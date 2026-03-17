@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<!DOCTYPE datafile PUBLIC "-//FinalBurn Neo//DTD ROM Management Datafile//EN" "http://www.logiqx.com/Dats/datafile.dtd">
+
+<datafile>
+	<header>
+		<name>FinalBurn Neo - SuprGrafx Games</name>
+		<description>FinalBurn Neo v0.2.97.44 SuprGrafx Games</description>
+		<category>Standard DatFile</category>
+		<version>0.2.97.44</version>
+		<author>FinalBurn Neo</author>
+		<homepage>https://neo-source.com/</homepage>
+		<url>https://neo-source.com/</url>
+		<clrmamepro forcenodump="ignore"/>
+	</header>
+	<game name="1941">
+		<description>1941 - Counter Attack</description>
+		<year>1991</year>
+		<manufacturer>Hudson</manufacturer>
+		<rom name="1941 - counter attack (japan).pce" size="1048576" crc="8c4588e2"/>
+		<driver status="good"/>
+	</game>
+	<game name="aldynes">
+		<description>Aldynes</description>
+		<year>1991</year>
+		<manufacturer>Hudson</manufacturer>
+		<rom name="aldynes (japan).pce" size="1048576" crc="4c2126b0"/>
+		<driver status="good"/>
+	</game>
+	<game name="battlace">
+		<description>Battle Ace</description>
+		<year>1989</year>
+		<manufacturer>Hudson</manufacturer>
+		<rom name="battle ace (japan).pce" size="524288" crc="3b13af61"/>
+		<driver status="good"/>
+	</game>
+	<game name="daimakai1" cloneof="daimakai" romof="daimakai">
+		<description>Dai Makaimura (Alt)</description>
+		<year>1990</year>
+		<manufacturer>NEC Avenue</manufacturer>
+		<rom name="daimakai mura (japan)[a].pce" size="1049088" crc="8e961f63"/>
+		<driver status="good"/>
+	</game>
+	<game name="daimakaid" cloneof="daimakai" romof="daimakai">
+		<description>Dai Makaimura (Chris Covell's Debug Menu Hack)</description>
+		<year>1990</year>
+		<manufacturer>NEC Avenue</manufacturer>
+		<rom name="daimakai mura (japan)[debug].pce" size="1048576" crc="d6722c04"/>
+		<driver status="good"/>
+	</game>
+	<game name="daimakai">
+		<description>Dai Makaimura</description>
+		<year>1990</year>
+		<manufacturer>NEC Avenue</manufacturer>
+		<rom name="daimakai mura (japan).pce" size="1048576" crc="b486a8ed"/>
+		<driver status="good"/>
+	</game>
+	<game name="granzort">
+		<description>Madou Ou Granzort</description>
+		<year>1990</year>
+		<manufacturer>Hudson</manufacturer>
+		<rom name="madou ou granzort (japan).pce" size="524288" crc="1f041166"/>
+		<driver status="good"/>
+	</game>
+</datafile>

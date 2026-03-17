@@ -1,0 +1,128 @@
+﻿Darkness|暗闇
+Wire Mesh|金網
+Large Bridge (V)|大きな橋（縦）
+Large Bridge (V)|大きな橋（縦）
+Large Bridge (V)|大きな橋（縦）
+Large Bridge (H)|大きな橋（横）
+Large Bridge (H)|大きな橋（横）
+Large Bridge (Snow, H)|大きな橋（雪・横）
+Transparent|透明
+Wire Mesh|金網
+Large Bridge (Snow, V)|大きな橋（雪・縦）
+Large Bridge (Snow, V)|大きな橋（雪・縦）
+Large Bridge (Snow, V)|大きな橋（雪・縦）
+Large Bridge (H)|大きな橋（横）
+Large Bridge (Snow,H)|大きな橋（雪・横）
+Large Bridge (Snow,H)|大きな橋（雪・横）
+Meadow|草地
+Dirt|土
+Desert|砂地
+Snow|雪
+Meadow|草地
+Dirt|土
+Desert|砂地
+Snow|雪
+Stairs (Meadow)|階段（草地）
+Stairs (Meadow)|階段（草地）
+Stairs (Meadow)|階段（草地）
+Stairs (Meadow)|階段（草地）
+Stairs (Dirt)|階段（土）
+Stairs (Dirt)|階段（土）
+Stairs (Dirt)|階段（土）
+Stairs (Dirt)|階段（土）
+Cobblestones|石畳
+Cobblestones|石畳
+Cobblestones|石畳
+Cobblestones|石畳
+Cobblestones (Ruins)|石畳（廃墟）
+Cobblestones (Ruins)|石畳（廃墟）
+Cobblestones (Ruins)|石畳（廃墟）
+Cobblestones (Ruins)|石畳（廃墟）
+Stairs (Desert)|階段（砂地）
+Stairs (Desert)|階段（砂地）
+Stairs (Desert)|階段（砂地）
+Stairs (Desert)|階段（砂地）
+Stairs (Snow)|階段（雪）
+Stairs (Snow)|階段（雪）
+Stairs (Snow)|階段（雪）
+Stairs (Snow)|階段（雪）
+Cobblestones|石畳
+Cobblestones|石畳
+Cobblestones|石畳
+Ice Floor|氷の床
+Cobblestones (Ruins)|石畳（廃墟）
+Cobblestones (Ruins)|石畳（廃墟）
+Cobblestones (Ruins)|石畳（廃墟）
+Ice Floor|氷の床
+Stairs (Paved)|階段（舗装）
+Stairs (Paved)|階段（舗装）
+Stairs (Paved)|階段（舗装）
+Stairs (Paved)|階段（舗装）
+Stairs (Ruins)|階段（廃墟）
+Stairs (Ruins)|階段（廃墟）
+Stairs (Ruins)|階段（廃墟）
+Stairs (Ruins)|階段（廃墟）
+Ledge (Port)|段差（港）
+Ledge (Port)|段差（港）
+Ledge (Port)|段差（港）
+Ledge (Port)|段差（港）
+Cobblestones|石畳
+Cobblestones|石畳
+Ground (Cloud)|雲の床
+Ground (Cloud)|雲の床
+Farm Field|畑
+Farm Field|畑
+Farm Field (Snow)|畑（雪）
+Farm Field (Snow)|畑（雪）
+Relief Floor Tile|レリーフ床
+Relief Floor Tile|レリーフ床
+Relief Floor Tile|レリーフ床
+Relief Floor Tile|レリーフ床
+Farm Field|畑
+Farm Field|畑
+Farm Field (Snow)|畑（雪）
+Farm Field (Snow)|畑（雪）
+Relief Floor Tile|レリーフ床
+Relief Floor Tile|レリーフ床
+Relief Floor Tile|レリーフ床
+Relief Floor Tile|レリーフ床
+Stairs (Meadow)|段差（草地）
+Stairs (Meadow)|段差（草地）
+Stairs (Meadow)|段差（草地）
+Garden|花壇
+Garden (Snow)|花壇（雪）
+Ledge (Dirt)|段差（土）
+Ledge (Dirt)|段差（土）
+Ledge (Dirt)|段差（土）
+Stairs (Meadow)|段差（草地）
+Stairs (Meadow)|段差（草地）
+Stairs (Meadow)|段差（草地）
+Stairs (Meadow)|段差（草地）
+Stairs (Meadow)|段差（草地）
+Ledge (Dirt)|段差（土）
+Ledge (Dirt)|段差（土）
+Ledge (Dirt)|段差（土）
+Stairs (Meadow)|段差（草地）
+Stairs (Meadow)|段差（草地）
+Stairs (Meadow)|段差（草地）
+Stairs (Meadow)|段差（草地）
+Stairs (Meadow)|段差（草地）
+Ledge (Dirt)|段差（土）
+Ledge (Dirt)|段差（土）
+Ledge (Dirt)|段差（土）
+Cliff|崖
+Cliff|崖
+Cliff|崖
+Ledge (Dirt)|段差（土）
+Ledge (Dirt)|段差（土）
+Cliff|崖
+Cliff|崖
+Cliff|崖
+Cliff (Meadow)|崖（草地）
+Cliff (Meadow)|崖（草地）
+Cliff (Meadow)|崖（草地）
+Ledge (Dirt)|段差（土）
+Ledge (Dirt)|段差（土）
+Cliff (Dirt)|崖（土）
+Cliff (Dirt)|崖（土）
+Cliff (Dirt)|崖（土）

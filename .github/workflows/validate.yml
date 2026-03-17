@@ -1,0 +1,146 @@
+name: Validate PR
+
+on:
+  pull_request:
+    paths:
+      - "bios/**"
+      - "platforms/**"
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  validate-bios:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install pyyaml
+
+      - name: Get changed BIOS files
+        id: changed
+        run: |
+          files=$(git diff --name-only ${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }} | grep '^bios/' || true)
+          echo "files=$files" >> "$GITHUB_OUTPUT"
+          echo "$files" > /tmp/changed_files.txt
+
+      - name: Validate BIOS files
+        id: validate
+        run: |
+          files=$(cat /tmp/changed_files.txt)
+          if [ -n "$files" ]; then
+            python scripts/validate_pr.py --markdown $files > /tmp/report.md 2>&1 || true
+          else
+            echo "No BIOS files changed" > /tmp/report.md
+          fi
+
+      - name: Post validation report
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const fs = require('fs');
+            const report = fs.readFileSync('/tmp/report.md', 'utf8');
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: report
+            });
+
+  validate-configs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install pyyaml jsonschema
+
+      - name: Validate platform configs
+        run: |
+          python -c "
+          import json, yaml, sys
+          from jsonschema import validate, ValidationError
+          from pathlib import Path
+
+          with open('schemas/platform.schema.json') as f:
+              schema = json.load(f)
+
+          errors = []
+          for yml_file in Path('platforms').glob('*.yml'):
+              if yml_file.name.startswith('_'):
+                  continue
+              with open(yml_file) as f:
+                  config = yaml.safe_load(f)
+              try:
+                  validate(config, schema)
+                  print(f'✅ {yml_file.name}')
+              except ValidationError as e:
+                  errors.append(f'{yml_file.name}: {e.message}')
+                  print(f'❌ {yml_file.name}: {e.message}')
+
+          if errors:
+              sys.exit(1)
+          "
+
+  label-pr:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Auto-label PR
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const { data: files } = await github.rest.pulls.listFiles({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+            });
+
+            const labels = new Set();
+
+            for (const file of files) {
+              if (file.filename.startsWith('bios/')) {
+                labels.add('bios');
+                // Extract system from path
+                const parts = file.filename.split('/');
+                if (parts.length >= 3) {
+                  labels.add(`system:${parts[1].toLowerCase()}`);
+                }
+              }
+              if (file.filename.startsWith('platforms/')) {
+                labels.add('platform-config');
+              }
+              if (file.filename.startsWith('scripts/')) {
+                labels.add('automation');
+              }
+            }
+
+            if (labels.size > 0) {
+              try {
+                await github.rest.issues.addLabels({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.issue.number,
+                  labels: [...labels],
+                });
+              } catch (e) {
+                console.log('Could not add labels:', e.message);
+              }
+            }

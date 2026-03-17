@@ -1,0 +1,48 @@
+# Platform Registry
+# Central configuration for all supported platforms and their scraper sources.
+# Adding a new platform = adding an entry here + creating its YAML config.
+#
+# status: active | archived
+#   active   -- included in automated releases, scraped weekly/monthly
+#   archived -- config preserved, user can generate pack manually, excluded from CI releases
+
+platforms:
+  retroarch:
+    config: retroarch.yml
+    status: active
+    scraper: libretro
+    source_url: "https://raw.githubusercontent.com/libretro/libretro-database/master/dat/System.dat"
+    source_format: clrmamepro_dat
+    hash_type: sha1
+    schedule: weekly
+
+  batocera:
+    config: batocera.yml
+    status: active
+    scraper: batocera
+    source_url: "https://raw.githubusercontent.com/batocera-linux/batocera.linux/master/package/batocera/core/batocera-scripts/scripts/batocera-systems"
+    source_format: python_dict
+    hash_type: md5
+    schedule: weekly
+
+  recalbox:
+    config: recalbox.yml
+    status: active
+    scraper: recalbox
+    source_url: "https://gitlab.com/recalbox/recalbox/-/raw/master/board/recalbox/fsoverlay/recalbox/share_init/system/.emulationstation/es_bios.xml"
+    source_format: xml
+    hash_type: md5
+    schedule: monthly
+
+  lakka:
+    config: lakka.yml
+    status: active
+    scraper: libretro
+    inherits_from: retroarch
+    schedule: weekly
+
+  retropie:
+    config: retropie.yml
+    status: archived  # Last release: v4.8 (March 2022) - no update in 4 years
+    scraper: null
+    schedule: null

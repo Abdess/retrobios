@@ -1,0 +1,256 @@
+﻿Transparent|透明
+Shop Sign (Sword)|看板（剣）
+Shop Sign (Sword & Shield)|看板（剣と盾）
+Shop Sign (Armor)|看板（鎧）
+Shop Sign (Sack)|看板（袋）
+Shop Sign (Teapot)|看板（ポット）
+Shop Sign (Inn)|看板（宿）
+Shop Sign (Pub)|看板（酒場）
+Shop Sign (Eatery)|看板（食堂）
+Shop Sign (Hexagram)|看板（魔法陣）
+Shop Sign (Staves)|看板（杖）
+Shop Sign (Coin)|看板（コイン）
+Shop Sign (Shoes)|看板（靴）
+Shop Sign (Ring)|看板（指輪）
+Shop Sign (Hammer)|看板（ハンマー）
+Shop Sign (Crest)|看板（紋章）
+Log Bridge (V)|丸太の橋（縦）
+Log Bridge (H)|丸太の橋（横）
+Wood Bridge (V)|木の橋（縦）
+Wood Bridge (H)|木の橋（横）
+Stone Bridge (V)|石の橋（縦）
+Stone Bridge (H)|石の橋（横）
+Wood Bridge (V)|木の橋（縦）
+Wood Bridge (H)|木の橋（横）
+Bridge Spar (Wood)|橋げた（木）
+Bridge Spar (Wood)|橋げた（木）
+Bridge Spar (Wood)|橋げた（木）
+Bridge Spar (Wood)|橋げた（木）
+Bridge Spar (Stone)|橋げた（石）
+Bridge Spar (Stone)|橋げた（石）
+Bridge Spar (Stone)|橋げた（石）
+Bridge Spar (Stone)|橋げた（石）
+Window|窓
+Window|窓
+Window|窓
+Window|窓
+Window|窓
+Window|窓
+Window|窓
+Window|窓
+Window|窓
+Window|窓
+Window|窓
+Stained Glass Window|ステンドグラス
+Window|窓
+Window|窓
+Window|窓
+Window|窓
+Window|窓
+Window|窓
+Window|窓
+Stained Glass Window|ステンドグラス
+Window|窓
+Window|窓
+Window|窓
+Window|窓
+Window|窓
+Window|窓
+Window|窓
+Stained Glass Window|ステンドグラス
+Window|窓
+Window|窓
+Window|窓
+Window|窓
+Chimney|煙突
+Mooring Bollard|ビット
+Mooring Bollard|ビット
+Entrance|入口
+Entrance|入口
+Entrance (Top Half)|入口（上半分）
+Entrance|入口
+Entrance (Top Half)|入口（上半分）
+Chimney|煙突
+Sign|立て札
+Sign|立て札
+Well|井戸
+Stepping Stones|踏み石
+Barrel|樽
+Grave|墓
+Grave|墓
+Vase|壺
+Basin|桶
+Basin|桶
+Rock Fire Pit|石のかまど
+Rock Fire Pit|石のかまど
+Barricade (H)|バリケード（横）
+Barricade (V)|バリケード（縦）
+Beanstalk|豆の木
+Grass|草
+Grass|草
+Grass|草
+Grass|草
+Stump|切り株
+Tree|木
+Tree|木
+Boulder|岩
+Flowers|花
+Flowers|花
+Flowers|花
+Flowers|花
+Fallen Log|倒木
+Tree|木
+Bush|植え込み
+Boulder|岩
+Scarecrow|かかし
+Hole|穴
+Firewood|薪
+Rocks|小石
+Crops|農作物
+Crops|農作物
+Crops|農作物
+Crops|農作物
+Tree|木
+Tree|木
+Tree|木
+Tree|木
+Crate|木箱
+Crate|木箱
+Crate|木箱
+Crate|木箱
+Tree|木
+Tree|木
+Tree|木
+Tree|木
+Crate|木箱
+Crate|木箱
+Crate|木箱
+Crate|木箱
+Conifer Tree (Snow)|針葉樹（雪）
+Conifer Tree (Snow)|針葉樹（雪）
+Conifer Tree (Snow)|針葉樹（雪）
+Conifer Tree (Snow)|針葉樹（雪）
+Scarecrow (Snow)|かかし（雪）
+Vase (Snow)|壺（雪）
+Bucket (Snow)|桶（雪）
+Crate (Snow)|木箱（雪）
+Conifer Tree (Snow)|針葉樹（雪）
+Conifer Tree (Snow)|針葉樹（雪）
+Conifer Tree (Snow)|針葉樹（雪）
+Conifer Tree (Snow)|針葉樹（雪）
+Mooring Bollard (Snow)|ビット（雪）
+Barricade (H, Snow)|バリケード（横・雪）
+Barricade (H, Snow)|バリケード（縦・雪）
+Beanstalk (Snow)|豆の木（雪）
+Chimney (Snow)|煙突（雪）
+Sign (Snow)|立て札（雪）
+Sign (Snow)|立て札（雪）
+Well (Snow)|井戸（雪）
+Stepping Stones (Snow)|踏み石（雪）
+Barrel (Snow)|樽（雪）
+Grave (Snow)|墓（雪）
+Grave (Snow)|墓（雪）
+Grass (Snow)|草（雪）
+Grass (Snow)|草（雪）
+Grass (Snow)|草（雪）
+Grass (Snow)|草（雪）
+Stump (Snow)|切り株（雪）
+Conifer Tree (Snow)|針葉樹（雪）
+Conifer Tree (Snow)|針葉樹（雪）
+Boulder (Snow)|岩（雪）
+Snowman|雪だるま
+Hole (Snow)|穴（雪）
+Firewood (Snow)|薪（雪）
+Rocks (Snow)|小石（雪）
+Fallen Log (Snow)|倒木（雪）
+Conifer Tree (Snow)|針葉樹（雪）
+Bush (Snow)|植え込み（雪）
+Boulder (Snow)|岩（雪）
+Dead Tree|枯れ木
+Dead Tree|枯れ木
+Mushrooms|キノコ
+Mushrooms|キノコ
+Palm Tree|ヤシの木
+Palm Tree|ヤシの木
+Cactus|サボテン
+Dead Grass|枯れ草
+Dead Tree|枯れ木
+Dead Tree|枯れ木
+Rafflesia|ラフレシア
+Stump (Moss)|切り株（苔）
+Palm Tree|ヤシの木
+Bush (Flowers)|植え込み（花）
+Fern|シダ
+Dead Grass|枯れ草
+Hay|干し草
+Hay (Snow)|干し草（雪）
+Floral Patch|花畑
+Susuki Grass|ススキ
+Fallen Leaves|落ち葉
+Lotus Pads|蓮の葉
+Lotus Pads (Flowers)|蓮の葉（花）
+Lotus Pads|蓮の葉
+Wall Vines|壁のツタ
+Wall Vines|壁のツタ
+Leafless Wall Vines|壁のつる
+Wall Fern|壁のシダ
+Fissures|亀裂
+Fissures|亀裂
+Fissures|亀裂
+Fissures|亀裂
+Wall Vines|壁のツタ
+Wall Vines|壁のツタ
+Leafless Wall Vines|壁のつる
+Wall Moss|壁の苔
+Fissures|亀裂
+Fissures|亀裂
+Fissures|亀裂
+Fissures|亀裂
+Tent|テント
+Tent|テント
+Tent|テント
+Streetlight|街灯
+Stairs (Up)|階段（上り）
+Stairs (Up)|階段（上り）
+Stairs (Up)|階段（上り）
+Stairs (Up)|階段（上り）
+Tent|テント
+Tent|テント
+Tent|テント
+Streetlight|街灯
+Stairs (Down)|階段（下り）
+Stairs (Down)|階段（下り）
+Stairs (Down)|階段（下り）
+Stairs (Down)|階段（下り）
+Tent|テント
+Tent (Entrance)|テント（入口）
+Tent|テント
+Streetlight|街灯
+Metal Ladder|鉄ばしご
+Rope Ladder|縄ばしご
+Rope|ロープ
+Vines|ツタ
+Tent (Snow)|テント（雪）
+Tent (Snow)|テント（雪）
+Tent (Snow)|テント（雪）
+Streetlight (Snow)|街灯（雪）
+Metal Ladder|鉄ばしご
+Rope Ladder|縄ばしご
+Rope|ロープ
+Vines|ツタ
+Tent (Snow)|テント（雪）
+Tent (Snow)|テント（雪）
+Tent (Snow)|テント（雪）
+Streetlight (Snow)|街灯（雪）
+Metal Ladder|鉄ばしご
+Rope Ladder|縄ばしご
+Rope|ロープ
+Vines (Down)|ツタ（下り）
+Tent (Snow)|テント（雪）
+Tent (Entrance, Snow)|テント（入口・雪）
+Tent (Snow)|テント（雪）
+Streetlight (Snow)|街灯（雪）
+Hole (Metal Ladder)|穴（鉄ばしご）
+Hole (Rope Ladder)|穴（縄ばしご）
+Hole (Rope)|穴（ロープ）
+Hole|穴

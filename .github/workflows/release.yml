@@ -1,0 +1,214 @@
+name: Release BIOS Packs
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version (e.g., v2.0.0)"
+        required: true
+  # Auto-release when update-db finishes (after BIOS push or platform update merge)
+  workflow_run:
+    workflows: ["Update Database"]
+    types: [completed]
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  check-changes:
+    runs-on: ubuntu-latest
+    # Skip auto-release if update-db failed or was triggered by release itself
+    if: >
+      github.event_name == 'push' ||
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
+    outputs:
+      should_release: ${{ steps.check.outputs.should_release }}
+      version: ${{ steps.version.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 2
+
+      - name: Check if BIOS files changed
+        id: check
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_run" ]; then
+            # Auto-release: check if bios/ or platforms/ changed in the last commit
+            changed=$(git diff --name-only HEAD~1 HEAD | grep -cE '^(bios/|platforms/)' || true)
+            if [ "$changed" -gt 0 ]; then
+              echo "should_release=true" >> "$GITHUB_OUTPUT"
+            else
+              echo "should_release=false" >> "$GITHUB_OUTPUT"
+            fi
+          else
+            echo "should_release=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Determine version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "tag=${{ github.event.inputs.version }}" >> "$GITHUB_OUTPUT"
+          elif [ "${{ github.event_name }}" = "push" ]; then
+            echo "tag=${{ github.ref_name }}" >> "$GITHUB_OUTPUT"
+          else
+            # Auto-release: use date-based version
+            echo "tag=auto-$(date +%Y%m%d)" >> "$GITHUB_OUTPUT"
+          fi
+
+  discover:
+    needs: check-changes
+    if: needs.check-changes.outputs.should_release == 'true'
+    runs-on: ubuntu-latest
+    outputs:
+      platforms: ${{ steps.list.outputs.platforms }}
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: List platforms
+        id: list
+        run: python scripts/list_platforms.py
+
+  build:
+    needs: [check-changes, discover]
+    if: needs.check-changes.outputs.should_release == 'true'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        platform: ${{ fromJson(needs.discover.outputs.platforms) }}
+      fail-fast: false
+      max-parallel: 10
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install pyyaml
+
+      - name: Generate database (if not present)
+        run: |
+          if [ ! -f database.json ]; then
+            python scripts/generate_db.py --bios-dir bios --output database.json
+          fi
+
+      - name: Generate pack for ${{ matrix.platform }}
+        run: python scripts/generate_pack.py --platform ${{ matrix.platform }} --output-dir dist/
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: pack-${{ matrix.platform }}
+          path: dist/*.zip
+          retention-days: 1
+
+  publish:
+    needs: [check-changes, discover, build]
+    if: needs.check-changes.outputs.should_release == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Download all pack artifacts
+        uses: actions/download-artifact@v6
+        with:
+          path: dist/
+          pattern: pack-*
+          merge-multiple: true
+
+      - name: Copy database.json
+        run: cp database.json dist/database.json 2>/dev/null || true
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install pyyaml
+
+      - name: Generate release notes
+        id: notes
+        run: |
+          python3 << 'PYEOF'
+          import json, os, subprocess, textwrap
+
+          with open("database.json") as f:
+              db = json.load(f)
+
+          total = db["total_files"]
+          size_mb = db["total_size"] / (1024 * 1024)
+          date = db["generated_at"]
+
+          packs = sorted(f for f in os.listdir("dist") if f.endswith(".zip"))
+          pack_list = "\n".join(f"- **{p}** ({os.path.getsize(f'dist/{p}') / 1024 / 1024:.0f} MB)" for p in packs)
+
+          # Get recent changes
+          try:
+              log = subprocess.run(
+                  ["git", "log", "--oneline", "-20", "--no-merges", "--", "bios/", "platforms/"],
+                  capture_output=True, text=True
+              ).stdout.strip()
+              changes = "\n".join(f"- {line}" for line in log.split("\n") if line) if log else "- Initial release"
+          except Exception:
+              changes = "- See commit history"
+
+          notes = textwrap.dedent(f"""\
+          {total} BIOS/firmware files, {size_mb:.0f} MB, 50+ systems, verified checksums.
+
+          ### Packs
+          {pack_list}
+
+          ### Install
+          Download, extract to your emulator's BIOS directory:
+
+          | Platform | Path |
+          |----------|------|
+          | RetroArch / Lakka | `system/` |
+          | Batocera | `/userdata/bios/` |
+          | Recalbox | `/recalbox/share/bios/` |
+
+          <details><summary>CLI & archived platforms</summary>
+
+          ```bash
+          # CLI download
+          python scripts/download.py retroarch ~/RetroArch/system/
+
+          # Archived platforms (RetroPie, etc.)
+          git clone https://github.com/Abdess/retroarch_system.git
+          cd retroarch_system && pip install pyyaml
+          python scripts/generate_pack.py --platform retropie -o ~/Downloads/
+          ```
+          </details>
+
+          ### Changes
+          {changes}
+
+          ---
+          *{date} - [Full checksums & file listing](../../blob/main/README.md)*
+          """)
+
+          with open("/tmp/release_notes.md", "w") as f:
+              f.write(notes)
+          PYEOF
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ needs.check-changes.outputs.version }}
+          name: "BIOS Pack ${{ needs.check-changes.outputs.version }}"
+          body_path: /tmp/release_notes.md
+          files: dist/*
+          fail_on_unmatched_files: false
+          generate_release_notes: true
+          make_latest: true

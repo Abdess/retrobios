@@ -1,0 +1,16 @@
+﻿Sea|海
+Deep Sea|深い海
+Rock Shoal|岩礁
+Icebergs|氷山
+Poison Swamp|毒の沼
+Dead Trees|枯れ木
+Lava|溶岩
+Bubbles|泡
+Pond|池
+Boulder|岩
+Frozen Sea|凍った海
+Whirlpool|渦
+Land's End|大地の境界
+Endless Waterfall|下界に落ちる滝
+Cloud Land's End|雲の大地の境界
+Cloud|雲

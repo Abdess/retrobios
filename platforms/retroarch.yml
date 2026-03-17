@@ -1,0 +1,2999 @@
+platform: RetroArch
+version: v1.22.2
+dat_version: v1.19.0
+homepage: "https://www.retroarch.com"
+source: "https://github.com/libretro/libretro-database/blob/master/dat/System.dat"
+base_destination: system
+hash_type: sha1
+verification_mode: existence
+systems:
+  3do:
+    files:
+    - name: 3do_arcade_saot.bin
+      destination: 3do_arcade_saot.bin
+      required: true
+      sha1: 520d3d1b5897800af47f92efd2444a26b7a7dead
+      md5: 8970fc987ab89a7f64da9f8a8c4333ff
+      crc32: b832da9a
+      size: 524288
+    - name: goldstar.bin
+      destination: goldstar.bin
+      required: true
+      sha1: c4a2e5336f77fb5f743de1eea2cda43675ee2de7
+      md5: 8639fd5e549bd6238cfee79e3e749114
+      crc32: b6f5028b
+      size: 1048576
+    - name: panafz1-kanji.bin
+      destination: panafz1-kanji.bin
+      required: true
+      sha1: acd39a8fee1b9d2950d5ab447846c11fb31af63e
+      md5: b8dc97f778a6245c58e064b0312e8281
+      crc32: a8e9447c
+      size: 933636
+    - name: panafz1.bin
+      destination: panafz1.bin
+      required: true
+      sha1: 34bf189111295f74d7b7dfc1f304d98b8d36325a
+      md5: f47264dd47fe30f73ab3c010015c155b
+      crc32: c8c8ff89
+      size: 1048576
+    - name: panafz10-norsa.bin
+      destination: panafz10-norsa.bin
+      required: true
+      sha1: f05e642322c03694f06a809c0b90fc27ac73c002
+      md5: 1477bda80dc33731a65468c1f5bcbee9
+      crc32: 230e6feb
+      size: 1048576
+    - name: panafz10.bin
+      destination: panafz10.bin
+      required: true
+      sha1: 3c912300775d1ad730dc35757e279c274c0acaad
+      md5: 51f2f43ae2f3508a14d9f56597e2d3ce
+      crc32: 58242cee
+      size: 1048576
+    - name: panafz10e-anvil-norsa.bin
+      destination: panafz10e-anvil-norsa.bin
+      required: true
+      sha1: 2765c7b4557cc838b32567d2428d088980295159
+      md5: cf11bbb5a16d7af9875cca9de9a15e09
+      crc32: 9a186221
+      size: 1048576
+    - name: panafz10e-anvil.bin
+      destination: panafz10e-anvil.bin
+      required: true
+      sha1: a900371f0cdcdc03f79557f11d406fd71251a5fd
+      md5: a48e6746bd7edec0f40cff078f0bb19f
+      crc32: 2495c500
+      size: 1048576
+    - name: panafz10ja-anvil-kanji.bin
+      destination: panafz10ja-anvil-kanji.bin
+      required: true
+      sha1: 2e857b957803d0331fd229328df01f3ffab69eee
+      md5: 428577250f43edc902ea239c50d2240d
+      crc32: ff7393de
+      size: 1048576
+    - name: panafz1j-kanji.bin
+      destination: panafz1j-kanji.bin
+      required: true
+      sha1: 884515605ee243577ab20767ef8c1a7368e4e407
+      md5: c23fb5d5e6bb1c240d02cf968972be37
+      crc32: 45f478b1
+      size: 1048576
+    - name: panafz1j-norsa.bin
+      destination: panafz1j-norsa.bin
+      required: true
+      sha1: a417587ae3b0b8ef00c830920c21af8bee88e419
+      md5: f6c71de7470d16abe4f71b1444883dc8
+      crc32: 82ce67c6
+      size: 1048576
+    - name: panafz1j.bin
+      destination: panafz1j.bin
+      required: true
+      sha1: ec7ec62d60ec0459a14ed56ebc66761ef3c80efc
+      md5: a496cfdded3da562759be3561317b605
+      crc32: d9493adc
+      size: 1048576
+    - name: sanyotry.bin
+      destination: sanyotry.bin
+      required: true
+      sha1: b01c53da256dde43ffec4ad3fc3adfa8d635e943
+      md5: 35fa1a1ebaaeea286dc5cd15487c13ea
+      crc32: d5cbc509
+      size: 1048576
+    core: opera
+    manufacturer: Panasonic|GoldStar|Sanyo
+    docs: "https://docs.libretro.com/library/opera/"
+  amstrad-cpc:
+    files:
+    - name: cpc464.rom
+      destination: cpc464.rom
+      required: true
+      sha1: 56d39c463da60968d93e58b4ba0e675829412a20
+      md5: a993f85b88ac4350cf4d41554e87fe4f
+      crc32: 40852f25
+      size: 32768
+    - name: cpc664.rom
+      destination: cpc664.rom
+      required: true
+      sha1: 073a7665527b5bd8a148747a3947dbd3328682c8
+      md5: 5a384a2310f472c7857888371c00ed66
+      crc32: 9ab5a036
+      size: 32768
+    - name: cpc6128.rom
+      destination: cpc6128.rom
+      required: true
+      sha1: 5977adbad3f7c1e0e082cd02fe76a700d9860c30
+      md5: b96280dc6c95a48857b4b8eb931533ae
+      crc32: 9e827fe1
+      size: 32768
+    - name: cpc_amsdos.rom
+      destination: cpc_amsdos.rom
+      required: true
+      sha1: 39102c8e9cb55fcc0b9b62098780ed4a3cb6a4bb
+      md5: 25629dfe870d097469c217b95fdc1c95
+      crc32: 1fe22ecd
+      size: 16384
+  arcade:
+    files:
+    - name: bubsys.zip
+      destination: bubsys.zip
+      required: true
+      sha1: 1c0ffcd308b0c8c6dbb74ad8b811a0767200d366
+      md5: f81298afd68a1a24a49a1a2d9f087964
+      crc32: 8fc2fd2e
+      size: 7950
+    - name: cchip.zip
+      destination: cchip.zip
+      required: true
+      sha1: 364f2302a145a0fd6de767d7f8484badde1d1a6e
+      md5: df6f8a3d83c028a5cb9f2f2be60773f3
+      crc32: 23debecb
+      size: 2700
+    - name: decocass.zip
+      destination: decocass.zip
+      required: true
+      sha1: 30b97b2670b79d0de41cba190324c504846c6fa1
+      md5: b7e1189b341bf6a8e270017c096d21b0
+      crc32: 5de524e5
+      size: 16107
+    - name: isgsm.zip
+      destination: isgsm.zip
+      required: true
+      sha1: f590ccf688b4c05fa1da5c5dd92c224545170c3b
+      md5: 4a56d56e2219c5e2b006b66a4263c01c
+      crc32: 26856bf9
+      size: 10207
+    - name: midssio.zip
+      destination: midssio.zip
+      required: true
+      sha1: 54275c9833e497f71f76ab239030cc386c863991
+      md5: 5904b0de768d1d506e766aa7e18994c1
+      crc32: 7620bd32
+      size: 163
+    - name: neogeo.zip
+      destination: neogeo.zip
+      required: true
+      sha1: deb62b0074b8cae4f162c257662136733cfc76ad
+      md5: 00dad01abdbf8ea9e79ad2fe11bdb182
+      crc32: '81315163'
+      size: 1859335
+    - name: nmk004.zip
+      destination: nmk004.zip
+      required: true
+      sha1: 489256f5e2001070d2ad94c90d255282c71ed274
+      md5: bfacf1a68792d5348f93cf724d2f1dda
+      crc32: a6099353
+      size: 3556
+    - name: pgm.zip
+      destination: pgm.zip
+      required: true
+      sha1: c0c001ec80fa860857000f4cfc9844a28498a355
+      md5: 87cc944eef4c671aa2629a8ba48a08e0
+      crc32: bf3dd2ef
+      size: 2094636
+    - name: skns.zip
+      destination: skns.zip
+      required: true
+      sha1: 4257bd14b541fafbd555cb98ba079a3416a45934
+      md5: 3f956c4e7008804cb47cbde49bd5b908
+      crc32: 5692af22
+      size: 924762
+    - name: ym2608.zip
+      destination: ym2608.zip
+      required: true
+      sha1: 06fc753d015b43ca1787f4cfd9331b1674202e64
+      md5: 79ae0d2bb1901b7e606b6dc339b79a97
+      crc32: 5b4c29c4
+      size: 7609
+    core: fbneo
+    manufacturer: Various
+    docs: "https://docs.libretro.com/library/fbneo/"
+  atari-400-800:
+    files:
+    - name: ATARIBAS.ROM
+      destination: ATARIBAS.ROM
+      required: true
+      sha1: 3693c9cb9bf3b41bae1150f7a8264992468fc8c0
+      md5: 0bac0c6a50104045d902df4503a4c30b
+      crc32: 7d684184
+      size: 8192
+    - name: ATARIOSA.ROM
+      destination: ATARIOSA.ROM
+      required: true
+      sha1: 6dd53356159a129ed12367beb3b24a771d41adb0
+      md5: eb1f32f5d9f382db1bbfb8d7f9cb343a
+      crc32: 72b3fed4
+      size: 10240
+    - name: ATARIOSB.ROM
+      destination: ATARIOSB.ROM
+      required: true
+      sha1: f1f0741b1d34fb4350cf7cb8ab3b6ea11cdd8174
+      md5: a3e8d617c95d08031fe1b20d541434b2
+      crc32: 3e28a1fe
+      size: 10240
+    - name: ATARIXL.ROM
+      destination: ATARIXL.ROM
+      required: true
+      sha1: ae4f523ba08b6fd59f3cae515a2b2410bbd98f55
+      md5: 06daac977823773a3eea3422fd26a703
+      crc32: 1f9cd270
+      size: 16384
+    - name: BB01R4_OS.ROM
+      destination: BB01R4_OS.ROM
+      required: true
+      sha1: decde89fbae90adb591ad2fc553d35f49030c129
+      md5: b7a2a04677d34f069eeb643d5238bf86
+      crc32: 1eaf4002
+      size: 16384
+    - name: XEGAME.ROM
+      destination: XEGAME.ROM
+      required: true
+      sha1: a107db7f16a1129cf9d933c9cf4f013b068c9e82
+      md5: d7eb37aec6960cba36bc500e0e5d00bc
+      crc32: bdca01fb
+      size: 8192
+  atari-5200:
+    files:
+    - name: 5200.rom
+      destination: 5200.rom
+      required: true
+      sha1: 6ad7a1e8c9fad486fbec9498cb48bf5bc3adc530
+      md5: 281f20ea4320404ec820fb7ec0693b38
+      crc32: 4248d3e3
+      size: 2048
+    core: a5200
+    manufacturer: Atari
+    docs: "https://docs.libretro.com/library/a5200/"
+  atari-7800:
+    files:
+    - name: "7800 BIOS (E).rom"
+      destination: "7800 BIOS (E).rom"
+      required: true
+      sha1: 5a140136a16d1d83e4ff32a19409ca376a8df874
+      md5: 397bb566584be7b9764e7a68974c4263
+      crc32: d5b61170
+      size: 16384
+    - name: "7800 BIOS (U).rom"
+      destination: "7800 BIOS (U).rom"
+      required: true
+      sha1: d9d134bb6b36907c615a594cc7688f7bfcef5b43
+      md5: 0763f1ffb006ddbe32e52d497ee848ae
+      crc32: 5d13730c
+      size: 4096
+    core: prosystem
+    manufacturer: Atari
+    docs: "https://docs.libretro.com/library/prosystem/"
+  atari-lynx:
+    files:
+    - name: lynxboot.img
+      destination: lynxboot.img
+      required: true
+      sha1: e4ed47fae31693e016b081c6bda48da5b70d7ccb
+      md5: fcd403db69f54290b51035d82f835e7b
+      crc32: 0d973c9d
+      size: 512
+    core: handy
+    manufacturer: Atari
+    docs: "https://docs.libretro.com/library/handy/"
+  atari-st:
+    files:
+    - name: tos.img
+      destination: tos.img
+      required: true
+      sha1: 735793fdba07fe8d5295caa03484f6ef3de931f5
+      md5: c1c57ce48e8ee4135885cee9e63a68a2
+      crc32: d3c32283
+      size: 196608
+    core: hatari
+    manufacturer: Atari
+    docs: "https://docs.libretro.com/library/hatari/"
+  coleco-colecovision:
+    files:
+    - name: colecovision.rom
+      destination: colecovision.rom
+      required: true
+      sha1: 45bedc4cbdeac66c7df59e9e599195c778d86a92
+      md5: 2c66f5911e5b42b8ebe113403548eee7
+      crc32: 3aa93ef3
+      size: 8192
+  commodore-amiga:
+    files:
+    - name: kick33180.A500
+      destination: kick33180.A500
+      required: true
+      sha1: 11f9e62cf299f72184835b7b2a70a16333fc0d88
+      md5: 85ad74194e87c08904327de1a9443b7a
+      crc32: a6ce1636
+      size: 262144
+    - name: kick34005.CDTV
+      destination: kick34005.CDTV
+      required: true
+      sha1: 7ba40ffa17e500ed9fed041f3424bd81d9c907be
+      md5: 89da1838a24460e4b93f4f0c5d92d48d
+      crc32: 42baa124
+      size: 262144
+    - name: kick40060.CD32
+      destination: kick40060.CD32
+      required: true
+      sha1: 3525be8887f79b5929e017b42380a79edfee542d
+      md5: 5f8924d013dd57a89cf349f4cdedc6b1
+      crc32: 1e62d4a5
+      size: 524288
+    - name: kick34005.A500
+      destination: kick34005.A500
+      required: true
+      sha1: 891e9a547772fe0c6c19b610baf8bc4ea7fcb785
+      md5: 82a21c1890cae844b3df741f2762d48d
+      crc32: c4f0f55f
+      size: 262144
+    - name: kick40063.A600
+      destination: kick40063.A600
+      required: true
+      sha1: 3b7f1493b27e212830f989f26ca76c02049f09ca
+      md5: e40a5dfb3d017ba8779faba30cbd1c8e
+      crc32: fc24ae0d
+      size: 524288
+    - name: kick40068.A1200
+      destination: kick40068.A1200
+      required: true
+      sha1: e21545723fe8374e91342617604f1b3d703094f1
+      md5: 646773759326fbac3b2311fd8c8793ee
+      crc32: 1483a091
+      size: 524288
+    - name: kick37175.A500
+      destination: kick37175.A500
+      required: true
+      sha1: c5839f5cb98a7a8947065c3ed2f14f5f42e334a1
+      md5: dc10d7bdd1b6f450773dfb558477c230
+      crc32: c3bdb240
+      size: 524288
+    - name: kick37350.A600
+      destination: kick37350.A600
+      required: true
+      sha1: 02843c4253bbd29aba535b0aa3bd9a85034ecde4
+      md5: 465646c9b6729f77eea5314d1f057951
+      crc32: 43b0df7b
+      size: 524288
+    - name: kick39106.A1200
+      destination: kick39106.A1200
+      required: true
+      sha1: 70033828182fffc7ed106e5373a8b89dda76faa5
+      md5: b7cc148386aa631136f510cd29e42fc3
+      crc32: 6c9b07d2
+      size: 524288
+    - name: kick39106.A4000
+      destination: kick39106.A4000
+      required: true
+      sha1: f0b4e9e29e12218c2d5bd7020e4e785297d91fd7
+      md5: 9b8bdd5a3fd32c2a5a6f5b1aefc799a5
+      crc32: 9e6ac152
+      size: 524288
+    - name: kick40068.A4000
+      destination: kick40068.A4000
+      required: true
+      sha1: 5fe04842d04a489720f0f4bb0e46948199406f49
+      md5: 9bdedde6a4f33555b4a270c8ca53297d
+      crc32: d6bae334
+      size: 524288
+    - name: kick40060.CD32.ext
+      destination: kick40060.CD32.ext
+      required: true
+      sha1: 5bef3d628ce59cc02a66e6e4ae0da48f60e78f7f
+      md5: bb72565701b1b6faece07d68ea5da639
+      crc32: 87746be2
+      size: 524288
+    core: puae
+    manufacturer: Commodore
+    docs: "https://docs.libretro.com/library/puae/"
+  commodore-c128:
+    files:
+    - name: JiffyDOS_C128.bin
+      destination: JiffyDOS_C128.bin
+      required: true
+      sha1: 7d1898f32beae4b2ae610d469ce578a588efaa7c
+      md5: cbbd1bbcb5e4fd8046b6030ab71fc021
+      crc32: 4b7964de
+      size: 16384
+    - name: JiffyDOS_C64.bin
+      destination: JiffyDOS_C64.bin
+      required: true
+      sha1: 31e73e66eccb28732daea8ec3ad1addd9b39a017
+      md5: be09394f0576cf81fa8bacf634daf9a2
+      crc32: 2f79984c
+      size: 8192
+    - name: JiffyDOS_1541-II.bin
+      destination: JiffyDOS_1541-II.bin
+      required: true
+      sha1: b1a5b826304d3df2a27d7163c6a81a532e040d32
+      md5: 1b1e985ea5325a1f46eb7fd9681707bf
+      crc32: dd409902
+      size: 16384
+    - name: JiffyDOS_1571_repl310654.bin
+      destination: JiffyDOS_1571_repl310654.bin
+      required: true
+      sha1: d4b79b60cf1eaa399d0932200eb7811e00455249
+      md5: 41c6cc528e9515ffd0ed9b180f8467c0
+      crc32: fe6cac6d
+      size: 32768
+    - name: JiffyDOS_1581.bin
+      destination: JiffyDOS_1581.bin
+      required: true
+      sha1: 65bbf2be7bcd5bdcbff609d6c66471ffb9d04bfe
+      md5: 20b6885c6dc2d42c38754a365b043d71
+      crc32: 98873d0f
+      size: 32768
+    - name: scpu-dos-1.4.bin
+      destination: scpu-dos-1.4.bin
+      required: true
+      md5: cda2fcd2e1f0412029383e51dd472095
+    - name: scpu-dos-2.04.bin
+      destination: scpu-dos-2.04.bin
+      required: true
+      md5: b2869f8678b8b274227f35aad26ba509
+    core: vice_x128
+    manufacturer: Commodore
+    docs: "https://docs.libretro.com/library/vice_x128/"
+  dinothawr:
+    files:
+    - name: Dinothawr.zip
+      destination: Dinothawr.zip
+      required: true
+      sha1: 693d8bb4d992c645e6413a57195acf4eca2f5a2e
+      md5: a2e891e330d146c4046c2b622fc31462
+      crc32: 683ed4ad
+      size: 5763199
+  dos:
+    files:
+    - name: MT32_CONTROL.ROM
+      destination: MT32_CONTROL.ROM
+      required: true
+      sha1: b083518fffb7f66b03c23b7eb4f868e62dc5a987
+      md5: 5626206284b22c2734f3e9efefcd2675
+      crc32: a7c1531b
+      size: 65536
+    - name: MT32_PCM.ROM
+      destination: MT32_PCM.ROM
+      required: true
+      sha1: f6b1eebc4b2d200ec6d3d21d51325d5b48c60252
+      md5: 89e42e386e82e0cacb4a2704a03706ca
+      crc32: 573e31cc
+      size: 524288
+    - name: CM32L_CONTROL.ROM
+      destination: CM32L_CONTROL.ROM
+      required: true
+      sha1: a439fbb390da38cada95a7cbb1d6ca199cd66ef8
+      md5: bfff32b6144c1d706109accb6e6b1113
+      crc32: b998047e
+      size: 65536
+    - name: CM32L_PCM.ROM
+      destination: CM32L_PCM.ROM
+      required: true
+      sha1: 289cc298ad532b702461bfc738009d9ebe8025ea
+      md5: 08cdcfa0ed93e9cb16afa76e6ac5f0a4
+      crc32: 4b961eba
+      size: 1048576
+  elektronika-bk:
+    files:
+    - name: B11M_BOS.ROM
+      destination: bk/B11M_BOS.ROM
+      required: true
+      sha1: 7e9a30e38d7b78981999821640a68a201bb6df01
+      md5: fe4627d1e3a1535874085050733263e7
+      crc32: 8ffd5efa
+      size: 8192
+    - name: B11M_EXT.ROM
+      destination: bk/B11M_EXT.ROM
+      required: true
+      sha1: f087af69044432a1ef2431a72ac06946e32f2dd3
+      md5: dc52f365d56fa1951f5d35b1101b9e3f
+      crc32: b2e4c33c
+      size: 8192
+    - name: BAS11M_0.ROM
+      destination: bk/BAS11M_0.ROM
+      required: true
+      sha1: 9d76f3eefd64e032c763fa1ebf9cd3d9bd22317a
+      md5: 946f6f23ded03c0e26187f0b3ca75993
+      crc32: e71f9339
+      size: 16384
+    - name: BAS11M_1.ROM
+      destination: bk/BAS11M_1.ROM
+      required: true
+      sha1: 34fa37599f2f9eb607390ef2458a3c22d87f09a9
+      md5: 1e6637f32aa7d1de03510030cac40bcf
+      crc32: 4c68ff59
+      size: 8192
+    - name: DISK_327.ROM
+      destination: bk/DISK_327.ROM
+      required: true
+      sha1: 28eefbb63047b26e4aec104aeeca74e2f9d0276c
+      md5: 5015228eeeb238e65da8edcd1b6dfac7
+      crc32: ed8a43ae
+      size: 4096
+    - name: BASIC10.ROM
+      destination: bk/BASIC10.ROM
+      required: true
+      sha1: af7eae90c398ec12942a408fa5ac2722e331738c
+      md5: 3fa774326d75410a065659aea80252f0
+      crc32: 4181ecb6
+      size: 24576
+    - name: FOCAL10.ROM
+      destination: bk/FOCAL10.ROM
+      required: true
+      sha1: 6386e58bc1bba5e76baec9e8a1ca4b99dc3c573f
+      md5: 5737f972e8638831ab71e9139abae052
+      crc32: b90a52e8
+      size: 24576
+    - name: MONIT10.ROM
+      destination: bk/MONIT10.ROM
+      required: true
+      sha1: 4e83a94ae5155bbea14d7331a5a8db82457bd5ae
+      md5: 95f8c41c6abf7640e35a6a03cecebd01
+      crc32: 26c6e8a0
+      size: 8192
+  enterprise-64-128:
+    files:
+    - name: hun.rom
+      destination: hun.rom
+      required: true
+      sha1: 325a5e28c2a0d896711f8829e7ff14fed5dd4103
+      md5: 22167938f142c222f40992839aa21a06
+      crc32: 596ab6d6
+      size: 16384
+    - name: brd.rom
+      destination: brd.rom
+      required: true
+      sha1: f34f0c330b44dbf2548329bea954d5991dec30ca
+      md5: 6af0402906944fd134004b85097c8524
+      crc32: 6999d6a3
+      size: 16384
+    - name: exos20.rom
+      destination: exos20.rom
+      required: true
+      sha1: 6033a0535136c40c47137e4d1cd9273c06d5fdff
+      md5: 5ad3baaad3b5156d6b60b34229a676fb
+      crc32: d421795f
+      size: 32768
+    - name: exos21.rom
+      destination: exos21.rom
+      required: true
+      sha1: 55315b20fecb4441a07ee4bc5dc7153f396e0a2e
+      md5: f36f24cbb87745fbd2714e4df881db09
+      crc32: 982a3b44
+      size: 32768
+    - name: zt19uk.rom
+      destination: zt19uk.rom
+      required: true
+      sha1: b7af62f0bc95fdca4b31d236f8327dafc80f83b7
+      md5: 228540b6be83ae2acd7569c8ff0f91d0
+      crc32: d6deedf1
+      size: 32768
+    - name: basic20.rom
+      destination: basic20.rom
+      required: true
+      sha1: 61d0987b906146e21b94f265d5b51b4938c986a9
+      md5: 8e18edce4a7acb2c33cc0ab18f988482
+      crc32: 1228de34
+      size: 16384
+    - name: basic21.rom
+      destination: basic21.rom
+      required: true
+      sha1: 03bbb386cf530e804363acdfc1d13e64cf28af2e
+      md5: e972fe42b398c9ff1d93ff014786aec6
+      crc32: 55f96251
+      size: 16384
+    - name: exdos13.rom
+      destination: exdos13.rom
+      required: true
+      sha1: cb43ab3676b93c279f1ed8ffcb0d4dcd4b34e631
+      md5: ddff70c014d1958dc75378b6c9aab6f8
+      crc32: e0135929
+      size: 32768
+    - name: epd19hft.rom
+      destination: epd19hft.rom
+      required: true
+      sha1: 8f28fe73d13e94dd1da02519908ecc6eebe104f6
+      md5: 12cfc9c7e48c8a16c2e09edbd926d467
+      crc32: bd503eeb
+      size: 32768
+    - name: zt18hfnt.rom
+      destination: zt18hfnt.rom
+      required: true
+      sha1: 283be1ce417a759a3368bb4bbe72f692fd43ca6d
+      md5: 3082dc488d32f30a612761b99074199b
+      crc32: 76c9dbf6
+      size: 32768
+    - name: epfileio.rom
+      destination: epfileio.rom
+      required: true
+      sha1: 2f9077bcd89b1ec42dbdcd55d335bdbaf361eff3
+      md5: a68ebcbc73a4d2178d755b7755bf18fe
+      crc32: 60c79925
+      size: 16384
+    - name: exos24uk.rom
+      destination: exos24uk.rom
+      required: true
+      sha1: cf12e971623a54bf8c4f891ca3a36d969f205c49
+      md5: 55af78f877a21ca45eb2df68a74fcc60
+      crc32: c099a5e3
+      size: 65536
+  epoch-scv:
+    files:
+    - name: upd7801g.s01
+      destination: upd7801g.s01
+      required: true
+      sha1: 6e89d1227581c76441a53d605f9e324185f1da33
+      md5: 635a978fd40db9a18ee44eff449fc126
+      crc32: 7ac06182
+      size: 4096
+  fairchild-channel-f:
+    files:
+    - name: sl31253.bin
+      destination: sl31253.bin
+      required: true
+      sha1: 81193965a374d77b99b4743d317824b53c3e3c78
+      md5: ac9804d4c0e9d07e33472e3726ed15c3
+      crc32: 04694ed9
+      size: 1024
+    - name: sl31254.bin
+      destination: sl31254.bin
+      required: true
+      sha1: 8f70d1b74483ba3a37e86cf16c849d601a8c3d2c
+      md5: da98f4bb3242ab80d76629021bb27585
+      crc32: 9c047ba3
+      size: 1024
+    - name: sl90025.bin
+      destination: sl90025.bin
+      required: true
+      sha1: 759e2ed31fbde4a2d8daf8b9f3e0dffebc90dae2
+      md5: 95d339631d867c8f1d15a5f2ec26069d
+      crc32: 015c1e38
+      size: 1024
+  doom:
+    files:
+    - name: prboom.wad
+      destination: prboom.wad
+      required: true
+      sha1: 5f4aed208301449c2e9514edfd325fe9dead76fa
+      md5: 72ae1b47820fcc93cc0df9c428d0face
+      crc32: a5751b99
+      size: 143312
+  j2me:
+    files:
+    - name: freej2me-lr.jar
+      destination: freej2me-lr.jar
+      required: true
+      sha1: fb231192894e2fd17a5799fbbdf86a4696951bce
+      md5: ccd92e7156ce2f0ce14c88ffb68a16eb
+      crc32: 96a1babf
+      size: 552042
+    - name: freej2me-sdl.jar
+      destination: freej2me-sdl.jar
+      required: true
+      sha1: 78f1f41d55efc6b8d81e99c1d9d75248b3f83dc2
+      md5: 4da74084fc1b1bd3d776ed8d3ee648de
+      crc32: 5cca0f35
+      size: 552043
+    - name: freej2me.jar
+      destination: freej2me.jar
+      required: true
+      sha1: 7d738042268e4ffd0aae8e85e05dd28bce761d1f
+      md5: 29a92d0867da2917275b7c6c805d256f
+      crc32: ffb98ffa
+      size: 552039
+    core: freej2me
+    manufacturer: Java
+    docs: "https://docs.libretro.com/library/freej2me/"
+  apple-macintosh-ii:
+    files:
+    - name: MacII.ROM
+      destination: MacII.ROM
+      required: true
+      sha1: db6b504744281369794e26ba71a6e385cf6227fa
+      md5: 66223be1497460f1e60885eeb35e03cc
+      crc32: 4df6d054
+      size: 262144
+  magnavox-odyssey2:
+    files:
+    - name: o2rom.bin
+      destination: o2rom.bin
+      required: true
+      sha1: b2e1955d957a475de2411770452eff4ea19f4cee
+      md5: 562d5ebf9e030a40d6fabfc2f33139fd
+      crc32: 8016a315
+      size: 1024
+    - name: c52.bin
+      destination: c52.bin
+      required: true
+      sha1: a6120aed50831c9c0d95dbdf707820f601d9452e
+      md5: f1071cdb0b6b10dde94d3bc8a6146387
+      crc32: a318e8d6
+      size: 1024
+    - name: g7400.bin
+      destination: g7400.bin
+      required: true
+      sha1: 5130243429b40b01a14e1304d0394b8459a6fbae
+      md5: c500ff71236068e0dc0d0603d265ae76
+      crc32: e20a9f41
+      size: 1024
+    - name: jopac.bin
+      destination: jopac.bin
+      required: true
+      sha1: 54b8d2c1317628de51a85fc1c424423a986775e4
+      md5: 279008e4a0db2dc5f1c048853b033828
+      crc32: 11647ca5
+      size: 1024
+    core: o2em
+    manufacturer: Magnavox|Philips
+    docs: "https://docs.libretro.com/library/o2em/"
+  mattel-intellivision:
+    files:
+    - name: exec.bin
+      destination: exec.bin
+      required: true
+      sha1: 5a65b922b562cb1f57dab51b73151283f0e20c7a
+      md5: 62e761035cb657903761800f4437b8af
+      crc32: cbce86f7
+      size: 8192
+    - name: grom.bin
+      destination: grom.bin
+      required: true
+      sha1: f9608bb4ad1cfe3640d02844c7ad8e0bcd974917
+      md5: 0cd5946c6473e42e8e4c2137785e427f
+      crc32: 683a4158
+      size: 2048
+  microsoft-msx:
+    files:
+    - name: CARTS.SHA
+      destination: CARTS.SHA
+      required: true
+      sha1: bf5fb954db868e523febccc68549ed9187961076
+      md5: 74b0f217fa0e2b8bb5a2f8e2ecc69da3
+      crc32: d42f4444
+      size: 33152
+    - name: CYRILLIC.FNT
+      destination: CYRILLIC.FNT
+      required: true
+      sha1: 000ac11b702a4c42e40f135df12fa5f2f13e20a1
+      md5: 85b38e4128bbc300e675f55b278683a8
+      crc32: 73af9bc3
+      size: 2048
+    - name: DISK.ROM
+      destination: DISK.ROM
+      required: true
+      sha1: 032cb1c1c75b9a191fa1230978971698d9d2a17f
+      md5: 80dcd1ad1a4cf65d64b7ba10504e8190
+      crc32: 721f61df
+      size: 16384
+    - name: FMPAC.ROM
+      destination: FMPAC.ROM
+      required: true
+      sha1: 9d789166e3caf28e4742fe933d962e99618c633d
+      md5: 6f69cc8b5ed761b03afd78000dfb0e19
+      crc32: 0e84505d
+      size: 65536
+    - name: FMPAC16.ROM
+      destination: FMPAC16.ROM
+      required: true
+      sha1: 2dc4517ebd5a061f9b5aa6b449cc4d4a2073540c
+      md5: af8537262df8df267072f359399a7635
+      crc32: 5d6c4d27
+      size: 16384
+    - name: ITALIC.FNT
+      destination: ITALIC.FNT
+      required: true
+      sha1: 401dd6692dc80628e5f68b7c79be0b0ebbc4d3ee
+      md5: c83e50e9f33b8dd893c414691822740d
+      crc32: c90ec498
+      size: 2048
+    - name: KANJI.ROM
+      destination: KANJI.ROM
+      required: true
+      sha1: 84a645becec0a25d3ab7a909cde1b242699a8662
+      md5: febe8782b466d7c3b16de6d104826b34
+      crc32: c9651b32
+      size: 131072
+    - name: MSX.ROM
+      destination: MSX.ROM
+      required: true
+      sha1: 409e82adac40f6bdd18eb6c84e8b2fbdc7fb5498
+      md5: aa95aea2563cd5ec0a0919b44cc17d47
+      crc32: 94ee12f3
+      size: 32768
+    - name: MSX2.ROM
+      destination: MSX2.ROM
+      required: true
+      sha1: 6103b39f1e38d1aa2d84b1c3219c44f1abb5436e
+      md5: ec3a01c91f24fbddcbcab0ad301bc9ef
+      crc32: 6cdaf3a5
+      size: 32768
+    - name: MSX2EXT.ROM
+      destination: MSX2EXT.ROM
+      required: true
+      sha1: 5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02
+      md5: 2183c2aff17cf4297bdb496de78c2e8a
+      crc32: 66237ecf
+      size: 16384
+    - name: MSX2P.ROM
+      destination: MSX2P.ROM
+      required: true
+      sha1: e2fbd56e42da637609d23ae9df9efd1b4241b18a
+      md5: 6d8c0ca64e726c82a4b726e9b01cdf1e
+      crc32: 00870134
+      size: 32768
+    - name: MSX2PEXT.ROM
+      destination: MSX2PEXT.ROM
+      required: true
+      sha1: fe0254cbfc11405b79e7c86c7769bd6322b04995
+      md5: 7c8243c71d8f143b2531f01afa6a05dc
+      crc32: b8ba44d3
+      size: 16384
+    - name: MSXDOS2.ROM
+      destination: MSXDOS2.ROM
+      required: true
+      sha1: c36c9e0f96738a340381e23b4f97245388801a46
+      md5: 6418d091cd6907bbcf940324339e43bb
+      crc32: 1c430991
+      size: 65536
+    - name: PAINTER.ROM
+      destination: PAINTER.ROM
+      required: true
+      sha1: 7fd2a28c4fdaeb140f3c8c8fb90271b1472c97b9
+      md5: 403cdea1cbd2bb24fae506941f8f655e
+      crc32: 1bda68a3
+      size: 65536
+    - name: RS232.ROM
+      destination: RS232.ROM
+      required: true
+      sha1: 7aec0134ad6a5177f4056fcb6047083e8e00529b
+      md5: 279efd1eae0d358eecd4edc7d9adedf3
+      crc32: ab6874f8
+      size: 16640
+    core: bluemsx
+    manufacturer: Spectravideo|Philips|Al Alamiah|Sony|Sanyo|Mitsubishi|Toshiba|Hitachi|Panasonic|Canon|Casio|Pioneer|Fujitsu|Yamaha|JVC|Kyocera|GoldStar|Samsung|Daewoo|Gradiente|Sharp|Talent|NTT|ACVS/CIEL|DDX|AGE
+      Labs
+    docs: "https://docs.libretro.com/library/bluemsx/"
+  nec-pc-engine:
+    files:
+    - name: gecard.pce
+      destination: gecard.pce
+      required: true
+      sha1: 014881a959e045e00f4db8f52955200865d40280
+      md5: 6d2cb14fc3e1f65ceb135633d1694122
+      crc32: 51a12d90
+      size: 32768
+    - name: gexpress.pce
+      destination: gexpress.pce
+      required: true
+      sha1: 014881a959e045e00f4db8f52955200865d40280
+      md5: 6d2cb14fc3e1f65ceb135633d1694122
+      crc32: 51a12d90
+      size: 32768
+    - name: syscard1.pce
+      destination: syscard1.pce
+      required: true
+      sha1: a39a66da7de6ba94ab84d04eef7afeec7d4ee66a
+      md5: 2b7ccb3d86baa18f6402c176f3065082
+      crc32: 3f9f95a4
+      size: 262144
+    - name: syscard2.pce
+      destination: syscard2.pce
+      required: true
+      sha1: 88da02e2503f7c32810f5d93a34849d470742b6d
+      md5: 3cdd6614a918616bfc41c862e889dd79
+      crc32: 283b74e0
+      size: 262144
+    - name: syscard2u.pce
+      destination: syscard2u.pce
+      required: true
+      sha1: 2bea3dac98f84b2f2f469fa77ea720b8770d598d
+      md5: 94279f315e8b52904f65ab3108542afe
+      crc32: ff2a5ec3
+      size: 262144
+    - name: syscard3.pce
+      destination: syscard3.pce
+      required: true
+      sha1: 79f5ff55dd10187c7fd7b8daab0b3ffbd1f56a2c
+      md5: 38179df8f4ac870017db21ebcbf53114
+      crc32: 6d9a73ef
+      size: 262144
+    - name: syscard3u.pce
+      destination: syscard3u.pce
+      required: true
+      sha1: d02611d99921986147c753df14c7349b31d71950
+      md5: 0754f903b52e3b3342202bdafb13efa5
+      crc32: 2b5b75fe
+      size: 262144
+    core: mednafen_pce_fast
+    manufacturer: NEC
+    docs: "https://docs.libretro.com/library/mednafen_pce_fast/"
+  nec-pc-98:
+    files:
+    - name: 2608_bd.wav
+      destination: 2608_bd.wav
+      required: true
+      sha1: 0a56c142ef40cec50f3ee56a6e42d0029c9e2818
+      md5: d94546e70f17fd899be8df3544ab6cbb
+      crc32: bb038714
+      size: 19192
+    - name: 2608_hh.wav
+      destination: 2608_hh.wav
+      required: true
+      sha1: 12f676cef249b82480b6f19c454e234b435ca7b6
+      md5: 08c54a0c1f774a5538a848a6665a34b4
+      crc32: 9898b372
+      size: 36722
+    - name: 2608_rim.wav
+      destination: 2608_rim.wav
+      required: true
+      sha1: c65592330c9dd84011151daed52f9aec926b7e56
+      md5: 465ea0768b27da404aec45dfc501404b
+      crc32: 638864c1
+      size: 5288
+    - name: 2608_sd.wav
+      destination: 2608_sd.wav
+      required: true
+      sha1: 3c79663ef74c0b0439d13351326eb1c52a657008
+      md5: d71004351c8bbfdad53b18222c061d49
+      crc32: 542cc58c
+      size: 15558
+    - name: 2608_tom.wav
+      destination: 2608_tom.wav
+      required: true
+      sha1: 9513fb4a3f41e75a972a273a5104cbd834c1e2c5
+      md5: 96a4ead13f364734f79b0c58af2f0e1f
+      crc32: 93c57bba
+      size: 23092
+    - name: 2608_top.wav
+      destination: 2608_top.wav
+      required: true
+      sha1: aa4a8f766a86b830687d5083fd3b9db0652f46fc
+      md5: 593cff6597ab9380d822b8f824fd2c28
+      crc32: ab73a296
+      size: 57016
+    - name: bios.rom
+      destination: bios.rom
+      required: true
+      sha1: 76a7360502fa0296ea93b4c537174610a834d367
+      md5: cd237e16e7e77c06bb58540e9e9fca68
+      crc32: 0a682b93
+      size: 98304
+    - name: font.bmp
+      destination: font.bmp
+      required: true
+      sha1: b4f14e58030ed40fff2dc312b58ea4440bdf8cc5
+      md5: 7da1e5b7c482d4108d22a5b09631d967
+      crc32: d271798b
+      size: 524350
+    - name: font.rom
+      destination: font.rom
+      required: true
+      sha1: 78ba9960f135372825ab7244b5e4e73a810002ff
+      md5: 38d32748ae49d1815b0614970849fd40
+      crc32: 456d9fc7
+      size: 288768
+    - name: itf.rom
+      destination: itf.rom
+      required: true
+      sha1: a2fb11c000ed7c976520622cfb7940ed6ddc904e
+      md5: 72ea51443070f0e9212bfc9b793ee28e
+      crc32: c1815325
+      size: 32768
+    - name: sound.rom
+      destination: sound.rom
+      required: true
+      sha1: d5dbc4fea3b8367024d363f5351baecd6adcd8ef
+      md5: 524473c1a5a03b17e21d86a0408ff827
+      crc32: fe9f57f2
+      size: 16384
+    core: np2kai
+    manufacturer: NEC
+    docs: "https://docs.libretro.com/library/np2kai/"
+  nec-pc-fx:
+    files:
+    - name: fx-scsi.rom
+      destination: fx-scsi.rom
+      required: true
+      sha1: 65482a23ac5c10a6095aee1db5824cca54ead6e5
+      md5: 430e9745f9235c515bc8e652d6ca3004
+      crc32: f3e60e5e
+      size: 524288
+    - name: pcfx.rom
+      destination: pcfx.rom
+      required: true
+      sha1: 1a77fd83e337f906aecab27a1604db064cf10074
+      md5: 08e36edbea28a017f79f8d4f7ff9b6d7
+      crc32: 76ffb97a
+      size: 1048576
+    - name: pcfxbios.bin
+      destination: pcfxbios.bin
+      required: true
+      sha1: 1a77fd83e337f906aecab27a1604db064cf10074
+      md5: 08e36edbea28a017f79f8d4f7ff9b6d7
+      crc32: 76ffb97a
+      size: 1048576
+    - name: pcfxga.rom
+      destination: pcfxga.rom
+      required: true
+      sha1: a9372202a5db302064c994fcda9b24d29bb1b41c
+      md5: 5885bc9a64bf80d4530b9b9b978ff587
+      crc32: 41c3776b
+      size: 1048576
+    - name: pcfxv101.bin
+      destination: pcfxv101.bin
+      required: true
+      sha1: 8b662f7548078be52a871565e19511ccca28c5c8
+      md5: e2fb7c7220e3a7838c2dd7e401a7f3d8
+      crc32: 236102c9
+      size: 1048576
+    core: mednafen_pcfx
+    manufacturer: NEC
+    docs: "https://docs.libretro.com/library/mednafen_pcfx/"
+  nintendo-fds:
+    files:
+    - name: disksys.rom
+      destination: disksys.rom
+      required: true
+      sha1: 57fe1bdee955bb48d357e463ccbf129496930b62
+      md5: ca30b50f880eb660a320674ed365ef7a
+      crc32: 5e607dcf
+      size: 8192
+    - name: gamegenie.nes
+      destination: gamegenie.nes
+      required: true
+      sha1: f430a0d752a9fa0c7032db8131f9090d18f71779
+      md5: 7f98d77d7a094ad7d069b74bd553ec98
+      crc32: 4c514089
+      size: 24592
+  nintendo-gb:
+    files:
+    - name: dmg_boot.bin
+      destination: dmg_boot.bin
+      required: true
+      sha1: 4ed31ec6b0b175bb109c0eb5fd3d193da823339f
+      md5: 32fbbd84168d3482956eb3c5051637f5
+      crc32: 59c8598e
+      size: 256
+    - name: gb_bios.bin
+      destination: gb_bios.bin
+      required: true
+      sha1: 4ed31ec6b0b175bb109c0eb5fd3d193da823339f
+      md5: 32fbbd84168d3482956eb3c5051637f5
+      crc32: 59c8598e
+      size: 256
+    core: gambatte
+    manufacturer: Nintendo
+    docs: "https://docs.libretro.com/library/gambatte/"
+  nintendo-gba:
+    files:
+    - name: gba_bios.bin
+      destination: gba_bios.bin
+      required: true
+      sha1: 300c20df6731a33952ded8c436f7f186d25d3492
+      md5: a860e8c0b6d573d191e4ec7db1b1e4f6
+      crc32: '81977335'
+      size: 16384
+    core: gpsp
+    manufacturer: Nintendo
+    docs: "https://docs.libretro.com/library/gpsp/"
+  nintendo-gbc:
+    files:
+    - name: cgb_boot.bin
+      destination: cgb_boot.bin
+      required: true
+      sha1: 1293d68bf9643bc4f36954c1e80e38f39864528d
+      md5: dbfce9db9deaa2567f6a84fde55f9680
+      crc32: 41884e46
+      size: 2304
+    - name: gbc_bios.bin
+      destination: gbc_bios.bin
+      required: true
+      sha1: 1293d68bf9643bc4f36954c1e80e38f39864528d
+      md5: dbfce9db9deaa2567f6a84fde55f9680
+      crc32: 41884e46
+      size: 2304
+  nintendo-gamecube:
+    files:
+    - name: gc-dvd-20010608.bin
+      destination: gc-dvd-20010608.bin
+      required: true
+      sha1: 27872c201e87b06a19bf85d36c796ef383f8d52d
+      md5: 561532ad496f644897952d2cef5bb431
+      crc32: c047465a
+      size: 131072
+    - name: gc-dvd-20010831.bin
+      destination: gc-dvd-20010831.bin
+      required: true
+      sha1: ae7233cae8f94749796e0b740d6021e3b00a8926
+      md5: b953eb1a8fc9922b3f7051c1cdc451f1
+      crc32: 54c7d10e
+      size: 131072
+    - name: gc-dvd-20020402.bin
+      destination: gc-dvd-20020402.bin
+      required: true
+      sha1: 691e46213d8428befdf568157e670b971ab94e1d
+      md5: 413154dd0e2c824c9b18b807fd03ec4e
+      crc32: 8bbef508
+      size: 131072
+    - name: gc-dvd-20020823.bin
+      destination: gc-dvd-20020823.bin
+      required: true
+      sha1: 2faaf92bcaffe675f54f7249d30f3791507e22ab
+      md5: c03f6bbaf644eb9b3ee261dbe199eb42
+      crc32: 5205222b
+      size: 131072
+    - name: gc-ntsc-10.bin
+      destination: gc-ntsc-10.bin
+      required: true
+      sha1: a1837968288253ed541f2b11440b68f5a9b33875
+      md5: fc924a7c879b661abc37cec4f018fdf3
+      crc32: 6dac1f2a
+      size: 2097152
+    - name: gc-ntsc-11.bin
+      destination: gc-ntsc-11.bin
+      required: true
+      sha1: 239eacd86527ff9a75aeb7282da65797baeef010
+      md5: 019e39822a9ca3029124f74dd4d55ac4
+      crc32: d5e6feea
+      size: 2097152
+    - name: gc-ntsc-12.bin
+      destination: gc-ntsc-12.bin
+      required: true
+      sha1: ef9194ab4804aa0aa8540d846caf291b28331165
+      md5: b17148254a5799684c7d783206504926
+      crc32: '86573808'
+      size: 2097152
+    - name: gc-pal-10.bin
+      destination: gc-pal-10.bin
+      required: true
+      sha1: f27c63e5394e2fd1606f70df004c4fc2d6027700
+      md5: 0cdda509e2da83c85bfe423dd87346cc
+      crc32: 4f319f43
+      size: 2097152
+    - name: gc-pal-11.bin
+      destination: gc-pal-11.bin
+      required: true
+      sha1: f3cd0c7c61cbcefa85e7de3aff4cfa50bc508714
+      md5: 339848a0b7c2124cf155276c1e79cbd0
+      crc32: 667d0b64
+      size: 2097152
+    - name: gc-pal-12.bin
+      destination: gc-pal-12.bin
+      required: true
+      sha1: 80b8744ff5e43585392f55546bd03a673d11ef5f
+      md5: db92574caab77a7ec99d4605fd6f2450
+      crc32: ad1b7f16
+      size: 2097152
+    core: dolphin
+    manufacturer: Nintendo
+    docs: "https://docs.libretro.com/library/dolphin/"
+  nintendo-64dd:
+    files:
+    - name: 64DD_IPL.bin
+      destination: 64DD_IPL.bin
+      required: true
+      sha1: bf861922dcb78c316360e3e742f4f70ff63c9bc3
+      md5: 8d3d9f294b6e174bc7b1d2fd1c727530
+      crc32: 7f933ce2
+      size: 4194304
+  nintendo-ds:
+    files:
+    - name: bios7.bin
+      destination: bios7.bin
+      required: true
+      sha1: 24f67bdea115a2c847c8813a262502ee1607b7df
+      md5: df692a80a5b1bc90728bc3dfc76cd948
+      crc32: 1280f0d5
+      size: 16384
+    - name: bios9.bin
+      destination: bios9.bin
+      required: true
+      sha1: bfaac75f101c135e32e2aaf541de6b1be4c8c62d
+      md5: a392174eb3e572fed6447e956bde4b25
+      crc32: 2ab23573
+      size: 4096
+    - name: firmware.bin
+      destination: firmware.bin
+      required: true
+      sha1: cfe072921ee3fb93f688743f8beef89043c3e9ad
+      md5: e45033d9b0fa6b0de071292bba7c9d13
+      crc32: 945f9dc9
+      size: 262144
+    core: desmume
+    manufacturer: Nintendo
+    docs: "https://docs.libretro.com/library/desmume/"
+  nintendo-nes:
+    files:
+    - name: NstDatabase.xml
+      destination: NstDatabase.xml
+      required: true
+      sha1: 26322f182540211e9b5e3647675b7c593706ae2b
+      md5: 7bfe8c0540ed4bd6a0f1e2a0f0118ced
+      crc32: ebb2196c
+      size: 1009534
+    core: fceumm
+    manufacturer: Nintendo
+    docs: "https://docs.libretro.com/library/fceumm/"
+  nintendo-pokemon-mini:
+    files:
+    - name: bios.min
+      destination: bios.min
+      required: true
+      sha1: daad4113713ed776fbd47727762bca81ba74915f
+      md5: 1e4fb124a3a886865acb574f388c803d
+      crc32: aed3c14d
+      size: 4096
+  nintendo-satellaview:
+    files:
+    - name: BS-X.bin
+      destination: BS-X.bin
+      required: true
+      sha1: 604556b2e62860af18db5a77f2956ebc75450020
+      md5: fed4d8242cfbed61343d53d48432aced
+      crc32: f51f07a0
+      size: 1048576
+    - name: "BS-X (En).bin"
+      destination: "BS-X (En).bin"
+      required: true
+      sha1: f3cdff70de5d0f5c52ca3a8f46588b863d48b8ec
+      md5: 33b62505da6ca4525e3839db4e1a7bca
+      crc32: 347e1c4e
+      size: 1048576
+    - name: "BS-X (En) (DRM-Free).bin"
+      destination: "BS-X (En) (DRM-Free).bin"
+      required: true
+      sha1: 7996bd1c01b99800e0d5d34beff93db283784864
+      md5: 4ed9648505ab33a4daec93707b16caba
+      crc32: 8c573c7e
+      size: 1048576
+  nintendo-sufami-turbo:
+    files:
+    - name: STBIOS.bin
+      destination: STBIOS.bin
+      required: true
+      sha1: ef86ea192eed03d5c413fdbbfd46043be1d7a127
+      md5: d3a44ba7d42a74d3ac58cb9c14c6a5ca
+      crc32: 9b4ca911
+      size: 262144
+  nintendo-sgb:
+    files:
+    - name: SGB1.sfc
+      destination: SGB1.sfc
+      required: true
+      sha1: 973e10840db683cf3faf61bd443090786b3a9f04
+      md5: b15ddb15721c657d82c5bab6db982ee9
+      crc32: 8a4a174f
+      size: 262144
+    - name: SGB2.sfc
+      destination: SGB2.sfc
+      required: true
+      sha1: e5b2922ca137051059e4269b236d07a22c07bc84
+      md5: 8ecd73eb4edf7ed7e81aef1be80031d5
+      crc32: cb176e45
+      size: 524288
+    - name: sgb1.boot.rom
+      destination: sgb1.boot.rom
+      required: true
+      sha1: aa2f50a77dfb4823da96ba99309085a3c6278515
+      md5: d574d4f9c12f305074798f54c091a8b4
+      crc32: ec8a83b9
+      size: 256
+    - name: sgb1.program.rom
+      destination: sgb1.program.rom
+      required: true
+      sha1: 973e10840db683cf3faf61bd443090786b3a9f04
+      md5: b15ddb15721c657d82c5bab6db982ee9
+      crc32: 8a4a174f
+      size: 262144
+    - name: sgb2.boot.rom
+      destination: sgb2.boot.rom
+      required: true
+      sha1: 93407ea10d2f30ab96a314d8eca44fe160aea734
+      md5: e0430bca9925fb9882148fd2dc2418c1
+      crc32: 53d0dd63
+      size: 256
+    - name: sgb2.program.rom
+      destination: sgb2.program.rom
+      required: true
+      sha1: e5b2922ca137051059e4269b236d07a22c07bc84
+      md5: 8ecd73eb4edf7ed7e81aef1be80031d5
+      crc32: cb176e45
+      size: 524288
+    - name: sgb2_bios.bin
+      destination: sgb2_bios.bin
+      required: true
+      sha1: 93407ea10d2f30ab96a314d8eca44fe160aea734
+      md5: e0430bca9925fb9882148fd2dc2418c1
+      crc32: 53d0dd63
+      size: 256
+    - name: sgb_bios.bin
+      destination: sgb_bios.bin
+      required: true
+      sha1: aa2f50a77dfb4823da96ba99309085a3c6278515
+      md5: d574d4f9c12f305074798f54c091a8b4
+      crc32: ec8a83b9
+      size: 256
+  nintendo-snes:
+    files:
+    - name: cx4.data.rom
+      destination: cx4.data.rom
+      required: true
+      sha1: a002f4efba42775a31185d443f3ed1790b0e949a
+      md5: 037ac4296b6b6a5c47c440188d3c72e3
+      crc32: b6e76a6a
+      size: 3072
+    - name: dsp1.data.rom
+      destination: dsp1.data.rom
+      required: true
+      sha1: 589c158685fe3cf88c7ca77cb6083f0e4de9c7c3
+      md5: 3d81b45fa0c2aa8b852dfb1ece7c0971
+      crc32: c8347cbd
+      size: 2048
+    - name: dsp1.program.rom
+      destination: dsp1.program.rom
+      required: true
+      sha1: c5d283604beebb3d832f15a0b3fc60d10dd4bddc
+      md5: ae209fbe789fbf11a48aea5ab1197321
+      crc32: db9a4c92
+      size: 6144
+    - name: dsp1b.data.rom
+      destination: dsp1b.data.rom
+      required: true
+      sha1: 19d5e822fe15ee6942e9921c3d8275a761a969df
+      md5: 1e3f568634a7d8284020dddc0ae905bc
+      crc32: 37a252c6
+      size: 2048
+    - name: dsp1b.program.rom
+      destination: dsp1b.program.rom
+      required: true
+      sha1: 03c6c0bdb40846c42aeff6b716e1ea0e001c3ae3
+      md5: d10f446888e097cbf500f3f663cf4f6d
+      crc32: 66a73998
+      size: 6144
+    - name: dsp2.data.rom
+      destination: dsp2.data.rom
+      required: true
+      sha1: aed9167cc2897cd8d0432f0b8f713fabbc48f5c4
+      md5: e9417e29223b139c3c4b635a2a3b8744
+      crc32: b3893c70
+      size: 2048
+    - name: dsp2.program.rom
+      destination: dsp2.program.rom
+      required: true
+      sha1: 51a274955ef493cfcf2efad7e2ee54738c81eb15
+      md5: aa6e5922a3ed5ded54f24247c11143c5
+      crc32: 0c1cf838
+      size: 6144
+    - name: dsp3.data.rom
+      destination: dsp3.data.rom
+      required: true
+      sha1: e7ec3da203a4edba2b17c06d9384787304a025a0
+      md5: 0a81210c0a940b997dd9843281008ee6
+      crc32: 8b41a2bd
+      size: 2048
+    - name: dsp3.program.rom
+      destination: dsp3.program.rom
+      required: true
+      sha1: 11b7ba3501a8542af4cdfdbd1c9702ae0a0e3fae
+      md5: d99ca4562818d49cee1f242705bba6f8
+      crc32: f29be51c
+      size: 6144
+    - name: dsp4.data.rom
+      destination: dsp4.data.rom
+      required: true
+      sha1: 8f2ffb9c1702aa2f76191e98f3fef43f73e5aab7
+      md5: ee4990879eb68e3cbca239c5bc20303d
+      crc32: efa8b9b2
+      size: 2048
+    - name: dsp4.program.rom
+      destination: dsp4.program.rom
+      required: true
+      sha1: 1abee528a59238fd5668fdcffd598d079cb056c2
+      md5: a151023b948b90ffc23a5b594bb6fef2
+      crc32: 14b77ae3
+      size: 6144
+    - name: st010.data.rom
+      destination: st010.data.rom
+      required: true
+      sha1: bd116501ec41c438fff210fd03233c6c9d15a514
+      md5: 254d70762b6f59f99c27c395aba7d07d
+      crc32: 216081b2
+      size: 4096
+    - name: st010.program.rom
+      destination: st010.program.rom
+      required: true
+      sha1: 2d0f34074ed3c6dfd61f767ee8b18e699b9769ac
+      md5: 1d70019179a59a566a0bb5d3f2845544
+      crc32: 691cbb4f
+      size: 49152
+    - name: st011.data.rom
+      destination: st011.data.rom
+      required: true
+      sha1: 798ab84110ca93a6e73a540f4146d21f8d9e1442
+      md5: 10bd3f4aa949737ab9836512c35bcc29
+      crc32: 803256a7
+      size: 4096
+    - name: st011.program.rom
+      destination: st011.program.rom
+      required: true
+      sha1: 375eca92592621e83881f3a9d7fd5ea3e5b306dc
+      md5: 95222ebf1c0c2990bcf25db43743f032
+      crc32: a741e9fb
+      size: 49152
+    - name: st018.data.rom
+      destination: st018.data.rom
+      required: true
+      sha1: b19c0f8f207d62fdabf4bf71442826063bccc626
+      md5: 49c898b60d0f15e90d0ba780dd12f366
+      crc32: b5255459
+      size: 32768
+    - name: st018.program.rom
+      destination: st018.program.rom
+      required: true
+      sha1: 388e3721b94cd074d6ba0eca8616523d2118a6c3
+      md5: dda40ccd57390c96e49d30a041f9a9e7
+      crc32: f73d5e10
+      size: 131072
+    core: bsnes
+    manufacturer: Nintendo
+    docs: "https://docs.libretro.com/library/bsnes/"
+  philips-videopac:
+    files:
+    - name: c52.bin
+      destination: c52.bin
+      required: true
+      sha1: a6120aed50831c9c0d95dbdf707820f601d9452e
+      md5: f1071cdb0b6b10dde94d3bc8a6146387
+      crc32: a318e8d6
+      size: 1024
+    - name: g7400.bin
+      destination: g7400.bin
+      required: true
+      sha1: 5130243429b40b01a14e1304d0394b8459a6fbae
+      md5: c500ff71236068e0dc0d0603d265ae76
+      crc32: e20a9f41
+      size: 1024
+    - name: jopac.bin
+      destination: jopac.bin
+      required: true
+      sha1: 54b8d2c1317628de51a85fc1c424423a986775e4
+      md5: 279008e4a0db2dc5f1c048853b033828
+      crc32: 11647ca5
+      size: 1024
+  sega-dreamcast:
+    files:
+    - name: dc_boot.bin
+      destination: dc/dc_boot.bin
+      required: true
+      sha1: 8951d1bb219ab2ff8583033d2119c899cc81f18c
+      md5: e10c53c2f8b90bab96ead2d368858623
+      crc32: 89f2b1a1
+      size: 2097152
+    - name: boot.bin
+      destination: dc/boot.bin
+      required: true
+      sha1: 8951d1bb219ab2ff8583033d2119c899cc81f18c
+      md5: e10c53c2f8b90bab96ead2d368858623
+      crc32: 89f2b1a1
+      size: 2097152
+    - name: flash.bin
+      destination: dc/flash.bin
+      required: true
+      sha1: 94d44d7f9529ec1642ba3771ed3c5f756d5bc872
+      md5: 0a93f7940c455905bea6e392dfde92a4
+      crc32: c611b498
+      size: 131072
+    core: flycast
+    manufacturer: Sega
+    docs: "https://docs.libretro.com/library/flycast/"
+  sega-dreamcast-arcade:
+    files:
+    - name: airlbios.zip
+      destination: dc/airlbios.zip
+      required: true
+      sha1: f2a730530f4989ca0e8860aa4e455b6a5fe69e1d
+      md5: 7a11bfe0cc72886d032e386db68f890c
+      crc32: f83ec60f
+      size: 715730
+    - name: awbios.zip
+      destination: dc/awbios.zip
+      required: true
+      sha1: 7940c7bf29eee85a5b2fdec78750b19aa22895dc
+      md5: 85254fbe320ca82a768ec2c26bb08def
+      crc32: 67a14ad5
+      size: 42296
+    - name: f355bios.zip
+      destination: dc/f355bios.zip
+      required: true
+      sha1: b6ff66dcb5547bd91760d239ddf428a655631c53
+      md5: 547f3d12aed389058ca06148f1cca0ed
+      crc32: '17516536'
+      size: 1394278
+    - name: f355dlx.zip
+      destination: dc/f355dlx.zip
+      required: true
+      sha1: 48d1712d1b1cdfeeeb43c6287c17b0b6309cfaab
+      md5: 1028615bcac4c31634a3364ce5c04044
+      crc32: 23ac17be
+      size: 2328436
+    - name: hod2bios.zip
+      destination: dc/hod2bios.zip
+      required: true
+      sha1: 782c303cbdfab1027b04db74a63e27bdad5e0c53
+      md5: f4011d3116500354edf7302a90402711
+      crc32: 0ddc6daf
+      size: 1479106
+    - name: naomi.zip
+      destination: dc/naomi.zip
+      required: true
+      sha1: c96711c01c0158f161791d6fbe75d88329e8ac0a
+      md5: 526eda1e2a7920c92c88178789d71d84
+      crc32: 6ee50181
+      size: 9321533
+    - name: naomi2.zip
+      destination: dc/naomi2.zip
+      required: true
+      sha1: 2962e338ccc9f66f29b409f73ca27aeee79633ac
+      md5: c50072cbab75673e1b1a6b94355e6fa8
+      crc32: 2143196c
+      size: 7022501
+  sega-game-gear:
+    files:
+    - name: bios.gg
+      destination: bios.gg
+      required: true
+      sha1: 914aa165e3d879f060be77870d345b60cfeb4ede
+      md5: 672e104c3be3a238301aceffc3b23fd6
+      crc32: 0ebea9d4
+      size: 1024
+  sega-master-system:
+    files:
+    - name: bios.sms
+      destination: bios.sms
+      required: true
+      sha1: c315672807d8ddb8d91443729405c766dd95cae7
+      md5: 840481177270d5642a14ca71ee72844c
+      crc32: 0072ed54
+      size: 8192
+    - name: bios_E.sms
+      destination: bios_E.sms
+      required: true
+      sha1: c315672807d8ddb8d91443729405c766dd95cae7
+      md5: 840481177270d5642a14ca71ee72844c
+      crc32: 0072ed54
+      size: 8192
+    - name: bios_J.sms
+      destination: bios_J.sms
+      required: true
+      sha1: a8c1b39a2e41137835eda6a5de6d46dd9fadbaf2
+      md5: 24a519c53f67b00640d0048ef7089105
+      crc32: 48d44a13
+      size: 8192
+    - name: bios_U.sms
+      destination: bios_U.sms
+      required: true
+      sha1: c315672807d8ddb8d91443729405c766dd95cae7
+      md5: 840481177270d5642a14ca71ee72844c
+      crc32: 0072ed54
+      size: 8192
+  sega-mega-cd:
+    files:
+    - name: bios_CD_E.bin
+      destination: bios_CD_E.bin
+      required: true
+      sha1: f891e0ea651e2232af0c5c4cb46a0cae2ee8f356
+      md5: e66fa1dc5820d254611fdcdba0662372
+      crc32: 529ac15a
+      size: 131072
+    - name: bios_CD_J.bin
+      destination: bios_CD_J.bin
+      required: true
+      sha1: 4846f448160059a7da0215a5df12ca160f26dd69
+      md5: 278a9397d192149e84e820ac621a8edd
+      crc32: 9d2da8f2
+      size: 131072
+    - name: bios_CD_U.bin
+      destination: bios_CD_U.bin
+      required: true
+      sha1: f4f315adcef9b8feb0364c21ab7f0eaf5457f3ed
+      md5: 2efd74e3232ff260e371b99f84024f7f
+      crc32: c6d10268
+      size: 131072
+  sega-mega-drive:
+    files:
+    - name: areplay.bin
+      destination: areplay.bin
+      required: true
+      sha1: 1e0f246826be4ebc7b99bb3f9de7f1de347122e5
+      md5: a0028b3043f9d59ceeb03da5b073b30d
+      crc32: 95ff7c3e
+      size: 32768
+    - name: bios_MD.bin
+      destination: bios_MD.bin
+      required: true
+      sha1: 3f50b76b0529db7f79c396b5e808cc0786ffc311
+      md5: d3293ebaaa7f4eb2a6766b68a0fb4609
+      crc32: 3f888cf4
+      size: 2048
+    - name: ggenie.bin
+      destination: ggenie.bin
+      required: true
+      sha1: 937e1878ebd104f489e6bdbc410a184f79f1144a
+      md5: e8af7fe115a75c849f6aab3701e7799b
+      crc32: 14dbce4a
+      size: 32768
+    - name: rom.db
+      destination: rom.db
+      required: true
+      sha1: 02c287d10da6de579af7a4ce73b134bbdf23c970
+      md5: ff4a3572475236e859e3e9ac5c87d1f1
+      crc32: c94e8c8b
+      size: 17742
+    - name: sk.bin
+      destination: sk.bin
+      required: true
+      sha1: 88d6499d874dcb5721ff58d76fe1b9af811192e3
+      md5: 4ea493ea4e9f6c9ebfccbdb15110367e
+      crc32: 0658f691
+      size: 2097152
+    - name: sk2chip.bin
+      destination: sk2chip.bin
+      required: true
+      sha1: 70429f1d80503a0632f603bf762fe0bbaa881d22
+      md5: b4e76e416b887f4e7413ba76fa735f16
+      crc32: 4dcfd55c
+      size: 262144
+    core: genesis_plus_gx
+    manufacturer: Sega
+    docs: "https://docs.libretro.com/library/genesis_plus_gx/"
+  sega-saturn:
+    files:
+    - name: hisaturn.bin
+      destination: hisaturn.bin
+      required: true
+      sha1: 49d8493008fa715ca0c94d99817a5439d6f2c796
+      md5: 3ea3202e2634cb47cb90f3a05c015010
+      crc32: 721e1b60
+      size: 524288
+    - name: mpr-17933.bin
+      destination: mpr-17933.bin
+      required: true
+      sha1: faa8ea183a6d7bbe5d4e03bb1332519800d3fbc3
+      md5: 3240872c70984b6cbfda1586cab68dbe
+      crc32: 4afcf0fa
+      size: 524288
+    - name: mpr-18100.bin
+      destination: mpr-18100.bin
+      required: true
+      sha1: 8a22710e09ce75f39625894366cafe503ed1942d
+      md5: cb2cebc1b6e573b7c44523d037edcd45
+      crc32: 3408dbf4
+      size: 524288
+    - name: mpr-18811-mx.ic1
+      destination: mpr-18811-mx.ic1
+      required: true
+      sha1: a67cd4f550751f8b91de2b8b74528ab4e0c11c77
+      md5: 255113ba943c92a54facd25a10fd780c
+      crc32: 90412e10
+      size: 2097152
+    - name: mpr-19367-mx.ic1
+      destination: mpr-19367-mx.ic1
+      required: true
+      sha1: 56c1b93da6b660bf393fbf48ca47569000ef4047
+      md5: 1cd19988d1d72a3e7caa0b73234c96b4
+      crc32: b9644b52
+      size: 2097152
+    - name: saturn_bios.bin
+      destination: saturn_bios.bin
+      required: true
+      sha1: 2b8cb4f87580683eb4d760e4ed210813d667f0a2
+      md5: af5828fdff51384f99b3c4926be27762
+      crc32: 2aba43c2
+      size: 524288
+    - name: sega1003.bin
+      destination: sega1003.bin
+      required: true
+      sha1: 7b23b53d62de0f29a23e423d0fe751dfb469c2fa
+      md5: 74570fed4d44b2682b560c8cd44b8b6a
+      crc32: b3c63c25
+      size: 524288
+    - name: sega_100.bin
+      destination: sega_100.bin
+      required: true
+      sha1: 2b8cb4f87580683eb4d760e4ed210813d667f0a2
+      md5: af5828fdff51384f99b3c4926be27762
+      crc32: 2aba43c2
+      size: 524288
+    - name: sega_100a.bin
+      destination: sega_100a.bin
+      required: true
+      sha1: 3bb41feb82838ab9a35601ac666de5aacfd17a58
+      md5: f273555d7d91e8a5a6bfd9bcf066331c
+      crc32: f90f0089
+      size: 524288
+    - name: sega_101.bin
+      destination: sega_101.bin
+      required: true
+      sha1: df94c5b4d47eb3cc404d88b33a8fda237eaf4720
+      md5: 85ec9ca47d8f6807718151cbcca8b964
+      crc32: 224b752c
+      size: 524288
+    - name: vsaturn.bin
+      destination: vsaturn.bin
+      required: true
+      sha1: 4154e11959f3d5639b11d7902b3a393a99fb5776
+      md5: ac4e4b6522e200c0d23d371a8cecbfd3
+      crc32: e4d61811
+      size: 524288
+    core: kronos
+    manufacturer: Sega
+    docs: "https://docs.libretro.com/library/kronos/"
+  sharp-x1:
+    files:
+    - name: iplrom.x1
+      destination: iplrom.x1
+      required: true
+      sha1: d3395e9aeb5b8bbba7654dd471bcd8af228ee69a
+      md5: eeeea1cd29c6e0e8b094790ae969bfa7
+      crc32: e70011d3
+      size: 4096
+    - name: iplrom.x1t
+      destination: iplrom.x1t
+      required: true
+      sha1: 1c1a0d8c9f4c446ccd7470516b215ddca5052fb2
+      md5: 851e4a5936f17d13f8c39a980cf00d77
+      crc32: e3995a57
+      size: 2048
+    core: x1
+    manufacturer: Sharp
+    docs: "https://docs.libretro.com/library/x1/"
+  sharp-x68000:
+    files:
+    - name: cgrom.dat
+      destination: cgrom.dat
+      required: true
+      sha1: 8d72c5b4d63bb14c5dbdac495244d659aa1498b6
+      md5: cb0a5cfcf7247a7eab74bb2716260269
+      crc32: 9f3195f1
+      size: 786432
+    - name: iplrom.dat
+      destination: iplrom.dat
+      required: true
+      sha1: 0ed038ed2133b9f78c6e37256807424e0d927560
+      md5: 7fd4caabac1d9169e289f0f7bbf71d8e
+      crc32: 72bdf532
+      size: 131072
+    - name: iplrom30.dat
+      destination: iplrom30.dat
+      required: true
+      sha1: 239e9124568c862c31d9ec0605e32373ea74b86a
+      md5: f373003710ab4322642f527f567e020a
+      crc32: e8f8fdad
+      size: 131072
+    - name: iplromco.dat
+      destination: iplromco.dat
+      required: true
+      sha1: 77511fc58798404701f66b6bbc9cbde06596eba7
+      md5: cc78d4f4900f622bd6de1aed7f52592f
+      crc32: 6c7ef608
+      size: 131072
+    - name: iplromxv.dat
+      destination: iplromxv.dat
+      required: true
+      sha1: e33cdcdb69cd257b0b211ef46e7a8b144637db57
+      md5: 0617321daa182c3f3d6f41fd02fb3275
+      crc32: 00eeb408
+      size: 131072
+    core: px68k
+    manufacturer: Sharp
+    docs: "https://docs.libretro.com/library/px68k/"
+  sinclair-zx-spectrum:
+    files:
+    - name: 128-0.rom
+      destination: 128-0.rom
+      required: true
+      sha1: 4f4b11ec22326280bdb96e3baf9db4b4cb1d02c5
+      md5: b4d2692115a9f2924df92a3cbfb358fb
+      crc32: e76799d2
+      size: 16384
+    - name: 128-1.rom
+      destination: 128-1.rom
+      required: true
+      sha1: 80080644289ed93d71a1103992a154cc9802b2fa
+      md5: 6e09e5d3c4aef166601669feaaadc01c
+      crc32: b96a36be
+      size: 16384
+    - name: 128-spanish-0.rom
+      destination: 128-spanish-0.rom
+      required: true
+      sha1: 968937b1c750f0ef6205f01c6db4148da4cca4e3
+      md5: c1231a70b8129311216acb7479b031d5
+      crc32: 453d86b2
+      size: 16384
+    - name: 128-spanish-1.rom
+      destination: 128-spanish-1.rom
+      required: true
+      sha1: bea3f397cc705eafee995ea629f4a82550562f90
+      md5: 4f341936594cbcab75cfa62ce96e3682
+      crc32: 6010e796
+      size: 16384
+    - name: 128p-0.rom
+      destination: 128p-0.rom
+      required: true
+      sha1: d07fcdeca892ee80494d286ea9ea5bf3928a1aca
+      md5: a249565f03b98d004ee7f019570069cd
+      crc32: 124ad9e0
+      size: 16384
+    - name: 128p-1.rom
+      destination: 128p-1.rom
+      required: true
+      sha1: 80080644289ed93d71a1103992a154cc9802b2fa
+      md5: 6e09e5d3c4aef166601669feaaadc01c
+      crc32: b96a36be
+      size: 16384
+    - name: 256s-0.rom
+      destination: 256s-0.rom
+      required: true
+      sha1: 477114ff0fe1388e0979df1423602b21248164e5
+      md5: b9fda5b6a747ff037365b0e2d8c4379a
+      crc32: 0eb40a09
+      size: 16384
+    - name: 256s-1.rom
+      destination: 256s-1.rom
+      required: true
+      sha1: 367b5a102fb663beee8e7930b8c4acc219c1f7b3
+      md5: 643861ad34831b255bf2eb64e8b6ecb8
+      crc32: 9d513013
+      size: 16384
+    - name: 256s-2.rom
+      destination: 256s-2.rom
+      required: true
+      sha1: 07783ee295274d8ff15d935bfd787c8ac1d54900
+      md5: d8ad507b1c915a9acfe0d73957082926
+      crc32: fd0d3ce1
+      size: 16384
+    - name: 256s-3.rom
+      destination: 256s-3.rom
+      required: true
+      sha1: 33703e97cc93b7edfcc0334b64233cf81b7930db
+      md5: ce0723f9bc02f4948c15d3b3230ae831
+      crc32: 1fe1d003
+      size: 16384
+    - name: 48.rom
+      destination: 48.rom
+      required: true
+      sha1: 5ea7c2b824672e914525d1d5c419d71b84a426a2
+      md5: 4c42a2f075212361c3117015b107ff68
+      crc32: ddee531f
+      size: 16384
+    - name: disciple.rom
+      destination: disciple.rom
+      required: true
+      sha1: 9a75ed4b293f968985be4c9aa893cd88276d1ced
+      md5: 78e61a2a02121873c1756b21fd1398b1
+      crc32: '82047489'
+      size: 8192
+    - name: disk_plus3.szx
+      destination: disk_plus3.szx
+      required: true
+      sha1: d7896640e18fc6204aa494835b0a430250fb06ce
+      md5: e6db6b9f6ad15012851115a7bc4b31d8
+      crc32: c2c6cba7
+      size: 1568
+    - name: gluck.rom
+      destination: gluck.rom
+      required: true
+      sha1: 015eb96dafb273d4f4512c467e9b43c305fd1bc4
+      md5: d5869034604dbfd2c1d54170e874fd0a
+      crc32: ca321d79
+      size: 16384
+    - name: if1-1.rom
+      destination: if1-1.rom
+      required: true
+      sha1: 4ffd9ed9c00cdc6f92ce69fdd8b618ef1203f48e
+      md5: 5c11c61a2dd2ca4bf39328d9ff42d289
+      crc32: e72a12ae
+      size: 8192
+    - name: if1-2.rom
+      destination: if1-2.rom
+      required: true
+      sha1: 5cfb6bca4177c45fefd571734576b55e3a127c08
+      md5: 31b704ae925305e74f50699271fddd9a
+      crc32: bb66dd1e
+      size: 8192
+    - name: plus2-0.rom
+      destination: plus2-0.rom
+      required: true
+      sha1: 72703f9a3e734f3c23ec34c0727aae4ccbef9a91
+      md5: 4ed7af4636308b8a48d7a35e6c5b546b
+      crc32: 5d2e8c66
+      size: 16384
+    - name: plus2-1.rom
+      destination: plus2-1.rom
+      required: true
+      sha1: de8b0d2d0379cfe7c39322a086ca6da68c7f23cb
+      md5: b3db95931cc844efaeb82db9c171b9f3
+      crc32: 98b1320b
+      size: 16384
+    - name: plus3-0.rom
+      destination: plus3-0.rom
+      required: true
+      sha1: e319ed08b4d53a5e421a75ea00ea02039ba6555b
+      md5: 9833b8b73384dd5fa3678377ff00a2bb
+      crc32: 17373da2
+      size: 16384
+    - name: plus3-1.rom
+      destination: plus3-1.rom
+      required: true
+      sha1: c9969fc36095a59787554026a9adc3b87678c794
+      md5: 0f711ceb5ab801b4701989982e0f334c
+      crc32: f1d1d99e
+      size: 16384
+    - name: plus3-2.rom
+      destination: plus3-2.rom
+      required: true
+      sha1: 22e50c6ba4157a3f6a821bd9937cd26e292775c6
+      md5: 3b6dd659d5e4ec97f0e2f7878152c987
+      crc32: 3dbf351d
+      size: 16384
+    - name: plus3-3.rom
+      destination: plus3-3.rom
+      required: true
+      sha1: 65f031caa8148a5493afe42c41f4929deab26b4e
+      md5: a148bcc575e51389e84fdf5d555c3196
+      crc32: 04448eaa
+      size: 16384
+    - name: plus3e-0.rom
+      destination: plus3e-0.rom
+      required: true
+      sha1: 649fbd233490bf58b35350b0123d36caaaa011eb
+      md5: bc123f625e245c225f92ef05933ed134
+      crc32: 7f4a5482
+      size: 16384
+    - name: plus3e-1.rom
+      destination: plus3e-1.rom
+      required: true
+      sha1: f12198108cbb14de4f03c6695bc16d08c85ee214
+      md5: 617364264c587d20c9fc4746c29679f2
+      crc32: 5aeb4675
+      size: 16384
+    - name: plus3e-2.rom
+      destination: plus3e-2.rom
+      required: true
+      sha1: 773633dce5ba323a9e00d9d0f9e4d8c295df7c87
+      md5: c363e95dcd0a90e6e7f847e6e47e0179
+      crc32: 504755cb
+      size: 16384
+    - name: plus3e-3.rom
+      destination: plus3e-3.rom
+      required: true
+      sha1: 65f031caa8148a5493afe42c41f4929deab26b4e
+      md5: a148bcc575e51389e84fdf5d555c3196
+      crc32: 04448eaa
+      size: 16384
+    - name: plusd.rom
+      destination: plusd.rom
+      required: true
+      sha1: 6b841dc5797ef7eb219ad455cd1e434ca3b9d30d
+      md5: 42e5de16fb5e50082bb954ec7ce45851
+      crc32: 569f7e55
+      size: 8192
+    - name: se-0.rom
+      destination: se-0.rom
+      required: true
+      sha1: 8608328d7dd66602a4846f046b24fed500f7d828
+      md5: fb3f86eb1e5a695d9c50c124e7cfb875
+      crc32: 8f1047d2
+      size: 16384
+    - name: se-1.rom
+      destination: se-1.rom
+      required: true
+      sha1: 3be5de57dd3bd0a9d15c57cabe9179afe2906a52
+      md5: 88de4a3129086f34bb9ca559acc51e6c
+      crc32: 16ed3a9b
+      size: 16384
+    - name: speccyboot-1.4.rom
+      destination: speccyboot-1.4.rom
+      required: true
+      sha1: 16af6f052b38a027dd49ba6e96e3a59d16b62672
+      md5: c54aa8f374b0971f51546c29d5d1eba1
+      crc32: 37c591b2
+      size: 8192
+    - name: tape_128.szx
+      destination: tape_128.szx
+      required: true
+      sha1: 3b1287bfc6fec9c7dd838f6ea1706698cb96fd16
+      md5: 8942b43b73ed4eb7f32bd1741709a4dc
+      crc32: 8d1c41f4
+      size: 1464
+    - name: tape_16.szx
+      destination: tape_16.szx
+      required: true
+      sha1: ec9e5607ce7faf2d6a5d71e5e21188ca86e963a1
+      md5: fec97eb9ea1b017cae84de78508feb4a
+      crc32: ccda9cc2
+      size: 591
+    - name: tape_2048.szx
+      destination: tape_2048.szx
+      required: true
+      sha1: f2d2227dce697df8aac78883eaf966e71435caa3
+      md5: 116f732bbae4e49d625aaf2f311474d0
+      crc32: dbc1a386
+      size: 720
+    - name: tape_2068.szx
+      destination: tape_2068.szx
+      required: true
+      sha1: 5af71025c02358b325bf8b4bfaa2662488abf1d2
+      md5: 0b0f267b95d556318bb652af2e8dc25c
+      crc32: 659b428d
+      size: 1799
+    - name: tape_48.szx
+      destination: tape_48.szx
+      required: true
+      sha1: d6e092730f822c9e8828ca12f54eb8d65228f30c
+      md5: ee2ae810711594db3a134a7432baabff
+      crc32: f56f230d
+      size: 708
+    - name: tape_pentagon.szx
+      destination: tape_pentagon.szx
+      required: true
+      sha1: 7e1eb0e250cfe1f2f0e50f734378a738e8bf327f
+      md5: bd7698603bd9079d337cdedfb04942d9
+      crc32: c7a272b6
+      size: 1479
+    - name: tape_plus2.szx
+      destination: tape_plus2.szx
+      required: true
+      sha1: 4a6d8941eee86d7e52452f5aaaa73d4bafe9bde1
+      md5: 166d4aa1a5aa4fbd99cc963b4e7c19cc
+      crc32: 93195e18
+      size: 1571
+    - name: tape_plus2a.szx
+      destination: tape_plus2a.szx
+      required: true
+      sha1: e0e0f6ebc8261ae9768a6be772eab4718fbc2395
+      md5: 445d4817d5557bb363a216fbd6eeaa84
+      crc32: 45727b82
+      size: 1617
+    - name: tape_plus3.szx
+      destination: tape_plus3.szx
+      required: true
+      sha1: 3850f7e5e6c90fd4dac988da77717d2647d9c021
+      md5: 0dc8828ac1db2e0efa915ac55191e96f
+      crc32: 1a825690
+      size: 1856
+    - name: tape_plus3e.szx
+      destination: tape_plus3e.szx
+      required: true
+      sha1: 92ac0df41f3ea7f147f4d6bae6b8a7d79b4f7e92
+      md5: bf07537f028bbcb3309464bd30da779c
+      crc32: 4ce6538f
+      size: 1970
+    - name: tape_scorpion.szx
+      destination: tape_scorpion.szx
+      required: true
+      sha1: 6abdeb434755d25a280954ce07b50b6a28b36957
+      md5: c10e677d3deb5a445689d3a599880745
+      crc32: eb6a7a83
+      size: 3500
+    - name: tape_se.szx
+      destination: tape_se.szx
+      required: true
+      sha1: cc20a8e6fc8c493881b14e00545a42ef75b8aabe
+      md5: 2518f9334bef8c44804a4185085579b5
+      crc32: 92bc2f43
+      size: 2146
+    - name: tape_ts2068.szx
+      destination: tape_ts2068.szx
+      required: true
+      sha1: 562298f5b3a7ed28f0129b066e8ad098a10e2270
+      md5: 1d360c09d370bb52a9a44b30cc7c59e6
+      crc32: 06ad712e
+      size: 1840
+    - name: tc2048.rom
+      destination: tc2048.rom
+      required: true
+      sha1: febb2d495b6eda7cdcb4074935d6e9d9f328972d
+      md5: 9dd7ecf784a6c04265c073c236f5fadb
+      crc32: f1b5fa67
+      size: 16384
+    - name: tc2068-0.rom
+      destination: tc2068-0.rom
+      required: true
+      sha1: 1446cb2780a9dedf640404a639fa3ae518b2d8aa
+      md5: 55d462fccc6c536037404ef4ced08bec
+      crc32: bf44ec3f
+      size: 16384
+    - name: tc2068-1.rom
+      destination: tc2068-1.rom
+      required: true
+      sha1: 7e265a2c1f621ed365ea23bdcafdedbc79c1299c
+      md5: 575d203c6e15e679fba0b73f854ec7a2
+      crc32: ae16233a
+      size: 8192
+    - name: trdos.rom
+      destination: trdos.rom
+      required: true
+      sha1: 21695e3f2a8f796386ce66eea8a246b0ac44810c
+      md5: 0da70a5d2a0e733398e005b96b7e4ba6
+      crc32: 10751aba
+      size: 16384
+    - name: zx48.rom
+      destination: zx48.rom
+      required: true
+      sha1: 5ea7c2b824672e914525d1d5c419d71b84a426a2
+      md5: 4c42a2f075212361c3117015b107ff68
+      crc32: ddee531f
+      size: 16384
+    - name: zx128.rom
+      destination: zx128.rom
+      required: true
+      sha1: 16375d42ea109b47edded7a16028de7fdb3013a1
+      md5: 85fede415f4294cc777517d7eada482e
+      crc32: 2cbe8995
+      size: 32768
+    core: fuse
+    manufacturer: Sinclair|Amstrad
+    docs: "https://docs.libretro.com/library/fuse/"
+  snk-neogeo-cd:
+    files:
+    - name: 000-lo.lo
+      destination: 000-lo.lo
+      required: true
+      sha1: 5992277debadeb64d1c1c64b0a92d9293eaf7e4a
+      md5: fc7599f3f871578fe9a0453662d1c966
+      crc32: 5a86cff2
+      size: 131072
+    - name: front-sp1.bin
+      destination: front-sp1.bin
+      required: true
+      sha1: 53bc1f283cdf00fa2efbb79f2e36d4c8038d743a
+      md5: 5c2366f25ff92d71788468ca492ebeca
+      crc32: cac62307
+      size: 524288
+    - name: neocd.bin
+      destination: neocd.bin
+      required: true
+      sha1: 7bb26d1e5d1e930515219cb18bcde5b7b23e2eda
+      md5: f39572af7584cb5b3f70ae8cc848aba2
+      crc32: df9de490
+      size: 524288
+    - name: neocd_f.rom
+      destination: neocd_f.rom
+      required: true
+      sha1: a5f4a7a627b3083c979f6ebe1fabc5d2df6d083b
+      md5: 8834880c33164ccbe6476b559f3e37de
+      crc32: 6fd2a520
+      size: 524288
+    - name: neocd_sf.rom
+      destination: neocd_sf.rom
+      required: true
+      sha1: 4a94719ee5d0e3f2b981498f70efc1b8f1cef325
+      md5: 043d76d5f0ef836500700c34faef774d
+      crc32: 1101f313
+      size: 524288
+    - name: neocd_st.rom
+      destination: neocd_st.rom
+      required: true
+      sha1: 19729b51bdab60c42aafef6e20ea9234c7eb8410
+      md5: f6325a33c6d63ea4b9162a3fa8c32727
+      crc32: 01c299cc
+      size: 524288
+    - name: neocd_sz.rom
+      destination: neocd_sz.rom
+      required: true
+      sha1: 6a947457031dd3a702a296862446d7485aa89dbb
+      md5: 971ee8a36fb72da57aed01758f0a37f5
+      crc32: 42f6b6c4
+      size: 524288
+    - name: neocd_t.rom
+      destination: neocd_t.rom
+      required: true
+      sha1: cc92b54a18a8bff6e595aabe8e5c360ba9e62eb5
+      md5: de3cf45d227ad44645b22aa83b49f450
+      crc32: 56c9ecba
+      size: 524288
+    - name: neocd_z.rom
+      destination: neocd_z.rom
+      required: true
+      sha1: b0f1c4fa8d4492a04431805f6537138b842b549f
+      md5: 11526d58d4c524daef7d5d677dc6b004
+      crc32: '33697892'
+      size: 524288
+    - name: top-sp1.bin
+      destination: top-sp1.bin
+      required: true
+      sha1: 235f4d1d74364415910f73c10ae5482d90b4274f
+      md5: 122aee210324c72e8a11116e6ef9c0d0
+      crc32: c36a47c0
+      size: 524288
+    - name: uni-bioscd.rom
+      destination: uni-bioscd.rom
+      required: true
+      sha1: 5142f205912869b673a71480c5828b1eaed782a8
+      md5: 08ca8b2dba6662e8024f9e789711c6fc
+      crc32: ff3abc59
+      size: 524288
+    core: neocd
+    manufacturer: SNK
+    docs: "https://docs.libretro.com/library/neocd/"
+  sony-playstation:
+    files:
+    - name: scph1000.bin
+      destination: scph1000.bin
+      required: true
+      sha1: 343883a7b555646da8cee54aadd2795b6e7dd070
+      md5: 239665b1a3dade1b5a52c06338011044
+      crc32: 3b601fc8
+      size: 524288
+    - name: scph1001.bin
+      destination: scph1001.bin
+      required: true
+      sha1: 10155d8d6e6e832d6ea66db9bc098321fb5e8ebf
+      md5: 924e392ed05558ffdb115408c263dccf
+      crc32: '37157331'
+      size: 524288
+    - name: scph1002.bin
+      destination: scph1002.bin
+      required: true
+      sha1: 20b98f3d80f11cbf5a7bfd0779b0e63760ecc62c
+      md5: 54847e693405ffeb0359c6287434cbef
+      crc32: 9bb87c4b
+      size: 524288
+    - name: scph100.bin
+      destination: scph100.bin
+      required: true
+      sha1: 339a48f4fcf63e10b5b867b8c93cfd40945faf6c
+      md5: 8abc1b549a4a80954addc48ef02c4521
+      crc32: f2af798b
+      size: 524288
+    - name: scph101.bin
+      destination: scph101.bin
+      required: true
+      sha1: dcffe16bd90a723499ad46c641424981338d8378
+      md5: 6e3735ff4c7dc899ee98981385f6f3d0
+      crc32: 171bdcec
+      size: 524288
+    - name: scph102A.bin
+      destination: scph102A.bin
+      required: true
+      sha1: beb0ac693c0dc26daf5665b3314db81480fa5c7c
+      md5: b10f5e0e3d9eb60e5159690680b1e774
+      crc32: 0bad7ea9
+      size: 524288
+    - name: scph102B.bin
+      destination: scph102B.bin
+      required: true
+      sha1: dbc7339e5d85827c095764fc077b41f78fd2ecae
+      md5: de93caec13d1a141a40a79f5c86168d6
+      crc32: 76b880e5
+      size: 524288
+    - name: scph102C.bin
+      destination: scph102C.bin
+      required: true
+      sha1: dbc7339e5d85827c095764fc077b41f78fd2ecae
+      md5: de93caec13d1a141a40a79f5c86168d6
+      crc32: 76b880e5
+      size: 524288
+    - name: scph3000.bin
+      destination: scph3000.bin
+      required: true
+      sha1: b06f4a861f74270be819aa2a07db8d0563a7cc4e
+      md5: 849515939161e62f6b866f6853006780
+      crc32: 3539def6
+      size: 524288
+    - name: scph3500.bin
+      destination: scph3500.bin
+      required: true
+      sha1: e38466a4ba8005fba7e9e3c7b9efeba7205bee3f
+      md5: cba733ceeff5aef5c32254f1d617fa62
+      crc32: bc190209
+      size: 524288
+    - name: scph5000.bin
+      destination: scph5000.bin
+      required: true
+      sha1: e340db2696274dda5fdc25e434a914db71e8b02b
+      md5: eb201d2d98251a598af467d4347bb62f
+      crc32: 8c93a399
+      size: 524288
+    - name: scph5500.bin
+      destination: scph5500.bin
+      required: true
+      sha1: b05def971d8ec59f346f2d9ac21fb742e3eb6917
+      md5: 8dd7d5296a650fac7319bce665a6a53c
+      crc32: ff3eeb8c
+      size: 524288
+    - name: scph5501.bin
+      destination: scph5501.bin
+      required: true
+      sha1: 0555c6fae8906f3f09baf5988f00e55f88e9f30b
+      md5: 490f666e1afb15b7362b406ed1cea246
+      crc32: 8d8cb7e4
+      size: 524288
+    - name: scph5502.bin
+      destination: scph5502.bin
+      required: true
+      sha1: f6bc2d1f5eb6593de7d089c425ac681d6fffd3f0
+      md5: 32736f17079d0b2b7024407c39bd3050
+      crc32: d786f0b9
+      size: 524288
+    - name: scph5552.bin
+      destination: scph5552.bin
+      required: true
+      sha1: f6bc2d1f5eb6593de7d089c425ac681d6fffd3f0
+      md5: 32736f17079d0b2b7024407c39bd3050
+      crc32: d786f0b9
+      size: 524288
+    - name: scph7001.bin
+      destination: scph7001.bin
+      required: true
+      sha1: 14df4f6c1e367ce097c11deae21566b4fe5647a9
+      md5: 1e68c231d0896b7eadcad1d7d8e76129
+      crc32: 502224b6
+      size: 524288
+    - name: scph7002.bin
+      destination: scph7002.bin
+      required: true
+      sha1: 8d5de56a79954f29e9006929ba3fed9b6a418c1d
+      md5: b9d9a0286c33dc6b7237bb13cd46fdee
+      crc32: 318178bf
+      size: 524288
+    - name: scph7003.bin
+      destination: scph7003.bin
+      required: true
+      sha1: 0555c6fae8906f3f09baf5988f00e55f88e9f30b
+      md5: 490f666e1afb15b7362b406ed1cea246
+      crc32: 8d8cb7e4
+      size: 524288
+    - name: scph7502.bin
+      destination: scph7502.bin
+      required: true
+      sha1: 8d5de56a79954f29e9006929ba3fed9b6a418c1d
+      md5: b9d9a0286c33dc6b7237bb13cd46fdee
+      crc32: 318178bf
+      size: 524288
+    - name: "scph9002(7502).bin"
+      destination: "scph9002(7502).bin"
+      required: true
+      sha1: 8d5de56a79954f29e9006929ba3fed9b6a418c1d
+      md5: b9d9a0286c33dc6b7237bb13cd46fdee
+      crc32: 318178bf
+      size: 524288
+    - name: psxonpsp660.bin
+      destination: psxonpsp660.bin
+      required: true
+      sha1: 96880d1ca92a016ff054be5159bb06fe03cb4e14
+      md5: c53ca5908936d412331790f4426c6c33
+      crc32: 5660f34f
+      size: 524288
+    - name: ps1_rom.bin
+      destination: ps1_rom.bin
+      required: true
+      sha1: c40146361eb8cf670b19fdc9759190257803cab7
+      md5: 81bbe60ba7a3d1cea1d48c14cbcc647b
+      crc32: 2f53b852
+      size: 524288
+    core: duckstation
+    manufacturer: Sony
+    docs: "https://docs.libretro.com/library/duckstation/"
+  sony-playstation-2:
+    files:
+    - name: ps2-0100jd-20000117.bin
+      destination: pcsx2/bios/ps2-0100jd-20000117.bin
+      required: true
+      sha1: 5b33170323ed6344e2363fed8115dc3918bb96a4
+      md5: 32f2e4d5ff5ee11072a6bc45530f5765
+      crc32: 5a04500c
+      size: 4194304
+    - name: ps2-0100j-20000117.bin
+      destination: pcsx2/bios/ps2-0100j-20000117.bin
+      required: true
+      sha1: aea061e6e263fdcc1c4fdbd68553ef78dae74263
+      md5: acf4730ceb38ac9d8c7d8e21f2614600
+      crc32: b7ef81a9
+      size: 4194304
+    - name: ps2-0101jd-20000217.bin
+      destination: pcsx2/bios/ps2-0101jd-20000217.bin
+      required: true
+      sha1: 16f4a284d0e760ee13a2aff2f7dda928255e3080
+      md5: acf9968c8f596d2b15f42272082513d1
+      crc32: 4f8b4205
+      size: 4194304
+    - name: ps2-0101j-20000217.bin
+      destination: pcsx2/bios/ps2-0101j-20000217.bin
+      required: true
+      sha1: 916e02431bcd73140504da3355c9598143b77e11
+      md5: b1459d7446c69e3e97e6ace3ae23dd1c
+      crc32: 211dfb6a
+      size: 4194304
+    - name: ps2-0101xd-20000224.bin
+      destination: pcsx2/bios/ps2-0101xd-20000224.bin
+      required: true
+      sha1: 4440b246bfde7bb31002c584a76c6ef384908e84
+      md5: d3f1853a16c2ec18f3cd1ae655213308
+      crc32: 2fef9faf
+      size: 4194304
+    - name: ps2-0110ad-20000727.bin
+      destination: pcsx2/bios/ps2-0110ad-20000727.bin
+      required: true
+      sha1: 339c646cf0699268552df5b05f18f0a03a9f55ff
+      md5: 63e6fd9b3c72e0d7b920e80cf76645cd
+      crc32: 795578c1
+      size: 4194304
+    - name: ps2-0110a-20000727.bin
+      destination: pcsx2/bios/ps2-0110a-20000727.bin
+      required: true
+      sha1: 20f6ce6693cf97e9494f8f0227f2b7988ffaf961
+      md5: a20c97c02210f16678ca3010127caf36
+      crc32: 9678ad6a
+      size: 4194304
+    - name: ps2-0120a-20000902.bin
+      destination: pcsx2/bios/ps2-0120a-20000902.bin
+      required: true
+      sha1: dbc2318a1029347b5af3a0c74b0bdf88d19efee6
+      md5: 8db2fbbac7413bf3e7154c1e0715e565
+      crc32: 1ae71e5d
+      size: 4194304
+    - name: ps2-0120ed-20000902.bin
+      destination: pcsx2/bios/ps2-0120ed-20000902.bin
+      required: true
+      sha1: 3bb1eecd618ab5c973c7bc53671a4475a02e1d5b
+      md5: 91c87cb2f2eb6ce529a2360f80ce2457
+      crc32: 25495aa7
+      size: 4194304
+    - name: ps2-0120ed-20000902-20030110.bin
+      destination: pcsx2/bios/ps2-0120ed-20000902-20030110.bin
+      required: true
+      sha1: 1b73dec999fcc2b92fa958110ff6bfe4d0af276e
+      md5: 3016b3dd42148a67e2c048595ca4d7ce
+      crc32: e2f78425
+      size: 4194304
+    - name: ps2-0120e-20000902.bin
+      destination: pcsx2/bios/ps2-0120e-20000902.bin
+      required: true
+      sha1: 274c05fec654913a3f698d4b0d592085866a2cbd
+      md5: b7fa11e87d51752a98b38e3e691cbf17
+      crc32: 7b08c33b
+      size: 4194304
+    - name: ps2-0120j-20001027-185015.bin
+      destination: pcsx2/bios/ps2-0120j-20001027-185015.bin
+      required: true
+      sha1: e481079eca752225555f0c26d14c9d0f94d9a8e9
+      md5: f63bc530bd7ad7c026fcd6f7bd0d9525
+      crc32: 9b096622
+      size: 4194304
+    - name: ps2-0120j-20001027-191435.bin
+      destination: pcsx2/bios/ps2-0120j-20001027-191435.bin
+      required: true
+      sha1: a9f5d8ed56cfff18add1b599010493461fa02448
+      md5: cee06bd68c333fc5768244eae77e4495
+      crc32: c1ccf3f6
+      size: 4194304
+    - name: ps2-0150ad-20001228-20030520.bin
+      destination: pcsx2/bios/ps2-0150ad-20001228-20030520.bin
+      required: true
+      sha1: 7284b9d16df9935afc384318e024c87ef0574fe5
+      md5: 0bf988e9c7aaa4c051805b0fa6eb3387
+      crc32: 0380c2ce
+      size: 4194304
+    - name: ps2-0150a-20001228.bin
+      destination: pcsx2/bios/ps2-0150a-20001228.bin
+      required: true
+      sha1: 5af5b5077d84a9c037ebe12bfab8a38b31d8a543
+      md5: 8accc3c49ac45f5ae2c5db0adc854633
+      crc32: bce74746
+      size: 4194304
+    - name: ps2-0150ed-20001228-20030520.bin
+      destination: pcsx2/bios/ps2-0150ed-20001228-20030520.bin
+      required: true
+      sha1: d004326c9d8060812b4433c3f07646b04854d6c4
+      md5: 6f9a6feb749f0533aaae2cc45090b0ed
+      crc32: 60bc0031
+      size: 4194304
+    - name: ps2-0150e-20001228.bin
+      destination: pcsx2/bios/ps2-0150e-20001228.bin
+      required: true
+      sha1: e22ef231faf3661edd92f2ee449a71297c82a092
+      md5: 838544f12de9b0abc90811279ee223c8
+      crc32: 1559fd43
+      size: 4194304
+    - name: ps2-0150jd-20010118.bin
+      destination: pcsx2/bios/ps2-0150jd-20010118.bin
+      required: true
+      sha1: 334e029fc7fd50222a399c50384ff42732652259
+      md5: bb6bbc850458fff08af30e969ffd0175
+      crc32: 0b3ec2bc
+      size: 4194304
+    - name: ps2-0150j-20010118.bin
+      destination: pcsx2/bios/ps2-0150j-20010118.bin
+      required: true
+      sha1: d6f365a0f07cd04ed28108e6ec5076e2f81e5f72
+      md5: 815ac991d8bc3b364696bead3457de7d
+      crc32: 4fc3b495
+      size: 4194304
+    - name: ps2-0160a-20010427.bin
+      destination: pcsx2/bios/ps2-0160a-20010427.bin
+      required: true
+      sha1: 7331a40b4b4feb1b3f0f77b013b6d38483577baa
+      md5: b107b5710042abe887c0f6175f6e94bb
+      crc32: 4008ac18
+      size: 4194304
+    - name: ps2-0160j-20010427.bin
+      destination: pcsx2/bios/ps2-0160j-20010427.bin
+      required: true
+      sha1: e525a0c900e37acf0ae5a655d82a0abcb07c6f1f
+      md5: ab55cceea548303c22c72570cfd4dd71
+      crc32: c268ef47
+      size: 4194304
+    - name: ps2-0160a-20010704.bin
+      destination: pcsx2/bios/ps2-0160a-20010704.bin
+      required: true
+      sha1: ce92e8e8c88665f2f645a9522e337823d47a914a
+      md5: 18bcaadb9ff74ed3add26cdf709fff2e
+      crc32: c506c693
+      size: 4194304
+    - name: ps2-0160e-20010704.bin
+      destination: pcsx2/bios/ps2-0160e-20010704.bin
+      required: true
+      sha1: 3cbd048e437c785b5a05a0feced00117a8a42545
+      md5: 491209dd815ceee9de02dbbc408c06d6
+      crc32: f1ac735f
+      size: 4194304
+    - name: ps2-0160a-20011004.bin
+      destination: pcsx2/bios/ps2-0160a-20011004.bin
+      required: true
+      sha1: d257bce6ecaf3bafb704c75a1b4741b910bd2d49
+      md5: 7200a03d51cacc4c14fcdfdbc4898431
+      crc32: a01ec625
+      size: 4194304
+    - name: ps2-0160e-20011004.bin
+      destination: pcsx2/bios/ps2-0160e-20011004.bin
+      required: true
+      sha1: ee34c3a87c53c75ca2a37d77b0042ca24d07831f
+      md5: 8359638e857c8bc18c3c18ac17d9cc3c
+      crc32: 82aa5055
+      size: 4194304
+    - name: ps2-0160h-20010730.bin
+      destination: pcsx2/bios/ps2-0160h-20010730.bin
+      required: true
+      sha1: ba15dcf7aac13864c08222037e9321d7468c87d1
+      md5: 352d2ff9b3f68be7e6fa7e6dd8389346
+      crc32: 75f83c67
+      size: 4194304
+    - name: ps2-0160a-20020207.bin
+      destination: pcsx2/bios/ps2-0160a-20020207.bin
+      required: true
+      sha1: f9a5d629a036b99128f7cb530c6e3ca016e9c8b7
+      md5: d5ce2c7d119f563ce04bc04dbc3a323e
+      crc32: a19e0bf5
+      size: 4194304
+    - name: ps2-0160e-20020319.bin
+      destination: pcsx2/bios/ps2-0160e-20020319.bin
+      required: true
+      sha1: bff2902bd0ce9729a060581132541e9fd1a9fab6
+      md5: 0d2228e6fd4fb639c9c39d077a9ec10c
+      crc32: 2fe21e4d
+      size: 4194304
+    - name: ps2-0160j-20020426.bin
+      destination: pcsx2/bios/ps2-0160j-20020426.bin
+      required: true
+      sha1: 003628c137dae577ff3b04b93ca1787b0c944702
+      md5: 72da56fccb8fcd77bba16d1b6f479914
+      crc32: c9363baf
+      size: 4194304
+    - name: ps2-0160e-20020426.bin
+      destination: pcsx2/bios/ps2-0160e-20020426.bin
+      required: true
+      sha1: d106b757ae2544dfe63f7e1924e59d5ad44c0c29
+      md5: 5b1f47fbeb277c6be2fccdd6344ff2fd
+      crc32: dad0baec
+      size: 4194304
+    - name: ps2-0160h-20020426.bin
+      destination: pcsx2/bios/ps2-0160h-20020426.bin
+      required: true
+      sha1: e3a74125c426bcacabca00b513fab928665c8846
+      md5: 315a4003535dfda689752cb25f24785c
+      crc32: 3355623e
+      size: 4194304
+    - name: ps2-0170j-20030206.bin
+      destination: pcsx2/bios/ps2-0170j-20030206.bin
+      required: true
+      sha1: d812ac65c357d392396ca9edee812dc41bed8bde
+      md5: 312ad4816c232a9606e56f946bc0678a
+      crc32: 9457f64e
+      size: 4194304
+    - name: ps2-0170ed-20030227.bin
+      destination: pcsx2/bios/ps2-0170ed-20030227.bin
+      required: true
+      sha1: e220bb282378c1f48ea1b585b3675e51a6dca572
+      md5: 666018ffec65c5c7e04796081295c6c7
+      crc32: 970a9c56
+      size: 4194304
+    - name: ps2-0170e-20030227.bin
+      destination: pcsx2/bios/ps2-0170e-20030227.bin
+      required: true
+      sha1: ad15bd7eabd5bd81ba011516a5be44947d6641aa
+      md5: 6e69920fa6eef8522a1d688a11e41bc6
+      crc32: 51b5fb8b
+      size: 4194304
+    - name: ps2-0170ad-20030325.bin
+      destination: pcsx2/bios/ps2-0170ad-20030325.bin
+      required: true
+      sha1: c5bc6e893b4c43d528142e56c96073024de64157
+      md5: eb960de68f0c0f7f9fa083e9f79d0360
+      crc32: 0e1ece79
+      size: 4194304
+    - name: ps2-0170a-20030325.bin
+      destination: pcsx2/bios/ps2-0170a-20030325.bin
+      required: true
+      sha1: d269d1ed513227f3ef7133c76cf1b3a64f97b15d
+      md5: 8aa12ce243210128c5074552d3b86251
+      crc32: 9a99e3f4
+      size: 4194304
+    - name: ps2-0180cd-20030224.bin
+      destination: pcsx2/bios/ps2-0180cd-20030224.bin
+      required: true
+      sha1: 2de87767008fc4a303af64a46251156e965d9065
+      md5: 240d4c5ddd4b54069bdc4a3cd2faf99d
+      crc32: 8c1a04cf
+      size: 4194304
+    - name: ps2-0180j-20031028.bin
+      destination: pcsx2/bios/ps2-0180j-20031028.bin
+      required: true
+      sha1: aa4a35c14ee342cf7a03b1dde294ca10e64889e1
+      md5: 1c6cd089e6c83da618fbf2a081eb4888
+      crc32: 585fd27c
+      size: 4194304
+    - name: ps2-0190j-20030623.bin
+      destination: pcsx2/bios/ps2-0190j-20030623.bin
+      required: true
+      sha1: 6a6ecfe6c10e42eff1ca056349def799b5629067
+      md5: 463d87789c555a4a7604e97d7db545d1
+      crc32: 7c10a967
+      size: 4194304
+    - name: ps2-0190a-20030623.bin
+      destination: pcsx2/bios/ps2-0190a-20030623.bin
+      required: true
+      sha1: c74d92a2952a2912b6698cbcf7742adac8f784d3
+      md5: 35461cecaa51712b300b2d6798825048
+      crc32: b3e87709
+      size: 4194304
+    - name: ps2-0190e-20030623.bin
+      destination: pcsx2/bios/ps2-0190e-20030623.bin
+      required: true
+      sha1: 18b9ba833c469c4683676cc20da5124080d980bb
+      md5: bd6415094e1ce9e05daabe85de807666
+      crc32: 1752a52e
+      size: 4194304
+    - name: ps2-0190h-20030623.bin
+      destination: pcsx2/bios/ps2-0190h-20030623.bin
+      required: true
+      sha1: caa18ed04854a91e68f2d61a782560edd6373bbf
+      md5: 2e70ad008d4ec8549aada8002fdf42fb
+      crc32: 41391dd3
+      size: 4194304
+    - name: ps2-0190r-20030623.bin
+      destination: pcsx2/bios/ps2-0190r-20030623.bin
+      required: true
+      sha1: 34a81db03ab617fbfdd7f9b861692dd2ecd57b82
+      md5: b53d51edc7fc086685e31b811dc32aad
+      crc32: 25f6212a
+      size: 4194304
+    - name: ps2-0190c-20030623.bin
+      destination: pcsx2/bios/ps2-0190c-20030623.bin
+      required: true
+      sha1: 92d9eb4b11cef97bb69a275b2851b72f7b0023d6
+      md5: 1b6e631b536247756287b916f9396872
+      crc32: d2347ee7
+      size: 4194304
+    - name: ps2-0190j-20030822.bin
+      destination: pcsx2/bios/ps2-0190j-20030822.bin
+      required: true
+      sha1: 0ea98a25a32145dda514de2f0d4bfbbd806bd00c
+      md5: 00da1b177096cfd2532c8fa22b43e667
+      crc32: 79d60546
+      size: 4194304
+    - name: ps2-0190e-20030822.bin
+      destination: pcsx2/bios/ps2-0190e-20030822.bin
+      required: true
+      sha1: 6e1f0eb4aec51a6288b3d802d3bcdb477cf52104
+      md5: afde410bd026c16be605a1ae4bd651fd
+      crc32: 3afd1d1e
+      size: 4194304
+    - name: ps2-0190a-20040329.bin
+      destination: pcsx2/bios/ps2-0190a-20040329.bin
+      required: true
+      sha1: b68c05f5cd86bf03cb38a643a723b7a97b759531
+      md5: 81f4336c1de607dd0865011c0447052e
+      crc32: 9ba4c32f
+      size: 4194304
+    - name: ps2-0200j-20040614.bin
+      destination: pcsx2/bios/ps2-0200j-20040614.bin
+      required: true
+      sha1: 224ab5704ab719edeb05ca1d835812252c97c1b3
+      md5: 0eee5d1c779aa50e94edd168b4ebf42e
+      crc32: 2f314730
+      size: 4194304
+    - name: ps2-0200a-20040614.bin
+      destination: pcsx2/bios/ps2-0200a-20040614.bin
+      required: true
+      sha1: 7a62e5f48603582707e9898eb055ea3eaee50d4c
+      md5: d333558cc14561c1fdc334c75d5f37b7
+      crc32: 7ebd68de
+      size: 4194304
+    - name: ps2-0200e-20040614.bin
+      destination: pcsx2/bios/ps2-0200e-20040614.bin
+      required: true
+      sha1: 434bc0b4eb4827da0773ec0795aadc5162569a07
+      md5: dc752f160044f2ed5fc1f4964db2a095
+      crc32: 6f8e3c29
+      size: 4194304
+    - name: ps2-0200ed-20040614.bin
+      destination: pcsx2/bios/ps2-0200ed-20040614.bin
+      required: true
+      sha1: 902f4680b258abd40c0922f6b0d581cbd8f8a73e
+      md5: 63ead1d74893bf7f36880af81f68a82d
+      crc32: 881c9aa9
+      size: 4194304
+    - name: ps2-0200h-20040614.bin
+      destination: pcsx2/bios/ps2-0200h-20040614.bin
+      required: true
+      sha1: 7f8e812cab7c7393c85eac6c42661e1fd0a642df
+      md5: 3e3e030c0f600442fa05b94f87a1e238
+      crc32: b57201bf
+      size: 4194304
+    - name: ps2-0210j-20040917.bin
+      destination: pcsx2/bios/ps2-0210j-20040917.bin
+      required: true
+      sha1: bbb1af3085e77599691ec430d147810157da934f
+      md5: 1ad977bb539fc9448a08ab276a836bbc
+      crc32: 55710d11
+      size: 4194304
+    - name: ps2-0220j-20050620.bin
+      destination: pcsx2/bios/ps2-0220j-20050620.bin
+      required: true
+      sha1: 7ffa75d142cb8eeea6c777dbcf263143655275d5
+      md5: eb4f40fcf4911ede39c1bbfe91e7a89a
+      crc32: d27fc41d
+      size: 4194304
+    - name: ps2-0220ad-20050620.bin
+      destination: pcsx2/bios/ps2-0220ad-20050620.bin
+      required: true
+      sha1: 7c7efdfcec7705f4e84bb47f45322104e39eed09
+      md5: 9959ad7a8685cad66206e7752ca23f8b
+      crc32: 181f1bda
+      size: 4194304
+    - name: ps2-0220a-20050620.bin
+      destination: pcsx2/bios/ps2-0220a-20050620.bin
+      required: true
+      sha1: 48d0445dffd1e879c7ae752c5166ec3101921555
+      md5: 929a14baca1776b00869f983aa6e14d2
+      crc32: d305a97a
+      size: 4194304
+    - name: ps2-0220e-20050620.bin
+      destination: pcsx2/bios/ps2-0220e-20050620.bin
+      required: true
+      sha1: 929a85e974faf4b40d0a7785023b758402c43bd9
+      md5: 573f7d4a430c32b3cc0fd0c41e104bbd
+      crc32: e2862e39
+      size: 4194304
+    - name: ps2-0220h-20050620.bin
+      destination: pcsx2/bios/ps2-0220h-20050620.bin
+      required: true
+      sha1: 0a071d1b46607a7694770407606d8599f62a372b
+      md5: df63a604e8bff5b0599bd1a6c2721bd0
+      crc32: e27c4a6c
+      size: 4194304
+    - name: ps2-0220j-20060210.bin
+      destination: pcsx2/bios/ps2-0220j-20060210.bin
+      required: true
+      sha1: 0edf1fbb772a8e6a79ae00e977450e3ade25c4f3
+      md5: 5b1ba4bb914406fae75ab8e38901684d
+      crc32: 1303918e
+      size: 4194304
+    - name: ps2-0220a-20060210.bin
+      destination: pcsx2/bios/ps2-0220a-20060210.bin
+      required: true
+      sha1: 92e488d5b2705e4cca83d4d1efbc421012faf83e
+      md5: cb801b7920a7d536ba07b6534d2433ca
+      crc32: 1279fce9
+      size: 4194304
+    - name: ps2-0220e-20060210.bin
+      destination: pcsx2/bios/ps2-0220e-20060210.bin
+      required: true
+      sha1: 28ad756d0cfd1e7b2e2de3de5d9e14207ee89761
+      md5: af60e6d1a939019d55e5b330d24b1c25
+      crc32: 23fa7baa
+      size: 4194304
+    - name: ps2-0220h-20060210.bin
+      destination: pcsx2/bios/ps2-0220h-20060210.bin
+      required: true
+      sha1: fce2a24e5e0400cc6d98c08f426405d19173813e
+      md5: 549a66d0c698635ca9fa3ab012da7129
+      crc32: 23001fff
+      size: 4194304
+    - name: ps2-0220j-20060905.bin
+      destination: pcsx2/bios/ps2-0220j-20060905.bin
+      required: true
+      sha1: 3baf847c1c217aa71ac6d298389c88edb3db32e2
+      md5: 5de9d0d730ff1e7ad122806335332524
+      crc32: 1d6d879b
+      size: 4194304
+    - name: ps2-0220ad-20060905.bin
+      destination: pcsx2/bios/ps2-0220ad-20060905.bin
+      required: true
+      sha1: 4191b5842f31a9985b5428bc9d2b733ce3abb583
+      md5: 21fe4cad111f7dc0f9af29477057f88d
+      crc32: 431d9b7f
+      size: 4194304
+    - name: ps2-0220a-20060905.bin
+      destination: pcsx2/bios/ps2-0220a-20060905.bin
+      required: true
+      sha1: 8361d615cc895962e0f0838489337574dbdc9173
+      md5: 40c11c063b3b9409aa5e4058e984e30c
+      crc32: 1c17eafc
+      size: 4194304
+    - name: ps2-0220e-20060905.bin
+      destination: pcsx2/bios/ps2-0220e-20060905.bin
+      required: true
+      sha1: da5aacead2fb55807d6d4e70b1f10f4fdcfd3281
+      md5: 80bbb237a6af9c611df43b16b930b683
+      crc32: 2d946dbf
+      size: 4194304
+    - name: ps2-0220h-20060905.bin
+      destination: pcsx2/bios/ps2-0220h-20060905.bin
+      required: true
+      sha1: a5a2ee0dd9a86ca35b94e97ca92476a584f755bf
+      md5: c37bce95d32b2be480f87dd32704e664
+      crc32: 2d6e09ea
+      size: 4194304
+    - name: ps2-0230j-20080220.bin
+      destination: pcsx2/bios/ps2-0230j-20080220.bin
+      required: true
+      sha1: fbd54bfc020af34008b317dcb80b812dd29b3759
+      md5: 80ac46fa7e77b8ab4366e86948e54f83
+      crc32: 2912faa5
+      size: 4194304
+    - name: ps2-0230a-20080220.bin
+      destination: pcsx2/bios/ps2-0230a-20080220.bin
+      required: true
+      sha1: f9229fe159d0353b9f0632f3fdc66819c9030458
+      md5: 21038400dc633070a78ad53090c53017
+      crc32: 286897c2
+      size: 4194304
+    - name: ps2-0230e-20080220.bin
+      destination: pcsx2/bios/ps2-0230e-20080220.bin
+      required: true
+      sha1: 9915b5ba56798f4027ac1bd8d10abe0c1c9c326a
+      md5: dc69f0643a3030aaa4797501b483d6c4
+      crc32: 19eb1081
+      size: 4194304
+    - name: ps2-0230h-20080220.bin
+      destination: pcsx2/bios/ps2-0230h-20080220.bin
+      required: true
+      sha1: a277b456849697abec11285c6b35bc734598c220
+      md5: 30d56e79d89fbddf10938fa67fe3f34e
+      crc32: 191174d4
+      size: 4194304
+    - name: ps2-0250e-20100415.bin
+      destination: pcsx2/bios/ps2-0250e-20100415.bin
+      required: true
+      sha1: b9cb5775af29cd4d1ec5521e8231f8b6636e2e44
+      md5: 93ea3bcee4252627919175ff1b16a1d9
+      crc32: 7e75fc28
+      size: 4194304
+    - name: ps2-0250j-20100415.bin
+      destination: pcsx2/bios/ps2-0250j-20100415.bin
+      required: true
+      sha1: 4b5ef16b67e3b523d28ed2406106cb80470a06d0
+      md5: d3e81e95db25f5a86a7b7474550a2155
+      crc32: 4e8c160c
+      size: 4194304
+  sony-psp:
+    files:
+    - name: ppge_atlas.zim
+      destination: ppge_atlas.zim
+      required: true
+      sha1: 30a33f3651f8e1b0967a5dfe6ff714baebcce41a
+      md5: 866855cc330b9b95cc69135fb7b41d38
+      crc32: 7b57fa78
+      size: 666530
+    core: ppsspp
+    manufacturer: Sony
+    docs: "https://docs.libretro.com/library/ppsspp/"
+  ti-83:
+    files:
+    - name: ti83se.rom
+      destination: ti83se.rom
+      required: true
+      sha1: 8177bc6d5489d575cbfa9a004d097fc08c6f8c86
+      md5: c6ff8204c5c81b7be34614dbbd690c8b
+      crc32: 200dd7d0
+      size: 2097152
+    - name: ti83plus.rom
+      destination: ti83plus.rom
+      required: true
+      sha1: 1fddd44d54f3ff12bfb548fcb03ce36b5a4f295a
+      md5: 8011181f810b5ec4e9d6a03f0e14257a
+      crc32: 58f14c79
+      size: 524288
+    - name: ti83.rom
+      destination: ti83.rom
+      required: true
+      sha1: ef66dad3e7b2b6a86f326765e7dfd7d1a308ad8f
+      md5: d4448d09bbfde687c04f9e3310e023ab
+      crc32: 4bf05697
+      size: 262144
+    core: numero
+    manufacturer: Texas Instruments
+    docs: "https://docs.libretro.com/library/numero/"
+  videoton-tvc:
+    files:
+    - name: tvcfileio.rom
+      destination: tvcfileio.rom
+      required: true
+      sha1: 98889c3a56b11dedf077f866ed2e12d51b604113
+      md5: a2cf86ba8e7fc58b242137fe59036832
+      crc32: 950e32fd
+      size: 8192
+    - name: tvc22_ext.rom
+      destination: tvc22_ext.rom
+      required: true
+      sha1: abf119cf947ea32defd08b29a8a25d75f6bd4987
+      md5: 5ce95a26ceed5bec73995d83568da9cf
+      crc32: 05e1c3a8
+      size: 8192
+    - name: tvc22_sys.rom
+      destination: tvc22_sys.rom
+      required: true
+      sha1: f2572ee83d09fc08f4de4a62f101c8bb301a9505
+      md5: 8c54285f541930cde766069942bad0f2
+      crc32: 79fa818c
+      size: 16384
+    - name: tvc_dos12d.rom
+      destination: tvc_dos12d.rom
+      required: true
+      sha1: 072c6160d4e7d406f5d8f5b1b66066c797d35561
+      md5: 88dc7876d584f90e4106f91444ab23b7
+      crc32: 1466aed4
+      size: 16384
+  wolfenstein-3d:
+    files:
+    - name: ecwolf.pk3
+      destination: ecwolf.pk3
+      required: true
+      sha1: 9259b87edfe9b9f6d0749788a75a6ccf158f50aa
+      md5: c011b428819eea4a80b455c245a5a04d
+      crc32: 26dc3fba
+      size: 178755
+  scummvm:
+    files:
+    - name: scummvm.zip
+      destination: scummvm.zip
+      required: true
+      sha1: 718c1a00d38e0810a1ad0ffde79f73447f846f01
+      md5: a17e0e0150155400d8cced329563d9c8
+      crc32: a93f1c4b
+      size: 9523360
+    core: scummvm
+    manufacturer: Various
+    docs: "https://docs.libretro.com/library/scummvm/"

@@ -1,0 +1,83 @@
+The meanings of the columns are as follows:
+Working - "No" means that the emulation has shortcomings that cause the game
+  not to work correctly. This can be anywhere from just showing a black screen
+  to being playable with major problems.
+Correct Colors - "Yes" means that colors should be identical to the original,
+  "Close" that they are very similar but wrong in places, "No" that they are
+  completely wrong. In some cases, we were not able to find the color PROMs of
+  the game. Those PROMs will be reported as "NO GOOD DUMP KNOWN" on startup,
+  and the game will have wrong colors. The game is still reported as "Yes" in
+  this column, because the code to handle the color PROMs is in the driver and
+  if you provide them colors will be correct.
+Sound - "Partial" means that sound support is either incomplete or not entirely
+  accurate. Note that, due to analog circuitry which is difficult to emulate,
+  sound may be significantly different from the real board. A common case is
+  the presence of low pass filters that make the real board sound less harsh
+  than the emulation.
+Screen Flip - A large number of games have a dip switch setting for "Cocktail"
+  cabinet, meaning that the players sit in front of each other, and the screen
+  is flipped when player 2 is playing. Some games also have a "Flip Screen" dip
+  switch. Those need special support in the driver, which is missing in many
+  cases.
+Internal Name - This is the unique name that should be specified on the command
+  line to run the game. ROMs must be placed in the ROM path, either in a .zip
+  file or in a subdirectory of the same name. The former is suggested, because
+  the files will be identified by their CRC instead of requiring specific
+  names.
+
++----------------------------------+-------+-------+-------+-------+----------+
+|                                  |       |Correct|       |Screen | Internal |
+| Game Name                        |Working|Colors | Sound | Flip  |   Name   |
++----------------------------------+-------+-------+-------+-------+----------+
+| Alex Kidd                        | No(1) |  Yes  |  Yes  |  Yes  | alexkidd |
+| Alien Storm                      | No(1) |  Yes  |  Yes  |  Yes  | astorm   |
+| American Horseshoes              |   No  |  Yes  |  Yes  |   No  | horshoes |
+| Avengers                         |   No  |   No  |  Yes  |  Yes  | avengers |
+| Block Gal                        |   No  |  Yes  |  Yes  |   No  | blockgal |
+| Cabal                            | No(1) |  Yes  |Partial|   No  | cabal    |
+| Champion Baseball II             |   No  |  Yes  |  Yes  |  Yes  | champbb2 |
+| Choplifter                       | No(1) |  Yes  |  Yes  |   No  | chplft   |
+| DakkoChan Jansoh                 |   No  |  Yes  |  Yes  |   No  | dakkochn |
+| Dark Planet                      |   No  |  Yes  |  Yes  |  Yes  | darkplnt |
+| E-Swat                           | No(1) |  Yes  |  Yes  |  Yes  | eswat    |
+| Enduro Racer                     | No(1) |  Yes  |  Yes  |  Yes  | enduror  |
+| Fast Lane                        |   No  | Close |  Yes  |  Yes  | fastlane |
+| Fire Trap                        | No(1) |  Yes  |  Yes  |  Yes  | firetrap |
+| Flash Point                      | No(1) |  Yes  |  Yes  |  Yes  | fpoint   |
+| Fly-Boy                          | No(1) |  Yes  |  Yes  |  Yes  | flyboy   |
+| Formation Z                      |   No  |  Yes  |  Yes  |   No  | formatz  |
+| Gardia                           |   No  |  Yes  |  Yes  |   No  | gardia   |
+| Gold Medalist                    |   No  |  Yes  |  Yes  |   No  | goldmedl |
+| Guardian                         | No(1) |  Yes  |  Yes  |   No  | getstar  |
+| Jump Shot                        |   No  |  Yes  |  Yes  |  Yes  | jumpshot |
+| Kick Start Wheelie King          |   No  |  Yes  |  Yes  |  Yes  | kikstart |
+| KiKi KaiKai                      |   No  |  Yes  |  Yes  |  Yes  | kikikai  |
+| Labyrinth Runner                 |   No  |  Yes  |  Yes  |  Yes  | labyrunr |
+| M.A.C.H. 3                       |   No  |  Yes  |  Yes  |  Yes  | mach3    |
+| Major Title                      |   No  |  Yes  |  Yes  |   No  | majtitle |
+| Mermaid                          |   No  |  Yes  |  Yes  |  Yes  | mermaid  |
+| Moon Walker                      | No(1) |  Yes  |  Yes  |  Yes  | moonwalk |
+| Passing Shot                     | No(1) |  Yes  |  Yes  |  Yes  | passsht  |
+| Popeye                           | No(1) |  Yes  |  Yes  |   No  | popeye   |
+| Raimais                          |   No  |  Yes  |   No  |   No  | raimais  |
+| Rip Cord                         |   No  |  Yes  |  Yes  |  Yes  | ripcord  |
+| Robocop                          | No(1) |  Yes  |  Yes  |   No  | robocop  |
+| S.P.Y. - Special Project Y       |   No  |  Yes  |  Yes  |  Yes  | spy      |
+| Shanghai                         |   No  |  Yes  |  Yes  |  Yes  | shanghai |
+| Shooting Master                  |   No  |  Yes  |  Yes  |   No  | shtngmst |
+| Slap Fight                       | No(1) |  Yes  |  Yes  |   No  | slapfigh |
+| Sundance                         |   No  |  Yes  |  Yes  |  Yes  | sundance |
+| Super Hang-On                    | No(1) |  Yes  |  Yes  |  Yes  | shangon  |
+| Super High Impact                |   No  |  Yes  |  Yes  |  Yes  | shimpact |
+| Super Qix                        | No(1) |  Yes  |  Yes  |   No  | superqix |
+| Tee'd Off                        |   No  |  Yes  |  Yes  |  Yes  | teedoff  |
+| Tetris                           | No(1) |  Yes  |  Yes  |  Yes  | tetris   |
+| Thunder Cross                    |   No  |  Yes  |  Yes  |  Yes  | thunderx |
+| Tiger Heli                       | No(1) |  Yes  |  Yes  |   No  | tigerh   |
+| Toki                             | No(1) |  Yes  |  Yes  |   No  | toki     |
+| Tokio / Scramble Formation       | No(1) |  Yes  |  Yes  |  Yes  | tokio    |
+| Ufo Senshi Yohko Chan            |   No  |  Yes  |  Yes  |   No  | ufosensi |
+| Us vs. Them                      |   No  |  Yes  |  Yes  |  Yes  | usvsthem |
++----------------------------------+-------+-------+-------+-------+----------+
+
+(1) There are variants of the game (usually bootlegs) that work correctly

@@ -1,0 +1,128 @@
+﻿Darkness|暗闇
+Wire Mesh|金網
+Stone Bridge (V)|石の橋（縦）
+Stone Bridge (V)|石の橋（縦）
+Stone Bridge (V)|石の橋（縦）
+Stone Bridge (H)|石の橋（横）
+Stone Bridge (H)|石の橋（横）
+Broken Bridge (H)|壊れた橋（横）
+Transparent|透明
+Wire Mesh|金網
+Broken Bridge (V)|壊れた橋（縦）
+Broken Bridge (V)|壊れた橋（縦）
+Broken Bridge (V)|壊れた橋（縦）
+Stone Bridge (H)|石の橋（横）
+Broken Bridge (H)|壊れた橋（横）
+Broken Bridge (H)|壊れた橋（横）
+Wood Floor|木の床
+Wood Floor|木の床
+Wood Floor|木の床
+Wood Floor|木の床
+Cobblestones|石畳
+Cobblestones|石畳
+Cobblestones|石畳
+Cobblestones|石畳
+Ledge|段差
+Ledge|段差
+Ledge|段差
+Ledge|段差
+Ledge|段差
+Ledge|段差
+Ledge|段差
+Ledge|段差
+Cobblestones|石畳
+Cobblestones|石畳
+Cobblestones|石畳
+Cobblestones|石畳
+Cobblestones|石畳
+Cobblestones|石畳
+Cobblestones|石畳
+Cobblestones|石畳
+Ledge|段差
+Ledge|段差
+Ledge|段差
+Ledge|段差
+Ledge|段差
+Ledge|段差
+Ledge|段差
+Ledge|段差
+Interior Floor|内装床
+Interior Floor|内装床
+Interior Floor|内装床
+Interior Floor|内装床
+Floor (Demon Castle)|床（魔王城）
+Floor (Concrete)|床（コンクリート）
+Floor (Tent)|床（テント）
+Floor (Dirt)|床（土）
+Ledge|段差
+Ledge|段差
+Ledge|段差
+Ledge|段差
+Ledge|段差
+Ledge|段差
+Ledge|段差
+Ledge|段差
+Stairs (Wood)|階段（木）
+Stairs (Wood)|階段（木）
+Stairs (Wood)|階段（木）
+Stairs (Wood)|階段（木）
+Stairs (Stone)|階段（石）
+Stairs (Stone)|階段（石）
+Stairs (Stone)|階段（石）
+Stairs (Stone)|階段（石）
+Stairs (Stone)|階段（石）
+Stairs (Stone)|階段（石）
+Stairs (Stone)|階段（石）
+Stairs (Stone)|階段（石）
+Stairs (Ruins)|階段（廃墟）
+Stairs (Ruins)|階段（廃墟）
+Stairs (Ruins)|階段（廃墟）
+Stairs (Ruins)|階段（廃墟）
+Stairs (Carpet)|階段（じゅうたん）
+Stairs (Carpet)|階段（じゅうたん）
+Stairs (Carpet)|階段（じゅうたん）
+Stairs (Carpet)|階段（じゅうたん）
+Stairs (Carpet)|階段（じゅうたん）
+Stairs (Carpet)|階段（じゅうたん）
+Stairs (Carpet)|階段（じゅうたん）
+Stairs (Carpet)|階段（じゅうたん）
+Wood Floor (Ruins)|木の床（廃墟）
+Wood Floor (Ruins)|木の床（廃墟）
+Wood Floor (Ruins)|木の床（廃墟）
+Wood Floor (Ruins)|木の床（廃墟）
+Cobblestones (Ruins)|石畳（廃墟）
+Cobblestones (Ruins)|石畳（廃墟）
+Cobblestones (Ruins)|石畳（廃墟）
+Cobblestones (Ruins)|石畳（廃墟）
+Cobblestones (Ruins)|石畳（廃墟）
+Cobblestones (Ruins)|石畳（廃墟）
+Cobblestones (Ruins)|石畳（廃墟）
+Cobblestones (Ruins)|石畳（廃墟）
+Cobblestones (Ruins)|石畳（廃墟）
+Cobblestones (Ruins)|石畳（廃墟）
+Cobblestones (Ruins)|石畳（廃墟）
+Cobblestones (Ruins)|石畳（廃墟）
+Interior Floor (Ruins)|内装床（廃墟）
+Interior Floor (Ruins)|内装床（廃墟）
+Interior Floor (Ruins)|内装床（廃墟）
+Interior Floor (Ruins)|内装床（廃墟）
+Floor (Demon Castle, Ruins)|床（魔王城・廃墟）
+Floor (Concrete, Ruins)|床（コンクリート・廃墟）
+Floor (Tent, Ruins)|床（テント・廃墟）
+Floor (Dirt, Ruins)|床（土・廃墟）
+Relief Floor Tile|レリーフ床
+Relief Floor Tile|レリーフ床
+Relief Floor Tile|レリーフ床
+Relief Floor Tile|レリーフ床
+Relief Floor Tile|レリーフ床
+Relief Floor Tile|レリーフ床
+Relief Floor Tile|レリーフ床
+Relief Floor Tile|レリーフ床
+Relief Floor Tile|レリーフ床
+Relief Floor Tile|レリーフ床
+Relief Floor Tile|レリーフ床
+Relief Floor Tile|レリーフ床
+Relief Floor Tile|レリーフ床
+Relief Floor Tile|レリーフ床
+Relief Floor Tile (Ruins)|レリーフ床（廃墟）
+Relief Floor Tile (Ruins)|レリーフ床（廃墟）

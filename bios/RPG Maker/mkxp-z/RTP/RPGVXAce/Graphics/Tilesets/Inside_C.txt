@@ -1,0 +1,256 @@
+﻿Cup & Teapot (Bottom)|カップとポット（下）
+Cup & Teapot (Top)|カップとポット（上）
+Cup & Teapot (Left)|カップとポット（左）
+Cup & Teapot (Right)|カップとポット（右）
+Cup (Bottom)|カップ（下）
+Cup (Top)|カップ（上）
+Cup (Left)|カップ（左）
+Cup (Right)|カップ（右）
+Glass & Bottle (Bottom)|グラスとボトル（下）
+Glass & Bottle (Top)|グラスとボトル（上）
+Glass & Bottle (Left)|グラスとボトル（左）
+Glass & Bottle (Right)|グラスとボトル（右）
+Glass (Bottom)|グラス（下）
+Glass (Top)|グラス（上）
+Glass (Left)|グラス（左）
+Glass (Right)|グラス（右）
+Pint Mug & Ale Bottle (Bottom)|ジョッキと瓶（下）
+Pint Mug & Ale Bottles (Top)|ジョッキと瓶（上）
+Pint Mug & Ale Bottles (Left)|ジョッキと瓶（左）
+Pint Mug & Ale Bottle (Right)|ジョッキと瓶（右）
+Pint Mug (Bottom)|ジョッキ（下）
+Pint Mug (Top)|ジョッキ（上）
+Pint Mug (Left)|ジョッキ（左）
+Pint Mug (Right)|ジョッキ（右）
+Teapot|ポット
+Bottle|ボトル
+Bottles|ボトル
+Bottles|ボトル
+Broken Bottle|割れたボトル
+Ale Bottle|瓶
+Ale Bottles|瓶
+Ale Bottles|瓶
+Meal (Fish)|魚料理
+Meal (Meat)|肉料理
+Side Dishes|副菜
+Fruit Bowl|フルーツ盛り合わせ
+Roast Pig|丸焼き
+Cake|ケーキ
+Pizza|ピザ
+Meal (Fish)|魚料理
+Dinner Set (Bottom)|夕食セット（下）
+Dinner Set (Top)|夕食セット（上）
+Dinner Set (Left)|夕食セット（左）
+Dinner Set (Right)|夕食セット（右）
+Pie|パイ
+Fried Rice|チャーハン
+Mystery Dishes|謎の料理
+Cooking Disaster|失敗料理
+Breakfast Set (Bottom)|朝食セット（下）
+Breakfast Set (Top)|朝食セット（上）
+Breakfast Set (Left)|朝食セット（左）
+Breakfast Set (Right)|朝食セット（右）
+Plate|皿
+Bowl|ボウル
+Plates|皿
+Plates|皿
+Closed Book (Bottom)|閉じた本（下）
+Closed Book (Top)|閉じた本（上）
+Closed Book (Left)|閉じた本（左）
+Closed Book (Right)|閉じた本（右）
+Open Book (Bottom)|開いた本（下）
+Open Book (Top)|開いた本（上）
+Open Book (Left)|開いた本（左）
+Open Book (Right)|開いた本（右）
+Closed Old Book (Bottom)|閉じた古文書（下）
+Closed Old Book (Top)|閉じた古文書（上）
+Closed Old Book (Left)|閉じた古文書（左）
+Closed Old Book (Right)|閉じた古文書（右）
+Open Old Book (Bottom)|開いた古文書（下）
+Open Old Book (Top)|開いた古文書（上）
+Open Old Book (Left)|開いた古文書（左）
+Open Old Book (Right)|開いた古文書（右）
+Notes & Pen (Bottom)|メモとペン（下）
+Notes & Pen (Top)|メモとペン（上）
+Notes & Pen (Left)|メモとペン（左）
+Notes & Pen (Right)|メモとペン（右）
+Map (Bottom)|地図（下）
+Map (Top)|地図（上）
+Map (Left)|地図（左）
+Map (Right)|地図（右）
+Envelope & Letter|封筒と便箋
+Envelope|封筒
+Scrolls|巻物
+Scrolls|巻物
+Potted Flowers|花瓶
+Potted Plant|植木鉢
+Potted Plant|植木鉢
+Planter|プランター
+Case|ケース
+Case|ケース
+Letter Case|レターケース
+Cutting Board|まな板
+Small Box|小箱
+Small Box|小箱
+Small Box|小箱
+Small Box|小箱
+Sack|袋
+Sacks|袋
+Sacks|袋
+Medicine Bottle|薬瓶
+Medicine Bottles|薬瓶
+Medicine Bottles|薬瓶
+Potion|液体入り瓶
+Potions|液体入り瓶
+Basket|バスケット
+Basket|バスケット
+Basket|バスケット
+Basket|バスケット
+Rug|じゅうたん
+Rug|じゅうたん
+Rug|じゅうたん
+Lab Equipment|実験器具
+Stuffed Doll|ぬいぐるみ
+Stuffed Doll|ぬいぐるみ
+Stuffed Doll|ぬいぐるみ
+Stuffed Doll|ぬいぐるみ
+Stuffed Dolls|ぬいぐるみ
+Stuffed Dolls|ぬいぐるみ
+Gifts|プレゼント
+Gifts|プレゼント
+Shovel|スコップ
+Pickax|つるはし
+Rope|ロープ
+Rope|ロープ
+Pendant|ペンダント
+Jewelry Case|宝石ケース
+Necklace|ネックレス
+Jewelry Case|宝石ケース
+Sword|剣
+Swords|剣
+Swords|剣
+Axes|斧
+Spears|槍
+Spears|槍
+Whip|鞭
+Knives|短剣
+Cooking Utensils|調理器具
+Dry Flowers|ドライフラワー
+Shield|盾
+Shield|盾
+Men's Clothing (Hanging)|男物の服（壁掛け）
+Men's Clothing (Hanging)|男物の服（壁掛け）
+Women's Clothing (Hanging)|女物の服（壁掛け）
+Women's Clothing (Hanging)|女物の服（壁掛け）
+Sword Rack|剣掛台
+Sword Rack|剣掛台
+Hammers|ハンマー
+Bows & Arrows|弓矢
+Blacksmith's Table|金床
+Blacksmith's Table|金床
+Large Basin|水桶
+Scrap Metal|鉄くず
+Helmet|兜
+Helmet|兜
+Helmet|兜
+Hat (Stand)|帽子（スタンド）
+Hat (Stand)|帽子（スタンド）
+Hat (Stand)|帽子（スタンド）
+Women's Clothing (Stand)|女物の服（スタンド）
+Dress (Stand)|ドレス（スタンド）
+Armor (Stand)|鎧（スタンド）
+Armor (Stand)|鎧（スタンド）
+Armor (Stand)|鎧（スタンド）
+Armor (Stand)|鎧（スタンド）
+Men's Clothing (Stand)|男物の服（スタンド）
+Cape (Stand)|マント（スタンド）
+Robe (Stand)|ローブ（スタンド）
+Robe (Stand)|ローブ（スタンド）
+Church Symbol|教会のシンボル
+Goddess Statue|女神像
+Goddess Statue|女神像
+Goddess Statue|女神像
+Statue|石像
+Dais|台座
+Crate with Swords|剣の入った箱
+Crate with Spears|槍の入った箱
+Church Symbol|教会のシンボル
+Goddess Statue|女神像
+Goddess Statue|女神像
+Goddess Statue|女神像
+Statue|石像
+Broken Statue|壊れた像
+Crate with Swords|剣の入った箱
+Crate with Spears|槍の入った箱
+Church Table|教会机
+Church Table|教会机
+Church Table|教会机
+Church Table|教会机
+Decorative Pillar|装飾柱
+Decorative Pillar|装飾柱
+Decorative Pillar (Ruins)|装飾柱（廃墟）
+Decorative Pillar (Ruins)|装飾柱（廃墟）
+Church Table|教会机
+Church Table|教会机
+Church Table|教会机
+Church Table|教会机
+Decorative Pillar|装飾柱
+Decorative Pillar|装飾柱
+Decorative Pillar (Ruins)|装飾柱（廃墟）
+Decorative Pillar (Ruins)|装飾柱（廃墟）
+Gold Bricks|金の延べ棒
+Gold Bricks|金の延べ棒
+Silver Bricks|銀の延べ棒
+Silver Bricks|銀の延べ棒
+Decorative Pillar|装飾柱
+Decorative Pillar|装飾柱
+Decorative Pillar (Ruins)|装飾柱（廃墟）
+Decorative Pillar (Ruins)|装飾柱（廃墟）
+Monument|石碑
+Monument|石碑
+Demon Statue|悪魔像
+Dragon Statue|竜像
+Dragon Statue|竜像
+Monument|石碑
+Monument|石碑
+Monument|石碑
+Monument|石碑
+Monument|石碑
+Demon Statue|悪魔像
+Dragon Statue|竜像
+Dragon Statue|竜像
+Monument|石碑
+Monument|石碑
+Monument|石碑
+Railings|段差用手すり
+Railings|段差用手すり
+Railings|段差用手すり
+Railings|段差用手すり
+Railings|段差用手すり
+Railings|段差用手すり
+Railings|段差用手すり
+Railings|段差用手すり
+Banister (Wood)|階段用手すり（木）
+Banister (Wood)|階段用手すり（木）
+Banister (Stone)|階段用手すり（石）
+Banister (Stone)|階段用手すり（石）
+Banister (Temple)|階段用手すり（神殿）
+Banister (Temple)|階段用手すり（神殿）
+Banister (Castle)|階段用手すり（城）
+Banister (Castle)|階段用手すり（城）
+Banister (Wood)|階段用手すり（木）
+Banister (Wood)|階段用手すり（木）
+Banister (Stone)|階段用手すり（石）
+Banister (Stone)|階段用手すり（石）
+Banister (Temple)|階段用手すり（神殿）
+Banister (Temple)|階段用手すり（神殿）
+Banister (Castle)|階段用手すり（城）
+Banister (Castle)|階段用手すり（城）
+Banister (Wood)|階段用手すり（木）
+Banister (Wood)|階段用手すり（木）
+Banister (Stone)|階段用手すり（石）
+Banister (Stone)|階段用手すり（石）
+Banister (Temple)|階段用手すり（神殿）
+Banister (Temple)|階段用手すり（神殿）
+Banister (Castle)|階段用手すり（城）
+Banister (Castle)|階段用手すり（城）

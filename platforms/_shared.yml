@@ -1,0 +1,38 @@
+# Shared BIOS Groups
+# BIOS files used across multiple systems/platforms.
+# Referenced via `includes: [group_name]` in platform configs.
+
+shared_groups:
+  mt32:
+    - name: MT32_CONTROL.ROM
+      sha1: "b083518fffb7f66b03c23b7eb4f868e62dc5a987"
+      md5: "5626206284b22c2734f3e9efefcd2675"
+      destination: "scummvm/extra/MT32_CONTROL.ROM"
+      required: false
+    - name: MT32_PCM.ROM
+      sha1: "f6b1eebc4b2d200ec6d3d21d51325d5b48c60252"
+      md5: "89e42e386e82e0cacb4a2704a03706ca"
+      destination: "scummvm/extra/MT32_PCM.ROM"
+      required: false
+
+  jiffydos:
+    - name: JiffyDOS_C128.bin
+      sha1: "7d1898f32beae4b2ae610d469ce578a588efaa7c"
+      destination: "vice/JiffyDOS_C128.bin"
+      required: false
+    - name: JiffyDOS_C64.bin
+      sha1: "31e73e66eccb28732daea8ec3ad1addd9b39a017"
+      destination: "vice/JiffyDOS_C64.bin"
+      required: false
+    - name: JiffyDOS_1541-II.bin
+      sha1: "b1a5b826304d3df2a27d7163c6a81a532e040d32"
+      destination: "vice/JiffyDOS_1541-II.bin"
+      required: false
+    - name: JiffyDOS_1571_repl310654.bin
+      sha1: "d4b79b60cf1eaa399d0932200eb7811e00455249"
+      destination: "vice/JiffyDOS_1571_repl310654.bin"
+      required: false
+    - name: JiffyDOS_1581.bin
+      sha1: "65bbf2be7bcd5bdcbff609d6c66471ffb9d04bfe"
+      destination: "vice/JiffyDOS_1581.bin"
+      required: false

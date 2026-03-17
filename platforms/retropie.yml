@@ -1,0 +1,6 @@
+inherits: retroarch
+platform: RetroPie
+homepage: "https://retropie.org.uk"
+base_destination: "BIOS"
+# Version is inherited from retroarch.yml (fetched dynamically by scraper)
+# RetroPie uses the same cores as RetroArch but with BIOS/ base path

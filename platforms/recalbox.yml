@@ -1,0 +1,1508 @@
+platform: Recalbox
+version: '10.0'
+homepage: "https://www.recalbox.com"
+source: "https://gitlab.com/recalbox/recalbox/-/raw/master/board/recalbox/fsoverlay/recalbox/share_init/system/.emulationstation/es_bios.xml"
+base_destination: bios
+hash_type: md5
+verification_mode: md5
+systems:
+  commodore-amiga:
+    files:
+    - name: kick33180.A500
+      destination: amiga/bios/kick33180.A500
+      required: true
+      md5: 85ad74194e87c08904327de1a9443b7a
+    - name: kick34005.A500
+      destination: amiga/bios/kick34005.A500
+      required: false
+      md5: 82a21c1890cae844b3df741f2762d48d
+    - name: kick37175.A500
+      destination: amiga/bios/kick37175.A500
+      required: true
+      md5: dc10d7bdd1b6f450773dfb558477c230
+    - name: kick40063.A600
+      destination: amiga/bios/kick40063.A600
+      required: false
+      md5: e40a5dfb3d017ba8779faba30cbd1c8e
+    - name: kick02019.AROS.ext
+      destination: amiga/bios/kick02019.AROS.ext
+      required: false
+      md5: 4fa7042d73d0f77bf5723cf8430989bf
+    - name: kick02019.AROS
+      destination: amiga/bios/kick02019.AROS
+      required: false
+      md5: 186d23cccd9fbd6336d0f988b39dce4d
+    - name: kick39106.A1200
+      destination: amiga/bios/kick39106.A1200
+      required: true
+      md5: b7cc148386aa631136f510cd29e42fc3
+    - name: kick40068.A1200
+      destination: amiga/bios/kick40068.A1200
+      required: true
+      md5: 646773759326fbac3b2311fd8c8793ee
+    - name: kick40068.A4000
+      destination: amiga/bios/kick40068.A4000
+      required: true
+      md5: 9bdedde6a4f33555b4a270c8ca53297d
+    - name: kick34005.CDTV
+      destination: amiga/bios/kick34005.CDTV
+      required: true
+      md5: 89da1838a24460e4b93f4f0c5d92d48d,d98112f18792ee3714df16a6eb421b89,d1145ab3a0f89340f94c9e734762c198
+    - name: kick40060.CD32
+      destination: amiga/bios/kick40060.CD32
+      required: true
+      md5: f2f241bf094168cfb9e7805dc2856433,5f8924d013dd57a89cf349f4cdedc6b1
+    - name: kick40060.CD32.ext
+      destination: amiga/bios/kick40060.CD32.ext
+      required: false
+      md5: bb72565701b1b6faece07d68ea5da639
+  apple2gs:
+    files:
+    - name: apple2gs1.rom
+      destination: apple2gs1.rom
+      required: true
+      md5: 20a0334c447cb069a040ae5be1d938df
+    - name: apple2gs3.rom
+      destination: apple2gs3.rom
+      required: true
+      md5: ba89edf2729a28a17cd9e0f7a0ac9a39
+  macintosh:
+    files:
+    - name: MacII.ROM
+      destination: macintosh/MacII.ROM
+      required: true
+      md5: 66223be1497460f1e60885eeb35e03cc
+    - name: MinivMacBootv2.dsk
+      destination: macintosh/MinivMacBootv2.dsk
+      required: true
+      md5: 16ddb8838d48be26e471a2f2bb85a961,e66dc7952c8b9673868ad2faba3c0d20
+  atari-400-800:
+    files:
+    - name: ATARIBAS.ROM
+      destination: atari800/ATARIBAS.ROM
+      required: true
+      md5: 0bac0c6a50104045d902df4503a4c30b
+    - name: ATARIOSA.ROM
+      destination: atari800/ATARIOSA.ROM
+      required: true
+      md5: eb1f32f5d9f382db1bbfb8d7f9cb343a
+    - name: ATARIOSB.ROM
+      destination: atari800/ATARIOSB.ROM
+      required: true
+      md5: a3e8d617c95d08031fe1b20d541434b2
+    - name: ATARIXL.ROM
+      destination: atari800/ATARIXL.ROM
+      required: true
+      md5: 06daac977823773a3eea3422fd26a703
+  atari-5200:
+    files:
+    - name: 5200.rom
+      destination: atari5200/5200.rom
+      required: false
+      md5: 281f20ea4320404ec820fb7ec0693b38
+  atari-7800:
+    files:
+    - name: "7800 BIOS (U).rom"
+      destination: "atari7800/7800 BIOS (U).rom"
+      required: false
+      md5: 0763f1ffb006ddbe32e52d497ee848ae
+    - name: "7800 BIOS (E).rom"
+      destination: "atari7800/7800 BIOS (E).rom"
+      required: false
+      md5: 397bb566584be7b9764e7a68974c4263
+  bk:
+    files:
+    - name: B11M_BOS.ROM
+      destination: bk/B11M_BOS.ROM
+      required: true
+      md5: fe4627d1e3a1535874085050733263e7
+    - name: B11M_EXT.ROM
+      destination: bk/B11M_EXT.ROM
+      required: true
+      md5: dc52f365d56fa1951f5d35b1101b9e3f
+    - name: BAS11M_0.ROM
+      destination: bk/BAS11M_0.ROM
+      required: true
+      md5: 946f6f23ded03c0e26187f0b3ca75993
+    - name: BAS11M_1.ROM
+      destination: bk/BAS11M_1.ROM
+      required: true
+      md5: 1e6637f32aa7d1de03510030cac40bcf
+    - name: DISK_327.ROM
+      destination: bk/DISK_327.ROM
+      required: true
+      md5: 5015228eeeb238e65da8edcd1b6dfac7
+    - name: FOCAL10.ROM
+      destination: bk/FOCAL10.ROM
+      required: true
+      md5: 5737f972e8638831ab71e9139abae052
+    - name: MONIT10.ROM
+      destination: bk/MONIT10.ROM
+      required: true
+      md5: 95f8c41c6abf7640e35a6a03cecebd01
+  sega-dreamcast-arcade:
+    files:
+    - name: awbios.zip
+      destination: dc/awbios.zip
+      required: true
+      md5: a420c0e56135c2e7e87399c887d7ef4a,abb0a508c83e689fc5e9230c623dabd0,042a0adecf2d616ccfb915a5cd71fde5,27fb8181fd9a0df18c7f6f941e9d60ab,74f5e994ecff655f18f0f9f998c9b1d9
+    - name: naomi.zip
+      destination: dc/naomi.zip
+      required: true
+      md5: 7300a99a4fc856d1a3c36b4485789897,40ae83a9552df0f340d5eeeadc5436ea,7ed453bda92b25156536ff055b8685b6,a48e7a735b9036be8f150018155370ad,e1dcb105789296b93bf58e37b7f38fc6,3c6b0fb04ab3eae5dc6a99f63507dbd4
+    - name: airlbios.zip
+      destination: dc/airlbios.zip
+      required: false
+      md5: 06dd41b614a6d6d079ec1ee73e2bf87d,5b7de05fb2dea6fb0408149c9bada27c,987e08b1786a93653281ca8a5b21dc7f
+    - name: hod2bios.zip
+      destination: dc/hod2bios.zip
+      required: false
+      md5: 09b92ad1240fba7954985bdee59d1741,2c08c42cc8c6eb3a4e07bff07db5102f,9e1f4846028b18b5ef8a6bd8efd6c67d,fbdf7e1cef86d3ffd23754c0a303a4af,729A623576CB9D8F7FD7C4E44ECE3066
+    - name: naomigd.zip
+      destination: dc/naomigd.zip
+      required: true
+      md5: 288cde03a112e7726fa8093e05d46853,416b5914acb3d0b4a190a1d358c8710d,bd9f19b4be0692e92e272d0eb82402f7,be57d3744e71a3396fb8dc59830e880a
+  commodore-c64:
+    files:
+    - name: JiffyDOS_C64.bin
+      destination: vice/JiffyDOS_C64.bin
+      required: false
+      md5: be09394f0576cf81fa8bacf634daf9a2
+    - name: JiffyDOS_C128.bin
+      destination: vice/JiffyDOS_C128.bin
+      required: false
+      md5: cbbd1bbcb5e4fd8046b6030ab71fc021
+    - name: JiffyDOS_1541-II.bin
+      destination: vice/JiffyDOS_1541-II.bin
+      required: false
+      md5: 1b1e985ea5325a1f46eb7fd9681707bf
+    - name: JiffyDOS_1571_repl310654.bin
+      destination: vice/JiffyDOS_1571_repl310654.bin
+      required: false
+      md5: 41c6cc528e9515ffd0ed9b180f8467c0
+    - name: JiffyDOS_1581.bin
+      destination: vice/JiffyDOS_1581.bin
+      required: false
+      md5: 20b6885c6dc2d42c38754a365b043d71
+    - name: scpu-dos-1.4.bin
+      destination: vice/SCPU64/scpu-dos-1.4.bin
+      required: false
+      md5: cda2fcd2e1f0412029383e51dd472095
+    - name: scpu-dos-2.04.bin
+      destination: vice/SCPU64/scpu-dos-2.04.bin
+      required: false
+      md5: b2869f8678b8b274227f35aad26ba509
+  sega-dreamcast:
+    files:
+    - name: dc_boot.bin
+      destination: dc/dc_boot.bin
+      required: true
+      md5: e10c53c2f8b90bab96ead2d368858623,d552d8b577faa079e580659cd3517f86,d407fcf70b56acb84b8c77c93b0e5327
+    - name: dc_flash.bin
+      destination: dc/dc_flash.bin
+      required: true
+      md5: d6e11a23f1fa01cddb5dfccf7e4cc8d7,93a9766f14159b403178ac77417c6b68,0a93f7940c455905bea6e392dfde92a4,23df18aa53c8b30784cd9a84e061d008,69c036adfca4ebea0b0c6fa4acfc8538,74e3f69c2bb92bc1fc5d9a53dcf6ffe2,2f818338f47701c606ade664a3e16a8a
+  pc88:
+    files:
+    - name: n88.rom
+      destination: quasi88/n88.rom
+      required: true
+      md5: 22be239bc0c4298bc0561252eed98633,f7cba6a308c2718dbe97e60e46ddd66a,4f984e04a99d56c4cfe36115415d6eb8
+    - name: n88_0.rom
+      destination: quasi88/n88_0.rom
+      required: true
+      md5: e28fe3f520bea594350ea8fb00395370,c254685f00ca9c31b97203d6ef19f5e2,d675a2ca186c6efcd6277b835de4c7e5
+    - name: n88_1.rom
+      destination: quasi88/n88_1.rom
+      required: true
+      md5: e844534dfe5744b381444dbe61ef1b66,a8e298da7ac947669bcb1ff25cee0a83
+    - name: n88_2.rom
+      destination: quasi88/n88_2.rom
+      required: true
+      md5: 6548fa45061274dee1ea8ae1e9e93910,9d03154fd9abfc28c4e6d4dc705e6e23
+    - name: n88_3.rom
+      destination: quasi88/n88_3.rom
+      required: true
+      md5: fc4b76a402ba501e6ba6de4b3e8b4273,e1791f8154f1cdf22b576a1a365b6e1f
+    - name: n88n.rom
+      destination: quasi88/n88n.rom
+      required: true
+      md5: 5d6854624dd01cd791f58727fc43a525,93cd1d78b7b9c50b80041ed330332ece,2ff07b8769367321128e03924af668a0
+    - name: disk.rom
+      destination: quasi88/disk.rom
+      required: true
+      md5: 793f86784e5608352a5d7f03f03e0858,01b1af474fcabe93c40d779b234a3825
+    - name: n88knj1.rom
+      destination: quasi88/n88knj1.rom
+      required: false
+      md5: d81c6d5d7ad1a4bbbd6ae22a01257603
+  pc98:
+    files:
+    - name: bios.rom
+      destination: np2kai/bios.rom
+      required: true
+      md5: 052f5f6010877522f78803498a625727,0c052b1f1bfd0ece11286d2ff45d296f,36293e23fe0c86cb115d59b653c13876,3af0ae018c5710eec6e2891064814138,50274bb5dcb707e4450011b09accffcb,c70ee9df11794bd5cc8aadb3721b4a03,cd237e16e7e77c06bb58540e9e9fca68,e246140dec5124c5e404869a84caefce
+    - name: font.bmp
+      destination: np2kai/font.bmp
+      required: true
+      md5: 0c8624e9ced7cca8769e5c7b0dd4279b,7da1e5b7c482d4108d22a5b09631d967
+    - name: font.rom
+      destination: np2kai/font.rom
+      required: true
+      md5: 38d32748ae49d1815b0614970849fd40,fd0b856899aec843cbe69d2940df547f,4133b0be0d470920da60b9ed28d2614f,693fd1da3239d4bbeafc77d211718fc5,829b963e21334e0fc2092ebd58f2ab4a,add4a225048c85ca2bc588696c6ecdc5,ca87908a99ea423093f6d497fc367f7d
+    - name: itf.rom
+      destination: np2kai/itf.rom
+      required: true
+      md5: 1d295699ffeab0f0e24e09381299259d,72ea51443070f0e9212bfc9b793ee28e,a13d96da03a28af8418d7f86ab951f1a,b49ea39a1f730f1c966babc11961dc9a,e9fc3890963b12cf15d0a2eea5815b72
+    - name: sound.rom
+      destination: np2kai/sound.rom
+      required: true
+      md5: 42c271f8b720e796a484cc1165ff4914,524473c1a5a03b17e21d86a0408ff827,a77fc2bc7c696dd68dba18e02f89d386,caf90f22197aed6f14c471c21e64658d
+    - name: 2608_bd.wav
+      destination: np2kai/2608_bd.wav
+      required: false
+      md5: 9c6637930b1779abe00b8b63e4e41f50,d94546e70f17fd899be8df3544ab6cbb
+    - name: 2608_hh.wav
+      destination: np2kai/2608_hh.wav
+      required: false
+      md5: 73548a1391631ff54a1f7c838d67917e,08c54a0c1f774a5538a848a6665a34b4
+    - name: 2608_rim.wav
+      destination: np2kai/2608_rim.wav
+      required: false
+      md5: 43d54b3e05c081fa280c9bace3af1043,465ea0768b27da404aec45dfc501404b
+    - name: 2608_sd.wav
+      destination: np2kai/2608_sd.wav
+      required: false
+      md5: 08124ccb84a9f65e2affc29581e690c9,d71004351c8bbfdad53b18222c061d49
+    - name: 2608_tom.wav
+      destination: np2kai/2608_tom.wav
+      required: false
+      md5: 0faed5664a2dd8b1b2308e8a50ac25ea,96a4ead13f364734f79b0c58af2f0e1f
+    - name: 2608_top.wav
+      destination: np2kai/2608_top.wav
+      required: false
+      md5: 3721ace646ffd56439aebbb2154e9263,593cff6597ab9380d822b8f824fd2c28
+  sega-mega-cd:
+    files:
+    - name: bios_CD_E.bin
+      destination: segacd/bios_CD_E.bin
+      required: true
+      md5: e66fa1dc5820d254611fdcdba0662372
+    - name: bios_CD_U.bin
+      destination: segacd/bios_CD_U.bin
+      required: true
+      md5: 2efd74e3232ff260e371b99f84024f7f
+    - name: bios_CD_J.bin
+      destination: segacd/bios_CD_J.bin
+      required: true
+      md5: 278a9397d192149e84e820ac621a8edd,bdeb4c47da613946d422d97d98b21cda
+  nintendo-fds:
+    files:
+    - name: disksys.rom
+      destination: fds/disksys.rom
+      required: true
+      md5: ca30b50f880eb660a320674ed365ef7a
+  nintendo-gba:
+    files:
+    - name: gba_bios.bin
+      destination: gba/gba_bios.bin
+      required: false
+      md5: a860e8c0b6d573d191e4ec7db1b1e4f6
+    - name: open_gba_bios.bin
+      destination: gba/open_gba_bios.bin
+      required: false
+      md5: 1876f71b0d8c65eef3454547896ffb11
+  satellaview:
+    files:
+    - name: BS-X.bin
+      destination: satellaview/BS-X.bin
+      required: true
+      md5: 96cf17bf589fcbfa6f8de2dc84f19fa2,d5af0ab2545c053b90ffa0866074ecf1,9c72de0cf4c9c88003292a79ddd0144d,fed4d8242cfbed61343d53d48432aced
+  sufami:
+    files:
+    - name: STBIOS.bin
+      destination: sufami/STBIOS.bin
+      required: true
+      md5: d3a44ba7d42a74d3ac58cb9c14c6a5ca
+  nec-pc-engine:
+    files:
+    - name: gexpress.pce
+      destination: pcengine/gexpress.pce
+      required: false
+      md5: 6d2cb14fc3e1f65ceb135633d1694122
+    - name: syscard3.pce
+      destination: pcenginecd/syscard3.pce
+      required: true
+      md5: ff1a674273fe3540ccef576376407d1d,1e47a1780aaa7e277a3896c1ba00e317,38179df8f4ac870017db21ebcbf53114
+    - name: syscard1.pce
+      destination: pcenginecd/syscard1.pce
+      required: false
+      md5: 9f770275393b8627cf9d24e5c56d2ab9
+    - name: syscard2.pce
+      destination: pcenginecd/syscard2.pce
+      required: false
+      md5: 424f1d6bf93259bf255afa7d1dc9f721
+    - name: syscard2u.pce
+      destination: pcenginecd/syscard2u.pce
+      required: false
+      md5: 94279f315e8b52904f65ab3108542afe
+    - name: syscard3u.pce
+      destination: pcenginecd/syscard3u.pce
+      required: false
+      md5: 0754f903b52e3b3342202bdafb13efa5
+  nec-pc-fx:
+    files:
+    - name: pcfx.rom
+      destination: pcfx/pcfx.rom
+      required: true
+      md5: 08e36edbea28a017f79f8d4f7ff9b6d7
+  msx1,msx2:
+    files:
+    - name: CARTS.SHA
+      destination: msx/CARTS.SHA
+      required: true
+      md5: d6dedca1112ddfda94cc9b2e426b818b,74b0f217fa0e2b8bb5a2f8e2ecc69da3
+    - name: CYRILLIC.FNT
+      destination: msx/CYRILLIC.FNT
+      required: true
+      md5: 85b38e4128bbc300e675f55b278683a8
+    - name: DISK.ROM
+      destination: msx/DISK.ROM
+      required: true
+      md5: 80dcd1ad1a4cf65d64b7ba10504e8190
+    - name: FMPAC16.ROM
+      destination: msx/FMPAC16.ROM
+      required: true
+      md5: af8537262df8df267072f359399a7635
+    - name: FMPAC.ROM
+      destination: msx/FMPAC.ROM
+      required: true
+      md5: 6f69cc8b5ed761b03afd78000dfb0e19
+    - name: ITALIC.FNT
+      destination: msx/ITALIC.FNT
+      required: true
+      md5: c83e50e9f33b8dd893c414691822740d
+    - name: KANJI.ROM
+      destination: msx/KANJI.ROM
+      required: true
+      md5: febe8782b466d7c3b16de6d104826b34
+    - name: MSX2EXT.ROM
+      destination: msx/MSX2EXT.ROM
+      required: true
+      md5: 2183c2aff17cf4297bdb496de78c2e8a
+    - name: MSX2PEXT.ROM
+      destination: msx/MSX2PEXT.ROM
+      required: true
+      md5: 7c8243c71d8f143b2531f01afa6a05dc
+    - name: MSX2P.ROM
+      destination: msx/MSX2P.ROM
+      required: true
+      md5: 6d8c0ca64e726c82a4b726e9b01cdf1e
+    - name: MSX2.ROM
+      destination: msx/MSX2.ROM
+      required: true
+      md5: ec3a01c91f24fbddcbcab0ad301bc9ef
+    - name: MSXDOS2.ROM
+      destination: msx/MSXDOS2.ROM
+      required: true
+      md5: 6418d091cd6907bbcf940324339e43bb
+    - name: MSX.ROM
+      destination: msx/MSX.ROM
+      required: true
+      md5: aa95aea2563cd5ec0a0919b44cc17d47
+    - name: PAINTER.ROM
+      destination: msx/PAINTER.ROM
+      required: true
+      md5: 403cdea1cbd2bb24fae506941f8f655e
+    - name: RS232.ROM
+      destination: msx/RS232.ROM
+      required: true
+      md5: 279efd1eae0d358eecd4edc7d9adedf3
+  lynx:
+    files:
+    - name: lynxboot.img
+      destination: lynx/lynxboot.img
+      required: false
+      md5: fcd403db69f54290b51035d82f835e7b
+  atari-st:
+    files:
+    - name: tos.img
+      destination: atarist/tos.img
+      required: false
+      md5: 27ac71b59d59f65571b972e0f894054a,5d65c6a384d847a0b8013d5e22ec0887,f62bc9777f28bc6876422738758db365,d41ae4efaa2c97f632dbe75d24d51bea,c87a52c277f7952b41c639fc7bf0a43b,e0444d8c51a8093a3f09665d8099c0af,d0f682ee6237497004339fb02172638b,5491b3755992feaf743ceecaa3b18f34,25789a649faff0a1176dc7d9b98105c0,b9e37f0f0a700fc673049794870bdb85,91ce7c1903006da75c823ff3c938e5d2,091a4d95f6c600231a3f1391a309ac26,a622cc35d8d78703905592dfaa4d2ccb,d6521785627d20c51edc566808a6bf28,b2a8570de2e850c5acf81cb80512d9f6,696ba04b3bc963aee2ba769298e342de,c1c57ce48e8ee4135885cee9e63a68a2,91fb61080d27d0376e1a3da409727468,f6a8fa31d0d1bac1a08d47502244408d,41b7dae4e24735f330b63ad923a0bfbc,143343f7b8e0b1162af206fe8f46b002,800d48825be45ec7f39ba7bb2c3f0b59,0087e2707c57efa2106a0aa7576655c0,036c5ae4f885cbf62c9bed651c6c58a8,52248cc70ae48b3050e197e270917130,7c040857bdcfcd7d748ca82205463efa,736adb2dc835df4d323191fdc8926cc9,992bac38e01633a529121a2a65f0779e,30f69d70fe7c210300ed83f991b12de9,bc7b224d0dc3f0cc14c8897db89c5787,6033f2b9364edfed321c6931a8181fd2,f3f92cd4e2c331aef8970a156be03b7c,a0982e760f9807d82667ff5a69e78f6b,94a75c1c65408d9f974b0463e15a3b11,61168619b5109d314638c9409f44bca2,4759f2c7bace6c2f440d27acd2ab6ed4,ed5fbaabe0219092df74c6c14cea3f8e,a4cfd3c7412002dd693f69a15d4d961c,1cbc4f55295e469fc8cd72b7efdea1da,6f9471098a521214fad1e2c6f2dd3d08,febb00ba8784798293a7ae709a1dafcb,4689ef3694ac86e7289923190e6cd10d,7aeabdc25f8134590e25643a405210ca,7449b131681f1dfe62ebed1392847057,61b620ad951815a25cb37895c81a947c,7e87d8fe7e24e0b4c55ad1b7955beae3,1c92855316a33faee602b8007f22d2cb,7cdd45b6aac66a21bfb357d9334e46db,0604dbb85928f0598d04144a8b554bbe,b2873004a408b8db36321f98daafa251,886b9b6bb6afa287211a594e16f6ca67,e690bec90d902024beed549d22150755,4a0d4f282c3f2a0196681adf88862dd4,332fe3803a7e20cd625b27a69f07ae69,a7dc40dc5c1086bce1a8f3d44fd29051,c9093f27159e7d13ac0d1501a95e53d4,066f39a7ea5789d5afd59dd7b3104fa6,2a8e39c60317b921eabd7e25b5d74395,dd1010ec566efbd71047d6c4919feba5,ed2647936ce4bd283c4d7dfd7ae09d1c,9e880168d0a004f7f5e852be758f39e4,919fd0f045299f101cf7757e5e058c41,b2ecabc15b65afef96331be46f2a2cd4,e5ea0f216fb446f1c4a4f476bc5f03d4,941baac767269649f92f7918dd5740b8
+    - name: st.img
+      destination: atarist/st.img
+      required: true
+      md5: c87a52c277f7952b41c639fc7bf0a43b,e0444d8c51a8093a3f09665d8099c0af,d0f682ee6237497004339fb02172638b,5491b3755992feaf743ceecaa3b18f34,25789a649faff0a1176dc7d9b98105c0,b9e37f0f0a700fc673049794870bdb85,91ce7c1903006da75c823ff3c938e5d2,091a4d95f6c600231a3f1391a309ac26,a622cc35d8d78703905592dfaa4d2ccb,d6521785627d20c51edc566808a6bf28,b2a8570de2e850c5acf81cb80512d9f6,696ba04b3bc963aee2ba769298e342de,c1c57ce48e8ee4135885cee9e63a68a2,91fb61080d27d0376e1a3da409727468,f6a8fa31d0d1bac1a08d47502244408d,41b7dae4e24735f330b63ad923a0bfbc,143343f7b8e0b1162af206fe8f46b002,800d48825be45ec7f39ba7bb2c3f0b59,0087e2707c57efa2106a0aa7576655c0,036c5ae4f885cbf62c9bed651c6c58a8,52248cc70ae48b3050e197e270917130,7c040857bdcfcd7d748ca82205463efa,0604dbb85928f0598d04144a8b554bbe,b2873004a408b8db36321f98daafa251,886b9b6bb6afa287211a594e16f6ca67,e690bec90d902024beed549d22150755,4a0d4f282c3f2a0196681adf88862dd4,332fe3803a7e20cd625b27a69f07ae69,a7dc40dc5c1086bce1a8f3d44fd29051,c9093f27159e7d13ac0d1501a95e53d4,736adb2dc835df4d323191fdc8926cc9
+    - name: ste.img
+      destination: atarist/ste.img
+      required: true
+      md5: 992bac38e01633a529121a2a65f0779e,30f69d70fe7c210300ed83f991b12de9,bc7b224d0dc3f0cc14c8897db89c5787,6033f2b9364edfed321c6931a8181fd2,f3f92cd4e2c331aef8970a156be03b7c,a0982e760f9807d82667ff5a69e78f6b,94a75c1c65408d9f974b0463e15a3b11,61168619b5109d314638c9409f44bca2,4759f2c7bace6c2f440d27acd2ab6ed4,ed5fbaabe0219092df74c6c14cea3f8e,a4cfd3c7412002dd693f69a15d4d961c,1cbc4f55295e469fc8cd72b7efdea1da,6f9471098a521214fad1e2c6f2dd3d08,febb00ba8784798293a7ae709a1dafcb,0604dbb85928f0598d04144a8b554bbe,b2873004a408b8db36321f98daafa251,886b9b6bb6afa287211a594e16f6ca67,e690bec90d902024beed549d22150755,4a0d4f282c3f2a0196681adf88862dd4,332fe3803a7e20cd625b27a69f07ae69,a7dc40dc5c1086bce1a8f3d44fd29051,c9093f27159e7d13ac0d1501a95e53d4
+    - name: megaste.img
+      destination: atarist/megaste.img
+      required: false
+      md5: 4689ef3694ac86e7289923190e6cd10d,7aeabdc25f8134590e25643a405210ca,7449b131681f1dfe62ebed1392847057,61b620ad951815a25cb37895c81a947c,7e87d8fe7e24e0b4c55ad1b7955beae3,1c92855316a33faee602b8007f22d2cb,7cdd45b6aac66a21bfb357d9334e46db,0604dbb85928f0598d04144a8b554bbe,b2873004a408b8db36321f98daafa251,886b9b6bb6afa287211a594e16f6ca67,e690bec90d902024beed549d22150755,4a0d4f282c3f2a0196681adf88862dd4,332fe3803a7e20cd625b27a69f07ae69,a7dc40dc5c1086bce1a8f3d44fd29051,c9093f27159e7d13ac0d1501a95e53d4
+    - name: tt.img
+      destination: atarist/tt.img
+      required: false
+      md5: 066f39a7ea5789d5afd59dd7b3104fa6,2a8e39c60317b921eabd7e25b5d74395,dd1010ec566efbd71047d6c4919feba5,19cd81e1c3049bf408ad426dc5c3b2e0,ac6ca0f0ed42a1603dfd409c4bf8eb89
+    - name: falcon.img
+      destination: atarist/falcon.img
+      required: true
+      md5: ed2647936ce4bd283c4d7dfd7ae09d1c,9e880168d0a004f7f5e852be758f39e4,919fd0f045299f101cf7757e5e058c41,b2ecabc15b65afef96331be46f2a2cd4,e5ea0f216fb446f1c4a4f476bc5f03d4,941baac767269649f92f7918dd5740b8,b338bacb2fc453bab61bcc1e2cf5076b
+    - name: emutos.img
+      destination: atarist/emutos.img
+      required: true
+      md5: e2c861c588fca2d0cf6be3df3aaf05f2
+  magnavox-odyssey2:
+    files:
+    - name: o2rom.bin
+      destination: o2em/o2rom.bin
+      required: true
+      md5: 562d5ebf9e030a40d6fabfc2f33139fd
+    - name: c52.bin
+      destination: o2em/c52.bin
+      required: true
+      md5: f1071cdb0b6b10dde94d3bc8a6146387
+  videopacplus:
+    files:
+    - name: g7400.bin
+      destination: o2em/g7400.bin
+      required: true
+      md5: c500ff71236068e0dc0d0603d265ae76
+    - name: jopac.bin
+      destination: o2em/jopac.bin
+      required: true
+      md5: 279008e4a0db2dc5f1c048853b033828
+  3do:
+    files:
+    - name: panafz1.bin
+      destination: 3do/panafz1.bin
+      required: true
+      md5: f47264dd47fe30f73ab3c010015c155b
+    - name: panafz1j.bin
+      destination: 3do/panafz1j.bin
+      required: true
+      md5: a496cfdded3da562759be3561317b605
+    - name: panafz1j-norsa.bin
+      destination: 3do/panafz1j-norsa.bin
+      required: true
+      md5: f6c71de7470d16abe4f71b1444883dc8
+    - name: panafz10.bin
+      destination: 3do/panafz10.bin
+      required: false
+      md5: 51f2f43ae2f3508a14d9f56597e2d3ce
+    - name: panafz10-norsa.bin
+      destination: 3do/panafz10-norsa.bin
+      required: false
+      md5: 1477bda80dc33731a65468c1f5bcbee9
+    - name: panafz10e-anvil.bin
+      destination: 3do/panafz10e-anvil.bin
+      required: false
+      md5: a48e6746bd7edec0f40cff078f0bb19f
+    - name: panafz10e-anvil-norsa.bin
+      destination: 3do/panafz10e-anvil-norsa.bin
+      required: false
+      md5: cf11bbb5a16d7af9875cca9de9a15e09
+    - name: goldstar.bin
+      destination: 3do/goldstar.bin
+      required: false
+      md5: 8639fd5e549bd6238cfee79e3e749114
+    - name: sanyotry.bin
+      destination: 3do/sanyotry.bin
+      required: false
+      md5: 35fa1a1ebaaeea286dc5cd15487c13ea
+    - name: 3do_arcade_saot.bin
+      destination: 3do/3do_arcade_saot.bin
+      required: false
+      md5: 8970fc987ab89a7f64da9f8a8c4333ff
+    - name: panafz1-kanji.bin
+      destination: 3do/panafz1-kanji.bin
+      required: false
+      md5: b8dc97f778a6245c58e064b0312e8281
+    - name: panafz1j-kanji.bin
+      destination: 3do/panafz1j-kanji.bin
+      required: false
+      md5: c23fb5d5e6bb1c240d02cf968972be37
+    - name: panafz10ja-anvil-kanji.bin
+      destination: 3do/panafz10ja-anvil-kanji.bin
+      required: false
+      md5: 428577250f43edc902ea239c50d2240d
+  sharp-x68000:
+    files:
+    - name: iplrom.dat
+      destination: keropi/iplrom.dat
+      required: true
+      md5: 7fd4caabac1d9169e289f0f7bbf71d8e
+    - name: cgrom.dat
+      destination: keropi/cgrom.dat
+      required: true
+      md5: cb0a5cfcf7247a7eab74bb2716260269
+    - name: iplrom30.dat
+      destination: keropi/iplrom30.dat
+      required: false
+      md5: f373003710ab4322642f527f567e020a
+    - name: iplromco.dat
+      destination: keropi/iplromco.dat
+      required: false
+      md5: cc78d4f4900f622bd6de1aed7f52592f
+    - name: iplromxv.dat
+      destination: keropi/iplromxv.dat
+      required: false
+      md5: 0617321daa182c3f3d6f41fd02fb3275
+  x1:
+    files:
+    - name: IPLROM.X1
+      destination: xmil/IPLROM.X1
+      required: true
+      md5: eeeea1cd29c6e0e8b094790ae969bfa7,59074727a953fe965109b7dbe3298e30
+    - name: IPLROM.X1T
+      destination: xmil/IPLROM.X1T
+      required: true
+      md5: 56c28adcf1f3a2f87cf3d57c378013f5
+  sony-playstation:
+    files:
+    - name: scph5500.bin
+      destination: scph5500.bin
+      required: true
+      md5: 8dd7d5296a650fac7319bce665a6a53c
+    - name: scph5501.bin
+      destination: scph5501.bin
+      required: true
+      md5: 490f666e1afb15b7362b406ed1cea246
+    - name: scph5502.bin
+      destination: scph5502.bin
+      required: true
+      md5: 32736f17079d0b2b7024407c39bd3050
+    - name: scph101.bin
+      destination: scph101.bin
+      required: true
+      md5: 6E3735FF4C7DC899EE98981385F6F3D0
+    - name: scph7001.bin
+      destination: scph7001.bin
+      required: true
+      md5: 1e68c231d0896b7eadcad1d7d8e76129
+    - name: scph1001.bin
+      destination: scph1001.bin
+      required: true
+      md5: dc2b9bf8da62ec93e868cfd29f0d067d,924e392ed05558ffdb115408c263dccf
+    - name: ps1_rom.bin
+      destination: ps1_rom.bin
+      required: false
+      md5: 81bbe60ba7a3d1cea1d48c14cbcc647b
+  sony-playstation-2:
+    files:
+    - name: ps2-0230a-20080220.bin
+      destination: ps2/ps2-0230a-20080220.bin
+      required: true
+      md5: 21038400dc633070a78ad53090c53017
+    - name: ps2-0230e-20080220.bin
+      destination: ps2/ps2-0230e-20080220.bin
+      required: true
+      md5: dc69f0643a3030aaa4797501b483d6c4
+    - name: ps2-0230h-20080220.bin
+      destination: ps2/ps2-0230h-20080220.bin
+      required: true
+      md5: 30d56e79d89fbddf10938fa67fe3f34e
+    - name: ps2-0230j-20080220.bin
+      destination: ps2/ps2-0230j-20080220.bin
+      required: true
+      md5: 80ac46fa7e77b8ab4366e86948e54f83
+  fairchild-channel-f:
+    files:
+    - name: sl31254.bin
+      destination: channelf/sl31254.bin
+      required: true
+      md5: da98f4bb3242ab80d76629021bb27585
+    - name: sl31253.bin
+      destination: channelf/sl31253.bin
+      required: true
+      md5: ac9804d4c0e9d07e33472e3726ed15c3
+    - name: sl90025.bin
+      destination: channelf/sl90025.bin
+      required: false
+      md5: 95d339631d867c8f1d15a5f2ec26069d
+  mattel-intellivision:
+    files:
+    - name: exec.bin
+      destination: intellivision/exec.bin
+      required: true
+      md5: 62e761035cb657903761800f4437b8af
+    - name: grom.bin
+      destination: intellivision/grom.bin
+      required: true
+      md5: 0cd5946c6473e42e8e4c2137785e427f
+  pokemini:
+    files:
+    - name: bios.min
+      destination: pokemini/bios.min
+      required: false
+      md5: 1e4fb124a3a886865acb574f388c803d
+  nintendo-ds:
+    files:
+    - name: bios7.bin
+      destination: nds/bios7.bin
+      required: true
+      md5: df692a80a5b1bc90728bc3dfc76cd948
+    - name: bios9.bin
+      destination: nds/bios9.bin
+      required: true
+      md5: a392174eb3e572fed6447e956bde4b25
+    - name: firmware.bin
+      destination: nds/firmware.bin
+      required: true
+      md5: 145eaef5bd3037cbc247c213bb3da1b3,e45033d9b0fa6b0de071292bba7c9d13,3ad72b2c9a736b24953f2d391da4bfcc
+  palm:
+    files:
+    - name: palmos41-en-m515.rom
+      destination: palm/palmos41-en-m515.rom
+      required: true
+      md5: 83cb1d1c76e568b916dc2e7c0bf669f6
+    - name: bootloader-dbvz.rom
+      destination: palm/bootloader-dbvz.rom
+      required: false
+      md5: 9da101cd2317830649a31f8fa46debec
+  oricatmos:
+    files:
+    - name: basic11b.rom
+      destination: oricutron/basic11b.rom
+      required: true
+      md5: a330779c42ad7d0c4ac6ef9e92788ec6
+    - name: basic10.rom
+      destination: oricutron/basic10.rom
+      required: true
+      md5: ebe418ec8a6c85d5ac32956c9a96c179
+    - name: bd500.rom
+      destination: oricutron/bd500.rom
+      required: false
+      md5: 2b6498fd29a0adbf1c529762c02c33ab
+    - name: jasmin.rom
+      destination: oricutron/jasmin.rom
+      required: true
+      md5: 5136f764a7dbd1352519351fbb53a9f3
+    - name: microdis.rom
+      destination: oricutron/microdis.rom
+      required: true
+      md5: df864344d2a2091c3f952bd1c5ce1707
+    - name: pravetzt.rom
+      destination: oricutron/pravetzt.rom
+      required: true
+      md5: 8712a22e7e078de3343667d9fc1f2390
+    - name: 8dos2.rom
+      destination: oricutron/8dos2.rom
+      required: false
+      md5: 5f3cd5a4307fed7a9dfe8faa4c044273
+    - name: teleass.rom
+      destination: oricutron/teleass.rom
+      required: true
+      md5: 2324c9cc227c1327a72a667c97ed2990
+    - name: hyperbas.rom
+      destination: oricutron/hyperbas.rom
+      required: true
+      md5: 364bf095e0dc4222d75354d50b8cddfc
+    - name: telmon24.rom
+      destination: oricutron/telmon24.rom
+      required: true
+      md5: 9a432244d9ee4a49e8ddcde64af94e05
+  spectravideo:
+    files:
+    - name: svi318.rom
+      destination: Machines/SVI - Spectravideo SVI-318/svi318.rom
+      required: true
+      md5: ee6ad7ea29e791b03a28a9443e622648
+    - name: svi328a.rom
+      destination: Machines/SVI - Spectravideo SVI-328 80 Column/svi328a.rom
+      required: true
+      md5: 352f054ab09605070bdff49d73f335cc
+    - name: svi806.rom
+      destination: Machines/SVI - Spectravideo SVI-328 80 Column/svi806.rom
+      required: true
+      md5: 82f7bc9c08f43db1d79bcb565a0de12b
+    - name: svi328a.rom
+      destination: Machines/SVI - Spectravideo SVI-328 80 Swedish/svi328a.rom
+      required: true
+      md5: 352f054ab09605070bdff49d73f335cc
+    - name: svi806se.rom
+      destination: Machines/SVI - Spectravideo SVI-328 80 Swedish/svi806se.rom
+      required: true
+      md5: 6a5536c1eb4f0477c4f76488cd8ca3ad
+    - name: svi328a.rom
+      destination: Machines/SVI - Spectravideo SVI-328 MK2/svi328a.rom
+      required: true
+      md5: 352f054ab09605070bdff49d73f335cc
+    - name: svi806.rom
+      destination: Machines/SVI - Spectravideo SVI-328 MK2/svi806.rom
+      required: true
+      md5: 82f7bc9c08f43db1d79bcb565a0de12b
+    - name: svi328.rom
+      destination: Machines/SVI - Spectravideo SVI-328/svi328.rom
+      required: true
+      md5: 2cebd1db9dda475a011b7bce65c984a2
+  coleco-colecovision:
+    files:
+    - name: czz50-1.rom
+      destination: Machines/COL - Bit Corporation Dina/czz50-1.rom
+      required: true
+      md5: 1de922acdd742d31349c2801e9768c35
+    - name: czz50-2.rom
+      destination: Machines/COL - Bit Corporation Dina/czz50-2.rom
+      required: true
+      md5: 72b089dc55b7fe7ffb5028f365e8c045
+    - name: coleco.rom
+      destination: Machines/COL - ColecoVision with Opcode Memory Extension/coleco.rom
+      required: true
+      md5: 2c66f5911e5b42b8ebe113403548eee7
+    - name: coleco.rom
+      destination: Machines/COL - ColecoVision/coleco.rom
+      required: true
+      md5: 2c66f5911e5b42b8ebe113403548eee7
+    - name: SVI603.ROM
+      destination: Machines/COL - Spectravideo SVI-603 Coleco/SVI603.ROM
+      required: true
+      md5: c60a2e85572c0ccb69505a7646d5c1b6
+    - name: boot.rom
+      destination: coleco/boot.rom
+      required: true
+      md5: 2c66f5911e5b42b8ebe113403548eee7
+  msx1,msx2,msxturbor:
+    files:
+    - name: pesadelo.rom
+      destination: Machines/Forte II Games - Pesadelo/pesadelo.rom
+      required: true
+      md5: ba53d700ec25bcb08020ce693319cd28
+    - name: cbios_logo_msx1.rom
+      destination: Machines/MSX - C-BIOS/cbios_logo_msx1.rom
+      required: true
+      md5: 25b5cdea5040883a206b89845cdf55f1
+    - name: cbios_main_msx1.rom
+      destination: Machines/MSX - C-BIOS/cbios_main_msx1.rom
+      required: true
+      md5: 87b27f48cc25e2b6f749c019587d5f23
+    - name: cbios_logo_msx2.rom
+      destination: Machines/MSX2 - C-BIOS/cbios_logo_msx2.rom
+      required: true
+      md5: 659db9142e62c51f2f75fd52fac78e44
+    - name: cbios_main_msx2.rom
+      destination: Machines/MSX2 - C-BIOS/cbios_main_msx2.rom
+      required: true
+      md5: 98b94c2d99066f272bb5de07778f7fd1
+    - name: cbios_sub.rom
+      destination: Machines/MSX2 - C-BIOS/cbios_sub.rom
+      required: true
+      md5: 9dd9a69432cc116d0f1d4ec7a51053e0
+    - name: cbios_logo_msx2+.rom
+      destination: Machines/MSX2+ - C-BIOS/cbios_logo_msx2+.rom
+      required: true
+      md5: 462d6ecb52a8c35dd7d48c2d46687f14
+    - name: cbios_main_msx2+.rom
+      destination: Machines/MSX2+ - C-BIOS/cbios_main_msx2+.rom
+      required: true
+      md5: 0a34c660614ead31dab78638ce7745e9
+    - name: cbios_music.rom
+      destination: Machines/MSX2+ - C-BIOS/cbios_music.rom
+      required: true
+      md5: e09783c4ec6d4770c5395c42bb0e1d91
+    - name: cbios_sub.rom
+      destination: Machines/MSX2+ - C-BIOS/cbios_sub.rom
+      required: true
+      md5: 9dd9a69432cc116d0f1d4ec7a51053e0
+    - name: KANJI.rom
+      destination: Machines/MSX2+ - European/KANJI.rom
+      required: true
+      md5: acf53887c2d2783dc059a9b442c86b90
+    - name: MSX2PMUS.rom
+      destination: Machines/MSX2+ - European/MSX2PMUS.rom
+      required: true
+      md5: f877f32e6d8687474ac5ee83e40de23b
+    - name: MSXKANJI.rom
+      destination: Machines/MSX2+ - European/MSXKANJI.rom
+      required: true
+      md5: 9dfdebfaa6b547222a40aab8bb2e29f8
+    - name: Msx2pe.rom
+      destination: Machines/MSX2+ - European/Msx2pe.rom
+      required: true
+      md5: 277fd57c13f301fb4b366845a32d673a
+    - name: Msx2pexte.rom
+      destination: Machines/MSX2+ - European/Msx2pexte.rom
+      required: true
+      md5: f78ab735aaad7045badbda8f4c8ac751
+    - name: PANASONICDISK.rom
+      destination: Machines/MSX2+ - European/PANASONICDISK.rom
+      required: true
+      md5: 00aa02b6077de40a0b51d71a3c3e1d5f
+    - name: XBASIC2.rom
+      destination: Machines/MSX2+ - European/XBASIC2.rom
+      required: true
+      md5: 0b6120f289336538bc564548109f97c6
+    - name: sf7000.rom
+      destination: Machines/SEGA - SF-7000/sf7000.rom
+      required: true
+      md5: 561b362f9aa4cbcb240461abf83c2e0d
+    - name: ARAB1.ROM
+      destination: Machines/Shared Roms/ARAB1.ROM
+      required: true
+      md5: 7fa0558bcec9dba310579521623d9f6a
+    - name: ARABIC.rom
+      destination: Machines/Shared Roms/ARABIC.rom
+      required: true
+      md5: 20c4b5d1d9469c201b145f082ec32658
+    - name: BEERIDE.ROM
+      destination: Machines/Shared Roms/BEERIDE.ROM
+      required: true
+      md5: b32279f2700652a5ce0a809318626763
+    - name: FMPAC.rom
+      destination: Machines/Shared Roms/FMPAC.rom
+      required: true
+      md5: 6f69cc8b5ed761b03afd78000dfb0e19
+    - name: GCVMX80.ROM
+      destination: Machines/Shared Roms/GCVMX80.ROM
+      required: true
+      md5: fd0b8f1766dc6dcc03a43d9c79dc4e37
+    - name: HANGUL.rom
+      destination: Machines/Shared Roms/HANGUL.rom
+      required: true
+      md5: 9baf17b190f631405b6b0eeeeb162b87
+    - name: KANJI.rom
+      destination: Machines/Shared Roms/KANJI.rom
+      required: true
+      md5: acf53887c2d2783dc059a9b442c86b90
+    - name: MICROSOLDISK.ROM
+      destination: Machines/Shared Roms/MICROSOLDISK.ROM
+      required: true
+      md5: 02e8b1f96049f09d6d3a735647cbbb2a
+    - name: MOONSOUND.rom
+      destination: Machines/Shared Roms/MOONSOUND.rom
+      required: true
+      md5: 42af93619160ef2116416f74a6cb12f2
+    - name: MSX.rom
+      destination: Machines/Shared Roms/MSX.rom
+      required: true
+      md5: 364a1a579fe5cb8dba54519bcfcdac0d
+    - name: MSX2.rom
+      destination: Machines/Shared Roms/MSX2.rom
+      required: true
+      md5: ec3a01c91f24fbddcbcab0ad301bc9ef
+    - name: MSX2AR.ROM
+      destination: Machines/Shared Roms/MSX2AR.ROM
+      required: true
+      md5: 91764e84f977671ac7caa50b36273fd2
+    - name: MSX2AREXT.ROM
+      destination: Machines/Shared Roms/MSX2AREXT.ROM
+      required: true
+      md5: be5d1ec8001d945ca1432285722e9d16
+    - name: MSX2BR.rom
+      destination: Machines/Shared Roms/MSX2BR.rom
+      required: true
+      md5: d3df424728a225b301510f5384cae583
+    - name: MSX2BREXT.rom
+      destination: Machines/Shared Roms/MSX2BREXT.rom
+      required: true
+      md5: 355c6d5ee31da441d485cd89ca906413
+    - name: MSX2EXT.rom
+      destination: Machines/Shared Roms/MSX2EXT.rom
+      required: true
+      md5: 2183c2aff17cf4297bdb496de78c2e8a
+    - name: MSX2FR.rom
+      destination: Machines/Shared Roms/MSX2FR.rom
+      required: true
+      md5: 7af9e84da1520a8a7fb82e73703e5075
+    - name: MSX2FREXT.rom
+      destination: Machines/Shared Roms/MSX2FREXT.rom
+      required: true
+      md5: 6ffe789cca2eca9d2e71ca7b69b97e6b
+    - name: MSX2G.rom
+      destination: Machines/Shared Roms/MSX2G.rom
+      required: true
+      md5: b6c33b7b3508d691d7872589c778f808
+    - name: MSX2GEXT.rom
+      destination: Machines/Shared Roms/MSX2GEXT.rom
+      required: true
+      md5: 4047ce143a8bf391e21991835aa65b59
+    - name: MSX2HAN.rom
+      destination: Machines/Shared Roms/MSX2HAN.rom
+      required: true
+      md5: 7b9466546009d419ebd0dc27db90c30e
+    - name: MSX2J.rom
+      destination: Machines/Shared Roms/MSX2J.rom
+      required: true
+      md5: 53bec1c22b30c0a15263e04b91a7814f
+    - name: MSX2JEXT.rom
+      destination: Machines/Shared Roms/MSX2JEXT.rom
+      required: true
+      md5: 8aabde714a42256bef36ea9b04f6ef59
+    - name: MSX2KR.rom
+      destination: Machines/Shared Roms/MSX2KR.rom
+      required: true
+      md5: 6819a1533502261bfdd52436b8346073
+    - name: MSX2KREXT.rom
+      destination: Machines/Shared Roms/MSX2KREXT.rom
+      required: true
+      md5: 30a0b3402a0a13b516af76d39f45a365
+    - name: MSX2P.rom
+      destination: Machines/Shared Roms/MSX2P.rom
+      required: true
+      md5: 847cc025ffae665487940ff2639540e5
+    - name: MSX2PEXT.rom
+      destination: Machines/Shared Roms/MSX2PEXT.rom
+      required: true
+      md5: 7c8243c71d8f143b2531f01afa6a05dc
+    - name: MSX2PMUS.rom
+      destination: Machines/Shared Roms/MSX2PMUS.rom
+      required: true
+      md5: f877f32e6d8687474ac5ee83e40de23b
+    - name: MSX2R.rom
+      destination: Machines/Shared Roms/MSX2R.rom
+      required: true
+      md5: db56360c85ef8410dc4bcf8e8602f61e
+    - name: MSX2R2.ROM
+      destination: Machines/Shared Roms/MSX2R2.ROM
+      required: true
+      md5: 96ac231b718e88ce64d5a9b4a5e9ae12
+    - name: MSX2REXT.rom
+      destination: Machines/Shared Roms/MSX2REXT.rom
+      required: true
+      md5: 8e4af1124e2b82fbdc74a7bc5f20dc6e
+    - name: MSX2SE.rom
+      destination: Machines/Shared Roms/MSX2SE.rom
+      required: true
+      md5: fb8f7ab15e32a91147204bd7f7a1b451
+    - name: MSX2SP.rom
+      destination: Machines/Shared Roms/MSX2SP.rom
+      required: true
+      md5: 79caefa20a0d056fb42eaeca856c6f82
+    - name: MSX2SPEXT.rom
+      destination: Machines/Shared Roms/MSX2SPEXT.rom
+      required: true
+      md5: d71842ce8f559a8aed2721766bc15f2b
+    - name: MSXAR.ROM
+      destination: Machines/Shared Roms/MSXAR.ROM
+      required: true
+      md5: 793e3b833c33be7aaf834beacb8fb926
+    - name: MSXBR.rom
+      destination: Machines/Shared Roms/MSXBR.rom
+      required: true
+      md5: d13c1fc9ad4897c322f51aab3ad3b30d
+    - name: MSXDOS23.ROM
+      destination: Machines/Shared Roms/MSXDOS23.ROM
+      required: true
+      md5: 56bf5b02fed377b7bb9d91f914965431
+    - name: MSXFR.rom
+      destination: Machines/Shared Roms/MSXFR.rom
+      required: true
+      md5: 6f43d28ac4a69182c860c2db0e18ee6d
+    - name: MSXG.rom
+      destination: Machines/Shared Roms/MSXG.rom
+      required: true
+      md5: 4655329d3f37bf1a655d05f2abd1aa62
+    - name: MSXHAN.rom
+      destination: Machines/Shared Roms/MSXHAN.rom
+      required: true
+      md5: 394efbc50fb7df1151130d8c162f85c3
+    - name: MSXJ.rom
+      destination: Machines/Shared Roms/MSXJ.rom
+      required: true
+      md5: f005e55c680ba6e7b19f6d4dc8f73ce5
+    - name: MSXKANJI.rom
+      destination: Machines/Shared Roms/MSXKANJI.rom
+      required: true
+      md5: 9dfdebfaa6b547222a40aab8bb2e29f8
+    - name: MSXKR.rom
+      destination: Machines/Shared Roms/MSXKR.rom
+      required: true
+      md5: c84f362c44192659273d45ae97462362
+    - name: MSXR.rom
+      destination: Machines/Shared Roms/MSXR.rom
+      required: true
+      md5: 0db9592930488259fc1a5c127215e784
+    - name: MSXR2.ROM
+      destination: Machines/Shared Roms/MSXR2.ROM
+      required: true
+      md5: 704bdd980fa56c6be5c680358458eeeb
+    - name: MSXSE.ROM
+      destination: Machines/Shared Roms/MSXSE.ROM
+      required: true
+      md5: 161cb768c52a13f5b38ba46e721b68c1
+    - name: MSXSP.rom
+      destination: Machines/Shared Roms/MSXSP.rom
+      required: true
+      md5: 51af5b19aeccf94eb8e03bce0b5d33c4
+    - name: MSXTR.ROM
+      destination: Machines/Shared Roms/MSXTR.ROM
+      required: true
+      md5: fd9513736823e470965949f2a3ec6a43
+    - name: MSXTREXT.ROM
+      destination: Machines/Shared Roms/MSXTREXT.ROM
+      required: true
+      md5: 824b1c4475a3bd3b91c5ae81ea940aa2
+    - name: MSXTRMUS.ROM
+      destination: Machines/Shared Roms/MSXTRMUS.ROM
+      required: true
+      md5: c688a229f834f95f8c64df7d33188cd8
+    - name: MSXTROPT.ROM
+      destination: Machines/Shared Roms/MSXTROPT.ROM
+      required: true
+      md5: 2cba0d812ec445cfe63ffa2cac8d42c2
+    - name: NATIONALDISK.rom
+      destination: Machines/Shared Roms/NATIONALDISK.rom
+      required: true
+      md5: 86269da485e852d9f581ac27f4ba32ff
+    - name: NOVAXIS.rom
+      destination: Machines/Shared Roms/NOVAXIS.rom
+      required: true
+      md5: 20989124671593ab04eeb01d52a1e25c
+    - name: PAINT.rom
+      destination: Machines/Shared Roms/PAINT.rom
+      required: true
+      md5: 41db0d7b37be479296ffd59fcd6775f0
+    - name: PANASONICDISK.rom
+      destination: Machines/Shared Roms/PANASONICDISK.rom
+      required: true
+      md5: 00aa02b6077de40a0b51d71a3c3e1d5f
+    - name: PHILIPSDISK.rom
+      destination: Machines/Shared Roms/PHILIPSDISK.rom
+      required: true
+      md5: 01dd1d72ed9bb6afe8a9b441c198a1cd
+    - name: RS232.ROM
+      destination: Machines/Shared Roms/RS232.ROM
+      required: true
+      md5: 55cca200bbbdd0a1ec5c9d70966c05c0
+    - name: SUNRISEIDE.rom
+      destination: Machines/Shared Roms/SUNRISEIDE.rom
+      required: true
+      md5: 7b564497beb2c0de0847f107dec00ddf
+    - name: SWP.rom
+      destination: Machines/Shared Roms/SWP.rom
+      required: true
+      md5: 490db04e2a3c1c993a2a9d3611949c76
+    - name: XBASIC2.rom
+      destination: Machines/Shared Roms/XBASIC2.rom
+      required: true
+      md5: 0b6120f289336538bc564548109f97c6
+    - name: nowindDos1.rom
+      destination: Machines/Shared Roms/nowindDos1.rom
+      required: true
+      md5: 8c294a75f14fc30fce0c8642d28ccec1
+    - name: nowindDos2.rom
+      destination: Machines/Shared Roms/nowindDos2.rom
+      required: true
+      md5: 1847398c014384b833868c64f149f338
+  sega-game-gear:
+    files:
+    - name: bios.gg
+      destination: gamegear/bios.gg
+      required: false
+      md5: 672e104c3be3a238301aceffc3b23fd6
+  sega-master-system:
+    files:
+    - name: bios_E.sms
+      destination: mastersystem/bios_E.sms
+      required: false
+      md5: 840481177270d5642a14ca71ee72844c,4187d96beaf36385e681a3cf3bd1663d,e8b26871629b938887757a64798df6dc,02cbb2e348945c9ac41e37502a58ca76,5cd8f62cd8786af0226e6d2248279338,08b81aa6be18b92daef1b875deecf824,bdb34f2c471e5d0c358eeec621f9d029
+    - name: bios_U.sms
+      destination: mastersystem/bios_U.sms
+      required: false
+      md5: 840481177270d5642a14ca71ee72844c,b264bef9bda264ffe83afcebac21b81f,e8b26871629b938887757a64798df6dc,02cbb2e348945c9ac41e37502a58ca76,5cd8f62cd8786af0226e6d2248279338,08b81aa6be18b92daef1b875deecf824
+    - name: bios_J.sms
+      destination: mastersystem/bios_J.sms
+      required: false
+      md5: 24a519c53f67b00640d0048ef7089105
+  sega-mega-drive:
+    files:
+    - name: bios_MD.bin
+      destination: megadrive/bios_MD.bin
+      required: false
+      md5: 45e298905a08f9cfb38fd504cd6dbc84
+  nintendo-gb:
+    files:
+    - name: gb_bios.bin
+      destination: gb/gb_bios.bin
+      required: false
+      md5: 32fbbd84168d3482956eb3c5051637f5
+    - name: dmg_boot.bin
+      destination: gb/dmg_boot.bin
+      required: false
+      md5: 57f6a79fb41d6b2c8987fa529c3a90f2,60f1d849a435e9053b8ac0fd5776804a,6344d08bbbcbedbbaef9ddbdf7632c74
+    - name: mgb_boot.bin
+      destination: gb/mgb_boot.bin
+      required: false
+      md5: df79723ee8093b0580496f3df436e4c4
+  gb,gbc:
+    files:
+    - name: sgb_bios.bin
+      destination: sgb/sgb_bios.bin
+      required: false
+      md5: d574d4f9c12f305074798f54c091a8b4
+    - name: sgb_boot.bin
+      destination: sgb/sgb_boot.bin
+      required: false
+      md5: be77bbd03f8675478f6e3d2176f3cb56,a43cbd0ab271990f434412fc5c500eff
+    - name: sgb2_boot.bin
+      destination: sgb/sgb2_boot.bin
+      required: false
+      md5: b4331a9e612b4738867a30af9c96df52,6d507dcf3b61ce45a5717421cdd0ae95
+    - name: SGB1.sfc
+      destination: sgb/SGB1.sfc
+      required: true
+      md5: b15ddb15721c657d82c5bab6db982ee9
+    - name: SGB2.sfc
+      destination: sgb/SGB2.sfc
+      required: true
+      md5: 8ecd73eb4edf7ed7e81aef1be80031d5
+  nintendo-gbc:
+    files:
+    - name: gbc_bios.bin
+      destination: gbc/gbc_bios.bin
+      required: false
+      md5: dbfce9db9deaa2567f6a84fde55f9680
+    - name: cgb_boot.bin
+      destination: gbc/cgb_boot.bin
+      required: false
+      md5: b560efd759d87634a03b243f22bba27a,6b68be48dab6a7298a8c07e00c136b4e,62cfda90d22405cdff59700c388a57f6
+    - name: agb_boot.bin
+      destination: gbc/agb_boot.bin
+      required: false
+      md5: 8e29ae4f331830d54ae764f3e10cebae
+  sinclair-zx-spectrum:
+    files:
+    - name: 128p-0.rom
+      destination: fuse/128p-0.rom
+      required: false
+      md5: a249565f03b98d004ee7f019570069cd
+    - name: 128p-1.rom
+      destination: fuse/128p-1.rom
+      required: false
+      md5: 6e09e5d3c4aef166601669feaaadc01c
+    - name: gluck.rom
+      destination: fuse/gluck.rom
+      required: false
+      md5: d5869034604dbfd2c1d54170e874fd0a
+    - name: trdos.rom
+      destination: fuse/trdos.rom
+      required: false
+      md5: b6d8db853c24621cbd5fef3c892c976c,5c097b0fb75bb7147104d6e77db0300a,dd70541ed6a6e8176e8dace64f9344ad,b08fa49b5de8448e94936a9d061dc0f5,4a3e2b04982ac6c594adb6793be4d6e7,4123fd0b5c218ef704770596dc6533e1,6459c606ff23a610e504d0387383148a,aa9f9acf05382aff569dfdadde4ef8f2,48b5da4079ff8394852429e53cfc607f,14399030d8228ca1b16872ed426a5835,7031f2610845d39c54c97097afa8fa03,4da473775c4badcc83ab5d86dc8231de,3f8a2a239a10b6694ec79148a292cfb4,62cbbdca554c8c23676618d4c83ef40e,c511eaa8fcc968cc13baf7ad80f3aea3,a92db09c9aa3cfda478a9bf1eec7ff90,0da70a5d2a0e733398e005b96b7e4ba6,a701f54355b53fa93fb8599933d518b7,0c42e3b9ab8dd91ea096f1d0c07c55e5,b4c9634312b796063015450daef13dfa,d6f43c70c003f07d0a694f81ff55db95,a3242d31a0624a64a56f3a6cb5484e7c,cc46c7bacbbaf528a864113c76d9b9c9,53e2f417c6996df9af170e147df8e369
+    - name: 256s-0.rom
+      destination: fuse/256s-0.rom
+      required: false
+      md5: b9fda5b6a747ff037365b0e2d8c4379a
+    - name: 256s-1.rom
+      destination: fuse/256s-1.rom
+      required: false
+      md5: 643861ad34831b255bf2eb64e8b6ecb8
+    - name: 256s-2.rom
+      destination: fuse/256s-2.rom
+      required: false
+      md5: d8ad507b1c915a9acfe0d73957082926
+    - name: 256s-3.rom
+      destination: fuse/256s-3.rom
+      required: false
+      md5: ce0723f9bc02f4948c15d3b3230ae831
+  nintendo-gamecube:
+    files:
+    - name: IPL.bin
+      destination: gamecube/EUR/IPL.bin
+      required: false
+      md5: 0cdda509e2da83c85bfe423dd87346cc
+    - name: IPL.bin
+      destination: gamecube/JAP/IPL.bin
+      required: false
+      md5: fc924a7c879b661abc37cec4f018fdf3
+    - name: IPL.bin
+      destination: gamecube/USA/IPL.bin
+      required: false
+      md5: 339848a0b7c2124cf155276c1e79cbd0
+  64dd:
+    files:
+    - name: IPL.n64
+      destination: Mupen64plus/IPL.n64
+      required: true
+      md5: 8d3d9f294b6e174bc7b1d2fd1c727530
+  scv:
+    files:
+    - name: upd7801g.s01
+      destination: scv/upd7801g.s01
+      required: true
+      md5: 635A978FD40DB9A18EE44EFF449FC126
+  sega-saturn:
+    files:
+    - name: saturn_bios.bin
+      destination: saturn/saturn_bios.bin
+      required: true
+      md5: af5828fdff51384f99b3c4926be27762
+    - name: stvbios.zip
+      destination: saturn/stvbios.zip
+      required: true
+      md5: 2b99d9dcecde22db4371580b6bb33f32,53a094ad3a188f86de4e64624fe9b3ca,17116d2aea72454096b3f80ab714bfba,2b99d9dcecde22db4371580b6bb33f32,4cb34733b741ada074f11e3abcdc56d8,6b6d422a6c392eaec178b64b92987e99,88b9da6cda268ba1d9e37dd82d038801,8c34608cc140e1bfbf9c945a12fed0e8,b876d86e244d00b336980b4e26e94132
+    - name: sega_101.bin
+      destination: saturn/sega_101.bin
+      required: true
+      md5: 85ec9ca47d8f6807718151cbcca8b964
+    - name: mpr-17933.bin
+      destination: saturn/mpr-17933.bin
+      required: true
+      md5: 3240872c70984b6cbfda1586cab68dbe
+    - name: mpr-18811-mx.ic1
+      destination: saturn/mpr-18811-mx.ic1
+      required: true
+      md5: 255113ba943c92a54facd25a10fd780c
+    - name: mpr-19367-mx.ic1
+      destination: saturn/mpr-19367-mx.ic1
+      required: true
+      md5: 1cd19988d1d72a3e7caa0b73234c96b4
+  snk-neogeo:
+    files:
+    - name: neogeo.zip
+      destination: neogeo.zip
+      required: true
+      md5: e023d0a4b5249fdff2a4620c28963944,8cbdff53661f41ddbe486a98915e1ec9,42e359e394f0be1d61b94ddca0efbe6c,c1e0a738d266926f604186aa9d63e4db,d12bba59121229ff13702878b415cb7c,2b4ffdf24d5d4f24c4b116c50c4bafc3,005b843b6e70b939c2cca41887cbc371,42e359e394f0be1d61b94ddca0efbe6c,4b9432a4571d03cc8bae9d24d8d6eb40,4cd64313e26537c04cdb561b8f84b0e4,50bbfd6bf297038b085e29265c65723a,76ee7390ccd537cddea1018025ca29a8,84d6c35aad790a77ba3cfc1b319e1061,912c0a56bafe0fba39d0c668b139b250,94748719c0ef31e7375b0c357d82fc89,ab25b9e25052a6064901a7a221037eb6,ae9e5825cde82c58e39dfd48534f7060,b18f83feef474b8a1306ef199cd810a2,b4519df27a352c2a6e42e06d31330d91,bf00272e7150b31156a8995d60bf185d,ca66fd463ef7dcab492a6de8ce5f45eb,f4a125538dfd7a8044e025fc5188fb88,a3b2c9a69c28ad0bd4ea07877b744bbe,00dad01abdbf8ea9e79ad2fe11bdb182
+    - name: aes.zip
+      destination: geolith/aes.zip
+      required: true
+      md5: ad9585c72130c56f04ae26aae87c289d,7a4dcd56b3924215aac7f903ff907339
+    - name: neogeo.zip
+      destination: geolith/neogeo.zip
+      required: true
+      md5: 00dad01abdbf8ea9e79ad2fe11bdb182,912c0a56bafe0fba39d0c668b139b250,b2c8175567ab9e0bd72d4e2633f2c650
+  snk-neogeo-cd:
+    files:
+    - name: neocdz.zip
+      destination: neocdz.zip
+      required: true
+      md5: f39572af7584cb5b3f70ae8cc848aba2,389dbeb0cb857c130414747462cf9d71,c85b8132799f1b2ad3754a97947809d2,b9ab07a79997fc044ca164fc72cd5680
+    - name: neocd.bin
+      destination: neocd/neocd.bin
+      required: true
+      md5: f39572af7584cb5b3f70ae8cc848aba2
+    - name: uni-bioscd.rom
+      destination: neocd/uni-bioscd.rom
+      required: false
+      md5: 08ca8b2dba6662e8024f9e789711c6fc
+    - name: top-sp1.bin
+      destination: neocd/top-sp1.bin
+      required: false
+      md5: 122aee210324c72e8a11116e6ef9c0d0
+    - name: front-sp1.bin
+      destination: neocd/front-sp1.bin
+      required: false
+      md5: 5c2366f25ff92d71788468ca492ebeca
+    - name: neocd_sz.rom
+      destination: neocd/neocd_sz.rom
+      required: false
+      md5: 971ee8a36fb72da57aed01758f0a37f5
+    - name: neocd_z.rom
+      destination: neocd/neocd_z.rom
+      required: false
+      md5: 11526d58d4c524daef7d5d677dc6b004
+    - name: neocd_st.rom
+      destination: neocd/neocd_st.rom
+      required: false
+      md5: f6325a33c6d63ea4b9162a3fa8c32727
+    - name: neocd_t.rom
+      destination: neocd/neocd_t.rom
+      required: false
+      md5: de3cf45d227ad44645b22aa83b49f450
+    - name: neocd_sf.rom
+      destination: neocd/neocd_sf.rom
+      required: false
+      md5: 043d76d5f0ef836500700c34faef774d
+    - name: neocd_f.rom
+      destination: neocd/neocd_f.rom
+      required: false
+      md5: 8834880c33164ccbe6476b559f3e37de
+    - name: 000-lo.lo
+      destination: neocd/000-lo.lo
+      required: false
+      md5: fc7599f3f871578fe9a0453662d1c966
+    - name: ng-lo.rom
+      destination: neocd/ng-lo.rom
+      required: false
+      md5: e255264d85d5765013b1b2fa8109dd53
+  ti994a:
+    files:
+    - name: TI-994A.ctg
+      destination: ti994a/TI-994A.ctg
+      required: true
+      md5: 412ecbf991edcb68edd0e76c2caa4a59
+    - name: spchrom.bin
+      destination: ti994a/spchrom.bin
+      required: false
+      md5: 7adcaf64272248f7a7161cfc02fd5b3f
+    - name: ti-disk.ctg
+      destination: ti994a/ti-disk.ctg
+      required: false
+      md5: 04714f43347cefb2a051a77116344b3f
+  dragon:
+    files:
+    - name: d32.rom
+      destination: dragon/d32.rom
+      required: true
+      md5: 3420b96031078a4ef408cad7bf21a33f
+    - name: d64rom1.rom
+      destination: dragon/d64rom1.rom
+      required: true
+      md5: 5f0bee59710e55f5880e74890912ed78
+    - name: d64rom2.rom
+      destination: dragon/d64rom2.rom
+      required: true
+      md5: fd91edce7be5e7c2d88e46b76956a8aa
+    - name: d64tano.rom
+      destination: dragon/d64tano.rom
+      required: true
+      md5: be9bc86ee5eb401d0a40d0377f65fefa
+    - name: d64tano2.rom
+      destination: dragon/d64tano2.rom
+      required: true
+      md5: fd91edce7be5e7c2d88e46b76956a8aa
+    - name: d200rom1.rom
+      destination: dragon/d200rom1.rom
+      required: false
+      md5: be9bc86ee5eb401d0a40d0377f65fefa
+    - name: d200rom2.rom
+      destination: dragon/d200rom2.rom
+      required: false
+      md5: fd91edce7be5e7c2d88e46b76956a8aa
+    - name: ddos10.rom
+      destination: dragon/ddos10.rom
+      required: false
+      md5: 1c965da49b6c5459b8353630aa1482e7
+    - name: ddos11c.rom
+      destination: dragon/ddos11c.rom
+      required: false
+      md5: d8429af1a12f7438a4bf88a5b934cb3a
+    - name: ddos12a.rom
+      destination: dragon/ddos12a.rom
+      required: false
+      md5: 55e2535dbbed7f1a26b5f263d7c72c63
+    - name: ddos40.rom
+      destination: dragon/ddos40.rom
+      required: false
+      md5: 9ddc388632cd3c376b164ba5cfc64329
+    - name: ddos42.rom
+      destination: dragon/ddos42.rom
+      required: false
+      md5: c956a854cbc4b9d1e69c000f78368668
+    - name: deltados.rom
+      destination: dragon/deltados.rom
+      required: false
+      md5: 024eac3db20f1b5cf98c30a0e4743201
+    - name: dplus48.rom
+      destination: dragon/dplus48.rom
+      required: false
+      md5: ee6f24d893a52b8efea9f787855456b5
+    - name: dplus49b.rom
+      destination: dragon/dplus49b.rom
+      required: false
+      md5: 56f1b97314e4ca82491c465bb887059e
+    - name: dplus50.rom
+      destination: dragon/dplus50.rom
+      required: false
+      md5: 35de5d28da507ebb213a26e04241d940
+    - name: sdose6.rom
+      destination: dragon/sdose6.rom
+      required: false
+      md5: 9d85e6b7133f915c021156f4b9cdb512
+    - name: sdose8.rom
+      destination: dragon/sdose8.rom
+      required: false
+      md5: 167f409b7a4b992faabb784b061ab4c6
+  trs80coco:
+    files:
+    - name: bas10.rom
+      destination: trs80coco/bas10.rom
+      required: false
+      md5: a74f3d95b395dad7cdca19d560eeea74
+    - name: bas11.rom
+      destination: trs80coco/bas11.rom
+      required: true
+      md5: c73fb4bff9621c5ab17f6220b20db82f
+    - name: bas12.rom
+      destination: trs80coco/bas12.rom
+      required: false
+      md5: c933316c7d939532a13648850c1c2aa6
+    - name: bas13.rom
+      destination: trs80coco/bas13.rom
+      required: true
+      md5: c2fc43556eb6b7b25bdf5955bd9df825
+    - name: extbas10.rom
+      destination: trs80coco/extbas10.rom
+      required: true
+      md5: fda72f415afe99b36f953bb9bc1253da
+    - name: extbas11.rom
+      destination: trs80coco/extbas11.rom
+      required: true
+      md5: 21070aa0496142b886c562bf76d7c113
+    - name: mx1600bas.rom
+      destination: trs80coco/mx1600bas.rom
+      required: false
+      md5: 88d1504e93366f498105a846cdbf7fb7
+    - name: disk10.rom
+      destination: trs80coco/disk10.rom
+      required: false
+      md5: a64b3ef9efcc066b18d35b134068d1cc
+    - name: disk11.rom
+      destination: trs80coco/disk11.rom
+      required: false
+      md5: 8cab28f4b7311b8df63c07bb3b59bfd5
+    - name: hdbdw3bck.rom
+      destination: trs80coco/hdbdw3bck.rom
+      required: false
+      md5: ef750d93d24d7bc87a8ecd6e5a15a845
+    - name: mc10.rom
+      destination: trs80coco/mc10.rom
+      required: false
+      md5: f29e94ff36577ffb6a787959e45bfe85
+    - name: coco3.rom
+      destination: trs80coco/coco3.rom
+      required: false
+      md5: 7233c6c429f3ce1c7392f28a933e0b6f
+    - name: coco3p.rom
+      destination: trs80coco/coco3p.rom
+      required: false
+      md5: 4ae57e5a8e7494e5485446fefedb580b
+    - name: alice32.rom
+      destination: trs80coco/alice32.rom
+      required: false
+      md5: 79ea46603d716578d5f2b52eb4c33ca2
+    - name: alice4k.rom
+      destination: trs80coco/alice4k.rom
+      required: false
+      md5: 78af465c2f31cf4e05dec1efda77da01
+  cdi:
+    files:
+    - name: cdimono1.zip
+      destination: cdi/cdimono1.zip
+      required: true
+      md5: ce590c4787460161359f2b680136cb60,bbe6636ac11d3744f0710e8e820187e7,1a7c3c98c46555ff5fc93ee3feae4b47
+    - name: cdibios.zip
+      destination: cdi/cdibios.zip
+      required: false
+      md5: 9fd6b277cd877d51426427a33d1d19bb
+    - name: cdimono2.zip
+      destination: cdi/cdimono2.zip
+      required: false
+      md5: 2ac8cd5bb23287e022ca17d616949255
+  naomi2:
+    files:
+    - name: naomi2.zip
+      destination: dc/naomi2.zip
+      required: true
+      md5: 34f9c1acdaf53d6a50dd8de052e506ca
+  xbox:
+    files:
+    - name: Complex_4627.bin
+      destination: xbox/Complex_4627.bin
+      required: true
+      md5: 39cee882148a87f93cb440b99dde3ceb
+    - name: mcpx_1.0.bin
+      destination: xbox/mcpx_1.0.bin
+      required: true
+      md5: d49c52a4102f6df7bcf8d0617ac475ed
+  scummvm:
+    files:
+    - name: MT32_CONTROL.ROM
+      destination: scummvm/MT32_CONTROL.ROM
+      required: false
+      md5: 5626206284b22c2734f3e9efefcd2675
+    - name: MT32_PCM.ROM
+      destination: scummvm/MT32_PCM.ROM
+      required: false
+      md5: 89e42e386e82e0cacb4a2704a03706ca

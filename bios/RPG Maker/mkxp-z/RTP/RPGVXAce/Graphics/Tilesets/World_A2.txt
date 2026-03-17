@@ -1,0 +1,32 @@
+﻿Grassland|草原
+Dark Grassland|濃い草原
+Grassland|草原
+Dark Grassland|濃い草原
+Forest|森
+Forest (Conifer)|森（針葉樹）
+Low Mountain (Grass)|低い山（草）
+High Mountain (Rock)|高い山（岩）
+Wasteland|荒れ地
+Wasteland|荒れ地
+Dirt Field|土肌
+Dirt Field|土肌
+Forest (Dead Trees)|森（枯れ木）
+Road (Dirt)|道（土）
+Low Mountain (Dirt)|低い山（土）
+High Mountain (Rock)|高い山（岩）
+Desert|砂漠
+Desert|砂漠
+Rocky Land|岩地
+Rocky Land (Lava)|岩地（溶岩）
+Forest (Palm Trees)|森（ヤシの木）
+Road (Paved)|道（舗装）
+Low Mountain (Sandstone)|低い山（砂岩）
+High Mountain (Sandstone)|高い山（砂岩）
+Snowfield|雪原
+Low Mountain (Snow)|低い山（雪）
+Clouds|雲
+High Mountain (Clouds)|高い山（雲）
+Forest (Snow)|森（雪）
+Pit|穴
+Low Mountain (Rock)|低い山（岩）
+High Mountain (Snow)|高い山（雪）

@@ -1,2 +1,17 @@
 
 desktop.ini
+.DS_Store
+__pycache__/
+*.pyc
+.cache/
+dist/
+*.tmp
+
+# Large files stored as GitHub Release assets (> 50MB)
+bios/Arcade/Arcade/Firmware.19.0.0.zip
+bios/Arcade/Arcade/maclc3.zip
+bios/Nintendo/Nintendo DS/dsi_nand.bin
+bios/Other/Batocera42/dsi_nand.bin
+bios/Sony/PlayStation 3/PS3UPDAT.PUP
+bios/Sony/PlayStation Vita/PSVUPDAT.PUP
+bios/Sony/PlayStation Vita/PSP2UPDAT.PUP

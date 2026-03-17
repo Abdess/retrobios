@@ -1,0 +1,16 @@
+﻿Water (Meadow)|水場（草地）
+Deep Water|深い水場
+Lotus Pads|蓮の葉
+Swamp Grass|水草
+Water (Snow)|水場（雪）
+Waterfall (Stone Wall)|滝（石壁）
+Canal|水路
+Waterfall (Stone Wall)|滝（石壁）
+Water (Dirt)|水場（土）
+Waterfall (Cliff)|滝（崖）
+Water (Sand)|水場（砂）
+Boulder in Waterfall|滝の岩
+Water (Port)|水場（港）
+Waterfall (Stone Wall)|滝（石壁）
+Poison Swamp|毒の沼
+Dead Tree|枯れ木

@@ -1,0 +1,21 @@
+;
+; example script to be used with WHDLoad option ExecuteStartup
+; stop all software which can cause interrupts with external hardware
+; optionally free memory to allow WHDLoad better PreLoad
+;
+
+; stop the IP-stack via ARexx
+;C:rx offline.rexx
+
+; stop Genesis with a X-Surf card
+;AmiTCP:bin/offline x-surf0
+
+; stop Roadshow
+;C:NetShutdown
+
+; stop Poseidon USB-stack
+;C:AddUSBHardware REMOVE ALL
+
+; set compatible speed and disable JIT for UAE
+;uae-configuration cpu_speed real cachesize 0
+

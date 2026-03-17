@@ -1,0 +1,256 @@
+﻿Decorative Pillar|装飾柱
+Decorative Pillar|装飾柱
+Decorative Pillar|装飾柱
+Decorative Pillar|装飾柱
+Decorative Pillar|装飾柱
+Decorative Pillar|装飾柱
+Decorative Pillar|装飾柱
+Decorative Pillar|装飾柱
+Decorative Pillar|装飾柱
+Decorative Pillar|装飾柱
+Decorative Pillar|装飾柱
+Decorative Pillar|装飾柱
+Decorative Pillar|装飾柱
+Decorative Pillar|装飾柱
+Decorative Pillar|装飾柱
+Decorative Pillar|装飾柱
+Decorative Pillar|装飾柱
+Decorative Pillar|装飾柱
+Decorative Pillar|装飾柱
+Decorative Pillar|装飾柱
+Decorative Pillar|装飾柱
+Decorative Pillar|装飾柱
+Decorative Pillar|装飾柱
+Decorative Pillar|装飾柱
+Decorative Pillar (Ruins)|装飾柱（廃墟）
+Decorative Pillar (Ruins)|装飾柱（廃墟）
+Decorative Pillar (Ruins)|装飾柱（廃墟）
+Decorative Pillar (Ruins)|装飾柱（廃墟）
+Decorative Pillar (Ruins)|装飾柱（廃墟）
+Decorative Pillar (Ruins)|装飾柱（廃墟）
+Decorative Pillar (Ruins)|装飾柱（廃墟）
+Decorative Pillar (Front, Ruins)|装飾柱（手前・廃墟）
+Decorative Pillar (Ruins)|装飾柱（廃墟）
+Decorative Pillar (Ruins)|装飾柱（廃墟）
+Decorative Pillar (Ruins)|装飾柱（廃墟）
+Decorative Pillar (Ruins)|装飾柱（廃墟）
+Decorative Pillar (Ruins)|装飾柱（廃墟）
+Decorative Pillar (Ruins)|装飾柱（廃墟）
+Decorative Pillar (Ruins)|装飾柱（廃墟）
+Decorative Pillar (Front, Ruins)|装飾柱（手前・廃墟）
+Decorative Pillar (Ruins)|装飾柱（廃墟）
+Decorative Pillar (Ruins)|装飾柱（廃墟）
+Decorative Pillar (Ruins)|装飾柱（廃墟）
+Decorative Pillar (Ruins)|装飾柱（廃墟）
+Decorative Pillar (Ruins)|装飾柱（廃墟）
+Decorative Pillar (Ruins)|装飾柱（廃墟）
+Decorative Pillar (Ruins)|装飾柱（廃墟）
+Decorative Pillar (Front, Ruins)|装飾柱（手前・廃墟）
+Decorative Pillar (Front)|装飾柱（手前）
+Decorative Pillar (Front)|装飾柱（手前）
+Decorative Pillar (Front)|装飾柱（手前）
+Decorative Pillar (Front)|装飾柱（手前）
+Decorative Pillar (Front)|装飾柱（手前）
+Decorative Pillar (Front)|装飾柱（手前）
+Decorative Pillar (Front)|装飾柱（手前）
+Decorative Pillar (Front)|装飾柱（手前）
+Gate|門
+Gate|門
+Gate|門
+Gate|門
+Gate|門
+Gate|門
+Decorative Pillar|装飾柱
+Decorative Pillar (Ruins)|装飾柱（廃墟）
+Gate|門
+Gate|門
+Gate|門
+Gate|門
+Gate|門
+Gate|門
+Decorative Pillar|装飾柱
+Decorative Pillar (Ruins)|装飾柱（廃墟）
+Gate|門
+Gate|門
+Gate|門
+Gate|門
+Gate|門
+Gate|門
+Coffin|棺
+Coffin|棺
+Hexagram|魔法陣
+Hexagram|魔法陣
+Hexagram|魔法陣
+Hexagram (Lit)|魔法陣（光）
+Hexagram (Lit)|魔法陣（光）
+Hexagram (Lit)|魔法陣（光）
+Coffin|棺
+Coffin|棺
+Hexagram|魔法陣
+Hexagram|魔法陣
+Hexagram|魔法陣
+Hexagram (Lit)|魔法陣（光）
+Hexagram (Lit)|魔法陣（光）
+Hexagram (Lit)|魔法陣（光）
+Coffin|棺
+Coffin|棺
+Hexagram|魔法陣
+Hexagram|魔法陣
+Hexagram|魔法陣
+Hexagram (Lit)|魔法陣（光）
+Hexagram (Lit)|魔法陣（光）
+Hexagram (Lit)|魔法陣（光）
+Coffin|棺
+Coffin|棺
+Rails|線路
+Rails|線路
+Rails|線路
+Rails|線路
+Rails (Ruins)|線路（廃墟）
+Rails (Ruins)|線路（廃墟）
+Rails (Ruins)|線路（廃墟）
+Rails (Ruins)|線路（廃墟）
+Rails|線路
+Railroad Ties|枕木
+Rails|線路
+Rails|線路
+Rails|線路
+Rails|線路
+Rails|線路
+Rails|線路
+Rails|線路
+Railroad Ties|枕木
+Rails|線路
+Rails|線路
+Rails|線路
+Rails|線路
+Rails|線路
+Rails|線路
+Mural|壁画
+Mural|壁画
+Mural|壁画
+Mural|壁画
+Mural|壁画
+Mural|壁画
+Bed|ベッド
+Bed (Ruins)|ベッド（廃墟）
+Mural|壁画
+Mural|壁画
+Mural|壁画
+Mural|壁画
+Mural|壁画
+Mural|壁画
+Bed|ベッド
+Bed (Ruins)|ベッド（廃墟）
+Window|窓
+Window|窓
+Window|窓
+Window (Ruins)|窓（廃墟）
+Window (Demon Castle)|窓（魔王城）
+Table|テーブル
+Pipe Frame Bed|パイプベッド
+Straw Bed|むしろの寝床
+Window|窓
+Window|窓
+Window|窓
+Window (Ruins)|窓（廃墟）
+Window (Demon Castle)|窓（魔王城）
+Stool|椅子
+Pipe Frame Bed|パイプベッド
+Straw Bed|むしろの寝床
+Window|窓
+Window|窓
+Window|窓
+Stained Glass Window|ステンドグラス
+Window|窓
+Window|窓
+Window|窓
+Window|窓
+Window|窓
+Window|窓
+Window|窓
+Stained Glass Window|ステンドグラス
+Window|窓
+Window|窓
+Window|窓
+Window|窓
+Chest|チェスト
+Cabinet|キャビネット
+Closet|クローゼット
+Chest of Drawers|タンス
+Dish Cabinet|食器棚
+Wine Rack|ワインセラー
+Bottle Shelf|ボトル棚
+Bottle Shelf|ボトル棚
+Chest|チェスト
+Chest|チェスト
+Closet|クローゼット
+Chest of Drawers|タンス
+Dish Cabinet|食器棚
+Wine Rack|ワインセラー
+Bottle Shelf|ボトル棚
+Bottle Shelf|ボトル棚
+Tipped Shelf|倒れた棚
+Sundries Shelf|雑貨棚
+Sundries Shelf|雑貨棚
+Sundries Shelf|雑貨棚
+Medicine Shelf|薬品棚
+Bookshelf|本棚
+Bookshelf|本棚
+Bookshelf|本棚
+Tipped Shelf|倒れた棚
+Sundries Shelf|雑貨棚
+Sundries Shelf|雑貨棚
+Sundries Shelf|雑貨棚
+Medicine Shelf|薬品棚
+Bookshelf|本棚
+Bookshelf|本棚
+Bookshelf|本棚
+Curtains|カーテン
+Curtains|カーテン
+Curtains|カーテン
+Curtains|カーテン
+Curtains (Ruins)|カーテン（廃墟）
+Curtains (Ruins)|カーテン（廃墟）
+Curtains (Ruins)|カーテン（廃墟）
+Curtains (Ruins)|カーテン（廃墟）
+Curtains|カーテン
+Curtains|カーテン
+Curtains|カーテン
+Curtains|カーテン
+Curtains (Ruins)|カーテン（廃墟）
+Curtains (Ruins)|カーテン（廃墟）
+Curtains (Ruins)|カーテン（廃墟）
+Curtains (Ruins)|カーテン（廃墟）
+Clock|時計
+Mirror|鏡
+Clock (Ruins)|時計（廃墟）
+Mirror (Ruins)|鏡（廃墟）
+Stacked Crates|積まれた木箱
+Stacked Crates|積まれた木箱
+Tapestry|タペストリー
+Tapestry (Ruins)|タペストリー（廃墟）
+Clock|時計
+Mirror|鏡
+Clock (Ruins)|時計（廃墟）
+Mirror (Ruins)|鏡（廃墟）
+Stacked Crates|積まれた木箱
+Stacked Crates|積まれた木箱
+Tapestry|タペストリー
+Tapestry (Ruins)|タペストリー（廃墟）
+Chair|背もたれ椅子
+Chair|背もたれ椅子
+Throne|玉座
+Throne|玉座
+Throne|玉座
+Throne (Demon Castle)|玉座（魔王城）
+Throne (Demon Castle)|玉座（魔王城）
+Throne (Demon Castle)|玉座（魔王城）
+Chair|背もたれ椅子
+Chair|背もたれ椅子
+Throne|玉座
+Throne|玉座
+Throne|玉座
+Throne (Demon Castle)|玉座（魔王城）
+Throne (Demon Castle)|玉座（魔王城）
+Throne (Demon Castle)|玉座（魔王城）

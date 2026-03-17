@@ -1,0 +1,160 @@
+M+ FONTS                                Copyright (C) 2002-2007 M+ FONTS PROJECT
+
+-
+
+README_J
+
+
+
+
+■ M+ TESTFLIGHT
+
+M+ OUTLINE FONTS に興味をお持ちいただき、ありがとうございます。
+このフォントセットは 2 種類の全角固定幅かな文字 M+ 1 と M+ 2、
+4 種類の可変幅英数字 M+ P（Type-1/2）と M+ C（Type-1/2）、
+3 種類の半角固定幅英数字 M+ M（Type-1/2）と M+ MN から構成されています。
+
+それぞれ thin から black までの 7 種類（半角固定幅英数字は bold までの
+5 種類）のウエイトバリエーションが用意され、 かな文字と英数字を組み合わせた
+43 種類のファイルで、7 つのフォントファミリを形成しています。
+
+
+可変幅フォント（かな文字は全角固定幅、英字は可変幅）
+
+M+ 1P     mplus-1p-thin.ttf
+          mplus-1p-light.ttf
+          mplus-1p-regular.ttf
+          mplus-1p-medium.ttf
+          mplus-1p-bold.ttf
+          mplus-1p-heavy.ttf
+          mplus-1p-black.ttf
+          
+M+ 2P     mplus-2p-thin.ttf
+          mplus-2p-light.ttf
+          mplus-2p-regular.ttf
+          mplus-2p-medium.ttf
+          mplus-2p-bold.ttf
+          mplus-2p-heavy.ttf
+          mplus-2p-black.ttf
+          
+M+ 1C     mplus-1c-thin.ttf
+          mplus-1c-light.ttf
+          mplus-1c-regular.ttf
+          mplus-1c-medium.ttf
+          mplus-1c-bold.ttf
+          mplus-1c-heavy.ttf
+          mplus-1c-black.ttf
+          
+M+ 2C     mplus-2c-thin.ttf
+          mplus-2c-light.ttf
+          mplus-2c-regular.ttf
+          mplus-2c-medium.ttf
+          mplus-2c-bold.ttf
+          mplus-2c-heavy.ttf
+          mplus-2c-black.ttf
+
+
+固定幅フォント（かな文字は全角、英数字は半角の固定幅）
+
+M+ 1M     mplus-1m-thin.ttf
+          mplus-1m-light.ttf
+          mplus-1m-regular.ttf
+          mplus-1m-medium.ttf
+          mplus-1m-bold.ttf
+          
+M+ 2M     mplus-2m-thin.ttf
+          mplus-2m-light.ttf
+          mplus-2m-regular.ttf
+          mplus-2m-medium.ttf
+          mplus-2m-bold.ttf
+
+M+ 1MN    mplus-1mn-thin.ttf
+          mplus-1mn-light.ttf
+          mplus-1mn-regular.ttf
+          mplus-1mn-medium.ttf
+          mplus-1mn-bold.ttf
+
+          
+
+
+■ 他のフォントからの漢字補完
+
+M+ OUTLINE FONTS を使用する環境によって自動的に、または必要に応じた設定で、
+漢字などの未着手文字を他の和文フォントから補完させる事が出来ます。
+
+
+・ UNIX/Linux (XFT)
+
+自動的に補完されますが、任意の和文フォントから補完させたい場合は
+fonts.conf の設定が必要です。
+
+
+・ Mac OS X 10.4
+
+Safari.app や TextEdit.app などでは自動的にヒラギノ角ゴから補完され、
+太字にも対応しています。
+注）FireFox では後述の「IPA フォントとの合成フォント」も含め、
+正常に表示されません。
+
+
+・ Windows XP
+
+フォントリンクの設定で補完されますが、補完された文字が正常に表示されない様です。
+後述の「IPA フォントとの合成フォント」を試してみて下さい。
+
+
+
+
+■ IPA フォントとの合成
+
+同梱の m++ipag.pe スクリプトと IPA フォント（ipag.ttf）、FontForge プログラム
+を使用して、ipag.ttf から漢字が補完された合成フォントを生成する事ができます。
+合成に必要なファイルとプログラムは以下の通りです。
+
+
+・ IPA フォントとの合成に必要なファイルとプログラム
+
+          mplus-1p-regular.ttf *1
+          mplus-2p-regular.ttf *1
+          mplus-1c-regular.ttf *1
+          mplus-2c-regular.ttf *1
+          mplus-1m-regular.ttf *1
+          mplus-2m-regular.ttf *1
+          mplus-1mn-regular.ttf *1
+          m++ipag.pe *1
+          ipag.ttf *2
+          fontforge *3
+
+*1 M+ TESTFLIGHT に同梱されています
+*2 http://www.grass-japan.org/FOSS4G/readme-grass-i18n-ipafonts.eucjp.htm
+*3 http://fontforge.sourceforge.net/
+
+
+・ 合成フォントの生成
+
+fontforge 以外のファイルを同じディレクトリに配置し、以下のコマンドを実行します。
+-
+$ ./m++ipag.pe
+-
+7 つの M+*+IPAG.ttf ファイルが生成されますので、IPA フォントのライセンスに
+従ってご利用ください。
+Mac OS X 上でインストールする際に警告画面が表示される場合は、チェック欄を埋め、
+確認ボタンをクリックして、強制的にインストールを実行してみてください。
+
+
+
+
+■ お問い合わせ
+
+M+ OUTLINE FONTS の詳細、お問い合わせなどは以下の URL をご利用ください。
+
+-
+
+M+ OUTLINE FONTS
+http://mplus-fonts.sourceforge.jp/mplus-outline-fonts/
+
+mplus-fonts-dev ML
+http://lists.sourceforge.jp/mailman/listinfo/mplus-fonts-dev
+
+M+ FONTS open forum
+http://sourceforge.jp/forum/forum.php?forum_id=3403

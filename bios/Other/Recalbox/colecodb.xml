@@ -1,0 +1,6661 @@
+<?xml version="1.0"	encoding="utf-8" ?>
+
+<!--
+ The colecodb.xml contains infos about ColecoVision/Adam games and applications. 
+								
+	© 2004-2012	Benoit Delvaux	(Database Administrator)
+
+	Thanks to the blueMSX and openMSX teams for their support	
+-->
+<softwaredb xml:lang="en"	timestamp="1355086800">
+<!-- ColecoVision roms -->
+	<software>
+		<title xml:lang="en">10 Years Of ColecoVision</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2009</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">78b029b29e53d65afc62f64ae37622244c2c66e6</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">2010 -	 The	Graphic Action Game</title>
+		<system>Coleco</system>
+		<company>Coleco</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">b1621d39a2a6d1cda7eceb882a612a4baf3da70c</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">bebedac4df5348e91122972fcc4259a7d1f7fc0f</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">458025377be7e1b60b806deda9d6315ad2e75d50</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">421</title>
+		<system>Coleco</system>
+		<company>Mathieu Proulx</company>
+		<year>2002</year>
+		<country>FR</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">f3a75bbef36851534657dfe1a788f76c77392c8f</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">6 Noises</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2006</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">41a5992681fa38ed334a509ff69d24067b1edde5</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Adamcom 17</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu - Guy Foster</company>
+		<year>2005</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">e9be2158352c6da610a0befb81aab2e8a5275597</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Adam's Musicbox Demo</title>
+		<system>Coleco</system>
+		<company>Coleco</company>
+		<year>1987</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">9ef2974a04f5982bd034f39d1741666b6d117d24</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">01ec2888acebf801ba27f3ecf87000bc7cf46ccf</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Adventurium 3 Demo</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2000</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">eab0cb4c8b2459342d5d3efded14e0f1d2e35145</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Air Battle Demo</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2000</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">b3f191439440e9682183e703f9018f29fd1355f0</hash>
+				<remark>
+					<text>Tip : FIRE + * = Breakout	2</text>
+				</remark>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Alcazar - The Forgotten Fortress</title>
+		<system>Coleco</system>
+		<company>Activision</company>
+		<year>1985</year>
+		<country>JP</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">1582cbb23eb5464bd6b9dfdbeb0b161ec90af60a</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">5935266be6c77ca977c9e55cf0426da9471ecd90</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">e69ebe64ae0458c71516c246f626b4f780c4ff39</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Alphabet Zoo</title>
+		<system>Coleco</system>
+		<company>Spinnaker</company>
+		<year>1984</year>
+		<country>GB</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">d1aa4aff55e9febaa3e7577ffcc381fee0f8e241</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Amazing Bumpman</title>
+		<system>Coleco</system>
+		<company>Telegames</company>
+		<year>1986</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">733f8395d102f6849f58627d06655119062b97f8</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">0a532fe876694562724ef55b2833b4b4996fa3ac</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Amazing Snake</title>
+		<system>Coleco</system>
+		<company>S.E.T.</company>
+		<year>2001</year>
+		<country>FR</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">c48a3f431a67390dd192fa7fa6a2b1234fc13aae</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">fb96ff8782af183fd0d02d36386f96a8a26b0411</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">63c142fe44ad21453740a6fb524c3777704a466b</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Ambigram Demo</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2011</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">b784b353d796632f1a7f2cf445abae0d71ef2fbe</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">4342409fcf9044c781108b9d0d55958660353bf8</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">d408935ac7f26e1e06078beaae78091f84b5436a</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Antartic Adventure</title>
+		<system>Coleco</system>
+		<company>Konami</company>
+		<year>1984</year>
+		<country>JP</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">00db7cf9bd66aecac3d9368dd205680781b2e542</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">be8a7df4f3e1e1001785eb2326c26b4c301b4dbe</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Anti ISDA Warrior</title>
+		<system>Coleco</system>
+		<company>Ventzislav Tzvetkov</company>
+		<year>2004</year>
+		<country>BG</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">43c9fada96ad7d5fc480432f862e0e677d0e3687</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">43b38e74629055a354907909fd58abd90527034e</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Aquattack</title>
+		<system>Coleco</system>
+		<company>Interphase</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">76627fe3a0bbeca4f4cafd3427182eb8700e7677</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">4782f1d6225d9b6501a9ab1ab72f9e66f3ff66d8</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Arkanoid Demo</title>
+		<system>Coleco</system>
+		<company>Opcode</company>
+		<year>2009</year>
+		<country>BR</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">61099bee2fd9474385a35e62b863053408d83666</hash>
+				<remark>
+					<text>Memory extension required</text>
+				</remark>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Artillery Duel</title>
+		<system>Coleco</system>
+		<company>Xonox</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">2233e9099561bfd4ece10ff5884782f0e31d0ea1</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">a2494b1ade772fe45779bd500139ff847dfe7afa</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">B.C's Quest</title>
+		<system>Coleco</system>
+		<company>Sierravision</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">683973d7e24cb0383132acf2562d3ebef739018f</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">96a24aacd2de6fd3e5553509d341389091830c2f</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Bankruptcy Builder Demo</title>
+		<system>Coleco</system>
+		<company>Philipp Klaus Krause</company>
+		<year>2008</year>
+		<country>DE</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">a797b4b2a7df9562e32c902ab6a1f89b7ffee3c8</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Battleship</title>
+		<system>Coleco</system>
+		<company>Mathieu Proulx</company>
+		<year>2003</year>
+		<country>FR</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">ec50d64549c0c9eed8489769b8da6781e88b6631</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Beamrider</title>
+		<system>Coleco</system>
+		<company>Activision</company>
+		<year>1983</year>
+		<country>JP</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">a79edccdfb5bae973848003b3905d968d18fae9d</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">9e18d51855b721298cc4efad0786df65e8ed6fd7</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Bejeweled</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2001-2002</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">031dc3902f6880e3b6ca043c74de6ba1f306237c</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">ec3cc0c5fad076d6afac5e5d6fb502d4b0d1ae9d</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">f2da85cfe938ef91a886cac560d0d0b77f5298b8</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">c3b69fee94bd036b98c8194efc6178169575a659</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Berenstain Bears, The </title>
+		<system>Coleco</system>
+		<company>Coleco</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">cb68d5a70ca0567060eddfd0b7783cbeeffb399e</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Beyond Terra Demo</title>
+		<system>Coleco</system>
+		<company>Scott Huggins</company>
+		<year>2009</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">36862db51366a97a7b23563f50ec57f09762b313</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Black Onyx, The</title>
+		<system>Coleco</system>
+		<company>Bruce Tomlin</company>
+		<year>2007</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">fc2b2003bcec3ef388f28f615f8d82e583edf951</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Blockade Runner</title>
+		<system>Coleco</system>
+		<company>Interphase</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">09fc6bd4cfba5664b45cb89e2daa7e3bc3f50c4b</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Boulder Dash</title>
+		<system>Coleco</system>
+		<company>Micro Fun</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">ad266ca4d270ea35def306381eaf05d36c811218</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">0d10fd3589a87a941d174aa8ce885335aa87a2d6</hash>
+				<remark>
+					<text>cheat 50 lives</text>
+				</remark>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">21189984d766d8703934051507d14782aab9b854</hash>
+				<remark>
+					<text>cheat 9 lives</text>
+				</remark>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Box Sprite Test</title>
+		<system>Coleco</system>
+		<company>Kiwi</company>
+		<year>2011</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">d2e84a6bacca59e58993670da07103597c7e3cd5</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Boxxle Jukebox</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2010</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">a1656b461b8e07e49819be1d4f4ccd1d8f135f12</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">954ff1a4713e8d27fe6685f17d5c55f83abfa26d</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Boys Boys Boys</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2009</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">285faf2ea6a42a5206e9291251d38887621ad2a8</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">56a231878a23ef15831c330344328f508983f4b0</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">0e33b9aaf85164eb01bb08a2402a851296ef2c54</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Brain Strainers</title>
+		<system>Coleco</system>
+		<company>Carousel</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">fe6235b99889388ff858c19eae7337dd0b75944a</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Breakout</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>1999</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">2b25dc2ea0e2791662209537590886598b7ec85c</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Breakout Paddle Demo</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2001</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">961ab8b825f4a091fd90d0e8f65e722b139833c9</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Bresenham's Line Shot Demo</title>
+		<system>Coleco</system>
+		<company>hardhat</company>
+		<year>2001</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">9b978336ad399500461a99ed6f85264f7af5d564</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Buck Rogers - Planet Of Zoom</title>
+		<system>Coleco</system>
+		<company>Sega</company>
+		<year>1983</year>
+		<country>JP</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">6f922d5750077efdb14cdcfb0fb6f6f53559e1b9</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">27402f01f9c558d1c1e2a41d0038416271e0377f</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Bump 'N' Jump</title>
+		<system>Coleco</system>
+		<company>Data East</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">efeb5031064061e2f02eb442ff0857fa21ee042d</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">158f666aac5cf48c77b62beb77310a45f6c7e2ea</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Burger	 Time</title>
+		<system>Coleco</system>
+		<company>Data East</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">6ebf0d23f2d7cf60897ba6fe13b2293421c0a589</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">b455e48f5462c8b27dd693e25113a8a28c28014b</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Burn Rubber Demo</title>
+		<system>Coleco</system>
+		<company>dvik &#38; joyrex</company>
+		<year>2008</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">5c2fa8cb7602383e1a901bf44641fd8bb01cb157</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">81f3f0d29458590dc4134c5f2c41c7cede37c1a4</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Bustin-Out</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2000</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">26237ae073298fb0bf4bdb6e76884c52fdd1f8b5</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">a66cd128b784041dafebaf8bc94c768cf573be87</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">d12f48fa0352c57deeb4aec9790f6af2ab50afca</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">de429b3e17d1dd8f3c3172490de669b10a89a3e5</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">b365850d7247d1be9a5ee36da5250a1a577008b2</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Cabbage Patch Kids - Adventures in the Park</title>
+		<system>Coleco</system>
+		<company>Konami</company>
+		<year>1984</year>
+		<country>JP</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">6dcf2f3acc4b221666defc6ebbc09286238e7a1b</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">8ed72bcbeb4858ef8aa3c219234f1865622c1f01</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">57b4b045797b1f18ce22759d2ed1acc36a2e2207</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">5384b63f91ca773df2e271fe6c9246c93998a40e</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">ca240633ec6ecf732cbc28c9394459a722d6edcb</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">cbe10b2ac6045e3aeb276e6457a243e0d02c810c</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Cabbage Patch Kids - Picture	Show</title>
+		<system>Coleco</system>
+		<company>Coleco</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">27e5fbb1dbace06c6a48dbaf1142d374e704506a</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">e083b81f7a5d47571214eac56b352e5a8a2b08b5</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">f64bb97876258f6ff00cf1d4ffc397e29cb5f6b4</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">California</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2009</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">d473d45419782214de21862429e1851544eb8778</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Campaign '84</title>
+		<system>Coleco</system>
+		<company>Sunrise</company>
+		<year>1983</year>
+		<country>JP</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">ac21fb23a4a4dde1d850264572924ac0cf9849b9</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">2e08245802c4c5aa87774ad3740fd56ac5b25bd1</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Canadian Mini-Games 1</title>
+		<system>Coleco</system>
+		<company>Bearded Men</company>
+		<year>2008</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">c9ced69ec7df07cf56d9cfe5c0d160e47640e59a</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Carnival</title>
+		<system>Coleco</system>
+		<company>Sega</company>
+		<year>1982</year>
+		<country>JP</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">b1b84b64d252ef145dd367fd393f477976ce7285</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">41e08352df00d4ea4f8b52ce2a81cd0c1581ce93</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">d4f34382d43897774101e3620384a402dd3d2ec1</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">5efd53fb520a86713dc3a4d28e2732e59e93a30d</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Castelo</title>
+		<system>Coleco</system>
+		<company>SpliceVision</company>
+		<year>1985</year>
+		<country>BR</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">0406ad601be68014820c77eda4491bfb4ea5c402</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Centipede</title>
+		<system>Coleco</system>
+		<company>Atari</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">d89c49bbbf002e075c5964ca74d7c94a502740ff</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Chateau Du	Dragon, Le</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2001</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">0029fe15165165e95db2a5702cb162c770170637</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Choplifter</title>
+		<system>Coleco</system>
+		<company>Broderbund</company>
+		<year>1984</year>
+		<country>JP</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">3a7e5ea50495a666bac8df0b3b2c82b5be65ad18</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">a90bcac7da24b518002971caec342ffdd43b2348</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Christmas Demo</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2001</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">2c080a2702e816de1fda59abc545097e55da82f7</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Chuck Norris - Super Kicks</title>
+		<system>Coleco</system>
+		<company>Xonox</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">42bfccd2219e595df2711ecc8854b24b803c0cd9</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">e9ccabc76be96279b322586f5a569d7fe3b0fa25</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">ColecoVision Controller Demo</title>
+		<system>Coleco</system>
+		<company>Spiceware</company>
+		<year>2012</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">e4de4c9f5593adb03a6c2a7fde828bc2bea0cd71</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">0f2f14653438521350b0bca874f42cb6d084fe3a</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">ColecoVision Controller Test</title>
+		<system>Coleco</system>
+		<company>Bruce Tomlin</company>
+		<year>2004</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">fb8014ff2fcc6c60769d3c87511e699c99755afc</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">ColecoVision Monitor Test</title>
+		<system>Coleco</system>
+		<company>Coleco</company>
+		<year>1982</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">5d0c451744b714514c3113a44320019c2457e52c</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">ColecoVision Noise Generator</title>
+		<system>Coleco</system>
+		<company>Marcel	de Kogel</company>
+		<year>1982</year>
+		<country>NL</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">d4c5a513b0e94b5e8ef23086da6a20c1dc0fa681</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">ColecoVision Screen Test 1</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2008</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">4ae8e40df5e0aa6b980bd8d9bf8e34075fa86667</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">ColecoVision Screen Test 2</title>
+		<system>Coleco</system>
+		<company>Harvey Dekleine</company>
+		<year>2009</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">eac552d21d960440a2ce9a01c413d84e624728ed</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">ColecoVision Thanks</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2009</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">98e91b862a6c80120f55a8a1434ce8a19749f867</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Colored Gravity Demo</title>
+		<system>Coleco</system>
+		<company>Philipp Klaus Krause</company>
+		<year>2008</year>
+		<country>DE</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">11063680e503fef9fc251475ae3ec5e633611ff3</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">1ece86117289156f1fdb89d231df6bb24d50be45</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">cc976a53f55c9081dd1934c9e0442f1b6f1962fd</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Commando Jukebox</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2010</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">9a3542d5ba6f83b727059b485ad1fc3a0954a75e</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">0feee28150a48c8010d39080d129fa95112a66ab</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Congo Bongo</title>
+		<system>Coleco</system>
+		<company>Sega</company>
+		<year>1984</year>
+		<country>JP</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">796118b875ceec83fc52aaa951f1f11e15600edc</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">4ad44dbf2651415f68c5e82289ecbc0122c51a19</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Cosmic	 Avenger</title>
+		<system>Coleco</system>
+		<company>Universal</company>
+		<year>1982</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">f31ebcb7429030af0fcb651d172724f392cc6f87</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">c8c2a70d3eab8a68ab1db04e766a6c70f02f02ca</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Cosmic	 Crisis</title>
+		<system>Coleco</system>
+		<company>Bit Corp.</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">ea9b79ac1b51f4337c2e2e24ad0d765d25e73fde</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">081a40414021a51b3219e8957e948163680a9ada</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">0475f1eef685579aad2e2e807f8f44f0d49a68a4</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">84eb331e39ae305c8ea5648f15cbbe22fd2f2cd7</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Cosmo Challenge</title>
+		<system>Coleco</system>
+		<company>Marcel	de Kogel</company>
+		<year>1997</year>
+		<country>NL</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">d9adaae3ff8dce384c00790999f2fd1f9b29213e</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Cosmo Fighter 2</title>
+		<system>Coleco</system>
+		<company>Marcel	de Kogel</company>
+		<year>1997</year>
+		<country>NL</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">e9f07b63332ea11b03abcee70536a05db93c5942</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">9f40b06f1a6a942ab206f7cb398e660fd747c043</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Cosmo Fighter 3</title>
+		<system>Coleco</system>
+		<company>Marcel	de Kogel</company>
+		<year>2001</year>
+		<country>NL</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">cae1acd7dc76c2a54b486638288b3059c6ac2754</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">dce406229a3d600cfaf8190275bb2660df88ec99</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">6d69ccbe4943d7af62b033e2ace61ede6d1f5d96</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Cosmo Trainer</title>
+		<system>Coleco</system>
+		<company>Marcel	de Kogel</company>
+		<year>1997</year>
+		<country>NL</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">4033ef529fd847627e9928db70365322d0de89da</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Cosmo Trainer/Challenge Menu</title>
+		<system>Coleco</system>
+		<company>Marcel	de Kogel</company>
+		<year>1997</year>
+		<country>NL</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">91d986581b0928483f81186aa878441a53f63157</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">CV Drum Machine Demo</title>
+		<system>Coleco</system>
+		<company>Ematcatics</company>
+		<year>2003</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">15681e3b1d63b9d1af5c324334ff702c04ba649a</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Cye Demo</title>
+		<system>Coleco</system>
+		<company>Philipp Klaus Krause</company>
+		<year>2007</year>
+		<country>DE</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">b544d650ed3d047e47d69fe8d0106458200b93c8</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Dacman	</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2000</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">39945ff1940c943ca8425af1ae4fd7dab1336aab</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">6095655d88a87797e01367edf2f8077c302027e7</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">34298434aaf76e22697d9652f8173b4bcdef2b79</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">c0b207c6f9b8a5431a358a0a1310d19c92a3e190</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">b783b03c0a3632846a2fbc8f30385930d3deaeb8</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">f534befa36c462e1448af1e71ca7f007aba43390</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">6fc2915aba7327188fc46f108bbeba7e003c580a</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">84d71f224b367eb76435754b3911e3563a38b1c2</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">4c29c84bf44f8055f819b123c3cc28f29cfc4e18</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">202b7273046aa0d2b1efb293b31f66aa6b9a991c</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">5e7a8d067fc7a81089824d73ca66c1fbb29e872c</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">5bc984f731766a54355a3f38730c0ba8b98edd7d</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Dam Busters, The</title>
+		<system>Coleco</system>
+		<company>Sydney</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">bcb8c003a5c8acdf62105c15d25163dff017d6c3</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Dance Fantasy</title>
+		<system>Coleco</system>
+		<company>Fisher-Price</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">6f65bbe13f13a70aee79ce7970095aef280abeaa</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">631a9ea999d6bef4db68502274d499fa44e4cec4</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Death Race</title>
+		<system>Coleco</system>
+		<company></company>
+		<year>2004</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">9f97a9594b39fdc32e530c18ba14f75852efc61e</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Decathlon</title>
+		<system>Coleco</system>
+		<company>Activision</company>
+		<year>1984</year>
+		<country>JP</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">5b35ee46585b2ff07ee8d730b519f12e58bda5e7</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Defender</title>
+		<system>Coleco</system>
+		<company>Atari</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">b07f4d6747411d3df5819735c7bf051f902cbf0f</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">12b1fb517d8f7308d18f355e0c54796e4b5225a0</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Deflektor Kollection </title>
+		<system>Coleco</system>
+		<company>Daniel Bievenu</company>
+		<year>2005</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">18ce2b989a496ea10e685c9d3103514d3274d45d</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Delta Remix</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2012</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">866f4478f64618594dca2b3342a3b956a654f334</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">5e0822dfcc4130a9c7d125c40b64506b76217cfe</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Demon 2 Demo</title>
+		<system>Coleco</system>
+		<company>Yannick Proulx</company>
+		<year>2001</year>
+		<country>FR</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">bc1814053155d054203dacae0b8158753ab27004</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Destructor</title>
+		<system>Coleco</system>
+		<company>Coleco</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">35283c51f448d877625049266c0c4687bf57ab42</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">aca92993f0cf8a054cbb4ae6c1a7121aad195e09</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">2dd34cbbf8a295e32e44f7bef125550442e72316</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Detroit Countryside</title>
+		<system>Coleco</system>
+		<company>Krue</company>
+		<year>2010</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">5f5160a1ad9ce2f0856d041577da2bf41771166a</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Diamond Dash</title>
+		<system>Coleco</system>
+		<company>Daniel Bievenu</company>
+		<year>2004</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">fe20a68bac37e2336c21c92a81ba8b110a7ec0d0</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">223b74dd9b1fcda30359d072a1a93a5079f72880</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">0397447a75441d74022d0fea9b72f2ece453e0ce</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Dig Dug</title>
+		<system>Coleco</system>
+		<company>Atari</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">04bce7d5ebd54f094d5f9f9b1880ae6507a5450d</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">c9a07f579c11400ddf988db809a487abe428dfa8</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Donkey	 Kong</title>
+		<system>Coleco</system>
+		<company>Nintendo</company>
+		<year>1982</year>
+		<country>JP</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">46b7aa1cedac273f2b96bad4a0768554733972bf</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">795a63360e71e3a51317f108f504b21f5b11c3c9</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Donkey	 Kong Arcade Demo</title>
+		<system>Coleco</system>
+		<company>Opcode</company>
+		<year>2005</year>
+		<country>BR</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">073525003507a51dcdfe9f42dcde24b7e069a75d</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">6c92ca2db96f88bc3a74a498b399066b97eceb27</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">b05a47ace42f47338ef0e0339089c76faf49cab0</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">cd39628b09070ddad383a1cf95edf14e30cd56a1</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">6a754455ec9f6f9811f2fb947c5ac750474dc8e8</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Donkey	 Kong Jr</title>
+		<system>Coleco</system>
+		<company>Nintendo</company>
+		<year>1983</year>
+		<country>JP</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">113c1ead67b2679ddad9b99506e801526245af05</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">78a28102543c76a532f3d0739d97f56239f55253</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Double	 Breakout</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2001-2003</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">656720d3c08ee72d980d8fcac8348ea66eae266c</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">699915e4158b2c3d127e5924a14146a3c71d6a8e</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">d802ed7686bc2f62ea2cff4d69c973fc8beb7d1e</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Dr. Seuss's Fix-Up The Mix-Up Puzzler</title>
+		<system>Coleco</system>
+		<company>Coleco</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">978eb1bf1a0393087cb639adbd4e6575d1725581</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Dracula Demo</title>
+		<system>Coleco</system>
+		<company>CollectorVision</company>
+		<year>2011</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">014f3fe74b316f631a4e84eccdccfde577cf2742</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Dragon	 Fire</title>
+		<system>Coleco</system>
+		<company>Imagic</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">b623a970164d9739c0135d0cf37f9f0b3c67b17c</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Dukes Of Hazzard, The</title>
+		<system>Coleco</system>
+		<company>Warner	Bros</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">162c7ad3266e02aa88983fa4ece7a77bc1cb9c7a</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Easter Bunny</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2007</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">7cdb1b050f3ef25ab048ee1d64e99f1c5493fbea</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">1e9c583fb812e99fb50875858035b41d8dcb497d</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Escape	 From The Mind Master</title>
+		<system>Coleco</system>
+		<company>Epyx</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">00c157e87a8f85ede84b26bfab018c50678f88e4</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Evolution</title>
+		<system>Coleco</system>
+		<company>Sydney</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">acc3f1f3a7c129d736c3625667a3c1d942f12bbe</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">5c775dd65722be72436d0b6dd99bd0143c938b33</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Explosion</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2004</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">c041361ca2c7b9090e404aa6774e535b3a1aab35</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Face Maker</title>
+		<system>Coleco</system>
+		<company>Spinnaker</company>
+		<year>1983</year>
+		<country>GB</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">490ce706697c0b370a6a2fe65ccaada2bac0a946</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">2cb0f3e63a6a0f754738d3306ae5ffe05ae6511d</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">4ac1b2b462aeba09aa9fa119430c0bb009a3be2e</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Fall Guy</title>
+		<system>Coleco</system>
+		<company>20th Century Fox</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">4158a3296dcd876b1ea5b1dd8b236a8b6f2f5304</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">68158824f0fe09d9588814d6db77f6e87369a16e</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">0e5c84d8fb8a9428aed399f4a9f9309b26bce990</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Fantasy</title>
+		<system>Coleco</system>
+		<company>Philipp Klaus Krause</company>
+		<year>2005</year>
+		<country>DE</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">cb00a383e7b53bd4dfd12a2597b7e8f852b33709</hash>
+				<remark>
+					<text>Pre-version of Search For The Stolen Crown Jewels</text>
+				</remark>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Fathom</title>
+		<system>Coleco</system>
+		<company>Imagic</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">3f5f92dec13860bd1eb56cf77fbe3556246291c4</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Final Countdown, The</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2011</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">8363258a610b041bd66294e49f4acb26b71667af</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">ce7e342f11333225e2443ddb532bdcc91c7f9eb9</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">ac8f5c7b2c1650b5f986d7046c8d77e0a9b2cdc0</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Final Test	Utility</title>
+		<system>Coleco</system>
+		<company>Coleco</company>
+		<year>1982</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">d28f866a931fb8b8c82509f3a563c4452302857a</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">e2a86e3119de8b44d14e048990dfccb30128d347</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">7a8fd7a8bfbb724260048a49afe18000415226d1</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Flipper Slipper</title>
+		<system>Coleco</system>
+		<company>Spectravideo</company>
+		<year>1982</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">3b5823bd966e042df81cf42dc07aef990e41fd88</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">65b532fe1f0d249e97117580638083731e1ff767</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Flora And The Ghost Mirror - Demo</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2012</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">e5a38f20349ef68756cedaf68adad7d64118c49a</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Fortune Builder</title>
+		<system>Coleco</system>
+		<company>Circuits and Systems</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">dd3461f5b79fe581b8e14685a5b8810b18d84dfe</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Fraction Fever</title>
+		<system>Coleco</system>
+		<company>Spinnaker</company>
+		<year>1983</year>
+		<country>GB</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">7cac4c6f685f35adba50e37356df974977d6ddec</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">1e96e4847295b461382ed2ddbf9270f11ba0adc7</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Frantic</title>
+		<system>Coleco</system>
+		<company>Scott Huggins</company>
+		<year>2008</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">f0d0a7d96edf77aa11467c426a9b4ec3d692ac8e</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">8a81e9b854e7f7fd5d4419cc9716d03ac2cfe023</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Frantic Freddy</title>
+		<system>Coleco</system>
+		<company>Spectravideo</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">4f4ef29dbb730583bdf6da75aa7fe7b4f144216a</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Frenzy!</title>
+		<system>Coleco</system>
+		<company>Stern Electronics</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">77da39d6fa64e1b3849f61967f148dfe846a32b2</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">1ec4f4ebdc02c4e03bc9dbc83e34ce49da33942a</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">9fae20696149c1dba5203e1600565917c8981d81</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">f8a7bbff1dfc19b85428206522c0ab73d0d628e2</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Frog Magi</title>
+		<system>Coleco</system>
+		<company>Dale Wick</company>
+		<year>2007</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">5f782368d301327b3ebf00af97c3352289863e44</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Frogger</title>
+		<system>Coleco</system>
+		<company>Parker	Bros</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">c808284b8a161e8405da093884e861fcde4220e9</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">d33dbb600b0a948ad2c5a2df7fc8ca7e86b753c4</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">0afb9b192e87f6d8db504121b163d909c35a7b42</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Frogger II	- Three Deep!</title>
+		<system>Coleco</system>
+		<company>Parker	Bros</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">932e0776b861b9d927bc7c86440517ebfa90c8af</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">c899debdda6bfb7e2ed0d1c327ab574b9cbc70ae</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Frog Feast</title>
+		<system>Coleco</system>
+		<company>Mark2008</company>
+		<year>2007</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">a8b9cbc3675f61f364a762cff87aa8563522c667</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">61425b053243a3d72661d149ed536caa054c939e</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Front Line</title>
+		<system>Coleco</system>
+		<company>Taito</company>
+		<year>1983</year>
+		<country>JP</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">ca62f469511d30d164adc74859d4c5c77963e218</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">a2b35d87f13ceb790a99f20bab43d4548d3c6587</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">62ca275776e4184032224e61b6d01d0636d7e846</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">68889d9410be82ce20f1eedfb5861dce4bd270d0</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Galaxian</title>
+		<system>Coleco</system>
+		<company>Taito</company>
+		<year>1983</year>
+		<country>JP</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">7564cb4ccd0068473f1e3866fa083ed138947153</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">cb389e5719aba0186f93643e75d5ffb3bf339f9d</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">287013140f2896516acb095157389f681d9c5150</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">2eacb99b0dd9622d2f11fb63349475c474408cdb</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">82052a190b21c73f06a676fad3d2e30a2cc9b952</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">e285e1fbffba00f1f72b169d3a36a0b3db462ee9</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Game Pack 1</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2002</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">33731751df3cefe7c9ad1f9ba2d4fc6b638fd356</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">8d6117b260bcfe24b5d93c7901258c1a4137b5b1</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">c1e63e2474659dea150ab23ebb53ad012370cfa4</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Game Pack 2</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2004</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">6b38dd9bc21a34ad0edc9e7f47e6168835d2a2bd</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">e2e27db42bdf67a56f3b8547ff533bcfbf67f228</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">b99da300bf26c35e53b62c350b3baec62b371a5c</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">375b9702c0ebf80d045100903ee6abd1c7ed377d</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Game Pack V2 Demo</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2003</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">e9ce28fd2370d1b6660d5e13682af8fff24f1667</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Gamma Test Utility</title>
+		<system>Coleco</system>
+		<company>Coleco</company>
+		<year>1982</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">32b167a3de6793fd8cb1b83d32ec8a6282cefa17</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Gateway To	Apshai</title>
+		<system>Coleco</system>
+		<company>Epyx</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">6970f6043adaeae0bf0a1bdf431b12807be87b58</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Get Booty!</title>
+		<system>Coleco</system>
+		<company>Dale Wick</company>
+		<year>2005</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">f4182b3a690437bb36cdf184ee458634718f2489</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Ghost Blaster</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2009</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">7f1221fd09d3a3ca19eaf2eb6ea9adc3721a1ebf</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">7f2e577f2144e1a457d0f65500a2370566ee8b56</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">8f8e5aece1afbfbc4d9c3464e64b37457a17687d</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">540913acebe6be4006fd1086a176c4376b51879d</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Goldorak Pic</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2000</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">44274580d8afc41488d8b5010a699ddd278f26a4</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Gorf</title>
+		<system>Coleco</system>
+		<company>Midway</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">f0406171923072e75d89ae43621ec18bbd9f154c</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">f7608765f8099fd4a778ee3d6e6bab9e5a056d2f</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Gran Turista 5</title>
+		<system>Coleco</system>
+		<company>Polycolique Digital</company>
+		<year>2010</year>
+		<country>CH</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">3b88bdc790c41032b93d3f77a4074dea8e032b55</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Grog's	 Revenge</title>
+		<system>Coleco</system>
+		<company>Sydney</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">f95e3e05818be44f792d24a93fd27e0a9f542de5</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">8a059d608adf892f3b13e99fb0ab8a10be745380</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">9fdd739a05f496837946f42c3ef08ebe7df142dc</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">57b145e2b88e29c6284754d3da16e1cffbab38a5</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Gulkave Demo</title>
+		<system>Coleco</system>
+		<company>Guy Foster</company>
+		<year>2006</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">4ca9b0ad2f13f71a127be835b806bb4dd158d7d0</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Gust Buster</title>
+		<system>Coleco</system>
+		<company>Sunrise</company>
+		<year>1983</year>
+		<country>JP</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">550901882d369064779956704b2925e4e9b8be1f</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">c6506f48a4f33761d0a39c65f0fd092429756f2b</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Gyruss</title>
+		<system>Coleco</system>
+		<company>Parker	Bros</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">d5890e96cdc1ca8a6a27042bc486ecfbb9ddeca7</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">9d34b9a55f9b6c8443696114a8e69724e5106b5a</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">54279c45a95294626b7586f5110015b5d1fb94e6</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">H.E.R.O.</title>
+		<system>Coleco</system>
+		<company>Activision</company>
+		<year>1984</year>
+		<country>JP</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">1febd0de031402c2d2dc88f0c60d18c35feee6f3</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Haddaway Jukebox</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2010</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">25322fd02ba639a24b895f217f91335fee20e595</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Halloween 2011</title>
+		<system>Coleco</system>
+		<company>Yurkie</company>
+		<year>2011</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">a5ec5bcbbb6d47cb7053e6a9a7fc7d5a441a3b82</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Halloween Witch</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2003</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">c2f3b952a2013253a7017d79441959767bf8701b</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Happy Halloween</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2001</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">d4e4626c15daf58362998eb805285ae327cf12a7</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Heist,	 The</title>
+		<system>Coleco</system>
+		<company>Micro Fun</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">01092a3afacb7e013c220c1aa6ce3c72ca400b5f</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">55cce8d6a61c1b028555ae0da8cdf629a3b19982</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">583c25a2e2d283fc4125273be6d318b731286845</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">dd5949e331f70bca313422a527091c2bd30b50a9</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">aa0069dbb9bc5c4d0ea04941c51f19587a9c6e40</hash>
+				<remark>
+					<text>cheat 50 lives</text>
+				</remark>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">08352200cfae252a69e83b55f1590e5f75739d18</hash>
+				<remark>
+					<text>cheat 8 lives</text>
+				</remark>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Horse Racing Demo</title>
+		<system>Coleco</system>
+		<company>Dragonstomper</company>
+		<year>2011</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">156470e6d48d27f9e231f9e6e9753b977c637fae</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">1586edf946b3c795d893fc6e9a03070f384390ce</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">3c69bd148a08e06cb7de5e3285ab2c7dc78a8d27</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">b1d6e853e996325ead53f3042f0ff770cf4a4df1</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">84de8cda9ddc42f9d8c2de47da87dbebfa71d983</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">05304d6e624e63d26eb12909be727355be3e63e2</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">52f63947765c56b85176633c7a3fe37e6385bd46</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Hustle</title>
+		<system>Coleco</system>
+		<company>Bruce Tomlin</company>
+		<year>2006</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">d1a98e9cadebeb800edb51bab9c995884743da8d</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Illusions</title>
+		<system>Coleco</system>
+		<company>Nice Ideas</company>
+		<year>1984</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">314be140b495de538ffdf01c9faee4aeef1ecb83</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">e494ba19552444151b233ae50a3801b5c111ca29</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Insane Pickin' Sticks VIII</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2009-2010</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">9cdc5c63ee8c2d2822e6184dd358e48b2d4731e5</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">bbeee720f23309a71930850e35e88a1bfb7c0c65</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">It's Only Rock 'N' Roll</title>
+		<system>Coleco</system>
+		<company>Xonox</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">96be6f4a0818a94dfa5ea9cb01928a66f755c278</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">781c5eff520418fc9f284314be082c143427cb16</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Jack B. Quick</title>
+		<system>Coleco</system>
+		<company>Mark2008</company>
+		<year>2008</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">7a179f52a58b3f7d9f36183d0e9cf7c0e53d0566</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">James Bond</title>
+		<system>Coleco</system>
+		<company>Parker	Bros</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">b9e66759502856e9341ba0a2f350c94faf29cca1</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">22ee76c680e94fa016263473d0ffdbed1ea5ab7b</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Jeeper Creepers</title>
+		<system>Coleco</system>
+		<company>Daniezl Bienvenu</company>
+		<year>2007</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">317b5e0238b154ac1d7c8bd24a33564ea91e9b69</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Jet Boat Demo</title>
+		<system>Coleco</system>
+		<company>Harvey Dekleine</company>
+		<year>2007</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">426caa7dd97d35ebe699a2ebb282b96e05825348</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Jetpack</title>
+		<system>Coleco</system>
+		<company>Harvey Dekleine</company>
+		<year>2006</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">7fc882133ea14f084ac7d2928a1483128772783d</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">45632a2b248d3f893687f63dd6f19b69c250a036</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Joust</title>
+		<system>Coleco</system>
+		<company>Atari</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">551a87b925595e7a465d669e96e11cba0266663a</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Juke Box</title>
+		<system>Coleco</system>
+		<company>Spinnaker</company>
+		<year>1984</year>
+		<country>GB</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">16f08d667334332a69cc09762dea5bb2a06ac82b</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">0f19a4477eef6e6cfd68738fe7244932ca9c77fa</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Jumpman Junior</title>
+		<system>Coleco</system>
+		<company>Epyx</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">b79d4312e2d5fc30e37ee46916dc31908c84590e</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">b9c4b8a6d5921927ba200e1f4efe0caaf82802c5</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">3a49914c7cb226dbc5b0b9e644f2433099ea6984</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Jump Or Die</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2006</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">7fcaef64fa7fc142a358ce34bfbe04d29085d11b</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">aabca82c56bfb2c0587022ea87402fde75a42da9</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Jungle	 Hunt</title>
+		<system>Coleco</system>
+		<company>Atari</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">d41bec8f571f3250668bb1cec5dc0bf7de74bb7d</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">8271203fa88e36dbee9423981f580c11b110001a</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Ken Uston Blackjack-Poker</title>
+		<system>Coleco</system>
+		<company>Coleco</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">282c8b5186a7dbbb69b4b7dacd2095e1eaa5b4cd</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">35030bd17ef2bccfc1d4117650b039d4996e7d18</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Kevtris</title>
+		<system>Coleco</system>
+		<company>CRVS</company>
+		<year>1996</year>
+		<country>GB</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">5de3bd9b7234a0eea7551ddbedd7f55cd47aa9f7</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">2c9491b998ab3c27dd1191405fd57b4a15de1ab8</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Keystone Kapers</title>
+		<system>Coleco</system>
+		<company>Activision</company>
+		<year>1984</year>
+		<country>JP</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">77cd01e29071dece70d18cf9e7e2d2ce455d001f</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">4591c2927131338ff2f602fc8aebb2dda0407a8c</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Kill Barney in Tokyo</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>1997</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">50a1be08f8cd5445ee32c1702a3d3607948867b6</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Killer Instinct</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>1997</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">40324590797f32915021cfd0d6eb4112020939bf</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Kobashi</title>
+		<system>Coleco</system>
+		<company>dvik &#38; joyrex</company>
+		<year>2008</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">4ce63f21e6d62220431f486ba75bef1ba127b1b8</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Lady Bug</title>
+		<system>Coleco</system>
+		<company>Universal</company>
+		<year>1982</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">afa8e2f119d63463dbdd0c88be6873b0c6a27594</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Learning With Leeper</title>
+		<system>Coleco</system>
+		<company>Sierra</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">0ce165b3c2a9e60964d33f37e8aec7cbf9e9d00f</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Linking Logic</title>
+		<system>Coleco</system>
+		<company>Fisher-Price</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">198767e1c8794f974f3434674cb0e542108d0011</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">a8b38970af1fc519220b2555fbfe3e3cb1e257d1</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Logic Levels</title>
+		<system>Coleco</system>
+		<company>Fisher-Price</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">c5a4d39c1aa5a643daabc9a163f366f9ba5afef2</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">77c46391de8073f6af9754f2b4eba150f258b182</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Lord Of The Dungeon</title>
+		<system>Coleco</system>
+		<company>Probe 2000</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">29dcf49c4d93be4029968f3bdd2e3fda921ffde1</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">681fa9f5c4130f65616c11ad7c598b667a3177f4</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">7e6e1ab227f5a6e1bb0c96d4b6adba187225b167</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Looping</title>
+		<system>Coleco</system>
+		<company>Venture Line</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">83ee624c22dd42650bcd585b9cc8cc87da6811d5</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">c4d1ff3843bf1fe884703b7ee81409b51bf9493a</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Maid Of The Mist</title>
+		<system>Coleco</system>
+		<company>Dale Wick</company>
+		<year>2007</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">ccd06c8f8056baa3917811cfd36ed89dcfa6a46a</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">3a86a06586264aff59053bb9c11fa73e3b7e305d</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Map Demo</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2003</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">1d1da4fcebf6c7a9129619b2656a278c3797ea0e</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">M.A.S.H.</title>
+		<system>Coleco</system>
+		<company>20th Century Fox</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">06513b0f49a86784b54dbd8abf8ef8eae934e3c4</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Masters Of The Universe II Demo</title>
+		<system>Coleco</system>
+		<company>CollectorVision</company>
+		<year>2011</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">9884787889df01ef9c8109be9ceae2119c86072a</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Matrix	 Demo</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2004</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">12ec476d7d3a7a77efeea779a4c3845529079998</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Maze Maniac</title>
+		<system>Coleco</system>
+		<company>Beepbop 666</company>
+		<year>2005</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">0e3add169580a744fbdb20af1aeacad26c9a1b62</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">bd5aea90f75be39aae4e3bf42f6bee7394578ce4</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">5efcaabd03b6f2ca2835f8d8e6f9d25857c39307</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">6b13deecec382d75ae301abad6ce06d9163a85ca</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">MazezaM</title>
+		<system>Coleco</system>
+		<company>Ventzislav Tzvetkov</company>
+		<year>2004</year>
+		<country>BG</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">8430022db95ddf5e4befe8254eac06367dce827b</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">5ff0e43757f0d1230ea61de27c4efa5af1cfb2c5</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Memory Manor</title>
+		<system>Coleco</system>
+		<company>Fisher-Price</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">06f3fd038fa903597bec67cdc5c9ab9572c9c799</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">b5bd18379236c40b2341c9550b45e3295a8fc990</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">bd3b06ecd97467fdd29f0dc77d89a4b841808249</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">c1abf277d2b5a7f42c2264a848b54547571edad6</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Meteoric Shower</title>
+		<system>Coleco</system>
+		<company>Bit Corp.</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">92cf04a5346a409be51d1f728c4f734e3a5446ef</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">ccbe07648f72eeedcde3fc8feb665124fcbf97ad</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Milon's Secret Castle Demo</title>
+		<system>Coleco</system>
+		<company>Kiwi</company>
+		<year>2011</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">f1135d7fa874ef9ff7f5254cfa55094aa09972ce</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">484266e800eedba7c11b749ecef7ebbadf9d6e0b</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Miner 2049er</title>
+		<system>Coleco</system>
+		<company>Micro Fun</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">f1bbbc8025a744c46e4f3e242f8904d2bc57f175</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">b29cd441e9edebc37abc08c3fd932f1d4185bacd</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">bccc2192580d42de093b63aee6050db90372401b</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">f4882ebf4f8a445381b89e8c4680419b8ec8b6b3</hash>
+				<remark>
+					<text>cheat 50 lives</text>
+				</remark>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">b999c22c320c6f3915eca73eada4928e951be62f</hash>
+				<remark>
+					<text>cheat 8 lives</text>
+				</remark>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Mod2PSG RePlayer Example</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>200x</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">2443a051078944d1fa79b3deff689a1b152017ed</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Monkey Academy</title>
+		<system>Coleco</system>
+		<company>Konami</company>
+		<year>1984</year>
+		<country>JP</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">099280f3e4fbc37afe5987116ea8cc46bd916fcf</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">6ade72687e2c556cd9c314afefc86dc861139438</hash>
+			</rom>
+			<rom>
+				<hash algo="sha1">5de6442754c639c77045ce9f18d1b59f38ab07b3</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Monster Masher Demo</title>
+		<system>Coleco</system>
+		<company>Philipp Klaus Krause</company>
+		<year>2005</year>
+		<country>DE</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">d0adef60cfc23cbd9aeafa90347b960e5ca0bf72</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">a1f292eccc802dc515762a64e85bea620ab98ce5</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Montezuma's Revenge</title>
+		<system>Coleco</system>
+		<company>Parker	Bros</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">b0c02e594dd965af5045d4e3de19c61fa5b6d0ca</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">44862334e171bccd80d41a2afbc5d7af46d68d07</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Moon Patrol</title>
+		<system>Coleco</system>
+		<company>Atari</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">8a1e2db621b84e630960b2341ac459af2723a3f6</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">a801f587360782afe7ac1bb7a9b08525a8363531</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">a1ad7bb4c8c399f25b2444abc51fe20e1e881619</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">a739855468693a1f107e377d171815e2be9f8896</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">dada6846654d8d9b025e3e3d51841ba6d78ea139</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Moonsweeper</title>
+		<system>Coleco</system>
+		<company>Imagic</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">eeccf73225e03ce10f6f6a02a808dc04f5bb0242</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">f7dbdf62c9db7adb6a98eb02b1a47bd4ede6a4e8</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Mortal Kombat Jukebox</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2010</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">6d607c4c4376d7f0cfd49401aa0a65890f53742a</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Motocross Racer</title>
+		<system>Coleco</system>
+		<company>Xonox</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">2e9a796cb6bc6467f58991c6eaf695d43b16fbda</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">89b6f5f482f8f79c10ef9d3ffdeac1ded47a2362</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Mountain King</title>
+		<system>Coleco</system>
+		<company>Sunrise</company>
+		<year>1984</year>
+		<country>JP</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">faa3301b9758c5c4a218b7ce1cbb760c26daee10</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">46602df46117513d7166eba81e2e3546246adf94</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Mousetrap</title>
+		<system>Coleco</system>
+		<company>Exidy</company>
+		<year>1982</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">36686b5f84c8ecfe9e6468ca0f2402ce0c03150c</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">bde8f3e4be86d175b544225b129b9bd41dce0d78</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">ce3632a4acd8c010c591f51bd1849e284fa1f2b8</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Mowleco</title>
+		<system>Coleco</system>
+		<company>Sebastian Mihai</company>
+		<year>2012</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">163fa90ee101f74c92fa85f3e98aeaf655240afc</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Mozart's Horn Duets</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2011</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">58cd944eb4dae214e44ebba7ad880d063ca003dd</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Mr. Do!</title>
+		<system>Coleco</system>
+		<company>Universal</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">d40a69f4d010636de50fdc1d43a0682141286cbd</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">ee98a2307e280d1c9b644ae9ce4aaa1ef954189f</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Mr. Do's Castle</title>
+		<system>Coleco</system>
+		<company>Universal</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">e2ae664ce84f59cd904de49fed68657e7278d501</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">e94e5d8dd549cae8b70d02170502eca4e90a3c30</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Mr. Do's Wildride</title>
+		<system>Coleco</system>
+		<company>Steve Begin</company>
+		<year>2004</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">178e71789bcfa638c3bbc59dfc09bd942a61f9ee</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Ms. Space Fury</title>
+		<system>Coleco</system>
+		<company>Digital Press</company>
+		<year>2001</year>
+		<country>FR</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">891444b0f3d311ce09c6553027bdab39a95839dd</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Music</title>
+		<system>Coleco</system>
+		<company></company>
+		<year>2004</year>
+		<country></country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">66319807acade8e328c9640ddd71855f0838752d</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Music - Vol. 1</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2000</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">c1a46e580b9dfa551bf0dae7f18e345416aec062</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Naval Battle Demo</title>
+		<system>Coleco</system>
+		<company>Philipp Klaus Krause</company>
+		<year>2010</year>
+		<country>DE</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">33d3d497cba6970c21d70ae6bdc75b89e510e455</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Nim</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2000</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">9ee8bee2b5f4c9f72dc07bba72b2d974473774d9</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">0f79cd544bab92f6a3ceb93de6f4534925126b9f</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Nova Blast</title>
+		<system>Coleco</system>
+		<company>Imagic</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">d42f8620c9c7bc099ed0f4005f989189c766f57f</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">5d3857ea3efb74dda8bc7415defefbdf90f58fba</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">2c35f5b2eb5914a14e544e00c67d4cb5582832d8</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">88cdb8ea518602fad212f0557945e70cea726fdb</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Number Bumper</title>
+		<system>Coleco</system>
+		<company>Sunrise</company>
+		<year>1984</year>
+		<country>JP</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">f2f916d56b5e0cd717a6cc7ae5e92fdf9d4cb7c3</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">50d40fa769c3b92fe7d4eae23c15c429e020e023</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Oil's Well</title>
+		<system>Coleco</system>
+		<company>Sierra</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">779e43f183dbdb692dc26ae41dde6b35891f8f8b</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">a081cf337854139e87952a03e463438720330aba</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Old School	Demo</title>
+		<system>Coleco</system>
+		<company>Guy Foster</company>
+		<year>2005</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">b55192bbdc08801e7344a37f96153748de5d99c5</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">4c720a1f498996938f8eb0d595de4345927961c2</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Omega Race</title>
+		<system>Coleco</system>
+		<company>Midway</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">84f4b6fa6ab30b6c2e2b79bf61c5bb3421530303</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">d0b00ee7b4368ef3dbd74fbace4f8e061ed632f4</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">One On One Basketball</title>
+		<system>Coleco</system>
+		<company>Micro Fun</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">71689ef2af8351bbe70b66dbb89cd252f276e6cc</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Orbit</title>
+		<system>Coleco</system>
+		<company>Parker	Bros</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">bcb3d6845b09adc1adf842cba1ca12f57aa47d79</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Ostrich Farmer</title>
+		<system>Coleco</system>
+		<company>Dale Wick</company>
+		<year>2007</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">90d7d226ebfe7df89cb5109c7a2e5e9d520c9ca3</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">810d9ff6f1c9c78cd201bc85dd585fd87e02d563</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Outrun Splash Wave Jukebox</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2010</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">608c57dc24793a1a8f73a3c304f0ec57dfd834af</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Pac-Man</title>
+		<system>Coleco</system>
+		<company>Atari</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">4d724d40c389cdb62929aa69bc76466c3bcb5bcd</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">182ef4ab7fbc5f916fef9b9f4dee70b519067a0b</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Pac-Man Collection</title>
+		<system>Coleco</system>
+		<company>Opcode</company>
+		<year>2008</year>
+		<country>BR</country>
+		<dump>
+			<original value="false" />
+			<megarom>
+				<type>MegaCart</type>
+				<hash algo="sha1">b88ea5f1b052a224068bcc920c6a18760f263c8f</hash>
+			</megarom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Pac-Man Collection Demo</title>
+		<system>Coleco</system>
+		<company>Opcode</company>
+		<year>2006</year>
+		<country>BR</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">3c2d3dc62330c01add34d9d67b68b2daeabcc4c3</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">d6b67e8f43afe666cdd79a718ddf808e27d6512d</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">4404d063c53e80ad4bce387cc470b2805a15b391</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">6d0ddc8002a60634edcefe712a0331dd1f6fe94a</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Pacar</title>
+		<system>Coleco</system>
+		<company>Steve Begin</company>
+		<year>200x</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">6fd2921e36dea2b39f6e0ef7b54cdf5152e48dd3</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Pepper	 II</title>
+		<system>Coleco</system>
+		<company>Exidy</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">0983d0a562ccb3d4ac88d8ae26cf29a465075067</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Pere Noel</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2001</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">5c5bbe98ed31ef305edfb85f764a21b465d5a45a</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Pitfall!</title>
+		<system>Coleco</system>
+		<company>Activision</company>
+		<year>1983</year>
+		<country>JP</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">964a3551121cd33ce72624c5414d1406ee75ca35</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">72daf86d5e8dc20028875942885546b9023bfd2f</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">50abbf2b89068c5b3a7d88aba84d206aa44bb60f</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Pitfall II	- Lost Caverns</title>
+		<system>Coleco</system>
+		<company>Activision</company>
+		<year>1984</year>
+		<country>JP</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">2642c458899c1cafa2f3b9e0959b9ead5829aa68</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Pitstop</title>
+		<system>Coleco</system>
+		<company>Epyx</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">f5a649238057fb354512da2f5336bcb4b09216e5</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">bc449bf923cc6b1695598b1ffa7a328618a4ad85</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">06640a1b83c326d2d5dc94a1e936d5d740ad3174</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Pong</title>
+		<system>Coleco</system>
+		<company>Dioniso</company>
+		<year>2007</year>
+		<country>ES</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">ca568485d4c37ffeb55ebed270ca63a6f00d1eb9</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Popeye</title>
+		<system>Coleco</system>
+		<company>Parker	Bros</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">f54f110ba5864bb3418f84e1c2cdc5c856dda771</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">8536d0a4d9c6422ab221a7eaa55b9ba7caa5ea4c</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Porky's</title>
+		<system>Coleco</system>
+		<company>20th Century Fox</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">4471f402c0cb8be232ece0ea84dcaef9ee002398</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Power Lords - Quest For Volcan</title>
+		<system>Coleco</system>
+		<company>Nap Consumers Electronics</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">6712b866fa0d2d57fef1ac292b679fe4aeb69b62</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">bf81f1254f0c5eb11d46ef5e8b8c03e8b02801b4</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Puckman Sounds</title>
+		<system>Coleco</system>
+		<company>Opcode</company>
+		<year>2003</year>
+		<country>BR</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">1e0b37161de52b1e83443debd6c933716e7e0ac2</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">552cff8b656e5ebf58b6e696a1c6df2b81125456</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">253b591f04fcb109af6b14c71e81f2308d0d2feb</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Purple	 Dinosaur Massacre</title>
+		<system>Coleco</system>
+		<company>John Dondzila</company>
+		<year>1996</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">13b9d251172d3f574c17c2c5ab936f8dda742a49</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Q-Bert</title>
+		<system>Coleco</system>
+		<company>Parker	Bros</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">6243fc5593f40d7285ea6b69c541307d3fc583ac</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">d2322e9aba23bdd3732ff5e631f92667f0c04ae9</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">a8487f03416bdbd28d3cc0737d55b90fdd1b45f2</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Q-Bert	 II</title>
+		<system>Coleco</system>
+		<company>Parker	Bros</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">7119f43faf35e0c346446deade468adfcf6c3afc</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">523fd9fce7047ae76dd4219cdb89a4f298fe14ab</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">77b54047cd3a9c7d15432e0556cf82eed44719eb</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Quest for Quintana Roo</title>
+		<system>Coleco</system>
+		<company>Sunrise</company>
+		<year>1983</year>
+		<country>JP</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">a8967b1192fb843598df62adf2c5b44a9e98d9bb</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">1aef03f7d0bdaa701517a1ad6a75ab8820674f15</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Qix Demo</title>
+		<system>Coleco</system>
+		<company>Philipp Klaus Krause</company>
+		<year>2012</year>
+		<country>DE</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">078eaa032693c48778526eb74f262b8d256edef5</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Quiz Wiz</title>
+		<system>Coleco</system>
+		<company>bfg</company>
+		<year>2012</year>
+		<country>FR</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">89753ab9ba96b82a65e470b61c26510182df0f60</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Reversi</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2001-2004</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">ca2dded3b5881bafe8bbc4ab3ee7fb57e04e4c0b</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">878193d602643183dc00df7da9f20eab416b6d9d</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">b1a7d6b1313abfd6078581076e6060ac34e9b21e</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">River Raid</title>
+		<system>Coleco</system>
+		<company>Activision</company>
+		<year>1984</year>
+		<country>JP</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">00a5b9dc41e3a684a874b65cf29121984f10f327</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Robin Hood</title>
+		<system>Coleco</system>
+		<company>Xonox</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">f987591f915eb0d3547b85f3767fff2d4fd0540f</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">25b69a19bed03c806188665a348f64be1f4b0e56</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Roc 'n Rope</title>
+		<system>Coleco</system>
+		<company>Konami</company>
+		<year>1984</year>
+		<country>JP</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">70f001572033d93fafce058d271fc875b6d0337b</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">6598592f1f4debccce5bccfff406bf10970ffdac</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Rock'n'Bolt</title>
+		<system>Coleco</system>
+		<company>Telegames</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">fda438a9d57bdb5aa178c6748db695627805ce15</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">2b2f337ba597af5eee2b10e70a129638b4679c9e</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">94eee5f9d91bc21802277edad53f7acf7f3223bb</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Rocky Super-Action Boxing</title>
+		<system>Coleco</system>
+		<company>Coleco</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">50af8fb35be989c9addbc0e9a082190eeab70d8d</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">8f7b39e3fff19d2b4d6e113567c599447ddc4fef</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">RPG Demo</title>
+		<system>Coleco</system>
+		<company>Bruce Tomlin</company>
+		<year>2006</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">fb7bd9f4e0fd7e00fbb918d90c796a4b38de31b4</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">6d662ddb394a96216519ab0808846ded3b9e239c</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">daaeb664488e9896d7576a1b338a0352ec49318e</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">f6dfab0fd8dc60cb144708f0ec6effd239cd0da2</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">c65cdfb7eea2d0b5260f3c611269a5ae0e809c62</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">236548e962cebe3cdb4c8a2737a05f35026d6521</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">467be013efce8e74dca7760b66f2396c1527735b</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">c35ec575d8444e46212036be9b9931554dd524de</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">9e57353c7e628a095d5a585df9e1f189831d3164</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">f9a3c5420597eb80c44ffe725bee04709b4757f9</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">5629f2740a716a2f4c1fc30eb4a20030ec8d6291</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">ec2f6d9b4f31f0c83e684b92ed5d0d92d9a22c6c</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">d08d6858872eb43c282f35ea6cb39c60b1222e82</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">af04e2249ce3196cca7c48ab9f455bcda2c70962</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Rolloverture</title>
+		<system>Coleco</system>
+		<company>Sunrise</company>
+		<year>1983</year>
+		<country>JP</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">2943b5d1274864e013b774108ef9c8d0cff25159</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Sammy Lightfoot</title>
+		<system>Coleco</system>
+		<company>Sierravision</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">88fa56b294294110a4cc2c0f109e09e8c1cdeae9</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">b011dc446bb20bcdf5ee8404919d039b690d976b</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Santa Must Save Xmas</title>
+		<system>Coleco</system>
+		<company>bfg</company>
+		<year>2011</year>
+		<country>FR</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">86f27ce3b9bebf9a205011b808c47c2602984def</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Santa's Gift Run</title>
+		<system>Coleco</system>
+		<company>Dale Wick</company>
+		<year>2004</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">d7cd2cc79928ccf4a860c06bb7c5dc80e0ba56aa</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Schlange CV 0.10</title>
+		<system>Coleco</system>
+		<company>Philipp Klaus Krause</company>
+		<year>2005</year>
+		<country>DE</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">5d6f0fbf74a97874acd8f3fcdb5900e3f0319b7d</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Schlange CV Demo</title>
+		<system>Coleco</system>
+		<company>Philipp Klaus Krause</company>
+		<year>2005-2006</year>
+		<country>DE</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">ebf9d94260eaec853b4eb4f073f8c702540e6fc1</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">09c3a505db39754bd0054c6cf3f585329e799fee</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">4a7cbc9ec211b438040e1664aeccff22882bb93e</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Scroll	 Demo</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2004</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">eeefb1e9ddff363f9129d86501a5c476fcc30697</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Search For The Stolen Crown Jewels Demo</title>
+		<system>Coleco</system>
+		<company>Philipp Klaus Krause</company>
+		<year>2006</year>
+		<country>DE</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">09e9347706a9077de4dec06466103ff07884b97c</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">1e2e883604e3b8559bd36c88313567dabd8444ac</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">fe6c1753419e8b49f23318758f3ab9cc42a8e0e5</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">cb00a383e7b53bd4dfd12a2597b7e8f852b33709</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">24a209ba6fe8ead416e3991bc361af8b5311187e</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Search For The Stolen Crown Jewels 2 Demo</title>
+		<system>Coleco</system>
+		<company>Philipp Klaus Krause</company>
+		<year>2007</year>
+		<country>DE</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">8e20a89350277f4d6f2b67e4e84fce21c1c62fa9</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">0d144f191629570213694fd63b54e651338c89e3</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">bab03754b7e7047d6e32527d53b55c8e60c57924</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Search For The Stolen Crown Jewels 3 Demo</title>
+		<system>Coleco</system>
+		<company>Philipp Klaus Krause</company>
+		<year>2008</year>
+		<country>DE</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">7102fd7a776ec16c4dd93b6e4caf729e6db4156f</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">19c574aa12ce727e7d620f0c9a38864cc1f13e9e</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Sector Alpha</title>
+		<system>Coleco</system>
+		<company>Spectravideo</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">fb2fea387eed84f0ca0fbf6736060a1612c971b3</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">2570fcf9d93e46ffce1d3f4a29681c9eac3bbd5f</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">6a4fbfbdcc8cc530a4dac5225c1d551e812e73ae</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">4f54d8641bf959ddcb776df7a45e6897bf31656a</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Sewer Sam</title>
+		<system>Coleco</system>
+		<company>Interphase</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">b0cb88d41d9b1b3698a799caacb3a7ddcb5c19ec</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">407c2a1bef81522dfd88ace7abd7d80c0f7de357</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Shunting Puzzle Demo</title>
+		<system>Coleco</system>
+		<company>Philipp Klaus Krause</company>
+		<year>2007</year>
+		<country>DE</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">042b00c4c7ac1355c7af1a4e5b5601e3003805a6</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Simple Screen Show</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2001</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">d24a957da8fe7fd49b536ce153af6da326421ec6</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Sir Lancelot</title>
+		<system>Coleco</system>
+		<company>Xonox</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">4309865f8a18ee611be95445fcaba000e9e321bd</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Skiing</title>
+		<system>Coleco</system>
+		<company>Telegames</company>
+		<year>1986</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">2cfd62a4b403fc2f5344d0e095d1028cc11e4ecc</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">e29cf38c556fb3706f0c8c9d86fbe4ed071ce3fb</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">ae77a13fee7b3828f36736a6ffd1139ec35df6a6</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Skiing Demo</title>
+		<system>Coleco</system>
+		<company>CollectorVision</company>
+		<year>2012</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">34c8015bcdc9dfcdc0360d76dc90c156a03fe7b3</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Sky Jaguar</title>
+		<system>Coleco</system>
+		<company>Opcode</company>
+		<year>2004</year>
+		<country>BR</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">630b793f81e1d130c1824ae34cd75704e8ed5f6e</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">f1f2b64c5e44b062614acb592112334811cf68aa</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">932cf8b6184ae688c15ab826e64eb35e51aefc79</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">a7c32e938e9354b92a87bd29dc1422765478d401</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Slither</title>
+		<system>Coleco</system>
+		<company>Century II</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">b11de2476f867c7c4efb2977777e12fcb454f10b</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">5569de038f64eee6ee685c5494e8360b4d029e83</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">c31234575aa955227cdff8523a0c7ab887ccbc90</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Slurpy</title>
+		<system>Coleco</system>
+		<company>Emag</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">ef01edb9f1ec6c01323f81ff03fd077dea50f105</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">b56ccdd5a6df3ad753b3f552daad70e1d7bd7e4d</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Smash</title>
+		<system>Coleco</system>
+		<company>Daniel Bievenu</company>
+		<year>2004</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">0692904ffcb39bb81564819e6925aecd2d4ca9df</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">9edc314ee0712dfada90fd1bc5454f862846d65e</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Smooth Criminal</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2009</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">611be53da29900d00e94ca015616150b3b088f65</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Smurf - Paint 'n	Play Workshop</title>
+		<system>Coleco</system>
+		<company>Coleco</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">d46d6e0edeaf6f76430d4800caa7a6af291cb199</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">b566ded8bd4ce1e2d6d15dd9378b8f228518ba4a</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Smurf - Rescue in Gargamel's	Castle</title>
+		<system>Coleco</system>
+		<company>Coleco</company>
+		<year>1982</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">f0740e1916d2351537c6725b37ba3c1b321f15eb</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">bfa12da8a4bfeb7c985c9b5ffc45494efc7fce50</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Smurf - Save The Day</title>
+		<system>Coleco</system>
+		<company>Coleco</company>
+		<year>198x</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">68f07f5387425f0c656e9c0dddd88be903cee7a9</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Sonic Musicbox</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2004</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">ec0e748c19cec242ac8f83a2d69b34636f23abbc</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Sound FX -	Vol. 1</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2000</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">3d51bf597c4537cbb855e10d79c7be370c4f515d</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Sound FX -	Vol. 2</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2000</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">de4b830b021c750b434816e73dc7bf51c914eb4e</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Space Caverns</title>
+		<system>Coleco</system>
+		<company>Scott Huggins</company>
+		<year>2004</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">0278de7c17064ded63e373443fa10cd468b6ea6f</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Space Fury</title>
+		<system>Coleco</system>
+		<company>Sega</company>
+		<year>1983</year>
+		<country>JP</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">f400e1e368ae420a97015674a28db91b4bea15a6</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">68a2532a516873e44c66355097ef15972a5e135f</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Space Hunter</title>
+		<system>Coleco</system>
+		<company>Guy Foster</company>
+		<year>2005</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">31be7cd35116f9e6c5f7b6fbd87b6cb889b03b61</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">d5d6930a2605380618c2a0699d4bb106ced3f112</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">311a28cbddef691b2d172bf3164a91b0bdcc2510</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">c03433fed431a5ee655018a405bd401c74cd5088</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Space Hunter Demo</title>
+		<system>Coleco</system>
+		<company>Guy Foster</company>
+		<year>2004</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">344c88ff88a8ab4aba7b0470602ba60afd408457</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">cd666795dc8924ccb9048180003a82ae06ba2d88</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Space Invaders Collection</title>
+		<system>Coleco</system>
+		<company>Opcode</company>
+		<year>2003</year>
+		<country>BR</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">5ecd4928cb33843246921bab152e9a99c0cf23d3</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">f55a9b5077a0499fa9d4e81803c962992c100b8a</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">5f57aad6d1c2466f9186d636fb7cc8e8871f9180</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Space Invaders Collection Demo</title>
+		<system>Coleco</system>
+		<company>Opcode</company>
+		<year>2002</year>
+		<country>BR</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">4ebbfb43878be488bed7e7b4926655be6c5f664f</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Space Invasion</title>
+		<system>Coleco</system>
+		<company>John Dondzila</company>
+		<year>1998</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">617f7bd6723f47017b7c0b0df68799b87fe6e09d</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Space Invasion - Demo</title>
+		<system>Coleco</system>
+		<company>John Dondzila</company>
+		<year>1998</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">f828b172ed3b51cc5f65843032bd2f4e2bf5c418</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Space Panic</title>
+		<system>Coleco</system>
+		<company>Universal</company>
+		<year>1993</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">530870501f322f1d72e820a722790d300f43a6de</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Space Trainer</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2005</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">ace9f6f35977aa763624a4f314825b0d0511324c</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">5c9f07d3a37ee5b6c3a0788f880313d4841cbaa4</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">c81037c3d19d8c502fc6f37d8b99bfc640d882be</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Space Zap Demo</title>
+		<system>Coleco</system>
+		<company>Scott Huggins</company>
+		<year>2008</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">e8b8786eb34fbef4a055d285fa39970bdec018dd</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Spaz Attack Demo</title>
+		<system>Coleco</system>
+		<company>Unhuman Software</company>
+		<year>2006-2009</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">9077e6defde16f11f11308091d3cc92a26e542a7</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">0ccbe626bb22dfe8e245b43bc6d2e3b3d60e6899</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">0406205cce714dc259891bde8f45dedc45312cc8</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">9e1f625fb9486fc9dda551c95b74f1ec6dda9eac</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">90fec073dafc71dbdc7b1c4ae73221908cf87145</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">491dacbf9880a871eee128befecf07882081bc4d</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">08787352a004d1838a865131d4a1df160a438297</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Spectank</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2000</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">5a1e9e8cfe6d6e1cd685ec4afd0fc159e20a69ff</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Spectron</title>
+		<system>Coleco</system>
+		<company>Spectravideo</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">8c83391f512d20cbbb4f36b0add06a6cf0bd8e65</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">fb092284a0a6cdabd1b10e6c4127125fe74c7b96</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Spy Hunter</title>
+		<system>Coleco</system>
+		<company>Bally Midway MFG</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">97865d067bd531209857c3c8502c1260e0a30366</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">e9814f694fad5548e9ce7295ddc9f8b9eee29332</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">ff08b9fd67966ea299ee810fb4cde7b0aba98fd3</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">f95fb554b211bde690a85d1f14ff5501cbcaf8bd</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Squares!</title>
+		<system>Coleco</system>
+		<company>Harvey Dekleine</company>
+		<year>2006-2007</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">2ca71d9e9c99ace14ce9de44f7f12281570f9d80</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">a2cb12a7a4dc2bdcadd940ec16e87054f9e4f4e7</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">ba2fa2f8ccca465146c491fd651e91ecf9db97d5</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">0c95083f6c3e33b7598c2890448ef4bb6c4da439</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">42d29a74b6db7e860adb4d00afbe3e82efeb8fbe</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Squish'em Sam!</title>
+		<system>Coleco</system>
+		<company>Interphase</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">d4c1a98a35dc79727b6e8838b1b0815919496601</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">ae25507b840b15ca3a832ba0bd8e1cbfdf4634a6</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Starry Nights Demo</title>
+		<system>Coleco</system>
+		<company>Guy Foster</company>
+		<year>2004-2005</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">bcd74ee33a83168a2a051f1fbc081219c3cd49dd</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">1ffea15672a8761805ec96ee4f152649f56afa7a</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">a750807528a7055929e3a20be3c04e06514bc3cd</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Star Fortress</title>
+		<system>Coleco</system>
+		<company>John Dondzila</company>
+		<year>1997</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">ca3b145cf148eaa5d7a3dc99718ef853815812db</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Star Trek - Strategic Operations Simulator</title>
+		<system>Coleco</system>
+		<company>Sega</company>
+		<year>1984</year>
+		<country>JP</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">981e7dba3d8231019ecd137bfee97fce84061fdc</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">1a506cd30e06a4af4ff00da00b7b7cf6c22da1a9</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">d37140e1abd1a0402af5c9e02ab3e4d0c6afe598</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Star Wars - The Arcade Game</title>
+		<system>Coleco</system>
+		<company>Parker	Bros</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">da0567bee88bd1991481a755ac8292a115ed15ac</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Steamroller</title>
+		<system>Coleco</system>
+		<company>Activision</company>
+		<year>1984</year>
+		<country>JP</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">9b0da21d8e6e9a762c578f989d90dd057fea2b5a</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Strike It!</title>
+		<system>Coleco</system>
+		<company>Telegames</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">459536b106532b213da79662f56a36c1745eda9a</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">a455e93e5ce6e562092d2c0b06070a746296395b</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Stubby! Demo</title>
+		<system>Coleco</system>
+		<company>Retrovision</company>
+		<year>2001</year>
+		<country>FR</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">22621b6de2f7ecccd51fa0a80132417c7b79cb95</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">997e2e547064717a8e51d7efff6a34b2046aea2a</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">St-Valentine's Day</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2002</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">870d1a39aa85ac1d0e270348b56944ba47170557</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">003f07fa755f632348694e7c6e6ac0de10e1b3e7</hash>
+				<remark>
+					<text>No Alien Head</text>
+				</remark>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Subroc</title>
+		<system>Coleco</system>
+		<company>Sega</company>
+		<year>1983</year>
+		<country>JP</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">1a0a939355e024f2118d9b6a62d178ae4b4a7ec6</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">5500b8251775d81485249de3c4c36e89411700e1</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">306fb29c6262ea9cbcf10c99310273f751dcf210</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Suddenly</title>
+		<system>Coleco</system>
+		<company>Krue</company>
+		<year>2010</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">dbe4c18c97d681ba110ad44591fac18cb07898b0</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Sudoku</title>
+		<system>Coleco</system>
+		<company>Luc Miron</company>
+		<year>2008</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">0124ba683340188c7a9a89122af7a54db07e1edb</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">499c9746f0dacab59a3fb23f80169df34cfbb91a</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Super Action Baseball</title>
+		<system>Coleco</system>
+		<company>Coleco</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">06bc7c00a253ab27ae2117b65c7508e165c826f1</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">9b230aa549448f2589b036673b81eee4d054292b</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">4829d304cbb752031bf5b4b1d48eed2ad06f222e</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">0fb9142261a10444c14c57066f1e6a6181f9b82f</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Super Action Football</title>
+		<system>Coleco</system>
+		<company>Coleco</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">4c16f4e233db50e3d9b3a191f4f408338640ac19</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">3edf3b79e2f2d0cf4c8122298026cb7b3bef7836</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Super Action Soccer</title>
+		<system>Coleco</system>
+		<company>Coleco</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">71ed4c35f49af9ee3469f604ceb101af69096c36</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Super Car Demo</title>
+		<system>Coleco</system>
+		<company>CollectorVision</company>
+		<year>2011</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">d19d5c480b9857160fbbcea7e79e20101e8d12ba</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Super Cobra</title>
+		<system>Coleco</system>
+		<company>Parker	Bros</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">c0ff64668723f5f353ce98d3ee6089ebe0201369</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">3bf730acbfb0404d2e2411169c8fc6a81b907053</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Super Controller Tester</title>
+		<system>Coleco</system>
+		<company>Nuvatec</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">0c6840b7bc24a36529f0a80ccef85ee9f409a972</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Super Cross Force</title>
+		<system>Coleco</system>
+		<company>Spectravideo</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">efa3b89899839e062e072921148716e8b82923ce</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">00c9f22fdf0be33a295514431fab36da92a78ff4</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">42a22d2314081450e8cb2a5e8ba4aa0987971063</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Super Donkey Kong</title>
+		<system>Coleco</system>
+		<company>Nintendo</company>
+		<year>1983</year>
+		<country>JP</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">b1ac18780e36821a8d41fc4410e14ab0ce80ac91</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Super Donkey Kong Junior</title>
+		<system>Coleco</system>
+		<company>Nintendo</company>
+		<year>1983</year>
+		<country>JP</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">44a22e508002a069f7953668f2e8a3c901c677d6</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Super Ghouls'n Ghosts Jukebox </title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2010</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">0fe9d3fd9f17c72a1b13f7ad9a1e2c92195c2ece</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">9cc6e2df6a5aa0a121012fbfbb14e34d6108aa49</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Super Pong</title>
+		<system>Coleco</system>
+		<company></company>
+		<year>2000</year>
+		<country></country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">ff8f73f9bf16bb67799bbe8e52c541d727f501f4</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Super Sketch</title>
+		<system>Coleco</system>
+		<company>Personal Peripherals</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">3acbae2580c38bfea9ce7ec06274edd39607016d</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Super Space Acer</title>
+		<system>Coleco</system>
+		<company>Mike Harms</company>
+		<year>2009-2011</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">492e07a16d3c3bf20091fbc1afe85b456a903d18</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">b124645f46a2c9833598e4935b03fafc1c299c76</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">e20ac801aca7037a9610af6a8c9c0198e4bce3a7</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Sword and The Sorcerer, The</title>
+		<system>Coleco</system>
+		<company>Coleco</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">461a3715416a1b9f71b1af1dfc531a8f77862645</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Tank Wars</title>
+		<system>Coleco</system>
+		<company>Bit Corp.</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">a79cbe906a6df960f790c3139704f534b09a378b</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">01062d5049231a2bfd6ece924d3f1f17329d7725</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Tapper</title>
+		<system>Coleco</system>
+		<company>Bally Midway MFG</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">bbb25e64aefa3adaff9f864713ecabe3b6f0316b</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">459393f07792ee1b2c878e1257a21c6c351d5c29</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Tarzan	 - From Out Of The Jungle</title>
+		<system>Coleco</system>
+		<company>Coleco</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">2d61d96fd15c614bde450813aa88092cf814e60a</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">59cb8dec033c3b1df476c7c93109aba9562ba3d4</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Telly Turtle</title>
+		<system>Coleco</system>
+		<company>Coleco</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">c0157c0622a751f8eb7ff19b83f521c107f7a7ce</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Tempest Demo</title>
+		<system>Coleco</system>
+		<company>CollectorVision</company>
+		<year>2011</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">85c6102dbb53169cca51d072fa8b63e6f745f910</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Tenchi	 Muyo Demo</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2000</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">e2345f516654f6d5c4a4adddd27a3dd5bbe2573c</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Tennis</title>
+		<system>Coleco</system>
+		<company></company>
+		<year>2008</year>
+		<country></country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">54b7effee37d60e5fa9491a31ea23b2c63817ad3</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">7fd0645c65208e39eb62f7c38713bd5bd487c99f</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Terra Attack</title>
+		<system>Coleco</system>
+		<company>Scott Huggins</company>
+		<year>2007</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">0276f344d63f4f9675c29730d97112b3123e6c18</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">76712e4e94d55183f361c9101037f708773b7f99</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">6659dd7b9ef8edb2822980007cb37e3c55d4cd7c</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Text Adventure Part 1</title>
+		<system>Coleco</system>
+		<company>Kiwi</company>
+		<year>2011</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">6964d318adfe0e2411df25797570539c384e90e4</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">54db8132f6e93e06f31ae39e1a15c49e65aa72fb</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Threshold</title>
+		<system>Coleco</system>
+		<company>Sierravision</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">7f71c024d7d85627b893d28131d284dde25577b8</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Tic Tac Toe</title>
+		<system>Coleco</system>
+		<company>Norman	Nithman</company>
+		<year>1996</year>
+		<country>GB</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">811f35cca75ff3fcd180f8fe3d06f764ab0e1fb6</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">3fe5477166f1809e50754bd3d153e10764c3ad4e</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Time Pilot</title>
+		<system>Coleco</system>
+		<company>Konami</company>
+		<year>1983</year>
+		<country>JP</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">3b7cbc5c0d47027ecd5e6f5d1485af436ab02ad1</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Tomarc	 The	Barbarian</title>
+		<system>Coleco</system>
+		<company>Xonox</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">44b285d438854dfa0186c7fe6e21872e2dde13f1</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">a92528974f0d9f3606b5044ffe0fa690e34f1ed3</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Tournament	Tennis</title>
+		<system>Coleco</system>
+		<company>Imagic</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">0f113cda3b12253d1d42e994896db3f88a5b884d</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">d12bfb15b38e9f008de695b405107c5a431a07d6</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Tune Layer</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2002</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">fd3e1d4c3a163e422d1cfe7a9e439dbf75fa24ea</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Tunnels &#38; Trolls Demo</title>
+		<system>Coleco</system>
+		<company>Flying	Buffalo</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">19452eb2a020939245dc100d2736c6f479eb518f</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">59eb2c750a5af6079a0a66e6e58cb99dd6b7da83</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">0f5b61f650e26e681d7b8a28fcb9d2db7c3bcddb</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Tunnels &#38; Trolls Demo</title>
+		<system>Coleco</system>
+		<company>Philipp Klaus Krause</company>
+		<year>2007</year>
+		<country>DE</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">50de0d2726b11873607fe776a8161b3f73c18e6d</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Turbo</title>
+		<system>Coleco</system>
+		<company>Sega</company>
+		<year>1982</year>
+		<country>JP</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">732d1f3b2f24895a1f79d15d830aa989ea12fe5e</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">b833ec0930289059458873d92ee7e04b941fb7fa</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">44428c1cd547f197f518cb63a134616869d692a5</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Tutankham</title>
+		<system>Coleco</system>
+		<company>Parker	Bros</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">a668ff92e6f83e37f44178260618bbc650ca61c9</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">06f54a91ad57e5487ff733c9f33372d5314a1d74</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">880d1a04788befd912415bc2b782e5be52e95420</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Untitled Game</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2002</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">e64a55af600aa73596a4f14372c02b326a50e4e1</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Up'n Down</title>
+		<system>Coleco</system>
+		<company>Sega</company>
+		<year>1984</year>
+		<country>JP</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">96d83945d041f6f795a3107904a9986de86df8a6</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Venture</title>
+		<system>Coleco</system>
+		<company>Exidy</company>
+		<year>1982</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">9cf7e7439d1719152ed28c1123ae8ad68175412f</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">88cdf7bb3bc6c82c675d2d3915adaff718dcab2d</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">a3a1cfc9fcce2d963b81a4700f3b4449c328c971</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">9b46818c328e733fccb29e186f69fdaa7ecec788</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Victory</title>
+		<system>Coleco</system>
+		<company>Exidy</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">327727222226d0c95d7557389d79a0c974cebf2a</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">7144c65cb57eeb846f4771aeb402469494f8f56f</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">41756f14de96b7d57ac07f4732fde1e2d1e8aa86</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Video Hustler</title>
+		<system>Coleco</system>
+		<company>Konami</company>
+		<year>1984</year>
+		<country>JP</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">08172d85140c004241ab585fc41cdc7841f8290b</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">5f481ff47762a812c73bb120e60f31ee99fd6b5f</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">47f0fddca5a04268d5f9f4c0f55baf80d833deea</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">7d35bc72eba38b88b13ae96d36aff833a4ba410d</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Vision 8</title>
+		<system>Coleco</system>
+		<company>Marcel de Kogel</company>
+		<year>1997</year>
+		<country>NL</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">86afd1fc7ce0f7f76c01a2490303dbd42eaf9990</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Waterline</title>
+		<system>Coleco</system>
+		<company>Krue</company>
+		<year>2010</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">3bce651348e066ab28c636db357c80a6ce961d48</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">War Games</title>
+		<system>Coleco</system>
+		<company>United	Artists</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">48828f603e65178c0feda275d6b3a11aff688eae</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">1e3b525f2d895105727fee76076dd5ecccbf1778</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">War Room</title>
+		<system>Coleco</system>
+		<company>Probe 2000</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">6a78dc759b3194699b15b00db34abef474ad3583</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">031eaec9188105150460ff354fe50e22ce738c53</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">0834d75cc9cc2758689d333b6958ac3fcd5d7538</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Warm Fuzzy - Quest for Salad</title>
+		<system>Coleco</system>
+		<company>Dale Wick</company>
+		<year>2005</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">bca61548018cda5fea3ebe800142cd935c1caea1</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Waterville Rescue</title>
+		<system>Coleco</system>
+		<company>Mike Harms</company>
+		<year>2009</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">3c37eea4207e42a48fc9f311a0a35712e9611a1e</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Wild Western Demo</title>
+		<system>Coleco</system>
+		<company>Opcode</company>
+		<year>1996</year>
+		<country>BR</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">e98f90cc5d955c928a69f3a11994e6285e248433</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Wing War</title>
+		<system>Coleco</system>
+		<company>Imagic</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">e2b351b83cb85239d4a03b629dfd2f707cc54fd1</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">eb7764ef6f50885e2eaffaff42ab9fcf760a77e1</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Winky Trap</title>
+		<system>Coleco</system>
+		<company>John Dondzila</company>
+		<year>1997</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">6da8e9f0adbe6d1f9787bc5364615de36b65133f</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Wizard Cards</title>
+		<system>Coleco</system>
+		<company>Daniel Bienvenu</company>
+		<year>2003</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">b04d4a1c18255da48f3e9cf1f61fb7e765a01fd5</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Wizard	of Id's Wizmath</title>
+		<system>Coleco</system>
+		<company>Sierravision</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">dc89ba95d30e9e46ab77506e700b9d5e264b90a7</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Word Feud</title>
+		<system>Coleco</system>
+		<company>Xonox</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">28e0113c74f277a52b51dcbf12cde06353db3cee</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">9a6188511ae54e6886222b84185714d2ead8cfbc</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Wrong Way</title>
+		<system>Coleco</system>
+		<company>Harvey Dekleine</company>
+		<year>2007</year>
+		<country>CA</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">7dd17dd71bb349a03147c856745a9a0eb72651fd</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Yank Bash</title>
+		<system>Coleco</system>
+		<company>Rich Drushel</company>
+		<year>2004</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">31c7a5d78886eb1df477d14b21105e7f21734b9c</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">32dd2063aa880aad596cbc7b091315479d99e055</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Yolk's	on You, The</title>
+		<system>Coleco</system>
+		<company>2Oth Century Fox</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">9b5bfb69d37042d131a5c9576f927e09f44f9666</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">bc00fe0d1e619ac0eaf289f51e13a250a43be423</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">3ff5c1c272350a3285159afb920768381aa7fa9e</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Zaxxon</title>
+		<system>Coleco</system>
+		<company>Sega</company>
+		<year>1982</year>
+		<country>JP</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">1733b3407939f5c37e39d5494abfa4137f500707</hash>
+			</rom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">383d79b34a11e9e8b25b120a264a89f31fcbb866</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Zenji</title>
+		<system>Coleco</system>
+		<company>Activision</company>
+		<year>1984</year>
+		<country>JP</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">9119f3a485eb4215e7d41c7cf0e412d903458647</hash>
+			</rom>
+		</dump>
+	</software>
+<!-- ColecoAdam roms -->
+	<software>
+		<title xml:lang="en">Adam Demo</title>
+		<system>Coleco</system>
+		<company>Coleco</company>
+		<year>198x</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">69b905e67a5152802336320e00297c7fb162ece8</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Adam Diagnostics</title>
+		<system>Coleco</system>
+		<company>Coleco</company>
+		<year>198x</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">4c00c5254317301e10593ad444578fe66d24dd0d</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Adam Menu</title>
+		<system>Coleco</system>
+		<company>Coleco</company>
+		<year>198x</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">428bbc848ae14f5557c3577a8e9ee55b718e15cd</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Adam Tape Utility</title>
+		<system>Coleco</system>
+		<company>Coleco</company>
+		<year>1984</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">4db424c25c6ee010850e6783c844ad75bebf0359</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Conway's Game Of Life</title>
+		<system>Coleco</system>
+		<company>Dale Wick</company>
+		<year>1996</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">77199ff553eec9cd4600b0b0100186b5fc1ce38b</hash>
+			</rom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Dragon's Lair</title>
+		<system>Coleco</system>
+		<company>Coleco</company>
+		<year>1996</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<rom>
+				<hash algo="sha1">e398ec4a225e470afde625945abed8fb264453a1</hash>
+			</rom>
+		</dump>
+	</software>
+<!-- Coleco system roms -->
+	<software>
+		<title xml:lang="en">Bit Corporation Dina Bios</title>
+		<system>Coleco</system>
+		<company>Bit Corp.</company>
+		<year>1986</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<systemrom>
+				<hash algo="sha1">17fbbf2aa6a336454f9bd6f3f2b7b17bbe28c072</hash>
+			</systemrom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">ColecoAdam	Enhanced Operating System</title>
+		<system>Coleco</system>
+		<company>Coleco</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<systemrom>
+				<hash algo="sha1">ad3c20ef444f10af7ae8eb75c81e500d9b1bba3d</hash>
+			</systemrom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">ColecoAdam	Word Processor</title>
+		<system>Coleco</system>
+		<company>Coleco</company>
+		<year>1983</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<systemrom>
+				<hash algo="sha1">d4aec4efe1431e56fe52d83baf9118542c525255</hash>
+			</systemrom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">ColecoVision Bios</title>
+		<system>Coleco</system>
+		<company>Coleco</company>
+		<year>1982</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<systemrom>
+				<hash algo="sha1">45bedc4cbdeac66c7df59e9e599195c778d86a92</hash>
+			</systemrom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<systemrom>
+				<hash algo="sha1">99ba9be24ada3e86e5c17aeecb7a2d68c5edfe59</hash>
+				<remark>
+					<text>Alternative Font</text>
+				</remark>
+			</systemrom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<systemrom>
+				<hash algo="sha1">5d564490df4a80f0bab2b534a8102173619359f1</hash>
+				<remark>
+					<text>No Delay</text>
+				</remark>
+			</systemrom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<systemrom>
+				<hash algo="sha1">2f625916c6458379379e61c91ecab3439624d8bf</hash>
+				<remark>
+					<text>Fire Button Skip Intro</text>
+				</remark>
+			</systemrom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<systemrom>
+				<hash algo="sha1">013485176cbdb8b2e53efddd29d14e3102f46c4a</hash>
+				<remark>
+					<text>Fire Button Skip Intro</text>
+				</remark>
+			</systemrom>
+		</dump>
+		<dump>
+			<original value="false" />
+			<systemrom>
+				<hash algo="sha1">66ebaca3a0570cf997f30b5a1d00c5204987a99c</hash>
+				<remark>
+					<text>Short Delay</text>
+				</remark>
+			</systemrom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">ColecoVision Bios with Super Expansion Module</title>
+		<system>Coleco</system>
+		<company>Coleco</company>
+		<year>1982</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<systemrom>
+				<hash algo="sha1">ec9cdc3f1deffe9421415ebcb4bc7125ab081726</hash>
+			</systemrom>
+		</dump>
+	</software>
+	<software>
+		<title xml:lang="en">Spectravideo SVI-603 Coleco Game Adapter</title>
+		<system>Coleco</system>
+		<company>Coleco</company>
+		<year>1982</year>
+		<country>US</country>
+		<dump>
+			<original value="false" />
+			<systemrom>
+				<hash algo="sha1">8a30abe5ffef810b0f99b86db38b1b3c9d259b78</hash>
+			</systemrom>
+		</dump>
+	</software>
+</softwaredb>

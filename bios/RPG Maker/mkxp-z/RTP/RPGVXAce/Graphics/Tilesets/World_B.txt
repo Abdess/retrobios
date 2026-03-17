@@ -1,0 +1,256 @@
+﻿Transparent|透明
+Sign|立て札
+Pier (H)|桟橋（横）
+Pier (V)|桟橋（縦）
+Pond|池
+Pond|池
+Pond (Ice)|池（氷）
+Beanstalk|豆の木
+Tent|テント
+Igloo|氷の家
+Pyramid|ピラミッド
+Giant Tree|大樹
+Giant Tree (Snow)|大樹（雪）
+Dirt|土砂
+Avalanche|雪崩
+Beanstalk|豆の木
+Cave|洞窟
+Cave|洞窟
+Cave (Collapsed)|洞窟（土砂崩れ）
+Mine|坑道
+Tunnel|トンネル
+Tunnel (Blocked)|トンネル（通行止め）
+Shrine|ほこら
+Shrine (Snow)|ほこら（雪）
+Crater|クレーター
+Trail|山道
+Rock Mountain|岩山
+Rock Mountain|岩山
+Rock Mountain (Sandstone)|岩山（砂岩）
+Rock Mountain (Sandstone)|岩山（砂岩）
+Rock Mountain (Snow)|岩山（雪）
+Rock Mountain (Snow)|岩山（雪）
+Volcano Crater (Lava)|火口（溶岩）
+Volcano Crater (Lava)|火口（溶岩）
+Rock Mountain|岩山
+Rock Mountain|岩山
+Rock Mountain (Sandstone)|岩山（砂岩）
+Rock Mountain (Sandstone)|岩山（砂岩）
+Rock Mountain (Snow)|岩山（雪）
+Rock Mountain (Snow)|岩山（雪）
+Volcano Crater|火口
+Volcano Crater|火口
+Rock Mountain|岩山
+Rock Mountain|岩山
+Rock Mountain (Sandstone)|岩山（砂岩）
+Rock Mountain (Sandstone)|岩山（砂岩）
+Rock Mountain (Snow)|岩山（雪）
+Rock Mountain (Snow)|岩山（雪）
+Volcano|火山
+Volcano|火山
+Rock Mountain|岩山
+Rock Mountain|岩山
+Rock Mountain (Sandstone)|岩山（砂岩）
+Rock Mountain (Sandstone)|岩山（砂岩）
+Rock Mountain (Snow)|岩山（雪）
+Rock Mountain (Snow)|岩山（雪）
+Town A|町A
+Town A|町A
+Town B|町B
+Town B|町B
+Village A|村A
+Village A|村A
+Village B|村B
+House (Town)|家（町）
+Town C|町C
+Town D|町D
+Village C|村C
+Village D|村D
+Town E (Desert)|町E（砂漠）
+Town E (Desert)|町E（砂漠）
+Town F (Desert)|町F（砂漠）
+Houses (Village)|家（村）
+Town A (Snow)|町A（雪）
+Town A (Snow)|町A（雪）
+Town B (Snow)|町B（雪）
+Town B (Snow)|町B（雪）
+Town G (Desert)|町G（砂漠）
+Town G (Desert)|町G（砂漠）
+Large Tent|大きなテント
+House (Desert)|家（砂漠）
+Town C (Snow)|町C（雪）
+Town D (Snow)|町D（雪）
+Village C (Snow)|村C（雪）
+Village D (Snow)|村D（雪）
+Village A (Snow)|村A（雪）
+Village A (Snow)|村A（雪）
+Village B (Snow)|村B（雪）
+House (Snow)|家（雪）
+Fortress City |城塞都市
+Fortress City |城塞都市
+Fortress City (Snow)|城塞都市（雪）
+Fortress City (Snow)|城塞都市（雪）
+Large Mansion|大きな屋敷
+Large Mansion|大きな屋敷
+School of Magic|魔法学校
+School of Magic|魔法学校
+Fortress City |城塞都市
+Fortress City |城塞都市
+Fortress City (Snow)|城塞都市（雪）
+Fortress City (Snow)|城塞都市（雪）
+Large Mansion|大きな屋敷
+Large Mansion|大きな屋敷
+School of Magic|魔法学校
+School of Magic|魔法学校
+Bridge (H)|橋（横）
+Bridge (V)|橋（縦）
+Collapsed Bridge (H)|崩れた橋（横）
+Collapsed Bridge (V)|崩れた橋（縦）
+Bridge (Snow, H)|橋（雪・横）
+Bridge (Snow, V)|橋（雪・縦）
+Collapsed Bridge (H)|崩れた橋（横）
+Collapsed Bridge (V)|崩れた橋（縦）
+Tower|塔
+Tower (Ruins)|塔（廃墟）
+Tower|塔
+Tower|塔
+Tower (Snow)|塔（雪）
+Tower|塔
+Temple|神殿
+Temple (Snow)|神殿（雪）
+Tower|塔
+Tower (Ruins)|塔（廃墟）
+Tower|塔
+Tower|塔
+Tower (Snow)|塔（雪）
+Tower (Ruins)|塔（廃墟）
+Temple|神殿
+Temple|神殿
+Castle|城
+Castle|城
+Castle|城
+Castle|城
+Fort|砦
+Fort|砦
+Fort|砦
+Fort|砦
+Castle|城
+Castle|城
+Castle|城
+Castle|城
+Fort|砦
+Fort|砦
+Fort|砦
+Fort|砦
+Castle|城
+Castle|城
+Castle|城
+Castle|城
+Castle (Ruins)|城（廃墟）
+Castle (Ruins)|城（廃墟）
+Castle (Ruins)|城（廃墟）
+Castle (Ruins)|城（廃墟）
+Castle|城
+Castle|城
+Castle|城
+Castle|城
+Castle (Ruins)|城（廃墟）
+Castle (Ruins)|城（廃墟）
+Castle (Ruins)|城（廃墟）
+Castle (Ruins)|城（廃墟）
+Castle (Snow)|城（雪）
+Castle (Snow)|城（雪）
+Castle (Snow)|城（雪）
+Castle (Snow)|城（雪）
+Fort (Snow)|砦（雪）
+Fort (Snow)|砦（雪）
+Castle (Ruins, Snow)|城（廃墟・雪）
+Castle (Ruins, Snow)|城（廃墟・雪）
+Castle (Snow)|城（雪）
+Castle (Snow)|城（雪）
+Castle (Snow)|城（雪）
+Castle (Snow)|城（雪）
+Fort (Snow)|砦（雪）
+Fort (Snow)|砦（雪）
+Castle (Ruins, Snow)|城（廃墟・雪）
+Castle (Ruins, Snow)|城（廃墟・雪）
+Castle (Walled)|城（城壁）
+Castle (Walled)|城（城壁）
+Castle (Walled)|城（城壁）
+Demon Castle|魔王城
+Demon Castle|魔王城
+Cursed Castle|呪われた城
+Cursed Castle|呪われた城
+Town C (Ruins)|町C（廃墟）
+Castle (Walled)|城（城壁）
+Castle (Walled)|城（城壁）
+Castle (Walled)|城（城壁）
+Demon Castle|魔王城
+Demon Castle|魔王城
+Cursed Castle|呪われた城
+Cursed Castle|呪われた城
+Town F (Ruins)|町F（廃墟）
+Castle (Walled)|城（城壁）
+Castle (Walled)|城（城壁）
+Castle (Walled)|城（城壁）
+Town A (Ruins)|町A（廃墟）
+Town A (Ruins)|町A（廃墟）
+Village A (Ruins)|村A（廃墟）
+Village A (Ruins)|村A（廃墟）
+House (Ruins)|家（廃墟）
+Castle Wall|城壁
+Castle Wall|城壁
+Castle Wall|城壁
+Castle Wall|城壁
+Castle Wall|城壁
+Castle Wall|城壁
+Castle Wall|城壁
+Castle Wall|城壁
+Castle Wall|城壁
+Castle Wall (Gate)|城壁（城門）
+Castle Wall|城壁
+Castle Wall|城壁
+Castle Wall|城壁
+Castle Wall|城壁
+Castle Wall|城壁
+Castle Wall|城壁
+Castle Wall|城壁
+Castle Wall|城壁
+Castle Wall|城壁
+Castle Wall|城壁
+Castle Wall|城壁
+Castle Wall|城壁
+Castle Wall|城壁
+Barricades|バリケード
+Castle Wall|城壁
+Castle Wall|城壁
+Castle Wall|城壁
+Castle Wall|城壁
+Castle Wall|城壁
+Castle Wall|城壁
+Castle Wall|城壁
+Lookout Post|やぐら
+Floating Continent (Giant Tree)|浮遊大陸（大樹）
+Floating Continent (Giant Tree)|浮遊大陸（大樹）
+Floating Continent|浮遊大陸
+Floating Continent|浮遊大陸
+Floating Continent (Cloud)|浮遊大陸（雲）
+Floating Continent (Cloud)|浮遊大陸（雲）
+Cloud Land|雲の大地
+Cloud Land|雲の大地
+Floating Continent (Castle)|浮遊大陸（城）
+Floating Continent (Castle)|浮遊大陸（城）
+Floating Continent|浮遊大陸
+Floating Continent|浮遊大陸
+Floating Continent (Cloud)|浮遊大陸（雲）
+Floating Continent (Cloud)|浮遊大陸（雲）
+Cloud Land|雲の大地
+Cloud Land|雲の大地
+Floating Continent (Temple)|浮遊大陸（神殿）
+Floating Continent (Temple)|浮遊大陸（神殿）
+Floating Continent (Shadow)|浮遊大陸（影）
+Floating Continent (Shadow)|浮遊大陸（影）
+Cloud Land (Temple)|雲の大地（神殿）
+Cloud Land (Temple)|雲の大地（神殿）
+Cloud Land (Castle)|雲の大地（城）
+Cloud Land (Castle)|雲の大地（城）

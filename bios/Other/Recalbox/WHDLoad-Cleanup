@@ -1,0 +1,20 @@
+;
+; example script to be used with WHDLoad option ExecuteCleanup
+; restart all software which has been stopped previously with ExecuteStartup
+;
+
+; start Poseidon USB-stack
+;ENVARC:PsdStackLoader
+
+; start Genesis with a X-Surf card
+;AmiTCP:bin/online x-surf0
+
+; start Roadshow
+;AddInterface DEVS:NetInterfaces/(#?.info) Quiet
+
+; start the IP-stack via ARexx
+;C:rx online.rexx
+
+; enable max speed and JIT for UAE
+;uae-configuration cpu_speed max cachesize 8192
+

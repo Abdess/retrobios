@@ -1,0 +1,88 @@
+name: Missing BIOS File
+description: Report a missing BIOS file needed by an emulator
+title: "[BIOS] Missing: "
+labels: ["bios-needed", "help-wanted"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a missing BIOS file! Please fill in the details below.
+
+  - type: input
+    id: filename
+    attributes:
+      label: BIOS Filename
+      description: Exact filename expected by the emulator
+      placeholder: "e.g., scph5501.bin"
+    validations:
+      required: true
+
+  - type: input
+    id: system
+    attributes:
+      label: System/Console
+      description: Which system needs this BIOS
+      placeholder: "e.g., Sony PlayStation"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      description: Which platform/frontend needs this file
+      options:
+        - RetroArch
+        - Batocera
+        - Recalbox
+        - Lakka
+        - RetroPie
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: sha1
+    attributes:
+      label: SHA1 Hash
+      description: Expected SHA1 hash (if known)
+      placeholder: "e.g., cdfd75fe99e71eb7b0a51e97fa281a09c7a7a9f3"
+
+  - type: input
+    id: md5
+    attributes:
+      label: MD5 Hash
+      description: Expected MD5 hash (if known)
+      placeholder: "e.g., dc2b9bf8da62ec93e868cfd29f0d067d"
+
+  - type: input
+    id: size
+    attributes:
+      label: File Size (bytes)
+      description: Expected file size in bytes
+      placeholder: "e.g., 524288"
+
+  - type: input
+    id: core
+    attributes:
+      label: Emulator Core
+      description: Which emulator core uses this BIOS
+      placeholder: "e.g., pcsx_rearmed"
+
+  - type: textarea
+    id: source
+    attributes:
+      label: Where to find this file
+      description: |
+        If you know where this BIOS can be obtained, please share the source.
+        Examples: official manufacturer website, extraction from console, etc.
+
+  - type: checkboxes
+    id: verification
+    attributes:
+      label: Verification
+      options:
+        - label: I have verified the filename and hash are correct
+          required: true
+        - label: This BIOS is not already available in the repository
+          required: true

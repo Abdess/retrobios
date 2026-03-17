@@ -1,0 +1,1779 @@
+<?xml version="1.0"?>
+<!DOCTYPE datafile PUBLIC "-//FinalBurn Neo//DTD ROM Management Datafile//EN" "http://www.logiqx.com/Dats/datafile.dtd">
+
+<datafile>
+	<header>
+		<name>FinalBurn Neo - Sega SG-1000 Games</name>
+		<description>FinalBurn Neo v1.0.0.03 Sega SG-1000 Games</description>
+		<category>Standard DatFile</category>
+		<version>1.0.0.03</version>
+		<author>FinalBurn Neo</author>
+		<homepage>https://neo-source.com/</homepage>
+		<url>https://neo-source.com/</url>
+		<clrmamepro forcenodump="ignore"/>
+	</header>
+	<game name="jb007a" cloneof="jb007" romof="jb007">
+		<description>007 James Bond (Jpn, v2.6, OMV)</description>
+		<year>1984</year>
+		<manufacturer>Tsukuda Original</manufacturer>
+		<rom name="007 james bond [v2.6] [40k map].bin" size="40960" crc="a8b5b57f"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="jb007">
+		<description>007 James Bond (Jpn, v2.7, OMV)</description>
+		<year>1984</year>
+		<manufacturer>Tsukuda Original</manufacturer>
+		<rom name="james bond 007 (japan) (v2.7) (om).bin" size="16384" crc="90160849"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="jb007t" cloneof="jb007" romof="jb007">
+		<description>007 James Bond (Tw)</description>
+		<year>1984?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="james bond 007 (tw).bin" size="16384" crc="76d6c64d"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="arnodash">
+		<comment>Homebrew</comment>
+		<description>Arno Dash (HB)</description>
+		<year>2020</year>
+		<manufacturer>Under4MHz</manufacturer>
+		<rom name="arno dash (2020)(under4mhz).sg" size="32768" crc="ea921f7c"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="arnodash2">
+		<comment>Homebrew</comment>
+		<description>Arno Dash 2 (HB, v1.03)</description>
+		<year>2020</year>
+		<manufacturer>Under4Mhz</manufacturer>
+		<rom name="Arno Dash 2 v1.03 (2020)(Under4Mhz).sg" size="32768" crc="e0478a53"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="bankp">
+		<description>Bank Panic (Jpn)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="bank panic (japan).bin" size="32768" crc="d8a87095"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="bombjackk2" cloneof="bombjack" romof="bombjack">
+		<description>Beom Jjaek (Kor)</description>
+		<year>1985?</year>
+		<manufacturer>Unknown</manufacturer>
+		<rom name="bomb jack [korean logo] (kr).bin" size="32768" crc="b0c7b310"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="bilidada" cloneof="bankp" romof="bankp">
+		<description>Bi Li Da Dao (Tw)</description>
+		<year>1985?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="bank panic (tw).bin" size="32768" crc="bd43fde4"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="blckonyxee" cloneof="blckonyx" romof="blckonyx">
+		<comment>Hack</comment>
+		<description>Black Onyx Enhanced, The (Hack, T-Eng)</description>
+		<year>2010</year>
+		<manufacturer>SSTranslations</manufacturer>
+		<rom name="Black Onyx Enhanced, the (T-Eng)(2010)(SSTranslations).bin" size="65535" crc="3003d9bd"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="blckonyxe" cloneof="blckonyx" romof="blckonyx">
+		<comment>Hack</comment>
+		<description>Black Onyx, The (Hack, T-Eng)</description>
+		<year>2010</year>
+		<manufacturer>SSTranslations</manufacturer>
+		<rom name="Black Onyx, the (T-Eng)(2010)(SSTranslations).bin" size="65535" crc="626e30cc"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="blckonyx">
+		<description>Black Onyx, The (Jpn)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="black onyx, the (japan).bin" size="32768" crc="26ecd094"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="bombjack">
+		<description>Bomb Jack (Jpn)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="bomb jack (japan).bin" size="32768" crc="ea0f2691"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="bombjackk1" cloneof="bombjack" romof="bombjack">
+		<description>Bomb Jack (Kor)</description>
+		<year>1985?</year>
+		<manufacturer>Unknown</manufacturer>
+		<rom name="bomb jack [english logo] (kr).bin" size="32768" crc="0c69d837"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="bombjackt1" cloneof="bombjack" romof="bombjack">
+		<description>Bomb Jack (Tw)</description>
+		<year>1985?</year>
+		<manufacturer>Unknown</manufacturer>
+		<rom name="bomb jack [english logo] (tw).bin" size="32768" crc="cda3a335"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="bombmnsp">
+		<description>Bomber Man Special (Tw)</description>
+		<year>1986?</year>
+		<manufacturer>DahJee</manufacturer>
+		<rom name="bomberman special (tw).bin" size="49152" crc="69fc1494"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="bordrlin">
+		<description>Borderline (Euro, Jpn)</description>
+		<year>1983</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="borderline (japan, europe).bin" size="16384" crc="0b4bca74"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="cso">
+		<description>C_So! (Jpn)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="c_so! (japan).bin" size="32768" crc="be7ed0eb"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="cabkids">
+		<description>Cabbage Patch Kids (Tw)</description>
+		<year>198?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="cabbage patch kids (tw).bin" size="32768" crc="9d91ab78"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="chackne" cloneof="chackn" romof="chackn">
+		<comment>Hack</comment>
+		<description>Chack'n Pop (Hack, T-Eng)</description>
+		<year>2010</year>
+		<manufacturer>goldenband</manufacturer>
+		<rom name="Chack'n Pop (T-Eng)(2010)(goldenband).bin" size="32768" crc="c106c923"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="chackn">
+		<description>Chack'n Pop (Jpn)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="chack'n pop (japan).bin" size="32768" crc="d37bda49"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="chaldrby">
+		<description>Challenge Derby (Jpn, OMV)</description>
+		<year>1984</year>
+		<manufacturer>Tsukuda Original</manufacturer>
+		<rom name="challenge derby [16k].bin" size="16384" crc="c91551da"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="chaldrbya" cloneof="chaldrby" romof="chaldrby">
+		<description>Challenge Derby (Jpn, OMV, Alt)</description>
+		<year>1984</year>
+		<manufacturer>Tsukuda Original</manufacturer>
+		<rom name="challenge derby [40k].bin" size="40960" crc="02bc891f"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="chaldrbyb" cloneof="chaldrby" romof="chaldrby">
+		<description>Challenge Derby (Jpn, OMV, Hacked)</description>
+		<year>1984</year>
+		<manufacturer>Tsukuda Original</manufacturer>
+		<rom name="challenge derby [ver.b] [40k].bin" size="40960" crc="c5f014dc"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="champbas">
+		<description>Champion Baseball (Jpn)</description>
+		<year>1983</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-6381.ic1" size="16384" crc="5970a12b"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="champbasa" cloneof="champbas" romof="champbas">
+		<description>Champion Baseball (Jpn, Older)</description>
+		<year>1983</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="champion baseball [40k].bin" size="40960" crc="c0c16fa7"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="champbast" cloneof="champbas" romof="champbas">
+		<description>Champion Baseball (Tw)</description>
+		<year>1985?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="champion baseball [16k] (tw).bin" size="16384" crc="677e6878"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="champbil">
+		<description>Champion Billiards (Jpn)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="champion billiards (japan).bin" size="32768" crc="62b21e31"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="champbox">
+		<description>Champion Boxing (Jpn)</description>
+		<year>1984</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-6100.ic1" size="32768" crc="26f947d1"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="champbox1" cloneof="champbox" romof="champbox">
+		<description>Champion Boxing (Jpn, MyCard)</description>
+		<year>1984</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="champion boxing (japan) (mycard).bin" size="32768" crc="f8b2ac1d"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="champboxt" cloneof="champbox" romof="champbox">
+		<description>Champion Boxing (Tw)</description>
+		<year>1984?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="champion boxing (tw).bin" size="32768" crc="15d2ce33"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="champglf">
+		<description>Champion Golf (Jpn)</description>
+		<year>1983</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-5435.ic1" size="32768" crc="868419b5"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="champglf1" cloneof="champglf" romof="champglf">
+		<description>Champion Golf (Jpn, MyCard)</description>
+		<year>1983</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="champion golf [card].bin" size="32768" crc="5a904122"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="champglfk" cloneof="champglf" romof="champglf">
+		<description>Champion Golf (Kor)</description>
+		<year>198?</year>
+		<manufacturer>Samsung</manufacturer>
+		<rom name="champion golf (kr).bin" size="32768" crc="35af42ad"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="champice">
+		<description>Champion Ice Hockey (Jpn)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="champion ice hockey (japan).bin" size="32768" crc="bdc05652"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="champicek" cloneof="champice" romof="champice">
+		<description>Champion Ice Hockey (Kor)</description>
+		<year>198?</year>
+		<manufacturer>Samsung</manufacturer>
+		<rom name="champion ice hockey (kr).bin" size="32768" crc="ec0b862c"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="champken">
+		<description>Champion Kendou (Jpn)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="champion kendou (japan).bin" size="32768" crc="10cdebce"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="champpwr">
+		<description>Champion Pro Wrestling (Jpn)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="champion pro wrestling (japan).bin" size="32768" crc="372fe6bc"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="champscr">
+		<description>Champion Soccer (Jpn)</description>
+		<year>1984</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="champion soccer (japan).bin" size="16384" crc="6f39719e"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="champscrt" cloneof="champscr" romof="champscr">
+		<description>Champion Soccer (Tw)</description>
+		<year>1984?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="champion soccer (tw).bin" size="16384" crc="269c1aee"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="champtns">
+		<description>Champion Tennis (Jpn)</description>
+		<year>1983</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-5439.ic1" size="8192" crc="7c663316"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="cloderun">
+		<description>Championship Lode Runner (Jpn)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="championship lode runner (japan).bin" size="32768" crc="11db4b1d"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="supertnkt" cloneof="supertnk" romof="supertnk">
+		<description>Chaoji Tanke (Tw)</description>
+		<year>1986?</year>
+		<manufacturer>Unknown</manufacturer>
+		<rom name="super tank (tw).bin" size="32768" crc="d0c3df3f"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="bombjackt2" cloneof="bombjack" romof="bombjack">
+		<description>Chaoren (Tw)</description>
+		<year>1985?</year>
+		<manufacturer>Unknown</manufacturer>
+		<rom name="bomb jack [chinese logo] (tw).bin" size="32768" crc="deb213fe"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="cheman">
+		<comment>Homebrew</comment>
+		<description>Che-Man (HB)</description>
+		<year>2018</year>
+		<manufacturer>The Mojon Twins</manufacturer>
+		<rom name="Che-Man (2018)(The Mojon Twins).bin" size="49152" crc="477a5d75"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="cherilp">
+		<comment>Homebrew</comment>
+		<description>Cheril Perils Classic (HB)</description>
+		<year>2018</year>
+		<manufacturer>The Mojon Twins</manufacturer>
+		<rom name="Cheril Perils Classic (2018)(The Mojon Twins).bin" size="49152" crc="f87d6ef5"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="choplift">
+		<description>Choplifter (Jpn)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="choplifter (japan).bin" size="32768" crc="732b7180"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="chopliftp" cloneof="choplift" romof="choplift">
+		<description>Choplifter (Jpn, Prototype)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="choplifter (japan) (proto).bin" size="32768" crc="ff435469"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="chopliftk" cloneof="choplift" romof="choplift">
+		<description>Choplifter (Kor)</description>
+		<year>1985?</year>
+		<manufacturer>Sega?</manufacturer>
+		<rom name="choplifter (kr).bin" size="32768" crc="954d8f26"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="chopliftt" cloneof="choplift" romof="choplift">
+		<description>Choplifter (Tw)</description>
+		<year>1985?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="choplifter [no logo] (tw).bin" size="32768" crc="825e1aae"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="circusck" cloneof="circusc" romof="circusc">
+		<description>Circus Charlie (Kor)</description>
+		<year>198?</year>
+		<manufacturer>Unknown</manufacturer>
+		<rom name="circus charlie (kr).bin" size="32768" crc="7f7f009d"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="circusc">
+		<description>Circus Charlie (Tw)</description>
+		<year>198?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="circus charlie (tw).bin" size="32768" crc="3404fce4"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="congoa" cloneof="congo" romof="congo">
+		<description>Congo Bongo (Euro, Jpn, v1 Alt)</description>
+		<year>1983</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="congo bongo [v1] [40k map].bin" size="40960" crc="f1506565"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="congo">
+		<description>Congo Bongo (Euro, Jpn, v1)</description>
+		<year>1983</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="congo bongo [v1].bin" size="24576" crc="5a24c7cf"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="congob" cloneof="congo" romof="congo">
+		<description>Congo Bongo (Jpn, v0)</description>
+		<year>1983</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="congo bongo [v0].bin" size="24576" crc="5eb48a20"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="congot" cloneof="congo" romof="congo">
+		<description>Congo Bongo (Tw)</description>
+		<year>19??</year>
+		<manufacturer>Unknown</manufacturer>
+		<rom name="congo bongo (tw).bin" size="24576" crc="f7eb94c5"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="dayu" cloneof="chackn" romof="chackn">
+		<description>Da Yu (Tw)</description>
+		<year>1985?</year>
+		<manufacturer>Unknown</manufacturer>
+		<rom name="chack'n pop (tw).bin" size="32768" crc="d81a72ce"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="elevatort" cloneof="elevator" romof="elevator">
+		<description>Die Dui Die (Tw)</description>
+		<year>1985?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="elevator action (tw).bin" size="32768" crc="6846e36d"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="dokidoki">
+		<description>Dokidoki Penguin Land (Jpn)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="dokidoki penguin land (japan).bin" size="32768" crc="346556b9"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="dragwang1" cloneof="dragwang" romof="dragwang">
+		<description>Dragon Wang (Jpn, v0)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="dragon wang (japan) (alt).bin" size="32768" crc="60f30138"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="dragwang">
+		<description>Dragon Wang (Jpn, v1)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="dragon wang (japan).bin" size="32768" crc="99c3de21"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="drol">
+		<description>Drol (Jpn)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="drol (japan).bin" size="32768" crc="288940cb"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="drolk" cloneof="drol" romof="drol">
+		<description>Drol (Kor)</description>
+		<year>198?</year>
+		<manufacturer>Samsung</manufacturer>
+		<rom name="drol (kr).bin" size="32768" crc="1d7c53bb"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="drolt" cloneof="drol" romof="drol">
+		<description>Drol (Tw)</description>
+		<year>1985?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="drol (tw).bin" size="32768" crc="b7fc033d"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="elevator">
+		<description>Elevator Action (Jpn)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="elevator action (japan).bin" size="32768" crc="5af8f69d"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="exerion">
+		<description>Exerion (Euro, Jpn)</description>
+		<year>1983</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-5692.ic1" size="16384" crc="a2c45b61"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="exerionk" cloneof="exerion" romof="exerion">
+		<description>Exerion (Kor)</description>
+		<year>198?</year>
+		<manufacturer>Samsung</manufacturer>
+		<rom name="exerion (kr).bin" size="32768" crc="fc628d0d"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="exeriont" cloneof="exerion" romof="exerion">
+		<description>Exerion (Tw)</description>
+		<year>1983?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="exerion (tw).bin" size="16384" crc="b5c84a32"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="faguiqib" cloneof="pitfall2" romof="pitfall2">
+		<description>Fa Gui Qibing (Tw)</description>
+		<year>1985?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="pitfall ii [v0] [chinese logo] (tw).bin" size="32768" crc="476a079b"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="faguiqiba" cloneof="pitfall2" romof="pitfall2">
+		<description>Fa Gui Qibing (Tw, Alt)</description>
+		<year>1985?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="pitfall ii [v0] [english logo] (tw).bin" size="32768" crc="4e93bc8e"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="feilang" cloneof="choplift" romof="choplift">
+		<description>Fei Lang (Tw)</description>
+		<year>1985?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="choplifter [chinese logo] (tw).bin" size="32768" crc="746a8d86"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="feilanga" cloneof="choplift" romof="choplift">
+		<description>Fei Lang ~ Choplifter (Tw, Alt)</description>
+		<year>1985?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="choplifter [english logo] (tw).bin" size="32768" crc="7c603987"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="flickya" cloneof="flicky" romof="flicky">
+		<description>Flicky (Jpn, v0)</description>
+		<year>1984</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="flicky (japan).bin" size="32768" crc="bd24d27b"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="flicky">
+		<description>Flicky (Jpn, v1)</description>
+		<year>1984</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="flicky [v1].bin" size="32768" crc="26d2862c"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="flickyt" cloneof="flicky" romof="flicky">
+		<description>Flicky (Tw)</description>
+		<year>1984?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="flicky (tw).bin" size="32768" crc="cd0666a7"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="segaflipt" cloneof="segaflip" romof="segaflip">
+		<description>Flipper (Tw)</description>
+		<year>1984?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="sega flipper (tw).bin" size="16384" crc="042c36ba"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="foryster">
+		<comment>Homebrew</comment>
+		<description>Foryster (HB, v00.9)</description>
+		<year>2022</year>
+		<manufacturer>siudym</manufacturer>
+		<rom name="Foryster v00.9 (2022)(siudym).bin" size="32768" crc="f8d7fa2c"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="galaga" cloneof="segagala" romof="segagala">
+		<description>Galaga (Tw)</description>
+		<year>1983?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="galaga (tw).bin" size="16384" crc="845bbb22"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="girlgard">
+		<description>Girl's Garden (Jpn)</description>
+		<year>1984</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="girl's garden (japan).bin" size="32768" crc="1898f274"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="girlgardt" cloneof="girlgard" romof="girlgard">
+		<description>Girl's Garden (Tw)</description>
+		<year>1984?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="girl's garden (tw).bin" size="32768" crc="b9635ac4"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="golgo13">
+		<description>Golgo 13 (Jpn)</description>
+		<year>1984</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="golgo 13 (japan).bin" size="32768" crc="0d159ed0"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="gpworlda" cloneof="gpworld" romof="gpworld">
+		<description>GP World (Jpn, v0)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-6485.ic1" size="32768" crc="942adf84"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="gpworld">
+		<description>GP World (Jpn, v1)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="gp world (japan).bin" size="32768" crc="191ffe0a"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="gpworldt" cloneof="gpworld" romof="gpworld">
+		<description>GP World (Tw)</description>
+		<year>1985?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="gp world (tw).bin" size="32768" crc="f19f7548"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="gulkave">
+		<description>Gulkave (Jpn)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="gulkave (japan).bin" size="32768" crc="15a754a3"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="gulkavek" cloneof="gulkave" romof="gulkave">
+		<description>Gulkave (Kor)</description>
+		<year>198?</year>
+		<manufacturer>Unknown</manufacturer>
+		<rom name="gulkave (kr).bin" size="32768" crc="ddcb708b"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="guzzler">
+		<description>Guzzler (Jpn, OMV)</description>
+		<year>1983</year>
+		<manufacturer>Tsukuda Original</manufacturer>
+		<rom name="guzzler (japan) (om).bin" size="8192" crc="61fa9ea0"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="guzzlert" cloneof="guzzler" romof="guzzler">
+		<description>Guzzler (Tw)</description>
+		<year>1983?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="guzzler (tw).bin" size="8192" crc="eb808158"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="hero">
+		<description>H.E.R.O. (Jpn)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="h.e.r.o. (japan).bin" size="32768" crc="4587de6e"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="hangon2">
+		<description>Hang-On II (Jpn)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="hang-on ii (japan).bin" size="32768" crc="9be3c6bd"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="hangon2t1" cloneof="hangon2" romof="hangon2">
+		<description>Hang-On II (Tw)</description>
+		<year>1985?</year>
+		<manufacturer>Unknown</manufacturer>
+		<rom name="hang-on ii [english logo] (tw).bin" size="32768" crc="cabd451b"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="heibaiqi" cloneof="othello" romof="othello">
+		<description>Hei Bai Qi (Tw)</description>
+		<year>1985?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="othello (tw).bin" size="32768" crc="1d1a0ca3"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="homemj1" cloneof="homemj" romof="homemj">
+		<description>Home Mahjong (Jpn, v0)</description>
+		<year>1984</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="home mahjong (japan) (v1.0).bin" size="49152" crc="c9d1ae7d"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="homemj">
+		<description>Home Mahjong (Jpn, v1)</description>
+		<year>1984</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="home mahjong (japan) (v1.1).bin" size="49152" crc="e7e0f0e3"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="huohuli" cloneof="zoom909" romof="zoom909">
+		<description>Huo Hu Li (Tw)</description>
+		<year>1985?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="zoom 909 (tw).bin" size="32768" crc="9943fc2b"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="huojiche" cloneof="roadfght" romof="roadfght">
+		<description>Huojian Che (Tw)</description>
+		<year>1986?</year>
+		<manufacturer>Jumbo</manufacturer>
+		<rom name="road fighter [jumbo] (tw).bin" size="32768" crc="29e047cc"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="hustle">
+		<description>Hustle Chumy (Jpn)</description>
+		<year>1984</year>
+		<manufacturer>Compile</manufacturer>
+		<rom name="hustle chumy (japan).bin" size="16384" crc="a627d440"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="hyperspt">
+		<description>Hyper Sports (Jpn)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-6487.ic1" size="32768" crc="ba09a0fd"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="hypersptk" cloneof="hyperspt" romof="hyperspt">
+		<description>Hyper Sports (Kor)</description>
+		<year>198?</year>
+		<manufacturer>Samsung</manufacturer>
+		<rom name="hyper sports (kr).bin" size="32768" crc="3157ef9c"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="hypersptt" cloneof="hyperspt" romof="hyperspt">
+		<description>Hyper Sports (Tw)</description>
+		<year>1985?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="hyper sports (tw).bin" size="32768" crc="87619ac2"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="hypersp2">
+		<description>Hyper Sports 2 (Tw)</description>
+		<year>198?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="hyper sports 2 (tw).bin" size="32768" crc="b0234e12"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="iq" cloneof="sokoban" romof="sokoban">
+		<description>I.Q. (Kor)</description>
+		<year>1985?</year>
+		<manufacturer>Unknown</manufacturer>
+		<rom name="soukoban [iq logo] (kr).bin" size="32768" crc="89bafec5"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="jetpaco">
+		<comment>Homebrew</comment>
+		<description>Jet Paco and Jet Puri (HB)</description>
+		<year>2018</year>
+		<manufacturer>The Mojon Twins</manufacturer>
+		<rom name="jet-paco-and-jet-puri-ntsc.sg" size="49152" crc="d31c6b3b"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="champkent" cloneof="champken" romof="champken">
+		<description>Jiandao (Tw)</description>
+		<year>1986?</year>
+		<manufacturer>Unknown</manufacturer>
+		<rom name="champion kendou (tw).bin" size="32768" crc="a5f61363"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="jingwumn" cloneof="dragwang" romof="dragwang">
+		<description>Jing Wu Men (Tw)</description>
+		<year>1985?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="dragon wang (tw).bin" size="32768" crc="7c7d4397"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="jingwumna" cloneof="dragwang" romof="dragwang">
+		<description>Jing Wu Men (Tw, Alt)</description>
+		<year>1985?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="dragon wang [v0] [english logo] (tw).bin" size="32768" crc="6f94e5c0"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="jinzita">
+		<description>King's Valley, Jinzita (Tw)</description>
+		<year>198?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="king's valley (tw).bin" size="32768" crc="223397a1"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="ksolitaire">
+		<comment>Homebrew</comment>
+		<description>Klondike Solitaire (HB, v1.04)</description>
+		<year>2020</year>
+		<manufacturer>Under4Mhz</manufacturer>
+		<rom name="Klondike Solitaire v1.04 (2020)(Under4Mhz).sg" size="32768" crc="5f9f8b15"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="moyuchua">
+		<description>Knightmare, Moyu Chuanqi (Tw)</description>
+		<year>1986?</year>
+		<manufacturer>Jumbo</manufacturer>
+		<rom name="knightmare [jumbo] (tw).bin" size="49152" crc="281d2888"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="ldrun">
+		<description>Lode Runner (Euro, Jpn)</description>
+		<year>1984</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-5998.ic1" size="32768" crc="00ed3970"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="ldrunk" cloneof="ldrun" romof="ldrun">
+		<description>Lode Runner (Kor)</description>
+		<year>1984?</year>
+		<manufacturer>Unknown</manufacturer>
+		<rom name="lode runner (kr).bin" size="32768" crc="e68bc7d6"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="ldrunt" cloneof="ldrun" romof="ldrun">
+		<description>Lode Runner (Tw)</description>
+		<year>1984?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="lode runner (tw).bin" size="32768" crc="d953bdb7"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="mkidwiz">
+		<comment>Stuck at boot logo?</comment>
+		<description>Magical Kid Wiz (Tw)</description>
+		<year>198?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="magical kid wiz (tw).bin" size="49152" crc="ffc4ee3f"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="magtree">
+		<description>Magical Tree (Tw)</description>
+		<year>198?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="magical tree (tw).bin" size="32768" crc="b3a8291a"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="mahjong">
+		<description>Mahjong (Jpn)</description>
+		<year>1983</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mahjong (japan).bin" size="24576" crc="6d909857"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="mahjonga" cloneof="mahjong" romof="mahjong">
+		<description>Mahjong (Jpn, Alt)</description>
+		<year>1983</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mahjong [big 1983].bin" size="24576" crc="1c137cab"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="mahjongt" cloneof="mahjong" romof="mahjong">
+		<description>Mahjong (Tw)</description>
+		<year>1983?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="mahjong (tw).bin" size="24576" crc="bc823a89"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="msolitaire">
+		<comment>Homebrew</comment>
+		<description>Mahjong Solitaire (HB, v1.07)</description>
+		<year>2020</year>
+		<manufacturer>Under4Mhz</manufacturer>
+		<rom name="Mahjong Solitaire v1.07 (2020)(Under4Mhz).sg" size="32768" crc="1b14b1c2"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="motianda" cloneof="rocknbol" romof="rocknbol">
+		<description>Mo Tian Da Lou (Tw)</description>
+		<year>1985?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="rock n' bolt (tw).bin" size="32768" crc="4eacb981"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="monacogpb" cloneof="monacogp" romof="monacogp">
+		<description>Monaco GP (Jpn, v0)</description>
+		<year>1983</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="monaco gp [24k].bin" size="40960" crc="8572d73a"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="monacogpa" cloneof="monacogp" romof="monacogp">
+		<description>Monaco GP (Jpn, v1)</description>
+		<year>1983</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="monaco gp [32k].bin" size="32768" crc="da2d57f3"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="monacogp">
+		<description>Monaco GP (Jpn, v2)</description>
+		<year>1983</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="monaco gp [32k] [v2].bin" size="32768" crc="02e5d66a"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="monacogpt" cloneof="monacogp" romof="monacogp">
+		<description>Monaco GP (Tw)</description>
+		<year>1983?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="monaco gp (tw).bin" size="32768" crc="01cda679"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="hangon2t2" cloneof="hangon2" romof="hangon2">
+		<description>Motuo Feiche (Tw)</description>
+		<year>1985?</year>
+		<manufacturer>Unknown</manufacturer>
+		<rom name="hang-on ii [chinese logo] (tw).bin" size="32768" crc="e98a111e"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="castlet" cloneof="castle" romof="castle">
+		<description>Mowang migong ~ The Castle (Tw)</description>
+		<year>1986?</year>
+		<manufacturer>DahJee</manufacturer>
+		<rom name="castle, the [msx] (tw).bin" size="49152" crc="2e366ccf"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="musicj" cloneof="music" romof="music">
+		<description>Music (Jpn)</description>
+		<year>1983</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="music (jp).bin" size="32768" crc="2ec28526"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="nsub">
+		<description>N-Sub (Euro?)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="n-sub (europe) (1988).bin" size="16384" crc="09196fc5"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="nsuba" cloneof="nsub" romof="nsub">
+		<description>N-Sub (Jpn)</description>
+		<year>1983</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="n-sub [16k].bin" size="16384" crc="652bbd1e"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="nsubb" cloneof="nsub" romof="nsub">
+		<description>N-Sub (Jpn, Alt)</description>
+		<year>1983</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="n-sub [40k].bin" size="40960" crc="b377d6e1"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="nsubt" cloneof="nsub" romof="nsub">
+		<description>N-Sub (Tw)</description>
+		<year>1983?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="n-sub (tw).bin" size="16384" crc="3e371769"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="ninjaprie" cloneof="ninjapri" romof="ninjapri">
+		<comment>Hack</comment>
+		<description>Ninja Princess (Hack, T-Eng)</description>
+		<year>2010</year>
+		<manufacturer>goldenband</manufacturer>
+		<rom name="Ninja Princess (T-Eng)(2010)(goldenband).bin" size="32768" crc="bdb6cf0e"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="ninjapri">
+		<description>Ninja Princess (Jpn)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="ninja princess (japan).bin" size="32768" crc="3b912408"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="matchpg">
+		<description>Okamoto Ayako no Match Play Golf (Jpn, OMV)</description>
+		<year>1984?</year>
+		<manufacturer>Tsukuda Original</manufacturer>
+		<rom name="okamoto ayako no match play golf [b] (jp).bin" size="32768" crc="49d3db2c"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="matchpga" cloneof="matchpg" romof="matchpg">
+		<description>Okamoto Ayako no Match Play Golf (Jpn, OMV, Alt)</description>
+		<year>1984?</year>
+		<manufacturer>Tsukuda Original</manufacturer>
+		<rom name="okamoto ayako no match play golf [a] (jp).bin" size="32768" crc="547dd7fd"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="matchpgt" cloneof="matchpg" romof="matchpg">
+		<description>Okamoto Ayako no Match Play Golf (Tw)</description>
+		<year>1984?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="okamoto ayako no match play golf (tw).bin" size="32768" crc="b60492d5"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="orguss">
+		<description>Orguss (Euro, Jpn)</description>
+		<year>1984</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-5743.ic1" size="32768" crc="f4f78b76"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="othello">
+		<description>Othello (Jpn)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="othello (japan).bin" size="32768" crc="af4f14bc"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="pacar">
+		<description>Pacar (Euro, Jpn)</description>
+		<year>1983</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-5556.ic1" size="16384" crc="30c52e5e"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="pacara" cloneof="pacar" romof="pacar">
+		<description>Pacar (Jpn, Alt)</description>
+		<year>1983</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="pacar [40k map].bin" size="40960" crc="19949375"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="pacart" cloneof="pacar" romof="pacar">
+		<description>Pacar (Tw)</description>
+		<year>1983?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="pacar (tw).bin" size="16384" crc="dd6817a0"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="pachinko">
+		<description>Pachinko (Jpn)</description>
+		<year>1983</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="pachinko (japan).bin" size="40960" crc="326587e1"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="pachink2">
+		<description>Pachinko II (Jpn)</description>
+		<year>1984</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="pachinko ii (japan).bin" size="16384" crc="fd7cb50a"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="pachink2t" cloneof="pachink2" romof="pachink2">
+		<description>Pachinko II (Tw)</description>
+		<year>1984?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="pachinko ii (tw).bin" size="16384" crc="6ebe81bf"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="palikat">
+		<comment>Homebrew</comment>
+		<description>Palikat (HB)</description>
+		<year>2020</year>
+		<manufacturer>helmha</manufacturer>
+		<rom name="PALIKAT_NTSC_SG1000.sg" size="32768" crc="ec169914"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="pegged">
+		<comment>Homebrew</comment>
+		<description>Pegged (HB, v1.02)</description>
+		<year>2021</year>
+		<manufacturer>Under4Mhz</manufacturer>
+		<rom name="Pegged v1.02 (2021)(Under4Mhz).sg" size="32768" crc="21e891f0"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="pingpong">
+		<description>Ping Pong (Tw)</description>
+		<year>1985?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="ping pong (konami's) (tw).bin" size="32768" crc="4d972a9e"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="pitfall2a" cloneof="pitfall2" romof="pitfall2">
+		<description>Pitfall II - The Lost Caverns (Jpn, v0)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="pitfall ii - the lost caverns (japan).bin" size="32768" crc="37fca2eb"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="pitfall2">
+		<description>Pitfall II - The Lost Caverns (Jpn, v1)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="pitfall ii - the lost caverns (japan) (alt).bin" size="32768" crc="3db74761"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="pitman">
+		<comment>Homebrew</comment>
+		<description>Pitman (HB, v1.03)</description>
+		<year>2021</year>
+		<manufacturer>Under4Mhz</manufacturer>
+		<rom name="Pitman v1.03 (2021)(Under4Mhz).sg" size="32768" crc="e325f022"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="popflame">
+		<description>Pop Flamer (Euro, Jpn)</description>
+		<year>1983</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="pop flamer (japan, europe).bin" size="16384" crc="db6404ba"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="popflamet" cloneof="popflame" romof="popflame">
+		<description>Pop Flamer (Tw)</description>
+		<year>1983?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="pop flamer (tw).bin" size="16384" crc="ab1da8a6"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="qbert">
+		<description>Q*bert (Jpn, OMV)</description>
+		<year>1983</year>
+		<manufacturer>Tsukuda Original</manufacturer>
+		<rom name="q-bert (japan) (om).bin" size="8192" crc="77db4704"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="qie" cloneof="dokidoki" romof="dokidoki">
+		<description>Qi E (Tw)</description>
+		<year>1985?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="doki doki penguin land (19xx)(-)(tw).bin" size="32768" crc="fdc095bc"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="herot" cloneof="hero" romof="hero">
+		<description>Qing Feng Xia (Tw)</description>
+		<year>1985?</year>
+		<manufacturer>Unknown</manufacturer>
+		<rom name="h.e.r.o. (tw).bin" size="32768" crc="83958998"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="champicet" cloneof="champice" romof="champice">
+		<description>Qugunqiu (Tw)</description>
+		<year>1985?</year>
+		<manufacturer>Unknown</manufacturer>
+		<rom name="champion ice hockey (tw).bin" size="32768" crc="c6e5192f"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="rallyx">
+		<description>Rally-X (Tw)</description>
+		<year>1986?</year>
+		<manufacturer>DahJee</manufacturer>
+		<rom name="rally-x (tw).bin" size="32768" crc="aaac12cf"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="ninjaprit" cloneof="ninjapri" romof="ninjapri">
+		<description>Renzhe Gongzhu (Tw)</description>
+		<year>1986?</year>
+		<manufacturer>Unknown</manufacturer>
+		<rom name="ninja princess (tw).bin" size="32768" crc="464d144b"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="roadfght">
+		<description>Road Fighter (Tw)</description>
+		<year>1986?</year>
+		<manufacturer>Jumbo?</manufacturer>
+		<rom name="road fighter (tw).bin" size="32768" crc="d2edd329"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="rocknbol">
+		<description>Rock n' Bolt (Jpn)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="rock n' bolt (japan).bin" size="32768" crc="0ffdd03d"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="safarihu">
+		<description>Safari Hunting (Jpn)</description>
+		<year>1983</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="safari hunting (japan).bin" size="16384" crc="49e9718b"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="safarihut" cloneof="safarihu" romof="safarihu">
+		<description>Safari Hunting (Tw)</description>
+		<year>1983?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="safari hunting (tw).bin" size="16384" crc="6dc51c01"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="safarirc">
+		<description>Safari Race (Euro?)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="safari race [1988].bin" size="32768" crc="619dd066"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="safarircj" cloneof="safarirc" romof="safarirc">
+		<description>Safari Race (Jpn)</description>
+		<year>1984</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-5977.ic1" size="32768" crc="08707fe3"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="safarirct" cloneof="safarirc" romof="safarirc">
+		<description>Safari Race (Tw)</description>
+		<year>1984?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="safari race (tw).bin" size="32768" crc="b2724428"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="3ninmj">
+		<description>San-nin Mahjong (Jpn, OMV)</description>
+		<year>1984</year>
+		<manufacturer>Tsukuda Original</manufacturer>
+		<rom name="san-nin mahjong.bin" size="16384" crc="885fa64d"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="3ninmjt" cloneof="3ninmj" romof="3ninmj">
+		<description>San-nin Mahjong (Tw)</description>
+		<year>1984?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="san-nin mahjong (tw).bin" size="16384" crc="6fd17655"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="segaflip">
+		<description>Sega Flipper (Euro, Jpn)</description>
+		<year>1983</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="sega flipper (japan, europe).bin" size="16384" crc="8efc77bc"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="segaflipa" cloneof="segaflip" romof="segaflip">
+		<description>Sega Flipper (Jpn, Alt)</description>
+		<year>1983</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="sega flipper [40k map].bin" size="40960" crc="fd76ad99"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="music">
+		<description>Sega Music Editor (Euro?)</description>
+		<year>198?</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="music.bin" size="32768" crc="622010e1"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="segagala">
+		<description>Sega-Galaga (Jpn)</description>
+		<year>1983</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="sega-galaga (japan).bin" size="16384" crc="981e36c1"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="segagala1" cloneof="segagala" romof="segagala">
+		<description>Sega-Galaga (Jpn, Alt)</description>
+		<year>1983</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="sega-galaga [40k map].bin" size="40960" crc="31283003"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="serizawa">
+		<description>Serizawa Hachidan no Tsumeshogi (Jpn)</description>
+		<year>1983</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="serizawa hachidan no tsumeshogi (japan).bin" size="16384" crc="545fc9bb"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="m2cp">
+		<description>SG-1000 M2 Check Program</description>
+		<year>1984</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="sg-1000 m2 check program.bin" size="8192" crc="207e7e99"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="sgthelmet">
+		<comment>Homebrew</comment>
+		<description>Sgt. Helmet - Training Day (HB)</description>
+		<year>2018</year>
+		<manufacturer>The Mojon Twins</manufacturer>
+		<rom name="Sgt. Helmet - Training Day (2018)(The Mojon Twins).bin" size="49152" crc="27c065a5"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="shinnyus">
+		<description>Shinnyushain Tooru Kun (Jpn)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="shinnyushain tooru kun (japan).bin" size="32768" crc="5a917e06"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="shinnyust" cloneof="shinnyus" romof="shinnyus">
+		<description>Shinnyushain Tooru Kun (Tw)</description>
+		<year>19??</year>
+		<manufacturer>Unknown</manufacturer>
+		<rom name="shinnyushain tooru kun (tw).bin" size="32768" crc="33fc5cf6"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="sindbadm">
+		<description>Sindbad Mystery (Euro, Jpn)</description>
+		<year>1983</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-5546.ic1" size="32768" crc="01932df9"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="sindbadmt" cloneof="sindbadm" romof="sindbadm">
+		<description>Sindbad Mystery (Tw)</description>
+		<year>1983?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="sindbad mystery (tw).bin" size="32768" crc="945f7847"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="snake">
+		<comment>Homebrew</comment>
+		<description>Snake (HB, v1.04)</description>
+		<year>2021</year>
+		<manufacturer>Under4Mhz</manufacturer>
+		<rom name="Snake v1.04 (2021)(Under4Mhz).sg" size="32768" crc="b9ab9d0c"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="sokoban">
+		<description>Soukoban (Jpn)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="soukoban (japan).bin" size="32768" crc="922c5468"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="sokobank" cloneof="sokoban" romof="sokoban">
+		<description>Soukoban (Kor)</description>
+		<year>1985?</year>
+		<manufacturer>Unknown</manufacturer>
+		<rom name="soukoban (kr).bin" size="32768" crc="148ea752"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="sokobant" cloneof="sokoban" romof="sokoban">
+		<description>Soukoban (Tw)</description>
+		<year>1985?</year>
+		<manufacturer>Unknown</manufacturer>
+		<rom name="soukoban (tw).bin" size="32768" crc="a2c3fc97"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="spacearmb" cloneof="spacearm" romof="spacearm">
+		<description>Space Armor (Jpn, v10, OMV)</description>
+		<year>1984</year>
+		<manufacturer>Tsukuda Original</manufacturer>
+		<rom name="space armor [v0] [40k map].bin" size="40960" crc="d23b0e3e"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="spacearm">
+		<description>Space Armor (Jpn, v20, OMV)</description>
+		<year>1984</year>
+		<manufacturer>Tsukuda Original</manufacturer>
+		<rom name="space armor [v2].bin" size="16384" crc="ac4f0a5c"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="spacearma" cloneof="spacearm" romof="spacearm">
+		<description>Space Armor (Jpn, v20, OMV, Alt)</description>
+		<year>1984</year>
+		<manufacturer>Tsukuda Original</manufacturer>
+		<rom name="space armor [v1].bin" size="16384" crc="d5fdb4a3"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="spaceinv">
+		<description>Space Invaders (Jpn)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="space invaders (japan).bin" size="16384" crc="6ad5cb3d"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="spaceinvt" cloneof="spaceinv" romof="spaceinv">
+		<description>Space Invaders (Tw)</description>
+		<year>1985?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="space invaders (tw).bin" size="16384" crc="0760ea93"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="spacemnt">
+		<description>Space Mountain (Jpn, OMV)</description>
+		<year>1983</year>
+		<manufacturer>Tsukuda Original</manufacturer>
+		<rom name="space mountain (japan) (om).bin" size="8192" crc="bbd87d8f"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="spacesla">
+		<description>Space Slalom (Jpn)</description>
+		<year>1983</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="space slalom (japan).bin" size="8192" crc="b8b58b30"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="starfrce">
+		<description>Star Force (Jpn)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="star force (japan).bin" size="32768" crc="b846b52a"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="starfrcet" cloneof="starfrce" romof="starfrce">
+		<description>Star Force (Tw)</description>
+		<year>1985?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="star force (tw).bin" size="32768" crc="1f736931"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="starfrceta" cloneof="starfrce" romof="starfrce">
+		<description>Star Force (Tw, Alt)</description>
+		<year>1985?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="star force [b] (tw).bin" size="32768" crc="6f9b1ccd"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="starjack1" cloneof="starjack" romof="starjack">
+		<description>Star Jacker (Euro, Jpn, v1.1)</description>
+		<year>1983</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="star jacker (japan, europe) (v1.1).bin" size="32768" crc="7f25deca"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="starjack">
+		<description>Star Jacker (Euro, Jpn, v1.2)</description>
+		<year>1983</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="star jacker (japan, europe) (v1.2).bin" size="32768" crc="3fe59505"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="starjack2" cloneof="starjack" romof="starjack">
+		<description>Star Jacker (Jpn, v1.0)</description>
+		<year>1983</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="star jacker (japan) (v1.0).bin" size="32768" crc="1ae94122"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="starjackt" cloneof="starjack" romof="starjack">
+		<description>Star Jacker (Tw)</description>
+		<year>1983?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="star jacker [v1] (tw).bin" size="32768" crc="df162201"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="supertnk">
+		<description>Super Tank (Jpn)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="super tank (japan).bin" size="32768" crc="084cc13e"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="supertnkk" cloneof="supertnk" romof="supertnk">
+		<description>Super Tank (Kor)</description>
+		<year>1986?</year>
+		<manufacturer>Unknown</manufacturer>
+		<rom name="super tank (kr).bin" size="32768" crc="4c48b7ac"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="superuwol">
+		<comment>Homebrew</comment>
+		<description>Super UWOL! (HB)</description>
+		<year>2016</year>
+		<manufacturer>The Mojon Twins</manufacturer>
+		<rom name="mojon-twins--super-uwol.sg" size="49152" crc="aa8ea6eb"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="wboyt" cloneof="wboy" romof="wboy">
+		<description>Taotailang (Tw)</description>
+		<year>1986?</year>
+		<manufacturer>Unknown</manufacturer>
+		<rom name="wonder boy [v1] (tw).bin" size="32768" crc="953fc2b2"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="terebioe">
+		<description>Terebi Oekaki (Jpn)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="terebi oekaki (japan).bin" size="8192" crc="dd4a661b"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="castle">
+		<description>The Castle (Jpn)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-10159.ic1" size="32768" crc="092f29d6"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="sxpao">
+		<description>Twinbee (Tw)</description>
+		<year>1986?</year>
+		<manufacturer>Jumbo</manufacturer>
+		<rom name="twinbee [jumbo] (tw).bin" size="49152" crc="c550b4f0"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="vexed">
+		<comment>Homebrew</comment>
+		<description>Vexed (HB, v1.03)</description>
+		<year>2020</year>
+		<manufacturer>Under4Mhz</manufacturer>
+		<rom name="Vexed v1.03 (2020)(Under4Mhz).sg" size="32768" crc="6159a842"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="csot" cloneof="cso" romof="cso">
+		<description>Wanpi Gui (Tw)</description>
+		<year>1985?</year>
+		<manufacturer>Unknown</manufacturer>
+		<rom name="c_so! (tw).bin" size="32768" crc="82c4e3e5"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="wboya" cloneof="wboy" romof="wboy">
+		<description>Wonder Boy (Jpn, v0)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="wonder boy (japan).bin" size="32768" crc="160535c5"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="wboy">
+		<description>Wonder Boy (Jpn, v1)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="wonder boy [v1].bin" size="32768" crc="e8f0344d"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="cloderunt" cloneof="cloderun" romof="cloderun">
+		<description>Xun Bao Er Dai (Tw)</description>
+		<year>1985?</year>
+		<manufacturer>Unknown</manufacturer>
+		<rom name="championship lode runner (tw).bin" size="32768" crc="ec95ebcb"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="yamato">
+		<description>Yamato (Euro, Jpn)</description>
+		<year>1983</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="yamato (japan, europe).bin" size="16384" crc="e2fd5201"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="yamatoa" cloneof="yamato" romof="yamato">
+		<description>Yamato (Euro, Jpn, Alt)</description>
+		<year>1983</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="yamato [40k map].bin" size="40960" crc="9c7497ff"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="yamatot" cloneof="yamato" romof="yamato">
+		<description>Yamato (Tw)</description>
+		<year>1983?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="yamato (tw).bin" size="16384" crc="b65a093f"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="yiear">
+		<description>Yie Ar Kung-Fu (Tw)</description>
+		<year>1985?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="yie ar kung-fu (tw).bin" size="32768" crc="bb0f1930"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="dacike">
+		<description>Yie Ar Kung-Fu II, Da Cike (Tw)</description>
+		<year>1986?</year>
+		<manufacturer>DahJee</manufacturer>
+		<rom name="yie ar kung-fu ii [dahjee] (tw).bin" size="49152" crc="fc87463c"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="homemjt" cloneof="homemj" romof="homemj">
+		<description>Yon-nin Mahjong (Tw)</description>
+		<year>1984?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="home mahjong (tw).bin" size="49152" crc="0583a9fa"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="zaxxon">
+		<description>Zaxxon (Jpn)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="zaxxon (japan).bin" size="32768" crc="905467e4"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="zaxxont" cloneof="zaxxon" romof="zaxxon">
+		<description>Zaxxon (Tw)</description>
+		<year>1985?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="zaxxon (tw).bin" size="32768" crc="49cae925"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="zippyrac">
+		<description>Zippy Race (Jpn)</description>
+		<year>1983</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="zippy race (japan).bin" size="32768" crc="bc5d20df"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="zippyract" cloneof="zippyrac" romof="zippyrac">
+		<description>Zippy Race (Tw)</description>
+		<year>1983?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="zippy race (tw).bin" size="32768" crc="bcf441a5"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="zoom909">
+		<description>Zoom 909 (Jpn)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="zoom 909 (japan).bin" size="32768" crc="093830d8"/>
+		<video type="raster" orientation="horizontal" width="272" height="228" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+</datafile>

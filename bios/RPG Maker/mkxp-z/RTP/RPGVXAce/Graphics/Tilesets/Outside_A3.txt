@@ -1,0 +1,32 @@
+﻿Roof (Tile)|屋根（瓦）
+Roof (Tile)|屋根（瓦）
+Roof (Tile)|屋根（瓦）
+Roof (Tile)|屋根（瓦）
+Roof (Tile)|屋根（瓦）
+Roof (Tile)|屋根（瓦）
+Roof (Tile)|屋根（瓦）
+Roof (Sheet Metal)|屋根（鉄板）
+Outer Wall (Plaster)|外壁（白壁）
+Outer Wall (Rock Wall)|外壁（石壁）
+Outer Wall (Rock Wall)|外壁（石壁）
+Outer Wall (Rock Wall)|外壁（石壁）
+Outer Wall (Brick)|外壁（レンガ）
+Outer Wall (Decorative Tile)|外壁（化粧タイル）
+Outer Wall (Dirt)|外壁（土壁）
+Outer Wall (Wood)|外壁（木造）
+Roof (Wood)|屋根（木造）
+Roof (Wood)|屋根（木造）
+Roof (Log)|屋根（丸太）
+Roof (Thatch)|屋根（藁）
+Roof (Stone)|屋根（石）
+Roof (Tent)|屋根（テント）
+Roof (Thatch, Snow)|屋根（藁・雪）
+Roof (Snow)|屋根（雪）
+Outer Wall (Wood)|外壁（木造）
+Outer Wall (Wood)|外壁（木造）
+Outer Wall (Log)|外壁（丸太）
+Outer Wall (Wood)|外壁（木造）
+Outer Wall (Rock Wall)|外壁（石壁）
+Outer Wall (Tent)|外壁（テント）
+Outer Wall (Wood, Snow)|外壁（木造・雪）
+Outer Wall (Wood, Snow)|外壁（木造・雪）

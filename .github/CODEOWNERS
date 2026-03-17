@@ -1,0 +1,8 @@
+# BIOS files require review from maintainer
+/bios/ @Abdess
+
+# Platform configs require review
+/platforms/ @Abdess
+
+# Scripts require review
+/scripts/ @Abdess

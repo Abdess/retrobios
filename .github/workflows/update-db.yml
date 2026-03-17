@@ -1,0 +1,41 @@
+name: Update Database
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "bios/**"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-db
+  cancel-in-progress: true
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install pyyaml
+
+      - name: Generate database
+        run: python scripts/generate_db.py --bios-dir bios --output database.json
+
+      - name: Generate README and CONTRIBUTING
+        run: python scripts/generate_readme.py --db database.json --platforms-dir platforms
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          commit_message: "chore: update database and documentation"
+          file_pattern: "database.json README.md CONTRIBUTING.md"
+          commit_author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"

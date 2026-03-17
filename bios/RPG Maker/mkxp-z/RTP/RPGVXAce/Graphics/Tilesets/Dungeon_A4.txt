@@ -1,0 +1,48 @@
+﻿Wall (Dirt Cave)|壁（土洞窟）
+Wall (Rock Cave)|壁（岩洞窟）
+Wall (Lava Cave)|壁（溶岩洞窟）
+Wall (Ice Cave)|壁（氷洞窟）
+Wall (Grass Maze)|壁（草迷宮）
+Wall (Crystal)|壁（水晶）
+Wall (In Body)|壁（体内）
+Wall (Demonic World)|壁（魔界）
+Wall (Dirt Cave)|壁（土洞窟）
+Wall (Rock Cave)|壁（岩洞窟）
+Wall (Lava Cave)|壁（溶岩洞窟）
+Wall (Ice Cave)|壁（氷洞窟）
+Wall (Grass Maze)|壁（草迷宮）
+Wall (Crystal)|壁（水晶）
+Wall (In Body)|壁（体内）
+Wall (Demonic World)|壁（魔界）
+Wall (Stone)|壁（石）
+Wall (Brick)|壁（レンガ）
+Wall (Stone)|壁（石）
+Wall (Stone)|壁（石）
+Wall (Stone)|壁（石）
+Wall (Castle)|壁（城）
+Wall (Fort)|壁（砦）
+Wall (Demon Castle)|壁（魔王城）
+Wall (Stone)|壁（石）
+Wall (Brick)|壁（レンガ）
+Wall (Stone)|壁（石）
+Wall (Stone)|壁（石）
+Wall (Stone)|壁（石）
+Wall (Castle)|壁（城）
+Wall (Fort)|壁（砦）
+Wall (Demon Castle)|壁（魔王城）
+Wall (Temple)|壁（神殿）
+Wall (Stone)|壁（石）
+Frozen Wall|凍った壁
+Wall (Factory)|壁（工場）
+Ledge (Dirt Cave)|段差（土洞窟）
+Ledge (Rock Cave)|段差（岩洞窟）
+Ledge (Lava Cave)|段差（溶岩洞窟）
+Ledge (Ice Cave)|段差（氷洞窟）
+Wall (Temple)|壁（神殿）
+Wall (Stone)|壁（石）
+Frozen Wall|凍った壁
+Wall (Factory)|壁（工場）
+Ledge (Dirt Cave)|段差（土洞窟）
+Ledge (Rock Cave)|段差（岩洞窟）
+Ledge (Lava Cave)|段差（溶岩洞窟）
+Ledge (Ice Cave)|段差（氷洞窟）

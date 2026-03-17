@@ -1,0 +1,128 @@
+﻿Darkness|暗闇
+Translucent Floor|半透明の床
+Translucent Floor|半透明の床
+Translucent Floor|半透明の床
+Translucent Floor|半透明の床
+Stairs (Translucent)|階段（半透明）
+Stairs (Translucent)|階段（半透明）
+Wire Mesh|金網
+Transparent|透明
+Translucent Floor|半透明の床
+Translucent Floor|半透明の床
+Translucent Floor|半透明の床
+Translucent Floor|半透明の床
+Stairs (Translucent)|階段（半透明）
+Stairs (Translucent)|階段（半透明）
+Wire Mesh|金網
+Ground (Dirt Cave)|床（土洞窟）
+Ground (Rock Cave)|床（岩洞窟）
+Ground (Lava Cave)|床（溶岩洞窟）
+Ground (Ice Cave)|床（氷洞窟）
+Ground (Grass Maze)|床（草迷宮）
+Ground (Crystal)|床（水晶）
+Ground (In Body)|床（体内）
+Ground (Demonic World)|床（魔界）
+Stairs (Dirt Cave)|階段（土洞窟）
+Stairs (Dirt Cave)|階段（土洞窟）
+Stairs (Dirt Cave)|階段（土洞窟）
+Stairs (Dirt Cave)|階段（土洞窟）
+Stairs (Rock Cave)|階段（岩洞窟）
+Stairs (Rock Cave)|階段（岩洞窟）
+Stairs (Rock Cave)|階段（岩洞窟）
+Stairs (Rock Cave)|階段（岩洞窟）
+Cobblestones|石畳
+Cobblestones|石畳
+Cobblestones|石畳
+Cobblestones|石畳
+Cobblestones|石畳
+Cobblestones|石畳
+Cobblestones|石畳
+Floor (Demon Castle)|床（魔王城）
+Stairs (Lava Cave)|階段（溶岩洞窟）
+Stairs (Lava Cave)|階段（溶岩洞窟）
+Stairs (Lava Cave)|階段（溶岩洞窟）
+Stairs (Lava Cave)|階段（溶岩洞窟）
+Stairs (Ice Cave)|階段（氷洞窟）
+Stairs (Ice Cave)|階段（氷洞窟）
+Stairs (Ice Cave)|階段（氷洞窟）
+Stairs (Ice Cave)|階段（氷洞窟）
+Cobblestones|石畳
+Cobblestones|石畳
+Icy Ground|氷の床
+Floor (Factory)|床（工場）
+Cobblestones|石畳
+Cobblestones|石畳
+Cobblestones|石畳
+Decorative Tile|化粧タイル
+Stairs (Grass Maze)|階段（草迷宮）
+Stairs (Grass Maze)|階段（草迷宮）
+Stairs (Grass Maze)|階段（草迷宮）
+Stairs (Grass Maze)|階段（草迷宮）
+Stairs (Crystal)|階段（水晶）
+Stairs (Crystal)|階段（水晶）
+Stairs (Crystal)|階段（水晶）
+Stairs (Crystal)|階段（水晶）
+Stairs (In Body)|階段（体内）
+Stairs (In Body)|階段（体内）
+Stairs (In Body)|階段（体内）
+Stairs (In Body)|階段（体内）
+Stairs (Demonic World)|階段（魔界）
+Stairs (Demonic World)|階段（魔界）
+Stairs (Demonic World)|階段（魔界）
+Stairs (Demonic World)|階段（魔界）
+Stairs (Stone)|階段（石）
+Stairs (Stone)|階段（石）
+Stairs (Stone)|階段（石）
+Stairs (Stone)|階段（石）
+Stairs (Ruins)|階段（廃墟）
+Stairs (Ruins)|階段（廃墟）
+Stairs (Ruins)|階段（廃墟）
+Stairs (Ruins)|階段（廃墟）
+Stairs (Stone)|階段（石）
+Stairs (Stone)|階段（石）
+Stairs (Stone)|階段（石）
+Stairs (Stone)|階段（石）
+Stairs (Ruins)|階段（廃墟）
+Stairs (Ruins)|階段（廃墟）
+Stairs (Ruins)|階段（廃墟）
+Stairs (Ruins)|階段（廃墟）
+Ground (Dirt Cave)|床（土洞窟）
+Ground (Rock Cave)|床（岩洞窟）
+Ground (Lava Cave)|床（溶岩洞窟）
+Ground (Ice Cave)|床（氷洞窟）
+Ground (Grass Maze)|床（草迷宮）
+Ground (Crystal)|床（水晶）
+Ground (In Body)|床（体内）
+Ground (Demonic World)|床（魔界）
+Cobblestones (Ruins)|石畳（廃墟）
+Cobblestones (Ruins)|石畳（廃墟）
+Cobblestones (Ruins)|石畳（廃墟）
+Cobblestones (Ruins)|石畳（廃墟）
+Cobblestones (Ruins)|石畳（廃墟）
+Cobblestones (Ruins)|石畳（廃墟）
+Cobblestones (Ruins)|石畳（廃墟）
+Floor (Demon Castle, Ruins)|床（魔王城・廃墟）
+Cobblestones (Ruins)|石畳（廃墟）
+Cobblestones (Ruins)|石畳（廃墟）
+Icy Ground|氷の床
+Floor (Factory)|床（工場）
+Cobblestones (Ruins)|石畳（廃墟）
+Cobblestones (Ruins)|石畳（廃墟）
+Cobblestones (Ruins)|石畳（廃墟）
+Decorative Tile (Ruins)|化粧タイル（廃墟）
+Relief Floor Tile|レリーフ床
+Relief Floor Tile|レリーフ床
+Relief Floor Tile|レリーフ床
+Relief Floor Tile|レリーフ床
+Directional Floor Tile (Down)|方向床（下）
+Directional Floor Tile (Up)|方向床（上）
+Relief Floor Tile|レリーフ床
+Relief Floor Tile|レリーフ床
+Relief Floor Tile|レリーフ床
+Relief Floor Tile|レリーフ床
+Relief Floor Tile|レリーフ床
+Relief Floor Tile|レリーフ床
+Directional Floor Tile (Left)|方向床（左）
+Directional Floor Tile (Right)|方向床（右）
+Relief Floor Tile (Ruins)|レリーフ床（廃墟）
+Relief Floor Tile (Ruins)|レリーフ床（廃墟）

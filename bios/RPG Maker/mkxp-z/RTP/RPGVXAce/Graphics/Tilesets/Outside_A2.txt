@@ -1,0 +1,32 @@
+﻿Meadow|草地
+Dirt (Meadow)|土（草地）
+Road (Meadow)|道（草地）
+Cobblestones|石畳
+Bush|茂み
+Road Edging|縁石
+Fencepost|柵
+Fissures|ひび割れ
+Dirt|土
+Grass (Dirt)|草地（土）
+Road (Dirt)|道（土）
+Cobblestones (Snow)|石畳（雪）
+Bush (Dead)|茂み（枯れ草）
+Road Edging (Snow)|縁石（雪）
+Fencepost|柵
+Soil|汚れ
+Sand|砂地
+Grass (Sand)|草地（砂地）
+Road (Sand)|道（砂地）
+Cobblestones|石畳
+Bush (Sand)|茂み（砂地）
+Hole|穴
+Fencepost|柵
+Moss|苔
+Snow|雪
+Dirt (Snow)|土（雪）
+Road (Snow)|道（雪）
+Carpet|カーペット
+Bush (Snow)|茂み（雪）
+Hole|穴
+Fencepost (Snow)|柵（雪）
+Poison Swamp|毒の沼

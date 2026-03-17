@@ -1,0 +1,179 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Abdess/retroarch_system/schemas/platform.schema.json",
+  "title": "Platform Configuration",
+  "description": "Schema for retrogaming platform BIOS configuration files",
+  "type": "object",
+  "required": ["platform"],
+  "properties": {
+    "inherits": {
+      "type": "string",
+      "description": "Parent platform config to inherit from (e.g., 'retroarch')"
+    },
+    "platform": {
+      "type": "string",
+      "description": "Platform display name"
+    },
+    "version": {
+      "type": "string",
+      "description": "Platform version"
+    },
+    "homepage": {
+      "type": "string",
+      "format": "uri",
+      "description": "Platform homepage URL"
+    },
+    "source": {
+      "type": "string",
+      "description": "URL to source BIOS requirements list"
+    },
+    "base_destination": {
+      "type": "string",
+      "description": "Base directory for BIOS files on this platform"
+    },
+    "hash_type": {
+      "type": "string",
+      "enum": ["sha1", "md5", "crc32", "sha256"],
+      "description": "Primary hash algorithm used by this platform"
+    },
+    "verification_mode": {
+      "type": "string",
+      "enum": ["existence", "md5", "sha1"],
+      "default": "existence",
+      "description": "How the platform verifies BIOS at runtime: existence (file exists), md5 (checks MD5 hash), sha1 (checks SHA1 hash)"
+    },
+    "systems": {
+      "type": "object",
+      "description": "Systems/consoles supported by this platform",
+      "additionalProperties": {
+        "$ref": "#/$defs/system"
+      }
+    },
+    "overrides": {
+      "type": "object",
+      "description": "Override inherited system configs",
+      "properties": {
+        "systems": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/system"
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "system": {
+      "type": "object",
+      "properties": {
+        "core": {
+          "type": "string",
+          "description": "Emulator core name"
+        },
+        "manufacturer": {
+          "type": "string",
+          "description": "Hardware manufacturer"
+        },
+        "dat_version": {
+          "type": "string",
+          "description": "Version of the DAT file used as source for BIOS hashes"
+        },
+        "source": {
+          "type": "string",
+          "description": "URL or reference to the source of BIOS requirements"
+        },
+        "release_year": {
+          "type": "integer",
+          "minimum": 1970,
+          "maximum": 2030,
+          "description": "Console release year"
+        },
+        "docs": {
+          "type": "string",
+          "format": "uri",
+          "description": "Documentation URL"
+        },
+        "includes": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Shared BIOS groups to include (from _shared.yml)"
+        },
+        "files": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/bios_file"
+          },
+          "description": "BIOS files required for this system"
+        }
+      }
+    },
+    "bios_file": {
+      "type": "object",
+      "required": ["name", "destination"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "BIOS filename"
+        },
+        "sha1": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$",
+          "description": "SHA1 hash"
+        },
+        "md5": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{32}(,[a-fA-F0-9]{32})*$",
+          "description": "MD5 hash (comma-separated for multi-hash)"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$",
+          "description": "SHA256 hash"
+        },
+        "crc32": {
+          "type": "string",
+          "pattern": "^[a-f0-9A-F0-9]{8}$",
+          "description": "CRC32 hash"
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "File size in bytes"
+        },
+        "destination": {
+          "type": "string",
+          "description": "Destination path relative to base_destination"
+        },
+        "required": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether this BIOS is required for the core to function"
+        },
+        "extract": {
+          "type": "boolean",
+          "default": false,
+          "description": "Extract ZIP contents instead of copying the ZIP"
+        },
+        "storage": {
+          "type": "string",
+          "enum": ["embedded", "external", "user_provided"],
+          "default": "embedded",
+          "description": "Storage tier: embedded (in repo), external (download at build), user_provided (manual)"
+        },
+        "source_url": {
+          "type": "string",
+          "format": "uri",
+          "description": "Download URL for external storage tier"
+        },
+        "instructions": {
+          "type": "string",
+          "description": "Human-readable instructions (for user_provided or context)"
+        },
+        "zipped_file": {
+          "type": "string",
+          "description": "If set, the MD5 hash refers to this file inside the ZIP, not the ZIP itself"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,256 @@
+﻿Transparent|透明
+Stairs (Up)|階段（上り）
+Stairs (Up)|階段（上り）
+Stairs (Up)|階段（上り）
+Stairs (Up)|階段（上り）
+Metal Ladde|鉄ばしご
+Rope Ladder|縄ばしご
+Rope|ロープ
+Hole|穴
+Stairs (Down)|階段（下り）
+Stairs (Down)|階段（下り）
+Stairs (Down)|階段（下り）
+Stairs (Down)|階段（下り）
+Metal Ladde|鉄ばしご
+Rope Ladder|縄ばしご
+Rope|ロープ
+Window|窓
+Window|窓
+Window|窓
+Window (Ruins)|窓（廃墟）
+Window (Demon Castle)|窓（魔王城）
+Metal Ladder|鉄ばしご
+Rope Ladder|縄ばしご
+Rope|ロープ
+Window|窓
+Window|窓
+Window|窓
+Window (Ruins)|窓（廃墟）
+Window (Demon Castle)|窓（魔王城）
+Hole (Metal Ladder)|穴（鉄ばしご）
+Hole (Rope Ladder)|穴（縄ばしご）
+Hole (Rope)|穴（ロープ）
+Window|窓
+Window|窓
+Window|窓
+Stained Glass Window|ステンドグラス
+Window|窓
+Window|窓
+Window|窓
+Window|窓
+Window|窓
+Window|窓
+Window|窓
+Stained Glass Window|ステンドグラス
+Window|窓
+Window|窓
+Window|窓
+Window|窓
+Chest|チェスト
+Cabinet|キャビネット
+Closet|クローゼット
+Chest of Drawers|タンス
+Dish Cabinet|食器棚
+Wine Rack|ワインセラー
+Bottle Shelf|ボトル棚
+Bottle Shelf|ボトル棚
+Chest|チェスト
+Chest|チェスト
+Closet|クローゼット
+Chest of Drawers|タンス
+Dish Cabinet|食器棚
+Wine Rack|ワインセラー
+Bottle Shelf|ボトル棚
+Bottle Shelf|ボトル棚
+Bread Shelf|パン棚
+Sundries Shelf|雑貨棚
+Sundries Shelf|雑貨棚
+Sundries Shelf|雑貨棚
+Medicine Shelf|薬品棚
+Bookshelf|本棚
+Bookshelf|本棚
+Bookshelf|本棚
+Bread Shelf|パン棚
+Sundries Shelf|雑貨棚
+Sundries Shelf|雑貨棚
+Sundries Shelf|雑貨棚
+Medicine Shelf|薬品棚
+Bookshelf|本棚
+Bookshelf|本棚
+Bookshelf|本棚
+Bed|ベッド
+Large Bed|ダブルベッド
+Large Bed|ダブルベッド
+Large Bed|パイプベッド
+Cheap Bed|粗末なベッド
+Straw Bed|むしろの寝床
+Bed (Ruins)|ベッド（廃墟）
+Tipped Shel|倒れた棚
+Bed|ベッド
+Large Bed|ダブルベッド
+Large Bed|ダブルベッド
+Pipe Frame Bed|パイプベッド
+Cheap Bed|粗末なベッド
+Straw Bed|むしろの寝床
+Bed (Ruins)|ベッド（廃墟）
+Tipped Shel|倒れた棚
+Table|テーブル
+Table|テーブル
+Table|テーブル
+Fortuneteller's Table|占い台
+Mini Table|ミニテーブル
+Piano|ピアノ
+Piano|ピアノ
+Piano|ピアノ
+Stool|椅子
+Stool|椅子
+Stool|椅子
+Fortuneteller's Table (Crystal)|占い台（水晶）
+Mini Table (Flower)|ミニテーブル（花瓶）
+Piano|ピアノ
+Piano|ピアノ
+Piano|ピアノ
+Oven|かまど
+Sink|流し
+Kitchen Counter|調理台
+Kitchen Counter|調理台
+Dresser|ドレッサー
+Pipe Organ|パイプオルガン
+Pipe Organ|パイプオルガン
+Pipe Organ|パイプオルガン
+Simple Shelf|簡易棚
+Simple Shelf (Jars)|簡易棚（瓶）
+Simple Shelf (Books)|簡易棚（本）
+Simple Shelf (Sacks)|簡易棚（袋）
+Simple Shelf (Bottles)|簡易棚（ボトル）
+Pipe Organ|パイプオルガン
+Pipe Organ|パイプオルガン
+Pipe Organ|パイプオルガン
+Fireplace|暖炉
+Fireplace|暖炉
+Fireplace|暖炉
+Fireplace|暖炉
+Fireplace|暖炉
+Fireplace|暖炉
+Tapestry|タペストリー
+Tapestry (Ruins)|タペストリー（廃墟）
+Fireplace|暖炉
+Fireplace|暖炉
+Fireplace|暖炉
+Fireplace|暖炉
+Fireplace|暖炉
+Fireplace|暖炉
+Tapestry|タペストリー
+Tapestry (Ruins)|タペストリー（廃墟）
+Curtains|カーテン
+Curtains|カーテン
+Curtains|カーテン
+Curtains|カーテン
+Curtains (Ruins)|カーテン（廃墟）
+Curtains (Ruins)|カーテン（廃墟）
+Curtains (Ruins)|カーテン（廃墟）
+Curtains (Ruins)|カーテン（廃墟）
+Curtains|カーテン
+Curtains|カーテン
+Curtains|カーテン
+Curtains|カーテン
+Curtains (Ruins)|カーテン（廃墟）
+Curtains (Ruins)|カーテン（廃墟）
+Curtains (Ruins)|カーテン（廃墟）
+Curtains (Ruins)|カーテン（廃墟）
+Clock|時計
+Mirror|鏡
+Posted Notice|貼り紙
+Posted Notice (Ruins)|貼り紙（廃墟）
+World Map|世界地図
+World Map|世界地図
+Painting|絵画
+Painting|絵画
+Clock|時計
+Mirror|鏡
+Stone Tablet|石版
+Stone Tablet(Ruins)|石版（廃墟）
+Portrait|肖像画
+Portrait|肖像画
+Portrait|静物画
+Painting|絵画
+Chair|背もたれ椅子
+Chair|背もたれ椅子
+Throne|玉座
+Throne|玉座
+Throne|玉座
+Throne (Demon Castle)|玉座（魔王城）
+Throne (Demon Castle)|玉座（魔王城）
+Throne (Demon Castle)|玉座（魔王城）
+Chair|背もたれ椅子
+Chair|背もたれ椅子
+Throne|玉座
+Throne|玉座
+Throne|玉座
+Throne (Demon Castle)|玉座（魔王城）
+Throne (Demon Castle)|玉座（魔王城）
+Throne (Demon Castle)|玉座（魔王城）
+Shield|盾
+Swords|剣
+Swords|剣
+Entrance|入口
+Entrance|入口
+Entrance (Top Half)|入口（上半分）
+Entrance|入口
+Entrance (Top Half)|入口（上半分）
+Vase|壺
+Vase|壺
+Vase|壺（廃墟）
+Table (Ruins)|テーブル（廃墟）
+Stone Pillar|石の柱
+Stone Pillar|石の柱
+Fort Pillar|砦の柱
+Rubble|瓦礫
+Basin|桶
+Barrel|樽
+Barrel (Ruins)|樽（廃墟）
+Stool (Ruins)|椅子（廃墟）
+Stone Pillar|石の柱
+Stone Pillar|石の柱
+Fort Pilla|砦の柱
+Rubble|瓦礫
+Basin|桶
+Tub|たらい
+Tub|たらい
+Crate(Ruins)|木箱（廃墟）
+Broken Stone Pillar|折れた石の柱
+Broken Stone Pillar|折れた石の柱
+Broken Fort Pillar|折れた砦の柱
+Scrap Wood|端材
+Crate|木箱
+Crate|木箱
+Stacked Crates|積まれた木箱
+Stacked Crates|積まれた木箱
+Fissures|亀裂
+Fissures|亀裂
+Fissures|亀裂
+Fissures|亀裂
+Crate|木箱
+Crate|木箱
+Stacked Crates|積まれた木箱
+Stacked Crates|積まれた木箱
+Fissures|亀裂
+Fissures|亀裂
+Fissures|亀裂
+Fissures|亀裂
+Crate|木箱
+Crate|木箱
+Sacks|麻袋
+Crate|木箱
+Jail Bar|鉄格子
+Jail Bar|鉄格子
+Jail Bar|鉄格子
+Jail Bar|鉄格子
+Sack|麻袋
+Sack|麻袋
+Sack|麻袋
+Crate|木箱
+Jail Bar|鉄格子
+Jail Bar|鉄格子
+Jail Bar|鉄格子
+Jail Bar|鉄格子

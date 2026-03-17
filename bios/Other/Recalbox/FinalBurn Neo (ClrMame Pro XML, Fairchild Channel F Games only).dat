@@ -1,0 +1,579 @@
+<?xml version="1.0"?>
+<!DOCTYPE datafile PUBLIC "-//FinalBurn Neo//DTD ROM Management Datafile//EN" "http://www.logiqx.com/Dats/datafile.dtd">
+
+<datafile>
+	<header>
+		<name>FinalBurn Neo - Fairchild Channel F Games</name>
+		<description>FinalBurn Neo v1.0.0.03 Fairchild Channel F Games</description>
+		<category>Standard DatFile</category>
+		<version>1.0.0.03</version>
+		<author>FinalBurn Neo</author>
+		<homepage>https://neo-source.com/</homepage>
+		<url>https://neo-source.com/</url>
+		<clrmamepro forcenodump="ignore"/>
+	</header>
+	<game name="alieninv" romof="channelf">
+		<description>Alien Invasion</description>
+		<year>1981</year>
+		<manufacturer>Zircon</manufacturer>
+		<rom name="alieninv.bin" size="4096" crc="85e00865"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="backgamm" romof="channelf">
+		<description>Backgammon / Acey-Deucey</description>
+		<year>1977</year>
+		<manufacturer>Fairchild</manufacturer>
+		<rom name="backgmmn.bin" size="2048" crc="a1731b52"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="baseball" romof="channelf">
+		<description>Baseball</description>
+		<year>1977</year>
+		<manufacturer>Fairchild</manufacturer>
+		<rom name="baseball.bin" size="2048" crc="01129bcd"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="bowling" romof="channelf">
+		<description>Bowling</description>
+		<year>1978</year>
+		<manufacturer>Fairchil</manufacturer>
+		<rom name="bowling.bin" size="2048" crc="94322c79"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="casinop" romof="channelf">
+		<description>Casino Poker</description>
+		<year>1980</year>
+		<manufacturer>Zircon</manufacturer>
+		<rom name="casinop.bin" size="4096" crc="5aa30c12"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="multicrt" romof="channelf">
+		<comment>Homebrew</comment>
+		<description>Channel F Multi-Cart (Final)</description>
+		<year>2004</year>
+		<manufacturer>homebrew</manufacturer>
+		<rom name="multigame rom.bin" size="262144" crc="a1ecbd58"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="multicrto" cloneof="multicrt" romof="multicrt">
+		<comment>Homebrew</comment>
+		<description>Channel F Multi-Cart (Older)</description>
+		<year>2004</year>
+		<manufacturer>homebrew</manufacturer>
+		<rom name="multigame older.bin" size="262144" crc="ad4ebe3f"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="checkers" romof="channelf">
+		<description>Checkers</description>
+		<year>1978</year>
+		<manufacturer>Zircon</manufacturer>
+		<rom name="checkers.bin" size="2048" crc="fdae7044"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="clrorgan" romof="channelf">
+		<comment>Demo, Prototype</comment>
+		<description>Color Organ (Prototype)</description>
+		<year>19??</year>
+		<manufacturer>Zircon</manufacturer>
+		<rom name="color organ (proto).bin" size="2048" crc="3fa2d4eb"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="democrt1" romof="channelf">
+		<comment>Demo</comment>
+		<description>Democart 1</description>
+		<year>1977</year>
+		<manufacturer>Fairchild</manufacturer>
+		<rom name="democrt1.bin" size="2048" crc="42727ad5"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="democrt2" romof="channelf">
+		<comment>Demo</comment>
+		<description>Democart 2</description>
+		<year>197?</year>
+		<manufacturer>Fairchild</manufacturer>
+		<rom name="democrt2.bin" size="2048" crc="44cf1d89"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="dsrtfox" romof="channelf">
+		<description>Desert Fox / Shooting Gallery</description>
+		<year>1976</year>
+		<manufacturer>Fairchild</manufacturer>
+		<rom name="dsrtfox.bin" size="2048" crc="1570934b"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="dodgeit" romof="channelf">
+		<description>Dodge It</description>
+		<year>1978</year>
+		<manufacturer>Fairchild</manufacturer>
+		<rom name="dodgeit.bin" size="2048" crc="e3c1811c"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="dragrace" romof="channelf">
+		<description>Drag Race</description>
+		<year>1977</year>
+		<manufacturer>Fairchild</manufacturer>
+		<rom name="dragrace.bin" size="2048" crc="6a64dda3"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="drawpkr" cloneof="casinop" romof="casinop">
+		<comment>Prototype</comment>
+		<description>Draw Poker (Prototype)</description>
+		<year>1980</year>
+		<manufacturer>Zircon</manufacturer>
+		<rom name="draw poker (proto).bin" size="4096" crc="619fcc00"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="football" cloneof="pfootbll" romof="pfootbll">
+		<comment>Prototype</comment>
+		<description>Football (Prototype)</description>
+		<year>1981</year>
+		<manufacturer>Zircon</manufacturer>
+		<rom name="football (proto).bin" size="4096" crc="7e5dafea"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="galacticp" cloneof="galactic" romof="galactic">
+		<comment>Prototype</comment>
+		<description>Galactic Space Wars (Prototype)</description>
+		<year>1980</year>
+		<manufacturer>Zircon</manufacturer>
+		<rom name="glactic space war (proto).bin" size="2048" crc="a61258a8"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="galactic" romof="channelf">
+		<description>Galactic Space Wars / Lunar Lander</description>
+		<year>1980</year>
+		<manufacturer>Zircon</manufacturer>
+		<rom name="galactic.bin" size="2048" crc="c8ef3410"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="hangman" romof="channelf">
+		<description>Hangman</description>
+		<year>1978</year>
+		<manufacturer>Fairchild</manufacturer>
+		<rom name="hangman.bin" size="3072" crc="9238d6ce"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="builtin" romof="channelf">
+		<comment>Channel F built-in games</comment>
+		<description>Hockey + Tennis</description>
+		<year>1976</year>
+		<manufacturer>Fairchild</manufacturer>
+		<rom name="Hockey + Tennis (1976)(Fairchild).bin" size="2048" crc="abdd6d62"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="lightsout" romof="channelf">
+		<comment>Homebrew</comment>
+		<description>Lights Out (HB)</description>
+		<year>2004</year>
+		<manufacturer>Sean Riddle</manufacturer>
+		<rom name="Lights Out (2004)(Riddle, Sean).bin" size="2048" crc="666c0b4a"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="magicnum" romof="channelf">
+		<description>Magic Numbers / Mind Reader / Nim</description>
+		<year>1977</year>
+		<manufacturer>Fairchild</manufacturer>
+		<rom name="magicnum.bin" size="2048" crc="24da0529"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="mthquiz1" romof="channelf">
+		<description>Math Quiz 1</description>
+		<year>1976</year>
+		<manufacturer>Fairchild</manufacturer>
+		<rom name="mthquiz1.bin" size="2048" crc="bb4c24a2"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="mthquiz2" romof="channelf">
+		<description>Math Quiz 2</description>
+		<year>1977</year>
+		<manufacturer>Fairchild</manufacturer>
+		<rom name="mthquiz2.bin" size="2048" crc="4aa7ea97"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="mazea" cloneof="maze" romof="maze">
+		<description>Maze / Jailbreak / Blind-man's-bluff / Trailblazer (Alt)</description>
+		<year>1977</year>
+		<manufacturer>Fairchild</manufacturer>
+		<rom name="mazealt.bin" size="2048" crc="0a948b61"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="maze" romof="channelf">
+		<description>Maze / Jailbreak / Blind-man's-bluff / Trailblazer</description>
+		<year>1977</year>
+		<manufacturer>Fairchild</manufacturer>
+		<rom name="maze.bin" size="2048" crc="4d42b296"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="memory" romof="channelf">
+		<description>Memory Match 1 &amp; 2</description>
+		<year>1978</year>
+		<manufacturer>Fairchild</manufacturer>
+		<rom name="mmrymtch.bin" size="2048" crc="104b5e18"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="muehle" cloneof="tctactoe" romof="tctactoe">
+		<description>Muehle / Tontauben-Schiessen / Kreatives Malspiel / Videoscope (Ger)</description>
+		<year>1978</year>
+		<manufacturer>SABA</manufacturer>
+		<rom name="muehle.bin" size="2048" crc="7124dc59"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="ordtvlng" cloneof="hangman" romof="hangman">
+		<description>Ordtavling (Swe)</description>
+		<year>1978</year>
+		<manufacturer>Luxor</manufacturer>
+		<rom name="ordtvlng.bin" size="3072" crc="3a386e79"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="pacman" romof="channelf">
+		<comment>Homebrew</comment>
+		<description>Pac-Man (HB)</description>
+		<year>2004</year>
+		<manufacturer>Blackbird - e5frog</manufacturer>
+		<rom name="Pac-Man (2004)(Blackbird - e5frog).bin" size="4096" crc="172f5770"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="pacmanv2" cloneof="pacman" romof="pacman">
+		<comment>Homebrew</comment>
+		<description>Pac-Man (HB, v2)</description>
+		<year>2004</year>
+		<manufacturer>Blackbird - e5frog</manufacturer>
+		<rom name="Pac-Man v2 (2004)(Blackbird - e5frog).bin" size="8192" crc="a22dbf73"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="pinballa" cloneof="pinball" romof="pinball">
+		<description>Pinball Challenge (Alt)</description>
+		<year>1978</year>
+		<manufacturer>Fairchild</manufacturer>
+		<rom name="pinballa.bin" size="2048" crc="7cadf0fd"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="pinball" romof="channelf">
+		<description>Pinball Challenge</description>
+		<year>1978</year>
+		<manufacturer>Fairchild</manufacturer>
+		<rom name="pinball.bin" size="2048" crc="c610b330"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="pfootbll" romof="channelf">
+		<description>Pro Football</description>
+		<year>1981</year>
+		<manufacturer>Zircon</manufacturer>
+		<rom name="pfootbll.bin" size="4096" crc="a1ae99be"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="ratmal" cloneof="hangman" romof="hangman">
+		<description>Rat' Mal (Ger)</description>
+		<year>197?</year>
+		<manufacturer>SABA</manufacturer>
+		<rom name="ratmal.bin" size="3072" crc="87752425"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="robotwarp" cloneof="robotwar" romof="robotwar">
+		<comment>Prototype</comment>
+		<description>Robot War (Prototype)</description>
+		<year>1977</year>
+		<manufacturer>Fairchild</manufacturer>
+		<rom name="robot war (proto).bin" size="2048" crc="7f62a23c"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="robotwar" romof="channelf">
+		<description>Robot War / Torpedo Alley</description>
+		<year>1977</year>
+		<manufacturer>Fairchild</manufacturer>
+		<rom name="robotwar.bin" size="2048" crc="38241e4f"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="schach" romof="channelf">
+		<description>Schach (Ger)</description>
+		<year>197?</year>
+		<manufacturer>SABA</manufacturer>
+		<rom name="schach.bin" size="6144" crc="04fb6dce"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="slotmchn" romof="channelf">
+		<description>Slot Machine</description>
+		<year>1980</year>
+		<manufacturer>Zircon</manufacturer>
+		<rom name="slotmchn.bin" size="2048" crc="b7eabd08"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="sonrsrch" romof="channelf">
+		<description>Sonar Search</description>
+		<year>1977</year>
+		<manufacturer>Fairchild</manufacturer>
+		<rom name="sonrsrch.bin" size="2048" crc="dbdc56bf"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="spacewar" romof="channelf">
+		<description>Space War</description>
+		<year>1977</year>
+		<manufacturer>Fairchild</manufacturer>
+		<rom name="spacewar.bin" size="2048" crc="22ef49e8"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="spitfirep" cloneof="spitfire" romof="spitfire">
+		<comment>Prototype</comment>
+		<description>Spitfire (Prototype)</description>
+		<year>1976</year>
+		<manufacturer>Fairchild</manufacturer>
+		<rom name="spitfire (proto).bin" size="2048" crc="0a728afc"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="spitfire" romof="channelf">
+		<description>Spitfire</description>
+		<year>1976</year>
+		<manufacturer>Fairchild</manufacturer>
+		<rom name="spitfire.bin" size="2048" crc="5357c5f6"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="tetris" romof="channelf">
+		<comment>Homebrew</comment>
+		<description>Tetris (HB)</description>
+		<year>2004</year>
+		<manufacturer>Peter Trauner</manufacturer>
+		<rom name="Tetris (2004)(Trauner, Peter).bin" size="3583" crc="2b900e96"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="tctactoe" romof="channelf">
+		<description>Tic-Tac-Toe / Shooting Gallery / Doodle / Quadra-Doodle</description>
+		<year>1976</year>
+		<manufacturer>Fairchild</manufacturer>
+		<rom name="tctactoe.bin" size="2048" crc="ff4768b0"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="vblckjck" romof="channelf">
+		<description>Video Blackjack</description>
+		<year>1976</year>
+		<manufacturer>Fairchild</manufacturer>
+		<rom name="vblckjck.bin" size="2048" crc="e98d4456"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="whizball" romof="channelf">
+		<description>Video Whizball</description>
+		<year>1978</year>
+		<manufacturer>Fairchild</manufacturer>
+		<rom name="vwhzball.bin" size="3072" crc="65fdfe49"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="werbetxt" romof="channelf">
+		<description>Werbetextcassette</description>
+		<year>198?</year>
+		<manufacturer>Electronic-Partner</manufacturer>
+		<rom name="werbetextcassette.bin" size="4096" crc="da351c39"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game name="wrdlf" romof="channelf">
+		<comment>Homebrew</comment>
+		<description>Wrdl-F (HB)</description>
+		<year>2022</year>
+		<manufacturer>Arlasoft</manufacturer>
+		<rom name="Wrdl-F (2022)(Arlasoft).rom" size="8161" crc="0ae07b86"/>
+		<rom name="sl31254.rom" merge="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" merge="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" merge="sl90025.rom" size="1024" crc="015c1e38"/>
+		<video type="raster" orientation="horizontal" width="306" height="174" aspectx="4" aspecty="3"/>
+		<driver status="good"/>
+	</game>
+	<game isbios="yes" name="channelf">
+		<comment>BIOS only</comment>
+		<description>Fairchild Channel F (Bios)</description>
+		<year>1976</year>
+		<manufacturer>Fairchild</manufacturer>
+		<rom name="sl31254.rom" size="1024" crc="9c047ba3"/>
+		<rom name="sl31253.rom" size="1024" crc="04694ed9"/>
+		<rom name="sl90025.rom" size="1024" crc="015c1e38"/>
+	</game>
+</datafile>

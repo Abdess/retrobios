@@ -1,0 +1,5 @@
+inherits: retroarch
+platform: Lakka
+homepage: "https://www.lakka.tv"
+# Version is inherited from retroarch.yml (fetched dynamically by scraper)
+# Lakka uses the same BIOS requirements as RetroArch

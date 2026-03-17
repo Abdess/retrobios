@@ -1,0 +1,11 @@
+;
+; ROM patches file
+;
+
+; ****** ROM INFORMATION ******
+
+; This part isn't actual patches, just information about
+; the hardware the ROM expects to be present.
+
+; ROM expects a special keyboard layout?
+keymap = qwerty

@@ -1,0 +1,48 @@
+﻿Wall (Stone)|壁（石）
+Wall (Brick)|壁（レンガ）
+Wall (Stone)|壁（石）
+Wall (Stone)|壁（石）
+Wall (Stone)|壁（石）
+Castle|城
+Wall (Fort)|壁（砦）
+Wall (Demon Castle)|壁（魔王城）
+Wall (Stone)|壁（石）
+Wall (Brick)|壁（レンガ）
+Wall (Stone)|壁（石）
+Wall (Stone)|壁（石）
+Wall (Stone)|壁（石）
+Castle|城
+Wall (Fort)|壁（砦）
+Wall (Demon Castle)|壁（魔王城）
+Wall (Wood)|壁（木造）
+Wall (Log)|壁（丸太）
+Wall (Wood)|壁（木造）
+Interior Wall|内装壁
+Interior Wall|内装壁
+Wall (Stone)|壁（石）
+Wall (Marble)|壁（大理石）
+Wall (Concrete)|壁（コンクリート）
+Wall (Wood)|壁（木造）
+Wall (Log)|壁（丸太）
+Wall (Wood)|壁（木造）
+Interior Wall|内装壁
+Interior Wall|内装壁
+Wall (Stone)|壁（石）
+Wall (Marble)|壁（大理石）
+Wall (Concrete)|壁（コンクリート）
+Interior Wall|内装壁
+Interior Wall|内装壁
+Interior Wall|内装壁
+Interior Wall|内装壁
+Interior Wall|内装壁
+Interior Wall|内装壁
+Wall (Tent)|壁（テント）
+Stage|舞台
+Interior Wall|内装壁
+Interior Wall|内装壁
+Interior Wall|内装壁
+Interior Wall内装壁
+Interior Wall|内装壁
+Interior Wall|内装壁
+Wall (Tent)|壁（テント）
+Stage|舞台

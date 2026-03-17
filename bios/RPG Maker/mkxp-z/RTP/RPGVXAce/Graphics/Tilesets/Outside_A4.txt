@@ -1,0 +1,48 @@
+﻿Wall (Stone)|壁（石）
+Wall (Brick)|壁（レンガ）
+Wall (Stone)|壁（石）
+Wall (Stone)|壁（石）
+Wall (Stone)|壁（石）
+Wall (Marble)|壁（大理石）
+Hedge|生け垣
+Frozen Wall|凍った壁
+Wall (Stone)|壁（石）
+Wall (Brick)|壁（レンガ）
+Wall (Stone)|壁（石）
+Wall (Stone)|壁（石）
+Wall (Stone)|壁（石）
+Wall (Marble)|壁（大理石）
+Hedge|生け垣
+Frozen Wall|凍った壁
+Building (Urban)|建物（都会風）
+Building (Dirt Wall)|建物（土壁）
+Building (Desert)|建物（砂漠風）
+Building (Snow)|建物（雪）
+Castle|城
+Castle (Snow)|城（雪）
+Fort|砦
+Fort (Snow)|砦（雪）
+Building (Urban)|建物（都会風）
+Building (Dirt Wall)|建物（土壁）
+Building (Desert)|建物（砂漠風）
+Building (Snow)|建物（雪）
+Castle|城
+Castle (Snow)|城（雪）
+Fort|砦
+Fort (Snow)|砦（雪）
+Ledge (Meadow)|段差（草地）
+Ledge (Dirt)|段差（土）
+Ledge (Desert)|段差（砂地）
+Ledge (Snow)|段差（雪）
+Ledge (Paved)|段差（舗装）
+Forest|森
+Forest (Snow)|森（雪）
+Demon Castle|魔王城
+Cliff (Meadow)|崖（草地）
+Cliff (Dirt)|崖（土）
+Cliff (Desert)|崖（砂地）
+Cliff (Snow)|崖（雪）
+Wall (Paved)|壁（舗装）
+Forest|森
+Forest (Snow)|森（雪）
+Demon Castle|魔王城

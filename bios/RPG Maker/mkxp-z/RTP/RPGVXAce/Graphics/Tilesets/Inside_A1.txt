@@ -1,0 +1,16 @@
+﻿Canal|水路
+Deep Canal|深い水路
+Lotus Pads (Flowers)|蓮の葉（花）
+Junk|ゴミ
+Pool (Stone Lined)|水場（石の縁）
+Waterfall (Stone Wall)|滝（石壁）
+Pool (Wood Lined)|水場（木の縁）
+Waterfall (Stone Wall)|滝（石壁）
+Canal|水路
+Waterfall (Stone Wall)|滝（石壁）
+Pool (Stone Lined)|水場（石の縁）
+Waterfall (Stone Wall)|滝（石壁）
+Bathing Spot|水浴び場
+Waterfall (Stone Wall)|滝（石壁）
+Open Bath|露天風呂
+Waterfall (Demon Castle)|滝（魔王城）

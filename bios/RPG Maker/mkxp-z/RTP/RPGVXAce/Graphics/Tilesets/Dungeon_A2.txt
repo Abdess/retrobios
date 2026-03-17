@@ -1,0 +1,32 @@
+﻿Ground (Dirt Cave)|床（土洞窟）
+Ground (Grass Maze)|床（草迷宮）
+Dark Ground (Dirt Cave)|濃い床（土洞窟）
+Dark Ground (Grass Maze)|濃い床（草迷宮）
+Hole (Dirt Cave)|穴（土洞窟）
+Hole (Grass Maze)|穴（草迷宮）
+Hole (Stone Floor)|穴（石の床）
+Ground Cracks|床のひび割れ
+Ground (Rock Cave)|床（岩洞窟）
+Ground (Crystal)|床（水晶）
+Dark Ground (Rock Cave)|濃い床（岩洞窟）
+Dark Ground (Crystal)|濃い床（水晶）
+Hole (Rock Cave)|穴（岩洞窟）
+Hole (Crystal)|穴（水晶）
+Hole|穴
+Soil on Ground|床の汚れ
+Ground (Lava Cave)|床（溶岩洞窟）
+Ground (In Body)|床（体内）
+Dark Ground (Lava Cave)|濃い床（溶岩洞窟）
+Rug|じゅうたん
+Hole (Lava Cave)|穴（溶岩洞窟）
+Hole (In Body)|穴（体内）
+Fencepost|柵
+Moss on Ground|床の苔
+Ground (Ice Cave)|床（氷洞窟）
+Ground (Demonic World)|床（魔界）
+Dark Ground (Ice Cave)|濃い床（氷洞窟）
+Rug|じゅうたん
+Hole (Ice Cave)|穴（氷洞窟）
+Hole (Demonic World)|穴（魔界）
+Raised Stone|石段
+Poison Swamp|毒の沼

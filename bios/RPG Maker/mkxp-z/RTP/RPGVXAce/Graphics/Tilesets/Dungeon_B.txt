@@ -1,0 +1,256 @@
+﻿Transparent|透明
+Beanstalk|豆の木
+Stairs (Up)|階段（上り）
+Stairs (Up)|階段（上り）
+Metal Ladder|鉄ばしご
+Rope Ladder|縄ばしご
+Rope|ロープ
+Vines|ツタ
+Beanstalk (Snow)|豆の木（雪）
+Beanstalk (Dead)|豆の木（枯れ）
+Stairs (Down)|階段（下り）
+Stairs (Up)|階段（下り）
+Metal Ladder|鉄ばしご
+Rope Ladder|縄ばしご
+Rope|ロープ
+Vines|ツタ
+Crumbling Wall|崩れた壁
+Dug-Up Ground|掘られた床
+Stairs (Up)|階段（上り）
+Stairs (Up)|階段（上り）
+Metal Ladder|鉄ばしご
+Rope Ladder|縄ばしご
+Rope|ロープ
+Vines|ツタ（下り）
+Crumbling Wall|崩れた壁
+Dug-Up Ground|掘られた床
+Stairs (Down)|階段（下り）
+Stairs (Down)|階段（下り）
+Hole (Metal Ladder)|穴（鉄ばしご）
+Hole (Rope Ladder)|穴（縄ばしご）
+Hole (Rope)|穴（ロープ）
+Hole|穴
+Log Bridge (V)|丸太の橋（縦）
+Log Bridge (H)|丸太の橋（横）
+Wood Bridge (V)|木の橋（縦）
+Wood Bridge (H)|木の橋（横）
+Stone Bridge (V)|石の橋（縦）
+Stone Bridge (H)|石の橋（横）
+Wood Bridge (V)|木の橋（縦）
+Wood Bridge (H)|木の橋（横）
+Bridge Spar (Wood)|橋げた（木）
+Bridge Spar (Wood)|橋げた（木）
+Bridge Spar (Wood)|橋げた（木）
+Bridge Spar (Wood)|橋げた（木）
+Bridge Spar (Stone)|橋げた（石）
+Bridge Spar (Stone)|橋げた（石）
+Bridge Spar (Stone)|橋げた（石）
+Bridge Spar (Stone)|橋げた（石）
+Gravel (Dirt Cave)|砂利（土洞窟）
+Gravel (Rock Cave)|砂利（岩洞窟）
+Gravel (Lava Cave)|砂利（溶岩洞窟）
+Gravel (Ice Cave)|砂利（氷洞窟）
+Small Sprouts|小さな芽
+Gravel (Crystal)|砂利（水晶）
+Detritus (In Body)|床装飾（体内）
+Detritus (Demonic World)|床装飾（魔界）
+Boulder (Dirt Cave)|岩（土洞窟）
+Boulder (Rock Cave)|岩（岩洞窟）
+Boulder (Lava Cave)|岩（溶岩洞窟）
+Boulder (Ice Cave)|岩（氷洞窟）
+Boulder (Grass Maze)|岩（草迷宮）
+Crystal|水晶
+Spherical Lump|球状突起物
+Boulder (Demonic World)|岩（魔界）
+Tall Rock (Dirt Cave)|大きな岩（土洞窟）
+Tall Rock (Rock Cave)|大きな岩（岩洞窟）
+Tall Rock (Lava Cave)|大きな岩（溶岩洞窟）
+Tall Rock (Ice Cave)|大きな岩（氷洞窟）
+Tall Rock (Grass Maze)|大きな岩（草迷宮）
+Large Crystal|大きな水晶
+Large Growth|大型突起物
+Tall Rock (Demonic World)|大きな岩（魔界）
+Tall Rock (Dirt Cave)|大きな岩（土洞窟）
+Tall Rock (Rock Cave)|大きな岩（岩洞窟）
+Tall Rock (Lava Cave)|大きな岩（溶岩洞窟）
+Tall Rock (Ice Cave)|大きな岩（氷洞窟）
+Tall Rock (Grass Maze)|大きな岩（草迷宮）
+Large Crystal|大きな水晶
+Large Growth|大型突起物
+Tall Rock (Demonic World)|大きな岩（魔界）
+Stone Pillar|石の柱
+Stone Pillar|石の柱
+Stone Pillar|石の柱
+Stone Pillar (Moss)|石の柱（苔）
+Stone Pillar (Ice)|石の柱（氷）
+Wood Pillar|木の柱
+Stone Pillar|石の柱
+Orb Pillar|オーブの柱
+Stone Pillar|石の柱
+Stone Pillar|石の柱
+Stone Pillar|石の柱
+Stone Pillar (Moss)|石の柱（苔）
+Stone Pillar (Ice)|石の柱（氷）
+Wood Pillar|木の柱
+Stone Pillar|石の柱
+Orb Pillar|オーブの柱
+Broken Stone Pillar|折れた石の柱
+Broken Stone Pillar|折れた石の柱
+Broken Stone Pillar|折れた石の柱
+Broken Stone Pillar (Moss)|折れた石の柱（苔）
+Broken Stone Pillar (Ice)|折れた石の柱（氷）
+Broken Wood Pillar|折れた木の柱
+Broken Stone Pillar|折れた石の柱
+Broken Orb Pillar|折れたオーブの柱
+Rubble|瓦礫
+Rubble (Moss)|瓦礫（苔）
+Rubble (Ice)|瓦礫（氷）
+Broken Wood Pillar|折れた木の柱
+Rubble|瓦礫
+Scrap Wood|端材
+Barricade (H)|バリケード（横）
+Barricade (V)|バリケード（縦）
+Wall Bracing|壁の補強材
+Wall Bracing|壁の補強材
+Wall Bracing|壁の補強材
+Wall Bracing|壁の補強材
+Wall Bracing|壁の補強材
+Wall Bracing (Abandoned Mine)|壁の補強材（廃坑）
+Wall Bracing (Abandoned Mine)|壁の補強材（廃坑）
+Wall Bracing (Abandoned Mine)|壁の補強材（廃坑）
+Wall Bracing|壁の補強材
+Wall Bracing|壁の補強材
+Wall Bracing|壁の補強材
+Wall Bracing|壁の補強材
+Wall Bracing|壁の補強材
+Wall Bracing (Abandoned Mine)|壁の補強材（廃坑）
+Wall Bracing (Abandoned Mine)|壁の補強材（廃坑）
+Wall Bracing (Abandoned Mine)|壁の補強材（廃坑）
+Exit|外への出口
+Entrance|入口
+Exit|外への出口
+Entrance|入口
+Exit|外への出口
+Entrance|入口
+Window|窓
+Window|窓
+Exit|外への出口
+Entrance|入口
+Exit|外への出口
+Entrance|入口
+Light From Exit (Top)|出口からの光（上）
+Light From Exit (Bottom)|出口からの光（下）
+Window|窓
+Window|窓
+Spider Web|蜘蛛の巣
+Stone Tablet|石版
+Stone Tablet (Ruins)|石版（廃墟）
+Entrance|入口
+Entrance|入口
+Entrance (Top Half)|入口（上半分）
+Entrance|入口
+Entrance (Top Half)|入口（上半分）
+Wall Vines|壁のツタ
+Wall Vines|壁のツタ
+Leafless Wall Vines|壁のつる
+Wall Fern|壁のシダ
+Fissures|亀裂
+Fissures|亀裂
+Fissures|亀裂
+Fissures|亀裂
+Wall Vine|壁のツタ
+Wall Vine|壁のツタ
+Leafless Wall Vines|壁のつる
+Wall Moss|壁の苔
+Fissures|亀裂
+Fissures|亀裂
+Fissures|亀裂
+Fissures|亀裂
+Monument|石碑
+Monument|石碑
+Monument|石碑
+Monument|石碑
+Monument|石碑
+Monument (Lit)|石碑（光）
+Monument (Lit)|石碑（光）
+Monument (Lit)|石碑（光）
+Monument|石碑
+Monument|石碑
+Monument|石碑
+Monument|石碑
+Monument|石碑
+Monument (Lit)|石碑（光）
+Monument (Lit)|石碑（光）
+Monument (Lit)|石碑（光）
+Statue|石像
+Goddess Statue|女神像
+Goddess Statue|女神像
+Dais|台座
+Statue|石像
+Demon Statue|悪魔像
+Dragon Statue|竜像
+Dragon Statue|竜像
+Statue|石像
+Goddess Statue|女神像
+Goddess Statue|女神像
+Broken Statue|壊れた像
+Statue|石像
+Demon Statue|悪魔像
+Dragon Statue|竜像
+Dragon Statue|竜像
+Dirt Mound|土砂
+Dirt Mound|土砂
+Gravel Mound|土砂（石）
+Gravel Mound|土砂（石）
+Gold Mound|金の山
+Gold Mound|金の山
+Silver Mound|銀の山
+Silver Mound|銀の山
+Dirt Mound|土砂
+Dirt Mound|土砂
+Gravel Mound|土砂（石）
+Gravel Mound|土砂（石）
+Gold Mound|金の山
+Gold Mound|金の山
+Silver Mound|銀の山
+Silver Mound|銀の山
+Dirt Mound|土砂
+Gravel Mound|土砂（石）
+Gold Bricks|金の延べ棒
+Gold Bricks|金の延べ棒
+Crate|木箱
+Crate|木箱
+Crate (Ruins)|木箱（廃墟）
+Vase (Ruins)|壺（廃墟）
+Gold Mound|金の山
+Silver Mound|銀の山
+Gold Bricks|銀の延べ棒
+Gold Bricks|銀の延べ棒
+Crate|木箱
+Crate|木箱
+Vase|壺
+Vase|壺
+Shovel|スコップ
+Pickax|つるはし
+Rope|ロープ
+Mound of Gold Coins|金貨の山
+Crate|木箱
+Crate|木箱
+Barrel|樽
+Barrel (Ruins)|樽（廃墟）
+Bones|骸骨
+Bones|骸骨
+Bones|骸骨
+Table (Ruins)|テーブル（廃墟）
+Jail Bars|鉄格子
+Jail Bars|鉄格子
+Jail Bars|鉄格子
+Jail Bars|鉄格子
+Bones|骸骨
+Bones|骸骨
+Bones|骸骨
+Stool (Ruins)|椅子（廃墟）
+Jail Bars|鉄格子
+Jail Bars|鉄格子
+Jail Bars|鉄格子
+Jail Bars|鉄格子

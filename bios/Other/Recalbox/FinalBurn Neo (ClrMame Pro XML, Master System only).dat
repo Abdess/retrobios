@@ -1,0 +1,4362 @@
+<?xml version="1.0"?>
+<!DOCTYPE datafile PUBLIC "-//FinalBurn Neo//DTD ROM Management Datafile//EN" "http://www.logiqx.com/Dats/datafile.dtd">
+
+<datafile>
+	<header>
+		<name>FinalBurn Neo - Master System Games</name>
+		<description>FinalBurn Neo v0.2.97.44 Master System Games</description>
+		<category>Standard DatFile</category>
+		<version>0.2.97.44</version>
+		<author>FinalBurn Neo</author>
+		<homepage>https://neo-source.com/</homepage>
+		<url>https://neo-source.com/</url>
+		<clrmamepro forcenodump="ignore"/>
+	</header>
+	<game name="4pak">
+		<description>4 PAK All Action (Aus)</description>
+		<year>1995</year>
+		<manufacturer>HES</manufacturer>
+		<rom name="4 pak all action (aus).bin" size="1048576" crc="a67f2a5c"/>
+		<driver status="good"/>
+	</game>
+	<game name="94swc">
+		<description>94 Super World Cup Soccer (Kor)</description>
+		<year>1994</year>
+		<manufacturer>Daou Infosys</manufacturer>
+		<rom name="94 super world cup soccer (kr).bin" size="262144" crc="060d6a7c"/>
+		<driver status="good"/>
+	</game>
+	<game name="aceoface">
+		<description>Ace of Aces (Euro)</description>
+		<year>1991</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="ace of aces (europe).bin" size="262144" crc="887d9f6b"/>
+		<driver status="good"/>
+	</game>
+	<game name="actionfg1" cloneof="actionfg" romof="actionfg">
+		<description>Action Fighter (Euro, Jpn, v1)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="action fighter (japan, europe) (v1.1).bin" size="131072" crc="d91b340d"/>
+		<driver status="good"/>
+	</game>
+	<game name="actionfg">
+		<description>Action Fighter (Euro, USA, Bra, v2)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-11043.ic1" size="131072" crc="3658f3e0"/>
+		<driver status="good"/>
+	</game>
+	<game name="herolanc">
+		<description>Advanced Dungeons and Dragons - Heroes of the Lance (Euro, Bra)</description>
+		<year>1991</year>
+		<manufacturer>U.S. Gold</manufacturer>
+		<rom name="heroes of the lance (europe).bin" size="524288" crc="cde13ffb"/>
+		<driver status="good"/>
+	</game>
+	<game name="aerialas">
+		<description>Aerial Assault (Euro, Bra)</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="aerial assault (europe).bin" size="262144" crc="ecf491cf"/>
+		<driver status="good"/>
+	</game>
+	<game name="aerialasu" cloneof="aerialas" romof="aerialas">
+		<description>Aerial Assault (USA)</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-13299-f.ic1" size="262144" crc="15576613"/>
+		<driver status="good"/>
+	</game>
+	<game name="aburner">
+		<description>After Burner (World)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-11271 w01.ic2" size="524288" crc="1c951f8e"/>
+		<driver status="good"/>
+	</game>
+	<game name="agidooly" cloneof="dinodool" romof="dinodool">
+		<description>Agigongnyong Dooly (Kor)</description>
+		<year>1991</year>
+		<manufacturer>Daou Infosys</manufacturer>
+		<rom name="agigongnyong dooly (kr).bin" size="131072" crc="4f1be9fa"/>
+		<driver status="good"/>
+	</game>
+	<game name="airresc">
+		<description>Air Rescue (Euro, Bra, Kor)</description>
+		<year>1992</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="air rescue (europe).bin" size="262144" crc="8b43d21d"/>
+		<driver status="good"/>
+	</game>
+	<game name="aleste" cloneof="pstrike" romof="pstrike">
+		<description>Aleste (Jpn)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="aleste (japan).bin" size="131072" crc="d8c4165b"/>
+		<driver status="good"/>
+	</game>
+	<game name="alesteiigg2sms">
+		<description>Aleste II GG (SMS Conversion)</description>
+		<year>1993</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="Aleste IIgg2sms.sms" size="262144" crc="516d899d"/>
+		<driver status="good"/>
+	</game>
+	<game name="alexhitw">
+		<description>Alex Kidd - High-Tech World (Euro, USA)</description>
+		<year>1989</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-12408.ic1" size="131072" crc="013c0a94"/>
+		<driver status="good"/>
+	</game>
+	<game name="alexlost">
+		<description>Alex Kidd - The Lost Stars (World)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-11402 w09.ic1" size="262144" crc="c13896d5"/>
+		<driver status="good"/>
+	</game>
+	<game name="alexkidd3">
+		<description>Alex Kidd 3 - Curse in Miracle World (HB, Hack Demo4) [Homebrew]</description>
+		<year>2016</year>
+		<manufacturer>Yeti</manufacturer>
+		<rom name="alex kidd 3 - curse in miracle world (2016)(yeti-demo4).sms" size="1048576" crc="35b498a4"/>
+		<driver status="good"/>
+	</game>
+	<game name="alexbmx">
+		<description>Alex Kidd BMX Trial (Jpn)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="alex kidd bmx trial (japan).bin" size="131072" crc="f9dbb533"/>
+		<driver status="good"/>
+	</game>
+	<game name="alexkiddb" cloneof="alexkidd" romof="alexkidd">
+		<description>Alex Kidd in Miracle World (Bra, v1, Pirate)</description>
+		<year>1986</year>
+		<manufacturer>pirate</manufacturer>
+		<rom name="alex kidd in miracle world (b) [hack].bin" size="131072" crc="7545d7c2"/>
+		<driver status="good"/>
+	</game>
+	<game name="alexkidd1" cloneof="alexkidd" romof="alexkidd">
+		<description>Alex Kidd in Miracle World (Euro, USA, v0)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="alex kidd in miracle world (usa, europe).bin" size="131072" crc="17a40e29"/>
+		<driver status="good"/>
+	</game>
+	<game name="alexkidd">
+		<description>Alex Kidd in Miracle World (Euro, USA, v1)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="alex kidd in miracle world (usa, europe) (v1.1).bin" size="131072" crc="aed9aac4"/>
+		<driver status="good"/>
+	</game>
+	<game name="alexkidd2">
+		<description>Alex Kidd in Miracle World 2 (HB, Hack) [Homebrew]</description>
+		<year>2016</year>
+		<manufacturer>Ian Wall</manufacturer>
+		<rom name="Alex Kidd in Miracle World 2.sms" size="524288" crc="7de172ff"/>
+		<driver status="good"/>
+	</game>
+	<game name="alexkiddrr" cloneof="alexkidd" romof="alexkidd">
+		<description>Alex Kidd in Radaxian Rumble (ver. 1.5)</description>
+		<year>2015</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="Alex Kidd in Radaxian Rumble 1.5.sms" size="524288" crc="02760e17"/>
+		<driver status="good"/>
+	</game>
+	<game name="alexshin">
+		<description>Alex Kidd in Shinobi World (Euro, USA, Bra)</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="alex kidd in shinobi world (usa, europe).bin" size="262144" crc="d2417ed7"/>
+		<driver status="good"/>
+	</game>
+	<game name="alexkiddj" cloneof="alexkidd" romof="alexkidd">
+		<description>Alex Kidd no Miracle World (Jpn)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-10379.ic1" size="131072" crc="08c9ec91"/>
+		<driver status="good"/>
+	</game>
+	<game name="alf">
+		<description>Alf (USA, Bra)</description>
+		<year>1989</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="alf (usa).bin" size="131072" crc="82038ad4"/>
+		<driver status="good"/>
+	</game>
+	<game name="alibaba">
+		<description>Alibaba and 40 Thieves (Kor)</description>
+		<year>1989</year>
+		<manufacturer>HiCom</manufacturer>
+		<rom name="alibaba and 40 thieves (kr).sms" size="32768" crc="08bf3de3"/>
+		<driver status="good"/>
+	</game>
+	<game name="alien3">
+		<description>Alien 3 (Euro, Bra)</description>
+		<year>1992</year>
+		<manufacturer>Arena</manufacturer>
+		<rom name="alien 3 (europe).bin" size="262144" crc="b618b144"/>
+		<driver status="good"/>
+	</game>
+	<game name="astorm">
+		<description>Alien Storm (Euro, Bra)</description>
+		<year>1991</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-14254.ic1" size="262144" crc="7f30f793"/>
+		<driver status="good"/>
+	</game>
+	<game name="aliensyn">
+		<description>Alien Syndrome (Euro, USA, Bra)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-11384 w10.ic1" size="262144" crc="5cbfe997"/>
+		<driver status="good"/>
+	</game>
+	<game name="aliensynj" cloneof="aliensyn" romof="aliensyn">
+		<description>Alien Syndrome (Jpn)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="alien syndrome (japan).bin" size="262144" crc="4cc11df9"/>
+		<driver status="good"/>
+	</game>
+	<game name="aliensynp" cloneof="aliensyn" romof="aliensyn">
+		<description>Alien Syndrome (Prototype)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="alien syndrome (proto).bin" size="262144" crc="c148868c"/>
+		<driver status="good"/>
+	</game>
+	<game name="altbeast">
+		<description>Altered Beast (Euro, USA, Bra)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-12534 t35.ic2" size="262144" crc="bba2fe98"/>
+		<driver status="good"/>
+	</game>
+	<game name="ameribb">
+		<description>American Baseball (Euro, Bra)</description>
+		<year>1989</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-12555f.ic1" size="262144" crc="7b27202f"/>
+		<driver status="good"/>
+	</game>
+	<game name="ameripf">
+		<description>American Pro Football (Euro)</description>
+		<year>1989</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="american pro football (europe).bin" size="262144" crc="3727d8b2"/>
+		<driver status="good"/>
+	</game>
+	<game name="agassi">
+		<description>Andre Agassi Tennis (Euro, Bra)</description>
+		<year>1993</year>
+		<manufacturer>TecMagik</manufacturer>
+		<rom name="andre agassi tennis (europe).bin" size="262144" crc="f499034d"/>
+		<driver status="good"/>
+	</game>
+	<game name="anmitsu" cloneof="alexhitw" romof="alexhitw">
+		<description>Anmitsu Hime (Jpn)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="anmitsu hime (japan).bin" size="131072" crc="fff63b0b"/>
+		<driver status="good"/>
+	</game>
+	<game name="arcadesh">
+		<description>Arcade Smash Hits (Euro)</description>
+		<year>1992</year>
+		<manufacturer>Virgin Interactive</manufacturer>
+		<rom name="arcade smash hits (europe).bin" size="262144" crc="e4163163"/>
+		<driver status="good"/>
+	</game>
+	<game name="argosnj">
+		<description>Argos no Juujiken (Jpn)</description>
+		<year>1988</year>
+		<manufacturer>Tecmo</manufacturer>
+		<rom name="argos no juujiken (japan).bin" size="131072" crc="bae75805"/>
+		<driver status="good"/>
+	</game>
+	<game name="argosnj1" cloneof="argosnj" romof="argosnj">
+		<description>Argos no Juujiken (Jpn, Pirate?)</description>
+		<year>1988</year>
+		<manufacturer>Tecmo</manufacturer>
+		<rom name="argos no juujiken [hack].bin" size="131072" crc="32da4b0d"/>
+		<driver status="good"/>
+	</game>
+	<game name="tvcolos" cloneof="asterix" romof="asterix">
+		<description>As Aventuras da TV Colosso (Bra)</description>
+		<year>1996</year>
+		<manufacturer>Tec Toy</manufacturer>
+		<rom name="tv colosso (brazil).bin" size="524288" crc="e1714a88"/>
+		<driver status="good"/>
+	</game>
+	<game name="ashura" cloneof="secret" romof="secret">
+		<description>Ashura (Jpn)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-10386.ic1" size="131072" crc="ae705699"/>
+		<driver status="good"/>
+	</game>
+	<game name="assaultc1" cloneof="assaultc" romof="assaultc">
+		<description>Assault City (Euro)</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="assault city (europe).bin" size="262144" crc="0bd8da96"/>
+		<driver status="good"/>
+	</game>
+	<game name="assaultc">
+		<description>Assault City (Euro, Bra, Light Phaser version) [Light Phaser game]</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="assault city (europe) (light phaser).bin" size="262144" crc="861b6e79"/>
+		<driver status="good"/>
+	</game>
+	<game name="asterix1" cloneof="asterix" romof="asterix">
+		<description>Asterix (Euro, Bra, v0)</description>
+		<year>1991</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-14520-f.ic1" size="524288" crc="147e02fa"/>
+		<driver status="good"/>
+	</game>
+	<game name="asterix">
+		<description>Asterix (Euro, v1)</description>
+		<year>1991</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="asterix (europe) (en,fr) (v1.1).bin" size="524288" crc="8c9d5be8"/>
+		<driver status="good"/>
+	</game>
+	<game name="astergre">
+		<description>Asterix and the Great Rescue (Euro, Bra)</description>
+		<year>1993</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="asterix and the great rescue (europe) (en,fr,de,es,it).bin" size="524288" crc="f9b7d26b"/>
+		<driver status="good"/>
+	</game>
+	<game name="astermis">
+		<description>Asterix and the Secret Mission (Euro)</description>
+		<year>1993</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="asterix and the secret mission (europe) (en,fr,de).bin" size="524288" crc="def9b14e"/>
+		<driver status="good"/>
+	</game>
+	<game name="astrofl" cloneof="transbot" romof="transbot">
+		<description>Astro Flash (Jpn, MyCard)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="astro flash (japan).bin" size="32768" crc="c795182d"/>
+		<driver status="good"/>
+	</game>
+	<game name="astrofl1" cloneof="transbot" romof="transbot">
+		<description>Astro Flash (Jpn, Pirate)</description>
+		<year>1985</year>
+		<manufacturer>pirate</manufacturer>
+		<rom name="astro flash [hack].bin" size="32768" crc="0e21e6cf"/>
+		<driver status="good"/>
+	</game>
+	<game name="astforce">
+		<description>Astro Force (HB, v1.03) [Homebrew]</description>
+		<year>2017</year>
+		<manufacturer>MikGames</manufacturer>
+		<rom name="astroforce_v103.sms" size="262144" crc="1bad75c5"/>
+		<driver status="good"/>
+	</game>
+	<game name="astrow">
+		<description>Astro Warrior (Jpn, USA, Bra)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-10387.ic1" size="131072" crc="299cbb74"/>
+		<driver status="good"/>
+	</game>
+	<game name="astropit">
+		<description>Astro Warrior and Pit Pot (Euro)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-11070.ic1" size="131072" crc="69efd483"/>
+		<driver status="good"/>
+	</game>
+	<game name="smgp2">
+		<description>Ayrton Senna's Super Monaco GP II (Euro, Bra, Kor)</description>
+		<year>1992</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="ayrton senna's super monaco gp ii (europe).bin" size="524288" crc="e890331d"/>
+		<driver status="good"/>
+	</game>
+	<game name="aztecadv">
+		<description>Aztec Adventure - The Golden Road to Paradise (Euro, USA) ~ Nazca '88 - The Golden Road to Paradise (Jpn)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-11121.ic1" size="131072" crc="ff614eb3"/>
+		<driver status="good"/>
+	</game>
+	<game name="backtof2">
+		<description>Back to the Future Part II (Euro, Bra)</description>
+		<year>1990</year>
+		<manufacturer>Image Works</manufacturer>
+		<rom name="back to the future part ii (europe).bin" size="262144" crc="e5ff50d8"/>
+		<driver status="good"/>
+	</game>
+	<game name="backtof3">
+		<description>Back to the Future Part III (Euro)</description>
+		<year>1992</year>
+		<manufacturer>Image Works</manufacturer>
+		<rom name="back to the future part iii (europe).bin" size="262144" crc="2d48c1d3"/>
+		<driver status="good"/>
+	</game>
+	<game name="badapple">
+		<description>Bad Apple (HB, Tech-Demo) [Homebrew]</description>
+		<year>2017</year>
+		<manufacturer>SMS Power!</manufacturer>
+		<rom name="bad apple v100.sms" size="4194304" crc="38434560"/>
+		<driver status="good"/>
+	</game>
+	<game name="bakubaku">
+		<description>Baku Baku Animal (Bra)</description>
+		<year>1996</year>
+		<manufacturer>Tec Toy</manufacturer>
+		<rom name="baku baku animal (brazil).bin" size="262144" crc="35d84dc2"/>
+		<driver status="good"/>
+	</game>
+	<game name="balbalok">
+		<description>Baluba Balok (HB) [Homebrew]</description>
+		<year>2017</year>
+		<manufacturer>MikGames</manufacturer>
+		<rom name="baluba_balok.sms" size="32768" crc="4f8e512c"/>
+		<driver status="good"/>
+	</game>
+	<game name="bankp">
+		<description>Bank Panic (Euro)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-12554.ic1" size="32768" crc="655fb1f4"/>
+		<driver status="good"/>
+	</game>
+	<game name="bankpc" cloneof="bankp" romof="bankp">
+		<description>Bank Panic (Euro, Sega Card)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-12554.ic1" merge="mpr-12554.ic1" size="32768" crc="655fb1f4"/>
+		<driver status="good"/>
+	</game>
+	<game name="baraburu10">
+		<description>Bara Buruu (HB, v1.0) [Homebrew]</description>
+		<year>2016</year>
+		<manufacturer>Kagesan</manufacturer>
+		<rom name="BaraBuruu-SMS-1.00.sms" size="131072" crc="43e39aa4"/>
+		<driver status="good"/>
+	</game>
+	<game name="basketn">
+		<description>Basket Ball Nightmare (Euro, Bra)</description>
+		<year>1989</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-12728.ic1" size="262144" crc="0df8597f"/>
+		<driver status="good"/>
+	</game>
+	<game name="batmanrn">
+		<description>Batman Returns (Euro, Bra)</description>
+		<year>1993</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="batman returns (europe).bin" size="262144" crc="b154ec38"/>
+		<driver status="good"/>
+	</game>
+	<game name="battleor">
+		<description>Battle Out Run (Euro, Bra)</description>
+		<year>1989</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="battle out run (europe).bin" size="262144" crc="c19430ce"/>
+		<driver status="good"/>
+	</game>
+	<game name="battleorfm" cloneof="battleor" romof="battleor">
+		<description>Battle Out Run (FM Mod) [YM2413 FM sound chip supported]</description>
+		<year>2018</year>
+		<manufacturer>Sega - SMS Power!</manufacturer>
+		<rom name="battle out run (fm mod).sms" size="262144" crc="7c849999"/>
+		<driver status="good"/>
+	</game>
+	<game name="bmaniacs">
+		<description>Battlemaniacs (Bra)</description>
+		<year>1994</year>
+		<manufacturer>Tec Toy</manufacturer>
+		<rom name="battlemaniacs (brazil).bin" size="262144" crc="1cbb7bf1"/>
+		<driver status="good"/>
+	</game>
+	<game name="blackblt">
+		<description>Black Belt (Euro, USA)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="black belt (usa, europe).bin" size="131072" crc="da3a2f57"/>
+		<driver status="good"/>
+	</game>
+	<game name="bladeag1" cloneof="bladeag" romof="bladeag">
+		<description>Blade Eagle (USA, Prototype)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="blade eagle (world) (beta).bin" size="262144" crc="58d5fc48"/>
+		<driver status="good"/>
+	</game>
+	<game name="bladeag">
+		<description>Blade Eagle (World)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-11421.ic1" size="262144" crc="8ecd201c"/>
+		<driver status="good"/>
+	</game>
+	<game name="blockhol">
+		<description>Block Hole (Kor)</description>
+		<year>1990</year>
+		<manufacturer>Zemina</manufacturer>
+		<rom name="block hole (kr).sms" size="32768" crc="643b6b76"/>
+		<driver status="good"/>
+	</game>
+	<game name="bombraid">
+		<description>Bomber Raid (World)</description>
+		<year>1989</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-12043f.ic1" size="262144" crc="3084cf11"/>
+		<driver status="good"/>
+	</game>
+	<game name="bnzabros">
+		<description>Bonanza Bros. (Euro, Bra)</description>
+		<year>1991</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="bonanza bros. (europe).bin" size="262144" crc="caea8002"/>
+		<driver status="good"/>
+	</game>
+	<game name="dracula">
+		<description>Bram Stoker's Dracula (Euro)</description>
+		<year>1993</year>
+		<manufacturer>Sony Imagesoft</manufacturer>
+		<rom name="bram stoker's dracula (europe).bin" size="262144" crc="1b10a951"/>
+		<driver status="good"/>
+	</game>
+	<game name="brucelee10">
+		<description>Bruce Lee (HB, v1.0) [Homebrew]</description>
+		<year>2015</year>
+		<manufacturer>Kagesan</manufacturer>
+		<rom name="BruceLee-SMS-1.00.sms" size="131072" crc="37e27a38"/>
+		<driver status="good"/>
+	</game>
+	<game name="bublbobl">
+		<description>Bubble Bobble (Euro, Bra)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-14177-f.ic1" size="262144" crc="e843ba7e"/>
+		<driver status="good"/>
+	</game>
+	<game name="bublbokc" cloneof="bublbobl" romof="bublbobl">
+		<description>Bubble Bobble (Kor, Clover)</description>
+		<year>1990</year>
+		<manufacturer>Clover</manufacturer>
+		<rom name="bobble bobble [clover] (kr).bin" size="32768" crc="25eb9f80"/>
+		<driver status="good"/>
+	</game>
+	<game name="bublboky" cloneof="bublbobl" romof="bublbobl">
+		<description>Bubble Bobble (Kor, YM Soft)</description>
+		<year>1990</year>
+		<manufacturer>YM Soft</manufacturer>
+		<rom name="power boggle boggle (kr).bin" size="32768" crc="6d309ac5"/>
+		<driver status="good"/>
+	</game>
+	<game name="buggyrun">
+		<description>Buggy Run (Euro, Bra)</description>
+		<year>1993</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-15984 w06.ic1" size="524288" crc="b0fc4577"/>
+		<driver status="good"/>
+	</game>
+	<game name="cso">
+		<description>C_So! (Kor)</description>
+		<year>198?</year>
+		<manufacturer>Joy Soft</manufacturer>
+		<rom name="c_so! [msx] (kr).bin" size="32768" crc="0918fba0"/>
+		<driver status="good"/>
+	</game>
+	<game name="calgames">
+		<description>California Games (Euro, USA, Bra)</description>
+		<year>1989</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-12342f.ic1" size="262144" crc="ac6009a7"/>
+		<driver status="good"/>
+	</game>
+	<game name="calgame2b" cloneof="calgame2" romof="calgame2">
+		<description>California Games II (Bra, Kor)</description>
+		<year>1993</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="california games ii (brazil, korea).bin" size="262144" crc="45c50294"/>
+		<driver status="good"/>
+	</game>
+	<game name="calgame2">
+		<description>California Games II (Euro)</description>
+		<year>1993</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-15643-f.ic1" size="262144" crc="c0e25d62"/>
+		<driver status="good"/>
+	</game>
+	<game name="captsilv">
+		<description>Captain Silver (Euro, Jpn)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-11457f.ic1" size="262144" crc="a4852757"/>
+		<driver status="good"/>
+	</game>
+	<game name="captsilvu" cloneof="captsilv" romof="captsilv">
+		<description>Captain Silver (USA)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="captain silver (usa).bin" size="131072" crc="b81f6fa5"/>
+		<driver status="good"/>
+	</game>
+	<game name="casino">
+		<description>Casino Games (Euro, USA)</description>
+		<year>1989</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-13167.ic1" size="262144" crc="3cff6e80"/>
+		<driver status="good"/>
+	</game>
+	<game name="castelo">
+		<description>Castelo Ra-Tim-Bum (Bra)</description>
+		<year>1997</year>
+		<manufacturer>Tec Toy</manufacturer>
+		<rom name="castelo ra-tim-bum (brazil).bin" size="524288" crc="31ffd7c3"/>
+		<driver status="good"/>
+	</game>
+	<game name="castlill">
+		<description>Castle of Illusion Starring Mickey Mouse (Euro, Bra)</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-13584a.ic1" size="262144" crc="953f42e1"/>
+		<driver status="good"/>
+	</game>
+	<game name="castlillu" cloneof="castlill" romof="castlill">
+		<description>Castle of Illusion Starring Mickey Mouse (USA)</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="castle of illusion starring mickey mouse (usa).bin" size="262144" crc="b9db4282"/>
+		<driver status="good"/>
+	</game>
+	<game name="castlills" cloneof="castlill" romof="castlill">
+		<description>Castle of Illusion Starring Mickey Mouse (USA, Display Unit Sample)</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="castle of illusion - starring mickey mouse (unknown) (sample).bin" size="32768" crc="bd610939"/>
+		<driver status="good"/>
+	</game>
+	<game name="champeur">
+		<description>Champions of Europe (Euro, Bra)</description>
+		<year>1992</year>
+		<manufacturer>TecMagik</manufacturer>
+		<rom name="mpr-14689.ic1" size="262144" crc="23163a12"/>
+		<driver status="good"/>
+	</game>
+	<game name="champhck">
+		<description>Championship Hockey (Euro)</description>
+		<year>1992</year>
+		<manufacturer>U.S. Gold</manufacturer>
+		<rom name="championship hockey (europe).bin" size="262144" crc="7e5839a0"/>
+		<driver status="good"/>
+	</game>
+	<game name="chapolim" cloneof="ghosth" romof="ghosth">
+		<description>Chapolim x Dracula - Um Duelo Assustador (Bra)</description>
+		<year>1990</year>
+		<manufacturer>Tec Toy</manufacturer>
+		<rom name="chapolim x dracula - um duelo assustador (brazil).bin" size="131072" crc="492c7c6e"/>
+		<driver status="good"/>
+	</game>
+	<game name="cheese">
+		<description>Cheese Cat-astrophe Starring Speedy Gonzales (Euro, Bra)</description>
+		<year>1995</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="cheese cat-astrophe starring speedy gonzales (europe) (en,fr,de,es).bin" size="524288" crc="46340c41"/>
+		<driver status="good"/>
+	</game>
+	<game name="choplift">
+		<description>Choplifter (Euro, USA, Bra)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-10149 w04.ic1" size="131072" crc="4a21c15f"/>
+		<driver status="good"/>
+	</game>
+	<game name="chopliftj" cloneof="choplift" romof="choplift">
+		<description>Choplifter (Jpn, Prototype)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="choplifter (japan) (proto).bin" size="131072" crc="16ec3575"/>
+		<driver status="good"/>
+	</game>
+	<game name="chopliftp" cloneof="choplift" romof="choplift">
+		<description>Choplifter (USA, Prototype)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="choplifter [proto].bin" size="131072" crc="fd981232"/>
+		<driver status="good"/>
+	</game>
+	<game name="borgman" cloneof="cyborgh" romof="cyborgh">
+		<description>Chouon Senshi Borgman (Jpn)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="chouon senshi borgman (japan).bin" size="131072" crc="e421e466"/>
+		<driver status="good"/>
+	</game>
+	<game name="borgmanp" cloneof="cyborgh" romof="cyborgh">
+		<description>Chouon Senshi Borgman (Jpn, Prototype)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="chouon senshi borgman [proto] (jp).bin" size="131072" crc="86f49ae9"/>
+		<driver status="good"/>
+	</game>
+	<game name="chuckrck">
+		<description>Chuck Rock (Euro, Bra)</description>
+		<year>1992</year>
+		<manufacturer>Virgin Interactive</manufacturer>
+		<rom name="chuck rock (europe).bin" size="524288" crc="dd0e2927"/>
+		<driver status="good"/>
+	</game>
+	<game name="chukrck2b" cloneof="chukrck2" romof="chukrck2">
+		<description>Chuck Rock II - Son of Chuck (Bra)</description>
+		<year>1993</year>
+		<manufacturer>Tec Toy</manufacturer>
+		<rom name="chuck rock ii - son of chuck (brazil).bin" size="524288" crc="87783c04"/>
+		<driver status="good"/>
+	</game>
+	<game name="chukrck2">
+		<description>Chuck Rock II - Son of Chuck (Euro)</description>
+		<year>1993</year>
+		<manufacturer>Core Design</manufacturer>
+		<rom name="chuck rock ii - son of chuck (europe).bin" size="524288" crc="c30e690a"/>
+		<driver status="good"/>
+	</game>
+	<game name="cloudmst">
+		<description>Cloud Master (Euro, USA)</description>
+		<year>1989</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="cloud master (usa, europe).bin" size="262144" crc="e7f62e6d"/>
+		<driver status="good"/>
+	</game>
+	<game name="colors">
+		<description>Color and Switch Test (v1.3)</description>
+		<year>19??</year>
+		<manufacturer>Unknown</manufacturer>
+		<rom name="color and switch test (unknown) (v1.3).bin" size="32768" crc="7253c3ec"/>
+		<driver status="good"/>
+	</game>
+	<game name="columns">
+		<description>Columns (Euro, USA, Bra, Kor)</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-13293.ic1" size="131072" crc="665fda92"/>
+		<driver status="good"/>
+	</game>
+	<game name="columnsp" cloneof="columns" romof="columns">
+		<description>Columns (Prototype)</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="columns [proto].bin" size="131072" crc="3fb40043"/>
+		<driver status="good"/>
+	</game>
+	<game name="comicbak">
+		<description>Comic Bakery (Kor)</description>
+		<year>19??</year>
+		<manufacturer>Unknown</manufacturer>
+		<rom name="comic bakery (kor).bin" size="32768" crc="7778e256"/>
+		<driver status="good"/>
+	</game>
+	<game name="comical">
+		<description>Comical Machine Gun Joe (Jpn, MyCard)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="comical machine gun joe (japan).bin" size="32768" crc="9d549e08"/>
+		<driver status="good"/>
+	</game>
+	<game name="comicalk" cloneof="comical" romof="comical">
+		<description>Comical Machine Gun Joe (Kor)</description>
+		<year>198?</year>
+		<manufacturer>Samsung</manufacturer>
+		<rom name="comical machine gun joe (kr).bin" size="32768" crc="643f6bfc"/>
+		<driver status="good"/>
+	</game>
+	<game name="comicaltw" cloneof="comical" romof="comical">
+		<description>Comical Machine Gun Joe (Tw)</description>
+		<year>1986?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="comical machine gun joe (tw).bin" size="32768" crc="84ad5ae4"/>
+		<driver status="good"/>
+	</game>
+	<game name="coolspot">
+		<description>Cool Spot (Euro)</description>
+		<year>1993</year>
+		<manufacturer>Virgin Interactive</manufacturer>
+		<rom name="cool spot (europe).bin" size="262144" crc="13ac9023"/>
+		<driver status="good"/>
+	</game>
+	<game name="cosmic">
+		<description>Cosmic Spacehead (Euro)</description>
+		<year>1993</year>
+		<manufacturer>Codemasters</manufacturer>
+		<rom name="cosmic spacehead (europe) (en,fr,de,es).bin" size="262144" crc="29822980"/>
+		<driver status="good"/>
+	</game>
+	<game name="cyborgh">
+		<description>Cyborg Hunter (Euro, USA, Bra)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="cyborg hunter (usa, europe).bin" size="131072" crc="908e7524"/>
+		<driver status="good"/>
+	</game>
+	<game name="cyborgz">
+		<description>Cyborg Z (Kor)</description>
+		<year>1991</year>
+		<manufacturer>Zemina</manufacturer>
+		<rom name="cyborg z (kr).bin" size="131072" crc="77efe84a"/>
+		<driver status="good"/>
+	</game>
+	<game name="daffy">
+		<description>Daffy Duck in Hollywood (Euro, Bra)</description>
+		<year>1994</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="daffy duck in hollywood (europe) (en,fr,de,es,it).bin" size="524288" crc="71abef27"/>
+		<driver status="good"/>
+	</game>
+	<game name="dallye">
+		<description>Dallyeora Pigu-Wang (Kor)</description>
+		<year>1995</year>
+		<manufacturer>Game Line</manufacturer>
+		<rom name="dallyeora pigu-wang (korea) (unl).bin" size="442368" crc="89b79e77"/>
+		<driver status="good"/>
+	</game>
+	<game name="danan">
+		<description>Danan: The Jungle Fighter (Euro, Bra)</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="danan - the jungle fighter (europe).bin" size="262144" crc="ae4a28d7"/>
+		<driver status="good"/>
+	</game>
+	<game name="darc10">
+		<description>DARC (HB, v1.0) [Homebrew, Turn ON 'FM Emulation' in Dips for music/sfx!]</description>
+		<year>2015</year>
+		<manufacturer>Zipper</manufacturer>
+		<rom name="DARC.sms" size="524288" crc="61b3c657"/>
+		<driver status="good"/>
+	</game>
+	<game name="datastorm10">
+		<description>Data Storm (HB, v1.0) [Homebrew]</description>
+		<year>2016</year>
+		<manufacturer>haroldoop</manufacturer>
+		<rom name="datastorm.sms" size="32768" crc="37b775d6"/>
+		<driver status="good"/>
+	</game>
+	<game name="deadang">
+		<description>Dead Angle (Euro, USA)</description>
+		<year>1989</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-12654f.ic1" size="262144" crc="e2f7193e"/>
+		<driver status="good"/>
+	</game>
+	<game name="deepduck">
+		<description>Deep Duck Trouble Starring Donald Duck (Euro, Bra)</description>
+		<year>1993</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="deep duck trouble starring donald duck (europe).bin" size="524288" crc="42fc3a6e"/>
+		<driver status="good"/>
+	</game>
+	<game name="desert">
+		<description>Desert Speedtrap Starring Road Runner and Wile E. Coyote (Euro, Bra)</description>
+		<year>1993</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="desert speedtrap starring road runner and wile e. coyote (europe) (en,fr,de,es,it).bin" size="262144" crc="b137007a"/>
+		<driver status="good"/>
+	</game>
+	<game name="dstrike">
+		<description>Desert Strike (Euro)</description>
+		<year>1992</year>
+		<manufacturer>Domark</manufacturer>
+		<rom name="desert strike (europe) (en,fr,de,es).bin" size="524288" crc="6c1433f9"/>
+		<driver status="good"/>
+	</game>
+	<game name="dicktr">
+		<description>Dick Tracy (Euro, USA, Bra)</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-13644.ic1" size="262144" crc="f6fab48d"/>
+		<driver status="good"/>
+	</game>
+	<game name="dinobash">
+		<description>Dinobasher Starring Bignose the Caveman (Euro, Prototype)</description>
+		<year>1993</year>
+		<manufacturer>Codemasters</manufacturer>
+		<rom name="dinobasher starring bignose the caveman (europe) (proto).bin" size="262144" crc="ea5c3a6f"/>
+		<driver status="good"/>
+	</game>
+	<game name="aladdin">
+		<description>Disney's Aladdin (Euro, Bra, Kor)</description>
+		<year>1994</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="aladdin (europe).bin" size="524288" crc="c8718d40"/>
+		<driver status="good"/>
+	</game>
+	<game name="ariel">
+		<description>Disney's Ariel The Little Mermaid (Bra)</description>
+		<year>1997</year>
+		<manufacturer>Tec Toy</manufacturer>
+		<rom name="ariel - the little mermaid (brazil).bin" size="262144" crc="f4b3a7bd"/>
+		<driver status="good"/>
+	</game>
+	<game name="bonkers">
+		<description>Disney's Bonkers Wax Up! (Bra)</description>
+		<year>1994</year>
+		<manufacturer>Tec Toy</manufacturer>
+		<rom name="bonkers wax up! (brazil).bin" size="524288" crc="b3768a7a"/>
+		<driver status="good"/>
+	</game>
+	<game name="lionking">
+		<description>Disney's The Lion King (Euro, Bra)</description>
+		<year>1994</year>
+		<manufacturer>Virgin Interactive</manufacturer>
+		<rom name="lion king, the (europe).bin" size="524288" crc="c352c7eb"/>
+		<driver status="good"/>
+	</game>
+	<game name="dokidoki" cloneof="pengland" romof="pengland">
+		<description>Doki Doki Penguin Land - Uchuu Daibouken (Jpn)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="doki doki penguin land - uchuu daibouken (japan).bin" size="131072" crc="2bcdb8fa"/>
+		<driver status="good"/>
+	</game>
+	<game name="dokidokip" cloneof="pengland" romof="pengland">
+		<description>Doki Doki Penguin Land - Uchuu Daibouken (Jpn, Prototype)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="doki doki penguin land - uchuu daibouken (japan, proto).bin" size="131072" crc="56bd2455"/>
+		<driver status="good"/>
+	</game>
+	<game name="ddragonk" cloneof="ddragon" romof="ddragon">
+		<description>Double Dragon (Kor)</description>
+		<year>198?</year>
+		<manufacturer>Samsung</manufacturer>
+		<rom name="double dragon (kr).bin" size="262144" crc="aeacfca7"/>
+		<driver status="good"/>
+	</game>
+	<game name="ddragon">
+		<description>Double Dragon (World)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-11831 t03.ic1" size="262144" crc="a55d89f3"/>
+		<driver status="good"/>
+	</game>
+	<game name="doublhwk">
+		<description>Double Hawk (Euro)</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="double hawk (europe).bin" size="262144" crc="8370f6cd"/>
+		<driver status="good"/>
+	</game>
+	<game name="doublhwkp" cloneof="doublhwk" romof="doublhwk">
+		<description>Double Hawk (Euro, Prototype)</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="double hawk (europe) (beta).bin" size="262144" crc="f76d5cee"/>
+		<driver status="good"/>
+	</game>
+	<game name="doubltgt" cloneof="quartet" romof="quartet">
+		<description>Double Target - Cynthia no Nemuri (Jpn)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="double target - cynthia no nemuri (japan).bin" size="131072" crc="52b83072"/>
+		<driver status="good"/>
+	</game>
+	<game name="drhello">
+		<description>Dr. HELLO (Kor)</description>
+		<year>19??</year>
+		<manufacturer>Unknown</manufacturer>
+		<rom name="dr. hello (k).bin" size="32768" crc="16537865"/>
+		<driver status="good"/>
+	</game>
+	<game name="drrobotn">
+		<description>Dr. Robotnik's Mean Bean Machine (Euro, Bra)</description>
+		<year>1993</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="dr. robotnik's mean bean machine (europe).bin" size="262144" crc="6c696221"/>
+		<driver status="good"/>
+	</game>
+	<game name="dragon">
+		<description>Dragon - The Bruce Lee Story (Euro)</description>
+		<year>1994</year>
+		<manufacturer>Virgin Interactive</manufacturer>
+		<rom name="dragon - the bruce lee story (europe).bin" size="262144" crc="c88a5064"/>
+		<driver status="good"/>
+	</game>
+	<game name="dcrystal">
+		<description>Dragon Crystal (Euro, Bra)</description>
+		<year>1991</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="dragon crystal (europe).bin" size="131072" crc="9549fce4"/>
+		<driver status="good"/>
+	</game>
+	<game name="dnukem">
+		<description>Duke Nukem (HB, Hack v0.93) [Homebrew]</description>
+		<year>2017</year>
+		<manufacturer>revo-tibone-calindro</manufacturer>
+		<rom name="duke nukem (2017)(revo-tibone-calindro).sms" size="524288" crc="a16dba3b"/>
+		<driver status="good"/>
+	</game>
+	<game name="dynduke">
+		<description>Dynamite Duke (Euro, Bra)</description>
+		<year>1991</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="dynamite duke (europe).bin" size="262144" crc="07306947"/>
+		<driver status="good"/>
+	</game>
+	<game name="ddux">
+		<description>Dynamite Dux (Euro, Bra)</description>
+		<year>1989</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="dynamite dux (europe).bin" size="262144" crc="0e1cc1e0"/>
+		<driver status="good"/>
+	</game>
+	<game name="dduxfm" cloneof="ddux" romof="ddux">
+		<description>Dynamite Dux (FM Mod) [YM2413 FM sound chip supported]</description>
+		<year>2018</year>
+		<manufacturer>Sega - fatnick</manufacturer>
+		<rom name="dynamite dux (fm-mod).sms" size="262144" crc="26dfc995"/>
+		<driver status="good"/>
+	</game>
+	<game name="dhead">
+		<description>Dynamite Headdy (Bra)</description>
+		<year>1995</year>
+		<manufacturer>Tec Toy</manufacturer>
+		<rom name="dynamite headdy (brazil).bin" size="524288" crc="7db5b0fa"/>
+		<driver status="good"/>
+	</game>
+	<game name="eswatc1" cloneof="eswatc" romof="eswatc">
+		<description>E-SWAT - City Under Siege (Euro, USA, Bra, Hard Version)</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="e-swat - city under siege (usa, europe) (hard version).bin" size="262144" crc="c10fce39"/>
+		<driver status="good"/>
+	</game>
+	<game name="eswatc">
+		<description>E-SWAT - City Under Siege (Euro, USA, Easy Version)</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="e-swat - city under siege (usa, europe) (easy version).bin" size="262144" crc="c4bb1676"/>
+		<driver status="good"/>
+	</game>
+	<game name="exainnov">
+		<description>E.I. - Exa Innova (Kor)</description>
+		<year>19??</year>
+		<manufacturer>HiCom</manufacturer>
+		<rom name="e.i. - exa innova (kr).sms" size="32768" crc="dd74bcf1"/>
+		<driver status="good"/>
+	</game>
+	<game name="eagles5">
+		<description>Eagles 5 (Kor)</description>
+		<year>1990</year>
+		<manufacturer>Zemina</manufacturer>
+		<rom name="eagles 5 (kr).bin" size="32768" crc="f06f2ccb"/>
+		<driver status="good"/>
+	</game>
+	<game name="ejim">
+		<description>Earthworm Jim (Bra)</description>
+		<year>1995</year>
+		<manufacturer>Tec Toy</manufacturer>
+		<rom name="earthworm jim (brazil).bin" size="524288" crc="c4d5efc5"/>
+		<driver status="good"/>
+	</game>
+	<game name="ecco2">
+		<description>Ecco - The Tides of Time (Bra)</description>
+		<year>1996</year>
+		<manufacturer>Tec Toy</manufacturer>
+		<rom name="ecco - the tides of time (brazil).bin" size="524288" crc="7c28703a"/>
+		<driver status="good"/>
+	</game>
+	<game name="ecco">
+		<description>Ecco the Dolphin (Euro, Bra)</description>
+		<year>1993</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="ecco the dolphin (europe).bin" size="524288" crc="6687fab9"/>
+		<driver status="good"/>
+	</game>
+	<game name="enduro">
+		<description>Enduro Racer (Euro, USA, Bra)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-10843 w28.ic1" size="131072" crc="00e73541"/>
+		<driver status="good"/>
+	</game>
+	<game name="enduroj" cloneof="enduro" romof="enduro">
+		<description>Enduro Racer (Jpn)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-10745.ic1" size="262144" crc="5d5c50b3"/>
+		<driver status="good"/>
+	</game>
+	<game name="f1spirit">
+		<description>F-1 Spirit - The way to Formula-1 (Kor)</description>
+		<year>1987</year>
+		<manufacturer>Zemina</manufacturer>
+		<rom name="f-1 spirit - the way to formula-1 (kr)" size="131072" crc="06965ed9"/>
+		<driver status="good"/>
+	</game>
+	<game name="f16fight">
+		<description>F-16 Fighter (Euro, USA)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-12643.ic1" size="32768" crc="eaebf323"/>
+		<driver status="good"/>
+	</game>
+	<game name="f16fightc" cloneof="f16fight" romof="f16fight">
+		<description>F-16 Fighter (Euro, USA, Sega Card)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="f-16 fighter (euro, usa).bin" size="32768" crc="eaebf323"/>
+		<driver status="good"/>
+	</game>
+	<game name="f16falcjc" cloneof="f16fight" romof="f16fight">
+		<description>F-16 Fighting Falcon (Jpn, MyCard)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="f-16 fighting falcon (japan).bin" size="32768" crc="7ce06fce"/>
+		<driver status="good"/>
+	</game>
+	<game name="f16falctw" cloneof="f16fight" romof="f16fight">
+		<description>F-16 Fighting Falcon (Tw)</description>
+		<year>1985?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="f-16 fighting falcon (tw).bin" size="32768" crc="c4c53226"/>
+		<driver status="good"/>
+	</game>
+	<game name="f16falc" cloneof="f16fight" romof="f16fight">
+		<description>F-16 Fighting Falcon (USA)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="f-16 fighting falcon (usa).bin" size="32768" crc="184c23b7"/>
+		<driver status="good"/>
+	</game>
+	<game name="f16falcc" cloneof="f16fight" romof="f16fight">
+		<description>F-16 Fighting Falcon (USA, Sega Card for Display Unit)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="f-16 fighting falcon (usa).bin" size="32768" crc="184c23b7"/>
+		<driver status="good"/>
+	</game>
+	<game name="f1">
+		<description>F1 (Euro, Bra)</description>
+		<year>1993</year>
+		<manufacturer>Domark</manufacturer>
+		<rom name="mpr-15830-f.ic1" size="262144" crc="ec788661"/>
+		<driver status="good"/>
+	</game>
+	<game name="fatetris">
+		<description>FA Tetris (Kor)</description>
+		<year>1989</year>
+		<manufacturer>FA Soft</manufacturer>
+		<rom name="fa tetris (kr).bin" size="32768" crc="17ab6883"/>
+		<driver status="good"/>
+	</game>
+	<game name="family" cloneof="parlour" romof="parlour">
+		<description>Family Games (Jpn)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-11276.ic1" size="131072" crc="7abc70e9"/>
+		<driver status="good"/>
+	</game>
+	<game name="fantdizz">
+		<description>Fantastic Dizzy (Euro)</description>
+		<year>1993</year>
+		<manufacturer>Codemasters</manufacturer>
+		<rom name="fantastic dizzy (europe) (en,fr,de,es,it).bin" size="262144" crc="b9664ae1"/>
+		<driver status="good"/>
+	</game>
+	<game name="fantzonej" cloneof="fantzone" romof="fantzone">
+		<description>Fantasy Zone (Jpn, v0)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-7751.ic1" size="131072" crc="0ffbcaa3"/>
+		<driver status="good"/>
+	</game>
+	<game name="fantzonetw" cloneof="fantzone" romof="fantzone">
+		<description>Fantasy Zone (Tw)</description>
+		<year>1986?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="fantasy zone (tw).bin" size="131072" crc="5fd48352"/>
+		<driver status="good"/>
+	</game>
+	<game name="fantzone1" cloneof="fantzone" romof="fantzone">
+		<description>Fantasy Zone (World, v1, Prototype)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="fantasy zone (world) (v1.1) (beta).bin" size="131072" crc="f46264fe"/>
+		<driver status="good"/>
+	</game>
+	<game name="fantzone">
+		<description>Fantasy Zone (World, v2)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-10118 w01.ic1" size="131072" crc="65d7e4e0"/>
+		<driver status="good"/>
+	</game>
+	<game name="fantzonm">
+		<description>Fantasy Zone - The Maze (Euro, USA)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="fantasy zone - the maze (usa, europe).bin" size="131072" crc="d29889ad"/>
+		<driver status="good"/>
+	</game>
+	<game name="fantzon2j" cloneof="fantzon2" romof="fantzon2">
+		<description>Fantasy Zone II - Opa Opa no Namida (Jpn)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-10847.ic1" size="262144" crc="c722fb42"/>
+		<driver status="good"/>
+	</game>
+	<game name="fantzon2">
+		<description>Fantasy Zone II - The Tears of Opa-Opa (Euro, USA, Bra)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-10848 w05.ic1" size="262144" crc="b8b141f9"/>
+		<driver status="good"/>
+	</game>
+	<game name="felipe" cloneof="teddyboy" romof="teddyboy">
+		<description>Felipe em Acao (Bra)</description>
+		<year>1999</year>
+		<manufacturer>Tec Toy</manufacturer>
+		<rom name="felipe em acao (b).bin" size="32768" crc="ccb2cab4"/>
+		<driver status="good"/>
+	</game>
+	<game name="ferias">
+		<description>Ferias Frustradas do Pica-Pau (Bra)</description>
+		<year>1996</year>
+		<manufacturer>Tec Toy</manufacturer>
+		<rom name="ferias frustradas do pica pau (brazil).bin" size="524288" crc="bf6c2e37"/>
+		<driver status="good"/>
+	</game>
+	<game name="fifa">
+		<description>FIFA International Soccer (Bra)</description>
+		<year>1994</year>
+		<manufacturer>Tec Toy</manufacturer>
+		<rom name="fifa international soccer (brazil) (en,es,pt).bin" size="524288" crc="9bb3b5f9"/>
+		<driver status="good"/>
+	</game>
+	<game name="finalbb" cloneof="bublbobl" romof="bublbobl">
+		<description>Final Bubble Bobble (Jpn)</description>
+		<year>1988</year>
+		<manufacturer>Sega </manufacturer>
+		<rom name="final bubble bobble (japan).bin" size="262144" crc="3ebb7457"/>
+		<driver status="good"/>
+	</game>
+	<game name="fireforg">
+		<description>Fire and Forget II (Euro)</description>
+		<year>1990</year>
+		<manufacturer>Titus Arcade</manufacturer>
+		<rom name="fire and forget ii (europe).bin" size="262144" crc="f6ad7b1d"/>
+		<driver status="good"/>
+	</game>
+	<game name="fireice">
+		<description>Fire and Ice (Bra)</description>
+		<year>1993</year>
+		<manufacturer>Tec Toy</manufacturer>
+		<rom name="fire and ice (brazil).bin" size="262144" crc="8b24a640"/>
+		<driver status="good"/>
+	</game>
+	<game name="fpoint">
+		<description>Flashpoint (Kor)</description>
+		<year>199?</year>
+		<manufacturer>Zemina</manufacturer>
+		<rom name="flashpoint (kr).bin" size="32768" crc="61e8806f"/>
+		<driver status="good"/>
+	</game>
+	<game name="fpigarus">
+		<description>Flight of Pigarus (HB, v1.0) [Homebrew]</description>
+		<year>2018</year>
+		<manufacturer>Kagesan</manufacturer>
+		<rom name="FlightOfPigarus-SMS-1.00.sms" size="262144" crc="838574d1"/>
+		<driver status="good"/>
+	</game>
+	<game name="forgottn">
+		<description>Forgotten Worlds (Euro, Bra, Aus)</description>
+		<year>1991</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-13706-f.ic1" size="262144" crc="38c53916"/>
+		<driver status="good"/>
+	</game>
+	<game name="pitpot">
+		<description>Fushigi no Oshiro Pit Pot (Jpn, MyCard)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="fushigi no oshiro pit pot (japan).bin" size="32768" crc="e6795c53"/>
+		<driver status="good"/>
+	</game>
+	<game name="pitpot1" cloneof="pitpot" romof="pitpot">
+		<description>Fushigi no Oshiro Pit Pot (Jpn, Pirate?)</description>
+		<year>1985</year>
+		<manufacturer>pirate</manufacturer>
+		<rom name="fushigi no oshiro pit pot [hack].bin" size="32768" crc="5d08e823"/>
+		<driver status="good"/>
+	</game>
+	<game name="gloc">
+		<description>G-LOC Air Battle (Euro, Bra, Kor)</description>
+		<year>1991</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="g-loc air battle (europe).bin" size="262144" crc="05cdc24e"/>
+		<driver status="good"/>
+	</game>
+	<game name="gaegujan">
+		<description>Gaegujangi Ggachi (Kor)</description>
+		<year>1993</year>
+		<manufacturer>HiCom</manufacturer>
+		<rom name="gaegujangi ggachi (korea) (unl).bin" size="524288" crc="8b40f6bf"/>
+		<driver status="good"/>
+	</game>
+	<game name="gground">
+		<description>Gain Ground (Euro, Bra)</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="gain ground (europe).bin" size="262144" crc="3ec5e627"/>
+		<driver status="good"/>
+	</game>
+	<game name="ggroundp" cloneof="gground" romof="gground">
+		<description>Gain Ground (Euro, Prototype)</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="gain ground [proto].bin" size="262144" crc="d40d03c7"/>
+		<driver status="good"/>
+	</game>
+	<game name="gboogers">
+		<description>Galactic Boogers (HB) [Homebrew]</description>
+		<year>2020</year>
+		<manufacturer>YETI</manufacturer>
+		<rom name="Galactic Boogers.sms" size="1048576" crc="b5dac318"/>
+		<driver status="good"/>
+	</game>
+	<game name="galactpr">
+		<description>Galactic Protector (Jpn)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-11385.ic1" size="131072" crc="a6fa42d0"/>
+		<driver status="good"/>
+	</game>
+	<game name="galaxian">
+		<description>Galaxian (Kor)</description>
+		<year>199?</year>
+		<manufacturer>HiCom</manufacturer>
+		<rom name="galaxian [kr].bin" size="32768" crc="577ec227"/>
+		<driver status="good"/>
+	</game>
+	<game name="gforce">
+		<description>Galaxy Force (Euro, Bra)</description>
+		<year>1989</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-12566a.ic2" size="524288" crc="a4ac35d8"/>
+		<driver status="good"/>
+	</game>
+	<game name="gforceu" cloneof="gforce" romof="gforce">
+		<description>Galaxy Force (USA)</description>
+		<year>1989</year>
+		<manufacturer>Activision</manufacturer>
+		<rom name="galaxy force (usa).bin" size="524288" crc="6c827520"/>
+		<driver status="good"/>
+	</game>
+	<game name="gamebox">
+		<description>Game Box Serie Esportes Radicais (Bra)</description>
+		<year>1989</year>
+		<manufacturer>Tec Toy</manufacturer>
+		<rom name="mpr-18796.ic1" size="262144" crc="1890f407"/>
+		<driver status="good"/>
+	</game>
+	<game name="robocop">
+		<description>Gangcheol RoboCop (Kor)</description>
+		<year>1992</year>
+		<manufacturer>Sieco</manufacturer>
+		<rom name="gangcheol robocop (kr).bin" size="65536" crc="ad522efd"/>
+		<driver status="good"/>
+	</game>
+	<game name="gangster">
+		<description>Gangster Town (Euro, USA, Bra) [Light Phaser game]</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-11049.ic1" size="131072" crc="5fc74d2a"/>
+		<driver status="good"/>
+	</game>
+	<game name="gauntlet">
+		<description>Gauntlet (Euro, Bra)</description>
+		<year>1990</year>
+		<manufacturer>U.S. Gold</manufacturer>
+		<rom name="gauntlet (europe).bin" size="131072" crc="d9190956"/>
+		<driver status="good"/>
+	</game>
+	<game name="punpun">
+		<description>Geki Oko PunPun Maru ((HB, v20151031b) [Homebrew]</description>
+		<year>2013</year>
+		<manufacturer>Future Driver</manufacturer>
+		<rom name="punpun_20151031b.sms" size="262144" crc="b35ebcdf"/>
+		<driver status="good"/>
+	</game>
+	<game name="georgeko">
+		<description>George Foreman's KO Boxing (Euro, Bra)</description>
+		<year>1992</year>
+		<manufacturer>Flying Edge</manufacturer>
+		<rom name="george foreman's ko boxing (europe).bin" size="262144" crc="a64898ce"/>
+		<driver status="good"/>
+	</game>
+	<game name="gerald" cloneof="teddyboy" romof="teddyboy">
+		<description>Geraldinho (Bra)</description>
+		<year>19??</year>
+		<manufacturer>Tec Toy</manufacturer>
+		<rom name="geraldinho (brazil).bin" size="32768" crc="956c416b"/>
+		<driver status="good"/>
+	</game>
+	<game name="ghosth">
+		<description>Ghost House (Euro, USA, Bra)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-12586.ic1" size="32768" crc="f1f8ff2d"/>
+		<driver status="good"/>
+	</game>
+	<game name="ghosthc" cloneof="ghosth" romof="ghosth">
+		<description>Ghost House (Euro, USA, Bra, Sega Card)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="ghost house (euro, usa, bra).bin" size="32768" crc="f1f8ff2d"/>
+		<driver status="good"/>
+	</game>
+	<game name="ghosthj" cloneof="ghosth" romof="ghosth">
+		<description>Ghost House (Jpn, MyCard)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="ghost house (japan).bin" size="32768" crc="c0f3ce7e"/>
+		<driver status="good"/>
+	</game>
+	<game name="ghosthj1" cloneof="ghosth" romof="ghosth">
+		<description>Ghost House (Jpn, Pirate?)</description>
+		<year>1986</year>
+		<manufacturer>pirate</manufacturer>
+		<rom name="ghost house (j) [hack].bin" size="32768" crc="dabcc054"/>
+		<driver status="good"/>
+	</game>
+	<game name="ghosthk" cloneof="ghosth" romof="ghosth">
+		<description>Ghost House (Kor)</description>
+		<year>198?</year>
+		<manufacturer>Samsung</manufacturer>
+		<rom name="ghost house (kr).bin" size="32768" crc="1203afc9"/>
+		<driver status="good"/>
+	</game>
+	<game name="ghosthcp" cloneof="ghosth" romof="ghosth">
+		<description>Ghost House (Sega Card, Prototype)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="ghost house (usa, europe) (beta).bin" size="32768" crc="c3e7c1ed"/>
+		<driver status="good"/>
+	</game>
+	<game name="ghostbst">
+		<description>Ghostbusters (Euro, USA, Kor)</description>
+		<year>1989</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-10516.ic1" size="131072" crc="1ddc3059"/>
+		<driver status="good"/>
+	</game>
+	<game name="ghouls">
+		<description>Ghouls'n Ghosts (Euro, USA, Bra)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="ghouls'n ghosts (usa, europe).bin" size="262144" crc="7a92eba6"/>
+		<driver status="good"/>
+	</game>
+	<game name="ghoulsd" cloneof="ghouls" romof="ghouls">
+		<description>Ghouls'n Ghosts (USA, Demo)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="ghouls'n ghosts [demo].bin" size="32768" crc="96ca6902"/>
+		<driver status="good"/>
+	</game>
+	<game name="globald">
+		<description>Global Defense (Euro, USA)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-11274.ic1" size="131072" crc="b746a6f5"/>
+		<driver status="good"/>
+	</game>
+	<game name="globaldp" cloneof="globald" romof="globald">
+		<description>Global Defense (Euro, USA, Prototype)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="global defense (usa, europe) (beta).bin" size="131072" crc="91a0fc4e"/>
+		<driver status="good"/>
+	</game>
+	<game name="dumpmats" cloneof="prowres" romof="prowres">
+		<description>Gokuaku Doumei Dump Matsumoto (Jpn)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="gokuaku doumei dump matsumoto (japan).bin" size="131072" crc="a249fa9d"/>
+		<driver status="good"/>
+	</game>
+	<game name="goldnaxe">
+		<description>Golden Axe (Euro, USA)</description>
+		<year>1989</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-13166.ic1" size="524288" crc="c08132fb"/>
+		<driver status="good"/>
+	</game>
+	<game name="gaxewarr">
+		<description>Golden Axe Warrior (Euro, USA, Bra)</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-13664-f.ic1" size="262144" crc="c7ded988"/>
+		<driver status="good"/>
+	</game>
+	<game name="golfaman">
+		<description>Golfamania (Euro, Bra)</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-13144.ic1" size="262144" crc="48651325"/>
+		<driver status="good"/>
+	</game>
+	<game name="golfamanp" cloneof="golfaman" romof="golfaman">
+		<description>Golfamania (Prototype)</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="golfamania (europe) (beta).bin" size="262144" crc="5dabfdc3"/>
+		<driver status="good"/>
+	</game>
+	<game name="golvell">
+		<description>Golvellius (Euro, USA)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-11935f.ic1" size="262144" crc="a51376fe"/>
+		<driver status="good"/>
+	</game>
+	<game name="gprider">
+		<description>GP Rider (Euro, Bra)</description>
+		<year>1993</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="gp rider (europe).bin" size="524288" crc="ec2da554"/>
+		<driver status="good"/>
+	</game>
+	<game name="greatbas">
+		<description>Great Baseball (Euro, USA, Bra)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-10415 w11.ic1" size="131072" crc="10ed6b57"/>
+		<driver status="good"/>
+	</game>
+	<game name="greatbasj" cloneof="greatbas" romof="greatbas">
+		<description>Great Baseball (Jpn, MyCard)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="great baseball (japan).bin" size="32768" crc="89e98a7c"/>
+		<driver status="good"/>
+	</game>
+	<game name="greatbasj1" cloneof="greatbas" romof="greatbas">
+		<description>Great Baseball (Jpn, Pirate?)</description>
+		<year>1985</year>
+		<manufacturer>pirate</manufacturer>
+		<rom name="great baseball (j) [hack].bin" size="32768" crc="c1e699db"/>
+		<driver status="good"/>
+	</game>
+	<game name="greatbsk">
+		<description>Great Basketball (World)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-11073.ic1" size="131072" crc="2ac001eb"/>
+		<driver status="good"/>
+	</game>
+	<game name="greatftb">
+		<description>Great Football (World)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-10576.ic1" size="131072" crc="2055825f"/>
+		<driver status="good"/>
+	</game>
+	<game name="greatglf">
+		<description>Great Golf (Euro, USA) ~ Masters Golf (Japan)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-11192 w36.ic1" size="131072" crc="98e4ae4a"/>
+		<driver status="good"/>
+	</game>
+	<game name="greatglf1" cloneof="greatglf" romof="greatglf">
+		<description>Great Golf (Euro, USA, v1.0)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="great golf (ue) (v1.0) [!].bin" size="131072" crc="c6611c84"/>
+		<driver status="good"/>
+	</game>
+	<game name="greatglj">
+		<description>Great Golf (Jpn)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="great golf (japan).bin" size="131072" crc="6586bd1f"/>
+		<driver status="good"/>
+	</game>
+	<game name="greatglk" cloneof="greatglj" romof="greatglj">
+		<description>Great Golf (Kor)</description>
+		<year>19??</year>
+		<manufacturer>Samsung?</manufacturer>
+		<rom name="great golf [jp] (kr).sms" size="131072" crc="5def1bf5"/>
+		<driver status="good"/>
+	</game>
+	<game name="greatglfp" cloneof="greatglf" romof="greatglf">
+		<description>Great Golf (Prototype)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="great golf (world) (beta).bin" size="131072" crc="4847bc91"/>
+		<driver status="good"/>
+	</game>
+	<game name="greatice">
+		<description>Great Ice Hockey (Jpn, USA)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-10389.ic1" size="65536" crc="0cb7e21f"/>
+		<driver status="good"/>
+	</game>
+	<game name="greatscr">
+		<description>Great Soccer (Euro)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="great soccer (europe).bin" size="32768" crc="0ed170c9"/>
+		<driver status="good"/>
+	</game>
+	<game name="greatscrc" cloneof="greatscr" romof="greatscr">
+		<description>Great Soccer (Euro, Sega Card)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="great soccer (europe).bin" merge="great soccer (europe).bin" size="32768" crc="0ed170c9"/>
+		<driver status="good"/>
+	</game>
+	<game name="greatscrj" cloneof="greatscr" romof="greatscr">
+		<description>Great Soccer (Jpn, MyCard)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="great soccer (japan).bin" size="32768" crc="2d7fd7ef"/>
+		<driver status="good"/>
+	</game>
+	<game name="greatscrtw" cloneof="greatscr" romof="greatscr">
+		<description>Great Soccer (Tw)</description>
+		<year>1985?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="great soccer (tw).bin" size="32768" crc="84665648"/>
+		<driver status="good"/>
+	</game>
+	<game name="greattns" cloneof="stennis" romof="stennis">
+		<description>Great Tennis (Jpn, MyCard)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="great tennis (japan).bin" size="32768" crc="95cbf3dd"/>
+		<driver status="good"/>
+	</game>
+	<game name="greatvol">
+		<description>Great Volleyball (Euro, USA, Bra)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="great volleyball (usa, europe).bin" size="131072" crc="8d43ea95"/>
+		<driver status="good"/>
+	</game>
+	<game name="greatvolj" cloneof="greatvol" romof="greatvol">
+		<description>Great Volleyball (Jpn)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="great volleyball (japan).bin" size="131072" crc="6819b0c0"/>
+		<driver status="good"/>
+	</game>
+	<game name="gunsmoke">
+		<description>Gun.Smoke (Kor)</description>
+		<year>1990</year>
+		<manufacturer>ProSoft</manufacturer>
+		<rom name="gun.smoke (kr).bin" size="32768" crc="3af7ccad"/>
+		<driver status="good"/>
+	</game>
+	<game name="hajafuin" cloneof="miracle" romof="miracle">
+		<description>Haja no Fuuin (Jpn)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="haja no fuuin (japan).bin" size="262144" crc="b9fdf6d9"/>
+		<driver status="good"/>
+	</game>
+	<game name="hangon">
+		<description>Hang-On (Euro, Bra, Aus)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="hang-on (europe).bin" size="32768" crc="071b045e"/>
+		<driver status="good"/>
+	</game>
+	<game name="hangonc" cloneof="hangon" romof="hangon">
+		<description>Hang-On (Euro, Bra, Aus, Sega Card)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="hang-on (europe).bin" merge="hang-on (europe).bin" size="32768" crc="071b045e"/>
+		<driver status="good"/>
+	</game>
+	<game name="hangonj" cloneof="hangon" romof="hangon">
+		<description>Hang-On (Jpn, MyCard)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="hang-on (japan).bin" size="32768" crc="5c01adf9"/>
+		<driver status="good"/>
+	</game>
+	<game name="hangonaw">
+		<description>Hang-On and Astro Warrior (USA)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-11125.ic1" size="131072" crc="1c5059f0"/>
+		<driver status="good"/>
+	</game>
+	<game name="hangonsh">
+		<description>Hang-On and Safari Hunt (USA) [Safari Hunt is a Light Phaser game]</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-10137 w02.ic1" size="131072" crc="e167a561"/>
+		<driver status="good"/>
+	</game>
+	<game name="hangonshp" cloneof="hangonsh" romof="hangonsh">
+		<description>Hang-On and Safari Hunt (USA, Prototype) [Safari Hunt is a Light Phaser game]</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="hang-on and safari hunt [proto].bin" size="131072" crc="a120b77f"/>
+		<driver status="good"/>
+	</game>
+	<game name="heavyw">
+		<description>Heavyweight Champ (Euro)</description>
+		<year>1991</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="heavyweight champ (europe).bin" size="262144" crc="fdab876a"/>
+		<driver status="good"/>
+	</game>
+	<game name="had">
+		<description>Heroes Against Demons (HB, v1.03) [Homebrew]</description>
+		<year>2020</year>
+		<manufacturer>Ichigo</manufacturer>
+		<rom name="HeroesAgainstDemons_1.03.sms" size="131072" crc="35f47e0a"/>
+		<driver status="good"/>
+	</game>
+	<game name="highsc">
+		<description>High School! Kimengumi (Jpn)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="high school! kimengumi (japan).bin" size="131072" crc="9eb1aa4f"/>
+		<driver status="good"/>
+	</game>
+	<game name="highsce" cloneof="highsc" romof="highsc">
+		<description>High School! Kimengumi (T-eng)</description>
+		<year>2005</year>
+		<manufacturer>Sega - SMS Power!</manufacturer>
+		<rom name="high school! kimengumi (t-eng1.00).sms" size="131072" crc="8a296a3e"/>
+		<driver status="good"/>
+	</game>
+	<game name="hokuto" cloneof="blackblt" romof="blackblt">
+		<description>Hokuto no Ken (Jpn)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="hokuto no ken (japan).bin" size="131072" crc="24f5fe8c"/>
+		<driver status="good"/>
+	</game>
+	<game name="hokutotw" cloneof="blackblt" romof="blackblt">
+		<description>Hokuto no Ken (Tw)</description>
+		<year>1986?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="hokuto no ken (tw).bin" size="131072" crc="c4ab363d"/>
+		<driver status="good"/>
+	</game>
+	<game name="homea">
+		<description>Home Alone (Euro)</description>
+		<year>1993</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="home alone (europe).bin" size="262144" crc="c9dbf936"/>
+		<driver status="good"/>
+	</game>
+	<game name="hongkildong">
+		<description>Hong Kil Dong (Kor)</description>
+		<year>1991</year>
+		<manufacturer>Clover</manufacturer>
+		<rom name="Hong Kil Dong (KR).sms" size="49152" crc="8040b2fa"/>
+		<driver status="good"/>
+	</game>
+	<game name="hook">
+		<description>Hook (Euro, Prototype)</description>
+		<year>19??</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="hook (europe) (proto).bin" size="262144" crc="9ced34a7"/>
+		<driver status="good"/>
+	</game>
+	<game name="hoshiw">
+		<description>Hoshi wo Sagashite... (Jpn)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-11454.ic1" size="262144" crc="955a009e"/>
+		<driver status="good"/>
+	</game>
+	<game name="hwaran" cloneof="kenseid" romof="kenseid">
+		<description>Hwarang Ui Geom (Kor)</description>
+		<year>1988</year>
+		<manufacturer>Samsung</manufacturer>
+		<rom name="hwarang ui geom (korea).bin" size="262144" crc="e4b7c56a"/>
+		<driver status="good"/>
+	</game>
+	<game name="impmiss">
+		<description>Impossible Mission (Euro, Bra)</description>
+		<year>1990</year>
+		<manufacturer>U.S. Gold</manufacturer>
+		<rom name="impossible mission (europe).bin" size="131072" crc="64d6af3b"/>
+		<driver status="good"/>
+	</game>
+	<game name="impmissp" cloneof="impmiss" romof="impmiss">
+		<description>Impossible Mission (Euro, Prototype)</description>
+		<year>1990</year>
+		<manufacturer>U.S. Gold</manufacturer>
+		<rom name="impossible mission (europe) (beta).bin" size="131072" crc="71c4ca8f"/>
+		<driver status="good"/>
+	</game>
+	<game name="indycrus">
+		<description>Indiana Jones and the Last Crusade (Euro, Bra)</description>
+		<year>1990</year>
+		<manufacturer>U.S. Gold</manufacturer>
+		<rom name="mpr-13309.ic1" size="262144" crc="8aeb574b"/>
+		<driver status="good"/>
+	</game>
+	<game name="indycrusp" cloneof="indycrus" romof="indycrus">
+		<description>Indiana Jones and the Last Crusade (Euro, Prototype)</description>
+		<year>1990</year>
+		<manufacturer>U.S. Gold</manufacturer>
+		<rom name="indiana jones and the last crusade (europe) (beta).bin" size="262144" crc="acec894d"/>
+		<driver status="good"/>
+	</game>
+	<game name="jbdougko" cloneof="heavyw" romof="heavyw">
+		<description>James 'Buster' Douglas Knockout Boxing (USA)</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="james 'buster' douglas knockout boxing (usa).bin" size="262144" crc="6a664405"/>
+		<driver status="good"/>
+	</game>
+	<game name="jbdougkop" cloneof="heavyw" romof="heavyw">
+		<description>James 'Buster' Douglas Knockout Boxing (USA, Prototype)</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="james buster douglas knockout boxing [proto].bin" size="262144" crc="cfb4bd7b"/>
+		<driver status="good"/>
+	</game>
+	<game name="jb007b" cloneof="jb007" romof="jb007">
+		<description>James Bond 007 - The Duel (Bra)</description>
+		<year>1993</year>
+		<manufacturer>Tec Toy</manufacturer>
+		<rom name="james bond 007 - the duel (brazil).bin" size="262144" crc="8feff688"/>
+		<driver status="good"/>
+	</game>
+	<game name="jb007">
+		<description>James Bond 007 - The Duel (Euro)</description>
+		<year>1993</year>
+		<manufacturer>Domark</manufacturer>
+		<rom name="mpr-15484.ic1" size="262144" crc="8d23587f"/>
+		<driver status="good"/>
+	</game>
+	<game name="robocod">
+		<description>James Pond 2 - Codename RoboCod (Euro, Bra)</description>
+		<year>1993</year>
+		<manufacturer>U.S. Gold</manufacturer>
+		<rom name="james pond 2 - codename robocod (europe).bin" size="524288" crc="102d5fea"/>
+		<driver status="good"/>
+	</game>
+	<game name="jangpun3">
+		<description>Jang Pung 3 (Kor)</description>
+		<year>1994</year>
+		<manufacturer>Sanghun</manufacturer>
+		<rom name="jang pung 3 (kr).bin" size="1048576" crc="18fb98a3"/>
+		<driver status="good"/>
+	</game>
+	<game name="janggun">
+		<description>Janggun ui Adeul (Kor)</description>
+		<year>1992</year>
+		<manufacturer>Daou Infosys</manufacturer>
+		<rom name="janggun ui adeul (kr).bin" size="524288" crc="192949d5"/>
+		<driver status="good"/>
+	</game>
+	<game name="joemont">
+		<description>Joe Montana Football (Euro, USA, Bra)</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-13605 t35.ic1" size="262144" crc="0a9089e5"/>
+		<driver status="good"/>
+	</game>
+	<game name="jpark">
+		<description>Jurassic Park (Euro)</description>
+		<year>1993</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="jurassic park (europe).bin" size="524288" crc="0667ed9f"/>
+		<driver status="good"/>
+	</game>
+	<game name="kenseid">
+		<description>Kenseiden (Euro, USA, Bra)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="kenseiden (usa, europe).bin" size="262144" crc="516ed32e"/>
+		<driver status="good"/>
+	</game>
+	<game name="kenseidj" cloneof="kenseid" romof="kenseid">
+		<description>Kenseiden (Jpn)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-11488.ic1" size="262144" crc="05ea5353"/>
+		<driver status="good"/>
+	</game>
+	<game name="kingball">
+		<description>King and Balloon (Kor)</description>
+		<year>19??</year>
+		<manufacturer>Unknown</manufacturer>
+		<rom name="king and balloon (kr).sms" size="32768" crc="0ae470e5"/>
+		<driver status="good"/>
+	</game>
+	<game name="kingqst">
+		<description>King's Quest - Quest for the Crown (USA)</description>
+		<year>1989</year>
+		<manufacturer>Parker Brothers</manufacturer>
+		<rom name="king's quest - quest for the crown (usa).bin" size="131072" crc="f8d33bc4"/>
+		<driver status="good"/>
+	</game>
+	<game name="kingqstp" cloneof="kingqst" romof="kingqst">
+		<description>King's Quest - Quest for the Crown (USA, Prototype)</description>
+		<year>1989</year>
+		<manufacturer>Parker Brothers</manufacturer>
+		<rom name="king's quest - quest for the crown (usa) (beta).bin" size="131072" crc="b7fe0a9d"/>
+		<driver status="good"/>
+	</game>
+	<game name="klax">
+		<description>Klax (Euro)</description>
+		<year>1991</year>
+		<manufacturer>Tengen</manufacturer>
+		<rom name="klax (europe).bin" size="131072" crc="2b435fd6"/>
+		<driver status="good"/>
+	</game>
+	<game name="knightm2">
+		<description>Knightmare II - The Maze of Galious (Kor)</description>
+		<year>199?</year>
+		<manufacturer>Zemina</manufacturer>
+		<rom name="knightmare ii - the maze of galious [kr].bin" size="131072" crc="f89af3cc"/>
+		<driver status="good"/>
+	</game>
+	<game name="krustyfh">
+		<description>Krusty's Fun House (Euro, Bra)</description>
+		<year>1992</year>
+		<manufacturer>Flying Edge</manufacturer>
+		<rom name="krusty's fun house (europe).bin" size="262144" crc="64a585eb"/>
+		<driver status="good"/>
+	</game>
+	<game name="kujaku" cloneof="spellcst" romof="spellcst">
+		<description>Kujaku Ou (Jpn)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="kujaku ou (japan).bin" size="524288" crc="d11d32e4"/>
+		<driver status="good"/>
+	</game>
+	<game name="kungfuk">
+		<description>Kung Fu Kid (Euro, USA, Bra)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-11069.ic1" size="131072" crc="1e949d1f"/>
+		<driver status="good"/>
+	</game>
+	<game name="lambo">
+		<description>Lambo (HB, Demo) [Homebrew]</description>
+		<year>2015</year>
+		<manufacturer>Genesis Project</manufacturer>
+		<rom name="GenesisProject-Lambo.sms" size="262144" crc="92fe2775"/>
+		<driver status="good"/>
+	</game>
+	<game name="landill">
+		<description>Land of Illusion Starring Mickey Mouse (Euro, Bra)</description>
+		<year>1992</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-15163.ic1" size="524288" crc="24e97200"/>
+		<driver status="good"/>
+	</game>
+	<game name="lghost">
+		<description>Laser Ghost (Euro) [Light Phaser game]</description>
+		<year>1991</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="laser ghost (europe).bin" size="262144" crc="0ca95637"/>
+		<driver status="good"/>
+	</game>
+	<game name="legndill">
+		<description>Legend of Illusion Starring Mickey Mouse (Bra)</description>
+		<year>1994</year>
+		<manufacturer>Tec Toy</manufacturer>
+		<rom name="mpr-20989-s.ic1" size="524288" crc="6350e649"/>
+		<driver status="good"/>
+	</game>
+	<game name="lemmings">
+		<description>Lemmings (Euro, Bra, Kor)</description>
+		<year>1991</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-15221-f.ic1" size="262144" crc="f369b2d8"/>
+		<driver status="good"/>
+	</game>
+	<game name="lemmingsp" cloneof="lemmings" romof="lemmings">
+		<description>Lemmings (Euro, Prototype)</description>
+		<year>1991</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="lemmings (europe) (beta).bin" size="262144" crc="2c61ed88"/>
+		<driver status="good"/>
+	</game>
+	<game name="lemming2">
+		<description>Lemmings 2 - The Tribes (Euro, Prototype)</description>
+		<year>1994</year>
+		<manufacturer>Psygnosis</manufacturer>
+		<rom name="lemmings 2 - the tribes [proto].bin" size="524288" crc="cf5aecca"/>
+		<driver status="good"/>
+	</game>
+	<game name="sn_lwep3">
+		<description>Lethal Weapon 3 (Music prototype)</description>
+		<year>1992</year>
+		<manufacturer>Probe</manufacturer>
+		<rom name="lethal weapon 3 music [proto].bin" size="32768" crc="eb71247b"/>
+		<driver status="good"/>
+	</game>
+	<game name="loffire">
+		<description>Line of Fire (Euro, Bra, Kor)</description>
+		<year>1991</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="line of fire (europe).bin" size="524288" crc="cb09f355"/>
+		<driver status="good"/>
+	</game>
+	<game name="lordswrdj" cloneof="lordswrd" romof="lordswrd">
+		<description>Lord of Sword (Jpn)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="lord of sword (japan).bin" size="262144" crc="aa7d6f45"/>
+		<driver status="good"/>
+	</game>
+	<game name="lordswrd">
+		<description>Lord of the Sword (Euro, USA, Bra)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="lord of the sword (usa, europe).bin" size="262144" crc="e8511b08"/>
+		<driver status="good"/>
+	</game>
+	<game name="loretta">
+		<description>Loretta no Shouzou (Jpn)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-10517.ic2" size="131072" crc="323f357f"/>
+		<driver status="good"/>
+	</game>
+	<game name="lostraider101">
+		<description>Lost Raider (HB, v1.01) [Homebrew, The game lacks sound]</description>
+		<year>2015</year>
+		<manufacturer>Vingazole &amp; Ichigobankai</manufacturer>
+		<rom name="LostRaider-SMS-1.01.sms" size="131072" crc="2553b745"/>
+		<driver status="good"/>
+	</game>
+	<game name="luckypeng">
+		<description>Lucky Penguin (HB, v1.1) [Homebrew]</description>
+		<year>2020</year>
+		<manufacturer>Denine</manufacturer>
+		<rom name="LuckyPenguin-SMS-1.1.sms" size="49152" crc="69699887"/>
+		<driver status="good"/>
+	</game>
+	<game name="mjsengok">
+		<description>Mahjong Sengoku Jidai (Jpn, HK)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-11193.ic1" size="131072" crc="bcfbfc67"/>
+		<driver status="good"/>
+	</game>
+	<game name="mjsengokp" cloneof="mjsengok" romof="mjsengok">
+		<description>Mahjong Sengoku Jidai (Jpn, Prototype)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mahjong sengoku jidai (japan) (beta).bin" size="131072" crc="996b2a07"/>
+		<driver status="good"/>
+	</game>
+	<game name="makairet" cloneof="kungfuk" romof="kungfuk">
+		<description>Makai Retsuden (Jpn)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-10742.ic1" size="131072" crc="ca860451"/>
+		<driver status="good"/>
+	</game>
+	<game name="maougolv" cloneof="golvell" romof="golvell">
+		<description>Maou Golvellius (Jpn)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="maou golvellius (japan).bin" size="262144" crc="bf0411ad"/>
+		<driver status="good"/>
+	</game>
+	<game name="maougolvp" cloneof="golvell" romof="golvell">
+		<description>Maou Golvellius (Jpn, Prototype)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="maou golvellius [proto] (jp).bin" size="262144" crc="21a21352"/>
+		<driver status="good"/>
+	</game>
+	<game name="marble">
+		<description>Marble Madness (Euro)</description>
+		<year>1992</year>
+		<manufacturer>Virgin Interactive</manufacturer>
+		<rom name="marble madness (europe).bin" size="262144" crc="bf6f3e5f"/>
+		<driver status="good"/>
+	</game>
+	<game name="marksmanu" cloneof="marksman" romof="marksman">
+		<description>Marksman Shooting and Trap Shooting (USA) [Light Phaser games]</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="marksman shooting and trap shooting (usa).bin" size="131072" crc="e8ea842c"/>
+		<driver status="good"/>
+	</game>
+	<game name="marksman">
+		<description>Marksman Shooting and Trap Shooting and Safari Hunt (Euro, Bra) [Light Phaser games]</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-10157f.ic2" size="131072" crc="e8215c2e"/>
+		<driver status="good"/>
+	</game>
+	<game name="mastdark">
+		<description>Master of Darkness (Euro, Bra)</description>
+		<year>1992</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-15203-f.ic1" size="262144" crc="96fb4d4b"/>
+		<driver status="good"/>
+	</game>
+	<game name="mastcomb">
+		<description>Masters of Combat (Euro, Bra, Aus)</description>
+		<year>1993</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="masters of combat (europe).bin" size="262144" crc="93141463"/>
+		<driver status="good"/>
+	</game>
+	<game name="mazehunt">
+		<description>Maze Hunter 3-D (Euro, USA, Bra)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-11564.ic1" size="131072" crc="31b8040b"/>
+		<driver status="good"/>
+	</game>
+	<game name="mazewalk" cloneof="mazehunt" romof="mazehunt">
+		<description>Maze Walker (Jpn)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-11337.ic1" size="131072" crc="871562b0"/>
+		<driver status="good"/>
+	</game>
+	<game name="megumi">
+		<description>Megumi Rescue (Jpn)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="megumi rescue (japan).bin" size="131072" crc="29bc7fad"/>
+		<driver status="good"/>
+	</game>
+	<game name="mercs">
+		<description>Mercs (Euro, Bra)</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-14269-f.ic1" size="524288" crc="d7416b83"/>
+		<driver status="good"/>
+	</game>
+	<game name="mwalk">
+		<description>Michael Jackson's Moonwalker (Euro, USA, Bra, Kor)</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="michael jackson's moonwalker (usa, europe).bin" size="262144" crc="56cc906b"/>
+		<driver status="good"/>
+	</game>
+	<game name="mwalkp" cloneof="mwalk" romof="mwalk">
+		<description>Michael Jackson's Moonwalker (USA, Prototype)</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="michael jackson's moonwalker (usa, europe) (beta).bin" size="262144" crc="54123936"/>
+		<driver status="good"/>
+	</game>
+	<game name="mickmack">
+		<description>Mick and Mack as the Global Gladiators (Euro, Bra)</description>
+		<year>1993</year>
+		<manufacturer>Virgin Interactive</manufacturer>
+		<rom name="mpr-15510-f.ic1" size="262144" crc="b67ceb76"/>
+		<driver status="good"/>
+	</game>
+	<game name="mickeyuc">
+		<description>Mickey's Ultimate Challenge (Bra)</description>
+		<year>1998</year>
+		<manufacturer>Tec Toy</manufacturer>
+		<rom name="mickey's ultimate challenge (brazil).bin" size="262144" crc="25051dd5"/>
+		<driver status="good"/>
+	</game>
+	<game name="micromac">
+		<description>Micro Machines (Euro)</description>
+		<year>1994</year>
+		<manufacturer>Codemasters</manufacturer>
+		<rom name="micro machines (europe).bin" size="262144" crc="a577ce46"/>
+		<driver status="good"/>
+	</game>
+	<game name="miracle">
+		<description>Miracle Warriors - Seal of the Dark Lord (Euro, USA, Bra)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="miracle warriors - seal of the dark lord (usa, europe).bin" size="262144" crc="0e333b6e"/>
+		<driver status="good"/>
+	</game>
+	<game name="miraclep" cloneof="miracle" romof="miracle">
+		<description>Miracle Warriors - Seal of the Dark Lord (Prototype)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="miracle warriors - seal of the dark lord (usa, europe) (beta).bin" size="262144" crc="301a59aa"/>
+		<driver status="good"/>
+	</game>
+	<game name="missil3d">
+		<description>Missile Defense 3-D (Euro, USA, Bra) [Light Phaser game]</description>
+		<year>19??</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-10844 w29.ic1" size="131072" crc="fbe5cfbb"/>
+		<driver status="good"/>
+	</game>
+	<game name="moggym100">
+		<description>Moggy Master (HB, v1.00) [Homebrew]</description>
+		<year>2015</year>
+		<manufacturer>Mojon Twins</manufacturer>
+		<rom name="mojon-twins--moggy-master.sms" size="65536" crc="039539df"/>
+		<driver status="good"/>
+	</game>
+	<game name="monica" cloneof="wboymlnd" romof="wboymlnd">
+		<description>Monica no Castelo do Dragao (Bra)</description>
+		<year>1991</year>
+		<manufacturer>Tec Toy</manufacturer>
+		<rom name="monica no castelo do dragao (brazil).bin" size="262144" crc="01d67c0b"/>
+		<driver status="good"/>
+	</game>
+	<game name="monopoly">
+		<description>Monopoly (Euro)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="monopoly (usa, europe).bin" size="131072" crc="026d94a4"/>
+		<driver status="good"/>
+	</game>
+	<game name="monopolyu" cloneof="monopoly" romof="monopoly">
+		<description>Monopoly (USA)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="monopoly (usa).bin" size="131072" crc="69538469"/>
+		<driver status="good"/>
+	</game>
+	<game name="monopolyp" cloneof="monopoly" romof="monopoly">
+		<description>Monopoly (USA, Prototype)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="monopoly [proto].bin" size="131072" crc="7e9d87fc"/>
+		<driver status="good"/>
+	</game>
+	<game name="moncrunch">
+		<description>Monster Crunch (HB, v1.00) [Homebrew]</description>
+		<year>2020</year>
+		<manufacturer>Ichigo</manufacturer>
+		<rom name="MonsterCrunch-SMS-1.00.sms" size="32768" crc="7eacf20c"/>
+		<driver status="good"/>
+	</game>
+	<game name="montezum">
+		<description>Montezuma's Revenge Featuring Panama Joe (USA)</description>
+		<year>1989</year>
+		<manufacturer>Parker Brothers</manufacturer>
+		<rom name="mpr-12402.ic1" size="131072" crc="82fda895"/>
+		<driver status="good"/>
+	</game>
+	<game name="montezump" cloneof="montezum" romof="montezum">
+		<description>Montezuma's Revenge Featuring Panama Joe (USA, Prototype)</description>
+		<year>1989</year>
+		<manufacturer>Parker Brothers</manufacturer>
+		<rom name="montezuma's revenge - featuring panama joe [proto].bin" size="131072" crc="575d0fcf"/>
+		<driver status="good"/>
+	</game>
+	<game name="mopirang">
+		<description>Mopiranger (Kor)</description>
+		<year>19??</year>
+		<manufacturer>Unknown</manufacturer>
+		<rom name="mopiranger (kr).bin" size="32768" crc="b49aa6fc"/>
+		<driver status="good"/>
+	</game>
+	<game name="mk">
+		<description>Mortal Kombat (Euro, Bra)</description>
+		<year>1993</year>
+		<manufacturer>Arena</manufacturer>
+		<rom name="mpr-15757.ic1" size="524288" crc="302dc686"/>
+		<driver status="good"/>
+	</game>
+	<game name="mk3">
+		<description>Mortal Kombat 3 (Bra)</description>
+		<year>1996</year>
+		<manufacturer>Tec Toy</manufacturer>
+		<rom name="mortal kombat 3 (brazil).bin" size="524288" crc="395ae757"/>
+		<driver status="good"/>
+	</game>
+	<game name="mk2">
+		<description>Mortal Kombat II (Euro, Bra)</description>
+		<year>1994</year>
+		<manufacturer>Acclaim Entertainment</manufacturer>
+		<rom name="mortal kombat ii (europe).bin" size="524288" crc="2663bf18"/>
+		<driver status="good"/>
+	</game>
+	<game name="mspacman">
+		<description>Ms. Pac-Man (Euro, Bra)</description>
+		<year>1991</year>
+		<manufacturer>Tengen</manufacturer>
+		<rom name="ms. pac-man (europe).bin" size="131072" crc="3cd816c6"/>
+		<driver status="good"/>
+	</game>
+	<game name="myhero">
+		<description>My Hero (Euro, USA, Bra)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="my hero (usa, europe).bin" size="32768" crc="62f0c23d"/>
+		<driver status="good"/>
+	</game>
+	<game name="myheroc" cloneof="myhero" romof="myhero">
+		<description>My Hero (Euro, USA, Bra, Sega Card)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="my hero (usa, europe).bin" merge="my hero (usa, europe).bin" size="32768" crc="62f0c23d"/>
+		<driver status="good"/>
+	</game>
+	<game name="nbajam">
+		<description>NBA Jam (Euro, Prototype)</description>
+		<year>1994</year>
+		<manufacturer>Acclaim</manufacturer>
+		<rom name="nba jam [proto].bin" size="524288" crc="332a847d"/>
+		<driver status="good"/>
+	</game>
+	<game name="nekkyu">
+		<description>Nekkyuu Koushien (Jpn)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-11886.ic1" size="262144" crc="5b5f9106"/>
+		<driver status="good"/>
+	</game>
+	<game name="nemesis">
+		<description>Nemesis (Kor)</description>
+		<year>1987</year>
+		<manufacturer>Zemina</manufacturer>
+		<rom name="nemesis (kr).bin" size="131072" crc="e316c06d"/>
+		<driver status="good"/>
+	</game>
+	<game name="nemesis2">
+		<description>Nemesis 2 (Kor)</description>
+		<year>1987</year>
+		<manufacturer>Zemina</manufacturer>
+		<rom name="nemesis 2 (kr).bin" size="131072" crc="0a77fa5e"/>
+		<driver status="good"/>
+	</game>
+	<game name="newbogl2" cloneof="bublbobl" romof="bublbobl">
+		<description>New Boggle Boggle 2 (Kor)</description>
+		<year>1989</year>
+		<manufacturer>Zemina</manufacturer>
+		<rom name="new boggle boggle (kr).bin" size="32768" crc="dbbf4dd1"/>
+		<driver status="good"/>
+	</game>
+	<game name="novdmvdp">
+		<description>New Order vs Depeche Mode vs Daft Punk - (HB, Demo) [Homebrew]</description>
+		<year>2019</year>
+		<manufacturer>Maxim</manufacturer>
+		<rom name="novdmvdp.sms" size="4176507" crc="d0eabe60"/>
+		<driver status="good"/>
+	</game>
+	<game name="ngaiden">
+		<description>Ninja Gaiden (Euro, Bra)</description>
+		<year>1992</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-14677.ic1" size="262144" crc="1b1d8cc2"/>
+		<driver status="good"/>
+	</game>
+	<game name="ngaidenp" cloneof="ngaiden" romof="ngaiden">
+		<description>Ninja Gaiden (Euro, Prototype)</description>
+		<year>1992</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="ninja gaiden (europe) (beta).bin" size="262144" crc="761e9396"/>
+		<driver status="good"/>
+	</game>
+	<game name="olympgld">
+		<description>Olympic Gold (Euro)</description>
+		<year>1992</year>
+		<manufacturer>U.S. Gold</manufacturer>
+		<rom name="mpr-14754-f.ic1" size="262144" crc="6a5a1e39"/>
+		<driver status="good"/>
+	</game>
+	<game name="olympgldk" cloneof="olympgld" romof="olympgld">
+		<description>Olympic Gold (Kor)</description>
+		<year>1992</year>
+		<manufacturer>U.S. Gold</manufacturer>
+		<rom name="olympic gold (korea) (en,fr,de,es,it,nl,pt,sv).bin" size="262144" crc="d1a7b1aa"/>
+		<driver status="good"/>
+	</game>
+	<game name="opaopa" cloneof="fantzonm" romof="fantzonm">
+		<description>Opa Opa (Jpn)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="opa opa (japan).bin" size="131072" crc="bea27d5c"/>
+		<driver status="good"/>
+	</game>
+	<game name="opwolf">
+		<description>Operation Wolf (Euro, Bra) [Light Phaser game]</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="operation wolf (europe).bin" size="262144" crc="205caae8"/>
+		<driver status="good"/>
+	</game>
+	<game name="outrun">
+		<description>Out Run (World)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-11078 w04.ic1" size="262144" crc="5589d8d2"/>
+		<driver status="good"/>
+	</game>
+	<game name="outrun3d">
+		<description>Out Run 3-D (Euro, Bra)</description>
+		<year>1991</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-12130.ic1" size="262144" crc="d6f43dda"/>
+		<driver status="good"/>
+	</game>
+	<game name="outrneur">
+		<description>Out Run Europa (Euro, Bra)</description>
+		<year>1991</year>
+		<manufacturer>U.S. Gold</manufacturer>
+		<rom name="out run europa (europe).bin" size="262144" crc="3932adbc"/>
+		<driver status="good"/>
+	</game>
+	<game name="pacmania">
+		<description>Pac-Mania (Euro)</description>
+		<year>1991</year>
+		<manufacturer>Tengen</manufacturer>
+		<rom name="pac-mania (europe).bin" size="131072" crc="be57a9a5"/>
+		<driver status="good"/>
+	</game>
+	<game name="paperboy">
+		<description>Paperboy (Euro, v0)</description>
+		<year>1990</year>
+		<manufacturer>U.S. Gold</manufacturer>
+		<rom name="paperboy (europe).bin" size="131072" crc="294e0759"/>
+		<driver status="good"/>
+	</game>
+	<game name="paperboyu" cloneof="paperboy" romof="paperboy">
+		<description>Paperboy (USA, Bra, v1)</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-13306a-m.ic1" size="131072" crc="327a0b4c"/>
+		<driver status="good"/>
+	</game>
+	<game name="papicom">
+		<description>Papi Commando in CPP Land (HB, Hack v1.01) [Homebrew]</description>
+		<year>2019</year>
+		<manufacturer>Vetea</manufacturer>
+		<rom name="papi commando in cpp land v1.01 (2019)(studio vetea).sms" size="1048576" crc="bd531375"/>
+		<driver status="good"/>
+	</game>
+	<game name="parlour">
+		<description>Parlour Games (Euro, USA)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-11817-s.ic2" size="131072" crc="e030e66c"/>
+		<driver status="good"/>
+	</game>
+	<game name="patriley">
+		<description>Pat Riley Basketball (USA, Prototype)</description>
+		<year>19??</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="pat riley basketball (usa) (proto).bin" size="262144" crc="9aefe664"/>
+		<driver status="good"/>
+	</game>
+	<game name="pengadv">
+		<description>Penguin Adventure (Kor)</description>
+		<year>199?</year>
+		<manufacturer>Zemina</manufacturer>
+		<rom name="penguin adventure (kr).bin" size="131072" crc="445525e2"/>
+		<driver status="good"/>
+	</game>
+	<game name="pengland">
+		<description>Penguin Land (Euro, USA)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-11190.ic1" size="131072" crc="f97e9875"/>
+		<driver status="good"/>
+	</game>
+	<game name="pgatour">
+		<description>PGA Tour Golf (Euro)</description>
+		<year>1991</year>
+		<manufacturer>Tengen</manufacturer>
+		<rom name="pga tour golf (europe).bin" size="262144" crc="95b9ea95"/>
+		<driver status="good"/>
+	</game>
+	<game name="pstarb" cloneof="pstar" romof="pstar">
+		<description>Phantasy Star (Bra)</description>
+		<year>1987</year>
+		<manufacturer>Tec Toy</manufacturer>
+		<rom name="phantasy star (brazil).bin" size="524288" crc="75971bef"/>
+		<driver status="good"/>
+	</game>
+	<game name="pstar1" cloneof="pstar" romof="pstar">
+		<description>Phantasy Star (Euro, USA, v2)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="phantasy star (usa, europe) (v1.2).bin" size="524288" crc="e4a65e79"/>
+		<driver status="good"/>
+	</game>
+	<game name="pstar">
+		<description>Phantasy Star (Euro, USA, v3)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-11711at.ic2" size="524288" crc="00bef1d7"/>
+		<driver status="good"/>
+	</game>
+	<game name="pstarj" cloneof="pstar" romof="pstar">
+		<description>Phantasy Star (Jpn)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-11198.ic1" size="524288" crc="6605d36a"/>
+		<driver status="good"/>
+	</game>
+	<game name="pstarjmd" cloneof="pstar" romof="pstar">
+		<description>Phantasy Star (Jpn, MD)</description>
+		<year>1994</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="phantasy star (j) (from saturn collection cd) [!].bin" size="524288" crc="07301f83"/>
+		<driver status="good"/>
+	</game>
+	<game name="pstarje" cloneof="pstar" romof="pstar">
+		<description>Phantasy Star (Jpn, T-Eng v2.00) [YM2413 FM sound chip supported]</description>
+		<year>2020</year>
+		<manufacturer>Sega - SMS Power!</manufacturer>
+		<rom name="phantasy star (j) [t-eng2.00].sms" size="524288" crc="a04cf71a"/>
+		<driver status="good"/>
+	</game>
+	<game name="pstark" cloneof="pstar" romof="pstar">
+		<description>Phantasy Star (Kor)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="phantasy star (korea).bin" size="524288" crc="747e83b5"/>
+		<driver status="good"/>
+	</game>
+	<game name="pitfightb" cloneof="pitfight" romof="pitfight">
+		<description>PitFighter - The Ultimate Challenge (Bra)</description>
+		<year>1991</year>
+		<manufacturer>Tec Toy</manufacturer>
+		<rom name="pit fighter (brazil).bin" size="524288" crc="aa4d4b5a"/>
+		<driver status="good"/>
+	</game>
+	<game name="pitfight">
+		<description>PitFighter - The Ultimate Challenge (Euro)</description>
+		<year>1991</year>
+		<manufacturer>Domark</manufacturer>
+		<rom name="pit fighter (europe).bin" size="524288" crc="b840a446"/>
+		<driver status="good"/>
+	</game>
+	<game name="pooyan">
+		<description>Pooyan (Kor)</description>
+		<year>19??</year>
+		<manufacturer>HiCom</manufacturer>
+		<rom name="pooyan (kr).sms" size="32768" crc="ca082218"/>
+		<driver status="good"/>
+	</game>
+	<game name="populous">
+		<description>Populous (Euro, Bra)</description>
+		<year>1989</year>
+		<manufacturer>TecMagik</manufacturer>
+		<rom name="populous (europe).bin" size="262144" crc="c7a1fdef"/>
+		<driver status="good"/>
+	</game>
+	<game name="poseidon">
+		<description>Poseidon Wars 3-D (Euro, USA, Bra)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-12122f.ic1" size="262144" crc="abd48ad2"/>
+		<driver status="good"/>
+	</game>
+	<game name="pstrike">
+		<description>Power Strike (Euro, Bra, Kor)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-11685 w48.ic1" size="131072" crc="4077efd9"/>
+		<driver status="good"/>
+	</game>
+	<game name="pstrike2">
+		<description>Power Strike II (Euro, Bra)</description>
+		<year>1993</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-15671.ic1" size="524288" crc="a109a6fe"/>
+		<driver status="good"/>
+	</game>
+	<game name="predatr2b" cloneof="predatr2" romof="predatr2">
+		<description>Predator 2 (Bra)</description>
+		<year>1992?</year>
+		<manufacturer>Tec Toy</manufacturer>
+		<rom name="predator 2 (br).bin" size="262144" crc="2b54c82b"/>
+		<driver status="good"/>
+	</game>
+	<game name="predatr2">
+		<description>Predator 2 (Euro)</description>
+		<year>1992</year>
+		<manufacturer>Arena</manufacturer>
+		<rom name="predator 2 (europe).bin" size="262144" crc="0047b615"/>
+		<driver status="good"/>
+	</game>
+	<game name="ppersia">
+		<description>Prince of Persia (Euro, Bra)</description>
+		<year>1992</year>
+		<manufacturer>Domark</manufacturer>
+		<rom name="prince of persia (europe).bin" size="262144" crc="7704287d"/>
+		<driver status="good"/>
+	</game>
+	<game name="prowres">
+		<description>Pro Wrestling (Euro, USA, Bra)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-10154f.ic1" size="131072" crc="fbde42d3"/>
+		<driver status="good"/>
+	</game>
+	<game name="sms3samp">
+		<description>Promocao Especial M. System III Compact (Bra, Sample)</description>
+		<year>19??</year>
+		<manufacturer>Tec Toy</manufacturer>
+		<rom name="promocao especial m. system iii compact (brazil) (sample).bin" size="32768" crc="30af0233"/>
+		<driver status="good"/>
+	</game>
+	<game name="psychicwen" cloneof="psychicw" romof="psychicw">
+		<description>Psychic World (Enhanced Hack v1.2)</description>
+		<year>2020</year>
+		<manufacturer>BcnAbel76</manufacturer>
+		<rom name="psychic world (enhanced v1.2).bin" size="262144" crc="f0ec4500"/>
+		<driver status="good"/>
+	</game>
+	<game name="psychicw">
+		<description>Psychic World (Euro, Bra)</description>
+		<year>1991</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="psychic world (europe).bin" size="262144" crc="5c0b1f0f"/>
+		<driver status="good"/>
+	</game>
+	<game name="psychof">
+		<description>Psycho Fox (Euro, USA, Bra)</description>
+		<year>1989</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="psycho fox (usa, europe).bin" size="262144" crc="97993479"/>
+		<driver status="good"/>
+	</game>
+	<game name="puttputt">
+		<description>Putt and Putter (Euro, Bra)</description>
+		<year>1992</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="putt and putter (europe).bin" size="131072" crc="357d4f78"/>
+		<driver status="good"/>
+	</game>
+	<game name="puttputtp" cloneof="puttputt" romof="puttputt">
+		<description>Putt and Putter (Euro, Prototype)</description>
+		<year>1992</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="putt and putter (europe) (beta).bin" size="131072" crc="8167ccc4"/>
+		<driver status="good"/>
+	</game>
+	<game name="puznic">
+		<description>Puznic (Kor)</description>
+		<year>1990</year>
+		<manufacturer>Zemina</manufacturer>
+		<rom name="puznic (kr).sms" size="32768" crc="76e8265f"/>
+		<driver status="good"/>
+	</game>
+	<game name="quartet">
+		<description>Quartet (Euro, USA)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-10418 w15.ic1" size="131072" crc="e0f34fa6"/>
+		<driver status="good"/>
+	</game>
+	<game name="shavnyak">
+		<description>Quest for the Shaven Yak Starring Ren Hoek and Stimpy (Bra)</description>
+		<year>1993</year>
+		<manufacturer>Tec Toy</manufacturer>
+		<rom name="quest for the shaven yak starring ren hoek and stimpy (brazil).bin" size="524288" crc="f42e145c"/>
+		<driver status="good"/>
+	</game>
+	<game name="rtypep" cloneof="rtype" romof="rtype">
+		<description>R-Type (Prototype)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="r-type (proto).bin" size="524288" crc="0d0840d5"/>
+		<driver status="good"/>
+	</game>
+	<game name="rtype">
+		<description>R-Type (World)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-12002 t13.ic2" size="524288" crc="bb54b6b0"/>
+		<driver status="good"/>
+	</game>
+	<game name="rcgp">
+		<description>R.C. Grand Prix (Euro, USA, Bra)</description>
+		<year>1989</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-12903 t24.ic1" size="262144" crc="54316fea"/>
+		<driver status="good"/>
+	</game>
+	<game name="rcgpp" cloneof="rcgp" romof="rcgp">
+		<description>R.C. Grand Prix (Prototype)</description>
+		<year>1989</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="r.c. grand prix [proto].bin" size="262144" crc="767f11b8"/>
+		<driver status="good"/>
+	</game>
+	<game name="rbislandb" cloneof="rbisland" romof="rbisland">
+		<description>Rainbow Islands - The Story of Bubble Bobble 2 (Bra)</description>
+		<year>1993</year>
+		<manufacturer>Tec Toy</manufacturer>
+		<rom name="rainbow islands - the story of bubble bobble 2 (brazil).bin" size="262144" crc="00ec173a"/>
+		<driver status="good"/>
+	</game>
+	<game name="rbisland">
+		<description>Rainbow Islands - The Story of Bubble Bobble 2 (Euro)</description>
+		<year>1993</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="rainbow islands - the story of bubble bobble 2 (europe).bin" size="262144" crc="c172a22c"/>
+		<driver status="good"/>
+	</game>
+	<game name="rambo2" cloneof="secret" romof="secret">
+		<description>Rambo - First Blood Part II (USA)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-10407 w10.ic1" size="131072" crc="bbda65f0"/>
+		<driver status="good"/>
+	</game>
+	<game name="rambo3">
+		<description>Rambo III (Euro, USA, Bra) [Light Phaser game]</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-12036f.ic1" size="262144" crc="da5a7013"/>
+		<driver status="good"/>
+	</game>
+	<game name="rambo3fm" cloneof="rambo3" romof="rambo3">
+		<description>Rambo III (FM Mod) [Light Phaser game - YM2413 FM support]</description>
+		<year>2018</year>
+		<manufacturer>Sega - fatnick</manufacturer>
+		<rom name="rambo iii (fm-mod).sms" size="262144" crc="c2073674"/>
+		<driver status="good"/>
+	</game>
+	<game name="rampage">
+		<description>Rampage (Euro, USA, Bra)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-12042f.ic1" size="262144" crc="42fc47ee"/>
+		<driver status="good"/>
+	</game>
+	<game name="rampart">
+		<description>Rampart (Euro)</description>
+		<year>1991</year>
+		<manufacturer>Tengen</manufacturer>
+		<rom name="rampart (europe).bin" size="262144" crc="426e5c8a"/>
+		<driver status="good"/>
+	</game>
+	<game name="rastan">
+		<description>Rastan (Euro, USA, Bra)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="rastan (usa, europe).bin" size="262144" crc="c547eb1b"/>
+		<driver status="good"/>
+	</game>
+	<game name="regjacks" cloneof="ameribb" romof="ameribb">
+		<description>Reggie Jackson Baseball (USA)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="reggie jackson baseball (usa).bin" size="262144" crc="6d94bb0e"/>
+		<driver status="good"/>
+	</game>
+	<game name="renegade">
+		<description>Renegade (Euro, Bra)</description>
+		<year>1993</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="renegade (europe).bin" size="262144" crc="3be7f641"/>
+		<driver status="good"/>
+	</game>
+	<game name="rescuems">
+		<description>Rescue Mission (Euro, USA, Bra) [Light Phaser game]</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-11400.ic1" size="131072" crc="79ac8e7f"/>
+		<driver status="good"/>
+	</game>
+	<game name="roadfght">
+		<description>Road Fighter (Kor)</description>
+		<year>19??</year>
+		<manufacturer>Unknown</manufacturer>
+		<rom name="road fighter (kr).bin" size="32768" crc="8034bd27"/>
+		<driver status="good"/>
+	</game>
+	<game name="roadrash">
+		<description>Road Rash (Euro, Bra)</description>
+		<year>1993</year>
+		<manufacturer>U.S. Gold</manufacturer>
+		<rom name="road rash (europe).bin" size="524288" crc="b876fc74"/>
+		<driver status="good"/>
+	</game>
+	<game name="robocop3">
+		<description>RoboCop 3 (Euro, Bra)</description>
+		<year>1993</year>
+		<manufacturer>Flying Edge</manufacturer>
+		<rom name="robocop 3 (europe).bin" size="262144" crc="9f951756"/>
+		<driver status="good"/>
+	</game>
+	<game name="roboterm">
+		<description>RoboCop versus The Terminator (Euro, Bra)</description>
+		<year>1993</year>
+		<manufacturer>Virgin Interactive</manufacturer>
+		<rom name="robocop versus the terminator (europe).bin" size="524288" crc="8212b754"/>
+		<driver status="good"/>
+	</game>
+	<game name="rocky">
+		<description>Rocky (World)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-11072 w01.ic1" size="262144" crc="1bcc7be3"/>
+		<driver status="good"/>
+	</game>
+	<game name="running">
+		<description>Running Battle (Euro, Bra)</description>
+		<year>1991</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-14252-f.ic1" size="262144" crc="1fdae719"/>
+		<driver status="good"/>
+	</game>
+	<game name="saposos" cloneof="astrow" romof="astrow">
+		<description>S.O.S Lagoa Poluida (Bra)</description>
+		<year>1995</year>
+		<manufacturer>Tec Toy</manufacturer>
+		<rom name="sapo xule - s.o.s lagoa poluida (brazil).bin" size="131072" crc="7ab2946a"/>
+		<driver status="good"/>
+	</game>
+	<game name="sagaia">
+		<description>Sagaia (Euro, Bra)</description>
+		<year>1992</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="sagaia (europe).bin" size="262144" crc="66388128"/>
+		<driver status="good"/>
+	</game>
+	<game name="sangoku3">
+		<description>Sangokushi 3 (Kor)</description>
+		<year>1994</year>
+		<manufacturer>Game Line</manufacturer>
+		<rom name="sangokushi 3 (korea) (unl).bin" size="1048576" crc="97d03541"/>
+		<driver status="good"/>
+	</game>
+	<game name="sapomestr" cloneof="kungfuk" romof="kungfuk">
+		<description>Sapo Xule - O Mestre do Kung Fu (Bra)</description>
+		<year>1995</year>
+		<manufacturer>Tec Toy</manufacturer>
+		<rom name="sapo xule - o mestre do kung fu (brazil).bin" size="262144" crc="890e83e4"/>
+		<driver status="good"/>
+	</game>
+	<game name="sapoxule" cloneof="psychof" romof="psychof">
+		<description>Sapo Xule vs. Os Invasores do Brejo (Bra)</description>
+		<year>1995</year>
+		<manufacturer>Tec Toy</manufacturer>
+		<rom name="sapo xule vs. os invasores do brejo (brazil).bin" size="262144" crc="9a608327"/>
+		<driver status="good"/>
+	</game>
+	<game name="satell7">
+		<description>Satellite 7 (Jpn, MyCard)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="satellite 7 (japan).bin" size="32768" crc="16249e19"/>
+		<driver status="good"/>
+	</game>
+	<game name="satell7a" cloneof="satell7" romof="satell7">
+		<description>Satellite 7 (Jpn, Pirate?)</description>
+		<year>1985</year>
+		<manufacturer>pirate</manufacturer>
+		<rom name="satellite 7 (j) [hack].bin" size="32768" crc="87b9ecb8"/>
+		<driver status="good"/>
+	</game>
+	<game name="sspirits">
+		<description>Scramble Spirits (Euro, Bra)</description>
+		<year>1989</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="scramble spirits (europe).bin" size="262144" crc="9a8b28ec"/>
+		<driver status="good"/>
+	</game>
+	<game name="sdi" cloneof="globald" romof="globald">
+		<description>SDI (Jpn)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-11191.ic1" size="131072" crc="1de2c2d0"/>
+		<driver status="good"/>
+	</game>
+	<game name="secret">
+		<description>Secret Command (Euro)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="secret command (europe).bin" size="131072" crc="00529114"/>
+		<driver status="good"/>
+	</game>
+	<game name="segachss">
+		<description>Sega Chess (Euro, Bra)</description>
+		<year>1991</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="sega chess (europe).bin" size="262144" crc="a8061aef"/>
+		<driver status="good"/>
+	</game>
+	<game name="segagfx">
+		<description>Sega Graphic Board (Jpn, Prototype v2.0)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="graphic board v2.0.bin" size="32768" crc="276aa542"/>
+		<driver status="good"/>
+	</game>
+	<game name="segawtg">
+		<description>Sega World Tournament Golf (Euro, Bra, Kor)</description>
+		<year>1993</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="sega world tournament golf (europe).bin" size="262144" crc="296879dd"/>
+		<driver status="good"/>
+	</game>
+	<game name="seishun" cloneof="myhero" romof="myhero">
+		<description>Seishun Scandal (Jpn, MyCard)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="seishun scandal (japan).bin" size="32768" crc="f0ba2bc6"/>
+		<driver status="good"/>
+	</game>
+	<game name="seishun1" cloneof="myhero" romof="myhero">
+		<description>Seishun Scandal (Jpn, Pirate?)</description>
+		<year>1986</year>
+		<manufacturer>pirate</manufacturer>
+		<rom name="seishyun scandal (j) [hack].bin" size="32768" crc="bcd91d78"/>
+		<driver status="good"/>
+	</game>
+	<game name="sensible">
+		<description>Sensible Soccer (Euro)</description>
+		<year>1993</year>
+		<manufacturer>Sony Imagesoft</manufacturer>
+		<rom name="sensible soccer (europe).bin" size="131072" crc="f8176918"/>
+		<driver status="good"/>
+	</game>
+	<game name="shdancer">
+		<description>Shadow Dancer (Euro, Bra, Kor)</description>
+		<year>1991</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="shadow dancer (europe).bin" size="524288" crc="3793c01a"/>
+		<driver status="good"/>
+	</game>
+	<game name="beast">
+		<description>Shadow of the Beast (Euro, Bra)</description>
+		<year>1991</year>
+		<manufacturer>TecMagik</manufacturer>
+		<rom name="shadow of the beast (europe).bin" size="262144" crc="1575581d"/>
+		<driver status="good"/>
+	</game>
+	<game name="shanghai">
+		<description>Shanghai (Euro, USA)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="shanghai (usa, europe).bin" size="131072" crc="aab67ec3"/>
+		<driver status="good"/>
+	</game>
+	<game name="shanghaip" cloneof="shanghai" romof="shanghai">
+		<description>Shanghai (Prototype)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="shanghai (usa, europe) (beta).bin" size="131072" crc="d5d25156"/>
+		<driver status="good"/>
+	</game>
+	<game name="shinobi">
+		<description>Shinobi (Euro, USA, Bra, v1)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="shinobi (usa, europe).bin" size="262144" crc="0c6fac4e"/>
+		<driver status="good"/>
+	</game>
+	<game name="shinobij" cloneof="shinobi" romof="shinobi">
+		<description>Shinobi (Jpn, Bra, v0)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="shinobi (japan).bin" size="262144" crc="e1fff1bb"/>
+		<driver status="good"/>
+	</game>
+	<game name="shooting">
+		<description>Shooting Gallery (Euro, USA, Bra) [Light Phaser game]</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-10515.ic1" size="131072" crc="4b051022"/>
+		<driver status="good"/>
+	</game>
+	<game name="sdmilhao">
+		<description>Show do Milhao (Bra, Prototype)</description>
+		<year>2003</year>
+		<manufacturer>Tec Toy</manufacturer>
+		<rom name="milhao.bin" size="131072" crc="58423688"/>
+		<driver status="good"/>
+	</game>
+	<game name="silvervalley">
+		<description>Silver Valley (HB) [Homebrew]</description>
+		<year>2018</year>
+		<manufacturer>MIKGAMES / Enrique Ruiz</manufacturer>
+		<rom name="silvervalley-final.sms" size="262144" crc="2774b5cc"/>
+		<driver status="good"/>
+	</game>
+	<game name="sitio">
+		<description>Sitio do Picapau Amarelo (Bra)</description>
+		<year>1997</year>
+		<manufacturer>Tec Toy</manufacturer>
+		<rom name="sitio do picapau amarelo (brazil).bin" size="1048576" crc="abdf3923"/>
+		<driver status="good"/>
+	</game>
+	<game name="skyjag">
+		<description>Sky Jaguar (Kor)</description>
+		<year>199?</year>
+		<manufacturer>Samsung</manufacturer>
+		<rom name="sky jaguar (kr).bin" size="32768" crc="5b8e65e4"/>
+		<driver status="good"/>
+	</game>
+	<game name="slapshotp" cloneof="slapshot" romof="slapshot">
+		<description>Slap Shoot (Prototype)</description>
+		<year>1989</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="slap shot (proto).bin" size="262144" crc="fbb0a92a"/>
+		<driver status="good"/>
+	</game>
+	<game name="slapshotb" cloneof="slapshot" romof="slapshot">
+		<description>Slap Shot (Euro, v0)</description>
+		<year>1989</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-12934.ic1" size="262144" crc="c93bd0e9"/>
+		<driver status="good"/>
+	</game>
+	<game name="slapshota" cloneof="slapshot" romof="slapshot">
+		<description>Slap Shot (Euro, v1)</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="slap shot (europe) (v1.1).bin" size="262144" crc="d33b296a"/>
+		<driver status="good"/>
+	</game>
+	<game name="slapshot">
+		<description>Slap Shot (USA, v2)</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="slap shot (usa) (v1.2).bin" size="262144" crc="702c3e98"/>
+		<driver status="good"/>
+	</game>
+	<game name="smashtv">
+		<description>Smash T.V. (Euro)</description>
+		<year>1992</year>
+		<manufacturer>Flying Edge</manufacturer>
+		<rom name="super smash t.v. (europe).bin" size="262144" crc="e0b1aff8"/>
+		<driver status="good"/>
+	</game>
+	<game name="solomon">
+		<description>Solomon no Kagi - Oujo Rihita no Namida (Jpn)</description>
+		<year>1988</year>
+		<manufacturer>Salio</manufacturer>
+		<rom name="solomon no kagi - oujo rihita no namida (japan).bin" size="131072" crc="11645549"/>
+		<driver status="good"/>
+	</game>
+	<game name="sonicbls">
+		<description>Sonic Blast (Bra)</description>
+		<year>1997</year>
+		<manufacturer>Tec Toy</manufacturer>
+		<rom name="mpr-19947-s.u2" size="1048576" crc="96b3f29e"/>
+		<driver status="good"/>
+	</game>
+	<game name="sonic">
+		<description>Sonic The Hedgehog (Euro, USA, Bra)</description>
+		<year>1991</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-14271-f.ic1" size="262144" crc="b519e833"/>
+		<driver status="good"/>
+	</game>
+	<game name="sonicfm102" cloneof="sonic" romof="sonic">
+		<description>Sonic The Hedgehog (FM Mod, v1.02) [YM2413 FM sound chip supported]</description>
+		<year>2014</year>
+		<manufacturer>Sega - Valleybell</manufacturer>
+		<rom name="Sonic1SMS_FM_v102.sms" size="262144" crc="7c077b38"/>
+		<driver status="good"/>
+	</game>
+	<game name="sonic2">
+		<description>Sonic The Hedgehog 2 (Euro, Bra, Kor, v1)</description>
+		<year>1992</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="sonic the hedgehog 2 (europe) (v1.1).bin" size="524288" crc="d6f2bfca"/>
+		<driver status="good"/>
+	</game>
+	<game name="sonic2a" cloneof="sonic2" romof="sonic2">
+		<description>Sonic The Hedgehog 2 (Euro, Bra, v0)</description>
+		<year>1992</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-15159.ic1" size="524288" crc="5b3b922c"/>
+		<driver status="good"/>
+	</game>
+	<game name="sonicc">
+		<description>Sonic The Hedgehog Chaos (Euro, Bra)</description>
+		<year>1993</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-15926-f.ic1" size="524288" crc="aedf3bdf"/>
+		<driver status="good"/>
+	</game>
+	<game name="sspin">
+		<description>Sonic The Hedgehog Spinball (Euro, Bra)</description>
+		<year>1994</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="sonic spinball (europe).bin" size="524288" crc="11c1bc8a"/>
+		<driver status="good"/>
+	</game>
+	<game name="sonicedu">
+		<description>Sonic's Edusoft (Prototype)</description>
+		<year>19??</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="sonic's edusoft (unknown) (proto).bin" size="262144" crc="d9096263"/>
+		<driver status="good"/>
+	</game>
+	<game name="spacegun">
+		<description>Space Gun (Euro) [Light Phaser game]</description>
+		<year>1992</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-15063.ic1" size="524288" crc="a908cff5"/>
+		<driver status="good"/>
+	</game>
+	<game name="sharrier">
+		<description>Space Harrier (Euro)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-11071.ic1" size="262144" crc="ca1d3752"/>
+		<driver status="good"/>
+	</game>
+	<game name="sharrierju" cloneof="sharrier" romof="sharrier">
+		<description>Space Harrier (Jpn, USA)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="space harrier (japan).bin" size="262144" crc="beddf80e"/>
+		<driver status="good"/>
+	</game>
+	<game name="sharr3d">
+		<description>Space Harrier 3-D (Euro, USA, Bra)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-11564.ic1" size="262144" crc="6bd5c2bf"/>
+		<driver status="good"/>
+	</game>
+	<game name="sharr3dj" cloneof="sharr3d" romof="sharr3d">
+		<description>Space Harrier 3D (Jpn)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="space harrier 3d (japan).bin" size="262144" crc="156948f9"/>
+		<driver status="good"/>
+	</game>
+	<game name="sci">
+		<description>Special Criminal Investigation (Euro)</description>
+		<year>1992</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="special criminal investigation (europe).bin" size="262144" crc="fa8e4ca0"/>
+		<driver status="good"/>
+	</game>
+	<game name="scip" cloneof="sci" romof="sci">
+		<description>Special Criminal Investigation (Euro, Prototype)</description>
+		<year>1992</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="special criminal investigation (europe) (beta).bin" size="262144" crc="1b7d2a20"/>
+		<driver status="good"/>
+	</game>
+	<game name="speedbl">
+		<description>Speedball (Image Works) (Euro)</description>
+		<year>1990</year>
+		<manufacturer>Image Works</manufacturer>
+		<rom name="speedball (europe) (mirrorsoft).bin" size="131072" crc="a57cad18"/>
+		<driver status="good"/>
+	</game>
+	<game name="speedblv">
+		<description>Speedball (Virgin) (Euro, USA)</description>
+		<year>1992</year>
+		<manufacturer>Virgin Interactive</manufacturer>
+		<rom name="speedball (europe) (virgin).bin" size="131072" crc="5ccc1a65"/>
+		<driver status="good"/>
+	</game>
+	<game name="speedbl2">
+		<description>Speedball 2 (Euro)</description>
+		<year>1992</year>
+		<manufacturer>Virgin Interactive</manufacturer>
+		<rom name="speedball 2 (europe).bin" size="262144" crc="0c7366a0"/>
+		<driver status="good"/>
+	</game>
+	<game name="spellcst">
+		<description>SpellCaster (Euro, USA, Bra)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-12532-t.ic2" size="524288" crc="4752cae7"/>
+		<driver status="good"/>
+	</game>
+	<game name="spidermn">
+		<description>Spider-Man - Return of the Sinister Six (Euro, Bra)</description>
+		<year>1992</year>
+		<manufacturer>Flying Edge</manufacturer>
+		<rom name="spider-man - return of the sinister six (europe).bin" size="262144" crc="ebe45388"/>
+		<driver status="good"/>
+	</game>
+	<game name="spidking">
+		<description>Spider-Man vs. The Kingpin (Euro, USA, Bra)</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-13949 t42.ic1" size="262144" crc="908ff25c"/>
+		<driver status="good"/>
+	</game>
+	<game name="sportsft">
+		<description>Sports Pad Football (USA)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="sports pad football (usa).bin" size="131072" crc="e42e4998"/>
+		<driver status="good"/>
+	</game>
+	<game name="sportssc" cloneof="worldsoc" romof="worldsoc">
+		<description>Sports Pad Soccer (Jpn)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="sports pad soccer (japan).bin" size="131072" crc="41c948bf"/>
+		<driver status="good"/>
+	</game>
+	<game name="spyvsspyj" cloneof="spyvsspy" romof="spyvsspy">
+		<description>Spy vs Spy (Jpn, MyCard)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="spy vs spy (japan).bin" size="32768" crc="d41b9a08"/>
+		<driver status="good"/>
+	</game>
+	<game name="spyvsspyk" cloneof="spyvsspy" romof="spyvsspy">
+		<description>Spy vs Spy (Kor)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="spy vs spy (japan).bin" size="32768" crc="d41b9a08"/>
+		<driver status="good"/>
+	</game>
+	<game name="spyvsspytw" cloneof="spyvsspy" romof="spyvsspy">
+		<description>Spy vs Spy (Tw)</description>
+		<year>1986?</year>
+		<manufacturer>Aaronix</manufacturer>
+		<rom name="spy vs spy (tw).bin" size="32768" crc="689f58a2"/>
+		<driver status="good"/>
+	</game>
+	<game name="spyvsspy">
+		<description>Spy vs. Spy (Euro, USA, Bra)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="spy vs. spy (usa, europe).bin" size="32768" crc="78d7faab"/>
+		<driver status="good"/>
+	</game>
+	<game name="spyvsspyc" cloneof="spyvsspy" romof="spyvsspy">
+		<description>Spy vs. Spy (Euro, USA, Bra, Sega Card)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="spy vs. spy (usa, europe).bin" merge="spy vs. spy (usa, europe).bin" size="32768" crc="78d7faab"/>
+		<driver status="good"/>
+	</game>
+	<game name="spyvsspyj1" cloneof="spyvsspy" romof="spyvsspy">
+		<description>Spy vs. Spy (Jpn, Pirate?)</description>
+		<year>1986</year>
+		<manufacturer>pirate</manufacturer>
+		<rom name="spy vs. spy (j) [hack].bin" size="32768" crc="a71bc542"/>
+		<driver status="good"/>
+	</game>
+	<game name="spyvsspys" cloneof="spyvsspy" romof="spyvsspy">
+		<description>Spy vs. Spy (USA, Display Unit Sample)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="spy vs. spy (u) (display-unit cart) [!].bin" size="262144" crc="b87e1b2b"/>
+		<driver status="good"/>
+	</game>
+	<game name="starwars">
+		<description>Star Wars (Euro, Bra)</description>
+		<year>1993</year>
+		<manufacturer>U.S. Gold</manufacturer>
+		<rom name="star wars (europe).bin" size="524288" crc="d4b8f66d"/>
+		<driver status="good"/>
+	</game>
+	<game name="sf2">
+		<description>Street Fighter II (Bra)</description>
+		<year>1997</year>
+		<manufacturer>Tec Toy</manufacturer>
+		<rom name="street fighter ii (brazil).bin" size="819200" crc="0f8287ec"/>
+		<driver status="good"/>
+	</game>
+	<game name="strtmast">
+		<description>Street Master (Kor)</description>
+		<year>1992</year>
+		<manufacturer>Zemina</manufacturer>
+		<rom name="street master (kr).bin" size="131072" crc="83f0eede"/>
+		<driver status="good"/>
+	</game>
+	<game name="sor">
+		<description>Streets of Rage (Euro, Bra)</description>
+		<year>1993</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="streets of rage (europe).bin" size="524288" crc="4ab3790f"/>
+		<driver status="good"/>
+	</game>
+	<game name="sor2">
+		<description>Streets of Rage II (Euro, Bra)</description>
+		<year>1993</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="streets of rage ii (europe).bin" size="524288" crc="04e9c089"/>
+		<driver status="good"/>
+	</game>
+	<game name="strider">
+		<description>Strider (Euro, USA, Bra, Kor)</description>
+		<year>1991</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-14093 w08.ic1" size="524288" crc="9802ed31"/>
+		<driver status="good"/>
+	</game>
+	<game name="striderd" cloneof="strider" romof="strider">
+		<description>Strider (USA, Display Unit Sample)</description>
+		<year>1991</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="strider (demo).bin" size="131072" crc="b990269a"/>
+		<driver status="good"/>
+	</game>
+	<game name="strider2">
+		<description>Strider II (Euro, Bra)</description>
+		<year>1992</year>
+		<manufacturer>U.S. Gold</manufacturer>
+		<rom name="strider ii (europe).bin" size="262144" crc="b8f0915a"/>
+		<driver status="good"/>
+	</game>
+	<game name="submarin">
+		<description>Submarine Attack (Euro)</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="submarine attack (europe).bin" size="262144" crc="d8f2f1b9"/>
+		<driver status="good"/>
+	</game>
+	<game name="suhocheo">
+		<description>Suho Jeonsa (Kor)</description>
+		<year>19??</year>
+		<manufacturer>Unknown</manufacturer>
+		<rom name="suho cheonsa (kr).bin" size="262144" crc="01686d67"/>
+		<driver status="good"/>
+	</game>
+	<game name="sukeban">
+		<description>Sukeban Deka II - Shoujo Tekkamen Densetsu (Jpn)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="sukeban deka ii - shoujo tekkamen densetsu (japan).bin" size="131072" crc="b13df647"/>
+		<driver status="good"/>
+	</game>
+	<game name="sumgames">
+		<description>Summer Games (Euro)</description>
+		<year>1991</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="summer games (europe).bin" size="131072" crc="8da5c93f"/>
+		<driver status="good"/>
+	</game>
+	<game name="sumgamesp" cloneof="sumgames" romof="sumgames">
+		<description>Summer Games (Euro, Prototype)</description>
+		<year>1991</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="summer games (europe) (beta).bin" size="131072" crc="80eb1fff"/>
+		<driver status="good"/>
+	</game>
+	<game name="sumgamesfm" cloneof="sumgames" romof="sumgames">
+		<description>Summer Games (FM Mod) [YM2413 FM sound chip supported]</description>
+		<year>2018</year>
+		<manufacturer>Sega - fatnick</manufacturer>
+		<rom name="summer games (fm-mod).sms" size="131072" crc="bbae488d"/>
+		<driver status="good"/>
+	</game>
+	<game name="superark" cloneof="woodypop" romof="woodypop">
+		<description>Super Arkanoid (Kor)</description>
+		<year>1989</year>
+		<manufacturer>HiCom</manufacturer>
+		<rom name="woody pop (super arkanoid) (kr).bin" size="32768" crc="c9dd4e5f"/>
+		<driver status="good"/>
+	</game>
+	<game name="suprbskt">
+		<description>Super Basketball (USA, CES Demo)</description>
+		<year>1989?</year>
+		<manufacturer>Unknown</manufacturer>
+		<rom name="super basketball (usa) (sample).bin" size="65536" crc="0dbf3b4a"/>
+		<driver status="good"/>
+	</game>
+	<game name="sbioman1">
+		<description>Super Bioman 1 (Kor)</description>
+		<year>1992</year>
+		<manufacturer>HiCom</manufacturer>
+		<rom name="super bioman 1.bin" size="65536" crc="a66d26cf"/>
+		<driver status="good"/>
+	</game>
+	<game name="sboy3">
+		<description>Super Boy 3 (Kor)</description>
+		<year>1991</year>
+		<manufacturer>Zemina</manufacturer>
+		<rom name="super boy 3.bin" size="131072" crc="9195c34c"/>
+		<driver status="good"/>
+	</game>
+	<game name="sboy4">
+		<description>Super Boy 4 (Kor)</description>
+		<year>1992</year>
+		<manufacturer>Zemina</manufacturer>
+		<rom name="super boy 4 (kor).bin" size="262144" crc="b995b4f0"/>
+		<driver status="good"/>
+	</game>
+	<game name="sboy1">
+		<description>Super Boy I (Kor)</description>
+		<year>1989</year>
+		<manufacturer>Zemina</manufacturer>
+		<rom name="super boy 1.bin" size="49152" crc="bf5a994a"/>
+		<driver status="good"/>
+	</game>
+	<game name="sboy2">
+		<description>Super Boy II (Kor)</description>
+		<year>1989</year>
+		<manufacturer>Zemina</manufacturer>
+		<rom name="super boy ii (kor).bin" size="49152" crc="67c2f0ff"/>
+		<driver status="good"/>
+	</game>
+	<game name="suprbubl" cloneof="bublbobl" romof="bublbobl">
+		<description>Super Bubble Bobble (Kor)</description>
+		<year>1989</year>
+		<manufacturer>Zemina</manufacturer>
+		<rom name="super bubble bobble (kr).bin" size="32768" crc="22c09cfd"/>
+		<driver status="good"/>
+	</game>
+	<game name="supgolf" cloneof="golfaman" romof="golfaman">
+		<description>Super Golf (Prototype)</description>
+		<year>1989</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="super golf [proto].bin" size="262144" crc="7f7b568d"/>
+		<driver status="good"/>
+	</game>
+	<game name="skickoff">
+		<description>Super Kick Off (Euro, Bra)</description>
+		<year>1991</year>
+		<manufacturer>U.S. Gold</manufacturer>
+		<rom name="mpr-14397-f.ic1" size="262144" crc="406aa0c2"/>
+		<driver status="good"/>
+	</game>
+	<game name="smgp">
+		<description>Super Monaco GP (Euro, Bra)</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-13289.ic1" size="262144" crc="55bf81a0"/>
+		<driver status="good"/>
+	</game>
+	<game name="smgpp2" cloneof="smgp" romof="smgp">
+		<description>Super Monaco GP (Euro, Older Prototype)</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="super monaco gp (proto).bin" size="262144" crc="a1d6d963"/>
+		<driver status="good"/>
+	</game>
+	<game name="smgpp1" cloneof="smgp" romof="smgp">
+		<description>Super Monaco GP (Euro, Prototype)</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="super monaco gp [proto 1].bin" size="262144" crc="dd7adbcc"/>
+		<driver status="good"/>
+	</game>
+	<game name="smgpu" cloneof="smgp" romof="smgp">
+		<description>Super Monaco GP (USA)</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-13295 t32.ic1" size="262144" crc="3ef12baa"/>
+		<driver status="good"/>
+	</game>
+	<game name="superoff">
+		<description>Super Off Road (Euro)</description>
+		<year>1992</year>
+		<manufacturer>Virgin Interactive</manufacturer>
+		<rom name="super off road (europe).bin" size="131072" crc="54f68c2a"/>
+		<driver status="good"/>
+	</game>
+	<game name="superrac">
+		<description>Super Racing (Jpn)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="super racing (japan).bin" size="262144" crc="7e0ef8cb"/>
+		<driver status="good"/>
+	</game>
+	<game name="ssinv">
+		<description>Super Space Invaders (Euro)</description>
+		<year>1991</year>
+		<manufacturer>Domark</manufacturer>
+		<rom name="super space invaders (europe).bin" size="262144" crc="1d6244ee"/>
+		<driver status="good"/>
+	</game>
+	<game name="stennis">
+		<description>Super Tennis (Euro, USA)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-12584.ic1" size="32768" crc="914514e3"/>
+		<driver status="good"/>
+	</game>
+	<game name="stennisc" cloneof="stennis" romof="stennis">
+		<description>Super Tennis (Euro, USA, Sega Card)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="super tennis (euro, usa).bin" size="32768" crc="914514e3"/>
+		<driver status="good"/>
+	</game>
+	<game name="wboymlndj" cloneof="wboymlnd" romof="wboymlnd">
+		<description>Super Wonder Boy - Monster World (Jpn)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="super wonder boy - monster world (japan).bin" size="262144" crc="b1da6a30"/>
+		<driver status="good"/>
+	</game>
+	<game name="superman">
+		<description>Superman - The Man of Steel (Euro, Bra)</description>
+		<year>1993</year>
+		<manufacturer>Virgin Interactive</manufacturer>
+		<rom name="mpr-15506.ic1" size="262144" crc="6f9ac98f"/>
+		<driver status="good"/>
+	</game>
+	<game name="sydhunt">
+		<description>Sydney Hunter and the Sacred Tribe (HB) [Homebrew]</description>
+		<year>2017</year>
+		<manufacturer>Oscar Toledo G.</manufacturer>
+		<rom name="Sydney Hunter.sms" size="131072" crc="e3060500"/>
+		<driver status="good"/>
+	</game>
+	<game name="t2ag">
+		<description>T2 - The Arcade Game (Euro)</description>
+		<year>1993</year>
+		<manufacturer>Arena</manufacturer>
+		<rom name="mpr-16073.ic1" size="524288" crc="93ca8152"/>
+		<driver status="good"/>
+	</game>
+	<game name="chasehq">
+		<description>Taito Chase H.Q. (Euro)</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="taito chase h.q. (europe).bin" size="262144" crc="85cfc9c9"/>
+		<driver status="good"/>
+	</game>
+	<game name="tazmars">
+		<description>Taz in Escape from Mars (Bra)</description>
+		<year>19??</year>
+		<manufacturer>Tec Toy</manufacturer>
+		<rom name="taz in escape from mars (brazil).bin" size="524288" crc="11ce074c"/>
+		<driver status="good"/>
+	</game>
+	<game name="tazmania">
+		<description>Taz-Mania (Euro, Bra)</description>
+		<year>1992</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-15161.ic1" size="262144" crc="7cc3e837"/>
+		<driver status="good"/>
+	</game>
+	<game name="tazmaniap" cloneof="tazmania" romof="tazmania">
+		<description>Taz-Mania (Euro, Prototype)</description>
+		<year>1992</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="taz-mania (europe) (beta).bin" size="262144" crc="1b312e04"/>
+		<driver status="good"/>
+	</game>
+	<game name="tecmow92">
+		<description>Tecmo World Cup '92 (Euro, Prototype)</description>
+		<year>1992</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="tecmo world cup '92 (europe) (beta).bin" size="262144" crc="96e75f48"/>
+		<driver status="good"/>
+	</game>
+	<game name="tecmow93">
+		<description>Tecmo World Cup '93 (Euro)</description>
+		<year>1993</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="tecmo world cup '93 (europe).bin" size="262144" crc="5a1c3dde"/>
+		<driver status="good"/>
+	</game>
+	<game name="teddyboy">
+		<description>Teddy Boy (Euro, USA, Bra)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-12668.ic1" size="32768" crc="2728faa3"/>
+		<driver status="good"/>
+	</game>
+	<game name="teddyboyc" cloneof="teddyboy" romof="teddyboy">
+		<description>Teddy Boy (Euro, USA, Bra, Sega Card)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="teddy boy (euro, usa, bra).bin" size="32768" crc="2728faa3"/>
+		<driver status="good"/>
+	</game>
+	<game name="teddyboyjp" cloneof="teddyboy" romof="teddyboy">
+		<description>Teddy Boy Blues (Jpn, Ep-MyCard, Prototype)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="teddy boy blues (japan) (proto) (ep-mycard).bin" size="49152" crc="d7508041"/>
+		<driver status="good"/>
+	</game>
+	<game name="teddyboyj" cloneof="teddyboy" romof="teddyboy">
+		<description>Teddy Boy Blues (Jpn, MyCard)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="teddy boy blues (japan).bin" size="32768" crc="316727dd"/>
+		<driver status="good"/>
+	</game>
+	<game name="teddyboyj1" cloneof="teddyboy" romof="teddyboy">
+		<description>Teddy Boy Blues (Jpn, Pirate?)</description>
+		<year>1985</year>
+		<manufacturer>pirate</manufacturer>
+		<rom name="teddy boy blues (j) [hack].bin" size="32768" crc="9dfa67ee"/>
+		<driver status="good"/>
+	</game>
+	<game name="tennis">
+		<description>Tennis Ace (Euro, Bra)</description>
+		<year>1989</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="tennis ace (europe).bin" size="262144" crc="1a390b93"/>
+		<driver status="good"/>
+	</game>
+	<game name="bakabon">
+		<description>Tensai Bakabon (Jpn)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="tensai bakabon (japan).bin" size="262144" crc="8132ab2c"/>
+		<driver status="good"/>
+	</game>
+	<game name="term2">
+		<description>Terminator 2 - Judgment Day (Euro)</description>
+		<year>1993</year>
+		<manufacturer>Flying Edge</manufacturer>
+		<rom name="terminator 2 - judgment day (europe).bin" size="262144" crc="ac56104f"/>
+		<driver status="good"/>
+	</game>
+	<game name="sn_ateam">
+		<description>The A-Team (Music prototype)</description>
+		<year>1992</year>
+		<manufacturer>Probe</manufacturer>
+		<rom name="a-team music [proto].bin" size="32768" crc="0eb430ff"/>
+		<driver status="good"/>
+	</game>
+	<game name="addfam">
+		<description>The Addams Family (Euro)</description>
+		<year>1993</year>
+		<manufacturer>Flying Edge</manufacturer>
+		<rom name="addams family, the (europe).bin" size="262144" crc="72420f38"/>
+		<driver status="good"/>
+	</game>
+	<game name="hicom8a" cloneof="hicom3a" romof="hicom3a">
+		<description>The Best Game Collection (Kor, 8 in 1 Ver. A)</description>
+		<year>1990</year>
+		<manufacturer>Hi-Com</manufacturer>
+		<rom name="hi-com 8-in-1 the best game collection a (kr).sms" size="262144" crc="fba94148"/>
+		<driver status="good"/>
+	</game>
+	<game name="hicom8b" cloneof="hicom3a" romof="hicom3a">
+		<description>The Best Game Collection (Kor, 8 in 1 Ver. B)</description>
+		<year>1990</year>
+		<manufacturer>Hi-Com</manufacturer>
+		<rom name="hi-com 8-in-1 the best game collection b (kr).sms" size="262144" crc="8333c86e"/>
+		<driver status="good"/>
+	</game>
+	<game name="hicom8c" cloneof="hicom3a" romof="hicom3a">
+		<description>The Best Game Collection (Kor, 8 in 1 Ver. C)</description>
+		<year>1990</year>
+		<manufacturer>Hi-Com</manufacturer>
+		<rom name="hi-com 8-in-1 the best game collection c (kr).sms" size="262144" crc="00e9809f"/>
+		<driver status="good"/>
+	</game>
+	<game name="hicom3e" cloneof="hicom3a" romof="hicom3a">
+		<description>The Best Game Collection - Ghost House + Teddy Boy Blues + Seishun Scandal (Kor)</description>
+		<year>1990</year>
+		<manufacturer>Hi-Com</manufacturer>
+		<rom name="hi-com 3-in-1 the best game collection e (kr).sms" size="131072" crc="82c09b57"/>
+		<driver status="good"/>
+	</game>
+	<game name="hicom3b" cloneof="hicom3a" romof="hicom3a">
+		<description>The Best Game Collection - Great Baseball + Great Soccer + Super Tennis (Kor)</description>
+		<year>1990</year>
+		<manufacturer>Hi-Com</manufacturer>
+		<rom name="hi-com 3-in-1 the best game collection b (kr).sms" size="131072" crc="6ebfe1c3"/>
+		<driver status="good"/>
+	</game>
+	<game name="hicom3a">
+		<description>The Best Game Collection - Hang On + Pit Pot + Spy vs Spy (Kor)</description>
+		<year>1990</year>
+		<manufacturer>Hi-Com</manufacturer>
+		<rom name="hi-com 3-in-1 the best game collection a (kr).sms" size="131072" crc="98af0236"/>
+		<driver status="good"/>
+	</game>
+	<game name="hicom3f" cloneof="hicom3a" romof="hicom3a">
+		<description>The Best Game Collection - Satellite-7 + Great Baseball + Seishun Scandal (Kor)</description>
+		<year>1990</year>
+		<manufacturer>Hi-Com</manufacturer>
+		<rom name="hi-com 3-in-1 the best game collection f (kr).sms" size="131072" crc="4088eeb4"/>
+		<driver status="good"/>
+	</game>
+	<game name="hicom3d" cloneof="hicom3a" romof="hicom3a">
+		<description>The Best Game Collection - Teddy Boy Blues + Great Soccer + Comical Machine Gun Joe (Kor)</description>
+		<year>1990</year>
+		<manufacturer>Hi-Com</manufacturer>
+		<rom name="hi-com 3-in-1 the best game collection d (kr).sms" size="131072" crc="8d2d695d"/>
+		<driver status="good"/>
+	</game>
+	<game name="hicom3c" cloneof="hicom3a" romof="hicom3a">
+		<description>The Best Game Collection - Teddy Boy Blues + Pit-Pot + Astro Flash (Kor)</description>
+		<year>1990</year>
+		<manufacturer>Hi-Com</manufacturer>
+		<rom name="hi-com 3-in-1 the best game collection c (kr).sms" size="131072" crc="81a36a4f"/>
+		<driver status="good"/>
+	</game>
+	<game name="circuit" cloneof="worldgp" romof="worldgp">
+		<description>The Circuit (Jpn)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="circuit, the (japan).bin" size="131072" crc="8fb75994"/>
+		<driver status="good"/>
+	</game>
+	<game name="cybers">
+		<description>The Cyber Shinobi (Euro, Bra)</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="cyber shinobi, the (europe).bin" size="262144" crc="1350e4f8"/>
+		<driver status="good"/>
+	</game>
+	<game name="cybersp" cloneof="cybers" romof="cybers">
+		<description>The Cyber Shinobi (Prototype)</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="cyber shinobi, the [proto].bin" size="131072" crc="dac00a3a"/>
+		<driver status="good"/>
+	</game>
+	<game name="dinodool">
+		<description>The Dinosaur Dooley (Kor)</description>
+		<year>1991</year>
+		<manufacturer>Daou Infosys</manufacturer>
+		<rom name="dinosaur dooley, the (korea) (unl).bin" size="131072" crc="32f4b791"/>
+		<driver status="good"/>
+	</game>
+	<game name="excdizzy" cloneof="xcdizzy" romof="xcdizzy">
+		<description>The Excellent Dizzy Collection (Euro, USA, Prototype) [unfinished proto, play 'gg_excdizzy' instead!]</description>
+		<year>1994</year>
+		<manufacturer>Codemasters</manufacturer>
+		<rom name="excellent dizzy collection, the (usa, europe) (en,fr,de,es,it) (proto).bin" size="262144" crc="8813514b"/>
+		<driver status="good"/>
+	</game>
+	<game name="flash">
+		<description>The Flash (Euro, Bra)</description>
+		<year>1993</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="flash, the (europe).bin" size="262144" crc="be31d63f"/>
+		<driver status="good"/>
+	</game>
+	<game name="flint">
+		<description>The Flintstones (Euro, Bra)</description>
+		<year>1990</year>
+		<manufacturer>Grandslam</manufacturer>
+		<rom name="mpr-13701-f.ic1" size="262144" crc="ca5c78a5"/>
+		<driver status="good"/>
+	</game>
+	<game name="crashdum">
+		<description>The Incredible Crash Dummies (Euro, Bra)</description>
+		<year>1993</year>
+		<manufacturer>Flying Edge</manufacturer>
+		<rom name="incredible crash dummies, the (europe).bin" size="262144" crc="b4584dde"/>
+		<driver status="good"/>
+	</game>
+	<game name="hulk">
+		<description>The Incredible Hulk (Euro, Bra)</description>
+		<year>1994</year>
+		<manufacturer>U.S. Gold</manufacturer>
+		<rom name="incredible hulk, the (europe).bin" size="524288" crc="be9a7071"/>
+		<driver status="good"/>
+	</game>
+	<game name="jungle">
+		<description>The Jungle Book (Euro, Bra)</description>
+		<year>1994</year>
+		<manufacturer>Virgin Interactive</manufacturer>
+		<rom name="mpr-16057.ic1" size="262144" crc="695a9a15"/>
+		<driver status="good"/>
+	</game>
+	<game name="luckydim">
+		<description>The Lucky Dime Caper Starring Donald Duck (Euro, Bra)</description>
+		<year>1991</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-14358-f.ic1" size="262144" crc="a1710f13"/>
+		<driver status="good"/>
+	</game>
+	<game name="luckydimp" cloneof="luckydim" romof="luckydim">
+		<description>The Lucky Dime Caper Starring Donald Duck (Euro, Prototype)</description>
+		<year>1991</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="lucky dime caper starring donald duck, the (europe) (beta).bin" size="262144" crc="7f6d0df6"/>
+		<driver status="good"/>
+	</game>
+	<game name="xevious">
+		<description>The Micro Xevious (Kor)</description>
+		<year>1990</year>
+		<manufacturer>Zemina</manufacturer>
+		<rom name="micro xevious, the (kr).bin" size="32768" crc="41cc2ade"/>
+		<driver status="good"/>
+	</game>
+	<game name="tnzs">
+		<description>The New Zealand Story (Euro)</description>
+		<year>1992</year>
+		<manufacturer>TecMagik</manufacturer>
+		<rom name="new zealand story, the (europe).bin" size="262144" crc="c660ff34"/>
+		<driver status="good"/>
+	</game>
+	<game name="ninja">
+		<description>The Ninja (Euro, USA)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-11046.ic1" size="131072" crc="66a15bd9"/>
+		<driver status="good"/>
+	</game>
+	<game name="ninjaj" cloneof="ninja" romof="ninja">
+		<description>The Ninja (Jpn)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-10409.ic1" size="131072" crc="320313ec"/>
+		<driver status="good"/>
+	</game>
+	<game name="ottifant">
+		<description>The Ottifants (Euro, Bra)</description>
+		<year>1993</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="ottifants, the (europe) (en,fr,de,es,it).bin" size="262144" crc="82ef2a7d"/>
+		<driver status="good"/>
+	</game>
+	<game name="proyakyu">
+		<description>The Pro Yakyuu Pennant Race (Jpn)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-10749.ic1" size="131072" crc="da9be8f0"/>
+		<driver status="good"/>
+	</game>
+	<game name="bartvssm">
+		<description>The Simpsons - Bart vs. The Space Mutants (Euro, Bra)</description>
+		<year>1992</year>
+		<manufacturer>Flying Edge</manufacturer>
+		<rom name="simpsons, the - bart vs. the space mutants (europe).bin" size="262144" crc="d1cc08ee"/>
+		<driver status="good"/>
+	</game>
+	<game name="bartvsw">
+		<description>The Simpsons - Bart vs. The World (Euro, Bra)</description>
+		<year>1993</year>
+		<manufacturer>Flying Edge</manufacturer>
+		<rom name="mpr-15988.ic1" size="262144" crc="f6b2370a"/>
+		<driver status="good"/>
+	</game>
+	<game name="smurfs">
+		<description>The Smurfs (Euro, Bra)</description>
+		<year>1994</year>
+		<manufacturer>Infogrames</manufacturer>
+		<rom name="smurfs, the (europe) (en,fr,de,es).bin" size="262144" crc="3e63768a"/>
+		<driver status="good"/>
+	</game>
+	<game name="smurfs2">
+		<description>The Smurfs 2 (Euro)</description>
+		<year>1996</year>
+		<manufacturer>Infogrames</manufacturer>
+		<rom name="schtroumpfs autour du monde, les (europe) (en,fr,de,es).bin" size="262144" crc="97e5bb7d"/>
+		<driver status="good"/>
+	</game>
+	<game name="smurfs2p" cloneof="smurfs2" romof="smurfs2">
+		<description>The Smurfs 2 (Euro, Prototype)</description>
+		<year>1996</year>
+		<manufacturer>Infogrames</manufacturer>
+		<rom name="schtroumpfs autour du monde, les (europe) (en,fr,de,es) (beta).bin" size="262144" crc="7982ae67"/>
+		<driver status="good"/>
+	</game>
+	<game name="termntrb" cloneof="termntr" romof="termntr">
+		<description>The Terminator (Bra)</description>
+		<year>1992</year>
+		<manufacturer>Tec Toy</manufacturer>
+		<rom name="terminator, the (brazil).bin" size="262144" crc="e3d5ce9a"/>
+		<driver status="good"/>
+	</game>
+	<game name="termntr">
+		<description>The Terminator (Euro)</description>
+		<year>1992</year>
+		<manufacturer>Virgin Interactive</manufacturer>
+		<rom name="terminator, the (europe).bin" size="262144" crc="edc5c012"/>
+		<driver status="good"/>
+	</game>
+	<game name="3dragon">
+		<description>The Three Dragon Story (Kor)</description>
+		<year>19??</year>
+		<manufacturer>Zemina</manufacturer>
+		<rom name="three dragon story, the (k).bin" size="32768" crc="8640e7e8"/>
+		<driver status="good"/>
+	</game>
+	<game name="tblade">
+		<description>Thunder Blade (Euro, USA, Bra)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-11820f.ic1" size="262144" crc="ae920e4b"/>
+		<driver status="good"/>
+	</game>
+	<game name="tbladej" cloneof="tblade" romof="tblade">
+		<description>Thunder Blade (Jpn)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="thunder blade (japan).bin" size="262144" crc="c0ce19b1"/>
+		<driver status="good"/>
+	</game>
+	<game name="timesold">
+		<description>Time Soldiers (Euro, USA, Bra)</description>
+		<year>1989</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-12129f.ic1" size="262144" crc="51bd14be"/>
+		<driver status="good"/>
+	</game>
+	<game name="tomjerry" cloneof="tomjermv" romof="tomjermv">
+		<description>Tom and Jerry (Prototype)</description>
+		<year>1992</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="tom and jerry (europe) (beta).bin" size="262144" crc="0c2fc2de"/>
+		<driver status="good"/>
+	</game>
+	<game name="tomjermv">
+		<description>Tom and Jerry - The Movie (Euro, Bra)</description>
+		<year>1992</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="tom and jerry - the movie (europe).bin" size="262144" crc="bf7b7285"/>
+		<driver status="good"/>
+	</game>
+	<game name="totowld3">
+		<description>Toto World 3 (Kor)</description>
+		<year>1993</year>
+		<manufacturer>Open Corp.</manufacturer>
+		<rom name="toto world 3 (korea) (unl).bin" size="262144" crc="4f8d75ec"/>
+		<driver status="good"/>
+	</game>
+	<game name="tos">
+		<description>Tower of Sorrow (HB, rev3) [Homebrew]</description>
+		<year>2020</year>
+		<manufacturer>Steiger</manufacturer>
+		<rom name="Tower_of_Sorrow_REV3.sms" size="524288" crc="d0e103d9"/>
+		<driver status="good"/>
+	</game>
+	<game name="transbot">
+		<description>TransBot (Euro, USA, Bra)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-12552.ic1" size="32768" crc="4bc42857"/>
+		<driver status="good"/>
+	</game>
+	<game name="transbotc" cloneof="transbot" romof="transbot">
+		<description>TransBot (Euro, USA, Bra, Sega Card)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="transbot (euro, usa, bra).bin" size="32768" crc="4bc42857"/>
+		<driver status="good"/>
+	</game>
+	<game name="transbotp" cloneof="transbot" romof="transbot">
+		<description>TransBot (USA, Prototype)</description>
+		<year>1985</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="transbot [proto].bin" size="32768" crc="58b99750"/>
+		<driver status="good"/>
+	</game>
+	<game name="treinam">
+		<description>Treinamento Do Mymo (Bra)</description>
+		<year>19??</year>
+		<manufacturer>Tec Toy</manufacturer>
+		<rom name="treinamento do mymo (b).bin" size="262144" crc="e94784f2"/>
+		<driver status="good"/>
+	</game>
+	<game name="trivial">
+		<description>Trivial Pursuit - Genus Edition (Euro)</description>
+		<year>1992</year>
+		<manufacturer>Domark</manufacturer>
+		<rom name="trivial pursuit - genus edition (europe) (en,fr,de,es).bin" size="524288" crc="e5374022"/>
+		<driver status="good"/>
+	</game>
+	<game name="ttoriui" cloneof="myhero" romof="myhero">
+		<description>Ttoriui Moheom (Kor)</description>
+		<year>19??</year>
+		<manufacturer>Unknown</manufacturer>
+		<rom name="ttoriui moheom (kr).bin" size="32768" crc="178801d2"/>
+		<driver status="good"/>
+	</game>
+	<game name="turmamon" cloneof="wboy3" romof="wboy3">
+		<description>Turma da Monica em O Resgate (Bra)</description>
+		<year>1993</year>
+		<manufacturer>Tec Toy</manufacturer>
+		<rom name="mpr-15999.ic1" size="262144" crc="22cca9bb"/>
+		<driver status="good"/>
+	</game>
+	<game name="ultima4">
+		<description>Ultima IV - Quest of the Avatar (Euro, Bra)</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-13135.ic1" size="524288" crc="b52d60c8"/>
+		<driver status="good"/>
+	</game>
+	<game name="ultima4p" cloneof="ultima4" romof="ultima4">
+		<description>Ultima IV - Quest of the Avatar (Euro, Prototype)</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="ultima iv - quest of the avatar (europe) (beta).bin" size="524288" crc="de9f8517"/>
+		<driver status="good"/>
+	</game>
+	<game name="ultsoccr">
+		<description>Ultimate Soccer (Euro, Bra)</description>
+		<year>1993</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="ultimate soccer (europe) (en,fr,de,es,it).bin" size="262144" crc="15668ca4"/>
+		<driver status="good"/>
+	</game>
+	<game name="vampire" cloneof="mastdark" romof="mastdark">
+		<description>Vampire (Euro, Prototype)</description>
+		<year>19??</year>
+		<manufacturer>Unknown</manufacturer>
+		<rom name="vampire (europe) (beta).bin" size="262144" crc="20f40cae"/>
+		<driver status="good"/>
+	</game>
+	<game name="vigilant">
+		<description>Vigilante (Euro, USA, Bra)</description>
+		<year>1989</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-12138f.ic1" size="262144" crc="dfb0b161"/>
+		<driver status="good"/>
+	</game>
+	<game name="vfa">
+		<description>Virtua Fighter Animation (Bra)</description>
+		<year>1997</year>
+		<manufacturer>Tec Toy</manufacturer>
+		<rom name="virtua fighter animation (brazil).bin" size="1048576" crc="57f1545b"/>
+		<driver status="good"/>
+	</game>
+	<game name="voyage">
+		<description>Voyage - A Sorceress Vacation (HB, v1.03) [Homebrew]</description>
+		<year>2020</year>
+		<manufacturer>SNAGS</manufacturer>
+		<rom name="Voyage - A Sorceress Vacation v1.03.sms" size="524288" crc="7aff90b0"/>
+		<driver status="good"/>
+	</game>
+	<game name="WaimanuSMS">
+		<description>Waimanu: Scary Monsters Saga (HB) [Homebrew]</description>
+		<year>2015</year>
+		<manufacturer>Disjointed Studio</manufacturer>
+		<rom name="WaimanuSMS.sms" size="131072" crc="195c3f78"/>
+		<driver status="good"/>
+	</game>
+	<game name="wpayton" cloneof="ameripf" romof="ameripf">
+		<description>Walter Payton Football (USA)</description>
+		<year>1989</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="walter payton football (usa).bin" size="262144" crc="3d55759b"/>
+		<driver status="good"/>
+	</game>
+	<game name="wanted">
+		<description>Wanted (Euro, USA, Bra) [Light Phaser game]</description>
+		<year>1989</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-12533f.ic1" size="131072" crc="5359762d"/>
+		<driver status="good"/>
+	</game>
+	<game name="wekainvaders10">
+		<description>Weka Invaders (HB, v1.0) [Homebrew]</description>
+		<year>2017</year>
+		<manufacturer>Disjointed Studio</manufacturer>
+		<rom name="WekaInvaders.sms" size="294912" crc="54b2fcf8"/>
+		<driver status="good"/>
+	</game>
+	<game name="carmnwldb" cloneof="carmnwld" romof="carmnwld">
+		<description>Where in the World is Carmen Sandiego? (Bra)</description>
+		<year>1989</year>
+		<manufacturer>Tec Toy</manufacturer>
+		<rom name="where in the world is carmen sandiego (brazil).bin" size="131072" crc="88aa8ca6"/>
+		<driver status="good"/>
+	</game>
+	<game name="carmnwld">
+		<description>Where in the World is Carmen Sandiego? (USA)</description>
+		<year>1989</year>
+		<manufacturer>Parker Brothers</manufacturer>
+		<rom name="where in the world is carmen sandiego (usa).bin" size="131072" crc="428b1e7c"/>
+		<driver status="good"/>
+	</game>
+	<game name="wimbled">
+		<description>Wimbledon (Euro)</description>
+		<year>1992</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-14686.ic1" size="262144" crc="912d92af"/>
+		<driver status="good"/>
+	</game>
+	<game name="wimbled2">
+		<description>Wimbledon II (Euro, Bra)</description>
+		<year>1993</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="wimbledon ii (europe).bin" size="262144" crc="7f3afe58"/>
+		<driver status="good"/>
+	</game>
+	<game name="wingwarriors">
+		<description>Wing Warriors (HB, April 18, 2019 Test) [Homebrew]</description>
+		<year>2019</year>
+		<manufacturer>Kitmaker</manufacturer>
+		<rom name="WingWarriors.sms" size="131072" crc="14e13a82"/>
+		<driver status="good"/>
+	</game>
+	<game name="wintolb" cloneof="wintol" romof="wintol">
+		<description>Winter Olympics - Lillehammer '94 (Bra)</description>
+		<year>1993</year>
+		<manufacturer>U.S. Gold</manufacturer>
+		<rom name="winter olympics - lillehammer '94 (brazil) (en,fr,de,es,it,pt,sv,no).bin" size="524288" crc="2fec2b4a"/>
+		<driver status="good"/>
+	</game>
+	<game name="wintol">
+		<description>Winter Olympics - Lillehammer '94 (Euro)</description>
+		<year>1993</year>
+		<manufacturer>U.S. Gold</manufacturer>
+		<rom name="winter olympics - lillehammer '94 (europe) (en,fr,de,es,it,pt,sv,no).bin" size="524288" crc="a20290b6"/>
+		<driver status="good"/>
+	</game>
+	<game name="wolfchld">
+		<description>Wolfchild (Euro, Bra)</description>
+		<year>1993</year>
+		<manufacturer>Virgin Interactive</manufacturer>
+		<rom name="mpr-15714.ic1" size="262144" crc="1f8efa1d"/>
+		<driver status="good"/>
+	</game>
+	<game name="wboya" cloneof="wboy" romof="wboy">
+		<description>Wonder Boy (Euro, Kor, v0) ~ Super Wonder Boy (Jpn, v0)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="super wonder boy (japan).bin" size="131072" crc="e2fcb6f3"/>
+		<driver status="good"/>
+	</game>
+	<game name="wboy">
+		<description>Wonder Boy (Euro, USA, Bra, v1)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="wonder boy (usa, europe).bin" size="131072" crc="73705c02"/>
+		<driver status="good"/>
+	</game>
+	<game name="wboy3">
+		<description>Wonder Boy III - The Dragon's Trap (Euro, USA, Kor)</description>
+		<year>1989</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-12570.ic1" size="262144" crc="679e1676"/>
+		<driver status="good"/>
+	</game>
+	<game name="wboy3fm" cloneof="wboy3" romof="wboy3">
+		<description>Wonder Boy III - The Dragon's Trap (FM Mod) [YM2413 FM sound chip supported]</description>
+		<year>1999</year>
+		<manufacturer>Sega - Bock</manufacturer>
+		<rom name="wonder boy iii - the dragon's trap (fm mod).sms" size="262144" crc="9442cfff"/>
+		<driver status="good"/>
+	</game>
+	<game name="wboymlnd">
+		<description>Wonder Boy in Monster Land (Euro, USA)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-11487.ic1" size="262144" crc="8cbef0c1"/>
+		<driver status="good"/>
+	</game>
+	<game name="wboymlnda" cloneof="wboymlnd" romof="wboymlnd">
+		<description>Wonder Boy in Monster Land (Euro, USA, Hacked?)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="wonder boy in monster land [hack].bin" size="262144" crc="7522cf0a"/>
+		<driver status="good"/>
+	</game>
+	<game name="wboymlndp" cloneof="wboymlnd" romof="wboymlnd">
+		<description>Wonder Boy in Monster Land (Prototype)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="wonder boy in monster land [proto].bin" size="262144" crc="8312c429"/>
+		<driver status="good"/>
+	</game>
+	<game name="wboymwld">
+		<description>Wonder Boy in Monster World (Euro, Kor)</description>
+		<year>1993</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-15317.ic1" size="524288" crc="7d7ce80b"/>
+		<driver status="good"/>
+	</game>
+	<game name="wboymwldp" cloneof="wboymwld" romof="wboymwld">
+		<description>Wonder Boy in Monster World (Euro, Prototype)</description>
+		<year>1993</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="wonder boy in monster world (europe) (beta).bin" size="524288" crc="81bff9bb"/>
+		<driver status="good"/>
+	</game>
+	<game name="wonsiin">
+		<description>Wonsiin (Kor)</description>
+		<year>1991</year>
+		<manufacturer>Zemina</manufacturer>
+		<rom name="wonsiin (kr).bin" size="131072" crc="a05258f5"/>
+		<driver status="good"/>
+	</game>
+	<game name="woodypop">
+		<description>Woody Pop - Shinjinrui no Block Kuzushi (Jpn, MyCard)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="woody pop - shinjinrui no block kuzushi (japan).bin" size="32768" crc="315917d4"/>
+		<driver status="good"/>
+	</game>
+	<game name="wclead">
+		<description>World Class Leader Board (Euro, Bra)</description>
+		<year>1991</year>
+		<manufacturer>U.S. Gold</manufacturer>
+		<rom name="world class leader board (europe).bin" size="262144" crc="c9a449b7"/>
+		<driver status="good"/>
+	</game>
+	<game name="wcup90">
+		<description>World Cup Italia '90 (Euro, Bra)</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-13292.ic1" size="131072" crc="6e1ad6fd"/>
+		<driver status="good"/>
+	</game>
+	<game name="wcup90d" cloneof="wcup90" romof="wcup90">
+		<description>World Cup Italia '90 (USA, Demo)</description>
+		<year>1990</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="world cup italia '90 [demo].bin" size="131072" crc="a0cf8b15"/>
+		<driver status="good"/>
+	</game>
+	<game name="wcup94">
+		<description>World Cup USA 94 (Euro, Bra)</description>
+		<year>1992</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="world cup usa 94 (europe) (en,fr,de,es,it,nl,pt,sv).bin" size="524288" crc="a6bf8f9e"/>
+		<driver status="good"/>
+	</game>
+	<game name="wldgames">
+		<description>World Games (Euro, Bra)</description>
+		<year>1989</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="world games (europe).bin" size="131072" crc="a2a60bc8"/>
+		<driver status="good"/>
+	</game>
+	<game name="wldgamesp" cloneof="wldgames" romof="wldgames">
+		<description>World Games (Euro, Prototype)</description>
+		<year>1989</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="world games (europe) (beta).bin" size="131072" crc="914d3fc4"/>
+		<driver status="good"/>
+	</game>
+	<game name="worldgp">
+		<description>World Grand Prix (Euro)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-10156.ic1" size="131072" crc="4aaad0d6"/>
+		<driver status="good"/>
+	</game>
+	<game name="worldgpu" cloneof="worldgp" romof="worldgp">
+		<description>World Grand Prix (USA, Bra, Kor)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-10151.ic2" size="131072" crc="7b369892"/>
+		<driver status="good"/>
+	</game>
+	<game name="worldgpp" cloneof="worldgp" romof="worldgp">
+		<description>World Grand Prix (USA, Prototype)</description>
+		<year>1986</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="world grand prix [proto].bin" size="131072" crc="b5a9f824"/>
+		<driver status="good"/>
+	</game>
+	<game name="worldsoc">
+		<description>World Soccer (Euro, Jpn, Kor) ~ Great Soccer (USA)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-10747f.ic1" size="131072" crc="72112b75"/>
+		<driver status="good"/>
+	</game>
+	<game name="wwfsteel">
+		<description>WWF Wrestlemania - Steel Cage Challenge (Euro, Bra)</description>
+		<year>1993</year>
+		<manufacturer>Flying Edge</manufacturer>
+		<rom name="wwf wrestlemania - steel cage challenge (europe).bin" size="262144" crc="2db21448"/>
+		<driver status="good"/>
+	</game>
+	<game name="xmenmojo">
+		<description>X-Men - Mojo World (Bra)</description>
+		<year>1996</year>
+		<manufacturer>Tec Toy</manufacturer>
+		<rom name="x-men - mojo world (brazil).bin" size="524288" crc="3e1387f6"/>
+		<driver status="good"/>
+	</game>
+	<game name="xenon2">
+		<description>Xenon 2 - Megablast (Image Works) (Euro)</description>
+		<year>1991</year>
+		<manufacturer>Image Works</manufacturer>
+		<rom name="xenon 2 - megablast (europe) (image works).bin" size="262144" crc="5c205ee1"/>
+		<driver status="good"/>
+	</game>
+	<game name="xenon2v" cloneof="xenon2" romof="xenon2">
+		<description>Xenon 2 - Megablast (Virgin) (Euro)</description>
+		<year>1991</year>
+		<manufacturer>Virgin Interactive</manufacturer>
+		<rom name="xenon 2 - megablast (europe) (virgin).bin" size="262144" crc="ec726c0d"/>
+		<driver status="good"/>
+	</game>
+	<game name="xyzolog">
+		<description>Xyzolog (Kor)</description>
+		<year>19??</year>
+		<manufacturer>Taito?</manufacturer>
+		<rom name="xyzolog (kr).sms" size="49152" crc="565c799f"/>
+		<driver status="good"/>
+	</game>
+	<game name="ysj" cloneof="ys" romof="ys">
+		<description>Ys (Jpn)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="ys (japan).bin" size="262144" crc="32759751"/>
+		<driver status="good"/>
+	</game>
+	<game name="ysd" cloneof="ys" romof="ys">
+		<description>Ys (USA, Demo)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="ys - the vanished omens [demo].bin" size="262144" crc="e8b82066"/>
+		<driver status="good"/>
+	</game>
+	<game name="ys">
+		<description>Ys - The Vanished Omens (Euro, USA, Bra)</description>
+		<year>1988</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-12044f.ic1" size="262144" crc="b33e2827"/>
+		<driver status="good"/>
+	</game>
+	<game name="ysfm" cloneof="ys" romof="ys">
+		<description>Ys - The Vanished Omens (FM Mod, v1.2) [YM2413 FM sound chip supported]</description>
+		<year>2009</year>
+		<manufacturer>Sega - SSTranslations</manufacturer>
+		<rom name="ys - the vanished omens (fm patch).sms" size="262144" crc="7ed5dca2"/>
+		<driver status="good"/>
+	</game>
+	<game name="zaxxon3d">
+		<description>Zaxxon 3-D (World)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="mpr-11197.ic1" size="262144" crc="a3ef13cb"/>
+		<driver status="good"/>
+	</game>
+	<game name="zaxxon3dp" cloneof="zaxxon3d" romof="zaxxon3d">
+		<description>Zaxxon 3-D (World, Prototype)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="zaxxon 3-d (world) (beta).bin" size="262144" crc="bba74147"/>
+		<driver status="good"/>
+	</game>
+	<game name="zillionb" cloneof="zillion" romof="zillion">
+		<description>Zillion (Euro, v0) ~ Akai Koudan Zillion (Jpn, v0)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="zillion (japan, europe) (en,ja).bin" size="131072" crc="60c19645"/>
+		<driver status="good"/>
+	</game>
+	<game name="zillion">
+		<description>Zillion (Euro, v2)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="zillion (europe) (v1.2).bin" size="131072" crc="7ba54510"/>
+		<driver status="good"/>
+	</game>
+	<game name="zilliona" cloneof="zillion" romof="zillion">
+		<description>Zillion (USA, v1)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="zillion (usa) (v1.1).bin" size="131072" crc="5718762c"/>
+		<driver status="good"/>
+	</game>
+	<game name="zillion2">
+		<description>Zillion II - The Tri Formation (Euro, USA) ~ Tri Formation (Jpn)</description>
+		<year>1987</year>
+		<manufacturer>Sega</manufacturer>
+		<rom name="zillion ii - the tri formation (world).bin" size="131072" crc="2f2e3bc9"/>
+		<driver status="good"/>
+	</game>
+	<game name="zool">
+		<description>Zool - Ninja of the 'Nth' Dimension (Euro)</description>
+		<year>1993</year>
+		<manufacturer>Gremlin Interactive</manufacturer>
+		<rom name="mpr-15992.ic1" size="262144" crc="9d9d0a5f"/>
+		<driver status="good"/>
+	</game>
+</datafile>

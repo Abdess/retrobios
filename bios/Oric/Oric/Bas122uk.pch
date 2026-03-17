@@ -1,0 +1,74 @@
+;
+; ROM patches file
+;
+; This file describes how to patch a ROM for things like turbotape,
+; and filename decoding.
+;
+
+; ****** ROM INFORMATION ******
+
+; This part isn't actual patches, just information about
+; the hardware the ROM expects to be present.
+
+; ROM expects a special keyboard layout?
+keymap = qwerty
+
+; ****** FILENAME DECODING *******
+
+; When the PC is about to execute this address, we should be at a point
+; in CLOAD/CSAVE/STORE/RECALL where the filename is valid in memory.
+fd_cload_getname_pc = $e4ac
+fd_csave_getname_pc = $e92c
+fd_store_getname_pc = $e98b
+fd_recall_getname_pc = $e9d8
+
+; The address to read the CLOAD filename
+fd_getname_addr = $027f
+
+
+; ****** TURBOTAPE ******
+
+; Address of the "Cassette Sync" function in ROM
+tt_getsync_pc = $e735
+
+; Address of the RTS at the end of the cassette sync function (so we can
+; skip the function)
+tt_getsync_end_pc = $e759
+
+; If turbotape is enabled, but no tape is inserted, the cassette sync
+; function will be executed normally. Here we have an address inside the
+; loop that waits for the cassette sync signal, so that we can break out
+; of it if a tape is inserted.
+tt_getsync_loop_pc = $e720
+
+; Address of the "Read Byte" function in ROM
+tt_readbyte_pc = $e6c9
+
+; Address of the RTS at the end of the read byte function
+tt_readbyte_end_pc = $e6fb
+
+; Set carry at end of readbyte routine?
+tt_readbyte_setcarry = yes
+
+; In order to simulate the effects of the read byte routine, you can
+; specify an address to write the byte read, and an address to write
+; zero to.
+tt_readbyte_storebyte_addr = $002f
+tt_readbyte_storezero_addr = $02b1
+
+; Address of the "put byte" function in ROM
+tt_putbyte_pc = $e65e
+
+; Address of the RTS at the end of the put byte function
+tt_putbyte_end_pc = $e68a
+
+; Address of the RTS at the end of CSAVE
+tt_csave_end_pc = $e93c
+
+; Address of the RTS at the end of STORE
+tt_store_end_pc = $e9d0
+
+; Address of the function that writes the tape leader
+; (so we can write a shorter one)
+tt_writeleader_pc = $e75a
+tt_writeleader_end_pc = $e769

@@ -1,0 +1,256 @@
+﻿Stone Pillar|石の柱
+Stone Pillar|石の柱
+Stone Pillar|石の柱
+Stone Pillar (Moss)|石の柱（苔）
+Stone Pillar (Snow)|石の柱（雪）
+Wood Pilla|木の柱
+Stone Pillar|石の柱
+Demon Castle Pillar|魔王城の柱
+Stone Pillar|石の柱
+Stone Pillar|石の柱
+Stone Pillar|石の柱
+Stone Pillar (Moss)|石の柱（苔）
+Stone Pillar (Snow)|石の柱（雪）
+Wood Pilla|木の柱
+Stone Pillar|石の柱
+Demon Castle Pillar|魔王城の柱
+Broken Stone Pillar|折れた石の柱
+Broken Stone Pillar|折れた石の柱
+Broken Stone Pillar|折れた石の柱
+Broken Stone Pillar (Moss)|折れた石の柱（苔）
+Broken Stone Pillar (Snow)|折れた石の柱（雪）
+Broken Wood Pillar|折れた木の柱
+Broken Stone Pillar|折れた石の柱
+Broken Demon Castle Pillar|折れた魔王城の柱
+Bones|骸骨
+Bones|骸骨
+Rubble|瓦礫
+Rubble (Moss)|瓦礫（苔）
+Rubble (Snow)|瓦礫（雪）
+Broken Wood Pillar|折れた木の柱
+Rubble|瓦礫
+Rubble (Demon Castle)|瓦礫（魔王城）
+Tapestry|タペストリー
+Tapestry (Ruins)|タペストリー（廃墟）
+Tapestry|タペストリー
+Tapestry (Ruins)|タペストリー（廃墟）
+Tapestry|タペストリー
+Tapestry (Ruins)|タペストリー（廃墟）
+Tapestry|タペストリー
+Tapestry (Ruins)|タペストリー（廃墟）
+Tapestry|タペストリー
+Tapestry (Ruins)|タペストリー（廃墟）
+Tapestry|タペストリー
+Tapestry (Ruins)|タペストリー（廃墟）
+Tapestry|タペストリー
+Tapestry (Ruins)|タペストリー（廃墟）
+Tapestry|タペストリー
+Tapestry (Ruins)|タペストリー（廃墟）
+Monument|石碑
+Monument|石碑
+Monument|石碑
+Monument|石碑
+Monument|石碑
+Monument (Lit)|石碑（光）
+Monument (Lit)|石碑（光）
+Monument (Lit)|石碑（光）
+Monument|石碑
+Monument|石碑
+Monument|石碑
+Monument|石碑
+Monument|石碑
+Monument (Lit)|石碑（光）
+Monument (Lit)|石碑（光）
+Monument (Lit)|石碑（光）
+Monument (Snow)|石碑（雪）
+Monument (Snow)|石碑（雪）
+Monument (Snow)|石碑（雪）
+Monument (Snow)|石碑（雪）
+Monument (Snow)|石碑（雪）
+Monument (Ruins)|石碑（廃墟）
+Monument (Ruins)|石碑（廃墟）
+Monument (Ruins)|石碑（廃墟）
+Monument (Snow)|石碑（雪）
+Monument (Snow)|石碑（雪）
+Monument (Snow)|石碑（雪）
+Monument (Snow)|石碑（雪）
+Monument (Snow)|石碑（雪）
+Monument (Ruins)|石碑（廃墟）
+Monument (Ruins)|石碑（廃墟）
+Monument (Ruins)|石碑（廃墟）
+Statue|石像
+Goddess Statue|女神像
+Goddess Statue|女神像
+Demon Statue|悪魔像
+Dais|台座
+Dragon Statue|竜像
+Dragon Statue|竜像
+Statue|石像
+Statue|石像
+Goddess Statue|女神像
+Goddess Statue|女神像
+Demon Statue|悪魔像
+Broken Statue|壊れた像
+Dragon Statue|竜像
+Dragon Statue|竜像
+Statue|石像
+Statue (Snow)|石像（雪）
+Goddess Statue (Snow)|女神像（雪）
+Goddess Statue (Snow)|女神像（雪）
+Demon Statue (Snow)|悪魔像（雪）
+Dais (Snow)|台座（雪）
+Dragon Statue (Snow)|竜像（雪）
+Dragon Statue (Snow)|竜像（雪）
+Ice Statue|氷像
+Statue (Snow)|石像（雪）
+Goddess Statue (Snow)|女神像（雪）
+Goddess Statue (Snow)|女神像（雪）
+Demon Statue (Snow)|悪魔像（雪）
+Broken Statue (Snow)|壊れた像（雪）
+Dragon Statue (Snow)|竜像（雪）
+Dragon Statue (Snow)|竜像（雪）
+Ice Statue|氷像
+Window (Demon Castle)|窓（魔王城）
+Window (Demon Castle)|窓（魔王城）
+Window (Demon Castle)|窓（魔王城）
+Gravel Mound|土砂
+Gravel Mound|土砂
+Gravel Mound|土砂
+Cave Entrance|洞窟入口
+Mine Entrance|坑道入口
+Window (Demon Castle)|窓（魔王城）
+Window (Demon Castle)|窓（魔王城）
+Window (Demon Castle)|窓（魔王城）
+Gravel Mound (Snow|土砂（雪）
+Gravel Mound|土砂
+Gravel Mound|土砂
+Cave Entrance|洞窟入口
+Mine Entrance|坑道入口
+Roof|屋根
+Roof|屋根
+Roof|屋根
+Roof|屋根
+Roof|屋根
+Roof (Snow)|屋根（雪）
+Roof (Snow)|屋根（雪）
+Roof (Snow)|屋根（雪）
+Roof|屋根
+Roof|屋根
+Roof|屋根
+Roof|屋根
+Roof|屋根
+Roof (Snow)|屋根（雪）
+Roof (Snow)|屋根（雪）
+Roof (Snow)|屋根（雪）
+Roof|屋根
+Roof|屋根
+Roof|屋根
+Roof (Snow)|屋根（雪）
+Roof (Snow)|屋根（雪）
+Roof (Snow)|屋根（雪）
+Roof (Snow)|屋根（雪）
+Roof (Snow)|屋根（雪）
+Roof|屋根
+Roof|屋根
+Roof|屋根
+Roof (Snow)|屋根（雪）
+Roof (Snow)|屋根（雪）
+Roof (Wood)|屋根（木造）
+Roof (Wood)|屋根（木造）
+Roof (Wood)|屋根（木造）
+Roof|屋根
+Roof|屋根
+Roof|屋根
+Roof|屋根
+Roof|屋根
+Roof (Wood)|屋根（木造）
+Roof (Wood)|屋根（木造）
+Roof (Wood)|屋根（木造）
+Roof|屋根
+Roof|屋根
+Roof|屋根
+Roof|屋根
+Roof|屋根
+Roof (Wood)|屋根（木造）
+Roof (Wood)|屋根（木造）
+Roof (Wood)|屋根（木造）
+Round Tower|円塔
+Round Tower|円塔
+Roof Detail|屋根飾り
+Roof Detail (Snow)|屋根飾り（雪）
+Roof (Wood)|屋根（木造）
+Roof (Wood)|屋根（木造）
+Round Tower (Fort)|円塔（砦）
+Round Tower (Fort)|円塔（砦）
+Round Tower|円塔
+Round Tower|円塔
+Roof Detail|屋根飾り
+Roof Detail (Wood)|屋根飾り（木造）
+Roof (Wood)|屋根（木造）
+Roof (Wood)|屋根（木造）
+Round Tower (Fort)|円塔（砦）
+Round Tower (Fort)|円塔（砦）
+Round Tower|円塔
+Round Tower|円塔
+Round Tower|円塔
+Round Tower|円塔
+Round Tower (Fort)|円塔（砦）
+Round Tower (Fort)|円塔（砦）
+Round Tower (Fort)|円塔（砦）
+Round Tower (Fort)|円塔（砦）
+Round Tower|円塔
+Round Tower|円塔
+Round Tower|円塔
+Round Tower|円塔
+Round Tower (Demon Castle)|円塔（魔王城）
+Round Tower (Demon Castle)|円塔（魔王城）
+Round Tower (Fort)|円塔（砦）
+Round Tower (Fort)|円塔（砦）
+Round Tower|円塔
+Round Tower|円塔
+Round Tower|円塔
+Round Tower|円塔
+Round Tower (Demon Castle)|円塔（魔王城）
+Round Tower (Demon Castle)|円塔（魔王城）
+Round Tower (Fort)|円塔（砦）
+Round Tower (Fort)|円塔（砦）
+Round Tower (Snow)|円塔（雪）
+Round Tower (Snow)|円塔（雪）
+Round Tower|円塔
+Round Tower|円塔
+Round Tower (Demon Castle)|円塔（魔王城）
+Round Tower (Demon Castle)|円塔（魔王城）
+Round Tower (Fort, Snow)|円塔（砦・雪）
+Round Tower (Fort, Snow)|円塔（砦・雪）
+Round Tower (Snow)|円塔（雪）
+Round Tower (Snow)|円塔（雪）
+Round Tower (Snow)|円塔（雪）
+Round Tower (Snow)|円塔（雪）
+Round Tower (Demon Castle)|円塔（魔王城）
+Round Tower (Demon Castle)|円塔（魔王城）
+Round Tower (Fort, Snow)|円塔（砦・雪）
+Round Tower (Fort, Snow)|円塔（砦・雪）
+Round Tower (Snow)|円塔（雪）
+Round Tower (Snow)|円塔（雪）
+Round Tower (Snow)|円塔（雪）
+Round Tower (Snow)|円塔（雪）
+Round Tower (Demon Castle)|円塔（魔王城）
+Round Tower (Demon Castle)|円塔（魔王城）
+Round Tower (Fort, Snow)|円塔（砦・雪）
+Round Tower (Fort, Snow)|円塔（砦・雪）
+Round Tower (Snow)|円塔（雪）
+Round Tower (Snow)|円塔（雪）
+Round Tower (Snow)|円塔（雪）
+Round Tower (Snow)|円塔（雪）
+Round Tower (Demon Castle)|円塔（魔王城）
+Round Tower (Demon Castle)|円塔（魔王城）
+Round Tower (Fort, Snow)|円塔（砦・雪）
+Round Tower (Fort, Snow)|円塔（砦・雪）
+Round Tower (Snow)|円塔（雪）
+Round Tower (Snow)|円塔（雪）
+Round Tower (Snow)|円塔（雪）
+Round Tower (Snow)|円塔（雪）
+Round Tower (Fort, Snow)|円塔（砦・雪）
+Round Tower (Fort, Snow)|円塔（砦・雪）
+Round Tower (Fort, Snow)|円塔（砦・雪）
+Round Tower (Fort, Snow)|円塔（砦・雪）

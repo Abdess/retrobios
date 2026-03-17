@@ -1,1944 +1,16153 @@
-# Retro BIOSes
-
-BIOSes in agreement with: [System.dat](https://github.com/libretro/libretro-database/blob/master/dat/System.dat)
-
-## What's inside
-
-### System, firmware, or BIOS files used by libretro
-
-#### Version 2020-11-02
-
-#### 3DO Company, The - 3DO 🆗
-
-✔️**3do_arcade_saot.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/3DO%20Company%2C%20The%20-%203DO/3do_arcade_saot.bin))
-
-> size 524288
-> crc b832da9a
-> md5 8970fc987ab89a7f64da9f8a8c4333ff
-> sha1 520d3d1b5897800af47f92efd2444a26b7a7dead
-
-✔️**goldstar.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/3DO%20Company%2C%20The%20-%203DO/goldstar.bin))
-
-> size 1048576
-> crc b6f5028b
-> md5 8639fd5e549bd6238cfee79e3e749114
-> sha1 c4a2e5336f77fb5f743de1eea2cda43675ee2de7
-
-✔️**panafz1-kanji.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/3DO%20Company%2C%20The%20-%203DO/panafz1-kanji.bin))
-
-> size 933636
-> crc a8e9447c
-> md5 b8dc97f778a6245c58e064b0312e8281
-> sha1 acd39a8fee1b9d2950d5ab447846c11fb31af63e
-
-✔️**panafz1.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/3DO%20Company%2C%20The%20-%203DO/panafz1.bin))
-
-> size 1048576
-> crc c8c8ff89
-> md5 f47264dd47fe30f73ab3c010015c155b
-> sha1 34bf189111295f74d7b7dfc1f304d98b8d36325a
-
-✔️**panafz10-norsa.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/3DO%20Company%2C%20The%20-%203DO/panafz10-norsa.bin))
-
-> size 1048576
-> crc 230e6feb
-> md5 1477bda80dc33731a65468c1f5bcbee9
-> sha1 f05e642322c03694f06a809c0b90fc27ac73c002
-
-✔️**panafz10.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/3DO%20Company%2C%20The%20-%203DO/panafz10.bin))
-
-> size 1048576
-> crc 58242cee
-> md5 51f2f43ae2f3508a14d9f56597e2d3ce
-> sha1 3c912300775d1ad730dc35757e279c274c0acaad
-
-✔️**panafz10e-anvil-norsa.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/3DO%20Company%2C%20The%20-%203DO/panafz10e-anvil-norsa.bin))
-
-> size 1048576
-> crc 9a186221
-> md5 cf11bbb5a16d7af9875cca9de9a15e09
-> sha1 2765c7b4557cc838b32567d2428d088980295159
-
-✔️**panafz10e-anvil.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/3DO%20Company%2C%20The%20-%203DO/panafz10e-anvil.bin))
-
-> size 1048576
-> crc 2495c500
-> md5 a48e6746bd7edec0f40cff078f0bb19f
-> sha1 a900371f0cdcdc03f79557f11d406fd71251a5fd
-
-✔️**panafz10ja-anvil-kanji.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/3DO%20Company%2C%20The%20-%203DO/panafz10ja-anvil-kanji.bin))
-
-> size 1048576
-> crc ff7393de
-> md5 428577250f43edc902ea239c50d2240d
-> sha1 2e857b957803d0331fd229328df01f3ffab69eee
-
-✔️**panafz1j-kanji.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/3DO%20Company%2C%20The%20-%203DO/panafz1j-kanji.bin))
-
-> size 1048576
-> crc 45f478b1
-> md5 c23fb5d5e6bb1c240d02cf968972be37
-> sha1 884515605ee243577ab20767ef8c1a7368e4e407
-
-✔️**panafz1j-norsa.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/3DO%20Company%2C%20The%20-%203DO/panafz1j-norsa.bin))
-
-> size 1048576
-> crc 82ce67c6
-> md5 f6c71de7470d16abe4f71b1444883dc8
-> sha1 a417587ae3b0b8ef00c830920c21af8bee88e419
-
-✔️**panafz1j.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/3DO%20Company%2C%20The%20-%203DO/panafz1j.bin))
-
-> size 1048576
-> crc d9493adc
-> md5 a496cfdded3da562759be3561317b605
-> sha1 ec7ec62d60ec0459a14ed56ebc66761ef3c80efc
-
-✔️**sanyotry.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/3DO%20Company%2C%20The%20-%203DO/sanyotry.bin))
-
-> size 1048576
-> crc d5cbc509
-> md5 35fa1a1ebaaeea286dc5cd15487c13ea
-> sha1 b01c53da256dde43ffec4ad3fc3adfa8d635e943
-
-#### Arcade 🆗
-
-✔️**airlbios.zip** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Arcade/airlbios.zip))
-
-> size 715730
-> crc f83ec60f
-> md5 7a11bfe0cc72886d032e386db68f890c
-> sha1 f2a730530f4989ca0e8860aa4e455b6a5fe69e1d
-
-✔️**awbios.zip** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Arcade/awbios.zip))
-
-> size 42296
-> crc 67a14ad5
-> md5 85254fbe320ca82a768ec2c26bb08def
-> sha1 7940c7bf29eee85a5b2fdec78750b19aa22895dc
-
-✔️**bubsys.zip** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Arcade/bubsys.zip))
-
-> size 7950
-> crc 8fc2fd2e
-> md5 f81298afd68a1a24a49a1a2d9f087964
-> sha1 1c0ffcd308b0c8c6dbb74ad8b811a0767200d366
-
-✔️**cchip.zip** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Arcade/cchip.zip))
-
-> size 2700
-> crc 23debecb
-> md5 df6f8a3d83c028a5cb9f2f2be60773f3
-> sha1 364f2302a145a0fd6de767d7f8484badde1d1a6e
-
-✔️**decocass.zip** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Arcade/decocass.zip))
-
-> size 16107
-> crc 5de524e5
-> md5 b7e1189b341bf6a8e270017c096d21b0
-> sha1 30b97b2670b79d0de41cba190324c504846c6fa1
-
-✔️**f355bios.zip** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Arcade/f355bios.zip))
-
-> size 1394278
-> crc 17516536
-> md5 547f3d12aed389058ca06148f1cca0ed
-> sha1 b6ff66dcb5547bd91760d239ddf428a655631c53
-
-✔️**f355dlx.zip** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Arcade/f355dlx.zip))
-
-> size 2328436
-> crc 23ac17be
-> md5 1028615bcac4c31634a3364ce5c04044
-> sha1 48d1712d1b1cdfeeeb43c6287c17b0b6309cfaab
-
-✔️**hod2bios.zip** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Arcade/hod2bios.zip))
-
-> size 1479106
-> crc 0ddc6daf
-> md5 f4011d3116500354edf7302a90402711
-> sha1 782c303cbdfab1027b04db74a63e27bdad5e0c53
-
-✔️**isgsm.zip** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Arcade/isgsm.zip))
-
-> size 10207
-> crc 26856bf9
-> md5 4a56d56e2219c5e2b006b66a4263c01c
-> sha1 f590ccf688b4c05fa1da5c5dd92c224545170c3b
-
-✔️**midssio.zip** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Arcade/midssio.zip))
-
-> size 163
-> crc 7620bd32
-> md5 5904b0de768d1d506e766aa7e18994c1
-> sha1 54275c9833e497f71f76ab239030cc386c863991
-
-✔️**naomi.zip** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Arcade/naomi.zip))
-
-> size 9321533
-> crc 6ee50181
-> md5 526eda1e2a7920c92c88178789d71d84
-> sha1 c96711c01c0158f161791d6fbe75d88329e8ac0a
-
-✔️**neogeo.zip** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Arcade/neogeo.zip))
-
-> size 1859335
-> crc 81315163
-> md5 00dad01abdbf8ea9e79ad2fe11bdb182
-> sha1 deb62b0074b8cae4f162c257662136733cfc76ad
-
-✔️**nmk004.zip** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Arcade/nmk004.zip))
-
-> size 3556
-> crc a6099353
-> md5 bfacf1a68792d5348f93cf724d2f1dda
-> sha1 489256f5e2001070d2ad94c90d255282c71ed274
-
-✔️**pgm.zip** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Arcade/pgm.zip))
-
-> size 2094636
-> crc bf3dd2ef
-> md5 87cc944eef4c671aa2629a8ba48a08e0
-> sha1 c0c001ec80fa860857000f4cfc9844a28498a355
-
-✔️**skns.zip** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Arcade/skns.zip))
-
-> size 924762
-> crc 5692af22
-> md5 3f956c4e7008804cb47cbde49bd5b908
-> sha1 4257bd14b541fafbd555cb98ba079a3416a45934
-
-✔️**ym2608.zip** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Arcade/ym2608.zip))
-
-> size 7609
-> crc 5b4c29c4
-> md5 79ae0d2bb1901b7e606b6dc339b79a97
-> sha1 06fc753d015b43ca1787f4cfd9331b1674202e64
-
-#### Atari - 400-800 🆗
-
-✔️**ATARIBAS.ROM** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Atari%20-%20400-800/ATARIBAS.ROM))
-
-> size 8192
-> crc 7d684184
-> md5 0bac0c6a50104045d902df4503a4c30b
-> sha1 3693c9cb9bf3b41bae1150f7a8264992468fc8c0
-
-✔️**ATARIOSA.ROM** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Atari%20-%20400-800/ATARIOSA.ROM))
-
-> size 10240
-> crc 72b3fed4
-> md5 eb1f32f5d9f382db1bbfb8d7f9cb343a
-> sha1 6dd53356159a129ed12367beb3b24a771d41adb0
-
-✔️**ATARIOSB.ROM** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Atari%20-%20400-800/ATARIOSB.ROM))
-
-> size 10240
-> crc 3e28a1fe
-> md5 a3e8d617c95d08031fe1b20d541434b2
-> sha1 f1f0741b1d34fb4350cf7cb8ab3b6ea11cdd8174
-
-✔️**ATARIXL.ROM** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Atari%20-%20400-800/ATARIXL.ROM))
-
-> size 16384
-> crc 1f9cd270
-> md5 06daac977823773a3eea3422fd26a703
-> sha1 ae4f523ba08b6fd59f3cae515a2b2410bbd98f55
-
-#### Atari - 5200 🆗
-
-✔️**5200.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Atari%20-%205200/5200.rom))
-
-> size 2048
-> crc 4248d3e3
-> md5 281f20ea4320404ec820fb7ec0693b38
-> sha1 6ad7a1e8c9fad486fbec9498cb48bf5bc3adc530
-
-#### Atari - 7800 🆗
-
-✔️**7800 BIOS (E).rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Atari%20-%207800/7800%20BIOS%20(E).rom))
-
-> size 16384
-> crc d5b61170
-> md5 397bb566584be7b9764e7a68974c4263
-> sha1 5a140136a16d1d83e4ff32a19409ca376a8df874
-
-✔️**7800 BIOS (U).rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Atari%20-%207800/7800%20BIOS%20(U).rom))
-
-> size 4096
-> crc 5d13730c
-> md5 0763f1ffb006ddbe32e52d497ee848ae
-> sha1 d9d134bb6b36907c615a594cc7688f7bfcef5b43
-
-#### Atari - Lynx 🆗
-
-✔️**lynxboot.img** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Atari%20-%20Lynx/lynxboot.img))
-
-> size 512
-> crc 0d973c9d
-> md5 fcd403db69f54290b51035d82f835e7b
-> sha1 e4ed47fae31693e016b081c6bda48da5b70d7ccb
-
-#### Atari - ST 🆗
-
-✔️**tos.img** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Atari%20-%20ST/tos.img))
-
-> size 196608
-> crc d3c32283
-> md5 c1c57ce48e8ee4135885cee9e63a68a2
-> sha1 735793fdba07fe8d5295caa03484f6ef3de931f5
-
-#### Coleco - ColecoVision 🆗
-
-✔️**colecovision.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Coleco%20-%20ColecoVision/colecovision.rom))
-
-> size 8192
-> crc 3aa93ef3
-> md5 2c66f5911e5b42b8ebe113403548eee7
-> sha1 45bedc4cbdeac66c7df59e9e599195c778d86a92
-
-#### Commodore - Amiga 🆗
-
-✔️**kick34005.A500** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Commodore%20-%20Amiga/kick34005.A500))
-
-> size 262144
-> crc c4f0f55f
-> md5 82a21c1890cae844b3df741f2762d48d
-> sha1 891e9a547772fe0c6c19b610baf8bc4ea7fcb785
-
-✔️**kick40063.A600** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Commodore%20-%20Amiga/kick40063.A600))
-
-> size 524288
-> crc fc24ae0d
-> md5 e40a5dfb3d017ba8779faba30cbd1c8e
-> sha1 3b7f1493b27e212830f989f26ca76c02049f09ca
-
-✔️**kick40068.A1200** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Commodore%20-%20Amiga/kick40068.A1200))
-
-> size 524288
-> crc 1483a091
-> md5 646773759326fbac3b2311fd8c8793ee
-> sha1 e21545723fe8374e91342617604f1b3d703094f1
-
-#### Fairchild Channel F 🆗
-
-✔️**sl31253.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Fairchild%20Channel%20F/sl31253.bin))
-
-> size 1024
-> crc 04694ed9
-> md5 ac9804d4c0e9d07e33472e3726ed15c3
-> sha1 81193965a374d77b99b4743d317824b53c3e3c78
-
-✔️**sl31254.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Fairchild%20Channel%20F/sl31254.bin))
-
-> size 1024
-> crc 9c047ba3
-> md5 da98f4bb3242ab80d76629021bb27585
-> sha1 8f70d1b74483ba3a37e86cf16c849d601a8c3d2c
-
-✔️**sl90025.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Fairchild%20Channel%20F/sl90025.bin))
-
-> size 1024
-> crc 015c1e38
-> md5 95d339631d867c8f1d15a5f2ec26069d
-> sha1 759e2ed31fbde4a2d8daf8b9f3e0dffebc90dae2
-
-#### Id Software - Doom 🆗
-
-✔️**prboom.wad** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Id%20Software%20-%20Doom/prboom.wad))
-
-> size 143312
-> crc a5751b99
-> md5 72ae1b47820fcc93cc0df9c428d0face
-> sha1 5f4aed208301449c2e9514edfd325fe9dead76fa
-
-#### J2ME 🆗
-
-✔️**freej2me-lr.jar** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/J2ME/freej2me-lr.jar))
-
-> size 552042
-> crc 96a1babf
-> md5 ccd92e7156ce2f0ce14c88ffb68a16eb
-> sha1 fb231192894e2fd17a5799fbbdf86a4696951bce
-
-✔️**freej2me-sdl.jar** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/J2ME/freej2me-sdl.jar))
-
-> size 552043
-> crc 5cca0f35
-> md5 4da74084fc1b1bd3d776ed8d3ee648de
-> sha1 78f1f41d55efc6b8d81e99c1d9d75248b3f83dc2
-
-✔️**freej2me.jar** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/J2ME/freej2me.jar))
-
-> size 552039
-> crc ffb98ffa
-> md5 29a92d0867da2917275b7c6c805d256f
-> sha1 7d738042268e4ffd0aae8e85e05dd28bce761d1f
-
-#### MacII 🆗
-
-✔️**MacII.ROM** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/MacII/MacII.ROM))
-
-> size 262144
-> crc 4df6d054
-> md5 66223be1497460f1e60885eeb35e03cc
-> sha1 db6b504744281369794e26ba71a6e385cf6227fa
-
-#### Magnavox - Odyssey2 🆗
-
-✔️**o2rom.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Magnavox%20-%20Odyssey2/o2rom.bin))
-
-> size 1024
-> crc 8016a315
-> md5 562d5ebf9e030a40d6fabfc2f33139fd
-> sha1 b2e1955d957a475de2411770452eff4ea19f4cee
-
-#### Mattel - Intellivision 🆗
-
-✔️**exec.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Mattel%20-%20Intellivision/exec.bin))
-
-> size 8192
-> crc cbce86f7
-> md5 62e761035cb657903761800f4437b8af
-> sha1 5a65b922b562cb1f57dab51b73151283f0e20c7a
-
-✔️**grom.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Mattel%20-%20Intellivision/grom.bin))
-
-> size 2048
-> crc 683a4158
-> md5 0cd5946c6473e42e8e4c2137785e427f
-> sha1 f9608bb4ad1cfe3640d02844c7ad8e0bcd974917
-
-#### Microsoft - MSX 🆗
-
-✔️**CARTS.SHA** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Microsoft%20-%20MSX/CARTS.SHA))
-
-> size 33152
-> crc d42f4444
-> md5 74b0f217fa0e2b8bb5a2f8e2ecc69da3
-> sha1 bf5fb954db868e523febccc68549ed9187961076
-
-✔️**CYRILLIC.FNT** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Microsoft%20-%20MSX/CYRILLIC.FNT))
-
-> size 2048
-> crc 73af9bc3
-> md5 85b38e4128bbc300e675f55b278683a8
-> sha1 000ac11b702a4c42e40f135df12fa5f2f13e20a1
-
-✔️**DISK.ROM** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Microsoft%20-%20MSX/DISK.ROM))
-
-> size 16384
-> crc 721f61df
-> md5 80dcd1ad1a4cf65d64b7ba10504e8190
-> sha1 032cb1c1c75b9a191fa1230978971698d9d2a17f
-
-✔️**FMPAC.ROM** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Microsoft%20-%20MSX/FMPAC.ROM))
-
-> size 65536
-> crc 0e84505d
-> md5 6f69cc8b5ed761b03afd78000dfb0e19
-> sha1 9d789166e3caf28e4742fe933d962e99618c633d
-
-✔️**FMPAC16.ROM** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Microsoft%20-%20MSX/FMPAC16.ROM))
-
-> size 16384
-> crc 5d6c4d27
-> md5 af8537262df8df267072f359399a7635
-> sha1 2dc4517ebd5a061f9b5aa6b449cc4d4a2073540c
-
-✔️**ITALIC.FNT** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Microsoft%20-%20MSX/ITALIC.FNT))
-
-> size 2048
-> crc c90ec498
-> md5 c83e50e9f33b8dd893c414691822740d
-> sha1 401dd6692dc80628e5f68b7c79be0b0ebbc4d3ee
-
-✔️**KANJI.ROM** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Microsoft%20-%20MSX/KANJI.ROM))
-
-> size 131072
-> crc c9651b32
-> md5 febe8782b466d7c3b16de6d104826b34
-> sha1 84a645becec0a25d3ab7a909cde1b242699a8662
-
-✔️**MSX.ROM** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Microsoft%20-%20MSX/MSX.ROM))
-
-> size 32768
-> crc 94ee12f3
-> md5 aa95aea2563cd5ec0a0919b44cc17d47
-> sha1 409e82adac40f6bdd18eb6c84e8b2fbdc7fb5498
-
-✔️**MSX2.ROM** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Microsoft%20-%20MSX/MSX2.ROM))
-
-> size 32768
-> crc 6cdaf3a5
-> md5 ec3a01c91f24fbddcbcab0ad301bc9ef
-> sha1 6103b39f1e38d1aa2d84b1c3219c44f1abb5436e
-
-✔️**MSX2EXT.ROM** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Microsoft%20-%20MSX/MSX2EXT.ROM))
-
-> size 16384
-> crc 66237ecf
-> md5 2183c2aff17cf4297bdb496de78c2e8a
-> sha1 5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02
-
-✔️**MSX2P.ROM** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Microsoft%20-%20MSX/MSX2P.ROM))
-
-> size 32768
-> crc 00870134
-> md5 6d8c0ca64e726c82a4b726e9b01cdf1e
-> sha1 e2fbd56e42da637609d23ae9df9efd1b4241b18a
-
-✔️**MSX2PEXT.ROM** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Microsoft%20-%20MSX/MSX2PEXT.ROM))
-
-> size 16384
-> crc b8ba44d3
-> md5 7c8243c71d8f143b2531f01afa6a05dc
-> sha1 fe0254cbfc11405b79e7c86c7769bd6322b04995
-
-✔️**MSXDOS2.ROM** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Microsoft%20-%20MSX/MSXDOS2.ROM))
-
-> size 65536
-> crc 1c430991
-> md5 6418d091cd6907bbcf940324339e43bb
-> sha1 c36c9e0f96738a340381e23b4f97245388801a46
-
-✔️**PAINTER.ROM** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Microsoft%20-%20MSX/PAINTER.ROM))
-
-> size 65536
-> crc 1bda68a3
-> md5 403cdea1cbd2bb24fae506941f8f655e
-> sha1 7fd2a28c4fdaeb140f3c8c8fb90271b1472c97b9
-
-✔️**RS232.ROM** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Microsoft%20-%20MSX/RS232.ROM))
-
-> size 16640
-> crc ab6874f8
-> md5 279efd1eae0d358eecd4edc7d9adedf3
-> sha1 7aec0134ad6a5177f4056fcb6047083e8e00529b
-
-#### NEC - PC Engine - TurboGrafx 16 - SuperGrafx 🆗
-
-✔️**gecard.pce** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/NEC%20-%20PC%20Engine%20-%20TurboGrafx%2016%20-%20SuperGrafx/gecard.pce))
-
-> size 32768
-> crc 51a12d90
-> md5 6d2cb14fc3e1f65ceb135633d1694122
-> sha1 014881a959e045e00f4db8f52955200865d40280
-
-✔️**gexpress.pce** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/NEC%20-%20PC%20Engine%20-%20TurboGrafx%2016%20-%20SuperGrafx/gexpress.pce))
-
-> size 32768
-> crc 51a12d90
-> md5 6d2cb14fc3e1f65ceb135633d1694122
-> sha1 014881a959e045e00f4db8f52955200865d40280
-
-✔️**syscard1.pce** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/NEC%20-%20PC%20Engine%20-%20TurboGrafx%2016%20-%20SuperGrafx/syscard1.pce))
-
-> size 262144
-> crc 3f9f95a4
-> md5 2b7ccb3d86baa18f6402c176f3065082
-> sha1 a39a66da7de6ba94ab84d04eef7afeec7d4ee66a
-
-✔️**syscard2.pce** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/NEC%20-%20PC%20Engine%20-%20TurboGrafx%2016%20-%20SuperGrafx/syscard2.pce))
-
-> size 262144
-> crc 283b74e0
-> md5 3cdd6614a918616bfc41c862e889dd79
-> sha1 88da02e2503f7c32810f5d93a34849d470742b6d
-
-✔️**syscard2u.pce** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/NEC%20-%20PC%20Engine%20-%20TurboGrafx%2016%20-%20SuperGrafx/syscard2u.pce))
-
-> size 262144
-> crc ff2a5ec3
-> md5 94279f315e8b52904f65ab3108542afe
-> sha1 2bea3dac98f84b2f2f469fa77ea720b8770d598d
-
-✔️**syscard3.pce** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/NEC%20-%20PC%20Engine%20-%20TurboGrafx%2016%20-%20SuperGrafx/syscard3.pce))
-
-> size 262144
-> crc 6d9a73ef
-> md5 38179df8f4ac870017db21ebcbf53114
-> sha1 79f5ff55dd10187c7fd7b8daab0b3ffbd1f56a2c
-
-✔️**syscard3u.pce** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/NEC%20-%20PC%20Engine%20-%20TurboGrafx%2016%20-%20SuperGrafx/syscard3u.pce))
-
-> size 262144
-> crc 2b5b75fe
-> md5 0754f903b52e3b3342202bdafb13efa5
-> sha1 d02611d99921986147c753df14c7349b31d71950
-
-#### NEC - PC-98 🆗
-
-✔️**2608_bd.wav** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/NEC%20-%20PC-98/2608_bd.wav))
-
-> size 19192
-> crc bb038714
-> md5 d94546e70f17fd899be8df3544ab6cbb
-> sha1 0a56c142ef40cec50f3ee56a6e42d0029c9e2818
-
-✔️**2608_hh.wav** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/NEC%20-%20PC-98/2608_hh.wav))
-
-> size 36722
-> crc 9898b372
-> md5 08c54a0c1f774a5538a848a6665a34b4
-> sha1 12f676cef249b82480b6f19c454e234b435ca7b6
-
-✔️**2608_rim.wav** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/NEC%20-%20PC-98/2608_rim.wav))
-
-> size 5288
-> crc 638864c1
-> md5 465ea0768b27da404aec45dfc501404b
-> sha1 c65592330c9dd84011151daed52f9aec926b7e56
-
-✔️**2608_sd.wav** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/NEC%20-%20PC-98/2608_sd.wav))
-
-> size 15558
-> crc 542cc58c
-> md5 d71004351c8bbfdad53b18222c061d49
-> sha1 3c79663ef74c0b0439d13351326eb1c52a657008
-
-✔️**2608_tom.wav** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/NEC%20-%20PC-98/2608_tom.wav))
-
-> size 23092
-> crc 93c57bba
-> md5 96a4ead13f364734f79b0c58af2f0e1f
-> sha1 9513fb4a3f41e75a972a273a5104cbd834c1e2c5
-
-✔️**2608_top.wav** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/NEC%20-%20PC-98/2608_top.wav))
-
-> size 57016
-> crc ab73a296
-> md5 593cff6597ab9380d822b8f824fd2c28
-> sha1 aa4a8f766a86b830687d5083fd3b9db0652f46fc
-
-✔️**bios.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/NEC%20-%20PC-98/bios.rom))
-
-> size 98304
-> crc 0a682b93
-> md5 cd237e16e7e77c06bb58540e9e9fca68
-> sha1 76a7360502fa0296ea93b4c537174610a834d367
-
-✔️**font.bmp** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/NEC%20-%20PC-98/font.bmp))
-
-> size 524350
-> crc d271798b
-> md5 7da1e5b7c482d4108d22a5b09631d967
-> sha1 b4f14e58030ed40fff2dc312b58ea4440bdf8cc5
-
-✔️**font.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/NEC%20-%20PC-98/font.rom))
-
-> size 288768
-> crc 456d9fc7
-> md5 38d32748ae49d1815b0614970849fd40
-> sha1 78ba9960f135372825ab7244b5e4e73a810002ff
-
-✔️**itf.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/NEC%20-%20PC-98/itf.rom))
-
-> size 32768
-> crc c1815325
-> md5 72ea51443070f0e9212bfc9b793ee28e
-> sha1 a2fb11c000ed7c976520622cfb7940ed6ddc904e
-
-✔️**sound.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/NEC%20-%20PC-98/sound.rom))
-
-> size 16384
-> crc fe9f57f2
-> md5 524473c1a5a03b17e21d86a0408ff827
-> sha1 d5dbc4fea3b8367024d363f5351baecd6adcd8ef
-
-#### NEC - PC-FX 🆗
-
-✔️**fx-scsi.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/NEC%20-%20PC-FX/fx-scsi.rom))
-
-> size 524288
-> crc f3e60e5e
-> md5 430e9745f9235c515bc8e652d6ca3004
-> sha1 65482a23ac5c10a6095aee1db5824cca54ead6e5
-
-✔️**pcfx.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/NEC%20-%20PC-FX/pcfx.rom))
-
-> size 1048576
-> crc 76ffb97a
-> md5 08e36edbea28a017f79f8d4f7ff9b6d7
-> sha1 1a77fd83e337f906aecab27a1604db064cf10074
-
-✔️**pcfxbios.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/NEC%20-%20PC-FX/pcfxbios.bin))
-
-> size 1048576
-> crc 76ffb97a
-> md5 08e36edbea28a017f79f8d4f7ff9b6d7
-> sha1 1a77fd83e337f906aecab27a1604db064cf10074
-
-✔️**pcfxga.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/NEC%20-%20PC-FX/pcfxga.rom))
-
-> size 1048576
-> crc 41c3776b
-> md5 5885bc9a64bf80d4530b9b9b978ff587
-> sha1 a9372202a5db302064c994fcda9b24d29bb1b41c
-
-✔️**pcfxv101.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/NEC%20-%20PC-FX/pcfxv101.bin))
-
-> size 1048576
-> crc 236102c9
-> md5 e2fb7c7220e3a7838c2dd7e401a7f3d8
-> sha1 8b662f7548078be52a871565e19511ccca28c5c8
-
-#### Nintendo - Famicom Disk System 🆗
-
-✔️**disksys.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20Famicom%20Disk%20System/disksys.rom))
-
-> size 8192
-> crc 5e607dcf
-> md5 ca30b50f880eb660a320674ed365ef7a
-> sha1 57fe1bdee955bb48d357e463ccbf129496930b62
-
-#### Nintendo - Gameboy 🆗
-
-✔️**dmg_boot.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20Gameboy/dmg_boot.bin))
-
-> size 256
-> crc 59c8598e
-> md5 32fbbd84168d3482956eb3c5051637f5
-> sha1 4ed31ec6b0b175bb109c0eb5fd3d193da823339f
-
-✔️**gb_bios.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20Gameboy/gb_bios.bin))
-
-> size 256
-> crc 59c8598e
-> md5 32fbbd84168d3482956eb3c5051637f5
-> sha1 4ed31ec6b0b175bb109c0eb5fd3d193da823339f
-
-#### Nintendo - Game Boy Advance 🆗
-
-✔️**gba_bios.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20Game%20Boy%20Advance/gba_bios.bin))
-
-> size 16384
-> crc 81977335
-> md5 a860e8c0b6d573d191e4ec7db1b1e4f6
-> sha1 300c20df6731a33952ded8c436f7f186d25d3492
-
-#### Nintendo - Gameboy Color 🆗
-
-✔️**cgb_boot.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20Gameboy%20Color/cgb_boot.bin))
-
-> size 2304
-> crc 41884e46
-> md5 dbfce9db9deaa2567f6a84fde55f9680
-> sha1 1293d68bf9643bc4f36954c1e80e38f39864528d
-
-✔️**gbc_bios.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20Gameboy%20Color/gbc_bios.bin))
-
-> size 2304
-> crc 41884e46
-> md5 dbfce9db9deaa2567f6a84fde55f9680
-> sha1 1293d68bf9643bc4f36954c1e80e38f39864528d
-
-#### Nintendo - GameCube 🆗
-
-✔️**gc-dvd-20010608.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20GameCube/gc-dvd-20010608.bin))
-
-> size 131072
-> crc c047465a
-> md5 561532ad496f644897952d2cef5bb431
-> sha1 27872c201e87b06a19bf85d36c796ef383f8d52d
-
-✔️**gc-dvd-20010831.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20GameCube/gc-dvd-20010831.bin))
-
-> size 131072
-> crc 54c7d10e
-> md5 b953eb1a8fc9922b3f7051c1cdc451f1
-> sha1 ae7233cae8f94749796e0b740d6021e3b00a8926
-
-✔️**gc-dvd-20020402.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20GameCube/gc-dvd-20020402.bin))
-
-> size 131072
-> crc 8bbef508
-> md5 413154dd0e2c824c9b18b807fd03ec4e
-> sha1 691e46213d8428befdf568157e670b971ab94e1d
-
-✔️**gc-dvd-20020823.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20GameCube/gc-dvd-20020823.bin))
-
-> size 131072
-> crc 5205222b
-> md5 c03f6bbaf644eb9b3ee261dbe199eb42
-> sha1 2faaf92bcaffe675f54f7249d30f3791507e22ab
-
-✔️**gc-ntsc-10.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20GameCube/gc-ntsc-10.bin))
-
-> size 2097152
-> crc 6dac1f2a
-> md5 fc924a7c879b661abc37cec4f018fdf3
-> sha1 a1837968288253ed541f2b11440b68f5a9b33875
-
-✔️**gc-ntsc-11.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20GameCube/gc-ntsc-11.bin))
-
-> size 2097152
-> crc d5e6feea
-> md5 019e39822a9ca3029124f74dd4d55ac4
-> sha1 239eacd86527ff9a75aeb7282da65797baeef010
-
-✔️**gc-ntsc-12.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20GameCube/gc-ntsc-12.bin))
-
-> size 2097152
-> crc 86573808
-> md5 b17148254a5799684c7d783206504926
-> sha1 ef9194ab4804aa0aa8540d846caf291b28331165
-
-✔️**gc-pal-10.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20GameCube/gc-pal-10.bin))
-
-> size 2097152
-> crc 4f319f43
-> md5 0cdda509e2da83c85bfe423dd87346cc
-> sha1 f27c63e5394e2fd1606f70df004c4fc2d6027700
-
-✔️**gc-pal-11.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20GameCube/gc-pal-11.bin))
-
-> size 2097152
-> crc 667d0b64
-> md5 339848a0b7c2124cf155276c1e79cbd0
-> sha1 f3cd0c7c61cbcefa85e7de3aff4cfa50bc508714
-
-✔️**gc-pal-12.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20GameCube/gc-pal-12.bin))
-
-> size 2097152
-> crc ad1b7f16
-> md5 db92574caab77a7ec99d4605fd6f2450
-> sha1 80b8744ff5e43585392f55546bd03a673d11ef5f
-
-#### Nintendo - Nintendo 64DD 🆗
-
-✔️**64DD_IPL.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20Nintendo%2064DD/64DD_IPL.bin))
-
-> size 4194304
-> crc 7f933ce2
-> md5 8d3d9f294b6e174bc7b1d2fd1c727530
-> sha1 bf861922dcb78c316360e3e742f4f70ff63c9bc3
-
-#### Nintendo - Nintendo DS 🆗
-
-✔️**bios7.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20Nintendo%20DS/bios7.bin))
-
-> size 16384
-> crc 1280f0d5
-> md5 df692a80a5b1bc90728bc3dfc76cd948
-> sha1 24f67bdea115a2c847c8813a262502ee1607b7df
-
-✔️**bios9.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20Nintendo%20DS/bios9.bin))
-
-> size 4096
-> crc 2ab23573
-> md5 a392174eb3e572fed6447e956bde4b25
-> sha1 bfaac75f101c135e32e2aaf541de6b1be4c8c62d
-
-✔️**firmware.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20Nintendo%20DS/firmware.bin))
-
-> size 262144
-> crc 945f9dc9
-> md5 e45033d9b0fa6b0de071292bba7c9d13
-> sha1 cfe072921ee3fb93f688743f8beef89043c3e9ad
-
-#### Nintendo - Nintendo Entertainment System 🆗
-
-✔️**NstDatabase.xml** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20Nintendo%20Entertainment%20System/NstDatabase.xml))
-
-> size 1009534
-> crc ebb2196c
-> md5 7bfe8c0540ed4bd6a0f1e2a0f0118ced
-> sha1 26322f182540211e9b5e3647675b7c593706ae2b
-
-#### Nintendo - Pokemon Mini 🆗
-
-✔️**bios.min** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20Pokemon%20Mini/bios.min))
-
-> size 4096
-> crc aed3c14d
-> md5 1e4fb124a3a886865acb574f388c803d
-> sha1 daad4113713ed776fbd47727762bca81ba74915f
-
-#### Nintendo - Satellaview 🆗
-
-✔️**BS-X.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20Satellaview/BS-X.bin))
-
-> size 1048576
-> crc f51f07a0
-> md5 fed4d8242cfbed61343d53d48432aced
-> sha1 604556b2e62860af18db5a77f2956ebc75450020
-
-✔️**BS-X (En).bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20Satellaview/BS-X%20(En).bin))
-
-> size 1048576
-> crc 347e1c4e
-> md5 33b62505da6ca4525e3839db4e1a7bca
-> sha1 f3cdff70de5d0f5c52ca3a8f46588b863d48b8ec
-
-✔️**BS-X (En) (DRM-Free).bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20Satellaview/BS-X%20(En)%20(DRM-Free).bin))
-
-> size 1048576
-> crc 8c573c7e
-> md5 4ed9648505ab33a4daec93707b16caba
-> sha1 7996bd1c01b99800e0d5d34beff93db283784864
-
-#### Nintendo - SuFami Turbo 🆗
-
-✔️**STBIOS.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20SuFami%20Turbo/STBIOS.bin))
-
-> size 262144
-> crc 9b4ca911
-> md5 d3a44ba7d42a74d3ac58cb9c14c6a5ca
-> sha1 ef86ea192eed03d5c413fdbbfd46043be1d7a127
-
-#### Nintendo - Super Game Boy 🆗
-
-✔️**SGB1.sfc** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20Super%20Game%20Boy/SGB1.sfc))
-
-> size 262144
-> crc 8a4a174f
-> md5 b15ddb15721c657d82c5bab6db982ee9
-> sha1 973e10840db683cf3faf61bd443090786b3a9f04
-
-✔️**SGB2.sfc** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20Super%20Game%20Boy/SGB2.sfc))
-
-> size 524288
-> crc cb176e45
-> md5 8ecd73eb4edf7ed7e81aef1be80031d5
-> sha1 e5b2922ca137051059e4269b236d07a22c07bc84
-
-✔️**sgb1.boot.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20Super%20Game%20Boy/sgb1.boot.rom))
-
-> size 256
-> crc ec8a83b9
-> md5 d574d4f9c12f305074798f54c091a8b4
-> sha1 aa2f50a77dfb4823da96ba99309085a3c6278515
-
-✔️**sgb1.program.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20Super%20Game%20Boy/sgb1.program.rom))
-
-> size 262144
-> crc 8a4a174f
-> md5 b15ddb15721c657d82c5bab6db982ee9
-> sha1 973e10840db683cf3faf61bd443090786b3a9f04
-
-✔️**sgb2.boot.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20Super%20Game%20Boy/sgb2.boot.rom))
-
-> size 256
-> crc 53d0dd63
-> md5 e0430bca9925fb9882148fd2dc2418c1
-> sha1 93407ea10d2f30ab96a314d8eca44fe160aea734
-
-✔️**sgb2.program.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20Super%20Game%20Boy/sgb2.program.rom))
-
-> size 524288
-> crc cb176e45
-> md5 8ecd73eb4edf7ed7e81aef1be80031d5
-> sha1 e5b2922ca137051059e4269b236d07a22c07bc84
-
-✔️**sgb2_bios.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20Super%20Game%20Boy/sgb2_bios.bin))
-
-> size 256
-> crc 53d0dd63
-> md5 e0430bca9925fb9882148fd2dc2418c1
-> sha1 93407ea10d2f30ab96a314d8eca44fe160aea734
-
-✔️**sgb_bios.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20Super%20Game%20Boy/sgb_bios.bin))
-
-> size 256
-> crc ec8a83b9
-> md5 d574d4f9c12f305074798f54c091a8b4
-> sha1 aa2f50a77dfb4823da96ba99309085a3c6278515
-
-#### Nintendo - Super Nintendo Entertainment System 🆗
-
-✔️**cx4.data.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20Super%20Nintendo%20Entertainment%20System/cx4.data.rom))
-
-> size 3072
-> crc b6e76a6a
-> md5 037ac4296b6b6a5c47c440188d3c72e3
-> sha1 a002f4efba42775a31185d443f3ed1790b0e949a
-
-✔️**dsp1.data.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20Super%20Nintendo%20Entertainment%20System/dsp1.data.rom))
-
-> size 2048
-> crc c8347cbd
-> md5 3d81b45fa0c2aa8b852dfb1ece7c0971
-> sha1 589c158685fe3cf88c7ca77cb6083f0e4de9c7c3
-
-✔️**dsp1.program.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20Super%20Nintendo%20Entertainment%20System/dsp1.program.rom))
-
-> size 6144
-> crc db9a4c92
-> md5 ae209fbe789fbf11a48aea5ab1197321
-> sha1 c5d283604beebb3d832f15a0b3fc60d10dd4bddc
-
-✔️**dsp1b.data.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20Super%20Nintendo%20Entertainment%20System/dsp1b.data.rom))
-
-> size 2048
-> crc 37a252c6
-> md5 1e3f568634a7d8284020dddc0ae905bc
-> sha1 19d5e822fe15ee6942e9921c3d8275a761a969df
-
-✔️**dsp1b.program.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20Super%20Nintendo%20Entertainment%20System/dsp1b.program.rom))
-
-> size 6144
-> crc 66a73998
-> md5 d10f446888e097cbf500f3f663cf4f6d
-> sha1 03c6c0bdb40846c42aeff6b716e1ea0e001c3ae3
-
-✔️**dsp2.data.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20Super%20Nintendo%20Entertainment%20System/dsp2.data.rom))
-
-> size 2048
-> crc b3893c70
-> md5 e9417e29223b139c3c4b635a2a3b8744
-> sha1 aed9167cc2897cd8d0432f0b8f713fabbc48f5c4
-
-✔️**dsp2.program.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20Super%20Nintendo%20Entertainment%20System/dsp2.program.rom))
-
-> size 6144
-> crc 0c1cf838
-> md5 aa6e5922a3ed5ded54f24247c11143c5
-> sha1 51a274955ef493cfcf2efad7e2ee54738c81eb15
-
-✔️**dsp3.data.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20Super%20Nintendo%20Entertainment%20System/dsp3.data.rom))
-
-> size 2048
-> crc 8b41a2bd
-> md5 0a81210c0a940b997dd9843281008ee6
-> sha1 e7ec3da203a4edba2b17c06d9384787304a025a0
-
-✔️**dsp3.program.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20Super%20Nintendo%20Entertainment%20System/dsp3.program.rom))
-
-> size 6144
-> crc f29be51c
-> md5 d99ca4562818d49cee1f242705bba6f8
-> sha1 11b7ba3501a8542af4cdfdbd1c9702ae0a0e3fae
-
-✔️**dsp4.data.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20Super%20Nintendo%20Entertainment%20System/dsp4.data.rom))
-
-> size 2048
-> crc efa8b9b2
-> md5 ee4990879eb68e3cbca239c5bc20303d
-> sha1 8f2ffb9c1702aa2f76191e98f3fef43f73e5aab7
-
-✔️**dsp4.program.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20Super%20Nintendo%20Entertainment%20System/dsp4.program.rom))
-
-> size 6144
-> crc 14b77ae3
-> md5 a151023b948b90ffc23a5b594bb6fef2
-> sha1 1abee528a59238fd5668fdcffd598d079cb056c2
-
-✔️**st010.data.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20Super%20Nintendo%20Entertainment%20System/st010.data.rom))
-
-> size 4096
-> crc 216081b2
-> md5 254d70762b6f59f99c27c395aba7d07d
-> sha1 bd116501ec41c438fff210fd03233c6c9d15a514
-
-✔️**st010.program.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20Super%20Nintendo%20Entertainment%20System/st010.program.rom))
-
-> size 49152
-> crc 691cbb4f
-> md5 1d70019179a59a566a0bb5d3f2845544
-> sha1 2d0f34074ed3c6dfd61f767ee8b18e699b9769ac
-
-✔️**st011.data.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20Super%20Nintendo%20Entertainment%20System/st011.data.rom))
-
-> size 4096
-> crc 803256a7
-> md5 10bd3f4aa949737ab9836512c35bcc29
-> sha1 798ab84110ca93a6e73a540f4146d21f8d9e1442
-
-✔️**st011.program.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20Super%20Nintendo%20Entertainment%20System/st011.program.rom))
-
-> size 49152
-> crc a741e9fb
-> md5 95222ebf1c0c2990bcf25db43743f032
-> sha1 375eca92592621e83881f3a9d7fd5ea3e5b306dc
-
-✔️**st018.data.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20Super%20Nintendo%20Entertainment%20System/st018.data.rom))
-
-> size 32768
-> crc b5255459
-> md5 49c898b60d0f15e90d0ba780dd12f366
-> sha1 b19c0f8f207d62fdabf4bf71442826063bccc626
-
-✔️**st018.program.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Nintendo%20-%20Super%20Nintendo%20Entertainment%20System/st018.program.rom))
-
-> size 131072
-> crc f73d5e10
-> md5 dda40ccd57390c96e49d30a041f9a9e7
-> sha1 388e3721b94cd074d6ba0eca8616523d2118a6c3
-
-#### Phillips - Videopac+ 🆗
-
-✔️**c52.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Phillips%20-%20Videopac%2B/c52.bin))
-
-> size 1024
-> crc a318e8d6
-> md5 f1071cdb0b6b10dde94d3bc8a6146387
-> sha1 a6120aed50831c9c0d95dbdf707820f601d9452e
-
-✔️**g7400.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Phillips%20-%20Videopac%2B/g7400.bin))
-
-> size 1024
-> crc e20a9f41
-> md5 c500ff71236068e0dc0d0603d265ae76
-> sha1 5130243429b40b01a14e1304d0394b8459a6fbae
-
-✔️**jopac.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Phillips%20-%20Videopac%2B/jopac.bin))
-
-> size 1024
-> crc 11647ca5
-> md5 279008e4a0db2dc5f1c048853b033828
-> sha1 54b8d2c1317628de51a85fc1c424423a986775e4
-
-#### Sega - Dreamcast 🆗
-
-✔️**dc_boot.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sega%20-%20Dreamcast/dc_boot.bin))
-
-> size 2097152
-> crc 89f2b1a1
-> md5 e10c53c2f8b90bab96ead2d368858623
-> sha1 8951d1bb219ab2ff8583033d2119c899cc81f18c
-
-✔️**dc_flash.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sega%20-%20Dreamcast/dc_flash.bin))
-
-> size 131072
-> crc c611b498
-> md5 0a93f7940c455905bea6e392dfde92a4
-> sha1 94d44d7f9529ec1642ba3771ed3c5f756d5bc872
-
-✔️**naomi_boot.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sega%20-%20Dreamcast/naomi_boot.bin))
-
-> size 2097152
-> crc d2a1c6bf
-> md5 3bffafac42a7767d8dcecf771f5552ba
-> sha1 6d27d71aec4dfba98f66316ae74a1426d567698a
-
-#### Sega - Game Gear 🆗
-
-✔️**bios.gg** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sega%20-%20Game%20Gear/bios.gg))
-
-> size 1024
-> crc 0ebea9d4
-> md5 672e104c3be3a238301aceffc3b23fd6
-> sha1 914aa165e3d879f060be77870d345b60cfeb4ede
-
-#### Sega - Master System - Mark III 🆗
-
-✔️**bios.sms** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sega%20-%20Master%20System%20-%20Mark%20III/bios.sms))
-
-> size 8192
-> crc 0072ed54
-> md5 840481177270d5642a14ca71ee72844c
-> sha1 c315672807d8ddb8d91443729405c766dd95cae7
-
-✔️**bios_E.sms** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sega%20-%20Master%20System%20-%20Mark%20III/bios_E.sms))
-
-> size 8192
-> crc 0072ed54
-> md5 840481177270d5642a14ca71ee72844c
-> sha1 c315672807d8ddb8d91443729405c766dd95cae7
-
-✔️**bios_J.sms** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sega%20-%20Master%20System%20-%20Mark%20III/bios_J.sms))
-
-> size 8192
-> crc 48d44a13
-> md5 24a519c53f67b00640d0048ef7089105
-> sha1 a8c1b39a2e41137835eda6a5de6d46dd9fadbaf2
-
-✔️**bios_U.sms** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sega%20-%20Master%20System%20-%20Mark%20III/bios_U.sms))
-
-> size 8192
-> crc 0072ed54
-> md5 840481177270d5642a14ca71ee72844c
-> sha1 c315672807d8ddb8d91443729405c766dd95cae7
-
-#### Sega - Mega CD - Sega CD 🆗
-
-✔️**bios_CD_E.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sega%20-%20Mega%20CD%20-%20Sega%20CD/bios_CD_E.bin))
-
-> size 131072
-> crc 529ac15a
-> md5 e66fa1dc5820d254611fdcdba0662372
-> sha1 f891e0ea651e2232af0c5c4cb46a0cae2ee8f356
-
-✔️**bios_CD_J.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sega%20-%20Mega%20CD%20-%20Sega%20CD/bios_CD_J.bin))
-
-> size 131072
-> crc 9d2da8f2
-> md5 278a9397d192149e84e820ac621a8edd
-> sha1 4846f448160059a7da0215a5df12ca160f26dd69
-
-✔️**bios_CD_U.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sega%20-%20Mega%20CD%20-%20Sega%20CD/bios_CD_U.bin))
-
-> size 131072
-> crc c6d10268
-> md5 2efd74e3232ff260e371b99f84024f7f
-> sha1 f4f315adcef9b8feb0364c21ab7f0eaf5457f3ed
-
-#### Sega - Mega Drive - Genesis 🆗
-
-✔️**areplay.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sega%20-%20Mega%20Drive%20-%20Genesis/areplay.bin))
-
-> size 32768
-> crc 95ff7c3e
-> md5 a0028b3043f9d59ceeb03da5b073b30d
-> sha1 1e0f246826be4ebc7b99bb3f9de7f1de347122e5
-
-✔️**bios_MD.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sega%20-%20Mega%20Drive%20-%20Genesis/bios_MD.bin))
-
-> size 2048
-> crc 3f888cf4
-> md5 d3293ebaaa7f4eb2a6766b68a0fb4609
-> sha1 3f50b76b0529db7f79c396b5e808cc0786ffc311
-
-✔️**ggenie.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sega%20-%20Mega%20Drive%20-%20Genesis/ggenie.bin))
-
-> size 32768
-> crc 14dbce4a
-> md5 e8af7fe115a75c849f6aab3701e7799b
-> sha1 937e1878ebd104f489e6bdbc410a184f79f1144a
-
-✔️**rom.db** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sega%20-%20Mega%20Drive%20-%20Genesis/rom.db))
-
-> size 17742
-> crc c94e8c8b
-> md5 ff4a3572475236e859e3e9ac5c87d1f1
-> sha1 02c287d10da6de579af7a4ce73b134bbdf23c970
-
-✔️**sk.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sega%20-%20Mega%20Drive%20-%20Genesis/sk.bin))
-
-> size 2097152
-> crc 0658f691
-> md5 4ea493ea4e9f6c9ebfccbdb15110367e
-> sha1 88d6499d874dcb5721ff58d76fe1b9af811192e3
-
-✔️**sk2chip.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sega%20-%20Mega%20Drive%20-%20Genesis/sk2chip.bin))
-
-> size 262144
-> crc 4dcfd55c
-> md5 b4e76e416b887f4e7413ba76fa735f16
-> sha1 70429f1d80503a0632f603bf762fe0bbaa881d22
-
-#### Sega - Saturn 🆗
-
-✔️**hisaturn.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sega%20-%20Saturn/hisaturn.bin))
-
-> size 524288
-> crc 721e1b60
-> md5 3ea3202e2634cb47cb90f3a05c015010
-> sha1 49d8493008fa715ca0c94d99817a5439d6f2c796
-
-✔️**mpr-17933.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sega%20-%20Saturn/mpr-17933.bin))
-
-> size 524288
-> crc 4afcf0fa
-> md5 3240872c70984b6cbfda1586cab68dbe
-> sha1 faa8ea183a6d7bbe5d4e03bb1332519800d3fbc3
-
-✔️**mpr-18100.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sega%20-%20Saturn/mpr-18100.bin))
-
-> size 524288
-> crc 3408dbf4
-> md5 cb2cebc1b6e573b7c44523d037edcd45
-> sha1 8a22710e09ce75f39625894366cafe503ed1942d
-
-✔️**mpr-18811-mx.ic1** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sega%20-%20Saturn/mpr-18811-mx.ic1))
-
-> size 2097152
-> crc 90412e10
-> md5 255113ba943c92a54facd25a10fd780c
-> sha1 a67cd4f550751f8b91de2b8b74528ab4e0c11c77
-
-✔️**mpr-19367-mx.ic1** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sega%20-%20Saturn/mpr-19367-mx.ic1))
-
-> size 2097152
-> crc b9644b52
-> md5 1cd19988d1d72a3e7caa0b73234c96b4
-> sha1 56c1b93da6b660bf393fbf48ca47569000ef4047
-
-✔️**saturn_bios.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sega%20-%20Saturn/saturn_bios.bin))
-
-> size 524288
-> crc 2aba43c2
-> md5 af5828fdff51384f99b3c4926be27762
-> sha1 2b8cb4f87580683eb4d760e4ed210813d667f0a2
-
-✔️**sega1003.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sega%20-%20Saturn/sega1003.bin))
-
-> size 524288
-> crc b3c63c25
-> md5 74570fed4d44b2682b560c8cd44b8b6a
-> sha1 7b23b53d62de0f29a23e423d0fe751dfb469c2fa
-
-✔️**sega_100.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sega%20-%20Saturn/sega_100.bin))
-
-> size 524288
-> crc 2aba43c2
-> md5 af5828fdff51384f99b3c4926be27762
-> sha1 2b8cb4f87580683eb4d760e4ed210813d667f0a2
-
-✔️**sega_100a.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sega%20-%20Saturn/sega_100a.bin))
-
-> size 524288
-> crc f90f0089
-> md5 f273555d7d91e8a5a6bfd9bcf066331c
-> sha1 3bb41feb82838ab9a35601ac666de5aacfd17a58
-
-✔️**sega_101.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sega%20-%20Saturn/sega_101.bin))
-
-> size 524288
-> crc 224b752c
-> md5 85ec9ca47d8f6807718151cbcca8b964
-> sha1 df94c5b4d47eb3cc404d88b33a8fda237eaf4720
-
-✔️**vsaturn.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sega%20-%20Saturn/vsaturn.bin))
-
-> size 524288
-> crc e4d61811
-> md5 ac4e4b6522e200c0d23d371a8cecbfd3
-> sha1 4154e11959f3d5639b11d7902b3a393a99fb5776
-
-#### Sharp - X1 🆗
-
-✔️**iplrom.x1** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sharp%20-%20X1/iplrom.x1))
-
-> size 4096
-> crc e70011d3
-> md5 eeeea1cd29c6e0e8b094790ae969bfa7
-> sha1 d3395e9aeb5b8bbba7654dd471bcd8af228ee69a
-
-✔️**iplrom.x1t** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sharp%20-%20X1/iplrom.x1t))
-
-> size 2048
-> crc e3995a57
-> md5 851e4a5936f17d13f8c39a980cf00d77
-> sha1 1c1a0d8c9f4c446ccd7470516b215ddca5052fb2
-
-#### Sharp - X68000 🆗
-
-✔️**cgrom.dat** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sharp%20-%20X68000/cgrom.dat))
-
-> size 786432
-> crc 9f3195f1
-> md5 cb0a5cfcf7247a7eab74bb2716260269
-> sha1 8d72c5b4d63bb14c5dbdac495244d659aa1498b6
-
-✔️**iplrom.dat** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sharp%20-%20X68000/iplrom.dat))
-
-> size 131072
-> crc 72bdf532
-> md5 7fd4caabac1d9169e289f0f7bbf71d8e
-> sha1 0ed038ed2133b9f78c6e37256807424e0d927560
-
-✔️**iplrom30.dat** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sharp%20-%20X68000/iplrom30.dat))
-
-> size 131072
-> crc e8f8fdad
-> md5 f373003710ab4322642f527f567e020a
-> sha1 239e9124568c862c31d9ec0605e32373ea74b86a
-
-✔️**iplromco.dat** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sharp%20-%20X68000/iplromco.dat))
-
-> size 131072
-> crc 6c7ef608
-> md5 cc78d4f4900f622bd6de1aed7f52592f
-> sha1 77511fc58798404701f66b6bbc9cbde06596eba7
-
-✔️**iplromxv.dat** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sharp%20-%20X68000/iplromxv.dat))
-
-> size 131072
-> crc 00eeb408
-> md5 0617321daa182c3f3d6f41fd02fb3275
-> sha1 e33cdcdb69cd257b0b211ef46e7a8b144637db57
-
-#### Sinclair - ZX Spectrum 🆗
-
-✔️**128-0.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/128-0.rom))
-
-> size 16384
-> crc e76799d2
-> md5 b4d2692115a9f2924df92a3cbfb358fb
-> sha1 4f4b11ec22326280bdb96e3baf9db4b4cb1d02c5
-
-✔️**128-1.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/128-1.rom))
-
-> size 16384
-> crc b96a36be
-> md5 6e09e5d3c4aef166601669feaaadc01c
-> sha1 80080644289ed93d71a1103992a154cc9802b2fa
-
-✔️**128-spanish-0.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/128-spanish-0.rom))
-
-> size 16384
-> crc 453d86b2
-> md5 c1231a70b8129311216acb7479b031d5
-> sha1 968937b1c750f0ef6205f01c6db4148da4cca4e3
-
-✔️**128-spanish-1.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/128-spanish-1.rom))
-
-> size 16384
-> crc 6010e796
-> md5 4f341936594cbcab75cfa62ce96e3682
-> sha1 bea3f397cc705eafee995ea629f4a82550562f90
-
-✔️**128p-0.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/128p-0.rom))
-
-> size 16384
-> crc 124ad9e0
-> md5 a249565f03b98d004ee7f019570069cd
-> sha1 d07fcdeca892ee80494d286ea9ea5bf3928a1aca
-
-✔️**128p-1.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/128p-1.rom))
-
-> size 16384
-> crc b96a36be
-> md5 6e09e5d3c4aef166601669feaaadc01c
-> sha1 80080644289ed93d71a1103992a154cc9802b2fa
-
-✔️**256s-0.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/256s-0.rom))
-
-> size 16384
-> crc 0eb40a09
-> md5 b9fda5b6a747ff037365b0e2d8c4379a
-> sha1 477114ff0fe1388e0979df1423602b21248164e5
-
-✔️**256s-1.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/256s-1.rom))
-
-> size 16384
-> crc 9d513013
-> md5 643861ad34831b255bf2eb64e8b6ecb8
-> sha1 367b5a102fb663beee8e7930b8c4acc219c1f7b3
-
-✔️**256s-2.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/256s-2.rom))
-
-> size 16384
-> crc fd0d3ce1
-> md5 d8ad507b1c915a9acfe0d73957082926
-> sha1 07783ee295274d8ff15d935bfd787c8ac1d54900
-
-✔️**256s-3.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/256s-3.rom))
-
-> size 16384
-> crc 1fe1d003
-> md5 ce0723f9bc02f4948c15d3b3230ae831
-> sha1 33703e97cc93b7edfcc0334b64233cf81b7930db
-
-✔️**48.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/48.rom))
-
-> size 16384
-> crc ddee531f
-> md5 4c42a2f075212361c3117015b107ff68
-> sha1 5ea7c2b824672e914525d1d5c419d71b84a426a2
-
-✔️**disciple.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/disciple.rom))
-
-> size 8192
-> crc 82047489
-> md5 78e61a2a02121873c1756b21fd1398b1
-> sha1 9a75ed4b293f968985be4c9aa893cd88276d1ced
-
-✔️**disk_plus3.szx** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/disk_plus3.szx))
-
-> size 1568
-> crc c2c6cba7
-> md5 e6db6b9f6ad15012851115a7bc4b31d8
-> sha1 d7896640e18fc6204aa494835b0a430250fb06ce
-
-✔️**gluck.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/gluck.rom))
-
-> size 16384
-> crc ca321d79
-> md5 d5869034604dbfd2c1d54170e874fd0a
-> sha1 015eb96dafb273d4f4512c467e9b43c305fd1bc4
-
-✔️**if1-1.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/if1-1.rom))
-
-> size 8192
-> crc e72a12ae
-> md5 5c11c61a2dd2ca4bf39328d9ff42d289
-> sha1 4ffd9ed9c00cdc6f92ce69fdd8b618ef1203f48e
-
-✔️**if1-2.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/if1-2.rom))
-
-> size 8192
-> crc bb66dd1e
-> md5 31b704ae925305e74f50699271fddd9a
-> sha1 5cfb6bca4177c45fefd571734576b55e3a127c08
-
-✔️**plus2-0.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/plus2-0.rom))
-
-> size 16384
-> crc 5d2e8c66
-> md5 4ed7af4636308b8a48d7a35e6c5b546b
-> sha1 72703f9a3e734f3c23ec34c0727aae4ccbef9a91
-
-✔️**plus2-1.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/plus2-1.rom))
-
-> size 16384
-> crc 98b1320b
-> md5 b3db95931cc844efaeb82db9c171b9f3
-> sha1 de8b0d2d0379cfe7c39322a086ca6da68c7f23cb
-
-✔️**plus3-0.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/plus2-1.rom))
-
-> size 16384
-> crc 7f4a5482
-> md5 bc123f625e245c225f92ef05933ed134
-> sha1 649fbd233490bf58b35350b0123d36caaaa011eb
-
-✔️**plus3-1.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/plus3-1.rom))
-
-> size 16384
-> crc 5aeb4675
-> md5 617364264c587d20c9fc4746c29679f2
-> sha1 f12198108cbb14de4f03c6695bc16d08c85ee214
-
-✔️**plus3-2.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/plus3-2.rom))
-
-> size 16384
-> crc 504755cb
-> md5 c363e95dcd0a90e6e7f847e6e47e0179
-> sha1 773633dce5ba323a9e00d9d0f9e4d8c295df7c87
-
-✔️**plus3-3.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/plus3-3.rom))
-
-> size 16384
-> crc 04448eaa
-> md5 a148bcc575e51389e84fdf5d555c3196
-> sha1 65f031caa8148a5493afe42c41f4929deab26b4e
-
-✔️**plus3e-0.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/plus3e-0.rom))
-
-> size 16384
-> crc a10230c0
-> md5 3abdc20e72890a750dd3c745d286dfba
-> sha1 a837f66977040f7b51ed053a2483c10f3d070ab7
-
-✔️**plus3e-1.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/plus3e-1.rom))
-
-> size 16384
-> crc 09b9c3ca
-> md5 8361a1d9c8bcef89c0c39293776564ad
-> sha1 6a4364f25513e4079f048f2de131a896d30edc64
-
-✔️**plus3e-2.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/plus3e-2.rom))
-
-> size 16384
-> crc a60285a0
-> md5 f36c5c2d1f2a682caadeaa6f947db0da
-> sha1 0a747cc0b827a94b4fd74cfd818ca792437a38f7
-
-✔️**plus3e-3.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/plus3e-3.rom))
-
-> size 16384
-> crc 04448eaa
-> md5 a148bcc575e51389e84fdf5d555c3196
-> sha1 65f031caa8148a5493afe42c41f4929deab26b4e
-
-✔️**plusd.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/plusd.rom))
-
-> size 8192
-> crc 569f7e55
-> md5 42e5de16fb5e50082bb954ec7ce45851
-> sha1 6b841dc5797ef7eb219ad455cd1e434ca3b9d30d
-
-✔️**se-0.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/se-0.rom))
-
-> size 16384
-> crc 8f1047d2
-> md5 fb3f86eb1e5a695d9c50c124e7cfb875
-> sha1 8608328d7dd66602a4846f046b24fed500f7d828
-
-✔️**se-1.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/se-1.rom))
-
-> size 16384
-> crc 16ed3a9b
-> md5 88de4a3129086f34bb9ca559acc51e6c
-> sha1 3be5de57dd3bd0a9d15c57cabe9179afe2906a52
-
-✔️**speccyboot-1.4.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/speccyboot-1.4.rom))
-
-> size 8192
-> crc 37c591b2
-> md5 c54aa8f374b0971f51546c29d5d1eba1
-> sha1 16af6f052b38a027dd49ba6e96e3a59d16b62672
-
-✔️**tape_128.szx** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/tape_128.szx))
-
-> size 1464
-> crc 8d1c41f4
-> md5 8942b43b73ed4eb7f32bd1741709a4dc
-> sha1 3b1287bfc6fec9c7dd838f6ea1706698cb96fd16
-
-✔️**tape_16.szx** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/tape_16.szx))
-
-> size 591
-> crc ccda9cc2
-> md5 fec97eb9ea1b017cae84de78508feb4a
-> sha1 ec9e5607ce7faf2d6a5d71e5e21188ca86e963a1
-
-✔️**tape_2048.szx** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/tape_2048.szx))
-
-> size 720
-> crc dbc1a386
-> md5 116f732bbae4e49d625aaf2f311474d0
-> sha1 f2d2227dce697df8aac78883eaf966e71435caa3
-
-✔️**tape_2068.szx** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/tape_2068.szx))
-
-> size 1799
-> crc 659b428d
-> md5 0b0f267b95d556318bb652af2e8dc25c
-> sha1 5af71025c02358b325bf8b4bfaa2662488abf1d2
-
-✔️**tape_48.szx** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/tape_48.szx))
-
-> size 708
-> crc f56f230d
-> md5 ee2ae810711594db3a134a7432baabff
-> sha1 d6e092730f822c9e8828ca12f54eb8d65228f30c
-
-✔️**tape_pentagon.szx** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/tape_pentagon.szx))
-
-> size 1479
-> crc c7a272b6
-> md5 bd7698603bd9079d337cdedfb04942d9
-> sha1 7e1eb0e250cfe1f2f0e50f734378a738e8bf327f
-
-✔️**tape_plus2.szx** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/tape_plus2.szx))
-
-> size 1571
-> crc 93195e18
-> md5 166d4aa1a5aa4fbd99cc963b4e7c19cc
-> sha1 4a6d8941eee86d7e52452f5aaaa73d4bafe9bde1
-
-✔️**tape_plus2a.szx** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/tape_plus2a.szx))
-
-> size 1617
-> crc 45727b82
-> md5 445d4817d5557bb363a216fbd6eeaa84
-> sha1 e0e0f6ebc8261ae9768a6be772eab4718fbc2395
-
-✔️**tape_plus3.szx** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/tape_plus3.szx))
-
-> size 1856
-> crc 1a825690
-> md5 0dc8828ac1db2e0efa915ac55191e96f
-> sha1 3850f7e5e6c90fd4dac988da77717d2647d9c021
-
-✔️**tape_plus3e.szx** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/tape_plus3e.szx))
-
-> size 1970
-> crc 4ce6538f
-> md5 bf07537f028bbcb3309464bd30da779c
-> sha1 92ac0df41f3ea7f147f4d6bae6b8a7d79b4f7e92
-
-✔️**tape_scorpion.szx** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/tape_scorpion.szx))
-
-> size 3500
-> crc eb6a7a83
-> md5 c10e677d3deb5a445689d3a599880745
-> sha1 6abdeb434755d25a280954ce07b50b6a28b36957
-
-✔️**tape_se.szx** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/tape_se.szx))
-
-> size 2146
-> crc 92bc2f43
-> md5 2518f9334bef8c44804a4185085579b5
-> sha1 cc20a8e6fc8c493881b14e00545a42ef75b8aabe
-
-✔️**tape_ts2068.szx** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/tape_ts2068.szx))
-
-> size 1840
-> crc 06ad712e
-> md5 1d360c09d370bb52a9a44b30cc7c59e6
-> sha1 562298f5b3a7ed28f0129b066e8ad098a10e2270
-
-✔️**tc2048.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/tc2048.rom))
-
-> size 16384
-> crc f1b5fa67
-> md5 9dd7ecf784a6c04265c073c236f5fadb
-> sha1 febb2d495b6eda7cdcb4074935d6e9d9f328972d
-
-✔️**tc2068-0.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/tc2068-0.rom))
-
-> size 16384
-> crc bf44ec3f
-> md5 55d462fccc6c536037404ef4ced08bec
-> sha1 1446cb2780a9dedf640404a639fa3ae518b2d8aa
-
-✔️**tc2068-1.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/tc2068-1.rom))
-
-> size 8192
-> crc ae16233a
-> md5 575d203c6e15e679fba0b73f854ec7a2
-> sha1 7e265a2c1f621ed365ea23bdcafdedbc79c1299c
-
-✔️**trdos.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sinclair%20-%20ZX%20Spectrum/trdos.rom))
-
-> size 16384
-> crc 10751aba
-> md5 0da70a5d2a0e733398e005b96b7e4ba6
-> sha1 21695e3f2a8f796386ce66eea8a246b0ac44810c
-
-#### SNK - NeoGeo CD 🆗
-
-✔️**000-lo.lo** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/SNK%20-%20NeoGeo%20CD/000-lo.lo))
-
-> size 131072
-> crc 5a86cff2
-> md5 fc7599f3f871578fe9a0453662d1c966
-> sha1 5992277debadeb64d1c1c64b0a92d9293eaf7e4a
-
-✔️**front-sp1.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/SNK%20-%20NeoGeo%20CD/front-sp1.bin))
-
-> size 524288
-> crc cac62307
-> md5 5c2366f25ff92d71788468ca492ebeca
-> sha1 53bc1f283cdf00fa2efbb79f2e36d4c8038d743a
-
-✔️**neocd.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/SNK%20-%20NeoGeo%20CD/neocd.bin))
-
-> size 524288
-> crc df9de490
-> md5 f39572af7584cb5b3f70ae8cc848aba2
-> sha1 7bb26d1e5d1e930515219cb18bcde5b7b23e2eda
-
-✔️**neocd_f.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/SNK%20-%20NeoGeo%20CD/neocd_f.rom))
-
-> size 524288
-> crc 6fd2a520
-> md5 8834880c33164ccbe6476b559f3e37de
-> sha1 a5f4a7a627b3083c979f6ebe1fabc5d2df6d083b
-
-✔️**neocd_sf.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/SNK%20-%20NeoGeo%20CD/neocd_sf.rom))
-
-> size 524288
-> crc 1101f313
-> md5 043d76d5f0ef836500700c34faef774d
-> sha1 4a94719ee5d0e3f2b981498f70efc1b8f1cef325
-
-✔️**neocd_st.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/SNK%20-%20NeoGeo%20CD/neocd_st.rom))
-
-> size 524288
-> crc 01c299cc
-> md5 f6325a33c6d63ea4b9162a3fa8c32727
-> sha1 19729b51bdab60c42aafef6e20ea9234c7eb8410
-
-✔️**neocd_sz.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/SNK%20-%20NeoGeo%20CD/neocd_sz.rom))
-
-> size 524288
-> crc 42f6b6c4
-> md5 971ee8a36fb72da57aed01758f0a37f5
-> sha1 6a947457031dd3a702a296862446d7485aa89dbb
-
-✔️**neocd_t.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/SNK%20-%20NeoGeo%20CD/neocd_t.rom))
-
-> size 524288
-> crc 56c9ecba
-> md5 de3cf45d227ad44645b22aa83b49f450
-> sha1 cc92b54a18a8bff6e595aabe8e5c360ba9e62eb5
-
-✔️**neocd_z.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/SNK%20-%20NeoGeo%20CD/neocd_z.rom))
-
-> size 524288
-> crc 33697892
-> md5 11526d58d4c524daef7d5d677dc6b004
-> sha1 b0f1c4fa8d4492a04431805f6537138b842b549f
-
-✔️**top-sp1.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/SNK%20-%20NeoGeo%20CD/top-sp1.bin))
-
-> size 524288
-> crc c36a47c0
-> md5 122aee210324c72e8a11116e6ef9c0d0
-> sha1 235f4d1d74364415910f73c10ae5482d90b4274f
-
-✔️**uni-bioscd.rom** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/SNK%20-%20NeoGeo%20CD/uni-bioscd.rom))
-
-> size 524288
-> crc ff3abc59
-> md5 08ca8b2dba6662e8024f9e789711c6fc
-> sha1 5142f205912869b673a71480c5828b1eaed782a8
-
-#### Sony - PlayStation 🆗
-
-🔥**PSXONPSP660.BIN** ([download](https://github.com/Abdess/retroarch_system/blob/Other/Sony%20-%20PlayStation/PSXONPSP660.BIN)) ([infos](https://github.com/gingerbeardman/PSX))
-
-  **Note: This BIOS improves emulation, rename it by the name of the BIOS used by your emulator. For example: scph5500.bin.**
-
-> size 524288
-> crc 5660f34f
-> md5 c53ca5908936d412331790f4426c6c33
-> sha1 96880d1ca92a016ff054be5159bb06fe03cb4e14
-
-✔️**scph1000.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sony%20-%20PlayStation/scph1000.bin))
-
-> size 524288
-> crc 3b601fc8
-> md5 239665b1a3dade1b5a52c06338011044
-> sha1 343883a7b555646da8cee54aadd2795b6e7dd070
-
-✔️**scph1001.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sony%20-%20PlayStation/scph1001.bin))
-
-> size 524288
-> crc 37157331
-> md5 924e392ed05558ffdb115408c263dccf
-> sha1 10155d8d6e6e832d6ea66db9bc098321fb5e8ebf
-
-✔️**scph1002.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sony%20-%20PlayStation/scph1002.bin))
-
-> size 524288
-> crc 9bb87c4b
-> md5 54847e693405ffeb0359c6287434cbef
-> sha1 20b98f3d80f11cbf5a7bfd0779b0e63760ecc62c
-
-✔️**scph100.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sony%20-%20PlayStation/scph100.bin))
-
-> size 524288
-> crc f2af798b
-> md5 8abc1b549a4a80954addc48ef02c4521
-> sha1 339a48f4fcf63e10b5b867b8c93cfd40945faf6c
-
-✔️**scph101.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sony%20-%20PlayStation/scph101.bin))
-
-> size 524288
-> crc 171bdcec
-> md5 6e3735ff4c7dc899ee98981385f6f3d0
-> sha1 dcffe16bd90a723499ad46c641424981338d8378
-
-✔️**scph102A.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sony%20-%20PlayStation/scph102A.bin))
-
-> size 524288
-> crc 0bad7ea9
-> md5 b10f5e0e3d9eb60e5159690680b1e774
-> sha1 beb0ac693c0dc26daf5665b3314db81480fa5c7c
-
-✔️**scph102B.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sony%20-%20PlayStation/scph102B.bin))
-
-> size 524288
-> crc 76b880e5
-> md5 de93caec13d1a141a40a79f5c86168d6
-> sha1 dbc7339e5d85827c095764fc077b41f78fd2ecae
-
-
-✔️**scph102C.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sony%20-%20PlayStation/scph102C.bin))
-
-> size 524288
-> crc 76b880e5
-> md5 de93caec13d1a141a40a79f5c86168d6
-> sha1 dbc7339e5d85827c095764fc077b41f78fd2ecae
-
-
-✔️**scph3000.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sony%20-%20PlayStation/scph3000.bin))
-
-> size 524288
-> crc 3539def6
-> md5 849515939161e62f6b866f6853006780
-> sha1 b06f4a861f74270be819aa2a07db8d0563a7cc4e
-
-
-✔️**scph3500.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sony%20-%20PlayStation/scph3500.bin))
-
-> size 524288
-> crc bc190209
-> md5 cba733ceeff5aef5c32254f1d617fa62
-> sha1 e38466a4ba8005fba7e9e3c7b9efeba7205bee3f
-
-
-✔️**scph5000.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sony%20-%20PlayStation/scph5000.bin))
-
-> size 524288
-> crc 8c93a399
-> md5 eb201d2d98251a598af467d4347bb62f
-> sha1 e340db2696274dda5fdc25e434a914db71e8b02b
-
-
-✔️**scph5500.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sony%20-%20PlayStation/scph5500.bin))
-
-> size 524288
-> crc ff3eeb8c
-> md5 8dd7d5296a650fac7319bce665a6a53c
-> sha1 b05def971d8ec59f346f2d9ac21fb742e3eb6917
-
-✔️**scph5501.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sony%20-%20PlayStation/scph5501.bin))
-
-> size 524288
-> crc 8d8cb7e4
-> md5 490f666e1afb15b7362b406ed1cea246
-> sha1 0555c6fae8906f3f09baf5988f00e55f88e9f30b
-
-✔️**scph5502.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sony%20-%20PlayStation/scph5502.bin))
-
-> size 524288
-> crc d786f0b9
-> md5 32736f17079d0b2b7024407c39bd3050
-> sha1 f6bc2d1f5eb6593de7d089c425ac681d6fffd3f0
-
-✔️**scph5552.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sony%20-%20PlayStationscph5552.bin))
-
-> size 524288
-> crc d786f0b9
-> md5 32736f17079d0b2b7024407c39bd3050
-> sha1 f6bc2d1f5eb6593de7d089c425ac681d6fffd3f0
-
-✔️**scph7001.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sony%20-%20PlayStation/scph7001.bin))
-
-> size 524288
-> crc 502224b6
-> md5 1e68c231d0896b7eadcad1d7d8e76129
-> sha1 14df4f6c1e367ce097c11deae21566b4fe5647a9
-
-✔️**scph7002.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sony%20-%20PlayStation/scph7002.bin))
-
-> size 524288
-> crc 318178bf
-> md5 b9d9a0286c33dc6b7237bb13cd46fdee
-> sha1 8d5de56a79954f29e9006929ba3fed9b6a418c1d
-
-✔️**scph7003.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sony%20-%20PlayStation/scph7003.bin))
-
-> size 524288
-> crc 8d8cb7e4
-> md5 490f666e1afb15b7362b406ed1cea246
-> sha1 0555c6fae8906f3f09baf5988f00e55f88e9f30b
-
-✔️**scph7502.bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sony%20-%20PlayStation/scph7502.bin))
-
-> size 524288
-> crc 318178bf
-> md5 b9d9a0286c33dc6b7237bb13cd46fdee
-> sha1 8d5de56a79954f29e9006929ba3fed9b6a418c1d
-
-✔️**scph9002(7502).bin** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sony%20-%20PlayStation/scph9002(7502).bin))
-
-> size 524288
-> crc 318178bf
-> md5 b9d9a0286c33dc6b7237bb13cd46fdee
-> sha1 8d5de56a79954f29e9006929ba3fed9b6a418c1d
-
-#### Sony - PlayStation Portable 🆗
-
-✔️**ppge_atlas.zim** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Sony%20-%20PlayStation%20Portable/ppge_atlas.zim))
-
-> size 666530
-> crc 7b57fa78
-> md5 866855cc330b9b95cc69135fb7b41d38
-> sha1 30a33f3651f8e1b0967a5dfe6ff714baebcce41a
-
-#### Wolfenstein 3D 🆗
-
-✔️**ecwolf.pk3** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/Wolfenstein%203D/ecwolf.pk3))
-
-> size 178755
-> crc 26dc3fba
-> md5 c011b428819eea4a80b455c245a5a04d
-> sha1 9259b87edfe9b9f6d0749788a75a6ccf158f50aa
-
-#### ScummVM 🆗
-
-✔️**scummvm.zip** ([download](https://github.com/Abdess/retroarch_system/raw/libretro/ScummVM/scummvm.zip))
-
-> size 9523360
-> crc a93f1c4b
-> md5 a17e0e0150155400d8cced329563d9c8
-> sha1 718c1a00d38e0810a1ad0ffde79f73447f846f01
+# Retrogaming BIOS & Firmware Collection
+
+Complete, verified collection of BIOS, firmware, and system files for retrogaming emulators - RetroArch, Batocera, Recalbox, Lakka, RetroPie, and more. Every file checked against official checksums from [libretro System.dat](https://github.com/libretro/libretro-database), [batocera-systems](https://github.com/batocera-linux/batocera.linux), and [Recalbox es_bios.xml](https://gitlab.com/recalbox/recalbox).
+
+> **6285** files | **2715.9 MB** | Last updated: 2026-03-17T08:46:20Z
+>
+> PlayStation, PS2, Nintendo DS, Game Boy, GBA, Dreamcast, Saturn, Neo Geo, Mega CD, PC Engine, MSX, Amiga, Atari ST, ZX Spectrum, Arcade (MAME/FBNeo), and 50+ systems.
+
+## Quick Start
+
+### Download a complete pack
+
+Go to [Releases](../../releases) and download the ZIP for your platform.
+
+### Using the download tool
+
+```bash
+# List available platforms
+python scripts/download.py --list
+
+# Download BIOS pack for RetroArch
+python scripts/download.py retroarch ~/RetroArch/system/
+
+# Verify existing BIOS files
+python scripts/download.py --verify retroarch ~/RetroArch/system/
+```
+
+### Generate a pack locally (any platform)
+
+Some platforms are archived and not included in automated releases. You can generate any pack locally - including archived ones:
+
+```bash
+git clone https://github.com/Abdess/retroarch_system.git
+cd retroarch_system
+pip install pyyaml
+
+# Generate for a specific platform
+python scripts/generate_pack.py --platform retropie --output-dir ~/Downloads/
+
+# Generate for ALL platforms (including archived)
+python scripts/generate_pack.py --all --include-archived --output-dir ~/Downloads/
+```
+
+## Platform Coverage
+
+| Platform | Coverage | Status | Verification | Details |
+|----------|----------|--------|--------------|---------|
+| Batocera | 680/680 (100.0%) | ![Batocera 100%](https://img.shields.io/badge/Batocera-100%25-brightgreen) 🟢 | md5 | 643 verified, 37 untested |
+| Lakka | 398/398 (100.0%) | ![Lakka 100%](https://img.shields.io/badge/Lakka-100%25-brightgreen) 🟢 | existence | 398 present |
+| Recalbox | 346/346 (100.0%) | ![Recalbox 100%](https://img.shields.io/badge/Recalbox-100%25-brightgreen) 🟢 | md5 | 337 verified, 9 untested |
+| RetroArch | 398/398 (100.0%) | ![RetroArch 100%](https://img.shields.io/badge/RetroArch-100%25-brightgreen) 🟢 | existence | 398 present |
+| RetroPie | 398/398 (100.0%) | ![RetroPie](https://img.shields.io/badge/RetroPie-archived-lightgrey) 📦 | existence | 398 present *(archived - generate manually)* |
+
+## Systems
+
+| System | Files | Size |
+|--------|-------|------|
+| 3DO Company/3DO | 13 | 12.4 MB |
+| APF/Imagination Machine | 1 | 6.7 KB |
+| Acorn/Archimedes | 2 | 6.2 MB |
+| Acorn/BBC Micro | 17 | 836.5 KB |
+| Amstrad/CPC | 4 | 112.0 KB |
+| Amstrad/PCW | 2 | 4.2 KB |
+| Apple/Apple II | 10 | 1004.2 KB |
+| Apple/Macintosh | 17 | 37.9 MB |
+| Apple/Macintosh II | 10 | 50.3 MB |
+| Arcade/Arcade | 109 | 591.6 MB |
+| Arcade/FBNeo | 1 | 40.7 KB |
+| Arcade/MAME | 21 | 14.5 MB |
+| Atari/400-800 | 7 | 78.0 KB |
+| Atari/5200 | 1 | 2.0 KB |
+| Atari/7800 | 2 | 20.0 KB |
+| Atari/Lynx | 1 | 512 B |
+| Atari/ST | 39 | 10.9 MB |
+| Atari/XEGS | 1 | 22.5 KB |
+| Bally/Astrocade | 1 | 6.6 KB |
+| Bandai/RX-78 | 1 | 6.2 KB |
+| Bit Corporation/Gamate | 1 | 5.0 KB |
+| Camputers/Lynx | 3 | 80.8 KB |
+| Casio/Loopy | 1 | 467.0 KB |
+| Casio/PV-2000 | 1 | 13.3 KB |
+| Coleco/Adam | 5 | 69.0 KB |
+| Coleco/ColecoVision | 1 | 8.0 KB |
+| Commodore/Amiga | 23 | 8.3 MB |
+| Commodore/C128 | 7 | 360.0 KB |
+| DOS/DOSBox | 6 | 1.9 MB |
+| Dinothawr/Dinothawr | 1 | 6.4 MB |
+| Dragon/Dragon | 18 | 222.9 KB |
+| EACA/Colour Genie | 1 | 16.0 KB |
+| Elektronika/BK | 8 | 100.0 KB |
+| Enterprise/64-128 | 15 | 414.2 KB |
+| Entex/Adventure Vision | 1 | 1.5 KB |
+| Epoch/Game Pocket | 1 | 3.4 KB |
+| Fairchild/Channel F | 3 | 3.0 KB |
+| Fujitsu/FM Towns | 10 | 5.0 MB |
+| Funtech/Super A'Can | 1 | 1.8 KB |
+| GCE/Vectrex | 1 | 12.9 KB |
+| Galaksija/CHRGEN.BIN | 1 | 2.0 KB |
+| Galaksija/ROM1.BIN | 1 | 4.0 KB |
+| GamePark/GP32 | 1 | 1.3 MB |
+| Grundy/NewBrain | 2 | 8.2 KB |
+| Hartung/Game Master | 1 | 1.6 KB |
+| Id Software/Doom | 1 | 140.0 KB |
+| Id Software/Wolfenstein 3D | 1 | 174.6 KB |
+| Infocom/Z-Machine | 2 | 448.4 KB |
+| Java/J2ME | 6 | 25.1 MB |
+| Magnavox/Odyssey2 | 1 | 1024 B |
+| Mattel/Intellivision | 8 | 76.5 KB |
+| Microsoft/Chihiro | 1 | 256.0 KB |
+| Microsoft/MSX | 307 | 12.9 MB |
+| Microsoft/Xbox | 2 | 768 B |
+| NEC/PC Engine | 10 | 2.0 MB |
+| NEC/PC-6001 | 4 | 188.0 KB |
+| NEC/PC-8001 | 1 | 126.4 KB |
+| NEC/PC-98 | 49 | 3.3 MB |
+| NEC/PC-FX | 4 | 3.5 MB |
+| Nintendo/3DS | 20 | 13.2 MB |
+| Nintendo/Famicom Disk System | 1 | 8.0 KB |
+| Nintendo/Game Boy | 3 | 768 B |
+| Nintendo/Game Boy Advance | 2 | 32.0 KB |
+| Nintendo/Game Boy Color | 4 | 9.0 KB |
+| Nintendo/GameCube | 11 | 12.5 MB |
+| Nintendo/NES | 3 | 1010.1 KB |
+| Nintendo/Nintendo 64DD | 1 | 4.0 MB |
+| Nintendo/Nintendo DS | 12 | 245.5 MB |
+| Nintendo/Pokemon Mini | 1 | 4.0 KB |
+| Nintendo/SNES | 18 | 1.3 MB |
+| Nintendo/Satellaview | 3 | 3.0 MB |
+| Nintendo/SuFami Turbo | 1 | 256.0 KB |
+| Nintendo/Super Game Boy | 8 | 1.6 MB |
+| Oric/Oric | 21 | 181.1 KB |
+| Other/Batocera42 | 5 | 262.3 MB |
+| Other/Recalbox | 2479 | 197.9 MB |
+| Palm/Palm | 5 | 38.3 MB |
+| Philips/CD-i | 5 | 2.2 MB |
+| Philips/Videopac+ | 3 | 3.0 KB |
+| SNK/Neo Geo | 3 | 2.6 MB |
+| SNK/Neo Geo CD | 14 | 5.7 MB |
+| Sega/AI | 1 | 335.2 KB |
+| Sega/Arcade | 1 | 725 B |
+| Sega/Beena | 1 | 83.2 KB |
+| Sega/Dreamcast | 29 | 48.3 MB |
+| Sega/Game Gear | 1 | 1024 B |
+| Sega/Hikaru | 2 | 782.3 KB |
+| Sega/Master System | 2 | 16.0 KB |
+| Sega/Mega CD | 5 | 640.0 KB |
+| Sega/Mega Drive | 7 | 2.3 MB |
+| Sega/SC-3000 | 1 | 22.3 KB |
+| Sega/Saturn | 11 | 10.6 MB |
+| Sega/Triforce | 2 | 4.0 MB |
+| Sharp/MZ | 6 | 504.6 KB |
+| Sharp/X1 | 4 | 42.0 KB |
+| Sharp/X68000 | 7 | 1.3 MB |
+| Sinclair/ZX Spectrum | 47 | 1.5 MB |
+| Sony/PlayStation | 18 | 9.0 MB |
+| Sony/PlayStation 2 | 82 | 304.1 MB |
+| Sony/PlayStation 3 | 1 | 196.6 MB |
+| Sony/PlayStation Portable | 1 | 650.9 KB |
+| Sony/PlayStation Vita | 2 | 181.8 MB |
+| Tandy/CoCo | 21 | 263.0 KB |
+| Tandy/MC-10 | 2 | 14.2 KB |
+| Tandy/TRS-80 | 4 | 42.2 KB |
+| Tandy/VIS | 1 | 590.9 KB |
+| Texas Instruments/TI-83 | 3 | 2.8 MB |
+| Texas Instruments/TI-99 | 5 | 121.0 KB |
+| Tiger/Game.com | 1 | 141.7 KB |
+| Tomy/Tutor | 1 | 33.8 KB |
+| VTech/CreatiVision | 1 | 431.3 KB |
+| VTech/Laser 310 | 1 | 41.6 KB |
+| VTech/Socrates | 1 | 213.2 KB |
+| VTech/V.Smile | 1 | 2.9 MB |
+| Videoton/TVC | 4 | 48.0 KB |
+| Vircon/Vircon32Bios.v32 | 1 | 1.0 MB |
+| ZC/ZC210 | 10 | 10.4 MB |
+
+## Data Packs
+
+These are large asset packs required by specific cores. They are included in the repository but not listed individually.
+
+| Pack | Files | Size |
+|------|-------|------|
+| [RPG Maker/easyrpg](bios/RPG%20Maker/easyrpg) | 774 | 18.3 MB |
+| [RPG Maker/mkxp-z](bios/RPG%20Maker/mkxp-z) | 1761 | 225.6 MB |
+| [ScummVM/ScummVM](bios/ScummVM/ScummVM) | 68 | 100.2 MB |
+
+## BIOS File Listing
+
+### 3DO Company/3DO
+
+- **[3do_arcade_saot.bin](bios/3DO%20Company/3DO/3do_arcade_saot.bin)** (524,288 bytes)
+  - SHA1: `520d3d1b5897800af47f92efd2444a26b7a7dead`
+  - MD5: `8970fc987ab89a7f64da9f8a8c4333ff`
+  - CRC32: `b832da9a`
+- **[goldstar.bin](bios/3DO%20Company/3DO/goldstar.bin)** (1,048,576 bytes)
+  - SHA1: `c4a2e5336f77fb5f743de1eea2cda43675ee2de7`
+  - MD5: `8639fd5e549bd6238cfee79e3e749114`
+  - CRC32: `b6f5028b`
+- **[panafz1-kanji.bin](bios/3DO%20Company/3DO/panafz1-kanji.bin)** (933,636 bytes)
+  - SHA1: `acd39a8fee1b9d2950d5ab447846c11fb31af63e`
+  - MD5: `b8dc97f778a6245c58e064b0312e8281`
+  - CRC32: `a8e9447c`
+- **[panafz1.bin](bios/3DO%20Company/3DO/panafz1.bin)** (1,048,576 bytes)
+  - SHA1: `34bf189111295f74d7b7dfc1f304d98b8d36325a`
+  - MD5: `f47264dd47fe30f73ab3c010015c155b`
+  - CRC32: `c8c8ff89`
+- **[panafz10-norsa.bin](bios/3DO%20Company/3DO/panafz10-norsa.bin)** (1,048,576 bytes)
+  - SHA1: `f05e642322c03694f06a809c0b90fc27ac73c002`
+  - MD5: `1477bda80dc33731a65468c1f5bcbee9`
+  - CRC32: `230e6feb`
+- **[panafz10.bin](bios/3DO%20Company/3DO/panafz10.bin)** (1,048,576 bytes)
+  - SHA1: `3c912300775d1ad730dc35757e279c274c0acaad`
+  - MD5: `51f2f43ae2f3508a14d9f56597e2d3ce`
+  - CRC32: `58242cee`
+- **[panafz10e-anvil-norsa.bin](bios/3DO%20Company/3DO/panafz10e-anvil-norsa.bin)** (1,048,576 bytes)
+  - SHA1: `2765c7b4557cc838b32567d2428d088980295159`
+  - MD5: `cf11bbb5a16d7af9875cca9de9a15e09`
+  - CRC32: `9a186221`
+- **[panafz10e-anvil.bin](bios/3DO%20Company/3DO/panafz10e-anvil.bin)** (1,048,576 bytes)
+  - SHA1: `a900371f0cdcdc03f79557f11d406fd71251a5fd`
+  - MD5: `a48e6746bd7edec0f40cff078f0bb19f`
+  - CRC32: `2495c500`
+- **[panafz10ja-anvil-kanji.bin](bios/3DO%20Company/3DO/panafz10ja-anvil-kanji.bin)** (1,048,576 bytes)
+  - SHA1: `2e857b957803d0331fd229328df01f3ffab69eee`
+  - MD5: `428577250f43edc902ea239c50d2240d`
+  - CRC32: `ff7393de`
+- **[panafz1j-kanji.bin](bios/3DO%20Company/3DO/panafz1j-kanji.bin)** (1,048,576 bytes)
+  - SHA1: `884515605ee243577ab20767ef8c1a7368e4e407`
+  - MD5: `c23fb5d5e6bb1c240d02cf968972be37`
+  - CRC32: `45f478b1`
+- **[panafz1j-norsa.bin](bios/3DO%20Company/3DO/panafz1j-norsa.bin)** (1,048,576 bytes)
+  - SHA1: `a417587ae3b0b8ef00c830920c21af8bee88e419`
+  - MD5: `f6c71de7470d16abe4f71b1444883dc8`
+  - CRC32: `82ce67c6`
+- **[panafz1j.bin](bios/3DO%20Company/3DO/panafz1j.bin)** (1,048,576 bytes)
+  - SHA1: `ec7ec62d60ec0459a14ed56ebc66761ef3c80efc`
+  - MD5: `a496cfdded3da562759be3561317b605`
+  - CRC32: `d9493adc`
+- **[sanyotry.bin](bios/3DO%20Company/3DO/sanyotry.bin)** (1,048,576 bytes)
+  - SHA1: `b01c53da256dde43ffec4ad3fc3adfa8d635e943`
+  - MD5: `35fa1a1ebaaeea286dc5cd15487c13ea`
+  - CRC32: `d5cbc509`
+
+### APF/Imagination Machine
+
+- **[apfm1000.zip](bios/APF/Imagination%20Machine/apfm1000.zip)** (6,896 bytes)
+  - SHA1: `d2cce3ff07afa9d13ea371499495f4df9611420c`
+  - MD5: `b197db12f7a13827717bbeb7cfd9542a`
+  - CRC32: `a64058f0`
+
+### Acorn/Archimedes
+
+- **[aa310.zip](bios/Acorn/Archimedes/aa310.zip)** (6,536,273 bytes)
+  - SHA1: `db67429100680a7a991822b8e2b1ca958df1e140`
+  - MD5: `dc68b6ad1c10b42ff4a7720e423af790`
+  - CRC32: `9287f1f7`
+- **[archimedes_keyboard.zip](bios/Acorn/Archimedes/archimedes_keyboard.zip)** (1,301 bytes)
+  - SHA1: `baeb7254012b4a55893aba6e5c79ca747c02bdc3`
+  - MD5: `5352d15a3b7938a276305a01080af64c`
+  - CRC32: `bb049d88`
+
+### Acorn/BBC Micro
+
+- **[atom.zip](bios/Acorn/BBC%20Micro/atom.zip)** (13,583 bytes)
+  - SHA1: `38cda1f2199ee138c509e9b68647d7ac6c6885f6`
+  - MD5: `6c00b2e8c8cc432a0eefbd02255dc1de`
+  - CRC32: `4d194164`
+- **[basic2.rom](bios/Acorn/BBC%20Micro/basic2.rom)** (16,384 bytes)
+  - SHA1: `4a7393f3a45ea309f744441c16723e2ef447a281`
+  - MD5: `2cc67be4624df4dc66617742571a8e3d`
+  - CRC32: `79434781`
+  - Platform names: Batocera: `bbcb.zip`, Batocera: `electron64.zip`
+- **[bbc.zip](bios/Acorn/BBC%20Micro/mame/samples/bbc.zip)** (8,469 bytes)
+  - SHA1: `46d4a5a34443506160457db43f79d766e5383820`
+  - MD5: `b906eedc48c9067d37c942694b1bb2a1`
+  - CRC32: `48c8d150`
+- **[bbc_acorn8271.zip](bios/Acorn/BBC%20Micro/bbc_acorn8271.zip)** (164,713 bytes)
+  - SHA1: `25c03a42871df58a880e84e76f90da51d72f6c7e`
+  - MD5: `4c2027c59689fa0da2029e507a15ed0f`
+  - CRC32: `cdcfa3f7`
+- **[bbc_bitstik1.zip](bios/Acorn/BBC%20Micro/bbc_bitstik1.zip)** (5,798 bytes)
+  - SHA1: `5822df2318477e4571257f369891fb796ecc2e71`
+  - MD5: `0aeab3e1f3114ef52a55ff65485e1601`
+  - CRC32: `74a7372d`
+- **[bbc_bitstik2.zip](bios/Acorn/BBC%20Micro/bbc_bitstik2.zip)** (5,798 bytes)
+  - SHA1: `d6f512fd9506fc8989e807d2329a84c877c2f80f`
+  - MD5: `9e7f001f8e26be3413dc4206901a535f`
+  - CRC32: `362cfef0`
+- **[bbc_tube_80186.zip](bios/Acorn/BBC%20Micro/bbc_tube_80186.zip)** (6,643 bytes)
+  - SHA1: `10cee3c9e02aae1ef8ffacc631d85516ed2766e7`
+  - MD5: `549200855053cfe50fcbcf6d8ef9f4aa`
+  - CRC32: `5623bbbf`
+- **[bbcb.zip](bios/Acorn/BBC%20Micro/bbcb.zip)** (93,427 bytes)
+  - SHA1: `4d7d8a60ffc39fd840365a45388850707b1d016d`
+  - MD5: `2c8cf2053c40350aa460b70ca18b4207`
+  - CRC32: `dd1c9f3e`
+- **[bbcm.zip](bios/Acorn/BBC%20Micro/bbcm.zip)** (298,693 bytes)
+  - SHA1: `348862775399266446af90622c9d4caf93f98c8a`
+  - MD5: `5fc34ddc383049c12bd2e9f01e580ae4`
+  - CRC32: `af1d4eb7`
+- **[bbcmc.zip](bios/Acorn/BBC%20Micro/bbcmc.zip)** (100,074 bytes)
+  - SHA1: `67d2f51afa27d671b57d5efa66b922fa042fbc0e`
+  - MD5: `7c12d6240ca7da9c8839673c52c1e137`
+  - CRC32: `127afa43`
+- **[dfs-2.26.rom](bios/Acorn/BBC%20Micro/dfs-2.26.rom)** (16,384 bytes)
+  - SHA1: `cf2ebc422a8d24ec6f1a0320520c38a0e704109a`
+  - MD5: `f083f49d6fe66344c650d7e74249cb96`
+  - CRC32: `5ae33e94`
+- **[electron.zip](bios/Acorn/BBC%20Micro/electron.zip)** (25,571 bytes)
+  - SHA1: `19ed4ca51b20946ec05c0f1340b0c3141de9dbe1`
+  - MD5: `a2ce0a55c75fb1ffde2cee076f9d38ee`
+  - CRC32: `1d5da8b8`
+- **[electron64.zip](bios/Acorn/BBC%20Micro/electron64.zip)** (25,089 bytes)
+  - SHA1: `2310f98e8f8021400922a84a68daeb4b980ef898`
+  - MD5: `9c91afdb9f3b5e0abbbc7f2e50bd3be3`
+  - CRC32: `1e2510f3`
+- **[electron_plus1.zip](bios/Acorn/BBC%20Micro/electron_plus1.zip)** (1,344 bytes)
+  - SHA1: `2c10fac12bff79bc78d38429cbba65c1634a684d`
+  - MD5: `1e39c57fd872732aba1a9f18ad12305c`
+  - CRC32: `607f8078`
+- **[electron_plus3.zip](bios/Acorn/BBC%20Micro/electron_plus3.zip)** (57,712 bytes)
+  - SHA1: `1374cdc9e80a2b9c008780b4208ed14c8afefc4b`
+  - MD5: `655dd4c749b8673f6271eb34bd7865aa`
+  - CRC32: `aa53a82f`
+- **[os12.rom](bios/Acorn/BBC%20Micro/os12.rom)** (16,384 bytes)
+  - SHA1: `0d9bcaf6a393c9ce2359ed700ddb53c232c2c45d`
+  - MD5: `0a59a5ba15fe8557b5f7fee32bbd393a`
+  - CRC32: `3c14fc70`
+  - Platform names: Batocera: `bbcb.zip`
+- **[saa5050.zip](bios/Acorn/BBC%20Micro/saa5050.zip)** (536 bytes)
+  - SHA1: `c16ded03b2a17dfaaaaac2856e013f27259a2254`
+  - MD5: `721afdaf784a325e5c82f3028ad98aa9`
+  - CRC32: `2719b4b2`
+
+### Amstrad/CPC
+
+- **[cpc464.rom](bios/Amstrad/CPC/cpc464.rom)** (32,768 bytes)
+  - SHA1: `56d39c463da60968d93e58b4ba0e675829412a20`
+  - MD5: `a993f85b88ac4350cf4d41554e87fe4f`
+  - CRC32: `40852f25`
+- **[cpc6128.rom](bios/Amstrad/CPC/cpc6128.rom)** (32,768 bytes)
+  - SHA1: `5977adbad3f7c1e0e082cd02fe76a700d9860c30`
+  - MD5: `b96280dc6c95a48857b4b8eb931533ae`
+  - CRC32: `9e827fe1`
+- **[cpc664.rom](bios/Amstrad/CPC/cpc664.rom)** (32,768 bytes)
+  - SHA1: `073a7665527b5bd8a148747a3947dbd3328682c8`
+  - MD5: `5a384a2310f472c7857888371c00ed66`
+  - CRC32: `9ab5a036`
+- **[cpc_amsdos.rom](bios/Amstrad/CPC/cpc_amsdos.rom)** (16,384 bytes)
+  - SHA1: `39102c8e9cb55fcc0b9b62098780ed4a3cb6a4bb`
+  - MD5: `25629dfe870d097469c217b95fdc1c95`
+  - CRC32: `1fe22ecd`
+
+### Amstrad/PCW
+
+- **[pcw8256.zip](bios/Amstrad/PCW/pcw8256.zip)** (1,710 bytes)
+  - SHA1: `f8a11b4e03bb8c3caee604ca591676eab6535d1b`
+  - MD5: `bdbe5b131171871c15928528261708d2`
+  - CRC32: `e685bd58`
+- **[pcw9512.zip](bios/Amstrad/PCW/pcw9512.zip)** (2,625 bytes)
+  - SHA1: `844988dc5a36917b002d0140d3a7692d1407f783`
+  - MD5: `1ed06e9efe61c8092d4f42cd400d11f4`
+  - CRC32: `bade516d`
+
+### Apple/Apple II
+
+- **[a2cffa02.zip](bios/Apple/Apple%20II/a2cffa02.zip)** (2,371 bytes)
+  - SHA1: `e8af33c0904b422841080a5ee25935f5ea1f3781`
+  - MD5: `c192973c9a3c06594f87908abaec0b66`
+  - CRC32: `669f3e91`
+- **[a2diskiing.zip](bios/Apple/Apple%20II/a2diskiing.zip)** (371 bytes)
+  - SHA1: `d9bb189730e15d46c27e7246d7bb23137e7d761e`
+  - MD5: `e07ffce4500ffeac9750c427d8309d9b`
+  - CRC32: `1dcd4719`
+- **[apple2e.zip](bios/Apple/Apple%20II/apple2e.zip)** (15,975 bytes)
+  - SHA1: `891f44b09ab1a948d3d887f8a30b9c9265849ada`
+  - MD5: `d96a5b4370d665300802970c35cf1b7f`
+  - CRC32: `726b604c`
+- **[apple2ee.zip](bios/Apple/Apple%20II/apple2ee.zip)** (560,142 bytes)
+  - SHA1: `0bd2026795d117c33a5967b68fed8c54b3d95502`
+  - MD5: `5096735438308631fac54ab7e229d21e`
+  - CRC32: `505407fe`
+- **[apple2gs.rom](bios/Apple/Apple%20II/apple2gs.rom)** (262,144 bytes)
+  - SHA1: `bc32bc0e8902946663998f56aea52be597d9e361`
+  - MD5: `ba89edf2729a28a17cd9e0f7a0ac9a39`
+  - CRC32: `de7ddf29`
+  - Also known as: `apple2gs3.rom`
+  - Platform names: Recalbox: `apple2gs3.rom`
+- **[apple2gs.zip](bios/Apple/Apple%20II/apple2gs.zip)** (174,124 bytes)
+  - SHA1: `799e2fc90d6bfd8cb74e331e04d5afd36f2f21a1`
+  - MD5: `8f7ee14ccca8ae3dd8c759497af3f09b`
+  - CRC32: `4f923a35`
+- **[apple2p.zip](bios/Apple/Apple%20II/apple2p.zip)** (11,756 bytes)
+  - SHA1: `e8c40d3a44a41a9b6b5dd3a993d7057b3bfb4086`
+  - MD5: `d3bef2755267a941f264fb5b288e3076`
+  - CRC32: `665cd50f`
+- **[d2fdc.zip](bios/Apple/Apple%20II/d2fdc.zip)** (262 bytes)
+  - SHA1: `af56c948598291b284a528f3fce06b961dba55e3`
+  - MD5: `2b50e7c8a9f2b55ddd2ace9fecdd6a60`
+  - CRC32: `41462d42`
+- **[votrsc01.zip](bios/Apple/Apple%20II/votrsc01.zip)** (588 bytes)
+  - SHA1: `a57f14469867ce0d0865995a645b69f41a0ea718`
+  - MD5: `c835eab06842e3c1d6e2e7dc19289828`
+  - CRC32: `6105d2ee`
+- **[votrsc01a.zip](bios/Apple/Apple%20II/votrsc01a.zip)** (590 bytes)
+  - SHA1: `14a5ff2c8ca68d35a77ebfbc227ed9c8e19d7524`
+  - MD5: `b784c07140810457f6244d267cbbbb72`
+  - CRC32: `5f919dbc`
+
+### Apple/Macintosh
+
+- **[disk.img](bios/Apple/Macintosh/disk.img)** (31,457,280 bytes)
+  - SHA1: `134eab28dcb54854013f348078fb69bfb6329a8b`
+  - MD5: `64c507ce3395f96e5bbb09a13834fbba`
+  - CRC32: `30f5d7a6`
+- **[egret.zip](bios/Apple/Macintosh/egret.zip)** (8,834 bytes)
+  - SHA1: `601460f725cbe21711b4e7bc627614a0667caf05`
+  - MD5: `e2db7b7d1cf1420c7903206815d529d1`
+  - CRC32: `4a5258ae`
+- **[mac.rom](bios/Apple/Macintosh/mac.rom)** (1,048,576 bytes)
+  - SHA1: `47cd505b6a7c46e5c0ffa29f0d5037c83e94a02f`
+  - MD5: `af343f3f1362bf29cefd630687efaa25`
+  - CRC32: `1735e7a5`
+- **[mac128k.zip](bios/Apple/Macintosh/mac128k.zip)** (49,592 bytes)
+  - SHA1: `b63ea7435784f26bb99398890c707b21d7084769`
+  - MD5: `3cdf42e48684ac419d08f8dc2d23f9c3`
+  - CRC32: `ffe2524b`
+- **[mac2fdhd.zip](bios/Apple/Macintosh/mac2fdhd.zip)** (153,811 bytes)
+  - SHA1: `bcecee4379e0ecfa6dc0c49900dda3f8220d6ef0`
+  - MD5: `c2806ab3415462ae989c163bfdce95ce`
+  - CRC32: `c37b828c`
+- **[mac512k.zip](bios/Apple/Macintosh/mac512k.zip)** (49,594 bytes)
+  - SHA1: `0f033f8d7793c58d3ef5374174eec3ab86b33ba1`
+  - MD5: `96c9bdde5f9910d5ac8bee917ed8cffa`
+  - CRC32: `43272790`
+- **[macclasc.zip](bios/Apple/Macintosh/macclasc.zip)** (436,715 bytes)
+  - SHA1: `39a3243624df5a962c160c7bc1535b50c538f0bd`
+  - MD5: `28cada606496d94c0a3dc99816654221`
+  - CRC32: `dcfc228d`
+- **[maciix.zip](bios/Apple/Macintosh/maciix.zip)** (251,639 bytes)
+  - SHA1: `7b4ffde1cd36f4d729ad67e1547f2f16cd3a6e42`
+  - MD5: `e4b0fb4461e9b08f91e7ff858e19bc66`
+  - CRC32: `65ebc588`
+- **[mackbd_m0110.zip](bios/Apple/Macintosh/mackbd_m0110.zip)** (1,021 bytes)
+  - SHA1: `9dfd9b51164d07cbe9d04b1deffbd962d7107466`
+  - MD5: `7c1c124f62929aa44690da226dd03beb`
+  - CRC32: `4ed17f93`
+- **[mackbd_m0110a.zip](bios/Apple/Macintosh/mackbd_m0110a.zip)** (866 bytes)
+  - SHA1: `1365b42d35d80feac9050caea8d6bd9d374fd1d2`
+  - MD5: `7602a38a3aff4854e29275c1fef6cb41`
+  - CRC32: `a85e050a`
+- **[maclc3.zip](bios/Apple/Macintosh/maclc3.zip)** (481,885 bytes)
+  - SHA1: `f454095619834dbfb9e8de0111bb3ee5fc21622d`
+  - MD5: `fbd91ef9d8d3ed2dfd4ed33fed086315`
+  - CRC32: `feca61e3`
+- **[macos3.img](bios/Apple/Macintosh/macos3.img)** (819,200 bytes)
+  - SHA1: `0546dd0fa34f4e6d913e4254ddb5350e1e42800c`
+  - MD5: `dff90a8d9c9a41687ad7aa5851e6dbc1`
+  - CRC32: `d3768bcb`
+- **[macos608.img](bios/Apple/Macintosh/macos608.img)** (819,200 bytes)
+  - SHA1: `fb89deb29ff341e92fd30307934f7c7616c2c8e2`
+  - MD5: `2bee2c49381dd7d96c15deb57ea6e0a7`
+  - CRC32: `febb735f`
+- **[macos701.img](bios/Apple/Macintosh/macos701.img)** (1,474,560 bytes)
+  - SHA1: `37b3c669ac03f855ed14affbded280af7a78525e`
+  - MD5: `1b010545094e1a4fd5dae8dec54d6238`
+  - CRC32: `33c18479`
+- **[macos75.img](bios/Apple/Macintosh/macos75.img)** (1,474,560 bytes)
+  - SHA1: `c44664a2a7a649696b0081373717a9cf821c52d3`
+  - MD5: `7d8460f9ca957007bc77bf9d74066819`
+  - CRC32: `5009917e`
+- **[macplus.zip](bios/Apple/Macintosh/macplus.zip)** (1,001,148 bytes)
+  - SHA1: `616a58ca17834f76f9e07e64919f1cc56ae41e28`
+  - MD5: `2b96a73f785e49798154e8c7414ae14e`
+  - CRC32: `332c11d6`
+- **[macse.zip](bios/Apple/Macintosh/macse.zip)** (177,738 bytes)
+  - SHA1: `0e36e6df4a5c468939f8c136f6d0f0d4aed81a47`
+  - MD5: `56ac25d36f6e5ae0c634267ac525ee3b`
+  - CRC32: `73cb32d5`
+
+### Apple/Macintosh II
+
+- **[MacII.ROM](bios/Apple/Macintosh%20II/MacII.ROM)** (262,144 bytes)
+  - SHA1: `db6b504744281369794e26ba71a6e385cf6227fa`
+  - MD5: `66223be1497460f1e60885eeb35e03cc`
+  - CRC32: `4df6d054`
+- **[MacIIx.ROM](bios/Apple/Macintosh%20II/MacIIx.ROM)** (262,144 bytes)
+  - SHA1: `753b94351d94c369616c2c87b19d568dc5e2764e`
+  - MD5: `2a8a4c7f2a38e0ab0771f59a9a0f1ee4`
+  - CRC32: `ce3b966f`
+  - Platform names: Batocera: `mac2fdhd.zip`, Batocera: `maciix.zip`
+- **[MinivMacBootv2.dsk](bios/Apple/Macintosh%20II/MinivMacBootv2.dsk)** (25,165,824 bytes)
+  - SHA1: `20bb0271d02b1ab3b4cfe7c8d6b599abdbc5324e`
+  - MD5: `e66dc7952c8b9673868ad2faba3c0d20`
+  - CRC32: `4c873269`
+- **[adbmodem.zip](bios/Apple/Macintosh%20II/adbmodem.zip)** (763 bytes)
+  - SHA1: `33d741e1c6457cbda0580c36c013d13e93843293`
+  - MD5: `057f2b6bf76af0148124a7bdf36a0dcb`
+  - CRC32: `50bfc9a2`
+- **[mac608.chd](bios/Apple/Macintosh%20II/mac608.chd)** (932,773 bytes)
+  - SHA1: `c351225ccaa62930f5533d341f6c953e0aa29f6e`
+  - MD5: `41d037963fa45365fd11050188106895`
+  - CRC32: `181f5782`
+- **[mac701.chd](bios/Apple/Macintosh%20II/mac701.chd)** (2,639,357 bytes)
+  - SHA1: `59b64c909648966a898e565c9fd300caf9e012a2`
+  - MD5: `50bf05c451d0007a11948893925f7dfb`
+  - CRC32: `698834dc`
+- **[mac755.chd](bios/Apple/Macintosh%20II/mac755.chd)** (23,362,683 bytes)
+  - SHA1: `0b6b7dffae0446f34128d63a7f46db8fccc385a1`
+  - MD5: `05d322c8acef942c5ab02c46c1d9a6fd`
+  - CRC32: `a477e36e`
+- **[mackbd_m0120.zip](bios/Apple/Macintosh%20II/mackbd_m0120.zip)** (1,051 bytes)
+  - SHA1: `d2c4be29ed5b86c083b5283abc8461127d88395f`
+  - MD5: `c54b17f59168048eb5bf99f83a1f0f4d`
+  - CRC32: `0074341f`
+- **[nb_mdc824.zip](bios/Apple/Macintosh%20II/nb_mdc824.zip)** (7,883 bytes)
+  - SHA1: `734efa75815502d58898599359cf55f8003a03a5`
+  - MD5: `8ffe31f1ee8164f6c1dfd95ffb79feff`
+  - CRC32: `8473ae12`
+- **[vMac.ROM](bios/Apple/Macintosh%20II/vMac.ROM)** (138,576 bytes)
+  - SHA1: `32daf772960c7ed31f41b95055968532b81d0896`
+  - MD5: `4a89c35e11d0bcb3c174cabfa4b1cd09`
+  - CRC32: `e133094a`
+
+### Arcade/Arcade
+
+- **[3dobios.zip](bios/Arcade/Arcade/3dobios.zip)** (2,351,546 bytes)
+  - SHA1: `de463b0577dfd1027bf7de523ff67a0fff861cdb`
+  - MD5: `6c6c0c726cbf15e81785eb7592fdb51c`
+  - CRC32: `b28f7112`
+- **[Firmware.19.0.0.zip](bios/Arcade/Arcade/Firmware.19.0.0.zip)** (338,076,508 bytes)
+  - SHA1: `ac4b78d53c7a97da2451ca35498395d8dd1e3024`
+  - MD5: `72d6c73306c7f0b76723f989e7e1bdd1`
+  - CRC32: `77228c84`
+- **[acpsx.zip](bios/Arcade/Arcade/acpsx.zip)** (126,167 bytes)
+  - SHA1: `5426d52e17e0ff9195fabbb42f704342e556d08e`
+  - MD5: `fcb631bf18a56f2d5b077fa846bab4a6`
+  - CRC32: `9c9601ca`
+- **[airlbios.zip](bios/Arcade/Arcade/airlbios.zip)** (715,730 bytes)
+  - SHA1: `f2a730530f4989ca0e8860aa4e455b6a5fe69e1d`
+  - MD5: `7a11bfe0cc72886d032e386db68f890c`
+  - CRC32: `f83ec60f`
+  - **Variants** (1 alternate versions):
+    - [airlbios.zip.ff161eaa](bios/Sega/Dreamcast/.variants/airlbios.zip.ff161eaa) (702,615 bytes) - SHA1: `ff161eaa16b36b519eeab26364b99f59b9e8128c`, MD5: `e80075c0dfcd39ab2bea972d150e0ba1`
+- **[aleck64.zip](bios/Arcade/Arcade/aleck64.zip)** (1,804 bytes)
+  - SHA1: `beaf97c4a0e0792b8db65648f9dabb6a54ae0549`
+  - MD5: `c266fc58905af1e246dffadc84301042`
+  - CRC32: `da9beacc`
+- **[alg_bios.zip](bios/Arcade/Arcade/alg_bios.zip)** (143,125 bytes)
+  - SHA1: `901e1927ebe87946e3e4bb6d0a825088a8a60490`
+  - MD5: `0507c3a390e5b39d81dd9d10fdfc19eb`
+  - CRC32: `99c68750`
+- **[allied.zip](bios/Arcade/Arcade/allied.zip)** (2,926 bytes)
+  - SHA1: `f44836072ec6ad9e5a7b46105985548181faab5b`
+  - MD5: `eb6a82c4cc942bf46970968bf331df1e`
+  - CRC32: `bccffdf3`
+- **[apple2p.zip](bios/Arcade/Arcade/apple2p.zip)** (548,476 bytes)
+  - SHA1: `5ba8555f716bd48834858d8a7f42810ab7293b12`
+  - MD5: `b93c991fbf757a8fba3864f7e11b2068`
+  - CRC32: `2c87e8d5`
+- **[ar_bios.zip](bios/Arcade/Arcade/ar_bios.zip)** (681,333 bytes)
+  - SHA1: `df93e5943023cc8f7ddf0ffb956fd969e04a171a`
+  - MD5: `2bfe3a68f5261412b076d8baa92103d0`
+  - CRC32: `2f7e46db`
+- **[aristmk5.zip](bios/Arcade/Arcade/aristmk5.zip)** (261,435 bytes)
+  - SHA1: `81011bee956427e015cbb91e5d93364b6dc300dc`
+  - MD5: `f6256abae7af17850202e8a5c82de58c`
+  - CRC32: `2cee044b`
+- **[aristmk6.zip](bios/Arcade/Arcade/aristmk6.zip)** (22,239,668 bytes)
+  - SHA1: `e5a16ec95d54dd3ced17edccfdda049ac2f8f86f`
+  - MD5: `88d047a27259a1dbd0f75bdb9ab45a4b`
+  - CRC32: `dd185a95`
+- **[atarisy1.zip](bios/Arcade/Arcade/atarisy1.zip)** (49,385 bytes)
+  - SHA1: `4fb1f00681d2540b476add2def2bbf07ca3e3993`
+  - MD5: `8dc80333b1021bf1505908aec4d4482b`
+  - CRC32: `5561e1a5`
+- **[awbios.zip](bios/Arcade/Arcade/awbios.zip)** (42,296 bytes)
+  - SHA1: `7940c7bf29eee85a5b2fdec78750b19aa22895dc`
+  - MD5: `85254fbe320ca82a768ec2c26bb08def`
+  - CRC32: `67a14ad5`
+  - **Variants** (1 alternate versions):
+    - [awbios.zip.1f62f581](bios/Sega/Dreamcast/.variants/awbios.zip.1f62f581) (34,598 bytes) - SHA1: `1f62f581094c90620c74d4d15c1c1640a973e684`, MD5: `59889f03e09c1d4246b7874096a3201c`
+- **[bubsys.zip](bios/Arcade/Arcade/bubsys.zip)** (7,950 bytes)
+  - SHA1: `1c0ffcd308b0c8c6dbb74ad8b811a0767200d366`
+  - MD5: `f81298afd68a1a24a49a1a2d9f087964`
+  - CRC32: `8fc2fd2e`
+  - **Variants** (1 alternate versions):
+    - [bubsys.zip.9a48e38c](bios/Arcade/Arcade/.variants/bubsys.zip.9a48e38c) (12,021 bytes) - SHA1: `9a48e38cb92b7e0fcc75156bdfa737c63a2cb1c3`, MD5: `17cce3efe7b03d0e789744ed7dc4c619`
+- **[bubsys.zip.9a48e38c](bios/Arcade/Arcade/.variants/bubsys.zip.9a48e38c)** (12,021 bytes)
+  - SHA1: `9a48e38cb92b7e0fcc75156bdfa737c63a2cb1c3`
+  - MD5: `17cce3efe7b03d0e789744ed7dc4c619`
+  - CRC32: `0de73e72`
+- **[cchip.zip](bios/Arcade/Arcade/cchip.zip)** (2,700 bytes)
+  - SHA1: `364f2302a145a0fd6de767d7f8484badde1d1a6e`
+  - MD5: `df6f8a3d83c028a5cb9f2f2be60773f3`
+  - CRC32: `23debecb`
+- **[cdibios.zip](bios/Arcade/Arcade/cdibios.zip)** (468,660 bytes)
+  - SHA1: `e7d2a0dad62d6f75bc10f48a376da0a99b764571`
+  - MD5: `849f709632ad9bdfb9af1b5a2acf8308`
+  - CRC32: `8dbcced4`
+- **[cedmag.zip](bios/Arcade/Arcade/cedmag.zip)** (1,242 bytes)
+  - SHA1: `ef96ef15207789cdc75ed1836934934ad8c02883`
+  - MD5: `4fbf5780a3c949b52e5796897f9ec993`
+  - CRC32: `c7f665ca`
+- **[channelf.zip](bios/Arcade/Arcade/channelf.zip)** (2,705 bytes)
+  - SHA1: `1cb23b462b990241013deb4b5e07ce741af28267`
+  - MD5: `2f2f8de3827ae1faf2495e497ca95232`
+  - CRC32: `332807d9`
+- **[chihiro.zip](bios/Arcade/Arcade/chihiro.zip)** (2,104,141 bytes)
+  - SHA1: `4fe94baf28d658dd2651de4055a0ac33aa42aa0e`
+  - MD5: `3e714dafd8a5efbd859de8ef64a3a0bb`
+  - CRC32: `99e7f567`
+- **[coco_fdc_v11.zip](bios/Arcade/Arcade/coco_fdc_v11.zip)** (23,115 bytes)
+  - SHA1: `45795e083e635c7beab9a40793c628a16f9990e6`
+  - MD5: `5adf7b63da11f0d5c268635685e10666`
+  - CRC32: `60874b78`
+- **[coh1000a.zip](bios/Arcade/Arcade/coh1000a.zip)** (126,259 bytes)
+  - SHA1: `c91f79c7ac73519c8b99c184b2fcbffae42fa324`
+  - MD5: `5d44a53642580a6709defd456e637a39`
+  - CRC32: `f6e93790`
+- **[coh1000c.zip](bios/Arcade/Arcade/coh1000c.zip)** (278,470 bytes)
+  - SHA1: `9e156eee236b0077a50a2cda1ff0b874390ed8db`
+  - MD5: `323e38eb0fd48ff9c7357a29803a1170`
+  - CRC32: `f129ec43`
+- **[coh1000t.zip](bios/Arcade/Arcade/coh1000t.zip)** (126,274 bytes)
+  - SHA1: `c6d884d7b7ea46338efd116d6ddfa1392c624649`
+  - MD5: `75ffe488ca17447fa5733203cf8f4aa2`
+  - CRC32: `64816ed7`
+- **[coh1000w.zip](bios/Arcade/Arcade/coh1000w.zip)** (126,147 bytes)
+  - SHA1: `13bf28e3528c385b642046c2e0f96f44b33df0f2`
+  - MD5: `bcb07e7741b549bc3f9a534c7041bfc2`
+  - CRC32: `5e089bea`
+- **[coh1001l.zip](bios/Arcade/Arcade/coh1001l.zip)** (126,185 bytes)
+  - SHA1: `ab30bd19261c208e2c44c35de6f68cd415fb80e9`
+  - MD5: `2b243fedcfdd76f6b58664fa6f325fd1`
+  - CRC32: `579d1236`
+- **[coh1002e.zip](bios/Arcade/Arcade/coh1002e.zip)** (128,626 bytes)
+  - SHA1: `1f15b3acc75031633387b372ea71e537f4f96220`
+  - MD5: `f80741db0a3dd44036481cb2af3655db`
+  - CRC32: `6d2eaaf6`
+- **[coh1002m.zip](bios/Arcade/Arcade/coh1002m.zip)** (138,588 bytes)
+  - SHA1: `197337577f55ab4c237c3d545d63082e73748c47`
+  - MD5: `b32edaed4a9ad6ab5b1093f4b9cfd09b`
+  - CRC32: `977c5bbe`
+- **[coh1002v.zip](bios/Arcade/Arcade/coh1002v.zip)** (126,314 bytes)
+  - SHA1: `5162fcac2fa5a92480a081b3397099ce4a3703c5`
+  - MD5: `160b97fa78ad79a4a95fde1829e1ad95`
+  - CRC32: `29a716f4`
+- **[coh3002c.zip](bios/Arcade/Arcade/coh3002c.zip)** (137,941 bytes)
+  - SHA1: `94d49033e2c45a2591331826559bc93b2bb0884f`
+  - MD5: `4f97958fe67444637b5c6700fb62849c`
+  - CRC32: `708ae745`
+- **[coh3002t.zip](bios/Arcade/Arcade/coh3002t.zip)** (504,337 bytes)
+  - SHA1: `2c4f6d8d134a2e096e676821fad0a66ac32e6e5c`
+  - MD5: `40538ec41ce0e7ed66d9694bf1b1c2bf`
+  - CRC32: `4a92785e`
+- **[coleco.zip](bios/Arcade/Arcade/coleco.zip)** (28,014 bytes)
+  - SHA1: `db2190922f359f19b47f8270fa87a7c1b38f5b2b`
+  - MD5: `94915714a814a84f7c292e6db71f3ad2`
+  - CRC32: `eea6c08b`
+- **[cpzn1.zip](bios/Arcade/Arcade/cpzn1.zip)** (125,571 bytes)
+  - SHA1: `6515a4f2f3f5864c32346c2fecdc3595205f1d86`
+  - MD5: `987025e8031db82f2b32d757339f7c74`
+  - CRC32: `9a35b7fb`
+- **[cpzn2.zip](bios/Arcade/Arcade/cpzn2.zip)** (137,827 bytes)
+  - SHA1: `b18e23b8908e3e920ce971b8be168fa8baf1b3f7`
+  - MD5: `3d2d86e4582bf130470416e78e490889`
+  - CRC32: `f6d34e32`
+- **[crysbios.zip](bios/Arcade/Arcade/crysbios.zip)** (43,480 bytes)
+  - SHA1: `7f2d1c4e00ce1824ff91459d8ff6b59b2fb4b746`
+  - MD5: `c7a4670b97149a702c2645f4e79b22db`
+  - CRC32: `a68694a9`
+- **[cubo.zip](bios/Arcade/Arcade/cubo.zip)** (673,549 bytes)
+  - SHA1: `258d81f7d8afd46647c6b429ccdfc5a5388accb3`
+  - MD5: `9baf61a62ba1f5407906cef06bcd7b7f`
+  - CRC32: `3ffcf581`
+- **[cvs.zip](bios/Arcade/Arcade/cvs.zip)** (3,113 bytes)
+  - SHA1: `649d8af20ba0048fa993585960bf0305d50fc560`
+  - MD5: `3c69f36659e0db733227c54d003940f7`
+  - CRC32: `70232df1`
+- **[decocass.zip](bios/Arcade/Arcade/decocass.zip)** (16,107 bytes)
+  - SHA1: `30b97b2670b79d0de41cba190324c504846c6fa1`
+  - MD5: `b7e1189b341bf6a8e270017c096d21b0`
+  - CRC32: `5de524e5`
+  - **Variants** (2 alternate versions):
+    - [decocass.zip.5c5f300f](bios/Arcade/Arcade/.variants/decocass.zip.5c5f300f) (13,225 bytes) - SHA1: `5c5f300f3ab2bd10e2adf4dd96baa78317578d8d`, MD5: `2b268f2f8960e5124f9a8cc6cfe86773`
+    - [decocass.zip.ca7bf859](bios/Arcade/Arcade/.variants/decocass.zip.ca7bf859) (4,603 bytes) - SHA1: `ca7bf85999eaaa79652c721986e64f769cf03892`, MD5: `e0d8f3de7d217882fec5aa55883b6a11`
+- **[decocass.zip.5c5f300f](bios/Arcade/Arcade/.variants/decocass.zip.5c5f300f)** (13,225 bytes)
+  - SHA1: `5c5f300f3ab2bd10e2adf4dd96baa78317578d8d`
+  - MD5: `2b268f2f8960e5124f9a8cc6cfe86773`
+  - CRC32: `96ff4a07`
+- **[decocass.zip.ca7bf859](bios/Arcade/Arcade/.variants/decocass.zip.ca7bf859)** (4,603 bytes)
+  - SHA1: `ca7bf85999eaaa79652c721986e64f769cf03892`
+  - MD5: `e0d8f3de7d217882fec5aa55883b6a11`
+  - CRC32: `9f9c396d`
+- **[f355bios.zip](bios/Arcade/Arcade/f355bios.zip)** (1,394,278 bytes)
+  - SHA1: `b6ff66dcb5547bd91760d239ddf428a655631c53`
+  - MD5: `547f3d12aed389058ca06148f1cca0ed`
+  - CRC32: `17516536`
+  - **Variants** (1 alternate versions):
+    - [f355bios.zip.62a0d456](bios/Sega/Dreamcast/.variants/f355bios.zip.62a0d456) (1,381,185 bytes) - SHA1: `62a0d456ff84664a4f631938d3991088bc122f1b`, MD5: `f126d318f135f38ee377fef2acf08d7e`
+- **[f355dlx.zip](bios/Arcade/Arcade/f355dlx.zip)** (2,328,436 bytes)
+  - SHA1: `48d1712d1b1cdfeeeb43c6287c17b0b6309cfaab`
+  - MD5: `1028615bcac4c31634a3364ce5c04044`
+  - CRC32: `23ac17be`
+  - **Variants** (1 alternate versions):
+    - [f355dlx.zip.3c1c6422](bios/Sega/Dreamcast/.variants/f355dlx.zip.3c1c6422) (2,315,343 bytes) - SHA1: `3c1c6422c332fc57c69c938db4dd3ac91eff4f02`, MD5: `5e83867c751f692a000afdf658dc181f`
+- **[fdsbios.zip](bios/Arcade/Arcade/fdsbios.zip)** (5,724 bytes)
+  - SHA1: `682f0d2475a3d30333c01d34ecf90b8b81d31997`
+  - MD5: `e865dd6c266acb5e34a9012aac0d2862`
+  - CRC32: `32413056`
+  - **Variants** (1 alternate versions):
+    - [fdsbios.zip.c25686d2](bios/Arcade/Arcade/.variants/fdsbios.zip.c25686d2) (5,758 bytes) - SHA1: `c25686d24c7205473741f948f8a9df9906823145`, MD5: `c26bf1744cb7f6ffe441f463870321f8`
+- **[fdsbios.zip.c25686d2](bios/Arcade/Arcade/.variants/fdsbios.zip.c25686d2)** (5,758 bytes)
+  - SHA1: `c25686d24c7205473741f948f8a9df9906823145`
+  - MD5: `c26bf1744cb7f6ffe441f463870321f8`
+  - CRC32: `3d54fe55`
+- **[galgbios.zip](bios/Arcade/Arcade/galgbios.zip)** (1,345,333 bytes)
+  - SHA1: `9ec50f79c5fd6eaddd88542aa18b6c5bb81a9ed4`
+  - MD5: `a832488251f892f961a9afe125320adf`
+  - CRC32: `3890ead5`
+- **[gp_110.zip](bios/Arcade/Arcade/gp_110.zip)** (3,140 bytes)
+  - SHA1: `6fdec00172233095cebb085b26214648d1093ecb`
+  - MD5: `c45fdc9ceb6908110656940a86b72c56`
+  - CRC32: `e6264ee1`
+- **[gq863.zip](bios/Arcade/Arcade/gq863.zip)** (74,462 bytes)
+  - SHA1: `975fbbbec0b578a495a8da9e1a5965d94d6d52e1`
+  - MD5: `af5512431a3c23d8bb93057d17cff470`
+  - CRC32: `5be16858`
+- **[gts1.zip](bios/Arcade/Arcade/gts1.zip)** (3,734 bytes)
+  - SHA1: `346cbf24af08f5bfd96e6a77abf27595477aace8`
+  - MD5: `8ef9b86ab13c70e519d2c02e5282c67b`
+  - CRC32: `380dcb3f`
+- **[hiscore.dat](bios/Arcade/Arcade/hiscore.dat)** (322,458 bytes)
+  - SHA1: `7381472bf046126257e51a0124e4553282f020e5`
+  - MD5: `d0e17fe0126993b97d697bc859202be4`
+  - CRC32: `fd02cfba`
+  - **Variants** (5 alternate versions):
+    - [hiscore.dat.17b8b03a](bios/Other/Recalbox/.variants/hiscore.dat.17b8b03a) (202,298 bytes) - SHA1: `17b8b03a89d8443927aa92ede799e117b4ab6fdb`, MD5: `bb8023a43e357b7f0cc06bf00f0470b2`
+    - [hiscore.dat.21ddda0c](bios/Other/Recalbox/.variants/hiscore.dat.21ddda0c) (36,182 bytes) - SHA1: `21ddda0c61bd4f1cc04fb9d09e16d403d620f9e8`, MD5: `9b262149ec70cbda741a8ba55784f8e1`
+    - [hiscore.dat.68e94fb5](bios/Other/Recalbox/.variants/hiscore.dat.68e94fb5) (216,250 bytes) - SHA1: `68e94fb579f46f3255ef7c34c0322f3f0f3c8e20`, MD5: `7e31f0b84f6ea6f9ffec0cd968decf9f`
+    - [hiscore.dat.7f446f50](bios/Other/Recalbox/.variants/hiscore.dat.7f446f50) (131,868 bytes) - SHA1: `7f446f50545f605db9a490d693d394a2d7b0d7d9`, MD5: `f2b7d492dc55a1ecf8d370c9e9f0293e`
+    - [hiscore.dat.a22ec279](bios/Other/Recalbox/.variants/hiscore.dat.a22ec279) (215,475 bytes) - SHA1: `a22ec279222ec6aeb3249932f7d377b7cf1e7bf1`, MD5: `c6f35123264db9cdfb216e8fdb673679`
+- **[hng64.zip](bios/Arcade/Arcade/hng64.zip)** (41,210 bytes)
+  - SHA1: `98b92ece93d3e160c446a56ac859a8311333e36c`
+  - MD5: `b37582d04dee048edb99743d44764407`
+  - CRC32: `e62f0ef7`
+- **[hod2bios.zip](bios/Arcade/Arcade/hod2bios.zip)** (1,479,106 bytes)
+  - SHA1: `782c303cbdfab1027b04db74a63e27bdad5e0c53`
+  - MD5: `f4011d3116500354edf7302a90402711`
+  - CRC32: `0ddc6daf`
+  - **Variants** (3 alternate versions):
+    - [hod2bios.zip.0b5cc968](bios/Arcade/Arcade/.variants/hod2bios.zip.0b5cc968) (1,465,991 bytes) - SHA1: `0b5cc968644c936d4819c1eb5f623f5f3f83eda1`, MD5: `36ac7b58216de5eecfaebe527bf6d02e`
+    - [hod2bios.zip.889d239a](bios/Sega/Dreamcast/.variants/hod2bios.zip.889d239a) (816,543 bytes) - SHA1: `889d239ac41f25622164609367b713dd33bd5bde`, MD5: `ee362dd63d7ff01f6d579ad53f3bfe69`
+    - [hod2bios.zip.9b9c9f0a](bios/Sega/Dreamcast/.variants/hod2bios.zip.9b9c9f0a) (1,057,881 bytes) - SHA1: `9b9c9f0af3de914de677ba8e19f4190673142c1b`, MD5: `6559697f76592be77a7a9ff3bfb6711a`
+- **[hod2bios.zip.0b5cc968](bios/Arcade/Arcade/.variants/hod2bios.zip.0b5cc968)** (1,465,991 bytes)
+  - SHA1: `0b5cc968644c936d4819c1eb5f623f5f3f83eda1`
+  - MD5: `36ac7b58216de5eecfaebe527bf6d02e`
+  - CRC32: `e2c08bbf`
+- **[isgsm.zip](bios/Arcade/Arcade/isgsm.zip)** (10,207 bytes)
+  - SHA1: `f590ccf688b4c05fa1da5c5dd92c224545170c3b`
+  - MD5: `4a56d56e2219c5e2b006b66a4263c01c`
+  - CRC32: `26856bf9`
+- **[iteagle.zip](bios/Arcade/Arcade/iteagle.zip)** (3,602,204 bytes)
+  - SHA1: `7b5be2c65e378f736ee4689303349d80dc425f5f`
+  - MD5: `3a6561f8d2bb8424e6797920759962aa`
+  - CRC32: `d9d92d1b`
+- **[konamigv.zip](bios/Arcade/Arcade/konamigv.zip)** (81,391 bytes)
+  - SHA1: `b4ff14ed8c3e37a4b45ce2d80c692961ffc88270`
+  - MD5: `361f60b1d3ce84e17f027f3e547e3091`
+  - CRC32: `201eeb68`
+- **[konamigx.zip](bios/Arcade/Arcade/konamigx.zip)** (8,712 bytes)
+  - SHA1: `8cf0aa7f9dca4d77485e605fb0e2173a734633bf`
+  - MD5: `7b51d463324b6bf26e86c4afb7316a3a`
+  - CRC32: `ce2a2c77`
+- **[kviper.zip](bios/Arcade/Arcade/kviper.zip)** (33,864 bytes)
+  - SHA1: `78c8e1c3c033b65758b7e53a9346b44d037fea7f`
+  - MD5: `7a14456d6e8afaf540f2368fead25f26`
+  - CRC32: `7325a518`
+- **[lindbios.zip](bios/Arcade/Arcade/lindbios.zip)** (1,462,941 bytes)
+  - SHA1: `65a2f2cee74c316d5f40b68deda66787609df353`
+  - MD5: `d048a9ff941041de45c26474a0da40aa`
+  - CRC32: `065d69d0`
+- **[maclc3.zip](bios/Arcade/Arcade/maclc3.zip)** (189,428,461 bytes)
+  - SHA1: `add40c002084e8e25768671877b2aa603aaf5cb1`
+  - MD5: `aff722788800df5b22d5a07cf8e558ee`
+  - CRC32: `81f21918`
+- **[macsbios.zip](bios/Arcade/Arcade/macsbios.zip)** (305,290 bytes)
+  - SHA1: `4e0202f8430cb4842184df7b5418e32620156c7b`
+  - MD5: `34530e248d96e7171af19155af315378`
+  - CRC32: `946c6bb8`
+- **[maxaflex.zip](bios/Arcade/Arcade/maxaflex.zip)** (13,673 bytes)
+  - SHA1: `697551fcf9557ae33e31096b118a0c6769700a2e`
+  - MD5: `b48fb4fb35dc348f4904a318dbf9a712`
+  - CRC32: `bfce92a3`
+- **[megaplay.zip](bios/Arcade/Arcade/megaplay.zip)** (49,978 bytes)
+  - SHA1: `c9ee16e26e03496195a7bff151efbdd89da01204`
+  - MD5: `6bb005f55ba39bc5f6b330b663da1a58`
+  - CRC32: `7c57bff1`
+- **[megatech.zip](bios/Arcade/Arcade/megatech.zip)** (24,831 bytes)
+  - SHA1: `be1bcca32794d0eb36c86ae32a2a43c92834cdc6`
+  - MD5: `a502f86d5d16e00282173a901c26648b`
+  - CRC32: `907e8328`
+- **[midssio.zip](bios/Arcade/Arcade/midssio.zip)** (163 bytes)
+  - SHA1: `54275c9833e497f71f76ab239030cc386c863991`
+  - MD5: `5904b0de768d1d506e766aa7e18994c1`
+  - CRC32: `7620bd32`
+- **[msx.zip](bios/Arcade/Arcade/msx.zip)** (193,854 bytes)
+  - SHA1: `c0673df5af0ea7728aedf637f18d118e6f7cb778`
+  - MD5: `25a8912d7bf3cdad9beaa6d5cc14ea38`
+  - CRC32: `2ae71804`
+- **[namcoc69.zip](bios/Arcade/Arcade/namcoc69.zip)** (7,771 bytes)
+  - SHA1: `1cc7452608d44af8171270530a995644fb213d1d`
+  - MD5: `ad9af7a9560cad74f1644328213748f6`
+  - CRC32: `be241255`
+- **[namcoc70.zip](bios/Arcade/Arcade/namcoc70.zip)** (7,822 bytes)
+  - SHA1: `ab8375fcb12791d35b11df801041f965a40b21d9`
+  - MD5: `aa569a303793510b2b4173480148de4b`
+  - CRC32: `2d71120c`
+- **[namcoc75.zip](bios/Arcade/Arcade/namcoc75.zip)** (8,709 bytes)
+  - SHA1: `0649e27b7d605add7fc4215ee628b71e3c835328`
+  - MD5: `17516c33298e52424ffb58afc2ad208c`
+  - CRC32: `cf65b189`
+- **[naomi.zip](bios/Arcade/Arcade/naomi.zip)** (9,321,533 bytes)
+  - SHA1: `c96711c01c0158f161791d6fbe75d88329e8ac0a`
+  - MD5: `526eda1e2a7920c92c88178789d71d84`
+  - CRC32: `6ee50181`
+  - **Variants** (2 alternate versions):
+    - [naomi.zip.2533cc33](bios/Arcade/Arcade/.variants/naomi.zip.2533cc33) (8,005,827 bytes) - SHA1: `2533cc33201da28b2086a0a2fd2b5e04271b6eeb`, MD5: `58033e4ba5793c09dffb87f96f3e9301`
+    - [naomi.zip.43f0018c](bios/Sega/Dreamcast/.variants/naomi.zip.43f0018c) (6,134,707 bytes) - SHA1: `43f0018c32dd6d166c3b6d8ed2ffa672f398fa3a`, MD5: `8bab1ba136d0cb6ebcc05a27c4dfc185`
+- **[naomi.zip.2533cc33](bios/Arcade/Arcade/.variants/naomi.zip.2533cc33)** (8,005,827 bytes)
+  - SHA1: `2533cc33201da28b2086a0a2fd2b5e04271b6eeb`
+  - MD5: `58033e4ba5793c09dffb87f96f3e9301`
+  - CRC32: `7eba26a4`
+- **[naomi2.zip](bios/Arcade/Arcade/naomi2.zip)** (5,384,060 bytes)
+  - SHA1: `c63a74691ee7384080877268a70bb1f53bc66dee`
+  - MD5: `dd6fb7894fb2398a55e83a51328a3ad6`
+  - CRC32: `4a2409fe`
+  - **Variants** (1 alternate versions):
+    - [naomi2.zip.2962e338](bios/Sega/Dreamcast/.variants/naomi2.zip.2962e338) (7,022,501 bytes) - SHA1: `2962e338ccc9f66f29b409f73ca27aeee79633ac`, MD5: `c50072cbab75673e1b1a6b94355e6fa8`
+- **[naomigd.zip](bios/Arcade/Arcade/naomigd.zip)** (3,371,765 bytes)
+  - SHA1: `f9ad4a4c6b0bbbe39ba358690a48f763ecbd98f0`
+  - MD5: `e20b430bd7def78b45f61f238abab624`
+  - CRC32: `ca501374`
+- **[neocdz.zip](bios/Arcade/Arcade/neocdz.zip)** (214,659 bytes)
+  - SHA1: `838934ee5b8fcc81883fb664526b3d281840b2e9`
+  - MD5: `c85b8132799f1b2ad3754a97947809d2`
+  - CRC32: `a313a0d6`
+  - **Variants** (1 alternate versions):
+    - [neocdz.zip.4f28af31](bios/Arcade/Arcade/.variants/neocdz.zip.4f28af31) (214,681 bytes) - SHA1: `4f28af31ca0defdd73d80edec2fa296908e624dc`, MD5: `62d56b126e78f3d82faa4ee8a92c3e82`
+- **[neocdz.zip.4f28af31](bios/Arcade/Arcade/.variants/neocdz.zip.4f28af31)** (214,681 bytes)
+  - SHA1: `4f28af31ca0defdd73d80edec2fa296908e624dc`
+  - MD5: `62d56b126e78f3d82faa4ee8a92c3e82`
+  - CRC32: `6fc3e0de`
+- **[neogeo.zip](bios/Arcade/Arcade/neogeo.zip)** (1,859,335 bytes)
+  - SHA1: `deb62b0074b8cae4f162c257662136733cfc76ad`
+  - MD5: `00dad01abdbf8ea9e79ad2fe11bdb182`
+  - CRC32: `81315163`
+  - **Variants** (4 alternate versions):
+    - [neogeo.zip.5b00dd73](bios/Arcade/MAME/.variants/neogeo.zip.5b00dd73) (1,416,625 bytes) - SHA1: `5b00dd73906a6f8a191ac2d0409459c29826710e`, MD5: `48d2ce098b51cf58457d2e08c3aeefbc`
+    - [neogeo.zip.eb9fed51](bios/Arcade/MAME/.variants/neogeo.zip.eb9fed51) (1,578,888 bytes) - SHA1: `eb9fed518897dfafb67b4148f0ecfa731f0e3259`, MD5: `cc345d87f576665d1c2a673503c1991b`
+    - [neogeo.zip.ed352869](bios/Arcade/MAME/.variants/neogeo.zip.ed352869) (1,416,603 bytes) - SHA1: `ed35286907f7f47b33bd98b48b5d76527fccae0c`, MD5: `1b78bb266499ee243bf660e069067e82`
+    - [neogeo.zip.fc398ab4](bios/SNK/Neo%20Geo/.variants/neogeo.zip.fc398ab4) (1,862,445 bytes) - SHA1: `fc398ab4e13ca6bfef3366ed3391b1050e0eb5e8`, MD5: `dffb72f116d36d025068b23970a4f6df`
+- **[ngp.zip](bios/Arcade/Arcade/ngp.zip)** (74,758 bytes)
+  - SHA1: `f677361cd05cf2d146730890298985290b3dbc69`
+  - MD5: `5bc25f80395a68790a69b7eb3e57b897`
+  - CRC32: `6a679292`
+- **[nmk004.zip](bios/Arcade/Arcade/nmk004.zip)** (3,556 bytes)
+  - SHA1: `489256f5e2001070d2ad94c90d255282c71ed274`
+  - MD5: `bfacf1a68792d5348f93cf724d2f1dda`
+  - CRC32: `a6099353`
+- **[nss.zip](bios/Arcade/Arcade/nss.zip)** (50,536 bytes)
+  - SHA1: `68b780f40623e51a421faf374ae5a84a53a81279`
+  - MD5: `64477b600ad6436f3304624bf02f993f`
+  - CRC32: `d28b794e`
+- **[pgm.zip](bios/Arcade/Arcade/pgm.zip)** (2,094,636 bytes)
+  - SHA1: `c0c001ec80fa860857000f4cfc9844a28498a355`
+  - MD5: `87cc944eef4c671aa2629a8ba48a08e0`
+  - CRC32: `bf3dd2ef`
+  - **Variants** (3 alternate versions):
+    - [pgm.zip.0783012b](bios/Arcade/Arcade/.variants/pgm.zip.0783012b) (2,094,614 bytes) - SHA1: `0783012b4eabca599e460988257ec37500501df6`, MD5: `68ef99a1f2847d08ff9242a90561d31b`
+    - [pgm.zip.6bbbce09](bios/Arcade/Arcade/.variants/pgm.zip.6bbbce09) (2,190,114 bytes) - SHA1: `6bbbce094422062bd178d6007bed06dcdd0d8b78`, MD5: `653e991a39e867354d090c3394157d1c`
+    - [pgm.zip.bc0acaef](bios/Arcade/Arcade/.variants/pgm.zip.bc0acaef) (2,190,092 bytes) - SHA1: `bc0acaefb5fac0cdc05476a9f452391d34a5150d`, MD5: `581cc172db39bb5007642405adf25b6e`
+- **[pgm.zip.0783012b](bios/Arcade/Arcade/.variants/pgm.zip.0783012b)** (2,094,614 bytes)
+  - SHA1: `0783012b4eabca599e460988257ec37500501df6`
+  - MD5: `68ef99a1f2847d08ff9242a90561d31b`
+  - CRC32: `713d6657`
+- **[pgm.zip.6bbbce09](bios/Arcade/Arcade/.variants/pgm.zip.6bbbce09)** (2,190,114 bytes)
+  - SHA1: `6bbbce094422062bd178d6007bed06dcdd0d8b78`
+  - MD5: `653e991a39e867354d090c3394157d1c`
+  - CRC32: `fefb84f1`
+- **[pgm.zip.bc0acaef](bios/Arcade/Arcade/.variants/pgm.zip.bc0acaef)** (2,190,092 bytes)
+  - SHA1: `bc0acaefb5fac0cdc05476a9f452391d34a5150d`
+  - MD5: `581cc172db39bb5007642405adf25b6e`
+  - CRC32: `578e8fde`
+- **[playch10.zip](bios/Arcade/Arcade/playch10.zip)** (23,388 bytes)
+  - SHA1: `125e74975da3f7ac643232210ab37c33e4ece9ca`
+  - MD5: `0329b5c0eb126c6da029b09ae63e707c`
+  - CRC32: `9e0c143c`
+- **[pyson.zip](bios/Arcade/Arcade/pyson.zip)** (24,809 bytes)
+  - SHA1: `ed7d7a1de52042e1b0d9467f41c5105620fa165a`
+  - MD5: `3263c8d3320aa7934e8d4806888a8a31`
+  - CRC32: `f76450f8`
+- **[qsound.zip](bios/Arcade/Arcade/qsound.zip)** (2,654 bytes)
+  - SHA1: `f1ccedb2c6e8f15cfebab52c3923e4b35f4df43f`
+  - MD5: `101163782d87442d74f5e98c50c9f912`
+  - CRC32: `d85f005e`
+- **[sammymdl.zip](bios/Arcade/Arcade/sammymdl.zip)** (24,090 bytes)
+  - SHA1: `2c178083ac2906cecb7e331d7111f7766a353052`
+  - MD5: `3f5f4c2626a2ff0b590ebba998a7d562`
+  - CRC32: `c92cc7db`
+- **[segasp.zip](bios/Arcade/Arcade/segasp.zip)** (1,281,424 bytes)
+  - SHA1: `de78a0b8df78d5ffdb1a274f80d877a96ef204aa`
+  - MD5: `ca5f3a6d0fe963ec2db8f8f636f90ca7`
+  - CRC32: `c6406ea3`
+- **[sfcbox.zip](bios/Arcade/Arcade/sfcbox.zip)** (194,344 bytes)
+  - SHA1: `14311945b06a5d013d1df5ce961ab47fbd46fb2a`
+  - MD5: `982982a7862ef09b996b777363e38989`
+  - CRC32: `1e4a1866`
+- **[shtzone.zip](bios/Arcade/Arcade/shtzone.zip)** (3,332 bytes)
+  - SHA1: `2adbde3ef74c431fbd700cffd4cd1d41251a8833`
+  - MD5: `8c9049474f49ce0ed857b3f9670b2667`
+  - CRC32: `9b2d4b56`
+- **[skns.zip](bios/Arcade/Arcade/skns.zip)** (924,762 bytes)
+  - SHA1: `4257bd14b541fafbd555cb98ba079a3416a45934`
+  - MD5: `3f956c4e7008804cb47cbde49bd5b908`
+  - CRC32: `5692af22`
+  - **Variants** (3 alternate versions):
+    - [skns.zip.44bc8180](bios/Arcade/Arcade/.variants/skns.zip.44bc8180) (783,788 bytes) - SHA1: `44bc8180dca3dfdf1b461268919da8efb2e3fb07`, MD5: `49e192febe2f011d9be44ebc69129080`
+    - [skns.zip.aabedfeb](bios/Arcade/Arcade/.variants/skns.zip.aabedfeb) (783,766 bytes) - SHA1: `aabedfebe2cd8cfede8c2a3cb9ff33166f0ef953`, MD5: `937ab1072d9ce3ecdf3d16d7fc72137a`
+    - [skns.zip.eb2a8675](bios/Arcade/Arcade/.variants/skns.zip.eb2a8675) (783,766 bytes) - SHA1: `eb2a867578a05bbf8741e9fe7204301062df0cb8`, MD5: `fcb298d97792b9e9bdd3296cc6be10b6`
+- **[skns.zip.44bc8180](bios/Arcade/Arcade/.variants/skns.zip.44bc8180)** (783,788 bytes)
+  - SHA1: `44bc8180dca3dfdf1b461268919da8efb2e3fb07`
+  - MD5: `49e192febe2f011d9be44ebc69129080`
+  - CRC32: `33ca0801`
+- **[skns.zip.aabedfeb](bios/Arcade/Arcade/.variants/skns.zip.aabedfeb)** (783,766 bytes)
+  - SHA1: `aabedfebe2cd8cfede8c2a3cb9ff33166f0ef953`
+  - MD5: `937ab1072d9ce3ecdf3d16d7fc72137a`
+  - CRC32: `651b0f2b`
+- **[skns.zip.eb2a8675](bios/Arcade/Arcade/.variants/skns.zip.eb2a8675)** (783,766 bytes)
+  - SHA1: `eb2a867578a05bbf8741e9fe7204301062df0cb8`
+  - MD5: `fcb298d97792b9e9bdd3296cc6be10b6`
+  - CRC32: `ad37f2de`
+- **[spec128.zip](bios/Arcade/Arcade/spec128.zip)** (25,489 bytes)
+  - SHA1: `b88619a845cbba8bc04ad396e99a02aa6d2da7c1`
+  - MD5: `1a524bfa489cec90c941e6587d553a56`
+  - CRC32: `705f7138`
+- **[spec48k.zip](bios/Arcade/Arcade/spec48k.zip)** (12,432 bytes)
+  - SHA1: `9428d8b7c6d4db78f00a58915dccdf33f3b5d98b`
+  - MD5: `4698414be3369fff17bf6d3111734c6c`
+  - CRC32: `eea59503`
+  - Also known as: `fbneo/spectrum.zip`, `spectrum.zip`
+- **[su2000.zip](bios/Arcade/Arcade/su2000.zip)** (90,729 bytes)
+  - SHA1: `2e50b96a1d37e9407209e291d5f549233287ac77`
+  - MD5: `69d93ad80b3f167d24cd31b72f9d4039`
+  - CRC32: `ee278abe`
+- **[supracan.zip](bios/Arcade/Arcade/supracan.zip)** (1,733 bytes)
+  - SHA1: `1af645230c3f1741fb1f7efef05e9efe768e9dcc`
+  - MD5: `3bd04a2e4edcc77fa0e62ff79a99b569`
+  - CRC32: `570b6b37`
+- **[sys246.zip](bios/Arcade/Arcade/sys246.zip)** (580,122 bytes)
+  - SHA1: `fbba87e9d6852862252d31dd919f943c8edd7eb7`
+  - MD5: `20c241b5bf924f2338d79dd1d37769d5`
+  - CRC32: `450b9cb4`
+- **[sys256.zip](bios/Arcade/Arcade/sys256.zip)** (582,110 bytes)
+  - SHA1: `721621a353051fea6de484c26b534cdec4de616e`
+  - MD5: `8c11c3ead979857c38177a270382bd84`
+  - CRC32: `d1821125`
+- **[sys573.zip](bios/Arcade/Arcade/sys573.zip)** (225,972 bytes)
+  - SHA1: `9cfbcf50fe046c7e18b78d15af0db2bfe66f652c`
+  - MD5: `2274b7f397c6376320ff46268860ca29`
+  - CRC32: `dc2184b4`
+- **[taitofx1.zip](bios/Arcade/Arcade/taitofx1.zip)** (126,160 bytes)
+  - SHA1: `2975c1ac34a18f6d262c5cc7dcc223f096742075`
+  - MD5: `f8ab2822f479433b7aac53dfc5c19a1a`
+  - CRC32: `e018dfb0`
+- **[taitotz.zip](bios/Arcade/Arcade/taitotz.zip)** (77,002 bytes)
+  - SHA1: `d7ccc6ea8b21f5178389543f5e14c06e4e6f3b57`
+  - MD5: `1db596446ab192aba7209c9893a0180c`
+  - CRC32: `66a8ee32`
+- **[tourvis.zip](bios/Arcade/Arcade/tourvis.zip)** (29,492 bytes)
+  - SHA1: `a1352d895578181532d13e81ac7a8fecad564d1a`
+  - MD5: `7cd948f18be92ef66e271ab9df3852da`
+  - CRC32: `5954f4c5`
+- **[tps.zip](bios/Arcade/Arcade/tps.zip)** (138,474 bytes)
+  - SHA1: `f18270ba6e747de86bc7bd4f0f2c9c6f35335871`
+  - MD5: `77dd3278b3d278876c37a08ff9ff4793`
+  - CRC32: `12cc61eb`
+- **[triforce.zip](bios/Arcade/Arcade/triforce.zip)** (2,046,778 bytes)
+  - SHA1: `84a6ec5f148b63cccc362b5d9a13a2717d18aa8a`
+  - MD5: `8fbf2c97f256a665f8f40032c4f9e9f2`
+  - CRC32: `e4d8e126`
+- **[v4bios.zip](bios/Arcade/Arcade/v4bios.zip)** (3,753 bytes)
+  - SHA1: `5024b3bfd04ccd2061eb60d2eca254e8faf44f5c`
+  - MD5: `ffc0375b75ad461cef55aa3905ff00c8`
+  - CRC32: `865bcd8e`
+- **[vectrex.zip](bios/Arcade/Arcade/vectrex.zip)** (13,196 bytes)
+  - SHA1: `89d1a70142fb4e768e24854f98799c3fd1345ba5`
+  - MD5: `d2748ffa636d658babd6315d967f6d64`
+  - CRC32: `d4ef502b`
+- **[ym2608.zip](bios/Arcade/Arcade/ym2608.zip)** (7,609 bytes)
+  - SHA1: `06fc753d015b43ca1787f4cfd9331b1674202e64`
+  - MD5: `79ae0d2bb1901b7e606b6dc339b79a97`
+  - CRC32: `5b4c29c4`
+  - **Variants** (1 alternate versions):
+    - [ym2608.zip.0b651920](bios/Arcade/Arcade/.variants/ym2608.zip.0b651920) (7,587 bytes) - SHA1: `0b6519209766ed883e3fca4c61bf866804c89004`, MD5: `ddb8aacffffffa608ddbb4a6d6dda5ec`
+- **[ym2608.zip.0b651920](bios/Arcade/Arcade/.variants/ym2608.zip.0b651920)** (7,587 bytes)
+  - SHA1: `0b6519209766ed883e3fca4c61bf866804c89004`
+  - MD5: `ddb8aacffffffa608ddbb4a6d6dda5ec`
+  - CRC32: `b0e03aa6`
+
+### Arcade/FBNeo
+
+- **[spec1282a.zip](bios/Arcade/FBNeo/spec1282a.zip)** (41,646 bytes)
+  - SHA1: `a20dfda5804a9624e35baaf2fad2ac2011e70d9d`
+  - MD5: `1c65f9cd31676facd7ccddc80f5cb83f`
+  - CRC32: `c9ffaef8`
+
+### Arcade/MAME
+
+- **[bbc.zip](bios/Arcade/MAME/bbc.zip)** (8,477 bytes)
+  - SHA1: `42e22bf05041809766fc6942006f708a32ff14c2`
+  - MD5: `da9a54643bfb70e1d73c44b82d5c9efc`
+  - CRC32: `062c314f`
+- **[cpzn1.zip](bios/Arcade/MAME/cpzn1.zip)** (125,571 bytes)
+  - SHA1: `9675fde2dfb540734ce77ff55f407371d62ca5e4`
+  - MD5: `b62a023870d329bd3875fbd1558d2e1b`
+  - CRC32: `758fff08`
+- **[cpzn2.zip](bios/Arcade/MAME/cpzn2.zip)** (137,827 bytes)
+  - SHA1: `aa93d249419a24ecba34c7d1763b80f11077ea3b`
+  - MD5: `6ea293fc5166da09427f802c83df5cf4`
+  - CRC32: `224b2a91`
+- **[decocass.zip](bios/Arcade/MAME/decocass.zip)** (13,203 bytes)
+  - SHA1: `cf6c5c284110bdac0496704884fcd4f29d8480d9`
+  - MD5: `6392d13f409e4e7d0cf4f06595f91b7d`
+  - CRC32: `0fa6447b`
+  - **Variants** (2 alternate versions):
+    - [decocass.zip.5c5f300f](bios/Arcade/Arcade/.variants/decocass.zip.5c5f300f) (13,225 bytes) - SHA1: `5c5f300f3ab2bd10e2adf4dd96baa78317578d8d`, MD5: `2b268f2f8960e5124f9a8cc6cfe86773`
+    - [decocass.zip.ca7bf859](bios/Arcade/Arcade/.variants/decocass.zip.ca7bf859) (4,603 bytes) - SHA1: `ca7bf85999eaaa79652c721986e64f769cf03892`, MD5: `e0d8f3de7d217882fec5aa55883b6a11`
+- **[isgsm.zip](bios/Arcade/MAME/isgsm.zip)** (10,185 bytes)
+  - SHA1: `6a19d46d3915f2bff823ac34327bb0976fb2fed7`
+  - MD5: `9ec6cd05da7b4759e698682c3c5e4233`
+  - CRC32: `bd5d36d9`
+- **[konamigx.zip](bios/Arcade/MAME/konamigx.zip)** (8,712 bytes)
+  - SHA1: `a97c0579198d88d4db3f7f1b7707ddc6a86ab084`
+  - MD5: `bade818292c2ff5d97e86fe6f793bbb8`
+  - CRC32: `179e9b01`
+- **[megaplay.zip](bios/Arcade/MAME/megaplay.zip)** (49,978 bytes)
+  - SHA1: `9012d69ce8d2efe231012dc033d651065b5f4669`
+  - MD5: `1f862ac960cff360746fbf13621b2ddb`
+  - CRC32: `9e33aab9`
+- **[megatech.zip](bios/Arcade/MAME/megatech.zip)** (33,137 bytes)
+  - SHA1: `6f93b0340588b6b03ff2cb4c3954c34ecf06aa9b`
+  - MD5: `9a86eb85e9dca18d566adabd1a6b5391`
+  - CRC32: `1576b781`
+- **[neogeo.zip](bios/Arcade/MAME/neogeo.zip)** (1,592,774 bytes)
+  - SHA1: `59728b0f1ea3f0be2f1c7f2d8d793f462eb3a5d7`
+  - MD5: `251a50a4944a5d06638ddeff40ac1875`
+  - CRC32: `8dad9d91`
+  - **Variants** (4 alternate versions):
+    - [neogeo.zip.5b00dd73](bios/Arcade/MAME/.variants/neogeo.zip.5b00dd73) (1,416,625 bytes) - SHA1: `5b00dd73906a6f8a191ac2d0409459c29826710e`, MD5: `48d2ce098b51cf58457d2e08c3aeefbc`
+    - [neogeo.zip.eb9fed51](bios/Arcade/MAME/.variants/neogeo.zip.eb9fed51) (1,578,888 bytes) - SHA1: `eb9fed518897dfafb67b4148f0ecfa731f0e3259`, MD5: `cc345d87f576665d1c2a673503c1991b`
+    - [neogeo.zip.ed352869](bios/Arcade/MAME/.variants/neogeo.zip.ed352869) (1,416,603 bytes) - SHA1: `ed35286907f7f47b33bd98b48b5d76527fccae0c`, MD5: `1b78bb266499ee243bf660e069067e82`
+    - [neogeo.zip.fc398ab4](bios/SNK/Neo%20Geo/.variants/neogeo.zip.fc398ab4) (1,862,445 bytes) - SHA1: `fc398ab4e13ca6bfef3366ed3391b1050e0eb5e8`, MD5: `dffb72f116d36d025068b23970a4f6df`
+- **[neogeo.zip.5b00dd73](bios/Arcade/MAME/.variants/neogeo.zip.5b00dd73)** (1,416,625 bytes)
+  - SHA1: `5b00dd73906a6f8a191ac2d0409459c29826710e`
+  - MD5: `48d2ce098b51cf58457d2e08c3aeefbc`
+  - CRC32: `3a853b38`
+- **[neogeo.zip.eb9fed51](bios/Arcade/MAME/.variants/neogeo.zip.eb9fed51)** (1,578,888 bytes)
+  - SHA1: `eb9fed518897dfafb67b4148f0ecfa731f0e3259`
+  - MD5: `cc345d87f576665d1c2a673503c1991b`
+  - CRC32: `43d24424`
+- **[neogeo.zip.ed352869](bios/Arcade/MAME/.variants/neogeo.zip.ed352869)** (1,416,603 bytes)
+  - SHA1: `ed35286907f7f47b33bd98b48b5d76527fccae0c`
+  - MD5: `1b78bb266499ee243bf660e069067e82`
+  - CRC32: `06e006d4`
+- **[nmk004.zip](bios/Arcade/MAME/nmk004.zip)** (3,534 bytes)
+  - SHA1: `5ec203ff242f404f334a554282faaa262aaf076e`
+  - MD5: `fdd7f4de2af4493ba52812f1cdbd9ef0`
+  - CRC32: `416d18bd`
+- **[nss.zip](bios/Arcade/MAME/nss.zip)** (50,555 bytes)
+  - SHA1: `3cc9e4df2511ff1c963ee2dd5eca44bb2377c986`
+  - MD5: `40fc8187f2e49b35fcd15772cac2f191`
+  - CRC32: `7a651ec3`
+- **[pgm.zip](bios/Arcade/MAME/pgm.zip)** (2,094,614 bytes)
+  - SHA1: `75de7964a38038c45791960d5f2ec9d26dbdc5e2`
+  - MD5: `dbb3199bb68741dee3bba4f59464efd9`
+  - CRC32: `c331510c`
+  - **Variants** (3 alternate versions):
+    - [pgm.zip.0783012b](bios/Arcade/Arcade/.variants/pgm.zip.0783012b) (2,094,614 bytes) - SHA1: `0783012b4eabca599e460988257ec37500501df6`, MD5: `68ef99a1f2847d08ff9242a90561d31b`
+    - [pgm.zip.6bbbce09](bios/Arcade/Arcade/.variants/pgm.zip.6bbbce09) (2,190,114 bytes) - SHA1: `6bbbce094422062bd178d6007bed06dcdd0d8b78`, MD5: `653e991a39e867354d090c3394157d1c`
+    - [pgm.zip.bc0acaef](bios/Arcade/Arcade/.variants/pgm.zip.bc0acaef) (2,190,092 bytes) - SHA1: `bc0acaefb5fac0cdc05476a9f452391d34a5150d`, MD5: `581cc172db39bb5007642405adf25b6e`
+- **[playch10.zip](bios/Arcade/MAME/playch10.zip)** (48,317 bytes)
+  - SHA1: `7df6ca1485eb0a27e54713a73152b5b5919db0a0`
+  - MD5: `9c66e3fc6bffc4a2fb05040f599f3b04`
+  - CRC32: `49f525c8`
+- **[skns.zip](bios/Arcade/MAME/skns.zip)** (924,740 bytes)
+  - SHA1: `a8238391ddca35f9e59e5ca7f4f4491ae281b77f`
+  - MD5: `b541cddfb867c210af6a014230cdd2ed`
+  - CRC32: `af06f0b4`
+  - **Variants** (3 alternate versions):
+    - [skns.zip.44bc8180](bios/Arcade/Arcade/.variants/skns.zip.44bc8180) (783,788 bytes) - SHA1: `44bc8180dca3dfdf1b461268919da8efb2e3fb07`, MD5: `49e192febe2f011d9be44ebc69129080`
+    - [skns.zip.aabedfeb](bios/Arcade/Arcade/.variants/skns.zip.aabedfeb) (783,766 bytes) - SHA1: `aabedfebe2cd8cfede8c2a3cb9ff33166f0ef953`, MD5: `937ab1072d9ce3ecdf3d16d7fc72137a`
+    - [skns.zip.eb2a8675](bios/Arcade/Arcade/.variants/skns.zip.eb2a8675) (783,766 bytes) - SHA1: `eb2a867578a05bbf8741e9fe7204301062df0cb8`, MD5: `fcb298d97792b9e9bdd3296cc6be10b6`
+- **[stvbios.zip](bios/Arcade/MAME/stvbios.zip)** (2,955,630 bytes)
+  - SHA1: `7783ab663bb1a8d62ff60d583674355c2af556b1`
+  - MD5: `53a094ad3a188f86de4e64624fe9b3ca`
+  - CRC32: `80839303`
+  - **Variants** (1 alternate versions):
+    - [stvbios.zip.330a2ab5](bios/Arcade/MAME/.variants/stvbios.zip.330a2ab5) (2,699,375 bytes) - SHA1: `330a2ab5ce2e2c29987b2086e021de7aa04aa102`, MD5: `c105e2d063aeb0f9b60c45fad6969265`
+- **[stvbios.zip.330a2ab5](bios/Arcade/MAME/.variants/stvbios.zip.330a2ab5)** (2,699,375 bytes)
+  - SHA1: `330a2ab5ce2e2c29987b2086e021de7aa04aa102`
+  - MD5: `c105e2d063aeb0f9b60c45fad6969265`
+  - CRC32: `1de93304`
+- **[ym2413.zip](bios/Arcade/MAME/ym2413.zip)** (286 bytes)
+  - SHA1: `900e8c6cd152704a79905b6838fe3229c9499f8c`
+  - MD5: `9d9f45a4acb8bb7a1fe51bece1a9fda1`
+  - CRC32: `050033a3`
+- **[ym2608.zip](bios/Arcade/MAME/ym2608.zip)** (7,587 bytes)
+  - SHA1: `1214e3207e4dc85cc1597c53abd70802049dda2c`
+  - MD5: `2c27d4de99531330332c79847da2ce66`
+  - CRC32: `1aed30f4`
+  - **Variants** (1 alternate versions):
+    - [ym2608.zip.0b651920](bios/Arcade/Arcade/.variants/ym2608.zip.0b651920) (7,587 bytes) - SHA1: `0b6519209766ed883e3fca4c61bf866804c89004`, MD5: `ddb8aacffffffa608ddbb4a6d6dda5ec`
+
+### Atari/400-800
+
+- **[ATARIBAS.ROM](bios/Atari/400-800/ATARIBAS.ROM)** (8,192 bytes)
+  - SHA1: `3693c9cb9bf3b41bae1150f7a8264992468fc8c0`
+  - MD5: `0bac0c6a50104045d902df4503a4c30b`
+  - CRC32: `7d684184`
+- **[ATARIOSA.ROM](bios/Atari/400-800/ATARIOSA.ROM)** (10,240 bytes)
+  - SHA1: `6dd53356159a129ed12367beb3b24a771d41adb0`
+  - MD5: `eb1f32f5d9f382db1bbfb8d7f9cb343a`
+  - CRC32: `72b3fed4`
+- **[ATARIOSB.ROM](bios/Atari/400-800/ATARIOSB.ROM)** (10,240 bytes)
+  - SHA1: `f1f0741b1d34fb4350cf7cb8ab3b6ea11cdd8174`
+  - MD5: `a3e8d617c95d08031fe1b20d541434b2`
+  - CRC32: `3e28a1fe`
+  - **Variants** (1 alternate versions):
+    - [ATARIOSB.ROM.db103158](bios/Atari/400-800/.variants/ATARIOSB.ROM.db103158) (10,240 bytes) - SHA1: `db1031585968cfc6ec2ecda5c9a5a52f61444a3b`, MD5: `4177f386a3bac989a981d3fe3388cb6c`
+- **[ATARIOSB.ROM.db103158](bios/Atari/400-800/.variants/ATARIOSB.ROM.db103158)** (10,240 bytes)
+  - SHA1: `db1031585968cfc6ec2ecda5c9a5a52f61444a3b`
+  - MD5: `4177f386a3bac989a981d3fe3388cb6c`
+  - CRC32: `0e86d61d`
+  - Platform names: Batocera: `ATARIOSB.ROM`
+- **[ATARIXL.ROM](bios/Atari/400-800/ATARIXL.ROM)** (16,384 bytes)
+  - SHA1: `ae4f523ba08b6fd59f3cae515a2b2410bbd98f55`
+  - MD5: `06daac977823773a3eea3422fd26a703`
+  - CRC32: `1f9cd270`
+- **[BB01R4_OS.ROM](bios/Atari/400-800/BB01R4_OS.ROM)** (16,384 bytes)
+  - SHA1: `decde89fbae90adb591ad2fc553d35f49030c129`
+  - MD5: `b7a2a04677d34f069eeb643d5238bf86`
+  - CRC32: `1eaf4002`
+- **[XEGAME.ROM](bios/Atari/400-800/XEGAME.ROM)** (8,192 bytes)
+  - SHA1: `a107db7f16a1129cf9d933c9cf4f013b068c9e82`
+  - MD5: `d7eb37aec6960cba36bc500e0e5d00bc`
+  - CRC32: `bdca01fb`
+
+### Atari/5200
+
+- **[5200.rom](bios/Atari/5200/5200.rom)** (2,048 bytes)
+  - SHA1: `6ad7a1e8c9fad486fbec9498cb48bf5bc3adc530`
+  - MD5: `281f20ea4320404ec820fb7ec0693b38`
+  - CRC32: `4248d3e3`
+
+### Atari/7800
+
+- **[7800 BIOS (E).rom](bios/Atari/7800/7800%20BIOS%20%28E%29.rom)** (16,384 bytes)
+  - SHA1: `5a140136a16d1d83e4ff32a19409ca376a8df874`
+  - MD5: `397bb566584be7b9764e7a68974c4263`
+  - CRC32: `d5b61170`
+- **[7800 BIOS (U).rom](bios/Atari/7800/7800%20BIOS%20%28U%29.rom)** (4,096 bytes)
+  - SHA1: `d9d134bb6b36907c615a594cc7688f7bfcef5b43`
+  - MD5: `0763f1ffb006ddbe32e52d497ee848ae`
+  - CRC32: `5d13730c`
+
+### Atari/Lynx
+
+- **[lynxboot.img](bios/Atari/Lynx/lynxboot.img)** (512 bytes)
+  - SHA1: `e4ed47fae31693e016b081c6bda48da5b70d7ccb`
+  - MD5: `fcd403db69f54290b51035d82f835e7b`
+  - CRC32: `0d973c9d`
+
+### Atari/ST
+
+- **[emutos.img](bios/Atari/ST/emutos.img)** (524,288 bytes)
+  - SHA1: `bfcc01ae105fa4cee47890c09ebad9e3775395a4`
+  - MD5: `e2c861c588fca2d0cf6be3df3aaf05f2`
+  - CRC32: `dbfa7ceb`
+- **[falcon.img](bios/Atari/ST/falcon.img)** (524,288 bytes)
+  - SHA1: `7157f6a8aff275cfbb5ea6aa8e788dda8a977e56`
+  - MD5: `b338bacb2fc453bab61bcc1e2cf5076b`
+  - CRC32: `4a1f42af`
+- **[megaste.img](bios/Atari/ST/megaste.img)** (262,144 bytes)
+  - SHA1: `ee58768bdfc602c9b14942ce5481e97dd24e7c83`
+  - MD5: `c9093f27159e7d13ac0d1501a95e53d4`
+  - CRC32: `3f2f840f`
+  - Also known as: `tos206us.img`
+  - Platform names: Batocera: `tos206us.img`
+- **[st.img](bios/Atari/ST/st.img)** (196,608 bytes)
+  - SHA1: `9a6e4c88533a9eaa4d55cdc040e47443e0226eb2`
+  - MD5: `c87a52c277f7952b41c639fc7bf0a43b`
+  - CRC32: `1a586c64`
+  - Also known as: `tos100uk.img`
+  - Platform names: Batocera: `tos100uk.img`
+- **[ste.img](bios/Atari/ST/ste.img)** (262,144 bytes)
+  - SHA1: `3b8cf5ffa41b252eb67f8824f94608fa4005d6dd`
+  - MD5: `992bac38e01633a529121a2a65f0779e`
+  - CRC32: `7c67c5c9`
+  - Also known as: `tos106de.img`
+  - Platform names: Batocera: `tos106de.img`
+- **[tos.img](bios/Atari/ST/tos.img)** (196,608 bytes)
+  - SHA1: `735793fdba07fe8d5295caa03484f6ef3de931f5`
+  - MD5: `c1c57ce48e8ee4135885cee9e63a68a2`
+  - CRC32: `d3c32283`
+- **[tos100fr.img](bios/Atari/ST/tos100fr.img)** (196,608 bytes)
+  - SHA1: `ecb00a2e351a6205089a281b4ce6e08959953704`
+  - MD5: `25789a649faff0a1176dc7d9b98105c0`
+  - CRC32: `2b7f2117`
+- **[tos100us.img](bios/Atari/ST/tos100us.img)** (196,608 bytes)
+  - SHA1: `7bcc2311d122f451bd03c9763ade5a119b2f90da`
+  - MD5: `d0f682ee6237497004339fb02172638b`
+  - CRC32: `d331af30`
+- **[tos102de.img](bios/Atari/ST/tos102de.img)** (196,608 bytes)
+  - SHA1: `cad5d2902e875d8bf0a14dc5b5b8080b30254148`
+  - MD5: `a622cc35d8d78703905592dfaa4d2ccb`
+  - CRC32: `36a0058e`
+- **[tos102fr.img](bios/Atari/ST/tos102fr.img)** (196,608 bytes)
+  - SHA1: `f5a79aac0a4e812ca77b6ac51d58d98726f331fe`
+  - MD5: `d6521785627d20c51edc566808a6bf28`
+  - CRC32: `8688fce6`
+- **[tos102uk.img](bios/Atari/ST/tos102uk.img)** (196,608 bytes)
+  - SHA1: `87900a40a890fdf03bd08be6c60cc645855cbce5`
+  - MD5: `b2a8570de2e850c5acf81cb80512d9f6`
+  - CRC32: `3b5cd0c5`
+- **[tos104de.img](bios/Atari/ST/tos104de.img)** (196,607 bytes)
+  - SHA1: `39bec421274faa08ec502f573fffba91852cf10d`
+  - MD5: `41b7dae4e24735f330b63ad923a0bfbc`
+  - CRC32: `6a5ced85`
+- **[tos104es.img](bios/Atari/ST/tos104es.img)** (196,608 bytes)
+  - SHA1: `df63f8ac09125d0877b55d5ba1282779b7f99c16`
+  - MD5: `143343f7b8e0b1162af206fe8f46b002`
+  - CRC32: `f4e8ecd2`
+- **[tos104fr.img](bios/Atari/ST/tos104fr.img)** (196,608 bytes)
+  - SHA1: `20dba880344b810cf63cec5066797c5a971db870`
+  - MD5: `0087e2707c57efa2106a0aa7576655c0`
+  - CRC32: `a305a404`
+- **[tos104uk.img](bios/Atari/ST/tos104uk.img)** (196,608 bytes)
+  - SHA1: `9526ef63b9cb1d2a7109e278547ae78a5c1db6c6`
+  - MD5: `036c5ae4f885cbf62c9bed651c6c58a8`
+  - CRC32: `a50d1d43`
+- **[tos104us.img](bios/Atari/ST/tos104us.img)** (196,608 bytes)
+  - SHA1: `2487f330b0895e5d88d580d4ecb24061125e88ad`
+  - MD5: `736adb2dc835df4d323191fdc8926cc9`
+  - CRC32: `90f4fbff`
+- **[tos106es.img](bios/Atari/ST/tos106es.img)** (262,144 bytes)
+  - SHA1: `3a18f342c8288c0bc1879b7a209c73d5d57f7e81`
+  - MD5: `30f69d70fe7c210300ed83f991b12de9`
+  - CRC32: `5cd2a540`
+- **[tos106fr.img](bios/Atari/ST/tos106fr.img)** (262,144 bytes)
+  - SHA1: `7d7e3cef435caa2fd7733a3fbc6930cb9ea7bcbc`
+  - MD5: `bc7b224d0dc3f0cc14c8897db89c5787`
+  - CRC32: `b6e58a46`
+- **[tos106uk.img](bios/Atari/ST/tos106uk.img)** (262,144 bytes)
+  - SHA1: `06f9ea322e74b682df0396acfaee8cb4d9c90cad`
+  - MD5: `6033f2b9364edfed321c6931a8181fd2`
+  - CRC32: `d72fea29`
+- **[tos106us.img](bios/Atari/ST/tos106us.img)** (196,608 bytes)
+  - SHA1: `7ade7f61dd99cb4e8e71513e74205349a6719cbb`
+  - MD5: `a0982e760f9807d82667ff5a69e78f6b`
+  - CRC32: `de62800c`
+- **[tos162de.img](bios/Atari/ST/tos162de.img)** (262,144 bytes)
+  - SHA1: `10d9f61705048ee3dcbec67df741bed49b922149`
+  - MD5: `94a75c1c65408d9f974b0463e15a3b11`
+  - CRC32: `2cdeb5e5`
+- **[tos162fr.img](bios/Atari/ST/tos162fr.img)** (262,145 bytes)
+  - SHA1: `35e61592d4f5969a609c83b57462e0630f614859`
+  - MD5: `ed5fbaabe0219092df74c6c14cea3f8e`
+  - CRC32: `d3d32e88`
+- **[tos162uk.img](bios/Atari/ST/tos162uk.img)** (262,144 bytes)
+  - SHA1: `70db24a7c252392755849f78940a41bfaebace71`
+  - MD5: `1cbc4f55295e469fc8cd72b7efdea1da`
+  - CRC32: `d1c6f2fa`
+- **[tos162us.img](bios/Atari/ST/tos162us.img)** (262,144 bytes)
+  - SHA1: `0837c8768e2931692b7fa50e735df89dd789fa5e`
+  - MD5: `febb00ba8784798293a7ae709a1dafcb`
+  - CRC32: `6372e5bd`
+- **[tos205de.img](bios/Atari/ST/tos205de.img)** (262,144 bytes)
+  - SHA1: `0af0264b63d14828ea9146b5434a5918561d8015`
+  - MD5: `7aeabdc25f8134590e25643a405210ca`
+  - CRC32: `86eb6c4d`
+- **[tos205es.img](bios/Atari/ST/tos205es.img)** (262,144 bytes)
+  - SHA1: `317715ad8de718b5acc7e27ecf1eb833c2017c91`
+  - MD5: `7449b131681f1dfe62ebed1392847057`
+  - CRC32: `2a426206`
+- **[tos205fr.img](bios/Atari/ST/tos205fr.img)** (262,144 bytes)
+  - SHA1: `83963b0feb0d119b2ca6f51e483e8c20e6ab79e1`
+  - MD5: `61b620ad951815a25cb37895c81a947c`
+  - CRC32: `27b83d2f`
+- **[tos205it.img](bios/Atari/ST/tos205it.img)** (262,144 bytes)
+  - SHA1: `8e0581b442384af69345738849cf440d72f6e6ab`
+  - MD5: `7e87d8fe7e24e0b4c55ad1b7955beae3`
+  - CRC32: `b28bf5a1`
+- **[tos205us.img](bios/Atari/ST/tos205us.img)** (262,144 bytes)
+  - SHA1: `e069c14863819635bea33074b90c22e5bd99f1bd`
+  - MD5: `7cdd45b6aac66a21bfb357d9334e46db`
+  - CRC32: `d8845f8d`
+- **[tos206.img](bios/Atari/ST/tos206.img)** (262,144 bytes)
+  - SHA1: `c7a9ae3162f020dcac0c2a46cf0c033f91b98644`
+  - MD5: `4a0d4f282c3f2a0196681adf88862dd4`
+  - CRC32: `8c4fe57d`
+- **[tos206de.img](bios/Atari/ST/tos206de.img)** (262,144 bytes)
+  - SHA1: `d1da866560734289c4305f1028c36291d331d417`
+  - MD5: `0604dbb85928f0598d04144a8b554bbe`
+  - CRC32: `143cd2ab`
+- **[tos206fr.img](bios/Atari/ST/tos206fr.img)** (262,144 bytes)
+  - SHA1: `387da431e6e3dd2e0c4643207e67d06cf33618c3`
+  - MD5: `b2873004a408b8db36321f98daafa251`
+  - CRC32: `e3a99ca7`
+- **[tos206uk.img](bios/Atari/ST/tos206uk.img)** (262,144 bytes)
+  - SHA1: `2400ea95f547d6ea754a99d05d8530c03f8b28e3`
+  - MD5: `e690bec90d902024beed549d22150755`
+  - CRC32: `08538e39`
+- **[tos306de.img](bios/Atari/ST/tos306de.img)** (524,288 bytes)
+  - SHA1: `80af04499d1c3b8551fc4d72142ff02c2182e64a`
+  - MD5: `066f39a7ea5789d5afd59dd7b3104fa6`
+  - CRC32: `4fcbb59d`
+  - Platform names: Recalbox: `tt.img`
+- **[tos306uk.img](bios/Atari/ST/tos306uk.img)** (524,288 bytes)
+  - SHA1: `6325bdfd83f1b4d3afddb2b470a19428ca79478b`
+  - MD5: `dd1010ec566efbd71047d6c4919feba5`
+  - CRC32: `75dda215`
+- **[tos400.img](bios/Atari/ST/tos400.img)** (524,287 bytes)
+  - SHA1: `d74d09f11a0bf37a86ccb50c6e7f91aac4d4b11b`
+  - MD5: `ed2647936ce4bd283c4d7dfd7ae09d1c`
+  - CRC32: `1fbc5396`
+  - Platform names: Recalbox: `falcon.img`
+- **[tos402.img](bios/Atari/ST/tos402.img)** (524,288 bytes)
+  - SHA1: `75de588f6bbc630fa9c814f738195da23b972cc6`
+  - MD5: `9e880168d0a004f7f5e852be758f39e4`
+  - CRC32: `63f82f23`
+- **[tos404.img](bios/Atari/ST/tos404.img)** (524,288 bytes)
+  - SHA1: `27dcdb31b0951af99023b2fb8c370d8447ba6ebc`
+  - MD5: `e5ea0f216fb446f1c4a4f476bc5f03d4`
+  - CRC32: `028b561d`
+- **[tt.img](bios/Atari/ST/tt.img)** (524,288 bytes)
+  - SHA1: `4f0b344231719e80c2a4d4ade3769d7f0d0629b6`
+  - MD5: `ac6ca0f0ed42a1603dfd409c4bf8eb89`
+  - CRC32: `1fb32c3c`
+
+### Atari/XEGS
+
+- **[xegs.zip](bios/Atari/XEGS/xegs.zip)** (23,067 bytes)
+  - SHA1: `54a12c7aa78696ed310aca04faef642bc332c72d`
+  - MD5: `c4551d5effaed8f5658fc27e7b643441`
+  - CRC32: `8bcf073d`
+
+### Bally/Astrocade
+
+- **[astrocde.zip](bios/Bally/Astrocade/astrocde.zip)** (6,800 bytes)
+  - SHA1: `8641b09be090c0dc45f4ee5459fec3cc6fb9d78e`
+  - MD5: `f58a3823ab308ef0a02b498d126e5d96`
+  - CRC32: `6cad8a0b`
+
+### Bandai/RX-78
+
+- **[rx78.zip](bios/Bandai/RX-78/rx78.zip)** (6,397 bytes)
+  - SHA1: `b3a26e21574395a279a37922238802b349c303b7`
+  - MD5: `f313610ff87d27a8859950a497c5dc33`
+  - CRC32: `1b43f22d`
+
+### Bit Corporation/Gamate
+
+- **[gamate.zip](bios/Bit%20Corporation/Gamate/gamate.zip)** (5,072 bytes)
+  - SHA1: `e99667ea5cfe6a5eceb53faaa39cdda0cbf69c69`
+  - MD5: `320bf3d4142fa1043255db7ff87d17c7`
+  - CRC32: `23de1c25`
+
+### Camputers/Lynx
+
+- **[lynx128k.zip](bios/Camputers/Lynx/lynx128k.zip)** (24,796 bytes)
+  - SHA1: `5300a352007976102d61d53f1e8c48063d2f3026`
+  - MD5: `96123222580c7b923e4aca6a8faa49a4`
+  - CRC32: `9b6d3d35`
+- **[lynx48k.zip](bios/Camputers/Lynx/lynx48k.zip)** (25,078 bytes)
+  - SHA1: `64947e9b7d17870839aba5d93217183d480ff897`
+  - MD5: `99adf15dc2e2bb76c5203d46c2a14ce9`
+  - CRC32: `3c90fa66`
+- **[lynx96k.zip](bios/Camputers/Lynx/lynx96k.zip)** (32,888 bytes)
+  - SHA1: `df95ea702606e88b4c906a0233c8fec54c02ff01`
+  - MD5: `0aef1a4736e5e2d23719e55e534c7c9d`
+  - CRC32: `3fa34c8a`
+
+### Casio/Loopy
+
+- **[casloopy.zip](bios/Casio/Loopy/casloopy.zip)** (478,191 bytes)
+  - SHA1: `144ea9d0f20113632dde6d21c62a01c02cf7666d`
+  - MD5: `0e1d8dc0110ecf8201c0cef11ef4a858`
+  - CRC32: `a2e5cbfe`
+
+### Casio/PV-2000
+
+- **[pv2000.zip](bios/Casio/PV-2000/pv2000.zip)** (13,622 bytes)
+  - SHA1: `c18f460301177b64bbfcbedc3010e734d0803d4c`
+  - MD5: `1b7b38c5bdae716ac322c6bf384e0800`
+  - CRC32: `1b4fb70d`
+
+### Coleco/Adam
+
+- **[adam.zip](bios/Coleco/Adam/adam.zip)** (52,891 bytes)
+  - SHA1: `dc4b77cd3ac45cf448e427eff5c0a7b138fd9d81`
+  - MD5: `ba7e972ba12d8a6a323d374fa3e82118`
+  - CRC32: `9ee54a73`
+- **[adam_ddp.zip](bios/Coleco/Adam/adam_ddp.zip)** (1,595 bytes)
+  - SHA1: `69428318b280ba60d7eb0e31aa5ec829aadcbce2`
+  - MD5: `9405e8f37199841244222fa70f9db3d3`
+  - CRC32: `21c1651e`
+- **[adam_fdc.zip](bios/Coleco/Adam/adam_fdc.zip)** (12,794 bytes)
+  - SHA1: `1b5bb40a77cf6768975c6b48af1e174a0205d843`
+  - MD5: `baeec1e69ffc10340097a8d42d67dc4a`
+  - CRC32: `570e3b2c`
+- **[adam_kb.zip](bios/Coleco/Adam/adam_kb.zip)** (1,758 bytes)
+  - SHA1: `cd99eb61f44641ade747aaec9f5095c12a8d3c0c`
+  - MD5: `e9a71da243d6d48f122e5764430a5324`
+  - CRC32: `f3ee0300`
+- **[adam_prn.zip](bios/Coleco/Adam/adam_prn.zip)** (1,644 bytes)
+  - SHA1: `09e495756b8bdb80eafe67791713ef50a2b72361`
+  - MD5: `cf4dbd72f1cd1f26ce238a302db91169`
+  - CRC32: `1e04db26`
+
+### Coleco/ColecoVision
+
+- **[BIOS.col](bios/Coleco/ColecoVision/BIOS.col)** (8,192 bytes)
+  - SHA1: `45bedc4cbdeac66c7df59e9e599195c778d86a92`
+  - MD5: `2c66f5911e5b42b8ebe113403548eee7`
+  - CRC32: `3aa93ef3`
+  - Also known as: `boot.rom`, `coleco.rom`, `colecovision.rom`
+  - Platform names: Batocera: `adam.zip`, Batocera: `colecovision.rom`, Lakka: `colecovision.rom`, Recalbox: `coleco.rom`, Recalbox: `boot.rom`, RetroArch: `colecovision.rom`, RetroPie: `colecovision.rom`
+
+### Commodore/Amiga
+
+- **[amiga-os-205.rom](bios/Commodore/Amiga/amiga-os-205.rom)** (524,288 bytes)
+  - SHA1: `02843c4253bbd29aba535b0aa3bd9a85034ecde4`
+  - MD5: `465646c9b6729f77eea5314d1f057951`
+  - CRC32: `43b0df7b`
+  - Also known as: `kick37350.A600`
+  - Platform names: Batocera: `kick37350.A600`, Lakka: `kick37350.A600`, RetroArch: `kick37350.A600`, RetroPie: `kick37350.A600`
+- **[amiga-os-310-a3000.rom](bios/Commodore/Amiga/amiga-os-310-a3000.rom)** (524,288 bytes)
+  - SHA1: `f8e210d72b4c4853e0c9b85d223ba20e3d1b36ee`
+  - MD5: `413590e50098a056cfec418d3df0212d`
+  - CRC32: `efb239cc`
+- **[amiga-os-310.rom](bios/Commodore/Amiga/amiga-os-310.rom)** (524,288 bytes)
+  - SHA1: `c3c481160866e60d085e436a24db3617ff60b5f9`
+  - MD5: `730888fb1bd9a3606d51f772ed136528`
+  - CRC32: `43b6dd22`
+- **[kick02019.AROS](bios/Commodore/Amiga/kick02019.AROS)** (524,288 bytes)
+  - SHA1: `f1952b97e0fa7661e99efb4954e0a86371952c1d`
+  - MD5: `186d23cccd9fbd6336d0f988b39dce4d`
+  - CRC32: `786d1739`
+- **[kick02019.AROS.ext](bios/Commodore/Amiga/kick02019.AROS.ext)** (524,288 bytes)
+  - SHA1: `8b193a6515e0c8b3555ef4142417208dbbdb025e`
+  - MD5: `4fa7042d73d0f77bf5723cf8430989bf`
+  - CRC32: `805fb428`
+- **[kick12.rom](bios/Commodore/Amiga/kick12.rom)** (524,288 bytes)
+  - SHA1: `afcf89ba9888657703055750287834c042be9287`
+  - MD5: `1a96ab3177d651a5dba7bfd4d46e4d8e`
+  - CRC32: `b5f86782`
+- **[kick13.rom](bios/Commodore/Amiga/kick13.rom)** (524,288 bytes)
+  - SHA1: `90933936cce43ca9bc6bf375662c076b27e3c458`
+  - MD5: `192d6d950d0ed3df8040b788502831c2`
+  - CRC32: `f6290043`
+- **[kick33180.A500](bios/Commodore/Amiga/kick33180.A500)** (262,144 bytes)
+  - SHA1: `11f9e62cf299f72184835b7b2a70a16333fc0d88`
+  - MD5: `85ad74194e87c08904327de1a9443b7a`
+  - CRC32: `a6ce1636`
+  - Also known as: `amiga-os-120.rom`
+  - Platform names: Batocera: `amiga-os-120.rom`
+- **[kick33180.A500.RTB](bios/Commodore/Amiga/kick33180.A500.RTB)** (3,882 bytes)
+  - SHA1: `1d1c557f4a0f5ea88aeb96d68b09f41990340f70`
+  - MD5: `c993feb1eeddec1d2e687aa514231028`
+  - CRC32: `c61d5663`
+- **[kick34005.A500](bios/Commodore/Amiga/kick34005.A500)** (262,144 bytes)
+  - SHA1: `891e9a547772fe0c6c19b610baf8bc4ea7fcb785`
+  - MD5: `82a21c1890cae844b3df741f2762d48d`
+  - CRC32: `c4f0f55f`
+  - Also known as: `amiga-os-130.rom`
+  - Platform names: Batocera: `amiga-os-130.rom`
+- **[kick34005.A500.RTB](bios/Commodore/Amiga/kick34005.A500.RTB)** (4,020 bytes)
+  - SHA1: `209c109855f94c935439b60950d049527d2f2484`
+  - MD5: `7eb13d974af0992d672b67c317a7e0a1`
+  - CRC32: `ae7a9ac7`
+- **[kick34005.CDTV](bios/Commodore/Amiga/kick34005.CDTV)** (262,144 bytes)
+  - SHA1: `7ba40ffa17e500ed9fed041f3424bd81d9c907be`
+  - MD5: `89da1838a24460e4b93f4f0c5d92d48d`
+  - CRC32: `42baa124`
+  - Also known as: `amiga-ext-130-cdtv.rom`
+  - Platform names: Batocera: `amiga-ext-130-cdtv.rom`
+- **[kick37175.A500](bios/Commodore/Amiga/kick37175.A500)** (524,288 bytes)
+  - SHA1: `c5839f5cb98a7a8947065c3ed2f14f5f42e334a1`
+  - MD5: `dc10d7bdd1b6f450773dfb558477c230`
+  - CRC32: `c3bdb240`
+  - Also known as: `amiga-os-204.rom`
+  - Platform names: Batocera: `amiga-os-204.rom`
+- **[kick39106.A1200](bios/Commodore/Amiga/kick39106.A1200)** (524,288 bytes)
+  - SHA1: `70033828182fffc7ed106e5373a8b89dda76faa5`
+  - MD5: `b7cc148386aa631136f510cd29e42fc3`
+  - CRC32: `6c9b07d2`
+  - Also known as: `amiga-os-300-a1200.rom`
+  - Platform names: Batocera: `amiga-os-300-a1200.rom`
+- **[kick39106.A4000](bios/Commodore/Amiga/kick39106.A4000)** (524,288 bytes)
+  - SHA1: `f0b4e9e29e12218c2d5bd7020e4e785297d91fd7`
+  - MD5: `9b8bdd5a3fd32c2a5a6f5b1aefc799a5`
+  - CRC32: `9e6ac152`
+- **[kick40060.CD32](bios/Commodore/Amiga/kick40060.CD32)** (524,288 bytes)
+  - SHA1: `3525be8887f79b5929e017b42380a79edfee542d`
+  - MD5: `5f8924d013dd57a89cf349f4cdedc6b1`
+  - CRC32: `1e62d4a5`
+  - Also known as: `amiga-os-310-cd32.rom`
+  - Platform names: Batocera: `amiga-os-310-cd32.rom`
+- **[kick40060.CD32.ext](bios/Commodore/Amiga/kick40060.CD32.ext)** (524,288 bytes)
+  - SHA1: `5bef3d628ce59cc02a66e6e4ae0da48f60e78f7f`
+  - MD5: `bb72565701b1b6faece07d68ea5da639`
+  - CRC32: `87746be2`
+  - Also known as: `amiga-ext-310-cd32.rom`
+  - Platform names: Batocera: `amiga-ext-310-cd32.rom`
+- **[kick40063.A600](bios/Commodore/Amiga/kick40063.A600)** (524,288 bytes)
+  - SHA1: `3b7f1493b27e212830f989f26ca76c02049f09ca`
+  - MD5: `e40a5dfb3d017ba8779faba30cbd1c8e`
+  - CRC32: `fc24ae0d`
+  - Also known as: `amiga-os-310-a600.rom`
+  - Platform names: Batocera: `amiga-os-310-a600.rom`
+- **[kick40063.A600.RTB](bios/Commodore/Amiga/kick40063.A600.RTB)** (5,000 bytes)
+  - SHA1: `ca2d6e1e2b4883929447a05e29418533723a419c`
+  - MD5: `3f97c1963d82c808ef29e7c984c4c688`
+  - CRC32: `71180c7f`
+- **[kick40068.A1200](bios/Commodore/Amiga/kick40068.A1200)** (524,288 bytes)
+  - SHA1: `e21545723fe8374e91342617604f1b3d703094f1`
+  - MD5: `646773759326fbac3b2311fd8c8793ee`
+  - CRC32: `1483a091`
+  - Also known as: `amiga-os-310-a1200.rom`
+  - Platform names: Batocera: `amiga-os-310-a1200.rom`
+- **[kick40068.A1200.RTB](bios/Commodore/Amiga/kick40068.A1200.RTB)** (5,008 bytes)
+  - SHA1: `1ad1b55e7226bd5cd66def8370a69f19244da796`
+  - MD5: `547b42b7b070c7f227ea45e0986d57a1`
+  - CRC32: `cf631e0b`
+- **[kick40068.A4000](bios/Commodore/Amiga/kick40068.A4000)** (524,288 bytes)
+  - SHA1: `5fe04842d04a489720f0f4bb0e46948199406f49`
+  - MD5: `9bdedde6a4f33555b4a270c8ca53297d`
+  - CRC32: `d6bae334`
+  - Also known as: `amiga-os-310-a4000.rom`
+  - Platform names: Batocera: `amiga-os-310-a4000.rom`
+- **[kick40068.A4000.RTB](bios/Commodore/Amiga/kick40068.A4000.RTB)** (4,976 bytes)
+  - SHA1: `973b42dcaf8d6cb111484b3c4d3b719b15f6792d`
+  - MD5: `f89f19b858ea6b1a04327c6f71ee1600`
+  - CRC32: `3b46f0cb`
+
+### Commodore/C128
+
+- **[JiffyDOS_1541-II.bin](bios/Commodore/C128/JiffyDOS_1541-II.bin)** (16,384 bytes)
+  - SHA1: `b1a5b826304d3df2a27d7163c6a81a532e040d32`
+  - MD5: `1b1e985ea5325a1f46eb7fd9681707bf`
+  - CRC32: `dd409902`
+- **[JiffyDOS_1571_repl310654.bin](bios/Commodore/C128/JiffyDOS_1571_repl310654.bin)** (32,768 bytes)
+  - SHA1: `d4b79b60cf1eaa399d0932200eb7811e00455249`
+  - MD5: `41c6cc528e9515ffd0ed9b180f8467c0`
+  - CRC32: `fe6cac6d`
+- **[JiffyDOS_1581.bin](bios/Commodore/C128/JiffyDOS_1581.bin)** (32,768 bytes)
+  - SHA1: `65bbf2be7bcd5bdcbff609d6c66471ffb9d04bfe`
+  - MD5: `20b6885c6dc2d42c38754a365b043d71`
+  - CRC32: `98873d0f`
+- **[JiffyDOS_C128.bin](bios/Commodore/C128/JiffyDOS_C128.bin)** (16,384 bytes)
+  - SHA1: `7d1898f32beae4b2ae610d469ce578a588efaa7c`
+  - MD5: `cbbd1bbcb5e4fd8046b6030ab71fc021`
+  - CRC32: `4b7964de`
+- **[JiffyDOS_C64.bin](bios/Commodore/C128/JiffyDOS_C64.bin)** (8,192 bytes)
+  - SHA1: `31e73e66eccb28732daea8ec3ad1addd9b39a017`
+  - MD5: `be09394f0576cf81fa8bacf634daf9a2`
+  - CRC32: `2f79984c`
+- **[scpu-dos-1.4.bin](bios/Commodore/C128/SCPU64/scpu-dos-1.4.bin)** (131,072 bytes)
+  - SHA1: `3422a7735f0f959d990ab39512d8815a5d8eab7a`
+  - MD5: `cda2fcd2e1f0412029383e51dd472095`
+  - CRC32: `78008489`
+- **[scpu-dos-2.04.bin](bios/Commodore/C128/SCPU64/scpu-dos-2.04.bin)** (131,072 bytes)
+  - SHA1: `6aa529a7b1b6de53e8979e407a77b4d5657727f5`
+  - MD5: `b2869f8678b8b274227f35aad26ba509`
+  - CRC32: `f4151454`
+
+### DOS/DOSBox
+
+- **[bass.dll](bios/DOS/DOSBox/bass.dll)** (144,696 bytes)
+  - SHA1: `75c9fa407e0a027713ed563f135747fffec0590d`
+  - MD5: `7253a9fabc089044b3b8e9156b07d6f9`
+  - CRC32: `03e3f03c`
+- **[bassmidi.dll](bios/DOS/DOSBox/bassmidi.dll)** (73,600 bytes)
+  - SHA1: `2ea6df7253ce0a14094d20cd04c098505cc14c23`
+  - MD5: `0b00a4ab6b68960efa49272d416b040d`
+  - CRC32: `fd70a398`
+- **[libbass.dylib](bios/DOS/DOSBox/libbass.dylib)** (874,240 bytes)
+  - SHA1: `8833196b70002f7f2068d8f6c5eb96862777b018`
+  - MD5: `19addeb0da536c753797ed59b44d5ba3`
+  - CRC32: `9ba00bc0`
+- **[libbass.so](bios/DOS/DOSBox/libbass.so)** (248,952 bytes)
+  - SHA1: `415365e930b4c7d33e9af3225bea230e15bdebe7`
+  - MD5: `255fb8ab523b179320f08f44db36a9fa`
+  - CRC32: `61f3237e`
+- **[libbassmidi.dylib](bios/DOS/DOSBox/libbassmidi.dylib)** (519,808 bytes)
+  - SHA1: `efa4fdedfac60c98c53f3aec10fb44b324a35835`
+  - MD5: `ea143b23779d01152633442abb1e0c67`
+  - CRC32: `e5d1e180`
+- **[libbassmidi.so](bios/DOS/DOSBox/libbassmidi.so)** (142,080 bytes)
+  - SHA1: `77d07d7518104896e0acfee24073356f1a6bd51b`
+  - MD5: `3a48c08c224c32f2f4829b960e95f73b`
+  - CRC32: `0a8e277a`
+
+### Dinothawr/Dinothawr
+
+- **[Dinothawr.zip](bios/Dinothawr/Dinothawr/Dinothawr.zip)** (6,724,506 bytes)
+  - SHA1: `eadb966430454b40a17387acc7302ff1683cc9f2`
+  - MD5: `b8e3f8e88dc8164f8b4b60aa2add9107`
+  - CRC32: `ae2635ef`
+
+### Dragon/Dragon
+
+- **[d200rom1.rom](bios/Dragon/Dragon/d200rom1.rom)** (16,384 bytes)
+  - SHA1: `1983b4fb398e3dd9668d424c666c5a0b3f1e2b69`
+  - MD5: `be9bc86ee5eb401d0a40d0377f65fefa`
+  - CRC32: `84f68bf9`
+  - Also known as: `d64tano.rom`
+  - Platform names: Recalbox: `d64tano.rom`
+- **[d200rom2.rom](bios/Dragon/Dragon/d200rom2.rom)** (16,384 bytes)
+  - SHA1: `e3c8986bb1d44269c4587b04f1ca27a70b0aaa2e`
+  - MD5: `fd91edce7be5e7c2d88e46b76956a8aa`
+  - CRC32: `17893a42`
+  - Also known as: `d64rom2.rom`, `d64tano2.rom`
+  - Platform names: Recalbox: `d64rom2.rom`, Recalbox: `d64tano2.rom`
+- **[d32.rom](bios/Dragon/Dragon/d32.rom)** (16,384 bytes)
+  - SHA1: `f2dab125673e653995a83bf6b793e3390ec7f65a`
+  - MD5: `3420b96031078a4ef408cad7bf21a33f`
+  - CRC32: `e3879310`
+  - **Variants** (1 alternate versions):
+    - [d32.rom.e004e25a](bios/Dragon/Dragon/.variants/d32.rom.e004e25a) (16,384 bytes) - SHA1: `e004e25a8bb7bcd76a1aee7c2ec87b8fceda4332`, MD5: `d35177f73cf303c5565aa13ef8ca5251`
+- **[d32.rom.e004e25a](bios/Dragon/Dragon/.variants/d32.rom.e004e25a)** (16,384 bytes)
+  - SHA1: `e004e25a8bb7bcd76a1aee7c2ec87b8fceda4332`
+  - MD5: `d35177f73cf303c5565aa13ef8ca5251`
+  - CRC32: `ff7bf41e`
+- **[d64rom1.rom](bios/Dragon/Dragon/d64rom1.rom)** (16,384 bytes)
+  - SHA1: `f119506eaa3b4b70b9aa0dd83761e8cbe043d042`
+  - MD5: `5f0bee59710e55f5880e74890912ed78`
+  - CRC32: `60a4634c`
+- **[ddos10.rom](bios/Dragon/Dragon/ddos10.rom)** (8,192 bytes)
+  - SHA1: `a8918c71d319237c1e3155bb38620acb114a80bc`
+  - MD5: `1c965da49b6c5459b8353630aa1482e7`
+  - CRC32: `b44536f6`
+- **[ddos11c.rom](bios/Dragon/Dragon/ddos11c.rom)** (8,192 bytes)
+  - SHA1: `e2ef204e58372e836486b1fcb4edf0e3a0f3a457`
+  - MD5: `d8429af1a12f7438a4bf88a5b934cb3a`
+  - CRC32: `bdd4637a`
+- **[ddos12a.rom](bios/Dragon/Dragon/ddos12a.rom)** (8,192 bytes)
+  - SHA1: `7e324688aac097dd2b016506c40d570a085361bf`
+  - MD5: `55e2535dbbed7f1a26b5f263d7c72c63`
+  - CRC32: `d4041f0a`
+- **[ddos40.rom](bios/Dragon/Dragon/ddos40.rom)** (8,192 bytes)
+  - SHA1: `89f38825ddf72b9863c04d8066d5ab8cabb9197a`
+  - MD5: `9ddc388632cd3c376b164ba5cfc64329`
+  - CRC32: `14f4c54a`
+- **[ddos42.rom](bios/Dragon/Dragon/ddos42.rom)** (8,192 bytes)
+  - SHA1: `7747fe3d431b745b570629fe7f3f5d51b6d6f393`
+  - MD5: `c956a854cbc4b9d1e69c000f78368668`
+  - CRC32: `6bb0b4bb`
+- **[deltados.rom](bios/Dragon/Dragon/deltados.rom)** (8,192 bytes)
+  - SHA1: `686ebb5f39dd4fc907a0b748867d0a022d2f1a60`
+  - MD5: `024eac3db20f1b5cf98c30a0e4743201`
+  - CRC32: `307fb37c`
+- **[dplus48.rom](bios/Dragon/Dragon/dplus48.rom)** (8,192 bytes)
+  - SHA1: `e72ca68061267692b01034005c2804aeee8e5cd0`
+  - MD5: `ee6f24d893a52b8efea9f787855456b5`
+  - CRC32: `d4d954a0`
+- **[dplus49b.rom](bios/Dragon/Dragon/dplus49b.rom)** (8,192 bytes)
+  - SHA1: `73ae74978a78ec2b97ebb1b0c808238779529bfa`
+  - MD5: `56f1b97314e4ca82491c465bb887059e`
+  - CRC32: `7c6dfca8`
+- **[dplus50.rom](bios/Dragon/Dragon/dplus50.rom)** (8,192 bytes)
+  - SHA1: `90164ea50fe3ac4c118b502438d2e5015a588398`
+  - MD5: `35de5d28da507ebb213a26e04241d940`
+  - CRC32: `f444d57f`
+- **[dragon32.zip](bios/Dragon/Dragon/dragon32.zip)** (21,208 bytes)
+  - SHA1: `afed11dd6be59c672e35f2f416290232a05b1983`
+  - MD5: `77cdf3264e81884e876f438d2553eaca`
+  - CRC32: `7909413a`
+- **[dragon64.zip](bios/Dragon/Dragon/dragon64.zip)** (34,962 bytes)
+  - SHA1: `613223e2674d44a6b6cdc9662785fe4b7fe9cb60`
+  - MD5: `c428fb2eca69e4e7203314ab911179f0`
+  - CRC32: `81fd2649`
+- **[sdose6.rom](bios/Dragon/Dragon/sdose6.rom)** (8,192 bytes)
+  - SHA1: `ef157016386ed463374de6bac84d1f8ce654ed80`
+  - MD5: `9d85e6b7133f915c021156f4b9cdb512`
+  - CRC32: `8c1d6c45`
+- **[sdose8.rom](bios/Dragon/Dragon/sdose8.rom)** (8,192 bytes)
+  - SHA1: `8958dc06ee15a505e4b5729c8acf9db0f1f066fe`
+  - MD5: `167f409b7a4b992faabb784b061ab4c6`
+  - CRC32: `1d3fe2ba`
+
+### EACA/Colour Genie
+
+- **[cgenie.zip](bios/EACA/Colour%20Genie/cgenie.zip)** (16,377 bytes)
+  - SHA1: `1731b9aca99e17b0fc3189e33bb7326318fecd57`
+  - MD5: `887cad2abef60f106af15386ff75f74c`
+  - CRC32: `4a6fb5b9`
+
+### Elektronika/BK
+
+- **[B11M_BOS.ROM](bios/Elektronika/BK/B11M_BOS.ROM)** (8,192 bytes)
+  - SHA1: `7e9a30e38d7b78981999821640a68a201bb6df01`
+  - MD5: `fe4627d1e3a1535874085050733263e7`
+  - CRC32: `8ffd5efa`
+- **[B11M_EXT.ROM](bios/Elektronika/BK/B11M_EXT.ROM)** (8,192 bytes)
+  - SHA1: `f087af69044432a1ef2431a72ac06946e32f2dd3`
+  - MD5: `dc52f365d56fa1951f5d35b1101b9e3f`
+  - CRC32: `b2e4c33c`
+- **[BAS11M_0.ROM](bios/Elektronika/BK/BAS11M_0.ROM)** (16,384 bytes)
+  - SHA1: `9d76f3eefd64e032c763fa1ebf9cd3d9bd22317a`
+  - MD5: `946f6f23ded03c0e26187f0b3ca75993`
+  - CRC32: `e71f9339`
+- **[BAS11M_1.ROM](bios/Elektronika/BK/BAS11M_1.ROM)** (8,192 bytes)
+  - SHA1: `34fa37599f2f9eb607390ef2458a3c22d87f09a9`
+  - MD5: `1e6637f32aa7d1de03510030cac40bcf`
+  - CRC32: `4c68ff59`
+- **[BASIC10.ROM](bios/Elektronika/BK/BASIC10.ROM)** (24,576 bytes)
+  - SHA1: `af7eae90c398ec12942a408fa5ac2722e331738c`
+  - MD5: `3fa774326d75410a065659aea80252f0`
+  - CRC32: `4181ecb6`
+- **[DISK_327.ROM](bios/Elektronika/BK/DISK_327.ROM)** (4,096 bytes)
+  - SHA1: `28eefbb63047b26e4aec104aeeca74e2f9d0276c`
+  - MD5: `5015228eeeb238e65da8edcd1b6dfac7`
+  - CRC32: `ed8a43ae`
+- **[FOCAL10.ROM](bios/Elektronika/BK/FOCAL10.ROM)** (24,576 bytes)
+  - SHA1: `6386e58bc1bba5e76baec9e8a1ca4b99dc3c573f`
+  - MD5: `5737f972e8638831ab71e9139abae052`
+  - CRC32: `b90a52e8`
+- **[MONIT10.ROM](bios/Elektronika/BK/MONIT10.ROM)** (8,192 bytes)
+  - SHA1: `4e83a94ae5155bbea14d7331a5a8db82457bd5ae`
+  - MD5: `95f8c41c6abf7640e35a6a03cecebd01`
+  - CRC32: `26c6e8a0`
+
+### Enterprise/64-128
+
+- **[basic20.rom](bios/Enterprise/64-128/basic20.rom)** (16,384 bytes)
+  - SHA1: `61d0987b906146e21b94f265d5b51b4938c986a9`
+  - MD5: `8e18edce4a7acb2c33cc0ab18f988482`
+  - CRC32: `1228de34`
+- **[basic21.rom](bios/Enterprise/64-128/basic21.rom)** (16,384 bytes)
+  - SHA1: `03bbb386cf530e804363acdfc1d13e64cf28af2e`
+  - MD5: `e972fe42b398c9ff1d93ff014786aec6`
+  - CRC32: `55f96251`
+  - Also known as: `basic21.bin`
+  - Platform names: Batocera: `basic21.bin`
+- **[brd.rom](bios/Enterprise/64-128/brd.rom)** (16,384 bytes)
+  - SHA1: `f34f0c330b44dbf2548329bea954d5991dec30ca`
+  - MD5: `6af0402906944fd134004b85097c8524`
+  - CRC32: `6999d6a3`
+- **[ep64_exdos.zip](bios/Enterprise/64-128/ep64_exdos.zip)** (14,521 bytes)
+  - SHA1: `785774d028dba9f6bfdcd48b13eb4a71c1acb7f7`
+  - MD5: `057d2129ad8927b77d3dd56b80b5fa08`
+  - CRC32: `048e92ac`
+- **[epd19hft.rom](bios/Enterprise/64-128/epd19hft.rom)** (32,768 bytes)
+  - SHA1: `8f28fe73d13e94dd1da02519908ecc6eebe104f6`
+  - MD5: `12cfc9c7e48c8a16c2e09edbd926d467`
+  - CRC32: `bd503eeb`
+- **[epdos16f.rom](bios/Enterprise/64-128/epdos16f.rom)** (32,768 bytes)
+  - SHA1: `9a9eac31e601a1ab0f7a5d2b13175d092fa84bd3`
+  - MD5: `6593dff00ab32a4b1fc084674ededf2b`
+  - CRC32: `d34b4781`
+- **[epfileio.rom](bios/Enterprise/64-128/epfileio.rom)** (16,384 bytes)
+  - SHA1: `2f9077bcd89b1ec42dbdcd55d335bdbaf361eff3`
+  - MD5: `a68ebcbc73a4d2178d755b7755bf18fe`
+  - CRC32: `60c79925`
+- **[exdos13.rom](bios/Enterprise/64-128/exdos13.rom)** (32,768 bytes)
+  - SHA1: `cb43ab3676b93c279f1ed8ffcb0d4dcd4b34e631`
+  - MD5: `ddff70c014d1958dc75378b6c9aab6f8`
+  - CRC32: `e0135929`
+- **[exdos14isdos10uk.rom](bios/Enterprise/64-128/exdos14isdos10uk.rom)** (32,768 bytes)
+  - SHA1: `b82e21b6e3214432b6dc13f650e97de88fc90a72`
+  - MD5: `f91c4a507cc6895bdd9c43df4f021df3`
+  - CRC32: `a0d2808f`
+- **[exos20.rom](bios/Enterprise/64-128/exos20.rom)** (32,768 bytes)
+  - SHA1: `6033a0535136c40c47137e4d1cd9273c06d5fdff`
+  - MD5: `5ad3baaad3b5156d6b60b34229a676fb`
+  - CRC32: `d421795f`
+  - Also known as: `ep64.zip`
+  - Platform names: Batocera: `ep64.zip`
+- **[exos21.rom](bios/Enterprise/64-128/exos21.rom)** (32,768 bytes)
+  - SHA1: `55315b20fecb4441a07ee4bc5dc7153f396e0a2e`
+  - MD5: `f36f24cbb87745fbd2714e4df881db09`
+  - CRC32: `982a3b44`
+  - Also known as: `ep128.zip`, `exos21.bin`
+  - Platform names: Batocera: `exos21.bin`, Batocera: `ep128.zip`
+- **[exos24uk.rom](bios/Enterprise/64-128/exos24uk.rom)** (65,536 bytes)
+  - SHA1: `cf12e971623a54bf8c4f891ca3a36d969f205c49`
+  - MD5: `55af78f877a21ca45eb2df68a74fcc60`
+  - CRC32: `c099a5e3`
+- **[hun.rom](bios/Enterprise/64-128/hun.rom)** (16,384 bytes)
+  - SHA1: `325a5e28c2a0d896711f8829e7ff14fed5dd4103`
+  - MD5: `22167938f142c222f40992839aa21a06`
+  - CRC32: `596ab6d6`
+- **[zt18hfnt.rom](bios/Enterprise/64-128/zt18hfnt.rom)** (32,768 bytes)
+  - SHA1: `283be1ce417a759a3368bb4bbe72f692fd43ca6d`
+  - MD5: `3082dc488d32f30a612761b99074199b`
+  - CRC32: `76c9dbf6`
+- **[zt19uk.rom](bios/Enterprise/64-128/zt19uk.rom)** (32,768 bytes)
+  - SHA1: `b7af62f0bc95fdca4b31d236f8327dafc80f83b7`
+  - MD5: `228540b6be83ae2acd7569c8ff0f91d0`
+  - CRC32: `d6deedf1`
+  - Also known as: `ep128emu/roms/zt19hfnt.rom`, `zt19hfnt.rom`
+
+### Entex/Adventure Vision
+
+- **[advision.zip](bios/Entex/Adventure%20Vision/advision.zip)** (1,572 bytes)
+  - SHA1: `a9a7eef3c2f80b669e7421d2cf0a7a74f6088160`
+  - MD5: `1c08606408029751fd30ac91d2bf30d5`
+  - CRC32: `2ed33801`
+
+### Epoch/Game Pocket
+
+- **[gamepock.zip](bios/Epoch/Game%20Pocket/gamepock.zip)** (3,455 bytes)
+  - SHA1: `83e94c56f2fc4ab60de94021a1283cca09d65ee5`
+  - MD5: `887479fe3c69a0b935c57a7a738e26c4`
+  - CRC32: `9a06cba0`
+
+### Fairchild/Channel F
+
+- **[sl31253.bin](bios/Fairchild/Channel%20F/sl31253.bin)** (1,024 bytes)
+  - SHA1: `81193965a374d77b99b4743d317824b53c3e3c78`
+  - MD5: `ac9804d4c0e9d07e33472e3726ed15c3`
+  - CRC32: `04694ed9`
+- **[sl31254.bin](bios/Fairchild/Channel%20F/sl31254.bin)** (1,024 bytes)
+  - SHA1: `8f70d1b74483ba3a37e86cf16c849d601a8c3d2c`
+  - MD5: `da98f4bb3242ab80d76629021bb27585`
+  - CRC32: `9c047ba3`
+- **[sl90025.bin](bios/Fairchild/Channel%20F/sl90025.bin)** (1,024 bytes)
+  - SHA1: `759e2ed31fbde4a2d8daf8b9f3e0dffebc90dae2`
+  - MD5: `95d339631d867c8f1d15a5f2ec26069d`
+  - CRC32: `015c1e38`
+
+### Fujitsu/FM Towns
+
+- **[FMT_DIC.ROM](bios/Fujitsu/FM%20Towns/FMT_DIC.ROM)** (524,288 bytes)
+  - SHA1: `7564020dba71deee27184824b84dbbbb7c72aa4e`
+  - MD5: `8fa4e553f28cfc0c30a0a1e589799942`
+  - CRC32: `82d1daa2`
+  - Platform names: Batocera: `fmtownsux.zip`
+- **[FMT_DOS.ROM](bios/Fujitsu/FM%20Towns/FMT_DOS.ROM)** (524,288 bytes)
+  - SHA1: `57fd146478226f7f215caf63154c763a6d52165e`
+  - MD5: `0585b19930d4a7f4c71bcc8a33746588`
+  - CRC32: `112872ee`
+  - Platform names: Batocera: `fmtowns.zip`
+- **[FMT_F20.ROM](bios/Fujitsu/FM%20Towns/FMT_F20.ROM)** (524,288 bytes)
+  - SHA1: `1920711cb66340bb741a760de187de2f76040b8c`
+  - MD5: `ac0c7021e9bf48ca84b51ab651169a88`
+  - CRC32: `9f55a20c`
+- **[FMT_FNT.ROM](bios/Fujitsu/FM%20Towns/FMT_FNT.ROM)** (262,144 bytes)
+  - SHA1: `a216482ea3162f348fcf77fea78e0b2e4288091a`
+  - MD5: `b91300e55b70227ce98b59c5f02fa8dd`
+  - CRC32: `dd6fd544`
+  - Platform names: Batocera: `fmtownsux.zip`
+- **[FMT_SYS.ROM](bios/Fujitsu/FM%20Towns/FMT_SYS.ROM)** (262,144 bytes)
+  - SHA1: `4cd51de4fca9bd7a3d91d09ad636fa6b47a41df5`
+  - MD5: `86fb6f7280689259f0ca839dd3dd6cde`
+  - CRC32: `afe4ebcf`
+- **[fm7.zip](bios/Fujitsu/FM%20Towns/fm7.zip)** (104,276 bytes)
+  - SHA1: `1c29ba16151255cd916f49ea25570956f1353b71`
+  - MD5: `ae1d7fe1584e95e80b0c1d848cbc30cd`
+  - CRC32: `e6d0fa84`
+- **[fm77av.zip](bios/Fujitsu/FM%20Towns/fm77av.zip)** (46,921 bytes)
+  - SHA1: `b558bb5472cfa727dccab92229c66afa0d64404f`
+  - MD5: `54dc6786153da0397c1aaec7e28c89eb`
+  - CRC32: `8ebff292`
+- **[fmtmarty.zip](bios/Fujitsu/FM%20Towns/fmtmarty.zip)** (1,524,715 bytes)
+  - SHA1: `639fef8ce51774e4e34b7bbb14116ce8a56fa87d`
+  - MD5: `47d639ae07daa23d2b5a198ca3aebcd6`
+  - CRC32: `23d8a749`
+- **[fmtowns.zip](bios/Fujitsu/FM%20Towns/fmtowns.zip)** (655,778 bytes)
+  - SHA1: `8ba3bf533b0b75685f03d8759a7a34c32bfaf896`
+  - MD5: `f76521f8e7c5bc104a8614c8aead1192`
+  - CRC32: `2338792b`
+- **[fmtownsux.zip](bios/Fujitsu/FM%20Towns/fmtownsux.zip)** (838,046 bytes)
+  - SHA1: `803023b68b8f8b03a245082d4acddc0e5708c222`
+  - MD5: `443eeab819ebfb9ef39e928aabbb5567`
+  - CRC32: `472af5d8`
+
+### Funtech/Super A'Can
+
+- **[supracan.zip](bios/Funtech/Super%20A'Can/supracan.zip)** (1,849 bytes)
+  - SHA1: `b59182226bb040d56db2ff53389d2cf193591c9a`
+  - MD5: `f6f0b2ccbbeb2e1d6e843acb145490f8`
+  - CRC32: `e6cc88a7`
+
+### GCE/Vectrex
+
+- **[vectrex.zip](bios/GCE/Vectrex/vectrex.zip)** (13,218 bytes)
+  - SHA1: `2780260cf5b0e5392fb5530a076a1caafbd66004`
+  - MD5: `a0f182f72a0e98e9be3f957043a40728`
+  - CRC32: `c02497b1`
+
+### Galaksija/CHRGEN.BIN
+
+- **[CHRGEN.BIN](bios/Galaksija/CHRGEN.BIN)** (2,048 bytes)
+  - SHA1: `cc73b0386b84383b4841e58a1c328cb67b0121d8`
+  - MD5: `ecae5c55d75a2fe0871d0ebd95663628`
+  - CRC32: `fd77b6d2`
+
+### Galaksija/ROM1.BIN
+
+- **[ROM1.BIN](bios/Galaksija/ROM1.BIN)** (4,096 bytes)
+  - SHA1: `aea7a4c0c7ffe1f212f7b9faecfd728862ac6904`
+  - MD5: `c7ce14d6a81062db862f3ce5afedcfb6`
+  - CRC32: `e6853bc1`
+
+### GamePark/GP32
+
+- **[gp32.zip](bios/GamePark/GP32/gp32.zip)** (1,378,301 bytes)
+  - SHA1: `35def9830e797fb0788740b5da0a7202933554df`
+  - MD5: `e0abd9b6500f3414792b4288da5521fe`
+  - CRC32: `6716631c`
+
+### Grundy/NewBrain
+
+- **[nb_48gc.zip](bios/Grundy/NewBrain/nb_48gc.zip)** (6,576 bytes)
+  - SHA1: `80d34a21c6bc9732f93c754d4b71cb7b22e87a99`
+  - MD5: `36d690ffadc08a31141ffcd573320518`
+  - CRC32: `67190bd1`
+- **[nb_image.zip](bios/Grundy/NewBrain/nb_image.zip)** (1,810 bytes)
+  - SHA1: `bf4aed0b09bae6dfe2153a6f3bd91e9146705073`
+  - MD5: `5b69f69a5ec56588b92bdc138a3cc3af`
+  - CRC32: `833109d1`
+
+### Hartung/Game Master
+
+- **[gmaster.zip](bios/Hartung/Game%20Master/gmaster.zip)** (1,686 bytes)
+  - SHA1: `a89263689f19e046dab6dadea24c5d07270548a6`
+  - MD5: `4239d6f44a0d78d27c69f9b95885f48e`
+  - CRC32: `2aae403f`
+
+### Id Software/Doom
+
+- **[prboom.wad](bios/Id%20Software/Doom/prboom.wad)** (143,312 bytes)
+  - SHA1: `5f4aed208301449c2e9514edfd325fe9dead76fa`
+  - MD5: `72ae1b47820fcc93cc0df9c428d0face`
+  - CRC32: `a5751b99`
+
+### Id Software/Wolfenstein 3D
+
+- **[ecwolf.pk3](bios/Id%20Software/Wolfenstein%203D/ecwolf.pk3)** (178,755 bytes)
+  - SHA1: `9259b87edfe9b9f6d0749788a75a6ccf158f50aa`
+  - MD5: `c011b428819eea4a80b455c245a5a04d`
+  - CRC32: `26dc3fba`
+
+### Infocom/Z-Machine
+
+- **[zcdata.dat](bios/Infocom/Z-Machine/zcdata.dat)** (366,671 bytes)
+  - SHA1: `33b50cec88bc1569431a7885c0cc2692fddb004b`
+  - MD5: `033d7392985841027909c4c32b9f2076`
+  - CRC32: `4c0d2dbc`
+- **[zcsf.sf2](bios/Infocom/Z-Machine/zcsf.sf2)** (92,464 bytes)
+  - SHA1: `286b2e1fb21cc79851da01666db6c0b0e88f25e3`
+  - MD5: `e0ba7a8634b12cfee4b6760a6f89051a`
+  - CRC32: `35930faa`
+  - Also known as: `custom0.sf2`
+  - Platform names: Batocera: `custom0.sf2`
+
+### Java/J2ME
+
+- **[freej2me-lr.jar](bios/Java/J2ME/freej2me-lr.jar)** (552,042 bytes)
+  - SHA1: `fb231192894e2fd17a5799fbbdf86a4696951bce`
+  - MD5: `ccd92e7156ce2f0ce14c88ffb68a16eb`
+  - CRC32: `96a1babf`
+- **[freej2me-sdl.jar](bios/Java/J2ME/freej2me-sdl.jar)** (552,043 bytes)
+  - SHA1: `78f1f41d55efc6b8d81e99c1d9d75248b3f83dc2`
+  - MD5: `4da74084fc1b1bd3d776ed8d3ee648de`
+  - CRC32: `5cca0f35`
+- **[freej2me.jar](bios/Java/J2ME/freej2me.jar)** (552,039 bytes)
+  - SHA1: `7d738042268e4ffd0aae8e85e05dd28bce761d1f`
+  - MD5: `29a92d0867da2917275b7c6c805d256f`
+  - CRC32: `ffb98ffa`
+- **[squirreljme-javase.jar](bios/Java/J2ME/squirreljme-javase.jar)** (4,773,927 bytes)
+  - SHA1: `d49e71637d0356ec1f3d1407b6b2ff32ab998fa9`
+  - MD5: `d36f149116250913fd1554ab9a5ebae3`
+  - CRC32: `1bd22497`
+- **[squirreljme.jar](bios/Java/J2ME/squirreljme.jar)** (4,700,395 bytes)
+  - SHA1: `6933bbe1fc29f58581a7f64f859f756db9ef78a7`
+  - MD5: `cf849d4b36cd8b7782de7887d318182a`
+  - CRC32: `c3e532d3`
+- **[squirreljme.sqc](bios/Java/J2ME/squirreljme.sqc)** (15,181,774 bytes)
+  - SHA1: `8a2ddc37df2366d4e205e9904cd8bac22db2afd5`
+  - MD5: `8e98b0c8e5c96c191a8b2a9d29d0454b`
+  - CRC32: `1690ba5c`
+  - Also known as: `squirreljme-0.3.0-fast.jar`, `squirreljme-0.3.0-slow-test.jar`, `squirreljme-0.3.0-slow.jar`, `squirreljme-0.3.0.jar`, `squirreljme-fast.jar`, `squirreljme-slow-test.jar`, `squirreljme-slow.jar`
+
+### Magnavox/Odyssey2
+
+- **[o2rom.bin](bios/Magnavox/Odyssey2/o2rom.bin)** (1,024 bytes)
+  - SHA1: `b2e1955d957a475de2411770452eff4ea19f4cee`
+  - MD5: `562d5ebf9e030a40d6fabfc2f33139fd`
+  - CRC32: `8016a315`
+
+### Mattel/Intellivision
+
+- **[ECS.bin](bios/Mattel/Intellivision/ECS.bin)** (24,576 bytes)
+  - SHA1: `b7ccb38b881d7f8426cd6f1f8a7aabbd31784fc5`
+  - MD5: `2e72a9a2b897d330a35c8b07a6146c52`
+  - CRC32: `ea790a06`
+- **[IVOICE.BIN](bios/Mattel/Intellivision/IVOICE.BIN)** (2,048 bytes)
+  - SHA1: `618563e512ff5665183664f52270fa9606c9d289`
+  - MD5: `d5530f74681ec6e0f282dab42e6b1c5f`
+  - CRC32: `0de7579d`
+- **[exec.bin](bios/Mattel/Intellivision/exec.bin)** (8,192 bytes)
+  - SHA1: `5a65b922b562cb1f57dab51b73151283f0e20c7a`
+  - MD5: `62e761035cb657903761800f4437b8af`
+  - CRC32: `cbce86f7`
+- **[grom.bin](bios/Mattel/Intellivision/grom.bin)** (2,048 bytes)
+  - SHA1: `f9608bb4ad1cfe3640d02844c7ad8e0bcd974917`
+  - MD5: `0cd5946c6473e42e8e4c2137785e427f`
+  - CRC32: `683a4158`
+- **[level2.rom](bios/Mattel/Intellivision/level2.rom)** (12,288 bytes)
+  - SHA1: `5e318bf5d37db5795061326fb88aac29123d4b7d`
+  - MD5: `ca74822ebc2803c6635a55116ecd9539`
+  - CRC32: `0d8a132e`
+- **[level3.rom](bios/Mattel/Intellivision/level3.rom)** (14,336 bytes)
+  - SHA1: `04a1f062cf73c3931c038434e3f299482b6bf613`
+  - MD5: `ecd0a5a83fca19ea860fe565fad4b061`
+  - CRC32: `bddbf843`
+- **[level4.rom](bios/Mattel/Intellivision/level4.rom)** (14,336 bytes)
+  - SHA1: `752555fdd0ff23abc9f35c6e03d9d9b4c0e9677b`
+  - MD5: `0e4c4b1638a23fd26796816cf2f83961`
+  - CRC32: `1a92d54d`
+- **[level4P.rom](bios/Mattel/Intellivision/level4P.rom)** (504 bytes)
+  - SHA1: `41184f5240b4b54f3804f5a22b4d78bbba52ed1d`
+  - MD5: `9bc4cc42958a2a120670e5bc0bfc1d5e`
+  - CRC32: `7ff336f4`
+
+### Microsoft/Chihiro
+
+- **[cerbios.bin](bios/Microsoft/Chihiro/cerbios.bin)** (262,144 bytes)
+  - SHA1: `5996972d3e033f6c525c1988c563b4ffe4c58f22`
+  - MD5: `f23d7e00ae8fbf88908ed1f9165f35eb`
+  - CRC32: `a73a4d20`
+
+### Microsoft/MSX
+
+- **[ARAB1.ROM](bios/Microsoft/MSX/ARAB1.ROM)** (32,768 bytes)
+  - SHA1: `0287b2ec897b9196788cd9f10c99e1487d7adbbb`
+  - MD5: `7fa0558bcec9dba310579521623d9f6a`
+  - CRC32: `339cd1aa`
+- **[ARABIC.rom](bios/Microsoft/MSX/ARABIC.rom)** (32,768 bytes)
+  - SHA1: `2c9600c6e0025fee10d249e97448ecaa37e38c42`
+  - MD5: `20c4b5d1d9469c201b145f082ec32658`
+  - CRC32: `c0d8fc85`
+- **[BEERIDE.ROM](bios/Microsoft/MSX/BEERIDE.ROM)** (16,384 bytes)
+  - SHA1: `077bdfff644b931b6a13bab8ab847aee766d163e`
+  - MD5: `b32279f2700652a5ce0a809318626763`
+  - CRC32: `584b1250`
+- **[CARTS.SHA](bios/Microsoft/MSX/CARTS.SHA)** (33,152 bytes)
+  - SHA1: `69dd7344e4dfa7e250973a71bbb3e8aa6fb08d81`
+  - MD5: `d6dedca1112ddfda94cc9b2e426b818b`
+  - CRC32: `82312751`
+  - **Variants** (1 alternate versions):
+    - [CARTS.SHA.bf5fb954](bios/Microsoft/MSX/.variants/CARTS.SHA.bf5fb954) (33,152 bytes) - SHA1: `bf5fb954db868e523febccc68549ed9187961076`, MD5: `74b0f217fa0e2b8bb5a2f8e2ecc69da3`
+- **[CARTS.SHA.bf5fb954](bios/Microsoft/MSX/.variants/CARTS.SHA.bf5fb954)** (33,152 bytes)
+  - SHA1: `bf5fb954db868e523febccc68549ed9187961076`
+  - MD5: `74b0f217fa0e2b8bb5a2f8e2ecc69da3`
+  - CRC32: `d42f4444`
+  - Platform names: Lakka: `CARTS.SHA`, RetroArch: `CARTS.SHA`, RetroPie: `CARTS.SHA`
+- **[CYRILLIC.FNT](bios/Microsoft/MSX/CYRILLIC.FNT)** (2,048 bytes)
+  - SHA1: `000ac11b702a4c42e40f135df12fa5f2f13e20a1`
+  - MD5: `85b38e4128bbc300e675f55b278683a8`
+  - CRC32: `73af9bc3`
+- **[DISK.ROM](bios/Microsoft/MSX/DISK.ROM)** (16,384 bytes)
+  - SHA1: `032cb1c1c75b9a191fa1230978971698d9d2a17f`
+  - MD5: `80dcd1ad1a4cf65d64b7ba10504e8190`
+  - CRC32: `721f61df`
+- **[FMPAC.ROM](bios/Microsoft/MSX/FMPAC.ROM)** (65,536 bytes)
+  - SHA1: `9d789166e3caf28e4742fe933d962e99618c633d`
+  - MD5: `6f69cc8b5ed761b03afd78000dfb0e19`
+  - CRC32: `0e84505d`
+  - Also known as: `FMPAC.rom`
+  - Platform names: Recalbox: `FMPAC.rom`
+- **[FMPAC16.ROM](bios/Microsoft/MSX/FMPAC16.ROM)** (16,384 bytes)
+  - SHA1: `2dc4517ebd5a061f9b5aa6b449cc4d4a2073540c`
+  - MD5: `af8537262df8df267072f359399a7635`
+  - CRC32: `5d6c4d27`
+- **[GCVMX80.ROM](bios/Microsoft/MSX/GCVMX80.ROM)** (8,192 bytes)
+  - SHA1: `977fed1135b6cc73e765b47f51570fc00acd5b79`
+  - MD5: `fd0b8f1766dc6dcc03a43d9c79dc4e37`
+  - CRC32: `47b843ca`
+- **[HANGUL.rom](bios/Microsoft/MSX/HANGUL.rom)** (131,072 bytes)
+  - SHA1: `965f4982790f1817bcbabbb38c8777183b231a55`
+  - MD5: `9baf17b190f631405b6b0eeeeb162b87`
+  - CRC32: `b663c605`
+- **[INTERNAT.FNT](bios/Microsoft/MSX/INTERNAT.FNT)** (2,048 bytes)
+  - SHA1: `e2127084f40f9d19fe9bf4e35b5a7470f95ea4ab`
+  - MD5: `ac4f4a90c1b1887db48ded39c9d9c847`
+  - CRC32: `b6a01b07`
+- **[ITALIC.FNT](bios/Microsoft/MSX/ITALIC.FNT)** (2,048 bytes)
+  - SHA1: `401dd6692dc80628e5f68b7c79be0b0ebbc4d3ee`
+  - MD5: `c83e50e9f33b8dd893c414691822740d`
+  - CRC32: `c90ec498`
+- **[JAPANESE.FNT](bios/Microsoft/MSX/JAPANESE.FNT)** (2,048 bytes)
+  - SHA1: `c9377d76adedee1ba581ef71f263f35402980448`
+  - MD5: `aa28f0703b951a6be8df3e28e20d263d`
+  - CRC32: `1f8f9709`
+- **[KANJI.ROM](bios/Microsoft/MSX/KANJI.ROM)** (131,072 bytes)
+  - SHA1: `84a645becec0a25d3ab7a909cde1b242699a8662`
+  - MD5: `febe8782b466d7c3b16de6d104826b34`
+  - CRC32: `c9651b32`
+- **[KANJI.rom](bios/Microsoft/MSX/KANJI.rom)** (262,144 bytes)
+  - SHA1: `5aff2d9b6efc723bc395b0f96f0adfa83cc54a49`
+  - MD5: `acf53887c2d2783dc059a9b442c86b90`
+  - CRC32: `1f6406fb`
+  - Also known as: `fs-a1gt_kanjifont.rom`, `fs-a1wsx_kanjifont.rom`
+  - Platform names: Batocera: `fs-a1gt_kanjifont.rom`, Batocera: `fs-a1wsx_kanjifont.rom`
+- **[KOREAN.FNT](bios/Microsoft/MSX/KOREAN.FNT)** (2,048 bytes)
+  - SHA1: `0ef27e3599370e179b6fceaa22431fb97f5e7e61`
+  - MD5: `73291e76638a2f5aa2eceb843df468f4`
+  - CRC32: `7ac42370`
+- **[MICROSOLDISK.ROM](bios/Microsoft/MSX/MICROSOLDISK.ROM)** (16,384 bytes)
+  - SHA1: `f59d33311c95edc0168445f74eddd8a6772aa6a0`
+  - MD5: `02e8b1f96049f09d6d3a735647cbbb2a`
+  - CRC32: `232222be`
+- **[MOONSOUND.rom](bios/Microsoft/MSX/MOONSOUND.rom)** (2,097,152 bytes)
+  - SHA1: `32760893ce06dbe3930627755ba065cc3d8ec6ca`
+  - MD5: `42af93619160ef2116416f74a6cb12f2`
+  - CRC32: `2a9d8d43`
+  - Also known as: `yrw801.rom`
+  - Platform names: Batocera: `yrw801.rom`
+- **[MSX.ROM](bios/Microsoft/MSX/MSX.ROM)** (32,768 bytes)
+  - SHA1: `409e82adac40f6bdd18eb6c84e8b2fbdc7fb5498`
+  - MD5: `aa95aea2563cd5ec0a0919b44cc17d47`
+  - CRC32: `94ee12f3`
+  - Also known as: `MSX.rom`, `Machines/Shared Roms/MSX.rom`
+  - **Variants** (1 alternate versions):
+    - [MSX.ROM.e998f0c4](bios/Microsoft/MSX/.variants/MSX.ROM.e998f0c4) (32,768 bytes) - SHA1: `e998f0c441f4f1800ef44e42cd1659150206cf79`, MD5: `364a1a579fe5cb8dba54519bcfcdac0d`
+- **[MSX.ROM.e998f0c4](bios/Microsoft/MSX/.variants/MSX.ROM.e998f0c4)** (32,768 bytes)
+  - SHA1: `e998f0c441f4f1800ef44e42cd1659150206cf79`
+  - MD5: `364a1a579fe5cb8dba54519bcfcdac0d`
+  - CRC32: `a317e6b4`
+  - Also known as: `MSX.rom`
+  - Platform names: Batocera: `MSX.ROM`, Recalbox: `MSX.rom`
+- **[MSX2.ROM](bios/Microsoft/MSX/MSX2.ROM)** (32,768 bytes)
+  - SHA1: `6103b39f1e38d1aa2d84b1c3219c44f1abb5436e`
+  - MD5: `ec3a01c91f24fbddcbcab0ad301bc9ef`
+  - CRC32: `6cdaf3a5`
+  - Also known as: `MSX2.rom`
+  - Platform names: Recalbox: `MSX2.rom`
+- **[MSX2AR.ROM](bios/Microsoft/MSX/MSX2AR.ROM)** (32,768 bytes)
+  - SHA1: `35195ab67c289a0b470883464df66bc6ea5b00d3`
+  - MD5: `91764e84f977671ac7caa50b36273fd2`
+  - CRC32: `ea306155`
+- **[MSX2AREXT.ROM](bios/Microsoft/MSX/MSX2AREXT.ROM)** (16,384 bytes)
+  - SHA1: `ebb76f9061e875365023523607db610f2eda1d26`
+  - MD5: `be5d1ec8001d945ca1432285722e9d16`
+  - CRC32: `7c7540b7`
+- **[MSX2BR.rom](bios/Microsoft/MSX/MSX2BR.rom)** (32,768 bytes)
+  - SHA1: `9c43106dba3ae2829e9a11dffa9d000ed6d6454c`
+  - MD5: `d3df424728a225b301510f5384cae583`
+  - CRC32: `6bacdce4`
+- **[MSX2BREXT.rom](bios/Microsoft/MSX/MSX2BREXT.rom)** (16,384 bytes)
+  - SHA1: `4f2a7e0172f0214f025f23845f6e053d0ffd28e8`
+  - MD5: `355c6d5ee31da441d485cd89ca906413`
+  - CRC32: `08ced880`
+- **[MSX2EXT.ROM](bios/Microsoft/MSX/MSX2EXT.ROM)** (16,384 bytes)
+  - SHA1: `5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02`
+  - MD5: `2183c2aff17cf4297bdb496de78c2e8a`
+  - CRC32: `66237ecf`
+  - Also known as: `MSX2EXT.rom`
+  - Platform names: Recalbox: `MSX2EXT.rom`
+- **[MSX2FR.rom](bios/Microsoft/MSX/MSX2FR.rom)** (32,768 bytes)
+  - SHA1: `3926cdd91fa89657a811463e48cfbdb350676e51`
+  - MD5: `7af9e84da1520a8a7fb82e73703e5075`
+  - CRC32: `c0577a50`
+- **[MSX2FREXT.rom](bios/Microsoft/MSX/MSX2FREXT.rom)** (16,384 bytes)
+  - SHA1: `792e6b2814ab783d06c7576c1e3ccd6a9bbac34a`
+  - MD5: `6ffe789cca2eca9d2e71ca7b69b97e6b`
+  - CRC32: `e235d5c8`
+- **[MSX2G.rom](bios/Microsoft/MSX/MSX2G.rom)** (32,768 bytes)
+  - SHA1: `b17d9bea0eb16a1aa2d0ccbd7c9488da9f57698e`
+  - MD5: `b6c33b7b3508d691d7872589c778f808`
+  - CRC32: `8fa060e2`
+- **[MSX2GEXT.rom](bios/Microsoft/MSX/MSX2GEXT.rom)** (16,384 bytes)
+  - SHA1: `4ab7b2030d022f5486abaab22aaeaf8aa23e05f3`
+  - MD5: `4047ce143a8bf391e21991835aa65b59`
+  - CRC32: `41e36d03`
+- **[MSX2HAN.rom](bios/Microsoft/MSX/MSX2HAN.rom)** (32,768 bytes)
+  - SHA1: `87936f808423dddfd00629056d6807b4be1dc63e`
+  - MD5: `7b9466546009d419ebd0dc27db90c30e`
+  - CRC32: `a8ead5e3`
+- **[MSX2J.rom](bios/Microsoft/MSX/MSX2J.rom)** (32,768 bytes)
+  - SHA1: `0081ea0d25bc5cd8d70b60ad8cfdc7307812c0fd`
+  - MD5: `53bec1c22b30c0a15263e04b91a7814f`
+  - CRC32: `9b3e7b97`
+- **[MSX2JEXT.rom](bios/Microsoft/MSX/MSX2JEXT.rom)** (16,384 bytes)
+  - SHA1: `0fbd45ef3dd7bb82d4c31f1947884f411f1ca344`
+  - MD5: `8aabde714a42256bef36ea9b04f6ef59`
+  - CRC32: `43e7a7fc`
+- **[MSX2KR.rom](bios/Microsoft/MSX/MSX2KR.rom)** (32,768 bytes)
+  - SHA1: `affa3c5cd8db79a1450ad8a7f405a425b251653d`
+  - MD5: `6819a1533502261bfdd52436b8346073`
+  - CRC32: `53850907`
+- **[MSX2KREXT.rom](bios/Microsoft/MSX/MSX2KREXT.rom)** (32,768 bytes)
+  - SHA1: `b6d3649a6647fa9f6bd61efc317485a20901128f`
+  - MD5: `30a0b3402a0a13b516af76d39f45a365`
+  - CRC32: `2ba104a3`
+- **[MSX2P.ROM](bios/Microsoft/MSX/MSX2P.ROM)** (32,768 bytes)
+  - SHA1: `e2fbd56e42da637609d23ae9df9efd1b4241b18a`
+  - MD5: `6d8c0ca64e726c82a4b726e9b01cdf1e`
+  - CRC32: `00870134`
+  - **Variants** (1 alternate versions):
+    - [MSX2P.ROM.e90f80a6](bios/Microsoft/MSX/.variants/MSX2P.ROM.e90f80a6) (32,768 bytes) - SHA1: `e90f80a61d94c617850c415e12ad70ac41e66bb7`, MD5: `847cc025ffae665487940ff2639540e5`
+- **[MSX2P.ROM.e90f80a6](bios/Microsoft/MSX/.variants/MSX2P.ROM.e90f80a6)** (32,768 bytes)
+  - SHA1: `e90f80a61d94c617850c415e12ad70ac41e66bb7`
+  - MD5: `847cc025ffae665487940ff2639540e5`
+  - CRC32: `19771608`
+  - Also known as: `MSX2P.rom`
+  - Platform names: Recalbox: `MSX2P.rom`
+- **[MSX2PEXT.ROM](bios/Microsoft/MSX/MSX2PEXT.ROM)** (16,384 bytes)
+  - SHA1: `fe0254cbfc11405b79e7c86c7769bd6322b04995`
+  - MD5: `7c8243c71d8f143b2531f01afa6a05dc`
+  - CRC32: `b8ba44d3`
+  - Also known as: `MSX2PEXT.rom`, `fs-a1wsx_msx2psub.rom`
+  - Platform names: Batocera: `fs-a1wsx_msx2psub.rom`, Recalbox: `MSX2PEXT.rom`
+- **[MSX2PMUS.rom](bios/Microsoft/MSX/MSX2PMUS.rom)** (16,384 bytes)
+  - SHA1: `6354ccc5c100b1c558c9395fa8c00784d2e9b0a3`
+  - MD5: `f877f32e6d8687474ac5ee83e40de23b`
+  - CRC32: `456e494e`
+- **[MSX2R.rom](bios/Microsoft/MSX/MSX2R.rom)** (32,768 bytes)
+  - SHA1: `0f851ee7a1cf79819f61cc89e9948ee72a413802`
+  - MD5: `db56360c85ef8410dc4bcf8e8602f61e`
+  - CRC32: `e7d08e29`
+- **[MSX2R2.ROM](bios/Microsoft/MSX/MSX2R2.ROM)** (32,768 bytes)
+  - SHA1: `ebb7eb540a390509edfd36c84288ba85e63f2d1f`
+  - MD5: `96ac231b718e88ce64d5a9b4a5e9ae12`
+  - CRC32: `d0c20f54`
+- **[MSX2REXT.rom](bios/Microsoft/MSX/MSX2REXT.rom)** (16,384 bytes)
+  - SHA1: `03bf6d2ac86f5c9ab618e155442787c700f99fed`
+  - MD5: `8e4af1124e2b82fbdc74a7bc5f20dc6e`
+  - CRC32: `34d21778`
+- **[MSX2SE.rom](bios/Microsoft/MSX/MSX2SE.rom)** (32,768 bytes)
+  - SHA1: `1b70a195a00b1fc4995766390f39d3ba884b5148`
+  - MD5: `fb8f7ab15e32a91147204bd7f7a1b451`
+  - CRC32: `5648eeeb`
+- **[MSX2SP.rom](bios/Microsoft/MSX/MSX2SP.rom)** (32,768 bytes)
+  - SHA1: `4811956f878c3e03da46317f787cdc4bebc86f47`
+  - MD5: `79caefa20a0d056fb42eaeca856c6f82`
+  - CRC32: `c2b889a5`
+- **[MSX2SPEXT.rom](bios/Microsoft/MSX/MSX2SPEXT.rom)** (16,384 bytes)
+  - SHA1: `1e9a955943aeea9b1807ddf1250ba6436d8dd276`
+  - MD5: `d71842ce8f559a8aed2721766bc15f2b`
+  - CRC32: `dc0951bd`
+- **[MSXAR.ROM](bios/Microsoft/MSX/MSXAR.ROM)** (32,768 bytes)
+  - SHA1: `5e094fca95ab8e91873ee372a3f1239b9a48a48d`
+  - MD5: `793e3b833c33be7aaf834beacb8fb926`
+  - CRC32: `bd95c436`
+- **[MSXBR.rom](bios/Microsoft/MSX/MSXBR.rom)** (32,768 bytes)
+  - SHA1: `d6720845928ee848cfa88a86accb067397685f02`
+  - MD5: `d13c1fc9ad4897c322f51aab3ad3b30d`
+  - CRC32: `efb4b972`
+- **[MSXDOS2.ROM](bios/Microsoft/MSX/MSXDOS2.ROM)** (65,536 bytes)
+  - SHA1: `c36c9e0f96738a340381e23b4f97245388801a46`
+  - MD5: `6418d091cd6907bbcf940324339e43bb`
+  - CRC32: `1c430991`
+- **[MSXDOS23.ROM](bios/Microsoft/MSX/MSXDOS23.ROM)** (65,536 bytes)
+  - SHA1: `0527fb75775caa76c7eca8d449938ace83d36e96`
+  - MD5: `56bf5b02fed377b7bb9d91f914965431`
+  - CRC32: `d25fc001`
+- **[MSXFR.rom](bios/Microsoft/MSX/MSXFR.rom)** (32,768 bytes)
+  - SHA1: `9eaad185efc8e224368d1db4949eb9659c26fb2c`
+  - MD5: `6f43d28ac4a69182c860c2db0e18ee6d`
+  - CRC32: `6e692fa1`
+- **[MSXG.rom](bios/Microsoft/MSX/MSXG.rom)** (32,768 bytes)
+  - SHA1: `38a645febd0e0fe86d594f27c2d14be995acc730`
+  - MD5: `4655329d3f37bf1a655d05f2abd1aa62`
+  - CRC32: `7e2b32dd`
+- **[MSXHAN.rom](bios/Microsoft/MSX/MSXHAN.rom)** (8,192 bytes)
+  - SHA1: `d41676fde0a3047792f93c4a41509b8749e55e74`
+  - MD5: `394efbc50fb7df1151130d8c162f85c3`
+  - CRC32: `938db440`
+- **[MSXJ.rom](bios/Microsoft/MSX/MSXJ.rom)** (32,768 bytes)
+  - SHA1: `df48902f5f12af8867ae1a87f255145f0e5e0774`
+  - MD5: `f005e55c680ba6e7b19f6d4dc8f73ce5`
+  - CRC32: `071135e0`
+- **[MSXKANJI.rom](bios/Microsoft/MSX/MSXKANJI.rom)** (32,768 bytes)
+  - SHA1: `dcc3a67732aa01c4f2ee8d1ad886444a4dbafe06`
+  - MD5: `9dfdebfaa6b547222a40aab8bb2e29f8`
+  - CRC32: `b4fc574d`
+  - Also known as: `fs-a1wsx_kanjibasic.rom`
+  - Platform names: Batocera: `fs-a1wsx_kanjibasic.rom`
+- **[MSXKR.rom](bios/Microsoft/MSX/MSXKR.rom)** (32,768 bytes)
+  - SHA1: `171b587bd5a947a13f3114120b6e7baca3b57d78`
+  - MD5: `c84f362c44192659273d45ae97462362`
+  - CRC32: `3ab0cd3b`
+- **[MSXR.rom](bios/Microsoft/MSX/MSXR.rom)** (32,768 bytes)
+  - SHA1: `4f3114e96d7b892911e3dccf1eece712be26f396`
+  - MD5: `0db9592930488259fc1a5c127215e784`
+  - CRC32: `5095ae3d`
+- **[MSXR2.rom](bios/Microsoft/MSX/MSXR2.rom)** (32,768 bytes)
+  - SHA1: `04990aa1c3a3fc7294ec884b81deaa89832df614`
+  - MD5: `704bdd980fa56c6be5c680358458eeeb`
+  - CRC32: `67872f40`
+  - Also known as: `MSXR2.ROM`
+  - Platform names: Recalbox: `MSXR2.ROM`
+- **[MSXSE.ROM](bios/Microsoft/MSX/MSXSE.ROM)** (32,768 bytes)
+  - SHA1: `87f4d0fa58cfe9cef818a3185df2735e6da6168c`
+  - MD5: `161cb768c52a13f5b38ba46e721b68c1`
+  - CRC32: `c8ccdaa0`
+- **[MSXSP.rom](bios/Microsoft/MSX/MSXSP.rom)** (32,768 bytes)
+  - SHA1: `342e7d4bd86f3351766f460f6de3c89a40791ee0`
+  - MD5: `51af5b19aeccf94eb8e03bce0b5d33c4`
+  - CRC32: `fed7506f`
+- **[MSXTR.ROM](bios/Microsoft/MSX/MSXTR.ROM)** (32,768 bytes)
+  - SHA1: `242e73d8284a012b275c0a266844ebbc4269d787`
+  - MD5: `fd9513736823e470965949f2a3ec6a43`
+  - CRC32: `937c8dbb`
+- **[MSXTREXT.ROM](bios/Microsoft/MSX/MSXTREXT.ROM)** (16,384 bytes)
+  - SHA1: `018d7a5222f28514908fb1b1513286a6558a6d05`
+  - MD5: `824b1c4475a3bd3b91c5ae81ea940aa2`
+  - CRC32: `70aea0fe`
+- **[MSXTRMUS.ROM](bios/Microsoft/MSX/MSXTRMUS.ROM)** (16,384 bytes)
+  - SHA1: `6aea1aef5ec31c1826c22edf580525f93baad425`
+  - MD5: `c688a229f834f95f8c64df7d33188cd8`
+  - CRC32: `f5f93437`
+- **[MSXTROPT.ROM](bios/Microsoft/MSX/MSXTROPT.ROM)** (16,384 bytes)
+  - SHA1: `b4433a3975c57dd440d6bf12dbd28b2ac1b90ef4`
+  - MD5: `2cba0d812ec445cfe63ffa2cac8d42c2`
+  - CRC32: `50d11f60`
+- **[Msx2pe.rom](bios/Microsoft/MSX/Machines/MSX2+%20-%20European/Msx2pe.rom)** (32,768 bytes)
+  - SHA1: `aea0e4a635efce5336e496d36e4cb0a4b79593ff`
+  - MD5: `277fd57c13f301fb4b366845a32d673a`
+  - CRC32: `76c46fe0`
+- **[Msx2pexte.rom](bios/Microsoft/MSX/Machines/MSX2+%20-%20European/Msx2pexte.rom)** (49,152 bytes)
+  - SHA1: `cf00ec60608010aac94cfe245eb7aa67cb44d110`
+  - MD5: `f78ab735aaad7045badbda8f4c8ac751`
+  - CRC32: `2852b383`
+- **[NATIONALDISK.rom](bios/Microsoft/MSX/NATIONALDISK.rom)** (16,384 bytes)
+  - SHA1: `78cd7f847e77fd8cd51a647efb2725ba93f4c471`
+  - MD5: `86269da485e852d9f581ac27f4ba32ff`
+  - CRC32: `1e7d6512`
+- **[NOVAXIS.rom](bios/Microsoft/MSX/NOVAXIS.rom)** (16,384 bytes)
+  - SHA1: `352ec8c99fe1397a88ecb3aee6dbb4d121c818e9`
+  - MD5: `20989124671593ab04eeb01d52a1e25c`
+  - CRC32: `ecf385f2`
+- **[PAINT.rom](bios/Microsoft/MSX/PAINT.rom)** (65,536 bytes)
+  - SHA1: `ace202e87337fbc54fea21e22c0b3af0abe6f4ae`
+  - MD5: `41db0d7b37be479296ffd59fcd6775f0`
+  - CRC32: `18956e3a`
+- **[PAINTER.ROM](bios/Microsoft/MSX/PAINTER.ROM)** (65,536 bytes)
+  - SHA1: `7fd2a28c4fdaeb140f3c8c8fb90271b1472c97b9`
+  - MD5: `403cdea1cbd2bb24fae506941f8f655e`
+  - CRC32: `1bda68a3`
+- **[PANASONICDISK.rom](bios/Microsoft/MSX/PANASONICDISK.rom)** (16,384 bytes)
+  - SHA1: `7ed7c55e0359737ac5e68d38cb6903f9e5d7c2b6`
+  - MD5: `00aa02b6077de40a0b51d71a3c3e1d5f`
+  - CRC32: `17fa392b`
+  - Also known as: `fs-a1wsx_disk.rom`
+  - Platform names: Batocera: `fs-a1wsx_disk.rom`
+- **[PHILIPSDISK.rom](bios/Microsoft/MSX/PHILIPSDISK.rom)** (16,384 bytes)
+  - SHA1: `c3efedda7ab947a06d9345f7b8261076fa7ceeef`
+  - MD5: `01dd1d72ed9bb6afe8a9b441c198a1cd`
+  - CRC32: `ca3307d3`
+- **[RS232.ROM](bios/Microsoft/MSX/RS232.ROM)** (16,640 bytes)
+  - SHA1: `7aec0134ad6a5177f4056fcb6047083e8e00529b`
+  - MD5: `279efd1eae0d358eecd4edc7d9adedf3`
+  - CRC32: `ab6874f8`
+  - **Variants** (1 alternate versions):
+    - [RS232.ROM.4e9384c9](bios/Microsoft/MSX/.variants/RS232.ROM.4e9384c9) (8,192 bytes) - SHA1: `4e9384c9d137f0ab65ffc5a78f04cd8c9df6c8b7`, MD5: `55cca200bbbdd0a1ec5c9d70966c05c0`
+- **[RS232.ROM.4e9384c9](bios/Microsoft/MSX/.variants/RS232.ROM.4e9384c9)** (8,192 bytes)
+  - SHA1: `4e9384c9d137f0ab65ffc5a78f04cd8c9df6c8b7`
+  - MD5: `55cca200bbbdd0a1ec5c9d70966c05c0`
+  - CRC32: `3353dcc6`
+  - Platform names: Recalbox: `RS232.ROM`
+- **[SUNRISEIDE.rom](bios/Microsoft/MSX/SUNRISEIDE.rom)** (65,536 bytes)
+  - SHA1: `1c79c8fcfd661394f91be94b218955c84cabd742`
+  - MD5: `7b564497beb2c0de0847f107dec00ddf`
+  - CRC32: `c3438b15`
+- **[SVI603.ROM](bios/Microsoft/MSX/Machines/COL%20-%20Spectravideo%20SVI-603%20Coleco/SVI603.ROM)** (8,192 bytes)
+  - SHA1: `8a30abe5ffef810b0f99b86db38b1b3c9d259b78`
+  - MD5: `c60a2e85572c0ccb69505a7646d5c1b6`
+  - CRC32: `19e91b82`
+- **[SWP.rom](bios/Microsoft/MSX/SWP.rom)** (32,768 bytes)
+  - SHA1: `4b4508131dca6d811694ae6379f41364c477de58`
+  - MD5: `490db04e2a3c1c993a2a9d3611949c76`
+  - CRC32: `076f40fc`
+- **[Shared.txt](bios/Microsoft/MSX/Machines/Shared%20Roms/Shared.txt)** (41 bytes)
+  - SHA1: `ab5c9feccc785871d3ba86165f05b15159361273`
+  - MD5: `a9e1ab3604e2e7d54988125ea841cd63`
+  - CRC32: `71689ec0`
+- **[XBASIC2.rom](bios/Microsoft/MSX/XBASIC2.rom)** (16,384 bytes)
+  - SHA1: `47370bec7ca1f0615a54eda548b07fbc0c7ef398`
+  - MD5: `0b6120f289336538bc564548109f97c6`
+  - CRC32: `2825b1a0`
+- **[cbios.txt](bios/Microsoft/MSX/Machines/MSX%20-%20C-BIOS/cbios.txt)** (8,924 bytes)
+  - SHA1: `1152f3e3eff0afac2143d478f157fd26c7466e6e`
+  - MD5: `86065454ad150f78acb1ea3d2b4659c0`
+  - CRC32: `582c06d2`
+- **[cbios_logo_msx1.rom](bios/Microsoft/MSX/Machines/MSX%20-%20C-BIOS/cbios_logo_msx1.rom)** (16,384 bytes)
+  - SHA1: `95fe138745f5e627b021085c7e4629a6dfe6f93a`
+  - MD5: `25b5cdea5040883a206b89845cdf55f1`
+  - CRC32: `f969e424`
+- **[cbios_logo_msx2+.rom](bios/Microsoft/MSX/Machines/MSX2+%20-%20C-BIOS/cbios_logo_msx2+.rom)** (16,384 bytes)
+  - SHA1: `6e55cfc48d0d6ee57b041cb09427f614fb6a1910`
+  - MD5: `462d6ecb52a8c35dd7d48c2d46687f14`
+  - CRC32: `1c7429c6`
+- **[cbios_logo_msx2.rom](bios/Microsoft/MSX/Machines/MSX2%20-%20C-BIOS/cbios_logo_msx2.rom)** (16,384 bytes)
+  - SHA1: `6fc989ae715fe8492700a9d15934113d910aed36`
+  - MD5: `659db9142e62c51f2f75fd52fac78e44`
+  - CRC32: `4c5485aa`
+- **[cbios_main_msx1.rom](bios/Microsoft/MSX/Machines/MSX%20-%20C-BIOS/cbios_main_msx1.rom)** (32,768 bytes)
+  - SHA1: `a49bcf7a5a1115815f730782a1fd7d1c79ce29e7`
+  - MD5: `87b27f48cc25e2b6f749c019587d5f23`
+  - CRC32: `f0050785`
+- **[cbios_main_msx2+.rom](bios/Microsoft/MSX/Machines/MSX2+%20-%20C-BIOS/cbios_main_msx2+.rom)** (32,768 bytes)
+  - SHA1: `c5edc3b289dea120fe60ad38596a51c2e28838aa`
+  - MD5: `0a34c660614ead31dab78638ce7745e9`
+  - CRC32: `ae23c039`
+- **[cbios_main_msx2.rom](bios/Microsoft/MSX/Machines/MSX2%20-%20C-BIOS/cbios_main_msx2.rom)** (32,768 bytes)
+  - SHA1: `0808d0486f77a44d3aa08cd77828a3748a356b8d`
+  - MD5: `98b94c2d99066f272bb5de07778f7fd1`
+  - CRC32: `ec2fe089`
+- **[cbios_music.rom](bios/Microsoft/MSX/Machines/MSX2+%20-%20C-BIOS/cbios_music.rom)** (16,384 bytes)
+  - SHA1: `5c5eb001e6a1fe29edb7abd428a3967bb388e5db`
+  - MD5: `e09783c4ec6d4770c5395c42bb0e1d91`
+  - CRC32: `15c6ce2b`
+- **[cbios_sub.rom](bios/Microsoft/MSX/Machines/MSX2%20-%20C-BIOS/cbios_sub.rom)** (16,384 bytes)
+  - SHA1: `565143f7c6fe0ffa12ec3069048113f44759d91a`
+  - MD5: `9dd9a69432cc116d0f1d4ec7a51053e0`
+  - CRC32: `f7a597e1`
+- **[config.ini](bios/Microsoft/MSX/Machines/COL%20-%20Bit%20Corporation%20Dina/config.ini)** (421 bytes)
+  - SHA1: `33c1dbf723ddff0994aa56d7607e5b0e9757c9c5`
+  - MD5: `496751f95950f4ba240479e454f9bf00`
+  - CRC32: `ad177b1c`
+- **[config.ini](bios/Microsoft/MSX/Machines/COL%20-%20ColecoVision/config.ini)** (347 bytes)
+  - SHA1: `0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e`
+  - MD5: `8ed74c95dcaad0d714e1734c82159119`
+  - CRC32: `d3de69d9`
+- **[config.ini](bios/Microsoft/MSX/Machines/COL%20-%20ColecoVision%20with%20Opcode%20Memory%20Extension/config.ini)** (394 bytes)
+  - SHA1: `a6d5df689e8263b3cd1870c287132a767e30bb78`
+  - MD5: `fbf084848c822891684c5791d190a5c2`
+  - CRC32: `4233f38d`
+- **[config.ini](bios/Microsoft/MSX/Machines/COL%20-%20Spectravideo%20SVI-603%20Coleco/config.ini)** (362 bytes)
+  - SHA1: `930e778317ea802a848f596e0054ec46375d53c6`
+  - MD5: `0622c054e44d55649a1bcfa35c1b1254`
+  - CRC32: `f8b7f23b`
+- **[config.ini](bios/Microsoft/MSX/Machines/Forte%20II%20Games%20-%20Pesadelo/config.ini)** (364 bytes)
+  - SHA1: `3f56cdf8736a9e1d2d1e0dadefb8c19786aff01b`
+  - MD5: `ea55e8981db21b6e4322ff53e2149421`
+  - CRC32: `d2803680`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX/config.ini)** (408 bytes)
+  - SHA1: `483b2c34fcb3ddcf650314e45104f358ef74c98b`
+  - MD5: `98501fb5bd45bb5995f1f1ddb4fe520c`
+  - CRC32: `fb7ea5d9`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Al%20Alamiah%20AX-170/config.ini)** (426 bytes)
+  - SHA1: `cff532d00a2cb17548348f492bc520d346e4a045`
+  - MD5: `443526e576c008ac16881e637bc30a16`
+  - CRC32: `f9fe3f94`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Arabic/config.ini)** (459 bytes)
+  - SHA1: `f782ca81dde6a0c80f58289e83a1af59ea1d40ee`
+  - MD5: `b925034360e13d44623449f337bd517f`
+  - CRC32: `e0f1c37d`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Brazilian/config.ini)** (411 bytes)
+  - SHA1: `bc70db412a9677ebbbab4b565ef6d2c85b259db2`
+  - MD5: `fb15adbcf2e9dfc97f761931a7926eb6`
+  - CRC32: `eafc0ceb`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20C-BIOS/config.ini)** (424 bytes)
+  - SHA1: `0f232bd2d7410baf3ccd158b4348a0e0f1e44e71`
+  - MD5: `2106d77a87f334c3bf7d6e11526d51ff`
+  - CRC32: `34c4378c`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Canon%20V-10/config.ini)** (363 bytes)
+  - SHA1: `eb287d4eae5d90f47e7ba8f94b430e2e52c61249`
+  - MD5: `303a7e804bb5dd2e623737b733325043`
+  - CRC32: `9ac28de1`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Canon%20V-20/config.ini)** (363 bytes)
+  - SHA1: `37ca9bac21eacbc012a80219d15381d757bcfb14`
+  - MD5: `b2044d513692bec22c3a6fd1c922c29d`
+  - CRC32: `a859dd0b`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Daewoo%20DPC-100/config.ini)** (425 bytes)
+  - SHA1: `c989cb1bb632a1482298c234a4a76a3f94282390`
+  - MD5: `a34ef58f30cc7f5aa5386385665e538b`
+  - CRC32: `77a5003f`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Daewoo%20DPC-180/config.ini)** (425 bytes)
+  - SHA1: `1a033e4508e549421c94f83473de8dbd3aba834d`
+  - MD5: `061163886469279a1c45d3fd1ce7fbeb`
+  - CRC32: `09b64445`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Daewoo%20DPC-200/config.ini)** (425 bytes)
+  - SHA1: `ed5fdda9435c4c4cbb96b5231032f0e7128ec542`
+  - MD5: `d5c38321e43f6ea29f0cacada86836f7`
+  - CRC32: `29b291cd`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Daewoo%20DPC-200E/config.ini)** (372 bytes)
+  - SHA1: `0f6b7cd53ce79a577988f2341335bff24ad90f1f`
+  - MD5: `dcd690ca386e0eec71a3f314c7d53421`
+  - CRC32: `20643071`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Estonian/config.ini)** (411 bytes)
+  - SHA1: `c7bb8d863582e68650c3a0090369b626fbc3b7de`
+  - MD5: `1f3f76fe5d34ef1f8a3eaeb6e27bbfa3`
+  - CRC32: `b1844936`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Frael%20Bruc%20100-1/config.ini)** (371 bytes)
+  - SHA1: `99d5ec793bb00f1ee9f7bb856492da82f3e4858b`
+  - MD5: `4deb67abd14f890e3afb6c028b37da8d`
+  - CRC32: `f91ee238`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20French/config.ini)** (410 bytes)
+  - SHA1: `c375acc521b0df362faab7745e0f35acde92a85e`
+  - MD5: `55675b187b3c35a477a169c077e1805d`
+  - CRC32: `4a086035`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20German/config.ini)** (409 bytes)
+  - SHA1: `b3017e7d79ca0634bb313dd469852789610a4548`
+  - MD5: `75541f9a4c4126edb2362d816b05d00f`
+  - CRC32: `fe7aa493`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Goldstar%20FC-200/config.ini)** (372 bytes)
+  - SHA1: `eab1c23bd2e6ace8ef38e048ec71ccedb46c857d`
+  - MD5: `35a348fd662754bfd9eba62ae5d5d874`
+  - CRC32: `acf2101e`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Gradiente%20Expert%201.0/config.ini)** (375 bytes)
+  - SHA1: `69ce8179babc5f2e446fa86c94dfbc9b4da67d37`
+  - MD5: `60295caa45190888a31bde42eee615c5`
+  - CRC32: `d6104239`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Gradiente%20Expert%201.1/config.ini)** (375 bytes)
+  - SHA1: `fd9c7514639efceac987d6d492353b9982470a61`
+  - MD5: `2dff90d68a0b96444a66b861879ffcdc`
+  - CRC32: `fb9e90b4`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Gradiente%20Expert%201.3/config.ini)** (375 bytes)
+  - SHA1: `099a128c2d077673dc7db5454727922486c83895`
+  - MD5: `a1f13100e0d1b1e5090e70e21a16dc1d`
+  - CRC32: `b7f821ed`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Gradiente%20Expert%20DDPlus/config.ini)** (446 bytes)
+  - SHA1: `042d579bed20c0ef64f8128ec782b5057708dd23`
+  - MD5: `919e4290bb8672c0729bb467c5180899`
+  - CRC32: `01f45d95`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Gradiente%20Expert%20Plus/config.ini)** (442 bytes)
+  - SHA1: `d8b53c972cb1559298f83fec9fd9913e724ba129`
+  - MD5: `06ed665b34001401a4e65ff74ee3f222`
+  - CRC32: `f15a946b`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20JVC%20HC-7GB/config.ini)** (367 bytes)
+  - SHA1: `4cdeb73232ad5887fcee0259db5e5a1354848018`
+  - MD5: `49d30acdeccac1f2edbabedcb85d4859`
+  - CRC32: `8a857a78`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Japanese/config.ini)** (411 bytes)
+  - SHA1: `1f2f42a3c5d8471da652bcf2a9b620798487cf11`
+  - MD5: `a7b19e8b12ce1a292b0bfc6e0d48425a`
+  - CRC32: `6c4d184c`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Korean/config.ini)** (460 bytes)
+  - SHA1: `718dceb5ffb6294ce5a179848cf862fc0d72ad71`
+  - MD5: `3f9b143d1740391358a273e9cab7f723`
+  - CRC32: `77cf5559`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Mitsubishi%20ML-F80/config.ini)** (374 bytes)
+  - SHA1: `b71e6a9b1ad1a325d680dfee53b86a4b507118a3`
+  - MD5: `583207b66a47ec07b2cca99f579931a8`
+  - CRC32: `d08091c7`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Mitsubishi%20ML-FX1/config.ini)** (374 bytes)
+  - SHA1: `578be282f58a280bc3706950f950d9c4650d6113`
+  - MD5: `bbf42e6f2a97759412fce64e0b42b1bb`
+  - CRC32: `70c19a2f`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20National%20CF-1200/config.ini)** (360 bytes)
+  - SHA1: `a8208695f82b96b797c58b508b5b788199a83427`
+  - MD5: `cf29d099b1d7f774b2e229ded7b0ed6f`
+  - CRC32: `c562617e`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20National%20CF-2000/config.ini)** (360 bytes)
+  - SHA1: `95781d184bc5d8e310fa22bf94e0b7ddb89bdf86`
+  - MD5: `1c4c478866542b5d7ee75df7ff717160`
+  - CRC32: `837ea63c`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20National%20CF-2700/config.ini)** (360 bytes)
+  - SHA1: `6f7f3c9a4ae8beb60a54d98a15ec6001ba1f211e`
+  - MD5: `30d4035d799dc261fdc29ea918b398cb`
+  - CRC32: `7459599d`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20National%20CF-3000/config.ini)** (360 bytes)
+  - SHA1: `9241d9b114d514cd9d5957203b43818ad29c6d16`
+  - MD5: `cba9693441cfa310e6d644ba8bb6ee56`
+  - CRC32: `ae4dc8be`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20National%20CF-3300/config.ini)** (422 bytes)
+  - SHA1: `8a060b6169b87a524fd8d2fc8b8b47ac0f8368b9`
+  - MD5: `dd40b80a3f55d801fd59f230ef1c9da2`
+  - CRC32: `347d5889`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20National%20FS-1300/config.ini)** (360 bytes)
+  - SHA1: `d2a894d58428246ee2d1fc16d89bfd04659ab35f`
+  - MD5: `de4e6dc535359e902429614a3f2b8733`
+  - CRC32: `f57712ce`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20National%20FS-4000/config.ini)** (544 bytes)
+  - SHA1: `73f60e3d7c83f87ce3f6ff85ea94960bc3425316`
+  - MD5: `7f9ecd9439b02321dd0bfd6c7fc95250`
+  - CRC32: `c5e03f68`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Olympia%20PHC-2/config.ini)** (367 bytes)
+  - SHA1: `4364432d0a1ad21ce06705052248b1df8dd9052d`
+  - MD5: `04aeefa9a623c51da7d1c58c8dcb9e26`
+  - CRC32: `b6eeb005`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Olympia%20PHC-28/config.ini)** (369 bytes)
+  - SHA1: `b15daf568e6e6b29e4c0ce4674a6389f81589b2d`
+  - MD5: `9aa760f7d925399635f9f8d267a0dc0f`
+  - CRC32: `102592bf`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Panasonic%20CF-2700G/config.ini)** (363 bytes)
+  - SHA1: `d14db70e8200b2829aba83f724d104b7247a9626`
+  - MD5: `5ea458250339d0c1c33d67ada3f8ffa3`
+  - CRC32: `3c90a508`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Philips%20NMS-801/config.ini)** (350 bytes)
+  - SHA1: `db6516ac9fd99e47ca9c68c66260d053b4316e30`
+  - MD5: `ed761c105612e7bbdfda8cce9d4ea219`
+  - CRC32: `302e63e8`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Philips%20VG-8000/config.ini)** (342 bytes)
+  - SHA1: `347c24c34caab687856a7dcbb4404046c5af1b34`
+  - MD5: `fd10cabf36ec82a2bbdfbf0d99f78a91`
+  - CRC32: `f88548e0`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Philips%20VG-8010/config.ini)** (342 bytes)
+  - SHA1: `c5ab3e58e7e1ed861af60e4161ce6164af1e36be`
+  - MD5: `351e6bfea5c2103ad5748fab529f8954`
+  - CRC32: `960cac22`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Philips%20VG-8010F/config.ini)** (344 bytes)
+  - SHA1: `ad03d600d5b8e4047477efb817e6625ff064d414`
+  - MD5: `901ce9531bc4be0b0e0d26b4f394f7c6`
+  - CRC32: `51957b67`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Philips%20VG-8020-00/config.ini)** (365 bytes)
+  - SHA1: `10353870ff25664b46826ebc4d074467034cbbec`
+  - MD5: `1ecc77a90b6e598a94069b44bcc3754c`
+  - CRC32: `111c72af`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Philips%20VG-8020-20/config.ini)** (381 bytes)
+  - SHA1: `d69b93fad3a65c27977b82695087139b3843b3b3`
+  - MD5: `fe28d629f34437e3b26e7b8d9354e249`
+  - CRC32: `388304d6`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Philips%20VG-8020F/config.ini)** (377 bytes)
+  - SHA1: `3f00f566202992941f082c9748442c8fd08e5671`
+  - MD5: `5a02902a25da58826b3b3f5db64ac647`
+  - CRC32: `fb6cac1c`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Pioneer%20PX-7/config.ini)** (414 bytes)
+  - SHA1: `1a3a35acaf1186104b0792c9cb0b52e45ad5d869`
+  - MD5: `a9fabec1af1f20906a04a3751d4a18e5`
+  - CRC32: `7d61c164`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Pioneer%20PX-V60/config.ini)** (422 bytes)
+  - SHA1: `fc0aff559469ba63c7ebe2e22065f510212df6a5`
+  - MD5: `b3d52b1a247bcd45cde371f3994e0ab6`
+  - CRC32: `3f258628`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Russian/config.ini)** (410 bytes)
+  - SHA1: `cc393b4c73273a6710068d4dc7d16952d55a56f7`
+  - MD5: `6d318d7145545fe18375091357e73659`
+  - CRC32: `d5329647`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Sanyo%20MPC-100/config.ini)** (369 bytes)
+  - SHA1: `6fb3f394904d0c50e595f1df22cfaf7955ccaaa2`
+  - MD5: `eaf627e1a5b339618f84d32b22b2b200`
+  - CRC32: `c72bae29`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Sanyo%20MPC-64/config.ini)** (367 bytes)
+  - SHA1: `dc033c3b50f9b5921faa58af3e6382f05210f00b`
+  - MD5: `1eb0e05afa6ab1f92d7b6fa01f1f4de5`
+  - CRC32: `1ce7a6af`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Sanyo%20PHC-28L/config.ini)** (366 bytes)
+  - SHA1: `921d3ff67ecb870098a86ae5f8022d4858aaed3b`
+  - MD5: `2915964c29a287bc8f1c1bf9a0b959fd`
+  - CRC32: `dfacbf5e`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Sanyo%20PHC-28S/config.ini)** (366 bytes)
+  - SHA1: `1a0df568997ce23d8eeb5985d74295a87de37843`
+  - MD5: `4c3ef93d9b09627b7f1a5fb2badddf24`
+  - CRC32: `98842945`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Sanyo%20Wavy%20MPC-10/config.ini)** (362 bytes)
+  - SHA1: `c7a0b2f43ae2ae5ab4c7d3b39d5915a648792516`
+  - MD5: `7c1dfb85af6ea9b15483c63c5fdf384a`
+  - CRC32: `41b32477`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Sharp%20Epcom%20HotBit%201.1/config.ini)** (376 bytes)
+  - SHA1: `4df2c7c7acbb7287944df64479ac327d262efb70`
+  - MD5: `85b99a8b5b7155fa8fe44000c84b69a9`
+  - CRC32: `ca568852`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Sharp%20Epcom%20HotBit%201.2/config.ini)** (376 bytes)
+  - SHA1: `117cb4dcbc2ff443fced1aa81f8e46ae4d013e96`
+  - MD5: `556fd234f4b8b939ef2b1470907f937b`
+  - CRC32: `22b6e359`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Sharp%20Epcom%20HotBit%201.3b/config.ini)** (378 bytes)
+  - SHA1: `02b44e3ca7a9a187012e0669fdc087117f2319a5`
+  - MD5: `9e304d760602424e43b2e8398e51f378`
+  - CRC32: `bf6beb70`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Sharp%20Epcom%20HotBit%201.3p/config.ini)** (368 bytes)
+  - SHA1: `213641733001bea40d323ed1f8054cdafc9bcee2`
+  - MD5: `f2b4682473be9fba29ce04d9a6a96a74`
+  - CRC32: `e2677af7`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Sony%20HB-10P/config.ini)** (388 bytes)
+  - SHA1: `32b04756b3bec58ecd88910ec1ea5e45754d95b7`
+  - MD5: `cf4f0d4ce65ec97a7ea655407af48179`
+  - CRC32: `ed471739`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Sony%20HB-201/config.ini)** (444 bytes)
+  - SHA1: `c715982aa811b9d9d8e801ab9f5e8d784ff93a46`
+  - MD5: `ef65fc7c33806162af8b9059309332e1`
+  - CRC32: `8fe12434`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Sony%20HB-201P/config.ini)** (448 bytes)
+  - SHA1: `c353f4d7f8cf0ee58782882d73dbbb8bf41097f9`
+  - MD5: `aa04a57cb87b6a11e584a0f9ebce047e`
+  - CRC32: `6fab5ee0`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Sony%20HB-20P/config.ini)** (388 bytes)
+  - SHA1: `e6505cf68a9942b6648fa87c812d931cb3b5c2d3`
+  - MD5: `3e414479d312b0a09e628f33703e2f1d`
+  - CRC32: `b50f35db`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Sony%20HB-501P/config.ini)** (390 bytes)
+  - SHA1: `8e8a2aca5ef380b1a6ce9d652cf452db18c1ffb2`
+  - MD5: `22ddcfb504a42962c18e00b5b27938eb`
+  - CRC32: `301881e4`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Sony%20HB-55D/config.ini)** (420 bytes)
+  - SHA1: `9695c4dc48e63b9acee5c0d40a6e01849ffcc3bb`
+  - MD5: `117f9065becc230bcac2c2697d64388e`
+  - CRC32: `9b6d45ea`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Sony%20HB-55P/config.ini)** (410 bytes)
+  - SHA1: `5798acb86557a676a6e92c61948f0dec23886a83`
+  - MD5: `e8008ed2668c9612fc0e72115557692b`
+  - CRC32: `62d74324`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Sony%20HB-75D/config.ini)** (420 bytes)
+  - SHA1: `3405ea76acf361788e905d7a7e382c8cb01c9f3e`
+  - MD5: `ef25834ad8cba5a77a66a171074119e3`
+  - CRC32: `c7c00a93`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Sony%20HB-75P/config.ini)** (420 bytes)
+  - SHA1: `7a234f193625f3daa2bfdf1b4ecd64910a5e73f0`
+  - MD5: `b40b186f718eb61e121d3e135505e15a`
+  - CRC32: `f7a2eb39`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Spanish/config.ini)** (410 bytes)
+  - SHA1: `5641c9b3167a438d3a7ac4695116d3bfb12eabfd`
+  - MD5: `9d858780032cfa6bc3e7d0b0d526dcb6`
+  - CRC32: `0fe6f34c`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Spectravideo%20SVI-728/config.ini)** (440 bytes)
+  - SHA1: `2ab1cdfa6169ee2d9021137410676a24ca3fa9be`
+  - MD5: `a2b238f5507e13a7b7a9edadede476da`
+  - CRC32: `3a44e91f`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Spectravideo%20SVI-738/config.ini)** (502 bytes)
+  - SHA1: `f98f9e4a32f85187f91117177663e51c7a8c2ae0`
+  - MD5: `e1ccfd1d7e4765e74fe6ccdf152a4e9e`
+  - CRC32: `b123eb6d`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Spectravideo%20SVI-738%20Henrik%20Gilvad/config.ini)** (546 bytes)
+  - SHA1: `2afd2a06067aa847b09b81de59305ea29e6d902d`
+  - MD5: `9984a9615309f8b0fd77fe468c08fa60`
+  - CRC32: `5b607874`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Spectravideo%20SVI-738%20Swedish/config.ini)** (532 bytes)
+  - SHA1: `6e4f708ad9f203751afac2597177287d40045bf5`
+  - MD5: `780273d30afb7764d4b08f338f481432`
+  - CRC32: `9118ad4e`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Swedish/config.ini)** (410 bytes)
+  - SHA1: `3a416bfe651475ce0ad1ce6bd2dfa5e48df26eac`
+  - MD5: `614d44596f10001acc2ddaa9b20e398c`
+  - CRC32: `779b3baa`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Talent%20DPC-200/config.ini)** (370 bytes)
+  - SHA1: `2a1056f50cd842a5bf66e5f8f1daae5f1681db68`
+  - MD5: `ebb98f6223985963133d8b0e7ecacaf5`
+  - CRC32: `075f91d6`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Talent%20DPC-200A/config.ini)** (369 bytes)
+  - SHA1: `1bb388ef31a9b8b0a06268159ab9408e47f1c464`
+  - MD5: `a1efd35a690e8deff1c0431e1ab5a8b9`
+  - CRC32: `57af5392`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Toshiba%20HX-10/config.ini)** (369 bytes)
+  - SHA1: `ab08688dbe3409ab6f01ad0f60c323250dbed173`
+  - MD5: `40a28060672ce962b563db76ef87e7da`
+  - CRC32: `34c70da4`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Toshiba%20HX-10S/config.ini)** (371 bytes)
+  - SHA1: `61ab8b6b61ae9dc884fbd97f2c740ea6440441c1`
+  - MD5: `27b67fde8aac2a43d171be40d2ec41e3`
+  - CRC32: `f77f58fd`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Toshiba%20HX-20/config.ini)** (446 bytes)
+  - SHA1: `ba497e1c98c10638a3cb76be16d5168e87338da9`
+  - MD5: `c95a3c7d736ddd88d27d9fa388f45b53`
+  - CRC32: `6889993b`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Yamaha%20CX5M-1/config.ini)** (430 bytes)
+  - SHA1: `79f9b2a149b5640a260c0af1ee0c4ab972c60e74`
+  - MD5: `4df689f47c2ac685e302629b120c6335`
+  - CRC32: `0039cbde`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Yamaha%20CX5M-128/config.ini)** (558 bytes)
+  - SHA1: `fc5b1f3aaec25ead14eb9b74b187ba4a5d62eebf`
+  - MD5: `aa38d15d8ad2c3fa1d116adf14e3c2ab`
+  - CRC32: `b3e1ecae`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Yamaha%20CX5M-2/config.ini)** (430 bytes)
+  - SHA1: `d83782fb25c4fc73697cc8137dc71ef68258682d`
+  - MD5: `b467beca81fd9faa04a3d48413df53fb`
+  - CRC32: `bfe16742`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Yamaha%20CX5MII/config.ini)** (478 bytes)
+  - SHA1: `aae207dba987e699ff5b9d58de2569dc570a2900`
+  - MD5: `dcb40987b978b4160f4a48ab12d89019`
+  - CRC32: `baa6720e`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Yamaha%20YIS303/config.ini)** (365 bytes)
+  - SHA1: `aeef4cba14b6cbdbab2c3f0252bec86956a503ad`
+  - MD5: `e377cdab0ebcb7ec7245e046a0ed0f3f`
+  - CRC32: `e3c8308d`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Yamaha%20YIS503/config.ini)** (365 bytes)
+  - SHA1: `a430b9300a5ae9b0584113714a3d94b73ccfc455`
+  - MD5: `90927225106ffe3e015c34392aa64c88`
+  - CRC32: `513b3d55`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Yamaha%20YIS503F/config.ini)** (367 bytes)
+  - SHA1: `ca0418d9f87b0f7161fbcc2bdcc7e355e7e69503`
+  - MD5: `ebf6d6bc7a8d1cb9b55542e9c63c7aa6`
+  - CRC32: `f5339b4d`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Yamaha%20YIS503II/config.ini)** (367 bytes)
+  - SHA1: `479f333a72c7e3de935d1230c66d92594c2876f7`
+  - MD5: `ac96b4ce3285d31db7c02034b9046db2`
+  - CRC32: `6b90864e`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Yamaha%20YIS503IIR/config.ini)** (502 bytes)
+  - SHA1: `440d02ed098d2d5d847dc5b785c6bd3eae27720f`
+  - MD5: `1e88e128a9c3aa2600140bd80a07fa4b`
+  - CRC32: `3209d68f`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Yamaha%20YIS503IIR%20Estonian/config.ini)** (530 bytes)
+  - SHA1: `471db782f1b7e85d332ce88ebbdcd12f92d75a60`
+  - MD5: `4df0c5ee5167c505a65af1d857cdf217`
+  - CRC32: `fca636b9`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Yamaha%20YIS503M/config.ini)** (435 bytes)
+  - SHA1: `fbccedb75c77953ed9d5b87ddc8b0c3991d33be4`
+  - MD5: `326aba10fbf9b3f00010dfb3d74345f2`
+  - CRC32: `ed147bd7`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Yashica%20YC-64/config.ini)** (367 bytes)
+  - SHA1: `dd009df24ad82298d982a1ddc86ea5556a8a920a`
+  - MD5: `d0df7e57c78a32e6bb8ede6ac65c918c`
+  - CRC32: `c581cc8f`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Yeno%20DPC-64/config.ini)** (366 bytes)
+  - SHA1: `a69458fc93a73592eabebd7c8ab9b25372b9cc63`
+  - MD5: `b7fc9d5696411b340a5c60212b37fdd7`
+  - CRC32: `dd81f0b1`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX%20-%20Yeno%20MX64/config.ini)** (365 bytes)
+  - SHA1: `8185bb8361fe9aeb4c1cb8483bfcbbe1ff5ac10a`
+  - MD5: `b81e4fb3429ec9894711a540a7ee706c`
+  - CRC32: `b3f889b5`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2/config.ini)** (649 bytes)
+  - SHA1: `460ded0dbfc0285490da87a446b0321b6496aa5b`
+  - MD5: `c616cfad5eba7ac99b03bc2d40ac669b`
+  - CRC32: `11543fa2`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Al%20Alamiah%20AX-350/config.ini)** (710 bytes)
+  - SHA1: `e78ebeb26ec3672ca98e696cfea16ce79a2e21a1`
+  - MD5: `8aca07b7add1867c6492888b04b59384`
+  - CRC32: `42e63ed1`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Al%20Alamiah%20AX-370/config.ini)** (703 bytes)
+  - SHA1: `a07c82b456814d0f95029500661f3db2c02ea611`
+  - MD5: `16b3f5e833de2f0179746e92e3718144`
+  - CRC32: `8a8e9736`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Arabic/config.ini)** (809 bytes)
+  - SHA1: `66141cc07c768bed0370bb6fe7df3e4bdd80ab77`
+  - MD5: `4959854e6184c1108de69e0bb617365a`
+  - CRC32: `9c397eb5`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Brazilian/config.ini)** (652 bytes)
+  - SHA1: `505cd7f8cb1e5afc2a8fd8b0937686b8d4546572`
+  - MD5: `1af4a2b55599048452d9c6d73c4dc4db`
+  - CRC32: `b0259ab1`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20C-BIOS/config.ini)** (503 bytes)
+  - SHA1: `a8f33b4b8cb07449706d5e701badff1808f02415`
+  - MD5: `f9d905f8f18f94ad25adef25fa2ab920`
+  - CRC32: `080b6b1e`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Daewoo%20CPC-300/config.ini)** (509 bytes)
+  - SHA1: `ff9325fbe2da1bb36979cb0a187391b210bb8e0f`
+  - MD5: `59572ba87c2b04f0c4fb27e30d9cb5b2`
+  - CRC32: `52530ccc`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Daewoo%20CPC-300E/config.ini)** (514 bytes)
+  - SHA1: `12e560b28a75fcd78819078ec141edf6b91742f2`
+  - MD5: `facaf93b411b38246dc86032f7dcabe7`
+  - CRC32: `e2832ae3`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Daewoo%20CPC-400/config.ini)** (628 bytes)
+  - SHA1: `4b7e4693dc160ece61b0bc5cd5b0b81042824b25`
+  - MD5: `d910f354cb1cec0578885d3c4ca44872`
+  - CRC32: `9af2e00a`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Daewoo%20CPC-400S/config.ini)** (638 bytes)
+  - SHA1: `6dc8cb156bbdf75761f0f28d2535fd4e07fa3371`
+  - MD5: `03c1c3984f6dd43d0df763707b5ece54`
+  - CRC32: `8d968a40`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Estonian/config.ini)** (657 bytes)
+  - SHA1: `e1f2b54ca864981af9fd9f60a6e06102293aefa0`
+  - MD5: `98280bf171c99dedc6892f4e0bec868c`
+  - CRC32: `19952725`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20French/config.ini)** (657 bytes)
+  - SHA1: `341cc08dfecb5bc1ed06b0f0f8d40efe5424e8f0`
+  - MD5: `4acfcff93020bfdc373a2c933de10c87`
+  - CRC32: `a64ff87b`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20German/config.ini)** (655 bytes)
+  - SHA1: `046ba0eb76348827e0a3e2d2de289ff94e0970a5`
+  - MD5: `e349db2db7b69db0baedbf248d048a37`
+  - CRC32: `bcb1d3b4`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Gradiente%20Expert%202.0/config.ini)** (579 bytes)
+  - SHA1: `c9f67f2d2a8d7a65b3ced09a2392e921afa6f7f1`
+  - MD5: `af5efc299c663bf56e09fb04fc8327bb`
+  - CRC32: `df6daf1a`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Japanese/config.ini)** (774 bytes)
+  - SHA1: `10787827a4446712640dfc0c445d81edf71cf15f`
+  - MD5: `c1ea670df9893d7f4bb3de8b618b71f7`
+  - CRC32: `17fc45d5`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Korean/config.ini)** (775 bytes)
+  - SHA1: `d4832afd2c34dec7300e7ab80ee7a8a921769bb9`
+  - MD5: `08a52a23c80a15077f6232ddc305a6ff`
+  - CRC32: `f0f95424`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20National%20FS-4500/config.ini)** (1,031 bytes)
+  - SHA1: `20b751a66b6970561617194fdd64808f1186a286`
+  - MD5: `3018367b6eb9ef153b2eed55e376bfc0`
+  - CRC32: `d28a3906`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20National%20FS-4600/config.ini)** (885 bytes)
+  - SHA1: `4b0248cc9d444b7a122c3e8d2e2e1975e15ebb10`
+  - MD5: `5e2e5dbfbae86930f43936563e8a4fcd`
+  - CRC32: `71b23192`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20National%20FS-4700/config.ini)** (1,092 bytes)
+  - SHA1: `d99fff49f500290fc562f3b72cef2fc442af9c2f`
+  - MD5: `53dd1196ad09d15fa7bd58009e641b56`
+  - CRC32: `2f613014`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20National%20FS-5000/config.ini)** (695 bytes)
+  - SHA1: `f65cc0f72ffccf48e11ced10048e2f0930c79348`
+  - MD5: `5694c60d98fb02cbfad2195562f8822f`
+  - CRC32: `eb85babf`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20National%20FS-5500F1/config.ini)** (706 bytes)
+  - SHA1: `f0fae04dd4901d6b88e6fe6008b5f986014c8cc5`
+  - MD5: `f209ded395cae2d18b38b52d08e917ce`
+  - CRC32: `e6766dd5`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20National%20FS-5500F2/config.ini)** (706 bytes)
+  - SHA1: `941bed70f7af87b53aae7eab58f6f761d4de1cdc`
+  - MD5: `9414080be8e287adef46f61c3189d436`
+  - CRC32: `1463dadb`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Only%20PSG/config.ini)** (528 bytes)
+  - SHA1: `7d35fd78ccfea2a280fd77d5daf7a75eb2f1d233`
+  - MD5: `46e86fc50e1884841f440ca220aa7c3e`
+  - CRC32: `73100086`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Panasonic%20FS-A1/config.ini)** (561 bytes)
+  - SHA1: `79eed9af0bc82e86bb7d4f1880e1a2682a152001`
+  - MD5: `89be1be6a48c96125fb9b19dc261607d`
+  - CRC32: `c997303c`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Panasonic%20FS-A1%20%28a%29/config.ini)** (578 bytes)
+  - SHA1: `7def4e3e7c294d58ea48fb7c9016f72649f21fe2`
+  - MD5: `3b32d2f011ce85330dbeba34cbd9eb7f`
+  - CRC32: `e61fc329`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Panasonic%20FS-A1F/config.ini)** (689 bytes)
+  - SHA1: `cdacb737051190331bc39ed72ad6331c2c931420`
+  - MD5: `c2674d01d037eb8e9a9156d77b1a8a96`
+  - CRC32: `81b43d48`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Panasonic%20FS-A1FM/config.ini)** (786 bytes)
+  - SHA1: `0c853e7dd545f6872851c508438752da6eb8a1e7`
+  - MD5: `d1a4d700ee994511cd8323e62e28aadd`
+  - CRC32: `6022cafe`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Panasonic%20FS-A1MK2/config.ini)** (644 bytes)
+  - SHA1: `c583400d3a9ea1e868346625b18577e339691a37`
+  - MD5: `fbf273109701e5c27d291832afcc8ea9`
+  - CRC32: `d3dc4c9c`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Philips%20NMS-8220/config.ini)** (499 bytes)
+  - SHA1: `2153ddc013c17dec9efc569a202a8ae8edfc5879`
+  - MD5: `fc0488be451b9d67460c74cd81ccd985`
+  - CRC32: `0ebe4397`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Philips%20NMS-8220%20%28a%29/config.ini)** (512 bytes)
+  - SHA1: `768b3b1d342b60bfafb345e037e9eab859cd4215`
+  - MD5: `612de869ae0750976414cddcba675123`
+  - CRC32: `a93de8c0`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Philips%20NMS-8245/config.ini)** (499 bytes)
+  - SHA1: `e0ed25532058166404ccf42b9fd977da931c10e3`
+  - MD5: `0f06f51f6efd4d34a7e04ecb92126d20`
+  - CRC32: `ec7f14c6`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Philips%20NMS-8245F/config.ini)** (505 bytes)
+  - SHA1: `005b4bbbcb29680693d139bec449c6d180951d3a`
+  - MD5: `1fecc67a405fbd790e410318549489ac`
+  - CRC32: `7475b435`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Philips%20NMS-8250/config.ini)** (499 bytes)
+  - SHA1: `1f89dcb7b89893e497ae9c2344dad90c74c21a37`
+  - MD5: `03aaa44026b81d85897bbc5419440e9d`
+  - CRC32: `a1628665`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Philips%20NMS-8255/config.ini)** (501 bytes)
+  - SHA1: `b3a995c388f145c79af003ba5dbc1c2f06e6458f`
+  - MD5: `1dde9ea25d88a4cf32f94b303f690b78`
+  - CRC32: `c66c35f0`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Philips%20NMS-8280/config.ini)** (520 bytes)
+  - SHA1: `9efd61f78075fbcb548fa71f1e38971aa1e3aa0a`
+  - MD5: `a5d32fbd3a44b8c2a9f3c963d62faa25`
+  - CRC32: `69a285b4`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Philips%20NMS-8280G/config.ini)** (526 bytes)
+  - SHA1: `8d7da37154f0347441ce981f68ad5d364e4ed4a8`
+  - MD5: `2110465d2ffdff9c67b3c078898f68e7`
+  - CRC32: `0a2fe875`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Philips%20VG-8230/config.ini)** (489 bytes)
+  - SHA1: `3502d3f8e6e41fb92c9d5745358481d24d42373f`
+  - MD5: `0773929caf1b678c2895ad3d4c7386e0`
+  - CRC32: `f3e9cc64`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Philips%20VG-8235/config.ini)** (498 bytes)
+  - SHA1: `4ff27cbb079b76198c77ce83df87dd9f78c65e3d`
+  - MD5: `a488399bfee5783e1c32d88f818ef064`
+  - CRC32: `5ac10507`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Philips%20VG-8235F/config.ini)** (504 bytes)
+  - SHA1: `24c8e8cdc07a7ed5d4fef519c52b8d5c5c4f0bd7`
+  - MD5: `c483f982cae2f15d89249c79b395fab6`
+  - CRC32: `2ea76906`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Philips%20VG-8240/config.ini)** (497 bytes)
+  - SHA1: `afa8824f5b05d649dbef2cfd2b525fcc335305b8`
+  - MD5: `59eaedb98e61ad0f7063bb5192334187`
+  - CRC32: `87a1ee46`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Russian/config.ini)** (656 bytes)
+  - SHA1: `22dbd9e51ef0899515e28a6362c12e3e05daefe6`
+  - MD5: `e6edd84f9311778ac7c83f86abf784b9`
+  - CRC32: `d599144f`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Sanyo%20Wavy%20MPC-25FD/config.ini)** (518 bytes)
+  - SHA1: `dd03b46c8ebd33a5367fec3080831553f7062153`
+  - MD5: `52553682ed75d6ddf2fb58d0bce493fe`
+  - CRC32: `517437a9`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Sanyo%20Wavy%20PHC-23/config.ini)** (455 bytes)
+  - SHA1: `fcde481206f684048a48a716e9558d31ddd42898`
+  - MD5: `d28f6ac4e561423c31a0fb80f457e2a7`
+  - CRC32: `ac750030`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Sharp%20Epcom%20HotBit%202.0/config.ini)** (583 bytes)
+  - SHA1: `63cbe0c778c66b028b4eb431567b2fde945290f3`
+  - MD5: `76c6c18cdb0c3944bdd9c201dce58921`
+  - CRC32: `4028bd85`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Sony%20HB-F1/config.ini)** (607 bytes)
+  - SHA1: `f266f069c8159f0f054fb5527fe3a28e9aab22c7`
+  - MD5: `7e0b0eb7b2c9aaba8bcad3e6024d9211`
+  - CRC32: `3d4977e9`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Sony%20HB-F1II/config.ini)** (622 bytes)
+  - SHA1: `7ac2361ab83a04e5bf4c2007fbd7865b3327a483`
+  - MD5: `577f8a4d2b98a27e81e0926bc62c82ad`
+  - CRC32: `4c57996c`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Sony%20HB-F1XD/config.ini)** (506 bytes)
+  - SHA1: `d999e6305009db781c7f579cf2e0be9f7e88484e`
+  - MD5: `a70f78bc869825d9ce59ea2867e45bc3`
+  - CRC32: `adce47dd`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Sony%20HB-F1XDMK2/config.ini)** (515 bytes)
+  - SHA1: `b57ab62c9953644464da71cb466fd0a31e80b64d`
+  - MD5: `c56f85232c4e7a1a7480e06bfb87859f`
+  - CRC32: `9b54d48b`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Sony%20HB-F500/config.ini)** (582 bytes)
+  - SHA1: `d8a6f3a2fe3a178e04c9bbf4aac08ff6bf380e67`
+  - MD5: `a5165b6b795b8d3eff3eae67d8421bc3`
+  - CRC32: `6138abf7`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Sony%20HB-F500P/config.ini)** (509 bytes)
+  - SHA1: `791a8860b3ce7b8e3f218c683b4c2d4424d154a4`
+  - MD5: `b7d66c0318fb51d25149d297c22a8c7d`
+  - CRC32: `d284f5d7`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Sony%20HB-F700D/config.ini)** (510 bytes)
+  - SHA1: `8c7c8b0862aa804f6cbab4ba3b5c510aaa9efc95`
+  - MD5: `ab562407c8026a157f939936f1347b61`
+  - CRC32: `c57083e9`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Sony%20HB-F700F/config.ini)** (510 bytes)
+  - SHA1: `66b42bbb347b436ec7a33c29f5b6e228fc3bcacd`
+  - MD5: `5322e7e843f77009ba83a55eac8b7490`
+  - CRC32: `cf0e9203`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Sony%20HB-F700P/config.ini)** (492 bytes)
+  - SHA1: `223a8ac1ba1476db6c0f403e3ae023b38fe3e83b`
+  - MD5: `d61e9a0a3f4ba3632a02bcfcf1a72b75`
+  - CRC32: `4d9bd42f`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Sony%20HB-F700S/config.ini)** (492 bytes)
+  - SHA1: `7b46bab5836a3d3b32b069e7d7e2d6290735b264`
+  - MD5: `365d49bfaeb819afc034542c74f2da92`
+  - CRC32: `42dacd30`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Sony%20HB-F900/config.ini)** (624 bytes)
+  - SHA1: `de3fa5345e5dfad6c69d751ce132c5694a878334`
+  - MD5: `644e01372ccf7584517e58f40147f8e6`
+  - CRC32: `6d1a1f65`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Sony%20HB-F900%20%28a%29/config.ini)** (644 bytes)
+  - SHA1: `7398037569beb9e30f8e0857240b7882938ca693`
+  - MD5: `5ef958697492ea19425cdef81a709959`
+  - CRC32: `5c0720a6`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Sony%20HB-F9P/config.ini)** (562 bytes)
+  - SHA1: `2df5a8558f7f55413668d7f6a649af0267261fa3`
+  - MD5: `bb2bb20e0f2a9a1b70c1b73e372fe924`
+  - CRC32: `daac01c9`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Sony%20HB-F9P%20Russian/config.ini)** (452 bytes)
+  - SHA1: `5db596d4f24bc49c8c0a4b9bc61b30cc4b19e734`
+  - MD5: `fae978008634d56f2b8f3efc67d05e66`
+  - CRC32: `70c34c64`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Sony%20HB-F9S/config.ini)** (562 bytes)
+  - SHA1: `75b17d86347084e0b42a69a1934ab4928df3ba3f`
+  - MD5: `d5faefc7fb271b5733c16bf22f3d4300`
+  - CRC32: `29cdd686`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Sony%20HB-G900AP/config.ini)** (625 bytes)
+  - SHA1: `a7b98188975117012ccf161c86d967e74fac2dfc`
+  - MD5: `6f50ff6934aeaa75686b030316a7cbc1`
+  - CRC32: `6255227f`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Sony%20HB-G900P/config.ini)** (605 bytes)
+  - SHA1: `24d0d7c20aaa7d8e799eb4cbd4ef3a4813036130`
+  - MD5: `cbf75cf14f93481f2e8c9af09df26601`
+  - CRC32: `b1590bfa`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Spanish/config.ini)** (657 bytes)
+  - SHA1: `80a6e5bfc62f38132fc74abcf9a39dbb6930b4da`
+  - MD5: `c7fe215cf4d434799f21220d78f7b555`
+  - CRC32: `e8135c5e`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Spectravideo%20SVI-738-2%20CUC/config.ini)** (611 bytes)
+  - SHA1: `58584d6f4a40189749a7d64c6801e5602d0fc86e`
+  - MD5: `6dc5437477c3f3e7c6af974845c485af`
+  - CRC32: `b21fb89e`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Spectravideo%20SVI-738-2%20JP%20Grobler/config.ini)** (639 bytes)
+  - SHA1: `5232188e6a13fd3c275fa3ffc3f4ac9691cefd0f`
+  - MD5: `e3b95de6426b55814b05b4dd8eacea48`
+  - CRC32: `5431b820`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Spectravideo%20SVI-738-2%20LC%20Grosso/config.ini)** (718 bytes)
+  - SHA1: `845b8bdb5f0999f789c8aab34e7ffc0c15ce3a67`
+  - MD5: `abb88a7f213078ca077a49144b6154a3`
+  - CRC32: `27c73224`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Swedish/config.ini)** (655 bytes)
+  - SHA1: `8977b7f4809088dafbf68d6a34af4ad38a74bd81`
+  - MD5: `ce540179c472be16f22a24a624ed4bf1`
+  - CRC32: `dfa548ef`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Talent%20TPC-310/config.ini)** (655 bytes)
+  - SHA1: `d5e5e6670635e93b931c24a4411836f43cf116cb`
+  - MD5: `4c94d6a9a9059bb4a4f2aadb90680b1f`
+  - CRC32: `8c4167ee`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Toshiba%20HX-23/config.ini)** (517 bytes)
+  - SHA1: `32fe51f368863e2963f696feb379ef8b9dbe91de`
+  - MD5: `d0ec17dffbc20e8770a8b5c211fa6f33`
+  - CRC32: `27723bf9`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Toshiba%20HX-23F/config.ini)** (518 bytes)
+  - SHA1: `f3a54879e4ad46fea3b3805ea5837d990debf5d2`
+  - MD5: `e16f2c5428f7bd43be861ea60680fcc3`
+  - CRC32: `425ce987`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Virtual%20Haesung%20Console/config.ini)** (455 bytes)
+  - SHA1: `517b3beee3094c25ebc23d972fafd58dff1c8157`
+  - MD5: `ec29f60d0ec574d0a74eb8c4f3c4882e`
+  - CRC32: `12753037`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Yamaha%20CX7M/config.ini)** (473 bytes)
+  - SHA1: `323e32b9d6591d070880bb69d6780879e01de514`
+  - MD5: `e764c9b1422f95a67a9db31b5d37fab9`
+  - CRC32: `9212c2db`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2%20-%20Yamaha%20CX7M-128/config.ini)** (556 bytes)
+  - SHA1: `5ba860d316635d93d3ae7f5a5af90a2389c0f5a8`
+  - MD5: `2e6cc3f19c56fb26507d6e1784117fef`
+  - CRC32: `bb7da292`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2+/config.ini)** (773 bytes)
+  - SHA1: `cb7d14a17c4f4632f17ba5a64160cdd876dd6010`
+  - MD5: `510c643fa932b346ea8b87ea4f965618`
+  - CRC32: `8609e07e`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2+%20-%20Brazilian/config.ini)** (811 bytes)
+  - SHA1: `9dcf2d88350f739871e4af3f91e8037aa2befbbf`
+  - MD5: `1b6b80b0393d819d68a824ab31714bee`
+  - CRC32: `3e97e707`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2+%20-%20C-BIOS/config.ini)** (566 bytes)
+  - SHA1: `30b3932b7d2135157e5b7bbc4028efb9f658dc87`
+  - MD5: `b7c58643eb6ebb245e312720f76ad13f`
+  - CRC32: `c7c6377f`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2+%20-%20Ciel%20Expert%203%20IDE/config.ini)** (651 bytes)
+  - SHA1: `4c06fda7639a0aee5a4835f89b834babc73f5bb9`
+  - MD5: `9a0acca0ceedef8eb1f2bcaac69e6621`
+  - CRC32: `8ea96669`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2+%20-%20Ciel%20Expert%203%20Turbo/config.ini)** (658 bytes)
+  - SHA1: `77242eaab1acd34f1eb45a7c485fecac79d94a1e`
+  - MD5: `dc6f18359093d2d18e1270aab7af5d70`
+  - CRC32: `7ab7592c`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2+%20-%20European/config.ini)** (816 bytes)
+  - SHA1: `1877ba4b79c30deaf20d1b340a37a4a79899a491`
+  - MD5: `a230e22345748b2b590efa1dc7e83f35`
+  - CRC32: `390ca8fd`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2+%20-%20Gradiente%20Expert%20AC88+/config.ini)** (694 bytes)
+  - SHA1: `8e20ae322c04ed76e25676db3b8e2f846f4491d5`
+  - MD5: `e1f518277698d1c9d6bf41982b2cb27d`
+  - CRC32: `fd549fa6`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2+%20-%20Gradiente%20Expert%20DDX+/config.ini)** (598 bytes)
+  - SHA1: `87a0783be86a7b3b4a70693ec2bfafafaefdd604`
+  - MD5: `64269a04ab2622d235badd9c8c2f60f4`
+  - CRC32: `b03d487e`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2+%20-%20MSXPLAYer%202003/config.ini)** (693 bytes)
+  - SHA1: `e8042ad74d64f20ff6b243e1a0c1790d7c8f5ffe`
+  - MD5: `0f134b0f916e2e23a23bda70711e8394`
+  - CRC32: `63683601`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2+%20-%20Panasonic%20FS-A1FX/config.ini)** (744 bytes)
+  - SHA1: `fbaa4b4e21ff20892ebb59fda416939a736e10bb`
+  - MD5: `4a8c350a2eab84f552b1cfb689922c9c`
+  - CRC32: `a6d701ad`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2+%20-%20Panasonic%20FS-A1WSX/config.ini)** (816 bytes)
+  - SHA1: `88b729e23341c5b47dee0b2509b1d93c1c19e9a0`
+  - MD5: `cd85c5a118f6fabb267e8d1544867e7b`
+  - CRC32: `520a1dd9`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2+%20-%20Panasonic%20FS-A1WX/config.ini)** (809 bytes)
+  - SHA1: `248ebdfbb4f238bc88bec0092425f8a67e4403ae`
+  - MD5: `19f4cef7853bf4e85dbb97693c2faac9`
+  - CRC32: `c2c77072`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2+%20-%20Panasonic%20FS-A1WX%20%28a%29/config.ini)** (837 bytes)
+  - SHA1: `e818b3b8fa68936d5e7fe5573327d6282855bed1`
+  - MD5: `f563d420980ab7774b93c309a722fa2b`
+  - CRC32: `36e76864`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2+%20-%20Sanyo%20Wavy%20PHC-35J/config.ini)** (588 bytes)
+  - SHA1: `c5cfc42e522fd75ea76c029a697f77e36d267df3`
+  - MD5: `e502a834ce2f239bde2226b89721c053`
+  - CRC32: `d71d6c2a`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2+%20-%20Sanyo%20Wavy%20PHC-70FD1/config.ini)** (802 bytes)
+  - SHA1: `6a626d7d05fe83d6285e6d666c6eddb4a687e4c5`
+  - MD5: `52aab807012d1d42049485d8ec807fc3`
+  - CRC32: `589092e3`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2+%20-%20Sanyo%20Wavy%20PHC-70FD2/config.ini)** (802 bytes)
+  - SHA1: `8a6f4c6413ad97ef1828d5bd74b6aa61b32fba5b`
+  - MD5: `085b93f7cf9d5fb9060787b0c8048a08`
+  - CRC32: `da69e434`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2+%20-%20Sony%20HB-F1XDJ/config.ini)** (771 bytes)
+  - SHA1: `260afaa1894efdf55752e19ecb66017095b64af8`
+  - MD5: `42a20ecf0a66f7cbcd9096e2c3491d7c`
+  - CRC32: `46edd0ba`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2+%20-%20Sony%20HB-F1XV/config.ini)** (764 bytes)
+  - SHA1: `4d9243b3484b3a99aafdf549f0afe798a263b8ad`
+  - MD5: `b9f0b37f0103d32f6121df383451db37`
+  - CRC32: `e079eddd`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSX2+%20-%20Sony%20HB-F9S+/config.ini)** (574 bytes)
+  - SHA1: `f262716ae466e5d36d78f803e513a7c183084913`
+  - MD5: `c92aa9bf32a6015b8fe7e73e05002f99`
+  - CRC32: `b83b0adc`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSXturboR/config.ini)** (941 bytes)
+  - SHA1: `0b7a99c3beccee2b6df0fbe8e8c6db9bbf011de1`
+  - MD5: `ec49cd59730306b476444c046d9e25fd`
+  - CRC32: `ff475fd9`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSXturboR%20-%20European/config.ini)** (1,016 bytes)
+  - SHA1: `7e8010843572e4d539f2802de81a415c5a5d7e61`
+  - MD5: `086a40869e37a7a8aa870715f715434d`
+  - CRC32: `9435070a`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSXturboR%20-%20Panasonic%20FS-A1GT/config.ini)** (1,006 bytes)
+  - SHA1: `b518ca3aac43e6a7a212b3dcefb39dd05414fc28`
+  - MD5: `ceefe613502252d767e993b87ed3c197`
+  - CRC32: `55694c00`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSXturboR%20-%20Panasonic%20FS-A1ST/config.ini)** (988 bytes)
+  - SHA1: `c849264e6c83623482dc1607003ad1c53acce84c`
+  - MD5: `e73e586e8a390b161058c1444c312202`
+  - CRC32: `18dbaa99`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSXturboR%20-%20Panasonic%20FS-A1ST%20%28a%29/config.ini)** (1,021 bytes)
+  - SHA1: `36c171e2d82b1b3c68a5250ac89a6284a94ec6a9`
+  - MD5: `d0af5aa8c279e6be0d049ef7005c1022`
+  - CRC32: `a2bbe25c`
+- **[config.ini](bios/Microsoft/MSX/Machines/MSXturboR%20-%20Panasonic%20FS-A1ST%20%28b%29/config.ini)** (1,021 bytes)
+  - SHA1: `51ae974b782eaaf7d5dde88651979d21a0a4c6cc`
+  - MD5: `fe36c1fd5dfb40f3252a59ab27ac5964`
+  - CRC32: `24c8c5b6`
+- **[config.ini](bios/Microsoft/MSX/Machines/SEGA%20-%20SC-3000/config.ini)** (285 bytes)
+  - SHA1: `3c75856421ba350bf70f64721c0f7d016c72c6ef`
+  - MD5: `3b623e191f1b4841912ce60df9a4193d`
+  - CRC32: `b74a08e6`
+- **[config.ini](bios/Microsoft/MSX/Machines/SEGA%20-%20SF-7000/config.ini)** (337 bytes)
+  - SHA1: `9babbaf2cfb04a9057dbac370a56dd20f412f3ab`
+  - MD5: `9cc2a1f0361ccd5a5b351086d9629c30`
+  - CRC32: `ba727732`
+- **[config.ini](bios/Microsoft/MSX/Machines/SEGA%20-%20SG-1000/config.ini)** (287 bytes)
+  - SHA1: `1ed0081a4fdfcedb4fa23afbb4bc67afda380a50`
+  - MD5: `eb7e878418f3e484fa522a53223f8a21`
+  - CRC32: `6c26e357`
+- **[config.ini](bios/Microsoft/MSX/Machines/SVI%20-%20Spectravideo%20SVI-318/config.ini)** (346 bytes)
+  - SHA1: `0552fe09d07c03e8fcf8f44b04bf086689e2106a`
+  - MD5: `c8a53a309afe77d6323ec11041f9c4ef`
+  - CRC32: `f05bf1e4`
+- **[config.ini](bios/Microsoft/MSX/Machines/SVI%20-%20Spectravideo%20SVI-328/config.ini)** (418 bytes)
+  - SHA1: `9dc104c536f9fbf6ef29006479916da4964d9c68`
+  - MD5: `ba3600d30ae755af371d8b9ab325b0f6`
+  - CRC32: `89a71896`
+- **[config.ini](bios/Microsoft/MSX/Machines/SVI%20-%20Spectravideo%20SVI-328%2080%20Column/config.ini)** (521 bytes)
+  - SHA1: `e9157fcfad1e393bff6857ed1f1918aace5adc25`
+  - MD5: `7835259261b02f7053c73b55ee9bef34`
+  - CRC32: `fdaed247`
+- **[config.ini](bios/Microsoft/MSX/Machines/SVI%20-%20Spectravideo%20SVI-328%2080%20Swedish/config.ini)** (525 bytes)
+  - SHA1: `fa4c86a9d9c74875079b324c3b247d5aea285787`
+  - MD5: `4acfec75bd9566ce3f6e614bcf327c19`
+  - CRC32: `f12a70fd`
+- **[config.ini](bios/Microsoft/MSX/Machines/SVI%20-%20Spectravideo%20SVI-328%20MK2/config.ini)** (441 bytes)
+  - SHA1: `cb9dc3be87e7f9dd187ec3aef87620f3291e0a84`
+  - MD5: `441dd9a2d5ed89a7406344623dc2f5ae`
+  - CRC32: `4f3f32be`
+- **[czz50-1.rom](bios/Microsoft/MSX/Machines/COL%20-%20Bit%20Corporation%20Dina/czz50-1.rom)** (8,192 bytes)
+  - SHA1: `17fbbf2aa6a336454f9bd6f3f2b7b17bbe28c072`
+  - MD5: `1de922acdd742d31349c2801e9768c35`
+  - CRC32: `696c101a`
+- **[czz50-2.rom](bios/Microsoft/MSX/Machines/COL%20-%20Bit%20Corporation%20Dina/czz50-2.rom)** (8,192 bytes)
+  - SHA1: `ccbe07648f72eeedcde3fc8feb665124fcbf97ad`
+  - MD5: `72b089dc55b7fe7ffb5028f365e8c045`
+  - CRC32: `6538dd32`
+- **[fs-a1gt_firmware.rom](bios/Microsoft/MSX/openmsx/fs-a1gt_firmware.rom)** (4,194,304 bytes)
+  - SHA1: `e779c338eb91a7dea3ff75f3fde76b8af22c4a3a`
+  - MD5: `af17a344bcc177b97a4888c4c559f3ae`
+  - CRC32: `feefeadc`
+- **[fs-a1wsx_basic-bios2p.rom](bios/Microsoft/MSX/openmsx/fs-a1wsx_basic-bios2p.rom)** (32,768 bytes)
+  - SHA1: `f4433752d3bf876bfefb363c749d4d2e08a218b6`
+  - MD5: `c5c26c3e8bc6c485424818057f0507b9`
+  - CRC32: `358ec547`
+- **[fs-a1wsx_firmware.rom](bios/Microsoft/MSX/openmsx/fs-a1wsx_firmware.rom)** (2,097,152 bytes)
+  - SHA1: `3330d9b6b76e3c4ccb7cf252496ed15d08b95d3f`
+  - MD5: `fa8e7d4b999af058fe2864a5f2e014ec`
+  - CRC32: `e363595d`
+- **[fs-a1wsx_fmbasic.rom](bios/Microsoft/MSX/openmsx/fs-a1wsx_fmbasic.rom)** (16,384 bytes)
+  - SHA1: `aad42ba4289b33d8eed225d42cea930b7fc5c228`
+  - MD5: `0c40e7db1c1fcc2405e4d0cdd215adb4`
+  - CRC32: `5c32eb29`
+- **[ide250.zip](bios/Microsoft/MSX/openmsx/ide250.zip)** (45,968 bytes)
+  - SHA1: `15df3303fcb0204c4f9cffe371220b66b65b944d`
+  - MD5: `afa4b5f2944334f84971af814a24bd5a`
+  - CRC32: `d4e1a29b`
+- **[msxromdb.xml](bios/Microsoft/MSX/Databases/msxromdb.xml)** (930,986 bytes)
+  - SHA1: `573aa830b7bef4452808b40df883469907db2fed`
+  - MD5: `c0a94965701431e0df29949189e424dd`
+  - CRC32: `ed4c6720`
+- **[nowindDos1.rom](bios/Microsoft/MSX/Machines/Shared%20Roms/nowindDos1.rom)** (524,288 bytes)
+  - SHA1: `1d4c09166755c6569ff0ed3878bbf1b22d7e3864`
+  - MD5: `8c294a75f14fc30fce0c8642d28ccec1`
+  - CRC32: `0a7a7a5b`
+- **[nowindDos2.rom](bios/Microsoft/MSX/Machines/Shared%20Roms/nowindDos2.rom)** (524,288 bytes)
+  - SHA1: `8afd1ec5843ecfdcbff11497fa8c55b870c0c6f5`
+  - MD5: `1847398c014384b833868c64f149f338`
+  - CRC32: `d64dee77`
+- **[pesadelo.rom](bios/Microsoft/MSX/Machines/Forte%20II%20Games%20-%20Pesadelo/pesadelo.rom)** (65,536 bytes)
+  - SHA1: `12880dd7ad82acf04861843fb9d4f0f926d18f6b`
+  - MD5: `ba53d700ec25bcb08020ce693319cd28`
+  - CRC32: `1ae2f724`
+- **[phc-70fd2_basickun.rom](bios/Microsoft/MSX/openmsx/phc-70fd2_basickun.rom)** (16,384 bytes)
+  - SHA1: `22b3191d865010264001b9d896186a9818478a6b`
+  - MD5: `2ce20986da024e9a0e271961c6bc9f01`
+  - CRC32: `da7be246`
+- **[px-7_basic-bios1.rom](bios/Microsoft/MSX/openmsx/px-7_basic-bios1.rom)** (32,768 bytes)
+  - SHA1: `302afb5d8be26c758309ca3df611ae69cced2821`
+  - MD5: `9218f6dd89f7ba01e3090d44721b4260`
+  - CRC32: `ee229390`
+- **[px-7_pbasic.rom](bios/Microsoft/MSX/openmsx/px-7_pbasic.rom)** (8,192 bytes)
+  - SHA1: `665d805f96616e1037f1823050657b7849899283`
+  - MD5: `281809cafe63437fc4bffb3033fbd0db`
+  - CRC32: `a5d0c0b9`
+- **[sf7000.rom](bios/Microsoft/MSX/Machines/SEGA%20-%20SF-7000/sf7000.rom)** (8,192 bytes)
+  - SHA1: `77339a6db2593aadc638bed77b8e9bed5d9d87e3`
+  - MD5: `561b362f9aa4cbcb240461abf83c2e0d`
+  - CRC32: `d76810b8`
+- **[svi318.rom](bios/Microsoft/MSX/Machines/SVI%20-%20Spectravideo%20SVI-318/svi318.rom)** (32,768 bytes)
+  - SHA1: `07758272df475e5e06187aa3574241df1b14035b`
+  - MD5: `ee6ad7ea29e791b03a28a9443e622648`
+  - CRC32: `98d48655`
+- **[svi328.rom](bios/Microsoft/MSX/Machines/SVI%20-%20Spectravideo%20SVI-328/svi328.rom)** (32,768 bytes)
+  - SHA1: `7d8daf52f78371ca2c9443e04827c8e1f98c8f2c`
+  - MD5: `2cebd1db9dda475a011b7bce65c984a2`
+  - CRC32: `709904e9`
+- **[svi328a.rom](bios/Microsoft/MSX/Machines/SVI%20-%20Spectravideo%20SVI-328%2080%20Column/svi328a.rom)** (32,768 bytes)
+  - SHA1: `10349ce675f6d6d47f0976e39cb7188eba858d89`
+  - MD5: `352f054ab09605070bdff49d73f335cc`
+  - CRC32: `bc433df6`
+- **[svi806.rom](bios/Microsoft/MSX/Machines/SVI%20-%20Spectravideo%20SVI-328%2080%20Column/svi806.rom)** (4,096 bytes)
+  - SHA1: `ed45cb0e9bd18a9d7bd74f87e620f016a7ae840f`
+  - MD5: `82f7bc9c08f43db1d79bcb565a0de12b`
+  - CRC32: `850bc232`
+- **[svi806se.rom](bios/Microsoft/MSX/Machines/SVI%20-%20Spectravideo%20SVI-328%2080%20Swedish/svi806se.rom)** (4,096 bytes)
+  - SHA1: `3f16d5513ad35692488ae7d864f660e76c6e8ed3`
+  - MD5: `6a5536c1eb4f0477c4f76488cd8ca3ad`
+  - CRC32: `daea8956`
+
+### Microsoft/Xbox
+
+- **[mcpx_1.0.bin](bios/Microsoft/Xbox/mcpx_1.0.bin)** (512 bytes)
+  - SHA1: `5d270675b54eb8071b480e42d22a3015ac211cef`
+  - MD5: `d49c52a4102f6df7bcf8d0617ac475ed`
+  - CRC32: `0b07d1f1`
+- **[xemu_eeprom.bin](bios/Microsoft/Xbox/xemu_eeprom.bin)** (256 bytes)
+  - SHA1: `ff3e7eaf715fe5612e46fc984d686ed3b115baef`
+  - MD5: `3e647719d47e4a3992fc8bc5a7e56fce`
+  - CRC32: `151aca4c`
+
+### NEC/PC Engine
+
+- **[gecard.pce](bios/NEC/PC%20Engine/gecard.pce)** (32,768 bytes)
+  - SHA1: `014881a959e045e00f4db8f52955200865d40280`
+  - MD5: `6d2cb14fc3e1f65ceb135633d1694122`
+  - CRC32: `51a12d90`
+  - Also known as: `gexpress.pce`
+  - Platform names: Lakka: `gexpress.pce`, Recalbox: `gexpress.pce`, RetroArch: `gexpress.pce`, RetroPie: `gexpress.pce`
+- **[syscard1.pce](bios/NEC/PC%20Engine/syscard1.pce)** (262,144 bytes)
+  - SHA1: `a39a66da7de6ba94ab84d04eef7afeec7d4ee66a`
+  - MD5: `2b7ccb3d86baa18f6402c176f3065082`
+  - CRC32: `3f9f95a4`
+  - **Variants** (1 alternate versions):
+    - [syscard1.pce.008cf0f5](bios/NEC/PC%20Engine/.variants/syscard1.pce.008cf0f5) (262,656 bytes) - SHA1: `008cf0f5cd5e2000b9f2ebf5e4ee84097e6aef74`, MD5: `9f770275393b8627cf9d24e5c56d2ab9`
+- **[syscard1.pce.008cf0f5](bios/NEC/PC%20Engine/.variants/syscard1.pce.008cf0f5)** (262,656 bytes)
+  - SHA1: `008cf0f5cd5e2000b9f2ebf5e4ee84097e6aef74`
+  - MD5: `9f770275393b8627cf9d24e5c56d2ab9`
+  - CRC32: `31cc5649`
+  - Platform names: Recalbox: `syscard1.pce`
+- **[syscard2.pce](bios/NEC/PC%20Engine/syscard2.pce)** (262,144 bytes)
+  - SHA1: `88da02e2503f7c32810f5d93a34849d470742b6d`
+  - MD5: `3cdd6614a918616bfc41c862e889dd79`
+  - CRC32: `283b74e0`
+  - **Variants** (1 alternate versions):
+    - [syscard2.pce.3ca4a3b8](bios/NEC/PC%20Engine/.variants/syscard2.pce.3ca4a3b8) (262,656 bytes) - SHA1: `3ca4a3b8d8a7f08492e684064c6fa362e914c1af`, MD5: `424f1d6bf93259bf255afa7d1dc9f721`
+- **[syscard2.pce.3ca4a3b8](bios/NEC/PC%20Engine/.variants/syscard2.pce.3ca4a3b8)** (262,656 bytes)
+  - SHA1: `3ca4a3b8d8a7f08492e684064c6fa362e914c1af`
+  - MD5: `424f1d6bf93259bf255afa7d1dc9f721`
+  - CRC32: `5c01c82b`
+  - Platform names: Recalbox: `syscard2.pce`
+- **[syscard2u.pce](bios/NEC/PC%20Engine/syscard2u.pce)** (262,144 bytes)
+  - SHA1: `2bea3dac98f84b2f2f469fa77ea720b8770d598d`
+  - MD5: `94279f315e8b52904f65ab3108542afe`
+  - CRC32: `ff2a5ec3`
+- **[syscard3.pce](bios/NEC/PC%20Engine/syscard3.pce)** (262,144 bytes)
+  - SHA1: `79f5ff55dd10187c7fd7b8daab0b3ffbd1f56a2c`
+  - MD5: `38179df8f4ac870017db21ebcbf53114`
+  - CRC32: `6d9a73ef`
+  - **Variants** (1 alternate versions):
+    - [syscard3.pce.1b4c2603](bios/NEC/PC%20Engine/.variants/syscard3.pce.1b4c2603) (262,656 bytes) - SHA1: `1b4c260326d905bc718812dad0f68089977f427b`, MD5: `ff1a674273fe3540ccef576376407d1d`
+- **[syscard3.pce.1b4c2603](bios/NEC/PC%20Engine/.variants/syscard3.pce.1b4c2603)** (262,656 bytes)
+  - SHA1: `1b4c260326d905bc718812dad0f68089977f427b`
+  - MD5: `ff1a674273fe3540ccef576376407d1d`
+  - CRC32: `64f78e3c`
+  - Platform names: Recalbox: `syscard3.pce`
+- **[syscard3u.pce](bios/NEC/PC%20Engine/syscard3u.pce)** (262,144 bytes)
+  - SHA1: `d02611d99921986147c753df14c7349b31d71950`
+  - MD5: `0754f903b52e3b3342202bdafb13efa5`
+  - CRC32: `2b5b75fe`
+- **[upd7801g.s01](bios/NEC/PC%20Engine/upd7801g.s01)** (4,096 bytes)
+  - SHA1: `6e89d1227581c76441a53d605f9e324185f1da33`
+  - MD5: `635a978fd40db9a18ee44eff449fc126`
+  - CRC32: `7ac06182`
+
+### NEC/PC-6001
+
+- **[pc6001.zip](bios/NEC/PC-6001/pc6001.zip)** (17,095 bytes)
+  - SHA1: `ac3c1e72eae9fc19e575cc011926c80b330e8ad1`
+  - MD5: `4e9990f649ec41f13cbc7fe928857b0b`
+  - CRC32: `a8ca11cc`
+- **[pc6001a.zip](bios/NEC/PC-6001/pc6001a.zip)** (17,198 bytes)
+  - SHA1: `5f039c3c4ecd8ed08bbf9a9084a8765a53e44dbe`
+  - MD5: `9625726babfc759e88a97117a849773c`
+  - CRC32: `986362e9`
+- **[pc6001mk2.zip](bios/NEC/PC-6001/pc6001mk2.zip)** (56,693 bytes)
+  - SHA1: `6c1ab81f4450cd494f54349fa913c20fe6d098a1`
+  - MD5: `9203a206be15b45a0dc3bb36d618d764`
+  - CRC32: `398cf5dc`
+- **[pc6001mk2sr.zip](bios/NEC/PC-6001/pc6001mk2sr.zip)** (101,576 bytes)
+  - SHA1: `5a943ee2f4ff781af2e5ac2274f3350c3cb15248`
+  - MD5: `9c940c993b87b0a31d87960c1dc68656`
+  - CRC32: `300be300`
+
+### NEC/PC-8001
+
+- **[pc8001mk2sr.zip](bios/NEC/PC-8001/pc8001mk2sr.zip)** (129,455 bytes)
+  - SHA1: `88ad52740cd0b8a0e927abbfb84601aa099bcfbc`
+  - MD5: `9e5edcd9c670533791034ba84afb4d73`
+  - CRC32: `84760465`
+
+### NEC/PC-98
+
+- **[2608_BD.WAV](bios/NEC/PC-98/2608_BD.WAV)** (5,352 bytes)
+  - SHA1: `22fb2cd4412df057762c23dd22729ebcb922fe0e`
+  - MD5: `29aad51cd243c8e449d311d14613f0b1`
+  - CRC32: `fcb60c01`
+- **[2608_HH.WAV](bios/NEC/PC-98/2608_HH.WAV)** (5,040 bytes)
+  - SHA1: `ac7bc5f6849eb16087c04e88680ea477d553b436`
+  - MD5: `59a009ee444318bd57d99a19068731e4`
+  - CRC32: `7d6d9c4e`
+- **[2608_RIM.WAV](bios/NEC/PC-98/2608_RIM.WAV)** (4,170 bytes)
+  - SHA1: `4ecf900db8d0f69d6154bde376206d727ddddaae`
+  - MD5: `943290d1c5c6ae6295bd02be4411c7c0`
+  - CRC32: `8518a388`
+- **[2608_SD.WAV](bios/NEC/PC-98/2608_SD.WAV)** (6,700 bytes)
+  - SHA1: `0ea4f93b81df9dbb8d48590b440f5910c0b798b6`
+  - MD5: `08124ccb84a9f65e2affc29581e690c9`
+  - CRC32: `c0a71109`
+  - Platform names: Recalbox: `2608_sd.wav`
+- **[2608_TOM.WAV](bios/NEC/PC-98/2608_TOM.WAV)** (13,824 bytes)
+  - SHA1: `aa29f5e47cbd710077fa723929592c66d8bcb876`
+  - MD5: `c321a6835b26ad125b2eb78be56394a4`
+  - CRC32: `5e8ab475`
+- **[2608_TOP.WAV](bios/NEC/PC-98/2608_TOP.WAV)** (62,290 bytes)
+  - SHA1: `a160bf60a4f148fd191edc989429e6909d431fcb`
+  - MD5: `9e73ff2345236ebe72f7a937e477f0bd`
+  - CRC32: `cefa9f76`
+- **[2608_bd.wav](bios/NEC/PC-98/2608_bd.wav)** (19,192 bytes)
+  - SHA1: `0a56c142ef40cec50f3ee56a6e42d0029c9e2818`
+  - MD5: `d94546e70f17fd899be8df3544ab6cbb`
+  - CRC32: `bb038714`
+- **[2608_hh.wav](bios/NEC/PC-98/2608_hh.wav)** (36,722 bytes)
+  - SHA1: `12f676cef249b82480b6f19c454e234b435ca7b6`
+  - MD5: `08c54a0c1f774a5538a848a6665a34b4`
+  - CRC32: `9898b372`
+- **[2608_rim.wav](bios/NEC/PC-98/2608_rim.wav)** (5,288 bytes)
+  - SHA1: `c65592330c9dd84011151daed52f9aec926b7e56`
+  - MD5: `465ea0768b27da404aec45dfc501404b`
+  - CRC32: `638864c1`
+- **[2608_sd.wav](bios/NEC/PC-98/2608_sd.wav)** (15,558 bytes)
+  - SHA1: `3c79663ef74c0b0439d13351326eb1c52a657008`
+  - MD5: `d71004351c8bbfdad53b18222c061d49`
+  - CRC32: `542cc58c`
+- **[2608_tom.wav](bios/NEC/PC-98/2608_tom.wav)** (23,092 bytes)
+  - SHA1: `9513fb4a3f41e75a972a273a5104cbd834c1e2c5`
+  - MD5: `96a4ead13f364734f79b0c58af2f0e1f`
+  - CRC32: `93c57bba`
+- **[2608_top.wav](bios/NEC/PC-98/2608_top.wav)** (57,016 bytes)
+  - SHA1: `aa4a8f766a86b830687d5083fd3b9db0652f46fc`
+  - MD5: `593cff6597ab9380d822b8f824fd2c28`
+  - CRC32: `ab73a296`
+- **[BIOS.ROM](bios/NEC/PC-98/BIOS.ROM)** (98,304 bytes)
+  - SHA1: `910fae6763c0cd59b3957b6cde479c72e21f33c1`
+  - MD5: `e246140dec5124c5e404869a84caefce`
+  - CRC32: `76affd90`
+- **[FONT.ROM](bios/NEC/PC-98/FONT.ROM)** (288,768 bytes)
+  - SHA1: `541271ea46c5166a1e054379963b0dc663e9b60f`
+  - MD5: `2af6179d7de4893ea0b705c00e9a98d6`
+  - CRC32: `cd6dfabe`
+  - **Variants** (1 alternate versions):
+    - [FONT.ROM.554b8737](bios/NEC/PC-98/.variants/FONT.ROM.554b8737) (288,768 bytes) - SHA1: `554b87377d176830d21bd03964dc71f8e98676b1`, MD5: `ca87908a99ea423093f6d497fc367f7d`
+- **[FONT.ROM.554b8737](bios/NEC/PC-98/.variants/FONT.ROM.554b8737)** (288,768 bytes)
+  - SHA1: `554b87377d176830d21bd03964dc71f8e98676b1`
+  - MD5: `ca87908a99ea423093f6d497fc367f7d`
+  - CRC32: `a61c0649`
+- **[ITF.ROM](bios/NEC/PC-98/ITF.ROM)** (32,768 bytes)
+  - SHA1: `9bca7d5116788776ed0f297bccb4dfc485379b41`
+  - MD5: `e9fc3890963b12cf15d0a2eea5815b72`
+  - CRC32: `273e9e88`
+- **[N88.ROM](bios/NEC/PC-98/N88.ROM)** (32,768 bytes)
+  - SHA1: `3b31fc68fa7f47b21c1a1cb027b86b9e87afbfff`
+  - MD5: `4f984e04a99d56c4cfe36115415d6eb8`
+  - CRC32: `a0fc0473`
+- **[N88EXT0.ROM](bios/NEC/PC-98/N88EXT0.ROM)** (8,192 bytes)
+  - SHA1: `d239c26ad7ac5efac6e947b0e9549b1534aa970d`
+  - MD5: `d675a2ca186c6efcd6277b835de4c7e5`
+  - CRC32: `710a63ec`
+- **[N88EXT1.ROM](bios/NEC/PC-98/N88EXT1.ROM)** (8,192 bytes)
+  - SHA1: `8528eef7946edf6501a6ccb1f416b60c64efac7c`
+  - MD5: `e844534dfe5744b381444dbe61ef1b66`
+  - CRC32: `c0bd2aa6`
+  - Platform names: Recalbox: `n88_1.rom`
+- **[N88EXT2.ROM](bios/NEC/PC-98/N88EXT2.ROM)** (8,192 bytes)
+  - SHA1: `b7c8bcea219b77d9cc3ee0efafe343cc307425d1`
+  - MD5: `6548fa45061274dee1ea8ae1e9e93910`
+  - CRC32: `af2b6efa`
+  - Platform names: Recalbox: `n88_2.rom`
+- **[N88EXT3.ROM](bios/NEC/PC-98/N88EXT3.ROM)** (8,192 bytes)
+  - SHA1: `efce0b51cab9f0da6cf68507757f1245a2867a72`
+  - MD5: `fc4b76a402ba501e6ba6de4b3e8b4273`
+  - CRC32: `7713c519`
+  - Platform names: Recalbox: `n88_3.rom`
+- **[N88KNJ1.ROM](bios/NEC/PC-98/N88KNJ1.ROM)** (131,072 bytes)
+  - SHA1: `82e11a177af6a5091dd67f50a2f4bafda84d6556`
+  - MD5: `d81c6d5d7ad1a4bbbd6ae22a01257603`
+  - CRC32: `6178bd43`
+  - Also known as: `n88knj1.rom`, `quasi88/n88knj1.rom`
+  - Platform names: Recalbox: `n88knj1.rom`
+- **[N88KNJ2.ROM](bios/NEC/PC-98/N88KNJ2.ROM)** (131,072 bytes)
+  - SHA1: `7e6591cd465cbb35d6d3446c5a83b46d30fafe95`
+  - MD5: `41d2e2c0c0edfccf76fa1c3e38bc1cf2`
+  - CRC32: `154803cc`
+- **[N88N.ROM](bios/NEC/PC-98/N88N.ROM)** (32,768 bytes)
+  - SHA1: `5b922ed9de07d2a729bdf1da7b57c50ddf08809a`
+  - MD5: `2ff07b8769367321128e03924af668a0`
+  - CRC32: `27e1857d`
+- **[N88SUB.ROM](bios/NEC/PC-98/N88SUB.ROM)** (2,048 bytes)
+  - SHA1: `bb7103a0818850a039c67ff666a31ce49a8d516f`
+  - MD5: `793f86784e5608352a5d7f03f03e0858`
+  - CRC32: `2158d307`
+  - Platform names: Recalbox: `disk.rom`
+- **[ROM1](bios/NEC/PC-98/ROM1)** (131,072 bytes)
+  - SHA1: `e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37`
+  - MD5: `20a0334c447cb069a040ae5be1d938df`
+  - CRC32: `42f124b0`
+  - Also known as: `apple2gs1.rom`
+  - Platform names: Recalbox: `apple2gs1.rom`
+- **[SOUND.ROM](bios/NEC/PC-98/SOUND.ROM)** (16,384 bytes)
+  - SHA1: `34137c287c39c44300b04ee97c1e6459bb826b60`
+  - MD5: `caf90f22197aed6f14c471c21e64658d`
+  - CRC32: `a21ef796`
+- **[bios.rom](bios/NEC/PC-98/bios.rom)** (98,304 bytes)
+  - SHA1: `76a7360502fa0296ea93b4c537174610a834d367`
+  - MD5: `cd237e16e7e77c06bb58540e9e9fca68`
+  - CRC32: `0a682b93`
+  - **Variants** (1 alternate versions):
+    - [bios.rom.2e923467](bios/NEC/PC-98/.variants/bios.rom.2e923467) (98,304 bytes) - SHA1: `2e92346727b0355bc1ec9a7ded1b444a4917f2b9`, MD5: `50274bb5dcb707e4450011b09accffcb`
+- **[bios.rom.2e923467](bios/NEC/PC-98/.variants/bios.rom.2e923467)** (98,304 bytes)
+  - SHA1: `2e92346727b0355bc1ec9a7ded1b444a4917f2b9`
+  - MD5: `50274bb5dcb707e4450011b09accffcb`
+  - CRC32: `34a19a59`
+- **[disk.rom](bios/NEC/PC-98/disk.rom)** (8,192 bytes)
+  - SHA1: `8063185d4dd653dd75a68855148c9ee15b71164c`
+  - MD5: `01b1af474fcabe93c40d779b234a3825`
+  - CRC32: `f2cbe4ee`
+- **[font.bmp](bios/NEC/PC-98/font.bmp)** (524,350 bytes)
+  - SHA1: `b4f14e58030ed40fff2dc312b58ea4440bdf8cc5`
+  - MD5: `7da1e5b7c482d4108d22a5b09631d967`
+  - CRC32: `d271798b`
+- **[font.rom](bios/NEC/PC-98/font.rom)** (288,768 bytes)
+  - SHA1: `78ba9960f135372825ab7244b5e4e73a810002ff`
+  - MD5: `38d32748ae49d1815b0614970849fd40`
+  - CRC32: `456d9fc7`
+  - **Variants** (1 alternate versions):
+    - [font.rom.425a896a](bios/NEC/PC-98/.variants/font.rom.425a896a) (6,144 bytes) - SHA1: `425a896af83386c7bafac59f94211cdbb9cce18d`, MD5: `14bc9e267cf0cb56d22d5c470f582d53`
+- **[font.rom.425a896a](bios/NEC/PC-98/.variants/font.rom.425a896a)** (6,144 bytes)
+  - SHA1: `425a896af83386c7bafac59f94211cdbb9cce18d`
+  - MD5: `14bc9e267cf0cb56d22d5c470f582d53`
+  - CRC32: `7a6edb47`
+- **[itf.rom](bios/NEC/PC-98/itf.rom)** (32,768 bytes)
+  - SHA1: `a2fb11c000ed7c976520622cfb7940ed6ddc904e`
+  - MD5: `72ea51443070f0e9212bfc9b793ee28e`
+  - CRC32: `c1815325`
+  - **Variants** (1 alternate versions):
+    - [itf.rom.cf3aa193](bios/NEC/PC-98/.variants/itf.rom.cf3aa193) (32,768 bytes) - SHA1: `cf3aa193df2722899066246bccbed03f2e79a74a`, MD5: `a13d96da03a28af8418d7f86ab951f1a`
+- **[itf.rom.cf3aa193](bios/NEC/PC-98/.variants/itf.rom.cf3aa193)** (32,768 bytes)
+  - SHA1: `cf3aa193df2722899066246bccbed03f2e79a74a`
+  - MD5: `a13d96da03a28af8418d7f86ab951f1a`
+  - CRC32: `dd4c7bb8`
+- **[n88.rom](bios/NEC/PC-98/n88.rom)** (32,768 bytes)
+  - SHA1: `3518193b8207bdebf22c1380c2db8c554baff329`
+  - MD5: `22be239bc0c4298bc0561252eed98633`
+  - CRC32: `ffd68be0`
+  - **Variants** (1 alternate versions):
+    - [n88.rom.9b1346d4](bios/NEC/PC-98/.variants/n88.rom.9b1346d4) (32,768 bytes) - SHA1: `9b1346d44044eeea921c4cce69b5dc49dbc0b7e9`, MD5: `f7cba6a308c2718dbe97e60e46ddd66a`
+- **[n88.rom.9b1346d4](bios/NEC/PC-98/.variants/n88.rom.9b1346d4)** (32,768 bytes)
+  - SHA1: `9b1346d44044eeea921c4cce69b5dc49dbc0b7e9`
+  - MD5: `f7cba6a308c2718dbe97e60e46ddd66a`
+  - CRC32: `73573432`
+- **[n88_0.rom](bios/NEC/PC-98/n88_0.rom)** (8,192 bytes)
+  - SHA1: `d1ae642aed4f0584eeb81ff50180db694e5101d4`
+  - MD5: `e28fe3f520bea594350ea8fb00395370`
+  - CRC32: `61984bab`
+  - **Variants** (1 alternate versions):
+    - [n88_0.rom.5aedbc59](bios/NEC/PC-98/.variants/n88_0.rom.5aedbc59) (8,192 bytes) - SHA1: `5aedbc5916d67ef28767a2b942864765eea81bb8`, MD5: `c254685f00ca9c31b97203d6ef19f5e2`
+- **[n88_0.rom.5aedbc59](bios/NEC/PC-98/.variants/n88_0.rom.5aedbc59)** (8,192 bytes)
+  - SHA1: `5aedbc5916d67ef28767a2b942864765eea81bb8`
+  - MD5: `c254685f00ca9c31b97203d6ef19f5e2`
+  - CRC32: `a72697d7`
+- **[n88_1.rom](bios/NEC/PC-98/n88_1.rom)** (8,192 bytes)
+  - SHA1: `4ae4d37409ff99411a623da9f6a44192170a854e`
+  - MD5: `a8e298da7ac947669bcb1ff25cee0a83`
+  - CRC32: `7ad5d943`
+- **[n88_2.rom](bios/NEC/PC-98/n88_2.rom)** (8,192 bytes)
+  - SHA1: `e94278682ef9e9bbb82201f72c50382748dcea2a`
+  - MD5: `9d03154fd9abfc28c4e6d4dc705e6e23`
+  - CRC32: `6aee9a4e`
+- **[n88_3.rom](bios/NEC/PC-98/n88_3.rom)** (8,192 bytes)
+  - SHA1: `af452aed79b072c4d17985830b7c5dca64d4b412`
+  - MD5: `e1791f8154f1cdf22b576a1a365b6e1f`
+  - CRC32: `692cbcd8`
+- **[n88jisho.rom](bios/NEC/PC-98/n88jisho.rom)** (524,288 bytes)
+  - SHA1: `deef0cc2a9734ba891a6d6c022aa70ffc66f783e`
+  - MD5: `2e548679423370262f36cbde38a22789`
+  - CRC32: `bd6eb062`
+- **[n88knj2.rom](bios/NEC/PC-98/n88knj2.rom)** (131,072 bytes)
+  - SHA1: `b86b932cb4ce34472e0fe0f01a4a4350e15dcb53`
+  - MD5: `898a3b7b6c3326e8b2069765bca2b944`
+  - CRC32: `96d1ef44`
+- **[n88n.ROM](bios/NEC/PC-98/n88n.ROM)** (32,768 bytes)
+  - SHA1: `06dae1db384aa29d81c5b6ed587877e7128fcb35`
+  - MD5: `93cd1d78b7b9c50b80041ed330332ece`
+  - CRC32: `8a2a1e17`
+- **[n88n.rom](bios/NEC/PC-98/n88n.rom)** (32,768 bytes)
+  - SHA1: `063609dd518c124a4fc9ba35d1bae35771666a34`
+  - MD5: `5d6854624dd01cd791f58727fc43a525`
+  - CRC32: `5cb8b584`
+- **[pc88.rom](bios/NEC/PC-98/pc88.rom)** (90,112 bytes)
+  - SHA1: `d70660b4d67baecfc503f3777f56843b267c5960`
+  - MD5: `05a16413b0a5343de158a3dfd2d035e2`
+  - CRC32: `0a650926`
+- **[sound.rom](bios/NEC/PC-98/sound.rom)** (16,384 bytes)
+  - SHA1: `d5dbc4fea3b8367024d363f5351baecd6adcd8ef`
+  - MD5: `524473c1a5a03b17e21d86a0408ff827`
+  - CRC32: `fe9f57f2`
+  - **Variants** (1 alternate versions):
+    - [sound.rom.e09c5415](bios/NEC/PC-98/.variants/sound.rom.e09c5415) (16,384 bytes) - SHA1: `e09c54152c8093e1724842c711aed6417169db23`, MD5: `42c271f8b720e796a484cc1165ff4914`
+- **[sound.rom.e09c5415](bios/NEC/PC-98/.variants/sound.rom.e09c5415)** (16,384 bytes)
+  - SHA1: `e09c54152c8093e1724842c711aed6417169db23`
+  - MD5: `42c271f8b720e796a484cc1165ff4914`
+  - CRC32: `80eabfde`
+  - Platform names: Recalbox: `sound.rom`
+
+### NEC/PC-FX
+
+- **[fx-scsi.rom](bios/NEC/PC-FX/fx-scsi.rom)** (524,288 bytes)
+  - SHA1: `65482a23ac5c10a6095aee1db5824cca54ead6e5`
+  - MD5: `430e9745f9235c515bc8e652d6ca3004`
+  - CRC32: `f3e60e5e`
+- **[pcfx.rom](bios/NEC/PC-FX/pcfx.rom)** (1,048,576 bytes)
+  - SHA1: `1a77fd83e337f906aecab27a1604db064cf10074`
+  - MD5: `08e36edbea28a017f79f8d4f7ff9b6d7`
+  - CRC32: `76ffb97a`
+  - Also known as: `pcfxbios.bin`
+  - Platform names: Lakka: `pcfxbios.bin`, RetroArch: `pcfxbios.bin`, RetroPie: `pcfxbios.bin`
+- **[pcfxga.rom](bios/NEC/PC-FX/pcfxga.rom)** (1,048,576 bytes)
+  - SHA1: `a9372202a5db302064c994fcda9b24d29bb1b41c`
+  - MD5: `5885bc9a64bf80d4530b9b9b978ff587`
+  - CRC32: `41c3776b`
+- **[pcfxv101.bin](bios/NEC/PC-FX/pcfxv101.bin)** (1,048,576 bytes)
+  - SHA1: `8b662f7548078be52a871565e19511ccca28c5c8`
+  - MD5: `e2fb7c7220e3a7838c2dd7e401a7f3d8`
+  - CRC32: `236102c9`
+
+### Nintendo/3DS
+
+- **[00000000.app.romfs](bios/Nintendo/3DS/Citra/nand/00000000000000000000000000000000/title/0004009b/00010202/content/00000000.app.romfs)** (1,083,544 bytes)
+  - SHA1: `bca99203a54259269a3be7df175a1a83f21612c9`
+  - MD5: `8c1c0d4c1ece975a003a88cd3baf3694`
+  - CRC32: `5b414f0b`
+  - **Variants** (1 alternate versions):
+    - [00000000.app.romfs.874b5796](bios/Nintendo/3DS/.variants/00000000.app.romfs.874b5796) (118,292 bytes) - SHA1: `874b5796186536559f5703989e98525d85c6bd2a`, MD5: `6fd0dc38d37af0e6b894799c298a7659`
+- **[00000000.app.romfs](bios/Nintendo/3DS/Citra/nand/00000000000000000000000000000000/title/0004009b/00010402/content/00000000.app.romfs)** (219,040 bytes)
+  - SHA1: `a09da5a90b0d953568012b003b899243660ff6cd`
+  - MD5: `80e44b73d8c6144abebb57803af0f37f`
+  - CRC32: `00e4e89d`
+  - **Variants** (1 alternate versions):
+    - [00000000.app.romfs.874b5796](bios/Nintendo/3DS/.variants/00000000.app.romfs.874b5796) (118,292 bytes) - SHA1: `874b5796186536559f5703989e98525d85c6bd2a`, MD5: `6fd0dc38d37af0e6b894799c298a7659`
+- **[00000000.app.romfs](bios/Nintendo/3DS/Citra/nand/00000000000000000000000000000000/title/0004009b/00014002/content/00000000.app.romfs)** (1,445,851 bytes)
+  - SHA1: `84d3f3832db9ae5d77e4a4f0a86820897de18d3f`
+  - MD5: `e8463408d8f3bcadad40089c80bd58e8`
+  - CRC32: `0252a9db`
+  - **Variants** (1 alternate versions):
+    - [00000000.app.romfs.874b5796](bios/Nintendo/3DS/.variants/00000000.app.romfs.874b5796) (118,292 bytes) - SHA1: `874b5796186536559f5703989e98525d85c6bd2a`, MD5: `6fd0dc38d37af0e6b894799c298a7659`
+- **[00000000.app.romfs](bios/Nintendo/3DS/Citra/nand/00000000000000000000000000000000/title/0004009b/00014102/content/00000000.app.romfs)** (1,515,610 bytes)
+  - SHA1: `c591c749b50dbb20e0a74fd83ad195853b980e0a`
+  - MD5: `332659e67c5a29f874487e393c9e710a`
+  - CRC32: `1a1e080a`
+  - **Variants** (1 alternate versions):
+    - [00000000.app.romfs.874b5796](bios/Nintendo/3DS/.variants/00000000.app.romfs.874b5796) (118,292 bytes) - SHA1: `874b5796186536559f5703989e98525d85c6bd2a`, MD5: `6fd0dc38d37af0e6b894799c298a7659`
+- **[00000000.app.romfs](bios/Nintendo/3DS/Citra/nand/00000000000000000000000000000000/title/0004009b/00014202/content/00000000.app.romfs)** (527,944 bytes)
+  - SHA1: `3bfd84c374f9daf12e2a255ceecf34ff707c0272`
+  - MD5: `f4f0aa42482137c3ca6df7b1cc75bf7e`
+  - CRC32: `76c2ccc3`
+  - **Variants** (1 alternate versions):
+    - [00000000.app.romfs.874b5796](bios/Nintendo/3DS/.variants/00000000.app.romfs.874b5796) (118,292 bytes) - SHA1: `874b5796186536559f5703989e98525d85c6bd2a`, MD5: `6fd0dc38d37af0e6b894799c298a7659`
+- **[00000000.app.romfs](bios/Nintendo/3DS/Citra/nand/00000000000000000000000000000000/title/0004009b/00014302/content/00000000.app.romfs)** (1,829,602 bytes)
+  - SHA1: `d9d0e803bf9b14fdca93ac817a7b154bc7c236e4`
+  - MD5: `4b7d6c555fd4d663b9a898afad922c84`
+  - CRC32: `4c7b8931`
+  - **Variants** (1 alternate versions):
+    - [00000000.app.romfs.874b5796](bios/Nintendo/3DS/.variants/00000000.app.romfs.874b5796) (118,292 bytes) - SHA1: `874b5796186536559f5703989e98525d85c6bd2a`, MD5: `6fd0dc38d37af0e6b894799c298a7659`
+- **[00000000.app.romfs](bios/Nintendo/3DS/Citra/nand/00000000000000000000000000000000/title/000400db/00010302/content/00000000.app.romfs)** (119,012 bytes)
+  - SHA1: `2c433b334a2ecff7aafd279d75d7a0d124730629`
+  - MD5: `2e9a89049e8b7c4df060b175d67b7895`
+  - CRC32: `951f635f`
+  - **Variants** (1 alternate versions):
+    - [00000000.app.romfs.874b5796](bios/Nintendo/3DS/.variants/00000000.app.romfs.874b5796) (118,292 bytes) - SHA1: `874b5796186536559f5703989e98525d85c6bd2a`, MD5: `6fd0dc38d37af0e6b894799c298a7659`
+- **[00000000.app.romfs.874b5796](bios/Nintendo/3DS/.variants/00000000.app.romfs.874b5796)** (118,292 bytes)
+  - SHA1: `874b5796186536559f5703989e98525d85c6bd2a`
+  - MD5: `6fd0dc38d37af0e6b894799c298a7659`
+  - CRC32: `90b2a0f2`
+- **[CFL_DB.dat](bios/Nintendo/3DS/Citra/nand/data/00000000000000000000000000000000/extdata/00000000/F000000B/user/CFL_DB.dat)** (310,560 bytes)
+  - SHA1: `dcdba80719d0d77fc77d4edc4d951cf6dc7cd167`
+  - MD5: `6b2782bca7ee2873adc590f978264436`
+  - CRC32: `c4df011e`
+- **[config](bios/Nintendo/3DS/Citra/nand/data/00000000000000000000000000000000/sysdata/00010017/00000000/config)** (32,768 bytes)
+  - SHA1: `5c7c5a5768bbb8b293744f42acdc5467c1d54148`
+  - MD5: `3155c83220c178dd0ae325e5c037fc61`
+  - CRC32: `0ba5afa8`
+  - **Variants** (1 alternate versions):
+    - [config.77be2f6f](bios/Sharp/X68000/.variants/config.77be2f6f) (48 bytes) - SHA1: `77be2f6f28897f99b73d4c47bf7cd47e999fd7cd`, MD5: `d407317a52f8425a6753232064d14700`
+- **[gamecoin.dat](bios/Nintendo/3DS/Citra/nand/data/00000000000000000000000000000000/extdata/00000000/F000000B/user/gamecoin.dat)** (20 bytes)
+  - SHA1: `4d0ca3a357ce7a8f1feb77e5ae21bfe4c39edf4f`
+  - MD5: `db3ce1857c1568e36414ce043499120e`
+  - CRC32: `929604fc`
+- **[icon](bios/Nintendo/3DS/Citra/sdmc/Nintendo%203DS/00000000000000000000000000000000/00000000000000000000000000000000/extdata/00000000/00000300/icon)** (14,016 bytes)
+  - SHA1: `b94ea3514e70c36208b87ed9c129ca950e568eca`
+  - MD5: `d35a0c7a0534a10ef5b4de72858cf038`
+  - CRC32: `4cf62ffb`
+- **[icon](bios/Nintendo/3DS/Citra/sdmc/Nintendo%203DS/00000000000000000000000000000000/00000000000000000000000000000000/extdata/00000000/000011C5/icon)** (14,016 bytes)
+  - SHA1: `6f2803eaa5ec3979772c3754c0638a2d9fd7ea17`
+  - MD5: `e2af32bf972f7713fb78c8b488cf221d`
+  - CRC32: `bbb98299`
+- **[metadata](bios/Nintendo/3DS/Citra/nand/data/00000000000000000000000000000000/extdata/00000000/F000000B/metadata)** (16 bytes)
+  - SHA1: `e129f27c5103bc5cc44bcdf0a15e160d445066ff`
+  - MD5: `4ae71336e44bf9bf79d2752e234818a5`
+  - CRC32: `ecbb4b55`
+- **[metadata](bios/Nintendo/3DS/Citra/sdmc/Nintendo%203DS/00000000000000000000000000000000/00000000000000000000000000000000/extdata/00000000/00000300/metadata)** (16 bytes)
+  - SHA1: `68d56baf78755c307a51ef6a67ba5a4ca2a52f5c`
+  - MD5: `c680d86c9a2060b7f2a8de6f3fbe5331`
+  - CRC32: `9c189782`
+- **[metadata](bios/Nintendo/3DS/Citra/sdmc/Nintendo%203DS/00000000000000000000000000000000/00000000000000000000000000000000/extdata/00000000/000011C5/metadata)** (16 bytes)
+  - SHA1: `71a68339a0938ec632cfead3c2c1d8da613e071c`
+  - MD5: `5d8cec8cb58bd5f51262f2fd63e8bc41`
+  - CRC32: `e6a09d5a`
+- **[seeddb.bin](bios/Nintendo/3DS/Citra/sysdata/seeddb.bin)** (53,264 bytes)
+  - SHA1: `9e2c006997761082be87cf316e57c4da5cddbc62`
+  - MD5: `bb555415337408a88851f0b7fba797d1`
+  - CRC32: `20ce44b8`
+- **[shared_font.bin](bios/Nintendo/3DS/Citra/sysdata/shared_font.bin)** (3,145,728 bytes)
+  - SHA1: `60022d6d026c8df950722478aab25702a0dfa067`
+  - MD5: `73718beedb418a70bed8f16f2f2fb853`
+  - CRC32: `28418e6d`
+  - **Variants** (1 alternate versions):
+    - [shared_font.bin.44b6a43e](bios/Nintendo/3DS/.variants/shared_font.bin.44b6a43e) (3,350,532 bytes) - SHA1: `44b6a43eb05833d787d8b02a5572e3a684f23683`, MD5: `ced196afd79497857d8c5a0bfc2c0d4e`
+- **[shared_font.bin.44b6a43e](bios/Nintendo/3DS/.variants/shared_font.bin.44b6a43e)** (3,350,532 bytes)
+  - SHA1: `44b6a43eb05833d787d8b02a5572e3a684f23683`
+  - MD5: `ced196afd79497857d8c5a0bfc2c0d4e`
+  - CRC32: `4036c26b`
+- **[ubll.lst](bios/Nintendo/3DS/Citra/nand/data/00000000000000000000000000000000/extdata/00000000/F000000B/user/ubll.lst)** (12,000 bytes)
+  - SHA1: `28c07606c0cb782cc58faea250ed1eb4069c9bb5`
+  - MD5: `ff6b0e55e075bfb147844ff12df05786`
+  - CRC32: `a109d351`
+
+### Nintendo/Famicom Disk System
+
+- **[disksys.rom](bios/Nintendo/Famicom%20Disk%20System/disksys.rom)** (8,192 bytes)
+  - SHA1: `57fe1bdee955bb48d357e463ccbf129496930b62`
+  - MD5: `ca30b50f880eb660a320674ed365ef7a`
+  - CRC32: `5e607dcf`
+
+### Nintendo/Game Boy
+
+- **[dmg_boot.bin](bios/Nintendo/Game%20Boy/dmg_boot.bin)** (256 bytes)
+  - SHA1: `1db57a1e8b6e4096f811587f9eab0c6675fd9755`
+  - MD5: `6344d08bbbcbedbbaef9ddbdf7632c74`
+  - CRC32: `07a278d0`
+- **[dmg_rom.bin](bios/Nintendo/Game%20Boy/dmg_rom.bin)** (256 bytes)
+  - SHA1: `4ed31ec6b0b175bb109c0eb5fd3d193da823339f`
+  - MD5: `32fbbd84168d3482956eb3c5051637f5`
+  - CRC32: `59c8598e`
+  - Also known as: `gb_bios.bin`
+  - Platform names: Batocera: `gb_bios.bin`, Lakka: `dmg_boot.bin`, Lakka: `gb_bios.bin`, Recalbox: `gb_bios.bin`, RetroArch: `dmg_boot.bin`, RetroArch: `gb_bios.bin`, RetroPie: `dmg_boot.bin`, RetroPie: `gb_bios.bin`
+- **[mgb_boot.bin](bios/Nintendo/Game%20Boy/mgb_boot.bin)** (256 bytes)
+  - SHA1: `9817bdae9335a3accb584f77c165dc5726555d1f`
+  - MD5: `df79723ee8093b0580496f3df436e4c4`
+  - CRC32: `08f6fc29`
+
+### Nintendo/Game Boy Advance
+
+- **[gba_bios.bin](bios/Nintendo/Game%20Boy%20Advance/gba_bios.bin)** (16,384 bytes)
+  - SHA1: `300c20df6731a33952ded8c436f7f186d25d3492`
+  - MD5: `a860e8c0b6d573d191e4ec7db1b1e4f6`
+  - CRC32: `81977335`
+- **[open_gba_bios.bin](bios/Nintendo/Game%20Boy%20Advance/open_gba_bios.bin)** (16,384 bytes)
+  - SHA1: `598c0b2c6c5d15bbba218773574c9e7856d141f3`
+  - MD5: `1876f71b0d8c65eef3454547896ffb11`
+  - CRC32: `9ea7e05e`
+
+### Nintendo/Game Boy Color
+
+- **[agb_boot.bin](bios/Nintendo/Game%20Boy%20Color/agb_boot.bin)** (2,304 bytes)
+  - SHA1: `4ed1d95c9c682a78698f235ce9e9bb3b62bccf9f`
+  - MD5: `8e29ae4f331830d54ae764f3e10cebae`
+  - CRC32: `e082c15a`
+- **[cgb_boot.bin](bios/Nintendo/Game%20Boy%20Color/cgb_boot.bin)** (2,304 bytes)
+  - SHA1: `80e3ee82416c1a74827a5459fde32f04bf51a1f6`
+  - MD5: `b560efd759d87634a03b243f22bba27a`
+  - CRC32: `1d67e99e`
+  - **Variants** (1 alternate versions):
+    - [cgb_boot.bin.11390377](bios/Nintendo/Game%20Boy%20Color/.variants/cgb_boot.bin.11390377) (2,304 bytes) - SHA1: `113903775a9d34b798c2f8076672da6626815a91`, MD5: `62cfda90d22405cdff59700c388a57f6`
+- **[cgb_boot.bin.11390377](bios/Nintendo/Game%20Boy%20Color/.variants/cgb_boot.bin.11390377)** (2,304 bytes)
+  - SHA1: `113903775a9d34b798c2f8076672da6626815a91`
+  - MD5: `62cfda90d22405cdff59700c388a57f6`
+  - CRC32: `8113b4d8`
+- **[gbc_bios.bin](bios/Nintendo/Game%20Boy%20Color/gbc_bios.bin)** (2,304 bytes)
+  - SHA1: `1293d68bf9643bc4f36954c1e80e38f39864528d`
+  - MD5: `dbfce9db9deaa2567f6a84fde55f9680`
+  - CRC32: `41884e46`
+  - Also known as: `cgb0_boot.bin`, `cgb_agb_boot.bin`
+  - Platform names: Lakka: `cgb_boot.bin`, RetroArch: `cgb_boot.bin`, RetroPie: `cgb_boot.bin`
+
+### Nintendo/GameCube
+
+- **[codehandler.bin](bios/Nintendo/GameCube/dolphin-emu/Sys/codehandler.bin)** (2,880 bytes)
+  - SHA1: `e6c0050b3c67ee26198488fbbe4a5d019c15b628`
+  - MD5: `1f118b8735fcf40c20b38c3184eebfd9`
+  - CRC32: `ba8dfa56`
+- **[gc-dvd-20010608.bin](bios/Nintendo/GameCube/gc-dvd-20010608.bin)** (131,072 bytes)
+  - SHA1: `27872c201e87b06a19bf85d36c796ef383f8d52d`
+  - MD5: `561532ad496f644897952d2cef5bb431`
+  - CRC32: `c047465a`
+- **[gc-dvd-20010831.bin](bios/Nintendo/GameCube/gc-dvd-20010831.bin)** (131,072 bytes)
+  - SHA1: `ae7233cae8f94749796e0b740d6021e3b00a8926`
+  - MD5: `b953eb1a8fc9922b3f7051c1cdc451f1`
+  - CRC32: `54c7d10e`
+- **[gc-dvd-20020402.bin](bios/Nintendo/GameCube/gc-dvd-20020402.bin)** (131,072 bytes)
+  - SHA1: `691e46213d8428befdf568157e670b971ab94e1d`
+  - MD5: `413154dd0e2c824c9b18b807fd03ec4e`
+  - CRC32: `8bbef508`
+- **[gc-dvd-20020823.bin](bios/Nintendo/GameCube/gc-dvd-20020823.bin)** (131,072 bytes)
+  - SHA1: `2faaf92bcaffe675f54f7249d30f3791507e22ab`
+  - MD5: `c03f6bbaf644eb9b3ee261dbe199eb42`
+  - CRC32: `5205222b`
+- **[gc-ntsc-10.bin](bios/Nintendo/GameCube/gc-ntsc-10.bin)** (2,097,152 bytes)
+  - SHA1: `a1837968288253ed541f2b11440b68f5a9b33875`
+  - MD5: `fc924a7c879b661abc37cec4f018fdf3`
+  - CRC32: `6dac1f2a`
+  - Also known as: `IPL.bin`
+  - Platform names: Recalbox: `IPL.bin`
+- **[gc-ntsc-11.bin](bios/Nintendo/GameCube/gc-ntsc-11.bin)** (2,097,152 bytes)
+  - SHA1: `239eacd86527ff9a75aeb7282da65797baeef010`
+  - MD5: `019e39822a9ca3029124f74dd4d55ac4`
+  - CRC32: `d5e6feea`
+- **[gc-ntsc-12.bin](bios/Nintendo/GameCube/gc-ntsc-12.bin)** (2,097,152 bytes)
+  - SHA1: `ef9194ab4804aa0aa8540d846caf291b28331165`
+  - MD5: `b17148254a5799684c7d783206504926`
+  - CRC32: `86573808`
+  - Also known as: `IPL.bin`
+  - Platform names: Batocera: `IPL.bin`
+- **[gc-pal-10.bin](bios/Nintendo/GameCube/gc-pal-10.bin)** (2,097,152 bytes)
+  - SHA1: `f27c63e5394e2fd1606f70df004c4fc2d6027700`
+  - MD5: `0cdda509e2da83c85bfe423dd87346cc`
+  - CRC32: `4f319f43`
+  - Also known as: `IPL.bin`
+  - Platform names: Recalbox: `IPL.bin`
+- **[gc-pal-11.bin](bios/Nintendo/GameCube/gc-pal-11.bin)** (2,097,152 bytes)
+  - SHA1: `f3cd0c7c61cbcefa85e7de3aff4cfa50bc508714`
+  - MD5: `339848a0b7c2124cf155276c1e79cbd0`
+  - CRC32: `667d0b64`
+  - Also known as: `IPL.bin`
+  - Platform names: Recalbox: `IPL.bin`
+- **[gc-pal-12.bin](bios/Nintendo/GameCube/gc-pal-12.bin)** (2,097,152 bytes)
+  - SHA1: `80b8744ff5e43585392f55546bd03a673d11ef5f`
+  - MD5: `db92574caab77a7ec99d4605fd6f2450`
+  - CRC32: `ad1b7f16`
+  - Also known as: `IPL.bin`
+  - Platform names: Batocera: `IPL.bin`
+
+### Nintendo/NES
+
+- **[NstDatabase.xml](bios/Nintendo/NES/NstDatabase.xml)** (1,009,534 bytes)
+  - SHA1: `26322f182540211e9b5e3647675b7c593706ae2b`
+  - MD5: `7bfe8c0540ed4bd6a0f1e2a0f0118ced`
+  - CRC32: `ebb2196c`
+- **[gamegenie.nes](bios/Nintendo/NES/gamegenie.nes)** (24,592 bytes)
+  - SHA1: `f430a0d752a9fa0c7032db8131f9090d18f71779`
+  - MD5: `7f98d77d7a094ad7d069b74bd553ec98`
+  - CRC32: `4c514089`
+- **[nes.pal](bios/Nintendo/NES/nes.pal)** (192 bytes)
+  - SHA1: `37027d92e1015b82a7dc5c43e9f1649a961577ab`
+  - MD5: `aaf3666e4ed478e2964b46d6a7aa27ad`
+  - CRC32: `76f51d6b`
+
+### Nintendo/Nintendo 64DD
+
+- **[64DD_IPL.bin](bios/Nintendo/Nintendo%2064DD/64DD_IPL.bin)** (4,194,304 bytes)
+  - SHA1: `bf861922dcb78c316360e3e742f4f70ff63c9bc3`
+  - MD5: `8d3d9f294b6e174bc7b1d2fd1c727530`
+  - CRC32: `7f933ce2`
+  - Also known as: `IPL.n64`
+  - Platform names: Recalbox: `IPL.n64`
+
+### Nintendo/Nintendo DS
+
+- **[biosdsi7.bin](bios/Nintendo/Nintendo%20DS/biosdsi7.bin)** (65,536 bytes)
+  - SHA1: `a3aa751eb6bdaaf8a827ba9e03576a6f1ab0f547`
+  - MD5: `559dae4ea78eb9d67702c56c1d791e81`
+  - CRC32: `9f1840d9`
+  - Also known as: `dsi_bios7.bin`
+  - Platform names: Batocera: `dsi_bios7.bin`
+- **[biosdsi9.bin](bios/Nintendo/Nintendo%20DS/biosdsi9.bin)** (65,536 bytes)
+  - SHA1: `7bf549b8be9e48ab0cdc9b0fdadd49a5131f97eb`
+  - MD5: `87b665fce118f76251271c3732532777`
+  - CRC32: `3d64d498`
+  - Also known as: `dsi_bios9.bin`
+  - Platform names: Batocera: `dsi_bios9.bin`
+- **[choose-your-dsi-sd-images-size.zip](bios/Nintendo/Nintendo%20DS/choose-your-dsi-sd-images-size.zip)** (3,518,551 bytes)
+  - SHA1: `f1ad917e0affaeb8d2114c7ecd02b9f938c3cbd9`
+  - MD5: `bfd8292fbf0a251647a23c5cb310a97a`
+  - CRC32: `7389b815`
+- **[dsfirmware.bin](bios/Nintendo/Nintendo%20DS/dsfirmware.bin)** (262,144 bytes)
+  - SHA1: `1cf9e67c2c703bb9961bbcdd39cd2c7e319a803b`
+  - MD5: `94bc5094607c5e6598d50472c52f27f2`
+  - CRC32: `62efc03d`
+- **[dsi_firmware.bin](bios/Nintendo/Nintendo%20DS/dsi_firmware.bin)** (131,072 bytes)
+  - SHA1: `d2a5af338f09c5cbdd5d7628db5b9c075c69b616`
+  - MD5: `8daa89fd280b3e5ec79fbab73ad6684e`
+  - CRC32: `df558b58`
+- **[dsi_nand.bin](bios/Nintendo/Nintendo%20DS/dsi_nand.bin)** (251,658,304 bytes)
+  - SHA1: `b48f44194fe918aaaec5298861479512b581d661`
+  - MD5: `dfafb1908da8f527df7a372e649b50be`
+  - CRC32: `416bf51a`
+- **[dsi_sd_card.bin](bios/Nintendo/Nintendo%20DS/dsi_sd_card.bin)** (1,048,576 bytes)
+  - SHA1: `3b71f43ff30f4b15b5cd85dd9e95ebc7e84eb5a3`
+  - MD5: `b6d81b360a5672d80c27430f39153e2c`
+  - CRC32: `a738ea1c`
+  - Also known as: `nds_sd_card.bin`
+- **[dsifirmware.bin](bios/Nintendo/Nintendo%20DS/dsifirmware.bin)** (131,072 bytes)
+  - SHA1: `3773f52559d5ac4fc6d8aefe35bce58730ae8181`
+  - MD5: `74f23348012d7b3e1cc216c47192ffeb`
+  - CRC32: `6f6d289b`
+- **[firmware.bin](bios/Nintendo/Nintendo%20DS/firmware.bin)** (262,144 bytes)
+  - SHA1: `cfe072921ee3fb93f688743f8beef89043c3e9ad`
+  - MD5: `e45033d9b0fa6b0de071292bba7c9d13`
+  - CRC32: `945f9dc9`
+  - **Variants** (1 alternate versions):
+    - [firmware.bin.8497afdd](bios/Nintendo/Nintendo%20DS/.variants/firmware.bin.8497afdd) (262,144 bytes) - SHA1: `8497afdd16af92d6887b71582846c40514e9039f`, MD5: `145eaef5bd3037cbc247c213bb3da1b3`
+- **[firmware.bin.8497afdd](bios/Nintendo/Nintendo%20DS/.variants/firmware.bin.8497afdd)** (262,144 bytes)
+  - SHA1: `8497afdd16af92d6887b71582846c40514e9039f`
+  - MD5: `145eaef5bd3037cbc247c213bb3da1b3`
+  - CRC32: `41599ec9`
+  - Platform names: Recalbox: `firmware.bin`
+- **[nds7.bin](bios/Nintendo/Nintendo%20DS/nds7.bin)** (16,384 bytes)
+  - SHA1: `24f67bdea115a2c847c8813a262502ee1607b7df`
+  - MD5: `df692a80a5b1bc90728bc3dfc76cd948`
+  - CRC32: `1280f0d5`
+  - Also known as: `bios7.bin`
+  - Platform names: Batocera: `bios7.bin`, Lakka: `bios7.bin`, Recalbox: `bios7.bin`, RetroArch: `bios7.bin`, RetroPie: `bios7.bin`
+- **[nds9.bin](bios/Nintendo/Nintendo%20DS/nds9.bin)** (4,096 bytes)
+  - SHA1: `bfaac75f101c135e32e2aaf541de6b1be4c8c62d`
+  - MD5: `a392174eb3e572fed6447e956bde4b25`
+  - CRC32: `2ab23573`
+  - Also known as: `bios9.bin`
+  - Platform names: Batocera: `bios9.bin`, Lakka: `bios9.bin`, Recalbox: `bios9.bin`, RetroArch: `bios9.bin`, RetroPie: `bios9.bin`
+
+### Nintendo/Pokemon Mini
+
+- **[bios.min](bios/Nintendo/Pokemon%20Mini/bios.min)** (4,096 bytes)
+  - SHA1: `daad4113713ed776fbd47727762bca81ba74915f`
+  - MD5: `1e4fb124a3a886865acb574f388c803d`
+  - CRC32: `aed3c14d`
+
+### Nintendo/SNES
+
+- **[BS-X.bin](bios/Nintendo/SNES/BS-X.bin)** (1,048,576 bytes)
+  - SHA1: `4891d739a8a8b67923681bad4fb67edab2e90e50`
+  - MD5: `96cf17bf589fcbfa6f8de2dc84f19fa2`
+  - CRC32: `e5a91ad4`
+- **[cx4.data.rom](bios/Nintendo/SNES/cx4.data.rom)** (3,072 bytes)
+  - SHA1: `a002f4efba42775a31185d443f3ed1790b0e949a`
+  - MD5: `037ac4296b6b6a5c47c440188d3c72e3`
+  - CRC32: `b6e76a6a`
+- **[dsp1.data.rom](bios/Nintendo/SNES/dsp1.data.rom)** (2,048 bytes)
+  - SHA1: `589c158685fe3cf88c7ca77cb6083f0e4de9c7c3`
+  - MD5: `3d81b45fa0c2aa8b852dfb1ece7c0971`
+  - CRC32: `c8347cbd`
+- **[dsp1.program.rom](bios/Nintendo/SNES/dsp1.program.rom)** (6,144 bytes)
+  - SHA1: `c5d283604beebb3d832f15a0b3fc60d10dd4bddc`
+  - MD5: `ae209fbe789fbf11a48aea5ab1197321`
+  - CRC32: `db9a4c92`
+- **[dsp1b.data.rom](bios/Nintendo/SNES/dsp1b.data.rom)** (2,048 bytes)
+  - SHA1: `19d5e822fe15ee6942e9921c3d8275a761a969df`
+  - MD5: `1e3f568634a7d8284020dddc0ae905bc`
+  - CRC32: `37a252c6`
+- **[dsp1b.program.rom](bios/Nintendo/SNES/dsp1b.program.rom)** (6,144 bytes)
+  - SHA1: `03c6c0bdb40846c42aeff6b716e1ea0e001c3ae3`
+  - MD5: `d10f446888e097cbf500f3f663cf4f6d`
+  - CRC32: `66a73998`
+- **[dsp2.data.rom](bios/Nintendo/SNES/dsp2.data.rom)** (2,048 bytes)
+  - SHA1: `aed9167cc2897cd8d0432f0b8f713fabbc48f5c4`
+  - MD5: `e9417e29223b139c3c4b635a2a3b8744`
+  - CRC32: `b3893c70`
+- **[dsp2.program.rom](bios/Nintendo/SNES/dsp2.program.rom)** (6,144 bytes)
+  - SHA1: `51a274955ef493cfcf2efad7e2ee54738c81eb15`
+  - MD5: `aa6e5922a3ed5ded54f24247c11143c5`
+  - CRC32: `0c1cf838`
+- **[dsp3.data.rom](bios/Nintendo/SNES/dsp3.data.rom)** (2,048 bytes)
+  - SHA1: `e7ec3da203a4edba2b17c06d9384787304a025a0`
+  - MD5: `0a81210c0a940b997dd9843281008ee6`
+  - CRC32: `8b41a2bd`
+- **[dsp3.program.rom](bios/Nintendo/SNES/dsp3.program.rom)** (6,144 bytes)
+  - SHA1: `11b7ba3501a8542af4cdfdbd1c9702ae0a0e3fae`
+  - MD5: `d99ca4562818d49cee1f242705bba6f8`
+  - CRC32: `f29be51c`
+- **[dsp4.data.rom](bios/Nintendo/SNES/dsp4.data.rom)** (2,048 bytes)
+  - SHA1: `8f2ffb9c1702aa2f76191e98f3fef43f73e5aab7`
+  - MD5: `ee4990879eb68e3cbca239c5bc20303d`
+  - CRC32: `efa8b9b2`
+- **[dsp4.program.rom](bios/Nintendo/SNES/dsp4.program.rom)** (6,144 bytes)
+  - SHA1: `1abee528a59238fd5668fdcffd598d079cb056c2`
+  - MD5: `a151023b948b90ffc23a5b594bb6fef2`
+  - CRC32: `14b77ae3`
+- **[st010.data.rom](bios/Nintendo/SNES/st010.data.rom)** (4,096 bytes)
+  - SHA1: `bd116501ec41c438fff210fd03233c6c9d15a514`
+  - MD5: `254d70762b6f59f99c27c395aba7d07d`
+  - CRC32: `216081b2`
+- **[st010.program.rom](bios/Nintendo/SNES/st010.program.rom)** (49,152 bytes)
+  - SHA1: `2d0f34074ed3c6dfd61f767ee8b18e699b9769ac`
+  - MD5: `1d70019179a59a566a0bb5d3f2845544`
+  - CRC32: `691cbb4f`
+- **[st011.data.rom](bios/Nintendo/SNES/st011.data.rom)** (4,096 bytes)
+  - SHA1: `798ab84110ca93a6e73a540f4146d21f8d9e1442`
+  - MD5: `10bd3f4aa949737ab9836512c35bcc29`
+  - CRC32: `803256a7`
+- **[st011.program.rom](bios/Nintendo/SNES/st011.program.rom)** (49,152 bytes)
+  - SHA1: `375eca92592621e83881f3a9d7fd5ea3e5b306dc`
+  - MD5: `95222ebf1c0c2990bcf25db43743f032`
+  - CRC32: `a741e9fb`
+- **[st018.data.rom](bios/Nintendo/SNES/st018.data.rom)** (32,768 bytes)
+  - SHA1: `b19c0f8f207d62fdabf4bf71442826063bccc626`
+  - MD5: `49c898b60d0f15e90d0ba780dd12f366`
+  - CRC32: `b5255459`
+- **[st018.program.rom](bios/Nintendo/SNES/st018.program.rom)** (131,072 bytes)
+  - SHA1: `388e3721b94cd074d6ba0eca8616523d2118a6c3`
+  - MD5: `dda40ccd57390c96e49d30a041f9a9e7`
+  - CRC32: `f73d5e10`
+
+### Nintendo/Satellaview
+
+- **[BS-X (En) (DRM-Free).bin](bios/Nintendo/Satellaview/BS-X%20%28En%29%20%28DRM-Free%29.bin)** (1,048,576 bytes)
+  - SHA1: `7996bd1c01b99800e0d5d34beff93db283784864`
+  - MD5: `4ed9648505ab33a4daec93707b16caba`
+  - CRC32: `8c573c7e`
+- **[BS-X (En).bin](bios/Nintendo/Satellaview/BS-X%20%28En%29.bin)** (1,048,576 bytes)
+  - SHA1: `f3cdff70de5d0f5c52ca3a8f46588b863d48b8ec`
+  - MD5: `33b62505da6ca4525e3839db4e1a7bca`
+  - CRC32: `347e1c4e`
+- **[BS-X.bin](bios/Nintendo/Satellaview/BS-X.bin)** (1,048,576 bytes)
+  - SHA1: `604556b2e62860af18db5a77f2956ebc75450020`
+  - MD5: `fed4d8242cfbed61343d53d48432aced`
+  - CRC32: `f51f07a0`
+
+### Nintendo/SuFami Turbo
+
+- **[STBIOS.bin](bios/Nintendo/SuFami%20Turbo/STBIOS.bin)** (262,144 bytes)
+  - SHA1: `ef86ea192eed03d5c413fdbbfd46043be1d7a127`
+  - MD5: `d3a44ba7d42a74d3ac58cb9c14c6a5ca`
+  - CRC32: `9b4ca911`
+
+### Nintendo/Super Game Boy
+
+- **[SGB SFC for BSNES.zip](bios/Nintendo/Super%20Game%20Boy/SGB%20SFC%20for%20BSNES.zip)** (434,423 bytes)
+  - SHA1: `0f4f556277e87b3532a862b437a1685c6d77574c`
+  - MD5: `f06cf541494cc9685e6eaf568335c193`
+  - CRC32: `ba572850`
+- **[SGB SFC for Higan or nSide.zip](bios/Nintendo/Super%20Game%20Boy/SGB%20SFC%20for%20Higan%20or%20nSide.zip)** (435,551 bytes)
+  - SHA1: `1090223c6e8b38d7f8c1a97c9c125e3aa7c2b8cf`
+  - MD5: `58744063e88786ec3486903e4ce91f5a`
+  - CRC32: `de55de92`
+- **[sgb.boot.rom](bios/Nintendo/Super%20Game%20Boy/sgb.boot.rom)** (256 bytes)
+  - SHA1: `aa2f50a77dfb4823da96ba99309085a3c6278515`
+  - MD5: `d574d4f9c12f305074798f54c091a8b4`
+  - CRC32: `ec8a83b9`
+  - Also known as: `sgb1.boot.rom`, `sgb_bios.bin`
+  - Platform names: Batocera: `sgb_bios.bin`, Batocera: `sgb_boot.bin`, Lakka: `sgb1.boot.rom`, Lakka: `sgb_bios.bin`, Recalbox: `sgb_bios.bin`, RetroArch: `sgb1.boot.rom`, RetroArch: `sgb_bios.bin`, RetroPie: `sgb1.boot.rom`, RetroPie: `sgb_bios.bin`
+- **[sgb1.program.rom](bios/Nintendo/Super%20Game%20Boy/sgb1.program.rom)** (262,144 bytes)
+  - SHA1: `973e10840db683cf3faf61bd443090786b3a9f04`
+  - MD5: `b15ddb15721c657d82c5bab6db982ee9`
+  - CRC32: `8a4a174f`
+  - Also known as: `SGB1.sfc`, `SGB1.sfc/program.rom`
+  - Platform names: Batocera: `SGB1.sfc`, Lakka: `SGB1.sfc`, Recalbox: `SGB1.sfc`, RetroArch: `SGB1.sfc`, RetroPie: `SGB1.sfc`
+- **[sgb2.boot.rom](bios/Nintendo/Super%20Game%20Boy/sgb2.boot.rom)** (256 bytes)
+  - SHA1: `93407ea10d2f30ab96a314d8eca44fe160aea734`
+  - MD5: `e0430bca9925fb9882148fd2dc2418c1`
+  - CRC32: `53d0dd63`
+  - Also known as: `sgb2_bios.bin`
+  - Platform names: Batocera: `sgb2_boot.bin`, Lakka: `sgb2_bios.bin`, RetroArch: `sgb2_bios.bin`, RetroPie: `sgb2_bios.bin`
+- **[sgb2.program.rom](bios/Nintendo/Super%20Game%20Boy/sgb2.program.rom)** (524,288 bytes)
+  - SHA1: `e5b2922ca137051059e4269b236d07a22c07bc84`
+  - MD5: `8ecd73eb4edf7ed7e81aef1be80031d5`
+  - CRC32: `cb176e45`
+  - Also known as: `SGB2.sfc`, `SGB2.sfc/program.rom`
+  - Platform names: Batocera: `SGB2.sfc`, Lakka: `SGB2.sfc`, Recalbox: `SGB2.sfc`, RetroArch: `SGB2.sfc`, RetroPie: `SGB2.sfc`
+- **[sgb2_boot.bin](bios/Nintendo/Super%20Game%20Boy/sgb2_boot.bin)** (256 bytes)
+  - SHA1: `f282b3aaf98f8423dab7d77f1aa0192be630f2fb`
+  - MD5: `6d507dcf3b61ce45a5717421cdd0ae95`
+  - CRC32: `3ad83b6e`
+- **[sgb_boot.bin](bios/Nintendo/Super%20Game%20Boy/sgb_boot.bin)** (256 bytes)
+  - SHA1: `369e6eb5e0c975eaa52a4a3f6ee07b2a3c3c16de`
+  - MD5: `a43cbd0ab271990f434412fc5c500eff`
+  - CRC32: `4c866029`
+
+### Oric/Oric
+
+- **[8dos2.rom](bios/Oric/Oric/8dos2.rom)** (512 bytes)
+  - SHA1: `746a2996967282281a980842a93642ad7d740f9e`
+  - MD5: `5f3cd5a4307fed7a9dfe8faa4c044273`
+  - CRC32: `efc88d2b`
+- **[Bas122de.pch](bios/Oric/Oric/Bas122de.pch)** (2,037 bytes)
+  - SHA1: `3e8f851df9319891fb9849c922437468df98915d`
+  - MD5: `80fe771abf403e67f5640b2107c375c9`
+  - CRC32: `bfaaa640`
+- **[Bas122fr.pch](bios/Oric/Oric/Bas122fr.pch)** (2,037 bytes)
+  - SHA1: `c92aa5e5fedf94a01519867fd8235f33731b8191`
+  - MD5: `61e9414a2c0e2f71b5a25233506b4bf3`
+  - CRC32: `169dc64a`
+- **[Bas122uk.pch](bios/Oric/Oric/Bas122uk.pch)** (2,037 bytes)
+  - SHA1: `ee9dc592128ff337be5ef0bfb6d059752296b445`
+  - MD5: `120a23e1566195050983764e7d4543ce`
+  - CRC32: `3a0be9f6`
+- **[basic10.pch](bios/Oric/Oric/basic10.pch)** (2,016 bytes)
+  - SHA1: `6c62326403ecdf3d120fa7ffea47f4f1d5b40020`
+  - MD5: `c3944a435cc249196db09290aa17e9cf`
+  - CRC32: `801dea4e`
+- **[basic10.rom](bios/Oric/Oric/basic10.rom)** (16,384 bytes)
+  - SHA1: `333116e6884d85aaa4dfc7578a91cceeea66d016`
+  - MD5: `ebe418ec8a6c85d5ac32956c9a96c179`
+  - CRC32: `f18710b4`
+- **[basic11b.rom](bios/Oric/Oric/basic11b.rom)** (16,384 bytes)
+  - SHA1: `9451a1a09d8f75944dbd6f91193fc360f1de80ac`
+  - MD5: `a330779c42ad7d0c4ac6ef9e92788ec6`
+  - CRC32: `c3a92bef`
+  - Also known as: `basic11.rom`
+  - Platform names: Batocera: `basic11.rom`
+- **[bd500.rom](bios/Oric/Oric/bd500.rom)** (8,192 bytes)
+  - SHA1: `447975ed022379fb6b80a22fa37c2d188ca3aa88`
+  - MD5: `2b6498fd29a0adbf1c529762c02c33ab`
+  - CRC32: `61952e34`
+- **[colour.rom](bios/Oric/Oric/Oric/colour.rom)** (128 bytes)
+  - SHA1: `bda81f64be319d8793d284bf9d40f01d19b33515`
+  - MD5: `c888b36bf0fc222c3585c3fabe556d21`
+  - CRC32: `d50fca65`
+- **[empty_orix.rom](bios/Oric/Oric/empty_orix.rom)** (16,384 bytes)
+  - SHA1: `e7c32e4f75a58c87de1672e4dbd0794083535a60`
+  - MD5: `af3cec316a4960be1c9987599066c792`
+  - CRC32: `c98b4655`
+- **[hyperbas.rom](bios/Oric/Oric/hyperbas.rom)** (16,384 bytes)
+  - SHA1: `f5f70a0eb59f8cd6c261e179ae78ef906f68ed63`
+  - MD5: `364bf095e0dc4222d75354d50b8cddfc`
+  - CRC32: `1d96ab50`
+- **[jasmin.rom](bios/Oric/Oric/jasmin.rom)** (2,048 bytes)
+  - SHA1: `70e59b8abd67092f050462abc6cb5271e4c15f01`
+  - MD5: `5136f764a7dbd1352519351fbb53a9f3`
+  - CRC32: `37220e89`
+- **[kernel.rom](bios/Oric/Oric/kernel.rom)** (16,384 bytes)
+  - SHA1: `01f7a84d5a1973623eabd2be6c2cbac1ce5096a6`
+  - MD5: `1d63b6289c7e3566d411cf0682e401bc`
+  - CRC32: `356231a6`
+- **[microdis.rom](bios/Oric/Oric/microdis.rom)** (8,192 bytes)
+  - SHA1: `0d2ef6e67322f48f4b7e08d8bbe68827e2074561`
+  - MD5: `df864344d2a2091c3f952bd1c5ce1707`
+  - CRC32: `a9664a9c`
+- **[pravetzt.pch](bios/Oric/Oric/pravetzt.pch)** (2,390 bytes)
+  - SHA1: `3dd12d7ba54fee06a7e20dadb2c278a23a17af50`
+  - MD5: `eaa5158b07b439faab0db30e357f0af2`
+  - CRC32: `46bab02d`
+- **[pravetzt.rom](bios/Oric/Oric/pravetzt.rom)** (16,384 bytes)
+  - SHA1: `7afc276cb118adff72e4f16698f94bf3b2c64146`
+  - MD5: `8712a22e7e078de3343667d9fc1f2390`
+  - CRC32: `58079502`
+- **[shell.rom](bios/Oric/Oric/shell.rom)** (16,384 bytes)
+  - SHA1: `926b95e1cb574d4914dbed0681729a7c1a4bc68d`
+  - MD5: `642e8504adc72e7c16384dbdc1665fa2`
+  - CRC32: `8d166635`
+- **[teleass.rom](bios/Oric/Oric/teleass.rom)** (16,384 bytes)
+  - SHA1: `9e9af51dae3199cccf49ab3f0d47e2b9be4ba97d`
+  - MD5: `2324c9cc227c1327a72a667c97ed2990`
+  - CRC32: `68b0fde6`
+- **[telmatic.rom](bios/Oric/Oric/telmatic.rom)** (8,192 bytes)
+  - SHA1: `35f92a0477a88f5cf564971125047ffcfa02ec10`
+  - MD5: `0a814078410353744e2947a8e9342e4e`
+  - CRC32: `94358dc6`
+- **[telmon24.pch](bios/Oric/Oric/telmon24.pch)** (218 bytes)
+  - SHA1: `d8ce5b1405b6428969493efeb6f3aa2027c41bdc`
+  - MD5: `82a22231d402cd3284c698ba16a51d1d`
+  - CRC32: `29e86dbc`
+- **[telmon24.rom](bios/Oric/Oric/telmon24.rom)** (16,384 bytes)
+  - SHA1: `86fc8dc0932f983efa199e31ae05a4424772f959`
+  - MD5: `9a432244d9ee4a49e8ddcde64af94e05`
+  - CRC32: `aa727c5d`
+
+### Other/Batocera42
+
+- **[_info.txt](bios/Other/Batocera42/_info.txt)** (111 bytes)
+  - SHA1: `85acdc4646039d919c6125d715109685865376ab`
+  - MD5: `3ec5ebb9a9d65cccedb73d5d326194eb`
+  - CRC32: `4860e4b4`
+- **[dsi_nand.bin](bios/Other/Batocera42/dsi_nand.bin)** (251,658,304 bytes)
+  - SHA1: `2b972cec368e83a2699e6ab38165638b1bc1302c`
+  - MD5: `d71edf897ddd06bf335feeb68edeb272`
+  - CRC32: `8b79a73c`
+- **[mac755.chd](bios/Other/Batocera42/mac755.chd)** (23,360,456 bytes)
+  - SHA1: `817fbb2bbce56bf8e473ee2525ca34bcdeaddb90`
+  - MD5: `58d73d87e189ddc68ee9c64440ab1a05`
+  - CRC32: `69a1983e`
+- **[prod.keys](bios/Other/Batocera42/prod.keys)** (16,025 bytes)
+  - SHA1: `c146b651696d25287241f4bab18226e488bc45b3`
+  - MD5: `31fda6c3678507b12631dfd01b0415ef`
+  - CRC32: `a65c13ca`
+- **[title.keys](bios/Other/Batocera42/title.keys)** (1,224 bytes)
+  - SHA1: `bfee8e708dc4c8f27bfe51a12d57caaa0b7f74de`
+  - MD5: `f65367650f88124362922994b78ede77`
+  - CRC32: `77cacffb`
+
+### Other/Recalbox
+
+- **[0000000100000002.ini](bios/Other/Recalbox/0000000100000002.ini)** (255 bytes)
+  - SHA1: `70304e327f962ef8e25912df48981f9432fb7bf4`
+  - MD5: `a4ac00c622764f39b07f9fdf7cbf6f29`
+  - CRC32: `ef89c560`
+- **[16bit.glsl](bios/Other/Recalbox/16bit.glsl)** (943 bytes)
+  - SHA1: `f759d54750c7bb1fb7f9c38fc0c7a19164fdc08a`
+  - MD5: `bbb9f7de033210981d7b0ec4a8011c15`
+  - CRC32: `e8b7a22d`
+- **[32X_G_BIOS.BIN](bios/Other/Recalbox/32X_G_BIOS.BIN)** (256 bytes)
+  - SHA1: `dbebd76a448447cb6e524ac3cb0fd19fc065d944`
+  - MD5: `6a5433f6a132a2b683635819a6dcf085`
+  - CRC32: `5c12eae8`
+- **[32X_M_BIOS.BIN](bios/Other/Recalbox/32X_M_BIOS.BIN)** (2,048 bytes)
+  - SHA1: `1e5b0b2441a4979b6966d942b20cc76c413b8c5e`
+  - MD5: `f88354ec482be09aeccd76a97bb75868`
+  - CRC32: `dd9c46b8`
+- **[32X_S_BIOS.BIN](bios/Other/Recalbox/32X_S_BIOS.BIN)** (1,024 bytes)
+  - SHA1: `4103668c1bbd66c5e24558e73d4f3f92061a109a`
+  - MD5: `7f041b6a55cd7423a6c08a219335269e`
+  - CRC32: `bfda1fe5`
+- **[32bit.glsl](bios/Other/Recalbox/32bit.glsl)** (1,406 bytes)
+  - SHA1: `d4233447309a8bc51ef9aa74b866d57b890e7a2b`
+  - MD5: `d16c4efad5c0018492b37417b9c751b7`
+  - CRC32: `21aed445`
+- **[ApprovedInis.json](bios/Other/Recalbox/ApprovedInis.json)** (38,785 bytes)
+  - SHA1: `3641afa275bb6032e1a4bc9c4a75e08565074fb8`
+  - MD5: `54708e7ce622c2a384c54b57a2ebf998`
+  - CRC32: `27c1c18f`
+- **[AutoHDR.glsl](bios/Other/Recalbox/AutoHDR.glsl)** (1,763 bytes)
+  - SHA1: `1c136ad4b05922067dbbea7396538e7b51374ade`
+  - MD5: `ab81f0ee61a596429af746e6237a88dd`
+  - CRC32: `33b45ec7`
+- **[C.ini](bios/Other/Recalbox/C.ini)** (200 bytes)
+  - SHA1: `e89cfdba42060cc2027670ff8a4f955169a2a03d`
+  - MD5: `c29b3c8f8b0242c063030592de8395df`
+  - CRC32: `40a8f5ca`
+- **[D43.ini](bios/Other/Recalbox/D43.ini)** (282 bytes)
+  - SHA1: `5dc65b0fa559cedb965a7133bf513bb9feea7b2b`
+  - MD5: `6808cc29d7c37c6a54171f93e2ded058`
+  - CRC32: `fca2bda5`
+- **[D43E01.ini](bios/Other/Recalbox/D43E01.ini)** (2,018 bytes)
+  - SHA1: `f1d6230cd9ad1a836957796996b299adaa32b6e1`
+  - MD5: `f3ea142a038c150eeb34ab570dbbca75`
+  - CRC32: `de243786`
+- **[D43J01.ini](bios/Other/Recalbox/D43J01.ini)** (234 bytes)
+  - SHA1: `fbd60db86a00dbcca6fa91c3b8cf97c15fa8adcd`
+  - MD5: `3518d226af5efcd27978dad081bb6e8f`
+  - CRC32: `ddef9a3b`
+- **[D56E01.ini](bios/Other/Recalbox/D56E01.ini)** (344 bytes)
+  - SHA1: `db1ff3db298047de693f1ec9503cf502c0bf4b1e`
+  - MD5: `b8393a5b95d05edb8d65e39b0cbf87e6`
+  - CRC32: `128003a5`
+- **[D85.ini](bios/Other/Recalbox/D85.ini)** (251 bytes)
+  - SHA1: `06d9f5aa5559e45dbf0df286b34cfe00baff5384`
+  - MD5: `614a06b7f27c99f603271ae2d9ccea1d`
+  - CRC32: `96ff416d`
+- **[D86.ini](bios/Other/Recalbox/D86.ini)** (251 bytes)
+  - SHA1: `9fd5ccaa6ac1fefa60b2e764d331557a1ec0e8aa`
+  - MD5: `db6e7d3536d01d12e0cfc748c89a9854`
+  - CRC32: `f9428239`
+- **[D93U01.ini](bios/Other/Recalbox/D93U01.ini)** (79 bytes)
+  - SHA1: `1640c72c117f8ebfad01d5910f9e0a6e5bd3ba12`
+  - MD5: `763d80208e927a857ff1f3cfbfdbf735`
+  - CRC32: `2cb40ac3`
+- **[D95.ini](bios/Other/Recalbox/D95.ini)** (239 bytes)
+  - SHA1: `6f48767094c477543ef9f2cde034236a53192e9f`
+  - MD5: `e38effb366f64547223b98c1d1777d26`
+  - CRC32: `11e60d40`
+- **[DAX.ini](bios/Other/Recalbox/DAX.ini)** (469 bytes)
+  - SHA1: `0c9be0925010afc9e3795adab0962b0cda63a4a5`
+  - MD5: `52ac4e5ed762927054d55fe32fb18d81`
+  - CRC32: `d88b2c52`
+- **[DD2.ini](bios/Other/Recalbox/DD2.ini)** (334 bytes)
+  - SHA1: `66933e2aa2e454b7bbfff9352dac03345261aa1a`
+  - MD5: `529450ad8baa0ba794ba3bb1356948bb`
+  - CRC32: `51573f02`
+- **[DIC](bios/Other/Recalbox/DIC)** (4,676 bytes)
+  - SHA1: `2fcb5934019133ed7a2069e333cdbc349ecaa7ee`
+  - MD5: `d2e1f236a1be8816994d276df1bfb16c`
+  - CRC32: `ac12c46b`
+- **[DJU.ini](bios/Other/Recalbox/DJU.ini)** (150 bytes)
+  - SHA1: `48df4d13c1ea240acd0dcc8ecb52e9713b02035a`
+  - MD5: `6c055dbd9729eb0ba3c37923309c3a7e`
+  - CRC32: `ba2fd03a`
+- **[DLS.ini](bios/Other/Recalbox/DLS.ini)** (385 bytes)
+  - SHA1: `c2036b3aa24c805dabe41d5203c837d8140f0401`
+  - MD5: `06240dbbdee2c2a9b82701484429c680`
+  - CRC32: `173becce`
+- **[DPOJ8P.ini](bios/Other/Recalbox/DPOJ8P.ini)** (391 bytes)
+  - SHA1: `7195b3445003972b60c78a54ce0440fc400ce00a`
+  - MD5: `3e21e08fe706557580e07130a8aa1e92`
+  - CRC32: `d036be95`
+- **[DPSJ8P.ini](bios/Other/Recalbox/DPSJ8P.ini)** (291 bytes)
+  - SHA1: `3efd2c17bcb28781ce0b008409669bacac7e5162`
+  - MD5: `b6d5854a00da0d815a1fce504e8a7c13`
+  - CRC32: `13fbf951`
+- **[DQA.ini](bios/Other/Recalbox/DQA.ini)** (72 bytes)
+  - SHA1: `980b67541badbb96d582dba5186fd24acb3f61a8`
+  - MD5: `bc5c2d2f6b7ce0ceb2fa9ecea509966b`
+  - CRC32: `f3031781`
+- **[DSR.ini](bios/Other/Recalbox/DSR.ini)** (253 bytes)
+  - SHA1: `157944ccecdb49558b477af18e4c18864bf6161b`
+  - MD5: `500f351338c849e84db81b8a36a63160`
+  - CRC32: `4e8e45c0`
+- **[E.ini](bios/Other/Recalbox/E.ini)** (216 bytes)
+  - SHA1: `f5d1849d73c7e80ac528e8230808a9e3d885b208`
+  - MD5: `a7525aad2c08cd856ce884a6906366eb`
+  - CRC32: `a3b7b8e8`
+- **[E52.ini](bios/Other/Recalbox/E52.ini)** (238 bytes)
+  - SHA1: `03a87168cefabaddffff912f7e24356e17c301fd`
+  - MD5: `7107da69968cefec4960f7a739db1dc2`
+  - CRC32: `7fe6f7fa`
+- **[E53.ini](bios/Other/Recalbox/E53.ini)** (296 bytes)
+  - SHA1: `32c0b89d706433fa88ba368799014dd08051e39a`
+  - MD5: `71b557b852d49469056f5745bae56fcb`
+  - CRC32: `b0a1421c`
+- **[E54.ini](bios/Other/Recalbox/E54.ini)** (301 bytes)
+  - SHA1: `d9aa7134fa2ee22f0e175c8e3dcbf0c1a5ef0294`
+  - MD5: `b84e7a7469afc226cd05de538f073336`
+  - CRC32: `21931927`
+- **[E55.ini](bios/Other/Recalbox/E55.ini)** (246 bytes)
+  - SHA1: `468a874d0092f4bfeda64d01679c4c906c382c07`
+  - MD5: `2917381a0879c645ddf71e9ea45d1f0a`
+  - CRC32: `303222c8`
+- **[E56.ini](bios/Other/Recalbox/E56.ini)** (243 bytes)
+  - SHA1: `bc75acabccaf7474cd6c7f5c49019eeca4a81347`
+  - MD5: `ef0ebb1ceafdd5043a07b2b4ca6f081e`
+  - CRC32: `79439485`
+- **[E57.ini](bios/Other/Recalbox/E57.ini)** (240 bytes)
+  - SHA1: `828f3b0aa228712ef5b6eb4c5e55fe666f18e271`
+  - MD5: `5d83bd7d8b11f36a983ed18dfb2e1582`
+  - CRC32: `e03f5a72`
+- **[E5Z.ini](bios/Other/Recalbox/E5Z.ini)** (298 bytes)
+  - SHA1: `714450d4862f63a7de0062deff633f77d3291fc6`
+  - MD5: `39fac526f7f57491ab05de973e8fe51c`
+  - CRC32: `b753b49b`
+- **[E62.ini](bios/Other/Recalbox/E62.ini)** (298 bytes)
+  - SHA1: `b181aecf185e1ed96809e9e24db04ee8200c3160`
+  - MD5: `41460576e00859b7384424b3727af258`
+  - CRC32: `744ca680`
+- **[E63.ini](bios/Other/Recalbox/E63.ini)** (292 bytes)
+  - SHA1: `d8113759686a0be7f4974d25ac1fd94e91b0984f`
+  - MD5: `1c4a7099d1ba5a678c3f6b17ac03e2af`
+  - CRC32: `6e56d34a`
+- **[E6N.ini](bios/Other/Recalbox/E6N.ini)** (298 bytes)
+  - SHA1: `1cf184c0932c6fe43fad1c0807479749c35a8492`
+  - MD5: `3a49d30ac983794a7df4a02150bfeafc`
+  - CRC32: `6b7d00e7`
+- **[E6Q.ini](bios/Other/Recalbox/E6Q.ini)** (290 bytes)
+  - SHA1: `481c969ba8f9e29e5d89212b563d1a7080bfdd04`
+  - MD5: `a72c2e99a340f70e1d13ef5e6450d7c3`
+  - CRC32: `1b43f4bf`
+- **[E6V.ini](bios/Other/Recalbox/E6V.ini)** (291 bytes)
+  - SHA1: `9f0544be37be92c55b5be3c906f381a0b9ec78ba`
+  - MD5: `7c0eea16f84ba2fab3f8f3c89973f5c6`
+  - CRC32: `0e4e2ff5`
+- **[E6W.ini](bios/Other/Recalbox/E6W.ini)** (295 bytes)
+  - SHA1: `caa205dbcc2bb1fadd53972124f440cea95ebce0`
+  - MD5: `5d58565779283d8e8e2d5cfa826290ba`
+  - CRC32: `f187ee71`
+- **[E6X.ini](bios/Other/Recalbox/E6X.ini)** (298 bytes)
+  - SHA1: `b457e0248ffb6f9cfb61b2b7595bf0f9dade2724`
+  - MD5: `17215f3651e3402765ac223e245e99ff`
+  - CRC32: `3a89d797`
+- **[E73.ini](bios/Other/Recalbox/E73.ini)** (290 bytes)
+  - SHA1: `ebd6e3faa41d63aa170f5086d2ce98e17c8a40f3`
+  - MD5: `8ff1bbe4d77b44aa5ae0c87f02c17fc5`
+  - CRC32: `f719038c`
+- **[E78.ini](bios/Other/Recalbox/E78.ini)** (442 bytes)
+  - SHA1: `894ccd1981d9f1b0d36998c6292fcf9ae071f8f4`
+  - MD5: `262f61d5d61ba59a330042804237c850`
+  - CRC32: `7b446ee8`
+- **[E79.ini](bios/Other/Recalbox/E79.ini)** (291 bytes)
+  - SHA1: `f154da04adc1b6c31a1aa763c352aff29e22b6fd`
+  - MD5: `6ef1bd12745e2da5377f5b770fcd4ad0`
+  - CRC32: `dc948639`
+- **[E7V.ini](bios/Other/Recalbox/E7V.ini)** (291 bytes)
+  - SHA1: `8c5cc0605b5fe2766d393199b305dddddc6aec95`
+  - MD5: `db8ca6ed01f85b315e7c950fa3a9a207`
+  - CRC32: `c7c79abd`
+- **[E7Z.ini](bios/Other/Recalbox/E7Z.ini)** (304 bytes)
+  - SHA1: `0fe0495b361a69e4176832b8fcb0dbbc870133c0`
+  - MD5: `3db3d578aa051c598249425de37f65e7`
+  - CRC32: `73a63653`
+- **[EA2.ini](bios/Other/Recalbox/EA2.ini)** (334 bytes)
+  - SHA1: `17fbff0f84cd7e9d7f54002430797cf6e407437e`
+  - MD5: `42110bafe15d34c5e5833d156d1a3920`
+  - CRC32: `d3fb58d9`
+- **[EA3.ini](bios/Other/Recalbox/EA3.ini)** (338 bytes)
+  - SHA1: `e76a2873951d4aa8627b26ad57f5bf39ae507be1`
+  - MD5: `65cd67e02ca848d41bd9c1a34d7d04e4`
+  - CRC32: `94997a16`
+- **[EA4.ini](bios/Other/Recalbox/EA4.ini)** (341 bytes)
+  - SHA1: `e498242793382d17cceaf3c2a8f4b6ae58aff79f`
+  - MD5: `a7a1a5b050f3dcb065f9c79ef02bb1fa`
+  - CRC32: `4ab1e690`
+- **[EA5.ini](bios/Other/Recalbox/EA5.ini)** (361 bytes)
+  - SHA1: `025ec04473579f738d3f5be0c244c7a0fe2fb6f3`
+  - MD5: `c4fd0e6bd1eb599d0fd1ffa1f6295dfd`
+  - CRC32: `0c116cfa`
+- **[EA6.ini](bios/Other/Recalbox/EA6.ini)** (338 bytes)
+  - SHA1: `6994b65857f3b805eb56f0397a7353960d9bfa18`
+  - MD5: `ed341f94160b3940aa406621838b18b3`
+  - CRC32: `b3de6490`
+- **[EA7.ini](bios/Other/Recalbox/EA7.ini)** (351 bytes)
+  - SHA1: `b9b520254d15e1224988c5f4ecb5edfaded9edbd`
+  - MD5: `7c16ecded7a0157227d6921696d818d5`
+  - CRC32: `3a97e85f`
+- **[EA8.ini](bios/Other/Recalbox/EA8.ini)** (330 bytes)
+  - SHA1: `9d4472241b48e2935d0adab4b838dfa6072aacab`
+  - MD5: `ec24135e2c9513ac0c1111ce9c194f95`
+  - CRC32: `74fb446a`
+- **[EA9.ini](bios/Other/Recalbox/EA9.ini)** (317 bytes)
+  - SHA1: `9498ba0ee5907c35e836e133e4485bd23eef3b22`
+  - MD5: `7ab83b8024d8e1cc17b64a2a02b95e16`
+  - CRC32: `30aea806`
+- **[EAA.ini](bios/Other/Recalbox/EAA.ini)** (332 bytes)
+  - SHA1: `3bdf75039fbe979a8421575d3a7ddf6ae829c5ea`
+  - MD5: `bf02ce338744f4c8688b82cc85be3a30`
+  - CRC32: `eeb5443e`
+- **[EAB.ini](bios/Other/Recalbox/EAB.ini)** (334 bytes)
+  - SHA1: `d2f6a10a734949b180178faaeb949ed30de20c8c`
+  - MD5: `ce588df7c166344d0c8189485fa60baa`
+  - CRC32: `e61c674f`
+- **[EAC.ini](bios/Other/Recalbox/EAC.ini)** (335 bytes)
+  - SHA1: `7f420049478dc69fb08f2477ffae47009900daae`
+  - MD5: `706a193c8beeec4f63fd94c9ba86e0c0`
+  - CRC32: `d40f07f3`
+- **[EAD.ini](bios/Other/Recalbox/EAD.ini)** (337 bytes)
+  - SHA1: `d4bad15b8f1f98418e37d477f232ed234f7c603f`
+  - MD5: `ce90a826063477c743dfe98eaec3ec66`
+  - CRC32: `fc3d1f3e`
+- **[EAE.ini](bios/Other/Recalbox/EAE.ini)** (337 bytes)
+  - SHA1: `00a00a317196016de42eecf178ec6c31d3f3dfaf`
+  - MD5: `218f52de723ec0b518879d59addd164d`
+  - CRC32: `7797071b`
+- **[EAF.ini](bios/Other/Recalbox/EAF.ini)** (336 bytes)
+  - SHA1: `258b84662195d72930a9be7be38446c8a4357c0e`
+  - MD5: `6faa02066a463961fe01aa204685c168`
+  - CRC32: `db358870`
+- **[EAG.ini](bios/Other/Recalbox/EAG.ini)** (346 bytes)
+  - SHA1: `364343fb6e78e63c6168d3f92142c53e5e8d0ee9`
+  - MD5: `a76efceff3362c11d8fef0a345d177b4`
+  - CRC32: `b44f10b5`
+- **[EAH.ini](bios/Other/Recalbox/EAH.ini)** (338 bytes)
+  - SHA1: `c9dfc79c097348fdd917be4301c9f2bfbcc981dc`
+  - MD5: `8799f0ce1f4dd07f5d7f6bba5c3ab4dc`
+  - CRC32: `1c08c092`
+- **[EAI.ini](bios/Other/Recalbox/EAI.ini)** (332 bytes)
+  - SHA1: `f7b65de68a28f918adab9083b60a8b88c4508501`
+  - MD5: `9aedcc1ee89834634138c1c61abb1980`
+  - CRC32: `b403a726`
+- **[EAJ.ini](bios/Other/Recalbox/EAJ.ini)** (332 bytes)
+  - SHA1: `c2ec4728451429d169d426a8e1893b21a6fc3237`
+  - MD5: `5c0f29247139bdae75a4234ac31ecfb9`
+  - CRC32: `2e79f744`
+- **[EAK.ini](bios/Other/Recalbox/EAK.ini)** (335 bytes)
+  - SHA1: `51b98e7bd3d883304990dfaa0b9677db9558a8c1`
+  - MD5: `9c4de4459355c95f470f394be954bad8`
+  - CRC32: `3c985989`
+- **[EAL.ini](bios/Other/Recalbox/EAL.ini)** (339 bytes)
+  - SHA1: `b330dd10e8581ea4ee4cd5d13194765b788258b8`
+  - MD5: `80ea330836b5a0891367cf6b2e600c63`
+  - CRC32: `4e92f0ca`
+- **[EAM.ini](bios/Other/Recalbox/EAM.ini)** (334 bytes)
+  - SHA1: `d350b26a28b84ad99e1f7e6d7d70fe74c085ebf9`
+  - MD5: `1e70fe4049b284a90c5a5e265401d912`
+  - CRC32: `5c5e2daf`
+- **[EAN.ini](bios/Other/Recalbox/EAN.ini)** (334 bytes)
+  - SHA1: `3da844fb80bca92cee8afad68423e78899ae6760`
+  - MD5: `db65cd295ea024fc3065cd8fb870696c`
+  - CRC32: `8c202f39`
+- **[EAO.ini](bios/Other/Recalbox/EAO.ini)** (342 bytes)
+  - SHA1: `e54f92cdff71ea306d66c34584151b7765674c78`
+  - MD5: `767424c3c6f93564ec8499be372198a9`
+  - CRC32: `089bae11`
+- **[EAP.ini](bios/Other/Recalbox/EAP.ini)** (336 bytes)
+  - SHA1: `2eb36a191ed0d94ce19cd220078f0217a7ec6e51`
+  - MD5: `cd20972d88b87d1895ba522c1c5a0142`
+  - CRC32: `b0a8abc9`
+- **[EAQ.ini](bios/Other/Recalbox/EAQ.ini)** (328 bytes)
+  - SHA1: `4a4bb56956f9bbb3e2b217d842f788fa7a078732`
+  - MD5: `8d94498ee08ec70d6adfd368fa8b8c73`
+  - CRC32: `bf94dd5b`
+- **[EAR.ini](bios/Other/Recalbox/EAR.ini)** (338 bytes)
+  - SHA1: `f68abd647837a34bbf4eee42274eac4e4ce9e5b1`
+  - MD5: `da1fd77938c59c2d2955ddb7257f8556`
+  - CRC32: `d887f8fc`
+- **[EAS.ini](bios/Other/Recalbox/EAS.ini)** (339 bytes)
+  - SHA1: `36e48f8054acd4f052850909375127d2ac2e9688`
+  - MD5: `5c299a278aa9d430945c947289d36553`
+  - CRC32: `35dffe82`
+- **[EAT.ini](bios/Other/Recalbox/EAT.ini)** (332 bytes)
+  - SHA1: `4842f1441f20aff5506dca813e876fc52ed672b6`
+  - MD5: `924c217b81c8e1ead3e732fa34c3aea6`
+  - CRC32: `18fc562d`
+- **[EAU.ini](bios/Other/Recalbox/EAU.ini)** (326 bytes)
+  - SHA1: `d3e7e3db96eadde3ff6b7311ec8211d57dccd102`
+  - MD5: `4ebc1ea5ec6c650984133a9a94e4283e`
+  - CRC32: `6160ea6d`
+- **[EAV.ini](bios/Other/Recalbox/EAV.ini)** (346 bytes)
+  - SHA1: `0733d2d9c1cdaa41033efdbba2dec90aac0a2f63`
+  - MD5: `0da80ef37f0331853297b62af43a85b5`
+  - CRC32: `15edcb74`
+- **[EAW.ini](bios/Other/Recalbox/EAW.ini)** (340 bytes)
+  - SHA1: `1c75511760f1022643bb62f07c9961e1bb47fddf`
+  - MD5: `555014b2a981ff0d4bea065db3e7cd9c`
+  - CRC32: `0120caaf`
+- **[EAY.ini](bios/Other/Recalbox/EAY.ini)** (328 bytes)
+  - SHA1: `ccf111da0612ec44a748f3960b216e315b491117`
+  - MD5: `c0b5c621331d983072abded4b06f8d9b`
+  - CRC32: `a1693043`
+- **[EAZ.ini](bios/Other/Recalbox/EAZ.ini)** (334 bytes)
+  - SHA1: `ef5e434fcdfb74a97c67a2ad2d302aa0679eba1a`
+  - MD5: `bdab92209d8e3f6dad4a9457fd85d1cf`
+  - CRC32: `720d9162`
+- **[EB2.ini](bios/Other/Recalbox/EB2.ini)** (342 bytes)
+  - SHA1: `3990d963ec9e99f130f8c8c62884ee0f9fe67e23`
+  - MD5: `95f3d38472ee50681981a565ed056899`
+  - CRC32: `61d55188`
+- **[EB3.ini](bios/Other/Recalbox/EB3.ini)** (318 bytes)
+  - SHA1: `c1df71e319da41484481d1180521094d84a08fdf`
+  - MD5: `863b1459c9c37551d92f2e2550f39042`
+  - CRC32: `012643c6`
+- **[EB4.ini](bios/Other/Recalbox/EB4.ini)** (327 bytes)
+  - SHA1: `1ed344d5ce03678b218be624bd1d369175fe0586`
+  - MD5: `4b3ff2a7322ddf4f9d94c7e0c313272b`
+  - CRC32: `094d88ab`
+- **[EB5.ini](bios/Other/Recalbox/EB5.ini)** (328 bytes)
+  - SHA1: `02525e3cc11812298ff03564dbe0f79ba8b64df9`
+  - MD5: `fa2057b555e544de72de24b298fef4ed`
+  - CRC32: `ab9b6f28`
+- **[EB6.ini](bios/Other/Recalbox/EB6.ini)** (334 bytes)
+  - SHA1: `551f99952f482c1fe05f4152cb25beb27e35b54f`
+  - MD5: `8af06727ac97bdc4b34c08e0e5c30d19`
+  - CRC32: `32c651aa`
+- **[EB7.ini](bios/Other/Recalbox/EB7.ini)** (319 bytes)
+  - SHA1: `d4cff98845f768e93b1fa5c27bbc3f26fd46e02a`
+  - MD5: `ad9560b964fb97c3086bef1ae8c18dfd`
+  - CRC32: `6ee88d6b`
+- **[EB8.ini](bios/Other/Recalbox/EB8.ini)** (328 bytes)
+  - SHA1: `a85612676ba9b22a12b1cc00c9a78e465c28dbdd`
+  - MD5: `3d567d6547436e782b57dcaa45900d77`
+  - CRC32: `71c10a03`
+- **[EB9.ini](bios/Other/Recalbox/EB9.ini)** (313 bytes)
+  - SHA1: `b21fc3189aba2c454e99a49d5c83fc117628aabe`
+  - MD5: `a8c67c5d33ad598863704585b6da2779`
+  - CRC32: `1608a2af`
+- **[EBA.ini](bios/Other/Recalbox/EBA.ini)** (337 bytes)
+  - SHA1: `04d27472b9a6674b586e8384279ea98b8f57a087`
+  - MD5: `4625b477a43ed940f5f6c853467e4e71`
+  - CRC32: `a28bf3ac`
+- **[EBB.ini](bios/Other/Recalbox/EBB.ini)** (340 bytes)
+  - SHA1: `20f8cbc8fe504b9f3ff92da87683db3d72f89ae1`
+  - MD5: `a8be9e734deb997bad1a135e01553a5f`
+  - CRC32: `0df0f772`
+- **[EBC.ini](bios/Other/Recalbox/EBC.ini)** (323 bytes)
+  - SHA1: `b45a1e6969702c817a679d50621329c518d7f5b5`
+  - MD5: `edfac9f756f1499014d88425bdcd0a15`
+  - CRC32: `23d248b2`
+- **[EBD.ini](bios/Other/Recalbox/EBD.ini)** (338 bytes)
+  - SHA1: `640703393f13facc46e3fc06ff7a515f293cab06`
+  - MD5: `4190da51c0e593e6162efb44a6707864`
+  - CRC32: `916c3fd5`
+- **[EBE.ini](bios/Other/Recalbox/EBE.ini)** (333 bytes)
+  - SHA1: `8d9be207d17318b77b8695718135fc3c888a9ebe`
+  - MD5: `96ac94de8f7ffe4445363597b59b5674`
+  - CRC32: `2cee8064`
+- **[EBF.ini](bios/Other/Recalbox/EBF.ini)** (333 bytes)
+  - SHA1: `45c6bfe45508563a954f2a62f63078d06db1e6a4`
+  - MD5: `5917891793e865a3135d07de100e64fc`
+  - CRC32: `6dada656`
+- **[EBG.ini](bios/Other/Recalbox/EBG.ini)** (346 bytes)
+  - SHA1: `172580ad463166edca2aa22e3b0a75419637340f`
+  - MD5: `fa1691b07a754145a4536b2817c8003d`
+  - CRC32: `511028b3`
+- **[EBK.ini](bios/Other/Recalbox/EBK.ini)** (317 bytes)
+  - SHA1: `89535c551ee67ee9625762226b1f684f7cb61073`
+  - MD5: `cfed0cdcfed946698b61d0940bee4eec`
+  - CRC32: `b2af1b47`
+- **[EBL.ini](bios/Other/Recalbox/EBL.ini)** (333 bytes)
+  - SHA1: `d301b654616b10d8fbd1c7fa762e05b5af662131`
+  - MD5: `7144fea864a9bbad5d6ae62d50bb2490`
+  - CRC32: `55a4d8d6`
+- **[EBM.ini](bios/Other/Recalbox/EBM.ini)** (317 bytes)
+  - SHA1: `08fb0e963538a12257e80dd9108198ab2302e122`
+  - MD5: `4e79b21dbb1ad8ca39d8411404178d67`
+  - CRC32: `0540710b`
+- **[EBN.ini](bios/Other/Recalbox/EBN.ini)** (339 bytes)
+  - SHA1: `52b83536f27e4bb5a73f3b19414d7a49b273415b`
+  - MD5: `24200991594362c5766ffe580cad9650`
+  - CRC32: `7c77c3fa`
+- **[EBO.ini](bios/Other/Recalbox/EBO.ini)** (328 bytes)
+  - SHA1: `9ba47ae6845f9d348a56b11979a93a0fae779fd3`
+  - MD5: `8d813f34f9ce01c0c34e101939e9ff2a`
+  - CRC32: `24d4cc10`
+- **[EBP.ini](bios/Other/Recalbox/EBP.ini)** (320 bytes)
+  - SHA1: `09fb84e33a823430bb84a188e538bc4663c2d6e9`
+  - MD5: `41b9734faecdd7272dc6af4d3b6b5ed1`
+  - CRC32: `008d7392`
+- **[EBQ.ini](bios/Other/Recalbox/EBQ.ini)** (326 bytes)
+  - SHA1: `843ff4537e6bfd0c2f643ad7c37452d1dbcb5295`
+  - MD5: `8de8b1fb3412b629c33c88b0047ceda1`
+  - CRC32: `28d00dcd`
+- **[EBR.ini](bios/Other/Recalbox/EBR.ini)** (317 bytes)
+  - SHA1: `865fb0f2a79a33a96841ced4967be655163a0f46`
+  - MD5: `cf774cae880b7d090752730a54290201`
+  - CRC32: `676aea3f`
+- **[EBS.ini](bios/Other/Recalbox/EBS.ini)** (356 bytes)
+  - SHA1: `f12e5c6de05e5dd360a15b144f29673767c7afcf`
+  - MD5: `1fee7e2ed8383eb17b2256f36237457e`
+  - CRC32: `344f1d79`
+- **[EBT.ini](bios/Other/Recalbox/EBT.ini)** (320 bytes)
+  - SHA1: `3048cafd556dab3c73a638c1b00b532175905562`
+  - MD5: `b2131451cc4414c5ead92e1a33475ecf`
+  - CRC32: `324b8e1f`
+- **[EBU.ini](bios/Other/Recalbox/EBU.ini)** (333 bytes)
+  - SHA1: `a16361c1d5e582d241009e951927f88fc3d199b5`
+  - MD5: `64998384729e6577b0949f7ced0cb8b3`
+  - CRC32: `0277fbb0`
+- **[EBV.ini](bios/Other/Recalbox/EBV.ini)** (317 bytes)
+  - SHA1: `610f3c1320ba0e39fd7bf1257419170e5fd55442`
+  - MD5: `08c7a2ab265831aed2b54bbfdfb17816`
+  - CRC32: `76cc5a08`
+- **[EBW.ini](bios/Other/Recalbox/EBW.ini)** (321 bytes)
+  - SHA1: `1f425aa458b1f63471279da7047180ba70c613ae`
+  - MD5: `e6ddfa8618fbf9c50a227910cd8d7327`
+  - CRC32: `8c91353c`
+- **[EBX.ini](bios/Other/Recalbox/EBX.ini)** (323 bytes)
+  - SHA1: `e909444f3cff40320b0a47da7ef67ced06af8c30`
+  - MD5: `e8a0e876cb7fcc9e364b24e95fe6dd3b`
+  - CRC32: `61b769a8`
+- **[EBZ.ini](bios/Other/Recalbox/EBZ.ini)** (334 bytes)
+  - SHA1: `23e1003c88e16a7fd1770dc5c96bca81080282f5`
+  - MD5: `61597c59ea992db7ea0260d448e0d7b3`
+  - CRC32: `b48863a8`
+- **[ECA.ini](bios/Other/Recalbox/ECA.ini)** (351 bytes)
+  - SHA1: `6865c3040ee759790f5723ec834149ad922ebc95`
+  - MD5: `26a35a0e1731e7f920f0a70e4907b7c7`
+  - CRC32: `8e9ad25d`
+- **[ECC.ini](bios/Other/Recalbox/ECC.ini)** (326 bytes)
+  - SHA1: `74857155beaad6e39d65e94cd96b8a08450f708f`
+  - MD5: `a5271b4295732371f2f1b54b616aa030`
+  - CRC32: `8f410d09`
+- **[ECD.ini](bios/Other/Recalbox/ECD.ini)** (347 bytes)
+  - SHA1: `c1aaa3643a9780bc756fa9dc522d90ee099abc8d`
+  - MD5: `1efbd24276733f4bfcdc63c33c95eddf`
+  - CRC32: `deefc615`
+- **[ECE.ini](bios/Other/Recalbox/ECE.ini)** (330 bytes)
+  - SHA1: `f19c084f00e64719dac752bbfc8584e422123b55`
+  - MD5: `e3469eb7f29c91540bf35a4fb4ebd655`
+  - CRC32: `8e82a324`
+- **[ECF.ini](bios/Other/Recalbox/ECF.ini)** (318 bytes)
+  - SHA1: `e02b7a9f96f899f7890d0ab7054a7e4da18d3652`
+  - MD5: `2bd2ba50a4f0b0e2c190a5bff05e7b66`
+  - CRC32: `060962f9`
+- **[ECG.ini](bios/Other/Recalbox/ECG.ini)** (339 bytes)
+  - SHA1: `e8ad20a75d3a8676a8c3a8bb43504dc09e4929f9`
+  - MD5: `ed73361adc33cdeb5b6e813394bf4a95`
+  - CRC32: `36391ce0`
+- **[ECH.ini](bios/Other/Recalbox/ECH.ini)** (347 bytes)
+  - SHA1: `e15528eeea19ffdafc3036565ca517e05b63cf40`
+  - MD5: `1a0bb794f1663c786315efe09e28b8cd`
+  - CRC32: `6e345fb6`
+- **[ECI.ini](bios/Other/Recalbox/ECI.ini)** (326 bytes)
+  - SHA1: `aeb6695f53584ece92beabb1128d8de87d910444`
+  - MD5: `72b44cc22ebb78b95a2bfe45feda98a0`
+  - CRC32: `f81d9b16`
+- **[ECJ.ini](bios/Other/Recalbox/ECJ.ini)** (338 bytes)
+  - SHA1: `fe8708d30f60cc08a9715d0d83656db9cbe2596a`
+  - MD5: `30794624b8c9250210480fffc3baecbd`
+  - CRC32: `d6408b34`
+- **[ECK.ini](bios/Other/Recalbox/ECK.ini)** (322 bytes)
+  - SHA1: `709a61b42d76d7273d4c777f652b6951b2e82b2d`
+  - MD5: `0506a8488789e200c03cf92e6ee0088a`
+  - CRC32: `c8fc3e61`
+- **[ECL.ini](bios/Other/Recalbox/ECL.ini)** (321 bytes)
+  - SHA1: `c88f3b6bf99b9b5ca9c3735ee6659cdfa2b43630`
+  - MD5: `4cb2a4a50f0e5b5a0e0f266427bacbc2`
+  - CRC32: `2bca7275`
+- **[ECM.ini](bios/Other/Recalbox/ECM.ini)** (334 bytes)
+  - SHA1: `fe63503e32d2e3181b9091165557b5d9f33a4e7f`
+  - MD5: `f336b9dd93a0e45628bb69d64629f7ff`
+  - CRC32: `85157d16`
+- **[ECN.ini](bios/Other/Recalbox/ECN.ini)** (323 bytes)
+  - SHA1: `5915357625ef95ab1bf3fd3887283be2c35a11b1`
+  - MD5: `603998cb2ddcd5035ef703e1159e064c`
+  - CRC32: `16e98d88`
+- **[F.ini](bios/Other/Recalbox/F.ini)** (814 bytes)
+  - SHA1: `eced486d6f907b812e992c2e69c1495b71887cb0`
+  - MD5: `b2a5e69a099522fae2bb2f07b093bc3f`
+  - CRC32: `4fb8acac`
+- **[FAAE01.ini](bios/Other/Recalbox/FAAE01.ini)** (132 bytes)
+  - SHA1: `145ca957ac02d55730919ba62099225190503d24`
+  - MD5: `cb0039aa63cd6dc7d67d45dd3ee8c051`
+  - CRC32: `d6332a2e`
+- **[FABE01.ini](bios/Other/Recalbox/FABE01.ini)** (134 bytes)
+  - SHA1: `1a981e31abcb22dfe964f43e5846da2de6c8dd40`
+  - MD5: `87422e64702581d20a8e7a17c6845442`
+  - CRC32: `7beefea5`
+- **[FABP01.ini](bios/Other/Recalbox/FABP01.ini)** (113 bytes)
+  - SHA1: `8593b6779e9b332ada26d2974003bb27bf413ed5`
+  - MD5: `b4c252141d6569acc4528d0311cb02ca`
+  - CRC32: `4b41b0a9`
+- **[FACE01.ini](bios/Other/Recalbox/FACE01.ini)** (126 bytes)
+  - SHA1: `61a0a44a84cf823ff22f12fe7059d84b232ec3c4`
+  - MD5: `db8c42470684bcd53773f9d0ed84a2dd`
+  - CRC32: `668f676c`
+- **[FACP01.ini](bios/Other/Recalbox/FACP01.ini)** (105 bytes)
+  - SHA1: `260f44ff2ccc8a0becd6dffd3cb3310e6ceee367`
+  - MD5: `996dabd53d1c915597e6d298dba08d8d`
+  - CRC32: `a560fcbb`
+- **[FAFE01.ini](bios/Other/Recalbox/FAFE01.ini)** (130 bytes)
+  - SHA1: `b8b7133f2e0ad93101a3c489e44a48335206937a`
+  - MD5: `0273f9ffb6e46c1f85a7e30773a8f959`
+  - CRC32: `9008d82a`
+- **[FAGE01.ini](bios/Other/Recalbox/FAGE01.ini)** (138 bytes)
+  - SHA1: `102d08eeea558ea4aaba0c45facff45b12e6adea`
+  - MD5: `ad0d0ff79c63a9b0a4dcbbb22c46c3d9`
+  - CRC32: `777c9a23`
+- **[FAHE01.ini](bios/Other/Recalbox/FAHE01.ini)** (125 bytes)
+  - SHA1: `c11e5c33c5dc76809518e97645d24d43c4a86d27`
+  - MD5: `9202f81536bef3303aafbc996d9204e3`
+  - CRC32: `d12c3ce7`
+- **[FAIE01.ini](bios/Other/Recalbox/FAIE01.ini)** (125 bytes)
+  - SHA1: `6d71b19c34be037ae4345d6181fb1dc094439765`
+  - MD5: `3e393981e93778b2848fdaed33c44d5c`
+  - CRC32: `3aba95d9`
+- **[FAJE01.ini](bios/Other/Recalbox/FAJE01.ini)** (129 bytes)
+  - SHA1: `d94d25e1334e225d11efe6801f2594ca0fa08e0d`
+  - MD5: `d2a97a769282971b83aa265be54fe6b6`
+  - CRC32: `4f56caad`
+- **[FAJP01.ini](bios/Other/Recalbox/FAJP01.ini)** (108 bytes)
+  - SHA1: `6e2f974acbbae24dcbd74c21f289d0d79e8533fa`
+  - MD5: `ea06692a77bfb96fed045217f0fca280`
+  - CRC32: `26744dc9`
+- **[FAKE01.ini](bios/Other/Recalbox/FAKE01.ini)** (139 bytes)
+  - SHA1: `56510e7d64234134a18301c5841d44387dd5d37d`
+  - MD5: `f26a11571a352566dda7334982b6fc88`
+  - CRC32: `23e4dfc8`
+- **[FAKP01.ini](bios/Other/Recalbox/FAKP01.ini)** (118 bytes)
+  - SHA1: `aee535e600722ad7b72003ed1d5db1c06dc97119`
+  - MD5: `462399cadc19d82f02fe8fabf1d5faf6`
+  - CRC32: `8b4ff5e5`
+- **[FALE01.ini](bios/Other/Recalbox/FALE01.ini)** (127 bytes)
+  - SHA1: `1cc80afdbd114115a4031f0d3d979d62b0eeb200`
+  - MD5: `5d9e589ca0376f6417edc59e7f51f0c8`
+  - CRC32: `38ce5a30`
+- **[FAME01.ini](bios/Other/Recalbox/FAME01.ini)** (132 bytes)
+  - SHA1: `1da58fdd1607fba240a861060c4842ddd18300ab`
+  - MD5: `18bc53e217ce2acc283f9ae9db469399`
+  - CRC32: `2171ced3`
+- **[FANE01.ini](bios/Other/Recalbox/FANE01.ini)** (133 bytes)
+  - SHA1: `8cf4e69b11723aef5f6c20bdeab403e871fb5a3b`
+  - MD5: `2a44934ed4f653d319ab3724635ee958`
+  - CRC32: `14244ffb`
+- **[FAOE01.ini](bios/Other/Recalbox/FAOE01.ini)** (140 bytes)
+  - SHA1: `3883dd28bf4d1fb3ab0f027abed1cdc82aed2f0e`
+  - MD5: `1d73f4b563b75eaeec3fbeccc55aa1ec`
+  - CRC32: `8fe15380`
+- **[FARE01.ini](bios/Other/Recalbox/FARE01.ini)** (126 bytes)
+  - SHA1: `ca908c2d5309bdae854158a28f392a714971b31d`
+  - MD5: `fd1f1e99c15144eaa9d990cf2054659a`
+  - CRC32: `8732d5ff`
+- **[FASE01.ini](bios/Other/Recalbox/FASE01.ini)** (126 bytes)
+  - SHA1: `f50233b2151db34c46011abfff08aabaaa87fc15`
+  - MD5: `ff1c01bc58cddcd6968d88fd29737a12`
+  - CRC32: `dbfade25`
+- **[FXAA.glsl](bios/Other/Recalbox/FXAA.glsl)** (2,373 bytes)
+  - SHA1: `660fd9707ca1e04442bb54ff6c4773662202c6b0`
+  - MD5: `19b380c3650db727175c1474349ad995`
+  - CRC32: `b4994ceb`
+- **[FinalBurn Neo (ClrMame Pro XML, Arcade only).dat](bios/Other/Recalbox/FinalBurn%20Neo%20%28ClrMame%20Pro%20XML,%20Arcade%20only%29.dat)** (8,915,938 bytes)
+  - SHA1: `ef2caff41d59e4f7cf5d157ca34c22fe6dca134f`
+  - MD5: `529cc40b86b2916981cf62f445620e5d`
+  - CRC32: `3f289b1d`
+- **[FinalBurn Neo (ClrMame Pro XML, ColecoVision only).dat](bios/Other/Recalbox/FinalBurn%20Neo%20%28ClrMame%20Pro%20XML,%20ColecoVision%20only%29.dat)** (155,813 bytes)
+  - SHA1: `1aa657ae77211c9184e95da72f15d6eeda4ac1bc`
+  - MD5: `4001a16f5656c5b2105e0e6c2dd5bc69`
+  - CRC32: `038ed056`
+- **[FinalBurn Neo (ClrMame Pro XML, FDS Games only).dat](bios/Other/Recalbox/FinalBurn%20Neo%20%28ClrMame%20Pro%20XML,%20FDS%20Games%20only%29.dat)** (42,840 bytes)
+  - SHA1: `9d4e3ff457b9c3a124c2ccc24334a4aa836afee8`
+  - MD5: `2eef01c727ab8215b0fd3080dae4648a`
+  - CRC32: `f6f54152`
+- **[FinalBurn Neo (ClrMame Pro XML, Fairchild Channel F Games only).dat](bios/Other/Recalbox/FinalBurn%20Neo%20%28ClrMame%20Pro%20XML,%20Fairchild%20Channel%20F%20Games%20only%29.dat)** (29,547 bytes)
+  - SHA1: `ef7ecf6f8872faa2fc964e5df69fc5fa1871af4e`
+  - MD5: `3a9ee904740d5be3653f3930937f17b2`
+  - CRC32: `1594abb8`
+- **[FinalBurn Neo (ClrMame Pro XML, Game Gear only).dat](bios/Other/Recalbox/FinalBurn%20Neo%20%28ClrMame%20Pro%20XML,%20Game%20Gear%20only%29.dat)** (217,196 bytes)
+  - SHA1: `3aad823c1375398a023891838c5ed94d7b0da1f6`
+  - MD5: `a3d572cde0a5ca563b7dade56743ad9b`
+  - CRC32: `2faeb53f`
+- **[FinalBurn Neo (ClrMame Pro XML, MSX 1 Games only).dat](bios/Other/Recalbox/FinalBurn%20Neo%20%28ClrMame%20Pro%20XML,%20MSX%201%20Games%20only%29.dat)** (589,485 bytes)
+  - SHA1: `a38ce68d7acd9edbbc89917dfd3c11e6a9bbf395`
+  - MD5: `56a9387c0f463b8f3bad2445d9e11d70`
+  - CRC32: `f811078b`
+- **[FinalBurn Neo (ClrMame Pro XML, Master System only).dat](bios/Other/Recalbox/FinalBurn%20Neo%20%28ClrMame%20Pro%20XML,%20Master%20System%20only%29.dat)** (163,836 bytes)
+  - SHA1: `3296f7484ccf0316fb956878899d2f5cc0503837`
+  - MD5: `e9aee40bef5abc8ddd1a367db166da64`
+  - CRC32: `a3ccd66a`
+- **[FinalBurn Neo (ClrMame Pro XML, Megadrive only).dat](bios/Other/Recalbox/FinalBurn%20Neo%20%28ClrMame%20Pro%20XML,%20Megadrive%20only%29.dat)** (686,937 bytes)
+  - SHA1: `c7712ba7995010aca7345bbfa8db28c9c2c31e9b`
+  - MD5: `b288f86047907ac341242237768bac4e`
+  - CRC32: `2c2872cc`
+- **[FinalBurn Neo (ClrMame Pro XML, NES Games only).dat](bios/Other/Recalbox/FinalBurn%20Neo%20%28ClrMame%20Pro%20XML,%20NES%20Games%20only%29.dat)** (334,235 bytes)
+  - SHA1: `5eefeedbb8fcec08d60a8c136ac194df2523231c`
+  - MD5: `d4ee652b2f9ab5883fed97a1c80b69ed`
+  - CRC32: `2874b15c`
+- **[FinalBurn Neo (ClrMame Pro XML, NeoGeo Pocket Games only).dat](bios/Other/Recalbox/FinalBurn%20Neo%20%28ClrMame%20Pro%20XML,%20NeoGeo%20Pocket%20Games%20only%29.dat)** (77,082 bytes)
+  - SHA1: `25122746537afddf9fff9fc9412e30e03d07f2d0`
+  - MD5: `c14081568fb9f3d02d2c07068af66a13`
+  - CRC32: `e52b23f4`
+- **[FinalBurn Neo (ClrMame Pro XML, Neogeo only).dat](bios/Other/Recalbox/FinalBurn%20Neo%20%28ClrMame%20Pro%20XML,%20Neogeo%20only%29.dat)** (1,575,544 bytes)
+  - SHA1: `abadedc3ed32f0bf2b274671c9c81d020ea2c57e`
+  - MD5: `73c27326effecced2425ab030662c5b3`
+  - CRC32: `5daa7bc8`
+- **[FinalBurn Neo (ClrMame Pro XML, PC-Engine only).dat](bios/Other/Recalbox/FinalBurn%20Neo%20%28ClrMame%20Pro%20XML,%20PC-Engine%20only%29.dat)** (78,923 bytes)
+  - SHA1: `c40689fb6e657c451f1091594909d18a77b2589a`
+  - MD5: `2c092418d5eed5fdf1408b82a50bced6`
+  - CRC32: `39f98998`
+- **[FinalBurn Neo (ClrMame Pro XML, Sega SG-1000 only).dat](bios/Other/Recalbox/FinalBurn%20Neo%20%28ClrMame%20Pro%20XML,%20Sega%20SG-1000%20only%29.dat)** (52,153 bytes)
+  - SHA1: `80c914bfb94a5264d5bd032c602b120a836f7f49`
+  - MD5: `07a602d576194eae74be4dcb61efb9d0`
+  - CRC32: `a22a9b8c`
+- **[FinalBurn Neo (ClrMame Pro XML, SuprGrafx only).dat](bios/Other/Recalbox/FinalBurn%20Neo%20%28ClrMame%20Pro%20XML,%20SuprGrafx%20only%29.dat)** (2,287 bytes)
+  - SHA1: `851757678d10b30449a4c222cb8c779e1ed718f0`
+  - MD5: `8bfc6676355901266c4b2a064473577f`
+  - CRC32: `283e5855`
+- **[FinalBurn Neo (ClrMame Pro XML, TurboGrafx16 only).dat](bios/Other/Recalbox/FinalBurn%20Neo%20%28ClrMame%20Pro%20XML,%20TurboGrafx16%20only%29.dat)** (21,996 bytes)
+  - SHA1: `0ed4162b10325c7b9e61542c985a2131dacf8e4a`
+  - MD5: `3ecbb3823e69489d06b9831820e306d0`
+  - CRC32: `d23e4faf`
+- **[FinalBurn Neo (ClrMame Pro XML, ZX Spectrum Games only).dat](bios/Other/Recalbox/FinalBurn%20Neo%20%28ClrMame%20Pro%20XML,%20ZX%20Spectrum%20Games%20only%29.dat)** (131,813 bytes)
+  - SHA1: `a025d29a51322cf36989514221718a44c4a5b604`
+  - MD5: `14d6ec5e40a23be9fd5a36bfaa023fc7`
+  - CRC32: `cd3bbf93`
+- **[FinalBurn Neo Light (ClrMame Pro XML, Arcade only).dat](bios/Other/Recalbox/FinalBurn%20Neo%20Light%20%28ClrMame%20Pro%20XML,%20Arcade%20only%29.dat)** (9,444,121 bytes)
+  - SHA1: `6904fcf70d4fc74969dc08ca5c77ac0622a494fa`
+  - MD5: `a18cdc12a4008e95c9fc7b59f403421f`
+  - CRC32: `5814c828`
+- **[FinalBurn Neo Light (ClrMame Pro XML, ColecoVision only).dat](bios/Other/Recalbox/FinalBurn%20Neo%20Light%20%28ClrMame%20Pro%20XML,%20ColecoVision%20only%29.dat)** (316,312 bytes)
+  - SHA1: `57a81404ce76bf4a71a5aea7e0514ff96e44656a`
+  - MD5: `cf0f4af471b8b5efcc1f0a816f98490c`
+  - CRC32: `3564d84c`
+- **[FinalBurn Neo Light (ClrMame Pro XML, Game Gear only).dat](bios/Other/Recalbox/FinalBurn%20Neo%20Light%20%28ClrMame%20Pro%20XML,%20Game%20Gear%20only%29.dat)** (305,898 bytes)
+  - SHA1: `24559b86f3223d00d5a67b88df6c7f9d8ae3b586`
+  - MD5: `b55e7981a53d5dc36bd13bc718a47cdc`
+  - CRC32: `7a9b2cbf`
+- **[FinalBurn Neo Light (ClrMame Pro XML, Master System only).dat](bios/Other/Recalbox/FinalBurn%20Neo%20Light%20%28ClrMame%20Pro%20XML,%20Master%20System%20only%29.dat)** (270,735 bytes)
+  - SHA1: `2f49db9981a4000bdf48b6257e01281fae639187`
+  - MD5: `17723bc632eb34b9bcfd333cebb3afbe`
+  - CRC32: `f16fac28`
+- **[FinalBurn Neo Light (ClrMame Pro XML, Megadrive only).dat](bios/Other/Recalbox/FinalBurn%20Neo%20Light%20%28ClrMame%20Pro%20XML,%20Megadrive%20only%29.dat)** (1,177,833 bytes)
+  - SHA1: `eea1029bd75c047d30448f9a7ac5aacdd19052a1`
+  - MD5: `6fd312856eabeec8e13ce8b8e4d5032a`
+  - CRC32: `17f81dce`
+- **[FinalBurn Neo Light (ClrMame Pro XML, NeoGeo Pocket Games only).dat](bios/Other/Recalbox/FinalBurn%20Neo%20Light%20%28ClrMame%20Pro%20XML,%20NeoGeo%20Pocket%20Games%20only%29.dat)** (90,453 bytes)
+  - SHA1: `df0e41818baa5d43c28cd5c86cac05821ceb1b8d`
+  - MD5: `f9fc24b7d4d01e70b205e6cfea0a06e7`
+  - CRC32: `3830adc4`
+- **[FinalBurn Neo Light (ClrMame Pro XML, Neogeo only).dat](bios/Other/Recalbox/FinalBurn%20Neo%20Light%20%28ClrMame%20Pro%20XML,%20Neogeo%20only%29.dat)** (2,144,467 bytes)
+  - SHA1: `ecbe7bc3dd7fee7ee9ef4cbe7a323464d8b66f1d`
+  - MD5: `3e586757cfadb164fb8465f49cd01017`
+  - CRC32: `486f1b35`
+- **[FinalBurn Neo Light (ClrMame Pro XML, Sega SG-1000 only).dat](bios/Other/Recalbox/FinalBurn%20Neo%20Light%20%28ClrMame%20Pro%20XML,%20Sega%20SG-1000%20only%29.dat)** (78,227 bytes)
+  - SHA1: `05c74c118ead0d093237e80212c7b1322fe715e9`
+  - MD5: `cbf8ed5de2872639faef81032859c4b8`
+  - CRC32: `598809de`
+- **[Flag_Australia.png](bios/Other/Recalbox/Flag_Australia.png)** (500 bytes)
+  - SHA1: `c5fc6b9385b5f4642544d5fbd4f1ced7366939d0`
+  - MD5: `0c4af45b1e93b6738157579555f0152e`
+  - CRC32: `df4234f1`
+- **[Flag_Australia@2x.png](bios/Other/Recalbox/Flag_Australia@2x.png)** (1,067 bytes)
+  - SHA1: `b49d14c0cb895f4192ca2ecaa5b7a795b7e4598f`
+  - MD5: `7e631bbaf9611a6bec2882c0d3015b75`
+  - CRC32: `5eb678a4`
+- **[Flag_Australia@4x.png](bios/Other/Recalbox/Flag_Australia@4x.png)** (1,267 bytes)
+  - SHA1: `e3b1b89118bd370e7f309c39cfcd21e29482d59f`
+  - MD5: `88c2587d88ee3fe069763de37593d217`
+  - CRC32: `cd23152e`
+- **[Flag_Europe.png](bios/Other/Recalbox/Flag_Europe.png)** (356 bytes)
+  - SHA1: `a1666f893b600511cf5e1f499af12268b3e82c68`
+  - MD5: `6cfb69d2acefceffa7f62c7ec6fa9315`
+  - CRC32: `e9b5893f`
+- **[Flag_Europe@2x.png](bios/Other/Recalbox/Flag_Europe@2x.png)** (549 bytes)
+  - SHA1: `e530c1360136e89dd2d65f2fe00cfbda78b253ba`
+  - MD5: `8ba13f7a20f4a67e2e870315b1c2ffaf`
+  - CRC32: `c1e9eaf7`
+- **[Flag_Europe@4x.png](bios/Other/Recalbox/Flag_Europe@4x.png)** (1,044 bytes)
+  - SHA1: `ec90f24991cd0ff2dc1f598e195427716b7e59ad`
+  - MD5: `38532e400fd233737de0ae3745d6f403`
+  - CRC32: `dcbf3215`
+- **[Flag_France.png](bios/Other/Recalbox/Flag_France.png)** (97 bytes)
+  - SHA1: `70e34b30e650bbbe8a144bb8e714a7f931f8020f`
+  - MD5: `fc225dff9ffadb56be40aecedef3e8aa`
+  - CRC32: `b135319e`
+- **[Flag_France@2x.png](bios/Other/Recalbox/Flag_France@2x.png)** (102 bytes)
+  - SHA1: `4ce4a4af5c42a19e2cd1bd2de1ae7fbb3b83f98c`
+  - MD5: `4c76c3a5da3ee28234eb9817be6fc3c9`
+  - CRC32: `27a4cb44`
+- **[Flag_France@4x.png](bios/Other/Recalbox/Flag_France@4x.png)** (120 bytes)
+  - SHA1: `fe717a74c42ac1995b83203b66715b148185a3ef`
+  - MD5: `afc93cc9cae887b92394f2acbd65c619`
+  - CRC32: `3370c20b`
+- **[Flag_Germany.png](bios/Other/Recalbox/Flag_Germany.png)** (93 bytes)
+  - SHA1: `7ef1059e2834dab645e30d944a3de48147159443`
+  - MD5: `40e5d503b0e105510adbb1a6eed66b25`
+  - CRC32: `39ef1be2`
+- **[Flag_Germany@2x.png](bios/Other/Recalbox/Flag_Germany@2x.png)** (99 bytes)
+  - SHA1: `74422aa00b77357e4dbd328d3a747a15de0d0873`
+  - MD5: `5bff8ba0f272647bdd823b87901ba9d5`
+  - CRC32: `e1d88263`
+- **[Flag_Germany@4x.png](bios/Other/Recalbox/Flag_Germany@4x.png)** (145 bytes)
+  - SHA1: `41eed52d7d440ed67af74cf6fa48894db042fbf3`
+  - MD5: `5bb909a0c6fdf3f08a3bcb73d7cc9196`
+  - CRC32: `c851cf81`
+- **[Flag_International.png](bios/Other/Recalbox/Flag_International.png)** (433 bytes)
+  - SHA1: `f053cced7b5c3821eac426cc4ae35a127ffc8122`
+  - MD5: `8a7ef2c57c0062300d5e7840c14aca37`
+  - CRC32: `736305be`
+- **[Flag_International@2x.png](bios/Other/Recalbox/Flag_International@2x.png)** (667 bytes)
+  - SHA1: `d260c5e5aa0a797a3c5ef6a8acde8ac5d46dcaff`
+  - MD5: `6ea672c75c63902a88831f44ee8faee6`
+  - CRC32: `c20820a3`
+- **[Flag_International@4x.png](bios/Other/Recalbox/Flag_International@4x.png)** (1,715 bytes)
+  - SHA1: `94f3ca9869d6e3bb5cd36411178928d85439d55f`
+  - MD5: `4f9f2fe86ae1875a42bc0c018bb6233c`
+  - CRC32: `bc60ec81`
+- **[Flag_Italy.png](bios/Other/Recalbox/Flag_Italy.png)** (97 bytes)
+  - SHA1: `51466f08bee9884322d6b0cc95d25c14c8f4dfa3`
+  - MD5: `44acfc6801f0a61f3ef4692962e22522`
+  - CRC32: `9cb13d16`
+- **[Flag_Italy@2x.png](bios/Other/Recalbox/Flag_Italy@2x.png)** (103 bytes)
+  - SHA1: `5367899bc9048877243ee2347ba3e1102bab0fe1`
+  - MD5: `cb02b73930114623cf7b39cb1b5a3286`
+  - CRC32: `283a74bc`
+- **[Flag_Italy@4x.png](bios/Other/Recalbox/Flag_Italy@4x.png)** (120 bytes)
+  - SHA1: `11b99d56d3d1a870d90c1ad2298d4f156e598809`
+  - MD5: `ceb8bf132f9fb67e5815502fc416ca64`
+  - CRC32: `0de2cb52`
+- **[Flag_Japan.png](bios/Other/Recalbox/Flag_Japan.png)** (289 bytes)
+  - SHA1: `53fd09ed8ffd47791d6e13babfc36a2076d5e4db`
+  - MD5: `4c7267593b7fd189b8cc05336dd86492`
+  - CRC32: `4b3c16e3`
+- **[Flag_Japan@2x.png](bios/Other/Recalbox/Flag_Japan@2x.png)** (389 bytes)
+  - SHA1: `5f325d3a9445068c3df464a9e27534b3b528ea02`
+  - MD5: `486b681501113e580359df488e2a031d`
+  - CRC32: `e852f58b`
+- **[Flag_Japan@4x.png](bios/Other/Recalbox/Flag_Japan@4x.png)** (589 bytes)
+  - SHA1: `a3522ebd123035837fbbc4bac58b7cb31789129c`
+  - MD5: `8be84fd47b6400d06a4ac600bf5f2513`
+  - CRC32: `8ba6d2a0`
+- **[Flag_Korea.png](bios/Other/Recalbox/Flag_Korea.png)** (530 bytes)
+  - SHA1: `7ca4f72bdc3de3cb8d66fa23d784e21cca444fd2`
+  - MD5: `614a0fbc1ae51559bb0094f05359f56b`
+  - CRC32: `fb69fa84`
+- **[Flag_Korea@2x.png](bios/Other/Recalbox/Flag_Korea@2x.png)** (859 bytes)
+  - SHA1: `068225d2baf78907ca0c5ec1ed05efaadee62fae`
+  - MD5: `9a4b9e8b6fd75a11510b5b9c18a6e44c`
+  - CRC32: `3f53d0e5`
+- **[Flag_Korea@4x.png](bios/Other/Recalbox/Flag_Korea@4x.png)** (1,882 bytes)
+  - SHA1: `700acc78a7f4d7ab80883f414c769725118852ed`
+  - MD5: `a453acbf85c3aee4711b15fd7e57341e`
+  - CRC32: `8c0f91b3`
+- **[Flag_Netherlands.png](bios/Other/Recalbox/Flag_Netherlands.png)** (99 bytes)
+  - SHA1: `b533b85777aebfcbd70197f72a79d58263b097f7`
+  - MD5: `eede2165fb80b97f86028e50e90bb92a`
+  - CRC32: `4f969bba`
+- **[Flag_Netherlands@2x.png](bios/Other/Recalbox/Flag_Netherlands@2x.png)** (101 bytes)
+  - SHA1: `3d0eb442bf81bdaf4a95e1477d69494ca583db63`
+  - MD5: `ca8e6d18ae1297dc1cf5727ef0dddce8`
+  - CRC32: `7093e93d`
+- **[Flag_Netherlands@4x.png](bios/Other/Recalbox/Flag_Netherlands@4x.png)** (117 bytes)
+  - SHA1: `2422a292ba8f7fa3ac8dfc929303791db17963c9`
+  - MD5: `ac151849d66ee6d9d8f9e15d2ac040be`
+  - CRC32: `32a12ac1`
+- **[Flag_Russia.png](bios/Other/Recalbox/Flag_Russia.png)** (99 bytes)
+  - SHA1: `1953a0aabed74c62793c66f6e779eecdc609c85d`
+  - MD5: `4b3a1374603323dbdfa4cdfdfa6dc912`
+  - CRC32: `1decb6dd`
+- **[Flag_Russia@2x.png](bios/Other/Recalbox/Flag_Russia@2x.png)** (99 bytes)
+  - SHA1: `8027d231ea5eb674667875509a624886ce0a1b93`
+  - MD5: `ef3231f1e8522f2599a4a3f6773d6010`
+  - CRC32: `75204b5b`
+- **[Flag_Russia@4x.png](bios/Other/Recalbox/Flag_Russia@4x.png)** (117 bytes)
+  - SHA1: `e84a86d3a1db87d10700ed556d133d1c55902583`
+  - MD5: `b94edea078d13fb2c2b183094997c501`
+  - CRC32: `78e3ff2b`
+- **[Flag_Spain.png](bios/Other/Recalbox/Flag_Spain.png)** (352 bytes)
+  - SHA1: `9798145f61bf0fdc1063bab59e599f2e5af8b95a`
+  - MD5: `3ec52981ff57d42e7756c26fa2197982`
+  - CRC32: `35502482`
+- **[Flag_Spain@2x.png](bios/Other/Recalbox/Flag_Spain@2x.png)** (785 bytes)
+  - SHA1: `009c84479aaa38f78b4630a10f9cd81b5a3a4380`
+  - MD5: `759adcb71d0fb5a09d8a14ae638ac5eb`
+  - CRC32: `731b296b`
+- **[Flag_Spain@4x.png](bios/Other/Recalbox/Flag_Spain@4x.png)** (1,933 bytes)
+  - SHA1: `fe432169c57690f25307b781e9d67926290fb481`
+  - MD5: `19df291c84f6a139c5439d38c8efd185`
+  - CRC32: `10ac0c1e`
+- **[Flag_Taiwan.png](bios/Other/Recalbox/Flag_Taiwan.png)** (282 bytes)
+  - SHA1: `0e8ce110bdcb42329921c81866cd1892211af33b`
+  - MD5: `6cf5fbeba8f066b32c4e2ab850e7be0e`
+  - CRC32: `af764be6`
+- **[Flag_Taiwan@2x.png](bios/Other/Recalbox/Flag_Taiwan@2x.png)** (367 bytes)
+  - SHA1: `f3cc44e74b1110e73fcdff097cac6d364f304a5f`
+  - MD5: `5bc1c31e842e84bcb778507ceec5bbdb`
+  - CRC32: `8d24f92a`
+- **[Flag_Taiwan@4x.png](bios/Other/Recalbox/Flag_Taiwan@4x.png)** (697 bytes)
+  - SHA1: `094ff25f6e1854b00acb1572c3a5a7e2657e1e2b`
+  - MD5: `14217ea50649345554b3d118de2b31c2`
+  - CRC32: `975c7aac`
+- **[Flag_USA.png](bios/Other/Recalbox/Flag_USA.png)** (486 bytes)
+  - SHA1: `f3dea88a2aec8163b40d7214b08a5b39b54205e7`
+  - MD5: `416daa0cdb17e9870eda53030dcd2f40`
+  - CRC32: `0e73f197`
+- **[Flag_USA@2x.png](bios/Other/Recalbox/Flag_USA@2x.png)** (878 bytes)
+  - SHA1: `ec4c79c6f56c817557334e4b1487b2edda36f11c`
+  - MD5: `69ee7eae52048477a1a9487a3c646220`
+  - CRC32: `16328d0d`
+- **[Flag_USA@4x.png](bios/Other/Recalbox/Flag_USA@4x.png)** (1,909 bytes)
+  - SHA1: `d41a677ca6dec3406a9d1df6e92e90b3a38d4e48`
+  - MD5: `b91d577f1dbc8dfb21baaf1407f353a3`
+  - CRC32: `2b0f6b13`
+- **[Flag_Unknown.png](bios/Other/Recalbox/Flag_Unknown.png)** (129 bytes)
+  - SHA1: `a744ad80300b3b5b7d6215be21344d825c6909d6`
+  - MD5: `83a2176ec82c4603486e6060b2b7d6a2`
+  - CRC32: `c6cb41c1`
+- **[Flag_Unknown@2x.png](bios/Other/Recalbox/Flag_Unknown@2x.png)** (205 bytes)
+  - SHA1: `6df7cadcc9e9a97e469be9bf59e22b223bcbe190`
+  - MD5: `f9f21e0bf11a27bbb2851def6c620d7f`
+  - CRC32: `99fe34d2`
+- **[Flag_Unknown@4x.png](bios/Other/Recalbox/Flag_Unknown@4x.png)** (313 bytes)
+  - SHA1: `45ad02b2e686a09d64a67ef99f2e9d04de166212`
+  - MD5: `5c6ba023653c8a24f82ebe4bfd22840f`
+  - CRC32: `cfb2c67a`
+- **[G2B.ini](bios/Other/Recalbox/G2B.ini)** (269 bytes)
+  - SHA1: `9392447a3248e4ae8d946e930ccd435e386141fd`
+  - MD5: `e24868575600bd7dcb90be47d4385104`
+  - CRC32: `d13c0480`
+- **[G2BE5G.ini](bios/Other/Recalbox/G2BE5G.ini)** (334 bytes)
+  - SHA1: `c5b7378001dbbe63e69e58a93de3138fe68ddb76`
+  - MD5: `13d27449390b295991e591024d21bfca`
+  - CRC32: `840756b9`
+- **[G2BP7D.ini](bios/Other/Recalbox/G2BP7D.ini)** (334 bytes)
+  - SHA1: `b9eb04339ee4d37372fa16725c6255f3e90fa8cf`
+  - MD5: `163712b953497763bdfd54ace9095e56`
+  - CRC32: `9556712e`
+- **[G2C.ini](bios/Other/Recalbox/G2C.ini)** (96 bytes)
+  - SHA1: `3260f5e5e840885ec3a9b250d21aef65cdfc96e4`
+  - MD5: `215875302254014c4ed6016884060204`
+  - CRC32: `0fc9d8b4`
+- **[G2FE78.ini](bios/Other/Recalbox/G2FE78.ini)** (365 bytes)
+  - SHA1: `7865e872016921fdfa2d6068c2bd3eb6e32b34a9`
+  - MD5: `3a33efce43a4ebf8dac01fb6e20ff657`
+  - CRC32: `950c4ea5`
+- **[G2M.ini](bios/Other/Recalbox/G2M.ini)** (501 bytes)
+  - SHA1: `252d3af3f1e280cb3d81c9eb6125d2ada5735492`
+  - MD5: `6bddc3e2271c510adaa462ec91a70805`
+  - CRC32: `71055fb8`
+- **[G2ME01.ini](bios/Other/Recalbox/G2ME01.ini)** (2,589 bytes)
+  - SHA1: `890d3bfb888fd993fb3d68c4c37860d5f9350c5f`
+  - MD5: `d119277267ace995306b0d1c9a82dccd`
+  - CRC32: `f3878bc5`
+- **[G2MP01.ini](bios/Other/Recalbox/G2MP01.ini)** (2,568 bytes)
+  - SHA1: `19874eb22759b3f31f81772684069209ed7e2e0f`
+  - MD5: `87219db5808c5e4569fc3a70b4c2fd13`
+  - CRC32: `c63c4632`
+- **[G2O.ini](bios/Other/Recalbox/G2O.ini)** (260 bytes)
+  - SHA1: `627007a861827ddc7d282e6d0e8dcfc9e8e42511`
+  - MD5: `07b049f1d2568002301d4307f4e0b2f7`
+  - CRC32: `58cda01a`
+- **[G2RE52.ini](bios/Other/Recalbox/G2RE52.ini)** (1,958 bytes)
+  - SHA1: `93b7588a02ec5a9280f68d1b10ee3a285fb74ed7`
+  - MD5: `27e2ac45416c3e04fe1bcd7ffe5f8812`
+  - CRC32: `9e618463`
+- **[G2V.ini](bios/Other/Recalbox/G2V.ini)** (258 bytes)
+  - SHA1: `fa62264ed24001d1497193a1680335afd5153211`
+  - MD5: `8da0142c96a07dcc323ac728d4b7ac5e`
+  - CRC32: `b53a47eb`
+- **[G2VE08.ini](bios/Other/Recalbox/G2VE08.ini)** (304 bytes)
+  - SHA1: `40fdc624a1758011281d528787b52969071967dc`
+  - MD5: `bd955f29b79978edc7703951b64fa576`
+  - CRC32: `1b2509ad`
+- **[G2VP08.ini](bios/Other/Recalbox/G2VP08.ini)** (304 bytes)
+  - SHA1: `5d71ea6dfea32c9aaae3a28405d5a2d7c05b916f`
+  - MD5: `772d94a0d6c4669e95ab4b4e9ba4d19e`
+  - CRC32: `bdcd92d5`
+- **[G2X.ini](bios/Other/Recalbox/G2X.ini)** (275 bytes)
+  - SHA1: `d3173315e085789cef54dea5f6896503f6dd8b83`
+  - MD5: `1f214354300b03a0d11ea72fbd998565`
+  - CRC32: `a98fb5d0`
+- **[G3A.ini](bios/Other/Recalbox/G3A.ini)** (304 bytes)
+  - SHA1: `e8d863d6becea0699ef66bdcec6de804397a5a08`
+  - MD5: `f2e181515fb37292e3df5c49f7eb6ce8`
+  - CRC32: `ebc0bc8d`
+- **[G3F.ini](bios/Other/Recalbox/G3F.ini)** (282 bytes)
+  - SHA1: `b2882354267d0513a6b9957342731a8c8c611c38`
+  - MD5: `2869270eeb7ddfdef824cd1f7f692144`
+  - CRC32: `7dfc3f78`
+- **[G3L.ini](bios/Other/Recalbox/G3L.ini)** (262 bytes)
+  - SHA1: `5bcb60ac620e67d9503aed236a3e962685d74e06`
+  - MD5: `66b4d778afbdf915f065ac2b43950eb2`
+  - CRC32: `64c8ace4`
+- **[G3Q.ini](bios/Other/Recalbox/G3Q.ini)** (330 bytes)
+  - SHA1: `e56cb86225dadeea32306384151d0ec08f9bea92`
+  - MD5: `deb479c8c1fbaa9df05d2b22863a4d8d`
+  - CRC32: `7bf233ff`
+- **[G3R.ini](bios/Other/Recalbox/G3R.ini)** (265 bytes)
+  - SHA1: `4efdb6a7f5df6ffb552be75f57834d3a1de91226`
+  - MD5: `5644da4d7790b177094e8bae5b0d8cfc`
+  - CRC32: `5b87d6c9`
+- **[G3RP52.ini](bios/Other/Recalbox/G3RP52.ini)** (400 bytes)
+  - SHA1: `50035c185916a5e4140928330b34258dc2382f58`
+  - MD5: `c54dadc693d6379cc15edaf4f7af4714`
+  - CRC32: `10eb7496`
+- **[G3X.ini](bios/Other/Recalbox/G3X.ini)** (289 bytes)
+  - SHA1: `588141486d6fb42ae7ee4d8d77e50a583e78b661`
+  - MD5: `25b9a1e49643a74d98637cc4c3986ce2`
+  - CRC32: `b9554124`
+- **[G3YP52.ini](bios/Other/Recalbox/G3YP52.ini)** (192 bytes)
+  - SHA1: `1072d210a24f635febfba96ef9bb0468f0a63840`
+  - MD5: `5b052cc81e338f687913968b458e0b03`
+  - CRC32: `328ee42d`
+- **[G4AEE9.ini](bios/Other/Recalbox/G4AEE9.ini)** (189 bytes)
+  - SHA1: `4876c49845a358e69c3914e0ae366246005a4739`
+  - MD5: `195503bf1e5eb88e2830b3be2c972255`
+  - CRC32: `bc99229d`
+- **[G4C.ini](bios/Other/Recalbox/G4C.ini)** (293 bytes)
+  - SHA1: `f67763f7159684e67b9d52147b153444ba1b9e04`
+  - MD5: `d6a126894c6539286c0417cb3414b53c`
+  - CRC32: `e4789884`
+- **[G4GEE9.ini](bios/Other/Recalbox/G4GEE9.ini)** (1,029 bytes)
+  - SHA1: `34690b83a5b768732103faea1793740f9100dc45`
+  - MD5: `38cb1f07b5ebf84a8b6e0d773ca72837`
+  - CRC32: `cde7ac22`
+- **[G4M.ini](bios/Other/Recalbox/G4M.ini)** (283 bytes)
+  - SHA1: `5c00924373fdec69dde160ed5f3f9b4c0156b09b`
+  - MD5: `f36c06644ac99edae2b6a43a0ebc1786`
+  - CRC32: `4031540c`
+- **[G4ME69.ini](bios/Other/Recalbox/G4ME69.ini)** (318 bytes)
+  - SHA1: `a6a02ba947f3b4c11bb743da2799df87433b0e71`
+  - MD5: `534e187f629eaa2c439afa4c881b4ca2`
+  - CRC32: `85f55a80`
+- **[G4NJDA.ini](bios/Other/Recalbox/G4NJDA.ini)** (212 bytes)
+  - SHA1: `f7c26b9c7ad1e1fbd23d3347a202dbcaf715d98d`
+  - MD5: `cb8a03efffb425748c515c71dbf6b769`
+  - CRC32: `1ce99015`
+- **[G4P.ini](bios/Other/Recalbox/G4P.ini)** (293 bytes)
+  - SHA1: `f39ea5f040bccf9ec5a9d28c3ef03cecb4e6fce8`
+  - MD5: `9be7516360497ee849bebf898b8fd180`
+  - CRC32: `d62cbdce`
+- **[G4QE01.ini](bios/Other/Recalbox/G4QE01.ini)** (562 bytes)
+  - SHA1: `82183778b542a54262beae8490facbd176b8bea4`
+  - MD5: `b1f67e731aaacec461eed563984764c3`
+  - CRC32: `20488719`
+- **[G4S.ini](bios/Other/Recalbox/G4S.ini)** (286 bytes)
+  - SHA1: `20de00aa2ae98c7517b59b9df2b4440bdf755666`
+  - MD5: `5853bfc476013dad01c3bde2ababedae`
+  - CRC32: `4cfce84e`
+- **[G4SP01.ini](bios/Other/Recalbox/G4SP01.ini)** (1,820 bytes)
+  - SHA1: `6adacf3a60aec20037ea4e7fc1453c182e38b91d`
+  - MD5: `3f4f1cb797c3ff1073c945dedae84b4d`
+  - CRC32: `947d1c99`
+- **[G4Z.ini](bios/Other/Recalbox/G4Z.ini)** (210 bytes)
+  - SHA1: `125506b0cd81fa2f8046172263f0cd1e9558f82a`
+  - MD5: `8d7a3c1fdde95f92862b3b8a6e1b51b1`
+  - CRC32: `f360d506`
+- **[G5B.ini](bios/Other/Recalbox/G5B.ini)** (96 bytes)
+  - SHA1: `9f3cc86a567e46a2097433416f40d1f493c5ad6f`
+  - MD5: `3717d47a6c5d03e83352b12c7358d2c3`
+  - CRC32: `bf3d12d0`
+- **[G5D.ini](bios/Other/Recalbox/G5D.ini)** (432 bytes)
+  - SHA1: `c6f5b5f87352010af4dc2b025380486ed6601398`
+  - MD5: `6feb2a12243da016fe6953b394ff030e`
+  - CRC32: `f2d7a8cf`
+- **[G5N.ini](bios/Other/Recalbox/G5N.ini)** (322 bytes)
+  - SHA1: `24c223fdff63748047fbdd92de577aa632006a15`
+  - MD5: `2236678a39d6a554b0f52bce5385a7c7`
+  - CRC32: `b7209f83`
+- **[G5SE7D.ini](bios/Other/Recalbox/G5SE7D.ini)** (980 bytes)
+  - SHA1: `df6955d2ab40e220902c4b8408cf849b09a1297c`
+  - MD5: `bb86e44b3208b77c5f60e13814ac4a0b`
+  - CRC32: `ffee3d60`
+- **[G5SP7D.ini](bios/Other/Recalbox/G5SP7D.ini)** (885 bytes)
+  - SHA1: `60d332fe724d3d17c5b2c18724e8e4592c1383ce`
+  - MD5: `506ba5d61d37871a95baa978b48b2afd`
+  - CRC32: `d57fc0bb`
+- **[G5T.ini](bios/Other/Recalbox/G5T.ini)** (278 bytes)
+  - SHA1: `7cc36a2f876ff5f4b6976a46a0d2131e9a24b4b5`
+  - MD5: `ea1ee9026af73f14b4d20efd4b215a15`
+  - CRC32: `1b6561e2`
+- **[G6Q.ini](bios/Other/Recalbox/G6Q.ini)** (316 bytes)
+  - SHA1: `327d0a1d8eb5e48694def44aa8903e6f7d61191f`
+  - MD5: `ffc9e5fe08cba6928406df1af983d8b8`
+  - CRC32: `dfec74b5`
+- **[G6S.ini](bios/Other/Recalbox/G6S.ini)** (391 bytes)
+  - SHA1: `86e6f792d335298603a6d49b6e33c8ac4c67b902`
+  - MD5: `e75a3a1011e6c239d86d6266131e6f6b`
+  - CRC32: `bafb8843`
+- **[G6T.ini](bios/Other/Recalbox/G6T.ini)** (265 bytes)
+  - SHA1: `199db9d9a71e67d20f324d835e7c0d572784e533`
+  - MD5: `c143511f520111324b8b3c6879007ba4`
+  - CRC32: `712f9249`
+- **[G6W.ini](bios/Other/Recalbox/G6W.ini)** (276 bytes)
+  - SHA1: `4a4e7f9cebfda5f3a9ff18fe32ca9c419e63bbcc`
+  - MD5: `ae8b935071d7941a8a7003387a12f665`
+  - CRC32: `5332b3d8`
+- **[G8M.ini](bios/Other/Recalbox/G8M.ini)** (398 bytes)
+  - SHA1: `29072f1bab9a0817dee0235c31b73441469cdacb`
+  - MD5: `dbc320dd723e51ae5f2ea8669fc0752a`
+  - CRC32: `7b007d95`
+- **[G8ME01.ini](bios/Other/Recalbox/G8ME01.ini)** (1,448 bytes)
+  - SHA1: `b3113b53c77f4959964ed4bf9b37bdc9e319453b`
+  - MD5: `8ec4e020ff37072b6d85c29f542f4593`
+  - CRC32: `406ab989`
+- **[G8MJ01.ini](bios/Other/Recalbox/G8MJ01.ini)** (921 bytes)
+  - SHA1: `c45bf30aeb4872e173d88156b94e68a367b3288c`
+  - MD5: `64cd019a125e165b1bef18b47bdd3682`
+  - CRC32: `7c8bea1f`
+- **[G8MP01.ini](bios/Other/Recalbox/G8MP01.ini)** (921 bytes)
+  - SHA1: `82dec6531b04ec01074f2425d7b2eee03e0a7f6f`
+  - MD5: `1cb42dc6fc6ac2a79c2f25a2f9bafe44`
+  - CRC32: `f9004563`
+- **[G8W.ini](bios/Other/Recalbox/G8W.ini)** (238 bytes)
+  - SHA1: `792f6e8ed18975a7fc92cea9747b0a0504f405a6`
+  - MD5: `a77de73beebefcb1f1b7ed8d2d1f3e8f`
+  - CRC32: `f4e777e9`
+- **[G8WP01.ini](bios/Other/Recalbox/G8WP01.ini)** (220 bytes)
+  - SHA1: `36f6348d17e3b99ac4722d75e694ae52aa8e9eaf`
+  - MD5: `1c31b1cae087887e81699de0fd102cd8`
+  - CRC32: `93443d4c`
+- **[G95.ini](bios/Other/Recalbox/G95.ini)** (247 bytes)
+  - SHA1: `8dbbc3ffec2bc68034e9ea4f6dc3cf5e566f820b`
+  - MD5: `a9d78d802dab9f5e4bb83cbc6e6c29ed`
+  - CRC32: `2d57d28c`
+- **[G96.ini](bios/Other/Recalbox/G96.ini)** (235 bytes)
+  - SHA1: `330ac55f83ecfe609ffc42abb6199fbc66299eeb`
+  - MD5: `a851797c1e86f7528b870c04835a7bf1`
+  - CRC32: `1286ad0d`
+- **[G99.ini](bios/Other/Recalbox/G99.ini)** (246 bytes)
+  - SHA1: `3f04dcdecdfde682baf4bd734a784f3d7c30df0a`
+  - MD5: `3c1293f940507b0c0dd19d9615d70b9a`
+  - CRC32: `9b64d6c6`
+- **[G9R.ini](bios/Other/Recalbox/G9R.ini)** (261 bytes)
+  - SHA1: `626a62ccbacf9caeb1b3de59587b5f5b2ff96e31`
+  - MD5: `1e83921e5e05ec6b9e14ae8169a369f7`
+  - CRC32: `ba79df9b`
+- **[G9S.ini](bios/Other/Recalbox/G9S.ini)** (409 bytes)
+  - SHA1: `e44039dfea9b42cf3095139deb6daa8712d66ee2`
+  - MD5: `fd3df5846854c634a1dd8f8a4499bbad`
+  - CRC32: `04974b8f`
+- **[G9SE8P.ini](bios/Other/Recalbox/G9SE8P.ini)** (4,207 bytes)
+  - SHA1: `565cc5065ba48684ef360003918f076af6a01b93`
+  - MD5: `dc78f42b6b1e9e03bc9b3d97a5b13c03`
+  - CRC32: `08039049`
+- **[G9SJ8P.ini](bios/Other/Recalbox/G9SJ8P.ini)** (499 bytes)
+  - SHA1: `52a203f22819688606869001d09a6005e25e4935`
+  - MD5: `700c7e09fc2c719c1b87db2d091185ba`
+  - CRC32: `bc5c927b`
+- **[G9SP8P.ini](bios/Other/Recalbox/G9SP8P.ini)** (517 bytes)
+  - SHA1: `4413d21f262538367da5f4592736b7e0ff45c728`
+  - MD5: `0e6b250f6318e304ba6ad55c5ab7e069`
+  - CRC32: `fa6dfc4c`
+- **[G9T.ini](bios/Other/Recalbox/G9T.ini)** (286 bytes)
+  - SHA1: `5904e4e99df97d74e0b3dcaf70aa68aa4d6b8698`
+  - MD5: `0ee9af87f47c452c71fff033775e45a4`
+  - CRC32: `8569e026`
+- **[GAA.ini](bios/Other/Recalbox/GAA.ini)** (290 bytes)
+  - SHA1: `446280170eadb7eb29cdaffbbabc9cc79067ca39`
+  - MD5: `395d8feb15bcba00e65582eb455b21f6`
+  - CRC32: `c74965f2`
+- **[GAF.ini](bios/Other/Recalbox/GAF.ini)** (343 bytes)
+  - SHA1: `ca33943840fa8000ffa514ddba8e4842be44bd31`
+  - MD5: `a717ed0b60c155054736aa404ddb1e79`
+  - CRC32: `bfebd6a2`
+- **[GAFE01.ini](bios/Other/Recalbox/GAFE01.ini)** (8,383 bytes)
+  - SHA1: `1097456d477a8bceb2f1c6045f251851b618fb45`
+  - MD5: `67533900f7b30b40ded60d1639361813`
+  - CRC32: `c7e9f887`
+- **[GAK.ini](bios/Other/Recalbox/GAK.ini)** (267 bytes)
+  - SHA1: `231d38736872e9f6de81ff903bb6e7d632d5a2fa`
+  - MD5: `b72a5ad7feaf80b60a562a4bf52490ab`
+  - CRC32: `5a5908c0`
+- **[GAL.ini](bios/Other/Recalbox/GAL.ini)** (1,249 bytes)
+  - SHA1: `3c3d2c8ce52b3ef61ddc14d0fd9d45afc8c07e53`
+  - MD5: `6c6f3552aec28a3757532597596d58e2`
+  - CRC32: `eab2885c`
+- **[GALE01r0.ini](bios/Other/Recalbox/GALE01r0.ini)** (8,541 bytes)
+  - SHA1: `cef9fa67450a7f213d6e7e28a2f86643972f0e99`
+  - MD5: `38c4871dfbb54fac76a45350d893aa51`
+  - CRC32: `9db2249f`
+- **[GALE01r1.ini](bios/Other/Recalbox/GALE01r1.ini)** (1,350 bytes)
+  - SHA1: `a4a5d4e9d3e67076f7e42dff5eb3fb8ddb70a9ed`
+  - MD5: `2a97c2c9b11fcc6858dc89a737dbddd3`
+  - CRC32: `43028ab1`
+- **[GALE01r2.ini](bios/Other/Recalbox/GALE01r2.ini)** (24,982 bytes)
+  - SHA1: `9f40f8f52b08ad3bb20f35c87548360f60cd2965`
+  - MD5: `be421880eaf51a8364b7bbc34b8bae1d`
+  - CRC32: `ccce291e`
+- **[GALP01.ini](bios/Other/Recalbox/GALP01.ini)** (6,914 bytes)
+  - SHA1: `39570da7124ec6ee685050a8da71dfe3ba61ee73`
+  - MD5: `d782717db1dfd813f99bfd8798baa3a9`
+  - CRC32: `91b44a78`
+- **[GAP.ini](bios/Other/Recalbox/GAP.ini)** (270 bytes)
+  - SHA1: `bccf9de266df53921ff8e61e90dfcced3e9555cd`
+  - MD5: `d255e1ba782f794bb619fa11c68e622d`
+  - CRC32: `b73243ff`
+- **[GAS.ini](bios/Other/Recalbox/GAS.ini)** (263 bytes)
+  - SHA1: `cc5f8a62c174cfd1d054769033f3ecd7e8f74ecc`
+  - MD5: `7a057c724ebbe983ac09252f423892e5`
+  - CRC32: `c95659a5`
+- **[GAU.ini](bios/Other/Recalbox/GAU.ini)** (276 bytes)
+  - SHA1: `034751d082e6d0881c0381beefd671fce935f537`
+  - MD5: `f62c52ccbe0444ce5af8c5e200018104`
+  - CRC32: `61686be1`
+- **[GAUE08.ini](bios/Other/Recalbox/GAUE08.ini)** (1,155 bytes)
+  - SHA1: `6aaa0274fa345e53332767a94ff5c35adea88a77`
+  - MD5: `4d2f0b5ad9b8971c21a1ce88ee1ba356`
+  - CRC32: `feaffa27`
+- **[GAV.ini](bios/Other/Recalbox/GAV.ini)** (288 bytes)
+  - SHA1: `e191f2a4da5e8726f6705571f7f828550a94eaeb`
+  - MD5: `74da5991addb3aa05fdfe7a5a4eafc5f`
+  - CRC32: `3418dd0f`
+- **[GAY.ini](bios/Other/Recalbox/GAY.ini)** (310 bytes)
+  - SHA1: `a9675296ddf2af82780124d221ab48bc4a1ed239`
+  - MD5: `dc338bdfa06936d89be421e97068402d`
+  - CRC32: `56a313d8`
+- **[GAZE69.ini](bios/Other/Recalbox/GAZE69.ini)** (230 bytes)
+  - SHA1: `d40796f68c1269ce079826188991501057e6658a`
+  - MD5: `7a8a8d01870d02c31a18996a2abe0859`
+  - CRC32: `1bc6a0ed`
+- **[GB3.ini](bios/Other/Recalbox/GB3.ini)** (301 bytes)
+  - SHA1: `2970ef08a802bf1e4deb3bbaa49dd86012582364`
+  - MD5: `d78efc019a5ae63fc089db9636701745`
+  - CRC32: `7a1cf5c6`
+- **[GB4E51.ini](bios/Other/Recalbox/GB4E51.ini)** (1,090 bytes)
+  - SHA1: `7e2a4b77c1cbc878e18afca3375c2bdc1c911e97`
+  - MD5: `52b40db8e88843f1b67e9a535d60f2af`
+  - CRC32: `ad2ba92a`
+- **[GBH.ini](bios/Other/Recalbox/GBH.ini)** (282 bytes)
+  - SHA1: `5fec14c0023e91be118639abd06ac43e43bd598d`
+  - MD5: `daf3a69b2ba5170835a6e8e033e9e997`
+  - CRC32: `905a109a`
+- **[GBHEC8.ini](bios/Other/Recalbox/GBHEC8.ini)** (1,934 bytes)
+  - SHA1: `1a13c4a49a5318604e699ea7fa1e5e7c1969e7af`
+  - MD5: `8e08b238374dbe09e5c169e214aff2f0`
+  - CRC32: `1a5391e6`
+- **[GBL.ini](bios/Other/Recalbox/GBL.ini)** (288 bytes)
+  - SHA1: `81fca667c9f08a262e1b8717f5f2e6c004e5ceeb`
+  - MD5: `4d8b0ecabda7257bf695efe9b0d8e803`
+  - CRC32: `a31276cb`
+- **[GBLE52.ini](bios/Other/Recalbox/GBLE52.ini)** (376 bytes)
+  - SHA1: `a43e944d4bd52b6fe0c98b06fed81ebd26d82706`
+  - MD5: `1a8ab22df70a6ddaba4cee85d47093b8`
+  - CRC32: `09b874c4`
+- **[GBLP52.ini](bios/Other/Recalbox/GBLP52.ini)** (322 bytes)
+  - SHA1: `79e780ea81a5d8ab362ca1c166486592221a17d0`
+  - MD5: `cbcdd4a8809312bde84144f1d09af155`
+  - CRC32: `1d892a59`
+- **[GBM.ini](bios/Other/Recalbox/GBM.ini)** (289 bytes)
+  - SHA1: `0d3910704ec7dff3255a1cc6a0d5965d30595fb2`
+  - MD5: `b9d9fb4c720b94119f7ac4cd4aad02ed`
+  - CRC32: `121bfa16`
+- **[GBOP51.ini](bios/Other/Recalbox/GBOP51.ini)** (582 bytes)
+  - SHA1: `5f5b049c70542a5c91fac0496462a16f386fa781`
+  - MD5: `aef1e0213749b35e09ebd95c94cfa564`
+  - CRC32: `890f8512`
+- **[GBRJ18.ini](bios/Other/Recalbox/GBRJ18.ini)** (322 bytes)
+  - SHA1: `212528c99769b9a8ce2aa044ca14aa0a1d7e7587`
+  - MD5: `420e0f1a1ccf3b6ba4ed83a063d8d947`
+  - CRC32: `a7dff6b8`
+- **[GBS.ini](bios/Other/Recalbox/GBS.ini)** (225 bytes)
+  - SHA1: `8d964b2a3df19c920403b38e111143a7ae528001`
+  - MD5: `f0f9da835c75f91304050ccdb42b2170`
+  - CRC32: `d34c2120`
+- **[GBSE8P.ini](bios/Other/Recalbox/GBSE8P.ini)** (643 bytes)
+  - SHA1: `0756f0364941ca5a7b707be6bbacbb3dd0fc8241`
+  - MD5: `1dd708fba7b69f889c6e2bcb9b682449`
+  - CRC32: `92c3ae26`
+- **[GBSP8P.ini](bios/Other/Recalbox/GBSP8P.ini)** (643 bytes)
+  - SHA1: `65943f111b5b98831fc5b8393ff4c7793d733738`
+  - MD5: `10acb2034507faf02e343bc017a6abbe`
+  - CRC32: `a35d6323`
+- **[GBV.ini](bios/Other/Recalbox/GBV.ini)** (276 bytes)
+  - SHA1: `c792c35ab7a9ab9321215de739af562b8b5470a7`
+  - MD5: `a307232bb698d63ce438a73f24d1a118`
+  - CRC32: `ca8b6208`
+- **[GBW.ini](bios/Other/Recalbox/GBW.ini)** (300 bytes)
+  - SHA1: `b0b12befc5acd3d8a18c4896b79c6674e7bffdb5`
+  - MD5: `8080ef34d9060b102631649ebd9e1118`
+  - CRC32: `dec1ff2b`
+- **[GBZ.ini](bios/Other/Recalbox/GBZ.ini)** (142 bytes)
+  - SHA1: `f9d7c5f4c6d0e1a896a3e781b9ac294838ff0062`
+  - MD5: `dbf9561acef0c6659857f1af51b9c722`
+  - CRC32: `75568e6f`
+- **[GBZP08.ini](bios/Other/Recalbox/GBZP08.ini)** (1,436 bytes)
+  - SHA1: `58442964c17c849575085bfdfeb7d6c189afef79`
+  - MD5: `6c21e335188c9db47a5d1a92eb16b47c`
+  - CRC32: `798890da`
+- **[GC2.ini](bios/Other/Recalbox/GC2.ini)** (277 bytes)
+  - SHA1: `8bc212f67d3cf75fe0cab572221528a06058d5ac`
+  - MD5: `e633e50dc49a5f4991179aec078ddb24`
+  - CRC32: `9263a999`
+- **[GC3.ini](bios/Other/Recalbox/GC3.ini)** (454 bytes)
+  - SHA1: `bf5f2a2cdee75b4f940f1c9ceb32c79e6bfca2a0`
+  - MD5: `cf8d88768d9b3f01873b5cc76a1593e3`
+  - CRC32: `84810cf0`
+- **[GC6.ini](bios/Other/Recalbox/GC6.ini)** (486 bytes)
+  - SHA1: `6404688f13bfdbd9696255670955c3f5b2184ae8`
+  - MD5: `8878b7999fee77e506f54f30f7c2ec1f`
+  - CRC32: `694f4608`
+- **[GC6E01.ini](bios/Other/Recalbox/GC6E01.ini)** (1,407 bytes)
+  - SHA1: `c7247506f17e44c755de87f0d00fa65aa08771ee`
+  - MD5: `bc8c9bb0bf0833a8d482d56567623b40`
+  - CRC32: `1145857b`
+- **[GC6J01.ini](bios/Other/Recalbox/GC6J01.ini)** (1,632 bytes)
+  - SHA1: `79f21f805b156ad6aee98a6cb7498b42dc3d9226`
+  - MD5: `ae2bb72a3f4f7b3affd9a82f6da371ff`
+  - CRC32: `4a99dc67`
+- **[GC6P01.ini](bios/Other/Recalbox/GC6P01.ini)** (1,421 bytes)
+  - SHA1: `9dd037148816f60969cb9640b4f20983f238bece`
+  - MD5: `d59a844b3701b99de416c2a12a1c9b26`
+  - CRC32: `d441a93a`
+- **[GC8JA4.ini](bios/Other/Recalbox/GC8JA4.ini)** (579 bytes)
+  - SHA1: `71eed30ae73b8864d5beb1942f9cc45a48dc9239`
+  - MD5: `f3e8f2a8ce59c6ef33d6f9023d89d116`
+  - CRC32: `fa589225`
+- **[GC9.ini](bios/Other/Recalbox/GC9.ini)** (257 bytes)
+  - SHA1: `eb783c85cd37c82d5ba19c1281ad39d71147581f`
+  - MD5: `7da3371bce199711367d19841e2a5b09`
+  - CRC32: `00dbbc48`
+- **[GCBE7D.ini](bios/Other/Recalbox/GCBE7D.ini)** (343 bytes)
+  - SHA1: `f3b16dd72c50c88a2554d2d954280387a69f1fca`
+  - MD5: `b4b0ffb1743783adf441f680b95aead0`
+  - CRC32: `d4da80a4`
+- **[GCBP7D.ini](bios/Other/Recalbox/GCBP7D.ini)** (517 bytes)
+  - SHA1: `4a2557ec66f47560eb08d6602f5b2f0f4703efb0`
+  - MD5: `b47b7ad286126388e0993f46e24d8939`
+  - CRC32: `6d512df9`
+- **[GCC.ini](bios/Other/Recalbox/GCC.ini)** (686 bytes)
+  - SHA1: `a132c706fbce2be160fc1790fe46575b4283addb`
+  - MD5: `1469170c28028db901f7e96eafb743dd`
+  - CRC32: `52536c24`
+- **[GCCE01.ini](bios/Other/Recalbox/GCCE01.ini)** (8,492 bytes)
+  - SHA1: `0c4446785b4ca0d62e5517f06b6ad37e9cf3bc26`
+  - MD5: `ee5ffa020572c5fb94cd4dde88872400`
+  - CRC32: `37ff6d06`
+- **[GCCJGC.ini](bios/Other/Recalbox/GCCJGC.ini)** (736 bytes)
+  - SHA1: `40cb44341301110ee27521db614a12c45bd003f5`
+  - MD5: `afc56c452220d21c61bd8ba0e4787c51`
+  - CRC32: `369bdeb6`
+- **[GCCP01.ini](bios/Other/Recalbox/GCCP01.ini)** (855 bytes)
+  - SHA1: `0312b1f7f5348366ad32fe5877acf83aa212c111`
+  - MD5: `ba2c5214a47b4ad1473a464a6148480c`
+  - CRC32: `3140116a`
+- **[GCD.ini](bios/Other/Recalbox/GCD.ini)** (348 bytes)
+  - SHA1: `0b2958e47613bee77f8748eb3c5464061ee00c4d`
+  - MD5: `b808b601cf18c3f52ec080b923d87c5a`
+  - CRC32: `238b9f18`
+- **[GCDP08.ini](bios/Other/Recalbox/GCDP08.ini)** (133 bytes)
+  - SHA1: `58abb38f7753dc81a6096e046ff6ce0e65446e1f`
+  - MD5: `7a5f5092e189a909c1eb1c5f3d05f3f0`
+  - CRC32: `d629b0e1`
+- **[GCE.ini](bios/Other/Recalbox/GCE.ini)** (136 bytes)
+  - SHA1: `c401504847d580af2f06ee5c2bdf97d3b575203d`
+  - MD5: `d900f86434c29374f9fff2e1cfbd13fe`
+  - CRC32: `78aa17e4`
+- **[GCH.ini](bios/Other/Recalbox/GCH.ini)** (252 bytes)
+  - SHA1: `9ea23aef9d983800c9d6d94d5ed95d84d9c6f2ab`
+  - MD5: `ad89f33ed5e232a838ad7249582a3391`
+  - CRC32: `c3eadcbc`
+- **[GCI.ini](bios/Other/Recalbox/GCI.ini)** (301 bytes)
+  - SHA1: `3a4ff209fe007795140768f5a0efb3cede928b6c`
+  - MD5: `1f6ae76e68cc87b5d5c7f8900b568f86`
+  - CRC32: `ab5e9f9d`
+- **[GCN.ini](bios/Other/Recalbox/GCN.ini)** (533 bytes)
+  - SHA1: `17775674e378d15bbbe1b0cb76581d9b60b843cd`
+  - MD5: `1f54e7798cdab2fc4bd966ec8e212765`
+  - CRC32: `0f5d65b4`
+- **[GCO.ini](bios/Other/Recalbox/GCO.ini)** (96 bytes)
+  - SHA1: `cb8557db4fdfd6bc4f08225d1cbc408b79b93bc4`
+  - MD5: `8d392b88a54a4af13f6a340f4a6ade7a`
+  - CRC32: `62acbfa5`
+- **[GCP.ini](bios/Other/Recalbox/GCP.ini)** (266 bytes)
+  - SHA1: `7c3107e15973c071306f7822606052e196341a3a`
+  - MD5: `28e3b86edaa5e951bd8445668945eed3`
+  - CRC32: `c75af6ae`
+- **[GCVEEB.ini](bios/Other/Recalbox/GCVEEB.ini)** (395 bytes)
+  - SHA1: `d8d63df443bba485924bc9c0f9ef10061dcf9942`
+  - MD5: `0345b8d14b9538e0fb7bc37c0d11ec74`
+  - CRC32: `33150153`
+- **[GCZ.ini](bios/Other/Recalbox/GCZ.ini)** (262 bytes)
+  - SHA1: `ecf6d720527ac5e42efb948013fef2056656525b`
+  - MD5: `1638b025b5726b8f4925078030e69068`
+  - CRC32: `6a7a31eb`
+- **[GD7E70.ini](bios/Other/Recalbox/GD7E70.ini)** (315 bytes)
+  - SHA1: `75b6d6e3ddd8de9d3ead11e454db55a3bb22ab03`
+  - MD5: `8c56dfcf8d179e8171e0124ba23e925f`
+  - CRC32: `582f6dda`
+- **[GDD.ini](bios/Other/Recalbox/GDD.ini)** (287 bytes)
+  - SHA1: `9a2663f5afeacf62a4a3203233d7c7437953342e`
+  - MD5: `747d17fb76dca55cfea1d6942b96c72f`
+  - CRC32: `2d6035db`
+- **[GDDE41.ini](bios/Other/Recalbox/GDDE41.ini)** (433 bytes)
+  - SHA1: `71ce1ad0f4da270aa33f212b53ed66badb0a563b`
+  - MD5: `95acb6ba8eb435042ab722e5b874132d`
+  - CRC32: `ad4fbe18`
+- **[GDE.ini](bios/Other/Recalbox/GDE.ini)** (274 bytes)
+  - SHA1: `fd63958fd7dd0d4d60396e8fdaca9a5318abe71f`
+  - MD5: `986357814e6ed96cf14924ce4e64506c`
+  - CRC32: `5b02ebcb`
+- **[GDEE71.ini](bios/Other/Recalbox/GDEE71.ini)** (577 bytes)
+  - SHA1: `5da290470a6046e7c0dcf1f378ec5709bd86bbef`
+  - MD5: `cecb19683651bfd1ea8b86efe985da24`
+  - CRC32: `0f7456f6`
+- **[GDG.ini](bios/Other/Recalbox/GDG.ini)** (277 bytes)
+  - SHA1: `9bc03f6a5f6f1a00cb1680e8d06cc35722fdb94c`
+  - MD5: `59b77c98d8e8e399dca153a2677affc6`
+  - CRC32: `a6b3d679`
+- **[GDJEB2.ini](bios/Other/Recalbox/GDJEB2.ini)** (286 bytes)
+  - SHA1: `9485907f528bf00cb0f58a61244f6dd1fc69da11`
+  - MD5: `29f13125becca2b02e04f0a6a92254ad`
+  - CRC32: `5917ff92`
+- **[GDK.ini](bios/Other/Recalbox/GDK.ini)** (389 bytes)
+  - SHA1: `d76034704f1b61cdbc4f07dca89b0de746a8b8df`
+  - MD5: `3b9ec1e0a9d0d17fe781792525f01a20`
+  - CRC32: `cac918d8`
+- **[GDM.ini](bios/Other/Recalbox/GDM.ini)** (286 bytes)
+  - SHA1: `5fd22bbd456fde6c0f330d079d7f0a5412562b52`
+  - MD5: `0710bd0a87e891bcc45d921b3fc7f96e`
+  - CRC32: `7227fd17`
+- **[GDQ.ini](bios/Other/Recalbox/GDQ.ini)** (373 bytes)
+  - SHA1: `032e8178efc33b01359723f9de6d773852ec170d`
+  - MD5: `31c559b2820c90709b41403ddfd9306c`
+  - CRC32: `6b4b1c52`
+- **[GDREAF.ini](bios/Other/Recalbox/GDREAF.ini)** (489 bytes)
+  - SHA1: `d004f9c0df4a7ad991f77fc9d4473da19727d9cb`
+  - MD5: `7b8f8526f2464cede7bcb0c263c25413`
+  - CRC32: `85ba2fc3`
+- **[GDRP69.ini](bios/Other/Recalbox/GDRP69.ini)** (489 bytes)
+  - SHA1: `c68e04bca1633908b7345fce64a58f7deed6be5a`
+  - MD5: `e191d94f66ef42d94f71822a4993711d`
+  - CRC32: `f16a783d`
+- **[GDS.ini](bios/Other/Recalbox/GDS.ini)** (272 bytes)
+  - SHA1: `de5f7eae749c434ecb4ed5d356172ecca57bf0b1`
+  - MD5: `36adf1da4aa0474a51d1099dc9300bfb`
+  - CRC32: `5cd08e5d`
+- **[GDT.ini](bios/Other/Recalbox/GDT.ini)** (276 bytes)
+  - SHA1: `a675b9968e29d87ce6d9757803a8525479ca1e3e`
+  - MD5: `d3db1c356254d049b3136227c6baa220`
+  - CRC32: `731ec27e`
+- **[GDTE69.ini](bios/Other/Recalbox/GDTE69.ini)** (5,127 bytes)
+  - SHA1: `bbed93946196a0ded5635f818dbaa96f620e2ed0`
+  - MD5: `fc30d491a5641b83d13e17c7c70b4d91`
+  - CRC32: `f18ae1da`
+- **[GDV.ini](bios/Other/Recalbox/GDV.ini)** (225 bytes)
+  - SHA1: `a5058d8b5c05420d98b5440270bc631e2a41cf07`
+  - MD5: `c2e622430d1552bcb15dc32e4092dd14`
+  - CRC32: `c3fbe178`
+- **[GDX.ini](bios/Other/Recalbox/GDX.ini)** (141 bytes)
+  - SHA1: `9bd04f03dceada74153a197b5a0a45ef949a5231`
+  - MD5: `1c02d0c4629adba22a3cb5f861803732`
+  - CRC32: `bde38377`
+- **[GE3.ini](bios/Other/Recalbox/GE3.ini)** (310 bytes)
+  - SHA1: `6b0de7cb268813e8f3250a5c5080d6c7385214d7`
+  - MD5: `a35ac379a722d62af9ab5876b9a8795d`
+  - CRC32: `91514f22`
+- **[GE4.ini](bios/Other/Recalbox/GE4.ini)** (231 bytes)
+  - SHA1: `287970081049e61a05c29f3bd3c086282dcc8a15`
+  - MD5: `378e34af28ae939fdff812cb091788a8`
+  - CRC32: `e7c8adb8`
+- **[GE5EA4.ini](bios/Other/Recalbox/GE5EA4.ini)** (439 bytes)
+  - SHA1: `7f6a1fe2c56628f8357971bf005151c2b2d74e24`
+  - MD5: `afc39143dd3923ac207b1c73317f1c4a`
+  - CRC32: `e54892c3`
+- **[GE9.ini](bios/Other/Recalbox/GE9.ini)** (472 bytes)
+  - SHA1: `0a687d7f2fc68961745d8575d66bb5ff033c3078`
+  - MD5: `6233e47fbbb96b4e7145d1dd2fb85ea1`
+  - CRC32: `4a92f6cf`
+- **[GEA.ini](bios/Other/Recalbox/GEA.ini)** (338 bytes)
+  - SHA1: `327e2247561d56d34f973dbd3546ca612380559f`
+  - MD5: `1876f78123fcc66c53f8b06bcfd4c9a6`
+  - CRC32: `06ac074e`
+- **[GED.ini](bios/Other/Recalbox/GED.ini)** (327 bytes)
+  - SHA1: `421b93353e4df127ad5ab96938f980b2424442bb`
+  - MD5: `862abffe578c51df9c2cb16f44fb477c`
+  - CRC32: `bdbcecff`
+- **[GEDE01.ini](bios/Other/Recalbox/GEDE01.ini)** (178 bytes)
+  - SHA1: `7dec36e5a2f36d4f008fb7ef6e5c601002a2f854`
+  - MD5: `701967579196086aff0c18213d465f75`
+  - CRC32: `0fafc696`
+- **[GEDJ01.ini](bios/Other/Recalbox/GEDJ01.ini)** (178 bytes)
+  - SHA1: `80b0f986ba9309f47fa46fe4812f51b9731fcaf5`
+  - MD5: `fcea80edf57917ef3208d4f9c055ef5a`
+  - CRC32: `3d77ecb1`
+- **[GEDP01.ini](bios/Other/Recalbox/GEDP01.ini)** (178 bytes)
+  - SHA1: `f3bad277fc6ebb0705546a544aa0871d68509310`
+  - MD5: `be60d40eb9e2c7ed93fdd6c330bef8ea`
+  - CRC32: `fef2dbf6`
+- **[GEDW01.ini](bios/Other/Recalbox/GEDW01.ini)** (122 bytes)
+  - SHA1: `475e69261a419fdee9e4f9a722aaa4ff761779c2`
+  - MD5: `ccef88db39d89c17b9c64715e581701b`
+  - CRC32: `3dc7f80c`
+- **[GEME7F.ini](bios/Other/Recalbox/GEME7F.ini)** (441 bytes)
+  - SHA1: `f04676cd1b094e7d8c34356dee0d5d236543c258`
+  - MD5: `ef2e8d942bf69886f7eb02f277281376`
+  - CRC32: `b1501478`
+- **[GEMJ28.ini](bios/Other/Recalbox/GEMJ28.ini)** (441 bytes)
+  - SHA1: `6af53c22c0f3bde5ca3246ccb81f963d919c9fcc`
+  - MD5: `34d998e860c679b8602239e937738715`
+  - CRC32: `37d9c475`
+- **[GEN.ini](bios/Other/Recalbox/GEN.ini)** (296 bytes)
+  - SHA1: `1c1bdffed70508d1ab669ac5d8ef1ccc9f1e575f`
+  - MD5: `71beb7e8a22e91e8284ae09a3ddbe95b`
+  - CRC32: `87eec5d5`
+- **[GEO.ini](bios/Other/Recalbox/GEO.ini)** (315 bytes)
+  - SHA1: `8c4765a1a47fc1234f9293da3ddcc7d31f74b01a`
+  - MD5: `d32e9fb35e0149be47eac440be37c74e`
+  - CRC32: `2ee8f929`
+- **[GEZ.ini](bios/Other/Recalbox/GEZ.ini)** (266 bytes)
+  - SHA1: `89521acb36f912c6cfd756ad46772785466e711c`
+  - MD5: `0162c3f19b181596b725266531e883bd`
+  - CRC32: `de96927e`
+- **[GEZE8P.ini](bios/Other/Recalbox/GEZE8P.ini)** (826 bytes)
+  - SHA1: `4bfef517d3968fd993555706b5a4b53346eb1ee0`
+  - MD5: `226119a8663b1d056dea4e49b48ebfb2`
+  - CRC32: `ec46a81f`
+- **[GEZP8P.ini](bios/Other/Recalbox/GEZP8P.ini)** (356 bytes)
+  - SHA1: `2debdaf26273c9bf105aee5f77aba3d0d138e00e`
+  - MD5: `0b2a5eee15ec99051b704ebfe6262194`
+  - CRC32: `63a49fe1`
+- **[GF4.ini](bios/Other/Recalbox/GF4.ini)** (283 bytes)
+  - SHA1: `6e0e8c60202f923acdf414309f06735f3178fa61`
+  - MD5: `dc7c7cd6fbcd299ee05d72bca64d2576`
+  - CRC32: `02744781`
+- **[GF7.ini](bios/Other/Recalbox/GF7.ini)** (323 bytes)
+  - SHA1: `8a166868f044242911fa34705f56deea607bda76`
+  - MD5: `8c6efaa313627bce4c336428d1278dff`
+  - CRC32: `9c3eda14`
+- **[GF7E01.ini](bios/Other/Recalbox/GF7E01.ini)** (1,832 bytes)
+  - SHA1: `aa3b9f31529807be5c1c3ba9b37527a03927817f`
+  - MD5: `67531b742b13156a0cc33a00dc44fac0`
+  - CRC32: `b2d718a8`
+- **[GF7P01.ini](bios/Other/Recalbox/GF7P01.ini)** (1,627 bytes)
+  - SHA1: `391e9f79baf63e7870ab3d58b1721e3facdad683`
+  - MD5: `22a437b523d6745e98dcd9a2cec41f22`
+  - CRC32: `29cfeed8`
+- **[GF8E69.ini](bios/Other/Recalbox/GF8E69.ini)** (712 bytes)
+  - SHA1: `8af1295b8f0e8681356b96521eee018ab65729e8`
+  - MD5: `1b22f2a38404000f69b4cc2be3ca243e`
+  - CRC32: `83a93501`
+- **[GFB.ini](bios/Other/Recalbox/GFB.ini)** (243 bytes)
+  - SHA1: `2725252bfa70b25ab31160bc9633f5d92c610063`
+  - MD5: `1538e917c7bbce9078d3c6fbbf6ffc97`
+  - CRC32: `9d8b486b`
+- **[GFD.ini](bios/Other/Recalbox/GFD.ini)** (277 bytes)
+  - SHA1: `0de6c26c0a5fbff44c94b3e6dbb14a57e7d5ba8d`
+  - MD5: `669de3f8dbd27a2624358782fe9db991`
+  - CRC32: `39f104bd`
+- **[GFEE01.ini](bios/Other/Recalbox/GFEE01.ini)** (1,004 bytes)
+  - SHA1: `ea954f3366d2cd6f65f82c99720df8035eac185d`
+  - MD5: `ced7b788bbbe39b5f7161c04a25ae2a5`
+  - CRC32: `c2707200`
+- **[GFEJ01.ini](bios/Other/Recalbox/GFEJ01.ini)** (2,047 bytes)
+  - SHA1: `13d336cd6067ed925fef778d7ee65ec42b244c9d`
+  - MD5: `5553ea7744136998d33fb847b8a9b14c`
+  - CRC32: `9b4e9547`
+- **[GFF.ini](bios/Other/Recalbox/GFF.ini)** (266 bytes)
+  - SHA1: `7e8f55c7c91cf0237bc275ae573972de6463fe2c`
+  - MD5: `28ed485c2ee842921ad308536f4c38d2`
+  - CRC32: `9eafc5b8`
+- **[GFG.ini](bios/Other/Recalbox/GFG.ini)** (274 bytes)
+  - SHA1: `d593919358e543d4b04181f79eb4e61d6b578d23`
+  - MD5: `a180d69eaa0b5cd54124ef1edda733f8`
+  - CRC32: `2015a5d9`
+- **[GFH.ini](bios/Other/Recalbox/GFH.ini)** (302 bytes)
+  - SHA1: `8bcc6fc078bcf30619797591b084d5844d292081`
+  - MD5: `3796d9d2a6998de9851e02332b5ac6e6`
+  - CRC32: `ad4997d8`
+- **[GFQEA4.ini](bios/Other/Recalbox/GFQEA4.ini)** (975 bytes)
+  - SHA1: `89c7b946af2455b31e46650d850e0cf70f6d105e`
+  - MD5: `92a0d176a253e1110e5db0d0fc2ad1a5`
+  - CRC32: `d25b2bfa`
+- **[GFTE01.ini](bios/Other/Recalbox/GFTE01.ini)** (1,881 bytes)
+  - SHA1: `d375068d56d4bd770bbfe5830ed24dbaf8e3ea63`
+  - MD5: `4c93ed7953d098b9493786cbf5a4d55d`
+  - CRC32: `e21c0e97`
+- **[GFY.ini](bios/Other/Recalbox/GFY.ini)** (267 bytes)
+  - SHA1: `e7047c3464d5c236912c84dabddd29067d533b0e`
+  - MD5: `2330995e2e936331c1282e11cb13b474`
+  - CRC32: `9144942c`
+- **[GFYE69.ini](bios/Other/Recalbox/GFYE69.ini)** (654 bytes)
+  - SHA1: `c5778aa7d71e06a2ad2e4962b2bffc1d5bc15f62`
+  - MD5: `94a7dc4c1ed3926c5c55987f74f5b1c0`
+  - CRC32: `a5667b29`
+- **[GFZ.ini](bios/Other/Recalbox/GFZ.ini)** (449 bytes)
+  - SHA1: `15a0a607f61822e3392f9b22cb290f80e3f89614`
+  - MD5: `3ec8642f447c008cc432f5d47e706169`
+  - CRC32: `12af9234`
+- **[GFZE01.ini](bios/Other/Recalbox/GFZE01.ini)** (2,128 bytes)
+  - SHA1: `80960d506aaa7d8f49e3d54ba118e74ea6d4322c`
+  - MD5: `be417723ff5b992cea4bfb85eb9ce2fe`
+  - CRC32: `44ef9e6b`
+- **[GFZJ01.ini](bios/Other/Recalbox/GFZJ01.ini)** (1,157 bytes)
+  - SHA1: `b448de38e70d871bf3edd807d1b2903ebd1fa789`
+  - MD5: `f0ef24cab418e639907029707da334dc`
+  - CRC32: `2f803367`
+- **[GFZJ8P.ini](bios/Other/Recalbox/GFZJ8P.ini)** (306 bytes)
+  - SHA1: `269d612abc1d37b7882f9ad2d8e339dd37bd0225`
+  - MD5: `fd764a41a4e5819e4b2bcab281715af8`
+  - CRC32: `56d24fa2`
+- **[GFZP01.ini](bios/Other/Recalbox/GFZP01.ini)** (1,848 bytes)
+  - SHA1: `ec27ce27cdf0e03a3d257a358cbfd19e4ece582e`
+  - MD5: `b766101a4dfc9a83d09f9ac7dbdd2112`
+  - CRC32: `0f9114e0`
+- **[GGC.ini](bios/Other/Recalbox/GGC.ini)** (235 bytes)
+  - SHA1: `f4a793dcf772f91a4facb0a9ff6e4b869e45ab24`
+  - MD5: `b58852225c5aa36f082d6f8145bc5cb8`
+  - CRC32: `d80b765d`
+- **[GGE.ini](bios/Other/Recalbox/GGE.ini)** (303 bytes)
+  - SHA1: `cd943274cc67b5247f6e127fef6bef41b91f545c`
+  - MD5: `672213a8f75e96f9c1a13709ad07e222`
+  - CRC32: `9458a490`
+- **[GGN.ini](bios/Other/Recalbox/GGN.ini)** (288 bytes)
+  - SHA1: `babd615ade0dcb42470d6bcffb650e789ffc7a90`
+  - MD5: `ecf7b48ae7254e3fc6735daceb8dfd51`
+  - CRC32: `06d8551c`
+- **[GGR.ini](bios/Other/Recalbox/GGR.ini)** (277 bytes)
+  - SHA1: `301eb56b046f03ca31c2043b1e5c7360165a6154`
+  - MD5: `92fd3e58bb844a3648a4d647b77a3cc3`
+  - CRC32: `3b954d74`
+- **[GGS.ini](bios/Other/Recalbox/GGS.ini)** (335 bytes)
+  - SHA1: `52755d11516baa6a8b47a72ab767c672c02bb9a4`
+  - MD5: `9708c24ed7ec7c376c3403a0ccd5e3cd`
+  - CRC32: `31fc19b9`
+- **[GGSEA4.ini](bios/Other/Recalbox/GGSEA4.ini)** (2,342 bytes)
+  - SHA1: `5167f4f1aec4e7771a3fe95a3eb2aeef69389f3c`
+  - MD5: `a799f1b4786d1e449dccff5a888c39cc`
+  - CRC32: `2976040f`
+- **[GGSPA4.ini](bios/Other/Recalbox/GGSPA4.ini)** (2,232 bytes)
+  - SHA1: `8d0f9c8eddb92ef665fda932f7e8e463de21348b`
+  - MD5: `59706b1a59f6ae4340b7d924c557db04`
+  - CRC32: `9f72be67`
+- **[GGTE01.ini](bios/Other/Recalbox/GGTE01.ini)** (852 bytes)
+  - SHA1: `0222dc2ee88eef5873f6b949d91214258c8830d7`
+  - MD5: `dd81b5f637775bd6ff9012b1c852fb7d`
+  - CRC32: `c87adbb9`
+- **[GGTJ01.ini](bios/Other/Recalbox/GGTJ01.ini)** (500 bytes)
+  - SHA1: `943559809715f70880657a3664b52b33b53711c2`
+  - MD5: `232cf927bb4586f136555f38e24310a4`
+  - CRC32: `59272a47`
+- **[GGTP01.ini](bios/Other/Recalbox/GGTP01.ini)** (678 bytes)
+  - SHA1: `92683147ef26cc9e36487131936373008a5c40a7`
+  - MD5: `8ae96bdae2e0870f0c9e2e46b079a01e`
+  - CRC32: `8dff9ce0`
+- **[GGV.ini](bios/Other/Recalbox/GGV.ini)** (487 bytes)
+  - SHA1: `4f90ee9f7e5662b90983d771cd53bdbeb24fa5e0`
+  - MD5: `c5be672a3bdef4dedcc15eae32d4c398`
+  - CRC32: `5e58db62`
+- **[GGVD78.ini](bios/Other/Recalbox/GGVD78.ini)** (665 bytes)
+  - SHA1: `cd4ac1448e112cb7f95e0aed8cecd97f3e3bec30`
+  - MD5: `c70220e39d206ce96058985eccbf5691`
+  - CRC32: `7e0a8ef4`
+- **[GGVE78.ini](bios/Other/Recalbox/GGVE78.ini)** (683 bytes)
+  - SHA1: `78a3741993144d0f73f184d3d336df6fca488200`
+  - MD5: `88f0f05744d61886fa494eb54c3348fc`
+  - CRC32: `181fc98d`
+- **[GGVP78.ini](bios/Other/Recalbox/GGVP78.ini)** (683 bytes)
+  - SHA1: `0de43fd7b4749502649d250219cedb0d100fa61c`
+  - MD5: `43f05c8a08f14841c390408b6017f825`
+  - CRC32: `1702bded`
+- **[GGVX78.ini](bios/Other/Recalbox/GGVX78.ini)** (532 bytes)
+  - SHA1: `92db53d13625e61debde2b7cad6ab7dd75c02d75`
+  - MD5: `dad1c8e83df9d4a5265a4b86d333c876`
+  - CRC32: `2601fac0`
+- **[GGY.ini](bios/Other/Recalbox/GGY.ini)** (301 bytes)
+  - SHA1: `9c694188ceac5e16bd5c188014a4c808cb2cf203`
+  - MD5: `261285d5a2d1e2e90cc2e0970965198b`
+  - CRC32: `c60fcc6a`
+- **[GGZ.ini](bios/Other/Recalbox/GGZ.ini)** (253 bytes)
+  - SHA1: `7a6f8bd7a004a54bce5bd522615313783ca10747`
+  - MD5: `0b26bb84373355a7af20df82645f9089`
+  - CRC32: `079404ea`
+- **[GH2.ini](bios/Other/Recalbox/GH2.ini)** (269 bytes)
+  - SHA1: `02514988fe085133246c3bfd60071aba5672bc67`
+  - MD5: `df0073fc6f8fb052de84276178460aba`
+  - CRC32: `f6c1fb5c`
+- **[GH7.ini](bios/Other/Recalbox/GH7.ini)** (256 bytes)
+  - SHA1: `fe79853b21a28e98c61de39cb9e513b05e88b34c`
+  - MD5: `5c575e62a193d97c59dab3fdc6b9751b`
+  - CRC32: `14a3be13`
+- **[GH9.ini](bios/Other/Recalbox/GH9.ini)** (148 bytes)
+  - SHA1: `d69abe7baa632b1f03365b922ca74e9881df1247`
+  - MD5: `5b1eb2597153bedbcd2fe24109ff5fc0`
+  - CRC32: `f7b0fcfb`
+- **[GHAE08.ini](bios/Other/Recalbox/GHAE08.ini)** (567 bytes)
+  - SHA1: `9a9a1cbc6298b21c0844e265bc5df045596e5ee6`
+  - MD5: `ec5f44a91e119699bb5bb63940f40746`
+  - CRC32: `8f02631b`
+- **[GHAJ08.ini](bios/Other/Recalbox/GHAJ08.ini)** (563 bytes)
+  - SHA1: `65e174fb8a9ab4dea3b70d170cd12886fc9d9922`
+  - MD5: `7cc261317d8dff93b13a2dbfd01b7eac`
+  - CRC32: `dd4da890`
+- **[GHAP08.ini](bios/Other/Recalbox/GHAP08.ini)** (991 bytes)
+  - SHA1: `49965e754b62690dd809ec9539d2c1a03717c80d`
+  - MD5: `5950aa6c7272cc910726235d80928765`
+  - CRC32: `95476099`
+- **[GHK.ini](bios/Other/Recalbox/GHK.ini)** (178 bytes)
+  - SHA1: `cc5c2356d48b32c5f06752c2597c5b6037f3fb23`
+  - MD5: `f47f2df9107f0b6e1f13d1900659dd25`
+  - CRC32: `d9eb3bde`
+- **[GHLE69.ini](bios/Other/Recalbox/GHLE69.ini)** (367 bytes)
+  - SHA1: `a538a0834613b9cdda7cdac4244c849d6f8bb941`
+  - MD5: `218a51d618422f82534ef78a26be22b3`
+  - CRC32: `7b64ee6d`
+- **[GHME4F.ini](bios/Other/Recalbox/GHME4F.ini)** (589 bytes)
+  - SHA1: `7a5a17f3897f1917570f8e63fba7dd2fcb3b0174`
+  - MD5: `aea3685255b8c5faacc8e96e423e634c`
+  - CRC32: `27932a35`
+- **[GHN.ini](bios/Other/Recalbox/GHN.ini)** (281 bytes)
+  - SHA1: `18b0d21e5561e95c69b5e34d0fcbbda47bb6163e`
+  - MD5: `feb233531a230a0a11cb6a0145dd56dc`
+  - CRC32: `8329987f`
+- **[GHQ.ini](bios/Other/Recalbox/GHQ.ini)** (283 bytes)
+  - SHA1: `744c8651092ce49fc62460c6a3a3176360c90795`
+  - MD5: `5e740b46dda0abe163e79948d2243e1f`
+  - CRC32: `1f17f82d`
+- **[GHQE7D.ini](bios/Other/Recalbox/GHQE7D.ini)** (331 bytes)
+  - SHA1: `412d28d07eb8c618545d52cca303bb6994d50043`
+  - MD5: `997b2aa68e7744eeae0c122df291ac9b`
+  - CRC32: `a2e69c64`
+- **[GHQP7D.ini](bios/Other/Recalbox/GHQP7D.ini)** (432 bytes)
+  - SHA1: `98ceabfdbe16e683852c379e25523b3102749c28`
+  - MD5: `934efa133c24fde4433ec7bc9ace5a94`
+  - CRC32: `349bacc3`
+- **[GHR.ini](bios/Other/Recalbox/GHR.ini)** (266 bytes)
+  - SHA1: `52da03d785ed365b1c95518250d5a39298beeb68`
+  - MD5: `45e5df289f35ee80655115cbb34a4cc0`
+  - CRC32: `b48b0068`
+- **[GHRE78.ini](bios/Other/Recalbox/GHRE78.ini)** (202 bytes)
+  - SHA1: `9166515e391171be84c0f8da98a23040925c1e1d`
+  - MD5: `6e53f85cd7adb055ed2da42c746d09a8`
+  - CRC32: `060a65be`
+- **[GHS.ini](bios/Other/Recalbox/GHS.ini)** (301 bytes)
+  - SHA1: `a17b8af7f187939d57f131139072c84589e906aa`
+  - MD5: `e25edd254061fb61ae1250e647207bfd`
+  - CRC32: `95830a82`
+- **[GHSE69.ini](bios/Other/Recalbox/GHSE69.ini)** (297 bytes)
+  - SHA1: `665c35570f96dfeb887a56e9657b083f63cfbcb1`
+  - MD5: `412d94c382f3f8475c3d2e0f27a86fe4`
+  - CRC32: `c0d7b7e1`
+- **[GHSP69.ini](bios/Other/Recalbox/GHSP69.ini)** (282 bytes)
+  - SHA1: `16a8ba077780841ecb648895bee1fe071edd26ac`
+  - MD5: `aa75c80a6890dda6f4a144dab2abc922`
+  - CRC32: `9098f0cd`
+- **[GHV.ini](bios/Other/Recalbox/GHV.ini)** (281 bytes)
+  - SHA1: `d26c26da055c7d3920c787f5102d4a64f535b71b`
+  - MD5: `754a8cf1dff4f620c23bc2ffa6c93c8a`
+  - CRC32: `168c4ea4`
+- **[GHY.ini](bios/Other/Recalbox/GHY.ini)** (266 bytes)
+  - SHA1: `9843e37ebc463318f22f88d7e1eec1544f0d826a`
+  - MD5: `4f6637c659db48f3b352d70416886294`
+  - CRC32: `ed7e2014`
+- **[GIA.ini](bios/Other/Recalbox/GIA.ini)** (287 bytes)
+  - SHA1: `91ad7243ddb00514d806d41c85acf18569d051ac`
+  - MD5: `9112b09bf62517df260faac29254ce98`
+  - CRC32: `11f28f93`
+- **[GIC.ini](bios/Other/Recalbox/GIC.ini)** (436 bytes)
+  - SHA1: `119435640a85dbc9503ca7b3484e676de701d3cb`
+  - MD5: `f5120ccaef8f3c556ea591e511cbb56a`
+  - CRC32: `8d07fde4`
+- **[GICD78.ini](bios/Other/Recalbox/GICD78.ini)** (517 bytes)
+  - SHA1: `1f1cd3051cb27a8ddde412e6621655912a9df60f`
+  - MD5: `2ff3a55d8995a5cd40e59770e84205d4`
+  - CRC32: `6658b2e2`
+- **[GICE78.ini](bios/Other/Recalbox/GICE78.ini)** (601 bytes)
+  - SHA1: `ba25ee9aed9064e667d619f6364f3dd173bb81de`
+  - MD5: `fafd72c578d3f472c56a5194e57c7169`
+  - CRC32: `0900a4d5`
+- **[GICF78.ini](bios/Other/Recalbox/GICF78.ini)** (517 bytes)
+  - SHA1: `b6dac2b5d03e2767927a44800c3d90f1abf3751e`
+  - MD5: `2a2005559772594a32f2d8d3c440fcad`
+  - CRC32: `99c684a6`
+- **[GICH78.ini](bios/Other/Recalbox/GICH78.ini)** (517 bytes)
+  - SHA1: `cc1709c8b4608c57c430ec2dc53bdcdbe361d567`
+  - MD5: `732372f7f1ae5f250711e8a98ce18233`
+  - CRC32: `a4050702`
+- **[GICJG9.ini](bios/Other/Recalbox/GICJG9.ini)** (516 bytes)
+  - SHA1: `90f8fdc704b4a9244a9f102271c2c46399846443`
+  - MD5: `3dcf4d1180f7be7b4c065a76827e3e4f`
+  - CRC32: `31e78513`
+- **[GICP78.ini](bios/Other/Recalbox/GICP78.ini)** (517 bytes)
+  - SHA1: `b8304d158d9d57f39459ea5c6e9a00f3fac684b3`
+  - MD5: `2d256d56ed4f2207bc5c26e1febe6ed1`
+  - CRC32: `b421ef4f`
+- **[GIGJ8P.ini](bios/Other/Recalbox/GIGJ8P.ini)** (366 bytes)
+  - SHA1: `b32eda6a43b318c27d4584fe4017fc9751936d53`
+  - MD5: `442ecb4e7a5b3887b75949a04b628072`
+  - CRC32: `f5f38f45`
+- **[GIH.ini](bios/Other/Recalbox/GIH.ini)** (461 bytes)
+  - SHA1: `18243e5926c4ede2ab2301700264c78894b47c15`
+  - MD5: `c4fa3f265a4160db716e95b6af7e60f2`
+  - CRC32: `6f94a56e`
+- **[GIL.ini](bios/Other/Recalbox/GIL.ini)** (270 bytes)
+  - SHA1: `54bd7cad617c5846efbe03ee670d427dabf06726`
+  - MD5: `d829edbd1e3b3d7097a03a7b04d5ab36`
+  - CRC32: `e9d6869e`
+- **[GINE69.ini](bios/Other/Recalbox/GINE69.ini)** (369 bytes)
+  - SHA1: `745ac04a38297fd73df57915e688002bc5ff910e`
+  - MD5: `1ab6f544701a73a94d907c14e19027e8`
+  - CRC32: `86b05046`
+- **[GIQ.ini](bios/Other/Recalbox/GIQ.ini)** (498 bytes)
+  - SHA1: `7ece7c1837ed123b5b5b408ca93efb5ed17767f0`
+  - MD5: `8ac1b278c7e0c7fa1e8971bf8f4d64e1`
+  - CRC32: `905e319a`
+- **[GIQE78.ini](bios/Other/Recalbox/GIQE78.ini)** (782 bytes)
+  - SHA1: `b093561dc5dddd305ffd9c48a734a3b77f7c8ba3`
+  - MD5: `661222bbf12779d68f66875c2e01a94b`
+  - CRC32: `d8762651`
+- **[GIQJ8P.ini](bios/Other/Recalbox/GIQJ8P.ini)** (542 bytes)
+  - SHA1: `b5a09c369b5ae0f7ea64dbb74a43a8038f3a7131`
+  - MD5: `3f1b929da6516964f9594599ad79bf24`
+  - CRC32: `6260800f`
+- **[GIQX78.ini](bios/Other/Recalbox/GIQX78.ini)** (542 bytes)
+  - SHA1: `108c00d34a23716a9d139368290596d017723d85`
+  - MD5: `97d4e60fe67bec1eef1c099746434218`
+  - CRC32: `593e31dd`
+- **[GIQY78.ini](bios/Other/Recalbox/GIQY78.ini)** (542 bytes)
+  - SHA1: `4c14793dcf036b2c0e3a3bf18bfcd0caddc310dc`
+  - MD5: `275c06f785e057f7422956ae260e79bd`
+  - CRC32: `193a038e`
+- **[GIS.ini](bios/Other/Recalbox/GIS.ini)** (242 bytes)
+  - SHA1: `1a6694341365d1a12c97c68679a5c5fd12a27759`
+  - MD5: `b81c6b51c8b239e22f99bf2d56fe2386`
+  - CRC32: `93f645ca`
+- **[GIT.ini](bios/Other/Recalbox/GIT.ini)** (304 bytes)
+  - SHA1: `6d9b8d059705f55e6a0e6a004d70f08f9a0a15ee`
+  - MD5: `d59dd10f4ca045e508a6af9847a72846`
+  - CRC32: `53c9c486`
+- **[GIZ.ini](bios/Other/Recalbox/GIZ.ini)** (393 bytes)
+  - SHA1: `db4f163eac88c9afec391760f9b314e0d6286816`
+  - MD5: `4a30d72aba913a0a10265a5002be6883`
+  - CRC32: `e3c114ec`
+- **[GJB.ini](bios/Other/Recalbox/GJB.ini)** (305 bytes)
+  - SHA1: `09cb115fa234a2e4aeadf1584d3f4d5c9436d3a9`
+  - MD5: `c2e10df90a33260af6e08dcb4c6a34be`
+  - CRC32: `e6b817f8`
+- **[GJCE8P.ini](bios/Other/Recalbox/GJCE8P.ini)** (704 bytes)
+  - SHA1: `a579feeea2cc4f27a902994527c3774de77288fe`
+  - MD5: `7483300f743a5aa22a7f3c419f06f79d`
+  - CRC32: `d2bf07b3`
+- **[GJD.ini](bios/Other/Recalbox/GJD.ini)** (98 bytes)
+  - SHA1: `aba21bb70d1f7934536e35452dbff92450508b14`
+  - MD5: `dd0b1b6935f170046883a0fa46da3fd3`
+  - CRC32: `c811cf47`
+- **[GJF.ini](bios/Other/Recalbox/GJF.ini)** (409 bytes)
+  - SHA1: `39959a9b5c8932ce692473428167b3fa6969dc88`
+  - MD5: `6b923ad66e120f9fe3b3cab4e018857a`
+  - CRC32: `db40094c`
+- **[GJK.ini](bios/Other/Recalbox/GJK.ini)** (297 bytes)
+  - SHA1: `205e9e5307983a20494d899d6c8a2d8d8f3deb01`
+  - MD5: `55da2882c69a783f7289e18b6c3efb64`
+  - CRC32: `10bb55f4`
+- **[GJN.ini](bios/Other/Recalbox/GJN.ini)** (276 bytes)
+  - SHA1: `b7dff2c53d063b396193e72d86798729cb2c4019`
+  - MD5: `7b128d6e7b1f6671016533b70aeb1a6b`
+  - CRC32: `c977cd7f`
+- **[GJUE78.ini](bios/Other/Recalbox/GJUE78.ini)** (432 bytes)
+  - SHA1: `8e5b474685ea6c631dd7100f59228e74b5586b49`
+  - MD5: `36f2028e8be3540b711e74d936fe1dca`
+  - CRC32: `ce24da33`
+- **[GJWE78.ini](bios/Other/Recalbox/GJWE78.ini)** (447 bytes)
+  - SHA1: `e8df803845425262250e8e1551ca2b13878f2acc`
+  - MD5: `31f52d39cdc65bc15a5435be47a16573`
+  - CRC32: `9670bf76`
+- **[GK2.ini](bios/Other/Recalbox/GK2.ini)** (220 bytes)
+  - SHA1: `279ecbcdf3ce3e4a5d3cef33e3b53d85763cad66`
+  - MD5: `8feb67423f348bf6e055f89944f56544`
+  - CRC32: `6463495b`
+- **[GK2E52.ini](bios/Other/Recalbox/GK2E52.ini)** (212 bytes)
+  - SHA1: `2f1f5be385ff5213d307aebac176302a2a8b6969`
+  - MD5: `7c924f34ff7955ced2505550c0f8a258`
+  - CRC32: `73fab765`
+- **[GK4.ini](bios/Other/Recalbox/GK4.ini)** (1,196 bytes)
+  - SHA1: `c7b1f85424f03ac8f10c10315d6611ffbc1988bd`
+  - MD5: `d9ce223a74c7f0b99e72e0418bead07c`
+  - CRC32: `8ee44370`
+- **[GK4E01.ini](bios/Other/Recalbox/GK4E01.ini)** (937 bytes)
+  - SHA1: `cacc4bbb320bf7fa707dba044e5b925e8b4be7a6`
+  - MD5: `8e996d4988d5d22bc197161534e24afc`
+  - CRC32: `287ec4bb`
+- **[GK5.ini](bios/Other/Recalbox/GK5.ini)** (475 bytes)
+  - SHA1: `be51832972873220cdafe39a9ece2c7bc0a1b4ef`
+  - MD5: `60229ec1d444ce5cd964e5e8f3188a17`
+  - CRC32: `8334c54e`
+- **[GK7.ini](bios/Other/Recalbox/GK7.ini)** (252 bytes)
+  - SHA1: `a78ce1ae57950c4e10811ea9ba094d3f7cebeff5`
+  - MD5: `8e3cfb4a8e6eaa9e34c4a377cc43a4e6`
+  - CRC32: `2caf9627`
+- **[GKB.ini](bios/Other/Recalbox/GKB.ini)** (1,320 bytes)
+  - SHA1: `937766dfc1ae56f29539f2c100476e02f3390f05`
+  - MD5: `b4ce071e271b845a7d8aa10f0127f015`
+  - CRC32: `34277811`
+- **[GKBPAF.ini](bios/Other/Recalbox/GKBPAF.ini)** (168 bytes)
+  - SHA1: `6e3512c1fd18aac6f1bec431a4856c9305d76945`
+  - MD5: `00020e1eec48b2a8a420124a4428ea0b`
+  - CRC32: `362992dc`
+- **[GKDP01.ini](bios/Other/Recalbox/GKDP01.ini)** (245 bytes)
+  - SHA1: `6866eec3344febb7e401d24ff45a2441641c4da7`
+  - MD5: `12c9139bbfc8cd24d911dbaa0fd720d2`
+  - CRC32: `d7b05175`
+- **[GKH.ini](bios/Other/Recalbox/GKH.ini)** (313 bytes)
+  - SHA1: `839e9accfad910a91b457273209d7c6a012f4fb3`
+  - MD5: `a8ceee0e782b2d257fe32551081c69e2`
+  - CRC32: `8a0954e4`
+- **[GKL.ini](bios/Other/Recalbox/GKL.ini)** (339 bytes)
+  - SHA1: `d31689b0086a943b888d288d96d1288c9ee7aba2`
+  - MD5: `7397ba3ed532afeed78a3b89f79c2951`
+  - CRC32: `181abc10`
+- **[GKM.ini](bios/Other/Recalbox/GKM.ini)** (306 bytes)
+  - SHA1: `cef3520cfb9203d28c31f5e681c730aa1ffe634b`
+  - MD5: `2d0a4dbdda8d0cccec976cf085515674`
+  - CRC32: `ae03aaa2`
+- **[GKNEB2.ini](bios/Other/Recalbox/GKNEB2.ini)** (4,158 bytes)
+  - SHA1: `d30f644f03b640f37d4585a3698298500c97a2a1`
+  - MD5: `8f536b01ab6e87816ed6e9a948e263c4`
+  - CRC32: `db89da72`
+- **[GKO.ini](bios/Other/Recalbox/GKO.ini)** (278 bytes)
+  - SHA1: `182ec1afc55ccbbb8cadc33a40aa764b6e3e6948`
+  - MD5: `29497d5d23d1165f1ae9ad8f28993107`
+  - CRC32: `043b6ab5`
+- **[GKRPB2.ini](bios/Other/Recalbox/GKRPB2.ini)** (204 bytes)
+  - SHA1: `f1989800ab3fc9395807c4a2ed091cab91ddbba1`
+  - MD5: `d82a7f67c817f45ef98625cb7673f2db`
+  - CRC32: `5b62ac94`
+- **[GKS.ini](bios/Other/Recalbox/GKS.ini)** (293 bytes)
+  - SHA1: `955297c46ac0b5a624dfbe743ada7daf49f2a28b`
+  - MD5: `6012c83aa0f77f62f49887782afecd7d`
+  - CRC32: `791a76d4`
+- **[GKU.ini](bios/Other/Recalbox/GKU.ini)** (252 bytes)
+  - SHA1: `3c03bd9318bd6686c52176b9f1c7b9393ed348c6`
+  - MD5: `e381a1a2b9bdaebad78aa8e690a7195f`
+  - CRC32: `3b70cdb1`
+- **[GKWJ18.ini](bios/Other/Recalbox/GKWJ18.ini)** (135 bytes)
+  - SHA1: `df9fcbce74c85dbc92e1afe052130d07c0346b31`
+  - MD5: `660b9f5cc78230f59d5efd2ec27589c3`
+  - CRC32: `d2dc5d58`
+- **[GKY.ini](bios/Other/Recalbox/GKY.ini)** (265 bytes)
+  - SHA1: `23a147793e5412a8944b37256035651e0d3a5360`
+  - MD5: `9a3647bb34a56aa35b90c402d70aec9d`
+  - CRC32: `6ceb5ab8`
+- **[GKYE01.ini](bios/Other/Recalbox/GKYE01.ini)** (987 bytes)
+  - SHA1: `5b04fd7fc04a4d411a0292df264530e57d596f4d`
+  - MD5: `aef04c13f9f8158e70e88ad11d074974`
+  - CRC32: `278ab922`
+- **[GKYJ01.ini](bios/Other/Recalbox/GKYJ01.ini)** (537 bytes)
+  - SHA1: `97b0105bb78979a90e62519f2c75ed040d23854c`
+  - MD5: `54a2745bf3a3418b09a953691e135a72`
+  - CRC32: `9e0c3501`
+- **[GKYP01.ini](bios/Other/Recalbox/GKYP01.ini)** (537 bytes)
+  - SHA1: `67ad7bdb87e63ca6150d0ab20bb48f2451184da4`
+  - MD5: `3e6649db605cd4ff19bede3fef6c6cbd`
+  - CRC32: `5c3f190a`
+- **[GKZ.ini](bios/Other/Recalbox/GKZ.ini)** (308 bytes)
+  - SHA1: `58bfd938d2476db64b499e4119ff464331a45b4a`
+  - MD5: `ed6d5a3180075b43c0a2f21a75ecbc6b`
+  - CRC32: `a9fc2df1`
+- **[GL5.ini](bios/Other/Recalbox/GL5.ini)** (248 bytes)
+  - SHA1: `5e4f574fba2b5a25cdaa6e2c400c72559296b64c`
+  - MD5: `5eeb2850fe8f4e89cf7a772399b4a443`
+  - CRC32: `49914a02`
+- **[GL7.ini](bios/Other/Recalbox/GL7.ini)** (258 bytes)
+  - SHA1: `11e2d105fb4203900d0cf438ace5e88f80b1536c`
+  - MD5: `93795822f82bac2e00206fde6f468d3f`
+  - CRC32: `51a6b2cf`
+- **[GL8.ini](bios/Other/Recalbox/GL8.ini)** (299 bytes)
+  - SHA1: `f7cdbbe0abaeebfb85da7be85d4bcad7ad91e817`
+  - MD5: `96f0f2e0d81c5355bb0dfb65e4dffc41`
+  - CRC32: `f48a0e4a`
+- **[GLC.ini](bios/Other/Recalbox/GLC.ini)** (267 bytes)
+  - SHA1: `15df3591920551177cd4c4777beebf2c67eee577`
+  - MD5: `d34f9fa11877ec1340367f3204f42980`
+  - CRC32: `3e437075`
+- **[GLE.ini](bios/Other/Recalbox/GLE.ini)** (261 bytes)
+  - SHA1: `cf45f5272f617d6fdc94989700343e99e04ca64f`
+  - MD5: `db98d3cc9d897ae5cab31198058dc765`
+  - CRC32: `97d869f2`
+- **[GLEE08.ini](bios/Other/Recalbox/GLEE08.ini)** (474 bytes)
+  - SHA1: `d58bf5eb0da2dcd3ac51a4386878a33330893d7e`
+  - MD5: `53319ad5e249614b3b9517cb98bb663a`
+  - CRC32: `d9928691`
+- **[GLEJ08.ini](bios/Other/Recalbox/GLEJ08.ini)** (474 bytes)
+  - SHA1: `87512ebb7613c5520902ab8e7256ed0d669c34ed`
+  - MD5: `f272f619c6ea136be51aa6dc24ec2ec0`
+  - CRC32: `2393c448`
+- **[GLEP08.ini](bios/Other/Recalbox/GLEP08.ini)** (680 bytes)
+  - SHA1: `97a4ae4b6b198f70208021d645689af6c567522e`
+  - MD5: `f1d3411b3686566acde62134e45c1362`
+  - CRC32: `dbe24708`
+- **[GLG.ini](bios/Other/Recalbox/GLG.ini)** (263 bytes)
+  - SHA1: `b87321a6cfdedba69040a0f4ea8d62303c926fa1`
+  - MD5: `05b775b8912297bc9a62fafb5aec6edf`
+  - CRC32: `ff66bca4`
+- **[GLM.ini](bios/Other/Recalbox/GLM.ini)** (295 bytes)
+  - SHA1: `20551979809542c34768af327bae44c5e4c99277`
+  - MD5: `d37f9e9dd5d979ab6cb8350ef32d2294`
+  - CRC32: `e2a90dc4`
+- **[GLME01.ini](bios/Other/Recalbox/GLME01.ini)** (387 bytes)
+  - SHA1: `c3f0cb65b2e34476995e5989c71ecc4556e2acb7`
+  - MD5: `aa64cc240e209a7897e2c107fbb3c4f5`
+  - CRC32: `a6f774c4`
+- **[GLMP01.ini](bios/Other/Recalbox/GLMP01.ini)** (636 bytes)
+  - SHA1: `5918370fc1c33d6955edcbec46fc3a662ecd6e71`
+  - MD5: `ef101bca3fd0d04a52db2a23ed8d1a96`
+  - CRC32: `9fdd64ff`
+- **[GLNE69.ini](bios/Other/Recalbox/GLNE69.ini)** (476 bytes)
+  - SHA1: `5d26c0a10de18fd377688d8423ed5b94a138cf7b`
+  - MD5: `456be501ca2791aac56e53b36e17477d`
+  - CRC32: `e6280b39`
+- **[GLR.ini](bios/Other/Recalbox/GLR.ini)** (399 bytes)
+  - SHA1: `02f6460a259dc61b1343f690a8f608d52b49098f`
+  - MD5: `47bac034049814554fffedc52ab28e99`
+  - CRC32: `fcd4c28f`
+- **[GLS.ini](bios/Other/Recalbox/GLS.ini)** (311 bytes)
+  - SHA1: `861c7d4d94303580e9c3770e14f05aee9fa2b50e`
+  - MD5: `6bc4ed78fdfdf6fddb2b54311ad26915`
+  - CRC32: `f2f095c7`
+- **[GLSD64.ini](bios/Other/Recalbox/GLSD64.ini)** (1,098 bytes)
+  - SHA1: `4ef283bbab409ce999faaa11aa995abaeed18db6`
+  - MD5: `b7bb95d7f63df73e01cec3a817264d69`
+  - CRC32: `bed8fc5e`
+- **[GLSE64.ini](bios/Other/Recalbox/GLSE64.ini)** (1,098 bytes)
+  - SHA1: `73654310375e296a8bd88fb72c0a682cee2a48bd`
+  - MD5: `dc50668e5261c6e40c2c30053c2e720e`
+  - CRC32: `75e1f59a`
+- **[GLSF64.ini](bios/Other/Recalbox/GLSF64.ini)** (1,098 bytes)
+  - SHA1: `dc67c19d9245dc32ab8fdd61e2605a19b5974da5`
+  - MD5: `3adc4b106a5142af02ab3debd63d7a05`
+  - CRC32: `6558e0ef`
+- **[GLSP64.ini](bios/Other/Recalbox/GLSP64.ini)** (1,333 bytes)
+  - SHA1: `ffe68574105418fb2b4f1b439c07d7ee04c788d1`
+  - MD5: `f57843d78e8d0028d619d58646354710`
+  - CRC32: `7f586f75`
+- **[GLZ.ini](bios/Other/Recalbox/GLZ.ini)** (240 bytes)
+  - SHA1: `894f167da8b7e60da4d4dc754c4b98c3edaa2b32`
+  - MD5: `50a94575fc296ba8994e5a5e7675ca2c`
+  - CRC32: `4e2c17c8`
+- **[GM2.ini](bios/Other/Recalbox/GM2.ini)** (278 bytes)
+  - SHA1: `9b9331823edf63f9487ef7eef98283965d70630b`
+  - MD5: `3d77c7b3d8672bcdf75ebc4ff07c1cb1`
+  - CRC32: `d3086f48`
+- **[GM3.ini](bios/Other/Recalbox/GM3.ini)** (275 bytes)
+  - SHA1: `c0aaa09f1788c970314f7e5242e20ea954ea3688`
+  - MD5: `97381b687fe0c03aa04c627c38f9a6d4`
+  - CRC32: `9f548336`
+- **[GM4.ini](bios/Other/Recalbox/GM4.ini)** (278 bytes)
+  - SHA1: `1b5987d1b94d6be65b166ebb28f1daa33b21ca7f`
+  - MD5: `483ed88eb94df6431cf58314e04b8a27`
+  - CRC32: `548b635e`
+- **[GM4E01.ini](bios/Other/Recalbox/GM4E01.ini)** (4,495 bytes)
+  - SHA1: `e9ea72858cd16806ec56145f3bba05a30b6f5dce`
+  - MD5: `013940c297b73f0d3bf8f08e7475128b`
+  - CRC32: `d39607d0`
+- **[GM4P01.ini](bios/Other/Recalbox/GM4P01.ini)** (4,784 bytes)
+  - SHA1: `f4dd728c1f3935f96bb2edad792a6fc3d8162e1f`
+  - MD5: `4a332f361ee2f229ca74421d8e94264f`
+  - CRC32: `fec071ca`
+- **[GM5.ini](bios/Other/Recalbox/GM5.ini)** (294 bytes)
+  - SHA1: `9cb7ed8330d8d038293e302345ba057419231b18`
+  - MD5: `eac756834d689a4ee0290ff41d93be22`
+  - CRC32: `0b35b71d`
+- **[GM6.ini](bios/Other/Recalbox/GM6.ini)** (284 bytes)
+  - SHA1: `a36a7c1ad1f6e188e2607f98dc8b89d2a519361d`
+  - MD5: `081e6243eaacb2299cace07596e94758`
+  - CRC32: `da35ae0e`
+- **[GM8.ini](bios/Other/Recalbox/GM8.ini)** (446 bytes)
+  - SHA1: `27c01b1a012b2c2487bf5d0a211d516139a83be6`
+  - MD5: `b95965aa0e1aa5f50a1aca8d5f16f2dc`
+  - CRC32: `682385e1`
+- **[GM8E01.ini](bios/Other/Recalbox/GM8E01.ini)** (1,549 bytes)
+  - SHA1: `8ce9f08bdaf6d157a64e1669a97929323a8445bf`
+  - MD5: `6bef61e14013bda5f895718eccc8ae85`
+  - CRC32: `b5845432`
+- **[GMB.ini](bios/Other/Recalbox/GMB.ini)** (238 bytes)
+  - SHA1: `0aef21a54bdd02d8bda2cec0f3b107fea338c911`
+  - MD5: `0538927b8c940a4412b0d4c323ad1769`
+  - CRC32: `182ea1f6`
+- **[GMBE8P.ini](bios/Other/Recalbox/GMBE8P.ini)** (412 bytes)
+  - SHA1: `8e3ea852a5ed4beafd2043eeb96a4dfc6f517d8f`
+  - MD5: `46c46b6633ebbf1036871764611d6ad5`
+  - CRC32: `67aed07c`
+- **[GMBP8P.ini](bios/Other/Recalbox/GMBP8P.ini)** (342 bytes)
+  - SHA1: `c7bd3fb4f00918626f3d9ef90fde0715b15e79b0`
+  - MD5: `647452641d894d658b1295e0b170aac4`
+  - CRC32: `a1a8705d`
+- **[GMD.ini](bios/Other/Recalbox/GMD.ini)** (267 bytes)
+  - SHA1: `c1e76611c56ee7befc736427a0d4530623ca8cda`
+  - MD5: `5b047cc7c08bcda2e9cff533445edd33`
+  - CRC32: `a1f44f3e`
+- **[GMF.ini](bios/Other/Recalbox/GMF.ini)** (175 bytes)
+  - SHA1: `faafca2864073fdc0421a172c7921cbe26dd429d`
+  - MD5: `a45ab83fc65389a73d14934b56fe5f08`
+  - CRC32: `697e561a`
+- **[GMH.ini](bios/Other/Recalbox/GMH.ini)** (292 bytes)
+  - SHA1: `c99a7e77a9c756811de02d6aa3df4cd95bd442b2`
+  - MD5: `9b97a035f5b63023210486621975cb6d`
+  - CRC32: `22ef49cd`
+- **[GMI.ini](bios/Other/Recalbox/GMI.ini)** (296 bytes)
+  - SHA1: `390455acb0c7bc9e09c168bf5dbd5fa45f46a6ba`
+  - MD5: `db1cf4cf3c89b095eb1567e2e8e9f11a`
+  - CRC32: `9c2e2287`
+- **[GMN.ini](bios/Other/Recalbox/GMN.ini)** (287 bytes)
+  - SHA1: `3afb0f974001738f5a69667244ac5a5f07707d87`
+  - MD5: `f87d6ddf4778bc2a440e3c5853703a71`
+  - CRC32: `12759026`
+- **[GMOP70.ini](bios/Other/Recalbox/GMOP70.ini)** (261 bytes)
+  - SHA1: `a11dbe8134b90c7a5e5f5f7f4903fe189a2e2e03`
+  - MD5: `e23d64ce484a671ee8d7be2d904a707e`
+  - CRC32: `991f9468`
+- **[GMPE01.ini](bios/Other/Recalbox/GMPE01.ini)** (16,199 bytes)
+  - SHA1: `76b37fc5fdbc3bf87fb22c0773590eb0a7925624`
+  - MD5: `036757b67d2515b45fe412b2e07e9277`
+  - CRC32: `3bd00cec`
+- **[GMPJ01.ini](bios/Other/Recalbox/GMPJ01.ini)** (512 bytes)
+  - SHA1: `b475522e61b8188a8cb914de90e53d1235f7cc02`
+  - MD5: `54f52de1755850f62c221b024858476a`
+  - CRC32: `4ea1ffe3`
+- **[GMPP01.ini](bios/Other/Recalbox/GMPP01.ini)** (512 bytes)
+  - SHA1: `90426292f55c0b4459652a2deba7b0212c8a6a2d`
+  - MD5: `8fbac539cfd295d6d261f9e2aa77a07f`
+  - CRC32: `f51c3079`
+- **[GMS.ini](bios/Other/Recalbox/GMS.ini)** (600 bytes)
+  - SHA1: `1944c41617af5f2a12960d62fba6d33022512eee`
+  - MD5: `11057be07f7014c07dd531a209ac04ee`
+  - CRC32: `0d9df205`
+- **[GMSE01.ini](bios/Other/Recalbox/GMSE01.ini)** (3,689 bytes)
+  - SHA1: `ae09042d82e2a0aa0d8dc3f29e2badbacda12c89`
+  - MD5: `e5ad526bd72754e830f864fcdd0b7d58`
+  - CRC32: `4443705b`
+- **[GMSJ01.ini](bios/Other/Recalbox/GMSJ01.ini)** (3,165 bytes)
+  - SHA1: `e26b3306178ad8d54ff4e33926be528a9ee600e3`
+  - MD5: `d581100db55378e10b318fa7d0ee7c39`
+  - CRC32: `0d28ee07`
+- **[GMSJ01r0.ini](bios/Other/Recalbox/GMSJ01r0.ini)** (363 bytes)
+  - SHA1: `8a6faa1fa515b093753f0a75e74fc64797b2ba4f`
+  - MD5: `5110b8e672ba5826090cf959005baaf9`
+  - CRC32: `ae8bb07b`
+- **[GMSJ01r1.ini](bios/Other/Recalbox/GMSJ01r1.ini)** (363 bytes)
+  - SHA1: `2c550812f86ddef1c2302e895dd6b0bd86cea52d`
+  - MD5: `155c939a3aebbe8d65aef1b4f48e3ae9`
+  - CRC32: `201c2496`
+- **[GMSP01.ini](bios/Other/Recalbox/GMSP01.ini)** (2,053 bytes)
+  - SHA1: `4f3af617aa76ac94ef840ba83a9142e3b59c3d7b`
+  - MD5: `44bee5c6c41885bcc73d67432e58a184`
+  - CRC32: `d66d3aee`
+- **[GMX.ini](bios/Other/Recalbox/GMX.ini)** (326 bytes)
+  - SHA1: `5e243a78b2db85da76ed64e1f40d7f92a8221206`
+  - MD5: `363524455aceb1056d7cde7108d9fc3e`
+  - CRC32: `575535c8`
+- **[GMXE70.ini](bios/Other/Recalbox/GMXE70.ini)** (800 bytes)
+  - SHA1: `efee2d47120f3a7353be70e5adec230aa03c919b`
+  - MD5: `5a0dbe5802f225defafab93445c7d5b6`
+  - CRC32: `bff97a18`
+- **[GN4.ini](bios/Other/Recalbox/GN4.ini)** (263 bytes)
+  - SHA1: `d5077e1244226b86bcb02b1fea75fc9aba954f6f`
+  - MD5: `d80e3db1a572c62bd95423e2c39e1cde`
+  - CRC32: `c6042de4`
+- **[GN7.ini](bios/Other/Recalbox/GN7.ini)** (272 bytes)
+  - SHA1: `21b67f3e427f466189c1a73c4062be0db517da79`
+  - MD5: `7def0bb2962aafdbeb34e8ab0f36df99`
+  - CRC32: `cebf917a`
+- **[GNC.ini](bios/Other/Recalbox/GNC.ini)** (271 bytes)
+  - SHA1: `1e331bec2689297000ca42ea2b5b0d520dab946b`
+  - MD5: `47a98a9af456b1d5d659cc0d75b86f8b`
+  - CRC32: `796178f9`
+- **[GNE.ini](bios/Other/Recalbox/GNE.ini)** (296 bytes)
+  - SHA1: `630859e3449840a84488ebe579bfef37a025c53d`
+  - MD5: `c9cca80c07fa670a08adbce19af5b8c4`
+  - CRC32: `287b9749`
+- **[GNHE5d.ini](bios/Other/Recalbox/GNHE5d.ini)** (224 bytes)
+  - SHA1: `d18d3d9cd158088beb802e00f2f0308748b793a6`
+  - MD5: `4947b732128492b5d146eeae733a7917`
+  - CRC32: `2c09e76e`
+- **[GNI.ini](bios/Other/Recalbox/GNI.ini)** (281 bytes)
+  - SHA1: `20e785670d64044832d18b7b60ed19300bedf17a`
+  - MD5: `e88e75dc51c0bfe08791a1d7d424eaf6`
+  - CRC32: `f325bee8`
+- **[GNJ.ini](bios/Other/Recalbox/GNJ.ini)** (260 bytes)
+  - SHA1: `b27c8de81b2a9ab9050d5b64ca250a52d6c7a657`
+  - MD5: `51a3e14ae109a50d434c374034cd5e94`
+  - CRC32: `effe9187`
+- **[GNM.ini](bios/Other/Recalbox/GNM.ini)** (280 bytes)
+  - SHA1: `e59eaccd93f5d6a14ee7f8cd4126a1320a16b351`
+  - MD5: `6bb4f68c05204c5f846035a75a3ef39a`
+  - CRC32: `e5e80fdd`
+- **[GNN.ini](bios/Other/Recalbox/GNN.ini)** (305 bytes)
+  - SHA1: `f38c19f21deddb6e2f0cfa371ba69886f2add933`
+  - MD5: `859c442466d04c31b17e725f446951d5`
+  - CRC32: `1c4614f1`
+- **[GNO.ini](bios/Other/Recalbox/GNO.ini)** (325 bytes)
+  - SHA1: `caeb61903dffe9d302d8e7df09e5ba7589e08733`
+  - MD5: `9f92c426d9fb57a53cc32b4545acad64`
+  - CRC32: `84ac10cd`
+- **[GNW.ini](bios/Other/Recalbox/GNW.ini)** (213 bytes)
+  - SHA1: `21679e2359ee7cd7c01e7b3faa3e370e857eac29`
+  - MD5: `021720a8e0b3582fc34d2d806fabbddc`
+  - CRC32: `e496e5d9`
+- **[GNWE69.ini](bios/Other/Recalbox/GNWE69.ini)** (1,430 bytes)
+  - SHA1: `ed1de8811a1bd7043581e0a6f9a6d05c27badca7`
+  - MD5: `ea2585ebfc3842526bb1ceeb79ecde73`
+  - CRC32: `088e43b0`
+- **[GO2.ini](bios/Other/Recalbox/GO2.ini)** (297 bytes)
+  - SHA1: `6b885bb1cb8f582b2169da99bdbf9ef99de74140`
+  - MD5: `35853158d9a8f310b9e6ff2a7b9fc708`
+  - CRC32: `16ca8bb3`
+- **[GO2E4F.ini](bios/Other/Recalbox/GO2E4F.ini)** (246 bytes)
+  - SHA1: `e17d5df056bca94fb4f26249316c090477d8a81e`
+  - MD5: `959608b0ff3de32e32e0d11ab65dde32`
+  - CRC32: `b3452237`
+- **[GO7E69.ini](bios/Other/Recalbox/GO7E69.ini)** (441 bytes)
+  - SHA1: `0006ccacfa72c12f75b6db04aa7e20556aa4569e`
+  - MD5: `ffaf61c104aec84ccbdc92817d9751c4`
+  - CRC32: `f8306848`
+- **[GO7F69.ini](bios/Other/Recalbox/GO7F69.ini)** (549 bytes)
+  - SHA1: `4a52f46b7f02ed1b1620ff72d57cb15b8b5eb50d`
+  - MD5: `a8e8e34dbf60e13bb2a2cb1f3324ab61`
+  - CRC32: `4b618b9a`
+- **[GO7P69.ini](bios/Other/Recalbox/GO7P69.ini)** (639 bytes)
+  - SHA1: `c87267ce28cec721c7cea32da91cbe4d41d10e09`
+  - MD5: `1113aed553e2d6f976fa20cee0e4e65d`
+  - CRC32: `3acf7ae9`
+- **[GOCE5D.ini](bios/Other/Recalbox/GOCE5D.ini)** (189 bytes)
+  - SHA1: `ceb0e64e4f09dffe9226a23da382a315b67f24a5`
+  - MD5: `823550662966ae8ee81c1f790eccc31e`
+  - CRC32: `b05f3850`
+- **[GOM.ini](bios/Other/Recalbox/GOM.ini)** (268 bytes)
+  - SHA1: `9fbb4cb097535fe8a8bcb27da24e6f34c195607f`
+  - MD5: `7c50e1cfe3071f771d205dba5b6d28b8`
+  - CRC32: `c14b9af8`
+- **[GOME01.ini](bios/Other/Recalbox/GOME01.ini)** (3,836 bytes)
+  - SHA1: `5586ca6afd30dc574f6ba9fe661e87e4882efa59`
+  - MD5: `c24ef22baf715afd685425f80571f7a1`
+  - CRC32: `af4c7488`
+- **[GOMP01.ini](bios/Other/Recalbox/GOMP01.ini)** (240 bytes)
+  - SHA1: `048ba6b06f18e7a9af3fc578a563cb28195eb699`
+  - MD5: `428102b564609fab89beb7f155340145`
+  - CRC32: `0d1c5526`
+- **[GONE69.ini](bios/Other/Recalbox/GONE69.ini)** (215 bytes)
+  - SHA1: `d2493cc07b44b8ddf58a7ca0fce625fbe7f9b8aa`
+  - MD5: `ce3129642658c59fcf499aba4b20194e`
+  - CRC32: `217c65c7`
+- **[GOQ.ini](bios/Other/Recalbox/GOQ.ini)** (258 bytes)
+  - SHA1: `6bf60ef644cd1d9b69b253fdd58a16b46e5064a4`
+  - MD5: `dacb6736f215c4593a67f33b6b104655`
+  - CRC32: `cce7d343`
+- **[GOS.ini](bios/Other/Recalbox/GOS.ini)** (231 bytes)
+  - SHA1: `4b6fb9c4c5b1809d8d8158529924f0e8c44bbae7`
+  - MD5: `369669ffb7940ae4de0c9e5c2defd70d`
+  - CRC32: `75c8b46b`
+- **[GOW.ini](bios/Other/Recalbox/GOW.ini)** (125 bytes)
+  - SHA1: `4fa3104c2cba644733134aa07bb50df358b7e76b`
+  - MD5: `394cc4defe39152ceddd163ae4b348bc`
+  - CRC32: `9efe13d5`
+- **[GOY.ini](bios/Other/Recalbox/GOY.ini)** (291 bytes)
+  - SHA1: `a605bab6381b609304e2f44ee416df1b27f8a9e7`
+  - MD5: `b8ba428335ab787ae5c8b2926a5d2b67`
+  - CRC32: `0922c88c`
+- **[GOYE69.ini](bios/Other/Recalbox/GOYE69.ini)** (706 bytes)
+  - SHA1: `3d54a8688dc1073b165d64da95f03788ba8b8ec3`
+  - MD5: `dfb03bca3d6f576a371233fd683d4ce2`
+  - CRC32: `0f549731`
+- **[GP2.ini](bios/Other/Recalbox/GP2.ini)** (276 bytes)
+  - SHA1: `e91c9f7322f9ab428813ede5de70a4f08d911402`
+  - MD5: `c23f5ea38a7c5060fbfa4f5e2100f399`
+  - CRC32: `f904fbbf`
+- **[GP3.ini](bios/Other/Recalbox/GP3.ini)** (74 bytes)
+  - SHA1: `c7b1d882e36ae8e2531221a028e83e40d57a3213`
+  - MD5: `fb32268c9bdf3df38b3776c434c4e70a`
+  - CRC32: `b5f96159`
+- **[GP4J18.ini](bios/Other/Recalbox/GP4J18.ini)** (1,230 bytes)
+  - SHA1: `ce0f4367b310d9a0f91d8a5b451ac9c82816dbee`
+  - MD5: `17e711a87b43a19812d9ae4d326de218`
+  - CRC32: `21fdb4f9`
+- **[GP5.ini](bios/Other/Recalbox/GP5.ini)** (263 bytes)
+  - SHA1: `dc055d1c93f9f4accff377af63b30b7ffcf68eff`
+  - MD5: `2ba959313787f059630161936773c908`
+  - CRC32: `48e358b9`
+- **[GP5E01.ini](bios/Other/Recalbox/GP5E01.ini)** (23,525 bytes)
+  - SHA1: `05bddab3f1ef32e480460fe904112e2828bde883`
+  - MD5: `700e0af43ee7a49c048ae49e948eb2aa`
+  - CRC32: `42560e48`
+- **[GP5J01.ini](bios/Other/Recalbox/GP5J01.ini)** (2,426 bytes)
+  - SHA1: `140b430e5ed327619e5eac8e44b7b88b72fa7449`
+  - MD5: `879fba123e1a099634224033ecace012`
+  - CRC32: `e50bba45`
+- **[GP5P01.ini](bios/Other/Recalbox/GP5P01.ini)** (3,056 bytes)
+  - SHA1: `58b4e5e73574ea89d86f32c7087c05b8dc1eccc1`
+  - MD5: `faba7b90a74f7ad385f3e9c3e1227d44`
+  - CRC32: `199dac1a`
+- **[GP6.ini](bios/Other/Recalbox/GP6.ini)** (320 bytes)
+  - SHA1: `6e4f7ee09862a3379ae4124777e846df21aa4275`
+  - MD5: `5c7ce62438b1117473f2f0300160758a`
+  - CRC32: `5a0ca98c`
+- **[GP6E01.ini](bios/Other/Recalbox/GP6E01.ini)** (27,612 bytes)
+  - SHA1: `608a90edf219eee50ba7094472ebff94b9d652e9`
+  - MD5: `48a436e4e6d9940cf4845564a11a69c2`
+  - CRC32: `8d5b3661`
+- **[GP6J01.ini](bios/Other/Recalbox/GP6J01.ini)** (2,894 bytes)
+  - SHA1: `f0c0038c17e44622d7d0c1d241e2b2a8459ed8fb`
+  - MD5: `a71ac609ef36a9a7f74554d2d36ea60f`
+  - CRC32: `b2359913`
+- **[GP6P01.ini](bios/Other/Recalbox/GP6P01.ini)** (2,518 bytes)
+  - SHA1: `b1d16c5a81633a292d9f7cdfadfda5e51509ae59`
+  - MD5: `95ef8155f24ef8cd2a33350c18734fa7`
+  - CRC32: `5f7317e6`
+- **[GP7E01.ini](bios/Other/Recalbox/GP7E01.ini)** (30,076 bytes)
+  - SHA1: `313b47b6e5ab4d51d811ee4821b3f420ab3b9bc7`
+  - MD5: `6afe6990a9651f24e913a82066abf51f`
+  - CRC32: `25a443ce`
+- **[GP7J01.ini](bios/Other/Recalbox/GP7J01.ini)** (1,976 bytes)
+  - SHA1: `665fec2f035f00606656d076410bc8736ae272e4`
+  - MD5: `cc37ff49cf69b121ef519dc43ed93752`
+  - CRC32: `f695503f`
+- **[GP7P01.ini](bios/Other/Recalbox/GP7P01.ini)** (2,474 bytes)
+  - SHA1: `0b2ea079bd2fa9c84315d021aa57663aff905ca0`
+  - MD5: `7faf159bafd1de9319d1c1d002a2b0ab`
+  - CRC32: `0dddba45`
+- **[GPA.ini](bios/Other/Recalbox/GPA.ini)** (281 bytes)
+  - SHA1: `817021a2697135051c80c841164db642f6f613fd`
+  - MD5: `5700b2b4efd2d7a2e98ace9c749d6cef`
+  - CRC32: `c432d9ac`
+- **[GPE.ini](bios/Other/Recalbox/GPE.ini)** (268 bytes)
+  - SHA1: `91c454ea41128e2a6c9b806abf454c281f477e3e`
+  - MD5: `ef46b57b0f8cea83d33354bcf246c47b`
+  - CRC32: `54f74908`
+- **[GPH.ini](bios/Other/Recalbox/GPH.ini)** (697 bytes)
+  - SHA1: `903929283b861ec38399a884767e18fff32d522b`
+  - MD5: `00737243b4e17539d6c09281a3cc4014`
+  - CRC32: `4dc5d6ae`
+- **[GPIE01.ini](bios/Other/Recalbox/GPIE01.ini)** (3,289 bytes)
+  - SHA1: `a2a2c553d35553dcdbdb1ce88936b56c9b4b7fb7`
+  - MD5: `dced8ff77f0914b5353b130962002c3b`
+  - CRC32: `ed3e118e`
+- **[GPIE01r0.ini](bios/Other/Recalbox/GPIE01r0.ini)** (234 bytes)
+  - SHA1: `94dc8fc8e324c335f3101e763e578d572e9cf51c`
+  - MD5: `3b558476d457d74bc96bec594e43627e`
+  - CRC32: `46bb3970`
+- **[GPIE01r1.ini](bios/Other/Recalbox/GPIE01r1.ini)** (584 bytes)
+  - SHA1: `7181721bffe00a87fc7a8348e03f4df15eb14d5f`
+  - MD5: `ced71f58abf2b93be2bf249152fb3195`
+  - CRC32: `382573de`
+- **[GPIP01.ini](bios/Other/Recalbox/GPIP01.ini)** (2,183 bytes)
+  - SHA1: `139f2f7c2c0287526e9692608b12ef119c1f79ea`
+  - MD5: `48d95e9b8c28ebbd74068374e2a9b768`
+  - CRC32: `f55132e9`
+- **[GPK.ini](bios/Other/Recalbox/GPK.ini)** (284 bytes)
+  - SHA1: `8e325c763b50aa1c4f98e009a34dc1405ff69872`
+  - MD5: `8a72d8c122a162ef057d646d79eae878`
+  - CRC32: `47d2d4a3`
+- **[GPNE08.ini](bios/Other/Recalbox/GPNE08.ini)** (268 bytes)
+  - SHA1: `f65bb7e03b6c9253aa02ee4a629fdb6f7755e4fe`
+  - MD5: `02ba8b8ac77b966c8c2b314bc0f7cb8c`
+  - CRC32: `86b39db2`
+- **[GPNP08.ini](bios/Other/Recalbox/GPNP08.ini)** (2,033 bytes)
+  - SHA1: `d93973e3b2a001c07a0e1ce30cf72a64e4bc2cf9`
+  - MD5: `ae3a10a38f78e7ed82f38d3b5b655cdd`
+  - CRC32: `0af46a88`
+- **[GPO.ini](bios/Other/Recalbox/GPO.ini)** (314 bytes)
+  - SHA1: `983b908488732a048a491868748990f3de4f7ad2`
+  - MD5: `7b4b1c0d375030e8d4999c630bb5fdc9`
+  - CRC32: `381452f3`
+- **[GPOE8P.ini](bios/Other/Recalbox/GPOE8P.ini)** (971 bytes)
+  - SHA1: `9e2c7f7ef9fbc7ae1af3efabc4a407debd39a8d7`
+  - MD5: `69d94faa55f1b5c90c8cb089dc71de86`
+  - CRC32: `faddabbf`
+- **[GPOE8Pr0.ini](bios/Other/Recalbox/GPOE8Pr0.ini)** (423 bytes)
+  - SHA1: `6063e10c11ec4ac443e5de821b576beb0a428c82`
+  - MD5: `81efc56098ffa7d765a59a81c3fabfc6`
+  - CRC32: `51724e71`
+- **[GPOE8Pr1.ini](bios/Other/Recalbox/GPOE8Pr1.ini)** (361 bytes)
+  - SHA1: `9bfc15a219f05e0f41f3a6f30d281c7502455c6e`
+  - MD5: `239288e90f6735ae263c9d5a49ab702b`
+  - CRC32: `eeada847`
+- **[GPOP8P.ini](bios/Other/Recalbox/GPOP8P.ini)** (1,250 bytes)
+  - SHA1: `629a52954b7e42a4ce7907420a6f7adb5182e796`
+  - MD5: `4f9deb2021eb98a764f5d6cfb2141eed`
+  - CRC32: `0c7a0093`
+- **[GPS.ini](bios/Other/Recalbox/GPS.ini)** (347 bytes)
+  - SHA1: `a2b7c4089c049c899927d1f5a231e25fd4c756a1`
+  - MD5: `2913a70c255fc9e3c3b18fa4108cc77a`
+  - CRC32: `cbf6d0f6`
+- **[GPSP8P.ini](bios/Other/Recalbox/GPSP8P.ini)** (1,081 bytes)
+  - SHA1: `9e5b2ef19fd19d55637ed04bcc68f4db11c625fd`
+  - MD5: `bb262609ada77ef6d5ed5a9c0fce6c84`
+  - CRC32: `28e894c4`
+- **[GPT.ini](bios/Other/Recalbox/GPT.ini)** (296 bytes)
+  - SHA1: `c03da2c8851a4d50c3a9cee55fca68b011fdb9a2`
+  - MD5: `7f6133b1da3dfdd6b9debc240b42f605`
+  - CRC32: `1c06991d`
+- **[GPVE01.ini](bios/Other/Recalbox/GPVE01.ini)** (2,450 bytes)
+  - SHA1: `e2065fe60e9e566bbdbe904e77fa1d0fef769fab`
+  - MD5: `23ad7b8810a5b35a8d5c191589d51730`
+  - CRC32: `c82ad036`
+- **[GPVP01.ini](bios/Other/Recalbox/GPVP01.ini)** (302 bytes)
+  - SHA1: `7ce374f509b28090e8297af6ffacbb6bd167fb09`
+  - MD5: `459dfb485d7d8ac746e95c9f01bf385d`
+  - CRC32: `0e585c49`
+- **[GPXJ01.ini](bios/Other/Recalbox/GPXJ01.ini)** (74 bytes)
+  - SHA1: `51be684254c85500d2ad0bf86eb146669ce823d3`
+  - MD5: `1dec86e5ff1435eeac0c35149772d287`
+  - CRC32: `040f4222`
+- **[GQ4.ini](bios/Other/Recalbox/GQ4.ini)** (295 bytes)
+  - SHA1: `f0a502b3162e593a4a6d193e55848858192d8793`
+  - MD5: `dbc232bf4ba17e7f897d1821b64f427a`
+  - CRC32: `e3489691`
+- **[GQC.ini](bios/Other/Recalbox/GQC.ini)** (181 bytes)
+  - SHA1: `b8bdfc7b1183254a0ab6f3f35e8338bbb2d9617d`
+  - MD5: `29c008548119baf8c461d30c9e4050af`
+  - CRC32: `073b7974`
+- **[GQP.ini](bios/Other/Recalbox/GQP.ini)** (436 bytes)
+  - SHA1: `15f89c9ebfe96d0b8041994a579481fce0163347`
+  - MD5: `c4ac7c187022ff1c4466e5ad8ecfeeaf`
+  - CRC32: `b8ad934e`
+- **[GQPE78.ini](bios/Other/Recalbox/GQPE78.ini)** (545 bytes)
+  - SHA1: `2495ee0a769fe6918af6855bb144e09bbbc4a9a0`
+  - MD5: `bb3fbdcdad5c8f7b31fa1407d86baaac`
+  - CRC32: `face01ee`
+- **[GQPP78.ini](bios/Other/Recalbox/GQPP78.ini)** (545 bytes)
+  - SHA1: `f71699a560517b05a0bb3eba7d67ab3928ee1eba`
+  - MD5: `7e0827d62b53517c07d0e2a628e3b1ce`
+  - CRC32: `8bc6b530`
+- **[GQS.ini](bios/Other/Recalbox/GQS.ini)** (303 bytes)
+  - SHA1: `3532548f199ef8d9e126dca5de6b8daf91c947f9`
+  - MD5: `ede0cff193ea4760c82fc18e9fd41744`
+  - CRC32: `7a6aa7d3`
+- **[GQSDAF.ini](bios/Other/Recalbox/GQSDAF.ini)** (545 bytes)
+  - SHA1: `181f7b020057a60b6645142453d1d6e2fb99d711`
+  - MD5: `3f6abb1fff16664e93e8519197babfc8`
+  - CRC32: `87d34d5d`
+- **[GQSEAF.ini](bios/Other/Recalbox/GQSEAF.ini)** (16,404 bytes)
+  - SHA1: `900a5482f0fcf24d8134b88f79f32ebab965b831`
+  - MD5: `c79bbeffb4e115759dd762a48103aa12`
+  - CRC32: `1e33662a`
+- **[GQSFAF.ini](bios/Other/Recalbox/GQSFAF.ini)** (330 bytes)
+  - SHA1: `59c5e63af283b8e6706374355e29a911a6a3615c`
+  - MD5: `732b8c1388066563aae0f6d2aeb4df8e`
+  - CRC32: `524a9903`
+- **[GQX.ini](bios/Other/Recalbox/GQX.ini)** (275 bytes)
+  - SHA1: `896b55159d3ccb857b5f383bcca45f1c79799a43`
+  - MD5: `e10f7b2d35cdd7d3b3bbb9d1f91f639c`
+  - CRC32: `33bb09d6`
+- **[GR2E52.ini](bios/Other/Recalbox/GR2E52.ini)** (125 bytes)
+  - SHA1: `0521c09347dbc40b1b15e04f37d4f4f1998dc758`
+  - MD5: `3715817ab1743543a0469956790f7560`
+  - CRC32: `0e7188cd`
+- **[GR2J52.ini](bios/Other/Recalbox/GR2J52.ini)** (125 bytes)
+  - SHA1: `b0d4df96055069d9efb1074bcebc381dece84d55`
+  - MD5: `74cef05d20e706ba075ae741ae1cc955`
+  - CRC32: `23f61dfd`
+- **[GR2P52.ini](bios/Other/Recalbox/GR2P52.ini)** (125 bytes)
+  - SHA1: `f45d5f1fc8f598f751a80470071b07abc0c59df0`
+  - MD5: `558f6662b0a5bb5d0fd22c1dae08e787`
+  - CRC32: `c5798afd`
+- **[GR6.ini](bios/Other/Recalbox/GR6.ini)** (309 bytes)
+  - SHA1: `a02eee2f7eefdfbb3153ed21f8e7067378c48ebb`
+  - MD5: `c7371cc572a47f3ae93b97742d4a522d`
+  - CRC32: `07c3774a`
+- **[GRB.ini](bios/Other/Recalbox/GRB.ini)** (280 bytes)
+  - SHA1: `21ca22b0f99bd2218af7a31eac5dc16287f5e030`
+  - MD5: `fb849bbbfe5b73f57fbbba6c9bff6bf2`
+  - CRC32: `90e91d39`
+- **[GREE08.ini](bios/Other/Recalbox/GREE08.ini)** (790 bytes)
+  - SHA1: `4d09f4906c663d1354ab850628051cb471c27fe0`
+  - MD5: `3baecfe1d27a2deb0280d42f45ca1ea7`
+  - CRC32: `99fbfd9c`
+- **[GREJ08.ini](bios/Other/Recalbox/GREJ08.ini)** (108 bytes)
+  - SHA1: `481ad50a44a19139a46b5facc9759a27605b6690`
+  - MD5: `cc8a82d166efa01fb0e08981ee95fa20`
+  - CRC32: `b87f0690`
+- **[GRH.ini](bios/Other/Recalbox/GRH.ini)** (283 bytes)
+  - SHA1: `72b085f216d47eab24ff16de3eee7b3589ec1e08`
+  - MD5: `1c176177484aec56920124831702f0c9`
+  - CRC32: `01322160`
+- **[GRJ.ini](bios/Other/Recalbox/GRJ.ini)** (268 bytes)
+  - SHA1: `d555ff50b81dd9f2a732124434b15770a7f86737`
+  - MD5: `34b6e2a21cd7839730b8caa5f7c249e0`
+  - CRC32: `244b2b13`
+- **[GRK.ini](bios/Other/Recalbox/GRK.ini)** (301 bytes)
+  - SHA1: `7c1c2748ccb51d42115bbe6537903f9ddb9f05a5`
+  - MD5: `04a5668ba333eb9b87e26882491f5754`
+  - CRC32: `c1df22e2`
+- **[GRNE52.ini](bios/Other/Recalbox/GRNE52.ini)** (409 bytes)
+  - SHA1: `c31c7cc2e473c6d2f083298bf4dbef33283915fb`
+  - MD5: `4eee9d4ab927735bf1e5e768e7de226a`
+  - CRC32: `ce4825de`
+- **[GRNJ52.ini](bios/Other/Recalbox/GRNJ52.ini)** (241 bytes)
+  - SHA1: `a5660e13035f873d9970d791a87cf23ed5b79139`
+  - MD5: `4b884c202397eca624a2c4f58f164147`
+  - CRC32: `e29e717c`
+- **[GRNP52.ini](bios/Other/Recalbox/GRNP52.ini)** (241 bytes)
+  - SHA1: `da1be34c67e923a8533b7ac8e1c07aa1cacde361`
+  - MD5: `a29c1d0f68eb2b2724dc46358b0e4813`
+  - CRC32: `4867a2ac`
+- **[GROE5Z.ini](bios/Other/Recalbox/GROE5Z.ini)** (436 bytes)
+  - SHA1: `9e0e78d7390ee8f76def9f6b6871ff096f7e1fe9`
+  - MD5: `c263c855c6a66e61111c55a6d7102afd`
+  - CRC32: `cba57d37`
+- **[GRQ.ini](bios/Other/Recalbox/GRQ.ini)** (263 bytes)
+  - SHA1: `d4ab88233bf392b3213b9db940de83d8995af8a8`
+  - MD5: `ed3879a168d344f35c01fcd112abeb64`
+  - CRC32: `f2195098`
+- **[GRSPAF.ini](bios/Other/Recalbox/GRSPAF.ini)** (11,698 bytes)
+  - SHA1: `11971ded3c9376f07839919a98764e2780c5546f`
+  - MD5: `51d9b5189c3e5e75a02a8042faa5268c`
+  - CRC32: `136b0901`
+- **[GRU.ini](bios/Other/Recalbox/GRU.ini)** (279 bytes)
+  - SHA1: `84fc0d00bd463ac969fb65870d70fec90da9ce72`
+  - MD5: `5cac0860a0df8a11209558ba1e71f841`
+  - CRC32: `0d1b4a98`
+- **[GRUE78.ini](bios/Other/Recalbox/GRUE78.ini)** (333 bytes)
+  - SHA1: `b231cd266f83dc8b5473068d16c84762c4b27e5c`
+  - MD5: `e70c5668a20be72003c474bc41f2383d`
+  - CRC32: `d61b931b`
+- **[GRY.ini](bios/Other/Recalbox/GRY.ini)** (265 bytes)
+  - SHA1: `c7055e21de90c1f8bfff93771f0acf72e75be474`
+  - MD5: `3cfccdb352d5cd0f0b564a215f56cee2`
+  - CRC32: `f5a904ce`
+- **[GRYE41.ini](bios/Other/Recalbox/GRYE41.ini)** (525 bytes)
+  - SHA1: `199f4c10d42ab437e67101b08dbce45028143bdb`
+  - MD5: `47036db689f01a4aedc0b37c80948e67`
+  - CRC32: `6ccae68c`
+- **[GS2.ini](bios/Other/Recalbox/GS2.ini)** (298 bytes)
+  - SHA1: `c854a5ca10a9b86b3f86d510ae46e31ec0b7f328`
+  - MD5: `5431474e05ff9e890f0ca8b7fc4dd2cd`
+  - CRC32: `ffdead10`
+- **[GS2E78.ini](bios/Other/Recalbox/GS2E78.ini)** (2,416 bytes)
+  - SHA1: `4ea8fa8ccce7f6f934daf9fe55430055512e160f`
+  - MD5: `0bcd58a6fd5b7dd554bde5f37e2e0200`
+  - CRC32: `1ab0b1ac`
+- **[GSAE01r0.ini](bios/Other/Recalbox/GSAE01r0.ini)** (273 bytes)
+  - SHA1: `473d2169baf31139d33026f5ccdc0af60b72f17c`
+  - MD5: `cc1a49d14431377929ed627f81ef5d81`
+  - CRC32: `9ae32363`
+- **[GSAE01r1.ini](bios/Other/Recalbox/GSAE01r1.ini)** (273 bytes)
+  - SHA1: `235fec8bccd7306680fca4fd3ffacfdb4084e160`
+  - MD5: `4e481a9edcc7b1b914f321216e0bb469`
+  - CRC32: `36589f99`
+- **[GSAP01.ini](bios/Other/Recalbox/GSAP01.ini)** (1,076 bytes)
+  - SHA1: `eb6707e81a2c903e1c618469244a6bec149334df`
+  - MD5: `8d51c7121c29cae9b0714d3e0d2f6cf8`
+  - CRC32: `fc8e5be1`
+- **[GSB.ini](bios/Other/Recalbox/GSB.ini)** (325 bytes)
+  - SHA1: `f2cbb747deacc83bd3a971a806e213db1850256d`
+  - MD5: `1177f73bf175c871ff535104f094c9a7`
+  - CRC32: `74eaa034`
+- **[GSM.ini](bios/Other/Recalbox/GSM.ini)** (295 bytes)
+  - SHA1: `f2e327aac14e62b7b7795aba0d7b73b8b0857e80`
+  - MD5: `f5c1c47c5e1acb479caa261803c2d7dd`
+  - CRC32: `0b2aa781`
+- **[GSN.ini](bios/Other/Recalbox/GSN.ini)** (315 bytes)
+  - SHA1: `316368a29565224e1fea3ed29532bfb9fc5fc7c2`
+  - MD5: `58e6f68c18ce243508f36084fbefdd8d`
+  - CRC32: `45a9a7aa`
+- **[GSNE8P.ini](bios/Other/Recalbox/GSNE8P.ini)** (672 bytes)
+  - SHA1: `209cf17be2c003cbc8101f32ef8ebf94f09b4a2c`
+  - MD5: `cbc57e6366ba53e160e085553f65ec60`
+  - CRC32: `be95d50c`
+- **[GSNJ8P.ini](bios/Other/Recalbox/GSNJ8P.ini)** (246 bytes)
+  - SHA1: `90e3f3631136a125f956925eb9b9b8541dd2cad6`
+  - MD5: `52886288ef5eb04db11a0090ef1ef348`
+  - CRC32: `81c21479`
+- **[GSNP8P.ini](bios/Other/Recalbox/GSNP8P.ini)** (2,046 bytes)
+  - SHA1: `177c137cafa87a9d2a9e6bfc9c440dc68132bcee`
+  - MD5: `19e1363c3acc8e490c5c949018755338`
+  - CRC32: `53eaccd8`
+- **[GSO.ini](bios/Other/Recalbox/GSO.ini)** (1,188 bytes)
+  - SHA1: `f7532bd6f7bfea5792e464f95b8893f8f30b0813`
+  - MD5: `534faf828cdb5776ff02f48363d7d8f5`
+  - CRC32: `bf99a270`
+- **[GSPE69.ini](bios/Other/Recalbox/GSPE69.ini)** (186 bytes)
+  - SHA1: `d3af6325813753485ebb9f8086d742a70947d452`
+  - MD5: `eb049b46a350316b4cd96166c66ebaa9`
+  - CRC32: `03b1b77f`
+- **[GSPP69.ini](bios/Other/Recalbox/GSPP69.ini)** (468 bytes)
+  - SHA1: `2ba6a2834bdc24265b802bf974b00164baabd874`
+  - MD5: `9011dd88c79a943b6cde73514f58903b`
+  - CRC32: `7565179f`
+- **[GSQ.ini](bios/Other/Recalbox/GSQ.ini)** (145 bytes)
+  - SHA1: `9493f969baaf13cc99cd796cf427fb2a563aab14`
+  - MD5: `277b149851fac3bed238325b295956b9`
+  - CRC32: `f933baf4`
+- **[GSR.ini](bios/Other/Recalbox/GSR.ini)** (259 bytes)
+  - SHA1: `e9d31ac6b3a75e07993d694164ee5b6f7e8d6e45`
+  - MD5: `41c09465b75c0cc01027f9cbad7e02ea`
+  - CRC32: `b5300ec4`
+- **[GSS.ini](bios/Other/Recalbox/GSS.ini)** (293 bytes)
+  - SHA1: `5766dfc606f7eb4219c791eceaeb424739d84151`
+  - MD5: `cc879f16f3922f1d0163328d006862b9`
+  - CRC32: `a1820028`
+- **[GSSE8P.ini](bios/Other/Recalbox/GSSE8P.ini)** (407 bytes)
+  - SHA1: `bdd1b7628ddce9d287594d83e322fad78e1a1611`
+  - MD5: `cdef269c79b0fa789dafc669572efb77`
+  - CRC32: `7e477062`
+- **[GST.ini](bios/Other/Recalbox/GST.ini)** (297 bytes)
+  - SHA1: `064c8b1c029b6de1e6575f7b23aa6d642f80e077`
+  - MD5: `3675bfb0d29fcd67d563776a2bdabd49`
+  - CRC32: `e2b206f6`
+- **[GSV.ini](bios/Other/Recalbox/GSV.ini)** (253 bytes)
+  - SHA1: `efd685015393bf16ddb5c176e2e04255e5d46372`
+  - MD5: `4d13382903293ea17e915bc4403daaa8`
+  - CRC32: `35f2d735`
+- **[GSW.ini](bios/Other/Recalbox/GSW.ini)** (401 bytes)
+  - SHA1: `891d74fa81d5aef6fbfa37e350edbfc29aec3b55`
+  - MD5: `aee1ece2314dee7b08457b87958ad5b6`
+  - CRC32: `72e9fdd0`
+- **[GSWE64.ini](bios/Other/Recalbox/GSWE64.ini)** (620 bytes)
+  - SHA1: `96d1951915b159a1abb743185f72488090679683`
+  - MD5: `8e312d3db124ac125134e9426fdb1ad0`
+  - CRC32: `42b391e5`
+- **[GSX.ini](bios/Other/Recalbox/GSX.ini)** (245 bytes)
+  - SHA1: `94ef117de2a39b03d2f411506a7f80fa14c526b6`
+  - MD5: `c6376181a4d5b0749c776f38064c8e2f`
+  - CRC32: `0f4b168d`
+- **[GSZ.ini](bios/Other/Recalbox/GSZ.ini)** (262 bytes)
+  - SHA1: `494fb8ccfd0cbba96c04241ef159f7713fc9c5fe`
+  - MD5: `6b8ac7868844487d109018acee4c3b7e`
+  - CRC32: `b341dec5`
+- **[GT3.ini](bios/Other/Recalbox/GT3.ini)** (301 bytes)
+  - SHA1: `e86d10a6e3481cd9be695a0b0f685c29838d2868`
+  - MD5: `7f8db6a064832cfad0478f5352b077f1`
+  - CRC32: `efea664f`
+- **[GT6.ini](bios/Other/Recalbox/GT6.ini)** (262 bytes)
+  - SHA1: `5d7e14dd7b72ba0bb3428f4670db8b002a5c2490`
+  - MD5: `0fa3ae5344fc374bc0f613ff52927d70`
+  - CRC32: `9d41012c`
+- **[GT6E70.ini](bios/Other/Recalbox/GT6E70.ini)** (733 bytes)
+  - SHA1: `7c513008615ff141c1535d7037e7cf3d98013332`
+  - MD5: `bb88a857c6f8531b1f2bc690f6d4be8c`
+  - CRC32: `af466067`
+- **[GT7.ini](bios/Other/Recalbox/GT7.ini)** (347 bytes)
+  - SHA1: `2219d51c4ad05622854bc4f09dc95cbe39cff2ec`
+  - MD5: `98326a057bf5aee43467f77f7ffe849a`
+  - CRC32: `2eb6b21a`
+- **[GTEE01.ini](bios/Other/Recalbox/GTEE01.ini)** (1,041 bytes)
+  - SHA1: `07ce416039bb909c2a42afc71bedcf8ce2845f21`
+  - MD5: `fec0b142a905d43cbc879a5b6fbcd610`
+  - CRC32: `949376a0`
+- **[GTEP01.ini](bios/Other/Recalbox/GTEP01.ini)** (586 bytes)
+  - SHA1: `14acc3aa8d72fe6049dd9ffec64374a10d517b08`
+  - MD5: `bf0d7183d692fc1ddf9ab48b1a596546`
+  - CRC32: `7c68a4ab`
+- **[GTK.ini](bios/Other/Recalbox/GTK.ini)** (270 bytes)
+  - SHA1: `c02384aec6d58d11eeaf766f8b73a0b833dcc0e4`
+  - MD5: `c992c6617ef1d3855182502b845629ae`
+  - CRC32: `7fd816ff`
+- **[GTKE51.ini](bios/Other/Recalbox/GTKE51.ini)** (659 bytes)
+  - SHA1: `861b9ad3dbe88c9a527a92eefaa7236a3a0918d5`
+  - MD5: `1396b37dfdf9df12f2022d36f5d81f58`
+  - CRC32: `d9e45355`
+- **[GTO.ini](bios/Other/Recalbox/GTO.ini)** (278 bytes)
+  - SHA1: `a0a9997ee18db8b25816ae93048a209a9da06990`
+  - MD5: `a05f8823f978bf2a3667aca36b005ff8`
+  - CRC32: `309ce032`
+- **[GTOJAF.ini](bios/Other/Recalbox/GTOJAF.ini)** (252 bytes)
+  - SHA1: `a36c948333747c38db7d483d5f2c27c3fa54da14`
+  - MD5: `ee3a9bd1b6d73bcced7bee0ca55a5dc4`
+  - CRC32: `d8cac7b0`
+- **[GTR.ini](bios/Other/Recalbox/GTR.ini)** (131 bytes)
+  - SHA1: `51cccf3626d6bb54a450b10208448605724b5364`
+  - MD5: `0c893859c60d4a5ec7627f0909e9ffcf`
+  - CRC32: `94a3c753`
+- **[GTSE4F.ini](bios/Other/Recalbox/GTSE4F.ini)** (5,644 bytes)
+  - SHA1: `bc45ea26e2f6282cf764198fe0f4f47dd02bc42c`
+  - MD5: `921a94ddf141c4d49b52c861c472a883`
+  - CRC32: `50e1c738`
+- **[GTW.ini](bios/Other/Recalbox/GTW.ini)** (271 bytes)
+  - SHA1: `eb2d87501bf07f77b0219066dc2950eeda798855`
+  - MD5: `9d75c98828030e887a0687da8842b4b9`
+  - CRC32: `ca69610a`
+- **[GTY.ini](bios/Other/Recalbox/GTY.ini)** (349 bytes)
+  - SHA1: `0e3689e09a215ccf07a81d29de2019811295bf63`
+  - MD5: `5392cd9bcb60db1e15e7ddd53575da3f`
+  - CRC32: `3127cd3b`
+- **[GTZ.ini](bios/Other/Recalbox/GTZ.ini)** (276 bytes)
+  - SHA1: `4cf8a3e0294d18e4c021825755d3ec43d062d0f6`
+  - MD5: `395d76bf343e1f4e68313ee02e5ecf57`
+  - CRC32: `5902a03a`
+- **[GTZE41.ini](bios/Other/Recalbox/GTZE41.ini)** (299 bytes)
+  - SHA1: `51df09f9cdb45138d0d3453a6623afeca83130df`
+  - MD5: `b9cff0f3407a278955744280ceae75a0`
+  - CRC32: `ec82168f`
+- **[GTZP41.ini](bios/Other/Recalbox/GTZP41.ini)** (299 bytes)
+  - SHA1: `fb4563cadbff7db5ba164a827907654e20e2f262`
+  - MD5: `e17ad7fbbec6c78ea2918c6205b73a51`
+  - CRC32: `53085c49`
+- **[GU2.ini](bios/Other/Recalbox/GU2.ini)** (491 bytes)
+  - SHA1: `d195ff3c331f174fd5d2a5445d344aa86ddcfefe`
+  - MD5: `6d47837f7151dd0bc9eb0eb75a685ef1`
+  - CRC32: `f0bbe76e`
+- **[GU2D78.ini](bios/Other/Recalbox/GU2D78.ini)** (640 bytes)
+  - SHA1: `b6feb4f01b1e531b5be8fa6995c441ed2c33e188`
+  - MD5: `74c7d12735684bd1ed3e194c581b80c0`
+  - CRC32: `6e5b381f`
+- **[GU2F78.ini](bios/Other/Recalbox/GU2F78.ini)** (640 bytes)
+  - SHA1: `6cd2199c9714229da4341f5376b2fa1beb265a42`
+  - MD5: `a4c6447b3fb3b71800fbb185f7fda496`
+  - CRC32: `ef73e42b`
+- **[GU3.ini](bios/Other/Recalbox/GU3.ini)** (534 bytes)
+  - SHA1: `ccc4e176f7f45f8f15f27ea437347a102944e7d2`
+  - MD5: `cae4ba85ed86cb7c9512a246811b5de1`
+  - CRC32: `bd813d2c`
+- **[GU3D78.ini](bios/Other/Recalbox/GU3D78.ini)** (668 bytes)
+  - SHA1: `588ce6702848e0a029d94e31b629fdb52eed866f`
+  - MD5: `f748127b9ba75d77d65757f4ffe6978c`
+  - CRC32: `97571100`
+- **[GU3X78.ini](bios/Other/Recalbox/GU3X78.ini)** (666 bytes)
+  - SHA1: `d2fa8d2ef2573984775acf96e542e87d0e48689e`
+  - MD5: `7ed1fc58088e1a01d8b4cd15cfab7592`
+  - CRC32: `c6e9a81c`
+- **[GU4.ini](bios/Other/Recalbox/GU4.ini)** (562 bytes)
+  - SHA1: `c609135db1a4451247bf54c7cb53d2e73d6cb270`
+  - MD5: `f46fecf4334c4f7954889b752a0615a5`
+  - CRC32: `6ad46b0f`
+- **[GU4Y78.ini](bios/Other/Recalbox/GU4Y78.ini)** (1,090 bytes)
+  - SHA1: `c4ad72bfc30550268e183f55e3080b438ea81801`
+  - MD5: `7ac73e8458d7e8865dfb664e7e23708c`
+  - CRC32: `7256907d`
+- **[GUB.ini](bios/Other/Recalbox/GUB.ini)** (271 bytes)
+  - SHA1: `80146bccbbcb16c0101468dab733b1e3e1ef809f`
+  - MD5: `de9f01341bfdfbd98698fabf5cdbad68`
+  - CRC32: `488bebd9`
+- **[GUM.ini](bios/Other/Recalbox/GUM.ini)** (215 bytes)
+  - SHA1: `951b5ced0e69379edf4fe37d349fc59f5a898a02`
+  - MD5: `3c41a3f61302f1d4d451decc4666ef7d`
+  - CRC32: `0022c616`
+- **[GUN.ini](bios/Other/Recalbox/GUN.ini)** (275 bytes)
+  - SHA1: `cd686c7bf482cfa994cf95fa9eda9ddb2d3386c4`
+  - MD5: `32f86e83cdb933fb2709ea82bd17c10d`
+  - CRC32: `0b54e0cf`
+- **[GUNE5D.ini](bios/Other/Recalbox/GUNE5D.ini)** (796 bytes)
+  - SHA1: `90c3d066bb254d096350d44bb74d938653f303fc`
+  - MD5: `ec06b0df646da01d5abacfdaba505a75`
+  - CRC32: `4619a0b0`
+- **[GUNE5Dr0.ini](bios/Other/Recalbox/GUNE5Dr0.ini)** (334 bytes)
+  - SHA1: `d93120e09496c0611a75116b9fac24bddfb41b25`
+  - MD5: `7345a016cc433fa62e4554d690db8e2d`
+  - CRC32: `74bcfc4e`
+- **[GUNE5Dr1.ini](bios/Other/Recalbox/GUNE5Dr1.ini)** (334 bytes)
+  - SHA1: `fd7ceba885cc0e6db76f65378de86f6c3c9f675b`
+  - MD5: `29f34b3673196f8b6bdba7d061eb63e2`
+  - CRC32: `2d536f1e`
+- **[GUNP5D.ini](bios/Other/Recalbox/GUNP5D.ini)** (334 bytes)
+  - SHA1: `83a1d3c6e16826757391df93b39fccfed1c53902`
+  - MD5: `a43fb783c06a7cd46dfa7f99770be29c`
+  - CRC32: `2dcad308`
+- **[GUP.ini](bios/Other/Recalbox/GUP.ini)** (619 bytes)
+  - SHA1: `bce65d796ab93b4ebd75872e03b2acf86dece620`
+  - MD5: `73492906932d98aafeae8bc47e18faed`
+  - CRC32: `ff4fa26b`
+- **[GUT.ini](bios/Other/Recalbox/GUT.ini)** (348 bytes)
+  - SHA1: `b8601e60357257c81b66bf5b9f6c2fdd744fe025`
+  - MD5: `5e08cdb10d3d95ba32b0eecf922f429c`
+  - CRC32: `6070a53b`
+- **[GUZ.ini](bios/Other/Recalbox/GUZ.ini)** (284 bytes)
+  - SHA1: `6d86a337051792c00a12b6b66e7c5ed77fa8e1ca`
+  - MD5: `2c21a4119e88bf844512e1288d44f994`
+  - CRC32: `afa87a0f`
+- **[GV4E69.ini](bios/Other/Recalbox/GV4E69.ini)** (178 bytes)
+  - SHA1: `d54055f54ea64351b8c86773416193611a0fe12a`
+  - MD5: `0d8e8b159049ded2866d59bf87b7e462`
+  - CRC32: `c499e839`
+- **[GVC.ini](bios/Other/Recalbox/GVC.ini)** (289 bytes)
+  - SHA1: `e8add81ec876277aa2e98ecc22d803610c35fb57`
+  - MD5: `2f0155278e7cffea56e3ce5e6c6fbb7e`
+  - CRC32: `1bcc248a`
+- **[GVD.ini](bios/Other/Recalbox/GVD.ini)** (298 bytes)
+  - SHA1: `a02c83e8966a7993a9e69a337f067ea6dac93c60`
+  - MD5: `d790f9574a7ef0b5fdb511a55025155e`
+  - CRC32: `53bf3c98`
+- **[GVJ.ini](bios/Other/Recalbox/GVJ.ini)** (282 bytes)
+  - SHA1: `2863495de3298296feedf88de06b08d27711fff0`
+  - MD5: `2ce903b9858c60b5b14c718850a0f4ec`
+  - CRC32: `a2578ed8`
+- **[GVJE08.ini](bios/Other/Recalbox/GVJE08.ini)** (230 bytes)
+  - SHA1: `9d565a8d5f8630452196f036bf4774c4f1f06fa2`
+  - MD5: `3d3be84eb75988629880aca9b104c1e2`
+  - CRC32: `f81acd14`
+- **[GVJP08.ini](bios/Other/Recalbox/GVJP08.ini)** (122 bytes)
+  - SHA1: `b3e7194a889af5b5599d723aa07678f31f27ef73`
+  - MD5: `611ad6aa19706f3b53064795a1ef6213`
+  - CRC32: `ef5a5253`
+- **[GVL.ini](bios/Other/Recalbox/GVL.ini)** (278 bytes)
+  - SHA1: `c3a5b0bbf9b3fea0915aa45fb89e4b606c2d9713`
+  - MD5: `a2ed9bf75e2b3cac03fa4e9a7013f8d3`
+  - CRC32: `74885a86`
+- **[GVO.ini](bios/Other/Recalbox/GVO.ini)** (268 bytes)
+  - SHA1: `3879a75cbfc67b1c55548d73d8b25fc32a016ffd`
+  - MD5: `607a877632a4e070274a6ee57d29e540`
+  - CRC32: `02c35f27`
+- **[GVPE69.ini](bios/Other/Recalbox/GVPE69.ini)** (178 bytes)
+  - SHA1: `13fc93a09f5281c2a785a5a95ae802c47c379f50`
+  - MD5: `e0f37dd67d92c063d6caf5b81ed9fe98`
+  - CRC32: `b68e1530`
+- **[GVS.ini](bios/Other/Recalbox/GVS.ini)** (239 bytes)
+  - SHA1: `24ef1aa48a3e00204591da45766ca7acd79e6f8c`
+  - MD5: `3e016e30ba33b4835c864dd666589d10`
+  - CRC32: `b42289fb`
+- **[GVS46E.ini](bios/Other/Recalbox/GVS46E.ini)** (428 bytes)
+  - SHA1: `a4e2f8c15f38762cb08cd1e50d639c690caf5536`
+  - MD5: `6a601c44dad96759d88ea3f959d4e297`
+  - CRC32: `74924063`
+- **[GVSE8P.ini](bios/Other/Recalbox/GVSE8P.ini)** (614 bytes)
+  - SHA1: `afd73d7a856c45cd6ca3591841e1043657e0aeb0`
+  - MD5: `8cabac3b874c90fa5f250d0342cfc06c`
+  - CRC32: `d76c4a9c`
+- **[GW2.ini](bios/Other/Recalbox/GW2.ini)** (265 bytes)
+  - SHA1: `7816f5feebeb2a79f9cf71ea8edb41dfbd250e01`
+  - MD5: `04820349a7b98276be0957d47ccce0fd`
+  - CRC32: `32ce6b4d`
+- **[GW7.ini](bios/Other/Recalbox/GW7.ini)** (302 bytes)
+  - SHA1: `b0053874d1463d8aec2f03032d708f4ebf78fa99`
+  - MD5: `51763b864dd01e6106feb97ff51c163a`
+  - CRC32: `2d99d07d`
+- **[GW9.ini](bios/Other/Recalbox/GW9.ini)** (271 bytes)
+  - SHA1: `3a70b889b3e84358894b2354c1a886d5989fd10f`
+  - MD5: `352cee6755e1d84076daf47c820cad44`
+  - CRC32: `e65ca4cb`
+- **[GWJ.ini](bios/Other/Recalbox/GWJ.ini)** (148 bytes)
+  - SHA1: `6820d711def082ea47cb6ca90d65f4fe9525bbe1`
+  - MD5: `1624de9e3220d86adb431f6c8e722eaf`
+  - CRC32: `adc4df1f`
+- **[GWK.ini](bios/Other/Recalbox/GWK.ini)** (368 bytes)
+  - SHA1: `81656c0db555a9ec808b2e20499e8fe591b5901b`
+  - MD5: `7f2ea58c783f62c3003af687372e0eba`
+  - CRC32: `74b5924e`
+- **[GWL.ini](bios/Other/Recalbox/GWL.ini)** (272 bytes)
+  - SHA1: `4e3920eb6c75a36bf7d6a33855cd8901566a61a4`
+  - MD5: `bc22a1b95e25c56a33b3cbe81b312152`
+  - CRC32: `d5255a60`
+- **[GWP.ini](bios/Other/Recalbox/GWP.ini)** (271 bytes)
+  - SHA1: `a3aba25c6c675a58f0536cd3fafb9a7aaa5542fb`
+  - MD5: `c9c42df612812ccb2886c69368659526`
+  - CRC32: `9d282708`
+- **[GWQE52.ini](bios/Other/Recalbox/GWQE52.ini)** (4,874 bytes)
+  - SHA1: `b3ce28606abb264e70a08f330f3cf47f09d46ac6`
+  - MD5: `272b9f57ed7dc2a72a790c9cdce788ca`
+  - CRC32: `cee36f6f`
+- **[GWR.ini](bios/Other/Recalbox/GWR.ini)** (136 bytes)
+  - SHA1: `1998e274616f3e8889bde011c2ec8e9084afbb01`
+  - MD5: `800606c0c2d6c68226c1d5fce7d84b23`
+  - CRC32: `7ac4ff22`
+- **[GWRE01.ini](bios/Other/Recalbox/GWRE01.ini)** (660 bytes)
+  - SHA1: `80a52bf5c5bc9716cab5e887dfccfb4ee3ca29b9`
+  - MD5: `48ea6c108ff07be72766d4d06c9ea022`
+  - CRC32: `39ad5a69`
+- **[GWRP01.ini](bios/Other/Recalbox/GWRP01.ini)** (753 bytes)
+  - SHA1: `84b348675ee942ecbda826db3f29c5084b0cab3e`
+  - MD5: `33fdba281662ff1a0d17d95c71a19f55`
+  - CRC32: `00b4fd6b`
+- **[GWT.ini](bios/Other/Recalbox/GWT.ini)** (401 bytes)
+  - SHA1: `3da9fc87da833f41cb3b7d4488a12f73950c8857`
+  - MD5: `e3c086ea31c81f2d68eab82c6e2958f9`
+  - CRC32: `431f1293`
+- **[GWWE01.ini](bios/Other/Recalbox/GWWE01.ini)** (575 bytes)
+  - SHA1: `c4afa168b3263f8959e76207efd3562f41790ae0`
+  - MD5: `01107a73f538b8eb36743c2af7a0c34a`
+  - CRC32: `d3c8dbbc`
+- **[GWWJ01.ini](bios/Other/Recalbox/GWWJ01.ini)** (287 bytes)
+  - SHA1: `afb28e19eb338a62d544f9b317e187f1ce51b9cf`
+  - MD5: `c00018bfd863529f1170f598f399d6bf`
+  - CRC32: `4db3a380`
+- **[GWWP01.ini](bios/Other/Recalbox/GWWP01.ini)** (1,012 bytes)
+  - SHA1: `70e1241192cc5c7607d6dd8aa981477d859e736a`
+  - MD5: `8670e25266e3a67348aa6c4e87e9ac60`
+  - CRC32: `1145b9c0`
+- **[GWY.ini](bios/Other/Recalbox/GWY.ini)** (381 bytes)
+  - SHA1: `173e2852e7097a067992bc2311cf2ae5c97c2568`
+  - MD5: `61f25184495d68959defc8c3127bafc9`
+  - CRC32: `30e67134`
+- **[GWZE01.ini](bios/Other/Recalbox/GWZE01.ini)** (3,076 bytes)
+  - SHA1: `46ef47eb28d75f60f91ca6cd42eb8ea645309443`
+  - MD5: `7efb6939f11c719533b81281e2a7451a`
+  - CRC32: `769398d7`
+- **[GX3.ini](bios/Other/Recalbox/GX3.ini)** (272 bytes)
+  - SHA1: `a5376e8c06ac1380570c34434c18612a8a6d99a1`
+  - MD5: `6e5a75f8813234d8d3f089f49b45aac8`
+  - CRC32: `b07bc2e2`
+- **[GXCE01.ini](bios/Other/Recalbox/GXCE01.ini)** (246 bytes)
+  - SHA1: `19d992568ac7871c773a2b71470dd737f4a0bdb3`
+  - MD5: `57c8c517907fc89fef54899e41cd0594`
+  - CRC32: `0c806680`
+- **[GXG.ini](bios/Other/Recalbox/GXG.ini)** (275 bytes)
+  - SHA1: `2dd7cd64681cc29eff68ebf89a5035c67652baf5`
+  - MD5: `2c6f004fa581f50cd2c823f8769e8efc`
+  - CRC32: `41c0e8be`
+- **[GXM.ini](bios/Other/Recalbox/GXM.ini)** (288 bytes)
+  - SHA1: `7e76124c08f2201fb766bfefbcaba5c4a5893127`
+  - MD5: `24d2c226ea5f61e7baa6f62ffcc2c294`
+  - CRC32: `3742078c`
+- **[GXN.ini](bios/Other/Recalbox/GXN.ini)** (272 bytes)
+  - SHA1: `e041dbcb76865dc563f910f19c27dcabc13aaa69`
+  - MD5: `b22350442515d5a16d1726957f1d1831`
+  - CRC32: `ca31215d`
+- **[GXS.ini](bios/Other/Recalbox/GXS.ini)** (279 bytes)
+  - SHA1: `33513df39a32446ba04a37a08f1fd4ffd49c0acb`
+  - MD5: `f70b4111329762556ca683a3b4c49a68`
+  - CRC32: `3061d610`
+- **[GXSE8P.ini](bios/Other/Recalbox/GXSE8P.ini)** (336 bytes)
+  - SHA1: `457651c1b6a4ad44ee8d21f113fd7dfc4591802c`
+  - MD5: `78283b11ca220ec4bd61fa6938656cc6`
+  - CRC32: `b2fb7322`
+- **[GXSJ8P.ini](bios/Other/Recalbox/GXSJ8P.ini)** (230 bytes)
+  - SHA1: `1253017b0adcbaf77752f4ba8cc8ae6aaf9b70d3`
+  - MD5: `83c74d3a46a15a2cd36e6dabbdf2c052`
+  - CRC32: `71f41ffc`
+- **[GXSP8P.ini](bios/Other/Recalbox/GXSP8P.ini)** (710 bytes)
+  - SHA1: `314bb0f1833c97dfe47003920f5ae65fcad0bd8d`
+  - MD5: `5f8bf9a34e8c874d9877bffe6e2745cd`
+  - CRC32: `c497c547`
+- **[GXU.ini](bios/Other/Recalbox/GXU.ini)** (282 bytes)
+  - SHA1: `3ef10963fe8ba754fc979d19c512ae8ea1c736c6`
+  - MD5: `d937f753dac2b55cefbe028c03b0ffaf`
+  - CRC32: `fe2e2c22`
+- **[GXX.ini](bios/Other/Recalbox/GXX.ini)** (664 bytes)
+  - SHA1: `774adcc76f7110cccdb8dc606bd07ec9d52b0117`
+  - MD5: `8bf94bf53cbb9be9c22bdcedb860a454`
+  - CRC32: `2d20cd9a`
+- **[GXXE01.ini](bios/Other/Recalbox/GXXE01.ini)** (612 bytes)
+  - SHA1: `0a9abc35dd64d185c84fcb3fafe8e6404a9ae97a`
+  - MD5: `53e18d9d957aa6975990b810ff1082fb`
+  - CRC32: `e441ed8a`
+- **[GXXJ01.ini](bios/Other/Recalbox/GXXJ01.ini)** (394 bytes)
+  - SHA1: `bbe02eb56f61215a7e061915604a7f9e3e998aa1`
+  - MD5: `0738ca9b27d614219208c2a85cd9c87a`
+  - CRC32: `9006907c`
+- **[GXXP01.ini](bios/Other/Recalbox/GXXP01.ini)** (540 bytes)
+  - SHA1: `5d693e303e2c6f22d52238c662c00974b3221cc9`
+  - MD5: `6e8834d7f34d7313ee3a331be5246937`
+  - CRC32: `8ce51fe0`
+- **[GYA.ini](bios/Other/Recalbox/GYA.ini)** (294 bytes)
+  - SHA1: `d8086051cbb0f15ed58756035bddbe86623f2d09`
+  - MD5: `7267a33ecd59556936903bd9bc5e48d3`
+  - CRC32: `b565a425`
+- **[GYFPA4.ini](bios/Other/Recalbox/GYFPA4.ini)** (209 bytes)
+  - SHA1: `2a810578d66316302a1c327476085754fa6480c5`
+  - MD5: `76b9df8e141cf97fcdf43eaade6bd374`
+  - CRC32: `d9239d40`
+- **[GYQ.ini](bios/Other/Recalbox/GYQ.ini)** (284 bytes)
+  - SHA1: `ecf4dd57b27bb08f4305bb958a1b23f04260b7d6`
+  - MD5: `7c9e0032f1708d26d41ccfa129f0c3c7`
+  - CRC32: `061d163d`
+- **[GYT.ini](bios/Other/Recalbox/GYT.ini)** (339 bytes)
+  - SHA1: `06056d406492e923ccae346eb32bf6eafa78e242`
+  - MD5: `312c2c20e7129a8e6cdd355ed4193365`
+  - CRC32: `7c1d48ae`
+- **[GZ2.ini](bios/Other/Recalbox/GZ2.ini)** (789 bytes)
+  - SHA1: `7238f897dd922ffed88dadacf21cb69eb12e037e`
+  - MD5: `33500d9ec3a00103ae996aad517ec77e`
+  - CRC32: `d6617f88`
+- **[GZ2E01.ini](bios/Other/Recalbox/GZ2E01.ini)** (34,804 bytes)
+  - SHA1: `bb0b18776b7c1f49fbc59a53215833c295da1db9`
+  - MD5: `4b92584950312fb5e280eb9f0dccaaf7`
+  - CRC32: `eb9f24ed`
+- **[GZ2J01.ini](bios/Other/Recalbox/GZ2J01.ini)** (1,415 bytes)
+  - SHA1: `fa60b05d831893c0e949df139f13fa5e3bf7b1f2`
+  - MD5: `e4e8428118e417a1ae2cc09e75eee733`
+  - CRC32: `35e7e7dc`
+- **[GZ2P01.ini](bios/Other/Recalbox/GZ2P01.ini)** (3,556 bytes)
+  - SHA1: `1ecb4f9663b49f955ad847f544466f38ec013bd4`
+  - MD5: `eec6c1cc9b9c2eeff995c11299cc2e5a`
+  - CRC32: `69f363bc`
+- **[GZ3E70.ini](bios/Other/Recalbox/GZ3E70.ini)** (1,245 bytes)
+  - SHA1: `4bedbcd3788b92b1dd769ffcc1abcaa53a6f1787`
+  - MD5: `3c933218c6b769e04f15416bb078f3e3`
+  - CRC32: `a3dcd245`
+- **[GZD.ini](bios/Other/Recalbox/GZD.ini)** (121 bytes)
+  - SHA1: `79fd59bc690c800ffa447b77c3823a2fb8b5e623`
+  - MD5: `e2379e15ea0929152dcf06a7a2d6eeb8`
+  - CRC32: `4df9206b`
+- **[GZDP70.ini](bios/Other/Recalbox/GZDP70.ini)** (217 bytes)
+  - SHA1: `5d90e78466e04fc1aae46908d6e3689de076a20b`
+  - MD5: `0b639843d6328e5aaf7338f0403bdb93`
+  - CRC32: `812e16b8`
+- **[GZE.ini](bios/Other/Recalbox/GZE.ini)** (265 bytes)
+  - SHA1: `8c8e5eb7b2448a868e99a38a1acd0a06cf7cf315`
+  - MD5: `d4cd84c2fe9c91ea1df26fa98953e942`
+  - CRC32: `40ac576f`
+- **[GZL.ini](bios/Other/Recalbox/GZL.ini)** (683 bytes)
+  - SHA1: `5bf12499d7da3d23c7ff6452227315f1a3d86db5`
+  - MD5: `9efdfc760b6017ecc5e8fdd80344f40b`
+  - CRC32: `5e2feb36`
+- **[GZLE01.ini](bios/Other/Recalbox/GZLE01.ini)** (9,019 bytes)
+  - SHA1: `25d89256238a8bce0065a6decc0aa6f5a19f8f95`
+  - MD5: `69d4d63f194f925768a7e6f844d2583a`
+  - CRC32: `9365a0b1`
+- **[GZLJ01.ini](bios/Other/Recalbox/GZLJ01.ini)** (2,464 bytes)
+  - SHA1: `eb3869aef8bbd3df1ed24954f0e4224de6d69093`
+  - MD5: `89aa2d57087ad124d831c8211284e840`
+  - CRC32: `762b1359`
+- **[GZLP01.ini](bios/Other/Recalbox/GZLP01.ini)** (6,781 bytes)
+  - SHA1: `aa2c00a7566a4c787a3520bf52c682a41c0f1d88`
+  - MD5: `c04ed5ba32721ffe5e08a153887664dc`
+  - CRC32: `777cf0c7`
+- **[GZP.ini](bios/Other/Recalbox/GZP.ini)** (266 bytes)
+  - SHA1: `6fea69406611ad5cb4f29baca4dd04a567ffac6f`
+  - MD5: `6476833b06379d809162591bf1f94e1f`
+  - CRC32: `909c11f1`
+- **[GZPE70.ini](bios/Other/Recalbox/GZPE70.ini)** (153 bytes)
+  - SHA1: `299851718288ca3278b20d2beface0eba614782c`
+  - MD5: `681f6614281c9e2871eb69a4d7ac10e7`
+  - CRC32: `96861ca6`
+- **[GZPP70.ini](bios/Other/Recalbox/GZPP70.ini)** (273 bytes)
+  - SHA1: `9057136440cbbc1c9aeb7e7a089883b7bc0893a1`
+  - MD5: `3bb9da6935a1af4272fc449818656590`
+  - CRC32: `3a63083f`
+- **[GZSE70.ini](bios/Other/Recalbox/GZSE70.ini)** (238 bytes)
+  - SHA1: `82b00dcfa0bd995cff0bd336b135baee80e4a565`
+  - MD5: `35b39e5b7502ad835db2df7f42f931b5`
+  - CRC32: `0f9c1913`
+- **[GZW.ini](bios/Other/Recalbox/GZW.ini)** (345 bytes)
+  - SHA1: `d791a5f2470f93d022090720663aa3d1306530eb`
+  - MD5: `fa22d472a7a963f80238fb7367f10060`
+  - CRC32: `3eca7ef7`
+- **[HA8.ini](bios/Other/Recalbox/HA8.ini)** (272 bytes)
+  - SHA1: `1e2e528a79fc23c235e88d4be08467f3cd8b6c64`
+  - MD5: `9b5f669d432fc532afecf725d999e048`
+  - CRC32: `4370eee4`
+- **[HA9.ini](bios/Other/Recalbox/HA9.ini)** (270 bytes)
+  - SHA1: `fdc63e33f0389473913870c676d8ecae38f54f11`
+  - MD5: `d49c5f2d3c74802f8ba64f3b0fe76530`
+  - CRC32: `0cf69063`
+- **[HAB.ini](bios/Other/Recalbox/HAB.ini)** (276 bytes)
+  - SHA1: `eb2ed702c22ae6ed9a289571d5e52da35c2f2ff1`
+  - MD5: `16c34db3a3f2dea236ccbe46692ac271`
+  - CRC32: `39c584cf`
+- **[HAC.ini](bios/Other/Recalbox/HAC.ini)** (255 bytes)
+  - SHA1: `0cfac902f99b7697e8da358975e836b4a5bda929`
+  - MD5: `3f50758c3021d5e057b228d14f4ee8a5`
+  - CRC32: `e1b97d72`
+- **[HAF.ini](bios/Other/Recalbox/HAF.ini)** (593 bytes)
+  - SHA1: `09c32d00ccd791e4726818bc313610e14d52dbc6`
+  - MD5: `8861d4e6d0725fe5243b651a03e9873a`
+  - CRC32: `5b2ea398`
+- **[HAG.ini](bios/Other/Recalbox/HAG.ini)** (134 bytes)
+  - SHA1: `b6f5f218d6f7c1969165949b23fe7613b15556bd`
+  - MD5: `4341156019543414ae1768eb6f9c1789`
+  - CRC32: `12af71fe`
+- **[HAJ.ini](bios/Other/Recalbox/HAJ.ini)** (169 bytes)
+  - SHA1: `b450a52f2d2edea2c246219932d034653640d7ee`
+  - MD5: `1c08afba0ef3ae68e247447529b1b716`
+  - CRC32: `e404a97a`
+- **[HAL.ini](bios/Other/Recalbox/HAL.ini)** (494 bytes)
+  - SHA1: `823c05dc6f949bb248715c19534c3bbc518dd2b7`
+  - MD5: `28d1cb436c5b496b6fd39311d1afbb76`
+  - CRC32: `ee7e58b8`
+- **[HAT.ini](bios/Other/Recalbox/HAT.ini)** (293 bytes)
+  - SHA1: `b571b9da76596334bc75ca25312b733cc9d31f2c`
+  - MD5: `6032ac96bbdeadd9ef2dd0f7ef2a82aa`
+  - CRC32: `d8c31efd`
+- **[HATE01.ini](bios/Other/Recalbox/HATE01.ini)** (600 bytes)
+  - SHA1: `64456d1fca9ab401458dc1128bd0e4571f93bd63`
+  - MD5: `59256bca3e8056c42009c0043d8203d7`
+  - CRC32: `1857ae27`
+- **[HATJ01.ini](bios/Other/Recalbox/HATJ01.ini)** (564 bytes)
+  - SHA1: `bee8ccb060b5fa8c38b6198fe4245f061e22588d`
+  - MD5: `d17e6f2b46474c0b1123e47a39177509`
+  - CRC32: `34f665d5`
+- **[HATP01.ini](bios/Other/Recalbox/HATP01.ini)** (597 bytes)
+  - SHA1: `d00245bcd8cfc90fc1f90c8684504fbd7689ee6f`
+  - MD5: `037e1fdf187ff2e2e098fe4d92accb78`
+  - CRC32: `3696edbd`
+- **[HBA.ini](bios/Other/Recalbox/HBA.ini)** (272 bytes)
+  - SHA1: `23b64d7565fefb5a6a33967aec8e14b988816ab4`
+  - MD5: `a384a9f6f588db8c2f5dda91540c4df7`
+  - CRC32: `7a3d94aa`
+- **[HBB.ini](bios/Other/Recalbox/HBB.ini)** (270 bytes)
+  - SHA1: `4fa49409463a5036e584c084244a4076bf0ab55e`
+  - MD5: `a52f8ddbd1204f7d935d8b620d54d21c`
+  - CRC32: `185c2ba1`
+- **[HBC.ini](bios/Other/Recalbox/HBC.ini)** (263 bytes)
+  - SHA1: `c3f2b65b8048eef0cef0d1bfa5b90eda96694c2a`
+  - MD5: `debcfa68a4c2c420d0707b6b7af7a0ea`
+  - CRC32: `29326f37`
+- **[HBD.ini](bios/Other/Recalbox/HBD.ini)** (264 bytes)
+  - SHA1: `716a04b312e144d6767ba2960a184529a06c6712`
+  - MD5: `2dca06e9579207cec4900cae75eed048`
+  - CRC32: `7ee70a4a`
+- **[HBF.ini](bios/Other/Recalbox/HBF.ini)** (158 bytes)
+  - SHA1: `132cfeb5def6fb60bb1ee1690fa1675008abfa84`
+  - MD5: `e63f0c05654263a295e958c9ccc33062`
+  - CRC32: `c8c39b3d`
+- **[HBG.ini](bios/Other/Recalbox/HBG.ini)** (147 bytes)
+  - SHA1: `21211770c36d8f5780ce6cdc51d2eb600cdfb83d`
+  - MD5: `5d7fb0a15f181d11e89e3ee6ebcd8c9c`
+  - CRC32: `0a0de805`
+- **[HBI.ini](bios/Other/Recalbox/HBI.ini)** (154 bytes)
+  - SHA1: `89f00495f1b25508b6921a0da9a0ac96cd154437`
+  - MD5: `beca7209fad043bc473d00f32fcf18eb`
+  - CRC32: `0de40a13`
+- **[HBK.ini](bios/Other/Recalbox/HBK.ini)** (228 bytes)
+  - SHA1: `37bc37ee30363ee1486a0398a78d0789548d5117`
+  - MD5: `39072050829840c270c7fee61ef89932`
+  - CRC32: `1f4f2149`
+- **[HC2.ini](bios/Other/Recalbox/HC2.ini)** (48 bytes)
+  - SHA1: `941be9f1c47e27946283022ef1bf2534ded219c9`
+  - MD5: `3065283d6eb200e9d0e9799c053ae5df`
+  - CRC32: `35a4fb41`
+- **[HC4.ini](bios/Other/Recalbox/HC4.ini)** (230 bytes)
+  - SHA1: `3b1898f5a5a742b628c9f09e256ce1a1b190d5b8`
+  - MD5: `4bb2cf6c4b6b6802edc25d68a3902c7e`
+  - CRC32: `f601671d`
+- **[HCL.ini](bios/Other/Recalbox/HCL.ini)** (279 bytes)
+  - SHA1: `5f118333166c40f9008b16c0c6c2b9bce36316d5`
+  - MD5: `a7c60d0ae020f54c84b3e0deec20eae5`
+  - CRC32: `cce8e017`
+- **[HCS.ini](bios/Other/Recalbox/HCS.ini)** (280 bytes)
+  - SHA1: `1b1671563990a8bd4c18b3c70b92ddb38703bff0`
+  - MD5: `ada884dae63925ef796ed43c767a38a8`
+  - CRC32: `7ddce462`
+- **[J.ini](bios/Other/Recalbox/J.ini)** (185 bytes)
+  - SHA1: `7f71f778f5654d68d81b4e7d9af613ca963b91b0`
+  - MD5: `6d396bfa83241415e2bc40b3b389660b`
+  - CRC32: `7874f9a2`
+- **[JA7.ini](bios/Other/Recalbox/JA7.ini)** (74 bytes)
+  - SHA1: `aef22b856988e766b23a1a68ad282dffbeeb0ec8`
+  - MD5: `477a97f0bbb028c659c1a0a4d478ebdf`
+  - CRC32: `308f4cf7`
+- **[JAE.ini](bios/Other/Recalbox/JAE.ini)** (84 bytes)
+  - SHA1: `e40247ef4fdc9e6a0486d12abd0cb31cf5ab0433`
+  - MD5: `abb5b6af4d9fae96c7b3d891bd53e925`
+  - CRC32: `4fa92994`
+- **[JAL.ini](bios/Other/Recalbox/JAL.ini)** (75 bytes)
+  - SHA1: `523bcc9ee2044eab3208d441e766a375e634e21e`
+  - MD5: `00f96424ade1322f6c781f3e785f404b`
+  - CRC32: `cdd1bfd6`
+- **[JAP.ini](bios/Other/Recalbox/JAP.ini)** (104 bytes)
+  - SHA1: `2081376716620329e9d4c28645eb2d3d00d17c59`
+  - MD5: `e4775719f4d0c26580f245f617add131`
+  - CRC32: `972976c0`
+- **[JB6.ini](bios/Other/Recalbox/JB6.ini)** (93 bytes)
+  - SHA1: `d78ef20e131dbc81633f0e3d3d033d191bd87d88`
+  - MD5: `66a73a371d85297539b9a7dc670ad9b5`
+  - CRC32: `43505e1e`
+- **[JBA.ini](bios/Other/Recalbox/JBA.ini)** (78 bytes)
+  - SHA1: `c426ca0e57c0697082e6128bb80e7658c437493f`
+  - MD5: `5b2353f2e3b4770642405fa4f019c523`
+  - CRC32: `64b26e8b`
+- **[JBC.ini](bios/Other/Recalbox/JBC.ini)** (127 bytes)
+  - SHA1: `2879a8179d4bf5bd05923a54c36c786a1e18dadd`
+  - MD5: `5d9ca50bcbdb196a6aee842bf5d8b8fc`
+  - CRC32: `f756e2d6`
+- **[JBH.ini](bios/Other/Recalbox/JBH.ini)** (124 bytes)
+  - SHA1: `e3467053d6c79bb0391f1bc78b0fa1c1793e8ec6`
+  - MD5: `afba8a88c7f7801019bb097451a47a96`
+  - CRC32: `7f4bd72c`
+- **[JBK.ini](bios/Other/Recalbox/JBK.ini)** (79 bytes)
+  - SHA1: `5c61b2e7dd29bf5af3a979b4277c945aa87f92d4`
+  - MD5: `0f845364e3eb3e35d7edb8b0d175d1ab`
+  - CRC32: `f8e0ac64`
+- **[JBO.ini](bios/Other/Recalbox/JBO.ini)** (117 bytes)
+  - SHA1: `aed918c22a85b4d8b88eedb5ff803d146df7fade`
+  - MD5: `b9a916f2ea0b5ce388f7412ba0c83156`
+  - CRC32: `04b2ff4a`
+- **[JBQ.ini](bios/Other/Recalbox/JBQ.ini)** (82 bytes)
+  - SHA1: `1099d8458c943aa6ad07c476cda9a7c0d4ece95d`
+  - MD5: `02912a1bed83278230b47c579c2705e8`
+  - CRC32: `d115d523`
+- **[JBS.ini](bios/Other/Recalbox/JBS.ini)** (71 bytes)
+  - SHA1: `ae1da10f2b958d52b3c39f7291f72cbf4e3a9a9c`
+  - MD5: `a41c723cd3e9fc91fa9f41f5ac32c171`
+  - CRC32: `4eb6b3c2`
+- **[JBU.ini](bios/Other/Recalbox/JBU.ini)** (81 bytes)
+  - SHA1: `7a90334e956148ad37b2199cbf7a13d72b8f4776`
+  - MD5: `736339b26fda355f0adbb5fd9f0c3089`
+  - CRC32: `ef61d0a7`
+- **[JC6.ini](bios/Other/Recalbox/JC6.ini)** (92 bytes)
+  - SHA1: `293298a725c124cfdf64d9854f783638da443b76`
+  - MD5: `63f5b2b71f15ebc9994551dc386eb9e8`
+  - CRC32: `508aef2c`
+- **[JC8.ini](bios/Other/Recalbox/JC8.ini)** (70 bytes)
+  - SHA1: `fe40010929b9c46c81b0582d6beab3babea9e68c`
+  - MD5: `a56dd99955557d942eeeac7911021076`
+  - CRC32: `46d9d569`
+- **[JC9.ini](bios/Other/Recalbox/JC9.ini)** (91 bytes)
+  - SHA1: `1d29323aaf85b7a9ef313de0bc1169457d51e560`
+  - MD5: `7c9aaffae0e63e48b2fc697008bf6152`
+  - CRC32: `49111dd5`
+- **[JCD.ini](bios/Other/Recalbox/JCD.ini)** (85 bytes)
+  - SHA1: `5f582245bc2dd3596dca8fb35639fd4acda3d30c`
+  - MD5: `70d20e2abd27f251b027c27e38b9b3e8`
+  - CRC32: `2b8e87c4`
+- **[JCE.ini](bios/Other/Recalbox/JCE.ini)** (100 bytes)
+  - SHA1: `9917f970f0df52ddf4eebb49e2ba3e6d445fb0a9`
+  - MD5: `02892aad86a17700848e7afdd3c5c464`
+  - CRC32: `34f5b4eb`
+- **[JCL.ini](bios/Other/Recalbox/JCL.ini)** (68 bytes)
+  - SHA1: `7ee67654591ae321ac68b4feb3cc272f979d92ba`
+  - MD5: `95b71f112484af9328bc2071140fb742`
+  - CRC32: `b61970c3`
+- **[JCT.ini](bios/Other/Recalbox/JCT.ini)** (69 bytes)
+  - SHA1: `2efc1574f0bf2ea716363925302d19a101851083`
+  - MD5: `b59f61da2b8a06f9a2c2ee4cb343b515`
+  - CRC32: `8839935e`
+- **[JCX.ini](bios/Other/Recalbox/JCX.ini)** (84 bytes)
+  - SHA1: `e6c510eb8ccdd7434507ae7ca99ce1f973e715f0`
+  - MD5: `7ce7255ec7fa0d1b002363ba397d497d`
+  - CRC32: `86b848d2`
+- **[JCY.ini](bios/Other/Recalbox/JCY.ini)** (83 bytes)
+  - SHA1: `faa6ba68dc395f3bfb625e4be9b3f0c91eea3db1`
+  - MD5: `3cdc34d083f58068cf198445728bb567`
+  - CRC32: `c7a7c864`
+- **[JDA.ini](bios/Other/Recalbox/JDA.ini)** (86 bytes)
+  - SHA1: `8eb5bccc80c7ed2032c6b4e2fa1ed6f864f302b0`
+  - MD5: `3b5795e9ee9b6dfa676b1046f092ea05`
+  - CRC32: `a5c6a412`
+- **[JDV.ini](bios/Other/Recalbox/JDV.ini)** (63 bytes)
+  - SHA1: `bf1a340b633b70bcab40640a56e55383c3c3fd54`
+  - MD5: `f87612dc07b6596344203cae7bbf16f1`
+  - CRC32: `c59c7a16`
+- **[JEC.ini](bios/Other/Recalbox/JEC.ini)** (68 bytes)
+  - SHA1: `24a0f9422fddb6917d960df53dec939de12f5458`
+  - MD5: `3e603d739bd93a3d809fe5825dd9ee75`
+  - CRC32: `285f2b53`
+- **[L.ini](bios/Other/Recalbox/L.ini)** (241 bytes)
+  - SHA1: `acf0af6e66608d91723db504e24e7284eaa65299`
+  - MD5: `2b6cc84c8edf841c345ad86f9da40c12`
+  - CRC32: `ae13f7df`
+- **[LAD.ini](bios/Other/Recalbox/LAD.ini)** (133 bytes)
+  - SHA1: `ea75050a1e657014840a55428337a7f747ef5a60`
+  - MD5: `ba38222323b2e370799405498f5b99bc`
+  - CRC32: `055a770f`
+- **[LAF.ini](bios/Other/Recalbox/LAF.ini)** (146 bytes)
+  - SHA1: `7d6edb437e8b43d5bb906e0f6420edfdfe12aecd`
+  - MD5: `44a2ab16ec3a8f5c7ef3585658f68200`
+  - CRC32: `cc9d8173`
+- **[LAK.ini](bios/Other/Recalbox/LAK.ini)** (146 bytes)
+  - SHA1: `4a919049abfa07e5fad6957e6f8d6cde044d71ef`
+  - MD5: `9c532e5a08d0643a2bb84e1799d9f26b`
+  - CRC32: `54e7f57d`
+- **[LAL.ini](bios/Other/Recalbox/LAL.ini)** (157 bytes)
+  - SHA1: `676e91419a8adb30f26826be183aa513b8759dff`
+  - MD5: `d2a491055443c7747c6f6a6b5b9e1107`
+  - CRC32: `6858e0c2`
+- **[LAO.ini](bios/Other/Recalbox/LAO.ini)** (126 bytes)
+  - SHA1: `8e840c444f5bb13de7b5622c0e5018cfd3d93b4c`
+  - MD5: `dfb10b8a08e2f0bb20d5d8550aab2bb1`
+  - CRC32: `e57a562a`
+- **[LAP.ini](bios/Other/Recalbox/LAP.ini)** (143 bytes)
+  - SHA1: `29b646c588f85f0d205f22d5dbc78d2f235a2bd7`
+  - MD5: `e1a093bd412f36f418b0c765f74c6756`
+  - CRC32: `ac0c20a6`
+- **[LULZHB.ini](bios/Other/Recalbox/LULZHB.ini)** (69 bytes)
+  - SHA1: `4f78dc803995d1b795d28d38573c6002c76d92de`
+  - MD5: `65d919dab97e7168e8482db1c0607051`
+  - CRC32: `0a929899`
+- **[M.ini](bios/Other/Recalbox/M.ini)** (206 bytes)
+  - SHA1: `685b9b8b357bc5aae6e0a5f5487f40c783f1a9c0`
+  - MD5: `07e6c8f8a7c353953bb7d3cf80ccdd78`
+  - CRC32: `8aca0663`
+- **[MAK.ini](bios/Other/Recalbox/MAK.ini)** (85 bytes)
+  - SHA1: `c3387ce48e2c71b4e34e37cb0a6ed0e6ace12cc1`
+  - MD5: `bf6f17b48b39bc43ec7a8482cf4d1920`
+  - CRC32: `e099b453`
+- **[MAME 0.37b5 XML.dat](bios/Other/Recalbox/MAME%200.37b5%20XML.dat)** (2,450,014 bytes)
+  - SHA1: `e5827ca5fdef904892bf48d86ce0de6b5d00e51d`
+  - MD5: `557ee60d8ca0e7746ef5269d8e71f293`
+  - CRC32: `d91d21ac`
+- **[MAME 2000 Not-Working Gamelist.txt](bios/Other/Recalbox/MAME%202000%20Not-Working%20Gamelist.txt)** (6,128 bytes)
+  - SHA1: `f68f06330669a81aad5b2387b7ee460c665c1541`
+  - MD5: `1039cf37d19081a7da21197a1d8976cf`
+  - CRC32: `f64650ba`
+- **[MB3.ini](bios/Other/Recalbox/MB3.ini)** (137 bytes)
+  - SHA1: `b7cfdd0d5c65926c77af8879dd1e077ecdc9c450`
+  - MD5: `c1c114ce0e5f226fd975cf412869a7da`
+  - CRC32: `99eae6c1`
+- **[MB9.ini](bios/Other/Recalbox/MB9.ini)** (117 bytes)
+  - SHA1: `c65654192c209da2975af349bed0257415e77e88`
+  - MD5: `d42514a69dadf680d8f080a4cd37be46`
+  - CRC32: `6fafa386`
+- **[MBA.ini](bios/Other/Recalbox/MBA.ini)** (163 bytes)
+  - SHA1: `43af22d27401e68e450767b3a277687093a938d5`
+  - MD5: `eb59f0618912b99233f58d8cf7615c9b`
+  - CRC32: `38971895`
+- **[MCD.ini](bios/Other/Recalbox/MCD.ini)** (88 bytes)
+  - SHA1: `4f99afa1261adb2f84a7382ba64d9eee5f4fc748`
+  - MD5: `87a1cf32a962f346d73af603666b266c`
+  - CRC32: `605914e5`
+- **[MCS.ini](bios/Other/Recalbox/MCS.ini)** (84 bytes)
+  - SHA1: `a802fee3fc2a2ebb68d01cb85a18d83a0d05b198`
+  - MD5: `09b4c83d4e8b46f0bfd6adf0014dff6c`
+  - CRC32: `3ae98ee7`
+- **[MCT.ini](bios/Other/Recalbox/MCT.ini)** (123 bytes)
+  - SHA1: `ecff5ccbba7f8c578eeb55826ede067d52acbc94`
+  - MD5: `40e0d687ca2f91740d9aa91c4ddad476`
+  - CRC32: `01757f42`
+- **[MCV.ini](bios/Other/Recalbox/MCV.ini)** (183 bytes)
+  - SHA1: `5645410e57df4f470ad3343979e0b4503f774bb2`
+  - MD5: `24f7f9bd2b6a44f137485befc35b8213`
+  - CRC32: `559c6b30`
+- **[MCW.ini](bios/Other/Recalbox/MCW.ini)** (87 bytes)
+  - SHA1: `0f911d4a5d770c30a5dae5e98e5568f407d70994`
+  - MD5: `38392f2da23fc7515827961510b60d28`
+  - CRC32: `d4a8248a`
+- **[MCY.ini](bios/Other/Recalbox/MCY.ini)** (173 bytes)
+  - SHA1: `365ec6b3306bede1a27d276a7eadf28b491d655f`
+  - MD5: `c7dd4f2297395237a553bc75063d6fa1`
+  - CRC32: `b7dd59df`
+- **[MCZ.ini](bios/Other/Recalbox/MCZ.ini)** (116 bytes)
+  - SHA1: `71a824e1771ac35b6e99d239f7c56985e6627a46`
+  - MD5: `4ea4895f2b85a870ae0c3c52039eddfe`
+  - CRC32: `8e46e1f0`
+- **[Mame-0.220_NoClones_V1.0 barhi.dat.7z](bios/Other/Recalbox/Mame-0.220_NoClones_V1.0%20barhi.dat.7z)** (1,230,351 bytes)
+  - SHA1: `68932ca7c9c11c088670b56bc6cdc853617aa776`
+  - MD5: `5339e4c6f2b4e45778eb32b24543d6f1`
+  - CRC32: `51aaed0b`
+- **[Mame-0.220_V1.0 barhi.7z](bios/Other/Recalbox/Mame-0.220_V1.0%20barhi.7z)** (2,219,492 bytes)
+  - SHA1: `31b8afb35b7afca612543117cc376f828f98cba3`
+  - MD5: `5be5fe7327a6d353d364cd89e8d08fdb`
+  - CRC32: `14620fa8`
+- **[Mame-0.239_NoClones_V1.0 barhi.zip](bios/Other/Recalbox/Mame-0.239_NoClones_V1.0%20barhi.zip)** (1,758,845 bytes)
+  - SHA1: `4f36c0ef0d6dbaf4d470c68d5eb7f5922027ee87`
+  - MD5: `9997dd32281be08a84481957d77e79d8`
+  - CRC32: `3968b322`
+- **[Mame-0.239_V1.0 barhi.zip](bios/Other/Recalbox/Mame-0.239_V1.0%20barhi.zip)** (3,002,790 bytes)
+  - SHA1: `1f1e5e6144885306d452ca2bcfcc412bc879f0a1`
+  - MD5: `72c0e71aa87eca72021cd7321c358519`
+  - CRC32: `b7d95757`
+- **[Model3-0.235_NoClones_V1.0 barhi.zip](bios/Other/Recalbox/Model3-0.235_NoClones_V1.0%20barhi.zip)** (33,547 bytes)
+  - SHA1: `9359d214726b42dd0622eb7f7d42a0532609ab89`
+  - MD5: `d6864677bb119ce3651dd00fae9d10d5`
+  - CRC32: `b345cc59`
+- **[N.ini](bios/Other/Recalbox/N.ini)** (124 bytes)
+  - SHA1: `cecba3c648e8938284f458d9d4662200f9c37ecc`
+  - MD5: `5ab22b063af09be6f62ed0e470695865`
+  - CRC32: `7eca3b7a`
+- **[NAB.ini](bios/Other/Recalbox/NAB.ini)** (204 bytes)
+  - SHA1: `c0874c69b3aa85d99274c2524034d4bf1bc1c0ff`
+  - MD5: `a483d51b491eef7b2599408df2201279`
+  - CRC32: `b72f27fd`
+- **[NAC.ini](bios/Other/Recalbox/NAC.ini)** (365 bytes)
+  - SHA1: `8335b9050c17190819ab00bee425dbcde94e7793`
+  - MD5: `c6a3e63642d7606fdcd3c8d6568f8f5c`
+  - CRC32: `0e748fa8`
+- **[NAD.ini](bios/Other/Recalbox/NAD.ini)** (282 bytes)
+  - SHA1: `535ca050dab719de4ab4a89e02a76364f038baee`
+  - MD5: `724a3eda0e7328875b2243597b8030e9`
+  - CRC32: `57cec1df`
+- **[NAE.ini](bios/Other/Recalbox/NAE.ini)** (355 bytes)
+  - SHA1: `ed4ce69460e0e3dc28a05aa2f826c0aa1111faab`
+  - MD5: `fd6cde524de857b240af7e489f1dba3b`
+  - CRC32: `dcf06d47`
+- **[NAF.ini](bios/Other/Recalbox/NAF.ini)** (268 bytes)
+  - SHA1: `e3681eb410a7a5a7fafd184dd999f5512ceb526d`
+  - MD5: `e60d899dbe36fd4ba6fbaf13f00641a7`
+  - CRC32: `8b7bf7e6`
+- **[NAH.ini](bios/Other/Recalbox/NAH.ini)** (119 bytes)
+  - SHA1: `06177160ab117d5c51ae497f00964226f86c027b`
+  - MD5: `4a1da4f2761d04924259428f9e81adb8`
+  - CRC32: `06e14dcf`
+- **[NAK.ini](bios/Other/Recalbox/NAK.ini)** (306 bytes)
+  - SHA1: `4568654d885fbf9a7d892a15100f8445f5668551`
+  - MD5: `f04c86288311e469ba8c34ac0fba7259`
+  - CRC32: `8ef84407`
+- **[NAL.ini](bios/Other/Recalbox/NAL.ini)** (765 bytes)
+  - SHA1: `86ba1cfa98308598deafe73c5212d366c0d66067`
+  - MD5: `0583d87c91863e84436f1f7c5e136fea`
+  - CRC32: `bb56a46b`
+- **[NAO.ini](bios/Other/Recalbox/NAO.ini)** (318 bytes)
+  - SHA1: `44d56a45047f7567ea22756c414c7c2d7e20a633`
+  - MD5: `358bc2f9bfb35faee4f9889d911aad5e`
+  - CRC32: `0c322195`
+- **[NAR.ini](bios/Other/Recalbox/NAR.ini)** (396 bytes)
+  - SHA1: `631dd7260f54a4509823cbceea9a729a6e610172`
+  - MD5: `9b88b25e473e764e70d114f01890de04`
+  - CRC32: `f1e045fe`
+- **[NAT.ini](bios/Other/Recalbox/NAT.ini)** (714 bytes)
+  - SHA1: `3593da1ba706a719cfd29901c0719f6b9e89abf8`
+  - MD5: `e2a035895eab53a2c321042ac5fdbde7`
+  - CRC32: `3e3601bd`
+- **[P.ini](bios/Other/Recalbox/P.ini)** (295 bytes)
+  - SHA1: `10bcd09f82be778c5a36012a716bfa4591aa28b8`
+  - MD5: `cdc2832f1d44633238cdd13274bd44cf`
+  - CRC32: `4377115a`
+- **[P2M.ini](bios/Other/Recalbox/P2M.ini)** (339 bytes)
+  - SHA1: `32ce795ab82a0644d319e6d9e5ee113c20e55980`
+  - MD5: `3eef5ae8ccc4487b41614d77c99153cd`
+  - CRC32: `be91d00a`
+- **[P4B.ini](bios/Other/Recalbox/P4B.ini)** (321 bytes)
+  - SHA1: `d4ff6c514ed6285f4bb4cc2703145e5135bd3998`
+  - MD5: `ed8b86eb0be23590d7c57bb0a6085a45`
+  - CRC32: `d61e7b76`
+- **[PC6.ini](bios/Other/Recalbox/PC6.ini)** (325 bytes)
+  - SHA1: `a6bedfd2b4cb1ce665a5ac93f8946cc4f9128c3b`
+  - MD5: `6d7004a26d4feb62112df0aa4ab1fb3b`
+  - CRC32: `8c256777`
+- **[PCK.ini](bios/Other/Recalbox/PCK.ini)** (271 bytes)
+  - SHA1: `a370c5270a59b56ae1998ee4f1f5257215b27a8c`
+  - MD5: `877dafa7af73c1bd81b114592d7d1c96`
+  - CRC32: `74fff50e`
+- **[PCS.ini](bios/Other/Recalbox/PCS.ini)** (271 bytes)
+  - SHA1: `89aaf97a99475dad906f882151fcd06fa580fe1e`
+  - MD5: `c55e2de0c929c922e660da7e5edccab3`
+  - CRC32: `e7127202`
+- **[PGS.ini](bios/Other/Recalbox/PGS.ini)** (368 bytes)
+  - SHA1: `2e0c9b3b0fc2e2ec836f8d97a7a1b29c32652122`
+  - MD5: `3a4e53569236c860534d88a1631c70ed`
+  - CRC32: `9d84667f`
+- **[PM4.ini](bios/Other/Recalbox/PM4.ini)** (80 bytes)
+  - SHA1: `f007326b5b91c85d5afa7ea017278a471db6b570`
+  - MD5: `d743791b783d74a1eaadaa7cdfd3f23a`
+  - CRC32: `7d9536f6`
+- **[PNR.ini](bios/Other/Recalbox/PNR.ini)** (315 bytes)
+  - SHA1: `dc8abdac9326833f6762559bde1fb90350437193`
+  - MD5: `04df95b1405414831820016524ab3d60`
+  - CRC32: `38320dd8`
+- **[PRJ.ini](bios/Other/Recalbox/PRJ.ini)** (308 bytes)
+  - SHA1: `18a48dd425545e30d42302ffdcadb1e71e5576f7`
+  - MD5: `4c1b24fee70fe5f28050eb2372340bb7`
+  - CRC32: `22018250`
+- **[PZL.ini](bios/Other/Recalbox/PZL.ini)** (447 bytes)
+  - SHA1: `e0078c17a234d688de660e1fca3fe202b20f36df`
+  - MD5: `956bf2267cd397b69b375f5f2143822b`
+  - CRC32: `ae22c220`
+- **[PZLE01.ini](bios/Other/Recalbox/PZLE01.ini)** (11,716 bytes)
+  - SHA1: `97da88853cbb9288d7f79aa4c94f7531151afe24`
+  - MD5: `e72a678963f3b61b0a1889a58992c6c0`
+  - CRC32: `3ad865d6`
+- **[Patcher](bios/Other/Recalbox/Patcher)** (14,060 bytes)
+  - SHA1: `e1b6c3871d8327f771874b17258167c2a454029a`
+  - MD5: `15a8fbc4365dbd74bd36a28ae4c965b0`
+  - CRC32: `de6dfe3a`
+- **[PerceptualHDR.glsl](bios/Other/Recalbox/PerceptualHDR.glsl)** (3,540 bytes)
+  - SHA1: `ddbced4437efd998cf08d3197d87d2de5f401eb9`
+  - MD5: `4a9bcac9db879e8d199ee0d52245aa79`
+  - CRC32: `7b857f0c`
+- **[Platform_File.png](bios/Other/Recalbox/Platform_File.png)** (146 bytes)
+  - SHA1: `15763d5ef85f6ebae777dc9e571c52c8f21afce5`
+  - MD5: `3524f97432b1bf23c5fea4b2012aea27`
+  - CRC32: `7b053367`
+- **[Platform_File@2x.png](bios/Other/Recalbox/Platform_File@2x.png)** (211 bytes)
+  - SHA1: `cb6d90454d9ac376a9d2222adce892eb69aa0532`
+  - MD5: `9aa58ff0d60c037597a03d0ac08a939a`
+  - CRC32: `0490736a`
+- **[Platform_File@4x.png](bios/Other/Recalbox/Platform_File@4x.png)** (431 bytes)
+  - SHA1: `acbd0f093efd3d5d470b81814c73f231eb8913b5`
+  - MD5: `21b7004916c76442094a028292fa37d8`
+  - CRC32: `3ea4e185`
+- **[Platform_Gamecube.png](bios/Other/Recalbox/Platform_Gamecube.png)** (1,600 bytes)
+  - SHA1: `3eb0ad1adfcdda74e3c74ade90df928e67116a0b`
+  - MD5: `5e687a5e2a39467ad4bef37101adcce8`
+  - CRC32: `e4eb3688`
+- **[Platform_Gamecube@2x.png](bios/Other/Recalbox/Platform_Gamecube@2x.png)** (4,354 bytes)
+  - SHA1: `9399527c4d15825927a7d459ed59210ff834e9c1`
+  - MD5: `470e0eb1babfaa756c6965e9b7ae0b1f`
+  - CRC32: `2dfc228a`
+- **[Platform_Gamecube@4x.png](bios/Other/Recalbox/Platform_Gamecube@4x.png)** (11,674 bytes)
+  - SHA1: `8aacb052fa37f7a49008e9928bd5a1bd4ec499a3`
+  - MD5: `fd7b09f7006682bb4cf7d127675b1c12`
+  - CRC32: `dc581b4c`
+- **[Platform_Wad.png](bios/Other/Recalbox/Platform_Wad.png)** (507 bytes)
+  - SHA1: `9a4592a9f45a41bdd1d4fc9f144bbaede6230d9e`
+  - MD5: `e1e168047e64cbd6a2f9e6fd2dd45dc0`
+  - CRC32: `86889e7c`
+- **[Platform_Wad@2x.png](bios/Other/Recalbox/Platform_Wad@2x.png)** (912 bytes)
+  - SHA1: `a181204c9a99f4412f5f2132b212781790812630`
+  - MD5: `dbc02ab13879ba8f2c70018f539d8c9d`
+  - CRC32: `c2e3eac0`
+- **[Platform_Wad@4x.png](bios/Other/Recalbox/Platform_Wad@4x.png)** (1,460 bytes)
+  - SHA1: `b29a3e588ad1a012cbb6565c354a93545c8b503b`
+  - MD5: `ad9f67213b5a6e6d82d7ecc932dbf606`
+  - CRC32: `1309f81c`
+- **[Platform_Wii.png](bios/Other/Recalbox/Platform_Wii.png)** (353 bytes)
+  - SHA1: `3f590adc06b319eb22ec73e71040756d802d9ac4`
+  - MD5: `005504f4c5b8099832da72ff70caacab`
+  - CRC32: `656742aa`
+- **[Platform_Wii@2x.png](bios/Other/Recalbox/Platform_Wii@2x.png)** (617 bytes)
+  - SHA1: `76756978e85455c002ebbb7de3175ce07d462be8`
+  - MD5: `d4152c7a8aae99e5cc18c566314ad004`
+  - CRC32: `615c1249`
+- **[Platform_Wii@4x.png](bios/Other/Recalbox/Platform_Wii@4x.png)** (1,241 bytes)
+  - SHA1: `502351cb5ed7afdad72a852b3045d22b14059868`
+  - MD5: `3ad1629ff9f89110ac67c0e4908c8f02`
+  - CRC32: `cf96ccec`
+- **[Q.ini](bios/Other/Recalbox/Q.ini)** (127 bytes)
+  - SHA1: `f2348a1754936b97a1477ee48d8879fa0998b1ea`
+  - MD5: `b00078080e26041adf46f0b3204205f5`
+  - CRC32: `571ae494`
+- **[R22.ini](bios/Other/Recalbox/R22.ini)** (318 bytes)
+  - SHA1: `442ab69ad95f68959867dea5206d527728ae72a6`
+  - MD5: `5c72f0aa4ac73dd2533444c84641e3c5`
+  - CRC32: `6de577c7`
+- **[R25.ini](bios/Other/Recalbox/R25.ini)** (271 bytes)
+  - SHA1: `4066c55fb81e26f9faf19c692289bad096544c25`
+  - MD5: `18befb15325d642d9923ce9ef308c4f0`
+  - CRC32: `cbf31e7e`
+- **[R26.ini](bios/Other/Recalbox/R26.ini)** (80 bytes)
+  - SHA1: `f9377aec7ffaf66ad388c10297280735be0e2a19`
+  - MD5: `f48c53e8799bc324ee5738015f7c4bf0`
+  - CRC32: `9604ec65`
+- **[R29.ini](bios/Other/Recalbox/R29.ini)** (95 bytes)
+  - SHA1: `6f0f7258222f8d1b09592c590b8f91d150eeac62`
+  - MD5: `5dd01aac556016a000950446e6c8aa88`
+  - CRC32: `372ab272`
+- **[R2E.ini](bios/Other/Recalbox/R2E.ini)** (68 bytes)
+  - SHA1: `37f3d945fa9cfb603b1acabf45ee1401d65a0a8d`
+  - MD5: `1d6b009c224a35e6091a29b8e971200c`
+  - CRC32: `2788d8ca`
+- **[R2F.ini](bios/Other/Recalbox/R2F.ini)** (93 bytes)
+  - SHA1: `fc1bdac75ccf902bd3fe57da28d091439513258f`
+  - MD5: `9a30f7a59f904f75b805bb44bf4be4f4`
+  - CRC32: `127faa09`
+- **[R2G.ini](bios/Other/Recalbox/R2G.ini)** (314 bytes)
+  - SHA1: `805f76ee90b2b3d17216851afebfcb904f701129`
+  - MD5: `bd74753d79a4c64a77ab229cf0c67c7d`
+  - CRC32: `c99ce8e8`
+- **[R2H.ini](bios/Other/Recalbox/R2H.ini)** (70 bytes)
+  - SHA1: `06b16f372be83552338dccc2e6413ee9fd94184b`
+  - MD5: `96c9348c72d7febb4085f0f30eb9ffcf`
+  - CRC32: `55cc69d9`
+- **[R2L.ini](bios/Other/Recalbox/R2L.ini)** (96 bytes)
+  - SHA1: `975fa509899d1652afabc01b872f0320cb520758`
+  - MD5: `9d774d0d06ac79b6eb95157b74824904`
+  - CRC32: `32b06379`
+- **[R2M.ini](bios/Other/Recalbox/R2M.ini)** (70 bytes)
+  - SHA1: `59cd1a32453349df9472d6e9d10ab3d59dd7609f`
+  - MD5: `c14044bc29a5a25a6037ca65e87b639e`
+  - CRC32: `67642787`
+- **[R2P.ini](bios/Other/Recalbox/R2P.ini)** (104 bytes)
+  - SHA1: `e4e760481b2481247e9bd93ffdc9125909e9a231`
+  - MD5: `9e973561ea6cb07982796825c3b98ab2`
+  - CRC32: `048a738f`
+- **[R2Q.ini](bios/Other/Recalbox/R2Q.ini)** (95 bytes)
+  - SHA1: `a2c16ea26501a4add5e2ea9dd6a17d095bb36d44`
+  - MD5: `3ff2e44e74c231c10fff55011f48a4db`
+  - CRC32: `594e27e2`
+- **[R2R.ini](bios/Other/Recalbox/R2R.ini)** (77 bytes)
+  - SHA1: `58486ffd47f0e2f75e770e06941c65e980273b6b`
+  - MD5: `d7783364178aa6bbf66abba4c1684b68`
+  - CRC32: `ebc8793c`
+- **[R2V.ini](bios/Other/Recalbox/R2V.ini)** (396 bytes)
+  - SHA1: `c2347d468d3a0ac2d5a8fae42d931bf77dea82f4`
+  - MD5: `58cc26fa4a627d9bdf93a611a05e95db`
+  - CRC32: `489a9718`
+- **[R35.ini](bios/Other/Recalbox/R35.ini)** (86 bytes)
+  - SHA1: `c51822f431222a05583764389ab96d4f039c5236`
+  - MD5: `805c47c249111578120c03ad741a9938`
+  - CRC32: `5d84e468`
+- **[R38.ini](bios/Other/Recalbox/R38.ini)** (357 bytes)
+  - SHA1: `4f4eb6a24d5a3934c1b558e3985ed9c823abc0b4`
+  - MD5: `52c994c6368737a47f2cf7733d63f385`
+  - CRC32: `29f6107a`
+- **[R3A.ini](bios/Other/Recalbox/R3A.ini)** (309 bytes)
+  - SHA1: `1e8fde0819746bba7bc78a8e16b6aba021605f76`
+  - MD5: `36aaa0c2a97b760e9cd12f2905ac5043`
+  - CRC32: `6357b415`
+- **[R3B.ini](bios/Other/Recalbox/R3B.ini)** (281 bytes)
+  - SHA1: `fb2dc549650eab60f85ef02caa32b03fa4aa0b26`
+  - MD5: `3f74e76117e8ab8de7b35fe587e05b5f`
+  - CRC32: `0765caa2`
+- **[R3C.ini](bios/Other/Recalbox/R3C.ini)** (86 bytes)
+  - SHA1: `84d3c0d4d964f497490640de857e41c2c55c3e3b`
+  - MD5: `83abf1f48ffe0729483f98a26fe4932e`
+  - CRC32: `c5db634c`
+- **[R3D.ini](bios/Other/Recalbox/R3D.ini)** (277 bytes)
+  - SHA1: `34dd3ad8cf38a0a0f246cd858ee09d0ba7b6b733`
+  - MD5: `efa9586509361afa434f2ba1db42b67b`
+  - CRC32: `26575945`
+- **[R3E.ini](bios/Other/Recalbox/R3E.ini)** (75 bytes)
+  - SHA1: `b047841df92ff92d053b70275c57fbd89452de68`
+  - MD5: `23131e36b7d856b3fb30a0dc0012563d`
+  - CRC32: `00bbb96a`
+- **[R3G.ini](bios/Other/Recalbox/R3G.ini)** (83 bytes)
+  - SHA1: `05a5a277913a9fddb7bb0e4161eb1eeb12c7e7c3`
+  - MD5: `46e130ab6ebeda8e136363264fb35cb9`
+  - CRC32: `18a64285`
+- **[R3H.ini](bios/Other/Recalbox/R3H.ini)** (87 bytes)
+  - SHA1: `e05670461ea43500c76f6352dd363994d9110c90`
+  - MD5: `baae44d70d0202802b3ee4481fa74bf6`
+  - CRC32: `84125532`
+- **[R3J.ini](bios/Other/Recalbox/R3J.ini)** (74 bytes)
+  - SHA1: `30ff37ccb837f49b3314d006eaea767b17ced674`
+  - MD5: `e894137a589a9afb0cb89c680a2f29fd`
+  - CRC32: `0e4f58a6`
+- **[R3M.ini](bios/Other/Recalbox/R3M.ini)** (490 bytes)
+  - SHA1: `72a9b5e105b2de3b9e2d9c97e908ba49ffc32dcb`
+  - MD5: `a8a7eb6344ca934c66ee5900da0ecf61`
+  - CRC32: `b38fb78e`
+- **[R3N.ini](bios/Other/Recalbox/R3N.ini)** (300 bytes)
+  - SHA1: `b7c29bd6789f678648f8b4b00b4b05e1e36134ba`
+  - MD5: `4c8f18736dbadea756b69b1c412670ae`
+  - CRC32: `59a1370b`
+- **[R3O.ini](bios/Other/Recalbox/R3O.ini)** (323 bytes)
+  - SHA1: `37fad08d31dc116c8d173960dd942f3346c93094`
+  - MD5: `4066f580b51d6e15f1ab7a2497c8bb0f`
+  - CRC32: `2bd9f916`
+- **[R3R.ini](bios/Other/Recalbox/R3R.ini)** (181 bytes)
+  - SHA1: `cd2b4d34ed002f7c9f85a3e5651e07680942bc07`
+  - MD5: `29ef46540e0c5bcb2525cef070d4448a`
+  - CRC32: `9684b974`
+- **[R3S.ini](bios/Other/Recalbox/R3S.ini)** (133 bytes)
+  - SHA1: `b1c97d8dbb4849ab785b8dbe6924293703190d8b`
+  - MD5: `6e37cbd3c759067839a9043911e54b7e`
+  - CRC32: `9cf6f4a0`
+- **[R44.ini](bios/Other/Recalbox/R44.ini)** (374 bytes)
+  - SHA1: `5707394d57bcd7d024585f2e0170b58c98c268f8`
+  - MD5: `8f7490644b604c50ebc7e58d3566629e`
+  - CRC32: `8748696f`
+- **[R46.ini](bios/Other/Recalbox/R46.ini)** (91 bytes)
+  - SHA1: `44cc9de28033040fcf26c5e8e0a51b42a02e648e`
+  - MD5: `2a8f6412a5a3b0da10adcfe17cabe18e`
+  - CRC32: `80a45274`
+- **[R4C.ini](bios/Other/Recalbox/R4C.ini)** (77 bytes)
+  - SHA1: `0711e544ba3c60cedfc5c2c22497531648b1b024`
+  - MD5: `9530e57b6dcdbf7b0e03fa36de07f978`
+  - CRC32: `6c483fb5`
+- **[R4D.ini](bios/Other/Recalbox/R4D.ini)** (101 bytes)
+  - SHA1: `ffda31aea1d21e1b2cd2ad36f23398a959338066`
+  - MD5: `b2fabcb3b3b742c1d1669dcf5b29ba9d`
+  - CRC32: `674c6fcf`
+- **[R4E.ini](bios/Other/Recalbox/R4E.ini)** (275 bytes)
+  - SHA1: `bad4b42237f2719f7a4610e579b63a8382c2c533`
+  - MD5: `a74ffbff7585ba157cc6f6c31311606a`
+  - CRC32: `21850830`
+- **[R4F.ini](bios/Other/Recalbox/R4F.ini)** (303 bytes)
+  - SHA1: `89aaf9cf99bbb6f7637e046121f15272b4b6eb94`
+  - MD5: `08fb48e48a499d7d2cb7b8426f0fc0f8`
+  - CRC32: `42946a16`
+- **[R4L.ini](bios/Other/Recalbox/R4L.ini)** (83 bytes)
+  - SHA1: `9d54966914fecb04c2be8e660c71bde0f915645c`
+  - MD5: `a4c3ce91f69f9d7cc92c509ef420aea5`
+  - CRC32: `29578dec`
+- **[R4M.ini](bios/Other/Recalbox/R4M.ini)** (87 bytes)
+  - SHA1: `58e095d53bf32ea1736538fead8924dfda37823a`
+  - MD5: `20cac95876206465fe1315a592c0308e`
+  - CRC32: `733e4893`
+- **[R4V.ini](bios/Other/Recalbox/R4V.ini)** (81 bytes)
+  - SHA1: `12332a98e2f54fc0558417df48d25dec5fa1e16e`
+  - MD5: `48de9bd05ae7ee5436601e6988c5178f`
+  - CRC32: `9c62ade6`
+- **[R4Z.ini](bios/Other/Recalbox/R4Z.ini)** (336 bytes)
+  - SHA1: `021fd15b1aa415fa3bfb967782eebb1bbce08017`
+  - MD5: `f1dfe4301c397c0cd261f93868014b5a`
+  - CRC32: `965e3016`
+- **[R55.ini](bios/Other/Recalbox/R55.ini)** (297 bytes)
+  - SHA1: `991e1a9aff3b7375104b4a3e9b8429904cfcfa00`
+  - MD5: `9fb1d6fdf6870950b13b3b2a3c6c5345`
+  - CRC32: `ccfec26c`
+- **[R58.ini](bios/Other/Recalbox/R58.ini)** (93 bytes)
+  - SHA1: `787195bfe4cf59c44495bde405ebc7c2f36b124c`
+  - MD5: `b9ecc18eb4490f06f87d856f63d2232b`
+  - CRC32: `a1a78926`
+- **[R59.ini](bios/Other/Recalbox/R59.ini)** (257 bytes)
+  - SHA1: `86497228e6318b632df01a9998063c33a830a1bf`
+  - MD5: `4fd445ee1e25af34a2865355b591da7a`
+  - CRC32: `1f07741e`
+- **[R5D.ini](bios/Other/Recalbox/R5D.ini)** (236 bytes)
+  - SHA1: `855e779ea832892835f785871b610f5fdbf99169`
+  - MD5: `59c19415c5f8f667321dd30c765c74d4`
+  - CRC32: `d1beeb1a`
+- **[R5F.ini](bios/Other/Recalbox/R5F.ini)** (99 bytes)
+  - SHA1: `5e75e75879ff71a8b054facbd40c6970d4047984`
+  - MD5: `4f2d0f3b3f9f9f54a73e195d47d7d6ac`
+  - CRC32: `10d1eb9b`
+- **[R5I.ini](bios/Other/Recalbox/R5I.ini)** (330 bytes)
+  - SHA1: `20b9cef35719b138ada4d58438d7c536499ecfe1`
+  - MD5: `ced22a78a95b60549c32be253f6e4e51`
+  - CRC32: `2af644ab`
+- **[R5O.ini](bios/Other/Recalbox/R5O.ini)** (89 bytes)
+  - SHA1: `96540894d4ba35bd4b9278f8979b487b2015e055`
+  - MD5: `6022df2f7171f22d9e0dbd1377602577`
+  - CRC32: `bb249b85`
+- **[R5P.ini](bios/Other/Recalbox/R5P.ini)** (257 bytes)
+  - SHA1: `63417b26dd6af9d6edd1688b0eda4132c45594a3`
+  - MD5: `dc383ab49e53ab758d1c6707a6e35b7f`
+  - CRC32: `1c7ecdcd`
+- **[R5Q.ini](bios/Other/Recalbox/R5Q.ini)** (61 bytes)
+  - SHA1: `30fa94f7a86cfe7670ecc7fe259f04cc830debea`
+  - MD5: `1965d32bfbe66aaaceffa6551d7a4bb7`
+  - CRC32: `fceafbe7`
+- **[R5S.ini](bios/Other/Recalbox/R5S.ini)** (103 bytes)
+  - SHA1: `324848fdc815a5a1a4514bc6c3ae30dc51335f18`
+  - MD5: `0ce80136f597a5149b633b2821477bdc`
+  - CRC32: `174501ea`
+- **[R5T.ini](bios/Other/Recalbox/R5T.ini)** (260 bytes)
+  - SHA1: `1b8a7496c4bcfa72fbee9de3467ec75bd61e5538`
+  - MD5: `ccca77100d7dd79ee93e5603a6e91c3a`
+  - CRC32: `ff3435ab`
+- **[R5W.ini](bios/Other/Recalbox/R5W.ini)** (322 bytes)
+  - SHA1: `d97d7f687a80eb90f2af8d5c68c3d2b203900672`
+  - MD5: `f915d42bb5b8768ffb802500d69b4826`
+  - CRC32: `5fda8ae3`
+- **[R64.ini](bios/Other/Recalbox/R64.ini)** (290 bytes)
+  - SHA1: `4dfd2fe3529c205579dbbc29adec83f5086f9c9d`
+  - MD5: `c787defaffa0747d406df463277c4da1`
+  - CRC32: `7b86177a`
+- **[R66.ini](bios/Other/Recalbox/R66.ini)** (83 bytes)
+  - SHA1: `fe57a3a17ba85980e52eebeb0333e861dfed1338`
+  - MD5: `f015f8669a500baaf1577d0f2fcb85a4`
+  - CRC32: `85ba7dd8`
+- **[R67.ini](bios/Other/Recalbox/R67.ini)** (94 bytes)
+  - SHA1: `de2bd928682bbf9260df2fb078215abbed856808`
+  - MD5: `d290b364960b1f6f4af2bf543892b47a`
+  - CRC32: `7936a778`
+- **[R6B.ini](bios/Other/Recalbox/R6B.ini)** (348 bytes)
+  - SHA1: `388fb6611fec5ac4e0b02e4f08bb3e5d1d376031`
+  - MD5: `f50797cd500527fb0cac9e5db9ebdfb1`
+  - CRC32: `5457232f`
+- **[R6C.INI](bios/Other/Recalbox/R6C.INI)** (269 bytes)
+  - SHA1: `6be5af04db8fc7a817a06353cecc5e7989421df6`
+  - MD5: `cc5a6705e5d3121072c55fe0d39c5009`
+  - CRC32: `4873c4e6`
+- **[R6E.ini](bios/Other/Recalbox/R6E.ini)** (79 bytes)
+  - SHA1: `34f9f1a61db00e196a94867a584aa057ef558736`
+  - MD5: `9373a15d2402057b0242803fd407c860`
+  - CRC32: `fc189f54`
+- **[R6G.ini](bios/Other/Recalbox/R6G.ini)** (67 bytes)
+  - SHA1: `1a9f1cec536f485ebb1a2b3ebca2e6d07c5a7c0b`
+  - MD5: `c18ba301d44d1cbc74fd1b1e507c7ff3`
+  - CRC32: `fb6ede8b`
+- **[R6Q.ini](bios/Other/Recalbox/R6Q.ini)** (301 bytes)
+  - SHA1: `d18e8d5f9db69c34dfdc6960b51bd9deed2941d5`
+  - MD5: `6585f39523787cebfab46176576ec619`
+  - CRC32: `fca73bb7`
+- **[R6T.ini](bios/Other/Recalbox/R6T.ini)** (269 bytes)
+  - SHA1: `e98ad8e5ea86563b4e112f2daf91b07a2fcf1ab1`
+  - MD5: `afa644ab3d457276b505eec68636091f`
+  - CRC32: `47a0a10b`
+- **[R6V.ini](bios/Other/Recalbox/R6V.ini)** (76 bytes)
+  - SHA1: `fc331e62f921670390ace076ed8e8f24d4cd6e33`
+  - MD5: `c84e6928c31b547992ad71f8b1afd2f1`
+  - CRC32: `1c48c1b0`
+- **[R6X.ini](bios/Other/Recalbox/R6X.ini)** (200 bytes)
+  - SHA1: `cfa0a65279b45139f552fd1b671d0d237af17062`
+  - MD5: `7118dccb669907230f1251a67b790df2`
+  - CRC32: `a5d7e000`
+- **[R6Y.ini](bios/Other/Recalbox/R6Y.ini)** (270 bytes)
+  - SHA1: `d00462640886683971d8b39038216bc52c8c7abf`
+  - MD5: `d831efc6faa7a67bc7e1965d0220f36d`
+  - CRC32: `d62ce099`
+- **[R74.ini](bios/Other/Recalbox/R74.ini)** (78 bytes)
+  - SHA1: `9a84b0ca42eb0408f7280de0db0a574023a5ca86`
+  - MD5: `afae9e49dbc44efc64f11994424cc3e7`
+  - CRC32: `38a56e20`
+- **[R75.ini](bios/Other/Recalbox/R75.ini)** (66 bytes)
+  - SHA1: `51ad6115da58364c90a9a9c3bf901b1ee09d8e16`
+  - MD5: `e63d4e1340c4b86a59bba48723f1d78d`
+  - CRC32: `58d632ea`
+- **[R77.ini](bios/Other/Recalbox/R77.ini)** (83 bytes)
+  - SHA1: `7ab603e025d0683a3ea931f189479ad9c921330b`
+  - MD5: `ef23840ab4439ae587aee8a8d9b0754b`
+  - CRC32: `a4617f47`
+- **[R79.ini](bios/Other/Recalbox/R79.ini)** (89 bytes)
+  - SHA1: `ac0a66a128a00cff25c19940b0254b46332d997c`
+  - MD5: `159aa9b06fb6d57f804289b6c1b1b9e3`
+  - CRC32: `c91ba365`
+- **[R7B.ini](bios/Other/Recalbox/R7B.ini)** (90 bytes)
+  - SHA1: `65e438c15d2f0f233ae076869c8378d5db4f4510`
+  - MD5: `4d978b5a460ae43c15a468bd608fee90`
+  - CRC32: `68f0e8c0`
+- **[R7E.ini](bios/Other/Recalbox/R7E.ini)** (285 bytes)
+  - SHA1: `5eda59ec73410b33bbd210dbedbef79764b3825d`
+  - MD5: `991048747ef3dd8bfc2d746060886240`
+  - CRC32: `b92c1edf`
+- **[R7G.ini](bios/Other/Recalbox/R7G.ini)** (299 bytes)
+  - SHA1: `bf0844371a2f096181cc896dc963975dffa08598`
+  - MD5: `e9b9f0c91b1f3f621af7add8b018950f`
+  - CRC32: `d53e1656`
+- **[R7H.ini](bios/Other/Recalbox/R7H.ini)** (66 bytes)
+  - SHA1: `7a76a8c51f45a0968b92134a911b6aa61d6a897b`
+  - MD5: `8bb7dab536f18e2e8262fc4dedc91cfe`
+  - CRC32: `461daffa`
+- **[R7K.ini](bios/Other/Recalbox/R7K.ini)** (65 bytes)
+  - SHA1: `dc9328369460ea723f0307eb423ab6b3b46f414b`
+  - MD5: `463b95fad92aa264030c7b158afd57b7`
+  - CRC32: `c15f464d`
+- **[R7N.ini](bios/Other/Recalbox/R7N.ini)** (87 bytes)
+  - SHA1: `8cda1b22ca9627d3d2858b6daa80657172c2274a`
+  - MD5: `23c5549a15e58ad978dbad1149e85483`
+  - CRC32: `6cf837c1`
+- **[R7P.ini](bios/Other/Recalbox/R7P.ini)** (254 bytes)
+  - SHA1: `f57eddaf0076f792309b661f712fdbf82cfcd3af`
+  - MD5: `fb9efc447912d411701833280ae7102e`
+  - CRC32: `414b3ac9`
+- **[R7PE01.ini](bios/Other/Recalbox/R7PE01.ini)** (169 bytes)
+  - SHA1: `6453742792bfa4bf4ea406aa269cc88ff880201e`
+  - MD5: `5cf9fe56efd900ced584e40d48b53e42`
+  - CRC32: `2a73f53c`
+- **[R7PP01.ini](bios/Other/Recalbox/R7PP01.ini)** (169 bytes)
+  - SHA1: `743d006a1abb0ea9b3261de5d2de4794b12abb02`
+  - MD5: `1e3af2b1bcfe648c9b412047b25b5077`
+  - CRC32: `2be77c6a`
+- **[R7S.ini](bios/Other/Recalbox/R7S.ini)** (80 bytes)
+  - SHA1: `6adb85baf89cb32381c3a787281aa2f308c8d2d0`
+  - MD5: `7fa6b71f53da5f1f791fffaf8f830826`
+  - CRC32: `3410a404`
+- **[R7X.ini](bios/Other/Recalbox/R7X.ini)** (325 bytes)
+  - SHA1: `1678466848a730994f420359fc020fbf696e8e68`
+  - MD5: `62a70e7ffe7fd38ad8b7b07861878200`
+  - CRC32: `2875c3e5`
+- **[R82.ini](bios/Other/Recalbox/R82.ini)** (94 bytes)
+  - SHA1: `6526ee9850e834ffaedf94f503a90a1ae1be0dfc`
+  - MD5: `b1f591600e7dab4c0613a7bfabf08e4f`
+  - CRC32: `eb8c192c`
+- **[R84.ini](bios/Other/Recalbox/R84.ini)** (316 bytes)
+  - SHA1: `324b8a5bb68fef0c91822097462751780ece19df`
+  - MD5: `d87fb0266aded3c576a91810d333cdcf`
+  - CRC32: `d0fc233f`
+- **[R86.ini](bios/Other/Recalbox/R86.ini)** (74 bytes)
+  - SHA1: `48b7da4803817de1169fa068c3f1c4cf8899f592`
+  - MD5: `61e73e7cf414a76a160b60dc054156bb`
+  - CRC32: `a0d8cad8`
+- **[R88.ini](bios/Other/Recalbox/R88.ini)** (79 bytes)
+  - SHA1: `2329499cd269663d4d1fd00324219466bfd1ec94`
+  - MD5: `37c12f1c06aa51676baccb3af1cf0ad2`
+  - CRC32: `250b8fd8`
+- **[R89.ini](bios/Other/Recalbox/R89.ini)** (78 bytes)
+  - SHA1: `2b6388a505f2564c4576d3818f44f1a2430414b6`
+  - MD5: `eb311aca41741b5bf8ebbe19ee15c197`
+  - CRC32: `798a9833`
+- **[R8A.ini](bios/Other/Recalbox/R8A.ini)** (274 bytes)
+  - SHA1: `24367c8cbc2938a00fdfa20922e80ab4f146e9cd`
+  - MD5: `46f38141332512dad606b41015f25930`
+  - CRC32: `13782db2`
+- **[R8D.ini](bios/Other/Recalbox/R8D.ini)** (99 bytes)
+  - SHA1: `b0559fec3de9f2440d6e0baeeaafa195e6496339`
+  - MD5: `c941ae05292e3c8c40280977e7823a00`
+  - CRC32: `5e362fe3`
+- **[R8G.ini](bios/Other/Recalbox/R8G.ini)** (81 bytes)
+  - SHA1: `0006b3957e1d65e16033911e16f7182cdf443ade`
+  - MD5: `096ed0ba04f3275778b6a0f287b55156`
+  - CRC32: `82d32960`
+- **[R8I.ini](bios/Other/Recalbox/R8I.ini)** (343 bytes)
+  - SHA1: `2efbfc7c8d8aa3e3215ea2065dfc1c307a0de74c`
+  - MD5: `4d998c62b779db44bffb3bdee8723195`
+  - CRC32: `5ab80be0`
+- **[R8J.ini](bios/Other/Recalbox/R8J.ini)** (258 bytes)
+  - SHA1: `fe06972bdc23fdbbb754d1c3c08e4c5b588366bb`
+  - MD5: `937c06da47ec4e7da37ef8c5afb67fbb`
+  - CRC32: `63238312`
+- **[R8K.ini](bios/Other/Recalbox/R8K.ini)** (72 bytes)
+  - SHA1: `a4a728b4df1ea2f9703cb3c4ecb2546304b69780`
+  - MD5: `493af5206c06db0c193d7d8a9c09b85c`
+  - CRC32: `186bab21`
+- **[R8L.ini](bios/Other/Recalbox/R8L.ini)** (300 bytes)
+  - SHA1: `97065841a1a9d91cc71a0144c4d8292a2ab82d2c`
+  - MD5: `80e5ee194783cce0a63074398458f348`
+  - CRC32: `d0b1342d`
+- **[R8N.ini](bios/Other/Recalbox/R8N.ini)** (100 bytes)
+  - SHA1: `929cc24efc1f0c2e62b9563b16d0cc08eef89c6e`
+  - MD5: `af6a44e68c43ebbb5f99ff07dfa4e401`
+  - CRC32: `93044142`
+- **[R8P.ini](bios/Other/Recalbox/R8P.ini)** (343 bytes)
+  - SHA1: `d4376cbf870fb281c8e00eff0f9b81c1eebac89d`
+  - MD5: `12f6e44209c092995438bd61fa889557`
+  - CRC32: `15b1cf1d`
+- **[R8R.ini](bios/Other/Recalbox/R8R.ini)** (98 bytes)
+  - SHA1: `e6b0a03cee9d2a717dddb5ef62d76e484fba3278`
+  - MD5: `e9dac037daea82222813a53c8b2393ee`
+  - CRC32: `2708b1e2`
+- **[R8T.ini](bios/Other/Recalbox/R8T.ini)** (70 bytes)
+  - SHA1: `32947672e6765ee1c1da948c9c43185f2a67caa3`
+  - MD5: `6c8fadda734dd9352bae9cffc2fdd7f2`
+  - CRC32: `4041375c`
+- **[R92.ini](bios/Other/Recalbox/R92.ini)** (265 bytes)
+  - SHA1: `a6f5e278c19b61bf7ae33ce9565729d93ab9aeda`
+  - MD5: `01d78c0a5577de0c553b8dd929906c52`
+  - CRC32: `a0f3f7a8`
+- **[R9B.ini](bios/Other/Recalbox/R9B.ini)** (87 bytes)
+  - SHA1: `78634284030e0aa065ce66c014e5874e330d1fd5`
+  - MD5: `1cd4b0cd9ca9d496d8e5cc7de18fb538`
+  - CRC32: `850285b4`
+- **[R9D.ini](bios/Other/Recalbox/R9D.ini)** (315 bytes)
+  - SHA1: `bb8a0a8eb5d1fe63421a0a636c48dc91a3fa50e5`
+  - MD5: `9861a3dec13dea7e32638c49d1c51d2a`
+  - CRC32: `7c1c8fe4`
+- **[R9E.ini](bios/Other/Recalbox/R9E.ini)** (89 bytes)
+  - SHA1: `8b451487bf4ac23dd8b8f9d4b61ce445e7d4c0f5`
+  - MD5: `a6cdc94061bdc4406a8e64fcaf62a615`
+  - CRC32: `82d2c49e`
+- **[R9G.ini](bios/Other/Recalbox/R9G.ini)** (310 bytes)
+  - SHA1: `89819d8fd84e14c03695d8bba0f724957e48df73`
+  - MD5: `ac5ee35a9adedabfcdde4ead0b18b3a8`
+  - CRC32: `98adc557`
+- **[R9I.ini](bios/Other/Recalbox/R9I.ini)** (295 bytes)
+  - SHA1: `86e7c1cc5013af5f534fe71831b3b931c8bdf7a4`
+  - MD5: `eb09972178c9a773e0f0e41222b075b4`
+  - CRC32: `5852c951`
+- **[R9Q.ini](bios/Other/Recalbox/R9Q.ini)** (76 bytes)
+  - SHA1: `efdf07e5b405f3d2e53c587eea09142311d0dfcf`
+  - MD5: `69f21222424dbeaba828ed5711c2e3a6`
+  - CRC32: `e9227bfa`
+- **[R9R.ini](bios/Other/Recalbox/R9R.ini)** (75 bytes)
+  - SHA1: `f704762d51c048b0aff35641bc75d6af4a4b45c0`
+  - MD5: `61344e1d890ab06f3ba3abcd16cf9752`
+  - CRC32: `ff4d35c8`
+- **[R9S.ini](bios/Other/Recalbox/R9S.ini)** (77 bytes)
+  - SHA1: `503f9c23e6aa8ea8556b628227583db0dff692f9`
+  - MD5: `b3e99145bdb70e7e49549393f2b180f1`
+  - CRC32: `a46c5407`
+- **[R9W.ini](bios/Other/Recalbox/R9W.ini)** (94 bytes)
+  - SHA1: `996f5c1ab9c24a6cc8816179c82c9febe23509e4`
+  - MD5: `b524a355c4cfc22c0bba3826e505604b`
+  - CRC32: `0367986f`
+- **[RAA.ini](bios/Other/Recalbox/RAA.ini)** (150 bytes)
+  - SHA1: `057cd5f92dd214838a8d24ca7b7b96a9de70cc0c`
+  - MD5: `959ce1b956acdc4da5c54b91cf788e9f`
+  - CRC32: `60d6a951`
+- **[RB2.ini](bios/Other/Recalbox/RB2.ini)** (82 bytes)
+  - SHA1: `67c89bdf7880ab9818d529406ba2e5393ad30d09`
+  - MD5: `f27c020b118ceb4e705eaf6976f9e44a`
+  - CRC32: `e0e5a42d`
+- **[RB5.ini](bios/Other/Recalbox/RB5.ini)** (104 bytes)
+  - SHA1: `d0299b1fd156e66e04ec5110c1d6628473949bd3`
+  - MD5: `918ebd580b346538fdbd622292df08ce`
+  - CRC32: `4b03c8f8`
+- **[RB7.ini](bios/Other/Recalbox/RB7.ini)** (247 bytes)
+  - SHA1: `06dadda8a65ca9c4fb50d1a56b9a69d1dd784302`
+  - MD5: `82599cec352aab0ddcbe46b94d6a4281`
+  - CRC32: `cfb43834`
+- **[RB8.ini](bios/Other/Recalbox/RB8.ini)** (76 bytes)
+  - SHA1: `d32035c2d2e3b38024f0d95a880c9b393225c935`
+  - MD5: `238e597e968286251a55e05ff01f23b9`
+  - CRC32: `543e11ea`
+- **[RB9.ini](bios/Other/Recalbox/RB9.ini)** (340 bytes)
+  - SHA1: `8f1c0a8553f12dc12b0455ca64773225eb8f6136`
+  - MD5: `5b89d56ed791a854128a968724039bfa`
+  - CRC32: `8d0e8a9f`
+- **[RBB.ini](bios/Other/Recalbox/RBB.ini)** (346 bytes)
+  - SHA1: `4c88b75dd4bac880bda46171246e6f5d665d6d7c`
+  - MD5: `85c91f22c0f279d1dc2209d900e7bf35`
+  - CRC32: `566e2e99`
+- **[RBC.ini](bios/Other/Recalbox/RBC.ini)** (68 bytes)
+  - SHA1: `97bce89d4619c77d1de35588dda876cf3e88f4b5`
+  - MD5: `117203100fb04cae2246087476d5f3d8`
+  - CRC32: `dbb13b52`
+- **[RBF.ini](bios/Other/Recalbox/RBF.ini)** (76 bytes)
+  - SHA1: `d82ed03a0fffd75276b1e11e73a612d2a8c2b32f`
+  - MD5: `5611a24aa8afc6a331de55f817537a3f`
+  - CRC32: `faf58e48`
+- **[RBH.ini](bios/Other/Recalbox/RBH.ini)** (366 bytes)
+  - SHA1: `2aab26d0dfe5a7f814ca2eb7346d700d35ca9510`
+  - MD5: `0951730452c8cc12df06f45e9455ddeb`
+  - CRC32: `7345c6ba`
+- **[RBI.ini](bios/Other/Recalbox/RBI.ini)** (278 bytes)
+  - SHA1: `1ce0f1091a8164859c6ea1381489f22fde6952cf`
+  - MD5: `dda94a746dd22d452a8390356ec15a98`
+  - CRC32: `9bbb43dc`
+- **[RBK.ini](bios/Other/Recalbox/RBK.ini)** (273 bytes)
+  - SHA1: `854209c9e85c85961df3b089aaaab4105bca9d05`
+  - MD5: `be65d87f6d9e540bbdac1ccbeb66a896`
+  - CRC32: `9ca1b046`
+- **[RBL.ini](bios/Other/Recalbox/RBL.ini)** (274 bytes)
+  - SHA1: `fcb07abb805b1113a3e29a600a72f4e4cde2b59e`
+  - MD5: `d73522a10fa87438a64796c1ac4f9da1`
+  - CRC32: `654f6925`
+- **[RBM.ini](bios/Other/Recalbox/RBM.ini)** (80 bytes)
+  - SHA1: `2ee59d82cdaf2078d3a61511231c5914ab981464`
+  - MD5: `7954f142e9edd6fe7580f60c45a5bde1`
+  - CRC32: `a6d1534a`
+- **[RBO.ini](bios/Other/Recalbox/RBO.ini)** (328 bytes)
+  - SHA1: `af744b50bb8672baf44de326f765f94db21f820c`
+  - MD5: `f31ba074684c999306cfa00af9e79722`
+  - CRC32: `eba96b7e`
+- **[RBP.ini](bios/Other/Recalbox/RBP.ini)** (110 bytes)
+  - SHA1: `490cdfeb8015871c03772eb62859f2126bf702d7`
+  - MD5: `a83548b799ef5bacb922049bc288f94d`
+  - CRC32: `83e0c698`
+- **[RBQ.ini](bios/Other/Recalbox/RBQ.ini)** (91 bytes)
+  - SHA1: `822163d4f9e53d55f724f0475b8c2526a20ff291`
+  - MD5: `ad96abd7d3c49778438f147ca4a8ee5d`
+  - CRC32: `99e0234d`
+- **[RBR.ini](bios/Other/Recalbox/RBR.ini)** (326 bytes)
+  - SHA1: `f738bdef6f439e9f4361d13409b0652805931477`
+  - MD5: `01c8becb030157dfd162940847b3d84e`
+  - CRC32: `b64c20b5`
+- **[RBS.ini](bios/Other/Recalbox/RBS.ini)** (92 bytes)
+  - SHA1: `cff65e63f2a4227e11cf094c013a85e588cd0297`
+  - MD5: `03075a118ea70a12ef86bcbad1c9d5d2`
+  - CRC32: `577e19c4`
+- **[RBT.ini](bios/Other/Recalbox/RBT.ini)** (260 bytes)
+  - SHA1: `9b9e6751f25e25448bf9888f69cb8d165534da19`
+  - MD5: `50004d97f6243bd66459bbe09e7d3ef3`
+  - CRC32: `6f526655`
+- **[RBW.ini](bios/Other/Recalbox/RBW.ini)** (289 bytes)
+  - SHA1: `41e687f48a767a36cfd537a768d9cbc94a334ea1`
+  - MD5: `c1393eb7c5d99a27f957ecf07790b22b`
+  - CRC32: `b870729d`
+- **[RBY.ini](bios/Other/Recalbox/RBY.ini)** (287 bytes)
+  - SHA1: `55f16631807611a67529754b52e804e0f2254280`
+  - MD5: `a9adf64798ad8d23ddd125d245d13644`
+  - CRC32: `c64f150d`
+- **[RBZ.ini](bios/Other/Recalbox/RBZ.ini)** (113 bytes)
+  - SHA1: `cd2229be329492e631896da692fc212743d5fa1d`
+  - MD5: `30abdcd34e71023bc18eb22c9405761a`
+  - CRC32: `47314c25`
+- **[RC4.ini](bios/Other/Recalbox/RC4.ini)** (113 bytes)
+  - SHA1: `d29ffdaad2f3069023e302e787cf401483f11066`
+  - MD5: `f2a2be50c3c94cdf499fd20223816235`
+  - CRC32: `35420c16`
+- **[RC5.ini](bios/Other/Recalbox/RC5.ini)** (81 bytes)
+  - SHA1: `0a08b50479c18e25fb049025b7ad3b9c1bc3a98d`
+  - MD5: `2e6bdb4b99da472d31531f9de04bcb5b`
+  - CRC32: `1e25bfe8`
+- **[RCB.ini](bios/Other/Recalbox/RCB.ini)** (87 bytes)
+  - SHA1: `e3c6e58e5892b417d94b21772bc5baf42953b948`
+  - MD5: `73f4fb629c75dcb2db7e90d0b0e824bd`
+  - CRC32: `fb30d134`
+- **[RCC.ini](bios/Other/Recalbox/RCC.ini)** (273 bytes)
+  - SHA1: `cc1a522d8c1516da2b797c2f234edff162d4df2b`
+  - MD5: `20f94a9e85d93c209ebdb952654a2910`
+  - CRC32: `fe20d3ca`
+- **[RCE.ini](bios/Other/Recalbox/RCE.ini)** (90 bytes)
+  - SHA1: `dff2ef9e960b863f812eadbefc0dd969a42222ca`
+  - MD5: `73702ea94f3ed0306d04c38a6adbdf8e`
+  - CRC32: `fce9145f`
+- **[RCF.ini](bios/Other/Recalbox/RCF.ini)** (76 bytes)
+  - SHA1: `eb497ae0d8d6aa889d0ec0dfc0141d12b0d49fe5`
+  - MD5: `c184ad64d2ac20029fc2f3657343f0af`
+  - CRC32: `a83d764d`
+- **[RCH.ini](bios/Other/Recalbox/RCH.ini)** (309 bytes)
+  - SHA1: `cc1a291fcc276ee08c27b18b3db3c7d517f4f44c`
+  - MD5: `d739bc30608b95f0dbeeeaec95e3bae5`
+  - CRC32: `3c0c03b8`
+- **[RCJ.ini](bios/Other/Recalbox/RCJ.ini)** (279 bytes)
+  - SHA1: `5d1e65daa512c00883630cfa88159a1a1458592f`
+  - MD5: `61deb4e1ffdcea14468595eb7c52bbcc`
+  - CRC32: `0a94c2fc`
+- **[RCK.ini](bios/Other/Recalbox/RCK.ini)** (120 bytes)
+  - SHA1: `22ce344b79b37a7e259ebd6580a674c901e15cd1`
+  - MD5: `d736923380e65a4a24076c520bc9db0e`
+  - CRC32: `82386fec`
+- **[RCL.ini](bios/Other/Recalbox/RCL.ini)** (314 bytes)
+  - SHA1: `c29e11a08fed8acd4d3d7b045f7271bdb7f8dfdd`
+  - MD5: `4328772fa293c09b52227a15acc73062`
+  - CRC32: `42524779`
+- **[RCO.ini](bios/Other/Recalbox/RCO.ini)** (119 bytes)
+  - SHA1: `5055b0534ed1438a7d4b224423e6e61ea4d5da37`
+  - MD5: `4804ffc0b7665f772e46ffe2c57e5f7c`
+  - CRC32: `452aec32`
+- **[RCP.ini](bios/Other/Recalbox/RCP.ini)** (260 bytes)
+  - SHA1: `227d8c64feba4d8e81bccdb87cbe8d72b9857240`
+  - MD5: `4b521ddc5de4db56ec5b688ce0b361f5`
+  - CRC32: `29f82a67`
+- **[RCS.ini](bios/Other/Recalbox/RCS.ini)** (76 bytes)
+  - SHA1: `16baf8916c68c1836c99e3c5f5aff68662617eeb`
+  - MD5: `834237e58336b8d088ab2e812258fb15`
+  - CRC32: `3ba607db`
+- **[RCT.ini](bios/Other/Recalbox/RCT.ini)** (76 bytes)
+  - SHA1: `34a125dfd4075d675a167300efaac2291dabdf6d`
+  - MD5: `cbf9ce4d83526d80e179f2571d2ef3ad`
+  - CRC32: `56778628`
+- **[RCU.ini](bios/Other/Recalbox/RCU.ini)** (92 bytes)
+  - SHA1: `60de31cedfdfba8a94fc88e97b741739d6b6f048`
+  - MD5: `7c4b561dbbd87bdca486cb06ceb38acf`
+  - CRC32: `9c936b0e`
+- **[RCV.ini](bios/Other/Recalbox/RCV.ini)** (108 bytes)
+  - SHA1: `f102690107a96520e35c028d5ada21fa045714ba`
+  - MD5: `63c60ff94cc7dcd3b3803ec422015124`
+  - CRC32: `fe8aec4f`
+- **[RCY.ini](bios/Other/Recalbox/RCY.ini)** (74 bytes)
+  - SHA1: `4e9658b5562f0c66d000c6ab4857f242a0ad04d1`
+  - MD5: `91bca5f11ccee01b69e490b2132bbbe8`
+  - CRC32: `1c6ac176`
+- **[RD2.ini](bios/Other/Recalbox/RD2.ini)** (319 bytes)
+  - SHA1: `73e14af565fd2369c8b754341202ae80992ab7f3`
+  - MD5: `f2d08134db8d1d16633ab8ecdb065817`
+  - CRC32: `fef5128e`
+- **[RD8.ini](bios/Other/Recalbox/RD8.ini)** (77 bytes)
+  - SHA1: `3e2d2afdff5cb919589d2cc630b273b5a6344238`
+  - MD5: `ba5f49c7ea1cf73cb9f9e6b3cd13c30f`
+  - CRC32: `c1fc0a3a`
+- **[RD9.ini](bios/Other/Recalbox/RD9.ini)** (61 bytes)
+  - SHA1: `7f693ac3d7ba0bd3e8e4792842d0568f817e6b10`
+  - MD5: `41b79396fd6d3576e55858570e55c27f`
+  - CRC32: `fe34ad5c`
+- **[RDA.ini](bios/Other/Recalbox/RDA.ini)** (88 bytes)
+  - SHA1: `ce7e0abd61478e5f4d1fc5eb92dd71a0649f53b9`
+  - MD5: `d8b5e468d3cd4c7583a1f3f9fef178fb`
+  - CRC32: `61caf099`
+- **[RDB.ini](bios/Other/Recalbox/RDB.ini)** (327 bytes)
+  - SHA1: `34c94a8e6c69325ca88c21860d54daaa3bd808b7`
+  - MD5: `9ac2df40702f248bf915a61d53ded096`
+  - CRC32: `fddebd97`
+- **[RDF.ini](bios/Other/Recalbox/RDF.ini)** (300 bytes)
+  - SHA1: `94d3ee4f8fcfc71a91be103c5e11ecb09eb988c7`
+  - MD5: `eb77006256383176c919cf1ab49ae84e`
+  - CRC32: `9e1d4ddf`
+- **[RDJ.ini](bios/Other/Recalbox/RDJ.ini)** (313 bytes)
+  - SHA1: `e2cf4afcd7b9dd4b49bbead2440067ef35951ac5`
+  - MD5: `1b208fa0ee9e1a03bd9a1b9e5426ae24`
+  - CRC32: `0bf45846`
+- **[RDL.ini](bios/Other/Recalbox/RDL.ini)** (84 bytes)
+  - SHA1: `d31dbdcdb7e6c0a805cb5c68cb71ead3ee992019`
+  - MD5: `73eb801f66d6bf5f28f75135794243cc`
+  - CRC32: `f7477b06`
+- **[RDM.ini](bios/Other/Recalbox/RDM.ini)** (83 bytes)
+  - SHA1: `288d614a08ed78bb38034f66e6f732958fc83180`
+  - MD5: `168c863d9a876135eddc2efe6f1e44bb`
+  - CRC32: `730d3b19`
+- **[RDP.ini](bios/Other/Recalbox/RDP.ini)** (99 bytes)
+  - SHA1: `8d31b0f19914533cd5ace28b0e28481c43c29cfc`
+  - MD5: `6d0f89caa430eee91098fb7696136cfb`
+  - CRC32: `dade8149`
+- **[RDS.ini](bios/Other/Recalbox/RDS.ini)** (319 bytes)
+  - SHA1: `cc57eb61dc51e37fa1cc698ba94bc0e9a2d5111a`
+  - MD5: `4ca483dc1d534e22f1f41e211f6cacc2`
+  - CRC32: `f5d8a755`
+- **[RDS.txt](bios/Other/Recalbox/RDS.txt)** (1 bytes)
+  - SHA1: `adc83b19e793491b1c6ea0fd8b46cd9f32e592fc`
+  - MD5: `68b329da9893e34099c7d8ad5cb9c940`
+  - CRC32: `32d70693`
+- **[RDT.ini](bios/Other/Recalbox/RDT.ini)** (92 bytes)
+  - SHA1: `ed1e246bdcc7f56c7f3f9f28a2d43430e68707e5`
+  - MD5: `684b5762779a37a6e9c9d576e93b29b1`
+  - CRC32: `10f485fa`
+- **[RDU.ini](bios/Other/Recalbox/RDU.ini)** (110 bytes)
+  - SHA1: `d25110e9163edd6fc9f97d732bdc6b51ab34a38a`
+  - MD5: `444954057cacba5a5c255966b5901680`
+  - CRC32: `cad53ec9`
+- **[RDZ.ini](bios/Other/Recalbox/RDZ.ini)** (231 bytes)
+  - SHA1: `e55b302f005c85e093fe4d495dfd08f2d9a0ff8a`
+  - MD5: `842c91f6db54f714e13a00a88c7259a2`
+  - CRC32: `6dbd7903`
+- **[RE8.ini](bios/Other/Recalbox/RE8.ini)** (101 bytes)
+  - SHA1: `fa7ca8a58d3d18a60fb2e794465211c46305433c`
+  - MD5: `989dd64bb4261b1c73817a6b86ec6e1c`
+  - CRC32: `eccfb240`
+- **[README.md](bios/Other/Recalbox/README.md)** (114 bytes)
+  - SHA1: `c63a351f5c5060733ce3edbe0243db2922f2dac1`
+  - MD5: `5259e07ff5d264ec0101e5da8e557813`
+  - CRC32: `ae8d7fed`
+- **[REB.ini](bios/Other/Recalbox/REB.ini)** (85 bytes)
+  - SHA1: `5b2acac9fd1c95f16061456576780694a1a4ef0c`
+  - MD5: `2e5bb5cd7c99b544eea5df6b2c93a609`
+  - CRC32: `dbc5f3b0`
+- **[RED.ini](bios/Other/Recalbox/RED.ini)** (263 bytes)
+  - SHA1: `edc4b45de08883290795a6880547548ee796b443`
+  - MD5: `899a1c7100372576a7e55f268be82c1a`
+  - CRC32: `a67082bc`
+- **[REF.ini](bios/Other/Recalbox/REF.ini)** (124 bytes)
+  - SHA1: `ec418e37bfca77a617248fa85131d3e16837fdd1`
+  - MD5: `dc464c63e141d09eb8df58b614c3f9a6`
+  - CRC32: `23deb8b2`
+- **[REG.ini](bios/Other/Recalbox/REG.ini)** (96 bytes)
+  - SHA1: `afb782c7356e142ea5965035141584b5330d970b`
+  - MD5: `b1c408a0579fc1f9a12f9d8dfcaa66e1`
+  - CRC32: `0c93b011`
+- **[REL.ini](bios/Other/Recalbox/REL.ini)** (86 bytes)
+  - SHA1: `3c3bebb4c10a8f5a8a65b0875445b7c1107c1d3f`
+  - MD5: `3ecb5523ebaa9c48f64fde1bca2fd35a`
+  - CRC32: `85f05004`
+- **[RELJAB.ini](bios/Other/Recalbox/RELJAB.ini)** (357 bytes)
+  - SHA1: `55cfc35fa07926a1ded7730384e1ae4b3bc44101`
+  - MD5: `78fa9e33f8cda095e94c93c15f72455e`
+  - CRC32: `aec4111a`
+- **[REM.ini](bios/Other/Recalbox/REM.ini)** (95 bytes)
+  - SHA1: `5fd734fd24fdde61e8c9d1eff18c7c5a0714c1b3`
+  - MD5: `933e4029e9f92f8527bd1767ade15db9`
+  - CRC32: `ac916acd`
+- **[REP.ini](bios/Other/Recalbox/REP.ini)** (150 bytes)
+  - SHA1: `55c8dc4d319049e159c32acf3d798dbd80664ac7`
+  - MD5: `d3e1252fe51831bc068366ba0dcd4819`
+  - CRC32: `6231c58c`
+- **[REQ.ini](bios/Other/Recalbox/REQ.ini)** (107 bytes)
+  - SHA1: `596c3845b2e7cc0984cadacc09e6496fb0576296`
+  - MD5: `8b2d114de67b2f704f8ebe06f5e6a295`
+  - CRC32: `25cf2b1f`
+- **[RES.ini](bios/Other/Recalbox/RES.ini)** (126 bytes)
+  - SHA1: `387c4a94243941c0224a986f82b6dcfbd480718b`
+  - MD5: `c57de4810368721a3ad19decfd3f4f11`
+  - CRC32: `2cf69b8d`
+- **[RET.ini](bios/Other/Recalbox/RET.ini)** (74 bytes)
+  - SHA1: `131b799cf48f802c07e8b3819cec07655cfbcab8`
+  - MD5: `7b9d4495f2256f950241c6cab7aef9b7`
+  - CRC32: `66a5974d`
+- **[REU.ini](bios/Other/Recalbox/REU.ini)** (68 bytes)
+  - SHA1: `a2ed67be6f2ab2566557a02b3e936b8158922917`
+  - MD5: `cfaf1c8cdb26c38caf5dd74e4791fe12`
+  - CRC32: `e30871bb`
+- **[REX.ini](bios/Other/Recalbox/REX.ini)** (262 bytes)
+  - SHA1: `a3164afe6c35906e9a7f8f101b37f36624c3c8b7`
+  - MD5: `29c5af3a7d4a7a0e25a622c25fa8333a`
+  - CRC32: `b2949807`
+- **[REZ.ini](bios/Other/Recalbox/REZ.ini)** (74 bytes)
+  - SHA1: `518af36ae669fd18e2b2b796a112996f2f52256f`
+  - MD5: `c213659672962c01d5f2ae77c9316e9b`
+  - CRC32: `c2dea027`
+- **[RF2.ini](bios/Other/Recalbox/RF2.ini)** (104 bytes)
+  - SHA1: `887a602a6867421ea2f41bdc24b2ae9e4e4e934f`
+  - MD5: `74b284460fbe9c29ad9b171e6f929820`
+  - CRC32: `59a1556b`
+- **[RF4.ini](bios/Other/Recalbox/RF4.ini)** (79 bytes)
+  - SHA1: `72edbaf612179fcd8a0905c7d1d88b923d5785cc`
+  - MD5: `8fe56fe02108fb27671ebed8578038e3`
+  - CRC32: `5cc744bc`
+- **[RFA.ini](bios/Other/Recalbox/RFA.ini)** (101 bytes)
+  - SHA1: `f2a2e2392a77ef28d7489950da18357dcceef82e`
+  - MD5: `01bd59bb1e9e96653587ff72b40e3a9d`
+  - CRC32: `de9ae024`
+- **[RFB.ini](bios/Other/Recalbox/RFB.ini)** (264 bytes)
+  - SHA1: `148e00f77a9251c4eeec9d80be1759098292bf51`
+  - MD5: `7d517ba89728eaeadfe7702b5351b52a`
+  - CRC32: `60f308b6`
+- **[RFC.ini](bios/Other/Recalbox/RFC.ini)** (286 bytes)
+  - SHA1: `4459958a447913f6be5384371bbba94e9b179b17`
+  - MD5: `612fa183136ee93de6ceecf80158634a`
+  - CRC32: `0d3ef1ef`
+- **[RFF.ini](bios/Other/Recalbox/RFF.ini)** (269 bytes)
+  - SHA1: `099af8dbcfd8f7ffed18c014d0f399a8ad9bd933`
+  - MD5: `758fa16f5a92501270f8cd5a4c017fac`
+  - CRC32: `e89b0e2b`
+- **[RFK.ini](bios/Other/Recalbox/RFK.ini)** (87 bytes)
+  - SHA1: `fdf3d65066192930be0c0b06e7f0717074e36fdc`
+  - MD5: `0d6b50db8fd69dd5df1c1f562cb0a809`
+  - CRC32: `d94f4122`
+- **[RFN.ini](bios/Other/Recalbox/RFN.ini)** (610 bytes)
+  - SHA1: `210d0e271aa54fde83c94c4f7d930c22681e4326`
+  - MD5: `10930661aa5c74f7c2611cf12bd2b763`
+  - CRC32: `4326b19f`
+- **[RFP.ini](bios/Other/Recalbox/RFP.ini)** (715 bytes)
+  - SHA1: `81772ab2f156ad41e0c58b30aba6bf9f11bd8cd6`
+  - MD5: `b8057eb91ec329921c57c974e923cac1`
+  - CRC32: `0387ae5e`
+- **[RFQ.ini](bios/Other/Recalbox/RFQ.ini)** (291 bytes)
+  - SHA1: `713fcdf50c54e490e87332d5c6a882a3758ae769`
+  - MD5: `2d3caaa2eb9015abcc203fd655513a59`
+  - CRC32: `e7daf3c3`
+- **[RFR.ini](bios/Other/Recalbox/RFR.ini)** (77 bytes)
+  - SHA1: `e0d2978fd9f9b280794b67b6f33f398009e602ad`
+  - MD5: `045034626cc6e4e57405779c5acc1bc2`
+  - CRC32: `28d10569`
+- **[RFS.ini](bios/Other/Recalbox/RFS.ini)** (295 bytes)
+  - SHA1: `7716029db2ac829262420adae913bb5cadde51ef`
+  - MD5: `19b0a5dfcb7e8410e45652fd696b852c`
+  - CRC32: `55e83b38`
+- **[RFT.ini](bios/Other/Recalbox/RFT.ini)** (72 bytes)
+  - SHA1: `0d1f2976146628ff83eff7222ca277553ea28ba7`
+  - MD5: `a5da64d1e12939c06a7f3e422e7169b1`
+  - CRC32: `c6666f52`
+- **[RFU.ini](bios/Other/Recalbox/RFU.ini)** (92 bytes)
+  - SHA1: `28d3da07d195d02492ecd26eeb542503c87e40bf`
+  - MD5: `d0b00aee3358c8086e4d073bf8146aa1`
+  - CRC32: `edc9978f`
+- **[RFW.ini](bios/Other/Recalbox/RFW.ini)** (87 bytes)
+  - SHA1: `dd51a3645f3eac566a97574235202cb4ea314d33`
+  - MD5: `aec51d6ddbb864afab381d72a4cf5af9`
+  - CRC32: `7e4b6782`
+- **[RG2.ini](bios/Other/Recalbox/RG2.ini)** (272 bytes)
+  - SHA1: `bf2dc8cec7e80a8be201c61896bcb9562eeb7700`
+  - MD5: `be28df88868dbdf202126ab0adb7a4fd`
+  - CRC32: `47641d48`
+- **[RG4.ini](bios/Other/Recalbox/RG4.ini)** (284 bytes)
+  - SHA1: `8d3beaa0863ab167457000fc639c6b1209f659a6`
+  - MD5: `c276497ac26a863fe5e7a7e76c17c2a9`
+  - CRC32: `98cef783`
+- **[RG6.ini](bios/Other/Recalbox/RG6.ini)** (338 bytes)
+  - SHA1: `8e70005c9be235cc2c99db19fbc78f1ca75d65e9`
+  - MD5: `69e02f4c9901bd312add5ca63ec0614a`
+  - CRC32: `f1d95562`
+- **[RG8.ini](bios/Other/Recalbox/RG8.ini)** (74 bytes)
+  - SHA1: `1ae0e106074ddee2770e6cd0f592176df7e95786`
+  - MD5: `e4699984ee4c420770753a3af2322275`
+  - CRC32: `75235d15`
+- **[RGB.ini](bios/Other/Recalbox/RGB.ini)** (274 bytes)
+  - SHA1: `daea12cc8982ee203dc973b4a414ce03e5465971`
+  - MD5: `0b1dab030c729dfd58f03ba273ac1f9c`
+  - CRC32: `03715942`
+- **[RGD.ini](bios/Other/Recalbox/RGD.ini)** (77 bytes)
+  - SHA1: `1452d2ea164f433ccc35b0fb9eff1ce9aafba20b`
+  - MD5: `e9635ab63e3813119c72a8c537682c05`
+  - CRC32: `45d2b9fa`
+- **[RGI.ini](bios/Other/Recalbox/RGI.ini)** (76 bytes)
+  - SHA1: `f1449f8a5b5286349f3375b49abdc7bd69b75016`
+  - MD5: `356c309737349429aa20701620d6bade`
+  - CRC32: `780bbd4e`
+- **[RGJ.ini](bios/Other/Recalbox/RGJ.ini)** (106 bytes)
+  - SHA1: `e6efa41ce1e1524956b3494deccb14ffa3beac5a`
+  - MD5: `5259147f6a82b039b8cfbe4dd8e6e2ae`
+  - CRC32: `f0aaf21c`
+- **[RGK.ini](bios/Other/Recalbox/RGK.ini)** (86 bytes)
+  - SHA1: `bcf69c12063a77b96a9f52eef986bdb9574a9267`
+  - MD5: `1d614ca34e322881e8217496577df407`
+  - CRC32: `99bc9daf`
+- **[RGM.ini](bios/Other/Recalbox/RGM.ini)** (279 bytes)
+  - SHA1: `c8348607d2f0ffe6a191a3e92ff305de045ebe90`
+  - MD5: `3421062e0f22cc08ff6098b937164795`
+  - CRC32: `26f1c91d`
+- **[RGN.ini](bios/Other/Recalbox/RGN.ini)** (76 bytes)
+  - SHA1: `f59e5155e7acaca5b43b4a3cf16be4568e656fc1`
+  - MD5: `356502d416ee70f63b4a66f5a064f2fd`
+  - CRC32: `0a86fb1b`
+- **[RGQ.ini](bios/Other/Recalbox/RGQ.ini)** (257 bytes)
+  - SHA1: `468337d5302f5f745e396759c65424e2bdec3f47`
+  - MD5: `1337a2f0c8d8220881d1352f854161f2`
+  - CRC32: `647413ea`
+- **[RGQE70.ini](bios/Other/Recalbox/RGQE70.ini)** (223 bytes)
+  - SHA1: `fe414d758b5ca01b26bbe0ff6f5efff5328b9559`
+  - MD5: `337b03f15c654f16424daad5d755cec4`
+  - CRC32: `e25bbeb0`
+- **[RGS.ini](bios/Other/Recalbox/RGS.ini)** (262 bytes)
+  - SHA1: `774092cce8df5aa052cdcb44ab63d71275cef8b9`
+  - MD5: `e4b45f9dab7d0b566cc7f3823ed8ab10`
+  - CRC32: `6176325f`
+- **[RGW.ini](bios/Other/Recalbox/RGW.ini)** (514 bytes)
+  - SHA1: `5a28a7a6ddcf10391f8fdda5687532b494080906`
+  - MD5: `aabd5dc5c3aaffbda2e6eab37287405e`
+  - CRC32: `1414dfd3`
+- **[RGX.ini](bios/Other/Recalbox/RGX.ini)** (73 bytes)
+  - SHA1: `c8d45835674fd1295d1d2d2e7fa095b76508bce0`
+  - MD5: `27a2312315a28f847ebf2c4af328d035`
+  - CRC32: `438e449c`
+- **[RGY.ini](bios/Other/Recalbox/RGY.ini)** (82 bytes)
+  - SHA1: `f8980c90e83a2139ff4dd773751c60a7d60b0e74`
+  - MD5: `8e746c4d59a9c2d7e3b3d676b5df8b9f`
+  - CRC32: `99d658e1`
+- **[RH2.ini](bios/Other/Recalbox/RH2.ini)** (135 bytes)
+  - SHA1: `f0af3c5068657fa3dc0be479efe13da345fc6bbe`
+  - MD5: `1cc63adb023dbf8015cd303387ea94f2`
+  - CRC32: `3439d4d2`
+- **[RH4.ini](bios/Other/Recalbox/RH4.ini)** (69 bytes)
+  - SHA1: `2147c9fce3a116c348d6131da3c679544429e91a`
+  - MD5: `6ba329d2f7fa528a90cd5ff81537e99d`
+  - CRC32: `7c4ce1db`
+- **[RH5.ini](bios/Other/Recalbox/RH5.ini)** (84 bytes)
+  - SHA1: `c5ffd6893c2aeb1eb5f5eb354c0f9718f8caeaf0`
+  - MD5: `375cee2a0cc4badf3f02d2b5b7dde238`
+  - CRC32: `5bf6e7eb`
+- **[RH6.ini](bios/Other/Recalbox/RH6.ini)** (246 bytes)
+  - SHA1: `e425fad7edb09ca90bfe1dbc3c57575f7861197c`
+  - MD5: `3e96a3966ca1f210a088d61db397f148`
+  - CRC32: `69bdd596`
+- **[RH7.ini](bios/Other/Recalbox/RH7.ini)** (120 bytes)
+  - SHA1: `c305f80084fb459c9d301f842b4625b03c2ba8f4`
+  - MD5: `42d3f8ab4a2775f9274e0093140e046d`
+  - CRC32: `4760fe06`
+- **[RH8.ini](bios/Other/Recalbox/RH8.ini)** (299 bytes)
+  - SHA1: `ad345b1019c726dbe4da6795300a39ed8463d0e4`
+  - MD5: `22d1193f944bc57a5f4597ec4505803b`
+  - CRC32: `1a4d0be9`
+- **[RH9.ini](bios/Other/Recalbox/RH9.ini)** (83 bytes)
+  - SHA1: `cba9f776ecd0371274b6040290f64448e92d0061`
+  - MD5: `351a16c853aa9f18964a515926a552af`
+  - CRC32: `51457709`
+- **[RHA.ini](bios/Other/Recalbox/RHA.ini)** (271 bytes)
+  - SHA1: `6f85bff5ffd23214a13de5b7eb889f3e8e595fe7`
+  - MD5: `132f391359f65ea10ba8989a52d187d1`
+  - CRC32: `5e99bbe2`
+- **[RHC.ini](bios/Other/Recalbox/RHC.ini)** (106 bytes)
+  - SHA1: `9105f933b197c237078cb70f9fc0dcb1e7bff665`
+  - MD5: `7406abd0ce4ea95eef96881dd800d49d`
+  - CRC32: `16a1533a`
+- **[RHD.ini](bios/Other/Recalbox/RHD.ini)** (105 bytes)
+  - SHA1: `4a27a931a1af33f10d471bba25e1ade6d959d3b5`
+  - MD5: `db4b52acd5e92a146af3aa7f796eee7b`
+  - CRC32: `8ed53c40`
+- **[RHE.ini](bios/Other/Recalbox/RHE.ini)** (94 bytes)
+  - SHA1: `060839b20e3b79185b25088412695ba62c6c8922`
+  - MD5: `4c098577fafd41d6e7e1c8fe05b3fc08`
+  - CRC32: `1f72b4db`
+- **[RHF.ini](bios/Other/Recalbox/RHF.ini)** (275 bytes)
+  - SHA1: `71026e89923d1faad6a1c9f35bdaa16b666c9ce3`
+  - MD5: `4e96609c7ce4b89ba5c58fdaaaa515e0`
+  - CRC32: `5a2f636b`
+- **[RHG.ini](bios/Other/Recalbox/RHG.ini)** (87 bytes)
+  - SHA1: `412b12e37a606d087c38f3d5ae21299894a95ad2`
+  - MD5: `a4b37ffcc49d58b2da60227d8dae87be`
+  - CRC32: `a1b6f5b6`
+- **[RHJ.ini](bios/Other/Recalbox/RHJ.ini)** (77 bytes)
+  - SHA1: `22f11648e1e244a22435bcd89da5f160d7d88bb3`
+  - MD5: `a48d04f990baa41ab1a535d463b68aeb`
+  - CRC32: `c7eed3cb`
+- **[RHL.ini](bios/Other/Recalbox/RHL.ini)** (120 bytes)
+  - SHA1: `1df6cab0c81b4cd5d218da21b24da71781bc8317`
+  - MD5: `d60c7752d98b00b828e98ab343f48d6a`
+  - CRC32: `be3de606`
+- **[RHM.ini](bios/Other/Recalbox/RHM.ini)** (91 bytes)
+  - SHA1: `bd61c7e99f218b9f0806f2710c182e4f2a28cc28`
+  - MD5: `4771263c5346be3834756ef5e144f303`
+  - CRC32: `6d42dd77`
+- **[RHN.ini](bios/Other/Recalbox/RHN.ini)** (76 bytes)
+  - SHA1: `424dae4e6960fe1c04b1d92b60ea2521526fdb46`
+  - MD5: `4320fb9c84cac852117e7b7bd61c90a8`
+  - CRC32: `1cf102bd`
+- **[RHO.ini](bios/Other/Recalbox/RHO.ini)** (280 bytes)
+  - SHA1: `15b2608cb9f1c362aebe8f9bf2cfac4e7e5a2dc7`
+  - MD5: `4f34ece7c769cd2699e470b66fc217fe`
+  - CRC32: `a5a69b72`
+- **[RHP.ini](bios/Other/Recalbox/RHP.ini)** (84 bytes)
+  - SHA1: `4e5a7309e87894a3d69cb0fcfd4752e005814b50`
+  - MD5: `c4618a5e0332482351f974e6a920e26a`
+  - CRC32: `a0bf5ba9`
+- **[RHR.ini](bios/Other/Recalbox/RHR.ini)** (101 bytes)
+  - SHA1: `2a705e157bdb0a05e82c4d1ec28ded30a4abb9ae`
+  - MD5: `0bdd337bc698c66dfd49075ef80253cb`
+  - CRC32: `7d391bdf`
+- **[RHT.ini](bios/Other/Recalbox/RHT.ini)** (393 bytes)
+  - SHA1: `65bf2407051b34b9ae5838a87d4396f7ff6906ee`
+  - MD5: `8d5cc908fca50a4074c379700bab38d2`
+  - CRC32: `a6b12571`
+- **[RHV.ini](bios/Other/Recalbox/RHV.ini)** (82 bytes)
+  - SHA1: `c124e702bb089122863bcd5af20d3be70f8e8ade`
+  - MD5: `df10d329e2633c08d9a39b6994d7fc7b`
+  - CRC32: `ea3fb418`
+- **[RHZ.ini](bios/Other/Recalbox/RHZ.ini)** (76 bytes)
+  - SHA1: `7d311d01f8206a76c25a44e0a7da5d5835dcb1d7`
+  - MD5: `01e450b519e832f3127ce625d0923716`
+  - CRC32: `d8c0f3eb`
+- **[RI2.ini](bios/Other/Recalbox/RI2.ini)** (92 bytes)
+  - SHA1: `a05303d6c1f8242994f492a7f63afc495f9d4c23`
+  - MD5: `f97e767c95df8e030fc59bae464ae844`
+  - CRC32: `ecc0dd0b`
+- **[RI3.ini](bios/Other/Recalbox/RI3.ini)** (256 bytes)
+  - SHA1: `35f9800bde387bfb4dc6460a09ccafb89f2d477c`
+  - MD5: `a276fe33e06a765b5e17d6b1c6695805`
+  - CRC32: `8c90007f`
+- **[RI7.ini](bios/Other/Recalbox/RI7.ini)** (309 bytes)
+  - SHA1: `011804faa130077cf348b49a6cd38b3a773357b6`
+  - MD5: `be3ad38710115265a8096d9ce6160fbf`
+  - CRC32: `d7dc7ba3`
+- **[RI8.ini](bios/Other/Recalbox/RI8.ini)** (104 bytes)
+  - SHA1: `bb24bed2c081871bae4000ff25021eaead0c453f`
+  - MD5: `31829aef479ea3a76571ca9a5ddd4f5a`
+  - CRC32: `bb31cdd3`
+- **[RIE.ini](bios/Other/Recalbox/RIE.ini)** (104 bytes)
+  - SHA1: `90d98bc657a2add124bb21f3afb273dc0e4d7990`
+  - MD5: `5a2d9815e614525ac33a669aa17209d1`
+  - CRC32: `7adfe8f2`
+- **[RIF.ini](bios/Other/Recalbox/RIF.ini)** (106 bytes)
+  - SHA1: `24b86cce864922b347be1a9b7644d3ce651467f7`
+  - MD5: `a58d4a050a9d555caa585505ecb3267c`
+  - CRC32: `984f0488`
+- **[RIG.ini](bios/Other/Recalbox/RIG.ini)** (99 bytes)
+  - SHA1: `993ef97c54c916fd39a729c71d5037bc01f81e8a`
+  - MD5: `9cfc1f9754060807f6bdaf3cb7641b87`
+  - CRC32: `d0a52544`
+- **[RIL.ini](bios/Other/Recalbox/RIL.ini)** (106 bytes)
+  - SHA1: `38275ad7fa446644330558a06d10e7566d89c6a1`
+  - MD5: `8da539f50883909ae53ea984c8d0ed4a`
+  - CRC32: `a4927b60`
+- **[RIM.ini](bios/Other/Recalbox/RIM.ini)** (81 bytes)
+  - SHA1: `5512d7e89430164eb1029714c6bcf81508c07599`
+  - MD5: `32c2cb3daf29ff2333fb24ec94f4bf21`
+  - CRC32: `84a36002`
+- **[RIP.ini](bios/Other/Recalbox/RIP.ini)** (290 bytes)
+  - SHA1: `5d6cac7f6eb8f7656058417e9bdfb9ecb249ad57`
+  - MD5: `f792e43eb14e75f5057a82eb9da3c444`
+  - CRC32: `b11c432c`
+- **[RIR.ini](bios/Other/Recalbox/RIR.ini)** (71 bytes)
+  - SHA1: `a26d7515145a85dff624a3a77339926ffc66c0eb`
+  - MD5: `28ec95dd749ae4e033c0028f4992eed1`
+  - CRC32: `0001c744`
+- **[RIU.ini](bios/Other/Recalbox/RIU.ini)** (289 bytes)
+  - SHA1: `953e5c04d58bc21c7ec5560fae848b9040b00946`
+  - MD5: `062dbfab17f643b9604969773802a12b`
+  - CRC32: `1da357e1`
+- **[RIZ.ini](bios/Other/Recalbox/RIZ.ini)** (276 bytes)
+  - SHA1: `2c337da33a647461785544241d9856624ba8c0ed`
+  - MD5: `e84377b02dfd4fee549cb2907ff4f69d`
+  - CRC32: `3ea31b4b`
+- **[RJ2.ini](bios/Other/Recalbox/RJ2.ini)** (372 bytes)
+  - SHA1: `9dacdedbc34000209f8dd7a00d0d3c394ff4fdea`
+  - MD5: `9f824c448e26333de3452b6730893366`
+  - CRC32: `01e12602`
+- **[RJ3.ini](bios/Other/Recalbox/RJ3.ini)** (314 bytes)
+  - SHA1: `4e82218748a5080c56c3879ed66815a1f7e601fa`
+  - MD5: `cd695942782511dfd6a08a86c173084c`
+  - CRC32: `c5940cfc`
+- **[RJ4.ini](bios/Other/Recalbox/RJ4.ini)** (91 bytes)
+  - SHA1: `576ee07eacb42c76533a7c1b2979eb4b8788c5cc`
+  - MD5: `f1a9a1ac1fe6fbf53e08bf5042dffa3a`
+  - CRC32: `bfb2d9d0`
+- **[RJ7.ini](bios/Other/Recalbox/RJ7.ini)** (84 bytes)
+  - SHA1: `e4c2b2b341b8e0acbcd9b70f20e9efafba736c58`
+  - MD5: `042da9ea40107947d8465bca5a39ee75`
+  - CRC32: `2bf7b167`
+- **[RJ8.ini](bios/Other/Recalbox/RJ8.ini)** (471 bytes)
+  - SHA1: `c5befa0d7f34fca06687fc8de2ed170ff0d33435`
+  - MD5: `5d60589de47a9e1079643d3ebf276346`
+  - CRC32: `8ab1c1ca`
+- **[RJB.ini](bios/Other/Recalbox/RJB.ini)** (86 bytes)
+  - SHA1: `bb2eed7dd99af476d5b489bdf9744f01a365bcfc`
+  - MD5: `99ca9495fdce7a176012931329b65661`
+  - CRC32: `f7fae6b7`
+- **[RJC.ini](bios/Other/Recalbox/RJC.ini)** (280 bytes)
+  - SHA1: `c14231d366480897dc0e3ea222842d24879ccfea`
+  - MD5: `672ec274be53cde73bc84e70fe9b3a8a`
+  - CRC32: `96f4e004`
+- **[RJE.ini](bios/Other/Recalbox/RJE.ini)** (79 bytes)
+  - SHA1: `a2d27595a0419eb112b2d85051a508aa7c4e422b`
+  - MD5: `7db897f16bb0b9dfd2c1db4f5e7acff2`
+  - CRC32: `a894d35c`
+- **[RJF.ini](bios/Other/Recalbox/RJF.ini)** (103 bytes)
+  - SHA1: `1b4a167577be2f270e47d90751663a66b5de39c0`
+  - MD5: `7d12e7b4d03af30ae7a77890c06bea50`
+  - CRC32: `c8d8d786`
+- **[RJN.ini](bios/Other/Recalbox/RJN.ini)** (68 bytes)
+  - SHA1: `c4a1e94596373b7988a222bc678aeaffe97d64fe`
+  - MD5: `879f9bba0c74120e435da5bbe3e28d78`
+  - CRC32: `120a1e20`
+- **[RJQ.ini](bios/Other/Recalbox/RJQ.ini)** (94 bytes)
+  - SHA1: `45da59580200108fa01b728dd5d42c65911517a6`
+  - MD5: `c4f0c5374989b34e3d4db237f5fd73e2`
+  - CRC32: `70e6a6b5`
+- **[RJS.ini](bios/Other/Recalbox/RJS.ini)** (87 bytes)
+  - SHA1: `afdcbe84c9f85d5fbb87f9f388de2cd13c645828`
+  - MD5: `bc31e2b22c875abcc1262860969aacad`
+  - CRC32: `5eb04b4a`
+- **[RJZ.ini](bios/Other/Recalbox/RJZ.ini)** (83 bytes)
+  - SHA1: `0b82655d3c9d17b0654542da1be9d8bb653b471b`
+  - MD5: `d12afb7107b98828cce1a0cc0995045b`
+  - CRC32: `b7cddca5`
+- **[RK2.ini](bios/Other/Recalbox/RK2.ini)** (285 bytes)
+  - SHA1: `5f3f1786aa3fb91b06b586f64498ba3aa3e12573`
+  - MD5: `826eba6a295dffc0b4069a6b320fcbd7`
+  - CRC32: `564bd8cd`
+- **[RK9.ini](bios/Other/Recalbox/RK9.ini)** (81 bytes)
+  - SHA1: `72df1b27983206aaf238429453d5d4335294ee32`
+  - MD5: `500187b3314c4bfc9a1a822a365cbe9c`
+  - CRC32: `8b6a07e3`
+- **[RKA.ini](bios/Other/Recalbox/RKA.ini)** (323 bytes)
+  - SHA1: `c52ff39e69f23b1bdce6c8bce0f388f558c7c909`
+  - MD5: `ae9eb981f260d833add98e9c33e1bb3c`
+  - CRC32: `7099f992`
+- **[RKD.ini](bios/Other/Recalbox/RKD.ini)** (310 bytes)
+  - SHA1: `d3e8205a57ca8f1cb9bbf3bda222fe9db016c802`
+  - MD5: `d507a754921622d67a68f0d9390c3b79`
+  - CRC32: `befd0af7`
+- **[RKF.ini](bios/Other/Recalbox/RKF.ini)** (145 bytes)
+  - SHA1: `c90898737034dbaa40c84e487df2cfe7898ac821`
+  - MD5: `f3e5714674ce564e92d32e0bc68103c2`
+  - CRC32: `0aa5dad6`
+- **[RKG.ini](bios/Other/Recalbox/RKG.ini)** (88 bytes)
+  - SHA1: `cb2283378b862e74161afc1ecc5e7f5deee68ea3`
+  - MD5: `36f0fae554839ef9b2e2b07f2e81a944`
+  - CRC32: `461938b0`
+- **[RKI.ini](bios/Other/Recalbox/RKI.ini)** (86 bytes)
+  - SHA1: `f99f670287dd2b45a1b19a02235f0c32de7a4a3c`
+  - MD5: `c1d7c52002083744bb4f380e57f653b2`
+  - CRC32: `ed610ba7`
+- **[RKJ.ini](bios/Other/Recalbox/RKJ.ini)** (100 bytes)
+  - SHA1: `0b745d0798752f91cae008da1e086ebbb8af715b`
+  - MD5: `d024057673f49969d91929d774b3d2dc`
+  - CRC32: `b8d3d3d3`
+- **[RKL.ini](bios/Other/Recalbox/RKL.ini)** (71 bytes)
+  - SHA1: `b18242ab46b3f8e0aa7211aa5e66ef95d7c0debf`
+  - MD5: `c2b3a43f8e730f31057e25eb7afb6e5a`
+  - CRC32: `f9fb1a62`
+- **[RKQ.ini](bios/Other/Recalbox/RKQ.ini)** (83 bytes)
+  - SHA1: `75b91e09f27e16059f3cd446d9b7647db7c22edc`
+  - MD5: `01c294c449a078e4ad7d17575ef0547f`
+  - CRC32: `66f50a7b`
+- **[RKS.ini](bios/Other/Recalbox/RKS.ini)** (94 bytes)
+  - SHA1: `215755e85718e143551481b02f9e369aa6008ab4`
+  - MD5: `4725628ac0150b1a919d60f31f4abfeb`
+  - CRC32: `9680ed5d`
+- **[RKT.ini](bios/Other/Recalbox/RKT.ini)** (96 bytes)
+  - SHA1: `50cd941c635b458707bba4859eda0897c52875c4`
+  - MD5: `468e454ce496381a2553e7d668e5dfbd`
+  - CRC32: `e751ee50`
+- **[RKW.ini](bios/Other/Recalbox/RKW.ini)** (82 bytes)
+  - SHA1: `762888bc5974b18e12737e80c6f21d9aa8085f4b`
+  - MD5: `9fe0741e959bb79502831e8412fca6af`
+  - CRC32: `bb0c5007`
+- **[RL5.ini](bios/Other/Recalbox/RL5.ini)** (69 bytes)
+  - SHA1: `134e6a67c85852b442733eab4c2ae1ed9f389758`
+  - MD5: `3b3f53ec9384eccce69354c7592a275b`
+  - CRC32: `59933e85`
+- **[RLD.ini](bios/Other/Recalbox/RLD.ini)** (83 bytes)
+  - SHA1: `57e7d4edf023a7ea518d0751285759c3a696343d`
+  - MD5: `08d8d7b7f135b467772ae5fe0aad0019`
+  - CRC32: `39b9c3a7`
+- **[RLEEFS.ini](bios/Other/Recalbox/RLEEFS.ini)** (409 bytes)
+  - SHA1: `ad289324c084865d187af5748691e8ac8f3d73c9`
+  - MD5: `91458aa48313d56c7219fcf66263c722`
+  - CRC32: `de8f58a7`
+- **[RLI.ini](bios/Other/Recalbox/RLI.ini)** (197 bytes)
+  - SHA1: `1a35377c375a220c686df38669747e33b13180b0`
+  - MD5: `b06be7e30f592559326e96fae4dfd6c9`
+  - CRC32: `1ebf9ada`
+- **[RLJ.ini](bios/Other/Recalbox/RLJ.ini)** (272 bytes)
+  - SHA1: `1b6caf958f32d6b1131c7920770f428bd9550627`
+  - MD5: `c71a737a0e827c4994d94748794d7450`
+  - CRC32: `b31f2796`
+- **[RLK.ini](bios/Other/Recalbox/RLK.ini)** (93 bytes)
+  - SHA1: `45540a9096b5f232792b927a201b4e8e3ad3859e`
+  - MD5: `4979cc3aa9d8e42dce33c7ef08ade2a8`
+  - CRC32: `620b6510`
+- **[RLL.ini](bios/Other/Recalbox/RLL.ini)** (86 bytes)
+  - SHA1: `6a1ed7b241f4b8eabd8133c58c379d52e31b5ce0`
+  - MD5: `2c8e0048f3df772f7bb8de8b0529950f`
+  - CRC32: `016b965e`
+- **[RLS.ini](bios/Other/Recalbox/RLS.ini)** (317 bytes)
+  - SHA1: `77fab2aa0c5061d4300818552cb4041dd269b979`
+  - MD5: `2d6033113b188040c4f9020710bfa4d8`
+  - CRC32: `d5ec516b`
+- **[RLT.ini](bios/Other/Recalbox/RLT.ini)** (273 bytes)
+  - SHA1: `bced63c1444214f3f29557ac515be95700c7c873`
+  - MD5: `e8fb8494e00156964c2b8b6b48ddc662`
+  - CRC32: `9b3cb94e`
+- **[RLV.ini](bios/Other/Recalbox/RLV.ini)** (89 bytes)
+  - SHA1: `0901fe6d9920116a50c1c56dd52baf9f1d255cef`
+  - MD5: `1c807045cbdd3dee691cafebc4768595`
+  - CRC32: `9c7db710`
+- **[RLX.ini](bios/Other/Recalbox/RLX.ini)** (89 bytes)
+  - SHA1: `0c8bfbedba26d649ccf421800ea1c4b05adb4db3`
+  - MD5: `8e41df40cc9c9a8c44098730ee51cfd9`
+  - CRC32: `0ea8dd9f`
+- **[RM3.ini](bios/Other/Recalbox/RM3.ini)** (462 bytes)
+  - SHA1: `84a923ac08d3c53895f3f863bbdf07d525b2ee75`
+  - MD5: `f16b938ca6cdc7c0bca9a3f28c747ff3`
+  - CRC32: `05233302`
+- **[RM7.ini](bios/Other/Recalbox/RM7.ini)** (74 bytes)
+  - SHA1: `d5370b58a3a33d3c5aac0df0d6526db2fb3dc697`
+  - MD5: `e3f3484066594dd5faed0a3e35561259`
+  - CRC32: `a72fbcc4`
+- **[RM8.ini](bios/Other/Recalbox/RM8.ini)** (232 bytes)
+  - SHA1: `00b2d1c3f173091f3f386ac82034d049cf488ac8`
+  - MD5: `08f9654f6c024fc485fd95dacaccbdf1`
+  - CRC32: `823b28ae`
+- **[RM8E01.ini](bios/Other/Recalbox/RM8E01.ini)** (16,131 bytes)
+  - SHA1: `43b1f3b508749f60065972dc06594438df4cb1b1`
+  - MD5: `1793f495e5a90bc3d83c2d79875fcecb`
+  - CRC32: `1c90ac50`
+- **[RM8J01.ini](bios/Other/Recalbox/RM8J01.ini)** (3,866 bytes)
+  - SHA1: `83bfc9770b16117a868ce530b6e3e930a0d8c213`
+  - MD5: `24e63a5bc87b1c0211dc52dabb3c28d5`
+  - CRC32: `ad5c9efd`
+- **[RM8P01.ini](bios/Other/Recalbox/RM8P01.ini)** (3,740 bytes)
+  - SHA1: `15e8ae4c2bfbc4f2eacb5bc4c469967b872aaa9d`
+  - MD5: `f58d5b4c300f602b8b9b2d2302ebf963`
+  - CRC32: `e9641bee`
+- **[RM9.ini](bios/Other/Recalbox/RM9.ini)** (288 bytes)
+  - SHA1: `cdd1e8483467dbbc4860d7575038b9bd7ff857c3`
+  - MD5: `280421397546941a3e28ee7f8c552dfe`
+  - CRC32: `af0fb3a8`
+- **[RMC.ini](bios/Other/Recalbox/RMC.ini)** (370 bytes)
+  - SHA1: `2fafa69ab1eb9b4c67c6b8c94c490c25ca55dcff`
+  - MD5: `01d6cb932fe65b490bec1ebf9558c175`
+  - CRC32: `b54f773e`
+- **[RME.ini](bios/Other/Recalbox/RME.ini)** (66 bytes)
+  - SHA1: `a138c4b3204dc48a48b5c74134cbc2fce501baab`
+  - MD5: `d44e17673bb4e8046fdde3b3b00918d2`
+  - CRC32: `6b190522`
+- **[RMG.ini](bios/Other/Recalbox/RMG.ini)** (472 bytes)
+  - SHA1: `37e691c229f077b862816773aab7b3c682fb86bb`
+  - MD5: `879d23aca1c4d4e35801c39b80ff6ce4`
+  - CRC32: `9678dd86`
+- **[RMH.ini](bios/Other/Recalbox/RMH.ini)** (268 bytes)
+  - SHA1: `a0db62664398af9212edefef87a8dcaced980f12`
+  - MD5: `73eac927f87734f26cf49ce6e8f2bebe`
+  - CRC32: `03398583`
+- **[RMHE08.ini](bios/Other/Recalbox/RMHE08.ini)** (259 bytes)
+  - SHA1: `3a185a1af9269ee0b0a07e409f7dcb9e48a577ba`
+  - MD5: `54e4cfdc8f8b14a70fd309487c4525f0`
+  - CRC32: `9a834045`
+- **[RMHJ08.ini](bios/Other/Recalbox/RMHJ08.ini)** (338 bytes)
+  - SHA1: `5f4c414f52e82abb6435ad9ad2a37de8dbf86dce`
+  - MD5: `7e9bdffd9b326eee683d7916173e24e2`
+  - CRC32: `97ea7a95`
+- **[RMHP08.ini](bios/Other/Recalbox/RMHP08.ini)** (308 bytes)
+  - SHA1: `347254d62a35ff26908054359bfff223c7c9147f`
+  - MD5: `e7fdf206fee34c73cb01130e8e8476f8`
+  - CRC32: `aa631519`
+- **[RMI.ini](bios/Other/Recalbox/RMI.ini)** (82 bytes)
+  - SHA1: `3f0bda5d04b32ce4dabc73c5d1bb464c0c777f8b`
+  - MD5: `f15abef8932dfd5d3a1bcc2b75a59797`
+  - CRC32: `ec93fa59`
+- **[RMJ.ini](bios/Other/Recalbox/RMJ.ini)** (73 bytes)
+  - SHA1: `30c18239a5f81d86d52aece1933b6075993fe5b7`
+  - MD5: `946c39679593ee08ffeaeeb11555ad70`
+  - CRC32: `3cd303c6`
+- **[RMK.ini](bios/Other/Recalbox/RMK.ini)** (270 bytes)
+  - SHA1: `6f75b591d0f74e4bd492a898da5a469be7f766d4`
+  - MD5: `236a82c2f68e9160e18beecf46df3176`
+  - CRC32: `4d06034d`
+- **[RML.ini](bios/Other/Recalbox/RML.ini)** (340 bytes)
+  - SHA1: `eb6b3eb080dc4a8cd514cafdef1484287d294107`
+  - MD5: `f97e04fdde7034c146a0158e4f841450`
+  - CRC32: `c8f8ed7a`
+- **[RMO.ini](bios/Other/Recalbox/RMO.ini)** (263 bytes)
+  - SHA1: `ae4addff9edfddbad56ba3142f2f788e0300cb6e`
+  - MD5: `a2ce9a1dcbea49abf7a6b6187a72bd3a`
+  - CRC32: `4a9c21dd`
+- **[RMP.ini](bios/Other/Recalbox/RMP.ini)** (265 bytes)
+  - SHA1: `420d2b90ce58677a844be72e5142db4c58f9b0e7`
+  - MD5: `e588ce657f94757f6ed1a427fbcf751d`
+  - CRC32: `9170d04d`
+- **[RMQ.ini](bios/Other/Recalbox/RMQ.ini)** (96 bytes)
+  - SHA1: `a3b041c6ae779abe8f57bf00fe0d65f2a03f56c6`
+  - MD5: `e515a39127f353f28540e36ecf667a00`
+  - CRC32: `275168ab`
+- **[RMR.ini](bios/Other/Recalbox/RMR.ini)** (90 bytes)
+  - SHA1: `e5911f96d86bf1ab7ad3e7d19c4db44e6ae549a0`
+  - MD5: `a9497a0751ed5bb00ab5a3fa4ec3df06`
+  - CRC32: `8264c29b`
+- **[RMT.ini](bios/Other/Recalbox/RMT.ini)** (76 bytes)
+  - SHA1: `736df3973da2e4211b79940780409d7f7eb97d48`
+  - MD5: `dc6fadd9c4704773d1bcbe123c0da9e2`
+  - CRC32: `d8fab8c2`
+- **[RMV.ini](bios/Other/Recalbox/RMV.ini)** (95 bytes)
+  - SHA1: `9392c36acd4aa00d3273c84f04608189a0c4fc5a`
+  - MD5: `15a850f5959f1278e48e6ea8c8b89ebd`
+  - CRC32: `2712ac43`
+- **[RMW.ini](bios/Other/Recalbox/RMW.ini)** (80 bytes)
+  - SHA1: `bedefb9b1781ff82b9eeb66509de79734c766328`
+  - MD5: `fea4ec4da9783e9a515209ed50190c7b`
+  - CRC32: `3da4d9e2`
+- **[RMY.ini](bios/Other/Recalbox/RMY.ini)** (97 bytes)
+  - SHA1: `90b48e8bc6c6d3292e0ce8c8533eadb3810d03e2`
+  - MD5: `c9cdc2bd37e164add4ef59db2c622915`
+  - CRC32: `791281b4`
+- **[RMZ.ini](bios/Other/Recalbox/RMZ.ini)** (101 bytes)
+  - SHA1: `cb04396faef2cb53d1e111520edff6586c1e3677`
+  - MD5: `cd6200ea1c5293d0859404c10f69692e`
+  - CRC32: `b3ad5712`
+- **[RN2.ini](bios/Other/Recalbox/RN2.ini)** (89 bytes)
+  - SHA1: `43e534a47b0e6a65ce4e95ef1fc2c1c2f2d3da96`
+  - MD5: `b11e7d343ef7e4b13a468e3cc2f96114`
+  - CRC32: `d152061c`
+- **[RN5.ini](bios/Other/Recalbox/RN5.ini)** (102 bytes)
+  - SHA1: `4c975509a383cc72f8ecb089849ca86d58205dcc`
+  - MD5: `9742211ab5ad687c092c57ccda545730`
+  - CRC32: `14288f4d`
+- **[RN8.ini](bios/Other/Recalbox/RN8.ini)** (99 bytes)
+  - SHA1: `af4274e5ebc34253febf2257bf7aa6895bbc6e7c`
+  - MD5: `9d8b65c6e5da8add878a70a7f77f65b1`
+  - CRC32: `e3e39ede`
+- **[RNB.ini](bios/Other/Recalbox/RNB.ini)** (284 bytes)
+  - SHA1: `edfc7e18895bfc6a05a08d4ef92e765d8be5022e`
+  - MD5: `3a5b40efe9f99a1860db8faa8f7fd59a`
+  - CRC32: `534ae6fa`
+- **[RNC.ini](bios/Other/Recalbox/RNC.ini)** (117 bytes)
+  - SHA1: `3af5a74186d3f43cebdf25bd00cf118f26e85210`
+  - MD5: `bdf505ece9bcf1e41429e4b6d1a68be4`
+  - CRC32: `9aac9b72`
+- **[RND.ini](bios/Other/Recalbox/RND.ini)** (87 bytes)
+  - SHA1: `965a2fb9567ef7b0bc8ff43b5dcc79e9232f31b1`
+  - MD5: `18e7b63f79cffb67eb8bccb18b07f302`
+  - CRC32: `b8e72f5c`
+- **[RNG.ini](bios/Other/Recalbox/RNG.ini)** (82 bytes)
+  - SHA1: `bcb9b01fb1ded4d580718ebf7fff715e746e2cf7`
+  - MD5: `8254a462262246bc82305f8f47af5c4d`
+  - CRC32: `d800c522`
+- **[RNM.ini](bios/Other/Recalbox/RNM.ini)** (85 bytes)
+  - SHA1: `89354a7a54192105a5fbf3dc46b63aed87586036`
+  - MD5: `2ffcff3a4f67ca8e3fc335058a493a20`
+  - CRC32: `fe6faaac`
+- **[RNO.ini](bios/Other/Recalbox/RNO.ini)** (393 bytes)
+  - SHA1: `81ddc0bd68fea1e02960c7c290873fe76e0a9f06`
+  - MD5: `cb9411d53c8d1f9fc79d8cd40a1e92d6`
+  - CRC32: `34266e4c`
+- **[RNU.ini](bios/Other/Recalbox/RNU.ini)** (97 bytes)
+  - SHA1: `626b10097aef45e3704208fe26daff6034f3ce25`
+  - MD5: `ce780dfc3cdbc956dbfe3b9ae7f7aee6`
+  - CRC32: `dee48fe7`
+- **[RNV.ini](bios/Other/Recalbox/RNV.ini)** (80 bytes)
+  - SHA1: `d49f71144891044eed2f664be276b5355a9a332e`
+  - MD5: `c8927209f93eab2d3aaa47c2dfac8fe8`
+  - CRC32: `c18151f1`
+- **[RNW.ini](bios/Other/Recalbox/RNW.ini)** (77 bytes)
+  - SHA1: `81f3959cced6eb7f4b27d6e894dba6f9a949005b`
+  - MD5: `7065bc15e569cc9a61d1c4ab0426bcad`
+  - CRC32: `6754c6e0`
+- **[RNX.ini](bios/Other/Recalbox/RNX.ini)** (276 bytes)
+  - SHA1: `8c48baa7af3d05e04349ddca53974d2a2386e7e4`
+  - MD5: `0030080378e37ea23e5151ef15c22acc`
+  - CRC32: `1b6c2e9a`
+- **[RO2P7N.ini](bios/Other/Recalbox/RO2P7N.ini)** (270 bytes)
+  - SHA1: `ccd6a4150668c9afe9fe7125917783bcb9570aef`
+  - MD5: `3df350aabb8b922473470c1df55a8846`
+  - CRC32: `35d52d77`
+- **[RO3.ini](bios/Other/Recalbox/RO3.ini)** (288 bytes)
+  - SHA1: `21dcd814d5c5b71d2a682918f50fd029546cdd33`
+  - MD5: `c1ada27b996e5aeb7ef7655deeecaa05`
+  - CRC32: `6e616135`
+- **[RO7.ini](bios/Other/Recalbox/RO7.ini)** (393 bytes)
+  - SHA1: `91cf52bd7df3e10687f9f037f8727256bed3f386`
+  - MD5: `f800ef8b29a51e2a02b278d5f1ed25af`
+  - CRC32: `51c8aa6d`
+- **[RO8.ini](bios/Other/Recalbox/RO8.ini)** (312 bytes)
+  - SHA1: `997610297f419e772e9ea28e6f7dbcb21421022b`
+  - MD5: `7f4aa057b199be9794514b92471892aa`
+  - CRC32: `b4f82416`
+- **[RO9.ini](bios/Other/Recalbox/RO9.ini)** (271 bytes)
+  - SHA1: `6909e8c668f096c8366da79ec2ca325f514566f7`
+  - MD5: `bb04a3a25a9332cc3c8427d72399fe4b`
+  - CRC32: `a0af8645`
+- **[ROA.ini](bios/Other/Recalbox/ROA.ini)** (275 bytes)
+  - SHA1: `164297a2d7cfe0c064759777bdbe358c584fd191`
+  - MD5: `323e9be0565ce91a462e889fa6151f0e`
+  - CRC32: `f2905ce6`
+- **[ROB.ini](bios/Other/Recalbox/ROB.ini)** (85 bytes)
+  - SHA1: `ea74cadf74a1c748a959705f5d67e28c61256e2b`
+  - MD5: `7e26521430d09cc0f2ee5a3acfff5646`
+  - CRC32: `4b8a8e63`
+- **[ROC.ini](bios/Other/Recalbox/ROC.ini)** (80 bytes)
+  - SHA1: `60c6b99cf776c01e24879f32a2822773afa2a38e`
+  - MD5: `e7932ede9bcd0e0d97e7a58d52af2360`
+  - CRC32: `6e4c9156`
+- **[ROD.ini](bios/Other/Recalbox/ROD.ini)** (360 bytes)
+  - SHA1: `4d4d032c8c3c4760b2e15faab6c56656a0fca563`
+  - MD5: `8965c848099e8c95721c09022c1b7ec6`
+  - CRC32: `f57331a4`
+- **[ROE.ini](bios/Other/Recalbox/ROE.ini)** (77 bytes)
+  - SHA1: `d328cc55b31c5f535f5f949d62917ad0ff345f47`
+  - MD5: `b84f80a8748ccc66c365fc20aaa39b38`
+  - CRC32: `98046809`
+- **[ROF.ini](bios/Other/Recalbox/ROF.ini)** (103 bytes)
+  - SHA1: `01229b548e761c5f0de53016fa92169c90de6abc`
+  - MD5: `99c26701108f84b73e11ecacb313bff5`
+  - CRC32: `70575d5f`
+- **[ROG.ini](bios/Other/Recalbox/ROG.ini)** (93 bytes)
+  - SHA1: `fbbe3708058f1fc1cb74e646658894b8479b8e17`
+  - MD5: `82f98850425f767a093d6c6f50561f04`
+  - CRC32: `925f8c3a`
+- **[ROL.ini](bios/Other/Recalbox/ROL.ini)** (311 bytes)
+  - SHA1: `f73d264279e06bb48fd579090e7d1dbbb1ef9fd0`
+  - MD5: `6701628746280f724730a8b1ae3627c5`
+  - CRC32: `95bd674b`
+- **[ROM.ini](bios/Other/Recalbox/ROM.ini)** (79 bytes)
+  - SHA1: `2792ad4ec0f791d22fb8e8047dbadde4cf13e9d3`
+  - MD5: `a2a0b7792490be991741e7425569150f`
+  - CRC32: `05e9953d`
+- **[RON.ini](bios/Other/Recalbox/RON.ini)** (289 bytes)
+  - SHA1: `34564881716ed4ee69bd94e9ff356b6b3c8039fb`
+  - MD5: `f3a6f44865d63858d59426f5ea8e3759`
+  - CRC32: `6c641ac8`
+- **[ROO.ini](bios/Other/Recalbox/ROO.ini)** (150 bytes)
+  - SHA1: `836f6d19b680450cc26bcd0c27bd462704e7409f`
+  - MD5: `73d946e1b310d1a4435c17d782b74ac0`
+  - CRC32: `d144d56c`
+- **[ROP.ini](bios/Other/Recalbox/ROP.ini)** (74 bytes)
+  - SHA1: `1f2963312628c8e4da49d0b3dd33b3a735c7fe58`
+  - MD5: `8be42f26ea1bd660957daeac76c2f5ab`
+  - CRC32: `7166dc96`
+- **[ROT.ini](bios/Other/Recalbox/ROT.ini)** (93 bytes)
+  - SHA1: `8f52f91690baa48ec0c2a5ca2c6939365ee266dd`
+  - MD5: `b3b01ce5ef8a25eb313852a1f49fbada`
+  - CRC32: `a53ba468`
+- **[ROU.ini](bios/Other/Recalbox/ROU.ini)** (289 bytes)
+  - SHA1: `94e53a9e8dba19d0004e2082b05bc37e62d72be6`
+  - MD5: `840b4b7981a5b3eb7fe0aaab6b4352ad`
+  - CRC32: `a638a92e`
+- **[ROW.ini](bios/Other/Recalbox/ROW.ini)** (313 bytes)
+  - SHA1: `d3450dab57f4729bb781c44dc6ddbe41259ab1a1`
+  - MD5: `bdcfc1da6534ad72bba4de7071e41c3c`
+  - CRC32: `028038e3`
+- **[ROX.ini](bios/Other/Recalbox/ROX.ini)** (252 bytes)
+  - SHA1: `060ec9fd1d13f0b2a7c29f203b3fc6989c2a9d39`
+  - MD5: `85560b3ee693fb6d591a90e3e41cc858`
+  - CRC32: `459a0efa`
+- **[RPB.ini](bios/Other/Recalbox/RPB.ini)** (328 bytes)
+  - SHA1: `84df2dee5af2d57e4eccf86c5e8f138de9b8bfb8`
+  - MD5: `2138d908557f1149870422a752dc4902`
+  - CRC32: `03d60eb2`
+- **[RPBE01.ini](bios/Other/Recalbox/RPBE01.ini)** (452 bytes)
+  - SHA1: `d66efd3ed8881d81e626b01b99b1848209c1e585`
+  - MD5: `39cde1650607267ee0b8a18bb7236dad`
+  - CRC32: `823efdb0`
+- **[RPBJ01.ini](bios/Other/Recalbox/RPBJ01.ini)** (145 bytes)
+  - SHA1: `764c962addc83132e492b7623957f93cbd2d31d0`
+  - MD5: `e7dead233b0cacb9c675cf0d392443b0`
+  - CRC32: `9dfaea48`
+- **[RPBJ01r0.ini](bios/Other/Recalbox/RPBJ01r0.ini)** (452 bytes)
+  - SHA1: `645503d78e8f2c3e2bd03ef1404761126b51350a`
+  - MD5: `5a804b62b096756e0b4b1a4c7389609c`
+  - CRC32: `00440676`
+- **[RPBJ01r1.ini](bios/Other/Recalbox/RPBJ01r1.ini)** (452 bytes)
+  - SHA1: `092208d864d2f9a793a3a68c0ac58f42b1b5adae`
+  - MD5: `a2ae6dc388ea7977ccdbfee8fa956635`
+  - CRC32: `4845453b`
+- **[RPBP01.ini](bios/Other/Recalbox/RPBP01.ini)** (452 bytes)
+  - SHA1: `315f7fb4b359fed6e187a327392ed0b442bca74c`
+  - MD5: `a75cd2f363dbcb8f2d1aaebce6bd774f`
+  - CRC32: `cfc3604c`
+- **[RPC.ini](bios/Other/Recalbox/RPC.ini)** (89 bytes)
+  - SHA1: `d543150eabe81371e8ff42521df63a4784939195`
+  - MD5: `9d7453a79599013cce1d139a4ce2d239`
+  - CRC32: `179f0e0f`
+- **[RPD.ini](bios/Other/Recalbox/RPD.ini)** (96 bytes)
+  - SHA1: `186a43e384c08dbacb3aa96b9295e4769750885a`
+  - MD5: `63e7794fcc098dfef5e681d4c28a7ff5`
+  - CRC32: `c0fa6ce6`
+- **[RPF.ini](bios/Other/Recalbox/RPF.ini)** (491 bytes)
+  - SHA1: `46cb00255d073be834e374bff42322113cef8bb3`
+  - MD5: `106e4bc325ff393903f8210abb9814c8`
+  - CRC32: `83111fe7`
+- **[RPG.ini](bios/Other/Recalbox/RPG.ini)** (269 bytes)
+  - SHA1: `c89c0a6519892fd34c330eff82787aefde01dfe1`
+  - MD5: `f644d382586c57f25f1c269f9f40042e`
+  - CRC32: `8feec353`
+- **[RPH.ini](bios/Other/Recalbox/RPH.ini)** (74 bytes)
+  - SHA1: `5b26950717e473f64a4bc8adb104ee041abcdcd2`
+  - MD5: `53ddd3f31a84c0575e8b4f728f864c2a`
+  - CRC32: `4f532068`
+- **[RPJ.ini](bios/Other/Recalbox/RPJ.ini)** (270 bytes)
+  - SHA1: `257b43375afed4731e7fe9768d3b8c46f6d77f28`
+  - MD5: `31fd34ac53facb9bfe93940b82d64485`
+  - CRC32: `307f509b`
+- **[RPK.ini](bios/Other/Recalbox/RPK.ini)** (122 bytes)
+  - SHA1: `fef63498acd9f54ed01b4b2d1be2f2520f3e9754`
+  - MD5: `db91dddb80d5d3ad2d05da02a915a39f`
+  - CRC32: `fd28ea0f`
+- **[RPL.ini](bios/Other/Recalbox/RPL.ini)** (88 bytes)
+  - SHA1: `38f1746bf9d0709e67417e731a4aa3ea99a92234`
+  - MD5: `80e52ee20e718730726a77e4f132b25e`
+  - CRC32: `1d341f36`
+- **[RPM.ini](bios/Other/Recalbox/RPM.ini)** (90 bytes)
+  - SHA1: `bab1e6ac8de029bc2c1bbe3195e94d17aab2ae91`
+  - MD5: `2bb3033041ef96c55084936fee85b616`
+  - CRC32: `c0fe8f0f`
+- **[RPO.ini](bios/Other/Recalbox/RPO.ini)** (292 bytes)
+  - SHA1: `247fe15db7cf5edbb291e2eb964ff97d7ef5bb77`
+  - MD5: `5df6f2b89af1235ba58b911734ce5bda`
+  - CRC32: `208a5efa`
+- **[RPP.ini](bios/Other/Recalbox/RPP.ini)** (93 bytes)
+  - SHA1: `06f9ab26f1e248e6bcd4b8db25bd40a04df9fba7`
+  - MD5: `714526fcec890fa79733b96d8d95ec47`
+  - CRC32: `10cc1d73`
+- **[RPQ.ini](bios/Other/Recalbox/RPQ.ini)** (73 bytes)
+  - SHA1: `197a45d0cf4e0f6b12505c5c95e87a88d446f0f1`
+  - MD5: `c24fdea888e02338389825e0675de214`
+  - CRC32: `5ab4f36a`
+- **[RPS.ini](bios/Other/Recalbox/RPS.ini)** (105 bytes)
+  - SHA1: `4fc3fcd4df5ee8558bfcd8186a101a2894da619e`
+  - MD5: `30662ab4c5300734f578a49e742ea0ee`
+  - CRC32: `23fbcd9f`
+- **[RPT.ini](bios/Other/Recalbox/RPT.ini)** (102 bytes)
+  - SHA1: `7d98f3bfda47a9421ba7838dc046cf32f9b514b6`
+  - MD5: `c96b16c22d4c129d06f7ef390d2134bd`
+  - CRC32: `385eb3fb`
+- **[RPU.ini](bios/Other/Recalbox/RPU.ini)** (82 bytes)
+  - SHA1: `a88dd989abc6c0489c858aa8cf790327e594c701`
+  - MD5: `c4906b77677474408f0528e091925b86`
+  - CRC32: `0d0e0d16`
+- **[RPY.ini](bios/Other/Recalbox/RPY.ini)** (270 bytes)
+  - SHA1: `ecfab68b5273146facb6f25435cf7e0b15428429`
+  - MD5: `d02fb97bd356d296ee944605f86ca315`
+  - CRC32: `21c26fba`
+- **[RQ2.ini](bios/Other/Recalbox/RQ2.ini)** (72 bytes)
+  - SHA1: `827dd21b37601c99a7e1e1fc4bbb2af82412af5c`
+  - MD5: `1ed314e4c70d585e2731b6937ee58509`
+  - CRC32: `af9c707f`
+- **[RQ4.ini](bios/Other/Recalbox/RQ4.ini)** (123 bytes)
+  - SHA1: `aa7520318582df867b0a7038b228785e1c7df0bd`
+  - MD5: `2a99e08247d4181cdfab9eb10e1ade85`
+  - CRC32: `d4bf3dbc`
+- **[RQ5.ini](bios/Other/Recalbox/RQ5.ini)** (101 bytes)
+  - SHA1: `324ea388bc000ca636cf8b7665fa7fc5546be3e8`
+  - MD5: `84caec32c093567d33925d34790b8370`
+  - CRC32: `80765a00`
+- **[RQ6.ini](bios/Other/Recalbox/RQ6.ini)** (264 bytes)
+  - SHA1: `eddeb649077b83149cad790de73e3c42b6787658`
+  - MD5: `fbbb669373e0df87dc28fad516962d19`
+  - CRC32: `500cafba`
+- **[RQ8.ini](bios/Other/Recalbox/RQ8.ini)** (72 bytes)
+  - SHA1: `53b590cc2de76d5a9dfa9c026fe94b8d15929be0`
+  - MD5: `e6d1421fe52338aef0fba7de70f3e6b9`
+  - CRC32: `e3aeba71`
+- **[RQB.ini](bios/Other/Recalbox/RQB.ini)** (90 bytes)
+  - SHA1: `9055441e53facbf1f10b26734bcfd3c20bd81bae`
+  - MD5: `b6524eab406133ea96a1ded1352bc77d`
+  - CRC32: `f67a2a01`
+- **[RQE.ini](bios/Other/Recalbox/RQE.ini)** (98 bytes)
+  - SHA1: `ae4e6ba7fe6350937d6b397f3bbebb42ca50f3b7`
+  - MD5: `a0d06780f2c964dca74c721fa4881d00`
+  - CRC32: `f830c9ca`
+- **[RQF.ini](bios/Other/Recalbox/RQF.ini)** (105 bytes)
+  - SHA1: `6da2df1da7209e922da9f7c4d89c006af50a4ab6`
+  - MD5: `cf7122024cc6f28e3a1c4b91ccf7e384`
+  - CRC32: `7fe6511b`
+- **[RQL.ini](bios/Other/Recalbox/RQL.ini)** (308 bytes)
+  - SHA1: `49263252e510d9066eda0df55d5fa82ec41d8456`
+  - MD5: `53b50fc2c5ca73d4be5557969b0a85f2`
+  - CRC32: `4ec3f9fa`
+- **[RQM.ini](bios/Other/Recalbox/RQM.ini)** (78 bytes)
+  - SHA1: `e12be1935a9a5b097a66a948ad9209e7a0f6a248`
+  - MD5: `406178606e2c55ce6b1f535157edf34f`
+  - CRC32: `53cd0ba8`
+- **[RQP.ini](bios/Other/Recalbox/RQP.ini)** (92 bytes)
+  - SHA1: `5c527130da616e9413715a4943e7eaa2d2a09693`
+  - MD5: `6c94a6c84c8befc5d4ebda822197687b`
+  - CRC32: `be9a96ab`
+- **[RQQ.ini](bios/Other/Recalbox/RQQ.ini)** (76 bytes)
+  - SHA1: `23ee06ab34fcaa75859c5cfd8c8d18389e0bdce8`
+  - MD5: `6664dd17f95565371d0867ba3c83f889`
+  - CRC32: `86af3124`
+- **[RQR.ini](bios/Other/Recalbox/RQR.ini)** (243 bytes)
+  - SHA1: `3e56e1be518bd0b942e97594678aef27453317cc`
+  - MD5: `dd07d6386c060b71ada3415d11179b3f`
+  - CRC32: `7900cbce`
+- **[RQS.ini](bios/Other/Recalbox/RQS.ini)** (108 bytes)
+  - SHA1: `7646f787c72982eb78e1962ab76ba02b45fcaec2`
+  - MD5: `73d83c5bbfe387ecc45e4af52042bd66`
+  - CRC32: `123df7a0`
+- **[RQT.ini](bios/Other/Recalbox/RQT.ini)** (104 bytes)
+  - SHA1: `00ae886182c2fc838b2a53f78b3cf6705286952d`
+  - MD5: `ba3a894afa2c6df392ea87b69787ad67`
+  - CRC32: `df257265`
+- **[RQU.ini](bios/Other/Recalbox/RQU.ini)** (68 bytes)
+  - SHA1: `d2ece3fca43053966c0e7c7aff97bd066c6e14e0`
+  - MD5: `ecf0a3457b01e7797c31f5d744900b9c`
+  - CRC32: `398f8a6b`
+- **[RQW.ini](bios/Other/Recalbox/RQW.ini)** (282 bytes)
+  - SHA1: `b9ff20a9d2034629578dea1df0cceeae657e4bfc`
+  - MD5: `3c1f492da0a282654dc8a2be2835d557`
+  - CRC32: `17b1f355`
+- **[RR2.ini](bios/Other/Recalbox/RR2.ini)** (82 bytes)
+  - SHA1: `289df622112b9bf3fa7c754b7de95271f40cce22`
+  - MD5: `6c3e9ef50f5d3d5c096eec547bf2d0b1`
+  - CRC32: `2bd4c731`
+- **[RR3.ini](bios/Other/Recalbox/RR3.ini)** (95 bytes)
+  - SHA1: `0ef819d5fb6c011d3e50f060185b5e9568497af0`
+  - MD5: `45f206c74a4310f410b5dc72a3701e84`
+  - CRC32: `6e600f1d`
+- **[RR5.ini](bios/Other/Recalbox/RR5.ini)** (88 bytes)
+  - SHA1: `13b78f653d1cd7d40c8f855035c930e963959861`
+  - MD5: `18e8a795dd111b107a48d223ee28c07a`
+  - CRC32: `9c746196`
+- **[RRA.ini](bios/Other/Recalbox/RRA.ini)** (95 bytes)
+  - SHA1: `393d98a048390b6a7ba3f6cf18ac7a6e144a3ed6`
+  - MD5: `0e0767dc3921628fe2d50f5ab298c418`
+  - CRC32: `6bf520f5`
+- **[RRB.ini](bios/Other/Recalbox/RRB.ini)** (377 bytes)
+  - SHA1: `8ab8caacddfa4416725a7674fb1d3bc9821de357`
+  - MD5: `9e084170809f118cb44a0529f379f524`
+  - CRC32: `9675d3fd`
+- **[RRF.ini](bios/Other/Recalbox/RRF.ini)** (91 bytes)
+  - SHA1: `1a42fa407388437ce0583551c93c59c5f5fa5a7a`
+  - MD5: `c818215da3cd9a6824d389631cf9cc97`
+  - CRC32: `62d7173b`
+- **[RRK.ini](bios/Other/Recalbox/RRK.ini)** (317 bytes)
+  - SHA1: `ad25d9fc54812cfb451db1c29c1baa3e0e41296f`
+  - MD5: `941e10b92489b4479a6e2f1faed9a88f`
+  - CRC32: `9afc89f0`
+- **[RRL.ini](bios/Other/Recalbox/RRL.ini)** (366 bytes)
+  - SHA1: `c52fb8f9b378a0c2cdb16545a95403187ccc4c51`
+  - MD5: `e0584a71584ecb8cb7ed366d05582eaa`
+  - CRC32: `4777ca95`
+- **[RRO.ini](bios/Other/Recalbox/RRO.ini)** (150 bytes)
+  - SHA1: `f1db5eb13e4a2ac0101555b43185e4706a320eeb`
+  - MD5: `7e58b0911cc170bede44f4a0a26178f8`
+  - CRC32: `c55f9aaf`
+- **[RRP.ini](bios/Other/Recalbox/RRP.ini)** (295 bytes)
+  - SHA1: `89658a10f76f3462d0bb8228f8b6df6bc80ba3a7`
+  - MD5: `4363ff0d88d2011a4595003482478cba`
+  - CRC32: `88b28a2e`
+- **[RRS.ini](bios/Other/Recalbox/RRS.ini)** (97 bytes)
+  - SHA1: `2fe4b64760d8d496312b398ed47171a60934e1e4`
+  - MD5: `81879b95de467d0a02acf7277964d02b`
+  - CRC32: `3f4f43de`
+- **[RRT.ini](bios/Other/Recalbox/RRT.ini)** (82 bytes)
+  - SHA1: `942bd084c74854e2ea3c6f2712d0c059b4693e8f`
+  - MD5: `cc9bac46f8f9402052cad42294f9f9a8`
+  - CRC32: `2a67ef78`
+- **[RRV.ini](bios/Other/Recalbox/RRV.ini)** (89 bytes)
+  - SHA1: `937e34b82788aa90ed4d1c1cf616222f95a0661b`
+  - MD5: `4632fd2e98eaf8bf73dc299f85f21426`
+  - CRC32: `fb95c319`
+- **[RRW.ini](bios/Other/Recalbox/RRW.ini)** (77 bytes)
+  - SHA1: `1d245c449e2238a57b4737be62ce01cac9877443`
+  - MD5: `c99704b05d05fac750e8d49711f0e0d5`
+  - CRC32: `6d6e5677`
+- **[RRX.ini](bios/Other/Recalbox/RRX.ini)** (107 bytes)
+  - SHA1: `8c2fa4803d40730b43db119b9efa708a9e03a42a`
+  - MD5: `b36366064f056fb6a92d823143758215`
+  - CRC32: `d33436c2`
+- **[RRZ.ini](bios/Other/Recalbox/RRZ.ini)** (281 bytes)
+  - SHA1: `a8a8dfd40658894314f752b8dd289e5235f89855`
+  - MD5: `d26d0e7f4f1ddf479b31462c587841da`
+  - CRC32: `7e082dbc`
+- **[RS2.ini](bios/Other/Recalbox/RS2.ini)** (92 bytes)
+  - SHA1: `d0998f030f50600d35586c484c36a7ee4aa04c17`
+  - MD5: `ba85572264c0f16780aad8afe11a657a`
+  - CRC32: `c5e12f53`
+- **[RS4.ini](bios/Other/Recalbox/RS4.ini)** (94 bytes)
+  - SHA1: `22ac250ebccd251c4fff97f8b265325d13569738`
+  - MD5: `2e2edcc8031d4686cd6656e8e59fa9b0`
+  - CRC32: `f481ad67`
+- **[RS5.ini](bios/Other/Recalbox/RS5.ini)** (320 bytes)
+  - SHA1: `b7342593535ea2b60ca35bef698e88fbe91eadf9`
+  - MD5: `b9bbfa9ddd7465e3b0976f0c114debd4`
+  - CRC32: `4702292d`
+- **[RSA.ini](bios/Other/Recalbox/RSA.ini)** (96 bytes)
+  - SHA1: `5ccdb9ef32032b0b9d3a32c333f8185bdd92875f`
+  - MD5: `b401c6be93fad2173bdba3f330118409`
+  - CRC32: `e7ae7e25`
+- **[RSB.ini](bios/Other/Recalbox/RSB.ini)** (276 bytes)
+  - SHA1: `daae2444c293825dea8f48b57ece2ea34fa8eabe`
+  - MD5: `642ea36cf57e71899356661ee6397c95`
+  - CRC32: `c353f724`
+- **[RSBE01.ini](bios/Other/Recalbox/RSBE01.ini)** (2,653 bytes)
+  - SHA1: `fd33ce95a08188cac7d5050b2ed6ffa0b2e34edd`
+  - MD5: `4a49ba415093398b64622076f9edfb33`
+  - CRC32: `a5034768`
+- **[RSBP01.ini](bios/Other/Recalbox/RSBP01.ini)** (346 bytes)
+  - SHA1: `28d86fad624395fbaae760f1be19f619658b7272`
+  - MD5: `a57e13cd44504f902d1ceba03e3f9048`
+  - CRC32: `a07ea648`
+- **[RSD.ini](bios/Other/Recalbox/RSD.ini)** (78 bytes)
+  - SHA1: `a55994ee5f44b734475708c51589ade7ca4b69d5`
+  - MD5: `e47888e87dcac8f1f59ce5c3207109c9`
+  - CRC32: `a74f8e36`
+- **[RSH.ini](bios/Other/Recalbox/RSH.ini)** (326 bytes)
+  - SHA1: `26eed564b317c083c1a02ce7a06b6ede12aea799`
+  - MD5: `8a6b82cbffa4ec18fb45349b25838af4`
+  - CRC32: `faf8567e`
+- **[RSI.ini](bios/Other/Recalbox/RSI.ini)** (308 bytes)
+  - SHA1: `e17a118db26b45693172e747804880d751aceb95`
+  - MD5: `e2f0dab1d4d5f8c0a5a6bb090b3a12ef`
+  - CRC32: `f85781e0`
+- **[RSJ.ini](bios/Other/Recalbox/RSJ.ini)** (149 bytes)
+  - SHA1: `96936811ba193ac1516751a1ce6b330c93195a5b`
+  - MD5: `ac98cd5442eac8ea1920c9f9c908dd33`
+  - CRC32: `76c4d786`
+- **[RSL.ini](bios/Other/Recalbox/RSL.ini)** (289 bytes)
+  - SHA1: `d714842d5bf6045af10af87dda74975b397535f7`
+  - MD5: `805217dcbe8ada68529e447daa02d385`
+  - CRC32: `5e496862`
+- **[RSM.ini](bios/Other/Recalbox/RSM.ini)** (251 bytes)
+  - SHA1: `4e8a2d4b7f88c30b8b93535d6538026b97e0a45e`
+  - MD5: `68b92a3690b66b610c449f5740d0e24e`
+  - CRC32: `ebaa10c7`
+- **[RSN.ini](bios/Other/Recalbox/RSN.ini)** (382 bytes)
+  - SHA1: `53f0dd57d01f0b1b66f1d47b6b1faacfa6d9e741`
+  - MD5: `c6a2aba9430258169f0fb2d622106a28`
+  - CRC32: `88368d49`
+- **[RSO.ini](bios/Other/Recalbox/RSO.ini)** (279 bytes)
+  - SHA1: `53d95b0adfbb5aa4dd9d431cdcc4f3053489130f`
+  - MD5: `85fbf71e0dadf8e12b468acb70b26892`
+  - CRC32: `e2baaa80`
+- **[RSP.ini](bios/Other/Recalbox/RSP.ini)** (219 bytes)
+  - SHA1: `8c45aeeea106a67dfc80099f834e39cf09cf9bf2`
+  - MD5: `6d1d5612fc608b6867a4f9f5f0ab05e6`
+  - CRC32: `fb9478ce`
+- **[RSR.ini](bios/Other/Recalbox/RSR.ini)** (269 bytes)
+  - SHA1: `3471be9626e922e3c4c9a90795e943c4a77da74b`
+  - MD5: `8fed11c5fcdca1df71bd548b0acd10a4`
+  - CRC32: `1adbcc1b`
+- **[RSS.ini](bios/Other/Recalbox/RSS.ini)** (104 bytes)
+  - SHA1: `80ccd682d919da9ef644ac881874a3d8edf60aeb`
+  - MD5: `3aaacf5e32dc495a23369879b8b7b77d`
+  - CRC32: `3b63ec8e`
+- **[RST.ini](bios/Other/Recalbox/RST.ini)** (305 bytes)
+  - SHA1: `9e6f83c8b999b2170fefc2f92f59fe519c2524d5`
+  - MD5: `79f66b2023469ee03aee0a064117d9b8`
+  - CRC32: `e27a5c42`
+- **[RSX.ini](bios/Other/Recalbox/RSX.ini)** (299 bytes)
+  - SHA1: `3d209141497e378a6cde5f4a5ac66cb89b96b9d5`
+  - MD5: `cc2b124d51933a272ca247ba9c24f2d2`
+  - CRC32: `37eee60c`
+- **[RSY.ini](bios/Other/Recalbox/RSY.ini)** (91 bytes)
+  - SHA1: `e2ad9d49471175cbaece23bb5b2e123af18cdd7f`
+  - MD5: `9bd30d21ecf5e262da9e7368488cf38d`
+  - CRC32: `add914d7`
+- **[RT3.ini](bios/Other/Recalbox/RT3.ini)** (154 bytes)
+  - SHA1: `eb34a11d025b3c885b76d436fcf8a94e45ede2c3`
+  - MD5: `5a1b67f7735bdbbdfefaec3eed040a72`
+  - CRC32: `176d329a`
+- **[RT4.ini](bios/Other/Recalbox/RT4.ini)** (297 bytes)
+  - SHA1: `0ba9e36d275cd74f53c00bf3834c2f0981f8bae4`
+  - MD5: `40472b2fc1a60ca027bf5c21fcc0402b`
+  - CRC32: `10d60104`
+- **[RT7.ini](bios/Other/Recalbox/RT7.ini)** (102 bytes)
+  - SHA1: `edd0b63a66ce1ef52a6e310ce8df0d4d1a72261a`
+  - MD5: `ea70b7b91d6bbd6afbed3aefdefb53e5`
+  - CRC32: `3f36dea0`
+- **[RT8.ini](bios/Other/Recalbox/RT8.ini)** (266 bytes)
+  - SHA1: `b3c7fa1c0fc6665ec107f0e6b2b42e5f3c834353`
+  - MD5: `a5f663cde7458c35bfe75ba5380cc2d6`
+  - CRC32: `def6f5d6`
+- **[RTB.ini](bios/Other/Recalbox/RTB.ini)** (151 bytes)
+  - SHA1: `632d3740852da643cd894ee9b4d1a4558c57a4b6`
+  - MD5: `13cd5bf92b5be68143a7a84e1b760bf2`
+  - CRC32: `9e6986cc`
+- **[RTG.ini](bios/Other/Recalbox/RTG.ini)** (89 bytes)
+  - SHA1: `467e102a1a87567b800d8c337fdd510d8f754a54`
+  - MD5: `10e16c3c7b3560314a1b3cceff8f5d02`
+  - CRC32: `f3bbd5e6`
+- **[RTH.ini](bios/Other/Recalbox/RTH.ini)** (369 bytes)
+  - SHA1: `7d10ee34a8252327b08d5992c933be90a99acefa`
+  - MD5: `5f8878a5d26c54554e323e9e17b2a545`
+  - CRC32: `da677024`
+- **[RTJ.ini](bios/Other/Recalbox/RTJ.ini)** (82 bytes)
+  - SHA1: `61cbb50ed8db5c7a9e69b99f0081a0f67dc8e87b`
+  - MD5: `d80316fd110fc88fbe1e0832cd2b6e81`
+  - CRC32: `85fb0d8e`
+- **[RTK.ini](bios/Other/Recalbox/RTK.ini)** (170 bytes)
+  - SHA1: `064a9a78364c4df87c193e34b8447aab7209f935`
+  - MD5: `b31e2fcffc7ec104f6b5482e407e2022`
+  - CRC32: `8468051a`
+- **[RTL.ini](bios/Other/Recalbox/RTL.ini)** (97 bytes)
+  - SHA1: `d7832a2eb8af71119f007c2fe3e007396a9a68ed`
+  - MD5: `d908e8db44f99c579969450676afa7c0`
+  - CRC32: `a8961bea`
+- **[RTM.ini](bios/Other/Recalbox/RTM.ini)** (257 bytes)
+  - SHA1: `6d196554e9e2de479c44c231659e644f2972dae1`
+  - MD5: `2bd563b107f42bc04ba76c542a06e72e`
+  - CRC32: `7bbb686c`
+- **[RTP.ini](bios/Other/Recalbox/RTP.ini)** (76 bytes)
+  - SHA1: `eda7a63de370d56a0ebc34bb21982ef7020e14d4`
+  - MD5: `7eccb1452de50478554134882aa4e80d`
+  - CRC32: `fca0bc35`
+- **[RTQ.ini](bios/Other/Recalbox/RTQ.ini)** (91 bytes)
+  - SHA1: `60ca8ec445bb3c295aed3be1a60afa0aaa0042de`
+  - MD5: `0f726f28cff5ce64fdf31980596b8c4b`
+  - CRC32: `386228b7`
+- **[RTR.ini](bios/Other/Recalbox/RTR.ini)** (265 bytes)
+  - SHA1: `098bc2b1e3af0d2752a2049214cc7f272aca5497`
+  - MD5: `97490c463b425f571d35fefd66585306`
+  - CRC32: `f0994a53`
+- **[RTT.ini](bios/Other/Recalbox/RTT.ini)** (87 bytes)
+  - SHA1: `8977684869fef97b671afddb4fd9c60e3735b7e7`
+  - MD5: `fdf54c5b661a409baedc9cb52cd201fb`
+  - CRC32: `f5ed7d2e`
+- **[RTU.ini](bios/Other/Recalbox/RTU.ini)** (302 bytes)
+  - SHA1: `42dd5166361030067a7fde3b2624eafe5a94a38f`
+  - MD5: `8e28ecf9ab020b9a9b4d76778ee8b847`
+  - CRC32: `089f224f`
+- **[RTW.ini](bios/Other/Recalbox/RTW.ini)** (74 bytes)
+  - SHA1: `b7e3754a1b897332174ba1ee34c5c61096f728d4`
+  - MD5: `19d08f8f99422752444b0cdc823c0db4`
+  - CRC32: `d43f20de`
+- **[RTZ.ini](bios/Other/Recalbox/RTZ.ini)** (320 bytes)
+  - SHA1: `57ad3aad9c27f984083de7cb438794e107877e79`
+  - MD5: `4f9b8ad0785f8eb960cd429af556ca9d`
+  - CRC32: `b5529dc8`
+- **[RUD.ini](bios/Other/Recalbox/RUD.ini)** (150 bytes)
+  - SHA1: `1c040e25386c1186ae914068d1d9753604464131`
+  - MD5: `62696ddbe3673c9e0b5422f49f8e5bf9`
+  - CRC32: `8a34b4ca`
+- **[RUF.ini](bios/Other/Recalbox/RUF.ini)** (182 bytes)
+  - SHA1: `2b32b4ccecf6e1e4390e26287be5d4f54ff30280`
+  - MD5: `6151e5cb77e0ce1860ac36b9c8a47385`
+  - CRC32: `4c54d95d`
+- **[RUFEMV.ini](bios/Other/Recalbox/RUFEMV.ini)** (2,970 bytes)
+  - SHA1: `8b0a92a61439dd899bedd040e3c4d2f5994c9816`
+  - MD5: `da1b576078e007b04bebdfc810cbf7a5`
+  - CRC32: `3a52f89a`
+- **[RUFP99.ini](bios/Other/Recalbox/RUFP99.ini)** (1,960 bytes)
+  - SHA1: `cda506ec14f78d7bf3f8f2f04f4c785ec69a2dff`
+  - MD5: `2ba7ad82c930005051d7e53b6e12fed1`
+  - CRC32: `3e252415`
+- **[RUN.ini](bios/Other/Recalbox/RUN.ini)** (75 bytes)
+  - SHA1: `5c24340250cc6341e322e34a741e13a47bae44fc`
+  - MD5: `546747930d27a6125804eee65e0f12dd`
+  - CRC32: `cc108027`
+- **[RUO.ini](bios/Other/Recalbox/RUO.ini)** (82 bytes)
+  - SHA1: `b2a010b5133b357f6f31ee1708d79ec9f96b9416`
+  - MD5: `511630d30b19224ab1ceea98666289a2`
+  - CRC32: `3ae6120a`
+- **[RUP.ini](bios/Other/Recalbox/RUP.ini)** (82 bytes)
+  - SHA1: `c3dd31251b1b6062e32d04a4b595d6eaaa083fb4`
+  - MD5: `ee94c6d947af29b61d58d56bcb932a69`
+  - CRC32: `013e4ba6`
+- **[RUR.ini](bios/Other/Recalbox/RUR.ini)** (76 bytes)
+  - SHA1: `897120c645b861dcc9dcccb856c201aeaecf6a01`
+  - MD5: `3eace726d7c10cb260a2f8b977346a32`
+  - CRC32: `f3306753`
+- **[RUU.ini](bios/Other/Recalbox/RUU.ini)** (235 bytes)
+  - SHA1: `11a0076b9750a569026360eccde3ec427488f5cc`
+  - MD5: `b87226e5b12901648dda485bddaf43e6`
+  - CRC32: `8211b273`
+- **[RUW.ini](bios/Other/Recalbox/RUW.ini)** (73 bytes)
+  - SHA1: `8b5794418daba8fd628437e7a3c37a828b3c8ad7`
+  - MD5: `8a3ffb82b5b10a2c6dde383811e1b0f1`
+  - CRC32: `79aa9b17`
+- **[RUZ.ini](bios/Other/Recalbox/RUZ.ini)** (63 bytes)
+  - SHA1: `93a7973b3d0b549134bc4d097a12071440061f89`
+  - MD5: `c55c205cb6ba55c988e5d9e8bd844e1c`
+  - CRC32: `fb6ae62e`
+- **[RV2.ini](bios/Other/Recalbox/RV2.ini)** (75 bytes)
+  - SHA1: `f911e45984d43e8a163f85e8e11eadef75cabc72`
+  - MD5: `f889a81edfe4b4449c68543163cc997e`
+  - CRC32: `52a29895`
+- **[RVA.ini](bios/Other/Recalbox/RVA.ini)** (119 bytes)
+  - SHA1: `8b54b9e6ab53850d911dac067e1d1a5baa7b0630`
+  - MD5: `f29559dab86cd4ef4dd282993c8c7e1f`
+  - CRC32: `505ce524`
+- **[RVB.ini](bios/Other/Recalbox/RVB.ini)** (86 bytes)
+  - SHA1: `0334e897ecbc42f9eb55ab8ae09385ebce6d1a81`
+  - MD5: `acd74a68519c2fdfa501d2952da477b7`
+  - CRC32: `e5867552`
+- **[RVC.ini](bios/Other/Recalbox/RVC.ini)** (150 bytes)
+  - SHA1: `b079b631a50425d6e5fbc808982f02d534c25f1c`
+  - MD5: `a51de7471e1499183c4db5f4670e7308`
+  - CRC32: `ddab7a6e`
+- **[RVE.ini](bios/Other/Recalbox/RVE.ini)** (80 bytes)
+  - SHA1: `fd23009cba4afcd07dbce8699a77a9b738bc7c71`
+  - MD5: `927e2c4a580fabccd3dd03785e87f65f`
+  - CRC32: `7c622562`
+- **[RVN.ini](bios/Other/Recalbox/RVN.ini)** (95 bytes)
+  - SHA1: `b42226aa9e470e4867465d4b2184a4203e8f9234`
+  - MD5: `440377ad0f9da5f6e7a9accf32daa1cf`
+  - CRC32: `f71fc6dd`
+- **[RVO.ini](bios/Other/Recalbox/RVO.ini)** (70 bytes)
+  - SHA1: `848aabf4fc4522a82ce6d4bcd941aaec610cacc0`
+  - MD5: `64182c9e7b591443aadbeb0d4e21aaba`
+  - CRC32: `efe1d686`
+- **[RVQ.ini](bios/Other/Recalbox/RVQ.ini)** (74 bytes)
+  - SHA1: `9abb07327ecae9395cd35630d2bbe895e82ce349`
+  - MD5: `ff95ddc6dd601534b621396ff6b498c8`
+  - CRC32: `dfb20fb3`
+- **[RVR.ini](bios/Other/Recalbox/RVR.ini)** (97 bytes)
+  - SHA1: `7ff6186799572c5ef7335bb60394a8f92fee3807`
+  - MD5: `012637c8083f046a14cfdcef95a42148`
+  - CRC32: `d417e5ff`
+- **[RW3.ini](bios/Other/Recalbox/RW3.ini)** (111 bytes)
+  - SHA1: `fa27026dce0b997981fc26902b6535cb5f73e18c`
+  - MD5: `fd2a79cad1cf45e55478ae69eaefa99a`
+  - CRC32: `cf8d7563`
+- **[RW4.ini](bios/Other/Recalbox/RW4.ini)** (93 bytes)
+  - SHA1: `acc99d594b8006e3f5d45060f2484bba81ecb582`
+  - MD5: `7b2e47ce5e91b1ea673d71ed8d88a47e`
+  - CRC32: `df05d054`
+- **[RW7.ini](bios/Other/Recalbox/RW7.ini)** (317 bytes)
+  - SHA1: `afbafa1d2937caa150aa83f44c9e4b16f426516c`
+  - MD5: `cdf06d07f5bb5f63985ca5fd6fee0059`
+  - CRC32: `d2ebd747`
+- **[RW8.ini](bios/Other/Recalbox/RW8.ini)** (77 bytes)
+  - SHA1: `03e26a4f762de7195b64fd1e7cd7e4151ebc2c1e`
+  - MD5: `b7cca48abe33edfaa25746908d3edb42`
+  - CRC32: `1816212b`
+- **[RWA.ini](bios/Other/Recalbox/RWA.ini)** (168 bytes)
+  - SHA1: `d208e5183cdce0a20135acbcaf32da54c9533302`
+  - MD5: `0693acd92ea69ce8f3bdb40490e80b95`
+  - CRC32: `7af28d8e`
+- **[RWB.ini](bios/Other/Recalbox/RWB.ini)** (83 bytes)
+  - SHA1: `0fb9dfc331013c1e50b320d1a30528a3090e5f4d`
+  - MD5: `44b7fe3ec3fe089c0789f60838f04888`
+  - CRC32: `9e310510`
+- **[RWC.ini](bios/Other/Recalbox/RWC.ini)** (108 bytes)
+  - SHA1: `742406a2c5aff10dd48c86409db221944b927f99`
+  - MD5: `59d14344996b024b5c5221d61b7ead6d`
+  - CRC32: `e53237e4`
+- **[RWF.ini](bios/Other/Recalbox/RWF.ini)** (93 bytes)
+  - SHA1: `45137df1562e45038d7cef1067b2e65175ea023b`
+  - MD5: `749ef1e59df5809d3526f5b1f3c65354`
+  - CRC32: `e7683af2`
+- **[RWG.ini](bios/Other/Recalbox/RWG.ini)** (80 bytes)
+  - SHA1: `2defa1e41ca77f1e7fd2be56b7de08b0f55ffa40`
+  - MD5: `ce4f57e1bdee48a6491ed68b06ab78c4`
+  - CRC32: `21fad3a3`
+- **[RWH.ini](bios/Other/Recalbox/RWH.ini)** (77 bytes)
+  - SHA1: `51277ee2692a3629102e5df9a97a310eb2c222a0`
+  - MD5: `4d5d78b033a4738e04dbd274af83517d`
+  - CRC32: `c0c5720e`
+- **[RWK.ini](bios/Other/Recalbox/RWK.ini)** (90 bytes)
+  - SHA1: `23af0666d7e7734ba9d74b9c5d5cd42405daa0ca`
+  - MD5: `7c79259eb297bfac435a0a23d696a539`
+  - CRC32: `a6c4657b`
+- **[RWN.ini](bios/Other/Recalbox/RWN.ini)** (80 bytes)
+  - SHA1: `269f42b0075022f9025064d1b7d51f3b632ed9e4`
+  - MD5: `f474aa9c35eedb2fdc8becaa4794c4cd`
+  - CRC32: `ec870a3a`
+- **[RWO.ini](bios/Other/Recalbox/RWO.ini)** (313 bytes)
+  - SHA1: `b7676d0c5dabe99c592a58db93890be105a3e27c`
+  - MD5: `2185cdc1ea734c60eb78bb8a553396d1`
+  - CRC32: `b848f746`
+- **[RWQ.ini](bios/Other/Recalbox/RWQ.ini)** (94 bytes)
+  - SHA1: `0729359fdcac49ef9e3b95e2259c0e2b692615b1`
+  - MD5: `7b25ce0ee521c36f007b8b3de7b1c732`
+  - CRC32: `94df4652`
+- **[RWS.ini](bios/Other/Recalbox/RWS.ini)** (296 bytes)
+  - SHA1: `e58aeaf78e311b6cafb74829beb68e601d24585a`
+  - MD5: `b02b40f0269583252ee535c9246182db`
+  - CRC32: `772cfabc`
+- **[RWY.ini](bios/Other/Recalbox/RWY.ini)** (87 bytes)
+  - SHA1: `4e14eb17c6c3eb154e87503399af40a1ef152d16`
+  - MD5: `1e814a3d29c75c5b8d0d801a2ed2efbc`
+  - CRC32: `8a391638`
+- **[RWZ.ini](bios/Other/Recalbox/RWZ.ini)** (98 bytes)
+  - SHA1: `c9e691ebf83621a2baa9808b4c5b3f641cb5fa9c`
+  - MD5: `7535fc0cdfd57e99c3a0f4ca7f6ed6ef`
+  - CRC32: `102bb56d`
+- **[RX3.ini](bios/Other/Recalbox/RX3.ini)** (256 bytes)
+  - SHA1: `6fd29ff3f1657e2a26271cfe10324203f7728bc5`
+  - MD5: `b4da55ea3eeefc79fede5798be936043`
+  - CRC32: `429664e1`
+- **[RX4.ini](bios/Other/Recalbox/RX4.ini)** (103 bytes)
+  - SHA1: `73d9d22dbf780d8367b9963ec1fd093236fdd83d`
+  - MD5: `d7ff272ae409afb04c329d5e3b0533ef`
+  - CRC32: `a45b2d60`
+- **[RX4E4Z.ini](bios/Other/Recalbox/RX4E4Z.ini)** (1,359 bytes)
+  - SHA1: `04593ae6e447b851c63930889721ed2f95c745ae`
+  - MD5: `c2aea48ec6d3acbcc48659568f61e286`
+  - CRC32: `b04cb916`
+- **[RX4PMT.ini](bios/Other/Recalbox/RX4PMT.ini)** (1,359 bytes)
+  - SHA1: `569577772dc4013e5fce4d17c0081e108b7c0ace`
+  - MD5: `2f57422c306660ae1f3315e1f48edd54`
+  - CRC32: `e1160f1d`
+- **[RX6.ini](bios/Other/Recalbox/RX6.ini)** (80 bytes)
+  - SHA1: `a83b62cb9bbb57f01c8f2928be89cac264ac10c0`
+  - MD5: `20f4057089a784659ab73a1da8058a45`
+  - CRC32: `992bfbb9`
+- **[RXB.ini](bios/Other/Recalbox/RXB.ini)** (76 bytes)
+  - SHA1: `6e0409fbebd7f9dbcedb4013d331c5435b76f064`
+  - MD5: `ea53b711f0ace4fba750570970deaf64`
+  - CRC32: `354c3cb5`
+- **[RXC.ini](bios/Other/Recalbox/RXC.ini)** (87 bytes)
+  - SHA1: `48dd3206ffd238d658b7a4a009f8db7720c6a720`
+  - MD5: `62bb0f3416b13a388bc4681a6eb1d270`
+  - CRC32: `11587c1f`
+- **[RXF.ini](bios/Other/Recalbox/RXF.ini)** (70 bytes)
+  - SHA1: `49e7cbfcaedbf4f8b1375fefbbbcf003d403528f`
+  - MD5: `d5e2fcf4f731fa7d25dec3631ddd4b0c`
+  - CRC32: `ce18d482`
+- **[RXH.ini](bios/Other/Recalbox/RXH.ini)** (73 bytes)
+  - SHA1: `9c56270a9b2c79db50d4788811a986e949a813c0`
+  - MD5: `a1a8b67e13e2e7398a0c742e99330d17`
+  - CRC32: `dcc67ad7`
+- **[RXI.ini](bios/Other/Recalbox/RXI.ini)** (300 bytes)
+  - SHA1: `573cb3a42598205b26d24b9845ac460305f9834e`
+  - MD5: `039aec7d2013fc4e3ded7459cfa26f4d`
+  - CRC32: `d0473124`
+- **[RXR.ini](bios/Other/Recalbox/RXR.ini)** (93 bytes)
+  - SHA1: `0a1510b2aabe5899a1b05d9f93b3fec189a70fba`
+  - MD5: `eeccf9bcf2669001f90cdfb8abd0803d`
+  - CRC32: `95ba2ed4`
+- **[RXV.ini](bios/Other/Recalbox/RXV.ini)** (83 bytes)
+  - SHA1: `13f93074feb566e2150e694bf70f96cbead6c8dc`
+  - MD5: `9402e8db4d14b9a020009895200afa45`
+  - CRC32: `8a4ef750`
+- **[RXX.ini](bios/Other/Recalbox/RXX.ini)** (317 bytes)
+  - SHA1: `d0f76c37a05162223b9e3f4742d31a069899af39`
+  - MD5: `dbdd257ad78a990d1aedd3720d737fa7`
+  - CRC32: `b379a2f6`
+- **[RXZ.ini](bios/Other/Recalbox/RXZ.ini)** (92 bytes)
+  - SHA1: `5291ebbdf1b07f2607d9d6d1465a70dc1db3440d`
+  - MD5: `a7f2afd7d77d2ead69b4ead981fa5851`
+  - CRC32: `b86c9066`
+- **[RY2.ini](bios/Other/Recalbox/RY2.ini)** (377 bytes)
+  - SHA1: `5a7899ba8d8b6a6bbf58f8c0062901ba46842204`
+  - MD5: `81074d2318640196f6e1ae0cc85bb8d3`
+  - CRC32: `0e6fd41d`
+- **[RY3.ini](bios/Other/Recalbox/RY3.ini)** (325 bytes)
+  - SHA1: `a992abfefa0401b0b8fe39a6c043407f9476983f`
+  - MD5: `653d5d6487442f261e48143b70ed39ed`
+  - CRC32: `e24f8b3d`
+- **[RY4.ini](bios/Other/Recalbox/RY4.ini)** (66 bytes)
+  - SHA1: `b039a0d290d2f12123e46f1ea98d43f21838dd14`
+  - MD5: `ad8282aa9edfd41c117d916bb06b29e0`
+  - CRC32: `f6f5912b`
+- **[RY8.ini](bios/Other/Recalbox/RY8.ini)** (81 bytes)
+  - SHA1: `b2c6c0b0ac60f94d54560021006e549d539ba245`
+  - MD5: `e092a4256120cc8c54da200e53be4e37`
+  - CRC32: `a45b7c44`
+- **[RYB.ini](bios/Other/Recalbox/RYB.ini)** (286 bytes)
+  - SHA1: `92b3d996ba5b4cd719b3701f4f900fd73fa0fc2b`
+  - MD5: `23071ef334d10770eb9bd602c4a41351`
+  - CRC32: `785ff281`
+- **[RYG.ini](bios/Other/Recalbox/RYG.ini)** (97 bytes)
+  - SHA1: `a28ad083d6b6e7ddb0b0ade4acf765eba21f1a72`
+  - MD5: `651f88f435df214de8fc0e10809b8898`
+  - CRC32: `55420449`
+- **[RYH.ini](bios/Other/Recalbox/RYH.ini)** (85 bytes)
+  - SHA1: `37cedbe93fb09004825e1c56925a82169da62e1f`
+  - MD5: `0b8bf902327097c00181450240b541d3`
+  - CRC32: `f98618a4`
+- **[RYI.ini](bios/Other/Recalbox/RYI.ini)** (110 bytes)
+  - SHA1: `fd43fe7874e5c447f742a5f80bb8d944c4200bc4`
+  - MD5: `849ac72e604ffdfe2c530e3da3d32a68`
+  - CRC32: `caf92cec`
+- **[RYL.ini](bios/Other/Recalbox/RYL.ini)** (80 bytes)
+  - SHA1: `be24e2f58ed0a0d20369ae70c42916a060ec43f2`
+  - MD5: `4af275e88df758f89fcd85c80e3a04d0`
+  - CRC32: `fd6ee8f1`
+- **[RYN.ini](bios/Other/Recalbox/RYN.ini)** (95 bytes)
+  - SHA1: `d2cb521cd8af94ff64e205c62e1b0121ee5d06cd`
+  - MD5: `2376b04bee3dc77a384b6d1d591f4d1d`
+  - CRC32: `68b01890`
+- **[RYV.ini](bios/Other/Recalbox/RYV.ini)** (66 bytes)
+  - SHA1: `cd5fbfc2557a54e983a62a70bd7bf80e60386b13`
+  - MD5: `d8ba770a219ab28b847c7f99b13eb846`
+  - CRC32: `2c6ed8e6`
+- **[RYW.ini](bios/Other/Recalbox/RYW.ini)** (318 bytes)
+  - SHA1: `823bc5e4980eafa5e8b73fe7e4113ac9c7a9d118`
+  - MD5: `2a52cae69dbd2f2a08b207e6df669739`
+  - CRC32: `f654ae06`
+- **[RYZ.ini](bios/Other/Recalbox/RYZ.ini)** (80 bytes)
+  - SHA1: `076adf8f9675cf82d126ce0a7e1c6e25cfabfdbd`
+  - MD5: `bffbe3272159d6fad0e89a6b52a1c2ec`
+  - CRC32: `5931e243`
+- **[RZ2.ini](bios/Other/Recalbox/RZ2.ini)** (103 bytes)
+  - SHA1: `a48696b27e125943ba84faed92d2ab5fe8aa2dc9`
+  - MD5: `95d1a3c1193b6dde9c6902c1d0b18539`
+  - CRC32: `fda453d1`
+- **[RZ3.ini](bios/Other/Recalbox/RZ3.ini)** (111 bytes)
+  - SHA1: `083b0e2fc416269b728d736064c74a3ca049d51d`
+  - MD5: `81ad333281963f3575347444701dd2ae`
+  - CRC32: `3db30215`
+- **[RZ4.ini](bios/Other/Recalbox/RZ4.ini)** (97 bytes)
+  - SHA1: `aff2eddde71cd1330ccd14e738f742c61e1ed628`
+  - MD5: `6fbcdaf923112ac18d2af4cc72c5f7b0`
+  - CRC32: `a711ad53`
+- **[RZ5.ini](bios/Other/Recalbox/RZ5.ini)** (100 bytes)
+  - SHA1: `55adb63a71d316b6015404a9c85d6f08936fc6a0`
+  - MD5: `9e0f98ce6ebd2e957147c834acd8395b`
+  - CRC32: `4af8330b`
+- **[RZ6.ini](bios/Other/Recalbox/RZ6.ini)** (98 bytes)
+  - SHA1: `1f729d29bf354f05ca7f5b4f3bfb63fdca2c733e`
+  - MD5: `f0f42e37d96a40563ae32f2159a13bd5`
+  - CRC32: `0cb677ac`
+- **[RZ7.ini](bios/Other/Recalbox/RZ7.ini)** (100 bytes)
+  - SHA1: `7740e7d2fc3d941c90f2ddeb38516d23bf2d9868`
+  - MD5: `4691a7b609a17e0531757b561bf7326d`
+  - CRC32: `f784d25b`
+- **[RZ8.ini](bios/Other/Recalbox/RZ8.ini)** (100 bytes)
+  - SHA1: `1328242aa14ec139de963b864acc2e54d11a46b0`
+  - MD5: `33c51c0e9794d6220a198c1009fd5659`
+  - CRC32: `4720ab3a`
+- **[RZD.ini](bios/Other/Recalbox/RZD.ini)** (820 bytes)
+  - SHA1: `f671e253ab9ae133c644063ae4a8fc7285b15a6a`
+  - MD5: `d4164642e1c0e15bc04ec47d54cee712`
+  - CRC32: `9bf54489`
+- **[RZDE01r0.ini](bios/Other/Recalbox/RZDE01r0.ini)** (1,071 bytes)
+  - SHA1: `9de09412a7e017760af79f700cf9c2dae23a7a18`
+  - MD5: `444003ca40563ced79e3857e7ac0505e`
+  - CRC32: `d4e17626`
+- **[RZDE01r2.ini](bios/Other/Recalbox/RZDE01r2.ini)** (1,071 bytes)
+  - SHA1: `9d7104d4577707774c757e03140bc1297f369aca`
+  - MD5: `2a13f97cffe1d3c21f5e94ba2916b877`
+  - CRC32: `4ad2ce80`
+- **[RZDJ01.ini](bios/Other/Recalbox/RZDJ01.ini)** (1,043 bytes)
+  - SHA1: `baf217320ee634726d75925f9dbcab796527466d`
+  - MD5: `f809e897af2d8b2e50a612161196b6d1`
+  - CRC32: `79d2be57`
+- **[RZDK01.ini](bios/Other/Recalbox/RZDK01.ini)** (1,043 bytes)
+  - SHA1: `0ae419e1ab0b1cac5557894593352986cf2f2ec9`
+  - MD5: `fce81f6e6261d77e1945a7b189f116ee`
+  - CRC32: `818473db`
+- **[RZDP01.ini](bios/Other/Recalbox/RZDP01.ini)** (1,071 bytes)
+  - SHA1: `c0c948ae05ec839d75b14a82c38caa61e8d3a076`
+  - MD5: `226ca63b8637189a6ef29963064ce931`
+  - CRC32: `d9245dfe`
+- **[RZF.ini](bios/Other/Recalbox/RZF.ini)** (268 bytes)
+  - SHA1: `049a42625277b4665be6257d686135a3482f751a`
+  - MD5: `2dcd6c688e1849257a778b54e344c123`
+  - CRC32: `cb37c9d7`
+- **[RZI.ini](bios/Other/Recalbox/RZI.ini)** (289 bytes)
+  - SHA1: `5fb1ac489d07f6f785afef7598ea5191de6a73d8`
+  - MD5: `a7064c7d08384b4389fef794cb335f3a`
+  - CRC32: `03ac163c`
+- **[RZJ.ini](bios/Other/Recalbox/RZJ.ini)** (279 bytes)
+  - SHA1: `2979545d88163e3822bbc1421b329b910e4ee1dc`
+  - MD5: `ad4f72edbe05bb3d2c4a8ccbbaac0f38`
+  - CRC32: `80f6f0db`
+- **[RZJP69.ini](bios/Other/Recalbox/RZJP69.ini)** (448 bytes)
+  - SHA1: `da591465b8e21dd8ab07dce28459daca77f82ce6`
+  - MD5: `2bb1ff63a8162ac97356fd95d91bd129`
+  - CRC32: `1b798a44`
+- **[RZL.ini](bios/Other/Recalbox/RZL.ini)** (118 bytes)
+  - SHA1: `b002a99517edbd9272cca8032a931939ea912e54`
+  - MD5: `f93d7e5adb0b7bb35d3196588e17a810`
+  - CRC32: `a902bfe2`
+- **[RZO.ini](bios/Other/Recalbox/RZO.ini)** (305 bytes)
+  - SHA1: `e1a963a336da61a56555782eedd00fb2cf8289b8`
+  - MD5: `fae119a7c19d5923643c2f0de77f9ba3`
+  - CRC32: `a85b547a`
+- **[RZR.ini](bios/Other/Recalbox/RZR.ini)** (83 bytes)
+  - SHA1: `62dc592a822d8fb298e9ae9745f085728ef4dabf`
+  - MD5: `21381900f94600abe1bb6581b4a44b90`
+  - CRC32: `8d02f043`
+- **[RZT.ini](bios/Other/Recalbox/RZT.ini)** (224 bytes)
+  - SHA1: `3268ec9643fab829513a3f0230c8cca06b87917b`
+  - MD5: `dd42bdf2da11649f9dd02842b0125d87`
+  - CRC32: `a74118e4`
+- **[RZY.ini](bios/Other/Recalbox/RZY.ini)** (281 bytes)
+  - SHA1: `4d028fb119cb0c5cfa4d1b4d6888c820b2f68bb0`
+  - MD5: `5f870fb607e936863686d15d3feaf082`
+  - CRC32: `b1422374`
+- **[RawDIC](bios/Other/Recalbox/RawDIC)** (21,228 bytes)
+  - SHA1: `100d80eead41511dfef6086508b1f77d3c1672a8`
+  - MD5: `8ca244472d1c3438b2894fcad4a72584`
+  - CRC32: `22a0d64f`
+- **[Readme.txt](bios/Other/Recalbox/Readme.txt)** (103 bytes)
+  - SHA1: `3e304bc6ee181eb787245690c3c723f7f2622b2e`
+  - MD5: `5ed871ef86a282106e4881614d4aa843`
+  - CRC32: `91ac554c`
+- **[S25.ini](bios/Other/Recalbox/S25.ini)** (226 bytes)
+  - SHA1: `3a3e9eacb1a4f2e0bdd8e31a1268947d53dfaabf`
+  - MD5: `14e189a1c3551e3613f9f2c5bc64bd49`
+  - CRC32: `6690223a`
+- **[S2C.ini](bios/Other/Recalbox/S2C.ini)** (270 bytes)
+  - SHA1: `f977cf329034f9746ac5b7325806d43eff44e5d5`
+  - MD5: `45604a84e2fa67c27e88c19228e65434`
+  - CRC32: `bbc29605`
+- **[S2D.ini](bios/Other/Recalbox/S2D.ini)** (60 bytes)
+  - SHA1: `73584e673ed3d5707d6459ef766f1015eadfff88`
+  - MD5: `d58e0048aa58d6c1fbe1d1aa11cb4068`
+  - CRC32: `2d990f5d`
+- **[S2E.ini](bios/Other/Recalbox/S2E.ini)** (271 bytes)
+  - SHA1: `8f77eaa2dbadfe4dd155cfecb3e0f36966a80300`
+  - MD5: `3da43b6686724b382ea4c785ef7a32c0`
+  - CRC32: `a9956e4f`
+- **[S2L.ini](bios/Other/Recalbox/S2L.ini)** (263 bytes)
+  - SHA1: `3425921fe6e3dfacd2935631d12e79e5445f620b`
+  - MD5: `f51d391873ed2e00d71669fbe52d452b`
+  - CRC32: `3f5f0f64`
+- **[S2O.ini](bios/Other/Recalbox/S2O.ini)** (102 bytes)
+  - SHA1: `5462851817790c6ed022d552141ae9d3bf511f19`
+  - MD5: `8889587836cf1e4a6c4a1687d6fc2c43`
+  - CRC32: `b48e28c6`
+- **[S2W.ini](bios/Other/Recalbox/S2W.ini)** (331 bytes)
+  - SHA1: `6f381a521edf6d4c679b264dc69fa8ce3412d245`
+  - MD5: `a81f4dc20f7737931e8570be67e02a55`
+  - CRC32: `4a2918d3`
+- **[S3B.ini](bios/Other/Recalbox/S3B.ini)** (297 bytes)
+  - SHA1: `cc3fe9802618ac8e628e8c9aed740f6f44c00e59`
+  - MD5: `42863a4b7747945887b0499c2a609e2e`
+  - CRC32: `f8d3bf4c`
+- **[S3C.ini](bios/Other/Recalbox/S3C.ini)** (109 bytes)
+  - SHA1: `49f0762d27930497dbca156f246c57bef1821836`
+  - MD5: `72629d4a928c1b82a83295a7e40ff587`
+  - CRC32: `a3143b7c`
+- **[S3H.ini](bios/Other/Recalbox/S3H.ini)** (80 bytes)
+  - SHA1: `ae7f5cb4a323c62ce62203fbc15edaeed766990b`
+  - MD5: `389afbf6c118663442ffe8c6ab04f67c`
+  - CRC32: `6824b07b`
+- **[S59.ini](bios/Other/Recalbox/S59.ini)** (279 bytes)
+  - SHA1: `e18bd7f08245572ae3a123e86027db6ab61a754e`
+  - MD5: `1c3b6f5d6bc8a47cf0e2baf3253dd016`
+  - CRC32: `0f7bba6b`
+- **[S5D.ini](bios/Other/Recalbox/S5D.ini)** (329 bytes)
+  - SHA1: `ec6b6e65bfe6e65bf16ae0047b0f53fe0831ff1a`
+  - MD5: `79fb08e5621df60c180dbcd0313e0124`
+  - CRC32: `23a1fd15`
+- **[S5S.ini](bios/Other/Recalbox/S5S.ini)** (335 bytes)
+  - SHA1: `56f047759699d4de84a4a49556b6e8105ea8f88e`
+  - MD5: `83a9b14d0f4bdb74e274b0c2f34d7912`
+  - CRC32: `d562bfbd`
+- **[S72.ini](bios/Other/Recalbox/S72.ini)** (360 bytes)
+  - SHA1: `fb24a0da4e200a775903025e5fac9fdaf66dc452`
+  - MD5: `2a9682b7a778fece2c7bbd3d1e96ab29`
+  - CRC32: `36debb56`
+- **[S75.ini](bios/Other/Recalbox/S75.ini)** (269 bytes)
+  - SHA1: `322c53b9dc5a66a6c225a8a4b4a21a4d351adaca`
+  - MD5: `3b19bc843e35b164e56b07c40d10182c`
+  - CRC32: `193fbf1a`
+- **[S7E.ini](bios/Other/Recalbox/S7E.ini)** (158 bytes)
+  - SHA1: `91677c46e299b35ca282b3fd7b13fb89a5751c68`
+  - MD5: `5c555ca40fa8871411547e1f9bbf365f`
+  - CRC32: `ac8ed1c1`
+- **[SAG.ini](bios/Other/Recalbox/SAG.ini)** (71 bytes)
+  - SHA1: `99543d7249c8e43981730afc18c0df924364deda`
+  - MD5: `e7b5cf4a6040494e0084076b8b34ab70`
+  - CRC32: `c6bed05d`
+- **[SAK.ini](bios/Other/Recalbox/SAK.ini)** (349 bytes)
+  - SHA1: `9d1e8d585affc7693a3a347e2ce9185e45cf3ede`
+  - MD5: `6b128227ccb72afa3268dd7d982bd0f1`
+  - CRC32: `e4dd5aeb`
+- **[SAL.ini](bios/Other/Recalbox/SAL.ini)** (256 bytes)
+  - SHA1: `a60db5421e9a36ba98b1262eb4ceb0eed6d9de10`
+  - MD5: `164ad6e53abd0f3c717c0bf3c6628b7f`
+  - CRC32: `bf4d57b5`
+- **[SAN.ini](bios/Other/Recalbox/SAN.ini)** (97 bytes)
+  - SHA1: `1ca31f137fd0e87b26489f307ed8598a38476662`
+  - MD5: `eb7ee2077cbaa45bb93bc4db5501c3a0`
+  - CRC32: `907eacf5`
+- **[SAOE78.ini](bios/Other/Recalbox/SAOE78.ini)** (339 bytes)
+  - SHA1: `19eb2c7d6641cfe6a604ef0294881955245dba8a`
+  - MD5: `1b350f8da8297967bd9ddb6b4cb51892`
+  - CRC32: `389250bc`
+- **[SAOEVZ.ini](bios/Other/Recalbox/SAOEVZ.ini)** (339 bytes)
+  - SHA1: `f08f18f23f91de80b12e21d1ccd8bccd437c43d7`
+  - MD5: `6b04818fc90e4d90e35cee33c2848e3d`
+  - CRC32: `4bb6c083`
+- **[SAT.ini](bios/Other/Recalbox/SAT.ini)** (89 bytes)
+  - SHA1: `017804fb7a86dbacd5df37ebebd1ba67f694684f`
+  - MD5: `ec82f244c1af0975dbd1469dde3af9f0`
+  - CRC32: `47e0dbed`
+- **[SB3.ini](bios/Other/Recalbox/SB3.ini)** (295 bytes)
+  - SHA1: `541bcbff334773595b73de4dc1bfd88f3672addc`
+  - MD5: `15ebe950fb5fd47cc7374db35c3f838f`
+  - CRC32: `a1d9131c`
+- **[SB4.ini](bios/Other/Recalbox/SB4.ini)** (511 bytes)
+  - SHA1: `c87a1dad436e8a17915980e0fea38092dcd7f8d3`
+  - MD5: `647732c62978e16ec5e2f6b4b3a6944c`
+  - CRC32: `0f0bbe99`
+- **[SB8.ini](bios/Other/Recalbox/SB8.ini)** (65 bytes)
+  - SHA1: `8db5166066eed48a3529df23d781ba9267e73cc3`
+  - MD5: `cec49a70b6fb9c48aed9ee65daf5b2db`
+  - CRC32: `753ec852`
+- **[SBD.ini](bios/Other/Recalbox/SBD.ini)** (349 bytes)
+  - SHA1: `f416f91eaf9b8d4db8144585cac91c0e3078659f`
+  - MD5: `868a49eb1136f3269de2e81b57f9e4bf`
+  - CRC32: `64e6e4de`
+- **[SBE.ini](bios/Other/Recalbox/SBE.ini)** (71 bytes)
+  - SHA1: `00ec17d2f0f764787dd5d271c382903bbc4d570b`
+  - MD5: `b6874c5b1096d894718277f311cd70d8`
+  - CRC32: `9be5a22f`
+- **[SBF.ini](bios/Other/Recalbox/SBF.ini)** (76 bytes)
+  - SHA1: `1fb3e30b06cf6ac93ab32ea87d0ae7545cc51934`
+  - MD5: `b69eac7c1e51437ff5a9a7a3ba0fe5c3`
+  - CRC32: `02898c5d`
+- **[SBK.ini](bios/Other/Recalbox/SBK.ini)** (84 bytes)
+  - SHA1: `c1b93159d979c8d4c479534e126559085a9852a6`
+  - MD5: `0b0d607978ae735b844ee44e82ca63ad`
+  - CRC32: `56364f40`
+- **[SBQ.ini](bios/Other/Recalbox/SBQ.ini)** (74 bytes)
+  - SHA1: `e6257710cd021f0d5a9cf21ca7b1e399453ac07b`
+  - MD5: `4a0190698332580f56f4e74aee51fe93`
+  - CRC32: `c6f3b3a0`
+- **[SBR.ini](bios/Other/Recalbox/SBR.ini)** (83 bytes)
+  - SHA1: `483b65998d81c730b2bed090e34e776dad095138`
+  - MD5: `c4c3c2edf304b8a5eb134cb5a8e8e7c9`
+  - CRC32: `48d92cd4`
+- **[SBV.ini](bios/Other/Recalbox/SBV.ini)** (95 bytes)
+  - SHA1: `6b312ca419dfa247e9031de034bde711fbf63a5e`
+  - MD5: `ceea2ea50ba790eff52d01fa964ffcb9`
+  - CRC32: `3e8332f4`
+- **[SBX.ini](bios/Other/Recalbox/SBX.ini)** (313 bytes)
+  - SHA1: `94f845b53b084b285463191ef9811f313a50480b`
+  - MD5: `bf4a060749f2bf9e78024e76581ddc5e`
+  - CRC32: `5f34c752`
+- **[SBY.ini](bios/Other/Recalbox/SBY.ini)** (113 bytes)
+  - SHA1: `4a5ef9fc7b5bfb76c184fc7f8bfb11d4fb88edd7`
+  - MD5: `fa55885fefc517a4929d7854c072c7f1`
+  - CRC32: `36a28247`
+- **[SBZ.ini](bios/Other/Recalbox/SBZ.ini)** (89 bytes)
+  - SHA1: `bc9dc3c91147ebdbc6a791ca5eff0e10b7fd5f9b`
+  - MD5: `e0c08334960da9a8ff4ef9487255b0f9`
+  - CRC32: `700f7cad`
+- **[SC2E8P.ini](bios/Other/Recalbox/SC2E8P.ini)** (838 bytes)
+  - SHA1: `7e39f457f8a0c23fac63f27deaa2424c03ffa6cc`
+  - MD5: `6fb3e740382e8c99401b6a98cb8b628b`
+  - CRC32: `e61ce706`
+- **[SC7.ini](bios/Other/Recalbox/SC7.ini)** (325 bytes)
+  - SHA1: `645f466acc974f08b97f52a9c92930f26597ac7f`
+  - MD5: `6988f2c36d7c1a0948e2a3be45ca3149`
+  - CRC32: `bd2a2c04`
+- **[SCA.ini](bios/Other/Recalbox/SCA.ini)** (315 bytes)
+  - SHA1: `0d12b989578c66d1866a6fcc1b6ef85bcf27da1c`
+  - MD5: `46998b3d34fba42d14203b50a9050a3e`
+  - CRC32: `7706a6fd`
+- **[SCD.ini](bios/Other/Recalbox/SCD.ini)** (101 bytes)
+  - SHA1: `629decba8563a7b0aaed345726f7def4841bdbd7`
+  - MD5: `ff682bb332c3e59bd0d9fd59034e85ea`
+  - CRC32: `30beecd2`
+- **[SCE.ini](bios/Other/Recalbox/SCE.ini)** (84 bytes)
+  - SHA1: `03491693e69c94b23587683876b04a43475950de`
+  - MD5: `83def1e8f74848b9d6becb11e280ff65`
+  - CRC32: `94937f6c`
+- **[SCF.ini](bios/Other/Recalbox/SCF.ini)** (70 bytes)
+  - SHA1: `25bdd4f5447bab1f1fb2052b8eb6e7f02abd7309`
+  - MD5: `84e2b7e2a0f46f7b32c4aef2be9cdc4f`
+  - CRC32: `8b39fa27`
+- **[SCH.ini](bios/Other/Recalbox/SCH.ini)** (66 bytes)
+  - SHA1: `1b5f76ae52ab997f0020aa838e788f7b1e5cac71`
+  - MD5: `0e8eafcb2caef6ae20a3feb02e62750a`
+  - CRC32: `21e1b426`
+- **[SCI.ini](bios/Other/Recalbox/SCI.ini)** (221 bytes)
+  - SHA1: `9e7f8a7bebaa8391d27f324886e2f06338159366`
+  - MD5: `c7c37b2ec52e8eb74fa305c409dbbc8d`
+  - CRC32: `85278cee`
+- **[SCK.ini](bios/Other/Recalbox/SCK.ini)** (85 bytes)
+  - SHA1: `beaf862b533eac0189465af06170122f26032f9c`
+  - MD5: `c73ce94e03905cee7814b2449bdc12fd`
+  - CRC32: `5d9685f4`
+- **[SCT.ini](bios/Other/Recalbox/SCT.ini)** (70 bytes)
+  - SHA1: `7a1f94b398aa930634801211edd5bcca567cef6a`
+  - MD5: `c8cbdc68002b6abb7bd6d557bd9f545e`
+  - CRC32: `76ebadbc`
+- **[SCY.ini](bios/Other/Recalbox/SCY.ini)** (303 bytes)
+  - SHA1: `107a077b629b4e6d5dcd13523fa0290732ac18d1`
+  - MD5: `f11ff27a9898e996580b54bcd4e812bb`
+  - CRC32: `a3ba4af9`
+- **[SD2.ini](bios/Other/Recalbox/SD2.ini)** (323 bytes)
+  - SHA1: `8f45e7ae5e34da930dc1b2d6ef7046faef491f26`
+  - MD5: `293d76a7f39e44723fa45575b3c6a8e2`
+  - CRC32: `07a869f4`
+- **[SD2J01.ini](bios/Other/Recalbox/SD2J01.ini)** (432 bytes)
+  - SHA1: `7fc5c668652daadfa7b0602f07dc5d19cdedb425`
+  - MD5: `3e085aaea4ba21baa7796abaa4cec27b`
+  - CRC32: `909c20b8`
+- **[SD8.ini](bios/Other/Recalbox/SD8.ini)** (95 bytes)
+  - SHA1: `45ee1c4cfe0c4190c4f6305890139e93271ddd8a`
+  - MD5: `be40f4fa09f29a7201f6db2bfd7041d7`
+  - CRC32: `f9f8160a`
+- **[SDB.ini](bios/Other/Recalbox/SDB.ini)** (326 bytes)
+  - SHA1: `190457ddbc11eee4a1603e66022bc5af8e4f9b4a`
+  - MD5: `ec5da8d3f922aa85c02362af1385488a`
+  - CRC32: `1d837fc6`
+- **[SDE.ini](bios/Other/Recalbox/SDE.ini)** (79 bytes)
+  - SHA1: `babc11637a0df3a7c9bb35f1f338dc1a80d6aeeb`
+  - MD5: `b2e0dc982369ebf77194a4f7a7259cad`
+  - CRC32: `a2dd9bc5`
+- **[SDL.ini](bios/Other/Recalbox/SDL.ini)** (271 bytes)
+  - SHA1: `7b7de83d3b98ab0a44b2e6b29a9a8da723bd9d9e`
+  - MD5: `7d0b2efaa46a95b45143a53d5877c9b7`
+  - CRC32: `79fc2d67`
+- **[SDM.ini](bios/Other/Recalbox/SDM.ini)** (300 bytes)
+  - SHA1: `70b218bea81ce3c52d8a8ebca3a9ece80fdbb0dd`
+  - MD5: `86263ab98302da38c7cf5cc0feb5907f`
+  - CRC32: `0422106d`
+- **[SDN.ini](bios/Other/Recalbox/SDN.ini)** (305 bytes)
+  - SHA1: `111809ea6e2e7888d609ceb2bab6e6c76375962f`
+  - MD5: `c53bbeda9f8f8ce082f5630cd06ab5e1`
+  - CRC32: `75cbe178`
+- **[SDO.ini](bios/Other/Recalbox/SDO.ini)** (82 bytes)
+  - SHA1: `6aaaff47311daa676ec969e13d9c9507daf37f6c`
+  - MD5: `a242528cbc39379138cb5c94c084d4e7`
+  - CRC32: `d50161b8`
+- **[SDV.ini](bios/Other/Recalbox/SDV.ini)** (133 bytes)
+  - SHA1: `c12d1ff6406d6e327b7aac96f34886105b429fa4`
+  - MD5: `0dbc42afa6b8024c9cc1d28b402397e4`
+  - CRC32: `dcccc98c`
+- **[SDW.ini](bios/Other/Recalbox/SDW.ini)** (266 bytes)
+  - SHA1: `0fe8bf54b2d3b823a93c458bf663886618b396f8`
+  - MD5: `846062696efed3f28ee9bb99465facbc`
+  - CRC32: `3ea3f65f`
+- **[SDZ.ini](bios/Other/Recalbox/SDZ.ini)** (293 bytes)
+  - SHA1: `9506e0e0910a04c1f7ca256a76f6fff1eae37565`
+  - MD5: `7ad1192d505b34d2ce3b4829e29be215`
+  - CRC32: `6cd892c5`
+- **[SE2.ini](bios/Other/Recalbox/SE2.ini)** (395 bytes)
+  - SHA1: `3a9698838955ad7db9bc59abae845c0bc4c40933`
+  - MD5: `ead80f32bb1eda58733c81082306538c`
+  - CRC32: `213d509c`
+- **[SEA.ini](bios/Other/Recalbox/SEA.ini)** (345 bytes)
+  - SHA1: `c743422498d6ebc0d5324740277e8d3c3f66759f`
+  - MD5: `58f04636262e6e162a22cb32d4462b61`
+  - CRC32: `c41f1c19`
+- **[SEC.ini](bios/Other/Recalbox/SEC.ini)** (299 bytes)
+  - SHA1: `e2c464f7382273de8f79d6fa1cf0a61478ac617c`
+  - MD5: `4bb75f163f18fd955b1af636212d53a7`
+  - CRC32: `c02e3418`
+- **[SEG.ini](bios/Other/Recalbox/SEG.ini)** (67 bytes)
+  - SHA1: `f11febc8ad08cf0d68aef0df6a1bff69317b225a`
+  - MD5: `846062682a1aaeb4e2d83cba51c096d1`
+  - CRC32: `484f37b2`
+- **[SEM.ini](bios/Other/Recalbox/SEM.ini)** (369 bytes)
+  - SHA1: `628bec8b5ef9e9e2efffe8c0d320c07fec6afd40`
+  - MD5: `400ee8b32f4aec4076cc8a9f5b274122`
+  - CRC32: `cfb150f7`
+- **[SEP.ini](bios/Other/Recalbox/SEP.ini)** (298 bytes)
+  - SHA1: `fa22516f065bf052b509af6414471d8e7daf9639`
+  - MD5: `381272f2d21009dfcb7f202451a01e6f`
+  - CRC32: `c7cc4cc1`
+- **[SER.ini](bios/Other/Recalbox/SER.ini)** (347 bytes)
+  - SHA1: `d108852dc64cc77a9798543aa57fb4c1f7ebcfaa`
+  - MD5: `e56b5cef32b87d8b1794ede4bb5329c6`
+  - CRC32: `9075969d`
+- **[SEU.ini](bios/Other/Recalbox/SEU.ini)** (85 bytes)
+  - SHA1: `43107c9ab4d1f738abfd42a9cc095ee633d569c7`
+  - MD5: `d2c9d61f3492b0836ab183f0c665c2af`
+  - CRC32: `07592439`
+- **[SEV.ini](bios/Other/Recalbox/SEV.ini)** (80 bytes)
+  - SHA1: `23616a439ba5aefd914667b1c18a118ddc32e30b`
+  - MD5: `7e014f4c431c2bb76c3a7b85ca6ebdb0`
+  - CRC32: `c5e1c527`
+- **[SF2.ini](bios/Other/Recalbox/SF2.ini)** (299 bytes)
+  - SHA1: `50e9b2fd31528935666d21b73c9045133122114b`
+  - MD5: `f9c823cd62fa63edb5354b4b5ad30709`
+  - CRC32: `0385e48b`
+- **[SF7.ini](bios/Other/Recalbox/SF7.ini)** (79 bytes)
+  - SHA1: `1e0d3ce9fc24f157b97ce64b6c098e6c1df63d49`
+  - MD5: `30b5c26e17ae3131593788a719cd2138`
+  - CRC32: `dcf3767a`
+- **[SF8.ini](bios/Other/Recalbox/SF8.ini)** (450 bytes)
+  - SHA1: `5478270765a026494b4873d863983fc94595947f`
+  - MD5: `603ebcd6a889891b6766ee6c23cee0e1`
+  - CRC32: `967860ec`
+- **[SFI.ini](bios/Other/Recalbox/SFI.ini)** (490 bytes)
+  - SHA1: `ac206f6a24904be4c97cd759708d728ad6abae74`
+  - MD5: `fca487544ed974dd92b11880f86f97fb`
+  - CRC32: `be55990d`
+- **[SFP.ini](bios/Other/Recalbox/SFP.ini)** (274 bytes)
+  - SHA1: `55ee9c1e022c001d6b130225c103800b6508bad6`
+  - MD5: `fb41db752afa10b546a6b4ff9a67bdc3`
+  - CRC32: `e29fe3ea`
+- **[SFR.ini](bios/Other/Recalbox/SFR.ini)** (72 bytes)
+  - SHA1: `9cc7496d79f338943c1c6d3b5501fca8dc873f6a`
+  - MD5: `5403e645b5bbaf23a4991e5bb6ce7217`
+  - CRC32: `1afd6000`
+- **[SFU.ini](bios/Other/Recalbox/SFU.ini)** (296 bytes)
+  - SHA1: `ac628f0c120a0297e563c53062468f2dc961a9f3`
+  - MD5: `1e041c22aba55f18605e5d7986470973`
+  - CRC32: `a7e081fd`
+- **[SG2.ini](bios/Other/Recalbox/SG2.ini)** (96 bytes)
+  - SHA1: `055427723fa40996a043cb7149081e739c6f8e0e`
+  - MD5: `91bc95fa438dd95729ba9206c650e22b`
+  - CRC32: `4902dd34`
+- **[SG3.ini](bios/Other/Recalbox/SG3.ini)** (84 bytes)
+  - SHA1: `5b0486513a737dbdfd23e8e506d231af5c6beba3`
+  - MD5: `9b8084614a353367dd265fb2141d8e47`
+  - CRC32: `9554c8fa`
+- **[SG7.ini](bios/Other/Recalbox/SG7.ini)** (264 bytes)
+  - SHA1: `afc5b15b8a422bee323306579ff4303cc1374285`
+  - MD5: `71f83816cf8e4fc1434a252bfa3f5173`
+  - CRC32: `bbb78e57`
+- **[SG8.ini](bios/Other/Recalbox/SG8.ini)** (296 bytes)
+  - SHA1: `645301eddd02c11f5d22a073837d079119569e26`
+  - MD5: `14f441904fe3e96ab5ead6997d1b9bbd`
+  - CRC32: `069073f4`
+- **[SGD.ini](bios/Other/Recalbox/SGD.ini)** (80 bytes)
+  - SHA1: `daa5b4244d1e6a85c806b05d72dd64b55949361f`
+  - MD5: `435b55e1b91f661acff2727aedffbf8a`
+  - CRC32: `ab30e7d7`
+- **[SGL.ini](bios/Other/Recalbox/SGL.ini)** (201 bytes)
+  - SHA1: `dc710bbcab5e39bc285383042d6ad3258fb02681`
+  - MD5: `8e4f598175e47fc0f39b6a0c17465e29`
+  - CRC32: `32cf02dc`
+- **[SGLEA4.ini](bios/Other/Recalbox/SGLEA4.ini)** (390 bytes)
+  - SHA1: `d407fccdca7f7938388dcca7daed7cac5d8c8b2d`
+  - MD5: `cfa3249894c11db77437990363061161`
+  - CRC32: `5cc1a576`
+- **[SGLPA4.ini](bios/Other/Recalbox/SGLPA4.ini)** (390 bytes)
+  - SHA1: `d8023d1a7f4daf176b79dd5a4beda1fd19524374`
+  - MD5: `47836a5bc986d1103dce4fb5829fc9ad`
+  - CRC32: `b439a299`
+- **[SGT.ini](bios/Other/Recalbox/SGT.ini)** (127 bytes)
+  - SHA1: `e658c3c12c0f98e8e0b46212b9de966de628de70`
+  - MD5: `834d1ed094f6332982017ed73ecbe279`
+  - CRC32: `6db6f3fd`
+- **[SGV.ini](bios/Other/Recalbox/SGV.ini)** (253 bytes)
+  - SHA1: `c1455ca8a308cc76822bee15fb0dd4e8ee147c2c`
+  - MD5: `65b4ed0e85f90eaf471de2908d7d8fa6`
+  - CRC32: `7ff44c35`
+- **[SGX.ini](bios/Other/Recalbox/SGX.ini)** (96 bytes)
+  - SHA1: `55d767e0ba811a778491c95e9d86cba4dc54ad67`
+  - MD5: `8475119b7054b599d06c731f67e08ffc`
+  - CRC32: `199e6977`
+- **[SH2.ini](bios/Other/Recalbox/SH2.ini)** (90 bytes)
+  - SHA1: `4463b1b372fbeb911fed5ae0edc2d2c524fbd2eb`
+  - MD5: `0581d9253ec920fcbb2bd779e36ec1dc`
+  - CRC32: `72ad9219`
+- **[SH6.ini](bios/Other/Recalbox/SH6.ini)** (264 bytes)
+  - SHA1: `a71f4f83760c7f453418e065b775cfad817ce0cd`
+  - MD5: `7406bea3712599d891281747bf72f049`
+  - CRC32: `f90ee353`
+- **[SH9.ini](bios/Other/Recalbox/SH9.ini)** (100 bytes)
+  - SHA1: `d3a1c6a5a5d29e98750151191d2b75a8bdfbc765`
+  - MD5: `b0d56d842b91ab55f68bec033fa5207a`
+  - CRC32: `3bbc2eb5`
+- **[SHL.ini](bios/Other/Recalbox/SHL.ini)** (314 bytes)
+  - SHA1: `1f4defb7487753fa0060c0fbe30229d1ac6a5626`
+  - MD5: `fa9c4b3879cdf023099d528abc14e16f`
+  - CRC32: `c9c024fe`
+- **[SHO.ini](bios/Other/Recalbox/SHO.ini)** (93 bytes)
+  - SHA1: `acaf3a6689057f0fd352366a40d517e2fe7b5ff6`
+  - MD5: `d360469c4b4872f9dd397d97b447eb40`
+  - CRC32: `feb86606`
+- **[SHP.ini](bios/Other/Recalbox/SHP.ini)** (102 bytes)
+  - SHA1: `e21bbe4728d24e38bec0e7d1c7399bb396f72f93`
+  - MD5: `4a16813fe313e6085249f5e8e1b67e00`
+  - CRC32: `226196e4`
+- **[SHU.ini](bios/Other/Recalbox/SHU.ini)** (110 bytes)
+  - SHA1: `4ac315a1847368488a8d09696c10fe97b357e787`
+  - MD5: `09e867e14347b474593f81a3b08f7970`
+  - CRC32: `f982881c`
+- **[SHW.ini](bios/Other/Recalbox/SHW.ini)** (294 bytes)
+  - SHA1: `98c5cbd56e025e3f1a4c6ac96ceb690e5c84cb1e`
+  - MD5: `262e4e40e642333f44853045344777bc`
+  - CRC32: `e9647ed5`
+- **[SHX.ini](bios/Other/Recalbox/SHX.ini)** (317 bytes)
+  - SHA1: `a1a2c8f799dcc9d645ebdfc0a84f8be152fdca59`
+  - MD5: `fe58786f78e71d1be495aeebf2d30ebb`
+  - CRC32: `a29b952d`
+- **[SIL.ini](bios/Other/Recalbox/SIL.ini)** (297 bytes)
+  - SHA1: `d031031dcb27b65181e56b7214f85a78f2e130bd`
+  - MD5: `5983232de5ab633249ed95ef37846b5c`
+  - CRC32: `84cf2f06`
+- **[SIS.ini](bios/Other/Recalbox/SIS.ini)** (105 bytes)
+  - SHA1: `48fc88ee4d00c26ba8b00cebf39f925e7cefbba7`
+  - MD5: `7cc2d596acb1f93cfed8b2e140882d7e`
+  - CRC32: `3101f734`
+- **[SJ6.ini](bios/Other/Recalbox/SJ6.ini)** (326 bytes)
+  - SHA1: `a1a24b9b4b51e258bc3f616219a190e5aeac0e50`
+  - MD5: `5857be08254deb6c17854af169920636`
+  - CRC32: `02c79eff`
+- **[SJ7.ini](bios/Other/Recalbox/SJ7.ini)** (323 bytes)
+  - SHA1: `24ab0187e87c3c2ee2d4ee89f260d99ac824bc90`
+  - MD5: `a26703c58d80310b4739c4f91e95677f`
+  - CRC32: `768ff50e`
+- **[SJ9.ini](bios/Other/Recalbox/SJ9.ini)** (355 bytes)
+  - SHA1: `721327915d4dee38c96268742f40d96f0e831dc6`
+  - MD5: `14e4cac74aa184dc7ba19c22fc01628b`
+  - CRC32: `f51a673f`
+- **[SJB.ini](bios/Other/Recalbox/SJB.ini)** (285 bytes)
+  - SHA1: `8fdfa8437d8dd09aa4ccd0a10451e198a340832c`
+  - MD5: `768a1ebac1d515b4d6b07f95b4ca837c`
+  - CRC32: `43430d73`
+- **[SJC.ini](bios/Other/Recalbox/SJC.ini)** (120 bytes)
+  - SHA1: `7f9ddfd45108327c283544e6080d7b0992056c32`
+  - MD5: `81add152e4c825b85f49cbffd6ccc645`
+  - CRC32: `6af94234`
+- **[SJD.ini](bios/Other/Recalbox/SJD.ini)** (331 bytes)
+  - SHA1: `8f0ab1027e60d23174b399ac594147f40faf01d5`
+  - MD5: `e86d351a8528f42d8f27aba4dd8f5934`
+  - CRC32: `64a40180`
+- **[SJDJ01.ini](bios/Other/Recalbox/SJDJ01.ini)** (436 bytes)
+  - SHA1: `584991f925223936c00ddff73fb1fc5db08c67eb`
+  - MD5: `cd93444ff082a3946243a17787385723`
+  - CRC32: `a31990ae`
+- **[SJE.ini](bios/Other/Recalbox/SJE.ini)** (290 bytes)
+  - SHA1: `09c00a5014b527fad4da7dad94655fe4f0a49224`
+  - MD5: `8fe85244e3a2474262ceccef67a3edd1`
+  - CRC32: `f02f5e68`
+- **[SJHE41.ini](bios/Other/Recalbox/SJHE41.ini)** (311 bytes)
+  - SHA1: `11fec45f2181aade6fd1ce4c9d58f09558ded730`
+  - MD5: `b15181ca4b7de1f76c636e645065f74b`
+  - CRC32: `6eb0fabe`
+- **[SJK.ini](bios/Other/Recalbox/SJK.ini)** (76 bytes)
+  - SHA1: `fb3bf69ebcf3b1f48e8a37693b225059096a28da`
+  - MD5: `200df988dfc13708faa7f3619c71df24`
+  - CRC32: `0e5ead85`
+- **[SJL.ini](bios/Other/Recalbox/SJL.ini)** (83 bytes)
+  - SHA1: `35333dd1479ef602fed888ab1e02f9c6c005252a`
+  - MD5: `d3ec5c8a875f48fe711af97a08f4f6d2`
+  - CRC32: `55cefa4f`
+- **[SJQ.ini](bios/Other/Recalbox/SJQ.ini)** (82 bytes)
+  - SHA1: `c42b4195bbbdf129a837d277deb146a8cf4a0eb9`
+  - MD5: `a3de39456e92d8316589ecb2b435c428`
+  - CRC32: `d5c2fc88`
+- **[SJTP41.ini](bios/Other/Recalbox/SJTP41.ini)** (306 bytes)
+  - SHA1: `476131f960a79adf0c03182d7c3cf49e94ff8258`
+  - MD5: `74a97502b28af54d1298c815b6bd1477`
+  - CRC32: `2573dce1`
+- **[SJX.ini](bios/Other/Recalbox/SJX.ini)** (290 bytes)
+  - SHA1: `21d50c365a341119559a66efeb13f7e37e439bee`
+  - MD5: `6f093fef2d7a5a5640da17925cbd360d`
+  - CRC32: `e68bd679`
+- **[SJZ.ini](bios/Other/Recalbox/SJZ.ini)** (348 bytes)
+  - SHA1: `3941d796383a929c8312df30f2707ed40cf6b128`
+  - MD5: `d8e21eb7892e432d779caae1556a49c9`
+  - CRC32: `df019277`
+- **[SK3.ini](bios/Other/Recalbox/SK3.ini)** (257 bytes)
+  - SHA1: `fe1314e1cdb6ff23ee3d1e9db68cc0592e970c56`
+  - MD5: `8d46b782bdd50b86a17aef1cbf0dedb5`
+  - CRC32: `52a43bf8`
+- **[SK8.ini](bios/Other/Recalbox/SK8.ini)** (318 bytes)
+  - SHA1: `4d779830532f8a8f4cc3bded4d25ab025dcb6a40`
+  - MD5: `d7584a2ba9542cfdc99cafe16aa26836`
+  - CRC32: `eb035670`
+- **[SKA.ini](bios/Other/Recalbox/SKA.ini)** (293 bytes)
+  - SHA1: `a510098b47a07386473cd7cdc32b9728a4a68bb6`
+  - MD5: `81db360989884dd4aa54b89dd9acbb10`
+  - CRC32: `fdd9d2b7`
+- **[SKB.ini](bios/Other/Recalbox/SKB.ini)** (76 bytes)
+  - SHA1: `5a5b3cd712a43a453d591c137ba51b201f5e8668`
+  - MD5: `5b153540b78d3c268e03c3b910a2e7ae`
+  - CRC32: `677ddaa6`
+- **[SKC.ini](bios/Other/Recalbox/SKC.ini)** (284 bytes)
+  - SHA1: `65d5c2ec3b3f58dc99822c336bbb96cb8f42322f`
+  - MD5: `62c3ba9068117d37c6d5b17f90b4883f`
+  - CRC32: `f98297b5`
+- **[SKG.ini](bios/Other/Recalbox/SKG.ini)** (285 bytes)
+  - SHA1: `1130573365f516197de599af8d84dfae85c72b94`
+  - MD5: `26bfa19223536e8a385bc47b963bde6b`
+  - CRC32: `3c5f4192`
+- **[SKJ.ini](bios/Other/Recalbox/SKJ.ini)** (305 bytes)
+  - SHA1: `c5a047efdb1e3f39424344c419d5b96ad0e2ebe8`
+  - MD5: `12f47a53e3c3451f365462cbc3531eb8`
+  - CRC32: `07b5a861`
+- **[SKO.ini](bios/Other/Recalbox/SKO.ini)** (285 bytes)
+  - SHA1: `19af4d13f068af7963deeb370ea38ba3d899144b`
+  - MD5: `a8c57bc7c5a94ef85a4572a78be315df`
+  - CRC32: `a27d2d64`
+- **[SKP.ini](bios/Other/Recalbox/SKP.ini)** (150 bytes)
+  - SHA1: `38490ffcb821e2641dcaca04ae473a0f109a4480`
+  - MD5: `60b2b18a713df88472c0d44157004770`
+  - CRC32: `9dd70a34`
+- **[SKT.ini](bios/Other/Recalbox/SKT.ini)** (78 bytes)
+  - SHA1: `eeb9895b11740af108ae4d715b462afd20886031`
+  - MD5: `4a1ddeef973bcae9a78a62ee59aab3d0`
+  - CRC32: `628489da`
+- **[SKU.ini](bios/Other/Recalbox/SKU.ini)** (266 bytes)
+  - SHA1: `3b2866ab49ead04d2d53636eb81bbdaa6cd85540`
+  - MD5: `c0888365982faaab1654baf6fd311504`
+  - CRC32: `a1138f93`
+- **[SKV.ini](bios/Other/Recalbox/SKV.ini)** (286 bytes)
+  - SHA1: `53108a7dce75715c67564250ade663afc209f966`
+  - MD5: `cc3ebf402711f584b1e370575cac9a5f`
+  - CRC32: `767a76ae`
+- **[SKW.ini](bios/Other/Recalbox/SKW.ini)** (74 bytes)
+  - SHA1: `631e3cca5eeadb8bf5629eb6b4af8f5250ffa831`
+  - MD5: `58fa732bdf773fd9c11455b471ce4ba6`
+  - CRC32: `8e4905c0`
+- **[SKX.ini](bios/Other/Recalbox/SKX.ini)** (75 bytes)
+  - SHA1: `0c148abe3129a9b4f0573ee05514f7f4e0ab7935`
+  - MD5: `dde76ed945d197b0992f10bedea02d93`
+  - CRC32: `4eb66733`
+- **[SKY.ini](bios/Other/Recalbox/SKY.ini)** (315 bytes)
+  - SHA1: `37bbde01111c086fbfe5ff62ba5cd6569ba481b7`
+  - MD5: `1e2c73e3651f332b629ef8d8ee80f386`
+  - CRC32: `20ca6ff3`
+- **[SL2.ini](bios/Other/Recalbox/SL2.ini)** (265 bytes)
+  - SHA1: `3389bac1f7d1f2b0bef8837a629a1279d7c4b362`
+  - MD5: `fa7011c4feea6c5fb2c45abcd4b99265`
+  - CRC32: `4c65cbc4`
+- **[SL2P01.ini](bios/Other/Recalbox/SL2P01.ini)** (68 bytes)
+  - SHA1: `798431e1c0586858b6f693d8bfde10937472e028`
+  - MD5: `b2f34c28e9502242485c548df5ce513e`
+  - CRC32: `852076f5`
+- **[SLE.ini](bios/Other/Recalbox/SLE.ini)** (310 bytes)
+  - SHA1: `457254f00742e0c48ce2af46b7dfd6f2b80fde64`
+  - MD5: `a89284ed0a27a90951258fec221188c1`
+  - CRC32: `73c1f55e`
+- **[SLP.ini](bios/Other/Recalbox/SLP.ini)** (73 bytes)
+  - SHA1: `e0e3c0c0fc27a45e5703a5e4c27cea39153fa7ce`
+  - MD5: `ae9b7a00beba9e5c6817766289727657`
+  - CRC32: `b33a6300`
+- **[SLS.ini](bios/Other/Recalbox/SLS.ini)** (317 bytes)
+  - SHA1: `bf3cb43ccabba3310d1912779db242b661e8329a`
+  - MD5: `018a5a0770b37a2bb784a4414f87f46c`
+  - CRC32: `50a3c1a9`
+- **[SLSP01.ini](bios/Other/Recalbox/SLSP01.ini)** (68 bytes)
+  - SHA1: `7ae84f7b3475b538ad8bbf5b03f20d2be0181594`
+  - MD5: `a6ba3c24664885369faca9b6f0bf18db`
+  - CRC32: `e3f8755f`
+- **[SLW.ini](bios/Other/Recalbox/SLW.ini)** (340 bytes)
+  - SHA1: `a1eec48ee9aa85f98e9a66bf6283ffdb2e36c7a1`
+  - MD5: `2d87c8740e7d8996033067102e2e7340`
+  - CRC32: `8a579d1a`
+- **[SM2.ini](bios/Other/Recalbox/SM2.ini)** (110 bytes)
+  - SHA1: `f93b58c8efe6d114998c44a94e55b7d6e2faebd0`
+  - MD5: `db349cc363e547776e8ebaa77aa92426`
+  - CRC32: `af7f6da6`
+- **[SM6.ini](bios/Other/Recalbox/SM6.ini)** (87 bytes)
+  - SHA1: `674107322a77c04d05e0a1b7caa649f1efca187c`
+  - MD5: `73a8e7d6303b9320af27414fa50ba0b2`
+  - CRC32: `19db10c8`
+- **[SMB.ini](bios/Other/Recalbox/SMB.ini)** (244 bytes)
+  - SHA1: `aaf46f7cbb09e4e1cf212569771e6a1e1688fd70`
+  - MD5: `30514c50d4dbb87d891d62457fd293e9`
+  - CRC32: `bf673beb`
+- **[SMF.ini](bios/Other/Recalbox/SMF.ini)** (335 bytes)
+  - SHA1: `08e406ffe3c63e5deeffc918aacecae695276f6b`
+  - MD5: `d527511ed202959d211680bbccc4baa8`
+  - CRC32: `d9fca0ad`
+- **[SMI.ini](bios/Other/Recalbox/SMI.ini)** (84 bytes)
+  - SHA1: `1575afacb451e602c57e17d4a86d7e9fd84abfc3`
+  - MD5: `da60881df99d5c3531293dca5601fb13`
+  - CRC32: `cd68af92`
+- **[SMM.ini](bios/Other/Recalbox/SMM.ini)** (98 bytes)
+  - SHA1: `7e5b37f4349be382db19a136a78dd371fea355b2`
+  - MD5: `1f25deff99b74b0046478bddea71d70c`
+  - CRC32: `a2d2872c`
+- **[SMN.ini](bios/Other/Recalbox/SMN.ini)** (418 bytes)
+  - SHA1: `b683dfbf00f55906018ca15884a36b106924c0c1`
+  - MD5: `3a8376efd58b80089f5a8dc4ddd5a29d`
+  - CRC32: `dca36a52`
+- **[SMNE01.ini](bios/Other/Recalbox/SMNE01.ini)** (607 bytes)
+  - SHA1: `6d653ba5a0c5511ff8f01b0aa6c2b4833576428f`
+  - MD5: `1aec2db6f74bdb66001aaac9a8eaf732`
+  - CRC32: `4a6442ac`
+- **[SMNP01.ini](bios/Other/Recalbox/SMNP01.ini)** (340 bytes)
+  - SHA1: `9202ab7d5fd8c69a4be2aed214c8de52f68de103`
+  - MD5: `88ce9416d466e5f857cd121c90821481`
+  - CRC32: `21515146`
+- **[SMO.ini](bios/Other/Recalbox/SMO.ini)** (299 bytes)
+  - SHA1: `effb39af0e4a7a957784ededb194f7503ff0d67e`
+  - MD5: `f293fa6f7dab1ad3aa6fd305bee1b3e5`
+  - CRC32: `c2d80902`
+- **[SMS.ini](bios/Other/Recalbox/SMS.ini)** (154 bytes)
+  - SHA1: `77262edd3bdbf1c42d9b942d519974f4d6fb1255`
+  - MD5: `b7b07518cc53d1a6214f3cb596f1f4d9`
+  - CRC32: `8b963c24`
+- **[SMU.ini](bios/Other/Recalbox/SMU.ini)** (118 bytes)
+  - SHA1: `da7b38937e41143fa2024fb7f877017f1acb9cf6`
+  - MD5: `3653b54d85c1b27c8ba087756ee8ea42`
+  - CRC32: `3e2469e7`
+- **[SMZ.ini](bios/Other/Recalbox/SMZ.ini)** (288 bytes)
+  - SHA1: `69a98dfe970ae7fe91358d3218574d4f42280182`
+  - MD5: `c75653b61215788b5b37f76695c52420`
+  - CRC32: `d927a779`
+- **[SND.ini](bios/Other/Recalbox/SND.ini)** (261 bytes)
+  - SHA1: `5766a8f01b3140d46b4ec4e9129bdf12aeecbb21`
+  - MD5: `06522103064d8d37355979785d5ef71d`
+  - CRC32: `523056d7`
+- **[SNG.ini](bios/Other/Recalbox/SNG.ini)** (269 bytes)
+  - SHA1: `74da0a43ccdf95dbfc765f46d36a96ef6a11dfb0`
+  - MD5: `ebb8cbb1cca500d5047d76cfb109dfd5`
+  - CRC32: `edb4248c`
+- **[SNJ.ini](bios/Other/Recalbox/SNJ.ini)** (261 bytes)
+  - SHA1: `a698967c5f0347d748f9847b1de2505cd0188b92`
+  - MD5: `21db4d0486e2640a7436a874cf4b135f`
+  - CRC32: `da67da1a`
+- **[SNJE69.ini](bios/Other/Recalbox/SNJE69.ini)** (507 bytes)
+  - SHA1: `e753b0cf067218c4438a393839f2c1ec9144508b`
+  - MD5: `949e68c29a24ec3903db80c015afdc02`
+  - CRC32: `e6ed84e8`
+- **[SNM.ini](bios/Other/Recalbox/SNM.ini)** (75 bytes)
+  - SHA1: `692f853a9aca40d69483cf3eaec560a94d74d3e6`
+  - MD5: `890bb93fecb5bc0964394c5c10abaffc`
+  - CRC32: `cfddbe42`
+- **[SNQ.ini](bios/Other/Recalbox/SNQ.ini)** (76 bytes)
+  - SHA1: `5393253b857289795876769e52f4410b587f13c1`
+  - MD5: `1bf6b5c63f13facd6e2a8e5d46fa6ef4`
+  - CRC32: `8dd32f60`
+- **[SNS.ini](bios/Other/Recalbox/SNS.ini)** (289 bytes)
+  - SHA1: `3d4d38fe3fb0158253e5d628bafe5a1aa883144d`
+  - MD5: `8403474508c7abf538a6dfd5cc4dcbc9`
+  - CRC32: `58465e4d`
+- **[SNT.ini](bios/Other/Recalbox/SNT.ini)** (327 bytes)
+  - SHA1: `d418a31ef353f1f172f72e683120ca09caf68d39`
+  - MD5: `abeb7e34465cee8959df4b5c5e087638`
+  - CRC32: `27c67257`
+- **[SNY.ini](bios/Other/Recalbox/SNY.ini)** (147 bytes)
+  - SHA1: `d97ffae6800898bfcc61b37cb821ac43051a8500`
+  - MD5: `af15c0839aa78fb6d04a032a0a9707b8`
+  - CRC32: `9cf0a5ae`
+- **[SOC.ini](bios/Other/Recalbox/SOC.ini)** (84 bytes)
+  - SHA1: `3387bbeb0f6f4892a42d8d0b2066007a879cd895`
+  - MD5: `060b8a78a40b89e9423796222ab77bfb`
+  - CRC32: `3219cfe7`
+- **[SOD.ini](bios/Other/Recalbox/SOD.ini)** (105 bytes)
+  - SHA1: `a7f0597f99b656709639071a130ca1f5b5fe45d4`
+  - MD5: `971f2b11a0d8dff75c58ac8609327614`
+  - CRC32: `2ebcc51f`
+- **[SOJ.ini](bios/Other/Recalbox/SOJ.ini)** (308 bytes)
+  - SHA1: `a4abf8de17d71a445f4a1e2e75f76ccc4e0fccc0`
+  - MD5: `7d7ca28e4092da08ef85948341056ee8`
+  - CRC32: `400b2a35`
+- **[SOM.ini](bios/Other/Recalbox/SOM.ini)** (280 bytes)
+  - SHA1: `6a637e70efdcf91bd882eda4573f673cf58fd486`
+  - MD5: `ff363a123abab35c2fe6a4dd7375c60d`
+  - CRC32: `3c625538`
+- **[SON.ini](bios/Other/Recalbox/SON.ini)** (191 bytes)
+  - SHA1: `f9e83a933190a011cfa61923c2f1b6fa15c500ab`
+  - MD5: `1b2ac6ec6e81916518b82760e4641623`
+  - CRC32: `04a8bff0`
+- **[SOR.ini](bios/Other/Recalbox/SOR.ini)** (71 bytes)
+  - SHA1: `243f57c09dfaa3ec15a55badd0d25df7282ee9fe`
+  - MD5: `bb5bd518f97b91aa78e39aa8f7397b14`
+  - CRC32: `39325c71`
+- **[SOS.ini](bios/Other/Recalbox/SOS.ini)** (293 bytes)
+  - SHA1: `0a02f7825ce30c33fcba0c9f045f5445c33979e7`
+  - MD5: `0828db173aca0e08cd1e84c2c316a73c`
+  - CRC32: `6a8f4894`
+- **[SOU.ini](bios/Other/Recalbox/SOU.ini)** (399 bytes)
+  - SHA1: `0b7fd4217c5aa566d368d4dc988e03b8b40b4add`
+  - MD5: `0fa9477d8a7e469d40eddbc4b6e7c038`
+  - CRC32: `86d238ee`
+- **[SP3.ini](bios/Other/Recalbox/SP3.ini)** (77 bytes)
+  - SHA1: `251afdcd768eefaf4a8655f3be0e482ca492a075`
+  - MD5: `fd25a65e0e339d40504c76a4b7d2db33`
+  - CRC32: `8fba57d4`
+- **[SP7.ini](bios/Other/Recalbox/SP7.ini)** (83 bytes)
+  - SHA1: `85423ad18abfc2b1d161c2fdf4043f9c4d413c3e`
+  - MD5: `77da49ac036d0f1a6132e1d007cff4d6`
+  - CRC32: `4bc1c14b`
+- **[SP8.ini](bios/Other/Recalbox/SP8.ini)** (308 bytes)
+  - SHA1: `3a7bb4586fa4c4ae8bd82f86ec2b0030a8d46b5f`
+  - MD5: `bb2728ac7e276dec13d6082d33421b79`
+  - CRC32: `c076ef9d`
+- **[SP9.ini](bios/Other/Recalbox/SP9.ini)** (78 bytes)
+  - SHA1: `aed46074814af95dbdc37b09572888a3a6b12677`
+  - MD5: `ca6a4b29ac0c2ec633731793c772d62f`
+  - CRC32: `662030eb`
+- **[SPA.ini](bios/Other/Recalbox/SPA.ini)** (73 bytes)
+  - SHA1: `30436ac7a74034a518b2ad7f442c399a999dbc92`
+  - MD5: `b376c2d514fe9b335a4ff6f8595aa96b`
+  - CRC32: `7e38b0ac`
+- **[SPC.ini](bios/Other/Recalbox/SPC.ini)** (68 bytes)
+  - SHA1: `a3e958a7fe0771b3e651a20f5b2d4a8f96e6f9db`
+  - MD5: `42754072b29974b61b7f89930302ada8`
+  - CRC32: `778f2347`
+- **[SPD.ini](bios/Other/Recalbox/SPD.ini)** (315 bytes)
+  - SHA1: `5c288b71feb1b1d90126fd3c95683fc134577153`
+  - MD5: `9b30493dfeb061c64ae5901a86bc510c`
+  - CRC32: `931524a3`
+- **[SPH.ini](bios/Other/Recalbox/SPH.ini)** (80 bytes)
+  - SHA1: `8f4e79e01b22e5ac0bb2d1c0f912ed14670b386a`
+  - MD5: `56f0ffdfa3c00b721ef49dc19c27a5f7`
+  - CRC32: `c54f5cd0`
+- **[SPM.ini](bios/Other/Recalbox/SPM.ini)** (81 bytes)
+  - SHA1: `152a66bb2081ef3a5a5cb3772d7f8d8d4d8b0e19`
+  - MD5: `25f7423c0215bc1a874b3cb50eb5d6b5`
+  - CRC32: `f49ae8eb`
+- **[SPQ.ini](bios/Other/Recalbox/SPQ.ini)** (251 bytes)
+  - SHA1: `778466abb4a17d7967b07667dc3845298a2abbf3`
+  - MD5: `7b6e0f3836e0a7a8655f2c2a53352d5f`
+  - CRC32: `d839530b`
+- **[SPR.ini](bios/Other/Recalbox/SPR.ini)** (308 bytes)
+  - SHA1: `35210d96e7876e0dd2afcbc1d467dc0d6282acbe`
+  - MD5: `1a7e5e593c8ad98cb993d1a4505d1df5`
+  - CRC32: `493260c7`
+- **[SPT.ini](bios/Other/Recalbox/SPT.ini)** (269 bytes)
+  - SHA1: `42a9e65b713cac918c54fe0ae5a1ed12a40b9494`
+  - MD5: `6ef8d30c8fad0cf88367fb6e0bf9eb25`
+  - CRC32: `ef2e70c8`
+- **[SPU.ini](bios/Other/Recalbox/SPU.ini)** (66 bytes)
+  - SHA1: `6810123513d65d2d1d91f17c97981b28d5a9758f`
+  - MD5: `ea00e5b77d464fe6b5ff6f125999272d`
+  - CRC32: `3aea1e3d`
+- **[SPV.ini](bios/Other/Recalbox/SPV.ini)** (295 bytes)
+  - SHA1: `17e696e1652288a99f8e00a22db0b1146ba529d6`
+  - MD5: `18ca65eac3ce3d719c0c688383944ef5`
+  - CRC32: `88ceb8b8`
+- **[SPZ.ini](bios/Other/Recalbox/SPZ.ini)** (73 bytes)
+  - SHA1: `b887c173a8096c32d92d5bfaf2ae94913f8af567`
+  - MD5: `f3699390916fb35806732ed76e2e4027`
+  - CRC32: `ea523267`
+- **[SQD.ini](bios/Other/Recalbox/SQD.ini)** (297 bytes)
+  - SHA1: `4938f544896e33352d0f4207283ff431f90b0c6b`
+  - MD5: `82b03c4eb4e705fdb6f361d410687c52`
+  - CRC32: `fb159443`
+- **[SQI.ini](bios/Other/Recalbox/SQI.ini)** (288 bytes)
+  - SHA1: `e49a40ab3f5c0f6f60dafe9ab63138b2baf757f5`
+  - MD5: `4068dc84ddf32db4ecb6c8961f9f09b1`
+  - CRC32: `8b44cad8`
+- **[SR4.ini](bios/Other/Recalbox/SR4.ini)** (290 bytes)
+  - SHA1: `d315620eed6507667d6afb8d1aa8b47a8756d642`
+  - MD5: `fd743cf156ad6b80d41f879bf8456884`
+  - CRC32: `2faf2b41`
+- **[SR5.ini](bios/Other/Recalbox/SR5.ini)** (403 bytes)
+  - SHA1: `91510c5dcd796de3bdf7c62de94e0b6e9e1ffa80`
+  - MD5: `ca771786b9f90182f4746fcbb4e309d2`
+  - CRC32: `8b1ba7c1`
+- **[SR6.ini](bios/Other/Recalbox/SR6.ini)** (78 bytes)
+  - SHA1: `0269624fd14983e4ba108c2e1a90809a0c36f340`
+  - MD5: `81b6dc6b95906c680d126247d63622f3`
+  - CRC32: `70d4792f`
+- **[SR7.ini](bios/Other/Recalbox/SR7.ini)** (78 bytes)
+  - SHA1: `b22deb4f9d0e3f8531d4817a2ab1005b0009ca73`
+  - MD5: `57318b0676e5859146aa9e07f6300c95`
+  - CRC32: `c677704b`
+- **[SR8.ini](bios/Other/Recalbox/SR8.ini)** (81 bytes)
+  - SHA1: `e22705761fbfe21270c565a1d4bb5aa83e05b041`
+  - MD5: `ce78578f23580faa032f8fab87f82451`
+  - CRC32: `050618b6`
+- **[SR9.ini](bios/Other/Recalbox/SR9.ini)** (78 bytes)
+  - SHA1: `2439d66c119ccd93126c7c65a8cbdb22e3a5acf1`
+  - MD5: `e56147f49ff62e4f5ef3ab1431568bba`
+  - CRC32: `fc64728a`
+- **[SRA.ini](bios/Other/Recalbox/SRA.ini)** (71 bytes)
+  - SHA1: `68c83229cf5fd124c7baa109a609ece80515e2bb`
+  - MD5: `770ed63be84329c3cf5b87da30da1560`
+  - CRC32: `7674f6fd`
+- **[SRE.ini](bios/Other/Recalbox/SRE.ini)** (81 bytes)
+  - SHA1: `d4dbfef69e41b4c2dda2718cf204198fd1b1ddde`
+  - MD5: `6c57b7fe9812fe7834f6d1eabc74d44a`
+  - CRC32: `1ba2d263`
+- **[SRL.ini](bios/Other/Recalbox/SRL.ini)** (78 bytes)
+  - SHA1: `8ea2cc96350a2a1e2b17199fb20a17c0ef32c88b`
+  - MD5: `5a1616077a6695399736c62966ecae9c`
+  - CRC32: `7b4aa57a`
+- **[SRQ.ini](bios/Other/Recalbox/SRQ.ini)** (312 bytes)
+  - SHA1: `6540f2f630875ad03544457c633b71277f557155`
+  - MD5: `369ff8a2496c1dd9df3a09e7b342845e`
+  - CRC32: `0946bd25`
+- **[SRT.ini](bios/Other/Recalbox/SRT.ini)** (78 bytes)
+  - SHA1: `e7f5ce45a3c024e56bbae30686125e978500da41`
+  - MD5: `d40e78ecdfdfad4e60cbd56561ba5d0b`
+  - CRC32: `81f02525`
+- **[SRV.ini](bios/Other/Recalbox/SRV.ini)** (81 bytes)
+  - SHA1: `c009b73e11d7fbdeded37cc8aa1c347ce630da92`
+  - MD5: `a4d406b7766be64dbe95241367bba207`
+  - CRC32: `6f88908d`
+- **[SRW.ini](bios/Other/Recalbox/SRW.ini)** (78 bytes)
+  - SHA1: `12a00d7998060bbfabd6362825f2a3e52ff2dc81`
+  - MD5: `70877897149e6359ac225234830413b3`
+  - CRC32: `22bde8b6`
+- **[SRX.ini](bios/Other/Recalbox/SRX.ini)** (355 bytes)
+  - SHA1: `7b4c6d7a3377ea275fc47efe8a0500bb200e6575`
+  - MD5: `efd227b4d7d912a8ef44fa7ed3812b43`
+  - CRC32: `cdf41214`
+- **[SS8.ini](bios/Other/Recalbox/SS8.ini)** (274 bytes)
+  - SHA1: `675681e7c0739af89ffcf1de5b050736509c69fe`
+  - MD5: `315e7e2d4d762825b9582846eae9a828`
+  - CRC32: `f9a216bc`
+- **[SS9.ini](bios/Other/Recalbox/SS9.ini)** (86 bytes)
+  - SHA1: `9ca6ba428b7e70ff89216dd9bb3cf85c508c7f0a`
+  - MD5: `c8f150529e98d4fca3dbb203806d2973`
+  - CRC32: `0d3c7dc2`
+- **[SSC.ini](bios/Other/Recalbox/SSC.ini)** (139 bytes)
+  - SHA1: `9d06e737a68dbf8ebe83371453c6aace881a1881`
+  - MD5: `40bb805e017422409d980b9aae3efc8a`
+  - CRC32: `ea495640`
+- **[SSG.ini](bios/Other/Recalbox/SSG.ini)** (62 bytes)
+  - SHA1: `a13b1c98e5cb1e0b874c46d0fba34108f5228d05`
+  - MD5: `596f6d78768bd0f97543a5ed4f7bfffd`
+  - CRC32: `51a8e000`
+- **[SSH.ini](bios/Other/Recalbox/SSH.ini)** (90 bytes)
+  - SHA1: `0c37edf35932b09a097b130df007a8dddcf15b0a`
+  - MD5: `978aff3dd41f611c9b1c1c9d46096db6`
+  - CRC32: `c95d3164`
+- **[SSP.ini](bios/Other/Recalbox/SSP.ini)** (326 bytes)
+  - SHA1: `e835bfc812bd084b8a2e265db3e045fbc9fdad04`
+  - MD5: `8c7867bd45075cc7b347b4ff59a42568`
+  - CRC32: `30840750`
+- **[SSQ.ini](bios/Other/Recalbox/SSQ.ini)** (264 bytes)
+  - SHA1: `9c0543f03ec4ef53c2922782c55a4cc3aa2919d7`
+  - MD5: `00b46cff8fce0a432a155636fe65119e`
+  - CRC32: `ead12036`
+- **[SSR.ini](bios/Other/Recalbox/SSR.ini)** (279 bytes)
+  - SHA1: `8f4ccc14bdbda66dc67dfd383d9cb98d642547a2`
+  - MD5: `cd5fc347bd4c3d9f69266f29387981fd`
+  - CRC32: `4ba44229`
+- **[SST.ini](bios/Other/Recalbox/SST.ini)** (295 bytes)
+  - SHA1: `2975073e63a9e4fd6f7f2a3c73f9b9e0ef728ae4`
+  - MD5: `6fe00f9242d211c73fa8421258f287c3`
+  - CRC32: `b1ba33f3`
+- **[SSZ.ini](bios/Other/Recalbox/SSZ.ini)** (258 bytes)
+  - SHA1: `6fbfc950b30b2e3ac64a408820c7038d6e284a70`
+  - MD5: `73d18feadd52edf0419f6fe428c0f00f`
+  - CRC32: `1da0dc52`
+- **[ST4.ini](bios/Other/Recalbox/ST4.ini)** (98 bytes)
+  - SHA1: `95838303cc06c58a577e8319a359e9f06dffabb6`
+  - MD5: `0325caa0d180a2786b7ccb9a2d652dd9`
+  - CRC32: `b9a3b5a4`
+- **[ST6.ini](bios/Other/Recalbox/ST6.ini)** (116 bytes)
+  - SHA1: `a11b7cd381a26424ada1a8ca0d255e1d5599614e`
+  - MD5: `b0f117bfc2a419a999817e4edd780a62`
+  - CRC32: `312f0656`
+- **[ST7P01.ini](bios/Other/Recalbox/ST7P01.ini)** (65 bytes)
+  - SHA1: `59e055d80c725b5439a697f6b59664465d819787`
+  - MD5: `bbc0fb0f84e97a03899f136fb1a07028`
+  - CRC32: `d1e09149`
+- **[STM.ini](bios/Other/Recalbox/STM.ini)** (78 bytes)
+  - SHA1: `8fe72f2a6552ed7312cd31ecb48fed714e45a328`
+  - MD5: `89a4ed62372ca9f801111b6a22f8b91f`
+  - CRC32: `701d00b3`
+- **[STN.ini](bios/Other/Recalbox/STN.ini)** (145 bytes)
+  - SHA1: `97f6764eea9ba2df2cd857fb57a1a30fd285594e`
+  - MD5: `db8e186e0224486a0c27d685dcd7eb20`
+  - CRC32: `b870a51d`
+- **[STR.ini](bios/Other/Recalbox/STR.ini)** (288 bytes)
+  - SHA1: `70c478ad5adf1437b4d3c2215add18ca9aa0e743`
+  - MD5: `5df9fef311074f05c2ee400b7e50230a`
+  - CRC32: `60b1ce74`
+- **[STS.ini](bios/Other/Recalbox/STS.ini)** (297 bytes)
+  - SHA1: `58dc949bf53d9ff09088d2e5b7981d88757f7bdc`
+  - MD5: `23abd2f642bbddc351e4383a70638549`
+  - CRC32: `d43517bd`
+- **[STV.ini](bios/Other/Recalbox/STV.ini)** (70 bytes)
+  - SHA1: `187d9adcf5240797488cc183bc170f4dca7318e4`
+  - MD5: `a82f9265e8be12db53b51390aa64e402`
+  - CRC32: `7d36185c`
+- **[STZ.ini](bios/Other/Recalbox/STZ.ini)** (141 bytes)
+  - SHA1: `d6f7cc315da59c603c437604cc0e1812b859f040`
+  - MD5: `d144f00d0bc1dbc5ef6152821eeb6f09`
+  - CRC32: `9244db7c`
+- **[SU3.ini](bios/Other/Recalbox/SU3.ini)** (103 bytes)
+  - SHA1: `fac4410cb43bf6f4af62250ce4a7b08d7e1bff5c`
+  - MD5: `941e7501c181563385cbc95a0816dd76`
+  - CRC32: `4f9c9caa`
+- **[SU4.ini](bios/Other/Recalbox/SU4.ini)** (144 bytes)
+  - SHA1: `eb9fa66428e8ca545dd087ff7f06f8c2561685a4`
+  - MD5: `5be8c930886ef95e12013e0bd66826b7`
+  - CRC32: `3ec02a5f`
+- **[SU7.ini](bios/Other/Recalbox/SU7.ini)** (131 bytes)
+  - SHA1: `a88dd842c9335f411a927d460beec8a1cfbe90a0`
+  - MD5: `75d4c0b8a09c250d56f2dd8830d8c709`
+  - CRC32: `29ec3426`
+- **[SUK.ini](bios/Other/Recalbox/SUK.ini)** (278 bytes)
+  - SHA1: `e71528a06678ef2b27a7f47509a7221ab94c54e9`
+  - MD5: `b6152ed0494681a632145072c3adca3f`
+  - CRC32: `6ca85327`
+- **[SUKE01.ini](bios/Other/Recalbox/SUKE01.ini)** (39,057 bytes)
+  - SHA1: `4ce7a11342972243c3e1fc1b4c5e875b4443d03d`
+  - MD5: `bf623e4e247ad5d6dc91017989d076ae`
+  - CRC32: `056877ae`
+- **[SUKJ01.ini](bios/Other/Recalbox/SUKJ01.ini)** (39,047 bytes)
+  - SHA1: `5670d6b18aa2ea83c51a50175e0ab364c0ab0ce5`
+  - MD5: `b690ca751bb15fa05669b6ab78dba123`
+  - CRC32: `05bae3aa`
+- **[SUKP01.ini](bios/Other/Recalbox/SUKP01.ini)** (39,081 bytes)
+  - SHA1: `07ad5c77c2cff0270c1a730e5ba3e24e9ea5becf`
+  - MD5: `1b7fd278297fd8d7e9f4084dd38bc501`
+  - CRC32: `4cd6c858`
+- **[SUM.ini](bios/Other/Recalbox/SUM.ini)** (78 bytes)
+  - SHA1: `2b03d2038fdf05d7f9a1ea44034fef90bc02c69f`
+  - MD5: `204afa6fb581333f395785c27698567e`
+  - CRC32: `fd0bc147`
+- **[SUO.ini](bios/Other/Recalbox/SUO.ini)** (280 bytes)
+  - SHA1: `14fa020917574a1a5371a0fb26f9b7052994ad92`
+  - MD5: `7ba3f572bad9412de8b57796aab5f5df`
+  - CRC32: `5572cb8e`
+- **[SUS.ini](bios/Other/Recalbox/SUS.ini)** (81 bytes)
+  - SHA1: `fa821f585d49cf0bf8710148f582d6c0aa63dd72`
+  - MD5: `28ad667cc6b1cf7c3d1b56a885a035ce`
+  - CRC32: `a4dd3630`
+- **[SUU.ini](bios/Other/Recalbox/SUU.ini)** (91 bytes)
+  - SHA1: `cdf695043fc9d91ca066704e888dd71e067da2e2`
+  - MD5: `2c7e287f9ee619345e32f6551a54f012`
+  - CRC32: `4c487ea7`
+- **[SUW.ini](bios/Other/Recalbox/SUW.ini)** (74 bytes)
+  - SHA1: `59757a8c157507ec99e62aecdc38101e9001ed3a`
+  - MD5: `56a579c224c5ce7a97db452a3d1d85bb`
+  - CRC32: `58f8fe8a`
+- **[SVB.ini](bios/Other/Recalbox/SVB.ini)** (262 bytes)
+  - SHA1: `82de82e8fe1b05628f465bc18a99e14cfcdc8dba`
+  - MD5: `a3c869768c207b7565c127b84697ac33`
+  - CRC32: `5f45da4e`
+- **[SVF.ini](bios/Other/Recalbox/SVF.ini)** (150 bytes)
+  - SHA1: `c9df80657b55247cb7a289b1233b74ec41cfd73c`
+  - MD5: `6288c6fa05d42828ebac0230f1bc1eed`
+  - CRC32: `9a2eb21f`
+- **[SVM.ini](bios/Other/Recalbox/SVM.ini)** (348 bytes)
+  - SHA1: `27e91758b95df242b8b6074233704d1ff880794d`
+  - MD5: `d4b2880e118b37d66b114439bf84cab7`
+  - CRC32: `182e5a21`
+- **[SVV.ini](bios/Other/Recalbox/SVV.ini)** (288 bytes)
+  - SHA1: `01bec309b0ee706f1028236f14e61f4ebb4175a7`
+  - MD5: `57a94f1891e413ad5e19bff1b1195001`
+  - CRC32: `42f6a24a`
+- **[SVW.ini](bios/Other/Recalbox/SVW.ini)** (66 bytes)
+  - SHA1: `505ccae984e098279c6c438698625f9fe9735b1e`
+  - MD5: `3e107c169673a56322f79837c620fbc1`
+  - CRC32: `b8d8990f`
+- **[SVX.ini](bios/Other/Recalbox/SVX.ini)** (288 bytes)
+  - SHA1: `470e077ecba5212c61c17c16c64789d0854e9e4d`
+  - MD5: `eb26efd63a7af34275248b380fe9c12c`
+  - CRC32: `dfb1bbc9`
+- **[SVZ.ini](bios/Other/Recalbox/SVZ.ini)** (286 bytes)
+  - SHA1: `43d210454320afdc46de34ea41338bae74e10efe`
+  - MD5: `0cdb6e397ce0f16ee051d7da03eb8da8`
+  - CRC32: `1232fe39`
+- **[SX3.ini](bios/Other/Recalbox/SX3.ini)** (267 bytes)
+  - SHA1: `2169bd4760b8d81ba7e1a28515d868c441ce23cf`
+  - MD5: `158073062a341c8b0d035c9b75ddd095`
+  - CRC32: `796da272`
+- **[SX4.ini](bios/Other/Recalbox/SX4.ini)** (270 bytes)
+  - SHA1: `884cd676de36878126fc80677f1df2aa0f957ef0`
+  - MD5: `204b49a35ee1ecaddecd2c1bf103e0c0`
+  - CRC32: `d1b9b05f`
+- **[SX7.ini](bios/Other/Recalbox/SX7.ini)** (330 bytes)
+  - SHA1: `ea7164281fa4cdb5beec91312f3faf898690c510`
+  - MD5: `2d214b418467344999e2ba3e4305d501`
+  - CRC32: `2d140e75`
+- **[SX8.ini](bios/Other/Recalbox/SX8.ini)** (280 bytes)
+  - SHA1: `ec37a120de3c1a01f4e819fc2bcf2cc1536df79f`
+  - MD5: `1c3cd00a531657cca0975168d237b113`
+  - CRC32: `7b8d3847`
+- **[SXC.ini](bios/Other/Recalbox/SXC.ini)** (276 bytes)
+  - SHA1: `48bc795cc30ee7008a3a7f0553a72a8b5d019950`
+  - MD5: `8451ba91352b7df3f8546393769e7082`
+  - CRC32: `870754d2`
+- **[SZB.ini](bios/Other/Recalbox/SZB.ini)** (323 bytes)
+  - SHA1: `716da502b5e8184a99fbe10e6736515d888ae579`
+  - MD5: `76d0a0a3824ff2a5777fcf8a5db89834`
+  - CRC32: `ae8660f0`
+- **[W22.ini](bios/Other/Recalbox/W22.ini)** (64 bytes)
+  - SHA1: `8d6114345b29dd943fc5617bbb2db8cba7d43bea`
+  - MD5: `c760c1552011cecbb27310df6ad847b3`
+  - CRC32: `45d0cc21`
+- **[W2G.ini](bios/Other/Recalbox/W2G.ini)** (190 bytes)
+  - SHA1: `4eb94b682289aa9cacb4450060219a7e2c236244`
+  - MD5: `3b0ca9b4675b5e30cfe7b69b826ac9dc`
+  - CRC32: `551ed6e0`
+- **[W2L.ini](bios/Other/Recalbox/W2L.ini)** (65 bytes)
+  - SHA1: `54d2b553e26db5c2743424402a26afa024497020`
+  - MD5: `3d70c2d4f5361277675240c38600d65b`
+  - CRC32: `e862b5d5`
+- **[W34.ini](bios/Other/Recalbox/W34.ini)** (106 bytes)
+  - SHA1: `1cbc72525bd3de50b3d0fd9cf8cc877e02759eec`
+  - MD5: `6d47e7f84e51f985ca68082006adb9f7`
+  - CRC32: `1759a52d`
+- **[W3B.ini](bios/Other/Recalbox/W3B.ini)** (71 bytes)
+  - SHA1: `65b053d16ce2443fdac4e0cc90417e9f0904bbd7`
+  - MD5: `bc9b592b56e390b5196e8fb8650f5d0d`
+  - CRC32: `829845c0`
+- **[W3G.ini](bios/Other/Recalbox/W3G.ini)** (198 bytes)
+  - SHA1: `568889c1d67d7127e6442b2ea02c9fd36a0d616c`
+  - MD5: `001bf8ba61c54d4b901d640fb5bd8082`
+  - CRC32: `b519e1bd`
+- **[W3M.ini](bios/Other/Recalbox/W3M.ini)** (272 bytes)
+  - SHA1: `07fa573addef6971ce0ccf9f0280229f97fc965b`
+  - MD5: `17cfd1afe2ce014b19b6441916a3abd3`
+  - CRC32: `2430661b`
+- **[W4A.ini](bios/Other/Recalbox/W4A.ini)** (72 bytes)
+  - SHA1: `461f85bc4cd504bbf8eeb3417451f519184481f7`
+  - MD5: `65a26af74834160f148eec88cb642d46`
+  - CRC32: `ed547da2`
+- **[W4O.ini](bios/Other/Recalbox/W4O.ini)** (91 bytes)
+  - SHA1: `f459d32dc3cc6a570f17a572b0ded73b137f1037`
+  - MD5: `a0ca95ef483401f138c0d776d5d4eacb`
+  - CRC32: `7e0224e7`
+- **[W5I.ini](bios/Other/Recalbox/W5I.ini)** (69 bytes)
+  - SHA1: `d00188f29d536702ed90747060a7510cb8d192fc`
+  - MD5: `30f7f0ed0732a913a4d2963a9b16c259`
+  - CRC32: `1f3f7f4d`
+- **[W64.ini](bios/Other/Recalbox/W64.ini)** (150 bytes)
+  - SHA1: `01e37b5b50ad9eea1a6df00258855b83dd08ab72`
+  - MD5: `fb724574d412529f7150985a76e21915`
+  - CRC32: `fd3552b7`
+- **[W69.ini](bios/Other/Recalbox/W69.ini)** (150 bytes)
+  - SHA1: `e77f0c8b61301e12182ca6c3edf872297fccf3e6`
+  - MD5: `aa6485d1e38635490408309d66f3fed2`
+  - CRC32: `6471e3ce`
+- **[W8I.ini](bios/Other/Recalbox/W8I.ini)** (72 bytes)
+  - SHA1: `32427886e4640607890db0338e07152e12a6e26e`
+  - MD5: `ec98e8c2510a6dd6925b585fe81f41b4`
+  - CRC32: `d09c916e`
+- **[W8L.ini](bios/Other/Recalbox/W8L.ini)** (73 bytes)
+  - SHA1: `2619fef8433db73492fdf71c14b7d7218a7b1f28`
+  - MD5: `50d043eb07719623b4e5479edd1147fe`
+  - CRC32: `d2598cf2`
+- **[W8X.ini](bios/Other/Recalbox/W8X.ini)** (65 bytes)
+  - SHA1: `a57faee3fd0bd212c7024ee8a65f33b09b13284d`
+  - MD5: `c9c78941c1792cbbd8b52529b4a3ddec`
+  - CRC32: `3c70d8f4`
+- **[W9L.ini](bios/Other/Recalbox/W9L.ini)** (67 bytes)
+  - SHA1: `6dcf0bec01ba96d0c5d2511f6068977bd35baade`
+  - MD5: `1937392f1f4105070dc98fffd84064a5`
+  - CRC32: `4d4371a9`
+- **[WA2.ini](bios/Other/Recalbox/WA2.ini)** (267 bytes)
+  - SHA1: `3a7fec57169fa4137ea8e87951436ba37ea35b9d`
+  - MD5: `8a40073d584ade2015dc29f9ca77417c`
+  - CRC32: `a7a17877`
+- **[WAF.ini](bios/Other/Recalbox/WAF.ini)** (86 bytes)
+  - SHA1: `4b2b2c770c1928ef4a05dafde0670b88cd966ed2`
+  - MD5: `613544f8fce393db32cbd9bf2b6c81ef`
+  - CRC32: `f340bd2f`
+- **[WAN.ini](bios/Other/Recalbox/WAN.ini)** (69 bytes)
+  - SHA1: `e9174bbdbbb74a0207d6c3fd8326307630b1acb7`
+  - MD5: `3fcb274b2c9cd06cc6b585cef4004312`
+  - CRC32: `3fb87864`
+- **[WAZ.ini](bios/Other/Recalbox/WAZ.ini)** (76 bytes)
+  - SHA1: `7aea64ad121b38fa088d79741cfacd9b4ef53d3b`
+  - MD5: `70eb58fa6163a9e49f7525da0af44d99`
+  - CRC32: `5cd94261`
+- **[WB2.ini](bios/Other/Recalbox/WB2.ini)** (115 bytes)
+  - SHA1: `f7ab9e60b23af8d11831cb8eac5bc8226b8fbfa4`
+  - MD5: `6f8b58edb533a39a5f9cf4095fc6835b`
+  - CRC32: `e6d0b394`
+- **[WB3.ini](bios/Other/Recalbox/WB3.ini)** (117 bytes)
+  - SHA1: `013f36eeeee4b018dd7adf116b179e7cd578149f`
+  - MD5: `cbdf02b3c71e2350487b6f9c038f6f30`
+  - CRC32: `c794f2ef`
+- **[WB4.ini](bios/Other/Recalbox/WB4.ini)** (103 bytes)
+  - SHA1: `020124f437e80e6961786984947f6f49809db6c8`
+  - MD5: `193122fe82ac0f134a2909c89bbca9d8`
+  - CRC32: `1073a335`
+- **[WB6.ini](bios/Other/Recalbox/WB6.ini)** (114 bytes)
+  - SHA1: `828199b2b492429cf9ac04351817d483facc2b57`
+  - MD5: `712c05f1d611c668063788e37aa91f1b`
+  - CRC32: `dcb829ef`
+- **[WB7.ini](bios/Other/Recalbox/WB7.ini)** (265 bytes)
+  - SHA1: `9260871c82bf777f7ed460306c87bffc643a01e8`
+  - MD5: `a4b1f96046c8a75c4ed257e6f2586180`
+  - CRC32: `8b69448e`
+- **[WB8.ini](bios/Other/Recalbox/WB8.ini)** (258 bytes)
+  - SHA1: `4d800e061f92dd63b9a8315b00a8ee41d32e6d73`
+  - MD5: `ebc09102833031da7816b671f0119750`
+  - CRC32: `ede2611f`
+- **[WBA.ini](bios/Other/Recalbox/WBA.ini)** (60 bytes)
+  - SHA1: `e65598fe2575d8b247d4b41a47ae57aff4fe8f4b`
+  - MD5: `82765d51344132981f25543173cb88d6`
+  - CRC32: `9613c452`
+- **[WBI.ini](bios/Other/Recalbox/WBI.ini)** (59 bytes)
+  - SHA1: `013a2e9e378cc0d9fa5acde205fde360d8a34594`
+  - MD5: `9b021d97f2bdea2b6981e35be9bd0871`
+  - CRC32: `e58d1550`
+- **[WBK.ini](bios/Other/Recalbox/WBK.ini)** (312 bytes)
+  - SHA1: `a1de3df21bf61ad063b52427c9063a9332ccee01`
+  - MD5: `618660ab35f628da7fb375d9198b0b53`
+  - CRC32: `348d8040`
+- **[WBL.ini](bios/Other/Recalbox/WBL.ini)** (84 bytes)
+  - SHA1: `4c7647e7a4d4f67a35688c500e8b5e59e7e6dd5e`
+  - MD5: `57a35472242a2c93728aca826b92851f`
+  - CRC32: `d9989097`
+- **[WBR.ini](bios/Other/Recalbox/WBR.ini)** (79 bytes)
+  - SHA1: `255bf850a2e437d13ae4f788b7fcaf6dc5191690`
+  - MD5: `f17fd8bfcd1a7bf286559cc4686961d5`
+  - CRC32: `cf01436a`
+- **[WBV.ini](bios/Other/Recalbox/WBV.ini)** (71 bytes)
+  - SHA1: `b2c03a85bef60d00cde9aeadda0a5623e6433edc`
+  - MD5: `4fabe56a2df1a3bd732f785556b1c3b4`
+  - CRC32: `f47557e6`
+- **[WBX.ini](bios/Other/Recalbox/WBX.ini)** (117 bytes)
+  - SHA1: `40684025f0e0f1f2ae4835ebe2a331f63cdcf4a4`
+  - MD5: `ed406a0ebd6b7c396db0bbdd1b39bdd3`
+  - CRC32: `0f0b5c32`
+- **[WBY.ini](bios/Other/Recalbox/WBY.ini)** (122 bytes)
+  - SHA1: `fa46008bb38b91bab74d8a1e7158af4ee53cb091`
+  - MD5: `d8a793842430802d1192c2d974958b64`
+  - CRC32: `6ed944bd`
+- **[WBZ.ini](bios/Other/Recalbox/WBZ.ini)** (122 bytes)
+  - SHA1: `1b3065d54058fb1ce85f0cc52ced36939f1ed6ff`
+  - MD5: `e63c57fa3e6b0010550aa3d86c605f51`
+  - CRC32: `6ce2b55f`
+- **[WC2.ini](bios/Other/Recalbox/WC2.ini)** (85 bytes)
+  - SHA1: `08a0f0f2b9b11f99d23fc620854e7e9571fc5995`
+  - MD5: `a66f2e429fd2888d5f13e40394320c3c`
+  - CRC32: `e91fa893`
+- **[WC6.ini](bios/Other/Recalbox/WC6.ini)** (182 bytes)
+  - SHA1: `e652f40e8743a8d7ce8d0acf1a4634b4e9026cba`
+  - MD5: `411afa980d6c01162b4f1e8dc168c0e7`
+  - CRC32: `ce088a76`
+- **[WCH.ini](bios/Other/Recalbox/WCH.ini)** (221 bytes)
+  - SHA1: `ed4b7c8bf0d1761aaa14aca65a4b82b86c8d5eb7`
+  - MD5: `b1b4e483724cb9ed7afdddd5ad1df825`
+  - CRC32: `8f7070a4`
+- **[WCI.ini](bios/Other/Recalbox/WCI.ini)** (85 bytes)
+  - SHA1: `b3e2c2fa3c58fab9abc7c5eee98622127d5883fd`
+  - MD5: `6493c111eca68bcc7870d9a311e9e33f`
+  - CRC32: `195c4a13`
+- **[WCJ.ini](bios/Other/Recalbox/WCJ.ini)** (81 bytes)
+  - SHA1: `21ef3c24498fc111efb4abc17dd40e83a43cdb61`
+  - MD5: `8ef69e93946ed78f4a063fa9c1320f26`
+  - CRC32: `4cae56a5`
+- **[WCO.ini](bios/Other/Recalbox/WCO.ini)** (80 bytes)
+  - SHA1: `559eeaa06a4011276bcaed2f77c2997b1bbdd077`
+  - MD5: `9df1484d4b74b43de65192f0c0ee6f0b`
+  - CRC32: `0ba875e3`
+- **[WCP.ini](bios/Other/Recalbox/WCP.ini)** (72 bytes)
+  - SHA1: `eccbc46df6b06f90e8f00f32e7b90ae02d5e6479`
+  - MD5: `ec59748eeb4331874428f3edf2080bb8`
+  - CRC32: `513bb5fd`
+- **[WCU.ini](bios/Other/Recalbox/WCU.ini)** (86 bytes)
+  - SHA1: `ad0c000c5c793da40c80eff8e088b7cc33d86028`
+  - MD5: `17caaa0a161f411eb4c529a7843a4b21`
+  - CRC32: `ea11e36d`
+- **[WCV.ini](bios/Other/Recalbox/WCV.ini)** (69 bytes)
+  - SHA1: `15debc106d70689274f5fa855559bf3b9f86040a`
+  - MD5: `fefe17a25d9a128cd6502ac13a35a460`
+  - CRC32: `7f690248`
+- **[WCZ.ini](bios/Other/Recalbox/WCZ.ini)** (71 bytes)
+  - SHA1: `998ecb3ce8dca9f8398c231980b3fd62766ea22d`
+  - MD5: `6052074af6b2ccbd1a3f5cb2738532d5`
+  - CRC32: `7c47e2f6`
+- **[WD9.ini](bios/Other/Recalbox/WD9.ini)** (280 bytes)
+  - SHA1: `84bbe80a9be7176dec316864fa8ebe0092c14973`
+  - MD5: `5a26f2a49a4be0c452b1ebf3b33df8a7`
+  - CRC32: `755e9d7f`
+- **[WDA.ini](bios/Other/Recalbox/WDA.ini)** (62 bytes)
+  - SHA1: `735309305da3ca37fc37e78be2aecc6ddcd863b9`
+  - MD5: `61b495e4865f4dd05ed4a1e533916ab5`
+  - CRC32: `972f887c`
+- **[WDE.ini](bios/Other/Recalbox/WDE.ini)** (91 bytes)
+  - SHA1: `a1923a4dfa2ed85424e6856d8acb99a839174469`
+  - MD5: `cf1e5dce8752bcb56c9934b248e95505`
+  - CRC32: `eec55dc4`
+- **[WDF.ini](bios/Other/Recalbox/WDF.ini)** (77 bytes)
+  - SHA1: `731afc31a79284b3b4e1206068ef2bbd35763285`
+  - MD5: `68957a33415a57afff2d2742d7b6a7b9`
+  - CRC32: `80142704`
+- **[WDN.ini](bios/Other/Recalbox/WDN.ini)** (82 bytes)
+  - SHA1: `00bda6c0b75a8df654f29da5de0ec21ecded88af`
+  - MD5: `9abf706c3b711e0adeaa5638ae990c62`
+  - CRC32: `1d895cdd`
+- **[WDO.ini](bios/Other/Recalbox/WDO.ini)** (264 bytes)
+  - SHA1: `b39e070d9a131e1f65843e3ec607d989b62339c7`
+  - MD5: `83775155835decae6611c0c8e4540ba0`
+  - CRC32: `d5787bc3`
+- **[WDX.ini](bios/Other/Recalbox/WDX.ini)** (61 bytes)
+  - SHA1: `b38eb4f5f1ffb7454fb4d723589b56c9c48134af`
+  - MD5: `a5952e972cf208c4cb5c6d3f97bb5aac`
+  - CRC32: `2379146a`
+- **[WEM.ini](bios/Other/Recalbox/WEM.ini)** (91 bytes)
+  - SHA1: `1bcef972c828461fa419c82bd9aadabe817e9680`
+  - MD5: `44dd7ec461db79a6296a6cef7bf266d8`
+  - CRC32: `ff4b6982`
+- **[WF3.ini](bios/Other/Recalbox/WF3.ini)** (87 bytes)
+  - SHA1: `3a893d23a7b94e32bf41ddef153881f20e08ccbd`
+  - MD5: `7e584b364f52d108852d2dd5240eee4e`
+  - CRC32: `25edd799`
+- **[WF4.ini](bios/Other/Recalbox/WF4.ini)** (278 bytes)
+  - SHA1: `634aa404ffd4110380f643f2aabfd480bc62fa5d`
+  - MD5: `2ffb9b7c43fa59b635f4cd1a0fd8de83`
+  - CRC32: `14fc0dd1`
+- **[WF5.ini](bios/Other/Recalbox/WF5.ini)** (82 bytes)
+  - SHA1: `d9b0527af702d9ec5ffbd16740217484d279a8dc`
+  - MD5: `b5de7f5a42a0b5761bc554eb30086261`
+  - CRC32: `26b00c4c`
+- **[WFA.ini](bios/Other/Recalbox/WFA.ini)** (77 bytes)
+  - SHA1: `c12a48a6452e6c8f87e0a55d830e53a6cb1c2b36`
+  - MD5: `b1390ce21d238922705af22535810260`
+  - CRC32: `0f9066d8`
+- **[WFH.ini](bios/Other/Recalbox/WFH.ini)** (266 bytes)
+  - SHA1: `811d56d1b97200bf20adcce4fef6958e615d87ea`
+  - MD5: `30feb77e2ebd0b44d23c93cce07055d8`
+  - CRC32: `2487fa19`
+- **[WFI.ini](bios/Other/Recalbox/WFI.ini)** (87 bytes)
+  - SHA1: `06dcadabefce917eb6de518700a5b8e033dd13cd`
+  - MD5: `c17e90d8e8fa68b78e527260bc91ef43`
+  - CRC32: `f196b62a`
+- **[WFK.ini](bios/Other/Recalbox/WFK.ini)** (80 bytes)
+  - SHA1: `d7dc5d9c2f9222462aea7e54a9f156a70ba37db0`
+  - MD5: `831b002b6ca34585eddab6713cd57c75`
+  - CRC32: `37c95854`
+- **[WFL.ini](bios/Other/Recalbox/WFL.ini)** (106 bytes)
+  - SHA1: `d2a758c1fbd371a825371234ae57f5aa291ba214`
+  - MD5: `24aed542bf3d1f3aa2f716caabbd543f`
+  - CRC32: `7327be3c`
+- **[WFM.ini](bios/Other/Recalbox/WFM.ini)** (81 bytes)
+  - SHA1: `98592047b5f57e8ceb86c40af32213ca09b43a21`
+  - MD5: `14bb63ebf4ddaad203add9c54a320df0`
+  - CRC32: `e744065e`
+- **[WFN.ini](bios/Other/Recalbox/WFN.ini)** (68 bytes)
+  - SHA1: `d569854411aac5bf45093880e760e0734cef440c`
+  - MD5: `4f651e734ae33161b5ac22407adc4bb7`
+  - CRC32: `0303f390`
+- **[WFU.ini](bios/Other/Recalbox/WFU.ini)** (115 bytes)
+  - SHA1: `b8d65618b39f72bd53312dd99e184fd1c8068d7f`
+  - MD5: `8d6939784b4a1c0141e2ad4507183d4a`
+  - CRC32: `951bf3b2`
+- **[WFY.ini](bios/Other/Recalbox/WFY.ini)** (91 bytes)
+  - SHA1: `d2ca691cac96a9604021936aedfca48719971e9d`
+  - MD5: `2ba488548157a4833e209beddb16fe9f`
+  - CRC32: `53ea3867`
+- **[WGG.ini](bios/Other/Recalbox/WGG.ini)** (271 bytes)
+  - SHA1: `81ff2a39bce017436868b02f6bfb166d04e976c6`
+  - MD5: `8adceefb896886791cab3aed99fdada3`
+  - CRC32: `74785ba6`
+- **[WGL.ini](bios/Other/Recalbox/WGL.ini)** (261 bytes)
+  - SHA1: `5eac30fbdfb46db7b72fbe23553a28bcf8f24a66`
+  - MD5: `bfa8f6245a92c9bb90fd0f4dc971bff1`
+  - CRC32: `04fd60ac`
+- **[WGS.ini](bios/Other/Recalbox/WGS.ini)** (223 bytes)
+  - SHA1: `7658f5c75d83982b483c5921a0106fa32998276b`
+  - MD5: `d3bb43e322c7eb7a477ee24a3292690a`
+  - CRC32: `010bb9f5`
+- **[WGU.ini](bios/Other/Recalbox/WGU.ini)** (64 bytes)
+  - SHA1: `1352f97a0608bba2a4c1a76e8ff73af11e5a583b`
+  - MD5: `6cc9d221c9cbaf7daa4e29d4fb78d786`
+  - CRC32: `e9e69244`
+- **[WH3.ini](bios/Other/Recalbox/WH3.ini)** (74 bytes)
+  - SHA1: `4693fdcebe310226227740bc0ebe0a4ec03a8b36`
+  - MD5: `51da4d29fe050bf82aac39162ef43f9f`
+  - CRC32: `3df9a608`
+- **[WHDLoad](bios/Other/Recalbox/WHDLoad)** (145,567 bytes)
+  - SHA1: `0a9e7bfa1183420543e44c08410af1c5500fa704`
+  - MD5: `1aa6b2dc04b35fe084d749699ed3c54b`
+  - CRC32: `31183c70`
+- **[WHDLoad-Cleanup](bios/Other/Recalbox/WHDLoad-Cleanup)** (460 bytes)
+  - SHA1: `42be78c0967738faeeffe9ef0f2dc763ffefa04a`
+  - MD5: `9639b635a284b775d6ae824d260ff96d`
+  - CRC32: `1b425aaf`
+- **[WHDLoad-Startup](bios/Other/Recalbox/WHDLoad-Startup)** (490 bytes)
+  - SHA1: `7baa4d095c44de62d23277e2e93856101bb4e46b`
+  - MD5: `23e9573ebed13001e0a46d9d81229dd3`
+  - CRC32: `85832ccf`
+- **[WHDLoad.prefs](bios/Other/Recalbox/WHDLoad.prefs)** (1,604 bytes)
+  - SHA1: `f73e62f6f897baedb791af82682f1abd8f0cf1e9`
+  - MD5: `34eaaa8264df548afd138db3c2da6f1a`
+  - CRC32: `35f61ee7`
+- **[WHE.ini](bios/Other/Recalbox/WHE.ini)** (83 bytes)
+  - SHA1: `0c45055d3b53eea79c09468229d9bd408d74bae4`
+  - MD5: `189f62d897b41f280cac8a4883aae90f`
+  - CRC32: `a3e96b9b`
+- **[WHF.ini](bios/Other/Recalbox/WHF.ini)** (281 bytes)
+  - SHA1: `3d6e91e8488cc9ba8e6c2195acdc176c4bbea492`
+  - MD5: `a6f9462fc857ed3e07004b2c86abcafb`
+  - CRC32: `cec31691`
+- **[WHO.ini](bios/Other/Recalbox/WHO.ini)** (76 bytes)
+  - SHA1: `4c4c7a1c13ee340b8f6ae5988b59a2c25abbcd13`
+  - MD5: `b77aa662c5bdd902319b56fe664db48e`
+  - CRC32: `0ff2972d`
+- **[WHP.ini](bios/Other/Recalbox/WHP.ini)** (262 bytes)
+  - SHA1: `536cd4ba1c0cd0bb623a9b930abc9f250fb5bb3a`
+  - MD5: `7bdf80f596acacb3bb7326757b737272`
+  - CRC32: `288a1a4d`
+- **[WHU.ini](bios/Other/Recalbox/WHU.ini)** (271 bytes)
+  - SHA1: `7f0d6cb66f773ec29df988451986b626e4fa9d0d`
+  - MD5: `aa05f25f1068c355caf67d3eed087a1f`
+  - CRC32: `13c45571`
+- **[WHW.ini](bios/Other/Recalbox/WHW.ini)** (152 bytes)
+  - SHA1: `2c47cdddbc14fdb678c2fc1377a8eab3274b4fcd`
+  - MD5: `6f98c7963d1587c86f71864f1a0199a2`
+  - CRC32: `e7b9b7f5`
+- **[WIB.ini](bios/Other/Recalbox/WIB.ini)** (268 bytes)
+  - SHA1: `014fa12ee91aa532cc29161ff86b6bc24e835e6e`
+  - MD5: `06149030055d082226324cdd3ff8af7b`
+  - CRC32: `72237498`
+- **[WIC.ini](bios/Other/Recalbox/WIC.ini)** (275 bytes)
+  - SHA1: `7d65279004c87a2692ba97c09993052a8b7ae285`
+  - MD5: `7f0a3c3b72b177cf477cfac88b7df177`
+  - CRC32: `48f62f84`
+- **[WIN.ini](bios/Other/Recalbox/WIN.ini)** (84 bytes)
+  - SHA1: `90951e281961de06f66f362de7266e3a715cd1de`
+  - MD5: `2533028d7280505a539c7276eb31cf25`
+  - CRC32: `897d9d25`
+- **[WIT.ini](bios/Other/Recalbox/WIT.ini)** (100 bytes)
+  - SHA1: `57a95e9861cc28f1b44c309b9e57eb9b53ab64ba`
+  - MD5: `dab392e84e3ca58a26e1aac19fffe533`
+  - CRC32: `192a07a5`
+- **[WJA.ini](bios/Other/Recalbox/WJA.ini)** (272 bytes)
+  - SHA1: `9a4cdd6af22b7a941af0f10e71a4854f4f330366`
+  - MD5: `95816c5de43eb6f0c93b02381829049c`
+  - CRC32: `cec20e59`
+- **[WJE.ini](bios/Other/Recalbox/WJE.ini)** (246 bytes)
+  - SHA1: `1f0b67a0cf0167761b463f9b842467a37e6427ac`
+  - MD5: `83c83b2569f0a4fe43c7c2331f0c2e8b`
+  - CRC32: `bac47b6f`
+- **[WJS.ini](bios/Other/Recalbox/WJS.ini)** (71 bytes)
+  - SHA1: `1d5ed136aa254ff0c3f459d020ce25d3c4604e23`
+  - MD5: `edc88f157fb495c14cea01fddf79ea2b`
+  - CRC32: `c1f045a9`
+- **[WKD.ini](bios/Other/Recalbox/WKD.ini)** (284 bytes)
+  - SHA1: `25307264a60b47f388da11e38fcc765304515753`
+  - MD5: `fca597198653c071e1fbe7908d60a7bc`
+  - CRC32: `8b77c579`
+- **[WKE.ini](bios/Other/Recalbox/WKE.ini)** (128 bytes)
+  - SHA1: `99645ce55d83a9abc983211341ad1f6397a39e11`
+  - MD5: `f504953ea69dc46d928f4a97a998d76a`
+  - CRC32: `fb124982`
+- **[WKI.ini](bios/Other/Recalbox/WKI.ini)** (90 bytes)
+  - SHA1: `5f9126f355743207f14334b9728d30706b18b3b5`
+  - MD5: `60e4eba191b6b67bc831aab0fd7b656b`
+  - CRC32: `79190d44`
+- **[WKK.ini](bios/Other/Recalbox/WKK.ini)** (81 bytes)
+  - SHA1: `f5ddabae27b1bfe860162b430a66df1c86bcfd34`
+  - MD5: `4bdc82ed7a82e3a93b3d665305b06737`
+  - CRC32: `9a0077f8`
+- **[WKN.ini](bios/Other/Recalbox/WKN.ini)** (85 bytes)
+  - SHA1: `ab988509149a0036ba82731611e241fb306912ae`
+  - MD5: `35e2147ad2ce900dfe0eb597c540bebb`
+  - CRC32: `8b41769f`
+- **[WKT.ini](bios/Other/Recalbox/WKT.ini)** (260 bytes)
+  - SHA1: `12393339ef7fff5ab077c200d07dd1dda955a4de`
+  - MD5: `12b737776afc57f647ac87ad49a289df`
+  - CRC32: `f63497cc`
+- **[WKU.ini](bios/Other/Recalbox/WKU.ini)** (80 bytes)
+  - SHA1: `5d56bc0edb12e0e3f4dce57fc676ba3664894532`
+  - MD5: `801c0e0b904d1e5bdc1709b9bf81a251`
+  - CRC32: `ee5575d3`
+- **[WKW.ini](bios/Other/Recalbox/WKW.ini)** (109 bytes)
+  - SHA1: `ce2ca95598ce4343f6e9f1396a352f0d7b63ece8`
+  - MD5: `9d069f59db1555371320cd468fd54f7e`
+  - CRC32: `d9b6b958`
+- **[WL9.ini](bios/Other/Recalbox/WL9.ini)** (255 bytes)
+  - SHA1: `4045ae23fb28826c8bab46504cc238d8e4d767bf`
+  - MD5: `9f8eff9607435df4512a798d960e3553`
+  - CRC32: `19ec8714`
+- **[WLC.ini](bios/Other/Recalbox/WLC.ini)** (83 bytes)
+  - SHA1: `26af45609f4c9e367daf410bdc45a22d3af6562f`
+  - MD5: `a69f64624d501308d7f727c6494eb629`
+  - CRC32: `6a2e6ee4`
+- **[WLD.ini](bios/Other/Recalbox/WLD.ini)** (96 bytes)
+  - SHA1: `b805ed3cfa94fceee83ef35636b44285d55ea2b7`
+  - MD5: `823255360edfee9694984b14c3f9e0d5`
+  - CRC32: `1df3f814`
+- **[WLE.ini](bios/Other/Recalbox/WLE.ini)** (124 bytes)
+  - SHA1: `82030855e4f895dfa60c34eee10c1d4ab92b1bc0`
+  - MD5: `3ca9c58798271ad6a50c9c2f10bdc084`
+  - CRC32: `3fbb6409`
+- **[WLJ.ini](bios/Other/Recalbox/WLJ.ini)** (96 bytes)
+  - SHA1: `fb3d0c2768af40e7022ff382ac59f10e25fb3b11`
+  - MD5: `12efa31ecd92cc1770dadedfa4c0c621`
+  - CRC32: `fd7e2b3a`
+- **[WLK.ini](bios/Other/Recalbox/WLK.ini)** (70 bytes)
+  - SHA1: `732c5799ef756705c3f18e46f11268e916d215ff`
+  - MD5: `a8cceaf0724c4c53ce4b5fd61b61e85e`
+  - CRC32: `74e6a237`
+- **[WLM.ini](bios/Other/Recalbox/WLM.ini)** (74 bytes)
+  - SHA1: `4d65da7ed05eebc4f3358676824896ee14d48e68`
+  - MD5: `f9f7ac60c4a0ecdc37965b4ea1a0fa85`
+  - CRC32: `3e7efb7f`
+- **[WLN.ini](bios/Other/Recalbox/WLN.ini)** (124 bytes)
+  - SHA1: `123a9b881ce080560e6bb2cb0253f1c6183ed459`
+  - MD5: `f74462e453183bfa0db6edb380d6e8ff`
+  - CRC32: `9a56ddb6`
+- **[WLO.ini](bios/Other/Recalbox/WLO.ini)** (249 bytes)
+  - SHA1: `a22c3cad06a42212a000ef0504ee406189b2a3da`
+  - MD5: `53eea546e687060c5578da486b691a3c`
+  - CRC32: `99ce339c`
+- **[WLP.ini](bios/Other/Recalbox/WLP.ini)** (71 bytes)
+  - SHA1: `b12c02873b03fc6a2a36184fc3b0a43fd5c21006`
+  - MD5: `329d69d5bb37696a2fc46f3993268302`
+  - CRC32: `1b6d7170`
+- **[WLT.ini](bios/Other/Recalbox/WLT.ini)** (68 bytes)
+  - SHA1: `6e902e9f8caf5d464bd758a59a09b04dbd6ab13d`
+  - MD5: `90898452cabbdbe5769140d8ea0ff448`
+  - CRC32: `f9debffc`
+- **[WLX.ini](bios/Other/Recalbox/WLX.ini)** (60 bytes)
+  - SHA1: `371d788ce8d2d0c70b6cc82024f878b7928b9e1a`
+  - MD5: `d7ebe7f9b8b33262c8fea20af5bbfc4f`
+  - CRC32: `49649432`
+- **[WLZ.ini](bios/Other/Recalbox/WLZ.ini)** (261 bytes)
+  - SHA1: `03f9886b0e1da1a62632a4666706afa1592a622e`
+  - MD5: `6b6657b80714543050b781848a865691`
+  - CRC32: `dd0e0fa4`
+- **[WM4.ini](bios/Other/Recalbox/WM4.ini)** (72 bytes)
+  - SHA1: `3e5095a24b65f8a2ded304bf0fc1c6779f094ef7`
+  - MD5: `f90957ed83431aabde4937bcd0ff3673`
+  - CRC32: `74ab3c9b`
+- **[WM5.ini](bios/Other/Recalbox/WM5.ini)** (57 bytes)
+  - SHA1: `32d98b7423703ead892422fa265214e0fce30202`
+  - MD5: `665cdec248943c7d45d188d94227d457`
+  - CRC32: `e64a07e9`
+- **[WM9.ini](bios/Other/Recalbox/WM9.ini)** (79 bytes)
+  - SHA1: `d7dc269d5340faac633ebf11d06976c8ff7c1226`
+  - MD5: `90e51d142c84a817fee59fae2870a339`
+  - CRC32: `419fc12b`
+- **[WMA.ini](bios/Other/Recalbox/WMA.ini)** (260 bytes)
+  - SHA1: `49e131cbe039da56b6021d1610a6a852bc0d14ae`
+  - MD5: `28341e1b6e5c8d1dafeb74ff1b6533cd`
+  - CRC32: `8ee07d0f`
+- **[WMB.ini](bios/Other/Recalbox/WMB.ini)** (277 bytes)
+  - SHA1: `764f95110c6e104ce2c58654492b4b817ab1d70c`
+  - MD5: `db5f2fb56c66b1578df8577b168a87b4`
+  - CRC32: `284aea2a`
+- **[WMD.ini](bios/Other/Recalbox/WMD.ini)** (61 bytes)
+  - SHA1: `a60e97d01184e1fa3eba57903391cf64ab139b19`
+  - MD5: `2c9b8434ff10bee8d3088fb037dae36f`
+  - CRC32: `258a0afb`
+- **[WMG.ini](bios/Other/Recalbox/WMG.ini)** (262 bytes)
+  - SHA1: `1fe2733ddddd40cba4a378b71b69e27f4d7a4d46`
+  - MD5: `0f81d17db0090b84a21529b398b7959d`
+  - CRC32: `5aea3743`
+- **[WML.ini](bios/Other/Recalbox/WML.ini)** (88 bytes)
+  - SHA1: `06a21f7ca87ff30d7d706ea61affd941119a799e`
+  - MD5: `198e83285c6726213e6e5f25a02801fa`
+  - CRC32: `c96acdc9`
+- **[WMO.ini](bios/Other/Recalbox/WMO.ini)** (74 bytes)
+  - SHA1: `054e99b8282b5eed76f12cc7e97085854de8175e`
+  - MD5: `e25817d4125866a867d6207db3411619`
+  - CRC32: `d9f0a725`
+- **[WMS.ini](bios/Other/Recalbox/WMS.ini)** (273 bytes)
+  - SHA1: `8778c48cbdae72b567de685d9280f7fde7189247`
+  - MD5: `bb4b4a187056e40f7b49dff5976d3a92`
+  - CRC32: `1cba5964`
+- **[WO6.ini](bios/Other/Recalbox/WO6.ini)** (84 bytes)
+  - SHA1: `58c465125307d35d4483b337fc92db3145711228`
+  - MD5: `be6a34868a9d22a14022363e611d927f`
+  - CRC32: `ed4c0f4e`
+- **[WOA.ini](bios/Other/Recalbox/WOA.ini)** (84 bytes)
+  - SHA1: `6957212b1185a746398843139a2d1f621a503a0a`
+  - MD5: `f0b2672e2df60d50bee876a57ae32893`
+  - CRC32: `e625cda8`
+- **[WOD.ini](bios/Other/Recalbox/WOD.ini)** (60 bytes)
+  - SHA1: `df5f181d13d87c8be84947fdab54fdda97dc8f14`
+  - MD5: `2d6ee8ea17e6bf13274e97e2a8c84b7c`
+  - CRC32: `4fa10f9e`
+- **[WOF.ini](bios/Other/Recalbox/WOF.ini)** (61 bytes)
+  - SHA1: `4bfae87d0792914b8cce9ab92ebf2764a0b13d96`
+  - MD5: `311b5266bb49a6d52da444e8d9f04fde`
+  - CRC32: `2032c57d`
+- **[WOG.ini](bios/Other/Recalbox/WOG.ini)** (81 bytes)
+  - SHA1: `fb78a59e9156cc7b5be6bbf1ef70cc36144b1594`
+  - MD5: `cf00f52bf5717886e26f7d0ea1bfc351`
+  - CRC32: `9671e1f5`
+- **[WOL.ini](bios/Other/Recalbox/WOL.ini)** (60 bytes)
+  - SHA1: `44123ec4de336ba7731e42cd2958644dd776109d`
+  - MD5: `ff3d5ba718269dd1b97cb88c77c6daac`
+  - CRC32: `81ce39df`
+- **[WOP.ini](bios/Other/Recalbox/WOP.ini)** (73 bytes)
+  - SHA1: `a73f1dba536a59e7408b86a206813807a78f54e5`
+  - MD5: `341dd1d34ece309eb8d503c834383ac9`
+  - CRC32: `bd5ce2e5`
+- **[WOX.ini](bios/Other/Recalbox/WOX.ini)** (71 bytes)
+  - SHA1: `c8737e74a5c428bf5f6baf8cd79e13e006a0143d`
+  - MD5: `a1b8c1be35f50006e8e8fa2a561a08bb`
+  - CRC32: `b41cec09`
+- **[WOY.ini](bios/Other/Recalbox/WOY.ini)** (119 bytes)
+  - SHA1: `210e77c056a13a11de5ef615596c532eb7d113fc`
+  - MD5: `b5ce291b206da0f88bddf6e79045ed92`
+  - CRC32: `61633049`
+- **[WP4.ini](bios/Other/Recalbox/WP4.ini)** (271 bytes)
+  - SHA1: `3c2e35560f5e195aa79ade99d36f72b4beaa7bdc`
+  - MD5: `fa97571d1ebc085e5640e832a8883dd9`
+  - CRC32: `bef717ef`
+- **[WP6.ini](bios/Other/Recalbox/WP6.ini)** (107 bytes)
+  - SHA1: `15eff45402316e838d7823c00eee620d1713472c`
+  - MD5: `67c27f160915aa3b6bf18f2304b2e3b9`
+  - CRC32: `e64cab79`
+- **[WP9.ini](bios/Other/Recalbox/WP9.ini)** (65 bytes)
+  - SHA1: `58b21fb4f036d0820ba0118dcb619e10d515305f`
+  - MD5: `0bc89da3dc04bc81d3de0e319f67ddc0`
+  - CRC32: `3d5d4481`
+- **[WPA.ini](bios/Other/Recalbox/WPA.ini)** (298 bytes)
+  - SHA1: `76d9e1238e774c2250f0a26d86fc0318917323c0`
+  - MD5: `08e609e55dd553b0da0ff16a4d88f286`
+  - CRC32: `a36b060c`
+- **[WPB.ini](bios/Other/Recalbox/WPB.ini)** (68 bytes)
+  - SHA1: `b8533a441b0fb7fafc7c68d604837f1e13366235`
+  - MD5: `7dc620ea5aafd2ad992f65f2ea002672`
+  - CRC32: `5d26334f`
+- **[WPD.ini](bios/Other/Recalbox/WPD.ini)** (84 bytes)
+  - SHA1: `8c68ef5a4ea95f8a5ab0c8d18551d4fe94a98c81`
+  - MD5: `837abd597ba5ba4882bb2ebfe824c78a`
+  - CRC32: `586db687`
+- **[WPF.ini](bios/Other/Recalbox/WPF.ini)** (298 bytes)
+  - SHA1: `3543b41667ffa8ed154db26ef86017275d3b76c4`
+  - MD5: `b7b3dfef865caa6b66f611c20de7f0ed`
+  - CRC32: `9107c750`
+- **[WPH.ini](bios/Other/Recalbox/WPH.ini)** (299 bytes)
+  - SHA1: `a6c1695eeab156feede6f6e92cc5a49fed03f298`
+  - MD5: `358fa32d1dad6ac34a6f3ae4000bf4ec`
+  - CRC32: `324dbd2e`
+- **[WPJ.ini](bios/Other/Recalbox/WPJ.ini)** (140 bytes)
+  - SHA1: `8d4362ad46602c0f936d12cd527bbd9c2caf9a7a`
+  - MD5: `4cdb5ab0af0a908627d7d57c4129cf93`
+  - CRC32: `cdc1afe2`
+- **[WPN.ini](bios/Other/Recalbox/WPN.ini)** (59 bytes)
+  - SHA1: `5ad1929ca1fc7ccf8ed29a09d4f4d1bccf328b2f`
+  - MD5: `3526dfcd99205052f34afb9d26005576`
+  - CRC32: `09a47ca4`
+- **[WPP.ini](bios/Other/Recalbox/WPP.ini)** (84 bytes)
+  - SHA1: `fe40249a1fd4fc3bc510eb8df116c74dd682cd05`
+  - MD5: `2452455519ffcf95d2d1e8f0a379aad6`
+  - CRC32: `35da6982`
+- **[WPQ.ini](bios/Other/Recalbox/WPQ.ini)** (69 bytes)
+  - SHA1: `b455e670133559940b3b3ad30c07ebef9378ccbe`
+  - MD5: `7c02f26202cd9ef9e64f6d7a4e2877f6`
+  - CRC32: `19ea5571`
+- **[WPS.ini](bios/Other/Recalbox/WPS.ini)** (251 bytes)
+  - SHA1: `684a6205f965a52c0ed8aec3e30a24a072192a23`
+  - MD5: `3e729387a9ba566e6b545859f846d018`
+  - CRC32: `f372017a`
+- **[WPT.ini](bios/Other/Recalbox/WPT.ini)** (66 bytes)
+  - SHA1: `2a66daad241fd01ea8d1e5c169dff4a4f4d24a0b`
+  - MD5: `54bc9833ab0efe9629ae8c2072e7657d`
+  - CRC32: `4b8c9eca`
+- **[WPU.ini](bios/Other/Recalbox/WPU.ini)** (152 bytes)
+  - SHA1: `3ab279ab5003b20eb1219a2a5a1d7e7cd6ac8510`
+  - MD5: `e98c67763c05b5cf70a2e84cd4214d3e`
+  - CRC32: `dae7a2c1`
+- **[WPX.ini](bios/Other/Recalbox/WPX.ini)** (99 bytes)
+  - SHA1: `0606775e3536a63190d9fd24b5ec7431bbb912fe`
+  - MD5: `77c4bca9af26acfa988dc204a47f0276`
+  - CRC32: `50ffc804`
+- **[WPZ.ini](bios/Other/Recalbox/WPZ.ini)** (70 bytes)
+  - SHA1: `1dde133d7b5868877baa060ac81f96e6a8857efd`
+  - MD5: `e82ba17e23f14482d7fa4fbb18416829`
+  - CRC32: `9c957ed4`
+- **[WQ4.ini](bios/Other/Recalbox/WQ4.ini)** (78 bytes)
+  - SHA1: `a5896f3f2ad9a54e236f10bbd665954e4b7f1993`
+  - MD5: `95ecbbc37e441acc3b196b32dc469a65`
+  - CRC32: `271279ae`
+- **[WR2.ini](bios/Other/Recalbox/WR2.ini)** (494 bytes)
+  - SHA1: `d645b00b06306177b6c6499998c91b4263261a32`
+  - MD5: `5bd6185523b4015812b559939520b64c`
+  - CRC32: `9f2f6519`
+- **[WR5.ini](bios/Other/Recalbox/WR5.ini)** (270 bytes)
+  - SHA1: `ab7fa6e7fbcd378aa4fbe63408380d99c82c874b`
+  - MD5: `c538c81739e5824ff64502d3f311b537`
+  - CRC32: `5da3a1cb`
+- **[WR9.ini](bios/Other/Recalbox/WR9.ini)** (305 bytes)
+  - SHA1: `c8e16ab4f24d2cac71678e000412c830843254a5`
+  - MD5: `6577ec76258e9c3b0bbb8149f31aa85c`
+  - CRC32: `5efe2340`
+- **[WRA.ini](bios/Other/Recalbox/WRA.ini)** (150 bytes)
+  - SHA1: `8f945a2ec293570885c0834419525c23cb11741a`
+  - MD5: `75f5bdee8aa85f24d9f6d98eefed124c`
+  - CRC32: `9b13bd03`
+- **[WRD.ini](bios/Other/Recalbox/WRD.ini)** (72 bytes)
+  - SHA1: `577ced8da6eda5d02e8bc81169982f49218b29cf`
+  - MD5: `e093540a7d48766ca5efbaaaeef83784`
+  - CRC32: `4c1bc1eb`
+- **[WRF.ini](bios/Other/Recalbox/WRF.ini)** (84 bytes)
+  - SHA1: `4dd938164870fecfa462a95fcb456fb776de2946`
+  - MD5: `1f2fc52539c9a1021f556e446690634c`
+  - CRC32: `6f31bd7d`
+- **[WRI.ini](bios/Other/Recalbox/WRI.ini)** (262 bytes)
+  - SHA1: `6e7b2850aef2f93bcc4138d64f0a9b4baa8a58ea`
+  - MD5: `8e0b168844ccd0ee283c5d62a9a332ab`
+  - CRC32: `03eb808a`
+- **[WRS.ini](bios/Other/Recalbox/WRS.ini)** (60 bytes)
+  - SHA1: `5b70cb4216d8fdefc9e33d9a501a53920d131efe`
+  - MD5: `61e6f1670971d1016502221448f8252a`
+  - CRC32: `e1da30a3`
+- **[WRX.ini](bios/Other/Recalbox/WRX.ini)** (298 bytes)
+  - SHA1: `1637cd919a05e885b291823b6ff504e55040e59f`
+  - MD5: `5d6293cbfc19f0461c0aa8d5436d38e0`
+  - CRC32: `089cfe65`
+- **[WS2.ini](bios/Other/Recalbox/WS2.ini)** (71 bytes)
+  - SHA1: `d878f56e3eb1975b00cffc5ff097afd1754372df`
+  - MD5: `72834737891bfb8077e008606c0ddc20`
+  - CRC32: `bdcdef18`
+- **[WS3.ini](bios/Other/Recalbox/WS3.ini)** (77 bytes)
+  - SHA1: `ed01114bd91ed451f287903c2146fe00facae1c4`
+  - MD5: `c7b44290c17fdc76cf7af644b125f263`
+  - CRC32: `3ffd6b86`
+- **[WS4.ini](bios/Other/Recalbox/WS4.ini)** (75 bytes)
+  - SHA1: `3ccab96861287dc62240a5ecf845d3383b1906e6`
+  - MD5: `b2c0c596819c32edb0019069c68b2408`
+  - CRC32: `e0a7db4d`
+- **[WS5.ini](bios/Other/Recalbox/WS5.ini)** (81 bytes)
+  - SHA1: `abe7e7a32e05342bbc28fe42d9054baf11bf1342`
+  - MD5: `67d2c18949695060dc4bfbcf26cbdf22`
+  - CRC32: `49f9bde9`
+- **[WS6.ini](bios/Other/Recalbox/WS6.ini)** (79 bytes)
+  - SHA1: `9a45ee93fcc78da0681bb8c6b943acbece951780`
+  - MD5: `627db2749bccced1749b8af46ec1f85d`
+  - CRC32: `68e48791`
+- **[WS9.ini](bios/Other/Recalbox/WS9.ini)** (76 bytes)
+  - SHA1: `0cfd471c0b1a33daa71e10ee46661421f5f27b5c`
+  - MD5: `e217054db23ac949bbd23622b2008baf`
+  - CRC32: `85c3b55c`
+- **[WSH.ini](bios/Other/Recalbox/WSH.ini)** (86 bytes)
+  - SHA1: `9f638bd576a2b1aa4f6670d6c756b06ddd18c504`
+  - MD5: `2dc01ea5775de0c2d8b45c943a10200e`
+  - CRC32: `c6c32091`
+- **[WSI.ini](bios/Other/Recalbox/WSI.ini)** (73 bytes)
+  - SHA1: `ff3615e179be52499a29419479093c4316685e69`
+  - MD5: `75ff3f6e75ae219734d41f4a87793d3a`
+  - CRC32: `a0eab101`
+- **[WSL.ini](bios/Other/Recalbox/WSL.ini)** (260 bytes)
+  - SHA1: `4f75a52d8d4d3561ad29012ce28a75d4b6a02412`
+  - MD5: `ce6efbc78e84165c4eb84956f06e2d2b`
+  - CRC32: `78f05a37`
+- **[WSR.ini](bios/Other/Recalbox/WSR.ini)** (262 bytes)
+  - SHA1: `1d3b56f4fed08a2608d11c5f81fc0a85f0665f60`
+  - MD5: `56f0e0309094c1284739924365763c58`
+  - CRC32: `2cf53f74`
+- **[WSX.ini](bios/Other/Recalbox/WSX.ini)** (69 bytes)
+  - SHA1: `546590b18400074589cf5252e7a9d7d82f619179`
+  - MD5: `c39be23d865cad0c06c1819b2be82c5d`
+  - CRC32: `0ed6fbf4`
+- **[WT8.ini](bios/Other/Recalbox/WT8.ini)** (71 bytes)
+  - SHA1: `590dc3bae5c26f322e923787c417e34e813ef4d1`
+  - MD5: `bbb78e4fc276fb010009d98ddcb9d422`
+  - CRC32: `01ce85cb`
+- **[WTB.ini](bios/Other/Recalbox/WTB.ini)** (72 bytes)
+  - SHA1: `b25e9aa02f0bcd78bc6d7b7764a4552014151a65`
+  - MD5: `df1eb37838a0ea5c99a2b132efaa8383`
+  - CRC32: `dd50006c`
+- **[WTD.ini](bios/Other/Recalbox/WTD.ini)** (65 bytes)
+  - SHA1: `635e877f0156110b5bbf7546868917cde44bf97b`
+  - MD5: `cc0b120a3d69f2ae171f41b64680ed3e`
+  - CRC32: `303c14f6`
+- **[WTE.ini](bios/Other/Recalbox/WTE.ini)** (309 bytes)
+  - SHA1: `cb24fa96cc54e06e4ea7b4a02ea16681ca1c7ad1`
+  - MD5: `d12b38890efa9a984775a593eb0531da`
+  - CRC32: `1fa1578d`
+- **[WTI.ini](bios/Other/Recalbox/WTI.ini)** (64 bytes)
+  - SHA1: `203d2f99c040f12d60dcdece8d0be4ba53144431`
+  - MD5: `89a50e16dbdb5fa51acb7b8725742057`
+  - CRC32: `d5998603`
+- **[WTK.ini](bios/Other/Recalbox/WTK.ini)** (259 bytes)
+  - SHA1: `dd1657cb5b7409937c331e78459273cf3d018538`
+  - MD5: `bc3414dd2d395cbe10ed5c3533dab695`
+  - CRC32: `1b98fdb6`
+- **[WTN.ini](bios/Other/Recalbox/WTN.ini)** (72 bytes)
+  - SHA1: `4c5ca1381cb38fb42af698733dc81c304569e0ad`
+  - MD5: `7bab141513c31d3710a3fa939f0dc33a`
+  - CRC32: `ca47d903`
+- **[WTU.ini](bios/Other/Recalbox/WTU.ini)** (289 bytes)
+  - SHA1: `1ef608f9dc1417fa745f8a4d80444c378cb61ff5`
+  - MD5: `0a85607770e3a803a0c29a396b8bd3a7`
+  - CRC32: `e8d2a940`
+- **[WTX.ini](bios/Other/Recalbox/WTX.ini)** (309 bytes)
+  - SHA1: `fe19f9ef21810ad7bea86b77ce95112f78b20544`
+  - MD5: `b4a21302f0c4b693fcf81f5d7b4371e5`
+  - CRC32: `40440e67`
+- **[WUK.ini](bios/Other/Recalbox/WUK.ini)** (84 bytes)
+  - SHA1: `698f76eb770a331300ac1d2236023f5fea47066f`
+  - MD5: `bc1e79882cd747be07bf9808896a57c2`
+  - CRC32: `b2fb3d66`
+- **[WW2.ini](bios/Other/Recalbox/WW2.ini)** (156 bytes)
+  - SHA1: `d2a376352203a7098842baf2a1d61608aeb4301b`
+  - MD5: `de84098c847326b05ce71346efb4cc07`
+  - CRC32: `3eee8b91`
+- **[WW3.ini](bios/Other/Recalbox/WW3.ini)** (156 bytes)
+  - SHA1: `427c19ae0de7fa43c5fa937b9fa9fd40292dbdcb`
+  - MD5: `db2effffc161d13b8ac8ddfbb29c94c5`
+  - CRC32: `d0cf7548`
+- **[WWA.ini](bios/Other/Recalbox/WWA.ini)** (266 bytes)
+  - SHA1: `469dfe9886cdba03a83e0a3a3b9021efe5c19e9b`
+  - MD5: `5497dd0cc4b4ce40dc3967af177036cc`
+  - CRC32: `7880a692`
+- **[WWI.ini](bios/Other/Recalbox/WWI.ini)** (156 bytes)
+  - SHA1: `1bfc541ba75e6698103b5bdca8a26a10df242e4a`
+  - MD5: `c9e54aa02ce4bb5b7d040880afe38b50`
+  - CRC32: `37e96a63`
+- **[WWX.ini](bios/Other/Recalbox/WWX.ini)** (84 bytes)
+  - SHA1: `e870c57553c878b20e67166a4922b3b2e22d99e4`
+  - MD5: `52e12feaa7f56df51677a84507216c41`
+  - CRC32: `096d6e20`
+- **[WXB.ini](bios/Other/Recalbox/WXB.ini)** (261 bytes)
+  - SHA1: `8f6094275ae5e4319956f9ce9756b2c442d4bb0c`
+  - MD5: `43e86518ad30fba3c39e5e4e3a5d754c`
+  - CRC32: `2080da75`
+- **[WXP.ini](bios/Other/Recalbox/WXP.ini)** (255 bytes)
+  - SHA1: `07e3d7fe5d5c161570a83a0d7d4891fe07c7671d`
+  - MD5: `664c30b70ff28fe067721881ed2d7820`
+  - CRC32: `82b3671b`
+- **[WXR.ini](bios/Other/Recalbox/WXR.ini)** (303 bytes)
+  - SHA1: `7384e3842c558216b0ef5c52b54a328a2da50e31`
+  - MD5: `861ce440b9467d9af0bcce501bdc7292`
+  - CRC32: `d459b6ea`
+- **[WYM.ini](bios/Other/Recalbox/WYM.ini)** (266 bytes)
+  - SHA1: `eb71cf6807a5f6339f3fa8f53cc656d2658c27e7`
+  - MD5: `99381a18c871f347abc63ab016c23b3f`
+  - CRC32: `f7fd5217`
+- **[WZB.ini](bios/Other/Recalbox/WZB.ini)** (70 bytes)
+  - SHA1: `35d598a465563ccb79b24cc9b012f3c4d9c415a8`
+  - MD5: `7fb2b16c2ed9a2f77525812a0fe53f2d`
+  - CRC32: `182b1f8d`
+- **[WZG.ini](bios/Other/Recalbox/WZG.ini)** (66 bytes)
+  - SHA1: `b475d26eb9e62583c4b2c0f9f0d6739270540b00`
+  - MD5: `edb477bbc165f14feacf9b21acf17281`
+  - CRC32: `267431f2`
+- **[WZI.ini](bios/Other/Recalbox/WZI.ini)** (265 bytes)
+  - SHA1: `9111cb6d1f7bbce41cb4252eff3bdfe61762cada`
+  - MD5: `1702b3a73e2774eda0cbf1e61e1cbe9b`
+  - CRC32: `66f4de78`
+- **[WZM.ini](bios/Other/Recalbox/WZM.ini)** (90 bytes)
+  - SHA1: `a519ce5b1ab288e7ebae2e9b9ccc46c155ab7ab5`
+  - MD5: `0ac4a5dff2d0a023991dbc65eab6d954`
+  - CRC32: `5cc6ed4f`
+- **[Wii Remote with MotionPlus Pointing.ini](bios/Other/Recalbox/Wii%20Remote%20with%20MotionPlus%20Pointing.ini)** (3,156 bytes)
+  - SHA1: `2c980b6cba29b92887d264a9a45b6dde81d465b7`
+  - MD5: `7f6603ce6b7c6a718ab69db3835e947d`
+  - CRC32: `1ce498d2`
+- **[XAA.ini](bios/Other/Recalbox/XAA.ini)** (94 bytes)
+  - SHA1: `6c19517ad558904e27643c7cd0d536dc68518eea`
+  - MD5: `3839bb4e43ab7eed29a736f25225136e`
+  - CRC32: `98d00cd2`
+- **[XAB.ini](bios/Other/Recalbox/XAB.ini)** (96 bytes)
+  - SHA1: `6525e689f5d56f289ec8e62cd11023d053e49889`
+  - MD5: `104ec33201f5dcd1716903bc64aa3420`
+  - CRC32: `2e96acb7`
+- **[XAD.ini](bios/Other/Recalbox/XAD.ini)** (135 bytes)
+  - SHA1: `af0d84ca720f5e77ae57ede54a6ef01f305dab4c`
+  - MD5: `6269876981e177a56ab7bdb76e991af8`
+  - CRC32: `7005b0e2`
+- **[XAE.ini](bios/Other/Recalbox/XAE.ini)** (102 bytes)
+  - SHA1: `70b2c43227b298036861a2e34ce81a9658ca29c3`
+  - MD5: `a4a6c7b912be12dad7410a69d137d2c6`
+  - CRC32: `0de7ae99`
+- **[XAF.ini](bios/Other/Recalbox/XAF.ini)** (106 bytes)
+  - SHA1: `9329ed86810250199ea8eb377a37ec5acd4cd8ec`
+  - MD5: `641d6d1f9bb248dcb62a2a051a714595`
+  - CRC32: `a76627b0`
+- **[XAG.ini](bios/Other/Recalbox/XAG.ini)** (102 bytes)
+  - SHA1: `25bd4e4706fb12cdf023da03e1a6ed04d53c5c23`
+  - MD5: `efec8a2f6875cd5aaa0b2b381aebc847`
+  - CRC32: `27586e2b`
+- **[XAH.ini](bios/Other/Recalbox/XAH.ini)** (111 bytes)
+  - SHA1: `092269da4f7b53d88640cd34801f233d4b584f02`
+  - MD5: `3a798eb497f9d58cd3d14c839665c777`
+  - CRC32: `8e433d7c`
+- **[XAI.ini](bios/Other/Recalbox/XAI.ini)** (96 bytes)
+  - SHA1: `93a80119eefd09a4cfdfe2d61d15703012fa0d71`
+  - MD5: `909e5abb276c635efa4e0b5cb1018437`
+  - CRC32: `3c8f216b`
+- **[XAK.ini](bios/Other/Recalbox/XAK.ini)** (124 bytes)
+  - SHA1: `a35c780cfeeb8cc0c80005b6a7b4e1bec4de3245`
+  - MD5: `300a430e7b15245a4dbc2f4642dd8a0a`
+  - CRC32: `f6d6321e`
+- **[XAL.ini](bios/Other/Recalbox/XAL.ini)** (96 bytes)
+  - SHA1: `8ac011d64ade28dba764683426ae21b48087cacf`
+  - MD5: `28d02d5686a6e5d35e2b234f1216e01e`
+  - CRC32: `dabfbc1f`
+- **[XAM.ini](bios/Other/Recalbox/XAM.ini)** (116 bytes)
+  - SHA1: `53bccad292c5fd20e4a5093b7801a343ef37034a`
+  - MD5: `10a9f545bd9a2e10f69431fd5228bb6e`
+  - CRC32: `2a8d50c2`
+- **[XAN.ini](bios/Other/Recalbox/XAN.ini)** (105 bytes)
+  - SHA1: `208e7a089a304a3abfbb5cc78a009fc248288b30`
+  - MD5: `eb2c30c43fa1c711c0ab28eb08557d68`
+  - CRC32: `cd8a9cff`
+- **[XAO.ini](bios/Other/Recalbox/XAO.ini)** (116 bytes)
+  - SHA1: `2e168b02916a36709d1966b5a99ec5a0523c76b8`
+  - MD5: `4433c139a866718922f83eea5abeec91`
+  - CRC32: `bd20b68b`
+- **[XAP.ini](bios/Other/Recalbox/XAP.ini)** (115 bytes)
+  - SHA1: `c75a26e201729d08f7c7c51538a482d5ebceee4d`
+  - MD5: `7c849a07939cfafdb23e742c24afafe1`
+  - CRC32: `e4f327cc`
+- **[XAQ.ini](bios/Other/Recalbox/XAQ.ini)** (106 bytes)
+  - SHA1: `5143bcac707c4e1754d4cdccd8575e8d2276fc21`
+  - MD5: `09ee26f738947209d0a1fca88b22ff13`
+  - CRC32: `be805f79`
+- **[XH2.ini](bios/Other/Recalbox/XH2.ini)** (76 bytes)
+  - SHA1: `ee82ed293e94b7ca0976802e53891c6b298bdfa7`
+  - MD5: `4050275daf3ecf40c8405878b6a468b2`
+  - CRC32: `2fc1da2e`
+- **[XH7.ini](bios/Other/Recalbox/XH7.ini)** (69 bytes)
+  - SHA1: `67bf77f2d083b99a1d090d6d278dc37b8a08c7fa`
+  - MD5: `47c56323e05a30c2a82c0eeeb8fad767`
+  - CRC32: `3dc7b5ba`
+- **[XH9.ini](bios/Other/Recalbox/XH9.ini)** (150 bytes)
+  - SHA1: `eec6c4b3aadd497c4ef167e3776f0e468505b722`
+  - MD5: `3744782bfa4490c747b0fa9a81270235`
+  - CRC32: `fcf915af`
+- **[XHD.ini](bios/Other/Recalbox/XHD.ini)** (267 bytes)
+  - SHA1: `d2b9f445b0797bcec848f3e8b6b9bc89882e472e`
+  - MD5: `3183b31e05a041729b10526324947dba`
+  - CRC32: `5b42a39f`
+- **[XHL.ini](bios/Other/Recalbox/XHL.ini)** (246 bytes)
+  - SHA1: `ce3f5cf7c6ab381563fcd562f7c5cf5bb9479581`
+  - MD5: `1362ce051dce7eaccd76072092fdf780`
+  - CRC32: `b8baefc8`
+- **[XI9.ini](bios/Other/Recalbox/XI9.ini)** (150 bytes)
+  - SHA1: `be3b0778a1cd99462424d0ae130fa28daf62b653`
+  - MD5: `97abed8150e39ccbd9fdc2ddd1878404`
+  - CRC32: `29fa0a69`
+- **[XIT.ini](bios/Other/Recalbox/XIT.ini)** (73 bytes)
+  - SHA1: `00feefadf65970b85999584cf2389e198ad5e3b1`
+  - MD5: `f050e85c945ef045460da3645721abdd`
+  - CRC32: `7eb646ff`
+- **[XIU.ini](bios/Other/Recalbox/XIU.ini)** (76 bytes)
+  - SHA1: `5db4354da4754069028d8b22071df28cb36922fe`
+  - MD5: `0b658aa13e201feba9c3ee3de125617c`
+  - CRC32: `b27f2fb8`
+- **[XIV.ini](bios/Other/Recalbox/XIV.ini)** (77 bytes)
+  - SHA1: `15d0ce67257a7f6eca8a46d312dd5e76b16b8a35`
+  - MD5: `24a7c5af67c5871d048569f7bb878335`
+  - CRC32: `8d34f170`
+- **[accept.wav](bios/Other/Recalbox/accept.wav)** (12,988 bytes)
+  - SHA1: `ddf9e4d35b150cbda073151115427a4e803eeede`
+  - MD5: `84da1219e5e296af78926312f74a0616`
+  - CRC32: `3d0f7d85`
+- **[achievements_game.png](bios/Other/Recalbox/achievements_game.png)** (1,234 bytes)
+  - SHA1: `77b312f8f8455b466feea3e85656a56d05d5d6a7`
+  - MD5: `1b16c932606ea11c308e05d550f9f5bd`
+  - CRC32: `6e87ad39`
+- **[achievements_locked.png](bios/Other/Recalbox/achievements_locked.png)** (560 bytes)
+  - SHA1: `2626efb941a219fa70d4ef5bc7414a0927fcbcdd`
+  - MD5: `4247918ac46dd8c78c9bf5797b26bad3`
+  - CRC32: `1e191783`
+- **[achievements_player.png](bios/Other/Recalbox/achievements_player.png)** (1,164 bytes)
+  - SHA1: `27cffcbb031551cd01ed56d2857bdb371812542d`
+  - MD5: `a999dce7f873228b1be31ab87106e8a6`
+  - CRC32: `ba6073f7`
+- **[achievements_unlocked.png](bios/Other/Recalbox/achievements_unlocked.png)** (583 bytes)
+  - SHA1: `940a0c3bf045955449b59a81e959f1fa7a0cb6c1`
+  - MD5: `41605f41eb9b4b85083013a19bfd8230`
+  - CRC32: `a5b19652`
+- **[acidmetal.glsl](bios/Other/Recalbox/acidmetal.glsl)** (227 bytes)
+  - SHA1: `5e7cf1725862bcf30ebf7926668b429db7270ae9`
+  - MD5: `d21dd88cc9e1545bf5da5efd6e6e6656`
+  - CRC32: `21003be6`
+- **[acidtrip.glsl](bios/Other/Recalbox/acidtrip.glsl)** (91 bytes)
+  - SHA1: `6932007bbcfca8d79efceb9d5a62b64e6b2487ce`
+  - MD5: `30bb294dbf1f605dc95cbc89bf0c1317`
+  - CRC32: `1aeff654`
+- **[acidtrip2.glsl](bios/Other/Recalbox/acidtrip2.glsl)** (131 bytes)
+  - SHA1: `26eb836c8b5560d4fe12f564a6f17e2bd076998f`
+  - MD5: `a05c67cbdcaed0d493db9ebe098f1c5e`
+  - CRC32: `1568eda1`
+- **[agb_boot.bin](bios/Other/Recalbox/agb_boot.bin)** (2,304 bytes)
+  - SHA1: `4697f23cc5ef95b9522412f1ae05571eb2947b02`
+  - MD5: `36c394ff8b6968f746d4628c639c00a5`
+  - CRC32: `52a521bf`
+- **[asciiart.glsl](bios/Other/Recalbox/asciiart.glsl)** (18,047 bytes)
+  - SHA1: `f5e1c94bdb00bbccda551fa1035912c29265efe6`
+  - MD5: `2b812a32376ff8f3267ec0be67d6bfaa`
+  - CRC32: `1cf1a4fe`
+- **[assembler_assemble.png](bios/Other/Recalbox/assembler_assemble.png)** (3,904 bytes)
+  - SHA1: `0045c4fdaf3043ba94749fde799eba1cca510865`
+  - MD5: `a935b47df661c39f88b25277674d9bb6`
+  - CRC32: `ce68dd8e`
+  - **Variants** (4 alternate versions):
+    - [assembler_assemble.png.3acfb0c5](bios/Other/Recalbox/.variants/assembler_assemble.png.3acfb0c5) (3,881 bytes) - SHA1: `3acfb0c5a12f5093d7f81843a3f2d006dd987ef0`, MD5: `da53a03e5c13d5e20df4764ff90918f8`
+    - [assembler_assemble.png.b3184b8c](bios/Other/Recalbox/.variants/assembler_assemble.png.b3184b8c) (2,853 bytes) - SHA1: `b3184b8cc427d372426d2a592326dcf5ff60010b`, MD5: `90de290dc4bd2c5b1734c1682909cc26`
+    - [assembler_assemble.png.cee64a97](bios/Other/Recalbox/.variants/assembler_assemble.png.cee64a97) (3,911 bytes) - SHA1: `cee64a972535820b00514088cf23345041f4ce0d`, MD5: `d1885095bd724fb9f292482e46b7044c`
+    - [assembler_assemble.png.d64f9805](bios/Other/Recalbox/.variants/assembler_assemble.png.d64f9805) (3,918 bytes) - SHA1: `d64f98055ce52d762697b350d00b8152766e6281`, MD5: `2b0ef713d5be72dc55bf758f45ce6245`
+- **[assembler_assemble.png.3acfb0c5](bios/Other/Recalbox/.variants/assembler_assemble.png.3acfb0c5)** (3,881 bytes)
+  - SHA1: `3acfb0c5a12f5093d7f81843a3f2d006dd987ef0`
+  - MD5: `da53a03e5c13d5e20df4764ff90918f8`
+  - CRC32: `0e97e347`
+- **[assembler_assemble.png.b3184b8c](bios/Other/Recalbox/.variants/assembler_assemble.png.b3184b8c)** (2,853 bytes)
+  - SHA1: `b3184b8cc427d372426d2a592326dcf5ff60010b`
+  - MD5: `90de290dc4bd2c5b1734c1682909cc26`
+  - CRC32: `30c77e0f`
+- **[assembler_assemble.png.cee64a97](bios/Other/Recalbox/.variants/assembler_assemble.png.cee64a97)** (3,911 bytes)
+  - SHA1: `cee64a972535820b00514088cf23345041f4ce0d`
+  - MD5: `d1885095bd724fb9f292482e46b7044c`
+  - CRC32: `8decdd79`
+- **[assembler_assemble.png.d64f9805](bios/Other/Recalbox/.variants/assembler_assemble.png.d64f9805)** (3,918 bytes)
+  - SHA1: `d64f98055ce52d762697b350d00b8152766e6281`
+  - MD5: `2b0ef713d5be72dc55bf758f45ce6245`
+  - CRC32: `2d4ac3b0`
+- **[assembler_assemble@2x.png](bios/Other/Recalbox/assembler_assemble@2x.png)** (4,819 bytes)
+  - SHA1: `b0f45a268fb4de2284c269404d6c67f3c3824021`
+  - MD5: `3bfd331fd7e9a39958dbc3b7b1580dfa`
+  - CRC32: `ea6eee50`
+  - **Variants** (4 alternate versions):
+    - [assembler_assemble@2x.png.170449d4](bios/Other/Recalbox/.variants/assembler_assemble@2x.png.170449d4) (3,525 bytes) - SHA1: `170449d4c6632f6a12890d5c0c145e581636de16`, MD5: `a6d2d417bf6033652ecc2c45ee0056b9`
+    - [assembler_assemble@2x.png.39daceb4](bios/Other/Recalbox/.variants/assembler_assemble@2x.png.39daceb4) (5,312 bytes) - SHA1: `39daceb4da08489ed15c6da6be1c0c3fde83780f`, MD5: `0a2281533264e8a7557a7565e59e73a7`
+    - [assembler_assemble@2x.png.85134740](bios/Other/Recalbox/.variants/assembler_assemble@2x.png.85134740) (5,333 bytes) - SHA1: `851347402483a5e920578e47a24bd3402ae65784`, MD5: `c7503b3fd0de53bb6dbbb0d1a2bb257d`
+    - [assembler_assemble@2x.png.d441cff3](bios/Other/Recalbox/.variants/assembler_assemble@2x.png.d441cff3) (5,153 bytes) - SHA1: `d441cff38eddc10e5a4af61bf018b33c59bf0222`, MD5: `55de198c7daaa95b6ffc2a9f50420422`
+- **[assembler_assemble@2x.png.170449d4](bios/Other/Recalbox/.variants/assembler_assemble@2x.png.170449d4)** (3,525 bytes)
+  - SHA1: `170449d4c6632f6a12890d5c0c145e581636de16`
+  - MD5: `a6d2d417bf6033652ecc2c45ee0056b9`
+  - CRC32: `99f0523c`
+- **[assembler_assemble@2x.png.39daceb4](bios/Other/Recalbox/.variants/assembler_assemble@2x.png.39daceb4)** (5,312 bytes)
+  - SHA1: `39daceb4da08489ed15c6da6be1c0c3fde83780f`
+  - MD5: `0a2281533264e8a7557a7565e59e73a7`
+  - CRC32: `ecbe280e`
+- **[assembler_assemble@2x.png.85134740](bios/Other/Recalbox/.variants/assembler_assemble@2x.png.85134740)** (5,333 bytes)
+  - SHA1: `851347402483a5e920578e47a24bd3402ae65784`
+  - MD5: `c7503b3fd0de53bb6dbbb0d1a2bb257d`
+  - CRC32: `6c82f6ac`
+- **[assembler_assemble@2x.png.d441cff3](bios/Other/Recalbox/.variants/assembler_assemble@2x.png.d441cff3)** (5,153 bytes)
+  - SHA1: `d441cff38eddc10e5a4af61bf018b33c59bf0222`
+  - MD5: `55de198c7daaa95b6ffc2a9f50420422`
+  - CRC32: `e6b8ac45`
+- **[assembler_assemble@4x.png](bios/Other/Recalbox/assembler_assemble@4x.png)** (6,054 bytes)
+  - SHA1: `802ef4712688b72c2fe72b704e11234d541ccd5b`
+  - MD5: `3aef496067de1b6e2365eeb6e78a7e68`
+  - CRC32: `cf99977a`
+  - **Variants** (4 alternate versions):
+    - [assembler_assemble@4x.png.19f4b44d](bios/Other/Recalbox/.variants/assembler_assemble@4x.png.19f4b44d) (5,608 bytes) - SHA1: `19f4b44d8177795ef517e8d38fb94e37d5b38d17`, MD5: `0ee3bb59164a33f1f0bdec5502fa9eb4`
+    - [assembler_assemble@4x.png.241ed5c3](bios/Other/Recalbox/.variants/assembler_assemble@4x.png.241ed5c3) (6,086 bytes) - SHA1: `241ed5c39cb7efe3b27beb20e63d3b11c6ad0f76`, MD5: `403c5a2f5cd94d1a0c3572ecd18c637b`
+    - [assembler_assemble@4x.png.83da87ca](bios/Other/Recalbox/.variants/assembler_assemble@4x.png.83da87ca) (6,640 bytes) - SHA1: `83da87cae6ed527563f61947259a9e857a40f315`, MD5: `49f1a977b75bec3a4c4ba74e8891ff4c`
+    - [assembler_assemble@4x.png.8aaa5ea7](bios/Other/Recalbox/.variants/assembler_assemble@4x.png.8aaa5ea7) (6,444 bytes) - SHA1: `8aaa5ea74815fe95d8832be94998cdcf7dbec2b0`, MD5: `da46dbd15e19f3915c729adb8a8b38de`
+- **[assembler_assemble@4x.png.19f4b44d](bios/Other/Recalbox/.variants/assembler_assemble@4x.png.19f4b44d)** (5,608 bytes)
+  - SHA1: `19f4b44d8177795ef517e8d38fb94e37d5b38d17`
+  - MD5: `0ee3bb59164a33f1f0bdec5502fa9eb4`
+  - CRC32: `102087cb`
+- **[assembler_assemble@4x.png.241ed5c3](bios/Other/Recalbox/.variants/assembler_assemble@4x.png.241ed5c3)** (6,086 bytes)
+  - SHA1: `241ed5c39cb7efe3b27beb20e63d3b11c6ad0f76`
+  - MD5: `403c5a2f5cd94d1a0c3572ecd18c637b`
+  - CRC32: `7d504395`
+- **[assembler_assemble@4x.png.83da87ca](bios/Other/Recalbox/.variants/assembler_assemble@4x.png.83da87ca)** (6,640 bytes)
+  - SHA1: `83da87cae6ed527563f61947259a9e857a40f315`
+  - MD5: `49f1a977b75bec3a4c4ba74e8891ff4c`
+  - CRC32: `4eb3d615`
+- **[assembler_assemble@4x.png.8aaa5ea7](bios/Other/Recalbox/.variants/assembler_assemble@4x.png.8aaa5ea7)** (6,444 bytes)
+  - SHA1: `8aaa5ea74815fe95d8832be94998cdcf7dbec2b0`
+  - MD5: `da46dbd15e19f3915c729adb8a8b38de`
+  - CRC32: `de5aa1cf`
+- **[assembler_clipboard.png](bios/Other/Recalbox/assembler_clipboard.png)** (3,877 bytes)
+  - SHA1: `73b16caa3b9c49ee5a9a6104ed9f6e6d6f4b9961`
+  - MD5: `f4cf4317e9edc0020c252bbdbe0df9fa`
+  - CRC32: `01a0346f`
+  - **Variants** (4 alternate versions):
+    - [assembler_clipboard.png.092c973b](bios/Other/Recalbox/.variants/assembler_clipboard.png.092c973b) (4,070 bytes) - SHA1: `092c973bc01c42b4a92fab7d70f9b388de1bf48a`, MD5: `8a9c8fb76b4250aed60b9a9e4534a2af`
+    - [assembler_clipboard.png.0f42b328](bios/Other/Recalbox/.variants/assembler_clipboard.png.0f42b328) (4,078 bytes) - SHA1: `0f42b3289e24c9424ebda7243ae307b92d008719`, MD5: `a45db51e6ac7def719343976a0d358ae`
+    - [assembler_clipboard.png.216464a3](bios/Other/Recalbox/.variants/assembler_clipboard.png.216464a3) (3,888 bytes) - SHA1: `216464a30ed639383cae6e374ee7daa673ccd0be`, MD5: `16abd01121cd24884da212745ed47d49`
+    - [assembler_clipboard.png.77ad522b](bios/Other/Recalbox/.variants/assembler_clipboard.png.77ad522b) (3,742 bytes) - SHA1: `77ad522bee5811b466dc2e95d0f3b7b6e6b19641`, MD5: `dcd130db692c92cfba5b1d67906396ed`
+- **[assembler_clipboard.png.092c973b](bios/Other/Recalbox/.variants/assembler_clipboard.png.092c973b)** (4,070 bytes)
+  - SHA1: `092c973bc01c42b4a92fab7d70f9b388de1bf48a`
+  - MD5: `8a9c8fb76b4250aed60b9a9e4534a2af`
+  - CRC32: `a1d75189`
+- **[assembler_clipboard.png.0f42b328](bios/Other/Recalbox/.variants/assembler_clipboard.png.0f42b328)** (4,078 bytes)
+  - SHA1: `0f42b3289e24c9424ebda7243ae307b92d008719`
+  - MD5: `a45db51e6ac7def719343976a0d358ae`
+  - CRC32: `22c7920e`
+- **[assembler_clipboard.png.216464a3](bios/Other/Recalbox/.variants/assembler_clipboard.png.216464a3)** (3,888 bytes)
+  - SHA1: `216464a30ed639383cae6e374ee7daa673ccd0be`
+  - MD5: `16abd01121cd24884da212745ed47d49`
+  - CRC32: `7f5c34df`
+- **[assembler_clipboard.png.77ad522b](bios/Other/Recalbox/.variants/assembler_clipboard.png.77ad522b)** (3,742 bytes)
+  - SHA1: `77ad522bee5811b466dc2e95d0f3b7b6e6b19641`
+  - MD5: `dcd130db692c92cfba5b1d67906396ed`
+  - CRC32: `43ff4e82`
+- **[assembler_inject.png](bios/Other/Recalbox/assembler_inject.png)** (3,990 bytes)
+  - SHA1: `0bc3c07459a1c67fe24c2e915fcaac0d1e6271dd`
+  - MD5: `2fbca760f295343647092db8710622a3`
+  - CRC32: `ab283695`
+  - **Variants** (4 alternate versions):
+    - [assembler_inject.png.015d7d04](bios/Other/Recalbox/.variants/assembler_inject.png.015d7d04) (3,692 bytes) - SHA1: `015d7d045d005309c0419676eee70748e759dae6`, MD5: `12aad9f59c50dc5ac03830af5341313c`
+    - [assembler_inject.png.044d53f4](bios/Other/Recalbox/.variants/assembler_inject.png.044d53f4) (3,827 bytes) - SHA1: `044d53f47e98c807ca1e145c5d1cd574daf660d6`, MD5: `1acbdbc3c335af9154cbb76b7a45180c`
+    - [assembler_inject.png.52479da8](bios/Other/Recalbox/.variants/assembler_inject.png.52479da8) (3,757 bytes) - SHA1: `52479da8b192bc5794596b3fd01f83823dabfa54`, MD5: `caa720cb94856178fb727fc3b5cc897f`
+    - [assembler_inject.png.f203c7c9](bios/Other/Recalbox/.variants/assembler_inject.png.f203c7c9) (2,772 bytes) - SHA1: `f203c7c982375cede2c85952d8fc32aa705eb9b0`, MD5: `43eeffa56472bd2319b7c9a133983361`
+- **[assembler_inject.png.015d7d04](bios/Other/Recalbox/.variants/assembler_inject.png.015d7d04)** (3,692 bytes)
+  - SHA1: `015d7d045d005309c0419676eee70748e759dae6`
+  - MD5: `12aad9f59c50dc5ac03830af5341313c`
+  - CRC32: `141f8ec7`
+- **[assembler_inject.png.044d53f4](bios/Other/Recalbox/.variants/assembler_inject.png.044d53f4)** (3,827 bytes)
+  - SHA1: `044d53f47e98c807ca1e145c5d1cd574daf660d6`
+  - MD5: `1acbdbc3c335af9154cbb76b7a45180c`
+  - CRC32: `1fd74bce`
+- **[assembler_inject.png.52479da8](bios/Other/Recalbox/.variants/assembler_inject.png.52479da8)** (3,757 bytes)
+  - SHA1: `52479da8b192bc5794596b3fd01f83823dabfa54`
+  - MD5: `caa720cb94856178fb727fc3b5cc897f`
+  - CRC32: `99c48e8d`
+- **[assembler_inject.png.f203c7c9](bios/Other/Recalbox/.variants/assembler_inject.png.f203c7c9)** (2,772 bytes)
+  - SHA1: `f203c7c982375cede2c85952d8fc32aa705eb9b0`
+  - MD5: `43eeffa56472bd2319b7c9a133983361`
+  - CRC32: `706222d2`
+- **[assembler_inject@2x.png](bios/Other/Recalbox/assembler_inject@2x.png)** (4,588 bytes)
+  - SHA1: `f86ebcd69f3e77fca65bd8923f408de9e6e23bf6`
+  - MD5: `51697441a5ee7be065c1997f3d679b5b`
+  - CRC32: `57d85a2d`
+  - **Variants** (4 alternate versions):
+    - [assembler_inject@2x.png.6e0ccc05](bios/Other/Recalbox/.variants/assembler_inject@2x.png.6e0ccc05) (3,244 bytes) - SHA1: `6e0ccc054909bbca59d71e53a7485eb112cf2346`, MD5: `b1dba2fc7a4f7168dc8f4301035de734`
+    - [assembler_inject@2x.png.721a0ca5](bios/Other/Recalbox/.variants/assembler_inject@2x.png.721a0ca5) (4,649 bytes) - SHA1: `721a0ca571328b859ca27dca2aa7c7d1a8419ec9`, MD5: `6293fcafd2f3f9354a19890d451b83a6`
+    - [assembler_inject@2x.png.cdead9e2](bios/Other/Recalbox/.variants/assembler_inject@2x.png.cdead9e2) (4,727 bytes) - SHA1: `cdead9e21612364c580db82f35b61a3509cef985`, MD5: `8cd9a4925141adc460059e9c942da1e3`
+    - [assembler_inject@2x.png.e191dbf0](bios/Other/Recalbox/.variants/assembler_inject@2x.png.e191dbf0) (4,877 bytes) - SHA1: `e191dbf0a31f7478cd3c9c01cf4c77d32445f8dc`, MD5: `e3a99e8f275c212baa2d27a7310971a3`
+- **[assembler_inject@2x.png.6e0ccc05](bios/Other/Recalbox/.variants/assembler_inject@2x.png.6e0ccc05)** (3,244 bytes)
+  - SHA1: `6e0ccc054909bbca59d71e53a7485eb112cf2346`
+  - MD5: `b1dba2fc7a4f7168dc8f4301035de734`
+  - CRC32: `86bf5fdd`
+- **[assembler_inject@2x.png.721a0ca5](bios/Other/Recalbox/.variants/assembler_inject@2x.png.721a0ca5)** (4,649 bytes)
+  - SHA1: `721a0ca571328b859ca27dca2aa7c7d1a8419ec9`
+  - MD5: `6293fcafd2f3f9354a19890d451b83a6`
+  - CRC32: `c0bab20e`
+- **[assembler_inject@2x.png.cdead9e2](bios/Other/Recalbox/.variants/assembler_inject@2x.png.cdead9e2)** (4,727 bytes)
+  - SHA1: `cdead9e21612364c580db82f35b61a3509cef985`
+  - MD5: `8cd9a4925141adc460059e9c942da1e3`
+  - CRC32: `9a727eb2`
+- **[assembler_inject@2x.png.e191dbf0](bios/Other/Recalbox/.variants/assembler_inject@2x.png.e191dbf0)** (4,877 bytes)
+  - SHA1: `e191dbf0a31f7478cd3c9c01cf4c77d32445f8dc`
+  - MD5: `e3a99e8f275c212baa2d27a7310971a3`
+  - CRC32: `2a34c78e`
+- **[assembler_inject@4x.png](bios/Other/Recalbox/assembler_inject@4x.png)** (5,529 bytes)
+  - SHA1: `bb291018629d9c9d3db7f7dc0eb9d2ad75ee2897`
+  - MD5: `dca53732412201f16a728b18a3be505a`
+  - CRC32: `d891d334`
+  - **Variants** (4 alternate versions):
+    - [assembler_inject@4x.png.0177e084](bios/Other/Recalbox/.variants/assembler_inject@4x.png.0177e084) (5,233 bytes) - SHA1: `0177e084342546caa6baf9576c53b684dcf07c37`, MD5: `e84d79689bf4faa5d3022fbd96f07979`
+    - [assembler_inject@4x.png.026f7441](bios/Other/Recalbox/.variants/assembler_inject@4x.png.026f7441) (5,900 bytes) - SHA1: `026f74416eb904d164fdb3b1b6b4dbe19ac893a2`, MD5: `071a32681616adf0b67e33861a1f158a`
+    - [assembler_inject@4x.png.38e25471](bios/Other/Recalbox/.variants/assembler_inject@4x.png.38e25471) (5,482 bytes) - SHA1: `38e2547140bb706042756f987d1702c921991270`, MD5: `2e8d23aece5bdff87d1002ec1f119cdd`
+    - [assembler_inject@4x.png.d7462903](bios/Other/Recalbox/.variants/assembler_inject@4x.png.d7462903) (5,871 bytes) - SHA1: `d74629036f76a91d8d1cdae44aabe40ac2984a95`, MD5: `780c70901dbe67466ac1050a0302a917`
+- **[assembler_inject@4x.png.0177e084](bios/Other/Recalbox/.variants/assembler_inject@4x.png.0177e084)** (5,233 bytes)
+  - SHA1: `0177e084342546caa6baf9576c53b684dcf07c37`
+  - MD5: `e84d79689bf4faa5d3022fbd96f07979`
+  - CRC32: `a80f84f4`
+- **[assembler_inject@4x.png.026f7441](bios/Other/Recalbox/.variants/assembler_inject@4x.png.026f7441)** (5,900 bytes)
+  - SHA1: `026f74416eb904d164fdb3b1b6b4dbe19ac893a2`
+  - MD5: `071a32681616adf0b67e33861a1f158a`
+  - CRC32: `91f6a6f9`
+- **[assembler_inject@4x.png.38e25471](bios/Other/Recalbox/.variants/assembler_inject@4x.png.38e25471)** (5,482 bytes)
+  - SHA1: `38e2547140bb706042756f987d1702c921991270`
+  - MD5: `2e8d23aece5bdff87d1002ec1f119cdd`
+  - CRC32: `69a9de3d`
+- **[assembler_inject@4x.png.d7462903](bios/Other/Recalbox/.variants/assembler_inject@4x.png.d7462903)** (5,871 bytes)
+  - SHA1: `d74629036f76a91d8d1cdae44aabe40ac2984a95`
+  - MD5: `780c70901dbe67466ac1050a0302a917`
+  - CRC32: `1fd9abce`
+- **[assembler_new.png](bios/Other/Recalbox/assembler_new.png)** (3,775 bytes)
+  - SHA1: `306971957548055c7d66cc4d98ba5fdb41263d33`
+  - MD5: `79ba2a7eecb1a8c5413b00524094044c`
+  - CRC32: `055322fa`
+  - **Variants** (4 alternate versions):
+    - [assembler_new.png.5336228d](bios/Other/Recalbox/.variants/assembler_new.png.5336228d) (3,534 bytes) - SHA1: `5336228d1fbc5b2f03936c7696a16f55dfdb3ace`, MD5: `a97880ce1970314f0c4c535bdce57d7f`
+    - [assembler_new.png.9dfa96dd](bios/Other/Recalbox/.variants/assembler_new.png.9dfa96dd) (3,557 bytes) - SHA1: `9dfa96ddffabc4ec2959df9ac48ef261e69595ed`, MD5: `c24f47bf0cce14be1ad742f23ab879dc`
+    - [assembler_new.png.abcfb3c4](bios/Other/Recalbox/.variants/assembler_new.png.abcfb3c4) (3,570 bytes) - SHA1: `abcfb3c40ab0f28e23a21ea7e9ef7c2573f2b26c`, MD5: `57921417e621b1906f36aa72e36e821f`
+    - [assembler_new.png.d6571857](bios/Other/Recalbox/.variants/assembler_new.png.d6571857) (2,991 bytes) - SHA1: `d65718577a63faafe8a74adcc9a1121183fd4e69`, MD5: `f28f0a09e1e093bb0f4f8cda262bd9f0`
+- **[assembler_new.png.5336228d](bios/Other/Recalbox/.variants/assembler_new.png.5336228d)** (3,534 bytes)
+  - SHA1: `5336228d1fbc5b2f03936c7696a16f55dfdb3ace`
+  - MD5: `a97880ce1970314f0c4c535bdce57d7f`
+  - CRC32: `98da2292`
+- **[assembler_new.png.9dfa96dd](bios/Other/Recalbox/.variants/assembler_new.png.9dfa96dd)** (3,557 bytes)
+  - SHA1: `9dfa96ddffabc4ec2959df9ac48ef261e69595ed`
+  - MD5: `c24f47bf0cce14be1ad742f23ab879dc`
+  - CRC32: `2e29422b`
+- **[assembler_new.png.abcfb3c4](bios/Other/Recalbox/.variants/assembler_new.png.abcfb3c4)** (3,570 bytes)
+  - SHA1: `abcfb3c40ab0f28e23a21ea7e9ef7c2573f2b26c`
+  - MD5: `57921417e621b1906f36aa72e36e821f`
+  - CRC32: `3f28aed0`
+- **[assembler_new.png.d6571857](bios/Other/Recalbox/.variants/assembler_new.png.d6571857)** (2,991 bytes)
+  - SHA1: `d65718577a63faafe8a74adcc9a1121183fd4e69`
+  - MD5: `f28f0a09e1e093bb0f4f8cda262bd9f0`
+  - CRC32: `a378b4d7`
+- **[assembler_new@2x.png](bios/Other/Recalbox/assembler_new@2x.png)** (4,595 bytes)
+  - SHA1: `52d321e65711efb9a4d2a28d9e1d2d19d06fb28f`
+  - MD5: `72787f2a6927a1b8bbce0a05aadee420`
+  - CRC32: `7686e617`
+  - **Variants** (4 alternate versions):
+    - [assembler_new@2x.png.43e51009](bios/Other/Recalbox/.variants/assembler_new@2x.png.43e51009) (3,703 bytes) - SHA1: `43e510098c522cc1e450e107081c57fca548435f`, MD5: `c561b1fc5645fd02ec8b04103870c4ca`
+    - [assembler_new@2x.png.9776c0f0](bios/Other/Recalbox/.variants/assembler_new@2x.png.9776c0f0) (4,264 bytes) - SHA1: `9776c0f04fe16147f2c138a272dbae24863444ac`, MD5: `9f3fecdc72b297fdbb6d2d75cac07b39`
+    - [assembler_new@2x.png.ab0f4247](bios/Other/Recalbox/.variants/assembler_new@2x.png.ab0f4247) (4,303 bytes) - SHA1: `ab0f424757655373660ff78c659f908afd6b57be`, MD5: `733f2af3dff3ab744156be3460cde771`
+    - [assembler_new@2x.png.ac171395](bios/Other/Recalbox/.variants/assembler_new@2x.png.ac171395) (4,266 bytes) - SHA1: `ac171395d767c67119debd4fc0007c6b1a5b6f74`, MD5: `675e4a5da2d2d5c8ac0b6c53bb0da049`
+- **[assembler_new@2x.png.43e51009](bios/Other/Recalbox/.variants/assembler_new@2x.png.43e51009)** (3,703 bytes)
+  - SHA1: `43e510098c522cc1e450e107081c57fca548435f`
+  - MD5: `c561b1fc5645fd02ec8b04103870c4ca`
+  - CRC32: `cb386e76`
+- **[assembler_new@2x.png.9776c0f0](bios/Other/Recalbox/.variants/assembler_new@2x.png.9776c0f0)** (4,264 bytes)
+  - SHA1: `9776c0f04fe16147f2c138a272dbae24863444ac`
+  - MD5: `9f3fecdc72b297fdbb6d2d75cac07b39`
+  - CRC32: `5be76d19`
+- **[assembler_new@2x.png.ab0f4247](bios/Other/Recalbox/.variants/assembler_new@2x.png.ab0f4247)** (4,303 bytes)
+  - SHA1: `ab0f424757655373660ff78c659f908afd6b57be`
+  - MD5: `733f2af3dff3ab744156be3460cde771`
+  - CRC32: `d36f9798`
+- **[assembler_new@2x.png.ac171395](bios/Other/Recalbox/.variants/assembler_new@2x.png.ac171395)** (4,266 bytes)
+  - SHA1: `ac171395d767c67119debd4fc0007c6b1a5b6f74`
+  - MD5: `675e4a5da2d2d5c8ac0b6c53bb0da049`
+  - CRC32: `edcc7eb1`
+- **[assembler_new@4x.png](bios/Other/Recalbox/assembler_new@4x.png)** (6,684 bytes)
+  - SHA1: `50a9a91695e1d7d53401f33593eb141cff6e4182`
+  - MD5: `eed5d866a9f4f4144c9722259b4587c5`
+  - CRC32: `0090c6f2`
+  - **Variants** (4 alternate versions):
+    - [assembler_new@4x.png.1c116603](bios/Other/Recalbox/.variants/assembler_new@4x.png.1c116603) (6,288 bytes) - SHA1: `1c11660314d8430d9689154da867bda741ba4389`, MD5: `fa554f8e3eb2e7827b51c2b3f22d7c44`
+    - [assembler_new@4x.png.82abb55d](bios/Other/Recalbox/.variants/assembler_new@4x.png.82abb55d) (6,492 bytes) - SHA1: `82abb55ddc3180e5ab1cd7d6bcdc0d6c9f5a9539`, MD5: `1738cb5b94e85b04abb42d66886be991`
+    - [assembler_new@4x.png.8ab847b2](bios/Other/Recalbox/.variants/assembler_new@4x.png.8ab847b2) (6,910 bytes) - SHA1: `8ab847b2a41bd7a4936b5b4a99d37a1fb3cd3779`, MD5: `27108afdfaddd9a294a1f1e95c258d06`
+    - [assembler_new@4x.png.cae8eebc](bios/Other/Recalbox/.variants/assembler_new@4x.png.cae8eebc) (6,971 bytes) - SHA1: `cae8eebc9a7f1e472303adb6654edf174cf99f36`, MD5: `32e48bd8b391df1abe9b8077dd5be71c`
+- **[assembler_new@4x.png.1c116603](bios/Other/Recalbox/.variants/assembler_new@4x.png.1c116603)** (6,288 bytes)
+  - SHA1: `1c11660314d8430d9689154da867bda741ba4389`
+  - MD5: `fa554f8e3eb2e7827b51c2b3f22d7c44`
+  - CRC32: `75d2a19e`
+- **[assembler_new@4x.png.82abb55d](bios/Other/Recalbox/.variants/assembler_new@4x.png.82abb55d)** (6,492 bytes)
+  - SHA1: `82abb55ddc3180e5ab1cd7d6bcdc0d6c9f5a9539`
+  - MD5: `1738cb5b94e85b04abb42d66886be991`
+  - CRC32: `afe36973`
+- **[assembler_new@4x.png.8ab847b2](bios/Other/Recalbox/.variants/assembler_new@4x.png.8ab847b2)** (6,910 bytes)
+  - SHA1: `8ab847b2a41bd7a4936b5b4a99d37a1fb3cd3779`
+  - MD5: `27108afdfaddd9a294a1f1e95c258d06`
+  - CRC32: `6967cb69`
+- **[assembler_new@4x.png.cae8eebc](bios/Other/Recalbox/.variants/assembler_new@4x.png.cae8eebc)** (6,971 bytes)
+  - SHA1: `cae8eebc9a7f1e472303adb6654edf174cf99f36`
+  - MD5: `32e48bd8b391df1abe9b8077dd5be71c`
+  - CRC32: `37b76dbf`
+- **[assembler_openasm.png](bios/Other/Recalbox/assembler_openasm.png)** (2,674 bytes)
+  - SHA1: `b82da4fceee7f447b3e6f0dc5454fe4187fd233e`
+  - MD5: `946d8f268d0b4da98743822b0a8dbbff`
+  - CRC32: `8713a42c`
+  - **Variants** (4 alternate versions):
+    - [assembler_openasm.png.3726819c](bios/Other/Recalbox/.variants/assembler_openasm.png.3726819c) (3,314 bytes) - SHA1: `3726819c7cdf3f67e079e8367d839bdf7839f39c`, MD5: `d88f1e9cee762611ab822ac3853d590f`
+    - [assembler_openasm.png.cb4f2042](bios/Other/Recalbox/.variants/assembler_openasm.png.cb4f2042) (3,311 bytes) - SHA1: `cb4f2042137e39382a81527272244f7a5353d856`, MD5: `8bb83499afb2d959ea7c509cd4d917e4`
+    - [assembler_openasm.png.fc322290](bios/Other/Recalbox/.variants/assembler_openasm.png.fc322290) (2,234 bytes) - SHA1: `fc3222907d36bb968198e8a9a3853804686f387f`, MD5: `186a07b71c6f9363442b63aa9fcb6d29`
+    - [assembler_openasm.png.fc5658ca](bios/Other/Recalbox/.variants/assembler_openasm.png.fc5658ca) (3,339 bytes) - SHA1: `fc5658ca15d953fa840803630f46616be126ac40`, MD5: `57815ca9dc184f8f66705fc61ffb7390`
+- **[assembler_openasm.png.3726819c](bios/Other/Recalbox/.variants/assembler_openasm.png.3726819c)** (3,314 bytes)
+  - SHA1: `3726819c7cdf3f67e079e8367d839bdf7839f39c`
+  - MD5: `d88f1e9cee762611ab822ac3853d590f`
+  - CRC32: `5b7a5e60`
+- **[assembler_openasm.png.cb4f2042](bios/Other/Recalbox/.variants/assembler_openasm.png.cb4f2042)** (3,311 bytes)
+  - SHA1: `cb4f2042137e39382a81527272244f7a5353d856`
+  - MD5: `8bb83499afb2d959ea7c509cd4d917e4`
+  - CRC32: `f2a3d989`
+- **[assembler_openasm.png.fc322290](bios/Other/Recalbox/.variants/assembler_openasm.png.fc322290)** (2,234 bytes)
+  - SHA1: `fc3222907d36bb968198e8a9a3853804686f387f`
+  - MD5: `186a07b71c6f9363442b63aa9fcb6d29`
+  - CRC32: `ac9c7cdd`
+- **[assembler_openasm.png.fc5658ca](bios/Other/Recalbox/.variants/assembler_openasm.png.fc5658ca)** (3,339 bytes)
+  - SHA1: `fc5658ca15d953fa840803630f46616be126ac40`
+  - MD5: `57815ca9dc184f8f66705fc61ffb7390`
+  - CRC32: `63ef14f1`
+- **[assembler_openasm@2x.png](bios/Other/Recalbox/assembler_openasm@2x.png)** (3,482 bytes)
+  - SHA1: `91055d171cf9fcc0cc72803c88bb2c284e301bd0`
+  - MD5: `73d89dfe95fa6bea801a22216913a7dd`
+  - CRC32: `f29643d9`
+  - **Variants** (4 alternate versions):
+    - [assembler_openasm@2x.png.8aeb7644](bios/Other/Recalbox/.variants/assembler_openasm@2x.png.8aeb7644) (4,628 bytes) - SHA1: `8aeb76446da7aa1562688e0fb220b6fcb8a11811`, MD5: `c83868f64eb2ca00a9a61c7fd59a7919`
+    - [assembler_openasm@2x.png.a74384b5](bios/Other/Recalbox/.variants/assembler_openasm@2x.png.a74384b5) (2,846 bytes) - SHA1: `a74384b56786bf3f4866c0c63970f5e53bbbee3a`, MD5: `7bc53cce8c15cfc486396c73ed4cbac7`
+    - [assembler_openasm@2x.png.f97268ac](bios/Other/Recalbox/.variants/assembler_openasm@2x.png.f97268ac) (4,503 bytes) - SHA1: `f97268ac0cc0f1bd2c8604efceb0f29a757b2861`, MD5: `dfdb1d266bc5a540883a49de317c855d`
+    - [assembler_openasm@2x.png.fe4f8012](bios/Other/Recalbox/.variants/assembler_openasm@2x.png.fe4f8012) (4,489 bytes) - SHA1: `fe4f8012be2242f67a621c605a2068926a5e271d`, MD5: `dfde93bbb19415699967487a455c4a8d`
+- **[assembler_openasm@2x.png.8aeb7644](bios/Other/Recalbox/.variants/assembler_openasm@2x.png.8aeb7644)** (4,628 bytes)
+  - SHA1: `8aeb76446da7aa1562688e0fb220b6fcb8a11811`
+  - MD5: `c83868f64eb2ca00a9a61c7fd59a7919`
+  - CRC32: `29d5a696`
+- **[assembler_openasm@2x.png.a74384b5](bios/Other/Recalbox/.variants/assembler_openasm@2x.png.a74384b5)** (2,846 bytes)
+  - SHA1: `a74384b56786bf3f4866c0c63970f5e53bbbee3a`
+  - MD5: `7bc53cce8c15cfc486396c73ed4cbac7`
+  - CRC32: `c6c5dfb4`
+- **[assembler_openasm@2x.png.f97268ac](bios/Other/Recalbox/.variants/assembler_openasm@2x.png.f97268ac)** (4,503 bytes)
+  - SHA1: `f97268ac0cc0f1bd2c8604efceb0f29a757b2861`
+  - MD5: `dfdb1d266bc5a540883a49de317c855d`
+  - CRC32: `71883326`
+- **[assembler_openasm@2x.png.fe4f8012](bios/Other/Recalbox/.variants/assembler_openasm@2x.png.fe4f8012)** (4,489 bytes)
+  - SHA1: `fe4f8012be2242f67a621c605a2068926a5e271d`
+  - MD5: `dfde93bbb19415699967487a455c4a8d`
+  - CRC32: `8688de77`
+- **[assembler_openasm@4x.png](bios/Other/Recalbox/assembler_openasm@4x.png)** (5,147 bytes)
+  - SHA1: `01757559a10684f2361d0500bc2b40a534078ac7`
+  - MD5: `d145d7f9142e216b5a29df558be05f73`
+  - CRC32: `2def54d7`
+  - **Variants** (4 alternate versions):
+    - [assembler_openasm@4x.png.086472c0](bios/Other/Recalbox/.variants/assembler_openasm@4x.png.086472c0) (5,372 bytes) - SHA1: `086472c0958f2fcb6bc4213c3c60a79f17e1b907`, MD5: `c7a277305ab1d69b8c6281ee525fe4fd`
+    - [assembler_openasm@4x.png.195c355a](bios/Other/Recalbox/.variants/assembler_openasm@4x.png.195c355a) (5,978 bytes) - SHA1: `195c355aaaf3adcd213d27b60745afc7d862ea81`, MD5: `1a7512c05dd8436c03f798d9d0548af0`
+    - [assembler_openasm@4x.png.1a0f9b25](bios/Other/Recalbox/.variants/assembler_openasm@4x.png.1a0f9b25) (4,691 bytes) - SHA1: `1a0f9b25f2ffd4b6e3f31c70378e23780e160d44`, MD5: `7a50d3b6a6cfb5971dde129f407cf8a9`
+    - [assembler_openasm@4x.png.bd3dadd5](bios/Other/Recalbox/.variants/assembler_openasm@4x.png.bd3dadd5) (6,011 bytes) - SHA1: `bd3dadd5ab4c1b511e8c3dcaac391ee335321a8b`, MD5: `c5057fa3e2ddc8c21be86d8d4f67b512`
+- **[assembler_openasm@4x.png.086472c0](bios/Other/Recalbox/.variants/assembler_openasm@4x.png.086472c0)** (5,372 bytes)
+  - SHA1: `086472c0958f2fcb6bc4213c3c60a79f17e1b907`
+  - MD5: `c7a277305ab1d69b8c6281ee525fe4fd`
+  - CRC32: `89a6dbf3`
+- **[assembler_openasm@4x.png.195c355a](bios/Other/Recalbox/.variants/assembler_openasm@4x.png.195c355a)** (5,978 bytes)
+  - SHA1: `195c355aaaf3adcd213d27b60745afc7d862ea81`
+  - MD5: `1a7512c05dd8436c03f798d9d0548af0`
+  - CRC32: `842f3805`
+- **[assembler_openasm@4x.png.1a0f9b25](bios/Other/Recalbox/.variants/assembler_openasm@4x.png.1a0f9b25)** (4,691 bytes)
+  - SHA1: `1a0f9b25f2ffd4b6e3f31c70378e23780e160d44`
+  - MD5: `7a50d3b6a6cfb5971dde129f407cf8a9`
+  - CRC32: `c34ec5e5`
+- **[assembler_openasm@4x.png.bd3dadd5](bios/Other/Recalbox/.variants/assembler_openasm@4x.png.bd3dadd5)** (6,011 bytes)
+  - SHA1: `bd3dadd5ab4c1b511e8c3dcaac391ee335321a8b`
+  - MD5: `c5057fa3e2ddc8c21be86d8d4f67b512`
+  - CRC32: `c3a677d6`
+- **[assembler_save.png](bios/Other/Recalbox/assembler_save.png)** (4,450 bytes)
+  - SHA1: `58758aa9ee4ebf2ab7ba0ecc4dfb9d0182449c64`
+  - MD5: `62d9704b760f5da83feb0be1bdb2775e`
+  - CRC32: `c257757f`
+  - **Variants** (4 alternate versions):
+    - [assembler_save.png.54e8c1f4](bios/Other/Recalbox/.variants/assembler_save.png.54e8c1f4) (4,136 bytes) - SHA1: `54e8c1f429a448321201a87f8549437bec870f82`, MD5: `1b2c721a053d8d24539017b34cb72979`
+    - [assembler_save.png.75910d41](bios/Other/Recalbox/.variants/assembler_save.png.75910d41) (4,191 bytes) - SHA1: `75910d4143c1993643ae649a8aca6be37b0c332b`, MD5: `6a957c0c0160c6de32cddd7eb8e75f4e`
+    - [assembler_save.png.89a1f21b](bios/Other/Recalbox/.variants/assembler_save.png.89a1f21b) (4,115 bytes) - SHA1: `89a1f21b84d71655c772c766352b69b51fab8ae6`, MD5: `b921d216d9b7c4b31b664d2622b6fee4`
+    - [assembler_save.png.a5e19566](bios/Other/Recalbox/.variants/assembler_save.png.a5e19566) (3,167 bytes) - SHA1: `a5e19566e5cb22f8b83d8e6cafecc0e51718e6d2`, MD5: `31999e70c7fc41f9e80456f206d8a202`
+- **[assembler_save.png.54e8c1f4](bios/Other/Recalbox/.variants/assembler_save.png.54e8c1f4)** (4,136 bytes)
+  - SHA1: `54e8c1f429a448321201a87f8549437bec870f82`
+  - MD5: `1b2c721a053d8d24539017b34cb72979`
+  - CRC32: `2a8811d9`
+- **[assembler_save.png.75910d41](bios/Other/Recalbox/.variants/assembler_save.png.75910d41)** (4,191 bytes)
+  - SHA1: `75910d4143c1993643ae649a8aca6be37b0c332b`
+  - MD5: `6a957c0c0160c6de32cddd7eb8e75f4e`
+  - CRC32: `d421a671`
+- **[assembler_save.png.89a1f21b](bios/Other/Recalbox/.variants/assembler_save.png.89a1f21b)** (4,115 bytes)
+  - SHA1: `89a1f21b84d71655c772c766352b69b51fab8ae6`
+  - MD5: `b921d216d9b7c4b31b664d2622b6fee4`
+  - CRC32: `af15f847`
+- **[assembler_save.png.a5e19566](bios/Other/Recalbox/.variants/assembler_save.png.a5e19566)** (3,167 bytes)
+  - SHA1: `a5e19566e5cb22f8b83d8e6cafecc0e51718e6d2`
+  - MD5: `31999e70c7fc41f9e80456f206d8a202`
+  - CRC32: `3943a82c`
+- **[assembler_save@2x.png](bios/Other/Recalbox/assembler_save@2x.png)** (5,925 bytes)
+  - SHA1: `819df0ff7187c8ca6fd7c14131ca193638a1436f`
+  - MD5: `d807873637a994ee0e6d3f3f2e1b7be1`
+  - CRC32: `4195e49d`
+  - **Variants** (4 alternate versions):
+    - [assembler_save@2x.png.32eeac94](bios/Other/Recalbox/.variants/assembler_save@2x.png.32eeac94) (6,929 bytes) - SHA1: `32eeac946d2bad2c3e6f7e4817618dfd81a48058`, MD5: `2e8be3a9c7c45e3a1566e663f0ff5ac2`
+    - [assembler_save@2x.png.813dafd6](bios/Other/Recalbox/.variants/assembler_save@2x.png.813dafd6) (4,362 bytes) - SHA1: `813dafd63c247be6dff157ae889043600719219c`, MD5: `e843935f95c3eaf09be38eda9c16bcce`
+    - [assembler_save@2x.png.9fe78f50](bios/Other/Recalbox/.variants/assembler_save@2x.png.9fe78f50) (7,159 bytes) - SHA1: `9fe78f5060dc7e0fa8d48751af02c0fbfd4aa692`, MD5: `076026862516acf32f4a0c709d073b40`
+    - [assembler_save@2x.png.aa6f31b1](bios/Other/Recalbox/.variants/assembler_save@2x.png.aa6f31b1) (7,228 bytes) - SHA1: `aa6f31b174deeadef3442b09d5f7bce5fd4c92d8`, MD5: `de40e2b8b9ce1ea918d300165de63b58`
+- **[assembler_save@2x.png.32eeac94](bios/Other/Recalbox/.variants/assembler_save@2x.png.32eeac94)** (6,929 bytes)
+  - SHA1: `32eeac946d2bad2c3e6f7e4817618dfd81a48058`
+  - MD5: `2e8be3a9c7c45e3a1566e663f0ff5ac2`
+  - CRC32: `56ca4119`
+- **[assembler_save@2x.png.813dafd6](bios/Other/Recalbox/.variants/assembler_save@2x.png.813dafd6)** (4,362 bytes)
+  - SHA1: `813dafd63c247be6dff157ae889043600719219c`
+  - MD5: `e843935f95c3eaf09be38eda9c16bcce`
+  - CRC32: `ec4d5235`
+- **[assembler_save@2x.png.9fe78f50](bios/Other/Recalbox/.variants/assembler_save@2x.png.9fe78f50)** (7,159 bytes)
+  - SHA1: `9fe78f5060dc7e0fa8d48751af02c0fbfd4aa692`
+  - MD5: `076026862516acf32f4a0c709d073b40`
+  - CRC32: `25a84d86`
+- **[assembler_save@2x.png.aa6f31b1](bios/Other/Recalbox/.variants/assembler_save@2x.png.aa6f31b1)** (7,228 bytes)
+  - SHA1: `aa6f31b174deeadef3442b09d5f7bce5fd4c92d8`
+  - MD5: `de40e2b8b9ce1ea918d300165de63b58`
+  - CRC32: `83021279`
+- **[assembler_save@4x.png](bios/Other/Recalbox/assembler_save@4x.png)** (9,738 bytes)
+  - SHA1: `a936446cf1fab653426ac690805c5f17294c260a`
+  - MD5: `290f56e1cf61dbb208d3f3e8a39d62fa`
+  - CRC32: `9ecae9cc`
+  - **Variants** (4 alternate versions):
+    - [assembler_save@4x.png.76c389ed](bios/Other/Recalbox/.variants/assembler_save@4x.png.76c389ed) (9,870 bytes) - SHA1: `76c389ed9fe1029968f46d8ca15ec5975c363007`, MD5: `c92f8309b86dd9a8d6e13ae7e3e22975`
+    - [assembler_save@4x.png.89fe378f](bios/Other/Recalbox/.variants/assembler_save@4x.png.89fe378f) (11,644 bytes) - SHA1: `89fe378f56eb119c16242ca706c92df5f60c8081`, MD5: `3986ac035da38fce42201fd5d38858e9`
+    - [assembler_save@4x.png.e447a097](bios/Other/Recalbox/.variants/assembler_save@4x.png.e447a097) (8,836 bytes) - SHA1: `e447a0973593544c15884cba20816e0450acfc3d`, MD5: `1ef988977eb18985e639e5636345acc9`
+    - [assembler_save@4x.png.e4cbe5e8](bios/Other/Recalbox/.variants/assembler_save@4x.png.e4cbe5e8) (11,536 bytes) - SHA1: `e4cbe5e812103747428ab88d13040a9d509af49b`, MD5: `c0fa1864617c85ebaa647a78a3000513`
+- **[assembler_save@4x.png.76c389ed](bios/Other/Recalbox/.variants/assembler_save@4x.png.76c389ed)** (9,870 bytes)
+  - SHA1: `76c389ed9fe1029968f46d8ca15ec5975c363007`
+  - MD5: `c92f8309b86dd9a8d6e13ae7e3e22975`
+  - CRC32: `a5ed5625`
+- **[assembler_save@4x.png.89fe378f](bios/Other/Recalbox/.variants/assembler_save@4x.png.89fe378f)** (11,644 bytes)
+  - SHA1: `89fe378f56eb119c16242ca706c92df5f60c8081`
+  - MD5: `3986ac035da38fce42201fd5d38858e9`
+  - CRC32: `211dfe3e`
+- **[assembler_save@4x.png.e447a097](bios/Other/Recalbox/.variants/assembler_save@4x.png.e447a097)** (8,836 bytes)
+  - SHA1: `e447a0973593544c15884cba20816e0450acfc3d`
+  - MD5: `1ef988977eb18985e639e5636345acc9`
+  - CRC32: `bc6ec2cb`
+- **[assembler_save@4x.png.e4cbe5e8](bios/Other/Recalbox/.variants/assembler_save@4x.png.e4cbe5e8)** (11,536 bytes)
+  - SHA1: `e4cbe5e812103747428ab88d13040a9d509af49b`
+  - MD5: `c0fa1864617c85ebaa647a78a3000513`
+  - CRC32: `90287243`
+- **[auto_toon.glsl](bios/Other/Recalbox/auto_toon.glsl)** (421 bytes)
+  - SHA1: `3d928bb74b91bb5816be12d5affbe0b681c8dd18`
+  - MD5: `c9e7717a324b670a3b241ba52558c331`
+  - CRC32: `2ffe6b9d`
+- **[auto_toon2.glsl](bios/Other/Recalbox/auto_toon2.glsl)** (1,658 bytes)
+  - SHA1: `f32b86a5044d6c33084596046a00844956f63449`
+  - MD5: `cf3a89e276e2311f1833ded5fae90108`
+  - CRC32: `ef6cc2dd`
+- **[bad_bloom.glsl](bios/Other/Recalbox/bad_bloom.glsl)** (1,587 bytes)
+  - SHA1: `2a545b7a25e8b7a78e54b38f1fd4fbe080973995`
+  - MD5: `5715bcfa0c1073e2778a74ab039e1ca9`
+  - CRC32: `ab2e1e4b`
+- **[bioscv.rom](bios/Other/Recalbox/bioscv.rom)** (2,048 bytes)
+  - SHA1: `5ac620c529e4965efb5560fe824854a44c983757`
+  - MD5: `3b1ef759d8e3fb4071582efd33dd05f9`
+  - CRC32: `c3c590c6`
+  - Platform names: Batocera: `crvision.zip`
+- **[blueshrk.zip](bios/Other/Recalbox/blueshrk.zip)** (925,914 bytes)
+  - SHA1: `4317f301d6e4117dfde42b33dfaf73a2b25f43c1`
+  - MD5: `4659968035d462be471fdfb46b604696`
+  - CRC32: `7481c2ea`
+- **[bootloader-en-m515.rom](bios/Other/Recalbox/bootloader-en-m515.rom)** (512 bytes)
+  - SHA1: `aa35c04429a9eda1edb1c7eb257f621363d5a78c`
+  - MD5: `e64c755205bc3e79d1bc5b70128f688d`
+  - CRC32: `f1a6452b`
+- **[brighten.glsl](bios/Other/Recalbox/brighten.glsl)** (43 bytes)
+  - SHA1: `c3565bd98a86b40e42ddb8ef6a82ea9a3f8ba8ed`
+  - MD5: `79483e534186db67635f22641e8c4f72`
+  - CRC32: `3c2e9481`
+- **[browse.png](bios/Other/Recalbox/browse.png)** (225 bytes)
+  - SHA1: `e43b9f26fc4ea5828a3da35ec4bc0ade0a1d89dd`
+  - MD5: `e72db7425f5e459717f643dc107bbbff`
+  - CRC32: `34a60e75`
+  - **Variants** (4 alternate versions):
+    - [browse.png.56f2415d](bios/Other/Recalbox/.variants/browse.png.56f2415d) (382 bytes) - SHA1: `56f2415d08a9bf7dfb31eb3a28818558af4fb087`, MD5: `d25ae15ac317d1fc91994ece2cab5d8f`
+    - [browse.png.9b46e9ee](bios/Other/Recalbox/.variants/browse.png.9b46e9ee) (232 bytes) - SHA1: `9b46e9ee42b98b26c9cab920cd2c0df699a91c2d`, MD5: `f496a3282c05a8557e8bab881f42cdb5`
+    - [browse.png.baadb4d9](bios/Other/Recalbox/.variants/browse.png.baadb4d9) (333 bytes) - SHA1: `baadb4d998f503946e2f52234517732e7eb506af`, MD5: `29acf49fc5a3fe25ea9cefb8fda9c9cf`
+    - [browse.png.e81384a1](bios/Other/Recalbox/.variants/browse.png.e81384a1) (278 bytes) - SHA1: `e81384a1baccd6b834837541e3db49e99005766d`, MD5: `bc611d642cdbcb4e490ec5bba6c486e9`
+- **[browse.png.56f2415d](bios/Other/Recalbox/.variants/browse.png.56f2415d)** (382 bytes)
+  - SHA1: `56f2415d08a9bf7dfb31eb3a28818558af4fb087`
+  - MD5: `d25ae15ac317d1fc91994ece2cab5d8f`
+  - CRC32: `2f5c1378`
+- **[browse.png.9b46e9ee](bios/Other/Recalbox/.variants/browse.png.9b46e9ee)** (232 bytes)
+  - SHA1: `9b46e9ee42b98b26c9cab920cd2c0df699a91c2d`
+  - MD5: `f496a3282c05a8557e8bab881f42cdb5`
+  - CRC32: `877dbabd`
+- **[browse.png.baadb4d9](bios/Other/Recalbox/.variants/browse.png.baadb4d9)** (333 bytes)
+  - SHA1: `baadb4d998f503946e2f52234517732e7eb506af`
+  - MD5: `29acf49fc5a3fe25ea9cefb8fda9c9cf`
+  - CRC32: `c5dd3051`
+- **[browse.png.e81384a1](bios/Other/Recalbox/.variants/browse.png.e81384a1)** (278 bytes)
+  - SHA1: `e81384a1baccd6b834837541e3db49e99005766d`
+  - MD5: `bc611d642cdbcb4e490ec5bba6c486e9`
+  - CRC32: `f45bd953`
+- **[browse@2x.png](bios/Other/Recalbox/browse@2x.png)** (442 bytes)
+  - SHA1: `3f001150ea1406dd53cb1bc49596782b2cec47d4`
+  - MD5: `87b89b57d3c40b7e8d05c70eb524e71b`
+  - CRC32: `4ba05a95`
+  - **Variants** (4 alternate versions):
+    - [browse@2x.png.07122814](bios/Other/Recalbox/.variants/browse@2x.png.07122814) (547 bytes) - SHA1: `0712281416f0ba23429355238946112481dab774`, MD5: `52cb259ee36f1e1f97ff8f087b53f58f`
+    - [browse@2x.png.429161d0](bios/Other/Recalbox/.variants/browse@2x.png.429161d0) (780 bytes) - SHA1: `429161d0a18ee36feabff7f283ab3bacae932b3d`, MD5: `61f05730b593a88fe88fa95f796305d8`
+    - [browse@2x.png.e103a583](bios/Other/Recalbox/.variants/browse@2x.png.e103a583) (942 bytes) - SHA1: `e103a583c1a9e70ad2e3ac52eb412b7f483ad811`, MD5: `e2e6cb6a0cf84b048e1df07c3a3c1380`
+    - [browse@2x.png.facd90b5](bios/Other/Recalbox/.variants/browse@2x.png.facd90b5) (429 bytes) - SHA1: `facd90b50c00efd1f6349c3a449b4917377576f6`, MD5: `e3d856d784da9460eab3885873bc20ae`
+- **[browse@2x.png.07122814](bios/Other/Recalbox/.variants/browse@2x.png.07122814)** (547 bytes)
+  - SHA1: `0712281416f0ba23429355238946112481dab774`
+  - MD5: `52cb259ee36f1e1f97ff8f087b53f58f`
+  - CRC32: `6c5335db`
+- **[browse@2x.png.429161d0](bios/Other/Recalbox/.variants/browse@2x.png.429161d0)** (780 bytes)
+  - SHA1: `429161d0a18ee36feabff7f283ab3bacae932b3d`
+  - MD5: `61f05730b593a88fe88fa95f796305d8`
+  - CRC32: `21b04e0b`
+- **[browse@2x.png.e103a583](bios/Other/Recalbox/.variants/browse@2x.png.e103a583)** (942 bytes)
+  - SHA1: `e103a583c1a9e70ad2e3ac52eb412b7f483ad811`
+  - MD5: `e2e6cb6a0cf84b048e1df07c3a3c1380`
+  - CRC32: `ee6a38e9`
+- **[browse@2x.png.facd90b5](bios/Other/Recalbox/.variants/browse@2x.png.facd90b5)** (429 bytes)
+  - SHA1: `facd90b50c00efd1f6349c3a449b4917377576f6`
+  - MD5: `e3d856d784da9460eab3885873bc20ae`
+  - CRC32: `91eb662e`
+- **[browse@4x.png](bios/Other/Recalbox/browse@4x.png)** (1,199 bytes)
+  - SHA1: `a23c7da92a3de6e779e279519593dfdbec29359d`
+  - MD5: `cb47cf9ddd0c73d957217c4ab004edb4`
+  - CRC32: `bc604aa3`
+  - **Variants** (4 alternate versions):
+    - [browse@4x.png.8ca1b001](bios/Other/Recalbox/.variants/browse@4x.png.8ca1b001) (2,303 bytes) - SHA1: `8ca1b0010a45bba3ac1a6d9256297c671833e745`, MD5: `f99ebe5317a27131027985bdec5900bb`
+    - [browse@4x.png.a2463ac9](bios/Other/Recalbox/.variants/browse@4x.png.a2463ac9) (1,177 bytes) - SHA1: `a2463ac951cea663554f45ddee4d0c143e23ff4a`, MD5: `e30bd23a78d577b884838e13102cafb0`
+    - [browse@4x.png.b9606c24](bios/Other/Recalbox/.variants/browse@4x.png.b9606c24) (1,463 bytes) - SHA1: `b9606c2479ed33bc755d664a7eccd9c746cdf88a`, MD5: `811d5e13a5b95faf0af2bc3273045151`
+    - [browse@4x.png.d5249aeb](bios/Other/Recalbox/.variants/browse@4x.png.d5249aeb) (2,146 bytes) - SHA1: `d5249aeb9814bed34762b54f7cef1a5a4fade14e`, MD5: `a1c3cd4eae33e328a87664f67b5fa515`
+- **[browse@4x.png.8ca1b001](bios/Other/Recalbox/.variants/browse@4x.png.8ca1b001)** (2,303 bytes)
+  - SHA1: `8ca1b0010a45bba3ac1a6d9256297c671833e745`
+  - MD5: `f99ebe5317a27131027985bdec5900bb`
+  - CRC32: `cb89581b`
+- **[browse@4x.png.a2463ac9](bios/Other/Recalbox/.variants/browse@4x.png.a2463ac9)** (1,177 bytes)
+  - SHA1: `a2463ac951cea663554f45ddee4d0c143e23ff4a`
+  - MD5: `e30bd23a78d577b884838e13102cafb0`
+  - CRC32: `fa82a8a3`
+- **[browse@4x.png.b9606c24](bios/Other/Recalbox/.variants/browse@4x.png.b9606c24)** (1,463 bytes)
+  - SHA1: `b9606c2479ed33bc755d664a7eccd9c746cdf88a`
+  - MD5: `811d5e13a5b95faf0af2bc3273045151`
+  - CRC32: `9a561139`
+- **[browse@4x.png.d5249aeb](bios/Other/Recalbox/.variants/browse@4x.png.d5249aeb)** (2,146 bytes)
+  - SHA1: `d5249aeb9814bed34762b54f7cef1a5a4fade14e`
+  - MD5: `a1c3cd4eae33e328a87664f67b5fa515`
+  - CRC32: `6d265809`
+- **[catver.ini](bios/Other/Recalbox/catver.ini)** (95,221 bytes)
+  - SHA1: `572a73b286ade4082c1d4735b369dc2322f341af`
+  - MD5: `e4856ffc69e22e0804375cd7801f0d71`
+  - CRC32: `b4b68e1f`
+  - **Variants** (3 alternate versions):
+    - [catver.ini.44b5b0dc](bios/Other/Recalbox/.variants/catver.ini.44b5b0dc) (1,947,754 bytes) - SHA1: `44b5b0dc968cb36b46749f382966b5caf596023f`, MD5: `eba07aa1573ef4e8a6251c7496156388`
+    - [catver.ini.6bc7bd84](bios/Other/Recalbox/.variants/catver.ini.6bc7bd84) (154,098 bytes) - SHA1: `6bc7bd848d5ca8ede5e0082da227044317f18aca`, MD5: `927de4746822546cbbbd98d751bea6df`
+    - [catver.ini.8d504441](bios/Other/Recalbox/.variants/catver.ini.8d504441) (193,750 bytes) - SHA1: `8d5044418cfb5c4832c4c181218a57e700909e3a`, MD5: `f4b45091718865e873cd68cda278725a`
+- **[catver.ini.44b5b0dc](bios/Other/Recalbox/.variants/catver.ini.44b5b0dc)** (1,947,754 bytes)
+  - SHA1: `44b5b0dc968cb36b46749f382966b5caf596023f`
+  - MD5: `eba07aa1573ef4e8a6251c7496156388`
+  - CRC32: `fda422c4`
+- **[catver.ini.6bc7bd84](bios/Other/Recalbox/.variants/catver.ini.6bc7bd84)** (154,098 bytes)
+  - SHA1: `6bc7bd848d5ca8ede5e0082da227044317f18aca`
+  - MD5: `927de4746822546cbbbd98d751bea6df`
+  - CRC32: `36095964`
+- **[catver.ini.8d504441](bios/Other/Recalbox/.variants/catver.ini.8d504441)** (193,750 bytes)
+  - SHA1: `8d5044418cfb5c4832c4c181218a57e700909e3a`
+  - MD5: `f4b45091718865e873cd68cda278725a`
+  - CRC32: `c0eb3d83`
+- **[cheat-origin-docs-and-credits.txt](bios/Other/Recalbox/cheat-origin-docs-and-credits.txt)** (323,931 bytes)
+  - SHA1: `ae22afce1459d01fea8f46adedc9aced605f58b7`
+  - MD5: `ba4edcfb644f808a6cebb28248d32d1f`
+  - CRC32: `bc0f991f`
+  - **Variants** (1 alternate versions):
+    - [cheat-origin-docs-and-credits.txt.4f443c93](bios/Other/Recalbox/.variants/cheat-origin-docs-and-credits.txt.4f443c93) (402,388 bytes) - SHA1: `4f443c93ac13c68965b530fb58e61482fafabb66`, MD5: `086268574f99f11dd8cb92bb4c9adc52`
+- **[cheat-origin-docs-and-credits.txt.4f443c93](bios/Other/Recalbox/.variants/cheat-origin-docs-and-credits.txt.4f443c93)** (402,388 bytes)
+  - SHA1: `4f443c93ac13c68965b530fb58e61482fafabb66`
+  - MD5: `086268574f99f11dd8cb92bb4c9adc52`
+  - CRC32: `b1caa4f3`
+- **[cheat.7z](bios/Other/Recalbox/cheat.7z)** (1,320,274 bytes)
+  - SHA1: `7000952c9fec4fbfb880ca1efcbf8cb4cdcb8747`
+  - MD5: `f96f25b043ebc5eea690db9c2a2296f4`
+  - CRC32: `c0b714b2`
+- **[cheat.dat](bios/Other/Recalbox/cheat.dat)** (3,277,264 bytes)
+  - SHA1: `b352e7e478c5685e4fcfb43b922f042579fa0818`
+  - MD5: `86ce263a249aefe0320fed28002b1c8e`
+  - CRC32: `e3bae657`
+  - **Variants** (2 alternate versions):
+    - [cheat.dat.2816b048](bios/Other/Recalbox/.variants/cheat.dat.2816b048) (7,810,154 bytes) - SHA1: `2816b0480e72d625cd713b1687518b9d5c62f834`, MD5: `d8917848f69ee9eac78a86d24b501609`
+    - [cheat.dat.963c3cc8](bios/Other/Recalbox/.variants/cheat.dat.963c3cc8) (7,826,498 bytes) - SHA1: `963c3cc8dc04ffa808a1401b7557155ffa6bee43`, MD5: `ce2eacd6730cea5e1c489891a34a283f`
+- **[cheat.dat.2816b048](bios/Other/Recalbox/.variants/cheat.dat.2816b048)** (7,810,154 bytes)
+  - SHA1: `2816b0480e72d625cd713b1687518b9d5c62f834`
+  - MD5: `d8917848f69ee9eac78a86d24b501609`
+  - CRC32: `2d3b1a47`
+- **[cheat.dat.963c3cc8](bios/Other/Recalbox/.variants/cheat.dat.963c3cc8)** (7,826,498 bytes)
+  - SHA1: `963c3cc8dc04ffa808a1401b7557155ffa6bee43`
+  - MD5: `ce2eacd6730cea5e1c489891a34a283f`
+  - CRC32: `e7ea7f97`
+- **[cheat.zip](bios/Other/Recalbox/cheat.zip)** (24,981,772 bytes)
+  - SHA1: `a737e925e3b86374da57496e3261d0303889977f`
+  - MD5: `112c6b34e78ca3453cc2dc3a36b3ab04`
+  - CRC32: `2c502baa`
+- **[chrismas.glsl](bios/Other/Recalbox/chrismas.glsl)** (211 bytes)
+  - SHA1: `2f676ef7a9ed1a7a1506bf5a727f56081393db48`
+  - MD5: `cad7a8c9e1f139abccd4f24af6519555`
+  - CRC32: `9653c73d`
+- **[classic.png](bios/Other/Recalbox/classic.png)** (957 bytes)
+  - SHA1: `0294dc29f57de4eb1a070fff9c75ccbc4b5dc180`
+  - MD5: `5d754b21146c432a3903083533eb46a5`
+  - CRC32: `bbd0a2d9`
+  - **Variants** (4 alternate versions):
+    - [classic.png.074204d1](bios/Other/Recalbox/.variants/classic.png.074204d1) (1,040 bytes) - SHA1: `074204d132747484c6c632f864892a140a27c538`, MD5: `cd971cb65301a8138d14b5d83fd78019`
+    - [classic.png.16aadcae](bios/Other/Recalbox/.variants/classic.png.16aadcae) (1,158 bytes) - SHA1: `16aadcaeed0488dbea6749fe0fe23961443b4732`, MD5: `c15c51f202ba18681ba7e525103a8077`
+    - [classic.png.20763253](bios/Other/Recalbox/.variants/classic.png.20763253) (1,530 bytes) - SHA1: `207632537a19d10b47efab8e4b99dabb7fe05973`, MD5: `bc1876774a690e111c875a367a8fda82`
+    - [classic.png.89504b2c](bios/Other/Recalbox/.variants/classic.png.89504b2c) (1,502 bytes) - SHA1: `89504b2cae0daa2bc7167e0def22ce7c1f87b299`, MD5: `5d0c8b742e6d6840ab85acff11d8c676`
+- **[classic.png.074204d1](bios/Other/Recalbox/.variants/classic.png.074204d1)** (1,040 bytes)
+  - SHA1: `074204d132747484c6c632f864892a140a27c538`
+  - MD5: `cd971cb65301a8138d14b5d83fd78019`
+  - CRC32: `8704d798`
+- **[classic.png.16aadcae](bios/Other/Recalbox/.variants/classic.png.16aadcae)** (1,158 bytes)
+  - SHA1: `16aadcaeed0488dbea6749fe0fe23961443b4732`
+  - MD5: `c15c51f202ba18681ba7e525103a8077`
+  - CRC32: `a8167ddf`
+- **[classic.png.20763253](bios/Other/Recalbox/.variants/classic.png.20763253)** (1,530 bytes)
+  - SHA1: `207632537a19d10b47efab8e4b99dabb7fe05973`
+  - MD5: `bc1876774a690e111c875a367a8fda82`
+  - CRC32: `bd67e9b5`
+- **[classic.png.89504b2c](bios/Other/Recalbox/.variants/classic.png.89504b2c)** (1,502 bytes)
+  - SHA1: `89504b2cae0daa2bc7167e0def22ce7c1f87b299`
+  - MD5: `5d0c8b742e6d6840ab85acff11d8c676`
+  - CRC32: `7309df07`
+- **[classic@2x.png](bios/Other/Recalbox/classic@2x.png)** (2,177 bytes)
+  - SHA1: `f4718e5eaff191126dd6d1cd6427f4b4c16b4b07`
+  - MD5: `82c866c3283f98e8fb01f998073136ab`
+  - CRC32: `aeddb4f7`
+  - **Variants** (4 alternate versions):
+    - [classic@2x.png.8ae33a87](bios/Other/Recalbox/.variants/classic@2x.png.8ae33a87) (2,646 bytes) - SHA1: `8ae33a87395fd6baec75c4f5b4960ae31ea1bca9`, MD5: `91ee9a0361741cd1bed6624d83688251`
+    - [classic@2x.png.a73e80c4](bios/Other/Recalbox/.variants/classic@2x.png.a73e80c4) (2,341 bytes) - SHA1: `a73e80c4672d110c2296dfa9054dbf85d50ed5bc`, MD5: `54fd05c7177b64d4df63a01fb4acd911`
+    - [classic@2x.png.a8b04799](bios/Other/Recalbox/.variants/classic@2x.png.a8b04799) (3,759 bytes) - SHA1: `a8b0479999d38983e8f1b6256ac7c25588dceef0`, MD5: `428336940ec9f3b0036324cac1a4da4f`
+    - [classic@2x.png.eb94eb8c](bios/Other/Recalbox/.variants/classic@2x.png.eb94eb8c) (3,587 bytes) - SHA1: `eb94eb8c7fd50de6ad0537002f77d89ccc206a7f`, MD5: `7de52936523888aaa1742005eff24651`
+- **[classic@2x.png.8ae33a87](bios/Other/Recalbox/.variants/classic@2x.png.8ae33a87)** (2,646 bytes)
+  - SHA1: `8ae33a87395fd6baec75c4f5b4960ae31ea1bca9`
+  - MD5: `91ee9a0361741cd1bed6624d83688251`
+  - CRC32: `4505ee66`
+- **[classic@2x.png.a73e80c4](bios/Other/Recalbox/.variants/classic@2x.png.a73e80c4)** (2,341 bytes)
+  - SHA1: `a73e80c4672d110c2296dfa9054dbf85d50ed5bc`
+  - MD5: `54fd05c7177b64d4df63a01fb4acd911`
+  - CRC32: `a4289ef0`
+- **[classic@2x.png.a8b04799](bios/Other/Recalbox/.variants/classic@2x.png.a8b04799)** (3,759 bytes)
+  - SHA1: `a8b0479999d38983e8f1b6256ac7c25588dceef0`
+  - MD5: `428336940ec9f3b0036324cac1a4da4f`
+  - CRC32: `6dca4393`
+- **[classic@2x.png.eb94eb8c](bios/Other/Recalbox/.variants/classic@2x.png.eb94eb8c)** (3,587 bytes)
+  - SHA1: `eb94eb8c7fd50de6ad0537002f77d89ccc206a7f`
+  - MD5: `7de52936523888aaa1742005eff24651`
+  - CRC32: `82ee664d`
+- **[classic@4x.png](bios/Other/Recalbox/classic@4x.png)** (5,456 bytes)
+  - SHA1: `80b549044ce26df6b38f0aef9b429b8402433551`
+  - MD5: `2544783962f17e0ef2bf336979af6081`
+  - CRC32: `3b031f83`
+  - **Variants** (4 alternate versions):
+    - [classic@4x.png.4dd8585e](bios/Other/Recalbox/.variants/classic@4x.png.4dd8585e) (6,732 bytes) - SHA1: `4dd8585e65e4e69b003b6378ea6fe63f7fe48fd1`, MD5: `c75c6c98d446445795c3eeaf75da5eef`
+    - [classic@4x.png.7466517b](bios/Other/Recalbox/.variants/classic@4x.png.7466517b) (5,768 bytes) - SHA1: `7466517b38db7060f83ce3c134f23d77f0ef00b2`, MD5: `5260fd5217f0d904cb923c522baa153f`
+    - [classic@4x.png.a916ecd9](bios/Other/Recalbox/.variants/classic@4x.png.a916ecd9) (9,728 bytes) - SHA1: `a916ecd923e4e26b459722ffaa8860129400b4c6`, MD5: `2953e4086b1480461ba25cb2dc6ca164`
+    - [classic@4x.png.f9999a0f](bios/Other/Recalbox/.variants/classic@4x.png.f9999a0f) (9,183 bytes) - SHA1: `f9999a0f39e8fc2ae6104af592adba7f75b61442`, MD5: `6430598efa8721a5fbfab18e5a985eee`
+- **[classic@4x.png.4dd8585e](bios/Other/Recalbox/.variants/classic@4x.png.4dd8585e)** (6,732 bytes)
+  - SHA1: `4dd8585e65e4e69b003b6378ea6fe63f7fe48fd1`
+  - MD5: `c75c6c98d446445795c3eeaf75da5eef`
+  - CRC32: `1a8135a0`
+- **[classic@4x.png.7466517b](bios/Other/Recalbox/.variants/classic@4x.png.7466517b)** (5,768 bytes)
+  - SHA1: `7466517b38db7060f83ce3c134f23d77f0ef00b2`
+  - MD5: `5260fd5217f0d904cb923c522baa153f`
+  - CRC32: `bf3615ee`
+- **[classic@4x.png.a916ecd9](bios/Other/Recalbox/.variants/classic@4x.png.a916ecd9)** (9,728 bytes)
+  - SHA1: `a916ecd923e4e26b459722ffaa8860129400b4c6`
+  - MD5: `2953e4086b1480461ba25cb2dc6ca164`
+  - CRC32: `65dcec94`
+- **[classic@4x.png.f9999a0f](bios/Other/Recalbox/.variants/classic@4x.png.f9999a0f)** (9,183 bytes)
+  - SHA1: `f9999a0f39e8fc2ae6104af592adba7f75b61442`
+  - MD5: `6430598efa8721a5fbfab18e5a985eee`
+  - CRC32: `d0266d71`
+- **[cliffglyphs.bmp](bios/Other/Recalbox/cliffglyphs.bmp)** (32,906 bytes)
+  - SHA1: `9dae08018aec32cddb1404e8ed15fd2fd65b6865`
+  - MD5: `cf410ec3082ab029211c8c62e5a1937a`
+  - CRC32: `7d629ad0`
+- **[coinslot.wav](bios/Other/Recalbox/coinslot.wav)** (35,696 bytes)
+  - SHA1: `c9cd40045b7a5fd15d6ea9a188ca79d289d87db5`
+  - MD5: `b8d62456fa8be6d91c0971d505dfc1e2`
+  - CRC32: `bd370dd2`
+- **[colecodb.xml](bios/Other/Recalbox/colecodb.xml)** (164,848 bytes)
+  - SHA1: `7811316216d035c065b076b174df912e481e13f0`
+  - MD5: `7decb2b4ae37b7456c5b71dfa1a48b63`
+  - CRC32: `5c42b5d1`
+- **[config.png](bios/Other/Recalbox/config.png)** (311 bytes)
+  - SHA1: `76e338248fd1a4514cfb71cb96e3a5be23712c01`
+  - MD5: `fee4d8eae163897c71c406d60c39714a`
+  - CRC32: `bf30219b`
+  - **Variants** (4 alternate versions):
+    - [config.png.1a16b25e](bios/Other/Recalbox/.variants/config.png.1a16b25e) (309 bytes) - SHA1: `1a16b25e712a5b5368650f5d02c7eb1abc0b1186`, MD5: `7a41332150c8a40648d5d12861f3a04a`
+    - [config.png.a3b6a7dd](bios/Other/Recalbox/.variants/config.png.a3b6a7dd) (469 bytes) - SHA1: `a3b6a7dd89486a0fdd7e01a9e29ea2b4e6ab87f1`, MD5: `d1a331e9d22f5535f3189dab187ef4bb`
+    - [config.png.ae871052](bios/Other/Recalbox/.variants/config.png.ae871052) (339 bytes) - SHA1: `ae871052ba4334542e15721fea6a5a7efc127873`, MD5: `461f1f9ecc4f52276796bbd508d3bea2`
+    - [config.png.b7f2e8e7](bios/Other/Recalbox/.variants/config.png.b7f2e8e7) (392 bytes) - SHA1: `b7f2e8e7dc52a1eb9244b3e6b8760af04ffe8ba8`, MD5: `2a030f059366743e621677d521b1df24`
+- **[config.png.1a16b25e](bios/Other/Recalbox/.variants/config.png.1a16b25e)** (309 bytes)
+  - SHA1: `1a16b25e712a5b5368650f5d02c7eb1abc0b1186`
+  - MD5: `7a41332150c8a40648d5d12861f3a04a`
+  - CRC32: `eb049019`
+- **[config.png.a3b6a7dd](bios/Other/Recalbox/.variants/config.png.a3b6a7dd)** (469 bytes)
+  - SHA1: `a3b6a7dd89486a0fdd7e01a9e29ea2b4e6ab87f1`
+  - MD5: `d1a331e9d22f5535f3189dab187ef4bb`
+  - CRC32: `fc51f1c5`
+- **[config.png.ae871052](bios/Other/Recalbox/.variants/config.png.ae871052)** (339 bytes)
+  - SHA1: `ae871052ba4334542e15721fea6a5a7efc127873`
+  - MD5: `461f1f9ecc4f52276796bbd508d3bea2`
+  - CRC32: `7f526b6f`
+- **[config.png.b7f2e8e7](bios/Other/Recalbox/.variants/config.png.b7f2e8e7)** (392 bytes)
+  - SHA1: `b7f2e8e7dc52a1eb9244b3e6b8760af04ffe8ba8`
+  - MD5: `2a030f059366743e621677d521b1df24`
+  - CRC32: `47b35994`
+- **[config@2x.png](bios/Other/Recalbox/config@2x.png)** (603 bytes)
+  - SHA1: `318ce95005b3a17f57c5666d82f42d6cd0806ca6`
+  - MD5: `fc0069d2d6609e2bac725d3c58a52cad`
+  - CRC32: `e6cafaeb`
+  - **Variants** (4 alternate versions):
+    - [config@2x.png.119794d2](bios/Other/Recalbox/.variants/config@2x.png.119794d2) (822 bytes) - SHA1: `119794d2e3acef15a6c98efdca7e91ab0a0acf48`, MD5: `bae317409aaa5fa5fd43a8f7414c0304`
+    - [config@2x.png.21bb20df](bios/Other/Recalbox/.variants/config@2x.png.21bb20df) (721 bytes) - SHA1: `21bb20dfec88232aed39001f39a105d67d3c3edc`, MD5: `bc5501402a1dd7b2168b0a4c882fe6d2`
+    - [config@2x.png.34ebd551](bios/Other/Recalbox/.variants/config@2x.png.34ebd551) (610 bytes) - SHA1: `34ebd551cb10bc78cb2100113202c9ce879c8cf6`, MD5: `e6326016d6fa62b0146b8a56fe0c349f`
+    - [config@2x.png.e1076531](bios/Other/Recalbox/.variants/config@2x.png.e1076531) (967 bytes) - SHA1: `e1076531a24bd27069f0f64d8c54f3f882df397e`, MD5: `d07e8ba54668c8bc6f9b8f6d60fa1716`
+- **[config@2x.png.119794d2](bios/Other/Recalbox/.variants/config@2x.png.119794d2)** (822 bytes)
+  - SHA1: `119794d2e3acef15a6c98efdca7e91ab0a0acf48`
+  - MD5: `bae317409aaa5fa5fd43a8f7414c0304`
+  - CRC32: `05484cd8`
+- **[config@2x.png.21bb20df](bios/Other/Recalbox/.variants/config@2x.png.21bb20df)** (721 bytes)
+  - SHA1: `21bb20dfec88232aed39001f39a105d67d3c3edc`
+  - MD5: `bc5501402a1dd7b2168b0a4c882fe6d2`
+  - CRC32: `bfd29352`
+- **[config@2x.png.34ebd551](bios/Other/Recalbox/.variants/config@2x.png.34ebd551)** (610 bytes)
+  - SHA1: `34ebd551cb10bc78cb2100113202c9ce879c8cf6`
+  - MD5: `e6326016d6fa62b0146b8a56fe0c349f`
+  - CRC32: `bb435b50`
+- **[config@2x.png.e1076531](bios/Other/Recalbox/.variants/config@2x.png.e1076531)** (967 bytes)
+  - SHA1: `e1076531a24bd27069f0f64d8c54f3f882df397e`
+  - MD5: `d07e8ba54668c8bc6f9b8f6d60fa1716`
+  - CRC32: `557e0b3f`
+- **[config@4x.png](bios/Other/Recalbox/config@4x.png)** (2,343 bytes)
+  - SHA1: `cfb6ad6525e8ed84c4976af743cc661f1bfcc81a`
+  - MD5: `c5a9a1afb6b0926958df4e59f0e075f7`
+  - CRC32: `e741a82c`
+  - **Variants** (4 alternate versions):
+    - [config@4x.png.5bdfb0eb](bios/Other/Recalbox/.variants/config@4x.png.5bdfb0eb) (2,878 bytes) - SHA1: `5bdfb0ebfcc931854b499c46a33a5050eb10222d`, MD5: `4faf10567631343c7a4ad0bd76b6c2bb`
+    - [config@4x.png.c8eb5719](bios/Other/Recalbox/.variants/config@4x.png.c8eb5719) (2,774 bytes) - SHA1: `c8eb5719594d244afcb7fa2189ec3125c85df1e7`, MD5: `bab064efc845ba2fa807ad5441a505f0`
+    - [config@4x.png.d70c6a15](bios/Other/Recalbox/.variants/config@4x.png.d70c6a15) (2,423 bytes) - SHA1: `d70c6a15220eaa0586860576aedf9b4cd6a3d001`, MD5: `07fd41e5f8117a1b05a24b4e8e8fe09f`
+    - [config@4x.png.fb6c3569](bios/Other/Recalbox/.variants/config@4x.png.fb6c3569) (2,320 bytes) - SHA1: `fb6c3569ef64a131fe3b2f02febe1cba8fe3f497`, MD5: `566a8ad1993a41bf40381717836f0ad3`
+- **[config@4x.png.5bdfb0eb](bios/Other/Recalbox/.variants/config@4x.png.5bdfb0eb)** (2,878 bytes)
+  - SHA1: `5bdfb0ebfcc931854b499c46a33a5050eb10222d`
+  - MD5: `4faf10567631343c7a4ad0bd76b6c2bb`
+  - CRC32: `9412e94a`
+- **[config@4x.png.c8eb5719](bios/Other/Recalbox/.variants/config@4x.png.c8eb5719)** (2,774 bytes)
+  - SHA1: `c8eb5719594d244afcb7fa2189ec3125c85df1e7`
+  - MD5: `bab064efc845ba2fa807ad5441a505f0`
+  - CRC32: `1896adf3`
+- **[config@4x.png.d70c6a15](bios/Other/Recalbox/.variants/config@4x.png.d70c6a15)** (2,423 bytes)
+  - SHA1: `d70c6a15220eaa0586860576aedf9b4cd6a3d001`
+  - MD5: `07fd41e5f8117a1b05a24b4e8e8fe09f`
+  - CRC32: `e456d626`
+- **[config@4x.png.fb6c3569](bios/Other/Recalbox/.variants/config@4x.png.fb6c3569)** (2,320 bytes)
+  - SHA1: `fb6c3569ef64a131fe3b2f02febe1cba8fe3f497`
+  - MD5: `566a8ad1993a41bf40381717836f0ad3`
+  - CRC32: `28de88c5`
+- **[cool1.glsl](bios/Other/Recalbox/cool1.glsl)** (251 bytes)
+  - SHA1: `ac21652135662477263ff3a18918328f92cd4a4a`
+  - MD5: `362007ee418871b2bdef61a1330122fa`
+  - CRC32: `c84c31a4`
+- **[cslbios.rom](bios/Other/Recalbox/cslbios.rom)** (16,384 bytes)
+  - SHA1: `965965d3c94100813799bf5fe8095024ca53d7a9`
+  - MD5: `b320579c642b007ce01697e384151a53`
+  - CRC32: `8375203e`
+- **[cslbiossm.rom](bios/Other/Recalbox/cslbiossm.rom)** (16,384 bytes)
+  - SHA1: `cb9be92c685fee196f291d8fe27ab9eab1f232ea`
+  - MD5: `bd01e99eec4b50fc97a7bd53867868c6`
+  - CRC32: `77afd38b`
+- **[darkerbrighter.glsl](bios/Other/Recalbox/darkerbrighter.glsl)** (702 bytes)
+  - SHA1: `5f8eea0b40dd0540cdfc0c8533b6f404708185ea`
+  - MD5: `1055b3c1914f0a155f1b95f28b9a9708`
+  - CRC32: `66cfd259`
+- **[dc_nvmem.bin](bios/Other/Recalbox/dc_nvmem.bin)** (131,072 bytes)
+  - SHA1: `5d8b47bb2a13558eccc8858a6fda518ae99d6af7`
+  - MD5: `3d8ebc7a1cf29298305779e3b5d1b0ee`
+  - CRC32: `f00001bf`
+- **[debugger_add_breakpoint.png](bios/Other/Recalbox/debugger_add_breakpoint.png)** (733 bytes)
+  - SHA1: `c75098cf525b7de54cf3b55347e74f28f4763c3e`
+  - MD5: `99c9f0a6fd849ce3de9de6e4232e4d8d`
+  - CRC32: `f8f26608`
+  - **Variants** (4 alternate versions):
+    - [debugger_add_breakpoint.png.0eb118ac](bios/Other/Recalbox/.variants/debugger_add_breakpoint.png.0eb118ac) (819 bytes) - SHA1: `0eb118acdae8570574591e7b53d57f8906a9b29b`, MD5: `a4a68553bc6ea03aa97ebe67eeea7a6b`
+    - [debugger_add_breakpoint.png.3c8efa68](bios/Other/Recalbox/.variants/debugger_add_breakpoint.png.3c8efa68) (783 bytes) - SHA1: `3c8efa68a3d5000ed6c13317843e6ef198d051a1`, MD5: `763a446f774a49c40a3a9a82af1c235a`
+    - [debugger_add_breakpoint.png.6ff6131e](bios/Other/Recalbox/.variants/debugger_add_breakpoint.png.6ff6131e) (638 bytes) - SHA1: `6ff6131e59253cecb50694c205b1a222869ec6a2`, MD5: `6c9a9bc6e5586544f9ab1eee35e43e28`
+    - [debugger_add_breakpoint.png.79c12504](bios/Other/Recalbox/.variants/debugger_add_breakpoint.png.79c12504) (798 bytes) - SHA1: `79c1250470f8cb78144df1a376d43907239eeb5f`, MD5: `b76d981e29fc7737af9ec05c8c97a370`
+- **[debugger_add_breakpoint.png.0eb118ac](bios/Other/Recalbox/.variants/debugger_add_breakpoint.png.0eb118ac)** (819 bytes)
+  - SHA1: `0eb118acdae8570574591e7b53d57f8906a9b29b`
+  - MD5: `a4a68553bc6ea03aa97ebe67eeea7a6b`
+  - CRC32: `98264698`
+- **[debugger_add_breakpoint.png.3c8efa68](bios/Other/Recalbox/.variants/debugger_add_breakpoint.png.3c8efa68)** (783 bytes)
+  - SHA1: `3c8efa68a3d5000ed6c13317843e6ef198d051a1`
+  - MD5: `763a446f774a49c40a3a9a82af1c235a`
+  - CRC32: `840518e3`
+- **[debugger_add_breakpoint.png.6ff6131e](bios/Other/Recalbox/.variants/debugger_add_breakpoint.png.6ff6131e)** (638 bytes)
+  - SHA1: `6ff6131e59253cecb50694c205b1a222869ec6a2`
+  - MD5: `6c9a9bc6e5586544f9ab1eee35e43e28`
+  - CRC32: `9cde8f75`
+- **[debugger_add_breakpoint.png.79c12504](bios/Other/Recalbox/.variants/debugger_add_breakpoint.png.79c12504)** (798 bytes)
+  - SHA1: `79c1250470f8cb78144df1a376d43907239eeb5f`
+  - MD5: `b76d981e29fc7737af9ec05c8c97a370`
+  - CRC32: `73c79a27`
+- **[debugger_add_breakpoint@2x.png](bios/Other/Recalbox/debugger_add_breakpoint@2x.png)** (1,479 bytes)
+  - SHA1: `f105b258a686cfd8ac55954706ae65077f83c617`
+  - MD5: `ab319c4d0526441b2a15d4bd70b22e62`
+  - CRC32: `dc2a8edb`
+  - **Variants** (4 alternate versions):
+    - [debugger_add_breakpoint@2x.png.1aa36b60](bios/Other/Recalbox/.variants/debugger_add_breakpoint@2x.png.1aa36b60) (1,789 bytes) - SHA1: `1aa36b605d4d3cdb4cfbaaa2e19dcb69847dcb49`, MD5: `d32008b8f2ee57e2f00a067ed254b64d`
+    - [debugger_add_breakpoint@2x.png.2caa3790](bios/Other/Recalbox/.variants/debugger_add_breakpoint@2x.png.2caa3790) (1,397 bytes) - SHA1: `2caa3790b5db4a6db9b832ae7a7274590943ecd8`, MD5: `0c15d389dd4cfd9187c6300f992b035b`
+    - [debugger_add_breakpoint@2x.png.48407913](bios/Other/Recalbox/.variants/debugger_add_breakpoint@2x.png.48407913) (1,658 bytes) - SHA1: `48407913df717b727825165c42922770ffa2131c`, MD5: `7aed8aa21bdf7812f9b6e81a5c44b7b2`
+    - [debugger_add_breakpoint@2x.png.505972e4](bios/Other/Recalbox/.variants/debugger_add_breakpoint@2x.png.505972e4) (1,828 bytes) - SHA1: `505972e4b313cecfb50dba7f46cf15bd386bb795`, MD5: `227e8847470d3952ea1d7e981ed88a9c`
+- **[debugger_add_breakpoint@2x.png.1aa36b60](bios/Other/Recalbox/.variants/debugger_add_breakpoint@2x.png.1aa36b60)** (1,789 bytes)
+  - SHA1: `1aa36b605d4d3cdb4cfbaaa2e19dcb69847dcb49`
+  - MD5: `d32008b8f2ee57e2f00a067ed254b64d`
+  - CRC32: `df7e879d`
+- **[debugger_add_breakpoint@2x.png.2caa3790](bios/Other/Recalbox/.variants/debugger_add_breakpoint@2x.png.2caa3790)** (1,397 bytes)
+  - SHA1: `2caa3790b5db4a6db9b832ae7a7274590943ecd8`
+  - MD5: `0c15d389dd4cfd9187c6300f992b035b`
+  - CRC32: `b24858e7`
+- **[debugger_add_breakpoint@2x.png.48407913](bios/Other/Recalbox/.variants/debugger_add_breakpoint@2x.png.48407913)** (1,658 bytes)
+  - SHA1: `48407913df717b727825165c42922770ffa2131c`
+  - MD5: `7aed8aa21bdf7812f9b6e81a5c44b7b2`
+  - CRC32: `cc12077d`
+- **[debugger_add_breakpoint@2x.png.505972e4](bios/Other/Recalbox/.variants/debugger_add_breakpoint@2x.png.505972e4)** (1,828 bytes)
+  - SHA1: `505972e4b313cecfb50dba7f46cf15bd386bb795`
+  - MD5: `227e8847470d3952ea1d7e981ed88a9c`
+  - CRC32: `9979fa93`
+- **[debugger_add_breakpoint@4x.png](bios/Other/Recalbox/debugger_add_breakpoint@4x.png)** (2,498 bytes)
+  - SHA1: `f1bc42ff3a18044f18da37b5b72bf240bec94b62`
+  - MD5: `4aee0afb05a9bf3397d7923b01f3c45b`
+  - CRC32: `30038b08`
+  - **Variants** (4 alternate versions):
+    - [debugger_add_breakpoint@4x.png.6bd4d632](bios/Other/Recalbox/.variants/debugger_add_breakpoint@4x.png.6bd4d632) (2,756 bytes) - SHA1: `6bd4d6328f70fd294470c51621ffddd550ae8bf7`, MD5: `32fec3cbf5c1e8880a843afacb45e31b`
+    - [debugger_add_breakpoint@4x.png.d70f8101](bios/Other/Recalbox/.variants/debugger_add_breakpoint@4x.png.d70f8101) (4,444 bytes) - SHA1: `d70f81011281ea7b820ad38f79e8fecc7c34928a`, MD5: `7d0a8ff20bc6b0d69ab71815a232614f`
+    - [debugger_add_breakpoint@4x.png.dde914c7](bios/Other/Recalbox/.variants/debugger_add_breakpoint@4x.png.dde914c7) (3,199 bytes) - SHA1: `dde914c75c4ab606801c070355a0ddd35fb9ad67`, MD5: `b92901c20c25f44a4795c623b5e580b7`
+    - [debugger_add_breakpoint@4x.png.fcb37a15](bios/Other/Recalbox/.variants/debugger_add_breakpoint@4x.png.fcb37a15) (4,485 bytes) - SHA1: `fcb37a15a07eb4fd14d8b8d22b92a42cd8ba01ef`, MD5: `9a0f544c2964947977047e04019345b8`
+- **[debugger_add_breakpoint@4x.png.6bd4d632](bios/Other/Recalbox/.variants/debugger_add_breakpoint@4x.png.6bd4d632)** (2,756 bytes)
+  - SHA1: `6bd4d6328f70fd294470c51621ffddd550ae8bf7`
+  - MD5: `32fec3cbf5c1e8880a843afacb45e31b`
+  - CRC32: `8bf03090`
+- **[debugger_add_breakpoint@4x.png.d70f8101](bios/Other/Recalbox/.variants/debugger_add_breakpoint@4x.png.d70f8101)** (4,444 bytes)
+  - SHA1: `d70f81011281ea7b820ad38f79e8fecc7c34928a`
+  - MD5: `7d0a8ff20bc6b0d69ab71815a232614f`
+  - CRC32: `086d2d79`
+- **[debugger_add_breakpoint@4x.png.dde914c7](bios/Other/Recalbox/.variants/debugger_add_breakpoint@4x.png.dde914c7)** (3,199 bytes)
+  - SHA1: `dde914c75c4ab606801c070355a0ddd35fb9ad67`
+  - MD5: `b92901c20c25f44a4795c623b5e580b7`
+  - CRC32: `fc8042bb`
+- **[debugger_add_breakpoint@4x.png.fcb37a15](bios/Other/Recalbox/.variants/debugger_add_breakpoint@4x.png.fcb37a15)** (4,485 bytes)
+  - SHA1: `fcb37a15a07eb4fd14d8b8d22b92a42cd8ba01ef`
+  - MD5: `9a0f544c2964947977047e04019345b8`
+  - CRC32: `96354007`
+- **[debugger_add_memorycheck.png](bios/Other/Recalbox/debugger_add_memorycheck.png)** (735 bytes)
+  - SHA1: `7889d7b3690247c86c64af29a8da70dc21f29c5d`
+  - MD5: `a2734ad7045c6b7a653a359a038cbe18`
+  - CRC32: `cb222c42`
+  - **Variants** (4 alternate versions):
+    - [debugger_add_memorycheck.png.15b84e08](bios/Other/Recalbox/.variants/debugger_add_memorycheck.png.15b84e08) (1,186 bytes) - SHA1: `15b84e08ad38f27ab64a3b7670ed24ebf8f039c0`, MD5: `c23f0fa97b12482d5631a8bba8ac1ab8`
+    - [debugger_add_memorycheck.png.9cc8a5f9](bios/Other/Recalbox/.variants/debugger_add_memorycheck.png.9cc8a5f9) (766 bytes) - SHA1: `9cc8a5f9722385601ffd595c4df575deded8f928`, MD5: `e519211608da3de4ea7a72540b24d6ee`
+    - [debugger_add_memorycheck.png.a3f8a2aa](bios/Other/Recalbox/.variants/debugger_add_memorycheck.png.a3f8a2aa) (948 bytes) - SHA1: `a3f8a2aaadab8a4ba272b54b326cd563d4b35499`, MD5: `c8503bcce1d74f9fc043bd75a4411b5b`
+    - [debugger_add_memorycheck.png.b73f4ea0](bios/Other/Recalbox/.variants/debugger_add_memorycheck.png.b73f4ea0) (1,157 bytes) - SHA1: `b73f4ea06b18196b4bfaf1fe36d8b972f209b8c4`, MD5: `605929f709336202f48163e40ab97ffb`
+- **[debugger_add_memorycheck.png.15b84e08](bios/Other/Recalbox/.variants/debugger_add_memorycheck.png.15b84e08)** (1,186 bytes)
+  - SHA1: `15b84e08ad38f27ab64a3b7670ed24ebf8f039c0`
+  - MD5: `c23f0fa97b12482d5631a8bba8ac1ab8`
+  - CRC32: `5e1c5755`
+- **[debugger_add_memorycheck.png.9cc8a5f9](bios/Other/Recalbox/.variants/debugger_add_memorycheck.png.9cc8a5f9)** (766 bytes)
+  - SHA1: `9cc8a5f9722385601ffd595c4df575deded8f928`
+  - MD5: `e519211608da3de4ea7a72540b24d6ee`
+  - CRC32: `68e1eb76`
+- **[debugger_add_memorycheck.png.a3f8a2aa](bios/Other/Recalbox/.variants/debugger_add_memorycheck.png.a3f8a2aa)** (948 bytes)
+  - SHA1: `a3f8a2aaadab8a4ba272b54b326cd563d4b35499`
+  - MD5: `c8503bcce1d74f9fc043bd75a4411b5b`
+  - CRC32: `9a1bf88f`
+- **[debugger_add_memorycheck.png.b73f4ea0](bios/Other/Recalbox/.variants/debugger_add_memorycheck.png.b73f4ea0)** (1,157 bytes)
+  - SHA1: `b73f4ea06b18196b4bfaf1fe36d8b972f209b8c4`
+  - MD5: `605929f709336202f48163e40ab97ffb`
+  - CRC32: `36ea7862`
+- **[debugger_add_memorycheck@2x.png](bios/Other/Recalbox/debugger_add_memorycheck@2x.png)** (1,790 bytes)
+  - SHA1: `9865c45ab884e86821ae139818d0a61493802c31`
+  - MD5: `48b0fe69e7412c46082e407dcdbfe874`
+  - CRC32: `6288c979`
+  - **Variants** (4 alternate versions):
+    - [debugger_add_memorycheck@2x.png.2084656e](bios/Other/Recalbox/.variants/debugger_add_memorycheck@2x.png.2084656e) (3,004 bytes) - SHA1: `2084656e55f54acbc88aef3a31c08c3b5fc6d5cb`, MD5: `d122accff6a3b1f0dcac236b28b48cd9`
+    - [debugger_add_memorycheck@2x.png.3eb0f50a](bios/Other/Recalbox/.variants/debugger_add_memorycheck@2x.png.3eb0f50a) (3,044 bytes) - SHA1: `3eb0f50a02f26cdbeca7056161bfa83cab6a365b`, MD5: `49ba36cc3f770b339991967c8f9ec9ec`
+    - [debugger_add_memorycheck@2x.png.5bc6a222](bios/Other/Recalbox/.variants/debugger_add_memorycheck@2x.png.5bc6a222) (1,902 bytes) - SHA1: `5bc6a2220f086b7aeb0fb012799c866b3b8c8c83`, MD5: `42a12920b99b847bf14e92285d5b1434`
+    - [debugger_add_memorycheck@2x.png.fbd52b18](bios/Other/Recalbox/.variants/debugger_add_memorycheck@2x.png.fbd52b18) (2,346 bytes) - SHA1: `fbd52b184e3fec6fcaec1e7c84c89d2ba8b11c38`, MD5: `046745c5b68afdb11066cf55cac780af`
+- **[debugger_add_memorycheck@2x.png.2084656e](bios/Other/Recalbox/.variants/debugger_add_memorycheck@2x.png.2084656e)** (3,004 bytes)
+  - SHA1: `2084656e55f54acbc88aef3a31c08c3b5fc6d5cb`
+  - MD5: `d122accff6a3b1f0dcac236b28b48cd9`
+  - CRC32: `1edcdc0b`
+- **[debugger_add_memorycheck@2x.png.3eb0f50a](bios/Other/Recalbox/.variants/debugger_add_memorycheck@2x.png.3eb0f50a)** (3,044 bytes)
+  - SHA1: `3eb0f50a02f26cdbeca7056161bfa83cab6a365b`
+  - MD5: `49ba36cc3f770b339991967c8f9ec9ec`
+  - CRC32: `e229dc5a`
+- **[debugger_add_memorycheck@2x.png.5bc6a222](bios/Other/Recalbox/.variants/debugger_add_memorycheck@2x.png.5bc6a222)** (1,902 bytes)
+  - SHA1: `5bc6a2220f086b7aeb0fb012799c866b3b8c8c83`
+  - MD5: `42a12920b99b847bf14e92285d5b1434`
+  - CRC32: `9c109a4b`
+- **[debugger_add_memorycheck@2x.png.fbd52b18](bios/Other/Recalbox/.variants/debugger_add_memorycheck@2x.png.fbd52b18)** (2,346 bytes)
+  - SHA1: `fbd52b184e3fec6fcaec1e7c84c89d2ba8b11c38`
+  - MD5: `046745c5b68afdb11066cf55cac780af`
+  - CRC32: `9ae73ddc`
+- **[debugger_add_memorycheck@4x.png](bios/Other/Recalbox/debugger_add_memorycheck@4x.png)** (4,058 bytes)
+  - SHA1: `5aba904c2ac946fb7c7acd44635b38a8722f5c32`
+  - MD5: `727063b6ab116977b3ea37014ecb1c4f`
+  - CRC32: `a36f5b07`
+  - **Variants** (4 alternate versions):
+    - [debugger_add_memorycheck@4x.png.05850b4b](bios/Other/Recalbox/.variants/debugger_add_memorycheck@4x.png.05850b4b) (5,508 bytes) - SHA1: `05850b4bbaf054d0e85b923d3a4b828eeea0d6b8`, MD5: `df8587e2f558f85635490345c577d1db`
+    - [debugger_add_memorycheck@4x.png.0b28e804](bios/Other/Recalbox/.variants/debugger_add_memorycheck@4x.png.0b28e804) (7,708 bytes) - SHA1: `0b28e8040567b0168fda80b05dca767c6b61cfd7`, MD5: `58d621fda054c203245480405ec159d8`
+    - [debugger_add_memorycheck@4x.png.1410b007](bios/Other/Recalbox/.variants/debugger_add_memorycheck@4x.png.1410b007) (7,289 bytes) - SHA1: `1410b0074e7f4a8bf9d1687eaef555082a9d8e5e`, MD5: `6b5f465db8bceb96175b6fe93435c632`
+    - [debugger_add_memorycheck@4x.png.b5c75731](bios/Other/Recalbox/.variants/debugger_add_memorycheck@4x.png.b5c75731) (4,663 bytes) - SHA1: `b5c7573196c69f07986c978cf8d330018c7f862f`, MD5: `bea7fd1c49e26c09485892d1d2d69a9a`
+- **[debugger_add_memorycheck@4x.png.05850b4b](bios/Other/Recalbox/.variants/debugger_add_memorycheck@4x.png.05850b4b)** (5,508 bytes)
+  - SHA1: `05850b4bbaf054d0e85b923d3a4b828eeea0d6b8`
+  - MD5: `df8587e2f558f85635490345c577d1db`
+  - CRC32: `48b46cff`
+- **[debugger_add_memorycheck@4x.png.0b28e804](bios/Other/Recalbox/.variants/debugger_add_memorycheck@4x.png.0b28e804)** (7,708 bytes)
+  - SHA1: `0b28e8040567b0168fda80b05dca767c6b61cfd7`
+  - MD5: `58d621fda054c203245480405ec159d8`
+  - CRC32: `515bd1ad`
+- **[debugger_add_memorycheck@4x.png.1410b007](bios/Other/Recalbox/.variants/debugger_add_memorycheck@4x.png.1410b007)** (7,289 bytes)
+  - SHA1: `1410b0074e7f4a8bf9d1687eaef555082a9d8e5e`
+  - MD5: `6b5f465db8bceb96175b6fe93435c632`
+  - CRC32: `d6bf322c`
+- **[debugger_add_memorycheck@4x.png.b5c75731](bios/Other/Recalbox/.variants/debugger_add_memorycheck@4x.png.b5c75731)** (4,663 bytes)
+  - SHA1: `b5c7573196c69f07986c978cf8d330018c7f862f`
+  - MD5: `bea7fd1c49e26c09485892d1d2d69a9a`
+  - CRC32: `fcf298df`
+- **[debugger_breakpoint.png](bios/Other/Recalbox/debugger_breakpoint.png)** (657 bytes)
+  - SHA1: `93e222e96c1da715875bbba8d9c86b4f1a952d2e`
+  - MD5: `c51b97663ff2f607ddadc4f3dd9452e5`
+  - CRC32: `0e88c1c0`
+  - **Variants** (4 alternate versions):
+    - [debugger_breakpoint.png.0f7c0bdd](bios/Other/Recalbox/.variants/debugger_breakpoint.png.0f7c0bdd) (671 bytes) - SHA1: `0f7c0bdded0053df4ff42afb0e757a680759f810`, MD5: `840aef472e5e2d48cfcd424b15285ef2`
+    - [debugger_breakpoint.png.1a699ed3](bios/Other/Recalbox/.variants/debugger_breakpoint.png.1a699ed3) (684 bytes) - SHA1: `1a699ed35138336a7f8869b31f95689ba505d549`, MD5: `1a35542ed2e80b70e2b37bf92d21003a`
+    - [debugger_breakpoint.png.c25029aa](bios/Other/Recalbox/.variants/debugger_breakpoint.png.c25029aa) (556 bytes) - SHA1: `c25029aad7021c89a67c7d9099c27851db8d6f22`, MD5: `1855c96f6910364f8e1b300e1109b714`
+    - [debugger_breakpoint.png.f3c79d00](bios/Other/Recalbox/.variants/debugger_breakpoint.png.f3c79d00) (681 bytes) - SHA1: `f3c79d00d0008a3b2576b588769c28c5111b063f`, MD5: `abf03a8cdc9e8e78443a979eaed4daaf`
+- **[debugger_breakpoint.png.0f7c0bdd](bios/Other/Recalbox/.variants/debugger_breakpoint.png.0f7c0bdd)** (671 bytes)
+  - SHA1: `0f7c0bdded0053df4ff42afb0e757a680759f810`
+  - MD5: `840aef472e5e2d48cfcd424b15285ef2`
+  - CRC32: `28e78ff6`
+- **[debugger_breakpoint.png.1a699ed3](bios/Other/Recalbox/.variants/debugger_breakpoint.png.1a699ed3)** (684 bytes)
+  - SHA1: `1a699ed35138336a7f8869b31f95689ba505d549`
+  - MD5: `1a35542ed2e80b70e2b37bf92d21003a`
+  - CRC32: `6b619ccf`
+- **[debugger_breakpoint.png.c25029aa](bios/Other/Recalbox/.variants/debugger_breakpoint.png.c25029aa)** (556 bytes)
+  - SHA1: `c25029aad7021c89a67c7d9099c27851db8d6f22`
+  - MD5: `1855c96f6910364f8e1b300e1109b714`
+  - CRC32: `0aee56e4`
+- **[debugger_breakpoint.png.f3c79d00](bios/Other/Recalbox/.variants/debugger_breakpoint.png.f3c79d00)** (681 bytes)
+  - SHA1: `f3c79d00d0008a3b2576b588769c28c5111b063f`
+  - MD5: `abf03a8cdc9e8e78443a979eaed4daaf`
+  - CRC32: `b819ccc7`
+- **[debugger_breakpoint@2x.png](bios/Other/Recalbox/debugger_breakpoint@2x.png)** (1,256 bytes)
+  - SHA1: `bab04b4918de73b105fb67349f8ba7f30e4cab65`
+  - MD5: `c1fc648477886092060084678cec0ed8`
+  - CRC32: `a87ac0b6`
+  - **Variants** (4 alternate versions):
+    - [debugger_breakpoint@2x.png.00c116e8](bios/Other/Recalbox/.variants/debugger_breakpoint@2x.png.00c116e8) (1,400 bytes) - SHA1: `00c116e85c944b36f35d3c3fe1ec6bc7429b2286`, MD5: `c4d8b89a72b50f8c86851f3bb14aef14`
+    - [debugger_breakpoint@2x.png.8fd2bcaf](bios/Other/Recalbox/.variants/debugger_breakpoint@2x.png.8fd2bcaf) (1,555 bytes) - SHA1: `8fd2bcaf9b4347cb6edb30dbc043506a4f8d83e4`, MD5: `b921d5521d6262e201c049e27a87cd3c`
+    - [debugger_breakpoint@2x.png.a0c4ad9b](bios/Other/Recalbox/.variants/debugger_breakpoint@2x.png.a0c4ad9b) (1,547 bytes) - SHA1: `a0c4ad9bb2da3a514850493cd39851c59d120a99`, MD5: `7c6b6321008fc96ffdd1de68698249e2`
+    - [debugger_breakpoint@2x.png.ed0f154a](bios/Other/Recalbox/.variants/debugger_breakpoint@2x.png.ed0f154a) (1,234 bytes) - SHA1: `ed0f154abb692913846a2f2f6f7adf08167407bd`, MD5: `21e4287d4d5c01d0cc471a05bd692ac7`
+- **[debugger_breakpoint@2x.png.00c116e8](bios/Other/Recalbox/.variants/debugger_breakpoint@2x.png.00c116e8)** (1,400 bytes)
+  - SHA1: `00c116e85c944b36f35d3c3fe1ec6bc7429b2286`
+  - MD5: `c4d8b89a72b50f8c86851f3bb14aef14`
+  - CRC32: `30968e38`
+- **[debugger_breakpoint@2x.png.8fd2bcaf](bios/Other/Recalbox/.variants/debugger_breakpoint@2x.png.8fd2bcaf)** (1,555 bytes)
+  - SHA1: `8fd2bcaf9b4347cb6edb30dbc043506a4f8d83e4`
+  - MD5: `b921d5521d6262e201c049e27a87cd3c`
+  - CRC32: `81e0d00d`
+- **[debugger_breakpoint@2x.png.a0c4ad9b](bios/Other/Recalbox/.variants/debugger_breakpoint@2x.png.a0c4ad9b)** (1,547 bytes)
+  - SHA1: `a0c4ad9bb2da3a514850493cd39851c59d120a99`
+  - MD5: `7c6b6321008fc96ffdd1de68698249e2`
+  - CRC32: `cc3eaf15`
+- **[debugger_breakpoint@2x.png.ed0f154a](bios/Other/Recalbox/.variants/debugger_breakpoint@2x.png.ed0f154a)** (1,234 bytes)
+  - SHA1: `ed0f154abb692913846a2f2f6f7adf08167407bd`
+  - MD5: `21e4287d4d5c01d0cc471a05bd692ac7`
+  - CRC32: `02df46e1`
+- **[debugger_breakpoint@4x.png](bios/Other/Recalbox/debugger_breakpoint@4x.png)** (2,826 bytes)
+  - SHA1: `4c6ec82a5397a70e74159046c8f79c8584e45037`
+  - MD5: `43a1d0f303457ecfa851f36cd8c61912`
+  - CRC32: `2287408d`
+  - **Variants** (4 alternate versions):
+    - [debugger_breakpoint@4x.png.2957f327](bios/Other/Recalbox/.variants/debugger_breakpoint@4x.png.2957f327) (3,794 bytes) - SHA1: `2957f32752f96c7020e2d6b9e0b1d4316afed6c7`, MD5: `30f78611500e5657c37494667213d566`
+    - [debugger_breakpoint@4x.png.40ec61b8](bios/Other/Recalbox/.variants/debugger_breakpoint@4x.png.40ec61b8) (2,837 bytes) - SHA1: `40ec61b8d180b69cebd19a156b5339d183bcaa90`, MD5: `8781ebde7e54d0c5fb88dce5b99c2e5e`
+    - [debugger_breakpoint@4x.png.6589d98f](bios/Other/Recalbox/.variants/debugger_breakpoint@4x.png.6589d98f) (3,096 bytes) - SHA1: `6589d98fb24c02caca7dbc92b165933d5540d9c0`, MD5: `d10edec1287767595a2959a4f5926fda`
+    - [debugger_breakpoint@4x.png.be8045e3](bios/Other/Recalbox/.variants/debugger_breakpoint@4x.png.be8045e3) (3,918 bytes) - SHA1: `be8045e33e68c53a3ffc0b7f64bedf2f4aa3b835`, MD5: `63b11aa98147aa5d3506ecc35835eb7b`
+- **[debugger_breakpoint@4x.png.2957f327](bios/Other/Recalbox/.variants/debugger_breakpoint@4x.png.2957f327)** (3,794 bytes)
+  - SHA1: `2957f32752f96c7020e2d6b9e0b1d4316afed6c7`
+  - MD5: `30f78611500e5657c37494667213d566`
+  - CRC32: `8f237181`
+- **[debugger_breakpoint@4x.png.40ec61b8](bios/Other/Recalbox/.variants/debugger_breakpoint@4x.png.40ec61b8)** (2,837 bytes)
+  - SHA1: `40ec61b8d180b69cebd19a156b5339d183bcaa90`
+  - MD5: `8781ebde7e54d0c5fb88dce5b99c2e5e`
+  - CRC32: `d183cfcb`
+- **[debugger_breakpoint@4x.png.6589d98f](bios/Other/Recalbox/.variants/debugger_breakpoint@4x.png.6589d98f)** (3,096 bytes)
+  - SHA1: `6589d98fb24c02caca7dbc92b165933d5540d9c0`
+  - MD5: `d10edec1287767595a2959a4f5926fda`
+  - CRC32: `1ccf5117`
+- **[debugger_breakpoint@4x.png.be8045e3](bios/Other/Recalbox/.variants/debugger_breakpoint@4x.png.be8045e3)** (3,918 bytes)
+  - SHA1: `be8045e33e68c53a3ffc0b7f64bedf2f4aa3b835`
+  - MD5: `63b11aa98147aa5d3506ecc35835eb7b`
+  - CRC32: `3d706ce9`
+- **[debugger_clear.png](bios/Other/Recalbox/debugger_clear.png)** (708 bytes)
+  - SHA1: `7a1f95ef1b53934cfccf0f84c6dd866a0004eaf4`
+  - MD5: `86838d0b0787d7473d3a68148b960fbe`
+  - CRC32: `52cdb0f2`
+  - **Variants** (4 alternate versions):
+    - [debugger_clear.png.1ebdc202](bios/Other/Recalbox/.variants/debugger_clear.png.1ebdc202) (606 bytes) - SHA1: `1ebdc202ce8e509a7ff14b602ecb7d594997dfd2`, MD5: `e0038a5a32986e0343c4c249fac7ac5f`
+    - [debugger_clear.png.2760ef7d](bios/Other/Recalbox/.variants/debugger_clear.png.2760ef7d) (727 bytes) - SHA1: `2760ef7d6d9335607de99f43d47903729abcfd8b`, MD5: `306a8fd7ea28cabce2974c37f925b636`
+    - [debugger_clear.png.92f56664](bios/Other/Recalbox/.variants/debugger_clear.png.92f56664) (714 bytes) - SHA1: `92f56664cce5de52cfb40f6544d84be7cca2ce91`, MD5: `ba0554a876b2c555feee015c0c3f359b`
+    - [debugger_clear.png.c3e3a683](bios/Other/Recalbox/.variants/debugger_clear.png.c3e3a683) (729 bytes) - SHA1: `c3e3a683fe040f8c2f50d1bd82010ed49a1e47f3`, MD5: `f29d3a7905070062ea20c72f7c4d22b7`
+- **[debugger_clear.png.1ebdc202](bios/Other/Recalbox/.variants/debugger_clear.png.1ebdc202)** (606 bytes)
+  - SHA1: `1ebdc202ce8e509a7ff14b602ecb7d594997dfd2`
+  - MD5: `e0038a5a32986e0343c4c249fac7ac5f`
+  - CRC32: `64986a1e`
+- **[debugger_clear.png.2760ef7d](bios/Other/Recalbox/.variants/debugger_clear.png.2760ef7d)** (727 bytes)
+  - SHA1: `2760ef7d6d9335607de99f43d47903729abcfd8b`
+  - MD5: `306a8fd7ea28cabce2974c37f925b636`
+  - CRC32: `179561bf`
+- **[debugger_clear.png.92f56664](bios/Other/Recalbox/.variants/debugger_clear.png.92f56664)** (714 bytes)
+  - SHA1: `92f56664cce5de52cfb40f6544d84be7cca2ce91`
+  - MD5: `ba0554a876b2c555feee015c0c3f359b`
+  - CRC32: `04d79b19`
+- **[debugger_clear.png.c3e3a683](bios/Other/Recalbox/.variants/debugger_clear.png.c3e3a683)** (729 bytes)
+  - SHA1: `c3e3a683fe040f8c2f50d1bd82010ed49a1e47f3`
+  - MD5: `f29d3a7905070062ea20c72f7c4d22b7`
+  - CRC32: `51bb1056`
+- **[debugger_clear@2x.png](bios/Other/Recalbox/debugger_clear@2x.png)** (1,478 bytes)
+  - SHA1: `98beafe2c63f8395c900f9f1764744ad4e7c940f`
+  - MD5: `2ff5100628cd902b34ac9afb01ef1c90`
+  - CRC32: `c75e38ae`
+  - **Variants** (4 alternate versions):
+    - [debugger_clear@2x.png.250b21de](bios/Other/Recalbox/.variants/debugger_clear@2x.png.250b21de) (1,053 bytes) - SHA1: `250b21de8705c92214bb2cec4b44cee489d3b810`, MD5: `ae8b9dbd27ba601b83a311e88198962b`
+    - [debugger_clear@2x.png.2f191f36](bios/Other/Recalbox/.variants/debugger_clear@2x.png.2f191f36) (1,579 bytes) - SHA1: `2f191f36fb6c46175fea2ffa4a3ffc9adaea4328`, MD5: `e04525d15150f337451c11604b2de764`
+    - [debugger_clear@2x.png.75f2401b](bios/Other/Recalbox/.variants/debugger_clear@2x.png.75f2401b) (1,295 bytes) - SHA1: `75f2401b41b38053e9ec0a208dc338656c646523`, MD5: `dd339490cb65a8e953ccbc46f6c9a84f`
+    - [debugger_clear@2x.png.da6625f6](bios/Other/Recalbox/.variants/debugger_clear@2x.png.da6625f6) (1,555 bytes) - SHA1: `da6625f6839d4c607f9ff07f50b378169de756ff`, MD5: `c6237be4e0facec3f7b042954c498d01`
+- **[debugger_clear@2x.png.250b21de](bios/Other/Recalbox/.variants/debugger_clear@2x.png.250b21de)** (1,053 bytes)
+  - SHA1: `250b21de8705c92214bb2cec4b44cee489d3b810`
+  - MD5: `ae8b9dbd27ba601b83a311e88198962b`
+  - CRC32: `db549344`
+- **[debugger_clear@2x.png.2f191f36](bios/Other/Recalbox/.variants/debugger_clear@2x.png.2f191f36)** (1,579 bytes)
+  - SHA1: `2f191f36fb6c46175fea2ffa4a3ffc9adaea4328`
+  - MD5: `e04525d15150f337451c11604b2de764`
+  - CRC32: `dc112f23`
+- **[debugger_clear@2x.png.75f2401b](bios/Other/Recalbox/.variants/debugger_clear@2x.png.75f2401b)** (1,295 bytes)
+  - SHA1: `75f2401b41b38053e9ec0a208dc338656c646523`
+  - MD5: `dd339490cb65a8e953ccbc46f6c9a84f`
+  - CRC32: `29d40ad2`
+- **[debugger_clear@2x.png.da6625f6](bios/Other/Recalbox/.variants/debugger_clear@2x.png.da6625f6)** (1,555 bytes)
+  - SHA1: `da6625f6839d4c607f9ff07f50b378169de756ff`
+  - MD5: `c6237be4e0facec3f7b042954c498d01`
+  - CRC32: `85d7a564`
+- **[debugger_clear@4x.png](bios/Other/Recalbox/debugger_clear@4x.png)** (2,240 bytes)
+  - SHA1: `aa5f502b4ae76a963c9ae865d726f0fe5b3f4d59`
+  - MD5: `b6481834006838f5f6f23fb867965a02`
+  - CRC32: `f5a402a5`
+  - **Variants** (4 alternate versions):
+    - [debugger_clear@4x.png.07231b8e](bios/Other/Recalbox/.variants/debugger_clear@4x.png.07231b8e) (3,900 bytes) - SHA1: `07231b8ee5c08d36412ff9277d64f2b85e1dce8c`, MD5: `fe6333ffca4062bc44e2cfc1aa67aff2`
+    - [debugger_clear@4x.png.07cd3594](bios/Other/Recalbox/.variants/debugger_clear@4x.png.07cd3594) (3,012 bytes) - SHA1: `07cd359430f5a59e3c61490b9d9fc6e61200d934`, MD5: `e995faa7b4701b40ee8211e150076ce5`
+    - [debugger_clear@4x.png.3edddb01](bios/Other/Recalbox/.variants/debugger_clear@4x.png.3edddb01) (2,497 bytes) - SHA1: `3edddb01f6cd65b10a5e932024c3ac71489f6ee7`, MD5: `ac93a46c780efee4d01a0166ee77e0cd`
+    - [debugger_clear@4x.png.80c133b9](bios/Other/Recalbox/.variants/debugger_clear@4x.png.80c133b9) (3,847 bytes) - SHA1: `80c133b93ada395bf5891f618336afb1c7c61e6b`, MD5: `7df7bda692f8be424df91fc698a8ef46`
+- **[debugger_clear@4x.png.07231b8e](bios/Other/Recalbox/.variants/debugger_clear@4x.png.07231b8e)** (3,900 bytes)
+  - SHA1: `07231b8ee5c08d36412ff9277d64f2b85e1dce8c`
+  - MD5: `fe6333ffca4062bc44e2cfc1aa67aff2`
+  - CRC32: `a307ae79`
+- **[debugger_clear@4x.png.07cd3594](bios/Other/Recalbox/.variants/debugger_clear@4x.png.07cd3594)** (3,012 bytes)
+  - SHA1: `07cd359430f5a59e3c61490b9d9fc6e61200d934`
+  - MD5: `e995faa7b4701b40ee8211e150076ce5`
+  - CRC32: `9c8e9093`
+- **[debugger_clear@4x.png.3edddb01](bios/Other/Recalbox/.variants/debugger_clear@4x.png.3edddb01)** (2,497 bytes)
+  - SHA1: `3edddb01f6cd65b10a5e932024c3ac71489f6ee7`
+  - MD5: `ac93a46c780efee4d01a0166ee77e0cd`
+  - CRC32: `c2369d46`
+- **[debugger_clear@4x.png.80c133b9](bios/Other/Recalbox/.variants/debugger_clear@4x.png.80c133b9)** (3,847 bytes)
+  - SHA1: `80c133b93ada395bf5891f618336afb1c7c61e6b`
+  - MD5: `7df7bda692f8be424df91fc698a8ef46`
+  - CRC32: `3cb0a60a`
+- **[debugger_delete.png](bios/Other/Recalbox/debugger_delete.png)** (429 bytes)
+  - SHA1: `2e3efd5a290062127d13b219da93f31cd69de232`
+  - MD5: `d70419db204cad3d7cb0df4bc102c4dd`
+  - CRC32: `40b88e7d`
+  - **Variants** (4 alternate versions):
+    - [debugger_delete.png.27010cf1](bios/Other/Recalbox/.variants/debugger_delete.png.27010cf1) (434 bytes) - SHA1: `27010cf1976bde462b6655754aa68676d9018467`, MD5: `4d10df24ef05b6fab532e4dcc9a9901f`
+    - [debugger_delete.png.41981259](bios/Other/Recalbox/.variants/debugger_delete.png.41981259) (492 bytes) - SHA1: `419812594635194ce02a712779f4bb6bc7501797`, MD5: `9ac9dd584273509a5a77f54342bb54bf`
+    - [debugger_delete.png.7682edb5](bios/Other/Recalbox/.variants/debugger_delete.png.7682edb5) (415 bytes) - SHA1: `7682edb5136b8a86c55cd8490e51df1bba7c7f19`, MD5: `f571a41986ce550dc34253fc18785a70`
+    - [debugger_delete.png.decfb286](bios/Other/Recalbox/.variants/debugger_delete.png.decfb286) (479 bytes) - SHA1: `decfb286f422cde2643a789665f8d3befe22ecfc`, MD5: `f89bc2c86594d643bf9fb20f20f3de37`
+- **[debugger_delete.png.27010cf1](bios/Other/Recalbox/.variants/debugger_delete.png.27010cf1)** (434 bytes)
+  - SHA1: `27010cf1976bde462b6655754aa68676d9018467`
+  - MD5: `4d10df24ef05b6fab532e4dcc9a9901f`
+  - CRC32: `d602fe86`
+- **[debugger_delete.png.41981259](bios/Other/Recalbox/.variants/debugger_delete.png.41981259)** (492 bytes)
+  - SHA1: `419812594635194ce02a712779f4bb6bc7501797`
+  - MD5: `9ac9dd584273509a5a77f54342bb54bf`
+  - CRC32: `88197f21`
+- **[debugger_delete.png.7682edb5](bios/Other/Recalbox/.variants/debugger_delete.png.7682edb5)** (415 bytes)
+  - SHA1: `7682edb5136b8a86c55cd8490e51df1bba7c7f19`
+  - MD5: `f571a41986ce550dc34253fc18785a70`
+  - CRC32: `c7426838`
+- **[debugger_delete.png.decfb286](bios/Other/Recalbox/.variants/debugger_delete.png.decfb286)** (479 bytes)
+  - SHA1: `decfb286f422cde2643a789665f8d3befe22ecfc`
+  - MD5: `f89bc2c86594d643bf9fb20f20f3de37`
+  - CRC32: `1e324f6e`
+- **[debugger_delete@2x.png](bios/Other/Recalbox/debugger_delete@2x.png)** (1,013 bytes)
+  - SHA1: `e15da84fd3fd4f49fd6664ae4d62880ee9839fdf`
+  - MD5: `378853c53c2fb24365911e0a09a43590`
+  - CRC32: `5f5125fe`
+  - **Variants** (4 alternate versions):
+    - [debugger_delete@2x.png.82a83c71](bios/Other/Recalbox/.variants/debugger_delete@2x.png.82a83c71) (1,290 bytes) - SHA1: `82a83c718f4eec660a297a90a3de49616b05ccb8`, MD5: `5308d345eb24e5361e49a9eac08ac1ae`
+    - [debugger_delete@2x.png.95325f20](bios/Other/Recalbox/.variants/debugger_delete@2x.png.95325f20) (997 bytes) - SHA1: `95325f208faa76218f953bd6bc5839e7b87cc51d`, MD5: `bd724543854068be37aabb40ce8a082d`
+    - [debugger_delete@2x.png.aba2386d](bios/Other/Recalbox/.variants/debugger_delete@2x.png.aba2386d) (1,324 bytes) - SHA1: `aba2386d7f2748abacbe9975bf4ea815a498d3d4`, MD5: `68c5deca3fc6015e932ac00d80d34815`
+    - [debugger_delete@2x.png.da1fcc37](bios/Other/Recalbox/.variants/debugger_delete@2x.png.da1fcc37) (1,049 bytes) - SHA1: `da1fcc375f621d06af810494399989e64e8b7d15`, MD5: `6662e944138a9b583ede0c6f59302693`
+- **[debugger_delete@2x.png.82a83c71](bios/Other/Recalbox/.variants/debugger_delete@2x.png.82a83c71)** (1,290 bytes)
+  - SHA1: `82a83c718f4eec660a297a90a3de49616b05ccb8`
+  - MD5: `5308d345eb24e5361e49a9eac08ac1ae`
+  - CRC32: `091f9477`
+- **[debugger_delete@2x.png.95325f20](bios/Other/Recalbox/.variants/debugger_delete@2x.png.95325f20)** (997 bytes)
+  - SHA1: `95325f208faa76218f953bd6bc5839e7b87cc51d`
+  - MD5: `bd724543854068be37aabb40ce8a082d`
+  - CRC32: `7d7fef0c`
+- **[debugger_delete@2x.png.aba2386d](bios/Other/Recalbox/.variants/debugger_delete@2x.png.aba2386d)** (1,324 bytes)
+  - SHA1: `aba2386d7f2748abacbe9975bf4ea815a498d3d4`
+  - MD5: `68c5deca3fc6015e932ac00d80d34815`
+  - CRC32: `d12cc970`
+- **[debugger_delete@2x.png.da1fcc37](bios/Other/Recalbox/.variants/debugger_delete@2x.png.da1fcc37)** (1,049 bytes)
+  - SHA1: `da1fcc375f621d06af810494399989e64e8b7d15`
+  - MD5: `6662e944138a9b583ede0c6f59302693`
+  - CRC32: `377640dd`
+- **[debugger_delete@4x.png](bios/Other/Recalbox/debugger_delete@4x.png)** (1,961 bytes)
+  - SHA1: `93f59bf361b9c04d2ab394de8f3de8b782ee0469`
+  - MD5: `e94e013e663a7ea26ea176a242660a6d`
+  - CRC32: `e5217bb3`
+  - **Variants** (4 alternate versions):
+    - [debugger_delete@4x.png.36716279](bios/Other/Recalbox/.variants/debugger_delete@4x.png.36716279) (2,018 bytes) - SHA1: `367162791f4760a16a976e2ed2c113df87eebbe2`, MD5: `bb7e84aca758ec4f7911e4599c775d03`
+    - [debugger_delete@4x.png.70edddd7](bios/Other/Recalbox/.variants/debugger_delete@4x.png.70edddd7) (2,768 bytes) - SHA1: `70edddd7b5447a5700e535b29415c2e4cd89b8b0`, MD5: `5355d0c0706515c1367885c39b66c124`
+    - [debugger_delete@4x.png.821c63b2](bios/Other/Recalbox/.variants/debugger_delete@4x.png.821c63b2) (1,999 bytes) - SHA1: `821c63b270061b4899e8ade33a30c6c9905b1cde`, MD5: `1584997edd16ab7bc070869822932ae8`
+    - [debugger_delete@4x.png.b534bb0b](bios/Other/Recalbox/.variants/debugger_delete@4x.png.b534bb0b) (3,067 bytes) - SHA1: `b534bb0b531bc9766e29006e8f333fbec85419ec`, MD5: `9438e40103bebf179b6487a2382b68d0`
+- **[debugger_delete@4x.png.36716279](bios/Other/Recalbox/.variants/debugger_delete@4x.png.36716279)** (2,018 bytes)
+  - SHA1: `367162791f4760a16a976e2ed2c113df87eebbe2`
+  - MD5: `bb7e84aca758ec4f7911e4599c775d03`
+  - CRC32: `c9f0fee7`
+- **[debugger_delete@4x.png.70edddd7](bios/Other/Recalbox/.variants/debugger_delete@4x.png.70edddd7)** (2,768 bytes)
+  - SHA1: `70edddd7b5447a5700e535b29415c2e4cd89b8b0`
+  - MD5: `5355d0c0706515c1367885c39b66c124`
+  - CRC32: `8fcfade4`
+- **[debugger_delete@4x.png.821c63b2](bios/Other/Recalbox/.variants/debugger_delete@4x.png.821c63b2)** (1,999 bytes)
+  - SHA1: `821c63b270061b4899e8ade33a30c6c9905b1cde`
+  - MD5: `1584997edd16ab7bc070869822932ae8`
+  - CRC32: `c959fdd5`
+- **[debugger_delete@4x.png.b534bb0b](bios/Other/Recalbox/.variants/debugger_delete@4x.png.b534bb0b)** (3,067 bytes)
+  - SHA1: `b534bb0b531bc9766e29006e8f333fbec85419ec`
+  - MD5: `9438e40103bebf179b6487a2382b68d0`
+  - CRC32: `3dedbf60`
+- **[debugger_load.png](bios/Other/Recalbox/debugger_load.png)** (450 bytes)
+  - SHA1: `db87df9b3d3924e1f12b443f00acddf1ac5421f1`
+  - MD5: `9037817cc64e9f7adc5e5c3712694cf2`
+  - CRC32: `f04ff594`
+  - **Variants** (4 alternate versions):
+    - [debugger_load.png.698f935b](bios/Other/Recalbox/.variants/debugger_load.png.698f935b) (477 bytes) - SHA1: `698f935b6ea409cea8f8d0aaa80629484cfc6f1f`, MD5: `31557b1d9251c1ae2219cb15554538e2`
+    - [debugger_load.png.8a411a0f](bios/Other/Recalbox/.variants/debugger_load.png.8a411a0f) (479 bytes) - SHA1: `8a411a0f594b99c3561266432aabc7a5a78eb7ea`, MD5: `86bea08a0a455602e58d4c9a198b7a67`
+    - [debugger_load.png.d5477e00](bios/Other/Recalbox/.variants/debugger_load.png.d5477e00) (459 bytes) - SHA1: `d5477e00490d41d846c7960024d21984d1ed824e`, MD5: `edd4116f5efe3e3d363cef5c2b3bddad`
+    - [debugger_load.png.f6a3b573](bios/Other/Recalbox/.variants/debugger_load.png.f6a3b573) (394 bytes) - SHA1: `f6a3b57347919f15432668a4b57686550a13131b`, MD5: `c8ac844819272454b5494feff6456d26`
+- **[debugger_load.png.698f935b](bios/Other/Recalbox/.variants/debugger_load.png.698f935b)** (477 bytes)
+  - SHA1: `698f935b6ea409cea8f8d0aaa80629484cfc6f1f`
+  - MD5: `31557b1d9251c1ae2219cb15554538e2`
+  - CRC32: `38b8157d`
+- **[debugger_load.png.8a411a0f](bios/Other/Recalbox/.variants/debugger_load.png.8a411a0f)** (479 bytes)
+  - SHA1: `8a411a0f594b99c3561266432aabc7a5a78eb7ea`
+  - MD5: `86bea08a0a455602e58d4c9a198b7a67`
+  - CRC32: `16b4df8e`
+- **[debugger_load.png.d5477e00](bios/Other/Recalbox/.variants/debugger_load.png.d5477e00)** (459 bytes)
+  - SHA1: `d5477e00490d41d846c7960024d21984d1ed824e`
+  - MD5: `edd4116f5efe3e3d363cef5c2b3bddad`
+  - CRC32: `f7191271`
+- **[debugger_load.png.f6a3b573](bios/Other/Recalbox/.variants/debugger_load.png.f6a3b573)** (394 bytes)
+  - SHA1: `f6a3b57347919f15432668a4b57686550a13131b`
+  - MD5: `c8ac844819272454b5494feff6456d26`
+  - CRC32: `7cbd4e1b`
+- **[debugger_load@2x.png](bios/Other/Recalbox/debugger_load@2x.png)** (834 bytes)
+  - SHA1: `7e878820605fc5bb5fb9ae6500ef4bb4547a5841`
+  - MD5: `a31cceda75dc0a8c6d4cb00643e69144`
+  - CRC32: `f3c209e2`
+  - **Variants** (4 alternate versions):
+    - [debugger_load@2x.png.2065f2b3](bios/Other/Recalbox/.variants/debugger_load@2x.png.2065f2b3) (1,039 bytes) - SHA1: `2065f2b315be7e16b47b8693d22eb18756bfb706`, MD5: `123d07088e0e5d968aff5e54812d4be9`
+    - [debugger_load@2x.png.81a27fbf](bios/Other/Recalbox/.variants/debugger_load@2x.png.81a27fbf) (887 bytes) - SHA1: `81a27fbfadc947a4c340cfe39378b7811c7a9452`, MD5: `33b993f2eb46e876d962ecad88910250`
+    - [debugger_load@2x.png.c26bd7b7](bios/Other/Recalbox/.variants/debugger_load@2x.png.c26bd7b7) (1,106 bytes) - SHA1: `c26bd7b7f0ec3888f33d6c73742b2d6f8653c4bf`, MD5: `59d4bd909b54b7eb956806738834e34b`
+    - [debugger_load@2x.png.e61d1d91](bios/Other/Recalbox/.variants/debugger_load@2x.png.e61d1d91) (992 bytes) - SHA1: `e61d1d919d47901fafecdf95f98f6aa24bf540ef`, MD5: `29e1d4ebb85a19e7fc6a2c93c4a7ce50`
+- **[debugger_load@2x.png.2065f2b3](bios/Other/Recalbox/.variants/debugger_load@2x.png.2065f2b3)** (1,039 bytes)
+  - SHA1: `2065f2b315be7e16b47b8693d22eb18756bfb706`
+  - MD5: `123d07088e0e5d968aff5e54812d4be9`
+  - CRC32: `7c3f549e`
+- **[debugger_load@2x.png.81a27fbf](bios/Other/Recalbox/.variants/debugger_load@2x.png.81a27fbf)** (887 bytes)
+  - SHA1: `81a27fbfadc947a4c340cfe39378b7811c7a9452`
+  - MD5: `33b993f2eb46e876d962ecad88910250`
+  - CRC32: `6995f514`
+- **[debugger_load@2x.png.c26bd7b7](bios/Other/Recalbox/.variants/debugger_load@2x.png.c26bd7b7)** (1,106 bytes)
+  - SHA1: `c26bd7b7f0ec3888f33d6c73742b2d6f8653c4bf`
+  - MD5: `59d4bd909b54b7eb956806738834e34b`
+  - CRC32: `fbc2074f`
+- **[debugger_load@2x.png.e61d1d91](bios/Other/Recalbox/.variants/debugger_load@2x.png.e61d1d91)** (992 bytes)
+  - SHA1: `e61d1d919d47901fafecdf95f98f6aa24bf540ef`
+  - MD5: `29e1d4ebb85a19e7fc6a2c93c4a7ce50`
+  - CRC32: `b7b5eb48`
+- **[debugger_load@4x.png](bios/Other/Recalbox/debugger_load@4x.png)** (1,865 bytes)
+  - SHA1: `bdbf621d85df881d104d3be7a275e9e6745548fe`
+  - MD5: `cfa2f9412d3f5389b3caf775d3434063`
+  - CRC32: `af6249a6`
+  - **Variants** (4 alternate versions):
+    - [debugger_load@4x.png.071c2dba](bios/Other/Recalbox/.variants/debugger_load@4x.png.071c2dba) (2,026 bytes) - SHA1: `071c2dba0ffd9cedb885b1f2287dd9d1f7d8e123`, MD5: `a4ce83462b4090e98189d06ef6097aa2`
+    - [debugger_load@4x.png.3efb912b](bios/Other/Recalbox/.variants/debugger_load@4x.png.3efb912b) (1,810 bytes) - SHA1: `3efb912be882b7b50db122d095b1725e16095c9c`, MD5: `44b6adf55065e22b5e26be0056e69773`
+    - [debugger_load@4x.png.708f3768](bios/Other/Recalbox/.variants/debugger_load@4x.png.708f3768) (2,583 bytes) - SHA1: `708f376800e91a28416ed382b019fc0d8bf5c08b`, MD5: `efbfde81079d7c0c2717ede3bff4af3e`
+    - [debugger_load@4x.png.ea071c5d](bios/Other/Recalbox/.variants/debugger_load@4x.png.ea071c5d) (2,432 bytes) - SHA1: `ea071c5d02df7946ece40bdf8c177667242643ff`, MD5: `a9f2b6148a939a11107179fbcb0b6b87`
+- **[debugger_load@4x.png.071c2dba](bios/Other/Recalbox/.variants/debugger_load@4x.png.071c2dba)** (2,026 bytes)
+  - SHA1: `071c2dba0ffd9cedb885b1f2287dd9d1f7d8e123`
+  - MD5: `a4ce83462b4090e98189d06ef6097aa2`
+  - CRC32: `fa3e3d0d`
+- **[debugger_load@4x.png.3efb912b](bios/Other/Recalbox/.variants/debugger_load@4x.png.3efb912b)** (1,810 bytes)
+  - SHA1: `3efb912be882b7b50db122d095b1725e16095c9c`
+  - MD5: `44b6adf55065e22b5e26be0056e69773`
+  - CRC32: `03cb0865`
+- **[debugger_load@4x.png.708f3768](bios/Other/Recalbox/.variants/debugger_load@4x.png.708f3768)** (2,583 bytes)
+  - SHA1: `708f376800e91a28416ed382b019fc0d8bf5c08b`
+  - MD5: `efbfde81079d7c0c2717ede3bff4af3e`
+  - CRC32: `760d9bcf`
+- **[debugger_load@4x.png.ea071c5d](bios/Other/Recalbox/.variants/debugger_load@4x.png.ea071c5d)** (2,432 bytes)
+  - SHA1: `ea071c5d02df7946ece40bdf8c177667242643ff`
+  - MD5: `a9f2b6148a939a11107179fbcb0b6b87`
+  - CRC32: `1d699cb5`
+- **[debugger_save.png](bios/Other/Recalbox/debugger_save.png)** (399 bytes)
+  - SHA1: `41b032e6b667e4f37717dfe82abdf784c4d56197`
+  - MD5: `607ff069d9db4122a77cf91db58f07d7`
+  - CRC32: `e8cc990a`
+  - **Variants** (4 alternate versions):
+    - [debugger_save.png.15ab70d1](bios/Other/Recalbox/.variants/debugger_save.png.15ab70d1) (429 bytes) - SHA1: `15ab70d1b00169cbe4e679a189798b2979bf51c3`, MD5: `0622e62ea6c137ea2a77cb01b39aa4eb`
+    - [debugger_save.png.776ed5f5](bios/Other/Recalbox/.variants/debugger_save.png.776ed5f5) (413 bytes) - SHA1: `776ed5f51c0ac62666d49af6cd0a6a0c52a323f0`, MD5: `a79c1b26f312bbba10b2fbcc717da06e`
+    - [debugger_save.png.e33c349b](bios/Other/Recalbox/.variants/debugger_save.png.e33c349b) (423 bytes) - SHA1: `e33c349b0e57a57d569360d29b56d76629b70393`, MD5: `65555e2e195641a3c140757529436571`
+    - [debugger_save.png.f0be7d66](bios/Other/Recalbox/.variants/debugger_save.png.f0be7d66) (371 bytes) - SHA1: `f0be7d66d2f62c2bb9f47e83f990f968dc275048`, MD5: `40e0230156426969455ca5948f7ae959`
+- **[debugger_save.png.15ab70d1](bios/Other/Recalbox/.variants/debugger_save.png.15ab70d1)** (429 bytes)
+  - SHA1: `15ab70d1b00169cbe4e679a189798b2979bf51c3`
+  - MD5: `0622e62ea6c137ea2a77cb01b39aa4eb`
+  - CRC32: `a45ab928`
+- **[debugger_save.png.776ed5f5](bios/Other/Recalbox/.variants/debugger_save.png.776ed5f5)** (413 bytes)
+  - SHA1: `776ed5f51c0ac62666d49af6cd0a6a0c52a323f0`
+  - MD5: `a79c1b26f312bbba10b2fbcc717da06e`
+  - CRC32: `632897d1`
+- **[debugger_save.png.e33c349b](bios/Other/Recalbox/.variants/debugger_save.png.e33c349b)** (423 bytes)
+  - SHA1: `e33c349b0e57a57d569360d29b56d76629b70393`
+  - MD5: `65555e2e195641a3c140757529436571`
+  - CRC32: `89012227`
+- **[debugger_save.png.f0be7d66](bios/Other/Recalbox/.variants/debugger_save.png.f0be7d66)** (371 bytes)
+  - SHA1: `f0be7d66d2f62c2bb9f47e83f990f968dc275048`
+  - MD5: `40e0230156426969455ca5948f7ae959`
+  - CRC32: `8340d524`
+- **[debugger_save@2x.png](bios/Other/Recalbox/debugger_save@2x.png)** (781 bytes)
+  - SHA1: `dcd28b12768d105db12e16999b879a18f1b168bf`
+  - MD5: `3d83f0da2b7519610ba3323c21a8a721`
+  - CRC32: `e66ffc98`
+  - **Variants** (4 alternate versions):
+    - [debugger_save@2x.png.6a09258e](bios/Other/Recalbox/.variants/debugger_save@2x.png.6a09258e) (821 bytes) - SHA1: `6a09258eb3ef90bdc55865a4111dcbbc3c11e240`, MD5: `619c5520e51ebdeebd638330000578de`
+    - [debugger_save@2x.png.a79fd1bb](bios/Other/Recalbox/.variants/debugger_save@2x.png.a79fd1bb) (915 bytes) - SHA1: `a79fd1bb5f48cadc2cd6ce34029f250dbc34a024`, MD5: `fd418e0286ed7fff31107ca82b77b0b9`
+    - [debugger_save@2x.png.d7b71a83](bios/Other/Recalbox/.variants/debugger_save@2x.png.d7b71a83) (966 bytes) - SHA1: `d7b71a836502172c3e2ebb218a68988140d6cee1`, MD5: `b3e1578d8edc9c2b1372e3afbeb3fbae`
+    - [debugger_save@2x.png.f37706c2](bios/Other/Recalbox/.variants/debugger_save@2x.png.f37706c2) (1,023 bytes) - SHA1: `f37706c289362ee3d0d33c26e4fdba178976e762`, MD5: `71f476bb79e3a62d8533c0654a0ae6c5`
+- **[debugger_save@2x.png.6a09258e](bios/Other/Recalbox/.variants/debugger_save@2x.png.6a09258e)** (821 bytes)
+  - SHA1: `6a09258eb3ef90bdc55865a4111dcbbc3c11e240`
+  - MD5: `619c5520e51ebdeebd638330000578de`
+  - CRC32: `a4ef9671`
+- **[debugger_save@2x.png.a79fd1bb](bios/Other/Recalbox/.variants/debugger_save@2x.png.a79fd1bb)** (915 bytes)
+  - SHA1: `a79fd1bb5f48cadc2cd6ce34029f250dbc34a024`
+  - MD5: `fd418e0286ed7fff31107ca82b77b0b9`
+  - CRC32: `0426a831`
+- **[debugger_save@2x.png.d7b71a83](bios/Other/Recalbox/.variants/debugger_save@2x.png.d7b71a83)** (966 bytes)
+  - SHA1: `d7b71a836502172c3e2ebb218a68988140d6cee1`
+  - MD5: `b3e1578d8edc9c2b1372e3afbeb3fbae`
+  - CRC32: `76b9e754`
+- **[debugger_save@2x.png.f37706c2](bios/Other/Recalbox/.variants/debugger_save@2x.png.f37706c2)** (1,023 bytes)
+  - SHA1: `f37706c289362ee3d0d33c26e4fdba178976e762`
+  - MD5: `71f476bb79e3a62d8533c0654a0ae6c5`
+  - CRC32: `aa783e0c`
+- **[debugger_save@4x.png](bios/Other/Recalbox/debugger_save@4x.png)** (1,688 bytes)
+  - SHA1: `e58346047ca72b17bd41f6e45d7b6d41ee7f544c`
+  - MD5: `06b42e4d20589b177dfe4af4c4f84942`
+  - CRC32: `d761e97d`
+  - **Variants** (4 alternate versions):
+    - [debugger_save@4x.png.7165adc7](bios/Other/Recalbox/.variants/debugger_save@4x.png.7165adc7) (2,333 bytes) - SHA1: `7165adc700f73fc223b45f15c006f429cb02e33c`, MD5: `37915430690587fb0ab4b28a221069a6`
+    - [debugger_save@4x.png.e83204b3](bios/Other/Recalbox/.variants/debugger_save@4x.png.e83204b3) (1,827 bytes) - SHA1: `e83204b33cc1e55f290b6e315fe50300360eee4b`, MD5: `a7f89ff37d943e69cc6eb4e13e0e47a1`
+    - [debugger_save@4x.png.f4fa31b7](bios/Other/Recalbox/.variants/debugger_save@4x.png.f4fa31b7) (2,267 bytes) - SHA1: `f4fa31b7034dec604ddb29a9435ac45ebd9aaab0`, MD5: `fbb5fe4fe6bcae3120a83dc3a7877155`
+    - [debugger_save@4x.png.fd409928](bios/Other/Recalbox/.variants/debugger_save@4x.png.fd409928) (1,747 bytes) - SHA1: `fd409928ac646d1b9781f6da3891df6710e5336e`, MD5: `0170506fb0ad949dc2c100fc0ce987c6`
+- **[debugger_save@4x.png.7165adc7](bios/Other/Recalbox/.variants/debugger_save@4x.png.7165adc7)** (2,333 bytes)
+  - SHA1: `7165adc700f73fc223b45f15c006f429cb02e33c`
+  - MD5: `37915430690587fb0ab4b28a221069a6`
+  - CRC32: `e9a945c2`
+- **[debugger_save@4x.png.e83204b3](bios/Other/Recalbox/.variants/debugger_save@4x.png.e83204b3)** (1,827 bytes)
+  - SHA1: `e83204b33cc1e55f290b6e315fe50300360eee4b`
+  - MD5: `a7f89ff37d943e69cc6eb4e13e0e47a1`
+  - CRC32: `3ba5b2f5`
+- **[debugger_save@4x.png.f4fa31b7](bios/Other/Recalbox/.variants/debugger_save@4x.png.f4fa31b7)** (2,267 bytes)
+  - SHA1: `f4fa31b7034dec604ddb29a9435ac45ebd9aaab0`
+  - MD5: `fbb5fe4fe6bcae3120a83dc3a7877155`
+  - CRC32: `753ba815`
+- **[debugger_save@4x.png.fd409928](bios/Other/Recalbox/.variants/debugger_save@4x.png.fd409928)** (1,747 bytes)
+  - SHA1: `fd409928ac646d1b9781f6da3891df6710e5336e`
+  - MD5: `0170506fb0ad949dc2c100fc0ce987c6`
+  - CRC32: `e39fcf5f`
+- **[debugger_set_pc.png](bios/Other/Recalbox/debugger_set_pc.png)** (436 bytes)
+  - SHA1: `0b42741742dd20e7e0f60140e54dcaf85bae2f84`
+  - MD5: `dc4bfd45044826e9f5ea9411c33c7fbc`
+  - CRC32: `717e0319`
+  - **Variants** (4 alternate versions):
+    - [debugger_set_pc.png.3f09a9b2](bios/Other/Recalbox/.variants/debugger_set_pc.png.3f09a9b2) (464 bytes) - SHA1: `3f09a9b262fb89f0cdcb671b6a87e73e5bce6809`, MD5: `4cc2c3d58029a03f3bb01ddf814f9ba5`
+    - [debugger_set_pc.png.89a472be](bios/Other/Recalbox/.variants/debugger_set_pc.png.89a472be) (453 bytes) - SHA1: `89a472bebd79f9c100a4ba4bd081a4d84d89fe85`, MD5: `9a2e3653bdc0f561a9fa12c0fa7e3ed5`
+    - [debugger_set_pc.png.e30b40dd](bios/Other/Recalbox/.variants/debugger_set_pc.png.e30b40dd) (440 bytes) - SHA1: `e30b40ddb707ff9316fff97a0922ec2aa689f15c`, MD5: `c6ca9a555886cf36a0b1bcfc472542c3`
+    - [debugger_set_pc.png.ff6f770e](bios/Other/Recalbox/.variants/debugger_set_pc.png.ff6f770e) (514 bytes) - SHA1: `ff6f770e822a223f7bf06df86cf368e4d72df099`, MD5: `5cd84fe0b41aa9c3c9c1b4d54d402202`
+- **[debugger_set_pc.png.3f09a9b2](bios/Other/Recalbox/.variants/debugger_set_pc.png.3f09a9b2)** (464 bytes)
+  - SHA1: `3f09a9b262fb89f0cdcb671b6a87e73e5bce6809`
+  - MD5: `4cc2c3d58029a03f3bb01ddf814f9ba5`
+  - CRC32: `e460f628`
+- **[debugger_set_pc.png.89a472be](bios/Other/Recalbox/.variants/debugger_set_pc.png.89a472be)** (453 bytes)
+  - SHA1: `89a472bebd79f9c100a4ba4bd081a4d84d89fe85`
+  - MD5: `9a2e3653bdc0f561a9fa12c0fa7e3ed5`
+  - CRC32: `21f9de60`
+- **[debugger_set_pc.png.e30b40dd](bios/Other/Recalbox/.variants/debugger_set_pc.png.e30b40dd)** (440 bytes)
+  - SHA1: `e30b40ddb707ff9316fff97a0922ec2aa689f15c`
+  - MD5: `c6ca9a555886cf36a0b1bcfc472542c3`
+  - CRC32: `23483a4a`
+- **[debugger_set_pc.png.ff6f770e](bios/Other/Recalbox/.variants/debugger_set_pc.png.ff6f770e)** (514 bytes)
+  - SHA1: `ff6f770e822a223f7bf06df86cf368e4d72df099`
+  - MD5: `5cd84fe0b41aa9c3c9c1b4d54d402202`
+  - CRC32: `dd4c36cf`
+- **[debugger_set_pc@2x.png](bios/Other/Recalbox/debugger_set_pc@2x.png)** (1,085 bytes)
+  - SHA1: `ef86bc905eded160f70f220ba7150cbdfa2c2005`
+  - MD5: `4928c76abc07ec4f892cb719c668ae29`
+  - CRC32: `e4f4ce2d`
+  - **Variants** (4 alternate versions):
+    - [debugger_set_pc@2x.png.198c5a77](bios/Other/Recalbox/.variants/debugger_set_pc@2x.png.198c5a77) (978 bytes) - SHA1: `198c5a7755152270ef915455b8db3581c2af11ea`, MD5: `a58e0d9302b41f935d06f0829dd21711`
+    - [debugger_set_pc@2x.png.808bc0ab](bios/Other/Recalbox/.variants/debugger_set_pc@2x.png.808bc0ab) (1,201 bytes) - SHA1: `808bc0abdc861b9975e338cf2b32a37a421e9009`, MD5: `be24e32462580793f25c9be578da2afd`
+    - [debugger_set_pc@2x.png.ad06be13](bios/Other/Recalbox/.variants/debugger_set_pc@2x.png.ad06be13) (1,085 bytes) - SHA1: `ad06be13b04bc426ebc975de0ae1586d4bdbe9ea`, MD5: `515459cad4c42f96e957d2314971d950`
+    - [debugger_set_pc@2x.png.de17f900](bios/Other/Recalbox/.variants/debugger_set_pc@2x.png.de17f900) (1,213 bytes) - SHA1: `de17f9005bf3cebd970b649a95c8d02d8fcf008c`, MD5: `c20c9497a6f9f354ad163328b057bdc8`
+- **[debugger_set_pc@2x.png.198c5a77](bios/Other/Recalbox/.variants/debugger_set_pc@2x.png.198c5a77)** (978 bytes)
+  - SHA1: `198c5a7755152270ef915455b8db3581c2af11ea`
+  - MD5: `a58e0d9302b41f935d06f0829dd21711`
+  - CRC32: `0c9031ab`
+- **[debugger_set_pc@2x.png.808bc0ab](bios/Other/Recalbox/.variants/debugger_set_pc@2x.png.808bc0ab)** (1,201 bytes)
+  - SHA1: `808bc0abdc861b9975e338cf2b32a37a421e9009`
+  - MD5: `be24e32462580793f25c9be578da2afd`
+  - CRC32: `1b8a3f80`
+- **[debugger_set_pc@2x.png.ad06be13](bios/Other/Recalbox/.variants/debugger_set_pc@2x.png.ad06be13)** (1,085 bytes)
+  - SHA1: `ad06be13b04bc426ebc975de0ae1586d4bdbe9ea`
+  - MD5: `515459cad4c42f96e957d2314971d950`
+  - CRC32: `383617a3`
+- **[debugger_set_pc@2x.png.de17f900](bios/Other/Recalbox/.variants/debugger_set_pc@2x.png.de17f900)** (1,213 bytes)
+  - SHA1: `de17f9005bf3cebd970b649a95c8d02d8fcf008c`
+  - MD5: `c20c9497a6f9f354ad163328b057bdc8`
+  - CRC32: `4947027a`
+- **[debugger_set_pc@4x.png](bios/Other/Recalbox/debugger_set_pc@4x.png)** (2,434 bytes)
+  - SHA1: `48ec064997424da08fe6357bd036c463897aef85`
+  - MD5: `e94136d255440b992046f6fc2c2a904c`
+  - CRC32: `666c9893`
+  - **Variants** (4 alternate versions):
+    - [debugger_set_pc@4x.png.94a818a3](bios/Other/Recalbox/.variants/debugger_set_pc@4x.png.94a818a3) (1,881 bytes) - SHA1: `94a818a31dbbac25f8734666a25587beed451fa2`, MD5: `f430cfbc0de47bfb564d4ad9bc132680`
+    - [debugger_set_pc@4x.png.b5055d1f](bios/Other/Recalbox/.variants/debugger_set_pc@4x.png.b5055d1f) (2,320 bytes) - SHA1: `b5055d1fa47ab98f43d164492d786469e73647ee`, MD5: `83575d550ea9821b592a07de7f8cae03`
+    - [debugger_set_pc@4x.png.d88d337c](bios/Other/Recalbox/.variants/debugger_set_pc@4x.png.d88d337c) (3,159 bytes) - SHA1: `d88d337c9e33007363819c01f3f13b8bf17cc2b1`, MD5: `1388247ce742f184fdc8649a1865f401`
+    - [debugger_set_pc@4x.png.e14ee6fb](bios/Other/Recalbox/.variants/debugger_set_pc@4x.png.e14ee6fb) (3,014 bytes) - SHA1: `e14ee6fb3db1dacbff2e12655600247bfd8173be`, MD5: `3a1a73cfddab12a1fa912075336d1a8d`
+- **[debugger_set_pc@4x.png.94a818a3](bios/Other/Recalbox/.variants/debugger_set_pc@4x.png.94a818a3)** (1,881 bytes)
+  - SHA1: `94a818a31dbbac25f8734666a25587beed451fa2`
+  - MD5: `f430cfbc0de47bfb564d4ad9bc132680`
+  - CRC32: `fd510e20`
+- **[debugger_set_pc@4x.png.b5055d1f](bios/Other/Recalbox/.variants/debugger_set_pc@4x.png.b5055d1f)** (2,320 bytes)
+  - SHA1: `b5055d1fa47ab98f43d164492d786469e73647ee`
+  - MD5: `83575d550ea9821b592a07de7f8cae03`
+  - CRC32: `87033213`
+- **[debugger_set_pc@4x.png.d88d337c](bios/Other/Recalbox/.variants/debugger_set_pc@4x.png.d88d337c)** (3,159 bytes)
+  - SHA1: `d88d337c9e33007363819c01f3f13b8bf17cc2b1`
+  - MD5: `1388247ce742f184fdc8649a1865f401`
+  - CRC32: `9ba2d713`
+- **[debugger_set_pc@4x.png.e14ee6fb](bios/Other/Recalbox/.variants/debugger_set_pc@4x.png.e14ee6fb)** (3,014 bytes)
+  - SHA1: `e14ee6fb3db1dacbff2e12655600247bfd8173be`
+  - MD5: `3a1a73cfddab12a1fa912075336d1a8d`
+  - CRC32: `9ac6a02f`
+- **[debugger_show_pc.png](bios/Other/Recalbox/debugger_show_pc.png)** (649 bytes)
+  - SHA1: `17cf49342a5d59c81238bcecd6e2caee639e64c8`
+  - MD5: `ad4a1939465d167b26771e1469b70e00`
+  - CRC32: `89be3bd8`
+  - **Variants** (4 alternate versions):
+    - [debugger_show_pc.png.6327d1be](bios/Other/Recalbox/.variants/debugger_show_pc.png.6327d1be) (724 bytes) - SHA1: `6327d1be25283fccadff942da3c50099fcfa0758`, MD5: `4ead9a6e31b719c6234a7292f6296336`
+    - [debugger_show_pc.png.ccee65a2](bios/Other/Recalbox/.variants/debugger_show_pc.png.ccee65a2) (589 bytes) - SHA1: `ccee65a2e86dd66e7d179c11f74c4af132160687`, MD5: `9da4cee423e7dccec59a021f936bf3c9`
+    - [debugger_show_pc.png.e1883c5e](bios/Other/Recalbox/.variants/debugger_show_pc.png.e1883c5e) (693 bytes) - SHA1: `e1883c5eec7cb0160667f48b2886eff591c2fc98`, MD5: `1b6da08386d240176f717a857027d3b6`
+    - [debugger_show_pc.png.ee2ee618](bios/Other/Recalbox/.variants/debugger_show_pc.png.ee2ee618) (703 bytes) - SHA1: `ee2ee618fd6eba45aaadeb75b33c4d6eaf97bc48`, MD5: `2b60d72b6a07b6354897533dd33a909c`
+- **[debugger_show_pc.png.6327d1be](bios/Other/Recalbox/.variants/debugger_show_pc.png.6327d1be)** (724 bytes)
+  - SHA1: `6327d1be25283fccadff942da3c50099fcfa0758`
+  - MD5: `4ead9a6e31b719c6234a7292f6296336`
+  - CRC32: `b303d1a3`
+- **[debugger_show_pc.png.ccee65a2](bios/Other/Recalbox/.variants/debugger_show_pc.png.ccee65a2)** (589 bytes)
+  - SHA1: `ccee65a2e86dd66e7d179c11f74c4af132160687`
+  - MD5: `9da4cee423e7dccec59a021f936bf3c9`
+  - CRC32: `620f1858`
+- **[debugger_show_pc.png.e1883c5e](bios/Other/Recalbox/.variants/debugger_show_pc.png.e1883c5e)** (693 bytes)
+  - SHA1: `e1883c5eec7cb0160667f48b2886eff591c2fc98`
+  - MD5: `1b6da08386d240176f717a857027d3b6`
+  - CRC32: `380c12fb`
+- **[debugger_show_pc.png.ee2ee618](bios/Other/Recalbox/.variants/debugger_show_pc.png.ee2ee618)** (703 bytes)
+  - SHA1: `ee2ee618fd6eba45aaadeb75b33c4d6eaf97bc48`
+  - MD5: `2b60d72b6a07b6354897533dd33a909c`
+  - CRC32: `391336a6`
+- **[debugger_show_pc@2x.png](bios/Other/Recalbox/debugger_show_pc@2x.png)** (1,342 bytes)
+  - SHA1: `ec5809311385e16e5c619a983da6dafbb3974b15`
+  - MD5: `af0a2d862a1b02a7c4bdf06076af25da`
+  - CRC32: `27c3e466`
+  - **Variants** (4 alternate versions):
+    - [debugger_show_pc@2x.png.695bf355](bios/Other/Recalbox/.variants/debugger_show_pc@2x.png.695bf355) (1,387 bytes) - SHA1: `695bf3556c328cc51c1d1f961917155f7836059e`, MD5: `9875513fea0c6165f152f279370e7f45`
+    - [debugger_show_pc@2x.png.cee593be](bios/Other/Recalbox/.variants/debugger_show_pc@2x.png.cee593be) (1,571 bytes) - SHA1: `cee593bee3a621b620b1997aacb3526e3e3944b4`, MD5: `760632a45143d297110278a969f8655b`
+    - [debugger_show_pc@2x.png.e61a4c4b](bios/Other/Recalbox/.variants/debugger_show_pc@2x.png.e61a4c4b) (1,580 bytes) - SHA1: `e61a4c4b625f6160ac26705ff87fbd2b5c4c8b11`, MD5: `291ee145b3f12320a2b7b025201fcd91`
+    - [debugger_show_pc@2x.png.f8e20111](bios/Other/Recalbox/.variants/debugger_show_pc@2x.png.f8e20111) (1,293 bytes) - SHA1: `f8e20111a95cb86556dfbb14c759f98df9be0c92`, MD5: `12bfb0ce2dbb98b4694016175c4ab955`
+- **[debugger_show_pc@2x.png.695bf355](bios/Other/Recalbox/.variants/debugger_show_pc@2x.png.695bf355)** (1,387 bytes)
+  - SHA1: `695bf3556c328cc51c1d1f961917155f7836059e`
+  - MD5: `9875513fea0c6165f152f279370e7f45`
+  - CRC32: `4e31a5d0`
+- **[debugger_show_pc@2x.png.cee593be](bios/Other/Recalbox/.variants/debugger_show_pc@2x.png.cee593be)** (1,571 bytes)
+  - SHA1: `cee593bee3a621b620b1997aacb3526e3e3944b4`
+  - MD5: `760632a45143d297110278a969f8655b`
+  - CRC32: `30b1a136`
+- **[debugger_show_pc@2x.png.e61a4c4b](bios/Other/Recalbox/.variants/debugger_show_pc@2x.png.e61a4c4b)** (1,580 bytes)
+  - SHA1: `e61a4c4b625f6160ac26705ff87fbd2b5c4c8b11`
+  - MD5: `291ee145b3f12320a2b7b025201fcd91`
+  - CRC32: `0fa6b02c`
+- **[debugger_show_pc@2x.png.f8e20111](bios/Other/Recalbox/.variants/debugger_show_pc@2x.png.f8e20111)** (1,293 bytes)
+  - SHA1: `f8e20111a95cb86556dfbb14c759f98df9be0c92`
+  - MD5: `12bfb0ce2dbb98b4694016175c4ab955`
+  - CRC32: `e7311bc4`
+- **[debugger_show_pc@4x.png](bios/Other/Recalbox/debugger_show_pc@4x.png)** (2,275 bytes)
+  - SHA1: `f8acd51f98e5cde4c72c110524ac7bf76154f7fe`
+  - MD5: `b3ee0d9a3d361afe1dce6140ccbf3b74`
+  - CRC32: `cc81aa4a`
+  - **Variants** (4 alternate versions):
+    - [debugger_show_pc@4x.png.22779fa4](bios/Other/Recalbox/.variants/debugger_show_pc@4x.png.22779fa4) (4,186 bytes) - SHA1: `22779fa42f8c494710044363df88491e1aef31f5`, MD5: `b68aca1454eaa68002d3fd4530ab73b3`
+    - [debugger_show_pc@4x.png.45126abe](bios/Other/Recalbox/.variants/debugger_show_pc@4x.png.45126abe) (3,979 bytes) - SHA1: `45126abee1d57d3a5ca71d12f25bbf2b290fb7df`, MD5: `eba63dcc5b66558f970eea8293c780be`
+    - [debugger_show_pc@4x.png.54618403](bios/Other/Recalbox/.variants/debugger_show_pc@4x.png.54618403) (2,352 bytes) - SHA1: `546184035362b732a607354b2d84f3e56b4243c7`, MD5: `666aac37c2b8f70f17ec6df014cf0e40`
+    - [debugger_show_pc@4x.png.8922c2b1](bios/Other/Recalbox/.variants/debugger_show_pc@4x.png.8922c2b1) (2,941 bytes) - SHA1: `8922c2b1a1d0c7ba8e88cb727cfd79e6915bff43`, MD5: `e87bc298512c3ec0880ae0fa5341c73b`
+- **[debugger_show_pc@4x.png.22779fa4](bios/Other/Recalbox/.variants/debugger_show_pc@4x.png.22779fa4)** (4,186 bytes)
+  - SHA1: `22779fa42f8c494710044363df88491e1aef31f5`
+  - MD5: `b68aca1454eaa68002d3fd4530ab73b3`
+  - CRC32: `475a6aa5`
+- **[debugger_show_pc@4x.png.45126abe](bios/Other/Recalbox/.variants/debugger_show_pc@4x.png.45126abe)** (3,979 bytes)
+  - SHA1: `45126abee1d57d3a5ca71d12f25bbf2b290fb7df`
+  - MD5: `eba63dcc5b66558f970eea8293c780be`
+  - CRC32: `cef30c34`
+- **[debugger_show_pc@4x.png.54618403](bios/Other/Recalbox/.variants/debugger_show_pc@4x.png.54618403)** (2,352 bytes)
+  - SHA1: `546184035362b732a607354b2d84f3e56b4243c7`
+  - MD5: `666aac37c2b8f70f17ec6df014cf0e40`
+  - CRC32: `c769a159`
+- **[debugger_show_pc@4x.png.8922c2b1](bios/Other/Recalbox/.variants/debugger_show_pc@4x.png.8922c2b1)** (2,941 bytes)
+  - SHA1: `8922c2b1a1d0c7ba8e88cb727cfd79e6915bff43`
+  - MD5: `e87bc298512c3ec0880ae0fa5341c73b`
+  - CRC32: `42bccdb8`
+- **[debugger_skip.png](bios/Other/Recalbox/debugger_skip.png)** (534 bytes)
+  - SHA1: `012948a914ff360ee8e253ace3f9f6a37d1e7828`
+  - MD5: `7d656e16048bcd77ecdb05174bdec541`
+  - CRC32: `071c4203`
+  - **Variants** (4 alternate versions):
+    - [debugger_skip.png.0b84a8e2](bios/Other/Recalbox/.variants/debugger_skip.png.0b84a8e2) (582 bytes) - SHA1: `0b84a8e2aaca4511257f9fc748f67f3eb29b0add`, MD5: `d845cc64eff30c6114ac0d442c623d9d`
+    - [debugger_skip.png.2beb2413](bios/Other/Recalbox/.variants/debugger_skip.png.2beb2413) (462 bytes) - SHA1: `2beb241348ce2fa24b575338544807be2412f974`, MD5: `32f099a889e6cda56ca620b357b9f97f`
+    - [debugger_skip.png.39f382e9](bios/Other/Recalbox/.variants/debugger_skip.png.39f382e9) (572 bytes) - SHA1: `39f382e9b925fe283e8ac6bea4027f573e10a96e`, MD5: `e31fa8120c46914e0f4e5da28cd58ec8`
+    - [debugger_skip.png.ef93a0d8](bios/Other/Recalbox/.variants/debugger_skip.png.ef93a0d8) (549 bytes) - SHA1: `ef93a0d8eacca132c4dd4948c772c282b66679ea`, MD5: `a89e63655998bb218eae9de6bfa713fa`
+- **[debugger_skip.png.0b84a8e2](bios/Other/Recalbox/.variants/debugger_skip.png.0b84a8e2)** (582 bytes)
+  - SHA1: `0b84a8e2aaca4511257f9fc748f67f3eb29b0add`
+  - MD5: `d845cc64eff30c6114ac0d442c623d9d`
+  - CRC32: `8117d579`
+- **[debugger_skip.png.2beb2413](bios/Other/Recalbox/.variants/debugger_skip.png.2beb2413)** (462 bytes)
+  - SHA1: `2beb241348ce2fa24b575338544807be2412f974`
+  - MD5: `32f099a889e6cda56ca620b357b9f97f`
+  - CRC32: `ada7ee89`
+- **[debugger_skip.png.39f382e9](bios/Other/Recalbox/.variants/debugger_skip.png.39f382e9)** (572 bytes)
+  - SHA1: `39f382e9b925fe283e8ac6bea4027f573e10a96e`
+  - MD5: `e31fa8120c46914e0f4e5da28cd58ec8`
+  - CRC32: `fc5d3313`
+- **[debugger_skip.png.ef93a0d8](bios/Other/Recalbox/.variants/debugger_skip.png.ef93a0d8)** (549 bytes)
+  - SHA1: `ef93a0d8eacca132c4dd4948c772c282b66679ea`
+  - MD5: `a89e63655998bb218eae9de6bfa713fa`
+  - CRC32: `7dc6a93e`
+- **[debugger_skip@2x.png](bios/Other/Recalbox/debugger_skip@2x.png)** (1,246 bytes)
+  - SHA1: `c202bd763bc4f2de190495b62a01f5161c951329`
+  - MD5: `b4dda166f6dd41fefed38030461ff20a`
+  - CRC32: `17bcb68b`
+  - **Variants** (4 alternate versions):
+    - [debugger_skip@2x.png.0511ef4f](bios/Other/Recalbox/.variants/debugger_skip@2x.png.0511ef4f) (1,483 bytes) - SHA1: `0511ef4f2dc3c357bb66451ed23011c3423dff64`, MD5: `e0f614c33c8ea5ff3c4151ebc7790bc4`
+    - [debugger_skip@2x.png.434dc112](bios/Other/Recalbox/.variants/debugger_skip@2x.png.434dc112) (1,178 bytes) - SHA1: `434dc1129c459e0b1f8a4d5da8deb05b94ed303f`, MD5: `d800994f988da22f676ebb901438714a`
+    - [debugger_skip@2x.png.5807cd56](bios/Other/Recalbox/.variants/debugger_skip@2x.png.5807cd56) (1,258 bytes) - SHA1: `5807cd5617041e08657b8f1b0f1e4f7015c0bf8c`, MD5: `2a5ebe6ff89d01e4644eae448c4ec04c`
+    - [debugger_skip@2x.png.93313b18](bios/Other/Recalbox/.variants/debugger_skip@2x.png.93313b18) (1,469 bytes) - SHA1: `93313b187d3bf15550ea18d41296feb10d185ba5`, MD5: `c2798464fe65bb91e34145283bc6b99c`
+- **[debugger_skip@2x.png.0511ef4f](bios/Other/Recalbox/.variants/debugger_skip@2x.png.0511ef4f)** (1,483 bytes)
+  - SHA1: `0511ef4f2dc3c357bb66451ed23011c3423dff64`
+  - MD5: `e0f614c33c8ea5ff3c4151ebc7790bc4`
+  - CRC32: `0e5b784b`
+- **[debugger_skip@2x.png.434dc112](bios/Other/Recalbox/.variants/debugger_skip@2x.png.434dc112)** (1,178 bytes)
+  - SHA1: `434dc1129c459e0b1f8a4d5da8deb05b94ed303f`
+  - MD5: `d800994f988da22f676ebb901438714a`
+  - CRC32: `e91113f9`
+- **[debugger_skip@2x.png.5807cd56](bios/Other/Recalbox/.variants/debugger_skip@2x.png.5807cd56)** (1,258 bytes)
+  - SHA1: `5807cd5617041e08657b8f1b0f1e4f7015c0bf8c`
+  - MD5: `2a5ebe6ff89d01e4644eae448c4ec04c`
+  - CRC32: `703c868f`
+- **[debugger_skip@2x.png.93313b18](bios/Other/Recalbox/.variants/debugger_skip@2x.png.93313b18)** (1,469 bytes)
+  - SHA1: `93313b187d3bf15550ea18d41296feb10d185ba5`
+  - MD5: `c2798464fe65bb91e34145283bc6b99c`
+  - CRC32: `28972971`
+- **[debugger_skip@4x.png](bios/Other/Recalbox/debugger_skip@4x.png)** (2,188 bytes)
+  - SHA1: `450040edce08674fe70a655975b5961468aea96b`
+  - MD5: `9e36fe1e67c1c5a6fc98a81fe8f81645`
+  - CRC32: `40e28281`
+  - **Variants** (4 alternate versions):
+    - [debugger_skip@4x.png.7815d7be](bios/Other/Recalbox/.variants/debugger_skip@4x.png.7815d7be) (2,788 bytes) - SHA1: `7815d7be1ce063e88d1dfeffed43f8dabd9fa5d7`, MD5: `272b1f82c474704c2222cd16efef8931`
+    - [debugger_skip@4x.png.8c7e35d9](bios/Other/Recalbox/.variants/debugger_skip@4x.png.8c7e35d9) (2,325 bytes) - SHA1: `8c7e35d9e97f2ad53a416cabcadff2a5917dd18a`, MD5: `cefdbb5513fadb73da950fb882af48fd`
+    - [debugger_skip@4x.png.c4dadab6](bios/Other/Recalbox/.variants/debugger_skip@4x.png.c4dadab6) (4,054 bytes) - SHA1: `c4dadab6fdde24a151a9e182427961f089828bcd`, MD5: `a2ee6edeb3ac35c5fa3fbbe31cd3dad1`
+    - [debugger_skip@4x.png.f3645eac](bios/Other/Recalbox/.variants/debugger_skip@4x.png.f3645eac) (3,999 bytes) - SHA1: `f3645eacd9d0a077e82a98154a9ba672ec448b77`, MD5: `cf1a04b4b83ccb7d2539b08c1b54661d`
+- **[debugger_skip@4x.png.7815d7be](bios/Other/Recalbox/.variants/debugger_skip@4x.png.7815d7be)** (2,788 bytes)
+  - SHA1: `7815d7be1ce063e88d1dfeffed43f8dabd9fa5d7`
+  - MD5: `272b1f82c474704c2222cd16efef8931`
+  - CRC32: `acbec95a`
+- **[debugger_skip@4x.png.8c7e35d9](bios/Other/Recalbox/.variants/debugger_skip@4x.png.8c7e35d9)** (2,325 bytes)
+  - SHA1: `8c7e35d9e97f2ad53a416cabcadff2a5917dd18a`
+  - MD5: `cefdbb5513fadb73da950fb882af48fd`
+  - CRC32: `cacf21d6`
+- **[debugger_skip@4x.png.c4dadab6](bios/Other/Recalbox/.variants/debugger_skip@4x.png.c4dadab6)** (4,054 bytes)
+  - SHA1: `c4dadab6fdde24a151a9e182427961f089828bcd`
+  - MD5: `a2ee6edeb3ac35c5fa3fbbe31cd3dad1`
+  - CRC32: `20042bcb`
+- **[debugger_skip@4x.png.f3645eac](bios/Other/Recalbox/.variants/debugger_skip@4x.png.f3645eac)** (3,999 bytes)
+  - SHA1: `f3645eacd9d0a077e82a98154a9ba672ec448b77`
+  - MD5: `cf1a04b4b83ccb7d2539b08c1b54661d`
+  - CRC32: `5cb0558c`
+- **[debugger_step_in.png](bios/Other/Recalbox/debugger_step_in.png)** (700 bytes)
+  - SHA1: `a794f689ab3032d76175421f328ffb8ebda777be`
+  - MD5: `964e9ef78a5d2eab1385c3a417d49586`
+  - CRC32: `96eb22d6`
+  - **Variants** (4 alternate versions):
+    - [debugger_step_in.png.2a90630a](bios/Other/Recalbox/.variants/debugger_step_in.png.2a90630a) (573 bytes) - SHA1: `2a90630a298f80e5f20b3ba7cb9cd5fc5b74dda6`, MD5: `a3f85da76c563f2f3be2f46f6f210bb0`
+    - [debugger_step_in.png.6a27ffdf](bios/Other/Recalbox/.variants/debugger_step_in.png.6a27ffdf) (711 bytes) - SHA1: `6a27ffdf8f4999b70bc27f2c5c985f32a42c0804`, MD5: `57820e94b8b9d99b2ca82ba0e9b0a562`
+    - [debugger_step_in.png.cfa1c1dd](bios/Other/Recalbox/.variants/debugger_step_in.png.cfa1c1dd) (726 bytes) - SHA1: `cfa1c1dde11119be1c479894595c6d48798b43be`, MD5: `bd6357c86d0b7305d9080bc144196ba9`
+    - [debugger_step_in.png.e2c8860e](bios/Other/Recalbox/.variants/debugger_step_in.png.e2c8860e) (720 bytes) - SHA1: `e2c8860eb6f95a211400df69ee9b898cdeae2b56`, MD5: `cbcbd77cc65f16552789abe00b3255a4`
+- **[debugger_step_in.png.2a90630a](bios/Other/Recalbox/.variants/debugger_step_in.png.2a90630a)** (573 bytes)
+  - SHA1: `2a90630a298f80e5f20b3ba7cb9cd5fc5b74dda6`
+  - MD5: `a3f85da76c563f2f3be2f46f6f210bb0`
+  - CRC32: `ee21746a`
+- **[debugger_step_in.png.6a27ffdf](bios/Other/Recalbox/.variants/debugger_step_in.png.6a27ffdf)** (711 bytes)
+  - SHA1: `6a27ffdf8f4999b70bc27f2c5c985f32a42c0804`
+  - MD5: `57820e94b8b9d99b2ca82ba0e9b0a562`
+  - CRC32: `41f53ee5`
+- **[debugger_step_in.png.cfa1c1dd](bios/Other/Recalbox/.variants/debugger_step_in.png.cfa1c1dd)** (726 bytes)
+  - SHA1: `cfa1c1dde11119be1c479894595c6d48798b43be`
+  - MD5: `bd6357c86d0b7305d9080bc144196ba9`
+  - CRC32: `48c76f12`
+- **[debugger_step_in.png.e2c8860e](bios/Other/Recalbox/.variants/debugger_step_in.png.e2c8860e)** (720 bytes)
+  - SHA1: `e2c8860eb6f95a211400df69ee9b898cdeae2b56`
+  - MD5: `cbcbd77cc65f16552789abe00b3255a4`
+  - CRC32: `93c17470`
+- **[debugger_step_in@2x.png](bios/Other/Recalbox/debugger_step_in@2x.png)** (1,406 bytes)
+  - SHA1: `1e6bd8a3fd9b5c7d9df1be3ba1b8db2971ad257f`
+  - MD5: `a77bfdca0cfad4e7eafca973b25be6b1`
+  - CRC32: `e52332e7`
+  - **Variants** (4 alternate versions):
+    - [debugger_step_in@2x.png.03fb9315](bios/Other/Recalbox/.variants/debugger_step_in@2x.png.03fb9315) (1,570 bytes) - SHA1: `03fb9315e11a01042acaea1c2c883ab9d5950d8c`, MD5: `b5c0841a1c2478018f57bd710d839598`
+    - [debugger_step_in@2x.png.172e8c16](bios/Other/Recalbox/.variants/debugger_step_in@2x.png.172e8c16) (1,369 bytes) - SHA1: `172e8c16fff3f2e0e344abb4b8a612bf7a8c8717`, MD5: `332ae336e4da7a094c62b77c4e153c57`
+    - [debugger_step_in@2x.png.8cf61eb0](bios/Other/Recalbox/.variants/debugger_step_in@2x.png.8cf61eb0) (1,566 bytes) - SHA1: `8cf61eb02fe74dbeb4323f3a3ed00055d3a9966d`, MD5: `13dcdab5e990b2a0e8f1adfa04d4818c`
+    - [debugger_step_in@2x.png.8e0ce932](bios/Other/Recalbox/.variants/debugger_step_in@2x.png.8e0ce932) (1,254 bytes) - SHA1: `8e0ce932aab72ce8ca494744bb405e3423ee451f`, MD5: `46e6a8d643f2f955e8a3490afef510e0`
+- **[debugger_step_in@2x.png.03fb9315](bios/Other/Recalbox/.variants/debugger_step_in@2x.png.03fb9315)** (1,570 bytes)
+  - SHA1: `03fb9315e11a01042acaea1c2c883ab9d5950d8c`
+  - MD5: `b5c0841a1c2478018f57bd710d839598`
+  - CRC32: `fc5b1d96`
+- **[debugger_step_in@2x.png.172e8c16](bios/Other/Recalbox/.variants/debugger_step_in@2x.png.172e8c16)** (1,369 bytes)
+  - SHA1: `172e8c16fff3f2e0e344abb4b8a612bf7a8c8717`
+  - MD5: `332ae336e4da7a094c62b77c4e153c57`
+  - CRC32: `51bda5a4`
+- **[debugger_step_in@2x.png.8cf61eb0](bios/Other/Recalbox/.variants/debugger_step_in@2x.png.8cf61eb0)** (1,566 bytes)
+  - SHA1: `8cf61eb02fe74dbeb4323f3a3ed00055d3a9966d`
+  - MD5: `13dcdab5e990b2a0e8f1adfa04d4818c`
+  - CRC32: `e11981f9`
+- **[debugger_step_in@2x.png.8e0ce932](bios/Other/Recalbox/.variants/debugger_step_in@2x.png.8e0ce932)** (1,254 bytes)
+  - SHA1: `8e0ce932aab72ce8ca494744bb405e3423ee451f`
+  - MD5: `46e6a8d643f2f955e8a3490afef510e0`
+  - CRC32: `747e030a`
+- **[debugger_step_in@4x.png](bios/Other/Recalbox/debugger_step_in@4x.png)** (2,227 bytes)
+  - SHA1: `21aa38bb709366dee071e3400f080a7fca436129`
+  - MD5: `809dbe9ccbcacdfe1077d1b1684070a9`
+  - CRC32: `317abbac`
+  - **Variants** (4 alternate versions):
+    - [debugger_step_in@4x.png.0ece84ea](bios/Other/Recalbox/.variants/debugger_step_in@4x.png.0ece84ea) (2,720 bytes) - SHA1: `0ece84eafdaad9117b77d1dccb82b6eebf473068`, MD5: `c554b20503adb99d269b7066f18b2141`
+    - [debugger_step_in@4x.png.5cc6e853](bios/Other/Recalbox/.variants/debugger_step_in@4x.png.5cc6e853) (3,867 bytes) - SHA1: `5cc6e8530dfa560797751fb423814ebf18b1a6b9`, MD5: `abda951c1501edd03be5da1a2c076cc6`
+    - [debugger_step_in@4x.png.957b276f](bios/Other/Recalbox/.variants/debugger_step_in@4x.png.957b276f) (2,325 bytes) - SHA1: `957b276f45d339e0ec3fa715204efb463fd54248`, MD5: `b54b85a4df6cc676f06a75246e4f2160`
+    - [debugger_step_in@4x.png.ad9e6a71](bios/Other/Recalbox/.variants/debugger_step_in@4x.png.ad9e6a71) (4,009 bytes) - SHA1: `ad9e6a71f10e25f9d47ad675d2ae1e5bb59a3d66`, MD5: `db7380db64c37e023a135d8ec010af73`
+- **[debugger_step_in@4x.png.0ece84ea](bios/Other/Recalbox/.variants/debugger_step_in@4x.png.0ece84ea)** (2,720 bytes)
+  - SHA1: `0ece84eafdaad9117b77d1dccb82b6eebf473068`
+  - MD5: `c554b20503adb99d269b7066f18b2141`
+  - CRC32: `afe13e8b`
+- **[debugger_step_in@4x.png.5cc6e853](bios/Other/Recalbox/.variants/debugger_step_in@4x.png.5cc6e853)** (3,867 bytes)
+  - SHA1: `5cc6e8530dfa560797751fb423814ebf18b1a6b9`
+  - MD5: `abda951c1501edd03be5da1a2c076cc6`
+  - CRC32: `089cf429`
+- **[debugger_step_in@4x.png.957b276f](bios/Other/Recalbox/.variants/debugger_step_in@4x.png.957b276f)** (2,325 bytes)
+  - SHA1: `957b276f45d339e0ec3fa715204efb463fd54248`
+  - MD5: `b54b85a4df6cc676f06a75246e4f2160`
+  - CRC32: `1c689460`
+- **[debugger_step_in@4x.png.ad9e6a71](bios/Other/Recalbox/.variants/debugger_step_in@4x.png.ad9e6a71)** (4,009 bytes)
+  - SHA1: `ad9e6a71f10e25f9d47ad675d2ae1e5bb59a3d66`
+  - MD5: `db7380db64c37e023a135d8ec010af73`
+  - CRC32: `bb1f8879`
+- **[debugger_step_out.png](bios/Other/Recalbox/debugger_step_out.png)** (664 bytes)
+  - SHA1: `c3e1546d3a12ace4dae04705fc0697d0ec95fdb8`
+  - MD5: `d3e13f814678b38667a50b3caf3aa21d`
+  - CRC32: `c0543f3f`
+  - **Variants** (4 alternate versions):
+    - [debugger_step_out.png.17b4e499](bios/Other/Recalbox/.variants/debugger_step_out.png.17b4e499) (722 bytes) - SHA1: `17b4e499cd148ff2728cdbeec64941e11cc2e7bd`, MD5: `d1c234264ad9f1c5824610a6b33a1aaf`
+    - [debugger_step_out.png.4b39ccbd](bios/Other/Recalbox/.variants/debugger_step_out.png.4b39ccbd) (713 bytes) - SHA1: `4b39ccbdf8ebeaa19b83b52772bb1934d5b9cadb`, MD5: `53780d4f24ecf33f8a983995bc00adbf`
+    - [debugger_step_out.png.4c38419d](bios/Other/Recalbox/.variants/debugger_step_out.png.4c38419d) (600 bytes) - SHA1: `4c38419dd20115d5982eae8b2723e774311bc317`, MD5: `8eb0824d9375c42f50099e927684c6b9`
+    - [debugger_step_out.png.c6bc8900](bios/Other/Recalbox/.variants/debugger_step_out.png.c6bc8900) (699 bytes) - SHA1: `c6bc890053c673e28e285d40500f916677736a8a`, MD5: `d9d337d088d5bf3506e5402722a4bc51`
+- **[debugger_step_out.png.17b4e499](bios/Other/Recalbox/.variants/debugger_step_out.png.17b4e499)** (722 bytes)
+  - SHA1: `17b4e499cd148ff2728cdbeec64941e11cc2e7bd`
+  - MD5: `d1c234264ad9f1c5824610a6b33a1aaf`
+  - CRC32: `7bb539c5`
+- **[debugger_step_out.png.4b39ccbd](bios/Other/Recalbox/.variants/debugger_step_out.png.4b39ccbd)** (713 bytes)
+  - SHA1: `4b39ccbdf8ebeaa19b83b52772bb1934d5b9cadb`
+  - MD5: `53780d4f24ecf33f8a983995bc00adbf`
+  - CRC32: `9d319a7a`
+- **[debugger_step_out.png.4c38419d](bios/Other/Recalbox/.variants/debugger_step_out.png.4c38419d)** (600 bytes)
+  - SHA1: `4c38419dd20115d5982eae8b2723e774311bc317`
+  - MD5: `8eb0824d9375c42f50099e927684c6b9`
+  - CRC32: `ef529535`
+- **[debugger_step_out.png.c6bc8900](bios/Other/Recalbox/.variants/debugger_step_out.png.c6bc8900)** (699 bytes)
+  - SHA1: `c6bc890053c673e28e285d40500f916677736a8a`
+  - MD5: `d9d337d088d5bf3506e5402722a4bc51`
+  - CRC32: `ebd6b2d4`
+- **[debugger_step_out@2x.png](bios/Other/Recalbox/debugger_step_out@2x.png)** (1,549 bytes)
+  - SHA1: `7ca1cb72d12569151df07f26c5d5a6cc72eb1786`
+  - MD5: `86cd57fba01586cae1370f27aaeb7697`
+  - CRC32: `964170af`
+  - **Variants** (4 alternate versions):
+    - [debugger_step_out@2x.png.1070e57f](bios/Other/Recalbox/.variants/debugger_step_out@2x.png.1070e57f) (1,560 bytes) - SHA1: `1070e57f20848269277a31e5dbc257737b3ba98d`, MD5: `67878671cb16052afd4365262f69a66d`
+    - [debugger_step_out@2x.png.29d009c6](bios/Other/Recalbox/.variants/debugger_step_out@2x.png.29d009c6) (1,722 bytes) - SHA1: `29d009c6eef8eba9db8cec90a6503175f7162d36`, MD5: `306359e0b162f660d1c78e94c19551a8`
+    - [debugger_step_out@2x.png.45a04b33](bios/Other/Recalbox/.variants/debugger_step_out@2x.png.45a04b33) (1,340 bytes) - SHA1: `45a04b33288b46fcc7c3e91840afd7d252ef1e15`, MD5: `cb03101986c220864bc4c8cf456cf65d`
+    - [debugger_step_out@2x.png.86778ce5](bios/Other/Recalbox/.variants/debugger_step_out@2x.png.86778ce5) (1,714 bytes) - SHA1: `86778ce53b6949c57427c7ded0db583ef3b55540`, MD5: `52b714af96f6df91148e8a6da2912d5f`
+- **[debugger_step_out@2x.png.1070e57f](bios/Other/Recalbox/.variants/debugger_step_out@2x.png.1070e57f)** (1,560 bytes)
+  - SHA1: `1070e57f20848269277a31e5dbc257737b3ba98d`
+  - MD5: `67878671cb16052afd4365262f69a66d`
+  - CRC32: `c41a1b3f`
+- **[debugger_step_out@2x.png.29d009c6](bios/Other/Recalbox/.variants/debugger_step_out@2x.png.29d009c6)** (1,722 bytes)
+  - SHA1: `29d009c6eef8eba9db8cec90a6503175f7162d36`
+  - MD5: `306359e0b162f660d1c78e94c19551a8`
+  - CRC32: `e4db4289`
+- **[debugger_step_out@2x.png.45a04b33](bios/Other/Recalbox/.variants/debugger_step_out@2x.png.45a04b33)** (1,340 bytes)
+  - SHA1: `45a04b33288b46fcc7c3e91840afd7d252ef1e15`
+  - MD5: `cb03101986c220864bc4c8cf456cf65d`
+  - CRC32: `66b5ed6a`
+- **[debugger_step_out@2x.png.86778ce5](bios/Other/Recalbox/.variants/debugger_step_out@2x.png.86778ce5)** (1,714 bytes)
+  - SHA1: `86778ce53b6949c57427c7ded0db583ef3b55540`
+  - MD5: `52b714af96f6df91148e8a6da2912d5f`
+  - CRC32: `f31791e2`
+- **[debugger_step_out@4x.png](bios/Other/Recalbox/debugger_step_out@4x.png)** (2,503 bytes)
+  - SHA1: `922ece9ce9dc659dbe5be53695660ba785f2026d`
+  - MD5: `a682a8a4921f9427d84588dcb47e0eb7`
+  - CRC32: `06bf7157`
+  - **Variants** (4 alternate versions):
+    - [debugger_step_out@4x.png.253d931b](bios/Other/Recalbox/.variants/debugger_step_out@4x.png.253d931b) (4,596 bytes) - SHA1: `253d931b0560f4b12e22048a4b6932e7a6f45cad`, MD5: `b2754d088d142843d70a86ead006aad3`
+    - [debugger_step_out@4x.png.2a878949](bios/Other/Recalbox/.variants/debugger_step_out@4x.png.2a878949) (4,416 bytes) - SHA1: `2a878949be59413400674827412b1d0d758a6fd0`, MD5: `a91a3edfa34e8adde3001507cc253900`
+    - [debugger_step_out@4x.png.4c4d52d1](bios/Other/Recalbox/.variants/debugger_step_out@4x.png.4c4d52d1) (3,106 bytes) - SHA1: `4c4d52d15bc4839e8149f18fe2eeb9ff093b001a`, MD5: `5f06478fa22ee4bf5517215465d45230`
+    - [debugger_step_out@4x.png.e47af94e](bios/Other/Recalbox/.variants/debugger_step_out@4x.png.e47af94e) (2,633 bytes) - SHA1: `e47af94e9f0a2db6d7a7bce2b23e4b44f019ec91`, MD5: `7f77a1ea884547eeb3f30b0aa1efb5f0`
+- **[debugger_step_out@4x.png.253d931b](bios/Other/Recalbox/.variants/debugger_step_out@4x.png.253d931b)** (4,596 bytes)
+  - SHA1: `253d931b0560f4b12e22048a4b6932e7a6f45cad`
+  - MD5: `b2754d088d142843d70a86ead006aad3`
+  - CRC32: `2cbcc9e9`
+- **[debugger_step_out@4x.png.2a878949](bios/Other/Recalbox/.variants/debugger_step_out@4x.png.2a878949)** (4,416 bytes)
+  - SHA1: `2a878949be59413400674827412b1d0d758a6fd0`
+  - MD5: `a91a3edfa34e8adde3001507cc253900`
+  - CRC32: `ca0b0968`
+- **[debugger_step_out@4x.png.4c4d52d1](bios/Other/Recalbox/.variants/debugger_step_out@4x.png.4c4d52d1)** (3,106 bytes)
+  - SHA1: `4c4d52d15bc4839e8149f18fe2eeb9ff093b001a`
+  - MD5: `5f06478fa22ee4bf5517215465d45230`
+  - CRC32: `c9c8905c`
+- **[debugger_step_out@4x.png.e47af94e](bios/Other/Recalbox/.variants/debugger_step_out@4x.png.e47af94e)** (2,633 bytes)
+  - SHA1: `e47af94e9f0a2db6d7a7bce2b23e4b44f019ec91`
+  - MD5: `7f77a1ea884547eeb3f30b0aa1efb5f0`
+  - CRC32: `882e2834`
+- **[debugger_step_over.png](bios/Other/Recalbox/debugger_step_over.png)** (843 bytes)
+  - SHA1: `cd4fb4c9d6872bdad118c9c325d55af8847d4cda`
+  - MD5: `383f66a6f6450043f1d1385b670b499a`
+  - CRC32: `8821fc27`
+  - **Variants** (4 alternate versions):
+    - [debugger_step_over.png.0a45eeb7](bios/Other/Recalbox/.variants/debugger_step_over.png.0a45eeb7) (895 bytes) - SHA1: `0a45eeb75f790317f0043dfa21d4d3e14ea1b9db`, MD5: `5c296a0bd737245959d5509db3e18234`
+    - [debugger_step_over.png.30812e14](bios/Other/Recalbox/.variants/debugger_step_over.png.30812e14) (883 bytes) - SHA1: `30812e14e075842d3c60eec60f822b545751c8a5`, MD5: `fdf9ee3da274a2c0bcc77708ca006cb3`
+    - [debugger_step_over.png.50dec63f](bios/Other/Recalbox/.variants/debugger_step_over.png.50dec63f) (868 bytes) - SHA1: `50dec63f35e4458453dd8a3380dd5d2c17d410b2`, MD5: `5c0713e0f10523998d6332f7a501e748`
+    - [debugger_step_over.png.616751de](bios/Other/Recalbox/.variants/debugger_step_over.png.616751de) (703 bytes) - SHA1: `616751deec2b32ba5db069eeb31103d209fa616d`, MD5: `947134f45eb79c1595971c397ac0ee5b`
+- **[debugger_step_over.png.0a45eeb7](bios/Other/Recalbox/.variants/debugger_step_over.png.0a45eeb7)** (895 bytes)
+  - SHA1: `0a45eeb75f790317f0043dfa21d4d3e14ea1b9db`
+  - MD5: `5c296a0bd737245959d5509db3e18234`
+  - CRC32: `7905cb29`
+- **[debugger_step_over.png.30812e14](bios/Other/Recalbox/.variants/debugger_step_over.png.30812e14)** (883 bytes)
+  - SHA1: `30812e14e075842d3c60eec60f822b545751c8a5`
+  - MD5: `fdf9ee3da274a2c0bcc77708ca006cb3`
+  - CRC32: `0bc56366`
+- **[debugger_step_over.png.50dec63f](bios/Other/Recalbox/.variants/debugger_step_over.png.50dec63f)** (868 bytes)
+  - SHA1: `50dec63f35e4458453dd8a3380dd5d2c17d410b2`
+  - MD5: `5c0713e0f10523998d6332f7a501e748`
+  - CRC32: `40d3b0b8`
+- **[debugger_step_over.png.616751de](bios/Other/Recalbox/.variants/debugger_step_over.png.616751de)** (703 bytes)
+  - SHA1: `616751deec2b32ba5db069eeb31103d209fa616d`
+  - MD5: `947134f45eb79c1595971c397ac0ee5b`
+  - CRC32: `bb9b1f1f`
+- **[debugger_step_over@2x.png](bios/Other/Recalbox/debugger_step_over@2x.png)** (1,612 bytes)
+  - SHA1: `a484ee9ee0e982f9712609523f5d2650c1951908`
+  - MD5: `318ce5422145ca848d815832f435cc31`
+  - CRC32: `195cfccc`
+  - **Variants** (4 alternate versions):
+    - [debugger_step_over@2x.png.217c916f](bios/Other/Recalbox/.variants/debugger_step_over@2x.png.217c916f) (1,818 bytes) - SHA1: `217c916f04ee989978d8c230aeef73266bfa34f1`, MD5: `bddfc16dc61b08325d2b63515fc395e7`
+    - [debugger_step_over@2x.png.5a214534](bios/Other/Recalbox/.variants/debugger_step_over@2x.png.5a214534) (1,402 bytes) - SHA1: `5a214534184dff82f3c3826265c8f296bff7e9cb`, MD5: `e52758fd6b114cdc168b9637529575dd`
+    - [debugger_step_over@2x.png.d74057e0](bios/Other/Recalbox/.variants/debugger_step_over@2x.png.d74057e0) (1,866 bytes) - SHA1: `d74057e0f65240109a3cefc029a2ce3308b556bb`, MD5: `a82ea0a76f7a030a42fc220b158d4f77`
+    - [debugger_step_over@2x.png.ecbc24aa](bios/Other/Recalbox/.variants/debugger_step_over@2x.png.ecbc24aa) (1,576 bytes) - SHA1: `ecbc24aa245a7fb1facbeb5dd94f170aa8a10748`, MD5: `6dd59b684a0c76c7c3b08b048b17aecc`
+- **[debugger_step_over@2x.png.217c916f](bios/Other/Recalbox/.variants/debugger_step_over@2x.png.217c916f)** (1,818 bytes)
+  - SHA1: `217c916f04ee989978d8c230aeef73266bfa34f1`
+  - MD5: `bddfc16dc61b08325d2b63515fc395e7`
+  - CRC32: `0cac490c`
+- **[debugger_step_over@2x.png.5a214534](bios/Other/Recalbox/.variants/debugger_step_over@2x.png.5a214534)** (1,402 bytes)
+  - SHA1: `5a214534184dff82f3c3826265c8f296bff7e9cb`
+  - MD5: `e52758fd6b114cdc168b9637529575dd`
+  - CRC32: `ec192e70`
+- **[debugger_step_over@2x.png.d74057e0](bios/Other/Recalbox/.variants/debugger_step_over@2x.png.d74057e0)** (1,866 bytes)
+  - SHA1: `d74057e0f65240109a3cefc029a2ce3308b556bb`
+  - MD5: `a82ea0a76f7a030a42fc220b158d4f77`
+  - CRC32: `564f216f`
+- **[debugger_step_over@2x.png.ecbc24aa](bios/Other/Recalbox/.variants/debugger_step_over@2x.png.ecbc24aa)** (1,576 bytes)
+  - SHA1: `ecbc24aa245a7fb1facbeb5dd94f170aa8a10748`
+  - MD5: `6dd59b684a0c76c7c3b08b048b17aecc`
+  - CRC32: `cc9adb00`
+- **[debugger_step_over@4x.png](bios/Other/Recalbox/debugger_step_over@4x.png)** (2,583 bytes)
+  - SHA1: `53a7279428fc16d8932fb1a82a6812bbaba3763b`
+  - MD5: `9a6c11bcacff6436f5131ed813e8ea10`
+  - CRC32: `96216450`
+  - **Variants** (4 alternate versions):
+    - [debugger_step_over@4x.png.9b617503](bios/Other/Recalbox/.variants/debugger_step_over@4x.png.9b617503) (2,722 bytes) - SHA1: `9b61750398619d26475b29564f6ca44cdb09f6e9`, MD5: `f5df96b36a7ff250111f2a344fea2d20`
+    - [debugger_step_over@4x.png.afab6d1b](bios/Other/Recalbox/.variants/debugger_step_over@4x.png.afab6d1b) (4,664 bytes) - SHA1: `afab6d1bf42c9f6d774bc16bb79fa625547415a0`, MD5: `b17a2881981f22a9ca1c6bf4fff2315c`
+    - [debugger_step_over@4x.png.ca395457](bios/Other/Recalbox/.variants/debugger_step_over@4x.png.ca395457) (4,841 bytes) - SHA1: `ca395457107a8422286aaa1986473aae275658eb`, MD5: `53b61065baaa88a7fc07902bf4aeadd6`
+    - [debugger_step_over@4x.png.d2b92ca7](bios/Other/Recalbox/.variants/debugger_step_over@4x.png.d2b92ca7) (3,206 bytes) - SHA1: `d2b92ca7d63a23654cfd7c248ab4d53a794b01b3`, MD5: `91b6c6cdb0d304e77982b95e3f6dd307`
+- **[debugger_step_over@4x.png.9b617503](bios/Other/Recalbox/.variants/debugger_step_over@4x.png.9b617503)** (2,722 bytes)
+  - SHA1: `9b61750398619d26475b29564f6ca44cdb09f6e9`
+  - MD5: `f5df96b36a7ff250111f2a344fea2d20`
+  - CRC32: `e5a7f719`
+- **[debugger_step_over@4x.png.afab6d1b](bios/Other/Recalbox/.variants/debugger_step_over@4x.png.afab6d1b)** (4,664 bytes)
+  - SHA1: `afab6d1bf42c9f6d774bc16bb79fa625547415a0`
+  - MD5: `b17a2881981f22a9ca1c6bf4fff2315c`
+  - CRC32: `e492e165`
+- **[debugger_step_over@4x.png.ca395457](bios/Other/Recalbox/.variants/debugger_step_over@4x.png.ca395457)** (4,841 bytes)
+  - SHA1: `ca395457107a8422286aaa1986473aae275658eb`
+  - MD5: `53b61065baaa88a7fc07902bf4aeadd6`
+  - CRC32: `312a65f2`
+- **[debugger_step_over@4x.png.d2b92ca7](bios/Other/Recalbox/.variants/debugger_step_over@4x.png.d2b92ca7)** (3,206 bytes)
+  - SHA1: `d2b92ca7d63a23654cfd7c248ab4d53a794b01b3`
+  - MD5: `91b6c6cdb0d304e77982b95e3f6dd307`
+  - CRC32: `fe376168`
+- **[default_pre_post_process.glsl](bios/Other/Recalbox/default_pre_post_process.glsl)** (14,720 bytes)
+  - SHA1: `599a7cc0459949a8d474a632fd95826d5be93f1b`
+  - MD5: `f08902c61032ff0c5c758c2693cc7b34`
+  - CRC32: `3288ceba`
+- **[disk.rom](bios/Other/Recalbox/disk.rom)** (7,680 bytes)
+  - SHA1: `3d1d6c0c2fd8039c042e5985da3a501e378bbad3`
+  - MD5: `99691286a9d860b9512c1368e74e4c14`
+  - CRC32: `c76900e3`
+- **[dmg_boot.bin](bios/Other/Recalbox/dmg_boot.bin)** (256 bytes)
+  - SHA1: `3c48c4ce9c20ba1ca3d003ef43b249a9ec69941b`
+  - MD5: `57f6a79fb41d6b2c8987fa529c3a90f2`
+  - CRC32: `c65c0cae`
+  - Also known as: `dmg0_rom.bin`, `gb_bios.bin`
+- **[dolphin_logo.png](bios/Other/Recalbox/dolphin_logo.png)** (13,236 bytes)
+  - SHA1: `1aef16f7536a40a772df985c5cfe6cb1bdd5cee0`
+  - MD5: `5aa9b128df9ead8b000cf362a09b3036`
+  - CRC32: `20f367b6`
+- **[dolphin_logo@2x.png](bios/Other/Recalbox/dolphin_logo@2x.png)** (37,326 bytes)
+  - SHA1: `475c8415bb030d62d04402f816cbb10f87b1d706`
+  - MD5: `993c5884d12da360642a7dbaf8e35357`
+  - CRC32: `94159644`
+- **[dsp_coef.bin](bios/Other/Recalbox/dsp_coef.bin)** (4,096 bytes)
+  - SHA1: `c3f1ee843f08cd7d58ea6f9166d25ee8e12280a2`
+  - MD5: `246b4a629edeb193341fade6b965985f`
+  - CRC32: `8209b868`
+- **[dsp_rom.bin](bios/Other/Recalbox/dsp_rom.bin)** (8,192 bytes)
+  - SHA1: `58fb66e165d8a21875db27e5a4284a386bd172ed`
+  - MD5: `9f55235fd6d1d19dc80a4f9140d43983`
+  - CRC32: `06fdf061`
+- **[dubois-LCD-Amber-Blue.glsl](bios/Other/Recalbox/dubois-LCD-Amber-Blue.glsl)** (634 bytes)
+  - SHA1: `e551f9ac6032cefc34eebf15a200cb299902a367`
+  - MD5: `e3a3fe75be1f0987c0b5b758b3d7377c`
+  - CRC32: `1d00d0d0`
+- **[dubois-LCD-Green-Magenta.glsl](bios/Other/Recalbox/dubois-LCD-Green-Magenta.glsl)** (637 bytes)
+  - SHA1: `bde257244acdad1e38ed3abcbece683d978b893c`
+  - MD5: `6fc3e14ca334ed4ac3bd34b0f7bfa9de`
+  - CRC32: `db164710`
+- **[dubois.glsl](bios/Other/Recalbox/dubois.glsl)** (672 bytes)
+  - SHA1: `1e8b209f7e73e2cf9787c702188b95f26e414ad7`
+  - MD5: `e4d4f375494e318bedc04a8290b49e2b`
+  - CRC32: `5f803a6c`
+- **[ecwolf.pk3](bios/Other/Recalbox/ecwolf.pk3)** (189,942 bytes)
+  - SHA1: `05a7b07cfe7f1d94728abc0290cb3bb2b1d69332`
+  - MD5: `d68107770b3ba230d10aa27472a7617b`
+  - CRC32: `c30f6789`
+- **[emboss.glsl](bios/Other/Recalbox/emboss.glsl)** (423 bytes)
+  - SHA1: `884e567f526dca223289ed44ead1493cfc5076fd`
+  - MD5: `b41a29551fff0edb848dfb49656855b5`
+  - CRC32: `bfaa7e0f`
+- **[exitemu](bios/Other/Recalbox/exitemu)** (3,008 bytes)
+  - SHA1: `c8c50937b22ad20acdb307b736325fed6ea76d08`
+  - MD5: `44d74a5243a0607753f8e3e62da80fe8`
+  - CRC32: `42e13ef2`
+- **[fba_029671_od_release_10_working_roms.dat](bios/Other/Recalbox/fba_029671_od_release_10_working_roms.dat)** (400,844 bytes)
+  - SHA1: `a601f89c9d7d9e6de2b1e51e91d1eba9bdf8949e`
+  - MD5: `993c9ce349e377e353713641f0166d2b`
+  - CRC32: `4b65ab89`
+- **[fba_029671_od_release_10_working_roms_filtered.dat](bios/Other/Recalbox/fba_029671_od_release_10_working_roms_filtered.dat)** (230,707 bytes)
+  - SHA1: `98de8a206b9a403ba7bcc3c08535061c3e05a852`
+  - MD5: `d84bebcfb35ed4349199404ade082642`
+  - CRC32: `3410d9c4`
+- **[fire.glsl](bios/Other/Recalbox/fire.glsl)** (441 bytes)
+  - SHA1: `76255513408f086e39bbe236c2c5872e5f2e736a`
+  - MD5: `990ada9245de81dd7c471daf2f1847da`
+  - CRC32: `43f81e8b`
+- **[fire2.glsl](bios/Other/Recalbox/fire2.glsl)** (246 bytes)
+  - SHA1: `0bfbd4cbed8615636f7ee56b910dab549c66887d`
+  - MD5: `8979e7014bf5bc69c5204f85a1926021`
+  - CRC32: `75aba1f3`
+- **[firewater.glsl](bios/Other/Recalbox/firewater.glsl)** (304 bytes)
+  - SHA1: `f917cdbd10e7e65336ddc23a134bfea0dd437b7a`
+  - MD5: `0922b6ebe158f924e3357edcca1f04e0`
+  - CRC32: `d98219bc`
+- **[font-licenses.txt](bios/Other/Recalbox/font-licenses.txt)** (11,656 bytes)
+  - SHA1: `ab04e69305d9fd439436326e93ae8573b1539eaf`
+  - MD5: `6a5e4bf43b3a5de88a71c8ed76d04b88`
+  - CRC32: `c5ce2c3f`
+- **[font_japanese.bin](bios/Other/Recalbox/font_japanese.bin)** (259,626 bytes)
+  - SHA1: `7fbbedcc7a1ae00414a4e9e967109cc78be1fe3b`
+  - MD5: `a1d3c0e5a40f163f4fb00a5e0774c63c`
+  - CRC32: `9ac7f0c7`
+- **[font_western.bin](bios/Other/Recalbox/font_western.bin)** (6,478 bytes)
+  - SHA1: `483a17ff25b68a8f18cae691da99f16beefbe370`
+  - MD5: `9bef639b7426ef6948602a12b33522a8`
+  - CRC32: `6fe1f772`
+- **[frogs.zip](bios/Other/Recalbox/frogs.zip)** (2,832,731 bytes)
+  - SHA1: `cdff29398e76b92d93825d96c0f9cae5bb6b3400`
+  - MD5: `e30e8ef4631596e25466523b97fee19f`
+  - CRC32: `99541e86`
+- **[fullcolor.glsl](bios/Other/Recalbox/fullcolor.glsl)** (163 bytes)
+  - SHA1: `5ea870f99d50b26e000f8f96a361c5e17b8e73fd`
+  - MD5: `36a6d68a94be599ba14c7a6bbbb81815`
+  - CRC32: `ddc35856`
+- **[fullscreen.png](bios/Other/Recalbox/fullscreen.png)** (564 bytes)
+  - SHA1: `1ed5a615966eccfeeea1cbbc17a837c491779592`
+  - MD5: `7b263aa1cc8e5ca2b48ec974152b4aab`
+  - CRC32: `bbbe141e`
+  - **Variants** (4 alternate versions):
+    - [fullscreen.png.5b95a140](bios/Other/Recalbox/.variants/fullscreen.png.5b95a140) (681 bytes) - SHA1: `5b95a140ffe529e90802622a31791da171286ea9`, MD5: `05b43620c63249218a0e1492c5cd202d`
+    - [fullscreen.png.5e7193cf](bios/Other/Recalbox/.variants/fullscreen.png.5e7193cf) (613 bytes) - SHA1: `5e7193cfaf8c33c56ca60b559b06f71c45d2b1c1`, MD5: `cec815f0e099ffdabd5f9f647c862828`
+    - [fullscreen.png.9cd96d06](bios/Other/Recalbox/.variants/fullscreen.png.9cd96d06) (906 bytes) - SHA1: `9cd96d06322b5de8e759d214364e63588b429add`, MD5: `c9163160a02638ab19480275c11f688f`
+    - [fullscreen.png.ae2a40a4](bios/Other/Recalbox/.variants/fullscreen.png.ae2a40a4) (866 bytes) - SHA1: `ae2a40a49c1116d55bd1d793f2af05e76bc512ea`, MD5: `96787547023c6e923c0276caedfdf802`
+- **[fullscreen.png.5b95a140](bios/Other/Recalbox/.variants/fullscreen.png.5b95a140)** (681 bytes)
+  - SHA1: `5b95a140ffe529e90802622a31791da171286ea9`
+  - MD5: `05b43620c63249218a0e1492c5cd202d`
+  - CRC32: `a0e1af9a`
+- **[fullscreen.png.5e7193cf](bios/Other/Recalbox/.variants/fullscreen.png.5e7193cf)** (613 bytes)
+  - SHA1: `5e7193cfaf8c33c56ca60b559b06f71c45d2b1c1`
+  - MD5: `cec815f0e099ffdabd5f9f647c862828`
+  - CRC32: `7e266ad1`
+- **[fullscreen.png.9cd96d06](bios/Other/Recalbox/.variants/fullscreen.png.9cd96d06)** (906 bytes)
+  - SHA1: `9cd96d06322b5de8e759d214364e63588b429add`
+  - MD5: `c9163160a02638ab19480275c11f688f`
+  - CRC32: `6bb2d829`
+- **[fullscreen.png.ae2a40a4](bios/Other/Recalbox/.variants/fullscreen.png.ae2a40a4)** (866 bytes)
+  - SHA1: `ae2a40a49c1116d55bd1d793f2af05e76bc512ea`
+  - MD5: `96787547023c6e923c0276caedfdf802`
+  - CRC32: `e1c09aca`
+- **[fullscreen@2x.png](bios/Other/Recalbox/fullscreen@2x.png)** (1,097 bytes)
+  - SHA1: `cb93a89c9796ca107ceda3dbe96fba831a2b1ec3`
+  - MD5: `a48876059c4ff6e3ee132fa193a9c966`
+  - CRC32: `5b393c7b`
+  - **Variants** (4 alternate versions):
+    - [fullscreen@2x.png.b017e19e](bios/Other/Recalbox/.variants/fullscreen@2x.png.b017e19e) (1,870 bytes) - SHA1: `b017e19e58c338bfe48db2c6f0d4e5f96fdf9dc7`, MD5: `19eb83e9700f1c2b5fa8c77141049508`
+    - [fullscreen@2x.png.bf79136f](bios/Other/Recalbox/.variants/fullscreen@2x.png.bf79136f) (2,055 bytes) - SHA1: `bf79136fd3835cdea714ad6f6bf0cb0426bf0373`, MD5: `e794eeea0d03837b1dd1599da64460b1`
+    - [fullscreen@2x.png.c4bb3d42](bios/Other/Recalbox/.variants/fullscreen@2x.png.c4bb3d42) (1,227 bytes) - SHA1: `c4bb3d42cacb462fb623f9f0b10c2f15f2623ef5`, MD5: `562336786160165fc7b42889036d36b4`
+    - [fullscreen@2x.png.f9850ac1](bios/Other/Recalbox/.variants/fullscreen@2x.png.f9850ac1) (1,360 bytes) - SHA1: `f9850ac17203eaba39e08de8a89f73ad9b6880ef`, MD5: `f0280cbd757fe476e34369952e491fb7`
+- **[fullscreen@2x.png.b017e19e](bios/Other/Recalbox/.variants/fullscreen@2x.png.b017e19e)** (1,870 bytes)
+  - SHA1: `b017e19e58c338bfe48db2c6f0d4e5f96fdf9dc7`
+  - MD5: `19eb83e9700f1c2b5fa8c77141049508`
+  - CRC32: `d6be675f`
+- **[fullscreen@2x.png.bf79136f](bios/Other/Recalbox/.variants/fullscreen@2x.png.bf79136f)** (2,055 bytes)
+  - SHA1: `bf79136fd3835cdea714ad6f6bf0cb0426bf0373`
+  - MD5: `e794eeea0d03837b1dd1599da64460b1`
+  - CRC32: `7d56ece4`
+- **[fullscreen@2x.png.c4bb3d42](bios/Other/Recalbox/.variants/fullscreen@2x.png.c4bb3d42)** (1,227 bytes)
+  - SHA1: `c4bb3d42cacb462fb623f9f0b10c2f15f2623ef5`
+  - MD5: `562336786160165fc7b42889036d36b4`
+  - CRC32: `eebffed0`
+- **[fullscreen@2x.png.f9850ac1](bios/Other/Recalbox/.variants/fullscreen@2x.png.f9850ac1)** (1,360 bytes)
+  - SHA1: `f9850ac17203eaba39e08de8a89f73ad9b6880ef`
+  - MD5: `f0280cbd757fe476e34369952e491fb7`
+  - CRC32: `6d99fc57`
+- **[fullscreen@4x.png](bios/Other/Recalbox/fullscreen@4x.png)** (2,576 bytes)
+  - SHA1: `9c2c2c6d169576cc638a4bcc8dd750c7a3b613ed`
+  - MD5: `46ca8883ec9b200369c13164511fc89c`
+  - CRC32: `07d455fa`
+  - **Variants** (4 alternate versions):
+    - [fullscreen@4x.png.175b6a27](bios/Other/Recalbox/.variants/fullscreen@4x.png.175b6a27) (3,264 bytes) - SHA1: `175b6a278d1cc0aef7a2f1daf47a8dedeed2cc5e`, MD5: `bf9b1a07459729ba38060dbe84dc4f4d`
+    - [fullscreen@4x.png.230b6afe](bios/Other/Recalbox/.variants/fullscreen@4x.png.230b6afe) (4,841 bytes) - SHA1: `230b6afefc83870d5ab45606c5db5a5d07d75571`, MD5: `da633c3cc9c48258815e16d2a10c8517`
+    - [fullscreen@4x.png.37ef9684](bios/Other/Recalbox/.variants/fullscreen@4x.png.37ef9684) (4,973 bytes) - SHA1: `37ef9684c1f4116f7091fb5fa6fd5a7b1cc6f912`, MD5: `70175ae51c80825deb95f15ad6c9f148`
+    - [fullscreen@4x.png.6e7f3a8c](bios/Other/Recalbox/.variants/fullscreen@4x.png.6e7f3a8c) (2,808 bytes) - SHA1: `6e7f3a8c626f0af93bd5a7f63c735ecd44b28a1a`, MD5: `93234886962c7c200567c8dcc84d9744`
+- **[fullscreen@4x.png.175b6a27](bios/Other/Recalbox/.variants/fullscreen@4x.png.175b6a27)** (3,264 bytes)
+  - SHA1: `175b6a278d1cc0aef7a2f1daf47a8dedeed2cc5e`
+  - MD5: `bf9b1a07459729ba38060dbe84dc4f4d`
+  - CRC32: `f5fa1eab`
+- **[fullscreen@4x.png.230b6afe](bios/Other/Recalbox/.variants/fullscreen@4x.png.230b6afe)** (4,841 bytes)
+  - SHA1: `230b6afefc83870d5ab45606c5db5a5d07d75571`
+  - MD5: `da633c3cc9c48258815e16d2a10c8517`
+  - CRC32: `7ed33905`
+- **[fullscreen@4x.png.37ef9684](bios/Other/Recalbox/.variants/fullscreen@4x.png.37ef9684)** (4,973 bytes)
+  - SHA1: `37ef9684c1f4116f7091fb5fa6fd5a7b1cc6f912`
+  - MD5: `70175ae51c80825deb95f15ad6c9f148`
+  - CRC32: `f2e6a0d0`
+- **[fullscreen@4x.png.6e7f3a8c](bios/Other/Recalbox/.variants/fullscreen@4x.png.6e7f3a8c)** (2,808 bytes)
+  - SHA1: `6e7f3a8c626f0af93bd5a7f63c735ecd44b28a1a`
+  - MD5: `93234886962c7c200567c8dcc84d9744`
+  - CRC32: `00528876`
+- **[game.lua](bios/Other/Recalbox/game.lua)** (125,540 bytes)
+  - SHA1: `1611c986a5d2861d6594269ba4dfe433b1a29c8c`
+  - MD5: `3efe5fa6fc6ae0315590014c2bb74b32`
+  - CRC32: `3ae12bdb`
+  - **Variants** (1 alternate versions):
+    - [game.lua.f8db7263](bios/Other/Recalbox/.variants/game.lua.f8db7263) (226,301 bytes) - SHA1: `f8db7263bf63c16a0687707a378e5729334a26b8`, MD5: `9ecb494b04d51a18a8f8c25f7f3c35e6`
+- **[game.lua.f8db7263](bios/Other/Recalbox/.variants/game.lua.f8db7263)** (226,301 bytes)
+  - SHA1: `f8db7263bf63c16a0687707a378e5729334a26b8`
+  - MD5: `9ecb494b04d51a18a8f8c25f7f3c35e6`
+  - CRC32: `64f37cf6`
+- **[gcpad.png](bios/Other/Recalbox/gcpad.png)** (1,040 bytes)
+  - SHA1: `d389b8a1705a6ee9a08dca70e2e2a90e1db94732`
+  - MD5: `c5abc111c58bca3c5d9ebc4c7a42f9db`
+  - CRC32: `02d97f9f`
+  - **Variants** (4 alternate versions):
+    - [gcpad.png.47af2123](bios/Other/Recalbox/.variants/gcpad.png.47af2123) (1,622 bytes) - SHA1: `47af21235eaf4e6d9a45d2a792f99dbe5295b5d8`, MD5: `c7d1d6b35172f97c9f558fc65609bc26`
+    - [gcpad.png.73111d5e](bios/Other/Recalbox/.variants/gcpad.png.73111d5e) (1,102 bytes) - SHA1: `73111d5ed15fac7ae20116b4c7d878c6d5f9b28d`, MD5: `618f4683c8389b6b171c38c367098ef2`
+    - [gcpad.png.909d98cb](bios/Other/Recalbox/.variants/gcpad.png.909d98cb) (1,272 bytes) - SHA1: `909d98cb724abd40f2482c9831ef042649c4079a`, MD5: `dde410330ae6b641078f3ce8c3e30aeb`
+    - [gcpad.png.f3cc24b5](bios/Other/Recalbox/.variants/gcpad.png.f3cc24b5) (1,797 bytes) - SHA1: `f3cc24b5fe306bd46c5548bb25b3e47b24d699be`, MD5: `01b78267e46cd905e34bc97f95158001`
+- **[gcpad.png.47af2123](bios/Other/Recalbox/.variants/gcpad.png.47af2123)** (1,622 bytes)
+  - SHA1: `47af21235eaf4e6d9a45d2a792f99dbe5295b5d8`
+  - MD5: `c7d1d6b35172f97c9f558fc65609bc26`
+  - CRC32: `a60b8b9a`
+- **[gcpad.png.73111d5e](bios/Other/Recalbox/.variants/gcpad.png.73111d5e)** (1,102 bytes)
+  - SHA1: `73111d5ed15fac7ae20116b4c7d878c6d5f9b28d`
+  - MD5: `618f4683c8389b6b171c38c367098ef2`
+  - CRC32: `1bbd94ae`
+- **[gcpad.png.909d98cb](bios/Other/Recalbox/.variants/gcpad.png.909d98cb)** (1,272 bytes)
+  - SHA1: `909d98cb724abd40f2482c9831ef042649c4079a`
+  - MD5: `dde410330ae6b641078f3ce8c3e30aeb`
+  - CRC32: `877f835b`
+- **[gcpad.png.f3cc24b5](bios/Other/Recalbox/.variants/gcpad.png.f3cc24b5)** (1,797 bytes)
+  - SHA1: `f3cc24b5fe306bd46c5548bb25b3e47b24d699be`
+  - MD5: `01b78267e46cd905e34bc97f95158001`
+  - CRC32: `0da5f215`
+- **[gcpad@2x.png](bios/Other/Recalbox/gcpad@2x.png)** (2,652 bytes)
+  - SHA1: `509f21f6afeeca0f77842f7570c0a47146e9e127`
+  - MD5: `e6c3fca4f0c68a35d9f7aed8f4f84ed8`
+  - CRC32: `e1669618`
+  - **Variants** (4 alternate versions):
+    - [gcpad@2x.png.1ecd5d76](bios/Other/Recalbox/.variants/gcpad@2x.png.1ecd5d76) (2,859 bytes) - SHA1: `1ecd5d76633ca915879fd29beb651681ba7d2d07`, MD5: `56cc710f21505289fceecfe235203c70`
+    - [gcpad@2x.png.2dc89bc3](bios/Other/Recalbox/.variants/gcpad@2x.png.2dc89bc3) (4,425 bytes) - SHA1: `2dc89bc3e5d95932e986df3a360b35f96dd656af`, MD5: `369928b0810f5d4643219435030964fb`
+    - [gcpad@2x.png.42e53106](bios/Other/Recalbox/.variants/gcpad@2x.png.42e53106) (4,626 bytes) - SHA1: `42e53106bf47b38dd78657a12e2d6cdaf69a1e67`, MD5: `c7a69a7b7b734d2b4e098504c8eb1303`
+    - [gcpad@2x.png.f8335034](bios/Other/Recalbox/.variants/gcpad@2x.png.f8335034) (3,239 bytes) - SHA1: `f833503413a9cb0b197f4aeddbcc1e76147400ee`, MD5: `410b8834e4c01f0beebbd13f6097e6e8`
+- **[gcpad@2x.png.1ecd5d76](bios/Other/Recalbox/.variants/gcpad@2x.png.1ecd5d76)** (2,859 bytes)
+  - SHA1: `1ecd5d76633ca915879fd29beb651681ba7d2d07`
+  - MD5: `56cc710f21505289fceecfe235203c70`
+  - CRC32: `f815cfc8`
+- **[gcpad@2x.png.2dc89bc3](bios/Other/Recalbox/.variants/gcpad@2x.png.2dc89bc3)** (4,425 bytes)
+  - SHA1: `2dc89bc3e5d95932e986df3a360b35f96dd656af`
+  - MD5: `369928b0810f5d4643219435030964fb`
+  - CRC32: `7abe6594`
+- **[gcpad@2x.png.42e53106](bios/Other/Recalbox/.variants/gcpad@2x.png.42e53106)** (4,626 bytes)
+  - SHA1: `42e53106bf47b38dd78657a12e2d6cdaf69a1e67`
+  - MD5: `c7a69a7b7b734d2b4e098504c8eb1303`
+  - CRC32: `004839a8`
+- **[gcpad@2x.png.f8335034](bios/Other/Recalbox/.variants/gcpad@2x.png.f8335034)** (3,239 bytes)
+  - SHA1: `f833503413a9cb0b197f4aeddbcc1e76147400ee`
+  - MD5: `410b8834e4c01f0beebbd13f6097e6e8`
+  - CRC32: `0dc2401a`
+- **[gcpad@4x.png](bios/Other/Recalbox/gcpad@4x.png)** (6,668 bytes)
+  - SHA1: `ff7bc92c38b959f7e8d388cf6e338573d1d25ccc`
+  - MD5: `85535f692462b1329d9d970f5cad1b51`
+  - CRC32: `3d3a90c9`
+  - **Variants** (4 alternate versions):
+    - [gcpad@4x.png.1049cca2](bios/Other/Recalbox/.variants/gcpad@4x.png.1049cca2) (11,484 bytes) - SHA1: `1049cca23f32a5d0c32e27b27fc1a56951cc24b3`, MD5: `581d93a244cf7409a00c62cfcc75eb06`
+    - [gcpad@4x.png.c3e67ffd](bios/Other/Recalbox/.variants/gcpad@4x.png.c3e67ffd) (12,026 bytes) - SHA1: `c3e67ffd476f6218eaf55249fb925c3d5a35a93d`, MD5: `80f7fcd8d76134f1a5dcb6f0213fc08c`
+    - [gcpad@4x.png.cfd77daf](bios/Other/Recalbox/.variants/gcpad@4x.png.cfd77daf) (8,383 bytes) - SHA1: `cfd77daf54cffdacf0affcb72f5a4e2a1db42c12`, MD5: `504499231467b5c69edb9de99cb13db4`
+    - [gcpad@4x.png.d6dd5ba6](bios/Other/Recalbox/.variants/gcpad@4x.png.d6dd5ba6) (7,210 bytes) - SHA1: `d6dd5ba6565982e7b75a062549dfd5b95d78fd48`, MD5: `c724b154cf7b42ecea2f4701a9c18c4e`
+- **[gcpad@4x.png.1049cca2](bios/Other/Recalbox/.variants/gcpad@4x.png.1049cca2)** (11,484 bytes)
+  - SHA1: `1049cca23f32a5d0c32e27b27fc1a56951cc24b3`
+  - MD5: `581d93a244cf7409a00c62cfcc75eb06`
+  - CRC32: `233a8552`
+- **[gcpad@4x.png.c3e67ffd](bios/Other/Recalbox/.variants/gcpad@4x.png.c3e67ffd)** (12,026 bytes)
+  - SHA1: `c3e67ffd476f6218eaf55249fb925c3d5a35a93d`
+  - MD5: `80f7fcd8d76134f1a5dcb6f0213fc08c`
+  - CRC32: `4cdca03d`
+- **[gcpad@4x.png.cfd77daf](bios/Other/Recalbox/.variants/gcpad@4x.png.cfd77daf)** (8,383 bytes)
+  - SHA1: `cfd77daf54cffdacf0affcb72f5a4e2a1db42c12`
+  - MD5: `504499231467b5c69edb9de99cb13db4`
+  - CRC32: `6dc86aa8`
+- **[gcpad@4x.png.d6dd5ba6](bios/Other/Recalbox/.variants/gcpad@4x.png.d6dd5ba6)** (7,210 bytes)
+  - SHA1: `d6dd5ba6565982e7b75a062549dfd5b95d78fd48`
+  - MD5: `c724b154cf7b42ecea2f4701a9c18c4e`
+  - CRC32: `c16e2fac`
+- **[graphics.png](bios/Other/Recalbox/graphics.png)** (482 bytes)
+  - SHA1: `edf59f23e6fa0c3837066131dd3e2c3c59a121df`
+  - MD5: `0f898e3f88ba3083067cf99293ce9d26`
+  - CRC32: `e467de39`
+  - **Variants** (4 alternate versions):
+    - [graphics.png.43d379cc](bios/Other/Recalbox/.variants/graphics.png.43d379cc) (761 bytes) - SHA1: `43d379ccb9e6a6c73990d3dbf47658ef9688cdf3`, MD5: `b3107ce541d562fc8a821f991784df31`
+    - [graphics.png.4c52f5e6](bios/Other/Recalbox/.variants/graphics.png.4c52f5e6) (507 bytes) - SHA1: `4c52f5e68a790ff550cbbaf5691366655b607e2b`, MD5: `feef4accb61bf4f8b222e46e6f0c9838`
+    - [graphics.png.e3af54d0](bios/Other/Recalbox/.variants/graphics.png.e3af54d0) (677 bytes) - SHA1: `e3af54d0deab9789a68e869cd9142659d18eeeae`, MD5: `da39f0827df306b5f3d145fcbae3ea53`
+    - [graphics.png.f7477066](bios/Other/Recalbox/.variants/graphics.png.f7477066) (592 bytes) - SHA1: `f747706620ff189290a362113cf20a3e9dfdd459`, MD5: `4a1d88100bf3d7f14a8c05af71ce9e5a`
+- **[graphics.png.43d379cc](bios/Other/Recalbox/.variants/graphics.png.43d379cc)** (761 bytes)
+  - SHA1: `43d379ccb9e6a6c73990d3dbf47658ef9688cdf3`
+  - MD5: `b3107ce541d562fc8a821f991784df31`
+  - CRC32: `b21f30d6`
+- **[graphics.png.4c52f5e6](bios/Other/Recalbox/.variants/graphics.png.4c52f5e6)** (507 bytes)
+  - SHA1: `4c52f5e68a790ff550cbbaf5691366655b607e2b`
+  - MD5: `feef4accb61bf4f8b222e46e6f0c9838`
+  - CRC32: `ef9d4251`
+- **[graphics.png.e3af54d0](bios/Other/Recalbox/.variants/graphics.png.e3af54d0)** (677 bytes)
+  - SHA1: `e3af54d0deab9789a68e869cd9142659d18eeeae`
+  - MD5: `da39f0827df306b5f3d145fcbae3ea53`
+  - CRC32: `091ade56`
+- **[graphics.png.f7477066](bios/Other/Recalbox/.variants/graphics.png.f7477066)** (592 bytes)
+  - SHA1: `f747706620ff189290a362113cf20a3e9dfdd459`
+  - MD5: `4a1d88100bf3d7f14a8c05af71ce9e5a`
+  - CRC32: `afaa7ee8`
+- **[graphics@2x.png](bios/Other/Recalbox/graphics@2x.png)** (973 bytes)
+  - SHA1: `fbd0411f30245040c26ed51d851ca477679de215`
+  - MD5: `1fd06f1ad184e7da76677d8e037250fd`
+  - CRC32: `a0be0660`
+  - **Variants** (4 alternate versions):
+    - [graphics@2x.png.2dafc32d](bios/Other/Recalbox/.variants/graphics@2x.png.2dafc32d) (1,037 bytes) - SHA1: `2dafc32d5d7145c6809b465397fdf4c1fedfe782`, MD5: `653318cb9c3b48891d00d46c559529b5`
+    - [graphics@2x.png.32c0c8cc](bios/Other/Recalbox/.variants/graphics@2x.png.32c0c8cc) (1,731 bytes) - SHA1: `32c0c8ccbfa4e366fde2304084c4bd982c6ffa70`, MD5: `7ef80578981f4f170500e34c350ca652`
+    - [graphics@2x.png.b6404dc3](bios/Other/Recalbox/.variants/graphics@2x.png.b6404dc3) (1,490 bytes) - SHA1: `b6404dc3841de3a655566eed31c0664713a95099`, MD5: `080a16c38079532ed6e1ef00d716a523`
+    - [graphics@2x.png.cf4fe6d8](bios/Other/Recalbox/.variants/graphics@2x.png.cf4fe6d8) (1,182 bytes) - SHA1: `cf4fe6d845ba4c0d8fd18b806d5be263b683cbfe`, MD5: `51686af55832190c23787d9286401b64`
+- **[graphics@2x.png.2dafc32d](bios/Other/Recalbox/.variants/graphics@2x.png.2dafc32d)** (1,037 bytes)
+  - SHA1: `2dafc32d5d7145c6809b465397fdf4c1fedfe782`
+  - MD5: `653318cb9c3b48891d00d46c559529b5`
+  - CRC32: `f9bb54bf`
+- **[graphics@2x.png.32c0c8cc](bios/Other/Recalbox/.variants/graphics@2x.png.32c0c8cc)** (1,731 bytes)
+  - SHA1: `32c0c8ccbfa4e366fde2304084c4bd982c6ffa70`
+  - MD5: `7ef80578981f4f170500e34c350ca652`
+  - CRC32: `04ffc9d6`
+- **[graphics@2x.png.b6404dc3](bios/Other/Recalbox/.variants/graphics@2x.png.b6404dc3)** (1,490 bytes)
+  - SHA1: `b6404dc3841de3a655566eed31c0664713a95099`
+  - MD5: `080a16c38079532ed6e1ef00d716a523`
+  - CRC32: `67ca2450`
+- **[graphics@2x.png.cf4fe6d8](bios/Other/Recalbox/.variants/graphics@2x.png.cf4fe6d8)** (1,182 bytes)
+  - SHA1: `cf4fe6d845ba4c0d8fd18b806d5be263b683cbfe`
+  - MD5: `51686af55832190c23787d9286401b64`
+  - CRC32: `689d507e`
+- **[graphics@4x.png](bios/Other/Recalbox/graphics@4x.png)** (2,110 bytes)
+  - SHA1: `e48f364455cfa9b83883f5e7b29a1f9b8c828bb9`
+  - MD5: `ab5dd4eb394714c047af3218cf32f802`
+  - CRC32: `3160187c`
+  - **Variants** (4 alternate versions):
+    - [graphics@4x.png.1854caf5](bios/Other/Recalbox/.variants/graphics@4x.png.1854caf5) (3,742 bytes) - SHA1: `1854caf5d80c8ea863917432fba302c7b028471d`, MD5: `57d1e6e2f73bdbb8b3d19d20d5861ac1`
+    - [graphics@4x.png.846a42f1](bios/Other/Recalbox/.variants/graphics@4x.png.846a42f1) (3,642 bytes) - SHA1: `846a42f13d6f264b5a28e0a7991e103bcab3aad7`, MD5: `3074adbbf459c6c7bf750afcc3a36e11`
+    - [graphics@4x.png.86ab7272](bios/Other/Recalbox/.variants/graphics@4x.png.86ab7272) (2,823 bytes) - SHA1: `86ab7272f0169e5c6b2a5c072859359f88dd8815`, MD5: `05aacfe9bb0b79dedd6627063c56dcd7`
+    - [graphics@4x.png.e93e7120](bios/Other/Recalbox/.variants/graphics@4x.png.e93e7120) (2,216 bytes) - SHA1: `e93e7120c12131af9628552255e16f3b5c206ad2`, MD5: `671e8374c9a692b8101933187f18015b`
+- **[graphics@4x.png.1854caf5](bios/Other/Recalbox/.variants/graphics@4x.png.1854caf5)** (3,742 bytes)
+  - SHA1: `1854caf5d80c8ea863917432fba302c7b028471d`
+  - MD5: `57d1e6e2f73bdbb8b3d19d20d5861ac1`
+  - CRC32: `1e577a5c`
+- **[graphics@4x.png.846a42f1](bios/Other/Recalbox/.variants/graphics@4x.png.846a42f1)** (3,642 bytes)
+  - SHA1: `846a42f13d6f264b5a28e0a7991e103bcab3aad7`
+  - MD5: `3074adbbf459c6c7bf750afcc3a36e11`
+  - CRC32: `a9489bce`
+- **[graphics@4x.png.86ab7272](bios/Other/Recalbox/.variants/graphics@4x.png.86ab7272)** (2,823 bytes)
+  - SHA1: `86ab7272f0169e5c6b2a5c072859359f88dd8815`
+  - MD5: `05aacfe9bb0b79dedd6627063c56dcd7`
+  - CRC32: `e3b1a30d`
+- **[graphics@4x.png.e93e7120](bios/Other/Recalbox/.variants/graphics@4x.png.e93e7120)** (2,216 bytes)
+  - SHA1: `e93e7120c12131af9628552255e16f3b5c206ad2`
+  - MD5: `671e8374c9a692b8101933187f18015b`
+  - CRC32: `099b3b6f`
+- **[grayscale.glsl](bios/Other/Recalbox/grayscale.glsl)** (241 bytes)
+  - SHA1: `2db86ed31b93f3b453843d9088a63790c6fef8a9`
+  - MD5: `afe2108262d364322d3f4ba15e706bbc`
+  - CRC32: `959d3ba6`
+  - **Variants** (1 alternate versions):
+    - [grayscale.glsl.1904e19c](bios/Other/Recalbox/.variants/grayscale.glsl.1904e19c) (121 bytes) - SHA1: `1904e19c3995ba510112e2f2f0eaf4a387c7e338`, MD5: `3412f92b93c6034eccdd8f64dfb670ba`
+- **[grayscale.glsl.1904e19c](bios/Other/Recalbox/.variants/grayscale.glsl.1904e19c)** (121 bytes)
+  - SHA1: `1904e19c3995ba510112e2f2f0eaf4a387c7e338`
+  - MD5: `3412f92b93c6034eccdd8f64dfb670ba`
+  - CRC32: `e721b324`
+- **[grayscale2.glsl](bios/Other/Recalbox/grayscale2.glsl)** (378 bytes)
+  - SHA1: `af99a070acc55210ca15d9b6ecb51c0ad748fdfc`
+  - MD5: `9489aca6217aeec568101f5bd605d413`
+  - CRC32: `c667a1f6`
+  - **Variants** (1 alternate versions):
+    - [grayscale2.glsl.3f115b04](bios/Other/Recalbox/.variants/grayscale2.glsl.3f115b04) (250 bytes) - SHA1: `3f115b046f290c65d639480ac7d9aea1ed8ce7ba`, MD5: `6f3709731c7a613e14f09e14193c3251`
+- **[grayscale2.glsl.3f115b04](bios/Other/Recalbox/.variants/grayscale2.glsl.3f115b04)** (250 bytes)
+  - SHA1: `3f115b046f290c65d639480ac7d9aea1ed8ce7ba`
+  - MD5: `6f3709731c7a613e14f09e14193c3251`
+  - CRC32: `ba84dddc`
+- **[hiscore.dat](bios/Other/Recalbox/hiscore.dat)** (328,397 bytes)
+  - SHA1: `30c6ad697439de7c2158192ecdb48f5edd37478e`
+  - MD5: `f5cdce5b3749d673ad8f073ccc7371e4`
+  - CRC32: `ab7b721a`
+  - **Variants** (5 alternate versions):
+    - [hiscore.dat.17b8b03a](bios/Other/Recalbox/.variants/hiscore.dat.17b8b03a) (202,298 bytes) - SHA1: `17b8b03a89d8443927aa92ede799e117b4ab6fdb`, MD5: `bb8023a43e357b7f0cc06bf00f0470b2`
+    - [hiscore.dat.21ddda0c](bios/Other/Recalbox/.variants/hiscore.dat.21ddda0c) (36,182 bytes) - SHA1: `21ddda0c61bd4f1cc04fb9d09e16d403d620f9e8`, MD5: `9b262149ec70cbda741a8ba55784f8e1`
+    - [hiscore.dat.68e94fb5](bios/Other/Recalbox/.variants/hiscore.dat.68e94fb5) (216,250 bytes) - SHA1: `68e94fb579f46f3255ef7c34c0322f3f0f3c8e20`, MD5: `7e31f0b84f6ea6f9ffec0cd968decf9f`
+    - [hiscore.dat.7f446f50](bios/Other/Recalbox/.variants/hiscore.dat.7f446f50) (131,868 bytes) - SHA1: `7f446f50545f605db9a490d693d394a2d7b0d7d9`, MD5: `f2b7d492dc55a1ecf8d370c9e9f0293e`
+    - [hiscore.dat.a22ec279](bios/Other/Recalbox/.variants/hiscore.dat.a22ec279) (215,475 bytes) - SHA1: `a22ec279222ec6aeb3249932f7d377b7cf1e7bf1`, MD5: `c6f35123264db9cdfb216e8fdb673679`
+- **[hiscore.dat.17b8b03a](bios/Other/Recalbox/.variants/hiscore.dat.17b8b03a)** (202,298 bytes)
+  - SHA1: `17b8b03a89d8443927aa92ede799e117b4ab6fdb`
+  - MD5: `bb8023a43e357b7f0cc06bf00f0470b2`
+  - CRC32: `88a4f0e3`
+- **[hiscore.dat.21ddda0c](bios/Other/Recalbox/.variants/hiscore.dat.21ddda0c)** (36,182 bytes)
+  - SHA1: `21ddda0c61bd4f1cc04fb9d09e16d403d620f9e8`
+  - MD5: `9b262149ec70cbda741a8ba55784f8e1`
+  - CRC32: `cd9f4a9c`
+- **[hiscore.dat.68e94fb5](bios/Other/Recalbox/.variants/hiscore.dat.68e94fb5)** (216,250 bytes)
+  - SHA1: `68e94fb579f46f3255ef7c34c0322f3f0f3c8e20`
+  - MD5: `7e31f0b84f6ea6f9ffec0cd968decf9f`
+  - CRC32: `8213e86a`
+- **[hiscore.dat.7f446f50](bios/Other/Recalbox/.variants/hiscore.dat.7f446f50)** (131,868 bytes)
+  - SHA1: `7f446f50545f605db9a490d693d394a2d7b0d7d9`
+  - MD5: `f2b7d492dc55a1ecf8d370c9e9f0293e`
+  - CRC32: `3f75a724`
+- **[hiscore.dat.a22ec279](bios/Other/Recalbox/.variants/hiscore.dat.a22ec279)** (215,475 bytes)
+  - SHA1: `a22ec279222ec6aeb3249932f7d377b7cf1e7bf1`
+  - MD5: `c6f35123264db9cdfb216e8fdb673679`
+  - CRC32: `e929973f`
+- **[history.dat](bios/Other/Recalbox/history.dat)** (5,833,464 bytes)
+  - SHA1: `c75e7bbfe18c70a9d3c0c2a07ca335ab81318024`
+  - MD5: `b88defdd70f0012569bfedf6e07d29d9`
+  - CRC32: `f648c1ae`
+- **[horizontal.glsl](bios/Other/Recalbox/horizontal.glsl)** (165 bytes)
+  - SHA1: `78e959deaf9ab5a2ceada66e5e29c0f7f9caaeef`
+  - MD5: `41d0c3fa250862f6abea0a2dd7c0bb70`
+  - CRC32: `8620c6ea`
+- **[icon.bmp](bios/Other/Recalbox/icon.bmp)** (786,570 bytes)
+  - SHA1: `157055ee08fb281fa0a2f653c2f431f376f6afb9`
+  - MD5: `ab1a53fe5bfc9ecc66eec477214c1356`
+  - CRC32: `98dad57e`
+  - **Variants** (1 alternate versions):
+    - [icon.bmp.5436099f](bios/Other/Recalbox/.variants/icon.bmp.5436099f) (196,746 bytes) - SHA1: `5436099fbcc7d6dfbe7ab1434d303831038defd4`, MD5: `d8307999a43d5c03cfb92696707e827b`
+- **[icon.bmp.5436099f](bios/Other/Recalbox/.variants/icon.bmp.5436099f)** (196,746 bytes)
+  - SHA1: `5436099fbcc7d6dfbe7ab1434d303831038defd4`
+  - MD5: `d8307999a43d5c03cfb92696707e827b`
+  - CRC32: `994754f7`
+- **[integer_scaling.glsl](bios/Other/Recalbox/integer_scaling.glsl)** (4,753 bytes)
+  - SHA1: `b6c3522dac5518db6b1a986768309869a0530784`
+  - MD5: `b0e5913a536997d412a9ff0f8de33978`
+  - CRC32: `c7a23599`
+- **[invaders.zip](bios/Other/Recalbox/invaders.zip)** (4,324,198 bytes)
+  - SHA1: `4b18db526ca907707fd888385d907a7a585935d0`
+  - MD5: `23d65ad40ac1f2121fe35fe0c7893721`
+  - CRC32: `02546fd3`
+- **[invert.glsl](bios/Other/Recalbox/invert.glsl)** (67 bytes)
+  - SHA1: `a2d4c74f9193022d76edfd5f48e8cc91ea445324`
+  - MD5: `3c1be0fb395b2130dd28e1360590133e`
+  - CRC32: `e5b1d4cf`
+- **[invert_blue.glsl](bios/Other/Recalbox/invert_blue.glsl)** (67 bytes)
+  - SHA1: `1cefee53f7de86f8da9539b3e12b1777fd197657`
+  - MD5: `5ba30a501a05e9d4d4cd35346ac913f1`
+  - CRC32: `c57d28af`
+- **[invertedoutline.glsl](bios/Other/Recalbox/invertedoutline.glsl)** (100 bytes)
+  - SHA1: `fb05e56bf8228fbafb48761f6378cb92ea3d2a48`
+  - MD5: `fcf8ecaf5cbbcebdfd01e7027f0c2b5d`
+  - CRC32: `442ec3e0`
+- **[isoproperties_disc.png](bios/Other/Recalbox/isoproperties_disc.png)** (534 bytes)
+  - SHA1: `b35339789578b67d9885f37d8028a1421fdebd53`
+  - MD5: `c4808247aad325f424403d2593952b07`
+  - CRC32: `7ed4e145`
+- **[isoproperties_file.png](bios/Other/Recalbox/isoproperties_file.png)** (214 bytes)
+  - SHA1: `98cf1965a879b210552b9709e74120236c727eda`
+  - MD5: `87ad70146a6cd265c4e9a263a099683d`
+  - CRC32: `8b12d9a8`
+- **[isoproperties_folder.png](bios/Other/Recalbox/isoproperties_folder.png)** (487 bytes)
+  - SHA1: `94cffac2602092c3134b5ae3d3369ffd14d9d18a`
+  - MD5: `ad4b5a4b9a2536301f7bf806a794f613`
+  - CRC32: `5af4295e`
+- **[laser2001.rom](bios/Other/Recalbox/laser2001.rom)** (16,384 bytes)
+  - SHA1: `c12e098c14ac0724869053df2b63277a3e413802`
+  - MD5: `4dfadfb1158f84e2df2b85b13f303986`
+  - CRC32: `4dc35c39`
+- **[lens_distortion.glsl](bios/Other/Recalbox/lens_distortion.glsl)** (2,105 bytes)
+  - SHA1: `29b4ef8e3904d98a5e986855a5d628bfce4db0cc`
+  - MD5: `e0c4f883d956b34e58f8b1d2632b9a11`
+  - CRC32: `be0e2da1`
+- **[lisez-moi.txt](bios/Other/Recalbox/lisez-moi.txt)** (7,740 bytes)
+  - SHA1: `3c708a26d4e82f685523284fda39cbcf17b0bfd4`
+  - MD5: `6547b3785a0a6fe1db178657a8523662`
+  - CRC32: `fd39e793`
+- **[logo.bmp](bios/Other/Recalbox/logo.bmp)** (51,338 bytes)
+  - SHA1: `793a74b746944fa817f81d4dbf7739adfc5d5d18`
+  - MD5: `c6c4ba5b1ce4bc850ee851e52ab58062`
+  - CRC32: `e01db223`
+- **[mad_world.glsl](bios/Other/Recalbox/mad_world.glsl)** (563 bytes)
+  - SHA1: `82c47409be1547478063304af98498a82767c220`
+  - MD5: `89182bd4c43bc5e444d4534878cdd8a2`
+  - CRC32: `95bc3e2b`
+- **[mame2003-plus.xml](bios/Other/Recalbox/mame2003-plus.xml)** (20,225,015 bytes)
+  - SHA1: `d67e06372e697939d93b99f7b5f5c1bd163cc44b`
+  - MD5: `2b608fada32cab71e196654113f280f8`
+  - CRC32: `0f796a98`
+- **[mame2003.xml](bios/Other/Recalbox/mame2003.xml)** (19,099,132 bytes)
+  - SHA1: `378383185bd816bf9bca07d42e8096eac3ab3d12`
+  - MD5: `c82dd36c5f49cb795eb0157f1e504d6d`
+  - CRC32: `9cec8727`
+- **[mame2010.xml](bios/Other/Recalbox/mame2010.xml)** (43,352,284 bytes)
+  - SHA1: `bd7500c3a2f008d9995f2f42615b9f2d7af74d46`
+  - MD5: `30250411cb858750aa5b89a881d5bde8`
+  - CRC32: `70cc0f36`
+- **[mame2014-xml.zip](bios/Other/Recalbox/mame2014-xml.zip)** (9,501,682 bytes)
+  - SHA1: `ecc69131ec070be4600b021c7c4a0b96c7d3baad`
+  - MD5: `dbb197641b373bb2fc768d85fb921e5d`
+  - CRC32: `2fdd41e4`
+- **[metadata.json](bios/Other/Recalbox/metadata.json)** (300 bytes)
+  - SHA1: `4f3223a3b11fb09cba0e9655ca9fff52794339e1`
+  - MD5: `95dc78b9a89341f506f008e7b7df588f`
+  - CRC32: `e7e6e013`
+  - **Variants** (34 alternate versions):
+    - [metadata.json.0129dea1](bios/Other/Recalbox/.variants/metadata.json.0129dea1) (226 bytes) - SHA1: `0129dea19734f66a1a6662229650423dfd492468`, MD5: `d77d3ce0e03b7a66f286d49a23af00d0`
+    - [metadata.json.1494e0db](bios/Other/Recalbox/.variants/metadata.json.1494e0db) (228 bytes) - SHA1: `1494e0db46dda793b921b2accc3b3c3ccf6ecb80`, MD5: `65b9b368dc77d80920fedcfbff1d831f`
+    - [metadata.json.1aeb8960](bios/Other/Recalbox/.variants/metadata.json.1aeb8960) (226 bytes) - SHA1: `1aeb8960d19c5d1752d3d654b9e61f323ef4f6ed`, MD5: `f98a7b0cfc67e4a67f78f21f03cde365`
+    - [metadata.json.22bf62a5](bios/Other/Recalbox/.variants/metadata.json.22bf62a5) (263 bytes) - SHA1: `22bf62a560579563b245610a14d3cd76d0b8b257`, MD5: `982559681bf9e9028db32442b67f06e3`
+    - [metadata.json.29f21639](bios/Other/Recalbox/.variants/metadata.json.29f21639) (11,558 bytes) - SHA1: `29f216394c876b14183037b9d63a842c95390f18`, MD5: `b2098a4c94a3a57d6aaa38e2b0f08548`
+    - [metadata.json.2cb9d2dd](bios/Other/Recalbox/.variants/metadata.json.2cb9d2dd) (475 bytes) - SHA1: `2cb9d2dd0baee6b2510fa07f4779e14f729cb0e5`, MD5: `95ee8e8487a8ea85305b87bb333d6ea9`
+    - [metadata.json.2ef639c0](bios/Other/Recalbox/.variants/metadata.json.2ef639c0) (303 bytes) - SHA1: `2ef639c00f711b6df872cc1fe884a58f4eafac6c`, MD5: `d2846814cbee6e7b43b98a951f306f6a`
+    - [metadata.json.4fe291dc](bios/Other/Recalbox/.variants/metadata.json.4fe291dc) (518 bytes) - SHA1: `4fe291dc51b1a619da82a3e219e2f659ae858b00`, MD5: `bbb29a84fe28ebd087ae51ab1246a959`
+    - [metadata.json.592b69db](bios/Other/Recalbox/.variants/metadata.json.592b69db) (225 bytes) - SHA1: `592b69dbaa3ccf6756687c12e28ea6398200aa3b`, MD5: `3c0d696a434c5cd6fc04eedd3abe4bbe`
+    - [metadata.json.5be2125f](bios/Other/Recalbox/.variants/metadata.json.5be2125f) (885 bytes) - SHA1: `5be2125f62d4b4ce413995ac2e8b12564b416a0e`, MD5: `5b804f8148946fb958cc8d277bbf975e`
+    - [metadata.json.61c026da](bios/Other/Recalbox/.variants/metadata.json.61c026da) (417 bytes) - SHA1: `61c026da3a71dbac0fba60fdf2392367af2fe93f`, MD5: `ebf3fad7f584fcb3fa544e6867e91664`
+    - [metadata.json.6d980a10](bios/Other/Recalbox/.variants/metadata.json.6d980a10) (311 bytes) - SHA1: `6d980a10fdde070e626fa2919b1b932a3cc240b7`, MD5: `30ebdf6eaa64b6759f153a7bbcc9d834`
+    - [metadata.json.70310291](bios/Other/Recalbox/.variants/metadata.json.70310291) (226 bytes) - SHA1: `70310291c87cb49ad1baa4aa5dd6f3b7ff846df8`, MD5: `f49b7cd1c94763489d1293c841c372a7`
+    - [metadata.json.70e4cbab](bios/Other/Recalbox/.variants/metadata.json.70e4cbab) (335 bytes) - SHA1: `70e4cbab850875c1a666ad6ea36242a76825322c`, MD5: `021e8659cd3a3321d11f96727a72670a`
+    - [metadata.json.7ad0f68a](bios/Other/Recalbox/.variants/metadata.json.7ad0f68a) (230 bytes) - SHA1: `7ad0f68ab07a67f235542404306626ac8948d686`, MD5: `3fca2835b920ca8cbc67c01109be254c`
+    - [metadata.json.7cd069a8](bios/Other/Recalbox/.variants/metadata.json.7cd069a8) (3,743 bytes) - SHA1: `7cd069a88fba7164b5efc75e6a093d41410c8a91`, MD5: `0a2dc6f13589bb583d9d8ec0a3430837`
+    - [metadata.json.83dbca4e](bios/Other/Recalbox/.variants/metadata.json.83dbca4e) (394 bytes) - SHA1: `83dbca4e332079c0f613bd2102808f02b1f9562b`, MD5: `bc94c956ebefdabbf392e6483c3d9083`
+    - [metadata.json.83eed0eb](bios/Other/Recalbox/.variants/metadata.json.83eed0eb) (424 bytes) - SHA1: `83eed0eb09f604530152c3e9bbb92c43dd0d81fa`, MD5: `04de7fdce04a4c8ff999b0e15057f795`
+    - [metadata.json.88c4212b](bios/Other/Recalbox/.variants/metadata.json.88c4212b) (1,028 bytes) - SHA1: `88c4212b9610278159aa0280aa3f8d627486f423`, MD5: `e78bb6767682becd8d746e4ffc1ec63b`
+    - [metadata.json.8c2c6e70](bios/Other/Recalbox/.variants/metadata.json.8c2c6e70) (394 bytes) - SHA1: `8c2c6e702b0162b3093c3707fe4425026f3f01a3`, MD5: `71c7a9364e3fca6d98cdca1e4218ecc7`
+    - [metadata.json.95bd60cd](bios/Other/Recalbox/.variants/metadata.json.95bd60cd) (454 bytes) - SHA1: `95bd60cd0cb770d748310db200ea7629af714e77`, MD5: `1f35c2eb3a23ec001325bd4cd846c87d`
+    - [metadata.json.9dee10c0](bios/Other/Recalbox/.variants/metadata.json.9dee10c0) (2,787 bytes) - SHA1: `9dee10c02ddf498f2266604304fd895f80b157ed`, MD5: `a5b1ca2204c2ce5d5a10f0243ec5f839`
+    - [metadata.json.9e58ffab](bios/Other/Recalbox/.variants/metadata.json.9e58ffab) (303 bytes) - SHA1: `9e58ffabeffb2dc48ed6474c651befcf3b33a0de`, MD5: `d73727b10410f7e0ac0df4e8958548be`
+    - [metadata.json.a1bf04e9](bios/Other/Recalbox/.variants/metadata.json.a1bf04e9) (232 bytes) - SHA1: `a1bf04e9df3a4b5f5ddcd9d9eaf72170d5f70a0b`, MD5: `c0c3580619553066e2057b4b25e5ac3f`
+    - [metadata.json.b4615720](bios/Other/Recalbox/.variants/metadata.json.b4615720) (379 bytes) - SHA1: `b461572044d1b3dc49da3dd6623c3384450edd43`, MD5: `03eb5f96eb8b865de49eb9590a0d7cae`
+    - [metadata.json.c33e41ad](bios/Other/Recalbox/.variants/metadata.json.c33e41ad) (475 bytes) - SHA1: `c33e41ad8ed410ddcd4aba4cb8ffec521b5f6afc`, MD5: `1b808d6877b17efd2fed474761f49321`
+    - [metadata.json.c669af16](bios/Other/Recalbox/.variants/metadata.json.c669af16) (391 bytes) - SHA1: `c669af16912a66d1b0efdf49b0f4203ecc3465d6`, MD5: `e754017ef62096dce9f4ea1ee00681f7`
+    - [metadata.json.d080b297](bios/Other/Recalbox/.variants/metadata.json.d080b297) (6,233 bytes) - SHA1: `d080b2973a186197913ebcb4d189e74be2669a7b`, MD5: `02912789c90829d20eed3880bee47525`
+    - [metadata.json.db05728a](bios/Other/Recalbox/.variants/metadata.json.db05728a) (1,390 bytes) - SHA1: `db05728adeec8fc7b4e7850fb7388fe34744fff2`, MD5: `44416d7aca72f7bb22f29b230a801c34`
+    - [metadata.json.db18538b](bios/Other/Recalbox/.variants/metadata.json.db18538b) (378 bytes) - SHA1: `db18538b0a83e2468f451ffb0437da8867989141`, MD5: `b8cb24325f1226c585e573e52ce73c67`
+    - [metadata.json.dd9fdf1f](bios/Other/Recalbox/.variants/metadata.json.dd9fdf1f) (231 bytes) - SHA1: `dd9fdf1f32f43a4c9f8118872789394d7355b02b`, MD5: `8c2c9069deacc0544cb0bc8f02403bf3`
+    - [metadata.json.fa08acb9](bios/Other/Recalbox/.variants/metadata.json.fa08acb9) (231 bytes) - SHA1: `fa08acb9ecb16d11be0498446c4307ebbd2baaa7`, MD5: `d830cbe42582b0d45279cd272237df19`
+    - [metadata.json.fbb37c64](bios/Other/Recalbox/.variants/metadata.json.fbb37c64) (228 bytes) - SHA1: `fbb37c64acbe613d435044bfd62cb95f5dc0651d`, MD5: `9a179132613ef42ef662e11bfb525382`
+    - [metadata.json.fc54d43a](bios/Other/Recalbox/.variants/metadata.json.fc54d43a) (293 bytes) - SHA1: `fc54d43a1259d98087bc2f50341721737bd8a08a`, MD5: `8fe748f7ce36d0e21bae49ecda43e014`
+- **[metadata.json.0129dea1](bios/Other/Recalbox/.variants/metadata.json.0129dea1)** (226 bytes)
+  - SHA1: `0129dea19734f66a1a6662229650423dfd492468`
+  - MD5: `d77d3ce0e03b7a66f286d49a23af00d0`
+  - CRC32: `c196bc3f`
+- **[metadata.json.1494e0db](bios/Other/Recalbox/.variants/metadata.json.1494e0db)** (228 bytes)
+  - SHA1: `1494e0db46dda793b921b2accc3b3c3ccf6ecb80`
+  - MD5: `65b9b368dc77d80920fedcfbff1d831f`
+  - CRC32: `35a2bcf7`
+- **[metadata.json.1aeb8960](bios/Other/Recalbox/.variants/metadata.json.1aeb8960)** (226 bytes)
+  - SHA1: `1aeb8960d19c5d1752d3d654b9e61f323ef4f6ed`
+  - MD5: `f98a7b0cfc67e4a67f78f21f03cde365`
+  - CRC32: `8cc4b4a1`
+- **[metadata.json.22bf62a5](bios/Other/Recalbox/.variants/metadata.json.22bf62a5)** (263 bytes)
+  - SHA1: `22bf62a560579563b245610a14d3cd76d0b8b257`
+  - MD5: `982559681bf9e9028db32442b67f06e3`
+  - CRC32: `874a4169`
+- **[metadata.json.29f21639](bios/Other/Recalbox/.variants/metadata.json.29f21639)** (11,558 bytes)
+  - SHA1: `29f216394c876b14183037b9d63a842c95390f18`
+  - MD5: `b2098a4c94a3a57d6aaa38e2b0f08548`
+  - CRC32: `5cb5d4f5`
+- **[metadata.json.2cb9d2dd](bios/Other/Recalbox/.variants/metadata.json.2cb9d2dd)** (475 bytes)
+  - SHA1: `2cb9d2dd0baee6b2510fa07f4779e14f729cb0e5`
+  - MD5: `95ee8e8487a8ea85305b87bb333d6ea9`
+  - CRC32: `d33ef684`
+- **[metadata.json.2ef639c0](bios/Other/Recalbox/.variants/metadata.json.2ef639c0)** (303 bytes)
+  - SHA1: `2ef639c00f711b6df872cc1fe884a58f4eafac6c`
+  - MD5: `d2846814cbee6e7b43b98a951f306f6a`
+  - CRC32: `4eccbf8b`
+- **[metadata.json.4fe291dc](bios/Other/Recalbox/.variants/metadata.json.4fe291dc)** (518 bytes)
+  - SHA1: `4fe291dc51b1a619da82a3e219e2f659ae858b00`
+  - MD5: `bbb29a84fe28ebd087ae51ab1246a959`
+  - CRC32: `b906fcc9`
+- **[metadata.json.592b69db](bios/Other/Recalbox/.variants/metadata.json.592b69db)** (225 bytes)
+  - SHA1: `592b69dbaa3ccf6756687c12e28ea6398200aa3b`
+  - MD5: `3c0d696a434c5cd6fc04eedd3abe4bbe`
+  - CRC32: `c8c5eb0c`
+- **[metadata.json.5be2125f](bios/Other/Recalbox/.variants/metadata.json.5be2125f)** (885 bytes)
+  - SHA1: `5be2125f62d4b4ce413995ac2e8b12564b416a0e`
+  - MD5: `5b804f8148946fb958cc8d277bbf975e`
+  - CRC32: `f2baba51`
+- **[metadata.json.61c026da](bios/Other/Recalbox/.variants/metadata.json.61c026da)** (417 bytes)
+  - SHA1: `61c026da3a71dbac0fba60fdf2392367af2fe93f`
+  - MD5: `ebf3fad7f584fcb3fa544e6867e91664`
+  - CRC32: `ce8670cf`
+- **[metadata.json.6d980a10](bios/Other/Recalbox/.variants/metadata.json.6d980a10)** (311 bytes)
+  - SHA1: `6d980a10fdde070e626fa2919b1b932a3cc240b7`
+  - MD5: `30ebdf6eaa64b6759f153a7bbcc9d834`
+  - CRC32: `612bba7c`
+- **[metadata.json.70310291](bios/Other/Recalbox/.variants/metadata.json.70310291)** (226 bytes)
+  - SHA1: `70310291c87cb49ad1baa4aa5dd6f3b7ff846df8`
+  - MD5: `f49b7cd1c94763489d1293c841c372a7`
+  - CRC32: `15898cc3`
+- **[metadata.json.70e4cbab](bios/Other/Recalbox/.variants/metadata.json.70e4cbab)** (335 bytes)
+  - SHA1: `70e4cbab850875c1a666ad6ea36242a76825322c`
+  - MD5: `021e8659cd3a3321d11f96727a72670a`
+  - CRC32: `b2f0a1db`
+- **[metadata.json.7ad0f68a](bios/Other/Recalbox/.variants/metadata.json.7ad0f68a)** (230 bytes)
+  - SHA1: `7ad0f68ab07a67f235542404306626ac8948d686`
+  - MD5: `3fca2835b920ca8cbc67c01109be254c`
+  - CRC32: `daad88b2`
+- **[metadata.json.7cd069a8](bios/Other/Recalbox/.variants/metadata.json.7cd069a8)** (3,743 bytes)
+  - SHA1: `7cd069a88fba7164b5efc75e6a093d41410c8a91`
+  - MD5: `0a2dc6f13589bb583d9d8ec0a3430837`
+  - CRC32: `2ca91344`
+- **[metadata.json.83dbca4e](bios/Other/Recalbox/.variants/metadata.json.83dbca4e)** (394 bytes)
+  - SHA1: `83dbca4e332079c0f613bd2102808f02b1f9562b`
+  - MD5: `bc94c956ebefdabbf392e6483c3d9083`
+  - CRC32: `4a198214`
+- **[metadata.json.83eed0eb](bios/Other/Recalbox/.variants/metadata.json.83eed0eb)** (424 bytes)
+  - SHA1: `83eed0eb09f604530152c3e9bbb92c43dd0d81fa`
+  - MD5: `04de7fdce04a4c8ff999b0e15057f795`
+  - CRC32: `02f030d1`
+- **[metadata.json.88c4212b](bios/Other/Recalbox/.variants/metadata.json.88c4212b)** (1,028 bytes)
+  - SHA1: `88c4212b9610278159aa0280aa3f8d627486f423`
+  - MD5: `e78bb6767682becd8d746e4ffc1ec63b`
+  - CRC32: `4cca3030`
+- **[metadata.json.8c2c6e70](bios/Other/Recalbox/.variants/metadata.json.8c2c6e70)** (394 bytes)
+  - SHA1: `8c2c6e702b0162b3093c3707fe4425026f3f01a3`
+  - MD5: `71c7a9364e3fca6d98cdca1e4218ecc7`
+  - CRC32: `b801ad12`
+- **[metadata.json.95bd60cd](bios/Other/Recalbox/.variants/metadata.json.95bd60cd)** (454 bytes)
+  - SHA1: `95bd60cd0cb770d748310db200ea7629af714e77`
+  - MD5: `1f35c2eb3a23ec001325bd4cd846c87d`
+  - CRC32: `c5eb18a9`
+- **[metadata.json.9dee10c0](bios/Other/Recalbox/.variants/metadata.json.9dee10c0)** (2,787 bytes)
+  - SHA1: `9dee10c02ddf498f2266604304fd895f80b157ed`
+  - MD5: `a5b1ca2204c2ce5d5a10f0243ec5f839`
+  - CRC32: `cf558b97`
+- **[metadata.json.9e58ffab](bios/Other/Recalbox/.variants/metadata.json.9e58ffab)** (303 bytes)
+  - SHA1: `9e58ffabeffb2dc48ed6474c651befcf3b33a0de`
+  - MD5: `d73727b10410f7e0ac0df4e8958548be`
+  - CRC32: `c74e9ade`
+- **[metadata.json.a1bf04e9](bios/Other/Recalbox/.variants/metadata.json.a1bf04e9)** (232 bytes)
+  - SHA1: `a1bf04e9df3a4b5f5ddcd9d9eaf72170d5f70a0b`
+  - MD5: `c0c3580619553066e2057b4b25e5ac3f`
+  - CRC32: `46c6de23`
+- **[metadata.json.b4615720](bios/Other/Recalbox/.variants/metadata.json.b4615720)** (379 bytes)
+  - SHA1: `b461572044d1b3dc49da3dd6623c3384450edd43`
+  - MD5: `03eb5f96eb8b865de49eb9590a0d7cae`
+  - CRC32: `f85a9d77`
+- **[metadata.json.c33e41ad](bios/Other/Recalbox/.variants/metadata.json.c33e41ad)** (475 bytes)
+  - SHA1: `c33e41ad8ed410ddcd4aba4cb8ffec521b5f6afc`
+  - MD5: `1b808d6877b17efd2fed474761f49321`
+  - CRC32: `eddaa169`
+- **[metadata.json.c669af16](bios/Other/Recalbox/.variants/metadata.json.c669af16)** (391 bytes)
+  - SHA1: `c669af16912a66d1b0efdf49b0f4203ecc3465d6`
+  - MD5: `e754017ef62096dce9f4ea1ee00681f7`
+  - CRC32: `4518393c`
+- **[metadata.json.d080b297](bios/Other/Recalbox/.variants/metadata.json.d080b297)** (6,233 bytes)
+  - SHA1: `d080b2973a186197913ebcb4d189e74be2669a7b`
+  - MD5: `02912789c90829d20eed3880bee47525`
+  - CRC32: `af0ac2df`
+- **[metadata.json.db05728a](bios/Other/Recalbox/.variants/metadata.json.db05728a)** (1,390 bytes)
+  - SHA1: `db05728adeec8fc7b4e7850fb7388fe34744fff2`
+  - MD5: `44416d7aca72f7bb22f29b230a801c34`
+  - CRC32: `97f20eec`
+- **[metadata.json.db18538b](bios/Other/Recalbox/.variants/metadata.json.db18538b)** (378 bytes)
+  - SHA1: `db18538b0a83e2468f451ffb0437da8867989141`
+  - MD5: `b8cb24325f1226c585e573e52ce73c67`
+  - CRC32: `e305dd47`
+- **[metadata.json.dd9fdf1f](bios/Other/Recalbox/.variants/metadata.json.dd9fdf1f)** (231 bytes)
+  - SHA1: `dd9fdf1f32f43a4c9f8118872789394d7355b02b`
+  - MD5: `8c2c9069deacc0544cb0bc8f02403bf3`
+  - CRC32: `286f1449`
+- **[metadata.json.fa08acb9](bios/Other/Recalbox/.variants/metadata.json.fa08acb9)** (231 bytes)
+  - SHA1: `fa08acb9ecb16d11be0498446c4307ebbd2baaa7`
+  - MD5: `d830cbe42582b0d45279cd272237df19`
+  - CRC32: `77e7c8f6`
+- **[metadata.json.fbb37c64](bios/Other/Recalbox/.variants/metadata.json.fbb37c64)** (228 bytes)
+  - SHA1: `fbb37c64acbe613d435044bfd62cb95f5dc0651d`
+  - MD5: `9a179132613ef42ef662e11bfb525382`
+  - CRC32: `54ba564c`
+- **[metadata.json.fc54d43a](bios/Other/Recalbox/.variants/metadata.json.fc54d43a)** (293 bytes)
+  - SHA1: `fc54d43a1259d98087bc2f50341721737bd8a08a`
+  - MD5: `8fe748f7ce36d0e21bae49ecda43e014`
+  - CRC32: `e583c1bd`
+- **[misc.bin](bios/Other/Recalbox/misc.bin)** (1,024 bytes)
+  - SHA1: `08509dd4567fa61baa2bae01ba8361e8ca439659`
+  - MD5: `09697a2bb22132b4b4a28f7e846037f5`
+  - CRC32: `32622dbd`
+- **[missing_bios_report.txt](bios/Other/Recalbox/missing_bios_report.txt)** (210 bytes)
+  - SHA1: `72687324ca3e9927173d32ba9d1ebf2f72ec4566`
+  - MD5: `d8cc726ae23c794107b0967d8e913dfe`
+  - CRC32: `c75781e8`
+- **[msxcaswavdb.xml](bios/Other/Recalbox/msxcaswavdb.xml)** (852,796 bytes)
+  - SHA1: `06481f9739fd86d9d460062456fdc4844a13e583`
+  - MD5: `5d4f9b7d75f27d0dd73519d2b841fc49`
+  - CRC32: `4ae56bf2`
+- **[msxsysromdb.xml](bios/Other/Recalbox/msxsysromdb.xml)** (163,577 bytes)
+  - SHA1: `5f90ec0161801b9d30ac1e0dbdf90485ed2bfc6c`
+  - MD5: `56fc758eefd477ed1e16b3183a9779d2`
+  - CRC32: `a11837c3`
+- **[neogeo.zip](bios/Other/Recalbox/neogeo.zip)** (144,009 bytes)
+  - SHA1: `256dc6f59f27222b70491dbd26d7baa667c84e2a`
+  - MD5: `b9ee441f9ca39e69688352f59917ac7a`
+  - CRC32: `f526246c`
+  - **Variants** (4 alternate versions):
+    - [neogeo.zip.5b00dd73](bios/Arcade/MAME/.variants/neogeo.zip.5b00dd73) (1,416,625 bytes) - SHA1: `5b00dd73906a6f8a191ac2d0409459c29826710e`, MD5: `48d2ce098b51cf58457d2e08c3aeefbc`
+    - [neogeo.zip.eb9fed51](bios/Arcade/MAME/.variants/neogeo.zip.eb9fed51) (1,578,888 bytes) - SHA1: `eb9fed518897dfafb67b4148f0ecfa731f0e3259`, MD5: `cc345d87f576665d1c2a673503c1991b`
+    - [neogeo.zip.ed352869](bios/Arcade/MAME/.variants/neogeo.zip.ed352869) (1,416,603 bytes) - SHA1: `ed35286907f7f47b33bd98b48b5d76527fccae0c`, MD5: `1b78bb266499ee243bf660e069067e82`
+    - [neogeo.zip.fc398ab4](bios/SNK/Neo%20Geo/.variants/neogeo.zip.fc398ab4) (1,862,445 bytes) - SHA1: `fc398ab4e13ca6bfef3366ed3391b1050e0eb5e8`, MD5: `dffb72f116d36d025068b23970a4f6df`
+- **[nightvision.glsl](bios/Other/Recalbox/nightvision.glsl)** (145 bytes)
+  - SHA1: `6b4f86b379636dea8402e769931d530abca7387f`
+  - MD5: `89c1d0709bbca969dd5eb0481c60c96d`
+  - CRC32: `02dc11d7`
+- **[nightvision2.glsl](bios/Other/Recalbox/nightvision2.glsl)** (1,929 bytes)
+  - SHA1: `f32da56ed9cc0cbbc99c2a37f15472747619686a`
+  - MD5: `de04c823948bba230736ff6f654a9e99`
+  - CRC32: `ea17b0ab`
+- **[nightvision2scanlines.glsl](bios/Other/Recalbox/nightvision2scanlines.glsl)** (2,343 bytes)
+  - SHA1: `160303f27ed94a888f18976040ea8d6c39402558`
+  - MD5: `d2f9562da2ed759f7e93b75854b3da6e`
+  - CRC32: `1d10131c`
+- **[nobanner.png](bios/Other/Recalbox/nobanner.png)** (256 bytes)
+  - SHA1: `1f87dc05b5d706449bc10e7a8f28d12b17d45afe`
+  - MD5: `666c1ed3ea4469c760c6750dba95eee9`
+  - CRC32: `45dfae0d`
+- **[nobanner@2x.png](bios/Other/Recalbox/nobanner@2x.png)** (368 bytes)
+  - SHA1: `914cf06eda025f0955e24b6f36fd65ee335085c5`
+  - MD5: `fe559390d8018001521d926624954f19`
+  - CRC32: `3cf45606`
+- **[nobanner@4x.png](bios/Other/Recalbox/nobanner@4x.png)** (672 bytes)
+  - SHA1: `a2f7aee40297e33a487c975054fa3764b28936ba`
+  - MD5: `5f063cd76f52ad7513fe49a103221a19`
+  - CRC32: `335bf128`
+- **[nwc24dl.bin](bios/Other/Recalbox/nwc24dl.bin)** (63,488 bytes)
+  - SHA1: `27d53b55779a0db2e76dea50f51e633a53609cd5`
+  - MD5: `42372c6860eb0a0d108b08c502035337`
+  - CRC32: `d68b445b`
+- **[nwc24fl.bin](bios/Other/Recalbox/nwc24fl.bin)** (32,864 bytes)
+  - SHA1: `472c670d701bd233bc03afe4c9f18e22a6fd15c1`
+  - MD5: `deae3b73484ee178352e9d98e3fb5906`
+  - CRC32: `62ceb7a2`
+- **[nwc24fls.bin](bios/Other/Recalbox/nwc24fls.bin)** (12,800 bytes)
+  - SHA1: `c0bb6540f7f888bd60be958d7c1de3b221d51a33`
+  - MD5: `76f1f47e4340fbee8171faf2a4bd8135`
+  - CRC32: `4c2b3377`
+- **[nwc24msg.cbk](bios/Other/Recalbox/nwc24msg.cbk)** (1,024 bytes)
+  - SHA1: `caf8a96a36573d7e67f086f73fec675a5d1c4245`
+  - MD5: `0c425c24e91335f18a3246b1d611a8ca`
+  - CRC32: `934f9a2a`
+- **[omegrace.zip](bios/Other/Recalbox/omegrace.zip)** (1,754,523 bytes)
+  - SHA1: `1ca22afdfefcfa5943742e988c45c1fc0e1124bd`
+  - MD5: `255155cf3f9912c92be8f813e8112a54`
+  - CRC32: `04dbbb0a`
+- **[open.png](bios/Other/Recalbox/open.png)** (649 bytes)
+  - SHA1: `7097ec5e27ea877b91da329e0c64a5ccceb7c0c9`
+  - MD5: `23504875aa860db451ad0c04acaf12fb`
+  - CRC32: `e764b3c7`
+  - **Variants** (4 alternate versions):
+    - [open.png.33e6f9e5](bios/Other/Recalbox/.variants/open.png.33e6f9e5) (619 bytes) - SHA1: `33e6f9e5451304e9c17769c1cca25d01b7effdcd`, MD5: `f8a2a5b6eac3cd252a57779297859a0a`
+    - [open.png.a4535280](bios/Other/Recalbox/.variants/open.png.a4535280) (868 bytes) - SHA1: `a4535280ae34729201a607f9f5f178af5f83c8c2`, MD5: `9e860e20ee3ad0415d7edad49eb44904`
+    - [open.png.e17deb2a](bios/Other/Recalbox/.variants/open.png.e17deb2a) (1,052 bytes) - SHA1: `e17deb2ac28d3c8d1e53c72cfe5e3ddca96f8f2a`, MD5: `b457ff412dabb39b2a6db0dda5131fd8`
+    - [open.png.eda7885e](bios/Other/Recalbox/.variants/open.png.eda7885e) (1,005 bytes) - SHA1: `eda7885e0b2799b0d7f2ad24c037f70ec51e19d5`, MD5: `85647762d0ec5ec4b0a716f8c2374c8d`
+- **[open.png.33e6f9e5](bios/Other/Recalbox/.variants/open.png.33e6f9e5)** (619 bytes)
+  - SHA1: `33e6f9e5451304e9c17769c1cca25d01b7effdcd`
+  - MD5: `f8a2a5b6eac3cd252a57779297859a0a`
+  - CRC32: `f27010ee`
+- **[open.png.a4535280](bios/Other/Recalbox/.variants/open.png.a4535280)** (868 bytes)
+  - SHA1: `a4535280ae34729201a607f9f5f178af5f83c8c2`
+  - MD5: `9e860e20ee3ad0415d7edad49eb44904`
+  - CRC32: `e684b316`
+- **[open.png.e17deb2a](bios/Other/Recalbox/.variants/open.png.e17deb2a)** (1,052 bytes)
+  - SHA1: `e17deb2ac28d3c8d1e53c72cfe5e3ddca96f8f2a`
+  - MD5: `b457ff412dabb39b2a6db0dda5131fd8`
+  - CRC32: `401596f8`
+- **[open.png.eda7885e](bios/Other/Recalbox/.variants/open.png.eda7885e)** (1,005 bytes)
+  - SHA1: `eda7885e0b2799b0d7f2ad24c037f70ec51e19d5`
+  - MD5: `85647762d0ec5ec4b0a716f8c2374c8d`
+  - CRC32: `043a43db`
+- **[open@2x.png](bios/Other/Recalbox/open@2x.png)** (1,394 bytes)
+  - SHA1: `bf59c8ccb79798a5ad3014e83b690c3a0870e93e`
+  - MD5: `d415a1cf45cf8cab3617d856de6eebba`
+  - CRC32: `c2a25a76`
+  - **Variants** (4 alternate versions):
+    - [open@2x.png.2aa04f9f](bios/Other/Recalbox/.variants/open@2x.png.2aa04f9f) (2,473 bytes) - SHA1: `2aa04f9f7aad8468973de64eeee03e585eb5ea90`, MD5: `bb1d089c71792668875b71505f43ea69`
+    - [open@2x.png.3a883151](bios/Other/Recalbox/.variants/open@2x.png.3a883151) (1,213 bytes) - SHA1: `3a883151cf7dff6a37513aae77258a6608dd7222`, MD5: `f2be5ba1569009325e8ac5ee44fd0cab`
+    - [open@2x.png.5ec9f925](bios/Other/Recalbox/.variants/open@2x.png.5ec9f925) (1,857 bytes) - SHA1: `5ec9f925500fc812ba39d4abc2921431cf8e4835`, MD5: `0658049f97dd3cc39af2572e20e87e90`
+    - [open@2x.png.c95cd6c7](bios/Other/Recalbox/.variants/open@2x.png.c95cd6c7) (2,289 bytes) - SHA1: `c95cd6c703fc8ea3baadac19afb079b3a37a754e`, MD5: `c7df1c90c66a5a95e82481b8a6a49be6`
+- **[open@2x.png.2aa04f9f](bios/Other/Recalbox/.variants/open@2x.png.2aa04f9f)** (2,473 bytes)
+  - SHA1: `2aa04f9f7aad8468973de64eeee03e585eb5ea90`
+  - MD5: `bb1d089c71792668875b71505f43ea69`
+  - CRC32: `924eb1ab`
+- **[open@2x.png.3a883151](bios/Other/Recalbox/.variants/open@2x.png.3a883151)** (1,213 bytes)
+  - SHA1: `3a883151cf7dff6a37513aae77258a6608dd7222`
+  - MD5: `f2be5ba1569009325e8ac5ee44fd0cab`
+  - CRC32: `836d2f57`
+- **[open@2x.png.5ec9f925](bios/Other/Recalbox/.variants/open@2x.png.5ec9f925)** (1,857 bytes)
+  - SHA1: `5ec9f925500fc812ba39d4abc2921431cf8e4835`
+  - MD5: `0658049f97dd3cc39af2572e20e87e90`
+  - CRC32: `4fba648e`
+- **[open@2x.png.c95cd6c7](bios/Other/Recalbox/.variants/open@2x.png.c95cd6c7)** (2,289 bytes)
+  - SHA1: `c95cd6c703fc8ea3baadac19afb079b3a37a754e`
+  - MD5: `c7df1c90c66a5a95e82481b8a6a49be6`
+  - CRC32: `cda41762`
+- **[open@4x.png](bios/Other/Recalbox/open@4x.png)** (3,531 bytes)
+  - SHA1: `1394e92d8153969370a8aa16190f3760c9778e33`
+  - MD5: `4fc30f5521cb10c9d462bebd22b84b23`
+  - CRC32: `db400aeb`
+  - **Variants** (4 alternate versions):
+    - [open@4x.png.26d17de3](bios/Other/Recalbox/.variants/open@4x.png.26d17de3) (5,970 bytes) - SHA1: `26d17de394d8e00d0c070f10b8524d45147bd816`, MD5: `d73ac8a72e1c5717cfd58a244f261f2f`
+    - [open@4x.png.4364b445](bios/Other/Recalbox/.variants/open@4x.png.4364b445) (2,917 bytes) - SHA1: `4364b445e67346a2364116765cf145dc7fbdd8cf`, MD5: `aa6ed2fa4e19bbd99b26612af47e9472`
+    - [open@4x.png.6f366a41](bios/Other/Recalbox/.variants/open@4x.png.6f366a41) (4,643 bytes) - SHA1: `6f366a4177e5e474d7796723d82de4979e266344`, MD5: `2552b5ec8c8220bdfd6f9ab32398dfb7`
+    - [open@4x.png.cbda6b42](bios/Other/Recalbox/.variants/open@4x.png.cbda6b42) (5,843 bytes) - SHA1: `cbda6b42def980dc1ffc6e5bddb777a35c5b09d0`, MD5: `e0a8fc6cf8f9bede1559dbe9fc0af755`
+- **[open@4x.png.26d17de3](bios/Other/Recalbox/.variants/open@4x.png.26d17de3)** (5,970 bytes)
+  - SHA1: `26d17de394d8e00d0c070f10b8524d45147bd816`
+  - MD5: `d73ac8a72e1c5717cfd58a244f261f2f`
+  - CRC32: `5be20b28`
+- **[open@4x.png.4364b445](bios/Other/Recalbox/.variants/open@4x.png.4364b445)** (2,917 bytes)
+  - SHA1: `4364b445e67346a2364116765cf145dc7fbdd8cf`
+  - MD5: `aa6ed2fa4e19bbd99b26612af47e9472`
+  - CRC32: `674150cd`
+- **[open@4x.png.6f366a41](bios/Other/Recalbox/.variants/open@4x.png.6f366a41)** (4,643 bytes)
+  - SHA1: `6f366a4177e5e474d7796723d82de4979e266344`
+  - MD5: `2552b5ec8c8220bdfd6f9ab32398dfb7`
+  - CRC32: `73f07b6d`
+- **[open@4x.png.cbda6b42](bios/Other/Recalbox/.variants/open@4x.png.cbda6b42)** (5,843 bytes)
+  - SHA1: `cbda6b42def980dc1ffc6e5bddb777a35c5b09d0`
+  - MD5: `e0a8fc6cf8f9bede1559dbe9fc0af755`
+  - CRC32: `51936692`
+- **[pause.png](bios/Other/Recalbox/pause.png)** (220 bytes)
+  - SHA1: `abcb3d36f01e2310bb431f9bcdfaa0b4d6716973`
+  - MD5: `d088a333312e9799215b91e0f00bc17f`
+  - CRC32: `feec8cd5`
+  - **Variants** (4 alternate versions):
+    - [pause.png.80079698](bios/Other/Recalbox/.variants/pause.png.80079698) (216 bytes) - SHA1: `80079698461b91e73c16fdc738be798651122a4c`, MD5: `2ae2da0489fef642080e1b03af6c7ed1`
+    - [pause.png.91521ba9](bios/Other/Recalbox/.variants/pause.png.91521ba9) (267 bytes) - SHA1: `91521ba96a217548d0b932430c156acc1af25f99`, MD5: `aabcdd8c0e73833567c761dae5f85615`
+    - [pause.png.ac2ef2f4](bios/Other/Recalbox/.variants/pause.png.ac2ef2f4) (298 bytes) - SHA1: `ac2ef2f4a0bbef6b856e294269c8b5041d4f31bd`, MD5: `b412a64f3f750b353a67c1e250b47e4e`
+    - [pause.png.cdaa446b](bios/Other/Recalbox/.variants/pause.png.cdaa446b) (330 bytes) - SHA1: `cdaa446b651f56a0716ccc47e48a6a03c6eec105`, MD5: `31ff7a707917ebeca642a129d6df3552`
+- **[pause.png.80079698](bios/Other/Recalbox/.variants/pause.png.80079698)** (216 bytes)
+  - SHA1: `80079698461b91e73c16fdc738be798651122a4c`
+  - MD5: `2ae2da0489fef642080e1b03af6c7ed1`
+  - CRC32: `652c1a07`
+- **[pause.png.91521ba9](bios/Other/Recalbox/.variants/pause.png.91521ba9)** (267 bytes)
+  - SHA1: `91521ba96a217548d0b932430c156acc1af25f99`
+  - MD5: `aabcdd8c0e73833567c761dae5f85615`
+  - CRC32: `a133ea29`
+- **[pause.png.ac2ef2f4](bios/Other/Recalbox/.variants/pause.png.ac2ef2f4)** (298 bytes)
+  - SHA1: `ac2ef2f4a0bbef6b856e294269c8b5041d4f31bd`
+  - MD5: `b412a64f3f750b353a67c1e250b47e4e`
+  - CRC32: `c37ab01b`
+- **[pause.png.cdaa446b](bios/Other/Recalbox/.variants/pause.png.cdaa446b)** (330 bytes)
+  - SHA1: `cdaa446b651f56a0716ccc47e48a6a03c6eec105`
+  - MD5: `31ff7a707917ebeca642a129d6df3552`
+  - CRC32: `31bcb577`
+- **[pause@2x.png](bios/Other/Recalbox/pause@2x.png)** (515 bytes)
+  - SHA1: `a8435a69bfd700e45a9a285b8102a314d1dd526c`
+  - MD5: `dcbe395b98bb2a676620901dc19912e2`
+  - CRC32: `cf6eabef`
+  - **Variants** (4 alternate versions):
+    - [pause@2x.png.5a3657ad](bios/Other/Recalbox/.variants/pause@2x.png.5a3657ad) (847 bytes) - SHA1: `5a3657ad9418ad39959bcb154f2db8648f80dfdb`, MD5: `594a2f4de565eee948fa761ab5d7a896`
+    - [pause@2x.png.5ebc33aa](bios/Other/Recalbox/.variants/pause@2x.png.5ebc33aa) (621 bytes) - SHA1: `5ebc33aa60cff85ae8889a87ec9562e3cbd57503`, MD5: `59d51818b28463709157e7d04744dae9`
+    - [pause@2x.png.7e658e32](bios/Other/Recalbox/.variants/pause@2x.png.7e658e32) (513 bytes) - SHA1: `7e658e323f100980f6a7d54217e2ed747327db0b`, MD5: `eb58fa1d23aa87a079c086dee21ce916`
+    - [pause@2x.png.9651afbd](bios/Other/Recalbox/.variants/pause@2x.png.9651afbd) (906 bytes) - SHA1: `9651afbd3e9630003865661d901a6d2615bebb26`, MD5: `c7adebd5490e7cde41701a509c7ce029`
+- **[pause@2x.png.5a3657ad](bios/Other/Recalbox/.variants/pause@2x.png.5a3657ad)** (847 bytes)
+  - SHA1: `5a3657ad9418ad39959bcb154f2db8648f80dfdb`
+  - MD5: `594a2f4de565eee948fa761ab5d7a896`
+  - CRC32: `ee2589e3`
+- **[pause@2x.png.5ebc33aa](bios/Other/Recalbox/.variants/pause@2x.png.5ebc33aa)** (621 bytes)
+  - SHA1: `5ebc33aa60cff85ae8889a87ec9562e3cbd57503`
+  - MD5: `59d51818b28463709157e7d04744dae9`
+  - CRC32: `acc9a1d1`
+- **[pause@2x.png.7e658e32](bios/Other/Recalbox/.variants/pause@2x.png.7e658e32)** (513 bytes)
+  - SHA1: `7e658e323f100980f6a7d54217e2ed747327db0b`
+  - MD5: `eb58fa1d23aa87a079c086dee21ce916`
+  - CRC32: `945a2d87`
+- **[pause@2x.png.9651afbd](bios/Other/Recalbox/.variants/pause@2x.png.9651afbd)** (906 bytes)
+  - SHA1: `9651afbd3e9630003865661d901a6d2615bebb26`
+  - MD5: `c7adebd5490e7cde41701a509c7ce029`
+  - CRC32: `8e0d97b9`
+- **[pause@4x.png](bios/Other/Recalbox/pause@4x.png)** (1,413 bytes)
+  - SHA1: `05ac821d79be5a33c7f7561a8690b3f22c33dcfb`
+  - MD5: `af7cc0ed1ccd824f9cec8171025b3990`
+  - CRC32: `db663beb`
+  - **Variants** (4 alternate versions):
+    - [pause@4x.png.77f65e6e](bios/Other/Recalbox/.variants/pause@4x.png.77f65e6e) (2,150 bytes) - SHA1: `77f65e6e24caab3bd06a515693b65fb00209e42f`, MD5: `1b7635b5baf9aa734cb9e614b2eb4bb0`
+    - [pause@4x.png.8c8007d1](bios/Other/Recalbox/.variants/pause@4x.png.8c8007d1) (1,599 bytes) - SHA1: `8c8007d1c77277e4df887adf0f589d93608cdae5`, MD5: `88b7707145641b9b36a6ce0b180c6a56`
+    - [pause@4x.png.d56d6b48](bios/Other/Recalbox/.variants/pause@4x.png.d56d6b48) (2,328 bytes) - SHA1: `d56d6b4893bb4b093418831ced52229228f1e320`, MD5: `28ecbf1db7082b5a0b3ae47328d60b0b`
+    - [pause@4x.png.f06f76f2](bios/Other/Recalbox/.variants/pause@4x.png.f06f76f2) (1,377 bytes) - SHA1: `f06f76f2fccc3d3a0227e26ddbf2d6ed3ca483cc`, MD5: `9f88bf9cc1c8e89e741addcae39277e8`
+- **[pause@4x.png.77f65e6e](bios/Other/Recalbox/.variants/pause@4x.png.77f65e6e)** (2,150 bytes)
+  - SHA1: `77f65e6e24caab3bd06a515693b65fb00209e42f`
+  - MD5: `1b7635b5baf9aa734cb9e614b2eb4bb0`
+  - CRC32: `0ed1e803`
+- **[pause@4x.png.8c8007d1](bios/Other/Recalbox/.variants/pause@4x.png.8c8007d1)** (1,599 bytes)
+  - SHA1: `8c8007d1c77277e4df887adf0f589d93608cdae5`
+  - MD5: `88b7707145641b9b36a6ce0b180c6a56`
+  - CRC32: `6e288f7f`
+- **[pause@4x.png.d56d6b48](bios/Other/Recalbox/.variants/pause@4x.png.d56d6b48)** (2,328 bytes)
+  - SHA1: `d56d6b4893bb4b093418831ced52229228f1e320`
+  - MD5: `28ecbf1db7082b5a0b3ae47328d60b0b`
+  - CRC32: `5c7d9b6a`
+- **[pause@4x.png.f06f76f2](bios/Other/Recalbox/.variants/pause@4x.png.f06f76f2)** (1,377 bytes)
+  - SHA1: `f06f76f2fccc3d3a0227e26ddbf2d6ed3ca483cc`
+  - MD5: `9f88bf9cc1c8e89e741addcae39277e8`
+  - CRC32: `2b230cb0`
+- **[piFBA_gamelist.txt](bios/Other/Recalbox/piFBA_gamelist.txt)** (147,568 bytes)
+  - SHA1: `bee87380448ac9fb0f9cd90ce8bd71b8fdc87f70`
+  - MD5: `f3a0c4fa7e10c5e9a12445040a2df727`
+  - CRC32: `fb282406`
+- **[play.png](bios/Other/Recalbox/play.png)** (349 bytes)
+  - SHA1: `a9483932c08d9d4573f24f328e385627a09d1460`
+  - MD5: `1fcde5514eb0ad0e46a419019260ffd2`
+  - CRC32: `fc09be78`
+  - **Variants** (4 alternate versions):
+    - [play.png.03717947](bios/Other/Recalbox/.variants/play.png.03717947) (363 bytes) - SHA1: `03717947c7ad47a6f93fc3a8ac96b3abbd9128da`, MD5: `27a588bdf62b0eeabd68c85d02c1ef3c`
+    - [play.png.162ea605](bios/Other/Recalbox/.variants/play.png.162ea605) (556 bytes) - SHA1: `162ea60583c4cca1c4c767c352cf1dca86c79304`, MD5: `94c801d096529dc6987775e861b6c87f`
+    - [play.png.499775ef](bios/Other/Recalbox/.variants/play.png.499775ef) (437 bytes) - SHA1: `499775efe307dd55ea52f4f4dc63666072e01a19`, MD5: `963eff2edc26f1e9f3834480465cf5da`
+    - [play.png.f645b4fe](bios/Other/Recalbox/.variants/play.png.f645b4fe) (544 bytes) - SHA1: `f645b4fe5fd0d28c4cb12227b80a0d31d3ca2d9d`, MD5: `7bbdcabe623de5d1210fe98d3b71f47d`
+- **[play.png.03717947](bios/Other/Recalbox/.variants/play.png.03717947)** (363 bytes)
+  - SHA1: `03717947c7ad47a6f93fc3a8ac96b3abbd9128da`
+  - MD5: `27a588bdf62b0eeabd68c85d02c1ef3c`
+  - CRC32: `f419578e`
+- **[play.png.162ea605](bios/Other/Recalbox/.variants/play.png.162ea605)** (556 bytes)
+  - SHA1: `162ea60583c4cca1c4c767c352cf1dca86c79304`
+  - MD5: `94c801d096529dc6987775e861b6c87f`
+  - CRC32: `1eaf34dc`
+- **[play.png.499775ef](bios/Other/Recalbox/.variants/play.png.499775ef)** (437 bytes)
+  - SHA1: `499775efe307dd55ea52f4f4dc63666072e01a19`
+  - MD5: `963eff2edc26f1e9f3834480465cf5da`
+  - CRC32: `4b11b61c`
+- **[play.png.f645b4fe](bios/Other/Recalbox/.variants/play.png.f645b4fe)** (544 bytes)
+  - SHA1: `f645b4fe5fd0d28c4cb12227b80a0d31d3ca2d9d`
+  - MD5: `7bbdcabe623de5d1210fe98d3b71f47d`
+  - CRC32: `4913408d`
+- **[play@2x.png](bios/Other/Recalbox/play@2x.png)** (700 bytes)
+  - SHA1: `bf9f7afe4f7353fd09eb9d8c4ba37fcdf26c5882`
+  - MD5: `b9ac7a394d5fc704eb516eeeb32611b1`
+  - CRC32: `0072cea6`
+  - **Variants** (4 alternate versions):
+    - [play@2x.png.527d1382](bios/Other/Recalbox/.variants/play@2x.png.527d1382) (898 bytes) - SHA1: `527d13829fbd39f4d06689f4ad5c03f45643961a`, MD5: `0819b6dd3cceee8a0ac446fdefb650ce`
+    - [play@2x.png.931f10b7](bios/Other/Recalbox/.variants/play@2x.png.931f10b7) (1,176 bytes) - SHA1: `931f10b7a40c905821412e32e9e2a33d0facd755`, MD5: `fb80e6af37858b15630b42a9609c1b5f`
+    - [play@2x.png.cb303b15](bios/Other/Recalbox/.variants/play@2x.png.cb303b15) (1,190 bytes) - SHA1: `cb303b1580421f480fb4fd5da4b8480cde4db4b0`, MD5: `630f50736b8e4e9678f6e63451d17a55`
+    - [play@2x.png.d130e1da](bios/Other/Recalbox/.variants/play@2x.png.d130e1da) (752 bytes) - SHA1: `d130e1dab825fd469063a1781d3af7e87a4d9a32`, MD5: `fef50bea9d25d0b9cb4889d1f10de285`
+- **[play@2x.png.527d1382](bios/Other/Recalbox/.variants/play@2x.png.527d1382)** (898 bytes)
+  - SHA1: `527d13829fbd39f4d06689f4ad5c03f45643961a`
+  - MD5: `0819b6dd3cceee8a0ac446fdefb650ce`
+  - CRC32: `f7fd68f7`
+- **[play@2x.png.931f10b7](bios/Other/Recalbox/.variants/play@2x.png.931f10b7)** (1,176 bytes)
+  - SHA1: `931f10b7a40c905821412e32e9e2a33d0facd755`
+  - MD5: `fb80e6af37858b15630b42a9609c1b5f`
+  - CRC32: `6518460d`
+- **[play@2x.png.cb303b15](bios/Other/Recalbox/.variants/play@2x.png.cb303b15)** (1,190 bytes)
+  - SHA1: `cb303b1580421f480fb4fd5da4b8480cde4db4b0`
+  - MD5: `630f50736b8e4e9678f6e63451d17a55`
+  - CRC32: `e6373bd6`
+- **[play@2x.png.d130e1da](bios/Other/Recalbox/.variants/play@2x.png.d130e1da)** (752 bytes)
+  - SHA1: `d130e1dab825fd469063a1781d3af7e87a4d9a32`
+  - MD5: `fef50bea9d25d0b9cb4889d1f10de285`
+  - CRC32: `d16c1f2d`
+- **[play@4x.png](bios/Other/Recalbox/play@4x.png)** (1,586 bytes)
+  - SHA1: `461dc36a9cc506ebfb0570192b60e1eb2f8d5fe7`
+  - MD5: `46837b8597d2c4b50de38e0ec0d9523c`
+  - CRC32: `79207ce7`
+  - **Variants** (4 alternate versions):
+    - [play@4x.png.64f89855](bios/Other/Recalbox/.variants/play@4x.png.64f89855) (1,915 bytes) - SHA1: `64f89855163843381d536a2e54d5aff0be4436ae`, MD5: `1de3ad71260885fd381d2398d9b1da10`
+    - [play@4x.png.6bdc7581](bios/Other/Recalbox/.variants/play@4x.png.6bdc7581) (2,776 bytes) - SHA1: `6bdc75812c6fde24556ae912a42e05a8d358dd7b`, MD5: `04bcaa3be0a9af6386816ab3845c5912`
+    - [play@4x.png.cea18026](bios/Other/Recalbox/.variants/play@4x.png.cea18026) (2,703 bytes) - SHA1: `cea180266dbfe3e3c9dd0b58c38c2e9e434edb72`, MD5: `b3bfa48ea3bf4073815d460a7dac32b2`
+    - [play@4x.png.cfa577c6](bios/Other/Recalbox/.variants/play@4x.png.cfa577c6) (1,669 bytes) - SHA1: `cfa577c62a2f864da3263318fd3cf08e119eab45`, MD5: `0a202fb914e857c41f8bbb753df20722`
+- **[play@4x.png.64f89855](bios/Other/Recalbox/.variants/play@4x.png.64f89855)** (1,915 bytes)
+  - SHA1: `64f89855163843381d536a2e54d5aff0be4436ae`
+  - MD5: `1de3ad71260885fd381d2398d9b1da10`
+  - CRC32: `a9f36ffa`
+- **[play@4x.png.6bdc7581](bios/Other/Recalbox/.variants/play@4x.png.6bdc7581)** (2,776 bytes)
+  - SHA1: `6bdc75812c6fde24556ae912a42e05a8d358dd7b`
+  - MD5: `04bcaa3be0a9af6386816ab3845c5912`
+  - CRC32: `f9182923`
+- **[play@4x.png.cea18026](bios/Other/Recalbox/.variants/play@4x.png.cea18026)** (2,703 bytes)
+  - SHA1: `cea180266dbfe3e3c9dd0b58c38c2e9e434edb72`
+  - MD5: `b3bfa48ea3bf4073815d460a7dac32b2`
+  - CRC32: `47129a0c`
+- **[play@4x.png.cfa577c6](bios/Other/Recalbox/.variants/play@4x.png.cfa577c6)** (1,669 bytes)
+  - SHA1: `cfa577c62a2f864da3263318fd3cf08e119eab45`
+  - MD5: `0a202fb914e857c41f8bbb753df20722`
+  - CRC32: `36218932`
+- **[posterize.glsl](bios/Other/Recalbox/posterize.glsl)** (242 bytes)
+  - SHA1: `5e5132b9e1acf338e158a0809253c065b4a1d169`
+  - MD5: `8e5336b2b379c001ccba4164a06a5919`
+  - CRC32: `fa256257`
+- **[posterize2.glsl](bios/Other/Recalbox/posterize2.glsl)** (225 bytes)
+  - SHA1: `9d2ca80c7b2273bdfdf927febae004f77c529664`
+  - MD5: `887c8a656cdb1e58047aa1f494ca5d00`
+  - CRC32: `8ef1a1dc`
+- **[primarycolors.glsl](bios/Other/Recalbox/primarycolors.glsl)** (1,142 bytes)
+  - SHA1: `417a6a00bdb867f04e91803da9974415b0edf95f`
+  - MD5: `afc0cdd0310eb82daf7580889945f75d`
+  - CRC32: `e8aedc3c`
+- **[readme.txt](bios/Other/Recalbox/readme.txt)** (7,595 bytes)
+  - SHA1: `fe801242a47a5a0b94001e1c0205a142e8973add`
+  - MD5: `6c107cecfcca69890886b0b9f301a1bc`
+  - CRC32: `8a113c53`
+- **[refresh.png](bios/Other/Recalbox/refresh.png)** (781 bytes)
+  - SHA1: `3f8f7fde1935e8b166ee4cd0c982926ae842b4c2`
+  - MD5: `0ae9fd96fc7d5567ae3c4bf3c40a3a4a`
+  - CRC32: `074b7ead`
+  - **Variants** (4 alternate versions):
+    - [refresh.png.2b88074a](bios/Other/Recalbox/.variants/refresh.png.2b88074a) (1,255 bytes) - SHA1: `2b88074a383bd77044af6d33abdebcd3388238e9`, MD5: `bd585f843d3de853767dd694576f507b`
+    - [refresh.png.557efc24](bios/Other/Recalbox/.variants/refresh.png.557efc24) (840 bytes) - SHA1: `557efc24d1cbfbcd71e69323f8d121bfb4fc7705`, MD5: `d2b0f4eef2793f428418cb780d3b8bb1`
+    - [refresh.png.5d7281b7](bios/Other/Recalbox/.variants/refresh.png.5d7281b7) (1,259 bytes) - SHA1: `5d7281b7c8c483f7a02b586f5466df7ecfb40d39`, MD5: `ca52072c7d970c2459456b4f92d841e1`
+    - [refresh.png.67c5c8be](bios/Other/Recalbox/.variants/refresh.png.67c5c8be) (966 bytes) - SHA1: `67c5c8be799e91170de2106389db4844c64a86ce`, MD5: `8b4042ae76ec816ac5800c6a09de8f73`
+- **[refresh.png.2b88074a](bios/Other/Recalbox/.variants/refresh.png.2b88074a)** (1,255 bytes)
+  - SHA1: `2b88074a383bd77044af6d33abdebcd3388238e9`
+  - MD5: `bd585f843d3de853767dd694576f507b`
+  - CRC32: `3b6877d5`
+- **[refresh.png.557efc24](bios/Other/Recalbox/.variants/refresh.png.557efc24)** (840 bytes)
+  - SHA1: `557efc24d1cbfbcd71e69323f8d121bfb4fc7705`
+  - MD5: `d2b0f4eef2793f428418cb780d3b8bb1`
+  - CRC32: `b7d8303c`
+- **[refresh.png.5d7281b7](bios/Other/Recalbox/.variants/refresh.png.5d7281b7)** (1,259 bytes)
+  - SHA1: `5d7281b7c8c483f7a02b586f5466df7ecfb40d39`
+  - MD5: `ca52072c7d970c2459456b4f92d841e1`
+  - CRC32: `2ea06a90`
+- **[refresh.png.67c5c8be](bios/Other/Recalbox/.variants/refresh.png.67c5c8be)** (966 bytes)
+  - SHA1: `67c5c8be799e91170de2106389db4844c64a86ce`
+  - MD5: `8b4042ae76ec816ac5800c6a09de8f73`
+  - CRC32: `d5a8b586`
+- **[refresh@2x.png](bios/Other/Recalbox/refresh@2x.png)** (1,616 bytes)
+  - SHA1: `b0028c41d392688f4daf238db9ab930af5d262f8`
+  - MD5: `f4002bc82cbf2dd46414f13a1946f1af`
+  - CRC32: `3f6d23ce`
+  - **Variants** (4 alternate versions):
+    - [refresh@2x.png.054e3ec4](bios/Other/Recalbox/.variants/refresh@2x.png.054e3ec4) (2,859 bytes) - SHA1: `054e3ec439e0e8c3491ff9ee79b2cc947a0083e8`, MD5: `86e92bd2d8b94c6e69d0653709580d8c`
+    - [refresh@2x.png.0cbc6145](bios/Other/Recalbox/.variants/refresh@2x.png.0cbc6145) (1,810 bytes) - SHA1: `0cbc6145f229657b0f880af8fde9ff63066bdfa2`, MD5: `4f9621445e8019bb31198775c0451b3a`
+    - [refresh@2x.png.690e4a1f](bios/Other/Recalbox/.variants/refresh@2x.png.690e4a1f) (2,943 bytes) - SHA1: `690e4a1fab765763b09eb29862afde00a158eea8`, MD5: `e8a3b60db554f8100ac6d7a750a23947`
+    - [refresh@2x.png.b1e3337b](bios/Other/Recalbox/.variants/refresh@2x.png.b1e3337b) (2,011 bytes) - SHA1: `b1e3337bbde36f4af07b2d70ed43d4d7cef38cbc`, MD5: `29d71d12f083ac62c3142c8998c6e9f4`
+- **[refresh@2x.png.054e3ec4](bios/Other/Recalbox/.variants/refresh@2x.png.054e3ec4)** (2,859 bytes)
+  - SHA1: `054e3ec439e0e8c3491ff9ee79b2cc947a0083e8`
+  - MD5: `86e92bd2d8b94c6e69d0653709580d8c`
+  - CRC32: `ae9553b0`
+- **[refresh@2x.png.0cbc6145](bios/Other/Recalbox/.variants/refresh@2x.png.0cbc6145)** (1,810 bytes)
+  - SHA1: `0cbc6145f229657b0f880af8fde9ff63066bdfa2`
+  - MD5: `4f9621445e8019bb31198775c0451b3a`
+  - CRC32: `701c3ee3`
+- **[refresh@2x.png.690e4a1f](bios/Other/Recalbox/.variants/refresh@2x.png.690e4a1f)** (2,943 bytes)
+  - SHA1: `690e4a1fab765763b09eb29862afde00a158eea8`
+  - MD5: `e8a3b60db554f8100ac6d7a750a23947`
+  - CRC32: `6e008fbc`
+- **[refresh@2x.png.b1e3337b](bios/Other/Recalbox/.variants/refresh@2x.png.b1e3337b)** (2,011 bytes)
+  - SHA1: `b1e3337bbde36f4af07b2d70ed43d4d7cef38cbc`
+  - MD5: `29d71d12f083ac62c3142c8998c6e9f4`
+  - CRC32: `1e7052b5`
+- **[refresh@4x.png](bios/Other/Recalbox/refresh@4x.png)** (3,786 bytes)
+  - SHA1: `1fcd01cae063d47e493bb4847f5ea8a1f8119966`
+  - MD5: `7aba4759afd2c9e074e813d6764c8299`
+  - CRC32: `5ff5e9c7`
+  - **Variants** (4 alternate versions):
+    - [refresh@4x.png.3783a06c](bios/Other/Recalbox/.variants/refresh@4x.png.3783a06c) (4,496 bytes) - SHA1: `3783a06c587ec982ec93314f37110f5bfa8c4fcd`, MD5: `a4039dcd75d95fd69ed5a219f4e123ef`
+    - [refresh@4x.png.75b19b0d](bios/Other/Recalbox/.variants/refresh@4x.png.75b19b0d) (6,982 bytes) - SHA1: `75b19b0d8cb2cb80fbc37e4ad9352ee130243a7e`, MD5: `0847581f8805e070de9d640979ba06bb`
+    - [refresh@4x.png.a09a2552](bios/Other/Recalbox/.variants/refresh@4x.png.a09a2552) (4,845 bytes) - SHA1: `a09a2552ba81e18c67a4dc2dd7226480505e2983`, MD5: `d34edacc64b9ef8fa3e655e6da8d4fbb`
+    - [refresh@4x.png.b64e40d0](bios/Other/Recalbox/.variants/refresh@4x.png.b64e40d0) (7,461 bytes) - SHA1: `b64e40d0c71a842d6130b701a18e30ed0ef78d41`, MD5: `3e173ea9e986d97852aa3312c6076ec1`
+- **[refresh@4x.png.3783a06c](bios/Other/Recalbox/.variants/refresh@4x.png.3783a06c)** (4,496 bytes)
+  - SHA1: `3783a06c587ec982ec93314f37110f5bfa8c4fcd`
+  - MD5: `a4039dcd75d95fd69ed5a219f4e123ef`
+  - CRC32: `4b931abf`
+- **[refresh@4x.png.75b19b0d](bios/Other/Recalbox/.variants/refresh@4x.png.75b19b0d)** (6,982 bytes)
+  - SHA1: `75b19b0d8cb2cb80fbc37e4ad9352ee130243a7e`
+  - MD5: `0847581f8805e070de9d640979ba06bb`
+  - CRC32: `fb1ccd87`
+- **[refresh@4x.png.a09a2552](bios/Other/Recalbox/.variants/refresh@4x.png.a09a2552)** (4,845 bytes)
+  - SHA1: `a09a2552ba81e18c67a4dc2dd7226480505e2983`
+  - MD5: `d34edacc64b9ef8fa3e655e6da8d4fbb`
+  - CRC32: `72ca9fc9`
+- **[refresh@4x.png.b64e40d0](bios/Other/Recalbox/.variants/refresh@4x.png.b64e40d0)** (7,461 bytes)
+  - SHA1: `b64e40d0c71a842d6130b701a18e30ed0ef78d41`
+  - MD5: `3e173ea9e986d97852aa3312c6076ec1`
+  - CRC32: `7d340648`
+- **[reject.wav](bios/Other/Recalbox/reject.wav)** (17,792 bytes)
+  - SHA1: `bf15f4d34ceefb09dec74510557c18a21c842cbc`
+  - MD5: `3b753bcc1bbcc8901eedd46b08d3e4b8`
+  - CRC32: `bd66d323`
+- **[saloram.rom](bios/Other/Recalbox/saloram.rom)** (16,384 bytes)
+  - SHA1: `42e7909e0198701102ec19b1bf66c240dd3fa8b3`
+  - MD5: `e65f96e9ffef24b5215a2cd86d5c94b8`
+  - CRC32: `3662eb12`
+- **[screenshot.png](bios/Other/Recalbox/screenshot.png)** (711 bytes)
+  - SHA1: `d39d8dc9522e8b7149122cc2d16f65b14b8ea506`
+  - MD5: `11db70d22366386777c8b402f937d19a`
+  - CRC32: `24ebb5d1`
+  - **Variants** (4 alternate versions):
+    - [screenshot.png.09b1cefb](bios/Other/Recalbox/.variants/screenshot.png.09b1cefb) (1,122 bytes) - SHA1: `09b1cefb7280aff81c853a636b9bdce2f015821c`, MD5: `a36abfac997a4202d90ff84b4216cf2e`
+    - [screenshot.png.6b314d95](bios/Other/Recalbox/.variants/screenshot.png.6b314d95) (854 bytes) - SHA1: `6b314d95fc7f2ba067923d38f5e596ffd26d5cdd`, MD5: `5d860e2ff5d553abaf7418082232261e`
+    - [screenshot.png.9cde0514](bios/Other/Recalbox/.variants/screenshot.png.9cde0514) (777 bytes) - SHA1: `9cde05149392bbe9f93c5b414809e9fe34ba0f6c`, MD5: `99777987a6c57f267de9b23484193b60`
+    - [screenshot.png.bacfe099](bios/Other/Recalbox/.variants/screenshot.png.bacfe099) (1,176 bytes) - SHA1: `bacfe09941e27948215d680c0c0b73af86aabdf0`, MD5: `cb7c5c0f62fa0671103241f843ef9cdc`
+- **[screenshot.png.09b1cefb](bios/Other/Recalbox/.variants/screenshot.png.09b1cefb)** (1,122 bytes)
+  - SHA1: `09b1cefb7280aff81c853a636b9bdce2f015821c`
+  - MD5: `a36abfac997a4202d90ff84b4216cf2e`
+  - CRC32: `0728b7ea`
+- **[screenshot.png.6b314d95](bios/Other/Recalbox/.variants/screenshot.png.6b314d95)** (854 bytes)
+  - SHA1: `6b314d95fc7f2ba067923d38f5e596ffd26d5cdd`
+  - MD5: `5d860e2ff5d553abaf7418082232261e`
+  - CRC32: `1f58979d`
+- **[screenshot.png.9cde0514](bios/Other/Recalbox/.variants/screenshot.png.9cde0514)** (777 bytes)
+  - SHA1: `9cde05149392bbe9f93c5b414809e9fe34ba0f6c`
+  - MD5: `99777987a6c57f267de9b23484193b60`
+  - CRC32: `08f5256a`
+- **[screenshot.png.bacfe099](bios/Other/Recalbox/.variants/screenshot.png.bacfe099)** (1,176 bytes)
+  - SHA1: `bacfe09941e27948215d680c0c0b73af86aabdf0`
+  - MD5: `cb7c5c0f62fa0671103241f843ef9cdc`
+  - CRC32: `f6b29e5f`
+- **[screenshot@2x.png](bios/Other/Recalbox/screenshot@2x.png)** (1,531 bytes)
+  - SHA1: `359a1c1155c0480eb1e610fc20c852a5e109db62`
+  - MD5: `5796e431a17e95bd20fedb1d401c37da`
+  - CRC32: `32435499`
+  - **Variants** (4 alternate versions):
+    - [screenshot@2x.png.3cd1248a](bios/Other/Recalbox/.variants/screenshot@2x.png.3cd1248a) (2,682 bytes) - SHA1: `3cd1248a92b77fa3b5310d65a2d36d8824f282b9`, MD5: `dfd4d3ff489c0015616f727a402a089f`
+    - [screenshot@2x.png.63f721a8](bios/Other/Recalbox/.variants/screenshot@2x.png.63f721a8) (2,615 bytes) - SHA1: `63f721a8ca9e2dbfbad081f2936388e7a35e0235`, MD5: `d0c4dae92122f532596b86548e2066e3`
+    - [screenshot@2x.png.6e230a17](bios/Other/Recalbox/.variants/screenshot@2x.png.6e230a17) (1,614 bytes) - SHA1: `6e230a17d7a55131c54c6985e1f6d61fec2c46ff`, MD5: `c53f739890c9990ff4260dbb3ca89538`
+    - [screenshot@2x.png.d6a6235b](bios/Other/Recalbox/.variants/screenshot@2x.png.d6a6235b) (1,860 bytes) - SHA1: `d6a6235b05d5fd6b7be3a81831fc7f2eb1885853`, MD5: `7042d3d40677cd2fd20672febe9b573e`
+- **[screenshot@2x.png.3cd1248a](bios/Other/Recalbox/.variants/screenshot@2x.png.3cd1248a)** (2,682 bytes)
+  - SHA1: `3cd1248a92b77fa3b5310d65a2d36d8824f282b9`
+  - MD5: `dfd4d3ff489c0015616f727a402a089f`
+  - CRC32: `5e14989d`
+- **[screenshot@2x.png.63f721a8](bios/Other/Recalbox/.variants/screenshot@2x.png.63f721a8)** (2,615 bytes)
+  - SHA1: `63f721a8ca9e2dbfbad081f2936388e7a35e0235`
+  - MD5: `d0c4dae92122f532596b86548e2066e3`
+  - CRC32: `b550fa35`
+- **[screenshot@2x.png.6e230a17](bios/Other/Recalbox/.variants/screenshot@2x.png.6e230a17)** (1,614 bytes)
+  - SHA1: `6e230a17d7a55131c54c6985e1f6d61fec2c46ff`
+  - MD5: `c53f739890c9990ff4260dbb3ca89538`
+  - CRC32: `c26107d1`
+- **[screenshot@2x.png.d6a6235b](bios/Other/Recalbox/.variants/screenshot@2x.png.d6a6235b)** (1,860 bytes)
+  - SHA1: `d6a6235b05d5fd6b7be3a81831fc7f2eb1885853`
+  - MD5: `7042d3d40677cd2fd20672febe9b573e`
+  - CRC32: `3ab5a532`
+- **[screenshot@4x.png](bios/Other/Recalbox/screenshot@4x.png)** (3,534 bytes)
+  - SHA1: `3b4f3c49b31cf756314fe33d96c7b9a8ea1cd099`
+  - MD5: `cfb15ba911bee02c0bb5cf4750f3713d`
+  - CRC32: `7e65c79b`
+  - **Variants** (4 alternate versions):
+    - [screenshot@4x.png.32dadf58](bios/Other/Recalbox/.variants/screenshot@4x.png.32dadf58) (6,869 bytes) - SHA1: `32dadf581d2472bda343db200c77d837027aa512`, MD5: `2e794042259fb1bb83a77e2ab5acf7c5`
+    - [screenshot@4x.png.522ddcc0](bios/Other/Recalbox/.variants/screenshot@4x.png.522ddcc0) (3,969 bytes) - SHA1: `522ddcc07f6d487531663dbe32cd8e2b6286b5a8`, MD5: `845b637d827c2edc915a7a891693d262`
+    - [screenshot@4x.png.6543ec27](bios/Other/Recalbox/.variants/screenshot@4x.png.6543ec27) (6,603 bytes) - SHA1: `6543ec27d81777463b860eda542afc195472cc15`, MD5: `4002347fb15667464ab3e8b6011ae1f9`
+    - [screenshot@4x.png.cd0a99a3](bios/Other/Recalbox/.variants/screenshot@4x.png.cd0a99a3) (4,400 bytes) - SHA1: `cd0a99a3a50c837de7be1527249d62fa6929e883`, MD5: `22a35a091fb4869c63c0911969a9acb6`
+- **[screenshot@4x.png.32dadf58](bios/Other/Recalbox/.variants/screenshot@4x.png.32dadf58)** (6,869 bytes)
+  - SHA1: `32dadf581d2472bda343db200c77d837027aa512`
+  - MD5: `2e794042259fb1bb83a77e2ab5acf7c5`
+  - CRC32: `9fcdc6e4`
+- **[screenshot@4x.png.522ddcc0](bios/Other/Recalbox/.variants/screenshot@4x.png.522ddcc0)** (3,969 bytes)
+  - SHA1: `522ddcc07f6d487531663dbe32cd8e2b6286b5a8`
+  - MD5: `845b637d827c2edc915a7a891693d262`
+  - CRC32: `0719d031`
+- **[screenshot@4x.png.6543ec27](bios/Other/Recalbox/.variants/screenshot@4x.png.6543ec27)** (6,603 bytes)
+  - SHA1: `6543ec27d81777463b860eda542afc195472cc15`
+  - MD5: `4002347fb15667464ab3e8b6011ae1f9`
+  - CRC32: `21943b21`
+- **[screenshot@4x.png.cd0a99a3](bios/Other/Recalbox/.variants/screenshot@4x.png.cd0a99a3)** (4,400 bytes)
+  - SHA1: `cd0a99a3a50c837de7be1527249d62fa6929e883`
+  - MD5: `22a35a091fb4869c63c0911969a9acb6`
+  - CRC32: `b6660936`
+- **[segadb.xml](bios/Other/Recalbox/segadb.xml)** (80,679 bytes)
+  - SHA1: `e5bc915267d01567d460fb6c8d0d2c7456970ae1`
+  - MD5: `a806d88adff5383619613e94100b85f9`
+  - CRC32: `ad813665`
+- **[sepia.glsl](bios/Other/Recalbox/sepia.glsl)** (339 bytes)
+  - SHA1: `30f1062091df02d5ca48341bac0619af8a989af9`
+  - MD5: `5242dddb17bdfc8e6a03b5275e34e7c5`
+  - CRC32: `daa99a63`
+- **[sgb2_boot.bin](bios/Other/Recalbox/sgb2_boot.bin)** (256 bytes)
+  - SHA1: `576678d0fc3892b80471d7067ce6014e6af77ed5`
+  - MD5: `b4331a9e612b4738867a30af9c96df52`
+  - CRC32: `73bd96dc`
+  - Also known as: `sgb2_bios.bin`
+- **[sgb_boot.bin](bios/Other/Recalbox/sgb_boot.bin)** (256 bytes)
+  - SHA1: `27267e45c8408857267231ba6c18bfbd052536e2`
+  - MD5: `be77bbd03f8675478f6e3d2176f3cb56`
+  - CRC32: `edac680e`
+  - Also known as: `sgb_bios.bin`
+- **[sketchy.glsl](bios/Other/Recalbox/sketchy.glsl)** (527 bytes)
+  - SHA1: `e66355488508c3a81c20255cdbac099dea43072e`
+  - MD5: `21a2f75edf76e6ae7c618854827bb9d0`
+  - CRC32: `2aad5922`
+- **[skydiver.zip](bios/Other/Recalbox/skydiver.zip)** (117,241 bytes)
+  - SHA1: `a0548e37e76a21fb37005cff944319ee63f93d1e`
+  - MD5: `95e05db7f8fa208daafd7b0d32041db8`
+  - CRC32: `143797a3`
+- **[solarq.zip](bios/Other/Recalbox/solarq.zip)** (1,342,645 bytes)
+  - SHA1: `ff532cee1de69668b0c68238aff0c16813640476`
+  - MD5: `b4b70db555dfb48b91a067eea747c771`
+  - CRC32: `92998e66`
+- **[spookey1.glsl](bios/Other/Recalbox/spookey1.glsl)** (236 bytes)
+  - SHA1: `d09ef90b6be9ab8ba48fc965f478049e1b796968`
+  - MD5: `ad9e19b1f59e58b643a85371a36b2c37`
+  - CRC32: `8a650720`
+- **[spookey2.glsl](bios/Other/Recalbox/spookey2.glsl)** (281 bytes)
+  - SHA1: `7976d54f804ce3789c93cd2a49f7cb34243690f5`
+  - MD5: `37c08163651a3f973dcd2b1ffd019dbd`
+  - CRC32: `d2762957`
+- **[stop.png](bios/Other/Recalbox/stop.png)** (221 bytes)
+  - SHA1: `a7efa962a6ce5aefc7631e7bee6ad44c1b6cf612`
+  - MD5: `1dcd10ed07bdfb5f5491da8f1fc53dac`
+  - CRC32: `4aebd5d1`
+  - **Variants** (4 alternate versions):
+    - [stop.png.19fbfd65](bios/Other/Recalbox/.variants/stop.png.19fbfd65) (299 bytes) - SHA1: `19fbfd65dbb47a0ba3da0dee2d0157bef4fa3a42`, MD5: `d5f8ba07e38873581b5cb09434621b91`
+    - [stop.png.9d45941a](bios/Other/Recalbox/.variants/stop.png.9d45941a) (234 bytes) - SHA1: `9d45941a13a4d6ba5dd25abf27138b461f1b12fa`, MD5: `66fa9741213eb64b792a70a22b062156`
+    - [stop.png.b938934d](bios/Other/Recalbox/.variants/stop.png.b938934d) (275 bytes) - SHA1: `b938934da0b44a67495cf55504d2950eb7b4a7eb`, MD5: `ce2b4878d89bd5d633ce5e7a96f9d042`
+    - [stop.png.d802a130](bios/Other/Recalbox/.variants/stop.png.d802a130) (335 bytes) - SHA1: `d802a1309be05ff9af3cab1b1897f2f69dc9cc42`, MD5: `b737a00d198cd438ba7646c732eaa97f`
+- **[stop.png.19fbfd65](bios/Other/Recalbox/.variants/stop.png.19fbfd65)** (299 bytes)
+  - SHA1: `19fbfd65dbb47a0ba3da0dee2d0157bef4fa3a42`
+  - MD5: `d5f8ba07e38873581b5cb09434621b91`
+  - CRC32: `9248e685`
+- **[stop.png.9d45941a](bios/Other/Recalbox/.variants/stop.png.9d45941a)** (234 bytes)
+  - SHA1: `9d45941a13a4d6ba5dd25abf27138b461f1b12fa`
+  - MD5: `66fa9741213eb64b792a70a22b062156`
+  - CRC32: `1dd4c603`
+- **[stop.png.b938934d](bios/Other/Recalbox/.variants/stop.png.b938934d)** (275 bytes)
+  - SHA1: `b938934da0b44a67495cf55504d2950eb7b4a7eb`
+  - MD5: `ce2b4878d89bd5d633ce5e7a96f9d042`
+  - CRC32: `ebb4fbb6`
+- **[stop.png.d802a130](bios/Other/Recalbox/.variants/stop.png.d802a130)** (335 bytes)
+  - SHA1: `d802a1309be05ff9af3cab1b1897f2f69dc9cc42`
+  - MD5: `b737a00d198cd438ba7646c732eaa97f`
+  - CRC32: `29c3f01a`
+- **[stop@2x.png](bios/Other/Recalbox/stop@2x.png)** (368 bytes)
+  - SHA1: `9bbd59c9ae0f7aa558b0e72453d1d491bcd578ba`
+  - MD5: `f843a711705edb09de9383e5715ab089`
+  - CRC32: `b3aac457`
+  - **Variants** (4 alternate versions):
+    - [stop@2x.png.1439319a](bios/Other/Recalbox/.variants/stop@2x.png.1439319a) (376 bytes) - SHA1: `1439319a8a015ad0e1d40a48d5e12a0d29164a4f`, MD5: `05a1c5bf75d01a217aa7de773214cf10`
+    - [stop@2x.png.5f0ca5cc](bios/Other/Recalbox/.variants/stop@2x.png.5f0ca5cc) (580 bytes) - SHA1: `5f0ca5cc2e1415307cc0a591f86e940904520282`, MD5: `b55c6e619b4216ee39116484aaade7a3`
+    - [stop@2x.png.8b6377ff](bios/Other/Recalbox/.variants/stop@2x.png.8b6377ff) (644 bytes) - SHA1: `8b6377ffd179cdd44f9bdea8528e6acf578a887f`, MD5: `6b3aa84ff8908f4a6be4c1dd8da07ce9`
+    - [stop@2x.png.dbbe37e1](bios/Other/Recalbox/.variants/stop@2x.png.dbbe37e1) (469 bytes) - SHA1: `dbbe37e17433adf9c01915c335f218d3497bc8c7`, MD5: `237ddb03b8291935ac29cc408ab8dde9`
+- **[stop@2x.png.1439319a](bios/Other/Recalbox/.variants/stop@2x.png.1439319a)** (376 bytes)
+  - SHA1: `1439319a8a015ad0e1d40a48d5e12a0d29164a4f`
+  - MD5: `05a1c5bf75d01a217aa7de773214cf10`
+  - CRC32: `c6c1b5ad`
+- **[stop@2x.png.5f0ca5cc](bios/Other/Recalbox/.variants/stop@2x.png.5f0ca5cc)** (580 bytes)
+  - SHA1: `5f0ca5cc2e1415307cc0a591f86e940904520282`
+  - MD5: `b55c6e619b4216ee39116484aaade7a3`
+  - CRC32: `6cefe136`
+- **[stop@2x.png.8b6377ff](bios/Other/Recalbox/.variants/stop@2x.png.8b6377ff)** (644 bytes)
+  - SHA1: `8b6377ffd179cdd44f9bdea8528e6acf578a887f`
+  - MD5: `6b3aa84ff8908f4a6be4c1dd8da07ce9`
+  - CRC32: `baf6bb71`
+- **[stop@2x.png.dbbe37e1](bios/Other/Recalbox/.variants/stop@2x.png.dbbe37e1)** (469 bytes)
+  - SHA1: `dbbe37e17433adf9c01915c335f218d3497bc8c7`
+  - MD5: `237ddb03b8291935ac29cc408ab8dde9`
+  - CRC32: `439b3a2f`
+- **[stop@4x.png](bios/Other/Recalbox/stop@4x.png)** (934 bytes)
+  - SHA1: `32a639c473e89306ea453533ffea371cec48618a`
+  - MD5: `6515d4b18ea17076697f3664d290d598`
+  - CRC32: `578e314d`
+  - **Variants** (4 alternate versions):
+    - [stop@4x.png.30a219eb](bios/Other/Recalbox/.variants/stop@4x.png.30a219eb) (947 bytes) - SHA1: `30a219eb245c3dfa49c4e96f2351e6962bd4b68f`, MD5: `bcd464fbb24bdecd4593f22c812a9eb5`
+    - [stop@4x.png.e4c50534](bios/Other/Recalbox/.variants/stop@4x.png.e4c50534) (1,363 bytes) - SHA1: `e4c50534fe9e7146964c72364ff05a5b9eed42c7`, MD5: `9d6486e83a5661fb18f78846634d4db8`
+    - [stop@4x.png.f1d69b27](bios/Other/Recalbox/.variants/stop@4x.png.f1d69b27) (1,272 bytes) - SHA1: `f1d69b27b5356ea34298426137dc455092e6d890`, MD5: `bc181722eb0b3db549fb265d41882c70`
+    - [stop@4x.png.f91289ee](bios/Other/Recalbox/.variants/stop@4x.png.f91289ee) (1,105 bytes) - SHA1: `f91289eef1d62183b9138e498953fb8581508fb6`, MD5: `759f5e425944f551a0c0f4703c036842`
+- **[stop@4x.png.30a219eb](bios/Other/Recalbox/.variants/stop@4x.png.30a219eb)** (947 bytes)
+  - SHA1: `30a219eb245c3dfa49c4e96f2351e6962bd4b68f`
+  - MD5: `bcd464fbb24bdecd4593f22c812a9eb5`
+  - CRC32: `a90fcdee`
+- **[stop@4x.png.e4c50534](bios/Other/Recalbox/.variants/stop@4x.png.e4c50534)** (1,363 bytes)
+  - SHA1: `e4c50534fe9e7146964c72364ff05a5b9eed42c7`
+  - MD5: `9d6486e83a5661fb18f78846634d4db8`
+  - CRC32: `09caff35`
+- **[stop@4x.png.f1d69b27](bios/Other/Recalbox/.variants/stop@4x.png.f1d69b27)** (1,272 bytes)
+  - SHA1: `f1d69b27b5356ea34298426137dc455092e6d890`
+  - MD5: `bc181722eb0b3db549fb265d41882c70`
+  - CRC32: `7f0770dd`
+- **[stop@4x.png.f91289ee](bios/Other/Recalbox/.variants/stop@4x.png.f91289ee)** (1,105 bytes)
+  - SHA1: `f91289eef1d62183b9138e498953fb8581508fb6`
+  - MD5: `759f5e425944f551a0c0f4703c036842`
+  - CRC32: `ddfa0c1f`
+- **[sunset.glsl](bios/Other/Recalbox/sunset.glsl)** (95 bytes)
+  - SHA1: `6de46525d821fb39f1454bc26d1211343090e839`
+  - MD5: `4b8b589e769c8507166c5609c8a69e52`
+  - CRC32: `c632f1ea`
+- **[svidb.xml](bios/Other/Recalbox/svidb.xml)** (271,803 bytes)
+  - SHA1: `02d24a58e95b8ea373fd58639946886ebd50954d`
+  - MD5: `a9e5fabbbe1c557f74101092b4fc069e`
+  - CRC32: `84d48f54`
+- **[swap_RGB_BGR.glsl](bios/Other/Recalbox/swap_RGB_BGR.glsl)** (43 bytes)
+  - SHA1: `e63d41d1552bae528af3b5f21e025f7724cdcbd5`
+  - MD5: `f08781bdf5431ad18a39cd7b50ad5f8d`
+  - CRC32: `376abad7`
+- **[swap_RGB_BRG.glsl](bios/Other/Recalbox/swap_RGB_BRG.glsl)** (43 bytes)
+  - SHA1: `dc74cd0d18911d907b01692d2da12f84dec108cd`
+  - MD5: `96e75b6c5bf2671f05a6c92a0b8b6551`
+  - CRC32: `36d736f1`
+- **[swap_RGB_GBR.glsl](bios/Other/Recalbox/swap_RGB_GBR.glsl)** (43 bytes)
+  - SHA1: `5ac6d4aa80cbf73097e5c514d7a7f4ea755626b9`
+  - MD5: `811eb365457cf74c7b19ac5fd4c9a9d6`
+  - CRC32: `351df1fc`
+- **[swap_RGB_GRB.glsl](bios/Other/Recalbox/swap_RGB_GRB.glsl)** (43 bytes)
+  - SHA1: `82b4f357f4e80b6e601d43ca4f05e4885b34a58a`
+  - MD5: `336f72a4d8d631c2d87e6acce6019f84`
+  - CRC32: `2e785c19`
+- **[swap_RGB_RBG.glsl](bios/Other/Recalbox/swap_RGB_RBG.glsl)** (43 bytes)
+  - SHA1: `6f9b91e4fddc704e6954d9f433833d6e2c311e6e`
+  - MD5: `175cadb03d4c65bdc772affb8605aac6`
+  - CRC32: `e6ac45ab`
+- **[totaldb.dsy](bios/Other/Recalbox/totaldb.dsy)** (1,434,668 bytes)
+  - SHA1: `82c7c34cbe8ed9c4a3f5395b2ad040252307fc6c`
+  - MD5: `13af70490b6b838902cfabf041d0776c`
+  - CRC32: `de2851fa`
+- **[toxic.glsl](bios/Other/Recalbox/toxic.glsl)** (286 bytes)
+  - SHA1: `a379af7bbee1cc891e2a5821598700c9cc41604e`
+  - MD5: `565a1f96cedbd09b636173055405c4f8`
+  - CRC32: `721c9e10`
+- **[uaequit](bios/Other/Recalbox/uaequit)** (460 bytes)
+  - SHA1: `7988f7389a0e1f771838cd88eee6f8427626ebf9`
+  - MD5: `6fd19683a4f2319b5406f7191fee0762`
+  - CRC32: `842f874b`
+- **[warrior.zip](bios/Other/Recalbox/warrior.zip)** (1,125,335 bytes)
+  - SHA1: `57f89bbac39d8071e45c87f97e9b918f31d21994`
+  - MD5: `29fe11717016182d446ca6af56a08f75`
+  - CRC32: `82a68bb4`
+- **[wc24recv.ctl](bios/Other/Recalbox/wc24recv.ctl)** (32,768 bytes)
+  - SHA1: `23f41c0f21d4c16f0d112c805a89df2760d09692`
+  - MD5: `1f918440f16099cb379914e57ddab8a6`
+  - CRC32: `2f279ca9`
+- **[wc24recv.mbx](bios/Other/Recalbox/wc24recv.mbx)** (48 bytes)
+  - SHA1: `5aad884478da3c4495e033567c68e29bd8e9e783`
+  - MD5: `87a6fc7b9d7a069dce6049dc599213a4`
+  - CRC32: `907c321a`
+- **[wc24send.ctl](bios/Other/Recalbox/wc24send.ctl)** (16,384 bytes)
+  - SHA1: `8fcee88c8cf818e5d2a6a8ad0cc1c4168c93694e`
+  - MD5: `22cff426c64ccd3e257debc67d5550d8`
+  - CRC32: `fcd2700c`
+- **[wc24send.mbx](bios/Other/Recalbox/wc24send.mbx)** (48 bytes)
+  - SHA1: `704a576c5f18a8ce4729f4dfc7f8814d6ac09802`
+  - MD5: `04dd38bd6f40bb7f68c1e71dc65ce4b8`
+  - CRC32: `33a65cea`
+- **[wiimote.png](bios/Other/Recalbox/wiimote.png)** (652 bytes)
+  - SHA1: `fd2d516512bb1096281acc61f90ec5deb7f05a65`
+  - MD5: `5cf29bbe593235ffec998966e22994b9`
+  - CRC32: `10f27da9`
+  - **Variants** (4 alternate versions):
+    - [wiimote.png.556e7497](bios/Other/Recalbox/.variants/wiimote.png.556e7497) (647 bytes) - SHA1: `556e7497c6a91689540128683775f11bbe55f336`, MD5: `5ee8b7d572eb1ee6f6568bcef49095b0`
+    - [wiimote.png.565b1aee](bios/Other/Recalbox/.variants/wiimote.png.565b1aee) (769 bytes) - SHA1: `565b1aeeb2a96f1858429cc2b38b1611908969a7`, MD5: `5cdb696e930a58e1e47948d73ebc4901`
+    - [wiimote.png.795433e7](bios/Other/Recalbox/.variants/wiimote.png.795433e7) (1,033 bytes) - SHA1: `795433e75e19f97f61a57560efca6c8e96f46fed`, MD5: `035e985909b9b2a61efdaed0058f0887`
+    - [wiimote.png.db7a934d](bios/Other/Recalbox/.variants/wiimote.png.db7a934d) (943 bytes) - SHA1: `db7a934dff1d67c75b349ecdf8f4574627a54e05`, MD5: `a4b9c6341086c14f982bc008384a18b4`
+- **[wiimote.png.556e7497](bios/Other/Recalbox/.variants/wiimote.png.556e7497)** (647 bytes)
+  - SHA1: `556e7497c6a91689540128683775f11bbe55f336`
+  - MD5: `5ee8b7d572eb1ee6f6568bcef49095b0`
+  - CRC32: `8f311760`
+- **[wiimote.png.565b1aee](bios/Other/Recalbox/.variants/wiimote.png.565b1aee)** (769 bytes)
+  - SHA1: `565b1aeeb2a96f1858429cc2b38b1611908969a7`
+  - MD5: `5cdb696e930a58e1e47948d73ebc4901`
+  - CRC32: `fef15792`
+- **[wiimote.png.795433e7](bios/Other/Recalbox/.variants/wiimote.png.795433e7)** (1,033 bytes)
+  - SHA1: `795433e75e19f97f61a57560efca6c8e96f46fed`
+  - MD5: `035e985909b9b2a61efdaed0058f0887`
+  - CRC32: `083a9830`
+- **[wiimote.png.db7a934d](bios/Other/Recalbox/.variants/wiimote.png.db7a934d)** (943 bytes)
+  - SHA1: `db7a934dff1d67c75b349ecdf8f4574627a54e05`
+  - MD5: `a4b9c6341086c14f982bc008384a18b4`
+  - CRC32: `7c261a92`
+- **[wiimote@2x.png](bios/Other/Recalbox/wiimote@2x.png)** (1,399 bytes)
+  - SHA1: `de0b1573319b986fa790674da6e4cde94469767d`
+  - MD5: `242aeb2166de7816f7cb77ee9d3a5579`
+  - CRC32: `400722df`
+  - **Variants** (4 alternate versions):
+    - [wiimote@2x.png.314baa98](bios/Other/Recalbox/.variants/wiimote@2x.png.314baa98) (1,430 bytes) - SHA1: `314baa98e44385957c78d07c374f3cff3f11d0cf`, MD5: `a677ef7452123dcf8d6740437d6e1641`
+    - [wiimote@2x.png.7b6a0eec](bios/Other/Recalbox/.variants/wiimote@2x.png.7b6a0eec) (1,687 bytes) - SHA1: `7b6a0eec41b37cbd083578ad11d84fd5241b3150`, MD5: `38ec04b7bace88e814435b72bd4e6df7`
+    - [wiimote@2x.png.a106f580](bios/Other/Recalbox/.variants/wiimote@2x.png.a106f580) (2,504 bytes) - SHA1: `a106f580e24e55249ecca4a0595b7848a85007a0`, MD5: `70c883c7deea5f9204e1d6aff00bd6fa`
+    - [wiimote@2x.png.f818bb82](bios/Other/Recalbox/.variants/wiimote@2x.png.f818bb82) (2,228 bytes) - SHA1: `f818bb821ea3ed21ba62cb62bc36673c5a98246f`, MD5: `96983305d809d4d5514f8bf5026f0047`
+- **[wiimote@2x.png.314baa98](bios/Other/Recalbox/.variants/wiimote@2x.png.314baa98)** (1,430 bytes)
+  - SHA1: `314baa98e44385957c78d07c374f3cff3f11d0cf`
+  - MD5: `a677ef7452123dcf8d6740437d6e1641`
+  - CRC32: `cba0c4fe`
+- **[wiimote@2x.png.7b6a0eec](bios/Other/Recalbox/.variants/wiimote@2x.png.7b6a0eec)** (1,687 bytes)
+  - SHA1: `7b6a0eec41b37cbd083578ad11d84fd5241b3150`
+  - MD5: `38ec04b7bace88e814435b72bd4e6df7`
+  - CRC32: `9fc085cd`
+- **[wiimote@2x.png.a106f580](bios/Other/Recalbox/.variants/wiimote@2x.png.a106f580)** (2,504 bytes)
+  - SHA1: `a106f580e24e55249ecca4a0595b7848a85007a0`
+  - MD5: `70c883c7deea5f9204e1d6aff00bd6fa`
+  - CRC32: `51b3fd50`
+- **[wiimote@2x.png.f818bb82](bios/Other/Recalbox/.variants/wiimote@2x.png.f818bb82)** (2,228 bytes)
+  - SHA1: `f818bb821ea3ed21ba62cb62bc36673c5a98246f`
+  - MD5: `96983305d809d4d5514f8bf5026f0047`
+  - CRC32: `c76e9881`
+- **[wiimote@4x.png](bios/Other/Recalbox/wiimote@4x.png)** (3,577 bytes)
+  - SHA1: `710f398cda74b4cfda7ac81a9c44c7e4eed89162`
+  - MD5: `5701c20e69eb366a48e4e871bc41e34b`
+  - CRC32: `f8fa3464`
+  - **Variants** (4 alternate versions):
+    - [wiimote@4x.png.1d785ccb](bios/Other/Recalbox/.variants/wiimote@4x.png.1d785ccb) (6,161 bytes) - SHA1: `1d785ccb066d87c07549c10ae43d50ba21ecd334`, MD5: `838279f0f50b67ee13dfb4e00d5ed43a`
+    - [wiimote@4x.png.3c71cbc0](bios/Other/Recalbox/.variants/wiimote@4x.png.3c71cbc0) (6,519 bytes) - SHA1: `3c71cbc05e9e0c04c53f13e264a91e55b809e9db`, MD5: `2903c01cc441801377412f3b1be37954`
+    - [wiimote@4x.png.8bf84d98](bios/Other/Recalbox/.variants/wiimote@4x.png.8bf84d98) (4,387 bytes) - SHA1: `8bf84d9873fb4eecdcab948856e7d8db30e2410d`, MD5: `237b2af2e6c8c4c5e1f17cef9c67cd42`
+    - [wiimote@4x.png.9e6ae7d9](bios/Other/Recalbox/.variants/wiimote@4x.png.9e6ae7d9) (3,743 bytes) - SHA1: `9e6ae7d9ba02c282fd54d1dae002c540e6b8eedd`, MD5: `f68cfe1839bd2c65c5f5fa27fa50adeb`
+- **[wiimote@4x.png.1d785ccb](bios/Other/Recalbox/.variants/wiimote@4x.png.1d785ccb)** (6,161 bytes)
+  - SHA1: `1d785ccb066d87c07549c10ae43d50ba21ecd334`
+  - MD5: `838279f0f50b67ee13dfb4e00d5ed43a`
+  - CRC32: `633b4ff3`
+- **[wiimote@4x.png.3c71cbc0](bios/Other/Recalbox/.variants/wiimote@4x.png.3c71cbc0)** (6,519 bytes)
+  - SHA1: `3c71cbc05e9e0c04c53f13e264a91e55b809e9db`
+  - MD5: `2903c01cc441801377412f3b1be37954`
+  - CRC32: `8fbe4ae0`
+- **[wiimote@4x.png.8bf84d98](bios/Other/Recalbox/.variants/wiimote@4x.png.8bf84d98)** (4,387 bytes)
+  - SHA1: `8bf84d9873fb4eecdcab948856e7d8db30e2410d`
+  - MD5: `237b2af2e6c8c4c5e1f17cef9c67cd42`
+  - CRC32: `42c2c232`
+- **[wiimote@4x.png.9e6ae7d9](bios/Other/Recalbox/.variants/wiimote@4x.png.9e6ae7d9)** (3,743 bytes)
+  - SHA1: `9e6ae7d9ba02c282fd54d1dae002c540e6b8eedd`
+  - MD5: `f68cfe1839bd2c65c5f5fa27fa50adeb`
+  - CRC32: `11710773`
+- **[wiitdb-de.txt](bios/Other/Recalbox/wiitdb-de.txt)** (31,601 bytes)
+  - SHA1: `d4cd38403519e4d5dbe2bbc04fd3397cae163b29`
+  - MD5: `60367b5b9aa6843e03ba4cd8c023b8e2`
+  - CRC32: `65177a03`
+- **[wiitdb-en.txt](bios/Other/Recalbox/wiitdb-en.txt)** (335,923 bytes)
+  - SHA1: `c71a748b03614d4a6f12af6964e19c4cabcd2d18`
+  - MD5: `b9dadb74205dc93de479342095fbd859`
+  - CRC32: `2b50bca7`
+- **[wiitdb-es.txt](bios/Other/Recalbox/wiitdb-es.txt)** (57,694 bytes)
+  - SHA1: `07592d9007d10c8b3efd0439543fb52c56327c3d`
+  - MD5: `1f960983652851888e5666c3871cd125`
+  - CRC32: `463b95f2`
+- **[wiitdb-fr.txt](bios/Other/Recalbox/wiitdb-fr.txt)** (45,264 bytes)
+  - SHA1: `b55d12f5c0e4818ae57283ed81b6f943730d57c5`
+  - MD5: `dd7d9accb62116df83528eb7dce492a0`
+  - CRC32: `a57cae99`
+- **[wiitdb-it.txt](bios/Other/Recalbox/wiitdb-it.txt)** (26,528 bytes)
+  - SHA1: `752291c609ca2500141c4b53e3b8aa8a694f3fde`
+  - MD5: `0916db53e81e2c8cefc9327256c4f26d`
+  - CRC32: `c4dfcbdf`
+- **[wiitdb-ja.txt](bios/Other/Recalbox/wiitdb-ja.txt)** (87,067 bytes)
+  - SHA1: `70684d41f90386038043f7c614567df24878edcc`
+  - MD5: `1a6ca6ed0e55756bc26ec2d8248b56a3`
+  - CRC32: `28bd354a`
+- **[wiitdb-ko.txt](bios/Other/Recalbox/wiitdb-ko.txt)** (370,023 bytes)
+  - SHA1: `8bbf5e2567dc8cb02c1d1bc311a1326156b28389`
+  - MD5: `3b11baa6afcd99a56f25b4a6b3137ec5`
+  - CRC32: `390e695a`
+- **[wiitdb-nl.txt](bios/Other/Recalbox/wiitdb-nl.txt)** (18,421 bytes)
+  - SHA1: `5f1f3f0ef14f425c8198c34de48f7229184de3f0`
+  - MD5: `d5985274d24439d9b519f8e21615d893`
+  - CRC32: `dc0e5d78`
+- **[wiitdb-pt.txt](bios/Other/Recalbox/wiitdb-pt.txt)** (3,944 bytes)
+  - SHA1: `aed233c1f37c43c882a15e0e26b503c0e8413c93`
+  - MD5: `49c7f75443067952c3948f456bd3c2a9`
+  - CRC32: `56509a75`
+- **[wiitdb-ru.txt](bios/Other/Recalbox/wiitdb-ru.txt)** (968 bytes)
+  - SHA1: `63c32e99b8ffb13d970aa50a7cf463215d8a8f55`
+  - MD5: `8fc4d2b4274a499ed5428c1b7ef61f81`
+  - CRC32: `0b07c42e`
+- **[wiitdb-zh_CN.txt](bios/Other/Recalbox/wiitdb-zh_CN.txt)** (150,894 bytes)
+  - SHA1: `0d311bd201466974657bd7f58078f8b51b76070d`
+  - MD5: `fdfc338e9f13f56e7be9738488902d0e`
+  - CRC32: `7127cdd3`
+- **[wiitdb-zh_TW.txt](bios/Other/Recalbox/wiitdb-zh_TW.txt)** (140,668 bytes)
+  - SHA1: `ed941ac1b8c9f7e2611421ae88b859976da2c05f`
+  - MD5: `8328c66a3257dd2afbb49ed332fa2c91`
+  - CRC32: `609368f6`
+
+### Palm/Palm
+
+- **[bootloader-dbvz.rom](bios/Palm/Palm/bootloader-dbvz.rom)** (512 bytes)
+  - SHA1: `cea669f6d740f29ca248d2e8837a4b4f86fbe75a`
+  - MD5: `9da101cd2317830649a31f8fa46debec`
+  - CRC32: `a975efe4`
+- **[palmos40-en-m500.rom](bios/Palm/Palm/palmos40-en-m500.rom)** (2,359,296 bytes)
+  - SHA1: `a368b40751dd017163c9c1a615d6f3506b7dcbdf`
+  - MD5: `abed11421f47bbf3f654af618e0c6a8a`
+  - CRC32: `9261a5aa`
+- **[palmos41-en-m515.rom](bios/Palm/Palm/palmos41-en-m515.rom)** (4,194,304 bytes)
+  - SHA1: `cc4898ee8cae4669fc19e184c5b560c770e731b3`
+  - MD5: `83cb1d1c76e568b916dc2e7c0bf669f6`
+  - CRC32: `6481a088`
+- **[palmos52-en-t3.rom](bios/Palm/Palm/palmos52-en-t3.rom)** (16,777,216 bytes)
+  - SHA1: `3d4fc4a7c0b86342cab5a7f53b0b77737b48a0d2`
+  - MD5: `a46861541c63b20aba7bf172b0d853e1`
+  - CRC32: `443752f6`
+- **[palmos60-en-t3.rom](bios/Palm/Palm/palmos60-en-t3.rom)** (16,777,216 bytes)
+  - SHA1: `858c62e21d3a42d2e70641d001a46ad44e923614`
+  - MD5: `c2fae3ff41cc4f94be0fdaed1523ea99`
+  - CRC32: `25314c62`
+
+### Philips/CD-i
+
+- **[cdibios.zip](bios/Philips/CD-i/cdibios.zip)** (472,798 bytes)
+  - SHA1: `16072afaa65d1b059346616ac5b5a600c63ff1d1`
+  - MD5: `709acce6e9c4043b851ea7429b8e7eff`
+  - CRC32: `1d5bb3da`
+- **[cdimono1.zip](bios/Philips/CD-i/cdimono1.zip)** (660,996 bytes)
+  - SHA1: `5d0b1b55b0d0958a5c9069c3219d4da5a87a6b93`
+  - MD5: `c59f92647701428bc453976740eb75cf`
+  - CRC32: `0a67ff2c`
+  - **Variants** (1 alternate versions):
+    - [cdimono1.zip.e6714b3d](bios/Philips/CD-i/.variants/cdimono1.zip.e6714b3d) (468,660 bytes) - SHA1: `e6714b3d5fdc7023348435a77a016b763e0992b1`, MD5: `4d8f5238df9a374ce3640262773ba885`
+- **[cdimono1.zip.e6714b3d](bios/Philips/CD-i/.variants/cdimono1.zip.e6714b3d)** (468,660 bytes)
+  - SHA1: `e6714b3d5fdc7023348435a77a016b763e0992b1`
+  - MD5: `4d8f5238df9a374ce3640262773ba885`
+  - CRC32: `59205298`
+- **[cdimono2.zip](bios/Philips/CD-i/cdimono2.zip)** (500,003 bytes)
+  - SHA1: `e1d30b1d6a23aaaa765102590dc3ffff19c0b09f`
+  - MD5: `56683e58930b2b554e6594fe04eda238`
+  - CRC32: `7bad9043`
+  - **Variants** (1 alternate versions):
+    - [cdimono2.zip.94922472](bios/Philips/CD-i/.variants/cdimono2.zip.94922472) (244,291 bytes) - SHA1: `9492247203b71c12d88fad0a5437376941c7870a`, MD5: `97aa5f47030cd9fdb679d4fafbb0e332`
+- **[cdimono2.zip.94922472](bios/Philips/CD-i/.variants/cdimono2.zip.94922472)** (244,291 bytes)
+  - SHA1: `9492247203b71c12d88fad0a5437376941c7870a`
+  - MD5: `97aa5f47030cd9fdb679d4fafbb0e332`
+  - CRC32: `4eab5eda`
+
+### Philips/Videopac+
+
+- **[c52.bin](bios/Philips/Videopac+/c52.bin)** (1,024 bytes)
+  - SHA1: `a6120aed50831c9c0d95dbdf707820f601d9452e`
+  - MD5: `f1071cdb0b6b10dde94d3bc8a6146387`
+  - CRC32: `a318e8d6`
+- **[g7400.bin](bios/Philips/Videopac+/g7400.bin)** (1,024 bytes)
+  - SHA1: `5130243429b40b01a14e1304d0394b8459a6fbae`
+  - MD5: `c500ff71236068e0dc0d0603d265ae76`
+  - CRC32: `e20a9f41`
+- **[jopac.bin](bios/Philips/Videopac+/jopac.bin)** (1,024 bytes)
+  - SHA1: `54b8d2c1317628de51a85fc1c424423a986775e4`
+  - MD5: `279008e4a0db2dc5f1c048853b033828`
+  - CRC32: `11647ca5`
+
+### SNK/Neo Geo
+
+- **[aes.zip](bios/SNK/Neo%20Geo/aes.zip)** (850,311 bytes)
+  - SHA1: `23c66caa80b93199914fae246a5ea6e84db1be29`
+  - MD5: `ad9585c72130c56f04ae26aae87c289d`
+  - CRC32: `12c66621`
+- **[neogeo.zip](bios/SNK/Neo%20Geo/neogeo.zip)** (7,729 bytes)
+  - SHA1: `df89ef91bbaf84f2a109377fd4b17b0050a163e8`
+  - MD5: `266c7454616da286c1a7de54181834c2`
+  - CRC32: `bd34bfad`
+  - **Variants** (4 alternate versions):
+    - [neogeo.zip.5b00dd73](bios/Arcade/MAME/.variants/neogeo.zip.5b00dd73) (1,416,625 bytes) - SHA1: `5b00dd73906a6f8a191ac2d0409459c29826710e`, MD5: `48d2ce098b51cf58457d2e08c3aeefbc`
+    - [neogeo.zip.eb9fed51](bios/Arcade/MAME/.variants/neogeo.zip.eb9fed51) (1,578,888 bytes) - SHA1: `eb9fed518897dfafb67b4148f0ecfa731f0e3259`, MD5: `cc345d87f576665d1c2a673503c1991b`
+    - [neogeo.zip.ed352869](bios/Arcade/MAME/.variants/neogeo.zip.ed352869) (1,416,603 bytes) - SHA1: `ed35286907f7f47b33bd98b48b5d76527fccae0c`, MD5: `1b78bb266499ee243bf660e069067e82`
+    - [neogeo.zip.fc398ab4](bios/SNK/Neo%20Geo/.variants/neogeo.zip.fc398ab4) (1,862,445 bytes) - SHA1: `fc398ab4e13ca6bfef3366ed3391b1050e0eb5e8`, MD5: `dffb72f116d36d025068b23970a4f6df`
+- **[neogeo.zip.fc398ab4](bios/SNK/Neo%20Geo/.variants/neogeo.zip.fc398ab4)** (1,862,445 bytes)
+  - SHA1: `fc398ab4e13ca6bfef3366ed3391b1050e0eb5e8`
+  - MD5: `dffb72f116d36d025068b23970a4f6df`
+  - CRC32: `362e948d`
+  - Platform names: Batocera: `neogeo.zip`
+
+### SNK/Neo Geo CD
+
+- **[000-lo.lo](bios/SNK/Neo%20Geo%20CD/000-lo.lo)** (131,072 bytes)
+  - SHA1: `5992277debadeb64d1c1c64b0a92d9293eaf7e4a`
+  - MD5: `fc7599f3f871578fe9a0453662d1c966`
+  - CRC32: `5a86cff2`
+- **[front-sp1.bin](bios/SNK/Neo%20Geo%20CD/front-sp1.bin)** (524,288 bytes)
+  - SHA1: `53bc1f283cdf00fa2efbb79f2e36d4c8038d743a`
+  - MD5: `5c2366f25ff92d71788468ca492ebeca`
+  - CRC32: `cac62307`
+- **[neocd.bin](bios/SNK/Neo%20Geo%20CD/neocd.bin)** (524,288 bytes)
+  - SHA1: `7bb26d1e5d1e930515219cb18bcde5b7b23e2eda`
+  - MD5: `f39572af7584cb5b3f70ae8cc848aba2`
+  - CRC32: `df9de490`
+  - Platform names: Recalbox: `neocdz.zip`
+- **[neocd.srm](bios/SNK/Neo%20Geo%20CD/neocd.srm)** (8,192 bytes)
+  - SHA1: `43d114ed19550da818889dd3d002f0caa4b0be1f`
+  - MD5: `b39d656e4a1ff71e505b5424b87416b9`
+  - CRC32: `8caec8d2`
+- **[neocd_f.rom](bios/SNK/Neo%20Geo%20CD/neocd_f.rom)** (524,288 bytes)
+  - SHA1: `a5f4a7a627b3083c979f6ebe1fabc5d2df6d083b`
+  - MD5: `8834880c33164ccbe6476b559f3e37de`
+  - CRC32: `6fd2a520`
+- **[neocd_sf.rom](bios/SNK/Neo%20Geo%20CD/neocd_sf.rom)** (524,288 bytes)
+  - SHA1: `4a94719ee5d0e3f2b981498f70efc1b8f1cef325`
+  - MD5: `043d76d5f0ef836500700c34faef774d`
+  - CRC32: `1101f313`
+- **[neocd_st.rom](bios/SNK/Neo%20Geo%20CD/neocd_st.rom)** (524,288 bytes)
+  - SHA1: `19729b51bdab60c42aafef6e20ea9234c7eb8410`
+  - MD5: `f6325a33c6d63ea4b9162a3fa8c32727`
+  - CRC32: `01c299cc`
+- **[neocd_sz.rom](bios/SNK/Neo%20Geo%20CD/neocd_sz.rom)** (524,288 bytes)
+  - SHA1: `6a947457031dd3a702a296862446d7485aa89dbb`
+  - MD5: `971ee8a36fb72da57aed01758f0a37f5`
+  - CRC32: `42f6b6c4`
+- **[neocd_t.rom](bios/SNK/Neo%20Geo%20CD/neocd_t.rom)** (524,288 bytes)
+  - SHA1: `cc92b54a18a8bff6e595aabe8e5c360ba9e62eb5`
+  - MD5: `de3cf45d227ad44645b22aa83b49f450`
+  - CRC32: `56c9ecba`
+- **[neocd_z.rom](bios/SNK/Neo%20Geo%20CD/neocd_z.rom)** (524,288 bytes)
+  - SHA1: `b0f1c4fa8d4492a04431805f6537138b842b549f`
+  - MD5: `11526d58d4c524daef7d5d677dc6b004`
+  - CRC32: `33697892`
+- **[ng-lo.rom](bios/SNK/Neo%20Geo%20CD/ng-lo.rom)** (65,536 bytes)
+  - SHA1: `2b1c719531dac9bb503f22644e6e4236b91e7cfc`
+  - MD5: `e255264d85d5765013b1b2fa8109dd53`
+  - CRC32: `e09e253c`
+- **[top-sp1.bin](bios/SNK/Neo%20Geo%20CD/top-sp1.bin)** (524,288 bytes)
+  - SHA1: `235f4d1d74364415910f73c10ae5482d90b4274f`
+  - MD5: `122aee210324c72e8a11116e6ef9c0d0`
+  - CRC32: `c36a47c0`
+- **[uni-bioscd.rom](bios/SNK/Neo%20Geo%20CD/uni-bioscd.rom)** (524,288 bytes)
+  - SHA1: `5142f205912869b673a71480c5828b1eaed782a8`
+  - MD5: `08ca8b2dba6662e8024f9e789711c6fc`
+  - CRC32: `ff3abc59`
+  - **Variants** (1 alternate versions):
+    - [uni-bioscd.rom.5158b728](bios/SNK/Neo%20Geo%20CD/.variants/uni-bioscd.rom.5158b728) (524,288 bytes) - SHA1: `5158b728e62b391fb69493743dcf7abbc62abc82`, MD5: `a147aeab5edeb1a9b652e7fb640f5bb3`
+- **[uni-bioscd.rom.5158b728](bios/SNK/Neo%20Geo%20CD/.variants/uni-bioscd.rom.5158b728)** (524,288 bytes)
+  - SHA1: `5158b728e62b391fb69493743dcf7abbc62abc82`
+  - MD5: `a147aeab5edeb1a9b652e7fb640f5bb3`
+  - CRC32: `0ffb3127`
+
+### Sega/AI
+
+- **[segaai.zip](bios/Sega/AI/segaai.zip)** (343,220 bytes)
+  - SHA1: `39a0fec854e438f6757882604a8dc56e62e401d9`
+  - MD5: `2f19b925f2c6972c7cf299d42dcd7498`
+  - CRC32: `16ef13bc`
+
+### Sega/Arcade
+
+- **[mie.zip](bios/Sega/Arcade/mie.zip)** (725 bytes)
+  - SHA1: `00f43f5bf58dd79135565d52c4eea7e314ebc810`
+  - MD5: `e95415b161121bef35ade12367138c63`
+  - CRC32: `e185c03f`
+
+### Sega/Beena
+
+- **[beena.zip](bios/Sega/Beena/beena.zip)** (85,176 bytes)
+  - SHA1: `f63eca9a1b1e92ee1582ff5e4c0db55193f97e33`
+  - MD5: `a5d31549c638f0dc0ad4f3bb163ba4b7`
+  - CRC32: `b1642de4`
+
+### Sega/Dreamcast
+
+- **[Atomiswave-0.220_NoClones_V1.0 barhi.dat.7z](bios/Sega/Dreamcast/Atomiswave-0.220_NoClones_V1.0%20barhi.dat.7z)** (7,931 bytes)
+  - SHA1: `09f1ed9e0f8ece181a1850ec89361cef78f37c9e`
+  - MD5: `2593bcd4ba33a4974344af27ca371a1a`
+  - CRC32: `18ecc714`
+- **[Atomiswave-0.239_NoClones_V1.0 barhi.zip](bios/Sega/Dreamcast/Atomiswave-0.239_NoClones_V1.0%20barhi.zip)** (9,463 bytes)
+  - SHA1: `a43960ea7ba25dd823f5e0567d8d0296b960e47e`
+  - MD5: `1c3337f3f267e9aaab2652ab8aa6c335`
+  - CRC32: `312459a8`
+- **[Atomiswave_datfiles.zip](bios/Sega/Dreamcast/Atomiswave_datfiles.zip)** (21,740 bytes)
+  - SHA1: `8841e8e15c65fd94ccad95588eb71ef6b2d3d3c9`
+  - MD5: `cbc5d25c183ca3eb44af1d44418f52bd`
+  - CRC32: `28e5fc81`
+- **[Naomi-0.220_NoClones_V1.0 barhi.dat.7z](bios/Sega/Dreamcast/Naomi-0.220_NoClones_V1.0%20barhi.dat.7z)** (36,888 bytes)
+  - SHA1: `3b025eb0f2727a521ea8b29dec349a139709737e`
+  - MD5: `482bbeb3343533cdd33bca6d00a1ffe6`
+  - CRC32: `b98d6722`
+- **[Naomi-0.239_NoClones_V1.0 barhi.zip](bios/Sega/Dreamcast/Naomi-0.239_NoClones_V1.0%20barhi.zip)** (47,596 bytes)
+  - SHA1: `9e98bf5dacf4461aaf23ae2c2c193a0bd6c8a579`
+  - MD5: `0f15cbb8efd73d289a42077614c14980`
+  - CRC32: `9c580e15`
+- **[NaomiGd-0.220_NoClones_V1.0 barhi.dat.7z](bios/Sega/Dreamcast/NaomiGd-0.220_NoClones_V1.0%20barhi.dat.7z)** (8,248 bytes)
+  - SHA1: `73bdb8359bfc74b04e6e82b20143dc9f6322c886`
+  - MD5: `5536305d6e89f825519fabf1a8ef207a`
+  - CRC32: `bb76ee11`
+- **[NaomiGd-0.239_NoClones_V1.0 barhi.zip](bios/Sega/Dreamcast/NaomiGd-0.239_NoClones_V1.0%20barhi.zip)** (8,493 bytes)
+  - SHA1: `c42ff3b9e74c723b07a394dee9106e5a6ab5d3bb`
+  - MD5: `35480fabb5a7a306e5a643b915480a24`
+  - CRC32: `f0ddfc76`
+- **[Naomi_datfiles.zip](bios/Sega/Dreamcast/Naomi_datfiles.zip)** (120,724 bytes)
+  - SHA1: `3251d3b601850aed422f006b61ce9776cdb799d2`
+  - MD5: `c045f571b123b018ce2bfd2289172169`
+  - CRC32: `18354008`
+- **[airlbios.zip](bios/Sega/Dreamcast/airlbios.zip)** (702,637 bytes)
+  - SHA1: `e18c5e9ca21654dfd724aa54e625b386e6ffb2c5`
+  - MD5: `3f348c88af99a40fbd11fa435f28c69d`
+  - CRC32: `2c87c283`
+  - **Variants** (1 alternate versions):
+    - [airlbios.zip.ff161eaa](bios/Sega/Dreamcast/.variants/airlbios.zip.ff161eaa) (702,615 bytes) - SHA1: `ff161eaa16b36b519eeab26364b99f59b9e8128c`, MD5: `e80075c0dfcd39ab2bea972d150e0ba1`
+- **[airlbios.zip.ff161eaa](bios/Sega/Dreamcast/.variants/airlbios.zip.ff161eaa)** (702,615 bytes)
+  - SHA1: `ff161eaa16b36b519eeab26364b99f59b9e8128c`
+  - MD5: `e80075c0dfcd39ab2bea972d150e0ba1`
+  - CRC32: `fb55e65e`
+- **[awbios.zip](bios/Sega/Dreamcast/awbios.zip)** (34,620 bytes)
+  - SHA1: `cdf247154e28c4b352b962a4a523587f2fde9305`
+  - MD5: `0ec5ae5b5a5c4959fa8b43fcf8687f7c`
+  - CRC32: `c295a8c2`
+  - **Variants** (1 alternate versions):
+    - [awbios.zip.1f62f581](bios/Sega/Dreamcast/.variants/awbios.zip.1f62f581) (34,598 bytes) - SHA1: `1f62f581094c90620c74d4d15c1c1640a973e684`, MD5: `59889f03e09c1d4246b7874096a3201c`
+- **[awbios.zip.1f62f581](bios/Sega/Dreamcast/.variants/awbios.zip.1f62f581)** (34,598 bytes)
+  - SHA1: `1f62f581094c90620c74d4d15c1c1640a973e684`
+  - MD5: `59889f03e09c1d4246b7874096a3201c`
+  - CRC32: `20cab9aa`
+- **[dc_boot.bin](bios/Sega/Dreamcast/dc_boot.bin)** (2,097,152 bytes)
+  - SHA1: `8951d1bb219ab2ff8583033d2119c899cc81f18c`
+  - MD5: `e10c53c2f8b90bab96ead2d368858623`
+  - CRC32: `89f2b1a1`
+  - Also known as: `boot.bin`
+  - Platform names: Lakka: `boot.bin`, RetroArch: `boot.bin`, RetroPie: `boot.bin`
+- **[dc_flash.bin](bios/Sega/Dreamcast/dc_flash.bin)** (131,072 bytes)
+  - SHA1: `94d44d7f9529ec1642ba3771ed3c5f756d5bc872`
+  - MD5: `0a93f7940c455905bea6e392dfde92a4`
+  - CRC32: `c611b498`
+  - Also known as: `flash.bin`
+  - Platform names: Lakka: `flash.bin`, RetroArch: `flash.bin`, RetroPie: `flash.bin`
+  - **Variants** (2 alternate versions):
+    - [dc_flash.bin.ac59626e](bios/Sega/Dreamcast/.variants/dc_flash.bin.ac59626e) (131,072 bytes) - SHA1: `ac59626eee00a6a9a8a2f7e3ac5c774678c116ba`, MD5: `2f818338f47701c606ade664a3e16a8a`
+    - [dc_flash.bin.f695e418](bios/Sega/Dreamcast/.variants/dc_flash.bin.f695e418) (131,072 bytes) - SHA1: `f695e418bbfff01c47443fb8c4626d742951ed6a`, MD5: `9338b10ee6f13fbc8bfcd6276e156fad`
+- **[dc_flash.bin.ac59626e](bios/Sega/Dreamcast/.variants/dc_flash.bin.ac59626e)** (131,072 bytes)
+  - SHA1: `ac59626eee00a6a9a8a2f7e3ac5c774678c116ba`
+  - MD5: `2f818338f47701c606ade664a3e16a8a`
+  - CRC32: `4d458823`
+- **[dc_flash.bin.f695e418](bios/Sega/Dreamcast/.variants/dc_flash.bin.f695e418)** (131,072 bytes)
+  - SHA1: `f695e418bbfff01c47443fb8c4626d742951ed6a`
+  - MD5: `9338b10ee6f13fbc8bfcd6276e156fad`
+  - CRC32: `fa297c5b`
+- **[f355bios.zip](bios/Sega/Dreamcast/f355bios.zip)** (1,381,163 bytes)
+  - SHA1: `7d20a34242c98ac5ea76a8ca55bef0697d22e409`
+  - MD5: `54099a23e3d6e87b4786b8eb48bd4274`
+  - CRC32: `96b7ce1e`
+  - **Variants** (1 alternate versions):
+    - [f355bios.zip.62a0d456](bios/Sega/Dreamcast/.variants/f355bios.zip.62a0d456) (1,381,185 bytes) - SHA1: `62a0d456ff84664a4f631938d3991088bc122f1b`, MD5: `f126d318f135f38ee377fef2acf08d7e`
+- **[f355bios.zip.62a0d456](bios/Sega/Dreamcast/.variants/f355bios.zip.62a0d456)** (1,381,185 bytes)
+  - SHA1: `62a0d456ff84664a4f631938d3991088bc122f1b`
+  - MD5: `f126d318f135f38ee377fef2acf08d7e`
+  - CRC32: `5177e8c4`
+- **[f355dlx.zip](bios/Sega/Dreamcast/f355dlx.zip)** (1,414,509 bytes)
+  - SHA1: `4b21c78fdc782ef47d1f070ca7df0d50652d5612`
+  - MD5: `bb92e8ca3c27546174131ab1f10b7a53`
+  - CRC32: `d39556fc`
+  - **Variants** (1 alternate versions):
+    - [f355dlx.zip.3c1c6422](bios/Sega/Dreamcast/.variants/f355dlx.zip.3c1c6422) (2,315,343 bytes) - SHA1: `3c1c6422c332fc57c69c938db4dd3ac91eff4f02`, MD5: `5e83867c751f692a000afdf658dc181f`
+- **[f355dlx.zip.3c1c6422](bios/Sega/Dreamcast/.variants/f355dlx.zip.3c1c6422)** (2,315,343 bytes)
+  - SHA1: `3c1c6422c332fc57c69c938db4dd3ac91eff4f02`
+  - MD5: `5e83867c751f692a000afdf658dc181f`
+  - CRC32: `87e1cf82`
+- **[hod2bios.zip](bios/Sega/Dreamcast/hod2bios.zip)** (1,469,423 bytes)
+  - SHA1: `b3a86809857fe9ce575da73f6ed6c5441d558e3d`
+  - MD5: `9c755171b222fb1f4e1439d5b709dbf1`
+  - CRC32: `277c7fee`
+  - **Variants** (3 alternate versions):
+    - [hod2bios.zip.0b5cc968](bios/Arcade/Arcade/.variants/hod2bios.zip.0b5cc968) (1,465,991 bytes) - SHA1: `0b5cc968644c936d4819c1eb5f623f5f3f83eda1`, MD5: `36ac7b58216de5eecfaebe527bf6d02e`
+    - [hod2bios.zip.889d239a](bios/Sega/Dreamcast/.variants/hod2bios.zip.889d239a) (816,543 bytes) - SHA1: `889d239ac41f25622164609367b713dd33bd5bde`, MD5: `ee362dd63d7ff01f6d579ad53f3bfe69`
+    - [hod2bios.zip.9b9c9f0a](bios/Sega/Dreamcast/.variants/hod2bios.zip.9b9c9f0a) (1,057,881 bytes) - SHA1: `9b9c9f0af3de914de677ba8e19f4190673142c1b`, MD5: `6559697f76592be77a7a9ff3bfb6711a`
+- **[hod2bios.zip.889d239a](bios/Sega/Dreamcast/.variants/hod2bios.zip.889d239a)** (816,543 bytes)
+  - SHA1: `889d239ac41f25622164609367b713dd33bd5bde`
+  - MD5: `ee362dd63d7ff01f6d579ad53f3bfe69`
+  - CRC32: `9521330f`
+- **[hod2bios.zip.9b9c9f0a](bios/Sega/Dreamcast/.variants/hod2bios.zip.9b9c9f0a)** (1,057,881 bytes)
+  - SHA1: `9b9c9f0af3de914de677ba8e19f4190673142c1b`
+  - MD5: `6559697f76592be77a7a9ff3bfb6711a`
+  - CRC32: `651142d3`
+- **[naomi.zip](bios/Sega/Dreamcast/naomi.zip)** (9,308,440 bytes)
+  - SHA1: `d7ef86bd03de7c1d0e2b0762e04b6f8f8d26dbdb`
+  - MD5: `eb4099aeb42ef089cfe94f8fe95e51f6`
+  - CRC32: `ab628024`
+  - **Variants** (2 alternate versions):
+    - [naomi.zip.2533cc33](bios/Arcade/Arcade/.variants/naomi.zip.2533cc33) (8,005,827 bytes) - SHA1: `2533cc33201da28b2086a0a2fd2b5e04271b6eeb`, MD5: `58033e4ba5793c09dffb87f96f3e9301`
+    - [naomi.zip.43f0018c](bios/Sega/Dreamcast/.variants/naomi.zip.43f0018c) (6,134,707 bytes) - SHA1: `43f0018c32dd6d166c3b6d8ed2ffa672f398fa3a`, MD5: `8bab1ba136d0cb6ebcc05a27c4dfc185`
+- **[naomi.zip.43f0018c](bios/Sega/Dreamcast/.variants/naomi.zip.43f0018c)** (6,134,707 bytes)
+  - SHA1: `43f0018c32dd6d166c3b6d8ed2ffa672f398fa3a`
+  - MD5: `8bab1ba136d0cb6ebcc05a27c4dfc185`
+  - CRC32: `cc8b8e1e`
+- **[naomi2.zip](bios/Sega/Dreamcast/naomi2.zip)** (7,038,226 bytes)
+  - SHA1: `da79eca49c59f7661737643b5e11e63a73b51fcc`
+  - MD5: `843c0d51237dc945f57237c4b9872b1d`
+  - CRC32: `b700583b`
+  - **Variants** (1 alternate versions):
+    - [naomi2.zip.2962e338](bios/Sega/Dreamcast/.variants/naomi2.zip.2962e338) (7,022,501 bytes) - SHA1: `2962e338ccc9f66f29b409f73ca27aeee79633ac`, MD5: `c50072cbab75673e1b1a6b94355e6fa8`
+- **[naomi2.zip.2962e338](bios/Sega/Dreamcast/.variants/naomi2.zip.2962e338)** (7,022,501 bytes)
+  - SHA1: `2962e338ccc9f66f29b409f73ca27aeee79633ac`
+  - MD5: `c50072cbab75673e1b1a6b94355e6fa8`
+  - CRC32: `2143196c`
+  - Platform names: Lakka: `naomi2.zip`, RetroArch: `naomi2.zip`, RetroPie: `naomi2.zip`
+- **[naomi_boot.bin](bios/Sega/Dreamcast/naomi_boot.bin)** (2,097,152 bytes)
+  - SHA1: `6d27d71aec4dfba98f66316ae74a1426d567698a`
+  - MD5: `3bffafac42a7767d8dcecf771f5552ba`
+  - CRC32: `d2a1c6bf`
+- **[naomigd.zip](bios/Sega/Dreamcast/naomigd.zip)** (4,972,898 bytes)
+  - SHA1: `4b92936f396c8199f745d3ed0ff588a324b8dd70`
+  - MD5: `a3c74748f4b1d08f2247b16099db372d`
+  - CRC32: `b7949ddb`
+
+### Sega/Game Gear
+
+- **[bios.gg](bios/Sega/Game%20Gear/bios.gg)** (1,024 bytes)
+  - SHA1: `914aa165e3d879f060be77870d345b60cfeb4ede`
+  - MD5: `672e104c3be3a238301aceffc3b23fd6`
+  - CRC32: `0ebea9d4`
+
+### Sega/Hikaru
+
+- **[hikaru.zip](bios/Sega/Hikaru/hikaru.zip)** (785,989 bytes)
+  - SHA1: `de2734b2110864ada20f85ca6ba7874ed1e6ecb1`
+  - MD5: `aac601811a25d7b31a3d5f3f1f82f338`
+  - CRC32: `b4015df2`
+- **[jvs13551.zip](bios/Sega/Hikaru/jvs13551.zip)** (15,088 bytes)
+  - SHA1: `2c79934afdbcfc15684de9b75a520ac196ca75d5`
+  - MD5: `ee643e8c7369fe7feca610d4daa4a57c`
+  - CRC32: `f570f480`
+
+### Sega/Master System
+
+- **[bios.sms](bios/Sega/Master%20System/bios.sms)** (8,192 bytes)
+  - SHA1: `c315672807d8ddb8d91443729405c766dd95cae7`
+  - MD5: `840481177270d5642a14ca71ee72844c`
+  - CRC32: `0072ed54`
+  - Also known as: `bios_E.sms`, `bios_U.sms`
+  - Platform names: Lakka: `bios_E.sms`, Lakka: `bios_U.sms`, Recalbox: `bios_E.sms`, Recalbox: `bios_U.sms`, RetroArch: `bios_E.sms`, RetroArch: `bios_U.sms`, RetroPie: `bios_E.sms`, RetroPie: `bios_U.sms`
+- **[bios_J.sms](bios/Sega/Master%20System/bios_J.sms)** (8,192 bytes)
+  - SHA1: `a8c1b39a2e41137835eda6a5de6d46dd9fadbaf2`
+  - MD5: `24a519c53f67b00640d0048ef7089105`
+  - CRC32: `48d44a13`
+
+### Sega/Mega CD
+
+- **[bios_CD_E.bin](bios/Sega/Mega%20CD/bios_CD_E.bin)** (131,072 bytes)
+  - SHA1: `f891e0ea651e2232af0c5c4cb46a0cae2ee8f356`
+  - MD5: `e66fa1dc5820d254611fdcdba0662372`
+  - CRC32: `529ac15a`
+- **[bios_CD_J.bin](bios/Sega/Mega%20CD/bios_CD_J.bin)** (131,072 bytes)
+  - SHA1: `4846f448160059a7da0215a5df12ca160f26dd69`
+  - MD5: `278a9397d192149e84e820ac621a8edd`
+  - CRC32: `9d2da8f2`
+- **[bios_CD_U.bin](bios/Sega/Mega%20CD/bios_CD_U.bin)** (131,072 bytes)
+  - SHA1: `f4f315adcef9b8feb0364c21ab7f0eaf5457f3ed`
+  - MD5: `2efd74e3232ff260e371b99f84024f7f`
+  - CRC32: `c6d10268`
+  - **Variants** (1 alternate versions):
+    - [bios_CD_U.bin.5adb6c3a](bios/Sega/Mega%20CD/.variants/bios_CD_U.bin.5adb6c3a) (131,072 bytes) - SHA1: `5adb6c3af218c60868e6b723ec47e36bbdf5e6f0`, MD5: `854b9150240a198070150e4566ae1290`
+- **[bios_CD_U.bin.5adb6c3a](bios/Sega/Mega%20CD/.variants/bios_CD_U.bin.5adb6c3a)** (131,072 bytes)
+  - SHA1: `5adb6c3af218c60868e6b723ec47e36bbdf5e6f0`
+  - MD5: `854b9150240a198070150e4566ae1290`
+  - CRC32: `9f6f6276`
+  - Platform names: Batocera: `bios_CD_U.bin`
+- **[jp_mcd1_9112.bin](bios/Sega/Mega%20CD/jp_mcd1_9112.bin)** (131,072 bytes)
+  - SHA1: `e4193c6ae44c3cea002707d2a88f1fbcced664de`
+  - MD5: `bdeb4c47da613946d422d97d98b21cda`
+  - CRC32: `550f30bb`
+
+### Sega/Mega Drive
+
+- **[areplay.bin](bios/Sega/Mega%20Drive/areplay.bin)** (32,768 bytes)
+  - SHA1: `1e0f246826be4ebc7b99bb3f9de7f1de347122e5`
+  - MD5: `a0028b3043f9d59ceeb03da5b073b30d`
+  - CRC32: `95ff7c3e`
+- **[bios_MD.bin](bios/Sega/Mega%20Drive/bios_MD.bin)** (2,048 bytes)
+  - SHA1: `3f50b76b0529db7f79c396b5e808cc0786ffc311`
+  - MD5: `d3293ebaaa7f4eb2a6766b68a0fb4609`
+  - CRC32: `3f888cf4`
+  - **Variants** (1 alternate versions):
+    - [bios_MD.bin.453fca4e](bios/Sega/Mega%20Drive/.variants/bios_MD.bin.453fca4e) (16,384 bytes) - SHA1: `453fca4e1db6fae4a10657c4451bccbb71955628`, MD5: `45e298905a08f9cfb38fd504cd6dbc84`
+- **[bios_MD.bin.453fca4e](bios/Sega/Mega%20Drive/.variants/bios_MD.bin.453fca4e)** (16,384 bytes)
+  - SHA1: `453fca4e1db6fae4a10657c4451bccbb71955628`
+  - MD5: `45e298905a08f9cfb38fd504cd6dbc84`
+  - CRC32: `5f5e64eb`
+  - Platform names: Recalbox: `bios_MD.bin`
+- **[ggenie.bin](bios/Sega/Mega%20Drive/ggenie.bin)** (32,768 bytes)
+  - SHA1: `937e1878ebd104f489e6bdbc410a184f79f1144a`
+  - MD5: `e8af7fe115a75c849f6aab3701e7799b`
+  - CRC32: `14dbce4a`
+- **[rom.db](bios/Sega/Mega%20Drive/rom.db)** (17,742 bytes)
+  - SHA1: `02c287d10da6de579af7a4ce73b134bbdf23c970`
+  - MD5: `ff4a3572475236e859e3e9ac5c87d1f1`
+  - CRC32: `c94e8c8b`
+- **[sk.bin](bios/Sega/Mega%20Drive/sk.bin)** (2,097,152 bytes)
+  - SHA1: `88d6499d874dcb5721ff58d76fe1b9af811192e3`
+  - MD5: `4ea493ea4e9f6c9ebfccbdb15110367e`
+  - CRC32: `0658f691`
+- **[sk2chip.bin](bios/Sega/Mega%20Drive/sk2chip.bin)** (262,144 bytes)
+  - SHA1: `70429f1d80503a0632f603bf762fe0bbaa881d22`
+  - MD5: `b4e76e416b887f4e7413ba76fa735f16`
+  - CRC32: `4dcfd55c`
+
+### Sega/SC-3000
+
+- **[sc3000.zip](bios/Sega/SC-3000/sc3000.zip)** (22,881 bytes)
+  - SHA1: `ac7ac52c22f22bf499ecc5ead6afeddfb1fc9ffd`
+  - MD5: `b5d6782fb57775bf2a5e06889cfae58d`
+  - CRC32: `7a1b9d80`
+
+### Sega/Saturn
+
+- **[hisaturn.bin](bios/Sega/Saturn/hisaturn.bin)** (524,288 bytes)
+  - SHA1: `49d8493008fa715ca0c94d99817a5439d6f2c796`
+  - MD5: `3ea3202e2634cb47cb90f3a05c015010`
+  - CRC32: `721e1b60`
+- **[mpr-17933.bin](bios/Sega/Saturn/mpr-17933.bin)** (524,288 bytes)
+  - SHA1: `faa8ea183a6d7bbe5d4e03bb1332519800d3fbc3`
+  - MD5: `3240872c70984b6cbfda1586cab68dbe`
+  - CRC32: `4afcf0fa`
+- **[mpr-18100.bin](bios/Sega/Saturn/mpr-18100.bin)** (524,288 bytes)
+  - SHA1: `8a22710e09ce75f39625894366cafe503ed1942d`
+  - MD5: `cb2cebc1b6e573b7c44523d037edcd45`
+  - CRC32: `3408dbf4`
+- **[mpr-18811-mx.ic1](bios/Sega/Saturn/mpr-18811-mx.ic1)** (2,097,152 bytes)
+  - SHA1: `a67cd4f550751f8b91de2b8b74528ab4e0c11c77`
+  - MD5: `255113ba943c92a54facd25a10fd780c`
+  - CRC32: `90412e10`
+- **[mpr-19367-mx.ic1](bios/Sega/Saturn/mpr-19367-mx.ic1)** (2,097,152 bytes)
+  - SHA1: `56c1b93da6b660bf393fbf48ca47569000ef4047`
+  - MD5: `1cd19988d1d72a3e7caa0b73234c96b4`
+  - CRC32: `b9644b52`
+- **[sega1003.bin](bios/Sega/Saturn/sega1003.bin)** (524,288 bytes)
+  - SHA1: `7b23b53d62de0f29a23e423d0fe751dfb469c2fa`
+  - MD5: `74570fed4d44b2682b560c8cd44b8b6a`
+  - CRC32: `b3c63c25`
+- **[sega_100.bin](bios/Sega/Saturn/sega_100.bin)** (524,288 bytes)
+  - SHA1: `2b8cb4f87580683eb4d760e4ed210813d667f0a2`
+  - MD5: `af5828fdff51384f99b3c4926be27762`
+  - CRC32: `2aba43c2`
+  - Also known as: `saturn_bios.bin`
+  - Platform names: Batocera: `saturn_bios.bin`, Lakka: `saturn_bios.bin`, Recalbox: `saturn_bios.bin`, RetroArch: `saturn_bios.bin`, RetroPie: `saturn_bios.bin`
+- **[sega_100a.bin](bios/Sega/Saturn/sega_100a.bin)** (524,288 bytes)
+  - SHA1: `3bb41feb82838ab9a35601ac666de5aacfd17a58`
+  - MD5: `f273555d7d91e8a5a6bfd9bcf066331c`
+  - CRC32: `f90f0089`
+- **[sega_101.bin](bios/Sega/Saturn/sega_101.bin)** (524,288 bytes)
+  - SHA1: `df94c5b4d47eb3cc404d88b33a8fda237eaf4720`
+  - MD5: `85ec9ca47d8f6807718151cbcca8b964`
+  - CRC32: `224b752c`
+- **[stvbios.zip](bios/Sega/Saturn/stvbios.zip)** (2,699,371 bytes)
+  - SHA1: `ae5557ed313b6708bb7c2aee0944e39335a8f814`
+  - MD5: `14c3c8f5cdc4dc0531228bd344afcf89`
+  - CRC32: `ad4ed8d9`
+  - **Variants** (1 alternate versions):
+    - [stvbios.zip.330a2ab5](bios/Arcade/MAME/.variants/stvbios.zip.330a2ab5) (2,699,375 bytes) - SHA1: `330a2ab5ce2e2c29987b2086e021de7aa04aa102`, MD5: `c105e2d063aeb0f9b60c45fad6969265`
+- **[vsaturn.bin](bios/Sega/Saturn/vsaturn.bin)** (524,288 bytes)
+  - SHA1: `4154e11959f3d5639b11d7902b3a393a99fb5776`
+  - MD5: `ac4e4b6522e200c0d23d371a8cecbfd3`
+  - CRC32: `e4d61811`
+
+### Sega/Triforce
+
+- **[segaboot.gcm](bios/Sega/Triforce/segaboot.gcm)** (2,097,152 bytes)
+  - SHA1: `c3cb7227e4dbc2af861e76d00cb59726105a2e4c`
+  - MD5: `d063803adcced52217989bd825d69eb8`
+  - CRC32: `d1883221`
+- **[triforce.zip](bios/Sega/Triforce/triforce.zip)** (2,046,800 bytes)
+  - SHA1: `963cf5cd17618919dd23d4460581ee533ec5481e`
+  - MD5: `d98d6ab4b9de60efe13c45968d936cd2`
+  - CRC32: `76b7ffa2`
+
+### Sharp/MZ
+
+- **[mz2000.zip](bios/Sharp/MZ/mz2000.zip)** (2,652 bytes)
+  - SHA1: `0476dc3573ffbb71b91a0c948fdabfaf7f2cb16e`
+  - MD5: `c5bbda9c454535ef6245bbd5755638cc`
+  - CRC32: `b9ed22aa`
+- **[mz2500.zip](bios/Sharp/MZ/mz2500.zip)** (439,334 bytes)
+  - SHA1: `0eac9a7b8c74167f68bd724fa8c4c89f7040c783`
+  - MD5: `922cea21cbffe789a470751be7cebd08`
+  - CRC32: `8a206af7`
+- **[mz700.zip](bios/Sharp/MZ/mz700.zip)** (6,220 bytes)
+  - SHA1: `169a6b6d994e53f827a4535cc1198585b727e97d`
+  - MD5: `ddb3fadc54dc9e993f20faed4486c82b`
+  - CRC32: `36294a7c`
+- **[mz800.zip](bios/Sharp/MZ/mz800.zip)** (47,845 bytes)
+  - SHA1: `1ec11e6639ab20b1bf1a69a5e5222909284c042b`
+  - MD5: `3602382c1a370fb3064fcadeeea809e4`
+  - CRC32: `8a887ad3`
+- **[mz80k.zip](bios/Sharp/MZ/mz80k.zip)** (13,701 bytes)
+  - SHA1: `fec7527ecbf79b1ac697137f770bb8715fe8a652`
+  - MD5: `1474da2b8fbbb37abce8e7ab5cf9024c`
+  - CRC32: `17878e56`
+- **[mz80kj.zip](bios/Sharp/MZ/mz80kj.zip)** (6,930 bytes)
+  - SHA1: `2ca428b70ed1746834d129c11fb8e60a56317cff`
+  - MD5: `e634c906c23e62d5d3cd63581e5748ff`
+  - CRC32: `a61ca7c7`
+
+### Sharp/X1
+
+- **[IPLROM.X1](bios/Sharp/X1/IPLROM.X1)** (4,096 bytes)
+  - SHA1: `c4db9a6e99873808c8022afd1c50fef556a8b44d`
+  - MD5: `59074727a953fe965109b7dbe3298e30`
+  - CRC32: `7b28d9de`
+- **[IPLROM.X1T](bios/Sharp/X1/IPLROM.X1T)** (32,768 bytes)
+  - SHA1: `44620f57a25f0bcac2b57ca2b0f1ebad3bf305d3`
+  - MD5: `56c28adcf1f3a2f87cf3d57c378013f5`
+  - CRC32: `2e8b767c`
+  - Platform names: Batocera: `iplrom.x1t`
+- **[iplrom.x1](bios/Sharp/X1/iplrom.x1)** (4,096 bytes)
+  - SHA1: `d3395e9aeb5b8bbba7654dd471bcd8af228ee69a`
+  - MD5: `eeeea1cd29c6e0e8b094790ae969bfa7`
+  - CRC32: `e70011d3`
+  - Platform names: Batocera: `IPLROM.X1`, Recalbox: `IPLROM.X1`
+- **[iplrom.x1t](bios/Sharp/X1/iplrom.x1t)** (2,048 bytes)
+  - SHA1: `1c1a0d8c9f4c446ccd7470516b215ddca5052fb2`
+  - MD5: `851e4a5936f17d13f8c39a980cf00d77`
+  - CRC32: `e3995a57`
+
+### Sharp/X68000
+
+- **[cgrom.dat](bios/Sharp/X68000/cgrom.dat)** (786,432 bytes)
+  - SHA1: `8d72c5b4d63bb14c5dbdac495244d659aa1498b6`
+  - MD5: `cb0a5cfcf7247a7eab74bb2716260269`
+  - CRC32: `9f3195f1`
+- **[config](bios/Sharp/X68000/config)** (1,196 bytes)
+  - SHA1: `a6256a471d6f3a3e511c405df0b9642d481c0780`
+  - MD5: `ea8519ce69ec9432e585c92ba5edd2e4`
+  - CRC32: `4c59d3ef`
+  - **Variants** (1 alternate versions):
+    - [config.77be2f6f](bios/Sharp/X68000/.variants/config.77be2f6f) (48 bytes) - SHA1: `77be2f6f28897f99b73d4c47bf7cd47e999fd7cd`, MD5: `d407317a52f8425a6753232064d14700`
+- **[config.77be2f6f](bios/Sharp/X68000/.variants/config.77be2f6f)** (48 bytes)
+  - SHA1: `77be2f6f28897f99b73d4c47bf7cd47e999fd7cd`
+  - MD5: `d407317a52f8425a6753232064d14700`
+  - CRC32: `5dd9a0c5`
+- **[iplrom.dat](bios/Sharp/X68000/iplrom.dat)** (131,072 bytes)
+  - SHA1: `0ed038ed2133b9f78c6e37256807424e0d927560`
+  - MD5: `7fd4caabac1d9169e289f0f7bbf71d8e`
+  - CRC32: `72bdf532`
+- **[iplrom30.dat](bios/Sharp/X68000/iplrom30.dat)** (131,072 bytes)
+  - SHA1: `239e9124568c862c31d9ec0605e32373ea74b86a`
+  - MD5: `f373003710ab4322642f527f567e020a`
+  - CRC32: `e8f8fdad`
+- **[iplromco.dat](bios/Sharp/X68000/iplromco.dat)** (131,072 bytes)
+  - SHA1: `77511fc58798404701f66b6bbc9cbde06596eba7`
+  - MD5: `cc78d4f4900f622bd6de1aed7f52592f`
+  - CRC32: `6c7ef608`
+- **[iplromxv.dat](bios/Sharp/X68000/iplromxv.dat)** (131,072 bytes)
+  - SHA1: `e33cdcdb69cd257b0b211ef46e7a8b144637db57`
+  - MD5: `0617321daa182c3f3d6f41fd02fb3275`
+  - CRC32: `00eeb408`
+
+### Sinclair/ZX Spectrum
+
+- **[128-0.rom](bios/Sinclair/ZX%20Spectrum/128-0.rom)** (16,384 bytes)
+  - SHA1: `4f4b11ec22326280bdb96e3baf9db4b4cb1d02c5`
+  - MD5: `b4d2692115a9f2924df92a3cbfb358fb`
+  - CRC32: `e76799d2`
+- **[128-1.rom](bios/Sinclair/ZX%20Spectrum/128-1.rom)** (16,384 bytes)
+  - SHA1: `80080644289ed93d71a1103992a154cc9802b2fa`
+  - MD5: `6e09e5d3c4aef166601669feaaadc01c`
+  - CRC32: `b96a36be`
+  - Also known as: `128p-1.rom`
+  - Platform names: Lakka: `128p-1.rom`, Recalbox: `128p-1.rom`, RetroArch: `128p-1.rom`, RetroPie: `128p-1.rom`
+- **[128-spanish-0.rom](bios/Sinclair/ZX%20Spectrum/128-spanish-0.rom)** (16,384 bytes)
+  - SHA1: `968937b1c750f0ef6205f01c6db4148da4cca4e3`
+  - MD5: `c1231a70b8129311216acb7479b031d5`
+  - CRC32: `453d86b2`
+- **[128-spanish-1.rom](bios/Sinclair/ZX%20Spectrum/128-spanish-1.rom)** (16,384 bytes)
+  - SHA1: `bea3f397cc705eafee995ea629f4a82550562f90`
+  - MD5: `4f341936594cbcab75cfa62ce96e3682`
+  - CRC32: `6010e796`
+- **[128p-0.rom](bios/Sinclair/ZX%20Spectrum/128p-0.rom)** (16,384 bytes)
+  - SHA1: `d07fcdeca892ee80494d286ea9ea5bf3928a1aca`
+  - MD5: `a249565f03b98d004ee7f019570069cd`
+  - CRC32: `124ad9e0`
+- **[256s-0.rom](bios/Sinclair/ZX%20Spectrum/256s-0.rom)** (16,384 bytes)
+  - SHA1: `477114ff0fe1388e0979df1423602b21248164e5`
+  - MD5: `b9fda5b6a747ff037365b0e2d8c4379a`
+  - CRC32: `0eb40a09`
+- **[256s-1.rom](bios/Sinclair/ZX%20Spectrum/256s-1.rom)** (16,384 bytes)
+  - SHA1: `367b5a102fb663beee8e7930b8c4acc219c1f7b3`
+  - MD5: `643861ad34831b255bf2eb64e8b6ecb8`
+  - CRC32: `9d513013`
+- **[256s-2.rom](bios/Sinclair/ZX%20Spectrum/256s-2.rom)** (16,384 bytes)
+  - SHA1: `07783ee295274d8ff15d935bfd787c8ac1d54900`
+  - MD5: `d8ad507b1c915a9acfe0d73957082926`
+  - CRC32: `fd0d3ce1`
+- **[256s-3.rom](bios/Sinclair/ZX%20Spectrum/256s-3.rom)** (16,384 bytes)
+  - SHA1: `33703e97cc93b7edfcc0334b64233cf81b7930db`
+  - MD5: `ce0723f9bc02f4948c15d3b3230ae831`
+  - CRC32: `1fe1d003`
+- **[48.rom](bios/Sinclair/ZX%20Spectrum/48.rom)** (16,384 bytes)
+  - SHA1: `5ea7c2b824672e914525d1d5c419d71b84a426a2`
+  - MD5: `4c42a2f075212361c3117015b107ff68`
+  - CRC32: `ddee531f`
+  - Also known as: `zx48.rom`
+  - Platform names: Batocera: `zx48.rom`, Lakka: `zx48.rom`, RetroArch: `zx48.rom`, RetroPie: `zx48.rom`
+- **[Complex_4627.bin](bios/Sinclair/ZX%20Spectrum/Complex_4627.bin)** (1,048,576 bytes)
+  - SHA1: `3944392c954cfb176d4210544e88353b3c5d36b1`
+  - MD5: `39cee882148a87f93cb440b99dde3ceb`
+  - CRC32: `1dbb7b59`
+- **[disciple.rom](bios/Sinclair/ZX%20Spectrum/disciple.rom)** (8,192 bytes)
+  - SHA1: `9a75ed4b293f968985be4c9aa893cd88276d1ced`
+  - MD5: `78e61a2a02121873c1756b21fd1398b1`
+  - CRC32: `82047489`
+- **[disk_plus3.szx](bios/Sinclair/ZX%20Spectrum/disk_plus3.szx)** (1,568 bytes)
+  - SHA1: `d7896640e18fc6204aa494835b0a430250fb06ce`
+  - MD5: `e6db6b9f6ad15012851115a7bc4b31d8`
+  - CRC32: `c2c6cba7`
+- **[gluck.rom](bios/Sinclair/ZX%20Spectrum/gluck.rom)** (16,384 bytes)
+  - SHA1: `015eb96dafb273d4f4512c467e9b43c305fd1bc4`
+  - MD5: `d5869034604dbfd2c1d54170e874fd0a`
+  - CRC32: `ca321d79`
+- **[if1-1.rom](bios/Sinclair/ZX%20Spectrum/if1-1.rom)** (8,192 bytes)
+  - SHA1: `4ffd9ed9c00cdc6f92ce69fdd8b618ef1203f48e`
+  - MD5: `5c11c61a2dd2ca4bf39328d9ff42d289`
+  - CRC32: `e72a12ae`
+- **[if1-2.rom](bios/Sinclair/ZX%20Spectrum/if1-2.rom)** (8,192 bytes)
+  - SHA1: `5cfb6bca4177c45fefd571734576b55e3a127c08`
+  - MD5: `31b704ae925305e74f50699271fddd9a`
+  - CRC32: `bb66dd1e`
+- **[plus2-0.rom](bios/Sinclair/ZX%20Spectrum/plus2-0.rom)** (16,384 bytes)
+  - SHA1: `72703f9a3e734f3c23ec34c0727aae4ccbef9a91`
+  - MD5: `4ed7af4636308b8a48d7a35e6c5b546b`
+  - CRC32: `5d2e8c66`
+- **[plus2-1.rom](bios/Sinclair/ZX%20Spectrum/plus2-1.rom)** (16,384 bytes)
+  - SHA1: `de8b0d2d0379cfe7c39322a086ca6da68c7f23cb`
+  - MD5: `b3db95931cc844efaeb82db9c171b9f3`
+  - CRC32: `98b1320b`
+- **[plus3-0.rom](bios/Sinclair/ZX%20Spectrum/plus3-0.rom)** (16,384 bytes)
+  - SHA1: `e319ed08b4d53a5e421a75ea00ea02039ba6555b`
+  - MD5: `9833b8b73384dd5fa3678377ff00a2bb`
+  - CRC32: `17373da2`
+- **[plus3-1.rom](bios/Sinclair/ZX%20Spectrum/plus3-1.rom)** (16,384 bytes)
+  - SHA1: `c9969fc36095a59787554026a9adc3b87678c794`
+  - MD5: `0f711ceb5ab801b4701989982e0f334c`
+  - CRC32: `f1d1d99e`
+- **[plus3-2.rom](bios/Sinclair/ZX%20Spectrum/plus3-2.rom)** (16,384 bytes)
+  - SHA1: `22e50c6ba4157a3f6a821bd9937cd26e292775c6`
+  - MD5: `3b6dd659d5e4ec97f0e2f7878152c987`
+  - CRC32: `3dbf351d`
+- **[plus3-3.rom](bios/Sinclair/ZX%20Spectrum/plus3-3.rom)** (16,384 bytes)
+  - SHA1: `65f031caa8148a5493afe42c41f4929deab26b4e`
+  - MD5: `a148bcc575e51389e84fdf5d555c3196`
+  - CRC32: `04448eaa`
+  - Also known as: `plus3e-3.rom`
+  - Platform names: Lakka: `plus3e-3.rom`, RetroArch: `plus3e-3.rom`, RetroPie: `plus3e-3.rom`
+- **[plus3e-0.rom](bios/Sinclair/ZX%20Spectrum/plus3e-0.rom)** (16,384 bytes)
+  - SHA1: `649fbd233490bf58b35350b0123d36caaaa011eb`
+  - MD5: `bc123f625e245c225f92ef05933ed134`
+  - CRC32: `7f4a5482`
+- **[plus3e-1.rom](bios/Sinclair/ZX%20Spectrum/plus3e-1.rom)** (16,384 bytes)
+  - SHA1: `f12198108cbb14de4f03c6695bc16d08c85ee214`
+  - MD5: `617364264c587d20c9fc4746c29679f2`
+  - CRC32: `5aeb4675`
+- **[plus3e-2.rom](bios/Sinclair/ZX%20Spectrum/plus3e-2.rom)** (16,384 bytes)
+  - SHA1: `773633dce5ba323a9e00d9d0f9e4d8c295df7c87`
+  - MD5: `c363e95dcd0a90e6e7f847e6e47e0179`
+  - CRC32: `504755cb`
+- **[plusd.rom](bios/Sinclair/ZX%20Spectrum/plusd.rom)** (8,192 bytes)
+  - SHA1: `6b841dc5797ef7eb219ad455cd1e434ca3b9d30d`
+  - MD5: `42e5de16fb5e50082bb954ec7ce45851`
+  - CRC32: `569f7e55`
+- **[se-0.rom](bios/Sinclair/ZX%20Spectrum/se-0.rom)** (16,384 bytes)
+  - SHA1: `8608328d7dd66602a4846f046b24fed500f7d828`
+  - MD5: `fb3f86eb1e5a695d9c50c124e7cfb875`
+  - CRC32: `8f1047d2`
+- **[se-1.rom](bios/Sinclair/ZX%20Spectrum/se-1.rom)** (16,384 bytes)
+  - SHA1: `3be5de57dd3bd0a9d15c57cabe9179afe2906a52`
+  - MD5: `88de4a3129086f34bb9ca559acc51e6c`
+  - CRC32: `16ed3a9b`
+- **[speccyboot-1.4.rom](bios/Sinclair/ZX%20Spectrum/speccyboot-1.4.rom)** (8,192 bytes)
+  - SHA1: `16af6f052b38a027dd49ba6e96e3a59d16b62672`
+  - MD5: `c54aa8f374b0971f51546c29d5d1eba1`
+  - CRC32: `37c591b2`
+- **[tape_128.szx](bios/Sinclair/ZX%20Spectrum/tape_128.szx)** (1,464 bytes)
+  - SHA1: `3b1287bfc6fec9c7dd838f6ea1706698cb96fd16`
+  - MD5: `8942b43b73ed4eb7f32bd1741709a4dc`
+  - CRC32: `8d1c41f4`
+- **[tape_16.szx](bios/Sinclair/ZX%20Spectrum/tape_16.szx)** (591 bytes)
+  - SHA1: `ec9e5607ce7faf2d6a5d71e5e21188ca86e963a1`
+  - MD5: `fec97eb9ea1b017cae84de78508feb4a`
+  - CRC32: `ccda9cc2`
+- **[tape_2048.szx](bios/Sinclair/ZX%20Spectrum/tape_2048.szx)** (720 bytes)
+  - SHA1: `f2d2227dce697df8aac78883eaf966e71435caa3`
+  - MD5: `116f732bbae4e49d625aaf2f311474d0`
+  - CRC32: `dbc1a386`
+- **[tape_2068.szx](bios/Sinclair/ZX%20Spectrum/tape_2068.szx)** (1,799 bytes)
+  - SHA1: `5af71025c02358b325bf8b4bfaa2662488abf1d2`
+  - MD5: `0b0f267b95d556318bb652af2e8dc25c`
+  - CRC32: `659b428d`
+- **[tape_48.szx](bios/Sinclair/ZX%20Spectrum/tape_48.szx)** (708 bytes)
+  - SHA1: `d6e092730f822c9e8828ca12f54eb8d65228f30c`
+  - MD5: `ee2ae810711594db3a134a7432baabff`
+  - CRC32: `f56f230d`
+- **[tape_pentagon.szx](bios/Sinclair/ZX%20Spectrum/tape_pentagon.szx)** (1,479 bytes)
+  - SHA1: `7e1eb0e250cfe1f2f0e50f734378a738e8bf327f`
+  - MD5: `bd7698603bd9079d337cdedfb04942d9`
+  - CRC32: `c7a272b6`
+- **[tape_plus2.szx](bios/Sinclair/ZX%20Spectrum/tape_plus2.szx)** (1,571 bytes)
+  - SHA1: `4a6d8941eee86d7e52452f5aaaa73d4bafe9bde1`
+  - MD5: `166d4aa1a5aa4fbd99cc963b4e7c19cc`
+  - CRC32: `93195e18`
+- **[tape_plus2a.szx](bios/Sinclair/ZX%20Spectrum/tape_plus2a.szx)** (1,617 bytes)
+  - SHA1: `e0e0f6ebc8261ae9768a6be772eab4718fbc2395`
+  - MD5: `445d4817d5557bb363a216fbd6eeaa84`
+  - CRC32: `45727b82`
+- **[tape_plus3.szx](bios/Sinclair/ZX%20Spectrum/tape_plus3.szx)** (1,856 bytes)
+  - SHA1: `3850f7e5e6c90fd4dac988da77717d2647d9c021`
+  - MD5: `0dc8828ac1db2e0efa915ac55191e96f`
+  - CRC32: `1a825690`
+- **[tape_plus3e.szx](bios/Sinclair/ZX%20Spectrum/tape_plus3e.szx)** (1,970 bytes)
+  - SHA1: `92ac0df41f3ea7f147f4d6bae6b8a7d79b4f7e92`
+  - MD5: `bf07537f028bbcb3309464bd30da779c`
+  - CRC32: `4ce6538f`
+- **[tape_scorpion.szx](bios/Sinclair/ZX%20Spectrum/tape_scorpion.szx)** (3,500 bytes)
+  - SHA1: `6abdeb434755d25a280954ce07b50b6a28b36957`
+  - MD5: `c10e677d3deb5a445689d3a599880745`
+  - CRC32: `eb6a7a83`
+- **[tape_se.szx](bios/Sinclair/ZX%20Spectrum/tape_se.szx)** (2,146 bytes)
+  - SHA1: `cc20a8e6fc8c493881b14e00545a42ef75b8aabe`
+  - MD5: `2518f9334bef8c44804a4185085579b5`
+  - CRC32: `92bc2f43`
+- **[tape_ts2068.szx](bios/Sinclair/ZX%20Spectrum/tape_ts2068.szx)** (1,840 bytes)
+  - SHA1: `562298f5b3a7ed28f0129b066e8ad098a10e2270`
+  - MD5: `1d360c09d370bb52a9a44b30cc7c59e6`
+  - CRC32: `06ad712e`
+- **[tc2048.rom](bios/Sinclair/ZX%20Spectrum/tc2048.rom)** (16,384 bytes)
+  - SHA1: `febb2d495b6eda7cdcb4074935d6e9d9f328972d`
+  - MD5: `9dd7ecf784a6c04265c073c236f5fadb`
+  - CRC32: `f1b5fa67`
+- **[tc2068-0.rom](bios/Sinclair/ZX%20Spectrum/tc2068-0.rom)** (16,384 bytes)
+  - SHA1: `1446cb2780a9dedf640404a639fa3ae518b2d8aa`
+  - MD5: `55d462fccc6c536037404ef4ced08bec`
+  - CRC32: `bf44ec3f`
+- **[tc2068-1.rom](bios/Sinclair/ZX%20Spectrum/tc2068-1.rom)** (8,192 bytes)
+  - SHA1: `7e265a2c1f621ed365ea23bdcafdedbc79c1299c`
+  - MD5: `575d203c6e15e679fba0b73f854ec7a2`
+  - CRC32: `ae16233a`
+- **[trdos.rom](bios/Sinclair/ZX%20Spectrum/trdos.rom)** (16,384 bytes)
+  - SHA1: `21695e3f2a8f796386ce66eea8a246b0ac44810c`
+  - MD5: `0da70a5d2a0e733398e005b96b7e4ba6`
+  - CRC32: `10751aba`
+- **[zx128.rom](bios/Sinclair/ZX%20Spectrum/zx128.rom)** (32,768 bytes)
+  - SHA1: `16375d42ea109b47edded7a16028de7fdb3013a1`
+  - MD5: `85fede415f4294cc777517d7eada482e`
+  - CRC32: `2cbe8995`
+
+### Sony/PlayStation
+
+- **[ps1_rom.bin](bios/Sony/PlayStation/ps1_rom.bin)** (524,288 bytes)
+  - SHA1: `c40146361eb8cf670b19fdc9759190257803cab7`
+  - MD5: `81bbe60ba7a3d1cea1d48c14cbcc647b`
+  - CRC32: `2f53b852`
+- **[psxonpsp660.bin](bios/Sony/PlayStation/psxonpsp660.bin)** (524,288 bytes)
+  - SHA1: `96880d1ca92a016ff054be5159bb06fe03cb4e14`
+  - MD5: `c53ca5908936d412331790f4426c6c33`
+  - CRC32: `5660f34f`
+- **[scph100.bin](bios/Sony/PlayStation/scph100.bin)** (524,288 bytes)
+  - SHA1: `339a48f4fcf63e10b5b867b8c93cfd40945faf6c`
+  - MD5: `8abc1b549a4a80954addc48ef02c4521`
+  - CRC32: `f2af798b`
+- **[scph1000.bin](bios/Sony/PlayStation/scph1000.bin)** (524,288 bytes)
+  - SHA1: `343883a7b555646da8cee54aadd2795b6e7dd070`
+  - MD5: `239665b1a3dade1b5a52c06338011044`
+  - CRC32: `3b601fc8`
+- **[scph1001.bin](bios/Sony/PlayStation/scph1001.bin)** (524,288 bytes)
+  - SHA1: `10155d8d6e6e832d6ea66db9bc098321fb5e8ebf`
+  - MD5: `924e392ed05558ffdb115408c263dccf`
+  - CRC32: `37157331`
+  - **Variants** (1 alternate versions):
+    - [scph1001.bin.649895ef](bios/Sony/PlayStation/.variants/scph1001.bin.649895ef) (524,288 bytes) - SHA1: `649895efd79d14790eabb362e94eb0622093dfb9`, MD5: `dc2b9bf8da62ec93e868cfd29f0d067d`
+- **[scph1001.bin.649895ef](bios/Sony/PlayStation/.variants/scph1001.bin.649895ef)** (524,288 bytes)
+  - SHA1: `649895efd79d14790eabb362e94eb0622093dfb9`
+  - MD5: `dc2b9bf8da62ec93e868cfd29f0d067d`
+  - CRC32: `55847d8c`
+  - Platform names: Batocera: `scph1001.bin`, Recalbox: `scph1001.bin`
+- **[scph1002.bin](bios/Sony/PlayStation/scph1002.bin)** (524,288 bytes)
+  - SHA1: `20b98f3d80f11cbf5a7bfd0779b0e63760ecc62c`
+  - MD5: `54847e693405ffeb0359c6287434cbef`
+  - CRC32: `9bb87c4b`
+- **[scph101.bin](bios/Sony/PlayStation/scph101.bin)** (524,288 bytes)
+  - SHA1: `dcffe16bd90a723499ad46c641424981338d8378`
+  - MD5: `6e3735ff4c7dc899ee98981385f6f3d0`
+  - CRC32: `171bdcec`
+- **[scph102A.bin](bios/Sony/PlayStation/scph102A.bin)** (524,288 bytes)
+  - SHA1: `beb0ac693c0dc26daf5665b3314db81480fa5c7c`
+  - MD5: `b10f5e0e3d9eb60e5159690680b1e774`
+  - CRC32: `0bad7ea9`
+- **[scph102B.bin](bios/Sony/PlayStation/scph102B.bin)** (524,288 bytes)
+  - SHA1: `dbc7339e5d85827c095764fc077b41f78fd2ecae`
+  - MD5: `de93caec13d1a141a40a79f5c86168d6`
+  - CRC32: `76b880e5`
+  - Also known as: `scph102C.bin`
+  - Platform names: Lakka: `scph102C.bin`, RetroArch: `scph102C.bin`, RetroPie: `scph102C.bin`
+- **[scph3000.bin](bios/Sony/PlayStation/scph3000.bin)** (524,288 bytes)
+  - SHA1: `b06f4a861f74270be819aa2a07db8d0563a7cc4e`
+  - MD5: `849515939161e62f6b866f6853006780`
+  - CRC32: `3539def6`
+- **[scph3500.bin](bios/Sony/PlayStation/scph3500.bin)** (524,288 bytes)
+  - SHA1: `e38466a4ba8005fba7e9e3c7b9efeba7205bee3f`
+  - MD5: `cba733ceeff5aef5c32254f1d617fa62`
+  - CRC32: `bc190209`
+- **[scph5000.bin](bios/Sony/PlayStation/scph5000.bin)** (524,288 bytes)
+  - SHA1: `e340db2696274dda5fdc25e434a914db71e8b02b`
+  - MD5: `eb201d2d98251a598af467d4347bb62f`
+  - CRC32: `8c93a399`
+- **[scph5500.bin](bios/Sony/PlayStation/scph5500.bin)** (524,288 bytes)
+  - SHA1: `b05def971d8ec59f346f2d9ac21fb742e3eb6917`
+  - MD5: `8dd7d5296a650fac7319bce665a6a53c`
+  - CRC32: `ff3eeb8c`
+- **[scph5501.bin](bios/Sony/PlayStation/scph5501.bin)** (524,288 bytes)
+  - SHA1: `0555c6fae8906f3f09baf5988f00e55f88e9f30b`
+  - MD5: `490f666e1afb15b7362b406ed1cea246`
+  - CRC32: `8d8cb7e4`
+  - Also known as: `scph7003.bin`
+  - Platform names: Lakka: `scph7003.bin`, RetroArch: `scph7003.bin`, RetroPie: `scph7003.bin`
+- **[scph5502.bin](bios/Sony/PlayStation/scph5502.bin)** (524,288 bytes)
+  - SHA1: `f6bc2d1f5eb6593de7d089c425ac681d6fffd3f0`
+  - MD5: `32736f17079d0b2b7024407c39bd3050`
+  - CRC32: `d786f0b9`
+  - Also known as: `scph5552.bin`
+  - Platform names: Lakka: `scph5552.bin`, RetroArch: `scph5552.bin`, RetroPie: `scph5552.bin`
+- **[scph7001.bin](bios/Sony/PlayStation/scph7001.bin)** (524,288 bytes)
+  - SHA1: `14df4f6c1e367ce097c11deae21566b4fe5647a9`
+  - MD5: `1e68c231d0896b7eadcad1d7d8e76129`
+  - CRC32: `502224b6`
+- **[scph7002.bin](bios/Sony/PlayStation/scph7002.bin)** (524,288 bytes)
+  - SHA1: `8d5de56a79954f29e9006929ba3fed9b6a418c1d`
+  - MD5: `b9d9a0286c33dc6b7237bb13cd46fdee`
+  - CRC32: `318178bf`
+  - Also known as: `scph7502.bin`, `scph9002(7502).bin`
+  - Platform names: Lakka: `scph7502.bin`, Lakka: `scph9002(7502).bin`, RetroArch: `scph7502.bin`, RetroArch: `scph9002(7502).bin`, RetroPie: `scph7502.bin`, RetroPie: `scph9002(7502).bin`
+
+### Sony/PlayStation 2
+
+- **[EROM.BIN](bios/Sony/PlayStation%202/EROM.BIN)** (247,968 bytes)
+  - SHA1: `adb4dbb7feb8247811506a38896ddcb789c4b477`
+  - MD5: `9a9e8ed7668e6adfc8f7766c08ab9cd0`
+  - CRC32: `6932e64c`
+- **[GameIndex.yaml](bios/Sony/PlayStation%202/GameIndex.yaml)** (1,737,799 bytes)
+  - SHA1: `57369df9ca82a460e596cea7835c5a0797dee668`
+  - MD5: `526291c9c9bae8b184b0e5f4bfa94eb9`
+  - CRC32: `20b4ea53`
+- **[GameIndex.yaml](bios/Sony/PlayStation%202/resources/GameIndex.yaml)** (2,665,743 bytes)
+  - SHA1: `40ecf6138c99a0aba775ef93240b295025a45500`
+  - MD5: `de6da198a7359d1200c3eeb6df9c7eda`
+  - CRC32: `a3e573a0`
+- **[ROM2.BIN](bios/Sony/PlayStation%202/ROM2.BIN)** (8,192 bytes)
+  - SHA1: `1bae895fbdd658cfb56c53cc2139282cc1e778de`
+  - MD5: `b406d05922dac2eaf3c2e68157b1b468`
+  - CRC32: `b5fad94a`
+- **[SCPH-10000.MEC](bios/Sony/PlayStation%202/SCPH-10000.MEC)** (4 bytes)
+  - SHA1: `3f8affbe07024ccd2f5b8374072d0928c583a862`
+  - MD5: `3faf7c064a4984f53e2ef5e80ed543bc`
+  - CRC32: `054a6ec2`
+- **[SCPH-10000.bin](bios/Sony/PlayStation%202/SCPH-10000.bin)** (4,194,304 bytes)
+  - SHA1: `aea061e6e263fdcc1c4fdbd68553ef78dae74263`
+  - MD5: `acf4730ceb38ac9d8c7d8e21f2614600`
+  - CRC32: `b7ef81a9`
+  - Also known as: `ps2-0100j-20000117.bin`
+  - Platform names: Lakka: `ps2-0100j-20000117.bin`, RetroArch: `ps2-0100j-20000117.bin`, RetroPie: `ps2-0100j-20000117.bin`
+- **[SCPH-30004R.bin](bios/Sony/PlayStation%202/SCPH-30004R.bin)** (4,194,304 bytes)
+  - SHA1: `8fa040852d4b8688f0c84bcfffc65eb208f2b432`
+  - MD5: `28922c703cc7d2cf856f177f2985b3a9`
+  - CRC32: `9386a740`
+- **[SCPH-39001.bin](bios/Sony/PlayStation%202/SCPH-39001.bin)** (4,194,304 bytes)
+  - SHA1: `f9a5d629a036b99128f7cb530c6e3ca016e9c8b7`
+  - MD5: `d5ce2c7d119f563ce04bc04dbc3a323e`
+  - CRC32: `a19e0bf5`
+  - Also known as: `ps2-0160a-20020207.bin`
+  - Platform names: Lakka: `ps2-0160a-20020207.bin`, RetroArch: `ps2-0160a-20020207.bin`, RetroPie: `ps2-0160a-20020207.bin`
+- **[SCPH-70004.BIN](bios/Sony/PlayStation%202/SCPH-70004.BIN)** (4,194,304 bytes)
+  - SHA1: `434bc0b4eb4827da0773ec0795aadc5162569a07`
+  - MD5: `dc752f160044f2ed5fc1f4964db2a095`
+  - CRC32: `6f8e3c29`
+  - Also known as: `ps2-0200e-20040614.bin`
+  - Platform names: Lakka: `ps2-0200e-20040614.bin`, RetroArch: `ps2-0200e-20040614.bin`, RetroPie: `ps2-0200e-20040614.bin`
+- **[SCPH-70004.EROM](bios/Sony/PlayStation%202/SCPH-70004.EROM)** (3,145,728 bytes)
+  - SHA1: `ec0121bb8e2a209044309780d2efc2559c9a0ef1`
+  - MD5: `9feb1fdeadd6232a13b95e60b34ccef9`
+  - CRC32: `bf3cbc65`
+- **[SCPH-70004.ROM1](bios/Sony/PlayStation%202/SCPH-70004.ROM1)** (524,288 bytes)
+  - SHA1: `cc44355ded232a2ba5309bb24d4cd55af08696b2`
+  - MD5: `82dc50fa18e636850f557c4ea66c7bfd`
+  - CRC32: `0e8797c0`
+- **[ps2-0100jd-20000117.bin](bios/Sony/PlayStation%202/ps2-0100jd-20000117.bin)** (4,194,304 bytes)
+  - SHA1: `5b33170323ed6344e2363fed8115dc3918bb96a4`
+  - MD5: `32f2e4d5ff5ee11072a6bc45530f5765`
+  - CRC32: `5a04500c`
+- **[ps2-0101j-20000217.bin](bios/Sony/PlayStation%202/ps2-0101j-20000217.bin)** (4,194,304 bytes)
+  - SHA1: `916e02431bcd73140504da3355c9598143b77e11`
+  - MD5: `b1459d7446c69e3e97e6ace3ae23dd1c`
+  - CRC32: `211dfb6a`
+- **[ps2-0101jd-20000217.bin](bios/Sony/PlayStation%202/ps2-0101jd-20000217.bin)** (4,194,304 bytes)
+  - SHA1: `16f4a284d0e760ee13a2aff2f7dda928255e3080`
+  - MD5: `acf9968c8f596d2b15f42272082513d1`
+  - CRC32: `4f8b4205`
+- **[ps2-0101xd-20000224.bin](bios/Sony/PlayStation%202/ps2-0101xd-20000224.bin)** (4,194,304 bytes)
+  - SHA1: `4440b246bfde7bb31002c584a76c6ef384908e84`
+  - MD5: `d3f1853a16c2ec18f3cd1ae655213308`
+  - CRC32: `2fef9faf`
+- **[ps2-0110a-20000727.bin](bios/Sony/PlayStation%202/ps2-0110a-20000727.bin)** (4,194,304 bytes)
+  - SHA1: `20f6ce6693cf97e9494f8f0227f2b7988ffaf961`
+  - MD5: `a20c97c02210f16678ca3010127caf36`
+  - CRC32: `9678ad6a`
+- **[ps2-0110ad-20000727.bin](bios/Sony/PlayStation%202/ps2-0110ad-20000727.bin)** (4,194,304 bytes)
+  - SHA1: `339c646cf0699268552df5b05f18f0a03a9f55ff`
+  - MD5: `63e6fd9b3c72e0d7b920e80cf76645cd`
+  - CRC32: `795578c1`
+- **[ps2-0120a-20000902.bin](bios/Sony/PlayStation%202/ps2-0120a-20000902.bin)** (4,194,304 bytes)
+  - SHA1: `dbc2318a1029347b5af3a0c74b0bdf88d19efee6`
+  - MD5: `8db2fbbac7413bf3e7154c1e0715e565`
+  - CRC32: `1ae71e5d`
+- **[ps2-0120e-20000902.bin](bios/Sony/PlayStation%202/ps2-0120e-20000902.bin)** (4,194,304 bytes)
+  - SHA1: `274c05fec654913a3f698d4b0d592085866a2cbd`
+  - MD5: `b7fa11e87d51752a98b38e3e691cbf17`
+  - CRC32: `7b08c33b`
+- **[ps2-0120ed-20000902-20030110.bin](bios/Sony/PlayStation%202/ps2-0120ed-20000902-20030110.bin)** (4,194,304 bytes)
+  - SHA1: `1b73dec999fcc2b92fa958110ff6bfe4d0af276e`
+  - MD5: `3016b3dd42148a67e2c048595ca4d7ce`
+  - CRC32: `e2f78425`
+- **[ps2-0120ed-20000902.bin](bios/Sony/PlayStation%202/ps2-0120ed-20000902.bin)** (4,194,304 bytes)
+  - SHA1: `3bb1eecd618ab5c973c7bc53671a4475a02e1d5b`
+  - MD5: `91c87cb2f2eb6ce529a2360f80ce2457`
+  - CRC32: `25495aa7`
+- **[ps2-0120j-20001027-185015.bin](bios/Sony/PlayStation%202/ps2-0120j-20001027-185015.bin)** (4,194,304 bytes)
+  - SHA1: `e481079eca752225555f0c26d14c9d0f94d9a8e9`
+  - MD5: `f63bc530bd7ad7c026fcd6f7bd0d9525`
+  - CRC32: `9b096622`
+- **[ps2-0120j-20001027-191435.bin](bios/Sony/PlayStation%202/ps2-0120j-20001027-191435.bin)** (4,194,304 bytes)
+  - SHA1: `a9f5d8ed56cfff18add1b599010493461fa02448`
+  - MD5: `cee06bd68c333fc5768244eae77e4495`
+  - CRC32: `c1ccf3f6`
+- **[ps2-0150a-20001228.bin](bios/Sony/PlayStation%202/ps2-0150a-20001228.bin)** (4,194,304 bytes)
+  - SHA1: `5af5b5077d84a9c037ebe12bfab8a38b31d8a543`
+  - MD5: `8accc3c49ac45f5ae2c5db0adc854633`
+  - CRC32: `bce74746`
+- **[ps2-0150ad-20001228-20030520.bin](bios/Sony/PlayStation%202/ps2-0150ad-20001228-20030520.bin)** (4,194,304 bytes)
+  - SHA1: `7284b9d16df9935afc384318e024c87ef0574fe5`
+  - MD5: `0bf988e9c7aaa4c051805b0fa6eb3387`
+  - CRC32: `0380c2ce`
+- **[ps2-0150e-20001228.bin](bios/Sony/PlayStation%202/ps2-0150e-20001228.bin)** (4,194,304 bytes)
+  - SHA1: `e22ef231faf3661edd92f2ee449a71297c82a092`
+  - MD5: `838544f12de9b0abc90811279ee223c8`
+  - CRC32: `1559fd43`
+- **[ps2-0150ed-20001228-20030520.bin](bios/Sony/PlayStation%202/ps2-0150ed-20001228-20030520.bin)** (4,194,304 bytes)
+  - SHA1: `d004326c9d8060812b4433c3f07646b04854d6c4`
+  - MD5: `6f9a6feb749f0533aaae2cc45090b0ed`
+  - CRC32: `60bc0031`
+- **[ps2-0150j-20010118.bin](bios/Sony/PlayStation%202/ps2-0150j-20010118.bin)** (4,194,304 bytes)
+  - SHA1: `d6f365a0f07cd04ed28108e6ec5076e2f81e5f72`
+  - MD5: `815ac991d8bc3b364696bead3457de7d`
+  - CRC32: `4fc3b495`
+- **[ps2-0150jd-20010118.bin](bios/Sony/PlayStation%202/ps2-0150jd-20010118.bin)** (4,194,304 bytes)
+  - SHA1: `334e029fc7fd50222a399c50384ff42732652259`
+  - MD5: `bb6bbc850458fff08af30e969ffd0175`
+  - CRC32: `0b3ec2bc`
+- **[ps2-0160a-20010427.bin](bios/Sony/PlayStation%202/ps2-0160a-20010427.bin)** (4,194,304 bytes)
+  - SHA1: `7331a40b4b4feb1b3f0f77b013b6d38483577baa`
+  - MD5: `b107b5710042abe887c0f6175f6e94bb`
+  - CRC32: `4008ac18`
+- **[ps2-0160a-20010704.bin](bios/Sony/PlayStation%202/ps2-0160a-20010704.bin)** (4,194,304 bytes)
+  - SHA1: `ce92e8e8c88665f2f645a9522e337823d47a914a`
+  - MD5: `18bcaadb9ff74ed3add26cdf709fff2e`
+  - CRC32: `c506c693`
+- **[ps2-0160a-20011004.bin](bios/Sony/PlayStation%202/ps2-0160a-20011004.bin)** (4,194,304 bytes)
+  - SHA1: `d257bce6ecaf3bafb704c75a1b4741b910bd2d49`
+  - MD5: `7200a03d51cacc4c14fcdfdbc4898431`
+  - CRC32: `a01ec625`
+- **[ps2-0160e-20010704.bin](bios/Sony/PlayStation%202/ps2-0160e-20010704.bin)** (4,194,304 bytes)
+  - SHA1: `3cbd048e437c785b5a05a0feced00117a8a42545`
+  - MD5: `491209dd815ceee9de02dbbc408c06d6`
+  - CRC32: `f1ac735f`
+- **[ps2-0160e-20011004.bin](bios/Sony/PlayStation%202/ps2-0160e-20011004.bin)** (4,194,304 bytes)
+  - SHA1: `ee34c3a87c53c75ca2a37d77b0042ca24d07831f`
+  - MD5: `8359638e857c8bc18c3c18ac17d9cc3c`
+  - CRC32: `82aa5055`
+- **[ps2-0160e-20020319.bin](bios/Sony/PlayStation%202/ps2-0160e-20020319.bin)** (4,194,304 bytes)
+  - SHA1: `bff2902bd0ce9729a060581132541e9fd1a9fab6`
+  - MD5: `0d2228e6fd4fb639c9c39d077a9ec10c`
+  - CRC32: `2fe21e4d`
+- **[ps2-0160e-20020426.bin](bios/Sony/PlayStation%202/ps2-0160e-20020426.bin)** (4,194,304 bytes)
+  - SHA1: `d106b757ae2544dfe63f7e1924e59d5ad44c0c29`
+  - MD5: `5b1f47fbeb277c6be2fccdd6344ff2fd`
+  - CRC32: `dad0baec`
+- **[ps2-0160h-20010730.bin](bios/Sony/PlayStation%202/ps2-0160h-20010730.bin)** (4,194,304 bytes)
+  - SHA1: `ba15dcf7aac13864c08222037e9321d7468c87d1`
+  - MD5: `352d2ff9b3f68be7e6fa7e6dd8389346`
+  - CRC32: `75f83c67`
+- **[ps2-0160h-20020426.bin](bios/Sony/PlayStation%202/ps2-0160h-20020426.bin)** (4,194,304 bytes)
+  - SHA1: `e3a74125c426bcacabca00b513fab928665c8846`
+  - MD5: `315a4003535dfda689752cb25f24785c`
+  - CRC32: `3355623e`
+- **[ps2-0160j-20010427.bin](bios/Sony/PlayStation%202/ps2-0160j-20010427.bin)** (4,194,304 bytes)
+  - SHA1: `e525a0c900e37acf0ae5a655d82a0abcb07c6f1f`
+  - MD5: `ab55cceea548303c22c72570cfd4dd71`
+  - CRC32: `c268ef47`
+- **[ps2-0160j-20020426.bin](bios/Sony/PlayStation%202/ps2-0160j-20020426.bin)** (4,194,304 bytes)
+  - SHA1: `003628c137dae577ff3b04b93ca1787b0c944702`
+  - MD5: `72da56fccb8fcd77bba16d1b6f479914`
+  - CRC32: `c9363baf`
+- **[ps2-0170a-20030325.bin](bios/Sony/PlayStation%202/ps2-0170a-20030325.bin)** (4,194,304 bytes)
+  - SHA1: `d269d1ed513227f3ef7133c76cf1b3a64f97b15d`
+  - MD5: `8aa12ce243210128c5074552d3b86251`
+  - CRC32: `9a99e3f4`
+- **[ps2-0170ad-20030325.bin](bios/Sony/PlayStation%202/ps2-0170ad-20030325.bin)** (4,194,304 bytes)
+  - SHA1: `c5bc6e893b4c43d528142e56c96073024de64157`
+  - MD5: `eb960de68f0c0f7f9fa083e9f79d0360`
+  - CRC32: `0e1ece79`
+- **[ps2-0170e-20030227.bin](bios/Sony/PlayStation%202/ps2-0170e-20030227.bin)** (4,194,304 bytes)
+  - SHA1: `ad15bd7eabd5bd81ba011516a5be44947d6641aa`
+  - MD5: `6e69920fa6eef8522a1d688a11e41bc6`
+  - CRC32: `51b5fb8b`
+- **[ps2-0170ed-20030227.bin](bios/Sony/PlayStation%202/ps2-0170ed-20030227.bin)** (4,194,304 bytes)
+  - SHA1: `e220bb282378c1f48ea1b585b3675e51a6dca572`
+  - MD5: `666018ffec65c5c7e04796081295c6c7`
+  - CRC32: `970a9c56`
+- **[ps2-0170j-20030206.bin](bios/Sony/PlayStation%202/ps2-0170j-20030206.bin)** (4,194,304 bytes)
+  - SHA1: `d812ac65c357d392396ca9edee812dc41bed8bde`
+  - MD5: `312ad4816c232a9606e56f946bc0678a`
+  - CRC32: `9457f64e`
+- **[ps2-0180cd-20030224.bin](bios/Sony/PlayStation%202/ps2-0180cd-20030224.bin)** (4,194,304 bytes)
+  - SHA1: `2de87767008fc4a303af64a46251156e965d9065`
+  - MD5: `240d4c5ddd4b54069bdc4a3cd2faf99d`
+  - CRC32: `8c1a04cf`
+- **[ps2-0180j-20031028.bin](bios/Sony/PlayStation%202/ps2-0180j-20031028.bin)** (4,194,304 bytes)
+  - SHA1: `aa4a35c14ee342cf7a03b1dde294ca10e64889e1`
+  - MD5: `1c6cd089e6c83da618fbf2a081eb4888`
+  - CRC32: `585fd27c`
+- **[ps2-0190a-20030623.bin](bios/Sony/PlayStation%202/ps2-0190a-20030623.bin)** (4,194,304 bytes)
+  - SHA1: `c74d92a2952a2912b6698cbcf7742adac8f784d3`
+  - MD5: `35461cecaa51712b300b2d6798825048`
+  - CRC32: `b3e87709`
+- **[ps2-0190a-20040329.bin](bios/Sony/PlayStation%202/ps2-0190a-20040329.bin)** (4,194,304 bytes)
+  - SHA1: `b68c05f5cd86bf03cb38a643a723b7a97b759531`
+  - MD5: `81f4336c1de607dd0865011c0447052e`
+  - CRC32: `9ba4c32f`
+- **[ps2-0190c-20030623.bin](bios/Sony/PlayStation%202/ps2-0190c-20030623.bin)** (4,194,304 bytes)
+  - SHA1: `92d9eb4b11cef97bb69a275b2851b72f7b0023d6`
+  - MD5: `1b6e631b536247756287b916f9396872`
+  - CRC32: `d2347ee7`
+- **[ps2-0190e-20030623.bin](bios/Sony/PlayStation%202/ps2-0190e-20030623.bin)** (4,194,304 bytes)
+  - SHA1: `18b9ba833c469c4683676cc20da5124080d980bb`
+  - MD5: `bd6415094e1ce9e05daabe85de807666`
+  - CRC32: `1752a52e`
+- **[ps2-0190e-20030822.bin](bios/Sony/PlayStation%202/ps2-0190e-20030822.bin)** (4,194,304 bytes)
+  - SHA1: `6e1f0eb4aec51a6288b3d802d3bcdb477cf52104`
+  - MD5: `afde410bd026c16be605a1ae4bd651fd`
+  - CRC32: `3afd1d1e`
+- **[ps2-0190h-20030623.bin](bios/Sony/PlayStation%202/ps2-0190h-20030623.bin)** (4,194,304 bytes)
+  - SHA1: `caa18ed04854a91e68f2d61a782560edd6373bbf`
+  - MD5: `2e70ad008d4ec8549aada8002fdf42fb`
+  - CRC32: `41391dd3`
+- **[ps2-0190j-20030623.bin](bios/Sony/PlayStation%202/ps2-0190j-20030623.bin)** (4,194,304 bytes)
+  - SHA1: `6a6ecfe6c10e42eff1ca056349def799b5629067`
+  - MD5: `463d87789c555a4a7604e97d7db545d1`
+  - CRC32: `7c10a967`
+- **[ps2-0190j-20030822.bin](bios/Sony/PlayStation%202/ps2-0190j-20030822.bin)** (4,194,304 bytes)
+  - SHA1: `0ea98a25a32145dda514de2f0d4bfbbd806bd00c`
+  - MD5: `00da1b177096cfd2532c8fa22b43e667`
+  - CRC32: `79d60546`
+- **[ps2-0190r-20030623.bin](bios/Sony/PlayStation%202/ps2-0190r-20030623.bin)** (4,194,304 bytes)
+  - SHA1: `34a81db03ab617fbfdd7f9b861692dd2ecd57b82`
+  - MD5: `b53d51edc7fc086685e31b811dc32aad`
+  - CRC32: `25f6212a`
+- **[ps2-0200a-20040614.bin](bios/Sony/PlayStation%202/ps2-0200a-20040614.bin)** (4,194,304 bytes)
+  - SHA1: `7a62e5f48603582707e9898eb055ea3eaee50d4c`
+  - MD5: `d333558cc14561c1fdc334c75d5f37b7`
+  - CRC32: `7ebd68de`
+- **[ps2-0200ed-20040614.bin](bios/Sony/PlayStation%202/ps2-0200ed-20040614.bin)** (4,194,304 bytes)
+  - SHA1: `902f4680b258abd40c0922f6b0d581cbd8f8a73e`
+  - MD5: `63ead1d74893bf7f36880af81f68a82d`
+  - CRC32: `881c9aa9`
+- **[ps2-0200h-20040614.bin](bios/Sony/PlayStation%202/ps2-0200h-20040614.bin)** (4,194,304 bytes)
+  - SHA1: `7f8e812cab7c7393c85eac6c42661e1fd0a642df`
+  - MD5: `3e3e030c0f600442fa05b94f87a1e238`
+  - CRC32: `b57201bf`
+- **[ps2-0200j-20040614.bin](bios/Sony/PlayStation%202/ps2-0200j-20040614.bin)** (4,194,304 bytes)
+  - SHA1: `224ab5704ab719edeb05ca1d835812252c97c1b3`
+  - MD5: `0eee5d1c779aa50e94edd168b4ebf42e`
+  - CRC32: `2f314730`
+- **[ps2-0210j-20040917.bin](bios/Sony/PlayStation%202/ps2-0210j-20040917.bin)** (4,194,304 bytes)
+  - SHA1: `bbb1af3085e77599691ec430d147810157da934f`
+  - MD5: `1ad977bb539fc9448a08ab276a836bbc`
+  - CRC32: `55710d11`
+- **[ps2-0220a-20050620.bin](bios/Sony/PlayStation%202/ps2-0220a-20050620.bin)** (4,194,304 bytes)
+  - SHA1: `48d0445dffd1e879c7ae752c5166ec3101921555`
+  - MD5: `929a14baca1776b00869f983aa6e14d2`
+  - CRC32: `d305a97a`
+- **[ps2-0220a-20060210.bin](bios/Sony/PlayStation%202/ps2-0220a-20060210.bin)** (4,194,304 bytes)
+  - SHA1: `92e488d5b2705e4cca83d4d1efbc421012faf83e`
+  - MD5: `cb801b7920a7d536ba07b6534d2433ca`
+  - CRC32: `1279fce9`
+- **[ps2-0220a-20060905.bin](bios/Sony/PlayStation%202/ps2-0220a-20060905.bin)** (4,194,304 bytes)
+  - SHA1: `8361d615cc895962e0f0838489337574dbdc9173`
+  - MD5: `40c11c063b3b9409aa5e4058e984e30c`
+  - CRC32: `1c17eafc`
+- **[ps2-0220ad-20050620.bin](bios/Sony/PlayStation%202/ps2-0220ad-20050620.bin)** (4,194,304 bytes)
+  - SHA1: `7c7efdfcec7705f4e84bb47f45322104e39eed09`
+  - MD5: `9959ad7a8685cad66206e7752ca23f8b`
+  - CRC32: `181f1bda`
+- **[ps2-0220ad-20060905.bin](bios/Sony/PlayStation%202/ps2-0220ad-20060905.bin)** (4,194,304 bytes)
+  - SHA1: `4191b5842f31a9985b5428bc9d2b733ce3abb583`
+  - MD5: `21fe4cad111f7dc0f9af29477057f88d`
+  - CRC32: `431d9b7f`
+- **[ps2-0220e-20050620.bin](bios/Sony/PlayStation%202/ps2-0220e-20050620.bin)** (4,194,304 bytes)
+  - SHA1: `929a85e974faf4b40d0a7785023b758402c43bd9`
+  - MD5: `573f7d4a430c32b3cc0fd0c41e104bbd`
+  - CRC32: `e2862e39`
+- **[ps2-0220e-20060210.bin](bios/Sony/PlayStation%202/ps2-0220e-20060210.bin)** (4,194,304 bytes)
+  - SHA1: `28ad756d0cfd1e7b2e2de3de5d9e14207ee89761`
+  - MD5: `af60e6d1a939019d55e5b330d24b1c25`
+  - CRC32: `23fa7baa`
+- **[ps2-0220e-20060905.bin](bios/Sony/PlayStation%202/ps2-0220e-20060905.bin)** (4,194,304 bytes)
+  - SHA1: `da5aacead2fb55807d6d4e70b1f10f4fdcfd3281`
+  - MD5: `80bbb237a6af9c611df43b16b930b683`
+  - CRC32: `2d946dbf`
+- **[ps2-0220h-20050620.bin](bios/Sony/PlayStation%202/ps2-0220h-20050620.bin)** (4,194,304 bytes)
+  - SHA1: `0a071d1b46607a7694770407606d8599f62a372b`
+  - MD5: `df63a604e8bff5b0599bd1a6c2721bd0`
+  - CRC32: `e27c4a6c`
+- **[ps2-0220h-20060210.bin](bios/Sony/PlayStation%202/ps2-0220h-20060210.bin)** (4,194,304 bytes)
+  - SHA1: `fce2a24e5e0400cc6d98c08f426405d19173813e`
+  - MD5: `549a66d0c698635ca9fa3ab012da7129`
+  - CRC32: `23001fff`
+- **[ps2-0220h-20060905.bin](bios/Sony/PlayStation%202/ps2-0220h-20060905.bin)** (4,194,304 bytes)
+  - SHA1: `a5a2ee0dd9a86ca35b94e97ca92476a584f755bf`
+  - MD5: `c37bce95d32b2be480f87dd32704e664`
+  - CRC32: `2d6e09ea`
+- **[ps2-0220j-20050620.bin](bios/Sony/PlayStation%202/ps2-0220j-20050620.bin)** (4,194,304 bytes)
+  - SHA1: `7ffa75d142cb8eeea6c777dbcf263143655275d5`
+  - MD5: `eb4f40fcf4911ede39c1bbfe91e7a89a`
+  - CRC32: `d27fc41d`
+- **[ps2-0220j-20060210.bin](bios/Sony/PlayStation%202/ps2-0220j-20060210.bin)** (4,194,304 bytes)
+  - SHA1: `0edf1fbb772a8e6a79ae00e977450e3ade25c4f3`
+  - MD5: `5b1ba4bb914406fae75ab8e38901684d`
+  - CRC32: `1303918e`
+- **[ps2-0220j-20060905.bin](bios/Sony/PlayStation%202/ps2-0220j-20060905.bin)** (4,194,304 bytes)
+  - SHA1: `3baf847c1c217aa71ac6d298389c88edb3db32e2`
+  - MD5: `5de9d0d730ff1e7ad122806335332524`
+  - CRC32: `1d6d879b`
+- **[ps2-0230a-20080220.bin](bios/Sony/PlayStation%202/ps2-0230a-20080220.bin)** (4,194,304 bytes)
+  - SHA1: `f9229fe159d0353b9f0632f3fdc66819c9030458`
+  - MD5: `21038400dc633070a78ad53090c53017`
+  - CRC32: `286897c2`
+- **[ps2-0230e-20080220.bin](bios/Sony/PlayStation%202/ps2-0230e-20080220.bin)** (4,194,304 bytes)
+  - SHA1: `9915b5ba56798f4027ac1bd8d10abe0c1c9c326a`
+  - MD5: `dc69f0643a3030aaa4797501b483d6c4`
+  - CRC32: `19eb1081`
+- **[ps2-0230h-20080220.bin](bios/Sony/PlayStation%202/ps2-0230h-20080220.bin)** (4,194,304 bytes)
+  - SHA1: `a277b456849697abec11285c6b35bc734598c220`
+  - MD5: `30d56e79d89fbddf10938fa67fe3f34e`
+  - CRC32: `191174d4`
+- **[ps2-0230j-20080220.bin](bios/Sony/PlayStation%202/ps2-0230j-20080220.bin)** (4,194,304 bytes)
+  - SHA1: `fbd54bfc020af34008b317dcb80b812dd29b3759`
+  - MD5: `80ac46fa7e77b8ab4366e86948e54f83`
+  - CRC32: `2912faa5`
+- **[ps2-0250e-20100415.bin](bios/Sony/PlayStation%202/ps2-0250e-20100415.bin)** (4,194,304 bytes)
+  - SHA1: `b9cb5775af29cd4d1ec5521e8231f8b6636e2e44`
+  - MD5: `93ea3bcee4252627919175ff1b16a1d9`
+  - CRC32: `7e75fc28`
+- **[ps2-0250j-20100415.bin](bios/Sony/PlayStation%202/ps2-0250j-20100415.bin)** (4,194,304 bytes)
+  - SHA1: `4b5ef16b67e3b523d28ed2406106cb80470a06d0`
+  - MD5: `d3e81e95db25f5a86a7b7474550a2155`
+  - CRC32: `4e8c160c`
+- **[rom1.bin](bios/Sony/PlayStation%202/rom1.bin)** (199,680 bytes)
+  - SHA1: `47d2ec4b342649e4c391043ab915d4435f9d180d`
+  - MD5: `44552702b05697a14ccbe2ca22ee7139`
+  - CRC32: `2c3bcd32`
+
+### Sony/PlayStation 3
+
+- **[PS3UPDAT.PUP](bios/Sony/PlayStation%203/PS3UPDAT.PUP)** (206,126,236 bytes)
+  - SHA1: `093f8698b54b78dcb701de2043f82639de51d63b`
+  - MD5: `05fe32f5dc8c78acbcd84d36ee7fdc5b`
+  - CRC32: `24bdb2db`
+
+### Sony/PlayStation Portable
+
+- **[ppge_atlas.zim](bios/Sony/PlayStation%20Portable/ppge_atlas.zim)** (666,530 bytes)
+  - SHA1: `30a33f3651f8e1b0967a5dfe6ff714baebcce41a`
+  - MD5: `866855cc330b9b95cc69135fb7b41d38`
+  - CRC32: `7b57fa78`
+
+### Sony/PlayStation Vita
+
+- **[PSP2UPDAT.PUP](bios/Sony/PlayStation%20Vita/PSP2UPDAT.PUP)** (56,778,752 bytes)
+  - SHA1: `ed3a4cb264fff283209f10ae58c96c6090fed187`
+  - MD5: `59dcf059d3328fb67be7e51f8aa33418`
+  - CRC32: `082ecf86`
+- **[PSVUPDAT.PUP](bios/Sony/PlayStation%20Vita/PSVUPDAT.PUP)** (133,834,240 bytes)
+  - SHA1: `cc72dfcc964577cc29112ef368c28f55277c237c`
+  - MD5: `f2c7b12fe85496ec88a0391b514d6e3b`
+  - CRC32: `39075d41`
+
+### Tandy/CoCo
+
+- **[alice32.rom](bios/Tandy/CoCo/alice32.rom)** (16,384 bytes)
+  - SHA1: `f34e61c3cf711fb59ff4f1d4c0d2863dab0ab5d1`
+  - MD5: `79ea46603d716578d5f2b52eb4c33ca2`
+  - CRC32: `c3854ddf`
+- **[alice4k.rom](bios/Tandy/CoCo/alice4k.rom)** (8,192 bytes)
+  - SHA1: `c2166b91e6396a311f486832012aa43e0d2b19f8`
+  - MD5: `78af465c2f31cf4e05dec1efda77da01`
+  - CRC32: `f876abe9`
+- **[bas10.rom](bios/Tandy/CoCo/bas10.rom)** (8,192 bytes)
+  - SHA1: `1f08455cd48ce6a06132aea15c4778f264e19539`
+  - MD5: `a74f3d95b395dad7cdca19d560eeea74`
+  - CRC32: `00b50aaa`
+  - Platform names: Batocera: `coco.zip`
+- **[bas11.rom](bios/Tandy/CoCo/bas11.rom)** (8,192 bytes)
+  - SHA1: `cecb7c24ff1e0ab5836e4a7a8eb1b8e01f1fded3`
+  - MD5: `c73fb4bff9621c5ab17f6220b20db82f`
+  - CRC32: `6270955a`
+- **[bas12.rom](bios/Tandy/CoCo/bas12.rom)** (8,192 bytes)
+  - SHA1: `0f14dc46c647510eb0b7bd3f53e33da07907d04f`
+  - MD5: `c933316c7d939532a13648850c1c2aa6`
+  - CRC32: `54368805`
+  - Platform names: Batocera: `coco2.zip`
+- **[bas13.rom](bios/Tandy/CoCo/bas13.rom)** (8,192 bytes)
+  - SHA1: `28b92bebe35fa4f026a084416d6ea3b1552b63d3`
+  - MD5: `c2fc43556eb6b7b25bdf5955bd9df825`
+  - CRC32: `d8f4d15e`
+  - Platform names: Batocera: `coco2b.zip`
+- **[coco.zip](bios/Tandy/CoCo/coco.zip)** (7,438 bytes)
+  - SHA1: `e31fbbb831f32886e57410183bc4e85d36c2dc7a`
+  - MD5: `b0b96aadef063b07f079fca138b79e28`
+  - CRC32: `d25f9837`
+- **[coco2.zip](bios/Tandy/CoCo/coco2.zip)** (14,597 bytes)
+  - SHA1: `a4ec389d7ecffdcc741ea79064dc9dbc12ccbc5a`
+  - MD5: `e3f77c0e71716399ed93d556c73532e7`
+  - CRC32: `b145236b`
+- **[coco2b.zip](bios/Tandy/CoCo/coco2b.zip)** (14,600 bytes)
+  - SHA1: `e08fe575f3329d6af01ab119a575ef70f2a59cc6`
+  - MD5: `381f86c34f916632f9722f847ebdf6c5`
+  - CRC32: `b88e97cb`
+- **[coco3.rom](bios/Tandy/CoCo/coco3.rom)** (32,768 bytes)
+  - SHA1: `e0d82953fb6fd03768604933df1ce8bc51fc427d`
+  - MD5: `7233c6c429f3ce1c7392f28a933e0b6f`
+  - CRC32: `b4c88d6c`
+  - Platform names: Batocera: `coco3.zip`
+- **[coco3.zip](bios/Tandy/CoCo/coco3.zip)** (22,005 bytes)
+  - SHA1: `b9b96a7dac82e9af18859e4d6fd4976b3e7dacea`
+  - MD5: `600b3770cb8776fc7229908b2edabe86`
+  - CRC32: `aa3a7342`
+- **[coco3p.rom](bios/Tandy/CoCo/coco3p.rom)** (32,768 bytes)
+  - SHA1: `631e383068b1f52a8f419f4114b69501b21cf379`
+  - MD5: `4ae57e5a8e7494e5485446fefedb580b`
+  - CRC32: `ff050d80`
+  - Platform names: Batocera: `coco3p.zip`
+- **[coco3p.zip](bios/Tandy/CoCo/coco3p.zip)** (23,376 bytes)
+  - SHA1: `3aa96e0e586d67b3b836e0c702524508cf038907`
+  - MD5: `be0291a3e2da1141d5631a1837c0c391`
+  - CRC32: `f5e7f88a`
+- **[coco_fdc_v11.zip](bios/Tandy/CoCo/coco_fdc_v11.zip)** (7,112 bytes)
+  - SHA1: `cf3c2f9d53cf85db6c0a68e7b3d142b7f274d149`
+  - MD5: `ce9333ceff1cb555d0813035ef35c227`
+  - CRC32: `fb29eb80`
+- **[disk10.rom](bios/Tandy/CoCo/disk10.rom)** (8,192 bytes)
+  - SHA1: `04115be3f97952b9d9310b52f806d04f80b40d03`
+  - MD5: `a64b3ef9efcc066b18d35b134068d1cc`
+  - CRC32: `b4f9968e`
+- **[disk11.rom](bios/Tandy/CoCo/disk11.rom)** (8,192 bytes)
+  - SHA1: `10bdc5aa2d7d7f205f67b47b19003a4bd89defd1`
+  - MD5: `8cab28f4b7311b8df63c07bb3b59bfd5`
+  - CRC32: `0b9c5415`
+  - Platform names: Batocera: `coco_fdc_v11.zip`
+- **[extbas10.rom](bios/Tandy/CoCo/extbas10.rom)** (8,192 bytes)
+  - SHA1: `7275f1e3f165ff6a4657e4e5e24cb8b817239f54`
+  - MD5: `fda72f415afe99b36f953bb9bc1253da`
+  - CRC32: `e031d076`
+- **[extbas11.rom](bios/Tandy/CoCo/extbas11.rom)** (8,192 bytes)
+  - SHA1: `ad927fb4f30746d820cb8b860ebb585e7f095dea`
+  - MD5: `21070aa0496142b886c562bf76d7c113`
+  - CRC32: `a82a6254`
+  - Platform names: Batocera: `coco2.zip`
+- **[hdbdw3bck.rom](bios/Tandy/CoCo/hdbdw3bck.rom)** (8,192 bytes)
+  - SHA1: `8fd64f1c246489e0bf2b3743ae76332ff324716a`
+  - MD5: `ef750d93d24d7bc87a8ecd6e5a15a845`
+  - CRC32: `867a3f42`
+- **[mc10.rom](bios/Tandy/CoCo/mc10.rom)** (8,192 bytes)
+  - SHA1: `4afff2b4c120334481aab7b02c3552bf76f1bc43`
+  - MD5: `f29e94ff36577ffb6a787959e45bfe85`
+  - CRC32: `11fda97e`
+- **[mx1600bas.rom](bios/Tandy/CoCo/mx1600bas.rom)** (8,192 bytes)
+  - SHA1: `70a464edf3a654ed4ffe687e6dee4f0d2acc758b`
+  - MD5: `88d1504e93366f498105a846cdbf7fb7`
+  - CRC32: `d918156e`
+
+### Tandy/MC-10
+
+- **[alice.zip](bios/Tandy/MC-10/alice.zip)** (7,274 bytes)
+  - SHA1: `026b5c2e4d04b2c8e7d569a852d62be9bca2f32c`
+  - MD5: `7e7fb3daa64a29a3bb5927acc9a7055d`
+  - CRC32: `e9443331`
+- **[mc10.zip](bios/Tandy/MC-10/mc10.zip)** (7,262 bytes)
+  - SHA1: `fa66a874b735d3d984d66b529a54ae978a9b2766`
+  - MD5: `ed9816479dcea7dd88eedb97b9cb0d26`
+  - CRC32: `34e1d87e`
+
+### Tandy/TRS-80
+
+- **[trs80.zip](bios/Tandy/TRS-80/trs80.zip)** (4,157 bytes)
+  - SHA1: `3795bf93d977f2625e452f8caf6a5371eff2f701`
+  - MD5: `4eed271d76c7bc19baf7f15ca057a753`
+  - CRC32: `e2510704`
+- **[trs80m3.zip](bios/Tandy/TRS-80/trs80m3.zip)** (20,844 bytes)
+  - SHA1: `8cdf51015a0bac500d9a1d3969fa47ebec4144f6`
+  - MD5: `dde75b2ef3f7f6ed90364e4564703c1d`
+  - CRC32: `4d403b13`
+- **[trs80m4.zip](bios/Tandy/TRS-80/trs80m4.zip)** (13,369 bytes)
+  - SHA1: `300b3b1d52fbf833ff1cedb95e9541e76aa224c2`
+  - MD5: `8491bd4f3fcaf5aa5a00bce5e9b735eb`
+  - CRC32: `983e55f2`
+- **[trs80m4p.zip](bios/Tandy/TRS-80/trs80m4p.zip)** (4,880 bytes)
+  - SHA1: `497eea6e0ed80501ca3beee714d71a5815495b07`
+  - MD5: `8a0f1567df8f166f4056a6a71ef7dce5`
+  - CRC32: `e6fda693`
+
+### Tandy/VIS
+
+- **[vis.zip](bios/Tandy/VIS/vis.zip)** (605,047 bytes)
+  - SHA1: `beff39b4edb449c66b704e1c64ee6ed58e30a868`
+  - MD5: `3424f1a2df9d971024a50955cb05e067`
+  - CRC32: `99a449b5`
+
+### Texas Instruments/TI-83
+
+- **[ti83.rom](bios/Texas%20Instruments/TI-83/ti83.rom)** (262,144 bytes)
+  - SHA1: `ef66dad3e7b2b6a86f326765e7dfd7d1a308ad8f`
+  - MD5: `d4448d09bbfde687c04f9e3310e023ab`
+  - CRC32: `4bf05697`
+- **[ti83plus.rom](bios/Texas%20Instruments/TI-83/ti83plus.rom)** (524,288 bytes)
+  - SHA1: `1fddd44d54f3ff12bfb548fcb03ce36b5a4f295a`
+  - MD5: `8011181f810b5ec4e9d6a03f0e14257a`
+  - CRC32: `58f14c79`
+- **[ti83se.rom](bios/Texas%20Instruments/TI-83/ti83se.rom)** (2,097,152 bytes)
+  - SHA1: `8177bc6d5489d575cbfa9a004d097fc08c6f8c86`
+  - MD5: `c6ff8204c5c81b7be34614dbbd690c8b`
+  - CRC32: `200dd7d0`
+
+### Texas Instruments/TI-99
+
+- **[TI-994A.ctg](bios/Texas%20Instruments/TI-99/TI-994A.ctg)** (32,702 bytes)
+  - SHA1: `4e764ab67dfcbee8adc5b7d98e7b2926a008b9d8`
+  - MD5: `412ecbf991edcb68edd0e76c2caa4a59`
+  - CRC32: `a092207d`
+- **[spchrom.bin](bios/Texas%20Instruments/TI-99/spchrom.bin)** (32,768 bytes)
+  - SHA1: `382292295c00dff348d7e17c5ce4da12a1d87763`
+  - MD5: `7adcaf64272248f7a7161cfc02fd5b3f`
+  - CRC32: `58b155f7`
+- **[ti-disk.ctg](bios/Texas%20Instruments/TI-99/ti-disk.ctg)** (5,835 bytes)
+  - SHA1: `693f5b4fe1e5eb6429fd6614fb7bb14350939814`
+  - MD5: `04714f43347cefb2a051a77116344b3f`
+  - CRC32: `1a52b40c`
+- **[ti99_4a.zip](bios/Texas%20Instruments/TI-99/ti99_4a.zip)** (21,377 bytes)
+  - SHA1: `e05575b630bea7ff98b9ca1f083d745abb3110b6`
+  - MD5: `3df4d280ad76edc0662c2e89ad4f2f74`
+  - CRC32: `f93bd9f7`
+- **[ti99_speech.zip](bios/Texas%20Instruments/TI-99/ti99_speech.zip)** (31,184 bytes)
+  - SHA1: `a11d1801594fa3d1f95d37bbcc2e0faa1ad013c6`
+  - MD5: `01770fde15c34ff88bb49526d38cb1f6`
+  - CRC32: `71879a28`
+
+### Tiger/Game.com
+
+- **[gamecom.zip](bios/Tiger/Game.com/gamecom.zip)** (145,138 bytes)
+  - SHA1: `e0f5e2eced447abf9948342b2facc40179f0f527`
+  - MD5: `f2087ed09f7fa8d8856cfafb20dd00dc`
+  - CRC32: `9ed23a12`
+
+### Tomy/Tutor
+
+- **[tutor.zip](bios/Tomy/Tutor/tutor.zip)** (34,653 bytes)
+  - SHA1: `273dbb7a93eb0ab83c2e13e9db51b897cc18f838`
+  - MD5: `4f0e9736c6ff1671459b1f3c80f74f98`
+  - CRC32: `0d9fbdbb`
+
+### VTech/CreatiVision
+
+- **[crvision.zip](bios/VTech/CreatiVision/crvision.zip)** (441,619 bytes)
+  - SHA1: `87526fb12fabbcc01292dd01dc698fdc762ab7dc`
+  - MD5: `a2049600b290c9e73a74d124785516c4`
+  - CRC32: `f387895d`
+
+### VTech/Laser 310
+
+- **[laser310.zip](bios/VTech/Laser%20310/laser310.zip)** (42,630 bytes)
+  - SHA1: `9fa5f366c4ec43d7c23f03f054733894bf42912f`
+  - MD5: `9cd678c94615c23a65618631be70b500`
+  - CRC32: `e004421a`
+
+### VTech/Socrates
+
+- **[socrates.zip](bios/VTech/Socrates/socrates.zip)** (218,299 bytes)
+  - SHA1: `6bbaa8f73027eaca2c6988ee3b9b3f3b0b29d18e`
+  - MD5: `3e88a4725c71e49c897e83ab9eb536f6`
+  - CRC32: `a5156df5`
+
+### VTech/V.Smile
+
+- **[vsmile.zip](bios/VTech/V.Smile/vsmile.zip)** (3,078,731 bytes)
+  - SHA1: `65e526ae3e4795a9186c53c7428d8b946170befe`
+  - MD5: `aadb355f8db993f50c6e83eb835dd55d`
+  - CRC32: `e52dd2f9`
+
+### Videoton/TVC
+
+- **[tvc22_ext.rom](bios/Videoton/TVC/tvc22_ext.rom)** (8,192 bytes)
+  - SHA1: `abf119cf947ea32defd08b29a8a25d75f6bd4987`
+  - MD5: `5ce95a26ceed5bec73995d83568da9cf`
+  - CRC32: `05e1c3a8`
+- **[tvc22_sys.rom](bios/Videoton/TVC/tvc22_sys.rom)** (16,384 bytes)
+  - SHA1: `f2572ee83d09fc08f4de4a62f101c8bb301a9505`
+  - MD5: `8c54285f541930cde766069942bad0f2`
+  - CRC32: `79fa818c`
+- **[tvc_dos12d.rom](bios/Videoton/TVC/tvc_dos12d.rom)** (16,384 bytes)
+  - SHA1: `072c6160d4e7d406f5d8f5b1b66066c797d35561`
+  - MD5: `88dc7876d584f90e4106f91444ab23b7`
+  - CRC32: `1466aed4`
+- **[tvcfileio.rom](bios/Videoton/TVC/tvcfileio.rom)** (8,192 bytes)
+  - SHA1: `98889c3a56b11dedf077f866ed2e12d51b604113`
+  - MD5: `a2cf86ba8e7fc58b242137fe59036832`
+  - CRC32: `950e32fd`
+
+### Vircon/Vircon32Bios.v32
+
+- **[Vircon32Bios.v32](bios/Vircon/Vircon32Bios.v32)** (1,073,060 bytes)
+  - SHA1: `67ddbcd018f03ed74b6e013074d92cc5f1f51c80`
+  - MD5: `73f04397cbb2dafcf2047b19a856153a`
+  - CRC32: `d4f7327d`
+
+### ZC/ZC210
+
+- **[custom1.sf2](bios/ZC/ZC210/zc210/sf2/custom1.sf2)** (128,788 bytes)
+  - SHA1: `71c13c66cf864086379433aad7e27511560283d6`
+  - MD5: `c1dc781c34cff8f9a023c0192754dc6c`
+  - CRC32: `9f2ee856`
+- **[custom2.sf2](bios/ZC/ZC210/zc210/sf2/custom2.sf2)** (163,198 bytes)
+  - SHA1: `83d1f5ce6566465c2fdfe608f453f0321ee76acc`
+  - MD5: `144fcdbb6a30f1f916f6963006c2da97`
+  - CRC32: `240bddaa`
+- **[custom3.sf2](bios/ZC/ZC210/zc210/sf2/custom3.sf2)** (166,252 bytes)
+  - SHA1: `eef05f85884cfe1cb378f71f7c37cd7074216929`
+  - MD5: `134d217fb99c3be1e89cfaf8f28280d8`
+  - CRC32: `75941cff`
+- **[custom4.sf2](bios/ZC/ZC210/zc210/sf2/custom4.sf2)** (331,054 bytes)
+  - SHA1: `c7900a11b30ee1c5b9f87955cf3071c3e6d6ea5f`
+  - MD5: `b37366199c6df9ee5316f031755aa821`
+  - CRC32: `ad436da2`
+- **[custom5.sf2](bios/ZC/ZC210/zc210/sf2/custom5.sf2)** (524,372 bytes)
+  - SHA1: `3c701a9eee61c561abd8e6396d8a63bd35f92712`
+  - MD5: `64068b84eb88dc85b75148bbe9b393fb`
+  - CRC32: `fac84b05`
+- **[custom6.sf2](bios/ZC/ZC210/zc210/sf2/custom6.sf2)** (1,090,280 bytes)
+  - SHA1: `5176df8e48fa3c05b19e5e05c7b1983b2fddbb0f`
+  - MD5: `1241986de5b1d00b02d34f1e6651a1d1`
+  - CRC32: `eac25fd2`
+- **[custom7.sf2](bios/ZC/ZC210/zc210/sf2/custom7.sf2)** (1,195,640 bytes)
+  - SHA1: `44df043ba4dda287304a718c734903e589355391`
+  - MD5: `386db0d538f372a9f1af622d1e934abf`
+  - CRC32: `f26c29f0`
+- **[custom8.sf2](bios/ZC/ZC210/zc210/sf2/custom8.sf2)** (1,852,478 bytes)
+  - SHA1: `cee76080884af97c20059da0eb1ca956a835f3d0`
+  - MD5: `6f68e4baf89c8ee4623c19617319184b`
+  - CRC32: `8419990c`
+- **[custom9.sf2](bios/ZC/ZC210/zc210/sf2/custom9.sf2)** (2,193,356 bytes)
+  - SHA1: `c7cc306fb921754ba00794153292d533cf0765ef`
+  - MD5: `2010e5b85f9e1d60685ccb3d84a17115`
+  - CRC32: `3cacb086`
+- **[default.sf2](bios/ZC/ZC210/zc210/sf2/default.sf2)** (3,281,786 bytes)
+  - SHA1: `22bcfeb5b6c6481569b90db96aa3f4b5f06c8848`
+  - MD5: `39e5bc84ce9aac3a2d297d8aeb2a0d05`
+  - CRC32: `0a4e2e07`
+
+---
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on submitting BIOS files.
+
+## License
+
+This repository provides BIOS files for personal backup and archival purposes.
+
+*Auto-generated on 2026-03-17T08:46:20Z*

@@ -1,0 +1,32 @@
+﻿Wood Floor|木の床
+Cobblestones|石畳
+Rug|じゅうたん
+Straw Mat|ござ
+Hole (Wood Floor)|穴（木の床）
+Raised Stone|石段
+Ground Cracks|床のひび割れ
+Table|テーブル
+Wood Floor|木の床
+Cobblestones|石畳
+Rug|じゅうたん
+Rug|じゅうたん
+Hole (Wood Floor)|穴（木の床）
+Raised Stone|石段
+Soil on Ground|床の汚れ
+Table|テーブル
+Cobblestones|石畳
+Cobblestones|石畳
+Rug|じゅうたん
+Rug|じゅうたん
+Hole (Stone Floor)|穴（石の床）
+Raised Stone|石段
+Moss on Ground|床の苔
+Table|テーブル
+Cobblestones|石畳
+Cobblestones|石畳
+Rug|じゅうたん
+Rug|じゅうたん
+Hole|穴
+Raised Stone|石段
+Poison Swamp|毒の沼
+Table|テーブル

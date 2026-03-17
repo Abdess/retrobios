@@ -1,0 +1,183 @@
+さざなみフォントについて
+
+このフォントは、Common Lisp に移植された和田研フォントキット (CLWFK) を
+使用して自動的に生成されたフォントと、既存の改変自由なビットマップフォント
+を組み合わせて作成した物です。
+
+文字の構成的には東風フォント代替フォントとほぼ同じですが、スケルトン定義
+データにまで遡った誤字の修正が行われています。将来的には、プログラムの改善
+により、漢字デザインの品質向上を図っていきたいと思います。
+
+このバージョンは最初のリリースで、品質上は非常に不完全な物です。
+東風フォント代替フォントより、不具合が発生する可能性は高いでしょう。
+問題点を発見されましたらご報告いただけると幸いです。
+
+連絡先としては efont-devel メーリングリストか公開フォーラムをご使用ください。
+どちらも http://sourceforge.jp/projects/efont/ からアクセスできます。
+
+
+ライセンス
+
+バイナリは、ソースコードのライセンスと同等とします。ただし、フォントの
+文書への埋め込みなど、フォントとしての再使用を目的としない用途においては、
+以下で言う Redistribution には当たらず、制限なく行えるものとします。
+
+Copyright (c) 1990-2003
+	Wada Laboratory, the University of Tokyo. All rights reserved.
+Copyright (c) 2003-2004
+	Electronic Font Open Laboratory (/efont/). All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+1. Redistributions of source code must retain the above copyright notice,
+   this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+3. Neither the name of the Wada Laboratory, the University of Tokyo nor
+   the names of its contributors may be used to endorse or promote products
+   derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY WADA LABORATORY, THE UNIVERSITY OF TOKYO AND
+CONTRIBUTORS ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT
+NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE LABORATORY OR
+CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+埋め込まれたビットマップフォントのライセンスについては、各フォントの添付
+ドキュメントを同梱しておりますので、そちらをご参照ください。
+
+本フォントに含まれる東風フォント由来のグリフは、古川泰之さんが単独で作成した
+オリジナルデザインに基づく Public Domain 相当のデータのみが含まれています。
+日立製作所とタイプバンクにより開発された 32 ドットビットマップに由来する
+漢字データ、ビットマップデータ、現在の CLWFK の ライセンスと異なるライセンス
+で配布されていた和田研フォントに由来するデータは含まれていません。
+
+
+ビルド環境
+
+FontForge (20040601版) に、以下のパッチを当てて作成しています。これは、
+・等幅フォントを必要とする環境で横幅がずれる
+・埋め込まれたビットマップが有効にならない
+という問題点を解決するためのものです。オリジナルの FontForge に
+取り込んでもらう予定です。
+
+--- fontforge/tottf.c.orig	Mon Jun  7 19:18:27 2004
++++ fontforge/tottf.c	Wed Jun 16 13:37:06 2004
+@@ -3038,6 +3038,8 @@
+     int i,j,cnt1,cnt2,first,last,avg1,avg2,k;
+     SplineFont *sf = _sf;
+     char *pt;
++    static int const weightFactors[26] = { 64, 14, 27, 35, 100, 20, 14, 42, 63,
++	3, 6, 35, 20, 56, 56, 17, 4, 49, 56, 71, 31, 10, 18, 3, 18, 2 };
+ 
+     os2->version = 1;
+     os2->weightClass = sf->pfminfo.weight;
+@@ -3102,9 +3104,10 @@
+ 		if ( sf->chars[i]->width!=0 ) {
+ 		    avg2 += sf->chars[i]->width; ++cnt2;
+ 		}
+-		if ( sf->chars[i]->unicodeenc==' ' ||
+-			(sf->chars[i]->unicodeenc>='a' && sf->chars[i]->unicodeenc<='z')) {
+-		    avg1 += sf->chars[i]->width; ++cnt1;
++		if ( sf->chars[i]->unicodeenc==' ') {
++		    avg1 += sf->chars[i]->width * 166; ++cnt1;
++		} else if (sf->chars[i]->unicodeenc>='a' && sf->chars[i]->unicodeenc<='z') {
++		    avg1 += sf->chars[i]->width * weightFactors[sf->chars[i]->unicodeenc-'a']; ++cnt1;
+ 		}
+ 	    }
+ 	}
+@@ -3122,9 +3125,9 @@
+     while ( pt<os2->achVendID ) *pt++ = ' ';	/* Pad with spaces not NUL */
+ 
+     os2->avgCharWid = 500;
+-    /*if ( cnt1==27 )
+-	os2->avgCharWid = avg1/cnt1;
+-    else*/ if ( cnt2!=0 )
++    if ( cnt1==27 )
++	os2->avgCharWid = avg1/1000;
++    else if ( cnt2!=0 )
+ 	os2->avgCharWid = avg2/cnt2;
+     memcpy(os2->panose,sf->pfminfo.panose,sizeof(os2->panose));
+     if ( format==ff_ttfsym ) {
+@@ -3349,11 +3352,34 @@
+ 	putshort(at->os2f,0);
+ }
+ 
+-static void dumpgasp(struct alltabs *at) {
++static void dumpgasp(struct alltabs *at, SplineFont *sf) {
++    BDFFont *bdf;
++    uint32 bitmaps = 0;
++    int i, rangecnt = 1;
++
++    for ( bdf=sf->bitmaps; bdf!=NULL; bdf=bdf->next) {
++	if ( BDFDepth(bdf)==1 && bdf->pixelsize<=32 )
++	    bitmaps |= 1<<(bdf->pixelsize-1);
++    }
++    for ( i=1; i<32; i++ ) {
++      if ( (bitmaps&(1<<i))!=((bitmaps&(1<<(i-1)))<<1) )
++	rangecnt++;
++    }
++    if (bitmaps&(1<<31)) rangecnt++;
+ 
+     at->gaspf = tmpfile();
+     putshort(at->gaspf,0);	/* Version number */
+-    putshort(at->gaspf,1);	/* One range */
++    putshort(at->gaspf,rangecnt);	/* One range */
++    for ( i=0; i<31; i++ ) {
++	if ( (bitmaps&(1<<i))<<1 != (bitmaps&(1<<(i+1))) ) {
++	    putshort(at->gaspf, i+1);
++	    putshort(at->gaspf, bitmaps&(1<<i) ? 0x0 : 0x2);
++	}
++    }
++    if ( bitmaps&(1<<31) ) {
++	putshort(at->gaspf,32);
++	putshort(at->gaspf,0x0);
++    }
+     putshort(at->gaspf,0xffff);	/* Upper bound on pixels/em for this range */
+     putshort(at->gaspf,0x2);	/* Grey scale, no gridfitting */
+ 				    /* No hints, so no grids to fit */
+@@ -4730,7 +4756,7 @@
+     redoos2(at);
+     if ( format!=ff_otf && format!=ff_otfcid && format!=ff_none ) {
+ 	if ( !SFHasInstructions(sf))
+-	    dumpgasp(at);
++	    dumpgasp(at, sf);
+ 	at->fpgmf = dumpstoredtable(sf,CHR('f','p','g','m'),&at->fpgmlen);
+ 	at->prepf = dumpstoredtable(sf,CHR('p','r','e','p'),&at->preplen);
+ 	at->cvtf = dumpstoredtable(sf,CHR('c','v','t',' '),&at->cvtlen);
+
+
+
+変更履歴
+
+2004-06-18	最初のバージョン。
+
+2004-06-21	マイナーな不具合の修正。漢字のアウトラインは全く一緒。
+
+・縦書きに 'vert' → 'vert' フィーチャを使用するように変更。
+・Oradano の不要な文字を取り除き、パスを重複除去
+・Latin1 のアクセントつき文字を、合成で生成するようにしてみた
+・明朝の U+FF02 が誤って U+FF01 を書き潰していたのを修正
+・PostScript 名に空白が含まれていたので、'-' に置換した。
+
+この変更により縦書きができなくなっていたため、公開を保留した。
+
+2004-06-29	前のバージョンの不具合の修正。
+
+・重複除去処理によってアウトラインが壊れた文字を修正。
+　明朝: 5E43, 72A7, 7FB2, 855A, 9120
+  ゴシック: 5804, 5DC7, 6969, 7768 (睨), 789E, 8CC7 (資), 8EF1, 9193
+           (9090 と 9115 は依然壊れたままである)
+・vert 以外の OpenType レイアウトタグを GSUB テーブルから除去。
+・埋め込みビットマップ (ayu 由来) の外字グリフが正しくエンコードされておらず、
+　縦書きの小書きの仮名が丸数字に化けていたのを修正。
+・漢字の仮想グリッドの上端がの y 座標が 1000 になるバグがあったのを修正。
+  漢字は 1024 分の 24 だけ低かったことになる。

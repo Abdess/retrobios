@@ -1,0 +1,3101 @@
+platform: Batocera
+version: '42'
+homepage: "https://batocera.org"
+source: "https://raw.githubusercontent.com/batocera-linux/batocera.linux/master/package/batocera/core/batocera-scripts/scripts/batocera-systems"
+base_destination: bios
+hash_type: md5
+verification_mode: md5
+systems:
+  atari-400-800:
+    files:
+    - name: ATARIOSA.ROM
+      destination: ATARIOSA.ROM
+      required: true
+      md5: eb1f32f5d9f382db1bbfb8d7f9cb343a
+    - name: ATARIOSB.ROM
+      destination: ATARIOSB.ROM
+      required: true
+      md5: 4177f386a3bac989a981d3fe3388cb6c
+    - name: ATARIXL.ROM
+      destination: ATARIXL.ROM
+      required: true
+      md5: 06daac977823773a3eea3422fd26a703
+    - name: ATARIBAS.ROM
+      destination: ATARIBAS.ROM
+      required: true
+      md5: 0bac0c6a50104045d902df4503a4c30b
+  atari-5200:
+    files:
+    - name: 5200.rom
+      destination: 5200.rom
+      required: true
+      md5: 281f20ea4320404ec820fb7ec0693b38
+  atari-st:
+    files:
+    - name: tos.img
+      destination: tos.img
+      required: true
+      md5: c1c57ce48e8ee4135885cee9e63a68a2
+    - name: tos100fr.img
+      destination: tos100fr.img
+      required: true
+      md5: 25789a649faff0a1176dc7d9b98105c0
+    - name: tos100uk.img
+      destination: tos100uk.img
+      required: true
+      md5: c87a52c277f7952b41c639fc7bf0a43b
+    - name: tos100us.img
+      destination: tos100us.img
+      required: true
+      md5: d0f682ee6237497004339fb02172638b
+    - name: tos102de.img
+      destination: tos102de.img
+      required: true
+      md5: a622cc35d8d78703905592dfaa4d2ccb
+    - name: tos102fr.img
+      destination: tos102fr.img
+      required: true
+      md5: d6521785627d20c51edc566808a6bf28
+    - name: tos102uk.img
+      destination: tos102uk.img
+      required: true
+      md5: b2a8570de2e850c5acf81cb80512d9f6
+    - name: tos104de.img
+      destination: tos104de.img
+      required: true
+      md5: 41b7dae4e24735f330b63ad923a0bfbc
+    - name: tos104es.img
+      destination: tos104es.img
+      required: true
+      md5: 143343f7b8e0b1162af206fe8f46b002
+    - name: tos104fr.img
+      destination: tos104fr.img
+      required: true
+      md5: 0087e2707c57efa2106a0aa7576655c0
+    - name: tos104uk.img
+      destination: tos104uk.img
+      required: true
+      md5: 036c5ae4f885cbf62c9bed651c6c58a8
+    - name: tos104us.img
+      destination: tos104us.img
+      required: true
+      md5: 736adb2dc835df4d323191fdc8926cc9
+    - name: tos106de.img
+      destination: tos106de.img
+      required: true
+      md5: 992bac38e01633a529121a2a65f0779e
+    - name: tos106es.img
+      destination: tos106es.img
+      required: true
+      md5: 30f69d70fe7c210300ed83f991b12de9
+    - name: tos106fr.img
+      destination: tos106fr.img
+      required: true
+      md5: bc7b224d0dc3f0cc14c8897db89c5787
+    - name: tos106uk.img
+      destination: tos106uk.img
+      required: true
+      md5: 6033f2b9364edfed321c6931a8181fd2
+    - name: tos106us.img
+      destination: tos106us.img
+      required: true
+      md5: a0982e760f9807d82667ff5a69e78f6b
+    - name: tos162de.img
+      destination: tos162de.img
+      required: true
+      md5: 94a75c1c65408d9f974b0463e15a3b11
+    - name: tos162fr.img
+      destination: tos162fr.img
+      required: true
+      md5: ed5fbaabe0219092df74c6c14cea3f8e
+    - name: tos162uk.img
+      destination: tos162uk.img
+      required: true
+      md5: 1cbc4f55295e469fc8cd72b7efdea1da
+    - name: tos162us.img
+      destination: tos162us.img
+      required: true
+      md5: febb00ba8784798293a7ae709a1dafcb
+    - name: tos205de.img
+      destination: tos205de.img
+      required: true
+      md5: 7aeabdc25f8134590e25643a405210ca
+    - name: tos205es.img
+      destination: tos205es.img
+      required: true
+      md5: 7449b131681f1dfe62ebed1392847057
+    - name: tos205fr.img
+      destination: tos205fr.img
+      required: true
+      md5: 61b620ad951815a25cb37895c81a947c
+    - name: tos205it.img
+      destination: tos205it.img
+      required: true
+      md5: 7e87d8fe7e24e0b4c55ad1b7955beae3
+    - name: tos205us.img
+      destination: tos205us.img
+      required: true
+      md5: 7cdd45b6aac66a21bfb357d9334e46db
+    - name: tos206de.img
+      destination: tos206de.img
+      required: true
+      md5: 0604dbb85928f0598d04144a8b554bbe
+    - name: tos206fr.img
+      destination: tos206fr.img
+      required: true
+      md5: b2873004a408b8db36321f98daafa251
+    - name: tos206.img
+      destination: tos206.img
+      required: true
+      md5: 4a0d4f282c3f2a0196681adf88862dd4
+    - name: tos206uk.img
+      destination: tos206uk.img
+      required: true
+      md5: e690bec90d902024beed549d22150755
+    - name: tos206us.img
+      destination: tos206us.img
+      required: true
+      md5: c9093f27159e7d13ac0d1501a95e53d4
+    - name: tos306de.img
+      destination: tos306de.img
+      required: true
+      md5: 066f39a7ea5789d5afd59dd7b3104fa6
+    - name: tos306uk.img
+      destination: tos306uk.img
+      required: true
+      md5: dd1010ec566efbd71047d6c4919feba5
+    - name: tos400.img
+      destination: tos400.img
+      required: true
+      md5: ed2647936ce4bd283c4d7dfd7ae09d1c
+    - name: tos402.img
+      destination: tos402.img
+      required: true
+      md5: 9e880168d0a004f7f5e852be758f39e4
+    - name: tos404.img
+      destination: tos404.img
+      required: true
+      md5: e5ea0f216fb446f1c4a4f476bc5f03d4
+  atari-lynx:
+    files:
+    - name: lynxboot.img
+      destination: lynxboot.img
+      required: true
+      md5: fcd403db69f54290b51035d82f835e7b
+  magnavox-odyssey2:
+    files:
+    - name: o2rom.bin
+      destination: o2rom.bin
+      required: true
+      md5: 562d5ebf9e030a40d6fabfc2f33139fd
+    - name: c52.bin
+      destination: c52.bin
+      required: true
+      md5: f1071cdb0b6b10dde94d3bc8a6146387
+  videopacplus:
+    files:
+    - name: g7400.bin
+      destination: g7400.bin
+      required: true
+      md5: c500ff71236068e0dc0d0603d265ae76
+    - name: jopac.bin
+      destination: jopac.bin
+      required: true
+      md5: 279008e4a0db2dc5f1c048853b033828
+  mattel-intellivision:
+    files:
+    - name: exec.bin
+      destination: exec.bin
+      required: true
+      md5: 62e761035cb657903761800f4437b8af
+    - name: grom.bin
+      destination: grom.bin
+      required: true
+      md5: 0cd5946c6473e42e8e4c2137785e427f
+  nec-pc-engine:
+    files:
+    - name: syscard3.pce
+      destination: syscard3.pce
+      required: true
+      md5: 38179df8f4ac870017db21ebcbf53114
+    - name: syscard3.pce
+      destination: syscard3.pce
+      required: true
+      md5: 38179df8f4ac870017db21ebcbf53114
+  nec-pc-fx:
+    files:
+    - name: pcfx.rom
+      destination: pcfx.rom
+      required: true
+      md5: 08e36edbea28a017f79f8d4f7ff9b6d7
+  snk-neogeo:
+    files:
+    - name: neogeo.zip
+      destination: neogeo.zip
+      required: true
+      md5: dffb72f116d36d025068b23970a4f6df
+  snk-neogeo-cd:
+    files:
+    - name: neocd_f.rom
+      destination: neocd/neocd_f.rom
+      required: true
+      md5: 8834880c33164ccbe6476b559f3e37de
+    - name: neocd_sf.rom
+      destination: neocd/neocd_sf.rom
+      required: true
+      md5: 043d76d5f0ef836500700c34faef774d
+    - name: neocd_t.rom
+      destination: neocd/neocd_t.rom
+      required: true
+      md5: de3cf45d227ad44645b22aa83b49f450
+    - name: neocd_st.rom
+      destination: neocd/neocd_st.rom
+      required: true
+      md5: f6325a33c6d63ea4b9162a3fa8c32727
+    - name: neocd_z.rom
+      destination: neocd/neocd_z.rom
+      required: true
+      md5: 11526d58d4c524daef7d5d677dc6b004
+    - name: neocd_sz.rom
+      destination: neocd/neocd_sz.rom
+      required: true
+      md5: 971ee8a36fb72da57aed01758f0a37f5
+    - name: front-sp1.bin
+      destination: neocd/front-sp1.bin
+      required: true
+      md5: 5c2366f25ff92d71788468ca492ebeca
+    - name: top-sp1.bin
+      destination: neocd/top-sp1.bin
+      required: true
+      md5: 122aee210324c72e8a11116e6ef9c0d0
+    - name: neocd.bin
+      destination: neocd/neocd.bin
+      required: true
+      md5: f39572af7584cb5b3f70ae8cc848aba2
+    - name: uni-bioscd.rom
+      destination: neocd/uni-bioscd.rom
+      required: true
+      md5: 08ca8b2dba6662e8024f9e789711c6fc
+  sharp-x68000:
+    files:
+    - name: iplrom.dat
+      destination: keropi/iplrom.dat
+      required: true
+      md5: 7fd4caabac1d9169e289f0f7bbf71d8e
+    - name: cgrom.dat
+      destination: keropi/cgrom.dat
+      required: true
+      md5: cb0a5cfcf7247a7eab74bb2716260269
+  3do:
+    files:
+    - name: panafz1.bin
+      destination: panafz1.bin
+      required: true
+      md5: f47264dd47fe30f73ab3c010015c155b
+    - name: panafz10.bin
+      destination: panafz10.bin
+      required: true
+      md5: 51f2f43ae2f3508a14d9f56597e2d3ce
+    - name: goldstar.bin
+      destination: goldstar.bin
+      required: true
+      md5: 8639fd5e549bd6238cfee79e3e749114
+  sega-dreamcast:
+    files:
+    - name: dc_boot.bin
+      destination: dc/dc_boot.bin
+      required: true
+      md5: e10c53c2f8b90bab96ead2d368858623
+  sega-dreamcast-arcade:
+    files:
+    - name: naomi.zip
+      destination: dc/naomi.zip
+      required: true
+      md5: eb4099aeb42ef089cfe94f8fe95e51f6
+    - name: awbios.zip
+      destination: dc/awbios.zip
+      required: true
+      md5: 85254fbe320ca82a768ec2c26bb08def
+    - name: naomi2.zip
+      destination: dc/naomi2.zip
+      required: true
+    - name: naomi2.zip
+      destination: dc/naomi2.zip
+      required: true
+      md5: 728bfe038ce280872057e365ebfc0fee
+      zipped_file: 315-6146.bin
+    - name: naomi2.zip
+      destination: dc/naomi2.zip
+      required: true
+      md5: baf83367044924067e09856ba164aa6f
+      zipped_file: 315-6215.bin
+    - name: naomi2.zip
+      destination: dc/naomi2.zip
+      required: true
+      md5: 6f8ad6e3ab04c8ae1cbcaa652b91cf4e
+      zipped_file: epr-23605.ic27
+    - name: naomi2.zip
+      destination: dc/naomi2.zip
+      required: true
+      md5: f3f39513484df216d9979f6ae7577942
+      zipped_file: epr-23605a.ic27
+    - name: naomi2.zip
+      destination: dc/naomi2.zip
+      required: true
+      md5: ab046e62c51d67fb89eade2b8d5f6a8d
+      zipped_file: epr-23605b.ic27
+    - name: naomi2.zip
+      destination: dc/naomi2.zip
+      required: true
+      md5: 096a5217ff6e6c6cafe65a03336760ab
+      zipped_file: epr-23605c.ic27
+    - name: naomi2.zip
+      destination: dc/naomi2.zip
+      required: true
+      md5: 659d579ba9aef5b025d87323044e83f4
+      zipped_file: epr-23605c_multi.ic27
+    - name: naomi2.zip
+      destination: dc/naomi2.zip
+      required: true
+      md5: cbe0984d03d73869c23da5a3dd2ce207
+      zipped_file: epr-23607.ic27
+    - name: naomi2.zip
+      destination: dc/naomi2.zip
+      required: true
+      md5: b624ec7b3b90fdf3be103cdfb1679d1d
+      zipped_file: epr-23607b.ic27
+    - name: naomi2.zip
+      destination: dc/naomi2.zip
+      required: true
+      md5: a9d82db14b823a5a57885bea1a998eb7
+      zipped_file: epr-23607c.ic27
+    - name: naomi2.zip
+      destination: dc/naomi2.zip
+      required: true
+      md5: 3b1315be24dc8d17f4fa18f3bfc5fe5c
+      zipped_file: epr-23608.ic27
+    - name: naomi2.zip
+      destination: dc/naomi2.zip
+      required: true
+      md5: 0143cf852cb2a8a41f217bc688f62105
+      zipped_file: epr-23608a.ic27
+    - name: naomi2.zip
+      destination: dc/naomi2.zip
+      required: true
+      md5: 8b88c1f5a06e9b560e887c3b9f879237
+      zipped_file: epr-23608b.ic27
+    - name: naomi2.zip
+      destination: dc/naomi2.zip
+      required: true
+      md5: b49702e4fadb3b5f9143a3d20afd04b5
+      zipped_file: epr-23608c.ic27
+    - name: naomi2.zip
+      destination: dc/naomi2.zip
+      required: true
+      md5: ecadb008179ca1e6f4fe3fa091ab5df2
+      zipped_file: epr-23609b.ic27
+    - name: naomi2.zip
+      destination: dc/naomi2.zip
+      required: true
+      md5: edeed38a9795e062a9af28c3eba22040
+      zipped_file: main_eeprom.bin
+    - name: naomi2.zip
+      destination: dc/naomi2.zip
+      required: true
+      md5: 14e6bffff0d4dff6a5a547e7c43680ff
+      zipped_file: sp5001.bin
+    - name: naomi2.zip
+      destination: dc/naomi2.zip
+      required: true
+      md5: 689d2228b00fb59781f82af6e8ecdb78
+      zipped_file: sp5001-a.bin
+    - name: naomi2.zip
+      destination: dc/naomi2.zip
+      required: true
+      md5: 8373a11106c1c2fc21ac839f75ea488f
+      zipped_file: sp5001-b.bin
+    - name: naomi2.zip
+      destination: dc/naomi2.zip
+      required: true
+      md5: 7eecfb8e8f82b47ffab92a0c5528100e
+      zipped_file: sp5002-a.bin
+    - name: naomi2.zip
+      destination: dc/naomi2.zip
+      required: true
+      md5: 960ece0dc22a7c5ff81c812a2993e7cc
+      zipped_file: x76f100_eeprom.bin
+  sega-mega-cd:
+    files:
+    - name: bios_CD_E.bin
+      destination: bios_CD_E.bin
+      required: true
+      md5: e66fa1dc5820d254611fdcdba0662372
+    - name: bios_CD_U.bin
+      destination: bios_CD_U.bin
+      required: true
+      md5: 854b9150240a198070150e4566ae1290
+    - name: bios_CD_J.bin
+      destination: bios_CD_J.bin
+      required: true
+      md5: 278a9397d192149e84e820ac621a8edd
+  megadrive-msu:
+    files:
+    - name: bios_CD_E.bin
+      destination: bios_CD_E.bin
+      required: true
+      md5: e66fa1dc5820d254611fdcdba0662372
+    - name: bios_CD_U.bin
+      destination: bios_CD_U.bin
+      required: true
+      md5: 854b9150240a198070150e4566ae1290
+    - name: bios_CD_J.bin
+      destination: bios_CD_J.bin
+      required: true
+      md5: 278a9397d192149e84e820ac621a8edd
+  sega-saturn:
+    files:
+    - name: sega_101.bin
+      destination: sega_101.bin
+      required: true
+      md5: 85ec9ca47d8f6807718151cbcca8b964
+    - name: mpr-17933.bin
+      destination: mpr-17933.bin
+      required: true
+      md5: 3240872c70984b6cbfda1586cab68dbe
+    - name: mpr-18811-mx.ic1
+      destination: mpr-18811-mx.ic1
+      required: true
+      md5: 255113ba943c92a54facd25a10fd780c
+    - name: mpr-19367-mx.ic1
+      destination: mpr-19367-mx.ic1
+      required: true
+      md5: 1cd19988d1d72a3e7caa0b73234c96b4
+    - name: saturn_bios.bin
+      destination: saturn_bios.bin
+      required: true
+      md5: af5828fdff51384f99b3c4926be27762
+  sony-playstation:
+    files:
+    - name: psxonpsp660.bin
+      destination: psxonpsp660.bin
+      required: true
+      md5: c53ca5908936d412331790f4426c6c33
+    - name: scph101.bin
+      destination: scph101.bin
+      required: true
+      md5: 6e3735ff4c7dc899ee98981385f6f3d0
+    - name: scph1001.bin
+      destination: scph1001.bin
+      required: true
+      md5: dc2b9bf8da62ec93e868cfd29f0d067d
+    - name: scph5500.bin
+      destination: scph5500.bin
+      required: true
+      md5: 8dd7d5296a650fac7319bce665a6a53c
+    - name: scph5501.bin
+      destination: scph5501.bin
+      required: true
+      md5: 490f666e1afb15b7362b406ed1cea246
+    - name: scph5502.bin
+      destination: scph5502.bin
+      required: true
+      md5: 32736f17079d0b2b7024407c39bd3050
+    - name: scph7001.bin
+      destination: scph7001.bin
+      required: true
+      md5: 1e68c231d0896b7eadcad1d7d8e76129
+  sony-playstation-2:
+    files:
+    - name: ps2-0230a-20080220.bin
+      destination: ps2/ps2-0230a-20080220.bin
+      required: true
+      md5: 21038400dc633070a78ad53090c53017
+  ps3:
+    files:
+    - name: PS3UPDAT.PUP
+      destination: PS3UPDAT.PUP
+      required: true
+      md5: 05fe32f5dc8c78acbcd84d36ee7fdc5b
+  nintendo-fds:
+    files:
+    - name: disksys.rom
+      destination: disksys.rom
+      required: true
+      md5: ca30b50f880eb660a320674ed365ef7a
+  nintendo-ds:
+    files:
+    - name: firmware.bin
+      destination: firmware.bin
+      required: true
+    - name: bios7.bin
+      destination: bios7.bin
+      required: true
+      md5: df692a80a5b1bc90728bc3dfc76cd948
+    - name: bios9.bin
+      destination: bios9.bin
+      required: true
+      md5: a392174eb3e572fed6447e956bde4b25
+    - name: dsi_bios7.bin
+      destination: dsi_bios7.bin
+      required: true
+      md5: 559dae4ea78eb9d67702c56c1d791e81
+    - name: dsi_bios9.bin
+      destination: dsi_bios9.bin
+      required: true
+      md5: 87b665fce118f76251271c3732532777
+    - name: dsi_firmware.bin
+      destination: dsi_firmware.bin
+      required: true
+    - name: dsi_nand.bin
+      destination: dsi_nand.bin
+      required: true
+  nintendo-gba:
+    files:
+    - name: gba_bios.bin
+      destination: gba_bios.bin
+      required: true
+      md5: a860e8c0b6d573d191e4ec7db1b1e4f6
+    - name: gb_bios.bin
+      destination: gb_bios.bin
+      required: true
+      md5: 32fbbd84168d3482956eb3c5051637f5
+    - name: gbc_bios.bin
+      destination: gbc_bios.bin
+      required: true
+      md5: dbfce9db9deaa2567f6a84fde55f9680
+    - name: sgb_bios.bin
+      destination: sgb_bios.bin
+      required: true
+      md5: d574d4f9c12f305074798f54c091a8b4
+  nintendo-satellaview:
+    files:
+    - name: BS-X.bin
+      destination: BS-X.bin
+      required: true
+      md5: 96cf17bf589fcbfa6f8de2dc84f19fa2
+  sufami:
+    files:
+    - name: STBIOS.bin
+      destination: STBIOS.bin
+      required: true
+      md5: d3a44ba7d42a74d3ac58cb9c14c6a5ca
+  nintendo-sgb:
+    files:
+    - name: sgb_boot.bin
+      destination: sgb_boot.bin
+      required: true
+      md5: d574d4f9c12f305074798f54c091a8b4
+    - name: sgb2_boot.bin
+      destination: sgb2_boot.bin
+      required: true
+      md5: e0430bca9925fb9882148fd2dc2418c1
+    - name: SGB1.sfc
+      destination: SGB1.sfc
+      required: true
+      md5: b15ddb15721c657d82c5bab6db982ee9
+    - name: SGB2.sfc
+      destination: SGB2.sfc
+      required: true
+      md5: 8ecd73eb4edf7ed7e81aef1be80031d5
+  microsoft-msx:
+    files:
+    - name: MSX.ROM
+      destination: MSX.ROM
+      required: true
+      md5: 364a1a579fe5cb8dba54519bcfcdac0d
+    - name: MSX2.ROM
+      destination: MSX2.ROM
+      required: true
+      md5: ec3a01c91f24fbddcbcab0ad301bc9ef
+    - name: MSX2EXT.ROM
+      destination: MSX2EXT.ROM
+      required: true
+      md5: 2183c2aff17cf4297bdb496de78c2e8a
+    - name: px-7_pbasic.rom
+      destination: openmsx/px-7_pbasic.rom
+      required: true
+      md5: 281809cafe63437fc4bffb3033fbd0db
+    - name: px-7_basic-bios1.rom
+      destination: openmsx/px-7_basic-bios1.rom
+      required: true
+      md5: 9218f6dd89f7ba01e3090d44721b4260
+    - name: fs-a1gt_firmware.rom
+      destination: openmsx/fs-a1gt_firmware.rom
+      required: true
+      md5: af17a344bcc177b97a4888c4c559f3ae
+    - name: fs-a1gt_kanjifont.rom
+      destination: openmsx/fs-a1gt_kanjifont.rom
+      required: true
+      md5: acf53887c2d2783dc059a9b442c86b90
+    - name: ide250.zip
+      destination: openmsx/ide250.zip
+      required: true
+      md5: afa4b5f2944334f84971af814a24bd5a
+    - name: phc-70fd2_basickun.rom
+      destination: openmsx/phc-70fd2_basickun.rom
+      required: true
+      md5: 2ce20986da024e9a0e271961c6bc9f01
+    - name: yrw801.rom
+      destination: openmsx/yrw801.rom
+      required: true
+      md5: 42af93619160ef2116416f74a6cb12f2
+  msx2+:
+    files:
+    - name: fs-a1wsx_kanjifont.rom
+      destination: openmsx/fs-a1wsx_kanjifont.rom
+      required: true
+      md5: acf53887c2d2783dc059a9b442c86b90
+    - name: fs-a1wsx_basic-bios2p.rom
+      destination: openmsx/fs-a1wsx_basic-bios2p.rom
+      required: true
+      md5: c5c26c3e8bc6c485424818057f0507b9
+    - name: fs-a1wsx_fmbasic.rom
+      destination: openmsx/fs-a1wsx_fmbasic.rom
+      required: true
+      md5: 0c40e7db1c1fcc2405e4d0cdd215adb4
+    - name: fs-a1wsx_msx2psub.rom
+      destination: openmsx/fs-a1wsx_msx2psub.rom
+      required: true
+      md5: 7c8243c71d8f143b2531f01afa6a05dc
+    - name: fs-a1wsx_kanjibasic.rom
+      destination: openmsx/fs-a1wsx_kanjibasic.rom
+      required: true
+      md5: 9dfdebfaa6b547222a40aab8bb2e29f8
+    - name: fs-a1wsx_disk.rom
+      destination: openmsx/fs-a1wsx_disk.rom
+      required: true
+      md5: 00aa02b6077de40a0b51d71a3c3e1d5f
+    - name: fs-a1wsx_firmware.rom
+      destination: openmsx/fs-a1wsx_firmware.rom
+      required: true
+      md5: fa8e7d4b999af058fe2864a5f2e014ec
+    - name: phc-70fd2_basickun.rom
+      destination: openmsx/phc-70fd2_basickun.rom
+      required: true
+      md5: 2ce20986da024e9a0e271961c6bc9f01
+    - name: yrw801.rom
+      destination: openmsx/yrw801.rom
+      required: true
+      md5: 42af93619160ef2116416f74a6cb12f2
+  xbox:
+    files:
+    - name: mcpx_1.0.bin
+      destination: mcpx_1.0.bin
+      required: true
+      md5: d49c52a4102f6df7bcf8d0617ac475ed
+    - name: Complex_4627.bin
+      destination: Complex_4627.bin
+      required: true
+      md5: 39cee882148a87f93cb440b99dde3ceb
+  amiga500:
+    files:
+    - name: kick33180.A500
+      destination: amiga/kick33180.A500
+      required: true
+      md5: 85ad74194e87c08904327de1a9443b7a
+    - name: kick37175.A500
+      destination: amiga/kick37175.A500
+      required: true
+      md5: dc10d7bdd1b6f450773dfb558477c230
+    - name: kick34005.A500
+      destination: amiga/kick34005.A500
+      required: true
+      md5: 82a21c1890cae844b3df741f2762d48d
+    - name: kick37350.A600
+      destination: amiga/kick37350.A600
+      required: true
+      md5: 465646c9b6729f77eea5314d1f057951
+    - name: kick40063.A600
+      destination: amiga/kick40063.A600
+      required: true
+      md5: e40a5dfb3d017ba8779faba30cbd1c8e
+    - name: amiga-os-120.rom
+      destination: amiga/amiga-os-120.rom
+      required: true
+      md5: 85ad74194e87c08904327de1a9443b7a
+    - name: amiga-os-130.rom
+      destination: amiga/amiga-os-130.rom
+      required: true
+      md5: 82a21c1890cae844b3df741f2762d48d
+    - name: amiga-os-204.rom
+      destination: amiga/amiga-os-204.rom
+      required: true
+      md5: dc10d7bdd1b6f450773dfb558477c230
+    - name: amiga-os-205.rom
+      destination: amiga/amiga-os-205.rom
+      required: true
+      md5: 465646c9b6729f77eea5314d1f057951
+    - name: amiga-os-310-a600.rom
+      destination: amiga/amiga-os-310-a600.rom
+      required: true
+      md5: e40a5dfb3d017ba8779faba30cbd1c8e
+  commodore-amiga:
+    files:
+    - name: kick34005.A500
+      destination: amiga/kick34005.A500
+      required: true
+      md5: 82a21c1890cae844b3df741f2762d48d
+    - name: kick34005.CDTV
+      destination: amiga/kick34005.CDTV
+      required: true
+      md5: 89da1838a24460e4b93f4f0c5d92d48d
+    - name: amiga-os-130.rom
+      destination: amiga/amiga-os-130.rom
+      required: true
+      md5: 82a21c1890cae844b3df741f2762d48d
+    - name: amiga-ext-130-cdtv.rom
+      destination: amiga/amiga-ext-130-cdtv.rom
+      required: true
+      md5: 89da1838a24460e4b93f4f0c5d92d48d
+    - name: kick39106.A1200
+      destination: amiga/kick39106.A1200
+      required: true
+      md5: b7cc148386aa631136f510cd29e42fc3
+    - name: kick40068.A1200
+      destination: amiga/kick40068.A1200
+      required: true
+      md5: 646773759326fbac3b2311fd8c8793ee
+    - name: kick40068.A4000
+      destination: amiga/kick40068.A4000
+      required: true
+      md5: 9bdedde6a4f33555b4a270c8ca53297d
+    - name: amiga-os-300-a1200.rom
+      destination: amiga/amiga-os-300-a1200.rom
+      required: true
+      md5: b7cc148386aa631136f510cd29e42fc3
+    - name: amiga-os-310-a1200.rom
+      destination: amiga/amiga-os-310-a1200.rom
+      required: true
+      md5: 646773759326fbac3b2311fd8c8793ee
+    - name: amiga-os-310-a3000.rom
+      destination: amiga/amiga-os-310-a3000.rom
+      required: true
+      md5: 413590e50098a056cfec418d3df0212d
+    - name: amiga-os-310-a4000.rom
+      destination: amiga/amiga-os-310-a4000.rom
+      required: true
+      md5: 9bdedde6a4f33555b4a270c8ca53297d
+    - name: amiga-os-310.rom
+      destination: amiga/amiga-os-310.rom
+      required: true
+      md5: 730888fb1bd9a3606d51f772ed136528
+    - name: kick40060.CD32
+      destination: amiga/kick40060.CD32
+      required: true
+      md5: 5f8924d013dd57a89cf349f4cdedc6b1
+    - name: kick40060.CD32.ext
+      destination: amiga/kick40060.CD32.ext
+      required: true
+      md5: bb72565701b1b6faece07d68ea5da639
+    - name: amiga-os-310-cd32.rom
+      destination: amiga/amiga-os-310-cd32.rom
+      required: true
+      md5: 5f8924d013dd57a89cf349f4cdedc6b1
+    - name: amiga-ext-310-cd32.rom
+      destination: amiga/amiga-ext-310-cd32.rom
+      required: true
+      md5: bb72565701b1b6faece07d68ea5da639
+  pc60:
+    files:
+    - name: pc6001.zip
+      destination: pc6001.zip
+      required: true
+      md5: 2a13a60acf99a659144655b6c9e39b92
+      zipped_file: basicrom.60
+    - name: pc6001.zip
+      destination: pc6001.zip
+      required: true
+      md5: 9153f89e83f94f5d1cfe0a4e75d03372
+      zipped_file: cgrom60.60
+    - name: pc6001.zip
+      destination: pc6001.zip
+      required: true
+      md5: 240738391e23f9b0337ab122df8ed7c0
+      zipped_file: upd8049.ic17
+    - name: pc6001a.zip
+      destination: pc6001a.zip
+      required: true
+      md5: 8665e123c7d6b167677153f05a2f9c86
+      zipped_file: basicrom.60a
+    - name: pc6001a.zip
+      destination: pc6001a.zip
+      required: true
+      md5: 7a740d0745e32e171115122442af909c
+      zipped_file: cgrom60.60a
+    - name: pc6001mk2.zip
+      destination: pc6001mk2.zip
+      required: true
+      md5: ec0fced1d7f242a823c6d6ebf9772045
+      zipped_file: basicrom.62
+    - name: pc6001mk2.zip
+      destination: pc6001mk2.zip
+      required: true
+      md5: 808a4172c0e9cf2adf7c44fc8c549151
+      zipped_file: cgrom60.62
+    - name: pc6001mk2.zip
+      destination: pc6001mk2.zip
+      required: true
+      md5: 21f8cf17035d05e3b6b792f43246b1c0
+      zipped_file: cgrom60m.62
+    - name: pc6001mk2.zip
+      destination: pc6001mk2.zip
+      required: true
+      md5: 638ea8e59a73fa4d8c6a6153b500dab9
+      zipped_file: kanjirom.62
+    - name: pc6001mk2.zip
+      destination: pc6001mk2.zip
+      required: true
+      md5: 8b2e909ba293170e462057ba932ff57c
+      zipped_file: voicerom.62
+    - name: pc6001mk2sr.zip
+      destination: pc6001mk2sr.zip
+      required: true
+      md5: bef7865bdc29009350e308935a8b2b17
+      zipped_file: systemrom1.64
+    - name: pc6001mk2sr.zip
+      destination: pc6001mk2sr.zip
+      required: true
+      md5: 7eca26109db4c664826018a0d2e1d0d7
+      zipped_file: systemrom2.64
+    - name: pc6001mk2sr.zip
+      destination: pc6001mk2sr.zip
+      required: true
+      md5: 9d61f3cbd47c4a281c5241c4f1d80919
+      zipped_file: cgrom68.64
+  nec-pc-88:
+    files:
+    - name: N88.ROM
+      destination: quasi88/N88.ROM
+      required: true
+      md5: 4f984e04a99d56c4cfe36115415d6eb8
+    - name: N88SUB.ROM
+      destination: quasi88/N88SUB.ROM
+      required: true
+      md5: 793f86784e5608352a5d7f03f03e0858
+    - name: N88N.ROM
+      destination: quasi88/N88N.ROM
+      required: true
+      md5: 2ff07b8769367321128e03924af668a0
+    - name: N88KNJ1.ROM
+      destination: quasi88/N88KNJ1.ROM
+      required: true
+      md5: d81c6d5d7ad1a4bbbd6ae22a01257603
+    - name: N88EXT0.ROM
+      destination: quasi88/N88EXT0.ROM
+      required: true
+      md5: d675a2ca186c6efcd6277b835de4c7e5
+    - name: N88EXT1.ROM
+      destination: quasi88/N88EXT1.ROM
+      required: true
+      md5: e844534dfe5744b381444dbe61ef1b66
+    - name: N88EXT2.ROM
+      destination: quasi88/N88EXT2.ROM
+      required: true
+      md5: 6548fa45061274dee1ea8ae1e9e93910
+    - name: N88EXT3.ROM
+      destination: quasi88/N88EXT3.ROM
+      required: true
+      md5: fc4b76a402ba501e6ba6de4b3e8b4273
+  nec-pc-98:
+    files:
+    - name: BIOS.ROM
+      destination: np2kai/BIOS.ROM
+      required: true
+      md5: e246140dec5124c5e404869a84caefce
+    - name: FONT.ROM
+      destination: np2kai/FONT.ROM
+      required: true
+      md5: 2af6179d7de4893ea0b705c00e9a98d6
+    - name: SOUND.ROM
+      destination: np2kai/SOUND.ROM
+      required: true
+      md5: caf90f22197aed6f14c471c21e64658d
+    - name: ITF.ROM
+      destination: np2kai/ITF.ROM
+      required: true
+      md5: e9fc3890963b12cf15d0a2eea5815b72
+    - name: font.bmp
+      destination: np2kai/font.bmp
+      required: true
+      md5: 7da1e5b7c482d4108d22a5b09631d967
+  loopy:
+    files:
+    - name: casloopy.zip
+      destination: casloopy.zip
+      required: true
+      md5: 0e1d8dc0110ecf8201c0cef11ef4a858
+    - name: casloopy.zip
+      destination: casloopy.zip
+      required: true
+      md5: d527e3ed1bf9bd0661154c202a65c5bd
+      zipped_file: hd6437021.lsi302
+    - name: casloopy.zip
+      destination: casloopy.zip
+      required: true
+      md5: c0f1c899c9ca098663d046d60779711d
+      zipped_file: hn62434fa.lsi352
+  fairchild-channel-f:
+    files:
+    - name: sl31253.bin
+      destination: sl31253.bin
+      required: true
+      md5: ac9804d4c0e9d07e33472e3726ed15c3
+    - name: sl31254.bin
+      destination: sl31254.bin
+      required: true
+      md5: da98f4bb3242ab80d76629021bb27585
+    - name: sl90025.bin
+      destination: sl90025.bin
+      required: true
+      md5: 95d339631d867c8f1d15a5f2ec26069d
+  sharp-x1:
+    files:
+    - name: IPLROM.X1
+      destination: xmil/IPLROM.X1
+      required: true
+      md5: eeeea1cd29c6e0e8b094790ae969bfa7
+    - name: iplrom.x1t
+      destination: xmil/iplrom.x1t
+      required: true
+      md5: 56c28adcf1f3a2f87cf3d57c378013f5
+  fmtowns:
+    files:
+    - name: FMT_DIC.ROM
+      destination: fmtowns/FMT_DIC.ROM
+      required: true
+      md5: 8fa4e553f28cfc0c30a0a1e589799942
+    - name: FMT_DOS.ROM
+      destination: fmtowns/FMT_DOS.ROM
+      required: true
+      md5: 0585b19930d4a7f4c71bcc8a33746588
+    - name: FMT_F20.ROM
+      destination: fmtowns/FMT_F20.ROM
+      required: true
+      md5: ac0c7021e9bf48ca84b51ab651169a88
+    - name: FMT_FNT.ROM
+      destination: fmtowns/FMT_FNT.ROM
+      required: true
+      md5: b91300e55b70227ce98b59c5f02fa8dd
+    - name: FMT_SYS.ROM
+      destination: fmtowns/FMT_SYS.ROM
+      required: true
+      md5: 86fb6f7280689259f0ca839dd3dd6cde
+    - name: fmtmarty.zip
+      destination: fmtmarty.zip
+      required: true
+    - name: fmtmarty.zip
+      destination: fmtmarty.zip
+      required: true
+      md5: 6618519b2c104cf9b7e71a48381b44a9
+      zipped_file: mrom.m36
+    - name: fmtmarty.zip
+      destination: fmtmarty.zip
+      required: true
+      md5: 75a5c7afb4bc8221bab8cf24db417950
+      zipped_file: mrom.m37
+    - name: fmtowns.zip
+      destination: fmtowns.zip
+      required: true
+    - name: fmtowns.zip
+      destination: fmtowns.zip
+      required: true
+      md5: 34847786d7de94b5d1133c956ab1d75d
+      zipped_file: fmt_dic.rom
+    - name: fmtowns.zip
+      destination: fmtowns.zip
+      required: true
+      md5: 0585b19930d4a7f4c71bcc8a33746588
+      zipped_file: fmt_dos.rom
+    - name: fmtowns.zip
+      destination: fmtowns.zip
+      required: true
+      md5: eb44f2093f51eb7159f03e170b13af76
+      zipped_file: fmt_fnt.rom
+    - name: fmtowns.zip
+      destination: fmtowns.zip
+      required: true
+      md5: feaf8c5675151e00cfe3ad27673bff29
+      zipped_file: fmt_sys.rom
+    - name: fmtownsux.zip
+      destination: fmtownsux.zip
+      required: true
+    - name: fmtownsux.zip
+      destination: fmtownsux.zip
+      required: true
+      md5: 8fa4e553f28cfc0c30a0a1e589799942
+      zipped_file: fmt_dic.rom
+    - name: fmtownsux.zip
+      destination: fmtownsux.zip
+      required: true
+      md5: 03c8fac9a5f5f5f35fb5de5a5d0d018f
+      zipped_file: fmt_dos_a.rom
+    - name: fmtownsux.zip
+      destination: fmtownsux.zip
+      required: true
+      md5: b91300e55b70227ce98b59c5f02fa8dd
+      zipped_file: fmt_fnt.rom
+    - name: fmtownsux.zip
+      destination: fmtownsux.zip
+      required: true
+      md5: 90b5e01d42aaa93e8f4503a5e94e120b
+      zipped_file: fmt_sys_a.rom
+    - name: fmtownsux.zip
+      destination: fmtownsux.zip
+      required: true
+      md5: 1a15f6c1b58ec7e5f850118610a787a7
+      zipped_file: mytownsux.rom
+  gp32:
+    files:
+    - name: gp32.zip
+      destination: gp32.zip
+      required: true
+    - name: gp32.zip
+      destination: gp32.zip
+      required: true
+      md5: e64ad881b5e1d86547f2edc3034946d9
+      zipped_file: x2c32.jed
+    - name: gp32.zip
+      destination: gp32.zip
+      required: true
+      md5: f78092f15f6ffe15975901ee4e92c680
+      zipped_file: gp32166m.bin
+    - name: gp32.zip
+      destination: gp32.zip
+      required: true
+      md5: 19021cc891119c0872d46e87fc0ffe35
+      zipped_file: gp32157e.bin
+    - name: gp32.zip
+      destination: gp32.zip
+      required: true
+      md5: 1e4d3216719acea231b81dfcf6069aef
+      zipped_file: gp32156k.bin
+    - name: gp32.zip
+      destination: gp32.zip
+      required: true
+      md5: cac4b56c0db80922cae75403faef40af
+      zipped_file: gp32100k.bin
+    - name: gp32.zip
+      destination: gp32.zip
+      required: true
+      md5: d4af2bc352bdaf4972ea40902feda114
+      zipped_file: gp32mfv2.bin
+  laser310:
+    files:
+    - name: laser310.zip
+      destination: laser310.zip
+      required: true
+    - name: laser310.zip
+      destination: laser310.zip
+      required: true
+      md5: 42c8f9e6c2133ae0e953b89ccbbdb7e2
+      zipped_file: vtechv20.u12
+    - name: laser310.zip
+      destination: laser310.zip
+      required: true
+      md5: f7e5d9a3eb2b57bf5f4e2a4565318a8f
+      zipped_file: vtechv21.u12
+  scv:
+    files:
+    - name: upd7801g.s01
+      destination: upd7801g.s01
+      required: true
+      md5: 635a978fd40db9a18ee44eff449fc126
+  gsplus:
+    files:
+    - name: ROM1
+      destination: ROM1
+      required: true
+      md5: 20a0334c447cb069a040ae5be1d938df
+  zc210:
+    files:
+    - name: zcdata.dat
+      destination: zc210/zcdata.dat
+      required: true
+      md5: 033d7392985841027909c4c32b9f2076
+    - name: default.sf2
+      destination: zc210/sf2/default.sf2
+      required: true
+      md5: 39e5bc84ce9aac3a2d297d8aeb2a0d05
+    - name: custom0.sf2
+      destination: zc210/sf2/custom0.sf2
+      required: true
+      md5: e0ba7a8634b12cfee4b6760a6f89051a
+    - name: custom1.sf2
+      destination: zc210/sf2/custom1.sf2
+      required: true
+      md5: c1dc781c34cff8f9a023c0192754dc6c
+    - name: custom2.sf2
+      destination: zc210/sf2/custom2.sf2
+      required: true
+      md5: 144fcdbb6a30f1f916f6963006c2da97
+    - name: custom3.sf2
+      destination: zc210/sf2/custom3.sf2
+      required: true
+      md5: 134d217fb99c3be1e89cfaf8f28280d8
+    - name: custom4.sf2
+      destination: zc210/sf2/custom4.sf2
+      required: true
+      md5: b37366199c6df9ee5316f031755aa821
+    - name: custom5.sf2
+      destination: zc210/sf2/custom5.sf2
+      required: true
+      md5: 64068b84eb88dc85b75148bbe9b393fb
+    - name: custom6.sf2
+      destination: zc210/sf2/custom6.sf2
+      required: true
+      md5: 1241986de5b1d00b02d34f1e6651a1d1
+    - name: custom7.sf2
+      destination: zc210/sf2/custom7.sf2
+      required: true
+      md5: 386db0d538f372a9f1af622d1e934abf
+    - name: custom8.sf2
+      destination: zc210/sf2/custom8.sf2
+      required: true
+      md5: 6f68e4baf89c8ee4623c19617319184b
+    - name: custom9.sf2
+      destination: zc210/sf2/custom9.sf2
+      required: true
+      md5: 2010e5b85f9e1d60685ccb3d84a17115
+    - name: zcsf.sf2
+      destination: zcsf.sf2
+      required: true
+      md5: e0ba7a8634b12cfee4b6760a6f89051a
+  apple-macintosh-ii:
+    files:
+    - name: MacII.ROM
+      destination: MacII.ROM
+      required: true
+      md5: 66223be1497460f1e60885eeb35e03cc
+    - name: MacIIx.ROM
+      destination: MacIIx.ROM
+      required: true
+      md5: 2a8a4c7f2a38e0ab0771f59a9a0f1ee4
+    - name: mac128k.zip
+      destination: mac128k.zip
+      required: true
+    - name: mac128k.zip
+      destination: mac128k.zip
+      required: true
+      md5: bc04a4252ee96826c1f41f927c145225
+      zipped_file: 342-0220-a.u6d
+    - name: mac128k.zip
+      destination: mac128k.zip
+      required: true
+      md5: 409d8b9a04db15b7bfbbd5fcb931bf2e
+      zipped_file: 342-0221-a.u8d
+    - name: mackbd_m0110.zip
+      destination: mackbd_m0110.zip
+      required: true
+    - name: mackbd_m0110.zip
+      destination: mackbd_m0110.zip
+      required: true
+      md5: 9d09a9a51c9ef3ea5719e19db22e7901
+      zipped_file: ip8021h_2173.bin
+    - name: mackbd_m0120.zip
+      destination: mackbd_m0120.zip
+      required: true
+    - name: mackbd_m0120.zip
+      destination: mackbd_m0120.zip
+      required: true
+      md5: 9d09a9a51c9ef3ea5719e19db22e7901
+      zipped_file: ip8021h_2173.bin
+    - name: mac512k.zip
+      destination: mac512k.zip
+      required: true
+    - name: mac512k.zip
+      destination: mac512k.zip
+      required: true
+      md5: b4118b89fa68a913a225f0cf9a751fae
+      zipped_file: 342-0220-b.u6d
+    - name: mac512k.zip
+      destination: mac512k.zip
+      required: true
+      md5: ab4e461833e98ef7106f24455a07769d
+      zipped_file: 342-0221-b.u8d
+    - name: macplus.zip
+      destination: macplus.zip
+      required: true
+    - name: macplus.zip
+      destination: macplus.zip
+      required: true
+      md5: 1467a42dee57ac265d063b3f351189fc
+      zipped_file: 342-0341-a.u6d
+    - name: macplus.zip
+      destination: macplus.zip
+      required: true
+      md5: 25b1bf85b3b072d957499cef4d7e313f
+      zipped_file: 342-0341-b.u6d
+    - name: macplus.zip
+      destination: macplus.zip
+      required: true
+      md5: cf7c3259844245a8967556fa40d81243
+      zipped_file: 342-0341-c.u6d
+    - name: macplus.zip
+      destination: macplus.zip
+      required: true
+      md5: d5584762b43a9b1cb24a981f9b9b4198
+      zipped_file: 342-0342-a.u8d
+    - name: macplus.zip
+      destination: macplus.zip
+      required: true
+      md5: f83069fd7ff1fb011958f819cbff4c88
+      zipped_file: 342-0342-b.u8d
+    - name: macplus.zip
+      destination: macplus.zip
+      required: true
+      md5: 875919e2544644cd628f44b5c11db036
+      zipped_file: modplus-harp2.bin
+    - name: macplus.zip
+      destination: macplus.zip
+      required: true
+      md5: efcefe8f11c10541a503d48a07878201
+      zipped_file: rominator-20150225-hi.bin
+    - name: macplus.zip
+      destination: macplus.zip
+      required: true
+      md5: f4b06da98500df0747a764dfbf1862b9
+      zipped_file: rominator-20150225-lo.bin
+    - name: macse.zip
+      destination: macse.zip
+      required: true
+    - name: macse.zip
+      destination: macse.zip
+      required: true
+      md5: 9fb38bdcc0d53d9d380897ee53dc1322
+      zipped_file: macse.rom
+    - name: macclasc.zip
+      destination: macclasc.zip
+      required: true
+    - name: macclasc.zip
+      destination: macclasc.zip
+      required: true
+      md5: c229bb677cb41b84b780c9e38a09173e
+      zipped_file: 341-0813__=c=1983-90_apple__japan__910d_d.27c4096_be.ue1
+    - name: mac2fdhd.zip
+      destination: mac2fdhd.zip
+      required: true
+    - name: mac2fdhd.zip
+      destination: mac2fdhd.zip
+      required: true
+      md5: 2a8a4c7f2a38e0ab0771f59a9a0f1ee4
+      zipped_file: 97221136.rom
+    - name: nb_mdc824.zip
+      destination: nb_mdc824.zip
+      required: true
+    - name: nb_mdc824.zip
+      destination: nb_mdc824.zip
+      required: true
+      md5: 7500a6a958247ee6e092f08715f2fff8
+      zipped_file: 3410868.bin
+    - name: maciix.zip
+      destination: maciix.zip
+      required: true
+    - name: maciix.zip
+      destination: maciix.zip
+      required: true
+      md5: 2a8a4c7f2a38e0ab0771f59a9a0f1ee4
+      zipped_file: 97221136.rom
+    - name: maclc3.zip
+      destination: maclc3.zip
+      required: true
+    - name: maclc3.zip
+      destination: maclc3.zip
+      required: true
+      md5: fa16d49527c4e6e9c0d9e46904133d39
+      zipped_file: ecbbc41c.rom
+    - name: mackbd_m0110a.zip
+      destination: mackbd_m0110a.zip
+      required: true
+    - name: mackbd_m0110a.zip
+      destination: mackbd_m0110a.zip
+      required: true
+      md5: 9e8ea1552153c5e0f895e247e7d3ec1c
+      zipped_file: 341-0332-a.bin
+    - name: nb_image.zip
+      destination: nb_image.zip
+      required: true
+    - name: nb_image.zip
+      destination: nb_image.zip
+      required: true
+      md5: 93155ac7bad0fec36837252bb1e408f2
+      zipped_file: nb_fake.bin
+    - name: egret.zip
+      destination: egret.zip
+      required: true
+    - name: egret.zip
+      destination: egret.zip
+      required: true
+      md5: 96665499f5cf2bb5b4aae6fdaf0a9fb5
+      zipped_file: 341s0850.bin
+    - name: egret.zip
+      destination: egret.zip
+      required: true
+      md5: b955ecbdf6d2f979f3683dd1d6884643
+      zipped_file: 341s0851.bin
+    - name: egret.zip
+      destination: egret.zip
+      required: true
+      md5: 5035d321c5d5fa1eab5ce6bf986676e4
+      zipped_file: 344s0100.bin
+    - name: adbmodem.zip
+      destination: adbmodem.zip
+      required: true
+    - name: adbmodem.zip
+      destination: adbmodem.zip
+      required: true
+      md5: 862b8598cecdbc934658c4cb599a8142
+      zipped_file: 342s0440-b.bin
+    - name: macos3.img
+      destination: macos3.img
+      required: true
+    - name: macos608.img
+      destination: macos608.img
+      required: true
+    - name: macos701.img
+      destination: macos701.img
+      required: true
+    - name: macos75.img
+      destination: macos75.img
+      required: true
+    - name: mac608.chd
+      destination: mac608.chd
+      required: true
+    - name: mac701.chd
+      destination: mac701.chd
+      required: true
+    - name: mac755.chd
+      destination: mac755.chd
+      required: true
+  sc3000:
+    files:
+    - name: sc3000.zip
+      destination: sc3000.zip
+      required: true
+    - name: sc3000.zip
+      destination: sc3000.zip
+      required: true
+      md5: a6a47eae38600e41cc67e887e36e70b7
+      zipped_file: sc3000.rom
+  segaai:
+    files:
+    - name: segaai.zip
+      destination: segaai.zip
+      required: true
+  beena:
+    files:
+    - name: beena.zip
+      destination: beena.zip
+      required: true
+  coco:
+    files:
+    - name: coco.zip
+      destination: coco.zip
+      required: true
+    - name: coco.zip
+      destination: coco.zip
+      required: true
+      md5: a74f3d95b395dad7cdca19d560eeea74
+      zipped_file: bas10.rom
+    - name: coco2.zip
+      destination: coco2.zip
+      required: true
+    - name: coco2.zip
+      destination: coco2.zip
+      required: true
+      md5: c933316c7d939532a13648850c1c2aa6
+      zipped_file: bas12.rom
+    - name: coco2.zip
+      destination: coco2.zip
+      required: true
+      md5: 21070aa0496142b886c562bf76d7c113
+      zipped_file: extbas11.rom
+    - name: coco2b.zip
+      destination: coco2b.zip
+      required: true
+    - name: coco2b.zip
+      destination: coco2b.zip
+      required: true
+      md5: c2fc43556eb6b7b25bdf5955bd9df825
+      zipped_file: bas13.rom
+    - name: coco2.zip
+      destination: coco2.zip
+      required: true
+      md5: 21070aa0496142b886c562bf76d7c113
+      zipped_file: extbas11.rom
+    - name: coco3.zip
+      destination: coco3.zip
+      required: true
+    - name: coco3.zip
+      destination: coco3.zip
+      required: true
+      md5: 7233c6c429f3ce1c7392f28a933e0b6f
+      zipped_file: coco3.rom
+    - name: coco3p.zip
+      destination: coco3p.zip
+      required: true
+    - name: coco3p.zip
+      destination: coco3p.zip
+      required: true
+      md5: 4ae57e5a8e7494e5485446fefedb580b
+      zipped_file: coco3p.rom
+    - name: coco_fdc_v11.zip
+      destination: coco_fdc_v11.zip
+      required: true
+    - name: coco_fdc_v11.zip
+      destination: coco_fdc_v11.zip
+      required: true
+      md5: 8cab28f4b7311b8df63c07bb3b59bfd5
+      zipped_file: disk11.rom
+  cgenie:
+    files:
+    - name: cgenie.zip
+      destination: cgenie.zip
+      required: true
+  dragon64:
+    files:
+    - name: dragon64.zip
+      destination: dragon64.zip
+      required: true
+    - name: dragon64.zip
+      destination: dragon64.zip
+      required: true
+      zipped_file: d64_1.rom
+    - name: dragon64.zip
+      destination: dragon64.zip
+      required: true
+      zipped_file: d64_2.rom
+    - name: dragon64.zip
+      destination: dragon64.zip
+      required: true
+      zipped_file: d64bas.rom
+    - name: dragon32.zip
+      destination: dragon32.zip
+      required: true
+    - name: dragon32.zip
+      destination: dragon32.zip
+      required: true
+      zipped_file: d32.rom
+  mc10:
+    files:
+    - name: mc10.zip
+      destination: mc10.zip
+      required: true
+    - name: mc10.zip
+      destination: mc10.zip
+      required: true
+      zipped_file: mc10.rom
+    - name: alice.zip
+      destination: alice.zip
+      required: true
+    - name: alice.zip
+      destination: alice.zip
+      required: true
+      zipped_file: alice.rom
+  trs80:
+    files:
+    - name: trs80.zip
+      destination: trs80.zip
+      required: true
+    - name: trs80.zip
+      destination: trs80.zip
+      required: true
+      zipped_file: level1.rom
+    - name: trs80.zip
+      destination: trs80.zip
+      required: true
+      zipped_file: level2.rom
+    - name: trs80m3.zip
+      destination: trs80m3.zip
+      required: true
+    - name: trs80m3.zip
+      destination: trs80m3.zip
+      required: true
+      zipped_file: 8041730.u12
+    - name: trs80m4.zip
+      destination: trs80m4.zip
+      required: true
+    - name: trs80m4.zip
+      destination: trs80m4.zip
+      required: true
+      zipped_file: 8043216.u11
+    - name: trs80m4p.zip
+      destination: trs80m4p.zip
+      required: true
+  tutor:
+    files:
+    - name: tutor.zip
+      destination: tutor.zip
+      required: true
+    - name: tutor.zip
+      destination: tutor.zip
+      required: true
+      md5: 196ba41dd1184fe754390534cc273116
+      zipped_file: tutor1.bin
+    - name: tutor.zip
+      destination: tutor.zip
+      required: true
+      md5: 5770834c10946ac2c3617504ba530884
+      zipped_file: tutor2.bin
+  ti99:
+    files:
+    - name: ti99_4a.zip
+      destination: ti99_4a.zip
+      required: true
+    - name: ti99_4a.zip
+      destination: ti99_4a.zip
+      required: true
+      md5: 9bb51dfab49b9a7cf832cc1fb6f203e6
+      zipped_file: 994a_grom0.u500
+    - name: ti99_4a.zip
+      destination: ti99_4a.zip
+      required: true
+      md5: 7f1864c3dac31c86e2ae6ce43ccead07
+      zipped_file: 994a_grom1.u501
+    - name: ti99_4a.zip
+      destination: ti99_4a.zip
+      required: true
+      md5: a1f77a07243a334e13509a89bff944f2
+      zipped_file: 994a_grom2.u502
+    - name: ti99_4a.zip
+      destination: ti99_4a.zip
+      required: true
+      md5: 6f495eef767b3f2821a2ec32d0047891
+      zipped_file: 994a_rom_hb.u610
+    - name: ti99_4a.zip
+      destination: ti99_4a.zip
+      required: true
+      md5: 0dcb961cf84c69b2171a565427c7c6c7
+      zipped_file: 994a_rom_lb.u611
+    - name: ti99_speech.zip
+      destination: ti99_speech.zip
+      required: true
+    - name: ti99_speech.zip
+      destination: ti99_speech.zip
+      required: true
+      md5: 491c1195f6345cb6b725096b69d81ec9
+      zipped_file: cd2325a.u2a
+    - name: ti99_speech.zip
+      destination: ti99_speech.zip
+      required: true
+      md5: 206daf498ac5d0141de1d47d38afd899
+      zipped_file: cd2326a.u2b
+  astrocade:
+    files:
+    - name: astrocde.zip
+      destination: astrocde.zip
+      required: true
+    - name: astrocde.zip
+      destination: astrocde.zip
+      required: true
+      md5: 7d25a26e5c4841b364cfe6b1735eaf03
+      zipped_file: astro.bin
+  gmaster:
+    files:
+    - name: gmaster.zip
+      destination: gmaster.zip
+      required: true
+    - name: gmaster.zip
+      destination: gmaster.zip
+      required: true
+      md5: 6bff08b5e5f96de405cd56d5f04a08f8
+      zipped_file: d78c11agf_e19.u1
+  adam:
+    files:
+    - name: adam.zip
+      destination: adam.zip
+      required: true
+    - name: adam.zip
+      destination: adam.zip
+      required: true
+      md5: 01bba3bcd46d8a586dd6ec555accc133
+      zipped_file: alf @1 rev 57 e3d5.u8
+    - name: adam.zip
+      destination: adam.zip
+      required: true
+      md5: feabe33e8f2dab88da1458b4d27f3faa
+      zipped_file: alf @2 rev 57 ae6a.u20
+    - name: adam.zip
+      destination: adam.zip
+      required: true
+      md5: a720bc872a772ed471fac14e36ec8bcb
+      zipped_file: alf @3 rev 57 8534.u21
+    - name: adam.zip
+      destination: adam.zip
+      required: true
+      md5: cf10b154f2e006a9740d7653cfc47cab
+      zipped_file: eos 6 rev 57 08dd.u22
+    - name: adam.zip
+      destination: adam.zip
+      required: true
+      md5: 7916bb9635d502366326ec39aea5fc89
+      zipped_file: master rev a 174b.u6
+    - name: adam.zip
+      destination: adam.zip
+      required: true
+      md5: 2c66f5911e5b42b8ebe113403548eee7
+      zipped_file: os7.u2
+    - name: adam.zip
+      destination: adam.zip
+      required: true
+      md5: 4fe4f6800076ea3d897d4285653447bd
+      zipped_file: wp_r80.rom
+    - name: adam_ddp.zip
+      destination: adam_ddp.zip
+      required: true
+    - name: adam_ddp.zip
+      destination: adam_ddp.zip
+      required: true
+      md5: 0423e9e9bf5036aa1e9d656b6a1f842c
+      zipped_file: tape rev a 8865.u24
+    - name: adam_fdc.zip
+      destination: adam_fdc.zip
+      required: true
+    - name: adam_fdc.zip
+      destination: adam_fdc.zip
+      required: true
+      md5: ae12d0b83832b059cb6cb43029bbfdb3
+      zipped_file: 1440k micro innovations hd-dd.u10
+    - name: adam_fdc.zip
+      destination: adam_fdc.zip
+      required: true
+      md5: 4c38a7df1e645c8d9f417bf7165c46d0
+      zipped_file: 320ta.u10
+    - name: adam_fdc.zip
+      destination: adam_fdc.zip
+      required: true
+      md5: afea14c826f3cfbc89b76725a4a41951
+      zipped_file: a720dipi 7607 mmsg =c= 1988.u10
+    - name: adam_fdc.zip
+      destination: adam_fdc.zip
+      required: true
+      md5: 976d2a7d85319d9104bc9ec176fbfa9c
+      zipped_file: adam disk u10 ad 31 rev a 09-27-84.u10
+    - name: adam_fdc.zip
+      destination: adam_fdc.zip
+      required: true
+      md5: 29569dc029e95e48907b3c81d636987f
+      zipped_file: dbl2-4.u10
+    - name: adam_fdc.zip
+      destination: adam_fdc.zip
+      required: true
+      md5: a121855c20a638429bbfcf0448349515
+      zipped_file: doug.u10
+    - name: adam_fdc.zip
+      destination: adam_fdc.zip
+      required: true
+      md5: e05ababa16e2d5cb92b678cb6e6e2004
+      zipped_file: fastpack 720a,t.u10
+    - name: adam_fdc.zip
+      destination: adam_fdc.zip
+      required: true
+      md5: a1a2a353dea4b8769a2da733822abfdc
+      zipped_file: pmhdfdc.u10
+    - name: adam_kb.zip
+      destination: adam_kb.zip
+      required: true
+    - name: adam_kb.zip
+      destination: adam_kb.zip
+      required: true
+      md5: d81e0b2bb6b98999541c5f40b489e88f
+      zipped_file: keyboard.u2
+    - name: adam_prn.zip
+      destination: adam_prn.zip
+      required: true
+    - name: adam_prn.zip
+      destination: adam_prn.zip
+      required: true
+      md5: 3cdf2fe48ac4224b56f26c03f6c68982
+      zipped_file: printer.u2
+  coleco-colecovision:
+    files:
+    - name: colecovision.rom
+      destination: colecovision.rom
+      required: true
+      md5: 2c66f5911e5b42b8ebe113403548eee7
+  bbc:
+    files:
+    - name: bbcb.zip
+      destination: bbcb.zip
+      required: true
+    - name: bbcb.zip
+      destination: bbcb.zip
+      required: true
+      md5: 521a197d3623682825f1042c1350feb4
+      zipped_file: basic1.rom
+    - name: bbcb.zip
+      destination: bbcb.zip
+      required: true
+      md5: 2cc67be4624df4dc66617742571a8e3d
+      zipped_file: basic2.rom
+    - name: bbcb.zip
+      destination: bbcb.zip
+      required: true
+      md5: 0cad3d0cf0d111aca2b158b9b605913f
+      zipped_file: os01.rom
+    - name: bbcb.zip
+      destination: bbcb.zip
+      required: true
+      md5: 46f920a170e88bab7faa96cf80b84324
+      zipped_file: os092.rom
+    - name: bbcb.zip
+      destination: bbcb.zip
+      required: true
+      md5: 0199bac73f1dbca291582834a3e61122
+      zipped_file: os10.rom
+    - name: bbcb.zip
+      destination: bbcb.zip
+      required: true
+      md5: 0a59a5ba15fe8557b5f7fee32bbd393a
+      zipped_file: os12.rom
+    - name: bbcb.zip
+      destination: bbcb.zip
+      required: true
+      md5: 35e9ab10bcf016bd24b4c716add009b9
+      zipped_file: phroma.bin
+    - name: bbc_acorn8271.zip
+      destination: bbc_acorn8271.zip
+      required: true
+    - name: bbc_acorn8271.zip
+      destination: bbc_acorn8271.zip
+      required: true
+      md5: 803530149c274994fabc6d28cbe03679
+      zipped_file: dfs090.rom
+    - name: bbc_acorn8271.zip
+      destination: bbc_acorn8271.zip
+      required: true
+      md5: 5a3ddfae96178e025f27bf1f69bfa629
+      zipped_file: dfs098.rom
+    - name: bbc_acorn8271.zip
+      destination: bbc_acorn8271.zip
+      required: true
+      md5: d636ffb7a80fc29b133d32e4250fbab6
+      zipped_file: dnfs100.rom
+    - name: bbc_acorn8271.zip
+      destination: bbc_acorn8271.zip
+      required: true
+      md5: 5daed103918277e2065dd7e8d23e57a5
+      zipped_file: dnfs120.rom
+    - name: bbc_acorn8271.zip
+      destination: bbc_acorn8271.zip
+      required: true
+      md5: 79b31feacab0b1ccddf358be5dfb6241
+      zipped_file: wedfs130.rom
+    - name: bbc_acorn8271.zip
+      destination: bbc_acorn8271.zip
+      required: true
+      md5: 24458ace9566a01d255bca16b46a960d
+      zipped_file: wedfs141.rom
+    - name: bbc_acorn8271.zip
+      destination: bbc_acorn8271.zip
+      required: true
+      md5: 6e9356d0a5e7fbabb386824ec370d6f3
+      zipped_file: wedfs142.rom
+    - name: bbc_acorn8271.zip
+      destination: bbc_acorn8271.zip
+      required: true
+      md5: 990b8a9755af25452c85f23ceb344be4
+      zipped_file: wedfs143.rom
+    - name: bbc_acorn8271.zip
+      destination: bbc_acorn8271.zip
+      required: true
+      md5: 1d250b0242e447e9106e8bfd1f27ea84
+      zipped_file: wedfs144.rom
+    - name: saa5050.zip
+      destination: saa5050.zip
+      required: true
+    - name: saa5050.zip
+      destination: saa5050.zip
+      required: true
+      md5: 8b3c10a2317808ed94d6c6073b5b3327
+      zipped_file: saa5050
+    - name: bbc_tube_80186.zip
+      destination: bbc_tube_80186.zip
+      required: true
+    - name: bbc_tube_80186.zip
+      destination: bbc_tube_80186.zip
+      required: true
+      md5: 33d097349f12526584fcac21eccf3012
+      zipped_file: m512_hi_ic32.rom
+    - name: bbc_tube_80186.zip
+      destination: bbc_tube_80186.zip
+      required: true
+      md5: e6e84221c29b5d31d07055039583c8e7
+      zipped_file: m512_lo_ic31.rom
+    - name: bbcm.zip
+      destination: bbcm.zip
+      required: true
+    - name: bbcm.zip
+      destination: bbcm.zip
+      required: true
+      md5: b159012f9f301bab33316fd3bf55db79
+      zipped_file: mos320.cmos
+    - name: bbcm.zip
+      destination: bbcm.zip
+      required: true
+      md5: fed079c5e2c595b354529a8ea703b5fb
+      zipped_file: mos320.ic24
+    - name: bbcm.zip
+      destination: bbcm.zip
+      required: true
+      md5: ca0527f13f83bc95ef4b6833ee440afa
+      zipped_file: mos329.ic24
+    - name: bbcm.zip
+      destination: bbcm.zip
+      required: true
+      md5: ee9fc46252b7d7fe341b9c7f92575099
+      zipped_file: mos350.cmos
+    - name: bbcm.zip
+      destination: bbcm.zip
+      required: true
+      md5: 3f3dd4614db30f6e383794731272076a
+      zipped_file: mos350.ic24
+    - name: bbcmc.zip
+      destination: bbcmc.zip
+      required: true
+    - name: bbcmc.zip
+      destination: bbcmc.zip
+      required: true
+      md5: 55586a88477505d8fd28edfae646e2e3
+      zipped_file: mos500.ic49
+    - name: bbcmc.zip
+      destination: bbcmc.zip
+      required: true
+      md5: 956bf71da840943050836ade2474ef7b
+      zipped_file: mos510.ic49
+    - name: bbc_bitstik1.zip
+      destination: bbc_bitstik1.zip
+      required: true
+    - name: bbc_bitstik1.zip
+      destination: bbc_bitstik1.zip
+      required: true
+      md5: baf5cb5564ff6e6b4400243e7612f323
+      zipped_file: bitstik1.rom
+    - name: bbc_bitstik2.zip
+      destination: bbc_bitstik2.zip
+      required: true
+    - name: bbc_bitstik2.zip
+      destination: bbc_bitstik2.zip
+      required: true
+      md5: c196c145b3de630f85f625ca762e5504
+      zipped_file: bitstik2.rom
+    - name: bbc.zip
+      destination: mame/samples/bbc.zip
+      required: true
+    - name: bbc.zip
+      destination: mame/samples/bbc.zip
+      required: true
+      zipped_file: motoroff.wav
+    - name: bbc.zip
+      destination: mame/samples/bbc.zip
+      required: true
+      zipped_file: motoron.wav
+    - name: basic2.rom
+      destination: Acorn/basic2.rom
+      required: true
+      md5: 2cc67be4624df4dc66617742571a8e3d
+    - name: os12.rom
+      destination: BBCMicro/os12.rom
+      required: true
+      md5: 0a59a5ba15fe8557b5f7fee32bbd393a
+    - name: dfs-2.26.rom
+      destination: BBCMicro/dfs-2.26.rom
+      required: true
+      md5: f083f49d6fe66344c650d7e74249cb96
+  pcw:
+    files:
+    - name: pcw8256.zip
+      destination: pcw8256.zip
+      required: true
+    - name: pcw8256.zip
+      destination: pcw8256.zip
+      required: true
+      md5: a846b928562ca8281bc279f41b475a06
+      zipped_file: 40026.ic701
+    - name: pcw8256.zip
+      destination: pcw8256.zip
+      required: true
+      md5: cefe4b0b7c701c1a80130e3390b007f5
+      zipped_file: 40027.ic801
+    - name: pcw9512.zip
+      destination: pcw9512.zip
+      required: true
+    - name: pcw9512.zip
+      destination: pcw9512.zip
+      required: true
+      md5: b664af93987d575b0248832832c61505
+      zipped_file: 40103.ic109
+  apfm1000:
+    files:
+    - name: apfm1000.zip
+      destination: apfm1000.zip
+      required: true
+    - name: apfm1000.zip
+      destination: apfm1000.zip
+      required: true
+      md5: 1f4a976350202ee1e32c2b0477c3fc1b
+      zipped_file: apf_4000.rom
+    - name: apfm1000.zip
+      destination: apfm1000.zip
+      required: true
+      md5: b325543b36d37edf3fc20761f00c7a37
+      zipped_file: mod_bios.bin
+    - name: apfm1000.zip
+      destination: apfm1000.zip
+      required: true
+      md5: 89a7cfa5469ce24773721d65b28f8544
+      zipped_file: trash-ii.bin
+  fm7:
+    files:
+    - name: fm7.zip
+      destination: fm7.zip
+      required: true
+    - name: fm7.zip
+      destination: fm7.zip
+      required: true
+      md5: 9f9b7d5615ecdbde2cd26e9306ffef13
+      zipped_file: boot_bas.rom
+    - name: fm7.zip
+      destination: fm7.zip
+      required: true
+      md5: 18a461ccaf7ef4e8ecad58cecd3a24b3
+      zipped_file: boot_dos_a.rom
+    - name: fm7.zip
+      destination: fm7.zip
+      required: true
+      md5: 6a5da0404b7ee338df9002cdcabc3068
+      zipped_file: fbasic300.rom
+    - name: fm7.zip
+      destination: fm7.zip
+      required: true
+      md5: a330817f8f7ced752a7bcc8dfba8fd2e
+      zipped_file: kanji.rom
+    - name: fm7.zip
+      destination: fm7.zip
+      required: true
+      md5: d19ed5923aaae2ec43dffe7a0daa80cb
+      zipped_file: subsys_c.rom
+    - name: fm77av.zip
+      destination: fm77av.zip
+      required: true
+    - name: fm77av.zip
+      destination: fm77av.zip
+      required: true
+      md5: 71c96a45b78e88a39cb94c1aabd23d8a
+      zipped_file: fbasic30.rom
+    - name: fm77av.zip
+      destination: fm77av.zip
+      required: true
+      md5: e0f4c0ebee60aee83e863826e59ae1de
+      zipped_file: initiate.rom
+    - name: fm77av.zip
+      destination: fm77av.zip
+      required: true
+      md5: ae945a6dfb642b0a5d0529737e8ee5cd
+      zipped_file: subsys_a.rom
+    - name: fm77av.zip
+      destination: fm77av.zip
+      required: true
+      md5: fb83a1a9725c8432acef0c3ce89492e3
+      zipped_file: subsys_b.rom
+    - name: fm77av.zip
+      destination: fm77av.zip
+      required: true
+      md5: 7db27dede3e358017d518101850bccfa
+      zipped_file: subsyscg.rom
+  archimedes:
+    files:
+    - name: aa310.zip
+      destination: aa310.zip
+      required: true
+    - name: aa310.zip
+      destination: aa310.zip
+      required: true
+      md5: 374e4bcaa04cb98aad3b64a1555c3930
+      zipped_file: 0270,251-01.rom
+    - name: aa310.zip
+      destination: aa310.zip
+      required: true
+      md5: b0b6a83029b6f85bb044bfc46bf3f0f6
+      zipped_file: 0270,252-01.rom
+    - name: aa310.zip
+      destination: aa310.zip
+      required: true
+      md5: bf35bb799aa0278b7ee7719dd32f26bc
+      zipped_file: 0270,253-01.rom
+    - name: aa310.zip
+      destination: aa310.zip
+      required: true
+      md5: e41af081535aae930d68ee4cbd672513
+      zipped_file: 0270,254-01.rom
+    - name: aa310.zip
+      destination: aa310.zip
+      required: true
+      md5: 7ecdccd760557ab0711edb37773faeb6
+      zipped_file: 0270,601-01.rom
+    - name: aa310.zip
+      destination: aa310.zip
+      required: true
+      md5: c43bad04862ea03146ff5bf7441a1a24
+      zipped_file: 0270,602-01.rom
+    - name: aa310.zip
+      destination: aa310.zip
+      required: true
+      md5: 454c1977ad70a206f4f3a0bdca294d85
+      zipped_file: 0270,603-01.rom
+    - name: aa310.zip
+      destination: aa310.zip
+      required: true
+      md5: 6850da7a70b198eaf6fde5be503fa5cd
+      zipped_file: 0270,604-01.rom
+    - name: aa310.zip
+      destination: aa310.zip
+      required: true
+      md5: 84d305e248dab48a3a110af161dfb005
+      zipped_file: 0276,146-01.rom
+    - name: aa310.zip
+      destination: aa310.zip
+      required: true
+      md5: 64d7f085e6afb149ebc2e7f919429a19
+      zipped_file: 0276,147-01.rom
+    - name: aa310.zip
+      destination: aa310.zip
+      required: true
+      md5: f7d0a9a4d1dae8eee057aa626b87715f
+      zipped_file: 0276,148-01.rom
+    - name: aa310.zip
+      destination: aa310.zip
+      required: true
+      md5: 763b015d85c7d9d17e06d5babc0a9d32
+      zipped_file: 0276,149-01.rom
+    - name: aa310.zip
+      destination: aa310.zip
+      required: true
+      md5: b8fcd63c6a28d0c7034af2e6c5aff9a8
+      zipped_file: 0276,322-01.rom
+    - name: aa310.zip
+      destination: aa310.zip
+      required: true
+      md5: 6265551c5d6336f7ddd9f3fc78ceba93
+      zipped_file: 0276,323-01.rom
+    - name: aa310.zip
+      destination: aa310.zip
+      required: true
+      md5: ca4379aeab4f7c7640c8ad34b27a9db6
+      zipped_file: 0276,324-01.rom
+    - name: aa310.zip
+      destination: aa310.zip
+      required: true
+      md5: 358d3c9d2685c076f6a141c26d45520c
+      zipped_file: 0276,325-01.rom
+    - name: aa310.zip
+      destination: aa310.zip
+      required: true
+      md5: 4ae429fbf23f8aa64ce2002cfb14c527
+      zipped_file: 0277,022-02.rom
+    - name: aa310.zip
+      destination: aa310.zip
+      required: true
+      md5: 83d0f0738468fdf9f23c13eef22dbeea
+      zipped_file: 0277,023-02.rom
+    - name: aa310.zip
+      destination: aa310.zip
+      required: true
+      md5: 636e4072c392916d2bf00865fee40984
+      zipped_file: 0277,024-02.rom
+    - name: aa310.zip
+      destination: aa310.zip
+      required: true
+      md5: 252b1993fdb66cac522a0edbeffc3407
+      zipped_file: 0277,025-02.rom
+    - name: aa310.zip
+      destination: aa310.zip
+      required: true
+      md5: 591f3bdd0f20a0a3d03c8748f2f75754
+      zipped_file: 0283,022-01.rom
+    - name: aa310.zip
+      destination: aa310.zip
+      required: true
+      md5: f77f4a409c78c8495fc3876cd4e7d97c
+      zipped_file: 0283,023-01.rom
+    - name: aa310.zip
+      destination: aa310.zip
+      required: true
+      md5: 57d3a349407916f55129d6c8c0f56395
+      zipped_file: 0283,024-01.rom
+    - name: aa310.zip
+      destination: aa310.zip
+      required: true
+      md5: ee4aa1ea0eebf88c5f6cae6315ed11a1
+      zipped_file: 0283,025-01.rom
+    - name: aa310.zip
+      destination: aa310.zip
+      required: true
+      md5: a057124502e533ccd8865dc970cf7017
+      zipped_file: 0296,041-01.rom
+    - name: aa310.zip
+      destination: aa310.zip
+      required: true
+      md5: 3c40d2821595a7334a46ea3b46a5421d
+      zipped_file: 0296,041-02.rom
+    - name: aa310.zip
+      destination: aa310.zip
+      required: true
+      md5: d1d51b8f603bba476d1f63bc5980040e
+      zipped_file: 0296,042-01.rom
+    - name: aa310.zip
+      destination: aa310.zip
+      required: true
+      md5: 7b096a93cc5ada80bcfb5249bca33768
+      zipped_file: 0296,042-02.rom
+    - name: aa310.zip
+      destination: aa310.zip
+      required: true
+      md5: 744e80abe4c6a845412f63a0f0b14e48
+      zipped_file: 0296,043-01.rom
+    - name: aa310.zip
+      destination: aa310.zip
+      required: true
+      md5: 9dac78cba6034c427d00f78fa94ab63d
+      zipped_file: 0296,043-02.rom
+    - name: aa310.zip
+      destination: aa310.zip
+      required: true
+      md5: 4c0b2e1fb29c8acd84e94d25c953173c
+      zipped_file: 0296,044-01.rom
+    - name: aa310.zip
+      destination: aa310.zip
+      required: true
+      md5: f6bf5f8908a19a9aacf733633b1cd5cf
+      zipped_file: 0296,044-02.rom
+    - name: aa310.zip
+      destination: aa310.zip
+      required: true
+      md5: eec46f5bd4cdb456b760b3cddf16a33c
+      zipped_file: 0296,241-01.rom
+    - name: aa310.zip
+      destination: aa310.zip
+      required: true
+      md5: 980e3be0c851a59d0f4602f4a94b2eef
+      zipped_file: 0296,242-01.rom
+    - name: aa310.zip
+      destination: aa310.zip
+      required: true
+      md5: 971a49d5c2dbb3fc01c17d1d5615781a
+      zipped_file: 0296,243-01.rom
+    - name: aa310.zip
+      destination: aa310.zip
+      required: true
+      md5: 9ce06a4d2a8331bc5b7fadb967d74f4f
+      zipped_file: 0296,244-01.rom
+    - name: aa310.zip
+      destination: aa310.zip
+      required: true
+      md5: c74763f720c98e16dc3c6c421db21485
+      zipped_file: cmos_arthur.bin
+    - name: aa310.zip
+      destination: aa310.zip
+      required: true
+      md5: 6f564c8917f04594bda7385f6de61061
+      zipped_file: cmos_riscos2.bin
+    - name: aa310.zip
+      destination: aa310.zip
+      required: true
+      md5: 232a302efe19278d9df6ecbc8ea3dc6c
+      zipped_file: cmos_riscos3.bin
+    - name: archimedes_keyboard.zip
+      destination: archimedes_keyboard.zip
+      required: true
+    - name: archimedes_keyboard.zip
+      destination: archimedes_keyboard.zip
+      required: true
+      md5: 1a8617c1abe3e0729d20ce844e1e12a8
+      zipped_file: acorn_0280,022-01_philips_8051ah-2.bin
+  atom:
+    files:
+    - name: atom.zip
+      destination: atom.zip
+      required: true
+    - name: atom.zip
+      destination: atom.zip
+      required: true
+      md5: b7b7f8a608339fa39d44a3bcfa2cc3f0
+      zipped_file: abasic.ic20
+    - name: atom.zip
+      destination: atom.zip
+      required: true
+      md5: baa26f458acf5745388177ffc7368124
+      zipped_file: afloat.ic21
+    - name: atom.zip
+      destination: atom.zip
+      required: true
+      md5: 9627dfb5f8302db8dd5702dbf7c09f72
+      zipped_file: dosrom.u15
+  electron:
+    files:
+    - name: electron.zip
+      destination: electron.zip
+      required: true
+    - name: electron.zip
+      destination: electron.zip
+      required: true
+      md5: 4688a93aa298b9431c1788c9b90378c8
+      zipped_file: os_basic.ic2
+    - name: electron64.zip
+      destination: electron64.zip
+      required: true
+    - name: electron64.zip
+      destination: electron64.zip
+      required: true
+      md5: 2cc67be4624df4dc66617742571a8e3d
+      zipped_file: basic.rom
+    - name: electron64.zip
+      destination: electron64.zip
+      required: true
+      md5: df01cfe5894276de96bbd1c45b7e834c
+      zipped_file: os_300.rom
+    - name: electron_plus1.zip
+      destination: electron_plus1.zip
+      required: true
+    - name: electron_plus1.zip
+      destination: electron_plus1.zip
+      required: true
+      md5: f3a39227b401a2ce8cdc7e4b7a860aaf
+      zipped_file: plus1.rom
+    - name: electron_plus3.zip
+      destination: electron_plus3.zip
+      required: true
+    - name: electron_plus3.zip
+      destination: electron_plus3.zip
+      required: true
+      md5: 9aa334b4e8f6d7565e6323e0f77110de
+      zipped_file: acp_dfs1770_200.rom
+    - name: electron_plus3.zip
+      destination: electron_plus3.zip
+      required: true
+      md5: 83e15ca501899b0d5b2ce3f5ef696069
+      zipped_file: acp_dfs1770_210.rom
+    - name: electron_plus3.zip
+      destination: electron_plus3.zip
+      required: true
+      md5: b60ee811f4b805638478acd5297b16e0
+      zipped_file: adfs.rom
+    - name: electron_plus3.zip
+      destination: electron_plus3.zip
+      required: true
+      md5: 62f5e1d3dae3a68d8fe4406a6f603dc3
+      zipped_file: pres_adfs_113.rom
+    - name: electron_plus3.zip
+      destination: electron_plus3.zip
+      required: true
+      md5: 5c39baa89fe8a40a5167a53cc5ae7791
+      zipped_file: pres_adfs_115.rom
+  apple2:
+    files:
+    - name: apple2e.zip
+      destination: apple2e.zip
+      required: true
+    - name: apple2e.zip
+      destination: apple2e.zip
+      required: true
+      md5: 4431aea380185e3f509285540d7cb418
+      zipped_file: 342-0132-c.e12
+    - name: apple2e.zip
+      destination: apple2e.zip
+      required: true
+      md5: e6d453d8738e6df4f73df8c8051df3e8
+      zipped_file: 342-0133-a.chr
+    - name: apple2e.zip
+      destination: apple2e.zip
+      required: true
+      md5: 72924019cf1719765e4fde35e59c1c7d
+      zipped_file: 342-0134-a.64
+    - name: apple2e.zip
+      destination: apple2e.zip
+      required: true
+      md5: 0b150f4bfa090770a866cc5d214703f4
+      zipped_file: 342-0135-b.64
+    - name: apple2ee.zip
+      destination: apple2ee.zip
+      required: true
+    - name: apple2ee.zip
+      destination: apple2ee.zip
+      required: true
+      md5: b956c537e7b6b85ffa5c3493b1490d8a
+      zipped_file: 341-0132-d.e12
+    - name: apple2ee.zip
+      destination: apple2ee.zip
+      required: true
+      md5: 9123fff3442c0e688cc6816be88dd4ab
+      zipped_file: 342-0265-a.chr
+    - name: apple2ee.zip
+      destination: apple2ee.zip
+      required: true
+      md5: 6ac9338f6972eea01604f90d9a581f18
+      zipped_file: 342-0303-a.e8
+    - name: apple2ee.zip
+      destination: apple2ee.zip
+      required: true
+      md5: 6b11018a14668a7e3904319d2097dddc
+      zipped_file: 342-0304-a.e10
+    - name: apple2p.zip
+      destination: apple2p.zip
+      required: true
+    - name: apple2p.zip
+      destination: apple2p.zip
+      required: true
+      md5: 89ca5cd551ffad9a557652a97dcb6627
+      zipped_file: 341-0011.d0
+    - name: apple2p.zip
+      destination: apple2p.zip
+      required: true
+      md5: 42333f24cd6e70696b212b042f3166aa
+      zipped_file: 341-0012.d8
+    - name: apple2p.zip
+      destination: apple2p.zip
+      required: true
+      md5: 5de50bebc41e59ae4eb27be4c24b6814
+      zipped_file: 341-0013.e0
+    - name: apple2p.zip
+      destination: apple2p.zip
+      required: true
+      md5: 56d9bb6730735a3b2bbcc75d1da7a8de
+      zipped_file: 341-0014.e8
+    - name: apple2p.zip
+      destination: apple2p.zip
+      required: true
+      md5: cb63c41c5e72b5fda54feb5490efdefb
+      zipped_file: 341-0015.f0
+    - name: apple2p.zip
+      destination: apple2p.zip
+      required: true
+      md5: 8925b695ae0177dd3919dbea2f2f202b
+      zipped_file: 341-0020-00.f8
+    - name: apple2p.zip
+      destination: apple2p.zip
+      required: true
+      md5: 9ac0dc8c4d0002eb45b0b84be0bde5ec
+      zipped_file: 341-0036.chr
+    - name: a2diskiing.zip
+      destination: a2diskiing.zip
+      required: true
+    - name: a2diskiing.zip
+      destination: a2diskiing.zip
+      required: true
+      md5: 2020aa1413ff77fe29353f3ee72dc295
+      zipped_file: 341-0027-a.p5
+    - name: a2cffa02.zip
+      destination: a2cffa02.zip
+      required: true
+    - name: a2cffa02.zip
+      destination: a2cffa02.zip
+      required: true
+      md5: 80adbc2d79f347ec63f4b771ea32984d
+      zipped_file: cffa20ee02.bin
+    - name: votrsc01.zip
+      destination: votrsc01.zip
+      required: true
+    - name: votrsc01.zip
+      destination: votrsc01.zip
+      required: true
+      md5: 8ccf35a06f5e9a2131b0f42380ee5c15
+      zipped_file: sc01.bin
+    - name: votrsc01a.zip
+      destination: votrsc01a.zip
+      required: true
+    - name: votrsc01a.zip
+      destination: votrsc01a.zip
+      required: true
+      md5: 95b91e4a2fe7d6f13d353ba1827d37f9
+      zipped_file: sc01a.bin
+    - name: d2fdc.zip
+      destination: d2fdc.zip
+      required: true
+    - name: d2fdc.zip
+      destination: d2fdc.zip
+      required: true
+      md5: 5f1be0c1cdff26f5956eef9643911886
+      zipped_file: 341-0028-a.rom
+  apple2gs:
+    files:
+    - name: apple2gs.zip
+      destination: apple2gs.zip
+      required: true
+    - name: apple2gs.zip
+      destination: apple2gs.zip
+      required: true
+      md5: b956c537e7b6b85ffa5c3493b1490d8a
+      zipped_file: 341-0132-d.e12
+    - name: apple2gs.zip
+      destination: apple2gs.zip
+      required: true
+      md5: b9f94f5d1be27dafcb8fe619ca3f4d15
+      zipped_file: 341-0728
+    - name: apple2gs.zip
+      destination: apple2gs.zip
+      required: true
+      md5: e8e632aa592a61ef373b38af10ed54e1
+      zipped_file: 341-0748
+    - name: apple2gs.zip
+      destination: apple2gs.zip
+      required: true
+      md5: c9e0e059faec0393fc429131a3af4ee9
+      zipped_file: 341s0632-2.bin
+    - name: apple2gs.zip
+      destination: apple2gs.zip
+      required: true
+      md5: 68ff96a624237d233e8d4c701f660dd1
+      zipped_file: apple2gs.chr
+  camplynx:
+    files:
+    - name: lynx48k.zip
+      destination: lynx48k.zip
+      required: true
+    - name: lynx48k.zip
+      destination: lynx48k.zip
+      required: true
+      md5: b0ad5bf3070aea27b637e1998c81fa8c
+      zipped_file: lynx48-1.ic46
+    - name: lynx48k.zip
+      destination: lynx48k.zip
+      required: true
+      md5: b665e10211bbdbfaf2defb32d5580892
+      zipped_file: lynx48-2.ic45
+    - name: lynx48k.zip
+      destination: lynx48k.zip
+      required: true
+      md5: bc0760d8bf61c9683270266d259cd2ae
+      zipped_file: lynx4811.ic46
+    - name: lynx48k.zip
+      destination: lynx48k.zip
+      required: true
+      md5: dde90a794e5324002a9fd7f79cec3172
+      zipped_file: lynx4812.ic45
+    - name: lynx96k.zip
+      destination: lynx96k.zip
+      required: true
+    - name: lynx96k.zip
+      destination: lynx96k.zip
+      required: true
+      md5: a0a8f136f69b5891d33993627a185697
+      zipped_file: danish96k3.ic44
+    - name: lynx96k.zip
+      destination: lynx96k.zip
+      required: true
+      md5: fcb706b3ba2ba61f6f7af1c28f420f94
+      zipped_file: dosrom.rom
+    - name: lynx96k.zip
+      destination: lynx96k.zip
+      required: true
+      md5: 815afa653b61cbe70936b01aff700912
+      zipped_file: lynx9644.ic44
+    - name: lynx96k.zip
+      destination: lynx96k.zip
+      required: true
+      md5: 3ccdb9dfe6018892383fcbb1a9167d76
+      zipped_file: lynx9645.ic45
+    - name: lynx96k.zip
+      destination: lynx96k.zip
+      required: true
+      md5: 01a9770efdab17f089bbbbe53f5d69fa
+      zipped_file: lynx9646.ic46
+    - name: lynx96k.zip
+      destination: lynx96k.zip
+      required: true
+      md5: 89ba52f683cd79638646874e965476b6
+      zipped_file: skorprom.ic44
+    - name: lynx128k.zip
+      destination: lynx128k.zip
+      required: true
+    - name: lynx128k.zip
+      destination: lynx128k.zip
+      required: true
+      md5: fcb706b3ba2ba61f6f7af1c28f420f94
+      zipped_file: dosrom.rom
+    - name: lynx128k.zip
+      destination: lynx128k.zip
+      required: true
+      md5: 5017fe3a2ea47038ae61e2aeb4f43d65
+      zipped_file: lynx128-1.ic1
+    - name: lynx128k.zip
+      destination: lynx128k.zip
+      required: true
+      md5: bf69d9538192f65571dbed43dc4a99bb
+      zipped_file: lynx128-2.ic2
+    - name: lynx128k.zip
+      destination: lynx128k.zip
+      required: true
+      md5: f9f54913cdedb22bb8f0c549ad121379
+      zipped_file: lynx128-3.ic3
+  mz80k:
+    files:
+    - name: mz80k.zip
+      destination: mz80k.zip
+      required: true
+    - name: mz80k.zip
+      destination: mz80k.zip
+      required: true
+      zipped_file: 80kcg.rom
+    - name: mz80k.zip
+      destination: mz80k.zip
+      required: true
+      zipped_file: 80kcgf.rom
+    - name: mz80kj.zip
+      destination: mz80kj.zip
+      required: true
+    - name: mz80kj.zip
+      destination: mz80kj.zip
+      required: true
+      zipped_file: sp1002.rom
+    - name: mz80kj.zip
+      destination: mz80kj.zip
+      required: true
+      zipped_file: mz80kfdif.rom
+  mz700:
+    files:
+    - name: mz700.zip
+      destination: mz700.zip
+      required: true
+    - name: mz700.zip
+      destination: mz700.zip
+      required: true
+      zipped_file: 1z-013a.rom
+    - name: mz700.zip
+      destination: mz700.zip
+      required: true
+      zipped_file: mz700fon.int
+  mz800:
+    files:
+    - name: mz800.zip
+      destination: mz800.zip
+      required: true
+    - name: mz800.zip
+      destination: mz800.zip
+      required: true
+      zipped_file: mz800.rom
+  mz2000:
+    files:
+    - name: mz2000.zip
+      destination: mz2000.zip
+      required: true
+    - name: mz2000.zip
+      destination: mz2000.zip
+      required: true
+      zipped_file: mz20ipl.bin
+    - name: mz2000.zip
+      destination: mz2000.zip
+      required: true
+      zipped_file: font.bin
+  mz2500:
+    files:
+    - name: mz2500.zip
+      destination: mz2500.zip
+      required: true
+    - name: mz2500.zip
+      destination: mz2500.zip
+      required: true
+      zipped_file: ipl.rom
+    - name: mz2500.zip
+      destination: mz2500.zip
+      required: true
+      zipped_file: cg.rom
+    - name: mz2500.zip
+      destination: mz2500.zip
+      required: true
+      zipped_file: kanji.rom
+    - name: mz2500.zip
+      destination: mz2500.zip
+      required: true
+      zipped_file: kanji2.rom
+    - name: mz2500.zip
+      destination: mz2500.zip
+      required: true
+      zipped_file: dict.rom
+    - name: mz2500.zip
+      destination: mz2500.zip
+      required: true
+      zipped_file: phone.rom
+  vgmplay:
+    files:
+    - name: qsound.zip
+      destination: qsound.zip
+      required: true
+    - name: qsound.zip
+      destination: qsound.zip
+      required: true
+      md5: 108b113a596e800a02fece73f784eeb0
+      zipped_file: dl-1425.bin
+    - name: ym2413.zip
+      destination: ym2413.zip
+      required: true
+    - name: ym2413.zip
+      destination: ym2413.zip
+      required: true
+      md5: 96c11a92992bdff7f7e9d98a52621e1f
+      zipped_file: ym2413_instruments.bin
+    - name: ym2608.zip
+      destination: ym2608.zip
+      required: true
+    - name: ym2608.zip
+      destination: ym2608.zip
+      required: true
+      md5: 8740932cda05e518a9955f1d08d6786f
+      zipped_file: ym2608_adpcm_rom.bin
+  gamepock:
+    files:
+    - name: gamepock.zip
+      destination: gamepock.zip
+      required: true
+    - name: gamepock.zip
+      destination: gamepock.zip
+      required: true
+      md5: a0dd595eafb407a6a4b4ed800005a394
+      zipped_file: egpcboot.bin
+  gamecom:
+    files:
+    - name: gamecom.zip
+      destination: gamecom.zip
+      required: true
+    - name: gamecom.zip
+      destination: gamecom.zip
+      required: true
+      md5: 813364d4863b1d7b7b8fd6a97a416bcf
+      zipped_file: external.bin
+    - name: gamecom.zip
+      destination: gamecom.zip
+      required: true
+      md5: f7bcefb6daf923c8e5ea2eb69f619efe
+      zipped_file: internal.bin
+  xegs:
+    files:
+    - name: xegs.zip
+      destination: xegs.zip
+      required: true
+    - name: xegs.zip
+      destination: xegs.zip
+      required: true
+      md5: 42cbd989802c17d0ac3731d33270d835
+      zipped_file: c101687.rom
+  crvision:
+    files:
+    - name: crvision.zip
+      destination: crvision.zip
+      required: true
+    - name: crvision.zip
+      destination: crvision.zip
+      required: true
+      md5: 3b1ef759d8e3fb4071582efd33dd05f9
+      zipped_file: crvision.u20
+  vsmile:
+    files:
+    - name: vsmile.zip
+      destination: vsmile.zip
+      required: true
+    - name: vsmile.zip
+      destination: vsmile.zip
+      required: true
+      md5: 851ff77a89ec3f4f2793eb4aede30e5f
+      zipped_file: vsmile_v100.bin
+    - name: vsmile.zip
+      destination: vsmile.zip
+      required: true
+      md5: f41fcc19ebe1e90fa359cd0df6293fab
+      zipped_file: vsmile_v102.bin
+    - name: vsmile.zip
+      destination: vsmile.zip
+      required: true
+      md5: 11e59253c578c8f16ea2375ec398e4e9
+      zipped_file: vsmile_v103.bin
+  socrates:
+    files:
+    - name: socrates.zip
+      destination: socrates.zip
+      required: true
+    - name: socrates.zip
+      destination: socrates.zip
+      required: true
+      md5: 0efac0c2cc168c0d495e1c4e04ea9f5a
+      zipped_file: 27-00817-000-000.u1
+    - name: socrates.zip
+      destination: socrates.zip
+      required: true
+      md5: 99af124aa300ecd44f5dc9d5a2599778
+      zipped_file: speech_eng_internal.bin
+    - name: socrates.zip
+      destination: socrates.zip
+      required: true
+      md5: 7046c2b27f51c9a5d33b4d6103f29acf
+      zipped_file: speech_eng_vsm1.bin
+    - name: socrates.zip
+      destination: socrates.zip
+      required: true
+      md5: 6878302c362321eeee7e40d285cf7d30
+      zipped_file: speech_eng_vsm2.bin
+    - name: socrates.zip
+      destination: socrates.zip
+      required: true
+      md5: 31c29c57e3d3e6788ba5817eaaa8b17a
+      zipped_file: speech_eng_vsm3.bin
+  rx78:
+    files:
+    - name: rx78.zip
+      destination: rx78.zip
+      required: true
+    - name: rx78.zip
+      destination: rx78.zip
+      required: true
+      zipped_file: ipl.rom
+  advision:
+    files:
+    - name: advision.zip
+      destination: advision.zip
+      required: true
+    - name: advision.zip
+      destination: advision.zip
+      required: true
+      md5: 5729638bd856c475678467a353bd921c
+      zipped_file: b225__ins8048-11kdp_n.u5
+    - name: advision.zip
+      destination: advision.zip
+      required: true
+      md5: fc5e71445e4947a9d00eedbc66b13a8f
+      zipped_file: b8223__cop411l-kcn_n.u8
+  gamate:
+    files:
+    - name: gamate.zip
+      destination: gamate.zip
+      required: true
+    - name: gamate.zip
+      destination: gamate.zip
+      required: true
+      md5: b411167df6dd563111729296f4c547f6
+      zipped_file: gamate_bios_bit.bin
+    - name: gamate.zip
+      destination: gamate.zip
+      required: true
+      md5: ef67993a94503c4b7798b5901c7dda52
+      zipped_file: gamate_bios_umc.bin
+  pv2000:
+    files:
+    - name: pv2000.zip
+      destination: pv2000.zip
+      required: true
+  pc80:
+    files:
+    - name: pc8001mk2sr.zip
+      destination: pc8001mk2sr.zip
+      required: true
+  cdi:
+    files:
+    - name: cdimono1.zip
+      destination: cdimono1.zip
+      required: true
+    - name: cdimono1.zip
+      destination: cdimono1.zip
+      required: true
+      md5: 2969341396aa61e0143dc2351aaa6ef6
+      zipped_file: cdi200.rom
+    - name: cdimono1.zip
+      destination: cdimono1.zip
+      required: true
+      md5: ac80a92c988ce07fbd6a8f21ded34cf1
+      zipped_file: cdi220.rom
+    - name: cdimono1.zip
+      destination: cdimono1.zip
+      required: true
+      md5: ac0d468be366779c9df633be98da250a
+      zipped_file: cdi220b.rom
+    - name: cdimono1.zip
+      destination: cdimono1.zip
+      required: true
+      md5: 3e59b8a9a423d3ecd612a32fe4e2d748
+      zipped_file: zx405037p__cdi_servo_2.1__b43t__llek9215.mc68hc705c8a_withtestrom.7201
+    - name: cdimono1.zip
+      destination: cdimono1.zip
+      required: true
+      md5: 3d20cf7550f1b723158b42a1fd5bac62
+      zipped_file: zx405042p__cdi_slave_2.0__b43t__zzmk9213.mc68hc705c8a_withtestrom.7206
+  hikaru:
+    files:
+    - name: hikaru.zip
+      destination: hikaru.zip
+      required: true
+      md5: 040f9b37a1f802d450379aaec106ec69
+    - name: mie.zip
+      destination: mie.zip
+      required: true
+      md5: e95415b161121bef35ade12367138c63
+    - name: jvs13551.zip
+      destination: jvs13551.zip
+      required: true
+      md5: ee643e8c7369fe7feca610d4daa4a57c
+  psvita:
+    files:
+    - name: PSP2UPDAT.PUP
+      destination: psvita/PSP2UPDAT.PUP
+      required: true
+      md5: 59dcf059d3328fb67be7e51f8aa33418
+    - name: PSVUPDAT.PUP
+      destination: psvita/PSVUPDAT.PUP
+      required: true
+      md5: f2c7b12fe85496ec88a0391b514d6e3b
+  vectrex:
+    files:
+    - name: vectrex.zip
+      destination: vectrex.zip
+      required: true
+    - name: vectrex.zip
+      destination: vectrex.zip
+      required: true
+      md5: ab082fa8c8e632dd68589a8c7741388f
+      zipped_file: exec_rom.bin
+    - name: vectrex.zip
+      destination: vectrex.zip
+      required: true
+      md5: a9c238473229912eb757ff3dfe6f4631
+      zipped_file: exec_rom_intl_284001-1.bin
+  scummvm:
+    files:
+    - name: MT32_PCM.ROM
+      destination: scummvm/extra/MT32_PCM.ROM
+      required: true
+      md5: 89e42e386e82e0cacb4a2704a03706ca
+    - name: MT32_CONTROL.ROM
+      destination: scummvm/extra/MT32_CONTROL.ROM
+      required: true
+      md5: 5626206284b22c2734f3e9efefcd2675
+  supracan:
+    files:
+    - name: supracan.zip
+      destination: supracan.zip
+      required: true
+    - name: supracan.zip
+      destination: supracan.zip
+      required: true
+      md5: 53c4343e062bb3b337370bbb58e64d16
+      zipped_file: internal_68k.bin
+  vis:
+    files:
+    - name: vis.zip
+      destination: vis.zip
+      required: true
+    - name: vis.zip
+      destination: vis.zip
+      required: true
+      md5: ebf432d3b09f694db1c62018eb2ab471
+      zipped_file: p513bk0b.bin
+    - name: vis.zip
+      destination: vis.zip
+      required: true
+      md5: 758f8fec271fbf526bb22b36e88f154b
+      zipped_file: p513bk1b.bin
+  nintendo-64dd:
+    files:
+    - name: 64DD_IPL.bin
+      destination: 64DD_IPL.bin
+      required: true
+      md5: 8d3d9f294b6e174bc7b1d2fd1c727530
+  nintendo-gamecube:
+    files:
+    - name: IPL.bin
+      destination: GC/EUR/IPL.bin
+      required: true
+      md5: db92574caab77a7ec99d4605fd6f2450
+    - name: IPL.bin
+      destination: GC/JAP/IPL.bin
+      required: true
+      md5: b17148254a5799684c7d783206504926
+    - name: IPL.bin
+      destination: GC/USA/IPL.bin
+      required: true
+      md5: b17148254a5799684c7d783206504926
+  chihiro:
+    files:
+    - name: mcpx_1.0.bin
+      destination: mcpx_1.0.bin
+      required: true
+      md5: d49c52a4102f6df7bcf8d0617ac475ed
+    - name: cerbios.bin
+      destination: cerbios.bin
+      required: true
+      md5: f23d7e00ae8fbf88908ed1f9165f35eb
+  oricatmos:
+    files:
+    - name: basic11.rom
+      destination: Oric/basic11.rom
+      required: true
+      md5: a330779c42ad7d0c4ac6ef9e92788ec6
+    - name: colour.rom
+      destination: Oric/colour.rom
+      required: true
+      md5: c888b36bf0fc222c3585c3fabe556d21
+  enterprise:
+    files:
+    - name: basic21.bin
+      destination: Enterprise/basic21.bin
+      required: true
+      md5: e972fe42b398c9ff1d93ff014786aec6
+    - name: exos21.bin
+      destination: Enterprise/exos21.bin
+      required: true
+      md5: f36f24cbb87745fbd2714e4df881db09
+    - name: exos21.rom
+      destination: exos21.rom
+      required: true
+      md5: f36f24cbb87745fbd2714e4df881db09
+    - name: basic21.rom
+      destination: basic21.rom
+      required: true
+      md5: e972fe42b398c9ff1d93ff014786aec6
+    - name: exdos13.rom
+      destination: exdos13.rom
+      required: true
+      md5: ddff70c014d1958dc75378b6c9aab6f8
+    - name: exos20.rom
+      destination: exos20.rom
+      required: true
+      md5: 5ad3baaad3b5156d6b60b34229a676fb
+    - name: basic20.rom
+      destination: basic20.rom
+      required: true
+      md5: 8e18edce4a7acb2c33cc0ab18f988482
+    - name: epfileio.rom
+      destination: epfileio.rom
+      required: true
+      md5: a68ebcbc73a4d2178d755b7755bf18fe
+    - name: exos24uk.rom
+      destination: exos24uk.rom
+      required: true
+      md5: 55af78f877a21ca45eb2df68a74fcc60
+    - name: hun.rom
+      destination: hun.rom
+      required: true
+      md5: 22167938f142c222f40992839aa21a06
+    - name: epdos16f.rom
+      destination: epdos16f.rom
+      required: true
+      md5: 6593dff00ab32a4b1fc084674ededf2b
+    - name: exdos14isdos10uk.rom
+      destination: exdos14isdos10uk.rom
+      required: true
+      md5: f91c4a507cc6895bdd9c43df4f021df3
+    - name: brd.rom
+      destination: brd.rom
+      required: true
+      md5: 6af0402906944fd134004b85097c8524
+    - name: zt19uk.rom
+      destination: zt19uk.rom
+      required: true
+      md5: 228540b6be83ae2acd7569c8ff0f91d0
+    - name: tvc22_sys.rom
+      destination: tvc22_sys.rom
+      required: true
+      md5: 8c54285f541930cde766069942bad0f2
+    - name: tvc22_ext.rom
+      destination: tvc22_ext.rom
+      required: true
+      md5: 5ce95a26ceed5bec73995d83568da9cf
+    - name: tvcfileio.rom
+      destination: tvcfileio.rom
+      required: true
+      md5: a2cf86ba8e7fc58b242137fe59036832
+    - name: tvc_dos12d.rom
+      destination: tvc_dos12d.rom
+      required: true
+      md5: 88dc7876d584f90e4106f91444ab23b7
+    - name: cpc464.rom
+      destination: cpc464.rom
+      required: true
+      md5: a993f85b88ac4350cf4d41554e87fe4f
+    - name: cpc664.rom
+      destination: cpc664.rom
+      required: true
+      md5: 5a384a2310f472c7857888371c00ed66
+    - name: cpc6128.rom
+      destination: cpc6128.rom
+      required: true
+      md5: b96280dc6c95a48857b4b8eb931533ae
+    - name: cpc_amsdos.rom
+      destination: cpc_amsdos.rom
+      required: true
+      md5: 25629dfe870d097469c217b95fdc1c95
+    - name: zx128.rom
+      destination: zx128.rom
+      required: true
+      md5: 85fede415f4294cc777517d7eada482e
+    - name: zx48.rom
+      destination: zx48.rom
+      required: true
+      md5: 4c42a2f075212361c3117015b107f
+    - name: ep64.zip
+      destination: ep64.zip
+      required: true
+      md5: 5ad3baaad3b5156d6b60b34229a676fb
+      zipped_file: 9256ds-0038_enter05-23-a.u2
+    - name: ep128.zip
+      destination: ep128.zip
+      required: true
+      md5: f36f24cbb87745fbd2714e4df881db09
+      zipped_file: 9256ds-0019_enter08-45-a.u2
+    - name: ep64_exdos.zip
+      destination: ep64_exdos.zip
+      required: true
+      md5: 47258d03aec37bc24df5dbc5d50fc9f8
+      zipped_file: exdos13.rom
+  tvc:
+    files:
+    - name: tvc22_sys.rom
+      destination: tvc22_sys.rom
+      required: true
+      md5: 8c54285f541930cde766069942bad0f2
+    - name: tvc22_ext.rom
+      destination: tvc22_ext.rom
+      required: true
+      md5: 5ce95a26ceed5bec73995d83568da9cf
+    - name: tvcfileio.rom
+      destination: tvcfileio.rom
+      required: true
+      md5: a2cf86ba8e7fc58b242137fe59036832
+    - name: tvc_dos12d.rom
+      destination: tvc_dos12d.rom
+      required: true
+      md5: 88dc7876d584f90e4106f91444ab23b7
+  triforce:
+    files:
+    - name: segaboot.gcm
+      destination: saves/dolphin-emu/Triforce/segaboot.gcm
+      required: true
+      md5: 2ef01c0e93f7ee3a0a4b139aa14728b9
+  bk:
+    files:
+    - name: B11M_BOS.ROM
+      destination: bk/B11M_BOS.ROM
+      required: true
+      md5: fe4627d1e3a1535874085050733263e7
+    - name: B11M_EXT.ROM
+      destination: bk/B11M_EXT.ROM
+      required: true
+      md5: dc52f365d56fa1951f5d35b1101b9e3f
+    - name: BAS11M_0.ROM
+      destination: bk/BAS11M_0.ROM
+      required: true
+      md5: 946f6f23ded03c0e26187f0b3ca75993
+    - name: BAS11M_1.ROM
+      destination: bk/BAS11M_1.ROM
+      required: true
+      md5: 1e6637f32aa7d1de03510030cac40bcf
+    - name: DISK_327.ROM
+      destination: bk/DISK_327.ROM
+      required: true
+      md5: 5015228eeeb238e65da8edcd1b6dfac7
+    - name: BASIC10.ROM
+      destination: bk/BASIC10.ROM
+      required: true
+      md5: 3fa774326d75410a065659aea80252f0
+    - name: FOCAL10.ROM
+      destination: bk/FOCAL10.ROM
+      required: true
+      md5: 5737f972e8638831ab71e9139abae052
+    - name: MONIT10.ROM
+      destination: bk/MONIT10.ROM
+      required: true
+      md5: 95f8c41c6abf7640e35a6a03cecebd01
