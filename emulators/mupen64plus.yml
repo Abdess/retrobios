@@ -1,0 +1,48 @@
+emulator: Mupen64Plus-Next
+type: libretro
+source: "https://github.com/libretro/mupen64plus-libretro-nx"
+systems: [nintendo-64, nintendo-64dd]
+cores: [mupen64plus_next, mupen64plus_next_gles3, mupen64plus_next_gles2, parallel_n64]
+
+# PIF boot ROM is fully HLE'd (bootrom_hle.c), no external PIF ROM needed.
+# CIC emulation is also handled internally (n64_cic_nus_6105.c).
+# The only optional firmware is the 64DD IPL ROM for N64 Disk Drive games.
+
+# mupen64plus_next cores use: system/Mupen64plus/IPL.n64
+# parallel_n64 uses: system/64DD_IPL.bin
+# Both expect the same ROM, different path.
+
+files:
+  # -- 64DD IPL ROM (mupen64plus_next variants) --
+  - name: "IPL.n64"
+    path: "Mupen64plus/IPL.n64"
+    size: 4194304  # 0x400000 (4 MB)
+    md5: "8d3d9f294b6e174bc7b1d2fd1c727530"
+    required: false
+    note: "64DD IPL ROM for N64 Disk Drive games. Only needed for .ndd disk images via subsystem API"
+    source_ref: "mupen64plus-core/src/main/main.c:959-961, libretro/libretro.c:641"
+    cores: [mupen64plus_next, mupen64plus_next_gles3, mupen64plus_next_gles2]
+
+  # -- 64DD IPL ROM (parallel_n64) --
+  - name: "64DD_IPL.bin"
+    path: "64DD_IPL.bin"
+    md5: "8d3d9f294b6e174bc7b1d2fd1c727530"
+    required: false
+    note: "Same 64DD IPL ROM, different path expected by parallel_n64"
+    cores: [parallel_n64]
+
+notes:
+  hle_available: true
+  hle_note: >
+    N64 does not require any BIOS or firmware files for standard cartridge games.
+    The PIF boot ROM is fully emulated via HLE (bootrom_hle.c). CIC chip
+    challenge/response is handled in software (n64_cic_nus_6105.c).
+  dd_note: >
+    The 64DD IPL ROM is only needed to run N64 Disk Drive games (.ndd).
+    It is loaded via the retro subsystem API (RETRO_GAME_TYPE_DD), which
+    takes both a disk image and an optional cartridge ROM.
+    The core accepts Z64 (big-endian), N64 (little-endian), and V64
+    (byte-swapped) formats and converts internally.
+  transferpak_note: >
+    Transfer Pak support (GB/GBC games on N64) is handled via subsystem API.
+    No additional firmware files needed, just the GB ROM and save file.

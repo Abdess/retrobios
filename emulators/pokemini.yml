@@ -1,0 +1,88 @@
+emulator: PokeMini
+type: libretro
+source: "https://github.com/libretro/PokeMini"
+cores:
+  - pokemini
+systems:
+  - nintendo-pokemon-mini
+
+notes: |
+  PokeMini is a Pokemon Mini handheld emulator ported to libretro.
+
+  The core has an embedded FreeBIOS (open-source replacement) compiled
+  directly into the binary from freebios/freebios.c. This means the
+  real BIOS is never strictly required -- games will run with FreeBIOS
+  alone, though compatibility may differ from the original firmware.
+
+  BIOS loading sequence in the libretro port:
+
+  1. PokeMini_Create() clears PM_BIOS (4096 bytes at $000000-$000FFF),
+     then loads FreeBIOS into it via memcpy (source/PokeMini.c:116).
+     PokeMini_FreeBIOS is set to 1.
+
+  2. retro_load_game() calls PokeMini_Reset(0) after loading the ROM.
+
+  3. PokeMini_Reset() checks forcefreebios (hardcoded to 0 in the
+     libretro port, libretro.c:499). Since FreeBIOS is currently loaded
+     and forcefreebios is 0, it enters the real-BIOS path
+     (source/PokeMini.c:518-523):
+       - Reloads FreeBIOS as a safety fallback
+       - Checks if CommandLine.bios_file exists on disk
+       - If found, overwrites PM_BIOS with the real BIOS via
+         PokeMini_LoadBIOSFile(), sets PokeMini_FreeBIOS to 0
+
+  4. If bios.min is missing, FreeBIOS stays loaded and emulation
+     proceeds normally.
+
+  File path construction (libretro.c:565):
+    sprintf(CommandLine.bios_file, "%s%cbios.min", g_system_dir, slash)
+  The core looks for bios.min directly in the system directory root,
+  no subdirectory.
+
+  There is no core option to toggle FreeBIOS in the libretro port.
+  The standalone PokeMini has a forcefreebios setting, but the libretro
+  wrapper hardcodes it to 0 (always prefer real BIOS when available).
+
+  FreeBIOS (freebios/freebios.min) is 4096 bytes, a clean-room
+  reimplementation. It is NOT the official Nintendo Pokemon Mini BIOS.
+
+files:
+  - name: "bios.min"
+    system: nintendo-pokemon-mini
+    description: "Pokemon Mini official BIOS"
+    required: false
+    size: 4096
+    md5: "1e4fb124a3a886865acb574f388c803d"
+    sha1: "daad4113713ed776fbd47727762bca81ba74915f"
+    source_ref: "source/PokeMini.c:189-206 (PokeMini_LoadBIOSFile), libretro/libretro.c:565 (path)"
+    notes: "Mapped at $000000-$000FFF (4 KB). Read via Hardware.c:144-145. Falls back to embedded FreeBIOS if missing."
+
+platform_details:
+  bios_mapping:
+    target: "$000000-$000FFF in Pokemon Mini address space (4 KB)"
+    source_ref: "source/PokeMini.h:38, source/Hardware.c:144-145"
+    notes: |
+      PM_BIOS is a 4096-byte array. CPU reads from address range
+      $000000-$000FFF are served directly from this buffer. The BIOS
+      handles interrupt vectors, hardware init, and the startup logo.
+
+  freebios_fallback:
+    source_ref: "freebios/freebios.c, source/PokeMini.c:209-214"
+    notes: |
+      FreeBIOS is a 4096-byte open-source replacement embedded in the
+      binary as a C array. It provides basic interrupt vectors and
+      startup code. Loaded by default at PokeMini_Create() and used
+      as fallback when bios.min is not found on disk.
+    freebios_hashes:
+      md5: "d6c3ff5abc88f7c42f1a5edd6889f9cf"
+      sha1: "b40421defb005e836913e4e39dc1a18aa3b8887e"
+      size: 4096
+
+  load_priority:
+    source_ref: "source/PokeMini.c:515-523"
+    notes: |
+      During PokeMini_Reset(), the core first reloads FreeBIOS as a
+      safe baseline, then attempts to load bios.min from disk. If
+      the file exists and is exactly 4096 bytes, it replaces FreeBIOS.
+      The forcefreebios flag (hardcoded 0 in libretro) controls this:
+      when 0, the core always prefers real BIOS over FreeBIOS.

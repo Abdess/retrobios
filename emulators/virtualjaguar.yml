@@ -1,0 +1,112 @@
+emulator: Virtual Jaguar
+type: libretro
+source: "https://github.com/libretro/virtualjaguar-libretro"
+cores:
+  - virtualjaguar
+systems:
+  - atari-jaguar
+
+notes: |
+  Virtual Jaguar embeds all BIOS ROMs directly in the source code as C arrays
+  (bin2c generated). No external BIOS files are loaded at runtime. The core
+  selects between K-series and M-series boot ROMs based on vjs.biosType,
+  then copies 0x20000 bytes to jagMemSpace + 0xE00000 (libretro.c:902-904).
+
+  The "BIOS" core option (virtualjaguar_bios, disabled by default) controls
+  whether the embedded boot ROM is executed at startup. When enabled, the
+  boot ROM entry point is copied to jaguarMainRAM (jaguar.c:644-645).
+  When disabled, jaguarRunAddress is written directly, skipping the boot
+  animation. Either way the embedded ROM data is always present in memory.
+
+  The jagBootPath and CDBootPath fields in VJSettings exist in the struct
+  (settings.h:36-37) but are never populated or used in the libretro port.
+  No call to RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY or fopen for BIOS files.
+
+  Jaguar CD emulation: the CD boot ROM (jaguarCDBootROM, 0x40000 bytes) is
+  also embedded but Jaguar CD support is incomplete in this core. The
+  cdrom.c references "CD BIOS" in comments only.
+
+  No external BIOS files are required or loaded by this core.
+
+files: []
+
+analysis:
+  embedded_bios:
+    k_series_boot_rom:
+      source_file: src/jagbios.c
+      header: src/jagbios.h
+      symbol: jaguarBootROM
+      size: 131072  # 0x20000, 128 KB
+      description: "Jaguar K-series boot ROM"
+      filedb_crc: "0xFB731AAA"
+      filedb_name: "[BIOS] Atari Jaguar (World)"
+
+    m_series_boot_rom:
+      source_file: src/jagbios2.c
+      header: src/jagbios2.h
+      symbol: jaguarBootROM2
+      size: 131072  # 0x20000, 128 KB
+      description: "Jaguar M-series boot ROM"
+
+    cd_boot_rom:
+      source_file: src/jagcdbios.c
+      header: src/jagcdbios.h
+      symbol: jaguarCDBootROM
+      size: 262144  # 0x40000, 256 KB
+      description: "Jaguar CD boot ROM"
+      filedb_crc: "0x687068D5"
+      filedb_name: "[BIOS] Atari Jaguar CD (World)"
+
+    stubulator_93:
+      source_file: src/jagstub1bios.c
+      header: src/jagstub1bios.h
+      symbol: jaguarDevBootROM1
+      size: 131072  # 0x20000, 128 KB
+      description: "Jaguar Stubulator '93 dev BIOS"
+      filedb_crc: "0xE60277BB"
+      filedb_name: "[BIOS] Atari Jaguar Stubulator '93 (World)"
+
+    stubulator_94:
+      source_file: src/jagstub2bios.c
+      header: src/jagstub2bios.h
+      symbol: jaguarDevBootROM2
+      size: 131072  # 0x20000, 128 KB
+      description: "Jaguar Stubulator '94 dev BIOS"
+      filedb_crc: "0x8D15DBC6"
+      filedb_name: "[BIOS] Atari Jaguar Stubulator '94 (World)"
+
+    dev_cd_boot_rom:
+      source_file: src/jagdevcdbios.c
+      header: src/jagdevcdbios.h
+      symbol: jaguarDevCDBootROM
+      size: 262144  # 0x40000, 256 KB
+      description: "Jaguar Developer CD boot ROM"
+      filedb_crc: "0x55A0669C"
+      filedb_name: "[BIOS] Atari Jaguar Developer CD (World)"
+
+  bios_type_enum:
+    source_ref: "settings.h:46"
+    values:
+      - BT_K_SERIES
+      - BT_M_SERIES
+      - BT_STUBULATOR_1
+      - BT_STUBULATOR_2
+
+  core_option:
+    key: virtualjaguar_bios
+    label: "BIOS"
+    description: "Use the Jaguar BIOS, required for some games."
+    default: disabled
+    source_ref: "libretro_core_options.h:123"
+
+  bios_loading:
+    mechanism: embedded
+    load_address: "0xE00000"
+    load_size: "0x20000"
+    source_ref: "libretro.c:902-904"
+    selection_logic: "biosType == BT_K_SERIES ? jaguarBootROM : jaguarBootROM2"
+    external_loading: false
+    notes: |
+      jagBootPath and CDBootPath struct fields are never set in the libretro
+      port. The standalone Virtual Jaguar GUI uses them but that code path
+      is not compiled into the libretro core.

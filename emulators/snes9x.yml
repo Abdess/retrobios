@@ -1,0 +1,132 @@
+emulator: snes9x
+type: libretro
+source: "https://github.com/libretro/snes9x"
+systems: [nintendo-snes, nintendo-satellaview, nintendo-sufami-turbo]
+
+# snes9x uses HLE for all coprocessors: DSP1-4, ST010, ST011, ST018, CX4.
+# No external firmware files are needed for these chips - the emulation
+# logic and lookup tables are hardcoded in dsp1.cpp, dsp2.cpp, dsp3.cpp,
+# dsp4.cpp, seta010.cpp, seta011.cpp, seta018.cpp, c4emu.cpp.
+#
+# Unlike bsnes, snes9x does NOT support LLE coprocessor firmware.
+# It also does NOT support Super Game Boy (RETRO_GAME_TYPE_SUPER_GAME_BOY
+# is defined but never loads a SGB BIOS or boot ROM).
+#
+# The only external BIOS files used are for Satellaview (BS-X) and
+# Sufami Turbo, loaded by LoadBIOS() in libretro/libretro.cpp and
+# BSX_LoadBIOS() in bsx.cpp.
+#
+# BIOS lookup order (LoadBIOS):
+#   1. ROM directory (same folder as the game)
+#   2. RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY (system dir)
+
+cores:
+  snes9x:
+    source: "https://github.com/libretro/snes9x"
+    firmware_loading: true
+    hle_only: true
+    notes: |
+      Current snes9x. Loads BS-X.bin (tries BS-X.bios as fallback)
+      and STBIOS.bin via LoadBIOS() in libretro.cpp.
+      Auto-detects Sufami Turbo carts (is_SufamiTurbo_Cart) and
+      BS-X games (is_bsx) when loading via retro_load_game().
+      Also handles retro_load_game_special() for multi-cart and
+      subsystem types (RETRO_GAME_TYPE_BSX, RETRO_GAME_TYPE_SUFAMI_TURBO,
+      RETRO_GAME_TYPE_MULTI_CART).
+
+  snes9x2010:
+    source: "https://github.com/libretro/snes9x2010"
+    firmware_loading: true
+    hle_only: true
+    notes: |
+      Based on snes9x 1.52. Same BIOS loading as snes9x current.
+      BSX_LoadBIOS() in src/bsx.c loads BS-X.bin (fallback BS-X.bios).
+      STBIOS.bin loaded in src/memmap.c for Sufami Turbo.
+
+  snes9x2005:
+    source: "https://github.com/libretro/snes9x2005"
+    firmware_loading: false
+    hle_only: true
+    notes: |
+      Based on snes9x 1.43. Detects BS-X and Sufami Turbo ROM headers
+      in source/memmap.c but has no LoadBIOS function - does not load
+      external BIOS files. No firmware needed.
+
+  snes9x2005_plus:
+    source: "https://github.com/libretro/snes9x2005"
+    firmware_loading: false
+    hle_only: true
+    notes: |
+      Same codebase as snes9x2005 with video enhancements.
+      No external BIOS loading. No firmware needed.
+
+  snes9x2002:
+    source: "https://github.com/libretro/snes9x2002"
+    firmware_loading: false
+    hle_only: true
+    notes: |
+      Based on snes9x 1.39 (PocketSNES). Minimal core for low-end
+      devices. No BS-X, no Sufami Turbo, no external BIOS loading.
+      No firmware needed.
+
+files:
+  # -- BS-X Satellaview BIOS --
+  # Required by: snes9x, snes9x2010
+  # Loaded by: LoadBIOS() in libretro.cpp (snes9x) / BSX_LoadBIOS() in bsx.c (snes9x2010)
+  # Auto-detected when game ROM header matches BS-X signature at 0x7FC0 or 0xFFC0.
+  # Size validated: must be exactly BIOS_SIZE (0x100000 = 1048576 bytes).
+  # Filename fallback: BS-X.bin -> BS-X.bios (bsx.cpp:1209-1215)
+
+  - name: "BS-X.bin"
+    system: nintendo-satellaview
+    description: "Satellaview BS-X BIOS (Japanese)"
+    required: false
+    size: 1048576
+    md5: "fed4d8242cfbed61343d53d48432aced"
+    sha1: "604556b2e62860af18db5a77f2956ebc75450020"
+    source_ref: "libretro.cpp:1209 (LoadBIOS, 'BS-X.bin'), bsx.cpp:1209-1215 (BSX_LoadBIOS)"
+    notes: "Needed for Satellaview (.bs) game support. Core also accepts BS-X.bios as filename. Without this file, BS-X games will fail to load."
+
+  # -- Sufami Turbo BIOS --
+  # Required by: snes9x, snes9x2010
+  # Loaded by: LoadBIOS() in libretro.cpp (snes9x) / memmap.c (snes9x2010)
+  # Auto-detected when cart has "BANDAI SFC-ADX" at offset 0, without "SFC-ADX BACKUP" at 0x10.
+  # Size: 0x40000 (262144 bytes). Validated by is_SufamiTurbo_BIOS().
+
+  - name: "STBIOS.bin"
+    system: nintendo-sufami-turbo
+    description: "Bandai SuFami Turbo BIOS (Mini Cartridge add-on)"
+    required: false
+    size: 262144
+    md5: "d3a44ba7d42a74d3ac58cb9c14c6a5ca"
+    sha1: "ef86ea192eed03d5c413fdbbfd46043be1d7a127"
+    source_ref: "libretro.cpp:1203,1317,1348 (LoadBIOS, 'STBIOS.bin'), memmap.cpp:1672"
+    notes: "Needed for Sufami Turbo multi-cart games. Validated by is_SufamiTurbo_BIOS() which checks for 'BANDAI SFC-ADX' + 'SFC-ADX BACKUP' headers."
+
+notes:
+  coprocessor_hle: |
+    All SNES coprocessor chips are emulated in software (HLE) across
+    every snes9x variant. No external firmware files are needed for:
+    - DSP1/DSP1B (dsp1.cpp, static DSP1ROM[1024] lookup table)
+    - DSP2 (dsp2.cpp)
+    - DSP3 (dsp3.cpp)
+    - DSP4 (dsp4.cpp)
+    - ST010 (seta010.cpp, static ST010_SinTable)
+    - ST011 (seta011.cpp)
+    - ST018 (seta018.cpp)
+    - CX4/Cx4 (c4.cpp, c4emu.cpp, math-based HLE)
+    This is the key difference from bsnes, which supports both HLE and
+    LLE (with optional external firmware ROM files).
+  sgb_status: |
+    RETRO_GAME_TYPE_SUPER_GAME_BOY (0x104) is defined in libretro.cpp
+    but no actual SGB emulation exists. No SGB BIOS or boot ROM is
+    loaded or used by any snes9x variant.
+  bsx_detection: |
+    BS-X games are auto-detected by is_bsx() which checks for the
+    "Satellaview BS-X" signature in the ROM header. When detected,
+    the BIOS is loaded automatically without user intervention.
+  sufami_detection: |
+    Sufami Turbo carts are auto-detected by is_SufamiTurbo_Cart()
+    which checks for "BANDAI SFC-ADX" at ROM offset 0 and absence
+    of "SFC-ADX BACKUP" at offset 0x10 (which would indicate BIOS,
+    not cart). Multi-cart support uses retro_load_game_special().

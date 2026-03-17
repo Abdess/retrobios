@@ -1,0 +1,149 @@
+emulator: SameBoy
+type: libretro
+source: "https://github.com/libretro/SameBoy"
+cores:
+  - sameboy
+systems:
+  - nintendo-gb
+  - nintendo-gbc
+  - nintendo-sgb
+
+notes: |
+  SameBoy is a high-accuracy Game Boy, Game Boy Color and Super Game Boy
+  emulator written by Lior Halphon (LIJI32).
+
+  All boot ROMs are optional. SameBoy ships its own open-source boot ROM
+  replacements compiled from BootROMs/*.asm and embedded directly into
+  the libretro core binary (extern arrays dmg_boot, cgb_boot, agb_boot,
+  sgb_boot, sgb2_boot in libretro.c:129-130). These built-in boot ROMs
+  are SameBoy-authored replacements, not Nintendo originals.
+
+  The libretro port (libretro.c boot_rom_load(), line 513) tries to load
+  an external boot ROM from the system directory first. The filename is
+  constructed as "{model}_boot.bin" where model is one of: dmg0, dmg,
+  mgb, sgb, sgb2, cgb0, cgb, agb. If the file is missing or unreadable,
+  the embedded boot ROM is used as fallback.
+
+  Boot ROM type selection depends on the emulated model configured via
+  the sameboy_model core option (request_boot_rom in Core/gb.c:1588):
+    DMG_B           -> GB_BOOT_ROM_DMG   -> dmg_boot.bin
+    MGB             -> GB_BOOT_ROM_MGB   -> mgb_boot.bin
+    SGB/SGB_NTSC    -> GB_BOOT_ROM_SGB   -> sgb_boot.bin
+    SGB2            -> GB_BOOT_ROM_SGB2  -> sgb2_boot.bin
+    CGB_0           -> GB_BOOT_ROM_CGB_0 -> cgb0_boot.bin
+    CGB_A..CGB_E    -> GB_BOOT_ROM_CGB   -> cgb_boot.bin
+    AGB_A (GBA)     -> GB_BOOT_ROM_AGB   -> agb_boot.bin
+
+  Built-in fallback mapping (some models share a boot ROM):
+    DMG_0 and MGB reuse dmg_boot (not yet separately implemented)
+    CGB_0 reuses cgb_boot (not yet separately implemented)
+
+  The boot ROM buffer is 0x900 (2304) bytes. DMG/MGB/SGB/SGB2 boot ROMs
+  are 256 bytes (mapped at 0x0000-0x00FF). CGB/AGB boot ROMs are 2304
+  bytes (mapped at 0x0000-0x00FF and 0x0200-0x08FF).
+
+  SameDuck (MegaDuck emulator) is a separate project, not part of this
+  core.
+
+files:
+  # --- DMG boot ROM (optional, built-in fallback) ---
+  - name: "dmg_boot.bin"
+    system: nintendo-gb
+    description: "Original Game Boy (DMG) boot ROM"
+    required: false
+    size: 256
+    source_ref: "libretro.c:519,530,556 (boot_rom_load)"
+    notes: "Also used as fallback for DMG_0 and MGB models when dedicated boot ROMs are absent."
+
+  # --- MGB boot ROM (optional, built-in fallback) ---
+  - name: "mgb_boot.bin"
+    system: nintendo-gb
+    description: "Game Boy Pocket (MGB) boot ROM"
+    required: false
+    size: 256
+    source_ref: "libretro.c:520,531,556"
+    notes: "Built-in fallback reuses dmg_boot (mgb not separately implemented yet)."
+
+  # --- SGB boot ROM (optional, built-in fallback) ---
+  - name: "sgb_boot.bin"
+    system: nintendo-sgb
+    description: "Super Game Boy (SGB) boot ROM"
+    required: false
+    size: 256
+    source_ref: "libretro.c:521,532,556"
+    notes: "Used for SGB and SGB_NTSC models. Also loaded temporarily when borrowing SGB border for non-SGB games."
+
+  # --- SGB2 boot ROM (optional, built-in fallback) ---
+  - name: "sgb2_boot.bin"
+    system: nintendo-sgb
+    description: "Super Game Boy 2 (SGB2) boot ROM"
+    required: false
+    size: 256
+    source_ref: "libretro.c:522,533,556"
+    notes: "Separate from sgb_boot.bin, unlike some other cores that merge SGB/SGB2."
+
+  # --- CGB boot ROM (optional, built-in fallback) ---
+  - name: "cgb_boot.bin"
+    system: nintendo-gbc
+    description: "Game Boy Color (CGB) boot ROM"
+    required: false
+    size: 2304
+    source_ref: "libretro.c:524,535,556"
+    notes: "Also used as fallback for CGB_0 model (not separately implemented yet)."
+
+  # --- CGB0 boot ROM (optional, built-in fallback) ---
+  - name: "cgb0_boot.bin"
+    system: nintendo-gbc
+    description: "Game Boy Color early revision (CGB-0) boot ROM"
+    required: false
+    size: 2304
+    source_ref: "libretro.c:523,534,556"
+    notes: "Built-in fallback reuses cgb_boot (cgb0 not separately implemented yet)."
+
+  # --- AGB boot ROM (optional, built-in fallback) ---
+  - name: "agb_boot.bin"
+    system: nintendo-gbc
+    description: "Game Boy Advance in GBC mode (AGB) boot ROM"
+    required: false
+    size: 2304
+    source_ref: "libretro.c:525,536,556"
+    notes: "Used when emulating a GBA running GB/GBC software. Enables GBA-enhanced palettes in compatible GBC games."
+
+  # --- DMG0 boot ROM (optional, built-in fallback) ---
+  - name: "dmg0_boot.bin"
+    system: nintendo-gb
+    description: "Original Game Boy early revision (DMG-0) boot ROM"
+    required: false
+    size: 256
+    source_ref: "SDL/main.c:640 (standalone), libretro.c:518,529"
+    notes: "Only referenced in standalone SDL build filename list. Built-in fallback reuses dmg_boot."
+
+builtin_boot_roms:
+  description: |
+    SameBoy includes open-source boot ROM replacements compiled from
+    assembly source in BootROMs/ directory. These are NOT Nintendo
+    originals. They reproduce the boot animation and hardware
+    initialization but are clean-room implementations.
+  sources:
+    - "BootROMs/dmg_boot.asm -> dmg_boot (256 bytes)"
+    - "BootROMs/sgb_boot.asm -> sgb_boot (256 bytes)"
+    - "BootROMs/sgb2_boot.asm -> sgb2_boot (256 bytes)"
+    - "BootROMs/cgb_boot.asm -> cgb_boot (2304 bytes)"
+    - "BootROMs/agb_boot.asm -> agb_boot (2304 bytes)"
+  prebuilt_hashes:
+    dmg_boot.bin:
+      md5: "60f1d849a435e9053b8ac0fd5776804a"
+      sha1: "da853c8102acfff6b8e5a973ce0cd181f3dbb709"
+    sgb_boot.bin:
+      md5: "be77bbd03f8675478f6e3d2176f3cb56"
+      sha1: "27267e45c8408857267231ba6c18bfbd052536e2"
+    sgb2_boot.bin:
+      md5: "b4331a9e612b4738867a30af9c96df52"
+      sha1: "576678d0fc3892b80471d7067ce6014e6af77ed5"
+    cgb_boot.bin:
+      md5: "6b68be48dab6a7298a8c07e00c136b4e"
+      sha1: "9884b972110a63c9e86fb3bd241bd2e39ca82bb9"
+    agb_boot.bin:
+      md5: "7e095aa30941da3086fa0e9221335370"
+      sha1: "3b6231bdf840fb889f402d0ae89f21adb077323a"
+  notes: "These are SameBoy's own boot ROMs, not Nintendo originals. The hashes above identify the built-in versions."

@@ -1,0 +1,39 @@
+emulator: Handy
+type: libretro
+source: "https://github.com/libretro/libretro-handy"
+systems: [atari-lynx]
+
+notes: |
+  Handy is an Atari Lynx emulator. The core loads lynxboot.img from
+  the system directory and validates it by CRC32 (0x0D973C9D). If the
+  file is missing or the CRC does not match, the core falls back to an
+  internal HLE BIOS that replicates the boot sequence in software
+  (ram clear, cart loader decrypt, jump to $0200).
+
+  The HLE path intercepts CPU calls to ROM addresses FE00, FE19, FE4A
+  and FF80 via a Mikie register write trap (address 0xFD97). When
+  useEmu is true (no valid BIOS loaded), CRom initialises mRomData
+  with a default fill byte (0x88) plus reset vectors pointing to
+  the HLE entry points. The cart decryption uses a hardcoded RSA
+  public key (lynxdec.cpp) identical to the real hardware.
+
+  With the real BIOS, the first frame has unusually high cycle counts
+  because hardware timers start from the boot ROM rather than being
+  set artificially. Blip_Buffer::end_frame() caps the audio buffer
+  to handle this overflow.
+
+  File path: libretro.cpp retro_load_game() joins
+  RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY with "lynxboot.img".
+  No subdirectory.
+
+files:
+  - name: "lynxboot.img"
+    system: atari-lynx
+    description: "Atari Lynx boot ROM (Mikie internal 512B ROM)"
+    required: false
+    size: 512
+    md5: "fcd403db69f54290b51035d82f835e7b"
+    sha1: "e4ed47fae31693e016b081c6bda48da5b70d7ccb"
+    crc32: "0d973c9d"
+    source_ref: "rom.h:48-49 (ROM_SIZE=0x200, ROM_CRC32=0xD973C9D), rom.cpp:76-128 (CRom constructor), libretro.cpp:1231-1258 (bios path + CSystem init)"
+    notes: "Validated by CRC32 at load time. If invalid or missing, core uses HLE fallback (system.cpp HLE_BIOS_* functions). Games work without it but the real boot ROM provides accurate startup timing."

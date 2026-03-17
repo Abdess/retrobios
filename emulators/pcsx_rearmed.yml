@@ -1,0 +1,89 @@
+emulator: PCSX-ReARMed
+type: libretro
+source: "https://github.com/libretro/pcsx_rearmed"
+cores: [pcsx_rearmed, pcsx_rearmed_neon, pcsx_rearmed_interpreter]
+systems: [sony-playstation]
+bios_size: 524288  # 512 KB (0x80000); also accepts 4 MB psxonpsp combo (reads first 512 KB)
+verification: crc32
+notes: >
+  HLE BIOS built-in: core option pcsx_rearmed_bios = "HLE" bypasses real BIOS entirely.
+  Default is "auto" which searches system dir for listed filenames, then scans all files.
+  Region detection reads bytes at offset 0x7ff51: " E" = EU, " J" = JP, else US.
+  Three CRC32 hardcoded as JP override: 0x18D0F7D8, 0x3B601FC8, 0x3539DEF6 (psxonpsp, scph1000).
+  BIOS validity check: byte pattern at offset 1 (\x00\x08\x3c\x3f) or string "PS compatible" at 0x12c.
+  Files named "unirom" (case-insensitive) are explicitly skipped.
+  Region fallback: if the matching-region BIOS is missing, any available region BIOS is used over HLE.
+  Three region slots: US (index 0), JP (index 1), EU (index 2) stored in Config.Bios[].
+  All firmware is optional per libretro-core-info; HLE works but real BIOS improves compatibility.
+
+files:
+  # -- Region: Japan (PSX_REGION_JP = 1) --
+
+  - name: "scph5500.bin"
+    description: "SCPH-5500 (v3.0 09-09-96 J)"
+    region: "NTSC-J"
+    required: false
+    md5: "8dd7d5296a650fac7319bce665a6a53c"
+    source_ref: "frontend/libretro.c:3710 (listed_bios[0])"
+    notes: "Preferred JP BIOS, searched first by exact filename."
+
+  # -- Region: North America (PSX_REGION_US = 0) --
+
+  - name: "scph5501.bin"
+    description: "SCPH-5501 (v3.0 11-18-96 A)"
+    region: "NTSC-U"
+    required: false
+    md5: "490f666e1afb15b7362b406ed1cea246"
+    source_ref: "frontend/libretro.c:3710 (listed_bios[1])"
+    notes: "Preferred US BIOS, searched first by exact filename."
+
+  # -- Region: Europe (PSX_REGION_EU = 2) --
+
+  - name: "scph5502.bin"
+    description: "SCPH-5502 (v3.0 01-06-97 E)"
+    region: "PAL"
+    required: false
+    md5: "32736f17079d0b2b7024407c39bd3050"
+    source_ref: "frontend/libretro.c:3710 (listed_bios[2])"
+    notes: "Preferred EU BIOS, searched first by exact filename."
+
+  # -- Fallback BIOS filenames (searched in order after scph550x) --
+
+  - name: "psxonpsp660.bin"
+    description: "PSP embedded PS1 BIOS (region-free, 512 KB or 4 MB accepted)"
+    region: "Auto"
+    required: false
+    md5: "c53ca5908936d412331790f4426c6c33"
+    source_ref: "frontend/libretro.c:3711 (listed_bios[3])"
+    notes: "Region detected from content at runtime. 4 MB combo image accepted but only first 512 KB read."
+
+  - name: "scph101.bin"
+    description: "SCPH-101 (v4.4 03-24-00 A) - PSone US"
+    region: "NTSC-U"
+    required: false
+    md5: "6e3735ff4c7dc899ee98981c18c3666d"
+    source_ref: "frontend/libretro.c:3711 (listed_bios[4])"
+    notes: "PSone slim model. Searched by filename after scph550x and psxonpsp660."
+
+  - name: "scph7001.bin"
+    description: "SCPH-7001 (v4.1 12-16-97 A)"
+    region: "NTSC-U"
+    required: false
+    md5: "1e68c231d0896b7eadcad1d7d8e76129"
+    source_ref: "frontend/libretro.c:3711 (listed_bios[5])"
+    notes: "Searched by filename after psxonpsp660 and scph101."
+
+  - name: "scph1001.bin"
+    description: "SCPH-1001 (v2.2 12-04-95 A)"
+    region: "NTSC-U"
+    required: false
+    md5: "924e392ed05558ffdb115408c263dccf"
+    source_ref: "frontend/libretro.c:3711 (listed_bios[6])"
+    notes: "Original US model. Last in the explicit filename search list."
+
+  # -- Dynamic scan fallback --
+  # After exhausting listed_bios[], the core calls find_any_bios() which scans
+  # the entire system directory via opendir/readdir. Any 512 KB file passing the
+  # validity check (magic bytes or "PS compatible" string) is accepted and assigned
+  # to the detected region slot. This means scph1000.bin, scph3000.bin, scph7002.bin,
+  # scph7502.bin, etc. all work without being explicitly listed.

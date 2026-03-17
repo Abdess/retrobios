@@ -1,0 +1,26 @@
+emulator: Beetle VB (Mednafen Virtual Boy)
+type: libretro
+source: "https://github.com/libretro/beetle-vb-libretro"
+systems: [nintendo-virtualboy]
+
+notes: |
+  Beetle VB is a port of Mednafen's Virtual Boy emulation module to
+  libretro. Based on Mednafen v0.9.36.1.
+
+  No external BIOS or firmware files are required. The Virtual Boy
+  hardware did not use a traditional boot ROM or BIOS in the way
+  that consoles like PlayStation or Saturn do. The V810 CPU starts
+  execution directly from the game ROM mapped at 0x07000000.
+
+  The core loads the ROM into GPROM (Game Pak ROM), mirrors it if
+  smaller than 64KB, and initializes 64KB of WRAM and optional
+  GPRAM (Game Pak RAM/SRAM for saves). The VIP (Virtual Image
+  Processor), VSU (Virtual Sound Unit), and hardware timer are all
+  emulated in software with no firmware dependencies.
+
+  The libretro .info file (mednafen_vb_libretro.info) declares no
+  firmware entries and no system files.
+
+  ROM extensions: .vb, .vboy, .bin
+
+files: []

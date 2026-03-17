@@ -1,0 +1,54 @@
+emulator: Stella
+type: libretro
+source: "https://github.com/libretro/stella2014-libretro"
+cores:
+  - stella
+  - stella2014
+  - stella2023
+systems:
+  - atari-2600
+
+notes: |
+  Stella is an Atari 2600 (VCS) emulator. The libretro port available is
+  stella2014, which is a fork frozen at the 2014 codebase. The upstream
+  "stella-libretro" repo redirects to stella2014-libretro. There is no
+  separate stella2023 libretro core published at this time.
+
+  The Atari 2600 console has no BIOS ROM. Games run directly on the
+  hardware with no boot firmware.
+
+  The Starpath/Arcadia Supercharger add-on had a 2K BIOS ROM on the
+  physical hardware. Stella does NOT load this BIOS from an external
+  file. Instead, the core contains a built-in dummy BIOS
+  (ourDummyROMCode, 294 bytes in CartAR.cxx) that simulates the
+  Supercharger load sequence. The initializeROM() function copies this
+  dummy code into the ROM bank (bank 3) at reset, sets up the 6502
+  reset vector to 0xF80A, and handles multiload via a hotspot at
+  address 0x1850.
+
+  The "fastscbios" setting (offset 109 in the dummy ROM) controls
+  whether the SC load progress bars are shown (0x00) or skipped
+  (0xFF). This is toggled automatically during ROM format detection
+  (Console.cxx:119-120).
+
+  The real Supercharger BIOS ROM (MD5 4565c1a7abce773e53c75b35414adefd)
+  is recognized in DefProps.hxx as a known cartridge entry but is not
+  required or loaded as a system file.
+
+  The libretro interface (retro_set_environment) does not call
+  RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY and declares no firmware
+  requirements. No core option references BIOS loading.
+
+files: []
+
+platform_details:
+  supercharger_emulation:
+    source_ref: "stella/src/emucore/CartAR.cxx, CartAR.hxx"
+    notes: |
+      The Supercharger (type AR) uses 4 banks: 3x 2K RAM + 1x 2K ROM.
+      The ROM bank is filled with ourDummyROMCode at reset. SC games
+      are multi-load images (8448 bytes per load: 8192 data + 256 header).
+      loadIntoRAM() handles loading game data when the hotspot at 0x1850
+      is accessed with the ROM bank mapped. The bank switching byte and
+      start address are written to zero-page RAM (0xFE, 0xFF, 0x80) for
+      the dummy BIOS to read.

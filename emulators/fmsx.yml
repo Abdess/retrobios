@@ -1,0 +1,185 @@
+emulator: fMSX
+type: libretro
+source: "https://github.com/libretro/fmsx-libretro"
+cores:
+  - fmsx
+systems:
+  - msx
+  - msx2
+  - msx2plus
+
+# fMSX is a standalone MSX emulator by Marat Fayzullin, ported to libretro.
+# Supports MSX1, MSX2, and MSX2+ hardware models. Default model is MSX2+.
+#
+# ROM loading (fMSX/MSX.c:688-750, ResetMSX):
+#   The core sets ProgDir = RetroArch system_directory, then chdir(ProgDir)
+#   before calling LoadROM(). All BIOS files must be placed directly in the
+#   system directory root (no subdirectories).
+#
+# Model selection (libretro.c:731-757):
+#   Core option "fmsx_machine_type" picks MSX1/MSX2/MSX2+. Default is MSX2+.
+#   MSX1 loads MSX.ROM (32 KB main BIOS).
+#   MSX2 loads MSX2.ROM (32 KB) + MSX2EXT.ROM (16 KB extension).
+#   MSX2+ loads MSX2P.ROM (32 KB) + MSX2PEXT.ROM (16 KB extension).
+#
+# Disk support (fMSX/MSX.c:780):
+#   DISK.ROM is loaded when "fmsx_simbdos" option is enabled (MSX_PATCHBDOS).
+#   Without it, .dsk files won't boot. The core shows a warning if DISK.ROM
+#   is missing when loading disk content.
+#
+# Optional ROMs (fMSX/MSX.c:526-582):
+#   KANJI.ROM - Kanji font (128 KB), loaded unconditionally if present
+#   FMPAC.ROM - FM-PAC cartridge (64 KB), loaded into first free slot
+#   MSXDOS2.ROM - MSX-DOS 2 (64 KB), loaded when "fmsx_dos2" enabled and MSX2+
+#   PAINTER.ROM - Paint utility (64 KB), loaded for MSX2/MSX2+
+#   RS232.ROM - RS-232C serial (16 KB + 256 B), loaded into slot 3:3
+#   GMASTER2.ROM - Konami GameMaster2 cart, loaded when "fmsx_game_master" enabled
+#   GMASTER.ROM - Konami GameMaster (fallback if GMASTER2.ROM missing)
+#   CMOS.ROM - RTC settings persistence, saved/loaded automatically
+#
+# All ROMs listed below are bundled in fMSX/ROMs/ inside the repo source.
+# They are the standard C-BIOS-compatible generic MSX BIOS set from fMSX.
+
+notes: |
+  Place all ROM files directly in the RetroArch system directory. No subdirectory
+  needed. The core does chdir() to system_dir before loading.
+
+  The default model is MSX2+, which needs MSX2P.ROM and MSX2PEXT.ROM. If you only
+  play cartridge ROMs, these two files are sufficient. For disk games (.dsk), also
+  add DISK.ROM and enable "Simulate DiskROM" in core options.
+
+  KANJI.ROM and FMPAC.ROM are loaded automatically when present, no option needed.
+
+files:
+  # -- MSX1 BIOS --
+
+  - name: MSX.ROM
+    size: 32768
+    md5: aa95aea2563cd5ec0a0919b44cc17d47
+    sha1: 409e82adac40f6bdd18eb6c84e8b2fbdc7fb5498
+    required: true
+    system: msx
+    bundled: true
+    note: "MSX1 main BIOS (32 KB). Loaded for MSX1 model (fMSX/MSX.c:693)."
+    source_ref: "fMSX/ROMs/MSX.ROM"
+
+  # -- MSX2 BIOS --
+
+  - name: MSX2.ROM
+    size: 32768
+    md5: ec3a01c91f24fbddcbcab0ad301bc9ef
+    sha1: 6103b39f1e38d1aa2d84b1c3219c44f1abb5436e
+    required: true
+    system: msx2
+    bundled: true
+    note: "MSX2 main BIOS (32 KB). Loaded for MSX2 model (fMSX/MSX.c:709)."
+    source_ref: "fMSX/ROMs/MSX2.ROM"
+
+  - name: MSX2EXT.ROM
+    size: 16384
+    md5: 2183c2aff17cf4297bdb496de78c2e8a
+    sha1: 5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02
+    required: true
+    system: msx2
+    bundled: true
+    note: "MSX2 extension BIOS (16 KB). Loaded alongside MSX2.ROM (fMSX/MSX.c:710)."
+    source_ref: "fMSX/ROMs/MSX2EXT.ROM"
+
+  # -- MSX2+ BIOS (default model) --
+
+  - name: MSX2P.ROM
+    size: 32768
+    md5: 6d8c0ca64e726c82a4b726e9b01cdf1e
+    sha1: e2fbd56e42da637609d23ae9df9efd1b4241b18a
+    required: true
+    system: msx2plus
+    bundled: true
+    note: "MSX2+ main BIOS (32 KB). Loaded for MSX2+ model, the default (fMSX/MSX.c:731)."
+    source_ref: "fMSX/ROMs/MSX2P.ROM"
+
+  - name: MSX2PEXT.ROM
+    size: 16384
+    md5: 7c8243c71d8f143b2531f01afa6a05dc
+    sha1: fe0254cbfc11405b79e7c86c7769bd6322b04995
+    required: true
+    system: msx2plus
+    bundled: true
+    note: "MSX2+ extension BIOS (16 KB). Loaded alongside MSX2P.ROM (fMSX/MSX.c:732)."
+    source_ref: "fMSX/ROMs/MSX2PEXT.ROM"
+
+  # -- Disk support --
+
+  - name: DISK.ROM
+    size: 16384
+    md5: 80dcd1ad1a4cf65d64b7ba10504e8190
+    sha1: 032cb1c1c75b9a191fa1230978971698d9d2a17f
+    required: false
+    bundled: true
+    note: "Disk controller BIOS (16 KB). Needed for .dsk content. Enable 'Simulate DiskROM' option (fMSX/MSX.c:780)."
+    source_ref: "fMSX/ROMs/DISK.ROM"
+
+  # -- Optional expansion ROMs --
+
+  - name: FMPAC.ROM
+    size: 65536
+    md5: 6f69cc8b5ed761b03afd78000dfb0e19
+    sha1: 9d789166e3caf28e4742fe933d962e99618c633d
+    required: false
+    bundled: true
+    note: "FM-PAC cartridge ROM (64 KB, YM2413 FM synthesis). Auto-loaded into first free slot (fMSX/MSX.c:557)."
+    source_ref: "fMSX/ROMs/FMPAC.ROM"
+
+  - name: KANJI.ROM
+    size: 131072
+    md5: febe8782b466d7c3b16de6d104826b34
+    sha1: 84a645becec0a25d3ab7a909cde1b242699a8662
+    required: false
+    bundled: true
+    note: "Kanji font ROM (128 KB). Auto-loaded if present, no option needed (fMSX/MSX.c:530)."
+    source_ref: "fMSX/ROMs/KANJI.ROM"
+
+  - name: MSXDOS2.ROM
+    size: 65536
+    md5: 6418d091cd6907bbcf940324339e43bb
+    sha1: c36c9e0f96738a340381e23b4f97245388801a46
+    required: false
+    bundled: true
+    note: "MSX-DOS 2 ROM (64 KB). Loaded when 'fmsx_dos2' option enabled and model is MSX2+ (fMSX/MSX.c:545)."
+    source_ref: "fMSX/ROMs/MSXDOS2.ROM"
+
+  - name: PAINTER.ROM
+    size: 65536
+    md5: 403cdea1cbd2bb24fae506941f8f655e
+    sha1: 7fd2a28c4fdaeb140f3c8c8fb90271b1472c97b9
+    required: false
+    bundled: true
+    note: "Paint utility ROM (64 KB). Auto-loaded for MSX2 and MSX2+ models (fMSX/MSX.c:552)."
+    source_ref: "fMSX/ROMs/PAINTER.ROM"
+
+  - name: RS232.ROM
+    size: 16640
+    md5: 279efd1eae0d358eecd4edc7d9adedf3
+    sha1: 7aec0134ad6a5177f4056fcb6047083e8e00529b
+    required: false
+    bundled: true
+    note: "RS-232C serial interface ROM (16 KB + 256 B). Loaded into slot 3:3 (fMSX/MSX.c:533)."
+    source_ref: "fMSX/ROMs/RS232.ROM"
+
+  # -- GameMaster (not bundled, requires core option) --
+
+  - name: GMASTER2.ROM
+    required: false
+    bundled: false
+    note: "Konami GameMaster2 cartridge ROM. Loaded when 'fmsx_game_master' option enabled (fMSX/MSX.c:576)."
+
+  - name: GMASTER.ROM
+    required: false
+    bundled: false
+    note: "Konami GameMaster cartridge ROM. Fallback if GMASTER2.ROM is missing (fMSX/MSX.c:580)."
+
+  # -- CMOS persistence (auto-generated, not a BIOS) --
+
+  - name: CMOS.ROM
+    required: false
+    bundled: false
+    note: "RTC/CMOS settings. Auto-saved by the core on exit, auto-loaded on start (fMSX/MSX.c:526)."
