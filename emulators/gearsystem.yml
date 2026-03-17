@@ -1,0 +1,68 @@
+emulator: Gearsystem
+type: libretro
+source: "https://github.com/drhelius/Gearsystem"
+cores:
+  - gearsystem
+systems:
+  - sega-mastersystem
+  - sega-gamegear
+  - sega-sg1000
+
+notes: |
+  Gearsystem is a Sega Master System / Game Gear / SG-1000 emulator by
+  Ignacio Sanchez (drhelius). No BIOS is required for normal operation.
+
+  The core supports optional boot ROMs for Master System and Game Gear,
+  controlled by core options "gearsystem_bios_sms" and "gearsystem_bios_gg"
+  (both disabled by default). Boot ROMs are loaded in load_bootroms()
+  from the system directory with fixed filenames.
+
+  SG-1000 has no BIOS support. IsBootromEnabled() in Memory.cpp explicitly
+  returns false when a SG-1000 cartridge is detected.
+
+  When enabled, the boot ROM executes as on original hardware, which may
+  cause invalid ROMs to lock or fail to boot entirely.
+
+  Note: gearcoleco, geargrafx, and gearlynx are separate emulators by the
+  same author covering ColecoVision, PC Engine, and Atari Lynx respectively.
+  They are not part of Gearsystem.
+
+files:
+  # --- Master System boot ROM (optional, behind gearsystem_bios_sms) ---
+  - name: "bios.sms"
+    system: sega-mastersystem
+    description: "Master System boot ROM"
+    required: false
+    source_ref: "platforms/libretro/libretro.cpp:414 (load_bootroms)"
+    notes: "Loaded from system directory. Core option gearsystem_bios_sms must be set to Enabled. No size or hash validation performed by the core."
+
+  # --- Game Gear boot ROM (optional, behind gearsystem_bios_gg) ---
+  - name: "bios.gg"
+    system: sega-gamegear
+    description: "Game Gear boot ROM"
+    required: false
+    source_ref: "platforms/libretro/libretro.cpp:415 (load_bootroms)"
+    notes: "Loaded from system directory. Core option gearsystem_bios_gg must be set to Enabled. No size or hash validation performed by the core."
+
+platform_details:
+  mastersystem:
+    bios_filename: "bios.sms"
+    source_ref: "src/Memory.cpp:222-228"
+    notes: |
+      Boot ROM loaded via LoadBootromSMS() -> LoadBootroom(path, false).
+      Raw binary read, stored in m_pBootromSMS. Bank count computed as
+      Pow2Ceil(size / 0x4000). Memory mapping controlled by port 3E bit 3.
+
+  gamegear:
+    bios_filename: "bios.gg"
+    source_ref: "src/Memory.cpp:230-234"
+    notes: |
+      Boot ROM loaded via LoadBootromGG() -> LoadBootroom(path, true).
+      Raw binary read, stored in m_pBootromGG. Same bank computation.
+      Supports standard GG BIOS and Majesco 1KB variant.
+
+  sg1000:
+    bios_filename: null
+    notes: |
+      No BIOS support. Memory.cpp:291 returns false from IsBootromEnabled()
+      when IsSG1000() is true.

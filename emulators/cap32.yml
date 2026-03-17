@@ -1,0 +1,70 @@
+emulator: Caprice32
+type: libretro
+source: "https://github.com/libretro/libretro-cap32"
+cores:
+  - cap32
+systems:
+  - amstrad-cpc
+
+notes: |
+  Caprice32 is an Amstrad CPC emulator ported to libretro. Supports CPC 464,
+  CPC 664, CPC 6128, and CPC+ (Plus) models.
+
+  All system ROMs are compiled directly into the core binary as C header
+  arrays in cap32/rom/*.h. No external BIOS files are required.
+
+  Embedded ROMs (cap32/cap32.c:342-345):
+    - cap32/rom/464.h:    OS_BASIC10[32768] - CPC 464 OS + BASIC 1.0
+    - cap32/rom/6128.h:   OS_BASIC11[32768] - CPC 6128 OS + BASIC 1.1
+    - cap32/rom/amsdos.h: AMSDOS[16384]     - AMSDOS disk controller ROM
+    - cap32/rom/6128p.h:  OS_6128P          - CPC+ system cartridge ROM
+    - cap32/rom/cpm.h:    cpmROM            - CP/M boot snapshot (128KB)
+
+  ROM selection in emulator_select_ROM() (cap32/cap32.c:1072-1100):
+    - CPC 464:  OS_BASIC10 (32KB)
+    - CPC 664:  OS_BASIC10 (32KB) + AMSDOS in slot 7
+    - CPC 6128: OS_BASIC11 (32KB) + AMSDOS in slot 7
+    - CPC+:     OS_6128P loaded as system cartridge via cpr_load()
+
+  The standalone (non-libretro) version references external filenames
+  cpc464.rom, cpc664.rom, cpc6128.rom, amsdos.rom in cap32.c:349-352
+  via config file loading (cap32.c:1828-1840), but the libretro port
+  does not use this path. The libretro init (libretro-core.c:1512) has
+  a "TODO: future use to load custom bios" comment that is not
+  implemented.
+
+  Keyboard layout patches are applied to the ROM in memory for French
+  and Spanish layouts via rom_mods.h (cap32.c:1102-1126).
+
+  CP/M support loads a pre-built snapshot (cpm.h) into memory via
+  snapshot_load_mem() in slots.c:87.
+
+files: []
+
+platform_details:
+  bios_mapping:
+    source_ref: "cap32/cap32.c:1072-1100, cap32/cap32.c:342-345"
+    notes: |
+      All ROMs are embedded. emulator_select_ROM() copies the appropriate
+      ROM array into the pbROM buffer based on CPC.model. No filesystem
+      lookup occurs in the libretro port. The retro_system_bios_directory
+      variable is set up in libretro-core.c:1499-1510 but only used for
+      a future custom BIOS feature that is not yet implemented.
+
+  embedded_roms:
+    source_ref: "cap32/rom/464.h, cap32/rom/6128.h, cap32/rom/amsdos.h, cap32/rom/6128p.h, cap32/rom/cpm.h"
+    notes: |
+      5 ROM sets embedded as C arrays:
+      OS_BASIC10 (32KB) - CPC 464/664 OS + BASIC 1.0
+      OS_BASIC11 (32KB) - CPC 6128 OS + BASIC 1.1
+      AMSDOS (16KB)     - Disk controller ROM, mapped to slot 7
+      OS_6128P          - CPC+ system cartridge (White Label cartridge)
+      cpmROM (128KB+)   - CP/M boot snapshot including SNA header
+
+  model_rom_map:
+    source_ref: "cap32/cap32.c:1072-1100"
+    notes: |
+      CPC 464:  OS_BASIC10 only (no disk support)
+      CPC 664:  OS_BASIC10 + AMSDOS in ROM slot 7
+      CPC 6128: OS_BASIC11 + AMSDOS in ROM slot 7
+      CPC+:     6128P system cartridge (or user-provided .cpr file)

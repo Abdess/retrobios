@@ -1,0 +1,41 @@
+emulator: DeSmuME
+type: libretro
+source: "https://github.com/libretro/desmume"
+cores: [desmume, desmume2015]
+systems: [nintendo-ds]
+
+notes: |
+  DeSmuME provides full HLE (High-Level Emulation) of all ARM7/ARM9 SWI
+  routines, making BIOS files optional for most games. When external BIOS
+  is disabled, a minimal fake BIOS with exception vectors and IRQ handler
+  stubs is generated at runtime (NDSSystem.cpp:2208-2224, 2263-2278).
+  External BIOS enables SWI-from-BIOS mode and firmware boot animation.
+  Firmware boot requires both ARM7+ARM9 BIOS loaded AND interpreter mode
+  (JIT incompatible, see libretro.cpp:788).
+  ARM9 BIOS read size: 4096 bytes (0x1000). ARM7 BIOS read size: 16384
+  bytes (0x4000). No DSi support.
+  Libretro core option: desmume_use_external_bios (enabled/disabled).
+
+files:
+  - name: "bios7.bin"
+    system: nintendo-ds
+    description: "ARM7 BIOS"
+    required: false
+    size: 16384
+    source_ref: "desmume/src/NDSSystem.cpp:2178-2182, frontend/libretro/libretro.cpp:763"
+    notes: "HLE fallback covers all SWI calls; native file needed for firmware boot and SWI-from-BIOS accuracy"
+
+  - name: "bios9.bin"
+    system: nintendo-ds
+    description: "ARM9 BIOS"
+    required: false
+    size: 4096
+    source_ref: "desmume/src/NDSSystem.cpp:2236-2239, frontend/libretro/libretro.cpp:764"
+    notes: "HLE fallback covers all SWI calls; native file needed for firmware boot and logo comparison (Pal Park)"
+
+  - name: "firmware.bin"
+    system: nintendo-ds
+    description: "NDS firmware image"
+    required: false
+    source_ref: "desmume/src/NDSSystem.cpp:2653-2655, frontend/libretro/libretro.cpp:765"
+    notes: "Dummy firmware generated when absent; native firmware needed for boot animation, wifi config, user settings"

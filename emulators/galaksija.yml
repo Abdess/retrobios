@@ -1,0 +1,94 @@
+emulator: galaksija
+type: libretro
+source: "https://github.com/libretro/galaxy-libretro"
+cores:
+  - galaksija
+systems:
+  - galaksija
+
+# Galaksija is a Yugoslav home computer (1983, designed by Voja Antonic) emulator.
+# Z80-based at 3.072 MHz, PAL 50fps, character-mode display (32x16 chars, 256x208 px).
+#
+# The core embeds all three firmware files compressed in rom.c (LoadCHRGENBIN,
+# LoadROM1BIN, LoadROM2BIN). External files are optional overrides -- if ANY of
+# CHRGEN.BIN or ROM1.BIN is missing from <system_dir>/galaksija/, the core sets
+# firmware_ignore=true and loads all ROMs from the embedded copies instead.
+#
+# Firmware loading (src/libretro.c:93-135):
+#   1. retro_init() checks for galaksija/CHRGEN.BIN and galaksija/ROM1.BIN
+#   2. If either is missing: firmware_ignore=true, load embedded compressed ROMs
+#   3. If both present: galaxy_init() reads files from disk (init.c:46-105)
+#   4. ROM2.BIN missing is a warning only, not fatal (init.c:84-85)
+#   5. GAL_PLUS.BIN: referenced in a TODO comment but not implemented yet
+#
+# Memory map:
+#   0x0000-0x0FFF: ROM1 (4096 bytes) - BASIC interpreter
+#   0x1000-0x1FFF: ROM2 (4096 bytes) - math extension (optional)
+#   0x2000-0x27FF: keyboard memory-mapped I/O
+#   0x2800-0x29FF: screen RAM (32x16 characters)
+#   0x2A00-0x3FFF: free RAM
+#   chargen: 2048-byte character generator ROM (separate, not memory-mapped)
+#
+# The included firmware is public domain per README.
+
+files:
+  - name: "CHRGEN.BIN"
+    path: "galaksija/CHRGEN.BIN"
+    size: 2048
+    required: false
+    note: >
+      Character generator ROM. Defines the 128-character bitmap font (8x13 pixels
+      each). The core has this embedded compressed in rom.c and only loads the
+      external file if all firmware files are present in the system directory.
+    source_ref: "src/rom.h:5, src/libretro.c:95-99, src/external/galaksija-emulator/src/init.c:55-67"
+
+  - name: "ROM1.BIN"
+    path: "galaksija/ROM1.BIN"
+    size: 4096
+    required: false
+    note: >
+      System ROM / BASIC interpreter. Mapped at 0x0000-0x0FFF. Contains the
+      Galaksija BASIC language and boot routines. Embedded in rom.c as fallback.
+    source_ref: "src/rom.h:8, src/libretro.c:101-105, src/external/galaksija-emulator/src/init.c:69-81"
+
+  - name: "ROM2.BIN"
+    path: "galaksija/ROM2.BIN"
+    size: 4096
+    required: false
+    note: >
+      Math extension ROM. Mapped at 0x1000-0x1FFF. Adds floating-point math
+      functions (SIN, COS, TG, SQR, LN, EXP, POW, etc). Optional even when
+      loading from disk -- missing ROM2 only triggers a warning. Embedded in
+      rom.c as fallback.
+    source_ref: "src/rom.h:11, src/libretro.c:107-110, src/external/galaksija-emulator/src/init.c:83-92"
+
+  - name: "GAL_PLUS.BIN"
+    path: "galaksija/GAL_PLUS.BIN"
+    size: 4096
+    required: false
+    note: >
+      Galaksija Plus extension ROM. Would map at 0xE000-0xEFFF. Referenced in a
+      TODO comment in init.c but not yet implemented in the libretro core. The
+      original standalone emulator loaded it optionally with a Serbian message
+      on failure ("GAL_PLUS.BIN nije prisutan, idemo dalje bez njega!").
+    source_ref: "src/external/galaksija-emulator/src/init.c:94-104"
+
+notes:
+  embedded_firmware: >
+    All three ROMs (CHRGEN.BIN, ROM1.BIN, ROM2.BIN) are embedded as compressed
+    blobs in src/rom.c using RLE compression. The core works out of the box
+    without any external firmware files. External files only serve as overrides
+    for users who want alternative ROM versions (e.g. different BASIC revisions
+    or character sets).
+  firmware_override_logic: >
+    The override is all-or-nothing for CHRGEN.BIN and ROM1.BIN. If either file
+    is missing from galaksija/, the core ignores all external firmware and uses
+    embedded copies. ROM2.BIN is handled separately and can be absent even when
+    loading from disk.
+  license: >
+    The emulator code and included firmware are public domain. External
+    dependencies (libz80, libretro-common, tinyfiledialogs) have separate
+    licenses (GPL2, MIT).
+  no_bios_required_for_pack: >
+    Since all firmware is embedded, this core does not need any BIOS files in
+    platform packs. The files listed above are optional overrides only.

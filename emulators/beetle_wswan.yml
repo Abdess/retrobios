@@ -1,0 +1,31 @@
+emulator: Beetle WonderSwan (Mednafen WonderSwan)
+type: libretro
+source: "https://github.com/libretro/beetle-wswan-libretro"
+systems: [bandai-wswan, bandai-wswanc]
+
+notes: |
+  Beetle WonderSwan is a fork of Mednafen's Cygne module for WonderSwan
+  and WonderSwan Color emulation via libretro.
+
+  No external BIOS or firmware files are required. The core bypasses the
+  original boot ROM entirely by hardcoding the initial I/O register state
+  in mednafen/wswan/start.inc (a 256-byte table of power-on defaults for
+  all hardware registers 0x00-0xFF). On reset, WSwan_MemoryReset() in
+  wswan-memory.c zeroes RAM and writes a fixed 8-byte identifier at
+  0x75AC, then the CPU starts executing the cartridge directly.
+
+  Internal EEPROM owner data (name, birthday, sex, blood type) is
+  configured through core options (wswan.name, wswan.byear, wswan.bmonth,
+  wswan.bday, wswan.sex, wswan.blood) and initialized at boot by
+  WSwan_EEPROMInit() without needing a real EEPROM dump.
+
+  The wswan.language core option selects English or Japanese, which is
+  returned via I/O port 0xC8+ as the hardware language flag. This
+  replaces the boot ROM's language selection screen.
+
+  The NEC V30MZ CPU is emulated in software (v30mz.c). Sound DMA,
+  cartridge banking, and RTC are all handled internally.
+
+  ROM extensions: .ws, .wsc, .pc2
+
+files: []

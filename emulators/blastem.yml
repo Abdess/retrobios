@@ -1,0 +1,55 @@
+emulator: BlastEm
+type: libretro
+source: "https://github.com/libretro/blastem"
+cores:
+  - blastem
+systems:
+  - sega-megadrive
+  - sega-mastersystem
+
+notes: |
+  BlastEm is a cycle-accurate Sega Mega Drive/Genesis emulator with basic
+  Master System support. In standalone mode it supports TMSS ROM loading and
+  multiple hardware models (MD1 VA0 through MD3 VA2, Teradrive). The Jaguar
+  emulator (blastjag) is a separate standalone binary, not part of the
+  libretro core.
+
+  The libretro port (libblastem.c) does NOT expose any core options and
+  defaults to model md1va3 which has TMSS disabled. There is no way to
+  select a TMSS-enabled model through the libretro interface.
+
+  Even if a TMSS-enabled model were forced, read_bundled_file() in the
+  libretro build only serves rom.db and returns NULL for tmss.md, so TMSS
+  ROM loading would fail (fatal_error at genesis.c:1923).
+
+  Sega CD / Mega CD is not supported (only a TODO comment in system.c:16).
+  No BIOS files are required or loaded by the libretro core.
+
+files: []
+
+analysis:
+  tmss:
+    standalone_support: true
+    libretro_support: false
+    default_model: md1va3
+    default_tmss: "off"
+    rom_filename: tmss.md
+    rom_size: 2048  # 2 KB
+    config_path: "system\0tmss_path\0"
+    source_ref: "genesis.c:1910"
+    notes: |
+      TMSS ROM is loaded from tmss.md (configurable via system/tmss_path).
+      Models with tmss=on: md1va6, md2va1, md2va2, md3va1, md3va2.
+      Models with tmss=off: md1va0, md1va3 (default), teradrive.
+      The libretro build uses md1va3 (tmss off) with no option to change.
+
+  sega_cd:
+    supported: false
+    source_ref: "system.c:16"
+    notes: "TODO comment only: 'Differentiate between vanilla Genesis and Sega CD/32X games'"
+
+  jaguar_bios:
+    libretro_relevant: false
+    notes: |
+      blastjag (jaguar.c) is a separate standalone binary, not compiled
+      into the libretro core. Requires BIOS as first CLI argument.

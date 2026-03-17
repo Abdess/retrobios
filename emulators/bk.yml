@@ -1,0 +1,149 @@
+emulator: bk-emulator
+type: libretro
+source: "https://github.com/libretro/bk-emulator"
+cores:
+  - bk
+systems:
+  - elektronika-bk
+
+# BK-emulator is an Elektronika BK-0010/0011M emulator (Soviet PDP-11 based home
+# computer). The libretro core supports six machine configurations selected via
+# the "bk_model" core option:
+#   BK-0010           (model 0) - default
+#   BK-0010.01        (model 1)
+#   BK-0010.01 + FDD  (model 2)
+#   BK-0011M + FDD    (model 3)
+#   Slow BK-0011M     (model 4) - same ROMs as model 3
+#   Terak 8510/a      (model 9)
+#
+# ROM loading (boot.c:83-116):
+#   BK-0010 models use load_rom() which maps ROM into emulated memory at
+#   specific addresses: monitor at 0100000 (8 KB), BASIC/FOCAL at 0120000
+#   (24448-24576 bytes), disk controller at 0160000 (4 KB).
+#   BK-0011M uses load_rom11() which loads into separate ROM buffer arrays.
+#
+# ROM file resolution (libretro.c:1051-1108):
+#   Files are loaded from {system_dir}/bk/{filename} (libretro.c:724-726).
+#   If not found with original casing, the loader retries with lowercase
+#   filename (libretro.c:1074-1079).
+#
+# All ROM files are required for their respective model. The core calls
+# environ_cb(RETRO_ENVIRONMENT_SHUTDOWN) if any ROM file is missing.
+
+notes: |
+  Files go in {system_dir}/bk/.
+  Each BK model requires a specific set of ROMs. The default model is BK-0010
+  which needs MONIT10.ROM and FOCAL10.ROM. Changing the core option "bk_model"
+  changes which ROMs are loaded. The core shuts down if a required ROM is
+  missing (no fallback or pseudo-BIOS).
+  If a ROM file with uppercase name is not found, the core retries with
+  the filename lowercased.
+
+files:
+  # -- BK-0010 Monitor ROM (all BK-0010 variants) --
+
+  - name: MONIT10.ROM
+    path: "bk/MONIT10.ROM"
+    size: 8192
+    required: true
+    note: "BK-0010 monitor ROM (8 KB). Loaded at address 0100000. Required for all BK-0010 models (0, 1, 2)."
+    source_ref: "main.c:53, boot.c:107"
+    aliases: ["monit10.rom"]
+
+  # -- BK-0010 language ROMs (model-dependent) --
+
+  - name: FOCAL10.ROM
+    path: "bk/FOCAL10.ROM"
+    size: 24576
+    required: false
+    note: "FOCAL interpreter ROM (24448-24576 bytes). Loaded at 0120000. Used by BK-0010 (model 0, default)."
+    source_ref: "libretro.c:15, boot.c:110"
+    aliases: ["focal10.rom"]
+
+  - name: BASIC10.ROM
+    path: "bk/BASIC10.ROM"
+    size: 24576
+    required: false
+    note: "BASIC interpreter ROM (24448-24576 bytes). Loaded at 0120000. Used by BK-0010.01 (model 1)."
+    source_ref: "libretro.c:16, boot.c:110"
+    aliases: ["basic10.rom"]
+
+  # -- Disk controller ROM (BK-0010.01+FDD and BK-0011M) --
+
+  - name: DISK_327.ROM
+    path: "bk/DISK_327.ROM"
+    size: 4096
+    required: false
+    note: "Floppy disk controller ROM (4 KB). Loaded at 0160000 for BK-0010.01+FDD (model 2), or into system_rom for BK-0011M (model 3/4)."
+    source_ref: "main.c:54, boot.c:99,113"
+    aliases: ["disk_327.rom"]
+
+  # -- BK-0011M ROMs --
+
+  - name: B11M_BOS.ROM
+    path: "bk/B11M_BOS.ROM"
+    size: 8192
+    required: false
+    note: "BK-0011M system ROM / BOS (8 KB). Loaded into system_rom at offset 0. Required for BK-0011M (model 3/4)."
+    source_ref: "main.c:55, boot.c:98"
+    aliases: ["b11m_bos.rom"]
+
+  - name: B11M_EXT.ROM
+    path: "bk/B11M_EXT.ROM"
+    size: 8192
+    required: false
+    note: "BK-0011M extended BOS ROM (8 KB). Loaded into rom[1] at offset 8192. Required for BK-0011M (model 3/4)."
+    source_ref: "main.c:56, boot.c:102"
+    aliases: ["b11m_ext.rom"]
+
+  - name: BAS11M_0.ROM
+    path: "bk/BAS11M_0.ROM"
+    size: 16384
+    required: false
+    note: "BK-0011M BASIC ROM part 0 (16 KB). Loaded into rom[0]. Required for BK-0011M (model 3/4)."
+    source_ref: "main.c:57, boot.c:100"
+    aliases: ["bas11m_0.rom"]
+
+  - name: BAS11M_1.ROM
+    path: "bk/BAS11M_1.ROM"
+    size: 8192
+    required: false
+    note: "BK-0011M BASIC ROM part 1 (8 KB). Loaded into rom[1] at offset 0. Required for BK-0011M (model 3/4)."
+    source_ref: "main.c:58, boot.c:101"
+    aliases: ["bas11m_1.rom"]
+
+  # -- Terak 8510/a ROM --
+
+  - name: TERAK.ROM
+    path: "bk/TERAK.ROM"
+    size: 128
+    required: false
+    note: "Terak 8510/a boot ROM (128 bytes). Only used when model is set to Terak 8510/a (model 9)."
+    source_ref: "boot.c:94"
+    aliases: ["terak.rom"]
+
+platform_details:
+  bios_mapping:
+    source_ref: "libretro.c:718-760, boot.c:83-116"
+    notes: |
+      ROM directory is {system_dir}/bk/ (libretro.c:724-726).
+      Model selection via core option "bk_model" determines which ROMs are loaded.
+      The core shuts down immediately if any required ROM for the selected model
+      is not found.
+
+  model_rom_map:
+    source_ref: "libretro.c:734-756, boot.c:83-116"
+    notes: |
+      BK-0010:            MONIT10.ROM + FOCAL10.ROM
+      BK-0010.01:         MONIT10.ROM + BASIC10.ROM
+      BK-0010.01 + FDD:   MONIT10.ROM + DISK_327.ROM
+      BK-0011M + FDD:     B11M_BOS.ROM + DISK_327.ROM + BAS11M_0.ROM + BAS11M_1.ROM + B11M_EXT.ROM
+      Slow BK-0011M:      same as BK-0011M + FDD
+      Terak 8510/a:       TERAK.ROM
+
+  rom_loading:
+    source_ref: "libretro.c:1051-1108"
+    notes: |
+      load_rom_file() first tries {romdir}/{filename} with original casing.
+      If not found, retries with the filename converted to lowercase.
+      Returns NULL and shuts down the core on failure.
