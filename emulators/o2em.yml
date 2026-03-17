@@ -1,0 +1,98 @@
+emulator: O2EM
+type: libretro
+core: o2em_libretro
+source: "https://github.com/libretro/libretro-o2em"
+systems:
+  - odyssey2
+  - videopac
+
+notes: |
+  O2EM is the libretro port of the Odyssey2/Videopac emulator.
+  The core requires exactly one BIOS ROM selected via the o2em_bios core option.
+  Default is o2rom.bin (Odyssey2 NTSC). The user can switch to c52.bin, g7400.bin
+  or jopac.bin for European/French Videopac variants.
+
+  BIOS files are loaded from the system directory into rom_table[0] (1024 bytes).
+  The core identifies the BIOS variant by CRC32 and sets the vpp flag accordingly
+  (vpp=1 enables Videopac+ enhanced graphics for g7400.bin and jopac.bin).
+
+  The core will not start without a valid BIOS file present.
+  Any single BIOS from the list below is sufficient for its region/hardware.
+
+  All BIOS files are exactly 1 KB (1024 bytes).
+
+  BIOS detection: libretro.c load_bios() lines 146-212, CRC32 switch.
+  BIOS selection: libretro_core_options.h o2em_bios option lines 52-64.
+  Core option handling: libretro.c lines 1107-1134.
+
+files:
+  # -------------------------------------------------------
+  # Magnavox Odyssey2 (NTSC) - G7000 model
+  # -------------------------------------------------------
+  - name: "o2rom.bin"
+    system: odyssey2
+    region: [north-america]
+    required: true
+    size: 1024
+    md5: "562d5ebf9e030a40d6fabfc2f33139fd"
+    sha1: "b2e1955d957a475de2411770452eff4ea19f4cee"
+    crc32: "8016a315"
+    note: "Magnavox Odyssey2 BIOS (G7000 NTSC). Default BIOS, vpp=0."
+    source_ref: "libretro.c:182-186"
+
+  # -------------------------------------------------------
+  # Philips Videopac G7000 (European)
+  # -------------------------------------------------------
+  - name: "c52.bin"
+    system: videopac
+    region: [europe]
+    required: true
+    size: 1024
+    md5: "f1071cdb0b6b10dde94d3bc8a6146387"
+    sha1: "a6120aed50831c9c0d95dbdf707820f601d9452e"
+    crc32: "a318e8d6"
+    note: "Philips Videopac G7000 European BIOS. vpp=0, auto-sets PAL region."
+    source_ref: "libretro.c:192-197"
+
+  # -------------------------------------------------------
+  # Philips Videopac+ G7400 (European)
+  # -------------------------------------------------------
+  - name: "g7400.bin"
+    system: videopac
+    region: [europe]
+    required: true
+    size: 1024
+    md5: "c500ff71236068e0dc0d0603d265ae76"
+    sha1: "5130243429b40b01a14e1304d0394b8459a6fbae"
+    crc32: "e20a9f41"
+    note: "Philips Videopac+ G7400 European BIOS. vpp=1, enables enhanced graphics."
+    source_ref: "libretro.c:187-191"
+
+  # -------------------------------------------------------
+  # Philips Videopac+ G7400 (French) - JoPac
+  # -------------------------------------------------------
+  - name: "jopac.bin"
+    system: videopac
+    region: [france]
+    required: true
+    size: 1024
+    md5: "279008e4a0db2dc5f1c048853b033828"
+    sha1: "54b8d2c1317628de51a85fc1c424423a986775e4"
+    crc32: "11647ca5"
+    note: "Philips Videopac+ G7400 French BIOS (JoPac). vpp=1, enables enhanced graphics."
+    source_ref: "libretro.c:198-203"
+
+platform_details:
+  odyssey2:
+    bios_size: 1024
+    bios_selection: "core option o2em_bios, default o2rom.bin"
+    detection_method: "CRC32 of 1024-byte ROM"
+    hle_available: false
+    source_ref: "libretro.c:146-212, libretro_core_options.h:52-64"
+  videopac:
+    bios_size: 1024
+    bios_selection: "core option o2em_bios, choose c52/g7400/jopac"
+    detection_method: "CRC32 of 1024-byte ROM"
+    vpp_flag: "g7400.bin and jopac.bin set vpp=1 for enhanced graphics"
+    hle_available: false
+    source_ref: "libretro.c:146-212, libretro_core_options.h:52-64"

@@ -1,0 +1,81 @@
+emulator: FreeChaF
+type: libretro
+source: "https://github.com/libretro/FreeChaF"
+cores:
+  - freechaf
+systems:
+  - fairchild-channelf
+
+notes: |
+  FreeChaF is a Fairchild Channel F emulator ported to libretro.
+
+  BIOS loading is in src/libretro.c:186-208. The core first tries to load
+  sl90025.bin (Channel F II PSU1) at address 0x000. If that fails, it falls
+  back to sl31253.bin (original Channel F PSU1) at the same address. PSU2
+  (sl31254.bin) is always loaded at address 0x400.
+
+  Memory layout from src/memory.h:27-30:
+    0x000-0x3FF  PSU1 ROM (sl31253 or sl90025)
+    0x400-0x7FF  PSU2 ROM (sl31254)
+    0x800-0x1FFF cartridge ROM
+    0x2000+      VRAM
+
+  If either PSU ROM fails to load, the core switches to experimental HLE
+  (high-level emulation) for that PSU. A warning message is shown to the
+  user recommending real BIOS files. HLE state is tracked per-PSU via
+  hle_state.psu1_hle and hle_state.psu2_hle (src/channelf_hle.c).
+
+  The .info file declares all three firmware files as required (opt=false),
+  but the core does not abort on missing BIOS -- it falls back to HLE.
+
+files:
+  - name: "sl31253.bin"
+    system: fairchild-channelf
+    required: false
+    md5: ac9804d4c0e9d07e33472e3726ed15c3
+    size: 1024  # 1 KB, fills 0x000-0x3FF
+    note: "Channel F PSU1 ROM (original). Fallback if sl90025.bin is missing."
+    source_ref: "src/libretro.c:192"
+
+  - name: "sl31254.bin"
+    system: fairchild-channelf
+    required: false
+    md5: da98f4bb3242ab80d76629021bb27585
+    size: 1024  # 1 KB, fills 0x400-0x7FF
+    note: "Channel F PSU2 ROM. Always loaded at address 0x400."
+    source_ref: "src/libretro.c:202"
+
+  - name: "sl90025.bin"
+    system: fairchild-channelf
+    required: false
+    md5: 95d339631d867c8f1d15a5f2ec26069d
+    size: 1024  # 1 KB, fills 0x000-0x3FF
+    note: "Channel F II PSU1 ROM. Tried first, preferred over sl31253.bin."
+    source_ref: "src/libretro.c:186"
+
+platform_details:
+  bios_mapping:
+    target: "0x000-0x7FF in 64K memory space"
+    source_ref: "src/memory.h:27-29, src/memory.c:30-61"
+    notes: |
+      MEMORY_loadSysROM_libretro() reads the file and copies it into
+      Memory[] at the given address offset. PSU1 is loaded at 0x000,
+      PSU2 at 0x400. The loader caps file size to (MEMORY_SIZE - address)
+      to prevent overflow. MEMORY_RAMStart is advanced past the loaded
+      ROM to protect it from writes.
+
+  hle_fallback:
+    source_ref: "src/channelf_hle.c"
+    notes: |
+      When BIOS files are missing, FreeChaF uses HLE to emulate the
+      PSU routines in software. This is marked as experimental and may
+      cause compatibility issues with some games. Each PSU can
+      independently fall back to HLE.
+
+  load_priority:
+    source_ref: "src/libretro.c:186-198"
+    notes: |
+      PSU1 loading order: sl90025.bin (Channel F II) first, then
+      sl31253.bin (original Channel F) as fallback. If both fail,
+      HLE is used. sl90025.bin is the preferred BIOS as it includes
+      Channel F II improvements.

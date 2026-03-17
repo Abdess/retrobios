@@ -1,0 +1,118 @@
+emulator: mGBA
+type: libretro
+source: "https://github.com/libretro/mgba"
+cores:
+  - mgba
+systems:
+  - nintendo-gba
+  - nintendo-gb
+  - nintendo-gbc
+  - nintendo-sgb
+
+notes: |
+  mGBA is a Game Boy Advance emulator with Game Boy, Game Boy Color, and
+  Super Game Boy support.
+
+  All BIOS files are optional. mGBA ships a built-in HLE BIOS for GBA
+  (src/gba/hle-bios.c) that covers most software. The real BIOS improves
+  accuracy (startup logo, some edge-case SWI behavior). There is no HLE
+  BIOS for GB/GBC/SGB -- those rely on GBSkipBIOS() if no file is found.
+
+  BIOS loading is controlled by two core options:
+    mgba_use_bios (default ON)  - whether to look for BIOS files at all
+    mgba_skip_bios (default OFF) - skip the boot animation even if loaded
+
+  The libretro port resolves BIOS filenames in retro_load_game()
+  (src/platform/libretro/libretro.c:2091-2148). It picks the filename
+  based on detected model:
+    GBA           -> gba_bios.bin
+    GB (DMG/MGB)  -> gb_bios.bin
+    GBC (CGB/AGB) -> gbc_bios.bin
+    SGB (SGB/SGB2)-> sgb_bios.bin
+
+  The standalone core (src/gb/core.c:637-684) handles the same models
+  and maps SGB2 to sgb_bios.bin (marked TODO for a dedicated file).
+
+  GBIsBIOS() in src/gb/gb.c validates BIOS files by CRC32 checksum.
+  Accepted checksums cover DMG, DMG0, MGB, SGB, SGB2, CGB, CGB0, CGBE,
+  AGB, and AGB0 revisions.
+
+files:
+  # -------------------------------------------------------
+  # Game Boy Advance - BIOS (optional, HLE fallback)
+  # -------------------------------------------------------
+  - name: gba_bios.bin
+    system: nintendo-gba
+    required: false
+    size: 16384  # 16 KB (0x4000, GBA_SIZE_BIOS)
+    note: "GBA BIOS. HLE replacement built in. Real BIOS adds boot logo and full SWI accuracy."
+    source_ref: "src/platform/libretro/libretro.c:2099"
+
+  # -------------------------------------------------------
+  # Game Boy - boot ROM (optional, skip fallback)
+  # -------------------------------------------------------
+  - name: gb_bios.bin
+    system: nintendo-gb
+    required: false
+    size: 256  # 256 B (0x100)
+    note: "DMG/MGB boot ROM. Scrolling Nintendo logo. Skipped if absent."
+    source_ref: "src/platform/libretro/libretro.c:2134"
+
+  # -------------------------------------------------------
+  # Game Boy Color - boot ROM (optional, skip fallback)
+  # -------------------------------------------------------
+  - name: gbc_bios.bin
+    system: nintendo-gbc
+    required: false
+    size: 2304  # 2304 B (0x900)
+    note: "CGB boot ROM. Used for CGB, AGB (GBA in GB mode), and SCGB models."
+    source_ref: "src/platform/libretro/libretro.c:2127"
+
+  # -------------------------------------------------------
+  # Super Game Boy - boot ROM (optional, skip fallback)
+  # -------------------------------------------------------
+  - name: sgb_bios.bin
+    system: nintendo-sgb
+    required: false
+    size: 256  # 256 B (0x100)
+    note: "SGB/SGB2 boot ROM. Also used when model is SGB2 (no separate sgb2_bios.bin)."
+    source_ref: "src/platform/libretro/libretro.c:2130"
+
+platform_details:
+  gba:
+    bios_size: 16384  # 16 KB
+    hle_bios: true
+    source_ref: "src/gba/hle-bios.c, src/gba/gba.c:520-548"
+    notes: |
+      GBALoadBIOS() validates size (must be exactly 0x4000) then computes
+      an internal checksum. Two official checksums are recognized:
+        GBA_BIOS_CHECKSUM    = 0xBAAE187F (standard GBA)
+        GBA_DS_BIOS_CHECKSUM = 0xBAAE1880 (DS GBA mode)
+      Other checksums trigger a warning but the file is still loaded.
+
+  gb:
+    bios_size: 256  # 256 B
+    hle_bios: false
+    source_ref: "src/gb/gb.c:570-605"
+    notes: |
+      GBIsBIOS() validates by CRC32. Accepted DMG-family checksums:
+        DMG0 = 0xC2F5CC97, DMG = 0x59C8598E, MGB = 0xE6920754
+      Files not matching any known checksum are rejected.
+
+  gbc:
+    bios_size: 2304  # 2304 B (0x900)
+    hle_bios: false
+    source_ref: "src/gb/gb.c:570-605"
+    notes: |
+      Accepted CGB-family CRC32 checksums:
+        CGB = 0x41884E46, CGB0 = 0xE8EF5318, CGBE = 0xE95DC95D
+        AGB = 0xFFD6B0F1, AGB0 = 0x570337EA
+
+  sgb:
+    bios_size: 256  # 256 B
+    hle_bios: false
+    source_ref: "src/gb/gb.c:570-605, src/gb/core.c:642-644"
+    notes: |
+      Accepted SGB CRC32 checksums:
+        SGB = 0xEC8A83B9, SGB2 = 0x53D0DD63
+      SGB2 model falls through to sgb_bios.bin (marked TODO upstream).

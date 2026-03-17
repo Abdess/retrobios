@@ -1,0 +1,309 @@
+emulator: ep128emu-core
+type: libretro
+source: "https://github.com/libretro/ep128emu-core"
+cores:
+  - ep128emu_core
+systems:
+  - enterprise-64
+  - enterprise-128
+  - videoton-tvc
+  - amstrad-cpc
+  - zx-spectrum
+
+# ep128emu-core emulates Enterprise 64/128, Videoton TVC, Amstrad CPC 464/664/6128,
+# and ZX Spectrum 48/128. All ROMs are optional because the core ships built-in
+# fallback ROMs compiled into roms.hpp. External ROM files override the built-ins
+# and provide better accuracy for some systems.
+#
+# ROM path: <system_dir>/ep128emu/roms/
+#
+# Machine selection (core/core.cpp:62-118):
+#   Content file extension determines machine type:
+#   .cas/.tap/.bas/.128/.com/.trn -> Enterprise
+#   .tvcwav/.cas(TVC) -> Videoton TVC
+#   .cdt/.tzx -> Amstrad CPC or ZX Spectrum (autodetect)
+#   .img/.dsk -> Enterprise disk (default) or CPC/TVC depending on content
+#
+# Enterprise ROM layout (core/core.cpp:195-307):
+#   EP128 (default): exos21.rom (segments 0-1) + basic21.rom (segment 4/5)
+#   EP64: exos20.rom (segments 0-1) + basic20.rom (segment 4/5)
+#   EP128 enhanced: exos24uk.rom (segments 0-3, 64K)
+#   Disk mode: exdos13.rom (segments 0x20-0x21)
+#   IS-DOS mode: exdos14isdos10uk.rom (segments 0x20-0x21)
+#   File I/O mode: epfileio.rom (segment 0x10)
+#   DTF mode: zt19uk.rom (segments 0x40-0x41)
+#   Hungarian locale: hun.rom + epdos16f.rom
+#   German locale: brd.rom
+#
+# Built-in fallbacks (roms/roms.hpp:46516-46538):
+#   All 22 ROMs have compiled-in defaults. The core prepends "_default_" to
+#   the filename and looks up the builtin_rom map when no external file is found.
+#   This means the core works out of the box without any user-supplied ROMs.
+#
+# TOSEC alternate names (core/core.hpp:80-118):
+#   The core tries TOSEC naming conventions as fallback before using built-in ROMs.
+#   For example exos21.rom -> "Expandible OS v2.1 (1985)(Intelligent Software).bin"
+#   CPC ROMs can also be split into page-sized files (OS.ROM + BASIC.ROM).
+
+notes: |
+  All ROMs go under <system_dir>/ep128emu/roms/. The core has built-in ROM
+  fallbacks for every file, so it works without any user-supplied ROMs.
+  External ROMs provide byte-exact originals vs the built-in copies.
+
+  Enterprise EP128 is the default machine. EP64 is selected when content
+  requires it. Machine type can also be forced via core options.
+
+  Hungarian and German locale ROMs are loaded automatically when content
+  metadata indicates the locale. The IS-DOS disk system is an alternative
+  to the standard EXDOS disk controller.
+
+files:
+  # ============================================================
+  # Enterprise 64/128 - EXOS (Expandible OS)
+  # ============================================================
+
+  - name: exos21.rom
+    path: ep128emu/roms/exos21.rom
+    md5: f36f24cbb87745fbd2714e4df881db09
+    required: false
+    system: enterprise-128
+    has_builtin: true
+    note: "Enterprise 128 EXOS 2.1. Default OS for EP128 machines."
+    source_ref: "core/core.cpp:234-237"
+
+  - name: exos20.rom
+    path: ep128emu/roms/exos20.rom
+    md5: 5ad3baaad3b5156d6b60b34229a676fb
+    required: false
+    system: enterprise-64
+    has_builtin: true
+    note: "Enterprise 64 EXOS 2.0. Used when EP64 machine type is selected."
+    source_ref: "core/core.cpp:226-229"
+
+  - name: exos24uk.rom
+    path: ep128emu/roms/exos24uk.rom
+    md5: 55af78f877a21ca45eb2df68a74fcc60
+    required: false
+    system: enterprise-128
+    has_builtin: true
+    note: "Enterprise 128 EXOS 2.4 (UK). Used when enhanced ROM mode is enabled. 64K, loaded across segments 0-3."
+    source_ref: "core/core.cpp:214-221"
+
+  # ============================================================
+  # Enterprise 64/128 - BASIC interpreter
+  # ============================================================
+
+  - name: basic21.rom
+    path: ep128emu/roms/basic21.rom
+    md5: e972fe42b398c9ff1d93ff014786aec6
+    required: false
+    system: enterprise-128
+    has_builtin: true
+    note: "Enterprise 128 BASIC 2.1. Loaded when cartridge mode is active (default)."
+    source_ref: "core/core.cpp:248,276"
+
+  - name: basic20.rom
+    path: ep128emu/roms/basic20.rom
+    md5: 8e18edce4a7acb2c33cc0ab18f988482
+    required: false
+    system: enterprise-64
+    has_builtin: true
+    note: "Enterprise 64 BASIC 2.0. Used with EP64 machine type."
+    source_ref: "core/core.cpp:246,264,274"
+
+  # ============================================================
+  # Enterprise 64/128 - disk controllers
+  # ============================================================
+
+  - name: exdos13.rom
+    path: ep128emu/roms/exdos13.rom
+    md5: ddff70c014d1958dc75378b6c9aab6f8
+    required: false
+    system: enterprise-128
+    has_builtin: true
+    note: "EXDOS 1.3 disk controller. Loaded for EP128_DISK and EP64_DISK modes. 32K across segments 0x20-0x21."
+    source_ref: "core/core.cpp:303-306"
+
+  - name: exdos14isdos10uk.rom
+    path: ep128emu/roms/exdos14isdos10uk.rom
+    required: false
+    system: enterprise-128
+    has_builtin: true
+    note: "EXDOS 1.4 + IS-DOS 1.0 (UK). Used for IS-DOS disk mode instead of exdos13.rom."
+    source_ref: "core/core.cpp:295-298"
+
+  # ============================================================
+  # Enterprise 64/128 - file I/O and extensions
+  # ============================================================
+
+  - name: epfileio.rom
+    path: ep128emu/roms/epfileio.rom
+    md5: a68ebcbc73a4d2178d755b7755bf18fe
+    required: false
+    system: enterprise-128
+    has_builtin: true
+    bundled: true
+    note: "Direct file I/O extension. Loaded for EP128_FILE and EP64_FILE modes. Source included in roms/ directory."
+    source_ref: "core/core.cpp:283-284"
+
+  - name: zt19uk.rom
+    path: ep128emu/roms/zt19uk.rom
+    md5: 228540b6be83ae2acd7569c8ff0f91d0
+    required: false
+    system: enterprise-128
+    has_builtin: true
+    note: "ZozoTools 1.9 (UK). Loaded for DTF (direct tape file) mode. 32K across segments 0x40-0x41."
+    source_ref: "core/core.cpp:287-290"
+
+  # ============================================================
+  # Enterprise 64/128 - locale extensions
+  # ============================================================
+
+  - name: hun.rom
+    path: ep128emu/roms/hun.rom
+    md5: 22167938f142c222f40992839aa21a06
+    required: false
+    system: enterprise-128
+    has_builtin: true
+    note: "Hungarian language extension. Auto-loaded when content locale is Hungarian."
+    source_ref: "core/core.cpp:242-243"
+
+  - name: epdos16f.rom
+    path: ep128emu/roms/epdos16f.rom
+    required: false
+    system: enterprise-128
+    has_builtin: true
+    note: "EP-DOS 1.6f. Provides HFONT and CLKOFF for Hungarian locale. 32K across segments 0x06-0x07."
+    source_ref: "core/core.cpp:252-255"
+
+  - name: brd.rom
+    path: ep128emu/roms/brd.rom
+    md5: 6af0402906944fd134004b85097c8524
+    required: false
+    system: enterprise-128
+    has_builtin: true
+    note: "German (BRD) language extension. Auto-loaded when content locale is German."
+    source_ref: "core/core.cpp:260-261"
+
+  # ============================================================
+  # Enterprise 64/128 - optional extras (in .info, not in source)
+  # ============================================================
+
+  - name: epd19hft.rom
+    path: ep128emu/roms/epd19hft.rom
+    md5: 12cfc9c7e48c8a16c2e09edbd926d467
+    required: false
+    system: enterprise-128
+    note: "EP-DOS 1.9 with Hungarian font. Listed in .info file as optional firmware."
+    source_ref: "ep128emu_core_libretro.info:firmware8"
+
+  - name: zt19hfnt.rom
+    path: ep128emu/roms/zt19hfnt.rom
+    md5: 653daaf7b9b29c2c4e577f489580f247
+    required: false
+    system: enterprise-128
+    note: "ZozoTools 1.9 with Hungarian font. Listed in .info file as optional firmware."
+    source_ref: "ep128emu_core_libretro.info:firmware9"
+
+  # ============================================================
+  # Videoton TVC
+  # ============================================================
+
+  - name: tvc22_sys.rom
+    path: ep128emu/roms/tvc22_sys.rom
+    md5: 8c54285f541930cde766069942bad0f2
+    required: false
+    system: videoton-tvc
+    has_builtin: true
+    note: "TVC system ROM v2.2. Main BIOS for all TVC modes."
+    source_ref: "core/core.cpp:313-314"
+
+  - name: tvc22_ext.rom
+    path: ep128emu/roms/tvc22_ext.rom
+    md5: 5ce95a26ceed5bec73995d83568da9cf
+    required: false
+    system: videoton-tvc
+    has_builtin: true
+    note: "TVC extension ROM v2.2. Loaded alongside tvc22_sys.rom."
+    source_ref: "core/core.cpp:315-316"
+
+  - name: tvcfileio.rom
+    path: ep128emu/roms/tvcfileio.rom
+    md5: a2cf86ba8e7fc58b242137fe59036832
+    required: false
+    system: videoton-tvc
+    has_builtin: true
+    bundled: true
+    note: "TVC direct file I/O extension. Used for TVC64_FILE mode. Source included in roms/ directory."
+    source_ref: "core/core.cpp:319-320"
+
+  - name: tvc_dos12d.rom
+    path: ep128emu/roms/tvc_dos12d.rom
+    md5: 88dc7876d584f90e4106f91444ab23b7
+    required: false
+    system: videoton-tvc
+    has_builtin: true
+    note: "TVC DOS 1.2d. Loaded for TVC64_DISK mode."
+    source_ref: "core/core.cpp:324-325"
+
+  # ============================================================
+  # Amstrad CPC
+  # ============================================================
+
+  - name: cpc464.rom
+    path: ep128emu/roms/cpc464.rom
+    md5: a993f85b88ac4350cf4d41554e87fe4f
+    required: false
+    system: amstrad-cpc
+    has_builtin: true
+    note: "CPC 464 combined ROM (OS + BASIC). 32K loaded at segments 0x10 (OS) and 0x00 (BASIC) with offset."
+    source_ref: "core/core.cpp:335-338"
+
+  - name: cpc664.rom
+    path: ep128emu/roms/cpc664.rom
+    md5: 5a384a2310f472c7857888371c00ed66
+    required: false
+    system: amstrad-cpc
+    has_builtin: true
+    note: "CPC 664 combined ROM (OS + BASIC). Used for CPC_664_DISK mode."
+    source_ref: "core/core.cpp:343-346"
+
+  - name: cpc6128.rom
+    path: ep128emu/roms/cpc6128.rom
+    md5: b96280dc6c95a48857b4b8eb931533ae
+    required: false
+    system: amstrad-cpc
+    has_builtin: true
+    note: "CPC 6128 combined ROM (OS + BASIC). Default CPC machine when no specific model requested."
+    source_ref: "core/core.cpp:352-355"
+
+  - name: cpc_amsdos.rom
+    path: ep128emu/roms/cpc_amsdos.rom
+    md5: 25629dfe870d097469c217b95fdc1c95
+    required: false
+    system: amstrad-cpc
+    has_builtin: true
+    note: "AMSDOS disk controller ROM. Loaded for CPC_DISK and CPC_664_DISK modes."
+    source_ref: "core/core.cpp:359-360"
+
+  # ============================================================
+  # ZX Spectrum
+  # ============================================================
+
+  - name: zx128.rom
+    path: ep128emu/roms/zx128.rom
+    md5: 85fede415f4294cc777517d7eada482e
+    required: false
+    system: zx-spectrum
+    has_builtin: true
+    note: "ZX Spectrum 128K ROM. 32K loaded at segments 0x00-0x01."
+    source_ref: "core/core.cpp:382-385"
+
+  - name: zx48.rom
+    path: ep128emu/roms/zx48.rom
+    md5: 4c42a2f075212361c3117015b107ff68
+    required: false
+    system: zx-spectrum
+    has_builtin: true
+    note: "ZX Spectrum 48K ROM. Used for ZX16 and ZX48 modes."
+    source_ref: "core/core.cpp:389-390"

@@ -1,0 +1,67 @@
+emulator: Nestopia UE
+type: libretro
+source: "https://github.com/libretro/nestopia"
+systems: [nintendo-nes, nintendo-fds]
+
+notes: |
+  Nestopia UE (Undead Edition) is a cycle-accurate NES/Famicom emulator.
+  NES cartridge games need no BIOS. Famicom Disk System games require
+  the FDS BIOS ROM (disksys.rom, 8 KB) loaded from the system directory.
+  The core validates the BIOS via CRC32 against two known dumps:
+  standard Famicom (0x5E607DCF) and Twin Famicom (0x4DF24A6C).
+  An unknown BIOS triggers a warning but still loads.
+
+  NstDatabase.xml is an optional game database used for region autodetection,
+  aspect ratio selection, and 4-player adapter recognition. A copy is baked
+  into the core binary (libretro/nstdatabase.hpp) and used as fallback when
+  no external file is found. Placing a newer NstDatabase.xml in the system
+  directory overrides the built-in copy.
+
+  An optional custom palette file (custom.pal, 192 bytes, 64 RGB triplets)
+  overrides the built-in palettes when the nestopia_palette core option is
+  set to Custom. The core ships with 10+ built-in palettes (Royaltea,
+  Smooth FBx, etc.) so the external file is rarely needed.
+
+  Audio samples for specific games can be placed in system/nestopia/samples/
+  as numbered .wav files (e.g., 00.wav, 01.wav). This is used for Famicom
+  expansion audio in a few titles.
+
+  Game Genie is handled as cheat code decoding (software), not via a ROM file.
+
+  File path construction: libretro/libretro.cpp retro_load_game() joins the
+  system directory (RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY) with each
+  filename directly - no subdirectories.
+
+files:
+  # --- Famicom Disk System BIOS (required for FDS games) ---
+  - name: "disksys.rom"
+    system: nintendo-fds
+    description: "FDS BIOS ROM"
+    required: true
+    size: 8192
+    md5: "ca30b50f880eb660a320674ed365ef7a"
+    sha1: "57fe1bdee955bb48d357e463ccbf129496930b62"
+    source_ref: "libretro/libretro.cpp:1608-1634 (FDS load), source/core/NstFds.cpp:61-131 (Bios class, CRC32 validation)"
+    notes: "Mapped at 0xE000-0xFFFF (8 KB). retro_load_game returns false if missing when loading .fds files. CRC32 checked: Famicom 0x5E607DCF, Twin Famicom 0x4DF24A6C."
+
+  # --- NES game database (optional, overrides baked-in copy) ---
+  - name: "NstDatabase.xml"
+    system: nintendo-nes
+    description: "Nestopia game database for region and mapper autodetection"
+    required: false
+    size: 1022369
+    md5: "0ee6cbdc6f5c96ce9c8aa5edb59066f4"
+    sha1: ~
+    source_ref: "libretro/libretro.cpp:1561-1586 (database load), libretro/nstdatabase.hpp (baked-in fallback)"
+    notes: "XML database matching games by SHA1+CRC32. Used for region, mapper, mirroring, and 4-player adapter detection. Built-in fallback exists so this file is optional. Hash is for the upstream copy shipped with the core repo."
+
+  # --- Custom palette (optional, core option nestopia_palette = Custom) ---
+  - name: "custom.pal"
+    system: nintendo-nes
+    description: "External NES color palette"
+    required: false
+    size: 192
+    md5: ~
+    sha1: ~
+    source_ref: "libretro/libretro.cpp:1540-1559 (palette load)"
+    notes: "64 RGB triplets (64 x 3 bytes = 192 bytes). Only loaded when nestopia_palette core option is set to Custom. Falls back to built-in Royaltea palette if not found. Multiple valid palettes exist so no single canonical hash."
