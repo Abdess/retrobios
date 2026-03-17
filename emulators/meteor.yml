@@ -1,0 +1,55 @@
+emulator: Meteor GBA
+type: libretro
+source: "https://github.com/libretro/meteor-libretro"
+cores:
+  - meteor
+systems:
+  - nintendo-gba
+
+notes: |
+  Meteor is a Game Boy Advance emulator by Philippe Daouadi (2009-2011).
+
+  The libretro port does NOT load or use any external BIOS file. The core has
+  a complete HLE BIOS implementation (ameteor/source/bios.cpp) that handles
+  GBA SWI calls directly in C++. When no real BIOS is loaded (HasBios() returns
+  false), Cpu::SoftwareInterrupt() dispatches SWI calls to the HLE handlers
+  instead of executing the BIOS ROM (ameteor/source/cpu.cpp:244-311).
+
+  The standalone frontends (GTK, text) expose LoadBios() for optional real BIOS
+  loading, but the libretro port (libretro/libretro.cpp) never calls LoadBios()
+  and never queries RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY. The retro_load_game()
+  function only loads the ROM via LoadRom().
+
+  HLE SWI coverage: SoftReset (0x00), RegisterRamReset (0x01), Halt (0x02),
+  IntrWait (0x04), VBlankIntrWait (0x05), Div (0x06), DivArm (0x07),
+  Sqrt (0x08), ArcTan (0x09), ArcTan2 (0x0A), CpuSet (0x0B),
+  CpuFastSet (0x0C), BgAffineSet (0x0E), ObjAffineSet (0x0F),
+  LZ77UnCompWram (0x11), LZ77UnCompVram (0x12), HuffUnComp (0x13),
+  RLUnCompWram (0x14), RLUnCompVram (0x15).
+
+  Missing from HLE: Stop (0x03), BitUnPack (0x10), Diff8bitUnFilter (0x16-0x17),
+  Diff16bitUnFilter (0x18), SoundBias (0x19), SoundDriverInit (0x1A-0x1F),
+  MidiKey2Freq (0x1F), SoundDriverVSyncOff/On (0x28-0x29), GetBiosChecksum (0x0D).
+
+  The BIOS memory region (0x00000000-0x00003FFF, 16 KB) is allocated only if
+  LoadBios() is called. Memory reads to this region return BIOS protection values
+  (0x0E for 8-bit, 0xF00E for 16-bit, 0xE1B0F00E for 32-bit) when no BIOS is
+  loaded and PC is outside the BIOS area.
+
+  Bios000h() (entry point) initializes stack pointers and jumps to 0x08000004,
+  matching real GBA hardware boot sequence. In the libretro port, retro_reset()
+  resets all units except BIOS and ROM memory.
+
+files: []
+
+platform_details:
+  gba:
+    bios_size: 16384  # 0x4000
+    hle_bios: true
+    source_ref: "ameteor/source/bios.cpp, ameteor/source/cpu.cpp:244-311"
+    notes: |
+      Full HLE BIOS. The libretro port never loads an external BIOS file.
+      Cpu::SoftwareInterrupt() checks HasBios() -- if false (always in libretro),
+      SWI calls are routed to C++ reimplementations. If a real BIOS were loaded
+      (standalone only), execution would go through the actual BIOS ROM code via
+      SoftwareInterrupt() -> branch to 0x08.

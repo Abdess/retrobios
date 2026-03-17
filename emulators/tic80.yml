@@ -1,0 +1,44 @@
+emulator: TIC-80
+type: libretro
+source: "https://github.com/libretro/TIC-80"
+cores:
+  - tic80
+systems:
+  - tic80
+
+notes: |
+  TIC-80 is a fantasy computer for making, playing and sharing tiny games.
+  The libretro port wraps the nesbox/TIC-80 engine as a submodule.
+
+  The core loads .tic cartridge files (and .png for cart-as-image format)
+  entirely through the libretro data buffer (need_fullpath = false,
+  tic80_libretro.c:340). Content bytes are passed directly to tic80_load()
+  at retro_load_game() (tic80_libretro.c:1152).
+
+  The core never calls RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY. There is no
+  code path that reads any file from the system directory. No BIOS, firmware,
+  or boot ROM exists for this platform -- TIC-80 is a self-contained virtual
+  machine with all system resources built into the engine binary.
+
+  The TIC-80 VM provides 80x45 tilemap, 240x136 screen, 256 8x8 sprites,
+  4 channels of sound, and supports Lua, Moonscript, JavaScript, Wren,
+  Fennel, Squirrel, Ruby, Python, and Janet as scripting languages.
+
+files: []
+
+platform_details:
+  cartridge_format:
+    extensions: "tic, png"
+    source_ref: "tic80_libretro.c:339"
+    notes: |
+      .tic is the native cartridge format containing code, sprites, map,
+      sound, and music data. .png support allows loading cartridges
+      encoded as cover images (code stored in PNG metadata).
+
+  runtime:
+    source_ref: "nesbox/TIC-80 (submodule at core/)"
+    notes: |
+      The entire TIC-80 runtime (CPU, GPU, APU, scripting engines) is
+      compiled into the core binary. No external dependencies at runtime.
+      State serialization uses TIC_PERSISTENT_SIZE * 4 bytes of pmem()
+      data (tic80_libretro.c:1203-1243).

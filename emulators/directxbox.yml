@@ -1,0 +1,73 @@
+emulator: DirectXBox
+type: libretro
+source: "https://github.com/libretro/libretro-directxbox"
+cores:
+  - directxbox
+systems:
+  - xbox
+
+# DirectXBox is an experimental original Xbox emulator written from scratch for
+# libretro. Status: alpha. Cromwell BIOS boots but cannot run games. Microsoft
+# BIOS does not boot yet (ATA/OHCI unimplemented). No audio, no HW acceleration.
+#
+# BIOS loading (libretro.cpp:199-210):
+#   Paths are hardcoded relative to the system directory:
+#     mcpx_rom_str = <system_dir>/mcpx_1.0.bin
+#     bios_rom_str = <system_dir>/cromwell_1024.bin
+#   Both are passed to Xbox::LoadBootRoms(flash, mcpx).
+#   A commented-out alternative exists: xbox-3944.bin (Microsoft retail BIOS).
+#
+# LoadBootRoms (xbox.cpp:143-210):
+#   1. Opens flash ROM, validates size is a multiple of 0x10000
+#   2. Maps flash ROM to 0xFF000000-0xFFFFFFFF (mirrored to fill 16 MB)
+#   3. Opens MCPX ROM, validates size is exactly 512 bytes
+#   4. Overlays MCPX at the last 512 bytes of flash region
+#   If MCPX path is empty, step 3-4 are skipped (Debug/Chihiro machines).
+#   retro_load_game returns false if either file fails to load.
+#
+# Machine type (libretro_core_options.h:67-81):
+#   Core option "libretro-xbox_machine-type" selects hardware revision.
+#   Default "auto" detects from BIOS. Retail v1.0 uses McpxRomVersion::Mcpx1_0,
+#   all other retail revisions use Mcpx1_1. Debug and Chihiro use McpxRomVersion::None
+#   (no MCPX ROM needed).
+#
+# The .info file declares no firmware_count. Both files are mandatory for retail
+# machine types. The core has no fallback or built-in replacement.
+
+files:
+  - name: "mcpx_1.0.bin"
+    path: "mcpx_1.0.bin"
+    size: 512
+    required: true
+    note: >
+      Xbox MCPX ROM (secret boot ROM on the southbridge). Contains the initial
+      boot vector that loads the flash BIOS. Overlaid at the last 512 bytes of
+      the 16 MB flash region (0xFFFFFE00-0xFFFFFFFF). Only needed for retail
+      machine types; Debug and Chihiro skip this file.
+    source_ref: "src/xbox.cpp:186-206, src/libretro/libretro.cpp:202"
+
+  - name: "cromwell_1024.bin"
+    path: "cromwell_1024.bin"
+    required: true
+    note: >
+      Cromwell open-source Xbox BIOS (1024 KB variant). Loaded as the flash ROM
+      and mirrored across the 16 MB flash region at 0xFF000000. Size must be a
+      multiple of 0x10000. This is the only BIOS that currently boots in the
+      emulator. The Microsoft retail BIOS (xbox-3944.bin) is referenced in
+      commented-out code but does not work yet.
+    source_ref: "src/xbox.cpp:143-178, src/libretro/libretro.cpp:203-204"
+
+notes:
+  status: >
+    Alpha stage. Only Cromwell BIOS boots. No commercial game compatibility.
+    Missing ATA (hard drive), OHCI (USB/controllers), audio, and GPU HW
+    acceleration. The core requires libvirt86 for x86 virtualization.
+  microsoft_bios: >
+    The source references xbox-3944.bin as an alternative flash ROM (Microsoft
+    retail BIOS, typically 256 KB). It is commented out in libretro.cpp:204
+    because ATA and OHCI hardware are not yet implemented, preventing the
+    Microsoft BIOS from completing boot.
+  machine_types: >
+    xbox_database.cpp defines retail v1.0 through v1.6, debug, and chihiro
+    variants. Each has different TV encoder (Conexant/Focus/XCalibur) and MCPX
+    revision (X2/X3) settings. The core option auto-detects from the loaded BIOS.

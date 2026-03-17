@@ -1,0 +1,24 @@
+emulator: boom3
+type: libretro
+source: "https://github.com/libretro/boom3"
+cores: [boom3, boom3_xp]
+systems: [doom3]
+verification: existence
+notes: >
+  Doom 3 source port based on dhewm3 (GPL Doom 3 engine). The core accepts
+  .pk4 extensions (retro_get_system_info sets valid_extensions = "pk4").
+  Content is loaded directly from the .pk4 file path - the engine extracts
+  the grandparent directory as fs_basepath (libretro.cpp:1097,1135-1136
+  via extract_directory called twice on info->path) and expects the standard
+  Doom 3 directory layout with base/ containing pak000.pk4 through pak008.pk4.
+  BASE_GAMEDIR is hardcoded to "base" (Licensee.h:58). The boom3_xp variant
+  compiles with _D3XP defined, which passes "+set fs_game d3xp" at startup
+  (libretro.cpp:538-544) to load the Resurrection of Evil expansion from a
+  d3xp/ subdirectory alongside base/. The filesystem code (FileSystem.cpp:2125)
+  scans for .pk4 files in the game directory and loads them in order, with
+  higher-numbered paks overriding lower ones. The core requires OpenGL
+  (RETRO_ENVIRONMENT_SET_HW_RENDER) and XRGB8888 pixel format. All required
+  files are commercial Doom 3 game data, not engine firmware. No BIOS or
+  system files are needed in the RetroArch system directory.
+
+files: []

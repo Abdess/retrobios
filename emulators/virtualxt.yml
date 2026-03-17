@@ -1,0 +1,52 @@
+emulator: VirtualXT
+type: libretro
+source: "https://github.com/libretro/virtualxt"
+systems: [ibm-pc]
+
+# VirtualXT is a Turbo PC/XT emulator (Intel 8088/186). Written in Odin.
+# All BIOS ROMs are embedded at compile time via #load() directives in
+# src/frontend/core.odin. No external BIOS files are required at runtime.
+
+# The default machine setup (setup_default_machine) loads these embedded ROMs:
+#   - BIOS: GLaBIOS 0.2.6 or Turbo XT BIOS 3.1 (user selects via core option)
+#   - VGA BIOS: vgabios.bin (loaded when VGA video mode is selected)
+#   - Disk Extension: vxtx.bin (always loaded)
+#   - RTC BIOS: GLaTICK 0.8.4 (loaded when RTC is enabled)
+
+# Core option "virtualxt_bios" selects between GLaBIOS and TurboXT at startup.
+# Core option "virtualxt_video" selects CGA or VGA (VGA loads vgabios.bin).
+# Core option "virtualxt_rtc" selects GLaTICK or none (loads GLaTICK_0.8.4_AT.ROM).
+
+# INI config files (.ini extension) can reference external ROM paths, but the
+# standard usage path does not require any files in the system directory.
+
+# Embedded BIOS files (shipped inside the compiled core binary):
+#
+#   GLABIOS.ROM           8192 bytes   md5:bbeb6f7e2175732eebc3f0b49976347a  sha1:701bb8ab0f9797581f795394a5c09eb147ff93d2
+#   pcxtbios.bin          8192 bytes   md5:336bf8888a22075caa09e2e8e4d96a3b  sha1:f7b73e441fd7b582a493837658fa17407e851d7c
+#   vgabios.bin          32768 bytes   md5:9c80b0a0784dcf80f84c35b1cc8db81b  sha1:251d85a90d3df3d116c30568167587ee3819f623
+#   vxtx.bin              2048 bytes   md5:c6c7eef021e5e40503cb5ae860f02fde  sha1:ccd27f24e5d7bd7d14b336be5b79b7ef8ba6e6be
+#   GLaTICK_0.8.4_AT.ROM  2048 bytes   md5:06ead46b977ffb4a056844e2965653eb  sha1:025c5d6d9391698488cebad11623ee239ce070a2
+
+# Source references:
+#   src/frontend/core.odin:295-370  - BIOS embedding via #load("bios:...", []byte)
+#   src/frontend/options.odin:55    - core option "virtualxt_bios" (GLaBIOS|TurboXT)
+#   src/modules/rom/rom.odin:42-67  - load_from_file (INI path only)
+#   bios/                           - open-source BIOS files (GLaBIOS, TurboXT, vgabios)
+
+files: []
+
+notes:
+  bios_approach: >
+    VirtualXT embeds all BIOS ROMs into the core binary at compile time using
+    Odin's #load() directive. The bios/ directory in the source tree contains
+    open-source replacements: GLaBIOS (GPL), Turbo XT BIOS 3.1, and vgabios.
+    No proprietary IBM PC/XT BIOS is needed.
+  ini_config: >
+    When loading an .ini file, the core can instantiate ROM modules with external
+    file paths (rom.odin handles string values for "mem" via load_from_file).
+    This is an advanced usage path; standard operation needs no external files.
+  supported_extensions: "img, ini, exe, com"
+  supported_features: >
+    Intel 8088/186 CPU, CGA/VGA graphics, EMS memory, ethernet adapter,
+    host file sharing (RIFS2), GDB server, floppy and hard disk images.

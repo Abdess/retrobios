@@ -1,0 +1,54 @@
+emulator: "doukutsu-rs"
+type: libretro
+source: "https://github.com/DrGlaucous/doukutsu-rs-libretro"
+cores:
+  - doukutsu_rs
+systems:
+  - cavestory
+
+# doukutsu-rs (d-rs) is an open-source reimplementation of the Cave Story
+# (Doukutsu Monogatari) engine in Rust, ported to libretro by Dr. Glaucous.
+# It plays the original freeware Cave Story and Cave Story+ (Steam/Switch).
+#
+# The core does NOT use RetroArch's system directory for any BIOS or firmware.
+# get_system_directory() is defined in libretro.rs:1255 but never called by
+# the core (the import is commented out in core.rs:28).
+#
+# Instead, the core loads game data relative to the content path provided by
+# the frontend. The target is either a Doukutsu.exe (freeware) or a directory
+# containing a data/ subfolder (core.rs:226-233):
+#
+#   content_path = "/path/to/Doukutsu.exe"  (or directory for CS Switch)
+#   resource_dir = parent_of(content_path) + "/data/"
+#
+# The data/ directory must contain the freeware Cave Story game assets:
+#   npc.tbl, mrmap.bin, *.png, Stage/, Npc/, org/ (music), *.tsc (scripts)
+#
+# These are the original Pixel game files from Doukutsu.exe, extracted by
+# the doukutsu-rs/game-data repo (CSE2E-converted freeware data). They are
+# copyrighted by Daisuke "Pixel" Amaya but freely redistributable for
+# non-commercial use.
+#
+# Internal engine data (fonts, organya wavetables, gamecontrollerdb.txt,
+# touch overlay, lightmap) is compiled into the core binary via
+# include_bytes! in builtin_fs.rs, so nothing extra is needed in system/.
+#
+# The .info file (doukutsu_rs_libretro.info) declares:
+#   supported_extensions = "exe|dll|so"
+#   needs_fullpath = true
+#   supports_no_game = true
+#   notes = "(!) drs requires data ROM 'Cave Story (en).zip'."
+#           "|(!) Load Content 'Doukutsu.exe', Also works with all other ports of CS"
+#
+# No firmware entries are declared in the .info file.
+# Valid extensions: exe, dll, so (loads the original game binary as content path)
+
+notes: |
+  No BIOS or firmware files required in the system directory.
+  The core reads game data from a data/ subfolder next to the loaded content.
+  Users must provide the Cave Story freeware game files (Doukutsu.exe and its
+  data/ directory) or a Cave Story+ installation as the content to load.
+  All engine-internal resources (fonts, wavetables, controller mappings) are
+  built into the core binary.
+
+files: []

@@ -1,0 +1,43 @@
+emulator: Arduous
+type: libretro
+source: "https://github.com/libretro/arduous"
+cores:
+  - arduous
+systems:
+  - arduboy
+
+notes: |
+  Arduous is an Arduboy emulator built on simavr (ATmega32U4 AVR simulator)
+  with SSD1306 OLED display emulation, ported to libretro. It is distinct
+  from the Ardens core, which is a separate Arduboy emulator.
+
+  No BIOS, bootloader, or system files are required. The core operates as a
+  pure AVR simulator:
+
+  - The game content (.hex Intel HEX format) is parsed at load time via an
+    in-tree ihex reader (arduous.cpp:60-166) and written directly into the
+    simavr flash memory at the address specified in the hex file
+    (arduous.cpp:189). No separate bootloader is loaded.
+
+  - The MCU is hardcoded to atmega32u4 at 16 MHz (arduous.h:70-71).
+    simavr handles CPU initialization internally via avr_make_mcu_by_name().
+
+  - A commented-out loadFirmware() function (arduous.cpp:22-29) suggests
+    ELF firmware loading was considered but never implemented.
+
+  - EEPROM (1024 bytes), system RAM, and VRAM are exposed via the libretro
+    memory interface (RETRO_MEMORY_SAVE_RAM, RETRO_MEMORY_SYSTEM_RAM,
+    RETRO_MEMORY_VIDEO_RAM) but are not loaded from external files.
+
+  - The core never calls RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY. The
+    retro_load_game() function only reads the content data buffer passed
+    by the frontend (libretro.cpp:108-110).
+
+  - RETRO_ENVIRONMENT_SET_SUPPORT_NO_GAME is set to false (libretro.cpp:123),
+    meaning a game ROM is always required.
+
+  Supported ROM format: Intel HEX (.hex) only. The valid_extensions field
+  lists "hex". A TODO comment mentions .arduboy ZIP support but it is not
+  implemented.
+
+files: []

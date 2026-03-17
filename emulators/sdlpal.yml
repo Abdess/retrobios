@@ -1,0 +1,199 @@
+emulator: SDLPAL
+type: libretro
+source: "https://github.com/sdlpal/sdlpal"
+cores:
+  - sdlpal
+systems:
+  - sdlpal
+
+# SDLPAL is an open-source reimplementation of the classic Chinese RPG
+# "Xian Jian Qi Xia Zhuan" (Sword and Fairy / PAL) by SoftStar Inc.
+#
+# It does NOT include any game data. The original game files are proprietary
+# and must be obtained separately (e.g. from the Steam release).
+#
+# The core accepts a .cfg file pointing to the game directory (needs_fullpath).
+# When launched without a game (supports_no_game = true), it looks for data
+# in <system_dir>/sdlpal/ (libretro.c:201-204).
+#
+# Data file search (util.c:728-781, UTIL_CheckResourceFiles):
+#   Required: 13 common .mkf archives + message file (word.dat or m.msg)
+#   Optional: sound files (voc.mkf, sounds.mkf), music files (midi.mkf, mus.mkf)
+#
+# Additional optional files loaded at runtime:
+#   desc.dat   - object descriptions (global.c:204, DOS version only)
+#   mus.mkf    - MIDI music archive (audio.c:305)
+#
+# All files are game data, not BIOS or firmware. No system files are needed
+# beyond the original game resource files.
+
+notes: |
+  No BIOS or firmware required. SDLPAL is a game engine that needs the
+  original PAL (Sword and Fairy) game data files to run.
+
+  Place game files in <system_dir>/sdlpal/ or point a .cfg file at the
+  game directory. The game is available on Steam (app 1546570).
+
+  The core supports both DOS (original 1995) and Win95 (1998 remake)
+  versions of the game data. It auto-detects which version is present.
+
+files:
+  # ================================================================
+  # Required game data archives (proprietary, not distributable)
+  # util.c:733-737 - UTIL_CheckResourceFiles common_files[]
+  # ================================================================
+
+  - name: "abc.mkf"
+    path: "sdlpal/abc.mkf"
+    required: true
+    source_ref: "util.c:734, battle.c:879, global.c:55"
+    note: >
+      Animation/battle character data archive. Required for battle scenes
+      and character animations.
+
+  - name: "ball.mkf"
+    path: "sdlpal/ball.mkf"
+    required: true
+    source_ref: "util.c:734, global.c:177"
+    note: >
+      Ball/magic effect graphics archive.
+
+  - name: "data.mkf"
+    path: "sdlpal/data.mkf"
+    required: true
+    source_ref: "util.c:734, global.c:178"
+    note: >
+      Core game data archive containing scripts, events, and game logic.
+
+  - name: "f.mkf"
+    path: "sdlpal/f.mkf"
+    required: true
+    source_ref: "util.c:734, global.c:179"
+    note: >
+      Face/portrait graphics archive for character dialog.
+
+  - name: "fbp.mkf"
+    path: "sdlpal/fbp.mkf"
+    required: true
+    source_ref: "util.c:735, global.c:175"
+    note: >
+      Full-screen background picture archive (cutscenes, title screen).
+
+  - name: "fire.mkf"
+    path: "sdlpal/fire.mkf"
+    required: true
+    source_ref: "util.c:735, global.c:180"
+    note: >
+      Fire/spell effect graphics archive.
+
+  - name: "gop.mkf"
+    path: "sdlpal/gop.mkf"
+    required: true
+    source_ref: "util.c:735, res.c:234"
+    note: >
+      GOP (game object palette/graphics) archive.
+
+  - name: "map.mkf"
+    path: "sdlpal/map.mkf"
+    required: true
+    source_ref: "util.c:735, res.c:233, global.c:55"
+    note: >
+      Map tile and layout data archive for all game locations.
+
+  - name: "mgo.mkf"
+    path: "sdlpal/mgo.mkf"
+    required: true
+    source_ref: "util.c:736, global.c:176"
+    note: >
+      Map graphic object (sprite overlay) archive.
+
+  - name: "pat.mkf"
+    path: "sdlpal/pat.mkf"
+    required: true
+    source_ref: "util.c:736, palette.c:53"
+    note: >
+      Palette data archive for color management.
+
+  - name: "rgm.mkf"
+    path: "sdlpal/rgm.mkf"
+    required: true
+    source_ref: "util.c:736, global.c:181"
+    note: >
+      RGM graphics archive.
+
+  - name: "rng.mkf"
+    path: "sdlpal/rng.mkf"
+    required: true
+    source_ref: "util.c:736, rngplay.c:402"
+    note: >
+      RNG animation/cutscene sequence archive.
+
+  - name: "sss.mkf"
+    path: "sdlpal/sss.mkf"
+    required: true
+    source_ref: "util.c:737, global.c:182"
+    note: >
+      SSS data archive.
+
+  # ================================================================
+  # Message/text data (one of these is required)
+  # util.c:739-741 - msg_files[]
+  # ================================================================
+
+  - name: "word.dat"
+    path: "sdlpal/word.dat"
+    required: true
+    source_ref: "util.c:741, text.c:719, global.c:197"
+    note: >
+      Game text/dialog data file (DOS version). Contains all in-game text
+      strings. Either word.dat or m.msg is needed depending on game version.
+
+  - name: "m.msg"
+    path: "sdlpal/m.msg"
+    required: false
+    source_ref: "util.c:740"
+    note: >
+      Alternative message file format. Used by some game distributions
+      instead of word.dat. The core checks for a configured message file
+      first, then falls back to word.dat.
+
+  # ================================================================
+  # Sound effect files (optional, at least one recommended)
+  # util.c:743 - sound_files[]
+  # ================================================================
+
+  - name: "voc.mkf"
+    path: "sdlpal/voc.mkf"
+    required: false
+    source_ref: "util.c:743, sound.c:969"
+    note: >
+      VOC format sound effects archive (DOS version). One of voc.mkf or
+      sounds.mkf is needed for sound effects.
+
+  - name: "sounds.mkf"
+    path: "sdlpal/sounds.mkf"
+    required: false
+    source_ref: "util.c:743, sound.c:964"
+    note: >
+      WAV format sound effects archive (Win95 version). Alternative to
+      voc.mkf with higher quality audio.
+
+  # ================================================================
+  # Music files (optional, at least one recommended)
+  # util.c:744 - music_files[]
+  # ================================================================
+
+  - name: "midi.mkf"
+    path: "sdlpal/midi.mkf"
+    required: false
+    source_ref: "util.c:744, midi.c:78, midi_tsf.c:68"
+    note: >
+      MIDI music archive. Used when Music type is set to MIDI.
+
+  - name: "mus.mkf"
+    path: "sdlpal/mus.mkf"
+    required: false
+    source_ref: "util.c:744, audio.c:305"
+    note: >
+      RIX/OPL music archive. Default music source for the game. Contains
+      FM synthesizer music data played through OPL emulation.
