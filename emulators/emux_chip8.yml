@@ -1,0 +1,43 @@
+emulator: "emux (CHIP-8)"
+type: libretro
+source: "https://github.com/libretro/emux"
+cores:
+  - emux_chip8
+systems:
+  - chip8
+
+notes: |
+  emux is a multi-system emulator supporting CHIP-8, Game Boy, NES, and
+  Sega Master System as separate libretro cores. The CHIP-8 core
+  (emux_chip8) does not require any external BIOS or firmware files.
+
+  The CHIP-8 architecture has no real BIOS. The standard font/character
+  set (hex digits 0-F, 5 bytes each = 80 bytes) is hardcoded in
+  mach/chip8.c:40-57 as the char_mem[] array. On reset, this font data
+  is copied into the beginning of the 4 KB RAM (address 0x000-0x04F)
+  via memcpy in chip8_reset() at mach/chip8.c:105.
+
+  ROM loading: the game ROM is loaded via file_open(PATH_DATA, ...) in
+  chip8_init() at mach/chip8.c:68-74. On reset, ROM contents are copied
+  into RAM starting at address 0x200 (mach/chip8.c:113). The core
+  accepts .ch8, .bin, and .rom extensions (libretro/Makefile.rules:20).
+
+  Memory map from mach/chip8.c:17-20:
+    0x000-0x04F  font/character data (hardcoded)
+    0x050-0x1FF  unused
+    0x200-0xFFF  program ROM + working RAM
+
+  The libretro frontend retrieves the system directory via
+  RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY (libretro/libretro.c:34) but
+  only uses it as a general config path, not for BIOS loading.
+
+files: []
+
+platform_details:
+  bios_mapping:
+    target: "none"
+    source_ref: "mach/chip8.c:40-57, mach/chip8.c:98-115"
+    notes: |
+      No external BIOS. The 80-byte character font is compiled into the
+      binary as char_mem[] and memcpy'd into RAM[0x000] on every reset.
+      This is standard CHIP-8 behavior -- all interpreters embed the font.

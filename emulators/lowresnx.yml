@@ -1,0 +1,42 @@
+emulator: LowRes NX
+type: libretro
+source: "https://github.com/timoinutilis/lowres-nx"
+cores:
+  - lowresnx
+systems:
+  - lowresnx
+
+notes: |
+  LowRes NX is a fantasy console simulating an imaginary 8/16-bit handheld.
+  It runs programs written in a custom BASIC dialect, loaded as .nx files.
+
+  The libretro port reads game content entirely through the retro_game_info
+  data buffer (need_fullpath = false, libretro_main.c:317). The .nx source
+  code is copied into memory at retro_load_game() (libretro_main.c:490)
+  and compiled by the built-in interpreter.
+
+  The boot intro sequence is compiled from bootIntroSourceCode, a string
+  constant embedded in boot_intro.c -- not loaded from any external file.
+  The core never calls RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY. There is
+  no code path that reads any file from the system directory. No BIOS,
+  firmware, or boot ROM is required.
+
+  The virtual machine provides a 160x128 screen, 64 colors, 256 8x8
+  sprites, 4-channel sound, d-pad + 2 buttons, and a pause button.
+
+files: []
+
+platform_details:
+  cartridge_format:
+    extensions: "nx"
+    source_ref: "libretro_main.c:318"
+    notes: |
+      .nx files contain LowRes NX BASIC source code as plain text.
+      The interpreter compiles the source at load time.
+
+  runtime:
+    source_ref: "core/ (compiled into binary)"
+    notes: |
+      The entire LowRes NX runtime (CPU emulation, video chip, audio chip,
+      BASIC compiler/interpreter, boot intro) is compiled into the core
+      binary. No external dependencies at runtime. Version 1.2.

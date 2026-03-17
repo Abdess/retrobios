@@ -1,0 +1,28 @@
+emulator: OpenLara
+type: libretro
+source: "https://github.com/libretro/OpenLara"
+cores: [openlara]
+systems: [tomb-raider]
+verification: existence
+notes: >
+  Open-source reimplementation of the classic Tomb Raider engine (TR1-TR4).
+  Supports PC (.PHD, .TR2, .TR4), PlayStation (.PSX), and Saturn (.SAT)
+  level formats. The core accepts phd|psx|tr2|sat extensions
+  (retro_get_system_info sets valid_extensions, main.cpp:246).
+  need_fullpath is true - the core resolves sibling game assets relative
+  to the content directory. retro_load_game (main.cpp:602) derives
+  contentDir from the loaded level file path and strips the level/
+  subdirectory if present, then passes a relative levelpath to the engine.
+  Game version is auto-detected by probing for known level files:
+  DATA/GYM.PHD (TR1 PC), PSXDATA/GYM.PSX (TR1 PSX), DATA/GYM.SAT
+  (TR1 Saturn), data/ASSAULT.TR2 (TR2 PC), DATA/ASSAULT.PSX (TR2 PSX),
+  data/JUNGLE.TR2 (TR3 PC), DATA/JUNGLE.PSX (TR3 PSX), data/angkor1.tr4
+  (TR4 PC) - see gameflow.h:1047-1071. Audio tracks are loaded from
+  audio/ subdirectories as .ogg files or cdaudio.wad containers
+  (gameflow.h:1248-1350). The system directory is used only to create
+  a cache folder at {system_dir}/openlara/cache/ (main.cpp:177-197).
+  No BIOS, firmware, or engine data files are required in the system
+  directory. All required data comes from the original game files loaded
+  as content.
+
+files: []

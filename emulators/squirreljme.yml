@@ -1,0 +1,91 @@
+emulator: SquirrelJME
+type: libretro
+source: "https://github.com/SquirrelJME/SquirrelJME"
+cores: [squirreljme]
+systems: [j2me]
+verification: existence
+notes: |
+  Java ME 8 virtual machine for libretro. Runs J2ME MIDlets and older flip-phone games.
+  The core needs a class library JAR placed in RetroArch's system directory.
+  It searches for the JAR using a priority list: versioned-fast first, then versioned,
+  then unversioned variants. The first match wins.
+
+  Search order (from nanocoat/src/boot.c sjme_nvm_romNames[]):
+    1. squirreljme-{version}-fast.jar
+    2. squirreljme-{version}.jar
+    3. squirreljme-{version}-test.jar
+    4. squirreljme-{version}-slow.jar
+    5. squirreljme-{version}-slow-test.jar
+    6. squirreljme-fast.jar
+    7. squirreljme.jar
+    8. squirreljme-test.jar
+    9. squirreljme-slow.jar
+    10. squirreljme-slow-test.jar
+
+  Current version: 0.3.0. All firmware entries are marked optional in the .info file
+  because the core can launch its built-in modeless stars demo without a class library.
+  For actual J2ME software, one of these JARs is required.
+
+  The class library JAR is built from the SquirrelJME project itself (not a third-party
+  BIOS dump). It is open source under MPL-2.0.
+
+files:
+  # -- Versioned JARs (v0.3.0, preferred) --
+
+  - name: "squirreljme-0.3.0-fast.jar"
+    description: "SquirrelJME class library v0.3.0 (fast/optimized build)"
+    required: false
+    bundled: false
+    source_ref: "nanocoat/src/boot.c:102, squirreljme_libretro.info:firmware5"
+    note: "Highest priority versioned JAR. Optimized runtime, recommended for normal use."
+
+  - name: "squirreljme-0.3.0.jar"
+    description: "SquirrelJME class library v0.3.0 (standard build)"
+    required: false
+    bundled: false
+    source_ref: "nanocoat/src/boot.c:103, squirreljme_libretro.info:firmware4"
+    note: "Standard versioned build. Second in search priority."
+
+  - name: "squirreljme-0.3.0-slow.jar"
+    description: "SquirrelJME class library v0.3.0 (slow/interpreter build)"
+    required: false
+    bundled: false
+    source_ref: "nanocoat/src/boot.c:105, squirreljme_libretro.info:firmware6"
+    note: "Pure interpreter mode, no optimizations. Useful for debugging."
+
+  - name: "squirreljme-0.3.0-slow-test.jar"
+    description: "SquirrelJME class library v0.3.0 (slow build with tests)"
+    required: false
+    bundled: false
+    source_ref: "nanocoat/src/boot.c:106, squirreljme_libretro.info:firmware7"
+    note: "Interpreter mode with built-in test suites."
+
+  # -- Unversioned JARs (fallback) --
+
+  - name: "squirreljme-fast.jar"
+    description: "SquirrelJME class library (fast/optimized, unversioned)"
+    required: false
+    bundled: false
+    source_ref: "nanocoat/src/boot.c:107, squirreljme_libretro.info:firmware1"
+    note: "Highest priority unversioned JAR. Renamed from a versioned build."
+
+  - name: "squirreljme.jar"
+    description: "SquirrelJME class library (standard, unversioned)"
+    required: false
+    bundled: false
+    source_ref: "nanocoat/src/boot.c:108, squirreljme_libretro.info:firmware0"
+    note: "Most common filename. If only one JAR is provided, use this name."
+
+  - name: "squirreljme-slow.jar"
+    description: "SquirrelJME class library (slow/interpreter, unversioned)"
+    required: false
+    bundled: false
+    source_ref: "nanocoat/src/boot.c:110, squirreljme_libretro.info:firmware2"
+    note: "Pure interpreter, unversioned."
+
+  - name: "squirreljme-slow-test.jar"
+    description: "SquirrelJME class library (slow with tests, unversioned)"
+    required: false
+    bundled: false
+    source_ref: "nanocoat/src/boot.c:111, squirreljme_libretro.info:firmware3"
+    note: "Interpreter with tests, unversioned."

@@ -1,0 +1,72 @@
+emulator: Boytacean
+type: libretro
+source: "https://github.com/joamag/boytacean"
+cores:
+  - boytacean
+systems:
+  - nintendo-gb
+  - nintendo-gbc
+
+notes: |
+  Boytacean is a Game Boy / Game Boy Color emulator written in Rust by Joao Magalhaes.
+  No external BIOS or boot ROM files are needed.
+
+  The core ships with multiple boot ROMs compiled directly into the binary as static
+  byte arrays in src/data.rs. For DMG mode the default is "DMG Bootix" (an open-source
+  boot ROM forked from SameBoy's Bootix project, 256 bytes). For CGB mode the default
+  is "CGB Boytacean" (a custom open-source CGB boot ROM, 2304 bytes). The original
+  Nintendo DMG, SGB, and CGB boot ROMs are also embedded as static arrays (DMG_BOOT,
+  SGB_BOOT, CGB_BOOT) but the defaults use the open-source replacements.
+
+  The libretro frontend (frontends/libretro/src/core.rs) calls instance.load(true) in
+  retro_load_game(), which routes through load_dmg() or load_cgb() depending on the
+  cartridge header. These call load_boot_static() which copies one of the embedded byte
+  arrays into MMU memory. There is no RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY call, no
+  filesystem access for boot ROMs, and no core option to load external boot ROM files.
+
+  The .info file (boytacean_libretro.info) lists no firmware entries.
+
+  Boot ROM selection defaults:
+  - DMG: BootRom::DmgBootix (gb.rs:1389) - open-source, 256 bytes
+  - CGB: BootRom::CgbBoytacean (gb.rs:1398) - open-source, 2304 bytes
+
+  All boot ROM source code lives in src/boot/, forked from SameBoy and assembled
+  with rgbds. The compiled binaries are then converted to Rust const arrays in data.rs.
+
+files: []
+
+analysis:
+  embedded_boot_roms:
+    dmg_boot:
+      constant: DMG_BOOT
+      size: 256
+      description: "Original Nintendo DMG boot ROM (embedded, not default)"
+      source_ref: "data.rs:14-27"
+    sgb_boot:
+      constant: SGB_BOOT
+      size: 256
+      description: "Super Game Boy boot ROM (embedded, not default)"
+      source_ref: "data.rs:29-42"
+    dmg_bootix:
+      constant: DMG_BOOTIX
+      size: 256
+      description: "Open-source DMG boot ROM from Bootix project (default for DMG)"
+      source_ref: "data.rs:44-57"
+    mgb_bootix:
+      constant: MGB_BOOTIX
+      size: 256
+      description: "Open-source MGB (Game Boy Pocket) boot ROM from Bootix project"
+      source_ref: "data.rs:59-72"
+    cgb_boot:
+      constant: CGB_BOOT
+      size: 2304
+      description: "Original Nintendo CGB boot ROM (embedded, not default)"
+      source_ref: "data.rs:74-175"
+    cgb_boytacean:
+      constant: CGB_BOYTACEAN
+      size: 2304
+      description: "Custom open-source CGB boot ROM (default for CGB)"
+      source_ref: "data.rs:177-275"
+  filesystem_access: false
+  system_directory_used: false
+  boot_rom_source: "src/boot/ (assembly, forked from SameBoy)"

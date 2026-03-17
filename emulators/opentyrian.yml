@@ -1,0 +1,475 @@
+emulator: OpenTyrian
+type: libretro
+source: "https://github.com/trapexit/libretro-opentyrian"
+cores: [opentyrian]
+systems: [tyrian]
+verification: existence
+
+notes: |
+  OpenTyrian is a source port of the DOS vertical scrolling shooter Tyrian,
+  ported to libretro. It loads the Tyrian 2.1 freeware game data directly.
+  Tyrian 1.x, 2.0, and Tyrian 2000 data files are NOT compatible.
+
+  The core's .info file sets supports_no_game = true. The core locates the
+  data directory by probing for tyrian1.lvl in several paths (file.c:33-58):
+    1. custom_data_dir (set via --data= CLI argument, params.c:120)
+    2. TYRIAN_DIR (compile-time constant, Makefile:5-8)
+    3. "data" (relative subdirectory)
+    4. "." (current working directory)
+  The first path containing tyrian1.lvl wins.
+
+  On startup (opentyr.c:270-388), the core:
+    - Scans for episodes by checking tyrian1.lvl through tyrian5.lvl
+      (episodes.c:270-277)
+    - Loads palette data from palette.dat (palette.c:45)
+    - Loads main shape tables from tyrian.shp (sprite.c:669-722, 12 sprite
+      banks packed in one file: fonts, interface, option sprites, game sprites,
+      weapon sprites, etc.)
+    - Loads sound effects from tyrian.snd and voice samples from voices.snd
+      (nortsong.c:112-134, opentyr.c:333)
+    - Loads music from music.mus (loudness.c:196)
+    - Loads help/item data from tyrian.hdt (helptext.c:184, episodes.c:60)
+    - Loads picture data from tyrian.pic (picload.c:32)
+    - Loads credits from tyrian.cdt (mainint.c:2002)
+
+  Each episode loads additional files dynamically (episodes.c:261-263):
+    - tyrianN.lvl (level data, N=1-5)
+    - levelsN.dat (episode level definitions)
+    - cubetxtN.dat (datacube text for story mode)
+
+  The game engine also loads shape files on demand:
+    - shapesX.dat where X is a character from a 34-entry lookup table
+      (lvlmast.c:23-27, tyrian2.c:3079). Characters used:
+      2,4,7,8,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,5,#,V,0,@,3,^,9
+    - newshX.shp loaded via JE_loadCompShapes (sprite.c:469-481) using the
+      same character set plus '~' for destruct mode (destruct.c:569) and
+      '1' for arrow/mouse cursor sprites (mainint.c:493,884,1462) and
+      '6' for explosion sprites (tyrian2.c:771)
+
+  Additional optional files:
+    - tyrianc.shp and voicesc.snd for Christmas mode (opentyr.c:301-309)
+    - tyrend.anm for ending animation (tyrian2.c:2473)
+    - tshp2.pcx loaded during gameplay (tyrian2.c:2757, pcxload.c:25)
+    - estsc.shp for ending sequence sprites (mainint.c:1995)
+    - demo.1 through demo.5 for demo playback (mainint.c:1781-1786)
+
+  All filenames must be lowercase on case-sensitive filesystems. The repo
+  includes lower-script.sh for batch renaming.
+
+  The Tyrian 2.1 freeware data is available at:
+  https://camanis.net/tyrian/tyrian21.zip
+
+  No separate BIOS or firmware is needed. The freeware game data set is the
+  sole system requirement.
+
+files:
+  # -----------------------------------------------------------
+  # Core data files (required, loaded unconditionally at init)
+  # -----------------------------------------------------------
+  - name: "tyrian.shp"
+    system: tyrian
+    description: "Main shape tables (12 sprite banks: fonts, interface, options, game sprites)"
+    required: true
+    source_ref: "sprite.c:669-722 (JE_loadMainShapeTables)"
+
+  - name: "palette.dat"
+    system: tyrian
+    description: "Color palette data (all palettes used by the game)"
+    required: true
+    source_ref: "palette.c:45 (JE_loadPals)"
+
+  - name: "tyrian.hdt"
+    system: tyrian
+    description: "Help and item data (weapons, ships, shields, enemies, help text)"
+    required: true
+    source_ref: "episodes.c:60 (JE_loadItemDat), helptext.c:184 (JE_loadHelpText)"
+
+  - name: "tyrian.pic"
+    system: tyrian
+    description: "Picture data (menu backgrounds, cutscene images)"
+    required: true
+    source_ref: "picload.c:32 (JE_loadPic)"
+
+  - name: "tyrian.cdt"
+    system: tyrian
+    description: "Credits text (encrypted pascal strings)"
+    required: true
+    source_ref: "mainint.c:2002 (JE_drawCredits)"
+
+  - name: "tyrian.snd"
+    system: tyrian
+    description: "Sound effects"
+    required: true
+    source_ref: "nortsong.c:112, opentyr.c:333 (JE_loadSndFile)"
+
+  - name: "voices.snd"
+    system: tyrian
+    description: "Voice samples"
+    required: true
+    source_ref: "nortsong.c:134, opentyr.c:333 (JE_loadSndFile)"
+
+  - name: "music.mus"
+    system: tyrian
+    description: "Music data (all game tracks)"
+    required: true
+    source_ref: "loudness.c:196 (load_music)"
+
+  # -----------------------------------------------------------
+  # Episode level files (episode 1 required, 2-5 optional)
+  # -----------------------------------------------------------
+  - name: "tyrian1.lvl"
+    system: tyrian
+    description: "Episode 1 level data (also used as data directory detection marker)"
+    required: true
+    source_ref: "file.c:51 (data_dir probe), episodes.c:274 (JE_scanForEpisodes)"
+
+  - name: "levels1.dat"
+    system: tyrian
+    description: "Episode 1 level definitions"
+    required: true
+    source_ref: "episodes.c:263 (JE_initEpisode), tyrian2.c:2434"
+
+  - name: "cubetxt1.dat"
+    system: tyrian
+    description: "Episode 1 datacube text (in-game story lore)"
+    required: true
+    source_ref: "episodes.c:262 (JE_initEpisode), game_menu.c:1723"
+
+  - name: "tyrian2.lvl"
+    system: tyrian
+    description: "Episode 2 level data"
+    required: false
+    source_ref: "episodes.c:274"
+
+  - name: "levels2.dat"
+    system: tyrian
+    description: "Episode 2 level definitions"
+    required: false
+    source_ref: "episodes.c:263"
+
+  - name: "cubetxt2.dat"
+    system: tyrian
+    description: "Episode 2 datacube text"
+    required: false
+    source_ref: "episodes.c:262"
+
+  - name: "tyrian3.lvl"
+    system: tyrian
+    description: "Episode 3 level data"
+    required: false
+    source_ref: "episodes.c:274"
+
+  - name: "levels3.dat"
+    system: tyrian
+    description: "Episode 3 level definitions"
+    required: false
+    source_ref: "episodes.c:263"
+
+  - name: "cubetxt3.dat"
+    system: tyrian
+    description: "Episode 3 datacube text"
+    required: false
+    source_ref: "episodes.c:262"
+
+  - name: "tyrian4.lvl"
+    system: tyrian
+    description: "Episode 4 level data"
+    required: false
+    source_ref: "episodes.c:274"
+
+  - name: "levels4.dat"
+    system: tyrian
+    description: "Episode 4 level definitions"
+    required: false
+    source_ref: "episodes.c:263"
+
+  - name: "cubetxt4.dat"
+    system: tyrian
+    description: "Episode 4 datacube text"
+    required: false
+    source_ref: "episodes.c:262"
+
+  - name: "tyrian5.lvl"
+    system: tyrian
+    description: "Episode 5 level data"
+    required: false
+    source_ref: "episodes.c:274"
+
+  - name: "levels5.dat"
+    system: tyrian
+    description: "Episode 5 level definitions"
+    required: false
+    source_ref: "episodes.c:263"
+
+  - name: "cubetxt5.dat"
+    system: tyrian
+    description: "Episode 5 datacube text"
+    required: false
+    source_ref: "episodes.c:262"
+
+  # -----------------------------------------------------------
+  # Shape data files (loaded per-level, character from lookup)
+  # -----------------------------------------------------------
+  - name: "shapes2.dat"
+    system: tyrian
+    description: "Level tileset shapes (character '2')"
+    required: false
+    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
+
+  - name: "shapes3.dat"
+    system: tyrian
+    description: "Level tileset shapes (character '3')"
+    required: false
+    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
+
+  - name: "shapes4.dat"
+    system: tyrian
+    description: "Level tileset shapes (character '4')"
+    required: false
+    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
+
+  - name: "shapes5.dat"
+    system: tyrian
+    description: "Level tileset shapes (character '5')"
+    required: false
+    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
+
+  - name: "shapes7.dat"
+    system: tyrian
+    description: "Level tileset shapes (character '7')"
+    required: false
+    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
+
+  - name: "shapes8.dat"
+    system: tyrian
+    description: "Level tileset shapes (character '8')"
+    required: false
+    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
+
+  - name: "shapes9.dat"
+    system: tyrian
+    description: "Level tileset shapes (character '9')"
+    required: false
+    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
+
+  - name: "shapes0.dat"
+    system: tyrian
+    description: "Level tileset shapes (character '0')"
+    required: false
+    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
+
+  - name: "shapesa.dat"
+    system: tyrian
+    description: "Level tileset shapes (character 'A')"
+    required: false
+    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
+
+  - name: "shapesb.dat"
+    system: tyrian
+    description: "Level tileset shapes (character 'B')"
+    required: false
+    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
+
+  - name: "shapesc.dat"
+    system: tyrian
+    description: "Level tileset shapes (character 'C')"
+    required: false
+    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
+
+  - name: "shapesd.dat"
+    system: tyrian
+    description: "Level tileset shapes (character 'D')"
+    required: false
+    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
+
+  - name: "shapese.dat"
+    system: tyrian
+    description: "Level tileset shapes (character 'E')"
+    required: false
+    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
+
+  - name: "shapesf.dat"
+    system: tyrian
+    description: "Level tileset shapes (character 'F')"
+    required: false
+    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
+
+  - name: "shapesg.dat"
+    system: tyrian
+    description: "Level tileset shapes (character 'G')"
+    required: false
+    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
+
+  - name: "shapesh.dat"
+    system: tyrian
+    description: "Level tileset shapes (character 'H')"
+    required: false
+    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
+
+  - name: "shapesi.dat"
+    system: tyrian
+    description: "Level tileset shapes (character 'I')"
+    required: false
+    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
+
+  - name: "shapesj.dat"
+    system: tyrian
+    description: "Level tileset shapes (character 'J')"
+    required: false
+    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
+
+  - name: "shapesk.dat"
+    system: tyrian
+    description: "Level tileset shapes (character 'K')"
+    required: false
+    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
+
+  - name: "shapesl.dat"
+    system: tyrian
+    description: "Level tileset shapes (character 'L')"
+    required: false
+    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
+
+  - name: "shapesm.dat"
+    system: tyrian
+    description: "Level tileset shapes (character 'M')"
+    required: false
+    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
+
+  - name: "shapesn.dat"
+    system: tyrian
+    description: "Level tileset shapes (character 'N')"
+    required: false
+    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
+
+  - name: "shapeso.dat"
+    system: tyrian
+    description: "Level tileset shapes (character 'O')"
+    required: false
+    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
+
+  - name: "shapesp.dat"
+    system: tyrian
+    description: "Level tileset shapes (character 'P')"
+    required: false
+    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
+
+  - name: "shapesq.dat"
+    system: tyrian
+    description: "Level tileset shapes (character 'Q')"
+    required: false
+    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
+
+  - name: "shapesr.dat"
+    system: tyrian
+    description: "Level tileset shapes (character 'R')"
+    required: false
+    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
+
+  - name: "shapess.dat"
+    system: tyrian
+    description: "Level tileset shapes (character 'S')"
+    required: false
+    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
+
+  - name: "shapest.dat"
+    system: tyrian
+    description: "Level tileset shapes (character 'T')"
+    required: false
+    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
+
+  - name: "shapesu.dat"
+    system: tyrian
+    description: "Level tileset shapes (character 'U')"
+    required: false
+    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
+
+  - name: "shapesv.dat"
+    system: tyrian
+    description: "Level tileset shapes (character 'V')"
+    required: false
+    source_ref: "tyrian2.c:3079, lvlmast.c:23-27"
+
+  # -----------------------------------------------------------
+  # Compressed shape files (newshX.shp, loaded per-level)
+  # -----------------------------------------------------------
+  - name: "newsh1.shp"
+    system: tyrian
+    description: "Compressed sprites (arrows, mouse cursor)"
+    required: false
+    source_ref: "mainint.c:493,884,1462 (JE_loadCompShapes '1')"
+
+  - name: "newsh6.shp"
+    system: tyrian
+    description: "Compressed sprites (explosions)"
+    required: false
+    source_ref: "tyrian2.c:771 (JE_loadCompShapes '6')"
+
+  - name: "newsh~.shp"
+    system: tyrian
+    description: "Compressed sprites (destruct mode)"
+    required: false
+    source_ref: "destruct.c:569 (JE_loadCompShapes '~')"
+
+  # -----------------------------------------------------------
+  # Optional / special mode files
+  # -----------------------------------------------------------
+  - name: "tyrianc.shp"
+    system: tyrian
+    description: "Christmas mode shape tables (replaces tyrian.shp at Xmas)"
+    required: false
+    source_ref: "opentyr.c:301-309"
+
+  - name: "voicesc.snd"
+    system: tyrian
+    description: "Christmas mode voice samples (replaces voices.snd at Xmas)"
+    required: false
+    source_ref: "opentyr.c:301,333"
+
+  - name: "tyrend.anm"
+    system: tyrian
+    description: "Ending animation sequence"
+    required: false
+    source_ref: "tyrian2.c:2473 (JE_playAnim)"
+
+  - name: "tshp2.pcx"
+    system: tyrian
+    description: "Additional ship graphics (PCX image)"
+    required: false
+    source_ref: "tyrian2.c:2757, pcxload.c:25-29"
+
+  - name: "estsc.shp"
+    system: tyrian
+    description: "Ending sequence character sprites"
+    required: false
+    source_ref: "mainint.c:1995 (load_sprites_file EXTRA_SHAPES)"
+
+  - name: "demo.1"
+    system: tyrian
+    description: "Demo replay file 1"
+    required: false
+    source_ref: "mainint.c:1781-1786"
+
+  - name: "demo.2"
+    system: tyrian
+    description: "Demo replay file 2"
+    required: false
+    source_ref: "mainint.c:1781-1786"
+
+  - name: "demo.3"
+    system: tyrian
+    description: "Demo replay file 3"
+    required: false
+    source_ref: "mainint.c:1781-1786"
+
+  - name: "demo.4"
+    system: tyrian
+    description: "Demo replay file 4"
+    required: false
+    source_ref: "mainint.c:1781-1786"
+
+  - name: "demo.5"
+    system: tyrian
+    description: "Demo replay file 5"
+    required: false
+    source_ref: "mainint.c:1781-1786"

@@ -1,0 +1,78 @@
+emulator: XRick
+type: libretro
+source: "https://github.com/libretro/xrick-libretro"
+cores:
+  - xrick
+systems:
+  - rick-dangerous
+
+notes: |
+  XRick is an open-source reimplementation of the Rick Dangerous engine (Core Design, 1989),
+  ported to libretro. It is not a general-purpose emulator; it only plays Rick Dangerous.
+
+  The core sets need_fullpath = true, valid_extensions = "*|zip", and supports launching
+  without content (RETRO_ENVIRONMENT_SET_SUPPORT_NO_GAME = true, libretro-core.c:93-97).
+
+  Game data handling works in two modes (retro_load_game, libretro-core.c:312-360):
+    1. Content provided: the content path is passed directly as the -data argument
+       (line 318: snprintf "xrick" "-data" "%s"). Content can be data.zip or a directory.
+    2. No content (standalone): the core builds the path {system_dir}/xrick/data.zip
+       using fill_pathname_join_special_ext(RETRO_DIR, "xrick", "data", ".zip") at lines
+       324-326. If this file is missing, a "game files missing" error is displayed (line 337)
+       and loading fails.
+
+  The fallback data path at line 359 confirms the expected location:
+    snprintf(RPATH, ... "xrick" "-data" "%s/xrick/data.zip", RETRO_DIR)
+
+  All game graphics, maps, tile data, entity tables, and screen layouts are compiled directly
+  into the binary from dat_*.c source files (dat_ents.c, dat_maps.c, dat_picsPC.c,
+  dat_picsST.c, dat_screens.c, dat_snd.c, dat_spritesPC.c, dat_spritesST.c, dat_tilesPC.c,
+  dat_tilesST.c). Only the sound files are external.
+
+  data.zip contains 29 WAV files in a sounds/ subdirectory: sound effects (bombshht, bonus,
+  box, bullet, crawl, die, ent0-ent8, explode, gameover, jump, pad, sbonus1, sbonus2, stick,
+  walk) and music tracks (tune0 through tune5). The data.c module handles opening files from
+  either a .zip archive (via unzip.c) or a flat directory, selected by extension detection
+  (data.c:56-73).
+
+  xrick.c:23 shows the hardcoded fallback: data_setpath("data.zip") when no -data argument
+  is provided.
+
+  system_dir is obtained via RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY (libretro-core.c:185-189),
+  falling back to "." if unavailable.
+
+  The data.zip file ships in the xrick-libretro repository root and is the original xrick
+  0.21212 game data release from 2002 by BigOrno.
+
+files:
+  - name: "xrick/data.zip"
+    system: rick-dangerous
+    description: "Rick Dangerous sound data (29 WAV files: sfx and music tracks)"
+    required: true
+    size: 1457440
+    md5: "a471e64e9f69afbe59c10cc94ed1b184"
+    sha1: "ecfc092fe6371dbf38e238a8ba5f90785b5db52d"
+    source_ref: "libretro-core.c:324-326 (path construction), libretro-core.c:328-357 (missing file error), libretro-core.c:359 (final path confirmation)"
+    notes: "Placed in system/xrick/data.zip. Contains sounds/ directory with 29 WAV files from the original xrick 0.21212 release. Without this file, standalone mode fails with 'XRick game files missing from frontend system directory'. Ships in the libretro repo root."
+
+analysis:
+  content_type: game_engine
+  content_extensions: ["*", "zip"]
+  system_directory_used: true
+  supports_no_content: true
+  data_files_location: "system/xrick/data.zip (standalone) or content path (with content)"
+  compiled_in_data:
+    - "dat_ents.c (entity/NPC tables)"
+    - "dat_maps.c (level map data)"
+    - "dat_picsPC.c, dat_picsST.c (background images, PC and Atari ST)"
+    - "dat_screens.c (screen layout data)"
+    - "dat_snd.c (sound metadata/indices)"
+    - "dat_spritesPC.c, dat_spritesST.c (sprite graphics)"
+    - "dat_tilesPC.c, dat_tilesST.c (tile graphics)"
+  external_data:
+    sounds:
+      - "bombshht.wav, bonus.wav, box.wav, bullet.wav, crawl.wav, die.wav"
+      - "ent0.wav through ent8.wav (9 entity sound effects)"
+      - "explode.wav, gameover.wav, jump.wav, pad.wav"
+      - "sbonus1.wav, sbonus2.wav, stick.wav, walk.wav"
+      - "tune0.wav through tune5.wav (6 music tracks)"

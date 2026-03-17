@@ -1,0 +1,44 @@
+emulator: JAXE
+type: libretro
+source: "https://github.com/libretro/jaxe"
+cores:
+  - jaxe
+systems:
+  - chip8
+
+notes: |
+  JAXE is a CHIP-8, SCHIP, and XO-CHIP emulator by Kurtis Dinelle,
+  ported to libretro. Supports .ch8, .sc8, .xo8, and .hc8 ROMs.
+
+  No external BIOS or font files required. The core has firmware_count = 0
+  in jaxe_libretro.info and never calls RETRO_ENVIRONMENT_GET_SYSTEM_DIR.
+
+  Font data is hardcoded in chip8_load_font() at src/chip8.c:119-168.
+  The standard 4x5 hex font (0-F, 80 bytes) is loaded at address 0x000,
+  and the SCHIP 8x10 big hex font (0-F, 160 bytes) follows immediately
+  after at address 0x050. Both are written directly into chip8->RAM[]
+  during chip8_reset() -> chip8_load_font().
+
+  Memory layout from include/chip8.h:42-45:
+    0x000-0x04F  standard font (NUM_FONT_BYTES = 80)
+    0x050-0x0EF  big font (NUM_BIG_FONT_BYTES = 160)
+    0x0F0-0x0FF  stack (STACK_SIZE = 16)
+    0x100-0x10F  audio buffer (AUDIO_BUF_SIZE = 16)
+    0x200+       program ROM (PC_START_ADDR_DEFAULT)
+
+  The fonts/dbgfont.ttf file in the repo is only used by the standalone
+  build (src/main.c:19) for the SDL debugger overlay, not by the
+  libretro core.
+
+files: []
+
+platform_details:
+  bios_mapping:
+    target: "none"
+    source_ref: "jaxe_libretro.info:13, src/chip8.c:119-168"
+    notes: |
+      All font/sprite data is compiled into the binary. The standard
+      CHIP-8 hex font (5 bytes per character, 16 characters) and the
+      SCHIP big hex font (10 bytes per character, 16 characters) are
+      stored as a static array in chip8_load_font() and copied into
+      RAM on every reset. No file I/O is performed for BIOS or fonts.

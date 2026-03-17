@@ -1,0 +1,45 @@
+emulator: FAKE-08
+type: libretro
+source: "https://github.com/jtothebell/fake-08"
+cores:
+  - fake08
+systems:
+  - pico8
+
+notes: |
+  FAKE-08 is an open-source PICO-8 compatible runtime for running .p8 and
+  .p8.png cartridges on platforms where the official PICO-8 binary is not
+  available (3DS, Vita, Switch, Wii U, various handhelds).
+
+  The core retrieves RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY in
+  retro_set_environment() (libretro.cpp:162-163) but never uses the value.
+  No file is loaded from the system directory. The PICO-8 boot sequence,
+  global Lua functions, and default cart menu are compiled directly into the
+  binary as string constants (p8GlobalLuaFunctions.h, DefaultCart.h).
+
+  When no ROM is passed (supports_no_game = true), the core queues its
+  built-in BIOS cart "__FAKE08-BIOS.p8" (libretro.cpp:751). This is not
+  an external file -- it is generated internally by the VM.
+
+  The core accepts .p8 (text) and .png (cartridge-as-image) formats
+  (libretro.cpp:258). Content is loaded either via the libretro data buffer
+  or full path depending on the _NEED_FULL_PATH_ compile flag.
+
+files: []
+
+platform_details:
+  cartridge_format:
+    extensions: "p8, png"
+    source_ref: "platform/libretro/libretro.cpp:258"
+    notes: |
+      .p8 is the PICO-8 text cartridge format containing Lua code, gfx,
+      gff, map, sfx, and music sections. .png is the cartridge-as-image
+      format where cart data is steganographically encoded in the image.
+
+  runtime:
+    source_ref: "source/vm.h, source/p8GlobalLuaFunctions.h"
+    notes: |
+      The FAKE-08 VM reimplements the PICO-8 API (128x128 screen, 16 colors,
+      4-channel audio, Lua scripting) entirely in C++. The built-in BIOS
+      provides a cart browser and error display. Audio runs at 22050 Hz
+      with save state support via custom serialization (libretro.cpp:517-736).
