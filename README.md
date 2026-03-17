@@ -2,7 +2,7 @@
 
 Complete, verified collection of BIOS, firmware, and system files for retrogaming emulators - RetroArch, Batocera, Recalbox, Lakka, RetroPie, and more. Every file checked against official checksums from [libretro System.dat](https://github.com/libretro/libretro-database), [batocera-systems](https://github.com/batocera-linux/batocera.linux), and [Recalbox es_bios.xml](https://gitlab.com/recalbox/recalbox).
 
-> **5285** files | **3457.5 MB** | Last updated: 2026-03-17T11:35:52Z
+> **5296** files | **3464.2 MB** | Last updated: 2026-03-17T11:44:51Z
 >
 > PlayStation, PS2, Nintendo DS, Game Boy, GBA, Dreamcast, Saturn, Neo Geo, Mega CD, PC Engine, MSX, Amiga, Atari ST, ZX Spectrum, Arcade (MAME/FBNeo), and 50+ systems.
 
@@ -68,7 +68,7 @@ python scripts/generate_pack.py --all --include-archived --output-dir ~/Download
 | Apple/Macintosh II | 10 | 50.3 MB |
 | Arcade/Arcade | 121 | 112.8 MB |
 | Arcade/FBNeo | 31 | 29.6 MB |
-| Arcade/MAME | 1070 | 2151.0 MB |
+| Arcade/MAME | 1073 | 2151.1 MB |
 | Atari/400-800 | 8 | 100.5 KB |
 | Atari/5200 | 1 | 2.0 KB |
 | Atari/7800 | 4 | 40.0 KB |
@@ -113,7 +113,7 @@ python scripts/generate_pack.py --all --include-archived --output-dir ~/Download
 | Mattel/Aquarius | 4 | 66.2 KB |
 | Mattel/Intellivision | 8 | 76.5 KB |
 | Microsoft/Chihiro | 1 | 256.0 KB |
-| Microsoft/MSX | 318 | 13.3 MB |
+| Microsoft/MSX | 323 | 14.7 MB |
 | Microsoft/Xbox | 2 | 768 B |
 | NEC/PC Engine | 10 | 2.0 MB |
 | NEC/PC-6001 | 4 | 188.0 KB |
@@ -125,7 +125,7 @@ python scripts/generate_pack.py --all --include-archived --output-dir ~/Download
 | Nintendo/Game Boy | 3 | 768 B |
 | Nintendo/Game Boy Advance | 2 | 32.0 KB |
 | Nintendo/Game Boy Color | 4 | 9.0 KB |
-| Nintendo/GameCube | 63 | 12.6 MB |
+| Nintendo/GameCube | 64 | 12.6 MB |
 | Nintendo/NES | 3 | 1010.1 KB |
 | Nintendo/Nintendo 64DD | 15 | 14.5 MB |
 | Nintendo/Nintendo DS | 11 | 5.5 MB |
@@ -135,6 +135,7 @@ python scripts/generate_pack.py --all --include-archived --output-dir ~/Download
 | Nintendo/SuFami Turbo | 1 | 256.0 KB |
 | Nintendo/Super Game Boy | 8 | 1.6 MB |
 | Oric/Oric | 21 | 181.1 KB |
+| Other/xrick | 1 | 1.4 MB |
 | Palm/Palm | 5 | 38.3 MB |
 | Philips/CD-i | 6 | 2.7 MB |
 | Philips/Videopac+ | 3 | 3.0 KB |
@@ -185,7 +186,7 @@ These are large asset packs required by specific cores. They are included in the
 |------|-------|------|
 | [RPG Maker/easyrpg](bios/RPG%20Maker/easyrpg) | 774 | 18.3 MB |
 | [RPG Maker/mkxp-z](bios/RPG%20Maker/mkxp-z) | 1761 | 225.6 MB |
-| [ScummVM/ScummVM](bios/ScummVM/ScummVM) | 225 | 124.8 MB |
+| [ScummVM/ScummVM](bios/ScummVM/ScummVM) | 226 | 128.6 MB |
 
 ## BIOS File Listing
 
@@ -1292,6 +1293,10 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `ae5df95815e83f646815798cb4bb1b454fde4dbd`
   - MD5: `7175cddafebedf82bc9ff45d2cfe4056`
   - CRC32: `c5832dc2`
+- **[3do.xml](bios/Arcade/MAME/hash/3do.xml)** (3,719 bytes)
+  - SHA1: `b72be08cc1949cdc29e83454a0862f1b62b47578`
+  - MD5: `b97ac00615753261f44fd78d1ea9feab`
+  - CRC32: `2928ff45`
 - **[3do_m2.xml](bios/Arcade/MAME/hash/3do_m2.xml)** (1,849 bytes)
   - SHA1: `76c4888e7892adb8f6761ffe1f41a58bf13f7e91`
   - MD5: `247231a6722888d6447ba2c770dd0034`
@@ -2555,6 +2560,10 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `8aeb0ba09e56a1a2f6ccdeae226161ddf5d01fe8`
   - MD5: `3350ddc4fa7459fe222ecdc8dac59755`
   - CRC32: `baa3ce82`
+- **[generic_cdrom.xml](bios/Arcade/MAME/hash/generic_cdrom.xml)** (52,073 bytes)
+  - SHA1: `0359a21a9ba8a486cdcdccaefb17777e039debad`
+  - MD5: `970b04a54ff4189816e744bb71b0fcf5`
+  - CRC32: `43a7d2b8`
 - **[generic_flop_525.xml](bios/Arcade/MAME/hash/generic_flop_525.xml)** (3,128 bytes)
   - SHA1: `b89189bfd7e94e6e6d0090bd240b66f0cb3734b8`
   - MD5: `1f91365563b32c89b68e924ab6902a89`
@@ -3277,6 +3286,10 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `ddf6aa7fed0347300d1c275a60942d83fc0a68d1`
   - MD5: `ce32f7b5e64c584d4609184190c631fa`
   - CRC32: `99083ef6`
+- **[k28o.xml](bios/Arcade/MAME/hash/k28o.xml)** (827 bytes)
+  - SHA1: `c8e1b348aee1ef0b600b6951f88182a9796a8aef`
+  - MD5: `2edef7927f5caf45333da537a1ddb99a`
+  - CRC32: `fe9dcd57`
 - **[kaypro.xml](bios/Arcade/MAME/hash/kaypro.xml)** (8,630 bytes)
   - SHA1: `cb2a8dfe670854fc5b2280539263cb34ee87bf1d`
   - MD5: `0f428c7d4d0ba69063dc614d2f60b649`
@@ -7092,6 +7105,10 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `f1525de4e0b60a6687156c2a96f8a8b2044b6c56`
   - MD5: `318b6aa76da71c54ccad7734356e1902`
   - CRC32: `549f1d90`
+- **[colecodb.xml](bios/Microsoft/MSX/Databases/colecodb.xml)** (158,187 bytes)
+  - SHA1: `7a812f277cf2440421044a7acde1c47abd01951e`
+  - MD5: `2db63ed28d016e85817717a267906d46`
+  - CRC32: `bfcb1ad5`
 - **[config.ini](bios/Microsoft/MSX/Machines/COL%20-%20Bit%20Corporation%20Dina/config.ini)** (421 bytes)
   - SHA1: `33c1dbf723ddff0994aa56d7607e5b0e9757c9c5`
   - MD5: `496751f95950f4ba240479e454f9bf00`
@@ -7936,10 +7953,18 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `15df3303fcb0204c4f9cffe371220b66b65b944d`
   - MD5: `afa4b5f2944334f84971af814a24bd5a`
   - CRC32: `d4e1a29b`
+- **[msxcaswavdb.xml](bios/Microsoft/MSX/Databases/msxcaswavdb.xml)** (819,679 bytes)
+  - SHA1: `a9b28b650d2104cd06cef55e4c1de25e1ea6ff8d`
+  - MD5: `e68b6f7593e06fc649e6a2c702641a60`
+  - CRC32: `ae40504a`
 - **[msxromdb.xml](bios/Microsoft/MSX/Databases/msxromdb.xml)** (930,986 bytes)
   - SHA1: `573aa830b7bef4452808b40df883469907db2fed`
   - MD5: `c0a94965701431e0df29949189e424dd`
   - CRC32: `ed4c6720`
+- **[msxsysromdb.xml](bios/Microsoft/MSX/Databases/msxsysromdb.xml)** (157,542 bytes)
+  - SHA1: `4053159367d4c65c559cd500fdd05c9717dbfe06`
+  - MD5: `b4db7d459c1a819e09739a404dcc7bfc`
+  - CRC32: `c89859f5`
 - **[nms8245_disk.rom](bios/Microsoft/MSX/share/systemroms/nms8245_disk.rom)** (16,384 bytes)
   - SHA1: `c3f3ca454d66a0bc791f1d4b60e6857b44eb8755`
   - MD5: `3525ea046ddedc66991790eeae32acfd`
@@ -7976,6 +8001,10 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `665d805f96616e1037f1823050657b7849899283`
   - MD5: `281809cafe63437fc4bffb3033fbd0db`
   - CRC32: `a5d0c0b9`
+- **[segadb.xml](bios/Microsoft/MSX/Databases/segadb.xml)** (82,318 bytes)
+  - SHA1: `ddc2b4877813256de3439d54fc5f474bd64c3996`
+  - MD5: `2bcd219deccab45469eb39759aa549be`
+  - CRC32: `b607ef94`
 - **[sf7000.rom](bios/Microsoft/MSX/Machines/SEGA%20-%20SF-7000/sf7000.rom)** (8,192 bytes)
   - SHA1: `77339a6db2593aadc638bed77b8e9bed5d9d87e3`
   - MD5: `561b362f9aa4cbcb240461abf83c2e0d`
@@ -8000,6 +8029,10 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `3f16d5513ad35692488ae7d864f660e76c6e8ed3`
   - MD5: `6a5536c1eb4f0477c4f76488cd8ca3ad`
   - CRC32: `daea8956`
+- **[svidb.xml](bios/Microsoft/MSX/Databases/svidb.xml)** (261,070 bytes)
+  - SHA1: `d83168b0b5abf8df0ceb8a147b6708823957a71a`
+  - MD5: `1e3ecfda27d503596de9e2e810dc3cac`
+  - CRC32: `db3dadd4`
 - **[vg8020_basic-bios1.rom](bios/Microsoft/MSX/share/systemroms/vg8020_basic-bios1.rom)** (32,768 bytes)
   - SHA1: `829c00c3114f25b3dae5157c0a238b52a3ac37db`
   - MD5: `a0452dbf5ace7d2e49d0a8029efed09a`
@@ -8571,6 +8604,10 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `8feaa90692164652141b4f63105e39bb637ac54b`
   - MD5: `25767bb1fe735310ae10c1ced1d83add`
   - CRC32: `bd9c556a`
+- **[dsp_coef.bin](bios/Nintendo/GameCube/dolphin-emu/Sys/GC/dsp_coef.bin)** (4,096 bytes)
+  - SHA1: `c3f1ee843f08cd7d58ea6f9166d25ee8e12280a2`
+  - MD5: `246b4a629edeb193341fade6b965985f`
+  - CRC32: `8209b868`
 - **[dsp_rom.bin](bios/Nintendo/GameCube/Sys/GC/dsp_rom.bin)** (8,192 bytes)
   - SHA1: `f4f683a49d7eb4155566f793f2c1c27e90159992`
   - MD5: `e7af9084609780d7252cd932f93444a6`
@@ -9142,6 +9179,13 @@ These are large asset packs required by specific cores. They are included in the
   - SHA1: `86fc8dc0932f983efa199e31ae05a4424772f959`
   - MD5: `9a432244d9ee4a49e8ddcde64af94e05`
   - CRC32: `aa727c5d`
+
+### Other/xrick
+
+- **[data.zip](bios/Other/xrick/data.zip)** (1,457,440 bytes)
+  - SHA1: `ecfc092fe6371dbf38e238a8ba5f90785b5db52d`
+  - MD5: `a471e64e9f69afbe59c10cc94ed1b184`
+  - CRC32: `74b76447`
 
 ### Palm/Palm
 
@@ -11182,4 +11226,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on submitting BIOS files.
 
 This repository provides BIOS files for personal backup and archival purposes.
 
-*Auto-generated on 2026-03-17T11:35:52Z*
+*Auto-generated on 2026-03-17T11:44:51Z*
