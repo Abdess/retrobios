@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-03-17T13:43:36Z",
+  "generated_at": "2026-03-17T14:13:11Z",
   "total_files": 5352,
-  "total_size": 4876416579,
+  "total_size": 4877068202,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -13071,23 +13071,23 @@
       "sha256": "eba1ef3c2e9efb4a0331cb6c9c45a013d89b43ade7b30659981477e5aad9e99b",
       "crc32": "f444d57f"
     },
-    "afed11dd6be59c672e35f2f416290232a05b1983": {
+    "9e042597360e6090687b040364101a64c9f54a89": {
       "path": "bios/Dragon/Dragon/dragon32.zip",
       "name": "dragon32.zip",
-      "size": 21208,
-      "sha1": "afed11dd6be59c672e35f2f416290232a05b1983",
-      "md5": "77cdf3264e81884e876f438d2553eaca",
-      "sha256": "ad18fea727b417c30d30053f40375624af533fc835ed0f7f1820ccd466abbfdc",
-      "crc32": "7909413a"
+      "size": 34983,
+      "sha1": "9e042597360e6090687b040364101a64c9f54a89",
+      "md5": "aa09c353c4759d9eca54ac6d47f4cea1",
+      "sha256": "82b52e5de5e5b9d206ebbb3775df0939b8f896735108de46c9e93d24c546d89f",
+      "crc32": "fd24e70a"
     },
-    "613223e2674d44a6b6cdc9662785fe4b7fe9cb60": {
+    "d82a22cc7d31620983a8c62d400be37f9b18bb9e": {
       "path": "bios/Dragon/Dragon/dragon64.zip",
       "name": "dragon64.zip",
-      "size": 34962,
-      "sha1": "613223e2674d44a6b6cdc9662785fe4b7fe9cb60",
-      "md5": "c428fb2eca69e4e7203314ab911179f0",
-      "sha256": "fc7f406bd463d45f44065d68b367f514638fd2fc57c9d3eae27f79fbe2fab9bc",
-      "crc32": "81fd2649"
+      "size": 49052,
+      "sha1": "d82a22cc7d31620983a8c62d400be37f9b18bb9e",
+      "md5": "e71131dece02e184c7d54dae50c4cabf",
+      "sha256": "2047b30aae051d322c47464e4684e27cf05d89a5a6cfdcc92b841da7a241c0e8",
+      "crc32": "5d04994a"
     },
     "ef157016386ed463374de6bac84d1f8ce654ed80": {
       "path": "bios/Dragon/Dragon/sdose6.rom",
@@ -13611,14 +13611,14 @@
       "sha256": "b4dd3642932193cc42bca0ee98bf30004888ca4850d69e85023b8baacfba1d1d",
       "crc32": "a5751b99"
     },
-    "f3151d3307c6ff36c0562dac00b4ce195d3157d2": {
+    "f3f2a11f3ecd91cd62d74c3acfad68a4cc6ddbd9": {
       "path": "bios/Id Software/Wolfenstein 3D/.variants/ecwolf.pk3",
       "name": "ecwolf.pk3",
       "size": 187571,
-      "sha1": "f3151d3307c6ff36c0562dac00b4ce195d3157d2",
-      "md5": "f1c29d2dc0a1a48a0c007dbb38801950",
-      "sha256": "f0d7707be0fb519b829a5be3442387fb348775afc77f9403b6c161d6a5984e16",
-      "crc32": "88eab7e1"
+      "sha1": "f3f2a11f3ecd91cd62d74c3acfad68a4cc6ddbd9",
+      "md5": "dbaa5c4e20a11000d1c4db3a2a28f374",
+      "sha256": "599f0efb2d29363e8365319b74ed94d0cdab779ffa4d97190f46bebcca3410c7",
+      "crc32": "7f9a2c1e"
     },
     "9259b87edfe9b9f6d0749788a75a6ccf158f50aa": {
       "path": "bios/Id Software/Wolfenstein 3D/ecwolf.pk3",
@@ -13647,14 +13647,14 @@
       "sha256": "d6b60c4196b9bb51f4bf779bad1c27af47389514de87fdb98d8131c941ba6341",
       "crc32": "35930faa"
     },
-    "5f3f22ccca001c5d992b398a2c47a45510f6316c": {
+    "eea6d4c69717af589ea36501e00fcb32ac91a5ac": {
       "path": "bios/Java/J2ME/.variants/freej2me-lr.jar",
       "name": "freej2me-lr.jar",
-      "size": 518483,
-      "sha1": "5f3f22ccca001c5d992b398a2c47a45510f6316c",
-      "md5": "c575f2dd51217ce82fd925b2a27a857c",
-      "sha256": "caa3918d20aa9ae4d393cb06c9158f846e134a6ef0aabb0a513d453bfd2d61ef",
-      "crc32": "30464652"
+      "size": 1107828,
+      "sha1": "eea6d4c69717af589ea36501e00fcb32ac91a5ac",
+      "md5": "a6f31483d1da4558cc19025e21f95c1d",
+      "sha256": "358992e0b71b5b6a370c5f07b6fbd050fda3cb1fde7256bf818f1bbe20245dd4",
+      "crc32": "5a79e0e1"
     },
     "fb231192894e2fd17a5799fbbdf86a4696951bce": {
       "path": "bios/Java/J2ME/freej2me-lr.jar",
@@ -47820,32 +47820,32 @@
       "sha256": "577cd77780d04e0ec7a22b3004160ee5df3224e537e2507f71d6184cff7d8985",
       "crc32": "34e1d87e"
     },
-    "3795bf93d977f2625e452f8caf6a5371eff2f701": {
+    "a9b8931c42303e8dfb475112fc18ff200b7252ce": {
       "path": "bios/Tandy/TRS-80/trs80.zip",
       "name": "trs80.zip",
-      "size": 4157,
-      "sha1": "3795bf93d977f2625e452f8caf6a5371eff2f701",
-      "md5": "4eed271d76c7bc19baf7f15ca057a753",
-      "sha256": "ca5e2550c9c097e23a1828ae7f4338f7962520335c83b78710a89f316d4d2831",
-      "crc32": "e2510704"
+      "size": 14558,
+      "sha1": "a9b8931c42303e8dfb475112fc18ff200b7252ce",
+      "md5": "a631f17e1b041a4cf66a8676582dd234",
+      "sha256": "bc508eeb02be884256a8b12ab4eb28baf91dfea54f1abbc417c771d05a06a712",
+      "crc32": "6127564d"
     },
-    "8cdf51015a0bac500d9a1d3969fa47ebec4144f6": {
+    "b804a031c8db6def59e077a4b6938dcac25093d7": {
       "path": "bios/Tandy/TRS-80/trs80m3.zip",
       "name": "trs80m3.zip",
-      "size": 20844,
-      "sha1": "8cdf51015a0bac500d9a1d3969fa47ebec4144f6",
-      "md5": "dde75b2ef3f7f6ed90364e4564703c1d",
-      "sha256": "cb70c9eb80135f399c3a068d2d91fb763af362218298a8e04a52168c0d97f817",
-      "crc32": "4d403b13"
+      "size": 32854,
+      "sha1": "b804a031c8db6def59e077a4b6938dcac25093d7",
+      "md5": "9e2b8b6612c3431e03cec5305571a598",
+      "sha256": "3c344819aebc5e58c34a025ec2ef079066c88a4d43aef67876e5871139a61672",
+      "crc32": "e09330c8"
     },
-    "300b3b1d52fbf833ff1cedb95e9541e76aa224c2": {
+    "bc58ac28be4854fb198b895c7fd999f599b5a961": {
       "path": "bios/Tandy/TRS-80/trs80m4.zip",
       "name": "trs80m4.zip",
-      "size": 13369,
-      "sha1": "300b3b1d52fbf833ff1cedb95e9541e76aa224c2",
-      "md5": "8491bd4f3fcaf5aa5a00bce5e9b735eb",
-      "sha256": "9ddb0d0f91eaf655ea64bfedc3ef0c3470952403769e16a53397bd81b91bda54",
-      "crc32": "983e55f2"
+      "size": 25371,
+      "sha1": "bc58ac28be4854fb198b895c7fd999f599b5a961",
+      "md5": "71f71d32cbb5e2fcc7d11e8735c97b6e",
+      "sha256": "24a286c1818d14c003d9aec26bf2a1fe307a173fc2731e4757583a1c0b96d78b",
+      "crc32": "6377a7f8"
     },
     "497eea6e0ed80501ca3beee714d71a5815495b07": {
       "path": "bios/Tandy/TRS-80/trs80m4p.zip",
@@ -49626,8 +49626,8 @@
       "ee6f24d893a52b8efea9f787855456b5": "e72ca68061267692b01034005c2804aeee8e5cd0",
       "56f1b97314e4ca82491c465bb887059e": "73ae74978a78ec2b97ebb1b0c808238779529bfa",
       "35de5d28da507ebb213a26e04241d940": "90164ea50fe3ac4c118b502438d2e5015a588398",
-      "77cdf3264e81884e876f438d2553eaca": "afed11dd6be59c672e35f2f416290232a05b1983",
-      "c428fb2eca69e4e7203314ab911179f0": "613223e2674d44a6b6cdc9662785fe4b7fe9cb60",
+      "aa09c353c4759d9eca54ac6d47f4cea1": "9e042597360e6090687b040364101a64c9f54a89",
+      "e71131dece02e184c7d54dae50c4cabf": "d82a22cc7d31620983a8c62d400be37f9b18bb9e",
       "9d85e6b7133f915c021156f4b9cdb512": "ef157016386ed463374de6bac84d1f8ce654ed80",
       "167f409b7a4b992faabb784b061ab4c6": "8958dc06ee15a505e4b5729c8acf9db0f1f066fe",
       "887cad2abef60f106af15386ff75f74c": "1731b9aca99e17b0fc3189e33bb7326318fecd57",
@@ -49686,11 +49686,11 @@
       "5b69f69a5ec56588b92bdc138a3cc3af": "bf4aed0b09bae6dfe2153a6f3bd91e9146705073",
       "4239d6f44a0d78d27c69f9b95885f48e": "a89263689f19e046dab6dadea24c5d07270548a6",
       "72ae1b47820fcc93cc0df9c428d0face": "5f4aed208301449c2e9514edfd325fe9dead76fa",
-      "f1c29d2dc0a1a48a0c007dbb38801950": "f3151d3307c6ff36c0562dac00b4ce195d3157d2",
+      "dbaa5c4e20a11000d1c4db3a2a28f374": "f3f2a11f3ecd91cd62d74c3acfad68a4cc6ddbd9",
       "c011b428819eea4a80b455c245a5a04d": "9259b87edfe9b9f6d0749788a75a6ccf158f50aa",
       "033d7392985841027909c4c32b9f2076": "33b50cec88bc1569431a7885c0cc2692fddb004b",
       "e0ba7a8634b12cfee4b6760a6f89051a": "286b2e1fb21cc79851da01666db6c0b0e88f25e3",
-      "c575f2dd51217ce82fd925b2a27a857c": "5f3f22ccca001c5d992b398a2c47a45510f6316c",
+      "a6f31483d1da4558cc19025e21f95c1d": "eea6d4c69717af589ea36501e00fcb32ac91a5ac",
       "ccd92e7156ce2f0ce14c88ffb68a16eb": "fb231192894e2fd17a5799fbbdf86a4696951bce",
       "4da74084fc1b1bd3d776ed8d3ee648de": "78f1f41d55efc6b8d81e99c1d9d75248b3f83dc2",
       "29a92d0867da2917275b7c6c805d256f": "7d738042268e4ffd0aae8e85e05dd28bce761d1f",
@@ -53487,9 +53487,9 @@
       "88d1504e93366f498105a846cdbf7fb7": "70a464edf3a654ed4ffe687e6dee4f0d2acc758b",
       "7e7fb3daa64a29a3bb5927acc9a7055d": "026b5c2e4d04b2c8e7d569a852d62be9bca2f32c",
       "ed9816479dcea7dd88eedb97b9cb0d26": "fa66a874b735d3d984d66b529a54ae978a9b2766",
-      "4eed271d76c7bc19baf7f15ca057a753": "3795bf93d977f2625e452f8caf6a5371eff2f701",
-      "dde75b2ef3f7f6ed90364e4564703c1d": "8cdf51015a0bac500d9a1d3969fa47ebec4144f6",
-      "8491bd4f3fcaf5aa5a00bce5e9b735eb": "300b3b1d52fbf833ff1cedb95e9541e76aa224c2",
+      "a631f17e1b041a4cf66a8676582dd234": "a9b8931c42303e8dfb475112fc18ff200b7252ce",
+      "9e2b8b6612c3431e03cec5305571a598": "b804a031c8db6def59e077a4b6938dcac25093d7",
+      "71f71d32cbb5e2fcc7d11e8735c97b6e": "bc58ac28be4854fb198b895c7fd999f599b5a961",
       "8a0f1567df8f166f4056a6a71ef7dce5": "497eea6e0ed80501ca3beee714d71a5815495b07",
       "3424f1a2df9d971024a50955cb05e067": "beff39b4edb449c66b704e1c64ee6ed58e30a868",
       "d4448d09bbfde687c04f9e3310e023ab": "ef66dad3e7b2b6a86f326765e7dfd7d1a308ad8f",
@@ -57671,10 +57671,10 @@
         "90164ea50fe3ac4c118b502438d2e5015a588398"
       ],
       "dragon32.zip": [
-        "afed11dd6be59c672e35f2f416290232a05b1983"
+        "9e042597360e6090687b040364101a64c9f54a89"
       ],
       "dragon64.zip": [
-        "613223e2674d44a6b6cdc9662785fe4b7fe9cb60"
+        "d82a22cc7d31620983a8c62d400be37f9b18bb9e"
       ],
       "sdose6.rom": [
         "ef157016386ed463374de6bac84d1f8ce654ed80"
@@ -57832,7 +57832,7 @@
         "5f4aed208301449c2e9514edfd325fe9dead76fa"
       ],
       "ecwolf.pk3": [
-        "f3151d3307c6ff36c0562dac00b4ce195d3157d2",
+        "f3f2a11f3ecd91cd62d74c3acfad68a4cc6ddbd9",
         "9259b87edfe9b9f6d0749788a75a6ccf158f50aa"
       ],
       "zcdata.dat": [
@@ -57842,7 +57842,7 @@
         "286b2e1fb21cc79851da01666db6c0b0e88f25e3"
       ],
       "freej2me-lr.jar": [
-        "5f3f22ccca001c5d992b398a2c47a45510f6316c",
+        "eea6d4c69717af589ea36501e00fcb32ac91a5ac",
         "fb231192894e2fd17a5799fbbdf86a4696951bce"
       ],
       "freej2me-sdl.jar": [
@@ -67994,13 +67994,13 @@
         "fa66a874b735d3d984d66b529a54ae978a9b2766"
       ],
       "trs80.zip": [
-        "3795bf93d977f2625e452f8caf6a5371eff2f701"
+        "a9b8931c42303e8dfb475112fc18ff200b7252ce"
       ],
       "trs80m3.zip": [
-        "8cdf51015a0bac500d9a1d3969fa47ebec4144f6"
+        "b804a031c8db6def59e077a4b6938dcac25093d7"
       ],
       "trs80m4.zip": [
-        "300b3b1d52fbf833ff1cedb95e9541e76aa224c2"
+        "bc58ac28be4854fb198b895c7fd999f599b5a961"
       ],
       "trs80m4p.zip": [
         "497eea6e0ed80501ca3beee714d71a5815495b07"
@@ -70728,8 +70728,8 @@
       "d4d954a0": "e72ca68061267692b01034005c2804aeee8e5cd0",
       "7c6dfca8": "73ae74978a78ec2b97ebb1b0c808238779529bfa",
       "f444d57f": "90164ea50fe3ac4c118b502438d2e5015a588398",
-      "7909413a": "afed11dd6be59c672e35f2f416290232a05b1983",
-      "81fd2649": "613223e2674d44a6b6cdc9662785fe4b7fe9cb60",
+      "fd24e70a": "9e042597360e6090687b040364101a64c9f54a89",
+      "5d04994a": "d82a22cc7d31620983a8c62d400be37f9b18bb9e",
       "8c1d6c45": "ef157016386ed463374de6bac84d1f8ce654ed80",
       "1d3fe2ba": "8958dc06ee15a505e4b5729c8acf9db0f1f066fe",
       "4a6fb5b9": "1731b9aca99e17b0fc3189e33bb7326318fecd57",
@@ -70788,11 +70788,11 @@
       "833109d1": "bf4aed0b09bae6dfe2153a6f3bd91e9146705073",
       "2aae403f": "a89263689f19e046dab6dadea24c5d07270548a6",
       "a5751b99": "5f4aed208301449c2e9514edfd325fe9dead76fa",
-      "88eab7e1": "f3151d3307c6ff36c0562dac00b4ce195d3157d2",
+      "7f9a2c1e": "f3f2a11f3ecd91cd62d74c3acfad68a4cc6ddbd9",
       "26dc3fba": "9259b87edfe9b9f6d0749788a75a6ccf158f50aa",
       "4c0d2dbc": "33b50cec88bc1569431a7885c0cc2692fddb004b",
       "35930faa": "286b2e1fb21cc79851da01666db6c0b0e88f25e3",
-      "30464652": "5f3f22ccca001c5d992b398a2c47a45510f6316c",
+      "5a79e0e1": "eea6d4c69717af589ea36501e00fcb32ac91a5ac",
       "96a1babf": "fb231192894e2fd17a5799fbbdf86a4696951bce",
       "5cca0f35": "78f1f41d55efc6b8d81e99c1d9d75248b3f83dc2",
       "ffb98ffa": "7d738042268e4ffd0aae8e85e05dd28bce761d1f",
@@ -74589,9 +74589,9 @@
       "d918156e": "70a464edf3a654ed4ffe687e6dee4f0d2acc758b",
       "e9443331": "026b5c2e4d04b2c8e7d569a852d62be9bca2f32c",
       "34e1d87e": "fa66a874b735d3d984d66b529a54ae978a9b2766",
-      "e2510704": "3795bf93d977f2625e452f8caf6a5371eff2f701",
-      "4d403b13": "8cdf51015a0bac500d9a1d3969fa47ebec4144f6",
-      "983e55f2": "300b3b1d52fbf833ff1cedb95e9541e76aa224c2",
+      "6127564d": "a9b8931c42303e8dfb475112fc18ff200b7252ce",
+      "e09330c8": "b804a031c8db6def59e077a4b6938dcac25093d7",
+      "6377a7f8": "bc58ac28be4854fb198b895c7fd999f599b5a961",
       "e6fda693": "497eea6e0ed80501ca3beee714d71a5815495b07",
       "99a449b5": "beff39b4edb449c66b704e1c64ee6ed58e30a868",
       "4bf05697": "ef66dad3e7b2b6a86f326765e7dfd7d1a308ad8f",
