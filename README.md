@@ -2,7 +2,7 @@
 
 Complete, verified collection of BIOS, firmware, and system files for retrogaming emulators - RetroArch, Batocera, Recalbox, Lakka, RetroPie, and more. Every file checked against official checksums from [libretro System.dat](https://github.com/libretro/libretro-database), [batocera-systems](https://github.com/batocera-linux/batocera.linux), and [Recalbox es_bios.xml](https://gitlab.com/recalbox/recalbox).
 
-> **5351** files | **4650.0 MB** | Last updated: 2026-03-17T13:37:13Z
+> **5352** files | **4650.5 MB** | Last updated: 2026-03-17T13:43:36Z
 >
 > PlayStation, PS2, Nintendo DS, Game Boy, GBA, Dreamcast, Saturn, Neo Geo, Mega CD, PC Engine, MSX, Amiga, Atari ST, ZX Spectrum, Arcade (MAME/FBNeo), and 50+ systems.
 
@@ -46,7 +46,7 @@ python scripts/generate_pack.py --all --include-archived --output-dir ~/Download
 | Platform | Coverage | Status | Verification | Details |
 |----------|----------|--------|--------------|---------|
 | Batocera | 680/680 (100.0%) | ![Batocera 100%](https://img.shields.io/badge/Batocera-100%25-brightgreen) 🟢 | md5 | 589 verified, 91 untested |
-| EmuDeck | 163/164 (99.4%) | ![EmuDeck 99%](https://img.shields.io/badge/EmuDeck-99%25-brightgreen) 🟢 | md5 | 163 verified, 1 missing |
+| EmuDeck | 164/164 (100.0%) | ![EmuDeck 100%](https://img.shields.io/badge/EmuDeck-100%25-brightgreen) 🟢 | md5 | 164 verified |
 | Lakka | 398/398 (100.0%) | ![Lakka 100%](https://img.shields.io/badge/Lakka-100%25-brightgreen) 🟢 | existence | 398 present |
 | Recalbox | 346/346 (100.0%) | ![Recalbox 100%](https://img.shields.io/badge/Recalbox-100%25-brightgreen) 🟢 | md5 | 336 verified, 10 untested |
 | RetroArch | 398/398 (100.0%) | ![RetroArch 100%](https://img.shields.io/badge/RetroArch-100%25-brightgreen) 🟢 | existence | 398 present |
@@ -163,7 +163,7 @@ python scripts/generate_pack.py --all --include-archived --output-dir ~/Download
 | Sharp/X1 | 4 | 42.0 KB |
 | Sharp/X68000 | 7 | 1.3 MB |
 | Sinclair/ZX Spectrum | 46 | 502.3 KB |
-| Sony/PlayStation | 26 | 13.5 MB |
+| Sony/PlayStation | 27 | 14.0 MB |
 | Sony/PlayStation 2 | 83 | 304.1 MB |
 | Sony/PlayStation 3 | 1 | 196.6 MB |
 | Sony/PlayStation Portable | 98 | 24.3 MB |
@@ -9845,6 +9845,12 @@ These are large asset packs required by specific cores. They are included in the
   - CRC32: `3b601fc8`
   - Also known as: `sony-playstation:239665b1a3dade1b5a52c06338011044`
   - Platform names: EmuDeck: ``
+- **[scph1000r.bin](bios/Sony/PlayStation/scph1000r.bin)** (524,288 bytes)
+  - SHA1: `7082bd57141fa0007b3adcd031f7ba23a20108a0`
+  - MD5: `476d68a94ccec3b9c8303bbd1daf2810`
+  - CRC32: `7bc5477f`
+  - Also known as: `sony-playstation:476d68a94ccec3b9c8303bbd1daf2810`
+  - Platform names: EmuDeck: ``
 - **[scph1001.bin](bios/Sony/PlayStation/scph1001.bin)** (524,288 bytes)
   - SHA1: `10155d8d6e6e832d6ea66db9bc098321fb5e8ebf`
   - MD5: `924e392ed05558ffdb115408c263dccf`
@@ -11168,4 +11174,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on submitting BIOS files.
 
 This repository provides BIOS files for personal backup and archival purposes.
 
-*Auto-generated on 2026-03-17T13:37:13Z*
+*Auto-generated on 2026-03-17T13:43:36Z*

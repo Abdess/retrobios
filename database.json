@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-03-17T13:37:13Z",
-  "total_files": 5351,
-  "total_size": 4875892291,
+  "generated_at": "2026-03-17T13:43:36Z",
+  "total_files": 5352,
+  "total_size": 4876416579,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -45759,6 +45759,15 @@
       "sha256": "cfc1fc38eb442f6f80781452119e931bcae28100c1c97e7e6c5f2725bbb0f8bb",
       "crc32": "3b601fc8"
     },
+    "7082bd57141fa0007b3adcd031f7ba23a20108a0": {
+      "path": "bios/Sony/PlayStation/scph1000r.bin",
+      "name": "scph1000r.bin",
+      "size": 524288,
+      "sha1": "7082bd57141fa0007b3adcd031f7ba23a20108a0",
+      "md5": "476d68a94ccec3b9c8303bbd1daf2810",
+      "sha256": "f597f4a8811c1207256f871a8b551be5fce7144051bb0baa9f9c21e94f79307f",
+      "crc32": "7bc5477f"
+    },
     "10155d8d6e6e832d6ea66db9bc098321fb5e8ebf": {
       "path": "bios/Sony/PlayStation/scph1001.bin",
       "name": "scph1001.bin",
@@ -53249,6 +53258,7 @@
       "c53ca5908936d412331790f4426c6c33": "96880d1ca92a016ff054be5159bb06fe03cb4e14",
       "8abc1b549a4a80954addc48ef02c4521": "339a48f4fcf63e10b5b867b8c93cfd40945faf6c",
       "239665b1a3dade1b5a52c06338011044": "343883a7b555646da8cee54aadd2795b6e7dd070",
+      "476d68a94ccec3b9c8303bbd1daf2810": "7082bd57141fa0007b3adcd031f7ba23a20108a0",
       "924e392ed05558ffdb115408c263dccf": "10155d8d6e6e832d6ea66db9bc098321fb5e8ebf",
       "54847e693405ffeb0359c6287434cbef": "20b98f3d80f11cbf5a7bfd0779b0e63760ecc62c",
       "6e3735ff4c7dc899ee98981385f6f3d0": "dcffe16bd90a723499ad46c641424981338d8378",
@@ -67315,6 +67325,9 @@
       "scph1000.bin": [
         "343883a7b555646da8cee54aadd2795b6e7dd070"
       ],
+      "scph1000r.bin": [
+        "7082bd57141fa0007b3adcd031f7ba23a20108a0"
+      ],
       "scph1001.bin": [
         "10155d8d6e6e832d6ea66db9bc098321fb5e8ebf"
       ],
@@ -68685,6 +68698,9 @@
       ],
       "sony-playstation:c53ca5908936d412331790f4426c6c33": [
         "96880d1ca92a016ff054be5159bb06fe03cb4e14"
+      ],
+      "sony-playstation:476d68a94ccec3b9c8303bbd1daf2810": [
+        "7082bd57141fa0007b3adcd031f7ba23a20108a0"
       ],
       "sony-playstation:d8f485717a5237285e4d7c5f881b7f32": [
         "d7d6be084f51354bc951d8fa2d8d912aa70abc5e"
@@ -74344,6 +74360,7 @@
       "5660f34f": "96880d1ca92a016ff054be5159bb06fe03cb4e14",
       "f2af798b": "339a48f4fcf63e10b5b867b8c93cfd40945faf6c",
       "3b601fc8": "343883a7b555646da8cee54aadd2795b6e7dd070",
+      "7bc5477f": "7082bd57141fa0007b3adcd031f7ba23a20108a0",
       "37157331": "10155d8d6e6e832d6ea66db9bc098321fb5e8ebf",
       "9bb87c4b": "20b98f3d80f11cbf5a7bfd0779b0e63760ecc62c",
       "171bdcec": "dcffe16bd90a723499ad46c641424981338d8378",
