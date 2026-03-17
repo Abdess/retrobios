@@ -1,0 +1,445 @@
+emulator: ScummVM
+type: libretro
+source: "https://github.com/libretro/scummvm"
+systems: [scummvm]
+
+# ScummVM is a multi-engine point-and-click adventure game interpreter.
+# The libretro port uses a specific directory layout under the RetroArch
+# system directory:
+#
+#   <system>/scummvm/          - main ScummVM subdirectory
+#   <system>/scummvm/extra/    - engine data files, soundfonts, shaders
+#   <system>/scummvm/theme/    - GUI themes and related assets
+#
+# These paths are defined in Makefile.common:
+#   SCUMMVM_SYSTEM_SUBDIR = scummvm
+#   SCUMMVM_EXTRA_SUBDIR  = extra
+#   SCUMMVM_THEME_SUBDIR  = theme
+#
+# The bundled scummvm.zip release artifact contains the full directory
+# tree pre-built. Extracting it into <system>/ is the easiest setup.
+#
+# MT-32/CM-32L ROM files go in scummvm/extra/ and are loaded by
+# audio/softsynth/mt32.cpp. The core tries CM-32L first, then MT-32.
+# These are NOT bundled (proprietary). Everything else is open-source
+# data shipped with ScummVM releases.
+
+# ----- scummvm.ini (config, auto-created) -----
+# Stored at <system>/scummvm.ini. Created by the core on first run.
+# Not listed here since it's not a distributable data file.
+
+files:
+  # ================================================================
+  # MT-32 / CM-32L ROM files (proprietary, not bundled)
+  # Loaded from the extra path by audio/softsynth/mt32.cpp
+  # CM-32L is tried first, falls back to MT-32.
+  # ================================================================
+
+  - name: "MT32_CONTROL.ROM"
+    path: "scummvm/extra/MT32_CONTROL.ROM"
+    required: false
+    size: 65536
+    source_ref: "audio/softsynth/mt32.cpp:298,581"
+    note: >
+      Roland MT-32 control ROM. Required for MT-32 music emulation in games
+      that use MT-32 MIDI (e.g. Monkey Island, Indiana Jones). Not bundled
+      with ScummVM. Must be paired with MT32_PCM.ROM.
+
+  - name: "MT32_PCM.ROM"
+    path: "scummvm/extra/MT32_PCM.ROM"
+    required: false
+    size: 524288
+    source_ref: "audio/softsynth/mt32.cpp:298,581"
+    note: >
+      Roland MT-32 PCM ROM. Contains the sample data for MT-32 emulation.
+      Must be paired with MT32_CONTROL.ROM.
+
+  - name: "CM32L_CONTROL.ROM"
+    path: "scummvm/extra/CM32L_CONTROL.ROM"
+    required: false
+    size: 65536
+    source_ref: "audio/softsynth/mt32.cpp:293,582"
+    note: >
+      Roland CM-32L control ROM. Preferred over MT-32 ROMs when both are
+      present. The CM-32L is a rack-mount version of the MT-32 with extra
+      sound effects used by some LucasArts and Sierra games.
+
+  - name: "CM32L_PCM.ROM"
+    path: "scummvm/extra/CM32L_PCM.ROM"
+    required: false
+    size: 1048576
+    source_ref: "audio/softsynth/mt32.cpp:293,582"
+    note: >
+      Roland CM-32L PCM ROM. Contains sample data for CM-32L emulation.
+      Must be paired with CM32L_CONTROL.ROM.
+
+  # ================================================================
+  # SoundFont (bundled with ScummVM releases)
+  # Default filename defined in libretro-defs.h:32
+  # ================================================================
+
+  - name: "Roland_SC-55.sf2"
+    path: "scummvm/extra/Roland_SC-55.sf2"
+    required: false
+    source_ref: "libretro-defs.h:32, libretro-os-utils.cpp:196"
+    note: >
+      Roland SC-55 SoundFont for General MIDI playback. This is the default
+      soundfont (DEFAULT_SOUNDFONT_FILENAME). Bundled in official ScummVM
+      releases. Used as fallback when no MT-32 ROMs are available.
+
+  # ================================================================
+  # GUI themes - placed in scummvm/theme/
+  # Listed in dists/scummvm.rc
+  # ================================================================
+
+  - name: "scummmodern.zip"
+    path: "scummvm/theme/scummmodern.zip"
+    required: false
+    source_ref: "dists/scummvm.rc:24"
+    note: "Modern GUI theme for ScummVM launcher."
+
+  - name: "scummclassic.zip"
+    path: "scummvm/theme/scummclassic.zip"
+    required: false
+    source_ref: "dists/scummvm.rc:23"
+    note: "Classic GUI theme for ScummVM launcher."
+
+  - name: "scummremastered.zip"
+    path: "scummvm/theme/scummremastered.zip"
+    required: false
+    source_ref: "dists/scummvm.rc:25"
+    note: "Remastered GUI theme for ScummVM launcher."
+
+  - name: "residualvm.zip"
+    path: "scummvm/theme/residualvm.zip"
+    required: false
+    source_ref: "dists/scummvm.rc:26"
+    note: "ResidualVM theme for 3D adventure games (Grim Fandango, Myst III)."
+
+  - name: "gui-icons.dat"
+    path: "scummvm/theme/gui-icons.dat"
+    required: false
+    source_ref: "dists/scummvm.rc:27"
+    note: "GUI icon pack used by the ScummVM launcher interface."
+
+  - name: "shaders.dat"
+    path: "scummvm/theme/shaders.dat"
+    required: false
+    source_ref: "dists/scummvm.rc:28"
+    note: "Compiled shader pack for the GUI rendering pipeline."
+
+  - name: "translations.dat"
+    path: "scummvm/theme/translations.dat"
+    required: false
+    source_ref: "dists/scummvm.rc:43"
+    note: "GUI translation strings for ScummVM launcher localization."
+
+  # ================================================================
+  # Core engine data - placed in scummvm/extra/
+  # Listed in dists/engine-data/engine_data_core.mk (always included)
+  # ================================================================
+
+  - name: "achievements.dat"
+    path: "scummvm/extra/achievements.dat"
+    required: false
+    source_ref: "engine_data_core.mk"
+    note: "Achievement definitions for supported games."
+
+  - name: "classicmacfonts.dat"
+    path: "scummvm/extra/classicmacfonts.dat"
+    required: false
+    source_ref: "engine_data_core.mk"
+    note: "Classic Macintosh bitmap fonts for Mac game rendering."
+
+  - name: "encoding.dat"
+    path: "scummvm/extra/encoding.dat"
+    required: false
+    source_ref: "engine_data_core.mk"
+    note: "Character encoding tables for text rendering across languages."
+
+  - name: "helpdialog.zip"
+    path: "scummvm/extra/helpdialog.zip"
+    required: false
+    source_ref: "engine_data_core.mk"
+    note: "Help dialog assets for the in-game help system."
+
+  - name: "macgui.dat"
+    path: "scummvm/extra/macgui.dat"
+    required: false
+    source_ref: "engine_data_core.mk"
+    note: "Macintosh GUI widget data for Mac-style game interfaces."
+
+  # ================================================================
+  # Per-engine data files - placed in scummvm/extra/
+  # Listed in dists/engine-data/engine_data.mk (conditionally included)
+  # ================================================================
+
+  - name: "access.dat"
+    path: "scummvm/extra/access.dat"
+    required: false
+    source_ref: "engine_data.mk (ENABLE_ACCESS)"
+    note: "Engine data for Access Software games (e.g. Amazon, Martian Memorandum)."
+
+  - name: "bagel.dat"
+    path: "scummvm/extra/bagel.dat"
+    required: false
+    source_ref: "engine_data.mk (ENABLE_BAGEL)"
+    note: "Engine data for Bagel engine games."
+
+  - name: "cryo.dat"
+    path: "scummvm/extra/cryo.dat"
+    required: false
+    source_ref: "engine_data.mk (ENABLE_CRYO)"
+    note: "Engine data for Cryo Interactive games (e.g. Dune, Lost Eden)."
+
+  - name: "cryomni3d.dat"
+    path: "scummvm/extra/cryomni3d.dat"
+    required: false
+    source_ref: "engine_data.mk (ENABLE_CRYOMNI3D)"
+    note: "Engine data for CryOmni3D games (Versailles 1685)."
+
+  - name: "darkseed.dat"
+    path: "scummvm/extra/darkseed.dat"
+    required: false
+    source_ref: "engine_data.mk (ENABLE_DARKSEED)"
+    note: "Engine data for Dark Seed (H.R. Giger adventure game)."
+
+  - name: "drascula.dat"
+    path: "scummvm/extra/drascula.dat"
+    required: false
+    source_ref: "engine_data.mk (ENABLE_DRASCULA)"
+    note: "Engine data for Drascula: The Vampire Strikes Back."
+
+  - name: "freescape.dat"
+    path: "scummvm/extra/freescape.dat"
+    required: false
+    source_ref: "engine_data.mk (ENABLE_FREESCAPE)"
+    note: "Engine data for Freescape games (Driller, Dark Side, Total Eclipse)."
+
+  - name: "got.aud"
+    path: "scummvm/extra/got.aud"
+    required: false
+    source_ref: "engine_data.mk (ENABLE_GOT)"
+    note: "Audio data for Game of Thrones engine."
+
+  - name: "got.gfx"
+    path: "scummvm/extra/got.gfx"
+    required: false
+    source_ref: "engine_data.mk (ENABLE_GOT)"
+    note: "Graphics data for Game of Thrones engine."
+
+  - name: "hadesch_translations.dat"
+    path: "scummvm/extra/hadesch_translations.dat"
+    required: false
+    source_ref: "engine_data.mk (ENABLE_HADESCH)"
+    note: "Translation data for Hades Challenge."
+
+  - name: "hugo.dat"
+    path: "scummvm/extra/hugo.dat"
+    required: false
+    source_ref: "engine_data.mk (ENABLE_HUGO)"
+    note: "Engine data for Hugo's House of Horrors trilogy."
+
+  - name: "kyra.dat"
+    path: "scummvm/extra/kyra.dat"
+    required: false
+    source_ref: "engine_data.mk (ENABLE_KYRA)"
+    note: "Engine data for Kyrandia series (Legend of Kyrandia, Hand of Fate, Malcolm's Revenge)."
+
+  - name: "lure.dat"
+    path: "scummvm/extra/lure.dat"
+    required: false
+    source_ref: "engine_data.mk (ENABLE_LURE)"
+    note: "Engine data for Lure of the Temptress."
+
+  - name: "macventure.dat"
+    path: "scummvm/extra/macventure.dat"
+    required: false
+    source_ref: "engine_data.mk (ENABLE_MACVENTURE)"
+    note: "Engine data for MacVenture games (Shadowgate, Deja Vu, Uninvited)."
+
+  - name: "mm.dat"
+    path: "scummvm/extra/mm.dat"
+    required: false
+    source_ref: "engine_data.mk (ENABLE_MM)"
+    note: "Engine data for Might and Magic engine."
+
+  - name: "mort.dat"
+    path: "scummvm/extra/mort.dat"
+    required: false
+    source_ref: "engine_data.mk (ENABLE_MORTEVIELLE)"
+    note: "Engine data for Mortville Manor."
+
+  - name: "myst3.dat"
+    path: "scummvm/extra/myst3.dat"
+    required: false
+    source_ref: "engine_data.mk (ENABLE_MYST3)"
+    note: "Engine data for Myst III: Exile."
+
+  - name: "nancy.dat"
+    path: "scummvm/extra/nancy.dat"
+    required: false
+    source_ref: "engine_data.mk (ENABLE_NANCY)"
+    note: "Engine data for Nancy Drew adventure games."
+
+  - name: "neverhood.dat"
+    path: "scummvm/extra/neverhood.dat"
+    required: false
+    source_ref: "engine_data.mk (ENABLE_NEVERHOOD)"
+    note: "Engine data for The Neverhood."
+
+  - name: "prince_translation.dat"
+    path: "scummvm/extra/prince_translation.dat"
+    required: false
+    source_ref: "engine_data.mk (ENABLE_PRINCE)"
+    note: "Translation data for The Prince and the Coward."
+
+  - name: "queen.tbl"
+    path: "scummvm/extra/queen.tbl"
+    required: false
+    source_ref: "engine_data.mk (ENABLE_QUEEN)"
+    note: "Resource table for Flight of the Amazon Queen."
+
+  - name: "sky.cpt"
+    path: "scummvm/extra/sky.cpt"
+    required: false
+    source_ref: "engine_data.mk (ENABLE_SKY)"
+    note: "Compact table for Beneath a Steel Sky."
+
+  - name: "supernova.dat"
+    path: "scummvm/extra/supernova.dat"
+    required: false
+    source_ref: "engine_data.mk (ENABLE_SUPERNOVA)"
+    note: "Engine data for Mission Supernova."
+
+  - name: "teenagent.dat"
+    path: "scummvm/extra/teenagent.dat"
+    required: false
+    source_ref: "engine_data.mk (ENABLE_TEENAGENT)"
+    note: "Engine data for Teenagent."
+
+  - name: "titanic.dat"
+    path: "scummvm/extra/titanic.dat"
+    required: false
+    source_ref: "engine_data.mk (ENABLE_TITANIC)"
+    note: "Engine data for Starship Titanic."
+
+  - name: "tony.dat"
+    path: "scummvm/extra/tony.dat"
+    required: false
+    source_ref: "engine_data.mk (ENABLE_TONY)"
+    note: "Engine data for Tony Tough and the Night of Roasted Moths."
+
+  - name: "toon.dat"
+    path: "scummvm/extra/toon.dat"
+    required: false
+    source_ref: "engine_data.mk (ENABLE_TOON)"
+    note: "Engine data for Toonstruck."
+
+  - name: "ultima.dat"
+    path: "scummvm/extra/ultima.dat"
+    required: false
+    source_ref: "engine_data.mk (ENABLE_ULTIMA)"
+    note: "Engine data for Ultima series (Ultima IV-VIII, Savage Empire, Martian Dreams)."
+
+  - name: "ultima8.dat"
+    path: "scummvm/extra/ultima8.dat"
+    required: false
+    source_ref: "engine_data.mk (ENABLE_ULTIMA)"
+    note: "Engine data specific to Ultima VIII: Pagan."
+
+  - name: "wintermute.zip"
+    path: "scummvm/extra/wintermute.zip"
+    required: false
+    source_ref: "engine_data.mk (ENABLE_WINTERMUTE)"
+    note: "Engine data for Wintermute engine games."
+
+  - name: "fonts.dat"
+    path: "scummvm/extra/fonts.dat"
+    required: false
+    source_ref: "engine_data.mk (USE_FREETYPE2)"
+    note: "FreeType2 font data for text rendering."
+
+  - name: "fonts-cjk.dat"
+    path: "scummvm/extra/fonts-cjk.dat"
+    required: false
+    source_ref: "engine_data_big.mk (USE_FREETYPE2)"
+    note: "CJK (Chinese/Japanese/Korean) font data. Large file, only for systems with enough memory."
+
+  - name: "fonts-imgui.dat"
+    path: "scummvm/extra/fonts-imgui.dat"
+    required: false
+    source_ref: "engine_data.mk (USE_IMGUI)"
+    note: "ImGui font data for debug overlay rendering."
+
+  - name: "grim-patch.lab"
+    path: "scummvm/extra/grim-patch.lab"
+    required: false
+    source_ref: "engine_data.mk (ENABLE_GRIM)"
+    note: "Patch data for Grim Fandango."
+
+  - name: "monkey4-patch.m4b"
+    path: "scummvm/extra/monkey4-patch.m4b"
+    required: false
+    source_ref: "engine_data.mk (ENABLE_MONKEY4)"
+    note: "Patch data for Escape from Monkey Island."
+
+  # ================================================================
+  # AGI engine dictionary
+  # ================================================================
+
+  - name: "pred.dic"
+    path: "scummvm/extra/pred.dic"
+    required: false
+    source_ref: "engine_data.mk (ENABLE_AGI)"
+    note: "Predictive text dictionary for AGI engine text input (King's Quest, Space Quest, etc)."
+
+  # ================================================================
+  # Virtual keyboard pack
+  # ================================================================
+
+  - name: "vkeybd_default.zip"
+    path: "scummvm/extra/vkeybd_default.zip"
+    required: false
+    source_ref: "bundle_datafiles.sh (hardcoded addition)"
+    note: "Default virtual keyboard layout. Added to the extra path by the build script."
+
+  # ================================================================
+  # Shaders - placed in scummvm/extra/shaders/
+  # Grim Fandango, Escape from Monkey Island, Myst III, The Longest
+  # Journey (Stark), Wintermute 3D, Freescape, HPL1 (Penumbra),
+  # Playground3D test engine. Listed in dists/scummvm.rc.
+  # Individual shader files are NOT listed here since they are
+  # bundled in shaders.dat for the theme path and as individual
+  # files in the extra/shaders/ directory. The build bundles them
+  # automatically via bundle_datafiles.sh.
+  # ================================================================
+
+notes:
+  directory_layout: >
+    The libretro core expects: <system>/scummvm/extra/ for engine data and
+    soundfonts, <system>/scummvm/theme/ for GUI themes. The bundled
+    scummvm.zip release contains the full tree and can be extracted
+    directly into the system directory. Individual shader files go in
+    <system>/scummvm/extra/shaders/.
+  mt32_emulation: >
+    MT-32 emulation requires either MT32_CONTROL.ROM + MT32_PCM.ROM or
+    CM32L_CONTROL.ROM + CM32L_PCM.ROM in the extra directory. These are
+    proprietary Roland ROM dumps, not shipped with ScummVM. CM-32L ROMs
+    are preferred when both sets are present. Without these, games that
+    use MT-32 MIDI fall back to General MIDI with the Roland SC-55
+    soundfont.
+  scummvm_zip: >
+    Official ScummVM libretro releases include scummvm.zip which bundles
+    all themes, engine data, shaders, and the SC-55 soundfont. This
+    single file extracted to <system>/ provides a complete setup minus
+    the proprietary MT-32/CM-32L ROMs.
+  config_file: >
+    ScummVM stores its configuration in <system>/scummvm.ini. This file
+    is auto-created on first launch and stores game entries, paths, and
+    user preferences. Not a distributable data file.
+  shaders: >
+    OpenGL shaders for 3D engines (Grim Fandango, Myst III, The Longest
+    Journey, Penumbra, Wintermute 3D, Freescape) are placed as individual
+    .vertex/.fragment files in <system>/scummvm/extra/shaders/. There are
+    roughly 130 shader files across all engines.

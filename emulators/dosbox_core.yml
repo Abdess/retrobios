@@ -1,0 +1,171 @@
+emulator: DOSBox-core
+type: libretro
+source: "https://github.com/libretro/dosbox-core"
+cores: [dosbox_core]
+systems: [dos]
+verification: sha1
+notes: >
+  No BIOS required. MT-32 and SoundFont support is optional for MIDI music.
+  Unlike DOSBox Pure, this core expects MT-32 ROMs with exact filenames
+  directly in the system directory (no recursive scan, no ZIP support).
+  The mt32.romdir config option is set to the system directory by the
+  libretro frontend. CM-32L is the default emulated hardware type.
+  FluidSynth support reads .sf2/.sf3/.dls/.gig from system/soundfonts/.
+  BASSMIDI support reads .sf2/.sfz from system/soundfonts/ but also
+  requires the BASS and BASSMIDI shared libraries (downloaded separately
+  from https://www.un4seen.com) placed in the system directory.
+  Uses bundled MUNT (mt32emu) for MT-32 emulation, bundled FluidSynth
+  for SF2 playback. BASSMIDI is optional and loaded at runtime via dlopen.
+  The .info file declares firmware_count=10 (4 ROMs + 6 BASS libs).
+
+files:
+  # -- MT-32 Control ROM --
+  # The core only loads MT32_CONTROL.ROM (not versioned filenames).
+  # Any v1.x control ROM (64 KB) works. The .info references v1.07.
+
+  - name: "MT32_CONTROL.ROM"
+    description: "MT-32 Control v1.04"
+    required: false
+    size: 65536
+    sha1: "5a5cb5a77d7d55ee69657c2f870416daed52dea7"
+    source_ref: "midi_mt32.cpp:55"
+
+  - name: "MT32_CONTROL.ROM"
+    description: "MT-32 Control v1.05"
+    required: false
+    size: 65536
+    sha1: "e17a3a6d265bf1fa150312061134293d2b58288c"
+    source_ref: "midi_mt32.cpp:55"
+
+  - name: "MT32_CONTROL.ROM"
+    description: "MT-32 Control v1.06"
+    required: false
+    size: 65536
+    sha1: "a553481f4e2794c10cfe597fef154eef0d8257de"
+    source_ref: "midi_mt32.cpp:55"
+
+  - name: "MT32_CONTROL.ROM"
+    description: "MT-32 Control v1.07"
+    required: false
+    size: 65536
+    sha1: "b083518fffb7f66b03c23b7eb4f868e62dc5a987"
+    source_ref: "midi_mt32.cpp:55, dosbox_core_libretro.info:firmware0"
+    notes: "version referenced in .info file (md5: 5626206284b22c2734f3e9efefcd2675)"
+
+  - name: "MT32_CONTROL.ROM"
+    description: "MT-32 Control BlueRidge"
+    required: false
+    size: 65536
+    sha1: "7b8c2a5ddb42fd0732e2f22b3340dcf5360edf92"
+    source_ref: "midi_mt32.cpp:55"
+
+  # -- MT-32 v2.x Control ROMs (128 KB) --
+
+  - name: "MT32_CONTROL.ROM"
+    description: "MT-32 Control v2.03 (new MT-32)"
+    required: false
+    size: 131072
+    sha1: "5837064c9df4741a55f7c4d8787ac158dff2d3ce"
+    source_ref: "midi_mt32.cpp:55"
+
+  - name: "MT32_CONTROL.ROM"
+    description: "MT-32 Control v2.04"
+    required: false
+    size: 131072
+    sha1: "2c16432b6c73dd2a3947cba950a0f4c19d6180eb"
+    source_ref: "midi_mt32.cpp:55"
+
+  - name: "MT32_CONTROL.ROM"
+    description: "MT-32 Control v2.06"
+    required: false
+    size: 131072
+    sha1: "2869cf4c235d671668cfcb62415e2ce8323ad4ed"
+    source_ref: "midi_mt32.cpp:55"
+
+  - name: "MT32_CONTROL.ROM"
+    description: "MT-32 Control v2.07"
+    required: false
+    size: 131072
+    sha1: "47b52adefedaec475c925e54340e37673c11707c"
+    source_ref: "midi_mt32.cpp:55"
+
+  # -- CM-32L / LAPC-I Control ROMs (64 KB) --
+  # Loaded when mt32.type = "cm32l" (the default).
+
+  - name: "CM32L_CONTROL.ROM"
+    description: "CM-32L/LAPC-I Control v1.00"
+    required: false
+    size: 65536
+    sha1: "73683d585cd6948cc19547942ca0e14a0319456d"
+    source_ref: "midi_mt32.cpp:53"
+
+  - name: "CM32L_CONTROL.ROM"
+    description: "CM-32L/LAPC-I Control v1.02"
+    required: false
+    size: 65536
+    sha1: "a439fbb390da38cada95a7cbb1d6ca199cd66ef8"
+    source_ref: "midi_mt32.cpp:53, dosbox_core_libretro.info:firmware2"
+    notes: "version referenced in .info file (md5: bfff32b6144c1d706109accb6e6b1113)"
+
+  # -- PCM ROMs --
+
+  - name: "MT32_PCM.ROM"
+    description: "MT-32 PCM ROM"
+    required: false
+    size: 524288
+    sha1: "f6b1eebc4b2d200ec6d3d21d51325d5b48c60252"
+    source_ref: "midi_mt32.cpp:66, dosbox_core_libretro.info:firmware1"
+    notes: "pairs with any MT-32 v1.x control ROM (md5: 89e42e386e82e0cacb4a2704a03706ca)"
+
+  - name: "CM32L_PCM.ROM"
+    description: "CM-32L/CM-64/LAPC-I PCM ROM"
+    required: false
+    size: 1048576
+    sha1: "289cc298ad532b702461bfc738009d9ebe8025ea"
+    source_ref: "midi_mt32.cpp:64, dosbox_core_libretro.info:firmware3"
+    notes: "pairs with MT-32 v2.x or CM-32L control ROMs (md5: 08cdcfa0ed93e9cb16afa76e6ac5f0a4)"
+
+  # -- BASS shared libraries (BASSMIDI driver) --
+  # Downloaded from https://www.un4seen.com, placed in system directory.
+  # Loaded at runtime via dlopen. Not redistributable ROMs.
+
+  - name: "libbass.so"
+    description: "BASS audio library (Linux)"
+    required: false
+    source_ref: "midi_bassmidi.cpp:238, dosbox_core_libretro.info:firmware4"
+    notes: "proprietary library from un4seen.com, not a ROM"
+
+  - name: "libbassmidi.so"
+    description: "BASSMIDI addon library (Linux)"
+    required: false
+    source_ref: "midi_bassmidi.cpp:239, dosbox_core_libretro.info:firmware5"
+    notes: "proprietary library from un4seen.com, not a ROM"
+
+  - name: "bass.dll"
+    description: "BASS audio library (Windows)"
+    required: false
+    source_ref: "midi_bassmidi.cpp:232, dosbox_core_libretro.info:firmware6"
+    notes: "proprietary library from un4seen.com, not a ROM"
+
+  - name: "bassmidi.dll"
+    description: "BASSMIDI addon library (Windows)"
+    required: false
+    source_ref: "midi_bassmidi.cpp:233, dosbox_core_libretro.info:firmware7"
+    notes: "proprietary library from un4seen.com, not a ROM"
+
+  - name: "libbass.dylib"
+    description: "BASS audio library (macOS)"
+    required: false
+    source_ref: "midi_bassmidi.cpp:235, dosbox_core_libretro.info:firmware8"
+    notes: "proprietary library from un4seen.com, not a ROM"
+
+  - name: "libbassmidi.dylib"
+    description: "BASSMIDI addon library (macOS)"
+    required: false
+    source_ref: "midi_bassmidi.cpp:236, dosbox_core_libretro.info:firmware9"
+    notes: "proprietary library from un4seen.com, not a ROM"
+
+  # -- General MIDI SoundFont --
+  # Placed in system/soundfonts/ directory. Core scans for .sf2/.sf3/.sfz/.dls/.gig.
+  # FluidSynth reads .sf2/.sf3/.dls/.gig; BASSMIDI reads .sf2/.sfz.
+  # No specific filename required - all found files appear in the core option dropdown.

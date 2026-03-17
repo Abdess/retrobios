@@ -1,0 +1,43 @@
+emulator: Gearlynx
+type: libretro
+source: "https://github.com/drhelius/Gearlynx"
+cores: [gearlynx]
+systems: [atari-lynx]
+verification: existence
+
+notes: |
+  Gearlynx is an Atari Lynx emulator by Ignacio Sanchez (drhelius).
+  The libretro core loads lynxboot.img from the system directory at
+  retro_load_game time (libretro.cpp:106-130, function load_bootroms).
+  Path is built as: system_directory + "/lynxboot.img", no subdirectory.
+
+  LoadBios in media.cpp:274 reads exactly 512 bytes (GLYNX_BIOS_SIZE
+  = 0x200, defines.h:52). If the file size is not 0x200, the load is
+  rejected with BIOS_LOAD_INVALID_SIZE. After loading, bytes at offset
+  0x1F8 and 0x1F9 are patched (RAM/MAPCTL registers), then CRC32 is
+  computed and compared against GLYNX_DB_BIOS_CRC (0x0D973C9D,
+  game_db.h:38). An invalid CRC triggers a warning log but the BIOS
+  is still marked as loaded (m_is_bios_loaded = true).
+
+  Unlike Handy, Gearlynx has no HLE fallback. If the BIOS is not
+  loaded (IsBiosLoaded() returns false), RunToVBlank in
+  gearlynx_core_inline.h:31-37 renders a static "no bios" image
+  and returns false, refusing to emulate. The BIOS is required for
+  any ROM to run. Homebrew (.o, BS93 format) bypasses the normal
+  boot sequence via PrepareForHomebrew() but still requires the BIOS
+  to be loaded for the emulation loop to execute.
+
+  ROM extensions: .lnx, .lyx, .o
+  Core options: none documented in the libretro port.
+
+files:
+  - name: "lynxboot.img"
+    description: "Atari Lynx boot ROM"
+    region: "World"
+    required: true
+    size: 512
+    sha1: "e4ed47fae31693e016b081c6bda48da5b70d7ccb"
+    md5: "fcd403db69f54290b51035d82f835e7b"
+    crc32: "0d973c9d"
+    source_ref: "libretro.cpp:106-130 (load_bootroms), media.cpp:274-329 (LoadBios), defines.h:52 (GLYNX_BIOS_SIZE=0x200), game_db.h:38 (GLYNX_DB_BIOS_CRC=0x0D973C9D), gearlynx_core_inline.h:33-37 (no-bios guard)"
+    notes: "512-byte boot ROM validated by CRC32 after load. Invalid CRC logs a warning but still works. Missing or wrong-size file blocks emulation entirely (no HLE fallback)."

@@ -1,0 +1,79 @@
+emulator: JollyCV
+type: libretro
+source: "https://github.com/libretro/jollycv"
+cores:
+  - jollycv
+systems:
+  - colecovision
+  - creativision
+  - myvision
+
+notes: |
+  JollyCV is a multi-system emulator by Rupert Carmichael supporting
+  ColecoVision (with Super Game Module), CreatiVision, and My Vision.
+
+  BIOS handling depends on the detected system type (set via core option
+  or auto-detected from ROM database via jcv_process_hash/jcv_get_dbflags):
+
+  - ColecoVision (JCV_SYS_COLECO): loads "coleco.rom" from system dir.
+    BIOS is mapped at 0x0000-0x1FFF. Size must be exactly 8192 bytes
+    (SIZE_CVBIOS = SIZE_8K = 0x2000). Load fails if size mismatches.
+    Without the BIOS, ColecoVision games will not run (load returns false).
+
+  - CreatiVision (JCV_SYS_CRVISION): loads "bioscv.rom" from system dir.
+    BIOS is mapped at 0xF800-0xFFFF. Size must be exactly 2048 bytes
+    (SIZE_CRVBIOS = SIZE_2K = 0x800). Without the BIOS, CreatiVision
+    games will not run.
+
+  - My Vision (JCV_SYS_MYVISION): no BIOS required.
+
+  The libretro port constructs paths via snprintf("%s%c%s", sysdir, pss,
+  filename) in libretro.c:699-711. jcv_bios_load_file() opens the file,
+  reads it fully, then delegates to jcv_coleco_bios_load() or
+  jcv_crvision_bios_load() which validate size before copying.
+
+  ColecoVision cartridge header bytes at offset 0x0000-0x0001 control
+  boot behavior: 0xAA55 shows the BIOS title screen, 0x55AA jumps
+  directly to the game code vector.
+
+  The core includes a built-in ROM database with MD5 hashes (gamedb.h)
+  for game-specific flags, but this is for game compatibility, not BIOS
+  verification.
+
+files:
+  # --- ColecoVision BIOS (required for CV games) ---
+  - name: "coleco.rom"
+    system: colecovision
+    description: "ColecoVision BIOS ROM"
+    required: true
+    size: 8192
+    md5: "2c66f5911e5b42b8ebe113403548eee7"
+    sha1: "4aa1d9b48f39b68bb17b3d6997b74850c6089dc3"
+    source_ref: "libretro/libretro.c:701, src/jcv_coleco.c:402-406"
+    notes: "Mapped at 0x0000-0x1FFF. Replaced by SGM lower RAM when Super Game Module is active. Must be exactly 8192 bytes."
+
+  # --- CreatiVision BIOS (required for CV games) ---
+  - name: "bioscv.rom"
+    system: creativision
+    description: "VTech CreatiVision BIOS ROM"
+    required: true
+    size: 2048
+    source_ref: "libretro/libretro.c:711, src/jcv_crvision.c:315-318"
+    notes: "Mapped at 0xF800-0xFFFF. Must be exactly 2048 bytes."
+
+platform_details:
+  colecovision:
+    bios_filename: "coleco.rom"
+    bios_size: 8192
+    memory_map: "0x0000-0x1FFF"
+    source_ref: "src/jcv_coleco.c:269-281"
+
+  creativision:
+    bios_filename: "bioscv.rom"
+    bios_size: 2048
+    memory_map: "0xF800-0xFFFF"
+    source_ref: "src/jcv_crvision.c:315-337, 441"
+
+  myvision:
+    bios_required: false
+    notes: "No BIOS needed. My Vision games run without any system ROM."

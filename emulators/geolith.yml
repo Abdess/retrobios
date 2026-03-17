@@ -1,0 +1,145 @@
+emulator: Geolith
+type: libretro
+source: "https://github.com/libretro/geolith-libretro"
+systems:
+  - snk-neogeo-mvs
+  - snk-neogeo-aes
+
+notes: |
+  Geolith is a highly accurate Neo Geo AES and MVS emulator using .NEO format
+  ROMs only. BIOS files must be provided as MAME-format ZIP archives in the
+  system directory. The core selects which ZIP to open based on the
+  "geolith_system_type" core option (libretro/libretro.c:1017-1018):
+    - AES mode  -> aes.zip
+    - MVS mode  -> neogeo.zip
+    - Uni mode  -> neogeo.zip (loads uni-bios_4_0.rom from it)
+
+  Inside the ZIP, specific ROM files are extracted by filename
+  (src/geo.c:162-241):
+    1. One 68K BIOS ROM, selected by system type + region:
+       - AES Japan:  neo-po.bin
+       - AES other:  neo-epo.bin
+       - MVS US:     sp-u2.sp1
+       - MVS Japan:  japan-j3.bin
+       - MVS Asia:   sp-45.sp1
+       - MVS Europe: sp-s2.sp1
+       - Universe:   uni-bios_4_0.rom
+    2. 000-lo.lo  (zoom lookup table, always required)
+    3. sfix.sfix  (FIX layer tiles, required for MVS/Uni, not AES)
+    4. sm1.sm1    (Z80 sound BIOS, required for MVS/Uni, not AES)
+
+  The AES mode only needs the 68K BIOS + 000-lo.lo. MVS and Universe BIOS
+  modes additionally need sfix.sfix and sm1.sm1.
+
+files:
+  # -----------------------------------------------------------
+  # neogeo.zip - MVS and Universe BIOS
+  # -----------------------------------------------------------
+
+  # MVS 68K BIOS ROMs (one required per region)
+  - name: "sp-u2.sp1"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: true
+    size: 131072
+    crc32: "e72943de"
+    note: "MVS USA ver. 5 (2 slot) - default for US region"
+    source_ref: "src/geo.c:174"
+
+  - name: "japan-j3.bin"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 131072
+    crc32: "dff6d41f"
+    note: "MVS Japan (J3) - default for JP region"
+    source_ref: "src/geo.c:177"
+
+  - name: "sp-45.sp1"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 524288
+    crc32: "03cc9f6a"
+    note: "NEO-MVH MV1C (Asia) - default for AS region"
+    source_ref: "src/geo.c:179"
+
+  - name: "sp-s2.sp1"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 131072
+    crc32: "9036d879"
+    note: "MVS Asia/Europe ver. 5 (1 slot) - default for EU region"
+    source_ref: "src/geo.c:183"
+
+  # Universe BIOS (loaded from neogeo.zip when system type = uni)
+  - name: "uni-bios_4_0.rom"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 131072
+    crc32: "a7aab458"
+    note: "Universe BIOS ver. 4.0 - only version supported by Geolith"
+    source_ref: "src/geo.c:189"
+
+  # Shared ROMs (required for MVS and Universe modes)
+  - name: "000-lo.lo"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: true
+    size: 131072
+    crc32: "5a86cff2"
+    note: "Zoom lookup table (vertical shrink ROM)"
+    source_ref: "src/geo.c:207-208"
+
+  - name: "sfix.sfix"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: true
+    size: 131072
+    crc32: "c2ea0cfd"
+    note: "System FIX layer tiles (text layer)"
+    source_ref: "src/geo.c:218-219"
+
+  - name: "sm1.sm1"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: true
+    size: 131072
+    crc32: "94416d67"
+    note: "Z80 sound BIOS"
+    source_ref: "src/geo.c:229-230"
+
+  # -----------------------------------------------------------
+  # aes.zip - AES (Home Console)
+  # -----------------------------------------------------------
+
+  # AES 68K BIOS ROMs (one required per region)
+  - name: "neo-epo.bin"
+    archive: aes.zip
+    system: snk-neogeo-aes
+    required: true
+    size: 131072
+    crc32: "d27a71f1"
+    note: "AES Asia/US/EU - default for non-JP regions"
+    source_ref: "src/geo.c:168"
+
+  - name: "neo-po.bin"
+    archive: aes.zip
+    system: snk-neogeo-aes
+    required: false
+    size: 131072
+    crc32: "16d0c132"
+    note: "AES Japan - default for JP region"
+    source_ref: "src/geo.c:167-168"
+
+  # Shared ROM (always required for AES)
+  - name: "000-lo.lo"
+    archive: aes.zip
+    system: snk-neogeo-aes
+    required: true
+    size: 131072
+    crc32: "5a86cff2"
+    note: "Zoom lookup table (same ROM as in neogeo.zip)"
+    source_ref: "src/geo.c:207-208"

@@ -1,0 +1,81 @@
+emulator: SMS Plus GX
+type: libretro
+source: "https://github.com/libretro/smsplus-gx"
+cores:
+  - smsplus
+systems:
+  - sega-master-system
+  - sega-game-gear
+  - colecovision
+  - sega-sg1000
+
+notes: |
+  SMS Plus GX is a Sega Master System / Game Gear emulator with additional
+  support for ColecoVision, SG-1000 and Sord M5 via TMS9918 VDP emulation.
+
+  BIOS loading happens in bios_init() (smsplus_libretro.c:203-252).
+  Two BIOS files are supported:
+
+  1. bios.sms -- Sega Master System boot ROM. Optional. Loaded for all
+     console types. A core option "smsplus_sms_bios" (default: disabled)
+     controls whether it is used. When set to "auto" and the file exists,
+     bios.enabled is set and the SMS boot sequence plays before games.
+
+  2. BIOS.col -- ColecoVision BIOS. Required for ColecoVision ROMs only.
+     Loaded into coleco.rom (0x2000 bytes = 8 KB). Without it, ColecoVision
+     games will not start and the core logs an error. The filename is
+     case-sensitive (uppercase BIOS, lowercase .col).
+
+  Both files are read from the system directory root (no subdirectory).
+  Path is built as: system_dir + "/" + filename (smsplus_libretro.c:211,234).
+
+  Console type is auto-detected from ROM file extension:
+    .col -> CONSOLE_COLECO
+    .sg  -> CONSOLE_SG1000
+  Or forced via the "smsplus_hardware" core option.
+
+files:
+  - name: "bios.sms"
+    system: sega-master-system
+    description: "Sega Master System boot ROM"
+    required: false
+    source_ref: "smsplus_libretro.c:211-229"
+    notes: |
+      Loaded into bios.rom (up to 1 MB allocated). Only active when the
+      core option smsplus_sms_bios is set to "auto". Displays the Sega
+      Master System startup screen before game execution.
+
+  - name: "BIOS.col"
+    system: colecovision
+    description: "ColecoVision BIOS ROM"
+    required: true
+    size: 8192
+    source_ref: "smsplus_libretro.c:232-248"
+    notes: |
+      Required for ColecoVision games. Read as 0x2000 (8192) raw bytes
+      into coleco.rom. Without this file, retro_load_game() returns false
+      when loading .col files. Filename is case-sensitive on Linux.
+
+platform_details:
+  bios_mapping:
+    sms:
+      target: "bios.rom buffer, mapped via slot system"
+      source_ref: "smsplus_libretro.c:208-229, source/memz80.c"
+      notes: |
+        When bios.enabled has both bits set (file present + option enabled),
+        the BIOS ROM is paged into the Z80 address space at startup. The
+        BIOS executes the boot animation, then hands off to the cartridge.
+    coleco:
+      target: "coleco.rom, mapped at 0x0000-0x1FFF"
+      source_ref: "smsplus_libretro.c:245, source/memz80.c"
+      notes: |
+        The ColecoVision BIOS provides the interrupt handler, I/O routines
+        and startup code. Mapped into the first 8 KB of Z80 address space.
+
+  console_detection:
+    source_ref: "smsplus_libretro.c:605-609, source/loadrom.c:402"
+    notes: |
+      File extension .col forces CONSOLE_COLECO with MAPPER_NONE.
+      Extension .sg forces CONSOLE_SG1000.
+      The core option smsplus_hardware can override to: master system,
+      master system II, game gear, game gear (sms compatibility), coleco.

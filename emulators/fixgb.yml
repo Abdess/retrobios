@@ -1,0 +1,42 @@
+emulator: fixGB
+type: libretro
+source: "https://github.com/libretro/fixGB"
+cores:
+  - fixgb
+systems:
+  - nintendo-gbc
+
+notes: |
+  fixGB is a Game Boy / Game Boy Color emulator by FIX94, currently at
+  alpha v0.8.1. It supports .gb, .gbc, and .gbs (Game Boy Sound) files.
+
+  The core optionally loads "gbc_bios.bin" (CGB boot ROM) from the
+  system directory. In the libretro port, doOpenCGBBootrom() in
+  libretro.c:246-254 resolves the path via
+  RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY + "/gbc_bios.bin".
+
+  memInitCGBBootrom() in mem.c:567-586 validates the file: it must be
+  at least 0x900 (2304) bytes. If present, 0x900 bytes are read into
+  memCGBBootrom[] and cgbBootromEnabled is set to true. The boot ROM
+  plays the Game Boy Color startup animation before handing off to the
+  game.
+
+  If the file is missing or too small, the core skips the boot sequence
+  and starts games directly. The BIOS is optional -- games run fine
+  without it.
+
+  Despite the core name suggesting general Game Boy support, the only
+  BIOS file referenced is the GBC boot ROM. There is no DMG (original
+  Game Boy) boot ROM support in the source.
+
+files:
+  # --- GBC boot ROM (optional, enables startup animation) ---
+  - name: "gbc_bios.bin"
+    system: nintendo-gbc
+    description: "Game Boy Color (CGB-001) boot ROM"
+    required: false
+    size: 2304
+    md5: "dbfce9db9deaa2567f6a84fde55f9680"
+    sha1: "1293d68bf9643bc4f36954c1e80e38f39864528d"
+    source_ref: "libretro/libretro.c:246-254 (doOpenCGBBootrom), mem.c:567-586 (memInitCGBBootrom)"
+    notes: "Must be at least 0x900 (2304) bytes. Only the first 0x900 bytes are read. Enables cgbBootromEnabled flag for boot animation. Disabled via memDisableCGBBootrom() when register write occurs."

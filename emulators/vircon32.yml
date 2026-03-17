@@ -1,0 +1,80 @@
+emulator: Vircon32
+type: libretro
+source: "https://github.com/vircon32/vircon32-libretro"
+cores:
+  - vircon32
+systems:
+  - vircon32
+
+notes: |
+  Vircon32 is a libretro core for the Vircon32 fantasy console, a 32-bit
+  virtual game console with fixed hardware specs (60 fps, 640x360, 16
+  sound channels, up to 4 gamepads).
+
+  The Standard BIOS v1.2 is embedded directly into the core binary as a
+  C header (embedded/StandardBios.h), generated from Assets/StandardBios.v32
+  at build time. The core never strictly requires an external BIOS file.
+
+  BIOS loading logic (libretro.cpp:416-429):
+  1. Check if system_dir/Vircon32Bios.v32 exists on disk
+  2. If found, load it via Console.LoadBiosFile() (external override)
+  3. If not found, load the embedded BIOS via LoadEmbeddedBios()
+
+  This runs inside context_reset() (libretro.cpp:473-474), which is called
+  whenever the OpenGL context is (re)created.
+
+  The BIOS file format is a V32 ROM with a specific signature
+  (ROMFileFormat::BiosSignature). It must contain exactly 1 texture and
+  1 sound. The loader validates the signature, file structure, and version
+  compatibility before loading program ROM, video ROM and audio ROM
+  (V32Console.cpp:259-431).
+
+  The external BIOS file allows users to replace the boot animation with
+  a custom one. Game compatibility is not affected by BIOS choice.
+
+files:
+  - name: "Vircon32Bios.v32"
+    system: vircon32
+    description: "Vircon32 console BIOS (custom override)"
+    required: false
+    size: 1073060
+    md5: "73f04397cbb2dafcf2047b19a856153a"
+    sha1: "67ddbcd018f03ed74b6e013074d92cc5f1f51c80"
+    source_ref: "libretro.cpp:423-426"
+    notes: |
+      Optional external BIOS placed in the system directory root.
+      If present, overrides the embedded Standard BIOS v1.2.
+      The hashes above correspond to the Standard BIOS v1.2 bundled
+      in Assets/StandardBios.v32 of the source repo. Custom BIOSes
+      will have different hashes but must follow the V32 BIOS format.
+
+platform_details:
+  embedded_bios:
+    version: "Standard BIOS v1.2"
+    source_ref: "libretro.cpp:28, Assets/StandardBios.v32"
+    file_size: 1073060
+    md5: "73f04397cbb2dafcf2047b19a856153a"
+    sha1: "67ddbcd018f03ed74b6e013074d92cc5f1f51c80"
+    notes: |
+      The standard BIOS is compiled into the core binary as
+      embedded_StandardBios[] via a generated header file. It provides
+      the boot animation (Vircon32 logo + startup sound). LoadEmbeddedBios()
+      writes the raw bytes into a stringstream and passes it to
+      Console.LoadBiosData().
+
+  bios_format:
+    source_ref: "VirconDefinitions/FileFormats.hpp, V32Console.cpp:259-431"
+    notes: |
+      A V32 BIOS ROM file must have:
+      - BiosSignature in the header (distinct from CartridgeSignature)
+      - Exactly 1 texture (boot screen graphics)
+      - Exactly 1 sound (boot sound)
+      - Program ROM, Video ROM and Audio ROM in sequential layout
+      The loader validates all of this before accepting the file.
+
+  cartridge_format:
+    extensions: "v32"
+    source_ref: "V32Console.cpp:468-696"
+    notes: |
+      Cartridges use CartridgeSignature with up to 256 textures and
+      1024 sounds. Program ROM can be up to 128M words (512 MB).

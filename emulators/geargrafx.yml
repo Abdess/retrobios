@@ -1,0 +1,128 @@
+emulator: Geargrafx
+type: libretro
+source: "https://github.com/drhelius/Geargrafx"
+cores:
+  - geargrafx
+systems:
+  - nec-pc-engine
+  - nec-supergrafx
+  - nec-pc-engine-cd
+
+notes: |
+  Geargrafx is a PC Engine / TurboGrafx-16 / SuperGrafx / CD-ROM emulator by
+  Ignacio Sanchez (drhelius). HuCard games (pce/sgx/hes) run without BIOS.
+
+  CD-ROM games require a System Card BIOS loaded from the system directory.
+  The core option "geargrafx_cdrom_bios" selects which card image to use:
+  Auto (default, maps to syscard3.pce), System Card 1, System Card 2,
+  System Card 3, or Game Express. The load_bios() function in libretro.cpp
+  builds the path as "{system_directory}/{filename}" and calls
+  core->LoadBios(path, true) for the syscard, then always attempts to load
+  gexpress.pce as the Game Express BIOS via core->LoadBios(path, false).
+
+  BIOS validation uses CRC32 against an internal game_db (game_db.h).
+  The LoadBios() function in media.cpp reads the file, strips a 512-byte
+  header if present, computes CRC32, and looks it up in k_game_database
+  entries flagged with GG_GAMEDB_BIOS_SYSCARD or GG_GAMEDB_BIOS_GAME_EXPRESS.
+  If the CRC32 is not found, the BIOS is marked as "Unknown" and invalid,
+  but loading still proceeds (the file is kept in memory).
+
+  Expected BIOS sizes (from defines.h):
+  - System Card: GG_BIOS_SYSCARD_SIZE = 0x40000 (256 KB)
+  - Game Express: GG_BIOS_GAME_EXPRESS_SIZE = 0x8000 (32 KB)
+
+  Game Express CD-ROM games are auto-detected via CRC32 lookup in game_db.h
+  (GG_GAMEDB_GAME_EXPRESS flag). When detected, the core uses the Game Express
+  BIOS instead of the System Card for ROM bank mapping (media.cpp:649).
+
+  Arcade Card games are also detected from game_db.h and enable extra
+  0x30000 bytes of Card RAM for Super CD-ROM mode.
+
+  Unlike beetle_pce, this core does NOT have separate US syscard3u.pce or
+  syscard2u.pce options. The libretro frontend only references syscard1.pce,
+  syscard2.pce, syscard3.pce, and gexpress.pce.
+
+files:
+  # -- CD-ROM System Card 3 (Japan) - default --
+
+  - name: "syscard3.pce"
+    description: "Super CD-ROM System Card 3.0 (Japan)"
+    region: "NTSC-J"
+    required: true
+    source_ref: "libretro.cpp:453,471-473, game_db.h:50 CRC32=0x6D9A73EF"
+    notes: >
+      Default BIOS for CD-ROM games (cdrom_bios=0 or 3). Recommended for
+      most CD-ROM and Super CD-ROM titles. 256 KB expected size.
+
+  # -- CD-ROM System Card 2 (Japan) --
+
+  - name: "syscard2.pce"
+    description: "CD-ROM System Card 2.0 (Japan)"
+    region: "NTSC-J"
+    required: false
+    source_ref: "libretro.cpp:452,462-463, game_db.h:48-49"
+    notes: >
+      cdrom_bios = 'System Card 2'. For older CD-ROM2 titles. game_db.h lists
+      two variants: v2.0 (CRC32=0x52520BC6) and v2.1 (CRC32=0x283B74E0).
+
+  # -- CD-ROM System Card 1 (Japan) --
+
+  - name: "syscard1.pce"
+    description: "CD-ROM System Card 1.0 (Japan)"
+    region: "NTSC-J"
+    required: false
+    source_ref: "libretro.cpp:451,459-460, game_db.h:47 CRC32=0x3F9F95A4"
+    notes: >
+      cdrom_bios = 'System Card 1'. Very early CD-ROM2 games only.
+
+  # -- TurboGrafx CD System Card 3 (US) --
+  # Not directly selectable via core option, but game_db.h recognizes it.
+
+  - name: "syscard3.pce"
+    sha1_note: "US variant"
+    description: "TurboGrafx CD Super System Card 3.0 (US)"
+    region: "NTSC-U"
+    required: false
+    source_ref: "game_db.h:52 CRC32=0x2B5B75FE"
+    notes: >
+      The core does not have a separate syscard3u.pce option like beetle_pce.
+      If using a US System Card 3, it must be named syscard3.pce and placed in
+      the system directory. The game_db.h CRC32 validation will recognize it.
+
+  # -- TurboGrafx CD System Card 2 (US) --
+
+  - name: "syscard2.pce"
+    sha1_note: "US variant"
+    description: "TurboGrafx CD System Card 2.0 (US)"
+    region: "NTSC-U"
+    required: false
+    source_ref: "game_db.h:51 CRC32=0xFF2A5EC3"
+    notes: >
+      Same constraint as US System Card 3: must be named syscard2.pce.
+      Recognized by game_db.h CRC32 validation.
+
+  # -- Game Express CD Card --
+
+  - name: "gexpress.pce"
+    description: "Game Express CD Card"
+    region: "NTSC-J"
+    required: false
+    source_ref: "libretro.cpp:454,468-469,481-482, game_db.h:53-54"
+    notes: >
+      Always loaded alongside the selected System Card BIOS (libretro.cpp:481).
+      Required for unlicensed Game Express CD-ROM titles (AV Tanjou,
+      Bishoujo Pachinko, etc). game_db.h lists two variants:
+      Blue Version (CRC32=0x51A12D90) and Green Version (CRC32=0x16AAF05A).
+      Expected size: 32 KB (0x8000).
+
+valid_bios_crc32:
+  syscard:
+    - { crc32: "3F9F95A4", name: "CD-ROM System Card 1.0 (J)" }
+    - { crc32: "52520BC6", name: "CD-ROM System Card 2.0 (J)" }
+    - { crc32: "283B74E0", name: "CD-ROM System Card 2.1 (J)" }
+    - { crc32: "6D9A73EF", name: "Super CD-ROM System 3.0 (J)" }
+    - { crc32: "FF2A5EC3", name: "TurboGrafx CD System Card 2.0 (USA)" }
+    - { crc32: "2B5B75FE", name: "TurboGrafx CD Super System 3.0 (USA)" }
+  game_express:
+    - { crc32: "51A12D90", name: "Game Express Card Blue Version (J)" }
+    - { crc32: "16AAF05A", name: "Game Express Card Green Version (J)" }

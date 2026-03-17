@@ -1,0 +1,57 @@
+emulator: RetroDream
+type: libretro
+source: "https://github.com/libretro/redream-next"
+systems:
+  - sega-dreamcast
+
+notes: |
+  Fork of the final open-source redream release (pre-relicense). Experimental
+  core with no HLE BIOS -- real BIOS files are required to boot games.
+  Flycast is recommended over this core for actual gameplay.
+
+  The libretro core sets appdir to the RetroArch system directory
+  (src/host/retro_host.c:216-217). boot.bin and flash.bin are loaded
+  directly from appdir (src/guest/rom/boot.c:17, src/guest/rom/flash.c:30).
+
+  The .info file declares paths as dc/boot.bin and dc/flash.bin, which means
+  RetroArch resolves them under {system_dir}/dc/.
+
+  boot.bin is validated against four known MD5 hashes at load time
+  (src/guest/rom/boot.c:25-30). If validation fails, the core logs a warning
+  but still attempts to run via HLE syscall hooks (bios.c:440-447).
+
+  flash.bin is read/write -- the core saves modified flash data back to disk
+  on shutdown (src/guest/rom/flash.c:197-199).
+
+  Boot ROM size: 2 MB (0x200000). Flash ROM size: 128 KB (0x20000).
+
+files:
+  - name: "boot.bin"
+    system: sega-dreamcast
+    path: "dc/boot.bin"
+    required: true
+    size: 2097152  # 2 MB (0x200000)
+    md5:
+      - e10c53c2f8b90bab96ead2d368858623  # original US/EU BIOS
+      - a5c6a00818f97c5e3e91569ee22416dc  # Chinese BIOS
+      - 37c921eb47532cae8fb70e5d987ce91c  # Japanese BIOS
+      - f2cd29d09f3e29984bcea22ab2e006fe  # revised BIOS without MIL-CD
+    note: "Dreamcast boot ROM. Validated against known MD5 hashes at load."
+    source_ref: "src/guest/rom/boot.c:12-80"
+
+  - name: "flash.bin"
+    system: sega-dreamcast
+    path: "dc/flash.bin"
+    required: true
+    size: 131072  # 128 KB (0x20000)
+    md5:
+      - 0a93f7940c455905bea6e392dfde92a4
+    note: "Dreamcast flash memory (date, time, language). Written back on shutdown."
+    source_ref: "src/guest/rom/flash.c:25-35"
+
+platform_details:
+  dreamcast:
+    bios_size: 2097152     # 2 MB
+    flash_size: 131072     # 128 KB
+    hle_available: false
+    source_ref: "src/guest/rom/boot.c, src/guest/rom/flash.c"

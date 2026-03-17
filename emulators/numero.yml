@@ -1,0 +1,79 @@
+emulator: Numero
+type: libretro
+source: "https://github.com/nbarkhina/numero"
+cores:
+  - numero
+systems:
+  - ti-83
+
+notes: |
+  Numero is a TI-83 family calculator emulator for libretro, based on the
+  Wabbitemu emulator. Supports TI-83, TI-83 Plus and TI-83 Silver Edition.
+
+  A calculator ROM dump is required to run. The core searches for ROM files
+  in the system directory root with a fixed priority order
+  (libretronew.cpp:575-594):
+
+  1. ti83se.rom   (TI-83 Silver Edition, recommended -- largest storage)
+  2. ti83plus.rom (TI-83 Plus)
+  3. ti83.rom     (TI-83)
+
+  The first file found wins. file_present_in_system() checks existence only
+  (libretronew.cpp:451-472), then rom_load() loads it (libretronew.cpp:608).
+
+  There is no fallback or built-in ROM. If none of the three files are found,
+  the core starts without a BIOS and shows a blank screen with a status
+  message listing the expected filenames (libretronew.cpp:1034-1041).
+
+  The core supports no-content launch (RETRO_ENVIRONMENT_SET_SUPPORT_NO_GAME
+  is set to true, libretronew.cpp:555-556). Content files are .8xp/.8xk/.8xg
+  calculator programs loaded on top of the running ROM.
+
+  The emulator auto-saves calculator state every 10 seconds to preserve RAM
+  contents (the TI-83 has no persistent storage beyond battery-backed RAM).
+
+files:
+  - name: "ti83se.rom"
+    system: ti-83
+    description: "TI-83 Silver Edition ROM dump"
+    required: false
+    source_ref: "libretronew.cpp:576-578"
+    notes: "Checked first. Recommended by the author for largest storage capacity."
+
+  - name: "ti83plus.rom"
+    system: ti-83
+    description: "TI-83 Plus ROM dump"
+    required: false
+    source_ref: "libretronew.cpp:583-585"
+    notes: "Checked second, used if ti83se.rom is missing."
+
+  - name: "ti83.rom"
+    system: ti-83
+    description: "TI-83 ROM dump"
+    required: false
+    source_ref: "libretronew.cpp:591-593"
+    notes: "Checked last. Original TI-83 (non-Plus) ROM."
+
+platform_details:
+  bios_search:
+    source_ref: "libretronew.cpp:451-472, 575-608"
+    notes: |
+      file_present_in_system() opens a read handle via libretro VFS to
+      test file existence. The search is sequential: ti83se.rom first,
+      then ti83plus.rom, then ti83.rom. Only one ROM is loaded.
+
+  rom_loading:
+    source_ref: "src/Interface/calc.cpp (rom_load)"
+    notes: |
+      rom_load() detects the calculator model from the ROM image header
+      and initializes the appropriate hardware (83, 83+, 83SE). Each
+      model gets its own progress/save directory via setProgressDir().
+
+  content_loading:
+    formats: "8xp, 8xk, 8xg"
+    source_ref: "libretronew.cpp:483, 769"
+    notes: |
+      Calculator programs (.8xp), apps (.8xk) and groups (.8xg) are
+      loaded into the running calculator via the sendfile mechanism,
+      simulating the link cable transfer. Multiple programs can be
+      loaded sequentially onto the same ROM session.
