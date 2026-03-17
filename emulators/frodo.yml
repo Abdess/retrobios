@@ -1,0 +1,87 @@
+emulator: Frodo
+type: libretro
+cores: [frodo]
+source: "https://github.com/libretro/frodo-libretro"
+systems: [commodore-c64]
+
+notes: |
+  Frodo is a Commodore 64 emulator by Christian Bauer (Frodo V4.2), ported
+  to libretro. It emulates the C64 (MOS 6510, VIC-II, SID, CIA x2) and an
+  optional 1541 floppy drive.
+
+  All four ROMs are embedded directly in the core binary as compiled-in
+  byte arrays (Basic_ROM.h, Kernal_ROM.h, Char_ROM.h, 1541_ROM.h). No
+  external BIOS files are required for normal operation.
+
+  The core attempts to load external ROM files from the current working
+  directory (DATADIR is empty in the libretro build) at startup via
+  load_rom_files() in main.cpp. If any file fails to open or has the wrong
+  size, the embedded ROM is used as fallback via memcpy(). The filenames
+  are hardcoded with spaces, no subdirectory prefix.
+
+  ROM loading order in load_rom_files():
+  1. "Basic ROM"  (8192 bytes, BASIC_ROM_SIZE 0x2000) -> TheC64->Basic
+  2. "Kernal ROM" (8192 bytes, KERNAL_ROM_SIZE 0x2000) -> TheC64->Kernal
+  3. "Char ROM"   (4096 bytes, CHAR_ROM_SIZE 0x1000) -> TheC64->Char
+  4. "1541 ROM"   (16384 bytes, DRIVE_ROM_SIZE 0x4000) -> TheC64->ROM1541
+
+  The core does NOT construct paths relative to retro_system_directory for
+  ROM loading. The system directory variable is fetched in retro_init() but
+  only used for the save directory fallback, not for ROM path construction.
+  DATADIR defaults to "" (empty string) when not defined by the build
+  system, so the filenames resolve to bare names in the cwd. In practice,
+  the external ROM loading path is effectively unused in the libretro build
+  since the cwd is unpredictable and the filenames contain spaces.
+
+  The Kernal ROM is patched at runtime by PatchKernal() in C64.cpp for
+  fast reset (addresses 0x1D84-0x1D85) and IEC bus replacement when 1541
+  processor emulation is enabled (multiple addresses in the 0x0D00-0x0E00
+  range are patched with 0xF2 trap opcodes).
+
+  The 1541 drive ROM is also patched at Reset() in C64.cpp: ROM checksum
+  verification is disabled (0x2AE4-0x2AE9 NOPed), DOS idle loop is
+  trapped (0x2C9B), and write sector / format track operations are
+  intercepted (0x3594-0x3598, 0x3B0C-0x3B0D).
+
+  Source: Src/main.cpp:67-115 (ROM defines, load_rom, load_rom_files),
+  Src/C64.h:33-37 (ROM size constants), Src/C64.cpp:221-284 (PatchKernal),
+  Src/C64.cpp:738-746 (Reset ROM patching),
+  Src/Basic_ROM.h, Src/Kernal_ROM.h, Src/Char_ROM.h, Src/1541_ROM.h
+  (embedded ROM arrays)
+
+files:
+  - name: "Basic ROM"
+    system: commodore-c64
+    description: "C64 BASIC V2 ROM"
+    required: false
+    embedded: true
+    size: 8192
+    note: "Embedded as builtin_basic_rom[] in Basic_ROM.h. External file never loaded in practice (DATADIR is empty, path is bare filename in cwd)."
+    source_ref: "Src/main.cpp:71,77,100-102"
+
+  - name: "Kernal ROM"
+    system: commodore-c64
+    description: "C64 Kernal ROM"
+    required: false
+    embedded: true
+    size: 8192
+    note: "Embedded as builtin_kernal_rom[] in Kernal_ROM.h. Patched at runtime for fast reset and 1541 IEC traps."
+    source_ref: "Src/main.cpp:72,78,104-106"
+
+  - name: "Char ROM"
+    system: commodore-c64
+    description: "C64 Character Generator ROM"
+    required: false
+    embedded: true
+    size: 4096
+    note: "Embedded as builtin_char_rom[] in Char_ROM.h. Used by VIC-II for text/bitmap rendering."
+    source_ref: "Src/main.cpp:73,79,108-110"
+
+  - name: "1541 ROM"
+    system: commodore-c64
+    description: "Commodore 1541 floppy drive ROM"
+    required: false
+    embedded: true
+    size: 16384
+    note: "Embedded as builtin_drive_rom[] in 1541_ROM.h. Patched at runtime to disable checksum and trap disk I/O."
+    source_ref: "Src/main.cpp:74,80,112-114"

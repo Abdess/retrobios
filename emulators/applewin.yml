@@ -1,0 +1,220 @@
+emulator: AppleWin
+type: libretro
+source: "https://github.com/audetto/AppleWin"
+cores:
+  - applewin
+systems:
+  - apple-ii
+
+notes: |
+  AppleWin is an Apple II/IIe/II+ emulator. The libretro port embeds all
+  ROM images directly into the compiled binary via a CMake resource system
+  (resource/CMakeLists.txt -> apple2roms static library -> apple2roms_data.h).
+  The GNUFrame::GetResourceData() function serves ROMs from this compiled-in
+  map. No external BIOS/firmware files are needed.
+
+  The core never calls RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY and the official
+  applewin_libretro.info has zero firmware entries.
+
+  Supported machine types (via core option applewin_machine):
+    Enhanced Apple //e, Apple ][ (Original), Apple ][+, Apple ][ J-Plus,
+    Apple //e, Pravets 82, Pravets 8M, Pravets 8A, Base64A, TK3000 //e
+
+  Supported extensions: bin, do, dsk, nib, po, gz, woz, zip, 2mg, 2img,
+  iie, apl, hdv, yaml, m3u
+
+  supports_no_game: true (can boot without content)
+
+files: []
+
+analysis:
+  embedded_roms:
+    build_system: "CMake add_resources() in resource/CMakeLists.txt"
+    storage: "apple2roms static library linked into core binary"
+    accessor: "GNUFrame::GetResourceData() -> apple2roms::data map"
+    source_ref: "source/frontends/common2/gnuframe.cpp:83"
+
+    system_roms:
+      - id: IDR_APPLE2_ROM
+        filename: Apple2.rom
+        size: 12288
+        md5: 3c406514b9806a7c57ee65fb0b0c39b4
+        sha1: 09288be705464b608ff190519ab008d3dfcd1b05
+        note: "Apple ][ original ROM (12 KB)"
+
+      - id: IDR_APPLE2_PLUS_ROM
+        filename: Apple2_Plus.rom
+        size: 12288
+        md5: 572b3005a4fa49bc54917b069b82c1ab
+        sha1: 33a24f5489ba9195b44be77d9afb2252594cb5c7
+        note: "Apple ][+ ROM (12 KB)"
+
+      - id: IDR_APPLE2_JPLUS_ROM
+        filename: Apple2_JPlus.rom
+        size: 12288
+        md5: f3e8237eca3809bec2a42b984a1332a8
+        sha1: ad200b3263d08e7235d0871c8595963a07adc905
+        note: "Apple ][ J-Plus ROM (12 KB)"
+
+      - id: IDR_APPLE2E_ROM
+        filename: Apple2e.rom
+        size: 16384
+        md5: 346bc782c6a08a531c460e33bc03daf4
+        sha1: 61fa9254628e5bb7236fb474006116d67684d747
+        note: "Apple //e ROM (16 KB)"
+
+      - id: IDR_APPLE2E_ENHANCED_ROM
+        filename: Apple2e_Enhanced.rom
+        size: 16384
+        md5: 38063e08c778503fc03ecebb979769e9
+        sha1: b8ea90abe135a0031065e01697c4a3a20d51198b
+        note: "Enhanced Apple //e ROM (16 KB, default machine type)"
+
+      - id: IDR_PRAVETS_82_ROM
+        filename: PRAVETS82.ROM
+        size: 12288
+        md5: c619b7edfcf021f3b8fd20d9386676ba
+        sha1: 8bd7ced83e209a15e9b19a05a5ef4b8e996dc1a5
+        note: "Pravets 82 ROM (12 KB)"
+
+      - id: IDR_PRAVETS_8M_ROM
+        filename: PRAVETS8M.ROM
+        size: 12288
+        md5: 76c79535f7cf77973e2c711aa977a124
+        sha1: f1b4ff018acf95f3355f0d575b66a188d728b687
+        note: "Pravets 8M ROM (12 KB)"
+
+      - id: IDR_PRAVETS_8C_ROM
+        filename: PRAVETS8C.ROM
+        size: 16384
+        md5: 1896d7b98dd940c89f7c8ea899b71006
+        sha1: c976fe56e57706c161f513a82ba3e0d8cda83904
+        note: "Pravets 8A/8C ROM (16 KB)"
+
+      - id: IDR_TK3000_2E_ROM
+        filename: TK3000e.rom
+        size: 16384
+        md5: 8d84b614b545d4eec8799d3f325332cb
+        sha1: f163e5753c18ff0e812a448e8da406f102600edf
+        note: "TK3000 //e ROM (16 KB)"
+
+      - id: IDR_BASE_64A_ROM
+        filename: Base64A.rom
+        size: 49152
+        md5: 352fdbcae14c6a8c0398822c7a273309
+        sha1: f1c779af480b5bda2bdd03950c1201a5c5143bea
+        note: "Base64A ROM (48 KB)"
+
+      - id: IDR_FREEZES_F8_ROM
+        filename: Freezes_Non-autostart_F8_Rom.rom
+        size: 2048
+        md5: d0a61e95ed1e1dc37c8e4801326aa79e
+        sha1: 3180be6b555ee9ef1f59c4fc3f25c5aab8c39c81
+        note: "Freezes non-autostart F8 ROM (2 KB)"
+
+    video_roms:
+      - id: IDR_APPLE2_VIDEO_ROM
+        filename: Apple2_Video.rom
+        size: 2048
+        md5: 9ac0dc8c4d0002eb45b0b84be0bde5ec
+        sha1: f9d312f128c9557d9d6ac03bfad6c3ddf83e5659
+        note: "Apple II character generator ROM (2 KB)"
+
+      - id: IDR_APPLE2_JPLUS_VIDEO_ROM
+        filename: Apple2_JPlus_Video.rom
+        size: 2048
+        md5: 271e2c9bf928b95e7baeff391db45495
+        sha1: 0a382be58db5215c4a3de53b19a72fab660d5da2
+        note: "Apple ][ J-Plus character generator ROM (2 KB)"
+
+      - id: IDR_APPLE2E_ENHANCED_VIDEO_ROM
+        filename: Apple2e_Enhanced_Video.rom
+        size: 4096
+        md5: 9123fff3442c0e688cc6816be88dd4ab
+        sha1: b2b5d87f52693817fc747df087a4aa1ddcdb1f10
+        note: "Enhanced Apple //e character generator ROM (4 KB)"
+
+      - id: IDR_BASE64A_VIDEO_ROM
+        filename: Base64A_German_Video.rom
+        size: 4096
+        md5: 4b45852b369e2afd864a02d0d91f70dc
+        sha1: 87ca8135f7526ddf829f9c2c4f7dbe4d568818fc
+        note: "Base64A German character generator ROM (4 KB)"
+
+    peripheral_firmware:
+      - id: IDR_DISK2_13SECTOR_FW
+        filename: DISK2-13sector.rom
+        size: 256
+        md5: 4f80448507cf43ab40c17ac08d89e278
+        sha1: afd060e6f35faf3bb0146fa889fc787adf56330a
+        note: "Disk II 13-sector controller ROM (256 B)"
+
+      - id: IDR_DISK2_16SECTOR_FW
+        filename: DISK2.rom
+        size: 256
+        md5: 2020aa1413ff77fe29353f3ee72dc295
+        sha1: d4181c9f046aafc3fb326b381baac809d9e38d16
+        note: "Disk II 16-sector controller ROM (256 B)"
+
+      - id: IDR_SSC_FW
+        filename: SSC.rom
+        size: 2048
+        md5: 67c0d61ab0911183faf05270f881a97e
+        sha1: 6dab633470c6bc4cb3e81d09fda46597caf8ee57
+        note: "Super Serial Card firmware (2 KB)"
+
+      - id: IDR_HDDRVR_FW
+        filename: Hddrvr.bin
+        size: 256
+        md5: e0a40e9166af27b16f60beb83c9233f0
+        sha1: 69667800c54da1d4466e7b2168c0e418a4cf586c
+        note: "Hard disk controller firmware v1 (256 B)"
+
+      - id: IDR_HDDRVR_V2_FW
+        filename: Hddrvr-v2.bin
+        size: 256
+        md5: a49e45e7a6d4de23e0845a59c7e31e0c
+        sha1: 06115eebb4d58221b5c062a42bf3e41e137447ed
+        note: "Hard disk controller firmware v2 (256 B)"
+
+      - id: IDR_HDC_SMARTPORT_FW
+        filename: HDC-SmartPort.bin
+        size: 256
+        md5: 2592efa1d34ade55d490a1b39911c9b2
+        sha1: fd557998fd5823ad69a42ad1282e4fe47db02dca
+        note: "SmartPort hard disk controller firmware (256 B)"
+
+      - id: IDR_PRINTDRVR_FW
+        filename: Parallel.rom
+        size: 256
+        md5: 5902996f16dc78fc013f6e1db14805b3
+        sha1: c75c751589cbcc1ad4ab4f63676af7abadd86f5b
+        note: "Parallel printer card firmware (256 B)"
+
+      - id: IDR_MOCKINGBOARD_D_FW
+        filename: Mockingboard-D.rom
+        size: 2048
+        md5: ab53170c5ec66b63e6356f637f4388ed
+        sha1: e8d20f4b59fe867ff76434d35a14d2cbdc8533e3
+        note: "Mockingboard-D sound card firmware (2 KB)"
+
+      - id: IDR_MOUSEINTERFACE_FW
+        filename: MouseInterface.rom
+        size: 2048
+        md5: 22563ab338024dac7b03510371d49c57
+        sha1: 3a9d881a8a8d30f55b9719aceebbcf717f829d6f
+        note: "Mouse interface card firmware (2 KB)"
+
+      - id: IDR_THUNDERCLOCKPLUS_FW
+        filename: ThunderClockPlus.rom
+        size: 2048
+        md5: 138b1f7e30953fcaa58fcbf562c15001
+        sha1: 60f434f5325899d7ea257a6e56e6f53eae65146a
+        note: "ThunderClock Plus firmware (2 KB)"
+
+      - id: IDR_TKCLOCK_FW
+        filename: TKClock.rom
+        size: 2304
+        md5: 7076083b9d748b7637b020636543971b
+        sha1: 3740516cc9050465f8b884dbeb0ecdd2c1354620
+        note: "TK Clock firmware (2.25 KB)"

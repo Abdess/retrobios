@@ -1,0 +1,119 @@
+emulator: EasyRPG Player
+type: libretro
+source: "https://github.com/libretro/easyrpg-libretro"
+cores:
+  - easyrpg
+systems:
+  - rpgmaker
+
+# EasyRPG Player is an open-source interpreter for RPG Maker 2000 and 2003
+# games. It does not require any BIOS or firmware files. All system data
+# files are optional and improve the experience (MIDI music, RTP assets).
+#
+# The official libretro .info file declares zero firmware entries.
+#
+# Directory layout under <system_dir>:
+#   rtp/2000/              - RPG Maker 2000 Run-Time Package assets
+#   rtp/2003/              - RPG Maker 2003 Run-Time Package assets
+#   easyrpg-player/        - global config dir (auto-created)
+#   easyrpg-player/Soundfont/ - user-provided .sf2 files
+#   easyrpg-player/Font/   - user-provided font files
+#
+# RTP path resolution (filefinder_rtp.cpp:68-75, libretro build):
+#   1. <core_assets_dir>/rtp/<version>
+#   2. <system_dir>/rtp/<version>
+#   where <version> is "2000" or "2003" depending on the game
+#
+# MIDI playback uses FluidSynth (fluidlite) with this soundfont search
+# order (decoder_fluidsynth.cpp:118-163):
+#   1. User-configured soundfont from settings
+#   2. "easyrpg.soundfont" (looked up via VFS, placed in game dir or system dir)
+#   3. FluidSynth default soundfont setting
+#   4. SDL_SOUNDFONTS environment variable
+#   5. /usr/share/soundfonts/FluidR3_GM.sf2 (Linux desktop)
+#   6. /usr/share/sounds/sf2/FluidR3_GM.sf2 (Linux desktop)
+#
+# WildMidi alternative MIDI (decoder_wildmidi.cpp:99-114, libretro build):
+#   1. <system_dir>/wildmidi.cfg
+#   2. <core_assets_dir>/wildmidi/wildmidi.cfg
+#
+# Games that include all their assets (FullPackageFlag) need nothing extra.
+# Games relying on RPG Maker RTP need the matching RTP installed.
+
+notes: |
+  No BIOS or firmware required. All files listed below are optional runtime
+  data that improve compatibility and audio quality.
+
+  RTP (Run-Time Package) contains default assets (sprites, music, sound effects)
+  shared by many RPG Maker games. Games that ship all their own assets do not
+  need it. The RPG Maker 2000 and 2003 RTPs are separate packages. EasyRPG
+  also supports translated/third-party RTP variants (Don Miguel, Kadokawa,
+  Enterbrain, RPG Advocate, etc.) and auto-detects which one a game uses.
+
+  For MIDI music, a General MIDI soundfont in SF2 format is needed. Place it
+  as easyrpg.soundfont in the system directory, or put any .sf2 file in
+  easyrpg-player/Soundfont/ and select it from the core settings menu.
+
+files:
+  # ================================================================
+  # Soundfont for MIDI playback (optional)
+  # decoder_fluidsynth.cpp:125 - first custom path checked
+  # ================================================================
+
+  - name: "easyrpg.soundfont"
+    path: "easyrpg.soundfont"
+    required: false
+    source_ref: "decoder_fluidsynth.cpp:125, scene_logo.cpp:261"
+    note: >
+      General MIDI soundfont (SF2 format) for MIDI music playback. Many RPG
+      Maker games use MIDI for background music. Without a soundfont, MIDI
+      tracks are silent. Any GM-compatible .sf2 works. Can also be placed in
+      easyrpg-player/Soundfont/ with any filename.
+
+  # ================================================================
+  # WildMidi configuration (optional, alternative MIDI backend)
+  # decoder_wildmidi.cpp:99-114
+  # ================================================================
+
+  - name: "wildmidi.cfg"
+    path: "wildmidi.cfg"
+    required: false
+    source_ref: "decoder_wildmidi.cpp:103-104"
+    note: >
+      WildMidi configuration file pointing to GUS patch sets for MIDI
+      playback. Alternative to FluidSynth/SF2. Only used if WildMidi
+      support is compiled in and FluidSynth is not available or disabled.
+
+  # ================================================================
+  # RPG Maker 2000 RTP (optional, game-dependent)
+  # filefinder_rtp.cpp:73-74 - <system_dir>/rtp/2000
+  # ================================================================
+
+  - name: "RPG Maker 2000 RTP"
+    path: "rtp/2000/"
+    required: false
+    type: directory
+    source_ref: "filefinder_rtp.cpp:73-74"
+    note: >
+      Run-Time Package for RPG Maker 2000 games. Contains default tilesets,
+      character sprites, battle animations, music, and sound effects. Only
+      needed by games that reference RTP assets instead of bundling them.
+      Multiple RTP variants exist (Japanese official, English official,
+      Don Miguel English translation). EasyRPG auto-detects which variant
+      a game expects.
+
+  # ================================================================
+  # RPG Maker 2003 RTP (optional, game-dependent)
+  # filefinder_rtp.cpp:73-74 - <system_dir>/rtp/2003
+  # ================================================================
+
+  - name: "RPG Maker 2003 RTP"
+    path: "rtp/2003/"
+    required: false
+    type: directory
+    source_ref: "filefinder_rtp.cpp:73-74"
+    note: >
+      Run-Time Package for RPG Maker 2003 games. Same concept as the 2000
+      RTP but with additional battle system assets for the side-view ATB
+      combat. Multiple variants exist (Japanese official, English official,
+      RPG Advocate English, Vlad Russian, Korean, Traditional Chinese).

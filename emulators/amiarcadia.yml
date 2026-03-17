@@ -1,0 +1,35 @@
+emulator: amiarcadia
+type: libretro
+source: "https://amigan.yatho.com/"
+cores:
+  - amiarcadia
+systems:
+  - emerson-arcadia-2001
+  - interton-vc4000
+  - elektor-tv-games-computer
+
+# AmiArcadia is a libretro port of James Jacobs' emulator for Signetics
+# 2636 PVI / 2637 UVI + 2650 CPU-based systems: Emerson Arcadia 2001 and
+# clones (Bandai, Grandstand, Schmid, Hanimex, Leisurevision, etc.),
+# Interton VC 4000 family (Voltmace, Rowtron, Fountain, etc.), Elektor
+# TV Games Computer, and Zaccaria/Malzak coin-op arcade machines.
+#
+# The core does NOT require any BIOS or system ROM files.
+# firmware_count = 0 in amiarcadia_libretro.info confirms this.
+#
+# ROM identification:
+#   The core auto-identifies known game ROMs by CRC32 and configures the
+#   correct machine type, memory map, and game-specific settings. For
+#   unknown ROMs, the user selects machine type via the "Machine" core
+#   option (Arcadia / Interton).
+#
+# Supported extensions: .bin, .tvc
+#
+# Source ref: libretro-core-info/amiarcadia_libretro.info (firmware_count = 0)
+# Docs: https://docs.libretro.com/library/amiarcadia/
+
+notes: |
+  No BIOS files required. The emulator has no external firmware dependencies.
+  Game ROMs are identified by CRC32 for automatic machine configuration.
+
+bios_files: []

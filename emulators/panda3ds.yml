@@ -1,0 +1,42 @@
+emulator: Panda3DS
+type: libretro
+core_name: panda3ds_libretro
+source: "https://github.com/panda3ds-emu/panda3ds"
+systems: [nintendo-3ds]
+
+notes: |
+  Panda3DS is an HLE 3DS emulator. Most games run without any system files.
+  Encrypted ROMs need AES keys in sysdata/aes_keys.txt, and seed-encrypted
+  titles (9.6+) also need sysdata/seeddb.bin.
+  DSP firmware is loaded from the game itself (not from disk), with HLE/LLE/Null
+  modes selectable via core option panda3ds_dsp_emulation.
+  System archives (shared font, bad word list, country list, mii data) are
+  compiled into the binary from citra_system_archives headers.
+  The libretro core does NOT use RetroArch's system directory. It stores data
+  under the save directory in "Emulator Files/sysdata/".
+  The .info file declares no firmware entries, so RetroArch will not check
+  for any system files.
+  Experimental core: is_experimental = true in the .info file.
+
+files:
+  - name: "aes_keys.txt"
+    path: "Emulator Files/sysdata/aes_keys.txt"
+    description: "AES encryption keys for decrypting encrypted ROMs"
+    required: false
+    source_ref: "src/emulator.cpp:229,238"
+    notes: |
+      Loaded at ROM load time from appDataRoot/sysdata/aes_keys.txt.
+      In libretro mode, appDataRoot = <save_dir>/Emulator Files/.
+      Contains key slot entries like "generator=XXXX", keyX/keyY values.
+      Only needed for encrypted .3ds/.cci/.cxi/.app files.
+      Decrypted dumps work without this file.
+
+  - name: "seeddb.bin"
+    path: "Emulator Files/sysdata/seeddb.bin"
+    description: "Seed database for seed-encrypted games"
+    required: false
+    source_ref: "src/emulator.cpp:230,241-242, src/core/loader/ncch.cpp:77-93"
+    notes: |
+      Required for titles using seed encryption (firmware 9.6+).
+      Must be placed alongside aes_keys.txt in the sysdata directory.
+      Without it, seed-encrypted titles will fail to load with a warning.

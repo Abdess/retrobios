@@ -1,0 +1,708 @@
+emulator: PCem
+type: libretro
+source: "https://github.com/libretro/libretro-pcem"
+systems: [ibm-pc, ibm-xt, ibm-at, ibm-pcjr, ibm-ps1, tandy-1000]
+
+# PCem (PC Emulator) emulates IBM PC compatibles from 8088 through Pentium.
+# All ROMs are loaded relative to the core's system directory via romfopen()
+# which prepends pcempath (= RetroArch system dir) to the path.
+# Each machine model requires its own BIOS ROM set under roms/<machine>/.
+# Video card ROMs are separate and only needed for the selected GPU.
+# The font ROM (mda.rom) is always loaded at startup.
+
+files:
+  # ========================================================
+  # FONT ROM (always loaded)
+  # ========================================================
+  - name: "MDA font ROM"
+    path: "mda.rom"
+    required: true
+    note: >
+      MDA/Hercules character generator ROM. Loaded unconditionally by loadbios()
+      via loadfont() at startup, regardless of selected video card.
+    source_ref: "src/mem.c:107"
+
+  # ========================================================
+  # XT-IDE BIOS (optional, loaded for XT-class machines)
+  # ========================================================
+  - name: "XT-IDE BIOS"
+    path: "roms/ide_xt.bin"
+    required: false
+    note: >
+      XT-IDE Universal BIOS for XT-class machines. Loaded as option ROM at
+      0xC8000. Used by IBM PC, IBM XT, Generic XT, DTK XT, AMI XT,
+      Tandy, Amstrad, Euro PC, Olivetti, PC2086, PC3086, and other XT clones.
+    source_ref: "src/mem.c:60-72"
+
+  - name: "AT-IDE BIOS"
+    path: "roms/ide_at.bin"
+    required: false
+    note: >
+      XT-IDE Universal BIOS for AT-class machines. Loaded as option ROM.
+      Used by IBM AT, Compaq Deskpro 386, Phoenix 386, DTK 386.
+    source_ref: "src/mem.c:74-86"
+
+  - name: "AT-IDE BIOS v1.1.5"
+    path: "roms/ide_at_1_1_5.bin"
+    required: false
+    note: >
+      XT-IDE Universal BIOS v1.1.5 for AT-class machines.
+      Used specifically by IBM PS/1 model 2011.
+    source_ref: "src/mem.c:88-100"
+
+  # ========================================================
+  # MACHINE BIOS ROMs - IBM
+  # ========================================================
+  - name: "IBM PC BIOS"
+    path: "roms/ibmpc/pc102782.bin"
+    required: false
+    note: "IBM 5150 PC BIOS dated 10/27/82 (8 KB)."
+    source_ref: "src/mem.c:382-386"
+
+  - name: "IBM PC BASIC C1.1 F6"
+    path: "roms/ibmpc/basicc11.f6"
+    required: false
+    note: "IBM Cassette BASIC C1.1 ROM, bank F6. Optional for IBM PC."
+    source_ref: "src/mem.c:387-388"
+
+  - name: "IBM PC BASIC C1.1 F8"
+    path: "roms/ibmpc/basicc11.f8"
+    required: false
+    note: "IBM Cassette BASIC C1.1 ROM, bank F8."
+    source_ref: "src/mem.c:391-393"
+
+  - name: "IBM PC BASIC C1.1 FA"
+    path: "roms/ibmpc/basicc11.fa"
+    required: false
+    note: "IBM Cassette BASIC C1.1 ROM, bank FA."
+    source_ref: "src/mem.c:395-397"
+
+  - name: "IBM PC BASIC C1.1 FC"
+    path: "roms/ibmpc/basicc11.fc"
+    required: false
+    note: "IBM Cassette BASIC C1.1 ROM, bank FC."
+    source_ref: "src/mem.c:399-401"
+
+  - name: "IBM XT BIOS (combined)"
+    path: "roms/ibmxt/xt.rom"
+    required: false
+    note: >
+      IBM 5160 XT BIOS (64 KB combined ROM). Fallback: if this file
+      is missing, the core tries the split ROMs 5000027.u19 + 1501512.u18.
+    source_ref: "src/mem.c:203-222"
+
+  - name: "IBM XT BIOS U19"
+    path: "roms/ibmxt/5000027.u19"
+    required: false
+    note: "IBM XT BIOS low chip. Used when xt.rom is not present."
+    source_ref: "src/mem.c:206"
+
+  - name: "IBM XT BIOS U18"
+    path: "roms/ibmxt/1501512.u18"
+    required: false
+    note: "IBM XT BIOS high chip. Used when xt.rom is not present."
+    source_ref: "src/mem.c:207"
+
+  - name: "IBM PCjr BIOS"
+    path: "roms/ibmpcjr/bios.rom"
+    required: false
+    note: "IBM PCjr BIOS (64 KB). Required for PCjr machine model."
+    source_ref: "src/mem.c:226-229"
+
+  - name: "IBM AT BIOS U27"
+    path: "roms/ibmat/62x0820.u27"
+    required: false
+    note: "IBM 5170 AT BIOS low chip. Paired with 62x0821.u47."
+    source_ref: "src/mem.c:299"
+
+  - name: "IBM AT BIOS U47"
+    path: "roms/ibmat/62x0821.u47"
+    required: false
+    note: "IBM 5170 AT BIOS high chip. Paired with 62x0820.u27."
+    source_ref: "src/mem.c:300"
+
+  - name: "IBM PS/1 model 2011 BIOS"
+    path: "roms/ibmps1es/f80000.bin"
+    required: false
+    note: >
+      IBM PS/1 model 2011 BIOS (128 KB). 64 KB is read from offset 0x60000.
+      Also loaded separately by PS/1 motherboard init as a high ROM at 0xF80000.
+    source_ref: "src/mem.c:513-517, src/ps1.c:127-128"
+
+  # ========================================================
+  # MACHINE BIOS ROMs - Tandy
+  # ========================================================
+  - name: "Tandy 1000 BIOS"
+    path: "roms/tandy/tandy1t1.020"
+    required: false
+    note: "Tandy 1000 BIOS v01.020 (64 KB)."
+    source_ref: "src/mem.c:165-168"
+
+  - name: "Tandy 1000 HX BIOS"
+    path: "roms/tandy1000hx/v020000.u12"
+    required: false
+    note: "Tandy 1000 HX BIOS (128 KB)."
+    source_ref: "src/mem.c:172-176"
+
+  - name: "Tandy 1000 SL/2 BIOS low"
+    path: "roms/tandy1000sl2/8079047.hu1"
+    required: false
+    note: "Tandy 1000 SL/2 BIOS low chip. Paired with 8079048.hu2."
+    source_ref: "src/mem.c:180"
+
+  - name: "Tandy 1000 SL/2 BIOS high"
+    path: "roms/tandy1000sl2/8079048.hu2"
+    required: false
+    note: "Tandy 1000 SL/2 BIOS high chip. Paired with 8079047.hu1."
+    source_ref: "src/mem.c:181"
+
+  # ========================================================
+  # MACHINE BIOS ROMs - Amstrad / Sinclair
+  # ========================================================
+  - name: "Amstrad PC1512 BIOS low"
+    path: "roms/pc1512/40043.v1"
+    required: false
+    note: "Amstrad PC1512 BIOS low chip."
+    source_ref: "src/mem.c:121"
+
+  - name: "Amstrad PC1512 BIOS high"
+    path: "roms/pc1512/40044.v1"
+    required: false
+    note: "Amstrad PC1512 BIOS high chip."
+    source_ref: "src/mem.c:122"
+
+  - name: "Amstrad PC1512 font ROM"
+    path: "roms/pc1512/40078.ic127"
+    required: false
+    note: "Amstrad PC1512 character generator ROM."
+    source_ref: "src/mem.c:132"
+
+  - name: "Amstrad PC1640 BIOS low"
+    path: "roms/pc1640/40044.v3"
+    required: false
+    note: "Amstrad PC1640 BIOS low chip."
+    source_ref: "src/mem.c:135"
+
+  - name: "Amstrad PC1640 BIOS high"
+    path: "roms/pc1640/40043.v3"
+    required: false
+    note: "Amstrad PC1640 BIOS high chip."
+    source_ref: "src/mem.c:136"
+
+  - name: "Amstrad PC1640 video BIOS"
+    path: "roms/pc1640/40100"
+    required: false
+    note: "Amstrad PC1640 built-in EGA video BIOS. Also used by vid_pc1640 device."
+    source_ref: "src/mem.c:145, src/vid_pc1640.c:124"
+
+  - name: "Sinclair PC200 BIOS high"
+    path: "roms/pc200/pc20v2.1"
+    required: false
+    note: "Sinclair PC200 BIOS high chip."
+    source_ref: "src/mem.c:151"
+
+  - name: "Sinclair PC200 BIOS low"
+    path: "roms/pc200/pc20v2.0"
+    required: false
+    note: "Sinclair PC200 BIOS low chip."
+    source_ref: "src/mem.c:152"
+
+  - name: "Sinclair PC200 font ROM"
+    path: "roms/pc200/40109.bin"
+    required: false
+    note: "Sinclair PC200 character generator ROM."
+    source_ref: "src/mem.c:162"
+
+  - name: "Amstrad PC2086 BIOS low"
+    path: "roms/pc2086/40179.ic129"
+    required: false
+    note: "Amstrad PC2086 BIOS low chip."
+    source_ref: "src/mem.c:261"
+
+  - name: "Amstrad PC2086 BIOS high"
+    path: "roms/pc2086/40180.ic132"
+    required: false
+    note: "Amstrad PC2086 BIOS high chip."
+    source_ref: "src/mem.c:262"
+
+  - name: "Amstrad PC2086 video BIOS"
+    path: "roms/pc2086/40186.ic171"
+    required: false
+    note: "Amstrad PC2086 Paradise PVGA1A video BIOS."
+    source_ref: "src/mem.c:273, src/vid_paradise.c:329"
+
+  - name: "Amstrad PC3086 BIOS"
+    path: "roms/pc3086/fc00.bin"
+    required: false
+    note: "Amstrad PC3086 system BIOS (16 KB)."
+    source_ref: "src/mem.c:281"
+
+  - name: "Amstrad PC3086 video BIOS"
+    path: "roms/pc3086/c000.bin"
+    required: false
+    note: "Amstrad PC3086 Paradise PVGA1A video BIOS."
+    source_ref: "src/mem.c:285, src/vid_paradise.c:338"
+
+  # ========================================================
+  # MACHINE BIOS ROMs - Other XT clones
+  # ========================================================
+  - name: "Generic XT BIOS"
+    path: "roms/genxt/pcxt.rom"
+    required: false
+    note: "Generic XT clone BIOS (8 KB)."
+    source_ref: "src/mem.c:233-236"
+
+  - name: "DTK XT BIOS"
+    path: "roms/dtk/DTK_ERSO_2.42_2764.bin"
+    required: false
+    note: "DTK XT clone BIOS (8 KB)."
+    source_ref: "src/mem.c:240-243"
+
+  - name: "AMI XT BIOS"
+    path: "roms/amixt/AMI_8088_BIOS_31JAN89.BIN"
+    required: false
+    note: "AMI 8088 XT clone BIOS dated 31 Jan 1989 (8 KB)."
+    source_ref: "src/mem.c:539-542"
+
+  - name: "VTech Laser Turbo XT BIOS"
+    path: "roms/ltxt/27C64.bin"
+    required: false
+    note: "VTech Laser Turbo XT BIOS (8 KB)."
+    source_ref: "src/mem.c:547-550"
+
+  - name: "VTech Laser XT3 BIOS"
+    path: "roms/lxt3/27C64D.bin"
+    required: false
+    note: "VTech Laser XT3 BIOS (8 KB)."
+    source_ref: "src/mem.c:555-558"
+
+  - name: "Phoenix XT BIOS"
+    path: "roms/pxxt/000p001.bin"
+    required: false
+    note: "Phoenix XT clone BIOS (8 KB)."
+    source_ref: "src/mem.c:585-588"
+
+  - name: "Juko PC BIOS"
+    path: "roms/jukopc/000o001.bin"
+    required: false
+    note: "Juko XT clone BIOS (8 KB)."
+    source_ref: "src/mem.c:593-596"
+
+  - name: "Euro PC BIOS"
+    path: "roms/europc/50145"
+    required: false
+    note: "Schneider Euro PC BIOS (32 KB)."
+    source_ref: "src/mem.c:374-377"
+
+  - name: "Olivetti M24 BIOS low"
+    path: "roms/olivetti_m24/olivetti_m24_version_1.43_low.bin"
+    required: false
+    note: "Olivetti M24 BIOS low chip, version 1.43."
+    source_ref: "src/mem.c:247"
+
+  - name: "Olivetti M24 BIOS high"
+    path: "roms/olivetti_m24/olivetti_m24_version_1.43_high.bin"
+    required: false
+    note: "Olivetti M24 BIOS high chip, version 1.43."
+    source_ref: "src/mem.c:248"
+
+  # ========================================================
+  # MACHINE BIOS ROMs - 286 AT clones
+  # ========================================================
+  - name: "Commodore PC 30 III BIOS even"
+    path: "roms/cmdpc30/commodore pc 30 iii even.bin"
+    required: false
+    note: "Commodore PC 30 III BIOS even chip."
+    source_ref: "src/mem.c:312"
+
+  - name: "Commodore PC 30 III BIOS odd"
+    path: "roms/cmdpc30/commodore pc 30 iii odd.bin"
+    required: false
+    note: "Commodore PC 30 III BIOS odd chip."
+    source_ref: "src/mem.c:313"
+
+  - name: "AMI 286 BIOS"
+    path: "roms/ami286/amic206.bin"
+    required: false
+    note: "AMI 286 clone BIOS (64 KB)."
+    source_ref: "src/mem.c:365-368"
+
+  - name: "Dell System 200 BIOS low"
+    path: "roms/dells200/dell0.bin"
+    required: false
+    note: "Dell System 200 BIOS low chip."
+    source_ref: "src/mem.c:326"
+
+  - name: "Dell System 200 BIOS high"
+    path: "roms/dells200/dell1.bin"
+    required: false
+    note: "Dell System 200 BIOS high chip."
+    source_ref: "src/mem.c:327"
+
+  # ========================================================
+  # MACHINE BIOS ROMs - 386 machines
+  # ========================================================
+  - name: "Compaq Deskpro 386 BIOS U11"
+    path: "roms/deskpro386/109592-005.U11.bin"
+    required: false
+    note: "Compaq Deskpro 386 BIOS low chip."
+    source_ref: "src/mem.c:524"
+
+  - name: "Compaq Deskpro 386 BIOS U13"
+    path: "roms/deskpro386/109591-005.U13.bin"
+    required: false
+    note: "Compaq Deskpro 386 BIOS high chip."
+    source_ref: "src/mem.c:525"
+
+  - name: "Acer 386SX BIOS"
+    path: "roms/acer386/acer386.bin"
+    required: false
+    note: "Acer 386SX/25N BIOS (64 KB). Also requires oti067.bin video ROM."
+    source_ref: "src/mem.c:353-356"
+
+  - name: "Acer 386SX OTI-067 video BIOS"
+    path: "roms/acer386/oti067.bin"
+    required: false
+    note: "OTI-067 video BIOS for Acer 386SX (on-board video)."
+    source_ref: "src/mem.c:359, src/vid_oti067.c:184"
+
+  - name: "Phoenix 386 BIOS low"
+    path: "roms/px386/3iip001l.bin"
+    required: false
+    note: "Phoenix 386 clone BIOS low chip."
+    source_ref: "src/mem.c:563"
+
+  - name: "Phoenix 386 BIOS high"
+    path: "roms/px386/3iip001h.bin"
+    required: false
+    note: "Phoenix 386 clone BIOS high chip."
+    source_ref: "src/mem.c:564"
+
+  - name: "DTK 386 BIOS"
+    path: "roms/dtk386/3cto001.bin"
+    required: false
+    note: "DTK 386SX clone BIOS with NEAT chipset (64 KB)."
+    source_ref: "src/mem.c:577-580"
+
+  - name: "Amstrad MegaPC BIOS low"
+    path: "roms/megapc/41651-bios lo.u18"
+    required: false
+    note: "Amstrad MegaPC BIOS low chip."
+    source_ref: "src/mem.c:407"
+
+  - name: "Amstrad MegaPC BIOS high"
+    path: "roms/megapc/211253-bios hi.u19"
+    required: false
+    note: "Amstrad MegaPC BIOS high chip."
+    source_ref: "src/mem.c:408"
+
+  - name: "AMI 386 BIOS"
+    path: "roms/ami386/ami386.bin"
+    required: false
+    note: "AMI 386 clone BIOS with Headland/OPTi 82C495 chipset (64 KB)."
+    source_ref: "src/mem.c:345-348"
+
+  # ========================================================
+  # MACHINE BIOS ROMs - 486 machines
+  # ========================================================
+  - name: "AMI 486 BIOS"
+    path: "roms/ami486/ami486.BIN"
+    required: false
+    note: "AMI 486 clone BIOS with ALi M1429 chipset (64 KB)."
+    source_ref: "src/mem.c:422-425"
+
+  - name: "AMI WinBIOS 486"
+    path: "roms/win486/ALI1429G.AMW"
+    required: false
+    note: "AMI WinBIOS 486 with ALi M1429G chipset (64 KB)."
+    source_ref: "src/mem.c:431-434"
+
+  - name: "HOT-433 PCI 486 BIOS"
+    path: "roms/hot-433/hot-433.ami"
+    required: false
+    note: "HOT-433 PCI 486 BIOS with UMC UM8881F chipset (128 KB)."
+    source_ref: "src/mem.c:439-443"
+
+  - name: "DTK 486 BIOS"
+    path: "roms/dtk486/4siw005.bin"
+    required: false
+    note: "DTK PKM-0038S E-2 BIOS with SiS 85C471 chipset (64 KB)."
+    source_ref: "src/mem.c:601-604"
+
+  - name: "Award SiS 496 BIOS"
+    path: "roms/sis496/SIS496-1.AWA"
+    required: false
+    note: "Award BIOS for SiS 496/497 chipset (128 KB)."
+    source_ref: "src/mem.c:448-452"
+
+  - name: "Rise R418 BIOS"
+    path: "roms/r418/r418i.bin"
+    required: false
+    note: "Rise Computer R418 BIOS with SiS 496/497 chipset (128 KB)."
+    source_ref: "src/mem.c:608-612"
+
+  # ========================================================
+  # MACHINE BIOS ROMs - Pentium machines
+  # ========================================================
+  - name: "Intel Premiere/PCI (Batman) BIOS"
+    path: "roms/revenge/1009AF2_.BIO"
+    required: false
+    note: "Intel Premiere/PCI BIOS (430LX, code-name Batman). Main BIOS block."
+    source_ref: "src/mem.c:469-471"
+
+  - name: "Intel Premiere/PCI (Batman) BIOS ext"
+    path: "roms/revenge/1009AF2_.BI1"
+    required: false
+    note: "Intel Premiere/PCI BIOS extension block."
+    source_ref: "src/mem.c:474-478"
+
+  - name: "Intel Premiere/PCI II (Plato) BIOS"
+    path: "roms/plato/1016AX1_.BIO"
+    required: false
+    note: "Intel Premiere/PCI II BIOS (430NX). Main BIOS block."
+    source_ref: "src/mem.c:617-620"
+
+  - name: "Intel Premiere/PCI II (Plato) BIOS ext"
+    path: "roms/plato/1016AX1_.BI1"
+    required: false
+    note: "Intel Premiere/PCI II BIOS extension block."
+    source_ref: "src/mem.c:622-625"
+
+  - name: "Intel Advanced/EV (Endeavor) BIOS"
+    path: "roms/endeavor/1006CB0_.BIO"
+    required: false
+    note: "Intel Advanced/EV BIOS (430FX). Main BIOS block."
+    source_ref: "src/mem.c:483-485"
+
+  - name: "Intel Advanced/EV (Endeavor) BIOS ext"
+    path: "roms/endeavor/1006CB0_.BI1"
+    required: false
+    note: "Intel Advanced/EV BIOS extension block."
+    source_ref: "src/mem.c:488-491"
+
+  - name: "PC Partner MB500N BIOS"
+    path: "roms/mb500n/031396S.BIN"
+    required: false
+    note: "PC Partner MB500N BIOS (430FX, Award, 128 KB)."
+    source_ref: "src/mem.c:632-635"
+
+  - name: "ASUS P/I-P54TP4XE BIOS"
+    path: "roms/p54tp4xe/T15I0302.AWD"
+    required: false
+    note: "ASUS P/I-P54TP4XE BIOS (430FX, Award, 128 KB)."
+    source_ref: "src/mem.c:640-643"
+
+  - name: "Acer M3A BIOS"
+    path: "roms/acerm3a/r01-b3.bin"
+    required: false
+    note: "Acer M3A BIOS (430HX, 128 KB)."
+    source_ref: "src/mem.c:648-651"
+
+  - name: "Acer V35N BIOS"
+    path: "roms/acerv35n/V35ND1S1.BIN"
+    required: false
+    note: "Acer V35N BIOS (430HX, 128 KB)."
+    source_ref: "src/mem.c:656-659"
+
+  - name: "ASUS P/I-P55T2P4 BIOS"
+    path: "roms/p55t2p4/0207_J2.BIN"
+    required: false
+    note: "ASUS P/I-P55T2P4 BIOS (430HX, Award, 128 KB)."
+    source_ref: "src/mem.c:664-667"
+
+  - name: "Award 430VX BIOS"
+    path: "roms/430vx/55XWUQ0E.BIN"
+    required: false
+    note: "Award 430VX PCI BIOS (128 KB)."
+    source_ref: "src/mem.c:459-463"
+
+  - name: "Epox P55-VA BIOS"
+    path: "roms/p55va/VA021297.BIN"
+    required: false
+    note: "Epox P55-VA BIOS (430VX, Award, 128 KB)."
+    source_ref: "src/mem.c:672-675"
+
+  # ========================================================
+  # VIDEO CARD ROMs (selected via gfxcard option)
+  # ========================================================
+  - name: "IBM EGA BIOS"
+    path: "roms/ibm_6277356_ega_card_u44_27128.bin"
+    required: false
+    note: "IBM EGA card BIOS (32 KB)."
+    source_ref: "src/vid_ega.c:957, 1078"
+
+  - name: "Compaq EGA BIOS"
+    path: "roms/108281-001.bin"
+    required: false
+    note: "Compaq EGA card BIOS (32 KB)."
+    source_ref: "src/vid_ega.c:997, 1083"
+
+  - name: "Chips & Technologies SuperEGA BIOS"
+    path: "roms/lega.vbi"
+    required: false
+    note: "Chips & Technologies SuperEGA BIOS (32 KB)."
+    source_ref: "src/vid_ega.c:1041, 1088"
+
+  - name: "IBM VGA BIOS"
+    path: "roms/ibm_vga.bin"
+    required: false
+    note: "IBM VGA card BIOS. Also used by PS/1 VGA (same availability check)."
+    source_ref: "src/vid_vga.c:89, 127"
+
+  - name: "Compaq/Paradise VGA BIOS"
+    path: "roms/1988-05-18.rom"
+    required: false
+    note: "Compaq/Paradise PVGA1A VGA BIOS dated 1988-05-18."
+    source_ref: "src/vid_paradise.c:366, 373"
+
+  - name: "ATI VGA Edge-16 BIOS"
+    path: "roms/vgaedge16.vbi"
+    required: false
+    note: "ATI VGA Edge-16 (ATI-18800) video BIOS."
+    source_ref: "src/vid_ati18800.c:135, 155"
+
+  - name: "ATI VGA Charger BIOS"
+    path: "roms/bios.bin"
+    required: false
+    note: "ATI VGA Charger (ATI-28800) video BIOS."
+    source_ref: "src/vid_ati28800.c:160, 180"
+
+  - name: "OAK OTI-067 BIOS"
+    path: "roms/oti067/bios.bin"
+    required: false
+    note: "OAK OTI-067 standalone video BIOS."
+    source_ref: "src/vid_oti067.c:158, 194"
+
+  - name: "Trident TVGA8900D BIOS"
+    path: "roms/TRIDENT.BIN"
+    required: false
+    note: "Trident TVGA8900D video BIOS."
+    source_ref: "src/vid_tvga.c:292, 307"
+
+  - name: "Tseng ET4000AX BIOS"
+    path: "roms/et4000.BIN"
+    required: false
+    note: "Tseng ET4000AX video BIOS."
+    source_ref: "src/vid_et4000.c:153, 168"
+
+  - name: "Tseng ET4000/W32p BIOS"
+    path: "roms/et4000w32.bin"
+    required: false
+    note: "Diamond Stealth 32 (Tseng ET4000/W32p) video BIOS."
+    source_ref: "src/vid_et4000w32.c:1081, 1103"
+
+  - name: "S3 Vision864 BIOS"
+    path: "roms/bahamas64.BIN"
+    required: false
+    note: "Paradise Bahamas 64 (S3 Vision864) video BIOS."
+    source_ref: "src/vid_s3.c:2001, 2015"
+
+  - name: "S3 Trio64 BIOS (Number Nine 9FX)"
+    path: "roms/s3_764.bin"
+    required: false
+    note: "Number Nine 9FX (S3 764/Trio64) video BIOS."
+    source_ref: "src/vid_s3.c:2020, 2034"
+
+  - name: "S3 Trio32 BIOS (Phoenix)"
+    path: "roms/86C732P.bin"
+    required: false
+    note: "Phoenix S3 732/Trio32 video BIOS."
+    source_ref: "src/vid_s3.c:2039, 2055"
+
+  - name: "S3 Trio64 BIOS (Phoenix)"
+    path: "roms/86c764x1.bin"
+    required: false
+    note: "Phoenix S3 764/Trio64 video BIOS."
+    source_ref: "src/vid_s3.c:2060, 2076"
+
+  - name: "S3 ViRGE BIOS"
+    path: "roms/s3virge.bin"
+    required: false
+    note: "Diamond Stealth 3D 2000 (S3 ViRGE) video BIOS."
+    source_ref: "src/vid_s3_virge.c:3746, 3936"
+
+  - name: "S3 ViRGE/DX BIOS"
+    path: "roms/86c375_1.bin"
+    required: false
+    note: "S3 ViRGE/DX (86C375) video BIOS."
+    source_ref: "src/vid_s3_virge.c:3836, 3941"
+
+  - name: "ATI Mach64 GX BIOS"
+    path: "roms/mach64gx/bios.bin"
+    required: false
+    note: >
+      ATI Graphics Pro Turbo (Mach64 GX) video BIOS. Also used by the
+      Cirrus Logic CL-GD5429 init path (likely a copy/paste in the source).
+    source_ref: "src/vid_ati_mach64.c:2341, src/vid_cirrus.c:2324"
+
+  - name: "Cirrus Logic CL-GD5429 BIOS"
+    path: "roms/5429.vbi"
+    required: false
+    note: "Cirrus Logic CL-GD5429 video BIOS."
+    source_ref: "src/vid_cl5429.c:847, 872"
+
+  - name: "Trident TGUI9440 BIOS"
+    path: "roms/9440.vbi"
+    required: false
+    note: "Trident TGUI9440 video BIOS."
+    source_ref: "src/vid_tgui9440.c:495, 517"
+
+  - name: "Paradise WD90C11 BIOS"
+    path: "roms/megapc/41651-bios lo.u18"
+    required: false
+    note: >
+      Paradise WD90C11 video BIOS for MegaPC. Uses the MegaPC BIOS ROMs
+      (same files as the MegaPC machine BIOS).
+    source_ref: "src/vid_paradise.c:348-358"
+
+  - name: "nVidia RIVA 128 BIOS"
+    path: "roms/riva128.bin"
+    required: false
+    note: "nVidia RIVA 128 video BIOS (64 KB). Marked experimental."
+    source_ref: "src/vid_nv_riva128.c:1096, 1152"
+
+  - name: "nVidia RIVA TNT BIOS"
+    path: "roms/rivatnt.bin"
+    required: false
+    note: "nVidia RIVA TNT video BIOS (64 KB). Marked experimental."
+    source_ref: "src/vid_nv_rivatnt.c:1126, 1182"
+
+  # ========================================================
+  # SOUND CARD ROMs
+  # ========================================================
+  - name: "Sound Blaster AWE32 ROM"
+    path: "roms/awe32.raw"
+    required: false
+    note: >
+      Creative Sound Blaster AWE32 sample ROM for EMU8000 synth chip.
+      Required when SB AWE32 sound card is selected.
+    source_ref: "src/sound_emu8k.c:679, src/sound_sb.c:479"
+
+  # ========================================================
+  # NETWORK CARD ROMs
+  # ========================================================
+  - name: "Realtek RTL8029AS boot ROM"
+    path: "roms/rtl8029as.rom"
+    required: false
+    note: "Realtek RTL8029AS PCI Ethernet boot ROM (32 KB)."
+    source_ref: "src/ne2000.c:1694"
+
+  - name: "NE2000 boot ROM"
+    path: "roms/ne2000.rom"
+    required: false
+    note: "NE2000 ISA Ethernet boot ROM (64 KB)."
+    source_ref: "src/ne2000.c:1701"
+
+notes:
+  rom_structure: >
+    All ROM files are loaded relative to the RetroArch system directory.
+    Machine BIOS ROMs go in roms/<machine_name>/ subdirectories.
+    Video card ROMs go directly in roms/ (or roms/<card>/ for some).
+    Which ROMs are needed depends on the selected machine model and video card.
+  minimum_requirement: >
+    At minimum, the mda.rom font and one machine BIOS set are required.
+    The video card ROM for the selected GPU is also needed unless the machine
+    has built-in video (PCjr, Tandy, Amstrad, Acer 386SX, PS/1).
+  libretro_version: >
+    Based on PCem v10.1. The libretro port is quite old and may not match
+    current standalone PCem/86Box ROM paths.

@@ -1,0 +1,30 @@
+emulator: DoubleCherryGB
+type: libretro
+source: "https://github.com/TimOelrichs/doublecherryGB-libretro"
+cores:
+  - DoubleCherryGB
+systems:
+  - nintendo-gb
+  - nintendo-gbc
+
+notes: |
+  DoubleCherryGB is a Game Boy / Game Boy Color emulator forked from TGB Dual
+  by GIGO and Hii. It adds multi-Game Boy emulation with virtual link cable
+  support for up to 16 players, DMG-07 4-Player Adapter emulation, and
+  built-in Pokemon distribution events.
+
+  No BIOS or boot ROM files are required or supported. The core does not
+  call RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY for firmware loading and does
+  not attempt to open any files from the system directory.
+
+  In cpu.cpp:82, the program counter is initialized to 0x100 (post-boot ROM
+  entry point), and cpu::reset() sets all registers to their post-boot
+  values directly (AF=0x01B0 for DMG, 0x11B0 for CGB). This means the
+  core completely bypasses the boot ROM sequence via HLE register setup.
+
+  The .info file at libretro-core-info confirms no firmware entries.
+
+  Supported extensions: gb, dmg, gbc, cgb, sgb.
+  Library version: v0.18.0.
+
+files: []

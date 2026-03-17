@@ -1,0 +1,84 @@
+emulator: Ardens
+type: libretro
+source: "https://github.com/tiberiusbrown/ardens"
+cores:
+  - ardens
+systems:
+  - arduboy
+
+notes: |
+  Ardens is an Arduboy FX simulator designed for profiling and debugging,
+  ported to libretro. It emulates the ATmega32U4 MCU, SSD1306 OLED display,
+  and W25Q128 external flash used by the Arduboy hardware.
+
+  No BIOS or bootloader files are required. The core has all boot code
+  compiled directly into the binary:
+
+  - Caterina/Arduboy3K bootloaders for multiple hardware revisions (D1, D2,
+    E2) are embedded as C arrays generated from .hex files via bin2c.py.
+    Located in src/boot/boot_game_*.c and src/boot/boot_menu_*.c.
+    The appropriate variant is selected at reset based on the configured
+    device type (absim_arduboy.cpp:115-161).
+
+  - Flashcart header (1536 bytes) is embedded in src/boot/boot_flashcart.c
+    and written to the start of the W25Q128 flash image at init
+    (absim_w25q128.hpp:14).
+
+  - EEPROM (1024 bytes) and external flash (W25Q128, 16 MB) state are
+    handled as save RAM through the libretro RETRO_MEMORY_SAVE_RAM
+    interface, not as system files.
+
+  The libretro port does not call RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY
+  and never attempts to load any file from the system directory.
+  The .info file declares firmware_count = 0.
+
+  Supported ROM formats: Intel HEX (.hex) and Arduboy package (.arduboy).
+  block_extract is set to true (the core reads archives directly).
+
+files: []
+
+platform_details:
+  embedded_bootloaders:
+    source_ref: "src/boot/_make.bat, src/absim_arduboy.cpp:115-161"
+    variants:
+      - name: "arduboy3k-bootloader-game-sda"
+        array: "ARDENS_BOOT_GAME_D1"
+        size: 8422
+        device: "Arduboy FX (SDA)"
+      - name: "arduboy3k-bootloader-menu-sda"
+        array: "ARDENS_BOOT_MENU_D1"
+        size: 8422
+        device: "Arduboy FX (SDA)"
+      - name: "arduboy3k-bootloader-game-devkit"
+        array: "ARDENS_BOOT_GAME_D2"
+        size: 8446
+        device: "Arduboy FX DevKit"
+      - name: "arduboy3k-bootloader-menu-devkit"
+        array: "ARDENS_BOOT_MENU_D2"
+        size: 8446
+        device: "Arduboy FX DevKit"
+      - name: "arduboymini-bootloader-game"
+        array: "ARDENS_BOOT_GAME_E2"
+        size: 8548
+        device: "Arduboy Mini"
+      - name: "arduboymini-bootloader-menu"
+        array: "ARDENS_BOOT_MENU_E2"
+        size: 8548
+        device: "Arduboy Mini"
+    notes: |
+      All bootloaders are compiled from Intel HEX into C arrays at build
+      time. The core selects the game or menu variant at reset depending
+      on whether a flashcart image was loaded and the boot_to_menu config
+      flag (absim_arduboy.cpp:142-158). The bootloader is written to the
+      top of the ATmega32U4 program memory at the address defined by the
+      BOOTSZ fuse bits (absim.hpp:811).
+
+  embedded_flashcart_header:
+    source_ref: "src/boot/boot_flashcart.c, src/absim_w25q128.hpp:14"
+    array: "ARDENS_BOOT_FLASHCART"
+    size: 1536
+    notes: |
+      Empty flashcart header written to the first 1536 bytes of the
+      W25Q128 flash image during initialization. This is not a BIOS
+      file -- it is the default flash content the Arduboy FX expects
+      at the start of external storage.
