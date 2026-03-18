@@ -2,6 +2,7 @@ emulator: Beetle Saturn (Mednafen)
 type: libretro
 core: mednafen_saturn_libretro
 source: "https://github.com/libretro/beetle-saturn-libretro"
+profiled_date: "2026-03-18"
 systems:
   - sega-saturn
 

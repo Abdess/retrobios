@@ -1,6 +1,7 @@
 emulator: LowRes NX
 type: libretro
 source: "https://github.com/timoinutilis/lowres-nx"
+profiled_date: "2026-03-18"
 cores:
   - lowresnx
 systems:

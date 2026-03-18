@@ -1,6 +1,7 @@
 emulator: PicoDrive
 type: libretro
 source: "https://github.com/libretro/picodrive"
+profiled_date: "2026-03-18"
 systems:
   - sega-megadrive
   - sega-genesis

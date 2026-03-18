@@ -12,6 +12,7 @@ cores:
   - vice_xcbm5x0
   - vice_xscpu64
 source: "https://github.com/libretro/vice-libretro"
+profiled_date: "2026-03-18"
 systems:
   - commodore-c64
   - commodore-c128

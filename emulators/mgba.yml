@@ -1,6 +1,7 @@
 emulator: mGBA
 type: libretro
 source: "https://github.com/libretro/mgba"
+profiled_date: "2026-03-18"
 cores:
   - mgba
 systems:

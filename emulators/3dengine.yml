@@ -1,6 +1,7 @@
 emulator: 3DEngine
 type: utility
 source: "https://github.com/libretro/libretro-3dengine"
+profiled_date: "2026-03-18"
 cores: [3dengine]
 systems: []
 files: []

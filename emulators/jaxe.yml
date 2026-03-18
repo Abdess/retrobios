@@ -1,6 +1,7 @@
 emulator: JAXE
 type: libretro
 source: "https://github.com/libretro/jaxe"
+profiled_date: "2026-03-18"
 cores:
   - jaxe
 systems:

@@ -1,6 +1,7 @@
 emulator: "Game & Watch"
 type: libretro
 source: "https://github.com/libretro/gw-libretro"
+profiled_date: "2026-03-18"
 cores:
   - gw
 systems:

@@ -1,6 +1,7 @@
 emulator: Rustation
 type: libretro
 source: "https://github.com/libretro/rustation-libretro"
+profiled_date: "2026-03-18"
 cores: [rustation]
 systems: [sony-playstation]
 bios_size: 524288  # 512 KB, enforced before SHA-256 check

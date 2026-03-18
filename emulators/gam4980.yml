@@ -1,6 +1,7 @@
 emulator: GAM4980
 type: libretro
 source: "https://github.com/ThisBoringWorld/gam4980"
+profiled_date: "2026-03-18"
 cores:
   - gam4980
 systems:

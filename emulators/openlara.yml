@@ -1,6 +1,7 @@
 emulator: OpenLara
 type: libretro
 source: "https://github.com/libretro/OpenLara"
+profiled_date: "2026-03-18"
 cores: [openlara]
 systems: [tomb-raider]
 verification: existence

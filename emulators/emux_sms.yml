@@ -1,0 +1,6 @@
+emulator: "emux_sms"
+type: alias
+alias_of: "gearsystem"
+profiled_date: "2026-03-18"
+note: "This core uses the same BIOS/firmware as gearsystem. See emulators/gearsystem.yml for details."
+files: []

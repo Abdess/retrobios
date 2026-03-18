@@ -1,6 +1,7 @@
 emulator: Citra / Lime3DS / Azahar
 type: standalone + libretro
 source: "https://github.com/azahar-emu/azahar"
+profiled_date: "2026-03-18"
 systems: [nintendo-3ds]
 
 notes: |

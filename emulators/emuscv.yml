@@ -1,6 +1,7 @@
 emulator: EmuSCV
 type: libretro
 source: "https://github.com/wzcwzc/emuscv"
+profiled_date: "2026-03-18"
 cores:
   - emuscv
 systems:

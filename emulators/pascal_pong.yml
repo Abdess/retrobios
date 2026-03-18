@@ -1,6 +1,7 @@
 emulator: Pascal Pong
 type: game
 source: "https://github.com/libretro/libretro-pong"
+profiled_date: "2026-03-18"
 cores: [pascal_pong]
 systems: []
 files: []

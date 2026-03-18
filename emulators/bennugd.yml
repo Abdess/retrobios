@@ -1,6 +1,7 @@
 emulator: BennuGD
 type: libretro
 source: "https://github.com/diekleinekuh/BennuGD_libretro"
+profiled_date: "2026-03-18"
 cores:
   - bennugd
 systems:

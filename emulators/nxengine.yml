@@ -1,6 +1,7 @@
 emulator: NXEngine
 type: libretro
 source: "https://github.com/libretro/nxengine-libretro"
+profiled_date: "2026-03-18"
 systems: [cave-story]
 
 notes: |

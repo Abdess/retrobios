@@ -1,6 +1,7 @@
 emulator: MAME 2010
 type: libretro
 source: "https://github.com/libretro/mame2010-libretro"
+profiled_date: "2026-03-18"
 mame_version: "0.139"
 systems:
   - snk-neogeo-mvs

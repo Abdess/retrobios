@@ -1,6 +1,7 @@
 emulator: testvulkan_async_compute
 type: test
 source: "https://github.com/libretro/libretro-samples"
+profiled_date: "2026-03-18"
 cores:
   - testvulkan_async_compute
 systems: []

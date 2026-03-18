@@ -1,6 +1,7 @@
 emulator: REminiscence
 type: libretro
 source: "https://github.com/libretro/REminiscence"
+profiled_date: "2026-03-18"
 cores:
   - reminiscence
 systems:

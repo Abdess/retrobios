@@ -1,6 +1,7 @@
 emulator: Arduous
 type: libretro
 source: "https://github.com/libretro/arduous"
+profiled_date: "2026-03-18"
 cores:
   - arduous
 systems:

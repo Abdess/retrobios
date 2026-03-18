@@ -1,6 +1,7 @@
 emulator: MojoZork
 type: game
 source: "https://github.com/libretro/libretro-mojozork"
+profiled_date: "2026-03-18"
 cores:
   - mojozork
 systems: []

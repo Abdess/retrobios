@@ -1,6 +1,7 @@
 emulator: PCSX-ReARMed
 type: libretro
 source: "https://github.com/libretro/pcsx_rearmed"
+profiled_date: "2026-03-18"
 cores: [pcsx_rearmed, pcsx_rearmed_neon, pcsx_rearmed_interpreter]
 systems: [sony-playstation]
 bios_size: 524288  # 512 KB (0x80000); also accepts 4 MB psxonpsp combo (reads first 512 KB)

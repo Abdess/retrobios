@@ -1,6 +1,7 @@
 emulator: Genesis Plus GX
 type: libretro
 source: "https://github.com/libretro/Genesis-Plus-GX"
+profiled_date: "2026-03-18"
 cores:
   - genesis_plus_gx
   - genesis_plus_gx_wide

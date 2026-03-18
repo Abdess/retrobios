@@ -1,6 +1,7 @@
 emulator: BlastEm
 type: libretro
 source: "https://github.com/libretro/blastem"
+profiled_date: "2026-03-18"
 cores:
   - blastem
 systems:

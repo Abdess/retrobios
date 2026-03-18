@@ -1,6 +1,7 @@
 emulator: a5200
 type: libretro
 source: "https://github.com/libretro/a5200"
+profiled_date: "2026-03-18"
 cores:
   - a5200
 systems:

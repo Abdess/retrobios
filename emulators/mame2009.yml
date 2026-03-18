@@ -1,0 +1,6 @@
+emulator: "mame2009"
+type: alias
+alias_of: "mame2010"
+profiled_date: "2026-03-18"
+note: "This core uses the same BIOS/firmware as mame2010. See emulators/mame2010.yml for details."
+files: []

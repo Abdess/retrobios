@@ -2,6 +2,7 @@ emulator: Frodo
 type: libretro
 cores: [frodo]
 source: "https://github.com/libretro/frodo-libretro"
+profiled_date: "2026-03-18"
 systems: [commodore-c64]
 
 notes: |

@@ -1,0 +1,6 @@
+emulator: "mkxp-z"
+type: alias
+alias_of: "mkxp_z"
+profiled_date: "2026-03-18"
+note: "This core uses the same BIOS/firmware as mkxp_z. See emulators/mkxp_z.yml for details."
+files: []

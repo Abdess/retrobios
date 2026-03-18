@@ -2,6 +2,7 @@ emulator: PUAE (P-UAE)
 type: libretro
 cores: [puae, puae2021]
 source: "https://github.com/libretro/libretro-uae"
+profiled_date: "2026-03-18"
 systems:
   - commodore-amiga
   - commodore-amiga-cd32

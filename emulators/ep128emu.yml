@@ -1,6 +1,7 @@
 emulator: ep128emu-core
 type: libretro
 source: "https://github.com/libretro/ep128emu-core"
+profiled_date: "2026-03-18"
 cores:
   - ep128emu_core
 systems:

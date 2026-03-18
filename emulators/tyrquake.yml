@@ -1,6 +1,7 @@
 emulator: TyrQuake
 type: libretro
 source: "https://github.com/libretro/tyrquake"
+profiled_date: "2026-03-18"
 cores: [tyrquake]
 systems: [quake]
 verification: existence

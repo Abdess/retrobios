@@ -1,6 +1,7 @@
 emulator: Geargrafx
 type: libretro
 source: "https://github.com/drhelius/Geargrafx"
+profiled_date: "2026-03-18"
 cores:
   - geargrafx
 systems:

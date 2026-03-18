@@ -1,0 +1,6 @@
+emulator: "skyemu"
+type: alias
+alias_of: "mgba"
+profiled_date: "2026-03-18"
+note: "This core uses the same BIOS/firmware as mgba. See emulators/mgba.yml for details."
+files: []

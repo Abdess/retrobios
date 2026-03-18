@@ -1,6 +1,7 @@
 emulator: Mu
 type: libretro
 source: "https://github.com/libretro/Mu"
+profiled_date: "2026-03-18"
 systems: [palm-os]
 
 notes: |

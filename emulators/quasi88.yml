@@ -1,6 +1,7 @@
 emulator: QUASI88
 type: libretro
 source: "https://github.com/libretro/quasi88-libretro"
+profiled_date: "2026-03-18"
 cores:
   - quasi88
 systems:

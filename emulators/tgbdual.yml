@@ -1,6 +1,7 @@
 emulator: TGB Dual
 type: libretro
 source: "https://github.com/libretro/tgbdual-libretro"
+profiled_date: "2026-03-18"
 cores:
   - TGB Dual
 systems:

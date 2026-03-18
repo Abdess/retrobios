@@ -1,6 +1,7 @@
 emulator: vidtest
 type: test
 source: "https://github.com/libretro/RetroArch"
+profiled_date: "2026-03-18"
 cores:
   - vidtest
 systems: []

@@ -1,6 +1,7 @@
 emulator: FreeIntv
 type: libretro
 source: "https://github.com/libretro/FreeIntv"
+profiled_date: "2026-03-18"
 cores:
   - freeintv
 systems:

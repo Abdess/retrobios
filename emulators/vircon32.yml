@@ -1,6 +1,7 @@
 emulator: Vircon32
 type: libretro
 source: "https://github.com/vircon32/vircon32-libretro"
+profiled_date: "2026-03-18"
 cores:
   - vircon32
 systems:

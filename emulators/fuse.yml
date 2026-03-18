@@ -1,6 +1,7 @@
 emulator: Fuse
 type: libretro
 source: "https://github.com/libretro/fuse-libretro"
+profiled_date: "2026-03-18"
 cores:
   - fuse
 systems:

@@ -1,0 +1,6 @@
+emulator: "nekop2"
+type: alias
+alias_of: "np2kai"
+profiled_date: "2026-03-18"
+note: "This core uses the same BIOS/firmware as np2kai. See emulators/np2kai.yml for details."
+files: []

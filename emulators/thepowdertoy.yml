@@ -1,6 +1,7 @@
 emulator: The Powder Toy
 type: game
 source: "https://github.com/libretro/ThePowderToy"
+profiled_date: "2026-03-18"
 cores: [thepowdertoy]
 systems: []
 files: []

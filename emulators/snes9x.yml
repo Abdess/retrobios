@@ -1,6 +1,7 @@
 emulator: snes9x
 type: libretro
 source: "https://github.com/libretro/snes9x"
+profiled_date: "2026-03-18"
 systems: [nintendo-snes, nintendo-satellaview, nintendo-sufami-turbo]
 
 # snes9x uses HLE for all coprocessors: DSP1-4, ST010, ST011, ST018, CX4.

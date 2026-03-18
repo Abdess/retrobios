@@ -1,6 +1,7 @@
 emulator: Moonlight
 type: utility
 source: "https://github.com/libretro/moonlight-libretro"
+profiled_date: "2026-03-18"
 cores:
   - moonlight
 systems: []

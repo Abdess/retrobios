@@ -1,6 +1,7 @@
 emulator: Nestopia UE
 type: libretro
 source: "https://github.com/libretro/nestopia"
+profiled_date: "2026-03-18"
 systems: [nintendo-nes, nintendo-fds]
 
 notes: |

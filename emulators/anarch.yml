@@ -1,6 +1,7 @@
 emulator: Anarch
 type: game
 source: "https://github.com/libretro/anern"
+profiled_date: "2026-03-18"
 cores: [anarch]
 systems: []
 files: []

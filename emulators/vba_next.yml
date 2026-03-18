@@ -1,6 +1,7 @@
 emulator: VBA-Next
 type: libretro
 source: "https://github.com/libretro/vba-next"
+profiled_date: "2026-03-18"
 cores:
   - vba_next
 systems:

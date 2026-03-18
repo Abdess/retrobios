@@ -1,6 +1,7 @@
 emulator: Stella
 type: libretro
 source: "https://github.com/libretro/stella2014-libretro"
+profiled_date: "2026-03-18"
 cores:
   - stella
   - stella2014

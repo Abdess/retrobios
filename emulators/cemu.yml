@@ -1,6 +1,7 @@
 emulator: Cemu
 type: standalone
 source: "https://github.com/cemu-project/Cemu"
+profiled_date: "2026-03-18"
 systems: [nintendo-wiiu]
 analysis_date: "2026-03-17"
 analysis_commit: "HEAD (depth=1)"

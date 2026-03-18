@@ -1,6 +1,7 @@
 emulator: FreeChaF
 type: libretro
 source: "https://github.com/libretro/FreeChaF"
+profiled_date: "2026-03-18"
 cores:
   - freechaf
 systems:

@@ -1,6 +1,7 @@
 emulator: Jump 'n Bump
 type: game
 source: "https://github.com/libretro/jumpnbump-libretro"
+profiled_date: "2026-03-18"
 cores: [jumpnbump]
 systems: []
 files: []

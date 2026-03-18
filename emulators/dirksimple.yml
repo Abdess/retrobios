@@ -1,0 +1,6 @@
+emulator: "dirksimple"
+type: alias
+alias_of: "daphne"
+profiled_date: "2026-03-18"
+note: "This core uses the same BIOS/firmware as daphne. See emulators/daphne.yml for details."
+files: []

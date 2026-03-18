@@ -1,6 +1,7 @@
 emulator: PrBoom
 type: libretro
 source: "https://github.com/libretro/libretro-prboom"
+profiled_date: "2026-03-18"
 systems: [doom]
 
 notes: |

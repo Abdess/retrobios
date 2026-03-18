@@ -1,6 +1,7 @@
 emulator: PokeMini
 type: libretro
 source: "https://github.com/libretro/PokeMini"
+profiled_date: "2026-03-18"
 cores:
   - pokemini
 systems:

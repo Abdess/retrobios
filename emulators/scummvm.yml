@@ -1,6 +1,7 @@
 emulator: ScummVM
 type: libretro
 source: "https://github.com/libretro/scummvm"
+profiled_date: "2026-03-18"
 systems: [scummvm]
 
 # ScummVM is a multi-engine point-and-click adventure game interpreter.

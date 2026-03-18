@@ -1,6 +1,7 @@
 emulator: ROM Cleaner
 type: utility
 source: "https://github.com/libretro/libretro-database"
+profiled_date: "2026-03-18"
 cores:
   - romcleaner
 systems: []

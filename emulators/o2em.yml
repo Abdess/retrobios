@@ -2,6 +2,7 @@ emulator: O2EM
 type: libretro
 core: o2em_libretro
 source: "https://github.com/libretro/libretro-o2em"
+profiled_date: "2026-03-18"
 systems:
   - odyssey2
   - videopac

@@ -1,6 +1,7 @@
 emulator: boom3
 type: libretro
 source: "https://github.com/libretro/boom3"
+profiled_date: "2026-03-18"
 cores: [boom3, boom3_xp]
 systems: [doom3]
 verification: existence

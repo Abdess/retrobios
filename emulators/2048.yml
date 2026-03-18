@@ -1,6 +1,7 @@
 emulator: "2048"
 type: game
 source: "https://github.com/libretro/libretro-2048"
+profiled_date: "2026-03-18"
 cores: [2048]
 systems: []
 files: []

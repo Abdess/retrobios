@@ -1,6 +1,7 @@
 emulator: "Dolphin Launcher"
 type: launcher
 source: "https://github.com/RobLoach/libretro-dolphin-launcher"
+profiled_date: "2026-03-18"
 cores:
   - dolphin_launcher
 systems: [nintendo-gamecube, nintendo-wii]

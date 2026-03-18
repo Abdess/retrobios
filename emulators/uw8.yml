@@ -1,4 +1,5 @@
 emulator: MicroW8
+profiled_date: "2026-03-18"
 type: game
 cores: [uw8]
 systems: []

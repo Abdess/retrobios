@@ -1,6 +1,7 @@
 emulator: Gambatte
 type: libretro
 source: "https://github.com/libretro/gambatte-libretro"
+profiled_date: "2026-03-18"
 systems: [nintendo-gb, nintendo-gbc]
 
 notes: |

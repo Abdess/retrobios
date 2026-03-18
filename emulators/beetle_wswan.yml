@@ -1,6 +1,7 @@
 emulator: Beetle WonderSwan (Mednafen WonderSwan)
 type: libretro
 source: "https://github.com/libretro/beetle-wswan-libretro"
+profiled_date: "2026-03-18"
 systems: [bandai-wswan, bandai-wswanc]
 
 notes: |

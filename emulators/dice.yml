@@ -1,6 +1,7 @@
 emulator: DICE
 type: libretro
 source: "https://github.com/mittonk/dice-libretro"
+profiled_date: "2026-03-18"
 cores:
   - dice
 systems:

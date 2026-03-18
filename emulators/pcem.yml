@@ -1,6 +1,7 @@
 emulator: PCem
 type: libretro
 source: "https://github.com/libretro/libretro-pcem"
+profiled_date: "2026-03-18"
 systems: [ibm-pc, ibm-xt, ibm-at, ibm-pcjr, ibm-ps1, tandy-1000]
 
 # PCem (PC Emulator) emulates IBM PC compatibles from 8088 through Pentium.

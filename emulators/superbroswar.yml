@@ -1,6 +1,7 @@
 emulator: Super Bros War
 type: game
 source: "https://github.com/libretro/superbroswar-libretro"
+profiled_date: "2026-03-18"
 cores: [superbroswar]
 systems: []
 files: []

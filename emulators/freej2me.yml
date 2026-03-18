@@ -1,6 +1,7 @@
 emulator: FreeJ2ME
 type: libretro
 source: "https://github.com/hex007/freej2me"
+profiled_date: "2026-03-18"
 cores:
   - freej2me
 systems:

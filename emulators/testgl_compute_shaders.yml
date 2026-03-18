@@ -1,6 +1,7 @@
 emulator: testgl_compute_shaders
 type: test
 source: "https://github.com/libretro/libretro-samples"
+profiled_date: "2026-03-18"
 cores:
   - testgl_compute_shaders
 systems: []

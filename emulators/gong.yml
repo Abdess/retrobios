@@ -1,6 +1,7 @@
 emulator: Gong
 type: game
 source: "https://github.com/libretro/gong"
+profiled_date: "2026-03-18"
 cores: [gong]
 systems: []
 files: []

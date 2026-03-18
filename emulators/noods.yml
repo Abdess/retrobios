@@ -1,6 +1,7 @@
 emulator: NooDS
 type: libretro
 source: "https://github.com/Hydr8gon/NooDS"
+profiled_date: "2026-03-18"
 cores: [noods]
 systems: [nintendo-ds, nintendo-gba]
 

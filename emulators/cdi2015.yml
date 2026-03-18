@@ -1,0 +1,6 @@
+emulator: "cdi2015"
+type: alias
+alias_of: "same_cdi"
+profiled_date: "2026-03-18"
+note: "This core uses the same BIOS/firmware as same_cdi. See emulators/same_cdi.yml for details."
+files: []

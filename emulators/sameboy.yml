@@ -1,6 +1,7 @@
 emulator: SameBoy
 type: libretro
 source: "https://github.com/libretro/SameBoy"
+profiled_date: "2026-03-18"
 cores:
   - sameboy
 systems:

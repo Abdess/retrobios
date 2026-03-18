@@ -1,6 +1,7 @@
 emulator: PD777
 type: libretro
 source: "https://github.com/W88DodPECuThLOl/PD777"
+profiled_date: "2026-03-18"
 cores:
   - pd777
 systems:

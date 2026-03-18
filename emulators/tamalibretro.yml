@@ -1,6 +1,7 @@
 emulator: TamaLIBretro
 type: game
 source: "https://github.com/libretro/tamern-libretro"
+profiled_date: "2026-03-18"
 cores: [tamalibretro]
 systems: []
 files: []

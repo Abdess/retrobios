@@ -1,6 +1,7 @@
 emulator: CrocoDS
 type: libretro
 source: "https://github.com/libretro/libretro-crocods"
+profiled_date: "2026-03-18"
 cores:
   - crocods
 systems:

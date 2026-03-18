@@ -5,6 +5,7 @@
 emulator: PPSSPP
 type: standalone
 source: "https://github.com/hrydgard/ppsspp"
+profiled_date: "2026-03-18"
 systems: [sony-psp]
 
 firmware_required: false

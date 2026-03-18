@@ -1,6 +1,7 @@
 emulator: galaksija
 type: libretro
 source: "https://github.com/libretro/galaxy-libretro"
+profiled_date: "2026-03-18"
 cores:
   - galaksija
 systems:

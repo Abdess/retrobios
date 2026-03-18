@@ -1,6 +1,7 @@
 emulator: NP2kai
 type: libretro
 source: "https://github.com/libretro/NP2kai"
+profiled_date: "2026-03-18"
 systems: [pc-98]
 
 # NP2kai is a PC-9801/9821 emulator (Neko Project II kai).

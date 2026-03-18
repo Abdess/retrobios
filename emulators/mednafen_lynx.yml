@@ -1,0 +1,6 @@
+emulator: "mednafen_lynx"
+type: alias
+alias_of: "beetle_lynx"
+profiled_date: "2026-03-18"
+note: "This core uses the same BIOS/firmware as beetle_lynx. See emulators/beetle_lynx.yml for details."
+files: []

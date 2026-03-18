@@ -1,6 +1,7 @@
 emulator: Numero
 type: libretro
 source: "https://github.com/nbarkhina/numero"
+profiled_date: "2026-03-18"
 cores:
   - numero
 systems:

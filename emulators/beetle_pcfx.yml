@@ -2,6 +2,7 @@ emulator: Beetle PC-FX (Mednafen)
 type: libretro
 cores: [mednafen_pcfx]
 source: "https://github.com/libretro/beetle-pcfx-libretro"
+profiled_date: "2026-03-18"
 systems:
   - nec-pcfx
 

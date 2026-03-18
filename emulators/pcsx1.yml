@@ -1,0 +1,6 @@
+emulator: "pcsx1"
+type: alias
+alias_of: "pcsx_rearmed"
+profiled_date: "2026-03-18"
+note: "This core uses the same BIOS/firmware as pcsx_rearmed. See emulators/pcsx_rearmed.yml for details."
+files: []

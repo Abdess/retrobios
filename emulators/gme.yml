@@ -1,6 +1,7 @@
 emulator: Game Music Emu
 type: utility
 source: "https://github.com/libretro/libretro-gme"
+profiled_date: "2026-03-18"
 cores: [gme]
 systems: []
 files: []

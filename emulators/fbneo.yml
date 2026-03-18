@@ -1,6 +1,7 @@
 emulator: FinalBurn Neo
 type: libretro
 source: "https://github.com/libretro/FBNeo"
+profiled_date: "2026-03-18"
 systems:
   - snk-neogeo-mvs
   - snk-neogeo-aes

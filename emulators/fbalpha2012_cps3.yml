@@ -1,0 +1,6 @@
+emulator: "fbalpha2012_cps3"
+type: alias
+alias_of: "fbneo"
+profiled_date: "2026-03-18"
+note: "This core uses the same BIOS/firmware as fbneo. See emulators/fbneo.yml for details."
+files: []

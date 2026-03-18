@@ -1,6 +1,7 @@
 emulator: DOSBox-core
 type: libretro
 source: "https://github.com/libretro/dosbox-core"
+profiled_date: "2026-03-18"
 cores: [dosbox_core]
 systems: [dos]
 verification: sha1

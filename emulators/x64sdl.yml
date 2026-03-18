@@ -1,6 +1,7 @@
 emulator: x64sdl
 type: libretro
 source: "https://github.com/libretro/vice-libretro"
+profiled_date: "2026-03-18"
 cores:
   - vice_x64
 systems:

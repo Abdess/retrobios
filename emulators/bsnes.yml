@@ -1,6 +1,7 @@
 emulator: bsnes
 type: libretro
 source: "https://github.com/libretro/bsnes-libretro"
+profiled_date: "2026-03-18"
 systems: [nintendo-snes, nintendo-super-game-boy, nintendo-satellaview]
 
 # bsnes supports HLE for DSP1/DSP1B/DSP2/DSP4, ST010, and Cx4.

@@ -5,6 +5,7 @@
 emulator: RPCS3
 type: standalone
 source: "https://github.com/RPCS3/rpcs3"
+profiled_date: "2026-03-18"
 systems: [sony-playstation-3]
 
 firmware_file: "PS3UPDAT.PUP"

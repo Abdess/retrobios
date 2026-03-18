@@ -1,6 +1,7 @@
 emulator: ChaiLove
 type: game
 source: "https://github.com/libretro/libretro-chailove"
+profiled_date: "2026-03-18"
 cores: [chailove]
 systems: []
 files: []

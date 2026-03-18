@@ -4,6 +4,7 @@ cores:
   - kronos_libretro
   - yabause_libretro
 source: "https://github.com/FCare/Kronos"
+profiled_date: "2026-03-18"
 systems:
   - sega-saturn
   - sega-stv

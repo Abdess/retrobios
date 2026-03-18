@@ -1,6 +1,7 @@
 emulator: ECWolf
 type: libretro
 source: "https://github.com/libretro/ecwolf"
+profiled_date: "2026-03-18"
 cores: [ecwolf]
 systems: [wolfenstein3d]
 verification: md5

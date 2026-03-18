@@ -1,6 +1,7 @@
 emulator: Mupen64Plus-Next
 type: libretro
 source: "https://github.com/libretro/mupen64plus-libretro-nx"
+profiled_date: "2026-03-18"
 systems: [nintendo-64, nintendo-64dd]
 cores: [mupen64plus_next, mupen64plus_next_gles3, mupen64plus_next_gles2, parallel_n64]
 

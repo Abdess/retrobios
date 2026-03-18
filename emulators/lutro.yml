@@ -1,6 +1,7 @@
 emulator: Lutro
 type: game
 source: "https://github.com/libretro/libretro-lutro"
+profiled_date: "2026-03-18"
 cores:
   - lutro
 systems: []

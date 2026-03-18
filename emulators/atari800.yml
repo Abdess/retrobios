@@ -1,6 +1,7 @@
 emulator: Atari800
 type: libretro
 source: "https://github.com/libretro/libretro-atari800"
+profiled_date: "2026-03-18"
 systems: [atari-400, atari-800, atari-800xl, atari-130xe, atari-5200, atari-xegs]
 
 # Atari800 emulates the Atari 8-bit family (400/800/XL/XE) and the 5200 console.

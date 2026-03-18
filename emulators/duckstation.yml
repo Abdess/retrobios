@@ -1,6 +1,7 @@
 emulator: DuckStation
 type: standalone
 source: "https://github.com/stenzek/duckstation"
+profiled_date: "2026-03-18"
 systems: [sony-playstation]
 bios_size: 524288  # 0x80000 (512 KB), also accepts PS2 (4 MB) and PS3 BIOS
 verification: md5

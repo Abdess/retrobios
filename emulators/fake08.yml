@@ -1,6 +1,7 @@
 emulator: FAKE-08
 type: libretro
 source: "https://github.com/jtothebell/fake-08"
+profiled_date: "2026-03-18"
 cores:
   - fake08
 systems:

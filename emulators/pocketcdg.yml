@@ -1,6 +1,7 @@
 emulator: PocketCDG
 type: utility
 source: "https://github.com/libretro/libretro-pocketcdg"
+profiled_date: "2026-03-18"
 cores: [pocketcdg]
 systems: []
 files: []

@@ -1,6 +1,7 @@
 emulator: HBMAME (Homebrew MAME)
 type: libretro
 source: "https://github.com/libretro/hbmame-libretro"
+profiled_date: "2026-03-18"
 based_on: MAME 0.220
 author: Robbbert
 game_count: 8511

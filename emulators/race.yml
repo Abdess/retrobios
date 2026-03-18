@@ -1,6 +1,7 @@
 emulator: RACE (Neo Geo Pocket)
 type: libretro
 source: "https://github.com/libretro/RACE"
+profiled_date: "2026-03-18"
 systems: [snk-ngp, snk-ngpc]
 
 notes: |

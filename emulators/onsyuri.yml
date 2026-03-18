@@ -1,6 +1,7 @@
 emulator: ONScripter Yuri
 type: game
 source: "https://github.com/libretro/libretro-onsyuri"
+profiled_date: "2026-03-18"
 cores:
   - onsyuri
 systems:

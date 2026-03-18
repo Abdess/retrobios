@@ -1,6 +1,7 @@
 emulator: Beetle NGP (Mednafen Neo Geo Pocket)
 type: libretro
 source: "https://github.com/libretro/beetle-ngp-libretro"
+profiled_date: "2026-03-18"
 systems: [snk-ngp, snk-ngpc]
 
 notes: |

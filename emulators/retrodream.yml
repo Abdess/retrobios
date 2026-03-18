@@ -1,6 +1,7 @@
 emulator: RetroDream
 type: libretro
 source: "https://github.com/libretro/redream-next"
+profiled_date: "2026-03-18"
 systems:
   - sega-dreamcast
 

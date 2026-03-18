@@ -2,6 +2,7 @@ emulator: Opera (4DO)
 type: libretro
 core: opera_libretro
 source: "https://github.com/libretro/opera-libretro"
+profiled_date: "2026-03-18"
 systems:
   - 3do
 

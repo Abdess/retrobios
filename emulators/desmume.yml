@@ -1,6 +1,7 @@
 emulator: DeSmuME
 type: libretro
 source: "https://github.com/libretro/desmume"
+profiled_date: "2026-03-18"
 cores: [desmume, desmume2015]
 systems: [nintendo-ds]
 

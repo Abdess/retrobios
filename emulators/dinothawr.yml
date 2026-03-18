@@ -1,6 +1,7 @@
 emulator: Dinothawr
 type: game
 source: "https://github.com/libretro/Dinothawr"
+profiled_date: "2026-03-18"
 cores: [dinothawr]
 systems: []
 files: []

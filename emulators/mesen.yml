@@ -1,6 +1,7 @@
 emulator: Mesen
 type: libretro
 source: "https://github.com/libretro/Mesen"
+profiled_date: "2026-03-18"
 systems: [nintendo-nes, nintendo-fds]
 
 notes: |

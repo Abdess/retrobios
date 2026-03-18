@@ -1,6 +1,7 @@
 emulator: TIC-80
 type: libretro
 source: "https://github.com/libretro/TIC-80"
+profiled_date: "2026-03-18"
 cores:
   - tic80
 systems:

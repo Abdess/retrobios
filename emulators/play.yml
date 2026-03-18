@@ -6,6 +6,7 @@ emulator: "Play!"
 type: libretro
 core_name: play_libretro
 source: "https://github.com/jpd002/Play-"
+profiled_date: "2026-03-18"
 systems: [sony-playstation-2]
 
 bios_directory: null

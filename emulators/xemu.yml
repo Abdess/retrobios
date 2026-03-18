@@ -1,6 +1,7 @@
 emulator: Xemu
 type: standalone
 source: "https://github.com/xemu-project/xemu"
+profiled_date: "2026-03-18"
 systems: [microsoft-xbox]
 
 notes: |

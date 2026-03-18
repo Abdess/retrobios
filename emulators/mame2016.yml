@@ -1,6 +1,7 @@
 emulator: MAME 2016
 type: libretro
 source: "https://github.com/libretro/mame2016-libretro"
+profiled_date: "2026-03-18"
 mame_version: "0.174"
 systems:
   - snk-neogeo-mvs

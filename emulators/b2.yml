@@ -1,6 +1,7 @@
 emulator: b2
 type: standalone
 source: "https://github.com/tom-seddon/b2"
+profiled_date: "2026-03-18"
 cores: []
 systems:
   - bbc-micro-b

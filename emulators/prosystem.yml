@@ -1,6 +1,7 @@
 emulator: ProSystem
 type: libretro
 source: "https://github.com/libretro/prosystem-libretro"
+profiled_date: "2026-03-18"
 cores:
   - prosystem
 systems:

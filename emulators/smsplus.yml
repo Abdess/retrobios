@@ -1,6 +1,7 @@
 emulator: SMS Plus GX
 type: libretro
 source: "https://github.com/libretro/smsplus-gx"
+profiled_date: "2026-03-18"
 cores:
   - smsplus
 systems:

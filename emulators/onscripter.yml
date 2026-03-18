@@ -1,6 +1,7 @@
 emulator: ONScripter
 type: libretro
 source: "https://github.com/iyzsong/onscripter-libretro"
+profiled_date: "2026-03-18"
 cores:
   - onscripter
 systems:

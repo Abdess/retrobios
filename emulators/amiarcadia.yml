@@ -1,6 +1,7 @@
 emulator: amiarcadia
 type: libretro
 source: "https://amigan.yatho.com/"
+profiled_date: "2026-03-18"
 cores:
   - amiarcadia
 systems:

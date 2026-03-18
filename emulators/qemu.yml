@@ -1,6 +1,7 @@
 emulator: QEMU
 type: libretro
 source: "https://github.com/io12/qemu-libretro"
+profiled_date: "2026-03-18"
 systems: [ibm-pc, x86, x86-64, ppc, sparc, sparc64, arm, aarch64, mips, riscv, s390x, m68k, alpha, hppa]
 
 # QEMU (Quick Emulator) libretro core, based on QEMU 9.0.50.

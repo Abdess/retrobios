@@ -1,6 +1,7 @@
 emulator: M2000
 type: libretro
 source: "https://github.com/p2000t/M2000"
+profiled_date: "2026-03-18"
 cores:
   - m2000
 systems:

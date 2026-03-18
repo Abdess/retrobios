@@ -2,6 +2,7 @@ emulator: SAME CDi
 type: libretro
 cores: [same_cdi, cdi2015]
 source: "https://github.com/libretro/same_cdi"
+profiled_date: "2026-03-18"
 systems:
   - cdi
 

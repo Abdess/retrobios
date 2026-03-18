@@ -1,6 +1,7 @@
 emulator: EasyRPG Player
 type: libretro
 source: "https://github.com/libretro/easyrpg-libretro"
+profiled_date: "2026-03-18"
 cores:
   - easyrpg
 systems:

@@ -1,6 +1,7 @@
 emulator: px68k
 type: libretro
 source: "https://github.com/libretro/px68k-libretro"
+profiled_date: "2026-03-18"
 cores:
   - px68k
 systems:

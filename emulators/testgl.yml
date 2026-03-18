@@ -1,6 +1,7 @@
 emulator: testgl
 type: test
 source: "https://github.com/libretro/libretro-samples"
+profiled_date: "2026-03-18"
 cores:
   - testgl
 systems: []

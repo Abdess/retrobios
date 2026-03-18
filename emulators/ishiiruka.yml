@@ -1,6 +1,7 @@
 emulator: Ishiiruka
 type: libretro
 source: "https://github.com/libretro/ishiiruka"
+profiled_date: "2026-03-18"
 fork_of: Dolphin
 systems: [nintendo-gamecube, nintendo-wii]
 

@@ -1,6 +1,7 @@
 emulator: XRick
 type: libretro
 source: "https://github.com/libretro/xrick-libretro"
+profiled_date: "2026-03-18"
 cores:
   - xrick
 systems:

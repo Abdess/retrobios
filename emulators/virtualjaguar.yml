@@ -1,6 +1,7 @@
 emulator: Virtual Jaguar
 type: libretro
 source: "https://github.com/libretro/virtualjaguar-libretro"
+profiled_date: "2026-03-18"
 cores:
   - virtualjaguar
 systems:

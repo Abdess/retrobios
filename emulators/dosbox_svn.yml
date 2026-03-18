@@ -1,0 +1,6 @@
+emulator: "dosbox_svn"
+type: alias
+alias_of: "dosbox_core"
+profiled_date: "2026-03-18"
+note: "This core uses the same BIOS/firmware as dosbox_core. See emulators/dosbox_core.yml for details."
+files: []

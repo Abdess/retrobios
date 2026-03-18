@@ -1,6 +1,7 @@
 emulator: blueMSX
 type: libretro
 source: "https://github.com/libretro/blueMSX-libretro"
+profiled_date: "2026-03-18"
 cores:
   - bluemsx
 systems:

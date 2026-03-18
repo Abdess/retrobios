@@ -1,6 +1,7 @@
 emulator: "doukutsu-rs"
 type: libretro
 source: "https://github.com/DrGlaucous/doukutsu-rs-libretro"
+profiled_date: "2026-03-18"
 cores:
   - doukutsu_rs
 systems:

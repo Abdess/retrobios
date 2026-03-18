@@ -1,6 +1,7 @@
 emulator: Gearcoleco
 type: libretro
 source: "https://github.com/drhelius/Gearcoleco"
+profiled_date: "2026-03-18"
 cores:
   - gearcoleco
 systems:
