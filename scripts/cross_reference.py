@@ -61,6 +61,22 @@ def load_platform_files(platforms_dir: str) -> dict[str, set[str]]:
     return declared
 
 
+def _find_in_repo(fname: str, by_name: dict[str, list], by_name_lower: dict[str, str]) -> bool:
+    if fname in by_name:
+        return True
+    basename = fname.rsplit("/", 1)[-1] if "/" in fname else None
+    if basename and basename in by_name:
+        return True
+    key = fname.lower()
+    if key in by_name_lower:
+        return True
+    if basename:
+        key = basename.lower()
+        if key in by_name_lower:
+            return True
+    return False
+
+
 def cross_reference(
     profiles: dict[str, dict],
     declared: dict[str, set[str]],
@@ -72,13 +88,13 @@ def cross_reference(
     and coverage stats.
     """
     by_name = db.get("indexes", {}).get("by_name", {})
+    by_name_lower = {k.lower(): k for k in by_name}
     report = {}
 
     for emu_name, profile in profiles.items():
         emu_files = profile.get("files", [])
         systems = profile.get("systems", [])
 
-        # Collect all platform-declared files for this emulator's systems
         platform_names = set()
         for sys_id in systems:
             platform_names.update(declared.get(sys_id, set()))
@@ -91,7 +107,7 @@ def cross_reference(
                 continue
 
             in_platform = fname in platform_names
-            in_repo = fname in by_name
+            in_repo = _find_in_repo(fname, by_name, by_name_lower)
 
             entry = {
                 "name": fname,

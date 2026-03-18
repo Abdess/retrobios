@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-03-18T10:49:11Z",
-  "total_files": 5357,
-  "total_size": 4887546948,
+  "generated_at": "2026-03-18T11:50:35Z",
+  "total_files": 5376,
+  "total_size": 4896113929,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -1524,14 +1524,14 @@
       "sha256": "58e88cedb31918e2b9deeaddb80df45b8484cc1c4f10792520360a2585ad5014",
       "crc32": "23ac17be"
     },
-    "682f0d2475a3d30333c01d34ecf90b8b81d31997": {
+    "70c980f94d8d204cad3c18281cfb180592b6a6ee": {
       "path": "bios/Arcade/Arcade/fdsbios.zip",
       "name": "fdsbios.zip",
-      "size": 5724,
-      "sha1": "682f0d2475a3d30333c01d34ecf90b8b81d31997",
-      "md5": "e865dd6c266acb5e34a9012aac0d2862",
-      "sha256": "348746eaa86d1ec47f3cc59fe272bdae5ff5d6c6e29e8b2bd50a4a7fba7bbeb3",
-      "crc32": "32413056"
+      "size": 5788,
+      "sha1": "70c980f94d8d204cad3c18281cfb180592b6a6ee",
+      "md5": "7f780042388d83e7113556756d044d77",
+      "sha256": "1a49b157e41f1cf589e0e267d8f931f4793109cf76f162bedf85db9267e7acf1",
+      "crc32": "8ff1b99d"
     },
     "9ec50f79c5fd6eaddd88542aa18b6c5bb81a9ed4": {
       "path": "bios/Arcade/Arcade/galgbios.zip",
@@ -13287,6 +13287,15 @@
       "sha256": "c93f3e7d3342f747f6c55a3b5ebb8c1840d3d118e80dc5d274f645dc2b393688",
       "crc32": "26c6e8a0"
     },
+    "273a9933b68a290c5aedcd6d69faa7b1d22c0344": {
+      "path": "bios/Elektronika/BK/TERAK.ROM",
+      "name": "TERAK.ROM",
+      "size": 128,
+      "sha1": "273a9933b68a290c5aedcd6d69faa7b1d22c0344",
+      "md5": "8cd30d86b57f9236ab749165b240a2cc",
+      "sha256": "a8cf685bd1c60ed722b956ae0d203da546c4249fe89639c44f2f294a4651ab34",
+      "crc32": "fd654b8e"
+    },
     "61d0987b906146e21b94f265d5b51b4938c986a9": {
       "path": "bios/Enterprise/64-128/basic20.rom",
       "name": "basic20.rom",
@@ -16869,6 +16878,15 @@
       "sha256": "3d5fae186cb31b5a6331155e532ef63e493afd85d7af8576fb52c95d0ce0362c",
       "crc32": "1dbb7b59"
     },
+    "4e1c2c2ee308ca4591542b3ca48653f65fae6e0f": {
+      "path": "bios/Microsoft/Xbox/cromwell_1024.bin",
+      "name": "cromwell_1024.bin",
+      "size": 1048576,
+      "sha1": "4e1c2c2ee308ca4591542b3ca48653f65fae6e0f",
+      "md5": "04e9565c5eb34c71c8f5f8b9f6524406",
+      "sha256": "b5c2cbdf297cd66ada8ef6fe4224c7c437cabc83d7c40c8e44af4941a72339c5",
+      "crc32": "5ae5278a"
+    },
     "5d270675b54eb8071b480e42d22a3015ac211cef": {
       "path": "bios/Microsoft/Xbox/mcpx_1.0.bin",
       "name": "mcpx_1.0.bin",
@@ -16877,6 +16895,15 @@
       "md5": "d49c52a4102f6df7bcf8d0617ac475ed",
       "sha256": "e99e3a772bf5f5d262786aee895664eb96136196e37732fe66e14ae062f20335",
       "crc32": "0b07d1f1"
+    },
+    "9da5f9ecfb1c9c32efa616f0300d02e8f702244d": {
+      "path": "bios/Microsoft/Xbox/xbox_hdd.qcow2",
+      "name": "xbox_hdd.qcow2",
+      "size": 1638400,
+      "sha1": "9da5f9ecfb1c9c32efa616f0300d02e8f702244d",
+      "md5": "cf15087fd5fd7593e293faaa7281cff8",
+      "sha256": "c5ec3e0fbc4f31d36c13211ded7f070f3b5f04e99a367fbe5d8c2d8c6e4f925d",
+      "crc32": "150b160b"
     },
     "ff3e7eaf715fe5612e46fc984d686ed3b115baef": {
       "path": "bios/Microsoft/Xbox/xemu_eeprom.bin",
@@ -19127,6 +19154,150 @@
       "md5": "9a432244d9ee4a49e8ddcde64af94e05",
       "sha256": "0ed991887342fba9e4b71668ff4c14ed93c2b3a19b4874dd0282404a1c442094",
       "crc32": "aa727c5d"
+    },
+    "91d75a87872cbb88964bead92e0cbf8b72e836b6": {
+      "path": "bios/Other/NXEngine/Doukutsu.exe",
+      "name": "Doukutsu.exe",
+      "size": 1478656,
+      "sha1": "91d75a87872cbb88964bead92e0cbf8b72e836b6",
+      "md5": "f20bb7bc1b97453161e63964f24a2785",
+      "sha256": "8a7a63b24bb21557fb597697bdf09248c1ab7e3298cacfa1166d764dd81e7fc3",
+      "crc32": "0c0644ba"
+    },
+    "19555d2f5f72a66d6beddb4acc5ca00d634ac9c4": {
+      "path": "bios/Other/NXEngine/data/npc.tbl",
+      "name": "npc.tbl",
+      "size": 8664,
+      "sha1": "19555d2f5f72a66d6beddb4acc5ca00d634ac9c4",
+      "md5": "2c8dff849954bbca9c4a54087a5c06a9",
+      "sha256": "75b38bb4ab57b50bfc6c3ba77fe670a2eb67301f425aefe96bb1ed87c2b9e2db",
+      "crc32": "16b45e6c"
+    },
+    "58807f32c413a0c9db6deb0365f2fac9518e7c86": {
+      "path": "bios/Other/OpenTyrian/cubetxt1.dat",
+      "name": "cubetxt1.dat",
+      "size": 36169,
+      "sha1": "58807f32c413a0c9db6deb0365f2fac9518e7c86",
+      "md5": "3f2476d9ff29a06cf9fb85d52302222a",
+      "sha256": "2a0bc26ac4a8cdcbe7a145c9b1868a87ecb4335e9787f2f1e5713c965372df2b",
+      "crc32": "84e948df"
+    },
+    "e2b158dbf0c1a547e05f6e087f0ecc573a6c4f9a": {
+      "path": "bios/Other/OpenTyrian/levels1.dat",
+      "name": "levels1.dat",
+      "size": 9359,
+      "sha1": "e2b158dbf0c1a547e05f6e087f0ecc573a6c4f9a",
+      "md5": "013776dd1c00c1718906fac14493b69f",
+      "sha256": "e82164c96abb994450d416a3ab0e5fe6479fd4db831cd0f203a60dfe4aa78dcb",
+      "crc32": "67112fd6"
+    },
+    "b77313a9f92bc67f5c577699dcb95ca613e6948f": {
+      "path": "bios/Other/OpenTyrian/music.mus",
+      "name": "music.mus",
+      "size": 153482,
+      "sha1": "b77313a9f92bc67f5c577699dcb95ca613e6948f",
+      "md5": "bdb982d1ee185f1f713eadcd80931a66",
+      "sha256": "b06a509bd8576f63c61859e3a2c59482c4035d79f21725f9ec10479377044a74",
+      "crc32": "53e70005"
+    },
+    "29af4cd642e0b29dc8120b5d92f130eaf4e860c9": {
+      "path": "bios/Other/OpenTyrian/palette.dat",
+      "name": "palette.dat",
+      "size": 17664,
+      "sha1": "29af4cd642e0b29dc8120b5d92f130eaf4e860c9",
+      "md5": "847d6c6bf3d856422b7b27067049ed85",
+      "sha256": "6f0be74cb1b0026e46029d98d9ade41b8283bad849208543330b717fe5c365fc",
+      "crc32": "6c014b30"
+    },
+    "bd63566da5c24d1f50ffdcba99c654463f129d5c": {
+      "path": "bios/Other/OpenTyrian/tyrian.cdt",
+      "name": "tyrian.cdt",
+      "size": 1125,
+      "sha1": "bd63566da5c24d1f50ffdcba99c654463f129d5c",
+      "md5": "4490010ccebf217b86bb4337ac494773",
+      "sha256": "deb2c35297d89a1b2801ae21132d242121d9dee2a794a84b58dbd212f11f04fe",
+      "crc32": "6f6e39ce"
+    },
+    "f935e494b090b8bd2e86be06624a84946a5a947d": {
+      "path": "bios/Other/OpenTyrian/tyrian.hdt",
+      "name": "tyrian.hdt",
+      "size": 153657,
+      "sha1": "f935e494b090b8bd2e86be06624a84946a5a947d",
+      "md5": "0547aa08a6cfcdefa16f5b9813664ec6",
+      "sha256": "c816055863eb91d28ac10b4acc1e312f433deff553f08926e698c9a9ba68daa7",
+      "crc32": "c655ae91"
+    },
+    "0b216d9712f23e8faec041880b81773d93f646a2": {
+      "path": "bios/Other/OpenTyrian/tyrian.pic",
+      "name": "tyrian.pic",
+      "size": 365969,
+      "sha1": "0b216d9712f23e8faec041880b81773d93f646a2",
+      "md5": "a16de4ee30a67e2727c162dcd97ba25f",
+      "sha256": "5bda2ba46511f835e402188f1608b4398ae36303edfaef14304ad08b55bb5684",
+      "crc32": "278cba37"
+    },
+    "9978439cd9a52fde3d65c3b223dfe96ca437fef8": {
+      "path": "bios/Other/OpenTyrian/tyrian.shp",
+      "name": "tyrian.shp",
+      "size": 443871,
+      "sha1": "9978439cd9a52fde3d65c3b223dfe96ca437fef8",
+      "md5": "b79281a3c801b48af96cc57f510e2d83",
+      "sha256": "b9602b6dd42c1bf4716bdccbe5ab40495fcd064fcc55fd0f8d4436d640c4b450",
+      "crc32": "65906b5f"
+    },
+    "af896c25e6efeeb6dfd4cc7345362b4b29a85324": {
+      "path": "bios/Other/OpenTyrian/tyrian.snd",
+      "name": "tyrian.snd",
+      "size": 264512,
+      "sha1": "af896c25e6efeeb6dfd4cc7345362b4b29a85324",
+      "md5": "07fe095d8cc120b8293e7f776dfee90e",
+      "sha256": "0f5c37f97f0992026f1736f178bccc64746bc931daf23adbdc82553c140c80b8",
+      "crc32": "60dd487f"
+    },
+    "39825b5d69a07232d91886da68d217465a74695c": {
+      "path": "bios/Other/OpenTyrian/tyrian1.lvl",
+      "name": "tyrian1.lvl",
+      "size": 538262,
+      "sha1": "39825b5d69a07232d91886da68d217465a74695c",
+      "md5": "a1e73e0586ce715ab7daaedfe9b98595",
+      "sha256": "b41e532214fa8cea36e37fed6512b357c6ac9c8c3267899ceb4a258fcb1bf0b9",
+      "crc32": "06ce2efe"
+    },
+    "63ff6b55caeda529f69983a342618c84cba5addf": {
+      "path": "bios/Other/OpenTyrian/voices.snd",
+      "name": "voices.snd",
+      "size": 132767,
+      "sha1": "63ff6b55caeda529f69983a342618c84cba5addf",
+      "md5": "bdfeb89707fac1dd319a17e43328de2b",
+      "sha256": "c709ca1e74be6bd4b7917d258d81824d33c38a1a9a0287ec693b6459f58fc27a",
+      "crc32": "d23be573"
+    },
+    "cb1bd2cf5f89741900061955ac1a3b7cbd7a1ce9": {
+      "path": "bios/Other/QEMU/bios.bin",
+      "name": "bios.bin",
+      "size": 131072,
+      "sha1": "cb1bd2cf5f89741900061955ac1a3b7cbd7a1ce9",
+      "md5": "8bef06d1aa74c9ff45b268a18efcc954",
+      "sha256": "3dfd946d0c03ab0e022f84f10c3eb5f1dd507761f73e7d8067511ba35a10f776",
+      "crc32": "e7e3ac4c"
+    },
+    "214f09a25012e8702783d3ab9a22796071de5374": {
+      "path": "bios/Other/QEMU/vgabios.bin",
+      "name": "vgabios.bin",
+      "size": 38912,
+      "sha1": "214f09a25012e8702783d3ab9a22796071de5374",
+      "md5": "eb49484ba96ce09cdf4e60da747eceb1",
+      "sha256": "a7ea86bb06a58ff969fd0942e73b8eae00cb58e4c90bccbd900f6a3a01f54fbb",
+      "crc32": "e8256af7"
+    },
+    "d459d59b4d603d4cf733dd0fe34b7951f7c8165b": {
+      "path": "bios/Other/RVVM/fw_payload.bin",
+      "name": "fw_payload.bin",
+      "size": 2105672,
+      "sha1": "d459d59b4d603d4cf733dd0fe34b7951f7c8165b",
+      "md5": "14ee98e77ec06638bfef782a2ab8a063",
+      "sha256": "94468fe79c4fc51980c645cc964e00bdf21b4b68fd2306cfa13c4cd1ac9af9f4",
+      "crc32": "c068031c"
     },
     "cea669f6d740f29ca248d2e8837a4b4f86fbe75a": {
       "path": "bios/Palm/Palm/bootloader-dbvz.rom",
@@ -45147,6 +45318,15 @@
       "sha256": "ad1b2eb9300efd3d9476dad742c72e7436d9a9f67c951d537868553fa0c80843",
       "crc32": "a61ca7c7"
     },
+    "1c1a0d8c9f4c446ccd7470516b215ddca5052fb2": {
+      "path": "bios/Sharp/X1/FNT0808.X1",
+      "name": "FNT0808.X1",
+      "size": 2048,
+      "sha1": "1c1a0d8c9f4c446ccd7470516b215ddca5052fb2",
+      "md5": "851e4a5936f17d13f8c39a980cf00d77",
+      "sha256": "42139ed610747190c8ca9046c799907b52582c0d642b5f52f1548d9c1d4a86f8",
+      "crc32": "e3995a57"
+    },
     "c4db9a6e99873808c8022afd1c50fef556a8b44d": {
       "path": "bios/Sharp/X1/IPLROM.X1",
       "name": "IPLROM.X1",
@@ -45173,15 +45353,6 @@
       "md5": "eeeea1cd29c6e0e8b094790ae969bfa7",
       "sha256": "e6295a523008688421991b651ab61de392b28c67bec9efbf040b0004e4b70a2a",
       "crc32": "e70011d3"
-    },
-    "1c1a0d8c9f4c446ccd7470516b215ddca5052fb2": {
-      "path": "bios/Sharp/X1/iplrom.x1t",
-      "name": "iplrom.x1t",
-      "size": 2048,
-      "sha1": "1c1a0d8c9f4c446ccd7470516b215ddca5052fb2",
-      "md5": "851e4a5936f17d13f8c39a980cf00d77",
-      "sha256": "42139ed610747190c8ca9046c799907b52582c0d642b5f52f1548d9c1d4a86f8",
-      "crc32": "e3995a57"
     },
     "76c18deb168ad0ffd7886a130a9e74e915070782": {
       "path": "bios/Sharp/X68000/.variants/config",
@@ -48388,7 +48559,7 @@
       "d32987cdfcbd9f82abbfa93a297aa13f": "17d45f259fec8ef784526fe205c1b0722c5a9a00",
       "547f3d12aed389058ca06148f1cca0ed": "b6ff66dcb5547bd91760d239ddf428a655631c53",
       "1028615bcac4c31634a3364ce5c04044": "48d1712d1b1cdfeeeb43c6287c17b0b6309cfaab",
-      "e865dd6c266acb5e34a9012aac0d2862": "682f0d2475a3d30333c01d34ecf90b8b81d31997",
+      "7f780042388d83e7113556756d044d77": "70c980f94d8d204cad3c18281cfb180592b6a6ee",
       "a832488251f892f961a9afe125320adf": "9ec50f79c5fd6eaddd88542aa18b6c5bb81a9ed4",
       "c45fdc9ceb6908110656940a86b72c56": "6fdec00172233095cebb085b26214648d1093ecb",
       "af5512431a3c23d8bb93057d17cff470": "975fbbbec0b578a495a8da9e1a5965d94d6d52e1",
@@ -49695,6 +49866,7 @@
       "5015228eeeb238e65da8edcd1b6dfac7": "28eefbb63047b26e4aec104aeeca74e2f9d0276c",
       "5737f972e8638831ab71e9139abae052": "6386e58bc1bba5e76baec9e8a1ca4b99dc3c573f",
       "95f8c41c6abf7640e35a6a03cecebd01": "4e83a94ae5155bbea14d7331a5a8db82457bd5ae",
+      "8cd30d86b57f9236ab749165b240a2cc": "273a9933b68a290c5aedcd6d69faa7b1d22c0344",
       "8e18edce4a7acb2c33cc0ab18f988482": "61d0987b906146e21b94f265d5b51b4938c986a9",
       "e972fe42b398c9ff1d93ff014786aec6": "03bbb386cf530e804363acdfc1d13e64cf28af2e",
       "6af0402906944fd134004b85097c8524": "f34f0c330b44dbf2548329bea954d5991dec30ca",
@@ -50093,7 +50265,9 @@
       "248514aba82a0ec7fe2a9106862b05cd": "e7905d16d2ccd57a013c122dc432106cd59ef52c",
       "a0452dbf5ace7d2e49d0a8029efed09a": "829c00c3114f25b3dae5157c0a238b52a3ac37db",
       "39cee882148a87f93cb440b99dde3ceb": "3944392c954cfb176d4210544e88353b3c5d36b1",
+      "04e9565c5eb34c71c8f5f8b9f6524406": "4e1c2c2ee308ca4591542b3ca48653f65fae6e0f",
       "d49c52a4102f6df7bcf8d0617ac475ed": "5d270675b54eb8071b480e42d22a3015ac211cef",
+      "cf15087fd5fd7593e293faaa7281cff8": "9da5f9ecfb1c9c32efa616f0300d02e8f702244d",
       "3e647719d47e4a3992fc8bc5a7e56fce": "ff3e7eaf715fe5612e46fc984d686ed3b115baef",
       "9f770275393b8627cf9d24e5c56d2ab9": "008cf0f5cd5e2000b9f2ebf5e4ee84097e6aef74",
       "424f1d6bf93259bf255afa7d1dc9f721": "3ca4a3b8d8a7f08492e684064c6fa362e914c1af",
@@ -50344,6 +50518,22 @@
       "0a814078410353744e2947a8e9342e4e": "35f92a0477a88f5cf564971125047ffcfa02ec10",
       "82a22231d402cd3284c698ba16a51d1d": "d8ce5b1405b6428969493efeb6f3aa2027c41bdc",
       "9a432244d9ee4a49e8ddcde64af94e05": "86fc8dc0932f983efa199e31ae05a4424772f959",
+      "f20bb7bc1b97453161e63964f24a2785": "91d75a87872cbb88964bead92e0cbf8b72e836b6",
+      "2c8dff849954bbca9c4a54087a5c06a9": "19555d2f5f72a66d6beddb4acc5ca00d634ac9c4",
+      "3f2476d9ff29a06cf9fb85d52302222a": "58807f32c413a0c9db6deb0365f2fac9518e7c86",
+      "013776dd1c00c1718906fac14493b69f": "e2b158dbf0c1a547e05f6e087f0ecc573a6c4f9a",
+      "bdb982d1ee185f1f713eadcd80931a66": "b77313a9f92bc67f5c577699dcb95ca613e6948f",
+      "847d6c6bf3d856422b7b27067049ed85": "29af4cd642e0b29dc8120b5d92f130eaf4e860c9",
+      "4490010ccebf217b86bb4337ac494773": "bd63566da5c24d1f50ffdcba99c654463f129d5c",
+      "0547aa08a6cfcdefa16f5b9813664ec6": "f935e494b090b8bd2e86be06624a84946a5a947d",
+      "a16de4ee30a67e2727c162dcd97ba25f": "0b216d9712f23e8faec041880b81773d93f646a2",
+      "b79281a3c801b48af96cc57f510e2d83": "9978439cd9a52fde3d65c3b223dfe96ca437fef8",
+      "07fe095d8cc120b8293e7f776dfee90e": "af896c25e6efeeb6dfd4cc7345362b4b29a85324",
+      "a1e73e0586ce715ab7daaedfe9b98595": "39825b5d69a07232d91886da68d217465a74695c",
+      "bdfeb89707fac1dd319a17e43328de2b": "63ff6b55caeda529f69983a342618c84cba5addf",
+      "8bef06d1aa74c9ff45b268a18efcc954": "cb1bd2cf5f89741900061955ac1a3b7cbd7a1ce9",
+      "eb49484ba96ce09cdf4e60da747eceb1": "214f09a25012e8702783d3ab9a22796071de5374",
+      "14ee98e77ec06638bfef782a2ab8a063": "d459d59b4d603d4cf733dd0fe34b7951f7c8165b",
       "9da101cd2317830649a31f8fa46debec": "cea669f6d740f29ca248d2e8837a4b4f86fbe75a",
       "abed11421f47bbf3f654af618e0c6a8a": "a368b40751dd017163c9c1a615d6f3506b7dcbdf",
       "83cb1d1c76e568b916dc2e7c0bf669f6": "cc4898ee8cae4669fc19e184c5b560c770e731b3",
@@ -53235,10 +53425,10 @@
       "3602382c1a370fb3064fcadeeea809e4": "1ec11e6639ab20b1bf1a69a5e5222909284c042b",
       "1474da2b8fbbb37abce8e7ab5cf9024c": "fec7527ecbf79b1ac697137f770bb8715fe8a652",
       "e634c906c23e62d5d3cd63581e5748ff": "2ca428b70ed1746834d129c11fb8e60a56317cff",
+      "851e4a5936f17d13f8c39a980cf00d77": "1c1a0d8c9f4c446ccd7470516b215ddca5052fb2",
       "59074727a953fe965109b7dbe3298e30": "c4db9a6e99873808c8022afd1c50fef556a8b44d",
       "56c28adcf1f3a2f87cf3d57c378013f5": "44620f57a25f0bcac2b57ca2b0f1ebad3bf305d3",
       "eeeea1cd29c6e0e8b094790ae969bfa7": "d3395e9aeb5b8bbba7654dd471bcd8af228ee69a",
-      "851e4a5936f17d13f8c39a980cf00d77": "1c1a0d8c9f4c446ccd7470516b215ddca5052fb2",
       "51b55ee3807901c015fdb93616858b8b": "76c18deb168ad0ffd7886a130a9e74e915070782",
       "d407317a52f8425a6753232064d14700": "77be2f6f28897f99b73d4c47bf7cd47e999fd7cd",
       "cb0a5cfcf7247a7eab74bb2716260269": "8d72c5b4d63bb14c5dbdac495244d659aa1498b6",
@@ -53867,7 +54057,7 @@
       ],
       "fdsbios.zip": [
         "c25686d24c7205473741f948f8a9df9906823145",
-        "682f0d2475a3d30333c01d34ecf90b8b81d31997"
+        "70c980f94d8d204cad3c18281cfb180592b6a6ee"
       ],
       "hng64.zip": [
         "fb0c36d69f66f4b10a895aa708ae37f826755257",
@@ -57734,6 +57924,9 @@
       "MONIT10.ROM": [
         "4e83a94ae5155bbea14d7331a5a8db82457bd5ae"
       ],
+      "TERAK.ROM": [
+        "273a9933b68a290c5aedcd6d69faa7b1d22c0344"
+      ],
       "basic20.rom": [
         "61d0987b906146e21b94f265d5b51b4938c986a9"
       ],
@@ -58501,8 +58694,14 @@
       "Complex_4627.bin": [
         "3944392c954cfb176d4210544e88353b3c5d36b1"
       ],
+      "cromwell_1024.bin": [
+        "4e1c2c2ee308ca4591542b3ca48653f65fae6e0f"
+      ],
       "mcpx_1.0.bin": [
         "5d270675b54eb8071b480e42d22a3015ac211cef"
+      ],
+      "xbox_hdd.qcow2": [
+        "9da5f9ecfb1c9c32efa616f0300d02e8f702244d"
       ],
       "xemu_eeprom.bin": [
         "ff3e7eaf715fe5612e46fc984d686ed3b115baef"
@@ -59205,6 +59404,54 @@
       ],
       "telmon24.rom": [
         "86fc8dc0932f983efa199e31ae05a4424772f959"
+      ],
+      "Doukutsu.exe": [
+        "91d75a87872cbb88964bead92e0cbf8b72e836b6"
+      ],
+      "npc.tbl": [
+        "19555d2f5f72a66d6beddb4acc5ca00d634ac9c4"
+      ],
+      "cubetxt1.dat": [
+        "58807f32c413a0c9db6deb0365f2fac9518e7c86"
+      ],
+      "levels1.dat": [
+        "e2b158dbf0c1a547e05f6e087f0ecc573a6c4f9a"
+      ],
+      "music.mus": [
+        "b77313a9f92bc67f5c577699dcb95ca613e6948f"
+      ],
+      "palette.dat": [
+        "29af4cd642e0b29dc8120b5d92f130eaf4e860c9"
+      ],
+      "tyrian.cdt": [
+        "bd63566da5c24d1f50ffdcba99c654463f129d5c"
+      ],
+      "tyrian.hdt": [
+        "f935e494b090b8bd2e86be06624a84946a5a947d"
+      ],
+      "tyrian.pic": [
+        "0b216d9712f23e8faec041880b81773d93f646a2"
+      ],
+      "tyrian.shp": [
+        "9978439cd9a52fde3d65c3b223dfe96ca437fef8"
+      ],
+      "tyrian.snd": [
+        "af896c25e6efeeb6dfd4cc7345362b4b29a85324"
+      ],
+      "tyrian1.lvl": [
+        "39825b5d69a07232d91886da68d217465a74695c"
+      ],
+      "voices.snd": [
+        "63ff6b55caeda529f69983a342618c84cba5addf"
+      ],
+      "bios.bin": [
+        "cb1bd2cf5f89741900061955ac1a3b7cbd7a1ce9"
+      ],
+      "vgabios.bin": [
+        "214f09a25012e8702783d3ab9a22796071de5374"
+      ],
+      "fw_payload.bin": [
+        "d459d59b4d603d4cf733dd0fe34b7951f7c8165b"
       ],
       "bootloader-dbvz.rom": [
         "cea669f6d740f29ca248d2e8837a4b4f86fbe75a"
@@ -67062,6 +67309,9 @@
       "mz80kj.zip": [
         "2ca428b70ed1746834d129c11fb8e60a56317cff"
       ],
+      "FNT0808.X1": [
+        "1c1a0d8c9f4c446ccd7470516b215ddca5052fb2"
+      ],
       "IPLROM.X1": [
         "c4db9a6e99873808c8022afd1c50fef556a8b44d"
       ],
@@ -67070,9 +67320,6 @@
       ],
       "iplrom.x1": [
         "d3395e9aeb5b8bbba7654dd471bcd8af228ee69a"
-      ],
-      "iplrom.x1t": [
-        "1c1a0d8c9f4c446ccd7470516b215ddca5052fb2"
       ],
       "cgrom.dat": [
         "8d72c5b4d63bb14c5dbdac495244d659aa1498b6"
@@ -68467,6 +68714,9 @@
       "007-Ocean01.jpg": [
         "e5741010ac7f941cdb3c01865a1eda016a479dfd"
       ],
+      "[BIOS] SNK Neo Geo Pocket Color (Japan) (En,Ja).ngc": [
+        "edc13192054a59be49c6d55f83b70e2510968e86"
+      ],
       "emi_actorlights.fragment": [
         "41a739a72a43ee22d7d696d3b8a077af029a3ede"
       ],
@@ -68523,6 +68773,31 @@
       ],
       "bios_J.sms": [
         "a8c1b39a2e41137835eda6a5de6d46dd9fadbaf2"
+      ],
+      "eu_mcd2_9306.bin": [
+        "7063192ae9f6b696c5b81bc8f0a9fe6f0c400e58"
+      ],
+      "sega-mega-cd:9b562ebf2d095bf1dabadbc1881f519a": [
+        "7063192ae9f6b696c5b81bc8f0a9fe6f0c400e58"
+      ],
+      "jp_mcd2_921222.bin": [
+        "d203cfe22c03ae479dd8ca33840cf8d9776eb3ff"
+      ],
+      "sega-mega-cd:683a8a9e273662561172468dfa2858eb": [
+        "d203cfe22c03ae479dd8ca33840cf8d9776eb3ff"
+      ],
+      "us_scd2_9306.bin": [
+        "5a8c4b91d3034c1448aac4b5dc9a6484fce51636"
+      ],
+      "sega-mega-cd:310a9081d2edf2d316ab38813136725e": [
+        "5a8c4b91d3034c1448aac4b5dc9a6484fce51636"
+      ],
+      "iplrom.x1t": [
+        "1c1a0d8c9f4c446ccd7470516b215ddca5052fb2",
+        "44620f57a25f0bcac2b57ca2b0f1ebad3bf305d3"
+      ],
+      "128p-1.rom": [
+        "80080644289ed93d71a1103992a154cc9802b2fa"
       ],
       "SCPH-70004_BIOS_V12_EUR_200.BIN": [
         "434bc0b4eb4827da0773ec0795aadc5162569a07"
@@ -68896,15 +69171,6 @@
       "sega-mega-cd:e66fa1dc5820d254611fdcdba0662372": [
         "f891e0ea651e2232af0c5c4cb46a0cae2ee8f356"
       ],
-      "sega-mega-cd:683a8a9e273662561172468dfa2858eb": [
-        "d203cfe22c03ae479dd8ca33840cf8d9776eb3ff"
-      ],
-      "sega-mega-cd:310a9081d2edf2d316ab38813136725e": [
-        "5a8c4b91d3034c1448aac4b5dc9a6484fce51636"
-      ],
-      "sega-mega-cd:9b562ebf2d095bf1dabadbc1881f519a": [
-        "7063192ae9f6b696c5b81bc8f0a9fe6f0c400e58"
-      ],
       "sega-mega-cd:854b9150240a198070150e4566ae1290": [
         "5adb6c3af218c60868e6b723ec47e36bbdf5e6f0"
       ],
@@ -69115,9 +69381,6 @@
       ],
       "MSXR2.ROM": [
         "04990aa1c3a3fc7294ec884b81deaa89832df614"
-      ],
-      "128p-1.rom": [
-        "80080644289ed93d71a1103992a154cc9802b2fa"
       ],
       "d64rom2.rom": [
         "e3c8986bb1d44269c4587b04f1ca27a70b0aaa2e"
@@ -69375,7 +69638,7 @@
       "d2ea94b0": "17d45f259fec8ef784526fe205c1b0722c5a9a00",
       "17516536": "b6ff66dcb5547bd91760d239ddf428a655631c53",
       "23ac17be": "48d1712d1b1cdfeeeb43c6287c17b0b6309cfaab",
-      "32413056": "682f0d2475a3d30333c01d34ecf90b8b81d31997",
+      "8ff1b99d": "70c980f94d8d204cad3c18281cfb180592b6a6ee",
       "3890ead5": "9ec50f79c5fd6eaddd88542aa18b6c5bb81a9ed4",
       "e6264ee1": "6fdec00172233095cebb085b26214648d1093ecb",
       "5be16858": "975fbbbec0b578a495a8da9e1a5965d94d6d52e1",
@@ -70682,6 +70945,7 @@
       "ed8a43ae": "28eefbb63047b26e4aec104aeeca74e2f9d0276c",
       "b90a52e8": "6386e58bc1bba5e76baec9e8a1ca4b99dc3c573f",
       "26c6e8a0": "4e83a94ae5155bbea14d7331a5a8db82457bd5ae",
+      "fd654b8e": "273a9933b68a290c5aedcd6d69faa7b1d22c0344",
       "1228de34": "61d0987b906146e21b94f265d5b51b4938c986a9",
       "55f96251": "03bbb386cf530e804363acdfc1d13e64cf28af2e",
       "6999d6a3": "f34f0c330b44dbf2548329bea954d5991dec30ca",
@@ -71080,7 +71344,9 @@
       "95db2959": "e7905d16d2ccd57a013c122dc432106cd59ef52c",
       "8205795e": "829c00c3114f25b3dae5157c0a238b52a3ac37db",
       "1dbb7b59": "3944392c954cfb176d4210544e88353b3c5d36b1",
+      "5ae5278a": "4e1c2c2ee308ca4591542b3ca48653f65fae6e0f",
       "0b07d1f1": "5d270675b54eb8071b480e42d22a3015ac211cef",
+      "150b160b": "9da5f9ecfb1c9c32efa616f0300d02e8f702244d",
       "151aca4c": "ff3e7eaf715fe5612e46fc984d686ed3b115baef",
       "31cc5649": "008cf0f5cd5e2000b9f2ebf5e4ee84097e6aef74",
       "5c01c82b": "3ca4a3b8d8a7f08492e684064c6fa362e914c1af",
@@ -71331,6 +71597,22 @@
       "94358dc6": "35f92a0477a88f5cf564971125047ffcfa02ec10",
       "29e86dbc": "d8ce5b1405b6428969493efeb6f3aa2027c41bdc",
       "aa727c5d": "86fc8dc0932f983efa199e31ae05a4424772f959",
+      "0c0644ba": "91d75a87872cbb88964bead92e0cbf8b72e836b6",
+      "16b45e6c": "19555d2f5f72a66d6beddb4acc5ca00d634ac9c4",
+      "84e948df": "58807f32c413a0c9db6deb0365f2fac9518e7c86",
+      "67112fd6": "e2b158dbf0c1a547e05f6e087f0ecc573a6c4f9a",
+      "53e70005": "b77313a9f92bc67f5c577699dcb95ca613e6948f",
+      "6c014b30": "29af4cd642e0b29dc8120b5d92f130eaf4e860c9",
+      "6f6e39ce": "bd63566da5c24d1f50ffdcba99c654463f129d5c",
+      "c655ae91": "f935e494b090b8bd2e86be06624a84946a5a947d",
+      "278cba37": "0b216d9712f23e8faec041880b81773d93f646a2",
+      "65906b5f": "9978439cd9a52fde3d65c3b223dfe96ca437fef8",
+      "60dd487f": "af896c25e6efeeb6dfd4cc7345362b4b29a85324",
+      "06ce2efe": "39825b5d69a07232d91886da68d217465a74695c",
+      "d23be573": "63ff6b55caeda529f69983a342618c84cba5addf",
+      "e7e3ac4c": "cb1bd2cf5f89741900061955ac1a3b7cbd7a1ce9",
+      "e8256af7": "214f09a25012e8702783d3ab9a22796071de5374",
+      "c068031c": "d459d59b4d603d4cf733dd0fe34b7951f7c8165b",
       "a975efe4": "cea669f6d740f29ca248d2e8837a4b4f86fbe75a",
       "9261a5aa": "a368b40751dd017163c9c1a615d6f3506b7dcbdf",
       "6481a088": "cc4898ee8cae4669fc19e184c5b560c770e731b3",
@@ -74222,10 +74504,10 @@
       "8a887ad3": "1ec11e6639ab20b1bf1a69a5e5222909284c042b",
       "17878e56": "fec7527ecbf79b1ac697137f770bb8715fe8a652",
       "a61ca7c7": "2ca428b70ed1746834d129c11fb8e60a56317cff",
+      "e3995a57": "1c1a0d8c9f4c446ccd7470516b215ddca5052fb2",
       "7b28d9de": "c4db9a6e99873808c8022afd1c50fef556a8b44d",
       "2e8b767c": "44620f57a25f0bcac2b57ca2b0f1ebad3bf305d3",
       "e70011d3": "d3395e9aeb5b8bbba7654dd471bcd8af228ee69a",
-      "e3995a57": "1c1a0d8c9f4c446ccd7470516b215ddca5052fb2",
       "72628c06": "76c18deb168ad0ffd7886a130a9e74e915070782",
       "5dd9a0c5": "77be2f6f28897f99b73d4c47bf7cd47e999fd7cd",
       "9f3195f1": "8d72c5b4d63bb14c5dbdac495244d659aa1498b6",
