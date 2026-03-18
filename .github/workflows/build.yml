@@ -13,6 +13,7 @@ on:
 
 permissions:
   contents: write
+  pages: write
 
 concurrency:
   group: build
@@ -49,10 +50,16 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
 
-      - name: Regenerate database and docs
+      - name: Regenerate database, readme, and site
         run: |
+          pip install mkdocs-material
           python scripts/generate_db.py --force --bios-dir bios --output database.json
           python scripts/generate_readme.py --db database.json --platforms-dir platforms
+          python scripts/generate_site.py
+
+      - name: Deploy site to GitHub Pages
+        if: github.ref == 'refs/heads/main'
+        run: mkdocs gh-deploy --force --clean
 
       - name: Commit if changed
         id: commit
