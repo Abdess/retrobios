@@ -1,0 +1,486 @@
+platform: RetroDECK
+version: ''
+homepage: "https://retrodeck.net"
+source: "https://github.com/RetroDECK/components"
+base_destination: bios
+hash_type: md5
+verification_mode: md5
+systems:
+  sony-playstation:
+    files:
+    - name: psxonpsp660.bin
+      destination: psxonpsp660.bin
+      required: true
+      md5: c53ca5908936d412331790f4426c6c33
+    - name: scph5500.bin
+      destination: scph5500.bin
+      required: true
+      md5: 8dd7d5296a650fac7319bce665a6a53c
+    - name: scph5501.bin
+      destination: scph5501.bin
+      required: true
+      md5: 490f666e1afb15b7362b406ed1cea246
+    - name: scph5502.bin
+      destination: scph5502.bin
+      required: true
+      md5: 32736f17079d0b2b7024407c39bd3050
+    - name: scph7001.bin
+      destination: scph7001.bin
+      required: true
+      md5: 1e68c231d0896b7eadcad1d7d8e76129
+    - name: scph7002.bin
+      destination: scph7002.bin
+      required: true
+      md5: b9d9a0286c33dc6b7237bb13cd46fdee
+    - name: scph7003.bin
+      destination: scph7003.bin
+      required: true
+      md5: 490f666e1afb15b7362b406ed1cea246
+    - name: scph7502.bin
+      destination: scph7502.bin
+      required: true
+      md5: b9d9a0286c33dc6b7237bb13cd46fdee
+    - name: "scph9002(7502).bin"
+      destination: "scph9002(7502).bin"
+      required: true
+      md5: b9d9a0286c33dc6b7237bb13cd46fdee
+    - name: ps1_rom.bin
+      destination: ps1_rom.bin
+      required: true
+      md5: 81bbe60ba7a3d1cea1d48c14cbcc647b
+    - name: scph1000.bin
+      destination: scph1000.bin
+      required: true
+      md5: 239665b1a3dade1b5a52c06338011044
+    - name: scph1001.bin
+      destination: scph1001.bin
+      required: true
+      md5: 924e392ed05558ffdb115408c263dccf
+    - name: scph1002.bin
+      destination: scph1002.bin
+      required: true
+      md5: 54847e693405ffeb0359c6287434cbef
+    - name: scph100.bin
+      destination: scph100.bin
+      required: true
+      md5: 8abc1b549a4a80954addc48ef02c4521
+    - name: scph101.bin
+      destination: scph101.bin
+      required: true
+      md5: 6e3735ff4c7dc899ee98981385f6f3d0
+    - name: scph102A.bin
+      destination: scph102A.bin
+      required: true
+      md5: b10f5e0e3d9eb60e5159690680b1e774
+    - name: scph102B.bin
+      destination: scph102B.bin
+      required: true
+      md5: de93caec13d1a141a40a79f5c86168d6
+    - name: scph102C.bin
+      destination: scph102C.bin
+      required: true
+      md5: de93caec13d1a141a40a79f5c86168d6
+    - name: scph3000.bin
+      destination: scph3000.bin
+      required: true
+      md5: 849515939161e62f6b866f6853006780
+    - name: scph3500.bin
+      destination: scph3500.bin
+      required: true
+      md5: cba733ceeff5aef5c32254f1d617fa62
+    - name: scph5000.bin
+      destination: scph5000.bin
+      required: true
+      md5: eb201d2d98251a598af467d4347bb62f
+  nintendo-ds:
+    files:
+    - name: bios7.bin
+      destination: bios7.bin
+      required: true
+      md5: df692a80a5b1bc90728bc3dfc76cd948
+    - name: bios9.bin
+      destination: bios9.bin
+      required: true
+      md5: a392174eb3e572fed6447e956bde4b25
+    - name: firmware.bin
+      destination: firmware.bin
+      required: true
+      md5: e45033d9b0fa6b0de071292bba7c9d13
+    - name: biosdsi7.bin
+      destination: biosdsi7.bin
+      required: true
+      sha256: 2946281e730e71f7cafdb125f5cb60fed944ca5d610ee1e082c441b602b5f4e2
+    - name: biosdsi9.bin
+      destination: biosdsi9.bin
+      required: true
+      sha256: 47538922a8e8a8e79b922ff1203863ef5c40d9c54656a8d2c89c56ece52029ce
+    - name: dsifirmware.bin
+      destination: dsifirmware.bin
+      required: true
+      sha256: 11a150e3729bdde3ae8f5e7fc8be67d8bfbc548a1d2e523da58aa826ca0ffa99
+  sony-playstation-2:
+    files:
+    - name: ps2-0100j-20000117.bin
+      destination: ps2-0100j-20000117.bin
+      required: true
+      md5: acf4730ceb38ac9d8c7d8e21f2614600
+    - name: ps2-0101j-20000217.bin
+      destination: ps2-0101j-20000217.bin
+      required: true
+      md5: b1459d7446c69e3e97e6ace3ae23dd1c
+    - name: ps2-0120j-20001027-185015.bin
+      destination: ps2-0120j-20001027-185015.bin
+      required: true
+      md5: f63bc530bd7ad7c026fcd6f7bd0d9525
+    - name: ps2-0120j-20001027-191435.bin
+      destination: ps2-0120j-20001027-191435.bin
+      required: true
+      md5: cee06bd68c333fc5768244eae77e4495
+    - name: ps2-0150j-20010118.bin
+      destination: ps2-0150j-20010118.bin
+      required: true
+      md5: 815ac991d8bc3b364696bead3457de7d
+    - name: ps2-0160j-20010427.bin
+      destination: ps2-0160j-20010427.bin
+      required: true
+      md5: ab55cceea548303c22c72570cfd4dd71
+    - name: ps2-0170j-20030206.bin
+      destination: ps2-0170j-20030206.bin
+      required: true
+      md5: 312ad4816c232a9606e56f946bc0678a
+    - name: ps2-0200j-20040614.bin
+      destination: ps2-0200j-20040614.bin
+      required: true
+      md5: 0eee5d1c779aa50e94edd168b4ebf42e
+    - name: ps2-0210j-20040917.bin
+      destination: ps2-0210j-20040917.bin
+      required: true
+      md5: 1ad977bb539fc9448a08ab276a836bbc
+    - name: ps2-0110a-20000727.bin
+      destination: ps2-0110a-20000727.bin
+      required: true
+      md5: a20c97c02210f16678ca3010127caf36
+    - name: ps2-0120a-20000902.bin
+      destination: ps2-0120a-20000902.bin
+      required: true
+      md5: 8db2fbbac7413bf3e7154c1e0715e565
+    - name: ps2-0150a-20001228.bin
+      destination: ps2-0150a-20001228.bin
+      required: true
+      md5: 8accc3c49ac45f5ae2c5db0adc854633
+    - name: ps2-0160a-20010427.bin
+      destination: ps2-0160a-20010427.bin
+      required: true
+      md5: b107b5710042abe887c0f6175f6e94bb
+    - name: ps2-0160a-20011004.bin
+      destination: ps2-0160a-20011004.bin
+      required: true
+      md5: 7200a03d51cacc4c14fcdfdbc4898431
+    - name: ps2-0160a-20020207.bin
+      destination: ps2-0160a-20020207.bin
+      required: true
+      md5: d5ce2c7d119f563ce04bc04dbc3a323e
+    - name: ps2-0170a-20030325.bin
+      destination: ps2-0170a-20030325.bin
+      required: true
+      md5: 8aa12ce243210128c5074552d3b86251
+    - name: ps2-0190a-20030623.bin
+      destination: ps2-0190a-20030623.bin
+      required: true
+      md5: 35461cecaa51712b300b2d6798825048
+    - name: ps2-0200a-20040614.bin
+      destination: ps2-0200a-20040614.bin
+      required: true
+      md5: d333558cc14561c1fdc334c75d5f37b7
+    - name: ps2-0220a-20050620.bin
+      destination: ps2-0220a-20050620.bin
+      required: true
+      md5: 929a14baca1776b00869f983aa6e14d2
+    - name: ps2-0220a-20060210.bin
+      destination: ps2-0220a-20060210.bin
+      required: true
+      md5: cb801b7920a7d536ba07b6534d2433ca
+    - name: ps2-0220a-20060905.bin
+      destination: ps2-0220a-20060905.bin
+      required: true
+      md5: 40c11c063b3b9409aa5e4058e984e30c
+    - name: ps2-0230a-20080220.bin
+      destination: ps2-0230a-20080220.bin
+      required: true
+      md5: 21038400dc633070a78ad53090c53017
+    - name: ps2-0120e-20000902.bin
+      destination: ps2-0120e-20000902.bin
+      required: true
+      md5: b7fa11e87d51752a98b38e3e691cbf17
+    - name: ps2-0150e-20001228.bin
+      destination: ps2-0150e-20001228.bin
+      required: true
+      md5: 838544f12de9b0abc90811279ee223c8
+    - name: ps2-0160e-20010704.bin
+      destination: ps2-0160e-20010704.bin
+      required: true
+      md5: 491209dd815ceee9de02dbbc408c06d6
+    - name: ps2-0160e-20011004.bin
+      destination: ps2-0160e-20011004.bin
+      required: true
+      md5: 8359638e857c8bc18c3c18ac17d9cc3c
+    - name: ps2-0160e-20020319.bin
+      destination: ps2-0160e-20020319.bin
+      required: true
+      md5: 0d2228e6fd4fb639c9c39d077a9ec10c
+    - name: ps2-0170e-20030227.bin
+      destination: ps2-0170e-20030227.bin
+      required: true
+      md5: 6e69920fa6eef8522a1d688a11e41bc6
+    - name: ps2-0190e-20030623.bin
+      destination: ps2-0190e-20030623.bin
+      required: true
+      md5: bd6415094e1ce9e05daabe85de807666
+    - name: ps2-0200e-20040614.bin
+      destination: ps2-0200e-20040614.bin
+      required: true
+      md5: dc752f160044f2ed5fc1f4964db2a095
+    - name: ps2-0220e-20050620.bin
+      destination: ps2-0220e-20050620.bin
+      required: true
+      md5: 573f7d4a430c32b3cc0fd0c41e104bbd
+    - name: ps2-0220e-20060210.bin
+      destination: ps2-0220e-20060210.bin
+      required: true
+      md5: af60e6d1a939019d55e5b330d24b1c25
+    - name: ps2-0220e-20060905.bin
+      destination: ps2-0220e-20060905.bin
+      required: true
+      md5: 80bbb237a6af9c611df43b16b930b683
+    - name: ps2-0230e-20080220.bin
+      destination: ps2-0230e-20080220.bin
+      required: true
+      md5: dc69f0643a3030aaa4797501b483d6c4
+    - name: ps2-0160h-20010730.bin
+      destination: ps2-0160h-20010730.bin
+      required: true
+      md5: 352d2ff9b3f68be7e6fa7e6dd8389346
+    - name: ps2-0160h-20020426.bin
+      destination: ps2-0160h-20020426.bin
+      required: true
+      md5: 315a4003535dfda689752cb25f24785c
+    - name: ps2-0190h-20030623.bin
+      destination: ps2-0190h-20030623.bin
+      required: true
+      md5: 07b562a3f0c4b9a55834df9bbc9bd0c3
+    - name: ps2-0200h-20040614.bin
+      destination: ps2-0200h-20040614.bin
+      required: true
+      md5: 3e3e030c0f600442fa05b94f87a1e238
+    - name: ps2-0220h-20060905.bin
+      destination: ps2-0220h-20060905.bin
+      required: true
+      md5: c37bce95d32b2be480f87dd32704e664
+    - name: ps2-0220h-20060210.bin
+      destination: ps2-0220h-20060210.bin
+      required: true
+      md5: 549a66d0c698635ca9fa3ab012da7129
+    - name: ps2-0190c-20030623.bin
+      destination: ps2-0190c-20030623.bin
+      required: true
+      md5: 1b6e631b536247756287b916f9396872
+    - name: ps2-0190r-20030623.bin
+      destination: ps2-0190r-20030623.bin
+      required: true
+      md5: 0c13357c01a25a886db2356bbe73d9f0
+  pico8:
+    files:
+    - name: pico8
+      destination: pico-8/pico8
+      required: true
+    - name: pico8.dat
+      destination: pico-8/pico8.dat
+      required: true
+    - name: pico8_dyn
+      destination: pico-8/pico8_dyn
+      required: true
+  sony-psp:
+    files:
+    - name: ppge_atlas.zim
+      destination: ppge_atlas.zim
+      required: false
+      md5: 866855cc330b9b95cc69135fb7b41d38
+  xbox:
+    files:
+    - name: mcpx_1.0.bin
+      destination: mcpx_1.0.bin
+      required: true
+      md5: d49c52a4102f6df7bcf8d0617ac475ed
+    - name: Complex.bin
+      destination: Complex.bin
+      required: true
+    - name: Complex_4627v1.03.bin
+      destination: Complex_4627v1.03.bin
+      required: true
+    - name: Complex_4627.bin
+      destination: Complex_4627.bin
+      required: true
+  dragon32:
+    files:
+    - name: d32.rom
+      destination: d32.rom
+      required: true
+      md5: d35177f73cf303c5565aa13ef8ca5251,3420b96031078a4ef408cad7bf21a33f
+    - name: d64rom1.rom
+      destination: d64rom1.rom
+      required: true
+      md5: 5f0bee59710e55f5880e74890912ed78,6ab639e65c6e8fd832cb0d8ad4da1b60
+    - name: d64tano.rom
+      destination: d64tano.rom
+      required: true
+      md5: be9bc86ee5eb401d0a40d0377f65fefa
+    - name: d64tano2.rom
+      destination: d64tano2.rom
+      required: true
+      md5: fd91edce7be5e7c2d88e46b76956a8aa
+    - name: d200rom1.rom
+      destination: d200rom1.rom
+      required: true
+      md5: be9bc86ee5eb401d0a40d0377f65fefa
+    - name: d200rom2.rom
+      destination: d200rom2.rom
+      required: true
+      md5: fd91edce7be5e7c2d88e46b76956a8aa
+    - name: ddos10.rom
+      destination: ddos10.rom
+      required: true
+      md5: 1c965da49b6c5459b8353630aa1482e7
+    - name: ddos11c.rom
+      destination: ddos11c.rom
+      required: true
+      md5: d8429af1a12f7438a4bf88a5b934cb3a
+    - name: ddos12a.rom
+      destination: ddos12a.rom
+      required: true
+      md5: 55e2535dbbed7f1a26b5f263d7c72c63
+    - name: ddos40.rom
+      destination: ddos40.rom
+      required: true
+      md5: 9ddc388632cd3c376b164ba5cfc64329
+    - name: ddos42.rom
+      destination: ddos42.rom
+      required: true
+      md5: c956a854cbc4b9d1e69c000f78368668
+    - name: deltados.rom
+      destination: deltados.rom
+      required: true
+      md5: 024eac3db20f1b5cf98c30a0e4743201
+    - name: dplus48.rom
+      destination: dplus48.rom
+      required: true
+      md5: ee6f24d893a52b8efea9f787855456b5
+    - name: dplus49b.rom
+      destination: dplus49b.rom
+      required: true
+      md5: 56f1b97314e4ca82491c465bb887059e
+    - name: dplus50.rom
+      destination: dplus50.rom
+      required: true
+      md5: 35de5d28da507ebb213a26e04241d940
+    - name: sdose6.rom
+      destination: sdose6.rom
+      required: true
+      md5: 9d85e6b7133f915c021156f4b9cdb512
+    - name: sdose8.rom
+      destination: sdose8.rom
+      required: true
+      md5: 167f409b7a4b992faabb784b061ab4c6
+    - name: cp400bas.rom
+      destination: cp400bas.rom
+      required: true
+      md5: f73da4d73d6db5cdb8b3cb6a50415e38
+  trs80coco:
+    files:
+    - name: cp400extbas.rom
+      destination: cp400extbas.rom
+      required: true
+      md5: 091581001577b4a83ccfd511829de0f1
+    - name: cp400dsk.rom
+      destination: cp400dsk.rom
+      required: true
+      md5: 16d3ab9bc935f0d5651ca3f0e3030846
+    - name: color64extbas.rom
+      destination: color64extbas.rom
+      required: true
+      md5: 0d9264ffa95ba493f2b5b0d488a49e13
+    - name: xroarbios.rom
+      destination: xroarbios.rom
+      required: true
+      md5: 28dc97df470fb8660ef61b81dfd34f4a
+    - name: bas10.rom
+      destination: bas10.rom
+      required: true
+      md5: a74f3d95b395dad7cdca19d560eeea74
+    - name: bas11.rom
+      destination: bas11.rom
+      required: true
+      md5: c73fb4bff9621c5ab17f6220b20db82f
+    - name: bas12.rom
+      destination: bas12.rom
+      required: true
+      md5: c933316c7d939532a13648850c1c2aa6
+    - name: bas13.rom
+      destination: bas13.rom
+      required: true
+      md5: c2fc43556eb6b7b25bdf5955bd9df825
+    - name: bas14.rom
+      destination: bas14.rom
+      required: true
+      md5: ac33e16f677b4db52548d426174b1aaa
+    - name: coco3.rom
+      destination: coco3.rom
+      required: true
+      md5: 7233c6c429f3ce1c7392f28a933e0b6f
+    - name: extbas10.rom
+      destination: extbas10.rom
+      required: true
+      md5: fda72f415afe99b36f953bb9bc1253da
+    - name: extbas11.rom
+      destination: extbas11.rom
+      required: true
+      md5: 21070aa0496142b886c562bf76d7c113
+    - name: disk10.rom
+      destination: disk10.rom
+      required: true
+      md5: a64b3ef9efcc066b18d35b134068d1cc
+    - name: disk11.rom
+      destination: disk11.rom
+      required: true
+      md5: 8cab28f4b7311b8df63c07bb3b59bfd5
+    - name: fd502.rom
+      destination: fd502.rom
+      required: true
+      md5: 8cab28f4b7311b8df63c07bb3b59bfd5
+    - name: fd502ds.rom
+      destination: fd502ds.rom
+      required: true
+      md5: b2d43757dc6851d866021ff6c4f59205
+    - name: coco3p.rom
+      destination: coco3p.rom
+      required: true
+      md5: 4ae57e5a8e7494e5485446fefedb580b
+    - name: CCNPATCH.cas
+      destination: CCNPATCH.cas
+      required: true
+      md5: 2c395ad58a842711931679b554483a90
+    - name: CCNPATCH.wav
+      destination: CCNPATCH.wav
+      required: true
+      md5: a17397fb5408647a11d23bab959d1f97
+    - name: DBPATCH.cas
+      destination: DBPATCH.cas
+      required: true
+      md5: 65e1aab5fc5cba1b7374d9dddec25d62
+    - name: DBPATCH.wav
+      destination: DBPATCH.wav
+      required: true
+      md5: 6a07aeee664d81047672e6ff3541a12a
+    - name: disk.rom
+      destination: disk.rom
+      required: true
+      md5: 5bfcb1ae090159c8dea542b5a7c0840f
