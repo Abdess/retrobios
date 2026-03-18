@@ -287,41 +287,38 @@ def generate_system_page(
         files = consoles[console_name]
         lines.append(f"## {console_name}")
         lines.append("")
-        lines.append("| File | SHA1 | MD5 | Size | Platforms | Emulators |")
-        lines.append("|------|------|-----|------|-----------|-----------|")
-
         # Separate main files from variants
         main_files = [f for f in files if "/.variants/" not in f["path"]]
         variant_files = [f for f in files if "/.variants/" in f["path"]]
 
         for f in sorted(main_files, key=lambda x: x["name"]):
             name = f["name"]
-            sha1 = f.get("sha1", "unknown")[:12] + "..."
-            md5 = f.get("md5", "unknown")[:12] + "..."
+            sha1_full = f.get("sha1", "unknown")
+            md5_full = f.get("md5", "unknown")
             size = _fmt_size(f.get("size", 0))
 
             # Cross-reference: which platforms declare this file
-            plats = [p for p, names in platform_files.items() if name in names]
-            plat_str = ", ".join(sorted(plats)[:3])
-            if len(plats) > 3:
-                plat_str += f" +{len(plats)-3}"
-
+            plats = sorted(p for p, names in platform_files.items() if name in names)
             # Cross-reference: which emulators load this file
-            emus = [e for e, names in emulator_files.items() if name in names]
-            emu_str = ", ".join(sorted(emus)[:3])
-            if len(emus) > 3:
-                emu_str += f" +{len(emus)-3}"
+            emus = sorted(e for e, names in emulator_files.items() if name in names)
 
-            lines.append(f"| `{name}` | `{sha1}` | `{md5}` | {size} | {plat_str} | {emu_str} |")
+            lines.append(f"**`{name}`** ({size})")
+            lines.append("")
+            lines.append(f"- SHA1: `{sha1_full}`")
+            lines.append(f"- MD5: `{md5_full}`")
+            if plats:
+                lines.append(f"- Platforms: {', '.join(plats)}")
+            if emus:
+                lines.append(f"- Emulators: {', '.join(emus)}")
+            lines.append("")
 
         if variant_files:
-            lines.append("")
             lines.append("**Variants:**")
             lines.append("")
             for v in sorted(variant_files, key=lambda x: x["name"]):
                 vname = v["name"]
-                vmd5 = v.get("md5", "unknown")[:16]
-                lines.append(f"- `{vname}` (MD5: `{vmd5}...`)")
+                vmd5 = v.get("md5", "unknown")
+                lines.append(f"- `{vname}` MD5: `{vmd5}`")
 
         lines.append("")
 
