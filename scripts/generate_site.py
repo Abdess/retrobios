@@ -382,7 +382,8 @@ def generate_emulators_index(profiles: dict) -> str:
     return "\n".join(lines) + "\n"
 
 
-def generate_emulator_page(name: str, profile: dict, db: dict) -> str:
+def generate_emulator_page(name: str, profile: dict, db: dict,
+                           platform_files: dict | None = None) -> str:
     if profile.get("type") == "alias":
         parent = profile.get("alias_of", "unknown")
         return (
@@ -430,10 +431,12 @@ def generate_emulator_page(name: str, profile: dict, db: dict) -> str:
         lines.append(f"**{len(files)} files** ({in_repo_count} in repo, {missing_count} missing)")
         lines.append("")
 
-        has_notes = any(f.get("note") for f in files)
-        if has_notes:
-            lines.append("| File | Required | In Repo | Source Ref | Note |")
-            lines.append("|------|----------|---------|-----------|------|")
+        # Check which platforms declare each file
+        show_platforms = platform_files is not None
+
+        if show_platforms:
+            lines.append("| File | Required | In Repo | Platforms | Source Ref |")
+            lines.append("|------|----------|---------|-----------|-----------|")
         else:
             lines.append("| File | Required | In Repo | Source Ref |")
             lines.append("|------|----------|---------|-----------|")
@@ -443,9 +446,11 @@ def generate_emulator_page(name: str, profile: dict, db: dict) -> str:
             required = "yes" if f.get("required") else "no"
             in_repo = "yes" if fname in by_name else "no"
             source_ref = f.get("source_ref", "")
-            if has_notes:
-                note = f.get("note", "")
-                lines.append(f"| `{fname}` | {required} | {in_repo} | {source_ref} | {note} |")
+
+            if show_platforms:
+                plats = [p for p, names in platform_files.items() if fname in names]
+                plat_str = ", ".join(sorted(plats)) if plats else "-"
+                lines.append(f"| `{fname}` | {required} | {in_repo} | {plat_str} | {source_ref} |")
             else:
                 lines.append(f"| `{fname}` | {required} | {in_repo} | {source_ref} |")
 
@@ -456,6 +461,120 @@ def generate_emulator_page(name: str, profile: dict, db: dict) -> str:
 # ---------------------------------------------------------------------------
 # Contributing page
 # ---------------------------------------------------------------------------
+
+def generate_gap_analysis(
+    profiles: dict,
+    coverages: dict,
+    db: dict,
+) -> str:
+    """Generate a global gap analysis page showing all missing/undeclared files."""
+    by_name = db.get("indexes", {}).get("by_name", {})
+    platform_files = _build_platform_file_index(coverages)
+
+    lines = [
+        f"# Gap Analysis - {SITE_NAME}",
+        "",
+        "Files that emulators load but platforms don't declare, and their availability.",
+        "",
+    ]
+
+    # Global stats
+    total_undeclared = 0
+    total_in_repo = 0
+    total_missing = 0
+
+    emulator_gaps = []
+    for emu_name, profile in sorted(profiles.items()):
+        if profile.get("type") == "alias":
+            continue
+        files = profile.get("files", [])
+        if not files:
+            continue
+
+        systems = profile.get("systems", [])
+        all_platform_names = set()
+        for sys_id in systems:
+            for pname, pfiles in platform_files.items():
+                all_platform_names.update(pfiles)
+
+        undeclared = []
+        for f in files:
+            fname = f.get("name", "")
+            if not fname or fname.startswith("<"):
+                continue
+            if fname not in all_platform_names:
+                in_repo = fname in by_name
+                undeclared.append({
+                    "name": fname,
+                    "required": f.get("required", False),
+                    "in_repo": in_repo,
+                    "source_ref": f.get("source_ref", ""),
+                })
+                total_undeclared += 1
+                if in_repo:
+                    total_in_repo += 1
+                else:
+                    total_missing += 1
+
+        if undeclared:
+            emulator_gaps.append((emu_name, profile.get("emulator", emu_name), undeclared))
+
+    lines.extend([
+        "## Summary",
+        "",
+        f"| Metric | Count |",
+        f"|--------|-------|",
+        f"| Total undeclared files | {total_undeclared} |",
+        f"| Already in repo | {total_in_repo} |",
+        f"| Missing from repo | {total_missing} |",
+        f"| Emulators with gaps | {len(emulator_gaps)} |",
+        "",
+    ])
+
+    # Per-emulator breakdown
+    lines.extend([
+        "## Per Emulator",
+        "",
+        "| Emulator | Undeclared | In Repo | Missing |",
+        "|----------|-----------|---------|---------|",
+    ])
+
+    for emu_name, display, gaps in sorted(emulator_gaps, key=lambda x: -len(x[2])):
+        in_repo = sum(1 for g in gaps if g["in_repo"])
+        missing = len(gaps) - in_repo
+        lines.append(f"| [{display}](emulators/{emu_name}.md) | {len(gaps)} | {in_repo} | {missing} |")
+
+    # Missing files detail (not in repo)
+    all_missing = set()
+    missing_details = []
+    for emu_name, display, gaps in emulator_gaps:
+        for g in gaps:
+            if not g["in_repo"] and g["name"] not in all_missing:
+                all_missing.add(g["name"])
+                missing_details.append({
+                    "name": g["name"],
+                    "emulator": display,
+                    "required": g["required"],
+                    "source_ref": g["source_ref"],
+                })
+
+    if missing_details:
+        lines.extend([
+            "",
+            f"## Missing Files ({len(missing_details)} unique)",
+            "",
+            "Files loaded by emulators but not available in the repository.",
+            "",
+            "| File | Emulator | Required | Source |",
+            "|------|----------|----------|--------|",
+        ])
+        for m in sorted(missing_details, key=lambda x: x["name"]):
+            req = "yes" if m["required"] else "no"
+            lines.append(f"| `{m['name']}` | {m['emulator']} | {req} | {m['source_ref']} |")
+
+    lines.extend(["", f"*Generated on {_timestamp()}*"])
+    return "\n".join(lines) + "\n"
+
 
 def generate_contributing() -> str:
     return """# Contributing - RetroBIOS
@@ -558,6 +677,7 @@ def generate_mkdocs_nav(
         {"Platforms": platform_nav},
         {"Systems": system_nav},
         {"Emulators": emu_nav},
+        {"Gap Analysis": "gaps.md"},
         {"Contributing": "contributing.md"},
     ]
 
@@ -637,8 +757,14 @@ def main():
     print("Generating emulator pages...")
     (docs / "emulators" / "index.md").write_text(generate_emulators_index(profiles))
     for name, profile in profiles.items():
-        page = generate_emulator_page(name, profile, db)
+        page = generate_emulator_page(name, profile, db, platform_files)
         (docs / "emulators" / f"{name}.md").write_text(page)
+
+    # Generate gap analysis page
+    print("Generating gap analysis page...")
+    (docs / "gaps.md").write_text(
+        generate_gap_analysis(profiles, coverages, db)
+    )
 
     # Generate contributing
     print("Generating contributing page...")
