@@ -458,9 +458,8 @@ systems:
     - name: Dinothawr.zip
       destination: Dinothawr.zip
       required: true
-      sha1: 693d8bb4d992c645e6413a57195acf4eca2f5a2e
-      md5: a2e891e330d146c4046c2b622fc31462
-      crc32: 683ed4ad
+      sha1: eadb966430454b40a17387acc7302ff1683cc9f2
+      md5: b8e3f8e88dc8164f8b4b60aa2add9107
       size: 5763199
   dos:
     files:

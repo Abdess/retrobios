@@ -121,7 +121,9 @@ def resolve_file(file_entry: dict, db: dict, bios_dir: str,
         if os.path.exists(local_path):
             return local_path, "exact"
 
-    if md5:
+    # Skip MD5 direct lookup for zipped_file entries: the md5 is for the inner ROM,
+    # not the container ZIP. Matching it would resolve to the standalone ROM file.
+    if md5 and not zipped_file:
         sha1_from_md5 = db.get("indexes", {}).get("by_md5", {}).get(md5)
         if sha1_from_md5 and sha1_from_md5 in db["files"]:
             local_path = db["files"][sha1_from_md5]["path"]
