@@ -30,9 +30,28 @@ jobs:
 
       - run: pip install pyyaml
 
+      - name: Restore large files from release
+        run: |
+          mkdir -p .cache/large
+          gh release download large-files -D .cache/large/ 2>/dev/null || true
+          # Copy large files to their bios/ paths so generate_db sees them
+          for f in .cache/large/*; do
+            [ -f "$f" ] || continue
+            name=$(basename "$f")
+            # Match against .gitignore entries to find target path
+            target=$(grep "$name" .gitignore | head -1)
+            if [ -n "$target" ] && [ ! -f "$target" ]; then
+              mkdir -p "$(dirname "$target")"
+              cp "$f" "$target"
+              echo "Restored: $target"
+            fi
+          done
+        env:
+          GH_TOKEN: ${{ github.token }}
+
       - name: Regenerate database and docs
         run: |
-          python scripts/generate_db.py --bios-dir bios --output database.json
+          python scripts/generate_db.py --force --bios-dir bios --output database.json
           python scripts/generate_readme.py --db database.json --platforms-dir platforms
 
       - name: Commit if changed
