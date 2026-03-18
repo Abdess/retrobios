@@ -1,0 +1,16 @@
+emulator: MojoZork
+type: game
+source: "https://github.com/libretro/libretro-mojozork"
+cores:
+  - mojozork
+systems: []
+
+notes: |
+  MojoZork is a Z-machine interpreter for libretro, capable of running
+  Infocom-era interactive fiction (Zork, Hitchhiker's Guide, etc.) and
+  other Z-code story files (.z1 through .z8, .zblorb).
+
+  No BIOS or system files required. Story files are loaded directly
+  as content.
+
+files: []

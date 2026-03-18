@@ -1,0 +1,12 @@
+emulator: UXN
+type: game
+source: "https://github.com/libretro/uxn"
+cores: [uxn]
+systems: []
+files: []
+notes: >
+  Libretro port of the Varvara/UXN stack machine designed by Hundred Rabbits.
+  UXN is a portable 8-bit virtual computer with 64KB of memory and a
+  minimal instruction set. Loads .rom files compiled from Uxntal assembly.
+  The VM is entirely software-defined with no firmware or BIOS dependencies.
+  No system directory files required.

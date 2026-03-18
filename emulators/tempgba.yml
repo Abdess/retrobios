@@ -1,0 +1,27 @@
+emulator: TempGBA
+type: libretro
+source: "https://github.com/libretro/TempGBA-libretro"
+cores:
+  - tempgba
+systems:
+  - nintendo-gba
+
+notes: |
+  TempGBA is a Game Boy Advance emulator forked from gpSP. Originally
+  developed for the Nintendo DS homebrew scene, the libretro port wraps
+  the dynarec-based GBA engine for use in RetroArch.
+
+  The GBA BIOS (gba_bios.bin) is optional. TempGBA includes HLE BIOS
+  stubs inherited from gpSP that handle most SWI calls. The real BIOS
+  improves boot logo display and SWI accuracy for a small number of
+  titles.
+
+  BIOS file goes in the system directory as gba_bios.bin (same path
+  used by gpSP and mGBA).
+
+files:
+  - name: gba_bios.bin
+    system: nintendo-gba
+    required: false
+    size: 16384
+    note: "GBA BIOS. Optional, HLE stubs cover most software."

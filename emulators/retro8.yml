@@ -1,0 +1,15 @@
+emulator: Retro8
+type: game
+source: "https://github.com/libretro/retro8"
+cores:
+  - retro8
+systems: []
+
+notes: |
+  Retro8 is a PICO-8 compatible runtime for libretro. It can run .p8
+  and .p8.png cartridge files created for the PICO-8 fantasy console.
+
+  No BIOS, firmware, or system files required. The virtual machine and
+  Lua interpreter are self-contained in the core binary.
+
+files: []

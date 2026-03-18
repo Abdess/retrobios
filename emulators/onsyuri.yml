@@ -1,0 +1,19 @@
+emulator: ONScripter Yuri
+type: game
+source: "https://github.com/libretro/libretro-onsyuri"
+cores:
+  - onsyuri
+systems:
+  - onscripter
+
+notes: |
+  ONScripter Yuri is a fork of ONScripter optimized for the libretro
+  environment. Like the original ONScripter, it is a clone of the
+  NScripter visual novel engine and runs .txt, .dat, and .ons script
+  files.
+
+  No BIOS or system files required. Game content (scripts, graphics,
+  audio, fonts) is loaded from the game directory. Each game ships its
+  own default.ttf font file.
+
+files: []

@@ -1,0 +1,16 @@
+emulator: Moonlight
+type: utility
+source: "https://github.com/libretro/moonlight-libretro"
+cores:
+  - moonlight
+systems: []
+
+notes: |
+  Moonlight is a game streaming client that connects to NVIDIA
+  GameStream or Sunshine hosts. The libretro port allows streaming
+  PC games through RetroArch.
+
+  No BIOS or system files required. Configuration (host IP, pairing)
+  is handled through core options and the pairing process.
+
+files: []

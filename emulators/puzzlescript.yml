@@ -1,0 +1,16 @@
+emulator: PuzzleScript
+type: game
+source: "https://github.com/libretro/puzzlescript-libretro"
+cores:
+  - puzzlescript
+systems: []
+
+notes: |
+  Libretro port of PuzzleScript, an open-source HTML5 puzzle game
+  engine by Stephen Lavelle (increpare). Runs .puz puzzle definition
+  files within RetroArch.
+
+  No BIOS or system files required. The puzzle engine and renderer
+  are self-contained.
+
+files: []

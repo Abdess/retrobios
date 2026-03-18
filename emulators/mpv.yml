@@ -1,0 +1,15 @@
+emulator: mpv
+type: utility
+source: "https://github.com/libretro/libretro-mpv"
+cores:
+  - mpv
+systems: []
+
+notes: |
+  Libretro port of mpv, a media player based on MPlayer and mplayer2.
+  Plays video and audio files within RetroArch using mpv's decoding
+  pipeline.
+
+  No BIOS or system files required.
+
+files: []

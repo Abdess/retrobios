@@ -1,0 +1,19 @@
+emulator: vitaQuakeIII
+type: game
+source: "https://github.com/libretro/vitaquake3"
+cores: [vitaquake3, vitavoyager]
+systems: [quake3]
+
+notes: >
+  Quake III Arena and Star Trek Voyager Elite Force source ports. Built from
+  ioquake3 with the libretro backend. vitaquake3 plays Quake III Arena and
+  Team Arena, vitavoyager plays Star Trek Voyager Elite Force (Holomatch
+  multiplayer). Both cores accept .pk3 extensions. Content is loaded from the
+  .pk3 file path - the engine resolves the parent directory structure to find
+  baseq3/ (or baseEF/ for vitavoyager) and loads pak0.pk3 through pak8.pk3
+  sequentially. Game data files (.pk3 archives containing maps, textures,
+  models, shaders, sounds) come from the retail game, not engine firmware.
+  No files are required in the RetroArch system directory. The cores need
+  no BIOS or firmware.
+
+files: []

@@ -1,0 +1,17 @@
+emulator: x64sdl
+type: libretro
+source: "https://github.com/libretro/vice-libretro"
+cores:
+  - vice_x64
+systems:
+  - commodore-c64
+
+notes: |
+  Alias for the VICE x64 core. x64sdl is an alternate build name
+  referencing the SDL-based VICE x64 Commodore 64 emulator. In the
+  libretro ecosystem this maps to the same vice_x64 core binary.
+
+  See vice.yml for full ROM and BIOS details. All standard ROMs are
+  embedded in the core binary.
+
+files: []

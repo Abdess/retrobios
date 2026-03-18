@@ -1,0 +1,14 @@
+emulator: MCSoftserve
+type: utility
+source: "https://github.com/libretro/libretro-mcsoftserve"
+cores:
+  - mcsoftserve
+systems: []
+
+notes: |
+  MCSoftserve is a utility/test core for libretro. Repository not
+  publicly available; likely an internal or experimental core.
+
+  No BIOS or system files required.
+
+files: []

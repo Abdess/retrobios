@@ -1,0 +1,10 @@
+emulator: MicroW8
+type: game
+cores: [uw8]
+systems: []
+files: []
+notes: >
+  MicroW8 is a WebAssembly-based fantasy console with a 320x240 screen,
+  32-color palette, and a 256KB memory limit. Programs are compiled to
+  compact WASM modules (.uw8 format). The runtime is fully self-contained
+  with no external dependencies. No BIOS or system directory files required.

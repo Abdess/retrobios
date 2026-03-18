@@ -1,0 +1,21 @@
+emulator: SimCoupe
+type: libretro
+source: "https://github.com/libretro/libretro-simcoupe"
+cores:
+  - simcp
+systems:
+  - sam-coupe
+
+notes: |
+  SimCoupe is an emulator for the SAM Coupe, a British 8-bit home
+  computer by Miles Gordon Technology (1989). The SAM Coupe was
+  designed as a successor to the ZX Spectrum with a Z80B CPU at 6 MHz
+  and custom ASIC graphics.
+
+  No external BIOS or ROM files required. The SAM Coupe ROM is built
+  into the emulator. The libretro wrapper does not request any files
+  from the system directory.
+
+  Loads .dsk, .sad, .mgt, .sbt, and .cpm disk images as content.
+
+files: []

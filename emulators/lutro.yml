@@ -1,0 +1,17 @@
+emulator: Lutro
+type: game
+source: "https://github.com/libretro/libretro-lutro"
+cores:
+  - lutro
+systems: []
+
+notes: |
+  Lutro is a Love2D-compatible Lua game framework for libretro. It
+  implements a subset of the Love2D API (love.graphics, love.audio,
+  love.timer, love.keyboard) allowing Love2D-style games to run as
+  libretro cores.
+
+  No BIOS or system files required. Games are loaded as directories
+  containing main.lua and their assets.
+
+files: []

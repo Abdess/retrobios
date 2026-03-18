@@ -1,0 +1,17 @@
+emulator: Stone Soup
+type: game
+source: "https://github.com/libretro/crawl-ref"
+cores: [stonesoup]
+systems: []
+
+notes: >
+  Dungeon Crawl Stone Soup, a roguelike dungeon crawler. The libretro port is
+  built from the crawl-ref source tree (crawl-ref/source/) with TILES=y and
+  the libretro backend. The core accepts no content extensions - it launches
+  directly into a new game or save selection. All game data (tiles, databases,
+  descriptions, lua scripts, des files for level generation) is compiled into
+  the core binary or loaded from the bundled dat/ directory built alongside
+  the core. No BIOS, firmware, or external system files are required. Save
+  files are stored in the RetroArch save directory.
+
+files: []
