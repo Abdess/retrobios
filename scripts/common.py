@@ -166,17 +166,7 @@ def resolve_local_file(
                         if os.path.exists(path):
                             return path, "md5_exact"
 
-    # 3. zipped_file content match via pre-built index
-    if zipped_file and md5_list and zip_contents:
-        for md5_candidate in md5_list:
-            if md5_candidate in zip_contents:
-                zip_sha1 = zip_contents[md5_candidate]
-                if zip_sha1 in files_db:
-                    path = files_db[zip_sha1]["path"]
-                    if os.path.exists(path):
-                        return path, "zip_exact"
-
-    # 4. No MD5 = any file with that name (existence check)
+    # 3. No MD5 = any file with that name (existence check)
     if not md5_list:
         candidates = []
         for match_sha1 in by_name.get(name, []):
@@ -217,6 +207,18 @@ def resolve_local_file(
                     return path, "exact"
         primary = [p for p, _ in candidates if "/.variants/" not in p]
         return (primary[0] if primary else candidates[0][0]), "hash_mismatch"
+
+    # 6. zipped_file content match via pre-built index (last resort:
+    # matches inner ROM MD5 across ALL ZIPs in the repo, so only use
+    # when name-based resolution failed entirely)
+    if zipped_file and md5_list and zip_contents:
+        for md5_candidate in md5_list:
+            if md5_candidate in zip_contents:
+                zip_sha1 = zip_contents[md5_candidate]
+                if zip_sha1 in files_db:
+                    path = files_db[zip_sha1]["path"]
+                    if os.path.exists(path):
+                        return path, "zip_exact"
 
     return None, "not_found"
 
