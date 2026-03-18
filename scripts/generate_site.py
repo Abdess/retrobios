@@ -99,46 +99,45 @@ def generate_home(db: dict, coverages: dict, emulator_count: int,
         "",
         "Complete BIOS and firmware collection for retrogaming emulators.",
         "",
-        f"> **{total_files:,}** files | **{_fmt_size(total_size)}** "
-        f"| **{len(coverages)}** platforms | **{emulator_count}** emulator profiles",
+        "---",
         "",
-        "## Download",
+        f"**{total_files:,}** files across **{len(coverages)}** platforms, "
+        f"backed by **{emulator_count}** emulator source code profiles.",
         "",
-        "| Platform | Files | Verification | Pack |",
-        "|----------|-------|-------------|------|",
     ]
 
-    for name, cov in sorted(coverages.items(), key=lambda x: x[1]["platform"]):
-        display = cov["platform"]
-        total = cov["total"]
-        mode = cov["mode"]
-        logo_url = (registry or {}).get(name, {}).get("logo", "")
-        logo_md = f"![{display}]({logo_url}){{ width=24 }} " if logo_url else ""
-        lines.append(
-            f"| {logo_md}{display} | {total} | {mode} | "
-            f"[Download]({RELEASE_URL}) |"
-        )
-
+    # Single unified table: platform + coverage + download
     lines.extend([
+        "## Platforms",
         "",
-        "## Coverage",
-        "",
-        "| Platform | Coverage | Verified | Untested | Missing |",
-        "|----------|----------|----------|----------|---------|",
+        "| | Platform | Coverage | Verified | Download |",
+        "|---|----------|----------|----------|----------|",
     ])
 
     for name, cov in sorted(coverages.items(), key=lambda x: x[1]["platform"]):
         display = cov["platform"]
         pct = _pct(cov["present"], cov["total"])
+        logo_url = (registry or {}).get(name, {}).get("logo", "")
+        logo_md = f"![{display}]({logo_url}){{ width=20 loading=lazy }}" if logo_url else ""
+
         lines.append(
-            f"| [{display}](platforms/{name}.md) | "
+            f"| {logo_md} | [{display}](platforms/{name}.md) | "
             f"{cov['present']}/{cov['total']} ({pct}) | "
-            f"{cov['verified']} | {cov['untested']} | {cov['missing']} |"
+            f"{cov['verified']} | "
+            f"[Pack]({RELEASE_URL}) |"
         )
 
+    # Quick links
     lines.extend([
         "",
-        f"*Generated on {ts}*",
+        "---",
+        "",
+        f"[Systems](systems/){{ .md-button }} "
+        f"[Emulators](emulators/){{ .md-button }} "
+        f"[Gap Analysis](gaps/){{ .md-button }} "
+        f"[Contributing](contributing/){{ .md-button .md-button--primary }}",
+        "",
+        f"*{_fmt_size(total_size)} total. Generated on {ts}.*",
     ])
 
     return "\n".join(lines) + "\n"

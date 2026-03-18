@@ -76,6 +76,6 @@ platforms:
   retropie:
     config: retropie.yml
     status: archived  # Last release: v4.8 (March 2022) - no update in 4 years
-    logo: "https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/scriptmodules/system/RetroPie/icon.png"
+    logo: ""
     scraper: null
     schedule: null
