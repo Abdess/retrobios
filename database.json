@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-03-18T11:50:35Z",
-  "total_files": 5376,
-  "total_size": 4896113929,
+  "generated_at": "2026-03-18T12:47:15Z",
+  "total_files": 5562,
+  "total_size": 4907075379,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -1614,6 +1614,69 @@
       "sha256": "a12f79362c78b69d0c789ff7ae9075d1b92c826e4bbda4a5573505a3ba54b624",
       "crc32": "d9d92d1b"
     },
+    "802adfa42a0c1cde3c33385cb3eebcead70bede4": {
+      "path": "bios/Arcade/Arcade/jojo.zip",
+      "name": "jojo.zip",
+      "size": 129780,
+      "sha1": "802adfa42a0c1cde3c33385cb3eebcead70bede4",
+      "md5": "086349c7b939ee980df45b614ce00e2f",
+      "sha256": "75b6b0a46ad8781b591629339e438eec657505d9a61e758d141fbc5a4fbbd336",
+      "crc32": "fd30fa30"
+    },
+    "65eac36641f01942f0d2c34e2b27c26f930abb32": {
+      "path": "bios/Arcade/Arcade/jojoba.zip",
+      "name": "jojoba.zip",
+      "size": 132458,
+      "sha1": "65eac36641f01942f0d2c34e2b27c26f930abb32",
+      "md5": "fbc6b88733b6978267715be6a7773df2",
+      "sha256": "75c7e5d281b2ea3dcd9255507b17f91d9e128dfa8e97ee2e6b30b12859b5ce5f",
+      "crc32": "2fa2a2e7"
+    },
+    "aa73b11ba0787ec8bf59d7d1aa327be791506edf": {
+      "path": "bios/Arcade/Arcade/jojoban.zip",
+      "name": "jojoban.zip",
+      "size": 132468,
+      "sha1": "aa73b11ba0787ec8bf59d7d1aa327be791506edf",
+      "md5": "415da334e5653d0685d9b6a930be64eb",
+      "sha256": "40b0c1b2e101c71b1e1abaf97a925f8469dbc67374cc6545c7a80f7a43dfb9c2",
+      "crc32": "ed9656bb"
+    },
+    "4067cc49b6a2731d58db041e84cf7796d29765c3": {
+      "path": "bios/Arcade/Arcade/jojobane.zip",
+      "name": "jojobane.zip",
+      "size": 132466,
+      "sha1": "4067cc49b6a2731d58db041e84cf7796d29765c3",
+      "md5": "38f040484743c7320d3fa26b606c6642",
+      "sha256": "c518cbb3baf116b600345c4da66951203680ee22adc5e1f34244e4a2ab66161d",
+      "crc32": "6e95d100"
+    },
+    "adfd8a50daceb9140c83880886dd15b0e705e6b2": {
+      "path": "bios/Arcade/Arcade/jojoj.zip",
+      "name": "jojoj.zip",
+      "size": 129782,
+      "sha1": "adfd8a50daceb9140c83880886dd15b0e705e6b2",
+      "md5": "a8b4c19955fee853f05bb977c3abf1c2",
+      "sha256": "f7eddabe5700431ffbaea67fefdf4795602032f7ef8cc26d70e777eb4e0903bc",
+      "crc32": "b453fe22"
+    },
+    "e9623af0ae27632b55c037dde2dc5c0a07b1f466": {
+      "path": "bios/Arcade/Arcade/jojon.zip",
+      "name": "jojon.zip",
+      "size": 129790,
+      "sha1": "e9623af0ae27632b55c037dde2dc5c0a07b1f466",
+      "md5": "190dd9c19062a8af27d811fb60d18b24",
+      "sha256": "4f9fba19ff6ca4f6b6db3a5f30fa84d23e0f3686cb4bacb6d29ae33c601967d0",
+      "crc32": "cdf27589"
+    },
+    "37fd0af4db5ebd5a704ee65e3a0a1a67fe325bc5": {
+      "path": "bios/Arcade/Arcade/jojou.zip",
+      "name": "jojou.zip",
+      "size": 129779,
+      "sha1": "37fd0af4db5ebd5a704ee65e3a0a1a67fe325bc5",
+      "md5": "5ac13a82927b6e0a69a7bc5ec539d1ba",
+      "sha256": "91f7496fc2295e4321e53e7647168777344f75d150d75319452eb1f9bedec5ab",
+      "crc32": "1d0ae66c"
+    },
     "b4ff14ed8c3e37a4b45ce2d80c692961ffc88270": {
       "path": "bios/Arcade/Arcade/konamigv.zip",
       "name": "konamigv.zip",
@@ -1767,14 +1830,14 @@
       "sha256": "793db2a859be2d814d334ab511811c42c6727a16841e7627fa7c33171c3de441",
       "crc32": "b7949ddb"
     },
-    "838934ee5b8fcc81883fb664526b3d281840b2e9": {
+    "eac782be9f6ebe5dfb09bb4a5342d8aefb82d527": {
       "path": "bios/Arcade/Arcade/neocdz.zip",
       "name": "neocdz.zip",
-      "size": 214659,
-      "sha1": "838934ee5b8fcc81883fb664526b3d281840b2e9",
-      "md5": "c85b8132799f1b2ad3754a97947809d2",
-      "sha256": "19190c34399c40f3b25593c2c75143670edd1aae5e19410833664f4307b1ffc6",
-      "crc32": "a313a0d6"
+      "size": 957303,
+      "sha1": "eac782be9f6ebe5dfb09bb4a5342d8aefb82d527",
+      "md5": "f4eb6aa12a0923a845cd169a9198acab",
+      "sha256": "146bb79b224cc9e5f066fbf95f0c6862bda7856b7483f1c621b84e304e6ee4fa",
+      "crc32": "1da1dc00"
     },
     "deb62b0074b8cae4f162c257662136733cfc76ad": {
       "path": "bios/Arcade/Arcade/neogeo.zip",
@@ -1812,14 +1875,14 @@
       "sha256": "24d341ee618c8499178ee9b57bebb68f5418645cc2b4683af605a7db628b196e",
       "crc32": "d28b794e"
     },
-    "c0c001ec80fa860857000f4cfc9844a28498a355": {
+    "2b61f36b22933f3bec237818ecc959efb016d652": {
       "path": "bios/Arcade/Arcade/pgm.zip",
       "name": "pgm.zip",
-      "size": 2094636,
-      "sha1": "c0c001ec80fa860857000f4cfc9844a28498a355",
-      "md5": "87cc944eef4c671aa2629a8ba48a08e0",
-      "sha256": "b8603d9021cf9508152fe8ce23c411bb631b24b61d24a26fdd41e273ab925fe5",
-      "crc32": "bf3dd2ef"
+      "size": 2240738,
+      "sha1": "2b61f36b22933f3bec237818ecc959efb016d652",
+      "md5": "9b5e9f404ba902a60a7925ace94e9c14",
+      "sha256": "5582eae58a8f23b7e203f01b56e26e0450e7bab0ceb01bc65b151df6bf532555",
+      "crc32": "01a40c6a"
     },
     "125e74975da3f7ac643232210ab37c33e4ece9ca": {
       "path": "bios/Arcade/Arcade/playch10.zip",
@@ -1848,6 +1911,15 @@
       "sha256": "de8cfe2c1a0207b02a937a1cde4c56040e6d5aa7d0f52c26652a35d9f07dd9b6",
       "crc32": "d85f005e"
     },
+    "7821398e77ca91837548826773157c427a2ba018": {
+      "path": "bios/Arcade/Arcade/redearth.zip",
+      "name": "redearth.zip",
+      "size": 132590,
+      "sha1": "7821398e77ca91837548826773157c427a2ba018",
+      "md5": "e96854681b9a548dc311e7d70906423a",
+      "sha256": "74bf7d52e38d6964f92431c6a22962a5adb129a0ca4755db3c6869043c16bcf7",
+      "crc32": "24e90480"
+    },
     "2c178083ac2906cecb7e331d7111f7766a353052": {
       "path": "bios/Arcade/Arcade/sammymdl.zip",
       "name": "sammymdl.zip",
@@ -1875,6 +1947,132 @@
       "sha256": "75e95fb7431568fe4e71c0d71bbf41ebce3091a2d25ecc8da53f7eb115c4eba8",
       "crc32": "1e4a1866"
     },
+    "b23ce6c1cc03e366cedcba01e9f01e7ed47c7856": {
+      "path": "bios/Arcade/Arcade/sfiii.zip",
+      "name": "sfiii.zip",
+      "size": 132544,
+      "sha1": "b23ce6c1cc03e366cedcba01e9f01e7ed47c7856",
+      "md5": "af79a13aeeb4b97dbfd4f9f0f3630173",
+      "sha256": "d3513e44351d4295a26acaea3335ae0b68b373c90c11b636e960d68679589bf4",
+      "crc32": "03ecd264"
+    },
+    "1c8b9163f121afba6f43d5a55dda504bb66a32c5": {
+      "path": "bios/Arcade/Arcade/sfiii2.zip",
+      "name": "sfiii2.zip",
+      "size": 131904,
+      "sha1": "1c8b9163f121afba6f43d5a55dda504bb66a32c5",
+      "md5": "94b5b8cae5c6d8417acc75c1c2d28914",
+      "sha256": "0764a77f66b78fefb7f5e283c72dfcce57761cc94a0da9b6f9d390277241bc1b",
+      "crc32": "7290dea5"
+    },
+    "b6410ccf4a291e028fb05848f8308200f9eb2ea7": {
+      "path": "bios/Arcade/Arcade/sfiii2j.zip",
+      "name": "sfiii2j.zip",
+      "size": 131908,
+      "sha1": "b6410ccf4a291e028fb05848f8308200f9eb2ea7",
+      "md5": "f26fa7c1a2295d68b26b72c43c281506",
+      "sha256": "1530fae407514249f4efe3e4c5327710316c9e82af921a983f111f8ebbbdf54b",
+      "crc32": "4caf4084"
+    },
+    "79fbda9ec65e377a4e0e70bfd70bd4447f286ddd": {
+      "path": "bios/Arcade/Arcade/sfiii2n.zip",
+      "name": "sfiii2n.zip",
+      "size": 131916,
+      "sha1": "79fbda9ec65e377a4e0e70bfd70bd4447f286ddd",
+      "md5": "84305bd65363692f97b14ce5e74a47cb",
+      "sha256": "5f9b02fa61c2fbfe504a458726962ce71a3cf2585e001b9483865508cbe8f3c2",
+      "crc32": "8dca006c"
+    },
+    "908a53ee5dc154dc8e429ec9637b37b22f223f6d": {
+      "path": "bios/Arcade/Arcade/sfiii3.zip",
+      "name": "sfiii3.zip",
+      "size": 132421,
+      "sha1": "908a53ee5dc154dc8e429ec9637b37b22f223f6d",
+      "md5": "2076afc24ba5c3c5177d5d4f4be555e3",
+      "sha256": "1c58620322f5646f7a5bdd3dfe7145c5e088136042e440e8679404557f35d62d",
+      "crc32": "51303c12"
+    },
+    "bb31d8f5f5adbe2aa861029b57670329e6d70ac7": {
+      "path": "bios/Arcade/Arcade/sfiii3j.zip",
+      "name": "sfiii3j.zip",
+      "size": 132423,
+      "sha1": "bb31d8f5f5adbe2aa861029b57670329e6d70ac7",
+      "md5": "aa31ebfb49813c5e6b75ea6e940af7a2",
+      "sha256": "552d7f49464f4444b937b5756e9b56f8ff7f0e9e9efe653e46d09924099a38e1",
+      "crc32": "f7d177fd"
+    },
+    "f2f71013cf0895d0707c09ecb3bf82371ab92f5c": {
+      "path": "bios/Arcade/Arcade/sfiii3n.zip",
+      "name": "sfiii3n.zip",
+      "size": 132433,
+      "sha1": "f2f71013cf0895d0707c09ecb3bf82371ab92f5c",
+      "md5": "92f07d9d13c599742936962f22f96425",
+      "sha256": "eb9a0f31a996959be29700dc5382087d74a45425c62de7f3af1305e9df6bc5b6",
+      "crc32": "6dcc1323"
+    },
+    "3cbd7d975a8469177f511aa5e9f86d7015c891a0": {
+      "path": "bios/Arcade/Arcade/sfiii3u.zip",
+      "name": "sfiii3u.zip",
+      "size": 132419,
+      "sha1": "3cbd7d975a8469177f511aa5e9f86d7015c891a0",
+      "md5": "6f684b1a0a082c9025fa7fd57c171924",
+      "sha256": "574a9f08c8df623ca482dc968f9248addf88c6af683b2d4bb39e90f53556df45",
+      "crc32": "4f37dbbb"
+    },
+    "878021d181718b2d87f20dab0c5774e111f8b7d0": {
+      "path": "bios/Arcade/Arcade/sfiiia.zip",
+      "name": "sfiiia.zip",
+      "size": 132564,
+      "sha1": "878021d181718b2d87f20dab0c5774e111f8b7d0",
+      "md5": "7f4e784d7b3bef084d5a0509f2b49959",
+      "sha256": "07638d9a4392bb1d5b2d38bc5ed8da411a170cd98fffccf6307c206c00ba8859",
+      "crc32": "6a363cf6"
+    },
+    "d7538b16782abed604bbd6de8fc90da580757497": {
+      "path": "bios/Arcade/Arcade/sfiiih.zip",
+      "name": "sfiiih.zip",
+      "size": 132552,
+      "sha1": "d7538b16782abed604bbd6de8fc90da580757497",
+      "md5": "e4e94835661c45951a9f1d273cafcd99",
+      "sha256": "82a43d77effa03780bb0fd444656819c4d890dbda21468d23e9f36f11ce6d448",
+      "crc32": "27b20b5e"
+    },
+    "9dab5428a2694d424a93a315cb974a14e9ae64a3": {
+      "path": "bios/Arcade/Arcade/sfiiij.zip",
+      "name": "sfiiij.zip",
+      "size": 132546,
+      "sha1": "9dab5428a2694d424a93a315cb974a14e9ae64a3",
+      "md5": "272b5c4ce3442cc784f3efdbe5e4aa8d",
+      "sha256": "92db661d29d27c6082f4755e182fe19a151202b625e4919be41dd424143f29e6",
+      "crc32": "35a13afd"
+    },
+    "764e8889e2ff9e2bf0c56585f32315aa5c19076d": {
+      "path": "bios/Arcade/Arcade/sfiiin.zip",
+      "name": "sfiiin.zip",
+      "size": 132555,
+      "sha1": "764e8889e2ff9e2bf0c56585f32315aa5c19076d",
+      "md5": "edd90721e25d61ca9801499e8c11d14f",
+      "sha256": "8f041328aaedbc0bb00f5fecb9bf3453084b059244a0199208a38888c1907f7e",
+      "crc32": "fdf6fa12"
+    },
+    "133a9e6e7ae80e2dbf20c7d454006939ef1cd148": {
+      "path": "bios/Arcade/Arcade/sfiiina.zip",
+      "name": "sfiiina.zip",
+      "size": 132554,
+      "sha1": "133a9e6e7ae80e2dbf20c7d454006939ef1cd148",
+      "md5": "ee8b27953af81db9be83ff3a136b5a3f",
+      "sha256": "94a60fea20df9087a95bc322da0173359821674f3c38a3590f8f806cd23e985e",
+      "crc32": "32d25384"
+    },
+    "e8fcd1507a6811f0c2643d0497c0ac3f405f2438": {
+      "path": "bios/Arcade/Arcade/sfiiiu.zip",
+      "name": "sfiiiu.zip",
+      "size": 132562,
+      "sha1": "e8fcd1507a6811f0c2643d0497c0ac3f405f2438",
+      "md5": "1970a295b4ca3d50ecdc426f463ab98a",
+      "sha256": "392fdc19bb6977eb66a3793fd031adeb9b2288f6b2aefa164bd57439eda04583",
+      "crc32": "5a1e0f48"
+    },
     "2adbde3ef74c431fbd700cffd4cd1d41251a8833": {
       "path": "bios/Arcade/Arcade/shtzone.zip",
       "name": "shtzone.zip",
@@ -1893,14 +2091,14 @@
       "sha256": "6edf22c68e70be06c9b32741e0d1df1aa38cf6fc162c1027c15d6c1d882f621b",
       "crc32": "5692af22"
     },
-    "b88619a845cbba8bc04ad396e99a02aa6d2da7c1": {
+    "0444bfcbcf9cf63aac4e98957fce536e6a45ce73": {
       "path": "bios/Arcade/Arcade/spec128.zip",
       "name": "spec128.zip",
-      "size": 25489,
-      "sha1": "b88619a845cbba8bc04ad396e99a02aa6d2da7c1",
-      "md5": "1a524bfa489cec90c941e6587d553a56",
-      "sha256": "bbb5dfd9e2cf547c3327bcb9910075d2977587c7a11917ba33d2e79c4e4c32bb",
-      "crc32": "705f7138"
+      "size": 25575,
+      "sha1": "0444bfcbcf9cf63aac4e98957fce536e6a45ce73",
+      "md5": "162e30ea1f65c21378c09fc170d971d3",
+      "sha256": "69c5f3b719859f8a7c94dd6fe77d9750ff4ca23c177adcd7a86d9099f502904c",
+      "crc32": "3d7de6d8"
     },
     "9428d8b7c6d4db78f00a58915dccdf33f3b5d98b": {
       "path": "bios/Arcade/Arcade/spec48k.zip",
@@ -1910,6 +2108,15 @@
       "md5": "4698414be3369fff17bf6d3111734c6c",
       "sha256": "5be93f9bc5a16d2fac29da18e9021ee3c86c0acab57022dbe6c0722ce8d18eac",
       "crc32": "eea59503"
+    },
+    "593df141c3a5cda53b90e167cc02a2331929f767": {
+      "path": "bios/Arcade/Arcade/spectrum.zip",
+      "name": "spectrum.zip",
+      "size": 12462,
+      "sha1": "593df141c3a5cda53b90e167cc02a2331929f767",
+      "md5": "b7692d3ae9459bdb52c385acb2dde067",
+      "sha256": "3022bef353077891795a344177b27d820e36f31dbe24785429a7b084ea21f189",
+      "crc32": "018a6958"
     },
     "2e50b96a1d37e9407209e291d5f549233287ac77": {
       "path": "bios/Arcade/Arcade/su2000.zip",
@@ -2018,6 +2225,15 @@
       "md5": "d2748ffa636d658babd6315d967f6d64",
       "sha256": "76d4ba88a8a1be233880ccc30db96e22009bda6d40ba8c18a4b0c8e3930ae47e",
       "crc32": "d4ef502b"
+    },
+    "41c639c6a96403c4a42a2799bd7928f091226e2b": {
+      "path": "bios/Arcade/Arcade/warzard.zip",
+      "name": "warzard.zip",
+      "size": 132590,
+      "sha1": "41c639c6a96403c4a42a2799bd7928f091226e2b",
+      "md5": "dadd4ca9dd069fa648dc9838d99906c0",
+      "sha256": "7e8c0ca12fd96f1623efd97f451c9a7d3a4a9dffdeaec55f99e9a3e78039018b",
+      "crc32": "3464c93e"
     },
     "06fc753d015b43ca1787f4cfd9331b1674202e64": {
       "path": "bios/Arcade/Arcade/ym2608.zip",
@@ -12981,6 +13197,456 @@
       "sha256": "30314d1ce44a8d262ef8adf0ecf2552d9b20b13763686381c57a697bd56039f3",
       "crc32": "f4151454"
     },
+    "79015323128650c742a3694c9429aa91f355905e": {
+      "path": "bios/Commodore/C128/vice/C128/basic-901226-01.bin",
+      "name": "basic-901226-01.bin",
+      "size": 8192,
+      "sha1": "79015323128650c742a3694c9429aa91f355905e",
+      "md5": "57af4ae21d4b705c2991d98ed5c1f7b8",
+      "sha256": "89878cea0a268734696de11c4bae593eaaa506465d2029d619c0e0cbccdfa62d",
+      "crc32": "f833d117"
+    },
+    "c4fb4a714e48a7bf6c28659de0302183a0e0d6c0": {
+      "path": "bios/Commodore/C128/vice/C128/basichi-318019-04.bin",
+      "name": "basichi-318019-04.bin",
+      "size": 16384,
+      "sha1": "c4fb4a714e48a7bf6c28659de0302183a0e0d6c0",
+      "md5": "87bb251707d0a2c915d6e0c69fdb0fed",
+      "sha256": "121b7c7f15f9b72e83f293f8fb3c4686730ee02359cea71d18a72c6f489cd2d7",
+      "crc32": "6e2c91a7"
+    },
+    "d53a7884404f7d18ebd60dd3080c8f8d71067441": {
+      "path": "bios/Commodore/C128/vice/C128/basiclo-318018-04.bin",
+      "name": "basiclo-318018-04.bin",
+      "size": 16384,
+      "sha1": "d53a7884404f7d18ebd60dd3080c8f8d71067441",
+      "md5": "b86ce827c9108fbc7b9e02c690e81a23",
+      "sha256": "ccb0d516219f12857fef3ae7409fff072e47b9480d7eafb5eea7e0b188c958f5",
+      "crc32": "9f9c355b"
+    },
+    "638f8aff51c2ac4f99a55b12c4f8c985ef4bebd3": {
+      "path": "bios/Commodore/C128/vice/C128/chargen-315079-01.bin",
+      "name": "chargen-315079-01.bin",
+      "size": 8192,
+      "sha1": "638f8aff51c2ac4f99a55b12c4f8c985ef4bebd3",
+      "md5": "ec9e71614010c4efb851b83bcd685e9c",
+      "sha256": "7a6aff617e4f10323263ed48805ee7e3bce61b02c5ed409ccd8b6bb47b924dde",
+      "crc32": "fe5a2db1"
+    },
+    "aca3f7321ee7e6152f1f0afad646ae41964de4fb": {
+      "path": "bios/Commodore/C128/vice/C128/chargen-325181-01.bin",
+      "name": "chargen-325181-01.bin",
+      "size": 8192,
+      "sha1": "aca3f7321ee7e6152f1f0afad646ae41964de4fb",
+      "md5": "06e46af13d13aa869218275e64d48b00",
+      "sha256": "ff702f8aa9c2a024d54a6f955c0b2889d884352d8b0f1fcc726100236fefbd32",
+      "crc32": "7a70d9b8"
+    },
+    "29ed066d513f2d5c09ff26d9166ba23c2afb2b3f": {
+      "path": "bios/Commodore/C128/vice/C128/chargen-390059-01.bin",
+      "name": "chargen-390059-01.bin",
+      "size": 8192,
+      "sha1": "29ed066d513f2d5c09ff26d9166ba23c2afb2b3f",
+      "md5": "46b3cb2140f244c0ed1150c819e7bdc4",
+      "sha256": "f08d8f525b44f5cbb3f5776739fcdff737886e1813f1eb7a20aedb128db1d4a8",
+      "crc32": "6aaaafe6"
+    },
+    "ceb6e1a1bf7e08eb9cbc651afa29e26adccf38ab": {
+      "path": "bios/Commodore/C128/vice/C128/kernal-318020-05.bin",
+      "name": "kernal-318020-05.bin",
+      "size": 16384,
+      "sha1": "ceb6e1a1bf7e08eb9cbc651afa29e26adccf38ab",
+      "md5": "01f6903033b90cd506cde7802ec743c3",
+      "sha256": "64ed21ad31da2840aa90eab70c6ed4731f63268a1b3c5cf85273e28d6cfa6d4d",
+      "crc32": "ba456b8e"
+    },
+    "9b0a0cef56d00035c611e07170f051ee5e63aa3a": {
+      "path": "bios/Commodore/C128/vice/C128/kernal-318034-01.bin",
+      "name": "kernal-318034-01.bin",
+      "size": 32768,
+      "sha1": "9b0a0cef56d00035c611e07170f051ee5e63aa3a",
+      "md5": "6792dfeaec2eda9db164c59e45e94214",
+      "sha256": "89d32c3a5c13cded89207a9e86d998158b00bf0a09663070ecc5524501045b74",
+      "crc32": "cb4e1719"
+    },
+    "1d503e56df85a62fee696e7618dc5b4e781df1bb": {
+      "path": "bios/Commodore/C128/vice/C128/kernal-901227-03.bin",
+      "name": "kernal-901227-03.bin",
+      "size": 8192,
+      "sha1": "1d503e56df85a62fee696e7618dc5b4e781df1bb",
+      "md5": "39065497630802346bce17963f13c092",
+      "sha256": "83c60d47047d7beab8e5b7bf6f67f80daa088b7a6a27de0d7e016f6484042721",
+      "crc32": "dbe3e7c7"
+    },
+    "267654823c4fdf2167050f41faa118218d2569ce": {
+      "path": "bios/Commodore/C128/vice/C128/kernal64-325182-01.bin",
+      "name": "kernal64-325182-01.bin",
+      "size": 16384,
+      "sha1": "267654823c4fdf2167050f41faa118218d2569ce",
+      "md5": "9e344195fe2937e3148b02972c80a59a",
+      "sha256": "f155b75021787f7d5b341c1f33e41e724688bf296f02f9f3b6f9913099e7855e",
+      "crc32": "2aff27d3"
+    },
+    "adc7c31e18c7c7413d54802ef2f4193da14711aa": {
+      "path": "bios/Commodore/C128/vice/C64/chargen-901225-01.bin",
+      "name": "chargen-901225-01.bin",
+      "size": 4096,
+      "sha1": "adc7c31e18c7c7413d54802ef2f4193da14711aa",
+      "md5": "12a4202f5331d45af846af6c58fba946",
+      "sha256": "fd0d53b8480e86163ac98998976c72cc58d5dd8eb824ed7b829774e74213b420",
+      "crc32": "ec4272ee"
+    },
+    "0fad19dbcdb12461c99657b2979dbb5c2e47b527": {
+      "path": "bios/Commodore/C128/vice/C64/chargen-906143-02.bin",
+      "name": "chargen-906143-02.bin",
+      "size": 4096,
+      "sha1": "0fad19dbcdb12461c99657b2979dbb5c2e47b527",
+      "md5": "cf32a93c0a693ed359a4f483ef6db53d",
+      "sha256": "0f4a5b0f9ec0d86639ba316053e330fdd849692623a41f8de4a420fcd47c55ee",
+      "crc32": "1604f6c1"
+    },
+    "aa136e91ecf3c5ac64f696b3dbcbfc5ba0871c98": {
+      "path": "bios/Commodore/C128/vice/C64/kernal-251104-04.bin",
+      "name": "kernal-251104-04.bin",
+      "size": 8192,
+      "sha1": "aa136e91ecf3c5ac64f696b3dbcbfc5ba0871c98",
+      "md5": "187b8c713b51931e070872bd390b472a",
+      "sha256": "81ad3a08920f2782ab031bb3ae02789d1f5f216c3d24d262e752a2b13e9faf73",
+      "crc32": "2c5965d4"
+    },
+    "21940ef5f1bfe67d7537164f7ca130a1095b067a": {
+      "path": "bios/Commodore/C128/vice/C64/kernal-390852-01.bin",
+      "name": "kernal-390852-01.bin",
+      "size": 16384,
+      "sha1": "21940ef5f1bfe67d7537164f7ca130a1095b067a",
+      "md5": "049e657afafbdd802e8c6a4f88f3d730",
+      "sha256": "5a5e650a655a58f1d7c7ce57f70809eec1a3932f7c81ed6782cfe962ca0f9975",
+      "crc32": "b0a9c2da"
+    },
+    "87cc04d61fc748b82df09856847bb5c2754a2033": {
+      "path": "bios/Commodore/C128/vice/C64/kernal-901227-01.bin",
+      "name": "kernal-901227-01.bin",
+      "size": 8192,
+      "sha1": "87cc04d61fc748b82df09856847bb5c2754a2033",
+      "md5": "1ae0ea224f2b291dafa2c20b990bb7d4",
+      "sha256": "f585600a2e47d0224459e878184d3f4cce2665bfcce65e61732530c6d89c4269",
+      "crc32": "dce782fa"
+    },
+    "0e2e4ee3f2d41f00bed72f9ab588b83e306fdb13": {
+      "path": "bios/Commodore/C128/vice/C64/kernal-901227-02.bin",
+      "name": "kernal-901227-02.bin",
+      "size": 8192,
+      "sha1": "0e2e4ee3f2d41f00bed72f9ab588b83e306fdb13",
+      "md5": "7360b296d64e18b88f6cf52289fd99a1",
+      "sha256": "675cf19a3e04bf68e41cc7a9010b353e51845ed9069db65496c52b79f1e1385f",
+      "crc32": "a5c687b3"
+    },
+    "6c4fa9465f6091b174df27dfe679499df447503c": {
+      "path": "bios/Commodore/C128/vice/C64/kernal-901246-01.bin",
+      "name": "kernal-901246-01.bin",
+      "size": 8192,
+      "sha1": "6c4fa9465f6091b174df27dfe679499df447503c",
+      "md5": "da92801e3a03b005b746a4dd0b639c7c",
+      "sha256": "b2b430a134514af11f3ed64c0929fc5241d8436ba7b12514ec02d1b2cb2fd533",
+      "crc32": "789c8cc5"
+    },
+    "4ff0f11e80f4b57430d8f0c3799ed0f0e0f4565d": {
+      "path": "bios/Commodore/C128/vice/C64/kernal-906145-02.bin",
+      "name": "kernal-906145-02.bin",
+      "size": 8192,
+      "sha1": "4ff0f11e80f4b57430d8f0c3799ed0f0e0f4565d",
+      "md5": "479553fd53346ec84054f0b1c6237397",
+      "sha256": "48af48070ec9adda79ae7f65b772c422062eb12e69214a7cf788e6947a3b4117",
+      "crc32": "3a9ef6f1"
+    },
+    "abb26418b9e1614a8f52bdeee0822d4a96071439": {
+      "path": "bios/Commodore/C128/vice/CBM-II/kernal-901244-04a.bin",
+      "name": "kernal-901244-04a.bin",
+      "size": 8192,
+      "sha1": "abb26418b9e1614a8f52bdeee0822d4a96071439",
+      "md5": "e0346953e77bd1353ebf53aaa5b6f0b0",
+      "sha256": "a3132af49a31f6f563c28cea88e4b17d768bd6b7831da8605a8721dd014d67ab",
+      "crc32": "09a5667e"
+    },
+    "0bec500cd97bf7c38c894bc5265aec19307e7c06": {
+      "path": "bios/Commodore/C128/vice/DRIVES/dos1540-325302+3-01.bin",
+      "name": "dos1540-325302+3-01.bin",
+      "size": 16384,
+      "sha1": "0bec500cd97bf7c38c894bc5265aec19307e7c06",
+      "md5": "916bb933b21b9e8f4411d15727ec5d20",
+      "sha256": "9d2d88ab750114022c7a382088a6064e8ba4efb6a76fded610128e99079e20d4",
+      "crc32": "f01834a3"
+    },
+    "ab16f56989b27d89babe5f89c5a8cb3da71a82f0": {
+      "path": "bios/Commodore/C128/vice/DRIVES/dos1541-325302-01+901229-05.bin",
+      "name": "dos1541-325302-01+901229-05.bin",
+      "size": 16384,
+      "sha1": "ab16f56989b27d89babe5f89c5a8cb3da71a82f0",
+      "md5": "a0ce8439d1b8dcf2e1430461f7233a72",
+      "sha256": "d1d45afb46fd4e2b48d93ca367b889d75654a3b7acf73044e51f6d880c09369e",
+      "crc32": "57224cde"
+    },
+    "d3b78c3dbac55f5199f33f3fe0036439811f7fb3": {
+      "path": "bios/Commodore/C128/vice/DRIVES/dos1541ii-251968-03.bin",
+      "name": "dos1541ii-251968-03.bin",
+      "size": 16384,
+      "sha1": "d3b78c3dbac55f5199f33f3fe0036439811f7fb3",
+      "md5": "ada295382a1f2df772a7e5c5c6f34215",
+      "sha256": "326c289c38753323d7e8167897447cf61ef35189d82eb8d75210ece949adda7c",
+      "crc32": "899fa3c5"
+    },
+    "f1be619c106641a685f6609e4d43d6fc9eac1e70": {
+      "path": "bios/Commodore/C128/vice/DRIVES/dos1571-310654-05.bin",
+      "name": "dos1571-310654-05.bin",
+      "size": 32768,
+      "sha1": "f1be619c106641a685f6609e4d43d6fc9eac1e70",
+      "md5": "dae964d64b7843ff86c008d396dda208",
+      "sha256": "1fd73459b54a72a737609a879c283645acc37835de2c121633153db9fac81d45",
+      "crc32": "5755bae3"
+    },
+    "01228eae6f066bd9b7b2b6a7fa3f667e41dad393": {
+      "path": "bios/Commodore/C128/vice/DRIVES/dos1581-318045-02.bin",
+      "name": "dos1581-318045-02.bin",
+      "size": 32768,
+      "sha1": "01228eae6f066bd9b7b2b6a7fa3f667e41dad393",
+      "md5": "6a82f92aea2a3afa190fe32d565f39e7",
+      "sha256": "8f689277f36be357f5f105e6e606c35c42e73c581cdeec14b58f31850dfbcfcb",
+      "crc32": "a9011b84"
+    },
+    "c53e180a96649ceb3f421739e8dc66faba7cba44": {
+      "path": "bios/Commodore/C128/vice/DRIVES/dos2031-901484-03+05.bin",
+      "name": "dos2031-901484-03+05.bin",
+      "size": 16384,
+      "sha1": "c53e180a96649ceb3f421739e8dc66faba7cba44",
+      "md5": "3454c06fd2275f5bcbfe936dcdf8059b",
+      "sha256": "af4e1175ec8afa6853d8d5dfa5af5b7fd3bcacc03c8a67d0e067f020ac0b423c",
+      "crc32": "21b80fdf"
+    },
+    "e37b3bfd801eb19dea50cf8b4a6af8613c3520d3": {
+      "path": "bios/Commodore/C128/vice/DRIVES/dos2040-901468-06+07.bin",
+      "name": "dos2040-901468-06+07.bin",
+      "size": 8192,
+      "sha1": "e37b3bfd801eb19dea50cf8b4a6af8613c3520d3",
+      "md5": "3efff682000fd841b4dd6560bf53e37c",
+      "sha256": "b6a05b015b2e9bad4784a148f11b5bf00818dbb6509cab366e3663852e8bc753",
+      "crc32": "d04c1fbb"
+    },
+    "02bd4b0c8508b3874b95799a9a63caf369c837de": {
+      "path": "bios/Commodore/C128/vice/DRIVES/dos3040-901468-11-13.bin",
+      "name": "dos3040-901468-11-13.bin",
+      "size": 12288,
+      "sha1": "02bd4b0c8508b3874b95799a9a63caf369c837de",
+      "md5": "139e72a58b7ddb2f92ceb18c8735c53c",
+      "sha256": "168a3044e4bae738dee90d1648d6f601b1b7f04315799f3325a409206b12e8af",
+      "crc32": "f4967a7f"
+    },
+    "245abbe76581558d270cdbb6fe55f56748403d8e": {
+      "path": "bios/Commodore/C128/vice/DRIVES/dos4040-901468-14-16.bin",
+      "name": "dos4040-901468-14-16.bin",
+      "size": 12288,
+      "sha1": "245abbe76581558d270cdbb6fe55f56748403d8e",
+      "md5": "2fce6a76c738d1a10c189bf0660d868e",
+      "sha256": "7b5c98f884012173e2c4450b7dd5bde45cf5a63920119f1ffc98e6b29371c2e4",
+      "crc32": "40e0ebaa"
+    },
+    "3e067cc621e4beafca2b90cb8f6dba975df2855b": {
+      "path": "bios/Commodore/C128/vice/PET/characters-1.901447-08.bin",
+      "name": "characters-1.901447-08.bin",
+      "size": 2048,
+      "sha1": "3e067cc621e4beafca2b90cb8f6dba975df2855b",
+      "md5": "29a82eb54e73ebc5673c718c489b174b",
+      "sha256": "697390d9cd7da9e77d71935b0bf71d1181f624e0be802cbfb472803861443340",
+      "crc32": "54f32f45"
+    },
+    "0157a2d55b7ac4eaeb38475889ebeea52e2593db": {
+      "path": "bios/Commodore/C128/vice/PET/characters-2.901447-10.bin",
+      "name": "characters-2.901447-10.bin",
+      "size": 2048,
+      "sha1": "0157a2d55b7ac4eaeb38475889ebeea52e2593db",
+      "md5": "9880432e633b15998d58884ff34c4e70",
+      "sha256": "da3374c21d6ea440cef5f338ce3f524e0a1e40dcb1ef64446c695f92c636f1fa",
+      "crc32": "d8408674"
+    },
+    "174ace3a8c0348cd21d39cc864e2adc58b0101a9": {
+      "path": "bios/Commodore/C128/vice/PET/edit-2-b.901474-01.bin",
+      "name": "edit-2-b.901474-01.bin",
+      "size": 2048,
+      "sha1": "174ace3a8c0348cd21d39cc864e2adc58b0101a9",
+      "md5": "7f87889ca7ee2537f0c1993d35d0fb18",
+      "sha256": "448483549a95c5828ca509081d9f621a569fdcd3fcd9bbacdeef036ea18ea628",
+      "crc32": "05db957e"
+    },
+    "5e5502ce32f5a7e387d65efe058916282041e54b": {
+      "path": "bios/Commodore/C128/vice/PET/edit-2-n.901447-24.bin",
+      "name": "edit-2-n.901447-24.bin",
+      "size": 2048,
+      "sha1": "5e5502ce32f5a7e387d65efe058916282041e54b",
+      "md5": "cb8e8404c0b28eda10469792dfd1dbc2",
+      "sha256": "5338b1dffebd695f6110c9995e16f7536bb63a909c2a0062b4789de46904ade9",
+      "crc32": "e459ab32"
+    },
+    "38742bdf449f629bcba6276ef24d3daeb7da6e84": {
+      "path": "bios/Commodore/C128/vice/PET/kernal-2.901465-03.bin",
+      "name": "kernal-2.901465-03.bin",
+      "size": 4096,
+      "sha1": "38742bdf449f629bcba6276ef24d3daeb7da6e84",
+      "md5": "51a38bfef8f9e72cb64bf7d874b4c8c6",
+      "sha256": "056d5e84a6e4f2b5b40a4109f49515c2496a4bf99139a9f59abe486ded5cd03d",
+      "crc32": "f02238e2"
+    },
+    "96a0fa56e0c937da92971d9c99d504e44e898806": {
+      "path": "bios/Commodore/C128/vice/PET/kernal-4.901465-22.bin",
+      "name": "kernal-4.901465-22.bin",
+      "size": 4096,
+      "sha1": "96a0fa56e0c937da92971d9c99d504e44e898806",
+      "md5": "16ec21443ea5431ab63d511061054e6f",
+      "sha256": "7cf8678b748bda1ffedee69ea54888feb3f5ec66dca8143375cbdf8c3de4d573",
+      "crc32": "cc5298a1"
+    },
+    "0414b3ab847c8977eb05c2fcc72efcf2f9d92871": {
+      "path": "bios/Commodore/C128/vice/PET/waterloo-a000.901898-01.bin",
+      "name": "waterloo-a000.901898-01.bin",
+      "size": 4096,
+      "sha1": "0414b3ab847c8977eb05c2fcc72efcf2f9d92871",
+      "md5": "6eb1c1bfa6ce1444737794432966dfcc",
+      "sha256": "a55aace69825d605e89bb177f0b749325418f4c22250d35e53d567cc63919404",
+      "crc32": "728a998b"
+    },
+    "df154939b934d0aeeb376813ec1ba0d43c2a3378": {
+      "path": "bios/Commodore/C128/vice/PET/waterloo-b000.901898-02.bin",
+      "name": "waterloo-b000.901898-02.bin",
+      "size": 4096,
+      "sha1": "df154939b934d0aeeb376813ec1ba0d43c2a3378",
+      "md5": "537498d75ecf761d4991f9ebd85129ca",
+      "sha256": "d815b0d554c4998e9acfe23fc81ea4027e0f422c095d642f3d589bffb0b8fc47",
+      "crc32": "6beb7c62"
+    },
+    "6c5b0cce97068f8841112ba6d5cd8e568b562fa3": {
+      "path": "bios/Commodore/C128/vice/PET/waterloo-c000.901898-03.bin",
+      "name": "waterloo-c000.901898-03.bin",
+      "size": 4096,
+      "sha1": "6c5b0cce97068f8841112ba6d5cd8e568b562fa3",
+      "md5": "3e8dd04902dc9fee172084698f84695f",
+      "sha256": "f8d2bc9eae09da569983236706139d0a11e1cfc626f701124c92b610d1ebe86e",
+      "crc32": "5db4983d"
+    },
+    "b42a2050a319a1ffca7868a8d8d635fadd37ec37": {
+      "path": "bios/Commodore/C128/vice/PET/waterloo-d000.901898-04.bin",
+      "name": "waterloo-d000.901898-04.bin",
+      "size": 4096,
+      "sha1": "b42a2050a319a1ffca7868a8d8d635fadd37ec37",
+      "md5": "80f4d2351ee19673820989919c7c1e9b",
+      "sha256": "11df5991bbbfd2f2b7a708a4327dc3f7593834c48292abfde9f91d0485f21acf",
+      "crc32": "f55fc559"
+    },
+    "9b4a5134d20345171e7303445f87c4e0b9addc96": {
+      "path": "bios/Commodore/C128/vice/PET/waterloo-f000.901898-05.bin",
+      "name": "waterloo-f000.901898-05.bin",
+      "size": 4096,
+      "sha1": "9b4a5134d20345171e7303445f87c4e0b9addc96",
+      "md5": "049e2d26fde71a741f6075ecbf0a432d",
+      "sha256": "e0cf60892ffa404e33828ea1175822d196272c88b5a8c1fde12823e886a31f31",
+      "crc32": "f42df0cb"
+    },
+    "3b69f6e7cb4c18bb08e203fb18b7dabfa853390f": {
+      "path": "bios/Commodore/C128/vice/PLUS4/3plus1-317053-01.bin",
+      "name": "3plus1-317053-01.bin",
+      "size": 16384,
+      "sha1": "3b69f6e7cb4c18bb08e203fb18b7dabfa853390f",
+      "md5": "2994d5463ef8524deb4231a9c764767c",
+      "sha256": "628eb4b01b8701e6fc5bd4b7e9e6573deae47e0b0f8b150b4022596501d5131d",
+      "crc32": "4fd1d8cb"
+    },
+    "0ad7ac2db7da692d972e586ca0dfd747d82c7693": {
+      "path": "bios/Commodore/C128/vice/PLUS4/3plus1-317054-01.bin",
+      "name": "3plus1-317054-01.bin",
+      "size": 16384,
+      "sha1": "0ad7ac2db7da692d972e586ca0dfd747d82c7693",
+      "md5": "ac34591c820fe607d527e04e95bce465",
+      "sha256": "2e83bfdfd93a2d9e8adfe4bb302869a30eac12015f6b41302c9d1ed3bb83de16",
+      "crc32": "109de2fc"
+    },
+    "161c96b4ad20f3a4f2321808e37a5ded26a135dd": {
+      "path": "bios/Commodore/C128/vice/PLUS4/basic-318006-01.bin",
+      "name": "basic-318006-01.bin",
+      "size": 16384,
+      "sha1": "161c96b4ad20f3a4f2321808e37a5ded26a135dd",
+      "md5": "44a4ae400e3b4f7533a47ae0df1be78c",
+      "sha256": "cbf0c4dec44e3e203beaf09690e5c7f859b0eca164e789884161c8cb0e596567",
+      "crc32": "74eaae87"
+    },
+    "7c7e07f016391174a557e790c4ef1cbe33512cdb": {
+      "path": "bios/Commodore/C128/vice/PLUS4/kernal-318004-05.bin",
+      "name": "kernal-318004-05.bin",
+      "size": 16384,
+      "sha1": "7c7e07f016391174a557e790c4ef1cbe33512cdb",
+      "md5": "89f5263665a8dc10c8f8abc38f5f7eb9",
+      "sha256": "1f07270c43fc84d1556978e5bb3a6b08aa7b1253f2e46d1a452c89c972ae506b",
+      "crc32": "71c07bd4"
+    },
+    "a3d9e5be091b98de39a046ab167fb7632d053682": {
+      "path": "bios/Commodore/C128/vice/PLUS4/kernal-318005-05.bin",
+      "name": "kernal-318005-05.bin",
+      "size": 16384,
+      "sha1": "a3d9e5be091b98de39a046ab167fb7632d053682",
+      "md5": "b3c450c36a88b491281d18fdf3e94ab0",
+      "sha256": "5c094751e8bbac217726e25e0864769aacb76f606f2ab807e10d420a5209aaf3",
+      "crc32": "70295038"
+    },
+    "587d1e90950675ab6b12d91248a3f0d640d02e8d": {
+      "path": "bios/Commodore/C128/vice/VIC20/basic-901486-01.bin",
+      "name": "basic-901486-01.bin",
+      "size": 8192,
+      "sha1": "587d1e90950675ab6b12d91248a3f0d640d02e8d",
+      "md5": "8b9237706f47a9b3498d8f881ef0244d",
+      "sha256": "8be2d882e0eeb1c6923a43660236ea69d43ca8a3bd0613b1b6c910601584fbed",
+      "crc32": "db4c43c1"
+    },
+    "dae61ac03065aa2904af5c123ce821855898c555": {
+      "path": "bios/Commodore/C128/vice/VIC20/chargen-901460-02.bin",
+      "name": "chargen-901460-02.bin",
+      "size": 4096,
+      "sha1": "dae61ac03065aa2904af5c123ce821855898c555",
+      "md5": "7e6e41b5b60fec798743afd7063b42ed",
+      "sha256": "66a81f03332f46a289d175933d50bba9cc4636d18bba439d324b2eb1bd1c43ab",
+      "crc32": "fcfd8a4b"
+    },
+    "4fd85ab6647ee2ac7ba40f729323f2472d35b9b4": {
+      "path": "bios/Commodore/C128/vice/VIC20/chargen-901460-03.bin",
+      "name": "chargen-901460-03.bin",
+      "size": 4096,
+      "sha1": "4fd85ab6647ee2ac7ba40f729323f2472d35b9b4",
+      "md5": "d390e340e94e1bef0f2fdfe9fa850993",
+      "sha256": "bda280726cfe069ca70ef5e2f2d95a29f69d3950c859a12e6979464963fcf502",
+      "crc32": "83e032a6"
+    },
+    "c9ead45e6674d1042ca6199160e8583c23aeac22": {
+      "path": "bios/Commodore/C128/vice/VIC20/kernal.901486-02.bin",
+      "name": "kernal.901486-02.bin",
+      "size": 8192,
+      "sha1": "c9ead45e6674d1042ca6199160e8583c23aeac22",
+      "md5": "317f93bcbc5ee15da085a51a306f2c61",
+      "sha256": "7e2df5778dfdf787a6e09f0576442d32c8e9160b7e34d22e07547c22bf9030e1",
+      "crc32": "336900d7"
+    },
+    "06de7ec017a5e78bd6746d89c2ecebb646efeb19": {
+      "path": "bios/Commodore/C128/vice/VIC20/kernal.901486-06.bin",
+      "name": "kernal.901486-06.bin",
+      "size": 8192,
+      "sha1": "06de7ec017a5e78bd6746d89c2ecebb646efeb19",
+      "md5": "0313e31e5f31e1f739c2377792460d67",
+      "sha256": "8fc94bd895f488ac0ae1a52abdc32988cd63c777770b89a9d415513098535cc2",
+      "crc32": "e5e7c174"
+    },
+    "ce0137ed69f003a299f43538fa9eee27898e621e": {
+      "path": "bios/Commodore/C128/vice/VIC20/kernal.901486-07.bin",
+      "name": "kernal.901486-07.bin",
+      "size": 8192,
+      "sha1": "ce0137ed69f003a299f43538fa9eee27898e621e",
+      "md5": "f0587624dcd7685710a8fdb35939617f",
+      "sha256": "ff6d1416b91a71f5240a5bb8adc9fdc1b955374c48322ca47b3e436334f168fb",
+      "crc32": "4be07cb4"
+    },
     "75c9fa407e0a027713ed563f135747fffec0590d": {
       "path": "bios/DOS/DOSBox/bass.dll",
       "name": "bass.dll",
@@ -13727,6 +14393,663 @@
       "md5": "4239d6f44a0d78d27c69f9b95885f48e",
       "sha256": "eb84761c062deffecca695ee52d2accdf6d2dfb9d05dd2ade8c9cf767ee217ce",
       "crc32": "2aae403f"
+    },
+    "2a411c35e2385983fe3bb5f771f0237d034dff32": {
+      "path": "bios/IBM/PC/430vx/55XWUQ0E.BIN",
+      "name": "55XWUQ0E.BIN",
+      "size": 131072,
+      "sha1": "2a411c35e2385983fe3bb5f771f0237d034dff32",
+      "md5": "6c9fd1019c1c3ce9e97b807bbc455e69",
+      "sha256": "9b40651f7603bf8a77d7df6743ba72ecf2ad49649d3365c794a3e719b2b55477",
+      "crc32": "9e7bf329"
+    },
+    "8060cd4b49052572bb5ec929f8ad21e2addce237": {
+      "path": "bios/IBM/PC/5429.vbi",
+      "name": "5429.vbi",
+      "size": 32768,
+      "sha1": "8060cd4b49052572bb5ec929f8ad21e2addce237",
+      "md5": "7138354ba08f606ba51df60c18015635",
+      "sha256": "e6faad995ea719b7b9cf8075af28cde8450aeeec52cb9d5ed444eb6122b69764",
+      "crc32": "a2d81c5b"
+    },
+    "0f80bbcb8f310e449d56e23118a230aa88d82bc2": {
+      "path": "bios/IBM/PC/86C732P.bin",
+      "name": "86C732P.bin",
+      "size": 32768,
+      "sha1": "0f80bbcb8f310e449d56e23118a230aa88d82bc2",
+      "md5": "561fa658d75427a80eafd3308bf68123",
+      "sha256": "0e6e1c85f27e478aebf9ada4bd66c6a71b8fce11bc9029980b82ebb749f197ed",
+      "crc32": "f7e6bcfa"
+    },
+    "3494864cf6f00720d1a65d97f8574b8dee0d9c89": {
+      "path": "bios/IBM/PC/86c375_1.bin",
+      "name": "86c375_1.bin",
+      "size": 32768,
+      "sha1": "3494864cf6f00720d1a65d97f8574b8dee0d9c89",
+      "md5": "b745b4d4014195cf70208d3fd268cfea",
+      "sha256": "d5d34807bcaa6de32f1916e416de9291d4f79c7815ec164fd319294ecb7002c9",
+      "crc32": "af55cc51"
+    },
+    "a308b15f93da34961c0141ec95b98c211557e2d5": {
+      "path": "bios/IBM/PC/86c764x1.bin",
+      "name": "86c764x1.bin",
+      "size": 32768,
+      "sha1": "a308b15f93da34961c0141ec95b98c211557e2d5",
+      "md5": "77a0129e238cee7d2ec3bc92285b8c12",
+      "sha256": "8f50988a39ad3673f5fef9db906f42dc6f90bc8fa8c004a267ffa7fb12203ecd",
+      "crc32": "bbdc5d5b"
+    },
+    "9be25b1af080aee863441cf0d25d0f984accb086": {
+      "path": "bios/IBM/PC/acer386/acer386.bin",
+      "name": "acer386.bin",
+      "size": 65536,
+      "sha1": "9be25b1af080aee863441cf0d25d0f984accb086",
+      "md5": "492a7cbc219c64a41562fef20317e2e4",
+      "sha256": "7f7908df5337e6d14713d5f90980bc417a9d978192812caee635d6c7c9187c0f",
+      "crc32": "8708727c"
+    },
+    "0633f78a0013a62be974233a3cad6a5d3cbe90d1": {
+      "path": "bios/IBM/PC/ami386/ami386.bin",
+      "name": "ami386.bin",
+      "size": 65536,
+      "sha1": "0633f78a0013a62be974233a3cad6a5d3cbe90d1",
+      "md5": "7b63a5a0169aaa61ec3137fa7cdc3402",
+      "sha256": "73aeb52b04a25e24d773f3744277afa07d36384eeccec83082ae7789da55fd89",
+      "crc32": "56ea4d9d"
+    },
+    "4e1d4a0deec702679961ffde470f8929d903bd5c": {
+      "path": "bios/IBM/PC/ami486/ami486.BIN",
+      "name": "ami486.BIN",
+      "size": 65536,
+      "sha1": "4e1d4a0deec702679961ffde470f8929d903bd5c",
+      "md5": "99bb4fafd75e57cfd9f3a8d4ac9303e2",
+      "sha256": "91fd62ce3ccb0b79b42f5fd6c6a7262ed52824b8ade917181b8a12267fec003b",
+      "crc32": "6b4a821a"
+    },
+    "cb30f01c46dad83343999c609d6f82092e2e8f54": {
+      "path": "bios/IBM/PC/amixt/AMI_8088_BIOS_31JAN89.BIN",
+      "name": "AMI_8088_BIOS_31JAN89.BIN",
+      "size": 8192,
+      "sha1": "cb30f01c46dad83343999c609d6f82092e2e8f54",
+      "md5": "a084ecdaf1ab0d0cc66511ea8d093d04",
+      "sha256": "bf555b5222bf2673a9986b485857a44d8fd632c3e0559912dfd6b3203bc8dd21",
+      "crc32": "0bcafd1f"
+    },
+    "6ac3c1317c1acb83902397d7767763cca4de357a": {
+      "path": "bios/IBM/PC/awe32.raw",
+      "name": "awe32.raw",
+      "size": 1048576,
+      "sha1": "6ac3c1317c1acb83902397d7767763cca4de357a",
+      "md5": "30b76c45ca0712418239d2b15c65881a",
+      "sha256": "4e143b94f758734f594ded78f4e5115635975c16fa37fabeae0baa4938ca710e",
+      "crc32": "ceb2787e"
+    },
+    "ac0f6402450bcf077aa95255e66e4c4c3cdd9ed8": {
+      "path": "bios/IBM/PC/bahamas64.BIN",
+      "name": "bahamas64.BIN",
+      "size": 32768,
+      "sha1": "ac0f6402450bcf077aa95255e66e4c4c3cdd9ed8",
+      "md5": "d7bc6e0584c7466407c399b495dab25c",
+      "sha256": "e16a9b7564a0df54149870c74444e5c8669f1fdb6569aed6ee37ebdc3f1a5d6c",
+      "crc32": "0a79415a"
+    },
+    "50237ffea703b867de426ab9ebc2af46bac1d0e1": {
+      "path": "bios/IBM/PC/cmdpc30/commodore pc 30 iii even.bin",
+      "name": "commodore pc 30 iii even.bin",
+      "size": 16384,
+      "sha1": "50237ffea703b867de426ab9ebc2af46bac1d0e1",
+      "md5": "e540cada31a763e1d815adc7543a87bf",
+      "sha256": "6c7b633229458ba42f694eb306bada2e896b2c7133079fb7688231f3f9cb85db",
+      "crc32": "36307aa9"
+    },
+    "27d6ad9554be86359d44331f25591e3122a31519": {
+      "path": "bios/IBM/PC/cmdpc30/commodore pc 30 iii odd.bin",
+      "name": "commodore pc 30 iii odd.bin",
+      "size": 16384,
+      "sha1": "27d6ad9554be86359d44331f25591e3122a31519",
+      "md5": "9594ec8aabf958a9bbebec443df52333",
+      "sha256": "8c1b9c51b7f80e95b1995846405c648490b35947330aef795fbf52ce205c6ec1",
+      "crc32": "41bae42d"
+    },
+    "1aca289240caa6d4bf811d301c338c157b6902a1": {
+      "path": "bios/IBM/PC/dells200/dell0.bin",
+      "name": "dell0.bin",
+      "size": 32768,
+      "sha1": "1aca289240caa6d4bf811d301c338c157b6902a1",
+      "md5": "c213bd59d38920726ed438e7a61417a4",
+      "sha256": "ad039bfa3276f91d4ed208e8be532238bb419688ab37e0ed8de344246a73e851",
+      "crc32": "a2530914"
+    },
+    "ee9ceef1fc7a328ee82006cd504e72e16f21b3c8": {
+      "path": "bios/IBM/PC/dells200/dell1.bin",
+      "name": "dell1.bin",
+      "size": 32768,
+      "sha1": "ee9ceef1fc7a328ee82006cd504e72e16f21b3c8",
+      "md5": "6118d50576ed67ddb2f22b248c89a11e",
+      "sha256": "5a529b1568d076be980c3e8b529f98719c67ca1051e0dff7e9d3d63feb3126df",
+      "crc32": "b5f69002"
+    },
+    "29a0e73d6b1df7dfa6c7ecb3f454bac9150017a1": {
+      "path": "bios/IBM/PC/deskpro386/109591-005.U13.bin",
+      "name": "109591-005.U13.bin",
+      "size": 16384,
+      "sha1": "29a0e73d6b1df7dfa6c7ecb3f454bac9150017a1",
+      "md5": "d35bab5b74fc21fef900b14b0807e126",
+      "sha256": "40f17915e01e758841b07564e7529f6431b9c7e7497a2831d7a2a702d7721ec4",
+      "crc32": "791a1c78"
+    },
+    "c2d2c1660f3f4a5e70add7f294393f51c7f89129": {
+      "path": "bios/IBM/PC/deskpro386/109592-005.U11.bin",
+      "name": "109592-005.U11.bin",
+      "size": 16384,
+      "sha1": "c2d2c1660f3f4a5e70add7f294393f51c7f89129",
+      "md5": "70e208d5992be21b26fe796d76964c1d",
+      "sha256": "280432e3edf4eef4ae644f7949c792f8b1a217d5d5bc2992cefcf970f1b506c9",
+      "crc32": "a9734a87"
+    },
+    "02fa057f2c22ab199a8d9795ab1ae570f2b13a36": {
+      "path": "bios/IBM/PC/dtk/DTK_ERSO_2.42_2764.bin",
+      "name": "DTK_ERSO_2.42_2764.bin",
+      "size": 8192,
+      "sha1": "02fa057f2c22ab199a8d9795ab1ae570f2b13a36",
+      "md5": "ed55c0643fe1664eb4fcbbd8ea469f6a",
+      "sha256": "ca1239e9883837a03f4e12c58a3df163e0b415bcd23246c9e427dd2f3382c255",
+      "crc32": "3f2d2a76"
+    },
+    "94aefc745b51015426a73015ab7892b88e7c8bcf": {
+      "path": "bios/IBM/PC/dtk386/3cto001.bin",
+      "name": "3cto001.bin",
+      "size": 65536,
+      "sha1": "94aefc745b51015426a73015ab7892b88e7c8bcf",
+      "md5": "9db3481d8fb338e9e79ec0b743a832e3",
+      "sha256": "e47d098a00b7850b98ffe6ab698076a4a9eb7fae09f34ddd8120b8c7ddf9dd17",
+      "crc32": "8a0e26da"
+    },
+    "d300c52e2c2e9d4c3b9c2dcc1c3000567792a1e4": {
+      "path": "bios/IBM/PC/endeavor/1006CB0_.BI1",
+      "name": "1006CB0_.BI1",
+      "size": 53376,
+      "sha1": "d300c52e2c2e9d4c3b9c2dcc1c3000567792a1e4",
+      "md5": "eb9b4027cc681d3f0c9f5ef08d4defe0",
+      "sha256": "8cd821c24269d18997ead504bfc70a0fcafbdffd571baad75cd2a8b2bbe689aa",
+      "crc32": "e6b7a714"
+    },
+    "04e92db350973bb5977d642bd4b8988d2a8a7b42": {
+      "path": "bios/IBM/PC/endeavor/1006CB0_.BIO",
+      "name": "1006CB0_.BIO",
+      "size": 65664,
+      "sha1": "04e92db350973bb5977d642bd4b8988d2a8a7b42",
+      "md5": "b3278f348d8b7924557ad99a36f11da6",
+      "sha256": "6a212c0083efac0d45c38b73974b75786240ff9003d694b4e0a8da00ac40ad22",
+      "crc32": "241a35d4"
+    },
+    "54430d4d0462860860397487c9c109e6f70db8e3": {
+      "path": "bios/IBM/PC/europc/50145",
+      "name": "50145",
+      "size": 32768,
+      "sha1": "54430d4d0462860860397487c9c109e6f70db8e3",
+      "md5": "6b491828044e69cb30b29ee849d686f2",
+      "sha256": "52369206c1549168088cb2893cea1a19991812ce8b4e3e1ad8e7680ad10370aa",
+      "crc32": "1775a11d"
+    },
+    "a641b505bbac97b8775f91fe9b83d9afdf4d038f": {
+      "path": "bios/IBM/PC/genxt/pcxt.rom",
+      "name": "pcxt.rom",
+      "size": 8192,
+      "sha1": "a641b505bbac97b8775f91fe9b83d9afdf4d038f",
+      "md5": "d1e055defd534fd332f10698c4ef3428",
+      "sha256": "c3353ceed8954e586ae711373e3b3fdc923354fe6ceb9a124acb7d760bc974b5",
+      "crc32": "031aafad"
+    },
+    "dc0794499b3e499c5777b3aa39554bbf0f2cc19b": {
+      "path": "bios/IBM/PC/ibm_6277356_ega_card_u44_27128.bin",
+      "name": "ibm_6277356_ega_card_u44_27128.bin",
+      "size": 16384,
+      "sha1": "dc0794499b3e499c5777b3aa39554bbf0f2cc19b",
+      "md5": "0636f46316f3e15cb287ce3da6ba43a1",
+      "sha256": "b26fea4da9a3ba4af8eda55a32cfc5a67d62e24be5960c1bbac857e8ef0fb5b2",
+      "crc32": "dc146448"
+    },
+    "7b8b0e22ecd002d43d5ed1bb9f9a63d9b9948032": {
+      "path": "bios/IBM/PC/ibm_vga.bin",
+      "name": "ibm_vga.bin",
+      "size": 32768,
+      "sha1": "7b8b0e22ecd002d43d5ed1bb9f9a63d9b9948032",
+      "md5": "2057a38cb472300205132fb9c01d9d85",
+      "sha256": "51b49761f72780a696c36f3d2e74a8168c1c99b865070f7f90b8e621a8b5ae17",
+      "crc32": "03b3f90d"
+    },
+    "64769b7a8b60ffeefa04e4afbec778069a2840c9": {
+      "path": "bios/IBM/PC/ibmpc/basicc11.f6",
+      "name": "basicc11.f6",
+      "size": 8192,
+      "sha1": "64769b7a8b60ffeefa04e4afbec778069a2840c9",
+      "md5": "69e2bd1d08c893cbf841607c8749d5bd",
+      "sha256": "9f5716f27665516f1fa98b8aa8dfbf49d8f7441ec3ef1be0c736826e247bc1ae",
+      "crc32": "80d3cf5d"
+    },
+    "082ae803994048e225150f771794ca305f73d731": {
+      "path": "bios/IBM/PC/ibmpc/basicc11.f8",
+      "name": "basicc11.f8",
+      "size": 8192,
+      "sha1": "082ae803994048e225150f771794ca305f73d731",
+      "md5": "5f85ff5ea352c1ec11b084043fbb549e",
+      "sha256": "cabb5e8dce3c88ae8c31e4821c675f9e160f6221368e383734f6b498486cbf74",
+      "crc32": "673a4acc"
+    },
+    "c9e0529470edf04da093bb8c8ae2536c688c1a74": {
+      "path": "bios/IBM/PC/ibmpc/basicc11.fa",
+      "name": "basicc11.fa",
+      "size": 8192,
+      "sha1": "c9e0529470edf04da093bb8c8ae2536c688c1a74",
+      "md5": "04a285d5dc8d86c60679e8f3c779dcc4",
+      "sha256": "836d41a2e5444a2edd1c3f226658742a4ff7d9831fef7217614e2e8faaf6bd68",
+      "crc32": "aac3fc37"
+    },
+    "5134dd64721cbf093d059ee5d3fd09c7f86604c7": {
+      "path": "bios/IBM/PC/ibmpc/basicc11.fc",
+      "name": "basicc11.fc",
+      "size": 8192,
+      "sha1": "5134dd64721cbf093d059ee5d3fd09c7f86604c7",
+      "md5": "b086a6980fc5736098269e62b59726ef",
+      "sha256": "71c3c6ff3ac0c5c9a832d2270cede939db0bda19c17f26baf0f38eca03b79a8f",
+      "crc32": "3062b3fc"
+    },
+    "40fce6a94dda4328a8b608c7ae2f39d1dc688af4": {
+      "path": "bios/IBM/PC/ibmpc/pc102782.bin",
+      "name": "pc102782.bin",
+      "size": 8192,
+      "sha1": "40fce6a94dda4328a8b608c7ae2f39d1dc688af4",
+      "md5": "f453eb2df6daf21ec644d33663d85434",
+      "sha256": "3700c345f3dcb76039986429ade9ff0cffbc2f0cae535b987b95a5de8aa0094f",
+      "crc32": "e88792b3"
+    },
+    "1f5f7013f18c08ff50d7942e76c4fbd782412414": {
+      "path": "bios/IBM/PC/ibmpcjr/bios.rom",
+      "name": "bios.rom",
+      "size": 65536,
+      "sha1": "1f5f7013f18c08ff50d7942e76c4fbd782412414",
+      "md5": "c66b49cd7082d1b81442fb2704542401",
+      "sha256": "863df0975a305110a7da4591b704e8f5dc7302f03c63603aa2dcd03e84c36ff9",
+      "crc32": "31e3a7aa"
+    },
+    "daa61762d3afdd7262e34edf1a3d2df9a05bcebb": {
+      "path": "bios/IBM/PC/ibmxt/1501512.u18",
+      "name": "1501512.u18",
+      "size": 32768,
+      "sha1": "daa61762d3afdd7262e34edf1a3d2df9a05bcebb",
+      "md5": "9696472098999c02217bf922786c1f4a",
+      "sha256": "f96a33e42173a87336a96ea97fad2df0e8b55bc7962f84be1d5a3d85b2690799",
+      "crc32": "4f417635"
+    },
+    "045e27a70407d89b7956ecae4d275bd2f6b0f8e2": {
+      "path": "bios/IBM/PC/ibmxt/5000027.u19",
+      "name": "5000027.u19",
+      "size": 32768,
+      "sha1": "045e27a70407d89b7956ecae4d275bd2f6b0f8e2",
+      "md5": "df9f29de490d7f269a6405df1fed69b7",
+      "sha256": "db7105778118441bd39bb5554335b4b90a87fefe1ef1171afc370822e271ae91",
+      "crc32": "758ff036"
+    },
+    "108f1c94b2d3d10bf35be8a1c615065895920616": {
+      "path": "bios/IBM/PC/ide_at.bin",
+      "name": "ide_at.bin",
+      "size": 8192,
+      "sha1": "108f1c94b2d3d10bf35be8a1c615065895920616",
+      "md5": "e7f07d6be5be0891f3458d6fcc8ee383",
+      "sha256": "95f1323b3676d593cc67e677df52348a93202e3490e0ae95da7959f09518104c",
+      "crc32": "ac75ec33"
+    },
+    "3fc07d174924e7c48b4758a7ba76ecd5362bd75b": {
+      "path": "bios/IBM/PC/ide_at_1_1_5.bin",
+      "name": "ide_at_1_1_5.bin",
+      "size": 8192,
+      "sha1": "3fc07d174924e7c48b4758a7ba76ecd5362bd75b",
+      "md5": "11a9cc95551db3e8c9fbc494d14001ae",
+      "sha256": "b8461919036be0fdfeafdb9e6014880f4caf5c49087c68293cc5cba521301d47",
+      "crc32": "434286ce"
+    },
+    "8b890c4ea4a0907b420aa0c59f0e9d6286473dec": {
+      "path": "bios/IBM/PC/ide_xt.bin",
+      "name": "ide_xt.bin",
+      "size": 8192,
+      "sha1": "8b890c4ea4a0907b420aa0c59f0e9d6286473dec",
+      "md5": "41d32cd4d3568f0efe225c525ef55a89",
+      "sha256": "90b132dd6366e388415647e94a56efab2c48bb411de8a22dc687bb1a558c0141",
+      "crc32": "4f8bb178"
+    },
+    "0b343f3028ca06c9e6dc69427d1b15a47c74b9fc": {
+      "path": "bios/IBM/PC/jukopc/000o001.bin",
+      "name": "000o001.bin",
+      "size": 8192,
+      "sha1": "0b343f3028ca06c9e6dc69427d1b15a47c74b9fc",
+      "md5": "64d2fef130dc1ad6615c119a15a356b0",
+      "sha256": "e0e53774c79c38e5687fe0a8bafa3a07875aa2a2130d759f6bc9679d974cfe32",
+      "crc32": "7a1c6dfa"
+    },
+    "62f17c408be0036d00a182e94c5c88b83d46b625": {
+      "path": "bios/IBM/PC/ltxt/27C64.bin",
+      "name": "27C64.bin",
+      "size": 8192,
+      "sha1": "62f17c408be0036d00a182e94c5c88b83d46b625",
+      "md5": "29b5260fa154057f878a8720f60448eb",
+      "sha256": "ae2db0b6595ba2736167bcfcdbe7c5bf1b2395731a61c212905f16ec0211b150",
+      "crc32": "b45a7dd3"
+    },
+    "59b1f8dd6fe981ef9a7700adebf6e1adda7cee90": {
+      "path": "bios/IBM/PC/lxt3/27C64D.bin",
+      "name": "27C64D.bin",
+      "size": 8192,
+      "sha1": "59b1f8dd6fe981ef9a7700adebf6e1adda7cee90",
+      "md5": "149d5b61204a3be0faff28cf1dc480a5",
+      "sha256": "1d06c34f7e7afbe18f310a4db973049eefc9660edca8e9e39659d4ab3babe778",
+      "crc32": "0a6121d3"
+    },
+    "c2a8b10808bf51a3c123ba3eb1e9dd608231916f": {
+      "path": "bios/IBM/PC/mda.rom",
+      "name": "mda.rom",
+      "size": 8192,
+      "sha1": "c2a8b10808bf51a3c123ba3eb1e9dd608231916f",
+      "md5": "3bc052db30ce58620a7b1fc3b25e3212",
+      "sha256": "37527f661580e5a09710051cec67422abfadf31c61b841537a91e7f27be19304",
+      "crc32": "0bf56d70"
+    },
+    "376d483db2bd1c775d46424e1176b24779591525": {
+      "path": "bios/IBM/PC/megapc/211253-bios hi.u19",
+      "name": "211253-bios hi.u19",
+      "size": 65536,
+      "sha1": "376d483db2bd1c775d46424e1176b24779591525",
+      "md5": "b43d9a5d42f365d883546326e10691f2",
+      "sha256": "bdd375db53a49edc0954f1613af4127aa2ad2cce792f3b675f2e1c71b4d838c8",
+      "crc32": "6acb573f"
+    },
+    "14fd39ec12df7fae99ccdb0484ee097d93bf8d95": {
+      "path": "bios/IBM/PC/megapc/41651-bios lo.u18",
+      "name": "41651-bios lo.u18",
+      "size": 65536,
+      "sha1": "14fd39ec12df7fae99ccdb0484ee097d93bf8d95",
+      "md5": "c5ed1b2fd3b02b5617599c8a758d07a0",
+      "sha256": "0310f2d19d0f3f4d6726c49effb29df350dc3972a2719bb3fb348fca5e94fa09",
+      "crc32": "1e9bd3b7"
+    },
+    "1066dcc849e6289b5ac6372c84a590e456d497a6": {
+      "path": "bios/IBM/PC/olivetti_m24/olivetti_m24_version_1.43_high.bin",
+      "name": "olivetti_m24_version_1.43_high.bin",
+      "size": 8192,
+      "sha1": "1066dcc849e6289b5ac6372c84a590e456d497a6",
+      "md5": "9a256e18b447734bc830783dab95b6ef",
+      "sha256": "873e18cad1905aca92078198f8ea5b94afa7dbb0d9f38cc7d1cc1604cc036c42",
+      "crc32": "04e697ba"
+    },
+    "13423011a9bae3f3193e8c199f98a496cab48c0f": {
+      "path": "bios/IBM/PC/olivetti_m24/olivetti_m24_version_1.43_low.bin",
+      "name": "olivetti_m24_version_1.43_low.bin",
+      "size": 8192,
+      "sha1": "13423011a9bae3f3193e8c199f98a496cab48c0f",
+      "md5": "451293f4ea207948f28366576f803b0d",
+      "sha256": "dd3957eaaf94aaa22be57a6b6f1e24e3f92c7eca6264faf852ec2f7e26ae0277",
+      "crc32": "ff7e0f10"
+    },
+    "a8870f2f3767cda8e28662c7880b87e904c2e11d": {
+      "path": "bios/IBM/PC/p55t2p4/0207_J2.BIN",
+      "name": "0207_J2.BIN",
+      "size": 131072,
+      "sha1": "a8870f2f3767cda8e28662c7880b87e904c2e11d",
+      "md5": "0821cc578a9ae84f09a61b92117a8ef8",
+      "sha256": "3cdabde2f4abbed74887ec714c2c87d565dc76a0fc8ee7b681c9bd82add20ecd",
+      "crc32": "4ea28971"
+    },
+    "b9e665097c09a9b8cb95fb3261d8494bb2a57a0a": {
+      "path": "bios/IBM/PC/p55va/VA021297.BIN",
+      "name": "VA021297.BIN",
+      "size": 131072,
+      "sha1": "b9e665097c09a9b8cb95fb3261d8494bb2a57a0a",
+      "md5": "d12d388005013465d97c7b172938f38c",
+      "sha256": "685942500e606732bb24cc77d4436b1a6661adcaf6e79fe2d1083b99f6fc4e13",
+      "crc32": "340bf218"
+    },
+    "7781d4717917262805d514b331ba113b1e05a247": {
+      "path": "bios/IBM/PC/pc1512/40043.v1",
+      "name": "40043.v1",
+      "size": 8192,
+      "sha1": "7781d4717917262805d514b331ba113b1e05a247",
+      "md5": "3aee7f0511c136bc958d08fff9bf26f8",
+      "sha256": "b8b8b9d9ca82959f341dc9bb6e3c73f24576f60b8bd207f8b18c47af47973ea3",
+      "crc32": "f72f1582"
+    },
+    "74002f5cc542df442eec9e2e7a18db3598d8c482": {
+      "path": "bios/IBM/PC/pc1512/40044.v1",
+      "name": "40044.v1",
+      "size": 8192,
+      "sha1": "74002f5cc542df442eec9e2e7a18db3598d8c482",
+      "md5": "8c9874d2eb05d0485bb3ea99e32e3c78",
+      "sha256": "f6ab06bb1159877b8fc8e10d680b58ba519d4b50064cc49f8755fdd5931dccc9",
+      "crc32": "668fcc94"
+    },
+    "bc8dc4dcedeea5bc1c04986b1f105ad93cb2ebcd": {
+      "path": "bios/IBM/PC/pc1512/40078.ic127",
+      "name": "40078.ic127",
+      "size": 8192,
+      "sha1": "bc8dc4dcedeea5bc1c04986b1f105ad93cb2ebcd",
+      "md5": "b43081e66779adffcdbaf7e32a02c34e",
+      "sha256": "2e5988193cb6e299c155ef672627f14e2d76c31f4a073376c45f45124c1d3cbc",
+      "crc32": "ae9c0d04"
+    },
+    "dde1a46c8f83e413d7070f1356fc91b9f595a8b6": {
+      "path": "bios/IBM/PC/pc1640/40043.v3",
+      "name": "40043.v3",
+      "size": 8192,
+      "sha1": "dde1a46c8f83e413d7070f1356fc91b9f595a8b6",
+      "md5": "20dc406d86e99362472be140c3b682b4",
+      "sha256": "3a1a6bc0783f6f916adaf6f0dbb6ce6636e1ec0d5f3ba76a71b6e8830a781f39",
+      "crc32": "9219d0aa"
+    },
+    "e21ae524d5b4d00696d293dbd4fe4d7bca22e277": {
+      "path": "bios/IBM/PC/pc1640/40044.v3",
+      "name": "40044.v3",
+      "size": 8192,
+      "sha1": "e21ae524d5b4d00696d293dbd4fe4d7bca22e277",
+      "md5": "c90257a7803855b87d93261bffb8dea8",
+      "sha256": "e21bbb02bc39e573d95ab74a5471789db1363dcafbd44d245fc31fda0bd7853e",
+      "crc32": "6090f782"
+    },
+    "98302006ee38a17c09bd75504cc18c0649174e33": {
+      "path": "bios/IBM/PC/pc1640/40100",
+      "name": "40100",
+      "size": 32768,
+      "sha1": "98302006ee38a17c09bd75504cc18c0649174e33",
+      "md5": "4e1c2abfa29b4d4e6d8e5943d9fa7710",
+      "sha256": "642b258bba7b5c9abec0e59f490436c0769a27fd54f0d1d869694ed9fd25dd8d",
+      "crc32": "d2d1f1ae"
+    },
+    "99663bfb61798526e092205575370c2ad34249a1": {
+      "path": "bios/IBM/PC/pc200/40109.bin",
+      "name": "40109.bin",
+      "size": 32768,
+      "sha1": "99663bfb61798526e092205575370c2ad34249a1",
+      "md5": "60e477dacb126dfab422e5b84164d582",
+      "sha256": "6288b2d2378fcd880876f67d939d6daa86d0070f8286cd982faff0f6193e4379",
+      "crc32": "a8b67639"
+    },
+    "8b4b2afea543b96b45d6a30365281decc15f2932": {
+      "path": "bios/IBM/PC/pc200/pc20v2.0",
+      "name": "pc20v2.0",
+      "size": 8192,
+      "sha1": "8b4b2afea543b96b45d6a30365281decc15f2932",
+      "md5": "0a84c353542417efa2f8afea1cad7659",
+      "sha256": "4c0fe432a88bebf78872fd962d9e10e4fa81fd7465fef731feeb7691f9087176",
+      "crc32": "41302eb8"
+    },
+    "4135102a491b25fc659d70b957e07649f3eacf24": {
+      "path": "bios/IBM/PC/pc200/pc20v2.1",
+      "name": "pc20v2.1",
+      "size": 8192,
+      "sha1": "4135102a491b25fc659d70b957e07649f3eacf24",
+      "md5": "7c38eaf64d0ceff4d3ae16e979acb200",
+      "sha256": "10e9f0ca6e2f99b4c691a204c6f152d7413b85da285fbbaba77bc57db7585598",
+      "crc32": "71b84616"
+    },
+    "b882e97ee81b9ba0e7d969c63da3f2052f23b4b9": {
+      "path": "bios/IBM/PC/pc2086/40179.ic129",
+      "name": "40179.ic129",
+      "size": 8192,
+      "sha1": "b882e97ee81b9ba0e7d969c63da3f2052f23b4b9",
+      "md5": "3ea16a4a92088bc401333aca891ff94f",
+      "sha256": "b007e6ea68f130ea355a7b79928aa7d55f5c11c4b5006b3f5583e96a243e1811",
+      "crc32": "003605e4"
+    },
+    "93e045609466fcec74e2bb72578bb7405281cf7b": {
+      "path": "bios/IBM/PC/pc2086/40180.ic132",
+      "name": "40180.ic132",
+      "size": 8192,
+      "sha1": "93e045609466fcec74e2bb72578bb7405281cf7b",
+      "md5": "a96ebfafb3a98cb213fe324966e6dba6",
+      "sha256": "258063505dccd6f11716c7f83a0e00bf9e802fd7d9d48b3d5949271df29d5af4",
+      "crc32": "28ee5e58"
+    },
+    "5df1efe4203cd076292a7713bd7ebd1196dca577": {
+      "path": "bios/IBM/PC/pc2086/40186.ic171",
+      "name": "40186.ic171",
+      "size": 32768,
+      "sha1": "5df1efe4203cd076292a7713bd7ebd1196dca577",
+      "md5": "0641b7bea81a21679e005f55b34b2e8f",
+      "sha256": "69b929dbe977631dcc068812dd6f6f4b8d7ce5e27eea1b84a0c9734a6f1db6a3",
+      "crc32": "959f00ba"
+    },
+    "382d2028e0dc5515a68843829563ce29018edb08": {
+      "path": "bios/IBM/PC/pc3086/c000.bin",
+      "name": "c000.bin",
+      "size": 32768,
+      "sha1": "382d2028e0dc5515a68843829563ce29018edb08",
+      "md5": "27cc3c8202f5bbbe2afa26966b3083ce",
+      "sha256": "4290eb27f5467db770a5c0419324c7b64c53532c7de79b10d44d530297d9dc4d",
+      "crc32": "5a6c38e9"
+    },
+    "98c344831cc4dc59ebb39bbb1961964a8d39fe20": {
+      "path": "bios/IBM/PC/pc3086/fc00.bin",
+      "name": "fc00.bin",
+      "size": 16384,
+      "sha1": "98c344831cc4dc59ebb39bbb1961964a8d39fe20",
+      "md5": "65c646c0b6594b309d83a84ddd8e8453",
+      "sha256": "8885d57b4013b971a539000f6865c4bd3e7d2477aaf9da1e33e9f7c919a67150",
+      "crc32": "b5630753"
+    },
+    "b6566fd761e2e6ec34b61ee3bb043ef62d696b5e": {
+      "path": "bios/IBM/PC/px386/3iip001h.bin",
+      "name": "3iip001h.bin",
+      "size": 32768,
+      "sha1": "b6566fd761e2e6ec34b61ee3bb043ef62d696b5e",
+      "md5": "c80c941244962bb182165c636f00997d",
+      "sha256": "5f5844626ebe8e51c918e5242ebcc560bca77cf7a93836fe88ebd5895284a31b",
+      "crc32": "f46dc8a2"
+    },
+    "a6d34c3bf0de93c2b71010948c1f16354996b5ab": {
+      "path": "bios/IBM/PC/px386/3iip001l.bin",
+      "name": "3iip001l.bin",
+      "size": 32768,
+      "sha1": "a6d34c3bf0de93c2b71010948c1f16354996b5ab",
+      "md5": "afe2fc8367cd2e614ce93d44649837bf",
+      "sha256": "2875f9aa7d8e6ef4c9b93fce991e1db74b80771c4955fec0279e91808605d42b",
+      "crc32": "f7bef447"
+    },
+    "8e73e9d1456aadd65bb89cc813d1aa1354c90d68": {
+      "path": "bios/IBM/PC/pxxt/000p001.bin",
+      "name": "000p001.bin",
+      "size": 8192,
+      "sha1": "8e73e9d1456aadd65bb89cc813d1aa1354c90d68",
+      "md5": "010fe851f41f577d23864bc808932352",
+      "sha256": "3224957446c11d671a6c0c65b4722afa4c59a60776639a428f2be67bcadbbdb2",
+      "crc32": "16f4fdc8"
+    },
+    "1d0c6e75f2d08e15804be07c7fe23ecebe9ca49b": {
+      "path": "bios/IBM/PC/revenge/1009AF2_.BI1",
+      "name": "1009AF2_.BI1",
+      "size": 49280,
+      "sha1": "1d0c6e75f2d08e15804be07c7fe23ecebe9ca49b",
+      "md5": "2605f21387e6ee45ecc38099abc98f17",
+      "sha256": "f56bb7e8201fca27088c9853994fe0850a5501949840757d87f55a1489d3404a",
+      "crc32": "8b75023c"
+    },
+    "8be89a060204002d636c965d064e6cac1eeb9534": {
+      "path": "bios/IBM/PC/revenge/1009AF2_.BIO",
+      "name": "1009AF2_.BIO",
+      "size": 65664,
+      "sha1": "8be89a060204002d636c965d064e6cac1eeb9534",
+      "md5": "1fb579ec196b97ed81019db98b84625c",
+      "sha256": "40e061e90b00172a0de90c95d460b51f41a70ac204a718c1bfbece7f4d7c3514",
+      "crc32": "cc5d50ba"
+    },
+    "50502df4d16c38608bcaea758791fc3419ee4589": {
+      "path": "bios/IBM/PC/s3_764.bin",
+      "name": "s3_764.bin",
+      "size": 32768,
+      "sha1": "50502df4d16c38608bcaea758791fc3419ee4589",
+      "md5": "09801819cee34e89ea20220b4db3baef",
+      "sha256": "9fe5bc398563e86e86a59cbf87a2ed552afd65fa24db0f9dd84962e454cae0c2",
+      "crc32": "1fbe4a8d"
+    },
+    "59997202571b4ccb021c7b71622e57742471374e": {
+      "path": "bios/IBM/PC/s3virge.bin",
+      "name": "s3virge.bin",
+      "size": 32768,
+      "sha1": "59997202571b4ccb021c7b71622e57742471374e",
+      "md5": "9a54d01bd84500e3f7e7abb14d853884",
+      "sha256": "d322d32e083d5b6edf334653367712b494630ff73f1043e041d2cc2556feb3de",
+      "crc32": "6052a96b"
+    },
+    "9549f7ae63f463473119c64bb74df884c7b0e70c": {
+      "path": "bios/IBM/PC/sis496/SIS496-1.AWA",
+      "name": "SIS496-1.AWA",
+      "size": 131072,
+      "sha1": "9549f7ae63f463473119c64bb74df884c7b0e70c",
+      "md5": "26363a701e3a70dbbb4299bbff4ed76a",
+      "sha256": "ae30999c3a8b0182c1805afc20cc95ac83fc0b3175a6c8d6918ee2d2d40683fd",
+      "crc32": "6296ce68"
+    },
+    "976af8c04c3f6fde14d7047f6521d302bdc2d017": {
+      "path": "bios/IBM/PC/tandy1000hx/v020000.u12",
+      "name": "v020000.u12",
+      "size": 131072,
+      "sha1": "976af8c04c3f6fde14d7047f6521d302bdc2d017",
+      "md5": "364dd8f7a8c5338227545c7c41960036",
+      "sha256": "c7d7cb0cdec5178898001cdde05442a9d2f64b56bfdf94003ee5e814f98f6bce",
+      "crc32": "6f3acd80"
+    },
+    "7deb71f14c2c418400b639d60066ab61b7e9df32": {
+      "path": "bios/IBM/PC/tandy1000sl2/8079047.hu1",
+      "name": "8079047.hu1",
+      "size": 262144,
+      "sha1": "7deb71f14c2c418400b639d60066ab61b7e9df32",
+      "md5": "52077be25095af55bfa8c2d4dac36412",
+      "sha256": "7fe228566de37a2f06ca6703a9f1280fd75db2f2d0e0e635b7c3b1e214680866",
+      "crc32": "c773ec0e"
+    },
+    "10f1a7204f69b82a18bc94a3010c9660aec0c802": {
+      "path": "bios/IBM/PC/tandy1000sl2/8079048.hu2",
+      "name": "8079048.hu2",
+      "size": 262144,
+      "sha1": "10f1a7204f69b82a18bc94a3010c9660aec0c802",
+      "md5": "8ecd11275ad418d302cd358b408b01ec",
+      "sha256": "160116f3ad6788af7faa7a5f12de636de58ea18e2021ddba242ac1e801a927af",
+      "crc32": "0f3e6586"
+    },
+    "c0ee6f9443fa82c0fef5d497b3e76aa3077f1865": {
+      "path": "bios/IBM/PC/vgaedge16.vbi",
+      "name": "vgaedge16.vbi",
+      "size": 32768,
+      "sha1": "c0ee6f9443fa82c0fef5d497b3e76aa3077f1865",
+      "md5": "ec2a977f0c0645dd284010160caec636",
+      "sha256": "e974a5670c4420a4e0212b5ccdcb35dadf0f86681d17a5bbf4a284e3ae65f459",
+      "crc32": "e75945f3"
+    },
+    "72c60172fb1ba77c9b24b06b7755f0a16f0b3a13": {
+      "path": "bios/IBM/PC/win486/ALI1429G.AMW",
+      "name": "ALI1429G.AMW",
+      "size": 65536,
+      "sha1": "72c60172fb1ba77c9b24b06b7755f0a16f0b3a13",
+      "md5": "19d55c537767a7424a8e376d62fc2ac0",
+      "sha256": "aed5d0d9a9884c86b3848b97432025de6fc47e01770be13be6dfc5c5e5b12e8a",
+      "crc32": "0636e0be"
     },
     "5f4aed208301449c2e9514edfd325fe9dead76fa": {
       "path": "bios/Id Software/Doom/prboom.wad",
@@ -44544,6 +45867,150 @@
       "sha256": "9be7592d4e4d2c0dbfbb0317648603d7a80cf492ca9cb1d01dea09542f51de61",
       "crc32": "16ef13bc"
     },
+    "01c8a819587a66d2ee4d255656e36fa0904377b0": {
+      "path": "bios/Sega/Arcade/epr-10187.88",
+      "name": "epr-10187.88",
+      "size": 32768,
+      "sha1": "01c8a819587a66d2ee4d255656e36fa0904377b0",
+      "md5": "0cc087bbf1d5ad46319756b5b17ab9be",
+      "sha256": "8c007818f7060be935ae212c7e6dec0e4ba0ec8dd1732b1c5999f262ab992e6d",
+      "crc32": "a10abaa9"
+    },
+    "77d18092e3c10a400e62eeba562f161398fe37a7": {
+      "path": "bios/Sega/Arcade/epr-10327.76",
+      "name": "epr-10327.76",
+      "size": 65536,
+      "sha1": "77d18092e3c10a400e62eeba562f161398fe37a7",
+      "md5": "eddae6f176ad5a3438e4dae1b8c4d4fb",
+      "sha256": "9ff9161b9281f3d1f63b3817e6e64522d85170c2ca0dafdf1fe0afd73753dc54",
+      "crc32": "da99d855"
+    },
+    "f715bde96c73ed47035acf5a41630fdeb41bb2f9": {
+      "path": "bios/Sega/Arcade/epr-10327a.76",
+      "name": "epr-10327a.76",
+      "size": 65536,
+      "sha1": "f715bde96c73ed47035acf5a41630fdeb41bb2f9",
+      "md5": "35bdcb3d8eaae6505af896a55f26dda1",
+      "sha256": "f50672376026758c47c4fcd59529bb4e3e5ba3911fa61127d75bab6859918bc2",
+      "crc32": "e28a5baf"
+    },
+    "0e182fdac70423a85dc2b996c70bcb3954e75e10": {
+      "path": "bios/Sega/Arcade/epr-10328.75",
+      "name": "epr-10328.75",
+      "size": 65536,
+      "sha1": "0e182fdac70423a85dc2b996c70bcb3954e75e10",
+      "md5": "73486b2da791109e322c71cbaf51338b",
+      "sha256": "e19574d414f9065759da978d1bfc7bba7ba06fb1a25be3bd307667fceb6579e6",
+      "crc32": "3c0e9a7f"
+    },
+    "a4e3cfca4d803e72bc4fcf91ab00e21bf3f8959f": {
+      "path": "bios/Sega/Arcade/epr-10328a.75",
+      "name": "epr-10328a.75",
+      "size": 65536,
+      "sha1": "a4e3cfca4d803e72bc4fcf91ab00e21bf3f8959f",
+      "md5": "5c82ed7dd7450f5c037b4dcaa0103218",
+      "sha256": "ef48d2831e133beaa35ed2252df47d5f1b7ca383a9e73f131081d91ec7e7a626",
+      "crc32": "d5ec5e5d"
+    },
+    "e63fe5f7950af35131539836f18fa056767c2c80": {
+      "path": "bios/Sega/Arcade/epr-10329.58",
+      "name": "epr-10329.58",
+      "size": 65536,
+      "sha1": "e63fe5f7950af35131539836f18fa056767c2c80",
+      "md5": "7197dfbdf83029abd56e72b98b274c63",
+      "sha256": "fa7ebd6cc55d29f4fa68810412f4e79978c7b5887bc5ef607f508c12c98bd7d8",
+      "crc32": "fe0fa5e2"
+    },
+    "57d5219bd0e2fd886217e37e8773fd76be9b40eb": {
+      "path": "bios/Sega/Arcade/epr-10329a.58",
+      "name": "epr-10329a.58",
+      "size": 65536,
+      "sha1": "57d5219bd0e2fd886217e37e8773fd76be9b40eb",
+      "md5": "f8729ace245eb8fc4854819f783f6042",
+      "sha256": "d8ef3670fec29bae76075bb3a9cd4814d542f95ed599bb9a6c1bb71083bbd8c7",
+      "crc32": "da131c81"
+    },
+    "834bf361ca67cee3793c324bb26cf0ec82a72068": {
+      "path": "bios/Sega/Arcade/epr-10330.57",
+      "name": "epr-10330.57",
+      "size": 65536,
+      "sha1": "834bf361ca67cee3793c324bb26cf0ec82a72068",
+      "md5": "9556c737b5506241a5a58635e58bdbad",
+      "sha256": "c004c575d38175b31e3ae60c0fc8b914a99e617c97c9fc6b3461cfb52b2fc979",
+      "crc32": "59786e99"
+    },
+    "2136c9572e26b7ae6de402c0cd53174407cc6018": {
+      "path": "bios/Sega/Arcade/epr-10330a.57",
+      "name": "epr-10330a.57",
+      "size": 65536,
+      "sha1": "2136c9572e26b7ae6de402c0cd53174407cc6018",
+      "md5": "f0f9e2cce2d64dbb28650b11679f745b",
+      "sha256": "b0be5c0e86c17bf033586eab22d3df261cede2a1370aca92ed12fc71e13411b6",
+      "crc32": "ba9ec82a"
+    },
+    "ac319cdafb156adcf6be29ae1b82d46d3048022e": {
+      "path": "bios/Sega/Arcade/epr-10380.133",
+      "name": "epr-10380.133",
+      "size": 65536,
+      "sha1": "ac319cdafb156adcf6be29ae1b82d46d3048022e",
+      "md5": "591daabf7c4b9005171f9af83068f3a1",
+      "sha256": "79048290af606e3233cbfa7a5b78b2afeafb0deda38d6ae530e4f0341e4a9a33",
+      "crc32": "e339e87a"
+    },
+    "31e870f307f44eb4f293b607123b623beee2bc3c": {
+      "path": "bios/Sega/Arcade/epr-10380b.133",
+      "name": "epr-10380b.133",
+      "size": 65536,
+      "sha1": "31e870f307f44eb4f293b607123b623beee2bc3c",
+      "md5": "94bb116334e7076aeeee5fcdcb536f87",
+      "sha256": "4fc0ba0ae4b996a880844e432ce82314e9058f84145ff36afa9eb51aa3bca920",
+      "crc32": "1f6cadad"
+    },
+    "bf3ff05bbf81bdd44567f3b9bb4919ed4a499624": {
+      "path": "bios/Sega/Arcade/epr-10381a.132",
+      "name": "epr-10381a.132",
+      "size": 65536,
+      "sha1": "bf3ff05bbf81bdd44567f3b9bb4919ed4a499624",
+      "md5": "ab1a9fe4feb5d5bd867552e3740bdc07",
+      "sha256": "bfa129294604597f7c5145f7f0fe9bb0fe5d38fafc3a8f20b15b95f4649e7e45",
+      "crc32": "be8c412b"
+    },
+    "4b75526df71bba0d588f47a65790a3d21b236302": {
+      "path": "bios/Sega/Arcade/epr-10382.118",
+      "name": "epr-10382.118",
+      "size": 65536,
+      "sha1": "4b75526df71bba0d588f47a65790a3d21b236302",
+      "md5": "bcf3cae054791aa0c2c9d3c144bb1682",
+      "sha256": "f27900608c9cc23ac7e0ef759063805d47d8ee583fd0850959ac8800ac5e44bf",
+      "crc32": "65248dd5"
+    },
+    "69236cf9f27691dee290c79db1fc9b5e73ea77d7": {
+      "path": "bios/Sega/Arcade/epr-10382b.118",
+      "name": "epr-10382b.118",
+      "size": 65536,
+      "sha1": "69236cf9f27691dee290c79db1fc9b5e73ea77d7",
+      "md5": "8ff3212b3a2e37a37ba73a998bbc424f",
+      "sha256": "f82740b485df5c841c3165348141f060181fd92afee8ff3419d6a6835d67a1af",
+      "crc32": "c4c3fa1a"
+    },
+    "d6e1de6b562359574d94b88ce6101646c506e701": {
+      "path": "bios/Sega/Arcade/epr-10383.117",
+      "name": "epr-10383.117",
+      "size": 65536,
+      "sha1": "d6e1de6b562359574d94b88ce6101646c506e701",
+      "md5": "161ceb196fcc9825bc981f933f305b5e",
+      "sha256": "dc246d43539d4da79f0bfcc4151569d2e2982dcb9530b585715a3c9d90800da7",
+      "crc32": "dcc586e7"
+    },
+    "1970895145ad8b5735f66ed8c837d9d453ce9b23": {
+      "path": "bios/Sega/Arcade/epr-10383b.117",
+      "name": "epr-10383b.117",
+      "size": 65536,
+      "sha1": "1970895145ad8b5735f66ed8c837d9d453ce9b23",
+      "md5": "2d2b6149f1bccaaebf9c792f292e36d0",
+      "sha256": "4f3e6ef308b7314f81a0b73c4fc4e26b8ac4def840f84b2750a8b3bccec620c4",
+      "crc32": "10a2014a"
+    },
     "00f43f5bf58dd79135565d52c4eea7e314ebc810": {
       "path": "bios/Sega/Arcade/mie.zip",
       "name": "mie.zip",
@@ -44552,6 +46019,204 @@
       "md5": "e95415b161121bef35ade12367138c63",
       "sha256": "98ec06b938a17f65fa4b0ad0439b410ed5e0f11b823320d3ce46b7268932fb8e",
       "crc32": "e185c03f"
+    },
+    "21320f945f7c8e990c97c9b1232a0f4b6bd00f8f": {
+      "path": "bios/Sega/Arcade/mpr-10371.9",
+      "name": "mpr-10371.9",
+      "size": 131072,
+      "sha1": "21320f945f7c8e990c97c9b1232a0f4b6bd00f8f",
+      "md5": "9bc7fcfda9dea3a6d1c527b3146a4a95",
+      "sha256": "a3b4c7982cfacb7171b151e69caa1c3e616eed8de0bd6d05a66dc0fe325c27d0",
+      "crc32": "7cc86208"
+    },
+    "a3746a2da077a8df4932348f650a061f413e8430": {
+      "path": "bios/Sega/Arcade/mpr-10372.13",
+      "name": "mpr-10372.13",
+      "size": 131072,
+      "sha1": "a3746a2da077a8df4932348f650a061f413e8430",
+      "md5": "7da2895e20d2152ebddbdd2df29f3bd4",
+      "sha256": "f01a21824815783664f1aaf98f68db829a6f3b179ac76b61a73bc25d57ba6209",
+      "crc32": "b557078c"
+    },
+    "3a9ce8547cd43b7b04abddf9a9ab5634e0bbfaba": {
+      "path": "bios/Sega/Arcade/mpr-10373.10",
+      "name": "mpr-10373.10",
+      "size": 131072,
+      "sha1": "3a9ce8547cd43b7b04abddf9a9ab5634e0bbfaba",
+      "md5": "5ed55433e64a4daecb9a0dbfc8771131",
+      "sha256": "c1e59b27805171724911b13711db7c1abd19acb9efce254749775c2c83f7f270",
+      "crc32": "b0d26ac9"
+    },
+    "9c8509fbed170b4ac74c169da573393e54774f49": {
+      "path": "bios/Sega/Arcade/mpr-10374.14",
+      "name": "mpr-10374.14",
+      "size": 131072,
+      "sha1": "9c8509fbed170b4ac74c169da573393e54774f49",
+      "md5": "5d09103268ac520609fb10ba186374b1",
+      "sha256": "f2277910d9fada3336ea3861194c1325e07c294630887155755339a28bcfa1d2",
+      "crc32": "8051e517"
+    },
+    "e5d8c67e020608edd24ba87b7687b2ac2483ee7f": {
+      "path": "bios/Sega/Arcade/mpr-10375.11",
+      "name": "mpr-10375.11",
+      "size": 131072,
+      "sha1": "e5d8c67e020608edd24ba87b7687b2ac2483ee7f",
+      "md5": "187a6496e67c95e119ce97600902d178",
+      "sha256": "789d39fcca4f39e8f86419ec5b9ea2d8012caa7f592075dc3e1c00bf1f9ae30d",
+      "crc32": "59b60bd7"
+    },
+    "a5f2532613f33a64441e0f75443c10ba78dccc6e": {
+      "path": "bios/Sega/Arcade/mpr-10376.15",
+      "name": "mpr-10376.15",
+      "size": 131072,
+      "sha1": "a5f2532613f33a64441e0f75443c10ba78dccc6e",
+      "md5": "107a513ce97fb3b88d97425f19054471",
+      "sha256": "2dc6fbf6383d06863d3f99a37f8535f850ecd52908c081168e76806f9ebb4c26",
+      "crc32": "f3b8f318"
+    },
+    "9f7210cb4153ac9029a785dcd4b45f4513a4b008": {
+      "path": "bios/Sega/Arcade/mpr-10377.12",
+      "name": "mpr-10377.12",
+      "size": 131072,
+      "sha1": "9f7210cb4153ac9029a785dcd4b45f4513a4b008",
+      "md5": "4a41f5ad01d78f52e8b6187c971c7270",
+      "sha256": "5820393b7229b793cb2229826895a6176cfaad66c7dc33f7e4d2b2677f4b67f0",
+      "crc32": "17a1b04a"
+    },
+    "4399030a155caf71f2dec7f75c4b65531ab53576": {
+      "path": "bios/Sega/Arcade/mpr-10378.16",
+      "name": "mpr-10378.16",
+      "size": 131072,
+      "sha1": "4399030a155caf71f2dec7f75c4b65531ab53576",
+      "md5": "f6b7defe9860aa8a2f2e2915f1d9b94d",
+      "sha256": "e0765ff25e9dd7e8a9ad638f329ce03a8caa2c5cfdc8162278d7ace324e39d0e",
+      "crc32": "a1062984"
+    },
+    "a554d4b68e71861a0d0da4d031b3b811b246f082": {
+      "path": "bios/Sega/Arcade/opr-10185.11",
+      "name": "opr-10185.11",
+      "size": 32768,
+      "sha1": "a554d4b68e71861a0d0da4d031b3b811b246f082",
+      "md5": "866f1a596cc943bc5a416ff3e63cc9b0",
+      "sha256": "66c9211f41bb1c1ff3992d98155fa6ca0dd9e6612b1460a0a86d866c64ca9cfa",
+      "crc32": "22794426"
+    },
+    "f70dd3a6362c314adef313b064102f7a250401c8": {
+      "path": "bios/Sega/Arcade/opr-10188.71",
+      "name": "opr-10188.71",
+      "size": 32768,
+      "sha1": "f70dd3a6362c314adef313b064102f7a250401c8",
+      "md5": "ce4c62deb59049edb9972a5214ab39a1",
+      "sha256": "03071f67b1a46fdc68264c39737b71fbfd7648f5c1d0c9977722236d2cd86116",
+      "crc32": "bad30ad9"
+    },
+    "e7c8ae6c59742e1de7ec5a95c5aebfab5716d959": {
+      "path": "bios/Sega/Arcade/opr-10188.71f",
+      "name": "opr-10188.71f",
+      "size": 32768,
+      "sha1": "e7c8ae6c59742e1de7ec5a95c5aebfab5716d959",
+      "md5": "7300090310ef7dc5cf4b7ebe06a38e66",
+      "sha256": "70bdd536c317ae552fddfb087fc6baec88001fd3ef526e4683d14e9d8518726c",
+      "crc32": "37598616"
+    },
+    "f467a6b807694d5832a985f5381c170d24aaee4e": {
+      "path": "bios/Sega/Arcade/opr-10189.70",
+      "name": "opr-10189.70",
+      "size": 32768,
+      "sha1": "f467a6b807694d5832a985f5381c170d24aaee4e",
+      "md5": "c23c9998ed1b32918cdb3b0a80547aac",
+      "sha256": "be04081dd3cc8bce30c121689c16a99a69e44761ffcafba4363c00596a081a03",
+      "crc32": "01366b54"
+    },
+    "a3c581d2b438630d0d4c39481dcfd85681c9f889": {
+      "path": "bios/Sega/Arcade/opr-10190.69",
+      "name": "opr-10190.69",
+      "size": 32768,
+      "sha1": "a3c581d2b438630d0d4c39481dcfd85681c9f889",
+      "md5": "e555e967fcbb98d01c2da5730e9f6a28",
+      "sha256": "14c7e31be417c5cf172c700592a1bd705cb7b2f2bc117e5e2fbfbed0239e68c7",
+      "crc32": "7cab70e2"
+    },
+    "7c9027416d4122791ba53782fe2230cf02b7d506": {
+      "path": "bios/Sega/Arcade/opr-10191.68",
+      "name": "opr-10191.68",
+      "size": 32768,
+      "sha1": "7c9027416d4122791ba53782fe2230cf02b7d506",
+      "md5": "edfdde9f0a1f2ea98139c9823a190e13",
+      "sha256": "00dbafb0d0761928753096eb22b7c66f36ad876fb8ca69def10b27032ffb9795",
+      "crc32": "20a284ab"
+    },
+    "686bdf44d45c1d6002622f6658f037735382f3e0": {
+      "path": "bios/Sega/Arcade/opr-10192.67",
+      "name": "opr-10192.67",
+      "size": 32768,
+      "sha1": "686bdf44d45c1d6002622f6658f037735382f3e0",
+      "md5": "e36e9675a128d78acb191781e2271ae5",
+      "sha256": "15c73de3bf08f02b1900fe0967815a520a8feac5ebf83eed154d7fdd1340444e",
+      "crc32": "770f1270"
+    },
+    "417ce1d7242884640c5b14f4db8ee57cde7d085d": {
+      "path": "bios/Sega/Arcade/opr-10193.66",
+      "name": "opr-10193.66",
+      "size": 32768,
+      "sha1": "417ce1d7242884640c5b14f4db8ee57cde7d085d",
+      "md5": "4980cb65d6ef5d4c4910d28fc200d369",
+      "sha256": "23a5620c028e85b1635958129059e27f0120630c675f2ffdb0337b629925383d",
+      "crc32": "bcd10dde"
+    },
+    "03697b892f911177968aa40de6c5f464eb0258e7": {
+      "path": "bios/Sega/Arcade/opr-10230.104",
+      "name": "opr-10230.104",
+      "size": 32768,
+      "sha1": "03697b892f911177968aa40de6c5f464eb0258e7",
+      "md5": "e58109f14a0a4891afed803580577833",
+      "sha256": "ca14d079471b7e6d02032c2ce265387df3ab9554b4efa74769f4defb8c5849c2",
+      "crc32": "686f5e50"
+    },
+    "8e1237b640a6f26bdcbfd5e201dadb2687c4febb": {
+      "path": "bios/Sega/Arcade/opr-10231.103",
+      "name": "opr-10231.103",
+      "size": 32768,
+      "sha1": "8e1237b640a6f26bdcbfd5e201dadb2687c4febb",
+      "md5": "faf3f323326434cebbe3536359724985",
+      "sha256": "204220bcac2cd9c6ef18e5a04fdb34efb596363099e420669e5ddeb689f3ffa4",
+      "crc32": "8908bcbf"
+    },
+    "e3477961d19e694c97643066534a1f720e0c4327": {
+      "path": "bios/Sega/Arcade/opr-10232.102",
+      "name": "opr-10232.102",
+      "size": 32768,
+      "sha1": "e3477961d19e694c97643066534a1f720e0c4327",
+      "md5": "7d6cae678c6a36bf0712958ee0e7711a",
+      "sha256": "16794c71f30c97e9cea1d35bd96e1f03caa5751c9711e03d28e0df511c426680",
+      "crc32": "776ba1eb"
+    },
+    "09164e858ebeedcff4d389524ddf89e7c216dcae": {
+      "path": "bios/Sega/Arcade/opr-10266.101",
+      "name": "opr-10266.101",
+      "size": 32768,
+      "sha1": "09164e858ebeedcff4d389524ddf89e7c216dcae",
+      "md5": "786da8c971d530bd51400da1904d5a3d",
+      "sha256": "87b6a5dc87720d7ec4bce55fb692619b84fd7b8a4ad6840f4214d3ac513bc9c1",
+      "crc32": "9f6f1a74"
+    },
+    "a7e0143dee5a47e679fd5155e58e717813912692": {
+      "path": "bios/Sega/Arcade/opr-10267.100",
+      "name": "opr-10267.100",
+      "size": 32768,
+      "sha1": "a7e0143dee5a47e679fd5155e58e717813912692",
+      "md5": "7ca240eb19818825f9d59d26b3037f69",
+      "sha256": "736773e82afccac7fa253d0d43b13f0f23c365fbbbf860597b68e13286f3ea4f",
+      "crc32": "a85bb823"
+    },
+    "b3480714b11fc49b449660431f85d4ba92f799ba": {
+      "path": "bios/Sega/Arcade/opr-10268.99",
+      "name": "opr-10268.99",
+      "size": 32768,
+      "sha1": "b3480714b11fc49b449660431f85d4ba92f799ba",
+      "md5": "080b53f5d3952a8a07981f9f66997887",
+      "sha256": "086285c30b1453ab797ace7dcd7665440fa187cfc6407d391d3bb96fba9f549f",
+      "crc32": "95344b04"
     },
     "9c294250f54b4e3f60e3d13f73ee80325e683b04": {
       "path": "bios/Sega/Arcade/res/tilemap.bin",
@@ -44761,8 +46426,8 @@
       "crc32": "af93ff9c"
     },
     "8951d1bb219ab2ff8583033d2119c899cc81f18c": {
-      "path": "bios/Sega/Dreamcast/dc_boot.bin",
-      "name": "dc_boot.bin",
+      "path": "bios/Sega/Dreamcast/dc_bios.bin",
+      "name": "dc_bios.bin",
       "size": 2097152,
       "sha1": "8951d1bb219ab2ff8583033d2119c899cc81f18c",
       "md5": "e10c53c2f8b90bab96ead2d368858623",
@@ -45326,6 +46991,15 @@
       "md5": "851e4a5936f17d13f8c39a980cf00d77",
       "sha256": "42139ed610747190c8ca9046c799907b52582c0d642b5f52f1548d9c1d4a86f8",
       "crc32": "e3995a57"
+    },
+    "4f06d20c997a79ee6af954b69498147789bf1847": {
+      "path": "bios/Sharp/X1/FNT0816.X1",
+      "name": "FNT0816.X1",
+      "size": 4096,
+      "sha1": "4f06d20c997a79ee6af954b69498147789bf1847",
+      "md5": "fb31145036be80d392c95ff50ee8553c",
+      "sha256": "e356dd1992708d2bdf03d4029ba07a8177158e1cb0eac145f881ed8dcdae35d8",
+      "crc32": "8f9fb213"
     },
     "c4db9a6e99873808c8022afd1c50fef556a8b44d": {
       "path": "bios/Sharp/X1/IPLROM.X1",
@@ -48569,6 +50243,13 @@
       "6559697f76592be77a7a9ff3bfb6711a": "9b9c9f0af3de914de677ba8e19f4190673142c1b",
       "4a56d56e2219c5e2b006b66a4263c01c": "f590ccf688b4c05fa1da5c5dd92c224545170c3b",
       "3a6561f8d2bb8424e6797920759962aa": "7b5be2c65e378f736ee4689303349d80dc425f5f",
+      "086349c7b939ee980df45b614ce00e2f": "802adfa42a0c1cde3c33385cb3eebcead70bede4",
+      "fbc6b88733b6978267715be6a7773df2": "65eac36641f01942f0d2c34e2b27c26f930abb32",
+      "415da334e5653d0685d9b6a930be64eb": "aa73b11ba0787ec8bf59d7d1aa327be791506edf",
+      "38f040484743c7320d3fa26b606c6642": "4067cc49b6a2731d58db041e84cf7796d29765c3",
+      "a8b4c19955fee853f05bb977c3abf1c2": "adfd8a50daceb9140c83880886dd15b0e705e6b2",
+      "190dd9c19062a8af27d811fb60d18b24": "e9623af0ae27632b55c037dde2dc5c0a07b1f466",
+      "5ac13a82927b6e0a69a7bc5ec539d1ba": "37fd0af4db5ebd5a704ee65e3a0a1a67fe325bc5",
       "361f60b1d3ce84e17f027f3e547e3091": "b4ff14ed8c3e37a4b45ce2d80c692961ffc88270",
       "7b51d463324b6bf26e86c4afb7316a3a": "8cf0aa7f9dca4d77485e605fb0e2173a734633bf",
       "7a14456d6e8afaf540f2368fead25f26": "78c8e1c3c033b65758b7e53a9346b44d037fea7f",
@@ -48586,22 +50267,38 @@
       "eb4099aeb42ef089cfe94f8fe95e51f6": "d7ef86bd03de7c1d0e2b0762e04b6f8f8d26dbdb",
       "dfaae8d206ffb390ed1cf9529ccc123d": "46278151f85b74951592d57155441485fe3e0274",
       "a3c74748f4b1d08f2247b16099db372d": "4b92936f396c8199f745d3ed0ff588a324b8dd70",
-      "c85b8132799f1b2ad3754a97947809d2": "838934ee5b8fcc81883fb664526b3d281840b2e9",
+      "f4eb6aa12a0923a845cd169a9198acab": "eac782be9f6ebe5dfb09bb4a5342d8aefb82d527",
       "00dad01abdbf8ea9e79ad2fe11bdb182": "deb62b0074b8cae4f162c257662136733cfc76ad",
       "5bc25f80395a68790a69b7eb3e57b897": "f677361cd05cf2d146730890298985290b3dbc69",
       "bfacf1a68792d5348f93cf724d2f1dda": "489256f5e2001070d2ad94c90d255282c71ed274",
       "64477b600ad6436f3304624bf02f993f": "68b780f40623e51a421faf374ae5a84a53a81279",
-      "87cc944eef4c671aa2629a8ba48a08e0": "c0c001ec80fa860857000f4cfc9844a28498a355",
+      "9b5e9f404ba902a60a7925ace94e9c14": "2b61f36b22933f3bec237818ecc959efb016d652",
       "0329b5c0eb126c6da029b09ae63e707c": "125e74975da3f7ac643232210ab37c33e4ece9ca",
       "3263c8d3320aa7934e8d4806888a8a31": "ed7d7a1de52042e1b0d9467f41c5105620fa165a",
       "101163782d87442d74f5e98c50c9f912": "f1ccedb2c6e8f15cfebab52c3923e4b35f4df43f",
+      "e96854681b9a548dc311e7d70906423a": "7821398e77ca91837548826773157c427a2ba018",
       "3f5f4c2626a2ff0b590ebba998a7d562": "2c178083ac2906cecb7e331d7111f7766a353052",
       "ca5f3a6d0fe963ec2db8f8f636f90ca7": "de78a0b8df78d5ffdb1a274f80d877a96ef204aa",
       "982982a7862ef09b996b777363e38989": "14311945b06a5d013d1df5ce961ab47fbd46fb2a",
+      "af79a13aeeb4b97dbfd4f9f0f3630173": "b23ce6c1cc03e366cedcba01e9f01e7ed47c7856",
+      "94b5b8cae5c6d8417acc75c1c2d28914": "1c8b9163f121afba6f43d5a55dda504bb66a32c5",
+      "f26fa7c1a2295d68b26b72c43c281506": "b6410ccf4a291e028fb05848f8308200f9eb2ea7",
+      "84305bd65363692f97b14ce5e74a47cb": "79fbda9ec65e377a4e0e70bfd70bd4447f286ddd",
+      "2076afc24ba5c3c5177d5d4f4be555e3": "908a53ee5dc154dc8e429ec9637b37b22f223f6d",
+      "aa31ebfb49813c5e6b75ea6e940af7a2": "bb31d8f5f5adbe2aa861029b57670329e6d70ac7",
+      "92f07d9d13c599742936962f22f96425": "f2f71013cf0895d0707c09ecb3bf82371ab92f5c",
+      "6f684b1a0a082c9025fa7fd57c171924": "3cbd7d975a8469177f511aa5e9f86d7015c891a0",
+      "7f4e784d7b3bef084d5a0509f2b49959": "878021d181718b2d87f20dab0c5774e111f8b7d0",
+      "e4e94835661c45951a9f1d273cafcd99": "d7538b16782abed604bbd6de8fc90da580757497",
+      "272b5c4ce3442cc784f3efdbe5e4aa8d": "9dab5428a2694d424a93a315cb974a14e9ae64a3",
+      "edd90721e25d61ca9801499e8c11d14f": "764e8889e2ff9e2bf0c56585f32315aa5c19076d",
+      "ee8b27953af81db9be83ff3a136b5a3f": "133a9e6e7ae80e2dbf20c7d454006939ef1cd148",
+      "1970a295b4ca3d50ecdc426f463ab98a": "e8fcd1507a6811f0c2643d0497c0ac3f405f2438",
       "8c9049474f49ce0ed857b3f9670b2667": "2adbde3ef74c431fbd700cffd4cd1d41251a8833",
       "3f956c4e7008804cb47cbde49bd5b908": "4257bd14b541fafbd555cb98ba079a3416a45934",
-      "1a524bfa489cec90c941e6587d553a56": "b88619a845cbba8bc04ad396e99a02aa6d2da7c1",
+      "162e30ea1f65c21378c09fc170d971d3": "0444bfcbcf9cf63aac4e98957fce536e6a45ce73",
       "4698414be3369fff17bf6d3111734c6c": "9428d8b7c6d4db78f00a58915dccdf33f3b5d98b",
+      "b7692d3ae9459bdb52c385acb2dde067": "593df141c3a5cda53b90e167cc02a2331929f767",
       "69d93ad80b3f167d24cd31b72f9d4039": "2e50b96a1d37e9407209e291d5f549233287ac77",
       "3bd04a2e4edcc77fa0e62ff79a99b569": "1af645230c3f1741fb1f7efef05e9efe768e9dcc",
       "20c241b5bf924f2338d79dd1d37769d5": "fbba87e9d6852862252d31dd919f943c8edd7eb7",
@@ -48614,6 +50311,7 @@
       "8fbf2c97f256a665f8f40032c4f9e9f2": "84a6ec5f148b63cccc362b5d9a13a2717d18aa8a",
       "ffc0375b75ad461cef55aa3905ff00c8": "5024b3bfd04ccd2061eb60d2eca254e8faf44f5c",
       "d2748ffa636d658babd6315d967f6d64": "89d1a70142fb4e768e24854f98799c3fd1345ba5",
+      "dadd4ca9dd069fa648dc9838d99906c0": "41c639c6a96403c4a42a2799bd7928f091226e2b",
       "79ae0d2bb1901b7e606b6dc339b79a97": "06fc753d015b43ca1787f4cfd9331b1674202e64",
       "bd444b3dc24b58688077103480b812d8": "52530b657d5e035101421eb540fd6df5c7415986",
       "e5069aba7da5b2c0f13091360d84068a": "d1ba776e1ec56281fee157cb2e44487b1db18b53",
@@ -49832,6 +51530,56 @@
       "be09394f0576cf81fa8bacf634daf9a2": "31e73e66eccb28732daea8ec3ad1addd9b39a017",
       "cda2fcd2e1f0412029383e51dd472095": "3422a7735f0f959d990ab39512d8815a5d8eab7a",
       "b2869f8678b8b274227f35aad26ba509": "6aa529a7b1b6de53e8979e407a77b4d5657727f5",
+      "57af4ae21d4b705c2991d98ed5c1f7b8": "79015323128650c742a3694c9429aa91f355905e",
+      "87bb251707d0a2c915d6e0c69fdb0fed": "c4fb4a714e48a7bf6c28659de0302183a0e0d6c0",
+      "b86ce827c9108fbc7b9e02c690e81a23": "d53a7884404f7d18ebd60dd3080c8f8d71067441",
+      "ec9e71614010c4efb851b83bcd685e9c": "638f8aff51c2ac4f99a55b12c4f8c985ef4bebd3",
+      "06e46af13d13aa869218275e64d48b00": "aca3f7321ee7e6152f1f0afad646ae41964de4fb",
+      "46b3cb2140f244c0ed1150c819e7bdc4": "29ed066d513f2d5c09ff26d9166ba23c2afb2b3f",
+      "01f6903033b90cd506cde7802ec743c3": "ceb6e1a1bf7e08eb9cbc651afa29e26adccf38ab",
+      "6792dfeaec2eda9db164c59e45e94214": "9b0a0cef56d00035c611e07170f051ee5e63aa3a",
+      "39065497630802346bce17963f13c092": "1d503e56df85a62fee696e7618dc5b4e781df1bb",
+      "9e344195fe2937e3148b02972c80a59a": "267654823c4fdf2167050f41faa118218d2569ce",
+      "12a4202f5331d45af846af6c58fba946": "adc7c31e18c7c7413d54802ef2f4193da14711aa",
+      "cf32a93c0a693ed359a4f483ef6db53d": "0fad19dbcdb12461c99657b2979dbb5c2e47b527",
+      "187b8c713b51931e070872bd390b472a": "aa136e91ecf3c5ac64f696b3dbcbfc5ba0871c98",
+      "049e657afafbdd802e8c6a4f88f3d730": "21940ef5f1bfe67d7537164f7ca130a1095b067a",
+      "1ae0ea224f2b291dafa2c20b990bb7d4": "87cc04d61fc748b82df09856847bb5c2754a2033",
+      "7360b296d64e18b88f6cf52289fd99a1": "0e2e4ee3f2d41f00bed72f9ab588b83e306fdb13",
+      "da92801e3a03b005b746a4dd0b639c7c": "6c4fa9465f6091b174df27dfe679499df447503c",
+      "479553fd53346ec84054f0b1c6237397": "4ff0f11e80f4b57430d8f0c3799ed0f0e0f4565d",
+      "e0346953e77bd1353ebf53aaa5b6f0b0": "abb26418b9e1614a8f52bdeee0822d4a96071439",
+      "916bb933b21b9e8f4411d15727ec5d20": "0bec500cd97bf7c38c894bc5265aec19307e7c06",
+      "a0ce8439d1b8dcf2e1430461f7233a72": "ab16f56989b27d89babe5f89c5a8cb3da71a82f0",
+      "ada295382a1f2df772a7e5c5c6f34215": "d3b78c3dbac55f5199f33f3fe0036439811f7fb3",
+      "dae964d64b7843ff86c008d396dda208": "f1be619c106641a685f6609e4d43d6fc9eac1e70",
+      "6a82f92aea2a3afa190fe32d565f39e7": "01228eae6f066bd9b7b2b6a7fa3f667e41dad393",
+      "3454c06fd2275f5bcbfe936dcdf8059b": "c53e180a96649ceb3f421739e8dc66faba7cba44",
+      "3efff682000fd841b4dd6560bf53e37c": "e37b3bfd801eb19dea50cf8b4a6af8613c3520d3",
+      "139e72a58b7ddb2f92ceb18c8735c53c": "02bd4b0c8508b3874b95799a9a63caf369c837de",
+      "2fce6a76c738d1a10c189bf0660d868e": "245abbe76581558d270cdbb6fe55f56748403d8e",
+      "29a82eb54e73ebc5673c718c489b174b": "3e067cc621e4beafca2b90cb8f6dba975df2855b",
+      "9880432e633b15998d58884ff34c4e70": "0157a2d55b7ac4eaeb38475889ebeea52e2593db",
+      "7f87889ca7ee2537f0c1993d35d0fb18": "174ace3a8c0348cd21d39cc864e2adc58b0101a9",
+      "cb8e8404c0b28eda10469792dfd1dbc2": "5e5502ce32f5a7e387d65efe058916282041e54b",
+      "51a38bfef8f9e72cb64bf7d874b4c8c6": "38742bdf449f629bcba6276ef24d3daeb7da6e84",
+      "16ec21443ea5431ab63d511061054e6f": "96a0fa56e0c937da92971d9c99d504e44e898806",
+      "6eb1c1bfa6ce1444737794432966dfcc": "0414b3ab847c8977eb05c2fcc72efcf2f9d92871",
+      "537498d75ecf761d4991f9ebd85129ca": "df154939b934d0aeeb376813ec1ba0d43c2a3378",
+      "3e8dd04902dc9fee172084698f84695f": "6c5b0cce97068f8841112ba6d5cd8e568b562fa3",
+      "80f4d2351ee19673820989919c7c1e9b": "b42a2050a319a1ffca7868a8d8d635fadd37ec37",
+      "049e2d26fde71a741f6075ecbf0a432d": "9b4a5134d20345171e7303445f87c4e0b9addc96",
+      "2994d5463ef8524deb4231a9c764767c": "3b69f6e7cb4c18bb08e203fb18b7dabfa853390f",
+      "ac34591c820fe607d527e04e95bce465": "0ad7ac2db7da692d972e586ca0dfd747d82c7693",
+      "44a4ae400e3b4f7533a47ae0df1be78c": "161c96b4ad20f3a4f2321808e37a5ded26a135dd",
+      "89f5263665a8dc10c8f8abc38f5f7eb9": "7c7e07f016391174a557e790c4ef1cbe33512cdb",
+      "b3c450c36a88b491281d18fdf3e94ab0": "a3d9e5be091b98de39a046ab167fb7632d053682",
+      "8b9237706f47a9b3498d8f881ef0244d": "587d1e90950675ab6b12d91248a3f0d640d02e8d",
+      "7e6e41b5b60fec798743afd7063b42ed": "dae61ac03065aa2904af5c123ce821855898c555",
+      "d390e340e94e1bef0f2fdfe9fa850993": "4fd85ab6647ee2ac7ba40f729323f2472d35b9b4",
+      "317f93bcbc5ee15da085a51a306f2c61": "c9ead45e6674d1042ca6199160e8583c23aeac22",
+      "0313e31e5f31e1f739c2377792460d67": "06de7ec017a5e78bd6746d89c2ecebb646efeb19",
+      "f0587624dcd7685710a8fdb35939617f": "ce0137ed69f003a299f43538fa9eee27898e621e",
       "7253a9fabc089044b3b8e9156b07d6f9": "75c9fa407e0a027713ed563f135747fffec0590d",
       "0b00a4ab6b68960efa49272d416b040d": "2ea6df7253ce0a14094d20cd04c098505cc14c23",
       "19addeb0da536c753797ed59b44d5ba3": "8833196b70002f7f2068d8f6c5eb96862777b018",
@@ -49915,6 +51663,79 @@
       "36d690ffadc08a31141ffcd573320518": "80d34a21c6bc9732f93c754d4b71cb7b22e87a99",
       "5b69f69a5ec56588b92bdc138a3cc3af": "bf4aed0b09bae6dfe2153a6f3bd91e9146705073",
       "4239d6f44a0d78d27c69f9b95885f48e": "a89263689f19e046dab6dadea24c5d07270548a6",
+      "6c9fd1019c1c3ce9e97b807bbc455e69": "2a411c35e2385983fe3bb5f771f0237d034dff32",
+      "7138354ba08f606ba51df60c18015635": "8060cd4b49052572bb5ec929f8ad21e2addce237",
+      "561fa658d75427a80eafd3308bf68123": "0f80bbcb8f310e449d56e23118a230aa88d82bc2",
+      "b745b4d4014195cf70208d3fd268cfea": "3494864cf6f00720d1a65d97f8574b8dee0d9c89",
+      "77a0129e238cee7d2ec3bc92285b8c12": "a308b15f93da34961c0141ec95b98c211557e2d5",
+      "492a7cbc219c64a41562fef20317e2e4": "9be25b1af080aee863441cf0d25d0f984accb086",
+      "7b63a5a0169aaa61ec3137fa7cdc3402": "0633f78a0013a62be974233a3cad6a5d3cbe90d1",
+      "99bb4fafd75e57cfd9f3a8d4ac9303e2": "4e1d4a0deec702679961ffde470f8929d903bd5c",
+      "a084ecdaf1ab0d0cc66511ea8d093d04": "cb30f01c46dad83343999c609d6f82092e2e8f54",
+      "30b76c45ca0712418239d2b15c65881a": "6ac3c1317c1acb83902397d7767763cca4de357a",
+      "d7bc6e0584c7466407c399b495dab25c": "ac0f6402450bcf077aa95255e66e4c4c3cdd9ed8",
+      "e540cada31a763e1d815adc7543a87bf": "50237ffea703b867de426ab9ebc2af46bac1d0e1",
+      "9594ec8aabf958a9bbebec443df52333": "27d6ad9554be86359d44331f25591e3122a31519",
+      "c213bd59d38920726ed438e7a61417a4": "1aca289240caa6d4bf811d301c338c157b6902a1",
+      "6118d50576ed67ddb2f22b248c89a11e": "ee9ceef1fc7a328ee82006cd504e72e16f21b3c8",
+      "d35bab5b74fc21fef900b14b0807e126": "29a0e73d6b1df7dfa6c7ecb3f454bac9150017a1",
+      "70e208d5992be21b26fe796d76964c1d": "c2d2c1660f3f4a5e70add7f294393f51c7f89129",
+      "ed55c0643fe1664eb4fcbbd8ea469f6a": "02fa057f2c22ab199a8d9795ab1ae570f2b13a36",
+      "9db3481d8fb338e9e79ec0b743a832e3": "94aefc745b51015426a73015ab7892b88e7c8bcf",
+      "eb9b4027cc681d3f0c9f5ef08d4defe0": "d300c52e2c2e9d4c3b9c2dcc1c3000567792a1e4",
+      "b3278f348d8b7924557ad99a36f11da6": "04e92db350973bb5977d642bd4b8988d2a8a7b42",
+      "6b491828044e69cb30b29ee849d686f2": "54430d4d0462860860397487c9c109e6f70db8e3",
+      "d1e055defd534fd332f10698c4ef3428": "a641b505bbac97b8775f91fe9b83d9afdf4d038f",
+      "0636f46316f3e15cb287ce3da6ba43a1": "dc0794499b3e499c5777b3aa39554bbf0f2cc19b",
+      "2057a38cb472300205132fb9c01d9d85": "7b8b0e22ecd002d43d5ed1bb9f9a63d9b9948032",
+      "69e2bd1d08c893cbf841607c8749d5bd": "64769b7a8b60ffeefa04e4afbec778069a2840c9",
+      "5f85ff5ea352c1ec11b084043fbb549e": "082ae803994048e225150f771794ca305f73d731",
+      "04a285d5dc8d86c60679e8f3c779dcc4": "c9e0529470edf04da093bb8c8ae2536c688c1a74",
+      "b086a6980fc5736098269e62b59726ef": "5134dd64721cbf093d059ee5d3fd09c7f86604c7",
+      "f453eb2df6daf21ec644d33663d85434": "40fce6a94dda4328a8b608c7ae2f39d1dc688af4",
+      "c66b49cd7082d1b81442fb2704542401": "1f5f7013f18c08ff50d7942e76c4fbd782412414",
+      "9696472098999c02217bf922786c1f4a": "daa61762d3afdd7262e34edf1a3d2df9a05bcebb",
+      "df9f29de490d7f269a6405df1fed69b7": "045e27a70407d89b7956ecae4d275bd2f6b0f8e2",
+      "e7f07d6be5be0891f3458d6fcc8ee383": "108f1c94b2d3d10bf35be8a1c615065895920616",
+      "11a9cc95551db3e8c9fbc494d14001ae": "3fc07d174924e7c48b4758a7ba76ecd5362bd75b",
+      "41d32cd4d3568f0efe225c525ef55a89": "8b890c4ea4a0907b420aa0c59f0e9d6286473dec",
+      "64d2fef130dc1ad6615c119a15a356b0": "0b343f3028ca06c9e6dc69427d1b15a47c74b9fc",
+      "29b5260fa154057f878a8720f60448eb": "62f17c408be0036d00a182e94c5c88b83d46b625",
+      "149d5b61204a3be0faff28cf1dc480a5": "59b1f8dd6fe981ef9a7700adebf6e1adda7cee90",
+      "3bc052db30ce58620a7b1fc3b25e3212": "c2a8b10808bf51a3c123ba3eb1e9dd608231916f",
+      "b43d9a5d42f365d883546326e10691f2": "376d483db2bd1c775d46424e1176b24779591525",
+      "c5ed1b2fd3b02b5617599c8a758d07a0": "14fd39ec12df7fae99ccdb0484ee097d93bf8d95",
+      "9a256e18b447734bc830783dab95b6ef": "1066dcc849e6289b5ac6372c84a590e456d497a6",
+      "451293f4ea207948f28366576f803b0d": "13423011a9bae3f3193e8c199f98a496cab48c0f",
+      "0821cc578a9ae84f09a61b92117a8ef8": "a8870f2f3767cda8e28662c7880b87e904c2e11d",
+      "d12d388005013465d97c7b172938f38c": "b9e665097c09a9b8cb95fb3261d8494bb2a57a0a",
+      "3aee7f0511c136bc958d08fff9bf26f8": "7781d4717917262805d514b331ba113b1e05a247",
+      "8c9874d2eb05d0485bb3ea99e32e3c78": "74002f5cc542df442eec9e2e7a18db3598d8c482",
+      "b43081e66779adffcdbaf7e32a02c34e": "bc8dc4dcedeea5bc1c04986b1f105ad93cb2ebcd",
+      "20dc406d86e99362472be140c3b682b4": "dde1a46c8f83e413d7070f1356fc91b9f595a8b6",
+      "c90257a7803855b87d93261bffb8dea8": "e21ae524d5b4d00696d293dbd4fe4d7bca22e277",
+      "4e1c2abfa29b4d4e6d8e5943d9fa7710": "98302006ee38a17c09bd75504cc18c0649174e33",
+      "60e477dacb126dfab422e5b84164d582": "99663bfb61798526e092205575370c2ad34249a1",
+      "0a84c353542417efa2f8afea1cad7659": "8b4b2afea543b96b45d6a30365281decc15f2932",
+      "7c38eaf64d0ceff4d3ae16e979acb200": "4135102a491b25fc659d70b957e07649f3eacf24",
+      "3ea16a4a92088bc401333aca891ff94f": "b882e97ee81b9ba0e7d969c63da3f2052f23b4b9",
+      "a96ebfafb3a98cb213fe324966e6dba6": "93e045609466fcec74e2bb72578bb7405281cf7b",
+      "0641b7bea81a21679e005f55b34b2e8f": "5df1efe4203cd076292a7713bd7ebd1196dca577",
+      "27cc3c8202f5bbbe2afa26966b3083ce": "382d2028e0dc5515a68843829563ce29018edb08",
+      "65c646c0b6594b309d83a84ddd8e8453": "98c344831cc4dc59ebb39bbb1961964a8d39fe20",
+      "c80c941244962bb182165c636f00997d": "b6566fd761e2e6ec34b61ee3bb043ef62d696b5e",
+      "afe2fc8367cd2e614ce93d44649837bf": "a6d34c3bf0de93c2b71010948c1f16354996b5ab",
+      "010fe851f41f577d23864bc808932352": "8e73e9d1456aadd65bb89cc813d1aa1354c90d68",
+      "2605f21387e6ee45ecc38099abc98f17": "1d0c6e75f2d08e15804be07c7fe23ecebe9ca49b",
+      "1fb579ec196b97ed81019db98b84625c": "8be89a060204002d636c965d064e6cac1eeb9534",
+      "09801819cee34e89ea20220b4db3baef": "50502df4d16c38608bcaea758791fc3419ee4589",
+      "9a54d01bd84500e3f7e7abb14d853884": "59997202571b4ccb021c7b71622e57742471374e",
+      "26363a701e3a70dbbb4299bbff4ed76a": "9549f7ae63f463473119c64bb74df884c7b0e70c",
+      "364dd8f7a8c5338227545c7c41960036": "976af8c04c3f6fde14d7047f6521d302bdc2d017",
+      "52077be25095af55bfa8c2d4dac36412": "7deb71f14c2c418400b639d60066ab61b7e9df32",
+      "8ecd11275ad418d302cd358b408b01ec": "10f1a7204f69b82a18bc94a3010c9660aec0c802",
+      "ec2a977f0c0645dd284010160caec636": "c0ee6f9443fa82c0fef5d497b3e76aa3077f1865",
+      "19d55c537767a7424a8e376d62fc2ac0": "72c60172fb1ba77c9b24b06b7755f0a16f0b3a13",
       "72ae1b47820fcc93cc0df9c428d0face": "5f4aed208301449c2e9514edfd325fe9dead76fa",
       "dbaa5c4e20a11000d1c4db3a2a28f374": "f3f2a11f3ecd91cd62d74c3acfad68a4cc6ddbd9",
       "c011b428819eea4a80b455c245a5a04d": "9259b87edfe9b9f6d0749788a75a6ccf158f50aa",
@@ -53339,7 +55160,45 @@
       "f88354ec482be09aeccd76a97bb75868": "1e5b0b2441a4979b6966d942b20cc76c413b8c5e",
       "7f041b6a55cd7423a6c08a219335269e": "4103668c1bbd66c5e24558e73d4f3f92061a109a",
       "2f19b925f2c6972c7cf299d42dcd7498": "39a0fec854e438f6757882604a8dc56e62e401d9",
+      "0cc087bbf1d5ad46319756b5b17ab9be": "01c8a819587a66d2ee4d255656e36fa0904377b0",
+      "eddae6f176ad5a3438e4dae1b8c4d4fb": "77d18092e3c10a400e62eeba562f161398fe37a7",
+      "35bdcb3d8eaae6505af896a55f26dda1": "f715bde96c73ed47035acf5a41630fdeb41bb2f9",
+      "73486b2da791109e322c71cbaf51338b": "0e182fdac70423a85dc2b996c70bcb3954e75e10",
+      "5c82ed7dd7450f5c037b4dcaa0103218": "a4e3cfca4d803e72bc4fcf91ab00e21bf3f8959f",
+      "7197dfbdf83029abd56e72b98b274c63": "e63fe5f7950af35131539836f18fa056767c2c80",
+      "f8729ace245eb8fc4854819f783f6042": "57d5219bd0e2fd886217e37e8773fd76be9b40eb",
+      "9556c737b5506241a5a58635e58bdbad": "834bf361ca67cee3793c324bb26cf0ec82a72068",
+      "f0f9e2cce2d64dbb28650b11679f745b": "2136c9572e26b7ae6de402c0cd53174407cc6018",
+      "591daabf7c4b9005171f9af83068f3a1": "ac319cdafb156adcf6be29ae1b82d46d3048022e",
+      "94bb116334e7076aeeee5fcdcb536f87": "31e870f307f44eb4f293b607123b623beee2bc3c",
+      "ab1a9fe4feb5d5bd867552e3740bdc07": "bf3ff05bbf81bdd44567f3b9bb4919ed4a499624",
+      "bcf3cae054791aa0c2c9d3c144bb1682": "4b75526df71bba0d588f47a65790a3d21b236302",
+      "8ff3212b3a2e37a37ba73a998bbc424f": "69236cf9f27691dee290c79db1fc9b5e73ea77d7",
+      "161ceb196fcc9825bc981f933f305b5e": "d6e1de6b562359574d94b88ce6101646c506e701",
+      "2d2b6149f1bccaaebf9c792f292e36d0": "1970895145ad8b5735f66ed8c837d9d453ce9b23",
       "e95415b161121bef35ade12367138c63": "00f43f5bf58dd79135565d52c4eea7e314ebc810",
+      "9bc7fcfda9dea3a6d1c527b3146a4a95": "21320f945f7c8e990c97c9b1232a0f4b6bd00f8f",
+      "7da2895e20d2152ebddbdd2df29f3bd4": "a3746a2da077a8df4932348f650a061f413e8430",
+      "5ed55433e64a4daecb9a0dbfc8771131": "3a9ce8547cd43b7b04abddf9a9ab5634e0bbfaba",
+      "5d09103268ac520609fb10ba186374b1": "9c8509fbed170b4ac74c169da573393e54774f49",
+      "187a6496e67c95e119ce97600902d178": "e5d8c67e020608edd24ba87b7687b2ac2483ee7f",
+      "107a513ce97fb3b88d97425f19054471": "a5f2532613f33a64441e0f75443c10ba78dccc6e",
+      "4a41f5ad01d78f52e8b6187c971c7270": "9f7210cb4153ac9029a785dcd4b45f4513a4b008",
+      "f6b7defe9860aa8a2f2e2915f1d9b94d": "4399030a155caf71f2dec7f75c4b65531ab53576",
+      "866f1a596cc943bc5a416ff3e63cc9b0": "a554d4b68e71861a0d0da4d031b3b811b246f082",
+      "ce4c62deb59049edb9972a5214ab39a1": "f70dd3a6362c314adef313b064102f7a250401c8",
+      "7300090310ef7dc5cf4b7ebe06a38e66": "e7c8ae6c59742e1de7ec5a95c5aebfab5716d959",
+      "c23c9998ed1b32918cdb3b0a80547aac": "f467a6b807694d5832a985f5381c170d24aaee4e",
+      "e555e967fcbb98d01c2da5730e9f6a28": "a3c581d2b438630d0d4c39481dcfd85681c9f889",
+      "edfdde9f0a1f2ea98139c9823a190e13": "7c9027416d4122791ba53782fe2230cf02b7d506",
+      "e36e9675a128d78acb191781e2271ae5": "686bdf44d45c1d6002622f6658f037735382f3e0",
+      "4980cb65d6ef5d4c4910d28fc200d369": "417ce1d7242884640c5b14f4db8ee57cde7d085d",
+      "e58109f14a0a4891afed803580577833": "03697b892f911177968aa40de6c5f464eb0258e7",
+      "faf3f323326434cebbe3536359724985": "8e1237b640a6f26bdcbfd5e201dadb2687c4febb",
+      "7d6cae678c6a36bf0712958ee0e7711a": "e3477961d19e694c97643066534a1f720e0c4327",
+      "786da8c971d530bd51400da1904d5a3d": "09164e858ebeedcff4d389524ddf89e7c216dcae",
+      "7ca240eb19818825f9d59d26b3037f69": "a7e0143dee5a47e679fd5155e58e717813912692",
+      "080b53f5d3952a8a07981f9f66997887": "b3480714b11fc49b449660431f85d4ba92f799ba",
       "756b19b9829e8b1c9903104ff4139f94": "9c294250f54b4e3f60e3d13f73ee80325e683b04",
       "3537e3cfe384cad5dcec34dc63777aff": "fa950979aaa1d4c947473f158f770f3f3c8c45da",
       "a5d31549c638f0dc0ad4f3bb163ba4b7": "f63eca9a1b1e92ee1582ff5e4c0db55193f97e33",
@@ -53426,6 +55285,7 @@
       "1474da2b8fbbb37abce8e7ab5cf9024c": "fec7527ecbf79b1ac697137f770bb8715fe8a652",
       "e634c906c23e62d5d3cd63581e5748ff": "2ca428b70ed1746834d129c11fb8e60a56317cff",
       "851e4a5936f17d13f8c39a980cf00d77": "1c1a0d8c9f4c446ccd7470516b215ddca5052fb2",
+      "fb31145036be80d392c95ff50ee8553c": "4f06d20c997a79ee6af954b69498147789bf1847",
       "59074727a953fe965109b7dbe3298e30": "c4db9a6e99873808c8022afd1c50fef556a8b44d",
       "56c28adcf1f3a2f87cf3d57c378013f5": "44620f57a25f0bcac2b57ca2b0f1ebad3bf305d3",
       "eeeea1cd29c6e0e8b094790ae969bfa7": "d3395e9aeb5b8bbba7654dd471bcd8af228ee69a",
@@ -54101,7 +55961,7 @@
       ],
       "neocdz.zip": [
         "4f28af31ca0defdd73d80edec2fa296908e624dc",
-        "838934ee5b8fcc81883fb664526b3d281840b2e9",
+        "eac782be9f6ebe5dfb09bb4a5342d8aefb82d527",
         "891407e147b2c022ebedf8c51fe3a2f497304906",
         "80c9a25ccf39c6b85d1a7c9c0d6fe527ab45ec1c"
       ],
@@ -54109,7 +55969,7 @@
         "0783012b4eabca599e460988257ec37500501df6",
         "6bbbce094422062bd178d6007bed06dcdd0d8b78",
         "bc0acaefb5fac0cdc05476a9f452391d34a5150d",
-        "c0c001ec80fa860857000f4cfc9844a28498a355",
+        "2b61f36b22933f3bec237818ecc959efb016d652",
         "75de7964a38038c45791960d5f2ec9d26dbdc5e2"
       ],
       "skns.zip": [
@@ -54309,6 +56169,27 @@
         "f590ccf688b4c05fa1da5c5dd92c224545170c3b",
         "6a19d46d3915f2bff823ac34327bb0976fb2fed7"
       ],
+      "jojo.zip": [
+        "802adfa42a0c1cde3c33385cb3eebcead70bede4"
+      ],
+      "jojoba.zip": [
+        "65eac36641f01942f0d2c34e2b27c26f930abb32"
+      ],
+      "jojoban.zip": [
+        "aa73b11ba0787ec8bf59d7d1aa327be791506edf"
+      ],
+      "jojobane.zip": [
+        "4067cc49b6a2731d58db041e84cf7796d29765c3"
+      ],
+      "jojoj.zip": [
+        "adfd8a50daceb9140c83880886dd15b0e705e6b2"
+      ],
+      "jojon.zip": [
+        "e9623af0ae27632b55c037dde2dc5c0a07b1f466"
+      ],
+      "jojou.zip": [
+        "37fd0af4db5ebd5a704ee65e3a0a1a67fe325bc5"
+      ],
       "konamigv.zip": [
         "b4ff14ed8c3e37a4b45ce2d80c692961ffc88270",
         "02dcad570077ee8e7aefec944e91650b99205bae"
@@ -54387,6 +56268,9 @@
       "qsound.zip": [
         "f1ccedb2c6e8f15cfebab52c3923e4b35f4df43f"
       ],
+      "redearth.zip": [
+        "7821398e77ca91837548826773157c427a2ba018"
+      ],
       "sammymdl.zip": [
         "2c178083ac2906cecb7e331d7111f7766a353052",
         "a2d1cfe34d5e62b7c8d6490383fb079ffe7f4a4a"
@@ -54399,15 +56283,60 @@
         "14311945b06a5d013d1df5ce961ab47fbd46fb2a",
         "21194d81d1a27dbf688ea43cf79d312e4fe2d0ee"
       ],
+      "sfiii.zip": [
+        "b23ce6c1cc03e366cedcba01e9f01e7ed47c7856"
+      ],
+      "sfiii2.zip": [
+        "1c8b9163f121afba6f43d5a55dda504bb66a32c5"
+      ],
+      "sfiii2j.zip": [
+        "b6410ccf4a291e028fb05848f8308200f9eb2ea7"
+      ],
+      "sfiii2n.zip": [
+        "79fbda9ec65e377a4e0e70bfd70bd4447f286ddd"
+      ],
+      "sfiii3.zip": [
+        "908a53ee5dc154dc8e429ec9637b37b22f223f6d"
+      ],
+      "sfiii3j.zip": [
+        "bb31d8f5f5adbe2aa861029b57670329e6d70ac7"
+      ],
+      "sfiii3n.zip": [
+        "f2f71013cf0895d0707c09ecb3bf82371ab92f5c"
+      ],
+      "sfiii3u.zip": [
+        "3cbd7d975a8469177f511aa5e9f86d7015c891a0"
+      ],
+      "sfiiia.zip": [
+        "878021d181718b2d87f20dab0c5774e111f8b7d0"
+      ],
+      "sfiiih.zip": [
+        "d7538b16782abed604bbd6de8fc90da580757497"
+      ],
+      "sfiiij.zip": [
+        "9dab5428a2694d424a93a315cb974a14e9ae64a3"
+      ],
+      "sfiiin.zip": [
+        "764e8889e2ff9e2bf0c56585f32315aa5c19076d"
+      ],
+      "sfiiina.zip": [
+        "133a9e6e7ae80e2dbf20c7d454006939ef1cd148"
+      ],
+      "sfiiiu.zip": [
+        "e8fcd1507a6811f0c2643d0497c0ac3f405f2438"
+      ],
       "shtzone.zip": [
         "2adbde3ef74c431fbd700cffd4cd1d41251a8833",
         "d08a271feaab04ac904e6357c23bca95c1cf57f1"
       ],
       "spec128.zip": [
-        "b88619a845cbba8bc04ad396e99a02aa6d2da7c1"
+        "0444bfcbcf9cf63aac4e98957fce536e6a45ce73"
       ],
       "spec48k.zip": [
         "9428d8b7c6d4db78f00a58915dccdf33f3b5d98b"
+      ],
+      "spectrum.zip": [
+        "593df141c3a5cda53b90e167cc02a2331929f767"
       ],
       "su2000.zip": [
         "2e50b96a1d37e9407209e291d5f549233287ac77",
@@ -54455,6 +56384,9 @@
       "vectrex.zip": [
         "89d1a70142fb4e768e24854f98799c3fd1345ba5",
         "2780260cf5b0e5392fb5530a076a1caafbd66004"
+      ],
+      "warzard.zip": [
+        "41c639c6a96403c4a42a2799bd7928f091226e2b"
       ],
       "FB Alpha (ClrMame Pro XML, Arcade only).dat": [
         "52530b657d5e035101421eb540fd6df5c7415986"
@@ -57824,6 +59756,156 @@
       "scpu-dos-2.04.bin": [
         "6aa529a7b1b6de53e8979e407a77b4d5657727f5"
       ],
+      "basic-901226-01.bin": [
+        "79015323128650c742a3694c9429aa91f355905e"
+      ],
+      "basichi-318019-04.bin": [
+        "c4fb4a714e48a7bf6c28659de0302183a0e0d6c0"
+      ],
+      "basiclo-318018-04.bin": [
+        "d53a7884404f7d18ebd60dd3080c8f8d71067441"
+      ],
+      "chargen-315079-01.bin": [
+        "638f8aff51c2ac4f99a55b12c4f8c985ef4bebd3"
+      ],
+      "chargen-325181-01.bin": [
+        "aca3f7321ee7e6152f1f0afad646ae41964de4fb"
+      ],
+      "chargen-390059-01.bin": [
+        "29ed066d513f2d5c09ff26d9166ba23c2afb2b3f"
+      ],
+      "kernal-318020-05.bin": [
+        "ceb6e1a1bf7e08eb9cbc651afa29e26adccf38ab"
+      ],
+      "kernal-318034-01.bin": [
+        "9b0a0cef56d00035c611e07170f051ee5e63aa3a"
+      ],
+      "kernal-901227-03.bin": [
+        "1d503e56df85a62fee696e7618dc5b4e781df1bb"
+      ],
+      "kernal64-325182-01.bin": [
+        "267654823c4fdf2167050f41faa118218d2569ce"
+      ],
+      "chargen-901225-01.bin": [
+        "adc7c31e18c7c7413d54802ef2f4193da14711aa"
+      ],
+      "chargen-906143-02.bin": [
+        "0fad19dbcdb12461c99657b2979dbb5c2e47b527"
+      ],
+      "kernal-251104-04.bin": [
+        "aa136e91ecf3c5ac64f696b3dbcbfc5ba0871c98"
+      ],
+      "kernal-390852-01.bin": [
+        "21940ef5f1bfe67d7537164f7ca130a1095b067a"
+      ],
+      "kernal-901227-01.bin": [
+        "87cc04d61fc748b82df09856847bb5c2754a2033"
+      ],
+      "kernal-901227-02.bin": [
+        "0e2e4ee3f2d41f00bed72f9ab588b83e306fdb13"
+      ],
+      "kernal-901246-01.bin": [
+        "6c4fa9465f6091b174df27dfe679499df447503c"
+      ],
+      "kernal-906145-02.bin": [
+        "4ff0f11e80f4b57430d8f0c3799ed0f0e0f4565d"
+      ],
+      "kernal-901244-04a.bin": [
+        "abb26418b9e1614a8f52bdeee0822d4a96071439"
+      ],
+      "dos1540-325302+3-01.bin": [
+        "0bec500cd97bf7c38c894bc5265aec19307e7c06"
+      ],
+      "dos1541-325302-01+901229-05.bin": [
+        "ab16f56989b27d89babe5f89c5a8cb3da71a82f0"
+      ],
+      "dos1541ii-251968-03.bin": [
+        "d3b78c3dbac55f5199f33f3fe0036439811f7fb3"
+      ],
+      "dos1571-310654-05.bin": [
+        "f1be619c106641a685f6609e4d43d6fc9eac1e70"
+      ],
+      "dos1581-318045-02.bin": [
+        "01228eae6f066bd9b7b2b6a7fa3f667e41dad393"
+      ],
+      "dos2031-901484-03+05.bin": [
+        "c53e180a96649ceb3f421739e8dc66faba7cba44"
+      ],
+      "dos2040-901468-06+07.bin": [
+        "e37b3bfd801eb19dea50cf8b4a6af8613c3520d3"
+      ],
+      "dos3040-901468-11-13.bin": [
+        "02bd4b0c8508b3874b95799a9a63caf369c837de"
+      ],
+      "dos4040-901468-14-16.bin": [
+        "245abbe76581558d270cdbb6fe55f56748403d8e"
+      ],
+      "characters-1.901447-08.bin": [
+        "3e067cc621e4beafca2b90cb8f6dba975df2855b"
+      ],
+      "characters-2.901447-10.bin": [
+        "0157a2d55b7ac4eaeb38475889ebeea52e2593db"
+      ],
+      "edit-2-b.901474-01.bin": [
+        "174ace3a8c0348cd21d39cc864e2adc58b0101a9"
+      ],
+      "edit-2-n.901447-24.bin": [
+        "5e5502ce32f5a7e387d65efe058916282041e54b"
+      ],
+      "kernal-2.901465-03.bin": [
+        "38742bdf449f629bcba6276ef24d3daeb7da6e84"
+      ],
+      "kernal-4.901465-22.bin": [
+        "96a0fa56e0c937da92971d9c99d504e44e898806"
+      ],
+      "waterloo-a000.901898-01.bin": [
+        "0414b3ab847c8977eb05c2fcc72efcf2f9d92871"
+      ],
+      "waterloo-b000.901898-02.bin": [
+        "df154939b934d0aeeb376813ec1ba0d43c2a3378"
+      ],
+      "waterloo-c000.901898-03.bin": [
+        "6c5b0cce97068f8841112ba6d5cd8e568b562fa3"
+      ],
+      "waterloo-d000.901898-04.bin": [
+        "b42a2050a319a1ffca7868a8d8d635fadd37ec37"
+      ],
+      "waterloo-f000.901898-05.bin": [
+        "9b4a5134d20345171e7303445f87c4e0b9addc96"
+      ],
+      "3plus1-317053-01.bin": [
+        "3b69f6e7cb4c18bb08e203fb18b7dabfa853390f"
+      ],
+      "3plus1-317054-01.bin": [
+        "0ad7ac2db7da692d972e586ca0dfd747d82c7693"
+      ],
+      "basic-318006-01.bin": [
+        "161c96b4ad20f3a4f2321808e37a5ded26a135dd"
+      ],
+      "kernal-318004-05.bin": [
+        "7c7e07f016391174a557e790c4ef1cbe33512cdb"
+      ],
+      "kernal-318005-05.bin": [
+        "a3d9e5be091b98de39a046ab167fb7632d053682"
+      ],
+      "basic-901486-01.bin": [
+        "587d1e90950675ab6b12d91248a3f0d640d02e8d"
+      ],
+      "chargen-901460-02.bin": [
+        "dae61ac03065aa2904af5c123ce821855898c555"
+      ],
+      "chargen-901460-03.bin": [
+        "4fd85ab6647ee2ac7ba40f729323f2472d35b9b4"
+      ],
+      "kernal.901486-02.bin": [
+        "c9ead45e6674d1042ca6199160e8583c23aeac22"
+      ],
+      "kernal.901486-06.bin": [
+        "06de7ec017a5e78bd6746d89c2ecebb646efeb19"
+      ],
+      "kernal.901486-07.bin": [
+        "ce0137ed69f003a299f43538fa9eee27898e621e"
+      ],
       "bass.dll": [
         "75c9fa407e0a027713ed563f135747fffec0590d"
       ],
@@ -58051,6 +60133,227 @@
       ],
       "gmaster.zip": [
         "a89263689f19e046dab6dadea24c5d07270548a6"
+      ],
+      "55XWUQ0E.BIN": [
+        "2a411c35e2385983fe3bb5f771f0237d034dff32"
+      ],
+      "5429.vbi": [
+        "8060cd4b49052572bb5ec929f8ad21e2addce237"
+      ],
+      "86C732P.bin": [
+        "0f80bbcb8f310e449d56e23118a230aa88d82bc2"
+      ],
+      "86c375_1.bin": [
+        "3494864cf6f00720d1a65d97f8574b8dee0d9c89"
+      ],
+      "86c764x1.bin": [
+        "a308b15f93da34961c0141ec95b98c211557e2d5"
+      ],
+      "acer386.bin": [
+        "9be25b1af080aee863441cf0d25d0f984accb086"
+      ],
+      "ami386.bin": [
+        "0633f78a0013a62be974233a3cad6a5d3cbe90d1"
+      ],
+      "ami486.BIN": [
+        "4e1d4a0deec702679961ffde470f8929d903bd5c"
+      ],
+      "AMI_8088_BIOS_31JAN89.BIN": [
+        "cb30f01c46dad83343999c609d6f82092e2e8f54"
+      ],
+      "awe32.raw": [
+        "6ac3c1317c1acb83902397d7767763cca4de357a"
+      ],
+      "bahamas64.BIN": [
+        "ac0f6402450bcf077aa95255e66e4c4c3cdd9ed8"
+      ],
+      "commodore pc 30 iii even.bin": [
+        "50237ffea703b867de426ab9ebc2af46bac1d0e1"
+      ],
+      "commodore pc 30 iii odd.bin": [
+        "27d6ad9554be86359d44331f25591e3122a31519"
+      ],
+      "dell0.bin": [
+        "1aca289240caa6d4bf811d301c338c157b6902a1"
+      ],
+      "dell1.bin": [
+        "ee9ceef1fc7a328ee82006cd504e72e16f21b3c8"
+      ],
+      "109591-005.U13.bin": [
+        "29a0e73d6b1df7dfa6c7ecb3f454bac9150017a1"
+      ],
+      "109592-005.U11.bin": [
+        "c2d2c1660f3f4a5e70add7f294393f51c7f89129"
+      ],
+      "DTK_ERSO_2.42_2764.bin": [
+        "02fa057f2c22ab199a8d9795ab1ae570f2b13a36"
+      ],
+      "3cto001.bin": [
+        "94aefc745b51015426a73015ab7892b88e7c8bcf"
+      ],
+      "1006CB0_.BI1": [
+        "d300c52e2c2e9d4c3b9c2dcc1c3000567792a1e4"
+      ],
+      "1006CB0_.BIO": [
+        "04e92db350973bb5977d642bd4b8988d2a8a7b42"
+      ],
+      "50145": [
+        "54430d4d0462860860397487c9c109e6f70db8e3"
+      ],
+      "pcxt.rom": [
+        "a641b505bbac97b8775f91fe9b83d9afdf4d038f"
+      ],
+      "ibm_6277356_ega_card_u44_27128.bin": [
+        "dc0794499b3e499c5777b3aa39554bbf0f2cc19b"
+      ],
+      "ibm_vga.bin": [
+        "7b8b0e22ecd002d43d5ed1bb9f9a63d9b9948032"
+      ],
+      "basicc11.f6": [
+        "64769b7a8b60ffeefa04e4afbec778069a2840c9"
+      ],
+      "basicc11.f8": [
+        "082ae803994048e225150f771794ca305f73d731"
+      ],
+      "basicc11.fa": [
+        "c9e0529470edf04da093bb8c8ae2536c688c1a74"
+      ],
+      "basicc11.fc": [
+        "5134dd64721cbf093d059ee5d3fd09c7f86604c7"
+      ],
+      "pc102782.bin": [
+        "40fce6a94dda4328a8b608c7ae2f39d1dc688af4"
+      ],
+      "bios.rom": [
+        "1f5f7013f18c08ff50d7942e76c4fbd782412414",
+        "2e92346727b0355bc1ec9a7ded1b444a4917f2b9",
+        "76a7360502fa0296ea93b4c537174610a834d367"
+      ],
+      "1501512.u18": [
+        "daa61762d3afdd7262e34edf1a3d2df9a05bcebb"
+      ],
+      "5000027.u19": [
+        "045e27a70407d89b7956ecae4d275bd2f6b0f8e2"
+      ],
+      "ide_at.bin": [
+        "108f1c94b2d3d10bf35be8a1c615065895920616"
+      ],
+      "ide_at_1_1_5.bin": [
+        "3fc07d174924e7c48b4758a7ba76ecd5362bd75b"
+      ],
+      "ide_xt.bin": [
+        "8b890c4ea4a0907b420aa0c59f0e9d6286473dec"
+      ],
+      "000o001.bin": [
+        "0b343f3028ca06c9e6dc69427d1b15a47c74b9fc"
+      ],
+      "27C64.bin": [
+        "62f17c408be0036d00a182e94c5c88b83d46b625"
+      ],
+      "27C64D.bin": [
+        "59b1f8dd6fe981ef9a7700adebf6e1adda7cee90"
+      ],
+      "mda.rom": [
+        "c2a8b10808bf51a3c123ba3eb1e9dd608231916f"
+      ],
+      "211253-bios hi.u19": [
+        "376d483db2bd1c775d46424e1176b24779591525"
+      ],
+      "41651-bios lo.u18": [
+        "14fd39ec12df7fae99ccdb0484ee097d93bf8d95"
+      ],
+      "olivetti_m24_version_1.43_high.bin": [
+        "1066dcc849e6289b5ac6372c84a590e456d497a6"
+      ],
+      "olivetti_m24_version_1.43_low.bin": [
+        "13423011a9bae3f3193e8c199f98a496cab48c0f"
+      ],
+      "0207_J2.BIN": [
+        "a8870f2f3767cda8e28662c7880b87e904c2e11d"
+      ],
+      "VA021297.BIN": [
+        "b9e665097c09a9b8cb95fb3261d8494bb2a57a0a"
+      ],
+      "40043.v1": [
+        "7781d4717917262805d514b331ba113b1e05a247"
+      ],
+      "40044.v1": [
+        "74002f5cc542df442eec9e2e7a18db3598d8c482"
+      ],
+      "40078.ic127": [
+        "bc8dc4dcedeea5bc1c04986b1f105ad93cb2ebcd"
+      ],
+      "40043.v3": [
+        "dde1a46c8f83e413d7070f1356fc91b9f595a8b6"
+      ],
+      "40044.v3": [
+        "e21ae524d5b4d00696d293dbd4fe4d7bca22e277"
+      ],
+      "40100": [
+        "98302006ee38a17c09bd75504cc18c0649174e33"
+      ],
+      "40109.bin": [
+        "99663bfb61798526e092205575370c2ad34249a1"
+      ],
+      "pc20v2.0": [
+        "8b4b2afea543b96b45d6a30365281decc15f2932"
+      ],
+      "pc20v2.1": [
+        "4135102a491b25fc659d70b957e07649f3eacf24"
+      ],
+      "40179.ic129": [
+        "b882e97ee81b9ba0e7d969c63da3f2052f23b4b9"
+      ],
+      "40180.ic132": [
+        "93e045609466fcec74e2bb72578bb7405281cf7b"
+      ],
+      "40186.ic171": [
+        "5df1efe4203cd076292a7713bd7ebd1196dca577"
+      ],
+      "c000.bin": [
+        "382d2028e0dc5515a68843829563ce29018edb08"
+      ],
+      "fc00.bin": [
+        "98c344831cc4dc59ebb39bbb1961964a8d39fe20"
+      ],
+      "3iip001h.bin": [
+        "b6566fd761e2e6ec34b61ee3bb043ef62d696b5e"
+      ],
+      "3iip001l.bin": [
+        "a6d34c3bf0de93c2b71010948c1f16354996b5ab"
+      ],
+      "000p001.bin": [
+        "8e73e9d1456aadd65bb89cc813d1aa1354c90d68"
+      ],
+      "1009AF2_.BI1": [
+        "1d0c6e75f2d08e15804be07c7fe23ecebe9ca49b"
+      ],
+      "1009AF2_.BIO": [
+        "8be89a060204002d636c965d064e6cac1eeb9534"
+      ],
+      "s3_764.bin": [
+        "50502df4d16c38608bcaea758791fc3419ee4589"
+      ],
+      "s3virge.bin": [
+        "59997202571b4ccb021c7b71622e57742471374e"
+      ],
+      "SIS496-1.AWA": [
+        "9549f7ae63f463473119c64bb74df884c7b0e70c"
+      ],
+      "v020000.u12": [
+        "976af8c04c3f6fde14d7047f6521d302bdc2d017"
+      ],
+      "8079047.hu1": [
+        "7deb71f14c2c418400b639d60066ab61b7e9df32"
+      ],
+      "8079048.hu2": [
+        "10f1a7204f69b82a18bc94a3010c9660aec0c802"
+      ],
+      "vgaedge16.vbi": [
+        "c0ee6f9443fa82c0fef5d497b3e76aa3077f1865"
+      ],
+      "ALI1429G.AMW": [
+        "72c60172fb1ba77c9b24b06b7755f0a16f0b3a13"
       ],
       "prboom.wad": [
         "5f4aed208301449c2e9514edfd325fe9dead76fa"
@@ -58748,10 +61051,6 @@
       "FONT.ROM": [
         "554b87377d176830d21bd03964dc71f8e98676b1",
         "541271ea46c5166a1e054379963b0dc663e9b60f"
-      ],
-      "bios.rom": [
-        "2e92346727b0355bc1ec9a7ded1b444a4917f2b9",
-        "76a7360502fa0296ea93b4c537174610a834d367"
       ],
       "font.rom": [
         "425a896af83386c7bafac59f94211cdbb9cce18d",
@@ -67108,8 +69407,122 @@
       "segaai.zip": [
         "39a0fec854e438f6757882604a8dc56e62e401d9"
       ],
+      "epr-10187.88": [
+        "01c8a819587a66d2ee4d255656e36fa0904377b0"
+      ],
+      "epr-10327.76": [
+        "77d18092e3c10a400e62eeba562f161398fe37a7"
+      ],
+      "epr-10327a.76": [
+        "f715bde96c73ed47035acf5a41630fdeb41bb2f9"
+      ],
+      "epr-10328.75": [
+        "0e182fdac70423a85dc2b996c70bcb3954e75e10"
+      ],
+      "epr-10328a.75": [
+        "a4e3cfca4d803e72bc4fcf91ab00e21bf3f8959f"
+      ],
+      "epr-10329.58": [
+        "e63fe5f7950af35131539836f18fa056767c2c80"
+      ],
+      "epr-10329a.58": [
+        "57d5219bd0e2fd886217e37e8773fd76be9b40eb"
+      ],
+      "epr-10330.57": [
+        "834bf361ca67cee3793c324bb26cf0ec82a72068"
+      ],
+      "epr-10330a.57": [
+        "2136c9572e26b7ae6de402c0cd53174407cc6018"
+      ],
+      "epr-10380.133": [
+        "ac319cdafb156adcf6be29ae1b82d46d3048022e"
+      ],
+      "epr-10380b.133": [
+        "31e870f307f44eb4f293b607123b623beee2bc3c"
+      ],
+      "epr-10381a.132": [
+        "bf3ff05bbf81bdd44567f3b9bb4919ed4a499624"
+      ],
+      "epr-10382.118": [
+        "4b75526df71bba0d588f47a65790a3d21b236302"
+      ],
+      "epr-10382b.118": [
+        "69236cf9f27691dee290c79db1fc9b5e73ea77d7"
+      ],
+      "epr-10383.117": [
+        "d6e1de6b562359574d94b88ce6101646c506e701"
+      ],
+      "epr-10383b.117": [
+        "1970895145ad8b5735f66ed8c837d9d453ce9b23"
+      ],
       "mie.zip": [
         "00f43f5bf58dd79135565d52c4eea7e314ebc810"
+      ],
+      "mpr-10371.9": [
+        "21320f945f7c8e990c97c9b1232a0f4b6bd00f8f"
+      ],
+      "mpr-10372.13": [
+        "a3746a2da077a8df4932348f650a061f413e8430"
+      ],
+      "mpr-10373.10": [
+        "3a9ce8547cd43b7b04abddf9a9ab5634e0bbfaba"
+      ],
+      "mpr-10374.14": [
+        "9c8509fbed170b4ac74c169da573393e54774f49"
+      ],
+      "mpr-10375.11": [
+        "e5d8c67e020608edd24ba87b7687b2ac2483ee7f"
+      ],
+      "mpr-10376.15": [
+        "a5f2532613f33a64441e0f75443c10ba78dccc6e"
+      ],
+      "mpr-10377.12": [
+        "9f7210cb4153ac9029a785dcd4b45f4513a4b008"
+      ],
+      "mpr-10378.16": [
+        "4399030a155caf71f2dec7f75c4b65531ab53576"
+      ],
+      "opr-10185.11": [
+        "a554d4b68e71861a0d0da4d031b3b811b246f082"
+      ],
+      "opr-10188.71": [
+        "f70dd3a6362c314adef313b064102f7a250401c8"
+      ],
+      "opr-10188.71f": [
+        "e7c8ae6c59742e1de7ec5a95c5aebfab5716d959"
+      ],
+      "opr-10189.70": [
+        "f467a6b807694d5832a985f5381c170d24aaee4e"
+      ],
+      "opr-10190.69": [
+        "a3c581d2b438630d0d4c39481dcfd85681c9f889"
+      ],
+      "opr-10191.68": [
+        "7c9027416d4122791ba53782fe2230cf02b7d506"
+      ],
+      "opr-10192.67": [
+        "686bdf44d45c1d6002622f6658f037735382f3e0"
+      ],
+      "opr-10193.66": [
+        "417ce1d7242884640c5b14f4db8ee57cde7d085d"
+      ],
+      "opr-10230.104": [
+        "03697b892f911177968aa40de6c5f464eb0258e7"
+      ],
+      "opr-10231.103": [
+        "8e1237b640a6f26bdcbfd5e201dadb2687c4febb"
+      ],
+      "opr-10232.102": [
+        "e3477961d19e694c97643066534a1f720e0c4327"
+      ],
+      "opr-10266.101": [
+        "09164e858ebeedcff4d389524ddf89e7c216dcae"
+      ],
+      "opr-10267.100": [
+        "a7e0143dee5a47e679fd5155e58e717813912692"
+      ],
+      "opr-10268.99": [
+        "b3480714b11fc49b449660431f85d4ba92f799ba"
       ],
       "tilemap.bin": [
         "9c294250f54b4e3f60e3d13f73ee80325e683b04"
@@ -67156,7 +69569,7 @@
       "dc.zip": [
         "24e80cdf0695361ae8de7cceda29843e0474ecd0"
       ],
-      "dc_boot.bin": [
+      "dc_bios.bin": [
         "8951d1bb219ab2ff8583033d2119c899cc81f18c"
       ],
       "dc_nvmem.bin": [
@@ -67311,6 +69724,9 @@
       ],
       "FNT0808.X1": [
         "1c1a0d8c9f4c446ccd7470516b215ddca5052fb2"
+      ],
+      "FNT0816.X1": [
+        "4f06d20c997a79ee6af954b69498147789bf1847"
       ],
       "IPLROM.X1": [
         "c4db9a6e99873808c8022afd1c50fef556a8b44d"
@@ -68762,6 +71178,18 @@
       "wme_shadow_volume.vertex": [
         "4e6aaba3209c980f57b90f83ad8adf9cf5f4b673"
       ],
+      "epr-10381b.132": [
+        "bf3ff05bbf81bdd44567f3b9bb4919ed4a499624"
+      ],
+      "opr-10186.47": [
+        "a554d4b68e71861a0d0da4d031b3b811b246f082"
+      ],
+      "dc_boot.bin": [
+        "8951d1bb219ab2ff8583033d2119c899cc81f18c"
+      ],
+      "boot.bin": [
+        "8951d1bb219ab2ff8583033d2119c899cc81f18c"
+      ],
       "bios.sms": [
         "c315672807d8ddb8d91443729405c766dd95cae7"
       ],
@@ -69407,9 +71835,6 @@
         "93407ea10d2f30ab96a314d8eca44fe160aea734",
         "f282b3aaf98f8423dab7d77f1aa0192be630f2fb"
       ],
-      "boot.bin": [
-        "8951d1bb219ab2ff8583033d2119c899cc81f18c"
-      ],
       "flash.bin": [
         "94d44d7f9529ec1642ba3771ed3c5f756d5bc872"
       ],
@@ -69461,11 +71886,8 @@
       "squirreljme-0.3.0-slow-test.jar": [
         "8a2ddc37df2366d4e205e9904cd8bac22db2afd5"
       ],
-      "spectrum.zip": [
-        "9428d8b7c6d4db78f00a58915dccdf33f3b5d98b"
-      ],
       "fbneo/spectrum.zip": [
-        "9428d8b7c6d4db78f00a58915dccdf33f3b5d98b"
+        "593df141c3a5cda53b90e167cc02a2331929f767"
       ]
     },
     "by_crc32": {
@@ -69648,6 +72070,13 @@
       "651142d3": "9b9c9f0af3de914de677ba8e19f4190673142c1b",
       "26856bf9": "f590ccf688b4c05fa1da5c5dd92c224545170c3b",
       "d9d92d1b": "7b5be2c65e378f736ee4689303349d80dc425f5f",
+      "fd30fa30": "802adfa42a0c1cde3c33385cb3eebcead70bede4",
+      "2fa2a2e7": "65eac36641f01942f0d2c34e2b27c26f930abb32",
+      "ed9656bb": "aa73b11ba0787ec8bf59d7d1aa327be791506edf",
+      "6e95d100": "4067cc49b6a2731d58db041e84cf7796d29765c3",
+      "b453fe22": "adfd8a50daceb9140c83880886dd15b0e705e6b2",
+      "cdf27589": "e9623af0ae27632b55c037dde2dc5c0a07b1f466",
+      "1d0ae66c": "37fd0af4db5ebd5a704ee65e3a0a1a67fe325bc5",
       "201eeb68": "b4ff14ed8c3e37a4b45ce2d80c692961ffc88270",
       "ce2a2c77": "8cf0aa7f9dca4d77485e605fb0e2173a734633bf",
       "7325a518": "78c8e1c3c033b65758b7e53a9346b44d037fea7f",
@@ -69665,22 +72094,38 @@
       "ab628024": "d7ef86bd03de7c1d0e2b0762e04b6f8f8d26dbdb",
       "5ec5131d": "46278151f85b74951592d57155441485fe3e0274",
       "b7949ddb": "4b92936f396c8199f745d3ed0ff588a324b8dd70",
-      "a313a0d6": "838934ee5b8fcc81883fb664526b3d281840b2e9",
+      "1da1dc00": "eac782be9f6ebe5dfb09bb4a5342d8aefb82d527",
       "81315163": "deb62b0074b8cae4f162c257662136733cfc76ad",
       "6a679292": "f677361cd05cf2d146730890298985290b3dbc69",
       "a6099353": "489256f5e2001070d2ad94c90d255282c71ed274",
       "d28b794e": "68b780f40623e51a421faf374ae5a84a53a81279",
-      "bf3dd2ef": "c0c001ec80fa860857000f4cfc9844a28498a355",
+      "01a40c6a": "2b61f36b22933f3bec237818ecc959efb016d652",
       "9e0c143c": "125e74975da3f7ac643232210ab37c33e4ece9ca",
       "f76450f8": "ed7d7a1de52042e1b0d9467f41c5105620fa165a",
       "d85f005e": "f1ccedb2c6e8f15cfebab52c3923e4b35f4df43f",
+      "24e90480": "7821398e77ca91837548826773157c427a2ba018",
       "c92cc7db": "2c178083ac2906cecb7e331d7111f7766a353052",
       "c6406ea3": "de78a0b8df78d5ffdb1a274f80d877a96ef204aa",
       "1e4a1866": "14311945b06a5d013d1df5ce961ab47fbd46fb2a",
+      "03ecd264": "b23ce6c1cc03e366cedcba01e9f01e7ed47c7856",
+      "7290dea5": "1c8b9163f121afba6f43d5a55dda504bb66a32c5",
+      "4caf4084": "b6410ccf4a291e028fb05848f8308200f9eb2ea7",
+      "8dca006c": "79fbda9ec65e377a4e0e70bfd70bd4447f286ddd",
+      "51303c12": "908a53ee5dc154dc8e429ec9637b37b22f223f6d",
+      "f7d177fd": "bb31d8f5f5adbe2aa861029b57670329e6d70ac7",
+      "6dcc1323": "f2f71013cf0895d0707c09ecb3bf82371ab92f5c",
+      "4f37dbbb": "3cbd7d975a8469177f511aa5e9f86d7015c891a0",
+      "6a363cf6": "878021d181718b2d87f20dab0c5774e111f8b7d0",
+      "27b20b5e": "d7538b16782abed604bbd6de8fc90da580757497",
+      "35a13afd": "9dab5428a2694d424a93a315cb974a14e9ae64a3",
+      "fdf6fa12": "764e8889e2ff9e2bf0c56585f32315aa5c19076d",
+      "32d25384": "133a9e6e7ae80e2dbf20c7d454006939ef1cd148",
+      "5a1e0f48": "e8fcd1507a6811f0c2643d0497c0ac3f405f2438",
       "9b2d4b56": "2adbde3ef74c431fbd700cffd4cd1d41251a8833",
       "5692af22": "4257bd14b541fafbd555cb98ba079a3416a45934",
-      "705f7138": "b88619a845cbba8bc04ad396e99a02aa6d2da7c1",
+      "3d7de6d8": "0444bfcbcf9cf63aac4e98957fce536e6a45ce73",
       "eea59503": "9428d8b7c6d4db78f00a58915dccdf33f3b5d98b",
+      "018a6958": "593df141c3a5cda53b90e167cc02a2331929f767",
       "ee278abe": "2e50b96a1d37e9407209e291d5f549233287ac77",
       "570b6b37": "1af645230c3f1741fb1f7efef05e9efe768e9dcc",
       "450b9cb4": "fbba87e9d6852862252d31dd919f943c8edd7eb7",
@@ -69693,6 +72138,7 @@
       "e4d8e126": "84a6ec5f148b63cccc362b5d9a13a2717d18aa8a",
       "865bcd8e": "5024b3bfd04ccd2061eb60d2eca254e8faf44f5c",
       "d4ef502b": "89d1a70142fb4e768e24854f98799c3fd1345ba5",
+      "3464c93e": "41c639c6a96403c4a42a2799bd7928f091226e2b",
       "5b4c29c4": "06fc753d015b43ca1787f4cfd9331b1674202e64",
       "f4a107f9": "52530b657d5e035101421eb540fd6df5c7415986",
       "f46151c3": "d1ba776e1ec56281fee157cb2e44487b1db18b53",
@@ -70911,6 +73357,56 @@
       "2f79984c": "31e73e66eccb28732daea8ec3ad1addd9b39a017",
       "78008489": "3422a7735f0f959d990ab39512d8815a5d8eab7a",
       "f4151454": "6aa529a7b1b6de53e8979e407a77b4d5657727f5",
+      "f833d117": "79015323128650c742a3694c9429aa91f355905e",
+      "6e2c91a7": "c4fb4a714e48a7bf6c28659de0302183a0e0d6c0",
+      "9f9c355b": "d53a7884404f7d18ebd60dd3080c8f8d71067441",
+      "fe5a2db1": "638f8aff51c2ac4f99a55b12c4f8c985ef4bebd3",
+      "7a70d9b8": "aca3f7321ee7e6152f1f0afad646ae41964de4fb",
+      "6aaaafe6": "29ed066d513f2d5c09ff26d9166ba23c2afb2b3f",
+      "ba456b8e": "ceb6e1a1bf7e08eb9cbc651afa29e26adccf38ab",
+      "cb4e1719": "9b0a0cef56d00035c611e07170f051ee5e63aa3a",
+      "dbe3e7c7": "1d503e56df85a62fee696e7618dc5b4e781df1bb",
+      "2aff27d3": "267654823c4fdf2167050f41faa118218d2569ce",
+      "ec4272ee": "adc7c31e18c7c7413d54802ef2f4193da14711aa",
+      "1604f6c1": "0fad19dbcdb12461c99657b2979dbb5c2e47b527",
+      "2c5965d4": "aa136e91ecf3c5ac64f696b3dbcbfc5ba0871c98",
+      "b0a9c2da": "21940ef5f1bfe67d7537164f7ca130a1095b067a",
+      "dce782fa": "87cc04d61fc748b82df09856847bb5c2754a2033",
+      "a5c687b3": "0e2e4ee3f2d41f00bed72f9ab588b83e306fdb13",
+      "789c8cc5": "6c4fa9465f6091b174df27dfe679499df447503c",
+      "3a9ef6f1": "4ff0f11e80f4b57430d8f0c3799ed0f0e0f4565d",
+      "09a5667e": "abb26418b9e1614a8f52bdeee0822d4a96071439",
+      "f01834a3": "0bec500cd97bf7c38c894bc5265aec19307e7c06",
+      "57224cde": "ab16f56989b27d89babe5f89c5a8cb3da71a82f0",
+      "899fa3c5": "d3b78c3dbac55f5199f33f3fe0036439811f7fb3",
+      "5755bae3": "f1be619c106641a685f6609e4d43d6fc9eac1e70",
+      "a9011b84": "01228eae6f066bd9b7b2b6a7fa3f667e41dad393",
+      "21b80fdf": "c53e180a96649ceb3f421739e8dc66faba7cba44",
+      "d04c1fbb": "e37b3bfd801eb19dea50cf8b4a6af8613c3520d3",
+      "f4967a7f": "02bd4b0c8508b3874b95799a9a63caf369c837de",
+      "40e0ebaa": "245abbe76581558d270cdbb6fe55f56748403d8e",
+      "54f32f45": "3e067cc621e4beafca2b90cb8f6dba975df2855b",
+      "d8408674": "0157a2d55b7ac4eaeb38475889ebeea52e2593db",
+      "05db957e": "174ace3a8c0348cd21d39cc864e2adc58b0101a9",
+      "e459ab32": "5e5502ce32f5a7e387d65efe058916282041e54b",
+      "f02238e2": "38742bdf449f629bcba6276ef24d3daeb7da6e84",
+      "cc5298a1": "96a0fa56e0c937da92971d9c99d504e44e898806",
+      "728a998b": "0414b3ab847c8977eb05c2fcc72efcf2f9d92871",
+      "6beb7c62": "df154939b934d0aeeb376813ec1ba0d43c2a3378",
+      "5db4983d": "6c5b0cce97068f8841112ba6d5cd8e568b562fa3",
+      "f55fc559": "b42a2050a319a1ffca7868a8d8d635fadd37ec37",
+      "f42df0cb": "9b4a5134d20345171e7303445f87c4e0b9addc96",
+      "4fd1d8cb": "3b69f6e7cb4c18bb08e203fb18b7dabfa853390f",
+      "109de2fc": "0ad7ac2db7da692d972e586ca0dfd747d82c7693",
+      "74eaae87": "161c96b4ad20f3a4f2321808e37a5ded26a135dd",
+      "71c07bd4": "7c7e07f016391174a557e790c4ef1cbe33512cdb",
+      "70295038": "a3d9e5be091b98de39a046ab167fb7632d053682",
+      "db4c43c1": "587d1e90950675ab6b12d91248a3f0d640d02e8d",
+      "fcfd8a4b": "dae61ac03065aa2904af5c123ce821855898c555",
+      "83e032a6": "4fd85ab6647ee2ac7ba40f729323f2472d35b9b4",
+      "336900d7": "c9ead45e6674d1042ca6199160e8583c23aeac22",
+      "e5e7c174": "06de7ec017a5e78bd6746d89c2ecebb646efeb19",
+      "4be07cb4": "ce0137ed69f003a299f43538fa9eee27898e621e",
       "03e3f03c": "75c9fa407e0a027713ed563f135747fffec0590d",
       "fd70a398": "2ea6df7253ce0a14094d20cd04c098505cc14c23",
       "9ba00bc0": "8833196b70002f7f2068d8f6c5eb96862777b018",
@@ -70994,6 +73490,79 @@
       "67190bd1": "80d34a21c6bc9732f93c754d4b71cb7b22e87a99",
       "833109d1": "bf4aed0b09bae6dfe2153a6f3bd91e9146705073",
       "2aae403f": "a89263689f19e046dab6dadea24c5d07270548a6",
+      "9e7bf329": "2a411c35e2385983fe3bb5f771f0237d034dff32",
+      "a2d81c5b": "8060cd4b49052572bb5ec929f8ad21e2addce237",
+      "f7e6bcfa": "0f80bbcb8f310e449d56e23118a230aa88d82bc2",
+      "af55cc51": "3494864cf6f00720d1a65d97f8574b8dee0d9c89",
+      "bbdc5d5b": "a308b15f93da34961c0141ec95b98c211557e2d5",
+      "8708727c": "9be25b1af080aee863441cf0d25d0f984accb086",
+      "56ea4d9d": "0633f78a0013a62be974233a3cad6a5d3cbe90d1",
+      "6b4a821a": "4e1d4a0deec702679961ffde470f8929d903bd5c",
+      "0bcafd1f": "cb30f01c46dad83343999c609d6f82092e2e8f54",
+      "ceb2787e": "6ac3c1317c1acb83902397d7767763cca4de357a",
+      "0a79415a": "ac0f6402450bcf077aa95255e66e4c4c3cdd9ed8",
+      "36307aa9": "50237ffea703b867de426ab9ebc2af46bac1d0e1",
+      "41bae42d": "27d6ad9554be86359d44331f25591e3122a31519",
+      "a2530914": "1aca289240caa6d4bf811d301c338c157b6902a1",
+      "b5f69002": "ee9ceef1fc7a328ee82006cd504e72e16f21b3c8",
+      "791a1c78": "29a0e73d6b1df7dfa6c7ecb3f454bac9150017a1",
+      "a9734a87": "c2d2c1660f3f4a5e70add7f294393f51c7f89129",
+      "3f2d2a76": "02fa057f2c22ab199a8d9795ab1ae570f2b13a36",
+      "8a0e26da": "94aefc745b51015426a73015ab7892b88e7c8bcf",
+      "e6b7a714": "d300c52e2c2e9d4c3b9c2dcc1c3000567792a1e4",
+      "241a35d4": "04e92db350973bb5977d642bd4b8988d2a8a7b42",
+      "1775a11d": "54430d4d0462860860397487c9c109e6f70db8e3",
+      "031aafad": "a641b505bbac97b8775f91fe9b83d9afdf4d038f",
+      "dc146448": "dc0794499b3e499c5777b3aa39554bbf0f2cc19b",
+      "03b3f90d": "7b8b0e22ecd002d43d5ed1bb9f9a63d9b9948032",
+      "80d3cf5d": "64769b7a8b60ffeefa04e4afbec778069a2840c9",
+      "673a4acc": "082ae803994048e225150f771794ca305f73d731",
+      "aac3fc37": "c9e0529470edf04da093bb8c8ae2536c688c1a74",
+      "3062b3fc": "5134dd64721cbf093d059ee5d3fd09c7f86604c7",
+      "e88792b3": "40fce6a94dda4328a8b608c7ae2f39d1dc688af4",
+      "31e3a7aa": "1f5f7013f18c08ff50d7942e76c4fbd782412414",
+      "4f417635": "daa61762d3afdd7262e34edf1a3d2df9a05bcebb",
+      "758ff036": "045e27a70407d89b7956ecae4d275bd2f6b0f8e2",
+      "ac75ec33": "108f1c94b2d3d10bf35be8a1c615065895920616",
+      "434286ce": "3fc07d174924e7c48b4758a7ba76ecd5362bd75b",
+      "4f8bb178": "8b890c4ea4a0907b420aa0c59f0e9d6286473dec",
+      "7a1c6dfa": "0b343f3028ca06c9e6dc69427d1b15a47c74b9fc",
+      "b45a7dd3": "62f17c408be0036d00a182e94c5c88b83d46b625",
+      "0a6121d3": "59b1f8dd6fe981ef9a7700adebf6e1adda7cee90",
+      "0bf56d70": "c2a8b10808bf51a3c123ba3eb1e9dd608231916f",
+      "6acb573f": "376d483db2bd1c775d46424e1176b24779591525",
+      "1e9bd3b7": "14fd39ec12df7fae99ccdb0484ee097d93bf8d95",
+      "04e697ba": "1066dcc849e6289b5ac6372c84a590e456d497a6",
+      "ff7e0f10": "13423011a9bae3f3193e8c199f98a496cab48c0f",
+      "4ea28971": "a8870f2f3767cda8e28662c7880b87e904c2e11d",
+      "340bf218": "b9e665097c09a9b8cb95fb3261d8494bb2a57a0a",
+      "f72f1582": "7781d4717917262805d514b331ba113b1e05a247",
+      "668fcc94": "74002f5cc542df442eec9e2e7a18db3598d8c482",
+      "ae9c0d04": "bc8dc4dcedeea5bc1c04986b1f105ad93cb2ebcd",
+      "9219d0aa": "dde1a46c8f83e413d7070f1356fc91b9f595a8b6",
+      "6090f782": "e21ae524d5b4d00696d293dbd4fe4d7bca22e277",
+      "d2d1f1ae": "98302006ee38a17c09bd75504cc18c0649174e33",
+      "a8b67639": "99663bfb61798526e092205575370c2ad34249a1",
+      "41302eb8": "8b4b2afea543b96b45d6a30365281decc15f2932",
+      "71b84616": "4135102a491b25fc659d70b957e07649f3eacf24",
+      "003605e4": "b882e97ee81b9ba0e7d969c63da3f2052f23b4b9",
+      "28ee5e58": "93e045609466fcec74e2bb72578bb7405281cf7b",
+      "959f00ba": "5df1efe4203cd076292a7713bd7ebd1196dca577",
+      "5a6c38e9": "382d2028e0dc5515a68843829563ce29018edb08",
+      "b5630753": "98c344831cc4dc59ebb39bbb1961964a8d39fe20",
+      "f46dc8a2": "b6566fd761e2e6ec34b61ee3bb043ef62d696b5e",
+      "f7bef447": "a6d34c3bf0de93c2b71010948c1f16354996b5ab",
+      "16f4fdc8": "8e73e9d1456aadd65bb89cc813d1aa1354c90d68",
+      "8b75023c": "1d0c6e75f2d08e15804be07c7fe23ecebe9ca49b",
+      "cc5d50ba": "8be89a060204002d636c965d064e6cac1eeb9534",
+      "1fbe4a8d": "50502df4d16c38608bcaea758791fc3419ee4589",
+      "6052a96b": "59997202571b4ccb021c7b71622e57742471374e",
+      "6296ce68": "9549f7ae63f463473119c64bb74df884c7b0e70c",
+      "6f3acd80": "976af8c04c3f6fde14d7047f6521d302bdc2d017",
+      "c773ec0e": "7deb71f14c2c418400b639d60066ab61b7e9df32",
+      "0f3e6586": "10f1a7204f69b82a18bc94a3010c9660aec0c802",
+      "e75945f3": "c0ee6f9443fa82c0fef5d497b3e76aa3077f1865",
+      "0636e0be": "72c60172fb1ba77c9b24b06b7755f0a16f0b3a13",
       "a5751b99": "5f4aed208301449c2e9514edfd325fe9dead76fa",
       "7f9a2c1e": "f3f2a11f3ecd91cd62d74c3acfad68a4cc6ddbd9",
       "26dc3fba": "9259b87edfe9b9f6d0749788a75a6ccf158f50aa",
@@ -74418,7 +76987,45 @@
       "dd9c46b8": "1e5b0b2441a4979b6966d942b20cc76c413b8c5e",
       "bfda1fe5": "4103668c1bbd66c5e24558e73d4f3f92061a109a",
       "16ef13bc": "39a0fec854e438f6757882604a8dc56e62e401d9",
+      "a10abaa9": "01c8a819587a66d2ee4d255656e36fa0904377b0",
+      "da99d855": "77d18092e3c10a400e62eeba562f161398fe37a7",
+      "e28a5baf": "f715bde96c73ed47035acf5a41630fdeb41bb2f9",
+      "3c0e9a7f": "0e182fdac70423a85dc2b996c70bcb3954e75e10",
+      "d5ec5e5d": "a4e3cfca4d803e72bc4fcf91ab00e21bf3f8959f",
+      "fe0fa5e2": "e63fe5f7950af35131539836f18fa056767c2c80",
+      "da131c81": "57d5219bd0e2fd886217e37e8773fd76be9b40eb",
+      "59786e99": "834bf361ca67cee3793c324bb26cf0ec82a72068",
+      "ba9ec82a": "2136c9572e26b7ae6de402c0cd53174407cc6018",
+      "e339e87a": "ac319cdafb156adcf6be29ae1b82d46d3048022e",
+      "1f6cadad": "31e870f307f44eb4f293b607123b623beee2bc3c",
+      "be8c412b": "bf3ff05bbf81bdd44567f3b9bb4919ed4a499624",
+      "65248dd5": "4b75526df71bba0d588f47a65790a3d21b236302",
+      "c4c3fa1a": "69236cf9f27691dee290c79db1fc9b5e73ea77d7",
+      "dcc586e7": "d6e1de6b562359574d94b88ce6101646c506e701",
+      "10a2014a": "1970895145ad8b5735f66ed8c837d9d453ce9b23",
       "e185c03f": "00f43f5bf58dd79135565d52c4eea7e314ebc810",
+      "7cc86208": "21320f945f7c8e990c97c9b1232a0f4b6bd00f8f",
+      "b557078c": "a3746a2da077a8df4932348f650a061f413e8430",
+      "b0d26ac9": "3a9ce8547cd43b7b04abddf9a9ab5634e0bbfaba",
+      "8051e517": "9c8509fbed170b4ac74c169da573393e54774f49",
+      "59b60bd7": "e5d8c67e020608edd24ba87b7687b2ac2483ee7f",
+      "f3b8f318": "a5f2532613f33a64441e0f75443c10ba78dccc6e",
+      "17a1b04a": "9f7210cb4153ac9029a785dcd4b45f4513a4b008",
+      "a1062984": "4399030a155caf71f2dec7f75c4b65531ab53576",
+      "22794426": "a554d4b68e71861a0d0da4d031b3b811b246f082",
+      "bad30ad9": "f70dd3a6362c314adef313b064102f7a250401c8",
+      "37598616": "e7c8ae6c59742e1de7ec5a95c5aebfab5716d959",
+      "01366b54": "f467a6b807694d5832a985f5381c170d24aaee4e",
+      "7cab70e2": "a3c581d2b438630d0d4c39481dcfd85681c9f889",
+      "20a284ab": "7c9027416d4122791ba53782fe2230cf02b7d506",
+      "770f1270": "686bdf44d45c1d6002622f6658f037735382f3e0",
+      "bcd10dde": "417ce1d7242884640c5b14f4db8ee57cde7d085d",
+      "686f5e50": "03697b892f911177968aa40de6c5f464eb0258e7",
+      "8908bcbf": "8e1237b640a6f26bdcbfd5e201dadb2687c4febb",
+      "776ba1eb": "e3477961d19e694c97643066534a1f720e0c4327",
+      "9f6f1a74": "09164e858ebeedcff4d389524ddf89e7c216dcae",
+      "a85bb823": "a7e0143dee5a47e679fd5155e58e717813912692",
+      "95344b04": "b3480714b11fc49b449660431f85d4ba92f799ba",
       "a5a07c99": "9c294250f54b4e3f60e3d13f73ee80325e683b04",
       "eed16e7a": "fa950979aaa1d4c947473f158f770f3f3c8c45da",
       "b1642de4": "f63eca9a1b1e92ee1582ff5e4c0db55193f97e33",
@@ -74505,6 +77112,7 @@
       "17878e56": "fec7527ecbf79b1ac697137f770bb8715fe8a652",
       "a61ca7c7": "2ca428b70ed1746834d129c11fb8e60a56317cff",
       "e3995a57": "1c1a0d8c9f4c446ccd7470516b215ddca5052fb2",
+      "8f9fb213": "4f06d20c997a79ee6af954b69498147789bf1847",
       "7b28d9de": "c4db9a6e99873808c8022afd1c50fef556a8b44d",
       "2e8b767c": "44620f57a25f0bcac2b57ca2b0f1ebad3bf305d3",
       "e70011d3": "d3395e9aeb5b8bbba7654dd471bcd8af228ee69a",

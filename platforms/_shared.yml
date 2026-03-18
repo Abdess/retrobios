@@ -36,3 +36,174 @@ shared_groups:
       sha1: "65bbf2be7bcd5bdcbff609d6c66471ffb9d04bfe"
       destination: "vice/JiffyDOS_1581.bin"
       required: false
+
+  # NEC PC-9801/9821 — NP2kai core
+  # np2kai hardcodes "np2kai/" subfolder for firmware lookups
+  # ref: libretro-np2kai/sdl/libretro.c, docs.libretro.com/library/np2kai
+  np2kai:
+    - name: bios.rom
+      destination: np2kai/bios.rom
+      required: true
+      sha1: "76a7360502fa0296ea93b4c537174610a834d367"
+      md5: "cd237e16e7e77c06bb58540e9e9fca68"
+      crc32: "0a682b93"
+      size: 98304
+    - name: font.rom
+      destination: np2kai/font.rom
+      required: true
+      sha1: "78ba9960f135372825ab7244b5e4e73a810002ff"
+      md5: "38d32748ae49d1815b0614970849fd40"
+      crc32: "456d9fc7"
+      size: 288768
+    - name: itf.rom
+      destination: np2kai/itf.rom
+      required: true
+      sha1: "a2fb11c000ed7c976520622cfb7940ed6ddc904e"
+      md5: "72ea51443070f0e9212bfc9b793ee28e"
+      crc32: "c1815325"
+      size: 32768
+    - name: sound.rom
+      destination: np2kai/sound.rom
+      required: true
+      sha1: "d5dbc4fea3b8367024d363f5351baecd6adcd8ef"
+      md5: "524473c1a5a03b17e21d86a0408ff827"
+      crc32: "fe9f57f2"
+      size: 16384
+    - name: font.bmp
+      destination: np2kai/font.bmp
+      required: true
+      sha1: "b4f14e58030ed40fff2dc312b58ea4440bdf8cc5"
+      md5: "7da1e5b7c482d4108d22a5b09631d967"
+      crc32: "d271798b"
+      size: 524350
+    - name: 2608_bd.wav
+      destination: np2kai/2608_bd.wav
+      required: true
+      sha1: "0a56c142ef40cec50f3ee56a6e42d0029c9e2818"
+      md5: "d94546e70f17fd899be8df3544ab6cbb"
+      crc32: "bb038714"
+      size: 19192
+    - name: 2608_sd.wav
+      destination: np2kai/2608_sd.wav
+      required: true
+      sha1: "3c79663ef74c0b0439d13351326eb1c52a657008"
+      md5: "d71004351c8bbfdad53b18222c061d49"
+      crc32: "542cc58c"
+      size: 15558
+    - name: 2608_top.wav
+      destination: np2kai/2608_top.wav
+      required: true
+      sha1: "aa4a8f766a86b830687d5083fd3b9db0652f46fc"
+      md5: "593cff6597ab9380d822b8f824fd2c28"
+      crc32: "ab73a296"
+      size: 57016
+    - name: 2608_hh.wav
+      destination: np2kai/2608_hh.wav
+      required: true
+      sha1: "12f676cef249b82480b6f19c454e234b435ca7b6"
+      md5: "08c54a0c1f774a5538a848a6665a34b4"
+      crc32: "9898b372"
+      size: 36722
+    - name: 2608_tom.wav
+      destination: np2kai/2608_tom.wav
+      required: true
+      sha1: "9513fb4a3f41e75a972a273a5104cbd834c1e2c5"
+      md5: "96a4ead13f364734f79b0c58af2f0e1f"
+      crc32: "93c57bba"
+      size: 23092
+    - name: 2608_rim.wav
+      destination: np2kai/2608_rim.wav
+      required: true
+      sha1: "c65592330c9dd84011151daed52f9aec926b7e56"
+      md5: "465ea0768b27da404aec45dfc501404b"
+      crc32: "638864c1"
+      size: 5288
+
+  # Sharp X68000 — PX68k core
+  # PX68k hardcodes "keropi/" subfolder for ROM lookups
+  # ref: px68k/libretro/libretro.c, docs.libretro.com/library/px68k
+  keropi:
+    - name: cgrom.dat
+      destination: keropi/cgrom.dat
+      required: true
+      sha1: "8d72c5b4d63bb14c5dbdac495244d659aa1498b6"
+      md5: "cb0a5cfcf7247a7eab74bb2716260269"
+      crc32: "9f3195f1"
+      size: 786432
+    - name: iplrom.dat
+      destination: keropi/iplrom.dat
+      required: true
+      sha1: "0ed038ed2133b9f78c6e37256807424e0d927560"
+      md5: "7fd4caabac1d9169e289f0f7bbf71d8e"
+      crc32: "72bdf532"
+      size: 131072
+    - name: iplrom30.dat
+      destination: keropi/iplrom30.dat
+      required: true
+      sha1: "239e9124568c862c31d9ec0605e32373ea74b86a"
+      md5: "f373003710ab4322642f527f567e020a"
+      crc32: "e8f8fdad"
+      size: 131072
+    - name: iplromco.dat
+      destination: keropi/iplromco.dat
+      required: true
+      sha1: "77511fc58798404701f66b6bbc9cbde06596eba7"
+      md5: "cc78d4f4900f622bd6de1aed7f52592f"
+      crc32: "6c7ef608"
+      size: 131072
+    - name: iplromxv.dat
+      destination: keropi/iplromxv.dat
+      required: true
+      sha1: "e33cdcdb69cd257b0b211ef46e7a8b144637db57"
+      md5: "0617321daa182c3f3d6f41fd02fb3275"
+      crc32: "00eeb408"
+      size: 131072
+
+  # NEC PC-8801 — QUASI88 core
+  # QUASI88 searches "quasi88/" subfolder first
+  # ref: quasi88/src/libretro.c, docs.libretro.com/library/quasi88
+  quasi88:
+    - name: N88.ROM
+      destination: quasi88/N88.ROM
+      required: true
+      md5: "4f984e04a99d56c4cfe36115415d6eb8"
+    - name: N88SUB.ROM
+      destination: quasi88/N88SUB.ROM
+      required: true
+      md5: "793f86784e5608352a5d7f03f03e0858"
+    - name: N88N.ROM
+      destination: quasi88/N88N.ROM
+      required: true
+      md5: "2ff07b8769367321128e03924af668a0"
+    - name: N88KNJ1.ROM
+      destination: quasi88/N88KNJ1.ROM
+      required: true
+      md5: "d81c6d5d7ad1a4bbbd6ae22a01257603"
+    - name: N88EXT0.ROM
+      destination: quasi88/N88EXT0.ROM
+      required: true
+      md5: "d675a2ca186c6efcd6277b835de4c7e5"
+    - name: N88EXT1.ROM
+      destination: quasi88/N88EXT1.ROM
+      required: true
+      md5: "e844534dfe5744b381444dbe61ef1b66"
+    - name: N88EXT2.ROM
+      destination: quasi88/N88EXT2.ROM
+      required: true
+      md5: "6548fa45061274dee1ea8ae1e9e93910"
+    - name: N88EXT3.ROM
+      destination: quasi88/N88EXT3.ROM
+      required: true
+      md5: "fc4b76a402ba501e6ba6de4b3e8b4273"
+
+  # Sega Saturn — Kronos core
+  # Kronos searches "kronos/" subfolder first, falls back to root
+  # ref: libretro-kronos/libretro/libretro.c, docs.libretro.com/library/kronos
+  kronos:
+    - name: saturn_bios.bin
+      destination: kronos/saturn_bios.bin
+      required: true
+      sha1: "2b8cb4f87580683eb4d760e4ed210813d667f0a2"
+      md5: "af5828fdff51384f99b3c4926be27762"
+      crc32: "2aba43c2"
+      size: 524288

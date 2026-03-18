@@ -1,0 +1,30 @@
+# LRPS2 — Sony PlayStation 2 (libretro)
+# ref: libretro/lrps2, docs.libretro.com/library/lrps2
+# Same BIOS as PCSX2 standalone, placed in pcsx2/bios/ subfolder.
+# Also needs GameIndex.yaml for game compatibility database.
+#
+# doc vs source: docs say "no specific filename required" for BIOS, any
+# valid 4 MB PS2 BIOS dump works. Docs do not list GameIndex.yaml as a
+# BIOS file, but the source code loads it from pcsx2/resources/ and it
+# is needed for game-specific patches and compatibility fixes.
+# SCPH-10000 not recommended per docs (lower compatibility).
+emulator: LRPS2
+type: libretro
+cores: [lrps2]
+source: "https://github.com/libretro/lrps2"
+systems:
+  - sony-playstation-2
+
+notes: |
+  Libretro port of PCSX2. Uses the same BIOS files as standalone PCSX2.
+  BIOS must NOT be zipped. Any valid PS2 BIOS works (SCPH-10000 not
+  recommended due to lower compatibility). BIOS goes in pcsx2/bios/.
+  GameIndex.yaml goes in pcsx2/resources/ and is needed for proper
+  game-specific settings (patches, fixes).
+
+files:
+  - name: GameIndex.yaml
+    system: sony-playstation-2
+    required: true
+    note: "game compatibility database, not a BIOS — pcsx2/resources/GameIndex.yaml"
+    source_ref: "pcsx2/GameIndex.yaml"

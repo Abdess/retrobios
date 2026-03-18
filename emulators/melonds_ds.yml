@@ -1,0 +1,55 @@
+# melonDS DS — Nintendo DS/DSi (libretro, newer fork)
+# ref: JesseTG/melonds-ds, docs.libretro.com/library/melonds_ds
+# Prefers files in "melonDS DS/" subfolder. DS mode has HLE fallback.
+# DSi mode requires real BIOS + NAND dump.
+#
+# doc vs source: docs use bios7.bin/bios9.bin (NDS) and dsi_bios7.bin/
+# dsi_bios9.bin (DSi). The older melonDS core uses the same names.
+# Repo stores NDS ARM7/ARM9 as biosdsi7.bin/biosdsi9.bin (DSi dumps that
+# also work for NDS). The md5 in docs (df692a80/a392174e) are for the
+# smaller NDS-only dumps, different from the DSi dumps in the repo.
+emulator: melonDS DS
+type: libretro
+cores: [melonds_ds]
+source: "https://github.com/JesseTG/melonds-ds"
+systems:
+  - nintendo-ds
+  - nintendo-dsi
+
+notes: |
+  Newer fork of melonDS for libretro with DSi support.
+  DS BIOS files are optional (built-in FreeBIOS used as fallback).
+  DSi mode requires all four DSi-specific files.
+  Core searches "melonDS DS/" subfolder first, then system root.
+
+files:
+  # DS mode (optional, FreeBIOS fallback)
+  - name: bios7.bin
+    system: nintendo-ds
+    required: false
+    md5: df692a80a5b1bc90728bc3dfc76cd948
+    note: "NDS ARM7 BIOS"
+  - name: bios9.bin
+    system: nintendo-ds
+    required: false
+    md5: a392174eb3e572fed6447e956bde4b25
+    note: "NDS ARM9 BIOS"
+  - name: firmware.bin
+    system: nintendo-ds
+    required: false
+    sha1: 8497afdd16af92d6887b71582846c40514e9039f
+    md5: 145eaef5bd3037cbc247c213bb3da1b3
+    size: 262144
+  # DSi mode (required)
+  - name: dsi_firmware.bin
+    system: nintendo-dsi
+    required: true
+    sha1: d2a5af338f09c5cbdd5d7628db5b9c075c69b616
+    md5: 8daa89fd280b3e5ec79fbab73ad6684e
+    size: 131072
+  - name: dsi_nand.bin
+    system: nintendo-dsi
+    required: true
+    sha1: b48f44194fe918aaaec5298861479512b581d661
+    md5: dfafb1908da8f527df7a372e649b50be
+    size: 251658304

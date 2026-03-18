@@ -22,6 +22,16 @@ SOURCE_URL = (
     "master/dat/System.dat"
 )
 
+# Libretro cores that expect BIOS files in a subdirectory of system/.
+# System.dat lists filenames flat; the scraper prepends the prefix.
+# ref: each core's libretro.c or equivalent — see platforms/README.md
+CORE_SUBDIR_MAP = {
+    "nec-pc-98": "np2kai",         # libretro-np2kai/sdl/libretro.c
+    "sharp-x68000": "keropi",      # px68k/libretro/libretro.c
+    "sega-dreamcast": "dc",        # flycast/shell/libretro/libretro.cpp
+    "sega-dreamcast-arcade": "dc", # flycast — same subfolder
+}
+
 SYSTEM_SLUG_MAP = {
     "3DO Company, The - 3DO": "3do",
     "Amstrad - CPC": "amstrad-cpc",
@@ -106,6 +116,10 @@ class Scraper(BaseScraper):
 
             destination = rom.name
             name = rom.name.split("/")[-1] if "/" in rom.name else rom.name
+
+            subdir = CORE_SUBDIR_MAP.get(system_slug)
+            if subdir and not destination.startswith(subdir + "/"):
+                destination = f"{subdir}/{destination}"
 
             requirements.append(BiosRequirement(
                 name=name,
@@ -235,6 +249,34 @@ class Scraper(BaseScraper):
                 entry["size"] = req.size
 
             systems[req.system]["files"].append(entry)
+
+        # Systems not in System.dat but needed for RetroArch — added via
+        # shared groups in _shared.yml. The includes directive is resolved
+        # at load time by load_platform_config().
+        EXTRA_SYSTEMS = {
+            "nec-pc-88": {
+                "includes": ["quasi88"],
+                "core": "quasi88",
+                "manufacturer": "NEC",
+                "docs": "https://docs.libretro.com/library/quasi88/",
+            },
+        }
+        for sys_id, sys_data in EXTRA_SYSTEMS.items():
+            if sys_id not in systems:
+                systems[sys_id] = sys_data
+
+        # Inject shared group references for systems that have core-specific
+        # subdirectory requirements already defined in _shared.yml.
+        SYSTEM_SHARED_GROUPS = {
+            "nec-pc-98": ["np2kai"],
+            "sharp-x68000": ["keropi"],
+            "sega-saturn": ["kronos"],
+        }
+        for sys_id, groups in SYSTEM_SHARED_GROUPS.items():
+            if sys_id in systems:
+                systems[sys_id].setdefault("includes", []).extend(
+                    g for g in groups if g not in systems[sys_id].get("includes", [])
+                )
 
         return {
             "platform": "RetroArch",
