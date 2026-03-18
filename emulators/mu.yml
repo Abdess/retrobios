@@ -37,6 +37,7 @@ files:
     system: palm-os
     description: "Palm m515 ROM, Palm OS 4.1 English"
     required: true
+    md5: "83cb1d1c76e568b916dc2e7c0bf669f6"
     note: "Default ROM. Selected when core option is 'Palm m515/Palm OS 4.1'. Max 4 MB, byte-swapped on LE."
     source_ref: "libretroBuildSystem/libretro.c:173-176,744-763 (retro_load_game ROM loading)"
 
@@ -45,6 +46,7 @@ files:
     system: palm-os
     description: "Palm m500 ROM, Palm OS 4.0 English"
     required: false
+    md5: "f50e4d5e4d98dc831f2c34a9107651eb"
     note: "Selected when core option is 'Palm m500/Palm OS 4.0'. Max 4 MB."
     source_ref: "libretroBuildSystem/libretro.c:169-172"
 
@@ -53,6 +55,7 @@ files:
     system: palm-os
     description: "Tungsten T3 ROM, Palm OS 5.2.1 English"
     required: false
+    md5: "de46ec84d9aabf655eabdf9b00a3845d"
     note: "Selected when core option is 'Tungsten T3/Palm OS 5.2.1'. Max 16 MB. Only available if core compiled with EMU_SUPPORT_PALM_OS5."
     source_ref: "libretroBuildSystem/libretro.c:178-181"
 
@@ -69,6 +72,7 @@ files:
     system: palm-os
     description: "MC68VZ328 UART bootloader"
     required: false
+    md5: "9da101cd2317830649a31f8fa46debec"
     note: "Optional for m500/m515. Ignored for Tungsten T3. Loads from system directory."
     source_ref: "libretroBuildSystem/libretro.c:766-782"
 

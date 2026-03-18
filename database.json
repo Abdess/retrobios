@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-03-18T12:47:15Z",
-  "total_files": 5562,
-  "total_size": 4907075379,
+  "generated_at": "2026-03-18T13:22:12Z",
+  "total_files": 5563,
+  "total_size": 4908008969,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -47811,14 +47811,14 @@
       "sha256": "f7c4944e3001e3849cdead743e200e009d4d07bd5afb20fb937a7b201895f713",
       "crc32": "6932e64c"
     },
-    "57369df9ca82a460e596cea7835c5a0797dee668": {
+    "b22389650f6c0a1e276b48213fed8a9c1c6476ce": {
       "path": "bios/Sony/PlayStation 2/GameIndex.yaml",
       "name": "GameIndex.yaml",
-      "size": 1737799,
-      "sha1": "57369df9ca82a460e596cea7835c5a0797dee668",
-      "md5": "526291c9c9bae8b184b0e5f4bfa94eb9",
-      "sha256": "efa94cb7b9208dc6812bb9407dc986560e523cce57f511eff30942f76b7288bf",
-      "crc32": "20b4ea53"
+      "size": 2669341,
+      "sha1": "b22389650f6c0a1e276b48213fed8a9c1c6476ce",
+      "md5": "6a42e113ffab12c06a82db00147311fd",
+      "sha256": "fe469d080984767b32b45dd4f26f58680470003c4935d78e57b21ed4d2061d88",
+      "crc32": "b5d7481e"
     },
     "1bae895fbdd658cfb56c53cc2139282cc1e778de": {
       "path": "bios/Sony/PlayStation 2/ROM2.BIN",
@@ -49871,6 +49871,15 @@
       "md5": "4f0e9736c6ff1671459b1f3c80f74f98",
       "sha256": "c156550085a40e69e82e83ce4fe31c92401b1cc0e09b35ca3a9b1687b0d852d6",
       "crc32": "0d9fbdbb"
+    },
+    "5ac620c529e4965efb5560fe824854a44c983757": {
+      "path": "bios/VTech/CreatiVision/bioscv.rom",
+      "name": "bioscv.rom",
+      "size": 2048,
+      "sha1": "5ac620c529e4965efb5560fe824854a44c983757",
+      "md5": "3b1ef759d8e3fb4071582efd33dd05f9",
+      "sha256": "5e3c95e10217007c5159a2ba3a60672888f5f8c87ba375a81ca9013e268b7bc8",
+      "crc32": "c3c590c6"
     },
     "87526fb12fabbcc01292dd01dc698fdc762ab7dc": {
       "path": "bios/VTech/CreatiVision/crvision.zip",
@@ -55376,7 +55385,7 @@
       "1e68c231d0896b7eadcad1d7d8e76129": "14df4f6c1e367ce097c11deae21566b4fe5647a9",
       "b9d9a0286c33dc6b7237bb13cd46fdee": "8d5de56a79954f29e9006929ba3fed9b6a418c1d",
       "9a9e8ed7668e6adfc8f7766c08ab9cd0": "adb4dbb7feb8247811506a38896ddcb789c4b477",
-      "526291c9c9bae8b184b0e5f4bfa94eb9": "57369df9ca82a460e596cea7835c5a0797dee668",
+      "6a42e113ffab12c06a82db00147311fd": "b22389650f6c0a1e276b48213fed8a9c1c6476ce",
       "b406d05922dac2eaf3c2e68157b1b468": "1bae895fbdd658cfb56c53cc2139282cc1e778de",
       "3faf7c064a4984f53e2ef5e80ed543bc": "3f8affbe07024ccd2f5b8374072d0928c583a862",
       "acf4730ceb38ac9d8c7d8e21f2614600": "aea061e6e263fdcc1c4fdbd68553ef78dae74263",
@@ -55605,6 +55614,7 @@
       "f2087ed09f7fa8d8856cfafb20dd00dc": "e0f5e2eced447abf9948342b2facc40179f0f527",
       "37c052c1388be33bac2fac88a439322c": "8bbe175a406e2e38227d8bdca1a820c727f80c03",
       "4f0e9736c6ff1671459b1f3c80f74f98": "273dbb7a93eb0ab83c2e13e9db51b897cc18f838",
+      "3b1ef759d8e3fb4071582efd33dd05f9": "5ac620c529e4965efb5560fe824854a44c983757",
       "a2049600b290c9e73a74d124785516c4": "87526fb12fabbcc01292dd01dc698fdc762ab7dc",
       "9cd678c94615c23a65618631be70b500": "9fa5f366c4ec43d7c23f03f054733894bf42912f",
       "3e88a4725c71e49c897e83ab9eb536f6": "6bbaa8f73027eaca2c6988ee3b9b3f3b0b29d18e",
@@ -69982,7 +69992,7 @@
         "adb4dbb7feb8247811506a38896ddcb789c4b477"
       ],
       "GameIndex.yaml": [
-        "57369df9ca82a460e596cea7835c5a0797dee668",
+        "b22389650f6c0a1e276b48213fed8a9c1c6476ce",
         "6eddec30056cde7c664a0cf508dcad29353a12bb",
         "40ecf6138c99a0aba775ef93240b295025a45500"
       ],
@@ -70642,6 +70652,9 @@
       "tutor.zip": [
         "8bbe175a406e2e38227d8bdca1a820c727f80c03",
         "273dbb7a93eb0ab83c2e13e9db51b897cc18f838"
+      ],
+      "bioscv.rom": [
+        "5ac620c529e4965efb5560fe824854a44c983757"
       ],
       "crvision.zip": [
         "87526fb12fabbcc01292dd01dc698fdc762ab7dc"
@@ -71746,9 +71759,6 @@
         "45bedc4cbdeac66c7df59e9e599195c778d86a92"
       ],
       "boot.rom": [
-        "45bedc4cbdeac66c7df59e9e599195c778d86a92"
-      ],
-      "bioscv.rom": [
         "45bedc4cbdeac66c7df59e9e599195c778d86a92"
       ],
       "IPL.bin": [
@@ -77203,7 +77213,7 @@
       "502224b6": "14df4f6c1e367ce097c11deae21566b4fe5647a9",
       "318178bf": "8d5de56a79954f29e9006929ba3fed9b6a418c1d",
       "6932e64c": "adb4dbb7feb8247811506a38896ddcb789c4b477",
-      "20b4ea53": "57369df9ca82a460e596cea7835c5a0797dee668",
+      "b5d7481e": "b22389650f6c0a1e276b48213fed8a9c1c6476ce",
       "b5fad94a": "1bae895fbdd658cfb56c53cc2139282cc1e778de",
       "054a6ec2": "3f8affbe07024ccd2f5b8374072d0928c583a862",
       "b7ef81a9": "aea061e6e263fdcc1c4fdbd68553ef78dae74263",
@@ -77432,6 +77442,7 @@
       "9ed23a12": "e0f5e2eced447abf9948342b2facc40179f0f527",
       "dc569ae7": "8bbe175a406e2e38227d8bdca1a820c727f80c03",
       "0d9fbdbb": "273dbb7a93eb0ab83c2e13e9db51b897cc18f838",
+      "c3c590c6": "5ac620c529e4965efb5560fe824854a44c983757",
       "f387895d": "87526fb12fabbcc01292dd01dc698fdc762ab7dc",
       "e004421a": "9fa5f366c4ec43d7c23f03f054733894bf42912f",
       "a5156df5": "6bbaa8f73027eaca2c6988ee3b9b3f3b0b29d18e",
