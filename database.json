@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-03-18T15:11:54Z",
-  "total_files": 5565,
-  "total_size": 4908280385,
+  "generated_at": "2026-03-18T16:37:01Z",
+  "total_files": 5567,
+  "total_size": 4908292673,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -47127,6 +47127,24 @@
       "sha256": "8a39aae2b2eb3c9fff09dc0d80bca9ffcb981f1665d9067ea1131129f3353b2b",
       "crc32": "37f87fac"
     },
+    "04e352ab6d6ca7f50109f67c850d9dc0f467de77": {
+      "path": "bios/Sinclair/ZX 81/dkchr.rom",
+      "name": "dkchr.rom",
+      "size": 4096,
+      "sha1": "04e352ab6d6ca7f50109f67c850d9dc0f467de77",
+      "md5": "5cba3a306fbb94454811ba262b27c958",
+      "sha256": "079ad784af12e6bf0b5c52a7b4d92da5ae4acddd0b13d73ec4221b49636a6c51",
+      "crc32": "761137d7"
+    },
+    "7b143ee964e9ada89d1f9e88f0bd48d919184cfc": {
+      "path": "bios/Sinclair/ZX 81/zx81.rom",
+      "name": "zx81.rom",
+      "size": 8192,
+      "sha1": "7b143ee964e9ada89d1f9e88f0bd48d919184cfc",
+      "md5": "db398d4e4e93a6d4dee3bfe146918219",
+      "sha256": "14ad84f4243efcd41587ff46ab932d11087043e8d455a1ed2a227b9657828dfa",
+      "crc32": "4b1dd6eb"
+    },
     "4f4b11ec22326280bdb96e3baf9db4b4cb1d02c5": {
       "path": "bios/Sinclair/ZX Spectrum/128-0.rom",
       "name": "128-0.rom",
@@ -55327,6 +55345,8 @@
       "cc78d4f4900f622bd6de1aed7f52592f": "77511fc58798404701f66b6bbc9cbde06596eba7",
       "0617321daa182c3f3d6f41fd02fb3275": "e33cdcdb69cd257b0b211ef46e7a8b144637db57",
       "27fbde30ffc81dbf909d4287be7c0f28": "cede52455ac2a92607b4a16b59a9296f9be3b78e",
+      "5cba3a306fbb94454811ba262b27c958": "04e352ab6d6ca7f50109f67c850d9dc0f467de77",
+      "db398d4e4e93a6d4dee3bfe146918219": "7b143ee964e9ada89d1f9e88f0bd48d919184cfc",
       "b4d2692115a9f2924df92a3cbfb358fb": "4f4b11ec22326280bdb96e3baf9db4b4cb1d02c5",
       "6e09e5d3c4aef166601669feaaadc01c": "80080644289ed93d71a1103992a154cc9802b2fa",
       "c1231a70b8129311216acb7479b031d5": "968937b1c750f0ef6205f01c6db4148da4cca4e3",
@@ -69789,6 +69809,12 @@
       "sram.dat": [
         "cede52455ac2a92607b4a16b59a9296f9be3b78e"
       ],
+      "dkchr.rom": [
+        "04e352ab6d6ca7f50109f67c850d9dc0f467de77"
+      ],
+      "zx81.rom": [
+        "7b143ee964e9ada89d1f9e88f0bd48d919184cfc"
+      ],
       "128-0.rom": [
         "4f4b11ec22326280bdb96e3baf9db4b4cb1d02c5"
       ],
@@ -77161,6 +77187,8 @@
       "6c7ef608": "77511fc58798404701f66b6bbc9cbde06596eba7",
       "00eeb408": "e33cdcdb69cd257b0b211ef46e7a8b144637db57",
       "37f87fac": "cede52455ac2a92607b4a16b59a9296f9be3b78e",
+      "761137d7": "04e352ab6d6ca7f50109f67c850d9dc0f467de77",
+      "4b1dd6eb": "7b143ee964e9ada89d1f9e88f0bd48d919184cfc",
       "e76799d2": "4f4b11ec22326280bdb96e3baf9db4b4cb1d02c5",
       "b96a36be": "80080644289ed93d71a1103992a154cc9802b2fa",
       "453d86b2": "968937b1c750f0ef6205f01c6db4148da4cca4e3",

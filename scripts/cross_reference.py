@@ -106,6 +106,13 @@ def cross_reference(
             if not fname:
                 continue
 
+            # Skip standalone-only files when comparing against libretro
+            # platforms (RetroArch, Lakka, etc.). These files are embedded
+            # in the core and don't need to be in the platform pack.
+            file_mode = f.get("mode", "both")
+            if file_mode == "standalone":
+                continue
+
             in_platform = fname in platform_names
             in_repo = _find_in_repo(fname, by_name, by_name_lower)
 
