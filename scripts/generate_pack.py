@@ -235,12 +235,84 @@ def download_external(file_entry: dict, dest_path: str) -> bool:
     return True
 
 
+def _load_emulator_extras(
+    platform_name: str,
+    platforms_dir: str,
+    emulators_dir: str,
+    seen: dict,
+    base_dest: str,
+    config: dict | None = None,
+) -> list[dict]:
+    """Load extra files from emulator profiles not already in the platform pack.
+
+    Collects emulators from two sources:
+    1. Auto-detected from platform config "core:" fields per system
+    2. Manual "emulators:" list in _registry.yml
+    """
+    emu_names = set()
+
+    # Source 1: auto-detect from platform config core: fields
+    if config:
+        for system in config.get("systems", {}).values():
+            core = system.get("core", "")
+            if core:
+                emu_names.add(core)
+
+    # Source 2: manual list from _registry.yml
+    registry_path = os.path.join(platforms_dir, "_registry.yml")
+    if os.path.exists(registry_path):
+        with open(registry_path) as f:
+            registry = yaml.safe_load(f) or {}
+        platform_cfg = registry.get("platforms", {}).get(platform_name, {})
+        for name in platform_cfg.get("emulators", []):
+            emu_names.add(name)
+
+    if not emu_names:
+        return []
+
+    extras = []
+    emu_dir = Path(emulators_dir)
+    for emu_name in emu_names:
+        emu_path = emu_dir / f"{emu_name}.yml"
+        if not emu_path.exists():
+            continue
+        with open(emu_path) as f:
+            profile = yaml.safe_load(f) or {}
+
+        # Follow alias
+        if profile.get("alias_of"):
+            parent = emu_dir / f"{profile['alias_of']}.yml"
+            if parent.exists():
+                with open(parent) as f:
+                    profile = yaml.safe_load(f) or {}
+
+        for fe in profile.get("files", []):
+            name = fe.get("name", "")
+            if not name or name.startswith("<"):
+                continue
+            dest = fe.get("destination", name)
+            full_dest = f"{base_dest}/{dest}" if base_dest else dest
+            if full_dest in seen:
+                continue
+            extras.append({
+                "name": name,
+                "sha1": fe.get("sha1"),
+                "md5": fe.get("md5"),
+                "destination": dest,
+                "required": fe.get("required", False),
+                "source_emulator": emu_name,
+            })
+    return extras
+
+
 def generate_pack(
     platform_name: str,
     platforms_dir: str,
     db_path: str,
     bios_dir: str,
     output_dir: str,
+    include_extras: bool = False,
+    emulators_dir: str = "emulators",
 ) -> str | None:
     """Generate a ZIP pack for a platform.
 
@@ -255,7 +327,8 @@ def generate_pack(
     platform_display = config.get("platform", platform_name)
     base_dest = config.get("base_destination", "")
 
-    zip_name = f"{platform_display.replace(' ', '_')}_BIOS_Pack.zip"
+    suffix = "Complete_Pack" if include_extras else "BIOS_Pack"
+    zip_name = f"{platform_display.replace(' ', '_')}_{suffix}.zip"
     zip_path = os.path.join(output_dir, zip_name)
     os.makedirs(output_dir, exist_ok=True)
 
@@ -329,6 +402,30 @@ def generate_pack(
                     zf.write(local_path, full_dest)
                 total_files += 1
 
+        # Tier 2: emulator extras
+        extra_count = 0
+        if include_extras:
+            extras = _load_emulator_extras(
+                platform_name, platforms_dir, emulators_dir,
+                seen_destinations, base_dest, config=config,
+            )
+            for fe in extras:
+                dest = _sanitize_path(fe.get("destination", fe["name"]))
+                if not dest:
+                    continue
+                full_dest = f"{base_dest}/{dest}" if base_dest else dest
+                if full_dest in seen_destinations:
+                    continue
+
+                local_path, status = resolve_file(fe, db, bios_dir, zip_contents)
+                if status in ("not_found", "external", "user_provided"):
+                    continue
+
+                zf.write(local_path, full_dest)
+                seen_destinations[full_dest] = fe.get("sha1") or fe.get("md5") or ""
+                extra_count += 1
+                total_files += 1
+
     if missing_files:
         print(f"  Missing ({len(missing_files)}): {', '.join(missing_files[:10])}")
         if len(missing_files) > 10:
@@ -342,13 +439,12 @@ def generate_pack(
     if user_provided:
         print(f"  User-provided ({len(user_provided)}): {', '.join(user_provided)}")
 
+    extras_msg = f" + {extra_count} emulator extras" if extra_count else ""
     if verification_mode == "existence":
-        # RetroArch-family: only existence matters
-        print(f"  Generated {zip_path}: {total_files} files ({total_files} present, {len(missing_files)} missing) [verification: existence]")
+        print(f"  Generated {zip_path}: {total_files} files ({total_files - extra_count} platform{extras_msg}, {len(missing_files)} missing) [verification: existence]")
     else:
-        # Batocera-family: hash verification matters
         verified = total_files - len(untested_files)
-        print(f"  Generated {zip_path}: {total_files} files ({verified} verified, {len(untested_files)} untested, {len(missing_files)} missing) [verification: {verification_mode}]")
+        print(f"  Generated {zip_path}: {total_files} files ({verified} verified{extras_msg}, {len(untested_files)} untested, {len(missing_files)} missing) [verification: {verification_mode}]")
     return zip_path
 
 
@@ -418,7 +514,10 @@ def main():
             print(f"\nGenerating pack for {representative}...")
 
         try:
-            zip_path = generate_pack(representative, args.platforms_dir, args.db, args.bios_dir, args.output_dir)
+            zip_path = generate_pack(
+                representative, args.platforms_dir, args.db, args.bios_dir, args.output_dir,
+                include_extras=args.include_extras, emulators_dir=args.emulators_dir,
+            )
             if zip_path and len(group_platforms) > 1:
                 # Rename ZIP to include all platform names
                 names = [load_platform_config(p, args.platforms_dir).get("platform", p) for p in group_platforms]

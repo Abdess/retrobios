@@ -25,6 +25,7 @@ platforms:
     source_format: python_dict
     hash_type: md5
     schedule: weekly
+    emulators: [flycast, dolphin, pcsx2, duckstation, rpcs3, ppsspp, beetle_psx, beetle_saturn, genesis_plus_gx, picodrive, fbneo, puae, hatari, fuse, opera, bluemsx, fmsx, np2kai, quasi88]
 
   recalbox:
     config: recalbox.yml
@@ -34,6 +35,7 @@ platforms:
     source_format: xml
     hash_type: md5
     schedule: monthly
+    emulators: [flycast, dolphin, pcsx2, beetle_psx, beetle_saturn, genesis_plus_gx, picodrive, fbneo, puae, hatari, opera, bluemsx, fmsx]
 
   retrobat:
     config: retrobat.yml
@@ -43,6 +45,7 @@ platforms:
     source_format: json
     hash_type: md5
     schedule: weekly
+    emulators: [duckstation, pcsx2, dolphin, rpcs3, ppsspp, cemu, xemu, flycast, beetle_psx, beetle_saturn, genesis_plus_gx, puae, opera]
 
   emudeck:
     config: emudeck.yml
