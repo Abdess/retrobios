@@ -288,24 +288,25 @@ def generate_pack(
     os.makedirs(output_dir, exist_ok=True)
 
     total_files = 0
-    total_checks = 0
-    verified_checks = 0
     missing_files = []
-    untested_files = []
     user_provided = []
     seen_destinations = set()
+    # Per-file status: worst status wins (missing > wrong_hash > ok)
+    file_status: dict[str, str] = {}
+    file_reasons: dict[str, str] = {}
 
     with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:
         for sys_id, system in sorted(config.get("systems", {}).items()):
             for file_entry in system.get("files", []):
-                total_checks += 1
                 dest = _sanitize_path(file_entry.get("destination", file_entry["name"]))
                 if not dest:
                     # EmuDeck-style entries (system:md5 whitelist, no filename).
-                    # Count as verified if file exists in DB by MD5.
+                    fkey = f"{sys_id}/{file_entry.get('name', '')}"
                     md5 = file_entry.get("md5", "")
                     if md5 and md5 in db.get("indexes", {}).get("by_md5", {}):
-                        verified_checks += 1
+                        file_status.setdefault(fkey, "ok")
+                    else:
+                        file_status[fkey] = "missing"
                     continue
                 if base_dest:
                     full_dest = f"{base_dest}/{dest}"
@@ -321,7 +322,7 @@ def generate_pack(
                     if already_packed:
                         continue
                     seen_destinations.add(dedup_key)
-                    verified_checks += 1
+                    file_status.setdefault(dedup_key, "ok")
                     instructions = file_entry.get("instructions", "Please provide this file manually.")
                     instr_name = f"INSTRUCTIONS_{file_entry['name']}.txt"
                     instr_path = f"{base_dest}/{instr_name}" if base_dest else instr_name
@@ -355,24 +356,26 @@ def generate_pack(
                 if status == "not_found":
                     if not already_packed:
                         missing_files.append(file_entry["name"])
+                        file_status[dedup_key] = "missing"
                     continue
 
-                check_passed = True
-                if status == "hash_mismatch":
-                    if verification_mode != "existence":
-                        zf_name = file_entry.get("zipped_file")
-                        if zf_name and local_path:
-                            from verify import check_inside_zip
-                            inner_md5 = file_entry.get("md5", "")
-                            result = check_inside_zip(local_path, zf_name, inner_md5)
-                            if result != "ok":
-                                untested_files.append(file_entry["name"])
-                                check_passed = False
+                if status == "hash_mismatch" and verification_mode != "existence":
+                    zf_name = file_entry.get("zipped_file")
+                    if zf_name and local_path:
+                        from verify import check_inside_zip
+                        inner_md5 = file_entry.get("md5", "")
+                        inner_result = check_inside_zip(local_path, zf_name, inner_md5)
+                        if inner_result != "ok":
+                            file_status[dedup_key] = "wrong_hash"
+                            reason = f"{zf_name} hash mismatch inside ZIP"
+                            file_reasons[dedup_key] = reason
                         else:
-                            untested_files.append(file_entry["name"])
-                            check_passed = False
-                if check_passed:
-                    verified_checks += 1
+                            file_status.setdefault(dedup_key, "ok")
+                    else:
+                        file_status[dedup_key] = "wrong_hash"
+                        file_reasons[dedup_key] = "container hash mismatch"
+                else:
+                    file_status.setdefault(dedup_key, "ok")
 
                 if already_packed:
                     continue
@@ -436,27 +439,23 @@ def generate_pack(
                         zf.write(src, full)
                         total_files += 1
 
-    if missing_files:
-        print(f"  Missing ({len(missing_files)}): {', '.join(missing_files[:10])}")
-        if len(missing_files) > 10:
-            print(f"    ... and {len(missing_files) - 10} more")
+    files_ok = sum(1 for s in file_status.values() if s == "ok")
+    files_wrong = sum(1 for s in file_status.values() if s == "wrong_hash")
+    files_miss = sum(1 for s in file_status.values() if s == "missing")
+    total_checked = len(file_status)
 
-    if untested_files:
-        print(f"  Untested ({len(untested_files)}): {', '.join(untested_files[:10])}")
-        if len(untested_files) > 10:
-            print(f"    ... and {len(untested_files) - 10} more")
+    parts = [f"{files_ok}/{total_checked} files OK"]
+    if files_wrong:
+        parts.append(f"{files_wrong} wrong hash")
+    if files_miss:
+        parts.append(f"{files_miss} missing")
+    extras_msg = f", {extra_count} extras" if extra_count else ""
+    print(f"  {zip_path}: {total_files} files packed{extras_msg}, {', '.join(parts)} [{verification_mode}]")
 
-    if user_provided:
-        print(f"  User-provided ({len(user_provided)}): {', '.join(user_provided)}")
-
-    extras_msg = f" + {extra_count} emulator extras" if extra_count else ""
-    if verification_mode == "existence":
-        print(f"  Generated {zip_path}: {total_files} files ({total_files - extra_count} platform{extras_msg}, {len(missing_files)} missing) [verification: existence]")
-    else:
-        checks_detail = ""
-        if total_checks != total_files:
-            checks_detail = f" ({total_checks - total_files} duplicate/inner checks)"
-        print(f"  Generated {zip_path}: {total_files} files, {verified_checks}/{total_checks} checks verified{checks_detail}, {len(untested_files)} untested, {len(missing_files)} missing [verification: {verification_mode}]")
+    for key, reason in file_reasons.items():
+        print(f"    WRONG HASH: {key} — {reason}")
+    for name in missing_files:
+        print(f"    MISSING: {name}")
     return zip_path
 
 

@@ -203,6 +203,7 @@ def verify_platform(config: dict, db: dict) -> dict:
     zip_contents = _build_zip_contents_index(db) if has_zipped else {}
 
     results = []
+    file_status: dict[str, str] = {}
     for sys_id, system in config.get("systems", {}).items():
         for file_entry in system.get("files", []):
             local_path, resolve_status = resolve_to_local_path(
@@ -215,24 +216,30 @@ def verify_platform(config: dict, db: dict) -> dict:
             result["system"] = sys_id
             results.append(result)
 
-    ok = sum(1 for r in results if r["status"] == Status.OK)
-    untested = sum(1 for r in results if r["status"] == Status.UNTESTED)
-    missing = sum(1 for r in results if r["status"] == Status.MISSING)
+            # Aggregate by destination (what the user sees on disk)
+            dest = file_entry.get("destination", file_entry.get("name", ""))
+            if not dest:
+                dest = f"{sys_id}/{file_entry.get('name', '')}"
+            cur = result["status"]
+            prev = file_status.get(dest)
+            if prev is None:
+                file_status[dest] = cur
+            elif cur == Status.MISSING:
+                file_status[dest] = Status.MISSING
+            elif cur == Status.UNTESTED and prev != Status.MISSING:
+                file_status[dest] = Status.UNTESTED
 
-    # Count unique files (by system/destination) for reporting
-    unique_files = set()
-    for r in results:
-        dest = r.get("path") or r["name"]
-        unique_files.add(dest)
+    files_ok = sum(1 for s in file_status.values() if s == Status.OK)
+    files_mismatch = sum(1 for s in file_status.values() if s == Status.UNTESTED)
+    files_missing = sum(1 for s in file_status.values() if s == Status.MISSING)
 
     return {
         "platform": platform,
         "verification_mode": mode,
-        "total": len(results),
-        "unique_files": len(unique_files),
-        "ok": ok,
-        "untested": untested,
-        "missing": missing,
+        "total_files": len(file_status),
+        "files_ok": files_ok,
+        "files_mismatch": files_mismatch,
+        "files_missing": files_missing,
         "details": results,
     }
 
@@ -266,26 +273,28 @@ def main():
 
         if not args.json:
             mode = result["verification_mode"]
-            uf = result["unique_files"]
-            total = result["total"]
-            checks_detail = f" ({total - uf} duplicate/inner checks)" if total != uf else ""
-            if mode == "existence":
-                print(f"{result['platform']}: {uf} files, {result['ok']}/{total} checks present{checks_detail}, "
-                      f"{result['missing']} missing [verification: {mode}]")
-            else:
-                print(f"{result['platform']}: {uf} files, {result['ok']}/{total} checks verified{checks_detail}, "
-                      f"{result['untested']} untested, {result['missing']} missing [verification: {mode}]")
+            total = result["total_files"]
+            ok = result["files_ok"]
+            mismatch = result["files_mismatch"]
+            miss = result["files_missing"]
 
-                for d in result["details"]:
-                    if d["status"] == Status.UNTESTED:
-                        reason = d.get("reason", "")
-                        if not reason and "expected_md5" in d:
-                            reason = f"expected={d['expected_md5'][:16]}... got={d['actual_md5'][:16]}..."
-                        print(f"  UNTESTED: {d['system']}/{d['name']} - {reason}")
+            parts = [f"{ok}/{total} files OK"]
+            if mismatch:
+                parts.append(f"{mismatch} wrong hash")
+            if miss:
+                parts.append(f"{miss} missing")
+            print(f"{result['platform']}: {', '.join(parts)} [{mode}]")
 
-                for d in result["details"]:
-                    if d["status"] == Status.MISSING:
-                        print(f"  MISSING: {d['system']}/{d['name']}")
+            for d in result["details"]:
+                if d["status"] == Status.UNTESTED:
+                    reason = d.get("reason", "")
+                    if not reason and "expected_md5" in d:
+                        reason = f"expected {d['expected_md5'][:12]}… got {d['actual_md5'][:12]}…"
+                    print(f"  WRONG HASH: {d['system']}/{d['name']} — {reason}")
+
+            for d in result["details"]:
+                if d["status"] == Status.MISSING:
+                    print(f"  MISSING: {d['system']}/{d['name']}")
 
     if args.json:
         for r in all_results.values():
