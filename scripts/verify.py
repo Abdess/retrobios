@@ -368,37 +368,74 @@ def print_platform_result(result: dict, group: list[str]) -> None:
     total = result["total_files"]
     c = result["severity_counts"]
     label = " / ".join(group)
+    ok_count = c[Severity.OK]
+    problems = total - ok_count
 
-    parts = [f"{c[Severity.OK]}/{total} OK"]
-    if c[Severity.CRITICAL]:
-        parts.append(f"{c[Severity.CRITICAL]} CRITICAL")
-    if c[Severity.WARNING]:
-        parts.append(f"{c[Severity.WARNING]} warning")
-    if c[Severity.INFO]:
-        parts.append(f"{c[Severity.INFO]} info")
+    # Summary line — platform-native terminology
+    if mode == "existence":
+        if problems:
+            missing = c.get(Severity.WARNING, 0) + c.get(Severity.CRITICAL, 0)
+            optional_missing = c.get(Severity.INFO, 0)
+            parts = [f"{ok_count}/{total} present"]
+            if missing:
+                parts.append(f"{missing} missing")
+            if optional_missing:
+                parts.append(f"{optional_missing} optional missing")
+        else:
+            parts = [f"{ok_count}/{total} present"]
+    else:
+        untested = c.get(Severity.WARNING, 0)
+        missing = c.get(Severity.CRITICAL, 0)
+        parts = [f"{ok_count}/{total} OK"]
+        if untested:
+            parts.append(f"{untested} untested")
+        if missing:
+            parts.append(f"{missing} missing")
     print(f"{label}: {', '.join(parts)} [{mode}]")
 
-    # Detail non-OK entries
+    # Detail non-OK entries with required/optional
+    seen_details = set()
     for d in result["details"]:
         if d["status"] == Status.UNTESTED:
+            key = f"{d['system']}/{d['name']}"
+            if key in seen_details:
+                continue
+            seen_details.add(key)
             req = "required" if d.get("required", True) else "optional"
             reason = d.get("reason", "")
-            print(f"  UNTESTED ({req}): {d['system']}/{d['name']} — {reason}")
+            print(f"  UNTESTED ({req}): {key} — {reason}")
     for d in result["details"]:
         if d["status"] == Status.MISSING:
+            key = f"{d['system']}/{d['name']}"
+            if key in seen_details:
+                continue
+            seen_details.add(key)
             req = "required" if d.get("required", True) else "optional"
-            print(f"  MISSING ({req}): {d['system']}/{d['name']}")
+            print(f"  MISSING ({req}): {key}")
 
-    # Cross-reference gaps
+    # Cross-reference: undeclared files used by cores
     undeclared = result.get("undeclared_files", [])
     if undeclared:
-        print(f"  Undeclared files used by cores ({len(undeclared)}):")
-        for u in undeclared[:20]:
-            req = "required" if u["required"] else "optional"
-            loc = "in repo" if u["in_repo"] else "NOT in repo"
-            print(f"    {u['emulator']} → {u['name']} ({req}, {loc})")
-        if len(undeclared) > 20:
-            print(f"    ... and {len(undeclared) - 20} more")
+        req_not_in_repo = [u for u in undeclared if u["required"] and not u["in_repo"]]
+        req_in_repo = [u for u in undeclared if u["required"] and u["in_repo"]]
+        opt_count = len(undeclared) - len(req_not_in_repo) - len(req_in_repo)
+
+        summary_parts = []
+        if req_not_in_repo:
+            summary_parts.append(f"{len(req_not_in_repo)} required NOT in repo")
+        if req_in_repo:
+            summary_parts.append(f"{len(req_in_repo)} required in repo")
+        summary_parts.append(f"{opt_count} optional")
+        print(f"  Core gaps: {len(undeclared)} undeclared ({', '.join(summary_parts)})")
+
+        # Show only critical gaps (required + not in repo)
+        for u in req_not_in_repo:
+            print(f"    {u['emulator']} → {u['name']} (required, NOT in repo)")
+        # Show required in repo (actionable)
+        for u in req_in_repo[:10]:
+            print(f"    {u['emulator']} → {u['name']} (required, in repo)")
+        if len(req_in_repo) > 10:
+            print(f"    ... and {len(req_in_repo) - 10} more required in repo")
 
 
 def main():

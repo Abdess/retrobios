@@ -40,39 +40,28 @@ def run(cmd: list[str], label: str) -> tuple[bool, str]:
     return ok, output
 
 
-def parse_verify_counts(output: str) -> dict[str, tuple[int, int, int, int]]:
-    """Extract per-group OK/total/wrong/missing from verify output.
+def parse_verify_counts(output: str) -> dict[str, tuple[int, int]]:
+    """Extract per-group OK/total from verify output.
 
-    Returns {group_label: (ok, total, wrong, missing)}.
-    Group label = "Lakka / RetroArch" for grouped platforms.
+    Matches: "Label: X/Y OK ..." or "Label: X/Y present ..."
+    Returns {group_label: (ok, total)}.
     """
+    import re
     counts = {}
     for line in output.splitlines():
-        if " files OK" not in line:
-            continue
-        label, rest = line.split(":", 1)
-        rest = rest.strip()
-        frac = rest.split(" files OK")[0].strip()
-        if "/" not in frac:
-            continue
-        ok, total = int(frac.split("/")[0]), int(frac.split("/")[1])
-        wrong = 0
-        missing = 0
-        if "wrong hash" in rest:
-            for part in rest.split(","):
-                part = part.strip()
-                if "wrong hash" in part:
-                    wrong = int(part.split()[0])
-                elif "missing" in part:
-                    missing = int(part.split()[0])
-        counts[label.strip()] = (ok, total, wrong, missing)
+        m = re.match(r"^(.+?):\s+(\d+)/(\d+)\s+(OK|present)", line)
+        if m:
+            label = m.group(1).strip()
+            ok, total = int(m.group(2)), int(m.group(3))
+            for name in label.split(" / "):
+                counts[name.strip()] = (ok, total)
     return counts
 
 
-def parse_pack_counts(output: str) -> dict[str, tuple[int, int, int, int, int]]:
-    """Extract per-pack files_packed/ok/total/wrong/missing.
+def parse_pack_counts(output: str) -> dict[str, tuple[int, int]]:
+    """Extract per-pack OK/total from generate_pack output.
 
-    Returns {pack_label: (packed, ok, total, wrong, missing)}.
+    Returns {pack_label: (ok, total)}.
     """
     import re
     counts = {}
@@ -82,16 +71,10 @@ def parse_pack_counts(output: str) -> dict[str, tuple[int, int, int, int, int]]:
         if m:
             current_label = m.group(1)
             continue
-        if "files packed" not in line or "files OK" not in line:
-            continue
-        packed = int(re.search(r"(\d+) files packed", line).group(1))
         frac_m = re.search(r"(\d+)/(\d+) files OK", line)
-        ok, total = int(frac_m.group(1)), int(frac_m.group(2))
-        wrong_m = re.search(r"(\d+) wrong hash", line)
-        wrong = int(wrong_m.group(1)) if wrong_m else 0
-        miss_m = re.search(r"(\d+) missing", line)
-        missing = int(miss_m.group(1)) if miss_m else 0
-        counts[current_label] = (packed, ok, total, wrong, missing)
+        if frac_m and "files packed" in line:
+            ok, total = int(frac_m.group(1)), int(frac_m.group(2))
+            counts[current_label] = (ok, total)
     return counts
 
 
@@ -102,13 +85,11 @@ def check_consistency(verify_output: str, pack_output: str) -> bool:
 
     print("\n--- 5/5 consistency check ---")
     all_ok = True
-    matched_verify = set()
 
-    for v_label, (v_ok, v_total, v_wrong, v_miss) in sorted(v.items()):
-        # Match by label overlap (handles "Lakka + RetroArch" vs "Lakka / RetroArch")
+    for v_label, (v_ok, v_total) in sorted(v.items()):
+        # Match by name overlap (handles "Lakka + RetroArch" vs "Lakka / RetroArch")
         p_match = None
         for p_label in p:
-            # Check if any platform name in the verify group matches the pack label
             v_names = {n.strip().lower() for n in v_label.split("/")}
             p_names = {n.strip().lower() for n in p_label.replace("+", "/").split("/")}
             if v_names & p_names:
@@ -116,25 +97,14 @@ def check_consistency(verify_output: str, pack_output: str) -> bool:
                 break
 
         if p_match:
-            matched_verify.add(v_label)
-            _, p_ok, p_total, p_wrong, p_miss = p[p_match]
-            checks_match = v_ok == p_ok and v_total == p_total
-            detail_match = v_wrong == p_wrong and v_miss == p_miss
-            if checks_match and detail_match:
-                print(f"  {v_label}: {v_ok}/{v_total} OK")
+            p_ok, p_total = p[p_match]
+            if v_ok == p_ok and v_total == p_total:
+                print(f"  {v_label}: verify {v_ok}/{v_total} == pack {p_ok}/{p_total} OK")
             else:
-                print(f"  {v_label}: MISMATCH")
-                print(f"    verify: {v_ok}/{v_total} OK, {v_wrong} wrong, {v_miss} missing")
-                print(f"    pack:   {p_ok}/{p_total} OK, {p_wrong} wrong, {p_miss} missing")
+                print(f"  {v_label}: MISMATCH verify {v_ok}/{v_total} != pack {p_ok}/{p_total}")
                 all_ok = False
         else:
-            # Grouped platform — check if another label in the same verify group matched
-            v_names = [n.strip() for n in v_label.split("/")]
-            other_matched = any(
-                name in lbl for lbl in matched_verify for name in v_names
-            )
-            if not other_matched:
-                print(f"  {v_label}: {v_ok}/{v_total} OK (no separate pack — grouped or archived)")
+            print(f"  {v_label}: {v_ok}/{v_total} (no separate pack)")
 
     status = "OK" if all_ok else "FAILED"
     print(f"--- consistency check: {status} ---")
