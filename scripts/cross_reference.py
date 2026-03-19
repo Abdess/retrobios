@@ -25,25 +25,11 @@ except ImportError:
     sys.exit(1)
 
 sys.path.insert(0, os.path.dirname(__file__))
-from common import load_database, load_platform_config
+from common import load_database, load_emulator_profiles, load_platform_config
 
 DEFAULT_EMULATORS_DIR = "emulators"
 DEFAULT_PLATFORMS_DIR = "platforms"
 DEFAULT_DB = "database.json"
-
-
-def load_emulator_profiles(emulators_dir: str) -> dict[str, dict]:
-    """Load all emulator YAML profiles."""
-    profiles = {}
-    emu_path = Path(emulators_dir)
-    if not emu_path.exists():
-        return profiles
-    for f in sorted(emu_path.glob("*.yml")):
-        with open(f) as fh:
-            profile = yaml.safe_load(fh) or {}
-        if "emulator" in profile:
-            profiles[f.stem] = profile
-    return profiles
 
 
 def load_platform_files(platforms_dir: str) -> tuple[dict[str, set[str]], dict[str, set[str]]]:

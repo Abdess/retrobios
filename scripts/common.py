@@ -243,6 +243,102 @@ def resolve_local_file(
     return None, "not_found"
 
 
+def check_inside_zip(container: str, file_name: str, expected_md5: str) -> str:
+    """Check a ROM inside a ZIP — replicates Batocera checkInsideZip().
+
+    Returns "ok", "untested", "not_in_zip", or "error".
+    """
+    try:
+        with zipfile.ZipFile(container) as archive:
+            for fname in archive.namelist():
+                if fname.casefold() == file_name.casefold():
+                    if expected_md5 == "":
+                        return "ok"
+                    with archive.open(fname) as entry:
+                        actual = md5sum(entry)
+                    return "ok" if actual == expected_md5 else "untested"
+            return "not_in_zip"
+    except (zipfile.BadZipFile, OSError, KeyError):
+        return "error"
+
+
+def build_zip_contents_index(db: dict, max_entry_size: int = 512 * 1024 * 1024) -> dict:
+    """Build {inner_rom_md5: zip_file_sha1} for ROMs inside ZIP files."""
+    index: dict[str, str] = {}
+    for sha1, entry in db.get("files", {}).items():
+        path = entry["path"]
+        if not path.endswith(".zip") or not os.path.exists(path):
+            continue
+        try:
+            with zipfile.ZipFile(path, "r") as zf:
+                for info in zf.infolist():
+                    if info.is_dir() or info.file_size > max_entry_size:
+                        continue
+                    data = zf.read(info.filename)
+                    index[hashlib.md5(data).hexdigest()] = sha1
+        except (zipfile.BadZipFile, OSError):
+            continue
+    return index
+
+
+def load_emulator_profiles(
+    emulators_dir: str, skip_aliases: bool = True,
+) -> dict[str, dict]:
+    """Load all emulator YAML profiles from a directory."""
+    try:
+        import yaml
+    except ImportError:
+        return {}
+    profiles = {}
+    emu_path = Path(emulators_dir)
+    if not emu_path.exists():
+        return profiles
+    for f in sorted(emu_path.glob("*.yml")):
+        with open(f) as fh:
+            profile = yaml.safe_load(fh) or {}
+        if "emulator" not in profile:
+            continue
+        if skip_aliases and profile.get("type") == "alias":
+            continue
+        profiles[f.stem] = profile
+    return profiles
+
+
+def group_identical_platforms(
+    platforms: list[str], platforms_dir: str,
+) -> list[tuple[list[str], str]]:
+    """Group platforms that produce identical packs (same files + base_destination).
+
+    Returns [(group_of_platform_names, representative), ...].
+    """
+    fingerprints: dict[str, list[str]] = {}
+    representatives: dict[str, str] = {}
+
+    for platform in platforms:
+        try:
+            config = load_platform_config(platform, platforms_dir)
+        except FileNotFoundError:
+            fingerprints.setdefault(platform, []).append(platform)
+            representatives.setdefault(platform, platform)
+            continue
+
+        base_dest = config.get("base_destination", "")
+        entries = []
+        for sys_id, system in sorted(config.get("systems", {}).items()):
+            for fe in system.get("files", []):
+                dest = fe.get("destination", fe.get("name", ""))
+                full_dest = f"{base_dest}/{dest}" if base_dest else dest
+                sha1 = fe.get("sha1", "")
+                md5 = fe.get("md5", "")
+                entries.append(f"{full_dest}|{sha1}|{md5}")
+
+        fp = hashlib.sha1("|".join(sorted(entries)).encode()).hexdigest()
+        fingerprints.setdefault(fp, []).append(platform)
+        representatives.setdefault(fp, platform)
+
+    return [(group, representatives[fp]) for fp, group in fingerprints.items()]
+
+
 def safe_extract_zip(zip_path: str, dest_dir: str) -> None:
     """Extract a ZIP file safely, preventing zip-slip path traversal."""
     dest = os.path.realpath(dest_dir)

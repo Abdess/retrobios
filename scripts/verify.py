@@ -34,7 +34,11 @@ except ImportError:
     sys.exit(1)
 
 sys.path.insert(0, os.path.dirname(__file__))
-from common import load_platform_config, md5sum, md5_composite, resolve_local_file
+from common import (
+    build_zip_contents_index, check_inside_zip, group_identical_platforms,
+    load_emulator_profiles, load_platform_config, md5sum, md5_composite,
+    resolve_local_file,
+)
 
 DEFAULT_DB = "database.json"
 DEFAULT_PLATFORMS_DIR = "platforms"
@@ -62,25 +66,6 @@ class Severity:
 # ---------------------------------------------------------------------------
 # Verification functions
 # ---------------------------------------------------------------------------
-
-def check_inside_zip(container: str, file_name: str, expected_md5: str) -> str:
-    """Replicate Batocera checkInsideZip() — batocera-systems:978-1009."""
-    try:
-        with zipfile.ZipFile(container) as archive:
-            for fname in archive.namelist():
-                if fname.casefold() == file_name.casefold():
-                    if expected_md5 == "":
-                        return Status.OK
-                    with archive.open(fname) as entry:
-                        actual = md5sum(entry)
-                    if actual == expected_md5:
-                        return Status.OK
-                    else:
-                        return Status.UNTESTED
-            return "not_in_zip"
-    except (zipfile.BadZipFile, OSError, KeyError):
-        return "error"
-
 
 def verify_entry_existence(file_entry: dict, local_path: str | None) -> dict:
     """RetroArch verification: path_is_valid() — file exists = OK."""
@@ -190,40 +175,9 @@ def compute_severity(status: str, required: bool, mode: str) -> str:
 # ZIP content index
 # ---------------------------------------------------------------------------
 
-def _build_zip_contents_index(db: dict) -> dict:
-    index: dict[str, str] = {}
-    for sha1, entry in db.get("files", {}).items():
-        path = entry["path"]
-        if not path.endswith(".zip") or not os.path.exists(path):
-            continue
-        try:
-            with zipfile.ZipFile(path, "r") as zf:
-                for info in zf.infolist():
-                    if info.is_dir() or info.file_size > 512 * 1024 * 1024:
-                        continue
-                    data = zf.read(info.filename)
-                    index[hashlib.md5(data).hexdigest()] = sha1
-        except (zipfile.BadZipFile, OSError):
-            continue
-    return index
-
-
 # ---------------------------------------------------------------------------
 # Cross-reference: undeclared files used by cores
 # ---------------------------------------------------------------------------
-
-def _load_emulator_profiles(emulators_dir: str) -> dict[str, dict]:
-    profiles = {}
-    emu_path = Path(emulators_dir)
-    if not emu_path.exists():
-        return profiles
-    for f in sorted(emu_path.glob("*.yml")):
-        with open(f) as fh:
-            profile = yaml.safe_load(fh) or {}
-        if "emulator" in profile and profile.get("type") != "alias":
-            profiles[f.stem] = profile
-    return profiles
-
 
 def find_undeclared_files(
     config: dict,
@@ -250,7 +204,7 @@ def find_undeclared_files(
                 declared_dd.add(ref)
 
     by_name = db.get("indexes", {}).get("by_name", {})
-    profiles = _load_emulator_profiles(emulators_dir)
+    profiles = load_emulator_profiles(emulators_dir)
 
     undeclared = []
     seen = set()
@@ -303,7 +257,7 @@ def verify_platform(config: dict, db: dict, emulators_dir: str = DEFAULT_EMULATO
         for sys in config.get("systems", {}).values()
         for fe in sys.get("files", [])
     )
-    zip_contents = _build_zip_contents_index(db) if has_zipped else {}
+    zip_contents = build_zip_contents_index(db) if has_zipped else {}
 
     # Per-entry results
     details = []
@@ -461,32 +415,20 @@ def main():
         parser.error("Specify --platform or --all")
         return
 
-    # Group identical platforms
-    verified_fps: dict[str, tuple[dict, list[str]]] = {}
+    # Group identical platforms (same function as generate_pack)
+    groups = group_identical_platforms(platforms, args.platforms_dir)
     all_results = {}
-    for platform in sorted(platforms):
-        config = load_platform_config(platform, args.platforms_dir)
-        base_dest = config.get("base_destination", "")
-        entries = []
-        for sys_id, system in sorted(config.get("systems", {}).items()):
-            for fe in system.get("files", []):
-                dest = fe.get("destination", fe.get("name", ""))
-                full_dest = f"{base_dest}/{dest}" if base_dest else dest
-                entries.append(f"{full_dest}|{fe.get('sha1', '')}|{fe.get('md5', '')}")
-        fp = hashlib.sha1("|".join(sorted(entries)).encode()).hexdigest()
-
-        if fp in verified_fps:
-            _, group = verified_fps[fp]
-            group.append(config.get("platform", platform))
-            all_results[platform] = verified_fps[fp][0]
-            continue
-
+    group_results: list[tuple[dict, list[str]]] = []
+    for group_platforms, representative in groups:
+        config = load_platform_config(representative, args.platforms_dir)
         result = verify_platform(config, db, args.emulators_dir)
-        all_results[platform] = result
-        verified_fps[fp] = (result, [config.get("platform", platform)])
+        names = [load_platform_config(p, args.platforms_dir).get("platform", p) for p in group_platforms]
+        group_results.append((result, names))
+        for p in group_platforms:
+            all_results[p] = result
 
     if not args.json:
-        for result, group in verified_fps.values():
+        for result, group in group_results:
             print_platform_result(result, group)
             print()
 

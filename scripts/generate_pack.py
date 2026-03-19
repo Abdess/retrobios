@@ -24,7 +24,11 @@ import zipfile
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
-from common import compute_hashes, load_database, load_data_dir_registry, load_platform_config, md5_composite, resolve_local_file
+from common import (
+    build_zip_contents_index, check_inside_zip, compute_hashes,
+    group_identical_platforms, load_database, load_data_dir_registry,
+    load_platform_config, md5_composite, resolve_local_file,
+)
 
 try:
     import yaml
@@ -122,27 +126,6 @@ def resolve_file(file_entry: dict, db: dict, bios_dir: str,
 
     return None, "not_found"
 
-
-def build_zip_contents_index(db: dict) -> dict:
-    """Build index of {inner_rom_md5: zip_file_sha1} for ROMs inside ZIP files."""
-    index = {}
-    for sha1, entry in db.get("files", {}).items():
-        path = entry["path"]
-        if not path.endswith(".zip") or not os.path.exists(path):
-            continue
-        try:
-            with zipfile.ZipFile(path, "r") as zf:
-                for info in zf.infolist():
-                    if info.is_dir():
-                        continue
-                    if info.file_size > MAX_ENTRY_SIZE:
-                        continue
-                    data = zf.read(info.filename)
-                    inner_md5 = hashlib.md5(data).hexdigest()
-                    index[inner_md5] = sha1
-        except (zipfile.BadZipFile, OSError):
-            continue
-    return index
 
 
 def download_external(file_entry: dict, dest_path: str) -> bool:
@@ -362,7 +345,6 @@ def generate_pack(
                 if status == "hash_mismatch" and verification_mode != "existence":
                     zf_name = file_entry.get("zipped_file")
                     if zf_name and local_path:
-                        from verify import check_inside_zip
                         inner_md5 = file_entry.get("md5", "")
                         inner_result = check_inside_zip(local_path, zf_name, inner_md5)
                         if inner_result == "ok":
@@ -537,7 +519,7 @@ def main():
         if updated:
             print(f"Refreshed {updated} data director{'ies' if updated > 1 else 'y'}")
 
-    groups = _group_identical_platforms(platforms, args.platforms_dir)
+    groups = group_identical_platforms(platforms, args.platforms_dir)
 
     for group_platforms, representative in groups:
         if len(group_platforms) > 1:
@@ -563,40 +545,6 @@ def main():
                     print(f"  Renamed -> {os.path.basename(new_path)}")
         except (FileNotFoundError, OSError, yaml.YAMLError) as e:
             print(f"  ERROR: {e}")
-
-
-def _group_identical_platforms(platforms: list[str], platforms_dir: str) -> list[tuple[list[str], str]]:
-    """Group platforms that would produce identical ZIP packs.
-
-    Returns [(group_of_platform_names, representative_platform), ...].
-    Platforms with the same resolved systems+files+base_destination are grouped.
-    """
-    fingerprints = {}
-    representatives = {}
-
-    for platform in platforms:
-        try:
-            config = load_platform_config(platform, platforms_dir)
-        except FileNotFoundError:
-            fingerprints.setdefault(platform, []).append(platform)
-            representatives.setdefault(platform, platform)
-            continue
-
-        base_dest = config.get("base_destination", "")
-        entries = []
-        for sys_id, system in sorted(config.get("systems", {}).items()):
-            for fe in system.get("files", []):
-                dest = fe.get("destination", fe.get("name", ""))
-                full_dest = f"{base_dest}/{dest}" if base_dest else dest
-                sha1 = fe.get("sha1", "")
-                md5 = fe.get("md5", "")
-                entries.append(f"{full_dest}|{sha1}|{md5}")
-
-        fingerprint = hashlib.sha1("|".join(sorted(entries)).encode()).hexdigest()
-        fingerprints.setdefault(fingerprint, []).append(platform)
-        representatives.setdefault(fingerprint, platform)
-
-    return [(group, representatives[fp]) for fp, group in fingerprints.items()]
 
 
 if __name__ == "__main__":
