@@ -1,0 +1,22 @@
+platform: TestExistence
+verification_mode: existence
+base_destination: system
+systems:
+  test-system:
+    files:
+    - name: required_present.bin
+      destination: required_present.bin
+      required: true
+      sha1: placeholder
+    - name: required_missing.bin
+      destination: required_missing.bin
+      required: true
+      sha1: "0000000000000000000000000000000000000000"
+    - name: optional_present.bin
+      destination: optional_present.bin
+      required: false
+      sha1: placeholder
+    - name: optional_missing.bin
+      destination: optional_missing.bin
+      required: false
+      sha1: "0000000000000000000000000000000000000001"

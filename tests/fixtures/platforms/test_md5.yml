@@ -1,0 +1,58 @@
+platform: TestMD5
+verification_mode: md5
+base_destination: bios
+systems:
+  test-system:
+    files:
+    - name: correct_hash.bin
+      destination: correct_hash.bin
+      required: true
+      md5: placeholder
+    - name: wrong_hash.bin
+      destination: wrong_hash.bin
+      required: true
+      md5: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    - name: no_md5_present.bin
+      destination: no_md5_present.bin
+      required: true
+    - name: required_missing.bin
+      destination: required_missing.bin
+      required: true
+      md5: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    - name: optional_missing.bin
+      destination: optional_missing.bin
+      required: false
+      md5: "cccccccccccccccccccccccccccccccc"
+  test-zip-system:
+    files:
+    - name: test.zip
+      destination: test.zip
+      required: true
+      md5: placeholder_zip_md5
+      zipped_file: inner.rom
+    - name: test_bad.zip
+      destination: test_bad.zip
+      required: true
+      md5: placeholder_bad_zip_md5
+      zipped_file: inner.rom
+    - name: test_missing_inner.zip
+      destination: test_missing_inner.zip
+      required: true
+      md5: placeholder_missing_inner_md5
+      zipped_file: not_there.rom
+  test-recalbox-system:
+    files:
+    - name: multi_hash.bin
+      destination: multi_hash.bin
+      required: true
+      md5: placeholder_multi
+    - name: truncated_md5.bin
+      destination: truncated_md5.bin
+      required: true
+      md5: placeholder_truncated
+  test-dedup-system:
+    files:
+    - name: correct_hash.bin
+      destination: correct_hash.bin
+      required: true
+      md5: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"

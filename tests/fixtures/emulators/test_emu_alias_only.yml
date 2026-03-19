@@ -1,0 +1,5 @@
+emulator: TestAlias
+type: alias
+alias_of: test_emu_with_aliases
+systems: [test-system]
+files: []

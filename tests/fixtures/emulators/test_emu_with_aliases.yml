@@ -1,0 +1,12 @@
+emulator: TestEmulator
+type: standalone + libretro
+systems: [test-system]
+files:
+  - name: correct_hash.bin
+    required: true
+    aliases: [alt1.bin, alt2.bin]
+  - name: optional_standalone.rom
+    required: false
+    mode: standalone
+  - name: undeclared.bin
+    required: true

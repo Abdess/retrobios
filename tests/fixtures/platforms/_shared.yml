@@ -1,0 +1,7 @@
+shared_groups:
+  test_group:
+    - name: shared_file.bin
+      sha1: "0000000000000000000000000000000000shared"
+      md5: "sharedmd5sharedmd5sharedmd5share"
+      destination: "shared/shared_file.bin"
+      required: false
