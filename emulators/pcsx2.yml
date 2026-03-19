@@ -74,6 +74,7 @@ files:
   - name: "<biosname>.nvm"
     pattern: "{biosbase}.nvm"
     required: false
+    hle_fallback: true
     size: 1024  # NVRAM_SIZE = 1024 bytes
     source_ref: "pcsx2/CDVD/CDVD.cpp:160-238"
     note: >
@@ -86,6 +87,7 @@ files:
   - name: "<biosname>.mec"
     pattern: "{biosbase}.mec"
     required: false
+    hle_fallback: true
     size: 4  # u32 s_mecha_version
     source_ref: "pcsx2/CDVD/CDVD.cpp:190-204"
     note: >
@@ -106,6 +108,7 @@ files:
   # -- DEV9 EEPROM (optional, network adapter) --
   - name: "eeprom.dat"
     required: false
+    hle_fallback: true
     size: 64  # 64 bytes, mmap'd
     source_ref: "pcsx2/DEV9/DEV9.cpp:110-160"
     note: >

@@ -52,6 +52,7 @@ files:
   - name: shared_font.bin
     system: nintendo-3ds
     required: false
+    hle_fallback: true
     note: "system shared font, HLE fallback if missing"
     source_ref: "src/common/common_paths.h:67"
 

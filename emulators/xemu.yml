@@ -43,6 +43,7 @@ files:
   - name: "eeprom.bin"
     description: "Xbox EEPROM dump (256 bytes)"
     required: false
+    hle_fallback: true
     size: 256
     source_ref: "system/vl.c:2939 (size != 256 -> error)"
     config_key: "sys.files.eeprom_path"

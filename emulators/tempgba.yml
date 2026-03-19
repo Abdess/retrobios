@@ -26,5 +26,6 @@ files:
   - name: gba_bios.bin
     system: nintendo-gba
     required: false
+    hle_fallback: true
     size: 16384
     note: "GBA BIOS. Optional, HLE stubs cover most software."

@@ -33,21 +33,27 @@ files:
   - name: dsp1.program.rom
     system: nintendo-snes
     required: false
+    hle_fallback: true
   - name: dsp1.data.rom
     system: nintendo-snes
     required: false
+    hle_fallback: true
   - name: dsp1b.program.rom
     system: nintendo-snes
     required: false
+    hle_fallback: true
   - name: dsp1b.data.rom
     system: nintendo-snes
     required: false
+    hle_fallback: true
   - name: dsp2.program.rom
     system: nintendo-snes
     required: false
+    hle_fallback: true
   - name: dsp2.data.rom
     system: nintendo-snes
     required: false
+    hle_fallback: true
   - name: dsp3.program.rom
     system: nintendo-snes
     required: false
@@ -58,14 +64,17 @@ files:
   - name: dsp4.program.rom
     system: nintendo-snes
     required: false
+    hle_fallback: true
   - name: dsp4.data.rom
     system: nintendo-snes
     required: false
+    hle_fallback: true
 
   # CX4 (Hitachi)
   - name: cx4.data.rom
     system: nintendo-snes
     required: false
+    hle_fallback: true
     size: 3072
     note: "HLE available — LLE optional for Mega Man X2/X3"
 
@@ -73,9 +82,11 @@ files:
   - name: st010.program.rom
     system: nintendo-snes
     required: false
+    hle_fallback: true
   - name: st010.data.rom
     system: nintendo-snes
     required: false
+    hle_fallback: true
   - name: st011.program.rom
     system: nintendo-snes
     required: false

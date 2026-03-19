@@ -42,6 +42,7 @@ files:
     system: doom
     description: "PrBoom engine data WAD (fonts, palette, colormaps, tables, menu graphics)"
     required: false
+    hle_fallback: true
     size: 143312
     md5: "72ae1b47820fcc93cc0df9c428d0face"
     sha1: "5f4aed208301449c2e9514edfd325fe9dead76fa"

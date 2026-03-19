@@ -62,6 +62,7 @@ files:
   - name: "kick31034.A1000"
     system: commodore-amiga
     required: false
+    hle_fallback: true
     size: 262144  # 256 KB
     note: "Kickstart 1.1 rev 31.34 (1985) NTSC. A1000 only."
     aliases:
@@ -72,6 +73,7 @@ files:
   - name: "kick32034.A1000"
     system: commodore-amiga
     required: false
+    hle_fallback: true
     size: 262144  # 256 KB
     note: "Kickstart 1.1 rev 32.34 (1986) PAL. A1000 only."
     aliases:
@@ -85,6 +87,7 @@ files:
   - name: "kick33180.A500"
     system: commodore-amiga
     required: false
+    hle_fallback: true
     size: 262144  # 256 KB
     note: "Kickstart 1.2 rev 33.180 (1986). A500/A2000. Also used by WHDLoad."
     aliases:
@@ -107,6 +110,7 @@ files:
   - name: "kick37175.A500"
     system: commodore-amiga
     required: false
+    hle_fallback: true
     size: 262144  # 256 KB
     note: "Kickstart 2.04 rev 37.175 (1991). Default for A500+ model."
     aliases:
@@ -121,6 +125,7 @@ files:
   - name: "kick37350.A600"
     system: commodore-amiga
     required: false
+    hle_fallback: true
     size: 262144  # 256 KB
     note: "Kickstart 2.05 rev 37.350 (1992). A600HD."
     aliases:
@@ -131,6 +136,7 @@ files:
   - name: "kick40063.A600"
     system: commodore-amiga
     required: false
+    hle_fallback: true
     size: 524288  # 512 KB
     note: "Kickstart 3.1 rev 40.63 (1993). Default for A600/A2000 models. Also used by WHDLoad."
     aliases:
@@ -145,6 +151,7 @@ files:
   - name: "kick39106.A1200"
     system: commodore-amiga
     required: false
+    hle_fallback: true
     size: 524288  # 512 KB
     note: "Kickstart 3.0 rev 39.106 (1992). A1200."
     aliases:
@@ -169,6 +176,7 @@ files:
   - name: "kick39106.A4000"
     system: commodore-amiga
     required: false
+    hle_fallback: true
     size: 524288  # 512 KB
     note: "Kickstart 3.0 rev 39.106 (1992). A4000."
     aliases:
@@ -179,6 +187,7 @@ files:
   - name: "kick40068.A4000"
     system: commodore-amiga
     required: false
+    hle_fallback: true
     size: 524288  # 512 KB
     note: "Kickstart 3.1 rev 40.68 (1993). Default for A4030/A4040 models."
     aliases:

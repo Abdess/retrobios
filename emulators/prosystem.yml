@@ -29,6 +29,7 @@ files:
   - name: "7800 BIOS (U).rom"
     system: atari-7800
     required: false
+    hle_fallback: true
     size: 4096  # 4 KB
     note: "NTSC/US Atari 7800 BIOS. Loaded when cartridge_region != REGION_PAL."
     source_ref: "core/libretro.c:585"
@@ -36,6 +37,7 @@ files:
   - name: "7800 BIOS (E).rom"
     system: atari-7800
     required: false
+    hle_fallback: true
     size: 16384  # 16 KB (PAL BIOS is larger than NTSC)
     note: "PAL/EU Atari 7800 BIOS. Loaded when cartridge_region == REGION_PAL."
     source_ref: "core/libretro.c:583"

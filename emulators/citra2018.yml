@@ -39,5 +39,6 @@ files:
   - name: shared_font.bin
     system: nintendo-3ds
     required: false
+    hle_fallback: true
     note: "system shared font, HLE fallback if missing"
     source_ref: "src/core/hle/service/apt/apt.cpp:174"

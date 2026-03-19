@@ -47,6 +47,7 @@ files:
   - name: gba_bios.bin
     system: nintendo-gba
     required: false
+    hle_fallback: true
     size: 16384  # 16 KB (0x4000)
     note: "GBA BIOS. Optional -- HLE replacement (myROM) handles all standard SWI calls. Real BIOS adds startup logo and may improve edge-case accuracy."
     source_ref: "libretro/libretro.cpp:198-203, src/gba.cpp:12413-12443"

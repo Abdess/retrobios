@@ -40,6 +40,7 @@ files:
     system: vircon32
     description: "Vircon32 console BIOS (custom override)"
     required: false
+    hle_fallback: true
     size: 1073060
     md5: "73f04397cbb2dafcf2047b19a856153a"
     sha1: "67ddbcd018f03ed74b6e013074d92cc5f1f51c80"

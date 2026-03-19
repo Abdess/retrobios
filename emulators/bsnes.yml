@@ -28,36 +28,42 @@ files:
   - name: "dsp1.program.rom"
     size: 6144  # 0x1800
     required: false
+    hle_fallback: true
     note: "NEC uPD7725 program ROM for DSP1. HLE fallback available"
     source_ref: "sfc/cartridge/load.cpp:490-494, heuristics/super-famicom.cpp:601"
 
   - name: "dsp1.data.rom"
     size: 2048  # 0x800
     required: false
+    hle_fallback: true
     note: "NEC uPD7725 data ROM for DSP1. HLE fallback available"
     source_ref: "sfc/cartridge/load.cpp:498-503"
 
   - name: "dsp1b.program.rom"
     size: 6144  # 0x1800
     required: false
+    hle_fallback: true
     note: "NEC uPD7725 program ROM for DSP1B (default NEC identifier). HLE fallback available"
     source_ref: "heuristics/super-famicom.cpp:606"
 
   - name: "dsp1b.data.rom"
     size: 2048  # 0x800
     required: false
+    hle_fallback: true
     note: "NEC uPD7725 data ROM for DSP1B. HLE fallback available"
     source_ref: "heuristics/super-famicom.cpp:606"
 
   - name: "dsp2.program.rom"
     size: 6144  # 0x1800
     required: false
+    hle_fallback: true
     note: "NEC uPD7725 program ROM for DSP2 (Dungeon Master). HLE fallback available"
     source_ref: "sfc/cartridge/load.cpp:515-520, heuristics/super-famicom.cpp:602"
 
   - name: "dsp2.data.rom"
     size: 2048  # 0x800
     required: false
+    hle_fallback: true
     note: "NEC uPD7725 data ROM for DSP2. HLE fallback available"
     source_ref: "sfc/cartridge/load.cpp:498-503"
 
@@ -76,12 +82,14 @@ files:
   - name: "dsp4.program.rom"
     size: 6144  # 0x1800
     required: false
+    hle_fallback: true
     note: "NEC uPD7725 program ROM for DSP4 (Top Gear 3000). HLE fallback available"
     source_ref: "sfc/cartridge/load.cpp:522-528, heuristics/super-famicom.cpp:604-605"
 
   - name: "dsp4.data.rom"
     size: 2048  # 0x800
     required: false
+    hle_fallback: true
     note: "NEC uPD7725 data ROM for DSP4. HLE fallback available"
     source_ref: "sfc/cartridge/load.cpp:498-503"
 
@@ -92,12 +100,14 @@ files:
   - name: "st010.program.rom"
     size: 49152  # 0xC000
     required: false
+    hle_fallback: true
     note: "NEC uPD96050 program ROM for ST010. HLE fallback available"
     source_ref: "sfc/cartridge/load.cpp:570-574, heuristics/super-famicom.cpp:583-587"
 
   - name: "st010.data.rom"
     size: 4096  # 0x1000
     required: false
+    hle_fallback: true
     note: "NEC uPD96050 data ROM for ST010. HLE fallback available"
     source_ref: "sfc/cartridge/load.cpp:578-583"
 
@@ -137,6 +147,7 @@ files:
   - name: "cx4.data.rom"
     size: 3072  # 0xC00
     required: false
+    hle_fallback: true
     note: "Hitachi HG51BS169 data ROM for Cx4 (Mega Man X2/X3). HLE fallback and built-in static ROM available"
     source_ref: "sfc/cartridge/load.cpp:444-456, hitachidsp/hitachidsp.hpp:49, heuristics/super-famicom.cpp:597"
 

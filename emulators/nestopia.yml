@@ -53,6 +53,7 @@ files:
     system: nintendo-nes
     description: "Nestopia game database for region and mapper autodetection"
     required: false
+    hle_fallback: true
     size: 1022369
     md5: "0ee6cbdc6f5c96ce9c8aa5edb59066f4"
     sha1: ~
@@ -64,6 +65,7 @@ files:
     system: nintendo-nes
     description: "External NES color palette"
     required: false
+    hle_fallback: true
     size: 192
     md5: ~
     sha1: ~

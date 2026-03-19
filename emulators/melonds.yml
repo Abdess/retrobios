@@ -22,6 +22,7 @@ files:
     system: nintendo-ds
     description: "ARM9 BIOS (NDS mode)"
     required: false
+    hle_fallback: true
     size: 4096
     crc32: "0x2ab23573"
     source_ref: "src/MemConstants.h:30,37"
@@ -31,6 +32,7 @@ files:
     system: nintendo-ds
     description: "ARM7 BIOS (NDS mode)"
     required: false
+    hle_fallback: true
     size: 16384
     crc32: "0x1280f0d5"
     source_ref: "src/MemConstants.h:31,36"
@@ -40,6 +42,7 @@ files:
     system: nintendo-ds
     description: "NDS firmware image"
     required: false
+    hle_fallback: true
     source_ref: "src/frontend/qt_sdl/EmuInstance.cpp:561"
     notes: "Generated firmware used as default; native firmware needed for boot animation and wifi settings"
 

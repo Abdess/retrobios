@@ -41,6 +41,7 @@ files:
   - name: "dc_boot.bin"
     system: sega-dreamcast
     required: false
+    hle_fallback: true
     size: 2097152  # 2 MB
     note: "Dreamcast boot ROM. HLE BIOS (reios) used as fallback."
     source_ref: "core/hw/flashrom/nvmem.cpp:287"
@@ -48,6 +49,7 @@ files:
   - name: "dc_bios.bin"
     system: sega-dreamcast
     required: false
+    hle_fallback: true
     size: 2097152
     note: "Alternate name for Dreamcast boot ROM."
     source_ref: "core/hw/flashrom/nvmem.cpp:287"
@@ -55,6 +57,7 @@ files:
   - name: "dc_flash.bin"
     system: sega-dreamcast
     required: false
+    hle_fallback: true
     size: 131072  # 128 KB
     note: "Dreamcast flash memory (settings, saves). Created if missing."
     source_ref: "core/hw/flashrom/nvmem.cpp:246"

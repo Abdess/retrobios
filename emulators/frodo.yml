@@ -57,6 +57,7 @@ files:
     system: commodore-c64
     description: "C64 BASIC V2 ROM"
     required: false
+    hle_fallback: true
     embedded: true
     size: 8192
     note: "Embedded as builtin_basic_rom[] in Basic_ROM.h. External file never loaded in practice (DATADIR is empty, path is bare filename in cwd)."
@@ -66,6 +67,7 @@ files:
     system: commodore-c64
     description: "C64 Kernal ROM"
     required: false
+    hle_fallback: true
     embedded: true
     size: 8192
     note: "Embedded as builtin_kernal_rom[] in Kernal_ROM.h. Patched at runtime for fast reset and 1541 IEC traps."
@@ -75,6 +77,7 @@ files:
     system: commodore-c64
     description: "C64 Character Generator ROM"
     required: false
+    hle_fallback: true
     embedded: true
     size: 4096
     note: "Embedded as builtin_char_rom[] in Char_ROM.h. Used by VIC-II for text/bitmap rendering."
@@ -84,6 +87,7 @@ files:
     system: commodore-c64
     description: "Commodore 1541 floppy drive ROM"
     required: false
+    hle_fallback: true
     embedded: true
     size: 16384
     note: "Embedded as builtin_drive_rom[] in 1541_ROM.h. Patched at runtime to disable checksum and trap disk I/O."

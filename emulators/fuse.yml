@@ -37,6 +37,7 @@ files:
   - name: "fuse/48.rom"
     system: sinclair-zxspectrum
     required: false
+    hle_fallback: true
     md5: 4c42a2f075212361c3117015b107ff68
     sha1: 5ea7c2b824672e914525d1d5c419d71b84a426a2
     size: 16384
@@ -46,6 +47,7 @@ files:
   - name: "fuse/128-0.rom"
     system: sinclair-zxspectrum
     required: false
+    hle_fallback: true
     md5: b4d2692115a9f2924df92a3cbfb358fb
     sha1: 4f4b11ec22326280bdb96e3baf9db4b4cb1d02c5
     size: 16384
@@ -55,6 +57,7 @@ files:
   - name: "fuse/128-1.rom"
     system: sinclair-zxspectrum
     required: false
+    hle_fallback: true
     md5: 6e09e5d3c4aef166601669feaaadc01c
     sha1: 80080644289ed93d71a1103992a154cc9802b2fa
     size: 16384
@@ -64,6 +67,7 @@ files:
   - name: "fuse/plus2-0.rom"
     system: sinclair-zxspectrum
     required: false
+    hle_fallback: true
     md5: 4ed7af4636308b8a48d7a35e6c5b546b
     sha1: 72703f9a3e734f3c23ec34c0727aae4ccbef9a91
     size: 16384
@@ -73,6 +77,7 @@ files:
   - name: "fuse/plus2-1.rom"
     system: sinclair-zxspectrum
     required: false
+    hle_fallback: true
     md5: b3db95931cc844efaeb82db9c171b9f3
     sha1: de8b0d2d0379cfe7c39322a086ca6da68c7f23cb
     size: 16384
@@ -82,6 +87,7 @@ files:
   - name: "fuse/plus3-0.rom"
     system: sinclair-zxspectrum
     required: false
+    hle_fallback: true
     md5: 9833b8b73384dd5fa3678377ff00a2bb
     sha1: e319ed08b4d53a5e421a75ea00ea02039ba6555b
     size: 16384
@@ -91,6 +97,7 @@ files:
   - name: "fuse/plus3-1.rom"
     system: sinclair-zxspectrum
     required: false
+    hle_fallback: true
     md5: 0f711ceb5ab801b4701989982e0f334c
     sha1: c9969fc36095a59787554026a9adc3b87678c794
     size: 16384
@@ -100,6 +107,7 @@ files:
   - name: "fuse/plus3-2.rom"
     system: sinclair-zxspectrum
     required: false
+    hle_fallback: true
     md5: 3b6dd659d5e4ec97f0e2f7878152c987
     sha1: 22e50c6ba4157a3f6a821bd9937cd26e292775c6
     size: 16384
@@ -109,6 +117,7 @@ files:
   - name: "fuse/plus3-3.rom"
     system: sinclair-zxspectrum
     required: false
+    hle_fallback: true
     md5: a148bcc575e51389e84fdf5d555c3196
     sha1: 65f031caa8148a5493afe42c41f4929deab26b4e
     size: 16384
@@ -118,6 +127,7 @@ files:
   - name: "fuse/plus3e-0.rom"
     system: sinclair-zxspectrum
     required: false
+    hle_fallback: true
     md5: bc123f625e245c225f92ef05933ed134
     sha1: 649fbd233490bf58b35350b0123d36caaaa011eb
     size: 16384
@@ -127,6 +137,7 @@ files:
   - name: "fuse/plus3e-1.rom"
     system: sinclair-zxspectrum
     required: false
+    hle_fallback: true
     md5: 617364264c587d20c9fc4746c29679f2
     sha1: f12198108cbb14de4f03c6695bc16d08c85ee214
     size: 16384
@@ -136,6 +147,7 @@ files:
   - name: "fuse/plus3e-2.rom"
     system: sinclair-zxspectrum
     required: false
+    hle_fallback: true
     md5: c363e95dcd0a90e6e7f847e6e47e0179
     sha1: 773633dce5ba323a9e00d9d0f9e4d8c295df7c87
     size: 16384
@@ -145,6 +157,7 @@ files:
   - name: "fuse/plus3e-3.rom"
     system: sinclair-zxspectrum
     required: false
+    hle_fallback: true
     md5: a148bcc575e51389e84fdf5d555c3196
     sha1: 65f031caa8148a5493afe42c41f4929deab26b4e
     size: 16384
@@ -154,6 +167,7 @@ files:
   - name: "fuse/se-0.rom"
     system: sinclair-zxspectrum
     required: false
+    hle_fallback: true
     md5: fb3f86eb1e5a695d9c50c124e7cfb875
     sha1: 8608328d7dd66602a4846f046b24fed500f7d828
     size: 16384
@@ -163,6 +177,7 @@ files:
   - name: "fuse/se-1.rom"
     system: sinclair-zxspectrum
     required: false
+    hle_fallback: true
     md5: 88de4a3129086f34bb9ca559acc51e6c
     sha1: 3be5de57dd3bd0a9d15c57cabe9179afe2906a52
     size: 16384
@@ -172,6 +187,7 @@ files:
   - name: "fuse/tc2048.rom"
     system: sinclair-zxspectrum
     required: false
+    hle_fallback: true
     md5: 9dd7ecf784a6c04265c073c236f5fadb
     sha1: febb2d495b6eda7cdcb4074935d6e9d9f328972d
     size: 16384
@@ -181,6 +197,7 @@ files:
   - name: "fuse/tc2068-0.rom"
     system: sinclair-zxspectrum
     required: false
+    hle_fallback: true
     md5: 55d462fccc6c536037404ef4ced08bec
     sha1: 1446cb2780a9dedf640404a639fa3ae518b2d8aa
     size: 16384
@@ -190,6 +207,7 @@ files:
   - name: "fuse/tc2068-1.rom"
     system: sinclair-zxspectrum
     required: false
+    hle_fallback: true
     md5: 575d203c6e15e679fba0b73f854ec7a2
     sha1: 7e265a2c1f621ed365ea23bdcafdedbc79c1299c
     size: 8192

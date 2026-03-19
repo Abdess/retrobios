@@ -103,6 +103,7 @@ files:
     path: "quasi88/disk.rom"
     size: 2048
     required: false
+    hle_fallback: true
     note: "Disk subsystem ROM (2 KB, 2D type). Core falls back to pseudo-BIOS if missing. 8 KB variant (2HD type) also accepted."
     source_ref: "src/LIBRETRO/libretro.c:552"
     aliases: ["DISK.ROM", "N88SUB.ROM", "n88sub.rom"]
@@ -137,6 +138,7 @@ files:
     path: "quasi88/font.rom"
     size: 4096
     required: false
+    hle_fallback: true
     note: "ANK font ROM (4 KB). Falls back to built-in font or kanji ROM glyphs."
     source_ref: "src/LIBRETRO/libretro.c:566"
     aliases: ["FONT.ROM"]
@@ -145,6 +147,7 @@ files:
     path: "quasi88/font2.rom"
     size: 4096
     required: false
+    hle_fallback: true
     note: "Second font ROM (4 KB). Falls back to built-in ANH font."
     source_ref: "src/LIBRETRO/libretro.c:576"
     aliases: ["FONT2.ROM"]
@@ -153,6 +156,7 @@ files:
     path: "quasi88/font3.rom"
     size: 4096
     required: false
+    hle_fallback: true
     note: "Third font ROM (4 KB). Zeroed out if missing."
     source_ref: "src/LIBRETRO/libretro.c:588"
     aliases: ["FONT3.ROM"]

@@ -39,6 +39,7 @@ files:
   - name: rom.db
     system: sega-megadrive
     required: false
+    hle_fallback: true
     note: "ROM feature database (game-specific mapper/save config). Embedded in core, external is optional override."
     source_ref: "libblastem.c:532-540 read_bundled_file()"
 

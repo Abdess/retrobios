@@ -38,6 +38,7 @@ files:
     system: nintendo-gbc
     description: "Game Boy Color (CGB-001) boot ROM"
     required: false
+    hle_fallback: true
     size: 2304
     md5: "dbfce9db9deaa2567f6a84fde55f9680"
     sha1: "1293d68bf9643bc4f36954c1e80e38f39864528d"

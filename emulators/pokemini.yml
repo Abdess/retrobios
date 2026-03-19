@@ -54,6 +54,7 @@ files:
     system: nintendo-pokemon-mini
     description: "Pokemon Mini official BIOS"
     required: false
+    hle_fallback: true
     size: 4096
     md5: "1e4fb124a3a886865acb574f388c803d"
     sha1: "daad4113713ed776fbd47727762bca81ba74915f"

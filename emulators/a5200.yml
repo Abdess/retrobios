@@ -32,6 +32,7 @@ files:
     path: "5200.rom"
     size: 2048
     required: false
+    hle_fallback: true
     note: >
       Atari 5200 OS ROM. Provides the built-in OS routines used by all 5200
       cartridges. Without it, the core uses the Altirra open-source replacement

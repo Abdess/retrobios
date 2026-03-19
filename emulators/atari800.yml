@@ -33,6 +33,7 @@ files:
   - name: "5200.rom"
     path: "5200.rom"
     required: false
+    hle_fallback: true
     size: 2048
     md5: 281f20ea4320404ec820fb7ec0693b38
     note: >
@@ -50,6 +51,7 @@ files:
   - name: "ATARIBAS.ROM"
     path: "ATARIBAS.ROM"
     required: false
+    hle_fallback: true
     size: 8192
     md5: 0bac0c6a50104045d902df4503a4c30b
     note: >
@@ -65,6 +67,7 @@ files:
   - name: "ATARIOSA.ROM"
     path: "ATARIOSA.ROM"
     required: false
+    hle_fallback: true
     size: 10240
     md5: eb1f32f5d9f382db1bbfb8d7f9cb343a
     note: >
@@ -79,6 +82,7 @@ files:
   - name: "ATARIOSB.ROM"
     path: "ATARIOSB.ROM"
     required: false
+    hle_fallback: true
     size: 10240
     md5: 4177f386a3bac989a981d3fe3388cb6c
     crc32: 0e86d61d
@@ -101,6 +105,7 @@ files:
   - name: "ATARIXL.ROM"
     path: "ATARIXL.ROM"
     required: false
+    hle_fallback: true
     size: 16384
     md5: 06daac977823773a3eea3422fd26a703
     note: >
@@ -115,6 +120,7 @@ files:
   - name: "BB01R4_OS.ROM"
     path: "BB01R4_OS.ROM"
     required: false
+    hle_fallback: true
     size: 16384
     md5: b7a2a04677d34f069eeb643d5238bf86
     note: >

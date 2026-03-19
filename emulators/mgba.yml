@@ -48,6 +48,7 @@ files:
   - name: gba_bios.bin
     system: nintendo-gba
     required: false
+    hle_fallback: true
     size: 16384  # 16 KB (0x4000, GBA_SIZE_BIOS)
     note: "GBA BIOS. HLE replacement built in. Real BIOS adds boot logo and full SWI accuracy."
     source_ref: "src/platform/libretro/libretro.c:2099"

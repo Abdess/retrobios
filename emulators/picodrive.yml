@@ -139,6 +139,7 @@ files:
   - name: "32X_G_BIOS.BIN"
     system: sega-32x
     required: false
+    hle_fallback: true
     size: 256  # 0x100
     note: "32X 68K (Genesis-side) BIOS. HLE replacement generated when NULL."
     source_ref: "pico/32x/memory.c:2207-2243"
@@ -146,6 +147,7 @@ files:
   - name: "32X_M_BIOS.BIN"
     system: sega-32x
     required: false
+    hle_fallback: true
     size: 2048  # 0x800
     note: "32X Master SH2 BIOS. HLE replacement generated when NULL."
     source_ref: "pico/32x/memory.c:2250-2277"
@@ -153,6 +155,7 @@ files:
   - name: "32X_S_BIOS.BIN"
     system: sega-32x
     required: false
+    hle_fallback: true
     size: 1024  # 0x400
     note: "32X Slave SH2 BIOS. HLE replacement generated when NULL."
     source_ref: "pico/32x/memory.c:2280-2298"

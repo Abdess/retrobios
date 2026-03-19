@@ -69,6 +69,7 @@ files:
     path: ep128emu/roms/exos21.rom
     md5: f36f24cbb87745fbd2714e4df881db09
     required: false
+    hle_fallback: true
     system: enterprise-128
     has_builtin: true
     note: "Enterprise 128 EXOS 2.1. Default OS for EP128 machines."
@@ -78,6 +79,7 @@ files:
     path: ep128emu/roms/exos20.rom
     md5: 5ad3baaad3b5156d6b60b34229a676fb
     required: false
+    hle_fallback: true
     system: enterprise-64
     has_builtin: true
     note: "Enterprise 64 EXOS 2.0. Used when EP64 machine type is selected."
@@ -87,6 +89,7 @@ files:
     path: ep128emu/roms/exos24uk.rom
     md5: 55af78f877a21ca45eb2df68a74fcc60
     required: false
+    hle_fallback: true
     system: enterprise-128
     has_builtin: true
     note: "Enterprise 128 EXOS 2.4 (UK). Used when enhanced ROM mode is enabled. 64K, loaded across segments 0-3."
@@ -100,6 +103,7 @@ files:
     path: ep128emu/roms/basic21.rom
     md5: e972fe42b398c9ff1d93ff014786aec6
     required: false
+    hle_fallback: true
     system: enterprise-128
     has_builtin: true
     note: "Enterprise 128 BASIC 2.1. Loaded when cartridge mode is active (default)."
@@ -109,6 +113,7 @@ files:
     path: ep128emu/roms/basic20.rom
     md5: 8e18edce4a7acb2c33cc0ab18f988482
     required: false
+    hle_fallback: true
     system: enterprise-64
     has_builtin: true
     note: "Enterprise 64 BASIC 2.0. Used with EP64 machine type."
@@ -122,6 +127,7 @@ files:
     path: ep128emu/roms/exdos13.rom
     md5: ddff70c014d1958dc75378b6c9aab6f8
     required: false
+    hle_fallback: true
     system: enterprise-128
     has_builtin: true
     note: "EXDOS 1.3 disk controller. Loaded for EP128_DISK and EP64_DISK modes. 32K across segments 0x20-0x21."
@@ -130,6 +136,7 @@ files:
   - name: exdos14isdos10uk.rom
     path: ep128emu/roms/exdos14isdos10uk.rom
     required: false
+    hle_fallback: true
     system: enterprise-128
     has_builtin: true
     note: "EXDOS 1.4 + IS-DOS 1.0 (UK). Used for IS-DOS disk mode instead of exdos13.rom."
@@ -143,6 +150,7 @@ files:
     path: ep128emu/roms/epfileio.rom
     md5: a68ebcbc73a4d2178d755b7755bf18fe
     required: false
+    hle_fallback: true
     system: enterprise-128
     has_builtin: true
     bundled: true
@@ -153,6 +161,7 @@ files:
     path: ep128emu/roms/zt19uk.rom
     md5: 228540b6be83ae2acd7569c8ff0f91d0
     required: false
+    hle_fallback: true
     system: enterprise-128
     has_builtin: true
     note: "ZozoTools 1.9 (UK). Loaded for DTF (direct tape file) mode. 32K across segments 0x40-0x41."
@@ -166,6 +175,7 @@ files:
     path: ep128emu/roms/hun.rom
     md5: 22167938f142c222f40992839aa21a06
     required: false
+    hle_fallback: true
     system: enterprise-128
     has_builtin: true
     note: "Hungarian language extension. Auto-loaded when content locale is Hungarian."
@@ -174,6 +184,7 @@ files:
   - name: epdos16f.rom
     path: ep128emu/roms/epdos16f.rom
     required: false
+    hle_fallback: true
     system: enterprise-128
     has_builtin: true
     note: "EP-DOS 1.6f. Provides HFONT and CLKOFF for Hungarian locale. 32K across segments 0x06-0x07."
@@ -183,6 +194,7 @@ files:
     path: ep128emu/roms/brd.rom
     md5: 6af0402906944fd134004b85097c8524
     required: false
+    hle_fallback: true
     system: enterprise-128
     has_builtin: true
     note: "German (BRD) language extension. Auto-loaded when content locale is German."
@@ -216,6 +228,7 @@ files:
     path: ep128emu/roms/tvc22_sys.rom
     md5: 8c54285f541930cde766069942bad0f2
     required: false
+    hle_fallback: true
     system: videoton-tvc
     has_builtin: true
     note: "TVC system ROM v2.2. Main BIOS for all TVC modes."
@@ -225,6 +238,7 @@ files:
     path: ep128emu/roms/tvc22_ext.rom
     md5: 5ce95a26ceed5bec73995d83568da9cf
     required: false
+    hle_fallback: true
     system: videoton-tvc
     has_builtin: true
     note: "TVC extension ROM v2.2. Loaded alongside tvc22_sys.rom."
@@ -234,6 +248,7 @@ files:
     path: ep128emu/roms/tvcfileio.rom
     md5: a2cf86ba8e7fc58b242137fe59036832
     required: false
+    hle_fallback: true
     system: videoton-tvc
     has_builtin: true
     bundled: true
@@ -244,6 +259,7 @@ files:
     path: ep128emu/roms/tvc_dos12d.rom
     md5: 88dc7876d584f90e4106f91444ab23b7
     required: false
+    hle_fallback: true
     system: videoton-tvc
     has_builtin: true
     note: "TVC DOS 1.2d. Loaded for TVC64_DISK mode."
@@ -257,6 +273,7 @@ files:
     path: ep128emu/roms/cpc464.rom
     md5: a993f85b88ac4350cf4d41554e87fe4f
     required: false
+    hle_fallback: true
     system: amstrad-cpc
     has_builtin: true
     note: "CPC 464 combined ROM (OS + BASIC). 32K loaded at segments 0x10 (OS) and 0x00 (BASIC) with offset."
@@ -266,6 +283,7 @@ files:
     path: ep128emu/roms/cpc664.rom
     md5: 5a384a2310f472c7857888371c00ed66
     required: false
+    hle_fallback: true
     system: amstrad-cpc
     has_builtin: true
     note: "CPC 664 combined ROM (OS + BASIC). Used for CPC_664_DISK mode."
@@ -275,6 +293,7 @@ files:
     path: ep128emu/roms/cpc6128.rom
     md5: b96280dc6c95a48857b4b8eb931533ae
     required: false
+    hle_fallback: true
     system: amstrad-cpc
     has_builtin: true
     note: "CPC 6128 combined ROM (OS + BASIC). Default CPC machine when no specific model requested."
@@ -284,6 +303,7 @@ files:
     path: ep128emu/roms/cpc_amsdos.rom
     md5: 25629dfe870d097469c217b95fdc1c95
     required: false
+    hle_fallback: true
     system: amstrad-cpc
     has_builtin: true
     note: "AMSDOS disk controller ROM. Loaded for CPC_DISK and CPC_664_DISK modes."
@@ -297,6 +317,7 @@ files:
     path: ep128emu/roms/zx128.rom
     md5: 85fede415f4294cc777517d7eada482e
     required: false
+    hle_fallback: true
     system: zx-spectrum
     has_builtin: true
     note: "ZX Spectrum 128K ROM. 32K loaded at segments 0x00-0x01."
@@ -306,6 +327,7 @@ files:
     path: ep128emu/roms/zx48.rom
     md5: 4c42a2f075212361c3117015b107ff68
     required: false
+    hle_fallback: true
     system: zx-spectrum
     has_builtin: true
     note: "ZX Spectrum 48K ROM. Used for ZX16 and ZX48 modes."

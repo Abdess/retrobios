@@ -29,6 +29,7 @@ files:
   - name: "bios.rom"
     path: "np2kai/bios.rom"
     required: false
+    hle_fallback: true
     note: >
       PC-9801 system BIOS ROM (96 KB). Provides full hardware compatibility.
       The core can boot without it using the built-in BIOS simulator, but
@@ -43,6 +44,7 @@ files:
   - name: "itf.rom"
     path: "np2kai/itf.rom"
     required: false
+    hle_fallback: true
     note: >
       Initial Test Firmware ROM (32 KB). Used for hardware initialization
       and memory check at boot. Only loaded when the built-in ITF simulator
@@ -57,6 +59,7 @@ files:
   - name: "font.bmp"
     path: "np2kai/font.bmp"
     required: false
+    hle_fallback: true
     aliases: ["FONT.ROM", "font.rom", "FONT.BMP"]
     note: >
       PC-98 font bitmap (288 KB). Required for correct Japanese kanji display.
@@ -71,6 +74,7 @@ files:
   - name: "sound.rom"
     path: "np2kai/sound.rom"
     required: false
+    hle_fallback: true
     note: >
       FM sound board BIOS ROM (16 KB). Used by the PC-9801-26K/86/118
       sound boards. The core falls back to a minimal built-in default
@@ -127,6 +131,7 @@ files:
   - name: "ide.rom"
     path: "np2kai/ide.rom"
     required: false
+    hle_fallback: true
     aliases: ["d8000.rom", "bank3.bin", "bios9821.rom"]
     note: >
       IDE controller BIOS ROM (8 KB). Required for real IDE BIOS emulation
@@ -138,6 +143,7 @@ files:
   - name: "scsi.rom"
     path: "np2kai/scsi.rom"
     required: false
+    hle_fallback: true
     note: >
       SCSI controller BIOS ROM (16 KB). For PC-98 SCSI HDD support.
       The core includes a built-in SCSI BIOS stub as fallback.
@@ -149,6 +155,7 @@ files:
   - name: "pci.rom"
     path: "np2kai/pci.rom"
     required: false
+    hle_fallback: true
     aliases: ["bank0.bin"]
     note: >
       PCI BIOS ROM (32 KB). For PC-9821 PCI bus emulation.

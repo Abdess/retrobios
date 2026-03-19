@@ -39,6 +39,7 @@ files:
     path: "galaksija/CHRGEN.BIN"
     size: 2048
     required: false
+    hle_fallback: true
     note: >
       Character generator ROM. Defines the 128-character bitmap font (8x13 pixels
       each). The core has this embedded compressed in rom.c and only loads the
@@ -49,6 +50,7 @@ files:
     path: "galaksija/ROM1.BIN"
     size: 4096
     required: false
+    hle_fallback: true
     note: >
       System ROM / BASIC interpreter. Mapped at 0x0000-0x0FFF. Contains the
       Galaksija BASIC language and boot routines. Embedded in rom.c as fallback.
@@ -58,6 +60,7 @@ files:
     path: "galaksija/ROM2.BIN"
     size: 4096
     required: false
+    hle_fallback: true
     note: >
       Math extension ROM. Mapped at 0x1000-0x1FFF. Adds floating-point math
       functions (SIN, COS, TG, SQR, LN, EXP, POW, etc). Optional even when

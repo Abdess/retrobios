@@ -26,6 +26,7 @@ files:
     system: nintendo-ds
     description: "ARM9 BIOS"
     required: false
+    hle_fallback: true
     size: 4096
     md5: "a392174eb3e572fed6447e956bde4b25"
     source_ref: "src/memory.cpp:130-142, src/memory.h:73"
@@ -35,6 +36,7 @@ files:
     system: nintendo-ds
     description: "ARM7 BIOS"
     required: false
+    hle_fallback: true
     size: 16384
     md5: "df692a80a5b1bc90728bc3dfc76cd948"
     source_ref: "src/memory.cpp:144-156, src/memory.h:74"
@@ -44,6 +46,7 @@ files:
     system: nintendo-ds
     description: "NDS firmware image"
     required: false
+    hle_fallback: true
     source_ref: "src/spi.cpp:62-160, src/settings.cpp:42"
     notes: "Auto-generated 128KB non-bootable firmware as fallback; native dump (>128KB) needed for firmware boot"
 
@@ -51,6 +54,7 @@ files:
     system: nintendo-gba
     description: "GBA BIOS"
     required: false
+    hle_fallback: true
     size: 16384
     md5: "a860e8c0b6d573d191e4ec7db1b1e4f6"
     source_ref: "src/memory.cpp:158-169, src/memory.h:75, src/core.cpp:244-252"

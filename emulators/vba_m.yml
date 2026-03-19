@@ -17,13 +17,16 @@ files:
   - name: gba_bios.bin
     system: nintendo-gba
     required: false
+    hle_fallback: true
     md5: a860e8c0b6d573d191e4ec7db1b1e4f6
     note: "optional, core option vbam_usebios must be On"
   - name: gb_bios.bin
     system: nintendo-gb
     required: false
+    hle_fallback: true
     md5: 32fbbd84168d3482956eb3c5051637f5
   - name: gbc_bios.bin
     system: nintendo-gbc
     required: false
+    hle_fallback: true
     md5: dbfce9db9deaa2567f6a84fde55f9680

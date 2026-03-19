@@ -27,6 +27,7 @@ files:
     path: "GC/USA/IPL.bin"
     size: 2097152
     required: false
+    hle_fallback: true
     note: "GC NTSC-U boot ROM, same as Dolphin. HLE available"
     source_ref: "Source/Core/Common/CommonPaths.h:115"
 
@@ -34,12 +35,14 @@ files:
     path: "GC/EUR/IPL.bin"
     size: 2097152
     required: false
+    hle_fallback: true
     note: "GC PAL boot ROM"
 
   - name: "IPL.bin"
     path: "GC/JAP/IPL.bin"
     size: 2097152
     required: false
+    hle_fallback: true
     note: "GC NTSC-J boot ROM"
 
   # -- DSP ROMs --
@@ -49,6 +52,7 @@ files:
     path: "GC/dsp_rom.bin"
     size: 8192
     required: false
+    hle_fallback: true
     note: "DSP instruction ROM for LLE audio. Free replacement included, real dump more accurate"
     source_ref: "Source/Core/Common/CommonPaths.h:112, Source/Core/Core/HW/DSPLLE/DSPLLE.cpp:142-150"
 
@@ -56,6 +60,7 @@ files:
     path: "GC/dsp_coef.bin"
     size: 4096
     required: false
+    hle_fallback: true
     note: "DSP coefficient ROM for LLE audio. Free replacement included"
     source_ref: "Source/Core/Common/CommonPaths.h:113, Source/Core/Core/HW/DSPLLE/DSPLLE.cpp:143-152"
 
@@ -64,12 +69,14 @@ files:
   - name: "font_western.bin"
     path: "GC/font_western.bin"
     required: false
+    hle_fallback: true
     note: "Windows-1252 font for GC/Wii text. Free alternative bundled"
     source_ref: "Source/Core/Core/HW/EXI/EXI_DeviceIPL.cpp:123"
 
   - name: "font_japanese.bin"
     path: "GC/font_japanese.bin"
     required: false
+    hle_fallback: true
     note: "Shift-JIS font for Japanese text. Free alternative bundled"
     source_ref: "Source/Core/Core/HW/EXI/EXI_DeviceIPL.cpp:122"
 

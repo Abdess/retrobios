@@ -83,6 +83,7 @@ files:
   - name: "vice/C64/basic-901226-01.bin"
     system: commodore-c64
     required: false
+    hle_fallback: true
     embedded: true
     size: 8192
     note: "C64 BASIC V2 ROM. Embedded in core."
@@ -91,6 +92,7 @@ files:
   - name: "vice/C64/kernal-901227-03.bin"
     system: commodore-c64
     required: false
+    hle_fallback: true
     embedded: true
     size: 8192
     note: "C64 Kernal Rev 3 (default). Embedded in core."
@@ -99,6 +101,7 @@ files:
   - name: "vice/C64/kernal-901227-01.bin"
     system: commodore-c64
     required: false
+    hle_fallback: true
     embedded: true
     size: 8192
     note: "C64 Kernal Rev 1. Embedded in core."
@@ -107,6 +110,7 @@ files:
   - name: "vice/C64/kernal-901227-02.bin"
     system: commodore-c64
     required: false
+    hle_fallback: true
     embedded: true
     size: 8192
     note: "C64 Kernal Rev 2. Embedded in core."
@@ -115,6 +119,7 @@ files:
   - name: "vice/C64/kernal-390852-01.bin"
     system: commodore-c64
     required: false
+    hle_fallback: true
     embedded: true
     size: 8192
     note: "C64 GS (Games System) Kernal. Embedded in core."
@@ -123,6 +128,7 @@ files:
   - name: "vice/C64/kernal-251104-04.bin"
     system: commodore-c64
     required: false
+    hle_fallback: true
     embedded: true
     size: 8192
     note: "SX-64 Kernal. Embedded in core."
@@ -131,6 +137,7 @@ files:
   - name: "vice/C64/kernal-901246-01.bin"
     system: commodore-c64
     required: false
+    hle_fallback: true
     embedded: true
     size: 8192
     note: "PET64/Educator64 (4064) Kernal. Embedded in core."
@@ -139,6 +146,7 @@ files:
   - name: "vice/C64/kernal-906145-02.bin"
     system: commodore-c64
     required: false
+    hle_fallback: true
     embedded: true
     size: 8192
     note: "C64 Japanese Kernal. Embedded in core."
@@ -147,6 +155,7 @@ files:
   - name: "vice/C64/chargen-901225-01.bin"
     system: commodore-c64
     required: false
+    hle_fallback: true
     embedded: true
     size: 4096
     note: "C64 Character Generator ROM (default). Embedded in core."
@@ -155,6 +164,7 @@ files:
   - name: "vice/C64/chargen-906143-02.bin"
     system: commodore-c64
     required: false
+    hle_fallback: true
     embedded: true
     size: 4096
     note: "C64 Japanese Character Generator ROM. Embedded in core."
@@ -167,6 +177,7 @@ files:
   - name: "vice/C128/kernal-318020-05.bin"
     system: commodore-c128
     required: false
+    hle_fallback: true
     embedded: true
     size: 16384
     note: "C128 Kernal (default international). Embedded in core."
@@ -175,6 +186,7 @@ files:
   - name: "vice/C128/kernal-315078-03.bin"
     system: commodore-c128
     required: false
+    hle_fallback: true
     embedded: true
     size: 16384
     note: "C128 Kernal German. Embedded in core."
@@ -183,6 +195,7 @@ files:
   - name: "vice/C128/kernal-325172-01.bin"
     system: commodore-c128
     required: false
+    hle_fallback: true
     embedded: true
     size: 16384
     note: "C128 Kernal Swiss. Embedded in core."
@@ -191,6 +204,7 @@ files:
   - name: "vice/C128/kernal-318034-01.bin"
     system: commodore-c128
     required: false
+    hle_fallback: true
     embedded: true
     size: 16384
     note: "C128 Kernal Swedish. Embedded in core."
@@ -199,6 +213,7 @@ files:
   - name: "vice/C128/kernalfi"
     system: commodore-c128
     required: false
+    hle_fallback: true
     embedded: true
     size: 16384
     note: "C128 Kernal Finnish (unidentified part number). Embedded in core."
@@ -207,6 +222,7 @@ files:
   - name: "vice/C128/kernalfr"
     system: commodore-c128
     required: false
+    hle_fallback: true
     embedded: true
     size: 16384
     note: "C128 Kernal French (unidentified part number). Embedded in core."
@@ -215,6 +231,7 @@ files:
   - name: "vice/C128/kernalit"
     system: commodore-c128
     required: false
+    hle_fallback: true
     embedded: true
     size: 16384
     note: "C128 Kernal Italian (unidentified part number). Embedded in core."
@@ -223,6 +240,7 @@ files:
   - name: "vice/C128/kernalno"
     system: commodore-c128
     required: false
+    hle_fallback: true
     embedded: true
     size: 16384
     note: "C128 Kernal Norwegian (unidentified part number). Embedded in core."
@@ -231,6 +249,7 @@ files:
   - name: "vice/C128/basiclo-318018-04.bin"
     system: commodore-c128
     required: false
+    hle_fallback: true
     embedded: true
     size: 16384
     note: "C128 BASIC low (BASIC part). Embedded in core."
@@ -239,6 +258,7 @@ files:
   - name: "vice/C128/basichi-318019-04.bin"
     system: commodore-c128
     required: false
+    hle_fallback: true
     embedded: true
     size: 16384
     note: "C128 BASIC high (Editor part). Embedded in core."
@@ -247,6 +267,7 @@ files:
   - name: "vice/C128/basic-901226-01.bin"
     system: commodore-c128
     required: false
+    hle_fallback: true
     embedded: true
     size: 8192
     note: "C64 BASIC V2 ROM, used by C128 in C64 mode. Libretro build uses C64 filename instead of basic64-901226-01.bin."
@@ -255,6 +276,7 @@ files:
   - name: "vice/C128/kernal-901227-03.bin"
     system: commodore-c128
     required: false
+    hle_fallback: true
     embedded: true
     size: 8192
     note: "C64 Kernal Rev 3, used by C128 in C64 mode. Libretro build uses C64 filename instead of kernal64-901227-03.bin."
@@ -263,6 +285,7 @@ files:
   - name: "vice/C128/kernal64-325179-01.bin"
     system: commodore-c128
     required: false
+    hle_fallback: true
     embedded: true
     size: 8192
     note: "C128 C64-mode Kernal Norwegian. Embedded in core."
@@ -271,6 +294,7 @@ files:
   - name: "vice/C128/kernal64-325182-01.bin"
     system: commodore-c128
     required: false
+    hle_fallback: true
     embedded: true
     size: 8192
     note: "C128 C64-mode Kernal Swedish. Embedded in core."
@@ -279,6 +303,7 @@ files:
   - name: "vice/C128/chargen-390059-01.bin"
     system: commodore-c128
     required: false
+    hle_fallback: true
     embedded: true
     size: 8192
     note: "C128 Character Generator (default international). Embedded in core."
@@ -287,6 +312,7 @@ files:
   - name: "vice/C128/chargen-315079-01.bin"
     system: commodore-c128
     required: false
+    hle_fallback: true
     embedded: true
     size: 8192
     note: "C128 Character Generator German. Embedded in core."
@@ -295,6 +321,7 @@ files:
   - name: "vice/C128/chargen-325167-02.bin"
     system: commodore-c128
     required: false
+    hle_fallback: true
     embedded: true
     size: 8192
     note: "C128 Character Generator Italian/French/Belgian. Embedded in core."
@@ -303,6 +330,7 @@ files:
   - name: "vice/C128/chargen-325173-01D.bin"
     system: commodore-c128
     required: false
+    hle_fallback: true
     embedded: true
     size: 8192
     note: "C128 Character Generator Swiss. Embedded in core."
@@ -311,6 +339,7 @@ files:
   - name: "vice/C128/chargen-325078-02.bin"
     system: commodore-c128
     required: false
+    hle_fallback: true
     embedded: true
     size: 8192
     note: "C128 Character Generator Norwegian. Embedded in core."
@@ -319,6 +348,7 @@ files:
   - name: "vice/C128/chargen-325181-01.bin"
     system: commodore-c128
     required: false
+    hle_fallback: true
     embedded: true
     size: 8192
     note: "C128 Character Generator Finnish/Swedish. Embedded in core."
@@ -331,6 +361,7 @@ files:
   - name: "vice/C64DTV/dtvrom.bin"
     system: commodore-c64dtv
     required: false
+    hle_fallback: true
     embedded: true
     size: 2097152
     note: "C64 DTV flash ROM (2 MB). Contains kernal, basic, chargen. Embedded in core."
@@ -339,6 +370,7 @@ files:
   - name: "vice/C64DTV/basic-901226-01.bin"
     system: commodore-c64dtv
     required: false
+    hle_fallback: true
     embedded: true
     size: 8192
     note: "C64 BASIC V2 ROM (DTV copy). Embedded in core."
@@ -347,6 +379,7 @@ files:
   - name: "vice/C64DTV/chargen-901225-01.bin"
     system: commodore-c64dtv
     required: false
+    hle_fallback: true
     embedded: true
     size: 4096
     note: "C64 Character Generator (DTV copy). Embedded in core."
@@ -355,6 +388,7 @@ files:
   - name: "vice/C64DTV/kernal-901227-03.bin"
     system: commodore-c64dtv
     required: false
+    hle_fallback: true
     embedded: true
     size: 8192
     note: "C64 Kernal Rev 3 (DTV copy). Embedded in core."
@@ -367,6 +401,7 @@ files:
   - name: "vice/VIC20/basic-901486-01.bin"
     system: commodore-vic20
     required: false
+    hle_fallback: true
     embedded: true
     size: 8192
     note: "VIC-20 BASIC ROM. Embedded in core."
@@ -375,6 +410,7 @@ files:
   - name: "vice/VIC20/kernal.901486-07.bin"
     system: commodore-vic20
     required: false
+    hle_fallback: true
     embedded: true
     size: 8192
     note: "VIC-20 Kernal PAL (default). Embedded in core."
@@ -383,6 +419,7 @@ files:
   - name: "vice/VIC20/kernal.901486-06.bin"
     system: commodore-vic20
     required: false
+    hle_fallback: true
     embedded: true
     size: 8192
     note: "VIC-20 Kernal NTSC. Embedded in core."
@@ -391,6 +428,7 @@ files:
   - name: "vice/VIC20/kernal.901486-02.bin"
     system: commodore-vic20
     required: false
+    hle_fallback: true
     embedded: true
     size: 8192
     note: "VIC-20 Kernal Japanese NTSC Rev 2. Embedded in core."
@@ -399,6 +437,7 @@ files:
   - name: "vice/VIC20/chargen-901460-03.bin"
     system: commodore-vic20
     required: false
+    hle_fallback: true
     embedded: true
     size: 4096
     note: "VIC-20 Character Generator (default). Embedded in core."
@@ -407,6 +446,7 @@ files:
   - name: "vice/VIC20/chargen-901460-02.bin"
     system: commodore-vic20
     required: false
+    hle_fallback: true
     embedded: true
     size: 4096
     note: "VIC-20 Japanese Character Generator. Embedded in core."
@@ -419,6 +459,7 @@ files:
   - name: "vice/PLUS4/basic-318006-01.bin"
     system: commodore-plus4
     required: false
+    hle_fallback: true
     embedded: true
     size: 16384
     note: "Plus/4 BASIC ROM. Embedded in core."
@@ -427,6 +468,7 @@ files:
   - name: "vice/PLUS4/kernal-318004-05.bin"
     system: commodore-plus4
     required: false
+    hle_fallback: true
     embedded: true
     size: 16384
     note: "Plus/4 Kernal PAL Rev 5 (default PAL). Embedded in core."
@@ -435,6 +477,7 @@ files:
   - name: "vice/PLUS4/kernal-318005-05.bin"
     system: commodore-plus4
     required: false
+    hle_fallback: true
     embedded: true
     size: 16384
     note: "Plus/4 Kernal NTSC Rev 5 (default NTSC). Embedded in core."
@@ -443,6 +486,7 @@ files:
   - name: "vice/PLUS4/kernal-318004-01.bin"
     system: commodore-plus4
     required: false
+    hle_fallback: true
     embedded: true
     size: 16384
     note: "Plus/4 Kernal NTSC Rev 1 (V232 prototype). Embedded in core."
@@ -451,6 +495,7 @@ files:
   - name: "vice/PLUS4/kernal-364.bin"
     system: commodore-plus4
     required: false
+    hle_fallback: true
     embedded: true
     size: 16384
     note: "Commodore 364 prototype Kernal. Embedded in core."
@@ -459,6 +504,7 @@ files:
   - name: "vice/PLUS4/3plus1-317053-01.bin"
     system: commodore-plus4
     required: false
+    hle_fallback: true
     embedded: true
     size: 16384
     note: "3-Plus-1 software ROM low. Embedded in core."
@@ -467,6 +513,7 @@ files:
   - name: "vice/PLUS4/3plus1-317054-01.bin"
     system: commodore-plus4
     required: false
+    hle_fallback: true
     embedded: true
     size: 16384
     note: "3-Plus-1 software ROM high. Embedded in core."
@@ -475,6 +522,7 @@ files:
   - name: "vice/PLUS4/c2lo-364.bin"
     system: commodore-plus4
     required: false
+    hle_fallback: true
     embedded: true
     size: 16384
     note: "Commodore 364 prototype function ROM low. Embedded in core."
@@ -487,6 +535,7 @@ files:
   - name: "vice/PET/basic-1.901439-09-05-02-06.bin"
     system: commodore-pet
     required: false
+    hle_fallback: true
     embedded: true
     size: 8192
     note: "PET BASIC 1.0 ROM (PET 2001). Embedded in core."
@@ -495,6 +544,7 @@ files:
   - name: "vice/PET/basic-2.901465-01-02.bin"
     system: commodore-pet
     required: false
+    hle_fallback: true
     embedded: true
     size: 8192
     note: "PET BASIC 2.0 ROM. Embedded in core."
@@ -503,6 +553,7 @@ files:
   - name: "vice/PET/basic-4.901465-23-20-21.bin"
     system: commodore-pet
     required: false
+    hle_fallback: true
     embedded: true
     size: 12288
     note: "PET BASIC 4.0 ROM. Embedded in core."
@@ -511,6 +562,7 @@ files:
   - name: "vice/PET/kernal-1.901439-04-07.bin"
     system: commodore-pet
     required: false
+    hle_fallback: true
     embedded: true
     size: 4096
     note: "PET Kernal 1.0 (PET 2001). Embedded in core."
@@ -519,6 +571,7 @@ files:
   - name: "vice/PET/kernal-2.901465-03.bin"
     system: commodore-pet
     required: false
+    hle_fallback: true
     embedded: true
     size: 4096
     note: "PET Kernal 2.0. Embedded in core."
@@ -527,6 +580,7 @@ files:
   - name: "vice/PET/kernal-4.901465-22.bin"
     system: commodore-pet
     required: false
+    hle_fallback: true
     embedded: true
     size: 4096
     note: "PET Kernal 4.0. Embedded in core."
@@ -535,6 +589,7 @@ files:
   - name: "vice/PET/edit-1-n.901439-03.bin"
     system: commodore-pet
     required: false
+    hle_fallback: true
     embedded: true
     size: 2048
     note: "PET Editor 1.0 Normal (graphics keyboard). Embedded in core."
@@ -543,6 +598,7 @@ files:
   - name: "vice/PET/edit-2-n.901447-24.bin"
     system: commodore-pet
     required: false
+    hle_fallback: true
     embedded: true
     size: 2048
     note: "PET Editor 2.0 Normal (graphics keyboard). Embedded in core."
@@ -551,6 +607,7 @@ files:
   - name: "vice/PET/edit-2-b.901474-01.bin"
     system: commodore-pet
     required: false
+    hle_fallback: true
     embedded: true
     size: 2048
     note: "PET Editor 2.0 Business keyboard. Embedded in core."
@@ -559,6 +616,7 @@ files:
   - name: "vice/PET/edit-4-40-n-50Hz.901498-01.bin"
     system: commodore-pet
     required: false
+    hle_fallback: true
     embedded: true
     size: 2048
     note: "PET Editor 4.0, 40 col, Normal keyboard, 50Hz. Embedded in core."
@@ -567,6 +625,7 @@ files:
   - name: "vice/PET/edit-4-40-b-50Hz.ts.bin"
     system: commodore-pet
     required: false
+    hle_fallback: true
     embedded: true
     size: 2048
     note: "PET Editor 4.0, 40 col, Business keyboard, 50Hz. Embedded in core."
@@ -575,6 +634,7 @@ files:
   - name: "vice/PET/edit-4-80-b-50Hz.901474-04_.bin"
     system: commodore-pet
     required: false
+    hle_fallback: true
     embedded: true
     size: 2048
     note: "PET Editor 4.0, 80 col, Business keyboard, 50Hz. Embedded in core."
@@ -583,6 +643,7 @@ files:
   - name: "vice/PET/characters-1.901447-08.bin"
     system: commodore-pet
     required: false
+    hle_fallback: true
     embedded: true
     size: 2048
     note: "PET Character Generator 1 (original PET 2001). Embedded in core."
@@ -591,6 +652,7 @@ files:
   - name: "vice/PET/characters-2.901447-10.bin"
     system: commodore-pet
     required: false
+    hle_fallback: true
     embedded: true
     size: 2048
     note: "PET Character Generator 2. Embedded in core."
@@ -599,6 +661,7 @@ files:
   - name: "vice/PET/characters.901640-01.bin"
     system: commodore-pet
     required: false
+    hle_fallback: true
     embedded: true
     size: 4096
     note: "SuperPET Character Generator. Embedded in core."
@@ -607,6 +670,7 @@ files:
   - name: "vice/PET/waterloo-a000.901898-01.bin"
     system: commodore-pet
     required: false
+    hle_fallback: true
     embedded: true
     size: 4096
     note: "SuperPET Waterloo microEngine 6809 ROM at $A000. Embedded in core."
@@ -615,6 +679,7 @@ files:
   - name: "vice/PET/waterloo-b000.901898-02.bin"
     system: commodore-pet
     required: false
+    hle_fallback: true
     embedded: true
     size: 4096
     note: "SuperPET Waterloo microEngine 6809 ROM at $B000. Embedded in core."
@@ -623,6 +688,7 @@ files:
   - name: "vice/PET/waterloo-c000.901898-03.bin"
     system: commodore-pet
     required: false
+    hle_fallback: true
     embedded: true
     size: 4096
     note: "SuperPET Waterloo microEngine 6809 ROM at $C000. Embedded in core."
@@ -631,6 +697,7 @@ files:
   - name: "vice/PET/waterloo-d000.901898-04.bin"
     system: commodore-pet
     required: false
+    hle_fallback: true
     embedded: true
     size: 4096
     note: "SuperPET Waterloo microEngine 6809 ROM at $D000. Embedded in core."
@@ -639,6 +706,7 @@ files:
   - name: "vice/PET/waterloo-e000.901897-01.bin"
     system: commodore-pet
     required: false
+    hle_fallback: true
     embedded: true
     size: 2048
     note: "SuperPET Waterloo microEngine 6809 ROM at $E000. Embedded in core."
@@ -647,6 +715,7 @@ files:
   - name: "vice/PET/waterloo-f000.901898-05.bin"
     system: commodore-pet
     required: false
+    hle_fallback: true
     embedded: true
     size: 4096
     note: "SuperPET Waterloo microEngine 6809 ROM at $F000. Embedded in core."
@@ -659,6 +728,7 @@ files:
   - name: "vice/CBM-II/basic-901242+3-04a.bin"
     system: commodore-cbm-ii
     required: false
+    hle_fallback: true
     embedded: true
     size: 16384
     note: "CBM-II BASIC 128 (CBM 610/620/710/720). Embedded in core."
@@ -667,6 +737,7 @@ files:
   - name: "vice/CBM-II/basic-901240+1-03.bin"
     system: commodore-cbm-ii
     required: false
+    hle_fallback: true
     embedded: true
     size: 16384
     note: "CBM-II BASIC 256 (CBM 710/720 with 256K). Embedded in core."
@@ -675,6 +746,7 @@ files:
   - name: "vice/CBM-II/basic-901235+6-02.bin"
     system: commodore-cbm-ii
     required: false
+    hle_fallback: true
     embedded: true
     size: 16384
     note: "CBM-II BASIC 500 (CBM 510/P500). Embedded in core."
@@ -683,6 +755,7 @@ files:
   - name: "vice/CBM-II/kernal-901244-04a.bin"
     system: commodore-cbm-ii
     required: false
+    hle_fallback: true
     embedded: true
     size: 8192
     note: "CBM-II Kernal (CBM 610/620/710/720). Embedded in core."
@@ -691,6 +764,7 @@ files:
   - name: "vice/CBM-II/kernal-901234-02.bin"
     system: commodore-cbm-ii
     required: false
+    hle_fallback: true
     embedded: true
     size: 8192
     note: "CBM-II Kernal 500 (CBM 510/P500). Embedded in core."
@@ -699,6 +773,7 @@ files:
   - name: "vice/CBM-II/chargen-901225-01.bin"
     system: commodore-cbm-ii
     required: false
+    hle_fallback: true
     embedded: true
     size: 4096
     note: "CBM-II Character Generator 500 (VIC-II based, CBM 510/P500). Embedded in core."
@@ -707,6 +782,7 @@ files:
   - name: "vice/CBM-II/chargen-901237-01.bin"
     system: commodore-cbm-ii
     required: false
+    hle_fallback: true
     embedded: true
     size: 4096
     note: "CBM-II Character Generator 600 (CBM 610/620). Embedded in core."
@@ -715,6 +791,7 @@ files:
   - name: "vice/CBM-II/chargen-901232-01.bin"
     system: commodore-cbm-ii
     required: false
+    hle_fallback: true
     embedded: true
     size: 4096
     note: "CBM-II Character Generator 700 (CBM 710/720). Embedded in core."
@@ -727,6 +804,7 @@ files:
   - name: "vice/SCPU64/scpu64"
     system: commodore-c64
     required: false
+    hle_fallback: true
     embedded: true
     size: 65536
     note: "SuperCPU64 internal ROM (default). Embedded in core."
@@ -735,6 +813,7 @@ files:
   - name: "vice/SCPU64/chargen-901225-01.bin"
     system: commodore-c64
     required: false
+    hle_fallback: true
     embedded: true
     size: 4096
     note: "C64 Character Generator (used by SCPU64). Embedded in core."
@@ -743,6 +822,7 @@ files:
   - name: "vice/SCPU64/chargen-906143-02.bin"
     system: commodore-c64
     required: false
+    hle_fallback: true
     embedded: true
     size: 4096
     note: "C64 Japanese Character Generator (used by SCPU64). Embedded in core."
@@ -751,6 +831,7 @@ files:
   - name: "vice/SCPU64/scpu-dos-1.4.bin"
     system: commodore-c64
     required: false
+    hle_fallback: true
     embedded: false
     note: "SuperCPU DOS v1.40 external kernal. Optional, selected via core option. Goes in system/vice/SCPU64/."
     source_ref: "retrodep/ui.c:266, libretro/libretro-core.c:2823"
@@ -758,6 +839,7 @@ files:
   - name: "vice/SCPU64/scpu-dos-2.04.bin"
     system: commodore-c64
     required: false
+    hle_fallback: true
     embedded: false
     note: "SuperCPU DOS v2.04 external kernal. Optional, selected via core option. Goes in system/vice/SCPU64/."
     source_ref: "retrodep/ui.c:263, libretro/libretro-core.c:2825"
@@ -769,6 +851,7 @@ files:
   - name: "vice/DRIVES/dos1540-325302+3-01.bin"
     system: commodore-c64
     required: false
+    hle_fallback: true
     embedded: true
     size: 16384
     note: "1540 drive DOS ROM. Embedded in core."
@@ -777,6 +860,7 @@ files:
   - name: "vice/DRIVES/dos1541-325302-01+901229-05.bin"
     system: commodore-c64
     required: false
+    hle_fallback: true
     embedded: true
     size: 16384
     note: "1541 drive DOS ROM. Embedded in core."
@@ -785,6 +869,7 @@ files:
   - name: "vice/DRIVES/dos1541ii-251968-03.bin"
     system: commodore-c64
     required: false
+    hle_fallback: true
     embedded: true
     size: 16384
     note: "1541-II drive DOS ROM. Embedded in core."
@@ -793,6 +878,7 @@ files:
   - name: "vice/DRIVES/dos1551-318008-01.bin"
     system: commodore-plus4
     required: false
+    hle_fallback: true
     embedded: true
     size: 16384
     note: "1551 drive DOS ROM (Plus/4 specific). Embedded in core."
@@ -801,6 +887,7 @@ files:
   - name: "vice/DRIVES/dos1570-315090-01.bin"
     system: commodore-c64
     required: false
+    hle_fallback: true
     embedded: true
     size: 32768
     note: "1570 drive DOS ROM. Embedded in core."
@@ -809,6 +896,7 @@ files:
   - name: "vice/DRIVES/dos1571-310654-05.bin"
     system: commodore-c64
     required: false
+    hle_fallback: true
     embedded: true
     size: 32768
     note: "1571 drive DOS ROM. Embedded in core."
@@ -817,6 +905,7 @@ files:
   - name: "vice/DRIVES/dos1571cr-318047-01.bin"
     system: commodore-c128
     required: false
+    hle_fallback: true
     embedded: true
     size: 32768
     note: "1571CR drive DOS ROM (cost-reduced, C128D internal). Embedded in core."
@@ -825,6 +914,7 @@ files:
   - name: "vice/DRIVES/dos1581-318045-02.bin"
     system: commodore-c64
     required: false
+    hle_fallback: true
     embedded: true
     size: 32768
     note: "1581 drive DOS ROM. Embedded in core."
@@ -833,6 +923,7 @@ files:
   - name: "vice/DRIVES/dos1001-901887+8-01.bin"
     system: commodore-pet
     required: false
+    hle_fallback: true
     embedded: true
     size: 16384
     note: "CBM 1001 (SFD-1001) drive DOS ROM. Embedded in core."
@@ -841,6 +932,7 @@ files:
   - name: "vice/DRIVES/dos2031-901484-03+05.bin"
     system: commodore-pet
     required: false
+    hle_fallback: true
     embedded: true
     size: 16384
     note: "CBM 2031 drive DOS ROM. Embedded in core."
@@ -849,6 +941,7 @@ files:
   - name: "vice/DRIVES/dos2040-901468-06+07.bin"
     system: commodore-pet
     required: false
+    hle_fallback: true
     embedded: true
     size: 8192
     note: "CBM 2040 dual drive DOS ROM. Embedded in core."
@@ -857,6 +950,7 @@ files:
   - name: "vice/DRIVES/dos3040-901468-11-13.bin"
     system: commodore-pet
     required: false
+    hle_fallback: true
     embedded: true
     size: 12288
     note: "CBM 3040 dual drive DOS ROM. Embedded in core."
@@ -865,6 +959,7 @@ files:
   - name: "vice/DRIVES/dos4040-901468-14-16.bin"
     system: commodore-pet
     required: false
+    hle_fallback: true
     embedded: true
     size: 12288
     note: "CBM 4040 dual drive DOS ROM. Embedded in core."
@@ -873,6 +968,7 @@ files:
   - name: "vice/DRIVES/dos9000-300516+7-revC.bin"
     system: commodore-pet
     required: false
+    hle_fallback: true
     embedded: true
     size: 16384
     note: "CBM D9090/D9060 hard drive DOS ROM. Embedded in core."
@@ -885,6 +981,7 @@ files:
   - name: "vice/JiffyDOS_C64.bin"
     system: commodore-c64
     required: false
+    hle_fallback: true
     embedded: false
     note: "JiffyDOS C64 kernal replacement. Optional, proprietary. Requires True Drive Emulation + 1541/1571/1581 drive."
     source_ref: "retrodep/ui.c:302, libretro/libretro-core.c:2853"
@@ -892,6 +989,7 @@ files:
   - name: "vice/JiffyDOS_SX-64.bin"
     system: commodore-c64
     required: false
+    hle_fallback: true
     embedded: false
     note: "JiffyDOS SX-64 kernal replacement. Used instead of JiffyDOS_C64.bin when SX-64 model is selected."
     source_ref: "retrodep/ui.c:295"
@@ -899,6 +997,7 @@ files:
   - name: "vice/JiffyDOS_C128.bin"
     system: commodore-c128
     required: false
+    hle_fallback: true
     embedded: false
     note: "JiffyDOS C128 kernal replacement. Optional, proprietary. C128 core only."
     source_ref: "retrodep/ui.c:309, libretro/libretro-core.c:2855"
@@ -906,6 +1005,7 @@ files:
   - name: "vice/JiffyDOS_1541-II.bin"
     system: commodore-c64
     required: false
+    hle_fallback: true
     embedded: false
     note: "JiffyDOS 1541-II drive ROM replacement. Optional, proprietary."
     source_ref: "retrodep/ui.c:283"
@@ -913,6 +1013,7 @@ files:
   - name: "vice/JiffyDOS_1571_repl310654.bin"
     system: commodore-c64
     required: false
+    hle_fallback: true
     embedded: false
     note: "JiffyDOS 1571 drive ROM replacement. Optional, proprietary."
     source_ref: "retrodep/ui.c:285"
@@ -920,6 +1021,7 @@ files:
   - name: "vice/JiffyDOS_1581.bin"
     system: commodore-c64
     required: false
+    hle_fallback: true
     embedded: false
     note: "JiffyDOS 1581 drive ROM replacement. Optional, proprietary."
     source_ref: "retrodep/ui.c:287"

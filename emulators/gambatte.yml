@@ -38,6 +38,7 @@ files:
     system: nintendo-gb
     description: "Original Game Boy (DMG-01) boot ROM"
     required: false
+    hle_fallback: true
     size: 256
     md5: "32fbbd84168d3482956eb3c5051637f5"
     sha1: "4ed31ec6b0b175bb109c0eb5fd3d193da823339f"
@@ -49,6 +50,7 @@ files:
     system: nintendo-gbc
     description: "Game Boy Color (CGB-001) boot ROM"
     required: false
+    hle_fallback: true
     size: 2304
     md5: "dbfce9db9deaa2567f6a84fde55f9680"
     sha1: "1293d68bf9643bc4f36954c1e80e38f39864528d"

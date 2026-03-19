@@ -42,6 +42,7 @@ files:
   - name: gba_bios.bin
     system: nintendo-gba
     required: false
+    hle_fallback: true
     size: 16384  # 16 KB (0x4000)
     note: "Official GBA BIOS. Built-in open-source BIOS used as fallback. Real BIOS needed for full SWI accuracy and boot logo."
     source_ref: "libretro/libretro.c:1111"

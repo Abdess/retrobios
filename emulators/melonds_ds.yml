@@ -27,16 +27,19 @@ files:
   - name: bios7.bin
     system: nintendo-ds
     required: false
+    hle_fallback: true
     md5: df692a80a5b1bc90728bc3dfc76cd948
     note: "NDS ARM7 BIOS"
   - name: bios9.bin
     system: nintendo-ds
     required: false
+    hle_fallback: true
     md5: a392174eb3e572fed6447e956bde4b25
     note: "NDS ARM9 BIOS"
   - name: firmware.bin
     system: nintendo-ds
     required: false
+    hle_fallback: true
     sha1: 8497afdd16af92d6887b71582846c40514e9039f
     md5: 145eaef5bd3037cbc247c213bb3da1b3
     size: 262144
