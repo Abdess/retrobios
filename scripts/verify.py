@@ -399,21 +399,31 @@ def print_platform_result(result: dict, group: list[str]) -> None:
     # Cross-reference: undeclared files used by cores
     undeclared = result.get("undeclared_files", [])
     if undeclared:
-        req_not_in_repo = [u for u in undeclared if u["required"] and not u["in_repo"]]
+        req_not_in_repo = [u for u in undeclared if u["required"] and not u["in_repo"] and not u.get("hle_fallback")]
+        req_hle_not_in_repo = [u for u in undeclared if u["required"] and not u["in_repo"] and u.get("hle_fallback")]
         req_in_repo = [u for u in undeclared if u["required"] and u["in_repo"]]
-        opt_count = len(undeclared) - len(req_not_in_repo) - len(req_in_repo)
+        opt_in_repo = [u for u in undeclared if not u["required"] and u["in_repo"]]
+        opt_not_in_repo = [u for u in undeclared if not u["required"] and not u["in_repo"]]
 
         summary_parts = []
         if req_not_in_repo:
             summary_parts.append(f"{len(req_not_in_repo)} required NOT in repo")
+        if req_hle_not_in_repo:
+            summary_parts.append(f"{len(req_hle_not_in_repo)} required with HLE NOT in repo")
         if req_in_repo:
             summary_parts.append(f"{len(req_in_repo)} required in repo")
-        summary_parts.append(f"{opt_count} optional")
+        if opt_in_repo:
+            summary_parts.append(f"{len(opt_in_repo)} optional in repo")
+        if opt_not_in_repo:
+            summary_parts.append(f"{len(opt_not_in_repo)} optional NOT in repo")
         print(f"  Core gaps: {len(undeclared)} undeclared ({', '.join(summary_parts)})")
 
-        # Show only critical gaps (required + not in repo)
+        # Show critical gaps (required + no HLE + not in repo)
         for u in req_not_in_repo:
             print(f"    {u['emulator']} → {u['name']} (required, NOT in repo)")
+        # Show required with HLE (core works but not ideal)
+        for u in req_hle_not_in_repo:
+            print(f"    {u['emulator']} → {u['name']} (required, HLE available, NOT in repo)")
         # Show required in repo (actionable)
         for u in req_in_repo[:10]:
             print(f"    {u['emulator']} → {u['name']} (required, in repo)")
