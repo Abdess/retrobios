@@ -112,11 +112,16 @@ def load_platform_config(platform_name: str, platforms_dir: str = "platforms") -
                     merged["systems"][sys_id] = override
         config = merged
 
-    # Resolve shared group includes
+    # Resolve shared group includes (cached to avoid re-parsing per call)
     shared_path = os.path.join(platforms_dir, "_shared.yml")
     if os.path.exists(shared_path):
-        with open(shared_path) as f:
-            shared = yaml.safe_load(f) or {}
+        if not hasattr(load_platform_config, "_shared_cache"):
+            load_platform_config._shared_cache = {}
+        cache_key = os.path.realpath(shared_path)
+        if cache_key not in load_platform_config._shared_cache:
+            with open(shared_path) as f:
+                load_platform_config._shared_cache[cache_key] = yaml.safe_load(f) or {}
+        shared = load_platform_config._shared_cache[cache_key]
         shared_groups = shared.get("shared_groups", {})
         for system in config.get("systems", {}).values():
             for group_name in system.get("includes", []):
@@ -288,8 +293,11 @@ def build_zip_contents_index(db: dict, max_entry_size: int = 512 * 1024 * 1024) 
                 for info in zf.infolist():
                     if info.is_dir() or info.file_size > max_entry_size:
                         continue
-                    data = zf.read(info.filename)
-                    index[hashlib.md5(data).hexdigest()] = sha1
+                    h = hashlib.md5()
+                    with zf.open(info.filename) as inner:
+                        for chunk in iter(lambda: inner.read(65536), b""):
+                            h.update(chunk)
+                    index[h.hexdigest()] = sha1
         except (zipfile.BadZipFile, OSError):
             continue
     return index

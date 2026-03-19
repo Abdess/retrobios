@@ -26,7 +26,8 @@ except ImportError:
     sys.exit(1)
 
 sys.path.insert(0, os.path.dirname(__file__))
-from common import load_database, load_platform_config
+from common import load_database, load_emulator_profiles, load_platform_config
+from generate_readme import compute_coverage
 from verify import verify_platform
 
 DOCS_DIR = "docs"
@@ -63,46 +64,6 @@ def _status_icon(pct: float) -> str:
     if pct >= 95:
         return "~OK"
     return "partial"
-
-
-def compute_coverage(platform_name: str, platforms_dir: str, db: dict) -> dict:
-    config = load_platform_config(platform_name, platforms_dir)
-    result = verify_platform(config, db)
-    sc = result.get("status_counts", {})
-    ok = sc.get("ok", 0)
-    untested = sc.get("untested", 0)
-    missing = sc.get("missing", 0)
-    total = result["total_files"]
-    present = ok + untested
-    pct = (present / total * 100) if total > 0 else 0
-    return {
-        "platform": config.get("platform", platform_name),
-        "total": total,
-        "verified": ok,
-        "untested": untested,
-        "missing": missing,
-        "present": present,
-        "percentage": pct,
-        "mode": config.get("verification_mode", "existence"),
-        "details": result["details"],
-        "config": config,
-    }
-
-
-# ---------------------------------------------------------------------------
-# Load emulator profiles
-# ---------------------------------------------------------------------------
-
-def _load_emulator_profiles(emulators_dir: str) -> dict[str, dict]:
-    profiles = {}
-    emu_path = Path(emulators_dir)
-    if not emu_path.exists():
-        return profiles
-    for f in sorted(emu_path.glob("*.yml")):
-        with open(f) as fh:
-            profile = yaml.safe_load(fh) or {}
-        profiles[f.stem] = profile
-    return profiles
 
 
 # ---------------------------------------------------------------------------
@@ -743,7 +704,7 @@ def main():
 
     # Load emulator profiles
     print("Loading emulator profiles...")
-    profiles = _load_emulator_profiles(args.emulators_dir)
+    profiles = load_emulator_profiles(args.emulators_dir, skip_aliases=False)
     unique_count = sum(1 for p in profiles.values() if p.get("type") != "alias")
     print(f"  {len(profiles)} profiles ({unique_count} unique, {len(profiles) - unique_count} aliases)")
 

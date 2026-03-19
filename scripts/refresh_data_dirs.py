@@ -116,7 +116,9 @@ def get_remote_sha(source_url: str, version: str) -> str | None:
 
 
 def _is_safe_tar_member(member: tarfile.TarInfo, dest: Path) -> bool:
-    """Reject path traversal and absolute paths in tar members."""
+    """Reject path traversal, absolute paths, and symlinks in tar members."""
+    if member.issym() or member.islnk():
+        return False
     if member.name.startswith("/") or ".." in member.name.split("/"):
         return False
     resolved = (dest / member.name).resolve()

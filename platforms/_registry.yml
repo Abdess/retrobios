@@ -82,8 +82,7 @@ platforms:
     source_format: github_component_manifests
     hash_type: md5
     schedule: monthly
-    emulators: [duckstation, pcsx2, dolphin, rpcs3, ppsspp, cemu, xemu, vita3k, melonds, xroar]
-    # RetroDECK/components = separate repo containing per-component build recipes
+    cores: [azahar, cemu, dolphin, duckstation, gzdoom, mame, melonds, openbor, pcsx2, pico-8, ppsspp, primehack, retroarch, rpcs3, ruffle, solarus, vita3k, xemu, xroar]
     # Each component/<name>/component_manifest.json declares BIOS requirements
     # Scraper enumerates top-level dirs via GitHub API, fetches each manifest directly
 

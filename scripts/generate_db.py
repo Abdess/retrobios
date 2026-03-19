@@ -49,7 +49,7 @@ def _canonical_name(filepath: Path) -> str:
     return name
 
 
-def scan_bios_dir(bios_dir: Path, cache: dict, force: bool) -> dict:
+def scan_bios_dir(bios_dir: Path, cache: dict, force: bool) -> tuple[dict, dict, dict]:
     """Scan bios directory and compute hashes, using cache when possible."""
     files = {}
     aliases = {}

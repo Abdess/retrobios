@@ -47,6 +47,31 @@ def compute_coverage(platform_name: str, platforms_dir: str, db: dict) -> dict:
 
 SITE_URL = "https://abdess.github.io/retrobios/"
 RELEASE_URL = "../../releases/latest"
+REPO = "Abdess/retrobios"
+
+
+def fetch_contributors() -> list[dict]:
+    """Fetch contributors from GitHub API, exclude bots."""
+    import urllib.request
+    import urllib.error
+    url = f"https://api.github.com/repos/{REPO}/contributors"
+    headers = {"User-Agent": "retrobios-readme/1.0"}
+    token = os.environ.get("GITHUB_TOKEN", "")
+    if token:
+        headers["Authorization"] = f"token {token}"
+    try:
+        req = urllib.request.Request(url, headers=headers)
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            data = json.loads(resp.read().decode())
+        owner = REPO.split("/")[0]
+        return [
+            c for c in data
+            if not c.get("login", "").endswith("[bot]")
+            and c.get("type") == "User"
+            and c.get("login") != owner
+        ]
+    except (urllib.error.URLError, urllib.error.HTTPError):
+        return []
 
 
 def generate_readme(db: dict, platforms_dir: str) -> str:
@@ -110,6 +135,25 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
         "## Documentation",
         "",
         f"Full file listings, platform coverage, emulator profiles, and gap analysis: **[{SITE_URL}]({SITE_URL})**",
+        "",
+    ])
+
+    contributors = fetch_contributors()
+    if contributors:
+        lines.extend([
+            "## Contributors",
+            "",
+        ])
+        for c in contributors:
+            login = c["login"]
+            avatar = c.get("avatar_url", "")
+            url = c.get("html_url", f"https://github.com/{login}")
+            lines.append(
+                f'<a href="{url}"><img src="{avatar}" width="50" title="{login}"></a>'
+            )
+        lines.append("")
+
+    lines.extend([
         "",
         "## Contributing",
         "",

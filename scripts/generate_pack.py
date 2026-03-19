@@ -224,6 +224,7 @@ def generate_pack(
     emulators_dir: str = "emulators",
     zip_contents: dict | None = None,
     data_registry: dict | None = None,
+    emu_profiles: dict | None = None,
 ) -> str | None:
     """Generate a ZIP pack for a platform.
 
@@ -269,7 +270,7 @@ def generate_pack(
                     full_dest = dest
 
                 dedup_key = full_dest
-                already_packed = dedup_key in seen_destinations
+                already_packed = dedup_key in seen_destinations or dedup_key.lower() in seen_lower
 
                 storage = file_entry.get("storage", "embedded")
 
@@ -364,7 +365,8 @@ def generate_pack(
                 total_files += 1
 
         # Core requirements: files platform's cores need but YAML doesn't declare
-        emu_profiles = load_emulator_profiles(emulators_dir)
+        if emu_profiles is None:
+            emu_profiles = load_emulator_profiles(emulators_dir)
         core_files = _collect_emulator_extras(
             config, emulators_dir, db,
             seen_destinations, base_dest, emu_profiles,
@@ -374,7 +376,16 @@ def generate_pack(
             dest = _sanitize_path(fe.get("destination", fe["name"]))
             if not dest:
                 continue
-            full_dest = f"{base_dest}/{dest}" if base_dest else dest
+            # Core extras use flat filenames; prepend base_destination or
+            # default to the platform's most common BIOS path prefix
+            if base_dest:
+                full_dest = f"{base_dest}/{dest}"
+            elif "/" not in dest:
+                # Bare filename with empty base_destination — infer bios/ prefix
+                # to match platform conventions (RetroDECK: ~/retrodeck/bios/)
+                full_dest = f"bios/{dest}"
+            else:
+                full_dest = dest
             if full_dest in seen_destinations:
                 continue
             # Skip case-insensitive duplicates (Windows/macOS FS safety)
@@ -513,6 +524,7 @@ def main():
         if updated:
             print(f"Refreshed {updated} data director{'ies' if updated > 1 else 'y'}")
 
+    emu_profiles = load_emulator_profiles(args.emulators_dir)
     groups = group_identical_platforms(platforms, args.platforms_dir)
 
     for group_platforms, representative in groups:
@@ -528,6 +540,7 @@ def main():
                 representative, args.platforms_dir, db, args.bios_dir, args.output_dir,
                 include_extras=args.include_extras, emulators_dir=args.emulators_dir,
                 zip_contents=zip_contents, data_registry=data_registry,
+                emu_profiles=emu_profiles,
             )
             if zip_path and len(group_platforms) > 1:
                 # Rename ZIP to include all platform names
