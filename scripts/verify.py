@@ -258,6 +258,61 @@ def find_undeclared_files(
     return undeclared
 
 
+def find_exclusion_notes(
+    config: dict, emulators_dir: str, emu_profiles: dict | None = None,
+) -> list[dict]:
+    """Document why certain emulator files are intentionally excluded.
+
+    Reports:
+    - Launchers (BIOS managed by standalone emulator)
+    - Standalone-only files (not needed in libretro mode)
+    - Frozen snapshots with files: [] (code doesn't load .info firmware)
+    - Files covered by data_directories
+    """
+    profiles = emu_profiles if emu_profiles is not None else load_emulator_profiles(emulators_dir)
+    platform_systems = set()
+    for sys_id in config.get("systems", {}):
+        platform_systems.add(sys_id)
+
+    notes = []
+    for emu_name, profile in sorted(profiles.items()):
+        emu_systems = set(profile.get("systems", []))
+        if not emu_systems & platform_systems:
+            continue
+
+        emu_display = profile.get("emulator", emu_name)
+
+        # Launcher excluded entirely
+        if profile.get("type") == "launcher":
+            notes.append({
+                "emulator": emu_display, "reason": "launcher",
+                "detail": "BIOS managed by standalone emulator, not system_dir",
+            })
+            continue
+
+        # Frozen snapshot with empty files
+        if not profile.get("files") and profile.get("notes"):
+            note_text = profile.get("notes", "")
+            if "frozen" in note_text.lower() or "snapshot" in note_text.lower() or "never loads" in note_text.lower():
+                notes.append({
+                    "emulator": emu_display, "reason": "frozen_snapshot",
+                    "detail": "code does not load external firmware despite .info declaration",
+                })
+                continue
+
+        # Count standalone-only files
+        standalone_files = [f for f in profile.get("files", []) if f.get("mode") == "standalone"]
+        if standalone_files:
+            names = [f["name"] for f in standalone_files[:3]]
+            more = f" +{len(standalone_files)-3}" if len(standalone_files) > 3 else ""
+            notes.append({
+                "emulator": emu_display, "reason": "standalone_only",
+                "detail": f"{len(standalone_files)} files for standalone mode only ({', '.join(names)}{more})",
+            })
+
+    return notes
+
+
 # ---------------------------------------------------------------------------
 # Platform verification
 # ---------------------------------------------------------------------------
@@ -329,6 +384,7 @@ def verify_platform(
 
     # Cross-reference undeclared files
     undeclared = find_undeclared_files(config, emulators_dir, db, emu_profiles)
+    exclusions = find_exclusion_notes(config, emulators_dir, emu_profiles)
 
     return {
         "platform": platform,
@@ -336,6 +392,7 @@ def verify_platform(
         "total_files": len(file_status),
         "severity_counts": counts,
         "undeclared_files": undeclared,
+        "exclusion_notes": exclusions,
         "details": details,
     }
 
@@ -429,6 +486,13 @@ def print_platform_result(result: dict, group: list[str]) -> None:
             print(f"    {u['emulator']} → {u['name']} (required, in repo)")
         if len(req_in_repo) > 10:
             print(f"    ... and {len(req_in_repo) - 10} more required in repo")
+
+    # Intentional exclusions (explain why certain emulator files are NOT included)
+    exclusions = result.get("exclusion_notes", [])
+    if exclusions:
+        print(f"  Intentional exclusions ({len(exclusions)}):")
+        for ex in exclusions:
+            print(f"    {ex['emulator']} — {ex['detail']} [{ex['reason']}]")
 
 
 def main():
