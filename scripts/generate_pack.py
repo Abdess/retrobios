@@ -348,7 +348,17 @@ def generate_pack(
 
                 if status == "hash_mismatch":
                     if verification_mode != "existence":
-                        untested_files.append(file_entry["name"])
+                        # For zipped_file entries, hash_mismatch is expected
+                        # (container MD5 ≠ inner ROM MD5). Verify inner content.
+                        zf_name = file_entry.get("zipped_file")
+                        if zf_name and local_path:
+                            from verify import check_inside_zip
+                            inner_md5 = file_entry.get("md5", "")
+                            result = check_inside_zip(local_path, zf_name, inner_md5)
+                            if result != "ok":
+                                untested_files.append(file_entry["name"])
+                        else:
+                            untested_files.append(file_entry["name"])
 
                 extract = file_entry.get("extract", False)
                 if extract and local_path.endswith(".zip"):
