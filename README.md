@@ -2,7 +2,7 @@
 
 Complete, verified collection of BIOS, firmware, and system files for retrogaming emulators.
 
-> **6676** files | **4975.0 MB** | **8** platforms | **275** emulator profiles
+> **6724** files | **5013.3 MB** | **8** platforms | **275** emulator profiles
 
 ## Download
 
@@ -27,7 +27,7 @@ Complete, verified collection of BIOS, firmware, and system files for retrogamin
 | Recalbox | 346/346 (100.0%) | 346 | 0 | 0 |
 | RetroArch | 448/448 (100.0%) | 448 | 0 | 0 |
 | RetroBat | 331/331 (100.0%) | 331 | 0 | 0 |
-| RetroDECK | 1953/2007 (97.3%) | 1648 | 305 | 54 |
+| RetroDECK | 2007/2007 (100.0%) | 1698 | 309 | 0 |
 | RetroPie | 448/448 (100.0%) | 448 | 0 | 0 |
 
 ## Documentation
@@ -47,4 +47,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 This repository provides BIOS files for personal backup and archival purposes.
 
-*Auto-generated on 2026-03-19T22:30:37Z*
+*Auto-generated on 2026-03-20T12:08:51Z*
