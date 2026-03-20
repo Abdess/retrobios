@@ -7699,7 +7699,7 @@ systems:
     - name: Atari Jaguar (World).j64
       destination: bios/Atari Jaguar (World).j64
       required: false
-      md5: cb492f093cd9e22a913d158741e8f00a
+      md5: bcfe348c565d9dedb173822ee6850dea
   fairchild-channel-f:
     files:
     - name: sl31253.bin
