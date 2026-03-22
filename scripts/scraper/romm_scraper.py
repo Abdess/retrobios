@@ -30,10 +30,6 @@ BIOS_URL = (
     f"https://raw.githubusercontent.com/{BIOS_REPO}/refs/heads/{BIOS_BRANCH}/{BIOS_FILE}"
 )
 
-SYSTEM_SLUG_TRANSLATION = {
-
-}
-
 class Scraper(BaseScraper):
     """RomM BIOS scraper from known_bios_files.json."""
 
@@ -123,17 +119,12 @@ class Scraper(BaseScraper):
         }
 
 def main():
-    import yaml
-    # try:
-    #     from .base_scraper import scraper_cli
-    # except ImportError:
-    #     sys.path.insert(0, str(Path(__file__).parent.parent))
-    #     from scraper.base_scraper import scraper_cli
-    # scraper_cli(Scraper, "Scrape RomM BIOS requirements")
-
-    scraper = Scraper()
-    platform_yaml = scraper.generate_platform_yaml()
-    open("platforms/romm.yml", "w").write(yaml.dump(platform_yaml, sort_keys=False))
+    try:
+        from .base_scraper import scraper_cli
+    except ImportError:
+        sys.path.insert(0, str(Path(__file__).parent.parent))
+        from scraper.base_scraper import scraper_cli
+    scraper_cli(Scraper, "Scrape RomM BIOS requirements")
 
 if __name__ == "__main__":
     main()
