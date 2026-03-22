@@ -1,7 +1,8 @@
 emulator: Geargrafx
 type: libretro
+core_classification: official_port
 source: "https://github.com/drhelius/Geargrafx"
-profiled_date: "2026-03-18"
+profiled_date: "2026-03-21"
 core_version: "1.6.0"
 display_name: "NEC - PC Engine / SuperGrafx / CD (Geargrafx)"
 cores:
@@ -41,9 +42,8 @@ notes: |
   Arcade Card games are also detected from game_db.h and enable extra
   0x30000 bytes of Card RAM for Super CD-ROM mode.
 
-  Unlike beetle_pce, this core does NOT have separate US syscard3u.pce or
-  syscard2u.pce options. The libretro frontend only references syscard1.pce,
-  syscard2.pce, syscard3.pce, and gexpress.pce.
+  No separate US-specific filenames (syscard3u.pce). US variants must be
+  named syscard3.pce/syscard2.pce — recognized by CRC32 validation.
 
 files:
   # -- CD-ROM System Card 3 (Japan) - default --
@@ -88,9 +88,7 @@ files:
     required: false
     source_ref: "game_db.h:52 CRC32=0x2B5B75FE"
     notes: >
-      The core does not have a separate syscard3u.pce option like beetle_pce.
-      If using a US System Card 3, it must be named syscard3.pce and placed in
-      the system directory. The game_db.h CRC32 validation will recognize it.
+      US variant must be named syscard3.pce. CRC32 validation recognizes it.
 
   # -- TurboGrafx CD System Card 2 (US) --
 

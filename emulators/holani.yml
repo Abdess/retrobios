@@ -1,7 +1,9 @@
 emulator: Holani
 type: libretro
+core_classification: official_port
 source: "https://github.com/LLeny/holani-retro"
-profiled_date: "2026-03-18"
+upstream: "https://github.com/LLeny/holani"
+profiled_date: "2026-03-21"
 core_version: "0.6.0"
 display_name: "Atari - Lynx (Holani)"
 cores: [holani]
@@ -22,13 +24,7 @@ notes: |
   has the free boot ROM initialized. No hash validation on the external
   file; Rom::from_slice() only checks length == 512.
 
-  Unlike Handy and Gearlynx, Holani always boots because the free ROM
-  is compiled in. The real BIOS provides more accurate boot behavior
-  (encrypted cart loader, original RSA key), while the free ROM
-  reimplements the boot sequence without proprietary code.
-
   ROM extensions: .lnx, .o
-  Core options: none.
 
 files:
   - name: "lynxboot.img"
@@ -37,8 +33,4 @@ files:
     required: false
     hle_fallback: true
     size: 512
-    sha1: "e4ed47fae31693e016b081c6bda48da5b70d7ccb"
-    md5: "fcd403db69f54290b51035d82f835e7b"
-    crc32: "0d973c9d"
-    source_ref: "holani-retro lib.rs:110-121 (bios load path), holani rom.rs:14-47 (FREE_BOOTROM embedded fallback), rom.rs:72-79 (from_slice length check only)"
-    notes: "Optional. Core ships with a free boot ROM embedded at compile time. Real BIOS provides original encrypted cart loader. No CRC/hash validation on load, only size == 512."
+    source_ref: "src/lib.rs:110-121 (bios load path)"

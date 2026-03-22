@@ -1,0 +1,482 @@
+emulator: "FinalBurn Neo (Neo Geo)"
+type: libretro
+core_classification: official_port
+source: "https://github.com/libretro/FBNeo"
+upstream: "https://github.com/finalburnneo/FBNeo"
+profiled_date: "2026-03-21"
+core_version: "v1.0.0.03"
+display_name: "Arcade (FinalBurn Neo) (Neo-Geo)"
+cores:
+  - fbneo_neogeo
+systems:
+  - snk-neogeo-mvs
+  - snk-neogeo-aes
+  - snk-neogeo-cd
+
+notes: |
+  Neo Geo subset of FinalBurn Neo, current codebase (not frozen).
+  Built with SUBSET=neogeo, includes only d_neogeo.cpp drivers.
+  Exists for platforms that cannot run the full FBNeo core.
+
+  Neo Geo games reference "neogeo" as parent ROM set. The BIOS ZIP
+  must be alongside game ZIPs or in system_dir/fbneo/.
+  Search order (libretro.cpp:922-1030):
+    1. {rom_dir}/{romName}
+    2. {rom_dir}/arcade/{romName}
+    3. {system_dir}/fbneo/{romName}
+    4. {system_dir}/fbneo/arcade/{romName}
+    5. {system_dir}/{romName}
+
+  neogeo.zip contains multiple selectable 68K BIOS variants (MVS, AES,
+  Universe BIOS). One 68K BIOS active at a time (dipswitch). Z80 BIOS,
+  fix tiles, and zoom table always required.
+
+  Neo Geo CDZ uses neocdz.zip with parent "neogeo". CD/CDZ BIOS plus
+  zoom table.
+
+  hiscore.dat loaded from system_dir/fbneo/ (hiscore.cpp:406).
+
+  need_fullpath=false, extensions=zip|7z|cue|ccd, savestate=deterministic.
+
+files:
+  # -------------------------------------------------------
+  # Neo Geo MVS/AES (neogeo.zip) — 68K BIOS ROMs
+  # -------------------------------------------------------
+  - name: "sp-s3.sp1"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: true
+    size: 131072
+    crc32: "91b64be3"
+    note: "MVS Asia/Europe ver. 6 (1 slot) - default BIOS"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1604"
+
+  - name: "sp-s2.sp1"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 131072
+    crc32: "9036d879"
+    note: "MVS Asia/Europe ver. 5 (1 slot)"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1605"
+
+  - name: "sp-s.sp1"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 131072
+    crc32: "c7f2fa45"
+    note: "MVS Asia/Europe ver. 3 (4 slot)"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1606"
+
+  - name: "sp-u2.sp1"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 131072
+    crc32: "e72943de"
+    note: "MVS USA ver. 5 (2 slot)"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1607"
+
+  - name: "sp1-u2"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 131072
+    crc32: "62f021f4"
+    note: "MVS USA ver. 5 (4 slot)"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1608"
+
+  - name: "sp-e.sp1"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 131072
+    crc32: "2723a5b5"
+    note: "MVS USA ver. 5 (6 slot)"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1609"
+
+  - name: "sp1-u4.bin"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 131072
+    crc32: "1179a30f"
+    note: "MVS USA (U4)"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1610"
+
+  - name: "sp1-u3.bin"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 131072
+    crc32: "2025b7a2"
+    note: "MVS USA (U3)"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1611"
+
+  - name: "vs-bios.rom"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 131072
+    crc32: "f0e8f27d"
+    note: "MVS Japan ver. 6"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1612"
+
+  - name: "sp-j2.sp1"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 131072
+    crc32: "acede59c"
+    note: "MVS Japan ver. 5"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1613"
+
+  - name: "sp1.jipan.1024"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 131072
+    crc32: "9fb0abe4"
+    note: "MVS Japan ver. 3 (4 slot)"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1614"
+
+  - name: "sp-45.sp1"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 524288
+    crc32: "03cc9f6a"
+    note: "NEO-MVH MV1C (Asia)"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1615"
+
+  - name: "sp-j3.sp1"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 524288
+    crc32: "486cb450"
+    note: "NEO-MVH MV1C (Japan)"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1616"
+
+  - name: "japan-j3.bin"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 131072
+    crc32: "dff6d41f"
+    note: "MVS Japan (J3)"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1617"
+
+  - name: "sp1-j3.bin"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 131072
+    crc32: "fbc6d469"
+    note: "MVS Japan (J3, alt)"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1618"
+
+  - name: "neo-po.bin"
+    archive: neogeo.zip
+    system: snk-neogeo-aes
+    required: false
+    size: 131072
+    crc32: "16d0c132"
+    note: "AES Japan"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1620"
+
+  - name: "neo-epo.bin"
+    archive: neogeo.zip
+    system: snk-neogeo-aes
+    required: false
+    size: 131072
+    crc32: "d27a71f1"
+    note: "AES Asia"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1621"
+
+  - name: "neodebug.bin"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 131072
+    crc32: "698ebb7d"
+    note: "Development Kit BIOS"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1622"
+
+  - name: "sp-1v1_3db8c.bin"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 131072
+    crc32: "162f0ebe"
+    note: "Deck ver. 6 (Git Ver 1.3)"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1628"
+
+  # Universe BIOS (third-party, multiple versions)
+  - name: "uni-bios_4_0.rom"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 131072
+    crc32: "a7aab458"
+    note: "Universe BIOS ver. 4.0"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1629"
+
+  - name: "uni-bios_3_3.rom"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 131072
+    crc32: "24858466"
+    note: "Universe BIOS ver. 3.3"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1630"
+
+  - name: "uni-bios_3_2.rom"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 131072
+    crc32: "a4e8b9b3"
+    note: "Universe BIOS ver. 3.2"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1631"
+
+  - name: "uni-bios_3_1.rom"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 131072
+    crc32: "0c58093f"
+    note: "Universe BIOS ver. 3.1"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1632"
+
+  - name: "uni-bios_3_0.rom"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 131072
+    crc32: "a97c89a9"
+    note: "Universe BIOS ver. 3.0"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1633"
+
+  - name: "uni-bios_2_3.rom"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 131072
+    crc32: "27664eb5"
+    note: "Universe BIOS ver. 2.3"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1634"
+
+  - name: "uni-bios_2_3o.rom"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 131072
+    crc32: "601720ae"
+    note: "Universe BIOS ver. 2.3 (older)"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1635"
+
+  - name: "uni-bios_2_2.rom"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 131072
+    crc32: "2d50996a"
+    note: "Universe BIOS ver. 2.2"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1636"
+
+  - name: "uni-bios_2_1.rom"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 131072
+    crc32: "8dabf76b"
+    note: "Universe BIOS ver. 2.1"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1637"
+
+  - name: "uni-bios_2_0.rom"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 131072
+    crc32: "0c12c2ad"
+    note: "Universe BIOS ver. 2.0"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1638"
+
+  - name: "uni-bios_1_3.rom"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 131072
+    crc32: "b24b44a0"
+    note: "Universe BIOS ver. 1.3"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1639"
+
+  - name: "uni-bios_1_2.rom"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 131072
+    crc32: "4fa698e9"
+    note: "Universe BIOS ver. 1.2"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1640"
+
+  - name: "uni-bios_1_2o.rom"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 131072
+    crc32: "e19d3ce9"
+    note: "Universe BIOS ver. 1.2 (older)"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1641"
+
+  - name: "uni-bios_1_1.rom"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 131072
+    crc32: "5dda0d84"
+    note: "Universe BIOS ver. 1.1"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1642"
+
+  - name: "uni-bios_1_0.rom"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 131072
+    crc32: "0ce453a0"
+    note: "Universe BIOS ver. 1.0"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1643"
+
+  - name: "neopen.sp1"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 131072
+    crc32: "cb915e76"
+    note: "NeoOpen BIOS v0.1 beta"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1645"
+
+  # Trackball BIOS
+  - name: "236-bios.sp1"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 131072
+    crc32: "853e6b96"
+    note: "Trackball BIOS / Asia MV1B 263"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1744"
+
+  - name: "236-bios_japan_hack.sp1"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 131072
+    crc32: "02bf4426"
+    note: "Trackball BIOS / Japan (hack)"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1745"
+
+  # Neo Geo shared ROMs (always required)
+  - name: "sm1.sm1"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: true
+    size: 131072
+    crc32: "94416d67"
+    note: "Z80 sound BIOS"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1652"
+
+  - name: "sfix.sfix"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: true
+    size: 131072
+    crc32: "c2ea0cfd"
+    note: "Text layer fix tiles"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1653"
+
+  - name: "000-lo.lo"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: true
+    size: 131072
+    crc32: "5a86cff2"
+    note: "Zoom lookup table"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1654"
+
+  # PCB BIOS
+  - name: "sp-4x.sp1"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 524288
+    crc32: "b4590283"
+    note: "PCB BIOS"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1791"
+
+  - name: "spj.sp1"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 524288
+    crc32: "148dd727"
+    note: "PCB BIOS (Japan)"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1879"
+
+  # -------------------------------------------------------
+  # Neo Geo CDZ (neocdz.zip)
+  # -------------------------------------------------------
+  - name: "neocd.bin"
+    archive: neocdz.zip
+    system: snk-neogeo-cd
+    required: true
+    size: 524288
+    crc32: "df9de490"
+    note: "Neo Geo CD/CDZ BIOS"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1963"
+
+  - name: "neocd_sz.rom"
+    archive: neocdz.zip
+    system: snk-neogeo-cd
+    required: false
+    size: 524288
+    crc32: "42f6b6c4"
+    note: "Neo Geo CDZ custom BIOS by SMKDan"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1964"
+
+  - name: "uni-bioscd33.rom"
+    archive: neocdz.zip
+    system: snk-neogeo-cd
+    required: false
+    size: 524288
+    crc32: "ff3abc59"
+    note: "Universe BIOS CD ver. 3.3"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1965"
+
+  - name: "uni-bioscd32.rom"
+    archive: neocdz.zip
+    system: snk-neogeo-cd
+    required: false
+    size: 524288
+    crc32: "0ffb3127"
+    note: "Universe BIOS CD ver. 3.2"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1966"
+
+  - name: "000-lo.lo"
+    archive: neocdz.zip
+    system: snk-neogeo-cd
+    required: true
+    size: 131072
+    crc32: "5a86cff2"
+    note: "Zoom lookup table (shared with MVS)"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1968"
+
+  # -------------------------------------------------------
+  # System support files
+  # -------------------------------------------------------
+  - name: "hiscore.dat"
+    path: "fbneo/hiscore.dat"
+    required: false
+    note: "High score database, enables persistent high scores"
+    source_ref: "src/burn/hiscore.cpp:406"

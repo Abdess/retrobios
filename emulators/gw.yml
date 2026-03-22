@@ -1,7 +1,8 @@
 emulator: "Game & Watch"
 type: libretro
+core_classification: pure_libretro
 source: "https://github.com/libretro/gw-libretro"
-profiled_date: "2026-03-18"
+profiled_date: "2026-03-21"
 core_version: "Git"
 display_name: "Handheld Electronic (GW)"
 cores:

@@ -1,7 +1,9 @@
 emulator: galaksija
 type: libretro
+core_classification: official_port
 source: "https://github.com/libretro/galaxy-libretro"
-profiled_date: "2026-03-18"
+upstream: "https://github.com/nikp123/Galaksija-Emulator"
+profiled_date: "2026-03-21"
 core_version: "v0.1"
 display_name: "Elektronika Inženjering - Galaksija (Galaksija)"
 cores:

@@ -1,7 +1,8 @@
 emulator: JAXE
 type: libretro
-source: "https://github.com/libretro/jaxe"
-profiled_date: "2026-03-18"
+core_classification: official_port
+source: "https://github.com/kurtjd/jaxe"
+profiled_date: "2026-03-21"
 core_version: "GIT"
 display_name: "CHIP-8/S-CHIP/XO-CHIP (JAXE)"
 cores:

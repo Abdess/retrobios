@@ -1,0 +1,8 @@
+emulator: "Flycast GLES2"
+type: alias
+alias_of: "flycast"
+profiled_date: "2026-03-21"
+core_version: "1.0"
+display_name: "Sega - Dreamcast/Naomi (Flycast GLES2)"
+note: "Same codebase as flycast, compiled with -DHAVE_OPENGLES2 for older mobile GPUs. Same BIOS files."
+files: []

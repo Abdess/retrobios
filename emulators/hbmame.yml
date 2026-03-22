@@ -1,10 +1,16 @@
 emulator: HBMAME (Homebrew MAME)
 type: libretro
+core_classification: enhanced_fork
 source: "https://github.com/libretro/hbmame-libretro"
+upstream: "https://github.com/Robbbert/hbmame"
 logo: "https://raw.githubusercontent.com/mamedev/mame/master/docs/source/images/MAMElogo.svg"
-profiled_date: "2026-03-18"
+profiled_date: "2026-03-21"
 core_version: "Git"
 display_name: "Arcade (HBMAME)"
+cores:
+  - hbmame
+systems:
+  - arcade
 based_on: MAME 0.220
 author: Robbbert
 game_count: 8511
@@ -38,9 +44,6 @@ notes: |
   BIOS files are expected as MAME-format ZIP archives in the ROM search path.
   Users with a working MAME 0.220 BIOS collection need nothing extra for HBMAME.
 
-bios_impact: none
-bios_note: |
-  Uses the same BIOS ZIPs as MAME 0.220. No custom or modified BIOS entries.
-  The primary BIOS dependency is neogeo.zip for the large Neo Geo homebrew/hack
-  library. Other arcade boards (CPS, Pac-Man, Galaxian, etc.) are ROM-only hacks
-  with no additional BIOS requirements beyond standard MAME parent sets.
+files: []
+
+exclusion_note: "BIOS ROMs are inside parent ROM set ZIPs (neogeo.zip, etc.) following MAME convention. No standalone system directory files."

@@ -1,8 +1,10 @@
 emulator: Frodo
 type: libretro
+core_classification: community_fork
 cores: [frodo]
 source: "https://github.com/libretro/frodo-libretro"
-profiled_date: "2026-03-18"
+upstream: "https://github.com/cebix/frodo4"
+profiled_date: "2026-03-21"
 core_version: "v4.2"
 display_name: "Commodore - C64 (Frodo)"
 systems: [commodore-c64]

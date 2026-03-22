@@ -1,18 +1,20 @@
 emulator: Genesis Plus GX
 type: libretro
+core_classification: community_fork
 source: "https://github.com/libretro/Genesis-Plus-GX"
-profiled_date: "2026-03-18"
+upstream: "https://github.com/ekeeke/Genesis-Plus-GX"
+profiled_date: "2026-03-21"
 core_version: "v1.7.4"
 display_name: "Sega - MS/GG/MD/CD (Genesis Plus GX)"
 cores:
   - genesis_plus_gx
-  - genesis_plus_gx_wide
 systems:
   - sega-megadrive
   - sega-megacd
   - sega-mastersystem
   - sega-gamegear
   - sega-sg1000
+  - sega-pico
 
 notes: |
   Genesis Plus GX is a Sega 8/16-bit emulator covering SG-1000, Master System,

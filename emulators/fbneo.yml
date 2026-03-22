@@ -1,10 +1,14 @@
 emulator: FinalBurn Neo
 type: libretro
+core_classification: official_port
 source: "https://github.com/libretro/FBNeo"
+upstream: "https://github.com/finalburnneo/FBNeo"
 logo: "https://raw.githubusercontent.com/finalburnneo/FBNeo/master/projectfiles/xcode/Emulator/Assets.xcassets/AppIcon.appiconset/icon_512.png"
-profiled_date: "2026-03-18"
+profiled_date: "2026-03-21"
 core_version: "v1.0.0.03"
 display_name: "Arcade (FinalBurn Neo)"
+cores:
+  - fbneo
 systems:
   - snk-neogeo-mvs
   - snk-neogeo-aes
@@ -25,6 +29,9 @@ systems:
   - konami-bubsys
   - nmk16
   - midway-mcr
+  - snes
+  - taito-cchip
+  - ym2608
 
 notes: |
   FinalBurn Neo is a multi-system arcade and console emulator. BIOS files are
@@ -410,6 +417,27 @@ files:
     crc32: "5a86cff2"
     note: "Zoom lookup table"
     source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1654"
+
+  # -------------------------------------------------------
+  # Trackball BIOS (for irrmaze)
+  # -------------------------------------------------------
+  - name: "236-bios.sp1"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 131072
+    crc32: "853e6b96"
+    note: "Trackball BIOS / Asia MV1B 263"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1744"
+
+  - name: "236-bios_japan_hack.sp1"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 131072
+    crc32: "02bf4426"
+    note: "Trackball BIOS / Japan (hack)"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1745"
 
   # -------------------------------------------------------
   # Neo Geo PCB BIOS (for ms5pcb, svcpcb, kf2k3pcb games)
@@ -947,7 +975,7 @@ files:
     source_ref: "src/burn/drv/spectrum/d_spectrum.cpp:189"
 
   - name: "zx128_2a_0.rom"
-    archive: spec128a.zip
+    archive: spec1282a.zip
     system: sinclair-spectrum
     required: false
     size: 16384
@@ -956,7 +984,7 @@ files:
     source_ref: "src/burn/drv/spectrum/d_spectrum.cpp:196"
 
   - name: "zx128_2a_1.rom"
-    archive: spec128a.zip
+    archive: spec1282a.zip
     system: sinclair-spectrum
     required: false
     size: 16384
@@ -965,7 +993,7 @@ files:
     source_ref: "src/burn/drv/spectrum/d_spectrum.cpp:197"
 
   - name: "zx128_2a_2.rom"
-    archive: spec128a.zip
+    archive: spec1282a.zip
     system: sinclair-spectrum
     required: false
     size: 16384
@@ -974,7 +1002,7 @@ files:
     source_ref: "src/burn/drv/spectrum/d_spectrum.cpp:198"
 
   - name: "zx128_2a_3.rom"
-    archive: spec128a.zip
+    archive: spec1282a.zip
     system: sinclair-spectrum
     required: false
     size: 16384
@@ -1323,10 +1351,10 @@ files:
     source_ref: "src/burn/drv/taito/d_taitof2.cpp:4392"
 
   # -------------------------------------------------------
-  # Midway MCR SSIO (ssioprom.zip)
+  # Midway MCR SSIO (midssio.zip)
   # -------------------------------------------------------
   - name: "82s123.12d"
-    archive: ssioprom.zip
+    archive: midssio.zip
     system: midway-mcr
     required: true
     size: 32  # 0x20
@@ -1345,3 +1373,78 @@ files:
     crc32: "23c9e0d8"
     note: "YM2608 internal ADPCM-A rhythm samples, used by multiple drivers"
     source_ref: "src/burn/drv/pst90s/d_pipedrm.cpp:876"
+
+  # -------------------------------------------------------
+  # SNES coprocessor BIOS (per-game boardrom ZIPs)
+  # -------------------------------------------------------
+  - name: "st010.bin"
+    archive: st010.zip
+    system: snes
+    required: true
+    size: 69632  # 0x11000
+    crc32: "aa11ee2d"
+    note: "Seta ST010 coprocessor microcode"
+    source_ref: "src/burn/drv/snes/d_snes.cpp:571"
+
+  - name: "st011.bin"
+    archive: st011.zip
+    system: snes
+    required: true
+    size: 69632  # 0x11000
+    crc32: "34d2952c"
+    note: "Seta ST011 coprocessor microcode"
+    source_ref: "src/burn/drv/snes/d_snes.cpp:590"
+
+  - name: "dsp1.bin"
+    archive: dsp1.zip
+    system: snes
+    required: true
+    size: 10240  # 0x2800
+    crc32: "2838f9f5"
+    note: "DSP-1 coprocessor microcode"
+    source_ref: "src/burn/drv/snes/d_snes.cpp:610"
+
+  - name: "dsp1b.bin"
+    archive: dsp1b.zip
+    system: snes
+    required: true
+    size: 10240  # 0x2800
+    crc32: "453557e0"
+    note: "DSP-1B coprocessor microcode (revised)"
+    source_ref: "src/burn/drv/snes/d_snes.cpp:629"
+
+  - name: "dsp2.bin"
+    archive: dsp2.zip
+    system: snes
+    required: true
+    size: 10240  # 0x2800
+    crc32: "8e9fbd9b"
+    note: "DSP-2 coprocessor microcode"
+    source_ref: "src/burn/drv/snes/d_snes.cpp:648"
+
+  - name: "dsp3.bin"
+    archive: dsp3.zip
+    system: snes
+    required: true
+    size: 10240  # 0x2800
+    crc32: "6b86728a"
+    note: "DSP-3 coprocessor microcode"
+    source_ref: "src/burn/drv/snes/d_snes.cpp:667"
+
+  - name: "dsp4.bin"
+    archive: dsp4.zip
+    system: snes
+    required: true
+    size: 10240  # 0x2800
+    crc32: "ce0c7783"
+    note: "DSP-4 coprocessor microcode"
+    source_ref: "src/burn/drv/snes/d_snes.cpp:686"
+
+  # -------------------------------------------------------
+  # System support files (fbneo/)
+  # -------------------------------------------------------
+  - name: "hiscore.dat"
+    path: "fbneo/hiscore.dat"
+    required: false
+    note: "High score database, enables persistent high scores across all arcade games"
+    source_ref: "src/burn/hiscore.cpp:406"

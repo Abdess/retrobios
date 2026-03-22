@@ -1,8 +1,67 @@
-emulator: "fsuae"
-type: alias
-alias_of: "puae"
-profiled_date: "2026-03-18"
+emulator: FS-UAE
+type: libretro
+core_classification: community_fork
+source: "https://github.com/libretro/libretro-fsuae"
+upstream: "https://github.com/FrodeSolheim/fs-uae"
+profiled_date: "2026-03-21"
 core_version: "v2.7.15"
 display_name: "Commodore - Amiga (FS-UAE)"
-note: "This core uses the same BIOS/firmware as puae. See emulators/puae.yml for details."
-files: []
+cores:
+  - fsuae
+systems:
+  - amiga
+
+notes: |
+  FS-UAE is an Amiga emulator by Frode Solheim, based on UAE.
+
+  Kickstart ROMs loaded from save_dir/Kickstarts/ (not system_dir).
+  base_dir = RETRO_ENVIRONMENT_GET_SAVE_DIRECTORY (paths.c:136).
+  Kickstarts/ subdirectory created automatically (paths.c:258-264).
+  Also scans AmigaForever/Amiga Files/Shared/rom/.
+
+  ROMs identified by checksum, not by filename.
+
+  Standard Amiga kickstart ROMs (all 512 KB unless noted):
+    kick13.rom (A500 Kickstart 1.3, 256 KB)
+    kick20.rom (A500+ Kickstart 2.04)
+    kick31.rom (A1200 Kickstart 3.1)
+    kick40068.A1200 (A1200 Kickstart 3.1.4)
+    kick40068.A4000 (A4000 Kickstart 3.1.4)
+
+  The core is marked experimental by upstream. Most users should use PUAE.
+
+files:
+  - name: "kick13.rom"
+    system: amiga
+    required: false
+    size: 262144  # 256 KB
+    note: "Amiga 500 Kickstart 1.3 (34.5). Loaded from save_dir/Kickstarts/."
+    source_ref: "sources/src/fs-uae/config.c:128 (fs_uae_load_rom_files)"
+
+  - name: "kick20.rom"
+    system: amiga
+    required: false
+    size: 524288
+    note: "Amiga 500+ Kickstart 2.04 (37.175)."
+    source_ref: "sources/src/fs-uae/config.c:128"
+
+  - name: "kick31.rom"
+    system: amiga
+    required: false
+    size: 524288
+    note: "Amiga 1200 Kickstart 3.1 (40.68)."
+    source_ref: "sources/src/fs-uae/config.c:128"
+
+  - name: "kick40068.A1200"
+    system: amiga
+    required: false
+    size: 524288
+    note: "Amiga 1200 Kickstart 3.1.4."
+    source_ref: "sources/src/fs-uae/config.c:128"
+
+  - name: "kick40068.A4000"
+    system: amiga
+    required: false
+    size: 524288
+    note: "Amiga 4000 Kickstart 3.1.4."
+    source_ref: "sources/src/fs-uae/config.c:128"

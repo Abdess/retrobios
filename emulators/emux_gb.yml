@@ -13,10 +13,6 @@ notes: |
   emux is a multi-system emulator by Sebastien Ronsse, supporting CHIP-8,
   Game Boy, NES, and Sega Master System as separate libretro cores.
 
-  NOT an alias of Gambatte. Completely different codebase and BIOS requirements.
-  Gambatte uses gb_bios.bin/gbc_bios.bin (optional, HLE fallback).
-  emux_gb uses dmg_boot.bin (required, no HLE, core fails without it).
-
   Boot ROM loading in controllers/mapper/gb_mapper.c:
     static char *bootrom_path = "dmg_boot.bin";  (line 32)
     gb_mapper->bootrom = file_map(PATH_SYSTEM, bootrom_path, 0, BOOTROM_SIZE);

@@ -1,8 +1,35 @@
-emulator: "fixnes"
-type: alias
-alias_of: "fceumm"
-profiled_date: "2026-03-18"
+emulator: fixNES
+type: libretro
+core_classification: official_port
+source: "https://github.com/libretro/fixNES"
+upstream: "https://github.com/FIX94/fixNES"
+profiled_date: "2026-03-21"
 core_version: "Alpha v1.3.1"
 display_name: "Nintendo - NES / Famicom (fixNES)"
-note: "This core uses the same BIOS/firmware as fceumm. See emulators/fceumm.yml for details."
-files: []
+cores:
+  - fixnes
+systems:
+  - nintendo-nes
+  - nintendo-fds
+
+notes: |
+  fixNES is an NES/Famicom emulator by FIX94 (same author as fixGB).
+
+  FDS games require disksys.rom (8192 bytes) in the system directory.
+  mapperInitFDS() in mapper.c:88-112 opens the file, validates exact
+  size 0x2000, reads into fdsBIOS[]. Returns false if missing or wrong
+  size — FDS game fails to load.
+
+  Regular NES cartridge games need no BIOS.
+
+  No other system files loaded. system_dir accessed only for disksys.rom
+  (libretro.c:278-286, doOpenFDSBIOS).
+
+files:
+  - name: "disksys.rom"
+    system: nintendo-fds
+    required: true
+    mode: both
+    size: 8192
+    md5: "ca30b50f880eb660a320674ed365ef7a"
+    source_ref: "mapper.c:88-112 (mapperInitFDS), libretro/libretro.c:278-286 (doOpenFDSBIOS)"

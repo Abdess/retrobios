@@ -1,7 +1,8 @@
 emulator: Gearlynx
 type: libretro
+core_classification: official_port
 source: "https://github.com/drhelius/Gearlynx"
-profiled_date: "2026-03-18"
+profiled_date: "2026-03-21"
 core_version: "1.0.0"
 display_name: "Atari - Lynx (GearLynx)"
 cores: [gearlynx]
@@ -22,8 +23,8 @@ notes: |
   game_db.h:38). An invalid CRC triggers a warning log but the BIOS
   is still marked as loaded (m_is_bios_loaded = true).
 
-  Unlike Handy, Gearlynx has no HLE fallback. If the BIOS is not
-  loaded (IsBiosLoaded() returns false), RunToVBlank in
+  No HLE fallback. If the BIOS is not loaded (IsBiosLoaded() returns
+  false), RunToVBlank in
   gearlynx_core_inline.h:31-37 renders a static "no bios" image
   and returns false, refusing to emulate. The BIOS is required for
   any ROM to run. Homebrew (.o, BS93 format) bypasses the normal

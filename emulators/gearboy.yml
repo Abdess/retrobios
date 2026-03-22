@@ -1,8 +1,31 @@
-emulator: "gearboy"
-type: alias
-alias_of: "gambatte"
-profiled_date: "2026-03-18"
+emulator: Gearboy
+type: libretro
+core_classification: community_fork
+source: "https://github.com/libretro/Gearboy"
+upstream: "https://github.com/drhelius/Gearboy"
+profiled_date: "2026-03-21"
 core_version: "3.4.1"
 display_name: "Nintendo - Game Boy / Color (Gearboy)"
-note: "This core uses the same BIOS/firmware as gambatte. See emulators/gambatte.yml for details."
+cores:
+  - gearboy
+systems:
+  - nintendo-gb
+  - nintendo-gbc
+
+notes: |
+  Gearboy is a Game Boy / Game Boy Color emulator by drhelius (Nacho Sanchez).
+
+  The upstream standalone has bootrom support (dmg_boot.bin, cgb_boot.bin)
+  via emu_load_bootrom_dmg/gbc (platforms/desktop-shared/emu.cpp:407-422).
+  The libretro port does NOT load any BIOS files — retro_init() only stores
+  system_dir, retro_load_game() calls LoadROMFromBuffer() with no bootrom
+  loading code (platforms/libretro/libretro.cpp:94-109, 335-364).
+
+  The .info declares firmware_count=2 (dmg_boot.bin, cgb_boot.bin) but the
+  code never references these files. .info is wrong for the libretro port.
+
+  The core HLE-skips the boot animation — games work without BIOS.
+
 files: []
+
+exclusion_note: "The .info declares dmg_boot.bin and cgb_boot.bin but the libretro port never loads them (no bootrom loading code in libretro.cpp). The upstream standalone supports bootroms but this was not ported to libretro."

@@ -1,8 +1,9 @@
 emulator: "FB Alpha 2012 Neo Geo"
-type: frozen_snapshot
+type: libretro
+core_classification: frozen_snapshot
 source: "https://github.com/libretro/fbalpha2012_neogeo"
 upstream: "https://www.fbalpha.com"
-profiled_date: "2026-03-19"
+profiled_date: "2026-03-21"
 core_version: "v0.2.97.29"
 display_name: "Arcade (FB Alpha 2012 Neo Geo)"
 cores:
@@ -12,11 +13,10 @@ systems:
 
 notes: |
   Frozen snapshot of Final Burn Alpha v0.2.97.29 (circa 2012), Neo Geo only.
-  NOT an alias of FBNeo — different codebase, different ROM set compatibility.
   Exists for RAM-constrained platforms. Most users should use FBNeo.
 
   Neo Geo requires a BIOS ROM set (neogeo.zip) placed alongside game ROMs.
-  The BIOS set contains ~35 variants (d_neogeo.cpp:903-968), all BRF_BIOS:
+  The BIOS set contains ~35 variants (d_neogeo.cpp:903-981), all BRF_BIOS:
 
   68K main BIOS (BRF_SELECT, one active at a time):
     asia-s3.rom       0x91b64be3  MVS Asia/Europe ver. 6 (default)

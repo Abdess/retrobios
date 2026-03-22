@@ -13,7 +13,6 @@ notes: |
   emux is a multi-system emulator by Sebastien Ronsse, supporting CHIP-8,
   Game Boy, NES, and Sega Master System as separate libretro cores.
 
-  NOT an alias of FCEUmm. Completely different codebase.
   The NES core does not require any BIOS or firmware files.
   The .info declares no firmware_count.
 

@@ -20,9 +20,6 @@ notes: |
   system_directory is read (libretro.cpp:1399) but only logged, never used
   to load any files.
 
-  NOT an alias of dosbox_core — completely different MIDI capabilities.
-  dosbox_core has MUNT + FluidSynth + BASSMIDI. This core has none.
-
   Requires libsdl1.2 and libsdl-net1.2 at runtime (.info notes).
 
 files: []

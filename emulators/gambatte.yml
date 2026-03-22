@@ -1,9 +1,13 @@
 emulator: Gambatte
 type: libretro
+core_classification: community_fork
 source: "https://github.com/libretro/gambatte-libretro"
-profiled_date: "2026-03-18"
+upstream: "https://github.com/sinamas/gambatte"
+profiled_date: "2026-03-21"
 core_version: "v0.5.0"
 display_name: "Nintendo - Game Boy / Color (Gambatte)"
+cores:
+  - gambatte
 systems: [nintendo-gb, nintendo-gbc]
 
 notes: |

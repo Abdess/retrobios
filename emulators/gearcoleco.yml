@@ -1,7 +1,8 @@
 emulator: Gearcoleco
 type: libretro
+core_classification: official_port
 source: "https://github.com/drhelius/Gearcoleco"
-profiled_date: "2026-03-18"
+profiled_date: "2026-03-21"
 core_version: "1.0.0"
 display_name: "Coleco - ColecoVision (Gearcoleco)"
 cores:
@@ -29,22 +30,12 @@ notes: |
   requires no additional BIOS files.
 
 files:
-  # --- ColecoVision BIOS (required) ---
   - name: "colecovision.rom"
+    aliases: ["coleco.rom"]
     system: colecovision
-    description: "ColecoVision BIOS ROM"
     required: true
     size: 8192
-    source_ref: "platforms/libretro/libretro.cpp:297 (load_bootroms)"
-    notes: "Primary filename. Loaded via Memory::LoadBios(), must be exactly 8192 bytes."
-
-  - name: "coleco.rom"
-    system: colecovision
-    description: "ColecoVision BIOS ROM (legacy filename)"
-    required: false
-    size: 8192
-    source_ref: "platforms/libretro/libretro.cpp:303 (load_bootroms fallback)"
-    notes: "Fallback filename tried when colecovision.rom is not found."
+    source_ref: "platforms/libretro/libretro.cpp:293-305 (load_bootroms)"
 
 platform_details:
   colecovision:

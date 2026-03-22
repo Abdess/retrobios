@@ -1,8 +1,17 @@
-emulator: "quicknes"
-type: alias
-alias_of: "fceumm"
-profiled_date: "2026-03-18"
+emulator: QuickNES
+type: libretro
+core_classification: community_fork
+source: "https://github.com/libretro/QuickNES_Core"
+profiled_date: "2026-03-21"
 core_version: "1.0-WIP"
 display_name: "Nintendo - NES / Famicom (QuickNES)"
-note: "This core uses the same BIOS/firmware as fceumm. See emulators/fceumm.yml for details."
+cores:
+  - quicknes
+systems:
+  - nintendo-nes
+
+notes: |
+  NES emulator by blargg (Shay Green). No BIOS required.
+  NES cartridge games are self-contained.
+
 files: []

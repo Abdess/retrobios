@@ -13,8 +13,6 @@ notes: |
   emux is a multi-system emulator by Sebastien Ronsse, supporting CHIP-8,
   Game Boy, NES, and Sega Master System as separate libretro cores.
 
-  NOT an alias of GearSystem. Completely different codebase.
-
   BIOS loading in controllers/mapper/sms_mapper.c:
     static char *bios_path = "bios.sms";  (line 33)
     #define BIOS_SIZE 0x2000              (line 7, 8192 bytes)

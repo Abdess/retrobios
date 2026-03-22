@@ -1,8 +1,9 @@
 emulator: "FinalBurn Neo (CPS-1/CPS-2)"
-type: pure_libretro
+type: libretro
+core_classification: official_port
 source: "https://github.com/libretro/FBNeo"
-upstream: "https://neo-source.com"
-profiled_date: "2026-03-19"
+upstream: "https://github.com/finalburnneo/FBNeo"
+profiled_date: "2026-03-21"
 core_version: "v1.0.0.03"
 display_name: "Arcade (FinalBurn Neo) (CPS-1 / CPS-2)"
 cores:
@@ -24,15 +25,17 @@ notes: |
   Board PLDs (buf1, ioa1, prg1/prg2, rom1, sou1) are BRF_OPT — GAL/PAL
   dumps for hardware preservation, never loaded by the emulator.
 
-  The .info lists firmware_count=1 but it's only hiscore.dat (optional,
-  high score database in system/fbneo/). Not a BIOS.
+  CPS-1/CPS-2 have no system BIOS. hiscore.dat enables persistent high
+  scores across all arcade games.
 
   ROM path: game ZIPs loaded from content directory.
-  system/fbneo/ used only for optional extras: hiscore.dat, samples,
-  cheats, blend files, IPS patches.
+  system/fbneo/ used for hiscore.dat, samples, cheats, blend files, IPS patches.
 
   need_fullpath=false, extensions=zip|7z, savestate=deterministic.
 
-files: []
-
-exclusion_note: "CPS-1/CPS-2 arcade hardware has no system BIOS. QSound DSP emulated in software. hiscore.dat is optional high score support, not firmware."
+files:
+  - name: "hiscore.dat"
+    path: "fbneo/hiscore.dat"
+    required: false
+    note: "High score database, enables persistent high scores across all arcade games"
+    source_ref: "src/burn/hiscore.cpp:406"

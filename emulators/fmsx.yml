@@ -1,7 +1,9 @@
 emulator: fMSX
 type: libretro
+core_classification: community_fork
 source: "https://github.com/libretro/fmsx-libretro"
-profiled_date: "2026-03-18"
+upstream: "https://fms.komkon.org/fMSX/"
+profiled_date: "2026-03-21"
 core_version: "6.0"
 display_name: "Microsoft - MSX (fMSX)"
 cores:
@@ -186,3 +188,56 @@ files:
     required: false
     bundled: false
     note: "RTC/CMOS settings. Auto-saved by the core on exit, auto-loaded on start (fMSX/MSX.c:526)."
+
+  # -- Text fonts (selectable via fmsx_font core option) --
+
+  - name: DEFAULT.FNT
+    required: false
+    bundled: true
+    md5: 85b38e4128bbc300e675f55b278683a8
+    note: "Default text font. Loaded by LoadFNT() (fMSX/MSX.c:523). Same content as CYRILLIC.FNT."
+    source_ref: "fMSX/ROMs/DEFAULT.FNT, libretro.c:1546"
+
+  - name: ITALIC.FNT
+    required: false
+    bundled: true
+    md5: c83e50e9f33b8dd893c414691822740d
+    note: "Italic text font."
+    source_ref: "fMSX/ROMs/ITALIC.FNT, libretro.c:1546"
+
+  - name: INTERNAT.FNT
+    required: false
+    bundled: true
+    md5: ac4f4a90c1b1887db48ded39c9d9c847
+    note: "International text font."
+    source_ref: "fMSX/ROMs/INTERNAT.FNT, libretro.c:1546"
+
+  - name: CYRILLIC.FNT
+    required: false
+    bundled: true
+    md5: 85b38e4128bbc300e675f55b278683a8
+    note: "Cyrillic text font. Same content as DEFAULT.FNT."
+    source_ref: "fMSX/ROMs/CYRILLIC.FNT, libretro.c:1546"
+
+  - name: KOREAN.FNT
+    required: false
+    bundled: true
+    md5: 73291e76638a2f5aa2eceb843df468f4
+    note: "Korean text font."
+    source_ref: "fMSX/ROMs/KOREAN.FNT, libretro.c:1546"
+
+  - name: JAPANESE.FNT
+    required: false
+    bundled: true
+    md5: aa28f0703b951a6be8df3e28e20d263d
+    note: "Japanese text font."
+    source_ref: "fMSX/ROMs/JAPANESE.FNT, libretro.c:1546"
+
+  # -- Cartridge identification database --
+
+  - name: CARTS.SHA
+    required: false
+    bundled: true
+    md5: 74b0f217fa0e2b8bb5a2f8e2ecc69da3
+    note: "SHA1 database for cartridge identification and mapper detection (fMSX/MSX.c:2712)."
+    source_ref: "fMSX/ROMs/CARTS.SHA"

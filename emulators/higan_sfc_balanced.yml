@@ -1,8 +1,128 @@
-emulator: "higan_sfc_balanced"
-type: alias
-alias_of: "bsnes"
-profiled_date: "2026-03-18"
+emulator: "nSide (SFC Balanced)"
+type: libretro
+core_classification: enhanced_fork
+source: "https://github.com/libretro/nSide"
+profiled_date: "2026-03-21"
 core_version: "v105 (Super Famicom Balanced)"
 display_name: "Nintendo - SNES / Famicom (nSide Balanced)"
-note: "This core uses the same BIOS/firmware as bsnes. See emulators/bsnes.yml for details."
-files: []
+cores:
+  - higan_sfc_balanced
+systems:
+  - nintendo-snes
+  - nintendo-sgb
+
+notes: |
+  Fork of higan v106 by hex-usr, renamed at byuu's request. Balanced
+  PPU profile (scanline-precision, faster than dot-based accuracy).
+  Loads coprocessor firmware from system_dir via locate_libretro().
+  SGB emulation loads from SGB1.sfc/ or SGB2.sfc/ subdirectories.
+
+files:
+  # DSP coprocessors (split data+program format)
+  - name: "dsp1.data.rom"
+    system: nintendo-snes
+    required: false
+    source_ref: "nSide/sfc/coprocessor/necdsp"
+
+  - name: "dsp1.program.rom"
+    system: nintendo-snes
+    required: false
+    source_ref: "nSide/sfc/coprocessor/necdsp"
+
+  - name: "dsp1b.data.rom"
+    system: nintendo-snes
+    required: false
+    source_ref: "nSide/sfc/coprocessor/necdsp"
+
+  - name: "dsp1b.program.rom"
+    system: nintendo-snes
+    required: false
+    source_ref: "nSide/sfc/coprocessor/necdsp"
+
+  - name: "dsp2.data.rom"
+    system: nintendo-snes
+    required: false
+    source_ref: "nSide/sfc/coprocessor/necdsp"
+
+  - name: "dsp2.program.rom"
+    system: nintendo-snes
+    required: false
+    source_ref: "nSide/sfc/coprocessor/necdsp"
+
+  - name: "dsp3.data.rom"
+    system: nintendo-snes
+    required: false
+    source_ref: "nSide/sfc/coprocessor/necdsp"
+
+  - name: "dsp3.program.rom"
+    system: nintendo-snes
+    required: false
+    source_ref: "nSide/sfc/coprocessor/necdsp"
+
+  - name: "dsp4.data.rom"
+    system: nintendo-snes
+    required: false
+    source_ref: "nSide/sfc/coprocessor/necdsp"
+
+  - name: "dsp4.program.rom"
+    system: nintendo-snes
+    required: false
+    source_ref: "nSide/sfc/coprocessor/necdsp"
+
+  # CX4 coprocessor
+  - name: "cx4.data.rom"
+    system: nintendo-snes
+    required: false
+    source_ref: "nSide/sfc/coprocessor/hitachidsp"
+
+  # Seta coprocessors
+  - name: "st010.data.rom"
+    system: nintendo-snes
+    required: false
+    source_ref: "nSide/sfc/coprocessor/necdsp"
+
+  - name: "st010.program.rom"
+    system: nintendo-snes
+    required: false
+    source_ref: "nSide/sfc/coprocessor/necdsp"
+
+  - name: "st011.data.rom"
+    system: nintendo-snes
+    required: false
+    source_ref: "nSide/sfc/coprocessor/necdsp"
+
+  - name: "st011.program.rom"
+    system: nintendo-snes
+    required: false
+    source_ref: "nSide/sfc/coprocessor/necdsp"
+
+  - name: "st018.data.rom"
+    system: nintendo-snes
+    required: false
+    source_ref: "nSide/sfc/coprocessor/armdsp"
+
+  - name: "st018.program.rom"
+    system: nintendo-snes
+    required: false
+    source_ref: "nSide/sfc/coprocessor/armdsp"
+
+  # Super Game Boy
+  - name: "SGB1.sfc/sgb1.boot.rom"
+    system: nintendo-sgb
+    required: false
+    source_ref: "nSide/target-libretro/libretro-sfc.cpp:142-184"
+
+  - name: "SGB1.sfc/program.rom"
+    system: nintendo-sgb
+    required: false
+    source_ref: "nSide/target-libretro/libretro-sfc.cpp:182"
+
+  - name: "SGB2.sfc/sgb2.boot.rom"
+    system: nintendo-sgb
+    required: false
+    source_ref: "nSide/target-libretro/libretro-sfc.cpp:142-184"
+
+  - name: "SGB2.sfc/program.rom"
+    system: nintendo-sgb
+    required: false
+    source_ref: "nSide/target-libretro/libretro-sfc.cpp:182"

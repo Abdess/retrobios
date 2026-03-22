@@ -1,7 +1,8 @@
 emulator: Gearsystem
 type: libretro
+core_classification: official_port
 source: "https://github.com/drhelius/Gearsystem"
-profiled_date: "2026-03-18"
+profiled_date: "2026-03-21"
 core_version: "3.2.0"
 display_name: "Sega - MS/GG/SG-1000 (Gearsystem)"
 cores:
@@ -26,26 +27,17 @@ notes: |
   When enabled, the boot ROM executes as on original hardware, which may
   cause invalid ROMs to lock or fail to boot entirely.
 
-  Note: gearcoleco, geargrafx, and gearlynx are separate emulators by the
-  same author covering ColecoVision, PC Engine, and Atari Lynx respectively.
-  They are not part of Gearsystem.
-
 files:
   # --- Master System boot ROM (optional, behind gearsystem_bios_sms) ---
   - name: "bios.sms"
     system: sega-mastersystem
-    description: "Master System boot ROM"
     required: false
-    source_ref: "platforms/libretro/libretro.cpp:414 (load_bootroms)"
-    notes: "Loaded from system directory. Core option gearsystem_bios_sms must be set to Enabled. No size or hash validation performed by the core."
+    source_ref: "platforms/libretro/libretro.cpp:413-414 (load_bootroms)"
 
-  # --- Game Gear boot ROM (optional, behind gearsystem_bios_gg) ---
   - name: "bios.gg"
     system: sega-gamegear
-    description: "Game Gear boot ROM"
     required: false
-    source_ref: "platforms/libretro/libretro.cpp:415 (load_bootroms)"
-    notes: "Loaded from system directory. Core option gearsystem_bios_gg must be set to Enabled. No size or hash validation performed by the core."
+    source_ref: "platforms/libretro/libretro.cpp:415-416 (load_bootroms)"
 
 platform_details:
   mastersystem:

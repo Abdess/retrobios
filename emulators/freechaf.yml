@@ -1,7 +1,8 @@
 emulator: FreeChaF
 type: libretro
+core_classification: pure_libretro
 source: "https://github.com/libretro/FreeChaF"
-profiled_date: "2026-03-18"
+profiled_date: "2026-03-21"
 core_version: "GIT"
 display_name: "Fairchild - ChannelF (FreeChaF)"
 cores:
@@ -35,6 +36,7 @@ files:
   - name: "sl31253.bin"
     system: fairchild-channelf
     required: false
+    hle_fallback: true
     md5: ac9804d4c0e9d07e33472e3726ed15c3
     size: 1024  # 1 KB, fills 0x000-0x3FF
     note: "Channel F PSU1 ROM (original). Fallback if sl90025.bin is missing."
@@ -43,6 +45,7 @@ files:
   - name: "sl31254.bin"
     system: fairchild-channelf
     required: false
+    hle_fallback: true
     md5: da98f4bb3242ab80d76629021bb27585
     size: 1024  # 1 KB, fills 0x400-0x7FF
     note: "Channel F PSU2 ROM. Always loaded at address 0x400."
@@ -51,6 +54,7 @@ files:
   - name: "sl90025.bin"
     system: fairchild-channelf
     required: false
+    hle_fallback: true
     md5: 95d339631d867c8f1d15a5f2ec26069d
     size: 1024  # 1 KB, fills 0x000-0x3FF
     note: "Channel F II PSU1 ROM. Tried first, preferred over sl31253.bin."

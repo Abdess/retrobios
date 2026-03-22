@@ -1,5 +1,6 @@
 emulator: "FB Alpha 2012 CPS-3"
-type: frozen_snapshot
+type: libretro
+core_classification: frozen_snapshot
 source: "https://github.com/libretro/fbalpha2012_cps3"
 upstream: "https://www.fbalpha.com"
 profiled_date: "2026-03-19"
@@ -12,7 +13,6 @@ systems:
 
 notes: |
   Frozen snapshot of Final Burn Alpha v0.2.97.29 (circa 2012), CPS-3 only.
-  NOT an alias of FBNeo — different codebase, different ROM set compatibility.
   Exists for RAM-constrained platforms. Most users should use FBNeo.
 
   CPS-3 uses a Hitachi SH-2 CPU with per-game, per-region BIOS ROMs.
@@ -50,6 +50,10 @@ notes: |
   18 unique BIOS ROMs, all 512 KB, all region-specific.
   These are arcade ROM set components, not user-supplied BIOS files.
 
-files: []
+files:
+  - name: "hiscore.dat"
+    required: false
+    note: "High score database, loaded from save directory"
+    source_ref: "svn-current/trunk/src/burn/hiscore.cpp:411"
 
 exclusion_note: "CPS-3 BIOS ROMs (SH-2 flash, 18 variants) are part of each game's ROM set ZIP archive, not standalone system files. Users obtain them as part of the arcade ROM set, not separately."

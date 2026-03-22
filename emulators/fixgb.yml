@@ -1,7 +1,8 @@
 emulator: fixGB
 type: libretro
+core_classification: pure_libretro
 source: "https://github.com/libretro/fixGB"
-profiled_date: "2026-03-18"
+profiled_date: "2026-03-21"
 core_version: "Alpha v0.8.2"
 display_name: "Nintendo - Game Boy / Color (fixGB)"
 cores:
@@ -11,7 +12,7 @@ systems:
 
 notes: |
   fixGB is a Game Boy / Game Boy Color emulator by FIX94, currently at
-  alpha v0.8.1. It supports .gb, .gbc, and .gbs (Game Boy Sound) files.
+  Alpha v0.8.2. It supports .gb, .gbc, and .gbs (Game Boy Sound) files.
 
   The core optionally loads "gbc_bios.bin" (CGB boot ROM) from the
   system directory. In the libretro port, doOpenCGBBootrom() in

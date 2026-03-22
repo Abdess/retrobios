@@ -1,7 +1,8 @@
 emulator: FreeJ2ME
 type: libretro
+core_classification: official_port
 source: "https://github.com/hex007/freej2me"
-profiled_date: "2026-03-18"
+profiled_date: "2026-03-21"
 core_version: "GIT"
 display_name: "Mobile - J2ME (FreeJ2ME)"
 cores:

@@ -1,5 +1,6 @@
 emulator: "FB Alpha 2012"
-type: frozen_snapshot
+type: libretro
+core_classification: frozen_snapshot
 source: "https://github.com/libretro/fbalpha2012"
 upstream: "https://www.fbalpha.com"
 profiled_date: "2026-03-19"
@@ -17,7 +18,6 @@ systems:
 
 notes: |
   Frozen snapshot of Final Burn Alpha v0.2.97.29 (circa 2012), full version.
-  NOT an alias of FBNeo — different codebase, different ROM set compatibility.
   Supports CPS-1, CPS-2, CPS-3, Neo Geo, PGM, Sega, Cave, Toaplan, and more.
   Exists for RAM-constrained platforms. Most users should use FBNeo.
 
@@ -51,6 +51,10 @@ notes: |
   ROM path: g_rom_dir from content path. g_system_dir set but unused.
   Extensions: iso|zip|7z. need_fullpath=true, block_extract=true.
 
-files: []
+files:
+  - name: "hiscore.dat"
+    required: false
+    note: "High score database, loaded from save directory"
+    source_ref: "svn-current/trunk/src/burn/hiscore.cpp:411"
 
 exclusion_note: "All BIOS ROMs (Neo Geo, PGM, CPS-3, Sega) are inside game ROM set ZIPs, not standalone system files. neogeo.zip is a parent ROM set loaded automatically by the emulator when a Neo Geo game is started."

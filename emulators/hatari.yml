@@ -1,10 +1,14 @@
 emulator: Hatari
 type: libretro
+core_classification: community_fork
 source: "https://github.com/libretro/hatari"
+upstream: "https://github.com/hatari/hatari"
 logo: "https://raw.githubusercontent.com/hatari/hatari/main/share/icons/hicolor/scalable/apps/hatari.svg"
-profiled_date: "2026-03-18"
+profiled_date: "2026-03-21"
 core_version: "1.8"
 display_name: "Atari - ST/STE/TT/Falcon (Hatari)"
+cores:
+  - hatari
 systems: [atari-st, atari-ste, atari-tt, atari-falcon]
 
 # Hatari requires a TOS ROM image to boot. The default filename is tos.img,
@@ -52,6 +56,14 @@ files:
       STC format images (0x20004 bytes) have a 4-byte header that is stripped.
       Mutually exclusive with GEMDOS hard disk emulation and extended VDI.
     source_ref: "src/cart.c:53-88"
+
+  - name: "BOOT.ST"
+    path: "hatari/BOOT.ST"
+    required: false
+    note: >
+      Floppy image used for GEMDOS HD bootstrapping with .gem files.
+      Libretro port addition (not in upstream Hatari).
+    source_ref: "libretro/libretro.c:1649"
 
 # Supported TOS versions (from patch table in tos.c):
 #   0x100 - TOS 1.00 (ST, 68000 only, no VDI extensions)
