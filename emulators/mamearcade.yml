@@ -1,8 +1,12 @@
-emulator: "mamearcade"
+emulator: MAME Arcade
 type: alias
-alias_of: "mame2016"
-profiled_date: "2026-03-18"
-core_version: "Git"
+alias_of: mame
+source: "https://github.com/libretro/mame"
+upstream: "https://github.com/mamedev/mame"
+profiled_date: "2026-03-22"
+core_version: "0.286"
 display_name: "Arcade (MAME/Arcade)"
-note: "This core uses the same BIOS/firmware as mame2016. See emulators/mame2016.yml for details."
+cores:
+  - mamearcade
+note: "Arcade-only build of libretro/mame (SUBTARGET=arcade). Same source, same CORE_NAME, same paths (system_dir/mame/). Excludes console/computer drivers."
 files: []

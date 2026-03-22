@@ -1,11 +1,16 @@
 emulator: MAME 2010
 type: libretro
+core_classification: frozen_snapshot
 source: "https://github.com/libretro/mame2010-libretro"
+upstream: "https://github.com/mamedev/mame/tree/mame0139"
 logo: "https://raw.githubusercontent.com/mamedev/mame/master/docs/source/images/MAMElogo.svg"
-profiled_date: "2026-03-18"
+profiled_date: "2026-03-22"
 core_version: "0.139"
 display_name: "Arcade (MAME 2010)"
 mame_version: "0.139"
+
+cores:
+  - mame2010
 systems:
   - snk-neogeo-mvs
   - igs-pgm
@@ -35,33 +40,32 @@ systems:
   - cave-cv1000
 
 notes: |
-  MAME 2010 is a libretro port of MAME 0.139, released around mid-2010. Compared
-  to mame2003 (MAME 0.78, early 2003), it adds roughly 7 years of MAME development
-  including better driver accuracy, more supported arcade boards, and additional
-  BIOS sets.
+  Frozen snapshot of MAME 0.139 (mid-2010). Sourced from mame0139s.zip.
+  51 BIOS root sets. Upstream comparison (tag mame0139): BIOS root sets
+  identical, romload.c modified (libretro_content_directory), hiscore.c
+  added (not in upstream), cheat.c modified (cheatpath global).
 
-  Key differences from mame2003 (0.78):
-    - 51 BIOS root sets vs ~30 in mame2003
-    - Sega boards: adds Hikaru, Chihiro, Triforce, Naomi 2, Naomi GD-ROM
-    - Namco boards: adds System 246/256/573
-    - Konami: adds Viper, expanded GX support
-    - Philips CD-i support (cdi)
-    - Taito Type X / GNet expanded
-    - Crystal System (Brezzasoft)
-    - More ZN-1/ZN-2/PSX-based board variants (cpzn1, cpzn2, atpsx, etc.)
-    - Neo Geo: same core BIOS set, adds Universe BIOS up to 2.3
-    - PGM: same BIOS ROMs, more game drivers
+  hiscore.dat is embedded in binary (precompile/hiscore_dat.h). External
+  hiscore.dat loadable via core option mame-external_hiscore from
+  system_dir/mame2010/. Cheats use per-game XML files (cheat.zip in
+  metadata/). Samples in system_dir/mame2010/samples/.
 
-  BIOS ZIPs are standard MAME romsets. The core looks for them in:
-    1. {content_dir}/ (same folder as the game ROM)
-    2. {system_dir}/mame2010/ (libretro system subfolder)
-    3. {system_dir}/ (libretro system root)
-
-  ROM naming follows MAME 0.139 conventions. ROMs from newer or older MAME
-  versions may not match expected CRC32/SHA1 values. Use a 0.139-specific
-  romset for full compatibility.
+  ROM naming follows MAME 0.139 conventions.
 
 files:
+  # Data files (system_dir/mame2010/)
+  - name: hiscore.dat
+    required: false
+    category: game_data
+    source_ref: "src/emu/hiscore.c:25,353-358"
+    note: "high score definitions, embedded in binary by default, external via core option mame-external_hiscore"
+
+  - name: cheat.zip
+    required: false
+    category: game_data
+    source_ref: "src/emu/cheat.c:1027"
+    note: "per-game XML cheat files in ZIP, loaded from system_dir/mame2010/"
+
   # SNK Neo Geo MVS/AES
   - name: neogeo.zip
     required: true
@@ -224,7 +228,7 @@ files:
     required: true
     category: bios_zip
     system: philips-cdi
-    note: "CD-i BIOS (not in mame2003)"
+    note: "CD-i BIOS"
     source_ref: "src/mame/drivers/cdi.c"
 
   # Namco boards
@@ -232,14 +236,14 @@ files:
     required: true
     category: bios_zip
     system: namco-system246
-    note: "Namco System 246 BIOS (PS2-based, not in mame2003)"
+    note: "Namco System 246 BIOS (PS2-based)"
     source_ref: "src/mame/drivers/namcops2.c"
 
   - name: sys256.zip
     required: true
     category: bios_zip
     system: namco-system256
-    note: "Namco System 256 BIOS (PS2-based, not in mame2003)"
+    note: "Namco System 256 BIOS (PS2-based)"
     source_ref: "src/mame/drivers/namcops2.c"
 
   - name: sys573.zip
@@ -315,3 +319,108 @@ files:
     system: hyper-neogeo64
     note: "Hyper Neo-Geo 64 BIOS (not working in 0.139)"
     source_ref: "src/mame/drivers/hng64.c"
+
+  - name: konamigx.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/drivers/konamigx.c"
+
+  - name: acpsx.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/drivers/zn.c"
+
+  - name: atluspsx.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/drivers/zn.c"
+
+  - name: atpsx.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/drivers/zn.c"
+
+  - name: taitofx1.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/drivers/zn.c"
+
+  - name: tps.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/drivers/zn.c"
+
+  - name: psarc95.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/drivers/zn.c"
+
+  - name: vspsx.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/drivers/zn.c"
+
+  - name: hod2bios.zip
+    required: false
+    category: bios_zip
+    source_ref: "src/mame/drivers/naomi.c"
+
+  - name: f355bios.zip
+    required: false
+    category: bios_zip
+    source_ref: "src/mame/drivers/naomi.c"
+
+  - name: airlbios.zip
+    required: false
+    category: bios_zip
+    source_ref: "src/mame/drivers/naomi.c"
+
+  - name: aleck64.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/drivers/aleck64.c"
+
+  - name: taitotz.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/drivers/taitotz.c"
+
+  - name: ar_bios.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/drivers/arcadia.c"
+
+  - name: atarisy1.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/drivers/atarisy1.c"
+
+  - name: crysbios.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/drivers/crystal.c"
+
+  - name: galgbios.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/drivers/galaxia.c"
+
+  - name: gq863.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/drivers/twinkle.c"
+
+  - name: mac2bios.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/drivers/suprnova.c"
+
+  - name: macsbios.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/drivers/macs.c"
+
+  - name: bctvidbs.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/drivers/mpu4drvr.c:3116"

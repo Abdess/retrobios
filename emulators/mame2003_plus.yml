@@ -1,11 +1,17 @@
 emulator: MAME 2003-Plus
 type: libretro
+core_classification: enhanced_fork
 source: "https://github.com/libretro/mame2003-plus-libretro"
+upstream: "https://www.mamedev.org"
 logo: "https://raw.githubusercontent.com/mamedev/mame/master/docs/source/images/MAMElogo.svg"
-profiled_date: "2026-03-18"
+profiled_date: "2026-03-22"
 core_version: "2003-Plus"
 display_name: "Arcade (MAME 2003-Plus)"
 mame_version: "0.78 (plus backports)"
+
+cores:
+  - mame2003_plus
+
 systems:
   - snk-neogeo-mvs
   - snk-neogeo-aes
@@ -25,6 +31,7 @@ systems:
   - zn1-video-system
   - zn1-acclaim
   - zn1-atlus
+  - century-cvs
 
 notes: |
   MAME 2003-Plus is a libretro port of MAME 0.78 with backported drivers, bug fixes,
@@ -57,6 +64,25 @@ notes: |
   flagged NOT_WORKING due to incomplete PlayStation emulation in 0.78.
 
 files:
+  # Data files (system_dir/mame2003-plus/)
+  - name: hiscore.dat
+    required: false
+    category: game_data
+    source_ref: "src/hiscore.c:15,248"
+    note: "high score definitions, compiled into binary and spawned on first run"
+
+  - name: cheat.dat
+    required: false
+    category: game_data
+    source_ref: "src/cheat.c:383,8249-8255"
+    note: "cheat definitions, requires cheats core option enabled"
+
+  - name: history.dat
+    required: false
+    category: game_data
+    source_ref: "src/datafile.c:327,608"
+    note: "game history and information database"
+
   # ---------------------------------------------------------
   # SNK Neo Geo MVS/AES (neogeo.zip)
   # ---------------------------------------------------------
@@ -370,6 +396,26 @@ files:
       - name: coh1000a.bin
         description: Acclaim PSX BIOS
         size: 524288
+
+  # Century Electronics CVS
+  - name: cvs.zip
+    required: true
+    category: bios_zip
+    system: century-cvs
+    source_ref: "src/drivers/cvs.c:475-482,1393"
+    contents:
+      - name: 5b.bin
+        description: sound CPU
+        size: 2048
+        crc32: "f055a624"
+      - name: 82s185.10h
+        description: PROM
+        size: 2048
+        crc32: "c205bca6"
+      - name: 82s123.10k
+        description: PROM
+        size: 32
+        crc32: "b5221cec"
 
   # Atlus PSX (PSARC95) - BIOS ROM is NO_DUMP
   # - name: psarc95.zip

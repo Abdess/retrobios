@@ -25,8 +25,8 @@ notes: |
   Samples (per-game WAV files) are loaded from system_dir/mame2000/samples/.
   They provide sound effects for certain games and are optional.
 
-  hiscore.dat and cheat.dat are loaded from the ROM directory (not system_dir).
-  Both are bundled in the repo's metadata/ directory.
+  hiscore.dat, cheat.dat and history.dat are loaded from the ROM directory
+  (not system_dir). hiscore.dat and cheat.dat are bundled in metadata/.
 
 files:
   - name: hiscore.dat
@@ -40,6 +40,12 @@ files:
     category: game_data
     source_ref: "src/cheat.c:210,618,830-831"
     note: "cheat definitions, loaded from ROM directory, cheats disabled by default"
+
+  - name: history.dat
+    required: false
+    category: game_data
+    source_ref: "src/libretro/fileio.c:997-1010"
+    note: "game history database, loaded from ROM directory"
 
   - name: neogeo.zip
     required: true

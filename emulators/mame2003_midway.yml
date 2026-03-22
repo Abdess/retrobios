@@ -1,8 +1,43 @@
-emulator: "mame2003_midway"
-type: alias
-alias_of: "mame2003_plus"
-profiled_date: "2026-03-18"
+emulator: MAME 2003 Midway
+type: libretro
+core_classification: frozen_snapshot
+source: "https://github.com/libretro/mame2003_midway"
+upstream: "https://www.mamedev.org"
+profiled_date: "2026-03-22"
 core_version: "0.78"
 display_name: "Arcade (MAME 2003 Midway)"
-note: "This core uses the same BIOS/firmware as mame2003_plus. See emulators/mame2003_plus.yml for details."
-files: []
+
+cores:
+  - mame2003_midway
+
+systems: []
+
+notes: |
+  Stripped-down MAME 0.78 build with only 4 Midway driver files
+  (midtunit, midwunit, midxunit, midyunit). Targets RAM-constrained
+  devices that cannot load the full mame2003 core. Supports ~50 games
+  (Mortal Kombat series, NBA Jam, Smash TV, Total Carnage, etc.).
+
+  No shared BIOS ZIPs needed — all Midway games are self-contained ROM sets.
+
+  Uses system_dir/mame2003/ for data files (shared path with mame2003).
+  Data files are not bundled in this repo.
+
+files:
+  - name: hiscore.dat
+    required: false
+    category: game_data
+    source_ref: "src/hiscore.c:18"
+    note: "high score definitions, loaded from system_dir/mame2003/"
+
+  - name: cheat.dat
+    required: false
+    category: game_data
+    source_ref: "src/cheat.c:8607"
+    note: "cheat definitions, loaded from system_dir/mame2003/"
+
+  - name: history.dat
+    required: false
+    category: game_data
+    source_ref: "src/datafile.c:620"
+    note: "game history database, loaded from system_dir/mame2003/"

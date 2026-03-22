@@ -1,0 +1,250 @@
+emulator: MAME 2003
+type: libretro
+core_classification: frozen_snapshot
+source: "https://github.com/libretro/mame2003-libretro"
+upstream: "https://www.mamedev.org"
+profiled_date: "2026-03-22"
+core_version: "0.78"
+display_name: "Arcade (MAME 2003)"
+
+cores:
+  - mame2003
+
+systems:
+  - snk-neogeo-mvs
+  - snk-neogeo-aes
+  - igs-pgm
+  - sega-stv
+  - sega-megaplay
+  - sega-megatech
+  - deco-cassette
+  - nintendo-playch10
+  - nintendo-nss
+  - super-kaneko-nova
+  - konami-gx
+  - century-cvs
+  - zn1-capcom
+  - zn2-capcom
+  - zn1-taito
+  - zn1-tecmo
+  - zn1-video-system
+  - zn1-acclaim
+
+notes: |
+  Frozen snapshot of MAME 0.78 (xmame, January 2003). Stock version without
+  the Plus patches. Targets low-end hardware (Raspberry Pi, SBCs).
+
+  BIOS ZIPs are searched in:
+    1. {content_dir}/ (same folder as the game ROM)
+    2. {system_dir}/mame2003/ (libretro system subfolder)
+    3. {system_dir}/ (libretro system root)
+
+  Data files (hiscore.dat, cheat.dat, history.dat) are loaded from
+  system_dir/mame2003/. Samples from system_dir/mame2003/samples/.
+  All bundled in the repo's metadata/ directory.
+
+  Neo Geo uses 7 official BIOS variants. Universe BIOS is commented out
+  in the stock source (available in mame2003_plus).
+
+  ROM naming follows MAME 0.78 conventions.
+
+files:
+  # Data files (system_dir/mame2003/)
+  - name: hiscore.dat
+    required: false
+    category: game_data
+    source_ref: "src/hiscore.c:15,248"
+    note: "high score definitions, auto-generated if missing"
+
+  - name: cheat.dat
+    required: false
+    category: game_data
+    source_ref: "src/cheat.c:383,8249-8255"
+    note: "cheat definitions, requires cheats core option enabled"
+
+  - name: history.dat
+    required: false
+    category: game_data
+    source_ref: "src/datafile.c:327,608"
+    note: "game history and information database"
+
+  # SNK Neo Geo MVS/AES
+  - name: neogeo.zip
+    required: true
+    category: bios_zip
+    system: snk-neogeo-mvs
+    note: "MVS/AES BIOS, 7 official variants"
+    source_ref: "src/drivers/neogeo.c:1544-1556,5661-5675"
+    contents:
+      - name: sp-s2.sp1
+        description: Europe MVS v2, default
+        crc32: "9036d879"
+      - name: sp-s.sp1
+        description: Europe MVS v1, 4 slot
+        crc32: "c7f2fa45"
+      - name: usa_2slt.bin
+        description: US MVS v2, 2 slot
+        crc32: "e72943de"
+      - name: sp-e.sp1
+        description: US MVS v1, 6 slot
+        crc32: "2723a5b5"
+      - name: asia-s3.rom
+        description: Asia
+        crc32: "91b64be3"
+      - name: vs-bios.rom
+        description: Japan VS v6
+        crc32: "f0e8f27d"
+      - name: sp-j2.rom
+        description: Japan, older
+        crc32: "acede59c"
+      - name: sm1.sm1
+        description: Z80 sound BIOS, always required
+        size: 131072
+        crc32: "97cf998b"
+      - name: sfix.sfx
+        description: fix layer tiles
+        size: 131072
+        crc32: "354029fc"
+      - name: 000-lo.lo
+        description: Y zoom control
+        size: 65536
+        crc32: "e09e253c"
+
+  # IGS PGM
+  - name: pgm.zip
+    required: true
+    category: bios_zip
+    system: igs-pgm
+    source_ref: "src/drivers/pgm.c:946"
+    contents:
+      - name: pgm_p01s.rom
+        description: 68K BIOS
+        size: 131072
+      - name: pgm_t01s.rom
+        description: text tiles
+        size: 2097152
+      - name: pgm_m01s.rom
+        description: samples
+        size: 2097152
+
+  # Sega ST-V
+  - name: stvbios.zip
+    required: true
+    category: bios_zip
+    system: sega-stv
+    source_ref: "src/drivers/stv.c:4597"
+
+  # Sega Mega Play
+  - name: megaplay.zip
+    required: true
+    category: bios_zip
+    system: sega-megaplay
+    source_ref: "src/drivers/segac2.c:4513"
+
+  # Sega Mega Tech
+  - name: megatech.zip
+    required: true
+    category: bios_zip
+    system: sega-megatech
+    source_ref: "src/drivers/segac2.c:4435"
+
+  # DECO Cassette
+  - name: decocass.zip
+    required: true
+    category: bios_zip
+    system: deco-cassette
+    source_ref: "src/drivers/decocass.c:1086"
+
+  # Nintendo PlayChoice-10
+  - name: playch10.zip
+    required: true
+    category: bios_zip
+    system: nintendo-playch10
+    source_ref: "src/drivers/playch10.c:1680"
+
+  # Nintendo Super System
+  - name: nss.zip
+    required: true
+    category: bios_zip
+    system: nintendo-nss
+    source_ref: "src/drivers/nss.c:406"
+
+  # Super Kaneko Nova System
+  - name: skns.zip
+    required: true
+    category: bios_zip
+    system: super-kaneko-nova
+    source_ref: "src/drivers/suprnova.c:1668"
+
+  # Konami System GX
+  - name: konamigx.zip
+    required: true
+    category: bios_zip
+    system: konami-gx
+    source_ref: "src/drivers/konamigx.c:3434"
+
+  # Century Electronics CVS
+  - name: cvs.zip
+    required: true
+    category: bios_zip
+    system: century-cvs
+    source_ref: "src/drivers/cvs.c:475-482,1350"
+    contents:
+      - name: 5b.bin
+        description: sound CPU
+        size: 2048
+        crc32: "f055a624"
+      - name: 82s185.10h
+        description: PROM
+        size: 2048
+        crc32: "c205bca6"
+      - name: 82s123.10k
+        description: PROM
+        size: 32
+        crc32: "b5221cec"
+
+  # ZN-1/ZN-2 PSX-based arcade boards
+  # Most are NOT_WORKING due to incomplete PS1 emulation in 0.78
+  - name: cpzn1.zip
+    required: true
+    category: bios_zip
+    system: zn1-capcom
+    note: "Capcom ZN-1 BIOS (PS1-based). Most games NOT_WORKING"
+    source_ref: "src/drivers/zn.c:1879"
+
+  - name: cpzn2.zip
+    required: true
+    category: bios_zip
+    system: zn2-capcom
+    note: "Capcom ZN-2 BIOS (PS1-based). Most games NOT_WORKING"
+    source_ref: "src/drivers/zn.c:1898"
+
+  - name: taitofx1.zip
+    required: true
+    category: bios_zip
+    system: zn1-taito
+    note: "Taito FX-1 BIOS (PS1-based). Most games NOT_WORKING"
+    source_ref: "src/drivers/zn.c:1955"
+
+  - name: tps.zip
+    required: true
+    category: bios_zip
+    system: zn1-tecmo
+    note: "Tecmo TPS BIOS (PS1-based). Most games NOT_WORKING"
+    source_ref: "src/drivers/zn.c:1936"
+
+  - name: sncwgltd.zip
+    required: false
+    category: bios_zip
+    system: zn1-video-system
+    note: "Video System KN BIOS (PS1-based). NOT_WORKING"
+    source_ref: "src/drivers/zn.c:1948"
+
+  - name: acpsx.zip
+    required: true
+    category: bios_zip
+    system: zn1-acclaim
+    note: "Acclaim PSX BIOS (PS1-based). NOT_WORKING"
+    source_ref: "src/drivers/zn.c:1925"
+
+  # psarc95.zip and atpsx.zip have NO_DUMP BIOS ROMs (coh1002e.bin, coh1000t.bin)
