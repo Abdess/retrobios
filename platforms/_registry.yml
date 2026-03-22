@@ -93,3 +93,10 @@ platforms:
     scraper: null
     cores: all_libretro
     schedule: null
+
+  romm:
+    config: romm.yml
+    status: active
+    logo: "https://raw.githubusercontent.com/rommapp/romm/master/.github/resources/isotipo.png"
+    scraper: romm
+    schedule: monthly

@@ -1,0 +1,2359 @@
+platform: RomM
+version: 4.7.0
+homepage: https://romm.app
+source: https://raw.githubusercontent.com/rommapp/romm/refs/heads/master/backend/models/fixtures/known_bios_files.json
+base_destination: bios
+hash_type: md5
+verification_mode: md5
+cores: []
+systems:
+  3do:
+    files:
+    - name: 3do_arcade_saot.bin
+      destination: 3do/3do_arcade_saot.bin
+      size: 524288
+      crc: b832da9a
+      md5: 8970fc987ab89a7f64da9f8a8c4333ff
+      sha1: 520d3d1b5897800af47f92efd2444a26b7a7dead
+    - name: goldstar.bin
+      destination: 3do/goldstar.bin
+      size: 1048576
+      crc: b6f5028b
+      md5: 8639fd5e549bd6238cfee79e3e749114
+      sha1: c4a2e5336f77fb5f743de1eea2cda43675ee2de7
+    - name: panafz1-kanji.bin
+      destination: 3do/panafz1-kanji.bin
+      size: 933636
+      crc: a8e9447c
+      md5: b8dc97f778a6245c58e064b0312e8281
+      sha1: acd39a8fee1b9d2950d5ab447846c11fb31af63e
+    - name: panafz1.bin
+      destination: 3do/panafz1.bin
+      size: 1048576
+      crc: c8c8ff89
+      md5: f47264dd47fe30f73ab3c010015c155b
+      sha1: 34bf189111295f74d7b7dfc1f304d98b8d36325a
+    - name: panafz10-norsa.bin
+      destination: 3do/panafz10-norsa.bin
+      size: 1048576
+      crc: 230e6feb
+      md5: 1477bda80dc33731a65468c1f5bcbee9
+      sha1: f05e642322c03694f06a809c0b90fc27ac73c002
+    - name: panafz10.bin
+      destination: 3do/panafz10.bin
+      size: 1048576
+      crc: 58242cee
+      md5: 51f2f43ae2f3508a14d9f56597e2d3ce
+      sha1: 3c912300775d1ad730dc35757e279c274c0acaad
+    - name: panafz10e-anvil-norsa.bin
+      destination: 3do/panafz10e-anvil-norsa.bin
+      size: 1048576
+      crc: 9a186221
+      md5: cf11bbb5a16d7af9875cca9de9a15e09
+      sha1: 2765c7b4557cc838b32567d2428d088980295159
+    - name: panafz10e-anvil.bin
+      destination: 3do/panafz10e-anvil.bin
+      size: 1048576
+      crc: 2495c500
+      md5: a48e6746bd7edec0f40cff078f0bb19f
+      sha1: a900371f0cdcdc03f79557f11d406fd71251a5fd
+    - name: panafz10ja-anvil-kanji.bin
+      destination: 3do/panafz10ja-anvil-kanji.bin
+      size: 1048576
+      crc: ff7393de
+      md5: 428577250f43edc902ea239c50d2240d
+      sha1: 2e857b957803d0331fd229328df01f3ffab69eee
+    - name: panafz1j-kanji.bin
+      destination: 3do/panafz1j-kanji.bin
+      size: 1048576
+      crc: 45f478b1
+      md5: c23fb5d5e6bb1c240d02cf968972be37
+      sha1: 884515605ee243577ab20767ef8c1a7368e4e407
+    - name: panafz1j-norsa.bin
+      destination: 3do/panafz1j-norsa.bin
+      size: 1048576
+      crc: 82ce67c6
+      md5: f6c71de7470d16abe4f71b1444883dc8
+      sha1: a417587ae3b0b8ef00c830920c21af8bee88e419
+    - name: panafz1j.bin
+      destination: 3do/panafz1j.bin
+      size: 1048576
+      crc: d9493adc
+      md5: a496cfdded3da562759be3561317b605
+      sha1: ec7ec62d60ec0459a14ed56ebc66761ef3c80efc
+    - name: sanyotry.bin
+      destination: 3do/sanyotry.bin
+      size: 1048576
+      crc: d5cbc509
+      md5: 35fa1a1ebaaeea286dc5cd15487c13ea
+      sha1: b01c53da256dde43ffec4ad3fc3adfa8d635e943
+  arcade:
+    files:
+    - name: airlbios.zip
+      destination: arcade/airlbios.zip
+      size: 715730
+      crc: f83ec60f
+      md5: 7a11bfe0cc72886d032e386db68f890c
+      sha1: f2a730530f4989ca0e8860aa4e455b6a5fe69e1d
+    - name: awbios.zip
+      destination: arcade/awbios.zip
+      size: 42296
+      crc: 67a14ad5
+      md5: 85254fbe320ca82a768ec2c26bb08def
+      sha1: 7940c7bf29eee85a5b2fdec78750b19aa22895dc
+    - name: bubsys.zip
+      destination: arcade/bubsys.zip
+      size: 7950
+      crc: 8fc2fd2e
+      md5: f81298afd68a1a24a49a1a2d9f087964
+      sha1: 1c0ffcd308b0c8c6dbb74ad8b811a0767200d366
+    - name: cchip.zip
+      destination: arcade/cchip.zip
+      size: 2700
+      crc: 23debecb
+      md5: df6f8a3d83c028a5cb9f2f2be60773f3
+      sha1: 364f2302a145a0fd6de767d7f8484badde1d1a6e
+    - name: decocass.zip
+      destination: arcade/decocass.zip
+      size: 16107
+      crc: 5de524e5
+      md5: b7e1189b341bf6a8e270017c096d21b0
+      sha1: 30b97b2670b79d0de41cba190324c504846c6fa1
+    - name: f355bios.zip
+      destination: arcade/f355bios.zip
+      size: 1394278
+      crc: '17516536'
+      md5: 547f3d12aed389058ca06148f1cca0ed
+      sha1: b6ff66dcb5547bd91760d239ddf428a655631c53
+    - name: f355dlx.zip
+      destination: arcade/f355dlx.zip
+      size: 2328436
+      crc: 23ac17be
+      md5: 1028615bcac4c31634a3364ce5c04044
+      sha1: 48d1712d1b1cdfeeeb43c6287c17b0b6309cfaab
+    - name: hod2bios.zip
+      destination: arcade/hod2bios.zip
+      size: 1479106
+      crc: 0ddc6daf
+      md5: f4011d3116500354edf7302a90402711
+      sha1: 782c303cbdfab1027b04db74a63e27bdad5e0c53
+    - name: isgsm.zip
+      destination: arcade/isgsm.zip
+      size: 10207
+      crc: 26856bf9
+      md5: 4a56d56e2219c5e2b006b66a4263c01c
+      sha1: f590ccf688b4c05fa1da5c5dd92c224545170c3b
+    - name: midssio.zip
+      destination: arcade/midssio.zip
+      size: 163
+      crc: 7620bd32
+      md5: 5904b0de768d1d506e766aa7e18994c1
+      sha1: 54275c9833e497f71f76ab239030cc386c863991
+    - name: naomi.zip
+      destination: arcade/naomi.zip
+      size: 9321533
+      crc: 6ee50181
+      md5: 526eda1e2a7920c92c88178789d71d84
+      sha1: c96711c01c0158f161791d6fbe75d88329e8ac0a
+    - name: neogeo.zip
+      destination: arcade/neogeo.zip
+      size: 1859335
+      crc: '81315163'
+      md5: 00dad01abdbf8ea9e79ad2fe11bdb182
+      sha1: deb62b0074b8cae4f162c257662136733cfc76ad
+    - name: nmk004.zip
+      destination: arcade/nmk004.zip
+      size: 3556
+      crc: a6099353
+      md5: bfacf1a68792d5348f93cf724d2f1dda
+      sha1: 489256f5e2001070d2ad94c90d255282c71ed274
+    - name: pgm.zip
+      destination: arcade/pgm.zip
+      size: 2094636
+      crc: bf3dd2ef
+      md5: 87cc944eef4c671aa2629a8ba48a08e0
+      sha1: c0c001ec80fa860857000f4cfc9844a28498a355
+    - name: skns.zip
+      destination: arcade/skns.zip
+      size: 924762
+      crc: 5692af22
+      md5: 3f956c4e7008804cb47cbde49bd5b908
+      sha1: 4257bd14b541fafbd555cb98ba079a3416a45934
+    - name: ym2608.zip
+      destination: arcade/ym2608.zip
+      size: 7609
+      crc: 5b4c29c4
+      md5: 79ae0d2bb1901b7e606b6dc339b79a97
+      sha1: 06fc753d015b43ca1787f4cfd9331b1674202e64
+    - name: naomi2.zip
+      destination: arcade/naomi2.zip
+      size: 2189528
+      crc: f25cf3a8
+      md5: 0ea5bf0345e27b1cf51bbde1bd398eca
+      sha1: 533ef12a6d22726da81a50f08871c6e9a377a328
+  atari8bit:
+    files:
+    - name: ATARIBAS.ROM
+      destination: atari8bit/ATARIBAS.ROM
+      size: 8192
+      crc: 7d684184
+      md5: 0bac0c6a50104045d902df4503a4c30b
+      sha1: 3693c9cb9bf3b41bae1150f7a8264992468fc8c0
+    - name: ATARIOSA.ROM
+      destination: atari8bit/ATARIOSA.ROM
+      size: 10240
+      crc: 72b3fed4
+      md5: eb1f32f5d9f382db1bbfb8d7f9cb343a
+      sha1: 6dd53356159a129ed12367beb3b24a771d41adb0
+    - name: ATARIOSB.ROM
+      destination: atari8bit/ATARIOSB.ROM
+      size: 10240
+      crc: 3e28a1fe
+      md5: a3e8d617c95d08031fe1b20d541434b2
+      sha1: f1f0741b1d34fb4350cf7cb8ab3b6ea11cdd8174
+    - name: ATARIXL.ROM
+      destination: atari8bit/ATARIXL.ROM
+      size: 16384
+      crc: 1f9cd270
+      md5: 06daac977823773a3eea3422fd26a703
+      sha1: ae4f523ba08b6fd59f3cae515a2b2410bbd98f55
+  atari5200:
+    files:
+    - name: 5200.rom
+      destination: atari5200/5200.rom
+      size: 2048
+      crc: 4248d3e3
+      md5: 281f20ea4320404ec820fb7ec0693b38
+      sha1: 6ad7a1e8c9fad486fbec9498cb48bf5bc3adc530
+  atari7800:
+    files:
+    - name: 7800 BIOS (E).rom
+      destination: atari7800/7800 BIOS (E).rom
+      size: 16384
+      crc: d5b61170
+      md5: 397bb566584be7b9764e7a68974c4263
+      sha1: 5a140136a16d1d83e4ff32a19409ca376a8df874
+    - name: 7800 BIOS (U).rom
+      destination: atari7800/7800 BIOS (U).rom
+      size: 4096
+      crc: 5d13730c
+      md5: 0763f1ffb006ddbe32e52d497ee848ae
+      sha1: d9d134bb6b36907c615a594cc7688f7bfcef5b43
+  lynx:
+    files:
+    - name: lynxboot.img
+      destination: lynx/lynxboot.img
+      size: 512
+      crc: 0d973c9d
+      md5: fcd403db69f54290b51035d82f835e7b
+      sha1: e4ed47fae31693e016b081c6bda48da5b70d7ccb
+  atari-st:
+    files:
+    - name: tos.img
+      destination: atari-st/tos.img
+      size: 196608
+      crc: d3c32283
+      md5: c1c57ce48e8ee4135885cee9e63a68a2
+      sha1: 735793fdba07fe8d5295caa03484f6ef3de931f5
+  colecovision:
+    files:
+    - name: colecovision.rom
+      destination: colecovision/colecovision.rom
+      size: 8192
+      crc: 3aa93ef3
+      md5: 2c66f5911e5b42b8ebe113403548eee7
+      sha1: 45bedc4cbdeac66c7df59e9e599195c778d86a92
+  amiga:
+    files:
+    - name: kick34005.A500
+      destination: amiga/kick34005.A500
+      size: 262144
+      crc: c4f0f55f
+      md5: 82a21c1890cae844b3df741f2762d48d
+      sha1: 891e9a547772fe0c6c19b610baf8bc4ea7fcb785
+    - name: kick40063.A600
+      destination: amiga/kick40063.A600
+      size: 524288
+      crc: fc24ae0d
+      md5: e40a5dfb3d017ba8779faba30cbd1c8e
+      sha1: 3b7f1493b27e212830f989f26ca76c02049f09ca
+    - name: kick40068.A1200
+      destination: amiga/kick40068.A1200
+      size: 524288
+      crc: 1483a091
+      md5: 646773759326fbac3b2311fd8c8793ee
+      sha1: e21545723fe8374e91342617604f1b3d703094f1
+  fairchild-channel-f:
+    files:
+    - name: sl31253.bin
+      destination: fairchild-channel-f/sl31253.bin
+      size: 1024
+      crc: 04694ed9
+      md5: ac9804d4c0e9d07e33472e3726ed15c3
+      sha1: 81193965a374d77b99b4743d317824b53c3e3c78
+    - name: sl31254.bin
+      destination: fairchild-channel-f/sl31254.bin
+      size: 1024
+      crc: 9c047ba3
+      md5: da98f4bb3242ab80d76629021bb27585
+      sha1: 8f70d1b74483ba3a37e86cf16c849d601a8c3d2c
+    - name: sl90025.bin
+      destination: fairchild-channel-f/sl90025.bin
+      size: 1024
+      crc: 015c1e38
+      md5: 95d339631d867c8f1d15a5f2ec26069d
+      sha1: 759e2ed31fbde4a2d8daf8b9f3e0dffebc90dae2
+  doom:
+    files:
+    - name: prboom.wad
+      destination: doom/prboom.wad
+      size: 143312
+      crc: a5751b99
+      md5: 72ae1b47820fcc93cc0df9c428d0face
+      sha1: 5f4aed208301449c2e9514edfd325fe9dead76fa
+    - name: DOOM1.WAD
+      destination: doom/DOOM1.WAD
+      size: 4196020
+      crc: 162b696a
+      md5: f0cefca49926d00903cf57551d901abe
+      sha1: 5b2e249b9c5133ec987b3ea77596381dc0d6bc1d
+    - name: DOOM.WAD
+      destination: doom/DOOM.WAD
+      size: 12733492
+      crc: cff03d9f
+      md5: 4461d4511386518e784c647e3128e7bc
+      sha1: 997bae5e5a190c5bb3b1fb9e7e3e75b2da88cb27
+    - name: DOOM2.WAD
+      destination: doom/DOOM2.WAD
+      size: 14802506
+      crc: 09b8a6ae
+      md5: 9aa3cbf65b961d0bdac98ec403b832e1
+      sha1: c745f04a6abc2e6d2a2d52382f45500dd2a260be
+    - name: DOOM2F.WAD
+      destination: doom/DOOM2F.WAD
+      size: 14607420
+      crc: 27eaae69
+      md5: 3cb02349b3df649c86290907eed64e7b
+      sha1: d510c877031bbd5f3d198581a2c8651e09b9861f
+    - name: DOOM64.WAD
+      destination: doom/DOOM64.WAD
+      size: 15103212
+      crc: '65816192'
+      md5: 0aaba212339c72250f8a53a0a2b6189e
+      sha1: d041456bea851c173f65ac6ab3f2ee61bb0b8b53
+    - name: TNT.WAD
+      destination: doom/TNT.WAD
+      size: 18304630
+      crc: 15f18ddb
+      md5: 8974e3117ed4a1839c752d5e11ab1b7b
+      sha1: 9820e2a3035f0cdd87f69a7d57c59a7a267c9409
+    - name: PLUTONIA.WAD
+      destination: doom/PLUTONIA.WAD
+      size: 17531493
+      crc: 650b998d
+      md5: 24037397056e919961005e08611623f4
+      sha1: ' 816c7c6b0098f66c299c9253f62bd908456efb63'
+    - name: HERETIC1.WAD
+      destination: doom/HERETIC1.WAD
+      size: 5120920
+      crc: 22d3f0ca
+      md5: ae779722390ec32fa37b0d361f7d82f8
+      sha1: b4c50ca9bea07f7c35250a1a11906091971c05ae
+    - name: HERETIC.WAD
+      destination: doom/HERETIC.WAD
+      size: 14189976
+      crc: 5b16049e
+      md5: 66d686b1ed6d35ff103f15dbd30e0341
+      sha1: f489d479371df32f6d280a0cb23b59a35ba2b833
+    - name: HEXEN.WAD
+      destination: doom/HEXEN.WAD
+      size: 20083672
+      crc: dca9114c
+      md5: abb033caf81e26f12a2103e1fa25453f
+      sha1: 4b53832f0733c1e29e5f1de2428e5475e891af29
+    - name: HEXDD.WAD
+      destination: doom/HEXDD.WAD
+      size: 4440584
+      crc: fd5eb11d
+      md5: 78d5898e99e220e4de64edaa0e479593
+      sha1: 081f6a2024643b54ef4a436a85508539b6d20a1e
+    - name: STRIFE0.WAD
+      destination: doom/STRIFE0.WAD
+      size: 9934413
+      crc: 93c144dd
+      md5: bb545b9c4eca0ff92c14d466b3294023
+      sha1: bc0a110bf27aee89a0b2fc8111e2391ede891b8d
+    - name: STRIFE1.WAD
+      destination: doom/STRIFE1.WAD
+      size: 28377364
+      crc: 4234ace5
+      md5: 2fed2031a5b03892106e0f117f17901f
+      sha1: 64c13b951a845ca7f8081f68138a6181557458d1
+    - name: VOICES.WAD
+      destination: doom/VOICES.WAD
+      size: 27319149
+      crc: cd12ebcf
+      md5: 082234d6a3f7086424856478b5aa9e95
+      sha1: ec6883100d807b894a98f426d024d22c77b63e7f
+    - name: CHEX.WAD
+      destination: doom/CHEX.WAD
+      size: 12361532
+      crc: 298dd5b5
+      md5: 25485721882b050afa96a56e5758dd52
+      sha1: eca9cff1014ce5081804e193588d96c6ddb35432
+  j2me:
+    files:
+    - name: freej2me-lr.jar
+      destination: j2me/freej2me-lr.jar
+      size: 552042
+      crc: 96a1babf
+      md5: ccd92e7156ce2f0ce14c88ffb68a16eb
+      sha1: fb231192894e2fd17a5799fbbdf86a4696951bce
+    - name: freej2me-sdl.jar
+      destination: j2me/freej2me-sdl.jar
+      size: 552043
+      crc: 5cca0f35
+      md5: 4da74084fc1b1bd3d776ed8d3ee648de
+      sha1: 78f1f41d55efc6b8d81e99c1d9d75248b3f83dc2
+    - name: freej2me.jar
+      destination: j2me/freej2me.jar
+      size: 552039
+      crc: ffb98ffa
+      md5: 29a92d0867da2917275b7c6c805d256f
+      sha1: 7d738042268e4ffd0aae8e85e05dd28bce761d1f
+  mac:
+    files:
+    - name: MacII.ROM
+      destination: mac/MacII.ROM
+      size: 262144
+      crc: 4df6d054
+      md5: 66223be1497460f1e60885eeb35e03cc
+      sha1: db6b504744281369794e26ba71a6e385cf6227fa
+  odyssey-2-slash-videopac-g7000:
+    files:
+    - name: o2rom.bin
+      destination: odyssey-2-slash-videopac-g7000/o2rom.bin
+      size: 1024
+      crc: 8016a315
+      md5: 562d5ebf9e030a40d6fabfc2f33139fd
+      sha1: b2e1955d957a475de2411770452eff4ea19f4cee
+  intellivision:
+    files:
+    - name: exec.bin
+      destination: intellivision/exec.bin
+      size: 8192
+      crc: cbce86f7
+      md5: 62e761035cb657903761800f4437b8af
+      sha1: 5a65b922b562cb1f57dab51b73151283f0e20c7a
+    - name: grom.bin
+      destination: intellivision/grom.bin
+      size: 2048
+      crc: 683a4158
+      md5: 0cd5946c6473e42e8e4c2137785e427f
+      sha1: f9608bb4ad1cfe3640d02844c7ad8e0bcd974917
+  msx:
+    files:
+    - name: CARTS.SHA
+      destination: msx/CARTS.SHA
+      size: 33152
+      crc: d42f4444
+      md5: 74b0f217fa0e2b8bb5a2f8e2ecc69da3
+      sha1: bf5fb954db868e523febccc68549ed9187961076
+    - name: CYRILLIC.FNT
+      destination: msx/CYRILLIC.FNT
+      size: 2048
+      crc: 73af9bc3
+      md5: 85b38e4128bbc300e675f55b278683a8
+      sha1: 000ac11b702a4c42e40f135df12fa5f2f13e20a1
+    - name: DISK.ROM
+      destination: msx/DISK.ROM
+      size: 16384
+      crc: 721f61df
+      md5: 80dcd1ad1a4cf65d64b7ba10504e8190
+      sha1: 032cb1c1c75b9a191fa1230978971698d9d2a17f
+    - name: FMPAC.ROM
+      destination: msx/FMPAC.ROM
+      size: 65536
+      crc: 0e84505d
+      md5: 6f69cc8b5ed761b03afd78000dfb0e19
+      sha1: 9d789166e3caf28e4742fe933d962e99618c633d
+    - name: FMPAC16.ROM
+      destination: msx/FMPAC16.ROM
+      size: 16384
+      crc: 5d6c4d27
+      md5: af8537262df8df267072f359399a7635
+      sha1: 2dc4517ebd5a061f9b5aa6b449cc4d4a2073540c
+    - name: ITALIC.FNT
+      destination: msx/ITALIC.FNT
+      size: 2048
+      crc: c90ec498
+      md5: c83e50e9f33b8dd893c414691822740d
+      sha1: 401dd6692dc80628e5f68b7c79be0b0ebbc4d3ee
+    - name: KANJI.ROM
+      destination: msx/KANJI.ROM
+      size: 131072
+      crc: c9651b32
+      md5: febe8782b466d7c3b16de6d104826b34
+      sha1: 84a645becec0a25d3ab7a909cde1b242699a8662
+    - name: MSX.ROM
+      destination: msx/MSX.ROM
+      size: 32768
+      crc: 94ee12f3
+      md5: aa95aea2563cd5ec0a0919b44cc17d47
+      sha1: 409e82adac40f6bdd18eb6c84e8b2fbdc7fb5498
+    - name: MSX2.ROM
+      destination: msx/MSX2.ROM
+      size: 32768
+      crc: 6cdaf3a5
+      md5: ec3a01c91f24fbddcbcab0ad301bc9ef
+      sha1: 6103b39f1e38d1aa2d84b1c3219c44f1abb5436e
+    - name: MSX2EXT.ROM
+      destination: msx/MSX2EXT.ROM
+      size: 16384
+      crc: 66237ecf
+      md5: 2183c2aff17cf4297bdb496de78c2e8a
+      sha1: 5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02
+    - name: MSX2P.ROM
+      destination: msx/MSX2P.ROM
+      size: 32768
+      crc: 00870134
+      md5: 6d8c0ca64e726c82a4b726e9b01cdf1e
+      sha1: e2fbd56e42da637609d23ae9df9efd1b4241b18a
+    - name: MSX2PEXT.ROM
+      destination: msx/MSX2PEXT.ROM
+      size: 16384
+      crc: b8ba44d3
+      md5: 7c8243c71d8f143b2531f01afa6a05dc
+      sha1: fe0254cbfc11405b79e7c86c7769bd6322b04995
+    - name: MSXDOS2.ROM
+      destination: msx/MSXDOS2.ROM
+      size: 65536
+      crc: 1c430991
+      md5: 6418d091cd6907bbcf940324339e43bb
+      sha1: c36c9e0f96738a340381e23b4f97245388801a46
+    - name: PAINTER.ROM
+      destination: msx/PAINTER.ROM
+      size: 65536
+      crc: 1bda68a3
+      md5: 403cdea1cbd2bb24fae506941f8f655e
+      sha1: 7fd2a28c4fdaeb140f3c8c8fb90271b1472c97b9
+    - name: RS232.ROM
+      destination: msx/RS232.ROM
+      size: 16640
+      crc: ab6874f8
+      md5: 279efd1eae0d358eecd4edc7d9adedf3
+      sha1: 7aec0134ad6a5177f4056fcb6047083e8e00529b
+  msx2:
+    files:
+    - name: DISK.ROM
+      destination: msx2/DISK.ROM
+      size: 16384
+      crc: 721f61df
+      md5: 80dcd1ad1a4cf65d64b7ba10504e8190
+      sha1: 032cb1c1c75b9a191fa1230978971698d9d2a17f
+  tg16:
+    files:
+    - name: gecard.pce
+      destination: tg16/gecard.pce
+      size: 32768
+      crc: 51a12d90
+      md5: 6d2cb14fc3e1f65ceb135633d1694122
+      sha1: 014881a959e045e00f4db8f52955200865d40280
+    - name: gexpress.pce
+      destination: tg16/gexpress.pce
+      size: 32768
+      crc: 51a12d90
+      md5: 6d2cb14fc3e1f65ceb135633d1694122
+      sha1: 014881a959e045e00f4db8f52955200865d40280
+    - name: syscard1.pce
+      destination: tg16/syscard1.pce
+      size: 262144
+      crc: 3f9f95a4
+      md5: 2b7ccb3d86baa18f6402c176f3065082
+      sha1: a39a66da7de6ba94ab84d04eef7afeec7d4ee66a
+    - name: syscard2.pce
+      destination: tg16/syscard2.pce
+      size: 262144
+      crc: 283b74e0
+      md5: 3cdd6614a918616bfc41c862e889dd79
+      sha1: 88da02e2503f7c32810f5d93a34849d470742b6d
+    - name: syscard2u.pce
+      destination: tg16/syscard2u.pce
+      size: 262144
+      crc: ff2a5ec3
+      md5: 94279f315e8b52904f65ab3108542afe
+      sha1: 2bea3dac98f84b2f2f469fa77ea720b8770d598d
+    - name: syscard3.pce
+      destination: tg16/syscard3.pce
+      size: 262144
+      crc: 6d9a73ef
+      md5: 38179df8f4ac870017db21ebcbf53114
+      sha1: 79f5ff55dd10187c7fd7b8daab0b3ffbd1f56a2c
+    - name: syscard3u.pce
+      destination: tg16/syscard3u.pce
+      size: 262144
+      crc: 2b5b75fe
+      md5: 0754f903b52e3b3342202bdafb13efa5
+      sha1: d02611d99921986147c753df14c7349b31d71950
+  pc-9800-series:
+    files:
+    - name: 2608_bd.wav
+      destination: pc-9800-series/2608_bd.wav
+      size: 19192
+      crc: bb038714
+      md5: d94546e70f17fd899be8df3544ab6cbb
+      sha1: 0a56c142ef40cec50f3ee56a6e42d0029c9e2818
+    - name: 2608_hh.wav
+      destination: pc-9800-series/2608_hh.wav
+      size: 36722
+      crc: 9898b372
+      md5: 08c54a0c1f774a5538a848a6665a34b4
+      sha1: 12f676cef249b82480b6f19c454e234b435ca7b6
+    - name: 2608_rim.wav
+      destination: pc-9800-series/2608_rim.wav
+      size: 5288
+      crc: 638864c1
+      md5: 465ea0768b27da404aec45dfc501404b
+      sha1: c65592330c9dd84011151daed52f9aec926b7e56
+    - name: 2608_sd.wav
+      destination: pc-9800-series/2608_sd.wav
+      size: 15558
+      crc: 542cc58c
+      md5: d71004351c8bbfdad53b18222c061d49
+      sha1: 3c79663ef74c0b0439d13351326eb1c52a657008
+    - name: 2608_tom.wav
+      destination: pc-9800-series/2608_tom.wav
+      size: 23092
+      crc: 93c57bba
+      md5: 96a4ead13f364734f79b0c58af2f0e1f
+      sha1: 9513fb4a3f41e75a972a273a5104cbd834c1e2c5
+    - name: 2608_top.wav
+      destination: pc-9800-series/2608_top.wav
+      size: 57016
+      crc: ab73a296
+      md5: 593cff6597ab9380d822b8f824fd2c28
+      sha1: aa4a8f766a86b830687d5083fd3b9db0652f46fc
+    - name: bios.rom
+      destination: pc-9800-series/bios.rom
+      size: 98304
+      crc: 0a682b93
+      md5: cd237e16e7e77c06bb58540e9e9fca68
+      sha1: 76a7360502fa0296ea93b4c537174610a834d367
+    - name: font.bmp
+      destination: pc-9800-series/font.bmp
+      size: 524350
+      crc: d271798b
+      md5: 7da1e5b7c482d4108d22a5b09631d967
+      sha1: b4f14e58030ed40fff2dc312b58ea4440bdf8cc5
+    - name: font.rom
+      destination: pc-9800-series/font.rom
+      size: 288768
+      crc: 456d9fc7
+      md5: 38d32748ae49d1815b0614970849fd40
+      sha1: 78ba9960f135372825ab7244b5e4e73a810002ff
+    - name: itf.rom
+      destination: pc-9800-series/itf.rom
+      size: 32768
+      crc: c1815325
+      md5: 72ea51443070f0e9212bfc9b793ee28e
+      sha1: a2fb11c000ed7c976520622cfb7940ed6ddc904e
+    - name: sound.rom
+      destination: pc-9800-series/sound.rom
+      size: 16384
+      crc: fe9f57f2
+      md5: 524473c1a5a03b17e21d86a0408ff827
+      sha1: d5dbc4fea3b8367024d363f5351baecd6adcd8ef
+  pc-fx:
+    files:
+    - name: fx-scsi.rom
+      destination: pc-fx/fx-scsi.rom
+      size: 524288
+      crc: f3e60e5e
+      md5: 430e9745f9235c515bc8e652d6ca3004
+      sha1: 65482a23ac5c10a6095aee1db5824cca54ead6e5
+    - name: pcfx.rom
+      destination: pc-fx/pcfx.rom
+      size: 1048576
+      crc: 76ffb97a
+      md5: 08e36edbea28a017f79f8d4f7ff9b6d7
+      sha1: 1a77fd83e337f906aecab27a1604db064cf10074
+    - name: pcfxbios.bin
+      destination: pc-fx/pcfxbios.bin
+      size: 1048576
+      crc: 76ffb97a
+      md5: 08e36edbea28a017f79f8d4f7ff9b6d7
+      sha1: 1a77fd83e337f906aecab27a1604db064cf10074
+    - name: pcfxga.rom
+      destination: pc-fx/pcfxga.rom
+      size: 1048576
+      crc: 41c3776b
+      md5: 5885bc9a64bf80d4530b9b9b978ff587
+      sha1: a9372202a5db302064c994fcda9b24d29bb1b41c
+    - name: pcfxv101.bin
+      destination: pc-fx/pcfxv101.bin
+      size: 1048576
+      crc: 236102c9
+      md5: e2fb7c7220e3a7838c2dd7e401a7f3d8
+      sha1: 8b662f7548078be52a871565e19511ccca28c5c8
+  fds:
+    files:
+    - name: disksys.rom
+      destination: fds/disksys.rom
+      size: 8192
+      crc: 5e607dcf
+      md5: ca30b50f880eb660a320674ed365ef7a
+      sha1: 57fe1bdee955bb48d357e463ccbf129496930b62
+  gb:
+    files:
+    - name: dmg_boot.bin
+      destination: gb/dmg_boot.bin
+      size: 256
+      crc: 59c8598e
+      md5: 32fbbd84168d3482956eb3c5051637f5
+      sha1: 4ed31ec6b0b175bb109c0eb5fd3d193da823339f
+    - name: gb_bios.bin
+      destination: gb/gb_bios.bin
+      size: 256
+      crc: 59c8598e
+      md5: 32fbbd84168d3482956eb3c5051637f5
+      sha1: 4ed31ec6b0b175bb109c0eb5fd3d193da823339f
+  gba:
+    files:
+    - name: gba_bios.bin
+      destination: gba/gba_bios.bin
+      size: 16384
+      crc: '81977335'
+      md5: a860e8c0b6d573d191e4ec7db1b1e4f6
+      sha1: 300c20df6731a33952ded8c436f7f186d25d3492
+  gbc:
+    files:
+    - name: cgb_boot.bin
+      destination: gbc/cgb_boot.bin
+      size: 2304
+      crc: 41884e46
+      md5: dbfce9db9deaa2567f6a84fde55f9680
+      sha1: 1293d68bf9643bc4f36954c1e80e38f39864528d
+    - name: gbc_bios.bin
+      destination: gbc/gbc_bios.bin
+      size: 2304
+      crc: 41884e46
+      md5: dbfce9db9deaa2567f6a84fde55f9680
+      sha1: 1293d68bf9643bc4f36954c1e80e38f39864528d
+  ngc:
+    files:
+    - name: gc-dvd-20010608.bin
+      destination: ngc/gc-dvd-20010608.bin
+      size: 131072
+      crc: c047465a
+      md5: 561532ad496f644897952d2cef5bb431
+      sha1: 27872c201e87b06a19bf85d36c796ef383f8d52d
+    - name: gc-dvd-20010831.bin
+      destination: ngc/gc-dvd-20010831.bin
+      size: 131072
+      crc: 54c7d10e
+      md5: b953eb1a8fc9922b3f7051c1cdc451f1
+      sha1: ae7233cae8f94749796e0b740d6021e3b00a8926
+    - name: gc-dvd-20020402.bin
+      destination: ngc/gc-dvd-20020402.bin
+      size: 131072
+      crc: 8bbef508
+      md5: 413154dd0e2c824c9b18b807fd03ec4e
+      sha1: 691e46213d8428befdf568157e670b971ab94e1d
+    - name: gc-dvd-20020823.bin
+      destination: ngc/gc-dvd-20020823.bin
+      size: 131072
+      crc: 5205222b
+      md5: c03f6bbaf644eb9b3ee261dbe199eb42
+      sha1: 2faaf92bcaffe675f54f7249d30f3791507e22ab
+    - name: gc-ntsc-10.bin
+      destination: ngc/gc-ntsc-10.bin
+      size: 2097152
+      crc: 6dac1f2a
+      md5: fc924a7c879b661abc37cec4f018fdf3
+      sha1: a1837968288253ed541f2b11440b68f5a9b33875
+    - name: gc-ntsc-11.bin
+      destination: ngc/gc-ntsc-11.bin
+      size: 2097152
+      crc: d5e6feea
+      md5: 019e39822a9ca3029124f74dd4d55ac4
+      sha1: 239eacd86527ff9a75aeb7282da65797baeef010
+    - name: gc-ntsc-12.bin
+      destination: ngc/gc-ntsc-12.bin
+      size: 2097152
+      crc: '86573808'
+      md5: b17148254a5799684c7d783206504926
+      sha1: ef9194ab4804aa0aa8540d846caf291b28331165
+    - name: gc-pal-10.bin
+      destination: ngc/gc-pal-10.bin
+      size: 2097152
+      crc: 4f319f43
+      md5: 0cdda509e2da83c85bfe423dd87346cc
+      sha1: f27c63e5394e2fd1606f70df004c4fc2d6027700
+    - name: gc-pal-11.bin
+      destination: ngc/gc-pal-11.bin
+      size: 2097152
+      crc: 667d0b64
+      md5: 339848a0b7c2124cf155276c1e79cbd0
+      sha1: f3cd0c7c61cbcefa85e7de3aff4cfa50bc508714
+    - name: gc-pal-12.bin
+      destination: ngc/gc-pal-12.bin
+      size: 2097152
+      crc: ad1b7f16
+      md5: db92574caab77a7ec99d4605fd6f2450
+      sha1: 80b8744ff5e43585392f55546bd03a673d11ef5f
+  64dd:
+    files:
+    - name: 64DD_IPL.bin
+      destination: 64dd/64DD_IPL.bin
+      size: 4194304
+      crc: 7f933ce2
+      md5: 8d3d9f294b6e174bc7b1d2fd1c727530
+      sha1: bf861922dcb78c316360e3e742f4f70ff63c9bc3
+  nds:
+    files:
+    - name: bios7.bin
+      destination: nds/bios7.bin
+      size: 16384
+      crc: 1280f0d5
+      md5: df692a80a5b1bc90728bc3dfc76cd948
+      sha1: 24f67bdea115a2c847c8813a262502ee1607b7df
+    - name: bios9.bin
+      destination: nds/bios9.bin
+      size: 4096
+      crc: 2ab23573
+      md5: a392174eb3e572fed6447e956bde4b25
+      sha1: bfaac75f101c135e32e2aaf541de6b1be4c8c62d
+    - name: firmware.bin
+      destination: nds/firmware.bin
+      size: 262144
+      crc: 945f9dc9
+      md5: e45033d9b0fa6b0de071292bba7c9d13
+      sha1: cfe072921ee3fb93f688743f8beef89043c3e9ad
+  nes:
+    files:
+    - name: NstDatabase.xml
+      destination: nes/NstDatabase.xml
+      size: 1009534
+      crc: ebb2196c
+      md5: 7bfe8c0540ed4bd6a0f1e2a0f0118ced
+      sha1: 26322f182540211e9b5e3647675b7c593706ae2b
+  pokemon-mini:
+    files:
+    - name: bios.min
+      destination: pokemon-mini/bios.min
+      size: 4096
+      crc: aed3c14d
+      md5: 1e4fb124a3a886865acb574f388c803d
+      sha1: daad4113713ed776fbd47727762bca81ba74915f
+  satellaview:
+    files:
+    - name: BS-X.bin
+      destination: satellaview/BS-X.bin
+      size: 1048576
+      crc: f51f07a0
+      md5: fed4d8242cfbed61343d53d48432aced
+      sha1: 604556b2e62860af18db5a77f2956ebc75450020
+    - name: BS-X (En).bin
+      destination: satellaview/BS-X (En).bin
+      size: 1048576
+      crc: 347e1c4e
+      md5: 33b62505da6ca4525e3839db4e1a7bca
+      sha1: f3cdff70de5d0f5c52ca3a8f46588b863d48b8ec
+    - name: BS-X (En) (DRM-Free).bin
+      destination: satellaview/BS-X (En) (DRM-Free).bin
+      size: 1048576
+      crc: 8c573c7e
+      md5: 4ed9648505ab33a4daec93707b16caba
+      sha1: 7996bd1c01b99800e0d5d34beff93db283784864
+  sufami-turbo:
+    files:
+    - name: STBIOS.bin
+      destination: sufami-turbo/STBIOS.bin
+      size: 262144
+      crc: 9b4ca911
+      md5: d3a44ba7d42a74d3ac58cb9c14c6a5ca
+      sha1: ef86ea192eed03d5c413fdbbfd46043be1d7a127
+  super-gb:
+    files:
+    - name: SGB1.sfc
+      destination: super-gb/SGB1.sfc
+      size: 262144
+      crc: 8a4a174f
+      md5: b15ddb15721c657d82c5bab6db982ee9
+      sha1: 973e10840db683cf3faf61bd443090786b3a9f04
+    - name: SGB2.sfc
+      destination: super-gb/SGB2.sfc
+      size: 524288
+      crc: cb176e45
+      md5: 8ecd73eb4edf7ed7e81aef1be80031d5
+      sha1: e5b2922ca137051059e4269b236d07a22c07bc84
+    - name: sgb1.boot.rom
+      destination: super-gb/sgb1.boot.rom
+      size: 256
+      crc: ec8a83b9
+      md5: d574d4f9c12f305074798f54c091a8b4
+      sha1: aa2f50a77dfb4823da96ba99309085a3c6278515
+    - name: sgb1.program.rom
+      destination: super-gb/sgb1.program.rom
+      size: 262144
+      crc: 8a4a174f
+      md5: b15ddb15721c657d82c5bab6db982ee9
+      sha1: 973e10840db683cf3faf61bd443090786b3a9f04
+    - name: sgb2.boot.rom
+      destination: super-gb/sgb2.boot.rom
+      size: 256
+      crc: 53d0dd63
+      md5: e0430bca9925fb9882148fd2dc2418c1
+      sha1: 93407ea10d2f30ab96a314d8eca44fe160aea734
+    - name: sgb2.program.rom
+      destination: super-gb/sgb2.program.rom
+      size: 524288
+      crc: cb176e45
+      md5: 8ecd73eb4edf7ed7e81aef1be80031d5
+      sha1: e5b2922ca137051059e4269b236d07a22c07bc84
+    - name: sgb2_bios.bin
+      destination: super-gb/sgb2_bios.bin
+      size: 256
+      crc: 53d0dd63
+      md5: e0430bca9925fb9882148fd2dc2418c1
+      sha1: 93407ea10d2f30ab96a314d8eca44fe160aea734
+    - name: sgb_bios.bin
+      destination: super-gb/sgb_bios.bin
+      size: 256
+      crc: ec8a83b9
+      md5: d574d4f9c12f305074798f54c091a8b4
+      sha1: aa2f50a77dfb4823da96ba99309085a3c6278515
+  snes:
+    files:
+    - name: cx4.data.rom
+      destination: snes/cx4.data.rom
+      size: 3072
+      crc: b6e76a6a
+      md5: 037ac4296b6b6a5c47c440188d3c72e3
+      sha1: a002f4efba42775a31185d443f3ed1790b0e949a
+    - name: dsp1.data.rom
+      destination: snes/dsp1.data.rom
+      size: 2048
+      crc: c8347cbd
+      md5: 3d81b45fa0c2aa8b852dfb1ece7c0971
+      sha1: 589c158685fe3cf88c7ca77cb6083f0e4de9c7c3
+    - name: dsp1.program.rom
+      destination: snes/dsp1.program.rom
+      size: 6144
+      crc: db9a4c92
+      md5: ae209fbe789fbf11a48aea5ab1197321
+      sha1: c5d283604beebb3d832f15a0b3fc60d10dd4bddc
+    - name: dsp1b.data.rom
+      destination: snes/dsp1b.data.rom
+      size: 2048
+      crc: 37a252c6
+      md5: 1e3f568634a7d8284020dddc0ae905bc
+      sha1: 19d5e822fe15ee6942e9921c3d8275a761a969df
+    - name: dsp1b.program.rom
+      destination: snes/dsp1b.program.rom
+      size: 6144
+      crc: 66a73998
+      md5: d10f446888e097cbf500f3f663cf4f6d
+      sha1: 03c6c0bdb40846c42aeff6b716e1ea0e001c3ae3
+    - name: dsp2.data.rom
+      destination: snes/dsp2.data.rom
+      size: 2048
+      crc: b3893c70
+      md5: e9417e29223b139c3c4b635a2a3b8744
+      sha1: aed9167cc2897cd8d0432f0b8f713fabbc48f5c4
+    - name: dsp2.program.rom
+      destination: snes/dsp2.program.rom
+      size: 6144
+      crc: 0c1cf838
+      md5: aa6e5922a3ed5ded54f24247c11143c5
+      sha1: 51a274955ef493cfcf2efad7e2ee54738c81eb15
+    - name: dsp3.data.rom
+      destination: snes/dsp3.data.rom
+      size: 2048
+      crc: 8b41a2bd
+      md5: 0a81210c0a940b997dd9843281008ee6
+      sha1: e7ec3da203a4edba2b17c06d9384787304a025a0
+    - name: dsp3.program.rom
+      destination: snes/dsp3.program.rom
+      size: 6144
+      crc: f29be51c
+      md5: d99ca4562818d49cee1f242705bba6f8
+      sha1: 11b7ba3501a8542af4cdfdbd1c9702ae0a0e3fae
+    - name: dsp4.data.rom
+      destination: snes/dsp4.data.rom
+      size: 2048
+      crc: efa8b9b2
+      md5: ee4990879eb68e3cbca239c5bc20303d
+      sha1: 8f2ffb9c1702aa2f76191e98f3fef43f73e5aab7
+    - name: dsp4.program.rom
+      destination: snes/dsp4.program.rom
+      size: 6144
+      crc: 14b77ae3
+      md5: a151023b948b90ffc23a5b594bb6fef2
+      sha1: 1abee528a59238fd5668fdcffd598d079cb056c2
+    - name: st010.data.rom
+      destination: snes/st010.data.rom
+      size: 4096
+      crc: 216081b2
+      md5: 254d70762b6f59f99c27c395aba7d07d
+      sha1: bd116501ec41c438fff210fd03233c6c9d15a514
+    - name: st010.program.rom
+      destination: snes/st010.program.rom
+      size: 49152
+      crc: 691cbb4f
+      md5: 1d70019179a59a566a0bb5d3f2845544
+      sha1: 2d0f34074ed3c6dfd61f767ee8b18e699b9769ac
+    - name: st011.data.rom
+      destination: snes/st011.data.rom
+      size: 4096
+      crc: 803256a7
+      md5: 10bd3f4aa949737ab9836512c35bcc29
+      sha1: 798ab84110ca93a6e73a540f4146d21f8d9e1442
+    - name: st011.program.rom
+      destination: snes/st011.program.rom
+      size: 49152
+      crc: a741e9fb
+      md5: 95222ebf1c0c2990bcf25db43743f032
+      sha1: 375eca92592621e83881f3a9d7fd5ea3e5b306dc
+    - name: st018.data.rom
+      destination: snes/st018.data.rom
+      size: 32768
+      crc: b5255459
+      md5: 49c898b60d0f15e90d0ba780dd12f366
+      sha1: b19c0f8f207d62fdabf4bf71442826063bccc626
+    - name: st018.program.rom
+      destination: snes/st018.program.rom
+      size: 131072
+      crc: f73d5e10
+      md5: dda40ccd57390c96e49d30a041f9a9e7
+      sha1: 388e3721b94cd074d6ba0eca8616523d2118a6c3
+  videopac-g7400:
+    files:
+    - name: c52.bin
+      destination: videopac-g7400/c52.bin
+      size: 1024
+      crc: a318e8d6
+      md5: f1071cdb0b6b10dde94d3bc8a6146387
+      sha1: a6120aed50831c9c0d95dbdf707820f601d9452e
+    - name: g7400.bin
+      destination: videopac-g7400/g7400.bin
+      size: 1024
+      crc: e20a9f41
+      md5: c500ff71236068e0dc0d0603d265ae76
+      sha1: 5130243429b40b01a14e1304d0394b8459a6fbae
+    - name: jopac.bin
+      destination: videopac-g7400/jopac.bin
+      size: 1024
+      crc: 11647ca5
+      md5: 279008e4a0db2dc5f1c048853b033828
+      sha1: 54b8d2c1317628de51a85fc1c424423a986775e4
+  dc:
+    files:
+    - name: dc_boot.bin
+      destination: dc/dc_boot.bin
+      size: 2097152
+      crc: 89f2b1a1
+      md5: e10c53c2f8b90bab96ead2d368858623
+      sha1: 8951d1bb219ab2ff8583033d2119c899cc81f18c
+    - name: boot.bin
+      destination: dc/boot.bin
+      size: 2097152
+      crc: 89f2b1a1
+      md5: e10c53c2f8b90bab96ead2d368858623
+      sha1: 8951d1bb219ab2ff8583033d2119c899cc81f18c
+    - name: dc_flash.bin
+      destination: dc/dc_flash.bin
+      size: 131072
+      crc: c611b498
+      md5: 0a93f7940c455905bea6e392dfde92a4
+      sha1: 94d44d7f9529ec1642ba3771ed3c5f756d5bc872
+    - name: flash.bin
+      destination: dc/flash.bin
+      size: 131072
+      crc: c611b498
+      md5: 0a93f7940c455905bea6e392dfde92a4
+      sha1: 94d44d7f9529ec1642ba3771ed3c5f756d5bc872
+    - name: naomi_boot.bin
+      destination: dc/naomi_boot.bin
+      size: 2097152
+      crc: d2a1c6bf
+      md5: 3bffafac42a7767d8dcecf771f5552ba
+      sha1: 6d27d71aec4dfba98f66316ae74a1426d567698a
+  gamegear:
+    files:
+    - name: bios.gg
+      destination: gamegear/bios.gg
+      size: 1024
+      crc: 0ebea9d4
+      md5: 672e104c3be3a238301aceffc3b23fd6
+      sha1: 914aa165e3d879f060be77870d345b60cfeb4ede
+  sms:
+    files:
+    - name: bios.sms
+      destination: sms/bios.sms
+      size: 8192
+      crc: 0072ed54
+      md5: 840481177270d5642a14ca71ee72844c
+      sha1: c315672807d8ddb8d91443729405c766dd95cae7
+    - name: bios_E.sms
+      destination: sms/bios_E.sms
+      size: 8192
+      crc: 0072ed54
+      md5: 840481177270d5642a14ca71ee72844c
+      sha1: c315672807d8ddb8d91443729405c766dd95cae7
+    - name: bios_J.sms
+      destination: sms/bios_J.sms
+      size: 8192
+      crc: 48d44a13
+      md5: 24a519c53f67b00640d0048ef7089105
+      sha1: a8c1b39a2e41137835eda6a5de6d46dd9fadbaf2
+    - name: bios_U.sms
+      destination: sms/bios_U.sms
+      size: 8192
+      crc: 0072ed54
+      md5: 840481177270d5642a14ca71ee72844c
+      sha1: c315672807d8ddb8d91443729405c766dd95cae7
+  segacd:
+    files:
+    - name: bios_CD_E.bin
+      destination: segacd/bios_CD_E.bin
+      size: 131072
+      crc: 529ac15a
+      md5: e66fa1dc5820d254611fdcdba0662372
+      sha1: f891e0ea651e2232af0c5c4cb46a0cae2ee8f356
+    - name: bios_CD_J.bin
+      destination: segacd/bios_CD_J.bin
+      size: 131072
+      crc: 9d2da8f2
+      md5: 278a9397d192149e84e820ac621a8edd
+      sha1: 4846f448160059a7da0215a5df12ca160f26dd69
+    - name: bios_CD_U.bin
+      destination: segacd/bios_CD_U.bin
+      size: 131072
+      crc: c6d10268
+      md5: 2efd74e3232ff260e371b99f84024f7f
+      sha1: f4f315adcef9b8feb0364c21ab7f0eaf5457f3ed
+  genesis:
+    files:
+    - name: areplay.bin
+      destination: genesis/areplay.bin
+      size: 32768
+      crc: 95ff7c3e
+      md5: a0028b3043f9d59ceeb03da5b073b30d
+      sha1: 1e0f246826be4ebc7b99bb3f9de7f1de347122e5
+    - name: bios_MD.bin
+      destination: genesis/bios_MD.bin
+      size: 2048
+      crc: 3f888cf4
+      md5: d3293ebaaa7f4eb2a6766b68a0fb4609
+      sha1: 3f50b76b0529db7f79c396b5e808cc0786ffc311
+    - name: ggenie.bin
+      destination: genesis/ggenie.bin
+      size: 32768
+      crc: 14dbce4a
+      md5: e8af7fe115a75c849f6aab3701e7799b
+      sha1: 937e1878ebd104f489e6bdbc410a184f79f1144a
+    - name: rom.db
+      destination: genesis/rom.db
+      size: 17742
+      crc: c94e8c8b
+      md5: ff4a3572475236e859e3e9ac5c87d1f1
+      sha1: 02c287d10da6de579af7a4ce73b134bbdf23c970
+    - name: sk.bin
+      destination: genesis/sk.bin
+      size: 2097152
+      crc: 0658f691
+      md5: 4ea493ea4e9f6c9ebfccbdb15110367e
+      sha1: 88d6499d874dcb5721ff58d76fe1b9af811192e3
+    - name: sk2chip.bin
+      destination: genesis/sk2chip.bin
+      size: 262144
+      crc: 4dcfd55c
+      md5: b4e76e416b887f4e7413ba76fa735f16
+      sha1: 70429f1d80503a0632f603bf762fe0bbaa881d22
+  saturn:
+    files:
+    - name: hisaturn.bin
+      destination: saturn/hisaturn.bin
+      size: 524288
+      crc: 721e1b60
+      md5: 3ea3202e2634cb47cb90f3a05c015010
+      sha1: 49d8493008fa715ca0c94d99817a5439d6f2c796
+    - name: mpr-17933.bin
+      destination: saturn/mpr-17933.bin
+      size: 524288
+      crc: 4afcf0fa
+      md5: 3240872c70984b6cbfda1586cab68dbe
+      sha1: faa8ea183a6d7bbe5d4e03bb1332519800d3fbc3
+    - name: mpr-18100.bin
+      destination: saturn/mpr-18100.bin
+      size: 524288
+      crc: 3408dbf4
+      md5: cb2cebc1b6e573b7c44523d037edcd45
+      sha1: 8a22710e09ce75f39625894366cafe503ed1942d
+    - name: mpr-18811-mx.ic1
+      destination: saturn/mpr-18811-mx.ic1
+      size: 2097152
+      crc: 90412e10
+      md5: 255113ba943c92a54facd25a10fd780c
+      sha1: a67cd4f550751f8b91de2b8b74528ab4e0c11c77
+    - name: mpr-19367-mx.ic1
+      destination: saturn/mpr-19367-mx.ic1
+      size: 2097152
+      crc: b9644b52
+      md5: 1cd19988d1d72a3e7caa0b73234c96b4
+      sha1: 56c1b93da6b660bf393fbf48ca47569000ef4047
+    - name: saturn_bios.bin
+      destination: saturn/saturn_bios.bin
+      size: 524288
+      crc: 2aba43c2
+      md5: af5828fdff51384f99b3c4926be27762
+      sha1: 2b8cb4f87580683eb4d760e4ed210813d667f0a2
+    - name: sega1003.bin
+      destination: saturn/sega1003.bin
+      size: 524288
+      crc: b3c63c25
+      md5: 74570fed4d44b2682b560c8cd44b8b6a
+      sha1: 7b23b53d62de0f29a23e423d0fe751dfb469c2fa
+    - name: sega_100.bin
+      destination: saturn/sega_100.bin
+      size: 524288
+      crc: 2aba43c2
+      md5: af5828fdff51384f99b3c4926be27762
+      sha1: 2b8cb4f87580683eb4d760e4ed210813d667f0a2
+    - name: sega_100a.bin
+      destination: saturn/sega_100a.bin
+      size: 524288
+      crc: f90f0089
+      md5: f273555d7d91e8a5a6bfd9bcf066331c
+      sha1: 3bb41feb82838ab9a35601ac666de5aacfd17a58
+    - name: sega_101.bin
+      destination: saturn/sega_101.bin
+      size: 524288
+      crc: 224b752c
+      md5: 85ec9ca47d8f6807718151cbcca8b964
+      sha1: df94c5b4d47eb3cc404d88b33a8fda237eaf4720
+    - name: vsaturn.bin
+      destination: saturn/vsaturn.bin
+      size: 524288
+      crc: e4d61811
+      md5: ac4e4b6522e200c0d23d371a8cecbfd3
+      sha1: 4154e11959f3d5639b11d7902b3a393a99fb5776
+  x1:
+    files:
+    - name: iplrom.x1
+      destination: x1/iplrom.x1
+      size: 4096
+      crc: e70011d3
+      md5: eeeea1cd29c6e0e8b094790ae969bfa7
+      sha1: d3395e9aeb5b8bbba7654dd471bcd8af228ee69a
+    - name: iplrom.x1t
+      destination: x1/iplrom.x1t
+      size: 2048
+      crc: e3995a57
+      md5: 851e4a5936f17d13f8c39a980cf00d77
+      sha1: 1c1a0d8c9f4c446ccd7470516b215ddca5052fb2
+  sharp-x68000:
+    files:
+    - name: cgrom.dat
+      destination: sharp-x68000/cgrom.dat
+      size: 786432
+      crc: 9f3195f1
+      md5: cb0a5cfcf7247a7eab74bb2716260269
+      sha1: 8d72c5b4d63bb14c5dbdac495244d659aa1498b6
+    - name: iplrom.dat
+      destination: sharp-x68000/iplrom.dat
+      size: 131072
+      crc: 72bdf532
+      md5: 7fd4caabac1d9169e289f0f7bbf71d8e
+      sha1: 0ed038ed2133b9f78c6e37256807424e0d927560
+    - name: iplrom30.dat
+      destination: sharp-x68000/iplrom30.dat
+      size: 131072
+      crc: e8f8fdad
+      md5: f373003710ab4322642f527f567e020a
+      sha1: 239e9124568c862c31d9ec0605e32373ea74b86a
+    - name: iplromco.dat
+      destination: sharp-x68000/iplromco.dat
+      size: 131072
+      crc: 6c7ef608
+      md5: cc78d4f4900f622bd6de1aed7f52592f
+      sha1: 77511fc58798404701f66b6bbc9cbde06596eba7
+    - name: iplromxv.dat
+      destination: sharp-x68000/iplromxv.dat
+      size: 131072
+      crc: 00eeb408
+      md5: 0617321daa182c3f3d6f41fd02fb3275
+      sha1: e33cdcdb69cd257b0b211ef46e7a8b144637db57
+  zxs:
+    files:
+    - name: 128-0.rom
+      destination: zxs/128-0.rom
+      size: 16384
+      crc: e76799d2
+      md5: b4d2692115a9f2924df92a3cbfb358fb
+      sha1: 4f4b11ec22326280bdb96e3baf9db4b4cb1d02c5
+    - name: 128-1.rom
+      destination: zxs/128-1.rom
+      size: 16384
+      crc: b96a36be
+      md5: 6e09e5d3c4aef166601669feaaadc01c
+      sha1: 80080644289ed93d71a1103992a154cc9802b2fa
+    - name: 128-spanish-0.rom
+      destination: zxs/128-spanish-0.rom
+      size: 16384
+      crc: 453d86b2
+      md5: c1231a70b8129311216acb7479b031d5
+      sha1: 968937b1c750f0ef6205f01c6db4148da4cca4e3
+    - name: 128-spanish-1.rom
+      destination: zxs/128-spanish-1.rom
+      size: 16384
+      crc: 6010e796
+      md5: 4f341936594cbcab75cfa62ce96e3682
+      sha1: bea3f397cc705eafee995ea629f4a82550562f90
+    - name: 128p-0.rom
+      destination: zxs/128p-0.rom
+      size: 16384
+      crc: 124ad9e0
+      md5: a249565f03b98d004ee7f019570069cd
+      sha1: d07fcdeca892ee80494d286ea9ea5bf3928a1aca
+    - name: 128p-1.rom
+      destination: zxs/128p-1.rom
+      size: 16384
+      crc: b96a36be
+      md5: 6e09e5d3c4aef166601669feaaadc01c
+      sha1: 80080644289ed93d71a1103992a154cc9802b2fa
+    - name: 256s-0.rom
+      destination: zxs/256s-0.rom
+      size: 16384
+      crc: 0eb40a09
+      md5: b9fda5b6a747ff037365b0e2d8c4379a
+      sha1: 477114ff0fe1388e0979df1423602b21248164e5
+    - name: 256s-1.rom
+      destination: zxs/256s-1.rom
+      size: 16384
+      crc: 9d513013
+      md5: 643861ad34831b255bf2eb64e8b6ecb8
+      sha1: 367b5a102fb663beee8e7930b8c4acc219c1f7b3
+    - name: 256s-2.rom
+      destination: zxs/256s-2.rom
+      size: 16384
+      crc: fd0d3ce1
+      md5: d8ad507b1c915a9acfe0d73957082926
+      sha1: 07783ee295274d8ff15d935bfd787c8ac1d54900
+    - name: 256s-3.rom
+      destination: zxs/256s-3.rom
+      size: 16384
+      crc: 1fe1d003
+      md5: ce0723f9bc02f4948c15d3b3230ae831
+      sha1: 33703e97cc93b7edfcc0334b64233cf81b7930db
+    - name: 48.rom
+      destination: zxs/48.rom
+      size: 16384
+      crc: ddee531f
+      md5: 4c42a2f075212361c3117015b107ff68
+      sha1: 5ea7c2b824672e914525d1d5c419d71b84a426a2
+    - name: disciple.rom
+      destination: zxs/disciple.rom
+      size: 8192
+      crc: '82047489'
+      md5: 78e61a2a02121873c1756b21fd1398b1
+      sha1: 9a75ed4b293f968985be4c9aa893cd88276d1ced
+    - name: disk_plus3.szx
+      destination: zxs/disk_plus3.szx
+      size: 1568
+      crc: c2c6cba7
+      md5: e6db6b9f6ad15012851115a7bc4b31d8
+      sha1: d7896640e18fc6204aa494835b0a430250fb06ce
+    - name: gluck.rom
+      destination: zxs/gluck.rom
+      size: 16384
+      crc: ca321d79
+      md5: d5869034604dbfd2c1d54170e874fd0a
+      sha1: 015eb96dafb273d4f4512c467e9b43c305fd1bc4
+    - name: if1-1.rom
+      destination: zxs/if1-1.rom
+      size: 8192
+      crc: e72a12ae
+      md5: 5c11c61a2dd2ca4bf39328d9ff42d289
+      sha1: 4ffd9ed9c00cdc6f92ce69fdd8b618ef1203f48e
+    - name: if1-2.rom
+      destination: zxs/if1-2.rom
+      size: 8192
+      crc: bb66dd1e
+      md5: 31b704ae925305e74f50699271fddd9a
+      sha1: 5cfb6bca4177c45fefd571734576b55e3a127c08
+    - name: plus2-0.rom
+      destination: zxs/plus2-0.rom
+      size: 16384
+      crc: 5d2e8c66
+      md5: 4ed7af4636308b8a48d7a35e6c5b546b
+      sha1: 72703f9a3e734f3c23ec34c0727aae4ccbef9a91
+    - name: plus2-1.rom
+      destination: zxs/plus2-1.rom
+      size: 16384
+      crc: 98b1320b
+      md5: b3db95931cc844efaeb82db9c171b9f3
+      sha1: de8b0d2d0379cfe7c39322a086ca6da68c7f23cb
+    - name: plus3-0.rom
+      destination: zxs/plus3-0.rom
+      size: 16384
+      crc: a10230c0
+      md5: 3abdc20e72890a750dd3c745d286dfba
+      sha1: a837f66977040f7b51ed053a2483c10f3d070ab7
+    - name: plus3-1.rom
+      destination: zxs/plus3-1.rom
+      size: 16384
+      crc: 09b9c3ca
+      md5: 8361a1d9c8bcef89c0c39293776564ad
+      sha1: 6a4364f25513e4079f048f2de131a896d30edc64
+    - name: plus3-2.rom
+      destination: zxs/plus3-2.rom
+      size: 16384
+      crc: a60285a0
+      md5: f36c5c2d1f2a682caadeaa6f947db0da
+      sha1: 0a747cc0b827a94b4fd74cfd818ca792437a38f7
+    - name: plus3-3.rom
+      destination: zxs/plus3-3.rom
+      size: 16384
+      crc: 04448eaa
+      md5: a148bcc575e51389e84fdf5d555c3196
+      sha1: 65f031caa8148a5493afe42c41f4929deab26b4e
+    - name: plus3e-0.rom
+      destination: zxs/plus3e-0.rom
+      size: 16384
+      crc: a10230c0
+      md5: 3abdc20e72890a750dd3c745d286dfba
+      sha1: a837f66977040f7b51ed053a2483c10f3d070ab7
+    - name: plus3e-1.rom
+      destination: zxs/plus3e-1.rom
+      size: 16384
+      crc: 09b9c3ca
+      md5: 8361a1d9c8bcef89c0c39293776564ad
+      sha1: 6a4364f25513e4079f048f2de131a896d30edc64
+    - name: plus3e-2.rom
+      destination: zxs/plus3e-2.rom
+      size: 16384
+      crc: a60285a0
+      md5: f36c5c2d1f2a682caadeaa6f947db0da
+      sha1: 0a747cc0b827a94b4fd74cfd818ca792437a38f7
+    - name: plus3e-3.rom
+      destination: zxs/plus3e-3.rom
+      size: 16384
+      crc: 04448eaa
+      md5: a148bcc575e51389e84fdf5d555c3196
+      sha1: 65f031caa8148a5493afe42c41f4929deab26b4e
+    - name: plusd.rom
+      destination: zxs/plusd.rom
+      size: 8192
+      crc: 569f7e55
+      md5: 42e5de16fb5e50082bb954ec7ce45851
+      sha1: 6b841dc5797ef7eb219ad455cd1e434ca3b9d30d
+    - name: se-0.rom
+      destination: zxs/se-0.rom
+      size: 16384
+      crc: 8f1047d2
+      md5: fb3f86eb1e5a695d9c50c124e7cfb875
+      sha1: 8608328d7dd66602a4846f046b24fed500f7d828
+    - name: se-1.rom
+      destination: zxs/se-1.rom
+      size: 16384
+      crc: 16ed3a9b
+      md5: 88de4a3129086f34bb9ca559acc51e6c
+      sha1: 3be5de57dd3bd0a9d15c57cabe9179afe2906a52
+    - name: speccyboot-1.4.rom
+      destination: zxs/speccyboot-1.4.rom
+      size: 8192
+      crc: 37c591b2
+      md5: c54aa8f374b0971f51546c29d5d1eba1
+      sha1: 16af6f052b38a027dd49ba6e96e3a59d16b62672
+    - name: tape_128.szx
+      destination: zxs/tape_128.szx
+      size: 1464
+      crc: 8d1c41f4
+      md5: 8942b43b73ed4eb7f32bd1741709a4dc
+      sha1: 3b1287bfc6fec9c7dd838f6ea1706698cb96fd16
+    - name: tape_16.szx
+      destination: zxs/tape_16.szx
+      size: 591
+      crc: ccda9cc2
+      md5: fec97eb9ea1b017cae84de78508feb4a
+      sha1: ec9e5607ce7faf2d6a5d71e5e21188ca86e963a1
+    - name: tape_2048.szx
+      destination: zxs/tape_2048.szx
+      size: 720
+      crc: dbc1a386
+      md5: 116f732bbae4e49d625aaf2f311474d0
+      sha1: f2d2227dce697df8aac78883eaf966e71435caa3
+    - name: tape_2068.szx
+      destination: zxs/tape_2068.szx
+      size: 1799
+      crc: 659b428d
+      md5: 0b0f267b95d556318bb652af2e8dc25c
+      sha1: 5af71025c02358b325bf8b4bfaa2662488abf1d2
+    - name: tape_48.szx
+      destination: zxs/tape_48.szx
+      size: 708
+      crc: f56f230d
+      md5: ee2ae810711594db3a134a7432baabff
+      sha1: d6e092730f822c9e8828ca12f54eb8d65228f30c
+    - name: tape_pentagon.szx
+      destination: zxs/tape_pentagon.szx
+      size: 1479
+      crc: c7a272b6
+      md5: bd7698603bd9079d337cdedfb04942d9
+      sha1: 7e1eb0e250cfe1f2f0e50f734378a738e8bf327f
+    - name: tape_plus2.szx
+      destination: zxs/tape_plus2.szx
+      size: 1571
+      crc: 93195e18
+      md5: 166d4aa1a5aa4fbd99cc963b4e7c19cc
+      sha1: 4a6d8941eee86d7e52452f5aaaa73d4bafe9bde1
+    - name: tape_plus2a.szx
+      destination: zxs/tape_plus2a.szx
+      size: 1617
+      crc: 45727b82
+      md5: 445d4817d5557bb363a216fbd6eeaa84
+      sha1: e0e0f6ebc8261ae9768a6be772eab4718fbc2395
+    - name: tape_plus3.szx
+      destination: zxs/tape_plus3.szx
+      size: 1856
+      crc: 1a825690
+      md5: 0dc8828ac1db2e0efa915ac55191e96f
+      sha1: 3850f7e5e6c90fd4dac988da77717d2647d9c021
+    - name: tape_plus3e.szx
+      destination: zxs/tape_plus3e.szx
+      size: 1970
+      crc: 4ce6538f
+      md5: bf07537f028bbcb3309464bd30da779c
+      sha1: 92ac0df41f3ea7f147f4d6bae6b8a7d79b4f7e92
+    - name: tape_scorpion.szx
+      destination: zxs/tape_scorpion.szx
+      size: 3500
+      crc: eb6a7a83
+      md5: c10e677d3deb5a445689d3a599880745
+      sha1: 6abdeb434755d25a280954ce07b50b6a28b36957
+    - name: tape_se.szx
+      destination: zxs/tape_se.szx
+      size: 2146
+      crc: 92bc2f43
+      md5: 2518f9334bef8c44804a4185085579b5
+      sha1: cc20a8e6fc8c493881b14e00545a42ef75b8aabe
+    - name: tape_ts2068.szx
+      destination: zxs/tape_ts2068.szx
+      size: 1840
+      crc: 06ad712e
+      md5: 1d360c09d370bb52a9a44b30cc7c59e6
+      sha1: 562298f5b3a7ed28f0129b066e8ad098a10e2270
+    - name: tc2048.rom
+      destination: zxs/tc2048.rom
+      size: 16384
+      crc: f1b5fa67
+      md5: 9dd7ecf784a6c04265c073c236f5fadb
+      sha1: febb2d495b6eda7cdcb4074935d6e9d9f328972d
+    - name: tc2068-0.rom
+      destination: zxs/tc2068-0.rom
+      size: 16384
+      crc: bf44ec3f
+      md5: 55d462fccc6c536037404ef4ced08bec
+      sha1: 1446cb2780a9dedf640404a639fa3ae518b2d8aa
+    - name: tc2068-1.rom
+      destination: zxs/tc2068-1.rom
+      size: 8192
+      crc: ae16233a
+      md5: 575d203c6e15e679fba0b73f854ec7a2
+      sha1: 7e265a2c1f621ed365ea23bdcafdedbc79c1299c
+    - name: trdos.rom
+      destination: zxs/trdos.rom
+      size: 16384
+      crc: 10751aba
+      md5: 0da70a5d2a0e733398e005b96b7e4ba6
+      sha1: 21695e3f2a8f796386ce66eea8a246b0ac44810c
+  neo-geo-cd:
+    files:
+    - name: 000-lo.lo
+      destination: neo-geo-cd/000-lo.lo
+      size: 131072
+      crc: 5a86cff2
+      md5: fc7599f3f871578fe9a0453662d1c966
+      sha1: 5992277debadeb64d1c1c64b0a92d9293eaf7e4a
+    - name: front-sp1.bin
+      destination: neo-geo-cd/front-sp1.bin
+      size: 524288
+      crc: cac62307
+      md5: 5c2366f25ff92d71788468ca492ebeca
+      sha1: 53bc1f283cdf00fa2efbb79f2e36d4c8038d743a
+    - name: neocd.bin
+      destination: neo-geo-cd/neocd.bin
+      size: 524288
+      crc: df9de490
+      md5: f39572af7584cb5b3f70ae8cc848aba2
+      sha1: 7bb26d1e5d1e930515219cb18bcde5b7b23e2eda
+    - name: neocd_f.rom
+      destination: neo-geo-cd/neocd_f.rom
+      size: 524288
+      crc: 6fd2a520
+      md5: 8834880c33164ccbe6476b559f3e37de
+      sha1: a5f4a7a627b3083c979f6ebe1fabc5d2df6d083b
+    - name: neocd_sf.rom
+      destination: neo-geo-cd/neocd_sf.rom
+      size: 524288
+      crc: 1101f313
+      md5: 043d76d5f0ef836500700c34faef774d
+      sha1: 4a94719ee5d0e3f2b981498f70efc1b8f1cef325
+    - name: neocd_st.rom
+      destination: neo-geo-cd/neocd_st.rom
+      size: 524288
+      crc: 01c299cc
+      md5: f6325a33c6d63ea4b9162a3fa8c32727
+      sha1: 19729b51bdab60c42aafef6e20ea9234c7eb8410
+    - name: neocd_sz.rom
+      destination: neo-geo-cd/neocd_sz.rom
+      size: 524288
+      crc: 42f6b6c4
+      md5: 971ee8a36fb72da57aed01758f0a37f5
+      sha1: 6a947457031dd3a702a296862446d7485aa89dbb
+    - name: neocd_t.rom
+      destination: neo-geo-cd/neocd_t.rom
+      size: 524288
+      crc: 56c9ecba
+      md5: de3cf45d227ad44645b22aa83b49f450
+      sha1: cc92b54a18a8bff6e595aabe8e5c360ba9e62eb5
+    - name: neocd_z.rom
+      destination: neo-geo-cd/neocd_z.rom
+      size: 524288
+      crc: '33697892'
+      md5: 11526d58d4c524daef7d5d677dc6b004
+      sha1: b0f1c4fa8d4492a04431805f6537138b842b549f
+    - name: top-sp1.bin
+      destination: neo-geo-cd/top-sp1.bin
+      size: 524288
+      crc: c36a47c0
+      md5: 122aee210324c72e8a11116e6ef9c0d0
+      sha1: 235f4d1d74364415910f73c10ae5482d90b4274f
+    - name: uni-bioscd.rom
+      destination: neo-geo-cd/uni-bioscd.rom
+      size: 524288
+      crc: ff3abc59
+      md5: 08ca8b2dba6662e8024f9e789711c6fc
+      sha1: 5142f205912869b673a71480c5828b1eaed782a8
+    - name: neocdz.zip
+      destination: neo-geo-cd/neocdz.zip
+      size: 214876
+      crc: 19681e91
+      md5: c38cb8e50321783e413dc5ff292a3ff8
+      sha1: bf6b379c204da77dece1aedf83ff35227a623e5d
+  psx:
+    files:
+    - name: PSXONPSP660.BIN
+      destination: psx/PSXONPSP660.BIN
+      size: 524288
+      crc: 5660f34f
+      md5: c53ca5908936d412331790f4426c6c33
+      sha1: 96880d1ca92a016ff054be5159bb06fe03cb4e14
+    - name: scph1000.bin
+      destination: psx/scph1000.bin
+      size: 524288
+      crc: 3b601fc8
+      md5: 239665b1a3dade1b5a52c06338011044
+      sha1: 343883a7b555646da8cee54aadd2795b6e7dd070
+    - name: scph1001.bin
+      destination: psx/scph1001.bin
+      size: 524288
+      crc: '37157331'
+      md5: 924e392ed05558ffdb115408c263dccf
+      sha1: 10155d8d6e6e832d6ea66db9bc098321fb5e8ebf
+    - name: scph1002.bin
+      destination: psx/scph1002.bin
+      size: 524288
+      crc: 9bb87c4b
+      md5: 54847e693405ffeb0359c6287434cbef
+      sha1: 20b98f3d80f11cbf5a7bfd0779b0e63760ecc62c
+    - name: scph100.bin
+      destination: psx/scph100.bin
+      size: 524288
+      crc: f2af798b
+      md5: 8abc1b549a4a80954addc48ef02c4521
+      sha1: 339a48f4fcf63e10b5b867b8c93cfd40945faf6c
+    - name: scph101.bin
+      destination: psx/scph101.bin
+      size: 524288
+      crc: 171bdcec
+      md5: 6e3735ff4c7dc899ee98981385f6f3d0
+      sha1: dcffe16bd90a723499ad46c641424981338d8378
+    - name: scph102A.bin
+      destination: psx/scph102A.bin
+      size: 524288
+      crc: 0bad7ea9
+      md5: b10f5e0e3d9eb60e5159690680b1e774
+      sha1: beb0ac693c0dc26daf5665b3314db81480fa5c7c
+    - name: scph102B.bin
+      destination: psx/scph102B.bin
+      size: 524288
+      crc: 76b880e5
+      md5: de93caec13d1a141a40a79f5c86168d6
+      sha1: dbc7339e5d85827c095764fc077b41f78fd2ecae
+    - name: scph102C.bin
+      destination: psx/scph102C.bin
+      size: 524288
+      crc: 76b880e5
+      md5: de93caec13d1a141a40a79f5c86168d6
+      sha1: dbc7339e5d85827c095764fc077b41f78fd2ecae
+    - name: scph3000.bin
+      destination: psx/scph3000.bin
+      size: 524288
+      crc: 3539def6
+      md5: 849515939161e62f6b866f6853006780
+      sha1: b06f4a861f74270be819aa2a07db8d0563a7cc4e
+    - name: scph3500.bin
+      destination: psx/scph3500.bin
+      size: 524288
+      crc: bc190209
+      md5: cba733ceeff5aef5c32254f1d617fa62
+      sha1: e38466a4ba8005fba7e9e3c7b9efeba7205bee3f
+    - name: scph5000.bin
+      destination: psx/scph5000.bin
+      size: 524288
+      crc: 8c93a399
+      md5: eb201d2d98251a598af467d4347bb62f
+      sha1: e340db2696274dda5fdc25e434a914db71e8b02b
+    - name: scph5500.bin
+      destination: psx/scph5500.bin
+      size: 524288
+      crc: ff3eeb8c
+      md5: 8dd7d5296a650fac7319bce665a6a53c
+      sha1: b05def971d8ec59f346f2d9ac21fb742e3eb6917
+    - name: scph5501.bin
+      destination: psx/scph5501.bin
+      size: 524288
+      crc: 8d8cb7e4
+      md5: 490f666e1afb15b7362b406ed1cea246
+      sha1: 0555c6fae8906f3f09baf5988f00e55f88e9f30b
+    - name: scph5502.bin
+      destination: psx/scph5502.bin
+      size: 524288
+      crc: d786f0b9
+      md5: 32736f17079d0b2b7024407c39bd3050
+      sha1: f6bc2d1f5eb6593de7d089c425ac681d6fffd3f0
+    - name: scph5552.bin
+      destination: psx/scph5552.bin
+      size: 524288
+      crc: d786f0b9
+      md5: 32736f17079d0b2b7024407c39bd3050
+      sha1: f6bc2d1f5eb6593de7d089c425ac681d6fffd3f0
+    - name: scph7001.bin
+      destination: psx/scph7001.bin
+      size: 524288
+      crc: 502224b6
+      md5: 1e68c231d0896b7eadcad1d7d8e76129
+      sha1: 14df4f6c1e367ce097c11deae21566b4fe5647a9
+    - name: scph7002.bin
+      destination: psx/scph7002.bin
+      size: 524288
+      crc: 318178bf
+      md5: b9d9a0286c33dc6b7237bb13cd46fdee
+      sha1: 8d5de56a79954f29e9006929ba3fed9b6a418c1d
+    - name: scph7003.bin
+      destination: psx/scph7003.bin
+      size: 524288
+      crc: 8d8cb7e4
+      md5: 490f666e1afb15b7362b406ed1cea246
+      sha1: 0555c6fae8906f3f09baf5988f00e55f88e9f30b
+    - name: scph7502.bin
+      destination: psx/scph7502.bin
+      size: 524288
+      crc: 318178bf
+      md5: b9d9a0286c33dc6b7237bb13cd46fdee
+      sha1: 8d5de56a79954f29e9006929ba3fed9b6a418c1d
+    - name: scph9002(7502).bin
+      destination: psx/scph9002(7502).bin
+      size: 524288
+      crc: 318178bf
+      md5: b9d9a0286c33dc6b7237bb13cd46fdee
+      sha1: 8d5de56a79954f29e9006929ba3fed9b6a418c1d
+  psp:
+    files:
+    - name: ppge_atlas.zim
+      destination: psp/ppge_atlas.zim
+      size: 666530
+      crc: 7b57fa78
+      md5: 866855cc330b9b95cc69135fb7b41d38
+      sha1: 30a33f3651f8e1b0967a5dfe6ff714baebcce41a
+  wolfenstein:
+    files:
+    - name: ecwolf.pk3
+      destination: wolfenstein/ecwolf.pk3
+      size: 178755
+      crc: 26dc3fba
+      md5: c011b428819eea4a80b455c245a5a04d
+      sha1: 9259b87edfe9b9f6d0749788a75a6ccf158f50aa
+  scummvm:
+    files:
+    - name: scummvm.zip
+      destination: scummvm/scummvm.zip
+      size: 9523360
+      crc: a93f1c4b
+      md5: a17e0e0150155400d8cced329563d9c8
+      sha1: 718c1a00d38e0810a1ad0ffde79f73447f846f01
+  acpc:
+    files:
+    - name: cpc464.rom
+      destination: acpc/cpc464.rom
+      size: 32768
+      crc: 40852f25
+      md5: a993f85b88ac4350cf4d41554e87fe4f
+      sha1: 56d39c463da60968d93e58b4ba0e675829412a20
+    - name: cpc664.rom
+      destination: acpc/cpc664.rom
+      size: 32768
+      crc: 9ab5a036
+      md5: 5a384a2310f472c7857888371c00ed66
+      sha1: 073a7665527b5bd8a148747a3947dbd3328682c8
+    - name: cpc6128.rom
+      destination: acpc/cpc6128.rom
+      size: 32768
+      crc: 9e827fe1
+      md5: b96280dc6c95a48857b4b8eb931533ae
+      sha1: 5977adbad3f7c1e0e082cd02fe76a700d9860c30
+    - name: cpc_amsdos.rom
+      destination: acpc/cpc_amsdos.rom
+      size: 16384
+      crc: 1fe22ecd
+      md5: 25629dfe870d097469c217b95fdc1c95
+      sha1: 39102c8e9cb55fcc0b9b62098780ed4a3cb6a4bb
+  enterprise:
+    files:
+    - name: hun.rom
+      destination: enterprise/hun.rom
+      size: 16384
+      crc: 596ab6d6
+      md5: 22167938f142c222f40992839aa21a06
+      sha1: 325a5e28c2a0d896711f8829e7ff14fed5dd4103
+    - name: brd.rom
+      destination: enterprise/brd.rom
+      size: 16384
+      crc: 6999d6a3
+      md5: 6af0402906944fd134004b85097c8524
+      sha1: f34f0c330b44dbf2548329bea954d5991dec30ca
+    - name: exos20.rom
+      destination: enterprise/exos20.rom
+      size: 32768
+      crc: d421795f
+      md5: 5ad3baaad3b5156d6b60b34229a676fb
+      sha1: 6033a0535136c40c47137e4d1cd9273c06d5fdff
+    - name: exos21.rom
+      destination: enterprise/exos21.rom
+      size: 32768
+      crc: 982a3b44
+      md5: f36f24cbb87745fbd2714e4df881db09
+      sha1: 55315b20fecb4441a07ee4bc5dc7153f396e0a2e
+    - name: zt19uk.rom
+      destination: enterprise/zt19uk.rom
+      size: 32768
+      crc: d6deedf1
+      md5: 228540b6be83ae2acd7569c8ff0f91d0
+      sha1: b7af62f0bc95fdca4b31d236f8327dafc80f83b7
+    - name: basic20.rom
+      destination: enterprise/basic20.rom
+      size: 16384
+      crc: 1228de34
+      md5: 8e18edce4a7acb2c33cc0ab18f988482
+      sha1: 61d0987b906146e21b94f265d5b51b4938c986a9
+    - name: basic21.rom
+      destination: enterprise/basic21.rom
+      size: 16384
+      crc: 55f96251
+      md5: e972fe42b398c9ff1d93ff014786aec6
+      sha1: 03bbb386cf530e804363acdfc1d13e64cf28af2e
+    - name: exdos13.rom
+      destination: enterprise/exdos13.rom
+      size: 32768
+      crc: e0135929
+      md5: ddff70c014d1958dc75378b6c9aab6f8
+      sha1: cb43ab3676b93c279f1ed8ffcb0d4dcd4b34e631
+    - name: epd19hft.rom
+      destination: enterprise/epd19hft.rom
+      size: 32768
+      crc: bd503eeb
+      md5: 12cfc9c7e48c8a16c2e09edbd926d467
+      sha1: 8f28fe73d13e94dd1da02519908ecc6eebe104f6
+    - name: zt18hfnt.rom
+      destination: enterprise/zt18hfnt.rom
+      size: 32768
+      crc: 76c9dbf6
+      md5: 3082dc488d32f30a612761b99074199b
+      sha1: 283be1ce417a759a3368bb4bbe72f692fd43ca6d
+    - name: epfileio.rom
+      destination: enterprise/epfileio.rom
+      size: 16384
+      crc: 60c79925
+      md5: a68ebcbc73a4d2178d755b7755bf18fe
+      sha1: 2f9077bcd89b1ec42dbdcd55d335bdbaf361eff3
+    - name: exos24uk.rom
+      destination: enterprise/exos24uk.rom
+      size: 65536
+      crc: c099a5e3
+      md5: 55af78f877a21ca45eb2df68a74fcc60
+      sha1: cf12e971623a54bf8c4f891ca3a36d969f205c49
+  ps2:
+    files:
+    - name: ps2-0100jd-20000117.bin
+      destination: ps2/ps2-0100jd-20000117.bin
+      size: 4194304
+      crc: 5a04500c
+      md5: 32f2e4d5ff5ee11072a6bc45530f5765
+      sha1: 5b33170323ed6344e2363fed8115dc3918bb96a4
+    - name: ps2-0100j-20000117.bin
+      destination: ps2/ps2-0100j-20000117.bin
+      size: 4194304
+      crc: b7ef81a9
+      md5: acf4730ceb38ac9d8c7d8e21f2614600
+      sha1: aea061e6e263fdcc1c4fdbd68553ef78dae74263
+    - name: ps2-0101jd-20000217.bin
+      destination: ps2/ps2-0101jd-20000217.bin
+      size: 4194304
+      crc: 4f8b4205
+      md5: acf9968c8f596d2b15f42272082513d1
+      sha1: 16f4a284d0e760ee13a2aff2f7dda928255e3080
+    - name: ps2-0101j-20000217.bin
+      destination: ps2/ps2-0101j-20000217.bin
+      size: 4194304
+      crc: 211dfb6a
+      md5: b1459d7446c69e3e97e6ace3ae23dd1c
+      sha1: 916e02431bcd73140504da3355c9598143b77e11
+    - name: ps2-0101xd-20000224.bin
+      destination: ps2/ps2-0101xd-20000224.bin
+      size: 4194304
+      crc: 2fef9faf
+      md5: d3f1853a16c2ec18f3cd1ae655213308
+      sha1: 4440b246bfde7bb31002c584a76c6ef384908e84
+    - name: ps2-0110ad-20000727.bin
+      destination: ps2/ps2-0110ad-20000727.bin
+      size: 4194304
+      crc: 795578c1
+      md5: 63e6fd9b3c72e0d7b920e80cf76645cd
+      sha1: 339c646cf0699268552df5b05f18f0a03a9f55ff
+    - name: ps2-0110a-20000727.bin
+      destination: ps2/ps2-0110a-20000727.bin
+      size: 4194304
+      crc: 9678ad6a
+      md5: a20c97c02210f16678ca3010127caf36
+      sha1: 20f6ce6693cf97e9494f8f0227f2b7988ffaf961
+    - name: ps2-0120a-20000902.bin
+      destination: ps2/ps2-0120a-20000902.bin
+      size: 4194304
+      crc: 1ae71e5d
+      md5: 8db2fbbac7413bf3e7154c1e0715e565
+      sha1: dbc2318a1029347b5af3a0c74b0bdf88d19efee6
+    - name: ps2-0120ed-20000902.bin
+      destination: ps2/ps2-0120ed-20000902.bin
+      size: 4194304
+      crc: 25495aa7
+      md5: 91c87cb2f2eb6ce529a2360f80ce2457
+      sha1: 3bb1eecd618ab5c973c7bc53671a4475a02e1d5b
+    - name: ps2-0120ed-20000902-20030110.bin
+      destination: ps2/ps2-0120ed-20000902-20030110.bin
+      size: 4194304
+      crc: e2f78425
+      md5: 3016b3dd42148a67e2c048595ca4d7ce
+      sha1: 1b73dec999fcc2b92fa958110ff6bfe4d0af276e
+    - name: ps2-0120e-20000902.bin
+      destination: ps2/ps2-0120e-20000902.bin
+      size: 4194304
+      crc: 7b08c33b
+      md5: b7fa11e87d51752a98b38e3e691cbf17
+      sha1: 274c05fec654913a3f698d4b0d592085866a2cbd
+    - name: ps2-0120j-20001027-185015.bin
+      destination: ps2/ps2-0120j-20001027-185015.bin
+      size: 4194304
+      crc: 9b096622
+      md5: f63bc530bd7ad7c026fcd6f7bd0d9525
+      sha1: e481079eca752225555f0c26d14c9d0f94d9a8e9
+    - name: ps2-0120j-20001027-191435.bin
+      destination: ps2/ps2-0120j-20001027-191435.bin
+      size: 4194304
+      crc: c1ccf3f6
+      md5: cee06bd68c333fc5768244eae77e4495
+      sha1: a9f5d8ed56cfff18add1b599010493461fa02448
+    - name: ps2-0150ad-20001228-20030520.bin
+      destination: ps2/ps2-0150ad-20001228-20030520.bin
+      size: 4194304
+      crc: 0380c2ce
+      md5: 0bf988e9c7aaa4c051805b0fa6eb3387
+      sha1: 7284b9d16df9935afc384318e024c87ef0574fe5
+    - name: ps2-0150a-20001228.bin
+      destination: ps2/ps2-0150a-20001228.bin
+      size: 4194304
+      crc: bce74746
+      md5: 8accc3c49ac45f5ae2c5db0adc854633
+      sha1: 5af5b5077d84a9c037ebe12bfab8a38b31d8a543
+    - name: ps2-0150ed-20001228-20030520.bin
+      destination: ps2/ps2-0150ed-20001228-20030520.bin
+      size: 4194304
+      crc: 60bc0031
+      md5: 6f9a6feb749f0533aaae2cc45090b0ed
+      sha1: d004326c9d8060812b4433c3f07646b04854d6c4
+    - name: ps2-0150e-20001228.bin
+      destination: ps2/ps2-0150e-20001228.bin
+      size: 4194304
+      crc: 1559fd43
+      md5: 838544f12de9b0abc90811279ee223c8
+      sha1: e22ef231faf3661edd92f2ee449a71297c82a092
+    - name: ps2-0150jd-20010118.bin
+      destination: ps2/ps2-0150jd-20010118.bin
+      size: 4194304
+      crc: 0b3ec2bc
+      md5: bb6bbc850458fff08af30e969ffd0175
+      sha1: 334e029fc7fd50222a399c50384ff42732652259
+    - name: ps2-0150j-20010118.bin
+      destination: ps2/ps2-0150j-20010118.bin
+      size: 4194304
+      crc: 4fc3b495
+      md5: 815ac991d8bc3b364696bead3457de7d
+      sha1: d6f365a0f07cd04ed28108e6ec5076e2f81e5f72
+    - name: ps2-0160a-20010427.bin
+      destination: ps2/ps2-0160a-20010427.bin
+      size: 4194304
+      crc: 4008ac18
+      md5: b107b5710042abe887c0f6175f6e94bb
+      sha1: 7331a40b4b4feb1b3f0f77b013b6d38483577baa
+    - name: ps2-0160j-20010427.bin
+      destination: ps2/ps2-0160j-20010427.bin
+      size: 4194304
+      crc: c268ef47
+      md5: ab55cceea548303c22c72570cfd4dd71
+      sha1: e525a0c900e37acf0ae5a655d82a0abcb07c6f1f
+    - name: ps2-0160a-20010704.bin
+      destination: ps2/ps2-0160a-20010704.bin
+      size: 4194304
+      crc: c506c693
+      md5: 18bcaadb9ff74ed3add26cdf709fff2e
+      sha1: ce92e8e8c88665f2f645a9522e337823d47a914a
+    - name: ps2-0160e-20010704.bin
+      destination: ps2/ps2-0160e-20010704.bin
+      size: 4194304
+      crc: f1ac735f
+      md5: 491209dd815ceee9de02dbbc408c06d6
+      sha1: 3cbd048e437c785b5a05a0feced00117a8a42545
+    - name: ps2-0160a-20011004.bin
+      destination: ps2/ps2-0160a-20011004.bin
+      size: 4194304
+      crc: a01ec625
+      md5: 7200a03d51cacc4c14fcdfdbc4898431
+      sha1: d257bce6ecaf3bafb704c75a1b4741b910bd2d49
+    - name: ps2-0160e-20011004.bin
+      destination: ps2/ps2-0160e-20011004.bin
+      size: 4194304
+      crc: 82aa5055
+      md5: 8359638e857c8bc18c3c18ac17d9cc3c
+      sha1: ee34c3a87c53c75ca2a37d77b0042ca24d07831f
+    - name: ps2-0160h-20010730.bin
+      destination: ps2/ps2-0160h-20010730.bin
+      size: 4194304
+      crc: 75f83c67
+      md5: 352d2ff9b3f68be7e6fa7e6dd8389346
+      sha1: ba15dcf7aac13864c08222037e9321d7468c87d1
+    - name: ps2-0160a-20020207.bin
+      destination: ps2/ps2-0160a-20020207.bin
+      size: 4194304
+      crc: a19e0bf5
+      md5: d5ce2c7d119f563ce04bc04dbc3a323e
+      sha1: f9a5d629a036b99128f7cb530c6e3ca016e9c8b7
+    - name: ps2-0160e-20020319.bin
+      destination: ps2/ps2-0160e-20020319.bin
+      size: 4194304
+      crc: 2fe21e4d
+      md5: 0d2228e6fd4fb639c9c39d077a9ec10c
+      sha1: bff2902bd0ce9729a060581132541e9fd1a9fab6
+    - name: ps2-0160j-20020426.bin
+      destination: ps2/ps2-0160j-20020426.bin
+      size: 4194304
+      crc: c9363baf
+      md5: 72da56fccb8fcd77bba16d1b6f479914
+      sha1: 003628c137dae577ff3b04b93ca1787b0c944702
+    - name: ps2-0160e-20020426.bin
+      destination: ps2/ps2-0160e-20020426.bin
+      size: 4194304
+      crc: dad0baec
+      md5: 5b1f47fbeb277c6be2fccdd6344ff2fd
+      sha1: d106b757ae2544dfe63f7e1924e59d5ad44c0c29
+    - name: ps2-0160h-20020426.bin
+      destination: ps2/ps2-0160h-20020426.bin
+      size: 4194304
+      crc: 3355623e
+      md5: 315a4003535dfda689752cb25f24785c
+      sha1: e3a74125c426bcacabca00b513fab928665c8846
+    - name: ps2-0170j-20030206.bin
+      destination: ps2/ps2-0170j-20030206.bin
+      size: 4194304
+      crc: 9457f64e
+      md5: 312ad4816c232a9606e56f946bc0678a
+      sha1: d812ac65c357d392396ca9edee812dc41bed8bde
+    - name: ps2-0170ed-20030227.bin
+      destination: ps2/ps2-0170ed-20030227.bin
+      size: 4194304
+      crc: 970a9c56
+      md5: 666018ffec65c5c7e04796081295c6c7
+      sha1: e220bb282378c1f48ea1b585b3675e51a6dca572
+    - name: ps2-0170e-20030227.bin
+      destination: ps2/ps2-0170e-20030227.bin
+      size: 4194304
+      crc: 51b5fb8b
+      md5: 6e69920fa6eef8522a1d688a11e41bc6
+      sha1: ad15bd7eabd5bd81ba011516a5be44947d6641aa
+    - name: ps2-0170ad-20030325.bin
+      destination: ps2/ps2-0170ad-20030325.bin
+      size: 4194304
+      crc: 0e1ece79
+      md5: eb960de68f0c0f7f9fa083e9f79d0360
+      sha1: c5bc6e893b4c43d528142e56c96073024de64157
+    - name: ps2-0170a-20030325.bin
+      destination: ps2/ps2-0170a-20030325.bin
+      size: 4194304
+      crc: 9a99e3f4
+      md5: 8aa12ce243210128c5074552d3b86251
+      sha1: d269d1ed513227f3ef7133c76cf1b3a64f97b15d
+    - name: ps2-0180cd-20030224.bin
+      destination: ps2/ps2-0180cd-20030224.bin
+      size: 4194304
+      crc: 8c1a04cf
+      md5: 240d4c5ddd4b54069bdc4a3cd2faf99d
+      sha1: 2de87767008fc4a303af64a46251156e965d9065
+    - name: ps2-0180j-20031028.bin
+      destination: ps2/ps2-0180j-20031028.bin
+      size: 4194304
+      crc: 585fd27c
+      md5: 1c6cd089e6c83da618fbf2a081eb4888
+      sha1: aa4a35c14ee342cf7a03b1dde294ca10e64889e1
+    - name: ps2-0190j-20030623.bin
+      destination: ps2/ps2-0190j-20030623.bin
+      size: 4194304
+      crc: 7c10a967
+      md5: 463d87789c555a4a7604e97d7db545d1
+      sha1: 6a6ecfe6c10e42eff1ca056349def799b5629067
+    - name: ps2-0190a-20030623.bin
+      destination: ps2/ps2-0190a-20030623.bin
+      size: 4194304
+      crc: b3e87709
+      md5: 35461cecaa51712b300b2d6798825048
+      sha1: c74d92a2952a2912b6698cbcf7742adac8f784d3
+    - name: ps2-0190e-20030623.bin
+      destination: ps2/ps2-0190e-20030623.bin
+      size: 4194304
+      crc: 1752a52e
+      md5: bd6415094e1ce9e05daabe85de807666
+      sha1: 18b9ba833c469c4683676cc20da5124080d980bb
+    - name: ps2-0190h-20030623.bin
+      destination: ps2/ps2-0190h-20030623.bin
+      size: 4194304
+      crc: 41391dd3
+      md5: 2e70ad008d4ec8549aada8002fdf42fb
+      sha1: caa18ed04854a91e68f2d61a782560edd6373bbf
+    - name: ps2-0190r-20030623.bin
+      destination: ps2/ps2-0190r-20030623.bin
+      size: 4194304
+      crc: 25f6212a
+      md5: b53d51edc7fc086685e31b811dc32aad
+      sha1: 34a81db03ab617fbfdd7f9b861692dd2ecd57b82
+    - name: ps2-0190c-20030623.bin
+      destination: ps2/ps2-0190c-20030623.bin
+      size: 4194304
+      crc: d2347ee7
+      md5: 1b6e631b536247756287b916f9396872
+      sha1: 92d9eb4b11cef97bb69a275b2851b72f7b0023d6
+    - name: ps2-0190j-20030822.bin
+      destination: ps2/ps2-0190j-20030822.bin
+      size: 4194304
+      crc: 79d60546
+      md5: 00da1b177096cfd2532c8fa22b43e667
+      sha1: 0ea98a25a32145dda514de2f0d4bfbbd806bd00c
+    - name: ps2-0190e-20030822.bin
+      destination: ps2/ps2-0190e-20030822.bin
+      size: 4194304
+      crc: 3afd1d1e
+      md5: afde410bd026c16be605a1ae4bd651fd
+      sha1: 6e1f0eb4aec51a6288b3d802d3bcdb477cf52104
+    - name: ps2-0190a-20040329.bin
+      destination: ps2/ps2-0190a-20040329.bin
+      size: 4194304
+      crc: 9ba4c32f
+      md5: 81f4336c1de607dd0865011c0447052e
+      sha1: b68c05f5cd86bf03cb38a643a723b7a97b759531
+    - name: ps2-0200ed-20040614.bin
+      destination: ps2/ps2-0200ed-20040614.bin
+      size: 4194304
+      crc: 881c9aa9
+      md5: 63ead1d74893bf7f36880af81f68a82d
+      sha1: 902f4680b258abd40c0922f6b0d581cbd8f8a73e
+    - name: ps2-0200h-20040614.bin
+      destination: ps2/ps2-0200h-20040614.bin
+      size: 4194304
+      crc: b57201bf
+      md5: 3e3e030c0f600442fa05b94f87a1e238
+      sha1: 7f8e812cab7c7393c85eac6c42661e1fd0a642df
+    - name: ps2-0210j-20040917.bin
+      destination: ps2/ps2-0210j-20040917.bin
+      size: 4194304
+      crc: 55710d11
+      md5: 1ad977bb539fc9448a08ab276a836bbc
+      sha1: bbb1af3085e77599691ec430d147810157da934f
+    - name: ps2-0220j-20050620.bin
+      destination: ps2/ps2-0220j-20050620.bin
+      size: 4194304
+      crc: d27fc41d
+      md5: eb4f40fcf4911ede39c1bbfe91e7a89a
+      sha1: 7ffa75d142cb8eeea6c777dbcf263143655275d5
+    - name: ps2-0220ad-20050620.bin
+      destination: ps2/ps2-0220ad-20050620.bin
+      size: 4194304
+      crc: 181f1bda
+      md5: 9959ad7a8685cad66206e7752ca23f8b
+      sha1: 7c7efdfcec7705f4e84bb47f45322104e39eed09
+    - name: ps2-0220a-20050620.bin
+      destination: ps2/ps2-0220a-20050620.bin
+      size: 4194304
+      crc: d305a97a
+      md5: 929a14baca1776b00869f983aa6e14d2
+      sha1: 48d0445dffd1e879c7ae752c5166ec3101921555
+    - name: ps2-0220e-20050620.bin
+      destination: ps2/ps2-0220e-20050620.bin
+      size: 4194304
+      crc: e2862e39
+      md5: 573f7d4a430c32b3cc0fd0c41e104bbd
+      sha1: 929a85e974faf4b40d0a7785023b758402c43bd9
+    - name: ps2-0220h-20050620.bin
+      destination: ps2/ps2-0220h-20050620.bin
+      size: 4194304
+      crc: e27c4a6c
+      md5: df63a604e8bff5b0599bd1a6c2721bd0
+      sha1: 0a071d1b46607a7694770407606d8599f62a372b
+    - name: ps2-0220j-20060210.bin
+      destination: ps2/ps2-0220j-20060210.bin
+      size: 4194304
+      crc: 1303918e
+      md5: 5b1ba4bb914406fae75ab8e38901684d
+      sha1: 0edf1fbb772a8e6a79ae00e977450e3ade25c4f3
+    - name: ps2-0220a-20060210.bin
+      destination: ps2/ps2-0220a-20060210.bin
+      size: 4194304
+      crc: 1279fce9
+      md5: cb801b7920a7d536ba07b6534d2433ca
+      sha1: 92e488d5b2705e4cca83d4d1efbc421012faf83e
+    - name: ps2-0220e-20060210.bin
+      destination: ps2/ps2-0220e-20060210.bin
+      size: 4194304
+      crc: 23fa7baa
+      md5: af60e6d1a939019d55e5b330d24b1c25
+      sha1: 28ad756d0cfd1e7b2e2de3de5d9e14207ee89761
+    - name: ps2-0220h-20060210.bin
+      destination: ps2/ps2-0220h-20060210.bin
+      size: 4194304
+      crc: 23001fff
+      md5: 549a66d0c698635ca9fa3ab012da7129
+      sha1: fce2a24e5e0400cc6d98c08f426405d19173813e
+    - name: ps2-0220j-20060905.bin
+      destination: ps2/ps2-0220j-20060905.bin
+      size: 4194304
+      crc: 1d6d879b
+      md5: 5de9d0d730ff1e7ad122806335332524
+      sha1: 3baf847c1c217aa71ac6d298389c88edb3db32e2
+    - name: ps2-0220ad-20060905.bin
+      destination: ps2/ps2-0220ad-20060905.bin
+      size: 4194304
+      crc: 431d9b7f
+      md5: 21fe4cad111f7dc0f9af29477057f88d
+      sha1: 4191b5842f31a9985b5428bc9d2b733ce3abb583
+    - name: ps2-0220a-20060905.bin
+      destination: ps2/ps2-0220a-20060905.bin
+      size: 4194304
+      crc: 1c17eafc
+      md5: 40c11c063b3b9409aa5e4058e984e30c
+      sha1: 8361d615cc895962e0f0838489337574dbdc9173
+    - name: ps2-0220e-20060905.bin
+      destination: ps2/ps2-0220e-20060905.bin
+      size: 4194304
+      crc: 2d946dbf
+      md5: 80bbb237a6af9c611df43b16b930b683
+      sha1: da5aacead2fb55807d6d4e70b1f10f4fdcfd3281
+    - name: ps2-0220h-20060905.bin
+      destination: ps2/ps2-0220h-20060905.bin
+      size: 4194304
+      crc: 2d6e09ea
+      md5: c37bce95d32b2be480f87dd32704e664
+      sha1: a5a2ee0dd9a86ca35b94e97ca92476a584f755bf
+    - name: ps2-0230j-20080220.bin
+      destination: ps2/ps2-0230j-20080220.bin
+      size: 4194304
+      crc: 2912faa5
+      md5: 80ac46fa7e77b8ab4366e86948e54f83
+      sha1: fbd54bfc020af34008b317dcb80b812dd29b3759
+    - name: ps2-0230a-20080220.bin
+      destination: ps2/ps2-0230a-20080220.bin
+      size: 4194304
+      crc: 286897c2
+      md5: 21038400dc633070a78ad53090c53017
+      sha1: f9229fe159d0353b9f0632f3fdc66819c9030458
+    - name: ps2-0230e-20080220.bin
+      destination: ps2/ps2-0230e-20080220.bin
+      size: 4194304
+      crc: 19eb1081
+      md5: dc69f0643a3030aaa4797501b483d6c4
+      sha1: 9915b5ba56798f4027ac1bd8d10abe0c1c9c326a
+    - name: ps2-0230h-20080220.bin
+      destination: ps2/ps2-0230h-20080220.bin
+      size: 4194304
+      crc: 191174d4
+      md5: 30d56e79d89fbddf10938fa67fe3f34e
+      sha1: a277b456849697abec11285c6b35bc734598c220
+    - name: ps2-0250e-20100415.bin
+      destination: ps2/ps2-0250e-20100415.bin
+      size: 4194304
+      crc: 7e75fc28
+      md5: 93ea3bcee4252627919175ff1b16a1d9
+      sha1: b9cb5775af29cd4d1ec5521e8231f8b6636e2e44
+    - name: ps2-0250j-20100415.bin
+      destination: ps2/ps2-0250j-20100415.bin
+      size: 4194304
+      crc: 4e8c160c
+      md5: d3e81e95db25f5a86a7b7474550a2155
+      sha1: 4b5ef16b67e3b523d28ed2406106cb80470a06d0
+  tvc:
+    files:
+    - name: tvcfileio.rom
+      destination: tvc/tvcfileio.rom
+      size: 8192
+      crc: 950e32fd
+      md5: a2cf86ba8e7fc58b242137fe59036832
+      sha1: 98889c3a56b11dedf077f866ed2e12d51b604113
+    - name: tvc22_ext.rom
+      destination: tvc/tvc22_ext.rom
+      size: 8192
+      crc: 05e1c3a8
+      md5: 5ce95a26ceed5bec73995d83568da9cf
+      sha1: abf119cf947ea32defd08b29a8a25d75f6bd4987
+    - name: tvc22_sys.rom
+      destination: tvc/tvc22_sys.rom
+      size: 16384
+      crc: 79fa818c
+      md5: 8c54285f541930cde766069942bad0f2
+      sha1: f2572ee83d09fc08f4de4a62f101c8bb301a9505
+    - name: tvc_dos12d.rom
+      destination: tvc/tvc_dos12d.rom
+      size: 16384
+      crc: 1466aed4
+      md5: 88dc7876d584f90e4106f91444ab23b7
+      sha1: 072c6160d4e7d406f5d8f5b1b66066c797d35561
+  xbox:
+    files:
+    - name: Complex_4627.bin
+      destination: xbox/Complex_4627.bin
+      size: 1048576
+      crc: ccb97a84
+      md5: ec00e31e746de2473acfe7903c5a4cb7
+      sha1: 6639b6693784574d204c42703a74fd8b088a3a5e
+    - name: mcpx_1.0.bin
+      destination: xbox/mcpx_1.0.bin
+      size: 512
+      crc: 0b07d1f1
+      md5: d49c52a4102f6df7bcf8d0617ac475ed
+      sha1: 5d270675b54eb8071b480e42d22a3015ac211cef

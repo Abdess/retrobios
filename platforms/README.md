@@ -93,3 +93,4 @@ Full libretro docs: `https://docs.libretro.com/library/<core>/`
 | RetroBat | md5 | MD5 check via JSON config | `batocera-systems.json` |
 | EmuDeck | md5 | MD5 whitelist per system | `checkBIOS.sh` |
 | Recalbox | md5 | multi-hash comma-separated | `es_bios.xml` + `Bios.cpp` |
+| RomM | md5 | MD5 | `known_bios_files.json` |
