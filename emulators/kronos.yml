@@ -1,93 +1,80 @@
 emulator: Kronos
 type: libretro
-cores:
-  - kronos_libretro
-  - yabause_libretro
-source: "https://github.com/FCare/Kronos"
-profiled_date: "2026-03-18"
+core_classification: official_port
+source: "https://github.com/libretro/yabause"
+upstream: "https://github.com/FCare/Kronos"
+profiled_date: "2026-03-22"
 core_version: "v2.6.0"
 display_name: "Sega - Saturn/ST-V (Kronos)"
+cores:
+  - kronos
 systems:
   - sega-saturn
   - sega-stv
 
 notes: |
-  Kronos is a Sega Saturn and ST-V arcade emulator forked from Yabause.
-  The libretro repo at libretro/yabause ships the older "Yabause" core
-  (yabause_libretro) which handles Saturn only and has no STV support.
+  Kronos is a Sega Saturn and ST-V arcade emulator by FCare, forked from
+  Yabause. Requires OpenGL 4.3 compute shaders.
 
-  Saturn BIOS search order (Kronos):
+  Saturn BIOS search order:
     1. {system}/kronos/saturn_bios.bin
     2. {system}/saturn_bios.bin
     3. {system}/sega_101.bin
     4. {system}/mpr-17933.bin
-  First file found wins. Real BIOS required, HLE is deprecated and causes
-  issues. Multi-disc (m3u) also forces real BIOS.
+  First file found wins. Real BIOS required (HLE deprecated, only available
+  via kronos_force_hle_bios core option for debugging).
 
-  Saturn BIOS search order (YabaSanshiro / Yabause):
-    1. {system}/saturn_bios.bin
-    2. {system}/sega_101.bin
-    3. {system}/mpr-17933.bin
-  Falls back to HLE if none found, but HLE is not recommended.
+  ST-V BIOS: {system}/kronos/stvbios.zip or {system}/stvbios.zip
+  MAME-style ZIP containing region-specific EPROMs. Kronos picks the best
+  match by game region and kronos_stv_favorite_region core option (EU/US/JP/TW).
 
-  ST-V BIOS (Kronos only):
-    {system}/kronos/stvbios.zip or {system}/stvbios.zip
-  The ZIP is a MAME-style romset containing region-specific EPROMs.
-  Kronos picks the first matching BIOS by region, with a configurable
-  "favorite region" core option (EU/US/JP/TW). The ZIP must contain
-  at least one of the BIOS blobs listed below. ST-V games are detected
-  automatically when loading a .zip file.
+  ROM cartridges for KOF95 and Ultraman are auto-detected via game database
+  (db.c) and loaded from system_dir when the corresponding game is running.
 
   BIOS loading: libretro.c retro_load_game() lines 1601-1727.
   STV blob table: ctrl/src/stv.c BiosList lines 112-136.
-  Region enums: ctrl/include/stv.h lines 47-52.
+  ROM cartridge DB: utils/src/db.c lines 43-45.
 
 files:
   # -----------------------------------------------------------
-  # Saturn BIOS - generic (any region accepted)
+  # Saturn BIOS - primary (any region)
   # -----------------------------------------------------------
   - name: "saturn_bios.bin"
     system: sega-saturn
     required: true
-    size: 524288  # 512 KB (0x80000)
-    note: "Primary Saturn BIOS. Any region. Searched first by both cores."
-    source_ref: "libretro.c:1619-1623 (kronos), libretro.c:1035 (yabause)"
+    size: 524288
+    note: "Primary Saturn BIOS. Any region accepted. Searched in kronos/ subdir first."
+    source_ref: "libretro.c:1619-1623"
 
   # -----------------------------------------------------------
-  # Saturn BIOS - Japan v1.01
+  # Saturn BIOS - Japan v1.01 (fallback)
   # -----------------------------------------------------------
   - name: "sega_101.bin"
     system: sega-saturn
     region: [japan]
     required: false
     size: 524288
-    md5: "85ec9ca47d8f6807718151cbcca8b964"
     note: "Saturn BIOS v1.01 (Japan). Fallback if saturn_bios.bin missing."
-    source_ref: "libretro.c:1627 (kronos), libretro.c:1039 (yabause)"
+    source_ref: "libretro.c:1627"
 
   # -----------------------------------------------------------
-  # Saturn BIOS - NA/EU
+  # Saturn BIOS - NA/EU (fallback)
   # -----------------------------------------------------------
   - name: "mpr-17933.bin"
     system: sega-saturn
     region: [north-america, europe]
     required: false
     size: 524288
-    md5: "3240872c70984b6cbfda1586cab68dbe"
     note: "Saturn BIOS (NA/EU). Last fallback for Saturn mode."
-    source_ref: "libretro.c:1631 (kronos), libretro.c:1043 (yabause)"
+    source_ref: "libretro.c:1631"
 
   # -----------------------------------------------------------
-  # ST-V Arcade BIOS (stvbios.zip) - Kronos only
+  # ST-V Arcade BIOS (stvbios.zip) - MAME romset
   # -----------------------------------------------------------
   - name: "stvbios.zip"
     system: sega-stv
     required: true
-    note: >
-      MAME-style ZIP containing ST-V region BIOS EPROMs. Required for
-      ST-V arcade games. Kronos picks the best match based on game
-      region and the stv_favorite_region core option. At least one
-      BIOS blob must be present. Searched in kronos/ subdir first.
+    note: "MAME-style ZIP containing ST-V region BIOS EPROMs. Searched in kronos/ subdir first."
     source_ref: "libretro.c:1608-1617, ctrl/src/stv.c:112-136"
 
   # -----------------------------------------------------------
@@ -96,146 +83,146 @@ files:
 
   # Japan
   - name: "epr-23603.ic8"
+    archive: stvbios.zip
     system: sega-stv
     region: [japan]
     required: false
     size: 524288
     crc32: "f688ae60"
-    note: "STV BIOS Japan (latest). Inside stvbios.zip."
     source_ref: "stv.c:120"
 
   - name: "epr-20091.ic8"
+    archive: stvbios.zip
     system: sega-stv
     region: [japan]
     required: false
     size: 524288
     crc32: "59ed40f4"
-    note: "STV BIOS Japan v1. Inside stvbios.zip."
     source_ref: "stv.c:121"
 
   - name: "epr-19730.ic8"
+    archive: stvbios.zip
     system: sega-stv
     region: [japan]
     required: false
     size: 524288
     crc32: "d0e0889d"
-    note: "STV BIOS Japan v2. Inside stvbios.zip."
     source_ref: "stv.c:122"
 
   - name: "epr-17951a.ic8"
+    archive: stvbios.zip
     system: sega-stv
     region: [japan]
     required: false
     size: 524288
     crc32: "2672f9d8"
-    note: "STV BIOS Japan v3. Inside stvbios.zip."
     source_ref: "stv.c:123"
 
   - name: "epr-17740a.ic8"
+    archive: stvbios.zip
     system: sega-stv
     region: [japan]
     required: false
     size: 524288
     crc32: "3e23c81f"
-    note: "STV BIOS Japan v4. Inside stvbios.zip."
     source_ref: "stv.c:124"
 
   - name: "epr-17740.ic8"
+    archive: stvbios.zip
     system: sega-stv
     region: [japan]
     required: false
     size: 524288
     crc32: "5c5aa63d"
-    note: "STV BIOS Japan v5. Inside stvbios.zip."
     source_ref: "stv.c:125"
 
   # Europe
   - name: "epr-17954a.ic8"
+    archive: stvbios.zip
     system: sega-stv
     region: [europe]
     required: false
     size: 524288
     crc32: "f7722da3"
-    note: "STV BIOS Europe. Inside stvbios.zip."
     source_ref: "stv.c:126"
 
   # USA
   - name: "epr-17952a.ic8"
+    archive: stvbios.zip
     system: sega-stv
     region: [north-america]
     required: false
     size: 524288
     crc32: "d1be2adf"
-    note: "STV BIOS USA. Inside stvbios.zip."
     source_ref: "stv.c:127"
 
   - name: "epr-17741a.ic8"
+    archive: stvbios.zip
     system: sega-stv
     region: [north-america]
     required: false
     size: 524288
     crc32: "4166c663"
-    note: "STV BIOS USA v1. Inside stvbios.zip."
     source_ref: "stv.c:128"
 
   # Taiwan
   - name: "epr-19854.ic8"
+    archive: stvbios.zip
     system: sega-stv
     region: [taiwan]
     required: false
     size: 524288
     crc32: "e09d1f60"
-    note: "STV BIOS Taiwan. Inside stvbios.zip."
     source_ref: "stv.c:129"
 
   - name: "epr-17953a.ic8"
+    archive: stvbios.zip
     system: sega-stv
     region: [taiwan]
     required: false
     size: 524288
     crc32: "a4c47570"
-    note: "STV BIOS Taiwan v1. Inside stvbios.zip."
     source_ref: "stv.c:130"
 
   - name: "epr-17742a.ic8"
+    archive: stvbios.zip
     system: sega-stv
     region: [taiwan]
     required: false
     size: 524288
     crc32: "02daf123"
-    note: "STV BIOS Taiwan v2. Inside stvbios.zip."
     source_ref: "stv.c:131"
 
   # Debug / Dev
   - name: "stv110.bin"
+    archive: stvbios.zip
     system: sega-stv
     required: false
     size: 524288
     crc32: "3dfeda92"
-    note: "STV debug BIOS. Inside stvbios.zip. Not used in normal operation."
     source_ref: "stv.c:132"
 
   - name: "stv1061.bin"
+    archive: stvbios.zip
     system: sega-stv
     required: false
     size: 524288
     crc32: "728dbca3"
-    note: "STV dev BIOS. Inside stvbios.zip. Not used in normal operation."
     source_ref: "stv.c:133"
 
-platform_details:
-  saturn:
-    bios_size: 524288
-    bios_address: "0x00000000-0x0007FFFF"
-    hle_available: true
-    hle_recommended: false
-    kronos_bios_subdir: "kronos"
-    source_ref: "sys/memory/src/memory.c:1346, libretro.c:1619-1638"
-  stv:
-    bios_format: "MAME-style ZIP (stvbios.zip)"
-    blob_size: 524288
-    blob_load_address: "0x000000"
-    regions: [japan, europe, north-america, taiwan]
-    region_selection: "automatic per game, overridable via kronos_stv_favorite_region"
-    kronos_bios_subdir: "kronos"
-    source_ref: "ctrl/src/stv.c:112-136, ctrl/include/stv.h:47-52"
+  # -----------------------------------------------------------
+  # ROM Cartridges (game-specific, loaded from system_dir)
+  # -----------------------------------------------------------
+  - name: "mpr-18811-mx.ic1"
+    system: sega-saturn
+    required: false
+    size: 2097152
+    note: "ROM cartridge for The King of Fighters '95. Auto-detected via game DB."
+    source_ref: "utils/src/db.c:43-44, sys/memory/src/cs0.c:1526-1544"
+
+  - name: "mpr-19367-mx.ic1"
+    system: sega-saturn
+    required: false
+    size: 2097152
+    note: "ROM cartridge for Ultraman: Hikari no Kyojin Densetsu. Auto-detected via game DB."
+    source_ref: "utils/src/db.c:45, sys/memory/src/cs0.c:1526-1544"

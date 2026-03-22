@@ -1,14 +1,25 @@
 emulator: Jump 'n Bump
 type: game
+core_classification: community_fork
 source: "https://github.com/libretro/jumpnbump-libretro"
-profiled_date: "2026-03-18"
+upstream: "https://github.com/fabiangreffrath/jumpnbump"
+profiled_date: "2026-03-22"
 core_version: "v0.1"
 display_name: "Jump 'n Bump"
 cores: [jumpnbump]
 systems: []
-files: []
-notes: >
+
+notes: |
   Libretro port of Jump 'n Bump, a multiplayer bunny-stomping platformer
-  originally by Brainchild Design (1998). Released as freeware.
-  Game data (sprites, levels, sounds) is compiled into the binary.
-  No content file, BIOS, or system directory files required.
+  originally by Brainchild Design (1998). Released as freeware under GPL.
+
+  The core loads a .dat archive file as content via retro_load_game().
+  All game resources (sprites, sounds, levels, fonts, music) are packed
+  inside the .dat file. No system directory files, BIOS, or firmware
+  required. The .dat file is built from the data/ directory by the
+  jnbpack tool in the upstream repo.
+
+  Extra levels are available from brainchilddesign.com as additional
+  .dat files.
+
+files: []

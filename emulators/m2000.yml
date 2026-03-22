@@ -1,7 +1,9 @@
 emulator: M2000
 type: libretro
+core_classification: official_port
 source: "https://github.com/p2000t/M2000"
-profiled_date: "2026-03-18"
+upstream: "https://github.com/p2000t/M2000"
+profiled_date: "2026-03-22"
 core_version: "0.9.3"
 display_name: "Philips - P2000T (M2000)"
 cores:
@@ -10,69 +12,18 @@ systems:
   - philips-p2000t
 
 notes: |
-  M2000 is a Philips P2000T home computer emulator ported to libretro.
+  M2000 is a Philips P2000T home computer emulator by Dion Olsthoorn,
+  based on the original emulator by Marcel de Kogel (1997). The libretro
+  port is maintained by the same author in the same repository.
 
-  The libretro port does NOT require any external BIOS or ROM files.
-  All required ROMs are compiled directly into the core binary via
-  src/libretro/m2000_roms.h:
+  All ROMs are embedded in the binary via m2000_roms.h:
+    - monitor_rom (4096 bytes, 0x0000-0x0FFF)
+    - basic_nl_rom (16384 bytes, 0x1000-0x4FFF)
+    - SAA5050 teletext font (m2000_saa5050.h)
 
-    - monitor_rom (4096 bytes) - P2000T monitor ROM, loaded at 0x0000-0x0FFF
-    - basic_nl_rom (16384 bytes) - Dutch BASIC cartridge ROM, loaded at 0x1000-0x4FFF
-
-  The SAA5050 teletext font is also embedded via src/libretro/m2000_saa5050.h.
-
-  retro_init() at src/libretro/m2000_libretro.c:444 calls:
-    InitP2000(monitor_rom, basic_nl_rom)
-  which copies the embedded arrays directly into the ROM memory space
-  (src/P2000.c:282-283 and 308-311), bypassing all file I/O.
-
-  The standalone (non-libretro) version loads these as external files:
-    - P2000ROM.bin (monitor ROM, 4096 bytes)
-    - BASIC.bin (BASIC cartridge ROM, 16384 bytes)
-    - Default.fnt (SAA5050 font, 2240 bytes)
-  These files exist in the repo root for the standalone build only.
-
-  The core accepts .cas (cassette) content and can also run with no
-  content to boot directly into P2000T BASIC.
+  retro_init() calls InitP2000(monitor_rom, basic_nl_rom) which copies
+  the embedded arrays into ROM memory (P2000.c:282-311). No system
+  directory access. The core accepts .cas cassette content and can boot
+  directly into P2000T BASIC with no content loaded.
 
 files: []
-
-platform_details:
-  bios_mapping:
-    target: "20K ROM space: 0x0000-0x0FFF monitor, 0x1000-0x4FFF BASIC cartridge"
-    source_ref: "src/P2000.c:249-311, src/libretro/m2000_libretro.c:444"
-    notes: |
-      InitP2000() allocates 20K (0x5000) for ROM and 4K for VRAM.
-      The monitor ROM occupies the first 4K, the BASIC cartridge ROM
-      occupies the next 16K. In the libretro build, both are passed
-      as in-memory byte arrays from the embedded header.
-
-  embedded_roms:
-    monitor_rom:
-      source_ref: "src/libretro/m2000_roms.h:1372"
-      size: 4096
-    basic_nl_rom:
-      source_ref: "src/libretro/m2000_roms.h:1"
-      size: 16384
-    saa5050_fnt:
-      source_ref: "src/libretro/m2000_saa5050.h:1"
-      note: "Teletext character generator font, also embedded"
-
-  standalone_files:
-    note: |
-      The standalone build (allegro/SDL) loads P2000ROM.bin, BASIC.bin,
-      and Default.fnt from disk via fopen(). The libretro build skips
-      this entirely by passing embedded arrays to InitP2000().
-    files:
-      - name: "P2000ROM.bin"
-        size: 4096
-        md5: 2a9c5b22537738b66f4e619734318c15
-        sha1: 4dbb28adad30587f2ea536ba116898d459faccac
-      - name: "BASIC.bin"
-        size: 16384
-        md5: 2191811aa64f8e7f273ce0f462374728
-        sha1: fb5100436c99634a2592a10dff867f85bcff7aec
-      - name: "Default.fnt"
-        size: 2240
-        md5: e06dd73b8a149990f7722eabbe4f286f
-        sha1: dc3508afcafb38fc33e883b0caf4cf3909998a07

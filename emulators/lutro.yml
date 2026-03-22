@@ -1,7 +1,8 @@
 emulator: Lutro
 type: game
+core_classification: pure_libretro
 source: "https://github.com/libretro/libretro-lutro"
-profiled_date: "2026-03-18"
+profiled_date: "2026-03-22"
 core_version: "v1"
 display_name: "Lua Engine (Lutro)"
 cores:
@@ -9,12 +10,14 @@ cores:
 systems: []
 
 notes: |
-  Lutro is a Love2D-compatible Lua game framework for libretro. It
-  implements a subset of the Love2D API (love.graphics, love.audio,
-  love.timer, love.keyboard) allowing Love2D-style games to run as
-  libretro cores.
+  Lutro is a Lua game framework for libretro implementing a subset of the
+  LÖVE (Love2D) API. Runs .lutro/.lua games. Written for libretro, no
+  standalone upstream.
 
-  No BIOS or system files required. Games are loaded as directories
-  containing main.lua and their assets.
+  retro_load_game() calls lutro_load(info->path) to load the game
+  directory or archive (libretro.c:216). The core exposes
+  love.filesystem.getAppdataDirectory to games as the system_dir
+  (filesystem.c:296) but does not load any files from it itself.
+  No BIOS, firmware, or system files required.
 
 files: []
