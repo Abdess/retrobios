@@ -1,0 +1,117 @@
+emulator: DOSBox
+type: libretro
+core_classification: community_fork
+source: "https://github.com/libretro/dosbox-libretro"
+upstream: "https://sourceforge.net/projects/dosbox/"
+profiled_date: "2026-03-23"
+core_version: "0.74"
+display_name: "DOS (DOSBox)"
+cores: [dosbox]
+systems: [dos]
+notes: |
+  Based on DOSBox 0.74 snapshot. MUNT MT-32 emulation added by libretro port.
+  Upstream DOSBox 0.74 has no MUNT — only OS-level MIDI (ALSA, CoreMIDI, Win32).
+  Hardware MIDI drivers removed, replaced with retro_midi_interface passthrough.
+  MT-32 activated via mididevice=mt32 in dosbox config section [midi].
+  Older MUNT version: no MT-32 v2.x ROMs, no CM-32LN support.
+  Both ROMs loaded by fixed filename from system directory root.
+  ref: midi_mt32.h:82-106
+  Keyboard layouts and codepages embedded in binary.
+  ref: dos_keyboard_layout_data.h, dos_codepages.h
+  .info declares firmware_count=0 but code loads 2 files (MUNT ROMs).
+  dosbox-libretro.conf optional config searched in system_directory/DOSbox/.
+  ref: libretro.cpp:751
+
+files:
+  # -- MT-32 Control ROM --
+  # Loaded from system_directory/MT32_CONTROL.ROM.
+  # MUNT validates by SHA1+size against known ROM database.
+  # CM-32L control ROMs also accepted under this filename.
+
+  - name: "MT32_CONTROL.ROM"
+    description: "MT-32 Control v1.04"
+    required: false
+    hle_fallback: true
+    size: 65536
+    sha1: "5a5cb5a77d7d55ee69657c2f870416daed52dea7"
+    mode: libretro
+    source_ref: "midi_mt32.h:92, munt/ROMInfo.cpp:30"
+
+  - name: "MT32_CONTROL.ROM"
+    description: "MT-32 Control v1.05"
+    required: false
+    hle_fallback: true
+    size: 65536
+    sha1: "e17a3a6d265bf1fa150312061134293d2b58288c"
+    mode: libretro
+    source_ref: "midi_mt32.h:92, munt/ROMInfo.cpp:31"
+
+  - name: "MT32_CONTROL.ROM"
+    description: "MT-32 Control v1.06"
+    required: false
+    hle_fallback: true
+    size: 65536
+    sha1: "a553481f4e2794c10cfe597fef154eef0d8257de"
+    mode: libretro
+    source_ref: "midi_mt32.h:92, munt/ROMInfo.cpp:32"
+
+  - name: "MT32_CONTROL.ROM"
+    description: "MT-32 Control v1.07"
+    required: false
+    hle_fallback: true
+    size: 65536
+    sha1: "b083518fffb7f66b03c23b7eb4f868e62dc5a987"
+    mode: libretro
+    source_ref: "midi_mt32.h:92, munt/ROMInfo.cpp:33"
+
+  - name: "MT32_CONTROL.ROM"
+    description: "MT-32 Control BlueRidge"
+    required: false
+    hle_fallback: true
+    size: 65536
+    sha1: "7b8c2a5ddb42fd0732e2f22b3340dcf5360edf92"
+    mode: libretro
+    source_ref: "midi_mt32.h:92, munt/ROMInfo.cpp:34"
+
+  # -- CM-32L / LAPC-I Control ROMs --
+  # Same fixed filename MT32_CONTROL.ROM — no CM32L_CONTROL.ROM in this core.
+
+  - name: "MT32_CONTROL.ROM"
+    description: "CM-32L/LAPC-I Control v1.00"
+    required: false
+    hle_fallback: true
+    size: 65536
+    sha1: "73683d585cd6948cc19547942ca0e14a0319456d"
+    mode: libretro
+    source_ref: "midi_mt32.h:92, munt/ROMInfo.cpp:36"
+
+  - name: "MT32_CONTROL.ROM"
+    description: "CM-32L/LAPC-I Control v1.02"
+    required: false
+    hle_fallback: true
+    size: 65536
+    sha1: "a439fbb390da38cada95a7cbb1d6ca199cd66ef8"
+    mode: libretro
+    source_ref: "midi_mt32.h:92, munt/ROMInfo.cpp:37"
+
+  # -- PCM ROMs --
+  # Loaded from system_directory/MT32_PCM.ROM.
+  # CM-32L PCM ROM also accepted under this filename.
+
+  - name: "MT32_PCM.ROM"
+    description: "MT-32 PCM ROM"
+    required: false
+    hle_fallback: true
+    size: 524288
+    sha1: "f6b1eebc4b2d200ec6d3d21d51325d5b48c60252"
+    mode: libretro
+    source_ref: "midi_mt32.h:99, munt/ROMInfo.cpp:39"
+
+  - name: "MT32_PCM.ROM"
+    description: "CM-32L/CM-64/LAPC-I PCM ROM"
+    required: false
+    hle_fallback: true
+    size: 1048576
+    sha1: "289cc298ad532b702461bfc738009d9ebe8025ea"
+    mode: libretro
+    source_ref: "midi_mt32.h:99, munt/ROMInfo.cpp:40"

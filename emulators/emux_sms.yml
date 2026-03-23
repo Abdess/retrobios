@@ -1,7 +1,9 @@
 emulator: "emux (SMS)"
 type: libretro
+core_classification: official_port
 source: "https://github.com/libretro/emux"
-profiled_date: "2026-03-19"
+upstream: "https://github.com/sronsse/emux"
+profiled_date: "2026-03-23"
 core_version: "0.1"
 display_name: "Sega - Master System (Emux SMS)"
 cores:
@@ -10,37 +12,17 @@ systems:
   - sms
 
 notes: |
-  emux is a multi-system emulator by Sebastien Ronsse, supporting CHIP-8,
-  Game Boy, NES, and Sega Master System as separate libretro cores.
+  emux is a multi-system emulator by Sebastien Ronsse. BIOS and cartridge
+  code identical between upstream and libretro fork (only difference: libretro
+  adds g_ram_data/g_ram_size exposure in mach/sms.c for RETRO_MEMORY_SYSTEM_RAM).
 
-  BIOS loading in controllers/mapper/sms_mapper.c:
-    static char *bios_path = "bios.sms";  (line 33)
-    #define BIOS_SIZE 0x2000              (line 7, 8192 bytes)
-    sms_mapper->bios = file_map(PATH_SYSTEM, bios_path, 0, BIOS_SIZE);
-  If file_map returns NULL, init returns false — core cannot start.
-  No HLE fallback, no skip logic.
+  BIOS loaded via file_map(PATH_SYSTEM, "bios.sms", 0, BIOS_SIZE) in
+  sms_mapper_init (sms_mapper.c:162-165). Returns false on failure — no HLE
+  fallback. Mapped at 0x0000, overlays cartridge ROM until bios_disable bit
+  set in slot control register (sms_mapper.c:79-82).
 
-  BIOS enable/disable via slot control register port write (lines 74-90):
-    bios_disable bit in control union. Reset clears bios_disable and
-    adds BIOS region to memory map. Writing bios_disable=1 removes
-    the BIOS overlay, exposing cartridge ROM underneath.
-
-  Cartridge loading delegated to sega_mapper controller:
-    ROM mapped via file_map(PATH_DATA, ...), 16 KB banks (BANK_SIZE=0x4000),
-    3 bank slots (NUM_BANKS=3), bank select registers at 0xFFFD-0xFFFF.
-
-  Memory map from mach/sms.c:
-    0x0000-0xBFFF  Mapper (BIOS overlay + cartridge ROM banks)
-    0xC000-0xDFFF  RAM (8 KB)
-    0xE000-0xFFFF  RAM mirror
-
-  The .info declares firmware_count=1, firmware0_opt=false.
-  is_experimental=true. No save states, rewind, or netplay support.
-  Supported extensions: sms, bms, bin, rom.
-
-  system_directory obtained via RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY
-  (libretro/libretro.c:23-25), passed as "system-dir" config param.
-  BIOS loaded from this directory via PATH_SYSTEM.
+  No hash validation. Code accepts any file >= 8192 bytes.
+  is_experimental=true. No save states, rewind, or netplay.
 
 files:
   - name: "bios.sms"
@@ -48,6 +30,6 @@ files:
     description: "Sega Master System BIOS"
     required: true
     size: 8192
-    md5: "840481177270d5642a14ca71ee72844c"
-    source_ref: "controllers/mapper/sms_mapper.c:7 (BIOS_SIZE=0x2000), :33 (bios_path), :167-172 (file_map)"
-    note: "Mapped at 0x0000, overlays cartridge ROM until bios_disable bit set in slot control register. No HLE — core fails to init without this file."
+    validation: [size]
+    source_ref: "controllers/mapper/sms_mapper.c:12 (BIOS_SIZE=0x2000), :61 (bios_path), :162-170 (file_map + NULL check → return false)"
+    note: "Mapped at 0x0000, overlays cartridge ROM until bios_disable bit set. file_map rejects files < 8192 bytes (file.c:59)."

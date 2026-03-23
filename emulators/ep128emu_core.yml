@@ -1,0 +1,179 @@
+emulator: ep128emu_core
+type: libretro
+core_classification: community_fork
+display_name: "Enterprise - 64/128 (ep128emu)"
+source: https://github.com/libretro/ep128emu-core
+upstream: https://github.com/istvan-v/ep128emu
+profiled_date: "2026-03-23"
+core_version: "1.2.10"
+
+cores:
+  - ep128emu_core
+
+systems:
+  - enterprise-64
+  - enterprise-128
+  - videoton-tvc
+  - amstrad-cpc
+  - zx-spectrum
+
+notes: >-
+  Emulates Enterprise 64/128, Videoton TVC, Amstrad CPC 464/664/6128,
+  and ZX Spectrum 16/48/128. All ROMs are embedded in the binary since
+  v1.1.0; external files override built-in data. Content type is
+  auto-detected and determines machine configuration and ROM selection.
+  Custom ROM mappings are possible via .ep128cfg config files placed in
+  ep128emu/config/ or next to content. The .info declares epd19hft.rom
+  and zt19hfnt.rom which are phantom entries never referenced in code.
+  The .info omits epdos16f.rom and exdos14isdos10uk.rom which are used
+  by the code. SDEXT, ReSID, and MIDI port features are compile-disabled
+  in the libretro build.
+
+files:
+  - name: exos21.rom
+    description: Enterprise 128 Expandible OS 2.1
+    path: ep128emu/roms/exos21.rom
+    required: false
+    source_ref: "core/core.cpp:234-237, roms/roms.hpp:18472-21205"
+    aliases:
+      - EXOS21.ROM
+
+  - name: exos20.rom
+    description: Enterprise 64 Expandible OS 2.0
+    path: ep128emu/roms/exos20.rom
+    required: false
+    source_ref: "core/core.cpp:226-229, roms/roms.hpp:15738-18471"
+    aliases:
+      - EXOS20.ROM
+
+  - name: exos24uk.rom
+    description: Enterprise 128 Expandible OS 2.4 (enhanced, fast memory test)
+    path: ep128emu/roms/exos24uk.rom
+    required: false
+    source_ref: "core/core.cpp:214-221, roms/roms.hpp:32838-38302"
+
+  - name: basic21.rom
+    description: Enterprise 128 BASIC Interpreter v2.1
+    path: ep128emu/roms/basic21.rom
+    required: false
+    source_ref: "core/core.cpp:248,266,276, roms/roms.hpp:3433-4801"
+
+  - name: basic20.rom
+    description: Enterprise 64 BASIC Interpreter v2.0
+    path: ep128emu/roms/basic20.rom
+    required: false
+    source_ref: "core/core.cpp:246,264,274, roms/roms.hpp:2064-3432"
+
+  - name: exdos13.rom
+    description: Enterprise 128 Disk Controller v1.3
+    path: ep128emu/roms/exdos13.rom
+    required: false
+    source_ref: "core/core.cpp:303-306, roms/roms.hpp:13004-15737"
+    aliases:
+      - EXDOS14.ROM
+
+  - name: exdos14isdos10uk.rom
+    description: Enterprise 128 IS-DOS (CP/M compatible disk system)
+    path: ep128emu/roms/exdos14isdos10uk.rom
+    required: false
+    source_ref: "core/core.cpp:295-298, roms/roms.hpp:30103-32836"
+
+  - name: epfileio.rom
+    description: Enterprise 128 Direct File I/O
+    path: ep128emu/roms/epfileio.rom
+    required: false
+    source_ref: "core/core.cpp:283-284, roms/roms.hpp:9-1377"
+
+  - name: epdos16f.rom
+    description: Enterprise 128 EP-DOS v1.6f (Hungarian font and CLKOFF)
+    path: ep128emu/roms/epdos16f.rom
+    required: false
+    source_ref: "core/core.cpp:252-255, roms/roms.hpp:43779-46512"
+
+  - name: hun.rom
+    description: Enterprise 128 Hungarian language extension
+    path: ep128emu/roms/hun.rom
+    required: false
+    source_ref: "core/core.cpp:242, roms/roms.hpp:41039-42407"
+
+  - name: brd.rom
+    description: Enterprise 128 German language extension
+    path: ep128emu/roms/brd.rom
+    required: false
+    source_ref: "core/core.cpp:260, roms/roms.hpp:42409-43777"
+
+  - name: zt19uk.rom
+    description: Enterprise 128 ZozoTools extension (DTF file loading)
+    path: ep128emu/roms/zt19uk.rom
+    required: false
+    source_ref: "core/core.cpp:287-290, roms/roms.hpp:38304-41037"
+
+  - name: tvc22_sys.rom
+    description: Videoton TVC system ROM v2.2
+    path: ep128emu/roms/tvc22_sys.rom
+    required: false
+    source_ref: "core/core.cpp:313-314, roms/roms.hpp:21206-22574"
+    aliases:
+      - TVC22_D6_D4.64K
+
+  - name: tvc22_ext.rom
+    description: Videoton TVC extension ROM v2.2
+    path: ep128emu/roms/tvc22_ext.rom
+    required: false
+    source_ref: "core/core.cpp:315-316, roms/roms.hpp:22575-23260"
+    aliases:
+      - TVC22_D7.64K
+
+  - name: tvcfileio.rom
+    description: Videoton TVC Direct File I/O
+    path: ep128emu/roms/tvcfileio.rom
+    required: false
+    source_ref: "core/core.cpp:319-320, roms/roms.hpp:1378-2063"
+
+  - name: tvc_dos12d.rom
+    description: Videoton TVC disk BIOS v1.2d
+    path: ep128emu/roms/tvc_dos12d.rom
+    required: false
+    source_ref: "core/core.cpp:324-325, roms/roms.hpp:23261-24629"
+    aliases:
+      - VT-DOS12-DISK.ROM
+
+  - name: cpc464.rom
+    description: Amstrad CPC 464 OS + BASIC
+    path: ep128emu/roms/cpc464.rom
+    required: false
+    source_ref: "core/core.cpp:335-338, roms/roms.hpp:4802-7535"
+
+  - name: cpc664.rom
+    description: Amstrad CPC 664 OS + BASIC
+    path: ep128emu/roms/cpc664.rom
+    required: false
+    source_ref: "core/core.cpp:343-346, roms/roms.hpp:7536-10269"
+
+  - name: cpc6128.rom
+    description: Amstrad CPC 6128 OS + BASIC
+    path: ep128emu/roms/cpc6128.rom
+    required: false
+    source_ref: "core/core.cpp:352-355, roms/roms.hpp:10270-13003"
+
+  - name: cpc_amsdos.rom
+    description: Amstrad CPC AMSDOS disk BIOS
+    path: ep128emu/roms/cpc_amsdos.rom
+    required: false
+    source_ref: "core/core.cpp:359-360, roms/roms.hpp:24630-25998"
+    aliases:
+      - AMSDOS_0.5.ROM
+
+  - name: zx128.rom
+    description: ZX Spectrum 128 ROM
+    path: ep128emu/roms/zx128.rom
+    required: false
+    source_ref: "core/core.cpp:382-385, roms/roms.hpp:27368-30101"
+
+  - name: zx48.rom
+    description: ZX Spectrum 48 ROM
+    path: ep128emu/roms/zx48.rom
+    required: false
+    source_ref: "core/core.cpp:389-390, roms/roms.hpp:25999-27367"
+    aliases:
+      - 48.rom

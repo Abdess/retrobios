@@ -1,7 +1,9 @@
 emulator: "emux (CHIP-8)"
 type: libretro
+core_classification: official_port
 source: "https://github.com/libretro/emux"
-profiled_date: "2026-03-18"
+upstream: "https://github.com/sronsse/emux"
+profiled_date: "2026-03-23"
 core_version: "0.1"
 display_name: "CHIP-8 (Emux CHIP-8)"
 cores:

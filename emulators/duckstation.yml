@@ -1,8 +1,10 @@
 emulator: DuckStation
 type: standalone + libretro
+core_classification: official_port
 source: "https://github.com/stenzek/duckstation"
+upstream: "https://github.com/stenzek/duckstation"
 logo: "https://raw.githubusercontent.com/stenzek/duckstation/master/data/resources/images/duck.png"
-profiled_date: "2026-03-19"
+profiled_date: "2026-03-23"
 core_version: "v0.1"
 display_name: "Sony - PlayStation (DuckStation)"
 cores: [duckstation]
@@ -11,14 +13,14 @@ bios_size: 524288  # 0x80000 (512 KB), also accepts PS2 (4 MB) and PS3 (0x3E66F0
 verification: md5
 notes: |
   DuckStation auto-detects BIOS by MD5 hash from a flat scan of the BIOS directory.
-  ref: src/core/bios.cpp:459-481 (FindBIOSImagesInDirectory — scans all files by size)
+  ref: src/core/bios.cpp:460-482 (FindBIOSImagesInDirectory — scans all files by size)
   ref: src/core/bios.cpp:208 (MD5Digest::HashData identification)
 
   Accepts PS1 (512 KB), PS2 (4 MB), and PS3 (0x3E66F0) BIOS images.
   ref: src/core/bios.h:24-26 (BIOS_SIZE, BIOS_SIZE_PS2, BIOS_SIZE_PS3)
   Only the first 512 KB are mapped (bios.cpp:212).
 
-  105 known BIOS entries (24 PS1 + 80 PS2 + 1 KDL-22PX300) identified by MD5.
+  104 known BIOS entries (24 PS1 + 80 PS2) identified by MD5.
   ref: src/core/bios.cpp:34-139 (s_image_info_by_hash)
   Each image has: region, region_check, fast_boot_patch type, priority score.
   Lower priority = preferred. PS2 deprioritized (>= 100) for dynamic fast boot.

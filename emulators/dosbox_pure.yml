@@ -1,10 +1,11 @@
 emulator: DOSBox Pure
 type: standalone + libretro
+core_classification: enhanced_fork
 source: "https://github.com/libretro/dosbox-pure"
 upstream: "https://github.com/schellingb/dosbox-pure"
 logo: "https://raw.githubusercontent.com/schellingb/dosbox-pure/main/images/logo.png"
-profiled_date: "2026-03-19"
-core_version: "0.9.9"
+profiled_date: "2026-03-23"
+core_version: "1.0-preview5"
 display_name: "DOS (DOSBox-Pure)"
 cores: [dosbox_pure]
 systems: [dos]
@@ -17,7 +18,7 @@ notes: |
     ref: dosbox_pure_libretro.cpp:1367-1378
     MT-32 requires matched pair: *_CONTROL.ROM + *_PCM.ROM (PCM name derived
     from CONTROL name by replacing CONTROL with PCM, preserving case).
-    ref: dosbox_pure_libretro.cpp:182-199
+    ref: midi_mt32.h:189-199
     ZIP archives also supported — scanned for files by size (65536/131072 =
     control, 524288/1048576 = PCM), not by name.
     ref: midi_mt32.h:160-166
@@ -28,8 +29,7 @@ notes: |
 
   Bundled MUNT (header-only mt32emu.h) for MT-32 emulation.
   SHA1-based ROM identification (mt32emu.h:5112-5127,5185).
-  13 full control ROMs + 2 PCM ROMs supported (no split ROMs in this MUNT).
-  Includes MT-32 v2.03 (not in dosbox-core's MUNT).
+  12 full control ROMs + 2 PCM ROMs supported (no split ROMs in this MUNT).
   TinySoundFont (tsf.h) for SF2/SF3 playback.
   No firmware entries in .info file — all MIDI files optional.
 

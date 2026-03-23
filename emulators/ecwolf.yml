@@ -1,45 +1,45 @@
 emulator: ECWolf
 type: standalone + libretro
+core_classification: game_engine
 source: "https://github.com/libretro/ecwolf"
 upstream: "https://bitbucket.org/ecwolf/ecwolf"
-profiled_date: "2026-03-19"
-core_version: "1.4.1"
+profiled_date: "2026-03-23"
+core_version: "1.3.99999"
 display_name: "Wolfenstein 3D (ECWolf)"
 cores: [ecwolf]
 systems: [wolfenstein3d]
-verification: md5
 notes: |
   Wolfenstein 3D source port by Braden Obrzut. Plays Wolf3D (wl6/wl1),
   Spear of Destiny (sod/sdm), Super 3D Noah's Ark (n3d), and community pk3 mods.
+  Blake Stone and Rise of the Triad support flagged as Preview in upstream.
 
   Requires ecwolf.pk3 — engine data package built from wadsrc/static/.
   Contains IWADINFO (game detection rules), palettes, sprites, map configs,
   DECORATE actor definitions, MAPINFO, SNDINFO, fonts, and localization strings.
   Without this file: "Could not open ecwolf.pk3!" fatal error.
-  ref: version.h:12 (MAIN_PK3), wl_iwad.cpp:642-657 (load + fatal)
 
   Libretro: ecwolf.pk3 searched in system_dir.
-  ref: libretro/libretro.cpp:831-832 (sysDir passed to SelectGame)
+  ref: libretro.cpp:831-832 (sysDir passed to SelectGame)
 
   Standalone: ecwolf.pk3 searched in progdir (binary directory).
-  ref: wl_main.cpp:1289 (progdir passed to SelectGame)
+  ref: wl_main.cpp:1295 (progdir passed to SelectGame)
   Also: INSTALL_PREFIX/share/ecwolf/ on Linux (wl_iwad.cpp:648)
 
   Game data files (vswap, gamemaps, vgagraph, audiot) loaded from content
   directory, not system directory. Auto-detects game variant by scanning
   lump contents against IWADINFO MustContain rules.
-  Blake Stone and Rise of the Triad support flagged as Preview.
+
+  Libretro fork based on ECWolf 1.3.99999-dev (forked 2020-02-23).
+  Upstream head at 1.5.0pre with broader game support.
 
 files:
   - name: "ecwolf.pk3"
     description: "ECWolf engine data package"
     required: true
     md5: "c011b428819eea4a80b455c245a5a04d"
-    source_ref: "ecwolf_libretro.info:firmware0, version.h:MAIN_PK3, wl_iwad.cpp:SelectGame"
+    source_ref: "version.h:12 (MAIN_PK3), wl_iwad.cpp:642-657 (open + fatal), libretro.cpp:831-832 (sysDir)"
     notes: >
       Built from wadsrc/static/ via zipdir. Contains IWADINFO (game detection rules),
       palettes (wolfpal, spearpal, blakepal, noahpal), map lump remappers (wl6map,
       sodmap, etc.), DECORATE actor definitions, MAPINFO, SNDINFO, SNDSEQ, textures,
-      sprites, fonts, and localization strings. Without this file the core errors
-      with "Could not open ecwolf.pk3!". The md5 corresponds to the version shipped
-      with the current libretro buildbot release.
+      sprites, fonts, and localization strings. md5 from .info, not validated by code.

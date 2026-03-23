@@ -1,7 +1,9 @@
 emulator: "emux (Game Boy)"
 type: libretro
+core_classification: official_port
 source: "https://github.com/libretro/emux"
-profiled_date: "2026-03-19"
+upstream: "https://github.com/sronsse/emux"
+profiled_date: "2026-03-23"
 core_version: "0.1"
 display_name: "Nintendo - Game Boy / Color (Emux GB)"
 cores:
@@ -10,41 +12,24 @@ systems:
   - nintendo-gb
 
 notes: |
-  emux is a multi-system emulator by Sebastien Ronsse, supporting CHIP-8,
-  Game Boy, NES, and Sega Master System as separate libretro cores.
+  emux is a multi-system emulator by Sebastien Ronsse. The libretro port
+  renamed the boot ROM from DMG_ROM.bin (upstream, gb_mapper.c:32) to
+  dmg_boot.bin (libretro, gb_mapper.c:35) to match RetroArch conventions.
 
-  Boot ROM loading in controllers/mapper/gb_mapper.c:
-    static char *bootrom_path = "dmg_boot.bin";  (line 32)
-    gb_mapper->bootrom = file_map(PATH_SYSTEM, bootrom_path, 0, BOOTROM_SIZE);
-  If file_map returns NULL, gb_mapper_init returns false — core cannot start.
-  No HLE fallback, no skip logic.
+  Boot ROM loaded via file_map(PATH_SYSTEM, "dmg_boot.bin", 0, 256) in
+  gb_mapper_init (gb_mapper.c:225-228). Returns false on failure — no HLE
+  fallback. Mapped at 0x0000-0x00FF, overlays ROM0 until BOOT_LOCK (0xFF50)
+  is written non-zero (lock_writeb, gb_mapper.c:97-106).
 
-  Boot ROM is 256 bytes (BOOTROM_SIZE in gb_mapper.h:10), mapped at 0x0000-0x00FF.
-  When register 0xFF50 (BOOT_LOCK) is written with non-zero, the bootrom region
-  is removed from the memory map (lock_writeb, gb_mapper.c:130-138).
-
-  Memory map from mach/gb.c:
-    0x0000-0x00FF  Boot ROM (overlays ROM0 until BOOT_LOCK)
-    0x0000-0x3FFF  ROM bank 0 (16 KB)
-    0x4000-0x7FFF  ROM bank 1 (switchable, 16 KB)
-    0x8000-0x9FFF  VRAM (8 KB)
-    0xA000-0xBFFF  External RAM (8 KB)
-    0xC000-0xDFFF  WRAM (8 KB)
-    0xFE00-0xFE9F  OAM (160 bytes)
-    0xFF80-0xFFFE  HRAM (127 bytes)
-
-  The .info declares firmware_count=1, firmware0_opt=false.
-  is_experimental=true. Core does not support save states, rewind, or netplay.
-
-  system_directory obtained via RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY
-  (libretro/libretro.c:23-25), passed as "system-dir" config param.
+  No hash validation. Code accepts any 256+ byte file.
+  is_experimental=true. No save states, rewind, or netplay.
 
 files:
   - name: "dmg_boot.bin"
+    aliases: ["DMG_ROM.bin"]
     system: nintendo-gb
     description: "Game Boy (DMG) boot ROM"
     required: true
     size: 256
-    md5: "32fbbd84168d3482956eb3c5051637f5"
-    source_ref: "controllers/mapper/gb_mapper.c:32 (bootrom_path), gb_mapper.h:10 (BOOTROM_SIZE=256)"
-    note: "Mapped at 0x0000-0x00FF, overlays ROM0 until BOOT_LOCK (0xFF50) written. No HLE — core fails to init without this file."
+    source_ref: "controllers/mapper/gb_mapper.c:35 (bootrom_path), gb_mapper.h:13 (BOOTROM_SIZE=256), gb_mapper.c:225-232 (file_map + error)"
+    note: "Upstream name DMG_ROM.bin, renamed by libretro port (gb_mapper.c:33-34)."

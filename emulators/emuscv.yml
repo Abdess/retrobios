@@ -1,9 +1,10 @@
 emulator: EmuSCV
-type: standalone + libretro
+type: libretro
+core_classification: community_fork
 source: "https://github.com/wzcwzc/emuscv"
-upstream: "https://github.com/wzcwzc/emuscv"
-profiled_date: "2026-03-19"
-core_version: ""
+upstream: "http://takeda-toshiya.my.coocan.jp/"
+profiled_date: "2026-03-23"
+core_version: "0.12"
 display_name: "EPOCH/YENO Super Cassette Vision"
 cores:
   - emuscv
@@ -11,37 +12,44 @@ systems:
   - scv
 
 notes: |
-  EmuSCV is an Epoch/YENO Super Cassette Vision emulator for libretro,
-  based on eSCV by Takeda Toshiya.
+  Libretro port of eSCV by Takeda Toshiya (Common Source Code Project),
+  ported to libretro by MARCONATO Maxime. Upstream source mirrored at
+  https://github.com/tautologico/common-src-project (src/vm/scv/).
 
-  BIOS loading in src/vm/scv/memory.cpp:initialize() (line 71-242). The core
-  tries multiple filenames in order: upd7801g.s01, upd7801g.bin, upd7801g.bios,
-  bios.rom, bios.bin. First successful open wins.
+  BIOS loading in src/vm/scv/memory.cpp:initialize() (lines 74-243).
+  Tries filenames in order: upd7801g.s01, upd7801g.bin, upd7801g.bios,
+  bios.rom, bios.bin. First successful open wins. Upstream eSCV uses
+  only BIOS.ROM (uppercase); the libretro port renamed and added
+  fallback aliases.
 
   The BIOS is read as 0x1000 (4096) bytes into the bios[] array, mapped
   read-only at CPU address 0x0000-0x0FFF (UPD7801 internal ROM area).
 
-  When CHECKBIOS core option is YES or AUTO, the core computes MD5 of the
-  loaded data and compares against 635a978fd40db9a18ee44eff449fc126. If the
-  hash does not match, the BIOS is rejected (zeroed out, bios_present=false).
-  When CHECKBIOS is NO, any file content is accepted.
+  When CHECKBIOS core option is YES, the core computes MD5 of the loaded
+  data and compares against 635a978fd40db9a18ee44eff449fc126. If the
+  hash does not match, the BIOS is rejected (zeroed out,
+  bios_present=false). When CHECKBIOS is AUTO (default) or NO, any file
+  content is accepted. The log message for AUTO says "automatic (yes)"
+  but the code skips the check (code bug: != YES_VAL at line 80).
 
   The font/character data is embedded within the BIOS at offset 0x200
-  (memory.h:163 get_font() returns bios + 0x200). No separate font ROM file.
+  (memory.h get_font() returns bios + 0x200). No separate font ROM file.
 
   The core can start without BIOS (supports_no_game=true) but shows
-  "BIOS not found" or "Bad BIOS" on the OSD. Games will not run without it.
+  "BIOS not found" or "Bad BIOS" on the OSD. Games will not run without
+  it.
 
-  The .info file declares firmware_count = 1, firmware0_opt = false.
+  The .info declares firmware_count=1, firmware0_opt=false. Matches code.
 
 files:
   - name: "upd7801g.s01"
     system: scv
     required: true
-    size: 4096  # 4 KB, UPD7801G internal ROM
+    size: 4096
     md5: 635a978fd40db9a18ee44eff449fc126
+    validation: [md5]
     note: "UPD7801G internal ROM (BIOS). Mapped at 0x0000-0x0FFF. Contains character font at offset 0x200."
-    source_ref: "src/vm/scv/memory.cpp:74, libretro-core-info/emuscv_libretro.info"
+    source_ref: "src/vm/scv/memory.cpp:74-243"
     aliases:
       - "upd7801g.bin"
       - "upd7801g.bios"
@@ -54,7 +62,7 @@ platform_details:
     upd7801g:
       target: "0x0000-0x0FFF (CPU internal ROM, 4 KB)"
       format: "raw binary"
-      source_ref: "src/vm/scv/memory.cpp:249"
+      source_ref: "src/vm/scv/memory.cpp:249-254"
       notes: |
         Memory map from memory.cpp:initialize():
           0x0000-0x0FFF  BIOS ROM (read-only)

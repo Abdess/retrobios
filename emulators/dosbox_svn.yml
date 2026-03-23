@@ -1,24 +1,28 @@
 emulator: DOSBox-SVN
 type: libretro
+core_classification: community_fork
 source: "https://github.com/libretro/dosbox-svn"
 upstream: "https://sourceforge.net/projects/dosbox/"
-profiled_date: "2026-03-19"
+profiled_date: "2026-03-23"
 core_version: "SVN"
 display_name: "DOS (DOSBox-SVN)"
 cores: [dosbox_svn]
 systems: [dos]
 notes: |
-  DOSBox-SVN is the same codebase as dosbox_svn_ce but builds with a fake
-  SDL shim (WITH_FAKE_SDL=1) instead of real SDL, for broader platform compat.
+  Same codebase as dosbox_svn_ce, builds against a fake SDL shim
+  (WITH_FAKE_SDL=1) instead of real SDL, for broader platform compat.
   ref: libretro/Makefile.libretro, libretro/fakesdl/
 
-  No MT-32 emulation — no MUNT bundled, no mt32emu, no FluidSynth, no BASS.
-  The src/midi/munt directory referenced in Makefile.common does not exist.
-  MIDI output is hardware-only via fake SDL stubs.
+  No MT-32 emulation. src/midi/munt referenced in Makefile.common:15
+  does not exist, no MUNT submodule. MIDI is hardware-only
+  (ALSA, CoreAudio, CoreMIDI, Win32, OSS) + retro_midi_interface.
   ref: src/gui/midi.cpp
 
-  system_directory is read (libretro.cpp:1399) but only logged, never used
-  to load any files.
+  system_directory set and logged (libretro.cpp:1399-1401), never used
+  to load files. Config uses retro_save_directory (cross.cpp:61-71).
+  Keyboard layouts and codepages embedded in binary.
+  ref: dos_keyboard_layout_data.h, dos_codepages.h
+
+  .info firmware_count=0, matches code.
 
 files: []
-# No BIOS, firmware, ROMs, or system files of any kind.

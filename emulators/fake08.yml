@@ -1,7 +1,9 @@
 emulator: FAKE-08
 type: libretro
+core_classification: game_engine
 source: "https://github.com/jtothebell/fake-08"
-profiled_date: "2026-03-18"
+upstream: "https://github.com/jtothebell/fake-08"
+profiled_date: "2026-03-23"
 core_version: "v0.0.2.19"
 display_name: "PICO-8 (FAKE-08)"
 cores:

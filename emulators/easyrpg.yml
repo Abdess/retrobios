@@ -1,8 +1,9 @@
 emulator: EasyRPG Player
 type: standalone + libretro
+core_classification: game_engine
 source: "https://github.com/libretro/easyrpg-libretro"
 upstream: "https://github.com/EasyRPG/Player"
-profiled_date: "2026-03-19"
+profiled_date: "2026-03-23"
 core_version: "0.8.1.0"
 display_name: "RPG Maker 2000/2003 (EasyRPG)"
 cores:
@@ -69,12 +70,12 @@ files:
     path: "easyrpg.soundfont"
     required: false
     hle_fallback: true
-    source_ref: "decoder_fluidsynth.cpp:125, scene_logo.cpp:261"
+    source_ref: "decoder_fluidsynth.cpp:125"
     note: >
       General MIDI soundfont (SF2 format) for MIDI music playback. Many RPG
       Maker games use MIDI for background music. Without a soundfont, MIDI
-      tracks are silent. Any GM-compatible .sf2 works. Can also be placed in
-      easyrpg-player/Soundfont/ with any filename.
+      falls back to the built-in FmMidi synthesizer (lower quality). Any
+      GM-compatible .sf2 works.
 
   # ================================================================
   # WildMidi configuration (optional, alternative MIDI backend)
@@ -101,7 +102,6 @@ files:
     category: game_data
     path: "rtp/2000/"
     required: false
-    hle_fallback: true
     type: directory
     source_ref: "filefinder_rtp.cpp:73-74"
     note: >
@@ -121,7 +121,6 @@ files:
     category: game_data
     path: "rtp/2003/"
     required: false
-    hle_fallback: true
     type: directory
     source_ref: "filefinder_rtp.cpp:73-74"
     note: >
