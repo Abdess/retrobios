@@ -1,169 +1,168 @@
 platform: Batocera
-version: '42'
+version: ''
 homepage: "https://batocera.org"
 source: "https://raw.githubusercontent.com/batocera-linux/batocera.linux/master/package/batocera/core/batocera-scripts/scripts/batocera-systems"
 base_destination: bios
 hash_type: md5
 verification_mode: md5
 cores:
-  - 81
-  - a5200
-  - abuse
-  - arduous
-  - atari800
-  - azahar
-  - bennugd
-  - bk
-  - bluemsx
-  - bsnes
-  - bstone
-  - cannonball
-  - cap32
-  - catacombgl
-  - cdogs
-  - cemu
-  - cgenius
-  - citron
-  - clk
-  - corsixth
-  - demul
-  - devilutionx
-  - dhewm3
-  - dice
-  - dolphin
-  - dosbox_pure
-  - dxx-rebirth
-  - easyrpg
-  - ecwolf
-  - eduke32
-  - eka2l1
-  - emuscv
-  - etlegacy
-  - fake08
-  - fallout1-ce
-  - fallout2-ce
-  - fbneo
-  - fceumm
-  - flatpak
-  - flycast
-  - freechaf
-  - freeintv
-  - fury
-  - fuse
-  - gambatte
-  - gearsystem
-  - genesisplusgx
-  - glide64mk2
-  - gong
-  - gsplus
-  - gw
-  - gzdoom
-  - hatari
-  - hcl
-  - hurrican
-  - hypseus-singe
-  - ikemen
-  - ioquake3
-  - iortcw
-  - jazz2-native
-  - lindbergh-loader
-  - lowresnx
-  - lutro
-  - mame
-  - mame078plus
-  - mednafen_lynx
-  - mednafen_ngp
-  - mednafen_supergrafx
-  - mednafen_wswan
-  - melonds
-  - mgba
-  - minivmac
-  - model2emu
-  - moonlight
-  - mrboom
-  - neocd
-  - np2kai
-  - nxengine
-  - o2em
-  - odcommander
-  - openbor6412
-  - openjazz
-  - openjk
-  - openjkdf2
-  - openmohaa
-  - opera
-  - pce_fast
-  - pcfx
-  - pcsx2
-  - pcsx_rearmed
-  - pd777
-  - picodrive
-  - play
-  - pokemini
-  - potator
-  - ppsspp
-  - prboom
-  - prosystem
-  - puae
-  - px68k
-  - pygame
-  - pyxel
-  - quasi88
-  - raze
-  - reminiscence
-  - rpcs3
-  - ruffle
-  - samcoupe
-  - sameduck
-  - scummvm
-  - sdlpop
-  - sh
-  - shadps4
-  - snes9x
-  - solarus
-  - sonic2013
-  - sonic3-air
-  - sonic-mania
-  - steam
-  - stella
-  - superbroswar
-  - supermodel
-  - taradino
-  - tgbdual
-  - theforceengine
-  - theodore
-  - thextech
-  - tic80
-  - tr1x
-  - tr2x
-  - tsugaru
-  - tyrian
-  - tyrquake
-  - uqm
-  - uzem
-  - vb
-  - vecx
-  - vice_x64
-  - vircon32
-  - virtualjaguar
-  - vita3k
-  - vox_official
-  - vpinball
-  - wasm4
-  - wine-tkg
-  - x1
-  - x128
-  - x16emu
-  - xash3d_fwgs
-  - xemu
-  - xenia-canary
-  - xpet
-  - xplus4
-  - xrick
-  - xvic
-  - yabasanshiro
-  - yquake2
-  - zc210
+- '81'
+- a5200
+- abuse
+- arduous
+- atari800
+- azahar
+- bennugd
+- bk
+- bluemsx
+- bsnes
+- bstone
+- cannonball
+- cap32
+- catacombgl
+- cdogs
+- cemu
+- cgenius
+- citron
+- clk
+- corsixth
+- demul
+- devilutionx
+- dhewm3
+- dice
+- dolphin
+- dosbox_pure
+- dxx-rebirth
+- easyrpg
+- ecwolf
+- eduke32
+- eka2l1
+- emuscv
+- etlegacy
+- fake08
+- fallout1-ce
+- fallout2-ce
+- fbneo
+- fceumm
+- flatpak
+- flycast
+- freechaf
+- freeintv
+- fury
+- fuse
+- gambatte
+- gearsystem
+- genesisplusgx
+- glide64mk2
+- gong
+- gsplus
+- gw
+- gzdoom
+- hatari
+- hcl
+- hurrican
+- hypseus-singe
+- ikemen
+- ioquake3
+- jazz2-native
+- lindbergh-loader
+- lowresnx
+- lutro
+- mame
+- mame078plus
+- mednafen_lynx
+- mednafen_ngp
+- mednafen_supergrafx
+- mednafen_wswan
+- melonds
+- mgba
+- minivmac
+- model2emu
+- moonlight
+- mrboom
+- neocd
+- np2kai
+- nxengine
+- o2em
+- odcommander
+- openbor6412
+- openjazz
+- openjk
+- openjkdf2
+- openmohaa
+- opera
+- pce_fast
+- pcfx
+- pcsx2
+- pcsx_rearmed
+- pd777
+- picodrive
+- play
+- pokemini
+- potator
+- ppsspp
+- prboom
+- prosystem
+- puae
+- px68k
+- pygame
+- pyxel
+- quasi88
+- raze
+- reminiscence
+- rpcs3
+- ruffle
+- samcoupe
+- sameduck
+- scummvm
+- sdlpop
+- sh
+- shadps4
+- snes9x
+- solarus
+- sonic-mania
+- sonic2013
+- sonic3-air
+- steam
+- stella
+- superbroswar
+- supermodel
+- taradino
+- tgbdual
+- theforceengine
+- theodore
+- thextech
+- tic80
+- tr1x
+- tr2x
+- tsugaru
+- tyrian
+- tyrquake
+- uqm
+- uzem
+- vb
+- vecx
+- vice_x64
+- vircon32
+- virtualjaguar
+- vita3k
+- vox_official
+- vpinball
+- wasm4
+- wine-tkg
+- x1
+- x128
+- x16emu
+- xash3d_fwgs
+- xemu
+- xenia-canary
+- xpet
+- xplus4
+- xrick
+- xvic
+- yabasanshiro
+- yquake2
+- zc210
 systems:
   atari-400-800:
     files:
