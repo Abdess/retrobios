@@ -1,18 +1,20 @@
 emulator: Dolphin
 type: standalone + libretro
-source: "https://github.com/dolphin-emu/dolphin"
+core_classification: community_fork
+source: "https://github.com/libretro/dolphin"
+upstream: "https://github.com/dolphin-emu/dolphin"
 logo: "https://raw.githubusercontent.com/dolphin-emu/dolphin/master/Data/dolphin-emu.svg"
-profiled_date: "2026-03-18"
+profiled_date: "2026-03-23"
 core_version: "Git"
 display_name: "Nintendo - GameCube / Wii (Dolphin)"
+cores:
+  - dolphin
 systems: [nintendo-gamecube, nintendo-wii]
-
-# Dolphin has HLE for most system functions, so real BIOS/firmware files
-# are optional but improve accuracy. DSP ROMs are the most commonly needed.
 
 # File paths are relative to Dolphin User directory:
 #   Standalone: User/GC/ and User/Wii/
 #   Libretro (RetroArch): system/dolphin-emu/GC/ and system/dolphin-emu/Wii/
+# Sys/ is checked as fallback when not found in User/.
 
 pack_structure:
   libretro: "dolphin-emu"
@@ -26,10 +28,11 @@ data_directories:
 files:
   # -- GameCube IPL (Boot ROM) --
   # Region-specific, placed in GC/<region>/IPL.bin
+  # Checked in User/GC/<region>/ then Sys/GC/<region>/
   # Regions: USA, EUR, JAP (legacy), JPN, DEV
   - name: "IPL.bin"
     path: "GC/USA/IPL.bin"
-    size: 2097152  # 0x200000 (2 MB)
+    size: 2097152
     required: false
     hle_fallback: true
     note: "GameCube NTSC-U boot ROM. HLE available but real IPL needed for GC menu boot and accurate fonts"
@@ -48,38 +51,40 @@ files:
     size: 2097152
     required: false
     hle_fallback: true
-    note: "GameCube NTSC-J boot ROM"
+    note: "GameCube NTSC-J boot ROM. JAP is the legacy directory name"
     source_ref: "Source/Core/Core/HW/EXI/EXI_DeviceIPL.cpp:185"
 
   # -- DSP ROMs --
-  # Used by DSP LLE (low-level emulation) for accurate audio
-  # Dolphin ships a free replacement ROM, but dumps from real hardware are more accurate
+  # Used by DSP LLE for accurate audio.
+  # Dolphin ships free replacement ROMs, but real dumps improve accuracy.
   # Searched in: User/GC/ then Sys/GC/
   - name: "dsp_rom.bin"
     path: "GC/dsp_rom.bin"
-    size: 8192  # 0x2000 (DSP_IROM_BYTE_SIZE)
+    size: 8192
     required: false
     hle_fallback: true
-    note: "DSP instruction ROM for LLE audio. Free replacement included with Dolphin, real dump improves accuracy"
-    known_hash_adler32: "0x66f334fe"  # official Nintendo ROM
-    source_ref: "Source/Core/Common/CommonPaths.h:136, Source/Core/Core/HW/DSPLLE/DSPLLE.cpp:106-117"
+    validation: [size]
+    known_hash_adler32: "0x66f334fe"
+    note: "DSP instruction ROM for LLE audio. Free replacement (v0.4) included"
+    source_ref: "Source/Core/Common/CommonPaths.h:136, Source/Core/Core/HW/DSPLLE/DSPLLE.cpp:84-117"
 
   - name: "dsp_coef.bin"
     path: "GC/dsp_coef.bin"
-    size: 4096  # 0x1000 (DSP_COEF_BYTE_SIZE)
+    size: 4096
     required: false
     hle_fallback: true
+    validation: [size]
+    known_hash_adler32: "0xf3b93527"
     note: "DSP coefficient ROM for LLE audio and HLE polyphase resampling. Free replacement included"
-    known_hash_adler32: "0xf3b93527"  # official Nintendo ROM
     source_ref: "Source/Core/Common/CommonPaths.h:137, Source/Core/Core/DSP/DSPCore.cpp:32-33, Source/Core/Core/HW/DSPHLE/UCodes/AX.cpp:55-62"
 
   # -- GameCube Fonts --
-  # Bundled free alternatives exist but have padding differences causing misplaced text
-  # If IPL dump is present, fonts are extracted from it instead
+  # Bundled free alternatives exist but have padding differences causing misplaced text.
+  # If IPL dump is present, fonts are extracted from it instead (preferred).
   # Searched in: Sys/GC/
   - name: "font_western.bin"
     path: "GC/font_western.bin"
-    size: 9589  # 0x2575
+    size: 9589
     required: false
     hle_fallback: true
     note: "Windows-1252 font for GC/Wii text rendering. Free alternative bundled, real one from IPL dump preferred"
@@ -87,14 +92,15 @@ files:
 
   - name: "font_japanese.bin"
     path: "GC/font_japanese.bin"
-    size: 303693  # 0x4A24D
+    size: 303693
     required: false
     hle_fallback: true
     note: "Shift-JIS font for Japanese text. Free alternative bundled, real one from IPL dump preferred"
     source_ref: "Source/Core/Common/CommonPaths.h:134, Source/Core/Core/HW/EXI/EXI_DeviceIPL.cpp:129,234"
 
   # -- GBA BIOS (for GC-GBA link) --
-  # Used by integrated mGBA core for GameCube-GBA connectivity
+  # Used by integrated mGBA core for GameCube-GBA connectivity.
+  # Loaded from User/GBA/gba_bios.bin (no Sys fallback).
   - name: "gba_bios.bin"
     path: "GBA/gba_bios.bin"
     required: false
@@ -103,8 +109,8 @@ files:
     source_ref: "Source/Core/Common/CommonPaths.h:145, Source/Core/Core/HW/GBACore.cpp:346-363"
 
   # -- Wii System Files --
-  # These are generated/managed by Dolphin's Wii NAND emulation
-  # Not typically user-supplied, but listed for completeness
+  # Generated/managed by Dolphin's Wii NAND emulation.
+  # Not typically user-supplied, but needed for full Wii functionality.
 
   - name: "SYSCONF"
     path: "Wii/shared2/sys/SYSCONF"
@@ -123,15 +129,15 @@ files:
 
   # -- Wii NAND Backup (BootMii) --
   - name: "nand.bin"
-    path: null  # user-selected via file dialog
+    path: null
     required: false
     hle_fallback: true
     note: "BootMii NAND backup. Can be imported to populate Wii NAND with channels, saves, system menu"
     source_ref: "Source/Core/DiscIO/NANDImporter.cpp:26-39,42-89"
 
   - name: "keys.bin"
-    path: null  # user-selected, or appended to nand.bin
-    size: 1024  # 0x400 (NAND_KEYS_SIZE)
+    path: null
+    size: 1024
     required: false
     hle_fallback: true
     note: "OTP/SEEPROM dump (Wii encryption keys). Needed if not appended to nand.bin for NAND import"
@@ -147,7 +153,7 @@ files:
 
   # -- Gecko Code Handler --
   - name: "codehandler.bin"
-    path: null  # in Sys directory, shipped with Dolphin
+    path: null
     required: false
     hle_fallback: true
     note: "Gecko/Ocarina cheat code handler. Shipped with Dolphin in Sys/, not user-supplied"
@@ -155,9 +161,10 @@ files:
 
   # -- Wii System Menu (WAD) --
   - name: "Wii System Menu"
-    path: null  # installed to NAND via WAD import
+    path: null
     required: false
     hle_fallback: true
+    mode: standalone
     note: "Wii System Menu WAD. Installed to NAND via Tools > Install WAD, needed for Wii Menu boot"
     source_ref: "Source/Core/DolphinQt/MainWindow.cpp:1581-1583, Source/Core/DolphinQt/MenuBar.cpp:1174-1188"
 
@@ -193,7 +200,6 @@ files:
   - name: "rtl8723a_fw.bin"
     path: "Load/Firmware/rtl_bt/rtl8723a_fw.bin"
     required: false
-    hle_fallback: true
     mode: standalone
     note: "Realtek 8723A BT firmware for Wiimote passthrough"
     source_ref: "RealtekFirmwareLoader.cpp:387"
@@ -201,7 +207,6 @@ files:
   - name: "rtl8723b_fw.bin"
     path: "Load/Firmware/rtl_bt/rtl8723b_fw.bin"
     required: false
-    hle_fallback: true
     mode: standalone
     note: "Realtek 8723B BT firmware for Wiimote passthrough"
     source_ref: "RealtekFirmwareLoader.cpp:389"
@@ -209,7 +214,6 @@ files:
   - name: "rtl8723d_fw.bin"
     path: "Load/Firmware/rtl_bt/rtl8723d_fw.bin"
     required: false
-    hle_fallback: true
     mode: standalone
     note: "Realtek 8723D BT firmware for Wiimote passthrough"
     source_ref: "RealtekFirmwareLoader.cpp:391"
@@ -217,7 +221,6 @@ files:
   - name: "rtl8761a_fw.bin"
     path: "Load/Firmware/rtl_bt/rtl8761a_fw.bin"
     required: false
-    hle_fallback: true
     mode: standalone
     note: "Realtek 8761A BT firmware for Wiimote passthrough"
     source_ref: "RealtekFirmwareLoader.cpp:393"
@@ -225,7 +228,6 @@ files:
   - name: "rtl8761bu_fw.bin"
     path: "Load/Firmware/rtl_bt/rtl8761bu_fw.bin"
     required: false
-    hle_fallback: true
     mode: standalone
     note: "Realtek 8761BU BT firmware for Wiimote passthrough (most common USB dongle)"
     source_ref: "RealtekFirmwareLoader.cpp:395"
@@ -233,7 +235,6 @@ files:
   - name: "rtl8821a_fw.bin"
     path: "Load/Firmware/rtl_bt/rtl8821a_fw.bin"
     required: false
-    hle_fallback: true
     mode: standalone
     note: "Realtek 8821A BT firmware for Wiimote passthrough"
     source_ref: "RealtekFirmwareLoader.cpp:397"
@@ -241,7 +242,6 @@ files:
   - name: "rtl8821c_fw.bin"
     path: "Load/Firmware/rtl_bt/rtl8821c_fw.bin"
     required: false
-    hle_fallback: true
     mode: standalone
     note: "Realtek 8821C BT firmware for Wiimote passthrough"
     source_ref: "RealtekFirmwareLoader.cpp:399"
@@ -249,7 +249,6 @@ files:
   - name: "rtl8822b_fw.bin"
     path: "Load/Firmware/rtl_bt/rtl8822b_fw.bin"
     required: false
-    hle_fallback: true
     mode: standalone
     note: "Realtek 8822B BT firmware for Wiimote passthrough"
     source_ref: "RealtekFirmwareLoader.cpp:403"
@@ -257,7 +256,6 @@ files:
   - name: "rtl8822cu_fw.bin"
     path: "Load/Firmware/rtl_bt/rtl8822cu_fw.bin"
     required: false
-    hle_fallback: true
     mode: standalone
     note: "Realtek 8822CU BT firmware for Wiimote passthrough"
     source_ref: "RealtekFirmwareLoader.cpp:401"
@@ -265,7 +263,6 @@ files:
   - name: "rtl8851bu_fw.bin"
     path: "Load/Firmware/rtl_bt/rtl8851bu_fw.bin"
     required: false
-    hle_fallback: true
     mode: standalone
     note: "Realtek 8851BU BT firmware for Wiimote passthrough"
     source_ref: "RealtekFirmwareLoader.cpp:405"
@@ -273,7 +270,6 @@ files:
   - name: "rtl8852au_fw.bin"
     path: "Load/Firmware/rtl_bt/rtl8852au_fw.bin"
     required: false
-    hle_fallback: true
     mode: standalone
     note: "Realtek 8852AU BT firmware for Wiimote passthrough"
     source_ref: "RealtekFirmwareLoader.cpp:407"
@@ -281,7 +277,6 @@ files:
   - name: "rtl8852bu_fw.bin"
     path: "Load/Firmware/rtl_bt/rtl8852bu_fw.bin"
     required: false
-    hle_fallback: true
     mode: standalone
     note: "Realtek 8852BU BT firmware for Wiimote passthrough"
     source_ref: "RealtekFirmwareLoader.cpp:409"
@@ -289,7 +284,6 @@ files:
   - name: "rtl8852cu_fw.bin"
     path: "Load/Firmware/rtl_bt/rtl8852cu_fw.bin"
     required: false
-    hle_fallback: true
     mode: standalone
     note: "Realtek 8852CU BT firmware for Wiimote passthrough"
     source_ref: "RealtekFirmwareLoader.cpp:411"
@@ -297,7 +291,6 @@ files:
   - name: "rtl8852btu_fw.bin"
     path: "Load/Firmware/rtl_bt/rtl8852btu_fw.bin"
     required: false
-    hle_fallback: true
     mode: standalone
     note: "Realtek 8852BT/8852BE-VT BT firmware for Wiimote passthrough"
     source_ref: "RealtekFirmwareLoader.cpp:413"
@@ -305,7 +298,6 @@ files:
   - name: "rtl8922au_fw.bin"
     path: "Load/Firmware/rtl_bt/rtl8922au_fw.bin"
     required: false
-    hle_fallback: true
     mode: standalone
     note: "Realtek 8922AU BT firmware for Wiimote passthrough"
     source_ref: "RealtekFirmwareLoader.cpp:415"
@@ -330,10 +322,6 @@ notes:
     Fonts can come from three sources: real IPL dump (preferred), standalone font files
     in Sys/GC/, or bundled free alternatives. The free fonts have different padding that
     causes text positioning issues in some games.
-  libretro_note: >
-    No official libretro core exists in the main Dolphin repo.
-    Third-party libretro cores (dolphin_libretro) use the same file paths
-    under RetroArch system/dolphin-emu/.
   nand_note: >
     Wii NAND content (channels, saves, system menu) is managed by Dolphin internally.
     Users can import a BootMii NAND backup (nand.bin + optional keys.bin) to populate it.
@@ -342,6 +330,5 @@ notes:
     Bluetooth passthrough allows connecting real Wiimotes via USB Bluetooth adapters.
     Realtek chipsets (very common) require firmware files in Load/Firmware/rtl_bt/.
     Dolphin can auto-download these from kernel-firmware/linux-firmware on GitLab.
-    15 device families supported (8723A/B/D, 8761A/BU, 8821A/C, 8822B/CU, 8851BU,
-    8852AU/BU/CU/BTU, 8922AU). Each needs _fw.bin (required) + _config.bin (optional).
+    15 device families supported. Each needs _fw.bin (required) + _config.bin (optional).
     ref: RealtekFirmwareLoader.cpp:75-179 (device IDs), 382-420 (firmware names)
