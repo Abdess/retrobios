@@ -1,71 +1,53 @@
 emulator: Citra
 type: standalone + libretro
+core_classification: community_fork
 source: "https://github.com/libretro/citra"
 upstream: "https://github.com/citra-emu/citra"
-profiled_date: "2026-03-18"
+profiled_date: "2026-03-23"
 core_version: "Git"
 display_name: "Nintendo - 3DS (Citra)"
 cores: [citra]
 systems: [nintendo-3ds]
 
 notes: |
-  Citra 3DS emulator (pre-Azahar). Data dir: citra-emu.
-  HLE for most services — files optional. AES keys most important.
-  File locations: sysdata/ for keys/boot/font/seeddb,
-  nand/ for NAND filesystem, nand/private/ for movable.sed.
-  ref: src/common/common_paths.h:67-70
+  Citra 3DS emulator. Upstream taken down March 2024 (Nintendo lawsuit).
+  Mirror: https://github.com/citra-mirror/citra
+  Data dir: {save_dir}/Citra/ or {system_dir}/Citra/
+  ref: src/citra_libretro/citra_libretro.cpp:460-466
 
-  Key file: aes_keys.txt (NOT keys.txt — that's Azahar).
-  ref: src/common/common_paths.h:68
+  HLE for most services. Embedded open-source replacements for shared font,
+  Mii data, country list, and bad word list compiled into the binary.
+  ref: src/core/file_sys/archive_ncch.cpp:9-27, 133-167
 
-  Azahar fork: see emulators/azahar.yml (uses keys.txt, data dir azahar-emu).
-  citra_canary: same repo, see emulators/citra_canary.yml.
+  firmware_count absent in .info (= 0). All files optional.
 
 files:
-  # --- sysdata/ directory ---
-  - name: "aes_keys.txt"
-    path: "sysdata/aes_keys.txt"
+  - name: aes_keys.txt
+    system: nintendo-3ds
     description: "AES encryption keys"
     required: false
-    source_ref: "src/common/common_paths.h:68, src/core/hw/aes/key.cpp LoadPresetKeys()"
-    notes: "Named aes_keys.txt in libretro/citra (keys.txt in Azahar)"
+    source_ref: "src/core/hw/aes/key.cpp:207-208 LoadPresetKeys()"
+    note: "needed for encrypted games"
 
-  - name: "boot9.bin"
-    path: "sysdata/boot9.bin"
+  - name: boot9.bin
+    system: nintendo-3ds
     description: "ARM9 bootrom"
     required: false
-    source_ref: "src/common/common_paths.h:69"
+    validation: [size]
+    source_ref: "src/core/hw/aes/key.cpp:162-172 LoadBootromKeys(), src/core/hw/rsa/rsa.cpp:55-65 InitSlots()"
+    note: "expected size 65536 bytes, provides AES and RSA keys"
 
-  - name: "sector0x96.bin"
-    path: "sysdata/sector0x96.bin"
-    description: "Secret sector from NAND"
-    required: false
-    source_ref: "src/common/common_paths.h:70"
-
-  - name: "shared_font.bin"
-    path: "sysdata/shared_font.bin"
-    description: "System shared font"
+  - name: shared_font.bin
+    system: nintendo-3ds
+    description: "system shared font (legacy format)"
     required: false
     hle_fallback: true
-    source_ref: "src/common/common_paths.h:67"
-    notes: "HLE fallback if missing"
+    source_ref: "src/core/hle/service/apt/apt.cpp:259-267 LoadLegacySharedFont()"
+    note: "fallback to embedded open-source replacement font"
 
-  - name: "seeddb.bin"
-    path: "sysdata/seeddb.bin"
-    description: "Game seed database"
+  - name: seeddb.bin
+    system: nintendo-3ds
+    description: "game seed database"
     required: false
-    source_ref: "src/core/file_sys/seed_db.cpp:15"
-    notes: "Required for some seed-encrypted games (9.6+ titles)"
-
-  # otp.bin, movable.sed, SecureInfo_A, LocalFriendCodeSeed_B
-  # do NOT exist in libretro/citra — they are Azahar-only features
-  # (src/core/hw/unique_data.cpp exists in azahar, not in libretro/citra)
-  # See emulators/azahar.yml for those files.
-
-  # --- NAND system archives (installed titles) ---
-  - name: "shared font (system archive)"
-    path: "nand/ (installed as NCCH title 0004009B00014002)"
-    description: "Shared font system archive (JPN/USA/EUR)"
-    required: false
-    source_ref: "src/core/file_sys/archive_ncch.cpp:161"
-    notes: "Region variants: CHN=00014102, KOR=00014202, TWN=00014302"
+    source_ref: "src/core/file_sys/seed_db.cpp:13-27 SeedDB::Load()"
+    note: "needed for seed-encrypted games (9.6+ titles), creates empty if missing"
