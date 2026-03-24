@@ -924,6 +924,170 @@ def main():
         except (FileNotFoundError, OSError, yaml.YAMLError) as e:
             print(f"  ERROR: {e}")
 
+    # Post-generation: verify all packs + inject manifests + SHA256SUMS
+    if not args.list_emulators and not args.list_systems:
+        print("\nVerifying packs and generating manifests...")
+        all_ok = verify_and_finalize_packs(args.output_dir, db)
+        if not all_ok:
+            print("WARNING: some packs have verification errors")
+            sys.exit(1)
+
+
+# ---------------------------------------------------------------------------
+# Post-generation pack verification + manifest + SHA256SUMS
+# ---------------------------------------------------------------------------
+
+def verify_pack(zip_path: str, db: dict) -> tuple[bool, dict]:
+    """Verify a generated pack ZIP by re-hashing every file inside.
+
+    Opens the ZIP, computes SHA1 for each file, and checks against
+    database.json. Returns (all_ok, manifest_dict).
+
+    The manifest contains per-file metadata for self-documentation.
+    """
+    files_db = db.get("files", {})  # SHA1 -> file_info
+    by_md5 = db.get("indexes", {}).get("by_md5", {})  # MD5 -> SHA1
+    manifest = {
+        "version": 1,
+        "generator": "retrobios generate_pack.py",
+        "generated": __import__("datetime").datetime.now(
+            __import__("datetime").timezone.utc
+        ).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "files": [],
+    }
+    errors = []
+
+    with zipfile.ZipFile(zip_path, "r") as zf:
+        for info in zf.infolist():
+            if info.is_dir():
+                continue
+            name = info.filename
+            if name.startswith("INSTRUCTIONS_") or name == "manifest.json":
+                continue
+            with zf.open(info) as f:
+                data = f.read()
+            sha1 = hashlib.sha1(data).hexdigest()
+            md5 = hashlib.md5(data).hexdigest()
+            size = len(data)
+
+            # Look up in database: files_db keyed by SHA1
+            db_entry = files_db.get(sha1)
+            status = "verified"
+            file_name = ""
+            if db_entry:
+                file_name = db_entry.get("name", "")
+            else:
+                # Try MD5 -> SHA1 lookup
+                ref_sha1 = by_md5.get(md5)
+                if ref_sha1:
+                    db_entry = files_db.get(ref_sha1)
+                    if db_entry:
+                        file_name = db_entry.get("name", "")
+                        status = "verified_md5"
+                    else:
+                        status = "untracked"
+                else:
+                    status = "untracked"
+
+            manifest["files"].append({
+                "path": name,
+                "sha1": sha1,
+                "md5": md5,
+                "size": size,
+                "status": status,
+                "name": file_name,
+            })
+
+            # Corruption check: SHA1 in DB but doesn't match what we computed
+            # This should never happen (we looked up by SHA1), but catches
+            # edge cases where by_md5 resolved to a different SHA1
+            if db_entry and status == "verified_md5":
+                expected_sha1 = db_entry.get("sha1", "")
+                if expected_sha1 and expected_sha1.lower() != sha1.lower():
+                    errors.append(f"{name}: SHA1 mismatch (expected {expected_sha1}, got {sha1})")
+
+    verified = sum(1 for f in manifest["files"] if f["status"] == "verified")
+    untracked = sum(1 for f in manifest["files"] if f["status"] == "untracked")
+    total = len(manifest["files"])
+    manifest["summary"] = {
+        "total_files": total,
+        "verified": verified,
+        "untracked": untracked,
+        "errors": len(errors),
+    }
+    manifest["errors"] = errors
+
+    all_ok = len(errors) == 0
+    return all_ok, manifest
+
+
+def inject_manifest(zip_path: str, manifest: dict) -> None:
+    """Inject manifest.json into an existing ZIP pack."""
+    import tempfile as _tempfile
+    manifest_json = json.dumps(manifest, indent=2, ensure_ascii=False)
+
+    # ZipFile doesn't support appending to existing entries,
+    # so we rebuild with the manifest added
+    tmp_fd, tmp_path = _tempfile.mkstemp(suffix=".zip", dir=os.path.dirname(zip_path))
+    os.close(tmp_fd)
+    try:
+        with zipfile.ZipFile(zip_path, "r") as src, \
+             zipfile.ZipFile(tmp_path, "w", zipfile.ZIP_DEFLATED) as dst:
+            for item in src.infolist():
+                if item.filename == "manifest.json":
+                    continue  # replace existing
+                dst.writestr(item, src.read(item.filename))
+            dst.writestr("manifest.json", manifest_json)
+        os.replace(tmp_path, zip_path)
+    except Exception:
+        os.unlink(tmp_path)
+        raise
+
+
+def generate_sha256sums(output_dir: str) -> str | None:
+    """Generate SHA256SUMS.txt for all ZIP files in output_dir."""
+    sums_path = os.path.join(output_dir, "SHA256SUMS.txt")
+    entries = []
+    for name in sorted(os.listdir(output_dir)):
+        if not name.endswith(".zip"):
+            continue
+        path = os.path.join(output_dir, name)
+        sha256 = hashlib.sha256()
+        with open(path, "rb") as f:
+            for chunk in iter(lambda: f.read(65536), b""):
+                sha256.update(chunk)
+        entries.append(f"{sha256.hexdigest()}  {name}")
+    if not entries:
+        return None
+    with open(sums_path, "w") as f:
+        f.write("\n".join(entries) + "\n")
+    print(f"\n{sums_path}: {len(entries)} pack checksums")
+    return sums_path
+
+
+def verify_and_finalize_packs(output_dir: str, db: dict) -> bool:
+    """Verify all packs, inject manifests, generate SHA256SUMS.
+
+    Returns True if all packs pass verification.
+    """
+    all_ok = True
+    for name in sorted(os.listdir(output_dir)):
+        if not name.endswith(".zip"):
+            continue
+        zip_path = os.path.join(output_dir, name)
+        ok, manifest = verify_pack(zip_path, db)
+        summary = manifest["summary"]
+        status = "OK" if ok else "ERRORS"
+        print(f"  verify {name}: {summary['verified']}/{summary['total_files']} verified, "
+              f"{summary['untracked']} untracked, {summary['errors']} errors [{status}]")
+        if not ok:
+            for err in manifest["errors"]:
+                print(f"    ERROR: {err}")
+            all_ok = False
+        inject_manifest(zip_path, manifest)
+    generate_sha256sums(output_dir)
+    return all_ok
+
 
 if __name__ == "__main__":
     main()

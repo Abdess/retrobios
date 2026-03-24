@@ -719,7 +719,7 @@ class TestE2E(unittest.TestCase):
         index = _build_validation_index(profiles)
         self.assertIn("present_req.bin", index)
         self.assertIn("size", index["present_req.bin"]["checks"])
-        self.assertEqual(index["present_req.bin"]["size"], 16)
+        self.assertIn(16, index["present_req.bin"]["sizes"])
         self.assertIn("correct_hash.bin", index)
         self.assertIn("crc32", index["correct_hash.bin"]["checks"])
 
@@ -779,8 +779,8 @@ class TestE2E(unittest.TestCase):
         reason = check_file_validation(path, "leading_zero_crc.bin", index)
         self.assertIsNone(reason)
 
-    def test_78_validation_conflict_raises(self):
-        """Conflicting size/crc32 from two profiles raises ValueError."""
+    def test_78_validation_multi_size_accepted(self):
+        """Multiple valid sizes from different profiles are collected as a set."""
         profiles = {
             "emu_a": {
                 "type": "libretro", "files": [
@@ -793,10 +793,8 @@ class TestE2E(unittest.TestCase):
                 ],
             },
         }
-        with self.assertRaises(ValueError) as ctx:
-            _build_validation_index(profiles)
-        self.assertIn("validation conflict", str(ctx.exception))
-        self.assertIn("shared.bin", str(ctx.exception))
+        index = _build_validation_index(profiles)
+        self.assertEqual(index["shared.bin"]["sizes"], {512, 1024})
 
     def test_79_validation_md5_pass(self):
         """File with correct MD5 passes validation."""

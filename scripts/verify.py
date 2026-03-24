@@ -122,10 +122,10 @@ def _build_validation_index(profiles: dict) -> dict[str, dict]:
                 continue
             if fname not in index:
                 index[fname] = {
-                    "checks": set(), "size": None,
+                    "checks": set(), "sizes": set(),
                     "min_size": None, "max_size": None,
-                    "crc32": None, "md5": None, "sha1": None, "sha256": None,
-                    "adler32": None, "crypto_only": set(),
+                    "crc32": set(), "md5": set(), "sha1": set(), "sha256": set(),
+                    "adler32": set(), "crypto_only": set(),
                 }
                 sources[fname] = {}
             index[fname]["checks"].update(checks)
@@ -136,51 +136,23 @@ def _build_validation_index(profiles: dict) -> dict[str, dict]:
             # Size checks
             if "size" in checks:
                 if f.get("size") is not None:
-                    new_size = f["size"]
-                    prev_size = index[fname]["size"]
-                    if prev_size is not None and prev_size != new_size:
-                        prev_emu = sources[fname].get("size", "?")
-                        raise ValueError(
-                            f"validation conflict for '{fname}': "
-                            f"size={prev_size} ({prev_emu}) vs size={new_size} ({emu_name})"
-                        )
-                    index[fname]["size"] = new_size
-                    sources[fname]["size"] = emu_name
+                    index[fname]["sizes"].add(f["size"])
                 if f.get("min_size") is not None:
-                    index[fname]["min_size"] = f["min_size"]
+                    cur = index[fname]["min_size"]
+                    index[fname]["min_size"] = min(cur, f["min_size"]) if cur is not None else f["min_size"]
                 if f.get("max_size") is not None:
-                    index[fname]["max_size"] = f["max_size"]
-            # Hash checks (crc32, md5, sha1, adler32)
+                    cur = index[fname]["max_size"]
+                    index[fname]["max_size"] = max(cur, f["max_size"]) if cur is not None else f["max_size"]
+            # Hash checks — collect all accepted hashes as sets (multiple valid
+            # versions of the same file, e.g. MT-32 ROM versions)
             if "crc32" in checks and f.get("crc32"):
-                new_crc = f["crc32"].lower()
-                if new_crc.startswith("0x"):
-                    new_crc = new_crc[2:]
-                prev_crc = index[fname]["crc32"]
-                if prev_crc is not None:
-                    norm_prev = prev_crc.lower()
-                    if norm_prev.startswith("0x"):
-                        norm_prev = norm_prev[2:]
-                    if norm_prev != new_crc:
-                        prev_emu = sources[fname].get("crc32", "?")
-                        raise ValueError(
-                            f"validation conflict for '{fname}': "
-                            f"crc32={prev_crc} ({prev_emu}) vs crc32={f['crc32']} ({emu_name})"
-                        )
-                index[fname]["crc32"] = f["crc32"]
-                sources[fname]["crc32"] = emu_name
+                norm = f["crc32"].lower()
+                if norm.startswith("0x"):
+                    norm = norm[2:]
+                index[fname]["crc32"].add(norm)
             for hash_type in ("md5", "sha1", "sha256"):
                 if hash_type in checks and f.get(hash_type):
-                    new_hash = f[hash_type].lower()
-                    prev_hash = index[fname][hash_type]
-                    if prev_hash is not None and prev_hash.lower() != new_hash:
-                        prev_emu = sources[fname].get(hash_type, "?")
-                        raise ValueError(
-                            f"validation conflict for '{fname}': "
-                            f"{hash_type}={prev_hash} ({prev_emu}) vs "
-                            f"{hash_type}={f[hash_type]} ({emu_name})"
-                        )
-                    index[fname][hash_type] = f[hash_type]
-                    sources[fname][hash_type] = emu_name
+                    index[fname][hash_type].add(f[hash_type].lower())
             # Adler32 — stored as known_hash_adler32 field (not in validation: list
             # for Dolphin, but support it in both forms for future profiles)
             adler_val = f.get("known_hash_adler32") or f.get("adler32")
@@ -188,19 +160,12 @@ def _build_validation_index(profiles: dict) -> dict[str, dict]:
                 norm = adler_val.lower()
                 if norm.startswith("0x"):
                     norm = norm[2:]
-                prev_adler = index[fname]["adler32"]
-                if prev_adler is not None and prev_adler != norm:
-                    prev_emu = sources[fname].get("adler32", "?")
-                    raise ValueError(
-                        f"validation conflict for '{fname}': "
-                        f"adler32={prev_adler} ({prev_emu}) vs adler32={norm} ({emu_name})"
-                    )
-                index[fname]["adler32"] = norm
-                sources[fname]["adler32"] = emu_name
-    # Convert sets to sorted lists for determinism
+                index[fname]["adler32"].add(norm)
+    # Convert sets to sorted tuples/lists for determinism
     for v in index.values():
         v["checks"] = sorted(v["checks"])
         v["crypto_only"] = sorted(v["crypto_only"])
+        # Keep hash sets as frozensets for O(1) lookup in check_file_validation
     return index
 
 
@@ -221,46 +186,45 @@ def check_file_validation(
         return None
     checks = entry["checks"]
 
-    # Size checks
+    # Size checks — sizes is a set of accepted values
     if "size" in checks:
         actual_size = os.path.getsize(local_path)
-        if entry["size"] is not None and actual_size != entry["size"]:
-            return f"size mismatch: expected {entry['size']}, got {actual_size}"
+        if entry["sizes"] and actual_size not in entry["sizes"]:
+            expected = ",".join(str(s) for s in sorted(entry["sizes"]))
+            return f"size mismatch: got {actual_size}, accepted [{expected}]"
         if entry["min_size"] is not None and actual_size < entry["min_size"]:
             return f"size too small: min {entry['min_size']}, got {actual_size}"
         if entry["max_size"] is not None and actual_size > entry["max_size"]:
             return f"size too large: max {entry['max_size']}, got {actual_size}"
 
-    # Hash checks — compute once, reuse for all hash types
+    # Hash checks — compute once, reuse for all hash types.
+    # Each hash field is a set of accepted values (multiple valid ROM versions).
     need_hashes = (
-        any(h in checks and entry.get(h) for h in ("crc32", "md5", "sha1"))
+        any(h in checks and entry.get(h) for h in ("crc32", "md5", "sha1", "sha256"))
         or entry.get("adler32")
     )
     if need_hashes:
         hashes = compute_hashes(local_path)
         if "crc32" in checks and entry["crc32"]:
-            expected_crc = entry["crc32"].lower()
-            if expected_crc.startswith("0x"):
-                expected_crc = expected_crc[2:]
-            if hashes["crc32"].lower() != expected_crc:
-                return f"crc32 mismatch: expected {entry['crc32']}, got {hashes['crc32']}"
+            if hashes["crc32"].lower() not in entry["crc32"]:
+                expected = ",".join(sorted(entry["crc32"]))
+                return f"crc32 mismatch: got {hashes['crc32']}, accepted [{expected}]"
         if "md5" in checks and entry["md5"]:
-            if hashes["md5"].lower() != entry["md5"].lower():
-                return f"md5 mismatch: expected {entry['md5']}, got {hashes['md5']}"
+            if hashes["md5"].lower() not in entry["md5"]:
+                expected = ",".join(sorted(entry["md5"]))
+                return f"md5 mismatch: got {hashes['md5']}, accepted [{expected}]"
         if "sha1" in checks and entry["sha1"]:
-            if hashes["sha1"].lower() != entry["sha1"].lower():
-                return f"sha1 mismatch: expected {entry['sha1']}, got {hashes['sha1']}"
+            if hashes["sha1"].lower() not in entry["sha1"]:
+                expected = ",".join(sorted(entry["sha1"]))
+                return f"sha1 mismatch: got {hashes['sha1']}, accepted [{expected}]"
         if "sha256" in checks and entry["sha256"]:
-            if hashes["sha256"].lower() != entry["sha256"].lower():
-                return f"sha256 mismatch: expected {entry['sha256']}, got {hashes['sha256']}"
-        # Adler32 — check if known_hash_adler32 is available (even if not
-        # in the validation: list, Dolphin uses it as informational check)
+            if hashes["sha256"].lower() not in entry["sha256"]:
+                expected = ",".join(sorted(entry["sha256"]))
+                return f"sha256 mismatch: got {hashes['sha256']}, accepted [{expected}]"
         if entry["adler32"]:
-            if hashes["adler32"].lower() != entry["adler32"]:
-                return (
-                    f"adler32 mismatch: expected 0x{entry['adler32']}, "
-                    f"got 0x{hashes['adler32']}"
-                )
+            if hashes["adler32"].lower() not in entry["adler32"]:
+                expected = ",".join(sorted(entry["adler32"]))
+                return f"adler32 mismatch: got 0x{hashes['adler32']}, accepted [{expected}]"
 
     # Signature/crypto checks (3DS RSA, AES)
     if entry["crypto_only"]:
