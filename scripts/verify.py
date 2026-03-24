@@ -124,7 +124,7 @@ def _build_validation_index(profiles: dict) -> dict[str, dict]:
                 index[fname] = {
                     "checks": set(), "size": None,
                     "min_size": None, "max_size": None,
-                    "crc32": None, "md5": None, "sha1": None,
+                    "crc32": None, "md5": None, "sha1": None, "sha256": None,
                     "adler32": None, "crypto_only": set(),
                 }
                 sources[fname] = {}
@@ -168,7 +168,7 @@ def _build_validation_index(profiles: dict) -> dict[str, dict]:
                         )
                 index[fname]["crc32"] = f["crc32"]
                 sources[fname]["crc32"] = emu_name
-            for hash_type in ("md5", "sha1"):
+            for hash_type in ("md5", "sha1", "sha256"):
                 if hash_type in checks and f.get(hash_type):
                     new_hash = f[hash_type].lower()
                     prev_hash = index[fname][hash_type]
@@ -250,6 +250,9 @@ def check_file_validation(
         if "sha1" in checks and entry["sha1"]:
             if hashes["sha1"].lower() != entry["sha1"].lower():
                 return f"sha1 mismatch: expected {entry['sha1']}, got {hashes['sha1']}"
+        if "sha256" in checks and entry["sha256"]:
+            if hashes["sha256"].lower() != entry["sha256"].lower():
+                return f"sha256 mismatch: expected {entry['sha256']}, got {hashes['sha256']}"
         # Adler32 — check if known_hash_adler32 is available (even if not
         # in the validation: list, Dolphin uses it as informational check)
         if entry["adler32"]:
