@@ -2,7 +2,7 @@ emulator: Gearlynx
 type: libretro
 core_classification: official_port
 source: "https://github.com/drhelius/Gearlynx"
-profiled_date: "2026-03-21"
+profiled_date: "2026-03-23"
 core_version: "1.0.0"
 display_name: "Atari - Lynx (GearLynx)"
 cores: [gearlynx]
@@ -12,7 +12,7 @@ verification: existence
 notes: |
   Gearlynx is an Atari Lynx emulator by Ignacio Sanchez (drhelius).
   The libretro core loads lynxboot.img from the system directory at
-  retro_load_game time (libretro.cpp:106-130, function load_bootroms).
+  retro_load_game time (libretro.cpp:105-129, function load_bootroms).
   Path is built as: system_directory + "/lynxboot.img", no subdirectory.
 
   LoadBios in media.cpp:274 reads exactly 512 bytes (GLYNX_BIOS_SIZE
@@ -32,7 +32,6 @@ notes: |
   to be loaded for the emulation loop to execute.
 
   ROM extensions: .lnx, .lyx, .o
-  Core options: none documented in the libretro port.
 
 files:
   - name: "lynxboot.img"
@@ -43,5 +42,6 @@ files:
     sha1: "e4ed47fae31693e016b081c6bda48da5b70d7ccb"
     md5: "fcd403db69f54290b51035d82f835e7b"
     crc32: "0d973c9d"
-    source_ref: "libretro.cpp:106-130 (load_bootroms), media.cpp:274-329 (LoadBios), defines.h:52 (GLYNX_BIOS_SIZE=0x200), game_db.h:38 (GLYNX_DB_BIOS_CRC=0x0D973C9D), gearlynx_core_inline.h:33-37 (no-bios guard)"
+    validation: [size, crc32]
+    source_ref: "libretro.cpp:105-129 (load_bootroms), media.cpp:274-329 (LoadBios), defines.h:52 (GLYNX_BIOS_SIZE=0x200), game_db.h:38 (GLYNX_DB_BIOS_CRC=0x0D973C9D), gearlynx_core_inline.h:33-37 (no-bios guard)"
     notes: "512-byte boot ROM validated by CRC32 after load. Invalid CRC logs a warning but still works. Missing or wrong-size file blocks emulation entirely (no HLE fallback)."

@@ -3,7 +3,7 @@ type: libretro
 core_classification: official_port
 source: "https://github.com/libretro/galaxy-libretro"
 upstream: "https://github.com/nikp123/Galaksija-Emulator"
-profiled_date: "2026-03-21"
+profiled_date: "2026-03-23"
 core_version: "v0.1"
 display_name: "Elektronika Inženjering - Galaksija (Galaksija)"
 cores:
@@ -24,7 +24,6 @@ systems:
 #   2. If either is missing: firmware_ignore=true, load embedded compressed ROMs
 #   3. If both present: galaxy_init() reads files from disk (init.c:46-105)
 #   4. ROM2.BIN missing is a warning only, not fatal (init.c:84-85)
-#   5. GAL_PLUS.BIN: referenced in a TODO comment but not implemented yet
 #
 # Memory map:
 #   0x0000-0x0FFF: ROM1 (4096 bytes) - BASIC interpreter
@@ -42,6 +41,7 @@ files:
     size: 2048
     required: false
     hle_fallback: true
+    validation: [size]
     note: >
       Character generator ROM. Defines the 128-character bitmap font (8x13 pixels
       each). The core has this embedded compressed in rom.c and only loads the
@@ -53,6 +53,7 @@ files:
     size: 4096
     required: false
     hle_fallback: true
+    validation: [size]
     note: >
       System ROM / BASIC interpreter. Mapped at 0x0000-0x0FFF. Contains the
       Galaksija BASIC language and boot routines. Embedded in rom.c as fallback.
@@ -63,23 +64,13 @@ files:
     size: 4096
     required: false
     hle_fallback: true
+    validation: [size]
     note: >
       Math extension ROM. Mapped at 0x1000-0x1FFF. Adds floating-point math
       functions (SIN, COS, TG, SQR, LN, EXP, POW, etc). Optional even when
       loading from disk -- missing ROM2 only triggers a warning. Embedded in
       rom.c as fallback.
     source_ref: "src/rom.h:11, src/libretro.c:107-110, src/external/galaksija-emulator/src/init.c:83-92"
-
-  - name: "GAL_PLUS.BIN"
-    path: "galaksija/GAL_PLUS.BIN"
-    size: 4096
-    required: false
-    note: >
-      Galaksija Plus extension ROM. Would map at 0xE000-0xEFFF. Referenced in a
-      TODO comment in init.c but not yet implemented in the libretro core. The
-      original standalone emulator loaded it optionally with a Serbian message
-      on failure ("GAL_PLUS.BIN nije prisutan, idemo dalje bez njega!").
-    source_ref: "src/external/galaksija-emulator/src/init.c:94-104"
 
 notes:
   embedded_firmware: >
@@ -97,6 +88,3 @@ notes:
     The emulator code and included firmware are public domain. External
     dependencies (libz80, libretro-common, tinyfiledialogs) have separate
     licenses (GPL2, MIT).
-  no_bios_required_for_pack: >
-    Since all firmware is embedded, this core does not need any BIOS files in
-    platform packs. The files listed above are optional overrides only.

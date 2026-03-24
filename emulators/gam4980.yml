@@ -3,7 +3,7 @@ type: libretro
 core_classification: pure_libretro
 source: "https://github.com/ThisBoringWorld/gam4980"
 upstream: "https://codeberg.org/iyzsong/gam4980"
-profiled_date: "2026-03-21"
+profiled_date: "2026-03-23"
 core_version: "0.2"
 display_name: "GAM4980"
 cores:
@@ -11,58 +11,44 @@ cores:
 systems:
   - bbk-longman-4980
 
-# GAM4980 is a BBK Longman 4980 electronic dictionary game emulator for
-# libretro. Original code from https://codeberg.org/iyzsong/gam4980, based
-# on the BA4988 BBK simulator by Wuyun.
+# GAM4980 emulates the BBK Longman 4980 (A4980/A4988) electronic dictionary.
+# Original code from https://codeberg.org/iyzsong/gam4980, based on the
+# BA4988 BBK simulator by Wuyun. Uses a 6502-based CPU with banked ROM access.
 #
-# The device uses a 6502-based CPU with banked ROM access.
-#
-# ROM loading (src/libretro.c:1171-1177, retro_init):
-#   The core gets the RetroArch system directory via RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY,
-#   appends "/gam4980" to build the ROM directory path, then calls sys_init(romdir).
-#
-# sys_init (src/libretro.c:693-723):
+# ROM loading (src/libretro.c:692-760, sys_init):
 #   Opens romdir/8.BIN and reads 0x200000 bytes (2 MB) into sys.rom_8 (font ROM).
 #   Opens romdir/E.BIN and reads 0x200000 bytes (2 MB) into sys.rom_e (OS ROM).
-#   Both files are mandatory -- no fallback, no error handling. The core will
-#   crash if either file is missing.
+#   The upstream has error handling (error_msg + RETRO_ENVIRONMENT_SHUTDOWN on
+#   missing files). The fork (ThisBoringWorld) removed these checks -- crashes
+#   on missing files.
 #
 # Memory map (src/libretro.c:109-110, 300-305):
 #   0x800000-0x9FFFFF  rom_8 (font ROM, 8.BIN)
 #   0xE00000-0xFFFFFF  rom_e (OS ROM, E.BIN)
-#   These ROMs must be dumped from a physical BBK Longman 4980 dictionary.
 #
-# The .info file does not declare firmware entries. The core is marked
-# is_experimental = true.
+# No hash validation. No size validation. The .info declares firmware_count=0.
 
 notes: |
   Place 8.BIN and E.BIN in the RetroArch system/gam4980/ subdirectory.
   Both files must be 2 MB dumps from a BBK Longman 4980 dictionary:
     8.BIN - font ROM, dumped from address range 0x800000-0x9FFFFF
     E.BIN - OS ROM, dumped from address range 0xE00000-0xFFFFFF
-  The core will crash without these files (no error handling in sys_init).
   Game files use the .gam extension.
 
 files:
   - name: "gam4980/8.BIN"
     size: 2097152
-    md5: ddfc001a6859d63ed46368ea7fe9f20c
-    sha1: 062067e6d661c3d3e10d910435be4a59db1bee9f
     required: true
     system: bbk-longman-4980
-    bundled: false
-    note: "Font ROM (2 MB). Loaded at 0x800000. Dumped from physical device (src/libretro.c:716-718)."
-    source_ref: "src/libretro.c:716"
+    note: "Font ROM (2 MB). Loaded at 0x800000."
+    source_ref: "src/libretro.c:716-718"
 
   - name: "gam4980/E.BIN"
     size: 2097152
-    md5: 72a16fd0d2453108321edc65cd347c77
-    sha1: b486b6eda5cd7e79bb5605d1fbe36eb88bfc6724
     required: true
     system: bbk-longman-4980
-    bundled: false
-    note: "OS ROM (2 MB). Loaded at 0xE00000. Dumped from physical device (src/libretro.c:720-722)."
-    source_ref: "src/libretro.c:720"
+    note: "OS ROM (2 MB). Loaded at 0xE00000."
+    source_ref: "src/libretro.c:720-722"
 
 platform_details:
   bios_mapping:
@@ -75,7 +61,7 @@ platform_details:
       the banking system.
 
   load_path:
-    source_ref: "src/libretro.c:1173-1177"
+    source_ref: "src/libretro.c:1173-1175"
     notes: |
       retro_init() builds the path as {system_directory}/gam4980/ and
       passes it to sys_init(). Files must be named exactly 8.BIN and

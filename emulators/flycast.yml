@@ -4,8 +4,8 @@ core_classification: official_port
 source: "https://github.com/libretro/flycast"
 upstream: "https://github.com/flyinghead/flycast"
 logo: "https://raw.githubusercontent.com/flyinghead/flycast/master/shell/linux/flycast.png"
-profiled_date: "2026-03-21"
-core_version: "Git"
+profiled_date: "2026-03-23"
+core_version: "0.1"
 display_name: "Sega - Dreamcast/Naomi (Flycast)"
 cores:
   - flycast
@@ -14,29 +14,34 @@ systems:
   - sega-naomi
   - sega-naomi2
   - sega-atomiswave
-  # sega-systemsp: supported by upstream but not by the libretro port
 
 notes: |
   Flycast has a built-in HLE BIOS (reios) for Dreamcast that can boot most
-  games without real BIOS files. Arcade systems (NAOMI, NAOMI2, Atomiswave,
-  System SP) require MAME-format BIOS ROM archives.
-  Hikaru and Triforce are NOT supported by Flycast.
+  games without real BIOS files. Arcade systems (NAOMI, Atomiswave) require
+  MAME-format BIOS ROM archives.
+
+  The libretro port (libretro/flycast, last updated 2025-12-12) is significantly
+  behind upstream (flyinghead/flycast). Key divergences:
+  - NAOMI 2 has no separate BIOS entry or platform detection; NAOMI 2 games
+    run as NAOMI using naomi.zip. Upstream has naomi2.zip with dedicated ROMs.
+  - System SP is not supported. Upstream has segasp.zip support.
+  - The n2_ prefix for NAOMI 2 flat boot ROMs is dead code (DC_PLATFORM_NAOMI2
+    is never assigned to settings.System in the libretro port).
+  - Flash search includes legacy names (%flash_wb.bin, %flash.bin, %flash.bin.bin)
+    that upstream has removed.
+  - NAOMI flat boot ROM search includes epr-21576d.bin fallback not in upstream.
 
   BIOS file search uses prefix + name pattern. The libretro port appends "dc/"
   to the system directory (libretro.cpp:1866). All files below are relative
   to system_dir/dc/.
 
-  File loading logic: core/hw/flashrom/nvmem.cpp loadFiles() and
-  core/hw/naomi/naomi_cart.cpp loadBios().
-
   The prefix is determined by platform (sb_mem.cpp:32-49):
     Dreamcast   -> dc_
     Dev Unit    -> hkt_
     NAOMI       -> naomi_
-    NAOMI 2     -> n2_ (libretro port; upstream uses naomi2_)
     Atomiswave  -> (no prefix, BIOS loaded from awbios.zip)
 
-  Boot ROM search pattern (sb_mem.cpp:57):
+  Boot ROM search pattern (sb_mem.cpp:51-68):
     {prefix}boot.bin, {prefix}boot.bin.bin, {prefix}bios.bin, {prefix}bios.bin.bin
   NAOMI also tries: epr-21576d.bin (sb_mem.cpp:59)
   Flash/NVRAM search pattern (sb_mem.cpp:231):
@@ -48,59 +53,42 @@ files:
   # -------------------------------------------------------
   - name: "dc_boot.bin"
     path: "dc/dc_boot.bin"
-    system: sega-dreamcast
-    required: false
-    hle_fallback: true
-    size: 2097152  # 2 MB
-    note: "Dreamcast boot ROM. HLE BIOS (reios) used as fallback."
-    source_ref: "core/hw/flashrom/nvmem.cpp:287"
-
-  - name: "dc_bios.bin"
-    path: "dc/dc_bios.bin"
+    aliases: ["dc_bios.bin", "dc_boot.bin.bin", "dc_bios.bin.bin"]
     system: sega-dreamcast
     required: false
     hle_fallback: true
     size: 2097152
-    note: "Alternate name for Dreamcast boot ROM."
-    source_ref: "core/hw/flashrom/nvmem.cpp:287"
-
-  - name: "dc_flash.bin"
-    path: "dc/dc_flash.bin"
-    system: sega-dreamcast
-    required: false
-    hle_fallback: true
-    size: 131072  # 128 KB
-    note: "Dreamcast flash memory. One of the nvmem search names."
-    source_ref: "core/hw/holly/sb_mem.cpp:231"
+    note: "Dreamcast boot ROM. HLE BIOS (reios) used as fallback. Code searches prefix + boot.bin, boot.bin.bin, bios.bin, bios.bin.bin sequentially."
+    source_ref: "core/hw/holly/sb_mem.cpp:219,55-57"
 
   - name: "dc_nvmem.bin"
     path: "dc/dc_nvmem.bin"
+    aliases: ["dc_flash_wb.bin", "dc_flash.bin", "dc_flash.bin.bin"]
     system: sega-dreamcast
     required: false
     hle_fallback: true
     size: 131072
-    note: "Dreamcast NVRAM (primary search name for flash)."
-    source_ref: "core/hw/holly/sb_mem.cpp:231"
+    note: "Dreamcast flash memory / NVRAM. Created if not found. Code searches prefix + nvmem.bin, flash_wb.bin, flash.bin, flash.bin.bin sequentially."
+    source_ref: "core/hw/holly/sb_mem.cpp:231,196-213"
 
-  - name: "dc_flash_wb.bin"
-    path: "dc/dc_flash_wb.bin"
+  - name: "font.bin"
+    path: "dc/font.bin"
     system: sega-dreamcast
     required: false
-    hle_fallback: true
-    size: 131072
-    note: "Dreamcast flash writeback."
-    source_ref: "core/hw/holly/sb_mem.cpp:231"
+    note: "Dreamcast system font for HLE BIOS text rendering. Built-in font used as fallback."
+    source_ref: "core/reios/reios.cpp:736-754"
 
   # -------------------------------------------------------
   # Sega NAOMI
   # -------------------------------------------------------
   - name: "naomi_boot.bin"
     path: "dc/naomi_boot.bin"
+    aliases: ["naomi_bios.bin", "naomi_boot.bin.bin", "naomi_bios.bin.bin", "epr-21576d.bin"]
     system: sega-naomi
     required: false
-    size: 2097152  # 2 MB
-    note: "NAOMI boot ROM (flat binary). Alternative to naomi.zip."
-    source_ref: "core/hw/flashrom/nvmem.cpp:287"
+    size: 2097152
+    note: "NAOMI boot ROM (flat binary). Alternative to naomi.zip. epr-21576d.bin is searched without prefix."
+    source_ref: "core/hw/holly/sb_mem.cpp:219,58-59"
 
   - name: "naomi.zip"
     path: "dc/naomi.zip"
@@ -110,66 +98,43 @@ files:
       NAOMI system BIOS archive (MAME format). Contains region-specific
       BIOS ROMs: epr-21576h.ic27 (Japan), epr-21577h.ic27 (USA),
       epr-21578h.ic27 (Export), epr-21579d.ic27 (Korea).
-    source_ref: "core/hw/naomi/naomi_roms.cpp:87-143"
+      Also used for NAOMI 2 games in the libretro port (no separate naomi2.zip).
+    source_ref: "core/hw/naomi/naomi_roms.h:133-188"
 
-  # NAOMI special BIOS sets (game-specific, loaded from game archive or standalone)
   - name: "airlbios.zip"
     path: "dc/airlbios.zip"
     system: sega-naomi
     required: false
     note: "Airline Pilots Deluxe BIOS. epr-21802.ic27 (Export), epr-21801.ic27 (USA)."
-    source_ref: "core/hw/naomi/naomi_roms.cpp:30-37"
+    source_ref: "core/hw/naomi/naomi_roms.h:78-85"
 
   - name: "f355bios.zip"
     path: "dc/f355bios.zip"
     system: sega-naomi
     required: false
     note: "Ferrari F355 Challenge BIOS. Japan/USA/Export variants."
-    source_ref: "core/hw/naomi/naomi_roms.cpp:49-58"
+    source_ref: "core/hw/naomi/naomi_roms.h:96-103"
 
   - name: "f355dlx.zip"
     path: "dc/f355dlx.zip"
     system: sega-naomi
     required: false
     note: "Ferrari F355 Challenge Deluxe BIOS. Japan/USA/Export variants."
-    source_ref: "core/hw/naomi/naomi_roms.cpp:60-74"
+    source_ref: "core/hw/naomi/naomi_roms.h:105-119"
 
   - name: "hod2bios.zip"
     path: "dc/hod2bios.zip"
     system: sega-naomi
     required: false
     note: "House of the Dead 2 BIOS. Japan/USA/Export variants."
-    source_ref: "core/hw/naomi/naomi_roms.cpp:76-85"
+    source_ref: "core/hw/naomi/naomi_roms.h:121-131"
 
   - name: "naomigd.zip"
     path: "dc/naomigd.zip"
     system: sega-naomi
     required: false
-    note: "NAOMI GD-ROM BIOS. Used by GD-ROM based NAOMI games."
-    source_ref: "core/hw/naomi/naomi_roms.cpp:158-181"
-
-  # -------------------------------------------------------
-  # Sega NAOMI 2
-  # -------------------------------------------------------
-  - name: "n2_boot.bin"
-    path: "dc/n2_boot.bin"
-    aliases: ["naomi2_boot.bin"]
-    mode: libretro
-    system: sega-naomi2
-    required: false
-    size: 2097152  # 2 MB
-    note: "NAOMI 2 boot ROM. Core uses n2_ prefix to avoid name collision in shared dc/ directory. Upstream standalone uses naomi2_ prefix."
-    source_ref: "core/hw/holly/sb_mem.cpp:43,57"
-
-  - name: "naomi2.zip"
-    path: "dc/naomi2.zip"
-    system: sega-naomi2
-    required: true
-    note: >
-      NAOMI 2 system BIOS archive (MAME format). Contains region-specific
-      ROMs: epr-23605c.ic27 (Japan), epr-23607c.ic27 (USA),
-      epr-23608c.ic27 (Export), epr-23609b.ic27 (Korea).
-    source_ref: "core/hw/naomi/naomi_roms.cpp:183-201"
+    note: "NAOMI GD-ROM BIOS. Shares ROMs with naomi.zip (epr-21576h, epr-21578h, epr-21577h)."
+    source_ref: "core/hw/naomi/naomi_roms.h:190-212"
 
   # -------------------------------------------------------
   # Sega Atomiswave
@@ -178,45 +143,44 @@ files:
     path: "dc/awbios.zip"
     system: sega-atomiswave
     required: true
-    note: >
-      Atomiswave system BIOS archive (MAME format). Contains
-      bios0.ic23 (Sammy, 128 KB). BIOS size is 128 KB.
-    source_ref: "core/hw/naomi/naomi_roms.cpp:39-48"
+    note: "Atomiswave system BIOS archive (MAME format). Contains bios0.ic23 (Sammy, 128 KB)."
+    source_ref: "core/hw/naomi/naomi_roms.h:87-94"
 
   # -------------------------------------------------------
-  # Sega System SP
+  # Not supported by libretro port
   # -------------------------------------------------------
-  # segasp.zip: supported by upstream (flyinghead/flycast) but NOT by the
-  # libretro port (naomi_roms.cpp absent from libretro fork). Lacune du port.
+  # naomi2.zip: no BIOS[] entry in libretro fork (naomi_roms.h). NAOMI 2 games
+  # use the "naomi" BIOS. naomi_cart_GetSystemType() never returns
+  # DC_PLATFORM_NAOMI2. Upstream has full naomi2.zip support.
+  #
+  # segasp.zip: no System SP support in libretro fork. Upstream has full support.
 
 platform_details:
   dreamcast:
-    bios_size: 2097152     # 2 MB
-    flash_size: 131072     # 128 KB
-    ram_size: 16777216     # 16 MB (32 MB with mod)
+    bios_size: 2097152
+    flash_size: 131072
+    ram_size: 16777216
     hle_available: true
-    source_ref: "core/emulator.cpp:446-452"
+    source_ref: "core/nullDC.cpp:333-345"
 
   naomi:
-    bios_size: 2097152     # 2 MB
-    flash_size: 32768      # 32 KB (battery-backed SRAM)
-    ram_size: 33554432     # 32 MB
+    bios_size: 2097152
+    sram_size: 32768
+    ram_size: 33554432
     hle_available: false
-    source_ref: "core/emulator.cpp:453-459"
+    source_ref: "core/nullDC.cpp:346-354"
 
   naomi2:
-    bios_size: 2097152     # 2 MB
-    flash_size: 32768      # 32 KB (battery-backed SRAM)
-    ram_size: 33554432     # 32 MB
-    eram_size: 33554432    # 32 MB (ELAN)
+    bios_size: 2097152
+    sram_size: 32768
+    ram_size: 33554432
     hle_available: false
-    source_ref: "core/emulator.cpp:460-467"
+    note: "Treated as NAOMI in the libretro port. Separate platform only in upstream."
+    source_ref: "core/nullDC.cpp:355-363"
 
   atomiswave:
-    bios_size: 131072      # 128 KB
-    flash_size: 131072     # 128 KB (SRAM)
-    ram_size: 16777216     # 16 MB
+    bios_size: 131072
+    sram_size: 131072
+    ram_size: 16777216
     hle_available: false
-    source_ref: "core/emulator.cpp:468-474"
-
-  # systemsp: supported by upstream but not by the libretro port
+    source_ref: "core/nullDC.cpp:364-375"

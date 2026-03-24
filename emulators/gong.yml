@@ -1,13 +1,14 @@
 emulator: Gong
 type: game
+core_classification: pure_libretro
 source: "https://github.com/libretro/gong"
-profiled_date: "2026-03-21"
+upstream: "https://danzaidan.itch.io/"
+profiled_date: "2026-03-23"
 core_version: "1.0"
 display_name: "Gong"
 cores: [gong]
 systems: []
 files: []
 notes: >
-  Simple Pong clone written as a minimal libretro core example.
-  Self-contained with all rendering done programmatically.
-  No content file, BIOS, or system directory files required.
+  Pong clone. Self-contained single-file core, all rendering programmatic.
+  Original code by Dan Zaidan, ported to libretro by Brad Parker.

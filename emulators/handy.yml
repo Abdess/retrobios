@@ -2,7 +2,8 @@ emulator: Handy
 type: libretro
 core_classification: community_fork
 source: "https://github.com/libretro/libretro-handy"
-profiled_date: "2026-03-21"
+upstream: "https://handy.sourceforge.net/"
+profiled_date: "2026-03-23"
 core_version: "0.95"
 display_name: "Atari - Lynx (Handy)"
 cores:
@@ -10,27 +11,29 @@ cores:
 systems: [atari-lynx]
 
 notes: |
-  Handy is an Atari Lynx emulator. The core loads lynxboot.img from
-  the system directory and validates it by CRC32 (0x0D973C9D). If the
-  file is missing or the CRC does not match, the core falls back to an
-  internal HLE BIOS that replicates the boot sequence in software
-  (ram clear, cart loader decrypt, jump to $0200).
+  Handy is an Atari Lynx emulator by K. Wilkins (Handy 0.95, 2007).
+  The core loads lynxboot.img from the system directory and validates
+  it by CRC32 (0x0D973C9D). If the file is missing or the CRC does
+  not match, the core falls back to an internal HLE BIOS that
+  replicates the boot sequence in software (ram clear, cart loader
+  decrypt, jump to $0200).
 
   The HLE path intercepts CPU calls to ROM addresses FE00, FE19, FE4A
   and FF80 via a Mikie register write trap (address 0xFD97). When
   useEmu is true (no valid BIOS loaded), CRom initialises mRomData
   with a default fill byte (0x88) plus reset vectors pointing to
-  the HLE entry points. The cart decryption uses a hardcoded RSA
-  public key (lynxdec.cpp) identical to the real hardware.
+  the HLE entry points.
 
-  With the real BIOS, the first frame has unusually high cycle counts
-  because hardware timers start from the boot ROM rather than being
-  set artificially. Blip_Buffer::end_frame() caps the audio buffer
-  to handle this overflow.
+  Upstream Handy 0.95 requires the BIOS (throws CLynxException) and
+  validates by checking the first 16 bytes against a hardcoded
+  signature. The libretro port added the HLE fallback and switched
+  to full CRC32 validation.
 
-  File path: libretro.cpp retro_load_game() joins
-  RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY with "lynxboot.img".
-  No subdirectory.
+  For headerless cartridges (no LNX/BS93 header), the core loads
+  howard.o from the system directory. This is the Epyx development
+  kit bootloader used to bootstrap raw/headerless ROMs into memory.
+  Upstream requires howard.o for headerless carts (throws exception);
+  the libretro port makes it optional (logs error, continues).
 
 files:
   - name: "lynxboot.img"
@@ -41,5 +44,12 @@ files:
     size: 512
     crc32: "0d973c9d"
     validation: [size, crc32]
-    source_ref: "rom.h:48-49 (ROM_SIZE=0x200, ROM_CRC32=0xD973C9D), rom.cpp:76-128 (CRom constructor), libretro.cpp:1231-1258 (bios path + CSystem init)"
-    notes: "Validated by CRC32 at load time. If invalid or missing, core uses HLE fallback (system.cpp HLE_BIOS_* functions). Games work without it but the real boot ROM provides accurate startup timing."
+    source_ref: "rom.h:48-49 (ROM_SIZE=0x200, ROM_CRC32=0x0D973C9D), rom.cpp:76-129 (CRom constructor), libretro.cpp:1231-1258 (bios path + CSystem init)"
+    notes: "Validated by CRC32 at load time. If invalid or missing, core uses HLE fallback (system.cpp:303-361 HLE_BIOS_* functions, system.cpp:406-428 trap writes)."
+
+  - name: "howard.o"
+    system: atari-lynx
+    description: "Epyx Howard bootloader for headerless cartridges"
+    required: false
+    source_ref: "system.cpp:197-238 (CartHeaderLess check, howard.o load via fill_pathname_resolve_relative)"
+    notes: "Loaded only for headerless carts (no LNX/BS93 header). Resolved relative to the BIOS file path (system directory). Passed to CRam for execution. Most commercial games have headers and skip this entirely."

@@ -4,7 +4,7 @@ core_classification: community_fork
 cores: [frodo]
 source: "https://github.com/libretro/frodo-libretro"
 upstream: "https://github.com/cebix/frodo4"
-profiled_date: "2026-03-21"
+profiled_date: "2026-03-23"
 core_version: "v4.2"
 display_name: "Commodore - C64 (Frodo)"
 systems: [commodore-c64]
@@ -43,14 +43,14 @@ notes: |
   processor emulation is enabled (multiple addresses in the 0x0D00-0x0E00
   range are patched with 0xF2 trap opcodes).
 
-  The 1541 drive ROM is also patched at Reset() in C64.cpp: ROM checksum
+  The 1541 drive ROM is also patched in PatchKernal(): ROM checksum
   verification is disabled (0x2AE4-0x2AE9 NOPed), DOS idle loop is
   trapped (0x2C9B), and write sector / format track operations are
   intercepted (0x3594-0x3598, 0x3B0C-0x3B0D).
 
   Source: Src/main.cpp:67-115 (ROM defines, load_rom, load_rom_files),
-  Src/C64.h:33-37 (ROM size constants), Src/C64.cpp:221-284 (PatchKernal),
-  Src/C64.cpp:738-746 (Reset ROM patching),
+  Src/C64.h:33-37 (ROM size constants), Src/C64.cpp:221-285 (PatchKernal),
+  Src/C64.cpp:734-746 (Run init, saves original kernal bytes, calls PatchKernal),
   Src/Basic_ROM.h, Src/Kernal_ROM.h, Src/Char_ROM.h, Src/1541_ROM.h
   (embedded ROM arrays)
 
@@ -60,7 +60,6 @@ files:
     description: "C64 BASIC V2 ROM"
     required: false
     hle_fallback: true
-    embedded: true
     size: 8192
     note: "Embedded as builtin_basic_rom[] in Basic_ROM.h. External file never loaded in practice (DATADIR is empty, path is bare filename in cwd)."
     source_ref: "Src/main.cpp:71,77,100-102"
@@ -70,7 +69,6 @@ files:
     description: "C64 Kernal ROM"
     required: false
     hle_fallback: true
-    embedded: true
     size: 8192
     note: "Embedded as builtin_kernal_rom[] in Kernal_ROM.h. Patched at runtime for fast reset and 1541 IEC traps."
     source_ref: "Src/main.cpp:72,78,104-106"
@@ -80,7 +78,6 @@ files:
     description: "C64 Character Generator ROM"
     required: false
     hle_fallback: true
-    embedded: true
     size: 4096
     note: "Embedded as builtin_char_rom[] in Char_ROM.h. Used by VIC-II for text/bitmap rendering."
     source_ref: "Src/main.cpp:73,79,108-110"
@@ -90,7 +87,6 @@ files:
     description: "Commodore 1541 floppy drive ROM"
     required: false
     hle_fallback: true
-    embedded: true
     size: 16384
     note: "Embedded as builtin_drive_rom[] in 1541_ROM.h. Patched at runtime to disable checksum and trap disk I/O."
     source_ref: "Src/main.cpp:74,80,112-114"

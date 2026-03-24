@@ -3,7 +3,7 @@ type: libretro
 core_classification: community_fork
 source: "https://github.com/libretro/libretro-fsuae"
 upstream: "https://github.com/FrodeSolheim/fs-uae"
-profiled_date: "2026-03-21"
+profiled_date: "2026-03-23"
 core_version: "v2.7.15"
 display_name: "Commodore - Amiga (FS-UAE)"
 cores:
@@ -12,56 +12,124 @@ systems:
   - amiga
 
 notes: |
-  FS-UAE is an Amiga emulator by Frode Solheim, based on UAE.
+  FS-UAE is an Amiga emulator by Frode Solheim, based on UAE/WinUAE.
 
-  Kickstart ROMs loaded from save_dir/Kickstarts/ (not system_dir).
-  base_dir = RETRO_ENVIRONMENT_GET_SAVE_DIRECTORY (paths.c:136).
-  Kickstarts/ subdirectory created automatically (paths.c:258-264).
-  Also scans AmigaForever/Amiga Files/Shared/rom/.
+  ROMs loaded from save_dir/fsuae/Kickstarts/ (not system_dir).
+  base_dir = RETRO_ENVIRONMENT_GET_SAVE_DIRECTORY/fsuae (paths.c:197).
+  Also scans base_dir/AmigaForever/Amiga Files/Shared/rom/ (config.c:129-135).
+  Scans for .rom and .bin files. Identification by SHA-1 checksum, not filename.
+  AROS kickstart (512 KB) bundled in fs-uae.dat as fallback for all models.
+  rom.key enables decryption of Cloanto Amiga Forever encrypted ROMs.
 
-  ROMs identified by checksum, not by filename.
+  Supported models: A1000, A500, A500+, A600, A1200, A3000, A4000, CD32, CDTV.
+  Default model is A500 (config.c:42). Each model auto-selects its kickstart
+  via quickstart mechanism (cfgfile.c:7111-7154, config.c:140).
 
-  Standard Amiga kickstart ROMs (all 512 KB unless noted):
-    kick13.rom (A500 Kickstart 1.3, 256 KB)
-    kick20.rom (A500+ Kickstart 2.04)
-    kick31.rom (A1200 Kickstart 3.1)
-    kick40068.A1200 (A1200 Kickstart 3.1.4)
-    kick40068.A4000 (A4000 Kickstart 3.1.4)
+  The .info declares firmware_count=0. All ROMs are auto-discovered by
+  directory scan, not by explicit filename lookup.
 
-  The core is marked experimental by upstream. Most users should use PUAE.
+  Libretro port is frozen at v2.7.15. Upstream ROM database is larger (3030
+  vs 1980 lines in rommgr). Core functionality equivalent for standard models.
 
 files:
-  - name: "kick13.rom"
+  - name: "amiga-os-130.rom"
     system: amiga
     required: false
-    size: 262144  # 256 KB
-    note: "Amiga 500 Kickstart 1.3 (34.5). Loaded from save_dir/Kickstarts/."
-    source_ref: "sources/src/fs-uae/config.c:128 (fs_uae_load_rom_files)"
+    hle_fallback: true
+    sha1: "891e9a547772fe0c6c19b610baf8bc4ea7fcb785"
+    validation: [sha1]
+    note: "Amiga 500 Kickstart 1.3 r34.5. Default model ROM."
+    source_ref: "sources/src/rommgr.c:141-142 (id=6, ROMTYPE_KICK)"
 
-  - name: "kick20.rom"
+  - name: "amiga-os-204.rom"
     system: amiga
     required: false
-    size: 524288
-    note: "Amiga 500+ Kickstart 2.04 (37.175)."
-    source_ref: "sources/src/fs-uae/config.c:128"
+    hle_fallback: true
+    sha1: "c5839f5cb98a7a8947065c3ed2f14f5f42e334a1"
+    validation: [sha1]
+    note: "Amiga 500+ Kickstart 2.04 r37.175."
+    source_ref: "sources/src/rommgr.c:149-150 (id=7, ROMTYPE_KICK)"
 
-  - name: "kick31.rom"
+  - name: "amiga-os-205.rom"
     system: amiga
     required: false
-    size: 524288
-    note: "Amiga 1200 Kickstart 3.1 (40.68)."
-    source_ref: "sources/src/fs-uae/config.c:128"
+    hle_fallback: true
+    sha1: "02843c4253bbd29aba535b0aa3bd9a85034ecde4"
+    validation: [sha1]
+    note: "Amiga 600 Kickstart 2.05 r37.350."
+    source_ref: "sources/src/rommgr.c:155-156 (id=10, ROMTYPE_KICK)"
 
-  - name: "kick40068.A1200"
+  - name: "amiga-os-120.rom"
     system: amiga
     required: false
-    size: 524288
-    note: "Amiga 1200 Kickstart 3.1.4."
-    source_ref: "sources/src/fs-uae/config.c:128"
+    hle_fallback: true
+    sha1: "11f9e62cf299f72184835b7b2a70a16333fc0d88"
+    validation: [sha1]
+    note: "Amiga 1000 Kickstart 1.2 r33.180."
+    source_ref: "sources/src/rommgr.c:139-140 (id=5, ROMTYPE_KICK)"
 
-  - name: "kick40068.A4000"
+  - name: "amiga-os-310-a1200.rom"
     system: amiga
     required: false
-    size: 524288
-    note: "Amiga 4000 Kickstart 3.1.4."
-    source_ref: "sources/src/fs-uae/config.c:128"
+    hle_fallback: true
+    sha1: "e21545723fe8374e91342617604f1b3d703094f1"
+    validation: [sha1]
+    note: "Amiga 1200 Kickstart 3.1 r40.68."
+    source_ref: "sources/src/rommgr.c:176-177 (id=15, ROMTYPE_KICK)"
+
+  - name: "amiga-os-310-a3000.rom"
+    system: amiga
+    required: false
+    hle_fallback: true
+    sha1: "f8e210d72b4c4853e0c9b85d223ba20e3d1b36ee"
+    validation: [sha1]
+    note: "Amiga 3000 Kickstart 3.1 r40.68."
+    source_ref: "sources/src/rommgr.c:180-181 (id=61, ROMTYPE_KICK)"
+
+  - name: "amiga-os-310-a4000.rom"
+    system: amiga
+    required: false
+    hle_fallback: true
+    sha1: "5fe04842d04a489720f0f4bb0e46948199406f49"
+    validation: [sha1]
+    note: "Amiga 4000 Kickstart 3.1 r40.68."
+    source_ref: "sources/src/rommgr.c:186-187 (id=16, ROMTYPE_KICK)"
+
+  - name: "amiga-os-310-cd32.rom"
+    system: amiga
+    required: false
+    hle_fallback: true
+    sha1: "3525be8887f79b5929e017b42380a79edfee542d"
+    validation: [sha1]
+    note: "Amiga CD32 Kickstart 3.1 r40.60."
+    source_ref: "sources/src/rommgr.c:197-198 (id=18, ROMTYPE_KICKCD32)"
+
+  - name: "amiga-ext-310-cd32.rom"
+    system: amiga
+    required: false
+    sha1: "5bef3d628ce59cc02a66e6e4ae0da48f60e78f7f"
+    validation: [sha1]
+    note: "CD32 extended ROM r40.60. Required for CD32 mode."
+    source_ref: "sources/src/rommgr.c:199-200 (id=19, ROMTYPE_EXTCD32)"
+
+  - name: "cd32fmv.rom"
+    system: amiga
+    required: false
+    sha1: "03ca81c7a7b259cf64bc9582863eca0f6529f435"
+    validation: [sha1]
+    note: "CD32 Full Motion Video cartridge ROM. For CD32/FMV model."
+    source_ref: "sources/src/rommgr.c:208-209 (id=23, ROMTYPE_CD32CART)"
+
+  - name: "amiga-ext-130-cdtv.rom"
+    system: amiga
+    required: false
+    sha1: "7ba40ffa17e500ed9fed041f3424bd81d9c907be"
+    validation: [sha1]
+    note: "CDTV extended ROM v1.0. Required for CDTV mode."
+    source_ref: "sources/src/rommgr.c:213-214 (id=20, ROMTYPE_EXTCDTV)"
+
+  - name: "rom.key"
+    system: amiga
+    required: false
+    note: "Cloanto Amiga Forever decryption key. Enables encrypted ROM loading."
+    source_ref: "libretro/libretro.c:206-222 (addkeyfile via amiga_add_key_dir)"

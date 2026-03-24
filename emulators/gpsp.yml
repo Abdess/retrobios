@@ -2,8 +2,8 @@ emulator: gpSP
 type: libretro
 core_classification: community_fork
 source: "https://github.com/libretro/gpsp"
-upstream: "https://github.com/BASLQC/gPSP"
-profiled_date: "2026-03-21"
+upstream: "https://github.com/davidgfnet/gpsp"
+profiled_date: "2026-03-23"
 core_version: "Git"
 display_name: "Nintendo - Game Boy Advance (gpSP)"
 cores:
@@ -12,9 +12,9 @@ systems:
   - nintendo-gba
 
 notes: |
-  gpSP is a Game Boy Advance emulator originally by Exophase, ported to
-  libretro. Historically it required the official GBA BIOS to run. Current
-  versions ship a built-in open-source BIOS (bios/open_gba_bios.bin) compiled
+  gpSP is a Game Boy Advance emulator originally by Exophase, forked by
+  notaz for GP2X/Pandora, now maintained by davidgfnet for libretro.
+  Ships a built-in open-source BIOS (bios/open_gba_bios.bin) compiled
   from bios/source/ that covers most games.
 
   The core option gpsp_bios controls BIOS selection:
@@ -22,52 +22,42 @@ notes: |
     builtin  - always use the built-in open-source BIOS
     official - try gba_bios.bin, warn and fall back to built-in if missing
 
-  A second option gpsp_boot_mode selects startup behavior:
-    game (default) - skip BIOS intro, boot directly into game
-    bios           - run the BIOS boot animation before launching
-
-  BIOS loading path (libretro/libretro.c:1093-1131):
+  BIOS loading path (libretro/libretro.c:1100-1131):
     1. Resolve system directory (RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY)
     2. Append "/gba_bios.bin"
     3. load_bios() reads 0x4000 (16 KB) into bios_rom[]
     4. Sanity check: bios_rom[0] must be 0x18 (ARM branch opcode)
     5. On failure, memcpy open_gba_bios_rom[] as fallback
 
-  The official BIOS improves compatibility for a few games that rely on
-  precise SWI behavior or BIOS checksum verification. The built-in BIOS
-  works for the vast majority of the GBA library.
+  The official BIOS improves compatibility for games that rely on
+  precise SWI behavior or BIOS checksum verification.
 
-  Upstream (Exophase v0.9) required the official BIOS with no fallback.
-  The built-in open-source BIOS is a libretro port addition.
+  Upstream (notaz/Exophase) required the official BIOS with no fallback.
+  The built-in open-source BIOS is a davidgfnet/libretro addition.
 
 files:
-  # -------------------------------------------------------
-  # Game Boy Advance - BIOS (optional, built-in fallback)
-  # -------------------------------------------------------
   - name: gba_bios.bin
     system: nintendo-gba
     required: false
     hle_fallback: true
-    size: 16384  # 16 KB (0x4000)
-    validation: [size]
-    note: "Official GBA BIOS. Built-in open-source BIOS used as fallback. Real BIOS needed for full SWI accuracy and boot logo."
-    source_ref: "libretro/libretro.c:1111"
+    size: 16384
+    description: "Official GBA BIOS"
+    note: "Built-in open-source BIOS used as fallback. Real BIOS needed for full SWI accuracy and boot animation."
+    source_ref: "libretro/libretro.c:1111, gba_memory.c:2568-2579"
 
 platform_details:
   gba:
-    bios_size: 16384  # 16 KB
+    bios_size: 16384
     hle_bios: true
-    source_ref: "libretro/libretro.c:1107-1131, bios/source/"
+    source_ref: "libretro/libretro.c:1100-1131, bios/source/"
     notes: |
       The built-in BIOS (open_gba_bios_rom, 16 KB) is an open-source
       reimplementation compiled from bios/source/. It implements most
       SWI calls (SoftReset, RegisterRamReset, Halt, VBlankIntrWait,
       arithmetic, decompression, sound, multiboot).
 
-      Validation is minimal: load_bios() in gba_memory.c reads exactly
-      0x4000 bytes. The libretro frontend checks bios_rom[0] == 0x18
-      (ARM branch instruction at reset vector) to reject garbage files.
-      No hash or checksum verification is performed.
+      No hash or checksum verification is performed. The only check
+      is bios_rom[0] == 0x18 (ARM branch at reset vector).
 
       The bios_type enum (main.h:56-61) defines three modes:
         auto_detect  - try official first, fall back to built-in

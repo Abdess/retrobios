@@ -3,7 +3,7 @@ type: libretro
 core_classification: community_fork
 source: "https://github.com/libretro/fuse-libretro"
 upstream: "https://sourceforge.net/projects/fuse-emulator/"
-profiled_date: "2026-03-21"
+profiled_date: "2026-03-23"
 core_version: "1.6.0"
 display_name: "Sinclair - ZX Spectrum (Fuse)"
 cores:
@@ -27,11 +27,15 @@ notes: |
 
   Default ROM filenames are set in fuse/settings.c:209-260. Each machine
   type loads its ROMs during reset via machine_load_rom() calls in
-  fuse/machines/*.c files.
+  fuse/machines/*.c files. All ROMs are size-validated at load time
+  (fuse/machine.c:289).
 
   The +2A reuses the +3 ROMs (plus3-0/1/2/3.rom) per settings.c:234-237.
   The TS2068 reuses TC2068 ROMs (tc2068-0/1.rom) per settings.c:257-258.
   Spectrum 16K uses 48.rom per settings.c:211.
+
+  Upstream FUSE 1.7.0 has SP0256 speech chip (sp0256-al2.rom) and Currah
+  uSpeech (uspeech.rom) peripherals not ported to libretro.
 
 files:
   # -- Embedded ROMs (compiled into the core, not required on disk) --
@@ -43,6 +47,7 @@ files:
     md5: 4c42a2f075212361c3117015b107ff68
     sha1: 5ea7c2b824672e914525d1d5c419d71b84a426a2
     size: 16384
+    validation: [size]
     note: "Spectrum 48K ROM. Also used for 16K and 48K NTSC. Embedded in core."
     source_ref: "fuse/settings.c:211-212, fuse/machines/spec48.c:76"
 
@@ -53,6 +58,7 @@ files:
     md5: b4d2692115a9f2924df92a3cbfb358fb
     sha1: 4f4b11ec22326280bdb96e3baf9db4b4cb1d02c5
     size: 16384
+    validation: [size]
     note: "Spectrum 128K ROM 0 (editor). Embedded in core."
     source_ref: "fuse/settings.c:209, fuse/machines/spec128.c:70"
 
@@ -63,6 +69,7 @@ files:
     md5: 6e09e5d3c4aef166601669feaaadc01c
     sha1: 80080644289ed93d71a1103992a154cc9802b2fa
     size: 16384
+    validation: [size]
     note: "Spectrum 128K ROM 1 (48 BASIC). Embedded in core."
     source_ref: "fuse/settings.c:210, fuse/machines/spec128.c:73"
 
@@ -73,6 +80,7 @@ files:
     md5: 4ed7af4636308b8a48d7a35e6c5b546b
     sha1: 72703f9a3e734f3c23ec34c0727aae4ccbef9a91
     size: 16384
+    validation: [size]
     note: "Spectrum +2 ROM 0. Embedded in core."
     source_ref: "fuse/settings.c:232, fuse/machines/specplus2.c:70"
 
@@ -83,6 +91,7 @@ files:
     md5: b3db95931cc844efaeb82db9c171b9f3
     sha1: de8b0d2d0379cfe7c39322a086ca6da68c7f23cb
     size: 16384
+    validation: [size]
     note: "Spectrum +2 ROM 1. Embedded in core."
     source_ref: "fuse/settings.c:233, fuse/machines/specplus2.c:73"
 
@@ -93,6 +102,7 @@ files:
     md5: 9833b8b73384dd5fa3678377ff00a2bb
     sha1: e319ed08b4d53a5e421a75ea00ea02039ba6555b
     size: 16384
+    validation: [size]
     note: "Spectrum +3 ROM 0. Also used for +2A. Embedded in core."
     source_ref: "fuse/settings.c:234,238, fuse/machines/specplus3.c:197"
 
@@ -103,6 +113,7 @@ files:
     md5: 0f711ceb5ab801b4701989982e0f334c
     sha1: c9969fc36095a59787554026a9adc3b87678c794
     size: 16384
+    validation: [size]
     note: "Spectrum +3 ROM 1. Also used for +2A. Embedded in core."
     source_ref: "fuse/settings.c:235,239, fuse/machines/specplus3.c:200"
 
@@ -113,6 +124,7 @@ files:
     md5: 3b6dd659d5e4ec97f0e2f7878152c987
     sha1: 22e50c6ba4157a3f6a821bd9937cd26e292775c6
     size: 16384
+    validation: [size]
     note: "Spectrum +3 ROM 2. Also used for +2A. Embedded in core."
     source_ref: "fuse/settings.c:236,240, fuse/machines/specplus3.c:203"
 
@@ -123,6 +135,7 @@ files:
     md5: a148bcc575e51389e84fdf5d555c3196
     sha1: 65f031caa8148a5493afe42c41f4929deab26b4e
     size: 16384
+    validation: [size]
     note: "Spectrum +3 ROM 3. Also used for +2A. Embedded in core."
     source_ref: "fuse/settings.c:237,241, fuse/machines/specplus3.c:206"
 
@@ -133,6 +146,7 @@ files:
     md5: bc123f625e245c225f92ef05933ed134
     sha1: 649fbd233490bf58b35350b0123d36caaaa011eb
     size: 16384
+    validation: [size]
     note: "Spectrum +3e ROM 0. Embedded in core."
     source_ref: "fuse/settings.c:242, fuse/machines/specplus3e.c:70"
 
@@ -143,6 +157,7 @@ files:
     md5: 617364264c587d20c9fc4746c29679f2
     sha1: f12198108cbb14de4f03c6695bc16d08c85ee214
     size: 16384
+    validation: [size]
     note: "Spectrum +3e ROM 1. Embedded in core."
     source_ref: "fuse/settings.c:243, fuse/machines/specplus3e.c:73"
 
@@ -153,6 +168,7 @@ files:
     md5: c363e95dcd0a90e6e7f847e6e47e0179
     sha1: 773633dce5ba323a9e00d9d0f9e4d8c295df7c87
     size: 16384
+    validation: [size]
     note: "Spectrum +3e ROM 2. Embedded in core."
     source_ref: "fuse/settings.c:244, fuse/machines/specplus3e.c:76"
 
@@ -163,6 +179,7 @@ files:
     md5: a148bcc575e51389e84fdf5d555c3196
     sha1: 65f031caa8148a5493afe42c41f4929deab26b4e
     size: 16384
+    validation: [size]
     note: "Spectrum +3e ROM 3. Same as plus3-3.rom. Embedded in core."
     source_ref: "fuse/settings.c:245, fuse/machines/specplus3e.c:79"
 
@@ -173,6 +190,7 @@ files:
     md5: fb3f86eb1e5a695d9c50c124e7cfb875
     sha1: 8608328d7dd66602a4846f046b24fed500f7d828
     size: 16384
+    validation: [size]
     note: "Spectrum SE ROM 0. Embedded in core."
     source_ref: "fuse/settings.c:251, fuse/machines/spec_se.c:89"
 
@@ -183,6 +201,7 @@ files:
     md5: 88de4a3129086f34bb9ca559acc51e6c
     sha1: 3be5de57dd3bd0a9d15c57cabe9179afe2906a52
     size: 16384
+    validation: [size]
     note: "Spectrum SE ROM 1. Embedded in core."
     source_ref: "fuse/settings.c:252, fuse/machines/spec_se.c:92"
 
@@ -193,6 +212,7 @@ files:
     md5: 9dd7ecf784a6c04265c073c236f5fadb
     sha1: febb2d495b6eda7cdcb4074935d6e9d9f328972d
     size: 16384
+    validation: [size]
     note: "Timex TC2048 ROM. Embedded in core."
     source_ref: "fuse/settings.c:254, fuse/machines/tc2048.c:80"
 
@@ -203,6 +223,7 @@ files:
     md5: 55d462fccc6c536037404ef4ced08bec
     sha1: 1446cb2780a9dedf640404a639fa3ae518b2d8aa
     size: 16384
+    validation: [size]
     note: "Timex TC2068 ROM 0. Also used for TS2068. Embedded in core."
     source_ref: "fuse/settings.c:255,257, fuse/machines/tc2068.c:138"
 
@@ -213,6 +234,7 @@ files:
     md5: 575d203c6e15e679fba0b73f854ec7a2
     sha1: 7e265a2c1f621ed365ea23bdcafdedbc79c1299c
     size: 8192
+    validation: [size]
     note: "Timex TC2068 ROM 1 (EXROM). Also used for TS2068. Embedded in core."
     source_ref: "fuse/settings.c:256,258, fuse/machines/tc2068.c:141"
 
@@ -224,6 +246,7 @@ files:
     required: true
     md5: ""
     size: 16384
+    validation: [size]
     note: "Pentagon 128K/512K/1024 ROM 0. Required for Pentagon machines."
     source_ref: "fuse/settings.c:221,225,229, fuse/machines/pentagon.c:135"
 
@@ -232,6 +255,7 @@ files:
     required: true
     md5: ""
     size: 16384
+    validation: [size]
     note: "Pentagon 128K/512K/1024 ROM 1. Required for Pentagon machines."
     source_ref: "fuse/settings.c:222,226,230, fuse/machines/pentagon.c:138"
 
@@ -240,6 +264,7 @@ files:
     required: true
     md5: ""
     size: 16384
+    validation: [size]
     note: "TR-DOS ROM (Beta 128 disk interface). Used by Pentagon and Scorpion."
     source_ref: "fuse/settings.c:223,227,231, fuse/machines/pentagon.c:141"
 
@@ -248,6 +273,7 @@ files:
     required: true
     md5: ""
     size: 16384
+    validation: [size]
     note: "Gluck ROM. Required for Pentagon 512K and 1024."
     source_ref: "fuse/settings.c:224,228, fuse/machines/pentagon512.c:82"
 
@@ -257,6 +283,7 @@ files:
     required: true
     md5: ""
     size: 16384
+    validation: [size]
     note: "Scorpion 256K ROM 0. Required for Scorpion machine."
     source_ref: "fuse/settings.c:247, fuse/machines/scorpion.c:76"
 
@@ -265,6 +292,7 @@ files:
     required: true
     md5: ""
     size: 16384
+    validation: [size]
     note: "Scorpion 256K ROM 1. Required for Scorpion machine."
     source_ref: "fuse/settings.c:248, fuse/machines/scorpion.c:79"
 
@@ -273,6 +301,7 @@ files:
     required: true
     md5: ""
     size: 16384
+    validation: [size]
     note: "Scorpion 256K ROM 2. Required for Scorpion machine."
     source_ref: "fuse/settings.c:249, fuse/machines/scorpion.c:82"
 
@@ -281,6 +310,7 @@ files:
     required: true
     md5: ""
     size: 16384
+    validation: [size]
     note: "Scorpion 256K ROM 3 (TR-DOS). Required for Scorpion machine."
     source_ref: "fuse/settings.c:250, fuse/machines/scorpion.c:85"
 
@@ -289,7 +319,8 @@ files:
     system: sinclair-zxspectrum
     required: false
     md5: ""
-    size: 16384
+    size: 8192
+    validation: [size]
     note: "Interface 1 ROM (edition 2). Loaded by peripherals/if1.c:403."
     source_ref: "fuse/settings.c:216, fuse/peripherals/if1.c:403"
 
@@ -299,6 +330,7 @@ files:
     md5: 78e61a2a02121873c1756b21fd1398b1
     sha1: 9a75ed4b293f968985be4c9aa893cd88276d1ced
     size: 8192
+    validation: [size]
     note: "DISCiPLE disk interface ROM. Bundled in repo but not in mem_entries[]."
     source_ref: "fuse/settings.c:215, fuse/peripherals/disk/disciple.c:279"
 
@@ -308,6 +340,7 @@ files:
     md5: 42e5de16fb5e50082bb954ec7ce45851
     sha1: 6b841dc5797ef7eb219ad455cd1e434ca3b9d30d
     size: 8192
+    validation: [size]
     note: "+D disk interface ROM. Bundled in repo but not in mem_entries[]."
     source_ref: "fuse/settings.c:246, fuse/peripherals/disk/plusd.c:239"
 
@@ -315,6 +348,8 @@ files:
     system: sinclair-zxspectrum
     required: false
     md5: ""
+    size: 14336
+    validation: [size]
     note: "Didaktik 80 disk interface ROM. Not embedded."
     source_ref: "fuse/settings.c:214, fuse/peripherals/disk/didaktik.c:236"
 
@@ -322,6 +357,8 @@ files:
     system: sinclair-zxspectrum
     required: false
     md5: ""
+    size: 8192
+    validation: [size]
     note: "Opus Discovery disk interface ROM. Not embedded."
     source_ref: "fuse/settings.c:220, fuse/peripherals/disk/opus.c:210"
 
@@ -329,6 +366,8 @@ files:
     system: sinclair-zxspectrum
     required: false
     md5: ""
+    size: 8192
+    validation: [size]
     note: "Multiface 1 ROM. Not embedded."
     source_ref: "fuse/settings.c:217, fuse/peripherals/multiface.c:224"
 
@@ -336,6 +375,8 @@ files:
     system: sinclair-zxspectrum
     required: false
     md5: ""
+    size: 8192
+    validation: [size]
     note: "Multiface 128 ROM. Not embedded."
     source_ref: "fuse/settings.c:218, fuse/peripherals/multiface.c:225"
 
@@ -343,6 +384,8 @@ files:
     system: sinclair-zxspectrum
     required: false
     md5: ""
+    size: 8192
+    validation: [size]
     note: "Multiface 3 ROM. Not embedded."
     source_ref: "fuse/settings.c:219, fuse/peripherals/multiface.c:226"
 
@@ -352,6 +395,7 @@ files:
     md5: c54aa8f374b0971f51546c29d5d1eba1
     sha1: 16af6f052b38a027dd49ba6e96e3a59d16b62672
     size: 8192
+    validation: [size]
     note: "SpeccyBoot ethernet ROM. Bundled in repo but not in mem_entries[]."
     source_ref: "fuse/settings.c:253, fuse/peripherals/speccyboot.c:148"
 
@@ -359,6 +403,8 @@ files:
     system: sinclair-zxspectrum
     required: false
     md5: ""
+    size: 8192
+    validation: [size]
     note: "TTX2000S teletext adapter ROM. Not embedded."
     source_ref: "fuse/settings.c:259, fuse/peripherals/ttx2000s.c:198"
 
@@ -366,6 +412,8 @@ files:
     system: sinclair-zxspectrum
     required: false
     md5: ""
+    size: 8192
+    validation: [size]
     note: "Currah uSource ROM. Not embedded."
     source_ref: "fuse/settings.c:260, fuse/peripherals/usource.c:129"
 

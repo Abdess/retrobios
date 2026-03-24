@@ -1,8 +1,9 @@
 emulator: FCEUmm
 type: libretro
-core_classification: pure_libretro
+core_classification: community_fork
 source: "https://github.com/libretro/libretro-fceumm"
-profiled_date: "2026-03-21"
+upstream: "https://sourceforge.net/projects/fceumm/"
+profiled_date: "2026-03-23"
 core_version: "SVN"
 display_name: "Nintendo - NES / Famicom (FCEUmm)"
 cores:
@@ -10,18 +11,14 @@ cores:
 systems: [nintendo-nes, nintendo-fds]
 
 notes: |
-  FCEUmm (FCE Ultra mappers modified) is a NES/Famicom emulator.
-  NES cartridge games need no BIOS. Famicom Disk System games require
-  the FDS BIOS ROM (disksys.rom, 8 KB) loaded from the system directory.
-  Game Genie emulation is an optional core feature (disabled by default)
-  that requires gamegenie.nes in the system directory.
-  An optional external palette file (nes.pal, 192 bytes, 64 RGB triplets)
-  can override the built-in NES palette when the core option is set to Custom.
-  NstDatabase.xml is NOT used by FCEUmm (that is Nestopia's database).
+  FCEUmm (FCE Ultra mappers modified) is a NES/Famicom emulator forked from
+  FCEU Ultra by CaH4e3. FDS games require the FDS BIOS ROM (disksys.rom).
+  Game Genie emulation requires gamegenie.nes when the core option is enabled.
+  An external palette file (nes.pal) overrides the built-in palette when the
+  core option is set to Custom.
 
-  File path construction: src/general.c FCEU_MakeFName() joins the
-  system directory (RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY) with each
-  filename directly - no subdirectories.
+  File path construction: src/general.c FCEU_MakeFName() joins the system
+  directory with each filename directly - no subdirectories.
 
 files:
   # --- Famicom Disk System BIOS (required for FDS games) ---
@@ -30,29 +27,22 @@ files:
     description: "FDS BIOS ROM"
     required: true
     size: 8192
-    md5: "ca30b50f880eb660a320674ed365ef7a"
-    sha1: "57fe1bdee955bb48d357e463ccbf129496930b62"
+    validation: [size]
     source_ref: "src/fds.c:636-667 (FDSLoad), src/general.c:64-66 (FCEUMKF_FDSROM)"
-    notes: "Loaded at 0xE000, mapped as 8 KB PRG bank 0. Load fails with error if missing or short read."
+    notes: "Loaded at 0xE000, mapped as 8 KB PRG bank 0. Load fails if missing or short read."
 
   # --- Game Genie ROM (optional, core option fceumm_game_genie) ---
   - name: "gamegenie.nes"
     system: nintendo-nes
     description: "Game Genie add-on cartridge ROM"
     required: false
-    size: 24592
-    md5: "7f98d77d7a094ad7d069b74bd553ec98"
-    sha1: "f430a0d752a9fa0c7032db8131f9090d18f71779"
-    source_ref: "src/cart.c:351-389 (OpenGenie), src/general.c:60-62 (FCEUMKF_GGROM)"
-    notes: "iNES format ROM (4 KB PRG + 256 bytes CHR). Core option disabled by default. Does not apply to FDS or arcade content."
+    source_ref: "src/cart.c:344-398 (FCEU_OpenGenie), src/general.c:60-62 (FCEUMKF_GGROM)"
+    notes: "iNES format ROM (4 KB PRG + 256 bytes CHR). Core option disabled by default. Only applies to cartridge games."
 
   # --- Custom palette (optional, core option fceumm_palette) ---
   - name: "nes.pal"
     system: nintendo-nes
     description: "External NES color palette"
     required: false
-    size: 192
-    md5: "aaf3666e4ed478e2964b46d6a7aa27ad"
-    sha1: "37027d92e1015b82a7dc5c43e9f1649a961577ab"
-    source_ref: "src/general.c:68-70 (FCEUMKF_PALETTE), src/drivers/libretro/libretro.c:1791"
-    notes: "64 RGB triplets (64 x 3 bytes). Only loaded when palette core option is set to Custom. Multiple valid palettes exist."
+    source_ref: "src/palette.c:170-200 (FCEU_LoadGamePalette), src/general.c:68-70 (FCEUMKF_PALETTE), src/drivers/libretro/libretro.c:1789-1798"
+    notes: "RGB triplets (64 standard or 512 with de-emphasis). Only loaded when palette core option is set to Custom."

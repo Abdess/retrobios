@@ -1,10 +1,10 @@
 emulator: Hatari
 type: libretro
-core_classification: community_fork
+core_classification: frozen_snapshot
 source: "https://github.com/libretro/hatari"
 upstream: "https://github.com/hatari/hatari"
 logo: "https://raw.githubusercontent.com/hatari/hatari/main/share/icons/hicolor/scalable/apps/hatari.svg"
-profiled_date: "2026-03-21"
+profiled_date: "2026-03-23"
 core_version: "1.8"
 display_name: "Atari - ST/STE/TT/Falcon (Hatari)"
 cores:
@@ -41,7 +41,7 @@ files:
       TOS ROM image. Any valid version (1.00 through 4.04) or EmuTOS works.
       The core auto-detects version from the ROM header and adjusts machine type.
       Default location is system/tos.img, additional images go in system/hatari/tos/.
-    source_ref: "src/tos.c:576-696, libretro/libretro.c:387-410"
+    source_ref: "src/tos.c:575-696, libretro/libretro.c:387-410"
 
   # -- Cartridge ROM (optional) --
   # External cartridge image, max 128 KB. Formats: .img, .rom, .stc
@@ -51,6 +51,7 @@ files:
     path: null  # user-configured via szCartridgeImageFileName
     required: false
     max_size: 131076  # 0x20004 (.stc with 4-byte header) or 0x20000 (raw)
+    validation: [size]
     note: >
       External cartridge image. Loaded to address 0xFA0000.
       STC format images (0x20004 bytes) have a 4-byte header that is stripped.

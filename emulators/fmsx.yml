@@ -3,7 +3,7 @@ type: libretro
 core_classification: community_fork
 source: "https://github.com/libretro/fmsx-libretro"
 upstream: "https://fms.komkon.org/fMSX/"
-profiled_date: "2026-03-21"
+profiled_date: "2026-03-23"
 core_version: "6.0"
 display_name: "Microsoft - MSX (fMSX)"
 cores:
@@ -149,7 +149,7 @@ files:
     sha1: c36c9e0f96738a340381e23b4f97245388801a46
     required: false
     bundled: true
-    note: "MSX-DOS 2 ROM (64 KB). Loaded when 'fmsx_dos2' option enabled and model is MSX2+ (fMSX/MSX.c:545)."
+    note: "MSX-DOS 2 ROM (64 KB). Loaded when 'fmsx_dos2' option enabled and model is MSX2 or MSX2+ (fMSX/MSX.c:545)."
     source_ref: "fMSX/ROMs/MSXDOS2.ROM"
 
   - name: PAINTER.ROM
@@ -235,9 +235,14 @@ files:
 
   # -- Cartridge identification database --
 
+  - name: CARTS.CRC
+    required: false
+    bundled: false
+    note: "CRC database for cartridge identification and mapper detection. Tried first, before CARTS.SHA (fMSX/MSX.c:2697)."
+
   - name: CARTS.SHA
     required: false
     bundled: true
     md5: 74b0f217fa0e2b8bb5a2f8e2ecc69da3
-    note: "SHA1 database for cartridge identification and mapper detection (fMSX/MSX.c:2712)."
+    note: "SHA1 database for cartridge identification and mapper detection. Fallback when CARTS.CRC absent (fMSX/MSX.c:2712)."
     source_ref: "fMSX/ROMs/CARTS.SHA"

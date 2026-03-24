@@ -3,7 +3,7 @@ type: libretro
 core_classification: community_fork
 source: "https://github.com/libretro/Genesis-Plus-GX"
 upstream: "https://github.com/ekeeke/Genesis-Plus-GX"
-profiled_date: "2026-03-21"
+profiled_date: "2026-03-23"
 core_version: "v1.7.4"
 display_name: "Sega - MS/GG/MD/CD (Genesis Plus GX)"
 cores:
@@ -36,21 +36,18 @@ files:
   - name: bios_CD_U.bin
     system: sega-megacd
     required: true
-    size: 131072  # 128 KB (0x20000)
     note: "Sega CD (NTSC-U) boot ROM. Loaded for REGION_USA."
     source_ref: "core/loadrom.c:409"
 
   - name: bios_CD_E.bin
     system: sega-megacd
     required: true
-    size: 131072
     note: "Mega CD (PAL) boot ROM. Loaded for REGION_EUROPE."
     source_ref: "core/loadrom.c:412"
 
   - name: bios_CD_J.bin
     system: sega-megacd
     required: true
-    size: 131072
     note: "Mega CD (NTSC-J) boot ROM. Loaded for default/Japan region."
     source_ref: "core/loadrom.c:415"
 
@@ -90,7 +87,6 @@ files:
   - name: bios_MD.bin
     system: sega-megadrive
     required: false
-    size: 2048  # 2 KB (0x800)
     note: "Mega Drive TMSS boot ROM. Shows 'Produced by or under license' screen."
     source_ref: "libretro/libretro.c:3651"
 
@@ -100,28 +96,28 @@ files:
   - name: ggenie.bin
     system: sega-megadrive
     required: false
-    size: 32768  # 32 KB (0x8000)
     note: "Game Genie ROM. Loaded when Game Genie lock-on is enabled."
     source_ref: "core/cart_hw/ggenie.c:64"
 
   - name: areplay.bin
     system: sega-megadrive
     required: false
-    size: 65536  # max 64 KB (0x10000)
     note: "Action Replay (Pro) ROM. Loaded when Action Replay lock-on is enabled."
     source_ref: "core/cart_hw/areplay.c:64"
 
   - name: sk.bin
     system: sega-megadrive
     required: false
-    size: 2097152  # 2 MB (0x200000)
+    size: 2097152
+    validation: [size]
     note: "Sonic & Knuckles ROM. Required for S&K lock-on feature."
     source_ref: "core/cart_hw/md_cart.c:867"
 
   - name: sk2chip.bin
     system: sega-megadrive
     required: false
-    size: 262144  # 256 KB (0x40000)
+    size: 262144
+    validation: [size]
     note: "Sonic & Knuckles UPMEM ROM. Used by Sonic 2 & Knuckles lock-on."
     source_ref: "core/cart_hw/md_cart.c:873"
 

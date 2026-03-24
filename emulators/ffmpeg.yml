@@ -1,7 +1,9 @@
 emulator: FFmpeg
 type: utility
-source: "https://github.com/libretro/RetroArch"
-profiled_date: "2026-03-18"
+core_classification: pure_libretro
+source: "https://github.com/libretro/FFmpeg"
+upstream: "https://www.ffmpeg.org/"
+profiled_date: "2026-03-23"
 core_version: "Git"
 display_name: "FFmpeg"
 cores:
@@ -9,11 +11,8 @@ cores:
 systems: []
 
 notes: |
-  FFmpeg core is a media player built into RetroArch using libavcodec,
-  libavformat, and libswscale. Plays video and audio files directly
-  within the RetroArch interface.
-
-  No BIOS or system files required. Codec support depends on the
-  FFmpeg libraries linked at build time.
+  Media player core using libavcodec, libavformat, and libswscale.
+  Plays video and audio files within RetroArch with an audio visualizer.
+  No external files required. Codecs are linked at build time.
 
 files: []

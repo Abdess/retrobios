@@ -2,7 +2,8 @@ emulator: Gearcoleco
 type: libretro
 core_classification: official_port
 source: "https://github.com/drhelius/Gearcoleco"
-profiled_date: "2026-03-21"
+upstream: "https://github.com/drhelius/Gearcoleco"
+profiled_date: "2026-03-23"
 core_version: "1.0.0"
 display_name: "Coleco - ColecoVision (Gearcoleco)"
 cores:
@@ -11,23 +12,20 @@ systems:
   - colecovision
 
 notes: |
-  Gearcoleco is a ColecoVision emulator by Ignacio Sanchez (drhelius).
-  The ColecoVision BIOS ROM is required to run games. Without it, the
-  core displays a static "no BIOS" placeholder image (kNoBiosImage from
-  no_bios.h) and games will not execute.
+  ColecoVision emulator by Ignacio Sanchez (drhelius). Official port
+  maintained by the upstream author. The ColecoVision BIOS ROM is required.
+  Without it, the core renders a static placeholder image (kNoBiosImage from
+  no_bios.h) and games do not execute.
 
-  The BIOS is loaded in load_bootroms() (libretro.cpp:293-305) from the
-  system directory. The core first tries "colecovision.rom", then falls
-  back to "coleco.rom" if the first file is not found.
+  The libretro wrapper (libretro.cpp:293-306) tries "colecovision.rom" first,
+  then falls back to "coleco.rom". Both resolve to the same LoadBios() call
+  in Memory.cpp:228-259 which validates size == 0x2000 (8192 bytes) only.
+  No hash check is performed.
 
-  Memory.cpp:LoadBios() validates the file size must be exactly 8192
-  bytes (0x2000). No hash check is performed by the core itself.
-
-  On reset, the BIOS byte at offset 0x69 is patched to select region:
+  On reset, BIOS byte at offset 0x69 is patched for region selection:
   0x3C for NTSC, 0x32 for PAL (Memory.cpp:184-187).
 
-  The core also supports Super Game Module (SGM) expanded RAM but that
-  requires no additional BIOS files.
+  SGM (Super Game Module) expanded RAM requires no additional BIOS files.
 
 files:
   - name: "colecovision.rom"
@@ -35,16 +33,5 @@ files:
     system: colecovision
     required: true
     size: 8192
-    source_ref: "platforms/libretro/libretro.cpp:293-305 (load_bootroms)"
-
-platform_details:
-  colecovision:
-    bios_filename: "colecovision.rom"
-    bios_fallback: "coleco.rom"
-    bios_size: 8192
-    source_ref: "src/Memory.cpp:228-258"
-    notes: |
-      LoadBios() reads the file as raw binary. Size must be exactly 0x2000
-      (8192 bytes) or the load is rejected with a log message. The BIOS is
-      mapped at address 0x0000-0x1FFF in the ColecoVision memory map. On
-      reset, byte 0x69 is patched for NTSC/PAL region selection.
+    validation: [size]
+    source_ref: "platforms/libretro/libretro.cpp:293-306, src/Memory.cpp:228-259"

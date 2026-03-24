@@ -2,7 +2,7 @@ emulator: FreeIntv
 type: libretro
 core_classification: pure_libretro
 source: "https://github.com/libretro/FreeIntv"
-profiled_date: "2026-03-21"
+profiled_date: "2026-03-23"
 core_version: "2018.1.5"
 display_name: "Mattel - Intellivision (FreeIntv)"
 cores:
@@ -11,65 +11,34 @@ systems:
   - intellivision
 
 notes: |
-  FreeIntv is a Mattel Intellivision emulator for libretro.
+  Written for libretro by David Richardson. Intellivoice SP0256 emulation
+  contributed by Joe Zbiciak (jzIntv), mask ROM embedded in source
+  (src/ivoice.c:337-510, 4097-byte static array). No external ivoice ROM.
 
-  BIOS loading happens in retro_init() (src/libretro.c:1166-1174). The core
-  calls retro_get_system_directory() then joins exec.bin and grom.bin paths
-  directly. No subdirectory, no core option to disable BIOS loading.
+  BIOS loading in retro_init() (src/libretro.c:1166-1174). Paths joined
+  directly to system directory, no subdirectory.
 
-  loadExec() in src/intv.c:47-71 reads exec.bin as big-endian 16-bit words
-  into memory range 0x1000-0x1FFF (Executive ROM, 8 KB file).
+  loadExec() reads exec.bin as big-endian 16-bit words into 0x1000-0x1FFF.
+  loadGrom() reads grom.bin as raw bytes into 0x3000-0x37FF.
 
-  loadGrom() in src/intv.c:73-98 reads grom.bin as raw bytes into memory
-  range 0x3000-0x37FF (Graphics ROM, 2 KB file).
+  Both files required for operation. Without them, the OSD shows
+  "PUT GROM/EXEC IN SYSTEM DIRECTORY" and games do not run.
 
-  Both files are required. Without them the core prints an error and shows
-  "PUT GROM/EXEC IN SYSTEM DIRECTORY" on the OSD, but does not abort.
-  Games will not run correctly without both BIOS files.
+  No hash or size validation on either file.
 
-  The .info file declares firmware_count = 2 with both marked opt = false.
-
-  No ECS (Entertainment Computer System) BIOS support exists in this core.
-  There is no ecs.bin loading code anywhere in the source.
+  No ECS support. No ecs.bin loading code in the source.
 
 files:
   - name: "exec.bin"
     system: intellivision
     required: true
-    size: 8192  # 8 KB (4096 x 16-bit words, 0x1000-0x1FFF)
-    md5: 62e761035cb657903761800f4437b8af
+    size: 8192
     note: "Executive ROM. Big-endian 16-bit words loaded at 0x1000-0x1FFF."
     source_ref: "src/intv.c:47-71, src/libretro.c:1169"
 
   - name: "grom.bin"
     system: intellivision
     required: true
-    size: 2048  # 2 KB (bytes, 0x3000-0x37FF)
-    md5: 0cd5946c6473e42e8e4c2137785e427f
+    size: 2048
     note: "Graphics ROM. Raw bytes loaded at 0x3000-0x37FF."
     source_ref: "src/intv.c:73-98, src/libretro.c:1173"
-
-platform_details:
-  bios_mapping:
-    exec:
-      target: "0x1000-0x1FFF (Executive ROM)"
-      format: "big-endian 16-bit words"
-      source_ref: "src/intv.c:55-58"
-    grom:
-      target: "0x3000-0x37FF (Graphics ROM)"
-      format: "raw 8-bit bytes"
-      source_ref: "src/intv.c:81-84"
-    notes: |
-      Memory[] is a 64K array of unsigned int (src/memory.c:26).
-      EXEC region (0x1000-0x1FFF) is write-protected in writeMem()
-      (src/memory.c:60-61). GROM region (0x3000-0x37FF) is also
-      write-protected (src/memory.c:62).
-
-  cartridge_loading:
-    formats: "int, bin, rom"
-    methods: "Intellicart (magic byte 0xA8), raw ROM with fingerprint DB"
-    source_ref: "src/cart.c"
-    notes: |
-      Raw ROMs use a fingerprint database (sum of first 256 bytes)
-      to select one of 10 memory map configurations (load0-load9).
-      Intellicart format is auto-detected by 0xA8 magic byte.

@@ -3,7 +3,7 @@ type: libretro
 core_classification: frozen_snapshot
 source: "https://github.com/libretro/fbalpha2012_cps2"
 upstream: "https://www.fbalpha.com"
-profiled_date: "2026-03-19"
+profiled_date: "2026-03-23"
 core_version: "v0.2.97.28"
 display_name: "Arcade (FB Alpha 2012 CPS-2)"
 cores:
@@ -13,32 +13,25 @@ systems:
 
 notes: |
   Frozen snapshot of Final Burn Alpha v0.2.97.28 (circa 2012), CPS-2 only.
-  Exists for RAM-constrained platforms (3DS, embedded). Most users should use FBNeo.
+  Exists for RAM-constrained platforms (3DS, embedded).
 
   CPS-2 has no system BIOS. Each game's ROM set is self-contained:
   68000 program ROMs + Z80 sound program + GFX ROMs + QSound samples.
+  Zero BRF_BIOS entries in entire codebase. No BRF_OPT entries either
+  (PLD references stripped from this CPS-2-only build).
 
-  QSound is emulated in software (qs_c.c:QscInit, panning table + DSP emulation).
-  No external QSound DSP ROM (dl-1425.bin) needed — unlike MAME, FBA emulates
-  the QSound chip directly without requiring the DSP program ROM.
+  QSound emulated in software (qs_c.c). No external QSound DSP ROM needed.
+  All audio data loaded from game ROM ZIP.
 
-  Z80 sound program loaded from game ROM set into CpsZRom buffer (cps.c:451,
-  BurnLoadRom). QSound samples loaded into CpsQSam. All from the game ZIP.
+  ROMs loaded from content directory (g_rom_dir, libretro.cpp:969).
+  g_system_dir used only for hiscore.dat (hiscore.c:228-232).
 
-  Board PLDs (buf1, ioa1, prg2, rom1) referenced via A_BOARD_QSOUND_PLDS
-  macro, all marked BRF_OPT. GAL/PAL dumps for hardware preservation only.
-  Zero BRF_BIOS entries in entire codebase.
-
-  ROM path: ROMs loaded from content directory (g_rom_dir, libretro.cpp).
-  g_system_dir is set (line 988) but never used for any file loading.
-
-  The .info note "BIOS files must be inside the ROM directory" is misleading —
-  there are no BIOS files for CPS-2. Generic note across all FBA cores.
-
-  need_fullpath=true, block_extract=true, extensions=zip.
+  Hiscore support gated by fba2012cps2_hiscores core option
+  (libretro.cpp:561-563) and per-game BDF_HISCORE_SUPPORTED flag.
 
 files:
   - name: "hiscore.dat"
+    description: "High score persistence database"
     required: false
-    note: "High score database, loaded from save directory"
-    source_ref: "src/burn/hiscore.c"
+    source_ref: "src/burn/hiscore.c:228-232"
+    note: "Loaded from <system_dir>/fbalpha2012/hiscore.dat"

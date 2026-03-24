@@ -3,7 +3,7 @@ type: libretro
 core_classification: frozen_snapshot
 source: "https://github.com/libretro/fbalpha2012"
 upstream: "https://www.fbalpha.com"
-profiled_date: "2026-03-19"
+profiled_date: "2026-03-23"
 core_version: "v0.2.97.29"
 display_name: "Arcade (FB Alpha 2012)"
 cores:
@@ -19,7 +19,6 @@ systems:
 notes: |
   Frozen snapshot of Final Burn Alpha v0.2.97.29 (circa 2012), full version.
   Supports CPS-1, CPS-2, CPS-3, Neo Geo, PGM, Sega, Cave, Toaplan, and more.
-  Exists for RAM-constrained platforms. Most users should use FBNeo.
 
   Multiple arcade systems have BIOS ROMs marked BRF_BIOS in source:
 
@@ -46,15 +45,80 @@ notes: |
   All BIOS files are part of their respective game ROM set ZIPs (arcade standard).
   None are standalone system directory files. The .info note "BIOS files must be
   inside the ROM directory" refers to the ROM directory containing the game ZIPs,
-  which already include their BIOS — no separate action needed by the user.
+  which already include their BIOS.
 
-  ROM path: g_rom_dir from content path. g_system_dir set but unused.
-  Extensions: iso|zip|7z. need_fullpath=true, block_extract=true.
+  ROM path: g_rom_dir from content path.
+  Sample path: g_system_dir/fba2012/samples/ (samples.cpp:248).
+  Hiscore path: g_save_dir/hiscore.dat (hiscore.cpp:411).
 
 files:
   - name: "hiscore.dat"
+    description: "High score persistence database"
     required: false
-    note: "High score database, loaded from save directory"
     source_ref: "svn-current/trunk/src/burn/hiscore.cpp:411"
+    note: "Loaded from save directory (g_save_dir). Gated by EnableHiscores core option and per-game BDF_HISCORE_SUPPORTED flag."
+
+  - name: "dkong.zip"
+    path: "fba2012/samples/dkong.zip"
+    description: "Donkey Kong audio samples"
+    required: false
+    category: game_data
+    source_ref: "svn-current/trunk/src/burn/snd/samples.cpp:248,262"
+    note: "WAV samples for Donkey Kong and clones (dkongo, dkongj, dkongjo, dkongjo1, dkongf, dkongx, dkongx11)"
+
+  - name: "dkongjr.zip"
+    path: "fba2012/samples/dkongjr.zip"
+    description: "Donkey Kong Jr audio samples"
+    required: false
+    category: game_data
+    source_ref: "svn-current/trunk/src/burn/snd/samples.cpp:248,262"
+    note: "WAV samples for Donkey Kong Jr and clones (dkongjrj, dkongjnrj, dkongjrb, jrking, dkingjr, dkongjre)"
+
+  - name: "galaga.zip"
+    path: "fba2012/samples/galaga.zip"
+    description: "Galaga audio samples"
+    required: false
+    category: game_data
+    source_ref: "svn-current/trunk/src/burn/snd/samples.cpp:248,262"
+    note: "WAV samples for Galaga and clones (galagao, galagamw, galagamk, galagamf, gallag)"
+
+  - name: "rallyx.zip"
+    path: "fba2012/samples/rallyx.zip"
+    description: "Rally-X audio samples"
+    required: false
+    category: game_data
+    source_ref: "svn-current/trunk/src/burn/snd/samples.cpp:248,262"
+    note: "WAV samples for Rally-X and clones (rallyxa, rallyxm, rallyxmr, nrallyx)"
+
+  - name: "ghox.zip"
+    path: "fba2012/samples/ghox.zip"
+    description: "Ghox audio samples"
+    required: false
+    category: game_data
+    source_ref: "svn-current/trunk/src/burn/snd/samples.cpp:248,262"
+    note: "WAV samples for Ghox and Ghox (joystick). Substitutes undumped MCU sound."
+
+  - name: "fireshrk.zip"
+    path: "fba2012/samples/fireshrk.zip"
+    description: "Fire Shark / Same! Same! Same! audio samples"
+    required: false
+    category: game_data
+    source_ref: "svn-current/trunk/src/burn/snd/samples.cpp:248,262"
+    note: "WAV samples for Fire Shark and clones (fireshrkd, fireshrkdh, samesame, samesame2)"
+
+  - name: "tekipaki.zip"
+    path: "fba2012/samples/tekipaki.zip"
+    description: "Teki Paki audio samples"
+    required: false
+    category: game_data
+    source_ref: "svn-current/trunk/src/burn/snd/samples.cpp:248,262"
+
+  - name: "vimana.zip"
+    path: "fba2012/samples/vimana.zip"
+    description: "Vimana audio samples"
+    required: false
+    category: game_data
+    source_ref: "svn-current/trunk/src/burn/snd/samples.cpp:248,262"
+    note: "WAV samples for Vimana and clones (vimanan, vimanaj)"
 
 exclusion_note: "All BIOS ROMs (Neo Geo, PGM, CPS-3, Sega) are inside game ROM set ZIPs, not standalone system files. neogeo.zip is a parent ROM set loaded automatically by the emulator when a Neo Geo game is started."

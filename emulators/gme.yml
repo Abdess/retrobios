@@ -1,8 +1,9 @@
 emulator: Game Music Emu
 type: utility
+core_classification: pure_libretro
 source: "https://github.com/libretro/libretro-gme"
 upstream: "https://github.com/libgme/game-music-emu"
-profiled_date: "2026-03-21"
+profiled_date: "2026-03-23"
 core_version: "Git"
 display_name: "Game Music Emu"
 cores: [gme]
@@ -10,7 +11,6 @@ systems: []
 files: []
 notes: >
   Libretro wrapper around Blargg's Game Music Emu library.
-  Plays chiptune music files from various consoles: NSF (NES), SPC (SNES),
-  GBS (Game Boy), VGM/VGZ (Sega), HES (PC Engine), AY (ZX Spectrum),
-  SAP (Atari), KSS (MSX). Loads music files as content.
-  No BIOS, firmware, or system directory files required.
+  Plays chiptune music files: NSF/NSFE (NES), SPC (SNES), GBS (Game Boy),
+  VGM/VGZ (Sega), HES (PC Engine), AY (ZX Spectrum), SAP (Atari),
+  KSS (MSX), GYM (Genesis). Loads music files as content.

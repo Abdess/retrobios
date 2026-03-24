@@ -69,7 +69,7 @@ files:
     size: 524288
     crc32: "03cc9f6a"
     note: "NEO-MVH MV1C (Asia) - default for AS region"
-    source_ref: "src/geo.c:179"
+    source_ref: "src/geo.c:180"
 
   - name: "sp-s2.sp1"
     archive: neogeo.zip

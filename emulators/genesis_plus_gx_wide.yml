@@ -3,7 +3,7 @@ type: libretro
 core_classification: enhanced_fork
 source: "https://github.com/libretro/Genesis-Plus-GX-Wide"
 upstream: "https://github.com/ekeeke/Genesis-Plus-GX"
-profiled_date: "2026-03-21"
+profiled_date: "2026-03-23"
 core_version: "v1.7.4"
 display_name: "Sega - MS/GG/MD/CD (Genesis Plus GX Wide)"
 cores:
@@ -26,45 +26,45 @@ files:
     system: sega-megacd
     required: true
     size: 131072
-    source_ref: "core/loadrom.c:409"
+    source_ref: "core/loadrom.c:408"
 
   - name: bios_CD_E.bin
     system: sega-megacd
     required: true
     size: 131072
-    source_ref: "core/loadrom.c:412"
+    source_ref: "core/loadrom.c:411"
 
   - name: bios_CD_J.bin
     system: sega-megacd
     required: true
     size: 131072
-    source_ref: "core/loadrom.c:415"
+    source_ref: "core/loadrom.c:414"
 
   - name: bios_U.sms
     system: sega-mastersystem
     required: false
-    source_ref: "core/loadrom.c:511"
+    source_ref: "core/loadrom.c:510"
 
   - name: bios_E.sms
     system: sega-mastersystem
     required: false
-    source_ref: "core/loadrom.c:514"
+    source_ref: "core/loadrom.c:513"
 
   - name: bios_J.sms
     system: sega-mastersystem
     required: false
-    source_ref: "core/loadrom.c:517"
+    source_ref: "core/loadrom.c:516"
 
   - name: bios.gg
     system: sega-gamegear
     required: false
-    source_ref: "core/loadrom.c:480"
+    source_ref: "core/loadrom.c:479"
 
   - name: bios_MD.bin
     system: sega-megadrive
     required: false
     size: 2048
-    source_ref: "libretro/libretro.c:3551"
+    source_ref: "libretro/libretro.c:3682"
 
   - name: ggenie.bin
     system: sega-megadrive
@@ -82,10 +82,12 @@ files:
     system: sega-megadrive
     required: false
     size: 2097152
-    source_ref: "core/cart_hw/md_cart.c:867"
+    validation: [size]
+    source_ref: "core/cart_hw/md_cart.c:750"
 
   - name: sk2chip.bin
     system: sega-megadrive
     required: false
     size: 262144
-    source_ref: "core/cart_hw/md_cart.c:873"
+    validation: [size]
+    source_ref: "core/cart_hw/md_cart.c:756"

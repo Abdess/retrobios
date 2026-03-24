@@ -2,7 +2,8 @@ emulator: Gearsystem
 type: libretro
 core_classification: official_port
 source: "https://github.com/drhelius/Gearsystem"
-profiled_date: "2026-03-21"
+upstream: "https://github.com/drhelius/Gearsystem"
+profiled_date: "2026-03-23"
 core_version: "3.2.0"
 display_name: "Sega - MS/GG/SG-1000 (Gearsystem)"
 cores:
@@ -21,8 +22,8 @@ notes: |
   (both disabled by default). Boot ROMs are loaded in load_bootroms()
   from the system directory with fixed filenames.
 
-  SG-1000 has no BIOS support. IsBootromEnabled() in Memory.cpp explicitly
-  returns false when a SG-1000 cartridge is detected.
+  SG-1000 and Game Gear in SMS mode have no BIOS support.
+  IsBootromEnabled() returns false for both cases.
 
   When enabled, the boot ROM executes as on original hardware, which may
   cause invalid ROMs to lock or fail to boot entirely.
@@ -32,17 +33,17 @@ files:
   - name: "bios.sms"
     system: sega-mastersystem
     required: false
-    source_ref: "platforms/libretro/libretro.cpp:413-414 (load_bootroms)"
+    source_ref: "platforms/libretro/libretro.cpp:414,417 (load_bootroms)"
 
   - name: "bios.gg"
     system: sega-gamegear
     required: false
-    source_ref: "platforms/libretro/libretro.cpp:415-416 (load_bootroms)"
+    source_ref: "platforms/libretro/libretro.cpp:415,418 (load_bootroms)"
 
 platform_details:
   mastersystem:
     bios_filename: "bios.sms"
-    source_ref: "src/Memory.cpp:222-228"
+    source_ref: "src/Memory.cpp:223-228"
     notes: |
       Boot ROM loaded via LoadBootromSMS() -> LoadBootroom(path, false).
       Raw binary read, stored in m_pBootromSMS. Bank count computed as
@@ -50,7 +51,7 @@ platform_details:
 
   gamegear:
     bios_filename: "bios.gg"
-    source_ref: "src/Memory.cpp:230-234"
+    source_ref: "src/Memory.cpp:230-235"
     notes: |
       Boot ROM loaded via LoadBootromGG() -> LoadBootroom(path, true).
       Raw binary read, stored in m_pBootromGG. Same bank computation.
@@ -60,4 +61,4 @@ platform_details:
     bios_filename: null
     notes: |
       No BIOS support. Memory.cpp:291 returns false from IsBootromEnabled()
-      when IsSG1000() is true.
+      when IsSG1000() or IsGameGearInSMSMode() is true.

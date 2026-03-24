@@ -2,7 +2,7 @@ emulator: FreeChaF
 type: libretro
 core_classification: pure_libretro
 source: "https://github.com/libretro/FreeChaF"
-profiled_date: "2026-03-21"
+profiled_date: "2026-03-23"
 core_version: "GIT"
 display_name: "Fairchild - ChannelF (FreeChaF)"
 cores:
@@ -11,7 +11,7 @@ systems:
   - fairchild-channelf
 
 notes: |
-  FreeChaF is a Fairchild Channel F emulator ported to libretro.
+  FreeChaF is a Fairchild Channel F emulator written for libretro.
 
   BIOS loading is in src/libretro.c:186-208. The core first tries to load
   sl90025.bin (Channel F II PSU1) at address 0x000. If that fails, it falls
@@ -37,8 +37,6 @@ files:
     system: fairchild-channelf
     required: false
     hle_fallback: true
-    md5: ac9804d4c0e9d07e33472e3726ed15c3
-    size: 1024  # 1 KB, fills 0x000-0x3FF
     note: "Channel F PSU1 ROM (original). Fallback if sl90025.bin is missing."
     source_ref: "src/libretro.c:192"
 
@@ -46,8 +44,6 @@ files:
     system: fairchild-channelf
     required: false
     hle_fallback: true
-    md5: da98f4bb3242ab80d76629021bb27585
-    size: 1024  # 1 KB, fills 0x400-0x7FF
     note: "Channel F PSU2 ROM. Always loaded at address 0x400."
     source_ref: "src/libretro.c:202"
 
@@ -55,15 +51,13 @@ files:
     system: fairchild-channelf
     required: false
     hle_fallback: true
-    md5: 95d339631d867c8f1d15a5f2ec26069d
-    size: 1024  # 1 KB, fills 0x000-0x3FF
     note: "Channel F II PSU1 ROM. Tried first, preferred over sl31253.bin."
     source_ref: "src/libretro.c:186"
 
 platform_details:
   bios_mapping:
     target: "0x000-0x7FF in 64K memory space"
-    source_ref: "src/memory.h:27-29, src/memory.c:30-61"
+    source_ref: "src/memory.h:27-29, src/memory.c:29-61"
     notes: |
       MEMORY_loadSysROM_libretro() reads the file and copies it into
       Memory[] at the given address offset. PSU1 is loaded at 0x000,

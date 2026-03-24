@@ -3,7 +3,7 @@ type: libretro
 core_classification: community_fork
 source: "https://github.com/libretro/gambatte-libretro"
 upstream: "https://github.com/sinamas/gambatte"
-profiled_date: "2026-03-21"
+profiled_date: "2026-03-23"
 core_version: "v0.5.0"
 display_name: "Nintendo - Game Boy / Color (Gambatte)"
 cores:
@@ -11,52 +11,45 @@ cores:
 systems: [nintendo-gb, nintendo-gbc]
 
 notes: |
-  Gambatte is a Game Boy / Game Boy Color emulator focused on accuracy.
-  No BIOS is required for normal operation. The core has a built-in
-  HLE boot sequence that skips the Nintendo logo animation by default.
+  Accuracy-focused GB/GBC emulator. No BIOS required for normal operation;
+  built-in HLE boot sequence skips the Nintendo logo animation.
 
-  When the core option "gambatte_gb_bootloader" is set to "enabled"
-  (the default), the core looks for official boot ROMs in the system
-  directory to play the real startup logo animation. If the files are
-  missing, emulation still works without them.
+  Core option gambatte_gb_bootloader (default: enabled) enables loading
+  official boot ROMs from the system directory for the real startup animation.
+  If missing, emulation works without them.
 
-  The boot ROM loaded depends on the hardware mode:
-  - DMG (original Game Boy): gb_bios.bin (256 bytes, 0x100)
-  - CGB (Game Boy Color) or GBA mode: gbc_bios.bin (2304 bytes, 0x900)
+  Boot ROM selection by hardware mode:
+  - DMG: gb_bios.bin (256 bytes)
+  - CGB or GBA: gbc_bios.bin (2304 bytes)
 
-  In GBA mode the core patches the CGB boot ROM at 0xF2 to fake
-  GBA detection (ld b,0x01), enabling GBA-enhanced features in
-  compatible GBC games (Shantae, Zelda Oracle series, etc.).
+  In GBA mode the core patches the CGB boot ROM at 0xF2 to fake GBA
+  detection (ld b,0x01), enabling GBA-enhanced features in compatible
+  GBC games.
 
-  File path construction: libretro.cpp get_bootloader_from_file()
-  joins RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY with each filename
-  directly - no subdirectories.
+  The upstream standalone supports SGB boot ROM loading; the libretro
+  port does not implement this.
 
-  Gambatte does NOT use sgb_bios.bin. The SGB palette references in
-  the source are color lookup tables for DMG palette colorization,
-  not actual Super Game Boy boot ROM loading.
+  Custom palette files (palettes/*.pal) are user-created colorization
+  configs loaded when GB Colorization is set to "custom". These are
+  user-generated content, not distributable files.
 
 files:
-  # --- DMG boot ROM (optional, enables startup animation) ---
   - name: "gb_bios.bin"
     system: nintendo-gb
     description: "Original Game Boy (DMG-01) boot ROM"
     required: false
     hle_fallback: true
     size: 256
-    md5: "32fbbd84168d3482956eb3c5051637f5"
-    sha1: "4ed31ec6b0b175bb109c0eb5fd3d193da823339f"
-    source_ref: "libretro.cpp:1304-1364 (get_bootloader_from_file), bootloader.cpp:20-55 (load)"
-    notes: "Mapped at 0x0000-0x00FF, swapped out when register 0xFF50 is written. Core option gambatte_gb_bootloader must be enabled."
+    validation: {core: [size], upstream: [size, crc32]}
+    source_ref: "libretro.cpp:1303-1363 (get_bootloader_from_file), bootloader.cpp:20-55 (load)"
+    notes: "Mapped at 0x0000-0x00FF, swapped out when register 0xFF50 is written."
 
-  # --- CGB boot ROM (optional, enables startup animation) ---
   - name: "gbc_bios.bin"
     system: nintendo-gbc
     description: "Game Boy Color (CGB-001) boot ROM"
     required: false
     hle_fallback: true
     size: 2304
-    md5: "dbfce9db9deaa2567f6a84fde55f9680"
-    sha1: "1293d68bf9643bc4f36954c1e80e38f39864528d"
-    source_ref: "libretro.cpp:1304-1364 (get_bootloader_from_file), bootloader.cpp:20-55 (load)"
-    notes: "Mapped at 0x0000-0x08FF with cartridge data preserved at 0x0100-0x01FF. Also used for GBA-enhanced mode with a patch at 0xF2. Presence required for FORCE_CGB flag when hw mode is set to GBC or GBA."
+    validation: {core: [size], upstream: [size, crc32]}
+    source_ref: "libretro.cpp:1303-1363 (get_bootloader_from_file), bootloader.cpp:20-55 (load)"
+    notes: "Mapped at 0x0000-0x08FF with cartridge data preserved at 0x0100-0x01FF. Also used for GBA mode with a patch at 0xF2. Presence required for FORCE_CGB flag when hw mode is GBC or GBA."

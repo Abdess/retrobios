@@ -1,9 +1,9 @@
 emulator: Gearboy
 type: libretro
-core_classification: community_fork
-source: "https://github.com/libretro/Gearboy"
+core_classification: official_port
+source: "https://github.com/drhelius/Gearboy"
 upstream: "https://github.com/drhelius/Gearboy"
-profiled_date: "2026-03-21"
+profiled_date: "2026-03-23"
 core_version: "3.4.1"
 display_name: "Nintendo - Game Boy / Color (Gearboy)"
 cores:
@@ -13,19 +13,25 @@ systems:
   - nintendo-gbc
 
 notes: |
-  Gearboy is a Game Boy / Game Boy Color emulator by drhelius (Nacho Sanchez).
+  Gearboy is a Game Boy / Game Boy Color emulator by drhelius (Ignacio Sanchez).
+  The buildbot builds from drhelius/Gearboy (upstream), not from libretro/Gearboy
+  (abandoned fork frozen at v2.6.0 from 2018).
+  Bootrom loading is gated behind core options (disabled by default).
+  Without bootroms, the core HLE-skips the boot animation.
 
-  The upstream standalone has bootrom support (dmg_boot.bin, cgb_boot.bin)
-  via emu_load_bootrom_dmg/gbc (platforms/desktop-shared/emu.cpp:407-422).
-  The libretro port does NOT load any BIOS files — retro_init() only stores
-  system_dir, retro_load_game() calls LoadROMFromBuffer() with no bootrom
-  loading code (platforms/libretro/libretro.cpp:94-109, 335-364).
+files:
+  - name: dmg_boot.bin
+    description: Game Boy DMG bootrom
+    size: 256
+    required: false
+    hle_fallback: true
+    validation: [size]
+    source_ref: "libretro.cpp:208,211 Memory.cpp:601-606,699-738"
 
-  The .info declares firmware_count=2 (dmg_boot.bin, cgb_boot.bin) but the
-  code never references these files. .info is wrong for the libretro port.
-
-  The core HLE-skips the boot animation — games work without BIOS.
-
-files: []
-
-exclusion_note: "The .info declares dmg_boot.bin and cgb_boot.bin but the libretro port never loads them (no bootrom loading code in libretro.cpp). The upstream standalone supports bootroms but this was not ported to libretro."
+  - name: cgb_boot.bin
+    description: Game Boy Color bootrom
+    size: 2304
+    required: false
+    hle_fallback: true
+    validation: [size]
+    source_ref: "libretro.cpp:209,212 Memory.cpp:608-611,699-738"

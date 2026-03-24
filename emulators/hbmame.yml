@@ -4,7 +4,7 @@ core_classification: enhanced_fork
 source: "https://github.com/libretro/hbmame-libretro"
 upstream: "https://github.com/Robbbert/hbmame"
 logo: "https://raw.githubusercontent.com/mamedev/mame/master/docs/source/images/MAMElogo.svg"
-profiled_date: "2026-03-21"
+profiled_date: "2026-03-23"
 core_version: "Git"
 display_name: "Arcade (HBMAME)"
 cores:
@@ -16,33 +16,17 @@ author: Robbbert
 game_count: 8511
 
 notes: |
-  HBMAME (Home Brew MAME) is a fork of MAME focused on two things: preserving
-  homebrew games written for arcade hardware, and including worthwhile hacks of
-  existing arcade games. The libretro port builds as TARGET=hbmame.
+  Fork of MAME 0.220 preserving homebrew and hacked arcade games. Builds as
+  TARGET=hbmame with 191 driver files covering 8511 game entries. Drivers are
+  hack/homebrew variants of CPS1, CPS2, CPS3, Neo Geo, Pac-Man, Galaxian, etc.
 
-  Based on MAME 0.220 (src/version.cpp: BARE_BUILD_VERSION "0.220"). The core
-  carries 191 driver files under src/hbmame/drivers/ covering ~8500 game entries
-  (hbmame.lst). Most drivers are hack/homebrew variants of well-known arcade
-  boards: CPS1, CPS2, CPS3, Neo Geo, Pac-Man, Galaxian, etc.
+  BIOS handling is identical to MAME. Neo Geo drivers reuse the standard
+  neogeo.zip BIOS set via unmodified NEO_BIOS macros (neogeo.h). No other
+  HBMAME driver defines ROM_SYSTEM_BIOS entries. BIOS files are expected as
+  MAME-format ZIP archives in the ROM search path.
 
-  BIOS handling is identical to MAME. HBMAME does not define any custom BIOS
-  ROMs beyond what standard MAME uses. The Neo Geo subsystem (which accounts for
-  the bulk of hbmame content) reuses the same neogeo.zip BIOS set as MAME:
-  sp-s2.sp1, sm1.sm1, sfix.sfix, 000-lo.lo, plus regional and Universe BIOS
-  variants. The NEO_BIOS macros in src/hbmame/includes/neogeo.h are copied
-  directly from MAME with no modifications to hashes or filenames.
-
-  The neogeo_noslot.cpp driver includes a reduced MV1C-only BIOS set for a few
-  specific PCB games (sp-45.sp1, sp1-j3.bin). The neogeohb.cpp driver handles
-  homebrew and unreleased Neo Geo titles (numbered 300-999) using the same
-  standard BIOS infrastructure.
-
-  No other hbmame-specific drivers (CPS1, CPS2, Pac-Man, Galaxian, etc.) define
-  ROM_SYSTEM_BIOS entries. Their games are ROM-only hacks that rely on parent
-  MAME sets for any BIOS needs.
-
-  BIOS files are expected as MAME-format ZIP archives in the ROM search path.
-  Users with a working MAME 0.220 BIOS collection need nothing extra for HBMAME.
+  Data directories (artwork, cheat, hash, ini, samples) can be placed in
+  {system_dir}/mame/ but are optional and game-specific.
 
 files: []
 

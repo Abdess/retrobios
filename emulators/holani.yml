@@ -3,8 +3,8 @@ type: libretro
 core_classification: official_port
 source: "https://github.com/LLeny/holani-retro"
 upstream: "https://github.com/LLeny/holani"
-profiled_date: "2026-03-21"
-core_version: "0.6.0"
+profiled_date: "2026-03-23"
+core_version: "0.9.9"
 display_name: "Atari - Lynx (Holani)"
 cores: [holani]
 systems: [atari-lynx]
@@ -13,7 +13,7 @@ verification: existence
 notes: |
   Holani is a cycle-stepped Atari Lynx emulator written in Rust by LLeny.
   The libretro port (holani-retro) loads lynxboot.img from the system
-  directory at retro_load_game time (lib.rs:110-121). Path is built as
+  directory at retro_load_game time (lib.rs:110-124). Path is built as
   system_directory + "/lynxboot.img", no subdirectory.
 
   The core library (holani/src/rom.rs) embeds a free boot ROM from
@@ -24,8 +24,6 @@ notes: |
   has the free boot ROM initialized. No hash validation on the external
   file; Rom::from_slice() only checks length == 512.
 
-  ROM extensions: .lnx, .o
-
 files:
   - name: "lynxboot.img"
     description: "Atari Lynx boot ROM"
@@ -33,4 +31,5 @@ files:
     required: false
     hle_fallback: true
     size: 512
-    source_ref: "src/lib.rs:110-121 (bios load path)"
+    validation: [size]
+    source_ref: "src/lib.rs:110-124 (bios load), holani/src/rom.rs:72-79 (size validation)"

@@ -3,7 +3,7 @@ type: libretro
 core_classification: official_port
 source: "https://github.com/libretro/FBNeo"
 upstream: "https://github.com/finalburnneo/FBNeo"
-profiled_date: "2026-03-22"
+profiled_date: "2026-03-23"
 core_version: "v1.0.0.03"
 display_name: "Arcade (FinalBurn Neo) (CPS-1 / CPS-2)"
 cores:

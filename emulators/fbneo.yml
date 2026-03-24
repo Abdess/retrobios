@@ -4,7 +4,7 @@ core_classification: official_port
 source: "https://github.com/libretro/FBNeo"
 upstream: "https://github.com/finalburnneo/FBNeo"
 logo: "https://raw.githubusercontent.com/finalburnneo/FBNeo/master/projectfiles/xcode/Emulator/Assets.xcassets/AppIcon.appiconset/icon_512.png"
-profiled_date: "2026-03-21"
+profiled_date: "2026-03-23"
 core_version: "v1.0.0.03"
 display_name: "Arcade (FinalBurn Neo)"
 cores:
@@ -101,6 +101,7 @@ files:
     source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1606"
 
   - name: "sp-u2.sp1"
+    aliases: ["usa_2slt.bin"]
     archive: neogeo.zip
     system: snk-neogeo-mvs
     required: false
@@ -417,48 +418,6 @@ files:
     crc32: "5a86cff2"
     note: "Zoom lookup table"
     source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1654"
-
-  # -------------------------------------------------------
-  # Trackball BIOS (for irrmaze)
-  # -------------------------------------------------------
-  - name: "236-bios.sp1"
-    archive: neogeo.zip
-    system: snk-neogeo-mvs
-    required: false
-    size: 131072
-    crc32: "853e6b96"
-    note: "Trackball BIOS / Asia MV1B 263"
-    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1744"
-
-  - name: "236-bios_japan_hack.sp1"
-    archive: neogeo.zip
-    system: snk-neogeo-mvs
-    required: false
-    size: 131072
-    crc32: "02bf4426"
-    note: "Trackball BIOS / Japan (hack)"
-    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1745"
-
-  # -------------------------------------------------------
-  # Neo Geo PCB BIOS (for ms5pcb, svcpcb, kf2k3pcb games)
-  # -------------------------------------------------------
-  - name: "sp-4x.sp1"
-    archive: neogeo.zip
-    system: snk-neogeo-mvs
-    required: false
-    size: 524288
-    crc32: "b4590283"
-    note: "PCB BIOS for Metal Slug 5 PCB and SVC Chaos PCB"
-    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1791"
-
-  - name: "spj.sp1"
-    archive: neogeo.zip
-    system: snk-neogeo-mvs
-    required: false
-    size: 524288
-    crc32: "148dd727"
-    note: "PCB BIOS for KOF 2003 PCB"
-    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1879"
 
   # -------------------------------------------------------
   # Neo Geo CDZ (neocdz.zip)

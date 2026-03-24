@@ -2,7 +2,8 @@ emulator: FreeJ2ME
 type: libretro
 core_classification: official_port
 source: "https://github.com/hex007/freej2me"
-profiled_date: "2026-03-21"
+upstream: "https://github.com/hex007/freej2me"
+profiled_date: "2026-03-23"
 core_version: "GIT"
 display_name: "Mobile - J2ME (FreeJ2ME)"
 cores:
@@ -11,33 +12,17 @@ systems:
   - j2me
 
 notes: |
-  FreeJ2ME is a Java ME (J2ME) emulator for libretro. The native .so/.dll
-  core acts as a bridge that spawns a Java process running freej2me-lr.jar,
-  which handles all actual J2ME emulation. Communication between the C
-  frontend and Java backend happens over pipes (Linux) or named pipes
-  (Windows).
-
-  The jar file is required: without it the core cannot start. It must be
-  placed directly in the system directory (not a subdirectory). The core
-  resolves it via RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY joined with
-  "freej2me-lr.jar" using fill_pathname_join().
-
-  A working Java runtime (JRE/JDK 8+) must be installed on the host
-  system. The core invokes "java -jar freej2me-lr.jar" with resolution,
-  rotation, phone type, FPS, and sound arguments passed via argv.
-
-  freej2me-lr.jar is built from the project source via Apache Ant
-  (build.xml target "lr"). It is not a traditional BIOS dump but a
-  software component distributed with the emulator.
-
-  The project also produces freej2me.jar (standalone AWT frontend) and
-  freej2me-sdl.jar (SDL2 frontend), but only freej2me-lr.jar is needed
-  for the libretro core.
+  The native core is a C bridge that spawns a Java process running
+  freej2me-lr.jar, which handles all J2ME emulation. Communication
+  happens over pipes (Linux) or named pipes (Windows). A Java runtime
+  (JRE/JDK 8+) must be installed on the host. The jar is built from
+  source via Apache Ant (build.xml). Same repo hosts standalone AWT
+  and SDL2 frontends alongside the libretro frontend.
 
 files:
   - name: "freej2me-lr.jar"
     system: j2me
     description: "FreeJ2ME libretro Java application"
     required: true
-    source_ref: "src/libretro/freej2me_libretro.c:485 (fill_pathname_join with javapath)"
-    notes: "Not a BIOS dump. This is the Java emulator itself, loaded by the native core at startup. Built from source via 'ant lr'. Must be in the system directory root."
+    source_ref: "src/libretro/freej2me_libretro.c:483-486 (GET_SYSTEM_DIRECTORY + fill_pathname_join + java -jar)"
+    notes: "Not a BIOS dump. Java emulator loaded by the native core at startup via execvp('java', '-jar', path). Built from source via 'ant'. Must be in the system directory root."
