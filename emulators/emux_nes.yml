@@ -48,5 +48,5 @@ notes: |
   is_experimental=true. No save states, rewind, or netplay support.
   Supported extensions: nes, bin, rom.
 
+exclusion_note: "NES has no boot ROM, CPU starts at reset vector from cartridge"
 files: []
-# No BIOS, firmware, or system files of any kind.

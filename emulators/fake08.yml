@@ -30,6 +30,7 @@ notes: |
   (libretro.cpp:258). Content is loaded either via the libretro data buffer
   or full path depending on the _NEED_FULL_PATH_ compile flag.
 
+exclusion_note: "all engine resources compiled into binary via include_bytes!"
 files: []
 
 platform_details:

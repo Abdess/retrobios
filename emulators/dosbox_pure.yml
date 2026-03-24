@@ -28,7 +28,8 @@ notes: |
     ref: dosbox_pure_libretro.cpp:1393-1413
 
   Bundled MUNT (header-only mt32emu.h) for MT-32 emulation.
-  SHA1-based ROM identification (mt32emu.h:5112-5127,5185).
+  SHA1+size validation at load: unrecognized ROMs rejected (Synth::open fails).
+  ref: mt32emu.h:2982-2988,3016-3019,5183-5187
   12 full control ROMs + 2 PCM ROMs supported (no split ROMs in this MUNT).
   TinySoundFont (tsf.h) for SF2/SF3 playback.
   No firmware entries in .info file — all MIDI files optional.
@@ -45,6 +46,7 @@ files:
     hle_fallback: true
     size: 65536
     sha1: "5a5cb5a77d7d55ee69657c2f870416daed52dea7"
+    validation: [sha1, size]
     source_ref: "mt32emu.h:5112,5129"
 
   - name: "MT32_CONTROL.ROM"
@@ -53,6 +55,7 @@ files:
     hle_fallback: true
     size: 65536
     sha1: "e17a3a6d265bf1fa150312061134293d2b58288c"
+    validation: [sha1, size]
     source_ref: "mt32emu.h:5113,5130"
 
   - name: "MT32_CONTROL.ROM"
@@ -61,6 +64,7 @@ files:
     hle_fallback: true
     size: 65536
     sha1: "a553481f4e2794c10cfe597fef154eef0d8257de"
+    validation: [sha1, size]
     source_ref: "mt32emu.h:5114,5131"
 
   - name: "MT32_CONTROL.ROM"
@@ -69,6 +73,7 @@ files:
     hle_fallback: true
     size: 65536
     sha1: "b083518fffb7f66b03c23b7eb4f868e62dc5a987"
+    validation: [sha1, size]
     source_ref: "mt32emu.h:5115,5132"
 
   - name: "MT32_CONTROL.ROM"
@@ -77,6 +82,7 @@ files:
     hle_fallback: true
     size: 65536
     sha1: "7b8c2a5ddb42fd0732e2f22b3340dcf5360edf92"
+    validation: [sha1, size]
     source_ref: "mt32emu.h:5116,5133"
 
   # -- MT-32 v2.x Control ROMs (128 KB) --
@@ -87,6 +93,7 @@ files:
     hle_fallback: true
     size: 131072
     sha1: "5837064c9df4741a55f7c4d8787ac158dff2d3ce"
+    validation: [sha1, size]
     source_ref: "mt32emu.h:5118,5135"
 
   - name: "MT32_CONTROL.ROM"
@@ -95,6 +102,7 @@ files:
     hle_fallback: true
     size: 131072
     sha1: "2c16432b6c73dd2a3947cba950a0f4c19d6180eb"
+    validation: [sha1, size]
     source_ref: "mt32emu.h:5119,5136"
 
   - name: "MT32_CONTROL.ROM"
@@ -103,6 +111,7 @@ files:
     hle_fallback: true
     size: 131072
     sha1: "2869cf4c235d671668cfcb62415e2ce8323ad4ed"
+    validation: [sha1, size]
     source_ref: "mt32emu.h:5120,5137"
 
   - name: "MT32_CONTROL.ROM"
@@ -111,6 +120,7 @@ files:
     hle_fallback: true
     size: 131072
     sha1: "47b52adefedaec475c925e54340e37673c11707c"
+    validation: [sha1, size]
     source_ref: "mt32emu.h:5121,5138"
 
   # -- CM-32L / LAPC-I Control ROMs (64 KB) --
@@ -121,6 +131,7 @@ files:
     hle_fallback: true
     size: 65536
     sha1: "73683d585cd6948cc19547942ca0e14a0319456d"
+    validation: [sha1, size]
     source_ref: "mt32emu.h:5122,5139"
 
   - name: "CM32L_CONTROL.ROM"
@@ -129,6 +140,7 @@ files:
     hle_fallback: true
     size: 65536
     sha1: "a439fbb390da38cada95a7cbb1d6ca199cd66ef8"
+    validation: [sha1, size]
     source_ref: "mt32emu.h:5123,5140"
 
   # -- CM-32LN / CM-500 / LAPC-N Control ROM (64 KB) --
@@ -139,6 +151,7 @@ files:
     hle_fallback: true
     size: 65536
     sha1: "dc1c5b1b90a4646d00f7daf3679733c7badc7077"
+    validation: [sha1, size]
     source_ref: "mt32emu.h:5124,5141"
 
   # -- PCM ROMs --
@@ -149,6 +162,7 @@ files:
     hle_fallback: true
     size: 524288
     sha1: "f6b1eebc4b2d200ec6d3d21d51325d5b48c60252"
+    validation: [sha1, size]
     source_ref: "mt32emu.h:5126,5143"
     notes: "pairs with any MT-32 v1.x control ROM"
 
@@ -158,6 +172,7 @@ files:
     hle_fallback: true
     size: 1048576
     sha1: "289cc298ad532b702461bfc738009d9ebe8025ea"
+    validation: [sha1, size]
     source_ref: "mt32emu.h:5127,5144"
     notes: "pairs with MT-32 v2.x or CM-32L control ROMs. Lower half aliases MT-32 PCM."
 

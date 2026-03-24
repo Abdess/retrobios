@@ -26,6 +26,9 @@ files:
   # -- MT-32 Control ROM --
   # Loaded from system_directory/MT32_CONTROL.ROM.
   # MUNT validates by SHA1+size against known ROM database.
+  # Unrecognized ROMs rejected: ROMInfo::getROMInfo returns NULL,
+  # loadControlROM/loadPCMROM abort, Synth::open fails.
+  # ref: munt/ROMInfo.cpp:175, munt/Synth.cpp:556-562,590-594
   # CM-32L control ROMs also accepted under this filename.
 
   - name: "MT32_CONTROL.ROM"
@@ -34,6 +37,7 @@ files:
     hle_fallback: true
     size: 65536
     sha1: "5a5cb5a77d7d55ee69657c2f870416daed52dea7"
+    validation: [sha1, size]
     mode: libretro
     source_ref: "midi_mt32.h:92, munt/ROMInfo.cpp:30"
 
@@ -43,6 +47,7 @@ files:
     hle_fallback: true
     size: 65536
     sha1: "e17a3a6d265bf1fa150312061134293d2b58288c"
+    validation: [sha1, size]
     mode: libretro
     source_ref: "midi_mt32.h:92, munt/ROMInfo.cpp:31"
 
@@ -52,6 +57,7 @@ files:
     hle_fallback: true
     size: 65536
     sha1: "a553481f4e2794c10cfe597fef154eef0d8257de"
+    validation: [sha1, size]
     mode: libretro
     source_ref: "midi_mt32.h:92, munt/ROMInfo.cpp:32"
 
@@ -61,6 +67,7 @@ files:
     hle_fallback: true
     size: 65536
     sha1: "b083518fffb7f66b03c23b7eb4f868e62dc5a987"
+    validation: [sha1, size]
     mode: libretro
     source_ref: "midi_mt32.h:92, munt/ROMInfo.cpp:33"
 
@@ -70,6 +77,7 @@ files:
     hle_fallback: true
     size: 65536
     sha1: "7b8c2a5ddb42fd0732e2f22b3340dcf5360edf92"
+    validation: [sha1, size]
     mode: libretro
     source_ref: "midi_mt32.h:92, munt/ROMInfo.cpp:34"
 
@@ -82,6 +90,7 @@ files:
     hle_fallback: true
     size: 65536
     sha1: "73683d585cd6948cc19547942ca0e14a0319456d"
+    validation: [sha1, size]
     mode: libretro
     source_ref: "midi_mt32.h:92, munt/ROMInfo.cpp:36"
 
@@ -91,6 +100,7 @@ files:
     hle_fallback: true
     size: 65536
     sha1: "a439fbb390da38cada95a7cbb1d6ca199cd66ef8"
+    validation: [sha1, size]
     mode: libretro
     source_ref: "midi_mt32.h:92, munt/ROMInfo.cpp:37"
 
@@ -104,6 +114,7 @@ files:
     hle_fallback: true
     size: 524288
     sha1: "f6b1eebc4b2d200ec6d3d21d51325d5b48c60252"
+    validation: [sha1, size]
     mode: libretro
     source_ref: "midi_mt32.h:99, munt/ROMInfo.cpp:39"
 
@@ -113,5 +124,6 @@ files:
     hle_fallback: true
     size: 1048576
     sha1: "289cc298ad532b702461bfc738009d9ebe8025ea"
+    validation: [sha1, size]
     mode: libretro
     source_ref: "midi_mt32.h:99, munt/ROMInfo.cpp:40"

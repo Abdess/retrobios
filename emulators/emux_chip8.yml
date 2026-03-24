@@ -36,6 +36,7 @@ notes: |
   RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY (libretro/libretro.c:34) but
   only uses it as a general config path, not for BIOS loading.
 
+exclusion_note: "CHIP-8 has no BIOS, font data hardcoded in char_mem[]"
 files: []
 
 platform_details:

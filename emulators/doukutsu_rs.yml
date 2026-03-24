@@ -56,4 +56,5 @@ notes: |
   All engine-internal resources (fonts, wavetables, controller mappings) are
   built into the core binary.
 
+exclusion_note: "game data loaded relative to content path, not from system directory"
 files: []

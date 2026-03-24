@@ -25,4 +25,5 @@ notes: |
 
   .info firmware_count=0, matches code.
 
+exclusion_note: "system_directory set but never used for file loading"
 files: []
