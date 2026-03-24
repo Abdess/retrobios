@@ -20,22 +20,25 @@ except ImportError:
 
 
 def compute_hashes(filepath: str | Path) -> dict[str, str]:
-    """Compute SHA1, MD5, SHA256, CRC32 for a file."""
+    """Compute SHA1, MD5, SHA256, CRC32, Adler32 for a file."""
     sha1 = hashlib.sha1()
     md5 = hashlib.md5()
     sha256 = hashlib.sha256()
     crc = 0
+    adler = 1  # zlib.adler32 initial value
     with open(filepath, "rb") as f:
         for chunk in iter(lambda: f.read(65536), b""):
             sha1.update(chunk)
             md5.update(chunk)
             sha256.update(chunk)
             crc = zlib.crc32(chunk, crc)
+            adler = zlib.adler32(chunk, adler)
     return {
         "sha1": sha1.hexdigest(),
         "md5": md5.hexdigest(),
         "sha256": sha256.hexdigest(),
         "crc32": format(crc & 0xFFFFFFFF, "08x"),
+        "adler32": format(adler & 0xFFFFFFFF, "08x"),
     }
 
 

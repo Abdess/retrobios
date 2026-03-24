@@ -370,8 +370,27 @@ class TestE2E(unittest.TestCase):
                 # MD5 validation — wrong md5
                 {"name": "alias_target.bin", "required": False,
                  "validation": ["md5"], "md5": "0000000000000000000000000000dead"},
+                # Adler32 — known_hash_adler32 field
+                {"name": "present_req.bin", "required": True,
+                 "known_hash_adler32": None},  # placeholder, set below
+                # Min/max size range validation
+                {"name": "present_req.bin", "required": True,
+                 "validation": ["size"], "min_size": 10, "max_size": 100},
+                # Signature — crypto check we can't reproduce, but size applies
+                {"name": "correct_hash.bin", "required": True,
+                 "validation": ["size", "signature"], "size": 17},
             ],
         }
+        # Compute the actual adler32 of present_req.bin for the test fixture
+        import zlib as _zlib
+        with open(self.files["present_req.bin"]["path"], "rb") as _f:
+            _data = _f.read()
+        _adler = format(_zlib.adler32(_data) & 0xFFFFFFFF, "08x")
+        # Set the adler32 entry (the one with known_hash_adler32=None)
+        for entry in emu_val["files"]:
+            if entry.get("known_hash_adler32") is None and "known_hash_adler32" in entry:
+                entry["known_hash_adler32"] = f"0x{_adler}"
+                break
         with open(os.path.join(self.emulators_dir, "test_validation.yml"), "w") as fh:
             yaml.dump(emu_val, fh)
 
@@ -805,6 +824,36 @@ class TestE2E(unittest.TestCase):
         self.assertIsNotNone(index["correct_hash.bin"]["md5"])
         self.assertIsNotNone(index["correct_hash.bin"]["sha1"])
 
+    def test_82_validation_adler32_pass(self):
+        """File with correct adler32 passes validation."""
+        profiles = load_emulator_profiles(self.emulators_dir)
+        index = _build_validation_index(profiles)
+        path = self.files["present_req.bin"]["path"]
+        reason = check_file_validation(path, "present_req.bin", index)
+        self.assertIsNone(reason)
+
+    def test_83_validation_min_max_size_pass(self):
+        """File within min/max size range passes validation."""
+        profiles = load_emulator_profiles(self.emulators_dir)
+        index = _build_validation_index(profiles)
+        path = self.files["present_req.bin"]["path"]
+        reason = check_file_validation(path, "present_req.bin", index)
+        self.assertIsNone(reason)
+        # Verify the index has min/max
+        self.assertEqual(index["present_req.bin"]["min_size"], 10)
+        self.assertEqual(index["present_req.bin"]["max_size"], 100)
+
+    def test_84_validation_crypto_tracked(self):
+        """Signature/crypto checks are tracked as non-reproducible."""
+        profiles = load_emulator_profiles(self.emulators_dir)
+        index = _build_validation_index(profiles)
+        # correct_hash.bin has [size, signature]
+        self.assertIn("signature", index["correct_hash.bin"]["crypto_only"])
+        # Size check still applies despite signature being non-reproducible
+        path = self.files["correct_hash.bin"]["path"]
+        reason = check_file_validation(path, "correct_hash.bin", index)
+        self.assertIsNone(reason)  # size=16 matches
+
     def test_76_validation_no_effect_when_no_field(self):
         """Files without validation field are unaffected."""
         profiles = load_emulator_profiles(self.emulators_dir)
@@ -918,7 +967,7 @@ class TestE2E(unittest.TestCase):
         """Validation label reflects the checks used."""
         result = verify_emulator(["test_validation"], self.emulators_dir, self.db)
         # test_validation has crc32, md5, sha1, size → all listed
-        self.assertEqual(result["verification_mode"], "crc32+md5+sha1+size")
+        self.assertEqual(result["verification_mode"], "crc32+md5+sha1+signature+size")
 
     def test_99_filter_files_by_mode(self):
         """_filter_files_by_mode correctly filters standalone/libretro."""

@@ -86,17 +86,28 @@ def _parse_validation(validation: list | dict | None) -> list[str]:
     return []
 
 
+# Validation types that require console-specific cryptographic keys.
+# verify.py cannot reproduce these — size checks still apply if combined.
+_CRYPTO_CHECKS = frozenset({"signature", "crypto"})
+
+# All reproducible validation types.
+_HASH_CHECKS = frozenset({"crc32", "md5", "sha1", "adler32"})
+
+
 def _build_validation_index(profiles: dict) -> dict[str, dict]:
     """Build per-filename validation rules from emulator profiles.
 
-    Returns {filename: {"checks": [str], "size": int|None, "crc32": str|None,
-    "md5": str|None, "sha1": str|None}}.
+    Returns {filename: {"checks": [str], "size": int|None, "min_size": int|None,
+    "max_size": int|None, "crc32": str|None, "md5": str|None, "sha1": str|None,
+    "adler32": str|None, "crypto_only": [str]}}.
+
+    ``crypto_only`` lists validation types we cannot reproduce (signature, crypto)
+    so callers can report them as non-verifiable rather than silently skipping.
+
     When multiple emulators reference the same file, merges checks (union).
-    Raises ValueError if two profiles declare conflicting values for
-    the same filename (indicates a profile bug).
+    Raises ValueError if two profiles declare conflicting values.
     """
     index: dict[str, dict] = {}
-    # Track which emulator set each value, for conflict reporting
     sources: dict[str, dict[str, str]] = {}
     for emu_name, profile in profiles.items():
         if profile.get("type") in ("launcher", "alias"):
@@ -113,9 +124,15 @@ def _build_validation_index(profiles: dict) -> dict[str, dict]:
                     "checks": set(), "size": None,
                     "min_size": None, "max_size": None,
                     "crc32": None, "md5": None, "sha1": None,
+                    "adler32": None, "crypto_only": set(),
                 }
                 sources[fname] = {}
             index[fname]["checks"].update(checks)
+            # Track non-reproducible crypto checks
+            index[fname]["crypto_only"].update(
+                c for c in checks if c in _CRYPTO_CHECKS
+            )
+            # Size checks
             if "size" in checks:
                 if f.get("size") is not None:
                     new_size = f["size"]
@@ -132,6 +149,7 @@ def _build_validation_index(profiles: dict) -> dict[str, dict]:
                     index[fname]["min_size"] = f["min_size"]
                 if f.get("max_size") is not None:
                     index[fname]["max_size"] = f["max_size"]
+            # Hash checks (crc32, md5, sha1, adler32)
             if "crc32" in checks and f.get("crc32"):
                 new_crc = f["crc32"].lower()
                 if new_crc.startswith("0x"):
@@ -162,24 +180,46 @@ def _build_validation_index(profiles: dict) -> dict[str, dict]:
                         )
                     index[fname][hash_type] = f[hash_type]
                     sources[fname][hash_type] = emu_name
+            # Adler32 — stored as known_hash_adler32 field (not in validation: list
+            # for Dolphin, but support it in both forms for future profiles)
+            adler_val = f.get("known_hash_adler32") or f.get("adler32")
+            if adler_val:
+                norm = adler_val.lower()
+                if norm.startswith("0x"):
+                    norm = norm[2:]
+                prev_adler = index[fname]["adler32"]
+                if prev_adler is not None and prev_adler != norm:
+                    prev_emu = sources[fname].get("adler32", "?")
+                    raise ValueError(
+                        f"validation conflict for '{fname}': "
+                        f"adler32={prev_adler} ({prev_emu}) vs adler32={norm} ({emu_name})"
+                    )
+                index[fname]["adler32"] = norm
+                sources[fname]["adler32"] = emu_name
     # Convert sets to sorted lists for determinism
     for v in index.values():
         v["checks"] = sorted(v["checks"])
+        v["crypto_only"] = sorted(v["crypto_only"])
     return index
 
 
 def check_file_validation(
     local_path: str, filename: str, validation_index: dict[str, dict],
 ) -> str | None:
-    """Check emulator-level validation (size, crc32, md5, sha1) on a resolved file.
+    """Check emulator-level validation on a resolved file.
 
-    Returns None if all checks pass or no validation applies.
+    Supports: size (exact/min/max), crc32, md5, sha1, adler32.
+    Reports but cannot reproduce: signature, crypto (console-specific keys).
+
+    Returns None if all reproducible checks pass or no validation applies.
     Returns a reason string if a check fails.
     """
     entry = validation_index.get(filename)
     if not entry:
         return None
     checks = entry["checks"]
+
+    # Size checks
     if "size" in checks:
         actual_size = os.path.getsize(local_path)
         if entry["size"] is not None and actual_size != entry["size"]:
@@ -188,9 +228,11 @@ def check_file_validation(
             return f"size too small: min {entry['min_size']}, got {actual_size}"
         if entry["max_size"] is not None and actual_size > entry["max_size"]:
             return f"size too large: max {entry['max_size']}, got {actual_size}"
-    # Hash checks — compute once, reuse
-    need_hashes = any(
-        h in checks and entry.get(h) for h in ("crc32", "md5", "sha1")
+
+    # Hash checks — compute once, reuse for all hash types
+    need_hashes = (
+        any(h in checks and entry.get(h) for h in ("crc32", "md5", "sha1"))
+        or entry.get("adler32")
     )
     if need_hashes:
         hashes = compute_hashes(local_path)
@@ -206,6 +248,18 @@ def check_file_validation(
         if "sha1" in checks and entry["sha1"]:
             if hashes["sha1"].lower() != entry["sha1"].lower():
                 return f"sha1 mismatch: expected {entry['sha1']}, got {hashes['sha1']}"
+        # Adler32 — check if known_hash_adler32 is available (even if not
+        # in the validation: list, Dolphin uses it as informational check)
+        if entry["adler32"]:
+            if hashes["adler32"].lower() != entry["adler32"]:
+                return (
+                    f"adler32 mismatch: expected 0x{entry['adler32']}, "
+                    f"got 0x{hashes['adler32']}"
+                )
+
+    # Note: signature/crypto checks require console-specific keys and
+    # cannot be reproduced. Size checks above still apply when combined
+    # (e.g. validation: [size, signature]).
     return None
 
 
