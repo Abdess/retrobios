@@ -1,8 +1,64 @@
-emulator: "mednafen_pce_fast"
-type: alias
-alias_of: "beetle_pce"
-profiled_date: "2026-03-18"
-core_version: "v0.9.38.7"
+emulator: mednafen_pce_fast
+type: libretro
+core_classification: community_fork
+source: "https://github.com/libretro/beetle-pce-fast-libretro"
+upstream: "https://mednafen.github.io/"
+profiled_date: "2026-03-24"
+core_version: "v1.31.0.0"
 display_name: "NEC - PC Engine / CD (Beetle PCE FAST)"
-note: "This core uses the same BIOS/firmware as beetle_pce. See emulators/beetle_pce.yml for details."
-files: []
+cores: [mednafen_pce_fast]
+systems: [nec-pc-engine]
+verification: existence
+notes: >
+  Fork of Mednafen's pce_fast module (speed-optimized, no SuperGrafx support).
+  Separate codebase from beetle_pce (mednafen/pce_fast/ vs mednafen/pce/).
+  BIOS loaded via HuCLoadCD() at CD-ROM load time. Core option "pce_fast_cdbios"
+  selects which card image to use (default: System Card 3).
+  No Games Express auto-detection (unlike beetle_pce); user must select manually.
+  No hash or size validation on BIOS load.
+  Upstream pce_fast module only has a single pce_fast.cdbios string setting;
+  the 6-option dropdown is a libretro addition.
+
+files:
+  - name: "syscard3.pce"
+    description: "CD-ROM System Card 3.0 (Japan)"
+    region: "NTSC-J"
+    required: true
+    source_ref: "libretro.cpp:67, libretro.cpp:1755-1760"
+    notes: "Default value for pce_fast_cdbios option."
+
+  - name: "syscard2.pce"
+    description: "CD-ROM System Card 2.0 (Japan)"
+    region: "NTSC-J"
+    required: false
+    source_ref: "libretro.cpp:1762"
+    notes: "pce_fast_cdbios = 'System Card 2'."
+
+  - name: "syscard1.pce"
+    description: "CD-ROM System Card 1.0 (Japan)"
+    region: "NTSC-J"
+    required: false
+    source_ref: "libretro.cpp:1764"
+    notes: "pce_fast_cdbios = 'System Card 1'."
+
+  - name: "gexpress.pce"
+    description: "Games Express CD Card"
+    region: "NTSC-J"
+    required: false
+    aliases: ["gecard.pce"]
+    source_ref: "libretro.cpp:1765-1766"
+    notes: "pce_fast_cdbios = 'Games Express'. For unlicensed Games Express titles."
+
+  - name: "syscard3u.pce"
+    description: "CD-ROM System Card 3.0 (US / TurboGrafx-CD)"
+    region: "NTSC-U"
+    required: false
+    source_ref: "libretro.cpp:1767-1768"
+    notes: "pce_fast_cdbios = 'System Card 3 US'. Not in .info."
+
+  - name: "syscard2u.pce"
+    description: "CD-ROM System Card 2.0 (US / TurboGrafx-CD)"
+    region: "NTSC-U"
+    required: false
+    source_ref: "libretro.cpp:1769-1770"
+    notes: "pce_fast_cdbios = 'System Card 2 US'. Not in .info."

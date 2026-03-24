@@ -1,8 +1,9 @@
 emulator: Lutro
 type: game
-core_classification: pure_libretro
+core_classification: game_engine
 source: "https://github.com/libretro/libretro-lutro"
-profiled_date: "2026-03-22"
+upstream: "https://github.com/libretro/libretro-lutro"
+profiled_date: "2026-03-24"
 core_version: "v1"
 display_name: "Lua Engine (Lutro)"
 cores:

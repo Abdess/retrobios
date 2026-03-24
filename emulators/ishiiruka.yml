@@ -1,111 +1,207 @@
 emulator: Ishiiruka
-type: libretro
+type: standalone + libretro
 core_classification: enhanced_fork
 source: "https://github.com/libretro/ishiiruka"
 upstream: "https://github.com/Tinob/Ishiiruka"
-profiled_date: "2026-03-21"
+profiled_date: "2026-03-24"
 core_version: "Git"
 display_name: "Nintendo - GameCube / Wii (Ishiiruka)"
 cores:
   - ishiiruka
 systems: [nintendo-gamecube, nintendo-wii]
 
-# Ishiiruka is a performance-focused Dolphin fork with custom GPU backends.
-# As a Dolphin fork, it shares the exact same BIOS file requirements and paths.
-# DSP HLE is enabled by default (ishiiruka_dsp_hle option), so DSP ROMs are
-# only needed when switching to LLE audio for accuracy.
-
-# Libretro paths (from Boot.cpp):
-#   Sys directory: system/dolphin-emu/Sys/
-#   User directory: saves/User/ (fallback: system/dolphin-emu/User/)
-# Same as dolphin_libretro - uses "dolphin-emu" subdirectory, not "ishiiruka".
-
+# Ishiiruka is a performance-focused Dolphin fork (custom GPU backends, async shader compilation).
+# BIOS/firmware handling identical to Dolphin 5.0-era code.
+# Libretro core uses "dolphin-emu" subdirectory, not "ishiiruka".
 # Core options use "ishiiruka_" prefix (ishiiruka_dsp_hle, ishiiruka_efb_scale, etc.)
+
+pack_structure:
+  libretro: "dolphin-emu"
+  standalone: ""
 
 data_directories:
   - ref: dolphin-sys
-    destination: "dolphin-emu/Sys"
-    source_ref: "Source/Core/Common/CommonPaths.h:115"
+    destination: "Sys"
+    source_ref: "Source/Core/Common/CommonPaths.h:130-131"
 
 files:
   # -- GameCube IPL (Boot ROM) --
   # Region-specific, placed in GC/<region>/IPL.bin
-  # Searched in User/GC/ then Sys/GC/
+  # Checked in User/GC/<region>/ then Sys/GC/<region>/
   - name: "IPL.bin"
     path: "GC/USA/IPL.bin"
     size: 2097152
     required: false
     hle_fallback: true
-    note: "GC NTSC-U boot ROM, same as Dolphin. HLE available"
-    source_ref: "Source/Core/Common/CommonPaths.h:115"
+    note: "GameCube NTSC-U boot ROM. HLE available but real IPL needed for GC menu boot and accurate fonts"
+    source_ref: "Source/Core/Core/ConfigManager.cpp:876-883, Source/Core/Core/HW/EXI/EXI_DeviceIPL.cpp:105"
 
   - name: "IPL.bin"
     path: "GC/EUR/IPL.bin"
     size: 2097152
     required: false
     hle_fallback: true
-    note: "GC PAL boot ROM"
+    note: "GameCube PAL boot ROM"
+    source_ref: "Source/Core/Core/HW/EXI/EXI_DeviceIPL.cpp:185"
 
   - name: "IPL.bin"
     path: "GC/JAP/IPL.bin"
     size: 2097152
     required: false
     hle_fallback: true
-    note: "GC NTSC-J boot ROM"
+    note: "GameCube NTSC-J boot ROM"
+    source_ref: "Source/Core/Core/HW/EXI/EXI_DeviceIPL.cpp:187"
 
   # -- DSP ROMs --
-  # Only needed if DSP LLE is selected (ishiiruka_dsp_hle = disabled)
-  # Searched in User/GC/ then Sys/GC/
+  # Used by DSP LLE for accurate audio. dsp_coef.bin also used by HLE for polyphase resampling.
+  # Searched in: User/GC/ then Sys/GC/
   - name: "dsp_rom.bin"
     path: "GC/dsp_rom.bin"
     size: 8192
     required: false
     hle_fallback: true
-    note: "DSP instruction ROM for LLE audio. Free replacement included, real dump more accurate"
-    source_ref: "Source/Core/Common/CommonPaths.h:112, Source/Core/Core/HW/DSPLLE/DSPLLE.cpp:142-150"
+    validation: [size]
+    known_hash_adler32: "0x66f334fe"
+    note: "DSP instruction ROM for LLE audio. Free replacement included"
+    source_ref: "Source/Core/Common/CommonPaths.h:112, Source/Core/Core/HW/DSPLLE/DSPLLE.cpp:142-150, Source/Core/Core/DSP/DSPCore.cpp:48,67"
 
   - name: "dsp_coef.bin"
     path: "GC/dsp_coef.bin"
     size: 4096
     required: false
     hle_fallback: true
-    note: "DSP coefficient ROM for LLE audio. Free replacement included"
-    source_ref: "Source/Core/Common/CommonPaths.h:113, Source/Core/Core/HW/DSPLLE/DSPLLE.cpp:143-152"
+    validation: [size]
+    known_hash_adler32: "0xf3b93527"
+    note: "DSP coefficient ROM for LLE audio and HLE polyphase resampling. Free replacement included"
+    source_ref: "Source/Core/Common/CommonPaths.h:113, Source/Core/Core/HW/DSPLLE/DSPLLE.cpp:143-153, Source/Core/Core/HW/DSPHLE/UCodes/AX.cpp:43-72, Source/Core/Core/DSP/DSPCore.cpp:48,68"
 
   # -- GameCube Fonts --
-  # Loaded from Sys/GC/, free alternatives bundled
+  # Bundled free alternatives exist but have padding differences causing misplaced text.
+  # If IPL dump is present, fonts are extracted from it instead (preferred).
+  # Loaded from: Sys/GC/
   - name: "font_western.bin"
     path: "GC/font_western.bin"
+    size: 9589
     required: false
     hle_fallback: true
-    note: "Windows-1252 font for GC/Wii text. Free alternative bundled"
-    source_ref: "Source/Core/Core/HW/EXI/EXI_DeviceIPL.cpp:123"
+    note: "Windows-1252 font for GC/Wii text rendering. Free alternative bundled, real one from IPL dump preferred"
+    source_ref: "Source/Core/Common/CommonPaths.h:109, Source/Core/Core/HW/EXI/EXI_DeviceIPL.cpp:123,193-227"
 
   - name: "font_japanese.bin"
     path: "GC/font_japanese.bin"
+    size: 303693
     required: false
     hle_fallback: true
-    note: "Shift-JIS font for Japanese text. Free alternative bundled"
-    source_ref: "Source/Core/Core/HW/EXI/EXI_DeviceIPL.cpp:122"
+    note: "Shift-JIS font for Japanese text. Free alternative bundled, real one from IPL dump preferred"
+    source_ref: "Source/Core/Common/CommonPaths.h:110, Source/Core/Core/HW/EXI/EXI_DeviceIPL.cpp:122,193-227"
+
+  # -- Gecko Code Handler --
+  - name: "codehandler.bin"
+    path: null
+    required: false
+    hle_fallback: true
+    note: "Gecko/Ocarina cheat code handler. Shipped with Ishiiruka in Sys/"
+    source_ref: "Source/Core/Common/CommonPaths.h:127, Source/Core/Core/GeckoCode.cpp:86"
+
+  # -- Wii System Files --
+  # Auto-generated/managed by Dolphin's Wii emulation.
+  - name: "SYSCONF"
+    path: "Wii/shared2/sys/SYSCONF"
+    required: false
+    hle_fallback: true
+    note: "Wii system configuration. Auto-generated, can be imported from NAND backup"
+    source_ref: "Source/Core/Common/CommonPaths.h:59,95, Source/Core/Common/SysConf.cpp:40"
+
+  - name: "setting.txt"
+    path: "Wii/title/00000001/00000002/data/setting.txt"
+    size: 256
+    required: false
+    hle_fallback: true
+    note: "Wii region/language settings. Auto-generated during Wii boot emulation"
+    source_ref: "Source/Core/Common/CommonPaths.h:125, Source/Core/Core/Boot/Boot_BS2Emu.cpp:229-266"
+
+  # -- Wii SD Card Image --
+  - name: "sd.raw"
+    path: "Wii/sd.raw"
+    required: false
+    hle_fallback: true
+    note: "Virtual SD card image for Wii homebrew. Auto-created (128MB) if not present"
+    source_ref: "Source/Core/Common/CommonPaths.h:122, Source/Core/Core/IOS/SDIO/SDIOSlot0.cpp:63-73"
+
+  # -- Wii NAND Backup (BootMii) --
+  - name: "nand.bin"
+    path: null
+    required: false
+    hle_fallback: true
+    mode: standalone
+    note: "BootMii NAND backup. Can be imported to populate Wii NAND with channels, saves, system menu"
+    source_ref: "Source/Core/DiscIO/NANDImporter.cpp:29-47"
+
+  - name: "keys.bin"
+    path: null
+    size: 1024
+    required: false
+    hle_fallback: true
+    mode: standalone
+    note: "OTP/SEEPROM dump (Wii encryption keys). Needed if not appended to nand.bin for NAND import"
+    source_ref: "Source/Core/DiscIO/NANDImporter.cpp:23-24,82-93"
+
+  # -- NAND Certificates (auto-extracted) --
+  - name: "clientca.pem"
+    path: "Wii/clientca.pem"
+    required: false
+    hle_fallback: true
+    mode: standalone
+    note: "SSL client certificate. Auto-extracted from IOS13 content during NAND import"
+    source_ref: "Source/Core/DiscIO/NANDImporter.cpp:199-264"
+
+  - name: "clientcakey.pem"
+    path: "Wii/clientcakey.pem"
+    required: false
+    hle_fallback: true
+    mode: standalone
+    note: "SSL client private key. Auto-extracted from IOS13 content during NAND import"
+    source_ref: "Source/Core/DiscIO/NANDImporter.cpp:235"
+
+  - name: "rootca.pem"
+    path: "Wii/rootca.pem"
+    required: false
+    hle_fallback: true
+    mode: standalone
+    note: "SSL root CA certificate. Auto-extracted from IOS13 content during NAND import"
+    source_ref: "Source/Core/DiscIO/NANDImporter.cpp:236"
 
 notes:
+  hle_available: true
+  hle_note: >
+    Dolphin provides HLE for GameCube IPL (boot ROM), DSP, and Wii system functions.
+    No BIOS files are strictly required for most games. DSP ROMs (dsp_rom.bin + dsp_coef.bin)
+    are the most impactful optional files - Dolphin ships free replacements but real dumps
+    from hardware provide better audio accuracy in some titles.
+  ipl_regions: ["USA", "EUR", "JAP"]
+  dsp_rom_note: >
+    DSP ROMs are verified at load time via Adler32 hash.
+    Official Nintendo hashes: irom=0x66f334fe, drom=0xf3b93527.
+    Multiple free replacement versions exist (v0.1 through v0.4).
+  font_note: >
+    Fonts can come from three sources: real IPL dump (preferred), standalone font files
+    in Sys/GC/, or bundled free alternatives. The free fonts have different padding that
+    causes text positioning issues in some games.
+  nand_note: >
+    Wii NAND content (channels, saves, system menu) is managed by Dolphin internally.
+    Users can import a BootMii NAND backup (nand.bin + optional keys.bin) to populate it.
+    NAND import is only available in standalone mode, not via the libretro core.
   dolphin_fork: true
+  fork_base: "Dolphin 5.0-era"
   fork_differences: >
     Ishiiruka is a Dolphin fork focused on GPU performance (custom texture cache,
     asynchronous shader compilation, post-processing). The BIOS/firmware handling
-    is identical to upstream Dolphin - same files, same paths, same HLE fallbacks.
-  hle_available: true
-  hle_note: >
-    DSP HLE is the default (ishiiruka_dsp_hle = enabled). No BIOS files are
-    required for most games. All files are optional with HLE/free replacements.
+    is identical to upstream Dolphin of the same era. No GBA link support (no mGBA
+    integration). No Realtek Bluetooth firmware support.
   libretro_path: "system/dolphin-emu/"
-  libretro_note: >
-    Despite being named Ishiiruka, the libretro core uses "dolphin-emu" as its
-    system subdirectory (Boot.cpp:46,49). Users with existing Dolphin BIOS files
-    already have everything Ishiiruka needs.
   data_dir_standalone: "ishiiruka"
   data_dir_note: >
     Standalone builds use "ishiiruka" as DOLPHIN_DATA_DIR (CommonPaths.h:24,27),
-    but the libretro core overrides this to use "dolphin-emu" paths.
+    but the libretro core overrides this to use "dolphin-emu" paths (Boot.cpp:46,49).
   library_name: "Ishiiruka"
   valid_extensions: "elf|dol|gcm|iso|tgc|wbfs|ciso|gcz|wad"

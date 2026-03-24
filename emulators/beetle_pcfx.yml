@@ -1,52 +1,30 @@
 emulator: Beetle PC-FX (Mednafen)
 type: libretro
+core_classification: community_fork
 cores: [mednafen_pcfx]
 source: "https://github.com/libretro/beetle-pcfx-libretro"
-profiled_date: "2026-03-18"
-core_version: "v0.9.33.3"
+upstream: "https://mednafen.github.io/"
+profiled_date: "2026-03-24"
+core_version: "v0.9.36.5"
 display_name: "NEC - PC-FX (Beetle PC-FX)"
 systems:
   - nec-pcfx
 
-notes: |
-  Beetle PC-FX is the libretro port of Mednafen's NEC PC-FX emulation module.
-  The core requires a single BIOS file: pcfx.rom (1 MB). The setting
-  "pcfx.bios" resolves to the filename "pcfx.rom" via MDFN_GetSettingS()
-  in mednafen/settings.c:92-93. The file is loaded from the libretro
-  system directory in LoadCommon() (libretro.cpp:367-394).
-
-  The BIOS is mapped at address 0xFFF00000 and must be exactly 1048576 bytes
-  (1024 * 1024). LoadCommon() returns false if the file is missing or the
-  wrong size, so the core will not start without it.
-
-  No other firmware files (fx-scsi.rom, pcfxga.rom, pcfxv101.bin) are
-  referenced by this core. Those exist for other PC-FX emulators or
-  alternate BIOS versions but are unused here.
-
-  BIOS loading: libretro.cpp LoadCommon() lines 364-397.
-  Setting resolution: mednafen/settings.c MDFN_GetSettingS() lines 90-94.
-  BIOS memory: static uint8 *BIOSROM, mapped at 0xFFF00000 (1 MB region).
+notes: >
+  Libretro port of Mednafen's PC-FX module. Setting "pcfx.bios" resolves
+  to "pcfx.rom" (settings.c:92). LoadCommon() loads the file, validates
+  size (1048576 bytes), and maps it at 0xFFF00000. Core won't start
+  without it. No hash validation. Upstream Mednafen also supports an
+  FX-SCSI ROM (pcfx.fxscsi setting, developer-only) not present in
+  this port.
 
 files:
-  # -------------------------------------------------------
-  # PC-FX BIOS
-  # -------------------------------------------------------
   - name: "pcfx.rom"
+    description: "PC-FX BIOS v1.00"
     system: nec-pcfx
     required: true
-    size: 1048576  # 1 MB (1024 * 1024)
+    size: 1048576
+    validation: [size]
     md5: "08e36edbea28a017f79f8d4f7ff9b6d7"
     sha1: "1a77fd83e337f906aecab27a1604db064cf10074"
-    note: "PC-FX BIOS v1.00. Only BIOS file used by this core."
-    source_ref: "libretro.cpp:367, mednafen/settings.c:92-93"
-
-platform_details:
-  pcfx:
-    bios_size: 1048576          # 1 MB
-    ram_size: 2097152            # 2 MB
-    bios_address: "0xFFF00000-0xFFFFFFFF"
-    ram_address: "0x00000000-0x001FFFFF"
-    cpu: "NEC V810"
-    cpu_modes: [accurate, fast]
-    hle_available: false
-    source_ref: "libretro.cpp:103-104, 379-387"
+    source_ref: "libretro.cpp:367-394, mednafen/settings.c:92-93"

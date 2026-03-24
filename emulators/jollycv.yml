@@ -3,7 +3,7 @@ type: libretro
 core_classification: official_port
 source: "https://github.com/libretro/jollycv"
 upstream: "https://gitlab.com/jgemu/jollycv"
-profiled_date: "2026-03-21"
+profiled_date: "2026-03-24"
 core_version: "2.0.0"
 display_name: "ColecoVision/CreatiVision/My Vision (JollyCV)"
 cores:
@@ -55,7 +55,7 @@ files:
     source_ref: "libretro/libretro.c:701, src/jcv_coleco.c:402-406"
     notes: "Mapped at 0x0000-0x1FFF. Replaced by SGM lower RAM when Super Game Module is active. Must be exactly 8192 bytes."
 
-  # --- CreatiVision BIOS (required for CV games) ---
+  # --- CreatiVision BIOS (required for CreatiVision games) ---
   - name: "bioscv.rom"
     system: creativision
     description: "VTech CreatiVision BIOS ROM"

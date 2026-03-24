@@ -3,7 +3,7 @@ type: libretro
 core_classification: frozen_snapshot
 source: "https://github.com/libretro/mame2000-libretro"
 upstream: "https://www.mamedev.org"
-profiled_date: "2026-03-22"
+profiled_date: "2026-03-24"
 core_version: "0.37b5"
 display_name: "Arcade (MAME 2000)"
 
@@ -25,8 +25,9 @@ notes: |
   Samples (per-game WAV files) are loaded from system_dir/mame2000/samples/.
   They provide sound effects for certain games and are optional.
 
-  hiscore.dat, cheat.dat and history.dat are loaded from the ROM directory
-  (not system_dir). hiscore.dat and cheat.dat are bundled in metadata/.
+  hiscore.dat, history.dat and mameinfo.dat are loaded from the ROM directory.
+  cheat.dat is loaded from system_dir/mame2000/cheat/.
+  hiscore.dat and cheat.dat are bundled in the core repo (metadata/).
 
 files:
   - name: hiscore.dat
@@ -38,14 +39,20 @@ files:
   - name: cheat.dat
     required: false
     category: game_data
-    source_ref: "src/cheat.c:210,618,830-831"
-    note: "cheat definitions, loaded from ROM directory, cheats disabled by default"
+    source_ref: "src/cheat.c:210,618,830"
+    note: "cheat definitions, loaded from system_dir/mame2000/cheat/"
 
   - name: history.dat
     required: false
     category: game_data
-    source_ref: "src/libretro/fileio.c:997-1010"
+    source_ref: "src/datafile.c:52,281,541"
     note: "game history database, loaded from ROM directory"
+
+  - name: mameinfo.dat
+    required: false
+    category: game_data
+    source_ref: "src/datafile.c:53,281,568"
+    note: "game technical info database, loaded from ROM directory"
 
   - name: neogeo.zip
     required: true

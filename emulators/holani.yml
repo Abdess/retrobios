@@ -3,7 +3,7 @@ type: libretro
 core_classification: official_port
 source: "https://github.com/LLeny/holani-retro"
 upstream: "https://github.com/LLeny/holani"
-profiled_date: "2026-03-23"
+profiled_date: "2026-03-24"
 core_version: "0.9.9"
 display_name: "Atari - Lynx (Holani)"
 cores: [holani]
@@ -26,8 +26,8 @@ notes: |
 
 files:
   - name: "lynxboot.img"
+    system: atari-lynx
     description: "Atari Lynx boot ROM"
-    region: "World"
     required: false
     hle_fallback: true
     size: 512

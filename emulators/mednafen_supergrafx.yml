@@ -1,8 +1,8 @@
 emulator: "mednafen_supergrafx"
 type: alias
-alias_of: "beetle_pce"
-profiled_date: "2026-03-18"
+alias_of: "mednafen_pce"
+profiled_date: "2026-03-24"
 core_version: "v1.23.0"
 display_name: "NEC - PC Engine SuperGrafx (Beetle SuperGrafx)"
-note: "This core uses the same BIOS/firmware as beetle_pce. See emulators/beetle_pce.yml for details."
+note: "Different repo (beetle-supergrafx-libretro) but loads identical BIOS files as mednafen_pce."
 files: []

@@ -1,12 +1,336 @@
 emulator: MAME Arcade
-type: alias
-alias_of: mame
+type: libretro
+core_classification: official_port
 source: "https://github.com/libretro/mame"
 upstream: "https://github.com/mamedev/mame"
-profiled_date: "2026-03-22"
+profiled_date: "2026-03-24"
 core_version: "0.286"
 display_name: "Arcade (MAME/Arcade)"
+
 cores:
   - mamearcade
-note: "Arcade-only build of libretro/mame (SUBTARGET=arcade). Same source, same CORE_NAME, same paths (system_dir/mame/). Excludes console/computer drivers."
-files: []
+systems:
+  - snk-neogeo-mvs
+  - igs-pgm
+  - sega-naomi
+  - sega-naomi2
+  - sega-naomigd
+  - sammy-atomiswave
+  - sega-stv
+  - deco-cassette
+  - nintendo-playch10
+  - sega-megaplay
+  - sega-megatech
+  - nintendo-nss
+  - philips-cdi
+  - commodore-cubo
+  - namco-system573
+  - konami-viper
+  - super-kaneko-nova
+  - capcom-zn1
+  - capcom-zn2
+  - konami-gv
+  - konami-twinkle
+  - hyper-neogeo64
+
+notes: |
+  Arcade-only build of libretro/mame (SUBTARGET=arcade). Same source repo,
+  CORE_NAME, and paths (system_dir/mame/) as the full MAME core. Driver
+  selection via src/mame/arcade.flt: 1130 arcade drivers from the full set.
+  Excludes console/computer/pinball/fruit machine drivers.
+  50 BIOS root sets (vs 99 in full MAME). romload.cpp unmodified.
+  ROM search: content_dir + system_dir/mame/bios + system_dir/mame/roms.
+
+files:
+  # SNK Neo Geo MVS (AES excluded via arcade.flt)
+  - name: neogeo.zip
+    required: true
+    category: bios_zip
+    system: snk-neogeo-mvs
+    source_ref: "src/mame/neogeo/neogeo.cpp:2432"
+
+  # IGS PGM
+  - name: pgm.zip
+    required: true
+    category: bios_zip
+    system: igs-pgm
+    source_ref: "src/mame/igs/pgm.cpp:5515"
+
+  # Sega NAOMI / NAOMI 2 / GD-ROM / Atomiswave
+  - name: naomi.zip
+    required: true
+    category: bios_zip
+    system: sega-naomi
+    source_ref: "src/mame/sega/naomi.cpp:10917"
+
+  - name: naomi2.zip
+    required: true
+    category: bios_zip
+    system: sega-naomi2
+    source_ref: "src/mame/sega/naomi.cpp:10922"
+
+  - name: naomigd.zip
+    required: true
+    category: bios_zip
+    system: sega-naomigd
+    source_ref: "src/mame/sega/naomi.cpp:10923"
+
+  - name: awbios.zip
+    required: true
+    category: bios_zip
+    system: sammy-atomiswave
+    source_ref: "src/mame/sega/dc_atomiswave.cpp:1480"
+
+  - name: hod2bios.zip
+    required: false
+    category: bios_zip
+    source_ref: "src/mame/sega/naomi.cpp:10918"
+    note: "game-specific BIOS for House of the Dead 2"
+
+  - name: f355dlx.zip
+    required: false
+    category: bios_zip
+    source_ref: "src/mame/sega/naomi.cpp:10919"
+
+  - name: f355bios.zip
+    required: false
+    category: bios_zip
+    source_ref: "src/mame/sega/naomi.cpp:10920"
+
+  - name: airlbios.zip
+    required: false
+    category: bios_zip
+    source_ref: "src/mame/sega/naomi.cpp:10921"
+
+  # Sega ST-V
+  - name: stvbios.zip
+    required: true
+    category: bios_zip
+    system: sega-stv
+    source_ref: "src/mame/sega/stv.cpp:3949"
+
+  - name: sammymdl.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/sigma/sigmab98.cpp:2409"
+
+  # Sega Mega Drive arcade
+  - name: megaplay.zip
+    required: true
+    category: bios_zip
+    system: sega-megaplay
+    source_ref: "src/mame/sega/megaplay.cpp:1016"
+
+  - name: megatech.zip
+    required: true
+    category: bios_zip
+    system: sega-megatech
+    source_ref: "src/mame/sega/megatech.cpp:1442"
+
+  - name: isgsm.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/sega/segas16b_isgsm.cpp:608"
+
+  # DECO Cassette
+  - name: decocass.zip
+    required: true
+    category: bios_zip
+    system: deco-cassette
+    source_ref: "src/mame/dataeast/decocass.cpp:2131"
+
+  # Nintendo arcade
+  - name: playch10.zip
+    required: true
+    category: bios_zip
+    system: nintendo-playch10
+    source_ref: "src/mame/nintendo/playch10.cpp:2982"
+
+  - name: nss.zip
+    required: true
+    category: bios_zip
+    system: nintendo-nss
+    source_ref: "src/mame/nintendo/nss.cpp:1099"
+
+  - name: aleck64.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/nintendo/aleck64.cpp:1417"
+
+  # Philips CD-i
+  - name: cdibios.zip
+    required: true
+    category: bios_zip
+    system: philips-cdi
+    source_ref: "src/mame/philips/cdi.cpp:921"
+
+  # Commodore Cubo (CD32-based)
+  - name: cubo.zip
+    required: true
+    category: bios_zip
+    system: commodore-cubo
+    source_ref: "src/mame/amiga/cubo.cpp:1433"
+
+  # Namco
+  - name: sys573.zip
+    required: true
+    category: bios_zip
+    system: namco-system573
+    source_ref: "src/mame/konami/ksys573.cpp:6289"
+
+  # Konami
+  - name: konamigx.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/konami/konamigx.cpp:4193"
+
+  - name: konamigv.zip
+    required: true
+    category: bios_zip
+    system: konami-gv
+    source_ref: "src/mame/konami/konamigv.cpp:1448"
+
+  - name: kviper.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/konami/viper.cpp:3267"
+
+  - name: gq863.zip
+    required: true
+    category: bios_zip
+    system: konami-twinkle
+    source_ref: "src/mame/konami/twinkle.cpp:1660"
+
+  - name: bubsys.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/konami/nemesis.cpp:3234"
+
+  # Sony ZN-based (PSX arcade)
+  - name: coh1000c.zip
+    required: true
+    category: bios_zip
+    system: capcom-zn1
+    source_ref: "src/mame/sony/zn.cpp:5967"
+
+  - name: coh3002c.zip
+    required: true
+    category: bios_zip
+    system: capcom-zn2
+    source_ref: "src/mame/sony/zn.cpp:6053"
+
+  - name: coh1000t.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/sony/zn.cpp:5987"
+
+  - name: coh1000a.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/sony/zn.cpp:6013"
+
+  - name: coh1000w.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/sony/zn.cpp:6022"
+
+  - name: coh1001l.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/sony/zn.cpp:6026"
+
+  - name: coh1002v.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/sony/zn.cpp:6030"
+
+  - name: coh1002e.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/sony/zn.cpp:6036"
+
+  - name: coh1002m.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/sony/zn.cpp:6087"
+
+  # Taito
+  - name: coh3002t.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/sony/taitogn.cpp:1377"
+
+  - name: coh1002t.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/sony/taitogn.cpp:1378"
+
+  # Super Kaneko Nova System
+  - name: skns.zip
+    required: true
+    category: bios_zip
+    system: super-kaneko-nova
+    source_ref: "src/mame/kaneko/suprnova.cpp:2057"
+
+  - name: mac2bios.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/seta/macs.cpp:776"
+
+  - name: macsbios.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/seta/macs.cpp:775"
+
+  # Hyper Neo-Geo 64
+  - name: hng64.zip
+    required: true
+    category: bios_zip
+    system: hyper-neogeo64
+    source_ref: "src/mame/snk/hng64.cpp:3241"
+
+  # Amiga-based
+  - name: ar_bios.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/amiga/arsystems.cpp:1011"
+
+  # Atari
+  - name: atarisy1.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/atari/atarisy1.cpp:2669"
+
+  - name: maxaflex.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/atari/maxaflex.cpp:450"
+
+  # Crystal System
+  - name: crysbios.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/misc/crystal.cpp:847"
+
+  # Galaxy Games
+  - name: galgbios.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/ces/galgames.cpp:1288"
+
+  # EFO Cedar Magnet
+  - name: cedmag.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/efo/cedar_magnet.cpp:1166"
+
+  # Misc
+  - name: iteagle.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/itech/iteagle.cpp:756"
+
+  - name: pumpitup.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/misc/xtom3d.cpp:996"

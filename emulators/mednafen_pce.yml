@@ -1,8 +1,66 @@
-emulator: "mednafen_pce"
-type: alias
-alias_of: "beetle_pce"
-profiled_date: "2026-03-18"
+emulator: mednafen_pce
+type: libretro
+core_classification: community_fork
+source: "https://github.com/libretro/beetle-pce-libretro"
+upstream: "https://mednafen.github.io/"
+profiled_date: "2026-03-24"
 core_version: "v0.9.38.7"
 display_name: "NEC - PC Engine / SuperGrafx / CD (Beetle PCE)"
-note: "This core uses the same BIOS/firmware as beetle_pce. See emulators/beetle_pce.yml for details."
-files: []
+cores: [mednafen_pce]
+systems: [nec-pc-engine]
+verification: existence
+notes: >
+  Fork of Mednafen's pce module (accurate, with SuperGrafx and CD support).
+  Separate codebase from mednafen_pce_fast (mednafen/pce/ vs mednafen/pce_fast/).
+  BIOS loaded via PCE_LoadCD() at CD-ROM load time. Core option "pce_cdbios"
+  selects which card image to use (default: System Card 3).
+  DetectGECD() auto-detects Games Express discs and overrides to gexpress.pce.
+  Arcade Card mode (pce_arcadecard option, enabled by default) extends System
+  Card 3 with extra RAM mapping.
+  No hash or size validation on BIOS load.
+  Upstream pce module has configurable pce.cdbios/pce.gecdbios string settings;
+  the 6-option dropdown is a libretro addition.
+
+files:
+  - name: "syscard3.pce"
+    description: "CD-ROM System Card 3.0 (Japan)"
+    region: "NTSC-J"
+    required: true
+    source_ref: "libretro.cpp:1051-1052, settings.cpp:40"
+    notes: "Default value for pce_cdbios option."
+
+  - name: "syscard2.pce"
+    description: "CD-ROM System Card 2.0 (Japan)"
+    region: "NTSC-J"
+    required: false
+    source_ref: "libretro.cpp:1053-1054"
+    notes: "pce_cdbios = 'System Card 2'."
+
+  - name: "syscard1.pce"
+    description: "CD-ROM System Card 1.0 (Japan)"
+    region: "NTSC-J"
+    required: false
+    source_ref: "libretro.cpp:1055-1056"
+    notes: "pce_cdbios = 'System Card 1'."
+
+  - name: "gexpress.pce"
+    description: "Games Express CD Card"
+    region: "NTSC-J"
+    required: false
+    aliases: ["gecard.pce"]
+    source_ref: "libretro.cpp:1057-1058, settings.cpp:41, pce.cpp:373-411"
+    notes: "pce_cdbios = 'Games Express' or auto-detected via DetectGECD()."
+
+  - name: "syscard3u.pce"
+    description: "CD-ROM System Card 3.0 (US / TurboGrafx-CD)"
+    region: "NTSC-U"
+    required: false
+    source_ref: "libretro.cpp:1059-1060"
+    notes: "pce_cdbios = 'System Card 3 US'. Not in .info."
+
+  - name: "syscard2u.pce"
+    description: "CD-ROM System Card 2.0 (US / TurboGrafx-CD)"
+    region: "NTSC-U"
+    required: false
+    source_ref: "libretro.cpp:1061-1062"
+    notes: "pce_cdbios = 'System Card 2 US'. Not in .info."

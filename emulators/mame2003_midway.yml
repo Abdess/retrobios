@@ -3,7 +3,7 @@ type: libretro
 core_classification: frozen_snapshot
 source: "https://github.com/libretro/mame2003_midway"
 upstream: "https://www.mamedev.org"
-profiled_date: "2026-03-22"
+profiled_date: "2026-03-24"
 core_version: "0.78"
 display_name: "Arcade (MAME 2003 Midway)"
 
@@ -27,17 +27,23 @@ files:
   - name: hiscore.dat
     required: false
     category: game_data
-    source_ref: "src/hiscore.c:18"
+    source_ref: "src/hiscore.c:18,225"
     note: "high score definitions, loaded from system_dir/mame2003/"
 
   - name: cheat.dat
     required: false
     category: game_data
-    source_ref: "src/cheat.c:8607"
+    source_ref: "src/cheat.c:839,8597-8607"
     note: "cheat definitions, loaded from system_dir/mame2003/"
 
   - name: history.dat
     required: false
     category: game_data
-    source_ref: "src/datafile.c:620"
+    source_ref: "src/datafile.c:51,619-623"
     note: "game history database, loaded from system_dir/mame2003/"
+
+  - name: mameinfo.dat
+    required: false
+    category: game_data
+    source_ref: "src/datafile.c:52,649-653"
+    note: "game technical information database, loaded from system_dir/mame2003/"

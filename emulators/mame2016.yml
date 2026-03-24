@@ -54,6 +54,7 @@ notes: |
   Cheats use per-game XML files loaded from system_dir/mame2016/cheat/.
   Samples in system_dir/mame2016/samples/.
   Artwork in system_dir/mame2016/artwork/.
+  Software list hash XMLs in system_dir/mame2016/hash/ (437 files).
 
   ROM naming follows MAME 0.174 conventions.
 

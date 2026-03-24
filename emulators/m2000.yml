@@ -3,8 +3,8 @@ type: libretro
 core_classification: official_port
 source: "https://github.com/p2000t/M2000"
 upstream: "https://github.com/p2000t/M2000"
-profiled_date: "2026-03-22"
-core_version: "0.9.3"
+profiled_date: "2026-03-24"
+core_version: "0.9.4"
 display_name: "Philips - P2000T (M2000)"
 cores:
   - m2000
@@ -16,14 +16,14 @@ notes: |
   based on the original emulator by Marcel de Kogel (1997). The libretro
   port is maintained by the same author in the same repository.
 
-  All ROMs are embedded in the binary via m2000_roms.h:
-    - monitor_rom (4096 bytes, 0x0000-0x0FFF)
-    - basic_nl_rom (16384 bytes, 0x1000-0x4FFF)
-    - SAA5050 teletext font (m2000_saa5050.h)
+  All ROMs are embedded in the binary via header files:
+    - monitor_rom (4096 bytes) and basic_nl_rom (16384 bytes) in m2000_roms.h
+    - SAA5050 teletext font in m2000_saa5050.h
 
   retro_init() calls InitP2000(monitor_rom, basic_nl_rom) which copies
-  the embedded arrays into ROM memory (P2000.c:282-311). No system
-  directory access. The core accepts .cas cassette content and can boot
-  directly into P2000T BASIC with no content loaded.
+  the embedded arrays into ROM memory (P2000.c:282-311). LoadFont() uses
+  the embedded saa5050_fnt array (m2000_libretro.c:103-161). No system
+  directory access. The standalone version loads P2000ROM.bin, BASIC.bin
+  and Default.fnt from disk, but the libretro port embeds all three.
 
 files: []

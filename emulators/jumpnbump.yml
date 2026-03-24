@@ -1,9 +1,9 @@
 emulator: Jump 'n Bump
 type: game
-core_classification: community_fork
+core_classification: game_engine
 source: "https://github.com/libretro/jumpnbump-libretro"
 upstream: "https://github.com/fabiangreffrath/jumpnbump"
-profiled_date: "2026-03-22"
+profiled_date: "2026-03-24"
 core_version: "v0.1"
 display_name: "Jump 'n Bump"
 cores: [jumpnbump]

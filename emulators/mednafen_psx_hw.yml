@@ -1,8 +1,8 @@
 emulator: "mednafen_psx_hw"
 type: alias
 alias_of: "beetle_psx"
-profiled_date: "2026-03-18"
+profiled_date: "2026-03-24"
 core_version: "v0.9.44.1"
 display_name: "Sony - PlayStation (Beetle PSX HW)"
-note: "This core uses the same BIOS/firmware as beetle_psx. See emulators/beetle_psx.yml for details."
+note: "Same codebase as beetle_psx, compiled with HAVE_HW for OpenGL/Vulkan GPU rendering. Same BIOS files."
 files: []

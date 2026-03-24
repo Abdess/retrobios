@@ -1,8 +1,24 @@
 emulator: "mednafen_gba"
-type: alias
-alias_of: "mgba"
-profiled_date: "2026-03-18"
+type: libretro
+core_classification: frozen_snapshot
+source: "https://github.com/libretro/beetle-gba-libretro"
+upstream: "https://mednafen.github.io/"
+profiled_date: "2026-03-24"
 core_version: "v0.9.36"
 display_name: "Nintendo - Game Boy Advance (Beetle GBA)"
-note: "This core uses the same BIOS/firmware as mgba. See emulators/mgba.yml for details."
-files: []
+cores:
+  - mednafen_gba
+systems:
+  - gba
+notes: |
+  Frozen at Mednafen v0.9.36 GBA module. GBA code derived from VisualBoyAdvance.
+  Built-in HLE BIOS used by default. Real BIOS improves compatibility.
+files:
+  - name: "gba_bios.bin"
+    description: "Game Boy Advance BIOS"
+    required: false
+    hle_fallback: true
+    size: 16384
+    validation:
+      - size
+    source_ref: "mednafen/gba/GBA.cpp:2647-2672"

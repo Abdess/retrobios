@@ -4,7 +4,7 @@ core_classification: frozen_snapshot
 source: "https://github.com/libretro/mame2015-libretro"
 upstream: "https://github.com/mamedev/mame/tree/mame0160"
 logo: "https://raw.githubusercontent.com/mamedev/mame/master/docs/source/images/MAMElogo.svg"
-profiled_date: "2026-03-22"
+profiled_date: "2026-03-24"
 core_version: "0.160"
 display_name: "Arcade (MAME 2015)"
 mame_version: "0.160"

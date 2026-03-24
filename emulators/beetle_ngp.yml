@@ -1,36 +1,20 @@
 emulator: Beetle NGP (Mednafen Neo Geo Pocket)
 type: libretro
+core_classification: community_fork
 source: "https://github.com/libretro/beetle-ngp-libretro"
-profiled_date: "2026-03-18"
-core_version: "v0.9.36.1"
+upstream: "https://mednafen.github.io/"
+profiled_date: "2026-03-24"
+core_version: "v1.29.0.0"
 display_name: "SNK - Neo Geo Pocket / Color (Beetle NeoPop)"
+cores: [mednafen_ngp]
 systems: [snk-ngp, snk-ngpc]
 
 notes: |
-  Beetle NGP is a fork of Mednafen's NeoPop module for Neo Geo Pocket
-  and Neo Geo Pocket Color emulation via libretro.
-
-  No external BIOS or firmware files are required. The core uses a
-  built-in High-Level Emulation (HLE) BIOS that is constructed at
-  runtime by bios_install() in mednafen/ngp/bios.c.
-
-  The HLE BIOS populates a 64KB array (ngpc_bios[0x10000]) with:
-  - A system call vector table at 0xFE00 (27 entries covering
-    clock, RTC, interrupts, font, flash read/write, comms)
-  - Each vector target contains an iBIOSHLE instruction (opcode 0x1F)
-    that traps into biosHLE.c for high-level handling
-  - A built-in system font (2048 bytes at 0x8DCF)
-  - A default interrupt handler (RETI at 0x23DF)
-  - An infinite loop at 0xFFFE as the idle entry point
-
-  The TLCS-900h CPU (main) and Z80 (sound) are both emulated in
-  software. Flash memory for game saves is handled internally via
-  flash.c without needing a separate firmware dump.
-
-  The only core option is ngp_language (english/japanese), which
-  controls the language flag passed to games. It does not affect
-  BIOS loading.
-
-  ROM extensions: .ngp, .ngc, .ngpc, .npc
+  Libretro port of Mednafen's NeoPop module (originally by neopop_uk).
+  HLE BIOS only, constructed at runtime by bios_install() in
+  mednafen/ngp/bios.c. No external BIOS or firmware files loaded.
+  Upstream Mednafen also uses HLE only (Documentation/ngp.html:
+  "BIOS is HLE'd"). The only core option is ngp_language
+  (english/japanese).
 
 files: []

@@ -4,7 +4,7 @@ core_classification: enhanced_fork
 source: "https://github.com/libretro/mame2003-plus-libretro"
 upstream: "https://www.mamedev.org"
 logo: "https://raw.githubusercontent.com/mamedev/mame/master/docs/source/images/MAMElogo.svg"
-profiled_date: "2026-03-22"
+profiled_date: "2026-03-24"
 core_version: "2003-Plus"
 display_name: "Arcade (MAME 2003-Plus)"
 mame_version: "0.78 (plus backports)"
@@ -43,25 +43,20 @@ notes: |
   BIOS defines a parent ROM set. Game drivers reference this parent, and the emulator
   merges the parent ZIP contents at load time.
 
-  BIOS ZIPs are searched in:
-    1. {content_dir}/ (same folder as the game ROM)
-    2. {system_dir}/mame2003-plus/ (libretro system subfolder)
-    3. {system_dir}/ (libretro system root)
+  BIOS ZIPs must be in {content_dir}/ (same folder as the game ROMs).
+  The core resolves parent ROMs by walking the clone_of chain within the
+  content directory only (osd_get_path returns content_path for FILETYPE_ROM).
 
   ROM naming follows MAME 0.78 conventions with some updates from the Plus patches.
-  ROMs from modern MAME may not match expected CRC32/SHA1 values. Use a
-  mame2003-plus-specific romset for full compatibility.
+  Requires a mame2003-plus-specific romset for full CRC32/SHA1 compatibility.
 
-  Key differences from FBNeo and modern MAME:
-    - Neo Geo: uses mame.sm1 / mamelo.lo / sfix.sfx naming (not sm1.sm1 / 000-lo.lo)
-    - Neo Geo: Universe BIOS up to 4.0 (FBNeo has newer)
-    - PGM: uses pgm_p01s.rom naming (not pgm_p01s.u20)
-    - No NAOMI, no Atomiswave, no CPS-3 (too late for 0.78 era)
-    - ZN-1/ZN-2 boards present but marked NOT_WORKING
+  Neo Geo uses mame.sm1, mamelo.lo, sfix.sfx naming. PGM uses pgm_p01s.rom naming.
+  ZN-1/ZN-2 boards are present but most games are NOT_WORKING (incomplete PS1
+  emulation in the 0.78 codebase). PGM and ST-V have partial support.
 
-  The Neo Geo set is the most critical BIOS for this core since nearly all Neo Geo
-  games work well. PGM and ST-V have partial support. Most ZN-based games are
-  flagged NOT_WORKING due to incomplete PlayStation emulation in 0.78.
+  Data files go in {system_dir}/mame2003-plus/. Samples in samples/ subfolder,
+  artwork in artwork/ subfolder (both per-game ZIPs). hiscore.dat is compiled
+  into the binary and auto-generated on first run if absent.
 
 files:
   # Data files (system_dir/mame2003-plus/)
@@ -82,6 +77,12 @@ files:
     category: game_data
     source_ref: "src/datafile.c:327,608"
     note: "game history and information database"
+
+  - name: mameinfo.dat
+    required: false
+    category: game_data
+    source_ref: "src/datafile.c:327,638"
+    note: "technical driver information, appended to history display"
 
   # ---------------------------------------------------------
   # SNK Neo Geo MVS/AES (neogeo.zip)

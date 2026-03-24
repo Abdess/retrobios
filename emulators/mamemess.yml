@@ -1,12 +1,134 @@
 emulator: MAME MESS
-type: alias
-alias_of: mame
+type: libretro
+core_classification: official_port
 source: "https://github.com/libretro/mame"
 upstream: "https://github.com/mamedev/mame"
-profiled_date: "2026-03-22"
+profiled_date: "2026-03-24"
 core_version: "0.286"
 display_name: "Multi (MAME/MESS)"
+
 cores:
   - mamemess
-note: "Console/computer-only build of libretro/mame (SUBTARGET=mess). Same source, same CORE_NAME, same paths (system_dir/mame/). Excludes arcade drivers."
-files: []
+
+notes: |
+  SUBTARGET=mess build from libretro/mame. Same source, same CORE_NAME ("mame"),
+  same paths (system_dir/mame/) as the mame core. Excludes arcade drivers, includes
+  only console/computer/non-arcade drivers (~1290 driver files via mess.flt).
+  romload.cpp unmodified. No hiscore support.
+
+  Paths under system_dir/mame/ (artwork, cheat, hash, ini, plugins, samples,
+  crosshair). ROM search: content_dir + system_dir/mame/bios + system_dir/mame/roms.
+  Hash directory contains software list XMLs needed for MESS software loading.
+
+  mess.flt exceptions: adds AES (+aes), CD-i consoles (+cdimono1, +cdimono2,
+  +cdi910, +cdi490a), Atari Jaguar (+jaguar, +jaguarcd), CPS Changer
+  (+wofch, +sfzch, +sfach, +sfzbch). Removes arcade 3DO machines (-3dobios,
+  -alg3do, -orbatak, -md23do, -sht3do).
+
+  1 active IS_BIOS_ROOT (miuchiz). XaviX TV game parent machines serve as
+  console BIOS for cartridge-based software (IS_BIOS_ROOT commented out in
+  source but functionally required).
+
+files:
+  # Miuchiz Virtual Companions
+  - name: miuchiz.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/misc/miuchiz.cpp:227"
+
+  # XaviX TV games — e-kara family
+  - name: ekara.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/tvgames/xavix.cpp:2878"
+
+  - name: ekaraa.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/tvgames/xavix.cpp:2879"
+
+  - name: ekaraj.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/tvgames/xavix.cpp:2880"
+
+  - name: ekarag.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/tvgames/xavix.cpp:2881"
+
+  - name: ekaras.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/tvgames/xavix.cpp:2882"
+
+  - name: isinger.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/tvgames/xavix.cpp:2884"
+
+  - name: ekaraphs.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/tvgames/xavix.cpp:2887"
+
+  - name: epitch.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/tvgames/xavix.cpp:2890"
+
+  - name: ekaramix.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/tvgames/xavix.cpp:2893"
+
+  # XaviX TV games — DDR / Popira / misc
+  - name: ddrfammt.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/tvgames/xavix.cpp:2896"
+
+  - name: popira.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/tvgames/xavix.cpp:2899"
+
+  - name: popirak.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/tvgames/xavix.cpp:2901"
+
+  - name: popira2.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/tvgames/xavix.cpp:2904"
+
+  - name: taikodp.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/tvgames/xavix.cpp:2907"
+
+  - name: jpopira.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/tvgames/xavix.cpp:2910"
+
+  - name: evio.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/tvgames/xavix.cpp:2913"
+
+  - name: tak_daig.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/tvgames/xavix.cpp:2918"
+
+  - name: gcslottv.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/tvgames/xavix.cpp:2920"
+
+  - name: hikara.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/tvgames/xavix.cpp:2925"

@@ -1,7 +1,8 @@
 emulator: MCSoftserve
 type: utility
-source: "https://github.com/libretro/libretro-mcsoftserve"
-profiled_date: "2026-03-18"
+core_classification: pure_libretro
+source: "https://github.com/JesseTG/McSoftServe"
+profiled_date: "2026-03-24"
 core_version: "1.0.0"
 display_name: "McSoftServe"
 cores:
@@ -9,9 +10,8 @@ cores:
 systems: []
 
 notes: |
-  MCSoftserve is a utility/test core for libretro. Repository not
-  publicly available; likely an internal or experimental core.
-
-  No BIOS or system files required.
+  April Fools' 2024 novelty core simulating a Taylor C713 soft-serve machine
+  control panel. All assets (images, sounds, font) are embedded at compile time
+  via embed_binaries. No external files loaded.
 
 files: []

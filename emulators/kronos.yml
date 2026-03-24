@@ -3,7 +3,7 @@ type: libretro
 core_classification: official_port
 source: "https://github.com/libretro/yabause"
 upstream: "https://github.com/FCare/Kronos"
-profiled_date: "2026-03-22"
+profiled_date: "2026-03-24"
 core_version: "v2.6.0"
 display_name: "Sega - Saturn/ST-V (Kronos)"
 cores:
@@ -35,6 +35,9 @@ notes: |
   STV blob table: ctrl/src/stv.c BiosList lines 112-136.
   ROM cartridge DB: utils/src/db.c lines 43-45.
 
+  Standalone supports MPEG card ROM loading (Video CD card); disabled in
+  libretro port (mpegpath = NULL in libretro.c:1578).
+
 files:
   # -----------------------------------------------------------
   # Saturn BIOS - primary (any region)
@@ -43,6 +46,7 @@ files:
     system: sega-saturn
     required: true
     size: 524288
+    validation: [size]
     note: "Primary Saturn BIOS. Any region accepted. Searched in kronos/ subdir first."
     source_ref: "libretro.c:1619-1623"
 
@@ -54,6 +58,7 @@ files:
     region: [japan]
     required: false
     size: 524288
+    validation: [size]
     note: "Saturn BIOS v1.01 (Japan). Fallback if saturn_bios.bin missing."
     source_ref: "libretro.c:1627"
 
@@ -65,6 +70,7 @@ files:
     region: [north-america, europe]
     required: false
     size: 524288
+    validation: [size]
     note: "Saturn BIOS (NA/EU). Last fallback for Saturn mode."
     source_ref: "libretro.c:1631"
 
@@ -89,6 +95,7 @@ files:
     required: false
     size: 524288
     crc32: "f688ae60"
+    validation: [crc32]
     source_ref: "stv.c:120"
 
   - name: "epr-20091.ic8"
@@ -98,6 +105,7 @@ files:
     required: false
     size: 524288
     crc32: "59ed40f4"
+    validation: [crc32]
     source_ref: "stv.c:121"
 
   - name: "epr-19730.ic8"
@@ -107,6 +115,7 @@ files:
     required: false
     size: 524288
     crc32: "d0e0889d"
+    validation: [crc32]
     source_ref: "stv.c:122"
 
   - name: "epr-17951a.ic8"
@@ -116,6 +125,7 @@ files:
     required: false
     size: 524288
     crc32: "2672f9d8"
+    validation: [crc32]
     source_ref: "stv.c:123"
 
   - name: "epr-17740a.ic8"
@@ -125,6 +135,7 @@ files:
     required: false
     size: 524288
     crc32: "3e23c81f"
+    validation: [crc32]
     source_ref: "stv.c:124"
 
   - name: "epr-17740.ic8"
@@ -134,6 +145,7 @@ files:
     required: false
     size: 524288
     crc32: "5c5aa63d"
+    validation: [crc32]
     source_ref: "stv.c:125"
 
   # Europe
@@ -144,6 +156,7 @@ files:
     required: false
     size: 524288
     crc32: "f7722da3"
+    validation: [crc32]
     source_ref: "stv.c:126"
 
   # USA
@@ -154,6 +167,7 @@ files:
     required: false
     size: 524288
     crc32: "d1be2adf"
+    validation: [crc32]
     source_ref: "stv.c:127"
 
   - name: "epr-17741a.ic8"
@@ -163,6 +177,7 @@ files:
     required: false
     size: 524288
     crc32: "4166c663"
+    validation: [crc32]
     source_ref: "stv.c:128"
 
   # Taiwan
@@ -173,6 +188,7 @@ files:
     required: false
     size: 524288
     crc32: "e09d1f60"
+    validation: [crc32]
     source_ref: "stv.c:129"
 
   - name: "epr-17953a.ic8"
@@ -182,6 +198,7 @@ files:
     required: false
     size: 524288
     crc32: "a4c47570"
+    validation: [crc32]
     source_ref: "stv.c:130"
 
   - name: "epr-17742a.ic8"
@@ -191,6 +208,7 @@ files:
     required: false
     size: 524288
     crc32: "02daf123"
+    validation: [crc32]
     source_ref: "stv.c:131"
 
   # Debug / Dev
@@ -200,6 +218,7 @@ files:
     required: false
     size: 524288
     crc32: "3dfeda92"
+    validation: [crc32]
     source_ref: "stv.c:132"
 
   - name: "stv1061.bin"
@@ -208,6 +227,7 @@ files:
     required: false
     size: 524288
     crc32: "728dbca3"
+    validation: [crc32]
     source_ref: "stv.c:133"
 
   # -----------------------------------------------------------
@@ -217,6 +237,7 @@ files:
     system: sega-saturn
     required: false
     size: 2097152
+    validation: [size]
     note: "ROM cartridge for The King of Fighters '95. Auto-detected via game DB."
     source_ref: "utils/src/db.c:43-44, sys/memory/src/cs0.c:1526-1544"
 
@@ -224,5 +245,6 @@ files:
     system: sega-saturn
     required: false
     size: 2097152
+    validation: [size]
     note: "ROM cartridge for Ultraman: Hikari no Kyojin Densetsu. Auto-detected via game DB."
     source_ref: "utils/src/db.c:45, sys/memory/src/cs0.c:1526-1544"

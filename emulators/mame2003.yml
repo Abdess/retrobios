@@ -3,7 +3,7 @@ type: libretro
 core_classification: frozen_snapshot
 source: "https://github.com/libretro/mame2003-libretro"
 upstream: "https://www.mamedev.org"
-profiled_date: "2026-03-22"
+profiled_date: "2026-03-24"
 core_version: "0.78"
 display_name: "Arcade (MAME 2003)"
 
@@ -34,14 +34,10 @@ notes: |
   Frozen snapshot of MAME 0.78 (xmame, January 2003). Stock version without
   the Plus patches. Targets low-end hardware (Raspberry Pi, SBCs).
 
-  BIOS ZIPs are searched in:
-    1. {content_dir}/ (same folder as the game ROM)
-    2. {system_dir}/mame2003/ (libretro system subfolder)
-    3. {system_dir}/ (libretro system root)
+  BIOS ZIPs are loaded from {content_dir}/ (same folder as the game ROM).
 
-  Data files (hiscore.dat, cheat.dat, history.dat) are loaded from
-  system_dir/mame2003/. Samples from system_dir/mame2003/samples/.
-  All bundled in the repo's metadata/ directory.
+  Data files (hiscore.dat, cheat.dat, history.dat, mameinfo.dat) are loaded
+  from system_dir/mame2003/. Samples from system_dir/mame2003/samples/.
 
   Neo Geo uses 7 official BIOS variants. Universe BIOS is commented out
   in the stock source (available in mame2003_plus).
@@ -53,7 +49,7 @@ files:
   - name: hiscore.dat
     required: false
     category: game_data
-    source_ref: "src/hiscore.c:15,248"
+    source_ref: "src/hiscore.c:14,248"
     note: "high score definitions, auto-generated if missing"
 
   - name: cheat.dat
@@ -67,6 +63,12 @@ files:
     category: game_data
     source_ref: "src/datafile.c:327,608"
     note: "game history and information database"
+
+  - name: mameinfo.dat
+    required: false
+    category: game_data
+    source_ref: "src/datafile.c:327,638"
+    note: "game technical information database"
 
   # SNK Neo Geo MVS/AES
   - name: neogeo.zip

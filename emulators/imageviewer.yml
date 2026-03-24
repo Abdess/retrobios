@@ -1,7 +1,8 @@
 emulator: Image Viewer
 type: utility
-source: "https://github.com/libretro/RetroArch"
-profiled_date: "2026-03-21"
+core_classification: pure_libretro
+source: "https://github.com/libretro/RetroArch/tree/master/cores/libretro-imageviewer"
+profiled_date: "2026-03-24"
 core_version: "1.0"
 display_name: "Imageviewer"
 cores:
@@ -10,9 +11,6 @@ systems: []
 
 notes: |
   Built-in RetroArch core for displaying image files (PNG, JPEG, BMP,
-  TGA). Uses stb_image for decoding. Supports slideshow mode when
-  loading a directory of images.
-
-  No BIOS or system files required.
+  TGA). Uses stb_image for decoding. Supports slideshow mode.
 
 files: []
