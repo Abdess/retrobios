@@ -106,16 +106,20 @@ def deduplicate(bios_dir: str, dry_run: bool = False) -> dict:
                 name_paths.sort(key=path_priority)
                 true_dupes_to_remove.extend(name_paths[1:])
 
-        # MAME device clones: different filenames, same content, in MAME dirs
+        # Different filenames, same content — need special handling
         unique_names = sorted(by_name.keys())
         if len(unique_names) > 1:
-            # Check if these are all MAME ZIPs
-            all_mame = all(
-                any(_is_mame_dir(p) for p in name_paths)
-                for name_paths in by_name.values()
+            # Check if these are all in MAME/Arcade dirs AND all ZIPs
+            all_mame_zip = (
+                all(
+                    any(_is_mame_dir(p) for p in name_paths)
+                    for name_paths in by_name.values()
+                )
+                and all(n.endswith(".zip") for n in unique_names)
             )
-            if all_mame and all(n.endswith(".zip") for n in unique_names):
-                # Pick canonical (shortest name) and record clones
+            if all_mame_zip:
+                # MAME device clones: different ZIP names, same ROM content
+                # Keep one canonical, remove clones, record in clone map
                 canonical_name = min(unique_names, key=len)
                 clone_names = sorted(n for n in unique_names if n != canonical_name)
                 if clone_names:
@@ -124,11 +128,14 @@ def deduplicate(bios_dir: str, dry_run: bool = False) -> dict:
                         "clones": clone_names,
                         "total_copies": sum(len(by_name[n]) for n in clone_names),
                     }
-                    # Remove all clone copies (keep one per unique name for now,
-                    # or remove all clones and rely on pack-time assembly)
                     for clone_name in clone_names:
                         for p in by_name[clone_name]:
                             true_dupes_to_remove.append(p)
+            else:
+                # Non-MAME different names (e.g., 64DD_IPL_US.n64 vs IPL_USA.n64)
+                # Keep ALL — each name may be needed by a different emulator
+                # Only remove true duplicates (same name in multiple dirs)
+                pass
 
         if not true_dupes_to_remove:
             continue
@@ -181,9 +188,19 @@ def deduplicate(bios_dir: str, dry_run: bool = False) -> dict:
             if alias_names:
                 print(f"    MAME clones: {alias_names}")
 
+    # Clean up empty directories
+    if not dry_run:
+        empty_cleaned = 0
+        for root, dirs, files in os.walk(bios_dir, topdown=False):
+            if not files and not dirs and root != bios_dir:
+                os.rmdir(root)
+                empty_cleaned += 1
+
     prefix = "Would remove" if dry_run else "Removed"
     print(f"\n{prefix}: {total_removed} files")
     print(f"Space {'to save' if dry_run else 'saved'}: {total_saved / 1024 / 1024:.1f} MB")
+    if not dry_run and empty_cleaned:
+        print(f"Cleaned {empty_cleaned} empty directories")
 
     # Write MAME clone mapping
     if mame_clones:
