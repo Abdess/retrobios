@@ -45,7 +45,7 @@ systems:
 
 notes: |
   Rolling release tracking mamedev/mame upstream (currently 0.286).
-  99 BIOS root sets. romload.cpp unmodified. No hiscore support.
+  80 BIOS root sets. romload.cpp unmodified. No hiscore support.
   Paths under system_dir/mame/ (artwork, cheat, hash, ini, plugins,
   samples, crosshair). ROM search: content_dir + system_dir/mame/bios +
   system_dir/mame/roms. Cheats via per-game XML files.
@@ -510,98 +510,3 @@ files:
     category: bios_zip
     source_ref: "src/mame/misc/xtom3d.cpp:996"
 
-  - name: ddrfammt.zip
-    required: true
-    category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2896"
-
-  # XaviX TV games BIOS sets
-  - name: ekara.zip
-    required: true
-    category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2878"
-
-  - name: ekaraa.zip
-    required: true
-    category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2879"
-
-  - name: ekaraj.zip
-    required: true
-    category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2880"
-
-  - name: ekarag.zip
-    required: true
-    category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2881"
-
-  - name: ekaras.zip
-    required: true
-    category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2882"
-
-  - name: isinger.zip
-    required: true
-    category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2884"
-
-  - name: ekaraphs.zip
-    required: true
-    category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2887"
-
-  - name: epitch.zip
-    required: true
-    category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2890"
-
-  - name: ekaramix.zip
-    required: true
-    category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2893"
-
-  - name: popira.zip
-    required: true
-    category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2899"
-
-  - name: popirak.zip
-    required: true
-    category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2901"
-
-  - name: popira2.zip
-    required: true
-    category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2904"
-
-  - name: taikodp.zip
-    required: true
-    category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2907"
-
-  - name: jpopira.zip
-    required: true
-    category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2910"
-
-  - name: evio.zip
-    required: true
-    category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2913"
-
-  - name: tak_daig.zip
-    required: true
-    category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2918"
-
-  - name: gcslottv.zip
-    required: true
-    category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2920"
-
-  - name: hikara.zip
-    required: true
-    category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2925"

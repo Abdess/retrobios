@@ -1,27 +1,25 @@
 emulator: Beetle PCE (Mednafen PCE)
 type: libretro
+core_classification: community_fork
 source: "https://github.com/libretro/beetle-pce-libretro"
-profiled_date: "2026-03-18"
+upstream: "https://mednafen.github.io/"
+profiled_date: "2026-03-24"
 core_version: "v0.9.38.7"
 display_name: "NEC - PC Engine / SuperGrafx / CD (Beetle PCE)"
-cores: [mednafen_pce, mednafen_pce_fast, mednafen_supergrafx]
+cores: [mednafen_pce]
 systems: [nec-pc-engine]
 verification: existence
 notes: >
-  BIOS loaded from system directory at CD-ROM load time via PCE_LoadCD().
+  Libretro port of Mednafen's PCE-Accurate module. BIOS loaded from system
+  directory at CD-ROM load time via PCE_LoadCD() in pce.cpp:441-460.
   Core option "pce_cdbios" selects which card image to use (default: System Card 3).
-  DetectGECD() auto-detects Games Express discs and switches to "pce.gecdbios" (gexpress.pce).
-  Arcade Card mode (pce_arcadecard option, enabled by default) extends System Card 3 with
-  extra RAM mapping via SYSCARD_ARCADE enum.
-  No hash validation on BIOS load: the core opens the file and reads it directly.
-  gexpress.pce and gecard.pce are the same ROM (Games Express CD Card); the core expects
-  gexpress.pce, libretro System.dat references gecard.pce. Both names should be provided.
-  SuperGrafx CD detection (DetectSGXCD) reads sector data to decide SGX mode but uses the
-  same BIOS files.
+  DetectGECD() auto-detects Games Express discs and switches to gexpress.pce.
+  Arcade Card mode (pce_arcadecard option, enabled by default) extends System Card 3
+  with extra RAM mapping via SYSCARD_ARCADE enum.
+  No hash or size validation on BIOS load: file_open() then HuC_Load() reads data directly.
+  DetectSGXCD() reads sector data to decide SGX mode but uses the same BIOS files.
 
 files:
-  # -- CD-ROM System Card 3 (Japan) - default --
-
   - name: "syscard3.pce"
     description: "CD-ROM System Card 3.0 (Japan)"
     region: "NTSC-J"
@@ -29,9 +27,7 @@ files:
     sha1: "79f5ff55dd10187c7fd7b8daab0b3ffbd1f56a2c"
     md5: "38179df8f4ac870017db21ebcbf53114"
     source_ref: "libretro.cpp:1051-1052, settings.cpp:40"
-    notes: "Default value for pce_cdbios option. Most CD games run with this."
-
-  # -- CD-ROM System Card 3 (US) --
+    note: "Default value for pce_cdbios option."
 
   - name: "syscard3u.pce"
     description: "CD-ROM System Card 3.0 (US / TurboGrafx-CD)"
@@ -40,9 +36,7 @@ files:
     sha1: "d02611d99921986147c753df14c7349b31d71950"
     md5: "0754f903b52e3b3342202bdafb13efa5"
     source_ref: "libretro.cpp:1059-1060"
-    notes: "pce_cdbios = 'System Card 3 US'"
-
-  # -- CD-ROM System Card 2 (Japan) --
+    note: "pce_cdbios = 'System Card 3 US'"
 
   - name: "syscard2.pce"
     description: "CD-ROM System Card 2.0 (Japan)"
@@ -51,9 +45,7 @@ files:
     sha1: "88da02e2503f7c32810f5d93a34849d470742b6d"
     md5: "3cdd6614a918616bfc41c862e889dd79"
     source_ref: "libretro.cpp:1053-1054"
-    notes: "pce_cdbios = 'System Card 2'. Older games only."
-
-  # -- CD-ROM System Card 2 (US) --
+    note: "pce_cdbios = 'System Card 2'"
 
   - name: "syscard2u.pce"
     description: "CD-ROM System Card 2.0 (US / TurboGrafx-CD)"
@@ -62,9 +54,7 @@ files:
     sha1: "2bea3dac98f84b2f2f469fa77ea720b8770d598d"
     md5: "94279f315e8b52904f65ab3108542afe"
     source_ref: "libretro.cpp:1061-1062"
-    notes: "pce_cdbios = 'System Card 2 US'"
-
-  # -- CD-ROM System Card 1 (Japan) --
+    note: "pce_cdbios = 'System Card 2 US'"
 
   - name: "syscard1.pce"
     description: "CD-ROM System Card 1.0 (Japan)"
@@ -73,9 +63,7 @@ files:
     sha1: "a39a66da7de6ba94ab84d04eef7afeec7d4ee66a"
     md5: "2b7ccb3d86baa18f6402c176f3065082"
     source_ref: "libretro.cpp:1055-1056"
-    notes: "pce_cdbios = 'System Card 1'. Very early CD-ROM2 games."
-
-  # -- Games Express CD Card --
+    note: "pce_cdbios = 'System Card 1'"
 
   - name: "gexpress.pce"
     description: "Games Express CD Card"
@@ -83,9 +71,6 @@ files:
     required: false
     sha1: "014881a959e045e00f4db8f52955200865d40280"
     md5: "6d2cb14fc3e1f65ceb135633d1694122"
-    source_ref: "libretro.cpp:1057-1058, settings.cpp:41"
-    alt_names: ["gecard.pce"]
-    notes: >
-      pce_cdbios = 'Games Express' or auto-detected via DetectGECD() in pce.cpp:374.
-      Same ROM as gecard.pce (System.dat name). Core expects gexpress.pce filename.
-      Required for unlicensed Games Express titles (AV Tanjou, Bishoujo Jyanshi, etc).
+    source_ref: "libretro.cpp:1057-1058, settings.cpp:41, pce.cpp:374-411"
+    aliases: ["gecard.pce"]
+    note: "pce_cdbios = 'Games Express' or auto-detected via DetectGECD()."

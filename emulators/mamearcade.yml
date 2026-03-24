@@ -31,7 +31,29 @@ systems:
   - capcom-zn2
   - konami-gv
   - konami-twinkle
+  - konami-bubble-system
+  - konami-gx
   - hyper-neogeo64
+  - sammy-medal
+  - sega-isgsm
+  - nintendo-aleck64
+  - taito-fx1
+  - taito-gnet
+  - acclaim-zn1
+  - atari-zn1
+  - atlus-zn1
+  - videosystem-zn1
+  - eighting-zn1
+  - tecmo-tps
+  - imax-macs
+  - arcadia-systems
+  - atari-system1
+  - exidy-maxaflex
+  - brezzasoft-crystal
+  - ces-galaxy-games
+  - efo-cedar-magnet
+  - itech-eagle
+  - andamiro-pumpitup
 
 notes: |
   Arcade-only build of libretro/mame (SUBTARGET=arcade). Same source repo,
@@ -84,22 +106,26 @@ files:
   - name: hod2bios.zip
     required: false
     category: bios_zip
+    system: sega-naomi
     source_ref: "src/mame/sega/naomi.cpp:10918"
     note: "game-specific BIOS for House of the Dead 2"
 
   - name: f355dlx.zip
     required: false
     category: bios_zip
+    system: sega-naomi
     source_ref: "src/mame/sega/naomi.cpp:10919"
 
   - name: f355bios.zip
     required: false
     category: bios_zip
+    system: sega-naomi
     source_ref: "src/mame/sega/naomi.cpp:10920"
 
   - name: airlbios.zip
     required: false
     category: bios_zip
+    system: sega-naomi
     source_ref: "src/mame/sega/naomi.cpp:10921"
 
   # Sega ST-V
@@ -112,6 +138,7 @@ files:
   - name: sammymdl.zip
     required: true
     category: bios_zip
+    system: sammy-medal
     source_ref: "src/mame/sigma/sigmab98.cpp:2409"
 
   # Sega Mega Drive arcade
@@ -130,6 +157,7 @@ files:
   - name: isgsm.zip
     required: true
     category: bios_zip
+    system: sega-isgsm
     source_ref: "src/mame/sega/segas16b_isgsm.cpp:608"
 
   # DECO Cassette
@@ -155,6 +183,7 @@ files:
   - name: aleck64.zip
     required: true
     category: bios_zip
+    system: nintendo-aleck64
     source_ref: "src/mame/nintendo/aleck64.cpp:1417"
 
   # Philips CD-i
@@ -182,6 +211,7 @@ files:
   - name: konamigx.zip
     required: true
     category: bios_zip
+    system: konami-gx
     source_ref: "src/mame/konami/konamigx.cpp:4193"
 
   - name: konamigv.zip
@@ -193,6 +223,7 @@ files:
   - name: kviper.zip
     required: true
     category: bios_zip
+    system: konami-viper
     source_ref: "src/mame/konami/viper.cpp:3267"
 
   - name: gq863.zip
@@ -204,6 +235,7 @@ files:
   - name: bubsys.zip
     required: true
     category: bios_zip
+    system: konami-bubble-system
     source_ref: "src/mame/konami/nemesis.cpp:3234"
 
   # Sony ZN-based (PSX arcade)
@@ -222,47 +254,56 @@ files:
   - name: coh1000t.zip
     required: true
     category: bios_zip
+    system: taito-fx1
     source_ref: "src/mame/sony/zn.cpp:5987"
 
   - name: coh1000a.zip
     required: true
     category: bios_zip
+    system: acclaim-zn1
     source_ref: "src/mame/sony/zn.cpp:6013"
 
   - name: coh1000w.zip
     required: true
     category: bios_zip
+    system: atari-zn1
     source_ref: "src/mame/sony/zn.cpp:6022"
 
   - name: coh1001l.zip
     required: true
     category: bios_zip
+    system: atlus-zn1
     source_ref: "src/mame/sony/zn.cpp:6026"
 
   - name: coh1002v.zip
     required: true
     category: bios_zip
+    system: videosystem-zn1
     source_ref: "src/mame/sony/zn.cpp:6030"
 
   - name: coh1002e.zip
     required: true
     category: bios_zip
+    system: eighting-zn1
     source_ref: "src/mame/sony/zn.cpp:6036"
 
   - name: coh1002m.zip
     required: true
     category: bios_zip
+    system: tecmo-tps
     source_ref: "src/mame/sony/zn.cpp:6087"
 
   # Taito
   - name: coh3002t.zip
     required: true
     category: bios_zip
+    system: taito-gnet
     source_ref: "src/mame/sony/taitogn.cpp:1377"
 
   - name: coh1002t.zip
     required: true
     category: bios_zip
+    system: taito-gnet
     source_ref: "src/mame/sony/taitogn.cpp:1378"
 
   # Super Kaneko Nova System
@@ -275,11 +316,13 @@ files:
   - name: mac2bios.zip
     required: true
     category: bios_zip
+    system: imax-macs
     source_ref: "src/mame/seta/macs.cpp:776"
 
   - name: macsbios.zip
     required: true
     category: bios_zip
+    system: imax-macs
     source_ref: "src/mame/seta/macs.cpp:775"
 
   # Hyper Neo-Geo 64
@@ -293,44 +336,52 @@ files:
   - name: ar_bios.zip
     required: true
     category: bios_zip
+    system: arcadia-systems
     source_ref: "src/mame/amiga/arsystems.cpp:1011"
 
   # Atari
   - name: atarisy1.zip
     required: true
     category: bios_zip
+    system: atari-system1
     source_ref: "src/mame/atari/atarisy1.cpp:2669"
 
   - name: maxaflex.zip
     required: true
     category: bios_zip
+    system: exidy-maxaflex
     source_ref: "src/mame/atari/maxaflex.cpp:450"
 
   # Crystal System
   - name: crysbios.zip
     required: true
     category: bios_zip
+    system: brezzasoft-crystal
     source_ref: "src/mame/misc/crystal.cpp:847"
 
   # Galaxy Games
   - name: galgbios.zip
     required: true
     category: bios_zip
+    system: ces-galaxy-games
     source_ref: "src/mame/ces/galgames.cpp:1288"
 
   # EFO Cedar Magnet
   - name: cedmag.zip
     required: true
     category: bios_zip
+    system: efo-cedar-magnet
     source_ref: "src/mame/efo/cedar_magnet.cpp:1166"
 
   # Misc
   - name: iteagle.zip
     required: true
     category: bios_zip
+    system: itech-eagle
     source_ref: "src/mame/itech/iteagle.cpp:756"
 
   - name: pumpitup.zip
     required: true
     category: bios_zip
+    system: andamiro-pumpitup
     source_ref: "src/mame/misc/xtom3d.cpp:996"

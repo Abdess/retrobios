@@ -174,30 +174,25 @@ files:
 notes:
   hle_available: true
   hle_note: >
-    Dolphin provides HLE for GameCube IPL (boot ROM), DSP, and Wii system functions.
-    No BIOS files are strictly required for most games. DSP ROMs (dsp_rom.bin + dsp_coef.bin)
-    are the most impactful optional files - Dolphin ships free replacements but real dumps
-    from hardware provide better audio accuracy in some titles.
+    HLE covers GameCube IPL (boot ROM), DSP, and Wii system functions.
   ipl_regions: ["USA", "EUR", "JAP"]
   dsp_rom_note: >
-    DSP ROMs are verified at load time via Adler32 hash.
+    DSP ROMs verified at load time via Adler32 hash.
     Official Nintendo hashes: irom=0x66f334fe, drom=0xf3b93527.
-    Multiple free replacement versions exist (v0.1 through v0.4).
+    Free replacement ROMs (v0.1 through v0.4) shipped in Sys/GC/.
   font_note: >
-    Fonts can come from three sources: real IPL dump (preferred), standalone font files
-    in Sys/GC/, or bundled free alternatives. The free fonts have different padding that
-    causes text positioning issues in some games.
+    Fonts loaded from three sources: IPL dump, standalone files in Sys/GC/,
+    or bundled free alternatives. Free alternatives have different padding
+    metrics than original Nintendo fonts.
   nand_note: >
-    Wii NAND content (channels, saves, system menu) is managed by Dolphin internally.
-    Users can import a BootMii NAND backup (nand.bin + optional keys.bin) to populate it.
-    NAND import is only available in standalone mode, not via the libretro core.
+    Wii NAND content managed internally. BootMii NAND backup (nand.bin + optional
+    keys.bin) import supported in standalone mode only.
   dolphin_fork: true
   fork_base: "Dolphin 5.0-era"
   fork_differences: >
-    Ishiiruka is a Dolphin fork focused on GPU performance (custom texture cache,
-    asynchronous shader compilation, post-processing). The BIOS/firmware handling
-    is identical to upstream Dolphin of the same era. No GBA link support (no mGBA
-    integration). No Realtek Bluetooth firmware support.
+    Dolphin fork with custom GPU backends, async shader compilation, post-processing.
+    BIOS/firmware handling identical to upstream Dolphin of the same era. No GBA link
+    support (no mGBA integration). No Realtek Bluetooth firmware support.
   libretro_path: "system/dolphin-emu/"
   data_dir_standalone: "ishiiruka"
   data_dir_note: >

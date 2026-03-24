@@ -1,8 +1,8 @@
 emulator: "mednafen_ngp"
 type: alias
 alias_of: "beetle_ngp"
-cores: [mednafen_ngp]
 profiled_date: "2026-03-24"
 core_version: "v1.29.0.0"
 display_name: "SNK - Neo Geo Pocket / Color (Beetle NeoPop)"
+note: "This core uses the same BIOS/firmware as beetle_ngp. See emulators/beetle_ngp.yml for details."
 files: []

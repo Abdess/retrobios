@@ -47,8 +47,9 @@ notes: |
 
   hiscore.dat is embedded in binary (precompile/hiscore_dat.h). External
   hiscore.dat loadable via core option mame-external_hiscore from
-  system_dir/mame2010/. Cheats use per-game XML files (cheat.zip in
-  metadata/). Samples in system_dir/mame2010/samples/.
+  system_dir/mame2010/. cheatpath declared but never initialized in
+  libretro port (cheat loading non-functional). Samples in
+  system_dir/mame2010/samples/.
 
   ROM naming follows MAME 0.139 conventions.
 
@@ -64,7 +65,7 @@ files:
     required: false
     category: game_data
     source_ref: "src/emu/cheat.c:1027"
-    note: "per-game XML cheat files in ZIP, loaded from system_dir/mame2010/"
+    note: "per-game XML cheat files in ZIP, cheatpath never initialized in libretro port (non-functional)"
 
   # SNK Neo Geo MVS/AES
   - name: neogeo.zip
@@ -403,7 +404,7 @@ files:
   - name: galgbios.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/drivers/galaxia.c"
+    source_ref: "src/mame/drivers/tmaster.c"
 
   - name: gq863.zip
     required: true

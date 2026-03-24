@@ -19,6 +19,5 @@ files:
     required: false
     hle_fallback: true
     size: 16384
-    validation:
-      - size
+    validation: [size]
     source_ref: "mednafen/gba/GBA.cpp:2647-2672"
