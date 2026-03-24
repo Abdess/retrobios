@@ -295,17 +295,27 @@ def verify_otp(
     filepath: str | Path,
     keys: dict[str, dict[str, bytes]],
 ) -> tuple[bool, str]:
-    """Verify otp.bin: AES-128-CBC decrypt + magic + SHA-256 hash.
+    """Verify otp.bin: AES-128-CBC decrypt + magic + SHA-256 hash + ECC cert.
 
-    Source: Azahar src/core/file_sys/otp.cpp
+    Source: Azahar src/core/file_sys/otp.cpp, src/core/hw/unique_data.cpp
     Struct: 0xE0 body + 0x20 SHA256 hash = 0x100
 
-    ECC certificate verification (sect233r1) is not reproduced — requires
-    binary field curve arithmetic unavailable in standard Python libraries.
-    AES decryption + SHA-256 hash is sufficient to prove file integrity.
+    OTP body layout:
+      0x000: u32 magic (0xDEADB00F)
+      0x004: u32 device_id
+      0x018: u8 otp_version
+      0x019: u8 system_type (0=retail, non-zero=dev)
+      0x020: u32 ctcert.expiry_date
+      0x024: 0x20 ctcert.priv_key (ECC private key)
+      0x044: 0x3C ctcert.signature (ECC signature r||s)
+
+    Certificate body (what is signed): issuer(0x40) + key_type(4) + name(0x40)
+    + expiration(4) + public_key_xy(0x3C), aligned to 0x100.
 
     Returns (valid, reason_string).
     """
+    from sect233r1 import ecdsa_verify_sha256, _ec_mul, _Gx, _Gy, _N
+
     data = bytearray(Path(filepath).read_bytes())
 
     if len(data) != 0x100:
@@ -336,7 +346,71 @@ def verify_otp(
     if computed_hash != stored_hash:
         return False, "SHA-256 hash mismatch (OTP corrupted)"
 
-    return True, "decrypted, magic valid, SHA-256 valid (ECC cert not verified — sect233r1)"
+    # --- ECC certificate verification (sect233r1) ---
+    ecc_keys = keys.get("ECC", {})
+    root_public_xy = ecc_keys.get("rootPublicXY")
+    if not root_public_xy or len(root_public_xy) != 60:
+        return True, "decrypted, magic valid, SHA-256 valid (ECC skipped: no rootPublicXY)"
+
+    # Extract CTCert fields from OTP body
+    device_id = struct.unpack_from("<I", data, 0x04)[0]
+    otp_version = data[0x18]
+    system_type = data[0x19]
+
+    # Expiry date endianness depends on otp_version
+    if otp_version < 5:
+        expiry_date = struct.unpack_from(">I", data, 0x20)[0]
+    else:
+        expiry_date = struct.unpack_from("<I", data, 0x20)[0]
+
+    # ECC private key (0x20 bytes at offset 0x24)
+    priv_key_raw = bytes(data[0x24:0x44])
+    # ECC signature (0x3C bytes at offset 0x44)
+    signature_rs = bytes(data[0x44:0x80])
+
+    # Fix up private key: privkey % subgroup_order (Nintendo's ECC lib quirk)
+    priv_key_int = int.from_bytes(priv_key_raw, "big") % _N
+
+    # Derive public key from private key: Q = privkey * G
+    pub_point = _ec_mul(priv_key_int, (_Gx, _Gy))
+    if pub_point is None:
+        return False, "ECC cert: derived public key is point at infinity"
+    pub_key_xy = (
+        pub_point[0].to_bytes(30, "big") + pub_point[1].to_bytes(30, "big")
+    )
+
+    # Build certificate body (what was signed)
+    # Issuer: "Nintendo CA - G3_NintendoCTR2prod" or "...dev"
+    issuer = bytearray(0x40)
+    if system_type == 0:
+        issuer_str = b"Nintendo CA - G3_NintendoCTR2prod"
+    else:
+        issuer_str = b"Nintendo CA - G3_NintendoCTR2dev"
+    issuer[:len(issuer_str)] = issuer_str
+
+    # Name: "CT{device_id:08X}-{system_type:02X}"
+    name = bytearray(0x40)
+    name_str = f"CT{device_id:08X}-{system_type:02X}".encode()
+    name[:len(name_str)] = name_str
+
+    # Key type = 2 (ECC), big-endian u32
+    key_type = struct.pack(">I", 2)
+
+    # Expiry date as big-endian u32
+    expiry_be = struct.pack(">I", expiry_date)
+
+    # Serialize: issuer + key_type + name + expiry + public_key_xy
+    cert_body = bytes(issuer) + key_type + bytes(name) + expiry_be + pub_key_xy
+    # Align up to 0x40
+    aligned_size = ((len(cert_body) + 0x3F) // 0x40) * 0x40
+    cert_body_padded = cert_body.ljust(aligned_size, b"\x00")
+
+    # Verify ECDSA-SHA256 signature against root public key
+    valid = ecdsa_verify_sha256(cert_body_padded, signature_rs, root_public_xy)
+
+    if valid:
+        return True, "decrypted, magic valid, SHA-256 valid, ECC cert valid"
+    return False, "decrypted, magic+SHA256 valid, but ECC cert signature invalid"
 
 
 # ---------------------------------------------------------------------------
