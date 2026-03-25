@@ -80,12 +80,14 @@ def verify_entry_existence(
     required = file_entry.get("required", True)
     if not local_path:
         return {"name": name, "status": Status.MISSING, "required": required}
+    result = {"name": name, "status": Status.OK, "required": required}
     if validation_index:
         reason = check_file_validation(local_path, name, validation_index)
         if reason:
-            return {"name": name, "status": Status.UNTESTED, "required": required,
-                    "path": local_path, "reason": reason}
-    return {"name": name, "status": Status.OK, "required": required}
+            ventry = validation_index.get(name, {})
+            emus = ", ".join(ventry.get("emulators", []))
+            result["discrepancy"] = f"file present (OK) but {emus} says {reason}"
+    return result
 
 
 def verify_entry_md5(
@@ -318,6 +320,34 @@ def find_exclusion_notes(
 # Platform verification
 # ---------------------------------------------------------------------------
 
+def _find_best_variant(
+    file_entry: dict, db: dict, current_path: str,
+    validation_index: dict,
+) -> str | None:
+    """Search for a repo file that passes both platform MD5 and emulator validation."""
+    fname = file_entry.get("name", "")
+    if not fname or fname not in validation_index:
+        return None
+
+    md5_expected = file_entry.get("md5", "")
+    md5_set = {m.strip().lower() for m in md5_expected.split(",") if m.strip()} if md5_expected else set()
+
+    by_name = db.get("indexes", {}).get("by_name", {})
+    files_db = db.get("files", {})
+
+    for sha1 in by_name.get(fname, []):
+        candidate = files_db.get(sha1, {})
+        path = candidate.get("path", "")
+        if not path or not os.path.exists(path) or os.path.realpath(path) == os.path.realpath(current_path):
+            continue
+        if md5_set and candidate.get("md5", "").lower() not in md5_set:
+            continue
+        reason = check_file_validation(path, fname, validation_index)
+        if reason is None:
+            return path
+    return None
+
+
 def verify_platform(
     config: dict, db: dict,
     emulators_dir: str = DEFAULT_EMULATORS_DIR,
@@ -361,13 +391,20 @@ def verify_platform(
                 )
             else:
                 result = verify_entry_md5(file_entry, local_path, resolve_status)
-                # Apply emulator-level validation on top of MD5 check
+                # Emulator-level validation: informational for platform packs.
+                # Platform verification (MD5) is the authority. Emulator
+                # mismatches are reported as discrepancies, not failures.
                 if result["status"] == Status.OK and local_path and validation_index:
                     fname = file_entry.get("name", "")
                     reason = check_file_validation(local_path, fname, validation_index)
                     if reason:
-                        result["status"] = Status.UNTESTED
-                        result["reason"] = reason
+                        better = _find_best_variant(
+                            file_entry, db, local_path, validation_index,
+                        )
+                        if not better:
+                            ventry = validation_index.get(fname, {})
+                            emus = ", ".join(ventry.get("emulators", []))
+                            result["discrepancy"] = f"{platform} says OK but {emus} says {reason}"
             result["system"] = sys_id
             result["hle_fallback"] = hle_index.get(file_entry.get("name", ""), False)
             details.append(result)
@@ -470,6 +507,14 @@ def print_platform_result(result: dict, group: list[str]) -> None:
             req = "required" if d.get("required", True) else "optional"
             hle = ", HLE available" if d.get("hle_fallback") else ""
             print(f"  MISSING ({req}{hle}): {key}")
+    for d in result["details"]:
+        disc = d.get("discrepancy")
+        if disc:
+            key = f"{d['system']}/{d['name']}"
+            if key in seen_details:
+                continue
+            seen_details.add(key)
+            print(f"  DISCREPANCY: {key} — {disc}")
 
     # Cross-reference: undeclared files used by cores
     undeclared = result.get("undeclared_files", [])

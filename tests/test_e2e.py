@@ -763,15 +763,15 @@ class TestE2E(unittest.TestCase):
         self.assertIn("crc32 mismatch", reason)
 
     def test_75_validation_applied_in_existence_mode(self):
-        """Existence platform downgrades OK to UNTESTED when validation fails."""
+        """Existence mode reports discrepancy when validation fails, keeps OK."""
         config = load_platform_config("test_existence", self.platforms_dir)
         profiles = load_emulator_profiles(self.emulators_dir)
         result = verify_platform(config, self.db, self.emulators_dir, profiles)
-        # present_opt.bin exists but has wrong expected size → UNTESTED
+        # present_opt.bin exists but has wrong expected size - OK with discrepancy
         for d in result["details"]:
             if d["name"] == "present_opt.bin":
-                self.assertEqual(d["status"], Status.UNTESTED)
-                self.assertIn("size mismatch", d.get("reason", ""))
+                self.assertEqual(d["status"], Status.OK)
+                self.assertIn("size mismatch", d.get("discrepancy", ""))
                 break
         else:
             self.fail("present_opt.bin not found in details")
