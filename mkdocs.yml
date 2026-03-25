@@ -187,7 +187,7 @@ nav:
     - VeMUlator: emulators/vemulator.md
     - Vircon32: emulators/vircon32.md
     - vitaQuakeII: emulators/vitaquake2.md
-  - Community forks (100):
+  - Community forks (101):
     - EightyOne: emulators/81.md
     - a5200: emulators/a5200.md
     - Anarch: emulators/anarch.md
@@ -288,6 +288,7 @@ nav:
     - Virtual Jaguar: emulators/virtualjaguar.md
     - vitaQuakeIII: emulators/vitaquake3.md
     - vitavoyager: emulators/vitavoyager.md
+    - X Millennium: emulators/x1.md
   - Pure libretro (29):
     - '2048': emulators/2048.md
     - 3DEngine: emulators/3dengine.md
@@ -392,7 +393,7 @@ nav:
     - PCSX-ReARMed: emulators/pcsx_rearmed.md
   - Launchers (1):
     - Dolphin Launcher: emulators/dolphin_launcher.md
-  - Other (13):
+  - Other (12):
     - Beetle GBA (Mednafen): emulators/beetle_gba.md
     - Cemu: emulators/cemu.md
     - ep128emu-core: emulators/ep128emu.md
@@ -402,7 +403,6 @@ nav:
     - VBA-M: emulators/vba_m.md
     - VICE: emulators/vice.md
     - Vita3K: emulators/vita3k.md
-    - X Millennium: emulators/x1.md
     - x64sdl: emulators/x64sdl.md
     - Xemu: emulators/xemu.md
     - XRick: emulators/xrick.md
