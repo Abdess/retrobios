@@ -1,0 +1,13322 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://abdess.github.io/retrobios/emulators/fbneo/">
+      
+      
+        <link rel="prev" href="../emux_sms/">
+      
+      
+        <link rel="next" href="../fbneo_cps12/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>FinalBurn Neo - RetroBIOS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#finalburn-neo-retrobios" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="RetroBIOS" class="md-header__button md-logo" aria-label="RetroBIOS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            RetroBIOS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              FinalBurn Neo
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to auto"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to auto" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Abdess/retrobios" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Abdess/retrobios
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../platforms/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Platforms
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../systems/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Systems
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Emulators
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../cross-reference/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Cross-reference
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../gaps/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Gap Analysis
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../wiki/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Wiki
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../contributing/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Contributing
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="RetroBIOS" class="md-nav__button md-logo" aria-label="RetroBIOS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    RetroBIOS
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Abdess/retrobios" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Abdess/retrobios
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../platforms/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Platforms
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Platforms
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../platforms/batocera/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Batocera
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../platforms/emudeck/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EmuDeck
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../platforms/lakka/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lakka
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../platforms/recalbox/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recalbox
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../platforms/retroarch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RetroArch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../platforms/retrobat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RetroBat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../platforms/retrodeck/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RetroDECK
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../platforms/retropie/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RetroPie
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../systems/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Systems
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Systems
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/3do-company/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3DO Company
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/apf/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    APF
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/acorn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Acorn
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/amstrad/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Amstrad
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/apple/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Apple
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/arcade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Arcade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/atari/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Atari
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/bbk/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    BBK
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/bally/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bally
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/bandai/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bandai
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/bit-corporation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bit Corporation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/camputers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Camputers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/casio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Casio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/coleco/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Coleco
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/commodore/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Commodore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/dos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DOS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/dinothawr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dinothawr
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/dragon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dragon
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/eaca/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EACA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/elektronika/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Elektronika
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/enterprise/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Enterprise
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/entex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Entex
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/epoch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Epoch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/fairchild/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fairchild
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/fujitsu/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fujitsu
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/funtech/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Funtech
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/gce/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GCE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/galaksija/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Galaksija
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/gamepark/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GamePark
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/grundy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Grundy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/hartung/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hartung
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/ibm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IBM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/id-software/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Id Software
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/infocom/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Infocom
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/java/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Java
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/jupiter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Jupiter
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/lambda/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lambda
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/lexaloffle/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lexaloffle
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/magnavox/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnavox
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/mattel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mattel
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/microdigital/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Microdigital
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/microsoft/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Microsoft
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/nec/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NEC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/nintendo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nintendo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/nokia/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nokia
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/oric/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Oric
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/other/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Other
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/palm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Palm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/philips/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Philips
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/pioneer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pioneer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/rpg-maker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RPG Maker
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/ringo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ringo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/snk/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SNK
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/scummvm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ScummVM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/sega/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sega
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/sharp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sharp
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/sinclair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sinclair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/sony/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sony
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/synertek/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Synertek
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/tandy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tandy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/texas-instruments/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Texas Instruments
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/tiger/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tiger
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/timex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Timex
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/tomy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tomy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/vtech/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VTech
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/videoton/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Videoton
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/vircon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vircon
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/zc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ZC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../systems/xrick/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xrick
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Emulators
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Emulators
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Official ports (59)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Official ports (59)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../amiarcadia/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    amiarcadia
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../amiberry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Amiberry
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ardens/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ardens
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../atari800/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Atari800
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../blastem/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    BlastEm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../boytacean/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Boytacean
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bsnes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    bsnes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../clownmdemu/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ClownMDEmu
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../crocods/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CrocoDS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dirksimple/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DirkSimple
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../duckstation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DuckStation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../emux_chip8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    emux (CHIP-8)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../emux_gb/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    emux (Game Boy)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../emux_nes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    emux (NES)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../emux_sms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    emux (SMS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FinalBurn Neo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fbneo_cps12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FinalBurn Neo (CPS-1/CPS-2)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fbneo_neogeo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FinalBurn Neo (Neo Geo)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fixgb/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    fixGB
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fixnes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    fixNES
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flycast/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flycast
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freej2me/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FreeJ2ME
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../galaksija/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    galaksija
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gearboy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gearboy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gearcoleco/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gearcoleco
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../geargrafx/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Geargrafx
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gearlynx/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gearlynx
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gearsystem/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gearsystem
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../geolith/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Geolith
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../holani/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Holani
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jaxe/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JAXE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jollycv/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JollyCV
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kronos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kronos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lowresnx/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LowRes NX
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../m2000/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    M2000
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mame/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MAME
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mamearcade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MAME Arcade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mamemess/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MAME MESS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mesen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mesen
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mesen-s/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    mesen-s
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mgba/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    mGBA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mrboom/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mr.Boom
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../panda3ds/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Panda3DS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../picodrive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PicoDrive
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../play/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    play
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ppsspp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PPSSPP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rustation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rustation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rvvm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RVVM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sameboy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SameBoy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sameduck/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    sameduck
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sdlpal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SDLPAL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../skyemu/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    skyemu
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../snes9x/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    snes9x
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../squirreljme/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SquirrelJME
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vaporspec/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VaporSpec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vbam/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VBA-M
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vemulator/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VeMUlator
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vircon32/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vircon32
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vitaquake2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    vitaQuakeII
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Community forks (101)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Community forks (101)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../81/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EightyOne
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../a5200/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    a5200
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../anarch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Anarch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../applewin/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AppleWin
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../azahar/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Azahar
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../b2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    b2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../beetle_lynx/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Beetle Lynx (Mednafen Lynx)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../beetle_ngp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Beetle NGP (Mednafen Neo Geo Pocket)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../beetle_pce/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Beetle PCE (Mednafen PCE)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../beetle_pcfx/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Beetle PC-FX (Mednafen)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../beetle_psx/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Beetle PSX (Mednafen PSX)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../beetle_saturn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    beetle_saturn
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../beetle_vb/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Beetle VB (Mednafen Virtual Boy)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bennugd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    BennuGD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bk/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    bk-emulator
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bluemsx/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    blueMSX
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bsnes-jg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    bsnes-jg
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cap32/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Caprice32
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chimerasnes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ChimeraSNES
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../citra/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Citra
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../citra_canary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Citra Canary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../daphne/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Daphne
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../desmume/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DeSmuME
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dice/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DICE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dolphin/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dolphin
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dosbox/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DOSBox
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dosbox_core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DOSBox-core
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dosbox_svn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DOSBox-SVN
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dosbox_svn_ce/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DOSBox-SVN CE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../emuscv/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EmuSCV
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ep128emu_core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ep128emu_core
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fceumm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FCEUmm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fmsx/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    fMSX
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../frodo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frodo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fsuae/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FS-UAE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fuse/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fuse
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gambatte/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gambatte
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../genesis_plus_gx/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Genesis Plus GX
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gpsp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    gpSP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../handy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../higan_sfc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    higan (SFC Accuracy)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lrps2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LRPS2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mednafen_pce/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    mednafen_pce
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mednafen_pce_fast/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    mednafen_pce_fast
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mednafen_supafaust/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    mednafen_supafaust
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mednafen_supergrafx/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    mednafen_supergrafx
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../melonds/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    melonDS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../melonds_ds/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    melonDS DS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../meteor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Meteor GBA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../minivmac/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mini vMac
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../moonlight/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Moonlight
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mpv/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    mpv
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nekop2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    nekop2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    nes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nestopia/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nestopia UE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../noods/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NooDS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../numero/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Numero
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../o2em/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    O2EM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../oberon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Oberon
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../onscripter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ONScripter
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../opera/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Opera (4DO)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../parallel_n64/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ParaLLEl N64
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pcem/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PCem
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pcsx1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PCSX1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pd777/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PD777
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pokemini/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PokeMini
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../potator/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Potator
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../prosystem/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ProSystem
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../puae/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PUAE (P-UAE)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../px68k/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    px68k
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../qemu/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    QEMU
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quasi88/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    QUASI88
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quicknes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    QuickNES
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../race/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RACE (Neo Geo Pocket)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reminiscence/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REminiscence
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../retrodream/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RetroDream
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../same_cdi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SAME CDi
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../simcp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SimCoupe
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../swanstation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    swanstation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../syobonaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Syobon Action
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tamalibretro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TamaLIBretro
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tempgba/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TempGBA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tgbdual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TGB Dual
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trident/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    trident
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../uae4arm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    uae4arm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../uxn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    UXN
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vecx/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    vecx
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vice_x128/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VICE x128
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vice_x64/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VICE x64
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vice_x64dtv/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VICE x64dtv
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vice_x64sc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VICE x64sc
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vice_xcbm2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VICE xcbm2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vice_xcbm5x0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VICE xcbm5x0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vice_xpet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VICE xpet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vice_xplus4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VICE xplus4
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vice_xscpu64/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VICE xscpu64
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vice_xvic/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VICE xvic
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../virtualjaguar/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual Jaguar
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vitaquake3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    vitaQuakeIII
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vitavoyager/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    vitavoyager
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../x1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    X Millennium
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_4" id="__nav_4_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pure libretro (29)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Pure libretro (29)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2048/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2048
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3dengine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3DEngine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../arduous/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Arduous
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../beetle_wswan/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Beetle WonderSwan (Mednafen WonderSwan)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../craft/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Craft
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cruzes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cruzes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../directxbox/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DirectXBox
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ffmpeg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FFmpeg
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freechaf/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FreeChaF
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freeintv/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FreeIntv
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gam4980/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GAM4980
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gme/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Music Emu
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gong/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gong
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gw/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game & Watch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../imageviewer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Image Viewer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mcsoftserve/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MCSoftserve
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mojozork/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MojoZork
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mu/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mu
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../neocd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NeoCD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pascal_pong/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pascal Pong
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pocketcdg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PocketCDG
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../redbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Redbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../remotejoy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RemoteJoy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../romcleaner/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ROM Cleaner
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../theodore/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Theodore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../thepowdertoy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Powder Toy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../uw8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MicroW8
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../uzem/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    uzem
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../virtualxt/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VirtualXT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_5" id="__nav_4_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game engines (23)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Game engines (23)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../boom3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    boom3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cannonball/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cannonball
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chailove/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ChaiLove
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dinothawr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dinothawr
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../doukutsu_rs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    doukutsu-rs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../easyrpg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EasyRPG Player
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ecwolf/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ECWolf
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fake08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAKE-08
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jumpnbump/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Jump 'n Bump
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lutro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lutro
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mkxp_z/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    mkxp-z
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nxengine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NXEngine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../onsyuri/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ONScripter Yuri
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../openlara/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenLara
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../opentyrian/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenTyrian
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../prboom/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PrBoom
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../puzzlescript/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PuzzleScript
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../retro8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Retro8
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../scummvm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ScummVM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../superbroswar/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Super Bros War
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tic80/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TIC-80
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tyrquake/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TyrQuake
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wasm4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    WASM-4
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_6" id="__nav_4_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Enhanced forks (12)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Enhanced forks (12)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bsnes_hd_beta/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    bsnes-hd beta
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bsnes_mercury/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    bsnes-mercury
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dosbox_pure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DOSBox Pure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../doublecherrygb/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DoubleCherryGB
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../genesis_plus_gx_wide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Genesis Plus GX Wide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hbmame/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HBMAME (Homebrew MAME)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../higan_sfc_balanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    nSide (SFC Balanced)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ishiiruka/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ishiiruka
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mame2003_plus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MAME 2003-Plus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mupen64plus_next/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mupen64Plus-Next
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../np2kai/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NP2kai
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../smsplus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SMS Plus GX
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_7" id="__nav_4_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frozen snapshots (32)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Frozen snapshots (32)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bnes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    bnes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bsnes2014/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    bsnes 2014
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bsnes_cplusplus98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    bsnes C++98
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cdi2015/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CDi 2015
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../citra2018/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Citra 2018
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../desmume2015/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DeSmuME 2015
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fbalpha2012/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FB Alpha 2012
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fbalpha2012_cps1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FB Alpha 2012 CPS-1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fbalpha2012_cps2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FB Alpha 2012 CPS-2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fbalpha2012_cps3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FB Alpha 2012 CPS-3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fbalpha2012_neogeo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FB Alpha 2012 Neo Geo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hatari/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hatari
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mame2000/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MAME 2000
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mame2003/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MAME 2003
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mame2003_midway/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MAME 2003 Midway
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mame2009/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MAME 2009
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mame2010/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MAME 2010
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mame2015/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MAME 2015
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mame2016/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MAME 2016
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mednafen_gba/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    mednafen_gba
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mednafen_snes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    mednafen_snes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mess2015/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MESS 2015
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../puae2021/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PUAE 2021
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../snes9x2002/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Snes9x 2002
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../snes9x2005/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Snes9x 2005
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../snes9x2005_plus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Snes9x 2005 Plus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../snes9x2010/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Snes9x 2010
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stella2014/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stella 2014
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stella2023/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stella 2023
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stonesoup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stone Soup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ume2015/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    UME 2015
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vba_next/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VBA-Next
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_8" id="__nav_4_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Embedded HLE (1)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Embedded HLE (1)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pcsx_rearmed/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PCSX-ReARMed
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_9" id="__nav_4_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Launchers (1)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Launchers (1)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dolphin_launcher/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dolphin Launcher
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_10" id="__nav_4_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Other (12)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Other (12)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../beetle_gba/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Beetle GBA (Mednafen)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cemu/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cemu
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ep128emu/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ep128emu-core
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pcsx2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PCSX2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../redream/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Redream
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rpcs3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RPCS3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vba_m/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VBA-M
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vice/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VICE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vita3k/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vita3K
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../x64sdl/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    x64sdl
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xemu/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Xemu
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xrick/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    XRick
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cross-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cross-reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../gaps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gap Analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../wiki/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wiki
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_7" id="__nav_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Wiki
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wiki/architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wiki/tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wiki/profiling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Profiling guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wiki/data-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contributing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="finalburn-neo-retrobios">FinalBurn Neo - RetroBIOS<a class="headerlink" href="#finalburn-neo-retrobios" title="Permanent link">&para;</a></h1>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Type</td>
+<td>libretro</td>
+</tr>
+<tr>
+<td>Classification</td>
+<td>official_port</td>
+</tr>
+<tr>
+<td>Source</td>
+<td><a href="https://github.com/libretro/FBNeo">https://github.com/libretro/FBNeo</a></td>
+</tr>
+<tr>
+<td>Upstream</td>
+<td><a href="https://github.com/finalburnneo/FBNeo">https://github.com/finalburnneo/FBNeo</a></td>
+</tr>
+<tr>
+<td>Version</td>
+<td>v1.0.0.03</td>
+</tr>
+<tr>
+<td>Profiled</td>
+<td>2026-03-23</td>
+</tr>
+<tr>
+<td>Cores</td>
+<td>fbneo</td>
+</tr>
+<tr>
+<td>Systems</td>
+<td>snk-neogeo-mvs, snk-neogeo-aes, <a href="../../systems/snk/#neo-geo-cd">snk-neogeo-cd</a>, snk-neogeo-pocket, capcom-cps3, igs-pgm, fairchild-channelf, <a href="../../systems/coleco/#colecovision">coleco-colecovision</a>, sinclair-spectrum, <a href="../../systems/microsoft/#msx">msx</a>, nes-fds, super-kaneko-nova, deco-cassette, namco-na1, namco-nb1, sega-system16b, konami-bubsys, nmk16, midway-mcr, snes, taito-cchip, ym2608</td>
+</tr>
+</tbody>
+</table>
+<details class="note" open="open">
+<summary>Technical notes</summary>
+<p>FinalBurn Neo is a multi-system arcade and console emulator. BIOS files are
+expected as MAME-format ZIP archives containing individual ROM chips. The
+libretro core searches for BIOS ZIPs in this order
+(src/burner/libretro/libretro.cpp:922-1030):
+  1. {rom_dir}/{romName}
+  2. {rom_dir}/arcade/{romName}
+  3. {system_dir}/fbneo/{romName}
+  4. {system_dir}/fbneo/arcade/{romName}
+  5. {system_dir}/{romName}</p>
+<p>Each game driver specifies a parent BIOS set via BurnDriver. The BIOS ZIP
+must contain the individual ROM chip files listed below. CRC32 values from
+BurnRomInfo structs are used to match ROMs inside ZIPs.</p>
+<p>Neo Geo games reference "neogeo" as parent. The neogeo.zip BIOS set contains
+multiple selectable BIOS variants (MVS, AES, Universe BIOS). Only one 68K
+BIOS ROM is active at a time (selected via dipswitch), but the Z80 BIOS,
+fix tiles, and zoom table are always required.</p>
+<p>CPS-3 games are self-contained: each game ZIP includes its own SH-2 BIOS
+chip. There is no shared cps3.zip. BIOS selection is per-game per-region.</p>
+<p>PGM games reference "pgm" as parent. The pgm.zip contains shared text tiles,
+samples, and 68K BIOS ROMs. Some PGM sub-boards use alternate BIOS sets
+(theglad, dmnfrnt, svgpcb, ddp3).</p>
+<p>Console subsystems (Channel F, ColecoVision, Spectrum, MSX, NES/FDS, NGP)
+each have their own BIOS set referenced as parent for their game drivers.</p>
+<p>DECO Cassette games reference "decocass" as parent. The decocass.zip contains
+multiple regional BIOS variants (Japan, USA, UK, Europe) with older/newer
+versions for each.</p>
+</details>
+<p><strong>144 files</strong> | 69 required, 75 optional | 7 in repo, 137 missing</p>
+<p><strong><code>sp-s3.sp1</code></strong> -<strong>required</strong>, in <code>neogeo.zip</code>, missing from repo</p>
+<ul>
+<li>System: snk-neogeo-mvs</li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>91b64be3</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1604</code></li>
+<li>MVS Asia/Europe ver. 6 (1 slot) - default BIOS</li>
+</ul>
+<p><strong><code>sp-s2.sp1</code></strong> -optional, in <code>neogeo.zip</code>, missing from repo</p>
+<ul>
+<li>System: snk-neogeo-mvs</li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>9036d879</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1605</code></li>
+<li>MVS Asia/Europe ver. 5 (1 slot)</li>
+</ul>
+<p><strong><code>sp-s.sp1</code></strong> -optional, in <code>neogeo.zip</code>, missing from repo</p>
+<ul>
+<li>System: snk-neogeo-mvs</li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>c7f2fa45</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1606</code></li>
+<li>MVS Asia/Europe ver. 3 (4 slot)</li>
+</ul>
+<p><strong><code>sp-u2.sp1</code></strong> -optional, in <code>neogeo.zip</code>, missing from repo</p>
+<ul>
+<li>System: snk-neogeo-mvs</li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>e72943de</code></li>
+<li>Aliases: <code>usa_2slt.bin</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1607</code></li>
+<li>MVS USA ver. 5 (2 slot)</li>
+</ul>
+<p><strong><code>sp1-u2</code></strong> -optional, in <code>neogeo.zip</code>, missing from repo</p>
+<ul>
+<li>System: snk-neogeo-mvs</li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>62f021f4</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1608</code></li>
+<li>MVS USA ver. 5 (4 slot)</li>
+</ul>
+<p><strong><code>sp-e.sp1</code></strong> -optional, in <code>neogeo.zip</code>, missing from repo</p>
+<ul>
+<li>System: snk-neogeo-mvs</li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>2723a5b5</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1609</code></li>
+<li>MVS USA ver. 5 (6 slot)</li>
+</ul>
+<p><strong><code>sp1-u4.bin</code></strong> -optional, in <code>neogeo.zip</code>, missing from repo</p>
+<ul>
+<li>System: snk-neogeo-mvs</li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>1179a30f</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1610</code></li>
+<li>MVS USA (U4)</li>
+</ul>
+<p><strong><code>sp1-u3.bin</code></strong> -optional, in <code>neogeo.zip</code>, missing from repo</p>
+<ul>
+<li>System: snk-neogeo-mvs</li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>2025b7a2</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1611</code></li>
+<li>MVS USA (U3)</li>
+</ul>
+<p><strong><code>vs-bios.rom</code></strong> -optional, in <code>neogeo.zip</code>, missing from repo</p>
+<ul>
+<li>System: snk-neogeo-mvs</li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>f0e8f27d</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1612</code></li>
+<li>MVS Japan ver. 6</li>
+</ul>
+<p><strong><code>sp-j2.sp1</code></strong> -optional, in <code>neogeo.zip</code>, missing from repo</p>
+<ul>
+<li>System: snk-neogeo-mvs</li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>acede59c</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1613</code></li>
+<li>MVS Japan ver. 5</li>
+</ul>
+<p><strong><code>sp1.jipan.1024</code></strong> -optional, in <code>neogeo.zip</code>, missing from repo</p>
+<ul>
+<li>System: snk-neogeo-mvs</li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>9fb0abe4</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1614</code></li>
+<li>MVS Japan ver. 3 (4 slot)</li>
+</ul>
+<p><strong><code>sp-45.sp1</code></strong> -optional, in <code>neogeo.zip</code>, missing from repo</p>
+<ul>
+<li>System: snk-neogeo-mvs</li>
+<li>Size: 512.0 KB</li>
+<li>CRC32: <code>03cc9f6a</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1615</code></li>
+<li>NEO-MVH MV1C (Asia)</li>
+</ul>
+<p><strong><code>sp-j3.sp1</code></strong> -optional, in <code>neogeo.zip</code>, missing from repo</p>
+<ul>
+<li>System: snk-neogeo-mvs</li>
+<li>Size: 512.0 KB</li>
+<li>CRC32: <code>486cb450</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1616</code></li>
+<li>NEO-MVH MV1C (Japan)</li>
+</ul>
+<p><strong><code>japan-j3.bin</code></strong> -optional, in <code>neogeo.zip</code>, missing from repo</p>
+<ul>
+<li>System: snk-neogeo-mvs</li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>dff6d41f</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1617</code></li>
+<li>MVS Japan (J3)</li>
+</ul>
+<p><strong><code>sp1-j3.bin</code></strong> -optional, in <code>neogeo.zip</code>, missing from repo</p>
+<ul>
+<li>System: snk-neogeo-mvs</li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>fbc6d469</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1618</code></li>
+<li>MVS Japan (J3, alt)</li>
+</ul>
+<p><strong><code>neo-po.bin</code></strong> -optional, in <code>neogeo.zip</code>, missing from repo</p>
+<ul>
+<li>System: snk-neogeo-aes</li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>16d0c132</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1620</code></li>
+<li>AES Japan</li>
+</ul>
+<p><strong><code>neo-epo.bin</code></strong> -optional, in <code>neogeo.zip</code>, missing from repo</p>
+<ul>
+<li>System: snk-neogeo-aes</li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>d27a71f1</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1621</code></li>
+<li>AES Asia</li>
+</ul>
+<p><strong><code>neodebug.bin</code></strong> -optional, in <code>neogeo.zip</code>, missing from repo</p>
+<ul>
+<li>System: snk-neogeo-mvs</li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>698ebb7d</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1622</code></li>
+<li>Development Kit BIOS</li>
+</ul>
+<p><strong><code>sp-1v1_3db8c.bin</code></strong> -optional, in <code>neogeo.zip</code>, missing from repo</p>
+<ul>
+<li>System: snk-neogeo-mvs</li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>162f0ebe</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1628</code></li>
+<li>Deck ver. 6 (Git Ver 1.3)</li>
+</ul>
+<p><strong><code>uni-bios_4_0.rom</code></strong> -optional, in <code>neogeo.zip</code>, missing from repo</p>
+<ul>
+<li>System: snk-neogeo-mvs</li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>a7aab458</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1629</code></li>
+<li>Universe BIOS ver. 4.0 (hack)</li>
+</ul>
+<p><strong><code>uni-bios_3_3.rom</code></strong> -optional, in <code>neogeo.zip</code>, missing from repo</p>
+<ul>
+<li>System: snk-neogeo-mvs</li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>24858466</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1630</code></li>
+<li>Universe BIOS ver. 3.3 (hack)</li>
+</ul>
+<p><strong><code>uni-bios_3_2.rom</code></strong> -optional, in <code>neogeo.zip</code>, missing from repo</p>
+<ul>
+<li>System: snk-neogeo-mvs</li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>a4e8b9b3</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1631</code></li>
+<li>Universe BIOS ver. 3.2 (hack)</li>
+</ul>
+<p><strong><code>uni-bios_3_1.rom</code></strong> -optional, in <code>neogeo.zip</code>, missing from repo</p>
+<ul>
+<li>System: snk-neogeo-mvs</li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>0c58093f</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1632</code></li>
+<li>Universe BIOS ver. 3.1 (hack)</li>
+</ul>
+<p><strong><code>uni-bios_3_0.rom</code></strong> -optional, in <code>neogeo.zip</code>, missing from repo</p>
+<ul>
+<li>System: snk-neogeo-mvs</li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>a97c89a9</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1633</code></li>
+<li>Universe BIOS ver. 3.0 (hack)</li>
+</ul>
+<p><strong><code>uni-bios_2_3.rom</code></strong> -optional, in <code>neogeo.zip</code>, missing from repo</p>
+<ul>
+<li>System: snk-neogeo-mvs</li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>27664eb5</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1634</code></li>
+<li>Universe BIOS ver. 2.3 (hack)</li>
+</ul>
+<p><strong><code>uni-bios_2_3o.rom</code></strong> -optional, in <code>neogeo.zip</code>, missing from repo</p>
+<ul>
+<li>System: snk-neogeo-mvs</li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>601720ae</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1635</code></li>
+<li>Universe BIOS ver. 2.3 older (hack)</li>
+</ul>
+<p><strong><code>uni-bios_2_2.rom</code></strong> -optional, in <code>neogeo.zip</code>, missing from repo</p>
+<ul>
+<li>System: snk-neogeo-mvs</li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>2d50996a</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1636</code></li>
+<li>Universe BIOS ver. 2.2 (hack)</li>
+</ul>
+<p><strong><code>uni-bios_2_1.rom</code></strong> -optional, in <code>neogeo.zip</code>, missing from repo</p>
+<ul>
+<li>System: snk-neogeo-mvs</li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>8dabf76b</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1637</code></li>
+<li>Universe BIOS ver. 2.1 (hack)</li>
+</ul>
+<p><strong><code>uni-bios_2_0.rom</code></strong> -optional, in <code>neogeo.zip</code>, missing from repo</p>
+<ul>
+<li>System: snk-neogeo-mvs</li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>0c12c2ad</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1638</code></li>
+<li>Universe BIOS ver. 2.0 (hack)</li>
+</ul>
+<p><strong><code>uni-bios_1_3.rom</code></strong> -optional, in <code>neogeo.zip</code>, missing from repo</p>
+<ul>
+<li>System: snk-neogeo-mvs</li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>b24b44a0</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1639</code></li>
+<li>Universe BIOS ver. 1.3 (hack)</li>
+</ul>
+<p><strong><code>uni-bios_1_2.rom</code></strong> -optional, in <code>neogeo.zip</code>, missing from repo</p>
+<ul>
+<li>System: snk-neogeo-mvs</li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>4fa698e9</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1640</code></li>
+<li>Universe BIOS ver. 1.2 (hack)</li>
+</ul>
+<p><strong><code>uni-bios_1_2o.rom</code></strong> -optional, in <code>neogeo.zip</code>, missing from repo</p>
+<ul>
+<li>System: snk-neogeo-mvs</li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>e19d3ce9</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1641</code></li>
+<li>Universe BIOS ver. 1.2 older (hack)</li>
+</ul>
+<p><strong><code>uni-bios_1_1.rom</code></strong> -optional, in <code>neogeo.zip</code>, missing from repo</p>
+<ul>
+<li>System: snk-neogeo-mvs</li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>5dda0d84</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1642</code></li>
+<li>Universe BIOS ver. 1.1 (hack)</li>
+</ul>
+<p><strong><code>uni-bios_1_0.rom</code></strong> -optional, in <code>neogeo.zip</code>, missing from repo</p>
+<ul>
+<li>System: snk-neogeo-mvs</li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>0ce453a0</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1643</code></li>
+<li>Universe BIOS ver. 1.0 (hack)</li>
+</ul>
+<p><strong><code>neopen.sp1</code></strong> -optional, in <code>neogeo.zip</code>, missing from repo</p>
+<ul>
+<li>System: snk-neogeo-mvs</li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>cb915e76</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1645</code></li>
+<li>NeoOpen BIOS v0.1 beta (hack)</li>
+</ul>
+<p><strong><code>sm1.sm1</code></strong> -<strong>required</strong>, in <code>neogeo.zip</code>, missing from repo</p>
+<ul>
+<li>System: snk-neogeo-mvs</li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>94416d67</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1652</code></li>
+<li>Z80 sound BIOS</li>
+</ul>
+<p><strong><code>sfix.sfix</code></strong> -<strong>required</strong>, in <code>neogeo.zip</code>, missing from repo</p>
+<ul>
+<li>System: snk-neogeo-mvs</li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>c2ea0cfd</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1653</code></li>
+<li>Text layer fix tiles</li>
+</ul>
+<p><strong><code>000-lo.lo</code></strong> -<strong>required</strong>, in <code>neogeo.zip</code></p>
+<ul>
+<li>System: snk-neogeo-mvs</li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>5a86cff2</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1654</code></li>
+<li>Platforms: <a href="../../platforms/lakka/">lakka</a>, <a href="../../platforms/recalbox/">recalbox</a>, <a href="../../platforms/retroarch/">retroarch</a>, <a href="../../platforms/retrodeck/">retrodeck</a>, <a href="../../platforms/retropie/">retropie</a></li>
+<li>Zoom lookup table</li>
+</ul>
+<p><strong><code>236-bios.sp1</code></strong> -optional, in <code>neogeo.zip</code>, missing from repo</p>
+<ul>
+<li>System: snk-neogeo-mvs</li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>853e6b96</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1744</code></li>
+<li>Trackball BIOS / Asia MV1B 263</li>
+</ul>
+<p><strong><code>236-bios_japan_hack.sp1</code></strong> -optional, in <code>neogeo.zip</code>, missing from repo</p>
+<ul>
+<li>System: snk-neogeo-mvs</li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>02bf4426</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1745</code></li>
+<li>Trackball BIOS / Japan (hack)</li>
+</ul>
+<p><strong><code>sp-4x.sp1</code></strong> -optional, in <code>neogeo.zip</code>, missing from repo</p>
+<ul>
+<li>System: snk-neogeo-mvs</li>
+<li>Size: 512.0 KB</li>
+<li>CRC32: <code>b4590283</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1791</code></li>
+<li>PCB BIOS for Metal Slug 5 PCB and SVC Chaos PCB</li>
+</ul>
+<p><strong><code>spj.sp1</code></strong> -optional, in <code>neogeo.zip</code>, missing from repo</p>
+<ul>
+<li>System: snk-neogeo-mvs</li>
+<li>Size: 512.0 KB</li>
+<li>CRC32: <code>148dd727</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1879</code></li>
+<li>PCB BIOS for KOF 2003 PCB</li>
+</ul>
+<p><strong><code>neocd.bin</code></strong> -<strong>required</strong>, in <code>neocdz.zip</code></p>
+<ul>
+<li>System: <a href="../../systems/snk/#neo-geo-cd">snk-neogeo-cd</a></li>
+<li>Size: 512.0 KB</li>
+<li>CRC32: <code>df9de490</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1963</code></li>
+<li>Platforms: <a href="../../platforms/batocera/">batocera</a>, <a href="../../platforms/lakka/">lakka</a>, <a href="../../platforms/recalbox/">recalbox</a>, <a href="../../platforms/retroarch/">retroarch</a>, <a href="../../platforms/retrobat/">retrobat</a>, <a href="../../platforms/retrodeck/">retrodeck</a>, <a href="../../platforms/retropie/">retropie</a></li>
+<li>Neo Geo CD/CDZ top-loading BIOS</li>
+</ul>
+<p><strong><code>neocd_sz.rom</code></strong> -optional, in <code>neocdz.zip</code></p>
+<ul>
+<li>System: <a href="../../systems/snk/#neo-geo-cd">snk-neogeo-cd</a></li>
+<li>Size: 512.0 KB</li>
+<li>CRC32: <code>42f6b6c4</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1964</code></li>
+<li>Platforms: <a href="../../platforms/batocera/">batocera</a>, <a href="../../platforms/lakka/">lakka</a>, <a href="../../platforms/recalbox/">recalbox</a>, <a href="../../platforms/retroarch/">retroarch</a>, <a href="../../platforms/retrobat/">retrobat</a>, <a href="../../platforms/retrodeck/">retrodeck</a>, <a href="../../platforms/retropie/">retropie</a></li>
+<li>Neo Geo CDZ custom BIOS by SMKDan</li>
+</ul>
+<p><strong><code>uni-bioscd33.rom</code></strong> -optional, in <code>neocdz.zip</code>, missing from repo</p>
+<ul>
+<li>System: <a href="../../systems/snk/#neo-geo-cd">snk-neogeo-cd</a></li>
+<li>Size: 512.0 KB</li>
+<li>CRC32: <code>ff3abc59</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1965</code></li>
+<li>Universe BIOS CD ver. 3.3 (hack)</li>
+</ul>
+<p><strong><code>uni-bioscd32.rom</code></strong> -optional, in <code>neocdz.zip</code>, missing from repo</p>
+<ul>
+<li>System: <a href="../../systems/snk/#neo-geo-cd">snk-neogeo-cd</a></li>
+<li>Size: 512.0 KB</li>
+<li>CRC32: <code>0ffb3127</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1966</code></li>
+<li>Universe BIOS CD ver. 3.2 (hack)</li>
+</ul>
+<p><strong><code>000-lo.lo</code></strong> -<strong>required</strong>, in <code>neocdz.zip</code></p>
+<ul>
+<li>System: <a href="../../systems/snk/#neo-geo-cd">snk-neogeo-cd</a></li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>5a86cff2</code></li>
+<li>Source: <code>src/burn/drv/neogeo/d_neogeo.cpp:1968</code></li>
+<li>Platforms: <a href="../../platforms/lakka/">lakka</a>, <a href="../../platforms/recalbox/">recalbox</a>, <a href="../../platforms/retroarch/">retroarch</a>, <a href="../../platforms/retrodeck/">retrodeck</a>, <a href="../../platforms/retropie/">retropie</a></li>
+<li>Zoom lookup table (shared with MVS)</li>
+</ul>
+<p><strong><code>pgm_t01s.rom</code></strong> -<strong>required</strong>, in <code>pgm.zip</code>, missing from repo</p>
+<ul>
+<li>System: igs-pgm</li>
+<li>Size: 2.0 MB</li>
+<li>CRC32: <code>1a7123a0</code></li>
+<li>Source: <code>src/burn/drv/pgm/d_pgm.cpp:880</code></li>
+<li>8x8 text layer tiles</li>
+</ul>
+<p><strong><code>pgm_m01s.rom</code></strong> -<strong>required</strong>, in <code>pgm.zip</code>, missing from repo</p>
+<ul>
+<li>System: igs-pgm</li>
+<li>Size: 2.0 MB</li>
+<li>CRC32: <code>45ae7159</code></li>
+<li>Source: <code>src/burn/drv/pgm/d_pgm.cpp:881</code></li>
+<li>ICS2115 sound samples</li>
+</ul>
+<p><strong><code>pgm_p01s.u20</code></strong> -optional, in <code>pgm.zip</code>, missing from repo</p>
+<ul>
+<li>System: igs-pgm</li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>e42b166e</code></li>
+<li>Source: <code>src/burn/drv/pgm/d_pgm.cpp:883</code></li>
+<li>68K BIOS V0001 older (02/26/97)</li>
+</ul>
+<p><strong><code>pgm_p02s.u20</code></strong> -<strong>required</strong>, in <code>pgm.zip</code>, missing from repo</p>
+<ul>
+<li>System: igs-pgm</li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>78c15fa2</code></li>
+<li>Source: <code>src/burn/drv/pgm/d_pgm.cpp:884</code></li>
+<li>68K BIOS V0001 newer (07/10/97)</li>
+</ul>
+<p><strong><code>ddp3_bios.u37</code></strong> -optional, in <code>pgm.zip</code>, missing from repo</p>
+<ul>
+<li>System: igs-pgm</li>
+<li>Size: 512.0 KB</li>
+<li>CRC32: <code>b3cc5c8f</code></li>
+<li>Source: <code>src/burn/drv/pgm/d_pgm.cpp:886</code></li>
+<li>68K BIOS V0001 custom (07/17/97) for DoDonPachi III</li>
+</ul>
+<p><strong><code>bios.u42</code></strong> -optional, in <code>pgm.zip</code>, missing from repo</p>
+<ul>
+<li>System: igs-pgm</li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>517cf7a2</code></li>
+<li>Source: <code>src/burn/drv/pgm/d_pgm.cpp:887</code></li>
+<li>68K BIOS V0001-01J custom (02/25/03) for The Gladiator</li>
+</ul>
+<p><strong><code>svg_bios.u49</code></strong> -optional, in <code>pgm.zip</code>, missing from repo</p>
+<ul>
+<li>System: igs-pgm</li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>3346401f</code></li>
+<li>Source: <code>src/burn/drv/pgm/d_pgm.cpp:928</code></li>
+<li>68K BIOS V0001 custom (05/13/05) for SVG PCB</li>
+</ul>
+<p><strong><code>sfiii_euro.29f400.u2</code></strong> -<strong>required</strong>, in <code>sfiii.zip</code>, missing from repo</p>
+<ul>
+<li>System: capcom-cps3</li>
+<li>Size: 512.0 KB</li>
+<li>CRC32: <code>27699ddc</code></li>
+<li>Source: <code>src/burn/drv/cps3/d_cps3.cpp:336</code></li>
+<li>SH-2 BIOS, SF3 1st Impact Europe</li>
+</ul>
+<p><strong><code>sfiii_usa_region_b1.29f400.u2</code></strong> -<strong>required</strong>, in <code>sfiiiu.zip</code>, missing from repo</p>
+<ul>
+<li>System: capcom-cps3</li>
+<li>Size: 512.0 KB</li>
+<li>CRC32: <code>fb172a8e</code></li>
+<li>Source: <code>src/burn/drv/cps3/d_cps3.cpp:351</code></li>
+<li>SH-2 BIOS, SF3 1st Impact USA</li>
+</ul>
+<p><strong><code>sfiii_asia_region_bd.29f400.u2</code></strong> -<strong>required</strong>, in <code>sfiiia.zip</code>, missing from repo</p>
+<ul>
+<li>System: capcom-cps3</li>
+<li>Size: 512.0 KB</li>
+<li>CRC32: <code>cbd28de7</code></li>
+<li>Source: <code>src/burn/drv/cps3/d_cps3.cpp:366</code></li>
+<li>SH-2 BIOS, SF3 1st Impact Asia</li>
+</ul>
+<p><strong><code>sfiii_japan.29f400.u2</code></strong> -<strong>required</strong>, in <code>sfiiij.zip</code>, missing from repo</p>
+<ul>
+<li>System: capcom-cps3</li>
+<li>Size: 512.0 KB</li>
+<li>CRC32: <code>74205250</code></li>
+<li>Source: <code>src/burn/drv/cps3/d_cps3.cpp:381</code></li>
+<li>SH-2 BIOS, SF3 1st Impact Japan</li>
+</ul>
+<p><strong><code>sfiii_hispanic.29f400.u2</code></strong> -<strong>required</strong>, in <code>sfiiih.zip</code>, missing from repo</p>
+<ul>
+<li>System: capcom-cps3</li>
+<li>Size: 512.0 KB</li>
+<li>CRC32: <code>d2b3cd48</code></li>
+<li>Source: <code>src/burn/drv/cps3/d_cps3.cpp:396</code></li>
+<li>SH-2 BIOS, SF3 1st Impact Hispanic</li>
+</ul>
+<p><strong><code>sfiii_asia_nocd.29f400.u2</code></strong> -<strong>required</strong>, in <code>sfiiin.zip</code>, missing from repo</p>
+<ul>
+<li>System: capcom-cps3</li>
+<li>Size: 512.0 KB</li>
+<li>CRC32: <code>ca2b715f</code></li>
+<li>Source: <code>src/burn/drv/cps3/d_cps3.cpp:411</code></li>
+<li>SH-2 BIOS, SF3 1st Impact Asia (No CD)</li>
+</ul>
+<p><strong><code>sfiii2_usa.29f400.u2</code></strong> -<strong>required</strong>, in <code>sfiii2.zip</code>, missing from repo</p>
+<ul>
+<li>System: capcom-cps3</li>
+<li>Size: 512.0 KB</li>
+<li>CRC32: <code>75dd72e0</code></li>
+<li>Source: <code>src/burn/drv/cps3/d_cps3.cpp:475</code></li>
+<li>SH-2 BIOS, SF3 2nd Impact USA</li>
+</ul>
+<p><strong><code>sfiii2_japan.29f400.u2</code></strong> -<strong>required</strong>, in <code>sfiii2j.zip</code>, missing from repo</p>
+<ul>
+<li>System: capcom-cps3</li>
+<li>Size: 512.0 KB</li>
+<li>CRC32: <code>faea0a3e</code></li>
+<li>Source: <code>src/burn/drv/cps3/d_cps3.cpp:490</code></li>
+<li>SH-2 BIOS, SF3 2nd Impact Japan</li>
+</ul>
+<p><strong><code>sfiii2_hispanic.29f400.u2</code></strong> -<strong>required</strong>, in <code>sfiii2h.zip</code>, missing from repo</p>
+<ul>
+<li>System: capcom-cps3</li>
+<li>Size: 512.0 KB</li>
+<li>CRC32: <code>5c799526</code></li>
+<li>Source: <code>src/burn/drv/cps3/d_cps3.cpp:505</code></li>
+<li>SH-2 BIOS, SF3 2nd Impact Hispanic</li>
+</ul>
+<p><strong><code>sfiii2_asia_nocd.29f400.u2</code></strong> -<strong>required</strong>, in <code>sfiii2n.zip</code>, missing from repo</p>
+<ul>
+<li>System: capcom-cps3</li>
+<li>Size: 512.0 KB</li>
+<li>CRC32: <code>fd297c0d</code></li>
+<li>Source: <code>src/burn/drv/cps3/d_cps3.cpp:520</code></li>
+<li>SH-2 BIOS, SF3 2nd Impact Asia (No CD)</li>
+</ul>
+<p><strong><code>sfiii3_euro.29f400.u2</code></strong> -<strong>required</strong>, in <code>sfiii3.zip</code>, missing from repo</p>
+<ul>
+<li>System: capcom-cps3</li>
+<li>Size: 512.0 KB</li>
+<li>CRC32: <code>30bbf293</code></li>
+<li>Source: <code>src/burn/drv/cps3/d_cps3.cpp:579</code></li>
+<li>SH-2 BIOS, SF3 3rd Strike Europe</li>
+</ul>
+<p><strong><code>sfiii3_usa.29f400.u2</code></strong> -<strong>required</strong>, in <code>sfiii3u.zip</code>, missing from repo</p>
+<ul>
+<li>System: capcom-cps3</li>
+<li>Size: 512.0 KB</li>
+<li>CRC32: <code>ecc545c1</code></li>
+<li>Source: <code>src/burn/drv/cps3/d_cps3.cpp:594</code></li>
+<li>SH-2 BIOS, SF3 3rd Strike USA</li>
+</ul>
+<p><strong><code>sfiii3_japan.29f400.u2</code></strong> -<strong>required</strong>, in <code>sfiii3j.zip</code>, missing from repo</p>
+<ul>
+<li>System: capcom-cps3</li>
+<li>Size: 512.0 KB</li>
+<li>CRC32: <code>63f23d1f</code></li>
+<li>Source: <code>src/burn/drv/cps3/d_cps3.cpp:609</code></li>
+<li>SH-2 BIOS, SF3 3rd Strike Japan</li>
+</ul>
+<p><strong><code>sfiii3_japan_nocd.29f400.u2</code></strong> -<strong>required</strong>, in <code>sfiii3n.zip</code>, missing from repo</p>
+<ul>
+<li>System: capcom-cps3</li>
+<li>Size: 512.0 KB</li>
+<li>CRC32: <code>1edc6366</code></li>
+<li>Source: <code>src/burn/drv/cps3/d_cps3.cpp:624</code></li>
+<li>SH-2 BIOS, SF3 3rd Strike Japan (No CD)</li>
+</ul>
+<p><strong><code>sfiii3_asia_nocd.29f400.u2</code></strong> -<strong>required</strong>, in <code>sfiii3na.zip</code>, missing from repo</p>
+<ul>
+<li>System: capcom-cps3</li>
+<li>Size: 512.0 KB</li>
+<li>CRC32: <code>a12ebcd1</code></li>
+<li>Source: <code>src/burn/drv/cps3/d_cps3.cpp:637</code></li>
+<li>SH-2 BIOS, SF3 3rd Strike Asia (No CD)</li>
+</ul>
+<p><strong><code>jojo_euro.29f400.u2</code></strong> -<strong>required</strong>, in <code>jojo.zip</code>, missing from repo</p>
+<ul>
+<li>System: capcom-cps3</li>
+<li>Size: 512.0 KB</li>
+<li>CRC32: <code>513e40ec</code></li>
+<li>Source: <code>src/burn/drv/cps3/d_cps3.cpp:799</code></li>
+<li>SH-2 BIOS, JoJo's Venture Europe</li>
+</ul>
+<p><strong><code>jojo_usa.29f400.u2</code></strong> -<strong>required</strong>, in <code>jojou.zip</code>, missing from repo</p>
+<ul>
+<li>System: capcom-cps3</li>
+<li>Size: 512.0 KB</li>
+<li>CRC32: <code>8d40f7be</code></li>
+<li>Source: <code>src/burn/drv/cps3/d_cps3.cpp:814</code></li>
+<li>SH-2 BIOS, JoJo's Venture USA</li>
+</ul>
+<p><strong><code>jojo_asia.29f400.u2</code></strong> -<strong>required</strong>, in <code>jojoa.zip</code>, missing from repo</p>
+<ul>
+<li>System: capcom-cps3</li>
+<li>Size: 512.0 KB</li>
+<li>CRC32: <code>789aa72a</code></li>
+<li>Source: <code>src/burn/drv/cps3/d_cps3.cpp:829</code></li>
+<li>SH-2 BIOS, JoJo's Venture Asia</li>
+</ul>
+<p><strong><code>jojo_japan.29f400.u2</code></strong> -<strong>required</strong>, in <code>jojoj.zip</code>, missing from repo</p>
+<ul>
+<li>System: capcom-cps3</li>
+<li>Size: 512.0 KB</li>
+<li>CRC32: <code>02778f60</code></li>
+<li>Source: <code>src/burn/drv/cps3/d_cps3.cpp:844</code></li>
+<li>SH-2 BIOS, JoJo's Venture Japan</li>
+</ul>
+<p><strong><code>jojo_asia_nocd.29f400.u2</code></strong> -<strong>required</strong>, in <code>jojon.zip</code>, missing from repo</p>
+<ul>
+<li>System: capcom-cps3</li>
+<li>Size: 512.0 KB</li>
+<li>CRC32: <code>05b4f953</code></li>
+<li>Source: <code>src/burn/drv/cps3/d_cps3.cpp:859</code></li>
+<li>SH-2 BIOS, JoJo's Venture Asia (No CD)</li>
+</ul>
+<p><strong><code>jojoba_euro.29f400.u2</code></strong> -<strong>required</strong>, in <code>jojobar1.zip</code>, missing from repo</p>
+<ul>
+<li>System: capcom-cps3</li>
+<li>Size: 512.0 KB</li>
+<li>CRC32: <code>63cc8800</code></li>
+<li>Source: <code>src/burn/drv/cps3/d_cps3.cpp:1184</code></li>
+<li>SH-2 BIOS, JoJo's BA: Heritage Europe</li>
+</ul>
+<p><strong><code>jojoba_japan.29f400.u2</code></strong> -<strong>required</strong>, in <code>jojobajr1.zip</code>, missing from repo</p>
+<ul>
+<li>System: capcom-cps3</li>
+<li>Size: 512.0 KB</li>
+<li>CRC32: <code>3085478c</code></li>
+<li>Source: <code>src/burn/drv/cps3/d_cps3.cpp:1199</code></li>
+<li>SH-2 BIOS, JoJo's BA: Heritage Japan</li>
+</ul>
+<p><strong><code>jojoba_euro_nocd.29f400.u2</code></strong> -<strong>required</strong>, in <code>jojoba.zip</code>, missing from repo</p>
+<ul>
+<li>System: capcom-cps3</li>
+<li>Size: 512.0 KB</li>
+<li>CRC32: <code>1ee2d679</code></li>
+<li>Source: <code>src/burn/drv/cps3/d_cps3.cpp:1120</code></li>
+<li>SH-2 BIOS, JoJo's BA: Heritage Europe (No CD)</li>
+</ul>
+<p><strong><code>jojoba_japan_nocd.29f400.u2</code></strong> -<strong>required</strong>, in <code>jojoban.zip</code>, missing from repo</p>
+<ul>
+<li>System: capcom-cps3</li>
+<li>Size: 512.0 KB</li>
+<li>CRC32: <code>4dab19f5</code></li>
+<li>Source: <code>src/burn/drv/cps3/d_cps3.cpp:1133</code></li>
+<li>SH-2 BIOS, JoJo's BA: Heritage Japan (No CD)</li>
+</ul>
+<p><strong><code>redearth_euro.29f400.u2</code></strong> -<strong>required</strong>, in <code>redearth.zip</code>, missing from repo</p>
+<ul>
+<li>System: capcom-cps3</li>
+<li>Size: 512.0 KB</li>
+<li>CRC32: <code>02e0f336</code></li>
+<li>Source: <code>src/burn/drv/cps3/d_cps3.cpp:1362</code></li>
+<li>SH-2 BIOS, Red Earth Europe</li>
+</ul>
+<p><strong><code>warzard_japan.29f400.u2</code></strong> -<strong>required</strong>, in <code>warzard.zip</code>, missing from repo</p>
+<ul>
+<li>System: capcom-cps3</li>
+<li>Size: 512.0 KB</li>
+<li>CRC32: <code>f8e2f0c6</code></li>
+<li>Source: <code>src/burn/drv/cps3/d_cps3.cpp:1377</code></li>
+<li>SH-2 BIOS, Warzard Japan</li>
+</ul>
+<p><strong><code>redearth_asia_nocd.29f400.u2</code></strong> -<strong>required</strong>, in <code>redearthn.zip</code>, missing from repo</p>
+<ul>
+<li>System: capcom-cps3</li>
+<li>Size: 512.0 KB</li>
+<li>CRC32: <code>7a4f0851</code></li>
+<li>Source: <code>src/burn/drv/cps3/d_cps3.cpp:1392</code></li>
+<li>SH-2 BIOS, Red Earth Asia (No CD)</li>
+</ul>
+<p><strong><code>sknsj1.u10</code></strong> -<strong>required</strong>, in <code>skns.zip</code>, missing from repo</p>
+<ul>
+<li>System: super-kaneko-nova</li>
+<li>Size: 512.0 KB</li>
+<li>CRC32: <code>7e2b836c</code></li>
+<li>Source: <code>src/burn/drv/pst90s/d_suprnova.cpp:1846</code></li>
+<li>SKNS BIOS Japan</li>
+</ul>
+<p><strong><code>sknse2.u10</code></strong> -optional, in <code>skns.zip</code>, missing from repo</p>
+<ul>
+<li>System: super-kaneko-nova</li>
+<li>Size: 512.0 KB</li>
+<li>CRC32: <code>e2b9d7d1</code></li>
+<li>Source: <code>src/burn/drv/pst90s/d_suprnova.cpp:1847</code></li>
+<li>SKNS BIOS Europe</li>
+</ul>
+<p><strong><code>sknsa1.u10</code></strong> -optional, in <code>skns.zip</code>, missing from repo</p>
+<ul>
+<li>System: super-kaneko-nova</li>
+<li>Size: 512.0 KB</li>
+<li>CRC32: <code>745e5212</code></li>
+<li>Source: <code>src/burn/drv/pst90s/d_suprnova.cpp:1848</code></li>
+<li>SKNS BIOS Asia</li>
+</ul>
+<p><strong><code>sknsu1.u10</code></strong> -optional, in <code>skns.zip</code>, missing from repo</p>
+<ul>
+<li>System: super-kaneko-nova</li>
+<li>Size: 512.0 KB</li>
+<li>CRC32: <code>384d21ec</code></li>
+<li>Source: <code>src/burn/drv/pst90s/d_suprnova.cpp:1849</code></li>
+<li>SKNS BIOS USA</li>
+</ul>
+<p><strong><code>sknsk1.u10</code></strong> -optional, in <code>skns.zip</code>, missing from repo</p>
+<ul>
+<li>System: super-kaneko-nova</li>
+<li>Size: 512.0 KB</li>
+<li>CRC32: <code>ff1c9f79</code></li>
+<li>Source: <code>src/burn/drv/pst90s/d_suprnova.cpp:1850</code></li>
+<li>SKNS BIOS Korea</li>
+</ul>
+<p><strong><code>sl31254.rom</code></strong> -<strong>required</strong>, in <code>channelf.zip</code>, missing from repo</p>
+<ul>
+<li>System: fairchild-channelf</li>
+<li>Size: 1.0 KB</li>
+<li>CRC32: <code>9c047ba3</code></li>
+<li>Source: <code>src/burn/drv/channelf/d_channelf.cpp:538</code></li>
+<li>Channel F BIOS bottom half</li>
+</ul>
+<p><strong><code>sl31253.rom</code></strong> -<strong>required</strong>, in <code>channelf.zip</code>, missing from repo</p>
+<ul>
+<li>System: fairchild-channelf</li>
+<li>Size: 1.0 KB</li>
+<li>CRC32: <code>04694ed9</code></li>
+<li>Source: <code>src/burn/drv/channelf/d_channelf.cpp:540</code></li>
+<li>Channel F BIOS top half</li>
+</ul>
+<p><strong><code>sl90025.rom</code></strong> -optional, in <code>channelf.zip</code>, missing from repo</p>
+<ul>
+<li>System: fairchild-channelf</li>
+<li>Size: 1.0 KB</li>
+<li>CRC32: <code>015c1e38</code></li>
+<li>Source: <code>src/burn/drv/channelf/d_channelf.cpp:541</code></li>
+<li>Luxor Video Entertainment System BIOS (top half)</li>
+</ul>
+<p><strong><code>coleco.rom</code></strong> -<strong>required</strong>, in <code>coleco.zip</code></p>
+<ul>
+<li>System: <a href="../../systems/coleco/#colecovision">coleco-colecovision</a></li>
+<li>Size: 8.0 KB</li>
+<li>CRC32: <code>3aa93ef3</code></li>
+<li>Source: <code>src/burn/drv/coleco/d_coleco.cpp:1070</code></li>
+<li>Platforms: <a href="../../platforms/lakka/">lakka</a>, <a href="../../platforms/recalbox/">recalbox</a>, <a href="../../platforms/retroarch/">retroarch</a>, <a href="../../platforms/retrobat/">retrobat</a>, <a href="../../platforms/retrodeck/">retrodeck</a>, <a href="../../platforms/retropie/">retropie</a></li>
+<li>ColecoVision BIOS (Coleco, 1982)</li>
+</ul>
+<p><strong><code>colecoa.rom</code></strong> -optional, in <code>coleco.zip</code>, missing from repo</p>
+<ul>
+<li>System: <a href="../../systems/coleco/#colecovision">coleco-colecovision</a></li>
+<li>Size: 8.0 KB</li>
+<li>CRC32: <code>39bb16fc</code></li>
+<li>Source: <code>src/burn/drv/coleco/d_coleco.cpp:1071</code></li>
+<li>ColecoVision BIOS thick characters (Coleco, 1982)</li>
+</ul>
+<p><strong><code>svi603.rom</code></strong> -optional, in <code>coleco.zip</code>, missing from repo</p>
+<ul>
+<li>System: <a href="../../systems/coleco/#colecovision">coleco-colecovision</a></li>
+<li>Size: 8.0 KB</li>
+<li>CRC32: <code>19e91b82</code></li>
+<li>Source: <code>src/burn/drv/coleco/d_coleco.cpp:1072</code></li>
+<li>SVI-603 Coleco Game Adapter (Spectravideo, 1983)</li>
+</ul>
+<p><strong><code>czz50.rom</code></strong> -optional, in <code>coleco.zip</code>, missing from repo</p>
+<ul>
+<li>System: <a href="../../systems/coleco/#colecovision">coleco-colecovision</a></li>
+<li>Size: 16.0 KB</li>
+<li>CRC32: <code>4999abc6</code></li>
+<li>Source: <code>src/burn/drv/coleco/d_coleco.cpp:1073</code></li>
+<li>Chuang Zao Zhe 50 (Bit Corporation, 1986)</li>
+</ul>
+<p><strong><code>spectrum.rom</code></strong> -<strong>required</strong>, in <code>spectrum.zip</code>, missing from repo</p>
+<ul>
+<li>System: sinclair-spectrum</li>
+<li>Size: 16.0 KB</li>
+<li>CRC32: <code>ddee531f</code></li>
+<li>Source: <code>src/burn/drv/spectrum/d_spectrum.cpp:181</code></li>
+<li>ZX Spectrum 48K BIOS</li>
+</ul>
+<p><strong><code>zx128_0.rom</code></strong> -<strong>required</strong>, in <code>spec128.zip</code>, missing from repo</p>
+<ul>
+<li>System: sinclair-spectrum</li>
+<li>Size: 16.0 KB</li>
+<li>CRC32: <code>e76799d2</code></li>
+<li>Source: <code>src/burn/drv/spectrum/d_spectrum.cpp:188</code></li>
+<li>ZX Spectrum 128K BIOS bank 0</li>
+</ul>
+<p><strong><code>zx128_1.rom</code></strong> -<strong>required</strong>, in <code>spec128.zip</code>, missing from repo</p>
+<ul>
+<li>System: sinclair-spectrum</li>
+<li>Size: 16.0 KB</li>
+<li>CRC32: <code>b96a36be</code></li>
+<li>Source: <code>src/burn/drv/spectrum/d_spectrum.cpp:189</code></li>
+<li>ZX Spectrum 128K BIOS bank 1</li>
+</ul>
+<p><strong><code>zx128_2a_0.rom</code></strong> -optional, in <code>spec1282a.zip</code>, missing from repo</p>
+<ul>
+<li>System: sinclair-spectrum</li>
+<li>Size: 16.0 KB</li>
+<li>CRC32: <code>30c9f490</code></li>
+<li>Source: <code>src/burn/drv/spectrum/d_spectrum.cpp:196</code></li>
+<li>ZX Spectrum +2A BIOS bank 0</li>
+</ul>
+<p><strong><code>zx128_2a_1.rom</code></strong> -optional, in <code>spec1282a.zip</code>, missing from repo</p>
+<ul>
+<li>System: sinclair-spectrum</li>
+<li>Size: 16.0 KB</li>
+<li>CRC32: <code>a7916b3f</code></li>
+<li>Source: <code>src/burn/drv/spectrum/d_spectrum.cpp:197</code></li>
+<li>ZX Spectrum +2A BIOS bank 1</li>
+</ul>
+<p><strong><code>zx128_2a_2.rom</code></strong> -optional, in <code>spec1282a.zip</code>, missing from repo</p>
+<ul>
+<li>System: sinclair-spectrum</li>
+<li>Size: 16.0 KB</li>
+<li>CRC32: <code>c9a0b748</code></li>
+<li>Source: <code>src/burn/drv/spectrum/d_spectrum.cpp:198</code></li>
+<li>ZX Spectrum +2A BIOS bank 2</li>
+</ul>
+<p><strong><code>zx128_2a_3.rom</code></strong> -optional, in <code>spec1282a.zip</code>, missing from repo</p>
+<ul>
+<li>System: sinclair-spectrum</li>
+<li>Size: 16.0 KB</li>
+<li>CRC32: <code>b88fd6e3</code></li>
+<li>Source: <code>src/burn/drv/spectrum/d_spectrum.cpp:199</code></li>
+<li>ZX Spectrum +2A BIOS bank 3</li>
+</ul>
+<p><strong><code>msx.rom</code></strong> -<strong>required</strong>, in <code>msx.zip</code>, missing from repo</p>
+<ul>
+<li>System: <a href="../../systems/microsoft/#msx">msx</a></li>
+<li>Size: 32.0 KB</li>
+<li>CRC32: <code>a317e6b4</code></li>
+<li>Source: <code>src/burn/drv/msx/d_msx.cpp:1773</code></li>
+<li>MSX1 standard BIOS</li>
+</ul>
+<p><strong><code>msxj.rom</code></strong> -optional, in <code>msx.zip</code>, missing from repo</p>
+<ul>
+<li>System: <a href="../../systems/microsoft/#msx">msx</a></li>
+<li>Size: 32.0 KB</li>
+<li>CRC32: <code>071135e0</code></li>
+<li>Source: <code>src/burn/drv/msx/d_msx.cpp:1774</code></li>
+<li>MSX1 Japanese BIOS</li>
+</ul>
+<p><strong><code>kanji.rom</code></strong> -optional, in <code>msx.zip</code>, missing from repo</p>
+<ul>
+<li>System: <a href="../../systems/microsoft/#msx">msx</a></li>
+<li>Size: 256.0 KB</li>
+<li>CRC32: <code>1f6406fb</code></li>
+<li>Source: <code>src/burn/drv/msx/d_msx.cpp:1775</code></li>
+<li>MSX Kanji character support</li>
+</ul>
+<p><strong><code>fdsbios.nes</code></strong> -<strong>required</strong>, in <code>fdsbios.zip</code>, missing from repo</p>
+<ul>
+<li>System: nes-fds</li>
+<li>Size: 8.0 KB</li>
+<li>CRC32: <code>5e607dcf</code></li>
+<li>Source: <code>src/burn/drv/nes/d_nes.cpp:517</code></li>
+<li>Famicom Disk System BIOS</li>
+</ul>
+<p><strong><code>SNK Neo-Geo Pocket BIOS (1998)(SNK)(en-ja).bin</code></strong> -<strong>required</strong>, in <code>ngp.zip</code>, missing from repo</p>
+<ul>
+<li>System: snk-neogeo-pocket</li>
+<li>Size: 64.0 KB</li>
+<li>CRC32: <code>6232df8d</code></li>
+<li>Source: <code>src/burn/drv/pst90s/d_ngp.cpp:962</code></li>
+<li>Neo Geo Pocket (b&amp;w) BIOS</li>
+</ul>
+<p><strong><code>SNK Neo-Geo Pocket Color BIOS (1999)(SNK)(en-ja).bin</code></strong> -<strong>required</strong>, in <code>ngp.zip</code>, missing from repo</p>
+<ul>
+<li>System: snk-neogeo-pocket</li>
+<li>Size: 64.0 KB</li>
+<li>CRC32: <code>6eeb6f40</code></li>
+<li>Source: <code>src/burn/drv/pst90s/d_ngp.cpp:963</code></li>
+<li>Neo Geo Pocket Color BIOS</li>
+</ul>
+<p><strong><code>v0a-.7e</code></strong> -<strong>required</strong>, in <code>decocass.zip</code>, missing from repo</p>
+<ul>
+<li>System: deco-cassette</li>
+<li>Size: 4.0 KB</li>
+<li>CRC32: <code>3d33ac34</code></li>
+<li>Source: <code>src/burn/drv/dataeast/d_decocass.cpp:3596</code></li>
+<li>BIOS A Japan, Main M6502</li>
+</ul>
+<p><strong><code>v1-.5a</code></strong> -<strong>required</strong>, in <code>decocass.zip</code>, missing from repo</p>
+<ul>
+<li>System: deco-cassette</li>
+<li>Size: 2.0 KB</li>
+<li>CRC32: <code>b66b2c2a</code></li>
+<li>Source: <code>src/burn/drv/dataeast/d_decocass.cpp:3599</code></li>
+<li>BIOS A Japan, Sound M6502 (shared across regions)</li>
+</ul>
+<p><strong><code>v2.3m</code></strong> -optional, in <code>decocass.zip</code>, missing from repo</p>
+<ul>
+<li>System: deco-cassette</li>
+<li>Size: 32 B</li>
+<li>CRC32: <code>238fdb40</code></li>
+<li>Source: <code>src/burn/drv/dataeast/d_decocass.cpp:3601</code></li>
+<li>BIOS PROM (shared across regions)</li>
+</ul>
+<p><strong><code>v4.10d</code></strong> -optional, in <code>decocass.zip</code>, missing from repo</p>
+<ul>
+<li>System: deco-cassette</li>
+<li>Size: 32 B</li>
+<li>CRC32: <code>3b5836b4</code></li>
+<li>Source: <code>src/burn/drv/dataeast/d_decocass.cpp:3602</code></li>
+<li>BIOS PROM (shared across regions)</li>
+</ul>
+<p><strong><code>v3.3j</code></strong> -optional, in <code>decocass.zip</code>, missing from repo</p>
+<ul>
+<li>System: deco-cassette</li>
+<li>Size: 32 B</li>
+<li>CRC32: <code>51eef657</code></li>
+<li>Source: <code>src/burn/drv/dataeast/d_decocass.cpp:3603</code></li>
+<li>BIOS PROM (shared across regions)</li>
+</ul>
+<p><strong><code>dsp-3_p0-a.m9</code></strong> -optional, in <code>decocass.zip</code>, missing from repo</p>
+<ul>
+<li>System: deco-cassette</li>
+<li>Size: 2.0 KB</li>
+<li>CRC32: <code>2541e34b</code></li>
+<li>Source: <code>src/burn/drv/dataeast/d_decocass.cpp:3608</code></li>
+<li>BIOS A Japan Older, Main M6502 (part 1)</li>
+</ul>
+<p><strong><code>dsp-3_p1-.l9</code></strong> -optional, in <code>decocass.zip</code>, missing from repo</p>
+<ul>
+<li>System: deco-cassette</li>
+<li>Size: 2.0 KB</li>
+<li>CRC32: <code>3bfff5f3</code></li>
+<li>Source: <code>src/burn/drv/dataeast/d_decocass.cpp:3609</code></li>
+<li>BIOS A Japan Older, Main M6502 (part 2, shared)</li>
+</ul>
+<p><strong><code>rms-3_p2-.c9</code></strong> -optional, in <code>decocass.zip</code>, missing from repo</p>
+<ul>
+<li>System: deco-cassette</li>
+<li>Size: 1.0 KB</li>
+<li>CRC32: <code>6c4a891f</code></li>
+<li>Source: <code>src/burn/drv/dataeast/d_decocass.cpp:3611</code></li>
+<li>BIOS A Japan Older, Sound M6502 (shared)</li>
+</ul>
+<p><strong><code>dsp-3_p3-.e5</code></strong> -optional, in <code>decocass.zip</code>, missing from repo</p>
+<ul>
+<li>System: deco-cassette</li>
+<li>Size: 32 B</li>
+<li>CRC32: <code>539a5a64</code></li>
+<li>Source: <code>src/burn/drv/dataeast/d_decocass.cpp:3613</code></li>
+<li>BIOS Older PROM (shared)</li>
+</ul>
+<p><strong><code>rms-3_p4-.f6</code></strong> -optional, in <code>decocass.zip</code>, missing from repo</p>
+<ul>
+<li>System: deco-cassette</li>
+<li>Size: 32 B</li>
+<li>CRC32: <code>9014c0fd</code></li>
+<li>Source: <code>src/burn/drv/dataeast/d_decocass.cpp:3614</code></li>
+<li>BIOS Older PROM (shared)</li>
+</ul>
+<p><strong><code>dsp-3_p5-.m4</code></strong> -optional, in <code>decocass.zip</code>, missing from repo</p>
+<ul>
+<li>System: deco-cassette</li>
+<li>Size: 32 B</li>
+<li>CRC32: <code>e52089a0</code></li>
+<li>Source: <code>src/burn/drv/dataeast/d_decocass.cpp:3615</code></li>
+<li>BIOS Older PROM (shared)</li>
+</ul>
+<p><strong><code>v0b-.7e</code></strong> -optional, in <code>decocass.zip</code>, missing from repo</p>
+<ul>
+<li>System: deco-cassette</li>
+<li>Size: 4.0 KB</li>
+<li>CRC32: <code>23d929b7</code></li>
+<li>Source: <code>src/burn/drv/dataeast/d_decocass.cpp:3620</code></li>
+<li>BIOS B USA, Main M6502</li>
+</ul>
+<p><strong><code>dsp-3_p0-b.m9</code></strong> -optional, in <code>decocass.zip</code>, missing from repo</p>
+<ul>
+<li>System: deco-cassette</li>
+<li>Size: 2.0 KB</li>
+<li>CRC32: <code>b67a91d9</code></li>
+<li>Source: <code>src/burn/drv/dataeast/d_decocass.cpp:3632</code></li>
+<li>BIOS B USA Older, Main M6502</li>
+</ul>
+<p><strong><code>v0c-.7e</code></strong> -optional, in <code>decocass.zip</code>, missing from repo</p>
+<ul>
+<li>System: deco-cassette</li>
+<li>Size: 4.0 KB</li>
+<li>CRC32: <code>9f505709</code></li>
+<li>Source: <code>src/burn/drv/dataeast/d_decocass.cpp:3644</code></li>
+<li>BIOS C UK, Main M6502</li>
+</ul>
+<p><strong><code>dsp-3_p0-c.m9</code></strong> -optional, in <code>decocass.zip</code>, missing from repo</p>
+<ul>
+<li>System: deco-cassette</li>
+<li>Size: 2.0 KB</li>
+<li>CRC32: <code>c76c4057</code></li>
+<li>Source: <code>src/burn/drv/dataeast/d_decocass.cpp:3656</code></li>
+<li>BIOS C UK Older, Main M6502</li>
+</ul>
+<p><strong><code>v0d-.7e</code></strong> -optional, in <code>decocass.zip</code>, missing from repo</p>
+<ul>
+<li>System: deco-cassette</li>
+<li>Size: 4.0 KB</li>
+<li>CRC32: <code>1e0c22b1</code></li>
+<li>Source: <code>src/burn/drv/dataeast/d_decocass.cpp:3668</code></li>
+<li>BIOS D Europe, Main M6502</li>
+</ul>
+<p><strong><code>dsp-3_p0-d.m9</code></strong> -optional, in <code>decocass.zip</code>, missing from repo</p>
+<ul>
+<li>System: deco-cassette</li>
+<li>Size: 2.0 KB</li>
+<li>CRC32: <code>4b7d72bc</code></li>
+<li>Source: <code>src/burn/drv/dataeast/d_decocass.cpp:3680</code></li>
+<li>BIOS D Europe Older, Main M6502</li>
+</ul>
+<p><strong><code>cassmcu.1c</code></strong> -<strong>required</strong>, in <code>decocass.zip</code>, missing from repo</p>
+<ul>
+<li>System: deco-cassette</li>
+<li>Size: 1.0 KB</li>
+<li>CRC32: <code>a6df18fd</code></li>
+<li>Source: <code>src/burn/drv/dataeast/d_decocass.cpp:3692</code></li>
+<li>MCU BIOS, shared across all DECO Cassette regions</li>
+</ul>
+<p><strong><code>c69.bin</code></strong> -<strong>required</strong>, in <code>namcoc69.zip</code>, missing from repo</p>
+<ul>
+<li>System: namco-na1</li>
+<li>Size: 16.0 KB</li>
+<li>CRC32: <code>349134d9</code></li>
+<li>Source: <code>src/burn/drv/pst90s/d_namcona1.cpp:1346</code></li>
+<li>C69 MCU internal ROM for Namco NA-1</li>
+</ul>
+<p><strong><code>c70.bin</code></strong> -<strong>required</strong>, in <code>namcoc70.zip</code>, missing from repo</p>
+<ul>
+<li>System: namco-na1</li>
+<li>Size: 16.0 KB</li>
+<li>CRC32: <code>b4015f23</code></li>
+<li>Source: <code>src/burn/drv/pst90s/d_namcona1.cpp:1367</code></li>
+<li>C70 MCU internal ROM for Namco NA-2</li>
+</ul>
+<p><strong><code>c75.bin</code></strong> -<strong>required</strong>, in <code>namcoc75.zip</code>, missing from repo</p>
+<ul>
+<li>System: namco-nb1</li>
+<li>Size: 16.0 KB</li>
+<li>CRC32: <code>42f539a5</code></li>
+<li>Source: <code>src/burn/drv/pst90s/d_namconb1.cpp:1978</code></li>
+<li>C75 MCU internal ROM for Namco NB-1</li>
+</ul>
+<p><strong><code>boot.bin</code></strong> -<strong>required</strong>, in <code>bubsys.zip</code></p>
+<ul>
+<li>System: konami-bubsys</li>
+<li>Size: 480 B</li>
+<li>CRC32: <code>f0774fc2</code></li>
+<li>Source: <code>src/burn/drv/konami/d_nemesis.cpp:4526</code></li>
+<li>Platforms: <a href="../../platforms/lakka/">lakka</a>, <a href="../../platforms/retroarch/">retroarch</a>, <a href="../../platforms/retropie/">retropie</a></li>
+<li>M68000 vectors</li>
+</ul>
+<p><strong><code>400b03.8g</code></strong> -<strong>required</strong>, in <code>bubsys.zip</code>, missing from repo</p>
+<ul>
+<li>System: konami-bubsys</li>
+<li>Size: 8.0 KB</li>
+<li>CRC32: <code>85c2afc5</code></li>
+<li>Source: <code>src/burn/drv/konami/d_nemesis.cpp:4530</code></li>
+<li>Z80 code</li>
+</ul>
+<p><strong><code>400a1.2b</code></strong> -<strong>required</strong>, in <code>bubsys.zip</code>, missing from repo</p>
+<ul>
+<li>System: konami-bubsys</li>
+<li>Size: 256 B</li>
+<li>CRC32: <code>5827b1e8</code></li>
+<li>Source: <code>src/burn/drv/konami/d_nemesis.cpp:4532</code></li>
+<li>K005289 wavetable 1</li>
+</ul>
+<p><strong><code>400a2.1b</code></strong> -<strong>required</strong>, in <code>bubsys.zip</code>, missing from repo</p>
+<ul>
+<li>System: konami-bubsys</li>
+<li>Size: 256 B</li>
+<li>CRC32: <code>2f44f970</code></li>
+<li>Source: <code>src/burn/drv/konami/d_nemesis.cpp:4533</code></li>
+<li>K005289 wavetable 2</li>
+</ul>
+<p><strong><code>ism2006v00.u1</code></strong> -<strong>required</strong>, in <code>isgsm.zip</code>, missing from repo</p>
+<ul>
+<li>System: sega-system16b</li>
+<li>Size: 128.0 KB</li>
+<li>CRC32: <code>2292585c</code></li>
+<li>Source: <code>src/burn/drv/sega/d_sys16b.cpp:11045</code></li>
+<li>ISG Selection Master Type 2006 BIOS</li>
+</ul>
+<p><strong><code>nmk004.bin</code></strong> -<strong>required</strong>, in <code>nmk004.zip</code>, missing from repo</p>
+<ul>
+<li>System: nmk16</li>
+<li>Size: 8.0 KB</li>
+<li>CRC32: <code>8ae61a09</code></li>
+<li>Source: <code>src/burn/drv/pst90s/d_nmk16.cpp:6123</code></li>
+<li>NMK004 TLCS90 internal ROM</li>
+</ul>
+<p><strong><code>cchip_upd78c11.bin</code></strong> -<strong>required</strong>, in <code>cchip.zip</code>, missing from repo</p>
+<ul>
+<li>System: taito-cchip</li>
+<li>Size: 4.0 KB</li>
+<li>CRC32: <code>43021521</code></li>
+<li>Source: <code>src/burn/drv/taito/d_taitof2.cpp:4392</code></li>
+<li>Taito C-Chip UPD78C11 internal ROM</li>
+</ul>
+<p><strong><code>82s123.12d</code></strong> -<strong>required</strong>, in <code>midssio.zip</code>, missing from repo</p>
+<ul>
+<li>System: midway-mcr</li>
+<li>Size: 32 B</li>
+<li>CRC32: <code>e1281ee9</code></li>
+<li>Source: <code>src/burn/drv/pre90s/d_mcr.cpp:1629</code></li>
+<li>Midway SSIO sound PROM</li>
+</ul>
+<p><strong><code>ym2608_adpcm_rom.bin</code></strong> -<strong>required</strong>, in <code>ym2608.zip</code>, missing from repo</p>
+<ul>
+<li>System: ym2608</li>
+<li>Size: 8.0 KB</li>
+<li>CRC32: <code>23c9e0d8</code></li>
+<li>Source: <code>src/burn/drv/pst90s/d_pipedrm.cpp:876</code></li>
+<li>YM2608 internal ADPCM-A rhythm samples, used by multiple drivers</li>
+</ul>
+<p><strong><code>st010.bin</code></strong> -<strong>required</strong>, in <code>st010.zip</code>, missing from repo</p>
+<ul>
+<li>System: snes</li>
+<li>Size: 68.0 KB</li>
+<li>CRC32: <code>aa11ee2d</code></li>
+<li>Source: <code>src/burn/drv/snes/d_snes.cpp:571</code></li>
+<li>Seta ST010 coprocessor microcode</li>
+</ul>
+<p><strong><code>st011.bin</code></strong> -<strong>required</strong>, in <code>st011.zip</code>, missing from repo</p>
+<ul>
+<li>System: snes</li>
+<li>Size: 68.0 KB</li>
+<li>CRC32: <code>34d2952c</code></li>
+<li>Source: <code>src/burn/drv/snes/d_snes.cpp:590</code></li>
+<li>Seta ST011 coprocessor microcode</li>
+</ul>
+<p><strong><code>dsp1.bin</code></strong> -<strong>required</strong>, in <code>dsp1.zip</code>, missing from repo</p>
+<ul>
+<li>System: snes</li>
+<li>Size: 10.0 KB</li>
+<li>CRC32: <code>2838f9f5</code></li>
+<li>Source: <code>src/burn/drv/snes/d_snes.cpp:610</code></li>
+<li>DSP-1 coprocessor microcode</li>
+</ul>
+<p><strong><code>dsp1b.bin</code></strong> -<strong>required</strong>, in <code>dsp1b.zip</code>, missing from repo</p>
+<ul>
+<li>System: snes</li>
+<li>Size: 10.0 KB</li>
+<li>CRC32: <code>453557e0</code></li>
+<li>Source: <code>src/burn/drv/snes/d_snes.cpp:629</code></li>
+<li>DSP-1B coprocessor microcode (revised)</li>
+</ul>
+<p><strong><code>dsp2.bin</code></strong> -<strong>required</strong>, in <code>dsp2.zip</code>, missing from repo</p>
+<ul>
+<li>System: snes</li>
+<li>Size: 10.0 KB</li>
+<li>CRC32: <code>8e9fbd9b</code></li>
+<li>Source: <code>src/burn/drv/snes/d_snes.cpp:648</code></li>
+<li>DSP-2 coprocessor microcode</li>
+</ul>
+<p><strong><code>dsp3.bin</code></strong> -<strong>required</strong>, in <code>dsp3.zip</code>, missing from repo</p>
+<ul>
+<li>System: snes</li>
+<li>Size: 10.0 KB</li>
+<li>CRC32: <code>6b86728a</code></li>
+<li>Source: <code>src/burn/drv/snes/d_snes.cpp:667</code></li>
+<li>DSP-3 coprocessor microcode</li>
+</ul>
+<p><strong><code>dsp4.bin</code></strong> -<strong>required</strong>, in <code>dsp4.zip</code>, missing from repo</p>
+<ul>
+<li>System: snes</li>
+<li>Size: 10.0 KB</li>
+<li>CRC32: <code>ce0c7783</code></li>
+<li>Source: <code>src/burn/drv/snes/d_snes.cpp:686</code></li>
+<li>DSP-4 coprocessor microcode</li>
+</ul>
+<p><strong><code>hiscore.dat</code></strong> -optional</p>
+<ul>
+<li>Path: <code>fbneo/hiscore.dat</code></li>
+<li>Source: <code>src/burn/hiscore.cpp:406</code></li>
+<li>High score database, enables persistent high scores across all arcade games</li>
+</ul>
+<p><em>Generated on 2026-03-25T14:56:43Z</em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.indexes", "search.suggest", "search.highlight", "content.tabs.link", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
