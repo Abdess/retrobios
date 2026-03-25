@@ -236,6 +236,9 @@ def _preserve_large_file_entries(files: dict, db_path: str) -> int:
     in .gitignore. When generate_db runs locally without them, their
     entries would be lost. This reads the existing database and re-adds
     entries whose paths match .gitignore bios/ entries.
+
+    If the file exists in .cache/large/, the path is updated so that
+    resolve_local_file can find it for verify and pack generation.
     """
     gitignored = _load_gitignored_bios_paths()
     if not gitignored:
@@ -247,10 +250,16 @@ def _preserve_large_file_entries(files: dict, db_path: str) -> int:
     except (FileNotFoundError, json.JSONDecodeError):
         return 0
 
+    cache_dir = Path(".cache/large")
     count = 0
     for sha1, entry in existing_db.get("files", {}).items():
         path = entry.get("path", "")
         if path in gitignored and sha1 not in files:
+            # Point to cached copy if available
+            name = entry.get("name", "")
+            cached = cache_dir / name
+            if cached.exists():
+                entry = {**entry, "path": str(cached)}
             files[sha1] = entry
             count += 1
     return count
