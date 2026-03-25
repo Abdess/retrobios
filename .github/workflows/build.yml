@@ -1,9 +1,6 @@
 name: Build & Release
 
 on:
-  push:
-    branches: [main]
-    paths: ["bios/**", "platforms/**"]
   workflow_dispatch:
     inputs:
       force_release:
