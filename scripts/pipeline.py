@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run the full retrobios pipeline: generate DB, verify, generate packs.
+"""Run the full retrobios pipeline.
 
 Steps:
   1. generate_db.py --force     (rebuild database.json from bios/)
@@ -7,11 +7,14 @@ Steps:
   3. verify.py --all            (check all platforms)
   4. generate_pack.py --all     (build ZIP packs)
   5. consistency check          (verify counts == pack counts)
+  6. generate_readme.py         (rebuild README.md + CONTRIBUTING.md)
+  7. generate_site.py           (rebuild MkDocs pages)
 
 Usage:
     python scripts/pipeline.py                    # active platforms
     python scripts/pipeline.py --include-archived # all platforms
     python scripts/pipeline.py --skip-packs       # steps 1-3 only
+    python scripts/pipeline.py --skip-docs        # skip steps 6-7
     python scripts/pipeline.py --offline          # skip step 2
 """
 from __future__ import annotations
@@ -94,7 +97,7 @@ def check_consistency(verify_output: str, pack_output: str) -> bool:
     v = parse_verify_counts(verify_output)
     p = parse_pack_counts(pack_output)
 
-    print("\n--- 5/5 consistency check ---")
+    print("\n--- 5/7 consistency check ---")
     all_ok = True
 
     for v_label, (v_ok, v_total) in sorted(v.items()):
@@ -128,6 +131,8 @@ def main():
                         help="Include archived platforms")
     parser.add_argument("--skip-packs", action="store_true",
                         help="Only regenerate DB and verify, skip pack generation")
+    parser.add_argument("--skip-docs", action="store_true",
+                        help="Skip README and site generation")
     parser.add_argument("--offline", action="store_true",
                         help="Skip data directory refresh")
     parser.add_argument("--output-dir", default="dist",
@@ -145,7 +150,7 @@ def main():
     ok, out = run(
         [sys.executable, "scripts/generate_db.py", "--force",
          "--bios-dir", "bios", "--output", "database.json"],
-        "1/5 generate database",
+        "1/7 generate database",
     )
     results["generate_db"] = ok
     if not ok:
@@ -156,18 +161,18 @@ def main():
     if not args.offline:
         ok, out = run(
             [sys.executable, "scripts/refresh_data_dirs.py"],
-            "2/5 refresh data directories",
+            "2/7 refresh data directories",
         )
         results["refresh_data"] = ok
     else:
-        print("\n--- 2/5 refresh data directories: SKIPPED (--offline) ---")
+        print("\n--- 2/7 refresh data directories: SKIPPED (--offline) ---")
         results["refresh_data"] = True
 
     # Step 3: Verify
     verify_cmd = [sys.executable, "scripts/verify.py", "--all"]
     if args.include_archived:
         verify_cmd.append("--include-archived")
-    ok, verify_output = run(verify_cmd, "3/5 verify all platforms")
+    ok, verify_output = run(verify_cmd, "3/7 verify all platforms")
     results["verify"] = ok
     all_ok = all_ok and ok
 
@@ -184,11 +189,11 @@ def main():
             pack_cmd.append("--offline")
         if args.include_extras:
             pack_cmd.append("--include-extras")
-        ok, pack_output = run(pack_cmd, "4/5 generate packs")
+        ok, pack_output = run(pack_cmd, "4/7 generate packs")
         results["generate_packs"] = ok
         all_ok = all_ok and ok
     else:
-        print("\n--- 4/5 generate packs: SKIPPED (--skip-packs) ---")
+        print("\n--- 4/7 generate packs: SKIPPED (--skip-packs) ---")
         results["generate_packs"] = True
 
     # Step 5: Consistency check
@@ -197,8 +202,33 @@ def main():
         results["consistency"] = ok
         all_ok = all_ok and ok
     else:
-        print("\n--- 5/5 consistency check: SKIPPED ---")
+        print("\n--- 5/7 consistency check: SKIPPED ---")
         results["consistency"] = True
+
+    # Step 6: Generate README
+    if not args.skip_docs:
+        ok, _ = run(
+            [sys.executable, "scripts/generate_readme.py",
+             "--db", "database.json", "--platforms-dir", "platforms"],
+            "6/7 generate readme",
+        )
+        results["generate_readme"] = ok
+        all_ok = all_ok and ok
+    else:
+        print("\n--- 6/7 generate readme: SKIPPED (--skip-docs) ---")
+        results["generate_readme"] = True
+
+    # Step 7: Generate site pages
+    if not args.skip_docs:
+        ok, _ = run(
+            [sys.executable, "scripts/generate_site.py"],
+            "7/7 generate site",
+        )
+        results["generate_site"] = ok
+        all_ok = all_ok and ok
+    else:
+        print("\n--- 7/7 generate site: SKIPPED (--skip-docs) ---")
+        results["generate_site"] = True
 
     # Summary
     total_elapsed = time.monotonic() - total_start
