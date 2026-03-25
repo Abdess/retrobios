@@ -1,0 +1,43 @@
+name: Deploy Site
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "platforms/**"
+      - "emulators/**"
+      - "scripts/generate_site.py"
+      - "scripts/generate_readme.py"
+      - "scripts/verify.py"
+      - "scripts/common.py"
+      - "database.json"
+      - "mkdocs.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: deploy-site
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - run: pip install pyyaml mkdocs-material pymdown-extensions
+
+      - name: Generate site
+        run: |
+          python scripts/generate_site.py
+          python scripts/generate_readme.py --db database.json --platforms-dir platforms
+
+      - name: Deploy to GitHub Pages
+        run: mkdocs gh-deploy --force --clean
