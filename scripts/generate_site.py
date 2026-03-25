@@ -555,10 +555,10 @@ def generate_system_page(
             lines.append(f"- SHA1: `{sha1_full}`")
             lines.append(f"- MD5: `{md5_full}`")
             if plats:
-                plat_links = [_platform_link(p, p, "../../") for p in plats]
+                plat_links = [_platform_link(p, p, "../") for p in plats]
                 lines.append(f"- Platforms: {', '.join(plat_links)}")
             if emus:
-                emu_links = [_emulator_link(e, "../../") for e in emus]
+                emu_links = [_emulator_link(e, "../") for e in emus]
                 lines.append(f"- Emulators: {', '.join(emu_links)}")
             lines.append("")
 
@@ -655,7 +655,7 @@ def generate_emulators_index(profiles: dict) -> str:
         lines.append("| Core | Points to |")
         lines.append("|------|-----------|")
         for name in sorted(aliases.keys()):
-            parent = aliases[name].get("alias_of", "unknown")
+            parent = aliases[name].get("alias_of", aliases[name].get("bios_identical_to", "unknown"))
             lines.append(f"| {name} | [{parent}]({parent}.md) |")
         lines.append("")
 
@@ -665,7 +665,7 @@ def generate_emulators_index(profiles: dict) -> str:
 def generate_emulator_page(name: str, profile: dict, db: dict,
                            platform_files: dict | None = None) -> str:
     if profile.get("type") == "alias":
-        parent = profile.get("alias_of", "unknown")
+        parent = profile.get("alias_of", profile.get("bios_identical_to", "unknown"))
         return (
             f"# {name} - {SITE_NAME}\n\n"
             f"This core uses the same firmware as **{parent}**.\n\n"
