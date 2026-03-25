@@ -167,6 +167,31 @@ def load_data_dir_registry(platforms_dir: str = "platforms") -> dict:
     return data.get("data_directories", {})
 
 
+def list_registered_platforms(
+    platforms_dir: str = "platforms",
+    include_archived: bool = False,
+) -> list[str]:
+    """List platforms registered in _registry.yml.
+
+    Only registered platforms generate packs and appear in CI.
+    Unregistered YAMLs (e.g., emulatorjs.yml) are base configs for inheritance.
+    """
+    registry_path = os.path.join(platforms_dir, "_registry.yml")
+    if not os.path.exists(registry_path):
+        return []
+    with open(registry_path) as f:
+        registry = yaml.safe_load(f) or {}
+    platforms = []
+    for name, meta in sorted(registry.get("platforms", {}).items()):
+        status = meta.get("status", "active")
+        if status == "archived" and not include_archived:
+            continue
+        config_path = os.path.join(platforms_dir, meta.get("config", f"{name}.yml"))
+        if os.path.exists(config_path):
+            platforms.append(name)
+    return platforms
+
+
 def resolve_local_file(
     file_entry: dict,
     db: dict,

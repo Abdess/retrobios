@@ -1,0 +1,57 @@
+# EmulatorJS base config (not a standalone platform).
+# Provides the core list for platforms that use EmulatorJS as their emulation engine.
+# Source: emulatorjs/emulatorjs data/src/consts.js + emulatorjs/build cores.json
+# RomM mapping: rommapp/romm frontend/src/utils/index.ts (_EJS_CORES_MAP)
+platform: EmulatorJS
+version: "4.2.3"
+homepage: "https://emulatorjs.org"
+source: "https://github.com/emulatorjs/emulatorjs"
+cores:
+- a5200
+- beetle_vb
+- cap32
+- crocods
+- desmume
+- desmume2015
+- dosbox_pure
+- fbalpha2012_cps1
+- fbalpha2012_cps2
+- fbneo
+- fceumm
+- freeintv
+- fuse
+- gambatte
+- gearcoleco
+- genesis_plus_gx
+- handy
+- mame2003
+- mame2003_plus
+- mednafen_ngp
+- mednafen_pce
+- mednafen_pcfx
+- mednafen_psx_hw
+- mednafen_wswan
+- melonds
+- mgba
+- mupen64plus_next
+- nestopia
+- opera
+- parallel_n64
+- pcsx_rearmed
+- picodrive
+- ppsspp
+- prboom
+- prosystem
+- puae
+- same_cdi
+- smsplus
+- snes9x
+- stella2014
+- vice_x128
+- vice_x64
+- vice_x64sc
+- vice_xpet
+- vice_xplus4
+- vice_xvic
+- virtualjaguar
+- yabause

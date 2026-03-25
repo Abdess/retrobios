@@ -86,6 +86,17 @@ platforms:
     # Each component/<name>/component_manifest.json declares BIOS requirements
     # Scraper enumerates top-level dirs via GitHub API, fetches each manifest directly
 
+  romm:
+    config: romm.yml
+    status: active
+    logo: "https://avatars.githubusercontent.com/u/168586850"
+    scraper: romm
+    source_url: "https://raw.githubusercontent.com/rommapp/romm/master/backend/models/fixtures/known_bios_files.json"
+    source_format: json
+    hash_type: sha1
+    schedule: monthly
+    inherits_from: emulatorjs  # cores inherited from emulatorjs.yml
+
   retropie:
     config: retropie.yml
     status: archived  # Last release: v4.8 (March 2022) - no update in 4 years
@@ -93,10 +104,3 @@ platforms:
     scraper: null
     cores: all_libretro
     schedule: null
-
-  romm:
-    config: romm.yml
-    status: active
-    logo: "https://raw.githubusercontent.com/rommapp/romm/master/.github/resources/isotipo.png"
-    scraper: romm
-    schedule: monthly

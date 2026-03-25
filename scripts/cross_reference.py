@@ -25,7 +25,7 @@ except ImportError:
     sys.exit(1)
 
 sys.path.insert(0, os.path.dirname(__file__))
-from common import load_database, load_emulator_profiles, load_platform_config
+from common import list_registered_platforms, load_database, load_emulator_profiles, load_platform_config
 
 DEFAULT_EMULATORS_DIR = "emulators"
 DEFAULT_PLATFORMS_DIR = "platforms"
@@ -36,10 +36,8 @@ def load_platform_files(platforms_dir: str) -> tuple[dict[str, set[str]], dict[s
     """Load all platform configs and collect declared filenames + data_directories per system."""
     declared = {}
     platform_data_dirs = {}
-    for f in sorted(Path(platforms_dir).glob("*.yml")):
-        if f.name.startswith("_"):
-            continue
-        config = load_platform_config(f.stem, platforms_dir)
+    for platform_name in list_registered_platforms(platforms_dir, include_archived=True):
+        config = load_platform_config(platform_name, platforms_dir)
         for sys_id, system in config.get("systems", {}).items():
             for fe in system.get("files", []):
                 name = fe.get("name", "")

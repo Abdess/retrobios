@@ -18,7 +18,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
-from common import compute_hashes
+from common import compute_hashes, list_registered_platforms
 
 CACHE_DIR = ".cache"
 CACHE_FILE = os.path.join(CACHE_DIR, "db_cache.json")
@@ -353,9 +353,8 @@ def _collect_all_aliases(files: dict) -> dict:
     if platforms_dir.is_dir():
         try:
             import yaml
-            for config_file in platforms_dir.glob("*.yml"):
-                if config_file.name.startswith("_"):
-                    continue
+            for platform_name in list_registered_platforms(str(platforms_dir), include_archived=True):
+                config_file = platforms_dir / f"{platform_name}.yml"
                 try:
                     with open(config_file) as f:
                         config = yaml.safe_load(f) or {}

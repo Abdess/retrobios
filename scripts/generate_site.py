@@ -26,7 +26,7 @@ except ImportError:
     sys.exit(1)
 
 sys.path.insert(0, os.path.dirname(__file__))
-from common import load_database, load_emulator_profiles, load_platform_config
+from common import list_registered_platforms, load_database, load_emulator_profiles, load_platform_config
 from generate_readme import compute_coverage
 from verify import verify_platform
 
@@ -2044,10 +2044,7 @@ def main():
             registry = (yaml.safe_load(f) or {}).get("platforms", {})
 
     # Load platform configs
-    platform_names = [
-        p.stem for p in Path(args.platforms_dir).glob("*.yml")
-        if not p.name.startswith("_")
-    ]
+    platform_names = list_registered_platforms(args.platforms_dir, include_archived=True)
 
     print("Computing platform coverage...")
     coverages = {}

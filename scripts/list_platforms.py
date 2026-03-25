@@ -17,45 +17,16 @@ import argparse
 import json
 import os
 import sys
-from pathlib import Path
 
-try:
-    import yaml
-except ImportError:
-    yaml = None
+sys.path.insert(0, os.path.dirname(__file__))
+from common import list_registered_platforms
 
 PLATFORMS_DIR = "platforms"
 
 
-def _load_registry(platforms_dir: str = PLATFORMS_DIR) -> dict:
-    """Load _registry.yml if available."""
-    registry_path = Path(platforms_dir) / "_registry.yml"
-    if yaml and registry_path.exists():
-        with open(registry_path) as f:
-            return yaml.safe_load(f) or {}
-    return {}
-
-
 def list_platforms(include_archived: bool = False) -> list[str]:
     """List platform config files, filtering by status from _registry.yml."""
-    platforms_dir = Path(PLATFORMS_DIR)
-    if not platforms_dir.is_dir():
-        return []
-
-    registry = _load_registry(str(platforms_dir))
-    registry_platforms = registry.get("platforms", {})
-
-    platforms = []
-    for f in sorted(platforms_dir.glob("*.yml")):
-        if f.name.startswith("_"):
-            continue
-        name = f.stem
-        status = registry_platforms.get(name, {}).get("status", "active")
-        if status == "archived" and not include_archived:
-            continue
-        platforms.append(name)
-
-    return platforms
+    return list_registered_platforms(PLATFORMS_DIR, include_archived=include_archived)
 
 
 def main():

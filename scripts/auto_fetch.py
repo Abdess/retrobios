@@ -26,7 +26,7 @@ import urllib.error
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from common import load_database, load_platform_config
+from common import list_registered_platforms, load_database, load_platform_config
 
 try:
     import yaml
@@ -381,10 +381,9 @@ def main():
     db = load_database(args.db)
 
     if args.all:
-        platforms = []
-        for f in Path(args.platforms_dir).glob("*.yml"):
-            if not f.name.startswith("_"):
-                platforms.append(f.stem)
+        platforms = list_registered_platforms(
+            args.platforms_dir, include_archived=True,
+        )
     elif args.platform:
         platforms = [args.platform]
     else:

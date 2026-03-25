@@ -54,6 +54,7 @@ nav:
   - RetroBat: platforms/retrobat.md
   - RetroDECK: platforms/retrodeck.md
   - RetroPie: platforms/retropie.md
+  - RomM: platforms/romm.md
 - Systems:
   - Overview: systems/index.md
   - 3DO Company: systems/3do-company.md

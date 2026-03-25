@@ -27,9 +27,10 @@ sys.path.insert(0, os.path.dirname(__file__))
 from common import (
     _build_validation_index, build_zip_contents_index, check_file_validation,
     check_inside_zip, compute_hashes, fetch_large_file, filter_files_by_mode,
-    group_identical_platforms, list_emulator_profiles, list_system_ids,
-    load_database, load_data_dir_registry, load_emulator_profiles,
-    load_platform_config, md5_composite, resolve_local_file,
+    group_identical_platforms, list_emulator_profiles, list_registered_platforms,
+    list_system_ids, load_database, load_data_dir_registry,
+    load_emulator_profiles, load_platform_config, md5_composite,
+    resolve_local_file,
 )
 from deterministic_zip import rebuild_zip_deterministic
 
@@ -820,13 +821,8 @@ def generate_system_pack(
 
 
 def list_platforms(platforms_dir: str) -> list[str]:
-    """List available platform names from YAML files."""
-    platforms = []
-    for f in sorted(Path(platforms_dir).glob("*.yml")):
-        if f.name.startswith("_"):
-            continue
-        platforms.append(f.stem)
-    return platforms
+    """List available platform names from registry."""
+    return list_registered_platforms(platforms_dir, include_archived=True)
 
 
 def main():
@@ -901,9 +897,9 @@ def main():
 
     # Platform mode (existing)
     if args.all:
-        sys.path.insert(0, os.path.dirname(__file__))
-        from list_platforms import list_platforms as _list_active
-        platforms = _list_active(include_archived=args.include_archived)
+        platforms = list_registered_platforms(
+            args.platforms_dir, include_archived=args.include_archived,
+        )
     elif args.platform:
         platforms = [args.platform]
     else:

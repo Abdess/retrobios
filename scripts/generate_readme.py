@@ -18,7 +18,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
-from common import load_database, load_platform_config
+from common import list_registered_platforms, load_database, load_platform_config
 from verify import verify_platform
 
 def compute_coverage(platform_name: str, platforms_dir: str, db: dict) -> dict:
@@ -80,10 +80,7 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
     size_mb = total_size / (1024 * 1024)
     ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
-    platform_names = sorted(
-        p.stem for p in Path(platforms_dir).glob("*.yml")
-        if not p.name.startswith("_")
-    )
+    platform_names = list_registered_platforms(platforms_dir, include_archived=True)
 
     coverages = {}
     for name in platform_names:
@@ -135,6 +132,7 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
         "RetroPie": "`BIOS/`",
         "RetroDECK": "`~/retrodeck/bios/`",
         "EmuDeck": "`Emulation/bios/`",
+        "RomM": "`bios/{platform_slug}/`",
     }
 
     for name, cov in sorted(coverages.items(), key=lambda x: x[1]["platform"]):

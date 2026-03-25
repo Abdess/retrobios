@@ -25,7 +25,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
-from common import compute_hashes, load_database as _load_database
+from common import compute_hashes, list_registered_platforms, load_database as _load_database
 
 try:
     import yaml
@@ -107,9 +107,8 @@ def load_platform_hashes(platforms_dir: str) -> dict:
     if not os.path.isdir(platforms_dir) or yaml is None:
         return known
 
-    for f in Path(platforms_dir).glob("*.yml"):
-        if f.name.startswith("_"):
-            continue
+    for name in list_registered_platforms(platforms_dir, include_archived=True):
+        f = Path(platforms_dir) / f"{name}.yml"
         with open(f) as fh:
             try:
                 config = yaml.safe_load(fh) or {}
