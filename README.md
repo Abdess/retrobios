@@ -1,6 +1,6 @@
 # RetroBIOS
 
-Complete BIOS and firmware packs for RetroArch, Batocera, Recalbox, Lakka, RetroPie, EmuDeck, RetroBat, and RetroDECK.
+Complete BIOS and firmware packs for RetroArch, Batocera, Recalbox, Lakka, RetroPie, EmuDeck, RetroBat, RetroDECK, and RomM.
 
 **6,748** verified files across **294** systems, ready to extract into your emulator's BIOS directory.
 

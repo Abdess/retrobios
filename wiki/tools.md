@@ -43,6 +43,8 @@ Verification modes per platform:
 | Batocera, RetroBat | md5 | MD5 hash match |
 | Recalbox | md5 | MD5 multi-hash, 3 severity levels |
 | EmuDeck | md5 | MD5 whitelist per system |
+| RetroDECK | md5 | MD5 per file via component manifests |
+| RomM | md5 | size + any hash (MD5/SHA1/CRC32) |
 
 ### generate_pack.py
 

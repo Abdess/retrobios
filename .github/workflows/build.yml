@@ -112,6 +112,7 @@ jobs:
           | RetroBat | RetroBat_BIOS_Pack.zip | bios/ |
           | RetroDECK | RetroDECK_BIOS_Pack.zip | ~/retrodeck/bios/ |
           | EmuDeck | EmuDeck_BIOS_Pack.zip | Emulation/bios/ |
+          | RomM | RomM_BIOS_Pack.zip | bios/{platform_slug}/ |
 
           ### Changes
           ${CHANGES}
