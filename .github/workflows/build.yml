@@ -168,14 +168,16 @@ jobs:
           ${PACKS}
 
           ### Install
-          Download, extract to your emulator's BIOS directory.
+          Download the pack matching your frontend, extract to the BIOS directory.
 
-          | Platform | Path |
-          |----------|------|
-          | RetroArch / Lakka | system/ |
-          | Batocera | /userdata/bios/ |
-          | Recalbox | /recalbox/share/bios/ |
-          | RetroBat | bios/ |
+          | Platform | Pack | Path |
+          |----------|------|------|
+          | RetroArch / Lakka | RetroArch_Lakka_BIOS_Pack.zip | system/ |
+          | Batocera | Batocera_BIOS_Pack.zip | /userdata/bios/ |
+          | Recalbox | Recalbox_BIOS_Pack.zip | /recalbox/share/bios/ |
+          | RetroBat | RetroBat_BIOS_Pack.zip | bios/ |
+          | RetroDECK | RetroDECK_BIOS_Pack.zip | ~/retrodeck/bios/ |
+          | EmuDeck | EmuDeck_BIOS_Pack.zip | Emulation/bios/ |
 
           ### Changes
           ${CHANGES}

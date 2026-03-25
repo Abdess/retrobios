@@ -416,16 +416,23 @@ def group_identical_platforms(
     """Group platforms that produce identical packs (same files + base_destination).
 
     Returns [(group_of_platform_names, representative), ...].
+    The representative is the root platform (one that does not inherit).
     """
     fingerprints: dict[str, list[str]] = {}
     representatives: dict[str, str] = {}
+    inherits: dict[str, bool] = {}
 
     for platform in platforms:
         try:
+            raw_path = os.path.join(platforms_dir, f"{platform}.yml")
+            with open(raw_path) as f:
+                raw = yaml.safe_load(f) or {}
+            inherits[platform] = "inherits" in raw
             config = load_platform_config(platform, platforms_dir)
         except FileNotFoundError:
             fingerprints.setdefault(platform, []).append(platform)
             representatives.setdefault(platform, platform)
+            inherits[platform] = False
             continue
 
         base_dest = config.get("base_destination", "")
@@ -440,9 +447,16 @@ def group_identical_platforms(
 
         fp = hashlib.sha1("|".join(sorted(entries)).encode()).hexdigest()
         fingerprints.setdefault(fp, []).append(platform)
-        representatives.setdefault(fp, platform)
+        # Prefer the root platform (no inherits) as representative
+        if fp not in representatives or (not inherits[platform] and inherits.get(representatives[fp], False)):
+            representatives[fp] = platform
 
-    return [(group, representatives[fp]) for fp, group in fingerprints.items()]
+    result = []
+    for fp, group in fingerprints.items():
+        rep = representatives[fp]
+        ordered = [rep] + [p for p in group if p != rep]
+        result.append((ordered, rep))
+    return result
 
 
 def resolve_platform_cores(
@@ -537,8 +551,10 @@ def _build_validation_index(profiles: dict) -> dict[str, dict]:
                     "min_size": None, "max_size": None,
                     "crc32": set(), "md5": set(), "sha1": set(), "sha256": set(),
                     "adler32": set(), "crypto_only": set(),
+                    "emulators": set(),
                 }
                 sources[fname] = {}
+            index[fname]["emulators"].add(emu_name)
             index[fname]["checks"].update(checks)
             # Track non-reproducible crypto checks
             index[fname]["crypto_only"].update(
@@ -584,6 +600,7 @@ def _build_validation_index(profiles: dict) -> dict[str, dict]:
     for v in index.values():
         v["checks"] = sorted(v["checks"])
         v["crypto_only"] = sorted(v["crypto_only"])
+        v["emulators"] = sorted(v["emulators"])
         # Keep hash sets as frozensets for O(1) lookup in check_file_validation
     return index
 

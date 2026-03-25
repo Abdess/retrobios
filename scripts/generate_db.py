@@ -216,6 +216,46 @@ def save_cache(cache_path: str, cache: dict):
         json.dump(cache, f)
 
 
+def _load_gitignored_bios_paths() -> set[str]:
+    """Read .gitignore and return bios/ paths that are listed (large files)."""
+    gitignore = Path(".gitignore")
+    if not gitignore.exists():
+        return set()
+    paths = set()
+    for line in gitignore.read_text().splitlines():
+        line = line.strip()
+        if line.startswith("bios/") and not line.startswith("#"):
+            paths.add(line)
+    return paths
+
+
+def _preserve_large_file_entries(files: dict, db_path: str) -> int:
+    """Preserve database entries for large files not on disk.
+
+    Large files (>50 MB) are stored as GitHub release assets and listed
+    in .gitignore. When generate_db runs locally without them, their
+    entries would be lost. This reads the existing database and re-adds
+    entries whose paths match .gitignore bios/ entries.
+    """
+    gitignored = _load_gitignored_bios_paths()
+    if not gitignored:
+        return 0
+
+    try:
+        with open(db_path) as f:
+            existing_db = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return 0
+
+    count = 0
+    for sha1, entry in existing_db.get("files", {}).items():
+        path = entry.get("path", "")
+        if path in gitignored and sha1 not in files:
+            files[sha1] = entry
+            count += 1
+    return count
+
+
 def main():
     parser = argparse.ArgumentParser(description="Generate multi-indexed BIOS database")
     parser.add_argument("--force", action="store_true", help="Force rehash all files")
@@ -235,6 +275,11 @@ def main():
 
     if not files:
         print("Warning: No BIOS files found", file=sys.stderr)
+
+    # Preserve entries for large files stored as release assets (.gitignore)
+    preserved = _preserve_large_file_entries(files, args.output)
+    if preserved:
+        print(f"  Preserved {preserved} large file entries from existing database")
 
     platform_aliases = _collect_all_aliases(files)
     for sha1, name_list in platform_aliases.items():

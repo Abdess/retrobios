@@ -94,6 +94,47 @@ def fetch_large_file(name: str, dest_dir: str = ".cache/large",
     return cached
 
 
+def _find_candidate_satisfying_both(
+    file_entry: dict,
+    db: dict,
+    local_path: str,
+    validation_index: dict,
+    bios_dir: str,
+) -> str | None:
+    """Search for a repo file that satisfies both platform MD5 and emulator validation.
+
+    When the current file passes platform verification but fails emulator checks,
+    search all candidates with the same name for one that passes both.
+    Returns a better path, or None if no upgrade found.
+    """
+    fname = file_entry.get("name", "")
+    if not fname:
+        return None
+    entry = validation_index.get(fname)
+    if not entry:
+        return None
+
+    md5_expected = file_entry.get("md5", "")
+    md5_set = {m.strip().lower() for m in md5_expected.split(",") if m.strip()} if md5_expected else set()
+
+    by_name = db.get("indexes", {}).get("by_name", {})
+    files_db = db.get("files", {})
+
+    for sha1 in by_name.get(fname, []):
+        candidate = files_db.get(sha1, {})
+        path = candidate.get("path", "")
+        if not path or not os.path.exists(path) or os.path.realpath(path) == os.path.realpath(local_path):
+            continue
+        # Must still satisfy platform MD5
+        if md5_set and candidate.get("md5", "").lower() not in md5_set:
+            continue
+        # Check emulator validation
+        reason = check_file_validation(path, fname, validation_index, bios_dir)
+        if reason is None:
+            return path
+    return None
+
+
 def _sanitize_path(raw: str) -> str:
     """Strip path traversal components from a relative path."""
     raw = raw.replace("\\", "/")
@@ -118,10 +159,11 @@ def resolve_file(file_entry: dict, db: dict, bios_dir: str,
 
     path, status = resolve_local_file(file_entry, db, zip_contents,
                                       dest_hint=dest_hint)
-    if path:
+    if path and status != "hash_mismatch":
         return path, status
 
-    # Last resort: large files from GitHub release assets
+    # Large files from GitHub release assets — tried when local file is
+    # missing OR has a hash mismatch (wrong variant on disk)
     name = file_entry.get("name", "")
     sha1 = file_entry.get("sha1")
     md5_raw = file_entry.get("md5", "")
@@ -130,6 +172,10 @@ def resolve_file(file_entry: dict, db: dict, bios_dir: str,
     cached = fetch_large_file(name, expected_sha1=sha1 or "", expected_md5=first_md5)
     if cached:
         return cached, "release_asset"
+
+    # Fall back to hash_mismatch local file if release asset unavailable
+    if path:
+        return path, status
 
     return None, "not_found"
 
@@ -362,20 +408,28 @@ def generate_pack(
                 else:
                     file_status.setdefault(dedup_key, "ok")
 
-                # Emulator-level validation (matches verify.py behavior)
-                # In existence mode: validation is informational (warning, not downgrade)
-                # In md5 mode: validation downgrades OK to UNTESTED
+                # Emulator-level validation: informational only for platform packs.
+                # Platform verification (existence/md5) is the authority for pack status.
+                # Emulator checks are supplementary — logged but don't downgrade.
+                # When a discrepancy is found, try to find a file satisfying both.
                 if (file_status.get(dedup_key) == "ok"
                         and local_path and validation_index):
                     fname = file_entry.get("name", "")
-                    reason = check_file_validation(local_path, fname, validation_index)
+                    reason = check_file_validation(local_path, fname, validation_index,
+                                                   bios_dir)
                     if reason:
-                        if verification_mode == "existence":
-                            # Existence mode: file present = OK, validation is extra info
-                            file_reasons.setdefault(dedup_key, reason)
+                        better = _find_candidate_satisfying_both(
+                            file_entry, db, local_path, validation_index, bios_dir,
+                        )
+                        if better:
+                            local_path = better
                         else:
-                            file_status[dedup_key] = "untested"
-                            file_reasons[dedup_key] = reason
+                            ventry = validation_index.get(fname, {})
+                            emus = ", ".join(ventry.get("emulators", []))
+                            file_reasons.setdefault(
+                                dedup_key,
+                                f"{platform_display} says OK but {emus} says {reason}",
+                            )
 
                 if already_packed:
                     continue
@@ -475,7 +529,7 @@ def generate_pack(
 
     for key, reason in sorted(file_reasons.items()):
         status = file_status.get(key, "")
-        label = "UNTESTED"
+        label = "UNTESTED" if status == "untested" else "DISCREPANCY"
         print(f"  {label}: {key} — {reason}")
     for name in missing_files:
         print(f"  MISSING: {name}")
@@ -915,10 +969,11 @@ def main():
     groups = group_identical_platforms(platforms, args.platforms_dir)
 
     for group_platforms, representative in groups:
-        if len(group_platforms) > 1:
-            names = [load_platform_config(p, args.platforms_dir).get("platform", p) for p in group_platforms]
-            combined_name = " + ".join(names)
-            print(f"\nGenerating shared pack for {combined_name}...")
+        variants = [p for p in group_platforms if p != representative]
+        if variants:
+            all_names = [load_platform_config(p, args.platforms_dir).get("platform", p) for p in group_platforms]
+            label = " / ".join(all_names)
+            print(f"\nGenerating pack for {label}...")
         else:
             print(f"\nGenerating pack for {representative}...")
 
@@ -929,10 +984,10 @@ def main():
                 zip_contents=zip_contents, data_registry=data_registry,
                 emu_profiles=emu_profiles,
             )
-            if zip_path and len(group_platforms) > 1:
-                names = [load_platform_config(p, args.platforms_dir).get("platform", p) for p in group_platforms]
-                combined_filename = "_".join(n.replace(" ", "") for n in names) + "_BIOS_Pack.zip"
-                new_path = os.path.join(os.path.dirname(zip_path), combined_filename)
+            if zip_path and variants:
+                all_names = [load_platform_config(p, args.platforms_dir).get("platform", p) for p in group_platforms]
+                combined = "_".join(n.replace(" ", "") for n in all_names) + "_BIOS_Pack.zip"
+                new_path = os.path.join(os.path.dirname(zip_path), combined)
                 if new_path != zip_path:
                     os.rename(zip_path, new_path)
                     print(f"  Renamed -> {os.path.basename(new_path)}")
