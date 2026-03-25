@@ -9,7 +9,7 @@ source: "https://github.com/libretro/Mesen-S"
 upstream: "https://github.com/SourMesen/Mesen-S"
 profiled_date: "2026-03-24"
 core_version: "0.4.0"
-cores: [mesen-s]
+cores: [mesen-s, mesen_s]
 systems: [nintendo-snes, nintendo-gb, nintendo-gbc, nintendo-super-game-boy, nintendo-satellaview]
 
 notes: >

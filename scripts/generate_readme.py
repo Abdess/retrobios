@@ -109,8 +109,9 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
     lines = [
         "# RetroBIOS",
         "",
-        f"Complete BIOS and firmware packs for RetroArch, Batocera, Recalbox, Lakka,"
-        f" RetroPie, EmuDeck, RetroBat, and RetroDECK.",
+        f"Complete BIOS and firmware packs for "
+        f"{', '.join(c['platform'] for c in sorted(coverages.values(), key=lambda x: x['platform'])[:-1])}"
+        f", and {sorted(coverages.values(), key=lambda x: x['platform'])[-1]['platform']}.",
         "",
         f"**{total_files:,}** verified files across **{len(system_ids)}** systems,"
         f" ready to extract into your emulator's BIOS directory.",

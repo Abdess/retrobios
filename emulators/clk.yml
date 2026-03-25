@@ -1,0 +1,1248 @@
+emulator: Clock Signal (CLK)
+type: standalone
+source: "https://github.com/TomHarte/CLK"
+upstream: "https://github.com/TomHarte/CLK"
+profiled_date: "2026-03-26"
+core_version: "2026-03-25"
+display_name: "Clock Signal"
+cores: [clk]
+systems:
+  - amstrad-cpc
+  - acorn-archimedes
+  - acorn-electron
+  - acorn-bbc-micro
+  - amiga
+  - apple-ii
+  - apple-iigs
+  - apple-macintosh
+  - atari-2600
+  - atari-st
+  - colecovision
+  - commodore-plus4
+  - commodore-vic20
+  - enterprise-64-128
+  - microsoft-msx
+  - microsoft-msx2
+  - oric
+  - pc-compatible
+  - sega-mastersystem
+  - sinclair-zx80-81
+  - sinclair-zx-spectrum
+  - thomson-mo5
+
+notes: |
+  Multi-system cycle-accurate emulator by Tom Harte. Used by Batocera and
+  RetroBat as a standalone emulator. Invoked as clksignal with --rompath
+  pointing to the BIOS directory.
+
+  ROM resolution: {rompath}/{machine_name}/{filename}. Machine names are
+  fixed strings per system (e.g. "Enterprise", "Oric", "AmstradCPC").
+  Batocera passes --rompath=/userdata/bios/.
+
+  All ROMs are loaded via a centralized ROM::Request/ROMFetcher system.
+  No hash validation at runtime. CRC32s in the ROM catalogue are for host
+  platform identification only. Sizes are enforced via truncation/padding.
+
+  Built-in ROMs (compiled into binary, no external file needed):
+  Amstrad CPC (all 7), ZX Spectrum (all 4), ZX80 + ZX81. These systems
+  function without external ROM files. User-supplied files override the
+  built-in copies.
+
+  Atari 2600 requires no system ROM (cartridge-only).
+
+files:
+  # -------------------------------------------------------
+  # Acorn Archimedes (machine_name: "Archimedes")
+  # -------------------------------------------------------
+  - name: ROM311
+    path: Archimedes/ROM311
+    description: "RISC OS v3.11"
+    size: 2097152
+    crc32: "54c0c963"
+    required: true
+    mode: standalone
+    source_ref: "Machines/Acorn/Archimedes/Archimedes.cpp:120-121,Machines/Utility/ROMCatalogue.cpp:59-65"
+
+  # -------------------------------------------------------
+  # Acorn BBC Micro (machine_name: "BBCMicro")
+  # -------------------------------------------------------
+  - name: basic.rom
+    path: Acorn/basic.rom
+    description: "Acorn BASIC II ROM, shared by BBC Micro and Electron"
+    size: 16384
+    crc32: "79434781"
+    required: true
+    aliases: [basic2.rom]
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:79-85"
+
+  - name: os12.rom
+    path: BBCMicro/os12.rom
+    description: "BBC MOS v1.2"
+    size: 16384
+    crc32: "3c14fc70"
+    required: true
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:426-432"
+
+  - name: dfs09.rom
+    path: BBCMicro/dfs09.rom
+    description: "Acorn 8271 DFS 0.9 ROM"
+    size: 8192
+    crc32: "3ce609cf"
+    required: false
+    note: "Conditional: only when using 8271 disk interface"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:434-440"
+
+  - name: dfs-2.26.rom
+    path: BBCMicro/dfs-2.26.rom
+    description: "Acorn 1770 DFS 2.26 ROM"
+    size: 16384
+    crc32: "5ae33e94"
+    required: false
+    note: "Conditional: needed for 1770 DFS or tube processor"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:442-448"
+
+  - name: adfs-1.30.rom
+    path: BBCMicro/adfs-1.30.rom
+    description: "Acorn ADFS 1.30 ROM"
+    size: 16384
+    crc32: "d3855588"
+    required: false
+    note: "Conditional: needed for ADFS support"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:450-456"
+
+  - name: ADT-1.40.rom
+    path: BBCMicro/ADT-1.40.rom
+    description: "Advanced Disc Toolkit 1.40 ROM"
+    size: 16384
+    crc32: "8314fed0"
+    required: false
+    note: "Optional: fetched separately, silently skipped if absent"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:458-464"
+
+  - name: TUBE110.rom
+    path: BBCMicro/TUBE110.rom
+    description: "6502 Tube 1.10 Boot ROM"
+    size: 2048
+    crc32: "9ec2dbd0"
+    required: false
+    note: "Conditional: needed for 6502 tube processor"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:466-472"
+
+  - name: Z80_122.rom
+    path: BBCMicro/Z80_122.rom
+    description: "Z80 Tube 1.22 Boot ROM"
+    size: 4096
+    crc32: "b5851efc"
+    required: false
+    note: "Conditional: needed for Z80 tube processor"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:474-480"
+
+  # -------------------------------------------------------
+  # Acorn Electron (machine_name: "Electron")
+  # -------------------------------------------------------
+  - name: basic.rom
+    path: Electron/basic.rom
+    description: "Acorn BASIC II ROM (Electron copy)"
+    size: 16384
+    crc32: "79434781"
+    required: true
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:91-97"
+
+  - name: os.rom
+    path: Electron/os.rom
+    description: "Electron MOS ROM v1.00"
+    size: 16384
+    crc32: "bf63fb1f"
+    required: true
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:148-153"
+
+  - name: ADFS-E00_1.rom
+    path: Electron/ADFS-E00_1.rom
+    description: "E00 ADFS ROM, first slot"
+    size: 16384
+    crc32: "51523993"
+    required: false
+    note: "Conditional: needed for PRES ADFS"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:99-105"
+
+  - name: ADFS-E00_2.rom
+    path: Electron/ADFS-E00_2.rom
+    description: "E00 ADFS ROM, second slot"
+    size: 16384
+    crc32: "8d17de0e"
+    required: false
+    note: "Conditional: needed for PRES ADFS"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:107-113"
+
+  - name: adfs.rom
+    path: Electron/adfs.rom
+    description: "Acorn ADFS ROM"
+    size: 16384
+    crc32: "3289bdc6"
+    required: false
+    note: "Conditional: needed for Acorn ADFS"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:115-121"
+
+  - name: DFS-1770-2.20.rom
+    path: Electron/DFS-1770-2.20.rom
+    description: "1770 DFS ROM"
+    size: 16384
+    crc32: "f3dc9bc5"
+    required: false
+    note: "Conditional: needed for DFS disk images"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:123-129"
+
+  - name: ELK130E.rom
+    path: Electron/ELK130E.rom
+    description: "IDE-modified ADFS 1.03 ROM"
+    size: 16384
+    crc32: "a923368d"
+    required: false
+    note: "Conditional: needed for IDE interface"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:131-137"
+
+  - name: AP6v133.rom
+    path: Electron/AP6v133.rom
+    description: "Advanced Plus 6 ROM"
+    size: 8192
+    crc32: "e0013cfc"
+    required: false
+    note: "Conditional: needed for AP6 commands"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:139-145"
+
+  # -------------------------------------------------------
+  # Amiga (machine_name: "Amiga")
+  # -------------------------------------------------------
+  - name: Kickstart-v1.3-rev34.5-1987-Commodore-A500-A1000-A2000-CDTV.rom
+    path: Amiga/Kickstart-v1.3-rev34.5-1987-Commodore-A500-A1000-A2000-CDTV.rom
+    description: "A500/A1000/A2000/CDTV Kickstart 1.3 ROM"
+    size: 262144
+    crc32: "c4f0f55f"
+    required: true
+    mode: standalone
+    source_ref: "Machines/Amiga/Amiga.cpp:60-61,Machines/Utility/ROMCatalogue.cpp:183-189"
+
+  # -------------------------------------------------------
+  # Amstrad CPC (machine_name: "AmstradCPC")
+  # Built into binary; external files override built-in copies
+  # -------------------------------------------------------
+  - name: os464.rom
+    path: AmstradCPC/os464.rom
+    description: "CPC 464 firmware"
+    size: 16384
+    crc32: "815752df"
+    required: false
+    note: "Built into binary. Required for CPC 464 model."
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:251-256,Machines/Utility/ROMLibrary.cpp:14535"
+
+  - name: basic464.rom
+    path: AmstradCPC/basic464.rom
+    description: "CPC 464 BASIC ROM"
+    size: 16384
+    crc32: "7d9a3bac"
+    required: false
+    note: "Built into binary. Required for CPC 464 model."
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:258-265,Machines/Utility/ROMLibrary.cpp:14532"
+
+  - name: os664.rom
+    path: AmstradCPC/os664.rom
+    description: "CPC 664 firmware"
+    size: 16384
+    crc32: "3f5a6dc4"
+    required: false
+    note: "Built into binary. Required for CPC 664 model."
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:267-271,Machines/Utility/ROMLibrary.cpp:14536"
+
+  - name: basic664.rom
+    path: AmstradCPC/basic664.rom
+    description: "CPC 664 BASIC ROM"
+    size: 16384
+    crc32: "32fee492"
+    required: false
+    note: "Built into binary. Required for CPC 664 model."
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:273-280,Machines/Utility/ROMLibrary.cpp:14534"
+
+  - name: os6128.rom
+    path: AmstradCPC/os6128.rom
+    description: "CPC 6128 firmware"
+    size: 16384
+    crc32: "0219bb74"
+    required: false
+    note: "Built into binary. Required for CPC 6128 model."
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:282-288,Machines/Utility/ROMLibrary.cpp:14536"
+
+  - name: basic6128.rom
+    path: AmstradCPC/basic6128.rom
+    description: "CPC 6128 BASIC ROM"
+    size: 16384
+    crc32: "ca6af63d"
+    required: false
+    note: "Built into binary. Required for CPC 6128 model."
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:290-296,Machines/Utility/ROMLibrary.cpp:14533"
+
+  - name: amsdos.rom
+    path: AmstradCPC/amsdos.rom
+    description: "Amstrad Disk Operating System"
+    size: 16384
+    crc32: "1fe22ecd"
+    required: false
+    note: "Built into binary. Needed for CPC 664/6128 disk support."
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:243-249,Machines/Utility/ROMLibrary.cpp:14531"
+
+  # -------------------------------------------------------
+  # Apple II (machine_name: "AppleII")
+  # -------------------------------------------------------
+  - name: apple2o.rom
+    path: AppleII/apple2o.rom
+    description: "Original Apple II ROM"
+    size: 12288
+    crc32: "ba210588"
+    required: true
+    note: "Required for original Apple II model"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:326-332"
+
+  - name: apple2.rom
+    path: AppleII/apple2.rom
+    description: "Apple II+ ROM"
+    size: 12288
+    crc32: "f66f9c26"
+    required: true
+    note: "Required for Apple II+ model"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:318-324"
+
+  - name: apple2eu.rom
+    path: AppleII/apple2eu.rom
+    description: "Apple IIe ROM"
+    size: 32768
+    crc32: "e12be18d"
+    required: true
+    note: "Required for Apple IIe model"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:310-316"
+
+  - name: apple2e.rom
+    path: AppleII/apple2e.rom
+    description: "Enhanced Apple IIe ROM"
+    size: 32768
+    crc32: "65989942"
+    required: true
+    note: "Required for Enhanced IIe model"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:302-308"
+
+  - name: apple2-character.rom
+    path: AppleII/apple2-character.rom
+    description: "Apple II/II+ character ROM"
+    size: 2048
+    crc32: "64f415c6"
+    required: true
+    note: "Required for Apple II and II+ models"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:334-340"
+
+  - name: apple2eu-character.rom
+    path: AppleII/apple2eu-character.rom
+    description: "Apple IIe character ROM"
+    size: 4096
+    crc32: "816a86f1"
+    required: true
+    note: "Required for Apple IIe model"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:342-348"
+
+  - name: apple2e-character.rom
+    path: AppleII/apple2e-character.rom
+    description: "Enhanced Apple IIe character ROM"
+    size: 4096
+    crc32: "2651014d"
+    required: true
+    note: "Required for Enhanced IIe model. Also used by Apple IIgs."
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:350-356"
+
+  - name: scsi.rom
+    path: AppleII/scsi.rom
+    description: "Apple II SCSI card ROM"
+    size: 16384
+    crc32: "5aff85d3"
+    required: false
+    note: "Conditional: needed for SCSI controller"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:358-364"
+
+  # -------------------------------------------------------
+  # Apple IIgs (machine_name: "AppleIIgs")
+  # -------------------------------------------------------
+  - name: apple2gs.rom
+    path: AppleIIgs/apple2gs.rom
+    description: "Apple IIgs ROM01"
+    size: 131072
+    crc32: "42f124b0"
+    required: true
+    note: "Required for ROM01 model"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:370-376"
+
+  - name: apple2gs.rom2
+    path: AppleIIgs/apple2gs.rom2
+    description: "Apple IIgs ROM03"
+    size: 262144
+    crc32: "de7ddf29"
+    required: true
+    note: "Required for ROM03 model (default)"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:378-384"
+
+  - name: apple2gs.chr
+    path: AppleIIgs/apple2gs.chr
+    description: "Apple IIgs character ROM"
+    size: 4096
+    crc32: "91e53cd8"
+    required: true
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:386-392"
+
+  - name: "341s0632-2"
+    path: "AppleIIgs/341s0632-2"
+    description: "Apple IIgs ROM03 ADB microcontroller ROM"
+    size: 4096
+    crc32: "e1c11fb0"
+    required: true
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:394-399"
+
+  # -------------------------------------------------------
+  # Atari ST (machine_name: "AtariST")
+  # -------------------------------------------------------
+  - name: tos100.img
+    path: AtariST/tos100.img
+    description: "UK TOS 1.00 ROM"
+    size: 196608
+    crc32: "1a586c64"
+    required: true
+    mode: standalone
+    source_ref: "Machines/Atari/ST/AtariST.cpp:96-97,Machines/Utility/ROMCatalogue.cpp:406-412"
+
+  # -------------------------------------------------------
+  # ColecoVision (machine_name: "ColecoVision")
+  # -------------------------------------------------------
+  - name: coleco.rom
+    path: ColecoVision/coleco.rom
+    description: "ColecoVision BIOS"
+    size: 8192
+    crc32: "3aa93ef3"
+    required: true
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:486-492"
+
+  # -------------------------------------------------------
+  # Commodore 1540/1541 (machine_name: "Commodore1540")
+  # Peripheral disk drive ROMs, used by VIC-20 and Plus/4
+  # -------------------------------------------------------
+  - name: 1540.bin
+    path: Commodore1540/1540.bin
+    description: "Commodore 1540 floppy drive ROM"
+    size: 16384
+    crc32: "718d42b1"
+    required: false
+    note: "Conditional: needed when VIC-20 has 1540 drive"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:498-504"
+
+  - name: 1541.bin
+    path: Commodore1540/1541.bin
+    description: "Commodore 1541 floppy drive ROM"
+    size: 16384
+    crc32: "fb760019"
+    required: false
+    note: "Conditional: needed when Plus/4 has 1541 drive"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:506-512"
+
+  # -------------------------------------------------------
+  # Disk II (machine_name: "DiskII")
+  # Peripheral ROMs, used by Apple II and Oric Pravetz
+  # -------------------------------------------------------
+  - name: boot-16.rom
+    path: DiskII/boot-16.rom
+    description: "Disk II 16-sector boot ROM"
+    size: 256
+    crc32: "ce7144f6"
+    required: false
+    note: "Conditional: needed for 16-sector disk controller"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:518-524"
+
+  - name: state-machine-16.rom
+    path: DiskII/state-machine-16.rom
+    description: "Disk II 16-sector state machine ROM"
+    size: 256
+    crc32: "9796a238"
+    required: false
+    note: "Conditional: needed for disk controller. Also used by Oric Pravetz."
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:526-532"
+
+  - name: boot-13.rom
+    path: DiskII/boot-13.rom
+    description: "Disk II 13-sector boot ROM"
+    size: 256
+    crc32: "d34eb2ff"
+    required: false
+    note: "Conditional: needed for 13-sector disk controller"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:534-540"
+
+  - name: state-machine-13.rom
+    path: DiskII/state-machine-13.rom
+    description: "Disk II 13-sector state machine ROM"
+    size: 256
+    crc32: "62e22620"
+    required: false
+    note: "Conditional: needed for 13-sector disk controller"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:542-548"
+
+  # -------------------------------------------------------
+  # Enterprise 64/128 (machine_name: "Enterprise")
+  # -------------------------------------------------------
+  - name: exos10.bin
+    path: Enterprise/exos10.bin
+    description: "Enterprise EXOS ROM v1.0"
+    size: 32768
+    crc32: "30b26387"
+    required: true
+    aliases: ["Exos (198x)(Enterprise).bin"]
+    note: "One EXOS version required. Selected by target or any available."
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:554-563"
+
+  - name: exos20.bin
+    path: Enterprise/exos20.bin
+    description: "Enterprise EXOS ROM v2.0"
+    size: 32768
+    crc32: "d421795f"
+    required: true
+    aliases: ["Expandible OS v2.0 (1984)(Intelligent Software).bin"]
+    note: "Alternative EXOS version"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:565-574"
+
+  - name: exos21.bin
+    path: Enterprise/exos21.bin
+    description: "Enterprise EXOS ROM v2.1"
+    size: 32768
+    crc32: "982a3b44"
+    required: true
+    aliases: ["Expandible OS v2.1 (1985)(Intelligent Software).bin"]
+    note: "Alternative EXOS version"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:576-585"
+
+  - name: exos23.bin
+    path: Enterprise/exos23.bin
+    description: "Enterprise EXOS ROM v2.3"
+    size: 65536
+    crc32: "24838410"
+    required: true
+    aliases: ["Expandible OS v2.3 (1987)(Intelligent Software).bin"]
+    note: "Alternative EXOS version"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:587-596"
+
+  - name: basic10.bin
+    path: Enterprise/basic10.bin
+    description: "Enterprise BASIC ROM v1.0"
+    size: 16384
+    crc32: "d62e4fb7"
+    required: true
+    note: "One BASIC version required. v1.0 single-file version."
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:599-605"
+
+  - name: "BASIC 1.0 - EPROM 1-2 (198x)(Enterprise).bin"
+    path: "Enterprise/BASIC 1.0 - EPROM 1-2 (198x)(Enterprise).bin"
+    description: "Enterprise BASIC ROM v1.0, Part 1"
+    size: 8193
+    crc32: "37bf48e1"
+    required: false
+    note: "Alternative: both parts needed together as substitute for basic10.bin"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:607-613"
+
+  - name: "BASIC 1.0 - EPROM 2-2 (198x)(Enterprise).bin"
+    path: "Enterprise/BASIC 1.0 - EPROM 2-2 (198x)(Enterprise).bin"
+    description: "Enterprise BASIC ROM v1.0, Part 2"
+    size: 8193
+    crc32: "c5298c79"
+    required: false
+    note: "Alternative: both parts needed together as substitute for basic10.bin"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:615-621"
+
+  - name: basic11.bin
+    path: Enterprise/basic11.bin
+    description: "Enterprise BASIC ROM v1.1"
+    size: 16384
+    crc32: "683cf455"
+    required: true
+    note: "Alternative BASIC version"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:623-629"
+
+  - name: "BASIC 1.1 - EPROM 1.1 (198x)(Enterprise).bin"
+    path: "Enterprise/BASIC 1.1 - EPROM 1.1 (198x)(Enterprise).bin"
+    description: "Enterprise BASIC ROM v1.1, with trailing byte"
+    size: 16385
+    crc32: "c96b7602"
+    required: false
+    note: "Alternative format of BASIC v1.1 with trailing byte"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:631-637"
+
+  - name: basic21.bin
+    path: Enterprise/basic21.bin
+    description: "Enterprise BASIC ROM v2.1"
+    size: 16384
+    crc32: "55f96251"
+    required: true
+    aliases:
+      - "BASIC Interpreter v2.1 (1985)(Intelligent Software).bin"
+      - "BASIC Interpreter v2.1 (1985)(Intelligent Software)[a].bin"
+    note: "Alternative BASIC version"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:639-649"
+
+  - name: epdos.bin
+    path: Enterprise/epdos.bin
+    description: "Enterprise EPDOS ROM"
+    size: 32768
+    crc32: "201319eb"
+    required: false
+    aliases: ["EPDOS v1.7 (19xx)(Haluska, Laszlo).bin"]
+    note: "Conditional: needed for EPDOS disk interface"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:651-661"
+
+  - name: exdos.bin
+    path: Enterprise/exdos.bin
+    description: "Enterprise EXDOS ROM"
+    size: 16384
+    crc32: "e6daa0e9"
+    required: false
+    aliases: ["EX-DOS EPROM (198x)(Enterprise).bin"]
+    note: "Conditional: needed when DOS is set to EXDOS"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:663-672"
+
+  # -------------------------------------------------------
+  # Apple Macintosh (machine_name: "Macintosh")
+  # -------------------------------------------------------
+  - name: mac128k.rom
+    path: Macintosh/mac128k.rom
+    description: "Macintosh 128k ROM"
+    size: 65536
+    crc32: "6d0c8a28"
+    required: true
+    note: "Required for Macintosh 128k model"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:678-684"
+
+  - name: mac512k.rom
+    path: Macintosh/mac512k.rom
+    description: "Macintosh 512k ROM"
+    size: 65536
+    crc32: "cf759e0d"
+    required: true
+    note: "Required for Macintosh 512k model"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:686-692"
+
+  - name: macplus.rom
+    path: Macintosh/macplus.rom
+    description: "Macintosh Plus ROM"
+    size: 131072
+    crc32: "4fa5b399"
+    required: true
+    note: "Required for Macintosh 512ke and Plus models"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:694-704"
+
+  # -------------------------------------------------------
+  # Master System (machine_name: "MasterSystem")
+  # -------------------------------------------------------
+  - name: bios.sms
+    path: MasterSystem/bios.sms
+    description: "European/US Master System BIOS"
+    size: 8192
+    crc32: "0072ed54"
+    required: false
+    note: "Optional. Boots cartridge directly if absent."
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:718-724"
+
+  - name: japanese-bios.sms
+    path: MasterSystem/japanese-bios.sms
+    description: "Japanese Master System BIOS"
+    size: 8192
+    crc32: "48d44a13"
+    required: false
+    note: "Optional. Used for Japan region. Boots without if absent."
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:710-716"
+
+  # -------------------------------------------------------
+  # MSX (machine_name: "MSX")
+  # -------------------------------------------------------
+  - name: msx.rom
+    path: MSX/msx.rom
+    description: "Generic MSX BIOS"
+    size: 32768
+    crc32: "94ee12f3"
+    required: true
+    note: "Required for MSX1. Region bytes patched in memory if regional BIOS absent."
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:731-737"
+
+  - name: msx-japanese.rom
+    path: MSX/msx-japanese.rom
+    description: "Japanese MSX BIOS"
+    size: 32768
+    crc32: "ee229390"
+    required: false
+    note: "Alternative to msx.rom for Japanese region"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:739-745"
+
+  - name: msx-american.rom
+    path: MSX/msx-american.rom
+    description: "American MSX BIOS"
+    size: 32768
+    required: false
+    note: "Alternative to msx.rom for American region"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:747-753"
+
+  - name: msx-european.rom
+    path: MSX/msx-european.rom
+    description: "European MSX BIOS"
+    size: 32768
+    required: false
+    note: "Alternative to msx.rom for European region"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:755-761"
+
+  - name: disk.rom
+    path: MSX/disk.rom
+    description: "MSX-DOS ROM"
+    size: 16384
+    crc32: "721f61df"
+    required: false
+    note: "Conditional: needed for disk drive support"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:763-769"
+
+  - name: msx2.rom
+    path: MSX/msx2.rom
+    description: "Generic MSX2 BIOS"
+    size: 32768
+    crc32: "6cdaf3a5"
+    required: true
+    note: "Required for MSX2"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:771-778"
+
+  - name: msx2ext.rom
+    path: MSX/msx2ext.rom
+    description: "MSX2 extension ROM"
+    size: 16384
+    crc32: "66237ecf"
+    required: true
+    note: "Required for MSX2"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:780-786"
+
+  - name: fmpac.rom
+    path: MSX/fmpac.rom
+    description: "MSX-MUSIC / FM-PAC ROM"
+    size: 65536
+    crc32: "0e84505d"
+    required: false
+    note: "Conditional: needed for MSX-Music support"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:788-794"
+
+  # -------------------------------------------------------
+  # Oric (machine_name: "Oric")
+  # -------------------------------------------------------
+  - name: basic10.rom
+    path: Oric/basic10.rom
+    description: "Oric BASIC 1.0"
+    size: 16384
+    crc32: "f18710b4"
+    required: true
+    note: "Required for Oric-1 model"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:824-830"
+
+  - name: basic11.rom
+    path: Oric/basic11.rom
+    description: "Oric BASIC 1.1"
+    size: 16384
+    crc32: "c3a92bef"
+    required: true
+    note: "Required for Oric Atmos model"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:832-838"
+
+  - name: pravetz.rom
+    path: Oric/pravetz.rom
+    description: "Pravetz BASIC"
+    size: 16384
+    crc32: "58079502"
+    required: true
+    note: "Required for Pravetz 8D model"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:840-846"
+
+  - name: colour.rom
+    path: Oric/colour.rom
+    description: "Oric colour ROM (128-byte version)"
+    size: 128
+    crc32: "d50fca65"
+    required: false
+    note: "Optional. Enables colour video output."
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:800-806"
+
+  - name: ORIC.PAL-PROM-TBP24S10-1ab9b572.bin
+    path: Oric/ORIC.PAL-PROM-TBP24S10-1ab9b572.bin
+    description: "Oric colour ROM (256-byte version)"
+    size: 256
+    crc32: "1ab9b572"
+    required: false
+    note: "Optional. Alternative colour ROM."
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:808-814"
+
+  - name: PRAVETZ-8D.PAL-PROM-82S129-1576a69b.bin
+    path: Oric/PRAVETZ-8D.PAL-PROM-82S129-1576a69b.bin
+    description: "Pravetz 8D colour ROM"
+    size: 256
+    crc32: "1576a69b"
+    required: false
+    note: "Optional. Colour ROM for Pravetz model."
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:816-822"
+
+  - name: bd500.rom
+    path: Oric/bd500.rom
+    description: "Oric Byte Drive 500 ROM"
+    size: 8192
+    crc32: "61952e34"
+    required: false
+    note: "Conditional: needed for Byte Drive 500 disk interface"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:848-854"
+
+  - name: jasmin.rom
+    path: Oric/jasmin.rom
+    description: "Oric Jasmin ROM"
+    size: 2048
+    crc32: "37220e89"
+    required: false
+    note: "Conditional: needed for Jasmin disk interface"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:856-862"
+
+  - name: microdisc.rom
+    path: Oric/microdisc.rom
+    description: "Oric Microdisc ROM"
+    size: 8192
+    crc32: "a9664a9c"
+    required: false
+    note: "Conditional: needed for Microdisc disk interface"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:864-870"
+
+  - name: 8dos.rom
+    path: Oric/8dos.rom
+    description: "8DOS boot ROM"
+    size: 512
+    crc32: "49a74c06"
+    required: false
+    note: "Conditional: needed for Pravetz 8-DOS disk interface"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:872-878"
+
+  # -------------------------------------------------------
+  # PC Compatible (machine_name: "PCCompatible")
+  # -------------------------------------------------------
+  - name: GLABIOS_0.2.5_8T.ROM
+    path: PCCompatible/GLABIOS_0.2.5_8T.ROM
+    description: "8088 GLaBIOS 0.2.5"
+    size: 8192
+    crc32: "9576944c"
+    required: true
+    note: "Required for XT-class emulation"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:884-890"
+
+  - name: GLaTICK_0.8.5_AT.ROM
+    path: PCCompatible/GLaTICK_0.8.5_AT.ROM
+    description: "AT GLaTICK 0.8.5 RTC option ROM"
+    size: 2048
+    crc32: "371ea3f1"
+    required: false
+    note: "XT-class RTC option ROM"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:892-898"
+
+  - name: "Phoenix 80286 ROM BIOS Version 3.05.bin"
+    path: "PCCompatible/Phoenix 80286 ROM BIOS Version 3.05.bin"
+    description: "Phoenix 80286 BIOS 3.05"
+    size: 32768
+    crc32: "8d0d318a"
+    required: true
+    note: "Required for AT-class emulation (alternative to IBM AT BIOS)"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:900-906"
+
+  - name: at-bios.bin
+    path: PCCompatible/at-bios.bin
+    description: "IBM PC AT BIOS v3"
+    size: 65536
+    crc32: "674426be"
+    required: true
+    note: "AT-class: single-file IBM AT BIOS (alternative to split U27/U47)"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:908-914"
+
+  - name: BIOS_5170_15NOV85_U27_61X9266_27256.BIN
+    path: PCCompatible/BIOS_5170_15NOV85_U27_61X9266_27256.BIN
+    description: "IBM PC AT BIOS, Nov 1985, U27 chip"
+    size: 32768
+    crc32: "4995be7a"
+    required: false
+    note: "AT-class: split BIOS, used with U47 chip"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:916-922"
+
+  - name: BIOS_5170_15NOV85_U47_61X9265_27256.BIN
+    path: PCCompatible/BIOS_5170_15NOV85_U47_61X9265_27256.BIN
+    description: "IBM PC AT BIOS, Nov 1985, U47 chip"
+    size: 32768
+    crc32: "c32713e4"
+    required: false
+    note: "AT-class: split BIOS, used with U27 chip"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:924-930"
+
+  - name: CGA.F08
+    path: PCCompatible/CGA.F08
+    description: "IBM CGA font"
+    size: 2048
+    crc32: "a362ffe6"
+    required: true
+    note: "Required for CGA video adapter"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:932-938"
+
+  - name: EUMDA9.F14
+    path: PCCompatible/EUMDA9.F14
+    description: "IBM MDA font"
+    size: 3584
+    crc32: "7754882a"
+    required: true
+    note: "Required for MDA video adapter"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:940-946"
+
+  - name: ibm_6277356_ega_card_u44_27128.bin
+    path: PCCompatible/ibm_6277356_ega_card_u44_27128.bin
+    description: "IBM EGA BIOS"
+    size: 16384
+    crc32: "2f2fbc40"
+    required: false
+    note: "Needed for EGA video adapter"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:948-954"
+
+  - name: ibm_vga.bin
+    path: PCCompatible/ibm_vga.bin
+    description: "IBM VGA BIOS"
+    size: 32768
+    crc32: "03b3f90d"
+    required: false
+    note: "Needed for VGA video adapter"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:956-962"
+
+  - name: ibm-basic-1.10.rom
+    path: PCCompatible/ibm-basic-1.10.rom
+    description: "IBM ROM BASIC 1.10"
+    size: 32768
+    crc32: "ebacb791"
+    required: false
+    note: "Required for AT-class with IBM BIOS (not needed with Phoenix)"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:964-970"
+
+  # -------------------------------------------------------
+  # Commodore Plus/4 (machine_name: "Plus4")
+  # -------------------------------------------------------
+  - name: basic.318006-01.bin
+    path: Plus4/basic.318006-01.bin
+    description: "C16+4 BASIC ROM"
+    size: 16384
+    crc32: "74eaae87"
+    required: true
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:999-1006"
+
+  - name: kernal.318004-05.bin
+    path: Plus4/kernal.318004-05.bin
+    description: "C16+4 kernel, PAL-G revision 5"
+    size: 16384
+    crc32: "71c07bd4"
+    required: true
+    note: "Default kernel version requested by machine code"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:992-998"
+
+  - name: kernal.318004-03.bin
+    path: Plus4/kernal.318004-03.bin
+    description: "C16+4 kernel, PAL-G revision 3"
+    size: 16384
+    crc32: "77bab934"
+    required: false
+    note: "Alternative kernel version (in catalogue but not default)"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:976-982"
+
+  - name: kernal.318004-04.bin
+    path: Plus4/kernal.318004-04.bin
+    description: "C16+4 kernel, PAL-G revision 4"
+    size: 16384
+    crc32: "be54ed79"
+    required: false
+    note: "Alternative kernel version (in catalogue but not default)"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:984-990"
+
+  # -------------------------------------------------------
+  # Thomson MO5 (machine_name: "Thomson")
+  # -------------------------------------------------------
+  - name: mo5-v1.1.rom
+    path: Thomson/mo5-v1.1.rom
+    description: "Thomson MO5 ROM, version 1.1"
+    size: 16384
+    crc32: "237c60bf"
+    required: true
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:1032-1038"
+
+  - name: mo5-v1.0.rom
+    path: Thomson/mo5-v1.0.rom
+    description: "Thomson MO5 ROM, version 1"
+    size: 16384
+    crc32: "f62d2f3a"
+    required: false
+    note: "In catalogue but machine requests v1.1 only"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:1024-1030"
+
+  # -------------------------------------------------------
+  # Commodore VIC-20 (machine_name: "Vic20")
+  # -------------------------------------------------------
+  - name: basic.bin
+    path: Vic20/basic.bin
+    description: "VIC-20 BASIC ROM"
+    size: 8192
+    crc32: "db4c43c1"
+    required: true
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:1044-1050"
+
+  - name: characters-english.bin
+    path: Vic20/characters-english.bin
+    description: "English-language VIC-20 character ROM"
+    size: 4096
+    crc32: "83e032a6"
+    required: true
+    note: "Required for English region"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:1052-1058"
+
+  - name: kernel-pal.bin
+    path: Vic20/kernel-pal.bin
+    description: "English-language PAL VIC-20 kernel ROM"
+    size: 8192
+    crc32: "4be07cb4"
+    required: true
+    note: "Required for English PAL region"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:1060-1066"
+
+  - name: kernel-ntsc.bin
+    path: Vic20/kernel-ntsc.bin
+    description: "English-language NTSC VIC-20 kernel ROM"
+    size: 8192
+    crc32: "e5e7c174"
+    required: true
+    note: "Required for English NTSC region"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:1068-1074"
+
+  - name: characters-danish.bin
+    path: Vic20/characters-danish.bin
+    description: "Danish VIC-20 character ROM"
+    size: 4096
+    crc32: "7fc11454"
+    required: false
+    note: "Required for Danish region"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:1076-1082"
+
+  - name: kernel-danish.bin
+    path: Vic20/kernel-danish.bin
+    description: "Danish VIC-20 kernel ROM"
+    size: 8192
+    crc32: "02adaf16"
+    required: false
+    note: "Required for Danish region"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:1084-1090"
+
+  - name: characters-japanese.bin
+    path: Vic20/characters-japanese.bin
+    description: "Japanese VIC-20 character ROM"
+    size: 4096
+    crc32: "fcfd8a4b"
+    required: false
+    note: "Required for Japanese region"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:1092-1098"
+
+  - name: kernel-japanese.bin
+    path: Vic20/kernel-japanese.bin
+    description: "Japanese VIC-20 kernel ROM"
+    size: 8192
+    crc32: "336900d7"
+    required: false
+    note: "Required for Japanese region"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:1100-1106"
+
+  - name: characters-swedish.bin
+    path: Vic20/characters-swedish.bin
+    description: "Swedish VIC-20 character ROM"
+    size: 4096
+    crc32: "d808551d"
+    required: false
+    note: "Required for Swedish region"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:1108-1114"
+
+  - name: kernel-swedish.bin
+    path: Vic20/kernel-swedish.bin
+    description: "Swedish VIC-20 kernel ROM"
+    size: 8192
+    crc32: "b2a60662"
+    required: false
+    note: "Required for Swedish region"
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:1116-1122"
+
+  # -------------------------------------------------------
+  # Sinclair ZX Spectrum (machine_name: "ZXSpectrum")
+  # Built into binary; external files override built-in copies
+  # -------------------------------------------------------
+  - name: 48.rom
+    path: ZXSpectrum/48.rom
+    description: "ZX Spectrum 48K ROM"
+    size: 16384
+    crc32: "ddee531f"
+    required: false
+    note: "Built into binary. Required for 16K/48K model."
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:1128-1134,Machines/Utility/ROMLibrary.cpp:14539"
+
+  - name: 128.rom
+    path: ZXSpectrum/128.rom
+    description: "ZX Spectrum 128K ROM"
+    size: 32768
+    crc32: "2cbe8995"
+    required: false
+    note: "Built into binary. Required for 128K model."
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:1136-1142,Machines/Utility/ROMLibrary.cpp:14540"
+
+  - name: plus2.rom
+    path: ZXSpectrum/plus2.rom
+    description: "ZX Spectrum +2 ROM"
+    size: 32768
+    crc32: "e7a517dc"
+    required: false
+    note: "Built into binary. Required for +2 model."
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:1144-1150,Machines/Utility/ROMLibrary.cpp:14541"
+
+  - name: plus3.rom
+    path: ZXSpectrum/plus3.rom
+    description: "ZX Spectrum +2a/+3 ROM"
+    size: 65536
+    crc32: "96e3c17a"
+    required: false
+    note: "Built into binary. Required for +2a/+3 model."
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:1152-1161,Machines/Utility/ROMLibrary.cpp:14542"
+
+  # -------------------------------------------------------
+  # Sinclair ZX80/ZX81 (machine_name: "ZX8081")
+  # Built into binary; external files override built-in copies
+  # -------------------------------------------------------
+  - name: zx80.rom
+    path: ZX8081/zx80.rom
+    description: "ZX80 BASIC ROM"
+    size: 4096
+    crc32: "4c7fc597"
+    required: false
+    note: "Built into binary. Required for ZX80 model."
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:1167-1173,Machines/Utility/ROMLibrary.cpp:14544"
+
+  - name: zx81.rom
+    path: ZX8081/zx81.rom
+    description: "ZX81 BASIC ROM"
+    size: 8192
+    crc32: "4b1dd6eb"
+    required: false
+    note: "Built into binary. Required for ZX81 model."
+    mode: standalone
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:1175-1181,Machines/Utility/ROMLibrary.cpp:14545"

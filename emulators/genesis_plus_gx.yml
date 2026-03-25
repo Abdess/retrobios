@@ -8,6 +8,7 @@ core_version: "v1.7.4"
 display_name: "Sega - MS/GG/MD/CD (Genesis Plus GX)"
 cores:
   - genesis_plus_gx
+  - genesisplusgx
 systems:
   - sega-megadrive
   - sega-megacd

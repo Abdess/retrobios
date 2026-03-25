@@ -399,9 +399,10 @@ nav:
     - PCSX-ReARMed: emulators/pcsx_rearmed.md
   - Launchers (1):
     - Dolphin Launcher: emulators/dolphin_launcher.md
-  - Other (10):
+  - Other (11):
     - Beetle GBA (Mednafen): emulators/beetle_gba.md
     - Cemu: emulators/cemu.md
+    - Clock Signal (CLK): emulators/clk.md
     - ep128emu-core: emulators/ep128emu.md
     - PCSX2: emulators/pcsx2.md
     - Redream: emulators/redream.md

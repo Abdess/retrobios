@@ -6,7 +6,7 @@ upstream: "https://sourceforge.net/projects/vice-emu/"
 profiled_date: "2026-03-25"
 core_version: "3.10"
 display_name: "Commodore - C64 (VICE x64, fast)"
-cores: [vice_x64]
+cores: [vice_x64, x64]
 systems: [commodore-c64]
 notes: >
   System ROMs embedded in binary: C64 BASIC (901226-01), chargen (901225-01),

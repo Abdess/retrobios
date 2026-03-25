@@ -1,7 +1,7 @@
 emulator: Beetle PC-FX (Mednafen)
 type: libretro
 core_classification: community_fork
-cores: [mednafen_pcfx]
+cores: [mednafen_pcfx, pcfx]
 source: "https://github.com/libretro/beetle-pcfx-libretro"
 upstream: "https://mednafen.github.io/"
 profiled_date: "2026-03-24"

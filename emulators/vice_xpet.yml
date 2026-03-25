@@ -6,7 +6,7 @@ upstream: "https://sourceforge.net/projects/vice-emu/"
 profiled_date: "2026-03-25"
 core_version: "3.10"
 display_name: "Commodore - PET (VICE xpet)"
-cores: [vice_xpet]
+cores: [vice_xpet, xpet]
 systems: [commodore-pet]
 notes: >
   System ROMs embedded in binary: kernal 1 (901439-04-07), kernal 2 (901465-03),

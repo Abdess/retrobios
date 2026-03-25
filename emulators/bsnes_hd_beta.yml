@@ -6,7 +6,7 @@ upstream: "https://github.com/bsnes-emu/bsnes"
 profiled_date: "2026-03-23"
 core_version: "v10.6"
 display_name: "Nintendo - SNES / SFC (bsnes-hd beta)"
-cores: [bsnes_hd_beta]
+cores: [bsnes_hd_beta, bsneshd]
 systems:
   - nintendo-snes
   - nintendo-sgb

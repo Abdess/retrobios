@@ -227,6 +227,7 @@ def find_undeclared_files(
     profiles = emu_profiles if emu_profiles is not None else load_emulator_profiles(emulators_dir)
 
     relevant = resolve_platform_cores(config, profiles)
+    standalone_set = set(str(c) for c in config.get("standalone_cores", []))
     undeclared = []
     seen = set()
     for emu_name, profile in sorted(profiles.items()):
@@ -235,21 +236,36 @@ def find_undeclared_files(
         if emu_name not in relevant:
             continue
 
+        # Check if this profile is standalone: match profile name or any cores: alias
+        is_standalone = emu_name in standalone_set or bool(
+            standalone_set & {str(c) for c in profile.get("cores", [])}
+        )
+
         for f in profile.get("files", []):
             fname = f.get("name", "")
             if not fname or fname in seen:
                 continue
-            # Skip standalone-only files for libretro platforms
-            if f.get("mode") == "standalone":
+            # Mode filtering: skip files incompatible with platform's usage
+            file_mode = f.get("mode")
+            if file_mode == "standalone" and not is_standalone:
+                continue
+            if file_mode == "libretro" and is_standalone:
                 continue
             if fname in declared_names:
                 continue
+
+            # Determine destination path based on mode
+            if is_standalone:
+                dest = f.get("standalone_path") or f.get("path") or fname
+            else:
+                dest = f.get("path") or fname
 
             in_repo = fname in by_name or fname.rsplit("/", 1)[-1] in by_name
             seen.add(fname)
             undeclared.append({
                 "emulator": profile.get("emulator", emu_name),
                 "name": fname,
+                "path": dest,
                 "required": f.get("required", False),
                 "hle_fallback": f.get("hle_fallback", False),
                 "category": f.get("category", "bios"),

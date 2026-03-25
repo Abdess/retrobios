@@ -12,10 +12,11 @@ cores: [mupen64plus_next, mupen64plus_next_develop, mupen64plus_next_gles3, mupe
 files:
   - name: "IPL.n64"
     path: "Mupen64plus/IPL.n64"
+    standalone_path: "64DD_IPL.bin"
+    aliases: ["64DD_IPL.bin"]
     size: 4194304
     required: false
     description: "64DD IPL ROM"
-    note: "Only needed for N64 Disk Drive games (.ndd) via subsystem API. Accepts Z64, N64, and V64 byte-swap formats."
     source_ref: "mupen64plus-core/src/main/main.c:940-1024"
 
   - name: "font.ttf"

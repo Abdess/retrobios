@@ -6,7 +6,7 @@ upstream: "https://sourceforge.net/projects/vice-emu/"
 profiled_date: "2026-03-25"
 core_version: "3.10"
 display_name: "Commodore - C64 SuperCPU (VICE xscpu64)"
-cores: [vice_xscpu64]
+cores: [vice_xscpu64, xscpu64]
 systems: [commodore-c64-supercpu]
 notes: >
   Embedded SCPU64 ROM V0.07 (free replacement by Soci/Singular, 64 KB), chargen

@@ -127,8 +127,12 @@ class Scraper(BaseScraper):
     def __init__(self, url: str = SOURCE_URL):
         super().__init__(url=url)
 
-    def _fetch_cores(self) -> list[str]:
-        """Extract core names from Batocera configgen-defaults.yml."""
+    def _fetch_cores(self) -> tuple[list[str], list[str]]:
+        """Extract core names and standalone cores from configgen-defaults.yml.
+
+        Returns (all_cores, standalone_cores) where standalone_cores are
+        those with emulator != "libretro".
+        """
         try:
             req = urllib.request.Request(
                 CONFIGGEN_DEFAULTS_URL,
@@ -142,13 +146,19 @@ class Scraper(BaseScraper):
             ) from e
         data = yaml.safe_load(raw)
         cores: set[str] = set()
+        standalone: set[str] = set()
         for system, cfg in data.items():
             if system == "default" or not isinstance(cfg, dict):
                 continue
-            core = cfg.get("core")
+            emulator = cfg.get("emulator", "")
+            core = cfg.get("core", "")
             if core:
                 cores.add(core)
-        return sorted(cores)
+            if emulator and emulator != "libretro":
+                standalone.add(emulator)
+                if core and core != emulator:
+                    standalone.add(core)
+        return sorted(cores), sorted(standalone)
 
     def _extract_systems_dict(self, raw: str) -> dict:
         """Extract and parse the 'systems' dict from the Python source via ast.literal_eval."""
@@ -295,7 +305,8 @@ class Scraper(BaseScraper):
             if num.isdigit():
                 batocera_version = num
 
-        return {
+        cores, standalone = self._fetch_cores()
+        result = {
             "platform": "Batocera",
             "version": batocera_version or "",
             "homepage": "https://batocera.org",
@@ -303,9 +314,12 @@ class Scraper(BaseScraper):
             "base_destination": "bios",
             "hash_type": "md5",
             "verification_mode": "md5",
-            "cores": self._fetch_cores(),
+            "cores": cores,
             "systems": systems,
         }
+        if standalone:
+            result["standalone_cores"] = standalone
+        return result
 
 
 def main():

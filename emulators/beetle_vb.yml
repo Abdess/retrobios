@@ -6,7 +6,7 @@ upstream: "https://mednafen.github.io/"
 profiled_date: "2026-03-24"
 core_version: "v0.9.36.1"
 display_name: "Nintendo - Virtual Boy (Beetle VB)"
-cores: [mednafen_vb]
+cores: [mednafen_vb, vb]
 systems: [nintendo-virtualboy]
 
 notes: |

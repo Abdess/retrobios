@@ -6,7 +6,7 @@ upstream: "https://sourceforge.net/projects/vice-emu/"
 profiled_date: "2026-03-25"
 core_version: "3.10"
 display_name: "Commodore - C128 (VICE x128)"
-cores: [vice_x128]
+cores: [vice_x128, x128]
 systems: [commodore-c128]
 notes: >
   System ROMs embedded in binary: C128 kernal (318020-05), chargen (390059-01),

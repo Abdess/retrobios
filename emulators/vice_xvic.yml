@@ -6,7 +6,7 @@ upstream: "https://sourceforge.net/projects/vice-emu/"
 profiled_date: "2026-03-25"
 core_version: "3.10"
 display_name: "Commodore - VIC-20 (VICE xvic)"
-cores: [vice_xvic]
+cores: [vice_xvic, xvic]
 systems: [commodore-vic20]
 notes: >
   System ROMs embedded in binary: BASIC (901486-01), chargen (901460-03),

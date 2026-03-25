@@ -1,5 +1,5 @@
 emulator: Hatari
-type: libretro
+type: standalone + libretro
 core_classification: frozen_snapshot
 source: "https://github.com/libretro/hatari"
 upstream: "https://github.com/hatari/hatari"

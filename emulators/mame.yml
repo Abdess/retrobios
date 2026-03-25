@@ -1,5 +1,5 @@
 emulator: MAME
-type: libretro
+type: standalone + libretro
 core_classification: official_port
 source: "https://github.com/libretro/mame"
 upstream: "https://github.com/mamedev/mame"

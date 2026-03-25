@@ -5,6 +5,87 @@ source: "https://raw.githubusercontent.com/batocera-linux/batocera.linux/master/
 base_destination: bios
 hash_type: md5
 verification_mode: md5
+standalone_cores:
+  - abuse
+  - azahar
+  - bstone
+  - cannonball
+  - catacombgl
+  - cdogs
+  - cemu
+  - cgenius
+  - citron
+  - clk
+  - corsixth
+  - demul
+  - devilutionx
+  - dhewm3
+  - dolphin
+  - dxx-rebirth
+  - easyrpg
+  - ecwolf
+  - eduke32
+  - eka2l1
+  - etlegacy
+  - fallout1-ce
+  - fallout2-ce
+  - flatpak
+  - fury
+  - gsplus
+  - gzdoom
+  - hcl
+  - hurrican
+  - hypseus-singe
+  - ikemen
+  - ioquake3
+  - iortcw
+  - jazz2-native
+  - lexaloffle
+  - lindbergh-loader
+  - mame
+  - model2emu
+  - moonlight
+  - mupen64plus
+  - odcommander
+  - openbor
+  - openjazz
+  - openjk
+  - openjkdf2
+  - openmohaa
+  - pcsx2
+  - play
+  - ppsspp
+  - pygame
+  - pyxel
+  - raze
+  - rpcs3
+  - ruffle
+  - samcoupe
+  - scummvm
+  - sdlpop
+  - shadps4
+  - solarus
+  - sonic-mania
+  - sonic2013
+  - sonic3-air
+  - steam
+  - supermodel
+  - taradino
+  - theforceengine
+  - thextech
+  - tr1x
+  - tr2x
+  - tsugaru
+  - tyrian
+  - uqm
+  - vice
+  - vita3k
+  - vpinball
+  - x16emu
+  - xash3d_fwgs
+  - xemu
+  - xenia-canary
+  - yquake2
 cores:
   - 81
   - a5200

@@ -204,7 +204,7 @@ def _collect_emulator_extras(
         if not u["in_repo"]:
             continue
         name = u["name"]
-        dest = name
+        dest = u.get("path") or name
         full_dest = f"{base_dest}/{dest}" if base_dest else dest
         if full_dest in seen:
             continue

@@ -508,11 +508,20 @@ def resolve_platform_cores(
         }
 
     if isinstance(cores_config, list):
-        core_set = set(cores_config)
+        core_set = {str(c) for c in cores_config}
+        # Build reverse index: platform core name -> profile name
+        # Uses profile filename (dict key) + all names in cores: field
+        core_to_profile: dict[str, str] = {}
+        for name, p in profiles.items():
+            if p.get("type") == "alias":
+                continue
+            core_to_profile[name] = name
+            for core_name in p.get("cores", []):
+                core_to_profile[str(core_name)] = name
         return {
-            name for name in profiles
-            if name in core_set
-            and profiles[name].get("type") != "alias"
+            core_to_profile[c]
+            for c in core_set
+            if c in core_to_profile
         }
 
     # Fallback: system ID intersection

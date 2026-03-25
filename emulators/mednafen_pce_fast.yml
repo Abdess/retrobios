@@ -6,7 +6,7 @@ upstream: "https://mednafen.github.io/"
 profiled_date: "2026-03-24"
 core_version: "v1.31.0.0"
 display_name: "NEC - PC Engine / CD (Beetle PCE FAST)"
-cores: [mednafen_pce_fast]
+cores: [mednafen_pce_fast, pce_fast]
 systems: [nec-pc-engine]
 verification: existence
 notes: >

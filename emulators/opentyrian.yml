@@ -6,7 +6,7 @@ upstream: "https://github.com/opentyrian/opentyrian"
 profiled_date: "2026-03-24"
 core_version: "1.0.0.6"
 display_name: "Tyrian (OpenTyrian)"
-cores: [opentyrian]
+cores: [opentyrian, tyrian]
 systems: [tyrian]
 verification: existence
 

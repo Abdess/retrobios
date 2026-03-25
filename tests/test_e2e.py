@@ -1098,5 +1098,83 @@ class TestE2E(unittest.TestCase):
         self.assertIn("d.bin", names)
 
 
+    def test_108_standalone_path_in_undeclared(self):
+        """Undeclared files use standalone_path when core is in standalone_cores."""
+        # Create a platform with standalone_cores
+        config = {
+            "platform": "TestStandalone",
+            "verification_mode": "existence",
+            "cores": ["test_emu"],
+            "standalone_cores": ["test_emu"],
+            "systems": {
+                "console-a": {
+                    "files": [
+                        {"name": "present_req.bin", "destination": "present_req.bin",
+                         "required": True},
+                    ],
+                },
+            },
+        }
+        with open(os.path.join(self.platforms_dir, "test_standalone.yml"), "w") as fh:
+            yaml.dump(config, fh)
+
+        # Create emulator with standalone_path divergence
+        emu = {
+            "emulator": "TestStandaloneEmu",
+            "type": "standalone + libretro",
+            "cores": ["test_emu"],
+            "systems": ["console-a"],
+            "files": [
+                {"name": "libretro_file.bin", "path": "subdir/libretro_file.bin",
+                 "standalone_path": "flat_file.bin", "required": True},
+                {"name": "standalone_only.bin", "mode": "standalone", "required": False},
+                {"name": "libretro_only.bin", "mode": "libretro", "required": False},
+            ],
+        }
+        with open(os.path.join(self.emulators_dir, "test_standalone_emu.yml"), "w") as fh:
+            yaml.dump(emu, fh)
+
+        config = load_platform_config("test_standalone", self.platforms_dir)
+        profiles = load_emulator_profiles(self.emulators_dir)
+        undeclared = find_undeclared_files(config, self.emulators_dir, self.db, profiles)
+        by_name = {u["name"]: u for u in undeclared}
+
+        # standalone_path used for undeclared file (core is standalone)
+        self.assertIn("libretro_file.bin", by_name)
+        self.assertEqual(by_name["libretro_file.bin"]["path"], "flat_file.bin")
+
+        # standalone-only file IS included (core is standalone)
+        self.assertIn("standalone_only.bin", by_name)
+
+        # libretro-only file is EXCLUDED (core is standalone)
+        self.assertNotIn("libretro_only.bin", by_name)
+
+    def test_109_no_standalone_cores_uses_libretro_path(self):
+        """Without standalone_cores, undeclared files use path: (libretro)."""
+        config = load_platform_config("test_existence", self.platforms_dir)
+        profiles = load_emulator_profiles(self.emulators_dir)
+        undeclared = find_undeclared_files(config, self.emulators_dir, self.db, profiles)
+        # standalone_only.bin should be excluded (platform has no standalone_cores)
+        names = {u["name"] for u in undeclared}
+        self.assertNotIn("standalone_only.bin", names)
+
+    def test_110_cores_alias_reverse_index(self):
+        """resolve_platform_cores matches via cores: field aliases."""
+        emu = {
+            "emulator": "TestAliasCore",
+            "type": "libretro",
+            "cores": ["test_alias_core", "shortname"],
+            "systems": ["console-a"],
+            "files": [],
+        }
+        with open(os.path.join(self.emulators_dir, "test_alias_core.yml"), "w") as fh:
+            yaml.dump(emu, fh)
+
+        config = {"cores": ["shortname"]}
+        profiles = load_emulator_profiles(self.emulators_dir)
+        resolved = resolve_platform_cores(config, profiles)
+        self.assertIn("test_alias_core", resolved)
+
+
 if __name__ == "__main__":
     unittest.main()
