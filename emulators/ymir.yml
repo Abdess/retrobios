@@ -1,0 +1,72 @@
+emulator: ymir
+type: standalone + libretro
+core_classification: community_fork
+source: "https://github.com/warmenhoven/Ymir/tree/libretro"
+upstream: "https://github.com/StrikerX3/Ymir"
+profiled_date: "2026-03-25"
+core_version: "PR#746"
+display_name: "Sega - Saturn (Ymir)"
+cores:
+  - ymir
+systems:
+  - sega-saturn
+
+notes: |
+  Ymir is a Sega Saturn emulator by StrikerX3. The libretro port by
+  warmenhoven wraps the shared ymir-core library (PR #746, not yet merged).
+  No .info file exists in libretro-core-info.
+
+  Saturn BIOS search order:
+    1. {system}/sega_101.bin
+    2. {system}/mpr-17933.bin
+    3. {system}/saturn_bios.bin
+  First file found with exact 512 KiB size wins. No HLE fallback for IPL.
+
+  CD Block LLE: optional low-level CD drive emulation. Scans {system}/cdb/
+  for any 64 KiB file. Falls back to HLE when disabled or no ROM found.
+  Known versions in upstream db: 1.04, 1.05, 1.06.
+
+  ROM cartridges: KoF95 and Ultraman shipped with physical ROM carts. The
+  core auto-detects required cartridge from its game database.
+
+  Addon cartridges: 1M/4M DRAM expansion handled via core option (no files).
+
+  Upstream uses XXH128 hashes for ROM identification only, not validation.
+  All file loading validates size only.
+
+files:
+  - name: "sega_101.bin"
+    system: sega-saturn
+    required: true
+    size: 524288
+    validation: [size]
+    aliases: [mpr-17933.bin, saturn_bios.bin]
+    description: "Saturn IPL ROM (BIOS). Any region accepted."
+    source_ref: "libretro.cpp:260-263,534-558"
+
+  - name: "cdb/cdb_rom.bin"
+    system: sega-saturn
+    required: false
+    hle_fallback: true
+    size: 65536
+    validation: [size]
+    description: "SH1 CD Block ROM for low-level CD drive emulation. Core scans cdb/ subdirectory for any matching file."
+    source_ref: "libretro.cpp:567-591"
+
+  - name: "mpr-18811-mx.ic1"
+    system: sega-saturn
+    required: false
+    category: game_data
+    size: 2097152
+    validation: [size]
+    description: "ROM cartridge for The King of Fighters '95."
+    source_ref: "libretro.cpp:619-620,597-616"
+
+  - name: "mpr-19367-mx.ic1"
+    system: sega-saturn
+    required: false
+    category: game_data
+    size: 2097152
+    validation: [size]
+    description: "ROM cartridge for Ultraman: Hikari no Kyojin Densetsu."
+    source_ref: "libretro.cpp:619,621,597-616"

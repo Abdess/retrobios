@@ -1,20 +1,181 @@
 emulator: x64sdl
 type: libretro
-source: "https://github.com/libretro/vice-libretro"
-profiled_date: "2026-03-18"
-core_version: "v3.1"
+core_classification: community_fork
+source: "https://github.com/r-type/sdlvice-libretro"
+upstream: "https://sourceforge.net/projects/vice-emu/"
+profiled_date: "2026-03-25"
+core_version: "3.1"
 display_name: "Commodore - C64 (VICE SDL)"
-cores:
-  - vice_x64
-systems:
-  - commodore-c64
+cores: [x64sdl]
+systems: [commodore-c64]
+notes: >
+  Old port of VICE 3.1 using an SDL-to-libretro shim (r-type/sdlvice-libretro).
+  Separate codebase from the newer vice-libretro port. Marked experimental and
+  superseded. Unlike the newer port, this core does NOT embed system ROMs; all ROMs
+  must be on disk in <system_dir>/data/C64/ and <system_dir>/data/DRIVES/.
+  The .info declares firmware_count=0 which is incorrect. No JiffyDOS support.
+  No save states, no netplay, no cheats.
 
-notes: |
-  Alias for the VICE x64 core. x64sdl is an alternate build name
-  referencing the SDL-based VICE x64 Commodore 64 emulator. In the
-  libretro ecosystem this maps to the same vice_x64 core binary.
+files:
+  # C64 system ROMs (required, path: data/C64/)
+  - name: "kernal"
+    description: "C64 Kernal ROM"
+    required: true
+    size: 8192
+    path: "data/C64/kernal"
+    source_ref: "src/c64/c64rom.c:133, src/c64/c64-resources.c:255"
 
-  See vice.yml for full ROM and BIOS details. All standard ROMs are
-  embedded in the core binary.
+  - name: "basic"
+    description: "C64 BASIC ROM"
+    required: true
+    size: 8192
+    path: "data/C64/basic"
+    source_ref: "src/c64/c64rom.c:192, src/c64/c64-resources.c:258"
 
-files: []
+  - name: "chargen"
+    description: "C64 character generator ROM"
+    required: true
+    size: 4096
+    path: "data/C64/chargen"
+    source_ref: "src/c64/c64rom.c:207, src/c64/c64-resources.c:252"
+
+  # C64 variant kernals (optional, for alternate models via c64model.c)
+  - name: "sxkernal"
+    description: "SX-64 Kernal ROM"
+    required: false
+    size: 8192
+    path: "data/C64/sxkernal"
+    source_ref: "src/c64/c64model.c:142,147"
+    notes: "Loaded when SX64 PAL or SX64 NTSC model selected."
+
+  - name: "jpkernal"
+    description: "Japanese C64 Kernal ROM"
+    required: false
+    size: 8192
+    path: "data/C64/jpkernal"
+    source_ref: "src/c64/c64model.c:152"
+    notes: "Loaded when C64 JAP NTSC model selected."
+
+  - name: "jpchrgen"
+    description: "Japanese C64 character generator ROM"
+    required: false
+    size: 4096
+    path: "data/C64/jpchrgen"
+    source_ref: "src/c64/c64model.c:152"
+    notes: "Loaded when C64 JAP NTSC model selected."
+
+  - name: "gskernal"
+    description: "C64 Games System Kernal ROM"
+    required: false
+    size: 8192
+    path: "data/C64/gskernal"
+    source_ref: "src/c64/c64model.c:157"
+    notes: "Loaded when C64 GS PAL model selected."
+
+  - name: "edkernal"
+    description: "PET64/Educator64 Kernal ROM"
+    required: false
+    size: 8192
+    path: "data/C64/edkernal"
+    source_ref: "src/c64/c64model.c:162,167"
+    notes: "Loaded when PET64 PAL or PET64 NTSC model selected."
+
+  # IEC drive ROMs (optional, path: data/DRIVES/)
+  - name: "dos1540"
+    description: "1540 floppy drive ROM"
+    required: false
+    path: "data/DRIVES/dos1540"
+    source_ref: "src/drive/iec/iecrom.c:99, src/drive/iec/iec-resources.c:182"
+    notes: "Hardware-level 1540 drive emulation. Absence disables this drive type."
+
+  - name: "dos1541"
+    description: "1541 floppy drive ROM"
+    required: false
+    path: "data/DRIVES/dos1541"
+    source_ref: "src/drive/iec/iecrom.c:106, src/drive/iec/iec-resources.c:185"
+    notes: "Hardware-level 1541 drive emulation. Most common C64 drive."
+
+  - name: "d1541II"
+    description: "1541-II floppy drive ROM"
+    required: false
+    path: "data/DRIVES/d1541II"
+    source_ref: "src/drive/iec/iecrom.c:113, src/drive/iec/iec-resources.c:187"
+
+  - name: "dos1570"
+    description: "1570 floppy drive ROM"
+    required: false
+    path: "data/DRIVES/dos1570"
+    source_ref: "src/drive/iec/iecrom.c:121, src/drive/iec/iec-resources.c:189"
+
+  - name: "dos1571"
+    description: "1571 floppy drive ROM"
+    required: false
+    path: "data/DRIVES/dos1571"
+    source_ref: "src/drive/iec/iecrom.c:127, src/drive/iec/iec-resources.c:191"
+
+  - name: "dos1581"
+    description: "1581 floppy drive ROM"
+    required: false
+    path: "data/DRIVES/dos1581"
+    source_ref: "src/drive/iec/iecrom.c:133, src/drive/iec/iec-resources.c:193"
+
+  - name: "dos2000"
+    description: "CMD FD-2000 drive ROM"
+    required: false
+    path: "data/DRIVES/dos2000"
+    source_ref: "src/drive/iec/iecrom.c:139, src/drive/iec/iec-resources.c:195"
+    notes: "Not shipped with VICE 3.1 data files."
+
+  - name: "dos4000"
+    description: "CMD FD-4000 drive ROM"
+    required: false
+    path: "data/DRIVES/dos4000"
+    source_ref: "src/drive/iec/iecrom.c:145, src/drive/iec/iec-resources.c:197"
+    notes: "Not shipped with VICE 3.1 data files."
+
+  # IEEE drive ROMs (optional, path: data/DRIVES/)
+  - name: "dos2031"
+    description: "2031 IEEE drive ROM"
+    required: false
+    path: "data/DRIVES/dos2031"
+    source_ref: "src/drive/ieee/ieee.c:115, src/drive/ieee/ieee-resources.c:93"
+    notes: "IEEE488 interface drive. Requires parallel IEEE488 extension."
+
+  - name: "dos2040"
+    description: "2040 IEEE drive ROM"
+    required: false
+    path: "data/DRIVES/dos2040"
+    source_ref: "src/drive/ieee/ieee.c:116, src/drive/ieee/ieee-resources.c:96"
+
+  - name: "dos3040"
+    description: "3040 IEEE drive ROM"
+    required: false
+    path: "data/DRIVES/dos3040"
+    source_ref: "src/drive/ieee/ieee.c:117, src/drive/ieee/ieee-resources.c:98"
+
+  - name: "dos4040"
+    description: "4040 IEEE drive ROM"
+    required: false
+    path: "data/DRIVES/dos4040"
+    source_ref: "src/drive/ieee/ieee.c:118, src/drive/ieee/ieee-resources.c:100"
+
+  - name: "dos1001"
+    description: "1001/8050/8250 IEEE drive ROM"
+    required: false
+    path: "data/DRIVES/dos1001"
+    source_ref: "src/drive/ieee/ieee.c:119, src/drive/ieee/ieee-resources.c:102"
+
+  # Printer ROMs (optional, path: data/PRINTER/)
+  - name: "mps803"
+    description: "MPS-803 printer character ROM"
+    required: false
+    path: "data/PRINTER/mps803"
+    source_ref: "src/printerdrv/drv-mps803.c:420"
+    notes: "Loaded on demand when MPS-803 printer opened."
+
+  - name: "nl10-cbm"
+    description: "NL10 printer ROM"
+    required: false
+    path: "data/PRINTER/nl10-cbm"
+    source_ref: "src/printerdrv/drv-nl10.c:2210"
+    notes: "Loaded on demand when NL10 printer opened."

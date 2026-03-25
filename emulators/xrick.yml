@@ -1,7 +1,9 @@
 emulator: XRick
 type: libretro
+core_classification: game_engine
 source: "https://github.com/libretro/xrick-libretro"
-profiled_date: "2026-03-18"
+upstream: "https://github.com/fabiensanglard/xrick"
+profiled_date: "2026-03-25"
 core_version: "1.0.0.6"
 display_name: "Rick Dangerous (XRick)"
 cores:

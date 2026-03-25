@@ -1,8 +1,61 @@
-emulator: "yabause"
-type: alias
-alias_of: "kronos"
-profiled_date: "2026-03-18"
+emulator: yabause
+type: libretro
+core_classification: community_fork
+source: "https://github.com/libretro/yabause"
+upstream: "https://github.com/Yabause/yabause"
+profiled_date: "2026-03-25"
 core_version: "v0.9.15"
 display_name: "Sega - Saturn (Yabause)"
-note: "This core uses the same BIOS/firmware as kronos. See emulators/kronos.yml for details."
-files: []
+cores:
+  - yabause
+systems:
+  - sega-saturn
+
+notes: |
+  Yabause is a software-rendered Sega Saturn emulator. Upstream project is
+  dead; libretro port maintained by the community on the master branch of
+  libretro/yabause.
+
+  Saturn BIOS search order:
+    1. {system}/saturn_bios.bin
+    2. {system}/sega_101.bin
+    3. {system}/mpr-17933.bin
+  First file found wins. HLE BIOS available via yabause_force_hle_bios core
+  option (reduced compatibility). Multi-disc (m3u) requires real BIOS.
+
+  Addon cartridges: 1M/4M RAM expansion via core option (no files needed).
+  ROM cartridge loading, SH1 ROM (CD Block LLE), and MPEG card ROM are
+  standalone-only features disabled in the libretro port.
+
+  BIOS loading: libretro.c retro_load_game() lines 1035-1049.
+  Core load: memory.c LoadBios() line 1260, T123Load() memory.h lines 196-264.
+
+files:
+  - name: "saturn_bios.bin"
+    system: sega-saturn
+    required: true
+    hle_fallback: true
+    max_size: 524288
+    validation: [max_size]
+    note: "Primary Saturn BIOS. Any region accepted."
+    source_ref: "libretro.c:1035"
+
+  - name: "sega_101.bin"
+    system: sega-saturn
+    region: [japan]
+    required: false
+    hle_fallback: true
+    max_size: 524288
+    validation: [max_size]
+    note: "Saturn BIOS v1.01 (Japan). Fallback if saturn_bios.bin missing."
+    source_ref: "libretro.c:1039"
+
+  - name: "mpr-17933.bin"
+    system: sega-saturn
+    region: [north-america, europe]
+    required: false
+    hle_fallback: true
+    max_size: 524288
+    validation: [max_size]
+    note: "Saturn BIOS (NA/EU). Last fallback."
+    source_ref: "libretro.c:1043"

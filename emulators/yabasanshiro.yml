@@ -1,8 +1,55 @@
-emulator: "yabasanshiro"
-type: alias
-alias_of: "kronos"
-profiled_date: "2026-03-18"
+emulator: yabasanshiro
+type: libretro
+core_classification: official_port
+source: "https://github.com/libretro/yabause/tree/yabasanshiro"
+upstream: "https://github.com/devmiyax/yabause"
+profiled_date: "2026-03-25"
 core_version: "v2.6.8"
 display_name: "Sega - Saturn (YabaSanshiro)"
-note: "This core uses the same BIOS/firmware as kronos. See emulators/kronos.yml for details."
-files: []
+cores:
+  - yabasanshiro
+systems:
+  - sega-saturn
+
+notes: |
+  YabaSanshiro is a Sega Saturn emulator by devmiyax, forked from Yabause.
+  Requires OpenGL 3.3 or OpenGL ES 3.0.
+
+  Saturn BIOS search order:
+    1. {system}/saturn_bios.bin
+    2. {system}/sega_101.bin
+    3. {system}/mpr-17933.bin
+  First file found wins. Real BIOS required for normal operation.
+  HLE available via yabasanshiro_force_hle_bios core option (deprecated,
+  debug only).
+
+  Addon cartridges: 1M/4M RAM expansion via core option (no files needed).
+  ROM cartridge and MPEG card ROM loading disabled in libretro port
+  (cartpath = empty, mpegpath = NULL).
+
+  BIOS loading: libretro.c retro_load_game() lines 1048-1069.
+  Core load: memory.c LoadBios() line 1353, T123Load() memory.h lines 219-280.
+
+files:
+  - name: "saturn_bios.bin"
+    system: sega-saturn
+    required: true
+    hle_fallback: true
+    note: "Primary Saturn BIOS. Any region accepted."
+    source_ref: "libretro.c:1048"
+
+  - name: "sega_101.bin"
+    system: sega-saturn
+    region: [japan]
+    required: false
+    hle_fallback: true
+    note: "Saturn BIOS v1.01 (Japan). Fallback if saturn_bios.bin missing."
+    source_ref: "libretro.c:1052"
+
+  - name: "mpr-17933.bin"
+    system: sega-saturn
+    region: [north-america, europe]
+    required: false
+    hle_fallback: true
+    note: "Saturn BIOS v1.003 (NA/EU). Last fallback."
+    source_ref: "libretro.c:1056"
