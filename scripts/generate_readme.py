@@ -96,42 +96,87 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
         1 for f in Path("emulators").glob("*.yml")
     ) if Path("emulators").exists() else 0
 
+    # Count systems from emulator profiles
+    system_ids: set[str] = set()
+    emu_dir = Path("emulators")
+    if emu_dir.exists():
+        try:
+            import yaml
+            for f in emu_dir.glob("*.yml"):
+                with open(f) as fh:
+                    p = yaml.safe_load(fh) or {}
+                system_ids.update(p.get("systems", []))
+        except ImportError:
+            pass
+
     lines = [
         "# RetroBIOS",
         "",
-        "Source-verified BIOS and firmware packs for retrogaming platforms.",
+        f"Complete BIOS and firmware packs for RetroArch, Batocera, Recalbox, Lakka,"
+        f" RetroPie, EmuDeck, RetroBat, and RetroDECK.",
         "",
-        "Documentation and metadata can drift from what emulators actually load at runtime.",
-        "To keep packs accurate, each file here is checked against the emulator's source code:",
-        "what the code opens, what hashes it expects, what happens when a file is missing.",
-        f"{emulator_count} emulators profiled, {len(coverages)} platforms cross-referenced,",
-        f"{total_files:,} files verified.",
+        f"**{total_files:,}** verified files across **{len(system_ids)}** systems,"
+        f" ready to extract into your emulator's BIOS directory.",
         "",
-        "### How it works",
+        "## Download BIOS packs",
         "",
-        "1. **Read emulator source code** - identify every file the code loads, its expected hash and size",
-        "2. **Cross-reference with platforms** - match against what RetroArch, Batocera, Recalbox and others declare",
-        "3. **Build packs** - for each platform, include its baseline files plus what its cores need",
-        "4. **Verify** - run each platform's native checks (MD5, existence) and emulator-level validation (CRC32, size)",
+        "Pick your platform, download the ZIP, extract to the BIOS path.",
         "",
-        "When a platform and an emulator disagree on a file, the discrepancy is reported.",
-        "When a variant in the repo satisfies both, it is preferred automatically.",
-        "",
-        f"> **{total_files:,}** files | **{size_mb:.1f} MB** | **{len(coverages)}** platforms | **{emulator_count}** emulator profiles",
-        "",
-        "## Download",
-        "",
-        "| Platform | Files | Verification | Pack |",
-        "|----------|-------|-------------|------|",
+        "| Platform | BIOS files | Extract to | Download |",
+        "|----------|-----------|-----------|----------|",
     ]
 
+    extract_paths = {
+        "RetroArch": "`system/`",
+        "Lakka": "`system/`",
+        "Batocera": "`/userdata/bios/`",
+        "Recalbox": "`/recalbox/share/bios/`",
+        "RetroBat": "`bios/`",
+        "RetroPie": "`BIOS/`",
+        "RetroDECK": "`~/retrodeck/bios/`",
+        "EmuDeck": "`Emulation/bios/`",
+    }
+
     for name, cov in sorted(coverages.items(), key=lambda x: x[1]["platform"]):
+        display = cov["platform"]
+        path = extract_paths.get(display, "")
         lines.append(
-            f"| {cov['platform']} | {cov['total']} | {cov['mode']} | "
+            f"| {display} | {cov['total']} | {path} | "
             f"[Download]({RELEASE_URL}) |"
         )
 
     lines.extend([
+        "",
+        "## What's included",
+        "",
+        "BIOS, firmware, and system files for consoles from Atari to PlayStation 3.",
+        f"Each file is checked against the emulator's source code to match what the"
+        f" code actually loads at runtime.",
+        "",
+        f"- **{len(coverages)} platforms** supported with platform-specific verification",
+        f"- **{emulator_count} emulators** profiled from source (RetroArch cores + standalone)",
+        f"- **{len(system_ids)} systems** covered (NES, SNES, PlayStation, Saturn, Dreamcast, ...)",
+        f"- **{total_files:,} files** verified with MD5, SHA1, CRC32 checksums",
+        f"- **{size_mb:.0f} MB** total collection size",
+        "",
+        "## Supported systems",
+        "",
+    ])
+
+    # Show well-known systems for SEO, link to full list
+    well_known = [
+        "NES", "SNES", "Nintendo 64", "GameCube", "Wii", "Game Boy", "Game Boy Advance",
+        "Nintendo DS", "Nintendo 3DS", "Switch",
+        "PlayStation", "PlayStation 2", "PlayStation 3", "PSP", "PS Vita",
+        "Mega Drive", "Saturn", "Dreamcast", "Game Gear", "Master System",
+        "Neo Geo", "Atari 2600", "Atari 7800", "Atari Lynx", "Atari ST",
+        "MSX", "PC Engine", "TurboGrafx-16", "ColecoVision", "Intellivision",
+        "Commodore 64", "Amiga", "ZX Spectrum", "Arcade (MAME)",
+    ]
+    lines.extend([
+        ", ".join(well_known) + f", and {len(system_ids) - len(well_known)}+ more.",
+        "",
+        f"Full list with per-file details: **[{SITE_URL}]({SITE_URL})**",
         "",
         "## Coverage",
         "",
@@ -148,9 +193,19 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
 
     lines.extend([
         "",
+        "## How it works",
+        "",
+        "Documentation and metadata can drift from what emulators actually load.",
+        "To keep packs accurate, each file is checked against the emulator's source code.",
+        "",
+        "1. **Read emulator source code** - trace every file the code loads, its expected hash and size",
+        "2. **Cross-reference with platforms** - match against what each platform declares",
+        "3. **Build packs** - include baseline files plus what each platform's cores need",
+        "4. **Verify** - run platform-native checks and emulator-level validation",
+        "",
         "## Documentation",
         "",
-        f"Full file listings, platform coverage, emulator profiles, and gap analysis: **[{SITE_URL}]({SITE_URL})**",
+        f"Per-file hashes, emulator profiles, gap analysis, cross-reference: **[{SITE_URL}]({SITE_URL})**",
         "",
     ])
 
