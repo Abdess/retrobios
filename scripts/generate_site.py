@@ -215,12 +215,28 @@ def generate_home(db: dict, coverages: dict, profiles: dict,
     lines = [
         f"# {SITE_NAME}",
         "",
-        "Complete BIOS and firmware collection for retrogaming emulators.",
+        "Source-verified BIOS and firmware packs for retrogaming platforms.",
         "",
         "---",
         "",
+        "## Methodology",
+        "",
+        "Every file in this collection is traced to its **ground truth**: the emulator's source code.",
+        "",
+        "Three levels of truth, in order of authority:",
+        "",
+        "1. **Upstream emulator source** - the original project (Dolphin, PCSX2, Mednafen...)",
+        "2. **Libretro core source** - the RetroArch port, which may diverge (different paths, added/removed files)",
+        "3. **`.info` declarations** - metadata files that can be wrong or outdated",
+        "",
+        f"**{emulator_count}** emulators profiled from source code. "
+        f"Each profile documents what the code loads, what it validates, "
+        f"and where the upstream diverges from the port.",
+        "",
         f"**{total_files:,}** files | **{len(coverages)}** platforms | "
         f"**{emulator_count}** emulator profiles | **{_fmt_size(total_size)}** total",
+        "",
+        "---",
         "",
     ]
 
@@ -595,7 +611,7 @@ def generate_emulator_page(name: str, profile: dict, db: dict,
     based_on = profile.get("based_on", "")
     if based_on:
         lines.append(f"| Based on | {based_on} |")
-    # Additional metadata fields (scalar values only — complex ones go to collapsible sections)
+    # Additional metadata fields (scalar values only -complex ones go to collapsible sections)
     for field, label in [
         ("core", "Core ID"), ("core_name", "Core name"),
         ("bios_size", "BIOS size"), ("bios_directory", "BIOS directory"),
@@ -784,7 +800,7 @@ def generate_emulator_page(name: str, profile: dict, db: dict,
             if not in_repo:
                 badges.append("missing from repo")
 
-            lines.append(f"**`{fname}`** — {', '.join(badges)}")
+            lines.append(f"**`{fname}`** -{', '.join(badges)}")
             if desc:
                 lines.append(f": {desc}")
             lines.append("")
@@ -873,7 +889,7 @@ def generate_emulator_page(name: str, profile: dict, db: dict,
                             parts.append(cdesc)
                         if csize:
                             parts.append(_fmt_size(csize))
-                        lines.append(f"    - {' — '.join(parts)}")
+                        lines.append(f"    - {' -'.join(parts)}")
                     else:
                         lines.append(f"    - {c}")
                 if len(contents) > 10:
@@ -886,7 +902,7 @@ def generate_emulator_page(name: str, profile: dict, db: dict,
         for dd in data_dirs:
             ref = dd.get("ref", "")
             dest = dd.get("destination", "")
-            lines.append(f"- `{ref}` → `{dest}`")
+            lines.append(f"- `{ref}` >`{dest}`")
         lines.append("")
 
     lines.extend([f"*Generated on {_timestamp()}*"])
@@ -1027,7 +1043,7 @@ def generate_cross_reference(
     lines = [
         f"# Cross-reference - {SITE_NAME}",
         "",
-        "Platform → Core → Systems → Upstream emulator.",
+        "Platform >Core >Systems >Upstream emulator.",
         "",
         "The libretro core is a port of the upstream emulator. "
         "Files, features, and validation may differ between the two.",
