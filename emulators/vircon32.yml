@@ -1,8 +1,10 @@
 emulator: Vircon32
 type: libretro
+core_classification: official_port
 source: "https://github.com/vircon32/vircon32-libretro"
-profiled_date: "2026-03-18"
-core_version: "2024.08.28"
+upstream: "https://github.com/vircon32/ComputerSoftware"
+profiled_date: "2026-03-25"
+core_version: "2026.2.18"
 display_name: "Vircon32"
 cores:
   - vircon32
@@ -18,7 +20,7 @@ notes: |
   C header (embedded/StandardBios.h), generated from Assets/StandardBios.v32
   at build time. The core never strictly requires an external BIOS file.
 
-  BIOS loading logic (libretro.cpp:416-429):
+  BIOS loading logic (libretro.cpp:415-429):
   1. Check if system_dir/Vircon32Bios.v32 exists on disk
   2. If found, load it via Console.LoadBiosFile() (external override)
   3. If not found, load the embedded BIOS via LoadEmbeddedBios()
@@ -44,7 +46,7 @@ files:
     size: 1073060
     md5: "73f04397cbb2dafcf2047b19a856153a"
     sha1: "67ddbcd018f03ed74b6e013074d92cc5f1f51c80"
-    source_ref: "libretro.cpp:423-426"
+    source_ref: "libretro.cpp:422-425"
     notes: |
       Optional external BIOS placed in the system directory root.
       If present, overrides the embedded Standard BIOS v1.2.

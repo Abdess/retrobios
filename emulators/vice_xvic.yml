@@ -1,0 +1,36 @@
+emulator: "VICE xvic"
+type: libretro
+core_classification: community_fork
+source: "https://github.com/libretro/vice-libretro"
+upstream: "https://sourceforge.net/projects/vice-emu/"
+profiled_date: "2026-03-25"
+core_version: "3.10"
+display_name: "Commodore - VIC-20 (VICE xvic)"
+cores: [vice_xvic]
+systems: [commodore-vic20]
+notes: >
+  System ROMs embedded in binary: BASIC (901486-01), chargen (901460-03),
+  kernal PAL Rev 7 (901486-07), kernal NTSC Rev 6 (901486-06), plus all
+  drive ROMs (1540, 1541, 1541-II, 1551, 1570, 1571, 1571CR, 1581, 1001,
+  2031, 2040, 3040, 4040, 9000) and VIC palettes. Embedded ROM check in
+  sysfile_load takes priority over filesystem. Japanese VIC-1001 model
+  requires kernal Rev 2 (901486-02) and chargen (901460-02) on the
+  filesystem in system/vice/VIC20/; this model is not exposed via core
+  options (only via vicerc). No JiffyDOS support for VIC-20.
+
+files:
+  - name: "kernal.901486-02.bin"
+    description: "VIC-1001 Kernal Rev 2 (Japanese NTSC)"
+    required: false
+    size: 8192
+    validation: [size]
+    source_ref: "vice/src/vic20/vic20rom.h:49, vice/src/vic20/vic20model.c:60, vice/src/vic20/vic20rom.c:112-120"
+    notes: "Not embedded. Loaded via sysfile from system/vice/VIC20/ when VIC-1001 Japanese model selected via vicerc."
+
+  - name: "chargen-901460-02.bin"
+    description: "VIC-1001 Character ROM (Japanese)"
+    required: false
+    size: 4096
+    validation: [size]
+    source_ref: "vice/src/vic20/vic20rom.h:53, vice/src/vic20/vic20model.c:60, vice/src/vic20/vic20rom.c:173-179"
+    notes: "Not embedded. Loaded via sysfile from system/vice/VIC20/ when VIC-1001 Japanese model selected via vicerc."

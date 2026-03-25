@@ -1,0 +1,22 @@
+emulator: "VICE xcbm2"
+type: libretro
+core_classification: community_fork
+source: "https://github.com/libretro/vice-libretro"
+upstream: "https://sourceforge.net/projects/vice-emu/"
+profiled_date: "2026-03-25"
+core_version: "3.10"
+display_name: "Commodore - CBM-II 6x0/7x0 (VICE xcbm2)"
+cores: [vice_xcbm2]
+systems: [commodore-cbm-ii]
+notes: >
+  System ROMs embedded in binary: chargen 600 (901237-01), chargen 700 (901232-01),
+  kernal (901244-04a), BASIC 128K (901242+3-04a), BASIC 256K (901240+1-03), plus
+  all drive ROMs (1001, 2031, 2040, 3040, 4040, 9000) and CRTC palettes (amber,
+  green, white). Embedded ROM check in sysfile_load takes priority over filesystem.
+  Models: 610 PAL/NTSC, 620 PAL/NTSC, 620+ PAL/NTSC, 710 NTSC, 720 NTSC,
+  720+ NTSC. 600 series uses CRTC with 8 scanlines/char, 700 series uses 14
+  scanlines/char (different chargen ROM). CBM-II uses IEEE-488 bus (not IEC serial),
+  so no JiffyDOS support. Cartridge slots (Cart1-Cart6) are user content, not system
+  files.
+
+files: []

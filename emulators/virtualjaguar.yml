@@ -1,7 +1,9 @@
 emulator: Virtual Jaguar
 type: libretro
+core_classification: community_fork
 source: "https://github.com/libretro/virtualjaguar-libretro"
-profiled_date: "2026-03-18"
+upstream: "http://shamusworld.gotdns.org/git/virtualjaguar"
+profiled_date: "2025-03-25"
 core_version: "v2.1.0"
 display_name: "Atari - Jaguar (Virtual Jaguar)"
 cores:

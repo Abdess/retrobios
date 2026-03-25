@@ -1,0 +1,23 @@
+emulator: "VICE xplus4"
+type: libretro
+core_classification: community_fork
+source: "https://github.com/libretro/vice-libretro"
+upstream: "https://sourceforge.net/projects/vice-emu/"
+profiled_date: "2026-03-25"
+core_version: "3.10"
+display_name: "Commodore - PLUS/4 (VICE xplus4)"
+cores: [vice_xplus4]
+systems: [commodore-plus4]
+notes: >
+  All system ROMs embedded in binary: BASIC (318006-01), kernal PAL (318004-05),
+  kernal NTSC (318005-05), kernal V232 (318004-01), kernal V364 (364),
+  3+1 function low (317053-01), 3+1 function high (317054-01), V364 speech ROM
+  (c2lo-364). All drive ROMs embedded (1540, 1541, 1541-II, 1551, 1570, 1571,
+  1571CR, 1581, 1001, 2031, 2040, 3040, 4040, 9000). TED palettes embedded
+  (colodore_ted, BT601, BT709, BT2020, yape-pal, yape-ntsc). Embedded check in
+  sysfile_load takes priority over filesystem. Models: C16 PAL/NTSC, Plus/4
+  PAL/NTSC, V364 NTSC, 232 NTSC — all use embedded kernal variants. No JiffyDOS
+  support (C64/C128/SCPU64 only). 3+1 function ROMs loaded for Plus/4 and V364
+  models, cleared to 0xFF for C16 and 232 models. c2lo loaded only for V364 model.
+
+files: []

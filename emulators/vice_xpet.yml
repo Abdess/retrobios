@@ -1,0 +1,24 @@
+emulator: "VICE xpet"
+type: libretro
+core_classification: community_fork
+source: "https://github.com/libretro/vice-libretro"
+upstream: "https://sourceforge.net/projects/vice-emu/"
+profiled_date: "2026-03-25"
+core_version: "3.10"
+display_name: "Commodore - PET (VICE xpet)"
+cores: [vice_xpet]
+systems: [commodore-pet]
+notes: >
+  System ROMs embedded in binary: kernal 1 (901439-04-07), kernal 2 (901465-03),
+  kernal 4 (901465-22), BASIC 1 (901439-09-05-02-06), BASIC 2 (901465-01-02),
+  BASIC 4 (901465-23-20-21), chargen 1 (901447-08), chargen 2 (901447-10),
+  SuperPET chargen (901640-01), 6 editor ROMs (1g40, 2b40, 2g40, 4b40, 4b80, 4g40),
+  6 SuperPET Waterloo 6809 ROMs (a000-f000), plus all drive ROMs (1540, 1541, 1541-II,
+  1551, 1570, 1571, 1571CR, 1581, 1001, 2031, 2040, 3040, 4040, 9000) and CRTC
+  palettes (amber, green, white). Embedded ROM check in sysfile_load takes priority
+  over filesystem. Models: 2001, 3008, 3016, 3032, 3032B, 4016, 4032, 4032B, 8032,
+  8096, 8296, SuperPET. PET uses IEEE-488 bus (not IEC serial), so no JiffyDOS support.
+  No cartridge support. Extension ROM slots ($9000/$A000/$B000) and German chargen
+  (chargen.de) are standalone-only features not exposed via libretro core options.
+
+files: []

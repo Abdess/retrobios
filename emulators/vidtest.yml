@@ -1,7 +1,8 @@
 emulator: vidtest
 type: test
-source: "https://github.com/libretro/RetroArch"
-profiled_date: "2026-03-18"
+core_classification: pure_libretro
+source: "https://github.com/schellingb/vidtest_libretro"
+profiled_date: "2026-03-25"
 core_version: "0.1"
 display_name: "VidTest"
 cores:
@@ -9,11 +10,9 @@ cores:
 systems: []
 
 notes: |
-  Video test core built into RetroArch (not from libretro-samples). Tests
-  video driver capabilities: pixel format negotiation, resolution switching,
-  aspect ratio handling, and frame pacing. Renders test patterns for visual
-  validation of the video output chain.
-
-  No system files, BIOS, or firmware required. Not an emulator.
+  Video mode and input test core for libretro frontends. Provides interactive
+  GUI (Nuklear) to adjust resolution, aspect ratio, timing, and inspect full
+  input state across all device types. Renders directly to a software surface.
+  No system files required.
 
 files: []

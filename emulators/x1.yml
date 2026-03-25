@@ -1,83 +1,92 @@
 emulator: "X Millennium"
 type: libretro
+core_classification: community_fork
 source: "https://github.com/libretro/xmil-libretro"
-profiled_date: "2026-03-18"
-core_version: "0.60"
+upstream: "http://amethyst.yui.ne.jp/svn/x1/xmil/trunk/"
+profiled_date: "2026-03-25"
+core_version: "0.60a"
 display_name: "Sharp X1 (X Millennium)"
 cores:
   - x1
 systems:
   - sharp-x1
 
-# X Millennium (XMIL) is a Sharp X1 series emulator by yui. The libretro port
-# supports X1, X1 Turbo, and X1 TurboZ models via the "X1_ROMTYPE" core option
-# (values: X1, TURBO, TURBOZ; default: X1 = ROM_TYPE 1).
+# X Millennium (XMIL) is a Sharp X1 series emulator by yui, ported to libretro
+# by r-type. Supports X1, X1 Turbo, and X1 TurboZ models via the "X1_ROMTYPE"
+# core option (X1 = ROM_TYPE 1, TURBO = 2, TURBOZ = 3).
+#
+# SUPPORT_TURBOZ is not compiled in the libretro build (compiler.h), so TurboZ
+# extended color modes are unavailable. ROM_TYPE 3 still selects IPLROM.X1T.
 #
 # All system files go under: <system_dir>/xmil/
-# (libretro.c:597 builds the path as "<system_dir>/xmil")
+# retro_init() builds: retro_system_conf = "<system_dir>/xmil" (libretro.c:597)
 #
-# IPL ROM loading (memio.c:88-116):
-#   ROM_TYPE 0: uses built-in default IPL (575 bytes, basic boot stub from defipl.res)
-#   ROM_TYPE 1 (X1): loads xmil/IPLROM.X1 (32 KB)
-#   ROM_TYPE 2 (Turbo): loads xmil/IPLROM.X1T (32 KB)
-#   ROM_TYPE 3 (TurboZ): loads xmil/IPLROM.X1T (32 KB, same file as Turbo)
-#   If the file is missing, the core falls back to the built-in default IPL.
+# IPL ROM loading (memio.c:87-121):
+#   biosmem is initialized with defaultiplrom (575-byte boot stub from defipl.res).
+#   ROM_TYPE >= 1: loads external IPL ROM into biosmem, overwriting the stub.
+#   ROM_TYPE 1 (X1): xmil/IPLROM.X1
+#   ROM_TYPE >= 2 (Turbo/TurboZ): xmil/IPLROM.X1T
+#   Path built explicitly: sprintf(rtmp, "%s%c%s", retro_system_conf, slash, iplfile)
+#   If file missing, the 575-byte stub remains (limited boot capability).
 #
-# Font loading (font.c:90-127, fontx1.c:70-123):
-#   font_load() calls x1fontread() which looks for font files using fontopen().
-#   fontopen() resolves paths relative to the working directory (file_getcd()),
-#   which in libretro context is the xmil subdirectory.
-#   Built-in defaults (defrom_ank, defrom_txt) are used for basic ASCII rendering.
-#   External font ROMs add full Japanese character support.
+# Font loading (fontx1.c:69-122, font.c:89-127):
+#   font_load(NULL, TRUE) called from pccore_initialize() (pccore.c:67).
+#   Built-in defaults (defrom_ank, defrom_txt from fontdata.c) provide basic ASCII.
+#   x1fontread() tries to load external font files via fontopen().
+#   Font path resolution uses file_getcd() which defaults to "./" in the libretro
+#   port (file_setcd() is never called). Upstream win9x/sdl2 calls file_setcd()
+#   to set the working dir. Fonts may not be found from xmil/ in practice.
 #
-# The .info file only lists IPLROM.X1 and IPLROM.X1T as required BIOS files.
-# Font ROMs are optional -- the core renders basic text without them but Japanese
-# kanji display requires the external font files.
+# .info declares firmware_count=2 (IPL ROMs only). Font files are not declared.
+# .info firmware1_desc incorrectly says "8x8 Font ROM" (actually Turbo IPL ROM).
 
 notes: |
   Place all files in: <system_dir>/xmil/
   The core selects between IPLROM.X1 and IPLROM.X1T based on the "X1_ROMTYPE"
-  core option. A built-in fallback IPL exists but lacks full boot functionality.
-  Font files are optional; without them, kanji/JIS characters won't render.
+  core option. A 575-byte built-in IPL stub provides limited boot without the
+  real ROMs. Font files add Japanese character support; the libretro port has a
+  path resolution quirk where fonts are searched in "./" instead of "xmil/"
+  (missing file_setcd call).
 
 files:
-  # -- IPL ROMs --
-
   - name: IPLROM.X1
     path: xmil/IPLROM.X1
     size: 32768
-    md5: eeeea1cd29c6e0e8b094790ae969bfa7
-    required: true
-    note: "X1 IPL ROM (32 KB). Loaded when ROM_TYPE=1 (X1 model). Listed in .info."
-    source_ref: "io/memio.c:82,96-103"
+    required: false
+    hle_fallback: true
+    description: "X1 IPL ROM. Loaded when ROM_TYPE=1 (X1 model)."
+    source_ref: "io/memio.c:82,96-108"
 
   - name: IPLROM.X1T
     path: xmil/IPLROM.X1T
     size: 32768
-    md5: 851e4a5936f17d13f8c39a980cf00d77
-    required: true
-    note: "X1 Turbo/TurboZ IPL ROM (32 KB). Loaded when ROM_TYPE=2 or 3. Listed in .info."
-    source_ref: "io/memio.c:83,97-99"
-
-  # -- Font ROMs (optional, for Japanese text rendering) --
+    required: false
+    hle_fallback: true
+    description: "X1 Turbo/TurboZ IPL ROM. Loaded when ROM_TYPE=2 or 3."
+    source_ref: "io/memio.c:83,97-108"
 
   - name: FNT0808.X1
     path: xmil/FNT0808.X1
     size: 2048
+    validation: [size]
     required: false
-    note: "8x8 ANK font ROM (2 KB). Provides half-width ASCII/kana characters."
+    hle_fallback: true
+    description: "8x8 ANK font ROM. Built-in defrom_ank fallback provides basic ASCII."
     source_ref: "font/fontdata.c:6, font/fontx1.c:79-87"
 
   - name: FNT0816.X1
     path: xmil/FNT0816.X1
     size: 4096
+    validation: [size]
     required: false
-    note: "8x16 ANK font ROM (4 KB). Provides taller half-width characters for text mode."
+    hle_fallback: true
+    description: "8x16 ANK font ROM. Built-in fallback derived from defrom_ank/defrom_txt."
     source_ref: "font/fontdata.c:7, font/fontx1.c:89-103"
 
   - name: FNT1616.X1
     path: xmil/FNT1616.X1
     size: 306176
+    validation: [size]
     required: false
-    note: "16x16 Kanji font ROM (~299 KB). Full JIS kanji character set for Japanese text."
+    description: "16x16 Kanji font ROM. No built-in kanji data (zeroed). Required for Japanese text."
     source_ref: "font/fontdata.c:8, font/fontx1.c:105-120"

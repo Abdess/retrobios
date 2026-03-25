@@ -1,0 +1,34 @@
+emulator: "VICE x64dtv"
+type: libretro
+core_classification: community_fork
+source: "https://github.com/libretro/vice-libretro"
+upstream: "https://sourceforge.net/projects/vice-emu/"
+profiled_date: "2026-03-25"
+core_version: "3.10"
+display_name: "Commodore - C64DTV (VICE x64dtv)"
+cores: [vice_x64dtv]
+systems: [commodore-c64dtv]
+notes: >
+  System ROMs embedded in binary: C64 BASIC (901226-01), kernal Rev 3
+  (901227-03), chargen (901225-01), plus all drive ROMs (1540, 1541, 1541-II,
+  1551, 1570, 1571, 1571CR, 1581, 1001, 2031, 2040, 3040, 4040, 9000).
+  Embedded ROM check in sysfile_load takes priority over filesystem.
+  DTV has its own color system (viciidtv-color.c); external palette loading
+  is disabled. JiffyDOS is not supported (excluded from build conditionals).
+  The .info declares 4 JiffyDOS firmware (firmware_count=4) but the code
+  never loads them for this core. The .info also omits dtvrom.bin.
+
+files:
+  - name: "dtvrom.bin"
+    description: "C64 DTV 2MB flash ROM image"
+    required: false
+    hle_fallback: true
+    size: 2097152
+    source_ref: "vice/src/c64dtv/c64dtvflash.c:59-64,470-471,488-505"
+    notes: >
+      Loaded via sysfile_load from system/vice/C64DTV/. All model variants
+      (V2 PAL/NTSC, V3 PAL/NTSC, Hummer) default to this filename. If not
+      found, the core copies embedded BASIC, kernal and chargen ROMs into
+      flash memory. Without it, the DTV operates as a basic C64 without the
+      built-in DTV games and firmware. The original DTV ROM has distorted
+      colors; a patched ROM is recommended.

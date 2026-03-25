@@ -1,0 +1,68 @@
+emulator: "VICE x64"
+type: libretro
+core_classification: community_fork
+source: "https://github.com/libretro/vice-libretro"
+upstream: "https://sourceforge.net/projects/vice-emu/"
+profiled_date: "2026-03-25"
+core_version: "3.10"
+display_name: "Commodore - C64 (VICE x64, fast)"
+cores: [vice_x64]
+systems: [commodore-c64]
+notes: >
+  System ROMs embedded in binary: C64 BASIC (901226-01), chargen (901225-01),
+  chargen Japanese (906143-02), kernal Rev 3 (901227-03), kernal GS (390852-01),
+  kernal SX-64 (251104-04), kernal 4064 (901246-01), kernal Japanese (906145-02),
+  plus all drive ROMs (1540, 1541, 1541-II, 1551, 1570, 1571, 1571CR, 1581, 1001,
+  2031, 2040, 3040, 4040, 9000) and VIC-II palettes. Embedded ROM check in
+  sysfile_load takes priority over filesystem. Kernal Rev 1 (901227-01) and
+  Rev 2 (901227-02) are NOT embedded; selecting C64 OLD NTSC or C64 OLD PAL model
+  requires them on the filesystem in system/vice/C64/. JiffyDOS requires True Drive
+  Emulation enabled and a 1541/1571/1581 drive type. SX-64 models use a separate
+  JiffyDOS kernal (JiffyDOS_SX-64.bin) not declared in the .info.
+
+files:
+  - name: "JiffyDOS_C64.bin"
+    description: "JiffyDOS C64 kernal replacement"
+    required: false
+    source_ref: "retrodep/ui.c:302-303"
+    notes: "Loaded into KernalName when vice_jiffydos option is enabled (non-SX64 models)."
+
+  - name: "JiffyDOS_SX-64.bin"
+    description: "JiffyDOS SX-64 kernal replacement"
+    required: false
+    source_ref: "retrodep/ui.c:295-296"
+    notes: "Loaded into KernalName when vice_jiffydos option is enabled and SX-64 model selected."
+
+  - name: "JiffyDOS_1541-II.bin"
+    description: "JiffyDOS 1541-II drive DOS replacement"
+    required: false
+    source_ref: "retrodep/ui.c:283-284"
+    notes: "Loaded into DosName1541ii when vice_jiffydos option is enabled."
+
+  - name: "JiffyDOS_1571_repl310654.bin"
+    description: "JiffyDOS 1571 drive DOS replacement"
+    required: false
+    source_ref: "retrodep/ui.c:285-286"
+    notes: "Loaded into DosName1571 when vice_jiffydos option is enabled."
+
+  - name: "JiffyDOS_1581.bin"
+    description: "JiffyDOS 1581 drive DOS replacement"
+    required: false
+    source_ref: "retrodep/ui.c:287-288"
+    notes: "Loaded into DosName1581 when vice_jiffydos option is enabled."
+
+  - name: "kernal-901227-01.bin"
+    description: "C64 Kernal Rev 1"
+    required: false
+    size: 8192
+    validation: [size]
+    source_ref: "vice/src/c64/c64-resources.c:253, vice/src/c64/c64model.c:131"
+    notes: "Not embedded. Loaded via sysfile from system/vice/C64/ when C64 OLD NTSC model selected."
+
+  - name: "kernal-901227-02.bin"
+    description: "C64 Kernal Rev 2"
+    required: false
+    size: 8192
+    validation: [size]
+    source_ref: "vice/src/c64/c64-resources.c:254, vice/src/c64/c64model.c:117"
+    notes: "Not embedded. Loaded via sysfile from system/vice/C64/ when C64 OLD PAL model selected."

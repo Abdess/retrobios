@@ -1,8 +1,20 @@
-emulator: "vitavoyager"
-type: alias
-alias_of: "vitaquake3"
-profiled_date: "2026-03-18"
+emulator: vitavoyager
+type: game
+core_classification: community_fork
+source: "https://github.com/libretro/vitavoyager"
+upstream: "https://github.com/zturtleman/lilium-voyager"
+profiled_date: "2026-03-25"
 core_version: "git"
 display_name: "Star Trek: Voyager - Elite Force (vitaVoyager)"
-note: "This core uses the same BIOS/firmware as vitaquake3. See emulators/vitaquake3.yml for details."
+cores: [vitavoyager]
+systems: [quake3]
+
+notes: >
+  Star Trek Voyager Elite Force Holomatch (multiplayer) source port built from
+  Lilium Voyager (itself an ioquake3 fork) with the libretro backend. Content
+  is loaded from the .pk3 file path - the engine resolves the parent directory
+  structure to find baseEF/ and loads pak0.pk3 through pak3.pk3 sequentially.
+  Game data files (.pk3 archives) come from the retail game. No files are
+  required in the RetroArch system directory.
+
 files: []

@@ -1,0 +1,59 @@
+emulator: "VICE xscpu64"
+type: libretro
+core_classification: community_fork
+source: "https://github.com/libretro/vice-libretro"
+upstream: "https://sourceforge.net/projects/vice-emu/"
+profiled_date: "2026-03-25"
+core_version: "3.10"
+display_name: "Commodore - C64 SuperCPU (VICE xscpu64)"
+cores: [vice_xscpu64]
+systems: [commodore-c64-supercpu]
+notes: >
+  Embedded SCPU64 ROM V0.07 (free replacement by Soci/Singular, 64 KB), chargen
+  (901225-01, 906143-02), C64 BASIC (901226-01), all C64 kernals (Rev 3, GS,
+  SX-64, 4064, Japanese), all drive ROMs (1540 through 9000), and VIC-II palettes.
+  Embedded ROM check in sysfile_load takes priority over filesystem. External
+  scpu-dos-*.bin provide the original CMD SuperCPU DOS kernals, loaded from
+  system/vice/SCPU64/ when SuperCPU Kernal core option is changed from Internal.
+  JiffyDOS requires True Drive Emulation enabled and a non-internal SuperCPU
+  kernal (the internal ROM is not JiffyDOS-compatible). The .info incorrectly
+  declares JiffyDOS_C64.bin (firmware_count=4); the C64 kernal replacement is
+  only loaded for x64/x64sc/x128, never for xscpu64. Correct firmware_count=5
+  (2 SCPU64 kernals + 3 JiffyDOS drive DOSes).
+
+files:
+  - name: "scpu-dos-2.04.bin"
+    description: "CMD SuperCPU Kernal v2.04"
+    required: false
+    min_size: 65536
+    max_size: 524288
+    validation: [size]
+    source_ref: "retrodep/ui.c:262-263, vice/src/scpu64/scpu64rom.c:75-89"
+    notes: "Loaded as SCPU64Name when SuperCPU Kernal option set to 2.04. Size must be power of 2 between 64 KB and 512 KB. Stored in system/vice/SCPU64/."
+
+  - name: "scpu-dos-1.4.bin"
+    description: "CMD SuperCPU Kernal v1.4"
+    required: false
+    min_size: 65536
+    max_size: 524288
+    validation: [size]
+    source_ref: "retrodep/ui.c:265-266, vice/src/scpu64/scpu64rom.c:75-89"
+    notes: "Loaded as SCPU64Name when SuperCPU Kernal option set to 1.40. Size must be power of 2 between 64 KB and 512 KB. Stored in system/vice/SCPU64/."
+
+  - name: "JiffyDOS_1541-II.bin"
+    description: "JiffyDOS 1541-II drive DOS replacement"
+    required: false
+    source_ref: "retrodep/ui.c:282-283"
+    notes: "Loaded as DosName1541ii when JiffyDOS option enabled."
+
+  - name: "JiffyDOS_1571_repl310654.bin"
+    description: "JiffyDOS 1571 drive DOS replacement"
+    required: false
+    source_ref: "retrodep/ui.c:285-286"
+    notes: "Loaded as DosName1571 when JiffyDOS option enabled."
+
+  - name: "JiffyDOS_1581.bin"
+    description: "JiffyDOS 1581 drive DOS replacement"
+    required: false
+    source_ref: "retrodep/ui.c:287-288"
+    notes: "Loaded as DosName1581 when JiffyDOS option enabled."

@@ -1,15 +1,15 @@
 emulator: WASM-4
 type: game
+core_classification: game_engine
 source: "https://github.com/aduros/wasm4"
-profiled_date: "2026-03-18"
+upstream: "https://github.com/aduros/wasm4"
+profiled_date: "2026-03-25"
 core_version: "2.1.0"
 display_name: "WASM-4"
 cores: [wasm4]
 systems: []
 files: []
 notes: >
-  WASM-4 is a low-level fantasy game console for building small games with
-  WebAssembly. It provides a fixed 160x160 display, 4-color palette, gamepad
-  input, and 1024 bytes of persistent storage. Games are standalone .wasm
-  cartridges. The runtime is fully self-contained with no external file
-  dependencies. No BIOS or system directory files required.
+  Fantasy game console for WebAssembly. 160x160 display, 4-color palette,
+  1024 bytes persistent storage. Self-contained runtime, no external file
+  dependencies. Libretro backend is in the upstream repo (no separate fork).
