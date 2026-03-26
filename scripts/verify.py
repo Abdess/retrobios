@@ -869,6 +869,8 @@ def main():
     parser.add_argument("--list-emulators", action="store_true", help="List available emulators")
     parser.add_argument("--list-systems", action="store_true", help="List available systems")
     parser.add_argument("--include-archived", action="store_true")
+    parser.add_argument("--target", "-t", help="Hardware target (e.g., switch, rpi4)")
+    parser.add_argument("--list-targets", action="store_true", help="List available targets for the platform")
     parser.add_argument("--db", default=DEFAULT_DB)
     parser.add_argument("--platforms-dir", default=DEFAULT_PLATFORMS_DIR)
     parser.add_argument("--emulators-dir", default=DEFAULT_EMULATORS_DIR)
@@ -882,6 +884,19 @@ def main():
         list_system_ids(args.emulators_dir)
         return
 
+    if args.list_targets:
+        if not args.platform:
+            parser.error("--list-targets requires --platform")
+        from common import list_available_targets
+        targets = list_available_targets(args.platform, args.platforms_dir)
+        if not targets:
+            print(f"No targets configured for platform '{args.platform}'")
+            return
+        for t in targets:
+            aliases = f" (aliases: {', '.join(t['aliases'])})" if t['aliases'] else ""
+            print(f"  {t['name']:30s} {t['architecture']:10s} {t['core_count']:>4d} cores{aliases}")
+        return
+
     # Mutual exclusion
     modes = sum(1 for x in (args.platform, args.all, args.emulator, args.system) if x)
     if modes == 0:
@@ -890,6 +905,10 @@ def main():
         parser.error("--platform, --all, --emulator, and --system are mutually exclusive")
     if args.standalone and not (args.emulator or args.system):
         parser.error("--standalone requires --emulator or --system")
+    if args.target and not (args.platform or args.all):
+        parser.error("--target requires --platform or --all")
+    if args.target and (args.emulator or args.system):
+        parser.error("--target is incompatible with --emulator and --system")
 
     with open(args.db) as f:
         db = json.load(f)
@@ -929,13 +948,37 @@ def main():
     # Load emulator profiles once for cross-reference (not per-platform)
     emu_profiles = load_emulator_profiles(args.emulators_dir)
 
+    target_cores_cache: dict[str, set[str] | None] = {}
+    if args.target:
+        from common import load_target_config
+        skip = []
+        for p in platforms:
+            try:
+                target_cores_cache[p] = load_target_config(p, args.target, args.platforms_dir)
+            except FileNotFoundError:
+                if args.all:
+                    target_cores_cache[p] = None
+                else:
+                    print(f"ERROR: No target config for platform '{p}'", file=sys.stderr)
+                    sys.exit(1)
+            except ValueError as e:
+                if args.all:
+                    print(f"INFO: Skipping {p}: {e}")
+                    skip.append(p)
+                else:
+                    print(f"ERROR: {e}", file=sys.stderr)
+                    sys.exit(1)
+        platforms = [p for p in platforms if p not in skip]
+
     # Group identical platforms (same function as generate_pack)
-    groups = group_identical_platforms(platforms, args.platforms_dir)
+    groups = group_identical_platforms(platforms, args.platforms_dir,
+                                      target_cores_cache if args.target else None)
     all_results = {}
     group_results: list[tuple[dict, list[str]]] = []
     for group_platforms, representative in groups:
         config = load_platform_config(representative, args.platforms_dir)
-        result = verify_platform(config, db, args.emulators_dir, emu_profiles)
+        tc = target_cores_cache.get(representative) if args.target else None
+        result = verify_platform(config, db, args.emulators_dir, emu_profiles, target_cores=tc)
         names = [load_platform_config(p, args.platforms_dir).get("platform", p) for p in group_platforms]
         group_results.append((result, names))
         for p in group_platforms:
