@@ -9,3 +9,14 @@
 #         aliases: [alias1, alias2]
 #         add_cores: [core_to_add]
 #         remove_cores: [core_to_remove]
+
+retroarch:
+  targets:
+    nintendo-switch:
+      aliases: [switch, nx]
+    linux-x86_64:
+      aliases: [pc, linux, x86_64, desktop]
+    playstation-ps2:
+      aliases: [ps2]
+    playstation-psp:
+      aliases: [psp]
