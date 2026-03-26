@@ -631,7 +631,18 @@ def resolve_platform_cores(
         }
 
     if target_cores is not None:
-        result = result & target_cores
+        # Build reverse index: upstream name -> profile key
+        # Upstream sources (buildbot, es_systems) may use different names
+        # than our profile keys (e.g., mednafen_psx vs beetle_psx).
+        # The profiles' cores: field lists these alternate names.
+        upstream_to_profile: dict[str, str] = {}
+        for name, p in profiles.items():
+            upstream_to_profile[name] = name
+            for alias in p.get("cores", []):
+                upstream_to_profile[str(alias)] = name
+        # Expand target_cores to profile keys
+        expanded = {upstream_to_profile.get(c, c) for c in target_cores}
+        result = result & expanded
     return result
 
 
