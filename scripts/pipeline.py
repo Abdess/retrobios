@@ -140,6 +140,7 @@ def main():
     # --include-extras is now a no-op: core requirements are always included
     parser.add_argument("--include-extras", action="store_true",
                         help="(no-op) Core requirements are always included")
+    parser.add_argument("--target", "-t", help="Hardware target (e.g., switch, rpi4)")
     args = parser.parse_args()
 
     results = {}
@@ -172,6 +173,8 @@ def main():
     verify_cmd = [sys.executable, "scripts/verify.py", "--all"]
     if args.include_archived:
         verify_cmd.append("--include-archived")
+    if args.target:
+        verify_cmd.extend(["--target", args.target])
     ok, verify_output = run(verify_cmd, "3/7 verify all platforms")
     results["verify"] = ok
     all_ok = all_ok and ok
@@ -189,6 +192,8 @@ def main():
             pack_cmd.append("--offline")
         if args.include_extras:
             pack_cmd.append("--include-extras")
+        if args.target:
+            pack_cmd.extend(["--target", args.target])
         ok, pack_output = run(pack_cmd, "4/7 generate packs")
         results["generate_packs"] = ok
         all_ok = all_ok and ok
