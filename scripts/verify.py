@@ -394,8 +394,10 @@ def verify_platform(
     validation_index = _build_validation_index(profiles)
 
     # Filter systems by target
+    plat_cores = resolve_platform_cores(config, profiles) if target_cores else None
     verify_systems = filter_systems_by_target(
         config.get("systems", {}), profiles, target_cores,
+        platform_cores=plat_cores,
     )
 
     # Per-entry results

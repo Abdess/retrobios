@@ -265,10 +265,13 @@ def generate_pack(
         validation_index = _build_validation_index(emu_profiles)
 
     # Filter systems by target if specified
+    from common import resolve_platform_cores
+    plat_cores = resolve_platform_cores(config, emu_profiles or {}) if target_cores else None
     pack_systems = filter_systems_by_target(
         config.get("systems", {}),
         emu_profiles or {},
         target_cores,
+        platform_cores=plat_cores,
     )
 
     with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:

@@ -650,11 +650,16 @@ def filter_systems_by_target(
     systems: dict[str, dict],
     profiles: dict[str, dict],
     target_cores: set[str] | None,
+    platform_cores: set[str] | None = None,
 ) -> dict[str, dict]:
     """Filter platform systems to only those reachable by target cores.
 
     A system is reachable if at least one core that emulates it is available
-    on the target. Returns the filtered systems dict (or all if no target).
+    on the target. Only considers cores relevant to the platform (from
+    platform_cores). Systems whose cores are all outside the platform's
+    scope are kept (no information to exclude them).
+
+    Returns the filtered systems dict (or all if no target).
     """
     if target_cores is None:
         return systems
@@ -667,10 +672,12 @@ def filter_systems_by_target(
             upstream_to_profile[str(alias)] = name
     expanded_target = {upstream_to_profile.get(c, c) for c in target_cores}
 
-    # Build system -> profile keys mapping
+    # Build system -> profile keys mapping (only platform-relevant cores)
     system_to_cores: dict[str, set[str]] = {}
     for name, p in profiles.items():
         if p.get("type") == "alias":
+            continue
+        if platform_cores is not None and name not in platform_cores:
             continue
         for sid in p.get("systems", []):
             system_to_cores.setdefault(sid, set()).add(name)
@@ -678,8 +685,13 @@ def filter_systems_by_target(
     filtered = {}
     for sys_id, sys_data in systems.items():
         cores_for_system = system_to_cores.get(sys_id, set())
-        if cores_for_system & expanded_target:
+        if not cores_for_system:
+            # No platform-relevant core maps to this system — keep it
             filtered[sys_id] = sys_data
+        elif cores_for_system & expanded_target:
+            # At least one core for this system is on the target
+            filtered[sys_id] = sys_data
+        # else: all platform cores for this system are off-target — exclude
     return filtered
 
 
