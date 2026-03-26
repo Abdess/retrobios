@@ -1318,6 +1318,40 @@ class TestE2E(unittest.TestCase):
         result = resolve_platform_cores(config, profiles, target_cores=None)
         self.assertEqual(result, {"core_a", "core_b"})
 
+    def test_verify_target_filtered(self):
+        """Verify with target_cores only reports files from filtered cores."""
+        self._write_target_fixtures()
+        core_a_path = os.path.join(self.emulators_dir, "core_a.yml")
+        core_b_path = os.path.join(self.emulators_dir, "core_b.yml")
+        with open(core_a_path, "w") as f:
+            yaml.dump({
+                "emulator": "CoreA", "type": "libretro", "systems": ["sys1"],
+                "files": [{"name": "bios_a.bin", "required": True}],
+            }, f)
+        with open(core_b_path, "w") as f:
+            yaml.dump({
+                "emulator": "CoreB", "type": "libretro", "systems": ["sys1"],
+                "files": [{"name": "bios_b.bin", "required": True}],
+            }, f)
+
+        config = {"cores": "all_libretro", "systems": {"sys1": {"files": []}}}
+        profiles = load_emulator_profiles(self.emulators_dir)
+
+        # Without target: both cores' files are undeclared
+        undeclared = find_undeclared_files(config, self.emulators_dir, self.db, profiles)
+        names = {u["name"] for u in undeclared}
+        self.assertIn("bios_a.bin", names)
+        self.assertIn("bios_b.bin", names)
+
+        # With target filtering to core_a only
+        undeclared = find_undeclared_files(
+            config, self.emulators_dir, self.db, profiles,
+            target_cores={"core_a"},
+        )
+        names = {u["name"] for u in undeclared}
+        self.assertIn("bios_a.bin", names)
+        self.assertNotIn("bios_b.bin", names)
+
 
 if __name__ == "__main__":
     unittest.main()

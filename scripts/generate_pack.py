@@ -185,6 +185,7 @@ def _collect_emulator_extras(
     seen: set,
     base_dest: str,
     emu_profiles: dict | None = None,
+    target_cores: set[str] | None = None,
 ) -> list[dict]:
     """Collect core requirement files from emulator profiles not in the platform pack.
 
@@ -198,7 +199,7 @@ def _collect_emulator_extras(
     """
     from verify import find_undeclared_files
 
-    undeclared = find_undeclared_files(config, emulators_dir, db, emu_profiles)
+    undeclared = find_undeclared_files(config, emulators_dir, db, emu_profiles, target_cores=target_cores)
     extras = []
     for u in undeclared:
         if not u["in_repo"]:

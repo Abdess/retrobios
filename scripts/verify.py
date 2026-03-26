@@ -205,6 +205,7 @@ def find_undeclared_files(
     emulators_dir: str,
     db: dict,
     emu_profiles: dict | None = None,
+    target_cores: set[str] | None = None,
 ) -> list[dict]:
     """Find files needed by cores but not declared in platform config."""
     # Collect all filenames declared by this platform
@@ -226,7 +227,7 @@ def find_undeclared_files(
     by_name = db.get("indexes", {}).get("by_name", {})
     profiles = emu_profiles if emu_profiles is not None else load_emulator_profiles(emulators_dir)
 
-    relevant = resolve_platform_cores(config, profiles)
+    relevant = resolve_platform_cores(config, profiles, target_cores=target_cores)
     standalone_set = set(str(c) for c in config.get("standalone_cores", []))
     undeclared = []
     seen = set()
@@ -278,6 +279,7 @@ def find_undeclared_files(
 
 def find_exclusion_notes(
     config: dict, emulators_dir: str, emu_profiles: dict | None = None,
+    target_cores: set[str] | None = None,
 ) -> list[dict]:
     """Document why certain emulator files are intentionally excluded.
 
@@ -292,7 +294,7 @@ def find_exclusion_notes(
     for sys_id in config.get("systems", {}):
         platform_systems.add(sys_id)
 
-    relevant = resolve_platform_cores(config, profiles)
+    relevant = resolve_platform_cores(config, profiles, target_cores=target_cores)
     notes = []
     for emu_name, profile in sorted(profiles.items()):
         emu_systems = set(profile.get("systems", []))
@@ -368,6 +370,7 @@ def verify_platform(
     config: dict, db: dict,
     emulators_dir: str = DEFAULT_EMULATORS_DIR,
     emu_profiles: dict | None = None,
+    target_cores: set[str] | None = None,
 ) -> dict:
     """Verify all BIOS files for a platform, including cross-reference gaps."""
     mode = config.get("verification_mode", "existence")
@@ -452,8 +455,8 @@ def verify_platform(
         status_counts[s] = status_counts.get(s, 0) + 1
 
     # Cross-reference undeclared files
-    undeclared = find_undeclared_files(config, emulators_dir, db, emu_profiles)
-    exclusions = find_exclusion_notes(config, emulators_dir, emu_profiles)
+    undeclared = find_undeclared_files(config, emulators_dir, db, emu_profiles, target_cores=target_cores)
+    exclusions = find_exclusion_notes(config, emulators_dir, emu_profiles, target_cores=target_cores)
 
     return {
         "platform": platform,
