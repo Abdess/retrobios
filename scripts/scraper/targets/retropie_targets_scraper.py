@@ -1,11 +1,13 @@
-"""Scraper for RetroPie package availability per platform.
+"""Scraper for RetroPie libretro core availability per platform.
 
-Source: https://retropie.org.uk/stats/pkgflags/
-Parses the HTML table of packages × platforms.
+Source: https://github.com/RetroPie/RetroPie-Setup/tree/master/scriptmodules/libretrocores
+Parses rp_module_id and rp_module_flags from each scriptmodule to determine
+which platforms each core supports.
 """
 from __future__ import annotations
 
 import argparse
+import json
 import re
 import sys
 import urllib.error
@@ -18,33 +20,48 @@ from . import BaseTargetScraper
 
 PLATFORM_NAME = "retropie"
 
-SOURCE_URL = "https://retropie.org.uk/stats/pkgflags/"
+GITHUB_API_URL = (
+    "https://api.github.com/repos/RetroPie/RetroPie-Setup/contents"
+    "/scriptmodules/libretrocores"
+)
+RAW_BASE_URL = (
+    "https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master"
+    "/scriptmodules/libretrocores/"
+)
 
-# Maps table column header to (target_name, architecture)
-_COLUMN_MAP: dict[str, tuple[str, str]] = {
-    "rpi1": ("rpi1", "armv6"),
-    "rpi2": ("rpi2", "armv7"),
-    "rpi3": ("rpi3", "armv7"),
-    "rpi4": ("rpi4", "aarch64"),
-    "rpi5": ("rpi5", "aarch64"),
-    "x86": ("x86", "x86"),
-    "x86_64": ("x86_64", "x86_64"),
+# Platform flag sets: flags that the platform possesses
+PLATFORM_FLAGS: dict[str, set[str]] = {
+    "rpi1": {"arm", "armv6", "rpi", "gles"},
+    "rpi2": {"arm", "armv7", "neon", "rpi", "gles"},
+    "rpi3": {"arm", "armv8", "neon", "rpi", "gles"},
+    "rpi4": {"arm", "armv8", "neon", "rpi", "gles", "gles3", "gles31"},
+    "rpi5": {"arm", "armv8", "neon", "rpi", "gles", "gles3", "gles31"},
+    "x86": {"x86"},
+    "x86_64": {"x86"},
 }
 
-_TH_RE = re.compile(r'<th[^>]*>(.*?)</th>', re.IGNORECASE | re.DOTALL)
-_TR_RE = re.compile(r'<tr[^>]*>(.*?)</tr>', re.IGNORECASE | re.DOTALL)
-_TD_RE = re.compile(r'<td[^>]*>(.*?)</td>', re.IGNORECASE | re.DOTALL)
-_TAG_RE = re.compile(r'<[^>]+>')
+ARCH_MAP: dict[str, str] = {
+    "rpi1": "armv6",
+    "rpi2": "armv7",
+    "rpi3": "armv7",
+    "rpi4": "aarch64",
+    "rpi5": "aarch64",
+    "x86": "x86",
+    "x86_64": "x86_64",
+}
+
+# Flags that are build directives, not platform restrictions
+_BUILD_FLAGS = {"nodistcc"}
+
+_MODULE_ID_RE = re.compile(r'rp_module_id\s*=\s*["\']([^"\']+)["\']')
+_MODULE_FLAGS_RE = re.compile(r'rp_module_flags\s*=\s*["\']([^"\']*)["\']')
 
 
-def _strip_tags(text: str) -> str:
-    return _TAG_RE.sub("", text).strip()
-
-
-def _fetch(url: str) -> str | None:
+def _fetch(url: str, accept: str = "text/plain") -> str | None:
     try:
         req = urllib.request.Request(
-            url, headers={"User-Agent": "retrobios-scraper/1.0"}
+            url,
+            headers={"User-Agent": "retrobios-scraper/1.0", "Accept": accept},
         )
         with urllib.request.urlopen(req, timeout=30) as resp:
             return resp.read().decode("utf-8")
@@ -53,75 +70,86 @@ def _fetch(url: str) -> str | None:
         return None
 
 
-def _parse_table(html: str) -> dict[str, list[str]]:
-    """Parse the pkgflags HTML table into {target: [packages]}."""
-    # Extract header row to find column indices
-    header_match = re.search(
-        r'<thead[^>]*>(.*?)</thead>', html, re.IGNORECASE | re.DOTALL
-    )
-    if not header_match:
-        # Fallback: find first tr
-        header_match = re.search(
-            r'<tr[^>]*>(.*?)</tr>', html, re.IGNORECASE | re.DOTALL
-        )
-    if not header_match:
-        return {}
+def _is_available(flags_str: str, platform: str) -> bool:
+    """Return True if the core is available on the given platform."""
+    platform_has = PLATFORM_FLAGS.get(platform, set())
+    tokens = flags_str.split() if flags_str.strip() else []
 
-    headers = [_strip_tags(h).lower() for h in _TH_RE.findall(header_match.group(1))]
-    # Find which column index maps to which target
-    col_targets: dict[int, tuple[str, str]] = {}
-    for i, h in enumerate(headers):
-        if h in _COLUMN_MAP:
-            col_targets[i] = _COLUMN_MAP[h]
-
-    if not col_targets:
-        return {}
-
-    # Initialize result
-    result: dict[str, list[str]] = {name: [] for name, _ in col_targets.values()}
-
-    # Parse body rows
-    tbody_match = re.search(
-        r'<tbody[^>]*>(.*?)</tbody>', html, re.IGNORECASE | re.DOTALL
-    )
-    body_html = tbody_match.group(1) if tbody_match else html
-
-    for tr_match in _TR_RE.finditer(body_html):
-        cells = [_strip_tags(td) for td in _TD_RE.findall(tr_match.group(1))]
-        if not cells:
+    for token in tokens:
+        if token in _BUILD_FLAGS:
             continue
-        # First cell is package name
-        package = cells[0].strip().lower()
-        if not package:
-            continue
-        for col_idx, (target_name, _arch) in col_targets.items():
-            if col_idx < len(cells):
-                cell_val = cells[col_idx].strip().lower()
-                # Any non-empty, non-dash, non-zero value = available
-                if cell_val and cell_val not in ("", "-", "0", "n", "no", "false"):
-                    result[target_name].append(package)
+        if token.startswith("!"):
+            # Exclusion: if platform has this flag, core is excluded
+            flag = token[1:]
+            if flag in platform_has:
+                return False
+        else:
+            # Requirement: platform must have this flag
+            if token not in platform_has:
+                return False
 
-    return result
+    return True
+
+
+def _parse_module(content: str) -> tuple[str | None, str]:
+    """Return (module_id, flags_string) from a scriptmodule file."""
+    id_match = _MODULE_ID_RE.search(content)
+    flags_match = _MODULE_FLAGS_RE.search(content)
+    module_id = id_match.group(1) if id_match else None
+    flags = flags_match.group(1) if flags_match else ""
+    return module_id, flags
 
 
 class Scraper(BaseTargetScraper):
-    """Fetches RetroPie package availability per platform from pkgflags page."""
+    """Fetches RetroPie libretro core availability by parsing scriptmodules."""
 
-    def __init__(self, url: str = SOURCE_URL):
+    def __init__(self, url: str = GITHUB_API_URL):
         super().__init__(url=url)
 
+    def _list_scriptmodules(self) -> list[str]:
+        """Return list of .sh filenames from the libretrocores directory."""
+        raw = _fetch(self.url, accept="application/vnd.github+json")
+        if raw is None:
+            return []
+        try:
+            entries = json.loads(raw)
+        except json.JSONDecodeError as e:
+            print(f"  JSON parse error: {e}", file=sys.stderr)
+            return []
+        return [e["name"] for e in entries if e.get("name", "").endswith(".sh")]
+
+    def _fetch_module(self, filename: str) -> str | None:
+        return _fetch(f"{RAW_BASE_URL}{filename}")
+
     def fetch_targets(self) -> dict:
-        print("  fetching RetroPie pkgflags...", file=sys.stderr)
-        html = _fetch(self.url)
-        packages_per_target: dict[str, list[str]] = {}
-        if html:
-            packages_per_target = _parse_table(html)
+        print("  listing RetroPie scriptmodules...", file=sys.stderr)
+        filenames = self._list_scriptmodules()
+        if not filenames:
+            print("  warning: no scriptmodules found", file=sys.stderr)
+
+        # {platform: [core_id, ...]}
+        platform_cores: dict[str, list[str]] = {p: [] for p in PLATFORM_FLAGS}
+
+        for filename in filenames:
+            content = self._fetch_module(filename)
+            if content is None:
+                continue
+            module_id, flags = _parse_module(content)
+            if not module_id:
+                print(f"  warning: no rp_module_id in {filename}", file=sys.stderr)
+                continue
+            for platform in PLATFORM_FLAGS:
+                if _is_available(flags, platform):
+                    platform_cores[platform].append(module_id)
+
+        print(f"  parsed {len(filenames)} scriptmodules", file=sys.stderr)
 
         targets: dict[str, dict] = {}
-        for col_key, (target_name, arch) in _COLUMN_MAP.items():
-            targets[target_name] = {
+        for platform, arch in ARCH_MAP.items():
+            cores = sorted(platform_cores.get(platform, []))
+            targets[platform] = {
                 "architecture": arch,
-                "cores": sorted(packages_per_target.get(target_name, [])),
+                "cores": cores,
             }
 
         return {
@@ -134,7 +162,7 @@ class Scraper(BaseTargetScraper):
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Scrape RetroPie package targets"
+        description="Scrape RetroPie libretro core targets from scriptmodules"
     )
     parser.add_argument("--dry-run", action="store_true", help="Show target summary")
     parser.add_argument("--output", "-o", help="Output YAML file")
@@ -145,7 +173,7 @@ def main() -> None:
 
     if args.dry_run:
         for name, info in data["targets"].items():
-            print(f"  {name} ({info['architecture']}): {len(info['cores'])} packages")
+            print(f"  {name} ({info['architecture']}): {len(info['cores'])} cores")
         return
 
     if args.output:
