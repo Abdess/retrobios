@@ -1291,6 +1291,33 @@ class TestE2E(unittest.TestCase):
             child,
         )
 
+    # ---------------------------------------------------------------
+    # Target filtering in resolve_platform_cores (Task 2)
+    # ---------------------------------------------------------------
+
+    def test_target_core_intersection(self):
+        self._write_target_fixtures()
+        profiles = {
+            "core_a": {"type": "libretro", "systems": ["sys1"]},
+            "core_b": {"type": "libretro", "systems": ["sys1"]},
+            "core_c": {"type": "libretro", "systems": ["sys2"]},
+            "core_d": {"type": "libretro", "systems": ["sys2"]},
+        }
+        config = {"cores": "all_libretro"}
+        result = resolve_platform_cores(config, profiles)
+        self.assertEqual(result, {"core_a", "core_b", "core_c", "core_d"})
+        result = resolve_platform_cores(config, profiles, target_cores={"core_a", "core_b"})
+        self.assertEqual(result, {"core_a", "core_b"})
+
+    def test_target_none_no_filter(self):
+        profiles = {
+            "core_a": {"type": "libretro", "systems": ["sys1"]},
+            "core_b": {"type": "libretro", "systems": ["sys1"]},
+        }
+        config = {"cores": "all_libretro"}
+        result = resolve_platform_cores(config, profiles, target_cores=None)
+        self.assertEqual(result, {"core_a", "core_b"})
+
 
 if __name__ == "__main__":
     unittest.main()

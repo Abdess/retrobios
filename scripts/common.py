@@ -582,29 +582,28 @@ def group_identical_platforms(
 
 def resolve_platform_cores(
     config: dict, profiles: dict[str, dict],
+    target_cores: set[str] | None = None,
 ) -> set[str]:
     """Resolve which emulator profiles are relevant for a platform.
 
     Resolution strategies (by priority):
-    1. cores: "all_libretro" — all profiles with libretro in type
-    2. cores: [list] — profiles whose dict key matches a core name
-    3. cores: absent — fallback to systems intersection
+    1. cores: "all_libretro" -- all profiles with libretro in type
+    2. cores: [list] -- profiles whose dict key matches a core name
+    3. cores: absent -- fallback to systems intersection
 
     Alias profiles are always excluded (they point to another profile).
+    If target_cores is provided, result is intersected with it.
     """
     cores_config = config.get("cores")
 
     if cores_config == "all_libretro":
-        return {
+        result = {
             name for name, p in profiles.items()
             if "libretro" in p.get("type", "")
             and p.get("type") != "alias"
         }
-
-    if isinstance(cores_config, list):
+    elif isinstance(cores_config, list):
         core_set = {str(c) for c in cores_config}
-        # Build reverse index: platform core name -> profile name
-        # Uses profile filename (dict key) + all names in cores: field
         core_to_profile: dict[str, str] = {}
         for name, p in profiles.items():
             if p.get("type") == "alias":
@@ -612,19 +611,22 @@ def resolve_platform_cores(
             core_to_profile[name] = name
             for core_name in p.get("cores", []):
                 core_to_profile[str(core_name)] = name
-        return {
+        result = {
             core_to_profile[c]
             for c in core_set
             if c in core_to_profile
         }
+    else:
+        platform_systems = set(config.get("systems", {}).keys())
+        result = {
+            name for name, p in profiles.items()
+            if set(p.get("systems", [])) & platform_systems
+            and p.get("type") != "alias"
+        }
 
-    # Fallback: system ID intersection
-    platform_systems = set(config.get("systems", {}).keys())
-    return {
-        name for name, p in profiles.items()
-        if set(p.get("systems", [])) & platform_systems
-        and p.get("type") != "alias"
-    }
+    if target_cores is not None:
+        result = result & target_cores
+    return result
 
 
 def _parse_validation(validation: list | dict | None) -> list[str]:
