@@ -51,6 +51,41 @@ Full list with per-file details: **[https://abdess.github.io/retrobios/](https:/
 | RetroPie | 448/448 (100.0%) | 448 | 0 | 0 |
 | RomM | 374/374 (100.0%) | 359 | 15 | 0 |
 
+## Build your own pack
+
+Clone the repo and generate packs for any platform, emulator, or system:
+
+```bash
+# Full platform pack
+python scripts/generate_pack.py --platform retroarch --output-dir dist/
+python scripts/generate_pack.py --platform batocera --output-dir dist/
+
+# Single emulator or system
+python scripts/generate_pack.py --emulator dolphin
+python scripts/generate_pack.py --system sony-playstation-2
+
+# List available emulators and systems
+python scripts/generate_pack.py --list-emulators
+python scripts/generate_pack.py --list-systems
+
+# Verify your BIOS collection
+python scripts/verify.py --all
+python scripts/verify.py --platform batocera
+python scripts/verify.py --emulator flycast
+```
+
+Only dependency: Python 3 + `pyyaml`.
+
+## Documentation site
+
+The [documentation site](https://abdess.github.io/retrobios/) provides:
+
+- **Per-platform pages** with file-by-file verification status and hashes
+- **Per-emulator profiles** with source code references for every file
+- **Per-system pages** showing which emulators and platforms cover each console
+- **Gap analysis** identifying missing files and undeclared core requirements
+- **Cross-reference** mapping files across 9 platforms and 319 emulators
+
 ## How it works
 
 Documentation and metadata can drift from what emulators actually load.
@@ -60,10 +95,6 @@ To keep packs accurate, each file is checked against the emulator's source code.
 2. **Cross-reference with platforms** - match against what each platform declares
 3. **Build packs** - include baseline files plus what each platform's cores need
 4. **Verify** - run platform-native checks and emulator-level validation
-
-## Documentation
-
-Per-file hashes, emulator profiles, gap analysis, cross-reference: **[https://abdess.github.io/retrobios/](https://abdess.github.io/retrobios/)**
 
 ## Contributors
 
@@ -79,4 +110,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 This repository provides BIOS files for personal backup and archival purposes.
 
-*Auto-generated on 2026-03-26T02:33:34Z*
+*Auto-generated on 2026-03-26T06:14:11Z*
