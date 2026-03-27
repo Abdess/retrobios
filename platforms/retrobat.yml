@@ -5,6 +5,7 @@ source: "https://raw.githubusercontent.com/RetroBat-Official/emulatorlauncher/ma
 base_destination: bios
 hash_type: md5
 verification_mode: md5
+case_insensitive_fs: true
 cores:
   - 81
   - a5200

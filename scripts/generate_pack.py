@@ -250,11 +250,16 @@ def generate_pack(
     zip_path = os.path.join(output_dir, zip_name)
     os.makedirs(output_dir, exist_ok=True)
 
+    # Case-insensitive dedup only for platforms targeting Windows/macOS.
+    # Linux-only platforms (Batocera, Recalbox, RetroDECK, Lakka, RomM)
+    # are case-sensitive and may have distinct files like DISK.ROM vs disk.rom.
+    case_insensitive = config.get("case_insensitive_fs", False)
+
     total_files = 0
     missing_files = []
     user_provided = []
     seen_destinations: set[str] = set()
-    seen_lower: set[str] = set()  # case-insensitive dedup for Windows/macOS
+    seen_lower: set[str] = set()  # only used when case_insensitive=True
     # Per-file status: worst status wins (missing > untested > ok)
     file_status: dict[str, str] = {}
     file_reasons: dict[str, str] = {}
@@ -293,7 +298,7 @@ def generate_pack(
                     full_dest = dest
 
                 dedup_key = full_dest
-                already_packed = dedup_key in seen_destinations or dedup_key.lower() in seen_lower
+                already_packed = dedup_key in seen_destinations or (case_insensitive and dedup_key.lower() in seen_lower)
 
                 storage = file_entry.get("storage", "embedded")
 
@@ -301,7 +306,8 @@ def generate_pack(
                     if already_packed:
                         continue
                     seen_destinations.add(dedup_key)
-                    seen_lower.add(dedup_key.lower())
+                    if case_insensitive:
+                        seen_lower.add(dedup_key.lower())
                     file_status.setdefault(dedup_key, "ok")
                     instructions = file_entry.get("instructions", "Please provide this file manually.")
                     instr_name = f"INSTRUCTIONS_{file_entry['name']}.txt"
@@ -326,7 +332,8 @@ def generate_pack(
                             else:
                                 zf.write(tmp_path, full_dest)
                             seen_destinations.add(dedup_key)
-                            seen_lower.add(dedup_key.lower())
+                            if case_insensitive:
+                                seen_lower.add(dedup_key.lower())
                             file_status.setdefault(dedup_key, "ok")
                             total_files += 1
                         else:
@@ -401,7 +408,8 @@ def generate_pack(
                 if already_packed:
                     continue
                 seen_destinations.add(dedup_key)
-                seen_lower.add(dedup_key.lower())
+                if case_insensitive:
+                    seen_lower.add(dedup_key.lower())
 
                 extract = file_entry.get("extract", False)
                 if extract and local_path.endswith(".zip"):
@@ -437,7 +445,7 @@ def generate_pack(
             if full_dest in seen_destinations:
                 continue
             # Skip case-insensitive duplicates (Windows/macOS FS safety)
-            if full_dest.lower() in seen_lower:
+            if full_dest.lower() in seen_lower and case_insensitive:
                 continue
 
             local_path, status = resolve_file(fe, db, bios_dir, zip_contents)
@@ -449,7 +457,8 @@ def generate_pack(
             else:
                 zf.write(local_path, full_dest)
             seen_destinations.add(full_dest)
-            seen_lower.add(full_dest.lower())
+            if case_insensitive:
+                seen_lower.add(full_dest.lower())
             core_count += 1
             total_files += 1
 
@@ -479,10 +488,11 @@ def generate_pack(
                         src = os.path.join(root, fname)
                         rel = os.path.relpath(src, local_path)
                         full = f"{dd_prefix}/{rel}"
-                        if full in seen_destinations or full.lower() in seen_lower:
+                        if full in seen_destinations or full.lower() in seen_lower and case_insensitive:
                             continue
                         seen_destinations.add(full)
-                        seen_lower.add(full.lower())
+                        if case_insensitive:
+                            seen_lower.add(full.lower())
                         zf.write(src, full)
                         total_files += 1
 
