@@ -393,6 +393,8 @@ class Scraper(BaseScraper):
         except (ConnectionError, ValueError, OSError):
             pass
 
+        cores = self._fetch_installed_emulators()
+
         return {
             "platform": "EmuDeck",
             "version": version or "",
@@ -401,8 +403,53 @@ class Scraper(BaseScraper):
             "base_destination": "bios",
             "hash_type": "md5",
             "verification_mode": "md5",
+            "cores": cores,
             "systems": systems,
         }
+
+    def _fetch_installed_emulators(self) -> list[str]:
+        """Fetch the list of emulators installed by EmuDeck from EmuScripts.
+
+        Returns core names normalized to match emulator profile keys.
+        """
+        import json
+
+        api_url = (
+            "https://api.github.com/repos/dragoonDorise/EmuDeck/"
+            "contents/functions/EmuScripts"
+        )
+        name_overrides = {
+            "pcsx2qt": "pcsx2", "rpcs3legacy": "rpcs3",
+            "cemuproton": "cemu", "rmg": "mupen64plus_next",
+        }
+        skip = {"retroarch_maincfg", "retroarch"}
+
+        try:
+            req = urllib.request.Request(
+                api_url, headers={"User-Agent": "retrobios-scraper/1.0"},
+            )
+            data = json.loads(urllib.request.urlopen(req, timeout=30).read())
+        except (urllib.error.URLError, OSError):
+            return []
+
+        cores: list[str] = []
+        seen: set[str] = set()
+        for entry in data:
+            name = entry.get("name", "")
+            if not name.endswith(".sh"):
+                continue
+            name = re.sub(r"\.sh$", "", name)
+            name = re.sub(r"^emuDeck", "", name, flags=re.IGNORECASE)
+            if not name:
+                continue
+            key = name.lower()
+            if key in skip:
+                continue
+            core = name_overrides.get(key, key)
+            if core not in seen:
+                seen.add(core)
+                cores.append(core)
+        return sorted(cores)
 
 
 def main():

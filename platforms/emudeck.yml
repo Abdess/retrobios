@@ -1,10 +1,38 @@
 platform: EmuDeck
 version: 2.3.8
-homepage: "https://www.emudeck.com"
-source: "https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main/functions/checkBIOS.sh"
+homepage: https://www.emudeck.com
+source: https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main/functions/checkBIOS.sh
 base_destination: bios
 hash_type: md5
 verification_mode: md5
+cores:
+- ares
+- azahar
+- bigpemu
+- cemu
+- citron
+- dolphin
+- duckstation
+- eden
+- flycast
+- mame
+- melonds
+- mgba
+- model2
+- mupen64plus_next
+- pcsx2
+- ppsspp
+- primehack
+- rpcs3
+- ryujinx
+- scummvm
+- shadps4
+- supermodel
+- suyu
+- vita3k
+- xemu
+- xenia
+- yuzu
 systems:
   sony-playstation:
     files:
@@ -17,123 +45,123 @@ systems:
     - name: scph5502.bin
       destination: scph5502.bin
       required: true
-    - name: "sony-playstation:239665b1a3dade1b5a52c06338011044"
+    - name: sony-playstation:239665b1a3dade1b5a52c06338011044
       destination: ''
       required: true
       md5: 239665b1a3dade1b5a52c06338011044
-    - name: "sony-playstation:2118230527a9f51bd9216e32fa912842"
+    - name: sony-playstation:2118230527a9f51bd9216e32fa912842
       destination: ''
       required: true
       md5: 2118230527a9f51bd9216e32fa912842
-    - name: "sony-playstation:849515939161e62f6b866f6853006780"
+    - name: sony-playstation:849515939161e62f6b866f6853006780
       destination: ''
       required: true
       md5: 849515939161e62f6b866f6853006780
-    - name: "sony-playstation:dc2b9bf8da62ec93e868cfd29f0d067d"
+    - name: sony-playstation:dc2b9bf8da62ec93e868cfd29f0d067d
       destination: ''
       required: true
       md5: dc2b9bf8da62ec93e868cfd29f0d067d
-    - name: "sony-playstation:54847e693405ffeb0359c6287434cbef"
+    - name: sony-playstation:54847e693405ffeb0359c6287434cbef
       destination: ''
       required: true
       md5: 54847e693405ffeb0359c6287434cbef
-    - name: "sony-playstation:cba733ceeff5aef5c32254f1d617fa62"
+    - name: sony-playstation:cba733ceeff5aef5c32254f1d617fa62
       destination: ''
       required: true
       md5: cba733ceeff5aef5c32254f1d617fa62
-    - name: "sony-playstation:da27e8b6dab242d8f91a9b25d80c63b8"
+    - name: sony-playstation:da27e8b6dab242d8f91a9b25d80c63b8
       destination: ''
       required: true
       md5: da27e8b6dab242d8f91a9b25d80c63b8
-    - name: "sony-playstation:417b34706319da7cf001e76e40136c23"
+    - name: sony-playstation:417b34706319da7cf001e76e40136c23
       destination: ''
       required: true
       md5: 417b34706319da7cf001e76e40136c23
-    - name: "sony-playstation:57a06303dfa9cf9351222dfcbb4a29d9"
+    - name: sony-playstation:57a06303dfa9cf9351222dfcbb4a29d9
       destination: ''
       required: true
       md5: 57a06303dfa9cf9351222dfcbb4a29d9
-    - name: "sony-playstation:81328b966e6dcf7ea1e32e55e1c104bb"
+    - name: sony-playstation:81328b966e6dcf7ea1e32e55e1c104bb
       destination: ''
       required: true
       md5: 81328b966e6dcf7ea1e32e55e1c104bb
-    - name: "sony-playstation:924e392ed05558ffdb115408c263dccf"
+    - name: sony-playstation:924e392ed05558ffdb115408c263dccf
       destination: ''
       required: true
       md5: 924e392ed05558ffdb115408c263dccf
-    - name: "sony-playstation:e2110b8a2b97a8e0b857a45d32f7e187"
+    - name: sony-playstation:e2110b8a2b97a8e0b857a45d32f7e187
       destination: ''
       required: true
       md5: e2110b8a2b97a8e0b857a45d32f7e187
-    - name: "sony-playstation:ca5cfc321f916756e3f0effbfaeba13b"
+    - name: sony-playstation:ca5cfc321f916756e3f0effbfaeba13b
       destination: ''
       required: true
       md5: ca5cfc321f916756e3f0effbfaeba13b
-    - name: "sony-playstation:8dd7d5296a650fac7319bce665a6a53c"
+    - name: sony-playstation:8dd7d5296a650fac7319bce665a6a53c
       destination: ''
       required: true
       md5: 8dd7d5296a650fac7319bce665a6a53c
-    - name: "sony-playstation:490f666e1afb15b7362b406ed1cea246"
+    - name: sony-playstation:490f666e1afb15b7362b406ed1cea246
       destination: ''
       required: true
       md5: 490f666e1afb15b7362b406ed1cea246
-    - name: "sony-playstation:32736f17079d0b2b7024407c39bd3050"
+    - name: sony-playstation:32736f17079d0b2b7024407c39bd3050
       destination: ''
       required: true
       md5: 32736f17079d0b2b7024407c39bd3050
-    - name: "sony-playstation:8e4c14f567745eff2f0408c8129f72a6"
+    - name: sony-playstation:8e4c14f567745eff2f0408c8129f72a6
       destination: ''
       required: true
       md5: 8e4c14f567745eff2f0408c8129f72a6
-    - name: "sony-playstation:b84be139db3ee6cbd075630aa20a6553"
+    - name: sony-playstation:b84be139db3ee6cbd075630aa20a6553
       destination: ''
       required: true
       md5: b84be139db3ee6cbd075630aa20a6553
-    - name: "sony-playstation:1e68c231d0896b7eadcad1d7d8e76129"
+    - name: sony-playstation:1e68c231d0896b7eadcad1d7d8e76129
       destination: ''
       required: true
       md5: 1e68c231d0896b7eadcad1d7d8e76129
-    - name: "sony-playstation:b9d9a0286c33dc6b7237bb13cd46fdee"
+    - name: sony-playstation:b9d9a0286c33dc6b7237bb13cd46fdee
       destination: ''
       required: true
       md5: b9d9a0286c33dc6b7237bb13cd46fdee
-    - name: "sony-playstation:8abc1b549a4a80954addc48ef02c4521"
+    - name: sony-playstation:8abc1b549a4a80954addc48ef02c4521
       destination: ''
       required: true
       md5: 8abc1b549a4a80954addc48ef02c4521
-    - name: "sony-playstation:9a09ab7e49b422c007e6d54d7c49b965"
+    - name: sony-playstation:9a09ab7e49b422c007e6d54d7c49b965
       destination: ''
       required: true
       md5: 9a09ab7e49b422c007e6d54d7c49b965
-    - name: "sony-playstation:b10f5e0e3d9eb60e5159690680b1e774"
+    - name: sony-playstation:b10f5e0e3d9eb60e5159690680b1e774
       destination: ''
       required: true
       md5: b10f5e0e3d9eb60e5159690680b1e774
-    - name: "sony-playstation:6e3735ff4c7dc899ee98981385f6f3d0"
+    - name: sony-playstation:6e3735ff4c7dc899ee98981385f6f3d0
       destination: ''
       required: true
       md5: 6e3735ff4c7dc899ee98981385f6f3d0
-    - name: "sony-playstation:de93caec13d1a141a40a79f5c86168d6"
+    - name: sony-playstation:de93caec13d1a141a40a79f5c86168d6
       destination: ''
       required: true
       md5: de93caec13d1a141a40a79f5c86168d6
-    - name: "sony-playstation:c53ca5908936d412331790f4426c6c33"
+    - name: sony-playstation:c53ca5908936d412331790f4426c6c33
       destination: ''
       required: true
       md5: c53ca5908936d412331790f4426c6c33
-    - name: "sony-playstation:476d68a94ccec3b9c8303bbd1daf2810"
+    - name: sony-playstation:476d68a94ccec3b9c8303bbd1daf2810
       destination: ''
       required: true
       md5: 476d68a94ccec3b9c8303bbd1daf2810
-    - name: "sony-playstation:d8f485717a5237285e4d7c5f881b7f32"
+    - name: sony-playstation:d8f485717a5237285e4d7c5f881b7f32
       destination: ''
       required: true
       md5: d8f485717a5237285e4d7c5f881b7f32
-    - name: "sony-playstation:fbb5f59ec332451debccf1e377017237"
+    - name: sony-playstation:fbb5f59ec332451debccf1e377017237
       destination: ''
       required: true
       md5: fbb5f59ec332451debccf1e377017237
-    - name: "sony-playstation:81bbe60ba7a3d1cea1d48c14cbcc647b"
+    - name: sony-playstation:81bbe60ba7a3d1cea1d48c14cbcc647b
       destination: ''
       required: true
       md5: 81bbe60ba7a3d1cea1d48c14cbcc647b
@@ -151,295 +179,295 @@ systems:
     - name: SCPH-70004_BIOS_V12_EUR_200.ROM2
       destination: SCPH-70004_BIOS_V12_EUR_200.ROM2
       required: true
-    - name: "sony-playstation-2:32f2e4d5ff5ee11072a6bc45530f5765"
+    - name: sony-playstation-2:32f2e4d5ff5ee11072a6bc45530f5765
       destination: ''
       required: true
       md5: 32f2e4d5ff5ee11072a6bc45530f5765
-    - name: "sony-playstation-2:acf4730ceb38ac9d8c7d8e21f2614600"
+    - name: sony-playstation-2:acf4730ceb38ac9d8c7d8e21f2614600
       destination: ''
       required: true
       md5: acf4730ceb38ac9d8c7d8e21f2614600
-    - name: "sony-playstation-2:acf9968c8f596d2b15f42272082513d1"
+    - name: sony-playstation-2:acf9968c8f596d2b15f42272082513d1
       destination: ''
       required: true
       md5: acf9968c8f596d2b15f42272082513d1
-    - name: "sony-playstation-2:b1459d7446c69e3e97e6ace3ae23dd1c"
+    - name: sony-playstation-2:b1459d7446c69e3e97e6ace3ae23dd1c
       destination: ''
       required: true
       md5: b1459d7446c69e3e97e6ace3ae23dd1c
-    - name: "sony-playstation-2:d3f1853a16c2ec18f3cd1ae655213308"
+    - name: sony-playstation-2:d3f1853a16c2ec18f3cd1ae655213308
       destination: ''
       required: true
       md5: d3f1853a16c2ec18f3cd1ae655213308
-    - name: "sony-playstation-2:63e6fd9b3c72e0d7b920e80cf76645cd"
+    - name: sony-playstation-2:63e6fd9b3c72e0d7b920e80cf76645cd
       destination: ''
       required: true
       md5: 63e6fd9b3c72e0d7b920e80cf76645cd
-    - name: "sony-playstation-2:a20c97c02210f16678ca3010127caf36"
+    - name: sony-playstation-2:a20c97c02210f16678ca3010127caf36
       destination: ''
       required: true
       md5: a20c97c02210f16678ca3010127caf36
-    - name: "sony-playstation-2:8db2fbbac7413bf3e7154c1e0715e565"
+    - name: sony-playstation-2:8db2fbbac7413bf3e7154c1e0715e565
       destination: ''
       required: true
       md5: 8db2fbbac7413bf3e7154c1e0715e565
-    - name: "sony-playstation-2:91c87cb2f2eb6ce529a2360f80ce2457"
+    - name: sony-playstation-2:91c87cb2f2eb6ce529a2360f80ce2457
       destination: ''
       required: true
       md5: 91c87cb2f2eb6ce529a2360f80ce2457
-    - name: "sony-playstation-2:3016b3dd42148a67e2c048595ca4d7ce"
+    - name: sony-playstation-2:3016b3dd42148a67e2c048595ca4d7ce
       destination: ''
       required: true
       md5: 3016b3dd42148a67e2c048595ca4d7ce
-    - name: "sony-playstation-2:b7fa11e87d51752a98b38e3e691cbf17"
+    - name: sony-playstation-2:b7fa11e87d51752a98b38e3e691cbf17
       destination: ''
       required: true
       md5: b7fa11e87d51752a98b38e3e691cbf17
-    - name: "sony-playstation-2:f63bc530bd7ad7c026fcd6f7bd0d9525"
+    - name: sony-playstation-2:f63bc530bd7ad7c026fcd6f7bd0d9525
       destination: ''
       required: true
       md5: f63bc530bd7ad7c026fcd6f7bd0d9525
-    - name: "sony-playstation-2:cee06bd68c333fc5768244eae77e4495"
+    - name: sony-playstation-2:cee06bd68c333fc5768244eae77e4495
       destination: ''
       required: true
       md5: cee06bd68c333fc5768244eae77e4495
-    - name: "sony-playstation-2:0bf988e9c7aaa4c051805b0fa6eb3387"
+    - name: sony-playstation-2:0bf988e9c7aaa4c051805b0fa6eb3387
       destination: ''
       required: true
       md5: 0bf988e9c7aaa4c051805b0fa6eb3387
-    - name: "sony-playstation-2:8accc3c49ac45f5ae2c5db0adc854633"
+    - name: sony-playstation-2:8accc3c49ac45f5ae2c5db0adc854633
       destination: ''
       required: true
       md5: 8accc3c49ac45f5ae2c5db0adc854633
-    - name: "sony-playstation-2:6f9a6feb749f0533aaae2cc45090b0ed"
+    - name: sony-playstation-2:6f9a6feb749f0533aaae2cc45090b0ed
       destination: ''
       required: true
       md5: 6f9a6feb749f0533aaae2cc45090b0ed
-    - name: "sony-playstation-2:838544f12de9b0abc90811279ee223c8"
+    - name: sony-playstation-2:838544f12de9b0abc90811279ee223c8
       destination: ''
       required: true
       md5: 838544f12de9b0abc90811279ee223c8
-    - name: "sony-playstation-2:bb6bbc850458fff08af30e969ffd0175"
+    - name: sony-playstation-2:bb6bbc850458fff08af30e969ffd0175
       destination: ''
       required: true
       md5: bb6bbc850458fff08af30e969ffd0175
-    - name: "sony-playstation-2:815ac991d8bc3b364696bead3457de7d"
+    - name: sony-playstation-2:815ac991d8bc3b364696bead3457de7d
       destination: ''
       required: true
       md5: 815ac991d8bc3b364696bead3457de7d
-    - name: "sony-playstation-2:b107b5710042abe887c0f6175f6e94bb"
+    - name: sony-playstation-2:b107b5710042abe887c0f6175f6e94bb
       destination: ''
       required: true
       md5: b107b5710042abe887c0f6175f6e94bb
-    - name: "sony-playstation-2:ab55cceea548303c22c72570cfd4dd71"
+    - name: sony-playstation-2:ab55cceea548303c22c72570cfd4dd71
       destination: ''
       required: true
       md5: ab55cceea548303c22c72570cfd4dd71
-    - name: "sony-playstation-2:18bcaadb9ff74ed3add26cdf709fff2e"
+    - name: sony-playstation-2:18bcaadb9ff74ed3add26cdf709fff2e
       destination: ''
       required: true
       md5: 18bcaadb9ff74ed3add26cdf709fff2e
-    - name: "sony-playstation-2:491209dd815ceee9de02dbbc408c06d6"
+    - name: sony-playstation-2:491209dd815ceee9de02dbbc408c06d6
       destination: ''
       required: true
       md5: 491209dd815ceee9de02dbbc408c06d6
-    - name: "sony-playstation-2:7200a03d51cacc4c14fcdfdbc4898431"
+    - name: sony-playstation-2:7200a03d51cacc4c14fcdfdbc4898431
       destination: ''
       required: true
       md5: 7200a03d51cacc4c14fcdfdbc4898431
-    - name: "sony-playstation-2:8359638e857c8bc18c3c18ac17d9cc3c"
+    - name: sony-playstation-2:8359638e857c8bc18c3c18ac17d9cc3c
       destination: ''
       required: true
       md5: 8359638e857c8bc18c3c18ac17d9cc3c
-    - name: "sony-playstation-2:352d2ff9b3f68be7e6fa7e6dd8389346"
+    - name: sony-playstation-2:352d2ff9b3f68be7e6fa7e6dd8389346
       destination: ''
       required: true
       md5: 352d2ff9b3f68be7e6fa7e6dd8389346
-    - name: "sony-playstation-2:d5ce2c7d119f563ce04bc04dbc3a323e"
+    - name: sony-playstation-2:d5ce2c7d119f563ce04bc04dbc3a323e
       destination: ''
       required: true
       md5: d5ce2c7d119f563ce04bc04dbc3a323e
-    - name: "sony-playstation-2:0d2228e6fd4fb639c9c39d077a9ec10c"
+    - name: sony-playstation-2:0d2228e6fd4fb639c9c39d077a9ec10c
       destination: ''
       required: true
       md5: 0d2228e6fd4fb639c9c39d077a9ec10c
-    - name: "sony-playstation-2:72da56fccb8fcd77bba16d1b6f479914"
+    - name: sony-playstation-2:72da56fccb8fcd77bba16d1b6f479914
       destination: ''
       required: true
       md5: 72da56fccb8fcd77bba16d1b6f479914
-    - name: "sony-playstation-2:5b1f47fbeb277c6be2fccdd6344ff2fd"
+    - name: sony-playstation-2:5b1f47fbeb277c6be2fccdd6344ff2fd
       destination: ''
       required: true
       md5: 5b1f47fbeb277c6be2fccdd6344ff2fd
-    - name: "sony-playstation-2:315a4003535dfda689752cb25f24785c"
+    - name: sony-playstation-2:315a4003535dfda689752cb25f24785c
       destination: ''
       required: true
       md5: 315a4003535dfda689752cb25f24785c
-    - name: "sony-playstation-2:312ad4816c232a9606e56f946bc0678a"
+    - name: sony-playstation-2:312ad4816c232a9606e56f946bc0678a
       destination: ''
       required: true
       md5: 312ad4816c232a9606e56f946bc0678a
-    - name: "sony-playstation-2:666018ffec65c5c7e04796081295c6c7"
+    - name: sony-playstation-2:666018ffec65c5c7e04796081295c6c7
       destination: ''
       required: true
       md5: 666018ffec65c5c7e04796081295c6c7
-    - name: "sony-playstation-2:6e69920fa6eef8522a1d688a11e41bc6"
+    - name: sony-playstation-2:6e69920fa6eef8522a1d688a11e41bc6
       destination: ''
       required: true
       md5: 6e69920fa6eef8522a1d688a11e41bc6
-    - name: "sony-playstation-2:eb960de68f0c0f7f9fa083e9f79d0360"
+    - name: sony-playstation-2:eb960de68f0c0f7f9fa083e9f79d0360
       destination: ''
       required: true
       md5: eb960de68f0c0f7f9fa083e9f79d0360
-    - name: "sony-playstation-2:8aa12ce243210128c5074552d3b86251"
+    - name: sony-playstation-2:8aa12ce243210128c5074552d3b86251
       destination: ''
       required: true
       md5: 8aa12ce243210128c5074552d3b86251
-    - name: "sony-playstation-2:240d4c5ddd4b54069bdc4a3cd2faf99d"
+    - name: sony-playstation-2:240d4c5ddd4b54069bdc4a3cd2faf99d
       destination: ''
       required: true
       md5: 240d4c5ddd4b54069bdc4a3cd2faf99d
-    - name: "sony-playstation-2:1c6cd089e6c83da618fbf2a081eb4888"
+    - name: sony-playstation-2:1c6cd089e6c83da618fbf2a081eb4888
       destination: ''
       required: true
       md5: 1c6cd089e6c83da618fbf2a081eb4888
-    - name: "sony-playstation-2:463d87789c555a4a7604e97d7db545d1"
+    - name: sony-playstation-2:463d87789c555a4a7604e97d7db545d1
       destination: ''
       required: true
       md5: 463d87789c555a4a7604e97d7db545d1
-    - name: "sony-playstation-2:35461cecaa51712b300b2d6798825048"
+    - name: sony-playstation-2:35461cecaa51712b300b2d6798825048
       destination: ''
       required: true
       md5: 35461cecaa51712b300b2d6798825048
-    - name: "sony-playstation-2:bd6415094e1ce9e05daabe85de807666"
+    - name: sony-playstation-2:bd6415094e1ce9e05daabe85de807666
       destination: ''
       required: true
       md5: bd6415094e1ce9e05daabe85de807666
-    - name: "sony-playstation-2:2e70ad008d4ec8549aada8002fdf42fb"
+    - name: sony-playstation-2:2e70ad008d4ec8549aada8002fdf42fb
       destination: ''
       required: true
       md5: 2e70ad008d4ec8549aada8002fdf42fb
-    - name: "sony-playstation-2:b53d51edc7fc086685e31b811dc32aad"
+    - name: sony-playstation-2:b53d51edc7fc086685e31b811dc32aad
       destination: ''
       required: true
       md5: b53d51edc7fc086685e31b811dc32aad
-    - name: "sony-playstation-2:1b6e631b536247756287b916f9396872"
+    - name: sony-playstation-2:1b6e631b536247756287b916f9396872
       destination: ''
       required: true
       md5: 1b6e631b536247756287b916f9396872
-    - name: "sony-playstation-2:00da1b177096cfd2532c8fa22b43e667"
+    - name: sony-playstation-2:00da1b177096cfd2532c8fa22b43e667
       destination: ''
       required: true
       md5: 00da1b177096cfd2532c8fa22b43e667
-    - name: "sony-playstation-2:afde410bd026c16be605a1ae4bd651fd"
+    - name: sony-playstation-2:afde410bd026c16be605a1ae4bd651fd
       destination: ''
       required: true
       md5: afde410bd026c16be605a1ae4bd651fd
-    - name: "sony-playstation-2:81f4336c1de607dd0865011c0447052e"
+    - name: sony-playstation-2:81f4336c1de607dd0865011c0447052e
       destination: ''
       required: true
       md5: 81f4336c1de607dd0865011c0447052e
-    - name: "sony-playstation-2:0eee5d1c779aa50e94edd168b4ebf42e"
+    - name: sony-playstation-2:0eee5d1c779aa50e94edd168b4ebf42e
       destination: ''
       required: true
       md5: 0eee5d1c779aa50e94edd168b4ebf42e
-    - name: "sony-playstation-2:d333558cc14561c1fdc334c75d5f37b7"
+    - name: sony-playstation-2:d333558cc14561c1fdc334c75d5f37b7
       destination: ''
       required: true
       md5: d333558cc14561c1fdc334c75d5f37b7
-    - name: "sony-playstation-2:dc752f160044f2ed5fc1f4964db2a095"
+    - name: sony-playstation-2:dc752f160044f2ed5fc1f4964db2a095
       destination: ''
       required: true
       md5: dc752f160044f2ed5fc1f4964db2a095
-    - name: "sony-playstation-2:63ead1d74893bf7f36880af81f68a82d"
+    - name: sony-playstation-2:63ead1d74893bf7f36880af81f68a82d
       destination: ''
       required: true
       md5: 63ead1d74893bf7f36880af81f68a82d
-    - name: "sony-playstation-2:3e3e030c0f600442fa05b94f87a1e238"
+    - name: sony-playstation-2:3e3e030c0f600442fa05b94f87a1e238
       destination: ''
       required: true
       md5: 3e3e030c0f600442fa05b94f87a1e238
-    - name: "sony-playstation-2:1ad977bb539fc9448a08ab276a836bbc"
+    - name: sony-playstation-2:1ad977bb539fc9448a08ab276a836bbc
       destination: ''
       required: true
       md5: 1ad977bb539fc9448a08ab276a836bbc
-    - name: "sony-playstation-2:eb4f40fcf4911ede39c1bbfe91e7a89a"
+    - name: sony-playstation-2:eb4f40fcf4911ede39c1bbfe91e7a89a
       destination: ''
       required: true
       md5: eb4f40fcf4911ede39c1bbfe91e7a89a
-    - name: "sony-playstation-2:9959ad7a8685cad66206e7752ca23f8b"
+    - name: sony-playstation-2:9959ad7a8685cad66206e7752ca23f8b
       destination: ''
       required: true
       md5: 9959ad7a8685cad66206e7752ca23f8b
-    - name: "sony-playstation-2:929a14baca1776b00869f983aa6e14d2"
+    - name: sony-playstation-2:929a14baca1776b00869f983aa6e14d2
       destination: ''
       required: true
       md5: 929a14baca1776b00869f983aa6e14d2
-    - name: "sony-playstation-2:573f7d4a430c32b3cc0fd0c41e104bbd"
+    - name: sony-playstation-2:573f7d4a430c32b3cc0fd0c41e104bbd
       destination: ''
       required: true
       md5: 573f7d4a430c32b3cc0fd0c41e104bbd
-    - name: "sony-playstation-2:df63a604e8bff5b0599bd1a6c2721bd0"
+    - name: sony-playstation-2:df63a604e8bff5b0599bd1a6c2721bd0
       destination: ''
       required: true
       md5: df63a604e8bff5b0599bd1a6c2721bd0
-    - name: "sony-playstation-2:5b1ba4bb914406fae75ab8e38901684d"
+    - name: sony-playstation-2:5b1ba4bb914406fae75ab8e38901684d
       destination: ''
       required: true
       md5: 5b1ba4bb914406fae75ab8e38901684d
-    - name: "sony-playstation-2:cb801b7920a7d536ba07b6534d2433ca"
+    - name: sony-playstation-2:cb801b7920a7d536ba07b6534d2433ca
       destination: ''
       required: true
       md5: cb801b7920a7d536ba07b6534d2433ca
-    - name: "sony-playstation-2:af60e6d1a939019d55e5b330d24b1c25"
+    - name: sony-playstation-2:af60e6d1a939019d55e5b330d24b1c25
       destination: ''
       required: true
       md5: af60e6d1a939019d55e5b330d24b1c25
-    - name: "sony-playstation-2:549a66d0c698635ca9fa3ab012da7129"
+    - name: sony-playstation-2:549a66d0c698635ca9fa3ab012da7129
       destination: ''
       required: true
       md5: 549a66d0c698635ca9fa3ab012da7129
-    - name: "sony-playstation-2:5de9d0d730ff1e7ad122806335332524"
+    - name: sony-playstation-2:5de9d0d730ff1e7ad122806335332524
       destination: ''
       required: true
       md5: 5de9d0d730ff1e7ad122806335332524
-    - name: "sony-playstation-2:21fe4cad111f7dc0f9af29477057f88d"
+    - name: sony-playstation-2:21fe4cad111f7dc0f9af29477057f88d
       destination: ''
       required: true
       md5: 21fe4cad111f7dc0f9af29477057f88d
-    - name: "sony-playstation-2:40c11c063b3b9409aa5e4058e984e30c"
+    - name: sony-playstation-2:40c11c063b3b9409aa5e4058e984e30c
       destination: ''
       required: true
       md5: 40c11c063b3b9409aa5e4058e984e30c
-    - name: "sony-playstation-2:80bbb237a6af9c611df43b16b930b683"
+    - name: sony-playstation-2:80bbb237a6af9c611df43b16b930b683
       destination: ''
       required: true
       md5: 80bbb237a6af9c611df43b16b930b683
-    - name: "sony-playstation-2:c37bce95d32b2be480f87dd32704e664"
+    - name: sony-playstation-2:c37bce95d32b2be480f87dd32704e664
       destination: ''
       required: true
       md5: c37bce95d32b2be480f87dd32704e664
-    - name: "sony-playstation-2:80ac46fa7e77b8ab4366e86948e54f83"
+    - name: sony-playstation-2:80ac46fa7e77b8ab4366e86948e54f83
       destination: ''
       required: true
       md5: 80ac46fa7e77b8ab4366e86948e54f83
-    - name: "sony-playstation-2:21038400dc633070a78ad53090c53017"
+    - name: sony-playstation-2:21038400dc633070a78ad53090c53017
       destination: ''
       required: true
       md5: 21038400dc633070a78ad53090c53017
-    - name: "sony-playstation-2:dc69f0643a3030aaa4797501b483d6c4"
+    - name: sony-playstation-2:dc69f0643a3030aaa4797501b483d6c4
       destination: ''
       required: true
       md5: dc69f0643a3030aaa4797501b483d6c4
-    - name: "sony-playstation-2:30d56e79d89fbddf10938fa67fe3f34e"
+    - name: sony-playstation-2:30d56e79d89fbddf10938fa67fe3f34e
       destination: ''
       required: true
       md5: 30d56e79d89fbddf10938fa67fe3f34e
-    - name: "sony-playstation-2:93ea3bcee4252627919175ff1b16a1d9"
+    - name: sony-playstation-2:93ea3bcee4252627919175ff1b16a1d9
       destination: ''
       required: true
       md5: 93ea3bcee4252627919175ff1b16a1d9
-    - name: "sony-playstation-2:d3e81e95db25f5a86a7b7474550a2155"
+    - name: sony-playstation-2:d3e81e95db25f5a86a7b7474550a2155
       destination: ''
       required: true
       md5: d3e81e95db25f5a86a7b7474550a2155
@@ -454,67 +482,67 @@ systems:
     - name: bios_CD_J.bin
       destination: bios_CD_J.bin
       required: true
-    - name: "sega-mega-cd:bc6ae4e1db01a2f349d9af392bf7e2bd"
+    - name: sega-mega-cd:bc6ae4e1db01a2f349d9af392bf7e2bd
       destination: ''
       required: true
       md5: bc6ae4e1db01a2f349d9af392bf7e2bd
-    - name: "sega-mega-cd:29ad9ce848b49d0f9cefc294137f653c"
+    - name: sega-mega-cd:29ad9ce848b49d0f9cefc294137f653c
       destination: ''
       required: true
       md5: 29ad9ce848b49d0f9cefc294137f653c
-    - name: "sega-mega-cd:cc049159d7e744c15eee080c241273b4"
+    - name: sega-mega-cd:cc049159d7e744c15eee080c241273b4
       destination: ''
       required: true
       md5: cc049159d7e744c15eee080c241273b4
-    - name: "sega-mega-cd:278a9397d192149e84e820ac621a8edd"
+    - name: sega-mega-cd:278a9397d192149e84e820ac621a8edd
       destination: ''
       required: true
       md5: 278a9397d192149e84e820ac621a8edd
-    - name: "sega-mega-cd:a3ddcc8483b0368141adfd99d9a1e466"
+    - name: sega-mega-cd:a3ddcc8483b0368141adfd99d9a1e466
       destination: ''
       required: true
       md5: a3ddcc8483b0368141adfd99d9a1e466
-    - name: "sega-mega-cd:bdeb4c47da613946d422d97d98b21cda"
+    - name: sega-mega-cd:bdeb4c47da613946d422d97d98b21cda
       destination: ''
       required: true
       md5: bdeb4c47da613946d422d97d98b21cda
-    - name: "sega-mega-cd:96ea588d647f2ab1f291279fc691663c"
+    - name: sega-mega-cd:96ea588d647f2ab1f291279fc691663c
       destination: ''
       required: true
       md5: 96ea588d647f2ab1f291279fc691663c
-    - name: "sega-mega-cd:2efd74e3232ff260e371b99f84024f7f"
+    - name: sega-mega-cd:2efd74e3232ff260e371b99f84024f7f
       destination: ''
       required: true
       md5: 2efd74e3232ff260e371b99f84024f7f
-    - name: "sega-mega-cd:e66fa1dc5820d254611fdcdba0662372"
+    - name: sega-mega-cd:e66fa1dc5820d254611fdcdba0662372
       destination: ''
       required: true
       md5: e66fa1dc5820d254611fdcdba0662372
-    - name: "sega-mega-cd:683a8a9e273662561172468dfa2858eb"
+    - name: sega-mega-cd:683a8a9e273662561172468dfa2858eb
       destination: ''
       required: true
       md5: 683a8a9e273662561172468dfa2858eb
-    - name: "sega-mega-cd:310a9081d2edf2d316ab38813136725e"
+    - name: sega-mega-cd:310a9081d2edf2d316ab38813136725e
       destination: ''
       required: true
       md5: 310a9081d2edf2d316ab38813136725e
-    - name: "sega-mega-cd:9b562ebf2d095bf1dabadbc1881f519a"
+    - name: sega-mega-cd:9b562ebf2d095bf1dabadbc1881f519a
       destination: ''
       required: true
       md5: 9b562ebf2d095bf1dabadbc1881f519a
-    - name: "sega-mega-cd:854b9150240a198070150e4566ae1290"
+    - name: sega-mega-cd:854b9150240a198070150e4566ae1290
       destination: ''
       required: true
       md5: 854b9150240a198070150e4566ae1290
-    - name: "sega-mega-cd:b10c0a97abc57b758497d3fae6ab35a4"
+    - name: sega-mega-cd:b10c0a97abc57b758497d3fae6ab35a4
       destination: ''
       required: true
       md5: b10c0a97abc57b758497d3fae6ab35a4
-    - name: "sega-mega-cd:ecc837c31d77b774c6e27e38f828aa9a"
+    - name: sega-mega-cd:ecc837c31d77b774c6e27e38f828aa9a
       destination: ''
       required: true
       md5: ecc837c31d77b774c6e27e38f828aa9a
-    - name: "sega-mega-cd:baca1df271d7c11fe50087c0358f4eb5"
+    - name: sega-mega-cd:baca1df271d7c11fe50087c0358f4eb5
       destination: ''
       required: true
       md5: baca1df271d7c11fe50087c0358f4eb5
@@ -529,35 +557,35 @@ systems:
     - name: saturn_bios.bin
       destination: saturn_bios.bin
       required: true
-    - name: "sega-saturn:af5828fdff51384f99b3c4926be27762"
+    - name: sega-saturn:af5828fdff51384f99b3c4926be27762
       destination: ''
       required: true
       md5: af5828fdff51384f99b3c4926be27762
-    - name: "sega-saturn:85ec9ca47d8f6807718151cbcca8b964"
+    - name: sega-saturn:85ec9ca47d8f6807718151cbcca8b964
       destination: ''
       required: true
       md5: 85ec9ca47d8f6807718151cbcca8b964
-    - name: "sega-saturn:f273555d7d91e8a5a6bfd9bcf066331c"
+    - name: sega-saturn:f273555d7d91e8a5a6bfd9bcf066331c
       destination: ''
       required: true
       md5: f273555d7d91e8a5a6bfd9bcf066331c
-    - name: "sega-saturn:3240872c70984b6cbfda1586cab68dbe"
+    - name: sega-saturn:3240872c70984b6cbfda1586cab68dbe
       destination: ''
       required: true
       md5: 3240872c70984b6cbfda1586cab68dbe
-    - name: "sega-saturn:ac4e4b6522e200c0d23d371a8cecbfd3"
+    - name: sega-saturn:ac4e4b6522e200c0d23d371a8cecbfd3
       destination: ''
       required: true
       md5: ac4e4b6522e200c0d23d371a8cecbfd3
-    - name: "sega-saturn:3ea3202e2634cb47cb90f3a05c015010"
+    - name: sega-saturn:3ea3202e2634cb47cb90f3a05c015010
       destination: ''
       required: true
       md5: 3ea3202e2634cb47cb90f3a05c015010
-    - name: "sega-saturn:cb2cebc1b6e573b7c44523d037edcd45"
+    - name: sega-saturn:cb2cebc1b6e573b7c44523d037edcd45
       destination: ''
       required: true
       md5: cb2cebc1b6e573b7c44523d037edcd45
-    - name: "sega-saturn:0306c0e408d6682dd2d86324bd4ac661"
+    - name: sega-saturn:0306c0e408d6682dd2d86324bd4ac661
       destination: ''
       required: true
       md5: 0306c0e408d6682dd2d86324bd4ac661

@@ -189,20 +189,25 @@ def scraper_cli(scraper_class: type, description: str = "Scrape BIOS requirement
         return
 
     if args.output:
-        # Generate platform YAML
         import yaml
-        config = {"systems": {}}
-        for req in reqs:
-            sys_id = req.system
-            config["systems"].setdefault(sys_id, {"files": []})
-            entry = {"name": req.name, "destination": req.destination or req.name, "required": req.required}
-            if req.sha1:
-                entry["sha1"] = req.sha1
-            if req.md5:
-                entry["md5"] = req.md5
-            if req.zipped_file:
-                entry["zipped_file"] = req.zipped_file
-            config["systems"][sys_id]["files"].append(entry)
+        # Use scraper's generate_platform_yaml() if available (includes
+        # platform metadata, cores list, standalone_cores, etc.)
+        if hasattr(scraper, "generate_platform_yaml"):
+            config = scraper.generate_platform_yaml()
+        else:
+            # Generic fallback: just systems from requirements
+            config = {"systems": {}}
+            for req in reqs:
+                sys_id = req.system
+                config["systems"].setdefault(sys_id, {"files": []})
+                entry = {"name": req.name, "destination": req.destination or req.name, "required": req.required}
+                if req.sha1:
+                    entry["sha1"] = req.sha1
+                if req.md5:
+                    entry["md5"] = req.md5
+                if req.zipped_file:
+                    entry["zipped_file"] = req.zipped_file
+                config["systems"][sys_id]["files"].append(entry)
         with open(args.output, "w") as f:
             yaml.dump(config, f, default_flow_style=False, sort_keys=False)
         print(f"Written {len(reqs)} entries to {args.output}")
