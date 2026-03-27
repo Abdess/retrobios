@@ -647,6 +647,14 @@ def resolve_platform_cores(
     return result
 
 
+MANUFACTURER_PREFIXES = (
+    "microsoft-", "nintendo-", "sony-", "sega-", "snk-", "panasonic-",
+    "nec-", "epoch-", "mattel-", "fairchild-", "hartung-", "tiger-",
+    "magnavox-", "philips-", "bandai-", "casio-", "coleco-",
+    "commodore-", "sharp-", "sinclair-", "atari-",
+)
+
+
 def _norm_system_id(sid: str) -> str:
     """Normalize system ID for cross-platform matching.
 
@@ -655,11 +663,7 @@ def _norm_system_id(sid: str) -> str:
     (e.g., "microsoft-xbox", "nintendo-wii-u").
     """
     s = sid.lower().replace("_", "-")
-    for prefix in ("microsoft-", "nintendo-", "sony-", "sega-",
-                    "snk-", "panasonic-", "nec-", "epoch-", "mattel-",
-                    "fairchild-", "hartung-", "tiger-", "magnavox-",
-                    "philips-", "bandai-", "casio-", "coleco-",
-                    "commodore-", "sharp-", "sinclair-"):
+    for prefix in MANUFACTURER_PREFIXES:
         if s.startswith(prefix):
             s = s[len(prefix):]
             break

@@ -25,6 +25,7 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (
+    MANUFACTURER_PREFIXES,
     _build_validation_index, build_zip_contents_index, check_file_validation,
     check_inside_zip, compute_hashes, fetch_large_file, filter_files_by_mode,
     group_identical_platforms, list_emulator_profiles, list_platform_system_ids,
@@ -256,11 +257,7 @@ def generate_pack(
         display_parts = []
         for sid in system_filter:
             s = sid.lower().replace("_", "-")
-            for prefix in ("microsoft-", "nintendo-", "sony-", "sega-", "snk-",
-                           "panasonic-", "nec-", "epoch-", "mattel-", "fairchild-",
-                           "hartung-", "tiger-", "magnavox-", "philips-", "bandai-",
-                           "casio-", "coleco-", "commodore-", "sharp-", "sinclair-",
-                           "atari-"):
+            for prefix in MANUFACTURER_PREFIXES:
                 if s.startswith(prefix):
                     s = s[len(prefix):]
                     break
