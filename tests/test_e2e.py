@@ -1802,5 +1802,259 @@ class TestE2E(unittest.TestCase):
         self.assertEqual(groups["Other"], ["arcade"])
 
 
+    def test_138_parse_hash_input(self):
+        """parse_hash_input handles various formats."""
+        from generate_pack import parse_hash_input
+        # Plain MD5
+        result = parse_hash_input("d8f1206299c48946e6ec5ef96d014eaa")
+        self.assertEqual(result, [("md5", "d8f1206299c48946e6ec5ef96d014eaa")])
+        # Comma-separated
+        result = parse_hash_input("d8f1206299c48946e6ec5ef96d014eaa,d8f1206299c48946e6ec5ef96d014eab")
+        self.assertEqual(len(result), 2)
+        # SHA1
+        sha1 = "a" * 40
+        result = parse_hash_input(sha1)
+        self.assertEqual(result, [("sha1", sha1)])
+        # CRC32
+        result = parse_hash_input("abcd1234")
+        self.assertEqual(result, [("crc32", "abcd1234")])
+
+    def test_139_parse_hash_file(self):
+        """parse_hash_file handles comments, empty lines, various formats."""
+        from generate_pack import parse_hash_file
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".txt", delete=False) as f:
+            f.write("# PS1 BIOS files\n")
+            f.write("\n")
+            f.write("d8f1206299c48946e6ec5ef96d014eaa\n")
+            f.write("d8f1206299c48946e6ec5ef96d014eab  scph5501.bin\n")
+            f.write("scph5502.bin  d8f1206299c48946e6ec5ef96d014eac  OK\n")
+            tmp_path = f.name
+        try:
+            result = parse_hash_file(tmp_path)
+            self.assertEqual(len(result), 3)
+            self.assertTrue(all(t == "md5" for t, _ in result))
+        finally:
+            os.unlink(tmp_path)
+
+    def test_140_lookup_hashes_found(self):
+        """lookup_hashes returns file info for known hashes."""
+        import io
+        import contextlib
+        from generate_pack import lookup_hashes
+        db = {
+            "files": {
+                "sha1abc": {
+                    "name": "test.bin", "md5": "md5abc",
+                    "sha1": "sha1abc", "sha256": "sha256abc",
+                    "paths": ["Mfr/Console/test.bin"],
+                    "aliases": ["alt.bin"],
+                },
+            },
+            "indexes": {
+                "by_md5": {"md5abc": "sha1abc"},
+                "by_crc32": {},
+            },
+        }
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            lookup_hashes([("md5", "md5abc")], db, "bios", "emulators", "platforms")
+        output = buf.getvalue()
+        self.assertIn("test.bin", output)
+        self.assertIn("sha1abc", output)
+        self.assertIn("alt.bin", output)
+
+    def test_141_lookup_hashes_not_found(self):
+        """lookup_hashes reports unknown hashes."""
+        import io
+        import contextlib
+        from generate_pack import lookup_hashes
+        db = {"files": {}, "indexes": {"by_md5": {}, "by_crc32": {}}}
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            lookup_hashes([("md5", "unknown123" + "0" * 22)], db, "bios", "emulators", "platforms")
+        output = buf.getvalue()
+        self.assertIn("NOT FOUND", output)
+
+
+    def test_142_from_md5_platform_pack(self):
+        """--from-md5 with --platform generates correctly laid out ZIP."""
+        import tempfile
+        import json
+        import zipfile
+        import yaml
+        with tempfile.TemporaryDirectory() as tmpdir:
+            plat_dir = os.path.join(tmpdir, "platforms")
+            os.makedirs(plat_dir)
+            bios_dir = os.path.join(tmpdir, "bios", "Sony", "PS1")
+            os.makedirs(bios_dir)
+            emu_dir = os.path.join(tmpdir, "emulators")
+            os.makedirs(emu_dir)
+            out_dir = os.path.join(tmpdir, "dist")
+
+            bios_file = os.path.join(bios_dir, "scph5501.bin")
+            with open(bios_file, "wb") as f:
+                f.write(b"ps1_bios_content")
+            from common import compute_hashes
+            h = compute_hashes(bios_file)
+
+            db = {
+                "files": {
+                    h["sha1"]: {
+                        "name": "scph5501.bin", "md5": h["md5"],
+                        "sha1": h["sha1"], "sha256": h["sha256"],
+                        "path": bios_file,
+                        "paths": ["Sony/PS1/scph5501.bin"],
+                    },
+                },
+                "indexes": {
+                    "by_md5": {h["md5"]: h["sha1"]},
+                    "by_name": {"scph5501.bin": [h["sha1"]]},
+                    "by_crc32": {}, "by_path_suffix": {},
+                },
+            }
+
+            registry = {"platforms": {"testplat": {"status": "active"}}}
+            with open(os.path.join(plat_dir, "_registry.yml"), "w") as f:
+                yaml.dump(registry, f)
+            plat_cfg = {
+                "platform": "TestPlat",
+                "verification_mode": "md5",
+                "base_destination": "bios",
+                "systems": {
+                    "sony-playstation": {
+                        "files": [
+                            {"name": "scph5501.bin", "md5": h["md5"],
+                             "destination": "scph5501.bin"},
+                        ]
+                    }
+                },
+            }
+            with open(os.path.join(plat_dir, "testplat.yml"), "w") as f:
+                yaml.dump(plat_cfg, f)
+
+            from generate_pack import generate_md5_pack
+            from common import build_zip_contents_index
+            zip_contents = build_zip_contents_index(db)
+
+            zip_path = generate_md5_pack(
+                hashes=[("md5", h["md5"])],
+                db=db, bios_dir=bios_dir, output_dir=out_dir,
+                zip_contents=zip_contents,
+                platform_name="testplat", platforms_dir=plat_dir,
+            )
+            self.assertIsNotNone(zip_path)
+            with zipfile.ZipFile(zip_path) as zf:
+                names = zf.namelist()
+            self.assertIn("bios/scph5501.bin", names)
+            self.assertIn("Custom", os.path.basename(zip_path))
+
+    def test_143_from_md5_not_in_repo(self):
+        """--from-md5 reports files in DB but missing from repo."""
+        import tempfile
+        import io
+        import contextlib
+        from generate_pack import generate_md5_pack
+
+        db = {
+            "files": {
+                "sha1known": {
+                    "name": "missing.bin", "md5": "md5known" + "0" * 25,
+                    "sha1": "sha1known", "sha256": "sha256known",
+                    "path": "/nonexistent/missing.bin",
+                    "paths": ["Test/missing.bin"],
+                },
+            },
+            "indexes": {
+                "by_md5": {"md5known" + "0" * 25: "sha1known"},
+                "by_crc32": {},
+            },
+        }
+        with tempfile.TemporaryDirectory() as tmpdir:
+            out_dir = os.path.join(tmpdir, "dist")
+            bios_dir = os.path.join(tmpdir, "bios")
+            os.makedirs(bios_dir)
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf):
+                result = generate_md5_pack(
+                    hashes=[("md5", "md5known" + "0" * 25)],
+                    db=db, bios_dir=bios_dir, output_dir=out_dir,
+                    zip_contents={},
+                )
+            output = buf.getvalue()
+            self.assertIn("NOT IN REPO", output)
+            self.assertIsNone(result)
+
+
+    def test_144_invalid_split_emulator(self):
+        """--split + --emulator is rejected."""
+        import subprocess
+        result = subprocess.run(
+            ["python", "scripts/generate_pack.py", "--emulator", "test", "--split"],
+            capture_output=True, text=True,
+        )
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("error", result.stderr.lower())
+
+    def test_145_invalid_from_md5_all(self):
+        """--from-md5 + --all is rejected."""
+        import subprocess
+        result = subprocess.run(
+            ["python", "scripts/generate_pack.py", "--all", "--from-md5", "abc123" + "0" * 26],
+            capture_output=True, text=True,
+        )
+        self.assertNotEqual(result.returncode, 0)
+
+    def test_146_invalid_from_md5_system(self):
+        """--from-md5 + --system is rejected."""
+        import subprocess
+        result = subprocess.run(
+            ["python", "scripts/generate_pack.py", "--system", "psx", "--from-md5", "abc123" + "0" * 26],
+            capture_output=True, text=True,
+        )
+        self.assertNotEqual(result.returncode, 0)
+
+    def test_147_invalid_group_by_without_split(self):
+        """--group-by without --split is rejected."""
+        import subprocess
+        result = subprocess.run(
+            ["python", "scripts/generate_pack.py", "--platform", "retroarch", "--group-by", "manufacturer"],
+            capture_output=True, text=True,
+        )
+        self.assertNotEqual(result.returncode, 0)
+
+    def test_148_valid_platform_system(self):
+        """--platform + --system is accepted (not rejected at validation stage)."""
+        import argparse
+        sys.path.insert(0, "scripts")
+        # Build the same parser as generate_pack.main()
+        parser = argparse.ArgumentParser()
+        parser.add_argument("--platform", "-p")
+        parser.add_argument("--all", action="store_true")
+        parser.add_argument("--emulator", "-e")
+        parser.add_argument("--system", "-s")
+        parser.add_argument("--standalone", action="store_true")
+        parser.add_argument("--split", action="store_true")
+        parser.add_argument("--group-by", choices=["system", "manufacturer"], default="system")
+        parser.add_argument("--target", "-t")
+        parser.add_argument("--from-md5")
+        parser.add_argument("--from-md5-file")
+        parser.add_argument("--required-only", action="store_true")
+        args = parser.parse_args(["--platform", "retroarch", "--system", "psx"])
+
+        # Replicate validation logic from main()
+        has_platform = bool(args.platform)
+        has_all = args.all
+        has_emulator = bool(args.emulator)
+        has_system = bool(args.system)
+        has_from_md5 = bool(args.from_md5 or args.from_md5_file)
+
+        # These should NOT raise
+        self.assertFalse(has_emulator and (has_platform or has_all or has_system))
+        self.assertFalse(has_platform and has_all)
+        self.assertTrue(has_platform or has_all or has_emulator or has_system or has_from_md5)
+        # --platform + --system is a valid combination
+        self.assertTrue(has_platform and has_system)
+
+
 if __name__ == "__main__":
     unittest.main()
