@@ -1353,5 +1353,46 @@ class TestE2E(unittest.TestCase):
         self.assertNotIn("bios_b.bin", names)
 
 
+    # ---------------------------------------------------------------
+    # Validation index per-emulator ground truth (Task: ground truth)
+    # ---------------------------------------------------------------
+
+    def test_111_validation_index_per_emulator(self):
+        """Validation index includes per-emulator detail for ground truth."""
+        profiles = load_emulator_profiles(self.emulators_dir)
+        index = _build_validation_index(profiles)
+        entry = index["present_req.bin"]
+        self.assertIn("per_emulator", entry)
+        pe = entry["per_emulator"]
+        self.assertIn("test_validation", pe)
+        detail = pe["test_validation"]
+        self.assertIn("size", detail["checks"])
+        self.assertEqual(detail["expected"]["size"], 16)
+
+    def test_112_build_ground_truth(self):
+        """build_ground_truth returns per-emulator detail for a filename."""
+        from common import build_ground_truth
+        profiles = load_emulator_profiles(self.emulators_dir)
+        index = _build_validation_index(profiles)
+        gt = build_ground_truth("present_req.bin", index)
+        self.assertIsInstance(gt, list)
+        self.assertTrue(len(gt) >= 1)
+        emu_names = {g["emulator"] for g in gt}
+        self.assertIn("test_validation", emu_names)
+        for g in gt:
+            if g["emulator"] == "test_validation":
+                self.assertIn("size", g["checks"])
+                self.assertIn("source_ref", g)
+                self.assertIn("expected", g)
+
+    def test_113_build_ground_truth_empty(self):
+        """build_ground_truth returns [] for unknown filename."""
+        from common import build_ground_truth
+        profiles = load_emulator_profiles(self.emulators_dir)
+        index = _build_validation_index(profiles)
+        gt = build_ground_truth("nonexistent.bin", index)
+        self.assertEqual(gt, [])
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -759,16 +759,18 @@ def _build_validation_index(profiles: dict) -> dict[str, dict]:
 
     Returns {filename: {"checks": [str], "size": int|None, "min_size": int|None,
     "max_size": int|None, "crc32": str|None, "md5": str|None, "sha1": str|None,
-    "adler32": str|None, "crypto_only": [str]}}.
+    "adler32": str|None, "crypto_only": [str], "per_emulator": {emu: detail}}}.
 
     ``crypto_only`` lists validation types we cannot reproduce (signature, crypto)
     so callers can report them as non-verifiable rather than silently skipping.
+
+    ``per_emulator`` preserves each core's individual checks, source_ref, and
+    expected values before merging, for ground truth reporting.
 
     When multiple emulators reference the same file, merges checks (union).
     Raises ValueError if two profiles declare conflicting values.
     """
     index: dict[str, dict] = {}
-    sources: dict[str, dict[str, str]] = {}
     for emu_name, profile in profiles.items():
         if profile.get("type") in ("launcher", "alias"):
             continue
@@ -785,9 +787,8 @@ def _build_validation_index(profiles: dict) -> dict[str, dict]:
                     "min_size": None, "max_size": None,
                     "crc32": set(), "md5": set(), "sha1": set(), "sha256": set(),
                     "adler32": set(), "crypto_only": set(),
-                    "emulators": set(),
+                    "emulators": set(), "per_emulator": {},
                 }
-                sources[fname] = {}
             index[fname]["emulators"].add(emu_name)
             index[fname]["checks"].update(checks)
             # Track non-reproducible crypto checks
@@ -830,6 +831,34 @@ def _build_validation_index(profiles: dict) -> dict[str, dict]:
                 if norm.startswith("0x"):
                     norm = norm[2:]
                 index[fname]["adler32"].add(norm)
+            # Per-emulator ground truth detail
+            expected: dict = {}
+            if "size" in checks:
+                for key in ("size", "min_size", "max_size"):
+                    if f.get(key) is not None:
+                        expected[key] = f[key]
+            for hash_type in ("crc32", "md5", "sha1", "sha256"):
+                if hash_type in checks and f.get(hash_type):
+                    expected[hash_type] = f[hash_type]
+            adler_val_pe = f.get("known_hash_adler32") or f.get("adler32")
+            if adler_val_pe:
+                expected["adler32"] = adler_val_pe
+            pe_entry = {
+                "checks": sorted(checks),
+                "source_ref": f.get("source_ref"),
+                "expected": expected,
+            }
+            pe = index[fname]["per_emulator"]
+            if emu_name in pe:
+                # Merge checks from multiple file entries for same emulator
+                existing = pe[emu_name]
+                merged_checks = sorted(set(existing["checks"]) | set(pe_entry["checks"]))
+                existing["checks"] = merged_checks
+                existing["expected"].update(pe_entry["expected"])
+                if pe_entry["source_ref"] and not existing["source_ref"]:
+                    existing["source_ref"] = pe_entry["source_ref"]
+            else:
+                pe[emu_name] = pe_entry
     # Convert sets to sorted tuples/lists for determinism
     for v in index.values():
         v["checks"] = sorted(v["checks"])
@@ -837,6 +866,27 @@ def _build_validation_index(profiles: dict) -> dict[str, dict]:
         v["emulators"] = sorted(v["emulators"])
         # Keep hash sets as frozensets for O(1) lookup in check_file_validation
     return index
+
+
+def build_ground_truth(filename: str, validation_index: dict[str, dict]) -> list[dict]:
+    """Format per-emulator ground truth for a file from the validation index.
+
+    Returns a sorted list of {emulator, checks, source_ref, expected} dicts.
+    Returns [] if the file has no emulator validation data.
+    """
+    entry = validation_index.get(filename)
+    if not entry or not entry.get("per_emulator"):
+        return []
+    result = []
+    for emu_name in sorted(entry["per_emulator"]):
+        detail = entry["per_emulator"][emu_name]
+        result.append({
+            "emulator": emu_name,
+            "checks": detail["checks"],
+            "source_ref": detail.get("source_ref"),
+            "expected": detail.get("expected", {}),
+        })
+    return result
 
 
 def check_file_validation(
