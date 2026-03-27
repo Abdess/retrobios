@@ -1433,6 +1433,23 @@ class TestE2E(unittest.TestCase):
         self.assertEqual(gt["platform_only"], gt["total"] - gt["with_validation"])
         self.assertGreaterEqual(gt["with_validation"], 1)
 
+    def test_118_emulator_result_has_ground_truth(self):
+        """verify_emulator attaches ground_truth to each detail entry."""
+        result = verify_emulator(["test_validation"], self.emulators_dir, self.db)
+        for d in result["details"]:
+            self.assertIn("ground_truth", d)
+        # present_req.bin should have ground truth from test_validation
+        for d in result["details"]:
+            if d["name"] == "present_req.bin":
+                self.assertTrue(len(d["ground_truth"]) >= 1)
+                break
+
+    def test_119_emulator_result_ground_truth_coverage(self):
+        """verify_emulator includes ground truth coverage counts."""
+        result = verify_emulator(["test_validation"], self.emulators_dir, self.db)
+        gt = result["ground_truth_coverage"]
+        self.assertEqual(gt["total"], result["total_files"])
+
     def test_115_platform_result_ground_truth_empty_for_unknown(self):
         """Files with no emulator validation get ground_truth=[]."""
         config = load_platform_config("test_existence", self.platforms_dir)

@@ -715,6 +715,7 @@ def verify_emulator(
     details = []
     file_status: dict[str, str] = {}
     file_severity: dict[str, str] = {}
+    dest_to_name: dict[str, str] = {}
     data_dir_notices: list[str] = []
 
     for emu_name, profile in selected:
@@ -736,6 +737,7 @@ def verify_emulator(
                 "name": f"({emu_name})", "status": Status.OK,
                 "required": False, "system": "",
                 "note": f"No files needed for {profile.get('emulator', emu_name)}",
+                "ground_truth": [],
             })
             continue
 
@@ -759,8 +761,10 @@ def verify_emulator(
                               "required": required}
                 result["system"] = file_entry.get("system", "")
                 result["hle_fallback"] = False
+                result["ground_truth"] = build_ground_truth(archive, validation_index)
                 details.append(result)
                 dest = archive
+                dest_to_name[dest] = archive
                 cur = result["status"]
                 prev = file_status.get(dest)
                 if prev is None or _STATUS_ORDER.get(cur, 0) > _STATUS_ORDER.get(prev, 0):
@@ -798,10 +802,12 @@ def verify_emulator(
 
             result["system"] = file_entry.get("system", "")
             result["hle_fallback"] = hle
+            result["ground_truth"] = build_ground_truth(name, validation_index)
             details.append(result)
 
             # Aggregate by destination (path if available, else name)
             dest = file_entry.get("path", "") or name
+            dest_to_name[dest] = name
             cur = result["status"]
             prev = file_status.get(dest)
             if prev is None or _STATUS_ORDER.get(cur, 0) > _STATUS_ORDER.get(prev, 0):
@@ -820,14 +826,25 @@ def verify_emulator(
 
     label = _effective_validation_label(details, validation_index)
 
+    gt_filenames = set(validation_index)
+    total = len(file_status)
+    with_validation = sum(
+        1 for dest in file_status if dest_to_name.get(dest, "") in gt_filenames
+    )
+
     return {
         "emulators": [n for n, _ in selected],
         "verification_mode": label,
-        "total_files": len(file_status),
+        "total_files": total,
         "severity_counts": counts,
         "status_counts": status_counts,
         "details": details,
         "data_dir_notices": sorted(set(data_dir_notices)),
+        "ground_truth_coverage": {
+            "with_validation": with_validation,
+            "platform_only": total - with_validation,
+            "total": total,
+        },
     }
 
 
