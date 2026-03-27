@@ -1766,5 +1766,41 @@ class TestE2E(unittest.TestCase):
                     self.assertNotIn("bios_a.bin", names)
 
 
+    def test_136_derive_manufacturer(self):
+        """derive_manufacturer extracts manufacturer correctly."""
+        from common import derive_manufacturer
+        # From system ID prefix
+        self.assertEqual(derive_manufacturer("sony-playstation", {}), "Sony")
+        self.assertEqual(derive_manufacturer("nintendo-snes", {}), "Nintendo")
+        self.assertEqual(derive_manufacturer("sega-saturn", {}), "Sega")
+        self.assertEqual(derive_manufacturer("atari-5200", {}), "Atari")
+        # From explicit manufacturer field
+        self.assertEqual(
+            derive_manufacturer("3do", {"manufacturer": "Panasonic|GoldStar"}),
+            "Panasonic",
+        )
+        # Various = skip to prefix check, then Other
+        self.assertEqual(derive_manufacturer("arcade", {"manufacturer": "Various"}), "Other")
+        # Fallback
+        self.assertEqual(derive_manufacturer("dos", {}), "Other")
+
+    def test_137_group_systems_by_manufacturer(self):
+        """_group_systems_by_manufacturer groups correctly."""
+        from generate_pack import _group_systems_by_manufacturer
+        systems = {
+            "sony-playstation": {"files": [{"name": "a.bin"}]},
+            "sony-psp": {"files": [{"name": "b.bin"}]},
+            "nintendo-snes": {"files": [{"name": "c.bin"}]},
+            "arcade": {"manufacturer": "Various", "files": [{"name": "d.bin"}]},
+        }
+        groups = _group_systems_by_manufacturer(systems, {}, "")
+        self.assertIn("Sony", groups)
+        self.assertEqual(sorted(groups["Sony"]), ["sony-playstation", "sony-psp"])
+        self.assertIn("Nintendo", groups)
+        self.assertEqual(groups["Nintendo"], ["nintendo-snes"])
+        self.assertIn("Other", groups)
+        self.assertEqual(groups["Other"], ["arcade"])
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -902,6 +902,20 @@ def _system_display_name(system_id: str) -> str:
     return "_".join(p.title() for p in parts if p)
 
 
+def _group_systems_by_manufacturer(
+    systems: dict[str, dict],
+    db: dict,
+    bios_dir: str,
+) -> dict[str, list[str]]:
+    """Group system IDs by manufacturer for --split --group-by manufacturer."""
+    from common import derive_manufacturer
+    groups: dict[str, list[str]] = {}
+    for sid, sys_data in systems.items():
+        mfr = derive_manufacturer(sid, sys_data)
+        groups.setdefault(mfr, []).append(sid)
+    return groups
+
+
 def generate_split_packs(
     platform_name: str,
     platforms_dir: str,

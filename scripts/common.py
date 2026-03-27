@@ -655,6 +655,21 @@ MANUFACTURER_PREFIXES = (
 )
 
 
+def derive_manufacturer(system_id: str, system_data: dict) -> str:
+    """Derive manufacturer name for a system.
+
+    Priority: explicit manufacturer field > system ID prefix > 'Other'.
+    """
+    mfr = system_data.get("manufacturer", "")
+    if mfr and mfr not in ("Various", "Other"):
+        return mfr.split("|")[0].strip()
+    s = system_id.lower().replace("_", "-")
+    for prefix in MANUFACTURER_PREFIXES:
+        if s.startswith(prefix):
+            return prefix.rstrip("-").title()
+    return "Other"
+
+
 def _norm_system_id(sid: str) -> str:
     """Normalize system ID for cross-platform matching.
 
