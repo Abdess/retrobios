@@ -6,7 +6,7 @@ upstream: "https://mednafen.github.io/"
 profiled_date: "2026-03-24"
 core_version: "v1.23.0"
 display_name: "NEC - PC Engine SuperGrafx (Beetle SuperGrafx)"
-cores: [mednafen_supergrafx]
+cores: [mednafen_supergrafx, beetle_supergrafx]
 systems: [nec-pc-engine]
 verification: existence
 notes: >

@@ -9,6 +9,7 @@ core_version: "0.174"
 
 cores:
   - mame2016
+  - mess2016
 
 display_name: "Arcade (MAME 2016)"
 mame_version: "0.174"

@@ -8,6 +8,7 @@ core_version: "v4.2.0"
 display_name: "Amstrad - CPC/GX4000 (Caprice32)"
 cores:
   - cap32
+  - caprice32
 systems:
   - amstrad-cpc
 
