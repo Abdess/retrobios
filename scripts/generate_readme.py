@@ -213,6 +213,7 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
         "python scripts/verify.py --all",
         "python scripts/verify.py --platform batocera",
         "python scripts/verify.py --emulator flycast",
+        "python scripts/verify.py --platform retroarch --verbose  # emulator ground truth",
         "```",
         "",
         f"Only dependency: Python 3 + `pyyaml`.",

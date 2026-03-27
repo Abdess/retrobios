@@ -2,7 +2,7 @@
 
 Complete BIOS and firmware packs for Batocera, EmuDeck, Lakka, Recalbox, RetroArch, RetroBat, RetroDECK, RetroPie, and RomM.
 
-**6,748** verified files across **352** systems, ready to extract into your emulator's BIOS directory.
+**6,756** verified files across **352** systems, ready to extract into your emulator's BIOS directory.
 
 ## Download BIOS packs
 
@@ -28,8 +28,8 @@ Each file is checked against the emulator's source code to match what the code a
 - **9 platforms** supported with platform-specific verification
 - **328 emulators** profiled from source (RetroArch cores + standalone)
 - **352 systems** covered (NES, SNES, PlayStation, Saturn, Dreamcast, ...)
-- **6,748 files** verified with MD5, SHA1, CRC32 checksums
-- **5251 MB** total collection size
+- **6,756 files** verified with MD5, SHA1, CRC32 checksums
+- **5331 MB** total collection size
 
 ## Supported systems
 
@@ -41,7 +41,7 @@ Full list with per-file details: **[https://abdess.github.io/retrobios/](https:/
 
 | Platform | Coverage | Verified | Untested | Missing |
 |----------|----------|----------|----------|---------|
-| Batocera | 359/359 (100.0%) | 358 | 1 | 0 |
+| Batocera | 359/359 (100.0%) | 359 | 0 | 0 |
 | EmuDeck | 161/161 (100.0%) | 161 | 0 | 0 |
 | Lakka | 448/448 (100.0%) | 448 | 0 | 0 |
 | Recalbox | 346/346 (100.0%) | 346 | 0 | 0 |
@@ -49,7 +49,7 @@ Full list with per-file details: **[https://abdess.github.io/retrobios/](https:/
 | RetroBat | 331/331 (100.0%) | 331 | 0 | 0 |
 | RetroDECK | 2007/2007 (100.0%) | 2007 | 0 | 0 |
 | RetroPie | 448/448 (100.0%) | 448 | 0 | 0 |
-| RomM | 374/374 (100.0%) | 359 | 15 | 0 |
+| RomM | 374/374 (100.0%) | 374 | 0 | 0 |
 
 ## Build your own pack
 
@@ -72,6 +72,7 @@ python scripts/generate_pack.py --list-systems
 python scripts/verify.py --all
 python scripts/verify.py --platform batocera
 python scripts/verify.py --emulator flycast
+python scripts/verify.py --platform retroarch --verbose  # emulator ground truth
 ```
 
 Only dependency: Python 3 + `pyyaml`.
@@ -110,4 +111,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 This repository provides BIOS files for personal backup and archival purposes.
 
-*Auto-generated on 2026-03-26T12:17:35Z*
+*Auto-generated on 2026-03-27T22:52:26Z*
