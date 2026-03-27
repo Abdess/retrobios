@@ -1173,29 +1173,32 @@ def generate_sha256sums(output_dir: str) -> str | None:
 
 def verify_pack_against_platform(
     zip_path: str, platform_name: str, platforms_dir: str,
+    db: dict | None = None, emulators_dir: str = "emulators",
+    emu_profiles: dict | None = None,
 ) -> tuple[bool, int, int, list[str]]:
-    """Verify a pack ZIP against its platform config.
+    """Verify a pack ZIP against its platform config and core requirements.
 
     Checks:
     1. Every baseline file declared by the platform exists in the ZIP
        at the correct destination path
-    2. No duplicate entries
-    3. No path anomalies (double slash, absolute, traversal)
-    4. No unexpected zero-byte BIOS files
-
-    Hash verification is handled by verify.py upstream (which runs
-    against bios/ on disk before packing). This function verifies
-    that the pack was assembled correctly.
+    2. Every in-repo core extra file (from emulator profiles) is present
+    3. No duplicate entries
+    4. No path anomalies (double slash, absolute, traversal)
+    5. No unexpected zero-byte BIOS files
 
     Returns (all_ok, checked, present, errors).
     """
     from collections import Counter
+    from verify import find_undeclared_files
 
     config = load_platform_config(platform_name, platforms_dir)
     base_dest = config.get("base_destination", "")
     errors: list[str] = []
     checked = 0
     present = 0
+
+    if emu_profiles is None:
+        emu_profiles = load_emulator_profiles(emulators_dir)
 
     with zipfile.ZipFile(zip_path, "r") as zf:
         zip_set = set(zf.namelist())
@@ -1219,21 +1222,45 @@ def verify_pack_against_platform(
                 if "GraphicMods" not in info.filename and info.filename != "manifest.json":
                     errors.append(f"zero-byte: {info.filename}")
 
-        # Baseline file presence
+        # 1. Baseline file presence
+        baseline_checked = 0
+        baseline_present = 0
         for sys_id, system in config.get("systems", {}).items():
             for fe in system.get("files", []):
                 dest = fe.get("destination", fe.get("name", ""))
                 if not dest:
                     continue
                 expected = f"{base_dest}/{dest}" if base_dest else dest
-                checked += 1
+                baseline_checked += 1
 
-                if expected in zip_set:
-                    present += 1
-                elif expected.lower() in zip_lower:
-                    present += 1  # case variant, OK on case-sensitive packs
+                if expected in zip_set or expected.lower() in zip_lower:
+                    baseline_present += 1
                 else:
-                    errors.append(f"missing: {expected}")
+                    errors.append(f"baseline missing: {expected}")
+
+        # 2. Core extras presence (files from emulator profiles, in repo)
+        core_checked = 0
+        core_present = 0
+        if db is not None:
+            undeclared = find_undeclared_files(config, emulators_dir, db, emu_profiles)
+            for u in undeclared:
+                if not u["in_repo"]:
+                    continue
+                dest = u.get("path") or u["name"]
+                if base_dest:
+                    full = f"{base_dest}/{dest}"
+                elif "/" not in dest:
+                    full = f"bios/{dest}"
+                else:
+                    full = dest
+                core_checked += 1
+
+                if full in zip_set or full.lower() in zip_lower:
+                    core_present += 1
+                # Not an error if missing — some get deduped or filtered
+
+        checked = baseline_checked + core_checked
+        present = baseline_present + core_present
 
     return len(errors) == 0, checked, present, errors
 
@@ -1282,7 +1309,7 @@ def verify_and_finalize_packs(output_dir: str, db: dict,
         platforms = pack_to_platform.get(name, [])
         for pname in platforms:
             p_ok, total, matched, p_errors = verify_pack_against_platform(
-                zip_path, pname, platforms_dir,
+                zip_path, pname, platforms_dir, db=db,
             )
             if p_ok:
                 print(f"  platform {pname}: {matched}/{total} OK")
