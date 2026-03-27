@@ -672,26 +672,56 @@ def filter_systems_by_target(
             upstream_to_profile[str(alias)] = name
     expanded_target = {upstream_to_profile.get(c, c) for c in target_cores}
 
-    # Build system -> profile keys mapping (only platform-relevant cores)
-    system_to_cores: dict[str, set[str]] = {}
+    # Build normalized system ID index for fuzzy matching.
+    # Platforms and profiles may use different IDs for the same system
+    # (e.g., "xbox" vs "microsoft-xbox-360"). Normalize by stripping
+    # manufacturer prefixes and separators to group them.
+    def _norm_sid(sid: str) -> str:
+        s = sid.lower().replace("_", "-")
+        for prefix in ("microsoft-", "nintendo-", "sony-", "sega-",
+                        "snk-", "panasonic-", "nec-", "epoch-", "mattel-",
+                        "fairchild-", "hartung-", "tiger-", "magnavox-",
+                        "philips-", "bandai-", "casio-", "coleco-",
+                        "commodore-", "sharp-", "sinclair-"):
+            if s.startswith(prefix):
+                s = s[len(prefix):]
+                break
+        return s.replace("-", "")
+
+    # Build normalized system -> cores from ALL profiles
+    norm_system_cores: dict[str, set[str]] = {}
     for name, p in profiles.items():
         if p.get("type") == "alias":
             continue
-        if platform_cores is not None and name not in platform_cores:
-            continue
         for sid in p.get("systems", []):
-            system_to_cores.setdefault(sid, set()).add(name)
+            norm_key = _norm_sid(sid)
+            norm_system_cores.setdefault(norm_key, set()).add(name)
+
+    # Platform-scoped mapping (for distinguishing "no info" from "known but off-target")
+    norm_plat_system_cores: dict[str, set[str]] = {}
+    if platform_cores is not None:
+        for name in platform_cores:
+            p = profiles.get(name, {})
+            for sid in p.get("systems", []):
+                norm_key = _norm_sid(sid)
+                norm_plat_system_cores.setdefault(norm_key, set()).add(name)
 
     filtered = {}
     for sys_id, sys_data in systems.items():
-        cores_for_system = system_to_cores.get(sys_id, set())
-        if not cores_for_system:
-            # No platform-relevant core maps to this system — keep it
+        norm_key = _norm_sid(sys_id)
+        all_cores = norm_system_cores.get(norm_key, set())
+        plat_cores_here = norm_plat_system_cores.get(norm_key, set())
+
+        if not all_cores and not plat_cores_here:
+            # No profile maps to this system — keep it
             filtered[sys_id] = sys_data
-        elif cores_for_system & expanded_target:
-            # At least one core for this system is on the target
+        elif all_cores & expanded_target:
+            # At least one core is on the target
             filtered[sys_id] = sys_data
-        # else: all platform cores for this system are off-target — exclude
+        elif not plat_cores_here:
+            # Platform resolution didn't find cores for this system — keep it
+            filtered[sys_id] = sys_data
+        # else: known cores exist but none are on the target — exclude
     return filtered
 
 
