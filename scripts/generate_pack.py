@@ -1262,7 +1262,8 @@ def verify_pack_against_platform(
         checked = baseline_checked + core_checked
         present = baseline_present + core_present
 
-    return len(errors) == 0, checked, present, errors
+    return (len(errors) == 0, checked, present, errors,
+            baseline_checked, baseline_present, core_checked, core_present)
 
 
 def verify_and_finalize_packs(output_dir: str, db: dict,
@@ -1308,13 +1309,15 @@ def verify_and_finalize_packs(output_dir: str, db: dict,
         # Stage 2: platform conformance (extract + verify)
         platforms = pack_to_platform.get(name, [])
         for pname in platforms:
-            p_ok, total, matched, p_errors = verify_pack_against_platform(
-                zip_path, pname, platforms_dir, db=db,
-            )
-            if p_ok:
-                print(f"  platform {pname}: {matched}/{total} OK")
-            else:
-                print(f"  platform {pname}: {matched}/{total} FAILED")
+            (p_ok, total, matched, p_errors,
+             bl_checked, bl_present, core_checked, core_present) = \
+                verify_pack_against_platform(
+                    zip_path, pname, platforms_dir, db=db,
+                )
+            status = "OK" if p_ok else "FAILED"
+            print(f"  platform {pname}: {bl_present}/{bl_checked} baseline, "
+                  f"{core_present}/{core_checked} cores, {status}")
+            if not p_ok:
                 for err in p_errors:
                     print(f"    {err}")
                 all_ok = False
