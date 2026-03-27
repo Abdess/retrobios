@@ -1681,5 +1681,90 @@ class TestE2E(unittest.TestCase):
         self.assertIn("2 files", output)
 
 
+    def test_135_split_by_system(self):
+        """--split generates one ZIP per system in a subdirectory."""
+        import tempfile
+        with tempfile.TemporaryDirectory() as tmpdir:
+            plat_dir = os.path.join(tmpdir, "platforms")
+            os.makedirs(plat_dir)
+            bios_dir = os.path.join(tmpdir, "bios", "Test")
+            os.makedirs(os.path.join(bios_dir, "SysA"))
+            os.makedirs(os.path.join(bios_dir, "SysB"))
+            emu_dir = os.path.join(tmpdir, "emulators")
+            os.makedirs(emu_dir)
+            out_dir = os.path.join(tmpdir, "dist")
+
+            file_a = os.path.join(bios_dir, "SysA", "bios_a.bin")
+            file_b = os.path.join(bios_dir, "SysB", "bios_b.bin")
+            with open(file_a, "wb") as f:
+                f.write(b"system_a")
+            with open(file_b, "wb") as f:
+                f.write(b"system_b")
+
+            from common import compute_hashes
+            ha = compute_hashes(file_a)
+            hb = compute_hashes(file_b)
+
+            db = {
+                "files": {
+                    ha["sha1"]: {"name": "bios_a.bin", "md5": ha["md5"],
+                                 "sha1": ha["sha1"], "sha256": ha["sha256"],
+                                 "path": file_a,
+                                 "paths": [file_a]},
+                    hb["sha1"]: {"name": "bios_b.bin", "md5": hb["md5"],
+                                 "sha1": hb["sha1"], "sha256": hb["sha256"],
+                                 "path": file_b,
+                                 "paths": [file_b]},
+                },
+                "indexes": {
+                    "by_md5": {ha["md5"]: ha["sha1"], hb["md5"]: hb["sha1"]},
+                    "by_name": {"bios_a.bin": [ha["sha1"]], "bios_b.bin": [hb["sha1"]]},
+                    "by_crc32": {}, "by_path_suffix": {},
+                },
+            }
+
+            registry = {"platforms": {"splitplat": {"status": "active"}}}
+            with open(os.path.join(plat_dir, "_registry.yml"), "w") as f:
+                yaml.dump(registry, f)
+            plat_cfg = {
+                "platform": "SplitTest",
+                "verification_mode": "existence",
+                "systems": {
+                    "test-system-a": {"files": [{"name": "bios_a.bin", "sha1": ha["sha1"]}]},
+                    "test-system-b": {"files": [{"name": "bios_b.bin", "sha1": hb["sha1"]}]},
+                },
+            }
+            with open(os.path.join(plat_dir, "splitplat.yml"), "w") as f:
+                yaml.dump(plat_cfg, f)
+
+            from generate_pack import generate_split_packs
+            from common import build_zip_contents_index, load_emulator_profiles
+            zip_contents = build_zip_contents_index(db)
+            emu_profiles = load_emulator_profiles(emu_dir)
+
+            zip_paths = generate_split_packs(
+                "splitplat", plat_dir, db, os.path.join(tmpdir, "bios"), out_dir,
+                emulators_dir=emu_dir, zip_contents=zip_contents,
+                emu_profiles=emu_profiles, group_by="system",
+            )
+            self.assertEqual(len(zip_paths), 2)
+
+            # Check subdirectory exists
+            split_dir = os.path.join(out_dir, "SplitTest_Split")
+            self.assertTrue(os.path.isdir(split_dir))
+
+            # Verify each ZIP contains only its system's files
+            for zp in zip_paths:
+                with zipfile.ZipFile(zp) as zf:
+                    names = zf.namelist()
+                basename = os.path.basename(zp)
+                if "System_A" in basename:
+                    self.assertIn("bios_a.bin", names)
+                    self.assertNotIn("bios_b.bin", names)
+                elif "System_B" in basename:
+                    self.assertIn("bios_b.bin", names)
+                    self.assertNotIn("bios_a.bin", names)
+
+
 if __name__ == "__main__":
     unittest.main()

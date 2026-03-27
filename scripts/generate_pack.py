@@ -891,6 +891,67 @@ def list_platforms(platforms_dir: str) -> list[str]:
     return list_registered_platforms(platforms_dir, include_archived=True)
 
 
+def _system_display_name(system_id: str) -> str:
+    """Convert system ID to display name for ZIP naming."""
+    s = system_id.lower().replace("_", "-")
+    for prefix in MANUFACTURER_PREFIXES:
+        if s.startswith(prefix):
+            s = s[len(prefix):]
+            break
+    parts = s.split("-")
+    return "_".join(p.title() for p in parts if p)
+
+
+def generate_split_packs(
+    platform_name: str,
+    platforms_dir: str,
+    db: dict,
+    bios_dir: str,
+    output_dir: str,
+    group_by: str = "system",
+    emulators_dir: str = "emulators",
+    zip_contents: dict | None = None,
+    data_registry: dict | None = None,
+    emu_profiles: dict | None = None,
+    target_cores: set[str] | None = None,
+    required_only: bool = False,
+) -> list[str]:
+    """Generate split packs (one ZIP per system or manufacturer)."""
+    config = load_platform_config(platform_name, platforms_dir)
+    platform_display = config.get("platform", platform_name)
+    split_dir = os.path.join(output_dir, f"{platform_display.replace(' ', '_')}_Split")
+    os.makedirs(split_dir, exist_ok=True)
+
+    systems = config.get("systems", {})
+
+    if group_by == "manufacturer":
+        groups = _group_systems_by_manufacturer(systems, db, bios_dir)
+    else:
+        groups = {_system_display_name(sid): [sid] for sid in systems}
+
+    results = []
+    for group_name, group_system_ids in sorted(groups.items()):
+        zip_path = generate_pack(
+            platform_name, platforms_dir, db, bios_dir, split_dir,
+            emulators_dir=emulators_dir, zip_contents=zip_contents,
+            data_registry=data_registry, emu_profiles=emu_profiles,
+            target_cores=target_cores, required_only=required_only,
+            system_filter=group_system_ids,
+        )
+        if zip_path:
+            version = config.get("version", config.get("dat_version", ""))
+            ver_tag = f"_{version.replace(' ', '')}" if version else ""
+            req_tag = "_Required" if required_only else ""
+            new_name = f"{platform_display.replace(' ', '_')}{ver_tag}{req_tag}_{group_name}_BIOS_Pack.zip"
+            new_path = os.path.join(split_dir, new_name)
+            if new_path != zip_path:
+                os.rename(zip_path, new_path)
+                zip_path = new_path
+            results.append(zip_path)
+
+    return results
+
+
 def main():
     parser = argparse.ArgumentParser(description="Generate platform BIOS ZIP packs")
     parser.add_argument("--platform", "-p", help="Platform name (e.g., retroarch)")
@@ -915,6 +976,11 @@ def main():
     parser.add_argument("--list", action="store_true", help="List available platforms")
     parser.add_argument("--required-only", action="store_true",
                         help="Only include required files, skip optional")
+    parser.add_argument("--split", action="store_true",
+                        help="Generate one ZIP per system/manufacturer")
+    parser.add_argument("--group-by", choices=["system", "manufacturer"],
+                        default="system",
+                        help="Grouping for --split (default: system)")
     parser.add_argument("--target", "-t", help="Hardware target (e.g., switch, rpi4)")
     parser.add_argument("--list-targets", action="store_true", help="List available targets for the platform")
     args = parser.parse_args()
@@ -962,6 +1028,12 @@ def main():
         parser.error("Specify --platform, --all, --emulator, or --system")
     if args.standalone and not (has_emulator or (has_system and not has_platform and not has_all)):
         parser.error("--standalone requires --emulator or --system (without --platform)")
+    if args.split and not (has_platform or has_all):
+        parser.error("--split requires --platform or --all")
+    if args.split and has_emulator:
+        parser.error("--split is incompatible with --emulator")
+    if args.group_by != "system" and not args.split:
+        parser.error("--group-by requires --split")
     if args.target and not (has_platform or has_all):
         parser.error("--target requires --platform or --all")
     if args.target and has_emulator:
@@ -1054,15 +1126,25 @@ def main():
 
         try:
             tc = target_cores_cache.get(representative) if args.target else None
-            zip_path = generate_pack(
-                representative, args.platforms_dir, db, args.bios_dir, args.output_dir,
-                include_extras=args.include_extras, emulators_dir=args.emulators_dir,
-                zip_contents=zip_contents, data_registry=data_registry,
-                emu_profiles=emu_profiles, target_cores=tc,
-                required_only=args.required_only,
-                system_filter=system_filter,
-            )
-            if zip_path and variants:
+            if args.split:
+                zip_paths = generate_split_packs(
+                    representative, args.platforms_dir, db, args.bios_dir,
+                    args.output_dir, group_by=args.group_by,
+                    emulators_dir=args.emulators_dir, zip_contents=zip_contents,
+                    data_registry=data_registry, emu_profiles=emu_profiles,
+                    target_cores=tc, required_only=args.required_only,
+                )
+                print(f"  Split into {len(zip_paths)} packs")
+            else:
+                zip_path = generate_pack(
+                    representative, args.platforms_dir, db, args.bios_dir, args.output_dir,
+                    include_extras=args.include_extras, emulators_dir=args.emulators_dir,
+                    zip_contents=zip_contents, data_registry=data_registry,
+                    emu_profiles=emu_profiles, target_cores=tc,
+                    required_only=args.required_only,
+                    system_filter=system_filter,
+                )
+            if not args.split and zip_path and variants:
                 rep_cfg = load_platform_config(representative, args.platforms_dir)
                 ver = rep_cfg.get("version", rep_cfg.get("dat_version", ""))
                 ver_tag = f"_{ver.replace(' ', '')}" if ver else ""
