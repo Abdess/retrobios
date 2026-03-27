@@ -1461,5 +1461,43 @@ class TestE2E(unittest.TestCase):
                 break
 
 
+    def test_120_format_ground_truth_aggregate(self):
+        """Aggregate format: one line with all cores."""
+        from verify import _format_ground_truth_aggregate
+        gt = [
+            {"emulator": "beetle_psx", "checks": ["md5"], "source_ref": "libretro.cpp:252", "expected": {"md5": "abc"}},
+            {"emulator": "pcsx_rearmed", "checks": ["existence"], "source_ref": None, "expected": {}},
+        ]
+        line = _format_ground_truth_aggregate(gt)
+        self.assertIn("beetle_psx", line)
+        self.assertIn("[md5]", line)
+        self.assertIn("pcsx_rearmed", line)
+        self.assertIn("[existence]", line)
+
+    def test_121_format_ground_truth_verbose(self):
+        """Verbose format: one line per core with expected values and source ref."""
+        from verify import _format_ground_truth_verbose
+        gt = [
+            {"emulator": "handy", "checks": ["size", "crc32"],
+             "source_ref": "rom.h:48-49", "expected": {"size": 512, "crc32": "0d973c9d"}},
+        ]
+        lines = _format_ground_truth_verbose(gt)
+        self.assertEqual(len(lines), 1)
+        self.assertIn("handy", lines[0])
+        self.assertIn("size=512", lines[0])
+        self.assertIn("crc32=0d973c9d", lines[0])
+        self.assertIn("[rom.h:48-49]", lines[0])
+
+    def test_122_format_ground_truth_verbose_no_source_ref(self):
+        """Verbose format omits bracket when source_ref is None."""
+        from verify import _format_ground_truth_verbose
+        gt = [
+            {"emulator": "core_a", "checks": ["existence"], "source_ref": None, "expected": {}},
+        ]
+        lines = _format_ground_truth_verbose(gt)
+        self.assertEqual(len(lines), 1)
+        self.assertNotIn("[", lines[0])
+
+
 if __name__ == "__main__":
     unittest.main()

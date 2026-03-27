@@ -536,7 +536,39 @@ def verify_platform(
 # Output
 # ---------------------------------------------------------------------------
 
-def print_platform_result(result: dict, group: list[str]) -> None:
+def _format_ground_truth_aggregate(ground_truth: list[dict]) -> str:
+    """Format ground truth as a single aggregated line.
+
+    Example: beetle_psx [md5], pcsx_rearmed [existence]
+    """
+    parts = []
+    for gt in ground_truth:
+        checks_label = "+".join(gt["checks"]) if gt["checks"] else "existence"
+        parts.append(f"{gt['emulator']} [{checks_label}]")
+    return ", ".join(parts)
+
+
+def _format_ground_truth_verbose(ground_truth: list[dict]) -> list[str]:
+    """Format ground truth as one line per core with expected values and source ref.
+
+    Example: handy validates size=512,crc32=0d973c9d [rom.h:48-49]
+    """
+    lines = []
+    for gt in ground_truth:
+        checks_label = "+".join(gt["checks"]) if gt["checks"] else "existence"
+        expected = gt.get("expected", {})
+        if expected:
+            vals = ",".join(f"{k}={v}" for k, v in sorted(expected.items()))
+            part = f"{gt['emulator']} validates {vals}"
+        else:
+            part = f"{gt['emulator']} validates {checks_label}"
+        if gt.get("source_ref"):
+            part += f" [{gt['source_ref']}]"
+        lines.append(part)
+    return lines
+
+
+def print_platform_result(result: dict, group: list[str], verbose: bool = False) -> None:
     mode = result["verification_mode"]
     total = result["total_files"]
     c = result["severity_counts"]
@@ -579,6 +611,13 @@ def print_platform_result(result: dict, group: list[str]) -> None:
             hle = ", HLE available" if d.get("hle_fallback") else ""
             reason = d.get("reason", "")
             print(f"  UNTESTED ({req}{hle}): {key} — {reason}")
+            gt = d.get("ground_truth", [])
+            if gt:
+                if verbose:
+                    for line in _format_ground_truth_verbose(gt):
+                        print(f"    {line}")
+                else:
+                    print(f"    {_format_ground_truth_aggregate(gt)}")
     for d in result["details"]:
         if d["status"] == Status.MISSING:
             key = f"{d['system']}/{d['name']}"
@@ -588,6 +627,13 @@ def print_platform_result(result: dict, group: list[str]) -> None:
             req = "required" if d.get("required", True) else "optional"
             hle = ", HLE available" if d.get("hle_fallback") else ""
             print(f"  MISSING ({req}{hle}): {key}")
+            gt = d.get("ground_truth", [])
+            if gt:
+                if verbose:
+                    for line in _format_ground_truth_verbose(gt):
+                        print(f"    {line}")
+                else:
+                    print(f"    {_format_ground_truth_aggregate(gt)}")
     for d in result["details"]:
         disc = d.get("discrepancy")
         if disc:
@@ -596,6 +642,27 @@ def print_platform_result(result: dict, group: list[str]) -> None:
                 continue
             seen_details.add(key)
             print(f"  DISCREPANCY: {key} — {disc}")
+            gt = d.get("ground_truth", [])
+            if gt:
+                if verbose:
+                    for line in _format_ground_truth_verbose(gt):
+                        print(f"    {line}")
+                else:
+                    print(f"    {_format_ground_truth_aggregate(gt)}")
+
+    if verbose:
+        for d in result["details"]:
+            if d["status"] == Status.OK:
+                key = f"{d['system']}/{d['name']}"
+                if key in seen_details:
+                    continue
+                seen_details.add(key)
+                gt = d.get("ground_truth", [])
+                if gt:
+                    req = "required" if d.get("required", True) else "optional"
+                    print(f"  OK ({req}): {key}")
+                    for line in _format_ground_truth_verbose(gt):
+                        print(f"    {line}")
 
     # Cross-reference: undeclared files used by cores
     undeclared = result.get("undeclared_files", [])
@@ -621,9 +688,39 @@ def print_platform_result(result: dict, group: list[str]) -> None:
         if req_not_in_repo:
             for u in req_not_in_repo:
                 print(f"    MISSING (required): {u['emulator']} needs {u['name']}")
+                checks = u.get("checks", [])
+                if checks:
+                    if verbose:
+                        expected = u.get("expected", {})
+                        if expected:
+                            vals = ",".join(f"{k}={v}" for k, v in sorted(expected.items()))
+                            ref_part = f" [{u['source_ref']}]" if u.get("source_ref") else ""
+                            print(f"      validates {vals}{ref_part}")
+                        else:
+                            checks_label = "+".join(checks)
+                            ref_part = f" [{u['source_ref']}]" if u.get("source_ref") else ""
+                            print(f"      validates {checks_label}{ref_part}")
+                    else:
+                        checks_label = "+".join(checks)
+                        print(f"      [{checks_label}]")
         if req_hle_not_in_repo:
             for u in req_hle_not_in_repo:
                 print(f"    MISSING (required, HLE fallback): {u['emulator']} needs {u['name']}")
+                checks = u.get("checks", [])
+                if checks:
+                    if verbose:
+                        expected = u.get("expected", {})
+                        if expected:
+                            vals = ",".join(f"{k}={v}" for k, v in sorted(expected.items()))
+                            ref_part = f" [{u['source_ref']}]" if u.get("source_ref") else ""
+                            print(f"      validates {vals}{ref_part}")
+                        else:
+                            checks_label = "+".join(checks)
+                            ref_part = f" [{u['source_ref']}]" if u.get("source_ref") else ""
+                            print(f"      validates {checks_label}{ref_part}")
+                    else:
+                        checks_label = "+".join(checks)
+                        print(f"      [{checks_label}]")
 
         if game_data:
             gd_missing = [u for u in game_data if not u["in_repo"]]
@@ -637,6 +734,14 @@ def print_platform_result(result: dict, group: list[str]) -> None:
         print(f"  No external files ({len(exclusions)}):")
         for ex in exclusions:
             print(f"    {ex['emulator']} — {ex['detail']} [{ex['reason']}]")
+
+    # Ground truth coverage footer
+    gt_cov = result.get("ground_truth_coverage")
+    if gt_cov and gt_cov["total"] > 0:
+        pct = gt_cov["with_validation"] * 100 // gt_cov["total"]
+        print(f"  Ground truth: {gt_cov['with_validation']}/{gt_cov['total']} files have emulator validation ({pct}%)")
+        if gt_cov["platform_only"]:
+            print(f"    {gt_cov['platform_only']} platform-only (no emulator profile)")
 
 
 # ---------------------------------------------------------------------------
@@ -884,7 +989,7 @@ def verify_system(
     return verify_emulator(matching, emulators_dir, db, standalone)
 
 
-def print_emulator_result(result: dict) -> None:
+def print_emulator_result(result: dict, verbose: bool = False) -> None:
     """Print verification result for emulator/system mode."""
     label = " + ".join(result["emulators"])
     mode = result["verification_mode"]
@@ -912,6 +1017,13 @@ def print_emulator_result(result: dict) -> None:
             hle = ", HLE available" if d.get("hle_fallback") else ""
             reason = d.get("reason", "")
             print(f"  UNTESTED ({req}{hle}): {d['name']} — {reason}")
+            gt = d.get("ground_truth", [])
+            if gt:
+                if verbose:
+                    for line in _format_ground_truth_verbose(gt):
+                        print(f"    {line}")
+                else:
+                    print(f"    {_format_ground_truth_aggregate(gt)}")
     for d in result["details"]:
         if d["status"] == Status.MISSING:
             if d["name"] in seen:
@@ -920,12 +1032,40 @@ def print_emulator_result(result: dict) -> None:
             req = "required" if d.get("required", True) else "optional"
             hle = ", HLE available" if d.get("hle_fallback") else ""
             print(f"  MISSING ({req}{hle}): {d['name']}")
+            gt = d.get("ground_truth", [])
+            if gt:
+                if verbose:
+                    for line in _format_ground_truth_verbose(gt):
+                        print(f"    {line}")
+                else:
+                    print(f"    {_format_ground_truth_aggregate(gt)}")
     for d in result["details"]:
         if d.get("note"):
             print(f"  {d['note']}")
 
+    if verbose:
+        for d in result["details"]:
+            if d["status"] == Status.OK:
+                if d["name"] in seen:
+                    continue
+                seen.add(d["name"])
+                gt = d.get("ground_truth", [])
+                if gt:
+                    req = "required" if d.get("required", True) else "optional"
+                    print(f"  OK ({req}): {d['name']}")
+                    for line in _format_ground_truth_verbose(gt):
+                        print(f"    {line}")
+
     for ref in result.get("data_dir_notices", []):
         print(f"  Note: data directory '{ref}' required but not included (use refresh_data_dirs.py)")
+
+    # Ground truth coverage footer
+    gt_cov = result.get("ground_truth_coverage")
+    if gt_cov and gt_cov["total"] > 0:
+        pct = gt_cov["with_validation"] * 100 // gt_cov["total"]
+        print(f"  Ground truth: {gt_cov['with_validation']}/{gt_cov['total']} files have emulator validation ({pct}%)")
+        if gt_cov["platform_only"]:
+            print(f"    {gt_cov['platform_only']} platform-only (no emulator profile)")
 
 
 def main():
@@ -943,6 +1083,7 @@ def main():
     parser.add_argument("--db", default=DEFAULT_DB)
     parser.add_argument("--platforms-dir", default=DEFAULT_PLATFORMS_DIR)
     parser.add_argument("--emulators-dir", default=DEFAULT_EMULATORS_DIR)
+    parser.add_argument("--verbose", "-v", action="store_true", help="Show emulator ground truth details")
     parser.add_argument("--json", action="store_true", help="JSON output")
     args = parser.parse_args()
 
@@ -990,7 +1131,7 @@ def main():
             result["details"] = [d for d in result["details"] if d["status"] != Status.OK]
             print(json.dumps(result, indent=2))
         else:
-            print_emulator_result(result)
+            print_emulator_result(result, verbose=args.verbose)
         return
 
     # System mode
@@ -1001,7 +1142,7 @@ def main():
             result["details"] = [d for d in result["details"] if d["status"] != Status.OK]
             print(json.dumps(result, indent=2))
         else:
-            print_emulator_result(result)
+            print_emulator_result(result, verbose=args.verbose)
         return
 
     # Platform mode (existing)
@@ -1055,7 +1196,7 @@ def main():
 
     if not args.json:
         for result, group in group_results:
-            print_platform_result(result, group)
+            print_platform_result(result, group, verbose=args.verbose)
             print()
 
     if args.json:
