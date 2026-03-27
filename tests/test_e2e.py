@@ -1393,6 +1393,56 @@ class TestE2E(unittest.TestCase):
         gt = build_ground_truth("nonexistent.bin", index)
         self.assertEqual(gt, [])
 
+    def test_114_platform_result_has_ground_truth(self):
+        """verify_platform attaches ground_truth to each detail entry."""
+        config = load_platform_config("test_existence", self.platforms_dir)
+        profiles = load_emulator_profiles(self.emulators_dir)
+        result = verify_platform(config, self.db, self.emulators_dir, profiles)
+        for d in result["details"]:
+            self.assertIn("ground_truth", d)
+        # present_req.bin has validation in test_validation profile
+        for d in result["details"]:
+            if d["name"] == "present_req.bin":
+                self.assertTrue(len(d["ground_truth"]) >= 1)
+                emu_names = {g["emulator"] for g in d["ground_truth"]}
+                self.assertIn("test_validation", emu_names)
+                break
+        else:
+            self.fail("present_req.bin not found in details")
+
+    def test_116_undeclared_files_have_ground_truth(self):
+        """find_undeclared_files attaches ground truth fields."""
+        config = load_platform_config("test_existence", self.platforms_dir)
+        profiles = load_emulator_profiles(self.emulators_dir)
+        undeclared = find_undeclared_files(config, self.emulators_dir, self.db, profiles)
+        for u in undeclared:
+            self.assertIn("checks", u)
+            self.assertIn("source_ref", u)
+            self.assertIn("expected", u)
+
+    def test_117_platform_result_ground_truth_coverage(self):
+        """verify_platform includes ground truth coverage counts."""
+        config = load_platform_config("test_existence", self.platforms_dir)
+        profiles = load_emulator_profiles(self.emulators_dir)
+        result = verify_platform(config, self.db, self.emulators_dir, profiles)
+        gt = result["ground_truth_coverage"]
+        self.assertIn("with_validation", gt)
+        self.assertIn("total", gt)
+        self.assertIn("platform_only", gt)
+        self.assertEqual(gt["total"], result["total_files"])
+        self.assertEqual(gt["platform_only"], gt["total"] - gt["with_validation"])
+        self.assertGreaterEqual(gt["with_validation"], 1)
+
+    def test_115_platform_result_ground_truth_empty_for_unknown(self):
+        """Files with no emulator validation get ground_truth=[]."""
+        config = load_platform_config("test_existence", self.platforms_dir)
+        profiles = load_emulator_profiles(self.emulators_dir)
+        result = verify_platform(config, self.db, self.emulators_dir, profiles)
+        for d in result["details"]:
+            if d["name"] == "missing_opt.bin":
+                self.assertEqual(d["ground_truth"], [])
+                break
+
 
 if __name__ == "__main__":
     unittest.main()

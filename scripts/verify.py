@@ -35,7 +35,8 @@ except ImportError:
 
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (
-    _build_validation_index, build_zip_contents_index, check_file_validation,
+    _build_validation_index, _parse_validation, build_ground_truth,
+    build_zip_contents_index, check_file_validation,
     check_inside_zip, compute_hashes, filter_files_by_mode,
     filter_systems_by_target, group_identical_platforms, list_emulator_profiles,
     list_system_ids, load_data_dir_registry, load_emulator_profiles,
@@ -201,6 +202,24 @@ def compute_severity(
 # Cross-reference: undeclared files used by cores
 # ---------------------------------------------------------------------------
 
+
+def _build_expected(file_entry: dict, checks: list[str]) -> dict:
+    """Extract expected validation values from an emulator profile file entry."""
+    expected: dict = {}
+    if not checks:
+        return expected
+    if "size" in checks:
+        for key in ("size", "min_size", "max_size"):
+            if file_entry.get(key) is not None:
+                expected[key] = file_entry[key]
+    for hash_type in ("crc32", "md5", "sha1", "sha256"):
+        if hash_type in checks and file_entry.get(hash_type):
+            expected[hash_type] = file_entry[hash_type]
+    adler_val = file_entry.get("known_hash_adler32") or file_entry.get("adler32")
+    if adler_val:
+        expected["adler32"] = adler_val
+    return expected
+
 def find_undeclared_files(
     config: dict,
     emulators_dir: str,
@@ -267,6 +286,7 @@ def find_undeclared_files(
 
             in_repo = fname in by_name or fname.rsplit("/", 1)[-1] in by_name
             seen.add(fname)
+            checks = _parse_validation(f.get("validation"))
             undeclared.append({
                 "emulator": profile.get("emulator", emu_name),
                 "name": fname,
@@ -276,6 +296,9 @@ def find_undeclared_files(
                 "category": f.get("category", "bios"),
                 "in_repo": in_repo,
                 "note": f.get("note", ""),
+                "checks": sorted(checks) if checks else [],
+                "source_ref": f.get("source_ref"),
+                "expected": _build_expected(f, checks),
             })
 
     return undeclared
@@ -443,6 +466,9 @@ def verify_platform(
                             result["discrepancy"] = f"{platform} says OK but {emus} says {reason}"
             result["system"] = sys_id
             result["hle_fallback"] = hle_index.get(file_entry.get("name", ""), False)
+            result["ground_truth"] = build_ground_truth(
+                file_entry.get("name", ""), validation_index,
+            )
             details.append(result)
 
             # Aggregate by destination
@@ -475,15 +501,34 @@ def verify_platform(
     undeclared = find_undeclared_files(config, emulators_dir, db, emu_profiles, target_cores=target_cores)
     exclusions = find_exclusion_notes(config, emulators_dir, emu_profiles, target_cores=target_cores)
 
+    # Ground truth coverage
+    gt_filenames = set(validation_index)
+    dest_to_name: dict[str, str] = {}
+    for sys_id, system in verify_systems.items():
+        for fe in system.get("files", []):
+            dest = fe.get("destination", fe.get("name", ""))
+            if not dest:
+                dest = f"{sys_id}/{fe.get('name', '')}"
+            dest_to_name.setdefault(dest, fe.get("name", ""))
+    with_validation = sum(
+        1 for dest in file_status if dest_to_name.get(dest, "") in gt_filenames
+    )
+    total = len(file_status)
+
     return {
         "platform": platform,
         "verification_mode": mode,
-        "total_files": len(file_status),
+        "total_files": total,
         "severity_counts": counts,
         "status_counts": status_counts,
         "undeclared_files": undeclared,
         "exclusion_notes": exclusions,
         "details": details,
+        "ground_truth_coverage": {
+            "with_validation": with_validation,
+            "platform_only": total - with_validation,
+            "total": total,
+        },
     }
 
 
