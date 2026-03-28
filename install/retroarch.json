@@ -3,7 +3,7 @@
   "platform": "retroarch",
   "display_name": "RetroArch",
   "version": "1.0",
-  "generated": "2026-03-28T17:57:43Z",
+  "generated": "2026-03-28T18:10:49Z",
   "base_destination": "system",
   "detect": [
     {
@@ -32,8 +32,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 956,
-  "total_size": 1705704847,
+  "total_files": 957,
+  "total_size": 1730542084,
   "files": [
     {
       "dest": "3do_arcade_saot.bin",
@@ -207,7 +207,7 @@
       "dest": "nmk004.zip",
       "sha1": "489256f5e2001070d2ad94c90d255282c71ed274",
       "size": 3556,
-      "repo_path": "",
+      "repo_path": "bios/Arcade/Arcade/nmk004.zip",
       "cores": null
     },
     {
@@ -571,7 +571,7 @@
       "dest": "Dinothawr.zip",
       "sha1": "693d8bb4d992c645e6413a57195acf4eca2f5a2e",
       "size": 6724506,
-      "repo_path": "",
+      "repo_path": "bios/Dinothawr/Dinothawr/Dinothawr.zip",
       "cores": null
     },
     {
@@ -1693,7 +1693,7 @@
       "dest": "scummvm.zip",
       "sha1": "718c1a00d38e0810a1ad0ffde79f73447f846f01",
       "size": 79379908,
-      "repo_path": "",
+      "repo_path": "bios/ScummVM/scummvm.zip",
       "cores": null,
       "storage": "release",
       "release_asset": "scummvm.zip"
@@ -5945,6 +5945,15 @@
       "sha1": "42d6d9ac933a7819adfd686f629a8e43aea4e880",
       "size": 38635890,
       "repo_path": "bios/Arcade/MAME/history.dat",
+      "cores": [
+        "MAME 2000"
+      ]
+    },
+    {
+      "dest": "mameinfo.dat",
+      "sha1": "65323366553276719c72fb11447de1eaa6931fa8",
+      "size": 24837237,
+      "repo_path": "bios/Arcade/MAME/mameinfo.dat",
       "cores": [
         "MAME 2000"
       ]

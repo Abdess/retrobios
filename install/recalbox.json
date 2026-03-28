@@ -3,7 +3,7 @@
   "platform": "recalbox",
   "display_name": "Recalbox",
   "version": "1.0",
-  "generated": "2026-03-28T17:57:49Z",
+  "generated": "2026-03-28T18:11:04Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -14,8 +14,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 761,
-  "total_size": 1187498115,
+  "total_files": 762,
+  "total_size": 1212335352,
   "files": [
     {
       "dest": "3do/panafz1.bin",
@@ -4372,6 +4372,15 @@
       "sha1": "42d6d9ac933a7819adfd686f629a8e43aea4e880",
       "size": 38635890,
       "repo_path": "bios/Arcade/MAME/history.dat",
+      "cores": [
+        "MAME 2000"
+      ]
+    },
+    {
+      "dest": "mameinfo.dat",
+      "sha1": "65323366553276719c72fb11447de1eaa6931fa8",
+      "size": 24837237,
+      "repo_path": "bios/Arcade/MAME/mameinfo.dat",
       "cores": [
         "MAME 2000"
       ]

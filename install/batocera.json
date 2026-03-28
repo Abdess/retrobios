@@ -3,7 +3,7 @@
   "platform": "batocera",
   "display_name": "Batocera",
   "version": "1.0",
-  "generated": "2026-03-28T17:57:00Z",
+  "generated": "2026-03-28T18:09:00Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -14,8 +14,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 841,
-  "total_size": 1275292366,
+  "total_files": 842,
+  "total_size": 1300129603,
   "files": [
     {
       "dest": "panafz1.bin",
@@ -5371,6 +5371,15 @@
       "sha1": "42d6d9ac933a7819adfd686f629a8e43aea4e880",
       "size": 38635890,
       "repo_path": "bios/Arcade/MAME/history.dat",
+      "cores": [
+        "MAME 2003-Plus"
+      ]
+    },
+    {
+      "dest": "mameinfo.dat",
+      "sha1": "65323366553276719c72fb11447de1eaa6931fa8",
+      "size": 24837237,
+      "repo_path": "bios/Arcade/MAME/mameinfo.dat",
       "cores": [
         "MAME 2003-Plus"
       ]
