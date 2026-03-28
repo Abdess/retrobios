@@ -1303,6 +1303,33 @@ def generate_md5_pack(
     return zip_path
 
 
+def generate_target_manifests(targets_dir: str, output_dir: str) -> None:
+    """Convert target YAMLs to installer JSON manifests."""
+    os.makedirs(output_dir, exist_ok=True)
+    targets_path = Path(targets_dir)
+    if not targets_path.is_dir():
+        print(f"No targets directory at {targets_dir}", file=sys.stderr)
+        return
+    count = 0
+    for yml_file in sorted(targets_path.glob("*.yml")):
+        if yml_file.name.startswith("_"):
+            continue
+        with open(yml_file) as f:
+            data = yaml.safe_load(f) or {}
+        targets = data.get("targets", {})
+        result: dict[str, list[str] | None] = {}
+        for target_name, target_info in targets.items():
+            cores = target_info.get("cores") if isinstance(target_info, dict) else None
+            result[target_name] = cores if cores else None
+        out_path = Path(output_dir) / f"{yml_file.stem}.json"
+        with open(out_path, "w") as f:
+            json.dump(result, f, indent=2, sort_keys=True)
+            f.write("\n")
+        count += 1
+        print(f"  {yml_file.stem}: {len(result)} targets")
+    print(f"Generated {count} target manifest(s) in {output_dir}")
+
+
 def main():
     parser = argparse.ArgumentParser(description="Generate platform BIOS ZIP packs")
     parser.add_argument("--platform", "-p", help="Platform name (e.g., retroarch)")
@@ -1340,7 +1367,16 @@ def main():
                         help="File with hashes (one per line)")
     parser.add_argument("--manifest", action="store_true",
                         help="Output JSON manifests instead of ZIP packs")
+    parser.add_argument("--manifest-targets", action="store_true",
+                        help="Convert target YAMLs to installer JSON")
     args = parser.parse_args()
+
+    if args.manifest_targets:
+        generate_target_manifests(
+            os.path.join(args.platforms_dir, "targets"),
+            args.output_dir,
+        )
+        return
 
     if args.list:
         platforms = list_platforms(args.platforms_dir)
