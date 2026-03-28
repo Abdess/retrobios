@@ -121,8 +121,8 @@ def lookup_hashes(
         entry = files_db[sha1]
         name = entry.get("name", "?")
         md5 = entry.get("md5", "?")
-        paths = entry.get("paths", [])
-        aliases = entry.get("aliases", [])
+        paths = entry.get("paths") or []
+        aliases = entry.get("aliases") or []
 
         print(f"\n{hash_type.upper()}: {hash_val}")
         print(f"  SHA1: {sha1}")
@@ -133,11 +133,21 @@ def lookup_hashes(
         if aliases:
             print(f"  Aliases: {aliases}")
 
-        primary = os.path.join(bios_dir, paths[0]) if paths else None
-        if primary and os.path.exists(primary):
-            print("  In repo: YES")
-        else:
-            print("  In repo: NO")
+        # Check if file exists in repo (by path or by resolve_local_file)
+        in_repo = False
+        if paths:
+            primary = os.path.join(bios_dir, paths[0])
+            if os.path.exists(primary):
+                in_repo = True
+        if not in_repo:
+            try:
+                fe_check = {"name": name, "sha1": sha1, "md5": md5}
+                local, status = resolve_file(fe_check, db, bios_dir, {})
+                if local and status != "not_found":
+                    in_repo = True
+            except (KeyError, OSError):
+                pass
+        print(f"  In repo: {'YES' if in_repo else 'NO'}")
 
 
 def _find_candidate_satisfying_both(
@@ -326,6 +336,7 @@ def generate_pack(
     target_cores: set[str] | None = None,
     required_only: bool = False,
     system_filter: list[str] | None = None,
+    precomputed_extras: list[dict] | None = None,
 ) -> str | None:
     """Generate a ZIP pack for a platform.
 
@@ -547,10 +558,15 @@ def generate_pack(
         # Core requirements: files platform's cores need but YAML doesn't declare
         if emu_profiles is None:
             emu_profiles = load_emulator_profiles(emulators_dir)
-        core_files = _collect_emulator_extras(
-            config, emulators_dir, db,
-            seen_destinations, base_dest, emu_profiles, target_cores=target_cores,
-        )
+        if precomputed_extras is not None:
+            core_files = precomputed_extras
+        elif system_filter:
+            core_files = []
+        else:
+            core_files = _collect_emulator_extras(
+                config, emulators_dir, db,
+                seen_destinations, base_dest, emu_profiles, target_cores=target_cores,
+            )
         core_count = 0
         for fe in core_files:
             if required_only and fe.get("required") is False:
@@ -1034,20 +1050,40 @@ def generate_split_packs(
     else:
         groups = {_system_display_name(sid): [sid] for sid in systems}
 
+    # Pre-compute core extras once (expensive: scans 260+ emulator profiles)
+    # then distribute per group based on emulator system overlap
+    if emu_profiles is None:
+        emu_profiles = load_emulator_profiles(emulators_dir)
+    base_dest = config.get("base_destination", "")
+    all_extras = _collect_emulator_extras(
+        config, emulators_dir, db, set(), base_dest, emu_profiles,
+        target_cores=target_cores,
+    )
+    # Map each extra to matching systems via source_emulator
+    emu_system_map: dict[str, set[str]] = {}
+    for name, p in emu_profiles.items():
+        emu_system_map[name] = set(p.get("systems", []))
+
     results = []
     for group_name, group_system_ids in sorted(groups.items()):
+        group_sys_set = set(group_system_ids)
+        group_extras = [
+            fe for fe in all_extras
+            if emu_system_map.get(fe.get("source_emulator", ""), set()) & group_sys_set
+        ]
         zip_path = generate_pack(
             platform_name, platforms_dir, db, bios_dir, split_dir,
             emulators_dir=emulators_dir, zip_contents=zip_contents,
             data_registry=data_registry, emu_profiles=emu_profiles,
             target_cores=target_cores, required_only=required_only,
-            system_filter=group_system_ids,
+            system_filter=group_system_ids, precomputed_extras=group_extras,
         )
         if zip_path:
             version = config.get("version", config.get("dat_version", ""))
             ver_tag = f"_{version.replace(' ', '')}" if version else ""
             req_tag = "_Required" if required_only else ""
-            new_name = f"{platform_display.replace(' ', '_')}{ver_tag}{req_tag}_{group_name}_BIOS_Pack.zip"
+            safe_group = group_name.replace(" ", "_")
+            new_name = f"{platform_display.replace(' ', '_')}{ver_tag}{req_tag}_{safe_group}_BIOS_Pack.zip"
             new_path = os.path.join(split_dir, new_name)
             if new_path != zip_path:
                 os.rename(zip_path, new_path)
@@ -1126,8 +1162,8 @@ def generate_md5_pack(
 
             entry = files_db[sha1]
             name = entry.get("name", "")
-            aliases = entry.get("aliases", [])
-            paths = entry.get("paths", [])
+            aliases = entry.get("aliases") or []
+            paths = entry.get("paths") or []
 
             dest = name
             matched_fe = None
@@ -1427,7 +1463,10 @@ def main():
     # Post-generation: verify all packs + inject manifests + SHA256SUMS
     if not args.list_emulators and not args.list_systems:
         print("\nVerifying packs and generating manifests...")
-        all_ok = verify_and_finalize_packs(args.output_dir, db)
+        # Skip platform conformance for filtered/split/custom packs
+        skip_conf = bool(system_filter or args.split)
+        all_ok = verify_and_finalize_packs(args.output_dir, db,
+                                            skip_conformance=skip_conf)
         if not all_ok:
             print("WARNING: some packs have verification errors")
             sys.exit(1)
@@ -1674,7 +1713,8 @@ def verify_pack_against_platform(
 
 
 def verify_and_finalize_packs(output_dir: str, db: dict,
-                               platforms_dir: str = "platforms") -> bool:
+                               platforms_dir: str = "platforms",
+                               skip_conformance: bool = False) -> bool:
     """Verify all packs, inject manifests, generate SHA256SUMS.
 
     Two-stage verification:
@@ -1714,6 +1754,9 @@ def verify_and_finalize_packs(output_dir: str, db: dict,
         inject_manifest(zip_path, manifest)
 
         # Stage 2: platform conformance (extract + verify)
+        # Skipped for filtered/split/custom packs (intentionally partial)
+        if skip_conformance:
+            continue
         platforms = pack_to_platform.get(name, [])
         for pname in platforms:
             (p_ok, total, matched, p_errors,
