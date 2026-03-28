@@ -350,7 +350,7 @@ class Scraper(BaseScraper):
                 "required": req.required,
             }
             if req.sha1:
-                entry["sha1"] = req.sha1
+                entry["sha1"] = req.sha1.lower()
             if req.size:
                 entry["size"] = req.size
 

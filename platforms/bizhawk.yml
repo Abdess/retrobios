@@ -39,17 +39,17 @@ systems:
     - name: 32X_G_BIOS.BIN
       destination: 32X_G_BIOS.BIN
       required: true
-      sha1: DBEBD76A448447CB6E524AC3CB0FD19FC065D944
+      sha1: dbebd76a448447cb6e524ac3cb0fd19fc065d944
       size: 256
     - name: 32X_M_BIOS.BIN
       destination: 32X_M_BIOS.BIN
       required: true
-      sha1: 1E5B0B2441A4979B6966D942B20CC76C413B8C5E
+      sha1: 1e5b0b2441a4979b6966d942b20cc76c413b8c5e
       size: 2048
     - name: 32X_S_BIOS.BIN
       destination: 32X_S_BIOS.BIN
       required: true
-      sha1: 4103668C1BBD66C5E24558E73D4F3F92061A109A
+      sha1: 4103668c1bbd66c5e24558e73d4f3f92061a109a
       size: 1024
   nintendo-3ds:
     files:
@@ -64,194 +64,194 @@ systems:
     - name: A78_PAL_BIOS.bin
       destination: A78_PAL_BIOS.bin
       required: true
-      sha1: 5A140136A16D1D83E4FF32A19409CA376A8DF874
+      sha1: 5a140136a16d1d83e4ff32a19409ca376a8df874
       size: 16384
     - name: A78_highscore.bin
       destination: A78_highscore.bin
       required: true
-      sha1: A3AF676991391A6DD716C79022D4947206B78164
+      sha1: a3af676991391a6dd716c79022d4947206b78164
       size: 4096
     - name: A78_NTSC_bios.bin
       destination: A78_NTSC_bios.bin
       required: true
-      sha1: D9D134BB6B36907C615A594CC7688F7BFCEF5B43
+      sha1: d9d134bb6b36907c615a594cc7688f7bfcef5b43
       size: 4096
   commodore-c64:
     files:
     - name: C64_Kernal.bin
       destination: C64_Kernal.bin
       required: true
-      sha1: 1D503E56DF85A62FEE696E7618DC5B4E781DF1BB
+      sha1: 1d503e56df85a62fee696e7618dc5b4e781df1bb
       size: 8192
     - name: C64_Basic.bin
       destination: C64_Basic.bin
       required: true
-      sha1: 79015323128650C742A3694C9429AA91F355905E
+      sha1: 79015323128650c742a3694c9429aa91f355905e
       size: 8192
     - name: C64_Chargen.bin
       destination: C64_Chargen.bin
       required: true
-      sha1: ADC7C31E18C7C7413D54802EF2F4193DA14711AA
+      sha1: adc7c31e18c7c7413d54802ef2f4193da14711aa
       size: 4096
     - name: C64_Drive-1541.bin
       destination: C64_Drive-1541.bin
       required: true
-      sha1: AB16F56989B27D89BABE5F89C5A8CB3DA71A82F0
+      sha1: ab16f56989b27d89babe5f89c5a8cb3da71a82f0
       size: 16384
     - name: C64_Drive-1541ii.bin
       destination: C64_Drive-1541ii.bin
       required: true
-      sha1: D3B78C3DBAC55F5199F33F3FE0036439811F7FB3
+      sha1: d3b78c3dbac55f5199f33f3fe0036439811f7fb3
       size: 16384
   fairchild-channel-f:
     files:
     - name: ChannelF_SL31253.rom
       destination: ChannelF_SL31253.rom
       required: true
-      sha1: 81193965A374D77B99B4743D317824B53C3E3C78
+      sha1: 81193965a374d77b99b4743d317824b53c3e3c78
       size: 1024
     - name: ChannelF_SL31254.rom
       destination: ChannelF_SL31254.rom
       required: true
-      sha1: 8F70D1B74483BA3A37E86CF16C849D601A8C3D2C
+      sha1: 8f70d1b74483ba3a37e86cf16c849d601a8c3d2c
       size: 1024
     - name: ChannelF_sl90025.rom
       destination: ChannelF_sl90025.rom
       required: true
-      sha1: 759E2ED31FBDE4A2D8DAF8B9F3E0DFFEBC90DAE2
+      sha1: 759e2ed31fbde4a2d8daf8b9f3e0dffebc90dae2
       size: 1024
   coleco-colecovision:
     files:
     - name: Coleco_Bios.bin
       destination: Coleco_Bios.bin
       required: true
-      sha1: 45BEDC4CBDEAC66C7DF59E9E599195C778D86A92
+      sha1: 45bedc4cbdeac66c7df59e9e599195c778d86a92
       size: 8192
   doom:
     files:
     - name: doom2.wad
       destination: doom2.wad
       required: true
-      sha1: 7EC7652FCFCE8DDC6E801839291F0E28EF1D5AE7
+      sha1: 7ec7652fcfce8ddc6e801839291f0e28ef1d5ae7
       size: 14604584
   sega-mega-drive:
     files:
     - name: GEN_boot.md
       destination: GEN_boot.md
       required: true
-      sha1: 3F50B76B0529DB7F79C396B5E808CC0786FFC311
+      sha1: 3f50b76b0529db7f79c396b5e808cc0786ffc311
       size: 2048
     - name: MCD_eu_100.bin
       destination: MCD_eu_100.bin
       required: true
-      sha1: F891E0EA651E2232AF0C5C4CB46A0CAE2EE8F356
+      sha1: f891e0ea651e2232af0c5c4cb46a0cae2ee8f356
       size: 131072
     - name: MCD_jp_100p.bin
       destination: MCD_jp_100p.bin
       required: true
-      sha1: 4846F448160059A7DA0215A5DF12CA160F26DD69
+      sha1: 4846f448160059a7da0215a5df12ca160f26dd69
       size: 131072
     - name: SCD_m1_us_110.bin
       destination: SCD_m1_us_110.bin
       required: true
-      sha1: F4F315ADCEF9B8FEB0364C21AB7F0EAF5457F3ED
+      sha1: f4f315adcef9b8feb0364c21ab7f0eaf5457f3ed
       size: 131072
   sega-game-gear:
     files:
     - name: GG_majesco.gg
       destination: GG_majesco.gg
       required: true
-      sha1: 914AA165E3D879F060BE77870D345B60CFEB4EDE
+      sha1: 914aa165e3d879f060be77870d345b60cfeb4ede
       size: 1024
   mattel-intellivision:
     files:
     - name: INTV_EROM.bin
       destination: INTV_EROM.bin
       required: true
-      sha1: 5A65B922B562CB1F57DAB51B73151283F0E20C7A
+      sha1: 5a65b922b562cb1f57dab51b73151283f0e20c7a
       size: 8192
     - name: INTV_GROM.bin
       destination: INTV_GROM.bin
       required: true
-      sha1: F9608BB4AD1CFE3640D02844C7AD8E0BCD974917
+      sha1: f9608bb4ad1cfe3640d02844c7ad8e0bcd974917
       size: 2048
   atari-lynx:
     files:
     - name: Atari_LYNX_boot.img
       destination: Atari_LYNX_boot.img
       required: true
-      sha1: E4ED47FAE31693E016B081C6BDA48DA5B70D7CCB
+      sha1: e4ed47fae31693e016b081c6bda48da5b70d7ccb
       size: 512
   microsoft-msx:
     files:
     - name: MSX_cbios_main_msx1.rom
       destination: MSX_cbios_main_msx1.rom
       required: true
-      sha1: 2F997E8A57528518C82AB3693FDAE243DBBCC508
+      sha1: 2f997e8a57528518c82ab3693fdae243dbbcc508
       size: 32768
     - name: MSX_8020-20bios.rom
       destination: MSX_8020-20bios.rom
       required: true
-      sha1: E998F0C441F4F1800EF44E42CD1659150206CF79
+      sha1: e998f0c441f4f1800ef44e42cd1659150206cf79
       size: 16384
     - name: MSX_4000bios.rom
       destination: MSX_4000bios.rom
       required: true
-      sha1: DF48902F5F12AF8867AE1A87F255145F0E5E0774
+      sha1: df48902f5f12af8867ae1a87f255145f0e5e0774
       size: 16384
     - name: MSX.rom
       destination: MSX.rom
       required: true
-      sha1: 409E82ADAC40F6BDD18EB6C84E8B2FBDC7FB5498
+      sha1: 409e82adac40f6bdd18eb6c84e8b2fbdc7fb5498
       size: 32768
     - name: MSX_1.0.rom
       destination: MSX_1.0.rom
       required: true
-      sha1: 3656BB3BBC17D280D2016FE4F6FF3CDED3082A41
+      sha1: 3656bb3bbc17d280d2016fe4f6ff3cded3082a41
       size: 32768
     - name: MSX_jpn.rom
       destination: MSX_jpn.rom
       required: true
-      sha1: 302AFB5D8BE26C758309CA3DF611AE69CCED2821
+      sha1: 302afb5d8be26c758309ca3df611ae69cced2821
       size: 32768
   nintendo-64dd:
     files:
     - name: 64DD_IPL_DEV.bin
       destination: 64DD_IPL_DEV.bin
       required: true
-      sha1: 10C4173C2A7EB09C6579818F72EF18FA0B6D32DE
+      sha1: 10c4173c2a7eb09c6579818f72ef18fa0b6d32de
       size: 4194304
     - name: 64DD_IPL_USA.bin
       destination: 64DD_IPL_USA.bin
       required: true
-      sha1: 3C5B93CA231550C68693A14F03CEA8D5DBD1BE9E
+      sha1: 3c5b93ca231550c68693a14f03cea8d5dbd1be9e
       size: 4194304
     - name: 64DD_IPL_v12_JPN.bin
       destination: 64DD_IPL_v12_JPN.bin
       required: true
-      sha1: BF861922DCB78C316360E3E742F4F70FF63C9BC3
+      sha1: bf861922dcb78c316360e3e742f4f70ff63c9bc3
       size: 4194304
   nintendo-ds:
     files:
     - name: NDS_Bios7.bin
       destination: NDS_Bios7.bin
       required: true
-      sha1: 24F67BDEA115A2C847C8813A262502EE1607B7DF
+      sha1: 24f67bdea115a2c847c8813a262502ee1607b7df
       size: 16384
     - name: NDS_Bios9.bin
       destination: NDS_Bios9.bin
       required: true
-      sha1: BFAAC75F101C135E32E2AAF541DE6B1BE4C8C62D
+      sha1: bfaac75f101c135e32e2aaf541de6b1be4c8c62d
       size: 4096
     - name: NDS_Bios7i.bin
       destination: NDS_Bios7i.bin
       required: true
-      sha1: C7C7570BFE51C3C7C5DA3B01331B94E7E7CB4F53
+      sha1: c7c7570bfe51c3c7c5da3b01331b94e7e7cb4f53
       size: 65536
     - name: NDS_Bios9i.bin
       destination: NDS_Bios9i.bin
       required: true
-      sha1: 719B9EEF33692406D7170FF526069615759C4DFC
+      sha1: 719b9eef33692406d7170ff526069615759c4dfc
       size: 65536
     - name: DSi_Firmware.bin
       destination: DSi_Firmware.bin
@@ -286,409 +286,409 @@ systems:
     - name: O2_Odyssey2.bin
       destination: O2_Odyssey2.bin
       required: true
-      sha1: B2E1955D957A475DE2411770452EFF4EA19F4CEE
+      sha1: b2e1955d957a475de2411770452eff4ea19f4cee
       size: 1024
     - name: O2_PhillipsC52.bin
       destination: O2_PhillipsC52.bin
       required: true
-      sha1: A6120AED50831C9C0D95DBDF707820F601D9452E
+      sha1: a6120aed50831c9c0d95dbdf707820f601d9452e
       size: 1024
     - name: O2_G7400_bios.bin
       destination: O2_G7400_bios.bin
       required: true
-      sha1: 5130243429B40B01A14E1304D0394B8459A6FBAE
+      sha1: 5130243429b40b01a14e1304d0394b8459a6fbae
       size: 1024
   nec-pc-engine-cd:
     files:
     - name: PCECD_3.0-(J).pce
       destination: PCECD_3.0-(J).pce
       required: true
-      sha1: 79F5FF55DD10187C7FD7B8DAAB0B3FFBD1F56A2C
+      sha1: 79f5ff55dd10187c7fd7b8daab0b3ffbd1f56a2c
       size: 262144
     - name: PCECD_gecard.pce
       destination: PCECD_gecard.pce
       required: true
-      sha1: 014881A959E045E00F4DB8F52955200865D40280
+      sha1: 014881a959e045e00f4db8f52955200865d40280
       size: 32768
   sega-saturn:
     files:
     - name: SAT_KoF95.bin
       destination: SAT_KoF95.bin
       required: true
-      sha1: A67CD4F550751F8B91DE2B8B74528AB4E0C11C77
+      sha1: a67cd4f550751f8b91de2b8b74528ab4e0c11c77
       size: 2097152
     - name: SAT_Ultraman.bin
       destination: SAT_Ultraman.bin
       required: true
-      sha1: 56C1B93DA6B660BF393FBF48CA47569000EF4047
+      sha1: 56c1b93da6b660bf393fbf48ca47569000ef4047
       size: 2097152
     - name: SAT_1.01-(J).bin
       destination: SAT_1.01-(J).bin
       required: true
-      sha1: DF94C5B4D47EB3CC404D88B33A8FDA237EAF4720
+      sha1: df94c5b4d47eb3cc404d88b33a8fda237eaf4720
       size: 524288
     - name: SAT_1.00-(U+E).bin
       destination: SAT_1.00-(U+E).bin
       required: true
-      sha1: FAA8EA183A6D7BBE5D4E03BB1332519800D3FBC3
+      sha1: faa8ea183a6d7bbe5d4e03bb1332519800d3fbc3
       size: 524288
     - name: SAT_1.00-(U+E).bin
       destination: SAT_1.00-(U+E).bin
       required: true
-      sha1: FAA8EA183A6D7BBE5D4E03BB1332519800D3FBC3
+      sha1: faa8ea183a6d7bbe5d4e03bb1332519800d3fbc3
       size: 524288
     - name: SAT_STV_20091-(J).bin
       destination: SAT_STV_20091-(J).bin
       required: true
-      sha1: EFF0F54C70BCE05FF3A289BF30B1027E1C8CD117
+      sha1: eff0f54c70bce05ff3a289bf30b1027e1c8cd117
       size: 524288
     - name: SAT_STV_17952A-(U).bin
       destination: SAT_STV_17952A-(U).bin
       required: true
-      sha1: EAF1C3E5D602E1139D2090A78D7E19F04F916794
+      sha1: eaf1c3e5d602e1139d2090a78d7e19f04f916794
       size: 524288
     - name: SAT_STV_17954A-(E).bin
       destination: SAT_STV_17954A-(E).bin
       required: true
-      sha1: AF79CFF317E5B57D49E463AF16A9F616ED1EEE08
+      sha1: af79cff317e5b57d49e463af16a9f616ed1eee08
       size: 524288
   nintendo-snes:
     files:
     - name: SNES_cx4.rom
       destination: SNES_cx4.rom
       required: true
-      sha1: A002F4EFBA42775A31185D443F3ED1790B0E949A
+      sha1: a002f4efba42775a31185d443f3ed1790b0e949a
       size: 3072
     - name: SNES_dsp1.rom
       destination: SNES_dsp1.rom
       required: true
-      sha1: 188D471FEFEA71EB53F0EE7064697FF0971B1014
+      sha1: 188d471fefea71eb53f0ee7064697ff0971b1014
       size: 8192
     - name: SNES_dsp1b.rom
       destination: SNES_dsp1b.rom
       required: true
-      sha1: 78B724811F5F18D8C67669D9390397EB1A47A5E2
+      sha1: 78b724811f5f18d8c67669d9390397eb1a47a5e2
       size: 8192
     - name: SNES_dsp2.rom
       destination: SNES_dsp2.rom
       required: true
-      sha1: 198C4B1C3BFC6D69E734C5957AF3DBFA26238DFB
+      sha1: 198c4b1c3bfc6d69e734c5957af3dbfa26238dfb
       size: 8192
     - name: SNES_dsp3.rom
       destination: SNES_dsp3.rom
       required: true
-      sha1: 558DA7CB3BD3876A6CA693661FFC6C110E948CF9
+      sha1: 558da7cb3bd3876a6ca693661ffc6c110e948cf9
       size: 8192
     - name: SNES_dsp4.rom
       destination: SNES_dsp4.rom
       required: true
-      sha1: AF6478AECB6F1B67177E79C82CA04C56250A8C72
+      sha1: af6478aecb6f1b67177e79c82ca04c56250a8c72
       size: 8192
     - name: SNES_st010.rom
       destination: SNES_st010.rom
       required: true
-      sha1: 6472828403DE3589433A906E2C3F3D274C0FF008
+      sha1: 6472828403de3589433a906e2c3f3d274c0ff008
       size: 53248
     - name: SNES_st011.rom
       destination: SNES_st011.rom
       required: true
-      sha1: FECBAE2CEC76C710422486BAA186FFA7CA1CF925
+      sha1: fecbae2cec76c710422486baa186ffa7ca1cf925
       size: 53248
     - name: SNES_st018.rom
       destination: SNES_st018.rom
       required: true
-      sha1: 91383B92745CC7CC4F15409AC5BC2C2F699A43F1
+      sha1: 91383b92745cc7cc4f15409ac5bc2c2f699a43f1
       size: 163840
     - name: SNES_SGB_(JU).sfc
       destination: SNES_SGB_(JU).sfc
       required: true
-      sha1: 6ED55C4368333B57F6A2F8BBD70CCD87ED48058E
+      sha1: 6ed55c4368333b57f6a2f8bbd70ccd87ed48058e
       size: 262144
     - name: SNES_SGB2_(J).sfc
       destination: SNES_SGB2_(J).sfc
       required: true
-      sha1: E5B2922CA137051059E4269B236D07A22C07BC84
+      sha1: e5b2922ca137051059e4269b236d07a22c07bc84
       size: 524288
   nintendo-bsx:
     files:
     - name: Satellaview_BS-X.sfc
       destination: Satellaview_BS-X.sfc
       required: true
-      sha1: 604556B2E62860AF18DB5A77F2956EBC75450020
+      sha1: 604556b2e62860af18db5a77f2956ebc75450020
       size: 1048576
     - name: Satellaview_Mahjong.sfc
       destination: Satellaview_Mahjong.sfc
       required: true
-      sha1: 8417556B5CE22FB9BC4026FE28F7AEE348A76FD9
+      sha1: 8417556b5ce22fb9bc4026fe28f7aee348a76fd9
       size: 1048576
     - name: Satellaview_GNEXT.sfc
       destination: Satellaview_GNEXT.sfc
       required: true
-      sha1: 356A3D60E9FABFF4B4CEC66277C9A6B717C958CE
+      sha1: 356a3d60e9fabff4b4cec66277c9a6b717c958ce
       size: 1572864
     - name: Satellaview_RPG_Tsukuru.sfc
       destination: Satellaview_RPG_Tsukuru.sfc
       required: true
-      sha1: 95F31DFB31200E31E80007CC66A32E2C1A7B02BE
+      sha1: 95f31dfb31200e31e80007cc66a32e2c1a7b02be
       size: 2097152
     - name: Satellaview_SameGame.sfc
       destination: Satellaview_SameGame.sfc
       required: true
-      sha1: A6AD0F89C3E75327D70AA0F0239C7B06F151E0A4
+      sha1: a6ad0f89c3e75327d70aa0f0239c7b06f151e0a4
       size: 1048576
     - name: Satellaview_Derby_Stallion_96.sfc
       destination: Satellaview_Derby_Stallion_96.sfc
       required: true
-      sha1: 24AF9A5A78635EC493BBBC2540AB98BD161C5798
+      sha1: 24af9a5a78635ec493bbbc2540ab98bd161c5798
       size: 3145728
     - name: Satellaview_Ongaku_Tsukuru.sfc
       destination: Satellaview_Ongaku_Tsukuru.sfc
       required: true
-      sha1: 337E0C4BDBF544787B543A1FB83AFBA7526191B9
+      sha1: 337e0c4bdbf544787b543a1fb83afba7526191b9
       size: 1048576
     - name: Satellaview_SoundNovel_Tsukuru.sfc
       destination: Satellaview_SoundNovel_Tsukuru.sfc
       required: true
-      sha1: A9B124948A19BB5A295EC208FCA8180476BDFEBB
+      sha1: a9b124948a19bb5a295ec208fca8180476bdfebb
       size: 3145728
     - name: Satellaview_Bass_Tsuri.sfc
       destination: Satellaview_Bass_Tsuri.sfc
       required: true
-      sha1: 357AC4826297A6496035E3951CACDA55DCAE4B1B
+      sha1: 357ac4826297a6496035e3951cacda55dcae4b1b
       size: 4194304
   gce-vectrex:
     files:
     - name: VEC_Bios.bin
       destination: VEC_Bios.bin
       required: true
-      sha1: B9BBF5BB0EAC52D039A4A993A2D8064B862C9E28
+      sha1: b9bbf5bb0eac52d039a4a993a2d8064b862c9e28
       size: 4096
     - name: VEC_Minestorm.vec
       destination: VEC_Minestorm.vec
       required: true
-      sha1: 65D07426B520DDD3115D40F255511E0FD2E20AE7
+      sha1: 65d07426b520ddd3115d40f255511e0fd2e20ae7
       size: 8192
   sinclair-zx-spectrum:
     files:
     - name: ZX_pentagon.rom
       destination: ZX_pentagon.rom
       required: true
-      sha1: A584272F21DC82C14B7D4F1ED440E23A976E71F0
+      sha1: a584272f21dc82c14b7d4f1ed440e23a976e71f0
       size: 32768
     - name: ZX_trdos.rom
       destination: ZX_trdos.rom
       required: true
-      sha1: 282EB7BC819AAD2A12FD954E76F7838A4E1A7929
+      sha1: 282eb7bc819aad2a12fd954e76f7838a4e1a7929
       size: 16384
   3do:
     files:
     - name: panafz1.bin
       destination: panafz1.bin
       required: true
-      sha1: 34BF189111295F74D7B7DFC1F304D98B8D36325A
+      sha1: 34bf189111295f74d7b7dfc1f304d98b8d36325a
       size: 1048576
     - name: panafz1e.bin
       destination: panafz1e.bin
       required: true
-      sha1: 1D0DB81E171EBC1D07CEFC8CE8AB082306186E56
+      sha1: 1d0db81e171ebc1d07cefc8ce8ab082306186e56
       size: 1048576
     - name: panafz1j.bin
       destination: panafz1j.bin
       required: true
-      sha1: EC7EC62D60EC0459A14ED56EBC66761EF3C80EFC
+      sha1: ec7ec62d60ec0459a14ed56ebc66761ef3c80efc
       size: 1048576
     - name: panafz10.bin
       destination: panafz10.bin
       required: true
-      sha1: 3C912300775D1AD730DC35757E279C274C0ACAAD
+      sha1: 3c912300775d1ad730dc35757e279c274c0acaad
       size: 1048576
     - name: panafz10e-anvil.bin
       destination: panafz10e-anvil.bin
       required: true
-      sha1: A900371F0CDCDC03F79557F11D406FD71251A5FD
+      sha1: a900371f0cdcdc03f79557f11d406fd71251a5fd
       size: 1048576
     - name: panafz10j.bin
       destination: panafz10j.bin
       required: true
-      sha1: FE7F9C9C6A98910013BF13F2CF798DE9FEA52ACD
+      sha1: fe7f9c9c6a98910013bf13f2cf798de9fea52acd
       size: 1048576
     - name: goldstar.bin
       destination: goldstar.bin
       required: true
-      sha1: C4A2E5336F77FB5F743DE1EEA2CDA43675EE2DE7
+      sha1: c4a2e5336f77fb5f743de1eea2cda43675ee2de7
       size: 1048576
     - name: goldstar_fc1_enc.bin
       destination: goldstar_fc1_enc.bin
       required: true
-      sha1: 8EF7503C948314D242DA47B7FDC272F68DAC2AEE
+      sha1: 8ef7503c948314d242da47b7fdc272f68dac2aee
       size: 1048576
     - name: sanyotry.bin
       destination: sanyotry.bin
       required: true
-      sha1: B01C53DA256DDE43FFEC4AD3FC3ADFA8D635E943
+      sha1: b01c53da256dde43ffec4ad3fc3adfa8d635e943
       size: 1048576
     - name: sanyo_hc21_b3_unenc.bin
       destination: sanyo_hc21_b3_unenc.bin
       required: true
-      sha1: C389AF32BCADF0D86826927DC3D20B7072F90069
+      sha1: c389af32bcadf0d86826927dc3d20b7072f90069
       size: 1048576
     - name: 3do_arcade_saot.bin
       destination: 3do_arcade_saot.bin
       required: true
-      sha1: 520D3D1B5897800AF47F92EFD2444A26B7A7DEAD
+      sha1: 520d3d1b5897800af47f92efd2444a26b7a7dead
       size: 524288
     - name: 3do_devkit_1.0fc2.bin
       destination: 3do_devkit_1.0fc2.bin
       required: true
-      sha1: BD325C869E1DDE8A3872FC21565E0646A3D5B525
+      sha1: bd325c869e1dde8a3872fc21565e0646a3d5b525
       size: 1048576
     - name: panafz1-kanji.bin
       destination: panafz1-kanji.bin
       required: true
-      sha1: ACD39A8FEE1B9D2950D5AB447846C11FB31AF63E
+      sha1: acd39a8fee1b9d2950d5ab447846c11fb31af63e
       size: 933636
     - name: panafz10ja-anvil-kanji.bin
       destination: panafz10ja-anvil-kanji.bin
       required: true
-      sha1: 2E857B957803D0331FD229328DF01F3FFAB69EEE
+      sha1: 2e857b957803d0331fd229328df01f3ffab69eee
       size: 1048576
   commodore-amiga:
     files:
     - name: amiga-os-130.rom
       destination: amiga-os-130.rom
       required: true
-      sha1: 891E9A547772FE0C6C19B610BAF8BC4EA7FCB785
+      sha1: 891e9a547772fe0c6c19b610baf8bc4ea7fcb785
       size: 262144
     - name: amiga-os-205-a600.rom
       destination: amiga-os-205-a600.rom
       required: true
-      sha1: 02843C4253BBD29ABA535B0AA3BD9A85034ECDE4
+      sha1: 02843c4253bbd29aba535b0aa3bd9a85034ecde4
       size: 524288
     - name: amiga-os-310-a1200.rom
       destination: amiga-os-310-a1200.rom
       required: true
-      sha1: E21545723FE8374E91342617604F1B3D703094F1
+      sha1: e21545723fe8374e91342617604f1b3d703094f1
       size: 524288
     - name: amiga-os-310-a4000.rom
       destination: amiga-os-310-a4000.rom
       required: true
-      sha1: 5FE04842D04A489720F0F4BB0E46948199406F49
+      sha1: 5fe04842d04a489720f0f4bb0e46948199406f49
       size: 524288
     - name: amiga-os-310-cd32.rom
       destination: amiga-os-310-cd32.rom
       required: true
-      sha1: 3525BE8887F79B5929E017B42380A79EDFEE542D
+      sha1: 3525be8887f79b5929e017b42380a79edfee542d
       size: 524288
     - name: amiga-os-310-cd32-ext.rom
       destination: amiga-os-310-cd32-ext.rom
       required: true
-      sha1: 5BEF3D628CE59CC02A66E6E4AE0DA48F60E78F7F
+      sha1: 5bef3d628ce59cc02a66e6e4ae0da48f60e78f7f
       size: 524288
   apple-ii:
     files:
     - name: AppleIIe.rom
       destination: AppleIIe.rom
       required: true
-      sha1: B8EA90ABE135A0031065E01697C4A3A20D51198B
+      sha1: b8ea90abe135a0031065e01697c4a3a20d51198b
       size: 16384
     - name: AppleIIe_DiskII.rom
       destination: AppleIIe_DiskII.rom
       required: true
-      sha1: D4181C9F046AAFC3FB326B381BAAC809D9E38D16
+      sha1: d4181c9f046aafc3fb326b381baac809d9e38d16
       size: 256
   nintendo-gba:
     files:
     - name: GBA_bios.rom
       destination: GBA_bios.rom
       required: true
-      sha1: 300C20DF6731A33952DED8C436F7F186D25D3492
+      sha1: 300c20df6731a33952ded8c436f7f186d25d3492
       size: 16384
   nintendo-gb:
     files:
     - name: GB_dmg.bin
       destination: GB_dmg.bin
       required: true
-      sha1: 4ED31EC6B0B175BB109C0EB5FD3D193DA823339F
+      sha1: 4ed31ec6b0b175bb109c0eb5fd3d193da823339f
       size: 256
     - name: GB_sgb.bin
       destination: GB_sgb.bin
       required: true
-      sha1: AA2F50A77DFB4823DA96BA99309085A3C6278515
+      sha1: aa2f50a77dfb4823da96ba99309085a3c6278515
       size: 256
     - name: GB_sgb2.bin
       destination: GB_sgb2.bin
       required: true
-      sha1: 93407EA10D2F30AB96A314D8ECA44FE160AEA734
+      sha1: 93407ea10d2f30ab96a314d8eca44fe160aea734
       size: 256
   nintendo-gbc:
     files:
     - name: GBC_cgb.bin
       destination: GBC_cgb.bin
       required: true
-      sha1: 1293D68BF9643BC4F36954C1E80E38F39864528D
+      sha1: 1293d68bf9643bc4f36954c1e80e38f39864528d
       size: 2304
     - name: GBC_agb.bin
       destination: GBC_agb.bin
       required: true
-      sha1: FA5287E24B0FA533B3B5EF2B28A81245346C1A0F
+      sha1: fa5287e24b0fa533b3b5ef2b28a81245346c1a0f
       size: 2304
   nintendo-nes:
     files:
     - name: FDS_disksys-nintendo.rom
       destination: FDS_disksys-nintendo.rom
       required: true
-      sha1: 57FE1BDEE955BB48D357E463CCBF129496930B62
+      sha1: 57fe1bdee955bb48d357e463ccbf129496930b62
       size: 8192
   nec-pc-fx:
     files:
     - name: PCFX_bios.bin
       destination: PCFX_bios.bin
       required: true
-      sha1: 1A77FD83E337F906AECAB27A1604DB064CF10074
+      sha1: 1a77fd83e337f906aecab27a1604db064cf10074
       size: 1048576
     - name: PCFX_fx-scsi.rom
       destination: PCFX_fx-scsi.rom
       required: true
-      sha1: 65482A23AC5C10A6095AEE1DB5824CCA54EAD6E5
+      sha1: 65482a23ac5c10a6095aee1db5824cca54ead6e5
       size: 524288
   sony-playstation:
     files:
     - name: PSX_DTLH2000.bin
       destination: PSX_DTLH2000.bin
       required: true
-      sha1: 1A8D6F9453111B1D317BB7DAE300495FBF54600C
+      sha1: 1a8d6f9453111b1d317bb7dae300495fbf54600c
       size: 524288
     - name: PSX_DTLH2000.bin
       destination: PSX_DTLH2000.bin
       required: true
-      sha1: 1A8D6F9453111B1D317BB7DAE300495FBF54600C
+      sha1: 1a8d6f9453111b1d317bb7dae300495fbf54600c
       size: 524288
     - name: PSX_DTLH2000.bin
       destination: PSX_DTLH2000.bin
       required: true
-      sha1: 1A8D6F9453111B1D317BB7DAE300495FBF54600C
+      sha1: 1a8d6f9453111b1d317bb7dae300495fbf54600c
       size: 524288
   sega-master-system:
     files:
     - name: SMS_us_1.3.sms
       destination: SMS_us_1.3.sms
       required: true
-      sha1: C315672807D8DDB8D91443729405C766DD95CAE7
+      sha1: c315672807d8ddb8d91443729405c766dd95cae7
       size: 8192
     - name: SMS_jp_2.1.sms
       destination: SMS_jp_2.1.sms
       required: true
-      sha1: A8C1B39A2E41137835EDA6A5DE6D46DD9FADBAF2
+      sha1: a8c1b39a2e41137835eda6a5de6d46dd9fadbaf2
       size: 8192
     - name: SMS_kr.sms
       destination: SMS_kr.sms
       required: true
-      sha1: 2FEAFD8F1C40FDF1BD5668F8C5C02E5560945B17
+      sha1: 2feafd8f1c40fdf1bd5668f8c5c02e5560945b17
       size: 131072
   texas-instruments-ti-83:
     files:
     - name: TI83_110.rom
       destination: TI83_110.rom
       required: true
-      sha1: 25B373B58523647BB7B904001D391615E0B79BEE
+      sha1: 25b373b58523647bb7b904001d391615e0b79bee
       size: 262144

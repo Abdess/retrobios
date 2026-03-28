@@ -30,3 +30,9 @@ data/
 bios/Arcade/MAME/artwork/snspell.zip
 bios/Arcade/MAME/MAME 0.174 Arcade XML.dat
 bios/Sony/PlayStation Vita/.variants/PSP2UPDAT.PUP
+bios/Nintendo/DS/DSi_Nand_JPN.bin
+bios/Nintendo/DS/DSi_Nand_EUR.bin
+bios/Nintendo/DS/DSi_Nand_USA.bin
+bios/Nintendo/DS/DSi_Nand_AUS.bin
+bios/Nintendo/DS/DSi_Nand_CHN.bin
+bios/Nintendo/DS/DSi_Nand_KOR.bin
