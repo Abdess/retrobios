@@ -1,0 +1,23 @@
+{
+  "x86_64-linux": [
+    "azahar",
+    "cemu",
+    "dolphin",
+    "duckstation",
+    "gzdoom",
+    "mame",
+    "melonds",
+    "openbor",
+    "pcsx2",
+    "pico-8",
+    "ppsspp",
+    "primehack",
+    "retroarch",
+    "rpcs3",
+    "ruffle",
+    "solarus",
+    "vita3k",
+    "xemu",
+    "xroar"
+  ]
+}
