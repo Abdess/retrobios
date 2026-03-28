@@ -2207,6 +2207,86 @@ class TestE2E(unittest.TestCase):
         records, _ = parse_firmware_database(fragment)
         self.assertEqual(records[0]["name"], "good.bin")
 
+    def test_157_path_conflict_helpers(self):
+        """_has_path_conflict detects file/directory naming collisions."""
+        from generate_pack import _has_path_conflict, _register_path
+
+        seen_files: set[str] = set()
+        seen_parents: set[str] = set()
+
+        # Register system/SGB1.sfc as a file
+        _register_path("system/SGB1.sfc", seen_files, seen_parents)
+
+        # Adding system/SGB1.sfc/program.rom should conflict (parent is a file)
+        self.assertTrue(_has_path_conflict("system/SGB1.sfc/program.rom",
+                                           seen_files, seen_parents))
+
+        # Adding system/other.bin should not conflict
+        self.assertFalse(_has_path_conflict("system/other.bin",
+                                            seen_files, seen_parents))
+
+        # Reverse: register a nested path first, then check flat
+        seen_files2: set[str] = set()
+        seen_parents2: set[str] = set()
+        _register_path("system/SGB2.sfc/program.rom", seen_files2, seen_parents2)
+
+        # Adding system/SGB2.sfc as a file should conflict (it's a directory)
+        self.assertTrue(_has_path_conflict("system/SGB2.sfc",
+                                           seen_files2, seen_parents2))
+
+        # Adding system/SGB2.sfc/boot.rom should not conflict (sibling in same dir)
+        self.assertFalse(_has_path_conflict("system/SGB2.sfc/boot.rom",
+                                            seen_files2, seen_parents2))
+
+    def test_158_pack_skips_file_directory_conflict(self):
+        """Pack generation skips entries that conflict with existing paths."""
+        from generate_pack import generate_pack
+
+        output_dir = os.path.join(self.root, "pack_conflict")
+        os.makedirs(output_dir, exist_ok=True)
+
+        # Platform declares SGB1.sfc as a flat file
+        config = {
+            "platform": "ConflictTest",
+            "verification_mode": "existence",
+            "base_destination": "system",
+            "systems": {
+                "test-sys": {
+                    "files": [
+                        {"name": "present_req.bin", "destination": "present_req.bin",
+                         "required": True},
+                    ],
+                },
+            },
+        }
+        with open(os.path.join(self.platforms_dir, "test_conflict.yml"), "w") as fh:
+            yaml.dump(config, fh)
+
+        # Create an emulator profile with a nested path that conflicts
+        emu = {
+            "emulator": "ConflictCore",
+            "type": "libretro",
+            "systems": ["test-sys"],
+            "files": [
+                {"name": "present_req.bin/nested.rom", "required": False},
+            ],
+        }
+        with open(os.path.join(self.emulators_dir, "conflict_core.yml"), "w") as fh:
+            yaml.dump(emu, fh)
+
+        zip_path = generate_pack(
+            "test_conflict", self.platforms_dir, self.db, self.bios_dir,
+            output_dir, emulators_dir=self.emulators_dir,
+        )
+        self.assertIsNotNone(zip_path)
+        with zipfile.ZipFile(zip_path) as zf:
+            names = zf.namelist()
+        # Flat file should be present
+        self.assertTrue(any("present_req.bin" in n and "/" + "nested" not in n
+                            for n in names))
+        # Nested conflict should NOT be present
+        self.assertFalse(any("nested.rom" in n for n in names))
+
 
 if __name__ == "__main__":
     unittest.main()
