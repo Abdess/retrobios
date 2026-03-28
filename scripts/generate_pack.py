@@ -684,6 +684,37 @@ def generate_pack(
                         zf.write(src, full)
                         total_files += 1
 
+        # README.txt for users
+        extract_paths = {
+            "retroarch": "system/", "lakka": "system/",
+            "batocera": "/userdata/bios/", "recalbox": "/recalbox/share/bios/",
+            "emudeck": "Emulation/bios/", "retrobat": "bios/",
+            "retrodeck": "~/retrodeck/bios/", "romm": "bios/",
+            "bizhawk": "Firmware/", "retropie": "BIOS/",
+        }
+        extract_to = extract_paths.get(platform_name, f"{base_dest}/")
+        num_systems = len(pack_systems)
+        readme_text = (
+            f"{'=' * 43}\n"
+            f"  RETROBIOS - {platform_display} BIOS Pack\n"
+            f"  {total_files} files for {num_systems} systems\n"
+            f"{'=' * 43}\n\n"
+            f"HOW TO INSTALL\n\n"
+            f"  1. Open the \"{base_dest or 'files'}\" folder in this archive\n"
+            f"  2. Select everything inside (Ctrl+A)\n"
+            f"  3. Copy (Ctrl+C)\n"
+            f"  4. Go to: {extract_to}\n"
+            f"  5. Paste (Ctrl+V)\n\n"
+            f"IMPORTANT\n"
+            f"  - Copy the FILES, not the folder itself\n"
+            f"  - If asked to replace, click Yes\n\n"
+            f"AUTOMATIC INSTALL (recommended)\n"
+            f"  curl -fsSL https://raw.githubusercontent.com/Abdess/retrobios/main/install.sh | sh\n\n"
+            f"PROJECT: https://github.com/Abdess/retrobios\n"
+            f"{'=' * 43}\n"
+        )
+        zf.writestr("README.txt", readme_text)
+
     files_ok = sum(1 for s in file_status.values() if s == "ok")
     files_untested = sum(1 for s in file_status.values() if s == "untested")
     files_miss = sum(1 for s in file_status.values() if s == "missing")
@@ -1893,7 +1924,7 @@ def verify_pack(zip_path: str, db: dict) -> tuple[bool, dict]:
             if info.is_dir():
                 continue
             name = info.filename
-            if name.startswith("INSTRUCTIONS_") or name == "manifest.json":
+            if name.startswith("INSTRUCTIONS_") or name in ("manifest.json", "README.txt"):
                 continue
             with zf.open(info) as f:
                 sha1_h = hashlib.sha1()
@@ -2057,7 +2088,7 @@ def verify_pack_against_platform(
         # Zero-byte check (exclude Dolphin GraphicMods markers)
         for info in zf.infolist():
             if info.file_size == 0 and not info.is_dir():
-                if "GraphicMods" not in info.filename and info.filename != "manifest.json":
+                if "GraphicMods" not in info.filename and info.filename not in ("manifest.json", "README.txt"):
                     errors.append(f"zero-byte: {info.filename}")
 
         # 1. Baseline file presence
