@@ -2419,5 +2419,24 @@ class TestE2E(unittest.TestCase):
         self.assertNotIn("missing_archive.zip", extra_names)
 
 
+    def test_90_registry_install_metadata(self):
+        """Registry install section is accessible."""
+        import yaml
+        with open("platforms/_registry.yml") as f:
+            registry = yaml.safe_load(f)
+        for name in ("retroarch", "batocera", "emudeck", "recalbox",
+                      "retrobat", "retrodeck", "lakka", "romm", "bizhawk"):
+            plat = registry["platforms"][name]
+            self.assertIn("install", plat, f"{name} missing install section")
+            self.assertIn("detect", plat["install"])
+            self.assertIsInstance(plat["install"]["detect"], list)
+            for hint in plat["install"]["detect"]:
+                self.assertIn("os", hint)
+        # EmuDeck has standalone_copies
+        self.assertIn(
+            "standalone_copies", registry["platforms"]["emudeck"]["install"],
+        )
+
+
 if __name__ == "__main__":
     unittest.main()

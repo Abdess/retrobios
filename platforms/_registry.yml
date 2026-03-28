@@ -19,6 +19,24 @@ platforms:
     cores: all_libretro
     target_scraper: retroarch_targets
     target_source: "https://buildbot.libretro.com/nightly/"
+    install:
+      detect:
+        - os: linux
+          method: config_file
+          config: "$HOME/.var/app/org.libretro.RetroArch/config/retroarch/retroarch.cfg"
+          parse_key: system_directory
+        - os: linux
+          method: config_file
+          config: "$HOME/.config/retroarch/retroarch.cfg"
+          parse_key: system_directory
+        - os: darwin
+          method: config_file
+          config: "$HOME/Library/Application Support/RetroArch/retroarch.cfg"
+          parse_key: system_directory
+        - os: windows
+          method: config_file
+          config: "%APPDATA%\\RetroArch\\retroarch.cfg"
+          parse_key: system_directory
 
   batocera:
     config: batocera.yml
@@ -32,6 +50,12 @@ platforms:
     cores: [81, a5200, abuse, arduous, atari800, azahar, bennugd, bk, bluemsx, bsnes, bstone, cannonball, cap32, catacombgl, cdogs, cemu, cgenius, citron, clk, corsixth, demul, devilutionx, dhewm3, dice, dolphin, dosbox_pure, dxx-rebirth, easyrpg, ecwolf, eduke32, eka2l1, emuscv, etlegacy, fake08, fallout1-ce, fallout2-ce, fbneo, fceumm, flatpak, flycast, freechaf, freeintv, fury, fuse, gambatte, gearsystem, genesisplusgx, glide64mk2, gong, gsplus, gw, gzdoom, hatari, hcl, hurrican, hypseus-singe, ikemen, ioquake3, iortcw, jazz2-native, lindbergh-loader, lowresnx, lutro, mame, mame078plus, mednafen_lynx, mednafen_ngp, mednafen_supergrafx, mednafen_wswan, melonds, mgba, minivmac, model2emu, moonlight, mrboom, neocd, np2kai, nxengine, o2em, odcommander, openbor6412, openjazz, openjk, openjkdf2, openmohaa, opera, pce_fast, pcfx, pcsx2, pcsx_rearmed, pd777, picodrive, play, pokemini, potator, ppsspp, prboom, prosystem, puae, px68k, pygame, pyxel, quasi88, raze, reminiscence, rpcs3, ruffle, samcoupe, sameduck, scummvm, sdlpop, sh, shadps4, snes9x, solarus, sonic2013, sonic3-air, sonic-mania, steam, stella, superbroswar, supermodel, taradino, tgbdual, theforceengine, theodore, thextech, tic80, tr1x, tr2x, tsugaru, tyrian, tyrquake, uqm, uzem, vb, vecx, vice_x64, vircon32, virtualjaguar, vita3k, vox_official, vpinball, wasm4, wine-tkg, x1, x128, x16emu, xash3d_fwgs, xemu, xenia-canary, xpet, xplus4, xrick, xvic, yabasanshiro, yquake2, zc210]
     target_scraper: batocera_targets
     target_source: "https://github.com/batocera-linux/batocera.linux"
+    install:
+      detect:
+        - os: linux
+          method: file_exists
+          file: /etc/batocera-version
+          bios_path: /userdata/bios
 
   recalbox:
     config: recalbox.yml
@@ -45,6 +69,12 @@ platforms:
     target_scraper: null
     target_source: null
     cores: ["2048", 81, a5200, advancemame, amiberry, applewin, arduous, atari800, b2, beebem, bk, bluemsx, boom3, bsnes, bsneshd, cannonball, cap32, cdi2015, corsixth, craft, crocods, daphne, desmume, dice, dinothawr, dirksimple, dolphin, dolphin-gui, dosbox, dosbox_pure, duckstation, easyrpg, ecwolf, emuscv, fake08, fba2x, fbneo, fceumm, flycast, flycast-next, fmsx, freechaf, freeintv, frotz, fuse, gambatte, gearcoleco, geargrafx, gearsystem, genesisplusgx, genesisplusgx_ex, genesisplusgxwide, geolith, glide64mk2, gliden64, gliden64_20, gong, gpsp, gsplus, gw, handy, hatari, hatarib, holani, imageviewer, julius, kronos, lowresnx, lutro, mame0258, mame0278, mame2000, mame2003, mame2003_plus, mame2010, mame2015, mame2016, mednafen_lynx, mednafen_ngp, mednafen_pce_fast, mednafen_pcfx, mednafen_psx, mednafen_psx_hw, mednafen_saturn, mednafen_supafaust, mednafen_supergrafx, mednafen_vb, mednafen_wswan, melonds, mesen, mesen_s, meteor, mgba, minivmac, mojozork, moonlight, mrboom, mu, mupen64plus, mupen64plus_next, n64_gles2, neocd, nestopia, np2kai, nxengine, o2em, openbor, openlara, opera, oricutron, parallel_n64, pcsx2, pcsx_rearmed, pico8, picodrive, pisnes, pokemini, potator, ppsspp, prboom, prosystem, ps2, puae, px68k, quasi88, quicknes, race, rb5000, reicast, reminiscence, retro8, retrodream, rice, rice_gles2, sameboy, same_cdi, sameduck, scummvm, sdlpop, simcoupe, snes9x, snes9x2002, snes9x2005, snes9x2010, solarus, stella, stella2014, stonesoup, supermodel, swanstation, tamalibretro, tgbdual, theodore, thepowdertoy, ti99sim, tic80, tyrquake, uae4all, uae4arm, uzem, vecx, vice_x128, vice_x64, vice_x64sc, vice_xcbm2, vice_xcbm5x0, vice_xpet, vice_xplus4, vice_xscpu64, vice_xvic, virtualjaguar, vitaquake2, vitaquake3, vitavoyager, vpinball, vvvvvv, wasm4, x1, x128, x64, x64sx, xcbm2, xcbm5x0, xemu, xpet, xplus4, xrick, xroar, xscpu64, xvic, yabasanshiro, yabause]
+    install:
+      detect:
+        - os: linux
+          method: file_exists
+          file: /usr/bin/recalbox-settings
+          bios_path: /recalbox/share/bios
 
   retrobat:
     config: retrobat.yml
@@ -58,6 +88,11 @@ platforms:
     cores: [81, a5200, abuse, arduous, atari800, azahar, bennugd, bk, bluemsx, bsnes, bstone, cannonball, cap32, catacombgl, cdogs, cemu, cgenius, citron, clk, corsixth, demul, devilutionx, dhewm3, dice, dolphin, dosbox_pure, dxx-rebirth, easyrpg, ecwolf, eduke32, eka2l1, emuscv, etlegacy, fake08, fallout1-ce, fallout2-ce, fbneo, fceumm, flatpak, flycast, freechaf, freeintv, fury, fuse, gambatte, gearsystem, genesisplusgx, glide64mk2, gong, gsplus, gw, gzdoom, hatari, hcl, hurrican, hypseus-singe, ikemen, ioquake3, iortcw, jazz2-native, lindbergh-loader, lowresnx, lutro, mame, mame078plus, mednafen_lynx, mednafen_ngp, mednafen_supergrafx, mednafen_wswan, melonds, mgba, minivmac, model2emu, moonlight, mrboom, neocd, np2kai, nxengine, o2em, odcommander, openbor6412, openjazz, openjk, openjkdf2, openmohaa, opera, pce_fast, pcfx, pcsx2, pcsx_rearmed, pd777, picodrive, play, pokemini, potator, ppsspp, prboom, prosystem, puae, px68k, pygame, pyxel, quasi88, raze, reminiscence, rpcs3, ruffle, samcoupe, sameduck, scummvm, sdlpop, sh, shadps4, snes9x, solarus, sonic2013, sonic3-air, sonic-mania, steam, stella, superbroswar, supermodel, taradino, tgbdual, theforceengine, theodore, thextech, tic80, tr1x, tr2x, tsugaru, tyrian, tyrquake, uqm, uzem, vb, vecx, vice_x64, vircon32, virtualjaguar, vita3k, vox_official, vpinball, wasm4, wine-tkg, x1, x128, x16emu, xash3d_fwgs, xemu, xenia-canary, xpet, xplus4, xrick, xvic, yabasanshiro, yquake2, zc210]
     target_scraper: null
     target_source: null
+    install:
+      detect:
+        - os: windows
+          method: path_exists
+          path: "%USERPROFILE%\\RetroBat\\bios"
 
   emudeck:
     config: emudeck.yml
@@ -73,6 +108,35 @@ platforms:
     target_source: "https://github.com/dragoonDorise/EmuDeck"
     # dragoonDorise/EmuDeck = official repo (creator's account, 3.4k stars)
     # EmuDeck/emudeck.github.io = official wiki (org account)
+    install:
+      detect:
+        - os: linux
+          method: config_file
+          config: "$HOME/.config/EmuDeck/settings.sh"
+          parse_key: emulationPath
+          bios_subdir: bios
+        - os: linux
+          method: path_exists
+          path: "$HOME/Emulation/bios"
+        - os: windows
+          method: config_file
+          config: "%APPDATA%\\EmuDeck\\settings.ps1"
+          parse_key: "$emulationPath"
+          bios_subdir: bios
+      standalone_copies:
+        - file: prod.keys
+          targets:
+            linux:
+              - "$HOME/.local/share/yuzu/keys"
+              - "$HOME/.local/share/eden/keys"
+              - "$HOME/.config/Ryujinx/system"
+            windows:
+              - "%APPDATA%\\yuzu\\keys"
+              - "%APPDATA%\\eden\\keys"
+        - file: aes_keys.txt
+          targets:
+            linux:
+              - "$HOME/Emulation/bios/citra/keys"
 
   lakka:
     config: lakka.yml
@@ -84,6 +148,12 @@ platforms:
     schedule: weekly
     target_scraper: lakka_targets
     target_source: "https://buildbot.libretro.com/nightly/"
+    install:
+      detect:
+        - os: linux
+          method: os_release
+          id: lakka
+          bios_path: /storage/system
 
   retrodeck:
     config: retrodeck.yml
@@ -99,6 +169,12 @@ platforms:
     target_source: null
     # Each component/<name>/component_manifest.json declares BIOS requirements
     # Scraper enumerates top-level dirs via GitHub API, fetches each manifest directly
+    install:
+      detect:
+        - os: linux
+          method: path_exists
+          path: "$HOME/.var/app/net.retrodeck.retrodeck"
+          bios_path: "$HOME/retrodeck/bios"
 
   romm:
     config: romm.yml
@@ -112,6 +188,11 @@ platforms:
     inherits_from: emulatorjs  # cores inherited from emulatorjs.yml
     target_scraper: null
     target_source: null
+    install:
+      detect:
+        - os: linux
+          method: path_exists
+          path: /romm/library/bios
 
   retropie:
     config: retropie.yml
@@ -122,6 +203,11 @@ platforms:
     schedule: null
     target_scraper: retropie_targets
     target_source: "https://retropie.org.uk/stats/pkgflags/"
+    install:
+      detect:
+        - os: linux
+          method: path_exists
+          path: "$HOME/RetroPie/BIOS"
 
   bizhawk:
     config: bizhawk.yml
@@ -135,3 +221,11 @@ platforms:
     cores: [gambatte, mgba, sameboy, melonds, snes9x, bsnes, beetle_psx, beetle_saturn, beetle_pce, beetle_pcfx, beetle_wswan, beetle_vb, beetle_ngp, opera, stella, picodrive, ppsspp, handy, quicknes, genesis_plus_gx, ares, mupen64plus_next, puae, prboom, virtualjaguar, vice_x64, mame]
     target_scraper: null
     target_source: null
+    install:
+      detect:
+        - os: windows
+          method: path_exists
+          path: "%USERPROFILE%\\BizHawk\\Firmware"
+        - os: linux
+          method: path_exists
+          path: "$HOME/.config/BizHawk/Firmware"
