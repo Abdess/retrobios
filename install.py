@@ -23,6 +23,7 @@ import shutil
 import sys
 import tempfile
 import urllib.error
+import urllib.parse
 import urllib.request
 from pathlib import Path
 
@@ -328,9 +329,9 @@ def _download_one(
     dest.parent.mkdir(parents=True, exist_ok=True)
 
     if f.get("release_asset"):
-        url = RELEASE_URL.format(asset=f["release_asset"])
+        url = RELEASE_URL.format(asset=urllib.parse.quote(f["release_asset"], safe="/"))
     else:
-        url = RAW_FILE_URL.format(path=f["repo_path"])
+        url = RAW_FILE_URL.format(path=urllib.parse.quote(f["repo_path"], safe="/"))
 
     tmp_path = dest.with_suffix(dest.suffix + ".tmp")
 
