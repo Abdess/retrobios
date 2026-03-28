@@ -1,0 +1,11 @@
+[project]
+name = "retrobios"
+version = "1.0.0"
+description = "BIOS collection manager for retrogaming platforms"
+requires-python = ">=3.10"
+dependencies = [
+    "pyyaml",
+]
+
+[project.urls]
+Repository = "https://github.com/Abdess/retrobios"
