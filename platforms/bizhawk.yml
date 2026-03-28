@@ -1,0 +1,694 @@
+platform: BizHawk
+version: releasebranch-svn-end
+homepage: https://tasvideos.org/BizHawk
+source: https://raw.githubusercontent.com/TASEmulators/BizHawk/master/src/BizHawk.Emulation.Common/Database/FirmwareDatabase.cs
+base_destination: Firmware
+hash_type: sha1
+verification_mode: sha1
+cores:
+- gambatte
+- mgba
+- sameboy
+- melonds
+- snes9x
+- bsnes
+- beetle_psx
+- beetle_saturn
+- beetle_pce
+- beetle_pcfx
+- beetle_wswan
+- beetle_vb
+- beetle_ngp
+- opera
+- stella
+- picodrive
+- ppsspp
+- handy
+- quicknes
+- genesis_plus_gx
+- ares
+- mupen64plus_next
+- puae
+- prboom
+- virtualjaguar
+- vice_x64
+- mame
+systems:
+  sega-32x:
+    files:
+    - name: 32X_G_BIOS.BIN
+      destination: 32X_G_BIOS.BIN
+      required: true
+      sha1: DBEBD76A448447CB6E524AC3CB0FD19FC065D944
+      size: 256
+    - name: 32X_M_BIOS.BIN
+      destination: 32X_M_BIOS.BIN
+      required: true
+      sha1: 1E5B0B2441A4979B6966D942B20CC76C413B8C5E
+      size: 2048
+    - name: 32X_S_BIOS.BIN
+      destination: 32X_S_BIOS.BIN
+      required: true
+      sha1: 4103668C1BBD66C5E24558E73D4F3F92061A109A
+      size: 1024
+  nintendo-3ds:
+    files:
+    - name: aes_keys.txt
+      destination: aes_keys.txt
+      required: true
+    - name: seeddb.bin
+      destination: seeddb.bin
+      required: true
+  atari-7800:
+    files:
+    - name: A78_PAL_BIOS.bin
+      destination: A78_PAL_BIOS.bin
+      required: true
+      sha1: 5A140136A16D1D83E4FF32A19409CA376A8DF874
+      size: 16384
+    - name: A78_highscore.bin
+      destination: A78_highscore.bin
+      required: true
+      sha1: A3AF676991391A6DD716C79022D4947206B78164
+      size: 4096
+    - name: A78_NTSC_bios.bin
+      destination: A78_NTSC_bios.bin
+      required: true
+      sha1: D9D134BB6B36907C615A594CC7688F7BFCEF5B43
+      size: 4096
+  commodore-c64:
+    files:
+    - name: C64_Kernal.bin
+      destination: C64_Kernal.bin
+      required: true
+      sha1: 1D503E56DF85A62FEE696E7618DC5B4E781DF1BB
+      size: 8192
+    - name: C64_Basic.bin
+      destination: C64_Basic.bin
+      required: true
+      sha1: 79015323128650C742A3694C9429AA91F355905E
+      size: 8192
+    - name: C64_Chargen.bin
+      destination: C64_Chargen.bin
+      required: true
+      sha1: ADC7C31E18C7C7413D54802EF2F4193DA14711AA
+      size: 4096
+    - name: C64_Drive-1541.bin
+      destination: C64_Drive-1541.bin
+      required: true
+      sha1: AB16F56989B27D89BABE5F89C5A8CB3DA71A82F0
+      size: 16384
+    - name: C64_Drive-1541ii.bin
+      destination: C64_Drive-1541ii.bin
+      required: true
+      sha1: D3B78C3DBAC55F5199F33F3FE0036439811F7FB3
+      size: 16384
+  fairchild-channel-f:
+    files:
+    - name: ChannelF_SL31253.rom
+      destination: ChannelF_SL31253.rom
+      required: true
+      sha1: 81193965A374D77B99B4743D317824B53C3E3C78
+      size: 1024
+    - name: ChannelF_SL31254.rom
+      destination: ChannelF_SL31254.rom
+      required: true
+      sha1: 8F70D1B74483BA3A37E86CF16C849D601A8C3D2C
+      size: 1024
+    - name: ChannelF_sl90025.rom
+      destination: ChannelF_sl90025.rom
+      required: true
+      sha1: 759E2ED31FBDE4A2D8DAF8B9F3E0DFFEBC90DAE2
+      size: 1024
+  coleco-colecovision:
+    files:
+    - name: Coleco_Bios.bin
+      destination: Coleco_Bios.bin
+      required: true
+      sha1: 45BEDC4CBDEAC66C7DF59E9E599195C778D86A92
+      size: 8192
+  doom:
+    files:
+    - name: doom2.wad
+      destination: doom2.wad
+      required: true
+      sha1: 7EC7652FCFCE8DDC6E801839291F0E28EF1D5AE7
+      size: 14604584
+  sega-mega-drive:
+    files:
+    - name: GEN_boot.md
+      destination: GEN_boot.md
+      required: true
+      sha1: 3F50B76B0529DB7F79C396B5E808CC0786FFC311
+      size: 2048
+    - name: MCD_eu_100.bin
+      destination: MCD_eu_100.bin
+      required: true
+      sha1: F891E0EA651E2232AF0C5C4CB46A0CAE2EE8F356
+      size: 131072
+    - name: MCD_jp_100p.bin
+      destination: MCD_jp_100p.bin
+      required: true
+      sha1: 4846F448160059A7DA0215A5DF12CA160F26DD69
+      size: 131072
+    - name: SCD_m1_us_110.bin
+      destination: SCD_m1_us_110.bin
+      required: true
+      sha1: F4F315ADCEF9B8FEB0364C21AB7F0EAF5457F3ED
+      size: 131072
+  sega-game-gear:
+    files:
+    - name: GG_majesco.gg
+      destination: GG_majesco.gg
+      required: true
+      sha1: 914AA165E3D879F060BE77870D345B60CFEB4EDE
+      size: 1024
+  mattel-intellivision:
+    files:
+    - name: INTV_EROM.bin
+      destination: INTV_EROM.bin
+      required: true
+      sha1: 5A65B922B562CB1F57DAB51B73151283F0E20C7A
+      size: 8192
+    - name: INTV_GROM.bin
+      destination: INTV_GROM.bin
+      required: true
+      sha1: F9608BB4AD1CFE3640D02844C7AD8E0BCD974917
+      size: 2048
+  atari-lynx:
+    files:
+    - name: Atari_LYNX_boot.img
+      destination: Atari_LYNX_boot.img
+      required: true
+      sha1: E4ED47FAE31693E016B081C6BDA48DA5B70D7CCB
+      size: 512
+  microsoft-msx:
+    files:
+    - name: MSX_cbios_main_msx1.rom
+      destination: MSX_cbios_main_msx1.rom
+      required: true
+      sha1: 2F997E8A57528518C82AB3693FDAE243DBBCC508
+      size: 32768
+    - name: MSX_8020-20bios.rom
+      destination: MSX_8020-20bios.rom
+      required: true
+      sha1: E998F0C441F4F1800EF44E42CD1659150206CF79
+      size: 16384
+    - name: MSX_4000bios.rom
+      destination: MSX_4000bios.rom
+      required: true
+      sha1: DF48902F5F12AF8867AE1A87F255145F0E5E0774
+      size: 16384
+    - name: MSX.rom
+      destination: MSX.rom
+      required: true
+      sha1: 409E82ADAC40F6BDD18EB6C84E8B2FBDC7FB5498
+      size: 32768
+    - name: MSX_1.0.rom
+      destination: MSX_1.0.rom
+      required: true
+      sha1: 3656BB3BBC17D280D2016FE4F6FF3CDED3082A41
+      size: 32768
+    - name: MSX_jpn.rom
+      destination: MSX_jpn.rom
+      required: true
+      sha1: 302AFB5D8BE26C758309CA3DF611AE69CCED2821
+      size: 32768
+  nintendo-64dd:
+    files:
+    - name: 64DD_IPL_DEV.bin
+      destination: 64DD_IPL_DEV.bin
+      required: true
+      sha1: 10C4173C2A7EB09C6579818F72EF18FA0B6D32DE
+      size: 4194304
+    - name: 64DD_IPL_USA.bin
+      destination: 64DD_IPL_USA.bin
+      required: true
+      sha1: 3C5B93CA231550C68693A14F03CEA8D5DBD1BE9E
+      size: 4194304
+    - name: 64DD_IPL_v12_JPN.bin
+      destination: 64DD_IPL_v12_JPN.bin
+      required: true
+      sha1: BF861922DCB78C316360E3E742F4F70FF63C9BC3
+      size: 4194304
+  nintendo-ds:
+    files:
+    - name: NDS_Bios7.bin
+      destination: NDS_Bios7.bin
+      required: true
+      sha1: 24F67BDEA115A2C847C8813A262502EE1607B7DF
+      size: 16384
+    - name: NDS_Bios9.bin
+      destination: NDS_Bios9.bin
+      required: true
+      sha1: BFAAC75F101C135E32E2AAF541DE6B1BE4C8C62D
+      size: 4096
+    - name: NDS_Bios7i.bin
+      destination: NDS_Bios7i.bin
+      required: true
+      sha1: C7C7570BFE51C3C7C5DA3B01331B94E7E7CB4F53
+      size: 65536
+    - name: NDS_Bios9i.bin
+      destination: NDS_Bios9i.bin
+      required: true
+      sha1: 719B9EEF33692406D7170FF526069615759C4DFC
+      size: 65536
+    - name: DSi_Firmware.bin
+      destination: DSi_Firmware.bin
+      required: true
+      size: 131072
+    - name: DSi_Nand_JPN.bin
+      destination: DSi_Nand_JPN.bin
+      required: true
+      size: 251658304
+    - name: DSi_Nand_EUR.bin
+      destination: DSi_Nand_EUR.bin
+      required: true
+      size: 251658304
+    - name: DSi_Nand_USA.bin
+      destination: DSi_Nand_USA.bin
+      required: true
+      size: 251658304
+    - name: DSi_Nand_AUS.bin
+      destination: DSi_Nand_AUS.bin
+      required: true
+      size: 251658304
+    - name: DSi_Nand_CHN.bin
+      destination: DSi_Nand_CHN.bin
+      required: true
+      size: 251658304
+    - name: DSi_Nand_KOR.bin
+      destination: DSi_Nand_KOR.bin
+      required: true
+      size: 251658304
+  philips-videopac:
+    files:
+    - name: O2_Odyssey2.bin
+      destination: O2_Odyssey2.bin
+      required: true
+      sha1: B2E1955D957A475DE2411770452EFF4EA19F4CEE
+      size: 1024
+    - name: O2_PhillipsC52.bin
+      destination: O2_PhillipsC52.bin
+      required: true
+      sha1: A6120AED50831C9C0D95DBDF707820F601D9452E
+      size: 1024
+    - name: O2_G7400_bios.bin
+      destination: O2_G7400_bios.bin
+      required: true
+      sha1: 5130243429B40B01A14E1304D0394B8459A6FBAE
+      size: 1024
+  nec-pc-engine-cd:
+    files:
+    - name: PCECD_3.0-(J).pce
+      destination: PCECD_3.0-(J).pce
+      required: true
+      sha1: 79F5FF55DD10187C7FD7B8DAAB0B3FFBD1F56A2C
+      size: 262144
+    - name: PCECD_gecard.pce
+      destination: PCECD_gecard.pce
+      required: true
+      sha1: 014881A959E045E00F4DB8F52955200865D40280
+      size: 32768
+  sega-saturn:
+    files:
+    - name: SAT_KoF95.bin
+      destination: SAT_KoF95.bin
+      required: true
+      sha1: A67CD4F550751F8B91DE2B8B74528AB4E0C11C77
+      size: 2097152
+    - name: SAT_Ultraman.bin
+      destination: SAT_Ultraman.bin
+      required: true
+      sha1: 56C1B93DA6B660BF393FBF48CA47569000EF4047
+      size: 2097152
+    - name: SAT_1.01-(J).bin
+      destination: SAT_1.01-(J).bin
+      required: true
+      sha1: DF94C5B4D47EB3CC404D88B33A8FDA237EAF4720
+      size: 524288
+    - name: SAT_1.00-(U+E).bin
+      destination: SAT_1.00-(U+E).bin
+      required: true
+      sha1: FAA8EA183A6D7BBE5D4E03BB1332519800D3FBC3
+      size: 524288
+    - name: SAT_1.00-(U+E).bin
+      destination: SAT_1.00-(U+E).bin
+      required: true
+      sha1: FAA8EA183A6D7BBE5D4E03BB1332519800D3FBC3
+      size: 524288
+    - name: SAT_STV_20091-(J).bin
+      destination: SAT_STV_20091-(J).bin
+      required: true
+      sha1: EFF0F54C70BCE05FF3A289BF30B1027E1C8CD117
+      size: 524288
+    - name: SAT_STV_17952A-(U).bin
+      destination: SAT_STV_17952A-(U).bin
+      required: true
+      sha1: EAF1C3E5D602E1139D2090A78D7E19F04F916794
+      size: 524288
+    - name: SAT_STV_17954A-(E).bin
+      destination: SAT_STV_17954A-(E).bin
+      required: true
+      sha1: AF79CFF317E5B57D49E463AF16A9F616ED1EEE08
+      size: 524288
+  nintendo-snes:
+    files:
+    - name: SNES_cx4.rom
+      destination: SNES_cx4.rom
+      required: true
+      sha1: A002F4EFBA42775A31185D443F3ED1790B0E949A
+      size: 3072
+    - name: SNES_dsp1.rom
+      destination: SNES_dsp1.rom
+      required: true
+      sha1: 188D471FEFEA71EB53F0EE7064697FF0971B1014
+      size: 8192
+    - name: SNES_dsp1b.rom
+      destination: SNES_dsp1b.rom
+      required: true
+      sha1: 78B724811F5F18D8C67669D9390397EB1A47A5E2
+      size: 8192
+    - name: SNES_dsp2.rom
+      destination: SNES_dsp2.rom
+      required: true
+      sha1: 198C4B1C3BFC6D69E734C5957AF3DBFA26238DFB
+      size: 8192
+    - name: SNES_dsp3.rom
+      destination: SNES_dsp3.rom
+      required: true
+      sha1: 558DA7CB3BD3876A6CA693661FFC6C110E948CF9
+      size: 8192
+    - name: SNES_dsp4.rom
+      destination: SNES_dsp4.rom
+      required: true
+      sha1: AF6478AECB6F1B67177E79C82CA04C56250A8C72
+      size: 8192
+    - name: SNES_st010.rom
+      destination: SNES_st010.rom
+      required: true
+      sha1: 6472828403DE3589433A906E2C3F3D274C0FF008
+      size: 53248
+    - name: SNES_st011.rom
+      destination: SNES_st011.rom
+      required: true
+      sha1: FECBAE2CEC76C710422486BAA186FFA7CA1CF925
+      size: 53248
+    - name: SNES_st018.rom
+      destination: SNES_st018.rom
+      required: true
+      sha1: 91383B92745CC7CC4F15409AC5BC2C2F699A43F1
+      size: 163840
+    - name: SNES_SGB_(JU).sfc
+      destination: SNES_SGB_(JU).sfc
+      required: true
+      sha1: 6ED55C4368333B57F6A2F8BBD70CCD87ED48058E
+      size: 262144
+    - name: SNES_SGB2_(J).sfc
+      destination: SNES_SGB2_(J).sfc
+      required: true
+      sha1: E5B2922CA137051059E4269B236D07A22C07BC84
+      size: 524288
+  nintendo-bsx:
+    files:
+    - name: Satellaview_BS-X.sfc
+      destination: Satellaview_BS-X.sfc
+      required: true
+      sha1: 604556B2E62860AF18DB5A77F2956EBC75450020
+      size: 1048576
+    - name: Satellaview_Mahjong.sfc
+      destination: Satellaview_Mahjong.sfc
+      required: true
+      sha1: 8417556B5CE22FB9BC4026FE28F7AEE348A76FD9
+      size: 1048576
+    - name: Satellaview_GNEXT.sfc
+      destination: Satellaview_GNEXT.sfc
+      required: true
+      sha1: 356A3D60E9FABFF4B4CEC66277C9A6B717C958CE
+      size: 1572864
+    - name: Satellaview_RPG_Tsukuru.sfc
+      destination: Satellaview_RPG_Tsukuru.sfc
+      required: true
+      sha1: 95F31DFB31200E31E80007CC66A32E2C1A7B02BE
+      size: 2097152
+    - name: Satellaview_SameGame.sfc
+      destination: Satellaview_SameGame.sfc
+      required: true
+      sha1: A6AD0F89C3E75327D70AA0F0239C7B06F151E0A4
+      size: 1048576
+    - name: Satellaview_Derby_Stallion_96.sfc
+      destination: Satellaview_Derby_Stallion_96.sfc
+      required: true
+      sha1: 24AF9A5A78635EC493BBBC2540AB98BD161C5798
+      size: 3145728
+    - name: Satellaview_Ongaku_Tsukuru.sfc
+      destination: Satellaview_Ongaku_Tsukuru.sfc
+      required: true
+      sha1: 337E0C4BDBF544787B543A1FB83AFBA7526191B9
+      size: 1048576
+    - name: Satellaview_SoundNovel_Tsukuru.sfc
+      destination: Satellaview_SoundNovel_Tsukuru.sfc
+      required: true
+      sha1: A9B124948A19BB5A295EC208FCA8180476BDFEBB
+      size: 3145728
+    - name: Satellaview_Bass_Tsuri.sfc
+      destination: Satellaview_Bass_Tsuri.sfc
+      required: true
+      sha1: 357AC4826297A6496035E3951CACDA55DCAE4B1B
+      size: 4194304
+  gce-vectrex:
+    files:
+    - name: VEC_Bios.bin
+      destination: VEC_Bios.bin
+      required: true
+      sha1: B9BBF5BB0EAC52D039A4A993A2D8064B862C9E28
+      size: 4096
+    - name: VEC_Minestorm.vec
+      destination: VEC_Minestorm.vec
+      required: true
+      sha1: 65D07426B520DDD3115D40F255511E0FD2E20AE7
+      size: 8192
+  sinclair-zx-spectrum:
+    files:
+    - name: ZX_pentagon.rom
+      destination: ZX_pentagon.rom
+      required: true
+      sha1: A584272F21DC82C14B7D4F1ED440E23A976E71F0
+      size: 32768
+    - name: ZX_trdos.rom
+      destination: ZX_trdos.rom
+      required: true
+      sha1: 282EB7BC819AAD2A12FD954E76F7838A4E1A7929
+      size: 16384
+  3do:
+    files:
+    - name: panafz1.bin
+      destination: panafz1.bin
+      required: true
+      sha1: 34BF189111295F74D7B7DFC1F304D98B8D36325A
+      size: 1048576
+    - name: panafz1e.bin
+      destination: panafz1e.bin
+      required: true
+      sha1: 1D0DB81E171EBC1D07CEFC8CE8AB082306186E56
+      size: 1048576
+    - name: panafz1j.bin
+      destination: panafz1j.bin
+      required: true
+      sha1: EC7EC62D60EC0459A14ED56EBC66761EF3C80EFC
+      size: 1048576
+    - name: panafz10.bin
+      destination: panafz10.bin
+      required: true
+      sha1: 3C912300775D1AD730DC35757E279C274C0ACAAD
+      size: 1048576
+    - name: panafz10e-anvil.bin
+      destination: panafz10e-anvil.bin
+      required: true
+      sha1: A900371F0CDCDC03F79557F11D406FD71251A5FD
+      size: 1048576
+    - name: panafz10j.bin
+      destination: panafz10j.bin
+      required: true
+      sha1: FE7F9C9C6A98910013BF13F2CF798DE9FEA52ACD
+      size: 1048576
+    - name: goldstar.bin
+      destination: goldstar.bin
+      required: true
+      sha1: C4A2E5336F77FB5F743DE1EEA2CDA43675EE2DE7
+      size: 1048576
+    - name: goldstar_fc1_enc.bin
+      destination: goldstar_fc1_enc.bin
+      required: true
+      sha1: 8EF7503C948314D242DA47B7FDC272F68DAC2AEE
+      size: 1048576
+    - name: sanyotry.bin
+      destination: sanyotry.bin
+      required: true
+      sha1: B01C53DA256DDE43FFEC4AD3FC3ADFA8D635E943
+      size: 1048576
+    - name: sanyo_hc21_b3_unenc.bin
+      destination: sanyo_hc21_b3_unenc.bin
+      required: true
+      sha1: C389AF32BCADF0D86826927DC3D20B7072F90069
+      size: 1048576
+    - name: 3do_arcade_saot.bin
+      destination: 3do_arcade_saot.bin
+      required: true
+      sha1: 520D3D1B5897800AF47F92EFD2444A26B7A7DEAD
+      size: 524288
+    - name: 3do_devkit_1.0fc2.bin
+      destination: 3do_devkit_1.0fc2.bin
+      required: true
+      sha1: BD325C869E1DDE8A3872FC21565E0646A3D5B525
+      size: 1048576
+    - name: panafz1-kanji.bin
+      destination: panafz1-kanji.bin
+      required: true
+      sha1: ACD39A8FEE1B9D2950D5AB447846C11FB31AF63E
+      size: 933636
+    - name: panafz10ja-anvil-kanji.bin
+      destination: panafz10ja-anvil-kanji.bin
+      required: true
+      sha1: 2E857B957803D0331FD229328DF01F3FFAB69EEE
+      size: 1048576
+  commodore-amiga:
+    files:
+    - name: amiga-os-130.rom
+      destination: amiga-os-130.rom
+      required: true
+      sha1: 891E9A547772FE0C6C19B610BAF8BC4EA7FCB785
+      size: 262144
+    - name: amiga-os-205-a600.rom
+      destination: amiga-os-205-a600.rom
+      required: true
+      sha1: 02843C4253BBD29ABA535B0AA3BD9A85034ECDE4
+      size: 524288
+    - name: amiga-os-310-a1200.rom
+      destination: amiga-os-310-a1200.rom
+      required: true
+      sha1: E21545723FE8374E91342617604F1B3D703094F1
+      size: 524288
+    - name: amiga-os-310-a4000.rom
+      destination: amiga-os-310-a4000.rom
+      required: true
+      sha1: 5FE04842D04A489720F0F4BB0E46948199406F49
+      size: 524288
+    - name: amiga-os-310-cd32.rom
+      destination: amiga-os-310-cd32.rom
+      required: true
+      sha1: 3525BE8887F79B5929E017B42380A79EDFEE542D
+      size: 524288
+    - name: amiga-os-310-cd32-ext.rom
+      destination: amiga-os-310-cd32-ext.rom
+      required: true
+      sha1: 5BEF3D628CE59CC02A66E6E4AE0DA48F60E78F7F
+      size: 524288
+  apple-ii:
+    files:
+    - name: AppleIIe.rom
+      destination: AppleIIe.rom
+      required: true
+      sha1: B8EA90ABE135A0031065E01697C4A3A20D51198B
+      size: 16384
+    - name: AppleIIe_DiskII.rom
+      destination: AppleIIe_DiskII.rom
+      required: true
+      sha1: D4181C9F046AAFC3FB326B381BAAC809D9E38D16
+      size: 256
+  nintendo-gba:
+    files:
+    - name: GBA_bios.rom
+      destination: GBA_bios.rom
+      required: true
+      sha1: 300C20DF6731A33952DED8C436F7F186D25D3492
+      size: 16384
+  nintendo-gb:
+    files:
+    - name: GB_dmg.bin
+      destination: GB_dmg.bin
+      required: true
+      sha1: 4ED31EC6B0B175BB109C0EB5FD3D193DA823339F
+      size: 256
+    - name: GB_sgb.bin
+      destination: GB_sgb.bin
+      required: true
+      sha1: AA2F50A77DFB4823DA96BA99309085A3C6278515
+      size: 256
+    - name: GB_sgb2.bin
+      destination: GB_sgb2.bin
+      required: true
+      sha1: 93407EA10D2F30AB96A314D8ECA44FE160AEA734
+      size: 256
+  nintendo-gbc:
+    files:
+    - name: GBC_cgb.bin
+      destination: GBC_cgb.bin
+      required: true
+      sha1: 1293D68BF9643BC4F36954C1E80E38F39864528D
+      size: 2304
+    - name: GBC_agb.bin
+      destination: GBC_agb.bin
+      required: true
+      sha1: FA5287E24B0FA533B3B5EF2B28A81245346C1A0F
+      size: 2304
+  nintendo-nes:
+    files:
+    - name: FDS_disksys-nintendo.rom
+      destination: FDS_disksys-nintendo.rom
+      required: true
+      sha1: 57FE1BDEE955BB48D357E463CCBF129496930B62
+      size: 8192
+  nec-pc-fx:
+    files:
+    - name: PCFX_bios.bin
+      destination: PCFX_bios.bin
+      required: true
+      sha1: 1A77FD83E337F906AECAB27A1604DB064CF10074
+      size: 1048576
+    - name: PCFX_fx-scsi.rom
+      destination: PCFX_fx-scsi.rom
+      required: true
+      sha1: 65482A23AC5C10A6095AEE1DB5824CCA54EAD6E5
+      size: 524288
+  sony-playstation:
+    files:
+    - name: PSX_DTLH2000.bin
+      destination: PSX_DTLH2000.bin
+      required: true
+      sha1: 1A8D6F9453111B1D317BB7DAE300495FBF54600C
+      size: 524288
+    - name: PSX_DTLH2000.bin
+      destination: PSX_DTLH2000.bin
+      required: true
+      sha1: 1A8D6F9453111B1D317BB7DAE300495FBF54600C
+      size: 524288
+    - name: PSX_DTLH2000.bin
+      destination: PSX_DTLH2000.bin
+      required: true
+      sha1: 1A8D6F9453111B1D317BB7DAE300495FBF54600C
+      size: 524288
+  sega-master-system:
+    files:
+    - name: SMS_us_1.3.sms
+      destination: SMS_us_1.3.sms
+      required: true
+      sha1: C315672807D8DDB8D91443729405C766DD95CAE7
+      size: 8192
+    - name: SMS_jp_2.1.sms
+      destination: SMS_jp_2.1.sms
+      required: true
+      sha1: A8C1B39A2E41137835EDA6A5DE6D46DD9FADBAF2
+      size: 8192
+    - name: SMS_kr.sms
+      destination: SMS_kr.sms
+      required: true
+      sha1: 2FEAFD8F1C40FDF1BD5668F8C5C02E5560945B17
+      size: 131072
+  texas-instruments-ti-83:
+    files:
+    - name: TI83_110.rom
+      destination: TI83_110.rom
+      required: true
+      sha1: 25B373B58523647BB7B904001D391615E0B79BEE
+      size: 262144

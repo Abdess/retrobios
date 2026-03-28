@@ -122,3 +122,16 @@ platforms:
     schedule: null
     target_scraper: retropie_targets
     target_source: "https://retropie.org.uk/stats/pkgflags/"
+
+  bizhawk:
+    config: bizhawk.yml
+    status: active
+    logo: "https://raw.githubusercontent.com/TASEmulators/BizHawk/master/Assets/bizhawk.ico"
+    scraper: bizhawk
+    source_url: "https://raw.githubusercontent.com/TASEmulators/BizHawk/master/src/BizHawk.Emulation.Common/Database/FirmwareDatabase.cs"
+    source_format: csharp_firmware_database
+    hash_type: sha1
+    schedule: monthly
+    cores: [gambatte, mgba, sameboy, melonds, snes9x, bsnes, beetle_psx, beetle_saturn, beetle_pce, beetle_pcfx, beetle_wswan, beetle_vb, beetle_ngp, opera, stella, picodrive, ppsspp, handy, quicknes, genesis_plus_gx, ares, mupen64plus_next, puae, prboom, virtualjaguar, vice_x64, mame]
+    target_scraper: null
+    target_source: null
