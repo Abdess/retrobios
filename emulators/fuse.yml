@@ -244,7 +244,8 @@ files:
   - name: "fuse/128p-0.rom"
     system: sinclair-zxspectrum
     required: true
-    md5: ""
+    md5: a249565f03b98d004ee7f019570069cd
+    sha1: d07fcdeca892ee80494d286ea9ea5bf3928a1aca
     size: 16384
     validation: [size]
     note: "Pentagon 128K/512K/1024 ROM 0. Required for Pentagon machines."
@@ -253,7 +254,8 @@ files:
   - name: "fuse/128p-1.rom"
     system: sinclair-zxspectrum
     required: true
-    md5: ""
+    md5: 6e09e5d3c4aef166601669feaaadc01c
+    sha1: 80080644289ed93d71a1103992a154cc9802b2fa
     size: 16384
     validation: [size]
     note: "Pentagon 128K/512K/1024 ROM 1. Required for Pentagon machines."
@@ -262,7 +264,8 @@ files:
   - name: "fuse/trdos.rom"
     system: sinclair-zxspectrum
     required: true
-    md5: ""
+    md5: 0da70a5d2a0e733398e005b96b7e4ba6
+    sha1: 21695e3f2a8f796386ce66eea8a246b0ac44810c
     size: 16384
     validation: [size]
     note: "TR-DOS ROM (Beta 128 disk interface). Used by Pentagon and Scorpion."
@@ -271,7 +274,8 @@ files:
   - name: "fuse/gluck.rom"
     system: sinclair-zxspectrum
     required: true
-    md5: ""
+    md5: d5869034604dbfd2c1d54170e874fd0a
+    sha1: 015eb96dafb273d4f4512c467e9b43c305fd1bc4
     size: 16384
     validation: [size]
     note: "Gluck ROM. Required for Pentagon 512K and 1024."
@@ -281,7 +285,8 @@ files:
   - name: "fuse/256s-0.rom"
     system: sinclair-zxspectrum
     required: true
-    md5: ""
+    md5: b9fda5b6a747ff037365b0e2d8c4379a
+    sha1: 477114ff0fe1388e0979df1423602b21248164e5
     size: 16384
     validation: [size]
     note: "Scorpion 256K ROM 0. Required for Scorpion machine."
@@ -290,7 +295,8 @@ files:
   - name: "fuse/256s-1.rom"
     system: sinclair-zxspectrum
     required: true
-    md5: ""
+    md5: 643861ad34831b255bf2eb64e8b6ecb8
+    sha1: 367b5a102fb663beee8e7930b8c4acc219c1f7b3
     size: 16384
     validation: [size]
     note: "Scorpion 256K ROM 1. Required for Scorpion machine."
@@ -299,7 +305,8 @@ files:
   - name: "fuse/256s-2.rom"
     system: sinclair-zxspectrum
     required: true
-    md5: ""
+    md5: d8ad507b1c915a9acfe0d73957082926
+    sha1: 07783ee295274d8ff15d935bfd787c8ac1d54900
     size: 16384
     validation: [size]
     note: "Scorpion 256K ROM 2. Required for Scorpion machine."
@@ -308,7 +315,8 @@ files:
   - name: "fuse/256s-3.rom"
     system: sinclair-zxspectrum
     required: true
-    md5: ""
+    md5: ce0723f9bc02f4948c15d3b3230ae831
+    sha1: 33703e97cc93b7edfcc0334b64233cf81b7930db
     size: 16384
     validation: [size]
     note: "Scorpion 256K ROM 3 (TR-DOS). Required for Scorpion machine."
@@ -318,7 +326,8 @@ files:
   - name: "fuse/if1-2.rom"
     system: sinclair-zxspectrum
     required: false
-    md5: ""
+    md5: 31b704ae925305e74f50699271fddd9a
+    sha1: 5cfb6bca4177c45fefd571734576b55e3a127c08
     size: 8192
     validation: [size]
     note: "Interface 1 ROM (edition 2). Loaded by peripherals/if1.c:403."
@@ -365,16 +374,19 @@ files:
   - name: "fuse/mf1.rom"
     system: sinclair-zxspectrum
     required: false
-    md5: ""
+    md5: ad539b4d026dd53a8442505f51441dfc
+    sha1: ba28754a3cc31a4ca579829ed4310c313409cf5d
     size: 8192
     validation: [size]
-    note: "Multiface 1 ROM. Not embedded."
+    note: "Multiface 1 ROM (MU 2.1). Not embedded."
     source_ref: "fuse/settings.c:217, fuse/peripherals/multiface.c:224"
 
   - name: "fuse/mf128.rom"
     system: sinclair-zxspectrum
     required: false
-    md5: ""
+    md5: c420ef03f6e0c477d9474efe3441a556
+    sha1: f03f4ecbcf4a654f4775d16bda0d4cc47f884379
+    aliases: [multiface128.rom]
     size: 8192
     validation: [size]
     note: "Multiface 128 ROM. Not embedded."
@@ -383,7 +395,9 @@ files:
   - name: "fuse/mf3.rom"
     system: sinclair-zxspectrum
     required: false
-    md5: ""
+    md5: afe2218c3a6a43f1854fe824424d4167
+    sha1: 5d74d2e2e5a537639da92ff120f8a6d86f474495
+    aliases: [multiface3.rom]
     size: 8192
     validation: [size]
     note: "Multiface 3 ROM. Not embedded."
@@ -411,7 +425,8 @@ files:
   - name: "fuse/usource.rom"
     system: sinclair-zxspectrum
     required: false
-    md5: ""
+    md5: ebe1490920cbb62bde7282ae24928d95
+    sha1: fae53678a85ba503b77ed2d877de2635b284eef1
     size: 8192
     validation: [size]
     note: "Currah uSource ROM. Not embedded."
