@@ -24,6 +24,7 @@ import sys
 import tempfile
 import unittest
 import zipfile
+from pathlib import Path
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
 
@@ -2522,6 +2523,87 @@ class TestE2E(unittest.TestCase):
         manifest_dests = {f["dest"] for f in manifest["files"]}
 
         self.assertEqual(manifest_dests, zip_names)
+
+
+    # ---------------------------------------------------------------
+    # install.py tests
+    # ---------------------------------------------------------------
+
+    def test_93_parse_retroarch_cfg(self):
+        """Parse system_directory from retroarch.cfg."""
+        sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        from install import _parse_retroarch_system_dir
+        cfg = os.path.join(self.root, "retroarch.cfg")
+        # Quoted absolute path
+        with open(cfg, "w") as f:
+            f.write('system_directory = "/home/user/ra/system"\n')
+        result = _parse_retroarch_system_dir(Path(cfg))
+        self.assertEqual(result, Path("/home/user/ra/system"))
+        # Default value
+        with open(cfg, "w") as f:
+            f.write('system_directory = "default"\n')
+        result = _parse_retroarch_system_dir(Path(cfg))
+        self.assertEqual(result, Path(self.root) / "system")
+        # Unquoted
+        with open(cfg, "w") as f:
+            f.write('system_directory = /tmp/ra_system\n')
+        result = _parse_retroarch_system_dir(Path(cfg))
+        self.assertEqual(result, Path("/tmp/ra_system"))
+
+    def test_94_parse_emudeck_settings(self):
+        """Parse emulationPath from EmuDeck settings.sh."""
+        sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        from install import _parse_bash_var
+        settings = os.path.join(self.root, "settings.sh")
+        with open(settings, "w") as f:
+            f.write('emulationPath="/home/deck/Emulation"\nromsPath="/home/deck/Emulation/roms"\n')
+        result = _parse_bash_var(Path(settings), "emulationPath")
+        self.assertEqual(result, "/home/deck/Emulation")
+
+    def test_95_parse_ps1_var(self):
+        """Parse $emulationPath from EmuDeck settings.ps1."""
+        sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        from install import _parse_ps1_var
+        settings = os.path.join(self.root, "settings.ps1")
+        with open(settings, "w") as f:
+            f.write('$emulationPath="C:\\Emulation"\n')
+        result = _parse_ps1_var(Path(settings), "$emulationPath")
+        self.assertEqual(result, "C:\\Emulation")
+
+    def test_96_target_filtering(self):
+        """--target filters files by cores field."""
+        sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        from install import _filter_by_target
+        files = [
+            {"dest": "a.bin", "cores": None},
+            {"dest": "b.bin", "cores": ["flycast", "redream"]},
+            {"dest": "c.bin", "cores": ["dolphin"]},
+        ]
+        filtered = _filter_by_target(files, ["flycast", "snes9x"])
+        dests = [f["dest"] for f in filtered]
+        self.assertIn("a.bin", dests)
+        self.assertIn("b.bin", dests)
+        self.assertNotIn("c.bin", dests)
+
+    def test_97_standalone_copies(self):
+        """Standalone keys copied to existing emulator dirs."""
+        sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        from install import do_standalone_copies
+        bios_dir = Path(self.root) / "bios"
+        bios_dir.mkdir(exist_ok=True)
+        (bios_dir / "prod.keys").write_bytes(b"KEYS")
+        yuzu_dir = Path(self.root) / "yuzu_keys"
+        yuzu_dir.mkdir()
+        missing_dir = Path(self.root) / "nonexistent"
+        manifest = {
+            "base_destination": "bios",
+            "standalone_copies": [{"file": "prod.keys", "targets": {"linux": [str(yuzu_dir), str(missing_dir)]}}]
+        }
+        copied, skipped = do_standalone_copies(manifest, bios_dir, "linux")
+        self.assertEqual(copied, 1)
+        self.assertEqual(skipped, 1)
+        self.assertTrue((yuzu_dir / "prod.keys").exists())
+        self.assertFalse((missing_dir / "prod.keys").exists())
 
 
 if __name__ == "__main__":
