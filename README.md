@@ -43,7 +43,7 @@ Full list with per-file details: **[https://abdess.github.io/retrobios/](https:/
 | Platform | Coverage | Verified | Untested | Missing |
 |----------|----------|----------|----------|---------|
 | Batocera | 359/359 (100.0%) | 359 | 0 | 0 |
-| BizHawk | 118/118 (100.0%) | 116 | 2 | 0 |
+| BizHawk | 118/118 (100.0%) | 118 | 0 | 0 |
 | EmuDeck | 161/161 (100.0%) | 161 | 0 | 0 |
 | Lakka | 448/448 (100.0%) | 448 | 0 | 0 |
 | Recalbox | 346/346 (100.0%) | 346 | 0 | 0 |
@@ -113,4 +113,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 This repository provides BIOS files for personal backup and archival purposes.
 
-*Auto-generated on 2026-03-28T10:39:20Z*
+*Auto-generated on 2026-03-28T10:48:52Z*
