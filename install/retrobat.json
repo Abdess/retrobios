@@ -3,7 +3,7 @@
   "platform": "retrobat",
   "display_name": "RetroBat",
   "version": "1.0",
-  "generated": "2026-03-28T17:42:06Z",
+  "generated": "2026-03-28T17:46:13Z",
   "base_destination": "bios",
   "detect": [
     {

@@ -3,7 +3,7 @@
   "platform": "retroarch",
   "display_name": "RetroArch",
   "version": "1.0",
-  "generated": "2026-03-28T17:41:55Z",
+  "generated": "2026-03-28T17:45:52Z",
   "base_destination": "system",
   "detect": [
     {

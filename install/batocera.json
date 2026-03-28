@@ -3,7 +3,7 @@
   "platform": "batocera",
   "display_name": "Batocera",
   "version": "1.0",
-  "generated": "2026-03-28T17:41:08Z",
+  "generated": "2026-03-28T17:44:03Z",
   "base_destination": "bios",
   "detect": [
     {
