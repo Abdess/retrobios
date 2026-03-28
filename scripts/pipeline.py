@@ -6,15 +6,17 @@ Steps:
   2. refresh_data_dirs.py       (update Dolphin Sys, PPSSPP, etc.)
   3. verify.py --all            (check all platforms)
   4. generate_pack.py --all     (build ZIP packs)
+  4b. generate install manifests
+  4c. generate target manifests
   5. consistency check          (verify counts == pack counts)
-  6. generate_readme.py         (rebuild README.md + CONTRIBUTING.md)
-  7. generate_site.py           (rebuild MkDocs pages)
+  8. generate_readme.py         (rebuild README.md + CONTRIBUTING.md)
+  9. generate_site.py           (rebuild MkDocs pages)
 
 Usage:
     python scripts/pipeline.py                    # active platforms
     python scripts/pipeline.py --include-archived # all platforms
     python scripts/pipeline.py --skip-packs       # steps 1-3 only
-    python scripts/pipeline.py --skip-docs        # skip steps 6-7
+    python scripts/pipeline.py --skip-docs        # skip steps 8-9
     python scripts/pipeline.py --offline          # skip step 2
 """
 from __future__ import annotations
@@ -97,7 +99,7 @@ def check_consistency(verify_output: str, pack_output: str) -> bool:
     v = parse_verify_counts(verify_output)
     p = parse_pack_counts(pack_output)
 
-    print("\n--- 5/7 consistency check ---")
+    print("\n--- 5/9 consistency check ---")
     all_ok = True
 
     for v_label, (v_ok, v_total) in sorted(v.items()):
@@ -151,7 +153,7 @@ def main():
     ok, out = run(
         [sys.executable, "scripts/generate_db.py", "--force",
          "--bios-dir", "bios", "--output", "database.json"],
-        "1/7 generate database",
+        "1/9 generate database",
     )
     results["generate_db"] = ok
     if not ok:
@@ -162,11 +164,11 @@ def main():
     if not args.offline:
         ok, out = run(
             [sys.executable, "scripts/refresh_data_dirs.py"],
-            "2/7 refresh data directories",
+            "2/9 refresh data directories",
         )
         results["refresh_data"] = ok
     else:
-        print("\n--- 2/7 refresh data directories: SKIPPED (--offline) ---")
+        print("\n--- 2/9 refresh data directories: SKIPPED (--offline) ---")
         results["refresh_data"] = True
 
     # Step 3: Verify
@@ -175,7 +177,7 @@ def main():
         verify_cmd.append("--include-archived")
     if args.target:
         verify_cmd.extend(["--target", args.target])
-    ok, verify_output = run(verify_cmd, "3/7 verify all platforms")
+    ok, verify_output = run(verify_cmd, "3/9 verify all platforms")
     results["verify"] = ok
     all_ok = all_ok and ok
 
@@ -194,12 +196,44 @@ def main():
             pack_cmd.append("--include-extras")
         if args.target:
             pack_cmd.extend(["--target", args.target])
-        ok, pack_output = run(pack_cmd, "4/7 generate packs")
+        ok, pack_output = run(pack_cmd, "4/9 generate packs")
         results["generate_packs"] = ok
         all_ok = all_ok and ok
     else:
-        print("\n--- 4/7 generate packs: SKIPPED (--skip-packs) ---")
+        print("\n--- 4/9 generate packs: SKIPPED (--skip-packs) ---")
         results["generate_packs"] = True
+
+    # Step 4b: Generate install manifests
+    if not args.skip_packs:
+        manifest_cmd = [
+            sys.executable, "scripts/generate_pack.py", "--all",
+            "--manifest", "--output-dir", "install",
+        ]
+        if args.include_archived:
+            manifest_cmd.append("--include-archived")
+        if args.offline:
+            manifest_cmd.append("--offline")
+        if args.target:
+            manifest_cmd.extend(["--target", args.target])
+        ok, _ = run(manifest_cmd, "4b/9 generate install manifests")
+        results["generate_manifests"] = ok
+        all_ok = all_ok and ok
+    else:
+        print("\n--- 4b/9 generate install manifests: SKIPPED (--skip-packs) ---")
+        results["generate_manifests"] = True
+
+    # Step 4c: Generate target manifests
+    if not args.skip_packs:
+        target_cmd = [
+            sys.executable, "scripts/generate_pack.py",
+            "--manifest-targets", "--output-dir", "install/targets",
+        ]
+        ok, _ = run(target_cmd, "4c/9 generate target manifests")
+        results["generate_target_manifests"] = ok
+        all_ok = all_ok and ok
+    else:
+        print("\n--- 4c/9 generate target manifests: SKIPPED (--skip-packs) ---")
+        results["generate_target_manifests"] = True
 
     # Step 5: Consistency check
     if pack_output and verify_output:
@@ -207,32 +241,32 @@ def main():
         results["consistency"] = ok
         all_ok = all_ok and ok
     else:
-        print("\n--- 5/7 consistency check: SKIPPED ---")
+        print("\n--- 5/9 consistency check: SKIPPED ---")
         results["consistency"] = True
 
-    # Step 6: Generate README
+    # Step 8: Generate README
     if not args.skip_docs:
         ok, _ = run(
             [sys.executable, "scripts/generate_readme.py",
              "--db", "database.json", "--platforms-dir", "platforms"],
-            "6/7 generate readme",
+            "8/9 generate readme",
         )
         results["generate_readme"] = ok
         all_ok = all_ok and ok
     else:
-        print("\n--- 6/7 generate readme: SKIPPED (--skip-docs) ---")
+        print("\n--- 8/9 generate readme: SKIPPED (--skip-docs) ---")
         results["generate_readme"] = True
 
-    # Step 7: Generate site pages
+    # Step 9: Generate site pages
     if not args.skip_docs:
         ok, _ = run(
             [sys.executable, "scripts/generate_site.py"],
-            "7/7 generate site",
+            "9/9 generate site",
         )
         results["generate_site"] = ok
         all_ok = all_ok and ok
     else:
-        print("\n--- 7/7 generate site: SKIPPED (--skip-docs) ---")
+        print("\n--- 9/9 generate site: SKIPPED (--skip-docs) ---")
         results["generate_site"] = True
 
     # Summary
