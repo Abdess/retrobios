@@ -47,6 +47,7 @@ nav:
 - Platforms:
   - Overview: platforms/index.md
   - Batocera: platforms/batocera.md
+  - BizHawk: platforms/bizhawk.md
   - EmuDeck: platforms/emudeck.md
   - Lakka: platforms/lakka.md
   - Recalbox: platforms/recalbox.md
