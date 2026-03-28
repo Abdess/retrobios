@@ -249,6 +249,9 @@ systems:
     - name: aes.zip
       destination: aes.zip
       required: true
+    data_directories:
+    - ref: fbneo-hiscore
+      destination: fbneo
     core: fbneo
     manufacturer: Various
     docs: https://docs.libretro.com/library/fbneo/
