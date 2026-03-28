@@ -72,6 +72,7 @@ nav:
   - Camputers: systems/camputers.md
   - Casio: systems/casio.md
   - Coleco: systems/coleco.md
+  - Commander X16: systems/commander-x16.md
   - Commodore: systems/commodore.md
   - DOS: systems/dos.md
   - Dinothawr: systems/dinothawr.md
@@ -86,6 +87,7 @@ nav:
   - Funtech: systems/funtech.md
   - GCE: systems/gce.md
   - Galaksija: systems/galaksija.md
+  - Game Engines: systems/game-engines.md
   - GamePark: systems/gamepark.md
   - Grundy: systems/grundy.md
   - Hartung: systems/hartung.md
@@ -108,6 +110,7 @@ nav:
   - Palm: systems/palm.md
   - Philips: systems/philips.md
   - Pioneer: systems/pioneer.md
+  - QEMU: systems/qemu.md
   - RPG Maker: systems/rpg-maker.md
   - Ringo: systems/ringo.md
   - SNK: systems/snk.md
