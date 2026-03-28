@@ -37,6 +37,7 @@ files:
     note: "high score definitions, loaded from ROM directory"
 
   - name: cheat.dat
+    path: "mame2000/cheat/cheat.dat"
     required: false
     category: game_data
     source_ref: "src/cheat.c:210,618,830"

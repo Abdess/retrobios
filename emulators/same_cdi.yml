@@ -36,6 +36,7 @@ notes: |
 
 files:
   - name: cdimono1.zip
+    path: "same_cdi/bios/cdimono1.zip"
     category: bios_zip
     system: cdi
     required: true
@@ -69,6 +70,7 @@ files:
         sha1: "56d0acd7caad51c7de703247cd6d842b36173079"
 
   - name: cdimono2.zip
+    path: "same_cdi/bios/cdimono2.zip"
     category: bios_zip
     system: cdi
     required: false
@@ -92,6 +94,7 @@ files:
         sha1: "cf02d84977050c71e87a38f1249e83c43a93949b"
 
   - name: cdibios.zip
+    path: "same_cdi/bios/cdibios.zip"
     category: bios_zip
     system: cdi
     required: false
@@ -115,6 +118,7 @@ files:
         sha1: "56d0acd7caad51c7de703247cd6d842b36173079"
 
   - name: cdi910.zip
+    path: "same_cdi/bios/cdi910.zip"
     category: bios_zip
     system: cdi
     required: false
@@ -153,6 +157,7 @@ files:
         sha1: "153d1a977291bedb7420484a9f889325dbd3628e"
 
   - name: cdi490a.zip
+    path: "same_cdi/bios/cdi490a.zip"
     category: bios_zip
     system: cdi
     required: false

@@ -64,6 +64,7 @@ notes: |
 files:
   # Data files (system_dir/ume2015/)
   - name: hiscore.dat
+    path: "ume2015/hiscore.dat"
     required: false
     category: game_data
     source_ref: "src/emu/hiscore.c:335-337"

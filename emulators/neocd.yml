@@ -38,7 +38,7 @@ files:
   # --- Front Loader family ---
 
   - name: neocd_f.rom
-    dest: neocd/neocd_f.rom
+    path: "neocd/neocd_f.rom"
     system: snk-neogeo-cd
     required: false
     size: 524288
@@ -46,7 +46,7 @@ files:
     source_ref: "src/bios.cpp:59 FRONT_LOADER_SEARCH_PATTERN at 0xC0006C"
 
   - name: front-sp1.bin
-    dest: neocd/front-sp1.bin
+    path: "neocd/front-sp1.bin"
     system: snk-neogeo-cd
     required: false
     size: 524288
@@ -54,7 +54,7 @@ files:
     source_ref: "src/bios.cpp:59 FRONT_LOADER_SEARCH_PATTERN, src/bios.cpp:148-160 autoByteSwap"
 
   - name: neocd_sf.rom
-    dest: neocd/neocd_sf.rom
+    path: "neocd/neocd_sf.rom"
     system: snk-neogeo-cd
     required: false
     size: 524288
@@ -64,7 +64,7 @@ files:
   # --- Top Loader family ---
 
   - name: neocd_t.rom
-    dest: neocd/neocd_t.rom
+    path: "neocd/neocd_t.rom"
     system: snk-neogeo-cd
     required: false
     size: 524288
@@ -72,7 +72,7 @@ files:
     source_ref: "src/bios.cpp:60 TOP_LOADER_SEARCH_PATTERN at 0xC0006C"
 
   - name: top-sp1.bin
-    dest: neocd/top-sp1.bin
+    path: "neocd/top-sp1.bin"
     system: snk-neogeo-cd
     required: false
     size: 524288
@@ -80,7 +80,7 @@ files:
     source_ref: "src/bios.cpp:60 TOP_LOADER_SEARCH_PATTERN, src/bios.cpp:148-160 autoByteSwap"
 
   - name: neocd_st.rom
-    dest: neocd/neocd_st.rom
+    path: "neocd/neocd_st.rom"
     system: snk-neogeo-cd
     required: false
     size: 524288
@@ -90,7 +90,7 @@ files:
   # --- CDZ family ---
 
   - name: neocd_z.rom
-    dest: neocd/neocd_z.rom
+    path: "neocd/neocd_z.rom"
     system: snk-neogeo-cd
     required: false
     size: 524288
@@ -98,7 +98,7 @@ files:
     source_ref: "src/bios.cpp:61 CDZ_SEARCH_PATTERN at 0xC0006C"
 
   - name: neocd.bin
-    dest: neocd/neocd.bin
+    path: "neocd/neocd.bin"
     system: snk-neogeo-cd
     required: false
     size: 524288
@@ -106,7 +106,7 @@ files:
     source_ref: "src/bios.cpp:61 CDZ_SEARCH_PATTERN, src/bios.cpp:148-160 autoByteSwap"
 
   - name: neocd_sz.rom
-    dest: neocd/neocd_sz.rom
+    path: "neocd/neocd_sz.rom"
     system: snk-neogeo-cd
     required: false
     size: 524288
@@ -114,7 +114,7 @@ files:
     source_ref: "src/bios.cpp:64 SMKDANBETA_CDZ_SEARCH_PATTERN at 0xC00004"
 
   - name: uni-bioscd.rom
-    dest: neocd/uni-bioscd.rom
+    path: "neocd/uni-bioscd.rom"
     system: snk-neogeo-cd
     required: false
     size: 524288

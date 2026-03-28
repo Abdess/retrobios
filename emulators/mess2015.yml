@@ -33,6 +33,7 @@ notes: |
 
 files:
   - name: hiscore.dat
+    path: "mess2015/hiscore.dat"
     required: false
     category: game_data
     source_ref: "src/emu/hiscore.c:335-337"

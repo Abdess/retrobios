@@ -31,6 +31,7 @@ notes: |
 
 files:
   - name: "hiscore.dat"
+    path: "fbalpha2012/hiscore.dat"
     description: "High score persistence database"
     required: false
     source_ref: "src/burn/hiscore.c:228-232"
