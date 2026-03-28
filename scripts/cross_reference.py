@@ -50,16 +50,29 @@ def load_platform_files(platforms_dir: str) -> tuple[dict[str, set[str]], dict[s
     return declared, platform_data_dirs
 
 
-def _build_data_dir_index(data_root: str = "data") -> set[str]:
-    """Build a set of filenames available in data/ directories."""
+def _build_supplemental_index(data_root: str = "data",
+                               bios_root: str = "bios") -> set[str]:
+    """Build a set of filenames in data/ directories and inside bios/ ZIPs."""
     names: set[str] = set()
     root_path = Path(data_root)
-    if not root_path.is_dir():
-        return names
-    for fpath in root_path.rglob("*"):
-        if fpath.is_file() and not fpath.name.startswith("."):
-            names.add(fpath.name)
-            names.add(fpath.name.lower())
+    if root_path.is_dir():
+        for fpath in root_path.rglob("*"):
+            if fpath.is_file() and not fpath.name.startswith("."):
+                names.add(fpath.name)
+                names.add(fpath.name.lower())
+    bios_path = Path(bios_root)
+    if bios_path.is_dir():
+        import zipfile
+        for zpath in bios_path.rglob("*.zip"):
+            try:
+                with zipfile.ZipFile(zpath) as zf:
+                    for member in zf.namelist():
+                        if not member.endswith("/"):
+                            basename = member.rsplit("/", 1)[-1] if "/" in member else member
+                            names.add(basename)
+                            names.add(basename.lower())
+            except (zipfile.BadZipFile, OSError):
+                pass
     return names
 
 
@@ -226,7 +239,7 @@ def main():
 
     declared, plat_data_dirs = load_platform_files(args.platforms_dir)
     db = load_database(args.db)
-    data_names = _build_data_dir_index()
+    data_names = _build_supplemental_index()
     report = cross_reference(profiles, declared, db, plat_data_dirs, data_names)
 
     if args.json:

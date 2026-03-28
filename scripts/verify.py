@@ -594,8 +594,8 @@ def verify_platform(
         status_counts[s] = status_counts.get(s, 0) + 1
 
     # Cross-reference undeclared files
-    from cross_reference import _build_data_dir_index
-    data_names = _build_data_dir_index()
+    from cross_reference import _build_supplemental_index
+    data_names = _build_supplemental_index()
     undeclared = find_undeclared_files(config, emulators_dir, db, emu_profiles,
                                        target_cores=target_cores, data_names=data_names)
     exclusions = find_exclusion_notes(config, emulators_dir, emu_profiles, target_cores=target_cores)
