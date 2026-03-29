@@ -145,6 +145,10 @@ def main():
     parser.add_argument("--target", "-t", help="Hardware target (e.g., switch, rpi4)")
     parser.add_argument("--check-buildbot", action="store_true",
                         help="Check buildbot system directory for changes")
+    parser.add_argument("--with-truth", action="store_true",
+                        help="Generate truth YAMLs and diff against scraped")
+    parser.add_argument("--with-export", action="store_true",
+                        help="Export native formats (implies --with-truth)")
     args = parser.parse_args()
 
     results = {}
@@ -182,6 +186,45 @@ def main():
         results["check_buildbot"] = ok
     elif args.check_buildbot:
         print("\n--- 2b check buildbot system: SKIPPED (--offline) ---")
+
+    # Step 2c: Generate truth YAMLs
+    if args.with_truth or args.with_export:
+        truth_cmd = [sys.executable, "scripts/generate_truth.py", "--all",
+                     "--output-dir", str(Path(args.output_dir) / "truth")]
+        if args.include_archived:
+            truth_cmd.append("--include-archived")
+        if args.target:
+            truth_cmd.extend(["--target", args.target])
+        ok, _ = run(truth_cmd, "2c generate truth")
+        results["generate_truth"] = ok
+        all_ok = all_ok and ok
+    else:
+        results["generate_truth"] = True
+
+    # Step 2d: Diff truth vs scraped
+    if args.with_truth or args.with_export:
+        diff_cmd = [sys.executable, "scripts/diff_truth.py", "--all"]
+        if args.include_archived:
+            diff_cmd.append("--include-archived")
+        diff_cmd.extend(["--truth-dir", str(Path(args.output_dir) / "truth")])
+        ok, _ = run(diff_cmd, "2d diff truth")
+        results["diff_truth"] = ok
+        all_ok = all_ok and ok
+    else:
+        results["diff_truth"] = True
+
+    # Step 2e: Export native formats
+    if args.with_export:
+        export_cmd = [sys.executable, "scripts/export_native.py", "--all",
+                      "--output-dir", str(Path(args.output_dir) / "upstream"),
+                      "--truth-dir", str(Path(args.output_dir) / "truth")]
+        if args.include_archived:
+            export_cmd.append("--include-archived")
+        ok, _ = run(export_cmd, "2e export native")
+        results["export_native"] = ok
+        all_ok = all_ok and ok
+    else:
+        results["export_native"] = True
 
     # Step 3: Verify
     verify_cmd = [sys.executable, "scripts/verify.py", "--all"]
