@@ -3,7 +3,7 @@
   "platform": "retrodeck",
   "display_name": "RetroDECK",
   "version": "1.0",
-  "generated": "2026-03-28T18:11:17Z",
+  "generated": "2026-03-29T08:12:46Z",
   "base_destination": "",
   "detect": [
     {
@@ -14,8 +14,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 2150,
-  "total_size": 1633239311,
+  "total_files": 2164,
+  "total_size": 1769947561,
   "files": [
     {
       "dest": "bios/panafz1.bin",
@@ -7194,9 +7194,9 @@
     },
     {
       "dest": "bios/neogeo.zip",
-      "sha1": "deb62b0074b8cae4f162c257662136733cfc76ad",
-      "size": 1859335,
-      "repo_path": "bios/Arcade/Arcade/neogeo.zip",
+      "sha1": "df89ef91bbaf84f2a109377fd4b17b0050a163e8",
+      "size": 7729,
+      "repo_path": "bios/SNK/Neo Geo/neogeo.zip",
       "cores": null
     },
     {
@@ -7236,7 +7236,7 @@
     },
     {
       "dest": "bios/nmk004.zip",
-      "sha1": "9f84f563df14ea1a1bcaaf05b720c3f5545e5a83",
+      "sha1": "489256f5e2001070d2ad94c90d255282c71ed274",
       "size": 3556,
       "repo_path": "bios/Arcade/Arcade/nmk004.zip",
       "cores": null
@@ -7754,8 +7754,8 @@
     },
     {
       "dest": "bios/pgm.zip",
-      "sha1": "c0c001ec80fa860857000f4cfc9844a28498a355",
-      "size": 2094636,
+      "sha1": "2b61f36b22933f3bec237818ecc959efb016d652",
+      "size": 2240738,
       "repo_path": "bios/Arcade/Arcade/pgm.zip",
       "cores": null
     },
@@ -9483,9 +9483,9 @@
     },
     {
       "dest": "bios/stvbios.zip",
-      "sha1": "b14bbed4bf459439cf7e96d2f79d7adea5d31448",
-      "size": 3455065,
-      "repo_path": "bios/Arcade/Arcade/stvbios.zip",
+      "sha1": "ae5557ed313b6708bb7c2aee0944e39335a8f814",
+      "size": 2699371,
+      "repo_path": "bios/Sega/Saturn/stvbios.zip",
       "cores": null
     },
     {
@@ -10589,9 +10589,9 @@
     },
     {
       "dest": "bios/neocdz.zip",
-      "sha1": "9cab31cfe7eacb6871d36cee105d87b90fd85b64",
-      "size": 1181333,
-      "repo_path": "bios/Arcade/Arcade/neocdz.zip",
+      "sha1": "80c9a25ccf39c6b85d1a7c9c0d6fe527ab45ec1c",
+      "size": 598775,
+      "repo_path": "bios/SNK/Neo Geo CD/neocdz.zip",
       "cores": null
     },
     {
@@ -10631,8 +10631,8 @@
     },
     {
       "dest": "bios/channelf.zip",
-      "sha1": "cb281a6441f355bab9e5e8aa8db51f7f0432c787",
-      "size": 3388,
+      "sha1": "1cb23b462b990241013deb4b5e07ce741af28267",
+      "size": 2705,
       "repo_path": "bios/Arcade/Arcade/channelf.zip",
       "cores": null
     },
@@ -13463,7 +13463,7 @@
       "dest": "bios/scph102A.bin",
       "sha1": "beb0ac693c0dc26daf5665b3314db81480fa5c7c",
       "size": 524288,
-      "repo_path": "bios/Sony/PlayStation/scph102A.bin",
+      "repo_path": "bios/Sony/PlayStation/scph102.bin",
       "cores": null
     },
     {
@@ -14168,6 +14168,15 @@
       ]
     },
     {
+      "dest": "cafeLibs",
+      "sha1": "1dcc727b17c98cb59adfa40b1cb91ba525d0ddd6",
+      "size": 84352,
+      "repo_path": "bios/Nintendo/Wii U/cafeLibs/snd_user.rpl",
+      "cores": [
+        "Cemu"
+      ]
+    },
+    {
       "dest": "GC/USA/IPL.bin",
       "sha1": "a1837968288253ed541f2b11440b68f5a9b33875",
       "size": 2097152,
@@ -14213,10 +14222,57 @@
       ]
     },
     {
-      "dest": "codehandler.bin",
-      "sha1": "e6c0050b3c67ee26198488fbbe4a5d019c15b628",
-      "size": 2880,
-      "repo_path": "bios/Nintendo/GameCube/codehandler.bin",
+      "dest": "Wii/shared2/sys/SYSCONF",
+      "sha1": "3256c026284a24fb99d2ec1558d95db3b5dcc2e9",
+      "size": 16384,
+      "repo_path": "bios/Nintendo/Wii/SYSCONF",
+      "cores": [
+        "Dolphin"
+      ]
+    },
+    {
+      "dest": "Wii/title/00000001/00000002/data/setting.txt",
+      "sha1": "077a31ce116de322f089a627c5eb7ff5c2236a5d",
+      "size": 256,
+      "repo_path": "bios/Nintendo/Wii/setting.txt",
+      "cores": [
+        "Dolphin"
+      ]
+    },
+    {
+      "dest": "Load/WiiSD.raw",
+      "sha1": "90d83d6c084deceeeb0466ac00723723ccfd0c6d",
+      "size": 134217728,
+      "repo_path": "bios/Nintendo/Wii/WiiSD.raw",
+      "cores": [
+        "Dolphin"
+      ],
+      "storage": "release",
+      "release_asset": "WiiSD.raw"
+    },
+    {
+      "dest": "Wii/clientca.pem",
+      "sha1": "4b937d4e81de11574b926386dd5f768aa23bf177",
+      "size": 1005,
+      "repo_path": "bios/Nintendo/Wii/clientca.pem",
+      "cores": [
+        "Dolphin"
+      ]
+    },
+    {
+      "dest": "Wii/clientcakey.pem",
+      "sha1": "a2c11886e6d12a135e1d5eb50d5fe92e028577d9",
+      "size": 609,
+      "repo_path": "bios/Nintendo/Wii/clientcakey.pem",
+      "cores": [
+        "Dolphin"
+      ]
+    },
+    {
+      "dest": "Wii/rootca.pem",
+      "sha1": "b5229455dd26c1f53c73060e9089b391389e1f75",
+      "size": 897,
+      "repo_path": "bios/Nintendo/Wii/rootca.pem",
       "cores": [
         "Dolphin"
       ]
@@ -14315,7 +14371,7 @@
       "dest": "scph102_v44.bin",
       "sha1": "beb0ac693c0dc26daf5665b3314db81480fa5c7c",
       "size": 524288,
-      "repo_path": "bios/Sony/PlayStation/scph102A.bin",
+      "repo_path": "bios/Sony/PlayStation/scph102.bin",
       "cores": [
         "DuckStation"
       ]
@@ -14334,6 +14390,15 @@
       "sha1": "7082bd57141fa0007b3adcd031f7ba23a20108a0",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/scph1000r.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph18000.bin",
+      "sha1": "d7d6be084f51354bc951d8fa2d8d912aa70abc5e",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/ps2-50j.bin",
       "cores": [
         "DuckStation"
       ]
@@ -15142,6 +15207,15 @@
       ]
     },
     {
+      "dest": "eeprom.dat",
+      "sha1": "ffc6261e487efa8c7442069f71acfc4aa826993d",
+      "size": 64,
+      "repo_path": "bios/Sony/PlayStation 2/eeprom.dat",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
       "dest": "PPSSPP/ppge_atlas.meta",
       "sha1": "ab398f667d6fd778859307c105fe16388b8fdf63",
       "size": 50242,
@@ -15313,6 +15387,15 @@
       ]
     },
     {
+      "dest": "cdos20.rom",
+      "sha1": "9513091f37adf330f66a0c08f4e200344ad2e082",
+      "size": 16384,
+      "repo_path": "bios/Dragon/Dragon/cdos20.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
       "dest": "cp450dsk.rom",
       "sha1": "827697fa5b755f5dc1efb054cdbbeb04e405405b",
       "size": 8192,
@@ -15349,12 +15432,57 @@
       ]
     },
     {
+      "dest": "yados.rom",
+      "sha1": "00009ae71d5ad71f12c456feb9ae1e2aa8aec751",
+      "size": 16384,
+      "repo_path": "bios/Dragon/Dragon/yados.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
       "dest": "sdbdos.rom",
       "sha1": "db4013d556da870362f750e3b31f172622803c64",
       "size": 65536,
       "repo_path": "bios/Dragon/Dragon/sdbdos.rom",
       "cores": [
         "XRoar"
+      ]
+    },
+    {
+      "dest": "GC/EUR/IPL.bin",
+      "sha1": "a1837968288253ed541f2b11440b68f5a9b33875",
+      "size": 2097152,
+      "repo_path": "bios/Nintendo/GameCube/GC/JAP/IPL.bin",
+      "cores": [
+        "Dolphin"
+      ]
+    },
+    {
+      "dest": "GC/JAP/IPL.bin",
+      "sha1": "a1837968288253ed541f2b11440b68f5a9b33875",
+      "size": 2097152,
+      "repo_path": "bios/Nintendo/GameCube/GC/JAP/IPL.bin",
+      "cores": [
+        "Dolphin"
+      ]
+    },
+    {
+      "dest": "GBA/gba_bios.bin",
+      "sha1": "300c20df6731a33952ded8c436f7f186d25d3492",
+      "size": 16384,
+      "repo_path": "bios/Nintendo/Game Boy Advance/GBA_bios.rom",
+      "cores": [
+        "Dolphin"
+      ]
+    },
+    {
+      "dest": "PPSSPP/ppge_atlas.zim",
+      "sha1": "30a33f3651f8e1b0967a5dfe6ff714baebcce41a",
+      "size": 666530,
+      "repo_path": "bios/Sony/PlayStation Portable/ppge_atlas.zim",
+      "cores": [
+        "PPSSPP"
       ]
     }
   ]

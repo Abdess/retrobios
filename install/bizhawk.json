@@ -3,7 +3,7 @@
   "platform": "bizhawk",
   "display_name": "BizHawk",
   "version": "1.0",
-  "generated": "2026-03-28T18:09:04Z",
+  "generated": "2026-03-29T08:11:21Z",
   "base_destination": "Firmware",
   "detect": [
     {
@@ -18,8 +18,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 313,
-  "total_size": 2018075542,
+  "total_files": 316,
+  "total_size": 2018340268,
   "files": [
     {
       "dest": "panafz1.bin",
@@ -333,14 +333,14 @@
       "dest": "MSX_1.0.rom",
       "sha1": "3656bb3bbc17d280d2016fe4f6ff3cded3082a41",
       "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/MSX_1.0.rom",
+      "repo_path": "bios/Microsoft/MSX/CLK/msx-american.rom",
       "cores": null
     },
     {
       "dest": "MSX_jpn.rom",
       "sha1": "302afb5d8be26c758309ca3df611ae69cced2821",
       "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/MSX_jpn.rom",
+      "repo_path": "bios/Microsoft/MSX/CLK/msx-japanese.rom",
       "cores": null
     },
     {
@@ -1004,6 +1004,15 @@
       ]
     },
     {
+      "dest": "satar4mp.bin",
+      "sha1": "11f9e62cf299f72184835b7b2a70a16333fc0d88",
+      "size": 262144,
+      "repo_path": "bios/Commodore/Amiga/amiga-os-120.rom",
+      "cores": [
+        "beetle_saturn"
+      ]
+    },
+    {
       "dest": "dsp1.program.rom",
       "sha1": "c5d283604beebb3d832f15a0b3fc60d10dd4bddc",
       "size": 6144,
@@ -1319,6 +1328,15 @@
       ]
     },
     {
+      "dest": "howard.o",
+      "sha1": "bdca7bbb647066cf7555ce5d555ce09de4ebc41b",
+      "size": 513,
+      "repo_path": "bios/Atari/Lynx/howard.o",
+      "cores": [
+        "Handy"
+      ]
+    },
+    {
       "dest": "neogeo.zip",
       "sha1": "deb62b0074b8cae4f162c257662136733cfc76ad",
       "size": 1859335,
@@ -1331,7 +1349,7 @@
       "dest": "pgm.zip",
       "sha1": "c0c001ec80fa860857000f4cfc9844a28498a355",
       "size": 2094636,
-      "repo_path": "bios/Arcade/Arcade/pgm.zip",
+      "repo_path": "bios/Arcade/MAME/pgm.zip",
       "cores": [
         "MAME"
       ]
@@ -2423,6 +2441,15 @@
       "sha1": "5bef3d628ce59cc02a66e6e4ae0da48f60e78f7f",
       "size": 524288,
       "repo_path": "bios/Commodore/Amiga/amiga-ext-310-cd32.rom",
+      "cores": [
+        "PUAE (P-UAE)"
+      ]
+    },
+    {
+      "dest": "rom.key",
+      "sha1": "801bbab32e3d37386dd1636d4f1d6fa7e21d5874",
+      "size": 2069,
+      "repo_path": "bios/Commodore/Amiga/rom.key",
       "cores": [
         "PUAE (P-UAE)"
       ]

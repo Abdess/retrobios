@@ -3,7 +3,7 @@
   "platform": "romm",
   "display_name": "RomM",
   "version": "1.0",
-  "generated": "2026-03-28T18:11:21Z",
+  "generated": "2026-03-29T08:12:47Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -13,8 +13,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 503,
-  "total_size": 1125638413,
+  "total_files": 549,
+  "total_size": 1199232751,
   "files": [
     {
       "dest": "3do/3do_arcade_saot.bin",
@@ -237,7 +237,7 @@
       "dest": "arcade/pgm.zip",
       "sha1": "c0c001ec80fa860857000f4cfc9844a28498a355",
       "size": 2094636,
-      "repo_path": "bios/Arcade/Arcade/pgm.zip",
+      "repo_path": "bios/Arcade/MAME/pgm.zip",
       "cores": null
     },
     {
@@ -1278,7 +1278,7 @@
     },
     {
       "dest": "scummvm/scummvm.zip",
-      "sha1": "718c1a00d38e0810a1ad0ffde79f73447f846f01",
+      "sha1": "320801896408d7c1566ce26dd5e4b5eb0f0caa6c",
       "size": 79379908,
       "repo_path": "bios/ScummVM/scummvm.zip",
       "cores": null,
@@ -2003,7 +2003,7 @@
       "dest": "psx/scph102A.bin",
       "sha1": "beb0ac693c0dc26daf5665b3314db81480fa5c7c",
       "size": 524288,
-      "repo_path": "bios/Sony/PlayStation/scph102A.bin",
+      "repo_path": "bios/Sony/PlayStation/scph102.bin",
       "cores": null
     },
     {
@@ -2736,7 +2736,349 @@
       ]
     },
     {
-      "dest": "cheat.dat",
+      "dest": "fuse/48.rom",
+      "sha1": "5ea7c2b824672e914525d1d5c419d71b84a426a2",
+      "size": 16384,
+      "repo_path": "bios/Enterprise/64-128/zx48.rom",
+      "cores": [
+        "Fuse"
+      ]
+    },
+    {
+      "dest": "fuse/128-0.rom",
+      "sha1": "4f4b11ec22326280bdb96e3baf9db4b4cb1d02c5",
+      "size": 16384,
+      "repo_path": "bios/Sinclair/ZX Spectrum/128-0.rom",
+      "cores": [
+        "Fuse"
+      ]
+    },
+    {
+      "dest": "fuse/128-1.rom",
+      "sha1": "80080644289ed93d71a1103992a154cc9802b2fa",
+      "size": 16384,
+      "repo_path": "bios/Sinclair/ZX Spectrum/128-1.rom",
+      "cores": [
+        "Fuse"
+      ]
+    },
+    {
+      "dest": "fuse/plus2-0.rom",
+      "sha1": "72703f9a3e734f3c23ec34c0727aae4ccbef9a91",
+      "size": 16384,
+      "repo_path": "bios/Sinclair/ZX Spectrum/plus2-0.rom",
+      "cores": [
+        "Fuse"
+      ]
+    },
+    {
+      "dest": "fuse/plus2-1.rom",
+      "sha1": "de8b0d2d0379cfe7c39322a086ca6da68c7f23cb",
+      "size": 16384,
+      "repo_path": "bios/Sinclair/ZX Spectrum/plus2-1.rom",
+      "cores": [
+        "Fuse"
+      ]
+    },
+    {
+      "dest": "fuse/plus3-0.rom",
+      "sha1": "e319ed08b4d53a5e421a75ea00ea02039ba6555b",
+      "size": 16384,
+      "repo_path": "bios/Sinclair/ZX Spectrum/plus3-0.rom",
+      "cores": [
+        "Fuse"
+      ]
+    },
+    {
+      "dest": "fuse/plus3-1.rom",
+      "sha1": "c9969fc36095a59787554026a9adc3b87678c794",
+      "size": 16384,
+      "repo_path": "bios/Sinclair/ZX Spectrum/plus3-1.rom",
+      "cores": [
+        "Fuse"
+      ]
+    },
+    {
+      "dest": "fuse/plus3-2.rom",
+      "sha1": "22e50c6ba4157a3f6a821bd9937cd26e292775c6",
+      "size": 16384,
+      "repo_path": "bios/Sinclair/ZX Spectrum/plus3-2.rom",
+      "cores": [
+        "Fuse"
+      ]
+    },
+    {
+      "dest": "fuse/plus3-3.rom",
+      "sha1": "65f031caa8148a5493afe42c41f4929deab26b4e",
+      "size": 16384,
+      "repo_path": "bios/Sinclair/ZX Spectrum/plus3-3.rom",
+      "cores": [
+        "Fuse"
+      ]
+    },
+    {
+      "dest": "fuse/plus3e-0.rom",
+      "sha1": "649fbd233490bf58b35350b0123d36caaaa011eb",
+      "size": 16384,
+      "repo_path": "bios/Sinclair/ZX Spectrum/plus3e-0.rom",
+      "cores": [
+        "Fuse"
+      ]
+    },
+    {
+      "dest": "fuse/plus3e-1.rom",
+      "sha1": "f12198108cbb14de4f03c6695bc16d08c85ee214",
+      "size": 16384,
+      "repo_path": "bios/Sinclair/ZX Spectrum/plus3e-1.rom",
+      "cores": [
+        "Fuse"
+      ]
+    },
+    {
+      "dest": "fuse/plus3e-2.rom",
+      "sha1": "773633dce5ba323a9e00d9d0f9e4d8c295df7c87",
+      "size": 16384,
+      "repo_path": "bios/Sinclair/ZX Spectrum/plus3e-2.rom",
+      "cores": [
+        "Fuse"
+      ]
+    },
+    {
+      "dest": "fuse/plus3e-3.rom",
+      "sha1": "65f031caa8148a5493afe42c41f4929deab26b4e",
+      "size": 16384,
+      "repo_path": "bios/Sinclair/ZX Spectrum/plus3-3.rom",
+      "cores": [
+        "Fuse"
+      ]
+    },
+    {
+      "dest": "fuse/se-0.rom",
+      "sha1": "8608328d7dd66602a4846f046b24fed500f7d828",
+      "size": 16384,
+      "repo_path": "bios/Sinclair/ZX Spectrum/se-0.rom",
+      "cores": [
+        "Fuse"
+      ]
+    },
+    {
+      "dest": "fuse/se-1.rom",
+      "sha1": "3be5de57dd3bd0a9d15c57cabe9179afe2906a52",
+      "size": 16384,
+      "repo_path": "bios/Sinclair/ZX Spectrum/se-1.rom",
+      "cores": [
+        "Fuse"
+      ]
+    },
+    {
+      "dest": "fuse/tc2048.rom",
+      "sha1": "febb2d495b6eda7cdcb4074935d6e9d9f328972d",
+      "size": 16384,
+      "repo_path": "bios/Sinclair/ZX Spectrum/tc2048.rom",
+      "cores": [
+        "Fuse"
+      ]
+    },
+    {
+      "dest": "fuse/tc2068-0.rom",
+      "sha1": "1446cb2780a9dedf640404a639fa3ae518b2d8aa",
+      "size": 16384,
+      "repo_path": "bios/Sinclair/ZX Spectrum/tc2068-0.rom",
+      "cores": [
+        "Fuse"
+      ]
+    },
+    {
+      "dest": "fuse/tc2068-1.rom",
+      "sha1": "7e265a2c1f621ed365ea23bdcafdedbc79c1299c",
+      "size": 8192,
+      "repo_path": "bios/Sinclair/ZX Spectrum/tc2068-1.rom",
+      "cores": [
+        "Fuse"
+      ]
+    },
+    {
+      "dest": "fuse/128p-0.rom",
+      "sha1": "d07fcdeca892ee80494d286ea9ea5bf3928a1aca",
+      "size": 16384,
+      "repo_path": "bios/Sinclair/ZX Spectrum/128p-0.rom",
+      "cores": [
+        "Fuse"
+      ]
+    },
+    {
+      "dest": "fuse/128p-1.rom",
+      "sha1": "80080644289ed93d71a1103992a154cc9802b2fa",
+      "size": 16384,
+      "repo_path": "bios/Sinclair/ZX Spectrum/128-1.rom",
+      "cores": [
+        "Fuse"
+      ]
+    },
+    {
+      "dest": "fuse/trdos.rom",
+      "sha1": "21695e3f2a8f796386ce66eea8a246b0ac44810c",
+      "size": 16384,
+      "repo_path": "bios/Sinclair/ZX Spectrum/beta128.trdos.v5-03.rom",
+      "cores": [
+        "Fuse"
+      ]
+    },
+    {
+      "dest": "fuse/gluck.rom",
+      "sha1": "015eb96dafb273d4f4512c467e9b43c305fd1bc4",
+      "size": 16384,
+      "repo_path": "bios/Sinclair/ZX Spectrum/gluck.rom",
+      "cores": [
+        "Fuse"
+      ]
+    },
+    {
+      "dest": "fuse/256s-0.rom",
+      "sha1": "477114ff0fe1388e0979df1423602b21248164e5",
+      "size": 16384,
+      "repo_path": "bios/Sinclair/ZX Spectrum/256s-0.rom",
+      "cores": [
+        "Fuse"
+      ]
+    },
+    {
+      "dest": "fuse/256s-1.rom",
+      "sha1": "367b5a102fb663beee8e7930b8c4acc219c1f7b3",
+      "size": 16384,
+      "repo_path": "bios/Sinclair/ZX Spectrum/256s-1.rom",
+      "cores": [
+        "Fuse"
+      ]
+    },
+    {
+      "dest": "fuse/256s-2.rom",
+      "sha1": "07783ee295274d8ff15d935bfd787c8ac1d54900",
+      "size": 16384,
+      "repo_path": "bios/Sinclair/ZX Spectrum/256s-2.rom",
+      "cores": [
+        "Fuse"
+      ]
+    },
+    {
+      "dest": "fuse/256s-3.rom",
+      "sha1": "33703e97cc93b7edfcc0334b64233cf81b7930db",
+      "size": 16384,
+      "repo_path": "bios/Sinclair/ZX Spectrum/256s-3.rom",
+      "cores": [
+        "Fuse"
+      ]
+    },
+    {
+      "dest": "fuse/if1-2.rom",
+      "sha1": "5cfb6bca4177c45fefd571734576b55e3a127c08",
+      "size": 8192,
+      "repo_path": "bios/Sinclair/ZX Spectrum/if1-2.rom",
+      "cores": [
+        "Fuse"
+      ]
+    },
+    {
+      "dest": "fuse/disciple.rom",
+      "sha1": "9a75ed4b293f968985be4c9aa893cd88276d1ced",
+      "size": 8192,
+      "repo_path": "bios/Sinclair/ZX Spectrum/disciple.rom",
+      "cores": [
+        "Fuse"
+      ]
+    },
+    {
+      "dest": "fuse/plusd.rom",
+      "sha1": "6b841dc5797ef7eb219ad455cd1e434ca3b9d30d",
+      "size": 8192,
+      "repo_path": "bios/Sinclair/ZX Spectrum/+d.g+dos.v1-a.rom",
+      "cores": [
+        "Fuse"
+      ]
+    },
+    {
+      "dest": "fuse/didaktik80.rom",
+      "sha1": "cfb801fe3c0634d57920652e9727119ff8bf3a22",
+      "size": 14336,
+      "repo_path": "bios/Sinclair/ZX Spectrum/fuse/didaktik80.rom",
+      "cores": [
+        "Fuse"
+      ]
+    },
+    {
+      "dest": "fuse/opus.rom",
+      "sha1": "0eee1c503f71709fce8b7560dadc2d07d15edb80",
+      "size": 8192,
+      "repo_path": "bios/Sinclair/ZX Spectrum/fuse/opus.rom",
+      "cores": [
+        "Fuse"
+      ]
+    },
+    {
+      "dest": "fuse/mf1.rom",
+      "sha1": "50fba2d628f3a2e9219f72980e4efd62fc9ec1f8",
+      "size": 8192,
+      "repo_path": "bios/Sinclair/ZX Spectrum/fuse/mf1.rom",
+      "cores": [
+        "Fuse"
+      ]
+    },
+    {
+      "dest": "fuse/mf128.rom",
+      "sha1": "8df204ab490b87c389971ce0c7fb5f9cbd281f14",
+      "size": 8192,
+      "repo_path": "bios/Sinclair/ZX Spectrum/fuse/mf128.rom",
+      "cores": [
+        "Fuse"
+      ]
+    },
+    {
+      "dest": "fuse/mf3.rom",
+      "sha1": "983699a07665186f498f5827f9b35c442c2178ba",
+      "size": 8192,
+      "repo_path": "bios/Sinclair/ZX Spectrum/fuse/mf3.rom",
+      "cores": [
+        "Fuse"
+      ]
+    },
+    {
+      "dest": "fuse/speccyboot-1.4.rom",
+      "sha1": "16af6f052b38a027dd49ba6e96e3a59d16b62672",
+      "size": 8192,
+      "repo_path": "bios/Sinclair/ZX Spectrum/speccyboot-1.4.rom",
+      "cores": [
+        "Fuse"
+      ]
+    },
+    {
+      "dest": "fuse/ttx2000s.rom",
+      "sha1": "c63d5b6a490a813a6d2890fefe9ce29e66d5c221",
+      "size": 8192,
+      "repo_path": "bios/Sinclair/ZX Spectrum/fuse/ttx2000s.rom",
+      "cores": [
+        "Fuse"
+      ]
+    },
+    {
+      "dest": "fuse/usource.rom",
+      "sha1": "fae53678a85ba503b77ed2d877de2635b284eef1",
+      "size": 8192,
+      "repo_path": "bios/Sinclair/ZX Spectrum/usource.rom",
+      "cores": [
+        "Fuse"
+      ]
+    },
+    {
+      "dest": "howard.o",
+      "sha1": "bdca7bbb647066cf7555ce5d555ce09de4ebc41b",
+      "size": 513,
+      "repo_path": "bios/Atari/Lynx/howard.o",
+      "cores": [
+        "Handy"
+      ]
+    },
+    {
+      "dest": "mame2003/cheat.dat",
       "sha1": "32fc78415114a976af9c2ee53ea13de9f40b55ee",
       "size": 7971360,
       "repo_path": "bios/Arcade/MAME/cheat.dat",
@@ -2745,7 +3087,7 @@
       ]
     },
     {
-      "dest": "history.dat",
+      "dest": "mame2003/history.dat",
       "sha1": "42d6d9ac933a7819adfd686f629a8e43aea4e880",
       "size": 38635890,
       "repo_path": "bios/Arcade/MAME/history.dat",
@@ -2754,7 +3096,7 @@
       ]
     },
     {
-      "dest": "mameinfo.dat",
+      "dest": "mame2003/mameinfo.dat",
       "sha1": "65323366553276719c72fb11447de1eaa6931fa8",
       "size": 24837237,
       "repo_path": "bios/Arcade/MAME/mameinfo.dat",
@@ -3179,6 +3521,15 @@
       ]
     },
     {
+      "dest": "rom.key",
+      "sha1": "801bbab32e3d37386dd1636d4f1d6fa7e21d5874",
+      "size": 2069,
+      "repo_path": "bios/Commodore/Amiga/rom.key",
+      "cores": [
+        "PUAE (P-UAE)"
+      ]
+    },
+    {
       "dest": "WHDLoad.prefs",
       "sha1": "455aa8688747daaa7e64122ba6871eaf51566727",
       "size": 1935,
@@ -3188,7 +3539,7 @@
       ]
     },
     {
-      "dest": "cdimono1.zip",
+      "dest": "same_cdi/bios/cdimono1.zip",
       "sha1": "5d0b1b55b0d0958a5c9069c3219d4da5a87a6b93",
       "size": 660996,
       "repo_path": "bios/Arcade/Arcade/cdimono1.zip",
@@ -3197,7 +3548,7 @@
       ]
     },
     {
-      "dest": "cdimono2.zip",
+      "dest": "same_cdi/bios/cdimono2.zip",
       "sha1": "9492247203b71c12d88fad0a5437376941c7870a",
       "size": 244291,
       "repo_path": "bios/Philips/CD-i/cdimono2.zip",
@@ -3206,7 +3557,7 @@
       ]
     },
     {
-      "dest": "cdibios.zip",
+      "dest": "same_cdi/bios/cdibios.zip",
       "sha1": "16072afaa65d1b059346616ac5b5a600c63ff1d1",
       "size": 472798,
       "repo_path": "bios/Arcade/Arcade/cdibios.zip",
@@ -3215,7 +3566,7 @@
       ]
     },
     {
-      "dest": "cdi910.zip",
+      "dest": "same_cdi/bios/cdi910.zip",
       "sha1": "b64381aa271ab5cd83b47a83fefab018f39ed11b",
       "size": 487572,
       "repo_path": "bios/Arcade/Arcade/cdi910.zip",
@@ -3224,7 +3575,7 @@
       ]
     },
     {
-      "dest": "cdi490a.zip",
+      "dest": "same_cdi/bios/cdi490a.zip",
       "sha1": "2366883a3259df021d0f1fc104b945978b8ef8b4",
       "size": 379558,
       "repo_path": "bios/Philips/CD-i/cdi490a.zip",
@@ -3396,8 +3747,8 @@
     },
     {
       "dest": "channelf.zip",
-      "sha1": "cb281a6441f355bab9e5e8aa8db51f7f0432c787",
-      "size": 3388,
+      "sha1": "1cb23b462b990241013deb4b5e07ce741af28267",
+      "size": 2705,
       "repo_path": "bios/Arcade/Arcade/channelf.zip",
       "cores": [
         "FinalBurn Neo"
@@ -3797,6 +4148,69 @@
       "repo_path": "bios/Arcade/Arcade/warzard.zip",
       "cores": [
         "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/hiscore.dat",
+      "sha1": "7381472bf046126257e51a0124e4553282f020e5",
+      "size": 322458,
+      "repo_path": "bios/Arcade/Arcade/hiscore.dat",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "mame2003/hiscore.dat",
+      "sha1": "7381472bf046126257e51a0124e4553282f020e5",
+      "size": 322458,
+      "repo_path": "bios/Arcade/Arcade/hiscore.dat",
+      "cores": [
+        "MAME 2003"
+      ]
+    },
+    {
+      "dest": "mame2003-plus/hiscore.dat",
+      "sha1": "7381472bf046126257e51a0124e4553282f020e5",
+      "size": 322458,
+      "repo_path": "bios/Arcade/Arcade/hiscore.dat",
+      "cores": [
+        "MAME 2003-Plus"
+      ]
+    },
+    {
+      "dest": "mame2003-plus/cheat.dat",
+      "sha1": "32fc78415114a976af9c2ee53ea13de9f40b55ee",
+      "size": 7971360,
+      "repo_path": "bios/Arcade/MAME/cheat.dat",
+      "cores": [
+        "MAME 2003-Plus"
+      ]
+    },
+    {
+      "dest": "mame2003-plus/history.dat",
+      "sha1": "42d6d9ac933a7819adfd686f629a8e43aea4e880",
+      "size": 38635890,
+      "repo_path": "bios/Arcade/MAME/history.dat",
+      "cores": [
+        "MAME 2003-Plus"
+      ]
+    },
+    {
+      "dest": "mame2003-plus/mameinfo.dat",
+      "sha1": "65323366553276719c72fb11447de1eaa6931fa8",
+      "size": 24837237,
+      "repo_path": "bios/Arcade/MAME/mameinfo.dat",
+      "cores": [
+        "MAME 2003-Plus"
+      ]
+    },
+    {
+      "dest": "PPSSPP/ppge_atlas.zim",
+      "sha1": "30a33f3651f8e1b0967a5dfe6ff714baebcce41a",
+      "size": 666530,
+      "repo_path": "bios/Sony/PlayStation Portable/ppge_atlas.zim",
+      "cores": [
+        "PPSSPP"
       ]
     }
   ]

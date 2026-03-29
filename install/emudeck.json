@@ -3,7 +3,7 @@
   "platform": "emudeck",
   "display_name": "EmuDeck",
   "version": "1.0",
-  "generated": "2026-03-28T17:57:05Z",
+  "generated": "2026-03-29T08:11:23Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -50,8 +50,8 @@
       }
     }
   ],
-  "total_files": 250,
-  "total_size": 772501129,
+  "total_files": 262,
+  "total_size": 914084795,
   "files": [
     {
       "dest": "colecovision.rom",
@@ -382,6 +382,15 @@
       ]
     },
     {
+      "dest": "cafeLibs",
+      "sha1": "1dcc727b17c98cb59adfa40b1cb91ba525d0ddd6",
+      "size": 84352,
+      "repo_path": "bios/Nintendo/Wii U/cafeLibs/snd_user.rpl",
+      "cores": [
+        "Cemu"
+      ]
+    },
+    {
       "dest": "GC/dsp_rom.bin",
       "sha1": "f4f683a49d7eb4155566f793f2c1c27e90159992",
       "size": 8192,
@@ -427,10 +436,57 @@
       ]
     },
     {
-      "dest": "codehandler.bin",
-      "sha1": "e6c0050b3c67ee26198488fbbe4a5d019c15b628",
-      "size": 2880,
-      "repo_path": "bios/Nintendo/GameCube/codehandler.bin",
+      "dest": "Wii/shared2/sys/SYSCONF",
+      "sha1": "3256c026284a24fb99d2ec1558d95db3b5dcc2e9",
+      "size": 16384,
+      "repo_path": "bios/Nintendo/Wii/SYSCONF",
+      "cores": [
+        "Dolphin"
+      ]
+    },
+    {
+      "dest": "Wii/title/00000001/00000002/data/setting.txt",
+      "sha1": "077a31ce116de322f089a627c5eb7ff5c2236a5d",
+      "size": 256,
+      "repo_path": "bios/Nintendo/Wii/setting.txt",
+      "cores": [
+        "Dolphin"
+      ]
+    },
+    {
+      "dest": "Load/WiiSD.raw",
+      "sha1": "90d83d6c084deceeeb0466ac00723723ccfd0c6d",
+      "size": 134217728,
+      "repo_path": "bios/Nintendo/Wii/WiiSD.raw",
+      "cores": [
+        "Dolphin"
+      ],
+      "storage": "release",
+      "release_asset": "WiiSD.raw"
+    },
+    {
+      "dest": "Wii/clientca.pem",
+      "sha1": "4b937d4e81de11574b926386dd5f768aa23bf177",
+      "size": 1005,
+      "repo_path": "bios/Nintendo/Wii/clientca.pem",
+      "cores": [
+        "Dolphin"
+      ]
+    },
+    {
+      "dest": "Wii/clientcakey.pem",
+      "sha1": "a2c11886e6d12a135e1d5eb50d5fe92e028577d9",
+      "size": 609,
+      "repo_path": "bios/Nintendo/Wii/clientcakey.pem",
+      "cores": [
+        "Dolphin"
+      ]
+    },
+    {
+      "dest": "Wii/rootca.pem",
+      "sha1": "b5229455dd26c1f53c73060e9089b391389e1f75",
+      "size": 897,
+      "repo_path": "bios/Nintendo/Wii/rootca.pem",
       "cores": [
         "Dolphin"
       ]
@@ -601,7 +657,7 @@
       "dest": "scph102_v44.bin",
       "sha1": "beb0ac693c0dc26daf5665b3314db81480fa5c7c",
       "size": 524288,
-      "repo_path": "bios/Sony/PlayStation/scph102A.bin",
+      "repo_path": "bios/Sony/PlayStation/scph102.bin",
       "cores": [
         "DuckStation"
       ]
@@ -620,6 +676,15 @@
       "sha1": "7082bd57141fa0007b3adcd031f7ba23a20108a0",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/scph1000r.bin",
+      "cores": [
+        "DuckStation"
+      ]
+    },
+    {
+      "dest": "ps2_scph18000.bin",
+      "sha1": "d7d6be084f51354bc951d8fa2d8d912aa70abc5e",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/ps2-50j.bin",
       "cores": [
         "DuckStation"
       ]
@@ -1420,7 +1485,7 @@
       "dest": "pgm.zip",
       "sha1": "c0c001ec80fa860857000f4cfc9844a28498a355",
       "size": 2094636,
-      "repo_path": "bios/Arcade/Arcade/pgm.zip",
+      "repo_path": "bios/Arcade/MAME/pgm.zip",
       "cores": [
         "MAME"
       ]
@@ -2157,6 +2222,15 @@
       ]
     },
     {
+      "dest": "eeprom.dat",
+      "sha1": "ffc6261e487efa8c7442069f71acfc4aa826993d",
+      "size": 64,
+      "repo_path": "bios/Sony/PlayStation 2/eeprom.dat",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
       "dest": "PPSSPP/ppge_atlas.zim",
       "sha1": "30a33f3651f8e1b0967a5dfe6ff714baebcce41a",
       "size": 666530,
@@ -2235,6 +2309,42 @@
       "repo_path": "bios/Microsoft/Xbox/xbox_hdd.qcow2",
       "cores": [
         "Xemu"
+      ]
+    },
+    {
+      "dest": "sysdata/keys.txt",
+      "sha1": "9edc52be45201ec99f6e4ceb5dc6abfc633c4eae",
+      "size": 449507,
+      "repo_path": "bios/Nintendo/Wii U/keys.txt",
+      "cores": [
+        "Azahar"
+      ]
+    },
+    {
+      "dest": "GC/USA/IPL.bin",
+      "sha1": "a1837968288253ed541f2b11440b68f5a9b33875",
+      "size": 2097152,
+      "repo_path": "bios/Nintendo/GameCube/GC/JAP/IPL.bin",
+      "cores": [
+        "Dolphin"
+      ]
+    },
+    {
+      "dest": "GC/EUR/IPL.bin",
+      "sha1": "a1837968288253ed541f2b11440b68f5a9b33875",
+      "size": 2097152,
+      "repo_path": "bios/Nintendo/GameCube/GC/JAP/IPL.bin",
+      "cores": [
+        "Dolphin"
+      ]
+    },
+    {
+      "dest": "GC/JAP/IPL.bin",
+      "sha1": "a1837968288253ed541f2b11440b68f5a9b33875",
+      "size": 2097152,
+      "repo_path": "bios/Nintendo/GameCube/GC/JAP/IPL.bin",
+      "cores": [
+        "Dolphin"
       ]
     }
   ]
