@@ -25,31 +25,31 @@ files:
     description: "JiffyDOS C64 kernal replacement"
     required: false
     source_ref: "retrodep/ui.c:302-303"
-    notes: "Loaded into KernalName when vice_jiffydos option is enabled (non-SX64 models)."
+    note: "Loaded into KernalName when vice_jiffydos option is enabled (non-SX64 models)."
 
   - name: "JiffyDOS_SX-64.bin"
     description: "JiffyDOS SX-64 kernal replacement"
     required: false
     source_ref: "retrodep/ui.c:295-296"
-    notes: "Loaded into KernalName when vice_jiffydos option is enabled and SX-64 model selected."
+    note: "Loaded into KernalName when vice_jiffydos option is enabled and SX-64 model selected."
 
   - name: "JiffyDOS_1541-II.bin"
     description: "JiffyDOS 1541-II drive DOS replacement"
     required: false
     source_ref: "retrodep/ui.c:283-284"
-    notes: "Loaded into DosName1541ii when vice_jiffydos option is enabled."
+    note: "Loaded into DosName1541ii when vice_jiffydos option is enabled."
 
   - name: "JiffyDOS_1571_repl310654.bin"
     description: "JiffyDOS 1571 drive DOS replacement"
     required: false
     source_ref: "retrodep/ui.c:285-286"
-    notes: "Loaded into DosName1571 when vice_jiffydos option is enabled."
+    note: "Loaded into DosName1571 when vice_jiffydos option is enabled."
 
   - name: "JiffyDOS_1581.bin"
     description: "JiffyDOS 1581 drive DOS replacement"
     required: false
     source_ref: "retrodep/ui.c:287-288"
-    notes: "Loaded into DosName1581 when vice_jiffydos option is enabled."
+    note: "Loaded into DosName1581 when vice_jiffydos option is enabled."
 
   - name: "kernal-901227-01.bin"
     description: "C64 Kernal Rev 1"
@@ -57,7 +57,7 @@ files:
     size: 8192
     validation: [size]
     source_ref: "vice/src/c64/c64-resources.c:253, vice/src/c64/c64model.c:131"
-    notes: "Not embedded. Loaded via sysfile from system/vice/C64/ when C64 OLD NTSC model selected."
+    note: "Not embedded. Loaded via sysfile from system/vice/C64/ when C64 OLD NTSC model selected."
 
   - name: "kernal-901227-02.bin"
     description: "C64 Kernal Rev 2"
@@ -65,4 +65,4 @@ files:
     size: 8192
     validation: [size]
     source_ref: "vice/src/c64/c64-resources.c:254, vice/src/c64/c64model.c:117"
-    notes: "Not embedded. Loaded via sysfile from system/vice/C64/ when C64 OLD PAL model selected."
+    note: "Not embedded. Loaded via sysfile from system/vice/C64/ when C64 OLD PAL model selected."

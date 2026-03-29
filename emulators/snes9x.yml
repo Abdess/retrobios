@@ -16,7 +16,7 @@ cores:
     source: "https://github.com/libretro/snes9x"
     firmware_loading: true
     hle_only: true
-    notes: |
+    note: |
       Loads BS-X.bin and STBIOS.bin via LoadBIOS() in libretro.cpp.
       BSX_LoadBIOS() in bsx.cpp tries BS-X.bios as fallback.
       Auto-detects Satellaview and Sufami Turbo carts on load.
@@ -33,7 +33,7 @@ files:
     validation: [size]
     source_ref: "libretro.cpp:1209, bsx.cpp:1209,1214"
     aliases: ["BS-X.bios"]
-    notes: "Needed for Satellaview (.bs) games."
+    note: "Needed for Satellaview (.bs) games."
 
   - name: "STBIOS.bin"
     system: nintendo-sufami-turbo
@@ -42,7 +42,7 @@ files:
     size: 262144
     validation: [size]
     source_ref: "libretro.cpp:1203,1317, memmap.cpp:1672"
-    notes: "Needed for Sufami Turbo multi-cart games."
+    note: "Needed for Sufami Turbo multi-cart games."
 
 notes:
   coprocessor_hle: |

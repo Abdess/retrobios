@@ -127,7 +127,7 @@ platform_details:
   megacd:
     bootrom_size: 131072      # 128 KB
     source_ref: "core/cd_hw/scd.h:73"
-    notes: |
+    note: |
       CD boot ROM region is auto-detected from disc image header.
       Hardware model detected from boot ROM string at offset 0x120:
         WONDER-MEGA BOOT -> Wondermega
@@ -137,14 +137,14 @@ platform_details:
   megadrive:
     tmss_rom_size: 2048       # 2 KB
     source_ref: "libretro/libretro.c:3648-3666"
-    notes: |
+    note: |
       TMSS boot ROM validated by checking "GENESIS OS" at offset 0x120.
       Only loaded when genesis_plus_gx_bios core option is enabled.
 
   mastersystem:
     bios_max_size: 4194304    # 4 MB (stored above cart ROM)
     source_ref: "core/loadrom.c:504-527"
-    notes: |
+    note: |
       BIOS ROM loaded into cart.rom + 0x400000. SEGA mapper assumed
       for ROMs larger than 48KB, otherwise no mapper.
       Region selected based on current region_code setting.
@@ -152,6 +152,6 @@ platform_details:
   gamegear:
     bios_max_size: 4194304    # 4 MB (stored above cart ROM)
     source_ref: "core/loadrom.c:467-489"
-    notes: |
+    note: |
       Handles 1KB Majesco GG BIOS (mapped to $0000-$03FF) and
       standard larger BIOS ROMs.

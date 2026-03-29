@@ -29,7 +29,7 @@ files:
     hle_fallback: true
     validation: [size]
     source_ref: "frontend/libretro.c:3721-3724 (listed_bios[0])"
-    notes: "Preferred JP BIOS, searched first by exact filename."
+    note: "Preferred JP BIOS, searched first by exact filename."
 
   # -- Region: North America (PSX_REGION_US = 0) --
 
@@ -41,7 +41,7 @@ files:
     hle_fallback: true
     validation: [size]
     source_ref: "frontend/libretro.c:3721-3724 (listed_bios[1])"
-    notes: "Preferred US BIOS, searched first by exact filename."
+    note: "Preferred US BIOS, searched first by exact filename."
 
   # -- Region: Europe (PSX_REGION_EU = 2) --
 
@@ -53,7 +53,7 @@ files:
     hle_fallback: true
     validation: [size]
     source_ref: "frontend/libretro.c:3721-3724 (listed_bios[2])"
-    notes: "Preferred EU BIOS, searched first by exact filename."
+    note: "Preferred EU BIOS, searched first by exact filename."
 
   # -- Fallback BIOS filenames (searched in order after scph550x) --
 
@@ -65,7 +65,7 @@ files:
     hle_fallback: true
     validation: [size]
     source_ref: "frontend/libretro.c:3721-3724 (listed_bios[3])"
-    notes: "Region detected from content at runtime. Must be 512 KB in libretro context."
+    note: "Region detected from content at runtime. Must be 512 KB in libretro context."
 
   - name: "scph101.bin"
     description: "SCPH-101 (v4.4 03-24-00 A) - PSone US"
@@ -75,7 +75,7 @@ files:
     hle_fallback: true
     validation: [size]
     source_ref: "frontend/libretro.c:3721-3724 (listed_bios[4])"
-    notes: "PSone slim model."
+    note: "PSone slim model."
 
   - name: "scph7001.bin"
     description: "SCPH-7001 (v4.1 12-16-97 A)"
@@ -94,7 +94,7 @@ files:
     hle_fallback: true
     validation: [size]
     source_ref: "frontend/libretro.c:3721-3724 (listed_bios[6])"
-    notes: "Original US model. Last in the explicit filename search list."
+    note: "Original US model. Last in the explicit filename search list."
 
   # -- Dynamic scan fallback --
   # After exhausting listed_bios[], the core calls find_any_bios() which scans

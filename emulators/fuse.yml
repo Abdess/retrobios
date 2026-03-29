@@ -420,7 +420,7 @@ files:
 platform_details:
   bios_mapping:
     source_ref: "src/compat/file.c:55-89, 129-223"
-    notes: |
+    note: |
       ROM resolution order in compat_file_open():
       1. Check mem_entries[] (18 embedded ROMs compiled as .h arrays)
       2. If not found, try {system_dir}/fuse/{filename} on filesystem
@@ -429,7 +429,7 @@ platform_details:
 
   embedded_roms:
     source_ref: "src/compat/file.c:55-73"
-    notes: |
+    note: |
       18 ROMs embedded in the binary via .h headers generated from .rom files:
       48.rom, 128-0.rom, 128-1.rom, plus2-0.rom, plus2-1.rom,
       plus3-0/1/2/3.rom, plus3e-0/1/2/3.rom, se-0.rom, se-1.rom,
@@ -440,7 +440,7 @@ platform_details:
 
   machine_rom_map:
     source_ref: "fuse/settings.c:209-260, fuse/machines/*.c"
-    notes: |
+    note: |
       Spectrum 16K:       48.rom (1 ROM)
       Spectrum 48K:       48.rom (1 ROM)
       Spectrum 48K NTSC:  48.rom (1 ROM)
@@ -460,7 +460,7 @@ platform_details:
 
   rom_copyright:
     source_ref: "fuse/roms/README.copyright"
-    notes: |
+    note: |
       Most ROMs are copyright Amstrad. Amstrad allows free distribution but
       retains copyright. Selling ROMs standalone is not permitted. SE ROMs
       are GPLv2+. DISCiPLE/+D ROMs are copyright Datel, distribution allowed.

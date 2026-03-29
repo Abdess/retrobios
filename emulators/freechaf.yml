@@ -58,7 +58,7 @@ platform_details:
   bios_mapping:
     target: "0x000-0x7FF in 64K memory space"
     source_ref: "src/memory.h:27-29, src/memory.c:29-61"
-    notes: |
+    note: |
       MEMORY_loadSysROM_libretro() reads the file and copies it into
       Memory[] at the given address offset. PSU1 is loaded at 0x000,
       PSU2 at 0x400. The loader caps file size to (MEMORY_SIZE - address)
@@ -67,7 +67,7 @@ platform_details:
 
   hle_fallback:
     source_ref: "src/channelf_hle.c"
-    notes: |
+    note: |
       When BIOS files are missing, FreeChaF uses HLE to emulate the
       PSU routines in software. This is marked as experimental and may
       cause compatibility issues with some games. Each PSU can
@@ -75,7 +75,7 @@ platform_details:
 
   load_priority:
     source_ref: "src/libretro.c:186-198"
-    notes: |
+    note: |
       PSU1 loading order: sl90025.bin (Channel F II) first, then
       sl31253.bin (original Channel F) as fallback. If both fail,
       HLE is used. sl90025.bin is the preferred BIOS as it includes

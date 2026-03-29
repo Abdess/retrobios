@@ -59,7 +59,7 @@ files:
     md5: "a471e64e9f69afbe59c10cc94ed1b184"
     sha1: "ecfc092fe6371dbf38e238a8ba5f90785b5db52d"
     source_ref: "libretro-core.c:324-326 (path construction), libretro-core.c:328-357 (missing file error), libretro-core.c:359 (final path confirmation)"
-    notes: "Placed in system/xrick/data.zip. Contains sounds/ directory with 29 WAV files from the original xrick 0.21212 release. Without this file, standalone mode fails with 'XRick game files missing from frontend system directory'. Ships in the libretro repo root."
+    note: "Placed in system/xrick/data.zip. Contains sounds/ directory with 29 WAV files from the original xrick 0.21212 release. Without this file, standalone mode fails with 'XRick game files missing from frontend system directory'. Ships in the libretro repo root."
 
 analysis:
   content_type: game_engine

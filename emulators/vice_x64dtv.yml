@@ -25,7 +25,7 @@ files:
     hle_fallback: true
     size: 2097152
     source_ref: "vice/src/c64dtv/c64dtvflash.c:59-64,470-471,488-505"
-    notes: >
+    note: >
       Loaded via sysfile_load from system/vice/C64DTV/. All model variants
       (V2 PAL/NTSC, V3 PAL/NTSC, Hummer) default to this filename. If not
       found, the core copies embedded BASIC, kernal and chargen ROMs into

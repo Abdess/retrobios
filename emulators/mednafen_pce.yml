@@ -27,21 +27,21 @@ files:
     region: "NTSC-J"
     required: true
     source_ref: "libretro.cpp:1051-1052, settings.cpp:40"
-    notes: "Default value for pce_cdbios option."
+    note: "Default value for pce_cdbios option."
 
   - name: "syscard2.pce"
     description: "CD-ROM System Card 2.0 (Japan)"
     region: "NTSC-J"
     required: false
     source_ref: "libretro.cpp:1053-1054"
-    notes: "pce_cdbios = 'System Card 2'."
+    note: "pce_cdbios = 'System Card 2'."
 
   - name: "syscard1.pce"
     description: "CD-ROM System Card 1.0 (Japan)"
     region: "NTSC-J"
     required: false
     source_ref: "libretro.cpp:1055-1056"
-    notes: "pce_cdbios = 'System Card 1'."
+    note: "pce_cdbios = 'System Card 1'."
 
   - name: "gexpress.pce"
     description: "Games Express CD Card"
@@ -49,18 +49,18 @@ files:
     required: false
     aliases: ["gecard.pce"]
     source_ref: "libretro.cpp:1057-1058, settings.cpp:41, pce.cpp:373-411"
-    notes: "pce_cdbios = 'Games Express' or auto-detected via DetectGECD()."
+    note: "pce_cdbios = 'Games Express' or auto-detected via DetectGECD()."
 
   - name: "syscard3u.pce"
     description: "CD-ROM System Card 3.0 (US / TurboGrafx-CD)"
     region: "NTSC-U"
     required: false
     source_ref: "libretro.cpp:1059-1060"
-    notes: "pce_cdbios = 'System Card 3 US'. Not in .info."
+    note: "pce_cdbios = 'System Card 3 US'. Not in .info."
 
   - name: "syscard2u.pce"
     description: "CD-ROM System Card 2.0 (US / TurboGrafx-CD)"
     region: "NTSC-U"
     required: false
     source_ref: "libretro.cpp:1061-1062"
-    notes: "pce_cdbios = 'System Card 2 US'. Not in .info."
+    note: "pce_cdbios = 'System Card 2 US'. Not in .info."

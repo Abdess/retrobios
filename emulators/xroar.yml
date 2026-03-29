@@ -41,7 +41,7 @@ files:
     validation: [crc32]
     aliases: [dragon32, d32rom, "Dragon Data Ltd - Dragon 32 - IC17"]
     source_ref: "xroar.c:643 (romlist d32), dragon.c:792,798-803,820-821 (load + CRC)"
-    notes: "Combined 16K ROM. Loaded into a single 16384-byte rombank slot."
+    note: "Combined 16K ROM. Loaded into a single 16384-byte rombank slot."
 
   # ---- Dragon 64 ----
 
@@ -54,7 +54,7 @@ files:
     validation: [crc32]
     aliases: [d64rom1, dragrom, "Dragon Data Ltd - Dragon 64 - IC17", "Dragon Data Ltd - TANO IC18", "Eurohard S.A. - Dragon 200 IC18"]
     source_ref: "xroar.c:641 (romlist d64_1), xroar.c:647 (romlist dragon64), dragon64.c:138-141,155-157 (load + CRC)"
-    notes: "IC17 ROM. Required for the machine to start."
+    note: "IC17 ROM. Required for the machine to start."
 
   - name: "d64_2.rom"
     system: dragon64
@@ -65,7 +65,7 @@ files:
     validation: [crc32]
     aliases: [d64rom2, "Dragon Data Ltd - Dragon 64 - IC18", "Dragon Data Ltd - TANO IC17", "Eurohard S.A. - Dragon 200 IC17"]
     source_ref: "xroar.c:642 (romlist d64_2), xroar.c:648 (romlist dragon64_alt), dragon64.c:146-152,160-162 (load + CRC)"
-    notes: "IC18 ROM. 64K mode alternate BASIC. Machine starts without it (32K mode only)."
+    note: "IC18 ROM. 64K mode alternate BASIC. Machine starts without it (32K mode only)."
 
   # ---- Dragon 200-E ----
 
@@ -78,7 +78,7 @@ files:
     validation: [crc32]
     aliases: [d200e_rom1, ic18_v1.4e.ic34]
     source_ref: "xroar.c:644 (romlist d200e_1), xroar.c:650 (romlist dragon200e), xroar.c:735 (crclist)"
-    notes: "Required for Dragon 200-E. Falls back to d64_1 then generic dragon if not found."
+    note: "Required for Dragon 200-E. Falls back to d64_1 then generic dragon if not found."
 
   - name: "d200e_2.rom"
     system: dragon64
@@ -87,7 +87,7 @@ files:
     size: 16384
     aliases: [d200e_rom2, ic17_v1.4e.ic37]
     source_ref: "xroar.c:645 (romlist d200e_2), xroar.c:651 (romlist dragon200e_alt)"
-    notes: "64K mode alternate. Falls back to d64_2 if not found."
+    note: "64K mode alternate. Falls back to d64_2 if not found."
 
   - name: "d200e_26.rom"
     system: dragon64
@@ -96,7 +96,7 @@ files:
     size: 4096
     aliases: [rom26.ic1]
     source_ref: "xroar.c:652 (romlist dragon200e_charset), dragon.c:523-539 (ext_charset load)"
-    notes: "Spanish character set. Loaded into a 4096-byte rombank. Machine works without it (uses standard charset)."
+    note: "Spanish character set. Loaded into a 4096-byte rombank. Machine works without it (uses standard charset)."
 
   # ---- Dragon Professional (Alpha) ----
 
@@ -108,7 +108,7 @@ files:
     validation: [crc32]
     aliases: [alpha_bt_10, "Dragon Data Ltd - Dragon Alpha Boot v1.0 150584"]
     source_ref: "xroar.c:654 (romlist dragonpro_boot), xroar.c:741 (crclist), dragonpro.c:231-234 (load)"
-    notes: "Required for Dragon Professional machine. Loaded as extbas_rom (boot ROM)."
+    note: "Required for Dragon Professional machine. Loaded as extbas_rom (boot ROM)."
 
   - name: "alpha-basic.rom"
     system: dragon64
@@ -116,7 +116,7 @@ files:
     required: true
     aliases: [alpha_ba, "Dragon Data Ltd - Dragon Alpga Basic"]
     source_ref: "xroar.c:655 (romlist dragonpro_basic), dragonpro.c:240-243 (load)"
-    notes: "Loaded as altbas_rom. Falls back to d64_1 if not found."
+    note: "Loaded as altbas_rom. Falls back to d64_1 if not found."
 
   # ---- Tandy CoCo (Colour BASIC) ----
 
@@ -128,7 +128,7 @@ files:
     crc32: "d8f4d15e"
     validation: [crc32]
     source_ref: "xroar.c:657 (romlist coco), xroar.c:747 (crclist bas13), dragon.c:807-812,824-826 (load + CRC)"
-    notes: "Default Colour BASIC. First tried in the @coco romlist. 8K ROM loaded into slot 1 of a 2-slot rombank."
+    note: "Default Colour BASIC. First tried in the @coco romlist. 8K ROM loaded into slot 1 of a 2-slot rombank."
 
   - name: "bas12.rom"
     system: coco
@@ -139,7 +139,7 @@ files:
     validation: [crc32]
     aliases: ["Color Basic v1.2 (1982)(Tandy)"]
     source_ref: "xroar.c:657 (romlist coco), xroar.c:746 (crclist bas12)"
-    notes: "Alternative to bas13. Second in fallback order."
+    note: "Alternative to bas13. Second in fallback order."
 
   - name: "bas11.rom"
     system: coco
@@ -149,7 +149,7 @@ files:
     crc32: "6270955a"
     validation: [crc32]
     source_ref: "xroar.c:657 (romlist coco), xroar.c:745 (crclist bas11)"
-    notes: "Used by CoCo 1E. Third in fallback order."
+    note: "Used by CoCo 1E. Third in fallback order."
 
   - name: "bas10.rom"
     system: coco
@@ -159,7 +159,7 @@ files:
     crc32: "00b50aaa"
     validation: [crc32]
     source_ref: "xroar.c:657 (romlist coco), xroar.c:744 (crclist bas10)"
-    notes: "Earliest version. Used by original CoCo 1. Last in fallback order."
+    note: "Earliest version. Used by original CoCo 1. Last in fallback order."
 
   # ---- Tandy CoCo (Extended Colour BASIC) ----
 
@@ -171,7 +171,7 @@ files:
     crc32: "a82a6254"
     validation: [crc32]
     source_ref: "xroar.c:658 (romlist coco_ext), xroar.c:752 (crclist extbas11), dragon.c:798-803,828-829 (load + CRC)"
-    notes: "Default Extended BASIC. 8K ROM loaded into slot 0 of a 2-slot rombank."
+    note: "Default Extended BASIC. 8K ROM loaded into slot 0 of a 2-slot rombank."
 
   - name: "extbas10.rom"
     system: coco
@@ -181,7 +181,7 @@ files:
     crc32: "e031d076"
     validation: [crc32]
     source_ref: "xroar.c:658 (romlist coco_ext), xroar.c:751 (crclist extbas10)"
-    notes: "Earlier version. Second in fallback order."
+    note: "Earlier version. Second in fallback order."
 
   # ---- Tandy CoCo 3 ----
 
@@ -193,7 +193,7 @@ files:
     crc32: "b4c88d6c"
     validation: [crc32]
     source_ref: "xroar.c:688 (romlist coco3), xroar.c:762 (crclist coco3), coco3.c:254-256,512-526 (load + CRC)"
-    notes: "32K combined ROM. Single required ROM for CoCo 3 NTSC."
+    note: "32K combined ROM. Single required ROM for CoCo 3 NTSC."
 
   - name: "coco3p.rom"
     system: coco3
@@ -201,7 +201,7 @@ files:
     required: true
     size: 32768
     source_ref: "xroar.c:689 (romlist coco3p), xroar.c:505,514 (machine config), coco3.c:254-256"
-    notes: "PAL variant of the CoCo 3 ROM. Required for PAL CoCo 3 machines."
+    note: "PAL variant of the CoCo 3 ROM. Required for PAL CoCo 3 machines."
 
   # ---- Tandy MC-10 ----
 
@@ -213,7 +213,7 @@ files:
     crc32: "11fda97e"
     validation: [crc32]
     source_ref: "xroar.c:695 (romlist mc10), xroar.c:767 (crclist mc10), mc10.c:157-158,397-407 (load + CRC)"
-    notes: "Single required ROM for MC-10."
+    note: "Single required ROM for MC-10."
 
   - name: "alice.rom"
     system: mc10
@@ -223,7 +223,7 @@ files:
     crc32: "f876abe9"
     validation: [crc32]
     source_ref: "xroar.c:697 (romlist alice), xroar.c:769 (crclist alice), mc10.c:157-158"
-    notes: "French Alice variant. Required for Alice machine. MC-10 compatible."
+    note: "French Alice variant. Required for Alice machine. MC-10 compatible."
 
   # ---- Deluxe CoCo (prototype) ----
 
@@ -235,7 +235,7 @@ files:
     validation: [crc32]
     aliases: [adv070_u24]
     source_ref: "xroar.c:673 (romlist deluxecoco), xroar.c:757 (crclist), deluxecoco.c:191-194 (load)"
-    notes: "Primary ROM for the Deluxe CoCo prototype. Loaded as extbas_rom."
+    note: "Primary ROM for the Deluxe CoCo prototype. Loaded as extbas_rom."
 
   - name: "adv071_u24.rom"
     system: coco
@@ -266,7 +266,7 @@ files:
     validation: [crc32]
     aliases: [mx1600bas_zephyr]
     source_ref: "xroar.c:679 (romlist mx1600), xroar.c:748 (crclist mx1600)"
-    notes: "Required for MX-1600. Zephyr-patched variant (CRC32 d11b1c96) is an alias."
+    note: "Required for MX-1600. Zephyr-patched variant (CRC32 d11b1c96) is an alias."
 
   - name: "mx1600extbas.rom"
     system: coco
@@ -301,28 +301,28 @@ files:
     description: "Tandy RS-DOS 1.1 (CoCo floppy disk controller)"
     required: false
     source_ref: "xroar.c:708 (romlist rsdos), rsdos.c:176 (default @rsdos)"
-    notes: "Primary CoCo disk controller ROM. disk10.rom (RS-DOS 1.0) is an earlier version used as fallback."
+    note: "Primary CoCo disk controller ROM. disk10.rom (RS-DOS 1.0) is an earlier version used as fallback."
 
   - name: "hdbdw3bck.rom"
     system: coco
     description: "RS-DOS with Becker port (DriveWire)"
     required: false
     source_ref: "xroar.c:718 (romlist rsdos_becker), xroar.c:572-574 (cart becker)"
-    notes: "For CoCo with Becker port hardware. Enables DriveWire connectivity."
+    note: "For CoCo with Becker port hardware. Enables DriveWire connectivity."
 
   - name: "ddos12a.rom"
     system: dragon64
     description: "DragonDOS 1.2a (Dragon floppy disk controller)"
     required: false
     source_ref: "xroar.c:702 (romlist dragondos), dragondos.c:173 (default @dragondos_compat)"
-    notes: "Latest DragonDOS version. Fallback chain tries DOSPlus -> SuperDOS -> DragonDOS -> Cumana. Older versions: ddos12, ddos40, ddos15, ddos10."
+    note: "Latest DragonDOS version. Fallback chain tries DOSPlus -> SuperDOS -> DragonDOS -> Cumana. Older versions: ddos12, ddos40, ddos15, ddos10."
 
   - name: "dplus49b.rom"
     system: dragon64
     description: "DOSPlus 4.9b (Dragon compatible DOS)"
     required: false
     source_ref: "xroar.c:703 (romlist dosplus)"
-    notes: "First tried in DragonDOS-compatible cartridge. Enhanced Dragon DOS. Older version: dplus48 (alias: dosplus-4.8, DOSPLUS)."
+    note: "First tried in DragonDOS-compatible cartridge. Enhanced Dragon DOS. Older version: dplus48 (alias: dosplus-4.8, DOSPLUS)."
 
   - name: "sdose6.rom"
     system: dragon64
@@ -330,7 +330,7 @@ files:
     required: false
     aliases: ["PNP - SuperDOS E6"]
     source_ref: "xroar.c:704 (romlist superdos)"
-    notes: "Latest SuperDOS. Older versions: sdose5, sdose4."
+    note: "Latest SuperDOS. Older versions: sdose5, sdose4."
 
   - name: "cdos20.rom"
     system: dragon64
@@ -345,14 +345,14 @@ files:
     required: false
     aliases: ["Premier Micros - DeltaDOS"]
     source_ref: "xroar.c:711 (romlist delta), deltados.c:160 (default @delta)"
-    notes: "Latest Delta version. Older versions: delta1a, delta19, delta, deltados."
+    note: "Latest Delta version. Older versions: delta1a, delta19, delta, deltados."
 
   - name: "cp450dsk.rom"
     system: coco
     description: "Prologica CP-450 DOS cartridge"
     required: false
     source_ref: "xroar.c:709 (romlist cp450)"
-    notes: "Falls back to RS-DOS if not found."
+    note: "Falls back to RS-DOS if not found."
 
   # ---- Other cartridge ROMs (all optional) ----
 
@@ -361,7 +361,7 @@ files:
     description: "Orchestra-90 CC sound cartridge ROM"
     required: false
     source_ref: "orch90.c:122 (default rom = orch90)"
-    notes: "Sound synthesis cartridge. Loaded directly (no romlist fallback)."
+    note: "Sound synthesis cartridge. Loaded directly (no romlist fallback)."
 
   - name: "mcx128.rom"
     system: mc10
@@ -369,7 +369,7 @@ files:
     required: false
     aliases: [MCX_Basic_21]
     source_ref: "xroar.c:724 (romlist mcx128), mcx128.c:208 (default @mcx128)"
-    notes: "128K memory expansion for MC-10. Adds enhanced BASIC."
+    note: "128K memory expansion for MC-10. Adds enhanced BASIC."
 
   - name: "mcx128a.rom"
     system: mc10
@@ -377,25 +377,25 @@ files:
     required: false
     aliases: [MCX_Basic_21_AZERTY]
     source_ref: "xroar.c:725 (romlist mcx128_azerty), xroar.c:632-633 (cart mcx128a)"
-    notes: "AZERTY keyboard variant for Alice. Same MCX128 hardware."
+    note: "AZERTY keyboard variant for Alice. Same MCX128 hardware."
 
   - name: "yados.rom"
     system: coco
     description: "YADOS (Glenside IDE interface ROM)"
     required: false
     source_ref: "xroar.c:690 (romlist glenside_ide), idecart.c:204 (default @glenside_ide)"
-    notes: "IDE hard disk interface. Fallback: hdblba.rom (alternative IDE ROM)."
+    note: "IDE hard disk interface. Fallback: hdblba.rom (alternative IDE ROM)."
 
   - name: "sdbdos.rom"
     system: dragon64
     description: "SDBDOS (MOOH memory cartridge ROM)"
     required: false
     source_ref: "mooh.c:254 (default rom = sdbdos)"
-    notes: "SD card boot DOS for MOOH cartridge. Loaded directly."
+    note: "SD card boot DOS for MOOH cartridge. Loaded directly."
 
   - name: "dragonfly-2.3.rom"
     system: dragon64
     description: "Ikon Ultra Drive Dragonfly ROM 2.3"
     required: false
     source_ref: "xroar.c:715 (romlist ikon), ikon.c:151 (default @ikon)"
-    notes: "Experimental. Ikon Ultra Drive storage interface. Older version: dragonfly-1.3."
+    note: "Experimental. Ikon Ultra Drive storage interface. Older version: dragonfly-1.3."

@@ -164,7 +164,7 @@ files:
     sha1: "f6b1eebc4b2d200ec6d3d21d51325d5b48c60252"
     validation: [sha1, size]
     source_ref: "mt32emu.h:5126,5143"
-    notes: "pairs with any MT-32 v1.x control ROM"
+    note: "pairs with any MT-32 v1.x control ROM"
 
   - name: "CM32L_PCM.ROM"
     description: "CM-32L/CM-64/LAPC-I PCM ROM"
@@ -174,7 +174,7 @@ files:
     sha1: "289cc298ad532b702461bfc738009d9ebe8025ea"
     validation: [sha1, size]
     source_ref: "mt32emu.h:5127,5144"
-    notes: "pairs with MT-32 v2.x or CM-32L control ROMs. Lower half aliases MT-32 PCM."
+    note: "pairs with MT-32 v2.x or CM-32L control ROMs. Lower half aliases MT-32 PCM."
 
   # -- General MIDI SoundFont --
 
@@ -183,7 +183,7 @@ files:
     required: false
     hle_fallback: true
     source_ref: "dosbox_pure_libretro.cpp:1375,2760"
-    notes: >
+    note: >
       Any .SF2 or .SF3 file in the system directory works. The core lists all
       found SoundFonts in the MIDI config dropdown. DOSBOX.SF2 is the conventional
       name and is also auto-detected when placed inside game content on C: drive.

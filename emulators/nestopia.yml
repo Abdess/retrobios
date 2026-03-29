@@ -43,7 +43,7 @@ files:
     md5: "ca30b50f880eb660a320674ed365ef7a"
     sha1: "57fe1bdee955bb48d357e463ccbf129496930b62"
     source_ref: "libretro/libretro.cpp:1608-1634 (FDS load), source/core/NstFds.cpp:61-131 (Bios class, CRC32 validation)"
-    notes: "Mapped at 0xE000-0xFFFF (8 KB). retro_load_game returns false if missing when loading .fds files. CRC32 checked: Famicom 0x5E607DCF, Twin Famicom 0x4DF24A6C."
+    note: "Mapped at 0xE000-0xFFFF (8 KB). retro_load_game returns false if missing when loading .fds files. CRC32 checked: Famicom 0x5E607DCF, Twin Famicom 0x4DF24A6C."
 
   # --- NES game database (optional, overrides baked-in copy) ---
   - name: "NstDatabase.xml"
@@ -52,7 +52,7 @@ files:
     required: false
     hle_fallback: true
     source_ref: "libretro/libretro.cpp:1561-1586 (database load), libretro/nstdatabase.hpp (baked-in fallback)"
-    notes: "XML database matching games by SHA1+CRC32. Used for region, mapper, mirroring, and 4-player adapter detection. Built-in fallback exists so this file is optional."
+    note: "XML database matching games by SHA1+CRC32. Used for region, mapper, mirroring, and 4-player adapter detection. Built-in fallback exists so this file is optional."
 
   # --- Custom palette (optional, core option nestopia_palette = Custom) ---
   - name: "custom.pal"
@@ -62,7 +62,7 @@ files:
     hle_fallback: true
     size: 192
     source_ref: "libretro/libretro.cpp:1540-1559 (palette load)"
-    notes: "64 RGB triplets (64 x 3 bytes = 192 bytes). Loaded unconditionally at startup; applied only when nestopia_palette core option is set to Custom. Falls back to built-in Royaltea palette. Multiple valid palettes exist so no canonical hash."
+    note: "64 RGB triplets (64 x 3 bytes = 192 bytes). Loaded unconditionally at startup; applied only when nestopia_palette core option is set to Custom. Falls back to built-in Royaltea palette. Multiple valid palettes exist so no canonical hash."
 
   # --- ADPCM audio samples (optional, game-specific) ---
   - name: "nestopia/samples/moepro/"

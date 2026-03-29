@@ -140,7 +140,7 @@ files:
 platform_details:
   bios_mapping:
     source_ref: "libretro.c:718-760, boot.c:83-116"
-    notes: |
+    note: |
       ROM directory is {system_dir}/bk/ (libretro.c:724-726).
       Model selection via core option "bk_model" determines which ROMs are loaded.
       The core shuts down immediately if any required ROM for the selected model
@@ -148,7 +148,7 @@ platform_details:
 
   model_rom_map:
     source_ref: "libretro.c:734-756, boot.c:83-116"
-    notes: |
+    note: |
       BK-0010:            MONIT10.ROM + FOCAL10.ROM
       BK-0010.01:         MONIT10.ROM + BASIC10.ROM
       BK-0010.01 + FDD:   MONIT10.ROM + DISK_327.ROM
@@ -158,7 +158,7 @@ platform_details:
 
   rom_loading:
     source_ref: "libretro.c:1050-1107"
-    notes: |
+    note: |
       load_rom_file() first tries {romdir}/{filename} with original casing.
       If not found, retries with the filename converted to lowercase.
       Returns NULL and shuts down the core on failure.

@@ -34,7 +34,7 @@ files:
     validation: [size]
     aliases: ["BS-X.bios"]
     source_ref: "src/bsx.c:959-993 (BSX_LoadBIOS), src/bsx.c:1068 (caller in S9xInitBSX)"
-    notes: |
+    note: |
       Loaded when a BS game is auto-detected (is_bsx checks ROM header at
       0x7FC0/0xFFC0). Without this file, BSX.bootup is set to FALSE and
       BIOSROM is zeroed. BS games still load but lack the boot menu.

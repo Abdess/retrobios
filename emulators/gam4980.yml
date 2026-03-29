@@ -54,7 +54,7 @@ platform_details:
   bios_mapping:
     target: "0x800000-0x9FFFFF (font), 0xE00000-0xFFFFFF (OS) in banked address space"
     source_ref: "src/libretro.c:109-110, 300-305"
-    notes: |
+    note: |
       sys.rom_8 and sys.rom_e are flat 2 MB arrays. The CPU accesses them
       through bank-switched memory (PA() macro resolves virtual to physical
       address). rom_8_vread and rom_e_vread handle indirect reads via
@@ -62,7 +62,7 @@ platform_details:
 
   load_path:
     source_ref: "src/libretro.c:1173-1175"
-    notes: |
+    note: |
       retro_init() builds the path as {system_directory}/gam4980/ and
       passes it to sys_init(). Files must be named exactly 8.BIN and
       E.BIN (case sensitive on Linux). No .info firmware declarations

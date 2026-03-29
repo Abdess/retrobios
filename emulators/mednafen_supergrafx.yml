@@ -29,25 +29,25 @@ files:
     region: "NTSC-J"
     required: true
     source_ref: "libretro.cpp:972-973, mednafen/settings.cpp:37"
-    notes: "Default value for sgx_cdbios option."
+    note: "Default value for sgx_cdbios option."
 
   - name: "syscard2.pce"
     description: "CD-ROM System Card 2.0 (Japan)"
     region: "NTSC-J"
     required: false
     source_ref: "libretro.cpp:974-975"
-    notes: "sgx_cdbios = 'System Card 2'."
+    note: "sgx_cdbios = 'System Card 2'."
 
   - name: "syscard1.pce"
     description: "CD-ROM System Card 1.0 (Japan)"
     region: "NTSC-J"
     required: false
     source_ref: "libretro.cpp:976-977"
-    notes: "sgx_cdbios = 'System Card 1'."
+    note: "sgx_cdbios = 'System Card 1'."
 
   - name: "gexpress.pce"
     description: "Games Express CD Card"
     region: "NTSC-J"
     required: false
     source_ref: "libretro.cpp:978-979, mednafen/pce_fast/pce.cpp:330-367,453-454"
-    notes: "sgx_cdbios = 'Games Express' or auto-detected via DetectGECD()."
+    note: "sgx_cdbios = 'Games Express' or auto-detected via DetectGECD()."

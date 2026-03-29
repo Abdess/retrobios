@@ -46,7 +46,7 @@ files:
     required: false
     hle_fallback: true
     source_ref: "src/libretro/config/console.cpp:184"
-    notes: "Filename configurable via core options; generated firmware used as fallback"
+    note: "Filename configurable via core options; generated firmware used as fallback"
 
   # --- Nintendo DSi (TWL) ---
   - name: dsi_bios7.bin
@@ -57,7 +57,7 @@ files:
     validation: [size]
     crc32: "0x4316CC42"
     source_ref: "src/libretro/config/console.cpp:333, melonDS:src/MemConstants.h:32,44"
-    notes: "Contains eMMC key-Y at offset 0x8308 for NAND init"
+    note: "Contains eMMC key-Y at offset 0x8308 for NAND init"
 
   - name: dsi_bios9.bin
     system: nintendo-dsi
@@ -73,11 +73,11 @@ files:
     description: "DSi firmware image"
     required: true
     source_ref: "src/libretro/config/console.cpp:352-358"
-    notes: "Filename configurable via core options; must have DSi firmware header"
+    note: "Filename configurable via core options; must have DSi firmware header"
 
   - name: dsi_nand.bin
     system: nintendo-dsi
     description: "DSi NAND dump"
     required: true
     source_ref: "src/libretro/config/console.cpp:378"
-    notes: "Filename configurable via core options; 240MB or 245.5MB with optional no$cash footer"
+    note: "Filename configurable via core options; 240MB or 245.5MB with optional no$cash footer"

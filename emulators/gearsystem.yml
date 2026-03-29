@@ -44,7 +44,7 @@ platform_details:
   mastersystem:
     bios_filename: "bios.sms"
     source_ref: "src/Memory.cpp:223-228"
-    notes: |
+    note: |
       Boot ROM loaded via LoadBootromSMS() -> LoadBootroom(path, false).
       Raw binary read, stored in m_pBootromSMS. Bank count computed as
       Pow2Ceil(size / 0x4000). Memory mapping controlled by port 3E bit 3.
@@ -52,13 +52,13 @@ platform_details:
   gamegear:
     bios_filename: "bios.gg"
     source_ref: "src/Memory.cpp:230-235"
-    notes: |
+    note: |
       Boot ROM loaded via LoadBootromGG() -> LoadBootroom(path, true).
       Raw binary read, stored in m_pBootromGG. Same bank computation.
       Supports standard GG BIOS and Majesco 1KB variant.
 
   sg1000:
     bios_filename: null
-    notes: |
+    note: |
       No BIOS support. Memory.cpp:291 returns false from IsBootromEnabled()
       when IsSG1000() or IsGameGearInSMSMode() is true.

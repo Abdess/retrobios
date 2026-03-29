@@ -29,7 +29,7 @@ files:
     size: 8192
     validation: [size]
     source_ref: "src/fds.c:636-667 (FDSLoad), src/general.c:64-66 (FCEUMKF_FDSROM)"
-    notes: "Loaded at 0xE000, mapped as 8 KB PRG bank 0. Load fails if missing or short read."
+    note: "Loaded at 0xE000, mapped as 8 KB PRG bank 0. Load fails if missing or short read."
 
   # --- Game Genie ROM (optional, core option fceumm_game_genie) ---
   - name: "gamegenie.nes"
@@ -37,7 +37,7 @@ files:
     description: "Game Genie add-on cartridge ROM"
     required: false
     source_ref: "src/cart.c:344-398 (FCEU_OpenGenie), src/general.c:60-62 (FCEUMKF_GGROM)"
-    notes: "iNES format ROM (4 KB PRG + 256 bytes CHR). Core option disabled by default. Only applies to cartridge games."
+    note: "iNES format ROM (4 KB PRG + 256 bytes CHR). Core option disabled by default. Only applies to cartridge games."
 
   # --- Custom palette (optional, core option fceumm_palette) ---
   - name: "nes.pal"
@@ -45,4 +45,4 @@ files:
     description: "External NES color palette"
     required: false
     source_ref: "src/palette.c:170-200 (FCEU_LoadGamePalette), src/general.c:68-70 (FCEUMKF_PALETTE), src/drivers/libretro/libretro.c:1789-1798"
-    notes: "RGB triplets (64 standard or 512 with de-emphasis). Only loaded when palette core option is set to Custom."
+    note: "RGB triplets (64 standard or 512 with de-emphasis). Only loaded when palette core option is set to Custom."

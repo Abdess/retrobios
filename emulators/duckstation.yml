@@ -1080,7 +1080,7 @@ files:
     fast_boot: Type2
     priority: 150
     source_ref: "src/core/bios.cpp:138"
-    notes: "Sony Bravia TV with embedded PS2"
+    note: "Sony Bravia TV with embedded PS2"
 
   # -- OpenBIOS (signature-based detection, no fixed hash) --
 
@@ -1093,4 +1093,4 @@ files:
     fast_boot: unsupported
     priority: 200
     source_ref: "src/core/bios.cpp:144-146"
-    notes: "Detected by 'OpenBIOS' signature at offset 0x78, not by MD5 hash"
+    note: "Detected by 'OpenBIOS' signature at offset 0x78, not by MD5 hash"

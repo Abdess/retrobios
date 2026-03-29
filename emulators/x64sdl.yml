@@ -46,7 +46,7 @@ files:
     size: 8192
     path: "data/C64/sxkernal"
     source_ref: "src/c64/c64model.c:142,147"
-    notes: "Loaded when SX64 PAL or SX64 NTSC model selected."
+    note: "Loaded when SX64 PAL or SX64 NTSC model selected."
 
   - name: "jpkernal"
     description: "Japanese C64 Kernal ROM"
@@ -54,7 +54,7 @@ files:
     size: 8192
     path: "data/C64/jpkernal"
     source_ref: "src/c64/c64model.c:152"
-    notes: "Loaded when C64 JAP NTSC model selected."
+    note: "Loaded when C64 JAP NTSC model selected."
 
   - name: "jpchrgen"
     description: "Japanese C64 character generator ROM"
@@ -62,7 +62,7 @@ files:
     size: 4096
     path: "data/C64/jpchrgen"
     source_ref: "src/c64/c64model.c:152"
-    notes: "Loaded when C64 JAP NTSC model selected."
+    note: "Loaded when C64 JAP NTSC model selected."
 
   - name: "gskernal"
     description: "C64 Games System Kernal ROM"
@@ -70,7 +70,7 @@ files:
     size: 8192
     path: "data/C64/gskernal"
     source_ref: "src/c64/c64model.c:157"
-    notes: "Loaded when C64 GS PAL model selected."
+    note: "Loaded when C64 GS PAL model selected."
 
   - name: "edkernal"
     description: "PET64/Educator64 Kernal ROM"
@@ -78,7 +78,7 @@ files:
     size: 8192
     path: "data/C64/edkernal"
     source_ref: "src/c64/c64model.c:162,167"
-    notes: "Loaded when PET64 PAL or PET64 NTSC model selected."
+    note: "Loaded when PET64 PAL or PET64 NTSC model selected."
 
   # IEC drive ROMs (optional, path: data/DRIVES/)
   - name: "dos1540"
@@ -86,14 +86,14 @@ files:
     required: false
     path: "data/DRIVES/dos1540"
     source_ref: "src/drive/iec/iecrom.c:99, src/drive/iec/iec-resources.c:182"
-    notes: "Hardware-level 1540 drive emulation. Absence disables this drive type."
+    note: "Hardware-level 1540 drive emulation. Absence disables this drive type."
 
   - name: "dos1541"
     description: "1541 floppy drive ROM"
     required: false
     path: "data/DRIVES/dos1541"
     source_ref: "src/drive/iec/iecrom.c:106, src/drive/iec/iec-resources.c:185"
-    notes: "Hardware-level 1541 drive emulation. Most common C64 drive."
+    note: "Hardware-level 1541 drive emulation. Most common C64 drive."
 
   - name: "d1541II"
     description: "1541-II floppy drive ROM"
@@ -124,14 +124,14 @@ files:
     required: false
     path: "data/DRIVES/dos2000"
     source_ref: "src/drive/iec/iecrom.c:139, src/drive/iec/iec-resources.c:195"
-    notes: "Not shipped with VICE 3.1 data files."
+    note: "Not shipped with VICE 3.1 data files."
 
   - name: "dos4000"
     description: "CMD FD-4000 drive ROM"
     required: false
     path: "data/DRIVES/dos4000"
     source_ref: "src/drive/iec/iecrom.c:145, src/drive/iec/iec-resources.c:197"
-    notes: "Not shipped with VICE 3.1 data files."
+    note: "Not shipped with VICE 3.1 data files."
 
   # IEEE drive ROMs (optional, path: data/DRIVES/)
   - name: "dos2031"
@@ -139,7 +139,7 @@ files:
     required: false
     path: "data/DRIVES/dos2031"
     source_ref: "src/drive/ieee/ieee.c:115, src/drive/ieee/ieee-resources.c:93"
-    notes: "IEEE488 interface drive. Requires parallel IEEE488 extension."
+    note: "IEEE488 interface drive. Requires parallel IEEE488 extension."
 
   - name: "dos2040"
     description: "2040 IEEE drive ROM"
@@ -171,11 +171,11 @@ files:
     required: false
     path: "data/PRINTER/mps803"
     source_ref: "src/printerdrv/drv-mps803.c:420"
-    notes: "Loaded on demand when MPS-803 printer opened."
+    note: "Loaded on demand when MPS-803 printer opened."
 
   - name: "nl10-cbm"
     description: "NL10 printer ROM"
     required: false
     path: "data/PRINTER/nl10-cbm"
     source_ref: "src/printerdrv/drv-nl10.c:2210"
-    notes: "Loaded on demand when NL10 printer opened."
+    note: "Loaded on demand when NL10 printer opened."

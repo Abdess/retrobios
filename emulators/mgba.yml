@@ -96,7 +96,7 @@ platform_details:
     bios_size: 16384  # 16 KB
     hle_bios: true
     source_ref: "src/gba/hle-bios.c, src/gba/gba.c:520-551"
-    notes: |
+    note: |
       GBALoadBIOS() validates size (must be exactly 0x4000) then computes
       an internal checksum. Two official checksums are recognized:
         GBA_BIOS_CHECKSUM    = 0xBAAE187F (standard GBA)
@@ -107,7 +107,7 @@ platform_details:
     bios_size: 256  # 256 B
     hle_bios: false
     source_ref: "src/gb/gb.c:570-605"
-    notes: |
+    note: |
       GBIsBIOS() validates by CRC32. Accepted DMG-family checksums:
         DMG0 = 0xC2F5CC97, DMG = 0x59C8598E, MGB = 0xE6920754
       Files not matching any known checksum are rejected.
@@ -116,7 +116,7 @@ platform_details:
     bios_size: 2304  # 2304 B (0x900)
     hle_bios: false
     source_ref: "src/gb/gb.c:570-605"
-    notes: |
+    note: |
       Accepted CGB-family CRC32 checksums:
         CGB = 0x41884E46, CGB0 = 0xE8EF5318, CGBE = 0xE95DC95D
         AGB = 0xFFD6B0F1, AGB0 = 0x570337EA
@@ -125,7 +125,7 @@ platform_details:
     bios_size: 256  # 256 B
     hle_bios: false
     source_ref: "src/gb/gb.c:570-605, src/gb/core.c:642-644"
-    notes: |
+    note: |
       Accepted SGB CRC32 checksums:
         SGB = 0xEC8A83B9, SGB2 = 0x53D0DD63
       SGB2 maps here in standalone (marked TODO upstream). Libretro port

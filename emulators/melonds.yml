@@ -26,7 +26,7 @@ files:
     validation: {core: [size], upstream: [size, crc32]}
     crc32: "0x2ab23573"
     source_ref: "src/NDS.h:196, src/NDS.cpp:467-477, src/frontend/Util_ROM.cpp:99-111"
-    notes: "FreeBIOS fallback (src/FreeBIOS.h); native needed for Key1 cartridge crypto"
+    note: "FreeBIOS fallback (src/FreeBIOS.h); native needed for Key1 cartridge crypto"
 
   - name: bios7.bin
     system: nintendo-ds
@@ -37,7 +37,7 @@ files:
     validation: {core: [size], upstream: [size, crc32]}
     crc32: "0x1280f0d5"
     source_ref: "src/NDS.h:197, src/NDS.cpp:482-492, src/frontend/Util_ROM.cpp:117-131"
-    notes: "FreeBIOS fallback (src/FreeBIOS.h); native needed for Key1 init at offset 0x0030"
+    note: "FreeBIOS fallback (src/FreeBIOS.h); native needed for Key1 init at offset 0x0030"
 
   - name: firmware.bin
     system: nintendo-ds
@@ -46,7 +46,7 @@ files:
     hle_fallback: true
     validation: [size]
     source_ref: "src/SPI.cpp:192-211, src/frontend/Util_ROM.cpp:174-195"
-    notes: "Generated 128KB firmware as fallback; native must be 256KB or 512KB for boot"
+    note: "Generated 128KB firmware as fallback; native must be 256KB or 512KB for boot"
 
   # --- Nintendo DSi (TWL) ---
   - name: dsi_bios9.bin
@@ -66,7 +66,7 @@ files:
     validation: {core: [size], upstream: [size, crc32]}
     crc32: "0x4316CC42"
     source_ref: "src/DSi.h:34, src/DSi.cpp:604-620, src/frontend/Util_ROM.cpp:158-170"
-    notes: "Contains eMMC key-Y at offset 0x8308 for NAND init"
+    note: "Contains eMMC key-Y at offset 0x8308 for NAND init"
 
   - name: dsi_firmware.bin
     system: nintendo-dsi
@@ -81,11 +81,11 @@ files:
     description: "DSi NAND dump"
     required: true
     source_ref: "src/frontend/Util_ROM.cpp:224-235, src/DSi_NAND.cpp"
-    notes: "Uses AES keys from ARM7i BIOS offset 0x8308"
+    note: "Uses AES keys from ARM7i BIOS offset 0x8308"
 
   - name: dsi_sd_card.bin
     system: nintendo-dsi
     description: "DSi SD card image"
     required: false
     source_ref: "src/frontend/Util_ROM.cpp:237-243, src/libretro/libretro.cpp:837,553"
-    notes: "Created if missing; requires melonds_dsi_sdcard core option enabled"
+    note: "Created if missing; requires melonds_dsi_sdcard core option enabled"

@@ -27,7 +27,7 @@ files:
     description: "AES encryption keys for decrypting encrypted ROMs"
     required: false
     source_ref: "src/emulator.cpp:229,237-238, src/core/crypto/aes_engine.cpp:13-92"
-    notes: |
+    note: |
       Loaded at ROM load time from appDataRoot/sysdata/aes_keys.txt.
       In libretro mode, appDataRoot = <save_dir>/Emulator Files/.
       Contains key slot entries (generator, keyX, keyY, normalKey).
@@ -39,7 +39,7 @@ files:
     description: "Seed database for seed-encrypted games"
     required: false
     source_ref: "src/emulator.cpp:230,241-242, src/core/loader/ncch.cpp:78-93"
-    notes: |
+    note: |
       Used for titles with seed encryption (firmware 9.6+).
       Placed alongside aes_keys.txt in the sysdata directory.
       Without it, seed-encrypted titles fail to load with a warning.

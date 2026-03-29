@@ -25,7 +25,7 @@ files:
     size: 8192
     validation: [size]
     source_ref: "vice/src/vic20/vic20rom.h:49, vice/src/vic20/vic20model.c:60, vice/src/vic20/vic20rom.c:112-120"
-    notes: "Not embedded. Loaded via sysfile from system/vice/VIC20/ when VIC-1001 Japanese model selected via vicerc."
+    note: "Not embedded. Loaded via sysfile from system/vice/VIC20/ when VIC-1001 Japanese model selected via vicerc."
 
   - name: "chargen-901460-02.bin"
     description: "VIC-1001 Character ROM (Japanese)"
@@ -33,4 +33,4 @@ files:
     size: 4096
     validation: [size]
     source_ref: "vice/src/vic20/vic20rom.h:53, vice/src/vic20/vic20model.c:60, vice/src/vic20/vic20rom.c:173-179"
-    notes: "Not embedded. Loaded via sysfile from system/vice/VIC20/ when VIC-1001 Japanese model selected via vicerc."
+    note: "Not embedded. Loaded via sysfile from system/vice/VIC20/ when VIC-1001 Japanese model selected via vicerc."

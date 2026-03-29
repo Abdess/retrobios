@@ -95,7 +95,7 @@ files:
     validation: [size, sha256]
     sha256: "0c8359870cbac0ea091f1c87f188cd332dcc709753b91cafd9fd44a4a6188197"
     source_ref: "rustation/src/bios/db.rs:108-117 (v2.2 Japan)"
-    notes: "A known-bad v2.2 J dump also exists in the DB but is rejected."
+    note: "A known-bad v2.2 J dump also exists in the DB but is rejected."
 
   - name: "scph5000.bin"
     description: "v2.2 J (alt)"

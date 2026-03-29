@@ -111,7 +111,7 @@ analysis:
     source_ref: "libretro.c:902-904"
     selection_logic: "biosType == BT_K_SERIES ? jaguarBootROM : jaguarBootROM2"
     external_loading: false
-    notes: |
+    note: |
       jagBootPath and CDBootPath struct fields are never set in the libretro
       port. The standalone Virtual Jaguar GUI uses them but that code path
       is not compiled into the libretro core.

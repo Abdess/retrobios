@@ -26,7 +26,7 @@ platform_details:
     bios_size: 16384
     hle_bios: true
     source_ref: "ameteor/source/bios.cpp, ameteor/source/cpu.cpp:245-311"
-    notes: |
+    note: |
       Full HLE BIOS. The libretro port never loads an external BIOS file.
       Cpu::SoftwareInterrupt() checks HasBios() — if false (always in
       libretro), SWI calls are routed to C++ reimplementations.

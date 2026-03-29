@@ -51,4 +51,4 @@ files:
     sha1: "5f4aed208301449c2e9514edfd325fe9dead76fa"
     crc32: "a5751b99"
     source_ref: "d_main.c:1069-1078 (PACKAGE .wad load), libretro.c:1742-1784 (I_FindFile search), config.h:46 (PACKAGE=prboom)"
-    notes: "Searched in system/prboom/ then system/. Falls back to internal defaults if missing, but menus and HUD may render incorrectly without it."
+    note: "Searched in system/prboom/ then system/. Falls back to internal defaults if missing, but menus and HUD may render incorrectly without it."

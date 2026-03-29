@@ -40,18 +40,18 @@ files:
     description: "TI-83 Plus Silver Edition ROM dump"
     required: false
     source_ref: "libretronew.cpp:576-578"
-    notes: "Checked first. Recommended for largest storage capacity."
+    note: "Checked first. Recommended for largest storage capacity."
 
   - name: "ti83plus.rom"
     system: ti-83
     description: "TI-83 Plus ROM dump"
     required: false
     source_ref: "libretronew.cpp:583-585"
-    notes: "Checked second, used if ti83se.rom is missing."
+    note: "Checked second, used if ti83se.rom is missing."
 
   - name: "ti83.rom"
     system: ti-83
     description: "TI-83 ROM dump"
     required: false
     source_ref: "libretronew.cpp:591-593"
-    notes: "Checked last. Original TI-83 (non-Plus)."
+    note: "Checked last. Original TI-83 (non-Plus)."

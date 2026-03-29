@@ -94,7 +94,7 @@ files:
 platform_details:
   bios_mapping:
     source_ref: "cap32/cap32.c:1072-1100, cap32/cap32.c:342-345"
-    notes: |
+    note: |
       All ROMs are embedded. emulator_select_ROM() copies the appropriate
       ROM array into the pbROM buffer based on CPC.model. No filesystem
       lookup occurs in the libretro port. The retro_system_bios_directory
@@ -103,7 +103,7 @@ platform_details:
 
   embedded_roms:
     source_ref: "cap32/rom/464.h, cap32/rom/6128.h, cap32/rom/amsdos.h, cap32/rom/6128p.h, cap32/rom/cpm.h"
-    notes: |
+    note: |
       5 ROM sets embedded as C arrays:
       OS_BASIC10 (32KB) - CPC 464/664 OS + BASIC 1.0
       OS_BASIC11 (32KB) - CPC 6128 OS + BASIC 1.1
@@ -113,7 +113,7 @@ platform_details:
 
   model_rom_map:
     source_ref: "cap32/cap32.c:1072-1100"
-    notes: |
+    note: |
       CPC 464:  OS_BASIC10 only (no disk support)
       CPC 664:  OS_BASIC10 + AMSDOS in ROM slot 7
       CPC 6128: OS_BASIC11 + AMSDOS in ROM slot 7

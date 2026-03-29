@@ -37,14 +37,14 @@ platform_details:
   cartridge_format:
     extensions: "p8, png"
     source_ref: "platform/libretro/libretro.cpp:258"
-    notes: |
+    note: |
       .p8 is the PICO-8 text cartridge format containing Lua code, gfx,
       gff, map, sfx, and music sections. .png is the cartridge-as-image
       format where cart data is steganographically encoded in the image.
 
   runtime:
     source_ref: "source/vm.h, source/p8GlobalLuaFunctions.h"
-    notes: |
+    note: |
       The FAKE-08 VM reimplements the PICO-8 API (128x128 screen, 16 colors,
       4-channel audio, Lua scripting) entirely in C++. The built-in BIOS
       provides a cart browser and error display. Audio runs at 22050 Hz

@@ -43,7 +43,7 @@ platform_details:
       - "0x6E = 0xFF"
       - "P3 = 0xFF (no buttons pressed)"
       - "BCD date/time at 0x10-0x16, raw at 0x17-0x1D"
-    notes: |
+    note: |
       HLE skips the BIOS boot sequence and jumps directly into the loaded
       game. System clock, date, and button state are initialized in RAM.
       The EXT register is set to 1 to signal HLE mode to the CPU
@@ -56,7 +56,7 @@ platform_details:
     rom_load_size: 61440
     encryption: "XOR 0x37 after stripping 4-byte header"
     detection: "first byte 0x2A (JMPF) = unencrypted, otherwise encrypted"
-    notes: |
+    note: |
       The loadBIOS() method is fully implemented but unreachable from the
       libretro interface. No system directory query, no BIOS path construction,
       and no call site exists in main.cpp. A future update could wire this up

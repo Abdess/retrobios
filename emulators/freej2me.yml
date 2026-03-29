@@ -25,4 +25,4 @@ files:
     description: "FreeJ2ME libretro Java application"
     required: true
     source_ref: "src/libretro/freej2me_libretro.c:483-486 (GET_SYSTEM_DIRECTORY + fill_pathname_join + java -jar)"
-    notes: "Not a BIOS dump. Java emulator loaded by the native core at startup via execvp('java', '-jar', path). Built from source via 'ant'. Must be in the system directory root."
+    note: "Not a BIOS dump. Java emulator loaded by the native core at startup via execvp('java', '-jar', path). Built from source via 'ant'. Must be in the system directory root."

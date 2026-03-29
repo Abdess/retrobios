@@ -39,7 +39,7 @@ files:
     required: false
     aliases: ["BIOS.sms"]
     source_ref: "smsplus_libretro.c:211-229"
-    notes: |
+    note: |
       Loaded into bios.rom (up to 1 MB allocated). Only active when core
       option smsplus_sms_bios is "auto". Displays SMS startup screen
       before game execution. Standalone ports use BIOS.sms (uppercase).
@@ -50,7 +50,7 @@ files:
     required: true
     size: 8192
     source_ref: "smsplus_libretro.c:232-248"
-    notes: |
+    note: |
       Required for ColecoVision games. Read as 0x2000 (8192) bytes into
       coleco.rom. Without this file, retro_load_game() returns false for
       .col files.
@@ -62,7 +62,7 @@ files:
     size: 8192
     mode: standalone
     source_ref: "ports/sdl/smsplus.c:321-329"
-    notes: |
+    note: |
       Read as 0x2000 (8192) bytes into coleco.rom (shared buffer). Only
       in standalone builds (SORDM5_EMU define). Not compiled in libretro.
       Code does not enforce presence but system needs BIOS to function.

@@ -43,7 +43,7 @@ platform_details:
   bios_mapping:
     target: "none"
     source_ref: "mach/chip8.c:40-57, mach/chip8.c:98-115"
-    notes: |
+    note: |
       No external BIOS. The 80-byte character font is compiled into the
       binary as char_mem[] and memcpy'd into RAM[0x000] on every reset.
       This is standard CHIP-8 behavior -- all interpreters embed the font.

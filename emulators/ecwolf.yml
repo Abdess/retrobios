@@ -38,7 +38,7 @@ files:
     required: true
     md5: "c011b428819eea4a80b455c245a5a04d"
     source_ref: "version.h:12 (MAIN_PK3), wl_iwad.cpp:642-657 (open + fatal), libretro.cpp:831-832 (sysDir)"
-    notes: >
+    note: >
       Built from wadsrc/static/ via zipdir. Contains IWADINFO (game detection rules),
       palettes (wolfpal, spearpal, blakepal, noahpal), map lump remappers (wl6map,
       sodmap, etc.), DECORATE actor definitions, MAPINFO, SNDINFO, SNDSEQ, textures,

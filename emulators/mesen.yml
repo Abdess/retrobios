@@ -49,7 +49,7 @@ files:
     size: 8192
     validation: [size]
     source_ref: "Core/FdsLoader.cpp:45-59 (LoadBios tries FdsBios.bin then disksys.rom), Core/FdsLoader.cpp:143-146 (LoadRom validates size == 0x2000)"
-    notes: "Mapped at 0xE000-0xFFFF as PRG ROM bank 0. Core checks FdsBios.bin first, falls back to disksys.rom. Size must be exactly 8192 bytes or BiosMissing is set."
+    note: "Mapped at 0xE000-0xFFFF as PRG ROM bank 0. Core checks FdsBios.bin first, falls back to disksys.rom. Size must be exactly 8192 bytes or BiosMissing is set."
 
   - name: "StudyBox.bin"
     system: nintendo-nes
@@ -58,7 +58,7 @@ files:
     size: 262144
     validation: [size]
     source_ref: "Core/StudyBoxLoader.cpp:125-133 (LoadBios), Core/StudyBoxLoader.cpp:149-152 (LoadRom validates size == 0x40000)"
-    notes: "256 KB BIOS for the Study Box tape peripheral (mapper 186). Only needed for .stbx tape dumps. Size must be exactly 262144 bytes."
+    note: "256 KB BIOS for the Study Box tape peripheral (mapper 186). Only needed for .stbx tape dumps. Size must be exactly 262144 bytes."
 
   - name: "MesenPalette.pal"
     system: nintendo-nes
@@ -66,4 +66,4 @@ files:
     required: false
     source_ref: "Libretro/libretro.cpp:301-323 (load_custom_palette), Libretro/libretro.cpp:405-406 (called when mesen_palette == Custom)"
     validation: [size]
-    notes: "Loaded when mesen_palette core option is Custom. Accepts exactly 192 bytes (64 RGB triplets) or 1536 bytes (512 entries for emphasis combos). Falls back to built-in default palette if size doesn't match."
+    note: "Loaded when mesen_palette core option is Custom. Accepts exactly 192 bytes (64 RGB triplets) or 1536 bytes (512 entries for emphasis combos). Falls back to built-in default palette if size doesn't match."

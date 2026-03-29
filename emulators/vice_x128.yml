@@ -25,28 +25,28 @@ files:
     description: "JiffyDOS C128 kernal replacement"
     required: false
     source_ref: "retrodep/ui.c:309-310"
-    notes: "Loaded into KernalIntName when vice_jiffydos option is enabled."
+    note: "Loaded into KernalIntName when vice_jiffydos option is enabled."
 
   - name: "JiffyDOS_C64.bin"
     description: "JiffyDOS C64 kernal replacement (GO64 mode)"
     required: false
     source_ref: "retrodep/ui.c:307-308"
-    notes: "Loaded into Kernal64Name when vice_jiffydos option is enabled."
+    note: "Loaded into Kernal64Name when vice_jiffydos option is enabled."
 
   - name: "JiffyDOS_1541-II.bin"
     description: "JiffyDOS 1541-II drive DOS replacement"
     required: false
     source_ref: "retrodep/ui.c:283-284"
-    notes: "Loaded into DosName1541ii when vice_jiffydos option is enabled."
+    note: "Loaded into DosName1541ii when vice_jiffydos option is enabled."
 
   - name: "JiffyDOS_1571_repl310654.bin"
     description: "JiffyDOS 1571 drive DOS replacement"
     required: false
     source_ref: "retrodep/ui.c:285-286"
-    notes: "Loaded into DosName1571 when vice_jiffydos option is enabled."
+    note: "Loaded into DosName1571 when vice_jiffydos option is enabled."
 
   - name: "JiffyDOS_1581.bin"
     description: "JiffyDOS 1581 drive DOS replacement"
     required: false
     source_ref: "retrodep/ui.c:287-288"
-    notes: "Loaded into DosName1581 when vice_jiffydos option is enabled."
+    note: "Loaded into DosName1581 when vice_jiffydos option is enabled."

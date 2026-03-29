@@ -58,7 +58,7 @@ files:
     size: 65536
     sha1: "b083518fffb7f66b03c23b7eb4f868e62dc5a987"
     source_ref: "midi_mt32.cpp:55, ROMInfo.cpp:67, dosbox_core_libretro.info:firmware0"
-    notes: "version referenced in .info file (md5: 5626206284b22c2734f3e9efefcd2675)"
+    note: "version referenced in .info file (md5: 5626206284b22c2734f3e9efefcd2675)"
 
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control BlueRidge"
@@ -112,7 +112,7 @@ files:
     size: 65536
     sha1: "a439fbb390da38cada95a7cbb1d6ca199cd66ef8"
     source_ref: "midi_mt32.cpp:53, ROMInfo.cpp:76, dosbox_core_libretro.info:firmware2"
-    notes: "version referenced in .info file (md5: bfff32b6144c1d706109accb6e6b1113)"
+    note: "version referenced in .info file (md5: bfff32b6144c1d706109accb6e6b1113)"
 
   - name: "CM32L_CONTROL.ROM"
     description: "CM-32LN/CM-500/LAPC-N Control v1.00"
@@ -121,7 +121,7 @@ files:
     size: 65536
     sha1: "dc1c5b1b90a4646d00f7daf3679733c7badc7077"
     source_ref: "midi_mt32.cpp:53, ROMInfo.cpp:77"
-    notes: "MUNT recognizes this ROM when named CM32L_CONTROL.ROM"
+    note: "MUNT recognizes this ROM when named CM32L_CONTROL.ROM"
 
   # -- PCM ROMs --
 
@@ -132,7 +132,7 @@ files:
     size: 524288
     sha1: "f6b1eebc4b2d200ec6d3d21d51325d5b48c60252"
     source_ref: "midi_mt32.cpp:66, ROMInfo.cpp:81, dosbox_core_libretro.info:firmware1"
-    notes: "pairs with any MT-32 v1.x control ROM (md5: 89e42e386e82e0cacb4a2704a03706ca)"
+    note: "pairs with any MT-32 v1.x control ROM (md5: 89e42e386e82e0cacb4a2704a03706ca)"
 
   - name: "CM32L_PCM.ROM"
     description: "CM-32L/CM-64/LAPC-I PCM ROM"
@@ -141,7 +141,7 @@ files:
     size: 1048576
     sha1: "289cc298ad532b702461bfc738009d9ebe8025ea"
     source_ref: "midi_mt32.cpp:64, ROMInfo.cpp:85, dosbox_core_libretro.info:firmware3"
-    notes: "pairs with MT-32 v2.x or CM-32L control ROMs (md5: 08cdcfa0ed93e9cb16afa76e6ac5f0a4)"
+    note: "pairs with MT-32 v2.x or CM-32L control ROMs (md5: 08cdcfa0ed93e9cb16afa76e6ac5f0a4)"
 
   # -- BASS shared libraries (BASSMIDI driver) --
   # Downloaded from https://www.un4seen.com, placed in system directory.
@@ -152,42 +152,42 @@ files:
     required: false
     hle_fallback: true
     source_ref: "midi_bassmidi.cpp:238, dosbox_core_libretro.info:firmware4"
-    notes: "proprietary library from un4seen.com, not a ROM"
+    note: "proprietary library from un4seen.com, not a ROM"
 
   - name: "libbassmidi.so"
     description: "BASSMIDI addon library (Linux)"
     required: false
     hle_fallback: true
     source_ref: "midi_bassmidi.cpp:239, dosbox_core_libretro.info:firmware5"
-    notes: "proprietary library from un4seen.com, not a ROM"
+    note: "proprietary library from un4seen.com, not a ROM"
 
   - name: "bass.dll"
     description: "BASS audio library (Windows)"
     required: false
     hle_fallback: true
     source_ref: "midi_bassmidi.cpp:232, dosbox_core_libretro.info:firmware6"
-    notes: "proprietary library from un4seen.com, not a ROM"
+    note: "proprietary library from un4seen.com, not a ROM"
 
   - name: "bassmidi.dll"
     description: "BASSMIDI addon library (Windows)"
     required: false
     hle_fallback: true
     source_ref: "midi_bassmidi.cpp:233, dosbox_core_libretro.info:firmware7"
-    notes: "proprietary library from un4seen.com, not a ROM"
+    note: "proprietary library from un4seen.com, not a ROM"
 
   - name: "libbass.dylib"
     description: "BASS audio library (macOS)"
     required: false
     hle_fallback: true
     source_ref: "midi_bassmidi.cpp:235, dosbox_core_libretro.info:firmware8"
-    notes: "proprietary library from un4seen.com, not a ROM"
+    note: "proprietary library from un4seen.com, not a ROM"
 
   - name: "libbassmidi.dylib"
     description: "BASSMIDI addon library (macOS)"
     required: false
     hle_fallback: true
     source_ref: "midi_bassmidi.cpp:236, dosbox_core_libretro.info:firmware9"
-    notes: "proprietary library from un4seen.com, not a ROM"
+    note: "proprietary library from un4seen.com, not a ROM"
 
   # -- General MIDI SoundFont --
   # Placed in system/soundfonts/ directory. Core scans for .sf2/.sf3/.sfz/.dls/.gig.

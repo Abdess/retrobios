@@ -29,7 +29,7 @@ files:
     max_size: 524288
     validation: [size]
     source_ref: "retrodep/ui.c:262-263, vice/src/scpu64/scpu64rom.c:75-89"
-    notes: "Loaded as SCPU64Name when SuperCPU Kernal option set to 2.04. Size must be power of 2 between 64 KB and 512 KB. Stored in system/vice/SCPU64/."
+    note: "Loaded as SCPU64Name when SuperCPU Kernal option set to 2.04. Size must be power of 2 between 64 KB and 512 KB. Stored in system/vice/SCPU64/."
 
   - name: "scpu-dos-1.4.bin"
     description: "CMD SuperCPU Kernal v1.4"
@@ -38,22 +38,22 @@ files:
     max_size: 524288
     validation: [size]
     source_ref: "retrodep/ui.c:265-266, vice/src/scpu64/scpu64rom.c:75-89"
-    notes: "Loaded as SCPU64Name when SuperCPU Kernal option set to 1.40. Size must be power of 2 between 64 KB and 512 KB. Stored in system/vice/SCPU64/."
+    note: "Loaded as SCPU64Name when SuperCPU Kernal option set to 1.40. Size must be power of 2 between 64 KB and 512 KB. Stored in system/vice/SCPU64/."
 
   - name: "JiffyDOS_1541-II.bin"
     description: "JiffyDOS 1541-II drive DOS replacement"
     required: false
     source_ref: "retrodep/ui.c:282-283"
-    notes: "Loaded as DosName1541ii when JiffyDOS option enabled."
+    note: "Loaded as DosName1541ii when JiffyDOS option enabled."
 
   - name: "JiffyDOS_1571_repl310654.bin"
     description: "JiffyDOS 1571 drive DOS replacement"
     required: false
     source_ref: "retrodep/ui.c:285-286"
-    notes: "Loaded as DosName1571 when JiffyDOS option enabled."
+    note: "Loaded as DosName1571 when JiffyDOS option enabled."
 
   - name: "JiffyDOS_1581.bin"
     description: "JiffyDOS 1581 drive DOS replacement"
     required: false
     source_ref: "retrodep/ui.c:287-288"
-    notes: "Loaded as DosName1581 when JiffyDOS option enabled."
+    note: "Loaded as DosName1581 when JiffyDOS option enabled."

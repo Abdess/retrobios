@@ -59,20 +59,20 @@ files:
     hle_fallback: true
     size: 4096
     source_ref: "source/PokeMini.c:189-206 (PokeMini_LoadBIOSFile), libretro/libretro.c:565 (path)"
-    notes: "Mapped at $000000-$000FFF (4 KB). Read via Hardware.c:144-145. Falls back to embedded FreeBIOS if missing."
+    note: "Mapped at $000000-$000FFF (4 KB). Read via Hardware.c:144-145. Falls back to embedded FreeBIOS if missing."
 
 platform_details:
   bios_mapping:
     target: "$000000-$000FFF in Pokemon Mini address space (4 KB)"
     source_ref: "source/PokeMini.h:38, source/Hardware.c:144-145"
-    notes: |
+    note: |
       PM_BIOS is a 4096-byte array. CPU reads from address range
       $000000-$000FFF are served directly from this buffer. The BIOS
       handles interrupt vectors, hardware init, and the startup logo.
 
   freebios_fallback:
     source_ref: "freebios/freebios.c, source/PokeMini.c:209-214"
-    notes: |
+    note: |
       FreeBIOS is a 4096-byte open-source replacement embedded in the
       binary as a C array. It provides basic interrupt vectors and
       startup code. Loaded by default at PokeMini_Create() and used
@@ -84,7 +84,7 @@ platform_details:
 
   load_priority:
     source_ref: "source/PokeMini.c:515-523"
-    notes: |
+    note: |
       During PokeMini_Reset(), the core first reloads FreeBIOS as a
       safe baseline, then attempts to load bios.min from disk. If
       the file exists and is exactly 4096 bytes, it replaces FreeBIOS.

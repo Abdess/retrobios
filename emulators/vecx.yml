@@ -39,7 +39,7 @@ platform_details:
   bios_mapping:
     target: "0xE000-0xFFFF in Vectrex address space (8 KB)"
     source_ref: "vecx.c:40 (unsigned char rom[8192]), vecx.c:437-439 (read handler)"
-    notes: |
+    note: |
       CPU reads from 0xE000-0xFFFF are served from rom[] via
       address & 0x1FFF masking. The array is populated from the
       compiled-in bios_data at retro_load_game() time.
@@ -58,7 +58,7 @@ platform_details:
       md5: "05f32c2b18b6fb168ab976989e86dfb1"
       sha1: "6c891bd74acb201d54071b310bd6df6617cdf205"
       size: 8192
-    notes: |
+    note: |
       All three variants are 8192 bytes, compiled as C arrays in
       bios/*.h headers. STANDARD_BIOS is the authentic Vectrex ROM.
       FAST_BIOS and skip are modified versions for faster startup.

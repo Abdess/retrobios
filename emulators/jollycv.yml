@@ -53,7 +53,7 @@ files:
     size: 8192
     validation: [size]
     source_ref: "libretro/libretro.c:701, src/jcv_coleco.c:402-406"
-    notes: "Mapped at 0x0000-0x1FFF. Replaced by SGM lower RAM when Super Game Module is active. Must be exactly 8192 bytes."
+    note: "Mapped at 0x0000-0x1FFF. Replaced by SGM lower RAM when Super Game Module is active. Must be exactly 8192 bytes."
 
   # --- CreatiVision BIOS (required for CreatiVision games) ---
   - name: "bioscv.rom"
@@ -63,7 +63,7 @@ files:
     size: 2048
     validation: [size]
     source_ref: "libretro/libretro.c:711, src/jcv_crvision.c:315-318"
-    notes: "Mapped at 0xF800-0xFFFF. Must be exactly 2048 bytes."
+    note: "Mapped at 0xF800-0xFFFF. Must be exactly 2048 bytes."
 
 platform_details:
   colecovision:
@@ -80,4 +80,4 @@ platform_details:
 
   myvision:
     bios_required: false
-    notes: "No BIOS needed. My Vision games run without any system ROM."
+    note: "No BIOS needed. My Vision games run without any system ROM."

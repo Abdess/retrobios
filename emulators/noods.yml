@@ -28,7 +28,7 @@ files:
     hle_fallback: true
     size: 4096
     source_ref: "src/memory.cpp:130-141"
-    notes: "HLE fallback for all SWI calls; native needed for firmware boot and logo verification (copyBiosLogo)"
+    note: "HLE fallback for all SWI calls; native needed for firmware boot and logo verification (copyBiosLogo)"
 
   - name: "bios7.bin"
     system: nintendo-ds
@@ -37,7 +37,7 @@ files:
     hle_fallback: true
     size: 16384
     source_ref: "src/memory.cpp:144-155"
-    notes: "HLE fallback for all SWI calls; native needed for firmware boot"
+    note: "HLE fallback for all SWI calls; native needed for firmware boot"
 
   - name: "firmware.bin"
     system: nintendo-ds
@@ -45,7 +45,7 @@ files:
     required: false
     hle_fallback: true
     source_ref: "src/spi.cpp:62-160"
-    notes: "Auto-generated 128KB non-bootable firmware as fallback; native dump (>128KB) needed for firmware boot"
+    note: "Auto-generated 128KB non-bootable firmware as fallback; native dump (>128KB) needed for firmware boot"
 
   - name: "gba_bios.bin"
     system: nintendo-gba
@@ -54,11 +54,11 @@ files:
     hle_fallback: true
     size: 16384
     source_ref: "src/memory.cpp:158-168, src/core.cpp:252-256"
-    notes: "HLE fallback via swiTableGba; native BIOS disables HLE and enables real GBA boot"
+    note: "HLE fallback via swiTableGba; native BIOS disables HLE and enables real GBA boot"
 
   - name: "nds_sd_card.bin"
     system: nintendo-ds
     description: "DLDI SD card image for homebrew"
     required: false
     source_ref: "src/dldi.cpp:80-83, src/libretro/libretro.cpp:331"
-    notes: "Opened on DLDI startup() call from homebrew ROMs; user-created FAT image"
+    note: "Opened on DLDI startup() call from homebrew ROMs; user-created FAT image"

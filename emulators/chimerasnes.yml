@@ -29,7 +29,7 @@ files:
     source_ref: "source/bsx.c:857-882"
     aliases: ["BS-X.bios"]
     validation: [size]
-    notes: |
+    note: |
       Loaded by BSX_LoadBIOS() from system_dir when core option
       chimerasnes_bsx_bios is set to 'load' (default: skip).
       Tries BS-X.bin first, then BS-X.bios as fallback.
@@ -41,7 +41,7 @@ files:
     required: true
     size: 262144
     source_ref: "source/memmap.c:275-289"
-    notes: |
+    note: |
       Loaded by LoadSFTBIOS() from system_dir when Sufami Turbo game
       detected (BANDAI SFC-ADX header at ROM offset 0, memmap.c:833).
       Reads 0x40000 bytes into Memory.ROM. No validation performed.

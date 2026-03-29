@@ -30,13 +30,13 @@ platform_details:
   cartridge_format:
     extensions: "tic, png"
     source_ref: "tic80_libretro.c:339"
-    notes: |
+    note: |
       .tic is the native cartridge format. .png loads cartridges
       encoded as cover images (code stored in PNG metadata).
 
   runtime:
     source_ref: "nesbox/TIC-80 (submodule at core/)"
-    notes: |
+    note: |
       Entire runtime compiled into the binary. No external dependencies.
       State serialization uses TIC_PERSISTENT_SIZE * 4 bytes of pmem()
       data (tic80_libretro.c:1203-1243).

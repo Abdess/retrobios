@@ -35,7 +35,7 @@ analysis:
     source_ref: "race-memory.c:337-361"
     upstream_status: optional
     upstream_ref: "memory.cpp:346-365 (8bitpsp/race)"
-    notes: |
+    note: |
       loadBIOS() is wrapped in #if 0 and always returns 0 in the libretro port.
       In upstream (8bitpsp/race, alekmaul/race), the function is live and loads
       NPBIOS.BIN optionally, falling back to HLE if not found.

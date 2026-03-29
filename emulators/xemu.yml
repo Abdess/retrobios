@@ -21,7 +21,7 @@ files:
     size: 512
     source_ref: "hw/xbox/xbox.c:151 (bootrom_size != 512 -> error)"
     config_key: "sys.files.bootrom_path"
-    notes: |
+    note: |
       Overlaid on the last 512 bytes of the flash ROM region at boot.
       Mapped to 0xFFFFFE00-0xFFFFFFFF. Disabled after early init
       via LPC config register write (hw/xbox/xbox_pci.c:362).
@@ -34,7 +34,7 @@ files:
     size_note: "Must be a multiple of 64 KB. Default 256 KB."
     source_ref: "hw/xbox/xbox.c:70-81 (bios_name, bios_size validation)"
     config_key: "sys.files.flashrom_path"
-    notes: |
+    note: |
       Loaded as -bios argument (system/vl.c:3052-3053).
       Mapped to 0xFF000000-0xFFFFFFFF with mirroring.
       Common variants: Complex_4627 (1.0), Complex_4034 (debug),
@@ -47,7 +47,7 @@ files:
     size: 256
     source_ref: "system/vl.c:2939 (size != 256 -> error)"
     config_key: "sys.files.eeprom_path"
-    notes: |
+    note: |
       Loaded via smbus-storage device (hw/xbox/smbus_storage.c:157).
       Auto-generated as XBOX_EEPROM_VERSION_R1 if missing
       (system/vl.c:2918-2919). Default path: <config_dir>/eeprom.bin.
@@ -59,7 +59,7 @@ files:
     required: true
     source_ref: "system/vl.c:3060-3073 (hdd_path loading)"
     config_key: "sys.files.hdd_path"
-    notes: |
+    note: |
       Attached as IDE drive index=0 with locked=on.
       Must contain Xbox partitions (C, E, X, Y, Z).
       Pre-built images available from xemu project.

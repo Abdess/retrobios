@@ -50,7 +50,7 @@ platform_details:
     bios_size: 16384
     hle_bios: true
     source_ref: "libretro/libretro.c:1100-1131, bios/source/"
-    notes: |
+    note: |
       The built-in BIOS (open_gba_bios_rom, 16 KB) is an open-source
       reimplementation compiled from bios/source/. It implements most
       SWI calls (SoftReset, RegisterRamReset, Halt, VBlankIntrWait,

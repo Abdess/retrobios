@@ -48,7 +48,7 @@ platform_details:
         array: "ARDENS_BOOT_MENU_E2"
         size: 8548
         device: "Arduboy Mini"
-    notes: |
+    note: |
       All bootloaders are compiled from Intel HEX into C arrays at build
       time. The core selects the game or menu variant at reset depending
       on whether a flashcart image was loaded and the boot_to_menu config
@@ -60,7 +60,7 @@ platform_details:
     source_ref: "src/boot/boot_flashcart.c, src/absim_w25q128.hpp:14"
     array: "ARDENS_BOOT_FLASHCART"
     size: 1536
-    notes: |
+    note: |
       Empty flashcart header written to the first 1536 bytes of the
       W25Q128 flash image during initialization. This is not a BIOS
       file -- it is the default flash content the Arduboy FX expects

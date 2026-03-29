@@ -45,20 +45,20 @@ files: []
 platform_details:
   bios_mapping:
     source_ref: "crocods-core/vga.c:185-200, crocods-core/platform.c:1009-1020"
-    notes: |
+    note: |
       All ROMs are embedded. InitMemCPC() copies cpc6128_bin and romdisc_bin
       into ROMINF and ROMEXT arrays via memcpy. No filesystem lookup occurs.
       retro_set_environment() does not request system_directory.
 
   embedded_roms:
     source_ref: "crocods-core/cpc6128.bin.c, crocods-core/romdisc.bin.c"
-    notes: |
+    note: |
       2 ROM sets embedded as C byte arrays:
       cpc6128_bin (32KB) - CPC 6128 OS (lower 16KB) + BASIC 1.1 (upper 16KB)
       romdisc_bin (16KB) - AMSDOS disk controller ROM, mapped to slot 7
 
   model_rom_map:
     source_ref: "crocods-core/vga.c:189-192"
-    notes: |
+    note: |
       CPC 6128 only: OS in ROMINF, BASIC in ROMEXT[0], AMSDOS in ROMEXT[7]
       emulator_patch_ROM() applies language patches to ROMINF after loading

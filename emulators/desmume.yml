@@ -24,7 +24,7 @@ files:
     size: 16384
     validation: [size]
     source_ref: "desmume/src/NDSSystem.cpp:2178-2182, frontend/libretro/libretro.cpp:763"
-    notes: "Native file needed for firmware boot and SWI-from-BIOS accuracy"
+    note: "Native file needed for firmware boot and SWI-from-BIOS accuracy"
 
   - name: "bios9.bin"
     system: nintendo-ds
@@ -34,7 +34,7 @@ files:
     size: 4096
     validation: [size]
     source_ref: "desmume/src/NDSSystem.cpp:2236-2239, frontend/libretro/libretro.cpp:764"
-    notes: "Native file needed for firmware boot and logo comparison (Pal Park)"
+    note: "Native file needed for firmware boot and logo comparison (Pal Park)"
 
   - name: "firmware.bin"
     system: nintendo-ds
@@ -42,4 +42,4 @@ files:
     required: false
     hle_fallback: true
     source_ref: "desmume/src/firmware.cpp:249-280, frontend/libretro/libretro.cpp:765"
-    notes: "Loaded only if both BIOS files present; needed for boot animation, wifi config, user settings"
+    note: "Loaded only if both BIOS files present; needed for boot animation, wifi config, user settings"

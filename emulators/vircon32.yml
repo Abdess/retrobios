@@ -47,7 +47,7 @@ files:
     md5: "73f04397cbb2dafcf2047b19a856153a"
     sha1: "67ddbcd018f03ed74b6e013074d92cc5f1f51c80"
     source_ref: "libretro.cpp:422-425"
-    notes: |
+    note: |
       Optional external BIOS placed in the system directory root.
       If present, overrides the embedded Standard BIOS v1.2.
       The hashes above correspond to the Standard BIOS v1.2 bundled
@@ -61,7 +61,7 @@ platform_details:
     file_size: 1073060
     md5: "73f04397cbb2dafcf2047b19a856153a"
     sha1: "67ddbcd018f03ed74b6e013074d92cc5f1f51c80"
-    notes: |
+    note: |
       The standard BIOS is compiled into the core binary as
       embedded_StandardBios[] via a generated header file. It provides
       the boot animation (Vircon32 logo + startup sound). LoadEmbeddedBios()
@@ -70,7 +70,7 @@ platform_details:
 
   bios_format:
     source_ref: "VirconDefinitions/FileFormats.hpp, V32Console.cpp:259-431"
-    notes: |
+    note: |
       A V32 BIOS ROM file must have:
       - BiosSignature in the header (distinct from CartridgeSignature)
       - Exactly 1 texture (boot screen graphics)
@@ -81,6 +81,6 @@ platform_details:
   cartridge_format:
     extensions: "v32"
     source_ref: "V32Console.cpp:468-696"
-    notes: |
+    note: |
       Cartridges use CartridgeSignature with up to 256 textures and
       1024 sounds. Program ROM can be up to 128M words (512 MB).

@@ -42,7 +42,7 @@ files:
     size: 256
     validation: {core: [size], upstream: [size, crc32]}
     source_ref: "libretro.cpp:1303-1363 (get_bootloader_from_file), bootloader.cpp:20-55 (load)"
-    notes: "Mapped at 0x0000-0x00FF, swapped out when register 0xFF50 is written."
+    note: "Mapped at 0x0000-0x00FF, swapped out when register 0xFF50 is written."
 
   - name: "gbc_bios.bin"
     system: nintendo-gbc
@@ -52,4 +52,4 @@ files:
     size: 2304
     validation: {core: [size], upstream: [size, crc32]}
     source_ref: "libretro.cpp:1303-1363 (get_bootloader_from_file), bootloader.cpp:20-55 (load)"
-    notes: "Mapped at 0x0000-0x08FF with cartridge data preserved at 0x0100-0x01FF. Also used for GBA mode with a patch at 0xF2. Presence required for FORCE_CGB flag when hw mode is GBC or GBA."
+    note: "Mapped at 0x0000-0x08FF with cartridge data preserved at 0x0100-0x01FF. Also used for GBA mode with a patch at 0xF2. Presence required for FORCE_CGB flag when hw mode is GBC or GBA."

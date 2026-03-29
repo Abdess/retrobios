@@ -64,7 +64,7 @@ analysis:
     rom_size: 2048  # 2 KB
     config_path: "system\0tmss_path\0"
     source_ref: "genesis.c:1910"
-    notes: |
+    note: |
       TMSS ROM is loaded from tmss.md (configurable via system/tmss_path).
       Models with tmss=on: md1va6, md2va1, md2va2, md3va1, md3va2.
       Models with tmss=off: md1va0, md1va3 (default), teradrive.
@@ -73,10 +73,10 @@ analysis:
   sega_cd:
     supported: false
     source_ref: "system.c:16"
-    notes: "TODO comment only: 'Differentiate between vanilla Genesis and Sega CD/32X games'"
+    note: "TODO comment only: 'Differentiate between vanilla Genesis and Sega CD/32X games'"
 
   jaguar_bios:
     libretro_relevant: false
-    notes: |
+    note: |
       blastjag (jaguar.c) is a separate standalone binary, not compiled
       into the libretro core. Requires BIOS as first CLI argument.

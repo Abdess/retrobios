@@ -44,4 +44,4 @@ files:
     crc32: "0d973c9d"
     validation: [size, crc32]
     source_ref: "libretro.cpp:105-129 (load_bootroms), media.cpp:274-329 (LoadBios), defines.h:52 (GLYNX_BIOS_SIZE=0x200), game_db.h:38 (GLYNX_DB_BIOS_CRC=0x0D973C9D), gearlynx_core_inline.h:33-37 (no-bios guard)"
-    notes: "512-byte boot ROM validated by CRC32 after load. Invalid CRC logs a warning but still works. Missing or wrong-size file blocks emulation entirely (no HLE fallback)."
+    note: "512-byte boot ROM validated by CRC32 after load. Invalid CRC logs a warning but still works. Missing or wrong-size file blocks emulation entirely (no HLE fallback)."

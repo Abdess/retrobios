@@ -32,4 +32,4 @@ files:
     size: 512
     crc32: "0d973c9d"
     source_ref: "libretro.cpp:191, rom.cpp:50-78, cart.cpp:67"
-    notes: "512-byte boot ROM. Core silently degrades without it but games will not run."
+    note: "512-byte boot ROM. Core silently degrades without it but games will not run."
