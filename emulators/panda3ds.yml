@@ -24,6 +24,7 @@ notes: |
 files:
   - name: "aes_keys.txt"
     path: "Emulator Files/sysdata/aes_keys.txt"
+    mode: standalone
     description: "AES encryption keys for decrypting encrypted ROMs"
     required: false
     source_ref: "src/emulator.cpp:229,237-238, src/core/crypto/aes_engine.cpp:13-92"
@@ -36,6 +37,7 @@ files:
 
   - name: "seeddb.bin"
     path: "Emulator Files/sysdata/seeddb.bin"
+    mode: standalone
     description: "Seed database for seed-encrypted games"
     required: false
     source_ref: "src/emulator.cpp:230,241-242, src/core/loader/ncch.cpp:78-93"

@@ -364,11 +364,23 @@ def _collect_emulator_extras(
     # Second pass: find alternative destinations for files already in the pack.
     # A file declared by the platform or emitted above may also be needed at a
     # different path by another core (e.g. neocd/ vs root, same_cdi/bios/ vs root).
+    # Only adds a copy when the file is ALREADY covered at a different path —
+    # never introduces a file that wasn't selected by the first pass.
     profiles = emu_profiles if emu_profiles is not None else load_emulator_profiles(emulators_dir)
     relevant = resolve_platform_cores(config, profiles, target_cores=target_cores)
     standalone_set = {str(c) for c in config.get("standalone_cores", [])}
     by_name = db.get("indexes", {}).get("by_name", {})
     by_path_suffix = db.get("indexes", {}).get("by_path_suffix", {})
+
+    # Build set of filenames already covered (platform baseline + first pass extras)
+    covered_names: set[str] = set()
+    for sys_id, system in config.get("systems", {}).items():
+        for fe in system.get("files", []):
+            n = fe.get("name", "")
+            if n:
+                covered_names.add(n)
+    for e in extras:
+        covered_names.add(e["name"])
 
     for emu_name, profile in sorted(profiles.items()):
         if profile.get("type") in ("launcher", "alias"):
@@ -381,6 +393,9 @@ def _collect_emulator_extras(
         for f in profile.get("files", []):
             fname = f.get("name", "")
             if not fname:
+                continue
+            # Only duplicate files already covered at another destination
+            if fname not in covered_names:
                 continue
             file_mode = f.get("mode")
             if file_mode == "standalone" and not is_standalone:
@@ -396,7 +411,7 @@ def _collect_emulator_extras(
             full_dest = f"{base_dest}/{dest}" if base_dest else dest
             if full_dest in seen_dests:
                 continue
-            # Check file exists in repo
+            # Check file exists in repo or data dirs
             if not (by_name.get(fname) or by_name.get(dest.rsplit("/", 1)[-1])
                     or by_path_suffix.get(dest)):
                 continue
