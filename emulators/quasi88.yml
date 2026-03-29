@@ -3,13 +3,14 @@ type: libretro
 core_classification: community_fork
 source: "https://github.com/libretro/quasi88-libretro"
 upstream: "https://www.retropc.net/showzoh/quasi88/"
-profiled_date: "2026-03-25"
+profiled_date: "2026-03-29"
 core_version: "0.6.4"
 display_name: "NEC - PC-8000 / PC-8800 series (QUASI88)"
 cores:
   - quasi88
 systems:
-  - pc-8801
+  - nec-pc-88
+  - nec-pc-80
 
 # QUASI88 by Showzoh Fukunaga, libretro port by Celerizer.
 # Includes pseudo-BIOS (pbios_n88, pbios_disk) by cisc compiled into the core.
@@ -35,6 +36,16 @@ systems:
 #
 # Upstream supports 2HD disk ROM (8 KB) via memory.c:356-368.
 # The libretro port reads only 2 KB (2D type) at libretro.c:552.
+#
+# font.rom divergence: libretro.c:566-571 loads 0x1000 bytes then
+# overwrites the buffer with kanji ROM + built-in graph. The font.rom
+# data is not actually used (bug). Upstream memory.c:427 loads FONT_SZ
+# (2048) and keeps the font data in the first half.
+#
+# OPNA rhythm samples (2608_BD.WAV etc.): loaded by upstream via
+# fmgen/opna.cpp:1271 LoadRhythmSample(), but osd_dir_rom() returns
+# NULL in the libretro port (dir_rom never initialized), so the samples
+# cannot be loaded. OPNA rhythm playback is silent in the libretro core.
 
 notes: |
   Files go in <system_dir>/quasi88/ or directly in <system_dir>/.
@@ -43,7 +54,8 @@ notes: |
   kanji display), real ROM files are needed.
 
   Core option "quasi88_basic_mode" selects N88 V2, N88 V1H, N88 V1S,
-  or N mode. Each mode requires its corresponding ROM.
+  or N mode. Each mode requires its corresponding ROM. N mode emulates
+  PC-8001 series (N-BASIC) and requires n88n.rom.
 
 files:
   - name: n88.rom

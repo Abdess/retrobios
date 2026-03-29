@@ -7,7 +7,7 @@ profiled_date: "2026-03-23"
 core_version: "3.1.0"
 display_name: "Atari - 400/800/600XL/800XL/130XE/5200 (Atari800)"
 cores: [atari800]
-systems: [atari-400, atari-800, atari-800xl, atari-130xe, atari-5200, atari-xegs]
+systems: [atari-400-800, atari-5200]
 
 # Atari800 emulates the Atari 8-bit family (400/800/XL/XE) and the 5200 console.
 # All BIOS files are optional -- the core ships built-in Altirra OS replacements
@@ -43,7 +43,7 @@ files:
     note: >
       Atari 5200 BIOS (original). Mapped at $F800-$FFFF.
       Altirra 5200 OS is used when this file is absent.
-    source_ref: "atari800/src/sysrom.c:101-102,254-255"
+    source_ref: "atari800/src/sysrom.c:101-102,255"
 
   # -- Atari BASIC ROM --
   # Atari BASIC interpreter (8 KB). Three known revisions:
@@ -63,7 +63,7 @@ files:
     note: >
       Atari BASIC Rev C. Required for 400/800 software that needs BASIC.
       Altirra BASIC is used as fallback. Enable via core option atari800_opt2.
-    source_ref: "atari800/src/sysrom.c:103-105,256"
+    source_ref: "atari800/src/sysrom.c:103-105,257"
 
   # -- Atari 400/800 OS A --
   # Original Atari 400/800 OS (10 KB). Two known CRC32 values:

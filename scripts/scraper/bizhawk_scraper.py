@@ -65,7 +65,7 @@ SYSTEM_ID_MAP: dict[str, str] = {
     "Amiga": "commodore-amiga",
     "AmstradCPC": "amstrad-cpc",
     "AppleII": "apple-ii",
-    "BSX": "nintendo-bsx",
+    "BSX": "nintendo-satellaview",
     "C64": "commodore-c64",
     "ChannelF": "fairchild-channel-f",
     "Coleco": "coleco-colecovision",

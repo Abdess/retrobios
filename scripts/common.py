@@ -732,14 +732,30 @@ def derive_manufacturer(system_id: str, system_data: dict) -> str:
     return "Other"
 
 
+# Abbreviations that normalization alone cannot resolve.
+# Maps platform-specific short names to canonical profile system IDs.
+SYSTEM_ALIASES: dict[str, str] = {
+    "gmaster": "hartung-game-master",
+    "n64dd": "nintendo-64dd",
+    "neogeo64": "hyper-neogeo64",
+    # Platform IDs missing the manufacturer-prefix hyphen
+    "atari5200": "atari-5200",
+    "atari7800": "atari-7800",
+    "atarist": "atari-st",
+    "sega32x": "sega-32x",
+    "segastv": "sega-stv",
+}
+
+
 def _norm_system_id(sid: str) -> str:
     """Normalize system ID for cross-platform matching.
 
-    Strips manufacturer prefixes and separators so that platform-specific
-    IDs (e.g., "xbox", "nintendo-wiiu") match profile IDs
-    (e.g., "microsoft-xbox", "nintendo-wii-u").
+    Resolves known aliases, then strips manufacturer prefixes and separators
+    so that platform-specific IDs (e.g., "xbox", "nintendo-wiiu") match
+    profile IDs (e.g., "microsoft-xbox", "nintendo-wii-u").
     """
     s = sid.lower().replace("_", "-")
+    s = SYSTEM_ALIASES.get(s, s)
     for prefix in MANUFACTURER_PREFIXES:
         if s.startswith(prefix):
             s = s[len(prefix):]

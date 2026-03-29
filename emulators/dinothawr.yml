@@ -7,10 +7,10 @@ profiled_date: "2026-03-23"
 core_version: "v1.0"
 display_name: "Dinothawr"
 cores: [dinothawr]
-systems: []
+systems: [dinothawr]
 
 notes: |
-  Puzzle game by the libretro team. Push blocks on ice.
+  Puzzle game by the libretro team (Themaister, Agnes Heyer). Push blocks on ice.
   Game data (TMX levels, sprites, music) needed for the core to work.
 
   Two loading modes:

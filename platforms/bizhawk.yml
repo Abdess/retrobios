@@ -409,7 +409,7 @@ systems:
       required: true
       sha1: e5b2922ca137051059e4269b236d07a22c07bc84
       size: 524288
-  nintendo-bsx:
+  nintendo-satellaview:
     files:
     - name: Satellaview_BS-X.sfc
       destination: Satellaview_BS-X.sfc

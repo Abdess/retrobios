@@ -3,15 +3,39 @@ type: libretro
 core_classification: official_port
 source: "https://github.com/libretro/mame"
 upstream: "https://github.com/mamedev/mame"
-profiled_date: "2026-03-24"
+profiled_date: "2026-03-29"
 core_version: "0.286"
 display_name: "Multi (MAME/MESS)"
 
 cores:
   - mamemess
 systems:
+  - apple2
+  - apple2gs
+  - astrocde
+  - astrocade
   - coleco-adam
+  - crvision
   - entex-advision
+  - mattel-aquarius
+  - camplynx
+  - cgenie
+  - atom
+  - tiger-game-com
+  - gamepark-gp32
+  - gamate
+  - gamepock
+  - hartung-game-master
+  - fm7
+  - laser310
+  - casio-loopy
+  - mz700
+  - mz2000
+  - mz2500
+  - mz800
+  - pc60
+  - mz80k
+  - pegasus
 
 notes: |
   SUBTARGET=mess build from libretro/mame. Same source, same CORE_NAME ("mame"),
@@ -30,9 +54,143 @@ notes: |
 
   1 active IS_BIOS_ROOT (miuchiz). XaviX TV game parent machines serve as
   console BIOS for cartridge-based software (IS_BIOS_ROOT commented out in
-  source but functionally required). Coleco Adam and Entex Adventure Vision
-  system ROMs required for software loading (not IS_BIOS_ROOT but
-  functionally BIOS). Adam uses ADAMnet bus with per-device MCU ROMs.
+  source but functionally required). Apple II family, Apple IIgs, Bally
+  Astrocade, Casio Loopy, Coleco Adam, VTech CreatiVision, Entex
+  Adventure Vision, EACA Colour Genie, Acorn Atom, Tiger game.com,
+  Bit Corporation Gamate, Epoch Game Pocket Computer, Hartung Game
+  Master, Technosys Aamber Pegasus and VTech Laser 310 system ROMs
+  required for software loading (not IS_BIOS_ROOT but functionally BIOS).
+
+  Apple II: 4 machine ROM sets (apple2, apple2p, apple2e, apple2ee) plus
+  5 peripheral device ROM sets (disk controllers, CompactFlash, speech).
+  Drivers in apple2.cpp and apple2e.cpp, both in mess.flt. Peripheral
+  devices loaded via A2Bus slot system when configured.
+
+  Apple IIgs parent set (ROM03) has 4 ROMs: ADB microcontroller, Mega II
+  character ROM, and two main CPU ROMs. Adam uses ADAMnet bus with
+  per-device MCU ROMs.
+
+  Bally Astrocade: 3 machines (astrocde parent, astrocdl Home Library
+  Computer, astrocdw Computer System). Single 8K BIOS ROM per machine.
+  Driver in midway/astrohome.cpp (mess.flt). Cartridge-based console
+  with software list "astrocde". No bus device ROMs.
+
+  VTech CreatiVision: 7 machines (crvision parent PAL, fnvision FunVision,
+  crvisioj Japan NTSC, wizzard Dick Smith Wizzard, rameses Hanimex,
+  vz2000 VZ 2000, crvisio2 MK-II). Single 2K BIOS ROM (crvision.u20).
+  Clones wizzard/crvisioj/crvisio2 share parent ROM. fnvision/rameses/vz2000
+  use alternate BIOS (funboot.rom). Related separate systems: lasr2001
+  (Laser 2001, 16K ROM) and manager (Salora Manager, 2x8K ROM).
+  Driver in vtech/crvision.cpp (mess.flt). Cartridge-based console
+  with centronics printer port. Software list "crvision".
+
+  Mattel Aquarius: 4 machines (aquarius NTSC, aquariusp PAL, aquarius2,
+  aquarius_ar Arabic). aquariusp uses identical ROMs as parent
+  (#define rom_aquariusp rom_aquarius). aquarius2 adds extended BASIC.
+  aquarius_ar has Arabic character ROM. Expansion slot supports C1541
+  DOS interface (Commodore 1541 device ROM loaded separately).
+
+  Acorn Atom: 5 machines (atom parent, atombbc BBC BASIC, prophet2
+  Busicomputers Prophet 2, atomes ES5700 NOT_WORKING, atomrr RAMROM
+  NOT_WORKING). Parent set has Atom BASIC (abasic.ic20, 8KB split-loaded)
+  and floating point ROM (afloat.ic21). atombbc adds MOS3 and BBC BASIC
+  ROMs. prophet2 has alternative FP ROM and AtomCalc ROMs. Expansion bus
+  (pl6/pl7/pl8) with discpack default on pl6. Bus device ROMs: discpack
+  (8271 FDC DOS ROM), gdos (GDOS 1.66), gdos2015 (GDOS-2015 flash),
+  speech (SP0256A-AL2), vdu80 (80-column charset, BAD_DUMP). Software
+  lists: atom_cass (cassette), atom_flop (floppy), atom_rom (cartridge).
+  Driver in acorn/atom.cpp, in mess.flt.
+
+  Camputers Lynx: 3 machines (lynx48k parent, lynx96k, lynx128k).
+  Z80A-based British home computer (1983). lynx48k has 2 BIOS sets
+  (Set1 default, Set2 alternate). lynx96k adds floppy DOS ROM and 3
+  BIOS variants for IC44 (original, Scorpion v2.1, Danish). lynx128k
+  has 3 main ROMs plus same DOS ROM. Software lists: camplynx_cass
+  (cassette) for all models, camplynx_flop (floppy) for 96K/128K.
+  Driver in camputers/camplynx.cpp, in mess.flt.
+
+  EACA Colour Genie: 2 machines (cgenie parent EU, cgenienz NZ clone).
+  Z80-based home computer (1982). Parent set has 4x4KB BASIC/system ROMs
+  and character ROM (German + default). NZ clone has 16KB BASIC ROM
+  (2 BIOS variants: old/new) with different palette init. Expansion slot
+  with optional FDC (WD2793, 4x 5.25" floppies, DOS ROM maps to
+  0xC000-0xDFFF). Parallel slot with joystick/printer options (no ROMs).
+  Software lists: cgenie_cass (cassette), cgenie_flop_rom (FDC ROM
+  socket). Driver in eaca/cgenie.cpp, in mess.flt.
+
+  Tiger game.com: 1 machine (gamecom). SM8521-based handheld (1997).
+  Internal ROM (4KB, SM8521 CPU boot code) and external flash ROM
+  (256KB, PDA software). Cartridge-based with software list "gamecom".
+  MACHINE_IMPERFECT_SOUND. Driver in tiger/gamecom.cpp, in mess.flt.
+
+  Bit Corporation Gamate: 1 machine (gamate). M6502-based handheld (1990).
+  Single 4KB BIOS ROM mapped at 0xE000-0xEFFF (mirrored to 0xF000).
+  Two BIOS variants: UMC/NCR ICASC00002 (default, common) and BIT
+  ICASC00001 (newer, 1994). Cartridge-based with software list "gamate".
+  Driver in bitcorp/gamate.cpp, in mess.flt.
+
+  Epoch Game Pocket Computer: 1 machine (gamepock). NEC uPD78C06AG-based
+  handheld (1984). Single 4KB internal CPU ROM (egpcboot.bin). Cartridge-based
+  with software list "gamepock" (5 official games). MACHINE_SUPPORTS_SAVE.
+  Driver in epoch/gamepock.cpp, in mess.flt.
+
+  Hartung Game Master: 1 machine (gmaster). NEC D78C11AGF-based handheld
+  (1990). Single 4KB internal MCU ROM. Cartridge-based with software list
+  "gmaster" (18 games). Driver in handheld/gmaster.cpp, in mess.flt.
+
+  Fujitsu FM-7: 5 machines (fm7 parent, fmnew7 FM-NEW7, fm77av FM-77AV
+  IMPERFECT_GRAPHICS, fm7740sx FM-77AV40SX NOT_WORKING; fm8 FM-8
+  separate parent). M6809-based home computer family (1982-1988). fm7
+  parent set has F-BASIC 3.00, sub-CPU ROM, boot ROMs and optional Kanji
+  ROM. fm77av adds initiate ROM, subsys A/B/CG ROMs and requires Kanji.
+  Related machines fm11 (FM-11 EX) and fm16beta (FM-16beta) are separate
+  parents, both NOT_WORKING. Software lists: fm7_cass, fm7_disk, fm77av.
+  Driver in fujitsu/fm7.cpp, in mess.flt.
+
+  Sharp MZ-80K/A: 3 machines (mz80kj parent MZ-80K Japanese, mz80k clone of
+  mz80kj MZ-80K, mz80a separate parent MZ-80A). Z80-based home computer (1979).
+  mz80kj parent set has monitor ROM (sp1002), floppy disk interface ROM
+  (mz80kfdif), and Japanese character generator (mz80k.jpn + 80kcgj). mz80k
+  clone has 3 BIOS alternatives (sp1002/tc/v44), shared FDI ROM, and English
+  character generator (80kcg + 80kcgf). mz80a separate parent has its own
+  monitor (sa1510), FDI (mz80afi), and chargen (mz80acg). Software list:
+  mz80k_cass (mz80k/mz80kj). Driver in sharp/mz80.cpp, in mess.flt.
+
+  Sharp MZ-2000 B-series: 3 machines (mz80b parent MZ-80B NOT_WORKING,
+  mz2000 separate parent MZ-2000, mz2200 MZ-2200 clone of mz2000).
+  Z80-based home computer family (1981-1983). mz2000 parent set has IPL ROM
+  and character generator ROM (BAD_DUMP). mz2200 clone adds its own IPL ROM,
+  shares chargen from parent. mz80b has separate IPL and font ROMs.
+  Software lists: mz2000_flop, mz2000_cass, mz2000_snap (mz2000/mz2200),
+  mz80b_flop, mz80b_cass (mz80b). Driver in sharp/mz2000.cpp, in mess.flt.
+
+  Sharp MZ-2500: 2 machines (mz2500 parent MZ-2500, mz2520 MZ-2520 clone of
+  mz2500). Z80-based home computer (1985), marketed as "SuperMZ".
+  MACHINE_IMPERFECT_GRAPHICS. mz2500 parent set has 6 ROMs: IPL, character
+  generator ("hand made?" comment), kanji level 1, kanji level 2, dictionary,
+  phone. mz2520 clone shares all ROMs except IPL (ipl2520.rom). cgrom region
+  declared but not dereferenced in driver code; loaded by MAME ROM system.
+  Software lists: mz2500_flop, compatible with mz2000_flop.
+  Driver in sharp/mz2500.cpp, in mess.flt.
+
+  Sharp MZ-700/800: 4 machines (mz700 parent MZ-700, mz700j MZ-700 Japan clone
+  of mz700, mz800 separate parent MZ-800 MACHINE_NOT_WORKING, mz1500 separate
+  parent MZ-1500 MACHINE_NOT_WORKING). Z80-based home computer family (1982-1984).
+  mz700 parent set has monitor ROM and character generator ROM. mz800 parent set
+  has monitor ROM with 4 BIOS alternatives (official 9Z-504M + 3 Willy's variants);
+  no cgrom (uses CGRAM). mz1500 is the Japanese MZ-800 with its own monitor ROM
+  and shares cgrom format from mz700. Software lists: mz700_cass (mz700),
+  mz800_cass (mz800/mz1500). Driver in sharp/mz700.cpp, in mess.flt.
+
+  NEC PC-6001 family: 6 machines across 3 parents. pc6001 parent (PC-6001 Japan
+  1981), pc6001a clone (PC-6001A "NEC Trek" US). pc6001mk2 parent (PC-6001mkII
+  Japan 1983), pc6601 clone of pc6001 (PC-6601 Japan 1983, adds FDD).
+  pc6001mk2sr parent (PC-6001mkIISR Japan 1984), pc6601sr clone of pc6001
+  (PC-6601SR "Mr. PC" Japan 1984, adds FDD + more ROMs). All MACHINE_NOT_WORKING.
+  Z80-based home computer with µPD8049 keyboard MCU (BAD_DUMP in pc6001/pc6001a,
+  NO_DUMP in mk2/6601/mk2sr, actual dump d8049hc-016.bin only in pc6601sr).
+  Software lists: pc6001_cart, pc6001_cass, pc6001mk2_cass.
+  Driver in nec/pc6001.cpp, in mess.flt.
 
 files:
   # Miuchiz Virtual Companions
@@ -137,6 +295,254 @@ files:
     required: true
     category: bios_zip
     source_ref: "src/mame/tvgames/xavix.cpp:2925"
+
+  # Bally Astrocade
+  - name: astrocde.zip
+    required: true
+    category: bios_zip
+    system: astrocde
+    source_ref: "src/mame/midway/astrohome.cpp:244-247"
+    contents:
+      - name: astro.bin
+        description: "On-board BIOS ROM (Bally Professional Arcade)"
+        size: 8192
+        crc32: ebc77f3a
+
+  - name: astrocdl.zip
+    required: false
+    category: bios_zip
+    system: astrocde
+    source_ref: "src/mame/midway/astrohome.cpp:249-251"
+    contents:
+      - name: ballyhlc.bin
+        description: "Bally Home Library Computer BIOS"
+        size: 8192
+        crc32: d7c517ba
+
+  - name: astrocdw.zip
+    required: false
+    category: bios_zip
+    system: astrocde
+    source_ref: "src/mame/midway/astrohome.cpp:254-257"
+    contents:
+      - name: bioswhit.bin
+        description: "Bally Computer System BIOS"
+        size: 8192
+        crc32: 6eb53e79
+
+  # Apple II family — machine ROM sets
+  - name: apple2.zip
+    required: true
+    category: bios_zip
+    system: apple2
+    source_ref: "src/mame/apple/apple2.cpp:988"
+    contents:
+      - name: a2.chr
+        description: "Character generator ROM"
+        size: 2048
+        crc32: 64f415c6
+      - name: 341-0001-00.e0
+        description: "Integer BASIC ROM E0"
+        size: 2048
+        crc32: c0a4ad3b
+      - name: 341-0002-00.e8
+        description: "Integer BASIC ROM E8"
+        size: 2048
+        crc32: a99c2cf6
+      - name: 341-0003-00.f0
+        description: "Integer BASIC ROM F0"
+        size: 2048
+        crc32: 62230d38
+      - name: 341-0004-00.f8
+        description: "Monitor ROM (original)"
+        size: 2048
+        crc32: 020a86d0
+      - name: 341-0020-00.f8
+        description: "Autostart Monitor ROM"
+        size: 2048
+        crc32: 079589c4
+
+  - name: apple2p.zip
+    required: true
+    category: bios_zip
+    system: apple2
+    source_ref: "src/mame/apple/apple2.cpp:1006"
+    contents:
+      - name: 341-0036.chr
+        description: "Character generator ROM"
+        size: 2048
+        crc32: 64f415c6
+      - name: 341-0011.d0
+        description: "Applesoft BASIC ROM D0"
+        size: 2048
+        crc32: 6f05f949
+      - name: 341-0012.d8
+        description: "Applesoft BASIC ROM D8"
+        size: 2048
+        crc32: 1f08087c
+      - name: 341-0013.e0
+        description: "Applesoft BASIC ROM E0"
+        size: 2048
+        crc32: 2b8d9a89
+      - name: 341-0014.e8
+        description: "Applesoft BASIC ROM E8"
+        size: 2048
+        crc32: 5719871a
+      - name: 341-0015.f0
+        description: "Applesoft BASIC ROM F0"
+        size: 2048
+        crc32: 9a04eecf
+      - name: 341-0020-00.f8
+        description: "Autostart Monitor ROM"
+        size: 2048
+        crc32: 079589c4
+
+  - name: apple2e.zip
+    required: true
+    category: bios_zip
+    system: apple2
+    source_ref: "src/mame/apple/apple2e.cpp:5563"
+    contents:
+      - name: 342-0133-a.chr
+        description: "Character generator ROM"
+        size: 4096
+        crc32: b081df66
+      - name: 342-0135-b.64
+        description: "CPU ROM CD bank"
+        size: 8192
+        crc32: e248835e
+      - name: 342-0134-a.64
+        description: "CPU ROM EF bank"
+        size: 8192
+        crc32: fc3d59d8
+      - name: 342-0132-c.e12
+        description: "Keyboard ROM (US-Dvorak)"
+        size: 2048
+        crc32: e47045f4
+
+  - name: apple2ee.zip
+    required: true
+    category: bios_zip
+    system: apple2
+    source_ref: "src/mame/apple/apple2e.cpp:5649"
+    contents:
+      - name: 342-0265-a.chr
+        description: "Enhanced character generator ROM"
+        size: 4096
+        crc32: 2651014d
+      - name: 342-0304-a.e10
+        description: "Enhanced CPU ROM CD bank"
+        size: 8192
+        crc32: 443aa7c4
+      - name: 342-0303-a.e8
+        description: "Enhanced CPU ROM EF bank"
+        size: 8192
+        crc32: 95e10034
+      - name: 341-0132-d.e12
+        description: "Enhanced keyboard ROM"
+        size: 2048
+        crc32: c506efb9
+
+  # Apple II — peripheral device ROM sets
+  - name: a2diskiing.zip
+    required: true
+    category: bios_zip
+    system: apple2
+    source_ref: "src/devices/bus/a2bus/a2diskiing.cpp:40"
+    note: "Disk II NG 16-sector controller, default floppy device"
+    contents:
+      - name: 341-0027-a.p5
+        description: "Disk II 16-sector controller PROM"
+        size: 256
+        crc32: ce7144f6
+
+  - name: d2fdc.zip
+    required: true
+    category: bios_zip
+    system: apple2
+    source_ref: "src/devices/machine/wozfdc.cpp:31"
+    note: "Disk II FDC (Woz machine), alternative floppy controller"
+    contents:
+      - name: 341-0028-a.rom
+        description: "Disk II FDC PROM P6"
+        size: 256
+        crc32: b72a2c70
+
+  - name: a2cffa02.zip
+    required: false
+    category: bios_zip
+    system: apple2
+    source_ref: "src/devices/bus/a2bus/a2cffa.cpp:33"
+    note: "CFFA 2.0 CompactFlash adapter (6502 firmware)"
+    contents:
+      - name: cffa20ee02.bin
+        description: "CFFA 2.0 firmware (6502)"
+        size: 4096
+        crc32: 3ecafce5
+
+  - name: votrsc01.zip
+    required: false
+    category: bios_zip
+    system: apple2
+    source_ref: "src/devices/sound/votrax.cpp:42"
+    note: "Votrax SC-01 speech synthesis chip, shared device"
+    contents:
+      - name: sc01.bin
+        description: "SC-01 internal ROM"
+        size: 512
+        crc32: 528d1c57
+
+  - name: votrsc01a.zip
+    required: false
+    category: bios_zip
+    system: apple2
+    source_ref: "src/devices/sound/votrax.cpp:47"
+    note: "Votrax SC-01A speech synthesis chip, shared device"
+    contents:
+      - name: sc01a.bin
+        description: "SC-01A internal ROM"
+        size: 512
+        crc32: fc416227
+
+  # Apple IIgs
+  - name: apple2gs.zip
+    required: true
+    category: bios_zip
+    system: apple2gs
+    source_ref: "src/mame/apple/apple2gs.cpp:3898-3912"
+    contents:
+      - name: 341s0632-2.bin
+        description: "ADB microcontroller ROM (M50740/50741)"
+        size: 4096
+        crc32: e1c11fb0
+      - name: 344s0047.bin
+        description: "Mega II character ROM"
+        size: 16384
+        crc32: 2d541944
+      - name: 341-0728
+        description: "IIgs ROM03 FC-FD main CPU"
+        size: 131072
+        crc32: 8d410067
+      - name: 341-0748
+        description: "IIgs ROM03 FE-FF main CPU"
+        size: 131072
+        crc32: "18190283"
+
+  # Casio Loopy
+  - name: casloopy.zip
+    required: true
+    category: bios_zip
+    system: casio-loopy
+    source_ref: "src/mame/casio/casloopy.cpp:2456-2462"
+    contents:
+      - name: hd6437021.lsi302
+        description: "SH-1 CPU internal mask ROM"
+        size: 32768
+        crc32: 8c57ff9f
+      - name: hn62434fa.lsi352
+        description: "HN62434 sound/wave data mask ROM"
+        size: 524288
+        crc32: 8f51fa17
 
   # Coleco Adam
   - name: adam.zip
@@ -263,3 +669,867 @@ files:
         description: "National COP411L sound CPU ROM"
         size: 512
         crc32: 81e95975
+
+  # VTech CreatiVision
+  - name: crvision.zip
+    required: true
+    category: bios_zip
+    system: crvision
+    source_ref: "src/mame/vtech/crvision.cpp:934-937"
+    contents:
+      - name: crvision.u20
+        description: "Microsoft BASIC ROM"
+        size: 2048
+        crc32: c3c590c6
+
+  - name: fnvision.zip
+    required: false
+    category: bios_zip
+    system: crvision
+    source_ref: "src/mame/vtech/crvision.cpp:939-942"
+    note: "FunVision clone with alternate BIOS"
+    contents:
+      - name: funboot.rom
+        description: "FunVision alternate BIOS ROM"
+        size: 2048
+        crc32: "05602697"
+
+  - name: lasr2001.zip
+    required: false
+    category: bios_zip
+    system: crvision
+    source_ref: "src/mame/vtech/crvision.cpp:950-953"
+    note: "VTech Laser 2001 home computer (CreatiVision successor)"
+    contents:
+      - name: laser2001.rom
+        description: "Laser 2001 BASIC + OS ROM"
+        size: 16384
+        crc32: 4dc35c39
+
+  - name: manager.zip
+    required: false
+    category: bios_zip
+    system: crvision
+    source_ref: "src/mame/vtech/crvision.cpp:955-959"
+    note: "Salora Manager (Finnish variant)"
+    contents:
+      - name: "01"
+        description: "ROM bank 0-1"
+        size: 8192
+        crc32: 702f4cf5
+      - name: "23"
+        description: "ROM bank 2-3"
+        size: 8192
+        crc32: 46489d88
+
+  # VTech Laser 310 (VZ-300)
+  - name: laser310.zip
+    required: true
+    category: bios_zip
+    system: laser310
+    source_ref: "src/mame/vtech/vtech1.cpp:602-608"
+    note: "Z80-based home computer (1984). Clones: VZ-300, Laser 310 SHRG."
+    contents:
+      - name: vtechv20.u12
+        description: "BASIC V2.0 ROM (default)"
+        size: 16384
+        crc32: 613de12c
+      - name: vtechv21.u12
+        description: "BASIC V2.1 ROM (hack)"
+        size: 16384
+        crc32: f7df980f
+
+  # Mattel Aquarius
+  - name: aquarius.zip
+    required: true
+    category: bios_zip
+    system: mattel-aquarius
+    source_ref: "src/mame/mattel/aquarius.cpp:487-500"
+    contents:
+      - name: aq_s2.u2
+        description: "S2 BASIC ROM"
+        size: 8192
+        crc32: 5cfa5b42
+      - name: aq.u2
+        description: "S1 BASIC ROM"
+        size: 8192
+        crc32: 28d0fdbd
+      - name: aq2.u5
+        description: "Character ROM"
+        size: 2048
+        crc32: e117f57c
+
+  - name: aquarius2.zip
+    required: true
+    category: bios_zip
+    system: mattel-aquarius
+    source_ref: "src/mame/mattel/aquarius.cpp:504-514"
+    contents:
+      - name: aq2_1.rom
+        description: "BASIC ROM"
+        size: 8192
+        crc32: 5cfa5b42
+      - name: aq2_2.rom
+        description: "Extended BASIC ROM"
+        size: 4096
+        crc32: c95117c6
+      - name: aq2.u5
+        description: "Character ROM"
+        size: 2048
+        crc32: e117f57c
+
+  - name: aquarius_ar.zip
+    required: true
+    category: bios_zip
+    system: mattel-aquarius
+    source_ref: "src/mame/mattel/aquarius.cpp:516-525"
+    contents:
+      - name: aq_s2.u2
+        description: "BASIC ROM"
+        size: 8192
+        crc32: 5cfa5b42
+      - name: xz-2120-1_v1.2.u5
+        description: "Arabic character ROM"
+        size: 4096
+        crc32: "09102213"
+
+  # Camputers Lynx 48K
+  - name: lynx48k.zip
+    required: true
+    category: bios_zip
+    system: camplynx
+    source_ref: "src/mame/camputers/camplynx.cpp:995-1004"
+    contents:
+      - name: lynx48-1.ic46
+        description: "BASIC ROM bank 1 (Set1)"
+        size: 8192
+        crc32: 56feec44
+      - name: lynx48-2.ic45
+        description: "BASIC ROM bank 2 (Set1)"
+        size: 8192
+        crc32: d894562e
+      - name: lynx4811.ic46
+        description: "BASIC ROM bank 1 (Set2)"
+        size: 8192
+        crc32: a933e577
+      - name: lynx4812.ic45
+        description: "BASIC ROM bank 2 (Set2)"
+        size: 8192
+        crc32: 3d3fdd0e
+
+  # Camputers Lynx 96K
+  - name: lynx96k.zip
+    required: true
+    category: bios_zip
+    system: camplynx
+    source_ref: "src/mame/camputers/camplynx.cpp:1006-1018"
+    contents:
+      - name: lynx9646.ic46
+        description: "BASIC ROM bank 1"
+        size: 8192
+        crc32: f86c5514
+      - name: lynx9645.ic45
+        description: "BASIC ROM bank 2"
+        size: 8192
+        crc32: f596b9a3
+      - name: lynx9644.ic44
+        description: "Extension ROM (original)"
+        size: 4096
+        crc32: 4b96b0de
+      - name: skorprom.ic44
+        description: "Scorpion ROM v2.1 (RLUG)"
+        size: 8192
+        crc32: 698d3de9
+      - name: danish96k3.ic44
+        description: "Danish extension ROM"
+        size: 8192
+        crc32: 795c22ea
+      - name: dosrom.rom
+        description: "Floppy DOS ROM"
+        size: 8192
+        crc32: 011e106a
+
+  # Camputers Lynx 128K
+  - name: lynx128k.zip
+    required: true
+    category: bios_zip
+    system: camplynx
+    source_ref: "src/mame/camputers/camplynx.cpp:1020-1026"
+    contents:
+      - name: lynx128-1.ic1
+        description: "BASIC ROM bank 1"
+        size: 8192
+        crc32: 65d292ce
+      - name: lynx128-2.ic2
+        description: "BASIC ROM bank 2"
+        size: 8192
+        crc32: 23288773
+      - name: lynx128-3.ic3
+        description: "BASIC ROM bank 3"
+        size: 8192
+        crc32: 9827b9e9
+      - name: dosrom.rom
+        description: "Floppy DOS ROM"
+        size: 8192
+        crc32: 011e106a
+
+  # EACA Colour Genie — parent machine ROM set
+  - name: cgenie.zip
+    required: true
+    category: bios_zip
+    system: cgenie
+    source_ref: "src/mame/eaca/cgenie.cpp:498-510"
+    contents:
+      - name: cg_rom1.z1
+        description: "BASIC/system ROM bank 1"
+        size: 4096
+        crc32: d3369420
+      - name: cg_rom2.z2
+        description: "BASIC/system ROM bank 2"
+        size: 4096
+        crc32: 73d2c9ea
+      - name: cg_rom3.z3
+        description: "BASIC/system ROM bank 3"
+        size: 4096
+        crc32: 3f358811
+      - name: cg_rom4.z4
+        description: "BASIC/system ROM bank 4"
+        size: 4096
+        crc32: be235782
+      - name: cgenieg.fnt
+        description: "German character set"
+        size: 2048
+        crc32: c3e60d57
+      - name: cgenie1.fnt
+        description: "Default character set"
+        size: 2048
+        crc32: 4fed774a
+
+  # EACA Colour Genie — clone: New Zealand
+  - name: cgenienz.zip
+    required: false
+    category: bios_zip
+    system: cgenie
+    source_ref: "src/mame/eaca/cgenie.cpp:512-521"
+    contents:
+      - name: cg-basic-rom-v1-pal-en.rom
+        description: "BASIC ROM (old)"
+        size: 16384
+        crc32: 844aaedd
+      - name: cgromv2.rom
+        description: "BASIC ROM (new)"
+        size: 16384
+        crc32: cfb84e09
+      - name: cgenie1.fnt
+        description: "Default character set"
+        size: 2048
+        crc32: 4fed774a
+
+  # EACA Colour Genie — expansion: FDC
+  - name: cgenie_fdc.zip
+    required: false
+    category: bios_zip
+    system: cgenie
+    source_ref: "src/devices/bus/cgenie/expansion/floppy.cpp:61-77"
+    note: "Optional expansion slot device, not default"
+    contents:
+      - name: cgdos.rom
+        description: "DOS ROM (default)"
+        size: 8192
+        crc32: 2a96cf74
+      - name: cgdos_a.c
+        description: "DOS ROM variant part 1"
+        size: 4096
+        crc32: 6164e9d1
+      - name: cgdos_a.d
+        description: "DOS ROM variant part 2"
+        size: 4096
+        crc32: b09eb5d1
+      - name: cgdos-v2.rom
+        description: "DOS ROM v2 (BAD_DUMP)"
+        size: 8192
+        crc32: 9dace9c1
+
+  # Acorn Atom — parent machine ROM set
+  - name: atom.zip
+    required: true
+    category: bios_zip
+    system: atom
+    source_ref: "src/mame/acorn/atom.cpp:1271-1276"
+    contents:
+      - name: abasic.ic20
+        description: "Atom BASIC + kernel ROM (split-loaded)"
+        size: 8192
+        crc32: 289b7791
+      - name: afloat.ic21
+        description: "Floating point ROM"
+        size: 4096
+        crc32: 81d86af7
+
+  # Acorn Atom — clone: Atom with BBC Basic
+  - name: atombbc.zip
+    required: false
+    category: bios_zip
+    system: atom
+    source_ref: "src/mame/acorn/atom.cpp:1278-1289"
+    contents:
+      - name: mos3.rom
+        description: "BBC mode MOS ROM"
+        size: 4096
+        crc32: 20158bd8
+      - name: bbcbasic.rom
+        description: "BBC BASIC ROM"
+        size: 16384
+        crc32: 79434781
+
+  # Acorn Atom — clone: Busicomputers Prophet 2
+  - name: prophet2.zip
+    required: false
+    category: bios_zip
+    system: atom
+    source_ref: "src/mame/acorn/atom.cpp:1291-1300"
+    contents:
+      - name: p2fp.ic21
+        description: "Prophet 2 floating point ROM"
+        size: 4096
+        crc32: 8be45181
+      - name: a_69ed.rom
+        description: "AtomCalc ROM bank 1"
+        size: 4096
+        crc32: 006010b7
+      - name: e_61e5.rom
+        description: "AtomCalc ROM bank 2"
+        size: 4096
+        crc32: ecd2d08b
+
+  # Acorn Atom — bus device: Disc Pack (default on pl6)
+  - name: atom_discpack.zip
+    required: false
+    category: bios_zip
+    system: atom
+    source_ref: "src/devices/bus/acorn/atom/discpack.cpp:77-80"
+    note: "Default slot device on pl6, loaded automatically"
+    contents:
+      - name: dosrom.ic15
+        description: "8271 FDC DOS ROM"
+        size: 4096
+        crc32: c431a9b7
+
+  # Acorn Atom — bus device: GDOS
+  - name: atom_gdos.zip
+    required: false
+    category: bios_zip
+    system: atom
+    source_ref: "src/devices/bus/acorn/atom/gdos.cpp:85-89"
+    contents:
+      - name: gdos166.rom
+        description: "GDOS 1.66 DOS ROM"
+        size: 4096
+        crc32: 935407cb
+
+  # Acorn Atom — bus device: GDOS-2015
+  - name: atom_gdos2015.zip
+    required: false
+    category: bios_zip
+    system: atom
+    source_ref: "src/devices/bus/acorn/atom/gdos2015.cpp:130-133"
+    contents:
+      - name: gdos2015_15.ic8
+        description: "GDOS-2015 flash ROM"
+        size: 65536
+        crc32: fc790657
+
+  # Acorn Atom — bus device: Speech Module
+  - name: atom_speech.zip
+    required: false
+    category: bios_zip
+    system: atom
+    source_ref: "src/devices/bus/acorn/atom/speech.cpp:61-63"
+    contents:
+      - name: sp0256a-al2.bin
+        description: "SP0256A-AL2 speech synthesis ROM"
+        size: 2048
+        crc32: b504ac15
+
+  # Acorn Atom — bus device: 80 Column VDU
+  - name: atom_vdu80.zip
+    required: false
+    category: bios_zip
+    system: atom
+    source_ref: "src/devices/bus/acorn/atom/vdu80.cpp:76-78"
+    contents:
+      - name: charset.rom
+        description: "EF9345 character ROM (BAD_DUMP)"
+        size: 8192
+        crc32: b2f49eb3
+
+  # Tiger game.com
+  - name: gamecom.zip
+    required: true
+    category: bios_zip
+    system: tiger-game-com
+    source_ref: "src/mame/tiger/gamecom.cpp:293-299"
+    contents:
+      - name: internal.bin
+        description: "SM8521 CPU internal ROM"
+        size: 4096
+        crc32: a0cec361
+      - name: external.bin
+        description: "External flash ROM (PDA software)"
+        size: 262144
+        crc32: e235a589
+
+  # Bit Corporation Gamate
+  - name: gamate.zip
+    required: true
+    category: bios_zip
+    system: gamate
+    source_ref: "src/mame/bitcorp/gamate.cpp:228-234"
+    contents:
+      - name: gamate_bios_umc.bin
+        description: "UMC/NCR ICASC00002 BIOS (default)"
+        size: 4096
+        crc32: "07090415"
+      - name: gamate_bios_bit.bin
+        description: "BIT ICASC00001 BIOS (1994)"
+        size: 4096
+        crc32: 03a5f3a7
+
+  # Epoch Game Pocket Computer
+  - name: gamepock.zip
+    required: true
+    category: bios_zip
+    system: gamepock
+    source_ref: "src/mame/epoch/gamepock.cpp:248-251"
+    contents:
+      - name: egpcboot.bin
+        description: "NEC uPD78C06AG internal ROM"
+        size: 4096
+        crc32: ee1ea65d
+
+  # Hartung Game Master
+  - name: gmaster.zip
+    required: true
+    category: bios_zip
+    system: hartung-game-master
+    source_ref: "src/mame/handheld/gmaster.cpp:261-263"
+    contents:
+      - name: d78c11agf_e19.u1
+        description: "NEC D78C11AGF internal ROM"
+        size: 4096
+        crc32: 05cc45e5
+
+  # Fujitsu FM-7 family
+  - name: fm7.zip
+    required: true
+    category: bios_zip
+    system: fm7
+    source_ref: "src/mame/fujitsu/fm7.cpp:2188-2209"
+    contents:
+      - name: fbasic300.rom
+        description: "F-BASIC 3.00 ROM"
+        size: 31744
+        crc32: 87c98494
+      - name: subsys_c.rom
+        description: "Sub-CPU system ROM"
+        size: 10240
+        crc32: 24cec93f
+      - name: boot_bas.rom
+        description: "Boot BASIC ROM"
+        size: 512
+        crc32: c70f0c74
+      - name: boot_dos_a.rom
+        description: "Boot DOS-A ROM"
+        size: 512
+        crc32: bf441864
+      - name: kanji.rom
+        description: "Kanji ROM (optional, JIS level 1)"
+        size: 131072
+        crc32: 62402ac9
+
+  - name: fm77av.zip
+    required: true
+    category: bios_zip
+    system: fm7
+    source_ref: "src/mame/fujitsu/fm7.cpp:2211-2232"
+    contents:
+      - name: initiate.rom
+        description: "Initiate ROM (boot sequencer)"
+        size: 8192
+        crc32: 785cb06c
+      - name: fbasic30.rom
+        description: "F-BASIC 3.0 ROM"
+        size: 31744
+        crc32: a96d19b6
+      - name: subsys_a.rom
+        description: "Sub system A ROM"
+        size: 8192
+        crc32: e8014fbb
+      - name: subsys_b.rom
+        description: "Sub system B ROM"
+        size: 8192
+        crc32: 9be69fac
+      - name: subsyscg.rom
+        description: "Sub system CG ROM (character generator)"
+        size: 8192
+        crc32: e9f16c42
+
+  - name: fmnew7.zip
+    required: false
+    category: bios_zip
+    system: fm7
+    source_ref: "src/mame/fujitsu/fm7.cpp:2170-2186"
+    note: "FM-NEW7 clone, inherits shared ROMs from fm7.zip parent"
+    contents:
+      - name: fbasic302.rom
+        description: "F-BASIC 3.02 ROM"
+        size: 31744
+        crc32: a96d19b6
+      - name: boot_dos.rom
+        description: "Boot DOS ROM"
+        size: 512
+        crc32: 198614ff
+
+  # Sharp MZ-80K (Japanese, parent)
+  - name: mz80kj.zip
+    required: true
+    category: bios_zip
+    system: mz80k
+    source_ref: "src/mame/sharp/mz80.cpp:359-369"
+    contents:
+      - name: sp1002.rom
+        description: "Monitor ROM SP-1002"
+        size: 4096
+        crc32: 2223e677
+      - name: mz80kfdif.rom
+        description: "Floppy disk interface ROM"
+        size: 1024
+        crc32: d36505e0
+      - name: mz80k.jpn
+        description: "Japanese character generator ROM"
+        size: 2048
+        crc32: bffe3312
+      - name: 80kcgj.rom
+        description: "Japanese character set variant"
+        size: 2048
+        crc32: 7767f11e
+
+  # Sharp MZ-80K (clone)
+  - name: mz80k.zip
+    required: true
+    category: bios_zip
+    system: mz80k
+    source_ref: "src/mame/sharp/mz80.cpp:343-357"
+    contents:
+      - name: sp1002.rom
+        description: "Monitor ROM SP-1002 (default BIOS)"
+        size: 4096
+        crc32: 2223e677
+      - name: 80ktc.rom
+        description: "Monitor ROM TC (alt BIOS)"
+        size: 4096
+        crc32: 19ed6546
+      - name: 80kv44.rom
+        description: "Monitor ROM V44 (alt BIOS)"
+        size: 4096
+        crc32: d66af028
+      - name: mz80kfdif.rom
+        description: "Floppy disk interface ROM"
+        size: 1024
+        crc32: d36505e0
+      - name: 80kcg.rom
+        description: "Character generator ROM"
+        size: 2048
+        crc32: 9b2fb88b
+      - name: 80kcgf.rom
+        description: "Character generator ROM (English fixed)"
+        size: 2048
+        crc32: be952852
+
+  # Sharp MZ-2000
+  - name: mz2000.zip
+    required: true
+    category: bios_zip
+    system: mz2000
+    source_ref: "src/mame/sharp/mz2000.cpp:1465-1474"
+    contents:
+      - name: mz20ipl.bin
+        description: "IPL ROM"
+        size: 2048
+        crc32: d7ccf37f
+      - name: font.bin
+        description: "Character generator ROM"
+        size: 2048
+        crc32: 6ae6ce8e
+
+  # Sharp MZ-2500
+  - name: mz2500.zip
+    required: true
+    category: bios_zip
+    system: mz2500
+    source_ref: "src/mame/sharp/mz2500.cpp:1875-1894"
+    contents:
+      - name: ipl.rom
+        description: "IPL ROM"
+        size: 32768
+        crc32: 7a659f20
+      - name: cg.rom
+        description: "Character generator ROM"
+        size: 2048
+        crc32: a082326f
+      - name: kanji.rom
+        description: "Kanji level 1 ROM"
+        size: 262144
+        crc32: dd426767
+      - name: kanji2.rom
+        description: "Kanji level 2 ROM"
+        size: 131072
+        crc32: eaaf20c9
+      - name: dict.rom
+        description: "Dictionary ROM"
+        size: 262144
+        crc32: aa957c2b
+      - name: phone.rom
+        description: "Phone ROM"
+        size: 16384
+        crc32: 8e49e4dc
+
+  # Sharp MZ-700
+  - name: mz700.zip
+    required: true
+    category: bios_zip
+    system: mz700
+    source_ref: "src/mame/sharp/mz700.cpp:463-469"
+    contents:
+      - name: 1z-013a.rom
+        description: "Monitor ROM 1Z-013A"
+        size: 4096
+        crc32: 4c6c6b7b
+      - name: mz700fon.int
+        description: "Character generator ROM (international)"
+        size: 4096
+        crc32: 42b9e8fb
+
+  # Sharp MZ-800
+  - name: mz800.zip
+    required: true
+    category: bios_zip
+    system: mz800
+    source_ref: "src/mame/sharp/mz700.cpp:480-490"
+    contents:
+      - name: mz800.rom
+        description: "Monitor 9Z-504M (default BIOS)"
+        size: 16384
+        crc32: 600d17e1
+      - name: 800willy_en.rom
+        description: "Willy's Monitor (English, alt BIOS)"
+        size: 16384
+        crc32: f98b4bea
+      - name: 800willy_ge.rom
+        description: "Willy's Monitor (German, alt BIOS)"
+        size: 16384
+        crc32: 2471034f
+      - name: 800willy_jap.rom
+        description: "Willy's Monitor (Japanese, alt BIOS)"
+        size: 16384
+        crc32: 92bbf0a3
+
+  # NEC PC-6001 family
+  - name: pc6001.zip
+    required: true
+    category: bios_zip
+    system: pc60
+    source_ref: "src/mame/nec/pc6001.cpp:1869-1881"
+    contents:
+      - name: basicrom.60
+        description: "BASIC ROM"
+        size: 16384
+        crc32: 54c03109
+      - name: upd8049.ic17
+        description: "Keyboard MCU ROM (BAD_DUMP)"
+        size: 2048
+        crc32: 6682ec41
+      - name: cgrom60.60
+        description: "Character generator ROM"
+        size: 4096
+        crc32: b0142d32
+
+  - name: pc6001a.zip
+    required: false
+    category: bios_zip
+    system: pc60
+    source_ref: "src/mame/nec/pc6001.cpp:1883-1894"
+    contents:
+      - name: basicrom.60a
+        description: "BASIC ROM (US)"
+        size: 16384
+        crc32: fa8e88d9
+      - name: upd8049.ic17
+        description: "Keyboard MCU ROM (BAD_DUMP, shared with parent)"
+        size: 2048
+        crc32: 6682ec41
+      - name: cgrom60.60a
+        description: "Character generator ROM (US)"
+        size: 4096
+        crc32: 49c21d08
+
+  - name: pc6001mk2.zip
+    required: true
+    category: bios_zip
+    system: pc60
+    source_ref: "src/mame/nec/pc6001.cpp:1896-1916"
+    contents:
+      - name: basicrom.62
+        description: "BASIC ROM"
+        size: 32768
+        crc32: 950ac401
+      - name: voicerom.62
+        description: "Voice synthesis ROM"
+        size: 16384
+        crc32: 49b4f917
+      - name: cgrom60.62
+        description: "Character generator ROM"
+        size: 8192
+        crc32: 81eb5d95
+      - name: cgrom60m.62
+        description: "Character generator ROM (mode 2)"
+        size: 8192
+        crc32: 3ce48c33
+      - name: kanjirom.62
+        description: "Kanji ROM"
+        size: 32768
+        crc32: 20c8f3eb
+
+  - name: pc6601.zip
+    required: false
+    category: bios_zip
+    system: pc60
+    source_ref: "src/mame/nec/pc6001.cpp:1919-1936"
+    contents:
+      - name: basicrom.66
+        description: "BASIC ROM"
+        size: 32768
+        crc32: c0b01772
+      - name: voicerom.66
+        description: "Voice synthesis ROM"
+        size: 16384
+        crc32: 91d078c1
+      - name: cgrom60.66
+        description: "Character generator ROM"
+        size: 8192
+        crc32: d2434f29
+      - name: cgrom66.66
+        description: "Character generator ROM (mode 2)"
+        size: 8192
+        crc32: 3ce48c33
+      - name: kanjirom.66
+        description: "Kanji ROM"
+        size: 32768
+        crc32: 20c8f3eb
+
+  - name: pc6001mk2sr.zip
+    required: true
+    category: bios_zip
+    system: pc60
+    source_ref: "src/mame/nec/pc6001.cpp:1938-1954"
+    contents:
+      - name: systemrom1.64
+        description: "System ROM 1"
+        size: 65536
+        crc32: b6fc2db2
+      - name: systemrom2.64
+        description: "System ROM 2"
+        size: 65536
+        crc32: 55a62a1d
+      - name: cgrom68.64
+        description: "Character generator ROM"
+        size: 16384
+        crc32: 73bc3256
+
+  - name: pc6601sr.zip
+    required: false
+    category: bios_zip
+    system: pc60
+    source_ref: "src/mame/nec/pc6001.cpp:1956-1987"
+    contents:
+      - name: systemrom1.68
+        description: "System ROM 1"
+        size: 65536
+        crc32: b6fc2db2
+      - name: systemrom2.68
+        description: "System ROM 2"
+        size: 65536
+        crc32: 55a62a1d
+      - name: basicrom.68
+        description: "BASIC ROM"
+        size: 32768
+        crc32: 516b1be3
+      - name: voicerom.68
+        description: "Voice synthesis ROM"
+        size: 16384
+        crc32: 37ff3829
+      - name: cgrom60.68
+        description: "Character generator ROM"
+        size: 8192
+        crc32: 331473a9
+      - name: cgrom66.68
+        description: "Character generator ROM (mode 2)"
+        size: 8192
+        crc32: 03ba2cf1
+      - name: sysrom2.68
+        description: "System ROM 2 (mk2 compat)"
+        size: 8192
+        crc32: 07318218
+      - name: d8049hc-016.bin
+        description: "Keyboard MCU ROM"
+        size: 2048
+        crc32: 65394e8d
+      - name: cgrom68.68
+        description: "Character generator ROM (SR)"
+        size: 16384
+        crc32: 73bc3256
+
+  # Technosys Aamber Pegasus
+  - name: pegasus.zip
+    required: true
+    category: bios_zip
+    system: pegasus
+    source_ref: "src/mame/ausnz/pegasus.cpp:ROM_START"
+    note: "6809-based home computer (1981, New Zealand). 8 monitor BIOS variants, 5 cartridge expansion slots."
+    contents:
+      - name: mon11_2674.bin
+        description: "Monitor 1.1 r2674 (default)"
+        size: 4096
+        crc32: 1640ff7e
+      - name: mon10_2569.bin
+        description: "Monitor 1.0 r2569"
+        size: 4096
+        crc32: 910fc930
+      - name: mon11_2569.bin
+        description: "Monitor 1.1 r2569"
+        size: 4096
+        crc32: "07b92002"
+      - name: mon11_2669.bin
+        description: "Monitor 1.1 r2669"
+        size: 4096
+        crc32: f3ee23c8
+      - name: mon22_2856.bin
+        description: "Monitor 2.2 r2856"
+        size: 4096
+        crc32: 5f5f688a
+      - name: mon22b_2856.bin
+        description: "Monitor 2.2B r2856"
+        size: 4096
+        crc32: a47b0308
+      - name: mon23_2601.bin
+        description: "Monitor 2.3 r2601"
+        size: 4096
+        crc32: 0e024222
+      - name: mon23a_2569.bin
+        description: "Monitor 2.3A r2569"
+        size: 4096
+        crc32: 248e62c9
+      - name: 6571.bin
+        description: "MCM6571A character generator"
+        size: 2048
+        crc32: 5a25144b

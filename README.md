@@ -2,7 +2,7 @@
 
 Complete BIOS and firmware packs for Batocera, BizHawk, EmuDeck, Lakka, Recalbox, RetroArch, RetroBat, RetroDECK, RetroPie, and RomM.
 
-**7,245** verified files across **355** systems, ready to extract into your emulator's BIOS directory.
+**7,245** verified files across **357** systems, ready to extract into your emulator's BIOS directory.
 
 ## Quick Install
 
@@ -45,13 +45,13 @@ Each file is checked against the emulator's source code to match what the code a
 
 - **10 platforms** supported with platform-specific verification
 - **328 emulators** profiled from source (RetroArch cores + standalone)
-- **355 systems** covered (NES, SNES, PlayStation, Saturn, Dreamcast, ...)
+- **357 systems** covered (NES, SNES, PlayStation, Saturn, Dreamcast, ...)
 - **7,245 files** verified with MD5, SHA1, CRC32 checksums
 - **9266 MB** total collection size
 
 ## Supported systems
 
-NES, SNES, Nintendo 64, GameCube, Wii, Game Boy, Game Boy Advance, Nintendo DS, Nintendo 3DS, Switch, PlayStation, PlayStation 2, PlayStation 3, PSP, PS Vita, Mega Drive, Saturn, Dreamcast, Game Gear, Master System, Neo Geo, Atari 2600, Atari 7800, Atari Lynx, Atari ST, MSX, PC Engine, TurboGrafx-16, ColecoVision, Intellivision, Commodore 64, Amiga, ZX Spectrum, Arcade (MAME), and 321+ more.
+NES, SNES, Nintendo 64, GameCube, Wii, Game Boy, Game Boy Advance, Nintendo DS, Nintendo 3DS, Switch, PlayStation, PlayStation 2, PlayStation 3, PSP, PS Vita, Mega Drive, Saturn, Dreamcast, Game Gear, Master System, Neo Geo, Atari 2600, Atari 7800, Atari Lynx, Atari ST, MSX, PC Engine, TurboGrafx-16, ColecoVision, Intellivision, Commodore 64, Amiga, ZX Spectrum, Arcade (MAME), and 323+ more.
 
 Full list with per-file details: **[https://abdess.github.io/retrobios/](https://abdess.github.io/retrobios/)**
 
@@ -66,7 +66,7 @@ Full list with per-file details: **[https://abdess.github.io/retrobios/](https:/
 | Recalbox | 276/346 (79.8%) | 273 | 3 | 70 |
 | RetroArch | 443/448 (98.9%) | 443 | 0 | 5 |
 | RetroBat | 330/331 (99.7%) | 326 | 4 | 1 |
-| RetroDECK | 1958/2007 (97.6%) | 1876 | 82 | 49 |
+| RetroDECK | 1958/2007 (97.6%) | 1932 | 26 | 49 |
 | RetroPie | 443/448 (98.9%) | 443 | 0 | 5 |
 | RomM | 372/374 (99.5%) | 372 | 0 | 2 |
 
@@ -130,4 +130,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 This repository provides BIOS files for personal backup and archival purposes.
 
-*Auto-generated on 2026-03-29T14:04:16Z*
+*Auto-generated on 2026-03-29T14:15:30Z*

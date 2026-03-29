@@ -4,7 +4,7 @@ core_classification: official_port
 source: "https://github.com/libretro/mame"
 upstream: "https://github.com/mamedev/mame"
 logo: "https://raw.githubusercontent.com/mamedev/mame/master/docs/source/images/MAMElogo.svg"
-profiled_date: "2026-03-22"
+profiled_date: "2026-03-29"
 core_version: "0.286"
 display_name: "Arcade (MAME)"
 
@@ -43,13 +43,29 @@ systems:
   - konami-twinkle
   - panasonic-3do
   - hyper-neogeo64
+  - apple2gs
   - apf-m1000
+  - bally-astrocade
   - coleco-adam
+  - crvision
   - entex-advision
+  - sega-beena
+  - camplynx
+  - tiger-game-com
+  - gamepark-gp32
+  - gamate
+  - gamepock
+  - hartung-game-master
+  - fm7
+  - laser310
+  - casio-loopy
+  - casio-pv1000
+  - pegasus
+  - pcw
 
 notes: |
   Rolling release tracking mamedev/mame upstream (currently 0.286).
-  80 BIOS root sets + 3 system ROM sets (adam, advision, apfm1000). romload.cpp
+  80 BIOS root sets + 18 system ROM sets (apple2gs, astrocade, adam, advision, apfm1000, beena, camplynx, casloopy, crvision, fm7, gamate, gamecom, gamepock, gmaster, gp32, laser310, pcw, pegasus). romload.cpp
   unmodified. No hiscore support.
   Paths under system_dir/mame/ (artwork, cheat, hash, ini, plugins,
   samples, crosshair). ROM search: content_dir + system_dir/mame/bios +
@@ -515,6 +531,80 @@ files:
     category: bios_zip
     source_ref: "src/mame/misc/xtom3d.cpp:996"
 
+  # Bally Astrocade
+  - name: astrocde.zip
+    required: true
+    category: bios_zip
+    system: astrocde
+    source_ref: "src/mame/midway/astrohome.cpp:244-247"
+    contents:
+      - name: astro.bin
+        description: "On-board BIOS ROM (Bally Professional Arcade)"
+        size: 8192
+        crc32: ebc77f3a
+
+  - name: astrocdl.zip
+    required: false
+    category: bios_zip
+    system: astrocde
+    source_ref: "src/mame/midway/astrohome.cpp:249-251"
+    contents:
+      - name: ballyhlc.bin
+        description: "Bally Home Library Computer BIOS"
+        size: 8192
+        crc32: d7c517ba
+
+  - name: astrocdw.zip
+    required: false
+    category: bios_zip
+    system: astrocde
+    source_ref: "src/mame/midway/astrohome.cpp:254-257"
+    contents:
+      - name: bioswhit.bin
+        description: "Bally Computer System BIOS"
+        size: 8192
+        crc32: 6eb53e79
+
+  # Apple IIgs
+  - name: apple2gs.zip
+    required: true
+    category: bios_zip
+    system: apple2gs
+    source_ref: "src/mame/apple/apple2gs.cpp:3898-3912"
+    contents:
+      - name: 341s0632-2.bin
+        description: "ADB microcontroller ROM (M50740/50741)"
+        size: 4096
+        crc32: e1c11fb0
+      - name: 344s0047.bin
+        description: "Mega II character ROM"
+        size: 16384
+        crc32: 2d541944
+      - name: 341-0728
+        description: "IIgs ROM03 FC-FD main CPU"
+        size: 131072
+        crc32: 8d410067
+      - name: 341-0748
+        description: "IIgs ROM03 FE-FF main CPU"
+        size: 131072
+        crc32: "18190283"
+
+  # Casio Loopy
+  - name: casloopy.zip
+    required: true
+    category: bios_zip
+    system: casio-loopy
+    source_ref: "src/mame/casio/casloopy.cpp:2456-2462"
+    contents:
+      - name: hd6437021.lsi302
+        description: "SH-1 CPU internal mask ROM"
+        size: 32768
+        crc32: 8c57ff9f
+      - name: hn62434fa.lsi352
+        description: "HN62434 sound/wave data mask ROM"
+        size: 524288
+        crc32: 8f51fa17
+
   # Coleco Adam
   - name: adam.zip
     required: true
@@ -660,4 +750,411 @@ files:
         description: "Mod BIOS (W. Lunquist 1982)"
         size: 4096
         crc32: f320aba6
+
+  # Sega Advanced Pico BEENA
+  - name: beena.zip
+    required: true
+    category: bios_zip
+    system: sega-beena
+    source_ref: "src/mame/sega/sega_beena.cpp:2233-2245"
+    contents:
+      - name: 9h0-0008.bios.ic1
+        description: "SoC internal BIOS (ARM7, dumped via JTAG)"
+        size: 131072
+        crc32: 5471aaf8
+      - name: 9h0-0008.midipcm.ic1
+        description: "SoC MIDI synthesizer PCM data"
+        size: 32768
+        crc32: ed336d29
+
+  # Camputers Lynx 48K
+  - name: lynx48k.zip
+    required: true
+    category: bios_zip
+    system: camplynx
+    source_ref: "src/mame/camputers/camplynx.cpp:995-1004"
+    contents:
+      - name: lynx48-1.ic46
+        description: "BASIC ROM bank 1 (Set1)"
+        size: 8192
+        crc32: 56feec44
+      - name: lynx48-2.ic45
+        description: "BASIC ROM bank 2 (Set1)"
+        size: 8192
+        crc32: d894562e
+      - name: lynx4811.ic46
+        description: "BASIC ROM bank 1 (Set2)"
+        size: 8192
+        crc32: a933e577
+      - name: lynx4812.ic45
+        description: "BASIC ROM bank 2 (Set2)"
+        size: 8192
+        crc32: 3d3fdd0e
+
+  # Camputers Lynx 96K
+  - name: lynx96k.zip
+    required: true
+    category: bios_zip
+    system: camplynx
+    source_ref: "src/mame/camputers/camplynx.cpp:1006-1018"
+    contents:
+      - name: lynx9646.ic46
+        description: "BASIC ROM bank 1"
+        size: 8192
+        crc32: f86c5514
+      - name: lynx9645.ic45
+        description: "BASIC ROM bank 2"
+        size: 8192
+        crc32: f596b9a3
+      - name: lynx9644.ic44
+        description: "Extension ROM (original)"
+        size: 4096
+        crc32: 4b96b0de
+      - name: skorprom.ic44
+        description: "Scorpion ROM v2.1 (RLUG)"
+        size: 8192
+        crc32: 698d3de9
+      - name: danish96k3.ic44
+        description: "Danish extension ROM"
+        size: 8192
+        crc32: 795c22ea
+      - name: dosrom.rom
+        description: "Floppy DOS ROM"
+        size: 8192
+        crc32: 011e106a
+
+  # Camputers Lynx 128K
+  - name: lynx128k.zip
+    required: true
+    category: bios_zip
+    system: camplynx
+    source_ref: "src/mame/camputers/camplynx.cpp:1020-1026"
+    contents:
+      - name: lynx128-1.ic1
+        description: "BASIC ROM bank 1"
+        size: 8192
+        crc32: 65d292ce
+      - name: lynx128-2.ic2
+        description: "BASIC ROM bank 2"
+        size: 8192
+        crc32: 23288773
+      - name: lynx128-3.ic3
+        description: "BASIC ROM bank 3"
+        size: 8192
+        crc32: 9827b9e9
+      - name: dosrom.rom
+        description: "Floppy DOS ROM"
+        size: 8192
+        crc32: 011e106a
+
+  # VTech CreatiVision
+  - name: crvision.zip
+    required: true
+    category: bios_zip
+    system: crvision
+    source_ref: "src/mame/vtech/crvision.cpp:934-937"
+    contents:
+      - name: crvision.u20
+        description: "Microsoft BASIC ROM"
+        size: 2048
+        crc32: c3c590c6
+
+  - name: fnvision.zip
+    required: false
+    category: bios_zip
+    system: crvision
+    source_ref: "src/mame/vtech/crvision.cpp:939-942"
+    note: "FunVision clone with alternate BIOS"
+    contents:
+      - name: funboot.rom
+        description: "FunVision alternate BIOS ROM"
+        size: 2048
+        crc32: "05602697"
+
+  - name: lasr2001.zip
+    required: false
+    category: bios_zip
+    system: crvision
+    source_ref: "src/mame/vtech/crvision.cpp:950-953"
+    note: "VTech Laser 2001 home computer (CreatiVision successor)"
+    contents:
+      - name: laser2001.rom
+        description: "Laser 2001 BASIC + OS ROM"
+        size: 16384
+        crc32: 4dc35c39
+
+  - name: manager.zip
+    required: false
+    category: bios_zip
+    system: crvision
+    source_ref: "src/mame/vtech/crvision.cpp:955-959"
+    note: "Salora Manager (Finnish variant)"
+    contents:
+      - name: "01"
+        description: "ROM bank 0-1"
+        size: 8192
+        crc32: 702f4cf5
+      - name: "23"
+        description: "ROM bank 2-3"
+        size: 8192
+        crc32: 46489d88
+
+  # VTech Laser 310 (VZ-300)
+  - name: laser310.zip
+    required: true
+    category: bios_zip
+    system: laser310
+    source_ref: "src/mame/vtech/vtech1.cpp:602-608"
+    note: "Z80-based home computer (1984). Clones: VZ-300, Laser 310 SHRG."
+    contents:
+      - name: vtechv20.u12
+        description: "BASIC V2.0 ROM (default)"
+        size: 16384
+        crc32: 613de12c
+      - name: vtechv21.u12
+        description: "BASIC V2.1 ROM (hack)"
+        size: 16384
+        crc32: f7df980f
+
+  # Bit Corporation Gamate
+  - name: gamate.zip
+    required: true
+    category: bios_zip
+    system: gamate
+    source_ref: "src/mame/bitcorp/gamate.cpp:228-234"
+    contents:
+      - name: gamate_bios_umc.bin
+        description: "UMC/NCR ICASC00002 BIOS (default)"
+        size: 4096
+        crc32: "07090415"
+      - name: gamate_bios_bit.bin
+        description: "BIT ICASC00001 BIOS (1994)"
+        size: 4096
+        crc32: 03a5f3a7
+
+  # Epoch Game Pocket Computer
+  - name: gamepock.zip
+    required: true
+    category: bios_zip
+    system: gamepock
+    source_ref: "src/mame/epoch/gamepock.cpp:248-251"
+    contents:
+      - name: egpcboot.bin
+        description: "NEC uPD78C06AG internal ROM"
+        size: 4096
+        crc32: ee1ea65d
+
+  # Hartung Game Master
+  - name: gmaster.zip
+    required: true
+    category: bios_zip
+    system: hartung-game-master
+    source_ref: "src/mame/handheld/gmaster.cpp:261-263"
+    contents:
+      - name: d78c11agf_e19.u1
+        description: "NEC D78C11AGF internal ROM"
+        size: 4096
+        crc32: 05cc45e5
+
+  # Tiger game.com
+  - name: gamecom.zip
+    required: true
+    category: bios_zip
+    system: tiger-game-com
+    source_ref: "src/mame/tiger/gamecom.cpp:293-299"
+    contents:
+      - name: internal.bin
+        description: "SM8521 CPU internal ROM"
+        size: 4096
+        crc32: a0cec361
+      - name: external.bin
+        description: "External flash ROM (PDA software)"
+        size: 262144
+        crc32: e235a589
+
+  # GamePark GP32
+  - name: gp32.zip
+    required: true
+    category: bios_zip
+    system: gamepark-gp32
+    source_ref: "src/mame/gamepark/gp32.cpp:1710-1727"
+    contents:
+      - name: gp32157e.bin
+        description: "Firmware 1.5.7 (English, default)"
+        size: 524288
+        crc32: b1e35643
+      - name: gp32100k.bin
+        description: "Firmware 1.0.0 (Korean)"
+        size: 524288
+        crc32: d9925ac9
+      - name: gp32156k.bin
+        description: "Firmware 1.5.6 (Korean)"
+        size: 524288
+        crc32: "667fb1c8"
+      - name: gp32166m.bin
+        description: "Firmware 1.6.6 (European)"
+        size: 524288
+        crc32: "4548a840"
+      - name: gp32mfv2.bin
+        description: "Mr. Spiv Multi Firmware V2"
+        size: 524288
+        crc32: "7ddaaaeb"
+      - name: x2c32.jed
+        description: "32 Macrocell CoolRunner-II CPLD (JEDEC)"
+        size: 15291
+        crc32: eeec10d8
+
+  # Fujitsu FM-7 family
+  - name: fm7.zip
+    required: true
+    category: bios_zip
+    system: fm7
+    source_ref: "src/mame/fujitsu/fm7.cpp:2188-2209"
+    contents:
+      - name: fbasic300.rom
+        description: "F-BASIC 3.00 ROM"
+        size: 31744
+        crc32: 87c98494
+      - name: subsys_c.rom
+        description: "Sub-CPU system ROM"
+        size: 10240
+        crc32: 24cec93f
+      - name: boot_bas.rom
+        description: "Boot BASIC ROM"
+        size: 512
+        crc32: c70f0c74
+      - name: boot_dos_a.rom
+        description: "Boot DOS-A ROM"
+        size: 512
+        crc32: bf441864
+      - name: kanji.rom
+        description: "Kanji ROM (optional, JIS level 1)"
+        size: 131072
+        crc32: 62402ac9
+
+  - name: fm77av.zip
+    required: true
+    category: bios_zip
+    system: fm7
+    source_ref: "src/mame/fujitsu/fm7.cpp:2211-2232"
+    contents:
+      - name: initiate.rom
+        description: "Initiate ROM (boot sequencer)"
+        size: 8192
+        crc32: 785cb06c
+      - name: fbasic30.rom
+        description: "F-BASIC 3.0 ROM"
+        size: 31744
+        crc32: a96d19b6
+      - name: subsys_a.rom
+        description: "Sub system A ROM"
+        size: 8192
+        crc32: e8014fbb
+      - name: subsys_b.rom
+        description: "Sub system B ROM"
+        size: 8192
+        crc32: 9be69fac
+      - name: subsyscg.rom
+        description: "Sub system CG ROM (character generator)"
+        size: 8192
+        crc32: e9f16c42
+
+  - name: fmnew7.zip
+    required: false
+    category: bios_zip
+    system: fm7
+    source_ref: "src/mame/fujitsu/fm7.cpp:2170-2186"
+    note: "FM-NEW7 clone, inherits shared ROMs from fm7.zip parent"
+    contents:
+      - name: fbasic302.rom
+        description: "F-BASIC 3.02 ROM"
+        size: 31744
+        crc32: a96d19b6
+      - name: boot_dos.rom
+        description: "Boot DOS ROM"
+        size: 512
+        crc32: 198614ff
+
+  # Technosys Aamber Pegasus
+  - name: pegasus.zip
+    required: true
+    category: bios_zip
+    system: pegasus
+    source_ref: "src/mame/ausnz/pegasus.cpp:ROM_START"
+    note: "6809-based home computer (1981, New Zealand). 8 monitor BIOS variants, 5 cartridge expansion slots."
+    contents:
+      - name: mon11_2674.bin
+        description: "Monitor 1.1 r2674 (default)"
+        size: 4096
+        crc32: 1640ff7e
+      - name: mon10_2569.bin
+        description: "Monitor 1.0 r2569"
+        size: 4096
+        crc32: 910fc930
+      - name: mon11_2569.bin
+        description: "Monitor 1.1 r2569"
+        size: 4096
+        crc32: "07b92002"
+      - name: mon11_2669.bin
+        description: "Monitor 1.1 r2669"
+        size: 4096
+        crc32: f3ee23c8
+      - name: mon22_2856.bin
+        description: "Monitor 2.2 r2856"
+        size: 4096
+        crc32: 5f5f688a
+      - name: mon22b_2856.bin
+        description: "Monitor 2.2B r2856"
+        size: 4096
+        crc32: a47b0308
+      - name: mon23_2601.bin
+        description: "Monitor 2.3 r2601"
+        size: 4096
+        crc32: 0e024222
+      - name: mon23a_2569.bin
+        description: "Monitor 2.3A r2569"
+        size: 4096
+        crc32: 248e62c9
+      - name: 6571.bin
+        description: "MCM6571A character generator"
+        size: 2048
+        crc32: 5a25144b
+
+  # Amstrad PCW (Joyce)
+  - name: pcw8256.zip
+    required: true
+    category: bios_zip
+    system: pcw
+    source_ref: "src/mame/amstrad/pcw.cpp:1402"
+    note: |
+      Amstrad PCW8256 parent ROM set. Z80-based word processor/computer (1985).
+      6 machines: pcw8256 (parent), pcw8512, pcw9256, pcw9512, pcw9512+, pcw10.
+      All MACHINE_NOT_WORKING. No main CPU ROM (boots from CP/M floppy).
+      Printer MCU boot code copied into Z80 RAM at machine_reset.
+      Clones pcw8512/pcw9256/pcw10 share parent ROMs. pcw9512/pcw9512+ use
+      separate daisywheel printer MCU (pcw9512.zip).
+    contents:
+      - name: 40026.ic701
+        description: "i8041 9-pin dot-matrix printer MCU"
+        size: 1024
+        crc32: ee8890ae
+      - name: 40027.ic801
+        description: "i8048 keyboard MCU"
+        size: 1024
+        crc32: "25260958"
+
+  - name: pcw9512.zip
+    required: true
+    category: bios_zip
+    system: pcw
+    source_ref: "src/mame/amstrad/pcw.cpp:1429"
+    note: |
+      Amstrad PCW9512 clone ROM set. Daisywheel printer variant (1987).
+      Uses different printer MCU (40103.ic109) than 9-pin models.
+      Keyboard MCU (40027.ic801) inherited from parent pcw8256.zip.
+    contents:
+      - name: 40103.ic109
+        description: "i8041 daisywheel printer MCU"
+        size: 8192
+        crc32: a64d450a
 

@@ -1,14 +1,16 @@
 emulator: GSplus
 type: standalone
+core_classification: community_fork
 source: "https://github.com/digarok/gsplus"
-upstream: "https://github.com/digarok/gsplus"
-profiled_date: "2026-03-26"
+upstream: "https://kegs.sourceforge.net/"
+profiled_date: "2026-03-29"
 core_version: "KEGS 1.38"
 display_name: "Apple - Apple IIGS (GSplus)"
 cores:
   - gsplus
 systems:
   - apple-iigs
+  - apple-iie
 
 notes: |
   Fork of KEGS (Kent's Emulated GS) by digarok. Cross-platform Apple IIGS
@@ -28,7 +30,7 @@ files:
     aliases: [ROM.01, ROM.03, APPLE2GS.ROM, APPLE2GS.ROM2, xgs.rom, XGS.ROM, Rom03gd, 342-0077-b]
     required: true
     description: "Apple IIGS system ROM"
-    source_ref: "config.c:131,403-407,1092-1149"
+    source_ref: "config.c:131,403-406,1092-1149"
     note: "Accepted sizes: 32768 (Apple //e), 131072 (ROM 01), 262144 (ROM 03)"
     validation: [size]
 
@@ -39,5 +41,5 @@ files:
     size: 256
     description: "Disk II controller PROM (slot 6)"
     validation: [size]
-    source_ref: "config.c:414-415,1188-1220"
+    source_ref: "config.c:414-415,1168-1220"
     note: "Built-in PROM generated from XOR diffs against main ROM"

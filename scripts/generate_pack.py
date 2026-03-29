@@ -429,6 +429,202 @@ def _collect_emulator_extras(
     return extras
 
 
+def _build_readme(platform_name: str, platform_display: str,
+                  base_dest: str, total_files: int, num_systems: int) -> str:
+    """Build a personalized step-by-step README for each platform pack."""
+    sep = "=" * 50
+    header = (
+        f"{sep}\n"
+        f"  RETROBIOS - {platform_display} BIOS Pack\n"
+        f"  {total_files} files for {num_systems} systems\n"
+        f"{sep}\n\n"
+    )
+
+    guides: dict[str, str] = {
+        "retroarch": (
+            "INSTALLATION GUIDE\n\n"
+            "  Option A: Automatic (recommended)\n"
+            "  ---------------------------------\n"
+            "  Run this in a terminal:\n\n"
+            "    curl -fsSL https://raw.githubusercontent.com/Abdess/retrobios/main/install.sh | sh\n\n"
+            "  The script auto-detects your RetroArch install and copies\n"
+            "  files to the correct location.\n\n"
+            "  Option B: Manual (PC)\n"
+            "  ---------------------\n"
+            "  1. Find your RetroArch system directory:\n"
+            "     - RetroArch > Settings > Directory > System/BIOS\n"
+            "     - Default: retroarch/system/\n"
+            "  2. Open the \"system\" folder from this archive\n"
+            "  3. Copy ALL contents into your system directory\n"
+            "  4. Overwrite if asked\n\n"
+            "  Option C: Manual (handheld / SD card)\n"
+            "  -------------------------------------\n"
+            "  Anbernic, Retroid, Miyoo, Trimui, etc.:\n"
+            "  1. Connect your SD card to your PC\n"
+            "  2. Find the BIOS folder (usually BIOS/ or system/)\n"
+            "  3. Copy ALL contents of \"system\" from this archive\n"
+            "  4. Eject SD card and reboot your device\n\n"
+            "  Common paths by device:\n"
+            "    Anbernic (ArkOS/JELOS): BIOS/\n"
+            "    Retroid (RetroArch):     RetroArch/system/\n"
+            "    Miyoo Mini (Onion OS):   BIOS/\n"
+            "    Steam Deck (RetroArch):  ~/.config/retroarch/system/\n\n"
+        ),
+        "batocera": (
+            "INSTALLATION GUIDE\n\n"
+            "  Option A: Automatic (recommended)\n"
+            "  ---------------------------------\n"
+            "  Open a terminal (F1 from Batocera menu) and run:\n\n"
+            "    curl -fsSL https://raw.githubusercontent.com/Abdess/retrobios/main/install.sh | sh\n\n"
+            "  Option B: Manual (network share)\n"
+            "  --------------------------------\n"
+            "  1. On your PC, open the Batocera network share:\n"
+            "     - Windows: \\\\BATOCERA\\share\\bios\\\n"
+            "     - Mac/Linux: smb://batocera/share/bios/\n"
+            "  2. Open the \"bios\" folder from this archive\n"
+            "  3. Copy ALL contents into the share\n"
+            "  4. Overwrite if asked\n\n"
+            "  Option C: Manual (SD card)\n"
+            "  --------------------------\n"
+            "  1. Put the SD card in your PC\n"
+            "  2. Navigate to /userdata/bios/ on the SHARE partition\n"
+            "  3. Copy ALL contents of \"bios\" from this archive\n\n"
+            "  NOTE: Dreamcast flash memory is named dc_nvmem.bin\n"
+            "  (if your setup asks for dc_flash.bin, same file).\n\n"
+        ),
+        "recalbox": (
+            "INSTALLATION GUIDE\n\n"
+            "  Option A: Automatic\n"
+            "  -------------------\n"
+            "    curl -fsSL https://raw.githubusercontent.com/Abdess/retrobios/main/install.sh | sh\n\n"
+            "  Option B: Manual (network share)\n"
+            "  --------------------------------\n"
+            "  1. On your PC, open the Recalbox network share:\n"
+            "     - Windows: \\\\RECALBOX\\share\\bios\\\n"
+            "     - Mac/Linux: smb://recalbox/share/bios/\n"
+            "  2. Open the \"bios\" folder from this archive\n"
+            "  3. Copy ALL contents into the share\n\n"
+            "  Option C: Manual (SD card)\n"
+            "  --------------------------\n"
+            "  1. Put the SD card in your PC\n"
+            "  2. Navigate to /recalbox/share/bios/\n"
+            "  3. Copy ALL contents of \"bios\" from this archive\n\n"
+        ),
+        "emudeck": (
+            "INSTALLATION GUIDE (Steam Deck / Linux)\n\n"
+            "  Option A: Automatic (recommended)\n"
+            "  ---------------------------------\n"
+            "  Open Konsole (or any terminal) and run:\n\n"
+            "    curl -fsSL https://raw.githubusercontent.com/Abdess/retrobios/main/install.sh | sh\n\n"
+            "  The script places BIOS files AND sets up standalone\n"
+            "  emulator keys automatically.\n\n"
+            "  Option B: Manual\n"
+            "  ----------------\n"
+            "  1. Open Dolphin file manager\n"
+            "  2. Navigate to ~/Emulation/bios/\n"
+            "  3. Open the \"bios\" folder from this archive\n"
+            "  4. Copy ALL contents into ~/Emulation/bios/\n\n"
+            "  STANDALONE EMULATORS (extra step)\n"
+            "  Switch and 3DS emulators need keys in specific folders:\n"
+            "    prod.keys  -> ~/.local/share/yuzu/keys/\n"
+            "    prod.keys  -> ~/.local/share/eden/keys/\n"
+            "    prod.keys  -> ~/.config/Ryujinx/system/\n"
+            "    aes_keys.txt -> ~/Emulation/bios/citra/keys/\n"
+            "  The automatic installer handles this for you.\n\n"
+        ),
+        "retrodeck": (
+            "INSTALLATION GUIDE (Steam Deck / Linux)\n\n"
+            "  Option A: Automatic (recommended)\n"
+            "  ---------------------------------\n"
+            "  Open Konsole (or any terminal) and run:\n\n"
+            "    curl -fsSL https://raw.githubusercontent.com/Abdess/retrobios/main/install.sh | sh\n\n"
+            "  Option B: Manual\n"
+            "  ----------------\n"
+            "  1. Open Dolphin file manager\n"
+            "  2. Show hidden files (Ctrl+H)\n"
+            "  3. Navigate to ~/retrodeck/bios/\n"
+            "  4. Open this archive and go into the top-level folder\n"
+            "  5. Copy ALL contents into ~/retrodeck/bios/\n\n"
+            "  NOTE: RetroDECK uses its own BIOS checker. After\n"
+            "  copying, open RetroDECK > Tools > BIOS Checker to\n"
+            "  verify everything is detected.\n\n"
+        ),
+        "retrobat": (
+            "INSTALLATION GUIDE (Windows)\n\n"
+            "  Option A: Automatic (recommended)\n"
+            "  ---------------------------------\n"
+            "  Download and run install.bat from:\n"
+            "  https://github.com/Abdess/retrobios/releases\n\n"
+            "  Option B: Manual\n"
+            "  ----------------\n"
+            "  1. Open your RetroBat installation folder\n"
+            "  2. Navigate to the bios\\ subfolder\n"
+            "     (default: C:\\RetroBat\\bios\\)\n"
+            "  3. Open the \"bios\" folder from this archive\n"
+            "  4. Copy ALL contents into your bios\\ folder\n"
+            "  5. Overwrite if asked\n\n"
+        ),
+        "bizhawk": (
+            "INSTALLATION GUIDE\n\n"
+            "  1. Open your BizHawk installation folder\n"
+            "  2. Navigate to the Firmware subfolder:\n"
+            "     - Windows: BizHawk\\Firmware\\\n"
+            "     - Linux: ~/.config/BizHawk/Firmware/\n"
+            "  3. Open the \"Firmware\" folder from this archive\n"
+            "  4. Copy ALL contents into your Firmware folder\n"
+            "  5. In BizHawk: Config > Paths > Firmware should\n"
+            "     point to this folder\n\n"
+        ),
+        "romm": (
+            "INSTALLATION GUIDE (RomM server)\n\n"
+            "  1. Locate your RomM library folder\n"
+            "  2. Navigate to the bios/ subdirectory\n"
+            "  3. Copy ALL contents of \"bios\" from this archive\n"
+            "  4. Restart the RomM service to detect new files\n\n"
+        ),
+        "retropie": (
+            "INSTALLATION GUIDE (Raspberry Pi)\n\n"
+            "  Option A: Via network share\n"
+            "  --------------------------\n"
+            "  1. On your PC, open: \\\\RETROPIE\\bios\\\n"
+            "  2. Copy ALL contents of \"BIOS\" from this archive\n\n"
+            "  Option B: Via SSH\n"
+            "  -----------------\n"
+            "  1. SSH into your Pi: ssh pi@retropie\n"
+            "  2. Copy files to ~/RetroPie/BIOS/\n\n"
+            "  Option C: Via SD card\n"
+            "  ---------------------\n"
+            "  1. Put the SD card in your PC\n"
+            "  2. Navigate to /home/pi/RetroPie/BIOS/\n"
+            "  3. Copy ALL contents of \"BIOS\" from this archive\n\n"
+        ),
+    }
+
+    # Lakka uses same guide as RetroArch
+    guides["lakka"] = guides["retroarch"]
+
+    guide = guides.get(platform_name, (
+        f"INSTALLATION\n\n"
+        f"  1. Open the \"{base_dest or 'files'}\" folder in this archive\n"
+        f"  2. Copy ALL contents to your BIOS directory\n"
+        f"  3. Overwrite if asked\n\n"
+    ))
+
+    footer = (
+        "TROUBLESHOOTING\n\n"
+        "  - Core says BIOS missing? Check the exact filename\n"
+        "    and make sure it's in the right subfolder.\n"
+        "  - Wrong region? Some systems have regional BIOS\n"
+        "    variants (USA/EUR/JAP). All are included.\n"
+        "  - Need help? https://github.com/Abdess/retrobios/issues\n\n"
+        f"{sep}\n"
+        f"  https://github.com/Abdess/retrobios\n"
+        f"{sep}\n"
+    )
+
+    return header + guide + footer
+
+
 def generate_pack(
     platform_name: str,
     platforms_dir: str,
@@ -765,66 +961,10 @@ def generate_pack(
                         zf.write(src, full)
                         total_files += 1
 
-        # README.txt for users
-        extract_paths = {
-            "retroarch": "system/", "lakka": "system/",
-            "batocera": "/userdata/bios/", "recalbox": "/recalbox/share/bios/",
-            "emudeck": "Emulation/bios/", "retrobat": "bios/",
-            "retrodeck": "~/retrodeck/bios/", "romm": "bios/",
-            "bizhawk": "Firmware/", "retropie": "BIOS/",
-        }
-        extract_to = extract_paths.get(platform_name, f"{base_dest}/")
+        # README.txt for users — personalized step-by-step per platform
         num_systems = len(pack_systems)
-        # Platform-specific notes
-        platform_notes = {
-            "emudeck": (
-                "\nSTANDALONE EMULATORS\n"
-                "  Switch emulators (Yuzu, Eden, Ryujinx) and Citra need\n"
-                "  keys in their own folders, not in Emulation/bios/.\n"
-                "  Use the automatic installer to set this up, or copy\n"
-                "  manually:\n"
-                "    prod.keys -> ~/.local/share/yuzu/keys/\n"
-                "    prod.keys -> ~/.local/share/eden/keys/\n"
-                "    prod.keys -> ~/.config/Ryujinx/system/\n"
-                "    aes_keys.txt -> Emulation/bios/citra/keys/\n\n"
-            ),
-            "retroarch": (
-                "\nHANDHELDS (Anbernic, Retroid, Miyoo, etc.)\n"
-                "  Copy the contents of \"system/\" to your SD card's\n"
-                "  BIOS folder (usually BIOS/ or system/).\n\n"
-            ),
-            "batocera": (
-                "\nDREAMCAST NOTE\n"
-                "  The flash memory file is named dc_nvmem.bin\n"
-                "  (Flycast's canonical name). If your setup asks for\n"
-                "  dc_flash.bin, it serves the same purpose.\n\n"
-            ),
-        }
-        extra_notes = platform_notes.get(platform_name, "")
-        # Lakka shares RetroArch notes
-        if platform_name == "lakka":
-            extra_notes = platform_notes.get("retroarch", "")
-
-        readme_text = (
-            f"{'=' * 43}\n"
-            f"  RETROBIOS - {platform_display} BIOS Pack\n"
-            f"  {total_files} files for {num_systems} systems\n"
-            f"{'=' * 43}\n\n"
-            f"HOW TO INSTALL\n\n"
-            f"  1. Open the \"{base_dest or 'files'}\" folder in this archive\n"
-            f"  2. Select everything inside (Ctrl+A)\n"
-            f"  3. Copy (Ctrl+C)\n"
-            f"  4. Go to: {extract_to}\n"
-            f"  5. Paste (Ctrl+V)\n\n"
-            f"IMPORTANT\n"
-            f"  - Copy the FILES, not the folder itself\n"
-            f"  - If asked to replace, click Yes\n"
-            f"{extra_notes}"
-            f"AUTOMATIC INSTALL (recommended)\n"
-            f"  curl -fsSL https://raw.githubusercontent.com/Abdess/retrobios/main/install.sh | sh\n\n"
-            f"PROJECT: https://github.com/Abdess/retrobios\n"
-            f"{'=' * 43}\n"
-        )
+        readme_text = _build_readme(platform_name, platform_display,
+                                    base_dest, total_files, num_systems)
         zf.writestr("README.txt", readme_text)
 
     files_ok = sum(1 for s in file_status.values() if s == "ok")

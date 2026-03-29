@@ -10,7 +10,7 @@ upstream: "https://github.com/PCSX2/pcsx2"
 profiled_date: "2026-03-25"
 core_version: "Git"
 display_name: "Sony - PlayStation 2 (LRPS2)"
-cores: [lrps2]
+cores: [lrps2, pcsx2]
 systems: [sony-playstation-2]
 
 bios_directory: "pcsx2/bios/"
