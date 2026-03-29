@@ -1790,13 +1790,15 @@ def main():
         # Skip platform conformance for filtered/split/custom packs
         skip_conf = bool(system_filter or args.split)
         all_ok = verify_and_finalize_packs(args.output_dir, db,
-                                            skip_conformance=skip_conf)
+                                            skip_conformance=skip_conf,
+                                            data_registry=data_registry)
         # Also verify split subdirectories
         if args.split:
             for entry in os.listdir(args.output_dir):
                 sub = os.path.join(args.output_dir, entry)
                 if os.path.isdir(sub) and entry.endswith("_Split"):
-                    ok = verify_and_finalize_packs(sub, db, skip_conformance=True)
+                    ok = verify_and_finalize_packs(sub, db, skip_conformance=True,
+                                                   data_registry=data_registry)
                     all_ok = all_ok and ok
         if not all_ok:
             print("WARNING: some packs have verification errors")
@@ -2037,16 +2039,33 @@ def generate_manifest(
 # Post-generation pack verification + manifest + SHA256SUMS
 # ---------------------------------------------------------------------------
 
-def verify_pack(zip_path: str, db: dict) -> tuple[bool, dict]:
+def verify_pack(zip_path: str, db: dict,
+                data_registry: dict | None = None) -> tuple[bool, dict]:
     """Verify a generated pack ZIP by re-hashing every file inside.
 
-    Opens the ZIP, computes SHA1 for each file, and checks against
-    database.json. Returns (all_ok, manifest_dict).
-
-    The manifest contains per-file metadata for self-documentation.
+    Checks against database.json, data directory caches, and verifies
+    rebuilt ZIP content by comparing inner CRC32s against source.
+    Returns (all_ok, manifest_dict).
     """
     files_db = db.get("files", {})  # SHA1 -> file_info
     by_md5 = db.get("indexes", {}).get("by_md5", {})  # MD5 -> SHA1
+    by_name = db.get("indexes", {}).get("by_name", {})  # name -> [SHA1]
+
+    # Data directory file index
+    _data_index: dict[str, list[str]] = {}
+    _data_path_index: dict[str, str] = {}
+    if data_registry:
+        for _dk, _de in data_registry.items():
+            cache = _de.get("local_cache", "")
+            if not cache or not os.path.isdir(cache):
+                continue
+            for _r, _d, _fns in os.walk(cache):
+                for _fn in _fns:
+                    _fp = os.path.join(_r, _fn)
+                    _rel = os.path.relpath(_fp, cache)
+                    _data_path_index[_rel] = _fp
+                    _data_index.setdefault(_fn, []).append(_fp)
+
     manifest = {
         "version": 1,
         "generator": "retrobios generate_pack.py",
@@ -2094,6 +2113,59 @@ def verify_pack(zip_path: str, db: dict) -> tuple[bool, dict]:
                 else:
                     status = "untracked"
 
+            # Rebuilt ZIP: verify inner ROM CRC32s match source
+            if status == "untracked" and name.endswith(".zip"):
+                _bn = os.path.basename(name)
+                for _src_sha1 in by_name.get(_bn, []):
+                    if _src_sha1 not in files_db:
+                        continue
+                    _src_path = files_db[_src_sha1]["path"]
+                    if not os.path.exists(_src_path):
+                        continue
+                    try:
+                        import io as _io
+                        with zipfile.ZipFile(_src_path) as _sz:
+                            _sc = {i.filename: i.CRC for i in _sz.infolist() if not i.is_dir()}
+                        with zipfile.ZipFile(_io.BytesIO(zf.read(name))) as _pz:
+                            _pc = {i.filename: i.CRC for i in _pz.infolist() if not i.is_dir()}
+                        if _sc == _pc:
+                            status = "verified_rebuild"
+                            file_name = _bn
+                            break
+                    except (zipfile.BadZipFile, OSError):
+                        continue
+
+            # Data directory: check against cached files
+            if status == "untracked" and _data_index:
+                _bn = os.path.basename(name)
+                _pr = name[len("system/"):] if name.startswith("system/") else name
+                _cands = []
+                if _pr in _data_path_index:
+                    _cands.append(_data_path_index[_pr])
+                for _dp in _data_index.get(_bn, []):
+                    if _dp not in _cands:
+                        _cands.append(_dp)
+                for _dp in _cands:
+                    if not os.path.exists(_dp):
+                        continue
+                    if os.path.getsize(_dp) == size:
+                        status = "verified_data"
+                        file_name = _bn
+                        break
+                    if name.endswith(".zip") and _dp.endswith(".zip"):
+                        try:
+                            import io as _io2
+                            with zipfile.ZipFile(_io2.BytesIO(zf.read(name))) as _pz2:
+                                _pc2 = {i.filename: i.CRC for i in _pz2.infolist() if not i.is_dir()}
+                            with zipfile.ZipFile(_dp) as _dz:
+                                _dc = {i.filename: i.CRC for i in _dz.infolist() if not i.is_dir()}
+                            if _pc2 == _dc:
+                                status = "verified_data"
+                                file_name = _bn
+                                break
+                        except (zipfile.BadZipFile, OSError):
+                            continue
+
             manifest["files"].append({
                 "path": name,
                 "sha1": sha1,
@@ -2111,7 +2183,7 @@ def verify_pack(zip_path: str, db: dict) -> tuple[bool, dict]:
                 if expected_sha1 and expected_sha1.lower() != sha1.lower():
                     errors.append(f"{name}: SHA1 mismatch (expected {expected_sha1}, got {sha1})")
 
-    verified = sum(1 for f in manifest["files"] if f["status"] == "verified")
+    verified = sum(1 for f in manifest["files"] if f["status"].startswith("verified"))
     untracked = sum(1 for f in manifest["files"] if f["status"] == "untracked")
     total = len(manifest["files"])
     manifest["summary"] = {
@@ -2275,7 +2347,8 @@ def verify_pack_against_platform(
 
 def verify_and_finalize_packs(output_dir: str, db: dict,
                                platforms_dir: str = "platforms",
-                               skip_conformance: bool = False) -> bool:
+                               skip_conformance: bool = False,
+                               data_registry: dict | None = None) -> bool:
     """Verify all packs, inject manifests, generate SHA256SUMS.
 
     Two-stage verification:
@@ -2303,7 +2376,7 @@ def verify_and_finalize_packs(output_dir: str, db: dict,
         zip_path = os.path.join(output_dir, name)
 
         # Stage 1: database integrity
-        ok, manifest = verify_pack(zip_path, db)
+        ok, manifest = verify_pack(zip_path, db, data_registry=data_registry)
         summary = manifest["summary"]
         status = "OK" if ok else "ERRORS"
         print(f"  verify {name}: {summary['verified']}/{summary['total_files']} verified, "
