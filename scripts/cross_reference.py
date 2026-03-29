@@ -160,6 +160,10 @@ def cross_reference(
             if "path" in f and f["path"] is None:
                 continue
 
+            # Skip release asset files (stored in GitHub releases, not bios/)
+            if f.get("storage") == "release":
+                continue
+
             # Skip standalone-only files
             file_mode = f.get("mode", "both")
             if file_mode == "standalone":
