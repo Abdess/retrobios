@@ -6451,10 +6451,6 @@ systems:
       destination: bios/ROM_XEGAME
       required: false
       md5: d7eb37aec6960cba36bc500e0e5d00bc
-    - name: ROM_400/800_CUSTOM
-      destination: bios/ROM_400/800_CUSTOM
-      required: false
-      md5: a3e8d617c95d08031fe1b20d541434b2,7e5e4ce9508edef684ebe2c5a0e6f0d3
     - name: ROM_BASIC_A
       destination: bios/ROM_BASIC_A
       required: false
