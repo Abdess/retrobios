@@ -3,7 +3,7 @@
   "platform": "romm",
   "display_name": "RomM",
   "version": "1.0",
-  "generated": "2026-03-29T08:12:47Z",
+  "generated": "2026-03-29T14:04:16Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -13,8 +13,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 549,
-  "total_size": 1199232751,
+  "total_files": 545,
+  "total_size": 1197706137,
   "files": [
     {
       "dest": "3do/3do_arcade_saot.bin",
@@ -350,13 +350,6 @@
       "sha1": "e21545723fe8374e91342617604f1b3d703094f1",
       "size": 524288,
       "repo_path": "bios/Commodore/Amiga/amiga-os-310-a1200.rom",
-      "cores": null
-    },
-    {
-      "dest": "doom/prboom.wad",
-      "sha1": "5f4aed208301449c2e9514edfd325fe9dead76fa",
-      "size": 143312,
-      "repo_path": "bios/Id Software/Doom/prboom.wad",
       "cores": null
     },
     {
@@ -2595,13 +2588,6 @@
       "cores": null
     },
     {
-      "dest": "psp/ppge_atlas.zim",
-      "sha1": "30a33f3651f8e1b0967a5dfe6ff714baebcce41a",
-      "size": 666530,
-      "repo_path": "bios/Sony/PlayStation Portable/ppge_atlas.zim",
-      "cores": null
-    },
-    {
       "dest": "tvc/tvcfileio.rom",
       "sha1": "98889c3a56b11dedf077f866ed2e12d51b604113",
       "size": 8192,
@@ -3413,15 +3399,6 @@
       ]
     },
     {
-      "dest": "PPSSPP/ppge_atlas.meta",
-      "sha1": "ab398f667d6fd778859307c105fe16388b8fdf63",
-      "size": 50242,
-      "repo_path": "bios/Sony/PlayStation Portable/ppge_atlas.meta",
-      "cores": [
-        "PPSSPP"
-      ]
-    },
-    {
       "dest": "kick31034.A1000",
       "sha1": "4192c505d130f446b2ada6bdc91dae730acafb4c",
       "size": 262144,
@@ -4202,15 +4179,6 @@
       "repo_path": "bios/Arcade/MAME/mameinfo.dat",
       "cores": [
         "MAME 2003-Plus"
-      ]
-    },
-    {
-      "dest": "PPSSPP/ppge_atlas.zim",
-      "sha1": "30a33f3651f8e1b0967a5dfe6ff714baebcce41a",
-      "size": 666530,
-      "repo_path": "bios/Sony/PlayStation Portable/ppge_atlas.zim",
-      "cores": [
-        "PPSSPP"
       ]
     }
   ]

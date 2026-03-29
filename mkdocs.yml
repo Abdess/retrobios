@@ -130,7 +130,6 @@ nav:
   - VTech: systems/vtech.md
   - Vircon: systems/vircon.md
   - ZC: systems/zc.md
-  - xrick: systems/xrick.md
 - Emulators:
   - Overview: emulators/index.md
   - Official ports (61):

@@ -3,7 +3,7 @@
   "platform": "recalbox",
   "display_name": "Recalbox",
   "version": "1.0",
-  "generated": "2026-03-29T08:12:39Z",
+  "generated": "2026-03-29T14:03:57Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -14,8 +14,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 844,
-  "total_size": 1505312763,
+  "total_files": 764,
+  "total_size": 1498594335,
   "files": [
     {
       "dest": "3do/panafz1.bin",
@@ -180,9 +180,9 @@
     },
     {
       "dest": "atarist/tos.img",
-      "sha1": "9a6e4c88533a9eaa4d55cdc040e47443e0226eb2",
+      "sha1": "735793fdba07fe8d5295caa03484f6ef3de931f5",
       "size": 196608,
-      "repo_path": "bios/Atari/ST/st.img",
+      "repo_path": "bios/Atari/ST/tos.img",
       "cores": null
     },
     {
@@ -201,23 +201,23 @@
     },
     {
       "dest": "atarist/megaste.img",
-      "sha1": "0af0264b63d14828ea9146b5434a5918561d8015",
+      "sha1": "ee58768bdfc602c9b14942ce5481e97dd24e7c83",
       "size": 262144,
-      "repo_path": "bios/Atari/ST/tos205de.img",
+      "repo_path": "bios/Atari/ST/megaste.img",
       "cores": null
     },
     {
       "dest": "atarist/tt.img",
-      "sha1": "80af04499d1c3b8551fc4d72142ff02c2182e64a",
+      "sha1": "4f0b344231719e80c2a4d4ade3769d7f0d0629b6",
       "size": 524288,
-      "repo_path": "bios/Atari/ST/tos306de.img",
+      "repo_path": "bios/Atari/ST/tt.img",
       "cores": null
     },
     {
       "dest": "atarist/falcon.img",
-      "sha1": "d74d09f11a0bf37a86ccb50c6e7f91aac4d4b11b",
-      "size": 524287,
-      "repo_path": "bios/Atari/ST/tos400.img",
+      "sha1": "7157f6a8aff275cfbb5ea6aa8e788dda8a977e56",
+      "size": 524288,
+      "repo_path": "bios/Atari/ST/falcon.img",
       "cores": null
     },
     {
@@ -298,20 +298,6 @@
       "cores": null
     },
     {
-      "dest": "Machines/COL - Bit Corporation Dina/czz50-1.rom",
-      "sha1": "17fbbf2aa6a336454f9bd6f3f2b7b17bbe28c072",
-      "size": 8192,
-      "repo_path": "bios/Microsoft/MSX/Machines/COL - Bit Corporation Dina/czz50-1.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/COL - Bit Corporation Dina/czz50-2.rom",
-      "sha1": "ccbe07648f72eeedcde3fc8feb665124fcbf97ad",
-      "size": 8192,
-      "repo_path": "bios/Microsoft/MSX/Machines/COL - Bit Corporation Dina/czz50-2.rom",
-      "cores": null
-    },
-    {
       "dest": "Machines/COL - ColecoVision with Opcode Memory Extension/coleco.rom",
       "sha1": "45bedc4cbdeac66c7df59e9e599195c778d86a92",
       "size": 8192,
@@ -323,13 +309,6 @@
       "sha1": "45bedc4cbdeac66c7df59e9e599195c778d86a92",
       "size": 8192,
       "repo_path": "bios/Coleco/ColecoVision/BIOS.col",
-      "cores": null
-    },
-    {
-      "dest": "Machines/COL - Spectravideo SVI-603 Coleco/SVI603.ROM",
-      "sha1": "8a30abe5ffef810b0f99b86db38b1b3c9d259b78",
-      "size": 8192,
-      "repo_path": "bios/Microsoft/MSX/Machines/COL - Spectravideo SVI-603 Coleco/SVI603.ROM",
       "cores": null
     },
     {
@@ -809,150 +788,24 @@
       "cores": null
     },
     {
-      "dest": "Machines/Forte II Games - Pesadelo/pesadelo.rom",
-      "sha1": "12880dd7ad82acf04861843fb9d4f0f926d18f6b",
-      "size": 65536,
-      "repo_path": "bios/Microsoft/MSX/Machines/Forte II Games - Pesadelo/pesadelo.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/MSX - C-BIOS/cbios_logo_msx1.rom",
-      "sha1": "95fe138745f5e627b021085c7e4629a6dfe6f93a",
-      "size": 16384,
-      "repo_path": "bios/Microsoft/MSX/Machines/MSX - C-BIOS/cbios_logo_msx1.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/MSX - C-BIOS/cbios_main_msx1.rom",
-      "sha1": "a49bcf7a5a1115815f730782a1fd7d1c79ce29e7",
-      "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/Machines/MSX - C-BIOS/cbios_main_msx1.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/MSX2 - C-BIOS/cbios_logo_msx2.rom",
-      "sha1": "6fc989ae715fe8492700a9d15934113d910aed36",
-      "size": 16384,
-      "repo_path": "bios/Microsoft/MSX/Machines/MSX2 - C-BIOS/cbios_logo_msx2.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/MSX2 - C-BIOS/cbios_main_msx2.rom",
-      "sha1": "0808d0486f77a44d3aa08cd77828a3748a356b8d",
-      "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/Machines/MSX2 - C-BIOS/cbios_main_msx2.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/MSX2 - C-BIOS/cbios_sub.rom",
-      "sha1": "565143f7c6fe0ffa12ec3069048113f44759d91a",
-      "size": 16384,
-      "repo_path": "bios/Microsoft/MSX/Machines/MSX2 - C-BIOS/cbios_sub.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/MSX2+ - C-BIOS/cbios_logo_msx2+.rom",
-      "sha1": "6e55cfc48d0d6ee57b041cb09427f614fb6a1910",
-      "size": 16384,
-      "repo_path": "bios/Microsoft/MSX/Machines/MSX2+ - C-BIOS/cbios_logo_msx2+.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/MSX2+ - C-BIOS/cbios_main_msx2+.rom",
-      "sha1": "c5edc3b289dea120fe60ad38596a51c2e28838aa",
-      "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/Machines/MSX2+ - C-BIOS/cbios_main_msx2+.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/MSX2+ - C-BIOS/cbios_music.rom",
-      "sha1": "5c5eb001e6a1fe29edb7abd428a3967bb388e5db",
-      "size": 16384,
-      "repo_path": "bios/Microsoft/MSX/Machines/MSX2+ - C-BIOS/cbios_music.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/MSX2+ - C-BIOS/cbios_sub.rom",
-      "sha1": "565143f7c6fe0ffa12ec3069048113f44759d91a",
-      "size": 16384,
-      "repo_path": "bios/Microsoft/MSX/Machines/MSX2 - C-BIOS/cbios_sub.rom",
-      "cores": null
-    },
-    {
       "dest": "Machines/MSX2+ - European/KANJI.rom",
       "sha1": "5aff2d9b6efc723bc395b0f96f0adfa83cc54a49",
       "size": 262144,
-      "repo_path": "bios/Microsoft/MSX/Machines/Shared Roms/KANJI.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/MSX2+ - European/MSX2PMUS.rom",
-      "sha1": "6354ccc5c100b1c558c9395fa8c00784d2e9b0a3",
-      "size": 16384,
-      "repo_path": "bios/Microsoft/MSX/MSX2PMUS.rom",
+      "repo_path": "bios/Microsoft/MSX/openmsx/fs-a1wsx_kanjifont.rom",
       "cores": null
     },
     {
       "dest": "Machines/MSX2+ - European/MSXKANJI.rom",
       "sha1": "dcc3a67732aa01c4f2ee8d1ad886444a4dbafe06",
       "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/MSXKANJI.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/MSX2+ - European/Msx2pe.rom",
-      "sha1": "aea0e4a635efce5336e496d36e4cb0a4b79593ff",
-      "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/Machines/MSX2+ - European/Msx2pe.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/MSX2+ - European/Msx2pexte.rom",
-      "sha1": "cf00ec60608010aac94cfe245eb7aa67cb44d110",
-      "size": 49152,
-      "repo_path": "bios/Microsoft/MSX/Machines/MSX2+ - European/Msx2pexte.rom",
+      "repo_path": "bios/Microsoft/MSX/openmsx/fs-a1wsx_kanjibasic.rom",
       "cores": null
     },
     {
       "dest": "Machines/MSX2+ - European/PANASONICDISK.rom",
       "sha1": "7ed7c55e0359737ac5e68d38cb6903f9e5d7c2b6",
       "size": 16384,
-      "repo_path": "bios/Microsoft/MSX/PANASONICDISK.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/MSX2+ - European/XBASIC2.rom",
-      "sha1": "47370bec7ca1f0615a54eda548b07fbc0c7ef398",
-      "size": 16384,
-      "repo_path": "bios/Microsoft/MSX/XBASIC2.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/SEGA - SF-7000/sf7000.rom",
-      "sha1": "77339a6db2593aadc638bed77b8e9bed5d9d87e3",
-      "size": 8192,
-      "repo_path": "bios/Microsoft/MSX/Machines/SEGA - SF-7000/sf7000.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/Shared Roms/ARAB1.ROM",
-      "sha1": "0287b2ec897b9196788cd9f10c99e1487d7adbbb",
-      "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/ARAB1.ROM",
-      "cores": null
-    },
-    {
-      "dest": "Machines/Shared Roms/ARABIC.rom",
-      "sha1": "2c9600c6e0025fee10d249e97448ecaa37e38c42",
-      "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/ARABIC.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/Shared Roms/BEERIDE.ROM",
-      "sha1": "077bdfff644b931b6a13bab8ab847aee766d163e",
-      "size": 16384,
-      "repo_path": "bios/Microsoft/MSX/BEERIDE.ROM",
+      "repo_path": "bios/Microsoft/MSX/openmsx/fs-a1wsx_disk.rom",
       "cores": null
     },
     {
@@ -963,38 +816,17 @@
       "cores": null
     },
     {
-      "dest": "Machines/Shared Roms/GCVMX80.ROM",
-      "sha1": "977fed1135b6cc73e765b47f51570fc00acd5b79",
-      "size": 8192,
-      "repo_path": "bios/Microsoft/MSX/GCVMX80.ROM",
-      "cores": null
-    },
-    {
-      "dest": "Machines/Shared Roms/HANGUL.rom",
-      "sha1": "965f4982790f1817bcbabbb38c8777183b231a55",
-      "size": 131072,
-      "repo_path": "bios/Microsoft/MSX/HANGUL.rom",
-      "cores": null
-    },
-    {
       "dest": "Machines/Shared Roms/KANJI.rom",
       "sha1": "5aff2d9b6efc723bc395b0f96f0adfa83cc54a49",
       "size": 262144,
-      "repo_path": "bios/Microsoft/MSX/Machines/Shared Roms/KANJI.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/Shared Roms/MICROSOLDISK.ROM",
-      "sha1": "f59d33311c95edc0168445f74eddd8a6772aa6a0",
-      "size": 16384,
-      "repo_path": "bios/Microsoft/MSX/MICROSOLDISK.ROM",
+      "repo_path": "bios/Microsoft/MSX/openmsx/fs-a1wsx_kanjifont.rom",
       "cores": null
     },
     {
       "dest": "Machines/Shared Roms/MOONSOUND.rom",
       "sha1": "32760893ce06dbe3930627755ba065cc3d8ec6ca",
       "size": 2097152,
-      "repo_path": "bios/Microsoft/MSX/MOONSOUND.rom",
+      "repo_path": "bios/Microsoft/MSX/openmsx/yrw801.rom",
       "cores": null
     },
     {
@@ -1012,34 +844,6 @@
       "cores": null
     },
     {
-      "dest": "Machines/Shared Roms/MSX2AR.ROM",
-      "sha1": "35195ab67c289a0b470883464df66bc6ea5b00d3",
-      "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/MSX2AR.ROM",
-      "cores": null
-    },
-    {
-      "dest": "Machines/Shared Roms/MSX2AREXT.ROM",
-      "sha1": "ebb76f9061e875365023523607db610f2eda1d26",
-      "size": 16384,
-      "repo_path": "bios/Microsoft/MSX/MSX2AREXT.ROM",
-      "cores": null
-    },
-    {
-      "dest": "Machines/Shared Roms/MSX2BR.rom",
-      "sha1": "9c43106dba3ae2829e9a11dffa9d000ed6d6454c",
-      "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/MSX2BR.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/Shared Roms/MSX2BREXT.rom",
-      "sha1": "4f2a7e0172f0214f025f23845f6e053d0ffd28e8",
-      "size": 16384,
-      "repo_path": "bios/Microsoft/MSX/MSX2BREXT.rom",
-      "cores": null
-    },
-    {
       "dest": "Machines/Shared Roms/MSX2EXT.rom",
       "sha1": "5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02",
       "size": 16384,
@@ -1047,73 +851,10 @@
       "cores": null
     },
     {
-      "dest": "Machines/Shared Roms/MSX2FR.rom",
-      "sha1": "3926cdd91fa89657a811463e48cfbdb350676e51",
-      "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/MSX2FR.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/Shared Roms/MSX2FREXT.rom",
-      "sha1": "792e6b2814ab783d06c7576c1e3ccd6a9bbac34a",
-      "size": 16384,
-      "repo_path": "bios/Microsoft/MSX/MSX2FREXT.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/Shared Roms/MSX2G.rom",
-      "sha1": "b17d9bea0eb16a1aa2d0ccbd7c9488da9f57698e",
-      "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/MSX2G.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/Shared Roms/MSX2GEXT.rom",
-      "sha1": "4ab7b2030d022f5486abaab22aaeaf8aa23e05f3",
-      "size": 16384,
-      "repo_path": "bios/Microsoft/MSX/MSX2GEXT.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/Shared Roms/MSX2HAN.rom",
-      "sha1": "87936f808423dddfd00629056d6807b4be1dc63e",
-      "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/MSX2HAN.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/Shared Roms/MSX2J.rom",
-      "sha1": "0081ea0d25bc5cd8d70b60ad8cfdc7307812c0fd",
-      "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/MSX2J.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/Shared Roms/MSX2JEXT.rom",
-      "sha1": "0fbd45ef3dd7bb82d4c31f1947884f411f1ca344",
-      "size": 16384,
-      "repo_path": "bios/Microsoft/MSX/MSX2JEXT.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/Shared Roms/MSX2KR.rom",
-      "sha1": "affa3c5cd8db79a1450ad8a7f405a425b251653d",
-      "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/MSX2KR.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/Shared Roms/MSX2KREXT.rom",
-      "sha1": "b6d3649a6647fa9f6bd61efc317485a20901128f",
-      "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/MSX2KREXT.rom",
-      "cores": null
-    },
-    {
       "dest": "Machines/Shared Roms/MSX2P.rom",
       "sha1": "e90f80a61d94c617850c415e12ad70ac41e66bb7",
       "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/Machines/Shared Roms/MSX2P.rom",
+      "repo_path": "bios/Microsoft/MSX/.variants/MSX2P.ROM.e90f80a6",
       "cores": null
     },
     {
@@ -1124,122 +865,24 @@
       "cores": null
     },
     {
-      "dest": "Machines/Shared Roms/MSX2PMUS.rom",
-      "sha1": "6354ccc5c100b1c558c9395fa8c00784d2e9b0a3",
-      "size": 16384,
-      "repo_path": "bios/Microsoft/MSX/MSX2PMUS.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/Shared Roms/MSX2R.rom",
-      "sha1": "0f851ee7a1cf79819f61cc89e9948ee72a413802",
-      "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/MSX2R.rom",
-      "cores": null
-    },
-    {
       "dest": "Machines/Shared Roms/MSX2R2.ROM",
-      "sha1": "ebb7eb540a390509edfd36c84288ba85e63f2d1f",
+      "sha1": "04990aa1c3a3fc7294ec884b81deaa89832df614",
       "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/MSX2R2.ROM",
-      "cores": null
-    },
-    {
-      "dest": "Machines/Shared Roms/MSX2REXT.rom",
-      "sha1": "03bf6d2ac86f5c9ab618e155442787c700f99fed",
-      "size": 16384,
-      "repo_path": "bios/Microsoft/MSX/MSX2REXT.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/Shared Roms/MSX2SE.rom",
-      "sha1": "1b70a195a00b1fc4995766390f39d3ba884b5148",
-      "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/MSX2SE.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/Shared Roms/MSX2SP.rom",
-      "sha1": "4811956f878c3e03da46317f787cdc4bebc86f47",
-      "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/MSX2SP.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/Shared Roms/MSX2SPEXT.rom",
-      "sha1": "1e9a955943aeea9b1807ddf1250ba6436d8dd276",
-      "size": 16384,
-      "repo_path": "bios/Microsoft/MSX/MSX2SPEXT.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/Shared Roms/MSXAR.ROM",
-      "sha1": "5e094fca95ab8e91873ee372a3f1239b9a48a48d",
-      "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/MSXAR.ROM",
-      "cores": null
-    },
-    {
-      "dest": "Machines/Shared Roms/MSXBR.rom",
-      "sha1": "d6720845928ee848cfa88a86accb067397685f02",
-      "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/MSXBR.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/Shared Roms/MSXDOS23.ROM",
-      "sha1": "0527fb75775caa76c7eca8d449938ace83d36e96",
-      "size": 65536,
-      "repo_path": "bios/Microsoft/MSX/MSXDOS23.ROM",
-      "cores": null
-    },
-    {
-      "dest": "Machines/Shared Roms/MSXFR.rom",
-      "sha1": "9eaad185efc8e224368d1db4949eb9659c26fb2c",
-      "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/MSXFR.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/Shared Roms/MSXG.rom",
-      "sha1": "38a645febd0e0fe86d594f27c2d14be995acc730",
-      "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/MSXG.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/Shared Roms/MSXHAN.rom",
-      "sha1": "d41676fde0a3047792f93c4a41509b8749e55e74",
-      "size": 8192,
-      "repo_path": "bios/Microsoft/MSX/MSXHAN.rom",
+      "repo_path": "bios/Microsoft/MSX/MSXR2.rom",
       "cores": null
     },
     {
       "dest": "Machines/Shared Roms/MSXJ.rom",
       "sha1": "df48902f5f12af8867ae1a87f255145f0e5e0774",
       "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/MSXJ.rom",
+      "repo_path": "bios/Microsoft/MSX/MSX_4000bios.rom",
       "cores": null
     },
     {
       "dest": "Machines/Shared Roms/MSXKANJI.rom",
       "sha1": "dcc3a67732aa01c4f2ee8d1ad886444a4dbafe06",
       "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/MSXKANJI.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/Shared Roms/MSXKR.rom",
-      "sha1": "171b587bd5a947a13f3114120b6e7baca3b57d78",
-      "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/MSXKR.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/Shared Roms/MSXR.rom",
-      "sha1": "4f3114e96d7b892911e3dccf1eece712be26f396",
-      "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/MSXR.rom",
+      "repo_path": "bios/Microsoft/MSX/openmsx/fs-a1wsx_kanjibasic.rom",
       "cores": null
     },
     {
@@ -1250,80 +893,17 @@
       "cores": null
     },
     {
-      "dest": "Machines/Shared Roms/MSXSE.ROM",
-      "sha1": "87f4d0fa58cfe9cef818a3185df2735e6da6168c",
-      "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/MSXSE.ROM",
-      "cores": null
-    },
-    {
-      "dest": "Machines/Shared Roms/MSXSP.rom",
-      "sha1": "342e7d4bd86f3351766f460f6de3c89a40791ee0",
-      "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/MSXSP.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/Shared Roms/MSXTR.ROM",
-      "sha1": "242e73d8284a012b275c0a266844ebbc4269d787",
-      "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/MSXTR.ROM",
-      "cores": null
-    },
-    {
-      "dest": "Machines/Shared Roms/MSXTREXT.ROM",
-      "sha1": "018d7a5222f28514908fb1b1513286a6558a6d05",
-      "size": 16384,
-      "repo_path": "bios/Microsoft/MSX/MSXTREXT.ROM",
-      "cores": null
-    },
-    {
-      "dest": "Machines/Shared Roms/MSXTRMUS.ROM",
-      "sha1": "6aea1aef5ec31c1826c22edf580525f93baad425",
-      "size": 16384,
-      "repo_path": "bios/Microsoft/MSX/MSXTRMUS.ROM",
-      "cores": null
-    },
-    {
-      "dest": "Machines/Shared Roms/MSXTROPT.ROM",
-      "sha1": "b4433a3975c57dd440d6bf12dbd28b2ac1b90ef4",
-      "size": 16384,
-      "repo_path": "bios/Microsoft/MSX/MSXTROPT.ROM",
-      "cores": null
-    },
-    {
-      "dest": "Machines/Shared Roms/NATIONALDISK.rom",
-      "sha1": "78cd7f847e77fd8cd51a647efb2725ba93f4c471",
-      "size": 16384,
-      "repo_path": "bios/Microsoft/MSX/NATIONALDISK.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/Shared Roms/NOVAXIS.rom",
-      "sha1": "352ec8c99fe1397a88ecb3aee6dbb4d121c818e9",
-      "size": 16384,
-      "repo_path": "bios/Microsoft/MSX/NOVAXIS.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/Shared Roms/PAINT.rom",
-      "sha1": "ace202e87337fbc54fea21e22c0b3af0abe6f4ae",
-      "size": 65536,
-      "repo_path": "bios/Microsoft/MSX/PAINT.rom",
-      "cores": null
-    },
-    {
       "dest": "Machines/Shared Roms/PANASONICDISK.rom",
       "sha1": "7ed7c55e0359737ac5e68d38cb6903f9e5d7c2b6",
       "size": 16384,
-      "repo_path": "bios/Microsoft/MSX/PANASONICDISK.rom",
+      "repo_path": "bios/Microsoft/MSX/openmsx/fs-a1wsx_disk.rom",
       "cores": null
     },
     {
       "dest": "Machines/Shared Roms/PHILIPSDISK.rom",
       "sha1": "c3efedda7ab947a06d9345f7b8261076fa7ceeef",
       "size": 16384,
-      "repo_path": "bios/Microsoft/MSX/PHILIPSDISK.rom",
+      "repo_path": "bios/Microsoft/MSX/nms8250_disk.rom",
       "cores": null
     },
     {
@@ -1331,41 +911,6 @@
       "sha1": "4e9384c9d137f0ab65ffc5a78f04cd8c9df6c8b7",
       "size": 8192,
       "repo_path": "bios/Microsoft/MSX/.variants/RS232.ROM.4e9384c9",
-      "cores": null
-    },
-    {
-      "dest": "Machines/Shared Roms/SUNRISEIDE.rom",
-      "sha1": "1c79c8fcfd661394f91be94b218955c84cabd742",
-      "size": 65536,
-      "repo_path": "bios/Microsoft/MSX/SUNRISEIDE.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/Shared Roms/SWP.rom",
-      "sha1": "4b4508131dca6d811694ae6379f41364c477de58",
-      "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/SWP.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/Shared Roms/XBASIC2.rom",
-      "sha1": "47370bec7ca1f0615a54eda548b07fbc0c7ef398",
-      "size": 16384,
-      "repo_path": "bios/Microsoft/MSX/XBASIC2.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/Shared Roms/nowindDos1.rom",
-      "sha1": "1d4c09166755c6569ff0ed3878bbf1b22d7e3864",
-      "size": 524288,
-      "repo_path": "bios/Microsoft/MSX/Machines/Shared Roms/nowindDos1.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/Shared Roms/nowindDos2.rom",
-      "sha1": "8afd1ec5843ecfdcbff11497fa8c55b870c0c6f5",
-      "size": 524288,
-      "repo_path": "bios/Microsoft/MSX/Machines/Shared Roms/nowindDos2.rom",
       "cores": null
     },
     {
@@ -1454,9 +999,9 @@
     },
     {
       "dest": "gamecube/EUR/IPL.bin",
-      "sha1": "f27c63e5394e2fd1606f70df004c4fc2d6027700",
+      "sha1": "a1837968288253ed541f2b11440b68f5a9b33875",
       "size": 2097152,
-      "repo_path": "bios/Nintendo/GameCube/.variants/gc-pal-10.bin",
+      "repo_path": "bios/Nintendo/GameCube/GC/JAP/IPL.bin",
       "cores": null
     },
     {
@@ -1468,9 +1013,9 @@
     },
     {
       "dest": "gamecube/USA/IPL.bin",
-      "sha1": "f3cd0c7c61cbcefa85e7de3aff4cfa50bc508714",
+      "sha1": "a1837968288253ed541f2b11440b68f5a9b33875",
       "size": 2097152,
-      "repo_path": "bios/Nintendo/GameCube/.variants/gc-pal-11.bin",
+      "repo_path": "bios/Nintendo/GameCube/GC/JAP/IPL.bin",
       "cores": null
     },
     {
@@ -1629,23 +1174,23 @@
     },
     {
       "dest": "quasi88/n88_1.rom",
-      "sha1": "8528eef7946edf6501a6ccb1f416b60c64efac7c",
+      "sha1": "4ae4d37409ff99411a623da9f6a44192170a854e",
       "size": 8192,
-      "repo_path": "bios/NEC/PC-98/N88EXT1.ROM",
+      "repo_path": "bios/NEC/PC-98/n88_1.rom",
       "cores": null
     },
     {
       "dest": "quasi88/n88_2.rom",
-      "sha1": "b7c8bcea219b77d9cc3ee0efafe343cc307425d1",
+      "sha1": "e94278682ef9e9bbb82201f72c50382748dcea2a",
       "size": 8192,
-      "repo_path": "bios/NEC/PC-98/N88EXT2.ROM",
+      "repo_path": "bios/NEC/PC-98/n88_2.rom",
       "cores": null
     },
     {
       "dest": "quasi88/n88_3.rom",
-      "sha1": "efce0b51cab9f0da6cf68507757f1245a2867a72",
+      "sha1": "af452aed79b072c4d17985830b7c5dca64d4b412",
       "size": 8192,
-      "repo_path": "bios/NEC/PC-98/N88EXT3.ROM",
+      "repo_path": "bios/NEC/PC-98/n88_3.rom",
       "cores": null
     },
     {
@@ -1657,9 +1202,9 @@
     },
     {
       "dest": "quasi88/disk.rom",
-      "sha1": "bb7103a0818850a039c67ff666a31ce49a8d516f",
-      "size": 2048,
-      "repo_path": "bios/NEC/PC-98/N88SUB.ROM",
+      "sha1": "8063185d4dd653dd75a68855148c9ee15b71164c",
+      "size": 8192,
+      "repo_path": "bios/NEC/PC-98/disk.rom",
       "cores": null
     },
     {
@@ -1671,9 +1216,9 @@
     },
     {
       "dest": "np2kai/bios.rom",
-      "sha1": "2e92346727b0355bc1ec9a7ded1b444a4917f2b9",
+      "sha1": "76a7360502fa0296ea93b4c537174610a834d367",
       "size": 98304,
-      "repo_path": "bios/NEC/PC-98/bios9821.rom",
+      "repo_path": "bios/NEC/PC-98/bios.rom",
       "cores": null
     },
     {
@@ -1727,9 +1272,9 @@
     },
     {
       "dest": "np2kai/2608_sd.wav",
-      "sha1": "0ea4f93b81df9dbb8d48590b440f5910c0b798b6",
-      "size": 6700,
-      "repo_path": "bios/NEC/PC-98/.variants/2608_SD.WAV.0ea4f93b",
+      "sha1": "3c79663ef74c0b0439d13351326eb1c52a657008",
+      "size": 15558,
+      "repo_path": "bios/NEC/PC-98/2608_sd.wav",
       "cores": null
     },
     {
@@ -2042,9 +1587,9 @@
     },
     {
       "dest": "neocdz.zip",
-      "sha1": "7bb26d1e5d1e930515219cb18bcde5b7b23e2eda",
-      "size": 524288,
-      "repo_path": "bios/SNK/Neo Geo CD/neocd.bin",
+      "sha1": "4f28af31ca0defdd73d80edec2fa296908e624dc",
+      "size": 214681,
+      "repo_path": "bios/Arcade/Arcade/.variants/neocdz.zip.4f28af31",
       "cores": null
     },
     {
@@ -2168,9 +1713,9 @@
     },
     {
       "dest": "scph1001.bin",
-      "sha1": "649895efd79d14790eabb362e94eb0622093dfb9",
+      "sha1": "10155d8d6e6e832d6ea66db9bc098321fb5e8ebf",
       "size": 524288,
-      "repo_path": "bios/Sony/PlayStation/scph1001_v20.bin",
+      "repo_path": "bios/Sony/PlayStation/scph1001.bin",
       "cores": null
     },
     {
@@ -2209,59 +1754,24 @@
       "cores": null
     },
     {
-      "dest": "Machines/SVI - Spectravideo SVI-318/svi318.rom",
-      "sha1": "07758272df475e5e06187aa3574241df1b14035b",
-      "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/Machines/SVI - Spectravideo SVI-318/svi318.rom",
-      "cores": null
-    },
-    {
       "dest": "Machines/SVI - Spectravideo SVI-328 80 Column/svi328a.rom",
       "sha1": "10349ce675f6d6d47f0976e39cb7188eba858d89",
       "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/Machines/SVI - Spectravideo SVI-328 80 Column/svi328a.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/SVI - Spectravideo SVI-328 80 Column/svi806.rom",
-      "sha1": "ed45cb0e9bd18a9d7bd74f87e620f016a7ae840f",
-      "size": 4096,
-      "repo_path": "bios/Microsoft/MSX/Machines/SVI - Spectravideo SVI-328 80 Column/svi806.rom",
+      "repo_path": "bios/Microsoft/MSX/openmsx/svi-3x8_v111.rom",
       "cores": null
     },
     {
       "dest": "Machines/SVI - Spectravideo SVI-328 80 Swedish/svi328a.rom",
       "sha1": "10349ce675f6d6d47f0976e39cb7188eba858d89",
       "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/Machines/SVI - Spectravideo SVI-328 80 Column/svi328a.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/SVI - Spectravideo SVI-328 80 Swedish/svi806se.rom",
-      "sha1": "3f16d5513ad35692488ae7d864f660e76c6e8ed3",
-      "size": 4096,
-      "repo_path": "bios/Microsoft/MSX/Machines/SVI - Spectravideo SVI-328 80 Swedish/svi806se.rom",
+      "repo_path": "bios/Microsoft/MSX/openmsx/svi-3x8_v111.rom",
       "cores": null
     },
     {
       "dest": "Machines/SVI - Spectravideo SVI-328 MK2/svi328a.rom",
       "sha1": "10349ce675f6d6d47f0976e39cb7188eba858d89",
       "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/Machines/SVI - Spectravideo SVI-328 80 Column/svi328a.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/SVI - Spectravideo SVI-328 MK2/svi806.rom",
-      "sha1": "ed45cb0e9bd18a9d7bd74f87e620f016a7ae840f",
-      "size": 4096,
-      "repo_path": "bios/Microsoft/MSX/Machines/SVI - Spectravideo SVI-328 80 Column/svi806.rom",
-      "cores": null
-    },
-    {
-      "dest": "Machines/SVI - Spectravideo SVI-328/svi328.rom",
-      "sha1": "7d8daf52f78371ca2c9443e04827c8e1f98c8f2c",
-      "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/Machines/SVI - Spectravideo SVI-328/svi328.rom",
+      "repo_path": "bios/Microsoft/MSX/openmsx/svi-3x8_v111.rom",
       "cores": null
     },
     {
@@ -2413,9 +1923,9 @@
     },
     {
       "dest": "xmil/IPLROM.X1",
-      "sha1": "d3395e9aeb5b8bbba7654dd471bcd8af228ee69a",
+      "sha1": "c4db9a6e99873808c8022afd1c50fef556a8b44d",
       "size": 4096,
-      "repo_path": "bios/Sharp/X1/iplrom.x1",
+      "repo_path": "bios/Sharp/X1/.variants/IPLROM.X1.c4db9a6e",
       "cores": null
     },
     {
@@ -2671,15 +2181,6 @@
       "repo_path": "bios/Elektronika/BK/TERAK.ROM",
       "cores": [
         "bk-emulator"
-      ]
-    },
-    {
-      "dest": "Databases/msxromdb.xml",
-      "sha1": "573aa830b7bef4452808b40df883469907db2fed",
-      "size": 930986,
-      "repo_path": "bios/Microsoft/MSX/Databases/msxromdb.xml",
-      "cores": [
-        "blueMSX"
       ]
     },
     {
@@ -3169,24 +2670,6 @@
       ]
     },
     {
-      "dest": "cannonball/res/tilemap.bin",
-      "sha1": "9c294250f54b4e3f60e3d13f73ee80325e683b04",
-      "size": 2804,
-      "repo_path": "bios/Sega/Arcade/res/tilemap.bin",
-      "cores": [
-        "Cannonball"
-      ]
-    },
-    {
-      "dest": "cannonball/res/tilepatch.bin",
-      "sha1": "fa950979aaa1d4c947473f158f770f3f3c8c45da",
-      "size": 1870,
-      "repo_path": "bios/Sega/Arcade/res/tilepatch.bin",
-      "cores": [
-        "Cannonball"
-      ]
-    },
-    {
       "dest": "cannonball/epr-10380.133",
       "sha1": "ac319cdafb156adcf6be29ae1b82d46d3048022e",
       "size": 65536,
@@ -3269,27 +2752,9 @@
     },
     {
       "dest": "GC/dsp_coef.bin",
-      "sha1": "c3f1ee843f08cd7d58ea6f9166d25ee8e12280a2",
+      "sha1": "c116d867ba001dcd6bf6d399ff4bf38d340f556c",
       "size": 4096,
-      "repo_path": "bios/Nintendo/GameCube/dsp_coef.bin",
-      "cores": [
-        "Dolphin"
-      ]
-    },
-    {
-      "dest": "GC/font_western.bin",
-      "sha1": "483a17ff25b68a8f18cae691da99f16beefbe370",
-      "size": 6478,
-      "repo_path": "bios/Nintendo/GameCube/font_western.bin",
-      "cores": [
-        "Dolphin"
-      ]
-    },
-    {
-      "dest": "GC/font_japanese.bin",
-      "sha1": "7fbbedcc7a1ae00414a4e9e967109cc78be1fe3b",
-      "size": 259626,
-      "repo_path": "bios/Nintendo/GameCube/font_japanese.bin",
+      "repo_path": "bios/Nintendo/GameCube/.variants/dsp_coef.bin.c116d867",
       "cores": [
         "Dolphin"
       ]
@@ -5587,15 +5052,6 @@
       ]
     },
     {
-      "dest": "nxengine/data/npc.tbl",
-      "sha1": "19555d2f5f72a66d6beddb4acc5ca00d634ac9c4",
-      "size": 8664,
-      "repo_path": "bios/Other/NXEngine/data/npc.tbl",
-      "cores": [
-        "NXEngine"
-      ]
-    },
-    {
       "dest": "64DD_IPL.bin",
       "sha1": "bf861922dcb78c316360e3e742f4f70ff63c9bc3",
       "size": 4194304,
@@ -5728,33 +5184,6 @@
       "repo_path": "bios/Sega/32X/32X_S_BIOS.BIN",
       "cores": [
         "PicoDrive"
-      ]
-    },
-    {
-      "dest": "PPSSPP/ppge_atlas.zim",
-      "sha1": "30a33f3651f8e1b0967a5dfe6ff714baebcce41a",
-      "size": 666530,
-      "repo_path": "bios/Sony/PlayStation Portable/ppge_atlas.zim",
-      "cores": [
-        "PPSSPP"
-      ]
-    },
-    {
-      "dest": "PPSSPP/ppge_atlas.meta",
-      "sha1": "ab398f667d6fd778859307c105fe16388b8fdf63",
-      "size": 50242,
-      "repo_path": "bios/Sony/PlayStation Portable/ppge_atlas.meta",
-      "cores": [
-        "PPSSPP"
-      ]
-    },
-    {
-      "dest": "prboom.wad",
-      "sha1": "5f4aed208301449c2e9514edfd325fe9dead76fa",
-      "size": 143312,
-      "repo_path": "bios/Id Software/Doom/prboom.wad",
-      "cores": [
-        "PrBoom"
       ]
     },
     {
@@ -6079,15 +5508,6 @@
       "repo_path": "bios/Microsoft/Xbox/xbox_hdd.qcow2",
       "cores": [
         "Xemu"
-      ]
-    },
-    {
-      "dest": "xrick/data.zip",
-      "sha1": "ecfc092fe6371dbf38e238a8ba5f90785b5db52d",
-      "size": 1457440,
-      "repo_path": "bios/xrick/data.zip",
-      "cores": [
-        "XRick"
       ]
     },
     {

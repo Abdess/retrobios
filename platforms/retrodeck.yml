@@ -153,7 +153,7 @@ systems:
     - name: 82c606.zip
       destination: bios/82c606.zip
       required: true
-      md5: 30cabd4aad9a5899e1fb3a8a6263a55a
+      md5: 6e83568c510dd618bb8b9a8aaf3f0c70
     - name: a1000kbd_us.zip
       destination: bios/a1000kbd_us.zip
       required: true
@@ -513,7 +513,7 @@ systems:
     - name: a7ports.zip
       destination: bios/a7ports.zip
       required: true
-      md5: 30cabd4aad9a5899e1fb3a8a6263a55a
+      md5: 6e83568c510dd618bb8b9a8aaf3f0c70
     - name: abc800kb.zip
       destination: bios/abc800kb.zip
       required: true
@@ -633,7 +633,7 @@ systems:
     - name: acorn_vib.zip
       destination: bios/acorn_vib.zip
       required: true
-      md5: 68babe6f7f88c8854436fac395f7126c
+      md5: e2cb03256571b0cb7d0e6ecf3f1679fb
     - name: adam_fdc.zip
       destination: bios/adam_fdc.zip
       required: true
@@ -1065,7 +1065,7 @@ systems:
     - name: at_mb.zip
       destination: bios/at_mb.zip
       required: true
-      md5: 63536a7d7cf28d179bd7163e834486e9
+      md5: d6bfd43d9632cbd0851f75f0fe355a68
     - name: atari810.zip
       destination: bios/atari810.zip
       required: true
@@ -1093,7 +1093,7 @@ systems:
     - name: at_keybc.zip
       destination: bios/at_keybc.zip
       required: true
-      md5: 63536a7d7cf28d179bd7163e834486e9
+      md5: d6bfd43d9632cbd0851f75f0fe355a68
     - name: atom_gdos2015.zip
       destination: bios/atom_gdos2015.zip
       required: true
@@ -1433,11 +1433,11 @@ systems:
     - name: bk_ay.zip
       destination: bios/bk_ay.zip
       required: true
-      md5: 30cabd4aad9a5899e1fb3a8a6263a55a
+      md5: 6e83568c510dd618bb8b9a8aaf3f0c70
     - name: bk_covox.zip
       destination: bios/bk_covox.zip
       required: true
-      md5: 30cabd4aad9a5899e1fb3a8a6263a55a
+      md5: 6e83568c510dd618bb8b9a8aaf3f0c70
     - name: bk_kmd.zip
       destination: bios/bk_kmd.zip
       required: true
@@ -1461,7 +1461,7 @@ systems:
     - name: bk_printer.zip
       destination: bios/bk_printer.zip
       required: true
-      md5: 30cabd4aad9a5899e1fb3a8a6263a55a
+      md5: 6e83568c510dd618bb8b9a8aaf3f0c70
     - name: bk_samara.zip
       destination: bios/bk_samara.zip
       required: true
@@ -1581,11 +1581,11 @@ systems:
     - name: c64_geocable.zip
       destination: bios/c64_geocable.zip
       required: true
-      md5: 30cabd4aad9a5899e1fb3a8a6263a55a
+      md5: 6e83568c510dd618bb8b9a8aaf3f0c70
     - name: c64_buscard.zip
       destination: bios/c64_buscard.zip
       required: true
-      md5: bc5fc674ed02f4ef1b7cbdc44aca0526
+      md5: d2a68d5283942f294ad97d4068e268b0
     - name: c64_ide64.zip
       destination: bios/c64_ide64.zip
       required: true
@@ -1593,7 +1593,7 @@ systems:
     - name: c64_ieee488.zip
       destination: bios/c64_ieee488.zip
       required: true
-      md5: bc5fc674ed02f4ef1b7cbdc44aca0526
+      md5: d2a68d5283942f294ad97d4068e268b0
     - name: c64_mscr.zip
       destination: bios/c64_mscr.zip
       required: true
@@ -1601,15 +1601,15 @@ systems:
     - name: c64_buscard2.zip
       destination: bios/c64_buscard2.zip
       required: true
-      md5: bc5fc674ed02f4ef1b7cbdc44aca0526
+      md5: d2a68d5283942f294ad97d4068e268b0
     - name: c64_music64.zip
       destination: bios/c64_music64.zip
       required: true
-      md5: bc5fc674ed02f4ef1b7cbdc44aca0526
+      md5: d2a68d5283942f294ad97d4068e268b0
     - name: c64_magic_voice.zip
       destination: bios/c64_magic_voice.zip
       required: true
-      md5: bc5fc674ed02f4ef1b7cbdc44aca0526
+      md5: d2a68d5283942f294ad97d4068e268b0
     - name: c64_nl10.zip
       destination: bios/c64_nl10.zip
       required: true
@@ -1621,7 +1621,7 @@ systems:
     - name: c64_sfxse.zip
       destination: bios/c64_sfxse.zip
       required: true
-      md5: bc5fc674ed02f4ef1b7cbdc44aca0526
+      md5: d2a68d5283942f294ad97d4068e268b0
     - name: c64_swiftlink.zip
       destination: bios/c64_swiftlink.zip
       required: true
@@ -1641,11 +1641,11 @@ systems:
     - name: c64_supercpu.zip
       destination: bios/c64_supercpu.zip
       required: true
-      md5: bc5fc674ed02f4ef1b7cbdc44aca0526
+      md5: d2a68d5283942f294ad97d4068e268b0
     - name: c64_tdos.zip
       destination: bios/c64_tdos.zip
       required: true
-      md5: bc5fc674ed02f4ef1b7cbdc44aca0526
+      md5: d2a68d5283942f294ad97d4068e268b0
     - name: c8050fdc.zip
       destination: bios/c8050fdc.zip
       required: true
@@ -1701,7 +1701,7 @@ systems:
     - name: cc90_232.zip
       destination: bios/cc90_232.zip
       required: true
-      md5: 68babe6f7f88c8854436fac395f7126c
+      md5: e2cb03256571b0cb7d0e6ecf3f1679fb
     - name: cd6809_fdc.zip
       destination: bios/cd6809_fdc.zip
       required: true
@@ -1813,7 +1813,7 @@ systems:
     - name: cgenie_printer.zip
       destination: bios/cgenie_printer.zip
       required: true
-      md5: 30cabd4aad9a5899e1fb3a8a6263a55a
+      md5: 6e83568c510dd618bb8b9a8aaf3f0c70
     - name: cgthree.zip
       destination: bios/cgthree.zip
       required: true
@@ -1897,7 +1897,7 @@ systems:
     - name: coco_multipack.zip
       destination: bios/coco_multipack.zip
       required: true
-      md5: fa88710047627398a0492bd039857097
+      md5: 3ed6ceffdba6ae67612f68e754972ac5
     - name: coco_rs232.zip
       destination: bios/coco_rs232.zip
       required: true
@@ -1909,7 +1909,7 @@ systems:
     - name: coco_ide.zip
       destination: bios/coco_ide.zip
       required: true
-      md5: fa88710047627398a0492bd039857097
+      md5: 3ed6ceffdba6ae67612f68e754972ac5
     - name: coco_wpk.zip
       destination: bios/coco_wpk.zip
       required: true
@@ -1937,7 +1937,7 @@ systems:
     - name: cocopakram.zip
       destination: bios/cocopakram.zip
       required: true
-      md5: 30cabd4aad9a5899e1fb3a8a6263a55a
+      md5: 6e83568c510dd618bb8b9a8aaf3f0c70
     - name: coh1000c.zip
       destination: bios/coh1000c.zip
       required: true
@@ -2053,19 +2053,19 @@ systems:
     - name: cpc_dkspeech.zip
       destination: bios/cpc_dkspeech.zip
       required: true
-      md5: abdd71cf446e41f0c1e54abd14174425
+      md5: 7c4326e817622b06db483efa218ed991
     - name: cpc_mface2.zip
       destination: bios/cpc_mface2.zip
       required: true
-      md5: abdd71cf446e41f0c1e54abd14174425
+      md5: 7c4326e817622b06db483efa218ed991
     - name: cpc_playcity.zip
       destination: bios/cpc_playcity.zip
       required: true
-      md5: abdd71cf446e41f0c1e54abd14174425
+      md5: 7c4326e817622b06db483efa218ed991
     - name: cpc_rom.zip
       destination: bios/cpc_rom.zip
       required: true
-      md5: abdd71cf446e41f0c1e54abd14174425
+      md5: 7c4326e817622b06db483efa218ed991
     - name: cpc_smartwatch.zip
       destination: bios/cpc_smartwatch.zip
       required: true
@@ -2073,11 +2073,11 @@ systems:
     - name: cpc_ser.zip
       destination: bios/cpc_ser.zip
       required: true
-      md5: abdd71cf446e41f0c1e54abd14174425
+      md5: 7c4326e817622b06db483efa218ed991
     - name: cpc_ssa1.zip
       destination: bios/cpc_ssa1.zip
       required: true
-      md5: abdd71cf446e41f0c1e54abd14174425
+      md5: 7c4326e817622b06db483efa218ed991
     - name: cpc_symf2.zip
       destination: bios/cpc_symf2.zip
       required: true
@@ -2089,7 +2089,7 @@ systems:
     - name: cpc_serams.zip
       destination: bios/cpc_serams.zip
       required: true
-      md5: abdd71cf446e41f0c1e54abd14174425
+      md5: 7c4326e817622b06db483efa218ed991
     - name: cq90_028.zip
       destination: bios/cq90_028.zip
       required: true
@@ -2253,7 +2253,7 @@ systems:
     - name: distomeb_rtime.zip
       destination: bios/distomeb_rtime.zip
       required: true
-      md5: 30cabd4aad9a5899e1fb3a8a6263a55a
+      md5: 6e83568c510dd618bb8b9a8aaf3f0c70
     - name: dio98629.zip
       destination: bios/dio98629.zip
       required: true
@@ -2261,7 +2261,7 @@ systems:
     - name: dmv_k210.zip
       destination: bios/dmv_k210.zip
       required: true
-      md5: 30cabd4aad9a5899e1fb3a8a6263a55a
+      md5: 6e83568c510dd618bb8b9a8aaf3f0c70
     - name: dio98644.zip
       destination: bios/dio98644.zip
       required: true
@@ -2445,7 +2445,7 @@ systems:
     - name: electron_fbprint.zip
       destination: bios/electron_fbprint.zip
       required: true
-      md5: 30cabd4aad9a5899e1fb3a8a6263a55a
+      md5: 6e83568c510dd618bb8b9a8aaf3f0c70
     - name: electron_mc68k.zip
       destination: bios/electron_mc68k.zip
       required: true
@@ -2645,7 +2645,7 @@ systems:
     - name: fdc37c665gt.zip
       destination: bios/fdc37c665gt.zip
       required: true
-      md5: 30cabd4aad9a5899e1fb3a8a6263a55a
+      md5: 6e83568c510dd618bb8b9a8aaf3f0c70
     - name: fdcmag.zip
       destination: bios/fdcmag.zip
       required: true
@@ -2653,11 +2653,11 @@ systems:
     - name: fdc37c93x.zip
       destination: bios/fdc37c93x.zip
       required: true
-      md5: 30cabd4aad9a5899e1fb3a8a6263a55a
+      md5: 6e83568c510dd618bb8b9a8aaf3f0c70
     - name: fdc37m707.zip
       destination: bios/fdc37m707.zip
       required: true
-      md5: 30cabd4aad9a5899e1fb3a8a6263a55a
+      md5: 6e83568c510dd618bb8b9a8aaf3f0c70
     - name: filetto_cga.zip
       destination: bios/filetto_cga.zip
       required: true
@@ -3049,7 +3049,7 @@ systems:
     - name: isa_bblue2.zip
       destination: bios/isa_bblue2.zip
       required: true
-      md5: 30cabd4aad9a5899e1fb3a8a6263a55a
+      md5: 6e83568c510dd618bb8b9a8aaf3f0c70
     - name: ioc2f.zip
       destination: bios/ioc2f.zip
       required: true
@@ -3093,7 +3093,7 @@ systems:
     - name: isa_lpt.zip
       destination: bios/isa_lpt.zip
       required: true
-      md5: 30cabd4aad9a5899e1fb3a8a6263a55a
+      md5: 6e83568c510dd618bb8b9a8aaf3f0c70
     - name: isa_mpu401.zip
       destination: bios/isa_mpu401.zip
       required: true
@@ -3117,7 +3117,7 @@ systems:
     - name: it8703f_device.zip
       destination: bios/it8703f_device.zip
       required: true
-      md5: 30cabd4aad9a5899e1fb3a8a6263a55a
+      md5: 6e83568c510dd618bb8b9a8aaf3f0c70
     - name: isgsm.zip
       destination: bios/isgsm.zip
       required: true
@@ -3129,7 +3129,7 @@ systems:
     - name: it8705f.zip
       destination: bios/it8705f.zip
       required: true
-      md5: 30cabd4aad9a5899e1fb3a8a6263a55a
+      md5: 6e83568c510dd618bb8b9a8aaf3f0c70
     - name: iteagle_fpga.zip
       destination: bios/iteagle_fpga.zip
       required: true
@@ -4236,7 +4236,7 @@ systems:
     - name: pc87306.zip
       destination: bios/pc87306.zip
       required: true
-      md5: 30cabd4aad9a5899e1fb3a8a6263a55a
+      md5: 6e83568c510dd618bb8b9a8aaf3f0c70
     - name: pc88va2_fd_if.zip
       destination: bios/pc88va2_fd_if.zip
       required: true
@@ -4244,7 +4244,7 @@ systems:
     - name: pc97338.zip
       destination: bios/pc97338.zip
       required: true
-      md5: 30cabd4aad9a5899e1fb3a8a6263a55a
+      md5: 6e83568c510dd618bb8b9a8aaf3f0c70
     - name: pc9801_118.zip
       destination: bios/pc9801_118.zip
       required: true
@@ -4288,7 +4288,7 @@ systems:
     - name: pc_lpt.zip
       destination: bios/pc_lpt.zip
       required: true
-      md5: 30cabd4aad9a5899e1fb3a8a6263a55a
+      md5: 6e83568c510dd618bb8b9a8aaf3f0c70
     - name: pcd_video.zip
       destination: bios/pcd_video.zip
       required: true
@@ -4364,15 +4364,15 @@ systems:
     - name: peribox.zip
       destination: bios/peribox.zip
       required: true
-      md5: 01770fde15c34ff88bb49526d38cb1f6
+      md5: 0b816179f7567ed77b738f9b2f264046
     - name: peribox_ev1.zip
       destination: bios/peribox_ev1.zip
       required: true
-      md5: 9ca62f89005e566b10bc1e3aaaf0d30e
+      md5: 92a4ac9559874cf7116709421d8ba63d
     - name: peribox_ev.zip
       destination: bios/peribox_ev.zip
       required: true
-      md5: 9ca62f89005e566b10bc1e3aaaf0d30e
+      md5: e32bdbc9488e706ab0360db52e0eee63
     - name: permedia2.zip
       destination: bios/permedia2.zip
       required: true
@@ -4380,15 +4380,15 @@ systems:
     - name: peribox_genmod.zip
       destination: bios/peribox_genmod.zip
       required: true
-      md5: 9ca62f89005e566b10bc1e3aaaf0d30e
+      md5: 92a4ac9559874cf7116709421d8ba63d
     - name: peribox_gen.zip
       destination: bios/peribox_gen.zip
       required: true
-      md5: 9ca62f89005e566b10bc1e3aaaf0d30e
+      md5: c35855fdc7f6a72fa11f80cfb94b3c80
     - name: peribox_sg.zip
       destination: bios/peribox_sg.zip
       required: true
-      md5: 9ca62f89005e566b10bc1e3aaaf0d30e
+      md5: 92a4ac9559874cf7116709421d8ba63d
     - name: pet_softbox.zip
       destination: bios/pet_softbox.zip
       required: true
@@ -4424,7 +4424,7 @@ systems:
     - name: pofo_hpc101.zip
       destination: bios/pofo_hpc101.zip
       required: true
-      md5: 30cabd4aad9a5899e1fb3a8a6263a55a
+      md5: 6e83568c510dd618bb8b9a8aaf3f0c70
     - name: polyvti.zip
       destination: bios/polyvti.zip
       required: true
@@ -4432,11 +4432,11 @@ systems:
     - name: pofo_hpc104_2.zip
       destination: bios/pofo_hpc104_2.zip
       required: true
-      md5: 68babe6f7f88c8854436fac395f7126c
+      md5: e2cb03256571b0cb7d0e6ecf3f1679fb
     - name: pofo_hpc104.zip
       destination: bios/pofo_hpc104.zip
       required: true
-      md5: 68babe6f7f88c8854436fac395f7126c
+      md5: e2cb03256571b0cb7d0e6ecf3f1679fb
     - name: premier_fdc.zip
       destination: bios/premier_fdc.zip
       required: true
@@ -4484,7 +4484,7 @@ systems:
     - name: psion_parallel.zip
       destination: bios/psion_parallel.zip
       required: true
-      md5: 30cabd4aad9a5899e1fb3a8a6263a55a
+      md5: 6e83568c510dd618bb8b9a8aaf3f0c70
     - name: psion_pclink.zip
       destination: bios/psion_pclink.zip
       required: true
@@ -4492,15 +4492,15 @@ systems:
     - name: psion_3link_par.zip
       destination: bios/psion_3link_par.zip
       required: true
-      md5: 30cabd4aad9a5899e1fb3a8a6263a55a
+      md5: 6e83568c510dd618bb8b9a8aaf3f0c70
     - name: psion_serpar.zip
       destination: bios/psion_serpar.zip
       required: true
-      md5: 68babe6f7f88c8854436fac395f7126c
+      md5: e2cb03256571b0cb7d0e6ecf3f1679fb
     - name: psion_siena_ssd.zip
       destination: bios/psion_siena_ssd.zip
       required: true
-      md5: 68babe6f7f88c8854436fac395f7126c
+      md5: e2cb03256571b0cb7d0e6ecf3f1679fb
     - name: psxgboost.zip
       destination: bios/psxgboost.zip
       required: true
@@ -4576,19 +4576,19 @@ systems:
     - name: ql_sqmouse.zip
       destination: bios/ql_sqmouse.zip
       required: true
-      md5: 25fbfbc47dae9428b570fe4450a697ee
+      md5: 1c8fb60bf4220293b2f7e1c13ba03d0e
     - name: ql_sqboard512.zip
       destination: bios/ql_sqboard512.zip
       required: true
-      md5: 25fbfbc47dae9428b570fe4450a697ee
+      md5: 1c8fb60bf4220293b2f7e1c13ba03d0e
     - name: ql_sqboard256.zip
       destination: bios/ql_sqboard256.zip
       required: true
-      md5: 25fbfbc47dae9428b570fe4450a697ee
+      md5: 1c8fb60bf4220293b2f7e1c13ba03d0e
     - name: ql_sqmouse512.zip
       destination: bios/ql_sqmouse512.zip
       required: true
-      md5: 25fbfbc47dae9428b570fe4450a697ee
+      md5: 1c8fb60bf4220293b2f7e1c13ba03d0e
     - name: qsound.zip
       destination: bios/qsound.zip
       required: true
@@ -5160,27 +5160,27 @@ systems:
     - name: spectrum_betacbi.zip
       destination: bios/spectrum_betacbi.zip
       required: true
-      md5: 389e7c7215dcef2217d9c905b236df94
+      md5: 656eefb7346600dfd6e3e294ea562098
     - name: spectrum_betaplus.zip
       destination: bios/spectrum_betaplus.zip
       required: true
-      md5: 389e7c7215dcef2217d9c905b236df94
+      md5: 656eefb7346600dfd6e3e294ea562098
     - name: spectrum_betav3.zip
       destination: bios/spectrum_betav3.zip
       required: true
-      md5: 389e7c7215dcef2217d9c905b236df94
+      md5: 656eefb7346600dfd6e3e294ea562098
     - name: spectrum_betav2.zip
       destination: bios/spectrum_betav2.zip
       required: true
-      md5: 389e7c7215dcef2217d9c905b236df94
+      md5: 656eefb7346600dfd6e3e294ea562098
     - name: spectrum_beta128.zip
       destination: bios/spectrum_beta128.zip
       required: true
-      md5: 389e7c7215dcef2217d9c905b236df94
+      md5: 656eefb7346600dfd6e3e294ea562098
     - name: spectrum_betaclone.zip
       destination: bios/spectrum_betaclone.zip
       required: true
-      md5: 389e7c7215dcef2217d9c905b236df94
+      md5: 656eefb7346600dfd6e3e294ea562098
     - name: spectrum_d80.zip
       destination: bios/spectrum_d80.zip
       required: true
@@ -5196,7 +5196,7 @@ systems:
     - name: spectrum_disciple.zip
       destination: bios/spectrum_disciple.zip
       required: true
-      md5: 389e7c7215dcef2217d9c905b236df94
+      md5: 656eefb7346600dfd6e3e294ea562098
     - name: spectrum_kempcentreu.zip
       destination: bios/spectrum_kempcentreu.zip
       required: true
@@ -5208,23 +5208,23 @@ systems:
     - name: spectrum_fuller.zip
       destination: bios/spectrum_fuller.zip
       required: true
-      md5: 389e7c7215dcef2217d9c905b236df94
+      md5: 656eefb7346600dfd6e3e294ea562098
     - name: spectrum_intf1.zip
       destination: bios/spectrum_intf1.zip
       required: true
-      md5: 389e7c7215dcef2217d9c905b236df94
+      md5: 656eefb7346600dfd6e3e294ea562098
     - name: spectrum_gamma.zip
       destination: bios/spectrum_gamma.zip
       required: true
-      md5: 389e7c7215dcef2217d9c905b236df94
+      md5: 656eefb7346600dfd6e3e294ea562098
     - name: spectrum_flpone.zip
       destination: bios/spectrum_flpone.zip
       required: true
-      md5: 389e7c7215dcef2217d9c905b236df94
+      md5: 656eefb7346600dfd6e3e294ea562098
     - name: spectrum_kempcentrs.zip
       destination: bios/spectrum_kempcentrs.zip
       required: true
-      md5: 30cabd4aad9a5899e1fb3a8a6263a55a
+      md5: 6e83568c510dd618bb8b9a8aaf3f0c70
     - name: spectrum_lprint.zip
       destination: bios/spectrum_lprint.zip
       required: true
@@ -5232,27 +5232,27 @@ systems:
     - name: spectrum_kempdisc.zip
       destination: bios/spectrum_kempdisc.zip
       required: true
-      md5: 389e7c7215dcef2217d9c905b236df94
+      md5: 656eefb7346600dfd6e3e294ea562098
     - name: spectrum_melodik.zip
       destination: bios/spectrum_melodik.zip
       required: true
-      md5: 389e7c7215dcef2217d9c905b236df94
+      md5: 656eefb7346600dfd6e3e294ea562098
     - name: spectrum_mface1.zip
       destination: bios/spectrum_mface1.zip
       required: true
-      md5: 389e7c7215dcef2217d9c905b236df94
+      md5: 656eefb7346600dfd6e3e294ea562098
     - name: spectrum_mface128v1.zip
       destination: bios/spectrum_mface128v1.zip
       required: true
-      md5: 389e7c7215dcef2217d9c905b236df94
+      md5: 656eefb7346600dfd6e3e294ea562098
     - name: spectrum_mface128.zip
       destination: bios/spectrum_mface128.zip
       required: true
-      md5: 389e7c7215dcef2217d9c905b236df94
+      md5: 656eefb7346600dfd6e3e294ea562098
     - name: spectrum_mface1v1.zip
       destination: bios/spectrum_mface1v1.zip
       required: true
-      md5: 389e7c7215dcef2217d9c905b236df94
+      md5: 656eefb7346600dfd6e3e294ea562098
     - name: spectrum_mface3.zip
       destination: bios/spectrum_mface3.zip
       required: true
@@ -5260,7 +5260,7 @@ systems:
     - name: spectrum_mface1v2.zip
       destination: bios/spectrum_mface1v2.zip
       required: true
-      md5: 389e7c7215dcef2217d9c905b236df94
+      md5: 656eefb7346600dfd6e3e294ea562098
     - name: spectrum_mikroplus.zip
       destination: bios/spectrum_mikroplus.zip
       required: true
@@ -5268,11 +5268,11 @@ systems:
     - name: spectrum_mface1v3.zip
       destination: bios/spectrum_mface1v3.zip
       required: true
-      md5: 389e7c7215dcef2217d9c905b236df94
+      md5: 656eefb7346600dfd6e3e294ea562098
     - name: spectrum_lprint3.zip
       destination: bios/spectrum_lprint3.zip
       required: true
-      md5: 389e7c7215dcef2217d9c905b236df94
+      md5: 656eefb7346600dfd6e3e294ea562098
     - name: spectrum_mpoker.zip
       destination: bios/spectrum_mpoker.zip
       required: true
@@ -5284,11 +5284,11 @@ systems:
     - name: spectrum_opus.zip
       destination: bios/spectrum_opus.zip
       required: true
-      md5: 389e7c7215dcef2217d9c905b236df94
+      md5: 656eefb7346600dfd6e3e294ea562098
     - name: spectrum_mprint.zip
       destination: bios/spectrum_mprint.zip
       required: true
-      md5: 389e7c7215dcef2217d9c905b236df94
+      md5: 656eefb7346600dfd6e3e294ea562098
     - name: spectrum_sdi.zip
       destination: bios/spectrum_sdi.zip
       required: true
@@ -5304,19 +5304,19 @@ systems:
     - name: spectrum_speccydos.zip
       destination: bios/spectrum_speccydos.zip
       required: true
-      md5: 389e7c7215dcef2217d9c905b236df94
+      md5: 656eefb7346600dfd6e3e294ea562098
     - name: spectrum_spdos.zip
       destination: bios/spectrum_spdos.zip
       required: true
-      md5: 389e7c7215dcef2217d9c905b236df94
+      md5: 656eefb7346600dfd6e3e294ea562098
     - name: spectrum_specmate.zip
       destination: bios/spectrum_specmate.zip
       required: true
-      md5: 389e7c7215dcef2217d9c905b236df94
+      md5: 656eefb7346600dfd6e3e294ea562098
     - name: spectrum_uslot.zip
       destination: bios/spectrum_uslot.zip
       required: true
-      md5: 389e7c7215dcef2217d9c905b236df94
+      md5: 656eefb7346600dfd6e3e294ea562098
     - name: spectrum_usource.zip
       destination: bios/spectrum_usource.zip
       required: true
@@ -5324,7 +5324,7 @@ systems:
     - name: spectrum_swiftdisc2.zip
       destination: bios/spectrum_swiftdisc2.zip
       required: true
-      md5: 389e7c7215dcef2217d9c905b236df94
+      md5: 656eefb7346600dfd6e3e294ea562098
     - name: spectrum_uspeech.zip
       destination: bios/spectrum_uspeech.zip
       required: true
@@ -5340,19 +5340,19 @@ systems:
     - name: spi.zip
       destination: bios/spi.zip
       required: true
-      md5: 30cabd4aad9a5899e1fb3a8a6263a55a
+      md5: 6e83568c510dd618bb8b9a8aaf3f0c70
     - name: spectrum_vtx5000.zip
       destination: bios/spectrum_vtx5000.zip
       required: true
-      md5: 389e7c7215dcef2217d9c905b236df94
+      md5: 656eefb7346600dfd6e3e294ea562098
     - name: spectrum_swiftdisc.zip
       destination: bios/spectrum_swiftdisc.zip
       required: true
-      md5: 389e7c7215dcef2217d9c905b236df94
+      md5: 656eefb7346600dfd6e3e294ea562098
     - name: spectrum_wafa.zip
       destination: bios/spectrum_wafa.zip
       required: true
-      md5: 389e7c7215dcef2217d9c905b236df94
+      md5: 656eefb7346600dfd6e3e294ea562098
     - name: ss50_mps2.zip
       destination: bios/ss50_mps2.zip
       required: true
@@ -5424,7 +5424,7 @@ systems:
     - name: sv802.zip
       destination: bios/sv802.zip
       required: true
-      md5: 30cabd4aad9a5899e1fb3a8a6263a55a
+      md5: 6e83568c510dd618bb8b9a8aaf3f0c70
     - name: sv601.zip
       destination: bios/sv601.zip
       required: true
@@ -5616,7 +5616,7 @@ systems:
     - name: ti99_iosplit.zip
       destination: bios/ti99_iosplit.zip
       required: true
-      md5: 9ca62f89005e566b10bc1e3aaaf0d30e
+      md5: 92a4ac9559874cf7116709421d8ba63d
     - name: ti99_tipi.zip
       destination: bios/ti99_tipi.zip
       required: true
@@ -5624,7 +5624,7 @@ systems:
     - name: ti99_speech.zip
       destination: bios/ti99_speech.zip
       required: true
-      md5: 9ca62f89005e566b10bc1e3aaaf0d30e
+      md5: 92a4ac9559874cf7116709421d8ba63d
     - name: ti99_whtscsi.zip
       destination: bios/ti99_whtscsi.zip
       required: true
@@ -5632,7 +5632,7 @@ systems:
     - name: ti99_speechconn.zip
       destination: bios/ti99_speechconn.zip
       required: true
-      md5: 9ca62f89005e566b10bc1e3aaaf0d30e
+      md5: 92a4ac9559874cf7116709421d8ba63d
     - name: ti_hx5102.zip
       destination: bios/ti_hx5102.zip
       required: true
@@ -5744,11 +5744,11 @@ systems:
     - name: upc82c710.zip
       destination: bios/upc82c710.zip
       required: true
-      md5: 30cabd4aad9a5899e1fb3a8a6263a55a
+      md5: 6e83568c510dd618bb8b9a8aaf3f0c70
     - name: upc82c711.zip
       destination: bios/upc82c711.zip
       required: true
-      md5: 30cabd4aad9a5899e1fb3a8a6263a55a
+      md5: 6e83568c510dd618bb8b9a8aaf3f0c70
     - name: uts_400kbd.zip
       destination: bios/uts_400kbd.zip
       required: true
@@ -5896,11 +5896,11 @@ systems:
     - name: vtech_printer.zip
       destination: bios/vtech_printer.zip
       required: true
-      md5: 30cabd4aad9a5899e1fb3a8a6263a55a
+      md5: 6e83568c510dd618bb8b9a8aaf3f0c70
     - name: w83977tf.zip
       destination: bios/w83977tf.zip
       required: true
-      md5: 30cabd4aad9a5899e1fb3a8a6263a55a
+      md5: 6e83568c510dd618bb8b9a8aaf3f0c70
     - name: wangpc_lic.zip
       destination: bios/wangpc_lic.zip
       required: true
@@ -5908,7 +5908,7 @@ systems:
     - name: w83787f.zip
       destination: bios/w83787f.zip
       required: true
-      md5: 30cabd4aad9a5899e1fb3a8a6263a55a
+      md5: 6e83568c510dd618bb8b9a8aaf3f0c70
     - name: wangpc_rtc.zip
       destination: bios/wangpc_rtc.zip
       required: true

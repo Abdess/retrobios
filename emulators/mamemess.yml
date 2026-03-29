@@ -9,6 +9,9 @@ display_name: "Multi (MAME/MESS)"
 
 cores:
   - mamemess
+systems:
+  - coleco-adam
+  - entex-advision
 
 notes: |
   SUBTARGET=mess build from libretro/mame. Same source, same CORE_NAME ("mame"),
@@ -27,7 +30,9 @@ notes: |
 
   1 active IS_BIOS_ROOT (miuchiz). XaviX TV game parent machines serve as
   console BIOS for cartridge-based software (IS_BIOS_ROOT commented out in
-  source but functionally required).
+  source but functionally required). Coleco Adam and Entex Adventure Vision
+  system ROMs required for software loading (not IS_BIOS_ROOT but
+  functionally BIOS). Adam uses ADAMnet bus with per-device MCU ROMs.
 
 files:
   # Miuchiz Virtual Companions
@@ -132,3 +137,129 @@ files:
     required: true
     category: bios_zip
     source_ref: "src/mame/tvgames/xavix.cpp:2925"
+
+  # Coleco Adam
+  - name: adam.zip
+    required: true
+    category: bios_zip
+    system: coleco-adam
+    source_ref: "src/mame/coleco/adam.cpp:1114-1128"
+    contents:
+      - name: os7.u2
+        description: "OS7 operating system ROM"
+        size: 8192
+        crc32: 3aa93ef3
+      - name: "alf @1 rev 57 e3d5.u8"
+        description: "SmartWriter ROM bank 1"
+        size: 8192
+        crc32: 565b364a
+      - name: "alf @2 rev 57 ae6a.u20"
+        description: "SmartWriter ROM bank 2"
+        size: 8192
+        crc32: 44a1cff4
+      - name: "alf @3 rev 57 8534.u21"
+        description: "SmartWriter ROM bank 3"
+        size: 8192
+        crc32: 77657b90
+      - name: "eos 6 rev 57 08dd.u22"
+        description: "EOS (Elementary Operating System)"
+        size: 8192
+        crc32: ef6403c5
+      - name: wp_r80.rom
+        description: "SmartWriter word processor"
+        size: 32768
+        crc32: 58d86a2a
+      - name: "master rev a 174b.u6"
+        description: "Master 6801 ADAMnet controller"
+        size: 2048
+        crc32: 035a7a3d
+
+  - name: adam_kb.zip
+    required: true
+    category: bios_zip
+    system: coleco-adam
+    source_ref: "src/devices/bus/adamnet/kb.cpp:33-36"
+    contents:
+      - name: keyboard.u2
+        description: "Keyboard 6801 MCU ROM"
+        size: 2048
+        crc32: ef204746
+
+  - name: adam_prn.zip
+    required: true
+    category: bios_zip
+    system: coleco-adam
+    source_ref: "src/devices/bus/adamnet/printer.cpp:33-36"
+    contents:
+      - name: printer.u2
+        description: "Printer 6801 MCU ROM"
+        size: 2048
+        crc32: e8db783b
+
+  - name: adam_ddp.zip
+    required: true
+    category: bios_zip
+    system: coleco-adam
+    source_ref: "src/devices/bus/adamnet/ddp.cpp:35-38"
+    contents:
+      - name: "tape rev a 8865.u24"
+        description: "Digital Data Pack 6801 MCU ROM"
+        size: 2048
+        crc32: 6b9ea1cf
+
+  - name: adam_fdc.zip
+    required: true
+    category: bios_zip
+    system: coleco-adam
+    source_ref: "src/devices/bus/adamnet/fdc.cpp:65-69"
+    contents:
+      - name: "adam disk u10 ad 31 rev a 09-27-84.u10"
+        description: "FDC 160KB SSDD 6801 MCU ROM"
+        size: 4096
+        crc32: 4b0b7143
+
+  - name: adam_fdc_320kb.zip
+    required: false
+    category: bios_zip
+    system: coleco-adam
+    source_ref: "src/devices/bus/adamnet/fdc.cpp:76-85"
+
+  - name: adam_fdc_a720dipi.zip
+    required: false
+    category: bios_zip
+    system: coleco-adam
+    source_ref: "src/devices/bus/adamnet/fdc.cpp:92-96"
+
+  - name: adam_fdc_fp720at.zip
+    required: false
+    category: bios_zip
+    system: coleco-adam
+    source_ref: "src/devices/bus/adamnet/fdc.cpp:103-107"
+
+  - name: adam_fdc_mihddd.zip
+    required: false
+    category: bios_zip
+    system: coleco-adam
+    source_ref: "src/devices/bus/adamnet/fdc.cpp:114-117"
+
+  - name: adam_spi.zip
+    required: false
+    category: bios_zip
+    system: coleco-adam
+    source_ref: "src/devices/bus/adamnet/spi.cpp:25-28"
+
+  # Entex Adventure Vision
+  - name: advision.zip
+    required: true
+    category: bios_zip
+    system: entex-advision
+    source_ref: "src/mame/entex/advision.cpp:357"
+    contents:
+      - name: ins8048-11kdp_n.u5
+        description: "Intel 8048 main CPU ROM"
+        size: 1024
+        crc32: 279e33d1
+      - name: cop411l-kcn_n.u8
+        description: "National COP411L sound CPU ROM"
+        size: 512
+        crc32: 81e95975

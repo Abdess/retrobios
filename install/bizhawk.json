@@ -3,7 +3,7 @@
   "platform": "bizhawk",
   "display_name": "BizHawk",
   "version": "1.0",
-  "generated": "2026-03-29T08:11:21Z",
+  "generated": "2026-03-29T14:02:34Z",
   "base_destination": "Firmware",
   "detect": [
     {
@@ -18,8 +18,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 316,
-  "total_size": 2018340268,
+  "total_files": 325,
+  "total_size": 2018015985,
   "files": [
     {
       "dest": "panafz1.bin",
@@ -319,7 +319,7 @@
       "dest": "MSX_4000bios.rom",
       "sha1": "df48902f5f12af8867ae1a87f255145f0e5e0774",
       "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/MSXJ.rom",
+      "repo_path": "bios/Microsoft/MSX/MSX_4000bios.rom",
       "cores": null
     },
     {
@@ -2057,6 +2057,114 @@
       ]
     },
     {
+      "dest": "adam.zip",
+      "sha1": "dc4b77cd3ac45cf448e427eff5c0a7b138fd9d81",
+      "size": 52891,
+      "repo_path": "bios/Coleco/Adam/adam.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "adam_kb.zip",
+      "sha1": "cd99eb61f44641ade747aaec9f5095c12a8d3c0c",
+      "size": 1758,
+      "repo_path": "bios/Arcade/Arcade/adam_kb.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "adam_prn.zip",
+      "sha1": "09e495756b8bdb80eafe67791713ef50a2b72361",
+      "size": 1644,
+      "repo_path": "bios/Arcade/Arcade/adam_prn.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "adam_ddp.zip",
+      "sha1": "69428318b280ba60d7eb0e31aa5ec829aadcbce2",
+      "size": 1595,
+      "repo_path": "bios/Arcade/Arcade/adam_ddp.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "adam_fdc.zip",
+      "sha1": "1b5bb40a77cf6768975c6b48af1e174a0205d843",
+      "size": 12794,
+      "repo_path": "bios/Arcade/Arcade/adam_fdc.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "adam_fdc_320kb.zip",
+      "sha1": "aaad897c81501ee66fc0800f1a3b844a18bb7430",
+      "size": 4716,
+      "repo_path": "bios/Arcade/MAME/adam_fdc_320kb.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "adam_fdc_a720dipi.zip",
+      "sha1": "832236f7300cebd4573c2a5c2ca4e604133245b3",
+      "size": 1671,
+      "repo_path": "bios/Arcade/MAME/adam_fdc_a720dipi.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "adam_fdc_fp720at.zip",
+      "sha1": "3cd05bb818611f43651d0edf2be43dcddafcb631",
+      "size": 1614,
+      "repo_path": "bios/Arcade/MAME/adam_fdc_fp720at.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "adam_fdc_mihddd.zip",
+      "sha1": "6ded941be73698be26051ffb5e176e1fe97633ef",
+      "size": 1807,
+      "repo_path": "bios/Arcade/MAME/adam_fdc_mihddd.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "adam_spi.zip",
+      "sha1": "e7328f43ceea8c9c0a6dc814680da9ff46e93fd3",
+      "size": 446843,
+      "repo_path": "bios/Arcade/Arcade/adam_spi.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "advision.zip",
+      "sha1": "a9a7eef3c2f80b669e7421d2cf0a7a74f6088160",
+      "size": 1572,
+      "repo_path": "bios/Entex/Adventure Vision/advision.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
+      "dest": "apfm1000.zip",
+      "sha1": "d2cce3ff07afa9d13ea371499495f4df9611420c",
+      "size": 6896,
+      "repo_path": "bios/APF/Imagination Machine/apfm1000.zip",
+      "cores": [
+        "MAME"
+      ]
+    },
+    {
       "dest": "bios9.bin",
       "sha1": "bfaac75f101c135e32e2aaf541de6b1be4c8c62d",
       "size": 4096,
@@ -2290,33 +2398,6 @@
       "repo_path": "bios/Sega/Mega CD/MCD_jp_100p.bin",
       "cores": [
         "PicoDrive"
-      ]
-    },
-    {
-      "dest": "PPSSPP/ppge_atlas.zim",
-      "sha1": "30a33f3651f8e1b0967a5dfe6ff714baebcce41a",
-      "size": 666530,
-      "repo_path": "bios/Sony/PlayStation Portable/ppge_atlas.zim",
-      "cores": [
-        "PPSSPP"
-      ]
-    },
-    {
-      "dest": "PPSSPP/ppge_atlas.meta",
-      "sha1": "ab398f667d6fd778859307c105fe16388b8fdf63",
-      "size": 50242,
-      "repo_path": "bios/Sony/PlayStation Portable/ppge_atlas.meta",
-      "cores": [
-        "PPSSPP"
-      ]
-    },
-    {
-      "dest": "prboom.wad",
-      "sha1": "5f4aed208301449c2e9514edfd325fe9dead76fa",
-      "size": 143312,
-      "repo_path": "bios/Id Software/Doom/prboom.wad",
-      "cores": [
-        "PrBoom"
       ]
     },
     {
