@@ -3013,5 +3013,40 @@ class TestE2E(unittest.TestCase):
         self.assertEqual(hm["scraped_md5"], "scraped_hash")
 
 
+    # ---------------------------------------------------------------
+    # native_id preservation
+    # ---------------------------------------------------------------
+
+    def test_native_id_preserved_in_platform_config(self):
+        """load_platform_config preserves native_id at the system level."""
+        config = {
+            "platform": "TestNativeId",
+            "verification_mode": "existence",
+            "base_destination": "system",
+            "systems": {
+                "sony-playstation": {
+                    "native_id": "Sony - PlayStation",
+                    "files": [
+                        {"name": "scph5501.bin", "destination": "scph5501.bin", "required": True},
+                    ],
+                },
+                "nintendo-snes": {
+                    "native_id": "snes",
+                    "files": [
+                        {"name": "bs-x.bin", "destination": "bs-x.bin", "required": False},
+                    ],
+                },
+            },
+        }
+        with open(os.path.join(self.platforms_dir, "test_native_id.yml"), "w") as fh:
+            yaml.dump(config, fh)
+
+        loaded = load_platform_config("test_native_id", self.platforms_dir)
+        psx = loaded["systems"]["sony-playstation"]
+        self.assertEqual(psx["native_id"], "Sony - PlayStation")
+        snes = loaded["systems"]["nintendo-snes"]
+        self.assertEqual(snes["native_id"], "snes")
+
+
 if __name__ == "__main__":
     unittest.main()

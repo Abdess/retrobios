@@ -22,6 +22,7 @@ class BiosRequirement:
     destination: str = ""
     required: bool = True
     zipped_file: str | None = None  # If set, md5 is for this ROM inside the ZIP
+    native_id: str | None = None  # Original system name before normalization
 
 
 @dataclass
@@ -199,7 +200,11 @@ def scraper_cli(scraper_class: type, description: str = "Scrape BIOS requirement
             config = {"systems": {}}
             for req in reqs:
                 sys_id = req.system
-                config["systems"].setdefault(sys_id, {"files": []})
+                if sys_id not in config["systems"]:
+                    sys_entry: dict = {"files": []}
+                    if req.native_id:
+                        sys_entry["native_id"] = req.native_id
+                    config["systems"][sys_id] = sys_entry
                 entry = {"name": req.name, "destination": req.destination or req.name, "required": req.required}
                 if req.sha1:
                     entry["sha1"] = req.sha1

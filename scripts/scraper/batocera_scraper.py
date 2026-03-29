@@ -265,6 +265,7 @@ class Scraper(BaseScraper):
                     destination=file_path,
                     required=True,
                     zipped_file=zipped_file or None,
+                    native_id=sys_key,
                 ))
 
         return requirements
@@ -284,7 +285,10 @@ class Scraper(BaseScraper):
         systems = {}
         for req in requirements:
             if req.system not in systems:
-                systems[req.system] = {"files": []}
+                sys_entry: dict = {"files": []}
+                if req.native_id:
+                    sys_entry["native_id"] = req.native_id
+                systems[req.system] = sys_entry
 
             entry = {
                 "name": req.name,

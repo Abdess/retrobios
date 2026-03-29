@@ -147,6 +147,7 @@ class Scraper(BaseScraper):
                     md5=all_md5,
                     destination=primary_path,
                     required=mandatory,
+                    native_id=platform,
                 ))
 
         return requirements
@@ -203,7 +204,10 @@ class Scraper(BaseScraper):
         systems = {}
         for req in requirements:
             if req.system not in systems:
-                systems[req.system] = {"files": []}
+                sys_entry: dict = {"files": []}
+                if req.native_id:
+                    sys_entry["native_id"] = req.native_id
+                systems[req.system] = sys_entry
 
             entry = {
                 "name": req.name,

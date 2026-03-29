@@ -112,7 +112,8 @@ class Scraper(BaseScraper):
         requirements = []
 
         for rom in roms:
-            system_slug = SYSTEM_SLUG_MAP.get(rom.system, rom.system.lower().replace(" ", "-"))
+            native_system = rom.system
+            system_slug = SYSTEM_SLUG_MAP.get(native_system, native_system.lower().replace(" ", "-"))
 
             destination = rom.name
             name = rom.name.split("/")[-1] if "/" in rom.name else rom.name
@@ -130,6 +131,7 @@ class Scraper(BaseScraper):
                 size=rom.size or None,
                 destination=destination,
                 required=True,
+                native_id=native_system,
             ))
 
         return requirements
@@ -223,7 +225,9 @@ class Scraper(BaseScraper):
         systems = {}
         for req in requirements:
             if req.system not in systems:
-                system_entry = {"files": []}
+                system_entry: dict = {"files": []}
+                if req.native_id:
+                    system_entry["native_id"] = req.native_id
                 if req.system in core_meta:
                     cm = core_meta[req.system]
                     if cm.get("core"):
