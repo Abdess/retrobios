@@ -350,18 +350,30 @@ def resolve_local_file(
             return path, "exact"
 
     # 2. MD5 direct lookup (skip for zipped_file: md5 is inner ROM, not container)
+    # Guard: only accept if the found file's name matches the requested name
+    # (or is a .variants/ derivative). Prevents cross-contamination when an
+    # unrelated file happens to share the same MD5 in the index.
+    _name_set = set(names_to_try)
+
+    def _md5_name_ok(candidate_path: str) -> bool:
+        bn = os.path.basename(candidate_path)
+        if bn in _name_set:
+            return True
+        # .variants/ pattern: filename like "neogeo.zip.fc398ab4"
+        return any(bn.startswith(n + ".") for n in _name_set)
+
     if md5_list and not zipped_file:
         for md5_candidate in md5_list:
             sha1_match = by_md5.get(md5_candidate)
             if sha1_match and sha1_match in files_db:
                 path = files_db[sha1_match]["path"]
-                if os.path.exists(path):
+                if os.path.exists(path) and _md5_name_ok(path):
                     return path, "md5_exact"
             if len(md5_candidate) < 32:
                 for db_md5, db_sha1 in by_md5.items():
                     if db_md5.startswith(md5_candidate) and db_sha1 in files_db:
                         path = files_db[db_sha1]["path"]
-                        if os.path.exists(path):
+                        if os.path.exists(path) and _md5_name_ok(path):
                             return path, "md5_exact"
 
     # 3. No MD5 = any file with that name or alias (existence check)
@@ -686,10 +698,10 @@ def resolve_platform_cores(
 
 
 MANUFACTURER_PREFIXES = (
-    "microsoft-", "nintendo-", "sony-", "sega-", "snk-", "panasonic-",
-    "nec-", "epoch-", "mattel-", "fairchild-", "hartung-", "tiger-",
-    "magnavox-", "philips-", "bandai-", "casio-", "coleco-",
-    "commodore-", "sharp-", "sinclair-", "atari-",
+    "apple-", "microsoft-", "nintendo-", "sony-", "sega-", "snk-",
+    "panasonic-", "nec-", "epoch-", "mattel-", "fairchild-", "hartung-",
+    "tiger-", "magnavox-", "philips-", "bandai-", "casio-", "coleco-",
+    "commodore-", "sharp-", "sinclair-", "atari-", "sammy-",
 )
 
 
@@ -1277,6 +1289,42 @@ def generate_platform_truth(
 
     resolved = resolve_platform_cores(config, profiles, target_cores)
 
+    # Build mapping: profile system ID -> platform system ID
+    # Three strategies, tried in order:
+    # 1. File-based: if the scraped platform already has this file, use its system
+    # 2. Exact match: profile system ID == platform system ID
+    # 3. Normalized match: strip manufacturer prefix + separators
+    platform_sys_ids = set(config.get("systems", {}).keys())
+
+    # File→platform_system reverse index from scraped config
+    file_to_plat_sys: dict[str, str] = {}
+    for psid, sys_data in config.get("systems", {}).items():
+        for fe in sys_data.get("files", []):
+            fname = fe.get("name", "").lower()
+            if fname:
+                file_to_plat_sys[fname] = psid
+            for alias in fe.get("aliases", []):
+                file_to_plat_sys[alias.lower()] = psid
+
+    # Normalized ID → platform system ID
+    norm_to_platform: dict[str, str] = {}
+    for psid in platform_sys_ids:
+        norm_to_platform[_norm_system_id(psid)] = psid
+
+    def _map_sys_id(profile_sid: str, file_name: str = "") -> str:
+        """Map a profile system ID to the platform's system ID."""
+        # 1. File-based lookup (handles composites and name mismatches)
+        if file_name:
+            plat_sys = file_to_plat_sys.get(file_name.lower())
+            if plat_sys:
+                return plat_sys
+        # 2. Exact match
+        if profile_sid in platform_sys_ids:
+            return profile_sid
+        # 3. Normalized match
+        normed = _norm_system_id(profile_sid)
+        return norm_to_platform.get(normed, profile_sid)
+
     systems: dict[str, dict] = {}
     cores_profiled: set[str] = set()
     cores_unprofiled: set[str] = set()
@@ -1298,10 +1346,11 @@ def generate_platform_truth(
             filtered = filter_files_by_mode(raw_files, standalone=(mode == "standalone"))
 
         for fe in filtered:
-            sys_id = fe.get("system", "")
-            if not sys_id:
+            profile_sid = fe.get("system", "")
+            if not profile_sid:
                 sys_ids = profile.get("systems", [])
-                sys_id = sys_ids[0] if sys_ids else "unknown"
+                profile_sid = sys_ids[0] if sys_ids else "unknown"
+            sys_id = _map_sys_id(profile_sid, fe.get("name", ""))
             system = systems.setdefault(sys_id, {})
             _merge_file_into_system(system, fe, emu_name, db)
             # Track core contribution per system
