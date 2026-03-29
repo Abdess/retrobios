@@ -1,299 +1,58 @@
-# Vita3K emulator firmware profile
-# Generated from source analysis of https://github.com/Vita3K/Vita3K
-# Commit analyzed: HEAD as of 2026-03-17
-
 emulator: Vita3K
 type: standalone
 source: "https://github.com/Vita3K/Vita3K"
-logo: "https://raw.githubusercontent.com/Vita3K/Vita3K/master/data/image/icon.png"
-profiled_date: "2026-03-18"
+upstream: "https://github.com/Vita3K/Vita3K"
+profiled_date: "2026-03-29"
 core_version: "0.2.1"
 display_name: "Vita3K (PS Vita)"
 systems: [sony-playstation-vita]
 
-firmware_file: "PSVUPDAT.PUP"
-firmware_source: "https://www.playstation.com/en-us/support/hardware/psvita/system-software/"
-firmware_detection: "pup_decrypt"
-firmware_install: "decrypts PUP, extracts FAT/exFAT images into os0/, vs0/, sa0/, pd0/"
+# Standalone emulator, no libretro core exists.
+# Firmware PUP files are one-time installations: install_pup() decrypts and
+# extracts partition images (os0, vs0, sa0, pd0) into the emulator data directory.
+# The PUP file itself is deleted after extraction.
+# Three separate PUP packages exist on Sony servers:
+#   1. PSVUPDAT.PUP (main firmware) from psv.update.playstation.net
+#   2. PSP2UPDAT.PUP (font package) from psp2.update.playstation.net (sd_ prefix)
+#   3. PSP2UPDAT.PUP (preinst firmware) from psp2.update.playstation.net (pre_ prefix)
+# Vita3K uses hybrid LLE/HLE: some modules always loaded from firmware (libc,
+# libSceFt2, libpvf, libcdlg), others toggleable per-module via settings.
 
-validation:
-  method: "pup_decrypt_and_extract"
-  source_ref: "vita3k/packages/src/pup.cpp:260-314"
-  note: >
-    PUP is decrypted using SCE keys (register_keys), then four filesystem images are
-    extracted: os0.img (FAT), pd0.img (exFAT), sa0.img (FAT), vs0.img (FAT).
-    Each image is mounted to its respective partition path.
-
-firmware_version:
-  path: "PUP_DEC/PUP/version.txt"
-  source_ref: "vita3k/packages/src/pup.cpp:303-309"
-  note: "Read from version.txt inside the decrypted PUP during installation"
-
-# Firmware partitions extracted from PSVUPDAT.PUP
-partitions:
-  os0:
-    image: "os0.img"
-    filesystem: "FAT"
-    source_ref: "vita3k/packages/src/pup.cpp:293"
-    note: "Core OS partition. Contains kernel modules and low-level system components."
-
-  vs0:
-    image: "vs0.img"
-    filesystem: "FAT"
-    source_ref: "vita3k/packages/src/pup.cpp:299"
+files:
+  - name: PSVUPDAT.PUP
+    path: "psvita/PSVUPDAT.PUP"
+    required: true
+    hle_fallback: true
     note: >
-      Main system partition. Contains firmware modules (sys/external/*.suprx),
-      system apps (app/), LiveArea resources, themes, and system configuration.
-    directories:
-      sys_external:
-        path: "vs0/sys/external/"
-        source_ref: "vita3k/modules/module_parent.cpp:332"
-        note: >
-          Primary firmware module directory. Modules are loaded as .suprx files.
-          RPCS3-style LLE/HLE toggle: Vita3K can load real firmware modules (LLE)
-          or use built-in reimplementations (HLE) per module.
+      Main PS Vita firmware. Decrypted via SCE keys, extracts os0 (kernel),
+      vs0 (system modules and apps), sa0 (fonts), pd0 (system data).
+      Games load LLE modules from vs0/sys/external/*.suprx. Preload modules
+      (libc, libSceFt2, libpvf) are always LLE. Without firmware most games fail.
+      Some simple titles may run on HLE alone.
+    source_ref: "vita3k/packages/src/pup.cpp:260-314, vita3k/module/src/load_module.cpp:142-161,187"
 
-      app:
-        path: "vs0/app/"
-        note: "System applications (settings, browser, store, etc)"
-
-      data_internal:
-        path: "vs0/data/internal/"
-        note: "Internal system data: themes, LiveArea defaults"
-        files:
-          - {path: "theme/", purpose: "Default system themes"}
-          - {path: "livearea/default/sce_sys/icon0.png", purpose: "Default app icon"}
-
-  sa0:
-    image: "sa0.img"
-    filesystem: "FAT"
-    source_ref: "vita3k/packages/src/pup.cpp:297"
-    note: "System assets partition. Contains firmware fonts (PVF files)."
-    directories:
-      fonts:
-        path: "sa0/data/font/pvf/"
-        source_ref: "vita3k/gui/src/gui.cpp:228-267"
-        note: >
-          PS Vita system fonts in PVF format (PlayStation Vita Font). Used for
-          system UI, LiveArea, and games that use the sceFt2/libpvf font API.
-          Without these, Vita3K falls back to bundled open-source fonts.
-        files:
-          - {name: "ltn0.pvf", type: "Latin Regular",    required: true, note: "Primary UI font, checked at startup"}
-          - {name: "jpn0.pvf", type: "Japanese",         required: false}
-          - {name: "kr0.pvf",  type: "Korean",           required: false}
-          - {name: "cn0.pvf",  type: "Chinese Simplified", required: false}
-
-  pd0:
-    image: "pd0.img"
-    filesystem: "exFAT"
-    source_ref: "vita3k/packages/src/pup.cpp:295"
-    note: "System data partition. Contains system BGM and other data."
-    files:
-      - {path: "data/systembgm/initialsetup.at9", purpose: "Initial setup background music"}
-
-# Firmware modules (vs0/sys/external/*.suprx)
-firmware_modules:
-  # Auto-LLE modules (loaded from firmware by default)
-  auto_lle:
-    source_ref: "vita3k/module/src/load_module.cpp:142-161"
-    note: "These modules are automatically loaded via LLE when firmware is present"
-    modules:
-      - {id: "SCE_SYSMODULE_HTTP",              libs: ["libhttp"]}
-      - {id: "SCE_SYSMODULE_SSL",               libs: ["libssl"]}
-      - {id: "SCE_SYSMODULE_HTTPS",             libs: ["libhttp", "libssl"]}
-      - {id: "SCE_SYSMODULE_ULT",               libs: ["libult"]}
-      - {id: "SCE_SYSMODULE_SAS",               libs: ["libsas"]}
-      - {id: "SCE_SYSMODULE_PGF",               libs: ["libpgf"]}
-      - {id: "SCE_SYSMODULE_FIOS2",             libs: ["libfios2"]}
-      - {id: "SCE_SYSMODULE_SYSTEM_GESTURE",    libs: ["libsystemgesture"]}
-      - {id: "SCE_SYSMODULE_XML",               libs: ["libSceXml"]}
-      - {id: "SCE_SYSMODULE_SQLITE",            libs: ["libSceSqlite"]}
-      - {id: "SCE_SYSMODULE_RUDP",              libs: ["librudp"]}
-      - {id: "SCE_SYSMODULE_NET_ADHOC_MATCHING", libs: ["adhoc_matching"]}
-      - {id: "SCE_SYSMODULE_MP4",               libs: ["libscemp4"]}
-      - {id: "SCE_SYSMODULE_ATRAC",             libs: ["libatrac"]}
-      - {id: "SCE_SYSMODULE_FACE",              libs: ["libface"]}
-      - {id: "SCE_SYSMODULE_SMART",             libs: ["libsmart"]}
-      - {id: "SCE_SYSMODULE_AVPLAYER",          libs: ["libsceavplayer", "libscemp4"]}
-      - {id: "SCE_SYSMODULE_JSON",              libs: ["libSceJson"]}
-
-  # Always-LLE preload modules
-  preload:
-    source_ref: "vita3k/interface.cpp:497-504, vita3k/module/src/load_module.cpp:187"
-    note: "These modules are always loaded from firmware (LLE), never HLE"
-    modules:
-      - {name: "libc",       note: "C standard library"}
-      - {name: "libSceFt2",  note: "FreeType2 font engine"}
-      - {name: "libpvf",     note: "PlayStation Vita Font library"}
-      - {name: "libcdlg",    note: "Common dialog library"}
-
-  # All registered sysmodule mappings
-  sysmodule_map:
-    source_ref: "vita3k/module/src/load_module.cpp:25-109"
-    note: "Complete mapping of SCE_SYSMODULE IDs to firmware library filenames"
-    modules:
-      # Networking
-      - {id: "SCE_SYSMODULE_NET",               libs: ["libnet", "libnetctl"]}
-      - {id: "SCE_SYSMODULE_HTTP",              libs: ["libhttp"]}
-      - {id: "SCE_SYSMODULE_SSL",               libs: ["libssl"]}
-      - {id: "SCE_SYSMODULE_HTTPS",             libs: ["libhttp", "libssl"]}
-      # Performance / Threading
-      - {id: "SCE_SYSMODULE_PERF",              libs: ["libperf"]}
-      - {id: "SCE_SYSMODULE_FIBER",             libs: ["libfiber"]}
-      - {id: "SCE_SYSMODULE_ULT",               libs: ["libult"]}
-      # Debug
-      - {id: "SCE_SYSMODULE_DBG",               libs: ["librazorcapture_es4", "librazorhud_es4"]}
-      - {id: "SCE_SYSMODULE_RAZOR_CAPTURE",     libs: ["librazorcapture_es4"]}
-      - {id: "SCE_SYSMODULE_RAZOR_HUD",         libs: ["librazorhud_es4"]}
-      # Audio
-      - {id: "SCE_SYSMODULE_NGS",               libs: ["libngs"]}
-      - {id: "SCE_SYSMODULE_SULPHA",            libs: ["libsulpha"]}
-      - {id: "SCE_SYSMODULE_SAS",               libs: ["libsas"]}
-      - {id: "SCE_SYSMODULE_AUDIOCODEC",        libs: ["libaudiocodec"]}
-      - {id: "SCE_SYSMODULE_AACENC",            libs: ["libnaac"]}
-      - {id: "SCE_SYSMODULE_ATRAC",             libs: ["libatrac"]}
-      - {id: "SCE_SYSMODULE_VOICE",             libs: ["libvoice"]}
-      - {id: "SCE_SYSMODULE_VOICEQOS",          libs: ["libvoiceqos"]}
-      # Font / Text
-      - {id: "SCE_SYSMODULE_PGF",               libs: ["libpgf"]}
-      - {id: "SCE_SYSMODULE_IME",               libs: ["libime"]}
-      - {id: "SCE_SYSMODULE_HANDWRITING",        libs: ["libhandwriting"]}
-      # System
-      - {id: "SCE_SYSMODULE_APPUTIL",           libs: ["apputil"]}
-      - {id: "SCE_SYSMODULE_FIOS2",             libs: ["libfios2"]}
-      - {id: "SCE_SYSMODULE_SYSTEM_GESTURE",    libs: ["libsystemgesture"]}
-      - {id: "SCE_SYSMODULE_LOCATION",           libs: ["liblocation"]}
-      - {id: "SCE_SYSMODULE_CLIPBOARD",          libs: ["libclipboard"]}
-      - {id: "SCE_SYSMODULE_TRIGGER_UTIL",       libs: ["trigger_util"]}
-      - {id: "SCE_SYSMODULE_LIVEAREA",           libs: ["livearea_util"]}
-      - {id: "SCE_SYSMODULE_BG_APP_UTIL",        libs: ["bgapputil"]}
-      - {id: "SCE_SYSMODULE_INCOMING_DIALOG",    libs: ["incoming_dialog"]}
-      - {id: "SCE_SYSMODULE_IPMI",               libs: ["libipmi_nongame"]}
-      - {id: "SCE_SYSMODULE_NOTIFICATION_UTIL",   libs: ["notification_util"]}
-      - {id: "SCE_SYSMODULE_SHUTTER_SOUND",      libs: ["libSceShutterSound"]}
-      - {id: "SCE_SYSMODULE_SCREEN_SHOT",        libs: ["libSceScreenShot"]}
-      # PlayStation Network
-      - {id: "SCE_SYSMODULE_NP_BASIC",           libs: ["np_basic"]}
-      - {id: "SCE_SYSMODULE_NP",                 libs: ["np_common", "np_manager", "np_basic"]}
-      - {id: "SCE_SYSMODULE_NP_COMMERCE2",       libs: ["np_commerce2"]}
-      - {id: "SCE_SYSMODULE_NP_UTILITY",         libs: ["np_utility"]}
-      - {id: "SCE_SYSMODULE_NP_MATCHING2",       libs: ["np_matching2"]}
-      - {id: "SCE_SYSMODULE_NP_SCORE_RANKING",   libs: ["np_ranking"]}
-      - {id: "SCE_SYSMODULE_NP_ACTIVITY",        libs: ["np_activity_sdk"]}
-      - {id: "SCE_SYSMODULE_NP_TROPHY",          libs: ["np_trophy"]}
-      - {id: "SCE_SYSMODULE_NP_MESSAGE",         libs: ["np_message_padding", "np_message"]}
-      - {id: "SCE_SYSMODULE_NP_PARTY",           libs: ["np_party"]}
-      - {id: "SCE_SYSMODULE_NP_TUS",             libs: ["np_tus"]}
-      - {id: "SCE_SYSMODULE_NP_SNS_FACEBOOK",    libs: ["np_sns_facebook"]}
-      - {id: "SCE_SYSMODULE_NP_SIGNALING",       libs: ["np_signaling"]}
-      - {id: "SCE_SYSMODULE_NP_WEBAPI",          libs: ["np_webapi"]}
-      # Media
-      - {id: "SCE_SYSMODULE_MP4",                libs: ["libscemp4"]}
-      - {id: "SCE_SYSMODULE_AVPLAYER",           libs: ["libsceavplayer", "libscemp4"]}
-      - {id: "SCE_SYSMODULE_AVCDEC",             libs: ["avcdec_for_player"]}
-      - {id: "SCE_SYSMODULE_MP4_RECORDER",       libs: ["libSceMp4Rec"]}
-      - {id: "SCE_SYSMODULE_PHOTO_EXPORT",       libs: ["libScePhotoExport"]}
-      - {id: "SCE_SYSMODULE_VIDEO_EXPORT",        libs: ["libSceVideoExport"]}
-      - {id: "SCE_SYSMODULE_MUSIC_EXPORT",        libs: ["libSceMusicExport"]}
-      # Other
-      - {id: "SCE_SYSMODULE_XML",                libs: ["libSceXml"]}
-      - {id: "SCE_SYSMODULE_JSON",               libs: ["libSceJson"]}
-      - {id: "SCE_SYSMODULE_SQLITE",             libs: ["libSceSqlite"]}
-      - {id: "SCE_SYSMODULE_RUDP",               libs: ["librudp"]}
-      - {id: "SCE_SYSMODULE_NET_ADHOC_MATCHING",  libs: ["adhoc_matching"]}
-      - {id: "SCE_SYSMODULE_PSPNET_ADHOC",        libs: ["pspnet_adhoc"]}
-      - {id: "SCE_SYSMODULE_FACE",                libs: ["libface"]}
-      - {id: "SCE_SYSMODULE_SMART",               libs: ["libsmart"]}
-      - {id: "SCE_SYSMODULE_MARLIN",              libs: ["libmln"]}
-      - {id: "SCE_SYSMODULE_MARLIN_DOWNLOADER",   libs: ["libmlndownloader"]}
-      - {id: "SCE_SYSMODULE_MARLIN_APP_LIB",      libs: ["libmlnapplib"]}
-      - {id: "SCE_SYSMODULE_TELEPHONY_UTIL",      libs: ["libSceTelephonyUtil"]}
-      - {id: "SCE_SYSMODULE_DTCP_IP",             libs: ["libSceDtcpIp"]}
-      - {id: "SCE_SYSMODULE_VIDEO_SEARCH_EMPR",   libs: ["libSceVideoSearchEmpr"]}
-      - {id: "SCE_SYSMODULE_BEISOBMF",            libs: ["libSceBeisobmf"]}
-      - {id: "SCE_SYSMODULE_BEMP2SYS",            libs: ["libSceBemp2sys"]}
-      - {id: "SCE_SYSMODULE_NEAR_UTIL",           libs: ["libScenNearUtil"]}
-      - {id: "SCE_SYSMODULE_NEAR_DIALOG_UTIL",    libs: ["libSceNearDialogUtil"]}
-      - {id: "SCE_SYSMODULE_LOCATION_EXTENSION",   libs: ["liblocation_extension"]}
-      - {id: "SCE_SYSMODULE_MAIL_API",            libs: ["mail_api_for_local_libc"]}
-      - {id: "SCE_SYSMODULE_TELEPORT_CLIENT",     libs: ["libSceTeleportClient"]}
-      - {id: "SCE_SYSMODULE_TELEPORT_SERVER",     libs: ["libSceTeleportServer"]}
-      - {id: "SCE_SYSMODULE_APPUTIL_EXT",         libs: ["apputil_ext"]}
-      - {id: "SCE_SYSMODULE_CODECENGINE_PERF",    libs: ["libcodecengine_perf"]}
-
-  # Internal sysmodule mappings
-  internal_modules:
-    source_ref: "vita3k/module/src/load_module.cpp:114-136"
-    modules:
-      - {id: "SCE_SYSMODULE_INTERNAL_JPEG_ENC_ARM",        libs: ["libscejpegencarm"]}
-      - {id: "SCE_SYSMODULE_INTERNAL_AUDIOCODEC",          libs: ["audiocodec"]}
-      - {id: "SCE_SYSMODULE_INTERNAL_BXCE",                libs: ["bXCe"]}
-      - {id: "SCE_SYSMODULE_INTERNAL_INI_FILE_PROCESSOR",  libs: ["ini_file_processor"]}
-      - {id: "SCE_SYSMODULE_INTERNAL_NP_ACTIVITY_NET",     libs: ["np_activity"]}
-      - {id: "SCE_SYSMODULE_INTERNAL_PAF",                 libs: ["libpaf"]}
-      - {id: "SCE_SYSMODULE_INTERNAL_SQLITE_VSH",          libs: ["sqlite"]}
-      - {id: "SCE_SYSMODULE_INTERNAL_DBUTIL",              libs: ["dbutil"]}
-      - {id: "SCE_SYSMODULE_INTERNAL_ACTIVITY_DB",         libs: ["activity_db"]}
-      - {id: "SCE_SYSMODULE_INTERNAL_COMMON_GUI_DIALOG",   libs: ["common_gui_dialog"]}
-      - {id: "SCE_SYSMODULE_INTERNAL_MSG_DIALOG",          libs: ["libcdlg_msg"]}
-      - {id: "SCE_SYSMODULE_INTERNAL_SAVEDATA_DIALOG",     libs: ["libcdlg_savedata"]}
-      - {id: "SCE_SYSMODULE_INTERNAL_IME_DIALOG",          libs: ["libcdlg_ime"]}
-      - {id: "SCE_SYSMODULE_INTERNAL_COMMON_DIALOG_MAIN",  libs: ["libcdlg_main"]}
-      - {id: "SCE_SYSMODULE_INTERNAL_DB_RECOVERY_UTILITY", libs: ["dbrecovery_utility"]}
-      - {id: "SCE_SYSMODULE_INTERNAL_DRM_PSM_KDC",         libs: ["psmkdc"]}
-      - {id: "SCE_SYSMODULE_INTERNAL_LOCATION_INTERNAL",   libs: ["liblocation_internal"]}
-
-# IO device layout (full Vita filesystem)
-io_devices:
-  source_ref: "vita3k/io/include/io/VitaIoDevice.h:22-50"
-  firmware_partitions:
-    - {device: "os0",  purpose: "Core OS kernel modules"}
-    - {device: "vs0",  purpose: "System firmware modules and apps"}
-    - {device: "sa0",  purpose: "System assets (fonts)"}
-    - {device: "pd0",  purpose: "System data (BGM, resources)"}
-  user_partitions:
-    - {device: "ux0",  purpose: "Main storage (memory card)"}
-    - {device: "ur0",  purpose: "Internal user storage"}
-    - {device: "uma0", purpose: "USB mass storage (PSTV)"}
-    - {device: "imc0", purpose: "Internal memory card (Slim)"}
-    - {device: "grw0", purpose: "Game card (writable area)"}
-    - {device: "gro0", purpose: "Game card (read-only area)"}
-  app_partitions:
-    - {device: "app0",      purpose: "Current running application"}
-    - {device: "addcont0",  purpose: "Additional content (DLC)"}
-    - {device: "savedata0", purpose: "Save data (slot 0)"}
-    - {device: "savedata1", purpose: "Save data (slot 1)"}
-
-# Fallback fonts when firmware is not installed
-fallback_fonts:
-  source_ref: "vita3k/gui/src/gui.cpp:276-318"
-  path: "data/fonts/"
-  files:
-    - {name: "mplus-1mn-bold.ttf",            purpose: "Primary fallback monospaced font"}
-    - {name: "SourceHanSansSC-Bold-Min.ttf",  purpose: "Chinese fallback font"}
-    - {name: "neodgm.ttf",                    purpose: "Korean fallback font"}
-  note: "Open-source fonts bundled with Vita3K, used when firmware fonts (sa0) are not installed"
+  - name: PSP2UPDAT.PUP
+    path: "psvita/PSP2UPDAT.PUP"
+    required: false
+    hle_fallback: true
+    note: >
+      Supplementary firmware font package. Populates sa0 partition with system
+      fonts (PVF format) used by UI, LiveArea, and games via sceFt2/libpvf API.
+      Vita3K bundles open-source fallback fonts (mplus-1mn-bold.ttf,
+      SourceHanSansSC-Bold-Min.ttf, neodgm.ttf) when firmware fonts are missing.
+    source_ref: "vita3k/gui/src/gui.cpp:228-267,276-318, vita3k/gui/src/initial_setup.cpp:96-97"
 
 notes: |
-  Vita3K requires the official PS Vita firmware (PSVUPDAT.PUP) from Sony for full
-  compatibility. The firmware is decrypted using SCE keys and extracted into four
-  partition images: os0 (kernel), vs0 (system), sa0 (assets), pd0 (data).
-
-  The most important firmware components are:
-  1. vs0/sys/external/*.suprx - Firmware modules loaded by games
-  2. sa0/data/font/pvf/*.pvf - System fonts (ltn0.pvf is checked at startup)
-  3. vs0/data/internal/ - LiveArea resources and default themes
-
-  Vita3K uses a hybrid LLE/HLE approach:
-  - Some modules (libc, libSceFt2, libpvf, libcdlg) are always loaded from firmware (LLE)
-  - Others can be toggled between LLE and HLE per module via settings
-  - Without firmware, many games will fail to load required modules
-
-  The module loading path is: first check app0:sce_module/{name}.suprx (game-bundled),
-  then fall back to vs0:sys/external/{name}.suprx (firmware). This allows games to
-  ship their own module versions.
-
-  CLI firmware install: vita3k --firmware /path/to/PSVUPDAT.PUP
-  GUI: File > Install Firmware
-
-  Vita3K does not have a libretro core. It is standalone only.
+  Standalone PS Vita emulator. No libretro core.
+  Firmware installed via File > Install Firmware or CLI --firmware flag.
+  PUP files validated by SCEUF magic header only (pup.cpp:119), no hash check.
+  After install, four partitions are extracted:
+    os0 (FAT, kernel modules), vs0 (FAT, system modules/apps),
+    sa0 (FAT, fonts), pd0 (exFAT, system data/BGM).
+  Module loading: app0:sce_module/{name}.suprx (game-bundled) then
+  vs0:sys/external/{name}.suprx (firmware). Auto-LLE modules include
+  libhttp, libssl, libult, libsas, libpgf, libfios2, libsystemgesture,
+  libSceXml, libSceSqlite, librudp, libatrac, libface, libsmart,
+  libsceavplayer, libSceJson, and more (load_module.cpp:142-161).
+  A third optional preinst firmware PUP (pd0 partition: system BGM, resources)
+  is available from Sony but not commonly required for game compatibility.

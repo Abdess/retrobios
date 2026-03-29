@@ -738,6 +738,7 @@ SYSTEM_ALIASES: dict[str, str] = {
     "gmaster": "hartung-game-master",
     "n64dd": "nintendo-64dd",
     "neogeo64": "hyper-neogeo64",
+    "psvita": "sony-playstation-vita",
     # Platform IDs missing the manufacturer-prefix hyphen
     "atari5200": "atari-5200",
     "atari7800": "atari-7800",

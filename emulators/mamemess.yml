@@ -29,6 +29,7 @@ systems:
   - fm7
   - laser310
   - casio-loopy
+  - casio-pv2000
   - mz700
   - mz2000
   - mz2500
@@ -36,6 +37,7 @@ systems:
   - pc60
   - mz80k
   - pegasus
+  - supracan
 
 notes: |
   SUBTARGET=mess build from libretro/mame. Same source, same CORE_NAME ("mame"),
@@ -55,11 +57,12 @@ notes: |
   1 active IS_BIOS_ROOT (miuchiz). XaviX TV game parent machines serve as
   console BIOS for cartridge-based software (IS_BIOS_ROOT commented out in
   source but functionally required). Apple II family, Apple IIgs, Bally
-  Astrocade, Casio Loopy, Coleco Adam, VTech CreatiVision, Entex
+  Astrocade, Casio Loopy, Casio PV-2000, Coleco Adam, VTech CreatiVision, Entex
   Adventure Vision, EACA Colour Genie, Acorn Atom, Tiger game.com,
   Bit Corporation Gamate, Epoch Game Pocket Computer, Hartung Game
-  Master, Technosys Aamber Pegasus and VTech Laser 310 system ROMs
-  required for software loading (not IS_BIOS_ROOT but functionally BIOS).
+  Master, Funtech Super A'Can, Technosys Aamber Pegasus and VTech
+  Laser 310 system ROMs required for software loading (not IS_BIOS_ROOT
+  but functionally BIOS).
 
   Apple II: 4 machine ROM sets (apple2, apple2p, apple2e, apple2ee) plus
   5 peripheral device ROM sets (disk controllers, CompactFlash, speech).
@@ -147,6 +150,11 @@ notes: |
   parents, both NOT_WORKING. Software lists: fm7_cass, fm7_disk, fm77av.
   Driver in fujitsu/fm7.cpp, in mess.flt.
 
+  Casio PV-2000: 1 machine (pv2000). Z80-based home computer (1983).
+  Single 16KB BASIC ROM (hn613128pc64.bin) mapped at 0x0000-0x3FFF.
+  TMS9928A VDP, SN76489A sound. Cartridge-based (8K or 16K) with software
+  list "pv2000". MACHINE_NOT_WORKING. Driver in casio/pv2000.cpp, in mess.flt.
+
   Sharp MZ-80K/A: 3 machines (mz80kj parent MZ-80K Japanese, mz80k clone of
   mz80kj MZ-80K, mz80a separate parent MZ-80A). Z80-based home computer (1979).
   mz80kj parent set has monitor ROM (sp1002), floppy disk interface ROM
@@ -191,6 +199,14 @@ notes: |
   NO_DUMP in mk2/6601/mk2sr, actual dump d8049hc-016.bin only in pc6601sr).
   Software lists: pc6001_cart, pc6001_cass, pc6001mk2_cass.
   Driver in nec/pc6001.cpp, in mess.flt.
+
+  Funtech Super A'Can: 1 machine (supracan). 68000+6502 cartridge-based
+  console (1995, Taiwan). 3 internal ROMs: 68k security ROM (4KB) and
+  two 6502 co-processor ROMs (8KB each, identified from die shot by
+  Furrtek). UMC 6650 lockout chip device ROM (16 bytes) in every
+  cartridge, loaded as separate umc6650 ROM set. MACHINE_IMPERFECT_SOUND |
+  MACHINE_IMPERFECT_GRAPHICS. Software list "supracan".
+  Driver in umc/supracan.cpp, in mess.flt.
 
 files:
   # Miuchiz Virtual Companions
@@ -543,6 +559,18 @@ files:
         description: "HN62434 sound/wave data mask ROM"
         size: 524288
         crc32: 8f51fa17
+
+  # Casio PV-2000
+  - name: pv2000.zip
+    required: true
+    category: bios_zip
+    system: casio-pv2000
+    source_ref: "src/mame/casio/pv2000.cpp:416-419"
+    contents:
+      - name: hn613128pc64.bin
+        description: "Z80 BASIC ROM"
+        size: 16384
+        crc32: 8f31f297
 
   # Coleco Adam
   - name: adam.zip
@@ -1533,3 +1561,35 @@ files:
         description: "MCM6571A character generator"
         size: 2048
         crc32: 5a25144b
+
+  # Funtech Super A'Can
+  - name: supracan.zip
+    required: true
+    category: bios_zip
+    system: supracan
+    source_ref: "src/mame/umc/supracan.cpp:2458-2467"
+    contents:
+      - name: internal_68k.bin
+        description: "68000 internal security ROM"
+        size: 4096
+        crc32: 8d575662
+      - name: internal_6502_1.bin
+        description: "6502 co-processor ROM block 1"
+        size: 8192
+        crc32: fc9fb05f
+      - name: internal_6502_2.bin
+        description: "6502 co-processor ROM block 2"
+        size: 8192
+        crc32: bf950ab7
+
+  - name: umc6650.zip
+    required: true
+    category: bios_zip
+    system: supracan
+    source_ref: "src/mame/umc/umc6650.cpp:32-36"
+    note: "UMC 6650 cartridge lockout chip device ROM."
+    contents:
+      - name: umc6650.bin
+        description: "Lockout chip ROM key"
+        size: 16
+        crc32: 0ba78597

@@ -60,12 +60,13 @@ systems:
   - laser310
   - casio-loopy
   - casio-pv1000
+  - casio-pv2000
   - pegasus
   - pcw
 
 notes: |
   Rolling release tracking mamedev/mame upstream (currently 0.286).
-  80 BIOS root sets + 18 system ROM sets (apple2gs, astrocade, adam, advision, apfm1000, beena, camplynx, casloopy, crvision, fm7, gamate, gamecom, gamepock, gmaster, gp32, laser310, pcw, pegasus). romload.cpp
+  80 BIOS root sets + 19 system ROM sets (apple2gs, astrocade, adam, advision, apfm1000, beena, camplynx, casloopy, crvision, fm7, gamate, gamecom, gamepock, gmaster, gp32, laser310, pcw, pegasus, pv2000). romload.cpp
   unmodified. No hiscore support.
   Paths under system_dir/mame/ (artwork, cheat, hash, ini, plugins,
   samples, crosshair). ROM search: content_dir + system_dir/mame/bios +
@@ -604,6 +605,18 @@ files:
         description: "HN62434 sound/wave data mask ROM"
         size: 524288
         crc32: 8f51fa17
+
+  # Casio PV-2000
+  - name: pv2000.zip
+    required: true
+    category: bios_zip
+    system: casio-pv2000
+    source_ref: "src/mame/casio/pv2000.cpp:416-419"
+    contents:
+      - name: hn613128pc64.bin
+        description: "Z80 BASIC ROM"
+        size: 16384
+        crc32: 8f31f297
 
   # Coleco Adam
   - name: adam.zip
