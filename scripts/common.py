@@ -698,10 +698,11 @@ def resolve_platform_cores(
 
 
 MANUFACTURER_PREFIXES = (
-    "apple-", "microsoft-", "nintendo-", "sony-", "sega-", "snk-",
-    "panasonic-", "nec-", "epoch-", "mattel-", "fairchild-", "hartung-",
-    "tiger-", "magnavox-", "philips-", "bandai-", "casio-", "coleco-",
-    "commodore-", "sharp-", "sinclair-", "atari-", "sammy-",
+    "acorn-", "apple-", "microsoft-", "nintendo-", "sony-", "sega-",
+    "snk-", "panasonic-", "nec-", "epoch-", "mattel-", "fairchild-",
+    "hartung-", "tiger-", "magnavox-", "philips-", "bandai-", "casio-",
+    "coleco-", "commodore-", "sharp-", "sinclair-", "atari-", "sammy-",
+    "gce-", "texas-instruments-",
 )
 
 
