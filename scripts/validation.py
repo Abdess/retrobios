@@ -205,22 +205,11 @@ def check_file_validation(
     )
     if need_hashes:
         hashes = compute_hashes(local_path)
-        if "crc32" in checks and entry["crc32"]:
-            if hashes["crc32"].lower() not in entry["crc32"]:
-                expected = ",".join(sorted(entry["crc32"]))
-                return f"crc32 mismatch: got {hashes['crc32']}, accepted [{expected}]"
-        if "md5" in checks and entry["md5"]:
-            if hashes["md5"].lower() not in entry["md5"]:
-                expected = ",".join(sorted(entry["md5"]))
-                return f"md5 mismatch: got {hashes['md5']}, accepted [{expected}]"
-        if "sha1" in checks and entry["sha1"]:
-            if hashes["sha1"].lower() not in entry["sha1"]:
-                expected = ",".join(sorted(entry["sha1"]))
-                return f"sha1 mismatch: got {hashes['sha1']}, accepted [{expected}]"
-        if "sha256" in checks and entry["sha256"]:
-            if hashes["sha256"].lower() not in entry["sha256"]:
-                expected = ",".join(sorted(entry["sha256"]))
-                return f"sha256 mismatch: got {hashes['sha256']}, accepted [{expected}]"
+        for hash_type in ("crc32", "md5", "sha1", "sha256"):
+            if hash_type in checks and entry[hash_type]:
+                if hashes[hash_type].lower() not in entry[hash_type]:
+                    expected = ",".join(sorted(entry[hash_type]))
+                    return f"{hash_type} mismatch: got {hashes[hash_type]}, accepted [{expected}]"
         if entry["adler32"]:
             if hashes["adler32"].lower() not in entry["adler32"]:
                 expected = ",".join(sorted(entry["adler32"]))
