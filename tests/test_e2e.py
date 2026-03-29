@@ -3048,5 +3048,65 @@ class TestE2E(unittest.TestCase):
         self.assertEqual(snes["native_id"], "snes")
 
 
+    # ---------------------------------------------------------------
+    # Exporter: System.dat round-trip
+    # ---------------------------------------------------------------
+
+    def test_systemdat_exporter_round_trip(self):
+        """Export truth data to System.dat and validate round-trip."""
+        from exporter import discover_exporters
+        from exporter.systemdat_exporter import Exporter as SystemDatExporter
+
+        truth = {
+            "platform": "retroarch",
+            "systems": {
+                "sony-playstation": {
+                    "files": [
+                        {
+                            "name": "scph5501.bin",
+                            "path": "scph5501.bin",
+                            "size": 524288,
+                            "md5": "490f666e1afb15ed6c63b88fc7571f2f",
+                            "sha1": "b056ee5a4d65937e1a3a17e1e78f3258ea49c38e",
+                            "crc32": "71af80b4",
+                            "required": True,
+                            "_cores": ["beetle_psx"],
+                            "_source_refs": ["libretro.c:50"],
+                        },
+                    ],
+                },
+            },
+        }
+        scraped = {
+            "systems": {
+                "sony-playstation": {
+                    "native_id": "Sony - PlayStation",
+                    "files": [
+                        {"name": "scph5501.bin", "destination": "scph5501.bin"},
+                    ],
+                },
+            },
+        }
+
+        out_path = os.path.join(self.root, "System.dat")
+        exporter = SystemDatExporter()
+        exporter.export(truth, out_path, scraped_data=scraped)
+
+        with open(out_path) as fh:
+            content = fh.read()
+        self.assertIn("Sony - PlayStation", content)
+        self.assertIn("scph5501.bin", content)
+        self.assertIn("b056ee5a4d65937e1a3a17e1e78f3258ea49c38e", content)
+        self.assertIn('name "System.dat"', content)
+
+        issues = exporter.validate(truth, out_path)
+        self.assertEqual(issues, [])
+
+        # Discovery finds the systemdat exporter
+        exporters = discover_exporters()
+        self.assertIn("retroarch", exporters)
+        self.assertIs(exporters["retroarch"], SystemDatExporter)
+
+
 if __name__ == "__main__":
     unittest.main()
