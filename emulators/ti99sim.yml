@@ -1,0 +1,66 @@
+emulator: ti99sim
+display_name: "TI-99/Sim"
+type: standalone
+source: https://github.com/christianhaitian/ti99sim
+upstream: https://www.mrousseau.org/programs/ti99sim/
+profiled_date: "2026-03-29"
+core_version: "0.16.0"
+cores:
+  - ti99sim
+
+systems:
+  - ti99
+
+notes: |
+  Marc Rousseau's TI-99/4A simulator (since 1993). Standalone only, no libretro port.
+  Uses proprietary .ctg cartridge format for ROM packaging (CPU ROM + GROMs + RAM config).
+  Raw ROM dumps must be converted to .ctg via the convert-ctg utility.
+  File search order: CWD, CWD/console/ (v0.16.0) or CWD/roms/ (<=0.0.11),
+  ~/.ti99sim/console/, /opt/ti99sim/console/.
+  v0.16.0 adds SHA1-based auto-discovery for device ROMs in the console/ directory.
+  Recalbox packages ti99sim as a standalone emulator for the ti994a system.
+
+files:
+  - name: TI-994A.ctg
+    required: true
+    description: "Console ROM cartridge containing CPU ROMs, system GROMs, and RAM configuration"
+    source_ref: "src/core/ti994a.cpp:122-131 (v0.16.0), src/sdl/main.cpp:407-411 (v0.0.11)"
+    sha1: "0264512c7d9e7fa091a48e5c8734782ea031a52d"
+    note: "SHA1 is of .ctg format. v0.16.0 also recognizes console v2.2 (sha1 16e275faae427465ba4dd4c2bf8569f6546d32dd)."
+
+  - name: spchrom.bin
+    required: false
+    size: 32768
+    description: "TMS5220/TMS6100 Speech Synthesizer vocabulary ROM"
+    source_ref: "src/core/tms5220.cpp:190-213 (v0.16.0), src/core/tms5220.cpp:194-213 (v0.0.11)"
+    validation: [size]
+    hle_fallback: true
+    note: "Raw binary, not .ctg format. Must be exactly 32768 bytes. First byte must be 0xAA. Falls back to empty speech ROM if missing or invalid."
+
+  - name: ti-disk.ctg
+    required: false
+    description: "TI Disk Controller DSR ROM (CRU >1100)"
+    source_ref: "src/core/device-support.cpp:52 (v0.16.0), src/sdl/main.cpp:452-476 (v0.0.11)"
+    sha1: "ed91d48c1eaa8ca37d5055bcf67127ea51c4cad5"
+    note: "SHA1 is of .ctg format. Disk emulation disabled without this file."
+
+  - name: "Gram Kracker.ctg"
+    required: false
+    description: "Miller Graphics Gram Kracker ROM manipulation peripheral"
+    source_ref: "src/core/ti994a-gk.cpp:56 (v0.16.0), src/sdl/ti994a-sdl.cpp:78 (v0.0.11)"
+    sha1: "a3bd5257c63e190800921b52dbe3ffa91ad91113"
+    note: "SHA1 is of .ctg format. Gram Kracker features disabled without this file."
+
+  - name: ti-pcard.ctg
+    required: false
+    description: "TI P-Code Card (UCSD Pascal) DSR ROM"
+    source_ref: "src/core/device-support.cpp:53 (v0.16.0)"
+    sha1: "27aceb956262d3e3f97d938602dfaa91b53da59e"
+    note: "SHA1 is of .ctg format. v0.16.0+ only."
+
+  - name: cf7+.ctg
+    required: false
+    description: "CF7+/nanoPEB CompactFlash interface DSR ROM"
+    source_ref: "src/core/device-support.cpp:51 (v0.16.0)"
+    sha1: "4d26e5ef0997ed2f3a56eb8104778bfe719b38f2"
+    note: "SHA1 is of .ctg format. v0.16.0+ only."
