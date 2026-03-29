@@ -1,5 +1,5 @@
 emulator: Super Bros War
-type: game
+type: libretro
 core_classification: game_engine
 source: "https://github.com/libretro/superbroswar-libretro"
 upstream: "https://github.com/mmatyas/supermariowar"

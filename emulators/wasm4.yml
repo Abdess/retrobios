@@ -1,5 +1,5 @@
 emulator: WASM-4
-type: game
+type: libretro
 core_classification: game_engine
 source: "https://github.com/aduros/wasm4"
 upstream: "https://github.com/aduros/wasm4"

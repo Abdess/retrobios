@@ -1,5 +1,5 @@
 emulator: Dinothawr
-type: game
+type: libretro
 core_classification: game_engine
 source: "https://github.com/libretro/Dinothawr"
 upstream: "https://github.com/libretro/Dinothawr"

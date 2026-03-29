@@ -1,5 +1,5 @@
 emulator: vitavoyager
-type: game
+type: libretro
 core_classification: community_fork
 source: "https://github.com/libretro/vitavoyager"
 upstream: "https://github.com/zturtleman/lilium-voyager"

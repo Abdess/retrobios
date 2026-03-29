@@ -1,5 +1,5 @@
 emulator: Mr.Boom
-type: game
+type: libretro
 core_classification: official_port
 source: "https://github.com/libretro/mrboom-libretro"
 upstream: "https://github.com/libretro/mrboom-libretro"

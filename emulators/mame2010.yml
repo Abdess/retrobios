@@ -56,12 +56,14 @@ notes: |
 files:
   # Data files (system_dir/mame2010/)
   - name: hiscore.dat
+    path: "mame2010/hiscore.dat"
     required: false
     category: game_data
     source_ref: "src/emu/hiscore.c:25,353-358"
     note: "high score definitions, embedded in binary by default, external via core option mame-external_hiscore"
 
   - name: cheat.zip
+    path: "mame2010/cheat.zip"
     required: false
     category: game_data
     source_ref: "src/emu/cheat.c:1027"

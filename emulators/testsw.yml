@@ -1,5 +1,5 @@
 emulator: testsw
-type: test
+type: libretro
 core_classification: pure_libretro
 source: "https://github.com/libretro/libretro-samples"
 source_ref: "video/software/rendering/libretro-test.c"

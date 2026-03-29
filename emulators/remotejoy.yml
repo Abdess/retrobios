@@ -1,5 +1,5 @@
 emulator: RemoteJoy
-type: utility
+type: libretro
 core_classification: pure_libretro
 source: "https://github.com/libretro/libretro-remotejoy"
 upstream: "https://github.com/akiraink/RemoteJoyLite"

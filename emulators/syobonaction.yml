@@ -1,5 +1,5 @@
 emulator: Syobon Action
-type: game
+type: libretro
 core_classification: community_fork
 source: "https://github.com/iyzsong/syobonaction-libretro"
 upstream: "https://github.com/akemin-dayo/OpenSyobonAction"

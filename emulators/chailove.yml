@@ -1,5 +1,5 @@
 emulator: ChaiLove
-type: game
+type: libretro
 core_classification: game_engine
 source: "https://github.com/libretro/libretro-chailove"
 upstream: "https://github.com/libretro/libretro-chailove"

@@ -47,24 +47,28 @@ notes: |
 files:
   # Data files (system_dir/mame2003/)
   - name: hiscore.dat
+    path: "mame2003/hiscore.dat"
     required: false
     category: game_data
     source_ref: "src/hiscore.c:14,248"
     note: "high score definitions, auto-generated if missing"
 
   - name: cheat.dat
+    path: "mame2003/cheat.dat"
     required: false
     category: game_data
     source_ref: "src/cheat.c:383,8249-8255"
     note: "cheat definitions, requires cheats core option enabled"
 
   - name: history.dat
+    path: "mame2003/history.dat"
     required: false
     category: game_data
     source_ref: "src/datafile.c:327,608"
     note: "game history and information database"
 
   - name: mameinfo.dat
+    path: "mame2003/mameinfo.dat"
     required: false
     category: game_data
     source_ref: "src/datafile.c:327,638"

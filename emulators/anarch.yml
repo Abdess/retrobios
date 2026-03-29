@@ -1,5 +1,5 @@
 emulator: Anarch
-type: game
+type: libretro
 core_classification: community_fork
 source: "https://codeberg.org/iyzsong/anarch-libretro"
 upstream: "https://gitlab.com/drummyfish/anarch"

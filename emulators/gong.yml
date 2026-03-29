@@ -1,5 +1,5 @@
 emulator: Gong
-type: game
+type: libretro
 core_classification: pure_libretro
 source: "https://github.com/libretro/gong"
 upstream: "https://danzaidan.itch.io/"

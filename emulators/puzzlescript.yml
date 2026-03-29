@@ -1,5 +1,5 @@
 emulator: PuzzleScript
-type: game
+type: libretro
 core_classification: game_engine
 source: "https://github.com/nwhitehead/pzretro"
 upstream: "https://github.com/increpare/PuzzleScript"

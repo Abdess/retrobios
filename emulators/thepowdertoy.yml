@@ -1,5 +1,5 @@
 emulator: The Powder Toy
-type: game
+type: libretro
 core_classification: pure_libretro
 source: "https://github.com/libretro/ThePowderToy"
 upstream: "https://github.com/ThePowderToy/The-Powder-Toy"

@@ -1,5 +1,5 @@
 emulator: "00_example"
-type: test
+type: libretro
 core_classification: pure_libretro
 source: "https://github.com/libretro/libretro-core-info"
 profiled_date: "2026-03-22"

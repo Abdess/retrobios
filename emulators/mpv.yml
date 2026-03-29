@@ -1,5 +1,5 @@
 emulator: mpv
-type: utility
+type: libretro
 core_classification: community_fork
 source: "https://github.com/libretro/libretro-mpv"
 upstream: "https://github.com/mpv-player/mpv"

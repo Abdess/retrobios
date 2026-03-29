@@ -1,5 +1,5 @@
 emulator: PocketCDG
-type: utility
+type: libretro
 core_classification: pure_libretro
 source: "https://github.com/libretro/libretro-pocketcdg"
 upstream: "https://github.com/redbug26/libretro-pocketcdg"

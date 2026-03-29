@@ -313,6 +313,13 @@ def resolve_local_file(
     aliases = file_entry.get("aliases", [])
     names_to_try = [name] + [a for a in aliases if a != name]
 
+    # When name contains a path separator (e.g. "res/tilemap.bin"), also
+    # try the basename since by_name indexes filenames without directories
+    if "/" in name:
+        name_base = name.rsplit("/", 1)[-1]
+        if name_base and name_base not in names_to_try:
+            names_to_try.append(name_base)
+
     # When dest_hint contains a path, also try its basename as a name
     # (handles emulator profiles where name: is descriptive and path: is
     # the actual filename, e.g. name: "MDA font ROM", path: "mda.rom")

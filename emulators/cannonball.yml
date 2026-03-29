@@ -1,5 +1,5 @@
 emulator: Cannonball
-type: game
+type: libretro
 core_classification: game_engine
 source: "https://github.com/libretro/cannonball"
 upstream: "https://github.com/djyt/cannonball"
@@ -40,6 +40,7 @@ files:
   # Master CPU ROMs (68000, Rev B)
   # -------------------------------------------------------
   - name: "epr-10381a.132"
+    path: "cannonball/epr-10381a.132"
     system: sega-outrun
     category: game_data
     required: true
@@ -51,6 +52,7 @@ files:
     source_ref: "src/main/roms.cpp:29"
 
   - name: "epr-10383b.117"
+    path: "cannonball/epr-10383b.117"
     system: sega-outrun
     category: game_data
     required: true
@@ -61,6 +63,7 @@ files:
     source_ref: "src/main/roms.cpp:38"
 
   - name: "epr-10380b.133"
+    path: "cannonball/epr-10380b.133"
     system: sega-outrun
     category: game_data
     required: true
@@ -71,6 +74,7 @@ files:
     source_ref: "src/main/roms.cpp:39"
 
   - name: "epr-10382b.118"
+    path: "cannonball/epr-10382b.118"
     system: sega-outrun
     category: game_data
     required: true
@@ -84,6 +88,7 @@ files:
   # Slave CPU ROMs (68000, Rev A)
   # -------------------------------------------------------
   - name: "epr-10327a.76"
+    path: "cannonball/epr-10327a.76"
     system: sega-outrun
     category: game_data
     required: true
@@ -94,6 +99,7 @@ files:
     source_ref: "src/main/roms.cpp:44"
 
   - name: "epr-10329a.58"
+    path: "cannonball/epr-10329a.58"
     system: sega-outrun
     category: game_data
     required: true
@@ -104,6 +110,7 @@ files:
     source_ref: "src/main/roms.cpp:45"
 
   - name: "epr-10328a.75"
+    path: "cannonball/epr-10328a.75"
     system: sega-outrun
     category: game_data
     required: true
@@ -114,6 +121,7 @@ files:
     source_ref: "src/main/roms.cpp:46"
 
   - name: "epr-10330a.57"
+    path: "cannonball/epr-10330a.57"
     system: sega-outrun
     category: game_data
     required: true
@@ -127,6 +135,7 @@ files:
   # Tile ROMs
   # -------------------------------------------------------
   - name: "opr-10268.99"
+    path: "cannonball/opr-10268.99"
     system: sega-outrun
     category: game_data
     required: true
@@ -137,6 +146,7 @@ files:
     source_ref: "src/main/roms.cpp:51"
 
   - name: "opr-10232.102"
+    path: "cannonball/opr-10232.102"
     system: sega-outrun
     category: game_data
     required: true
@@ -147,6 +157,7 @@ files:
     source_ref: "src/main/roms.cpp:52"
 
   - name: "opr-10267.100"
+    path: "cannonball/opr-10267.100"
     system: sega-outrun
     category: game_data
     required: true
@@ -157,6 +168,7 @@ files:
     source_ref: "src/main/roms.cpp:53"
 
   - name: "opr-10231.103"
+    path: "cannonball/opr-10231.103"
     system: sega-outrun
     category: game_data
     required: true
@@ -167,6 +179,7 @@ files:
     source_ref: "src/main/roms.cpp:54"
 
   - name: "opr-10266.101"
+    path: "cannonball/opr-10266.101"
     system: sega-outrun
     category: game_data
     required: true
@@ -177,6 +190,7 @@ files:
     source_ref: "src/main/roms.cpp:55"
 
   - name: "opr-10230.104"
+    path: "cannonball/opr-10230.104"
     system: sega-outrun
     category: game_data
     required: true
@@ -190,6 +204,7 @@ files:
   # Road ROMs (identical pair, one per road layer)
   # -------------------------------------------------------
   - name: "opr-10185.11"
+    path: "cannonball/opr-10185.11"
     system: sega-outrun
     category: game_data
     required: true
@@ -200,6 +215,7 @@ files:
     source_ref: "src/main/roms.cpp:60"
 
   - name: "opr-10186.47"
+    path: "cannonball/opr-10186.47"
     system: sega-outrun
     category: game_data
     required: true
@@ -213,6 +229,7 @@ files:
   # Sprite ROMs (interleaved 4-way)
   # -------------------------------------------------------
   - name: "mpr-10371.9"
+    path: "cannonball/mpr-10371.9"
     system: sega-outrun
     category: game_data
     required: true
@@ -223,6 +240,7 @@ files:
     source_ref: "src/main/roms.cpp:65"
 
   - name: "mpr-10373.10"
+    path: "cannonball/mpr-10373.10"
     system: sega-outrun
     category: game_data
     required: true
@@ -233,6 +251,7 @@ files:
     source_ref: "src/main/roms.cpp:66"
 
   - name: "mpr-10375.11"
+    path: "cannonball/mpr-10375.11"
     system: sega-outrun
     category: game_data
     required: true
@@ -243,6 +262,7 @@ files:
     source_ref: "src/main/roms.cpp:67"
 
   - name: "mpr-10377.12"
+    path: "cannonball/mpr-10377.12"
     system: sega-outrun
     category: game_data
     required: true
@@ -253,6 +273,7 @@ files:
     source_ref: "src/main/roms.cpp:68"
 
   - name: "mpr-10372.13"
+    path: "cannonball/mpr-10372.13"
     system: sega-outrun
     category: game_data
     required: true
@@ -263,6 +284,7 @@ files:
     source_ref: "src/main/roms.cpp:69"
 
   - name: "mpr-10374.14"
+    path: "cannonball/mpr-10374.14"
     system: sega-outrun
     category: game_data
     required: true
@@ -273,6 +295,7 @@ files:
     source_ref: "src/main/roms.cpp:70"
 
   - name: "mpr-10376.15"
+    path: "cannonball/mpr-10376.15"
     system: sega-outrun
     category: game_data
     required: true
@@ -283,6 +306,7 @@ files:
     source_ref: "src/main/roms.cpp:71"
 
   - name: "mpr-10378.16"
+    path: "cannonball/mpr-10378.16"
     system: sega-outrun
     category: game_data
     required: true
@@ -296,6 +320,7 @@ files:
   # Z80 Sound ROM
   # -------------------------------------------------------
   - name: "epr-10187.88"
+    path: "cannonball/epr-10187.88"
     system: sega-outrun
     category: game_data
     required: true
@@ -309,6 +334,7 @@ files:
   # Sega PCM samples
   # -------------------------------------------------------
   - name: "opr-10193.66"
+    path: "cannonball/opr-10193.66"
     system: sega-outrun
     category: game_data
     required: true
@@ -319,6 +345,7 @@ files:
     source_ref: "src/main/roms.cpp:80"
 
   - name: "opr-10192.67"
+    path: "cannonball/opr-10192.67"
     system: sega-outrun
     category: game_data
     required: true
@@ -329,6 +356,7 @@ files:
     source_ref: "src/main/roms.cpp:81"
 
   - name: "opr-10191.68"
+    path: "cannonball/opr-10191.68"
     system: sega-outrun
     category: game_data
     required: true
@@ -339,6 +367,7 @@ files:
     source_ref: "src/main/roms.cpp:82"
 
   - name: "opr-10190.69"
+    path: "cannonball/opr-10190.69"
     system: sega-outrun
     category: game_data
     required: true
@@ -349,6 +378,7 @@ files:
     source_ref: "src/main/roms.cpp:83"
 
   - name: "opr-10189.70"
+    path: "cannonball/opr-10189.70"
     system: sega-outrun
     category: game_data
     required: true
@@ -359,6 +389,7 @@ files:
     source_ref: "src/main/roms.cpp:84"
 
   - name: "opr-10188.71"
+    path: "cannonball/opr-10188.71"
     system: sega-outrun
     category: game_data
     required: true
@@ -372,6 +403,7 @@ files:
   # Optional: fixed PCM sample
   # -------------------------------------------------------
   - name: "opr-10188.71f"
+    path: "cannonball/opr-10188.71f"
     system: sega-outrun
     category: game_data
     required: false
@@ -385,6 +417,7 @@ files:
   # Optional: widescreen tilemap patches
   # -------------------------------------------------------
   - name: "res/tilemap.bin"
+    path: "cannonball/res/tilemap.bin"
     system: sega-outrun
     category: game_data
     required: false
@@ -392,6 +425,7 @@ files:
     source_ref: "src/main/engine/omusic.cpp:42-44"
 
   - name: "res/tilepatch.bin"
+    path: "cannonball/res/tilepatch.bin"
     system: sega-outrun
     category: game_data
     required: false
@@ -402,6 +436,7 @@ files:
   # Japanese ROM variants (loaded when jap option enabled)
   # -------------------------------------------------------
   - name: "epr-10380.133"
+    path: "cannonball/epr-10380.133"
     system: sega-outrun
     category: game_data
     required: false
@@ -412,6 +447,7 @@ files:
     source_ref: "src/main/roms.cpp:104"
 
   - name: "epr-10382.118"
+    path: "cannonball/epr-10382.118"
     system: sega-outrun
     category: game_data
     required: false
@@ -422,6 +458,7 @@ files:
     source_ref: "src/main/roms.cpp:105"
 
   - name: "epr-10381.132"
+    path: "cannonball/epr-10381.132"
     system: sega-outrun
     category: game_data
     required: false
@@ -432,6 +469,7 @@ files:
     source_ref: "src/main/roms.cpp:106"
 
   - name: "epr-10383.117"
+    path: "cannonball/epr-10383.117"
     system: sega-outrun
     category: game_data
     required: false
@@ -442,6 +480,7 @@ files:
     source_ref: "src/main/roms.cpp:107"
 
   - name: "epr-10327.76"
+    path: "cannonball/epr-10327.76"
     system: sega-outrun
     category: game_data
     required: false
@@ -452,6 +491,7 @@ files:
     source_ref: "src/main/roms.cpp:110"
 
   - name: "epr-10329.58"
+    path: "cannonball/epr-10329.58"
     system: sega-outrun
     category: game_data
     required: false
@@ -462,6 +502,7 @@ files:
     source_ref: "src/main/roms.cpp:111"
 
   - name: "epr-10328.75"
+    path: "cannonball/epr-10328.75"
     system: sega-outrun
     category: game_data
     required: false
@@ -472,6 +513,7 @@ files:
     source_ref: "src/main/roms.cpp:112"
 
   - name: "epr-10330.57"
+    path: "cannonball/epr-10330.57"
     system: sega-outrun
     category: game_data
     required: false

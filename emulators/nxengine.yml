@@ -36,6 +36,7 @@ notes: |
 
 files:
   - name: "Doukutsu.exe"
+    path: "nxengine/Doukutsu.exe"
     category: game_data
     system: cave-story
     description: "Cave Story freeware executable (data source for music, sfx, bitmaps, wavetable)"
@@ -47,6 +48,7 @@ files:
     notes: "Placed in system/nxengine/. The core extracts ORG music, PXT sounds, stage tile attributes, BMP graphics, and wavetable from this binary at each launch."
 
   - name: "data/"
+    path: "nxengine/data/"
     category: game_data
     system: cave-story
     description: "Full game asset directory tree (399 files: sprites, NPC sheets, stage maps, scripts, backgrounds)"
@@ -55,6 +57,7 @@ files:
     notes: "Must contain root assets (Arms.pbm, MyChar.pbm, etc.), Npc/ (36 sprite sheets), and Stage/ (333 map/script/tileset files). All files from the original freeware release."
 
   - name: "data/npc.tbl"
+    path: "nxengine/data/npc.tbl"
     category: game_data
     system: cave-story
     description: "NPC attribute table (entity behavior flags, HP, damage, display rect offsets)"
@@ -63,6 +66,7 @@ files:
     notes: "Located in system/nxengine/data/. Used to validate data directory presence and to load NPC behavior attributes."
 
   - name: "data/sprites.sif"
+    path: "nxengine/data/sprites.sif"
     category: game_data
     system: cave-story
     description: "Sprite information file (sprite positions, sizes, animation data)"
@@ -72,6 +76,7 @@ files:
     notes: "Not shipped in the freeware distribution. If missing, the core uses a compiled-in copy (sprites_sif.h)."
 
   - name: "tilekey.dat"
+    path: "nxengine/tilekey.dat"
     category: game_data
     system: cave-story
     description: "Tile attribute lookup table (maps tile codes to collision/behavior attributes)"

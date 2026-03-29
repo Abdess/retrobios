@@ -1,5 +1,5 @@
 emulator: ONScripter Yuri
-type: game
+type: libretro
 core_classification: game_engine
 source: "https://github.com/YuriSizuku/OnscripterYuri"
 upstream: "https://github.com/YuriSizuku/OnscripterYuri"

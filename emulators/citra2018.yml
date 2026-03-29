@@ -22,12 +22,14 @@ notes: |
 
 files:
   - name: aes_keys.txt
+    path: "Citra/sysdata/aes_keys.txt"
     system: nintendo-3ds
     required: false
     note: "AES encryption keys for decrypting 3DS content"
     source_ref: "src/core/hw/aes/key.cpp:72-76"
 
   - name: shared_font.bin
+    path: "Citra/sysdata/shared_font.bin"
     system: nintendo-3ds
     required: false
     hle_fallback: true

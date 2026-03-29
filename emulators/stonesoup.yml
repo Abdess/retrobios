@@ -1,5 +1,5 @@
 emulator: Stone Soup
-type: game
+type: libretro
 core_classification: frozen_snapshot
 source: "https://github.com/libretro/crawl-ref"
 upstream: "https://github.com/crawl/crawl"

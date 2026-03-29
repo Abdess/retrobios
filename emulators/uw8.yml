@@ -2,7 +2,7 @@ emulator: MicroW8
 profiled_date: "2026-03-25"
 core_version: "0.2.2"
 display_name: "MicroW8"
-type: game
+type: libretro
 core_classification: pure_libretro
 source: https://github.com/libretro/uw8-libretro
 upstream: https://github.com/exoticorn/microw8

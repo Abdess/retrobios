@@ -1,5 +1,5 @@
 emulator: Game Music Emu
-type: utility
+type: libretro
 core_classification: pure_libretro
 source: "https://github.com/libretro/libretro-gme"
 upstream: "https://github.com/libgme/game-music-emu"

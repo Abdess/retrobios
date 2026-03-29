@@ -1,5 +1,5 @@
 emulator: Craft
-type: game
+type: libretro
 core_classification: pure_libretro
 source: "https://github.com/libretro/Craft"
 upstream: "https://github.com/fogleman/Craft"

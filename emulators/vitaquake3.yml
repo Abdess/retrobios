@@ -1,5 +1,5 @@
 emulator: vitaQuakeIII
-type: game
+type: libretro
 core_classification: community_fork
 source: "https://github.com/libretro/vitaquake3"
 upstream: "https://github.com/ioquake/ioq3"

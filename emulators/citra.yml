@@ -23,6 +23,7 @@ notes: |
 
 files:
   - name: aes_keys.txt
+    path: "Citra/sysdata/aes_keys.txt"
     system: nintendo-3ds
     description: "AES encryption keys"
     required: false
@@ -30,6 +31,7 @@ files:
     note: "needed for encrypted games"
 
   - name: boot9.bin
+    path: "Citra/sysdata/boot9.bin"
     system: nintendo-3ds
     description: "ARM9 bootrom"
     required: false
@@ -38,6 +40,7 @@ files:
     note: "expected size 65536 bytes, provides AES and RSA keys"
 
   - name: shared_font.bin
+    path: "Citra/sysdata/shared_font.bin"
     system: nintendo-3ds
     description: "system shared font (legacy format)"
     required: false
@@ -46,6 +49,7 @@ files:
     note: "fallback to embedded open-source replacement font"
 
   - name: seeddb.bin
+    path: "Citra/sysdata/seeddb.bin"
     system: nintendo-3ds
     description: "game seed database"
     required: false

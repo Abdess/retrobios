@@ -25,24 +25,28 @@ notes: |
 
 files:
   - name: hiscore.dat
+    path: "mame2003/hiscore.dat"
     required: false
     category: game_data
     source_ref: "src/hiscore.c:18,225"
     note: "high score definitions, loaded from system_dir/mame2003/"
 
   - name: cheat.dat
+    path: "mame2003/cheat.dat"
     required: false
     category: game_data
     source_ref: "src/cheat.c:839,8597-8607"
     note: "cheat definitions, loaded from system_dir/mame2003/"
 
   - name: history.dat
+    path: "mame2003/history.dat"
     required: false
     category: game_data
     source_ref: "src/datafile.c:51,619-623"
     note: "game history database, loaded from system_dir/mame2003/"
 
   - name: mameinfo.dat
+    path: "mame2003/mameinfo.dat"
     required: false
     category: game_data
     source_ref: "src/datafile.c:52,649-653"

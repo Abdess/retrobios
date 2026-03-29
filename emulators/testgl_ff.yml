@@ -1,5 +1,5 @@
 emulator: testgl_ff
-type: test
+type: libretro
 core_classification: pure_libretro
 source: "https://github.com/libretro/libretro-samples"
 upstream: null

@@ -1,5 +1,5 @@
 emulator: ROM Cleaner
-type: utility
+type: libretro
 core_classification: pure_libretro
 source: "https://github.com/JesseTG/rom-cleaner"
 upstream: "https://github.com/JesseTG/rom-cleaner"
