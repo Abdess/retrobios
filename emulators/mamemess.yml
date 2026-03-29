@@ -40,6 +40,7 @@ systems:
   - mz80k
   - pegasus
   - supracan
+  - ti99
   - interton-vc4000
   - trs80
 
@@ -65,7 +66,7 @@ notes: |
   Adventure Vision, EACA Colour Genie, Acorn Atom, Tiger game.com,
   Bit Corporation Gamate, Epoch Game Pocket Computer, Hartung Game
   Master, Funtech Super A'Can, Technosys Aamber Pegasus, VTech
-  Laser 310, VTech Socrates and TRS-80 family system ROMs required for software loading
+  Laser 310, VTech Socrates, TI-99/4A family and TRS-80 family system ROMs required for software loading
   (not IS_BIOS_ROOT but functionally BIOS).
 
   Apple II: 4 machine ROM sets (apple2, apple2p, apple2e, apple2ee) plus
@@ -211,6 +212,25 @@ notes: |
   cartridge, loaded as separate umc6650 ROM set. MACHINE_IMPERFECT_SOUND |
   MACHINE_IMPERFECT_GRAPHICS. Software list "supracan".
   Driver in umc/supracan.cpp, in mess.flt.
+
+  TI-99/4A family: 6 machines in ti99_4x.cpp — ti99_4 parent (TI-99/4
+  1979), ti99_4e clone (Europe 50Hz), ti99_4a parent (TI-99/4A 1981),
+  ti99_4ae clone (Europe), ti99_4qi clone (QI version 1983), ti99_4ev
+  clone (with EVPC 1994). Related separate drivers: ti99_4p (SGCPU, in
+  ti99_4p.cpp), ti99_8 (TI-99/8 prototype, in ti99_8.cpp), geneve/genmod
+  (Myarc Geneve 9640, in geneve.cpp). All share the same PEB peripheral
+  bus. 5 ROMs per parent set: 3 GROMs (6KB each, u500-u502) and 2 CPU
+  ROMs (4KB each, u610-u611, 16-bit interleaved high/low byte). ti99_4qi
+  has alternate GROM 0 (u29). ti99_4ev has alternate GROM 1. Speech
+  Synthesizer is a sidecar device (speechsyn.cpp) with 2 TMS6100
+  vocabulary ROMs (16KB each). Peripheral Expansion Box (peribox.cpp)
+  with slotted device cards, each with its own device ROM set: TI FDC,
+  SNUG BwG FDC, CorComp DCC/FDC, RS232/PIO, EVPC, Myarc HFDC, P-Code
+  Card, Myarc DDCC-1, Myarc Memory Expansion, TIPI, WHT SCSI, GRAM
+  Kracker (gromport), Arcturus (sidecar). No PEB devices loaded by
+  default — all require user configuration. Software list "ti99_cart".
+  MACHINE_SUPPORTS_SAVE on all machines.
+  Drivers in ti/ti99_4x.cpp, in mess.flt.
 
 files:
   # Miuchiz Virtual Companions
@@ -1896,3 +1916,309 @@ files:
         description: "Character generator ROM"
         size: 2048
         crc32: 1765931e
+
+  # TI-99/4A family — machine ROM sets
+  - name: ti99_4a.zip
+    required: true
+    category: bios_zip
+    system: ti99
+    source_ref: "src/mame/ti/ti99_4x.cpp:1153-1166"
+    note: "TI-99/4A Home Computer (1981). Parent machine ROM set."
+    contents:
+      - name: 994a_grom0.u500
+        description: "Console GROM 0"
+        size: 6144
+        crc32: 2445a5e8
+      - name: 994a_grom1.u501
+        description: "Console GROM 1"
+        size: 6144
+        crc32: b8f367ab
+      - name: 994a_grom2.u502
+        description: "Console GROM 2"
+        size: 6144
+        crc32: e0bb5341
+      - name: 994a_rom_hb.u610
+        description: "CPU ROM high byte"
+        size: 4096
+        crc32: ee859c5f
+      - name: 994a_rom_lb.u611
+        description: "CPU ROM low byte"
+        size: 4096
+        crc32: 37859301
+
+  - name: ti99_4.zip
+    required: false
+    category: bios_zip
+    system: ti99
+    source_ref: "src/mame/ti/ti99_4x.cpp:1138-1151"
+    note: "TI-99/4 Home Computer (1979). Earlier model with smaller keyboard."
+    contents:
+      - name: 994_grom0.u500
+        description: "Console GROM 0"
+        size: 6144
+        crc32: aa757e13
+      - name: 994_grom1.u501
+        description: "Console GROM 1"
+        size: 6144
+        crc32: c863e460
+      - name: 994_grom2.u502
+        description: "Console GROM 2"
+        size: 6144
+        crc32: b0eda548
+      - name: 994_rom_hb.u610
+        description: "CPU ROM high byte"
+        size: 4096
+        crc32: 6fcf4b15
+      - name: 994_rom_lb.u611
+        description: "CPU ROM low byte"
+        size: 4096
+        crc32: 491c21d1
+
+  # TI-99/4A — peripheral device ROM sets
+  - name: ti99_speech.zip
+    required: false
+    category: bios_zip
+    system: ti99
+    source_ref: "src/devices/bus/ti99/sidecar/speechsyn.cpp:242-246"
+    note: "TI-99 Speech Synthesizer sidecar. 2 TMS6100 vocabulary ROMs."
+    contents:
+      - name: cd2325a.u2a
+        description: "TMS6100 vocabulary ROM (bottom)"
+        size: 16384
+        crc32: 1f58b571
+      - name: cd2326a.u2b
+        description: "TMS6100 vocabulary ROM (top)"
+        size: 16384
+        crc32: 65d00401
+
+  - name: ti99_fdc.zip
+    required: false
+    category: bios_zip
+    system: ti99
+    source_ref: "src/devices/bus/ti99/peb/ti_fdc.cpp:389"
+    note: "TI Standard DSSD Floppy Controller."
+    contents:
+      - name: fdc_dsr.u26
+        description: "FDC DSR ROM (low)"
+        size: 4096
+        crc32: 693c6b6e
+      - name: fdc_dsr.u27
+        description: "FDC DSR ROM (high)"
+        size: 4096
+        crc32: 2c921087
+
+  - name: ti99_bwg.zip
+    required: false
+    category: bios_zip
+    system: ti99
+    source_ref: "src/devices/bus/ti99/peb/bwg.cpp:597"
+    note: "SNUG BwG Floppy Controller."
+    contents:
+      - name: bwg_dsr.u15
+        description: "BwG DSR ROM"
+        size: 32768
+        crc32: 06f1ec89
+
+  - name: ti99_ccdcc.zip
+    required: false
+    category: bios_zip
+    system: ti99
+    source_ref: "src/devices/bus/ti99/peb/cc_fdc.cpp:567"
+    note: "CorComp Disk Controller Card."
+    contents:
+      - name: ccdcc_v89.u3
+        description: "DCC DSR ROM (low)"
+        size: 8192
+        crc32: de3f9476
+      - name: ccdcc_v89.u4
+        description: "DCC DSR ROM (high)"
+        size: 8192
+        crc32: 9c4e5c08
+
+  - name: ti99_ccfdc.zip
+    required: false
+    category: bios_zip
+    system: ti99
+    source_ref: "src/devices/bus/ti99/peb/cc_fdc.cpp:730"
+    note: "CorComp Floppy Disk Controller Card Rev A."
+    contents:
+      - name: ccfdc_v89mg.u1
+        description: "FDC DSR ROM (low)"
+        size: 8192
+        crc32: f010e273
+      - name: ccfdc_v89mg.u2
+        description: "FDC DSR ROM (high)"
+        size: 8192
+        crc32: 0cad8f5b
+
+  - name: ti99_rs232.zip
+    required: false
+    category: bios_zip
+    system: ti99
+    source_ref: "src/devices/bus/ti99/peb/ti_rs232.cpp:1071"
+    note: "TI RS232/PIO Interface."
+    contents:
+      - name: rs232pio_dsr.u1
+        description: "RS232 DSR ROM"
+        size: 4096
+        crc32: eab382fb
+
+  - name: ti99_evpc.zip
+    required: false
+    category: bios_zip
+    system: ti99
+    source_ref: "src/devices/bus/ti99/peb/evpc.cpp:453"
+    note: "SNUG Enhanced Video Processor Card."
+    contents:
+      - name: evpc_dsr.u21
+        description: "EVPC DSR ROM"
+        size: 65536
+        crc32: a062b75d
+
+  - name: ti99_hfdc.zip
+    required: false
+    category: bios_zip
+    system: ti99
+    source_ref: "src/devices/bus/ti99/peb/hfdc.cpp:1047"
+    note: "Myarc Hard and Floppy Disk Controller."
+    contents:
+      - name: hfdc_dsr.u34
+        description: "HFDC DSR ROM"
+        size: 16384
+        crc32: 66fbe0ed
+
+  - name: ti99_pcode.zip
+    required: false
+    category: bios_zip
+    system: ti99
+    source_ref: "src/devices/bus/ti99/peb/pcode.cpp:322"
+    note: "TI P-Code Card. 8 GROMs + 2 ROMs for UCSD Pascal support."
+    contents:
+      - name: pcode_grom0.u11
+        description: "P-Code GROM 0"
+        size: 6144
+        crc32: 505e5df0
+      - name: pcode_grom1.u13
+        description: "P-Code GROM 1"
+        size: 6144
+        crc32: 63b546d5
+      - name: pcode_grom2.u14
+        description: "P-Code GROM 2"
+        size: 6144
+        crc32: 28821e5c
+      - name: pcode_grom3.u16
+        description: "P-Code GROM 3"
+        size: 6144
+        crc32: 1db4a4a5
+      - name: pcode_grom4.u19
+        description: "P-Code GROM 4"
+        size: 6144
+        crc32: 9618eb9b
+      - name: pcode_grom5.u20
+        description: "P-Code GROM 5"
+        size: 6144
+        crc32: c47efe6d
+      - name: pcode_grom6.u21
+        description: "P-Code GROM 6"
+        size: 6144
+        crc32: 06a34c93
+      - name: pcode_grom7.u22
+        description: "P-Code GROM 7"
+        size: 6144
+        crc32: a09ca8d9
+      - name: pcode_rom0.u1
+        description: "P-Code ROM 0"
+        size: 4096
+        crc32: 3881d5b0
+      - name: pcode_rom1.u18
+        description: "P-Code ROM 1"
+        size: 8192
+        crc32: 46a06b8b
+
+  - name: ti99_ddcc1.zip
+    required: false
+    category: bios_zip
+    system: ti99
+    source_ref: "src/devices/bus/ti99/peb/myarcfdc.cpp:426"
+    note: "Myarc Disk Controller Card (DDCC-1)."
+    contents:
+      - name: ddcc1.u3
+        description: "DDCC-1 DSR ROM"
+        size: 8192
+        crc32: 042968a9
+
+  - name: ti99_myarcmem.zip
+    required: false
+    category: bios_zip
+    system: ti99
+    source_ref: "src/devices/bus/ti99/peb/myarcmem.cpp:193"
+    note: "Myarc Memory Expansion Card (MEXP-1, 512KB with XB2 DSR)."
+    contents:
+      - name: myarc512k_xb2_dsr.bin
+        description: "Memory expansion DSR ROM"
+        size: 8192
+        crc32: 41fbb96d
+
+  - name: ti99_tipi.zip
+    required: false
+    category: bios_zip
+    system: ti99
+    source_ref: "src/devices/bus/ti99/peb/tipi.cpp:697"
+    note: "TIPI card (Raspberry Pi interface). 3 BIOS variants (2021/2023/2025)."
+    contents:
+      - name: tipidsr.u2
+        description: "TIPI DSR 2021"
+        size: 32768
+        crc32: a54e65af
+      - name: tipidsr_2023.u2
+        description: "TIPI DSR 2023"
+        size: 32768
+        crc32: 666f0b63
+      - name: tipidsr_2025.u2
+        description: "TIPI DSR 2025 (default)"
+        size: 32768
+        crc32: 3b9cb922
+
+  - name: ti99_whtscsi.zip
+    required: false
+    category: bios_zip
+    system: ti99
+    source_ref: "src/devices/bus/ti99/peb/scsicard.cpp:473"
+    note: "Western Horizon Technologies SCSI host adapter."
+    contents:
+      - name: scsidsr150.u6
+        description: "SCSI DSR ROM v1.50"
+        size: 65536
+        crc32: 6e067c22
+
+  - name: ti99_arcturus.zip
+    required: false
+    category: bios_zip
+    system: ti99
+    source_ref: "src/devices/bus/ti99/sidecar/arcturus.cpp:74-80"
+    note: "Arcturus sidecar cartridge."
+    contents:
+      - name: arcturus.u1
+        description: "Cartridge ROM bank 4000"
+        size: 8192
+        crc32: 28ba65ec
+      - name: arcturus.u2
+        description: "Cartridge ROM bank A000"
+        size: 8192
+        crc32: 91e6910a
+      - name: arcturus.u3
+        description: "Cartridge ROM bank C000"
+        size: 8192
+        crc32: e9ce9f4e
+
+  - name: ti99_gkracker.zip
+    required: false
+    category: bios_zip
+    system: ti99
+    source_ref: "src/devices/bus/ti99/gromport/gkracker.cpp:409-413"
+    note: "Miller's Graphics GRAM Kracker."
+    contents:
+      - name: gkracker.bin
+        description: "Loader ROM"
+        size: 8192
+        crc32: 86eaaf9f

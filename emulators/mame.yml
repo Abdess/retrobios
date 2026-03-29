@@ -1526,3 +1526,48 @@ files:
         size: 2048
         crc32: 1765931e
 
+  # TI-99/4A
+  - name: ti99_4a.zip
+    required: true
+    category: bios_zip
+    system: ti99
+    source_ref: "src/mame/ti/ti99_4x.cpp:1153-1166"
+    note: "TI-99/4A Home Computer (1981). Parent machine ROM set."
+    contents:
+      - name: 994a_grom0.u500
+        description: "Console GROM 0"
+        size: 6144
+        crc32: 2445a5e8
+      - name: 994a_grom1.u501
+        description: "Console GROM 1"
+        size: 6144
+        crc32: b8f367ab
+      - name: 994a_grom2.u502
+        description: "Console GROM 2"
+        size: 6144
+        crc32: e0bb5341
+      - name: 994a_rom_hb.u610
+        description: "CPU ROM high byte"
+        size: 4096
+        crc32: ee859c5f
+      - name: 994a_rom_lb.u611
+        description: "CPU ROM low byte"
+        size: 4096
+        crc32: 37859301
+
+  - name: ti99_speech.zip
+    required: false
+    category: bios_zip
+    system: ti99
+    source_ref: "src/devices/bus/ti99/sidecar/speechsyn.cpp:242-246"
+    note: "TI-99 Speech Synthesizer sidecar. 2 TMS6100 vocabulary ROMs."
+    contents:
+      - name: cd2325a.u2a
+        description: "TMS6100 vocabulary ROM (bottom)"
+        size: 16384
+        crc32: 1f58b571
+      - name: cd2326a.u2b
+        description: "TMS6100 vocabulary ROM (top)"
+        size: 16384
+        crc32: 65d00401
+
