@@ -3007,6 +3007,36 @@ class TestE2E(unittest.TestCase):
         self.assertEqual(hm["scraped_md5"], "scraped_hash")
 
 
+    def test_104_diff_truth_normalized_system_ids(self):
+        """Diff matches systems with different ID formats via normalization."""
+        from common import diff_platform_truth
+
+        truth = {
+            "systems": {
+                "sega-gamegear": {
+                    "_coverage": {"cores_profiled": ["c"], "cores_unprofiled": []},
+                    "files": [
+                        {"name": "bios.gg", "required": True, "md5": "a" * 32,
+                         "_cores": ["c"], "_source_refs": []},
+                    ],
+                },
+            }
+        }
+        scraped = {
+            "systems": {
+                "sega-game-gear": {
+                    "files": [
+                        {"name": "bios.gg", "required": True, "md5": "a" * 32},
+                    ],
+                },
+            }
+        }
+
+        result = diff_platform_truth(truth, scraped)
+        self.assertEqual(result["summary"]["systems_uncovered"], 0)
+        self.assertEqual(result["summary"]["total_missing"], 0)
+        self.assertEqual(result["summary"]["systems_compared"], 1)
+
     # ---------------------------------------------------------------
     # native_id preservation
     # ---------------------------------------------------------------

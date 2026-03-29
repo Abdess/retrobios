@@ -1455,7 +1455,12 @@ def _update_summary(summary: dict, sys_div: dict) -> None:
 
 
 def diff_platform_truth(truth: dict, scraped: dict) -> dict:
-    """Compare truth YAML against scraped YAML, returning divergences."""
+    """Compare truth YAML against scraped YAML, returning divergences.
+
+    System IDs are matched using normalized forms (via _norm_system_id) to
+    handle naming differences between emulator profiles and scraped platforms
+    (e.g. 'sega-game-gear' vs 'sega-gamegear').
+    """
     truth_systems = truth.get("systems", {})
     scraped_systems = scraped.get("systems", {})
 
@@ -1474,30 +1479,46 @@ def diff_platform_truth(truth: dict, scraped: dict) -> dict:
     divergences: dict[str, dict] = {}
     uncovered_systems: list[str] = []
 
-    all_sys_ids = sorted(set(truth_systems) | set(scraped_systems))
+    # Build normalized-ID lookup for truth systems
+    norm_to_truth: dict[str, str] = {}
+    for sid in truth_systems:
+        norm_to_truth[_norm_system_id(sid)] = sid
 
-    for sys_id in all_sys_ids:
-        in_truth = sys_id in truth_systems
-        in_scraped = sys_id in scraped_systems
+    # Match scraped systems to truth via normalized IDs
+    matched_truth: set[str] = set()
 
-        if in_scraped and not in_truth:
-            uncovered_systems.append(sys_id)
-            summary["systems_uncovered"] += 1
-            continue
+    for s_sid in sorted(scraped_systems):
+        norm = _norm_system_id(s_sid)
+        t_sid = norm_to_truth.get(norm)
 
+        if t_sid is None:
+            # Also try exact match (in case normalization is lossy)
+            if s_sid in truth_systems:
+                t_sid = s_sid
+            else:
+                uncovered_systems.append(s_sid)
+                summary["systems_uncovered"] += 1
+                continue
+
+        matched_truth.add(t_sid)
         summary["systems_compared"] += 1
-
-        if in_truth and not in_scraped:
-            # All truth files are missing
-            truth_sys = truth_systems[sys_id]
-            sys_div = _diff_system(truth_sys, {"files": []})
-        else:
-            truth_sys = truth_systems[sys_id]
-            scraped_sys = scraped_systems[sys_id]
-            sys_div = _diff_system(truth_sys, scraped_sys)
+        sys_div = _diff_system(truth_systems[t_sid], scraped_systems[s_sid])
 
         if _has_divergences(sys_div):
-            divergences[sys_id] = sys_div
+            divergences[s_sid] = sys_div
+            _update_summary(summary, sys_div)
+            summary["systems_partially_covered"] += 1
+        else:
+            summary["systems_fully_covered"] += 1
+
+    # Truth systems not matched by any scraped system — all files missing
+    for t_sid in sorted(truth_systems):
+        if t_sid in matched_truth:
+            continue
+        summary["systems_compared"] += 1
+        sys_div = _diff_system(truth_systems[t_sid], {"files": []})
+        if _has_divergences(sys_div):
+            divergences[t_sid] = sys_div
             _update_summary(summary, sys_div)
             summary["systems_partially_covered"] += 1
         else:
