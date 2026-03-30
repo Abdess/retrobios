@@ -4,8 +4,10 @@ dat_version: v1.19.0
 homepage: https://www.retroarch.com
 source: https://github.com/libretro/libretro-database/blob/master/dat/System.dat
 base_destination: system
+cores: all_libretro
 hash_type: sha1
 verification_mode: existence
+case_insensitive_fs: true
 systems:
   3do:
     files:
@@ -100,10 +102,10 @@ systems:
       md5: 35fa1a1ebaaeea286dc5cd15487c13ea
       crc32: d5cbc509
       size: 1048576
-    native_id: 3DO Company, The - 3DO
     core: opera
     manufacturer: Panasonic|GoldStar|Sanyo
     docs: https://docs.libretro.com/library/opera/
+    native_id: 3DO Company, The - 3DO
   amstrad-cpc:
     files:
     - name: cpc464.rom
@@ -249,10 +251,17 @@ systems:
     - name: aes.zip
       destination: aes.zip
       required: true
-    native_id: Arcade
+    data_directories:
+    - ref: fbneo-hiscore
+      destination: ''
+    - ref: fbneo-cheats
+      destination: fbneo
+    - ref: fbneo-samples
+      destination: fbneo
     core: fbneo
     manufacturer: Various
     docs: https://docs.libretro.com/library/fbneo/
+    native_id: Arcade
   atari-400-800:
     files:
     - name: ATARIBAS.ROM
@@ -307,10 +316,10 @@ systems:
       md5: 281f20ea4320404ec820fb7ec0693b38
       crc32: 4248d3e3
       size: 2048
-    native_id: Atari - 5200
     core: a5200
     manufacturer: Atari
     docs: https://docs.libretro.com/library/a5200/
+    native_id: Atari - 5200
   atari-7800:
     files:
     - name: 7800 BIOS (E).rom
@@ -327,10 +336,10 @@ systems:
       md5: 0763f1ffb006ddbe32e52d497ee848ae
       crc32: 5d13730c
       size: 4096
-    native_id: Atari - 7800
     core: prosystem
     manufacturer: Atari
     docs: https://docs.libretro.com/library/prosystem/
+    native_id: Atari - 7800
   atari-lynx:
     files:
     - name: lynxboot.img
@@ -340,10 +349,10 @@ systems:
       md5: fcd403db69f54290b51035d82f835e7b
       crc32: 0d973c9d
       size: 512
-    native_id: Atari - Lynx
     core: handy
     manufacturer: Atari
     docs: https://docs.libretro.com/library/handy/
+    native_id: Atari - Lynx
   atari-st:
     files:
     - name: tos.img
@@ -353,10 +362,10 @@ systems:
       md5: c1c57ce48e8ee4135885cee9e63a68a2
       crc32: d3c32283
       size: 196608
-    native_id: Atari - ST
     core: hatari
     manufacturer: Atari
     docs: https://docs.libretro.com/library/hatari/
+    native_id: Atari - ST
   coleco-colecovision:
     files:
     - name: colecovision.rom
@@ -462,10 +471,10 @@ systems:
       md5: bb72565701b1b6faece07d68ea5da639
       crc32: 87746be2
       size: 524288
-    native_id: Commodore - Amiga
     core: puae
     manufacturer: Commodore
     docs: https://docs.libretro.com/library/puae/
+    native_id: Commodore - Amiga
   commodore-c128:
     files:
     - name: JiffyDOS_C128.bin
@@ -511,10 +520,10 @@ systems:
       destination: scpu-dos-2.04.bin
       required: true
       md5: b2869f8678b8b274227f35aad26ba509
-    native_id: Commodore - C128
     core: vice_x128
     manufacturer: Commodore
     docs: https://docs.libretro.com/library/vice_x128/
+    native_id: Commodore - C128
   dinothawr:
     files:
     - name: Dinothawr.zip
@@ -701,9 +710,9 @@ systems:
       md5: 55af78f877a21ca45eb2df68a74fcc60
       crc32: c099a5e3
       size: 65536
-    native_id: Enterprise - 64/128
     includes:
     - ep128emu
+    native_id: Enterprise - 64/128
   epoch-scv:
     files:
     - name: upd7801g.s01
@@ -771,10 +780,10 @@ systems:
       md5: 29a92d0867da2917275b7c6c805d256f
       crc32: ffb98ffa
       size: 552039
-    native_id: J2ME
     core: freej2me
     manufacturer: Java
     docs: https://docs.libretro.com/library/freej2me/
+    native_id: J2ME
   apple-macintosh-ii:
     files:
     - name: MacII.ROM
@@ -815,10 +824,10 @@ systems:
       md5: 279008e4a0db2dc5f1c048853b033828
       crc32: 11647ca5
       size: 1024
-    native_id: Magnavox - Odyssey2
     core: o2em
     manufacturer: Magnavox|Philips
     docs: https://docs.libretro.com/library/o2em/
+    native_id: Magnavox - Odyssey2
   mattel-intellivision:
     files:
     - name: exec.bin
@@ -835,10 +844,10 @@ systems:
       md5: 0cd5946c6473e42e8e4c2137785e427f
       crc32: 683a4158
       size: 2048
-    native_id: Mattel - Intellivision
     data_directories:
     - ref: freeintv-overlays
       destination: freeintv_overlays
+    native_id: Mattel - Intellivision
   microsoft-msx:
     files:
     - name: CARTS.SHA
@@ -946,7 +955,6 @@ systems:
       md5: 279efd1eae0d358eecd4edc7d9adedf3
       crc32: ab6874f8
       size: 16640
-    native_id: Microsoft - MSX
     core: bluemsx
     manufacturer: Spectravideo|Philips|Al Alamiah|Sony|Sanyo|Mitsubishi|Toshiba|Hitachi|Panasonic|Canon|Casio|Pioneer|Fujitsu|Yamaha|JVC|Kyocera|GoldStar|Samsung|Daewoo|Gradiente|Sharp|Talent|NTT|ACVS/CIEL|DDX|AGE
       Labs
@@ -954,6 +962,7 @@ systems:
     data_directories:
     - ref: bluemsx
       destination: ''
+    native_id: Microsoft - MSX
   nec-pc-engine:
     files:
     - name: gecard.pce
@@ -1005,10 +1014,10 @@ systems:
       md5: 0754f903b52e3b3342202bdafb13efa5
       crc32: 2b5b75fe
       size: 262144
-    native_id: NEC - PC Engine - TurboGrafx 16 - SuperGrafx
     core: mednafen_pce_fast
     manufacturer: NEC
     docs: https://docs.libretro.com/library/mednafen_pce_fast/
+    native_id: NEC - PC Engine - TurboGrafx 16 - SuperGrafx
   nec-pc-98:
     files:
     - name: 2608_bd.wav
@@ -1088,12 +1097,12 @@ systems:
       md5: 524473c1a5a03b17e21d86a0408ff827
       crc32: fe9f57f2
       size: 16384
-    native_id: NEC - PC-98
     core: np2kai
     manufacturer: NEC
     docs: https://docs.libretro.com/library/np2kai/
     includes:
     - np2kai
+    native_id: NEC - PC-98
   nec-pc-fx:
     files:
     - name: fx-scsi.rom
@@ -1131,10 +1140,10 @@ systems:
       md5: e2fb7c7220e3a7838c2dd7e401a7f3d8
       crc32: 236102c9
       size: 1048576
-    native_id: NEC - PC-FX
     core: mednafen_pcfx
     manufacturer: NEC
     docs: https://docs.libretro.com/library/mednafen_pcfx/
+    native_id: NEC - PC-FX
   nintendo-fds:
     files:
     - name: disksys.rom
@@ -1168,10 +1177,10 @@ systems:
       md5: 32fbbd84168d3482956eb3c5051637f5
       crc32: 59c8598e
       size: 256
-    native_id: Nintendo - Gameboy
     core: gambatte
     manufacturer: Nintendo
     docs: https://docs.libretro.com/library/gambatte/
+    native_id: Nintendo - Gameboy
   nintendo-gba:
     files:
     - name: gba_bios.bin
@@ -1181,10 +1190,10 @@ systems:
       md5: a860e8c0b6d573d191e4ec7db1b1e4f6
       crc32: '81977335'
       size: 16384
-    native_id: Nintendo - Game Boy Advance
     core: gpsp
     manufacturer: Nintendo
     docs: https://docs.libretro.com/library/gpsp/
+    native_id: Nintendo - Game Boy Advance
   nintendo-gbc:
     files:
     - name: cgb_boot.bin
@@ -1295,13 +1304,13 @@ systems:
     - name: font_japanese.bin
       destination: dolphin-emu/Sys/GC/font_japanese.bin
       required: false
-    native_id: Nintendo - GameCube
     core: dolphin
     manufacturer: Nintendo
     docs: https://docs.libretro.com/library/dolphin/
     data_directories:
     - ref: dolphin-sys
       destination: dolphin-emu/Sys
+    native_id: Nintendo - GameCube
   nintendo-64dd:
     files:
     - name: 64DD_IPL.bin
@@ -1347,23 +1356,23 @@ systems:
     - name: dsi_nand.bin
       destination: dsi_nand.bin
       required: true
-    native_id: Nintendo - Nintendo DS
     core: desmume
     manufacturer: Nintendo
     docs: https://docs.libretro.com/library/desmume/
+    native_id: Nintendo - Nintendo DS
   nintendo-nes:
     files:
     - name: NstDatabase.xml
       destination: NstDatabase.xml
       required: true
-      sha1: 26322f182540211e9b5e3647675b7c593706ae2b
-      md5: 7bfe8c0540ed4bd6a0f1e2a0f0118ced
-      crc32: ebb2196c
+      sha1: f92312bae56e29c5bf00a5103105fce78472bf5c
+      md5: 0ee6cbdc6f5c96ce9c8aa5edb59066f4
+      crc32: 0e4d552b
       size: 1009534
-    native_id: Nintendo - Nintendo Entertainment System
     core: fceumm
     manufacturer: Nintendo
     docs: https://docs.libretro.com/library/fceumm/
+    native_id: Nintendo - Nintendo Entertainment System
   nintendo-pokemon-mini:
     files:
     - name: bios.min
@@ -1591,10 +1600,10 @@ systems:
       md5: dda40ccd57390c96e49d30a041f9a9e7
       crc32: f73d5e10
       size: 131072
-    native_id: Nintendo - Super Nintendo Entertainment System
     core: bsnes
     manufacturer: Nintendo
     docs: https://docs.libretro.com/library/bsnes/
+    native_id: Nintendo - Super Nintendo Entertainment System
   philips-videopac:
     files:
     - name: c52.bin
@@ -1642,10 +1651,10 @@ systems:
       md5: 0a93f7940c455905bea6e392dfde92a4
       crc32: c611b498
       size: 131072
-    native_id: Sega - Dreamcast
     core: flycast
     manufacturer: Sega
     docs: https://docs.libretro.com/library/flycast/
+    native_id: Sega - Dreamcast
   sega-dreamcast-arcade:
     files:
     - name: airlbios.zip
@@ -1810,10 +1819,10 @@ systems:
       md5: b4e76e416b887f4e7413ba76fa735f16
       crc32: 4dcfd55c
       size: 262144
-    native_id: Sega - Mega Drive - Genesis
     core: genesis_plus_gx
     manufacturer: Sega
     docs: https://docs.libretro.com/library/genesis_plus_gx/
+    native_id: Sega - Mega Drive - Genesis
   sega-saturn:
     files:
     - name: hisaturn.bin
@@ -1896,12 +1905,12 @@ systems:
     - name: stvbios.zip
       destination: kronos/stvbios.zip
       required: true
-    native_id: Sega - Saturn
     core: kronos
     manufacturer: Sega
     docs: https://docs.libretro.com/library/kronos/
     includes:
     - kronos
+    native_id: Sega - Saturn
   sharp-x1:
     files:
     - name: iplrom.x1
@@ -1918,10 +1927,10 @@ systems:
       md5: 851e4a5936f17d13f8c39a980cf00d77
       crc32: e3995a57
       size: 2048
-    native_id: Sharp - X1
     core: x1
     manufacturer: Sharp
     docs: https://docs.libretro.com/library/x1/
+    native_id: Sharp - X1
   sharp-x68000:
     files:
     - name: cgrom.dat
@@ -1959,12 +1968,12 @@ systems:
       md5: 0617321daa182c3f3d6f41fd02fb3275
       crc32: 00eeb408
       size: 131072
-    native_id: Sharp - X68000
     core: px68k
     manufacturer: Sharp
     docs: https://docs.libretro.com/library/px68k/
     includes:
     - keropi
+    native_id: Sharp - X68000
   sinclair-zx-spectrum:
     files:
     - name: 128-0.rom
@@ -2310,10 +2319,10 @@ systems:
       md5: 85fede415f4294cc777517d7eada482e
       crc32: 2cbe8995
       size: 32768
-    native_id: Sinclair - ZX Spectrum
     core: fuse
     manufacturer: Sinclair|Amstrad
     docs: https://docs.libretro.com/library/fuse/
+    native_id: Sinclair - ZX Spectrum
   snk-neogeo-cd:
     files:
     - name: 000-lo.lo
@@ -2393,10 +2402,10 @@ systems:
       md5: 08ca8b2dba6662e8024f9e789711c6fc
       crc32: ff3abc59
       size: 524288
-    native_id: SNK - NeoGeo CD
     core: neocd
     manufacturer: SNK
     docs: https://docs.libretro.com/library/neocd/
+    native_id: SNK - NeoGeo CD
   sony-playstation:
     files:
     - name: scph1000.bin
@@ -2553,10 +2562,10 @@ systems:
       md5: 81bbe60ba7a3d1cea1d48c14cbcc647b
       crc32: 2f53b852
       size: 524288
-    native_id: Sony - PlayStation
     core: duckstation
     manufacturer: Sony
     docs: https://docs.libretro.com/library/duckstation/
+    native_id: Sony - PlayStation
   sony-playstation-2:
     files:
     - name: ps2-0100jd-20000117.bin
@@ -3080,13 +3089,13 @@ systems:
       md5: 866855cc330b9b95cc69135fb7b41d38
       crc32: 7b57fa78
       size: 666530
-    native_id: Sony - PlayStation Portable
     core: ppsspp
     manufacturer: Sony
     docs: https://docs.libretro.com/library/ppsspp/
     data_directories:
     - ref: ppsspp-assets
       destination: PPSSPP
+    native_id: Sony - PlayStation Portable
   ti-83:
     files:
     - name: ti83se.rom
@@ -3110,10 +3119,10 @@ systems:
       md5: d4448d09bbfde687c04f9e3310e023ab
       crc32: 4bf05697
       size: 262144
-    native_id: Texas Instruments TI-83
     core: numero
     manufacturer: Texas Instruments
     docs: https://docs.libretro.com/library/numero/
+    native_id: Texas Instruments TI-83
   videoton-tvc:
     files:
     - name: tvcfileio.rom
@@ -3164,10 +3173,10 @@ systems:
       md5: a17e0e0150155400d8cced329563d9c8
       crc32: a93f1c4b
       size: 9523360
-    native_id: ScummVM
     core: scummvm
     manufacturer: Various
     docs: https://docs.libretro.com/library/scummvm/
+    native_id: ScummVM
   nec-pc-88:
     includes:
     - quasi88
