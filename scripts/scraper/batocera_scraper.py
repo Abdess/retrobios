@@ -329,6 +329,13 @@ class Scraper(BaseScraper):
             num = tag.removeprefix("batocera-")
             if num.isdigit():
                 batocera_version = num
+        if not batocera_version:
+            # Preserve existing version when fetch fails (offline mode)
+            existing = Path(__file__).resolve().parents[2] / "platforms" / "batocera.yml"
+            if existing.exists():
+                with open(existing) as f:
+                    old = yaml.safe_load(f) or {}
+                batocera_version = str(old.get("version", ""))
 
         cores, standalone = self._fetch_cores()
         result = {

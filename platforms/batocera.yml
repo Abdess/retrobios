@@ -1,5 +1,5 @@
 platform: Batocera
-version: ''
+version: '42'
 homepage: https://batocera.org
 source: https://raw.githubusercontent.com/batocera-linux/batocera.linux/master/package/batocera/core/batocera-scripts/scripts/batocera-systems
 base_destination: bios
