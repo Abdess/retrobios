@@ -132,7 +132,7 @@ nav:
   - ZC: systems/zc.md
 - Emulators:
   - Overview: emulators/index.md
-  - Official ports (61):
+  - Official ports (62):
     - amiarcadia: emulators/amiarcadia.md
     - Amiberry: emulators/amiberry.md
     - Ardens: emulators/ardens.md
@@ -176,6 +176,7 @@ nav:
     - mGBA: emulators/mgba.md
     - Mr.Boom: emulators/mrboom.md
     - Panda3DS: emulators/panda3ds.md
+    - PCSX2: emulators/pcsx2.md
     - PicoDrive: emulators/picodrive.md
     - play: emulators/play.md
     - PPSSPP: emulators/ppsspp.md
@@ -428,7 +429,7 @@ nav:
     - PCSX-ReARMed: emulators/pcsx_rearmed.md
   - Launchers (1):
     - Dolphin Launcher: emulators/dolphin_launcher.md
-  - Other (25):
+  - Other (24):
     - ares: emulators/ares.md
     - Beetle GBA (Mednafen): emulators/beetle_gba.md
     - BigPEmu: emulators/bigpemu.md
@@ -440,7 +441,6 @@ nav:
     - Lexaloffle: emulators/lexaloffle.md
     - Model 2 Emulator: emulators/model2.md
     - openMSX: emulators/openmsx.md
-    - PCSX2: emulators/pcsx2.md
     - Redream: emulators/redream.md
     - RPCS3: emulators/rpcs3.md
     - Ryujinx: emulators/ryujinx.md

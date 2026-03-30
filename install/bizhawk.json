@@ -3,7 +3,7 @@
   "platform": "bizhawk",
   "display_name": "BizHawk",
   "version": "1.0",
-  "generated": "2026-03-30T07:37:59Z",
+  "generated": "2026-03-30T09:46:23Z",
   "base_destination": "Firmware",
   "detect": [
     {
