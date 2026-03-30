@@ -3608,5 +3608,125 @@ class TestE2E(unittest.TestCase):
         self.assertIn("retrobat", exporters)
 
 
+    # ---------------------------------------------------------------
+    # Hash scraper: parsers + merge
+    # ---------------------------------------------------------------
+
+    def test_mame_parser_finds_bios_root_sets(self):
+        from scripts.scraper.mame_parser import find_bios_root_sets, parse_rom_block
+        source = '''
+ROM_START( neogeo )
+    ROM_REGION( 0x020000, "mainbios", 0 )
+    ROM_LOAD( "sp-s2.sp1", 0x00000, 0x020000, CRC(9036d879) SHA1(4f834c580f3471ce40c3210ef5e7491df38d8851) )
+ROM_END
+GAME( 1990, neogeo, 0, ng, neogeo, ng_state, empty_init, ROT0, "SNK", "Neo Geo", MACHINE_IS_BIOS_ROOT )
+ROM_START( pacman )
+    ROM_REGION( 0x10000, "maincpu", 0 )
+    ROM_LOAD( "pacman.6e", 0x0000, 0x1000, CRC(c1e6ab10) SHA1(e87e059c5be45753f7e9f33dff851f16d6751181) )
+ROM_END
+GAME( 1980, pacman, 0, pacman, pacman, pacman_state, empty_init, ROT90, "Namco", "Pac-Man", 0 )
+'''
+        sets = find_bios_root_sets(source, "neogeo.cpp")
+        self.assertIn("neogeo", sets)
+        self.assertNotIn("pacman", sets)
+        roms = parse_rom_block(source, "neogeo")
+        self.assertEqual(len(roms), 1)
+        self.assertEqual(roms[0]["crc32"], "9036d879")
+
+    def test_fbneo_parser_finds_bios_sets(self):
+        from scripts.scraper.fbneo_parser import find_bios_sets, parse_rom_info
+        source = '''
+static struct BurnRomInfo neogeoRomDesc[] = {
+    { "sp-s2.sp1",    0x020000, 0x9036d879, BRF_ESS | BRF_BIOS },
+    { "",              0,        0,          0 }
+};
+STD_ROM_PICK(neogeo)
+STD_ROM_FN(neogeo)
+struct BurnDriver BurnDrvneogeo = {
+    "neogeo", NULL, NULL, NULL, "1990",
+    "Neo Geo\\0", "BIOS only", "SNK", "Neo Geo MVS",
+    NULL, NULL, NULL, NULL, BDF_BOARDROM, 0, 0,
+    0, 0, 0, NULL, neogeoRomInfo, neogeoRomName, NULL, NULL,
+    NULL, NULL, NULL, NULL, 0
+};
+'''
+        sets = find_bios_sets(source, "d_neogeo.cpp")
+        self.assertIn("neogeo", sets)
+        roms = parse_rom_info(source, "neogeo")
+        self.assertEqual(len(roms), 1)
+        self.assertEqual(roms[0]["crc32"], "9036d879")
+
+    def test_mame_merge_preserves_manual_fields(self):
+        import json as json_mod
+        from scripts.scraper._hash_merge import merge_mame_profile
+        merge_dir = os.path.join(self.root, "merge_mame")
+        os.makedirs(merge_dir)
+        profile = {
+            "emulator": "Test", "type": "libretro",
+            "upstream": "https://github.com/mamedev/mame",
+            "core_version": "0.285",
+            "files": [{
+                "name": "neogeo.zip", "required": True, "category": "bios_zip",
+                "system": "snk-neogeo-mvs", "note": "MVS BIOS",
+                "source_ref": "old.cpp:1",
+                "contents": [{"name": "sp-s2.sp1", "size": 131072, "crc32": "oldcrc"}],
+            }],
+        }
+        profile_path = os.path.join(merge_dir, "test.yml")
+        with open(profile_path, "w") as f:
+            yaml.dump(profile, f, sort_keys=False)
+        hashes = {
+            "source": "mamedev/mame", "version": "0.286", "commit": "abc",
+            "fetched_at": "2026-03-30T00:00:00Z",
+            "bios_sets": {"neogeo": {
+                "source_file": "neo.cpp", "source_line": 42,
+                "roms": [{"name": "sp-s2.sp1", "size": 131072, "crc32": "newcrc", "sha1": "abc123"}],
+            }},
+        }
+        hashes_path = os.path.join(merge_dir, "hashes.json")
+        with open(hashes_path, "w") as f:
+            json_mod.dump(hashes, f)
+        result = merge_mame_profile(profile_path, hashes_path)
+        neo = next(f for f in result["files"] if f["name"] == "neogeo.zip")
+        self.assertEqual(neo["contents"][0]["crc32"], "newcrc")
+        self.assertEqual(neo["system"], "snk-neogeo-mvs")
+        self.assertEqual(neo["note"], "MVS BIOS")
+        self.assertEqual(neo["source_ref"], "neo.cpp:42")
+        self.assertEqual(result["core_version"], "0.286")
+
+    def test_fbneo_merge_updates_individual_roms(self):
+        import json as json_mod
+        from scripts.scraper._hash_merge import merge_fbneo_profile
+        merge_dir = os.path.join(self.root, "merge_fbneo")
+        os.makedirs(merge_dir)
+        profile = {
+            "emulator": "FBNeo", "type": "libretro",
+            "upstream": "https://github.com/finalburnneo/FBNeo",
+            "core_version": "v1.0.0.02",
+            "files": [{"name": "sp-s2.sp1", "archive": "neogeo.zip",
+                        "system": "snk-neogeo-mvs", "required": True,
+                        "size": 131072, "crc32": "oldcrc"}],
+        }
+        profile_path = os.path.join(merge_dir, "fbneo.yml")
+        with open(profile_path, "w") as f:
+            yaml.dump(profile, f, sort_keys=False)
+        hashes = {
+            "source": "finalburnneo/FBNeo", "version": "v1.0.0.03", "commit": "def",
+            "fetched_at": "2026-03-30T00:00:00Z",
+            "bios_sets": {"neogeo": {
+                "source_file": "neo.cpp", "source_line": 10,
+                "roms": [{"name": "sp-s2.sp1", "size": 131072, "crc32": "newcrc"}],
+            }},
+        }
+        hashes_path = os.path.join(merge_dir, "hashes.json")
+        with open(hashes_path, "w") as f:
+            json_mod.dump(hashes, f)
+        result = merge_fbneo_profile(profile_path, hashes_path)
+        rom = next(f for f in result["files"] if f["name"] == "sp-s2.sp1")
+        self.assertEqual(rom["crc32"], "newcrc")
+        self.assertEqual(rom["system"], "snk-neogeo-mvs")
+        self.assertEqual(result["core_version"], "v1.0.0.03")
+
+
 if __name__ == "__main__":
     unittest.main()

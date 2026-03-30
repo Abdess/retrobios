@@ -210,9 +210,10 @@ class TestMameMerge(unittest.TestCase):
             self.assertEqual(len(non_bios), 1)
             self.assertEqual(non_bios[0]['name'], 'hiscore.dat')
 
-    def test_merge_keeps_removed_bios_set(self) -> None:
+    def test_merge_keeps_unmatched_bios_set(self) -> None:
+        """Entries not in scraper scope stay untouched (no _upstream_removed)."""
         hashes = _make_mame_hashes()
-        hashes['bios_sets'] = {}  # neogeo removed upstream
+        hashes['bios_sets'] = {}  # nothing from scraper
 
         with tempfile.TemporaryDirectory() as td:
             p = Path(td)
@@ -223,7 +224,8 @@ class TestMameMerge(unittest.TestCase):
 
             bios_files = [f for f in result['files'] if f.get('category') == 'bios_zip']
             self.assertEqual(len(bios_files), 1)
-            self.assertTrue(bios_files[0].get('_upstream_removed'))
+            self.assertNotIn('_upstream_removed', bios_files[0])
+            self.assertEqual(bios_files[0]['name'], 'neogeo.zip')
 
     def test_merge_updates_core_version(self) -> None:
         with tempfile.TemporaryDirectory() as td:
@@ -311,7 +313,8 @@ class TestFbneoMerge(unittest.TestCase):
             self.assertEqual(len(non_archive), 1)
             self.assertEqual(non_archive[0]['name'], 'hiscore.dat')
 
-    def test_merge_marks_removed_roms(self) -> None:
+    def test_merge_keeps_unmatched_roms(self) -> None:
+        """Entries not in scraper scope stay untouched (no _upstream_removed)."""
         hashes = _make_fbneo_hashes()
         hashes['bios_sets'] = {}
 
@@ -324,7 +327,7 @@ class TestFbneoMerge(unittest.TestCase):
 
             archive_files = [f for f in result['files'] if 'archive' in f]
             self.assertEqual(len(archive_files), 1)
-            self.assertTrue(archive_files[0].get('_upstream_removed'))
+            self.assertNotIn('_upstream_removed', archive_files[0])
 
     def test_merge_updates_core_version(self) -> None:
         with tempfile.TemporaryDirectory() as td:
@@ -362,7 +365,8 @@ class TestDiff(unittest.TestCase):
             self.assertEqual(len(diff['removed']), 0)
             self.assertEqual(diff['unchanged'], 0)
 
-    def test_diff_mame_detects_removed(self) -> None:
+    def test_diff_mame_out_of_scope(self) -> None:
+        """Items in profile but not in scraper output = out of scope, not removed."""
         hashes = _make_mame_hashes()
         hashes['bios_sets'] = {}
 
@@ -373,9 +377,9 @@ class TestDiff(unittest.TestCase):
 
             diff = compute_diff(profile_path, hashes_path, mode='mame')
 
-            self.assertIn('neogeo', diff['removed'])
+            self.assertEqual(diff['removed'], [])
+            self.assertEqual(diff['out_of_scope'], 1)
             self.assertEqual(len(diff['added']), 0)
-            self.assertEqual(len(diff['updated']), 0)
 
     def test_diff_fbneo_detects_changes(self) -> None:
         hashes = _make_fbneo_hashes()

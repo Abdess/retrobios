@@ -19,13 +19,15 @@ def merge_mame_profile(
     profile_path: str,
     hashes_path: str,
     write: bool = False,
+    add_new: bool = True,
 ) -> dict[str, Any]:
     """Merge MAME bios_zip entries from upstream hash data.
 
     Preserves system, note, required per entry. Updates contents and
-    source_ref from the hashes JSON. New sets get system=None,
-    required=True, category=bios_zip. Removed sets are flagged with
-    _upstream_removed=True.
+    source_ref from the hashes JSON. New sets are only added when
+    add_new=True (main profile). Entries not in the hash data are
+    left untouched (the scraper only covers MACHINE_IS_BIOS_ROOT sets,
+    not all machine ROM sets).
 
     If write=True, backs up existing profile to .old.yml before writing.
     """
@@ -42,20 +44,23 @@ def merge_mame_profile(
         key = _zip_name_to_set(entry['name'])
         existing_by_name[key] = entry
 
-    merged: list[dict] = []
-    seen_sets: set[str] = set()
+    updated_bios: list[dict] = []
+    matched_names: set[str] = set()
 
     for set_name, set_data in hashes.get('bios_sets', {}).items():
-        seen_sets.add(set_name)
         contents = _build_contents(set_data.get('roms', []))
         source_ref = _build_source_ref(set_data)
 
         if set_name in existing_by_name:
+            # Update existing entry: preserve manual fields, update contents
             entry = existing_by_name[set_name].copy()
             entry['contents'] = contents
             if source_ref:
                 entry['source_ref'] = source_ref
-        else:
+            updated_bios.append(entry)
+            matched_names.add(set_name)
+        elif add_new:
+            # New BIOS set — only added to the main profile
             entry = {
                 'name': f'{set_name}.zip',
                 'required': True,
@@ -64,16 +69,15 @@ def merge_mame_profile(
                 'source_ref': source_ref,
                 'contents': contents,
             }
+            updated_bios.append(entry)
 
-        merged.append(entry)
-
+    # Entries not matched by the scraper stay untouched
+    # (computer ROMs, device ROMs, etc. — outside BIOS root set scope)
     for set_name, entry in existing_by_name.items():
-        if set_name not in seen_sets:
-            removed = entry.copy()
-            removed['_upstream_removed'] = True
-            merged.append(removed)
+        if set_name not in matched_names:
+            updated_bios.append(entry)
 
-    profile['files'] = non_bios + merged
+    profile['files'] = non_bios + updated_bios
 
     if write:
         _backup_and_write(profile_path, profile)
@@ -85,11 +89,13 @@ def merge_fbneo_profile(
     profile_path: str,
     hashes_path: str,
     write: bool = False,
+    add_new: bool = True,
 ) -> dict[str, Any]:
     """Merge FBNeo individual ROM entries from upstream hash data.
 
     Preserves system, required per entry. Updates crc32, size, and
-    source_ref. New ROMs get archive=set_name.zip, required=True.
+    source_ref. New ROMs are only added when add_new=True (main profile).
+    Entries not in the hash data are left untouched.
 
     If write=True, backs up existing profile to .old.yml before writing.
     """
@@ -107,7 +113,7 @@ def merge_fbneo_profile(
         existing_by_key[key] = entry
 
     merged: list[dict] = []
-    seen_keys: set[tuple[str, str]] = set()
+    matched_keys: set[tuple[str, str]] = set()
 
     for set_name, set_data in hashes.get('bios_sets', {}).items():
         archive_name = f'{set_name}.zip'
@@ -116,7 +122,6 @@ def merge_fbneo_profile(
         for rom in set_data.get('roms', []):
             rom_name = rom['name']
             key = (archive_name, rom_name)
-            seen_keys.add(key)
 
             if key in existing_by_key:
                 entry = existing_by_key[key].copy()
@@ -126,7 +131,9 @@ def merge_fbneo_profile(
                     entry['sha1'] = rom['sha1']
                 if source_ref:
                     entry['source_ref'] = source_ref
-            else:
+                merged.append(entry)
+                matched_keys.add(key)
+            elif add_new:
                 entry = {
                     'name': rom_name,
                     'archive': archive_name,
@@ -138,14 +145,12 @@ def merge_fbneo_profile(
                     entry['sha1'] = rom['sha1']
                 if source_ref:
                     entry['source_ref'] = source_ref
+                merged.append(entry)
 
-            merged.append(entry)
-
+    # Entries not matched stay untouched
     for key, entry in existing_by_key.items():
-        if key not in seen_keys:
-            removed = entry.copy()
-            removed['_upstream_removed'] = True
-            merged.append(removed)
+        if key not in matched_keys:
+            merged.append(entry)
 
     profile['files'] = non_archive + merged
 
@@ -202,13 +207,17 @@ def _diff_mame(
         else:
             unchanged += 1
 
-    removed = [s for s in existing_by_name if s not in bios_sets]
+    # Items in profile but not in scraper output = out of scope (not removed)
+    out_of_scope = len(existing_by_name) - sum(
+        1 for s in existing_by_name if s in bios_sets
+    )
 
     return {
         'added': added,
         'updated': updated,
-        'removed': removed,
+        'removed': [],
         'unchanged': unchanged,
+        'out_of_scope': out_of_scope,
     }
 
 
@@ -247,15 +256,14 @@ def _diff_fbneo(
             else:
                 unchanged += 1
 
-    removed = [
-        f"{k[0]}:{k[1]}" for k in existing_by_key if k not in seen_keys
-    ]
+    out_of_scope = sum(1 for k in existing_by_key if k not in seen_keys)
 
     return {
         'added': added,
         'updated': updated,
-        'removed': removed,
+        'removed': [],
         'unchanged': unchanged,
+        'out_of_scope': out_of_scope,
     }
 
 

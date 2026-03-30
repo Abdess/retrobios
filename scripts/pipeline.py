@@ -177,6 +177,28 @@ def main():
         print("\n--- 2/9 refresh data directories: SKIPPED (--offline) ---")
         results["refresh_data"] = True
 
+    # Step 2a: Refresh MAME BIOS hashes
+    if not args.offline:
+        ok, _ = run(
+            [sys.executable, "-m", "scripts.scraper.mame_hash_scraper"],
+            "2a refresh MAME hashes",
+        )
+        results["mame_hashes"] = ok
+    else:
+        print("\n--- 2a refresh MAME hashes: SKIPPED (--offline) ---")
+        results["mame_hashes"] = True
+
+    # Step 2a2: Refresh FBNeo BIOS hashes
+    if not args.offline:
+        ok, _ = run(
+            [sys.executable, "-m", "scripts.scraper.fbneo_hash_scraper"],
+            "2a2 refresh FBNeo hashes",
+        )
+        results["fbneo_hashes"] = ok
+    else:
+        print("\n--- 2a2 refresh FBNeo hashes: SKIPPED (--offline) ---")
+        results["fbneo_hashes"] = True
+
     # Step 2b: Check buildbot system directory (non-blocking)
     if args.check_buildbot and not args.offline:
         ok, _ = run(
