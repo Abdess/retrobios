@@ -42,8 +42,9 @@ class BaseExporter(ABC):
                 return name
         # Fallback: convert slug to display name with acronym handling
         _UPPER = {
-            "3do", "cps1", "cps2", "cps3", "dos", "gba", "gbc", "msx",
-            "nes", "nds", "ngp", "psp", "psx", "sms", "snes", "tvc",
+            "3do", "cdi", "cpc", "cps1", "cps2", "cps3", "dos", "gba",
+            "gbc", "hle", "msx", "nes", "nds", "ngp", "psp", "psx",
+            "sms", "snes", "stv", "tvc", "vb", "zx",
         }
         parts = sys_id.replace("-", " ").split()
         result = []

@@ -85,7 +85,10 @@ class Exporter(BaseExporter):
                 if name.startswith("_") or self._is_pattern(name):
                     continue
 
-                rom_parts = [f"name {name}"]
+                # Quote names with spaces or special chars (matching original format)
+                needs_quote = " " in name or "(" in name or ")" in name
+                name_str = f'"{name}"' if needs_quote else name
+                rom_parts = [f"name {name_str}"]
                 size = fe.get("size")
                 if size:
                     rom_parts.append(f"size {size}")
