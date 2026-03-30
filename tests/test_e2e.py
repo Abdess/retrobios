@@ -3291,5 +3291,126 @@ class TestE2E(unittest.TestCase):
         self.assertIn("correct_hash.bin", result)
 
 
+    # ---------------------------------------------------------------
+    # Registry merge + all_libretro expansion + diff hash fallback
+    # ---------------------------------------------------------------
+
+    def test_175_registry_merge_cores(self):
+        """load_platform_config merges cores from _registry.yml."""
+        from common import _platform_config_cache
+
+        # Platform YAML with 1 core
+        config = {
+            "platform": "TestMerge",
+            "cores": ["core_a"],
+            "systems": {"test-system": {"files": []}},
+        }
+        with open(os.path.join(self.platforms_dir, "testmerge.yml"), "w") as f:
+            yaml.dump(config, f)
+
+        # Registry with 2 cores (superset)
+        registry = {
+            "platforms": {
+                "testmerge": {
+                    "config": "testmerge.yml",
+                    "status": "active",
+                    "cores": ["core_a", "core_b"],
+                }
+            }
+        }
+        with open(os.path.join(self.platforms_dir, "_registry.yml"), "w") as f:
+            yaml.dump(registry, f)
+
+        _platform_config_cache.clear()
+        loaded = load_platform_config("testmerge", self.platforms_dir)
+        cores = [str(c) for c in loaded["cores"]]
+        self.assertIn("core_a", cores)
+        self.assertIn("core_b", cores)
+
+    def test_176_all_libretro_in_list(self):
+        """resolve_platform_cores expands all_libretro/retroarch in a list."""
+        from common import resolve_platform_cores, load_emulator_profiles
+
+        # Create a libretro profile and a standalone profile
+        for name, ptype in [("lr_core", "libretro"), ("sa_core", "standalone")]:
+            profile = {
+                "emulator": name,
+                "type": ptype,
+                "cores": [name],
+                "systems": ["test-system"],
+                "files": [],
+            }
+            with open(os.path.join(self.emulators_dir, f"{name}.yml"), "w") as f:
+                yaml.dump(profile, f)
+
+        profiles = load_emulator_profiles(self.emulators_dir)
+
+        # Config with retroarch + sa_core in cores list
+        config = {"cores": ["retroarch", "sa_core"]}
+        resolved = resolve_platform_cores(config, profiles)
+        self.assertIn("lr_core", resolved)  # expanded via retroarch
+        self.assertIn("sa_core", resolved)  # explicit
+
+    def test_177_diff_hash_fallback_rename(self):
+        """Diff detects platform renames via hash fallback."""
+        from truth import diff_platform_truth
+
+        truth = {
+            "systems": {
+                "test-system": {
+                    "_coverage": {"cores_profiled": ["c"], "cores_unprofiled": []},
+                    "files": [
+                        {"name": "ROM", "required": True, "md5": "abcd1234" * 4,
+                         "_cores": ["c"], "_source_refs": []},
+                    ],
+                }
+            }
+        }
+        scraped = {
+            "systems": {
+                "test-system": {
+                    "files": [
+                        {"name": "ROM1", "required": True, "md5": "abcd1234" * 4},
+                    ],
+                }
+            }
+        }
+
+        result = diff_platform_truth(truth, scraped)
+        # ROM and ROM1 share the same hash — rename, not missing+phantom
+        self.assertEqual(result["summary"]["total_missing"], 0)
+        self.assertEqual(result["summary"]["total_extra_phantom"], 0)
+
+    def test_178_diff_system_normalization(self):
+        """Diff matches systems with different IDs via normalization."""
+        from truth import diff_platform_truth
+
+        truth = {
+            "systems": {
+                "sega-gamegear": {
+                    "_coverage": {"cores_profiled": ["c"], "cores_unprofiled": []},
+                    "files": [
+                        {"name": "bios.gg", "required": True, "md5": "a" * 32,
+                         "_cores": ["c"], "_source_refs": []},
+                    ],
+                },
+            }
+        }
+        scraped = {
+            "systems": {
+                "sega-game-gear": {
+                    "files": [
+                        {"name": "bios.gg", "required": True, "md5": "a" * 32},
+                    ],
+                },
+            }
+        }
+
+        result = diff_platform_truth(truth, scraped)
+        self.assertEqual(result["summary"]["systems_uncovered"], 0)
+        self.assertEqual(result["summary"]["total_missing"], 0)
+        self.assertEqual(result["summary"]["systems_compared"], 1)
+
+
 if __name__ == "__main__":
     unittest.main()
