@@ -1,32 +1,21 @@
-# RPCS3 emulator firmware profile
-# Generated from source analysis of https://github.com/RPCS3/rpcs3
-# Commit analyzed: HEAD as of 2026-03-17
-
 emulator: RPCS3
 type: standalone
+core_classification: official_port
 source: "https://github.com/RPCS3/rpcs3"
-logo: "https://raw.githubusercontent.com/RPCS3/rpcs3/master/rpcs3/rpcs3.svg"
-profiled_date: "2026-03-18"
+upstream: "https://github.com/RPCS3/rpcs3"
+cores:
+  - rpcs3
+profiled_date: "2026-03-30"
 core_version: "0.0.35"
-display_name: "RPCS3 (PS3)"
+display_name: "Sony - PlayStation 3 (RPCS3)"
 systems: [sony-playstation-3]
 
-firmware_file: "PS3UPDAT.PUP"
-firmware_source: "https://www.playstation.com/en-us/support/hardware/ps3/system-software/"
-firmware_detection: "pup_header"  # validates PUP magic bytes, HMAC-SHA1 hash per entry
-firmware_install: "extracts dev_flash_* TAR packages from PUP into dev_flash/"
-
-validation:
-  method: "pup_object"
-  magic: "SCEUF"
-  hash_algo: "HMAC-SHA1"
-  source_ref: "rpcs3/Loader/PUP.cpp:8-114"
-  note: "PUP file is validated by magic header, file count, HMAC-SHA1 per entry against PUP_KEY"
-
-firmware_version:
-  path: "dev_flash/vsh/etc/version.txt"
-  source_ref: "rpcs3/util/sysinfo.cpp:686"
-  note: "Read at startup, displayed as 'Firmware version: X.XX'. Missing = 'Missing Firmware'"
+files:
+  - name: PS3UPDAT.PUP
+    required: true
+    storage: large_file
+    source_ref: "rpcs3/Loader/PUP.cpp:23-77"
+    note: "PUP firmware package. Validated via SCEUF magic + HMAC-SHA1 per entry. Extracted to dev_flash/ at install time."
 
 # dev_flash filesystem layout extracted from PUP
 dev_flash:
