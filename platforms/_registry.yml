@@ -1,231 +1,867 @@
-# Platform Registry
-# Central configuration for all supported platforms and their scraper sources.
-# Adding a new platform = adding an entry here + creating its YAML config.
-#
-# status: active | archived
-#   active   -- included in automated releases, scraped weekly/monthly
-#   archived -- config preserved, user can generate pack manually, excluded from CI releases
-
 platforms:
   retroarch:
     config: retroarch.yml
     status: active
-    logo: "https://raw.githubusercontent.com/libretro/RetroArch/master/media/retroarch-vector_invader-only.svg"
+    logo: https://raw.githubusercontent.com/libretro/RetroArch/master/media/retroarch-vector_invader-only.svg
     scraper: libretro
-    source_url: "https://raw.githubusercontent.com/libretro/libretro-database/master/dat/System.dat"
+    source_url: https://raw.githubusercontent.com/libretro/libretro-database/master/dat/System.dat
     source_format: clrmamepro_dat
     hash_type: sha1
     schedule: weekly
     cores: all_libretro
     target_scraper: retroarch_targets
-    target_source: "https://buildbot.libretro.com/nightly/"
+    target_source: https://buildbot.libretro.com/nightly/
     install:
       detect:
-        - os: linux
-          method: config_file
-          config: "$HOME/.var/app/org.libretro.RetroArch/config/retroarch/retroarch.cfg"
-          parse_key: system_directory
-        - os: linux
-          method: config_file
-          config: "$HOME/.config/retroarch/retroarch.cfg"
-          parse_key: system_directory
-        - os: darwin
-          method: config_file
-          config: "$HOME/Library/Application Support/RetroArch/retroarch.cfg"
-          parse_key: system_directory
-        - os: windows
-          method: config_file
-          config: "%APPDATA%\\RetroArch\\retroarch.cfg"
-          parse_key: system_directory
-
+      - os: linux
+        method: config_file
+        config: $HOME/.var/app/org.libretro.RetroArch/config/retroarch/retroarch.cfg
+        parse_key: system_directory
+      - os: linux
+        method: config_file
+        config: $HOME/.config/retroarch/retroarch.cfg
+        parse_key: system_directory
+      - os: darwin
+        method: config_file
+        config: $HOME/Library/Application Support/RetroArch/retroarch.cfg
+        parse_key: system_directory
+      - os: windows
+        method: config_file
+        config: '%APPDATA%\RetroArch\retroarch.cfg'
+        parse_key: system_directory
   batocera:
     config: batocera.yml
     status: active
-    logo: "https://raw.githubusercontent.com/batocera-linux/batocera-emulationstation/master/resources/splash_batocera.svg"
+    logo: https://raw.githubusercontent.com/batocera-linux/batocera-emulationstation/master/resources/splash_batocera.svg
     scraper: batocera
-    source_url: "https://raw.githubusercontent.com/batocera-linux/batocera.linux/master/package/batocera/core/batocera-scripts/scripts/batocera-systems"
+    source_url: https://raw.githubusercontent.com/batocera-linux/batocera.linux/master/package/batocera/core/batocera-scripts/scripts/batocera-systems
     source_format: python_dict
     hash_type: md5
     schedule: weekly
-    cores: [81, a5200, abuse, amiberry, applewin, arduous, atari800, azahar, beetle-saturn, bennugd, bigpemu, bk, blastem, bluemsx, boom3, bsnes, bstone, cannonball, cap32, catacombgl, cdogs, cemu, cgenius, citron, clk, corsixth, demul, desmume, devilutionx, dhewm3, dice, dolphin, dosbox, dosbox_pure, duckstation, dxx-rebirth, easyrpg, ecwolf, eduke32, eka2l1, emuscv, ep128emu-core, etlegacy, fake08, fallout1-ce, fallout2-ce, fbneo, fceumm, flatpak, flycast, freechaf, freeintv, freej2me, fmsx, fsuae, fury, fuse, gambatte, gearcoleco, gearsystem, genesisplusgx, glide64mk2, gong, gpsp, gsplus, gw, gzdoom, handy, hatari, hcl, holani, hurrican, hypseus-singe, ikemen, ioquake3, iortcw, jazz2-native, kronos, lindbergh-loader, lowresnx, lutro, mame, mame078plus, mednafen_lynx, mednafen_ngp, mednafen_psx, mednafen_supergrafx, mednafen_wswan, melonds, mesen, mesen-s, mgba, minivmac, model2emu, moonlight, mrboom, mupen64plus-next, neocd, nestopia, np2kai, nxengine, o2em, odcommander, openbor6412, openjazz, openjk, openjkdf2, openmohaa, openmsx, opera, parallel_n64, pce_fast, pcfx, pcsx2, pcsx_rearmed, pd777, picodrive, play, pokemini, potator, ppsspp, prboom, prosystem, puae, puae2021, px68k, pygame, pyxel, quasi88, raze, redream, reminiscence, rpcs3, ruffle, ryujinx, samcoupe, same_cdi, sameduck, scummvm, sdlpop, sh, shadps4, smsplus, snes9x, solarus, sonic2013, sonic3-air, sonic-mania, squirreljme, steam, stella, stella2014, superbroswar, supermodel, swanstation, taradino, tgbdual, theforceengine, theodore, thextech, tic80, tr1x, tr2x, tsugaru, tyrian, tyrquake, uae4arm, uqm, uzem, vb, vba-m, vecx, vemulator, vice, vice_x64, vice_x128, vice_x64sc, vice_xpet, vice_xplus4, vice_xscpu64, vice_xvic, vircon32, virtualjaguar, vita3k, vitaquake2, vox_official, vpinball, wasm4, wine-tkg, x1, x128, x16emu, xash3d_fwgs, xemu, xenia, xenia-canary, xpet, xplus4, xrick, xroar, xvic, yabasanshiro, ymir, yquake2, zc210]
+    cores:
+    - '81'
+    - a5200
+    - abuse
+    - amiberry
+    - applewin
+    - arduous
+    - atari800
+    - azahar
+    - beetle-saturn
+    - bennugd
+    - bigpemu
+    - bk
+    - blastem
+    - bluemsx
+    - boom3
+    - bsnes
+    - bstone
+    - cannonball
+    - cap32
+    - catacombgl
+    - cdogs
+    - cemu
+    - cgenius
+    - citron
+    - clk
+    - corsixth
+    - demul
+    - desmume
+    - devilutionx
+    - dhewm3
+    - dice
+    - dolphin
+    - dosbox
+    - dosbox_pure
+    - duckstation
+    - dxx-rebirth
+    - easyrpg
+    - ecwolf
+    - eduke32
+    - eka2l1
+    - emuscv
+    - ep128emu-core
+    - etlegacy
+    - fake08
+    - fallout1-ce
+    - fallout2-ce
+    - fbneo
+    - fceumm
+    - flatpak
+    - flycast
+    - fmsx
+    - freechaf
+    - freeintv
+    - freej2me
+    - fsuae
+    - fury
+    - fuse
+    - gambatte
+    - gearcoleco
+    - gearsystem
+    - genesisplusgx
+    - glide64mk2
+    - gong
+    - gpsp
+    - gsplus
+    - gw
+    - gzdoom
+    - handy
+    - hatari
+    - hcl
+    - holani
+    - hurrican
+    - hypseus-singe
+    - ikemen
+    - ioquake3
+    - iortcw
+    - jazz2-native
+    - kronos
+    - lindbergh-loader
+    - lowresnx
+    - lutro
+    - mame
+    - mame078plus
+    - mamemess
+    - mednafen_lynx
+    - mednafen_ngp
+    - mednafen_psx
+    - mednafen_supergrafx
+    - mednafen_wswan
+    - melonds
+    - mesen
+    - mesen-s
+    - mgba
+    - minivmac
+    - model2emu
+    - moonlight
+    - mrboom
+    - mupen64plus-next
+    - neocd
+    - nestopia
+    - np2kai
+    - nxengine
+    - o2em
+    - odcommander
+    - openbor6412
+    - openjazz
+    - openjk
+    - openjkdf2
+    - openmohaa
+    - openmsx
+    - opera
+    - parallel_n64
+    - pce_fast
+    - pcfx
+    - pcsx2
+    - pcsx_rearmed
+    - pd777
+    - picodrive
+    - play
+    - pokemini
+    - potator
+    - ppsspp
+    - prboom
+    - prosystem
+    - puae
+    - puae2021
+    - px68k
+    - pygame
+    - pyxel
+    - quasi88
+    - raze
+    - redream
+    - reminiscence
+    - rpcs3
+    - ruffle
+    - ryujinx
+    - samcoupe
+    - same_cdi
+    - sameduck
+    - scummvm
+    - sdlpop
+    - sh
+    - shadps4
+    - smsplus
+    - snes9x
+    - solarus
+    - sonic-mania
+    - sonic2013
+    - sonic3-air
+    - squirreljme
+    - steam
+    - stella
+    - stella2014
+    - superbroswar
+    - supermodel
+    - swanstation
+    - taradino
+    - tgbdual
+    - theforceengine
+    - theodore
+    - thextech
+    - tic80
+    - tr1x
+    - tr2x
+    - tsugaru
+    - tyrian
+    - tyrquake
+    - uae4arm
+    - uqm
+    - uzem
+    - vb
+    - vba-m
+    - vecx
+    - vemulator
+    - vice
+    - vice_x128
+    - vice_x64
+    - vice_x64sc
+    - vice_xpet
+    - vice_xplus4
+    - vice_xscpu64
+    - vice_xvic
+    - vircon32
+    - virtualjaguar
+    - vita3k
+    - vitaquake2
+    - vox_official
+    - vpinball
+    - wasm4
+    - wine-tkg
+    - x1
+    - x128
+    - x16emu
+    - xash3d_fwgs
+    - xemu
+    - xenia
+    - xenia-canary
+    - xpet
+    - xplus4
+    - xrick
+    - xroar
+    - xvic
+    - yabasanshiro
+    - ymir
+    - yquake2
+    - zc210
     target_scraper: batocera_targets
-    target_source: "https://github.com/batocera-linux/batocera.linux"
+    target_source: https://github.com/batocera-linux/batocera.linux
     install:
       detect:
-        - os: linux
-          method: file_exists
-          file: /etc/batocera-version
-          bios_path: /userdata/bios
-
+      - os: linux
+        method: file_exists
+        file: /etc/batocera-version
+        bios_path: /userdata/bios
   recalbox:
     config: recalbox.yml
     status: active
-    logo: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/main/svg/recalbox.svg"
+    logo: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/main/svg/recalbox.svg
     scraper: recalbox
-    source_url: "https://gitlab.com/recalbox/recalbox/-/raw/master/board/recalbox/fsoverlay/recalbox/share_init/system/.emulationstation/es_bios.xml"
+    source_url: https://gitlab.com/recalbox/recalbox/-/raw/master/board/recalbox/fsoverlay/recalbox/share_init/system/.emulationstation/es_bios.xml
     source_format: xml
     hash_type: md5
     schedule: monthly
     target_scraper: null
     target_source: null
-    cores: ["2048", 81, a5200, advancemame, amiberry, applewin, arduous, atari800, b2, beebem, bk, bluemsx, boom3, bsnes, bsneshd, cannonball, cap32, cdi2015, corsixth, craft, crocods, daphne, desmume, dice, dinothawr, dirksimple, dolphin, dolphin-gui, dosbox, dosbox_pure, duckstation, easyrpg, ecwolf, emuscv, fake08, fba2x, fbneo, fceumm, flycast, flycast-next, fmsx, freechaf, freeintv, frotz, fuse, gambatte, gearcoleco, geargrafx, gearsystem, genesisplusgx, genesisplusgx_ex, genesisplusgxwide, geolith, glide64mk2, gliden64, gliden64_20, gong, gpsp, gsplus, gw, handy, hatari, hatarib, holani, imageviewer, julius, kronos, lowresnx, lutro, mame0258, mame0278, mame2000, mame2003, mame2003_plus, mame2010, mame2015, mame2016, mednafen_lynx, mednafen_ngp, mednafen_pce_fast, mednafen_pcfx, mednafen_psx, mednafen_psx_hw, mednafen_saturn, mednafen_supafaust, mednafen_supergrafx, mednafen_vb, mednafen_wswan, melonds, mesen, mesen_s, meteor, mgba, minivmac, mojozork, moonlight, mrboom, mu, mupen64plus, mupen64plus_next, n64_gles2, neocd, nestopia, np2kai, nxengine, o2em, openbor, openlara, opera, oricutron, parallel_n64, pcsx2, pcsx_rearmed, pico8, picodrive, pisnes, pokemini, potator, ppsspp, prboom, prosystem, ps2, puae, px68k, quasi88, quicknes, race, rb5000, reicast, reminiscence, retro8, retrodream, rice, rice_gles2, sameboy, same_cdi, sameduck, scummvm, sdlpop, simcoupe, snes9x, snes9x2002, snes9x2005, snes9x2010, solarus, stella, stella2014, stonesoup, supermodel, swanstation, tamalibretro, tgbdual, theodore, thepowdertoy, ti99sim, tic80, tyrquake, uae4all, uae4arm, uzem, vecx, vice_x128, vice_x64, vice_x64sc, vice_xcbm2, vice_xcbm5x0, vice_xpet, vice_xplus4, vice_xscpu64, vice_xvic, virtualjaguar, vitaquake2, vitaquake3, vitavoyager, vpinball, vvvvvv, wasm4, x1, x128, x64, x64sx, xcbm2, xcbm5x0, xemu, xpet, xplus4, xrick, xroar, xscpu64, xvic, yabasanshiro, yabause]
+    cores:
+    - '2048'
+    - '81'
+    - a5200
+    - advancemame
+    - amiberry
+    - applewin
+    - arduous
+    - atari800
+    - b2
+    - beebem
+    - bk
+    - bluemsx
+    - boom3
+    - bsnes
+    - bsneshd
+    - cannonball
+    - cap32
+    - cdi2015
+    - corsixth
+    - craft
+    - crocods
+    - daphne
+    - desmume
+    - dice
+    - dinothawr
+    - dirksimple
+    - dolphin
+    - dolphin-gui
+    - dosbox
+    - dosbox_pure
+    - duckstation
+    - easyrpg
+    - ecwolf
+    - emuscv
+    - fake08
+    - fba2x
+    - fbneo
+    - fceumm
+    - flycast
+    - flycast-next
+    - fmsx
+    - freechaf
+    - freeintv
+    - frotz
+    - fuse
+    - gambatte
+    - gearcoleco
+    - geargrafx
+    - gearsystem
+    - genesisplusgx
+    - genesisplusgx_ex
+    - genesisplusgxwide
+    - geolith
+    - glide64mk2
+    - gliden64
+    - gliden64_20
+    - gong
+    - gpsp
+    - gsplus
+    - gw
+    - handy
+    - hatari
+    - hatarib
+    - holani
+    - imageviewer
+    - julius
+    - kronos
+    - lowresnx
+    - lutro
+    - mame
+    - mame0258
+    - mame0278
+    - mame2000
+    - mame2003
+    - mame2003_plus
+    - mame2010
+    - mame2015
+    - mame2016
+    - mamemess
+    - mednafen_lynx
+    - mednafen_ngp
+    - mednafen_pce_fast
+    - mednafen_pcfx
+    - mednafen_psx
+    - mednafen_psx_hw
+    - mednafen_saturn
+    - mednafen_supafaust
+    - mednafen_supergrafx
+    - mednafen_vb
+    - mednafen_wswan
+    - melonds
+    - mesen
+    - mesen_s
+    - meteor
+    - mgba
+    - minivmac
+    - mojozork
+    - moonlight
+    - mrboom
+    - mu
+    - mupen64plus
+    - mupen64plus_next
+    - n64_gles2
+    - neocd
+    - nestopia
+    - np2kai
+    - nxengine
+    - o2em
+    - openbor
+    - openlara
+    - opera
+    - oricutron
+    - parallel_n64
+    - pcsx2
+    - pcsx_rearmed
+    - pico8
+    - picodrive
+    - pisnes
+    - pokemini
+    - potator
+    - ppsspp
+    - prboom
+    - prosystem
+    - ps2
+    - puae
+    - px68k
+    - quasi88
+    - quicknes
+    - race
+    - rb5000
+    - reicast
+    - reminiscence
+    - retro8
+    - retrodream
+    - rice
+    - rice_gles2
+    - same_cdi
+    - sameboy
+    - sameduck
+    - scummvm
+    - sdlpop
+    - simcoupe
+    - snes9x
+    - snes9x2002
+    - snes9x2005
+    - snes9x2010
+    - solarus
+    - stella
+    - stella2014
+    - stonesoup
+    - supermodel
+    - swanstation
+    - tamalibretro
+    - tgbdual
+    - theodore
+    - thepowdertoy
+    - ti99sim
+    - tic80
+    - tyrquake
+    - uae4all
+    - uae4arm
+    - uzem
+    - vecx
+    - vice_x128
+    - vice_x64
+    - vice_x64sc
+    - vice_xcbm2
+    - vice_xcbm5x0
+    - vice_xpet
+    - vice_xplus4
+    - vice_xscpu64
+    - vice_xvic
+    - virtualjaguar
+    - vitaquake2
+    - vitaquake3
+    - vitavoyager
+    - vpinball
+    - vvvvvv
+    - wasm4
+    - x1
+    - x128
+    - x64
+    - x64sx
+    - xcbm2
+    - xcbm5x0
+    - xemu
+    - xpet
+    - xplus4
+    - xrick
+    - xroar
+    - xscpu64
+    - xvic
+    - yabasanshiro
+    - yabause
     install:
       detect:
-        - os: linux
-          method: file_exists
-          file: /usr/bin/recalbox-settings
-          bios_path: /recalbox/share/bios
-
+      - os: linux
+        method: file_exists
+        file: /usr/bin/recalbox-settings
+        bios_path: /recalbox/share/bios
   retrobat:
     config: retrobat.yml
     status: active
-    logo: "https://raw.githubusercontent.com/RetroBat-Official/retrobat/main/system/resources/retrobat_logo_notext.png"
+    logo: https://raw.githubusercontent.com/RetroBat-Official/retrobat/main/system/resources/retrobat_logo_notext.png
     scraper: retrobat
-    source_url: "https://raw.githubusercontent.com/RetroBat-Official/emulatorlauncher/master/batocera-systems/Resources/batocera-systems.json"
+    source_url: https://raw.githubusercontent.com/RetroBat-Official/emulatorlauncher/master/batocera-systems/Resources/batocera-systems.json
     source_format: json
     hash_type: md5
     schedule: weekly
-    cores: [81, a5200, abuse, arduous, atari800, azahar, bennugd, bk, bluemsx, bsnes, bstone, cannonball, cap32, catacombgl, cdogs, cemu, cgenius, citron, clk, corsixth, demul, devilutionx, dhewm3, dice, dolphin, dosbox_pure, dxx-rebirth, easyrpg, ecwolf, eduke32, eka2l1, emuscv, etlegacy, fake08, fallout1-ce, fallout2-ce, fbneo, fceumm, flatpak, flycast, freechaf, freeintv, fury, fuse, gambatte, gearsystem, genesisplusgx, glide64mk2, gong, gsplus, gw, gzdoom, hatari, hcl, hurrican, hypseus-singe, ikemen, ioquake3, iortcw, jazz2-native, lindbergh-loader, lowresnx, lutro, mame, mame078plus, mednafen_lynx, mednafen_ngp, mednafen_supergrafx, mednafen_wswan, melonds, mgba, minivmac, model2emu, moonlight, mrboom, neocd, np2kai, nxengine, o2em, odcommander, openbor6412, openjazz, openjk, openjkdf2, openmohaa, opera, pce_fast, pcfx, pcsx2, pcsx_rearmed, pd777, picodrive, play, pokemini, potator, ppsspp, prboom, prosystem, puae, px68k, pygame, pyxel, quasi88, raze, reminiscence, rpcs3, ruffle, samcoupe, sameduck, scummvm, sdlpop, sh, shadps4, snes9x, solarus, sonic2013, sonic3-air, sonic-mania, steam, stella, superbroswar, supermodel, taradino, tgbdual, theforceengine, theodore, thextech, tic80, tr1x, tr2x, tsugaru, tyrian, tyrquake, uqm, uzem, vb, vecx, vice_x64, vircon32, virtualjaguar, vita3k, vox_official, vpinball, wasm4, wine-tkg, x1, x128, x16emu, xash3d_fwgs, xemu, xenia-canary, xpet, xplus4, xrick, xvic, yabasanshiro, yquake2, zc210]
+    cores:
+    - '81'
+    - a5200
+    - abuse
+    - arduous
+    - ares
+    - atari800
+    - azahar
+    - bennugd
+    - bk
+    - bluemsx
+    - bsnes
+    - bstone
+    - cannonball
+    - cap32
+    - catacombgl
+    - cdogs
+    - cemu
+    - cgenius
+    - citron
+    - clk
+    - corsixth
+    - demul
+    - devilutionx
+    - dhewm3
+    - dice
+    - dolphin
+    - dosbox_pure
+    - dxx-rebirth
+    - easyrpg
+    - ecwolf
+    - eduke32
+    - eka2l1
+    - emuscv
+    - etlegacy
+    - fake08
+    - fallout1-ce
+    - fallout2-ce
+    - fbalpha2012
+    - fbalpha2012_neogeo
+    - fbneo
+    - fceumm
+    - flatpak
+    - flycast
+    - freechaf
+    - freeintv
+    - freej2me
+    - fury
+    - fuse
+    - gambatte
+    - geargrafx
+    - gearsystem
+    - genesisplusgx
+    - glide64mk2
+    - gong
+    - gsplus
+    - gw
+    - gzdoom
+    - hatari
+    - hcl
+    - hurrican
+    - hypseus-singe
+    - ikemen
+    - ioquake3
+    - iortcw
+    - jazz2-native
+    - lindbergh-loader
+    - lowresnx
+    - lutro
+    - mame
+    - mame078plus
+    - mamemess
+    - mednafen_lynx
+    - mednafen_ngp
+    - mednafen_supergrafx
+    - mednafen_wswan
+    - melonds
+    - mgba
+    - minivmac
+    - model2emu
+    - moonlight
+    - mrboom
+    - mupen64plus_next
+    - neocd
+    - np2kai
+    - nxengine
+    - o2em
+    - odcommander
+    - openbor6412
+    - openjazz
+    - openjk
+    - openjkdf2
+    - openmohaa
+    - opera
+    - parallel_n64
+    - pce_fast
+    - pcfx
+    - pcsx2
+    - pcsx_rearmed
+    - pd777
+    - picodrive
+    - play
+    - pokemini
+    - potator
+    - ppsspp
+    - prboom
+    - prosystem
+    - puae
+    - px68k
+    - pygame
+    - pyxel
+    - quasi88
+    - raze
+    - reminiscence
+    - rpcs3
+    - ruffle
+    - samcoupe
+    - sameduck
+    - scummvm
+    - sdlpop
+    - sh
+    - shadps4
+    - snes9x
+    - solarus
+    - sonic-mania
+    - sonic2013
+    - sonic3-air
+    - squirreljme
+    - steam
+    - stella
+    - superbroswar
+    - supermodel
+    - taradino
+    - tgbdual
+    - theforceengine
+    - theodore
+    - thextech
+    - tic80
+    - tr1x
+    - tr2x
+    - tsugaru
+    - tyrian
+    - tyrquake
+    - uqm
+    - uzem
+    - vb
+    - vecx
+    - vice_x64
+    - vircon32
+    - virtualjaguar
+    - vita3k
+    - vox_official
+    - vpinball
+    - wasm4
+    - wine-tkg
+    - x1
+    - x128
+    - x16emu
+    - xash3d_fwgs
+    - xemu
+    - xenia-canary
+    - xpet
+    - xplus4
+    - xrick
+    - xroar
+    - xvic
+    - yabasanshiro
+    - yquake2
+    - zc210
     target_scraper: null
     target_source: null
     install:
       detect:
-        - os: windows
-          method: path_exists
-          path: "%USERPROFILE%\\RetroBat\\bios"
-
+      - os: windows
+        method: path_exists
+        path: '%USERPROFILE%\RetroBat\bios'
   emudeck:
     config: emudeck.yml
     status: active
-    logo: "https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main/icons/EmuDeck.png"
+    logo: https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main/icons/EmuDeck.png
     scraper: emudeck
-    source_url: "https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main/functions/checkBIOS.sh"
-    source_wiki: "https://raw.githubusercontent.com/EmuDeck/emudeck.github.io/main/docs/tables/"
+    source_url: https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main/functions/checkBIOS.sh
+    source_wiki: https://raw.githubusercontent.com/EmuDeck/emudeck.github.io/main/docs/tables/
     source_format: bash_script+csv
     hash_type: md5
     schedule: weekly
     target_scraper: emudeck_targets
-    target_source: "https://github.com/dragoonDorise/EmuDeck"
-    # dragoonDorise/EmuDeck = official repo (creator's account, 3.4k stars)
-    # EmuDeck/emudeck.github.io = official wiki (org account)
+    target_source: https://github.com/dragoonDorise/EmuDeck
     install:
       detect:
-        - os: linux
-          method: config_file
-          config: "$HOME/.config/EmuDeck/settings.sh"
-          parse_key: emulationPath
-          bios_subdir: bios
-        - os: linux
-          method: path_exists
-          path: "$HOME/Emulation/bios"
-        - os: windows
-          method: config_file
-          config: "%APPDATA%\\EmuDeck\\settings.ps1"
-          parse_key: "$emulationPath"
-          bios_subdir: bios
+      - os: linux
+        method: config_file
+        config: $HOME/.config/EmuDeck/settings.sh
+        parse_key: emulationPath
+        bios_subdir: bios
+      - os: linux
+        method: path_exists
+        path: $HOME/Emulation/bios
+      - os: windows
+        method: config_file
+        config: '%APPDATA%\EmuDeck\settings.ps1'
+        parse_key: $emulationPath
+        bios_subdir: bios
       standalone_copies:
-        - file: prod.keys
-          targets:
-            linux:
-              - "$HOME/.local/share/yuzu/keys"
-              - "$HOME/.local/share/eden/keys"
-              - "$HOME/.config/Ryujinx/system"
-            windows:
-              - "%APPDATA%\\yuzu\\keys"
-              - "%APPDATA%\\eden\\keys"
-        - file: aes_keys.txt
-          targets:
-            linux:
-              - "$HOME/Emulation/bios/citra/keys"
-
+      - file: prod.keys
+        targets:
+          linux:
+          - $HOME/.local/share/yuzu/keys
+          - $HOME/.local/share/eden/keys
+          - $HOME/.config/Ryujinx/system
+          windows:
+          - '%APPDATA%\yuzu\keys'
+          - '%APPDATA%\eden\keys'
+      - file: aes_keys.txt
+        targets:
+          linux:
+          - $HOME/Emulation/bios/citra/keys
   lakka:
     config: lakka.yml
     status: active
-    logo: "https://raw.githubusercontent.com/libretro/retroarch-assets/master/src/xmb/flatui/lakka.svg"
+    logo: https://raw.githubusercontent.com/libretro/retroarch-assets/master/src/xmb/flatui/lakka.svg
     scraper: libretro
     inherits_from: retroarch
     cores: all_libretro
     schedule: weekly
     target_scraper: lakka_targets
-    target_source: "https://buildbot.libretro.com/nightly/"
+    target_source: https://buildbot.libretro.com/nightly/
     install:
       detect:
-        - os: linux
-          method: os_release
-          id: lakka
-          bios_path: /storage/system
-
+      - os: linux
+        method: os_release
+        id: lakka
+        bios_path: /storage/system
   retrodeck:
     config: retrodeck.yml
     status: active
-    logo: "https://raw.githubusercontent.com/RetroDECK/RetroDECK/main/res/icon.svg"
+    logo: https://raw.githubusercontent.com/RetroDECK/RetroDECK/main/res/icon.svg
     scraper: retrodeck
-    source_url: "https://github.com/RetroDECK/components"
+    source_url: https://github.com/RetroDECK/components
     source_format: github_component_manifests
     hash_type: md5
     schedule: monthly
-    cores: [azahar, cemu, dolphin, duckstation, gzdoom, mame, melonds, openbor, pcsx2, pico-8, ppsspp, primehack, retroarch, rpcs3, ruffle, solarus, vita3k, xemu, xroar]
+    cores:
+    - azahar
+    - cemu
+    - clk
+    - dolphin
+    - duckstation
+    - gsplus
+    - gzdoom
+    - mame
+    - melonds
+    - openbor
+    - pcsx2
+    - pico-8
+    - ppsspp
+    - primehack
+    - retroarch
+    - rpcs3
+    - ruffle
+    - solarus
+    - vita3k
+    - xemu
+    - xroar
     target_scraper: null
     target_source: null
-    # Each component/<name>/component_manifest.json declares BIOS requirements
-    # Scraper enumerates top-level dirs via GitHub API, fetches each manifest directly
     install:
       detect:
-        - os: linux
-          method: path_exists
-          path: "$HOME/.var/app/net.retrodeck.retrodeck"
-          bios_path: "$HOME/retrodeck/bios"
-
+      - os: linux
+        method: path_exists
+        path: $HOME/.var/app/net.retrodeck.retrodeck
+        bios_path: $HOME/retrodeck/bios
   romm:
     config: romm.yml
     status: active
-    logo: "https://avatars.githubusercontent.com/u/168586850"
+    logo: https://avatars.githubusercontent.com/u/168586850
     scraper: romm
-    source_url: "https://raw.githubusercontent.com/rommapp/romm/master/backend/models/fixtures/known_bios_files.json"
+    source_url: https://raw.githubusercontent.com/rommapp/romm/master/backend/models/fixtures/known_bios_files.json
     source_format: json
     hash_type: sha1
     schedule: monthly
-    inherits_from: emulatorjs  # cores inherited from emulatorjs.yml
+    inherits_from: emulatorjs
     target_scraper: null
     target_source: null
     install:
       detect:
-        - os: linux
-          method: path_exists
-          path: /romm/library/bios
-
+      - os: linux
+        method: path_exists
+        path: /romm/library/bios
+    cores:
+    - atari800
+    - clk
+    - directxbox
+    - dolphin
+    - dolphin_launcher
+    - ecwolf
+    - ep128emu
+    - ep128emu_core
+    - freej2me
+    - hatari
+    - ishiiruka
+    - lrps2
+    - minivmac
+    - nekop2
+    - np2kai
+    - o2em
+    - pcsx2
+    - play
+    - pokemini
+    - primehack
+    - px68k
+    - scummvm
+    - squirreljme
+    - x1
+    - xemu
   retropie:
     config: retropie.yml
-    status: archived  # Last release: v4.8 (March 2022) - no update in 4 years
-    logo: "https://avatars.githubusercontent.com/u/11378204"
+    status: archived
+    logo: https://avatars.githubusercontent.com/u/11378204
     scraper: null
     cores: all_libretro
     schedule: null
     target_scraper: retropie_targets
-    target_source: "https://retropie.org.uk/stats/pkgflags/"
+    target_source: https://retropie.org.uk/stats/pkgflags/
     install:
       detect:
-        - os: linux
-          method: path_exists
-          path: "$HOME/RetroPie/BIOS"
-
+      - os: linux
+        method: path_exists
+        path: $HOME/RetroPie/BIOS
   bizhawk:
     config: bizhawk.yml
     status: active
-    logo: "https://raw.githubusercontent.com/TASEmulators/BizHawk/master/Assets/bizhawk.ico"
+    logo: https://raw.githubusercontent.com/TASEmulators/BizHawk/master/Assets/bizhawk.ico
     scraper: bizhawk
-    source_url: "https://raw.githubusercontent.com/TASEmulators/BizHawk/master/src/BizHawk.Emulation.Common/Database/FirmwareDatabase.cs"
+    source_url: https://raw.githubusercontent.com/TASEmulators/BizHawk/master/src/BizHawk.Emulation.Common/Database/FirmwareDatabase.cs
     source_format: csharp_firmware_database
     hash_type: sha1
     schedule: monthly
-    cores: [gambatte, mgba, sameboy, melonds, snes9x, bsnes, beetle_psx, beetle_saturn, beetle_pce, beetle_pcfx, beetle_wswan, beetle_vb, beetle_ngp, opera, stella, picodrive, ppsspp, handy, quicknes, genesis_plus_gx, ares, mupen64plus_next, puae, prboom, virtualjaguar, vice_x64, mame]
+    cores:
+    - applewin
+    - ares
+    - azahar
+    - beetle_ngp
+    - beetle_pce
+    - beetle_pcfx
+    - beetle_psx
+    - beetle_saturn
+    - beetle_vb
+    - beetle_wswan
+    - bsnes
+    - citra
+    - citra2018
+    - citra_canary
+    - clk
+    - fbneo
+    - freechaf
+    - freeintv
+    - gambatte
+    - genesis_plus_gx
+    - handy
+    - mame
+    - melonds
+    - mgba
+    - mupen64plus_next
+    - numero
+    - o2em
+    - opera
+    - panda3ds
+    - picodrive
+    - ppsspp
+    - prboom
+    - prosystem
+    - puae
+    - quicknes
+    - sameboy
+    - snes9x
+    - stella
+    - trident
+    - vecx
+    - vice_x64
+    - virtualjaguar
     target_scraper: null
     target_source: null
     install:
       detect:
-        - os: windows
-          method: path_exists
-          path: "%USERPROFILE%\\BizHawk\\Firmware"
-        - os: linux
-          method: path_exists
-          path: "$HOME/.config/BizHawk/Firmware"
+      - os: windows
+        method: path_exists
+        path: '%USERPROFILE%\BizHawk\Firmware'
+      - os: linux
+        method: path_exists
+        path: $HOME/.config/BizHawk/Firmware
