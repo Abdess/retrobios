@@ -191,6 +191,30 @@ def load_platform_config(platform_name: str, platforms_dir: str = "platforms") -
                             system.setdefault("files", []).append(gf)
                             existing.add(key)
 
+    # Merge cores from _registry.yml if the registry has a broader list.
+    # The scraped YAML may have an incomplete cores list; the registry is
+    # our curated source and supplements it. This affects all consumers:
+    # generate_pack, verify, generate_truth, diff_truth.
+    registry_path = os.path.join(platforms_dir, "_registry.yml")
+    if os.path.exists(registry_path):
+        reg_real = os.path.realpath(registry_path)
+        if reg_real not in _shared_yml_cache:
+            with open(registry_path) as f:
+                _shared_yml_cache[reg_real] = yaml.safe_load(f) or {}
+        reg = _shared_yml_cache[reg_real]
+        reg_entry = reg.get("platforms", {}).get(platform_name, {})
+        reg_cores = reg_entry.get("cores")
+        if reg_cores is not None:
+            cfg_cores = config.get("cores")
+            if reg_cores == "all_libretro":
+                config["cores"] = "all_libretro"
+            elif isinstance(reg_cores, list) and isinstance(cfg_cores, list):
+                # Union: registry supplements scraped cores
+                merged_set = {str(c) for c in cfg_cores} | {str(c) for c in reg_cores}
+                config["cores"] = sorted(merged_set)
+            elif isinstance(reg_cores, list) and cfg_cores is None:
+                config["cores"] = reg_cores
+
     _platform_config_cache[cache_key] = config
     return config
 
