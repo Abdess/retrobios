@@ -38,8 +38,14 @@ def _enrich_hashes(entry: dict, db: dict) -> None:
     sha1 = entry.get("sha1", "")
     md5 = entry.get("md5", "")
 
+    # Hashes can be lists (multi-hash) — use first string value
+    if isinstance(sha1, list):
+        sha1 = sha1[0] if sha1 else ""
+    if isinstance(md5, list):
+        md5 = md5[0] if md5 else ""
+
     record = None
-    if sha1 and db.get("files"):
+    if sha1 and isinstance(sha1, str) and db.get("files"):
         record = db["files"].get(sha1)
     if record is None and md5:
         by_md5 = db.get("by_md5", {})
