@@ -1,219 +1,73 @@
-# PCSX2 emulator BIOS profile
-# Generated from source analysis of https://github.com/PCSX2/pcsx2
-# Commit analyzed: HEAD as of 2026-03-17
-
 emulator: PCSX2
 type: standalone
+core_classification: official_port
 source: "https://github.com/PCSX2/pcsx2"
-logo: "https://raw.githubusercontent.com/PCSX2/pcsx2/master/pcsx2-qt/resources/icons/PCSX2logo.svg"
-profiled_date: "2026-03-18"
+upstream: "https://github.com/PCSX2/pcsx2"
+cores:
+  - pcsx2
+profiled_date: "2026-03-30"
 core_version: "Git"
-display_name: "Sony - PlayStation 2 (LRPS2)"
+display_name: "Sony - PlayStation 2 (PCSX2)"
 systems: [sony-playstation-2]
 
-bios_directory: "bios/"
-bios_detection: "romdir"  # scans romdir structure inside binary, looks for RESET/ROMVER/EXTINFO entries
-bios_selection: "automatic"  # scans all files in bios dir matching 4-8 MB size, validates via romdir
-
-validation:
-  method: "romdir_parse"
-  min_size: 4194304   # 4 MB (MIN_BIOS_SIZE = 4 * _1mb)
-  max_size: 8388608   # 8 MB (MAX_BIOS_SIZE = 8 * _1mb)
-  required_entries: ["RESET", "ROMVER"]
-  optional_entries: ["EXTINFO"]
-  note: "Any file in bios/ between 4-8 MB with valid romdir containing RESET+ROMVER is accepted"
-
-regions:
-  J: {zone: "Japan", id: 0}
-  A: {zone: "USA", id: 1}
-  E: {zone: "Europe", id: 2}
-  H: {zone: "Asia", id: 4}
-  C: {zone: "China", id: 6}
-  T: {zone: "T10K/COH-H", id: 8}
-  X: {zone: "Test", id: 9}
-  P: {zone: "Free", id: 10}
+notes: |
+  Filename-agnostic BIOS detection. Scans bios/ for any file between 4-8 MB
+  with valid romdir structure (RESET + ROMVER entries). No hash validation.
+  Companion files (.rom1, .rom2, .nvm, .mec) derive paths from selected BIOS.
+  ROM1 (DVD player) and ROM2 (Chinese extension) silently skipped if missing.
+  NVM and MEC auto-created with defaults if missing.
 
 files:
-  # -- Main BIOS binary (required) --
-  - name: "<user-selected>.bin"
-    pattern: "*"
+  - name: ps2-0230a-20080220.bin
     required: true
-    size_range: "4MB-8MB"
-    source_ref: "pcsx2/ps2/BiosTools.cpp:258-282"
-    note: >
-      PCSX2 does not mandate a specific filename. It scans the entire bios/ directory
-      for any file between 4-8 MB that contains a valid romdir structure (RESET + ROMVER entries).
-      Common filenames follow the SCPH-XXXXX_BIOS_VYYY_REGION_ZZZ.BIN convention but this is
-      not enforced. The file is loaded into the 4 MB ROM region of EE memory.
+    min_size: 4194304
+    max_size: 8388608
+    validation: [size]
+    source_ref: "pcsx2/ps2/BiosTools.cpp:258-362"
+    note: "Accepts any file 4-8 MB with valid romdir (RESET + ROMVER). Naming convention ps2-VVVVr-YYYYMMDD.bin (version, region, date)."
 
-  # -- ROM1 (optional, DVD player) --
-  - name: "<biosname>.rom1"
-    pattern: "{biosname}.rom1 or {biosbase}.rom1"
+  - name: rom1.bin
     required: false
-    max_size: 4194304  # 4 MB (Ps2MemSize::Rom1)
-    source_ref: "pcsx2/ps2/BiosTools.cpp:214-241"
-    note: >
-      DVD player ROM. Loaded via LoadExtraRom("rom1"). PCSX2 tries two naming patterns:
-      1) Full bios path + ".rom1" appended (e.g. scph70004.bin.rom1)
-      2) Bios path with extension replaced (e.g. scph70004.rom1)
-      Mapped to EE memory at ROM1 region (0x1FC00000 + 4MB offset).
-      Contains DVD player and region detection data (DVDID).
+    max_size: 4194304
+    source_ref: "pcsx2/ps2/BiosTools.cpp:214-241,366"
+    note: "DVD player ROM. Tries {biospath}.rom1 then {biosbase}.rom1. Silently skipped if missing."
 
-  # -- ROM2 (optional, Chinese ROM extension) --
-  - name: "<biosname>.rom2"
-    pattern: "{biosname}.rom2 or {biosbase}.rom2"
+  - name: ROM2.BIN
     required: false
-    max_size: 4194304  # 4 MB (Ps2MemSize::Rom2)
-    source_ref: "pcsx2/ps2/BiosTools.cpp:214-241"
-    note: >
-      Chinese ROM extension. Loaded via LoadExtraRom("rom2"). Same naming convention
-      as rom1: tries appended extension first, then replaced extension.
-      Only present on Chinese region consoles.
+    max_size: 4194304
+    source_ref: "pcsx2/ps2/BiosTools.cpp:214-241,367"
+    note: "Chinese ROM extension. Same naming convention as rom1. Only present on Chinese region consoles."
 
-  # -- NVM / NVRAM (optional, auto-created) --
-  - name: "<biosname>.nvm"
-    pattern: "{biosbase}.nvm"
+  - name: EROM.BIN
+    required: false
+    source_ref: "pcsx2/ps2/BiosTools.cpp"
+    note: "Extended ROM. Present in some BIOS dumps but not loaded by PCSX2 code via LoadExtraRom."
+    path: null
+
+  - name: eeprom.dat
     required: false
     hle_fallback: true
-    size: 1024  # NVRAM_SIZE = 1024 bytes
-    source_ref: "pcsx2/CDVD/CDVD.cpp:160-238"
-    note: >
-      EEPROM / NVRAM data. Path derived from BiosPath with extension replaced to ".nvm"
-      (cdvdGetNVRAMPath). Contains console configuration: language, timezone, iLink ID,
-      region parameters, OSD settings. Auto-created with defaults if missing.
-      Two NVM layouts exist: v0.00+ (biosVer 0x000) and v1.70+ (biosVer 0x146).
-
-  # -- MEC file (optional, auto-created) --
-  - name: "<biosname>.mec"
-    pattern: "{biosbase}.mec"
-    required: false
-    hle_fallback: true
-    size: 4  # u32 s_mecha_version
-    source_ref: "pcsx2/CDVD/CDVD.cpp:190-204"
-    note: >
-      Mechacon (mechanism controller) version file. 4 bytes containing the mecha version
-      as a u32 value. Auto-created with DEFAULT_MECHA_VERSION (0x00020603) if missing.
-      Path derived from BiosPath with extension replaced to ".mec".
-
-  # -- IRX override (optional, advanced) --
-  - name: "<custom>.irx"
-    pattern: "*.irx"
-    required: false
-    source_ref: "pcsx2/ps2/BiosTools.cpp:243-256,384-385"
-    note: >
-      Custom IOP Reboot eXecutable module. Loaded into ROM at offset 0x3C0000 if
-      EmuConfig.CurrentIRX is set (path length > 3). Injected at IOP reset (PC=0x1630).
-      Used for debugging/development, not needed for normal operation.
-
-  # -- DEV9 EEPROM (optional, network adapter) --
-  - name: "eeprom.dat"
-    required: false
-    hle_fallback: true
-    size: 64  # 64 bytes, mmap'd
+    size: 64
     source_ref: "pcsx2/DEV9/DEV9.cpp:110-160"
-    note: >
-      DEV9 (network adapter / HDD expansion bay) EEPROM data. Fixed filename "eeprom.dat"
-      opened from working directory. Contains network adapter configuration.
-      Falls back to built-in defaults if file not found. Only relevant when using
-      DEV9 features (online play, HDD).
+    note: "DEV9 network adapter EEPROM. Falls back to built-in defaults if missing."
 
-common_bios_filenames:
-  # Japan
-  - "SCPH-10000_BIOS_V1_JAP_100.BIN"
-  - "SCPH-15000_BIOS_V3_JAP_120.BIN"
-  - "SCPH-30000_BIOS_V4_JAP_150.BIN"
-  - "SCPH-30001R_BIOS_V7_JAP_160.BIN"
-  - "SCPH-30004R_BIOS_V7_JAP_160.BIN"
-  - "SCPH-35000_BIOS_V5_JAP_160.BIN"
-  - "SCPH-50000_BIOS_V9_JAP_170.BIN"
-  - "SCPH-50004_BIOS_V9_JAP_170.BIN"
-  - "SCPH-70000_BIOS_V12_JAP_200.BIN"
-  - "SCPH-75000_BIOS_V14_JAP_220.BIN"
-  - "SCPH-77000_BIOS_V14_JAP_220.BIN"
-  - "SCPH-90000_BIOS_V18_JAP_230.BIN"
-  # USA
-  - "SCPH-30001_BIOS_V4_USA_150.BIN"
-  - "SCPH-39001_BIOS_V6_USA_160.BIN"
-  - "SCPH-50001_BIOS_V9_USA_170.BIN"
-  - "SCPH-50003_BIOS_V9_USA_170.BIN"
-  - "SCPH-70002_BIOS_V12_USA_200.BIN"
-  - "SCPH-70004_BIOS_V12_USA_200.BIN"
-  - "SCPH-70012_BIOS_V12_USA_200.BIN"
-  - "SCPH-75001_BIOS_V14_USA_220.BIN"
-  - "SCPH-77001_BIOS_V14_USA_220.BIN"
-  - "SCPH-90001_BIOS_V18_USA_230.BIN"
-  # Europe
-  - "SCPH-30002_BIOS_V4_EUR_150.BIN"
-  - "SCPH-30003_BIOS_V4_EUR_150.BIN"
-  - "SCPH-30004_BIOS_V4_EUR_150.BIN"
-  - "SCPH-39002_BIOS_V6_EUR_160.BIN"
-  - "SCPH-39003_BIOS_V6_EUR_160.BIN"
-  - "SCPH-39004_BIOS_V6_EUR_160.BIN"
-  - "SCPH-50002_BIOS_V9_EUR_170.BIN"
-  - "SCPH-50004_BIOS_V9_EUR_170.BIN"
-  - "SCPH-70002_BIOS_V12_EUR_200.BIN"
-  - "SCPH-70003_BIOS_V12_EUR_200.BIN"
-  - "SCPH-70004_BIOS_V12_EUR_200.BIN"
-  - "SCPH-70008_BIOS_V12_EUR_200.BIN"
-  - "SCPH-75002_BIOS_V14_EUR_220.BIN"
-  - "SCPH-75003_BIOS_V14_EUR_220.BIN"
-  - "SCPH-75004_BIOS_V14_EUR_220.BIN"
-  - "SCPH-77002_BIOS_V14_EUR_220.BIN"
-  - "SCPH-77003_BIOS_V14_EUR_220.BIN"
-  - "SCPH-77004_BIOS_V14_EUR_220.BIN"
-  - "SCPH-90002_BIOS_V18_EUR_230.BIN"
-  - "SCPH-90003_BIOS_V18_EUR_230.BIN"
-  - "SCPH-90004_BIOS_V18_EUR_230.BIN"
-  # Asia
-  - "SCPH-50009_BIOS_V9_HK_170.BIN"
-  - "SCPH-70005_BIOS_V12_HK_200.BIN"
-  - "SCPH-70006_BIOS_V12_HK_200.BIN"
-  - "SCPH-70008_BIOS_V12_HK_200.BIN"
-  # China
-  - "SCPH-50009_BIOS_V9_CHN_170.BIN"
-  - "SCPH-70006_BIOS_V12_CHN_200.BIN"
+  - name: GameIndex.yaml
+    path: pcsx2/resources/GameIndex.yaml
+    required: false
+    mode: libretro
+    source_ref: "pcsx2/GameDatabase.cpp:48,880"
+    note: "Game compatibility database. OSD warning if missing."
 
-memory_layout:
-  ROM:  {offset: "0x1FC00000", size: "4 MB", purpose: "Main BIOS binary"}
-  ROM1: {offset: "ROM + 4MB",  size: "4 MB", purpose: "DVD player"}
-  ROM2: {offset: "ROM + 8MB",  size: "4 MB", purpose: "Chinese ROM extension"}
+  - name: cheats_ws.zip
+    path: pcsx2/resources/cheats_ws.zip
+    required: false
+    mode: libretro
+    source_ref: "pcsx2/VMManager.cpp:340-353"
+    note: "Widescreen patches archive."
 
-nvm_layout:
-  format_0:
-    applies_to: "BIOS v0.00+"
-    biosVer: 0x000
-    config0: 0x280
-    config1: 0x300
-    config2: 0x200
-    consoleId: 0x1C8
-    ilinkId: 0x1C0
-    modelNum: 0x1A0
-    regparams: 0x180
-    mac: 0x198
-  format_1:
-    applies_to: "BIOS v1.70+"
-    biosVer: 0x146
-    config0: 0x270
-    config1: 0x2B0
-    config2: 0x200
-    consoleId: 0x1F0
-    ilinkId: 0x1E0
-    modelNum: 0x1B0
-    regparams: 0x180
-    mac: 0x198
-
-notes: |
-  PCSX2 is filename-agnostic for the main BIOS. Detection relies on romdir structure
-  parsing inside the binary itself, not on filename or extension. Any file between 4-8 MB
-  with a valid romdir (containing at least RESET and ROMVER entries) is accepted.
-
-  The ROMVER entry encodes: version (2+2 digits), region letter, console/devel flag,
-  build date (YYYYMMDD), and is used to determine the BIOS description and region.
-
-  Companion files (.nvm, .mec) are auto-created with sane defaults if missing.
-  ROM1/ROM2 are silently skipped if not found - only the main BIOS binary is strictly required.
-
-  PCSX2 no longer ships as a libretro core in official builds. The standalone emulator
-  is the primary distribution channel.
-
-  Devel console BIOSes (< ~2.3 MB) lack the OSD and are handled with NoOSD=true flag.
+  - name: cheats_ni.zip
+    path: pcsx2/resources/cheats_ni.zip
+    required: false
+    mode: libretro
+    source_ref: "pcsx2/VMManager.cpp:375-388"
+    note: "No-interlacing patches archive."
