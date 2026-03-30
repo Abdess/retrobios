@@ -735,6 +735,15 @@ def resolve_platform_cores(
             for c in core_set
             if c in core_to_profile
         }
+        # Support "all_libretro" as a list element: combines all libretro
+        # profiles with explicitly listed standalone cores (e.g. RetroDECK
+        # ships RetroArch + standalone emulators)
+        if "all_libretro" in core_set or "retroarch" in core_set:
+            result |= {
+                name for name, p in profiles.items()
+                if "libretro" in p.get("type", "")
+                and p.get("type") != "alias"
+            }
     else:
         # Fallback: system ID intersection with normalization
         norm_plat_systems = {_norm_system_id(s) for s in config.get("systems", {})}
