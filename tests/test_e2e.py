@@ -170,6 +170,7 @@ class TestE2E(unittest.TestCase):
                 "md5": info["md5"],
                 "name": name,
                 "crc32": info.get("crc32", ""),
+                "size": len(info["data"]),
             }
             by_md5[info["md5"]] = sha1
             by_name.setdefault(name, []).append(sha1)
@@ -509,6 +510,33 @@ class TestE2E(unittest.TestCase):
         }
         with open(os.path.join(self.emulators_dir, "test_renamed.yml"), "w") as fh:
             yaml.dump(emu_renamed, fh)
+
+        # Agnostic profile (bios_mode: agnostic) — skipped by find_undeclared_files
+        emu_agnostic = {
+            "emulator": "TestAgnostic",
+            "type": "standalone",
+            "bios_mode": "agnostic",
+            "systems": ["console-a"],
+            "files": [
+                {"name": "correct_hash.bin", "required": True,
+                 "min_size": 1, "max_size": 999999},
+            ],
+        }
+        with open(os.path.join(self.emulators_dir, "test_agnostic.yml"), "w") as fh:
+            yaml.dump(emu_agnostic, fh)
+
+        # Mixed profile with per-file agnostic
+        emu_mixed_agnostic = {
+            "emulator": "TestMixedAgnostic",
+            "type": "libretro",
+            "systems": ["console-a"],
+            "files": [
+                {"name": "undeclared_req.bin", "required": True},
+                {"name": "agnostic_file.bin", "required": True, "agnostic": True},
+            ],
+        }
+        with open(os.path.join(self.emulators_dir, "test_mixed_agnostic.yml"), "w") as fh:
+            yaml.dump(emu_mixed_agnostic, fh)
 
     # ---------------------------------------------------------------
     # THE TEST -one method per feature area, all using same fixtures
@@ -3410,6 +3438,66 @@ class TestE2E(unittest.TestCase):
         self.assertEqual(result["summary"]["systems_uncovered"], 0)
         self.assertEqual(result["summary"]["total_missing"], 0)
         self.assertEqual(result["summary"]["systems_compared"], 1)
+
+    def test_179_agnostic_profile_skipped_in_undeclared(self):
+        """bios_mode: agnostic profiles are skipped entirely by find_undeclared_files."""
+        config = load_platform_config("test_existence", self.platforms_dir)
+        profiles = load_emulator_profiles(self.emulators_dir)
+        undeclared = find_undeclared_files(config, self.emulators_dir, self.db, profiles)
+        emulators = {u["emulator"] for u in undeclared}
+        # TestAgnostic should NOT appear in undeclared (bios_mode: agnostic)
+        self.assertNotIn("TestAgnostic", emulators)
+
+    def test_180_agnostic_file_skipped_in_undeclared(self):
+        """Files with agnostic: true are skipped, others in same profile are not."""
+        config = load_platform_config("test_existence", self.platforms_dir)
+        profiles = load_emulator_profiles(self.emulators_dir)
+        undeclared = find_undeclared_files(config, self.emulators_dir, self.db, profiles)
+        names = {u["name"] for u in undeclared}
+        # agnostic_file.bin should NOT be in undeclared (agnostic: true)
+        self.assertNotIn("agnostic_file.bin", names)
+        # undeclared_req.bin should still be in undeclared (not agnostic)
+        self.assertIn("undeclared_req.bin", names)
+
+    def test_181_agnostic_extras_scan(self):
+        """Agnostic profiles add all matching DB files as extras."""
+        from generate_pack import _collect_emulator_extras
+        config = load_platform_config("test_existence", self.platforms_dir)
+        profiles = load_emulator_profiles(self.emulators_dir)
+        extras = _collect_emulator_extras(
+            config, self.emulators_dir, self.db, set(), "system", profiles,
+        )
+        agnostic_extras = [e for e in extras if e.get("source_emulator") == "TestAgnostic"]
+        # Agnostic scan should find files in the same directory as correct_hash.bin
+        self.assertTrue(len(agnostic_extras) > 0, "Agnostic scan should produce extras")
+        # All agnostic extras should have agnostic_scan flag
+        for e in agnostic_extras:
+            self.assertTrue(e.get("agnostic_scan", False))
+
+    def test_182_agnostic_rename_readme(self):
+        """_build_agnostic_rename_readme generates correct text."""
+        from generate_pack import _build_agnostic_rename_readme
+        result = _build_agnostic_rename_readme(
+            "dsi_nand.bin", "DSi_Nand_AUS.bin",
+            ["DSi_Nand_EUR.bin", "DSi_Nand_USA.bin"],
+        )
+        self.assertIn("dsi_nand.bin <- DSi_Nand_AUS.bin", result)
+        self.assertIn("DSi_Nand_EUR.bin", result)
+        self.assertIn("DSi_Nand_USA.bin", result)
+        self.assertIn("rename it to: dsi_nand.bin", result)
+
+    def test_183_agnostic_resolve_fallback(self):
+        """resolve_local_file with agnostic fallback finds a system file."""
+        file_entry = {
+            "name": "nonexistent_agnostic.bin",
+            "agnostic": True,
+            "min_size": 1,
+            "max_size": 999999,
+            "agnostic_path_prefix": self.bios_dir + "/",
+        }
+        path, status = resolve_local_file(file_entry, self.db)
+        self.assertIsNotNone(path)
+        self.assertEqual(status, "agnostic_fallback")
 
 
 if __name__ == "__main__":

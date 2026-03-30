@@ -291,6 +291,10 @@ def find_undeclared_files(
         if emu_name not in relevant:
             continue
 
+        # Skip agnostic profiles entirely (filename-agnostic BIOS detection)
+        if profile.get("bios_mode") == "agnostic":
+            continue
+
         # Check if this profile is standalone: match profile name or any cores: alias
         is_standalone = emu_name in standalone_set or bool(
             standalone_set & {str(c) for c in profile.get("cores", [])}
@@ -315,6 +319,10 @@ def find_undeclared_files(
             # Skip files loaded from non-system directories (save_dir, content_dir)
             load_from = f.get("load_from", "")
             if load_from and load_from != "system_dir":
+                continue
+
+            # Skip agnostic files (filename-agnostic, handled by agnostic scan)
+            if f.get("agnostic"):
                 continue
 
             archive = f.get("archive")

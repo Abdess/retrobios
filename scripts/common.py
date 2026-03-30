@@ -546,6 +546,25 @@ def resolve_local_file(
                     if fn.casefold() in basename_targets:
                         return os.path.join(root, fn), "data_dir"
 
+    # Agnostic fallback: for filename-agnostic files, find any DB file
+    # matching the system path prefix and size criteria
+    if file_entry.get("agnostic"):
+        agnostic_prefix = file_entry.get("agnostic_path_prefix", "")
+        min_size = file_entry.get("min_size", 0)
+        max_size = file_entry.get("max_size", float("inf"))
+        exact_size = file_entry.get("size")
+        if exact_size and not min_size:
+            min_size = exact_size
+            max_size = exact_size
+        if agnostic_prefix:
+            for _sha1, entry in files_db.items():
+                path = entry.get("path", "")
+                if not path.startswith(agnostic_prefix):
+                    continue
+                size = entry.get("size", 0)
+                if min_size <= size <= max_size and os.path.exists(path):
+                    return path, "agnostic_fallback"
+
     return None, "not_found"
 
 

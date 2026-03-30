@@ -422,6 +422,91 @@ def _collect_emulator_extras(
                 "source_emulator": profile.get("emulator", emu_name),
             })
 
+    # Third pass: agnostic scan — for filename-agnostic cores, include all
+    # DB files matching the system path prefix and size criteria.
+    files_db = db.get("files", {})
+    for emu_name, profile in sorted(profiles.items()):
+        if profile.get("type") in ("launcher", "alias"):
+            continue
+        if emu_name not in relevant:
+            continue
+        is_profile_agnostic = profile.get("bios_mode") == "agnostic"
+        if not is_profile_agnostic:
+            if not any(f.get("agnostic") for f in profile.get("files", [])):
+                continue
+
+        for f in profile.get("files", []):
+            if not is_profile_agnostic and not f.get("agnostic"):
+                continue
+            fname = f.get("name", "")
+            if not fname:
+                continue
+
+            # Derive path prefix from the representative file in the DB
+            path_prefix = None
+            sha1_list = by_name.get(fname, [])
+            for sha1 in sha1_list:
+                entry = files_db.get(sha1, {})
+                path = entry.get("path", "")
+                if path:
+                    parts = path.rsplit("/", 1)
+                    if len(parts) == 2:
+                        path_prefix = parts[0] + "/"
+                    break
+
+            if not path_prefix:
+                # Fallback: try other files in the profile for the same system
+                for other_f in profile.get("files", []):
+                    if other_f is f:
+                        continue
+                    other_name = other_f.get("name", "")
+                    for sha1 in by_name.get(other_name, []):
+                        entry = files_db.get(sha1, {})
+                        path = entry.get("path", "")
+                        if path:
+                            parts = path.rsplit("/", 1)
+                            if len(parts) == 2:
+                                path_prefix = parts[0] + "/"
+                            break
+                    if path_prefix:
+                        break
+
+            if not path_prefix:
+                continue
+
+            # Size criteria from the file entry
+            min_size = f.get("min_size", 0)
+            max_size = f.get("max_size", float("inf"))
+            exact_size = f.get("size")
+            if exact_size and not min_size:
+                min_size = exact_size
+                max_size = exact_size
+
+            # Scan DB for all files under this prefix matching size
+            for sha1, entry in files_db.items():
+                path = entry.get("path", "")
+                if not path.startswith(path_prefix):
+                    continue
+                size = entry.get("size", 0)
+                if not (min_size <= size <= max_size):
+                    continue
+                scan_name = entry.get("name", "")
+                if not scan_name:
+                    continue
+                dest = scan_name
+                full_dest = f"{base_dest}/{dest}" if base_dest else dest
+                if full_dest in seen_dests:
+                    continue
+                seen_dests.add(full_dest)
+                extras.append({
+                    "name": scan_name,
+                    "destination": dest,
+                    "required": False,
+                    "hle_fallback": False,
+                    "source_emulator": profile.get("emulator", emu_name),
+                    "agnostic_scan": True,
+                })
+
     return extras
 
 
@@ -621,6 +706,24 @@ def _build_readme(platform_name: str, platform_display: str,
     return header + guide + footer
 
 
+def _build_agnostic_rename_readme(
+    destination: str, original: str, alternatives: list[str],
+) -> str:
+    """Build a README explaining an agnostic file rename."""
+    lines = [
+        "This file was renamed for compatibility:",
+        f"  {destination} <- {original}",
+        "",
+    ]
+    if alternatives:
+        lines.append("All variants included in this pack:")
+        for alt in sorted(alternatives):
+            lines.append(f"  {alt}")
+        lines.append("")
+        lines.append(f"To use a different variant, rename it to: {destination}")
+    return "\n".join(lines) + "\n"
+
+
 def generate_pack(
     platform_name: str,
     platforms_dir: str,
@@ -788,10 +891,71 @@ def generate_pack(
                     continue
 
                 if status == "not_found":
-                    if not already_packed:
-                        missing_files.append(file_entry["name"])
-                        file_status[dedup_key] = "missing"
-                    continue
+                    # Agnostic fallback: if an agnostic core covers this system,
+                    # find any matching file in the DB
+                    by_name = db.get("indexes", {}).get("by_name", {})
+                    files_db = db.get("files", {})
+                    agnostic_path = None
+                    agnostic_resolved = False
+                    if emu_profiles:
+                        for _emu_key, _emu_prof in emu_profiles.items():
+                            if _emu_prof.get("bios_mode") != "agnostic":
+                                continue
+                            if sys_id not in set(_emu_prof.get("systems", [])):
+                                continue
+                            for _ef in _emu_prof.get("files", []):
+                                ef_name = _ef.get("name", "")
+                                for _sha1 in by_name.get(ef_name, []):
+                                    _entry = files_db.get(_sha1, {})
+                                    _path = _entry.get("path", "")
+                                    if _path:
+                                        _prefix = _path.rsplit("/", 1)[0] + "/"
+                                        _min = _ef.get("min_size", 0)
+                                        _max = _ef.get("max_size", float("inf"))
+                                        if _ef.get("size") and not _min:
+                                            _min = _ef["size"]
+                                            _max = _ef["size"]
+                                        for _s, _e in files_db.items():
+                                            if _e.get("path", "").startswith(_prefix):
+                                                if _min <= _e.get("size", 0) <= _max:
+                                                    if os.path.exists(_e["path"]):
+                                                        local_path = _e["path"]
+                                                        agnostic_path = _prefix
+                                                        agnostic_resolved = True
+                                                        break
+                                        break
+                                if agnostic_resolved:
+                                    break
+                            if agnostic_resolved:
+                                break
+
+                    if agnostic_resolved and local_path:
+                        # Write rename README
+                        original_name = os.path.basename(local_path)
+                        dest_name = file_entry.get("name", "")
+                        if original_name != dest_name and agnostic_path:
+                            alt_names = []
+                            for _s, _e in files_db.items():
+                                _p = _e.get("path", "")
+                                if _p.startswith(agnostic_path):
+                                    _n = _e.get("name", "")
+                                    if _n and _n != original_name:
+                                        alt_names.append(_n)
+                            readme_text = _build_agnostic_rename_readme(
+                                dest_name, original_name, alt_names,
+                            )
+                            readme_name = f"RENAMED_{dest_name}.txt"
+                            readme_full = f"{base_dest}/{readme_name}" if base_dest else readme_name
+                            if readme_full not in seen_destinations:
+                                zf.writestr(readme_full, readme_text)
+                                seen_destinations.add(readme_full)
+                        status = "agnostic_fallback"
+                        # Fall through to normal packing below
+                    else:
+                        if not already_packed:
+                            missing_files.append(file_entry["name"])
+                            file_status[dedup_key] = "missing"
+                        continue
 
                 if status == "hash_mismatch" and verification_mode != "existence":
                     zf_name = file_entry.get("zipped_file")

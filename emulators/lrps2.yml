@@ -5,6 +5,7 @@
 emulator: LRPS2
 type: libretro
 core_classification: community_fork
+bios_mode: agnostic
 source: "https://github.com/libretro/ps2"
 upstream: "https://github.com/PCSX2/pcsx2"
 profiled_date: "2026-03-25"

@@ -77,6 +77,7 @@ files:
     source_ref: "src/SPI.cpp:197-211, src/frontend/Util_ROM.cpp:201-217"
 
   - name: dsi_nand.bin
+    agnostic: true
     system: nintendo-dsi
     description: "DSi NAND dump"
     required: true

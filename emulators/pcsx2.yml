@@ -1,6 +1,7 @@
 emulator: PCSX2
 type: standalone
 core_classification: official_port
+bios_mode: agnostic
 source: "https://github.com/PCSX2/pcsx2"
 upstream: "https://github.com/PCSX2/pcsx2"
 cores:
