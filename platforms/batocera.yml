@@ -1,250 +1,168 @@
 platform: Batocera
-version: '42'
+version: ''
 homepage: "https://batocera.org"
 source: "https://raw.githubusercontent.com/batocera-linux/batocera.linux/master/package/batocera/core/batocera-scripts/scripts/batocera-systems"
 base_destination: bios
 hash_type: md5
 verification_mode: md5
-standalone_cores:
-  - abuse
-  - azahar
-  - bstone
-  - cannonball
-  - catacombgl
-  - cdogs
-  - cemu
-  - cgenius
-  - citron
-  - clk
-  - corsixth
-  - demul
-  - devilutionx
-  - dhewm3
-  - dolphin
-  - dxx-rebirth
-  - easyrpg
-  - ecwolf
-  - eduke32
-  - eka2l1
-  - etlegacy
-  - fallout1-ce
-  - fallout2-ce
-  - flatpak
-  - fury
-  - gsplus
-  - gzdoom
-  - hcl
-  - hurrican
-  - hypseus-singe
-  - ikemen
-  - ioquake3
-  - iortcw
-  - jazz2-native
-  - lexaloffle
-  - lindbergh-loader
-  - mame
-  - model2emu
-  - moonlight
-  - mupen64plus
-  - odcommander
-  - openbor
-  - openjazz
-  - openjk
-  - openjkdf2
-  - openmohaa
-  - pcsx2
-  - play
-  - ppsspp
-  - pygame
-  - pyxel
-  - raze
-  - rpcs3
-  - ruffle
-  - samcoupe
-  - scummvm
-  - sdlpop
-  - shadps4
-  - solarus
-  - sonic-mania
-  - sonic2013
-  - sonic3-air
-  - steam
-  - supermodel
-  - taradino
-  - theforceengine
-  - thextech
-  - tr1x
-  - tr2x
-  - tsugaru
-  - tyrian
-  - uqm
-  - vice
-  - vita3k
-  - vpinball
-  - x16emu
-  - xash3d_fwgs
-  - xemu
-  - xenia-canary
-  - yquake2
 cores:
-  - 81
-  - a5200
-  - abuse
-  - arduous
-  - atari800
-  - azahar
-  - bennugd
-  - bk
-  - bluemsx
-  - bsnes
-  - bstone
-  - cannonball
-  - cap32
-  - catacombgl
-  - cdogs
-  - cemu
-  - cgenius
-  - citron
-  - clk
-  - corsixth
-  - demul
-  - devilutionx
-  - dhewm3
-  - dice
-  - dolphin
-  - dosbox_pure
-  - dxx-rebirth
-  - easyrpg
-  - ecwolf
-  - eduke32
-  - eka2l1
-  - emuscv
-  - etlegacy
-  - fake08
-  - fallout1-ce
-  - fallout2-ce
-  - fbneo
-  - fceumm
-  - flatpak
-  - flycast
-  - freechaf
-  - freeintv
-  - fury
-  - fuse
-  - gambatte
-  - gearsystem
-  - genesisplusgx
-  - glide64mk2
-  - gong
-  - gsplus
-  - gw
-  - gzdoom
-  - hatari
-  - hcl
-  - hurrican
-  - hypseus-singe
-  - ikemen
-  - ioquake3
-  - iortcw
-  - jazz2-native
-  - lindbergh-loader
-  - lowresnx
-  - lutro
-  - mame
-  - mame078plus
-  - mednafen_lynx
-  - mednafen_ngp
-  - mednafen_supergrafx
-  - mednafen_wswan
-  - melonds
-  - mgba
-  - minivmac
-  - model2emu
-  - moonlight
-  - mrboom
-  - neocd
-  - np2kai
-  - nxengine
-  - o2em
-  - odcommander
-  - openbor6412
-  - openjazz
-  - openjk
-  - openjkdf2
-  - openmohaa
-  - opera
-  - pce_fast
-  - pcfx
-  - pcsx2
-  - pcsx_rearmed
-  - pd777
-  - picodrive
-  - play
-  - pokemini
-  - potator
-  - ppsspp
-  - prboom
-  - prosystem
-  - puae
-  - px68k
-  - pygame
-  - pyxel
-  - quasi88
-  - raze
-  - reminiscence
-  - rpcs3
-  - ruffle
-  - samcoupe
-  - sameduck
-  - scummvm
-  - sdlpop
-  - sh
-  - shadps4
-  - snes9x
-  - solarus
-  - sonic2013
-  - sonic3-air
-  - sonic-mania
-  - steam
-  - stella
-  - superbroswar
-  - supermodel
-  - taradino
-  - tgbdual
-  - theforceengine
-  - theodore
-  - thextech
-  - tic80
-  - tr1x
-  - tr2x
-  - tsugaru
-  - tyrian
-  - tyrquake
-  - uqm
-  - uzem
-  - vb
-  - vecx
-  - vice_x64
-  - vircon32
-  - virtualjaguar
-  - vita3k
-  - vox_official
-  - vpinball
-  - wasm4
-  - wine-tkg
-  - x1
-  - x128
-  - x16emu
-  - xash3d_fwgs
-  - xemu
-  - xenia-canary
-  - xpet
-  - xplus4
-  - xrick
-  - xvic
-  - yabasanshiro
-  - yquake2
-  - zc210
+- '81'
+- a5200
+- abuse
+- arduous
+- atari800
+- azahar
+- bennugd
+- bk
+- bluemsx
+- bsnes
+- bstone
+- cannonball
+- cap32
+- catacombgl
+- cdogs
+- cemu
+- cgenius
+- citron
+- clk
+- corsixth
+- demul
+- devilutionx
+- dhewm3
+- dice
+- dolphin
+- dosbox_pure
+- dxx-rebirth
+- easyrpg
+- ecwolf
+- eduke32
+- eka2l1
+- emuscv
+- etlegacy
+- fake08
+- fallout1-ce
+- fallout2-ce
+- fbneo
+- fceumm
+- flatpak
+- flycast
+- freechaf
+- freeintv
+- fury
+- fuse
+- gambatte
+- gearsystem
+- genesisplusgx
+- glide64mk2
+- gong
+- gsplus
+- gw
+- gzdoom
+- hatari
+- hcl
+- hurrican
+- hypseus-singe
+- ikemen
+- ioquake3
+- jazz2-native
+- lindbergh-loader
+- lowresnx
+- lutro
+- mame
+- mame078plus
+- mednafen_lynx
+- mednafen_ngp
+- mednafen_supergrafx
+- mednafen_wswan
+- melonds
+- mgba
+- minivmac
+- model2emu
+- moonlight
+- mrboom
+- neocd
+- np2kai
+- nxengine
+- o2em
+- odcommander
+- openbor6412
+- openjazz
+- openjk
+- openjkdf2
+- openmohaa
+- opera
+- pce_fast
+- pcfx
+- pcsx2
+- pcsx_rearmed
+- pd777
+- picodrive
+- play
+- pokemini
+- potator
+- ppsspp
+- prboom
+- prosystem
+- puae
+- px68k
+- pygame
+- pyxel
+- quasi88
+- raze
+- reminiscence
+- rpcs3
+- ruffle
+- samcoupe
+- sameduck
+- scummvm
+- sdlpop
+- sh
+- shadps4
+- snes9x
+- solarus
+- sonic-mania
+- sonic2013
+- sonic3-air
+- steam
+- stella
+- superbroswar
+- supermodel
+- taradino
+- tgbdual
+- theforceengine
+- theodore
+- thextech
+- tic80
+- tr1x
+- tr2x
+- tsugaru
+- tyrian
+- tyrquake
+- uqm
+- uzem
+- vb
+- vecx
+- vice_x64
+- vircon32
+- virtualjaguar
+- vita3k
+- vox_official
+- vpinball
+- wasm4
+- wine-tkg
+- x1
+- x128
+- x16emu
+- xash3d_fwgs
+- xemu
+- xenia-canary
+- xpet
+- xplus4
+- xrick
+- xvic
+- yabasanshiro
+- yquake2
+- zc210
 systems:
   atari-400-800:
     files:
@@ -264,12 +182,14 @@ systems:
       destination: ATARIBAS.ROM
       required: true
       md5: 0bac0c6a50104045d902df4503a4c30b
+    native_id: atari800
   atari-5200:
     files:
     - name: 5200.rom
       destination: 5200.rom
       required: true
       md5: 281f20ea4320404ec820fb7ec0693b38
+    native_id: atari5200
   atari-st:
     files:
     - name: tos.img
@@ -416,12 +336,14 @@ systems:
       destination: tos404.img
       required: true
       md5: e5ea0f216fb446f1c4a4f476bc5f03d4
+    native_id: atarist
   atari-lynx:
     files:
     - name: lynxboot.img
       destination: lynxboot.img
       required: true
       md5: fcd403db69f54290b51035d82f835e7b
+    native_id: lynx
   magnavox-odyssey2:
     files:
     - name: o2rom.bin
@@ -432,6 +354,7 @@ systems:
       destination: c52.bin
       required: true
       md5: f1071cdb0b6b10dde94d3bc8a6146387
+    native_id: odyssey2
   videopacplus:
     files:
     - name: g7400.bin
@@ -442,6 +365,7 @@ systems:
       destination: jopac.bin
       required: true
       md5: 279008e4a0db2dc5f1c048853b033828
+    native_id: videopacplus
   mattel-intellivision:
     files:
     - name: exec.bin
@@ -452,6 +376,7 @@ systems:
       destination: grom.bin
       required: true
       md5: 0cd5946c6473e42e8e4c2137785e427f
+    native_id: intellivision
   nec-pc-engine:
     files:
     - name: syscard3.pce
@@ -462,18 +387,21 @@ systems:
       destination: syscard3.pce
       required: true
       md5: 38179df8f4ac870017db21ebcbf53114
+    native_id: pcengine
   nec-pc-fx:
     files:
     - name: pcfx.rom
       destination: pcfx.rom
       required: true
       md5: 08e36edbea28a017f79f8d4f7ff9b6d7
+    native_id: pcfx
   snk-neogeo:
     files:
     - name: neogeo.zip
       destination: neogeo.zip
       required: true
       md5: dffb72f116d36d025068b23970a4f6df
+    native_id: neogeo
   snk-neogeo-cd:
     files:
     - name: neocd_f.rom
@@ -516,6 +444,7 @@ systems:
       destination: neocd/uni-bioscd.rom
       required: true
       md5: 08ca8b2dba6662e8024f9e789711c6fc
+    native_id: neogeocd
   sharp-x68000:
     files:
     - name: iplrom.dat
@@ -526,6 +455,7 @@ systems:
       destination: keropi/cgrom.dat
       required: true
       md5: cb0a5cfcf7247a7eab74bb2716260269
+    native_id: x68000
   3do:
     files:
     - name: panafz1.bin
@@ -540,12 +470,14 @@ systems:
       destination: goldstar.bin
       required: true
       md5: 8639fd5e549bd6238cfee79e3e749114
+    native_id: 3do
   sega-dreamcast:
     files:
     - name: dc_boot.bin
       destination: dc/dc_boot.bin
       required: true
       md5: e10c53c2f8b90bab96ead2d368858623
+    native_id: dreamcast
   sega-dreamcast-arcade:
     files:
     - name: naomi.zip
@@ -664,6 +596,7 @@ systems:
       required: true
       md5: 960ece0dc22a7c5ff81c812a2993e7cc
       zipped_file: x76f100_eeprom.bin
+    native_id: naomi
   sega-mega-cd:
     files:
     - name: bios_CD_E.bin
@@ -678,6 +611,7 @@ systems:
       destination: bios_CD_J.bin
       required: true
       md5: 278a9397d192149e84e820ac621a8edd
+    native_id: segacd
   megadrive-msu:
     files:
     - name: bios_CD_E.bin
@@ -692,6 +626,7 @@ systems:
       destination: bios_CD_J.bin
       required: true
       md5: 278a9397d192149e84e820ac621a8edd
+    native_id: megadrive-msu
   sega-saturn:
     files:
     - name: sega_101.bin
@@ -714,6 +649,7 @@ systems:
       destination: saturn_bios.bin
       required: true
       md5: af5828fdff51384f99b3c4926be27762
+    native_id: saturn
   sony-playstation:
     files:
     - name: psxonpsp660.bin
@@ -744,24 +680,28 @@ systems:
       destination: scph7001.bin
       required: true
       md5: 1e68c231d0896b7eadcad1d7d8e76129
+    native_id: psx
   sony-playstation-2:
     files:
     - name: ps2-0230a-20080220.bin
       destination: ps2/ps2-0230a-20080220.bin
       required: true
       md5: 21038400dc633070a78ad53090c53017
+    native_id: ps2
   ps3:
     files:
     - name: PS3UPDAT.PUP
       destination: PS3UPDAT.PUP
       required: true
       md5: 05fe32f5dc8c78acbcd84d36ee7fdc5b
+    native_id: ps3
   nintendo-fds:
     files:
     - name: disksys.rom
       destination: disksys.rom
       required: true
       md5: ca30b50f880eb660a320674ed365ef7a
+    native_id: fds
   nintendo-ds:
     files:
     - name: firmware.bin
@@ -789,6 +729,7 @@ systems:
     - name: dsi_nand.bin
       destination: dsi_nand.bin
       required: true
+    native_id: nds
   nintendo-gba:
     files:
     - name: gba_bios.bin
@@ -807,18 +748,21 @@ systems:
       destination: sgb_bios.bin
       required: true
       md5: d574d4f9c12f305074798f54c091a8b4
+    native_id: gba
   nintendo-satellaview:
     files:
     - name: BS-X.bin
       destination: BS-X.bin
       required: true
       md5: 96cf17bf589fcbfa6f8de2dc84f19fa2
+    native_id: satellaview
   sufami:
     files:
     - name: STBIOS.bin
       destination: STBIOS.bin
       required: true
       md5: d3a44ba7d42a74d3ac58cb9c14c6a5ca
+    native_id: sufami
   nintendo-sgb:
     files:
     - name: sgb_boot.bin
@@ -837,6 +781,7 @@ systems:
       destination: SGB2.sfc
       required: true
       md5: 8ecd73eb4edf7ed7e81aef1be80031d5
+    native_id: sgb
   microsoft-msx:
     files:
     - name: MSX.ROM
@@ -879,6 +824,7 @@ systems:
       destination: openmsx/yrw801.rom
       required: true
       md5: 42af93619160ef2116416f74a6cb12f2
+    native_id: msx
   msx2+:
     files:
     - name: fs-a1wsx_kanjifont.rom
@@ -917,6 +863,7 @@ systems:
       destination: openmsx/yrw801.rom
       required: true
       md5: 42af93619160ef2116416f74a6cb12f2
+    native_id: msx2+
   xbox:
     files:
     - name: mcpx_1.0.bin
@@ -927,6 +874,7 @@ systems:
       destination: Complex_4627.bin
       required: true
       md5: 39cee882148a87f93cb440b99dde3ceb
+    native_id: xbox
   amiga500:
     files:
     - name: kick33180.A500
@@ -969,6 +917,7 @@ systems:
       destination: amiga/amiga-os-310-a600.rom
       required: true
       md5: e40a5dfb3d017ba8779faba30cbd1c8e
+    native_id: amiga500
   commodore-amiga:
     files:
     - name: kick34005.A500
@@ -1035,6 +984,7 @@ systems:
       destination: amiga/amiga-ext-310-cd32.rom
       required: true
       md5: bb72565701b1b6faece07d68ea5da639
+    native_id: amigacdtv
   pc60:
     files:
     - name: pc6001.zip
@@ -1102,6 +1052,7 @@ systems:
       required: true
       md5: 9d61f3cbd47c4a281c5241c4f1d80919
       zipped_file: cgrom68.64
+    native_id: pc60
   nec-pc-88:
     files:
     - name: N88.ROM
@@ -1136,6 +1087,7 @@ systems:
       destination: quasi88/N88EXT3.ROM
       required: true
       md5: fc4b76a402ba501e6ba6de4b3e8b4273
+    native_id: pc88
   nec-pc-98:
     files:
     - name: BIOS.ROM
@@ -1158,6 +1110,7 @@ systems:
       destination: np2kai/font.bmp
       required: true
       md5: 7da1e5b7c482d4108d22a5b09631d967
+    native_id: pc98
   loopy:
     files:
     - name: casloopy.zip
@@ -1174,6 +1127,7 @@ systems:
       required: true
       md5: c0f1c899c9ca098663d046d60779711d
       zipped_file: hn62434fa.lsi352
+    native_id: loopy
   fairchild-channel-f:
     files:
     - name: sl31253.bin
@@ -1188,6 +1142,7 @@ systems:
       destination: sl90025.bin
       required: true
       md5: 95d339631d867c8f1d15a5f2ec26069d
+    native_id: channelf
   sharp-x1:
     files:
     - name: IPLROM.X1
@@ -1198,6 +1153,7 @@ systems:
       destination: xmil/iplrom.x1t
       required: true
       md5: 56c28adcf1f3a2f87cf3d57c378013f5
+    native_id: x1
   fmtowns:
     files:
     - name: FMT_DIC.ROM
@@ -1284,6 +1240,7 @@ systems:
       required: true
       md5: 1a15f6c1b58ec7e5f850118610a787a7
       zipped_file: mytownsux.rom
+    native_id: fmtowns
   gp32:
     files:
     - name: gp32.zip
@@ -1319,6 +1276,7 @@ systems:
       required: true
       md5: d4af2bc352bdaf4972ea40902feda114
       zipped_file: gp32mfv2.bin
+    native_id: gp32
   laser310:
     files:
     - name: laser310.zip
@@ -1334,18 +1292,21 @@ systems:
       required: true
       md5: f7e5d9a3eb2b57bf5f4e2a4565318a8f
       zipped_file: vtechv21.u12
+    native_id: laser310
   scv:
     files:
     - name: upd7801g.s01
       destination: upd7801g.s01
       required: true
       md5: 635a978fd40db9a18ee44eff449fc126
+    native_id: scv
   gsplus:
     files:
     - name: ROM1
       destination: ROM1
       required: true
       md5: 20a0334c447cb069a040ae5be1d938df
+    native_id: gsplus
   zc210:
     files:
     - name: zcdata.dat
@@ -1400,6 +1361,7 @@ systems:
       destination: zcsf.sf2
       required: true
       md5: e0ba7a8634b12cfee4b6760a6f89051a
+    native_id: zc210
   apple-macintosh-ii:
     files:
     - name: MacII.ROM
@@ -1606,6 +1568,7 @@ systems:
     - name: mac755.chd
       destination: mac755.chd
       required: true
+    native_id: macintosh
   sc3000:
     files:
     - name: sc3000.zip
@@ -1614,18 +1577,21 @@ systems:
     - name: sc3000.zip
       destination: sc3000.zip
       required: true
-      md5: fda6619ba96bf00b849192f5e7460622
+      md5: a6a47eae38600e41cc67e887e36e70b7
       zipped_file: sc3000.rom
+    native_id: sc3000
   segaai:
     files:
     - name: segaai.zip
       destination: segaai.zip
       required: true
+    native_id: segaai
   beena:
     files:
     - name: beena.zip
       destination: beena.zip
       required: true
+    native_id: beena
   coco:
     files:
     - name: coco.zip
@@ -1686,11 +1652,13 @@ systems:
       required: true
       md5: 8cab28f4b7311b8df63c07bb3b59bfd5
       zipped_file: disk11.rom
+    native_id: coco
   cgenie:
     files:
     - name: cgenie.zip
       destination: cgenie.zip
       required: true
+    native_id: cgenie
   dragon64:
     files:
     - name: dragon64.zip
@@ -1699,10 +1667,12 @@ systems:
     - name: dragon64.zip
       destination: dragon64.zip
       required: true
+      md5: 5f0bee59710e55f5880e74890912ed78
       zipped_file: d64_1.rom
     - name: dragon64.zip
       destination: dragon64.zip
       required: true
+      md5: fd91edce7be5e7c2d88e46b76956a8aa
       zipped_file: d64_2.rom
     - name: dragon64.zip
       destination: dragon64.zip
@@ -1715,6 +1685,7 @@ systems:
       destination: dragon32.zip
       required: true
       zipped_file: d32.rom
+    native_id: dragon64
   mc10:
     files:
     - name: mc10.zip
@@ -1723,6 +1694,7 @@ systems:
     - name: mc10.zip
       destination: mc10.zip
       required: true
+      md5: f29e94ff36577ffb6a787959e45bfe85
       zipped_file: mc10.rom
     - name: alice.zip
       destination: alice.zip
@@ -1730,7 +1702,9 @@ systems:
     - name: alice.zip
       destination: alice.zip
       required: true
+      md5: 78af465c2f31cf4e05dec1efda77da01
       zipped_file: alice.rom
+    native_id: mc10
   trs80:
     files:
     - name: trs80.zip
@@ -1761,6 +1735,7 @@ systems:
     - name: trs80m4p.zip
       destination: trs80m4p.zip
       required: true
+    native_id: trs80
   tutor:
     files:
     - name: tutor.zip
@@ -1776,6 +1751,7 @@ systems:
       required: true
       md5: 5770834c10946ac2c3617504ba530884
       zipped_file: tutor2.bin
+    native_id: tutor
   ti99:
     files:
     - name: ti99_4a.zip
@@ -1819,6 +1795,7 @@ systems:
       required: true
       md5: 206daf498ac5d0141de1d47d38afd899
       zipped_file: cd2326a.u2b
+    native_id: ti99
   astrocade:
     files:
     - name: astrocde.zip
@@ -1829,6 +1806,7 @@ systems:
       required: true
       md5: 7d25a26e5c4841b364cfe6b1735eaf03
       zipped_file: astro.bin
+    native_id: astrocade
   gmaster:
     files:
     - name: gmaster.zip
@@ -1839,6 +1817,7 @@ systems:
       required: true
       md5: 6bff08b5e5f96de405cd56d5f04a08f8
       zipped_file: d78c11agf_e19.u1
+    native_id: gmaster
   adam:
     files:
     - name: adam.zip
@@ -1946,12 +1925,14 @@ systems:
       required: true
       md5: 3cdf2fe48ac4224b56f26c03f6c68982
       zipped_file: printer.u2
+    native_id: adam
   coleco-colecovision:
     files:
     - name: colecovision.rom
       destination: colecovision.rom
       required: true
       md5: 2c66f5911e5b42b8ebe113403548eee7
+    native_id: colecovision
   bbc:
     files:
     - name: bbcb.zip
@@ -2124,10 +2105,12 @@ systems:
     - name: bbc.zip
       destination: mame/samples/bbc.zip
       required: true
+      md5: 9240120e32a59caabc6f5d462f87d683
       zipped_file: motoroff.wav
     - name: bbc.zip
       destination: mame/samples/bbc.zip
       required: true
+      md5: 9d63bdc91cef4eda5e1a110e75c848fb
       zipped_file: motoron.wav
     - name: basic2.rom
       destination: Acorn/basic2.rom
@@ -2141,6 +2124,7 @@ systems:
       destination: BBCMicro/dfs-2.26.rom
       required: true
       md5: f083f49d6fe66344c650d7e74249cb96
+    native_id: bbc
   pcw:
     files:
     - name: pcw8256.zip
@@ -2164,6 +2148,7 @@ systems:
       required: true
       md5: b664af93987d575b0248832832c61505
       zipped_file: 40103.ic109
+    native_id: pcw
   apfm1000:
     files:
     - name: apfm1000.zip
@@ -2184,6 +2169,7 @@ systems:
       required: true
       md5: 89a7cfa5469ce24773721d65b28f8544
       zipped_file: trash-ii.bin
+    native_id: apfm1000
   fm7:
     files:
     - name: fm7.zip
@@ -2242,6 +2228,7 @@ systems:
       required: true
       md5: 7db27dede3e358017d518101850bccfa
       zipped_file: subsyscg.rom
+    native_id: fm7
   archimedes:
     files:
     - name: aa310.zip
@@ -2450,6 +2437,7 @@ systems:
       required: true
       md5: 1a8617c1abe3e0729d20ce844e1e12a8
       zipped_file: acorn_0280,022-01_philips_8051ah-2.bin
+    native_id: archimedes
   atom:
     files:
     - name: atom.zip
@@ -2470,6 +2458,7 @@ systems:
       required: true
       md5: 9627dfb5f8302db8dd5702dbf7c09f72
       zipped_file: dosrom.u15
+    native_id: atom
   electron:
     files:
     - name: electron.zip
@@ -2529,6 +2518,7 @@ systems:
       required: true
       md5: 5c39baa89fe8a40a5167a53cc5ae7791
       zipped_file: pres_adfs_115.rom
+    native_id: electron
   apple2:
     files:
     - name: apple2e.zip
@@ -2655,6 +2645,7 @@ systems:
       required: true
       md5: 5f1be0c1cdff26f5956eef9643911886
       zipped_file: 341-0028-a.rom
+    native_id: apple2
   apple2gs:
     files:
     - name: apple2gs.zip
@@ -2685,6 +2676,7 @@ systems:
       required: true
       md5: 68ff96a624237d233e8d4c701f660dd1
       zipped_file: apple2gs.chr
+    native_id: apple2gs
   camplynx:
     files:
     - name: lynx48k.zip
@@ -2766,6 +2758,7 @@ systems:
       required: true
       md5: f9f54913cdedb22bb8f0c549ad121379
       zipped_file: lynx128-3.ic3
+    native_id: camplynx
   mz80k:
     files:
     - name: mz80k.zip
@@ -2774,10 +2767,12 @@ systems:
     - name: mz80k.zip
       destination: mz80k.zip
       required: true
+      md5: 5db7707d120c835751899b0d1df5ad39
       zipped_file: 80kcg.rom
     - name: mz80k.zip
       destination: mz80k.zip
       required: true
+      md5: 3380dff179941e96851cfee7156e31de
       zipped_file: 80kcgf.rom
     - name: mz80kj.zip
       destination: mz80kj.zip
@@ -2785,11 +2780,14 @@ systems:
     - name: mz80kj.zip
       destination: mz80kj.zip
       required: true
+      md5: e5413f1a0d94726156dcae7d63f8f35f
       zipped_file: sp1002.rom
     - name: mz80kj.zip
       destination: mz80kj.zip
       required: true
+      md5: 4138784bdd2e2cbacd6c55eff195b2ac
       zipped_file: mz80kfdif.rom
+    native_id: mz80k
   mz700:
     files:
     - name: mz700.zip
@@ -2798,11 +2796,14 @@ systems:
     - name: mz700.zip
       destination: mz700.zip
       required: true
+      md5: 27990ced7cb97dd80356f517aa705010
       zipped_file: 1z-013a.rom
     - name: mz700.zip
       destination: mz700.zip
       required: true
+      md5: e9045d57e8574f3eb3f775c02369fbfe
       zipped_file: mz700fon.int
+    native_id: mz700
   mz800:
     files:
     - name: mz800.zip
@@ -2811,7 +2812,9 @@ systems:
     - name: mz800.zip
       destination: mz800.zip
       required: true
+      md5: 7d3909267b3f3e6ce7aa999de0ded226
       zipped_file: mz800.rom
+    native_id: mz800
   mz2000:
     files:
     - name: mz2000.zip
@@ -2820,11 +2823,14 @@ systems:
     - name: mz2000.zip
       destination: mz2000.zip
       required: true
+      md5: f8b599b75ad6ff3eeaeb58ccc0190684
       zipped_file: mz20ipl.bin
     - name: mz2000.zip
       destination: mz2000.zip
       required: true
+      md5: dea49b39998885631db16de1176e71b9
       zipped_file: font.bin
+    native_id: mz2000
   mz2500:
     files:
     - name: mz2500.zip
@@ -2833,27 +2839,34 @@ systems:
     - name: mz2500.zip
       destination: mz2500.zip
       required: true
+      md5: 714ddaf418ccf0018e4cc7e31694b3d8
       zipped_file: ipl.rom
     - name: mz2500.zip
       destination: mz2500.zip
       required: true
+      md5: 96f2fdff0deba58611ed4d67705b539d
       zipped_file: cg.rom
     - name: mz2500.zip
       destination: mz2500.zip
       required: true
+      md5: 88cd64f7bdd23ca6ea57b173254ead82
       zipped_file: kanji.rom
     - name: mz2500.zip
       destination: mz2500.zip
       required: true
+      md5: 3d5d1f6ba9d1f04378891c35663bd3a8
       zipped_file: kanji2.rom
     - name: mz2500.zip
       destination: mz2500.zip
       required: true
+      md5: eea42ca607369a225dbd9d11ab48bfd0
       zipped_file: dict.rom
     - name: mz2500.zip
       destination: mz2500.zip
       required: true
+      md5: 04843d14a8e2f69a7fcaff394a8cc012
       zipped_file: phone.rom
+    native_id: mz2500
   vgmplay:
     files:
     - name: qsound.zip
@@ -2880,6 +2893,7 @@ systems:
       required: true
       md5: 8740932cda05e518a9955f1d08d6786f
       zipped_file: ym2608_adpcm_rom.bin
+    native_id: vgmplay
   gamepock:
     files:
     - name: gamepock.zip
@@ -2890,6 +2904,7 @@ systems:
       required: true
       md5: a0dd595eafb407a6a4b4ed800005a394
       zipped_file: egpcboot.bin
+    native_id: gamepock
   gamecom:
     files:
     - name: gamecom.zip
@@ -2905,6 +2920,7 @@ systems:
       required: true
       md5: f7bcefb6daf923c8e5ea2eb69f619efe
       zipped_file: internal.bin
+    native_id: gamecom
   xegs:
     files:
     - name: xegs.zip
@@ -2915,6 +2931,7 @@ systems:
       required: true
       md5: 42cbd989802c17d0ac3731d33270d835
       zipped_file: c101687.rom
+    native_id: xegs
   crvision:
     files:
     - name: crvision.zip
@@ -2925,6 +2942,7 @@ systems:
       required: true
       md5: 3b1ef759d8e3fb4071582efd33dd05f9
       zipped_file: crvision.u20
+    native_id: crvision
   vsmile:
     files:
     - name: vsmile.zip
@@ -2945,6 +2963,7 @@ systems:
       required: true
       md5: 11e59253c578c8f16ea2375ec398e4e9
       zipped_file: vsmile_v103.bin
+    native_id: vsmile
   socrates:
     files:
     - name: socrates.zip
@@ -2975,6 +2994,7 @@ systems:
       required: true
       md5: 31c29c57e3d3e6788ba5817eaaa8b17a
       zipped_file: speech_eng_vsm3.bin
+    native_id: socrates
   rx78:
     files:
     - name: rx78.zip
@@ -2983,7 +3003,9 @@ systems:
     - name: rx78.zip
       destination: rx78.zip
       required: true
+      md5: f613b15c4b965013e4827d2ad79c7080
       zipped_file: ipl.rom
+    native_id: rx78
   advision:
     files:
     - name: advision.zip
@@ -2999,6 +3021,7 @@ systems:
       required: true
       md5: fc5e71445e4947a9d00eedbc66b13a8f
       zipped_file: b8223__cop411l-kcn_n.u8
+    native_id: advision
   gamate:
     files:
     - name: gamate.zip
@@ -3014,16 +3037,67 @@ systems:
       required: true
       md5: ef67993a94503c4b7798b5901c7dda52
       zipped_file: gamate_bios_umc.bin
+    native_id: gamate
   pv2000:
     files:
     - name: pv2000.zip
       destination: pv2000.zip
       required: true
+    native_id: pv2000
   pc80:
     files:
+    - name: pc8001.zip
+      destination: pc8001.zip
+      required: true
+    - name: pc8001.zip
+      destination: pc8001.zip
+      required: true
+      md5: f374db2869f7f44356ede51e94b4c5b6
+      zipped_file: n80v101.rom
+    - name: pc8001.zip
+      destination: pc8001.zip
+      required: true
+      md5: f1f6109541a89b626d4faf3f92ce5d75
+      zipped_file: n80v102.rom
+    - name: pc8001.zip
+      destination: pc8001.zip
+      required: true
+      md5: 36a73378118eb9a610d50a8b5098c404
+      zipped_file: n80v110.rom
+    - name: pc8001.zip
+      destination: pc8001.zip
+      required: true
+      md5: cd428f9ee8ff9f84c60beb7a8a0ef628
+      zipped_file: font.rom
     - name: pc8001mk2sr.zip
       destination: pc8001mk2sr.zip
       required: true
+    - name: pc8001mk2sr.zip
+      destination: pc8001mk2sr.zip
+      required: true
+      md5: f0f4a4c18bc76134e1fa85ddb91d04ed
+      zipped_file: n80_2sr.rom
+    - name: pc8001mk2sr.zip
+      destination: pc8001mk2sr.zip
+      required: true
+      md5: aced63c7fece13a1b075ea2cde93929b
+      zipped_file: n80_3.rom
+    - name: pc8001mk2sr.zip
+      destination: pc8001mk2sr.zip
+      required: true
+      md5: a1ff399365f5e3aa0607b6f34e313a51
+      zipped_file: font80sr.rom
+    - name: pc8001mk2sr.zip
+      destination: pc8001mk2sr.zip
+      required: true
+      md5: 018073063b1ae83a2e8a3ca127df78e5
+      zipped_file: fonthira.rom
+    - name: pc8001mk2sr.zip
+      destination: pc8001mk2sr.zip
+      required: true
+      md5: d81c6d5d7ad1a4bbbd6ae22a01257603
+      zipped_file: kanji1.rom
+    native_id: pc80
   cdi:
     files:
     - name: cdimono1.zip
@@ -3054,6 +3128,7 @@ systems:
       required: true
       md5: 3d20cf7550f1b723158b42a1fd5bac62
       zipped_file: zx405042p__cdi_slave_2.0__b43t__zzmk9213.mc68hc705c8a_withtestrom.7206
+    native_id: cdi
   hikaru:
     files:
     - name: hikaru.zip
@@ -3068,6 +3143,7 @@ systems:
       destination: jvs13551.zip
       required: true
       md5: ee643e8c7369fe7feca610d4daa4a57c
+    native_id: hikaru
   psvita:
     files:
     - name: PSP2UPDAT.PUP
@@ -3078,6 +3154,7 @@ systems:
       destination: psvita/PSVUPDAT.PUP
       required: true
       md5: f2c7b12fe85496ec88a0391b514d6e3b
+    native_id: psvita
   vectrex:
     files:
     - name: vectrex.zip
@@ -3093,6 +3170,7 @@ systems:
       required: true
       md5: a9c238473229912eb757ff3dfe6f4631
       zipped_file: exec_rom_intl_284001-1.bin
+    native_id: vectrex
   scummvm:
     files:
     - name: MT32_PCM.ROM
@@ -3103,6 +3181,7 @@ systems:
       destination: scummvm/extra/MT32_CONTROL.ROM
       required: true
       md5: 5626206284b22c2734f3e9efefcd2675
+    native_id: scummvm
   supracan:
     files:
     - name: supracan.zip
@@ -3113,6 +3192,7 @@ systems:
       required: true
       md5: 53c4343e062bb3b337370bbb58e64d16
       zipped_file: internal_68k.bin
+    native_id: supracan
   vis:
     files:
     - name: vis.zip
@@ -3128,12 +3208,14 @@ systems:
       required: true
       md5: 758f8fec271fbf526bb22b36e88f154b
       zipped_file: p513bk1b.bin
+    native_id: vis
   nintendo-64dd:
     files:
     - name: 64DD_IPL.bin
       destination: 64DD_IPL.bin
       required: true
       md5: 8d3d9f294b6e174bc7b1d2fd1c727530
+    native_id: n64dd
   nintendo-gamecube:
     files:
     - name: IPL.bin
@@ -3148,6 +3230,7 @@ systems:
       destination: GC/USA/IPL.bin
       required: true
       md5: b17148254a5799684c7d783206504926
+    native_id: gamecube
   chihiro:
     files:
     - name: mcpx_1.0.bin
@@ -3158,6 +3241,7 @@ systems:
       destination: cerbios.bin
       required: true
       md5: f23d7e00ae8fbf88908ed1f9165f35eb
+    native_id: chihiro
   oricatmos:
     files:
     - name: basic11.rom
@@ -3168,6 +3252,7 @@ systems:
       destination: Oric/colour.rom
       required: true
       md5: c888b36bf0fc222c3585c3fabe556d21
+    native_id: oricatmos
   enterprise:
     files:
     - name: basic21.bin
@@ -3281,6 +3366,7 @@ systems:
       required: true
       md5: 47258d03aec37bc24df5dbc5d50fc9f8
       zipped_file: exdos13.rom
+    native_id: enterprise
   tvc:
     files:
     - name: tvc22_sys.rom
@@ -3299,12 +3385,47 @@ systems:
       destination: tvc_dos12d.rom
       required: true
       md5: 88dc7876d584f90e4106f91444ab23b7
+    - name: tvc64.zip
+      destination: tvc64.zip
+      required: true
+    - name: tvc64.zip
+      destination: tvc64.zip
+      required: true
+      md5: bed323c85b629e7ccdd318ef8a21904b
+      zipped_file: tvc12_d4.64k
+    - name: tvc64.zip
+      destination: tvc64.zip
+      required: true
+      md5: be6a66ccdd3bf87992678138f3971090
+      zipped_file: tvc12_d3.64k
+    - name: tvc64.zip
+      destination: tvc64.zip
+      required: true
+      md5: c451c518138f855257ac05673532e162
+      zipped_file: tvc12_d7.64k
+    - name: tvc64.zip
+      destination: tvc64.zip
+      required: true
+      md5: d3ea34ee3ed3d0c7ae3001bd0d9a4ae9
+      zipped_file: tvc22_d6.64k
+    - name: tvc64.zip
+      destination: tvc64.zip
+      required: true
+      md5: 198182b80de1f1c54904870ae0639471
+      zipped_file: tvc22_d4.64k
+    - name: tvc64.zip
+      destination: tvc64.zip
+      required: true
+      md5: 5ce95a26ceed5bec73995d83568da9cf
+      zipped_file: tvc22_d7.64k
+    native_id: tvc
   triforce:
     files:
     - name: segaboot.gcm
       destination: saves/dolphin-emu/Triforce/segaboot.gcm
       required: true
       md5: 2ef01c0e93f7ee3a0a4b139aa14728b9
+    native_id: triforce
   bk:
     files:
     - name: B11M_BOS.ROM
@@ -3339,3 +3460,155 @@ systems:
       destination: bk/MONIT10.ROM
       required: true
       md5: 95f8c41c6abf7640e35a6a03cecebd01
+    - name: bk0010.zip
+      destination: bk0010.zip
+      required: true
+    - name: bk0010.zip
+      destination: bk0010.zip
+      required: true
+      md5: 95f8c41c6abf7640e35a6a03cecebd01
+      zipped_file: monit10.rom
+    - name: bk0010.zip
+      destination: bk0010.zip
+      required: true
+      md5: eb9e1cf1c1b36a2dece89624bfc59323
+      zipped_file: focal.rom
+    - name: bk0010.zip
+      destination: bk0010.zip
+      required: true
+      md5: 93d2776ecf9abf49fb45f58ce3182143
+      zipped_file: tests.rom
+    - name: bk0010.zip
+      destination: bk0010.zip
+      required: true
+      md5: 4a4530347ee18c547a0563aca73cf43d
+      zipped_file: basic10-1.rom
+    - name: bk0010.zip
+      destination: bk0010.zip
+      required: true
+      md5: 86fc2f7797a0333300159aa222c3ad3f
+      zipped_file: basic10-2.rom
+    - name: bk0010.zip
+      destination: bk0010.zip
+      required: true
+      md5: fb8875a62b9b02a66670dcefc270d441
+      zipped_file: basic10-3.rom
+    - name: bk0010.zip
+      destination: bk0010.zip
+      required: true
+      md5: c113a36e51f4557594817bc35a4b63b7
+      zipped_file: bk11m_328_basic2.rom
+    - name: bk0010.zip
+      destination: bk0010.zip
+      required: true
+      md5: 823d35a8c98f70d2d378a2c7568c3b23
+      zipped_file: bk11m_329_basic3.rom
+    - name: bk0010.zip
+      destination: bk0010.zip
+      required: true
+      md5: 1e6637f32aa7d1de03510030cac40bcf
+      zipped_file: bk11m_327_basic1.rom
+    - name: bk0010.zip
+      destination: bk0010.zip
+      required: true
+      md5: dc52f365d56fa1951f5d35b1101b9e3f
+      zipped_file: bk11m_325_ext.rom
+    - name: bk0010.zip
+      destination: bk0010.zip
+      required: true
+      md5: fe4627d1e3a1535874085050733263e7
+      zipped_file: bk11m_324_bos.rom
+    native_id: bk
+standalone_cores:
+- abuse
+- azahar
+- bstone
+- cannonball
+- catacombgl
+- cdogs
+- cemu
+- cgenius
+- citron
+- clk
+- corsixth
+- demul
+- devilutionx
+- dhewm3
+- dolphin
+- dxx-rebirth
+- easyrpg
+- ecwolf
+- eduke32
+- eka2l1
+- etlegacy
+- fallout1-ce
+- fallout2-ce
+- flatpak
+- fury
+- glide64mk2
+- gsplus
+- gzdoom
+- hcl
+- hurrican
+- hypseus-singe
+- ikemen
+- ioquake3
+- iortcw
+- jazz2-native
+- kodi
+- lexaloffle
+- lindbergh-loader
+- mame
+- model2emu
+- moonlight
+- mugen
+- mupen64plus
+- odcommander
+- openbor
+- openbor6412
+- openjazz
+- openjk
+- openjkdf2
+- openmohaa
+- pcsx2
+- play
+- ppsspp
+- pygame
+- pyxel
+- raze
+- rpcs3
+- ruffle
+- samcoupe
+- scummvm
+- sdlpop
+- sh
+- shadps4
+- solarus
+- sonic-mania
+- sonic2013
+- sonic3-air
+- steam
+- supermodel
+- taradino
+- theforceengine
+- thextech
+- tr1x
+- tr2x
+- tsugaru
+- tyrian
+- uqm
+- vice
+- vita3k
+- vox_official
+- vpinball
+- wine
+- wine-tkg
+- x128
+- x16emu
+- xash3d_fwgs
+- xemu
+- xenia-canary
+- xpet
+- xplus4
+- xvic
+- yquake2
