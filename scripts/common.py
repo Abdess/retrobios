@@ -215,15 +215,11 @@ def load_platform_config(platform_name: str, platforms_dir: str = "platforms") -
             elif isinstance(reg_cores, list) and cfg_cores is None:
                 config["cores"] = reg_cores
 
-        # Merge all registry fields not already in config.
-        # Skip registry-only metadata (not relevant to platform config).
-        _REGISTRY_ONLY = {
-            "config", "status", "logo", "scraper", "source_url",
-            "source_format", "schedule", "target_scraper", "target_source",
-            "inherits_from", "install", "cores",  # cores handled above
-        }
+        # Merge all registry fields absent from config (except cores,
+        # handled above with union logic). No hardcoded list — any field
+        # added to the registry is automatically available in the config.
         for key, val in reg_entry.items():
-            if key not in _REGISTRY_ONLY and key not in config:
+            if key != "cores" and key not in config:
                 config[key] = val
 
     _platform_config_cache[cache_key] = config
