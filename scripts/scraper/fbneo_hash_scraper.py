@@ -269,8 +269,8 @@ def run(
         diff = compute_diff(str(path), str(CACHE_PATH), mode='fbneo')
         print(_format_diff(path.stem, diff, show_added=is_main))
 
-        if not dry_run and (diff['added'] or diff['updated']):
-            is_main = path.name == 'fbneo.yml'
+        effective_added = diff['added'] if is_main else []
+        if not dry_run and (effective_added or diff['updated']):
             merge_fbneo_profile(str(path), str(CACHE_PATH), write=True, add_new=is_main)
             log.info('merged changes into %s', path.name)
 
