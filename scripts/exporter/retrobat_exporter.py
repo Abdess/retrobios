@@ -60,10 +60,11 @@ class Exporter(BaseExporter):
                 if isinstance(md5, list):
                     md5 = md5[0] if md5 else ""
 
-                # Original format has md5 before file
+                # Original format requires md5 for every entry
+                if not md5:
+                    continue
                 entry: OrderedDict[str, str] = OrderedDict()
-                if md5:
-                    entry["md5"] = md5
+                entry["md5"] = md5
                 entry["file"] = f"bios/{dest}"
                 bios_files.append(entry)
 
@@ -101,6 +102,11 @@ class Exporter(BaseExporter):
             for fe in sys_data.get("files", []):
                 name = fe.get("name", "")
                 if name.startswith("_") or self._is_pattern(name):
+                    continue
+                md5 = fe.get("md5", "")
+                if isinstance(md5, list):
+                    md5 = md5[0] if md5 else ""
+                if not md5:
                     continue
                 dest = self._dest(fe)
                 if name not in exported_files and dest not in exported_files:

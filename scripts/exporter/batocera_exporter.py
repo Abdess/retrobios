@@ -71,11 +71,12 @@ class Exporter(BaseExporter):
                 if not md5:
                     md5 = scraped_md5.get(name.lower(), "")
 
-                entry_parts = []
-                if md5:
-                    entry_parts.append(f'"md5": "{md5}"')
-                entry_parts.append(f'"file": "bios/{dest}"')
-                bios_parts.append("{ " + ", ".join(entry_parts) + " }")
+                # Original format requires md5 for every entry — skip without
+                if not md5:
+                    continue
+                bios_parts.append(
+                    f'{{ "md5": "{md5}", "file": "bios/{dest}" }}'
+                )
 
             bios_str = ", ".join(bios_parts)
             line = (
@@ -97,6 +98,12 @@ class Exporter(BaseExporter):
             for fe in sys_data.get("files", []):
                 name = fe.get("name", "")
                 if name.startswith("_") or self._is_pattern(name):
+                    continue
+                # Skip entries without md5 (not exportable in this format)
+                md5 = fe.get("md5", "")
+                if isinstance(md5, list):
+                    md5 = md5[0] if md5 else ""
+                if not md5:
                     continue
                 dest = self._dest(fe)
                 if dest not in content and name not in content:
