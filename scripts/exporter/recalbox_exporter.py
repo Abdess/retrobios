@@ -61,7 +61,7 @@ class Exporter(BaseExporter):
                 if name.startswith("_") or self._is_pattern(name):
                     continue
 
-                dest = fe.get("destination", name)
+                dest = self._dest(fe)
                 # Recalbox paths include system prefix
                 path = f"{native_id}/{dest}" if "/" not in dest else dest
 
@@ -113,7 +113,7 @@ class Exporter(BaseExporter):
                 name = fe.get("name", "")
                 if name.startswith("_") or self._is_pattern(name):
                     continue
-                dest = fe.get("destination", name)
+                dest = self._dest(fe)
                 if name not in exported_paths and dest not in exported_paths:
                     issues.append(f"missing: {name}")
         return issues

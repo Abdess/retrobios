@@ -138,7 +138,7 @@ class Exporter(BaseExporter):
                 if name.startswith("_") or self._is_pattern(name):
                     continue
 
-                dest = fe.get("destination", name)
+                dest = self._dest(fe)
                 path_token = _dest_to_path_token(dest)
 
                 md5 = fe.get("md5", "")
@@ -167,10 +167,18 @@ class Exporter(BaseExporter):
                 bios_entries.append(entry)
 
             if bios_entries:
-                component = OrderedDict()
-                component["system"] = native_id
-                component["bios"] = bios_entries
-                manifest[native_id] = component
+                if native_id in manifest:
+                    # Merge into existing component (multiple truth systems
+                    # may map to the same native ID)
+                    existing_names = {e["filename"] for e in manifest[native_id]["bios"]}
+                    for entry in bios_entries:
+                        if entry["filename"] not in existing_names:
+                            manifest[native_id]["bios"].append(entry)
+                else:
+                    component = OrderedDict()
+                    component["system"] = native_id
+                    component["bios"] = bios_entries
+                    manifest[native_id] = component
 
         Path(output_path).write_text(
             json.dumps(manifest, indent=2, ensure_ascii=False) + "\n",

@@ -16,6 +16,8 @@ from exporter import discover_exporters
 
 OUTPUT_FILENAMES: dict[str, str] = {
     "retroarch": "System.dat",
+    "lakka": "System.dat",
+    "retropie": "System.dat",
     "batocera": "batocera-systems",
     "recalbox": "es_bios.xml",
     "retrobat": "batocera-systems.json",
@@ -25,9 +27,16 @@ OUTPUT_FILENAMES: dict[str, str] = {
 }
 
 
-def output_filename(platform: str) -> str:
-    """Return the native output filename for a platform."""
-    return OUTPUT_FILENAMES.get(platform, f"{platform}_bios.dat")
+def output_path(platform: str, output_dir: str) -> str:
+    """Return the full output path for a platform's native export.
+
+    Each platform gets its own subdirectory to avoid filename collisions
+    (e.g. retroarch, lakka, retropie all produce System.dat).
+    """
+    filename = OUTPUT_FILENAMES.get(platform, f"{platform}_bios.dat")
+    plat_dir = Path(output_dir) / platform
+    plat_dir.mkdir(parents=True, exist_ok=True)
+    return str(plat_dir / filename)
 
 
 def run(
@@ -38,8 +47,6 @@ def run(
 ) -> int:
     """Export truth to native formats, return exit code."""
     exporters = discover_exporters()
-    output_path = Path(output_dir)
-    output_path.mkdir(parents=True, exist_ok=True)
 
     errors = 0
 
@@ -63,7 +70,7 @@ def run(
         except (FileNotFoundError, OSError):
             pass
 
-        dest = str(output_path / output_filename(platform))
+        dest = output_path(platform, output_dir)
         exporter = exporter_cls()
         exporter.export(truth_data, dest, scraped_data=scraped)
 

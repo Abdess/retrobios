@@ -53,7 +53,7 @@ class Exporter(BaseExporter):
                 name = fe.get("name", "")
                 if name.startswith("_") or self._is_pattern(name):
                     continue
-                dest = fe.get("destination", name)
+                dest = self._dest(fe)
                 md5 = fe.get("md5", "")
                 if isinstance(md5, list):
                     md5 = md5[0] if md5 else ""
@@ -85,7 +85,7 @@ class Exporter(BaseExporter):
                 name = fe.get("name", "")
                 if name.startswith("_") or self._is_pattern(name):
                     continue
-                dest = fe.get("destination", name)
+                dest = self._dest(fe)
                 if dest not in content and name not in content:
                     issues.append(f"missing: {name}")
         return issues

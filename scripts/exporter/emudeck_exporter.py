@@ -139,7 +139,7 @@ class Exporter(BaseExporter):
             else:
                 # No MD5 hashes — check file existence
                 for fe in sys_files[sys_id]:
-                    dest = fe.get("destination", fe.get("name", ""))
+                    dest = self._dest(fe)
                     if dest:
                         lines.append(
                             f'    if [ -f "$biosPath/{dest}" ]; then',

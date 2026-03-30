@@ -55,7 +55,7 @@ class Exporter(BaseExporter):
                 name = fe.get("name", "")
                 if name.startswith("_") or self._is_pattern(name):
                     continue
-                dest = fe.get("destination", name)
+                dest = self._dest(fe)
                 md5 = fe.get("md5", "")
                 if isinstance(md5, list):
                     md5 = md5[0] if md5 else ""
@@ -68,10 +68,16 @@ class Exporter(BaseExporter):
                 bios_files.append(entry)
 
             if bios_files:
-                sys_entry: OrderedDict[str, object] = OrderedDict()
-                sys_entry["name"] = display_name
-                sys_entry["biosFiles"] = bios_files
-                output[native_id] = sys_entry
+                if native_id in output:
+                    existing_files = {e.get("file") for e in output[native_id]["biosFiles"]}
+                    for entry in bios_files:
+                        if entry.get("file") not in existing_files:
+                            output[native_id]["biosFiles"].append(entry)
+                else:
+                    sys_entry: OrderedDict[str, object] = OrderedDict()
+                    sys_entry["name"] = display_name
+                    sys_entry["biosFiles"] = bios_files
+                    output[native_id] = sys_entry
 
         Path(output_path).write_text(
             json.dumps(output, indent=2, ensure_ascii=False) + "\n",
@@ -96,7 +102,7 @@ class Exporter(BaseExporter):
                 name = fe.get("name", "")
                 if name.startswith("_") or self._is_pattern(name):
                     continue
-                dest = fe.get("destination", name)
+                dest = self._dest(fe)
                 if name not in exported_files and dest not in exported_files:
                     issues.append(f"missing: {name}")
         return issues

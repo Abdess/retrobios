@@ -32,6 +32,11 @@ class BaseExporter(ABC):
         return "<" in name or ">" in name or "*" in name
 
     @staticmethod
+    def _dest(fe: dict) -> str:
+        """Get destination path for a file entry, falling back to name."""
+        return fe.get("path") or fe.get("destination") or fe.get("name", "")
+
+    @staticmethod
     def _display_name(
         sys_id: str, scraped_sys: dict | None = None,
     ) -> str:
