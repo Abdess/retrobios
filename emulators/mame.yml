@@ -5,7 +5,7 @@ source: "https://github.com/libretro/mame"
 upstream: "https://github.com/mamedev/mame"
 logo: "https://raw.githubusercontent.com/mamedev/mame/master/docs/source/images/MAMElogo.svg"
 profiled_date: "2026-03-29"
-core_version: "0.286"
+core_version: "0.287"
 display_name: "Arcade (MAME)"
 
 cores:
@@ -120,13 +120,171 @@ files:
     category: bios_zip
     system: snk-neogeo-mvs
     source_ref: "src/mame/neogeo/neogeo.cpp:2432"
+    contents:
+      - name: sp-s2.sp1
+        size: 131072
+        crc32: "9036d879"
+        sha1: "4f5ed7105b7128794654ce82b51723e16e389543"
+      - name: sp-s.sp1
+        size: 131072
+        crc32: "c7f2fa45"
+        sha1: "09576ff20b4d6b365e78e6a5698ea450262697cd"
+      - name: sp-45.sp1
+        size: 524288
+        crc32: "03cc9f6a"
+        sha1: "cdf1f49e3ff2bac528c21ed28449cf35b7957dc1"
+      - name: sp-s3.sp1
+        size: 131072
+        crc32: "91b64be3"
+        sha1: "720a3e20d26818632aedf2c2fd16c54f213543e1"
+      - name: sp-u2.sp1
+        size: 131072
+        crc32: "e72943de"
+        sha1: "5c6bba07d2ec8ac95776aa3511109f5e1e2e92eb"
+      - name: sp-e.sp1
+        size: 131072
+        crc32: "2723a5b5"
+        sha1: "5dbff7531cf04886cde3ef022fb5ca687573dcb8"
+      - name: sp1-u2
+        size: 131072
+        crc32: "62f021f4"
+        sha1: "62d372269e1b3161c64ae21123655a0a22ffd1bb"
+      - name: sp1-u4.bin
+        size: 131072
+        crc32: "1179a30f"
+        sha1: "866817f47aa84d903d0b819d61f6ef356893d16a"
+      - name: sp1-u3.bin
+        size: 131072
+        crc32: "2025b7a2"
+        sha1: "73d774746196f377111cd7aa051cc8bb5dd948b3"
+      - name: vs-bios.rom
+        size: 131072
+        crc32: "f0e8f27d"
+        sha1: "ecf01eda815909f1facec62abf3594eaa8d11075"
+      - name: sp-j2.sp1
+        size: 131072
+        crc32: "acede59c"
+        sha1: "b6f97acd282fd7e94d9426078a90f059b5e9dd91"
+      - name: sp1.jipan.1024
+        size: 131072
+        crc32: "9fb0abe4"
+        sha1: "18a987ce2229df79a8cf6a84f968f0e42ce4e59d"
+      - name: japan-j3.bin
+        size: 131072
+        crc32: "dff6d41f"
+        sha1: "e92910e20092577a4523a6b39d578a71d4de7085"
+      - name: sp1-j3.bin
+        size: 131072
+        crc32: "fbc6d469"
+        sha1: "46b2b409b5b68869e367b40c846373623edb632a"
+      - name: sp-j3.sp1
+        size: 524288
+        crc32: "486cb450"
+        sha1: "52c21ea817928904b80745a8c8d15cbad61e1dc1"
+      - name: sp-1v1_3db8c.bin
+        size: 131072
+        crc32: "162f0ebe"
+        sha1: "fe1c6dd3dfcf97d960065b1bb46c1e11cb7bf271"
+      - name: uni-bios_4_0.rom
+        size: 131072
+        crc32: "a7aab458"
+        sha1: "938a0bda7d9a357240718c2cec319878d36b8f72"
+      - name: uni-bios_3_3.rom
+        size: 131072
+        crc32: "24858466"
+        sha1: "0ad92efb0c2338426635e0159d1f60b4473d0785"
+      - name: uni-bios_3_2.rom
+        size: 131072
+        crc32: "a4e8b9b3"
+        sha1: "c92f18c3f1edda543d264ecd0ea915240e7c8258"
+      - name: uni-bios_3_1.rom
+        size: 131072
+        crc32: "0c58093f"
+        sha1: "29329a3448c2505e1ff45ffa75e61e9693165153"
+      - name: uni-bios_3_0.rom
+        size: 131072
+        crc32: "a97c89a9"
+        sha1: "97a5eff3b119062f10e31ad6f04fe4b90d366e7f"
+      - name: uni-bios_2_3.rom
+        size: 131072
+        crc32: "27664eb5"
+        sha1: "5b02900a3ccf3df168bdcfc98458136fd2b92ac0"
+      - name: uni-bios_2_3o.rom
+        size: 131072
+        crc32: "601720ae"
+        sha1: "1b8a72c720cdb5ee3f1d735bbcf447b09204b8d9"
+      - name: uni-bios_2_2.rom
+        size: 131072
+        crc32: "2d50996a"
+        sha1: "5241a4fb0c63b1a23fd1da8efa9c9a9bd3b4279c"
+      - name: uni-bios_2_1.rom
+        size: 131072
+        crc32: "8dabf76b"
+        sha1: "c23732c4491d966cf0373c65c83c7a4e88f0082c"
+      - name: uni-bios_2_0.rom
+        size: 131072
+        crc32: "0c12c2ad"
+        sha1: "37bcd4d30f3892078b46841d895a6eff16dc921e"
+      - name: uni-bios_1_3.rom
+        size: 131072
+        crc32: "b24b44a0"
+        sha1: "eca8851d30557b97c309a0d9f4a9d20e5b14af4e"
+      - name: uni-bios_1_2.rom
+        size: 131072
+        crc32: "4fa698e9"
+        sha1: "682e13ec1c42beaa2d04473967840c88fd52c75a"
+      - name: uni-bios_1_2o.rom
+        size: 131072
+        crc32: "e19d3ce9"
+        sha1: "af88ef837f44a3af2d7144bb46a37c8512b67770"
+      - name: uni-bios_1_1.rom
+        size: 131072
+        crc32: "5dda0d84"
+        sha1: "4153d533c02926a2577e49c32657214781ff29b7"
+      - name: uni-bios_1_0.rom
+        size: 131072
+        crc32: "0ce453a0"
+        sha1: "3b4c0cd26c176fc6b26c3a2f95143dd478f6abf9"
+      - name: sm1.sm1
+        size: 131072
+        crc32: "94416d67"
+        sha1: "42f9d7ddd6c0931fd64226a60dc73602b2819dcf"
+      - name: sm1.sm1
+        size: 131072
+        crc32: "94416d67"
+        sha1: "42f9d7ddd6c0931fd64226a60dc73602b2819dcf"
+      - name: 000-lo.lo
+        size: 131072
+        crc32: "5a86cff2"
+        sha1: "5992277debadeb64d1c1c64b0a92d9293eaf7e4a"
+      - name: sfix.sfix
+        size: 131072
+        crc32: "c2ea0cfd"
+        sha1: "fd4a618cdcdbf849374f0a50dd8efe9dbab706c3"
 
   # IGS PGM
   - name: pgm.zip
     required: true
     category: bios_zip
     system: igs-pgm
-    source_ref: "src/mame/igs/pgm.cpp:5515"
+    source_ref: "src/mame/igs/pgm.cpp:5519"
+    contents:
+      - name: pgm_p02s.u20
+        size: 131072
+        crc32: "78c15fa2"
+        sha1: "885a6558e022602cc6f482ac9667ba9f61e75092"
+      - name: pgm_p01s.u20
+        size: 131072
+        crc32: "e42b166e"
+        sha1: "2a9df9ec746b14b74fae48b1a438da14973702ea"
+      - name: pgm_t01s.rom
+        size: 2097152
+        crc32: "1a7123a0"
+        sha1: "cc567f577bfbf45427b54d6695b11b74f2578af3"
+      - name: pgm_m01s.rom
+        size: 2097152
+        crc32: "45ae7159"
+        sha1: "d3ed3ff3464557fd0df6b069b2e431528b0ebfa8"
 
   # Sega NAOMI / NAOMI 2 / GD-ROM / Atomiswave
   - name: naomi.zip
@@ -134,45 +292,395 @@ files:
     category: bios_zip
     system: sega-naomi
     source_ref: "src/mame/sega/naomi.cpp:10917"
+    contents:
+      - name: epr-21576h.ic27
+        size: 2097152
+        crc32: "d4895685"
+        sha1: "91424d481ff99a8d3f4c45cea6d3f0eada049a6d"
+      - name: epr-21576g.ic27
+        size: 2097152
+        crc32: "d2a1c6bf"
+        sha1: "6d27d71aec4dfba98f66316ae74a1426d567698a"
+      - name: epr-21576e.ic27
+        size: 2097152
+        crc32: "08c0add7"
+        sha1: "e7c1a7673cb2ccb21748ef44105e46d1bad7266d"
+      - name: epr-21576d.ic27
+        size: 2097152
+        crc32: "3b2afa7b"
+        sha1: "d007e1d321c198a38c5baff86eb2ab84385d150a"
+      - name: epr-21576c.ic27
+        size: 2097152
+        crc32: "4599ad13"
+        sha1: "7e730e9452a792d76f210c33a955d385538682c7"
+        bad_dump: true
+      - name: epr-21576b.ic27
+        size: 2097152
+        crc32: "755a6e07"
+        sha1: "7e8b8ccfc063144d89668e7224dcd8a36c54f3b3"
+      - name: epr-21576a.ic27
+        size: 2097152
+        crc32: "cedfe439"
+        sha1: "f27798bf3d890863ef0c1d9dcb4e7782249dca27"
+      - name: epr-21576.ic27
+        size: 2097152
+        crc32: "9dad3495"
+        sha1: "5fb66f9a2b68d120f059c72758e65d34f461044a"
+      - name: epr-21578h.ic27
+        size: 2097152
+        crc32: "7b452946"
+        sha1: "8e9f153bbada24b37066dc45b64a7bf0d4f26a9b"
+      - name: epr-21578g.ic27
+        size: 2097152
+        crc32: "55413214"
+        sha1: "bd2748365a9fc1821c9369aa7155d7c41c4df43e"
+      - name: epr-21578f.ic27
+        size: 2097152
+        crc32: "628a27fd"
+        sha1: "dae7add616b1a2478f00608823e88c3b82a0e78f"
+      - name: epr-21578e.ic27
+        size: 2097152
+        crc32: "087f09a3"
+        sha1: "0418eb2cf9766f0b1b874a4e92528779e22c0a4a"
+      - name: epr-21578d.ic27
+        size: 2097152
+        crc32: "dfd5f42a"
+        sha1: "614a0db4743a5e5a206190d6786ade24325afbfd"
+      - name: epr-21578a.ic27
+        size: 2097152
+        crc32: "6c9aad83"
+        sha1: "555918de76d8dbee2a97d8a95297ef694b3e803f"
+      - name: epr-21577h.ic27
+        size: 2097152
+        crc32: "fdf17452"
+        sha1: "5f3e4b677f0046ce690a4f096b0481e5dd8bb6e6"
+      - name: epr-21577g.ic27
+        size: 2097152
+        crc32: "25f64af7"
+        sha1: "99f9e6cc0642319bd2da492611220540add573e8"
+      - name: epr-21577e.ic27
+        size: 2097152
+        crc32: "cf36e97b"
+        sha1: "b085305982e7572e58b03a9d35f17ae319c3bbc6"
+      - name: epr-21577d.ic27
+        size: 2097152
+        crc32: "60ddcbbe"
+        sha1: "58b15096d269d6df617ca1810b66b47deb184958"
+      - name: epr-21577a.ic27
+        size: 2097152
+        crc32: "969dc491"
+        sha1: "581d1eae328b87b67508a7586ffc60cee256f70f"
+      - name: epr-21579d.ic27
+        size: 2097152
+        crc32: "33513691"
+        sha1: "b1d8c7c516e1471a788fcf7a02a794ad2f05aeeb"
+      - name: epr-21579.ic27
+        size: 2097152
+        crc32: "71f9c918"
+        sha1: "d15af8b947f41eea7c203b565cd403e3f37a2017"
+      - name: boot_rom_64b8.ic606
+        size: 524288
+        crc32: "7a50fab9"
+        sha1: "ef79f448e0bf735d1264ad4f051d24178822110f"
+      - name: develop110.ic27
+        size: 2097152
+        crc32: "de7cfdb0"
+        sha1: "da16800edc4d49f70481c124d487f544c2fa8ce7"
+      - name: develop.ic27
+        size: 2097152
+        crc32: "309a196a"
+        sha1: "409b50371feb648f10efd6b7ac420bf08d9a3b5a"
+      - name: zukinver0930.ic25
+        size: 2097152
+        crc32: "58e17c23"
+        sha1: "19330f906accf1b859f56bbcedc2edff73747599"
+      - name: epr-21576h_multi.ic27
+        size: 2097152
+        crc32: "cce01f1f"
+        sha1: "cca17119ad13e3a4ef7cb6902a37b65d6a844aee"
+      - name: epr-21336a.ic27
+        size: 2097152
+        crc32: "d3d57af8"
+        sha1: "0eb72c2a20ad8b86d442b77760eab5e89521d469"
+        bad_dump: true
+      - name: naomi_boot_2491.ic27
+        size: 2097152
+        crc32: "5b28f868"
+        sha1: "d101f58c69d9835e87a969688e43dc9b699b89d0"
+      - name: epr-21580a.ic27
+        size: 2097152
+        crc32: "46dbe90f"
+        sha1: "822b2ea8e254ea3ce66f0ea67e80a8c7e1125ec9"
+      - name: 315-6188.ic31
+        size: 8244
+        crc32: "7c9fea46"
+        sha1: "f77c07ae65dfed18c1c4c632c8945be21d02ddaf"
+      - name: main_eeprom.bin
+        size: 128
+        crc32: "fea29cbb"
+        sha1: "4099f1747aafa07db34f6e072cd9bfaa83bae10e"
+      - name: x76f100_eeprom.bin
+        size: 132
+        crc32: "3ea24b6a"
+        sha1: "3a730ebcf56e0060fef6b1b02eb2eb7cfb7e61dc"
 
   - name: naomi2.zip
     required: true
     category: bios_zip
     system: sega-naomi2
     source_ref: "src/mame/sega/naomi.cpp:10922"
+    contents:
+      - name: epr-23605c.ic27
+        size: 2097152
+        crc32: "297ea6ed"
+        sha1: "cfbfe57c80e6ee86a101fa83aec0a01e00c0f42a"
+      - name: epr-23605b.ic27
+        size: 2097152
+        crc32: "3a3242d4"
+        sha1: "aaca4df51ef91d926f8191d372f3dfe1d20d9484"
+      - name: epr-23605a.ic27
+        size: 2097152
+        crc32: "7bc3fc2d"
+        sha1: "a4a9531a7c66ff30046908cf71f6c7b6fb59c392"
+      - name: epr-23605.ic27
+        size: 2097152
+        crc32: "5731e446"
+        sha1: "787b0844fc408cf124c12405c095c59948709ea6"
+      - name: epr-23608c.ic27
+        size: 2097152
+        crc32: "6ef1dd8e"
+        sha1: "25ef957ec1c58fdaff5e89102002bca6c38832c5"
+      - name: epr-23608b.ic27
+        size: 2097152
+        crc32: "a554b1e3"
+        sha1: "343b727a3619d1c75a9b6d4cc156a9050447f155"
+      - name: epr-23608a.ic27
+        size: 2097152
+        crc32: "e8f884d1"
+        sha1: "28f4de747bb3cf860b9ebf897322fbc5d7c1e156"
+      - name: epr-23608.ic27
+        size: 2097152
+        crc32: "929cc3a6"
+        sha1: "47d00c818de23f733a4a33b1bbc72eb8aa729246"
+      - name: epr-23607c.ic27
+        size: 2097152
+        crc32: "750e254b"
+        sha1: "81d0b1a076c274c6bd7c53b65e7b80e14fe039e1"
+      - name: epr-23607b.ic27
+        size: 2097152
+        crc32: "f308c5e9"
+        sha1: "5470ab1cee6afecbd8ca8cf40f8fbe4ec2cb1471"
+      - name: epr-23607.ic27
+        size: 2097152
+        crc32: "2b55add2"
+        sha1: "547de5f97d3183c8cd069c4fa3c09f13d8b637d9"
+      - name: epr-23609b.ic27
+        size: 2097152
+        crc32: "99e3751f"
+        sha1: "8a244f75595c49d2a37a42ab96b6bab35163ca0e"
+      - name: epr-23610b.ic27
+        size: 2097152
+        crc32: "de8e1267"
+        sha1: "0b3a36446c308fcbfe3647df45c848091e8797f1"
+      - name: epr-23605c_multi.ic27
+        size: 2097152
+        crc32: "353fdbcd"
+        sha1: "a8b7dce572b74e02e65cb949b2c366c87625157f"
+      - name: main_eeprom.bin
+        size: 128
+        crc32: "fea29cbb"
+        sha1: "4099f1747aafa07db34f6e072cd9bfaa83bae10e"
+      - name: x76f100_eeprom.bin
+        size: 132
+        crc32: "3ea24b6a"
+        sha1: "3a730ebcf56e0060fef6b1b02eb2eb7cfb7e61dc"
 
   - name: naomigd.zip
     required: true
     category: bios_zip
     system: sega-naomigd
     source_ref: "src/mame/sega/naomi.cpp:10923"
+    contents:
+      - name: epr-21576e.ic27
+        size: 2097152
+        crc32: "08c0add7"
+        sha1: "e7c1a7673cb2ccb21748ef44105e46d1bad7266d"
+      - name: epr-21576g.ic27
+        size: 2097152
+        crc32: "d2a1c6bf"
+        sha1: "6d27d71aec4dfba98f66316ae74a1426d567698a"
+      - name: epr-21576h.ic27
+        size: 2097152
+        crc32: "d4895685"
+        sha1: "91424d481ff99a8d3f4c45cea6d3f0eada049a6d"
+      - name: epr-21578h.ic27
+        size: 2097152
+        crc32: "7b452946"
+        sha1: "8e9f153bbada24b37066dc45b64a7bf0d4f26a9b"
+      - name: epr-21578g.ic27
+        size: 2097152
+        crc32: "55413214"
+        sha1: "bd2748365a9fc1821c9369aa7155d7c41c4df43e"
+      - name: epr-21578e.ic27
+        size: 2097152
+        crc32: "087f09a3"
+        sha1: "0418eb2cf9766f0b1b874a4e92528779e22c0a4a"
+      - name: epr-21577h.ic27
+        size: 2097152
+        crc32: "fdf17452"
+        sha1: "5f3e4b677f0046ce690a4f096b0481e5dd8bb6e6"
+      - name: epr-21577g.ic27
+        size: 2097152
+        crc32: "25f64af7"
+        sha1: "99f9e6cc0642319bd2da492611220540add573e8"
+      - name: epr-21577e.ic27
+        size: 2097152
+        crc32: "cf36e97b"
+        sha1: "b085305982e7572e58b03a9d35f17ae319c3bbc6"
+      - name: main_eeprom.bin
+        size: 128
+        crc32: "fea29cbb"
+        sha1: "4099f1747aafa07db34f6e072cd9bfaa83bae10e"
+      - name: x76f100_eeprom.bin
+        size: 132
+        crc32: "3ea24b6a"
+        sha1: "3a730ebcf56e0060fef6b1b02eb2eb7cfb7e61dc"
 
   - name: awbios.zip
     required: true
     category: bios_zip
     system: sammy-atomiswave
     source_ref: "src/mame/sega/dc_atomiswave.cpp:1480"
+    contents:
+      - name: bios0.ic23
+        size: 131072
+        crc32: "719b2b0b"
+        sha1: "b4c1a26bc8906d5275eb28c701dff2b9365bcdfa"
+      - name: bios1.ic23
+        size: 131072
+        crc32: "d3e80a9f"
+        sha1: "33024f9d51c04884c2b44ce146f340e7a857b959"
+      - name: fpr-24363.ic48
+        size: 131072
+        crc32: "82a105f0"
+        sha1: "5128fe2ddcced77332bdcab691c09958051fa564"
 
   - name: hod2bios.zip
     required: false
     category: bios_zip
     source_ref: "src/mame/sega/naomi.cpp:10918"
     note: "game-specific BIOS for House of the Dead 2"
+    contents:
+      - name: epr-21331.ic27
+        size: 2097152
+        crc32: "065f8500"
+        sha1: "49a3881e8d76f952ef5e887200d77b4a415d47fe"
+      - name: epr-21330.ic27
+        size: 2097152
+        crc32: "9e3bfa1b"
+        sha1: "b539d38c767b0551b8e7956c1ff795de8bbe2fbc"
+      - name: epr-21329.ic27
+        size: 2097152
+        crc32: "d99e5b9b"
+        sha1: "453ffb41b6197cac6d12e7814bb1d7281ccf1659"
+      - name: epr-21332.ic27
+        size: 2097152
+        crc32: "bd6ce0ec"
+        sha1: "3d1ce5cb6978afe57967d8b53bc969259dd64749"
+      - name: hotd2biosproto.ic27
+        size: 2097152
+        crc32: "ea74e967"
+        sha1: "e4d037480eb6555d335a8ab9cd6c56122335586d"
+      - name: main_eeprom.bin
+        size: 128
+        crc32: "fea29cbb"
+        sha1: "4099f1747aafa07db34f6e072cd9bfaa83bae10e"
+      - name: x76f100_eeprom.bin
+        size: 132
+        crc32: "3ea24b6a"
+        sha1: "3a730ebcf56e0060fef6b1b02eb2eb7cfb7e61dc"
 
   - name: f355dlx.zip
     required: false
     category: bios_zip
     source_ref: "src/mame/sega/naomi.cpp:10919"
+    contents:
+      - name: epr-21864.ic27
+        size: 2097152
+        crc32: "12ed7c66"
+        sha1: "046be66e92eae766f3e05594aa837fc8888534ed"
+      - name: epr-21863.ic27
+        size: 2097152
+        crc32: "0615a4d1"
+        sha1: "2c6986580b84278af75f396229fdd587bebc1768"
+      - name: epr-21862.ic27
+        size: 2097152
+        crc32: "1f630716"
+        sha1: "8d157809770467c3e7618c6299f3b96b5f10518c"
+      - name: epr-21864p.ic27
+        size: 2097152
+        crc32: "05128861"
+        sha1: "5bdb320d84015b8429527a8eb4524958031862aa"
+      - name: epr-21862p.ic27
+        size: 2097152
+        crc32: "f0cd4aaa"
+        sha1: "9a9157992bf7a104c096efcdb8b02ceece186cbb"
+      - name: main_eeprom.bin
+        size: 128
+        crc32: "fea29cbb"
+        sha1: "4099f1747aafa07db34f6e072cd9bfaa83bae10e"
+      - name: x76f100_eeprom.bin
+        size: 132
+        crc32: "3ea24b6a"
+        sha1: "3a730ebcf56e0060fef6b1b02eb2eb7cfb7e61dc"
 
   - name: f355bios.zip
     required: false
     category: bios_zip
     source_ref: "src/mame/sega/naomi.cpp:10920"
+    contents:
+      - name: epr-22851.ic27
+        size: 2097152
+        crc32: "62483677"
+        sha1: "3e3bcacf5f972c376b569f45307ee7fd0b5031b7"
+      - name: epr-22850.ic27
+        size: 2097152
+        crc32: "28aa539d"
+        sha1: "14485368656af80504b212da620179c49f84c1a2"
+      - name: epr-22849.ic27
+        size: 2097152
+        crc32: "121e009c"
+        sha1: "3beb91f660e60590491b209b6be8584b05a90548"
+      - name: main_eeprom.bin
+        size: 128
+        crc32: "fea29cbb"
+        sha1: "4099f1747aafa07db34f6e072cd9bfaa83bae10e"
+      - name: x76f100_eeprom.bin
+        size: 132
+        crc32: "3ea24b6a"
+        sha1: "3a730ebcf56e0060fef6b1b02eb2eb7cfb7e61dc"
 
   - name: airlbios.zip
     required: false
     category: bios_zip
     source_ref: "src/mame/sega/naomi.cpp:10921"
+    contents:
+      - name: epr-21802.ic27
+        size: 2097152
+        crc32: "a77c6b1c"
+        sha1: "bd50a6bb8fa9bac121b076e21ea048a83a240a48"
+      - name: epr-21801.ic27
+        size: 2097152
+        crc32: "a21bef24"
+        sha1: "c6c6ed09772b63a9a84ef0678fc1b7527484038a"
+      - name: main_eeprom.bin
+        size: 128
+        crc32: "fea29cbb"
+        sha1: "4099f1747aafa07db34f6e072cd9bfaa83bae10e"
+      - name: x76f100_eeprom.bin
+        size: 132
+        crc32: "3ea24b6a"
+        sha1: "3a730ebcf56e0060fef6b1b02eb2eb7cfb7e61dc"
 
   # Sega ST-V / Lindbergh / SP / Hikaru / Chihiro / Triforce
   - name: stvbios.zip
@@ -180,45 +688,260 @@ files:
     category: bios_zip
     system: sega-stv
     source_ref: "src/mame/sega/stv.cpp:3949"
+    contents:
+      - name: epr-23603.ic8
+        size: 524288
+        crc32: "f688ae60"
+        sha1: "1a31b6b1a4257fcb6ac6a91e67dd798f91505f48"
+      - name: epr-20091.ic8
+        size: 524288
+        crc32: "59ed40f4"
+        sha1: "eff0f54c70bce05ff3a289bf30b1027e1c8cd117"
+      - name: epr-19730.ic8
+        size: 524288
+        crc32: "d0e0889d"
+        sha1: "fae53107c894e0c41c49e191dbe706c9cd6e50bd"
+      - name: epr-17951a.ic8
+        size: 524288
+        crc32: "2672f9d8"
+        sha1: "63cf4a6432f6c87952f9cf3ab0f977aed2367303"
+      - name: epr-17740a.ic8
+        size: 524288
+        crc32: "3e23c81f"
+        sha1: "f9b282fd27693e9891843597b2e1823da3d23c7b"
+      - name: epr-17740.ic8
+        size: 524288
+        crc32: "5c5aa63d"
+        sha1: "06860d96923b81afbc21e0ad32ee19487d8ff6e7"
+      - name: epr-17954a.ic8
+        size: 524288
+        crc32: "f7722da3"
+        sha1: "af79cff317e5b57d49e463af16a9f616ed1eee08"
+      - name: epr-17952a.ic8
+        size: 524288
+        crc32: "d1be2adf"
+        sha1: "eaf1c3e5d602e1139d2090a78d7e19f04f916794"
+      - name: epr-17741a.ic8
+        size: 524288
+        crc32: "4166c663"
+        sha1: "cc41d30de06160083d77e0dc5d69e61fec7fdcb5"
+      - name: epr-19854.ic8
+        size: 524288
+        crc32: "e09d1f60"
+        sha1: "b55cdcb45b2a5b0b35e352cf7625f0bd659084df"
+      - name: epr-17953a.ic8
+        size: 524288
+        crc32: "a4c47570"
+        sha1: "9efc73717ec8a13417e65c54344ded9fc25bf5ef"
+      - name: epr-17742a.ic8
+        size: 524288
+        crc32: "02daf123"
+        sha1: "23185beb1ce9c09b8719e57d1adb7b28c8141fd5"
+      - name: stv110.bin
+        size: 524288
+        crc32: "3dfeda92"
+        sha1: "8eb33192a57df5f3a1dfb57263054867c6b2db6d"
+      - name: stv1061.bin
+        size: 524288
+        crc32: "728dbca3"
+        sha1: "0ed2030177f0aa8285645c395ae9ad9f568ab1d6"
+      - name: stvbios.nv
+        size: 128
+        crc32: "15432ae2"
+        sha1: "7d9364d546f3d3f839ec36be148076f8d26a65a6"
 
   - name: lindbios.zip
     required: true
     category: bios_zip
     system: sega-lindbergh
     source_ref: "src/mame/sega/lindbergh.cpp:639"
+    contents:
+      - name: 6.0.0010a.bin
+        description: 6.0.0010 alternate version
+        size: 1048576
+        crc32: "10dd9b76"
+        sha1: "1fdf1f921bc395846a7c3180fbdbc4ca287a9670"
+      - name: 6.0.0009.bin
+        description: 6.0.0009
+        size: 1048576
+        crc32: "5ffdfbf8"
+        sha1: "605bc4967b749b4e6d13fc2ebb845ba956a259a7"
+      - name: 6.0.0010.bin
+        description: 6.0.0010
+        size: 1048576
+        crc32: "ea2bf888"
+        sha1: "c9c5b6f0d4f4f36620939b15dd2f128a74347e37"
+      - name: fpr-24370b.ic6
+        size: 4194304
+        crc32: "c3b021a4"
+        sha1: "1b6938a50fe0e4ae813864649eb103838c399ac0"
+      - name: vid_bios.u504
+        size: 65536
+        crc32: "f78d14d7"
+        sha1: "f129787e487984edd23bf344f2e9500c85052275"
 
   - name: segasp.zip
     required: true
     category: bios_zip
     source_ref: "src/mame/sega/segasp.cpp:1273"
+    contents:
+      - name: epr-24236a.ic50
+        size: 2097152
+        crc32: "ca7df0de"
+        sha1: "504c74d5fc96c53ef9f7753e9e37fb8b39cb628c"
+      - name: epr-24328.ic50
+        size: 2097152
+        crc32: "25f2ef00"
+        sha1: "e58dec9f171e52b3ded213b3fcd9a0de8a438076"
+      - name: epr-24328a.ic50
+        size: 2097152
+        crc32: "03ec3805"
+        sha1: "a8fbaea826ca257be0b2b86952f247254929e046"
+      - name: mb_serial.ic57
+        size: 128
+        crc32: "e1e3c009"
+        sha1: "66bc636c527389c3338f631d78c788b4bd4e93be"
+      - name: net_eeprom.ic74s
+        size: 512
+        crc32: "77cc5a6c"
+        sha1: "cbfba546256b70bce6c6fd0030d7e2e410a25526"
+      - name: net_firm_119.ic72
+        size: 2097152
+        crc32: "a738ea1c"
+        sha1: "d25187a973a7e166e70334f964363adf2be87257"
+      - name: fpr-24208a.ic72
+        size: 2097152
+        crc32: "a738ea1c"
+        sha1: "3c32ddfb3c40be66b9fb2ba35fbfd5b534bb3da0"
+      - name: fpr-24329.ic72
+        size: 2097152
+        crc32: "a738ea1c"
+        sha1: "d0d062a4089a2d3404df45eb015faaf7eee9b8c2"
+      - name: fpr-24407.ic72
+        size: 2097152
+        crc32: "a738ea1c"
+        sha1: "fbcc3d119b47a6da4d194e3fe4a98126c7049edf"
+      - name: fpr-24407_123.ic72
+        size: 2097152
+        crc32: "a738ea1c"
+        sha1: "3f5a2fb03bbb1bd9af9fe32ad76a224c97aa9b7a"
+      - name: mb_eeprom_us.ic54s
+        size: 128
+        crc32: "4186d7ab"
+        sha1: "fc23da69a511a7643b6a066161bcfc3cdeeacf04"
+      - name: mb_eeprom_exp.ic54s
+        size: 128
+        crc32: "947ddfad"
+        sha1: "832a3db097af680d1d0eb9451b4650565f0cf8c7"
 
   - name: hikaru.zip
     required: true
     category: bios_zip
     system: sega-hikaru
     source_ref: "src/mame/sega/hikaru.cpp:1482"
+    contents:
+      - name: epr-23400a.ic94
+        size: 2097152
+        crc32: "2aa906a7"
+        sha1: "098c9909b123ed6c338ac874f2ee90e3b2da4c02"
+      - name: epr-23400.ic94
+        size: 2097152
+        crc32: "3d557104"
+        sha1: "d39879f5a1acbd54ad8ee4fbd412f870c9ff4aa5"
+      - name: epr-21904.ic94
+        size: 2097152
+        crc32: "d96298b6"
+        sha1: "d10d837bc7d68eb7125c34beffe21a91305627b0"
+      - name: prot_bot.ic94
+        size: 2097152
+        crc32: "7cbf2fb6"
+        sha1: "7384e3c9314add7d61f93c9edd9fb7788d08f423"
+      - name: 93c46.ic115
+        size: 128
+        crc32: "737dc714"
+        sha1: "852a90319ac2e787b94a4fc769424b79afbaaf9d"
+      - name: x76f100.ic85
+        size: 132
+        crc32: "194c6c18"
+        sha1: "6c2de7dae32bef855d9bc556568c3a170f54caa5"
+        bad_dump: true
 
   - name: chihiro.zip
     required: true
     category: bios_zip
     system: sega-chihiro
     source_ref: "src/mame/sega/chihiro.cpp:2614"
+    contents:
+      - name: chihiro_xbox_bios.bin
+        size: 524288
+        crc32: "66232714"
+        sha1: "b700b0041af8f84835e45d1d1250247bf7077188"
+      - name: fpr-23887_29lv160te.ic4
+        size: 2097152
+        crc32: "13034372"
+        sha1: "77197fba2781ed1d81402c48bd743adb26d3161a"
+      - name: fpr21042_m29w160et.bin
+        size: 2097152
+        crc32: "a4fcab0b"
+        sha1: "a13cf9c5cdfe8605d82150b7573652f419b30197"
+      - name: 315-6351a_epc1pc8.ic2
+        size: 130817
+        crc32: "488624ea"
+        sha1: "1a607337a186415ae90b48934ce2aae81639d4de"
+      - name: ic10_g24lc64.bin
+        size: 8192
+        crc32: "cfc5e06f"
+        sha1: "3ababd4334d8d57abb22dd98bd2d347df39648d9"
+      - name: ic11_24lc024.bin
+        size: 128
+        crc32: "8dc8374e"
+        sha1: "cc03a0650bfac4bf6cb66e414bbef121cba53efe"
+      - name: pc20_g24lc64.bin
+        size: 8192
+        crc32: "7742ab62"
+        sha1: "82dad6e2a75bab4a4840dc6939462f1fb9b95101"
 
   - name: triforce.zip
     required: true
     category: bios_zip
     system: sega-triforce
     source_ref: "src/mame/sega/triforce.cpp:1304"
+    contents:
+      - name: triforce_bootrom.bin
+        size: 2097152
+        crc32: "d1883221"
+        sha1: "c3cb7227e4dbc2af861e76d00cb59726105a2e4c"
 
   - name: shtzone.zip
     required: true
     category: bios_zip
     source_ref: "src/mame/sega/shtzone.cpp:378"
+    contents:
+      - name: epr10894a.20
+        size: 16384
+        crc32: "ea8901d9"
+        sha1: "43fd8bfc395e3b2e3fbe9645d692a5eb04783d9c"
 
   - name: sammymdl.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/sigma/sigmab98.cpp:2409"
+    source_ref: "src/mame/sigma/sammymdl.cpp:1027"
+    contents:
+      - name: vm1211l01.u2
+        description: IPL Ver. 5.0
+        size: 524288
+        crc32: "c3c74dc5"
+        sha1: "07352e6dba7514214e778ba39e1ca773e4698858"
+      - name: mt201l04.u012
+        description: IPL Ver. 4.0
+        size: 524288
+        crc32: "c8c6d25f"
+        sha1: "5be39fa72b65f2e455ccc146dbab58d24ab46505"
+      - name: vm1201l01.u012
+        description: IPL Ver. 1.0
+        size: 524288
+        crc32: "21b2ccbd"
+        sha1: "c3ceea196e5c1c6a9e03cf3a22e9f25f0099a38e"
 
   # Sega Mega Drive arcade
   - name: megaplay.zip
@@ -226,22 +949,87 @@ files:
     category: bios_zip
     system: sega-megaplay
     source_ref: "src/mame/sega/megaplay.cpp:1016"
+    contents:
+      - name: ep15294.ic2
+        size: 131072
+        crc32: "aa8dc2d8"
+        sha1: "96771ad7b79dc9c83a1594243250d65052d23176"
+      - name: epr-a15294.ic2
+        size: 131072
+        crc32: "f97c68aa"
+        sha1: "bcabc879950bca1ced11c550a484e697ec5706b2"
+      - name: 315-5661.ic7
+        size: 279
+        crc32: "d8289e31"
+        sha1: "a0e9134d9e8043a3660a2ce122cfd5d7f76773b9"
+        bad_dump: true
+      - name: 315-5653.ic56
+        size: 279
+        crc32: "fd5c4fb3"
+        sha1: "6b2ba657836f3031d77602526416200e31d41a6e"
+        bad_dump: true
+      - name: 315-5651.ic8
+        size: 279
+        crc32: "55c6cddb"
+        sha1: "e1a968305ca7ea17e9021b31506ca087b84a8ab1"
+        bad_dump: true
+      - name: 315-5349a.ic54
+        size: 260
+        crc32: "825ea316"
+        sha1: "f49edb6a3f9349330f7ff525ef60517ed276a663"
+        bad_dump: true
+      - name: 315-5655.ic34
+        size: 260
+        crc32: "4a2d27d1"
+        sha1: "ba79183e4b522d1b57a46a56fc7d9b85de24df36"
+        bad_dump: true
 
   - name: megatech.zip
     required: true
     category: bios_zip
     system: sega-megatech
     source_ref: "src/mame/sega/megatech.cpp:1442"
+    contents:
+      - name: epr-12664.20
+        description: Ver 1
+        size: 32768
+        crc32: "f71e9526"
+        sha1: "1c7887541d02c41426992d17f8e3db9e03975953"
+      - name: epr-12263a.20
+        description: Ver 0 Rev A
+        size: 32768
+        crc32: "07c3f423"
+        sha1: "50c28bbc2d4349c820d988ae3f20aae3f808545f"
+      - name: epr-12263b.20
+        description: Ver 0 Rev B
+        size: 32768
+        crc32: "ca26c87a"
+        sha1: "987a18bede6e54cd73c4434426eb6c302a37cdc5"
+      - name: epr-12604a.20
+        description: Ver 0 Rev B (alt?)
+        size: 32768
+        crc32: "884e4aa5"
+        sha1: "c9008c431a937c084fb475273093ca0b434b5f47"
 
   - name: isgsm.zip
     required: true
     category: bios_zip
     source_ref: "src/mame/sega/segas16b_isgsm.cpp:608"
+    contents:
+      - name: ism2006v00.u1
+        size: 131072
+        crc32: "2292585c"
+        sha1: "97ba0e0f0be832a5114d95151e519bc027f6675b"
 
   - name: systemy2.zip
     required: true
     category: bios_zip
     source_ref: "src/mame/sega/y2.cpp:141"
+    contents:
+      - name: system_y2_m25p40.u801
+        size: 524288
+        crc32: "2b19f490"
+        sha1: "b6a0482926d02fb5bb9a2c05ffdba6a2347fe658"
 
   # DECO Cassette
   - name: decocass.zip
@@ -249,6 +1037,187 @@ files:
     category: bios_zip
     system: deco-cassette
     source_ref: "src/mame/dataeast/decocass.cpp:2131"
+    contents:
+      - name: v0a-.7e
+        size: 4096
+        crc32: "3d33ac34"
+        sha1: "909d59e7a993affd10224402b4370e82a5f5545c"
+      - name: v0b-.7e
+        size: 4096
+        crc32: "23d929b7"
+        sha1: "063f83020ba3d6f43ab8471f95ca919767b93aa4"
+      - name: v0c-.7e
+        size: 4096
+        crc32: "9f505709"
+        sha1: "a9c661ba5a0d3fa5e935fb9c10fa63e2d9809981"
+      - name: v0d-.7e
+        size: 4096
+        crc32: "1e0c22b1"
+        sha1: "5fec8fef500bbebc13d0173406afc55235d3affb"
+      - name: dsp-3_p0-a.m9
+        size: 2048
+        crc32: "2541e34b"
+        sha1: "4f983513dbae1350c83a433dea77a4465748b9c6"
+      - name: dsp-3_p1-.l9
+        size: 2048
+        crc32: "3bfff5f3"
+        sha1: "4e9437cb1b76d64da6b37f01bd6e879fb399e8ce"
+      - name: dsp-3_p0-b.m9
+        size: 2048
+        crc32: "b67a91d9"
+        sha1: "681c040be0f0ed1ba0a50161b36d0ad8e1c8c5cb"
+      - name: dsp-3_p1-.l9
+        size: 2048
+        crc32: "3bfff5f3"
+        sha1: "4e9437cb1b76d64da6b37f01bd6e879fb399e8ce"
+      - name: dsp-3_p0-c.m9
+        size: 2048
+        crc32: "c76c4057"
+        sha1: "4093d4ac44feff595e34f361ed1ed84113c9225e"
+      - name: dsp-3_p1-.l9
+        size: 2048
+        crc32: "3bfff5f3"
+        sha1: "4e9437cb1b76d64da6b37f01bd6e879fb399e8ce"
+      - name: dsp-3_p0-d.m9
+        size: 2048
+        crc32: "4b7d72bc"
+        sha1: "a70c5ba88404dafee2cc717071c4a249f67ab645"
+      - name: dsp-3_p1-.l9
+        size: 2048
+        crc32: "3bfff5f3"
+        sha1: "4e9437cb1b76d64da6b37f01bd6e879fb399e8ce"
+      - name: v1-.5a
+        size: 2048
+        crc32: "b66b2c2a"
+        sha1: "0097f38beb4872e735e560148052e258a26b08fd"
+      - name: v1-.5a
+        size: 2048
+        crc32: "b66b2c2a"
+        sha1: "0097f38beb4872e735e560148052e258a26b08fd"
+      - name: v1-.5a
+        size: 2048
+        crc32: "b66b2c2a"
+        sha1: "0097f38beb4872e735e560148052e258a26b08fd"
+      - name: v1-.5a
+        size: 2048
+        crc32: "b66b2c2a"
+        sha1: "0097f38beb4872e735e560148052e258a26b08fd"
+      - name: v1-.5a
+        size: 2048
+        crc32: "b66b2c2a"
+        sha1: "0097f38beb4872e735e560148052e258a26b08fd"
+      - name: v1-.5a
+        size: 2048
+        crc32: "b66b2c2a"
+        sha1: "0097f38beb4872e735e560148052e258a26b08fd"
+      - name: v1-.5a
+        size: 2048
+        crc32: "b66b2c2a"
+        sha1: "0097f38beb4872e735e560148052e258a26b08fd"
+      - name: v1-.5a
+        size: 2048
+        crc32: "b66b2c2a"
+        sha1: "0097f38beb4872e735e560148052e258a26b08fd"
+      - name: v2.3m
+        size: 32
+        crc32: "238fdb40"
+        sha1: "b88e8fabb82092105c3828154608ea067acbf2e5"
+      - name: v4.10d
+        size: 32
+        crc32: "3b5836b4"
+        sha1: "b630bb277d9ec09d46ef26b944014dd6165b35d8"
+      - name: v3.3j
+        size: 32
+        crc32: "51eef657"
+        sha1: "eaedce5caf55624ad6ae706aedf82c5717c60f1f"
+      - name: v2.3m
+        size: 32
+        crc32: "238fdb40"
+        sha1: "b88e8fabb82092105c3828154608ea067acbf2e5"
+      - name: v4.10d
+        size: 32
+        crc32: "3b5836b4"
+        sha1: "b630bb277d9ec09d46ef26b944014dd6165b35d8"
+      - name: v3.3j
+        size: 32
+        crc32: "51eef657"
+        sha1: "eaedce5caf55624ad6ae706aedf82c5717c60f1f"
+      - name: v2.3m
+        size: 32
+        crc32: "238fdb40"
+        sha1: "b88e8fabb82092105c3828154608ea067acbf2e5"
+      - name: v4.10d
+        size: 32
+        crc32: "3b5836b4"
+        sha1: "b630bb277d9ec09d46ef26b944014dd6165b35d8"
+      - name: v3.3j
+        size: 32
+        crc32: "51eef657"
+        sha1: "eaedce5caf55624ad6ae706aedf82c5717c60f1f"
+      - name: v2.3m
+        size: 32
+        crc32: "238fdb40"
+        sha1: "b88e8fabb82092105c3828154608ea067acbf2e5"
+      - name: v4.10d
+        size: 32
+        crc32: "3b5836b4"
+        sha1: "b630bb277d9ec09d46ef26b944014dd6165b35d8"
+      - name: v3.3j
+        size: 32
+        crc32: "51eef657"
+        sha1: "eaedce5caf55624ad6ae706aedf82c5717c60f1f"
+      - name: v2.3m
+        size: 32
+        crc32: "238fdb40"
+        sha1: "b88e8fabb82092105c3828154608ea067acbf2e5"
+      - name: v4.10d
+        size: 32
+        crc32: "3b5836b4"
+        sha1: "b630bb277d9ec09d46ef26b944014dd6165b35d8"
+      - name: v3.3j
+        size: 32
+        crc32: "51eef657"
+        sha1: "eaedce5caf55624ad6ae706aedf82c5717c60f1f"
+      - name: v2.3m
+        size: 32
+        crc32: "238fdb40"
+        sha1: "b88e8fabb82092105c3828154608ea067acbf2e5"
+      - name: v4.10d
+        size: 32
+        crc32: "3b5836b4"
+        sha1: "b630bb277d9ec09d46ef26b944014dd6165b35d8"
+      - name: v3.3j
+        size: 32
+        crc32: "51eef657"
+        sha1: "eaedce5caf55624ad6ae706aedf82c5717c60f1f"
+      - name: v2.3m
+        size: 32
+        crc32: "238fdb40"
+        sha1: "b88e8fabb82092105c3828154608ea067acbf2e5"
+      - name: v4.10d
+        size: 32
+        crc32: "3b5836b4"
+        sha1: "b630bb277d9ec09d46ef26b944014dd6165b35d8"
+      - name: v3.3j
+        size: 32
+        crc32: "51eef657"
+        sha1: "eaedce5caf55624ad6ae706aedf82c5717c60f1f"
+      - name: v2.3m
+        size: 32
+        crc32: "238fdb40"
+        sha1: "b88e8fabb82092105c3828154608ea067acbf2e5"
+      - name: v4.10d
+        size: 32
+        crc32: "3b5836b4"
+        sha1: "b630bb277d9ec09d46ef26b944014dd6165b35d8"
+      - name: v3.3j
+        size: 32
+        crc32: "51eef657"
+        sha1: "eaedce5caf55624ad6ae706aedf82c5717c60f1f"
+      - name: cassmcu.1c
+        size: 1024
+        crc32: "a6df18fd"
+        sha1: "1f9ea47e372d31767c936c15852b43df2b0ee8ff"
 
   # Nintendo arcade
   - name: playch10.zip
@@ -256,30 +1225,175 @@ files:
     category: bios_zip
     system: nintendo-playch10
     source_ref: "src/mame/nintendo/playch10.cpp:2982"
+    contents:
+      - name: pch1-c__8t_e-2.8t
+        size: 16384
+        crc32: "d52fa07a"
+        sha1: "55cabf52ae10c050c2229081a80b9fe5454ab8c5"
+      - name: pck1-c.8t
+        size: 16384
+        crc32: "503ee8b1"
+        sha1: "3bd20bc71cac742d1b8c1430a6426d0a19db7ad0"
+      - name: pch1-c_8te.8t
+        size: 16384
+        crc32: "123ffa37"
+        sha1: "3bef754a5a85a8498bb6222ddf5cb9021f264db5"
+      - name: pck1-c_fix.8t
+        size: 16384
+        crc32: "0be8ceb4"
+        sha1: "45b127a537370226e6b30be2b5a92ad05673ca7f"
+      - name: pch1-c__8t_e-1.8t
+        size: 16384
+        crc32: "88a8f87e"
+        sha1: "d1d7ffe68d2e7aa2faf8ad41a7ec8421265ede42"
+      - name: pch1-c__8k.8k
+        size: 8192
+        crc32: "9acffb30"
+        sha1: "b814f10ef23f2ca445fabafcbf7f25e2d454ba8c"
+      - name: pch1-c__8m_e-1.8m
+        size: 8192
+        crc32: "c1232eee"
+        sha1: "beaf9fa2d091a3c7f70c51e966d885b1f9f0935f"
+      - name: pch1-c__8p_e-1.8p
+        size: 8192
+        crc32: "30c15e23"
+        sha1: "69166afdb2fe827c7f1919cdf4197caccbd961fa"
+      - name: pch1-c__8k.8k
+        size: 8192
+        crc32: "9acffb30"
+        sha1: "b814f10ef23f2ca445fabafcbf7f25e2d454ba8c"
+      - name: pch1-c__8m_e-1.8m
+        size: 8192
+        crc32: "c1232eee"
+        sha1: "beaf9fa2d091a3c7f70c51e966d885b1f9f0935f"
+      - name: pch1-c__8p_e-1.8p
+        size: 8192
+        crc32: "30c15e23"
+        sha1: "69166afdb2fe827c7f1919cdf4197caccbd961fa"
+      - name: pch1-c__8k.8k
+        size: 8192
+        crc32: "9acffb30"
+        sha1: "b814f10ef23f2ca445fabafcbf7f25e2d454ba8c"
+      - name: pch1-c_8m.8m
+        size: 8192
+        crc32: "83ebc7a3"
+        sha1: "a7c607138f4f9b96ab5d3a82c47895f77672e296"
+      - name: pch1-c_8p-8p
+        size: 8192
+        crc32: "90e1b80c"
+        sha1: "c4f4b135b2a11743518aaa0554c365b4a8cf299a"
+      - name: pch1-c__8k.8k
+        size: 8192
+        crc32: "9acffb30"
+        sha1: "b814f10ef23f2ca445fabafcbf7f25e2d454ba8c"
+      - name: pch1-c__8m_e-1.8m
+        size: 8192
+        crc32: "c1232eee"
+        sha1: "beaf9fa2d091a3c7f70c51e966d885b1f9f0935f"
+      - name: pch1-c__8p_e-1.8p
+        size: 8192
+        crc32: "30c15e23"
+        sha1: "69166afdb2fe827c7f1919cdf4197caccbd961fa"
+      - name: pch1-c-6f.82s129an.6f
+        size: 256
+        crc32: "e5414ca3"
+        sha1: "d2878411cda84ffe0afb2e538a67457f51bebffb"
+      - name: pch1-c-6e.82s129an.6e
+        size: 256
+        crc32: "a2625c6e"
+        sha1: "a448b47c9289902e26a3d3c4c7d5a7968c385e81"
+      - name: pch1-c-6d.82s129an.6d
+        size: 256
+        crc32: "1213ebd4"
+        sha1: "0ad386fc3eab5e53c0288ad1de33639a9e461b7c"
+      - name: rp2c0x.pal
+        size: 192
+        crc32: "48de65dc"
+        sha1: "d10acafc8da9ff479c270ec01180cca61efe62f5"
 
   - name: nss.zip
     required: true
     category: bios_zip
     system: nintendo-nss
     source_ref: "src/mame/nintendo/nss.cpp:1099"
+    contents:
+      - name: nss-ic14.02.ic14
+        description: Nintendo Super System (Single Cart BIOS)
+        size: 32768
+        crc32: "e06cb58f"
+        sha1: "62f507e91a2797919a78d627af53f029c7d81477"
+      - name: nss-c.ic14
+        description: Nintendo Super System (Multi Cart BIOS)
+        size: 32768
+        crc32: "a8e202b3"
+        sha1: "b7afcfe4f5cf15df53452dc04be81929ced1efb2"
+      - name: nss-v3.ic14
+        description: Nintendo Super System (Single Cart BIOS v3, hack?)
+        size: 32768
+        crc32: "ac385b53"
+        sha1: "e3942f9d508c3c8074c3c3941376c37ca68b8e54"
 
   - name: sfcbox.zip
     required: true
     category: bios_zip
     system: nintendo-sfcbox
     source_ref: "src/mame/nintendo/sfcbox.cpp:586"
+    contents:
+      - name: krom2.00.ic1
+        description: SFCBox BIOS Version 2.00
+        size: 131072
+        crc32: "e31b5580"
+        sha1: "4a6a34a9a94c8249c3b441c2516bdd03e198c458"
+      - name: krom1.ic1
+        description: SFCBox BIOS Version 1.00
+        size: 65536
+        crc32: "c9010002"
+        sha1: "f4c74086a83b728b1c1af3a021a60efa80eff5a4"
+      - name: atrom-4s-0.rom5
+        size: 524288
+        crc32: "ad3ec05c"
+        sha1: "a3d336db585fe02a37c323422d9db6a33fd489a6"
 
   - name: aleck64.zip
     required: true
     category: bios_zip
     source_ref: "src/mame/nintendo/aleck64.cpp:1417"
+    contents:
+      - name: pifdata.bin
+        size: 2048
+        crc32: "5ec82be9"
+        sha1: "9174eadc0f0ea2654c95fd941406ab46b9dc9bdd"
+      - name: normpnt.rom
+        size: 128
+        crc32: "e7f2a005"
+        sha1: "c27b4a364a24daeee6e99fd286753fd6216362b4"
+      - name: normslp.rom
+        size: 128
+        crc32: "4f2ae525"
+        sha1: "eab43f8cc52c8551d9cff6fced18ef80eaba6f05"
 
   # Philips CD-i
   - name: cdibios.zip
     required: true
     category: bios_zip
     system: philips-cdi
-    source_ref: "src/mame/philips/cdi.cpp:921"
+    source_ref: "src/mame/philips/cdi.cpp:922"
+    contents:
+      - name: cdi200.rom
+        description: Magnavox CD-i 200
+        size: 524288
+        crc32: "40c4e6b9"
+        sha1: "d961de803c89b3d1902d656ceb9ce7c02dccb40a"
+      - name: cdi220b.rom
+        description: Philips CD-i 220 F2
+        size: 524288
+        crc32: "279683ca"
+        sha1: "53360a1f21ddac952e95306ced64186a3fc0b93e"
+      - name: zx405042p__cdi_slave_2.0__b43t__zzmk9213.mc68hc705c8a_withtestrom.7206
+        size: 8192
+        crc32: "688cda63"
+        sha1: "56d0acd7caad51c7de703247cd6d842b36173079"
+        bad_dump: true
 
   # Commodore Cubo (CD32-based)
   - name: cubo.zip
@@ -287,6 +1401,11 @@ files:
     category: bios_zip
     system: commodore-cubo
     source_ref: "src/mame/amiga/cubo.cpp:1433"
+    contents:
+      - name: 391640-03.u6a
+        size: 1048576
+        crc32: "d3837ae4"
+        sha1: "06807db3181637455f4d46582d9972afec8956d9"
 
   # Namco boards
   - name: sys246.zip
@@ -294,35 +1413,99 @@ files:
     category: bios_zip
     system: namco-system246
     source_ref: "src/mame/namco/namcops2.cpp:1716"
+    contents:
+      - name: r27v1602f.7d
+        size: 2097152
+        crc32: "2b2e41a2"
+        sha1: "f0a74bbcaf801f3fd0b7002ebd0118564aae3528"
 
   - name: sys256.zip
     required: true
     category: bios_zip
     system: namco-system256
     source_ref: "src/mame/namco/namcops2.cpp:1761"
+    contents:
+      - name: r27v1602f.8g
+        size: 2097152
+        crc32: "b2a8eeb6"
+        sha1: "bc4fb4e1e53adbd92385f1726bd69663ff870f1e"
 
   - name: sys573.zip
     required: true
     category: bios_zip
     system: namco-system573
     source_ref: "src/mame/konami/ksys573.cpp:6289"
+    contents:
+      - name: 700a01.22g
+        description: Standard
+        size: 524288
+        crc32: "11812ef8"
+        sha1: "e1284add4aaddd5337bd7f4e27614460d52b5b48"
+      - name: 700a01,gchgchmp.22g
+        description: Found on Gacha Gachamp
+        size: 524288
+        crc32: "39ebb0ca"
+        sha1: "9aab8c637dd2be84d79007e52f108abe92bf29dd"
+      - name: 700b01.22g
+        description: Found on Dancing Stage Euro Mix 2
+        size: 524288
+        crc32: "6cf852af"
+        sha1: "a2421d0a494892c0e71003c96995ce8f945064dd"
+      - name: h8a01.bin
+        description: Standard
+        size: 64
+        crc32: "131e0359"
+        sha1: "967f66578ebc0cf6b044d71af09b59bce1f4a1d0"
+      - name: h8a01.bin
+        description: Found on Gacha Gachamp
+        size: 64
+        crc32: "131e0359"
+        sha1: "967f66578ebc0cf6b044d71af09b59bce1f4a1d0"
+      - name: h8b01.bin
+        description: Found on Dancing Stage Euro Mix 2
+        size: 64
+        crc32: "508b057d"
+        sha1: "779177e6312ef272483eeb64a5e84bbae6e301f2"
 
   # Konami
   - name: konamigx.zip
     required: true
     category: bios_zip
     source_ref: "src/mame/konami/konamigx.cpp:4193"
+    contents:
+      - name: 300a01.34k
+        size: 131072
+        crc32: "d5fa95f5"
+        sha1: "c483aa98ff8ef40cdac359c19ad23fea5ecc1906"
 
   - name: konamigv.zip
     required: true
     category: bios_zip
     system: konami-gv
-    source_ref: "src/mame/konami/konamigv.cpp:1448"
+    source_ref: "src/mame/konami/konamigv.cpp:1444"
+    contents:
+      - name: 999a01.7e
+        size: 524288
+        crc32: "ad498d2d"
+        sha1: "02a82a2fe1fba0404517c3602324bfa64e23e478"
 
   - name: kviper.zip
     required: true
     category: bios_zip
     source_ref: "src/mame/konami/viper.cpp:3267"
+    contents:
+      - name: 941b01.u25
+        size: 262144
+        crc32: "233e5159"
+        sha1: "66ff268d5bf78fbfa48cdc3e1b08f8956cfd6cfb"
+      - name: 941a01.u25
+        size: 262144
+        crc32: "df6f88d6"
+        sha1: "2bc10e4fbec36573aa8b6878492d37665f074d87"
+      - name: ds2430.u3
+        size: 40
+        crc32: "f1511505"
+        sha1: "ed7cd9b2763b3e377df9663943160f9871f65105"
 
   - name: gq863.zip
     required: true
@@ -333,22 +1516,54 @@ files:
   - name: bubsys.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/konami/nemesis.cpp:3234"
+    source_ref: "src/mame/konami/nemesis.cpp:3246"
+    contents:
+      - name: boot.bin
+        size: 480
+        crc32: "f0774fc2"
+        sha1: "84fade54e025f170d983200a86c1ed96ef1a9ed3"
+      - name: 400b03.8g
+        size: 8192
+        crc32: "85c2afc5"
+        sha1: "387842d02d50d0d78a27270e7267af19555b9e63"
+      - name: 400a1.2b
+        size: 256
+        crc32: "5827b1e8"
+        sha1: "fa8cf5f868cfb08bce203baaebb6c4055ee2a000"
+      - name: 400a2.1b
+        size: 256
+        crc32: "2f44f970"
+        sha1: "7ab46f9d5d587665782cefc623b8de0124a6d38a"
 
   - name: konendev.zip
     required: true
     category: bios_zip
     source_ref: "src/mame/konami/konendev.cpp:914"
+    contents:
+      - name: 2v02s502_ifu.u190
+        size: 524288
+        crc32: "36122a98"
+        sha1: "3d2c40c9d504358d890364e26c9562e40314d8a4"
 
   - name: kpython.zip
     required: true
     category: bios_zip
     source_ref: "src/mame/konami/kpython.cpp:376"
+    contents:
+      - name: b22a01.u42
+        size: 524288
+        crc32: "98de405e"
+        sha1: "4bc268a996825c1bdf6ae277d331fe7bdc0cc00c"
 
   - name: kpython2.zip
     required: true
     category: bios_zip
     source_ref: "src/mame/konami/kpython2.cpp:1918"
+    contents:
+      - name: ps2-0190j-20030822.bin
+        size: 4194304
+        crc32: "79d60546"
+        sha1: "0ea98a25a32145dda514de2f0d4bfbbd806bd00c"
 
   # Sony ZN-based (PSX arcade, renamed from legacy cpzn/atpsx names)
   - name: coh1000c.zip
@@ -356,70 +1571,249 @@ files:
     category: bios_zip
     system: capcom-zn1
     source_ref: "src/mame/sony/zn.cpp:5967"
+    contents:
+      - name: m534002c-13.ic353
+        description: japan
+        size: 524288
+        crc32: "50033af6"
+        sha1: "486d92ff6c7f1e54f8e0ef41cd9116eca0e10e1a"
+      - name: msm27c402zb.ic353
+        description: english (debug)
+        size: 524288
+        crc32: "f20f7fe5"
+        sha1: "9aac7d3b3d0cc0bbbe4056164b73078dce41d91c"
+      - name: cp01.ic652
+        size: 8
+        crc32: "bb7ba033"
+        sha1: "966f3aee5d00e1312c455f855915d621e6cb0672"
 
   - name: coh3002c.zip
     required: true
     category: bios_zip
     system: capcom-zn2
     source_ref: "src/mame/sony/zn.cpp:6053"
+    contents:
+      - name: m534002c-59.ic353
+        size: 524288
+        crc32: "e860ea8b"
+        sha1: "66e7e1d4e426466b8f48a2ba055a91b475569504"
+      - name: cp10.ic652
+        size: 8
+        crc32: "7808fcef"
+        sha1: "3c3fb8227b05dace042dc1429b9f2355b1a15638"
 
   - name: coh1000t.zip
     required: true
     category: bios_zip
     source_ref: "src/mame/sony/zn.cpp:5987"
+    contents:
+      - name: m534002c-14.ic353
+        size: 524288
+        crc32: "e3f23b6e"
+        sha1: "e18907cf8c6ba54d96edba0a9a00487a90219e0d"
+      - name: tt01.ic652
+        size: 8
+        crc32: "daac13e7"
+        sha1: "96d94f2b06fb7ecd91454969f4959a583ffb9d5a"
 
   - name: coh1000a.zip
     required: true
     category: bios_zip
     source_ref: "src/mame/sony/zn.cpp:6013"
+    contents:
+      - name: m534002c-15.ic353
+        size: 524288
+        crc32: "8d8d0764"
+        sha1: "7ee83d317190bb1cef2f8f01c81eaaae47150ebb"
+      - name: ac01.ic652
+        size: 8
+        crc32: "c425eaf5"
+        sha1: "decf77ab50f7f58c641c3214a11647924f3a8998"
 
   - name: coh1000w.zip
     required: true
     category: bios_zip
     source_ref: "src/mame/sony/zn.cpp:6022"
+    contents:
+      - name: msm27c402zb.ic353
+        size: 524288
+        crc32: "45e8a4b4"
+        sha1: "815488d8563c85f97fbc3384ff21f08e4c88b7b7"
+      - name: tw01.ic652
+        size: 8
+        crc32: "1cac067e"
+        sha1: "8e87941bfb374172628c8a37647e3a66b7166aa8"
 
   - name: coh1001l.zip
     required: true
     category: bios_zip
     source_ref: "src/mame/sony/zn.cpp:6026"
+    contents:
+      - name: m534002c-17.ic353
+        size: 524288
+        crc32: "6721146b"
+        sha1: "9511d24bfe25eb180fb2db0835b131cb4a12730e"
+      - name: at01.ic652
+        size: 8
+        crc32: "181668b3"
+        sha1: "8d2fe1facb4473cc20b4b477aaf881f9280939cf"
 
   - name: coh1002v.zip
     required: true
     category: bios_zip
     source_ref: "src/mame/sony/zn.cpp:6030"
+    contents:
+      - name: coh-1002v.ic353
+        size: 524288
+        crc32: "5ff165f3"
+        sha1: "8f59314c1093446b9bcb06d232244da6df78e206"
+      - name: kn01.ic652
+        size: 8
+        crc32: "1ce271df"
+        sha1: "b01479dc75a4a8a86bee7ac7cd10af2bda332544"
 
   - name: coh1002e.zip
     required: true
     category: bios_zip
     source_ref: "src/mame/sony/zn.cpp:6036"
+    contents:
+      - name: m27c402cz-54.ic353
+        size: 524288
+        crc32: "910f3a8b"
+        sha1: "cd68532967a25f476a6d73473ec6b6f4df2e1689"
+      - name: et01.ic652
+        size: 8
+        crc32: "a7dd922e"
+        sha1: "1069c1d9015028a51a1b314cfacb014ea90aa425"
 
   - name: coh1002m.zip
     required: true
     category: bios_zip
     source_ref: "src/mame/sony/zn.cpp:6087"
+    contents:
+      - name: m534002c-61.ic353
+        size: 524288
+        crc32: "69ffbcb4"
+        sha1: "03eb2febfab3fcde716defff291babd9392de965"
+      - name: mg01.ic652
+        size: 8
+        crc32: "50dc8322"
+        sha1: "cef4011c6c06d6fce546e1db5d9fbae155eabf57"
 
   # Taito
   - name: coh3002t.zip
     required: true
     category: bios_zip
     source_ref: "src/mame/sony/taitogn.cpp:1377"
+    contents:
+      - name: m534002c-60.ic353
+        size: 524288
+        crc32: "03967fa7"
+        sha1: "0e17fec2286e4e25deb23d40e41ce0986f373d49"
+      - name: tt10.ic652
+        size: 8
+        crc32: "235510b1"
+        sha1: "2cc02113207a8f0b078152d31ce6503411750e70"
+      - name: tt16.u17
+        size: 8
+        crc32: "6bb167b3"
+        sha1: "9dcba08f10775a9adf2b1f382c947460edd3d239"
+      - name: flash.u30
+        size: 2097152
+        crc32: "c48c8236"
+        sha1: "c6dad60266ce2ff635696bc0d91903c543273559"
+      - name: f35-01_m27c800_v1.bin
+        description: G NET BIOS v1 flasher
+        size: 1048576
+        crc32: "cd15cc30"
+        sha1: "78361f46fa7186d5058937c86c66247a86b1257f"
+      - name: f35-01_m27c800.bin
+        description: G NET BIOS v2 flasher
+        size: 1048576
+        crc32: "6225ec11"
+        sha1: "047852d456b6ff85f8e640887caa03cf3e63ffad"
+      - name: f35-01_m27c800_modbios_mb-2009_dump_by_aje_fr.bin
+        description: MB2009
+        size: 1048576
+        crc32: "6367aedf"
+        sha1: "8400775e0c974c8b017e26ef9339144cad457c63"
+      - name: f35-01_m27c800_modbios_mb-2011.bin
+        description: MB2011
+        size: 1048576
+        crc32: "f98ae118"
+        sha1: "c6918dfbb6fcf686dde4b731e84f740177ab31f0"
 
   - name: coh1002t.zip
     required: true
     category: bios_zip
     source_ref: "src/mame/sony/taitogn.cpp:1378"
+    contents:
+      - name: m534002c-14.ic353
+        size: 524288
+        crc32: "e3f23b6e"
+        sha1: "e18907cf8c6ba54d96edba0a9a00487a90219e0d"
+      - name: tt01.ic652
+        size: 8
+        crc32: "daac13e7"
+        sha1: "96d94f2b06fb7ecd91454969f4959a583ffb9d5a"
+      - name: tt99.u17
+        size: 8
+        crc32: "2989b6eb"
+        sha1: "89981ec68d30729c27d31f820cbfd0c23ed14a03"
+      - name: flash.u30
+        size: 2097152
+        crc32: "9100dbf2"
+        sha1: "9ce888bd2a7e575c8ca71d978cb85de22afb5660"
 
   - name: taitotz.zip
     required: true
     category: bios_zip
     source_ref: "src/mame/taito/taitotz.cpp:3014"
+    contents:
+      - name: e68-05-1.ic6
+        size: 524288
+        crc32: "6ad9b006"
+        sha1: "f05a0ae26b6abaeda9c7944aee96c72b08fff7a5"
+      - name: e68-04-1.ic5
+        size: 524288
+        crc32: "c7c2dc6b"
+        sha1: "bf88c818166c285130c5c73d6982f009da26e143"
 
   # Super Kaneko Nova System
   - name: skns.zip
     required: true
     category: bios_zip
     system: super-kaneko-nova
-    source_ref: "src/mame/kaneko/suprnova.cpp:2057"
+    source_ref: "src/mame/kaneko/suprnova.cpp:2085"
+    contents:
+      - name: sknsj1.u10
+        size: 524288
+        crc32: "7e2b836c"
+        sha1: "92c5a7a2472496028bff0e5980d41dd294f42144"
+      - name: sknse2.u10
+        size: 524288
+        crc32: "e2b9d7d1"
+        sha1: "b530a3bb9dedc8cfafcba9f1f10277590be04a15"
+      - name: sknsa1.u10
+        size: 524288
+        crc32: "745e5212"
+        sha1: "caba649ab2d83b2d7e007eecee0fc582c019df38"
+      - name: sknsu1.u10
+        size: 524288
+        crc32: "384d21ec"
+        sha1: "a27e8a18099d9cea64fa32db28d01101c2a78815"
+      - name: sknsk1.u10
+        size: 524288
+        crc32: "ff1c9f79"
+        sha1: "a51e598d43e76d37da69b1f094c111273bdfc94a"
+      - name: supernova_modbios-japan.u10
+        size: 524288
+        crc32: "b8d3190c"
+        sha1: "62c9a4a075fd944e89fe95c6b46046101eb6de1c"
+      - name: supernova-modbios-korea.u10
+        size: 524288
+        crc32: "1d90517c"
+        sha1: "463962ffe19880135f0d95a7beda79e27448e872"
 
   - name: mac2bios.zip
     required: true
@@ -430,6 +1824,19 @@ files:
     required: true
     category: bios_zip
     source_ref: "src/mame/seta/macs.cpp:775"
+    contents:
+      - name: am_macs_os_low.u43
+        size: 524288
+        crc32: "0b5aed5e"
+        sha1: "042e705017ee34656e2c6af45825bb2dd3447747"
+      - name: am_macs_os_hi.u44
+        size: 524288
+        crc32: "538b68e4"
+        sha1: "a0534147791e94e726f49451d0e95671ae0a87d5"
+      - name: sx011-01.bin
+        size: 343
+        crc32: "669096c1"
+        sha1: "36f55a2e4865bdf0506746a4df51bfb1944f905e"
 
   # Panasonic 3DO
   - name: 3dobios.zip
@@ -437,11 +1844,37 @@ files:
     category: bios_zip
     system: panasonic-3do
     source_ref: "src/mame/misc/3do.cpp:565"
+    contents:
+      - name: panafz10.bin
+        description: Panasonic FZ-10 R.E.A.L. 3DO Interactive Multiplayer
+        size: 1048576
+        crc32: "58242cee"
+        sha1: "3c912300775d1ad730dc35757e279c274c0acaad"
+      - name: goldstar.bin
+        description: Goldstar 3DO Interactive Multiplayer v1.01m
+        size: 1048576
+        crc32: "b6f5028b"
+        sha1: "c4a2e5336f77fb5f743de1eea2cda43675ee2de7"
+      - name: panafz1.bin
+        description: Panasonic FZ-1 R.E.A.L. 3DO Interactive Multiplayer
+        size: 1048576
+        crc32: "c8c8ff89"
+        sha1: "34bf189111295f74d7b7dfc1f304d98b8d36325a"
+      - name: sanyotry.bin
+        description: Sanyo TRY 3DO Interactive Multiplayer
+        size: 1048576
+        crc32: "d5cbc509"
+        sha1: "b01c53da256dde43ffec4ad3fc3adfa8d635e943"
 
   - name: alg3do.zip
     required: true
     category: bios_zip
     source_ref: "src/mame/misc/3do.cpp:573"
+    contents:
+      - name: saot_rom2.bin
+        size: 524288
+        crc32: "b832da9a"
+        sha1: "520d3d1b5897800af47f92efd2444a26b7a7dead"
 
   # Hyper Neo-Geo 64
   - name: hng64.zip
@@ -449,34 +1882,251 @@ files:
     category: bios_zip
     system: hyper-neogeo64
     source_ref: "src/mame/snk/hng64.cpp:3241"
+    contents:
+      - name: brom1.bin
+        size: 524288
+        crc32: "a30dd3de"
+        sha1: "3e2fd0a56214e6f5dcb93687e409af13d065ea30"
+      - name: bios_us.bin
+        size: 524288
+        crc32: "ab5948d6"
+        sha1: "f8b940c1ae5ce2d3b2cd0c9bfaf6e5b063cec06e"
+      - name: bios_export.bin
+        size: 524288
+        crc32: "bbf07ec6"
+        sha1: "5656aa077f6a6d43953f15b5123eea102a9d5313"
+      - name: bios_korea.bin
+        size: 524288
+        crc32: "ac953e2e"
+        sha1: "f502188ef252b7c9d04934c4b525730a116de48b"
+      - name: from1.bin
+        size: 524288
+        crc32: "6b933005"
+        sha1: "e992747f46c48b66e5509fe0adf19c91250b00c7"
+      - name: rom1.bin
+        size: 130866
+        crc32: "4a6832dc"
+        sha1: "ae504f7733c2f40450157cd1d3b85bc83fac8569"
+      - name: tmp87ph40an.bin
+        size: 32768
+        crc32: "b70df21f"
+        sha1: "5b742e8a0bbf4c0ae4f4398d34c7058fb24acc92"
+      - name: lvs-ioj-br9020f.u2
+        size: 256
+        crc32: "78b7020d"
+        sha1: "2b8549532ef5e1e8102dbe71af55fdfb27ccbba6"
+      - name: lvs-igx-br9020f.u3
+        size: 256
+        crc32: "af9f4287"
+        sha1: "6df0e35c77dbfee2fab7ff490dcd651db420e367"
+      - name: lvs-jam-br9020f.u3
+        size: 256
+        crc32: "dabec5d2"
+        sha1: "19c5be89c57387d6ea563b3dc55674d0692af98e"
 
   # Amiga-based
   - name: ar_bios.zip
     required: true
     category: bios_zip
     source_ref: "src/mame/amiga/arsystems.cpp:1011"
+    contents:
+      - name: 315093-01.u2
+        size: 262144
+        crc32: "a6ce1636"
+        sha1: "11f9e62cf299f72184835b7b2a70a16333fc0d88"
+      - name: scpa_01-hi_v3.0.u12
+        size: 65536
+        crc32: "2d8e1a06"
+        sha1: "be187f34624aeda110017c4a09242f7c00ef56a4"
+      - name: scpa_01-lo_v3.0.u16
+        size: 65536
+        crc32: "e4f38fab"
+        sha1: "01c2eb5965070893be6734eb1372576727716476"
+      - name: scpa_01-hi_v2.20.u12
+        size: 65536
+        crc32: "79450b4b"
+        sha1: "a1e508a89fc62e1c4994064f2786f491b1dc8bc6"
+      - name: scpa_01-lo_v2.20.u16
+        size: 65536
+        crc32: "d2825511"
+        sha1: "747a37c6073224472bf261ae376ac9abfbe07554"
+      - name: scpa_01-hi_v2.11.u12
+        size: 65536
+        crc32: "be9dbdc5"
+        sha1: "1554da09f051ec53937d65d4e451de51bc0c69e5"
+      - name: scpa_01-lo_v2.11.u16
+        size: 65536
+        crc32: "95b84504"
+        sha1: "99999fc40909001b37aa1b543918118becc81800"
+      - name: gcp-1-hi
+        size: 65536
+        crc32: "67d44523"
+        sha1: "f3e3699132cdf741518accb890c04d17374c4049"
+      - name: gcp-1-lo
+        size: 65536
+        crc32: "65d9b9cf"
+        sha1: "5c60a0dd4a0a7d9b938ce6b0446a6ad2ecaf07ec"
+      - name: gcp-2-hi
+        size: 65536
+        crc32: "1d7594ae"
+        sha1: "6173bbfecf18d7d9ee6bc2b6753ca9d42fabd781"
+      - name: gcp-2-lo
+        size: 65536
+        crc32: "e776198d"
+        sha1: "694ca4cc99ed84a95d18201c94a3332f8599654f"
+      - name: gcp-3-hi
+        size: 65536
+        crc32: "3e7364be"
+        sha1: "26e10d0ddc031a891138db36ce4f1732722e6847"
+      - name: gcp-3-lo
+        size: 65536
+        crc32: "87229e0d"
+        sha1: "0b18544801e529f954b9e03226bd2e5475f36351"
+      - name: gcp_v311_1-hi.u16
+        size: 65536
+        crc32: "0b486a85"
+        sha1: "b406f1db5abf28d9072b7940989ffd176aeee5cb"
+      - name: gcp_v311_1-lo.u11
+        size: 65536
+        crc32: "80e8e863"
+        sha1: "ab04dfcda7544f4ed9b67771cd8aefe0300c6d4b"
+      - name: gcp_v311_2-hi.u17
+        size: 65536
+        crc32: "d20a4d7f"
+        sha1: "1dc0a79efa946333149f68ddac046fd44b5f2abe"
+      - name: gcp_v311_2-lo.u12
+        size: 65536
+        crc32: "5bf4c74c"
+        sha1: "1f7b17170accdf9e448c1a5d8bc430aa2d1d931b"
+      - name: gcp_v400_1-hi.u16
+        size: 65536
+        crc32: "69295167"
+        sha1: "855f53abbb9dc15e5518e16c5c2dfe4134d07306"
+      - name: gcp_v400_1-lo.u11
+        size: 65536
+        crc32: "504c2171"
+        sha1: "a93367f520afb86c97c0a191714b72823c95cdd2"
+      - name: gcp_v400_2-hi.u17
+        size: 65536
+        crc32: "13fb4e2d"
+        sha1: "3eef07aecc3a201ae0b20634c7fd0c87c89fd7f1"
+      - name: gcp_v400_2-lo.u12
+        size: 65536
+        crc32: "a5cc4515"
+        sha1: "80070521476e92323a6baa6e55928ca5b751a332"
 
   - name: alg_bios.zip
     required: true
     category: bios_zip
     source_ref: "src/mame/amiga/alg.cpp:923"
+    contents:
+      - name: 315093-02.u2
+        description: Kickstart 1.3 (34.5)
+        size: 262144
+        crc32: "c4f0f55f"
+        sha1: "891e9a547772fe0c6c19b610baf8bc4ea7fcb785"
 
   # Atari
   - name: atarisy1.zip
     required: true
     category: bios_zip
     source_ref: "src/mame/atari/atarisy1.cpp:2669"
+    contents:
+      - name: 136032.205.l13
+        size: 16384
+        crc32: "88d0be26"
+        sha1: "d124045eccc562ff0423b23a240e27ad740fa0c9"
+      - name: 136032.206.l12
+        size: 16384
+        crc32: "3c79ef05"
+        sha1: "20fdca7131478e1ee12691bdafd2d5bb74cbd16f"
+      - name: 136032.105.l13
+        size: 16384
+        crc32: "79021d3c"
+        sha1: "85febd34bcb166fc3326b5e5e4e80e157b660a08"
+      - name: 136032.106.l12
+        size: 16384
+        crc32: "76ee86c4"
+        sha1: "cbcd424510435a04e9041967a13781fd19b0f2c4"
+      - name: 136032.114.j11
+        size: 16384
+        crc32: "195c54ad"
+        sha1: "d7cda3cd3db4c6f77074ca05e96ae11b62e048b7"
+      - name: 136032.115.j10
+        size: 16384
+        crc32: "7275b4dc"
+        sha1: "0896ab37ea832a1335046353612c1b4c86d8d040"
+      - name: 136032.104.f5
+        size: 8192
+        crc32: "7a29dc07"
+        sha1: "72ba464da01bd6d3a91b8d9997d5ac14b6f47aad"
+      - name: 136032.104.f5
+        size: 8192
+        crc32: "7a29dc07"
+        sha1: "72ba464da01bd6d3a91b8d9997d5ac14b6f47aad"
+      - name: 136032.107.b2
+        size: 8192
+        crc32: "7a29dc07"
+        sha1: "72ba464da01bd6d3a91b8d9997d5ac14b6f47aad"
+      - name: 136032.101.e3
+        size: 256
+        crc32: "7e84972a"
+        sha1: "84d422b53547271e3a07342704a05ef481db3f99"
+      - name: 136032.102.e5
+        size: 256
+        crc32: "ebf1e0ae"
+        sha1: "2d327e78832edd67ca3909c25b8c8c839637a1ed"
+      - name: 136032.103.f7
+        size: 235
+        crc32: "92d6a0b4"
+        sha1: "0a42a4816c89447b16e1f3245409591efea98a4a"
+      - name: 136032.101.e3
+        size: 256
+        crc32: "7e84972a"
+        sha1: "84d422b53547271e3a07342704a05ef481db3f99"
+      - name: 136032.102.e5
+        size: 256
+        crc32: "ebf1e0ae"
+        sha1: "2d327e78832edd67ca3909c25b8c8c839637a1ed"
+      - name: 136032.103.f7
+        size: 235
+        crc32: "92d6a0b4"
+        sha1: "0a42a4816c89447b16e1f3245409591efea98a4a"
 
   - name: maxaflex.zip
     required: true
     category: bios_zip
     source_ref: "src/mame/atari/maxaflex.cpp:450"
+    contents:
+      - name: atarixl.rom
+        size: 16384
+        crc32: "1f9cd270"
+        sha1: "ae4f523ba08b6fd59f3cae515a2b2410bbd98f55"
+      - name: maxaflex.uc
+        size: 2048
+        crc32: "fe9cf53c"
+        sha1: "4b02bc2f0c8a1eab799814fac82d5812c0160206"
+      - name: maxprom.prm
+        size: 512
+        crc32: "edf5c950"
+        sha1: "9ad046ea41a61585dd8d2f2d4167a3cc39d2928f"
 
   # Crystal System
   - name: crysbios.zip
     required: true
     category: bios_zip
     source_ref: "src/mame/misc/crystal.cpp:847"
+    contents:
+      - name: mx27l1000.u14
+        description: AMG0110B PCB
+        size: 131072
+        crc32: "beff39a9"
+        sha1: "b6f6dda58d9c82273f9422c1bd623411e58982cb"
+      - name: mx27l1000-alt.u14
+        description: AMG0110D PCB
+        size: 131072
+        crc32: "1e8175c8"
+        sha1: "f60c016be2ff11e47b2192acddb92676043af501"
 
   # Galaxy Games
   - name: galgbios.zip
@@ -494,80 +2144,979 @@ files:
     required: true
     category: bios_zip
     source_ref: "src/mame/aristocrat/aristmk6.cpp:6639"
+    contents:
+      - name: 24013001_right.u83
+        size: 2097152
+        crc32: "e97afedf"
+        sha1: "10ca3b015afaff5d7812f0f5207b2535602136a5"
+      - name: 24013001_left.u70
+        size: 2097152
+        crc32: "06ae7e07"
+        sha1: "39a45575b66906d73b519988d1001c99b05c5f34"
+      - name: 21012901_right.u83
+        size: 2097152
+        crc32: "757618f2"
+        sha1: "43f9a3e7d544979f8c6974945914d9e099b02abd"
+      - name: 21012901_left.u70
+        size: 2097152
+        crc32: "0d271470"
+        sha1: "5cd4b604bfe2fd7e9a8d08e1c7c97f17ae068479"
+      - name: 19012801_right.u83
+        size: 2097152
+        crc32: "5b20a96c"
+        sha1: "5fd916b7cc2cdd51bf7dd212c1114f94dc9c7926"
+      - name: 19012801_left.u70
+        size: 2097152
+        crc32: "b03bd17c"
+        sha1: "f281e80f6dda5b727ed71d2deebe3b0ff548773f"
+      - name: 13012001_right.u83
+        size: 2097152
+        crc32: "e627dbfa"
+        sha1: "4fedbe0975ceb7dc0ebebf18a7708d78984db9b7"
+      - name: 13012001_left.u70
+        size: 2097152
+        crc32: "38e8f659"
+        sha1: "88c6acba99b0aca023c6f4d27c061c231490e9e0"
+      - name: 11011901_right.u83
+        size: 2097152
+        crc32: "73dcb11c"
+        sha1: "69ae4f32a0c9141b2a82ff3935b0cd20333d2964"
+      - name: 11011901_left.u70
+        size: 2097152
+        crc32: "d3dd2210"
+        sha1: "3548f8cc39859d3f44a55f6bae48966a2d48e0eb"
+      - name: 11011501_right.u83
+        size: 2097152
+        crc32: "de4c3aed"
+        sha1: "21596a2edd20eb7de7a4ec8900a270b09c8f326f"
+      - name: 11011501_left.u70
+        size: 2097152
+        crc32: "c5cc3461"
+        sha1: "5b43c4cb6110a6ccf67cd0f3789253f6872b20c4"
+      - name: 09011001_right.u83
+        size: 2097152
+        crc32: "8a853f80"
+        sha1: "9a75498f7b02c81a483b4e1c158f35f0ee4c0112"
+      - name: 09011001_left.u70
+        size: 2097152
+        crc32: "229c2e63"
+        sha1: "91fd2b1acb69efe073647e93db9f11042add2feb"
+      - name: 07010801_right.u83
+        size: 2097152
+        crc32: "8c148c11"
+        sha1: "5ff3be18455b4f04675fec8d5b9d881295c65e23"
+      - name: 07010801_left.u70
+        size: 2097152
+        crc32: "8e92af68"
+        sha1: "00d2bb655b7964a9652896741210ec534df0b0d2"
+      - name: 05010601_right.u83
+        size: 1048576
+        crc32: "c12eac11"
+        sha1: "683b9ddc323865ace7dca37d13b55de6e42759a5"
+      - name: 05010601_left.u70
+        size: 1048576
+        crc32: "b3e6b4a0"
+        sha1: "3bf398c9257579f8e51ce716d6ebfa74fa510273"
+      - name: 04010501_right.u83
+        size: 1048576
+        crc32: "3daefb7a"
+        sha1: "411471713219f4bab5ccf5fe7a12a6c138c8c550"
+      - name: 04010501_left.u70
+        size: 1048576
+        crc32: "21182775"
+        sha1: "7c5b7f5aba3babc85f512a8f7d4ebc0d83eb842a"
+      - name: 03010301.u84
+        size: 1048576
+        crc32: "a34a9f16"
+        sha1: "b8750e6ceb1715da8e5ac2f0183254e29a042641"
+      - name: 03010301.u71
+        size: 1048576
+        crc32: "d793440a"
+        sha1: "dced4c04bde13293af77a9a1f4c5c606e3758de0"
+      - name: 03010301.u83
+        size: 1048576
+        crc32: "c8580554"
+        sha1: "58b8bfff2f8d298c4e3be2b01900800c45fa7ad7"
+      - name: 03010301.u70
+        size: 1048576
+        crc32: "5ae69121"
+        sha1: "36dd3f9aaf5f7d2751d1954d67f898bc3ec71f3b"
+      - name: 02010201.u84
+        size: 1048576
+        crc32: "0920930f"
+        sha1: "771b0f62442d1c75b1bb59ad82365b7ab8747173"
+      - name: 02010201.u71
+        size: 1048576
+        crc32: "24d5614a"
+        sha1: "fdcf3826dccc72b74b66379b1411cf211d5a1670"
+      - name: 02010201.u83
+        size: 1048576
+        crc32: "5f64a20c"
+        sha1: "397404ab6d2a1aa3c1fc77bb9421fef7079b65a5"
+      - name: 02010201.u70
+        size: 1048576
+        crc32: "9b2db442"
+        sha1: "d512398a2d9257bd385dc50d61c63cd1a47300ba"
+      - name: 02010114.u84
+        size: 1048576
+        crc32: "183e3836"
+        sha1: "4c802d0cd010bc007acb3a83e37aaa29b2d13d87"
+      - name: 02010114.u71
+        size: 1048576
+        crc32: "8f83c3dd"
+        sha1: "a5f9d80b4b515b24299d0241e1665cfd9da8bab7"
+      - name: 02010114.u83
+        size: 1048576
+        crc32: "945104d7"
+        sha1: "e372d0cf889c72b5d001b26fe4a925a28486537f"
+      - name: 02010114.u70
+        size: 1048576
+        crc32: "3ba4379f"
+        sha1: "84367f12c4c9224d2ab9cae83ae8727de338408c"
+      - name: 25012805_right.u83
+        size: 2097152
+        crc32: "2ecd8da8"
+        sha1: "389e9668b2ba4fffed5d2721b2ce70d502fb9f67"
+      - name: 25012805_left.u70
+        size: 2097152
+        crc32: "996f32ce"
+        sha1: "cf21bef745986fcbd298167453c7b8e5945ce602"
+      - name: 20012605_right.u83
+        size: 2097152
+        crc32: "045b82ad"
+        sha1: "b8e4f9f826970d83ae5fd2f2898de12ad1bf2d24"
+      - name: 20012605_left.u70
+        size: 2097152
+        crc32: "87331111"
+        sha1: "6cdc2d81f68de23af18a975a6f27ddec246be405"
+      - name: 20012305_right.u83
+        size: 2097152
+        crc32: "e436c1f5"
+        sha1: "62ee529cc971fd76aa2ccc15778e3f0c40e3e47f"
+      - name: 20012305_left.u70
+        size: 2097152
+        crc32: "ea8961cc"
+        sha1: "0ebc7c3b94a6e01ee984af4711043130d9670bd3"
+      - name: 14011605_right.u83
+        size: 2097152
+        crc32: "2bec5b74"
+        sha1: "854733cada75e632f01f7096d4740ed4941a3d5b"
+      - name: 14011605_left.u70
+        size: 2097152
+        crc32: "cd26d4f0"
+        sha1: "40822714abf08aeb08d827dbd8cd099f86803754"
+      - name: 04041205_right.u83
+        size: 1048576
+        crc32: "ca6bc86c"
+        sha1: "69fe7fc35694e4cd7f861bff4ec3a6165a81df6e"
+      - name: 04041205_left.u70
+        size: 1048576
+        crc32: "dfb9a119"
+        sha1: "814a5a7877392aec4e4871d7f0e19d2fbd717409"
+      - name: 03130334_right.u83
+        size: 2097152
+        crc32: "bce3d97f"
+        sha1: "da36377cc1465022a2434703adee63bf48c71a9c"
+      - name: 03130334_left.u70
+        size: 2097152
+        crc32: "02175fde"
+        sha1: "4e9a9e1e803a0c84b06aec99dc3147dd7a919eee"
+      - name: 01040505.u84
+        size: 1048576
+        crc32: "cf5a9d1e"
+        sha1: "0ebba478fc883831d70b0fa95f43e5f93b07ae9e"
+      - name: 01040505.u71
+        size: 1048576
+        crc32: "f56ea77e"
+        sha1: "319be1bee66a289e2c1f6beec07758f79aa0cf16"
+      - name: 01040505.u83
+        size: 1048576
+        crc32: "90f32169"
+        sha1: "228be8b4a9eb6b2acf7f7a7561bd194009936026"
+      - name: 01040505.u70
+        size: 1048576
+        crc32: "b9ddea66"
+        sha1: "f4bfdeada39a3f0094d6468b7374a34f88f5df7f"
+      - name: 03030708_right.u83
+        size: 1048576
+        crc32: "b4b3c6a5"
+        sha1: "5747f98a6eaa5c24a23d1d76a28b33a3bfbbfd1f"
+      - name: 03030708_left.u70
+        size: 1048576
+        crc32: "4e5ad823"
+        sha1: "77ab1c29c6172cfdcef776222a72b2b44114d4da"
+      - name: 14011913_right.u83
+        size: 2097152
+        crc32: "01d13b89"
+        sha1: "b1013366d0803dfbec5a5f90f6a5cea862de0513"
+      - name: 14011913_left.u70
+        size: 2097152
+        crc32: "9a4cefdf"
+        sha1: "6c15bc565ede8af19361d60ee1e6657a8055c92c"
+      - name: 14010152_right.u83
+        size: 2097152
+        crc32: "7e3f61f6"
+        sha1: "1e27d72c35b0c633187159ef434f22398df28882"
+      - name: 14010152_left.u70
+        size: 2097152
+        crc32: "2716e1ef"
+        sha1: "81fe1ae4f9cd1bcb24795ce85913ee22ed0fabcd"
+      - name: 02061013_right.u83
+        size: 1048576
+        crc32: "7a8619a5"
+        sha1: "bd03ddb68817c1660b009e102ccf69e5b603b875"
+      - name: 02061013_left.u70
+        size: 1048576
+        crc32: "e70a7007"
+        sha1: "0935f924866162d9c0fbdbb99391cbf730a04b76"
+      - name: 02060913_right.u83
+        size: 1048576
+        crc32: "31068c41"
+        sha1: "962da0079495a64f7ffb34be643892c272017cc9"
+      - name: 02060913_left.u70
+        size: 1048576
+        crc32: "d6a6713c"
+        sha1: "0f3bb2746f1a6fa6a587fd50827299408a3b28d2"
+      - name: 15011025_right.u83
+        size: 2097152
+        crc32: "bf21a975"
+        sha1: "a251b1a7342387300689cd50fe4ce7975b903ac5"
+      - name: 15011025_left.u70
+        size: 2097152
+        crc32: "c02e14b0"
+        sha1: "6bf98927813519dfe60e582dbe5be3ccd87f7c91"
+      - name: 24010467_right.u83
+        size: 2097152
+        crc32: "eddeff13"
+        sha1: "77ccbcf40aeb7305eb13d6d24efafd09955f1eac"
+      - name: 24010467_left.u70
+        size: 2097152
+        crc32: "9093d820"
+        sha1: "05bb14895e3077d277a1d0822036d08f359c0307"
+      - name: 01.04.11_right.u83
+        size: 2097152
+        crc32: "2dae8ca0"
+        sha1: "7a0fb38b4c1ac7195d15bdab6f0cfb16c78430f0"
+      - name: 01.04.11_left.u70
+        size: 2097152
+        crc32: "787f2b07"
+        sha1: "2548289e44f4b935346b759afb5383bdbac04c3e"
+      - name: 01.04.10_right.u83
+        size: 2097152
+        crc32: "82ce2fcc"
+        sha1: "4c8fb3db084a67e99d1420b3f895a06ce9ef5ec2"
+      - name: 01.04.10_left.u70
+        size: 2097152
+        crc32: "9d9d52c1"
+        sha1: "b957220cdbedd516c219d1bfc28807ce466df93f"
+      - name: 01.04.08_right.u83
+        size: 2097152
+        crc32: "95333304"
+        sha1: "7afe49d6c5e4d6820f349778557daa88c5366a51"
+      - name: 01.04.08_left.u70
+        size: 2097152
+        crc32: "0dfcad10"
+        sha1: "53798be000304aed38909f5fd8470a68bedd8229"
+      - name: 01.04.07_right.u83
+        size: 2097152
+        crc32: "23c28e22"
+        sha1: "98f24a1f86232b6c2c288a61ec7d60c867f192e5"
+      - name: 01.04.07_left.u70
+        size: 2097152
+        crc32: "acfb0fe0"
+        sha1: "b1a772d7978e6ff4406a5bb39a71cb3f89608e72"
+      - name: 01.04.04_right.u83
+        size: 2097152
+        crc32: "e57ba02d"
+        sha1: "8e29403e6b619eeab41dc171221720bc7820ccdc"
+      - name: 01.04.04_left.u70
+        size: 2097152
+        crc32: "b984a92c"
+        sha1: "90f7a61302caee40195c08565bdac856a3234c1d"
+      - name: 01.03.17_right.u83
+        size: 2097152
+        crc32: "1582714b"
+        sha1: "92d0a15314ffe526159bef9a364898dd1ebdfde7"
+      - name: 01.03.17_left.u70
+        size: 2097152
+        crc32: "a88193dc"
+        sha1: "c9e1d483edaecd318d2e5fc8a54e84516c93e0ca"
+      - name: 01.03.14_right.u83
+        size: 2097152
+        crc32: "889ffd82"
+        sha1: "9c98c9cdcf5f7d05095f11006418133029e9f0f8"
+      - name: 01.03.14_left.u70
+        size: 2097152
+        crc32: "7138fec4"
+        sha1: "f81331d1875ac574d3e6c98be218ff25c6c7be5a"
+      - name: 01.03.07_right.u83
+        size: 2097152
+        crc32: "2ebccc4e"
+        sha1: "9342724e4451e9ab24ceae208284b50abd4f0be3"
+      - name: 01.03.07_left.u70
+        size: 2097152
+        crc32: "a3632da4"
+        sha1: "1c96a88e86095b81801ab88e36a4cdfa4b893265"
+      - name: 01.03.06_right.u83
+        size: 2097152
+        crc32: "bd48ca55"
+        sha1: "8fb1576cbeb1c64c358880714740195d2e73e03e"
+      - name: 01.03.06_left.u70
+        size: 2097152
+        crc32: "2f9d9a29"
+        sha1: "fdebfaca9a579d7249379f19aef22fbfd66bf943"
+      - name: 01.03.05_right.u83
+        size: 2097152
+        crc32: "2c7f1ec3"
+        sha1: "d03167f43ed6f9596080d91472695829378cef0a"
+      - name: 01.03.05_left.u70
+        size: 2097152
+        crc32: "0095e3f9"
+        sha1: "d2e8786158b1ab0a614aab21cf1d14cbc04754af"
+      - name: 01.03.03e_right.u83
+        size: 2097152
+        crc32: "2255e263"
+        sha1: "5e9e093aaa17172f47a14c3baf7f6f0f73b19398"
+      - name: 01.03.03e_left.u70
+        size: 2097152
+        crc32: "ea50729a"
+        sha1: "14b5a71bfb91ac366ddcb5f77fb54127808f8163"
+      - name: 01.03.03a_right.u83
+        size: 2097152
+        crc32: "253415f4"
+        sha1: "50dc77ad87bc6be1932dda2fd4865602c8c49729"
+      - name: 01.03.03a_left.u70
+        size: 2097152
+        crc32: "4ab5dd40"
+        sha1: "a6812cc624e6a98ea7b0697e2797fe10ba8e303e"
+      - name: 01.02.08_right.u2
+        size: 1048576
+        crc32: "aaaeac8c"
+        sha1: "a565e5fcb4f55f31e7d36be40eec234248a66efd"
+      - name: 01.02.08_left.u3
+        size: 1048576
+        crc32: "f29fd1bf"
+        sha1: "33e043d2616e10a1c7a0936c3d208f9bcc2ca6f3"
+      - name: 01.02.02_right.u2
+        size: 1048576
+        crc32: "e920e940"
+        sha1: "52e28d4765a3e953bb70dc4ed13d96d4180be996"
+      - name: 01.02.02_left.u3
+        size: 1048576
+        crc32: "1d0f4093"
+        sha1: "17d6328dba9826b58f39393ca2f2daac1b7161ef"
+      - name: 06.03.04_right.u2
+        size: 1048576
+        crc32: "6f5f5ef1"
+        sha1: "70a43fba4de47ed8dcf38b25eafd5873f3428e72"
+      - name: 06.03.04_left.u3
+        size: 1048576
+        crc32: "7034f26b"
+        sha1: "7be78f23bec38d05240cdfe1186ec0c8291f5a1c"
+      - name: 06.03.03_right.u2
+        size: 1048576
+        crc32: "98763498"
+        sha1: "246e95cc12eb34f946b2f4938c59217718f6d841"
+      - name: 06.03.03_left.u3
+        size: 1048576
+        crc32: "a6924238"
+        sha1: "b71ab39bf9c1fdbab556028138749e8c040ec83c"
+      - name: 06.02.20_right.u83
+        size: 1048576
+        crc32: "e4001f60"
+        sha1: "5da34efb1ac0f7c84a48e09363d20cfecda4bcf1"
+      - name: 06.02.20_left.u70
+        size: 1048576
+        crc32: "199ed3b9"
+        sha1: "e3ee81ffd713f09e35a10c38e4f59282e2c5cd30"
+      - name: 06.02.04_right.u2
+        size: 1048576
+        crc32: "1cf5a853"
+        sha1: "64d17efcce702df7a0b0e151293199478e25226d"
+      - name: 06.02.04_left.u3
+        size: 1048576
+        crc32: "117b75f2"
+        sha1: "2129286853d3c50b8a943b71334d4ef6b98adc05"
+      - name: gambs2m_01.05.07.u3
+        size: 131072
+        crc32: "58730ed3"
+        sha1: "6e9c9d7960fe0ef083ff824287a99d9c0b9f5e6a"
 
   - name: aristmk7.zip
     required: true
     category: bios_zip
     source_ref: "src/mame/aristocrat/aristmk7.cpp:233"
+    contents:
+      - name: mk7-bios_590176_01_1.00.7.u1
+        size: 1048576
+        crc32: "f2fea07e"
+        sha1: "285038473fbe3a5708045e2f8b14562f3c24b203"
 
   # Pinball
   - name: allied.zip
     required: true
     category: bios_zip
     source_ref: "src/mame/pinball/allied.cpp:775"
+    contents:
+      - name: 6530-009.u5
+        size: 1024
+        crc32: "e4fb64fb"
+        sha1: "a3d9de7cbfb42180a860e0bbbeaeba96d8bd1e20"
+      - name: 6530-010.u6
+        size: 1024
+        crc32: "dca980dd"
+        sha1: "3817d75413854d889fc1ce4fd6a51d820d1e0534"
+      - name: 6530-011.u3
+        size: 1024
+        crc32: "13f42789"
+        sha1: "baa0f73fda08a3c5d6f1423fb329e4febb07ef97"
 
   - name: gp_110.zip
     required: true
     category: bios_zip
     source_ref: "src/mame/pinball/gp_1.cpp:577"
+    contents:
+      - name: a-110.u12
+        size: 2048
+        crc32: "ed0d518b"
+        sha1: "8f3ca8792ad907c660d9149a1aa3a3528c7573e3"
+      - name: b1-110.u13
+        size: 2048
+        crc32: "a223f2e8"
+        sha1: "767e15e19e11399935c890c1d1034dccf1ad7f92"
 
   - name: gts1.zip
     required: true
     category: bios_zip
     source_ref: "src/mame/pinball/gts1.cpp:1074"
+    contents:
+      - name: a1752cf.u5
+        size: 2048
+        crc32: "614a3bd9"
+        sha1: "febca18fb6f96037ca82e515dd161dfcb0e4c776"
+      - name: a1753ce.u4
+        size: 2048
+        crc32: "4cd312dd"
+        sha1: "31245daa9972ef8652caee69986585bb8239e86e"
 
   - name: recel.zip
     required: true
     category: bios_zip
     source_ref: "src/mame/pinball/recel.cpp:547"
+    contents:
+      - name: a2361.b1
+        size: 1024
+        crc32: "d0c4695d"
+        sha1: "4846adb3f6c292626840ba5255ffc5e788a69301"
+      - name: a2362.b2
+        size: 1024
+        crc32: "39a70611"
+        sha1: "8545e168a5f256150bcff12d1e6d8efffd08c3cd"
 
   - name: slvrball.zip
     required: true
     category: bios_zip
     source_ref: "src/mame/misc/silverball.cpp:258"
+    contents:
+      - name: bios47.bin
+        description: BIOS47 (Acorp 694XT/694XT1)
+        size: 262144
+        crc32: "248910ed"
+        sha1: "2901c94fb003e5eaea7e91127ad1f7953826a248"
+      - name: bios46.bin
+        description: BIOS46 (Acorp 694XT/694XT1)
+        size: 262144
+        crc32: "90074f2b"
+        sha1: "08fdabad6114ede03a15ce51dec775080585b650"
+      - name: bios45.bin
+        description: BIOS45 (Acorp 694XT/694XT1)
+        size: 262144
+        crc32: "790d5db0"
+        sha1: "6bbfb35275eb0c7bb740ff9b1e299042d4c5952a"
+      - name: bios44.bin
+        description: BIOS44 (Acorp 694XT/694XT1)
+        size: 262144
+        crc32: "a4b2703e"
+        sha1: "9baa5e3aaaf120054979039e42bf1bca2a50616e"
+      - name: bios42.bin
+        description: BIOS42 (Acorp 694XT/694XT1)
+        size: 262144
+        crc32: "820c057e"
+        sha1: "b553961c1bbb6b4afa366eb0dba7ed29ca148f5e"
+      - name: bios41.bin
+        description: BIOS41 (Acorp 694XT/694XT1)
+        size: 262144
+        crc32: "0940aebd"
+        sha1: "38c8645eed9e17ef8e2cd0856f929697ce13df74"
+      - name: bios40.bin
+        description: BIOS40 (Acorp 694XT/694XT1)
+        size: 262144
+        crc32: "c5ed7d4f"
+        sha1: "9fcffb385b5d68bf8cf87615ffee781f38f5fb74"
+      - name: bios39.bin
+        description: BIOS39 (unknown motherboard)
+        size: 262144
+        crc32: "e7541a28"
+        sha1: "dad1aff2cb142d65e7c8736064dce8004451ea4b"
+      - name: bios38.bin
+        description: BIOS38 (unknown motherboard)
+        size: 262144
+        crc32: "cb49085b"
+        sha1: "867b95ebef8fd53dad5b71cd4430ede08cf03540"
+      - name: bios37.bin
+        description: BIOS37 (unknown motherboard)
+        size: 262144
+        crc32: "9f35e2d2"
+        sha1: "83026fc9fc72f795bc3229af98099b409c9bdc81"
+      - name: bios36.bin
+        description: BIOS36 (unknown motherboard)
+        size: 262144
+        crc32: "83ca05e9"
+        sha1: "9d06677907c88481a167e52cc149995cfef0ff40"
+      - name: bios35.bin
+        description: BIOS35 (unknown motherboard)
+        size: 262144
+        crc32: "d5a2f966"
+        sha1: "4f4c9688501814bc00b4cde58ac590b6e961816e"
+      - name: bios34.bin
+        description: BIOS34 (unknown motherboard)
+        size: 262144
+        crc32: "400702fe"
+        sha1: "63a9e04d2ea3d4ace3e5c9f11cc62d0131bc4af0"
+      - name: bios33.bin
+        description: BIOS33 (Soyo SY-7IZB+)
+        size: 262144
+        crc32: "96658274"
+        sha1: "1a5fc83cf84a4c774abc055688fa0c32c3784086"
+      - name: bios32.bin
+        description: BIOS32 (Soyo SY-7IZB+)
+        size: 262144
+        crc32: "63318d8a"
+        sha1: "1194a30a65186f2d0a9e11742d51232598c16011"
+      - name: bios31.bin
+        description: BIOS31 (Soyo SY-7IZB+)
+        size: 262144
+        crc32: "5121b267"
+        sha1: "97e51ed4d53d19ed69db1faba5395b46a1edb6b0"
+      - name: bios30.bin
+        description: BIOS30 (Soyo SY-7IZB+)
+        size: 262144
+        crc32: "c6e30fb1"
+        sha1: "1d9a900a5383bf58b66a2e9f7fb34c61397dd327"
+      - name: bios29.bin
+        description: BIOS29 (Soyo SY-5EAS)
+        size: 131072
+        crc32: "ddbd94f4"
+        sha1: "60ad74e56265a7936cf19e8480c657223d11f2d0"
+      - name: test.bin
+        description: TEST (Soyo SY-5EAS)
+        size: 131072
+        crc32: "ddbd94f4"
+        sha1: "60ad74e56265a7936cf19e8480c657223d11f2d0"
 
   # Nichibutsu
   - name: nichidvd.zip
     required: true
     category: bios_zip
     source_ref: "src/mame/nichibutsu/hrdvd.cpp:1012"
+    contents:
+      - name: va1b102.u2
+        size: 131072
+        crc32: "67374715"
+        sha1: "8767cbd81614c2686a1adb70159f909e8ffd634d"
+      - name: va1b101.u2
+        size: 131072
+        crc32: "b92a83c8"
+        sha1: "bd6d9adaa74cf7512478838d1bd5a79dbd0c4aa1"
+      - name: va1a101.u2
+        size: 131072
+        crc32: "36135792"
+        sha1: "1b9c50bd02df8227b228b35cc485efd5a13ec639"
 
   # EFO Cedar Magnet
   - name: cedmag.zip
     required: true
     category: bios_zip
     source_ref: "src/mame/efo/cedar_magnet.cpp:1166"
+    contents:
+      - name: magnet-master-vid-e03.bin
+        size: 8192
+        crc32: "86c4a4f0"
+        sha1: "6db1a006b2e0b2a7cc9748ade881debb098b6757"
 
   # Misc
   - name: iteagle.zip
     required: true
     category: bios_zip
     source_ref: "src/mame/itech/iteagle.cpp:756"
+    contents:
+      - name: eagle_u15_v209.u15
+        description: Eagle 40MB bootrom 2.09
+        size: 1048576
+        crc32: "e0fc1a16"
+        sha1: "c9524f7ee6b95bd484a3b75bcbe2243cb273f84c"
+      - name: eagle_u15_v208.u15
+        description: Eagle 40MB bootrom 2.08
+        size: 1048576
+        crc32: "772f2864"
+        sha1: "085063a4e34f29ebe3814823cd2c6323a050da36"
+      - name: eagle_u15_v204.u15
+        description: Eagle 40MB bootrom 2.04
+        size: 1048576
+        crc32: "f02e5523"
+        sha1: "b979cf72a6992f1ecad9695a08c8d51e315ab537"
+      - name: eagle_u15_v201.u15
+        description: Eagle 40MB bootrom 2.01
+        size: 1048576
+        crc32: "e180442b"
+        sha1: "4f50821fed5bcd786d989520aa2559d6c416fb1f"
+      - name: golf_fore_u15_v107.u15
+        description: Eagle 40MB bootrom 1.07
+        size: 1048576
+        crc32: "97a01fc9"
+        sha1: "a421dbf4d097b2f50cc005d3cd0d63e562e03df8"
+      - name: golf_fore_u15_v106a.u15
+        description: Eagle 40MB bootrom 1.06a
+        size: 1048576
+        crc32: "9c79b7ad"
+        sha1: "ccf1c86e79d65bee30f399e0fa33a7839570d93b"
+      - name: golf_fore_u15_v106.u15
+        description: Eagle 40MB bootrom 1.06
+        size: 1048576
+        crc32: "56bc193d"
+        sha1: "e531d208ef27f777d0784414885f390d1be654b9"
+      - name: golf_fore_u15_v105.u15
+        description: Eagle 40MB bootrom 1.05
+        size: 1048576
+        crc32: "3870dbe0"
+        sha1: "09be2d86c7259cd81d945c757044b167a76f30db"
+      - name: golf_fore_u15_v103.u15
+        description: Eagle bootrom 1.03
+        size: 1048576
+        crc32: "c35f4cf2"
+        sha1: "45301c18c7f8f78754c8ad60ea4d2da5a7dc55fb"
+      - name: bbh_u15_v102.u15
+        description: BBH 8meg bootrom 1.02
+        size: 1048576
+        crc32: "1fd39e73"
+        sha1: "d1ac758f94defc5c55c62594b3999a406dd9ef1f"
+      - name: golf_fore_u15_v102.u15
+        description: Eagle bootrom 1.02
+        size: 1048576
+        crc32: "4c000c5e"
+        sha1: "4fd5ea2a0874759b621c9cd52cee55d282443e5d"
+      - name: golf_fore_u15_v101.u15
+        description: Eagle bootrom 1.01
+        size: 1048576
+        crc32: "2600bc2b"
+        sha1: "c4b89e69c51e4a3bb1874407c4d30b6caed4f396"
+      - name: 17s20lpc_sb4.u26
+        size: 32768
+        crc32: "62c4af8a"
+        sha1: "6eca277b9c66a401990599e98fdca64a9e38cc9a"
+      - name: 17s20lpc_sb5.u26
+        size: 32768
+        crc32: "c88b9d42"
+        sha1: "b912d0fc50ecdc6a198c626f6e1644e8405fac6e"
+      - name: 17s50a_red1.u26
+        size: 131072
+        crc32: "f5cf3187"
+        sha1: "83b4a14de9959e5a776d97d424945d43501bda7f"
+      - name: e2-card1.u22.jed
+        size: 3025
+        crc32: "9d1e1ace"
+        sha1: "287d6a30e9f32137ef4eba54f0effa092c97a6eb"
+      - name: e2-res3.u117.jed
+        size: 3025
+        crc32: "4f1ff45a"
+        sha1: "213cbdd6cd37ad9b5bfc9545084892a68d29f5ff"
 
   - name: su2000.zip
     required: true
     category: bios_zip
     source_ref: "src/mame/misc/su2000.cpp:302"
+    contents:
+      - name: hmc86304_bios_v208.u7
+        size: 32768
+        crc32: "c6c32f1a"
+        sha1: "a07ade7f0567e1978cd8cee73c6a5d7b5e5f947f"
+      - name: amibios_486dx_isa_bios.u32
+        size: 65536
+        crc32: "811d3639"
+        sha1: "a64d6026c16ac8c79f22b2c241f149402449fafb"
+      - name: ver_151_03_u16.u16
+        size: 131072
+        crc32: "8354d059"
+        sha1: "a88df7cc259c1c39316cc3bff9e08aa4e8d3d2c0"
+      - name: ver_151_03_u17.u17
+        size: 131072
+        crc32: "ace4081d"
+        sha1: "f57287ded53f8d127bcdc9e34b8adb356fe55e5e"
+      - name: wfc062_212.u62
+        size: 32768
+        crc32: "9a6b553a"
+        sha1: "7045f733446866ee3171e175e1b22d9384fda1b5"
+      - name: wi01p006.u6
+        size: 2194
+        crc32: "528142eb"
+        sha1: "2c152c6540f3d38cb881296decba957f8b5c7c58"
+      - name: wi01p026.u26
+        size: 2194
+        crc32: "528142eb"
+        sha1: "2c152c6540f3d38cb881296decba957f8b5c7c58"
+      - name: wi01p044.u44
+        size: 2194
+        crc32: "a2ad9cf8"
+        sha1: "67d44807f7346baf87c15d35c27458b0a7d5de89"
+      - name: wi01p045.u45
+        size: 2194
+        crc32: "e2a13df7"
+        sha1: "eaa5ee3a92d11f0722934cb6d3443ead903dc78f"
+      - name: wi01p046.u46
+        size: 2194
+        crc32: "4c22fba5"
+        sha1: "6fabc7a0790f8b883b83fa6fe5f1ee1302d284e2"
+      - name: wi01p050.u50
+        size: 2194
+        crc32: "7cb0931f"
+        sha1: "394c100b33e5b8d1b2f4979399ad0791af39da28"
+      - name: wi01p053.u53
+        size: 2194
+        crc32: "d2eb2493"
+        sha1: "a66b4733da0f4f0869839630063c52a733f5ea8c"
+      - name: wi01p054.u54
+        size: 2194
+        crc32: "96d3506e"
+        sha1: "682ba8a7a17176ff41047cd9a9cfefdc2dc0fd64"
+      - name: wi01p056.u56
+        size: 2194
+        crc32: "8bf57db4"
+        sha1: "1a5315397b1903c36d7450e873603584db8a00e8"
+      - name: wi01p058.u58
+        size: 2194
+        crc32: "882f6405"
+        sha1: "e3b7c278f4ee9e0e11741d9ed7c5b32978a3d185"
+      - name: wi01p067.u67
+        size: 2194
+        crc32: "a97cff8e"
+        sha1: "78451a4bffecd4e1655e7a89971e28b47f5c8829"
+      - name: wi01p075.u75
+        size: 2194
+        crc32: "3d1adb17"
+        sha1: "b1af8c069de3df3c757e211b372f535b513c6326"
+      - name: wi01p079.u79
+        size: 2194
+        crc32: "3d3ad152"
+        sha1: "a769bc80514873c2f238e6c8842c5b23596b4a42"
+      - name: wi01p080.u80
+        size: 2194
+        crc32: "657a4495"
+        sha1: "c5bbd5e5f065a99f9f3d7ce89ca833779c338da5"
+      - name: wi01p048.u48
+        size: 2706
+        crc32: "b9958131"
+        sha1: "058203eefb1645a446ff3ff4a170a673ad65076c"
+      - name: wi01p049.u49
+        size: 2706
+        crc32: "820d245a"
+        sha1: "8690e6eb46617c3dc78e1b233970a9318101101c"
+      - name: wi01p070.u70
+        size: 2706
+        crc32: "4322291e"
+        sha1: "e8751b585a4fb3f371e67616abf48c9d23847b77"
+      - name: wi01p072.u72
+        size: 2706
+        crc32: "fe77b66b"
+        sha1: "aa13619346a566613f0fa9e3723419f65ffd3ea8"
+      - name: wi01p073.u73
+        size: 2706
+        crc32: "e02fe7c1"
+        sha1: "ca22b30391453daae943007a0c04b5a28a958c18"
+      - name: wi01p074.u74
+        size: 2706
+        crc32: "fca2823c"
+        sha1: "6628f1ba3827a3d333ed88c5f20ca94a1439c75e"
+      - name: wi01p083.u83
+        size: 2706
+        crc32: "902731aa"
+        sha1: "862c2e6fb75fbd712aeaf9eb3b8a84210332fa66"
+      - name: wi01p092.u92
+        size: 2706
+        crc32: "f996657e"
+        sha1: "01c2c774a9d5f4bcb78742cd606864eff512bfce"
+      - name: wi02p000.u23
+        size: 2706
+        crc32: "bab34c4b"
+        sha1: "a3f4f17a122cc0d063cb700b3d183b894d857cb4"
+      - name: wi02p001.u32
+        size: 2706
+        crc32: "b438ce94"
+        sha1: "f36c681b3d09835393a8be5079263915d3480b88"
+      - name: wi02p002.u22
+        size: 2706
+        crc32: "bab34c4b"
+        sha1: "a3f4f17a122cc0d063cb700b3d183b894d857cb4"
+      - name: wi02p003.u31
+        size: 2706
+        crc32: "b438ce94"
+        sha1: "f36c681b3d09835393a8be5079263915d3480b88"
+      - name: wi02p004.u6
+        size: 2706
+        crc32: "bab34c4b"
+        sha1: "a3f4f17a122cc0d063cb700b3d183b894d857cb4"
+      - name: wi02p005.u14
+        size: 2706
+        crc32: "b438ce94"
+        sha1: "f36c681b3d09835393a8be5079263915d3480b88"
+      - name: wi02p006.u5
+        size: 2706
+        crc32: "bab34c4b"
+        sha1: "a3f4f17a122cc0d063cb700b3d183b894d857cb4"
+      - name: wi02p007.u13
+        size: 2706
+        crc32: "b438ce94"
+        sha1: "f36c681b3d09835393a8be5079263915d3480b88"
+      - name: wi02p008.u51
+        size: 2194
+        crc32: "7c421890"
+        sha1: "49d0ab674a8cb4e18ae5ba570132111ed3ccd546"
+      - name: wi02p009.u49
+        size: 2194
+        crc32: "ff63d60c"
+        sha1: "8ee8629cc24cd18b944ffab3830ed474a1189179"
+      - name: wi02p010.u72
+        size: 2194
+        crc32: "68f48053"
+        sha1: "17ae9f5caa4b2f4ff700ce44294d3d2881bd4e62"
+      - name: wi02p011.u88
+        size: 2194
+        crc32: "78701d0f"
+        sha1: "089d5df945638cb811caa963430f5d6658c68947"
+      - name: wi02p012.u85
+        size: 2194
+        crc32: "1c489ff9"
+        sha1: "a0e1c00c9a5dd870b84f869070961d25724cea92"
+      - name: wi02p013.u86
+        size: 2194
+        crc32: "19de958f"
+        sha1: "a160f6b0e2a7e42457b470dbcf9415feaad880aa"
+      - name: wi02p014.u82
+        size: 2194
+        crc32: "845e4d48"
+        sha1: "6aaeabad0e86fe480773b4b51ca4f7c1c8935993"
+      - name: wi02p015.u74
+        size: 2194
+        crc32: "a10d1876"
+        sha1: "4091fa0a3abb2baeabcc6b250342cf29829af21a"
+      - name: wi02p016.u52
+        size: 2194
+        crc32: "d84b58c2"
+        sha1: "087b5a56ddb6bef6b1bc93b9a8e0d23de27aa399"
 
   - name: tourvis.zip
     required: true
     category: bios_zip
     source_ref: "src/mame/pce/tourvis.cpp:451"
+    contents:
+      - name: v4-60.ic29
+        description: V4-60
+        size: 32768
+        crc32: "1fd27e22"
+        sha1: "b103d365eac3fa447c2e9addddf6974b4403ed41"
+      - name: v4-55.ic29
+        description: V4-55
+        size: 32768
+        crc32: "87cf66c1"
+        sha1: "d6b42137be7a07a0e299c2d922328a6a9a2b7b8f"
+      - name: v4-54.ic29
+        description: V4-54
+        size: 32768
+        crc32: "125e7a6e"
+        sha1: "6f03c49acaad4feb9c2187f84fc1cb5451d0eb2b"
+      - name: v4-53.ic29
+        description: V4-53
+        size: 32768
+        crc32: "bccb53c9"
+        sha1: "a27113d70cf348c7eafa39fc7a76f55f63723ad7"
+      - name: v4-52.ic29
+        description: V4-52
+        size: 32768
+        crc32: "ffd7b0fe"
+        sha1: "d1804865c91e925a01b05cf441e8458a3db23f50"
+      - name: v4-51.ic29
+        description: V4-51
+        size: 32768
+        crc32: "2de0b946"
+        sha1: "c13051453aff3a2329f18ebade75c69aa3b1c28d"
+      - name: v4-43.ic29
+        description: V4-43
+        size: 32768
+        crc32: "88da23f3"
+        sha1: "9d24faa116129783e55c7f79a4a08902a236d5a6"
+      - name: v4-42.ic29
+        description: V4-42
+        size: 32768
+        crc32: "0372606d"
+        sha1: "8c6a63865b0b4951ea032725cf022d353115b93b"
+      - name: v4-40.ic29
+        description: V4-40
+        size: 32768
+        crc32: "ba6290cc"
+        sha1: "92b0e9f55791e892ec209de4fadd80faef370622"
+      - name: vt_2.0.bin
+        description: VT-20
+        size: 32768
+        crc32: "36012f88"
+        sha1: "5bd42fb51aa48ff65e704ea06a9181bb87ed2137"
+      - name: vt_1.1.bin
+        description: VT-11
+        size: 32768
+        crc32: "27abbc36"
+        sha1: "881ea7802b9e241473bc8ced0472e0f1851c9886"
 
   - name: v4bios.zip
     required: true
     category: bios_zip
     source_ref: "src/mame/barcrest/mpu4vid.cpp:8696"
+    contents:
+      - name: vid.p1
+        size: 65536
+        crc32: "e996bc18"
+        sha1: "49798165640627eb31024319353da04380787b10"
 
   - name: miuchiz.zip
     required: true
     category: bios_zip
     source_ref: "src/mame/misc/miuchiz.cpp:227"
+    contents:
+      - name: otp.dat
+        size: 16384
+        crc32: "2ff7ec96"
+        sha1: "633365fd19a3d0f2ce56cb499b2577a5fb53e466"
 
   - name: pumpitup.zip
     required: true
     category: bios_zip
     source_ref: "src/mame/misc/xtom3d.cpp:996"
+    contents:
+      - name: mk3_1.0_bios.u22
+        description: mk3 v1.0
+        size: 131072
+        crc32: "a2b5546b"
+        sha1: "d99d29615e2b9c8784e03d4270cf7bb6569f389d"
+      - name: mk3_1.1_bios.u22
+        description: mk3 v1.1
+        size: 131072
+        crc32: "4540c23f"
+        sha1: "bba697dbe234e4f14c23aac126ea36df216f8c93"
+      - name: piu10.u8
+        size: 2097152
+        crc32: "5911e31a"
+        sha1: "295723b9b7da9e55b5dd5586b23b06355f4837ef"
+      - name: piu10.u9
+        size: 2097152
+        crc32: "9c436cfa"
+        sha1: "480ea52e74721d1963ced41be5c482b7b913ccd2"
 
   # Bally Astrocade
   - name: astrocde.zip
@@ -577,9 +3126,9 @@ files:
     source_ref: "src/mame/midway/astrohome.cpp:244-247"
     contents:
       - name: astro.bin
-        description: "On-board BIOS ROM (Bally Professional Arcade)"
+        description: On-board BIOS ROM (Bally Professional Arcade)
         size: 8192
-        crc32: ebc77f3a
+        crc32: "ebc77f3a"
 
   - name: astrocdl.zip
     required: false
@@ -588,9 +3137,9 @@ files:
     source_ref: "src/mame/midway/astrohome.cpp:249-251"
     contents:
       - name: ballyhlc.bin
-        description: "Bally Home Library Computer BIOS"
+        description: Bally Home Library Computer BIOS
         size: 8192
-        crc32: d7c517ba
+        crc32: "d7c517ba"
 
   - name: astrocdw.zip
     required: false
@@ -599,9 +3148,9 @@ files:
     source_ref: "src/mame/midway/astrohome.cpp:254-257"
     contents:
       - name: bioswhit.bin
-        description: "Bally Computer System BIOS"
+        description: Bally Computer System BIOS
         size: 8192
-        crc32: 6eb53e79
+        crc32: "6eb53e79"
 
   # Apple IIgs
   - name: apple2gs.zip
@@ -611,19 +3160,19 @@ files:
     source_ref: "src/mame/apple/apple2gs.cpp:3898-3912"
     contents:
       - name: 341s0632-2.bin
-        description: "ADB microcontroller ROM (M50740/50741)"
+        description: ADB microcontroller ROM (M50740/50741)
         size: 4096
-        crc32: e1c11fb0
+        crc32: "e1c11fb0"
       - name: 344s0047.bin
-        description: "Mega II character ROM"
+        description: Mega II character ROM
         size: 16384
-        crc32: 2d541944
+        crc32: "2d541944"
       - name: 341-0728
-        description: "IIgs ROM03 FC-FD main CPU"
+        description: IIgs ROM03 FC-FD main CPU
         size: 131072
-        crc32: 8d410067
+        crc32: "8d410067"
       - name: 341-0748
-        description: "IIgs ROM03 FE-FF main CPU"
+        description: IIgs ROM03 FE-FF main CPU
         size: 131072
         crc32: "18190283"
 
@@ -635,13 +3184,13 @@ files:
     source_ref: "src/mame/casio/casloopy.cpp:2456-2462"
     contents:
       - name: hd6437021.lsi302
-        description: "SH-1 CPU internal mask ROM"
+        description: SH-1 CPU internal mask ROM
         size: 32768
-        crc32: 8c57ff9f
+        crc32: "8c57ff9f"
       - name: hn62434fa.lsi352
-        description: "HN62434 sound/wave data mask ROM"
+        description: HN62434 sound/wave data mask ROM
         size: 524288
-        crc32: 8f51fa17
+        crc32: "8f51fa17"
 
   # Casio PV-2000
   - name: pv2000.zip
@@ -651,9 +3200,9 @@ files:
     source_ref: "src/mame/casio/pv2000.cpp:416-419"
     contents:
       - name: hn613128pc64.bin
-        description: "Z80 BASIC ROM"
+        description: Z80 BASIC ROM
         size: 16384
-        crc32: 8f31f297
+        crc32: "8f31f297"
 
   # Coleco Adam
   - name: adam.zip
@@ -663,33 +3212,33 @@ files:
     source_ref: "src/mame/coleco/adam.cpp:1114-1128"
     contents:
       - name: os7.u2
-        description: "OS7 operating system ROM"
+        description: OS7 operating system ROM
         size: 8192
-        crc32: 3aa93ef3
-      - name: "alf @1 rev 57 e3d5.u8"
-        description: "SmartWriter ROM bank 1"
+        crc32: "3aa93ef3"
+      - name: alf @1 rev 57 e3d5.u8
+        description: SmartWriter ROM bank 1
         size: 8192
-        crc32: 565b364a
-      - name: "alf @2 rev 57 ae6a.u20"
-        description: "SmartWriter ROM bank 2"
+        crc32: "565b364a"
+      - name: alf @2 rev 57 ae6a.u20
+        description: SmartWriter ROM bank 2
         size: 8192
-        crc32: 44a1cff4
-      - name: "alf @3 rev 57 8534.u21"
-        description: "SmartWriter ROM bank 3"
+        crc32: "44a1cff4"
+      - name: alf @3 rev 57 8534.u21
+        description: SmartWriter ROM bank 3
         size: 8192
-        crc32: 77657b90
-      - name: "eos 6 rev 57 08dd.u22"
-        description: "EOS (Elementary Operating System)"
+        crc32: "77657b90"
+      - name: eos 6 rev 57 08dd.u22
+        description: EOS (Elementary Operating System)
         size: 8192
-        crc32: ef6403c5
+        crc32: "ef6403c5"
       - name: wp_r80.rom
-        description: "SmartWriter word processor"
+        description: SmartWriter word processor
         size: 32768
-        crc32: 58d86a2a
-      - name: "master rev a 174b.u6"
-        description: "Master 6801 ADAMnet controller"
+        crc32: "58d86a2a"
+      - name: master rev a 174b.u6
+        description: Master 6801 ADAMnet controller
         size: 2048
-        crc32: 035a7a3d
+        crc32: "035a7a3d"
 
   - name: adam_kb.zip
     required: true
@@ -698,9 +3247,9 @@ files:
     source_ref: "src/devices/bus/adamnet/kb.cpp:33-36"
     contents:
       - name: keyboard.u2
-        description: "Keyboard 6801 MCU ROM"
+        description: Keyboard 6801 MCU ROM
         size: 2048
-        crc32: ef204746
+        crc32: "ef204746"
 
   - name: adam_prn.zip
     required: true
@@ -709,9 +3258,9 @@ files:
     source_ref: "src/devices/bus/adamnet/printer.cpp:33-36"
     contents:
       - name: printer.u2
-        description: "Printer 6801 MCU ROM"
+        description: Printer 6801 MCU ROM
         size: 2048
-        crc32: e8db783b
+        crc32: "e8db783b"
 
   - name: adam_ddp.zip
     required: true
@@ -719,10 +3268,10 @@ files:
     system: coleco-adam
     source_ref: "src/devices/bus/adamnet/ddp.cpp:35-38"
     contents:
-      - name: "tape rev a 8865.u24"
-        description: "Digital Data Pack 6801 MCU ROM"
+      - name: tape rev a 8865.u24
+        description: Digital Data Pack 6801 MCU ROM
         size: 2048
-        crc32: 6b9ea1cf
+        crc32: "6b9ea1cf"
 
   - name: adam_fdc.zip
     required: true
@@ -730,10 +3279,10 @@ files:
     system: coleco-adam
     source_ref: "src/devices/bus/adamnet/fdc.cpp:65-69"
     contents:
-      - name: "adam disk u10 ad 31 rev a 09-27-84.u10"
-        description: "FDC 160KB SSDD 6801 MCU ROM"
+      - name: adam disk u10 ad 31 rev a 09-27-84.u10
+        description: FDC 160KB SSDD 6801 MCU ROM
         size: 4096
-        crc32: 4b0b7143
+        crc32: "4b0b7143"
 
   - name: adam_fdc_320kb.zip
     required: false
@@ -773,13 +3322,13 @@ files:
     source_ref: "src/mame/entex/advision.cpp:357"
     contents:
       - name: ins8048-11kdp_n.u5
-        description: "Intel 8048 main CPU ROM"
+        description: Intel 8048 main CPU ROM
         size: 1024
-        crc32: 279e33d1
+        crc32: "279e33d1"
       - name: cop411l-kcn_n.u8
-        description: "National COP411L sound CPU ROM"
+        description: National COP411L sound CPU ROM
         size: 512
-        crc32: 81e95975
+        crc32: "81e95975"
 
   # APF M-1000 / Imagination Machine
   - name: apfm1000.zip
@@ -789,17 +3338,17 @@ files:
     source_ref: "src/mame/apf/apf.cpp:613"
     contents:
       - name: apf_4000.rom
-        description: "Standard BIOS"
+        description: Standard BIOS
         size: 2048
-        crc32: cc6ac840
+        crc32: "cc6ac840"
       - name: trash-ii.bin
-        description: "Trash II BIOS"
+        description: Trash II BIOS
         size: 4096
-        crc32: 3bd8640a
+        crc32: "3bd8640a"
       - name: mod_bios.bin
-        description: "Mod BIOS (W. Lunquist 1982)"
+        description: Mod BIOS (W. Lunquist 1982)
         size: 4096
-        crc32: f320aba6
+        crc32: "f320aba6"
 
   # Sega Advanced Pico BEENA
   - name: beena.zip
@@ -809,13 +3358,13 @@ files:
     source_ref: "src/mame/sega/sega_beena.cpp:2233-2245"
     contents:
       - name: 9h0-0008.bios.ic1
-        description: "SoC internal BIOS (ARM7, dumped via JTAG)"
+        description: SoC internal BIOS (ARM7, dumped via JTAG)
         size: 131072
-        crc32: 5471aaf8
+        crc32: "5471aaf8"
       - name: 9h0-0008.midipcm.ic1
-        description: "SoC MIDI synthesizer PCM data"
+        description: SoC MIDI synthesizer PCM data
         size: 32768
-        crc32: ed336d29
+        crc32: "ed336d29"
 
   # Bandai RX-78
   - name: rx78.zip
@@ -826,9 +3375,9 @@ files:
     note: "MACHINE_NOT_WORKING."
     contents:
       - name: ipl.rom
-        description: "IPL boot ROM"
+        description: IPL boot ROM
         size: 8192
-        crc32: a194ea53
+        crc32: "a194ea53"
 
   # Sega AI Computer
   - name: segaai.zip
@@ -838,25 +3387,25 @@ files:
     source_ref: "src/mame/sega/segaai.cpp:730-739"
     contents:
       - name: mpr-7689.ic5
-        description: "OS ROM with SEGA PROLOG (128KB)"
+        description: OS ROM with SEGA PROLOG (128KB)
         size: 131072
-        crc32: 62402ac9
+        crc32: "62402ac9"
       - name: e000 8_24.ic3
-        description: "EPROM bank E000"
+        description: EPROM bank E000
         size: 65536
-        crc32: c8b6a539
+        crc32: "c8b6a539"
       - name: f000 7_21.ic4
-        description: "EPROM bank F000"
+        description: EPROM bank F000
         size: 65536
-        crc32: 64d6cd8c
+        crc32: "64d6cd8c"
       - name: mpr-7619.ic14
-        description: "UPD7759 speech ROM bank 0"
+        description: UPD7759 speech ROM bank 0
         size: 131072
-        crc32: d1aea002
+        crc32: "d1aea002"
       - name: mpr-7620.ic15
-        description: "UPD7759 speech ROM bank 1"
+        description: UPD7759 speech ROM bank 1
         size: 131072
-        crc32: e042754b
+        crc32: "e042754b"
 
   - name: segaai_soundbox.zip
     required: false
@@ -866,9 +3415,9 @@ files:
     note: "Sound Box expansion (AI-2002) with YM2151 FM + music keyboard"
     contents:
       - name: ai-snd-2002-cecb.bin
-        description: "Sound Box expansion ROM"
+        description: Sound Box expansion ROM
         size: 65536
-        crc32: ef2dabc0
+        crc32: "ef2dabc0"
 
   # Camputers Lynx 48K
   - name: lynx48k.zip
@@ -878,21 +3427,21 @@ files:
     source_ref: "src/mame/camputers/camplynx.cpp:995-1004"
     contents:
       - name: lynx48-1.ic46
-        description: "BASIC ROM bank 1 (Set1)"
+        description: BASIC ROM bank 1 (Set1)
         size: 8192
-        crc32: 56feec44
+        crc32: "56feec44"
       - name: lynx48-2.ic45
-        description: "BASIC ROM bank 2 (Set1)"
+        description: BASIC ROM bank 2 (Set1)
         size: 8192
-        crc32: d894562e
+        crc32: "d894562e"
       - name: lynx4811.ic46
-        description: "BASIC ROM bank 1 (Set2)"
+        description: BASIC ROM bank 1 (Set2)
         size: 8192
-        crc32: a933e577
+        crc32: "a933e577"
       - name: lynx4812.ic45
-        description: "BASIC ROM bank 2 (Set2)"
+        description: BASIC ROM bank 2 (Set2)
         size: 8192
-        crc32: 3d3fdd0e
+        crc32: "3d3fdd0e"
 
   # Camputers Lynx 96K
   - name: lynx96k.zip
@@ -902,29 +3451,29 @@ files:
     source_ref: "src/mame/camputers/camplynx.cpp:1006-1018"
     contents:
       - name: lynx9646.ic46
-        description: "BASIC ROM bank 1"
+        description: BASIC ROM bank 1
         size: 8192
-        crc32: f86c5514
+        crc32: "f86c5514"
       - name: lynx9645.ic45
-        description: "BASIC ROM bank 2"
+        description: BASIC ROM bank 2
         size: 8192
-        crc32: f596b9a3
+        crc32: "f596b9a3"
       - name: lynx9644.ic44
-        description: "Extension ROM (original)"
+        description: Extension ROM (original)
         size: 4096
-        crc32: 4b96b0de
+        crc32: "4b96b0de"
       - name: skorprom.ic44
-        description: "Scorpion ROM v2.1 (RLUG)"
+        description: Scorpion ROM v2.1 (RLUG)
         size: 8192
-        crc32: 698d3de9
+        crc32: "698d3de9"
       - name: danish96k3.ic44
-        description: "Danish extension ROM"
+        description: Danish extension ROM
         size: 8192
-        crc32: 795c22ea
+        crc32: "795c22ea"
       - name: dosrom.rom
-        description: "Floppy DOS ROM"
+        description: Floppy DOS ROM
         size: 8192
-        crc32: 011e106a
+        crc32: "011e106a"
 
   # Camputers Lynx 128K
   - name: lynx128k.zip
@@ -934,21 +3483,21 @@ files:
     source_ref: "src/mame/camputers/camplynx.cpp:1020-1026"
     contents:
       - name: lynx128-1.ic1
-        description: "BASIC ROM bank 1"
+        description: BASIC ROM bank 1
         size: 8192
-        crc32: 65d292ce
+        crc32: "65d292ce"
       - name: lynx128-2.ic2
-        description: "BASIC ROM bank 2"
+        description: BASIC ROM bank 2
         size: 8192
-        crc32: 23288773
+        crc32: "23288773"
       - name: lynx128-3.ic3
-        description: "BASIC ROM bank 3"
+        description: BASIC ROM bank 3
         size: 8192
-        crc32: 9827b9e9
+        crc32: "9827b9e9"
       - name: dosrom.rom
-        description: "Floppy DOS ROM"
+        description: Floppy DOS ROM
         size: 8192
-        crc32: 011e106a
+        crc32: "011e106a"
 
   # VTech CreatiVision
   - name: crvision.zip
@@ -958,9 +3507,9 @@ files:
     source_ref: "src/mame/vtech/crvision.cpp:934-937"
     contents:
       - name: crvision.u20
-        description: "Microsoft BASIC ROM"
+        description: Microsoft BASIC ROM
         size: 2048
-        crc32: c3c590c6
+        crc32: "c3c590c6"
 
   - name: fnvision.zip
     required: false
@@ -970,7 +3519,7 @@ files:
     note: "FunVision clone with alternate BIOS"
     contents:
       - name: funboot.rom
-        description: "FunVision alternate BIOS ROM"
+        description: FunVision alternate BIOS ROM
         size: 2048
         crc32: "05602697"
 
@@ -982,9 +3531,9 @@ files:
     note: "VTech Laser 2001 home computer (CreatiVision successor)"
     contents:
       - name: laser2001.rom
-        description: "Laser 2001 BASIC + OS ROM"
+        description: Laser 2001 BASIC + OS ROM
         size: 16384
-        crc32: 4dc35c39
+        crc32: "4dc35c39"
 
   - name: manager.zip
     required: false
@@ -993,14 +3542,14 @@ files:
     source_ref: "src/mame/vtech/crvision.cpp:955-959"
     note: "Salora Manager (Finnish variant)"
     contents:
-      - name: "01"
-        description: "ROM bank 0-1"
+      - name: 01
+        description: ROM bank 0-1
         size: 8192
-        crc32: 702f4cf5
-      - name: "23"
-        description: "ROM bank 2-3"
+        crc32: "702f4cf5"
+      - name: 23
+        description: ROM bank 2-3
         size: 8192
-        crc32: 46489d88
+        crc32: "46489d88"
 
   # VTech Laser 310 (VZ-300)
   - name: laser310.zip
@@ -1011,13 +3560,13 @@ files:
     note: "Z80-based home computer (1984). Clones: VZ-300, Laser 310 SHRG."
     contents:
       - name: vtechv20.u12
-        description: "BASIC V2.0 ROM (default)"
+        description: BASIC V2.0 ROM (default)
         size: 16384
-        crc32: 613de12c
+        crc32: "613de12c"
       - name: vtechv21.u12
-        description: "BASIC V2.1 ROM (hack)"
+        description: BASIC V2.1 ROM (hack)
         size: 16384
-        crc32: f7df980f
+        crc32: "f7df980f"
 
   # VTech Socrates Educational Video System
   - name: socrates.zip
@@ -1028,25 +3577,25 @@ files:
     note: "MACHINE_NOT_WORKING | MACHINE_IMPERFECT_SOUND. Clones: socratfc (French Canadian), profweis (German PAL)."
     contents:
       - name: 27-00817-000-000.u1
-        description: "Main CPU ROM (256KB)"
+        description: Main CPU ROM (256KB)
         size: 262144
-        crc32: 80f5aa20
+        crc32: "80f5aa20"
       - name: speech_eng_internal.bin
-        description: "TC8802AF speech chip internal data (optional, English)"
+        description: TC8802AF speech chip internal data (optional, English)
         size: 8192
-        crc32: edc1fb3f
+        crc32: "edc1fb3f"
       - name: speech_eng_vsm1.bin
-        description: "T6684F VSM serial ROM 1 (optional, English)"
+        description: T6684F VSM serial ROM 1 (optional, English)
         size: 16384
-        crc32: 888e3ddd
+        crc32: "888e3ddd"
       - name: speech_eng_vsm2.bin
-        description: "T6684F VSM serial ROM 2 (optional, English)"
+        description: T6684F VSM serial ROM 2 (optional, English)
         size: 16384
-        crc32: de4ac89d
+        crc32: "de4ac89d"
       - name: speech_eng_vsm3.bin
-        description: "T6684F VSM serial ROM 3 (optional, English)"
+        description: T6684F VSM serial ROM 3 (optional, English)
         size: 16384
-        crc32: 972384aa
+        crc32: "972384aa"
 
   # VTech V.Smile Console
   - name: vsmile.zip
@@ -1058,15 +3607,15 @@ files:
     validation: [crc32]
     contents:
       - name: vsmile_v103.bin
-        description: "System ROM v1.03 (default, also used on V.Smile Pocket)"
+        description: System ROM v1.03 (default, also used on V.Smile Pocket)
         size: 2097152
-        crc32: 387fbc24
+        crc32: "387fbc24"
       - name: vsmile_v102.bin
-        description: "System ROM v1.02 (found in fat model systems)"
+        description: System ROM v1.02 (found in fat model systems)
         size: 2097152
-        crc32: 0cd0bdf5
+        crc32: "0cd0bdf5"
       - name: vsmile_v100.bin
-        description: "System ROM v1.00"
+        description: System ROM v1.00
         size: 2097152
         crc32: "205c5296"
 
@@ -1078,13 +3627,13 @@ files:
     source_ref: "src/mame/bitcorp/gamate.cpp:228-234"
     contents:
       - name: gamate_bios_umc.bin
-        description: "UMC/NCR ICASC00002 BIOS (default)"
+        description: UMC/NCR ICASC00002 BIOS (default)
         size: 4096
         crc32: "07090415"
       - name: gamate_bios_bit.bin
-        description: "BIT ICASC00001 BIOS (1994)"
+        description: BIT ICASC00001 BIOS (1994)
         size: 4096
-        crc32: 03a5f3a7
+        crc32: "03a5f3a7"
 
   # Epoch Game Pocket Computer
   - name: gamepock.zip
@@ -1094,9 +3643,9 @@ files:
     source_ref: "src/mame/epoch/gamepock.cpp:248-251"
     contents:
       - name: egpcboot.bin
-        description: "NEC uPD78C06AG internal ROM"
+        description: NEC uPD78C06AG internal ROM
         size: 4096
-        crc32: ee1ea65d
+        crc32: "ee1ea65d"
 
   # Hartung Game Master
   - name: gmaster.zip
@@ -1106,9 +3655,9 @@ files:
     source_ref: "src/mame/handheld/gmaster.cpp:261-263"
     contents:
       - name: d78c11agf_e19.u1
-        description: "NEC D78C11AGF internal ROM"
+        description: NEC D78C11AGF internal ROM
         size: 4096
-        crc32: 05cc45e5
+        crc32: "05cc45e5"
 
   # Tiger game.com
   - name: gamecom.zip
@@ -1118,13 +3667,13 @@ files:
     source_ref: "src/mame/tiger/gamecom.cpp:293-299"
     contents:
       - name: internal.bin
-        description: "SM8521 CPU internal ROM"
+        description: SM8521 CPU internal ROM
         size: 4096
-        crc32: a0cec361
+        crc32: "a0cec361"
       - name: external.bin
-        description: "External flash ROM (PDA software)"
+        description: External flash ROM (PDA software)
         size: 262144
-        crc32: e235a589
+        crc32: "e235a589"
 
   # GamePark GP32
   - name: gp32.zip
@@ -1134,29 +3683,29 @@ files:
     source_ref: "src/mame/gamepark/gp32.cpp:1710-1727"
     contents:
       - name: gp32157e.bin
-        description: "Firmware 1.5.7 (English, default)"
+        description: Firmware 1.5.7 (English, default)
         size: 524288
-        crc32: b1e35643
+        crc32: "b1e35643"
       - name: gp32100k.bin
-        description: "Firmware 1.0.0 (Korean)"
+        description: Firmware 1.0.0 (Korean)
         size: 524288
-        crc32: d9925ac9
+        crc32: "d9925ac9"
       - name: gp32156k.bin
-        description: "Firmware 1.5.6 (Korean)"
+        description: Firmware 1.5.6 (Korean)
         size: 524288
         crc32: "667fb1c8"
       - name: gp32166m.bin
-        description: "Firmware 1.6.6 (European)"
+        description: Firmware 1.6.6 (European)
         size: 524288
         crc32: "4548a840"
       - name: gp32mfv2.bin
-        description: "Mr. Spiv Multi Firmware V2"
+        description: Mr. Spiv Multi Firmware V2
         size: 524288
         crc32: "7ddaaaeb"
       - name: x2c32.jed
-        description: "32 Macrocell CoolRunner-II CPLD (JEDEC)"
+        description: 32 Macrocell CoolRunner-II CPLD (JEDEC)
         size: 15291
-        crc32: eeec10d8
+        crc32: "eeec10d8"
 
   # Fujitsu FM-7 family
   - name: fm7.zip
@@ -1166,25 +3715,25 @@ files:
     source_ref: "src/mame/fujitsu/fm7.cpp:2188-2209"
     contents:
       - name: fbasic300.rom
-        description: "F-BASIC 3.00 ROM"
+        description: F-BASIC 3.00 ROM
         size: 31744
-        crc32: 87c98494
+        crc32: "87c98494"
       - name: subsys_c.rom
-        description: "Sub-CPU system ROM"
+        description: Sub-CPU system ROM
         size: 10240
-        crc32: 24cec93f
+        crc32: "24cec93f"
       - name: boot_bas.rom
-        description: "Boot BASIC ROM"
+        description: Boot BASIC ROM
         size: 512
-        crc32: c70f0c74
+        crc32: "c70f0c74"
       - name: boot_dos_a.rom
-        description: "Boot DOS-A ROM"
+        description: Boot DOS-A ROM
         size: 512
-        crc32: bf441864
+        crc32: "bf441864"
       - name: kanji.rom
-        description: "Kanji ROM (optional, JIS level 1)"
+        description: Kanji ROM (optional, JIS level 1)
         size: 131072
-        crc32: 62402ac9
+        crc32: "62402ac9"
 
   - name: fm77av.zip
     required: true
@@ -1193,25 +3742,25 @@ files:
     source_ref: "src/mame/fujitsu/fm7.cpp:2211-2232"
     contents:
       - name: initiate.rom
-        description: "Initiate ROM (boot sequencer)"
+        description: Initiate ROM (boot sequencer)
         size: 8192
-        crc32: 785cb06c
+        crc32: "785cb06c"
       - name: fbasic30.rom
-        description: "F-BASIC 3.0 ROM"
+        description: F-BASIC 3.0 ROM
         size: 31744
-        crc32: a96d19b6
+        crc32: "a96d19b6"
       - name: subsys_a.rom
-        description: "Sub system A ROM"
+        description: Sub system A ROM
         size: 8192
-        crc32: e8014fbb
+        crc32: "e8014fbb"
       - name: subsys_b.rom
-        description: "Sub system B ROM"
+        description: Sub system B ROM
         size: 8192
-        crc32: 9be69fac
+        crc32: "9be69fac"
       - name: subsyscg.rom
-        description: "Sub system CG ROM (character generator)"
+        description: Sub system CG ROM (character generator)
         size: 8192
-        crc32: e9f16c42
+        crc32: "e9f16c42"
 
   - name: fmnew7.zip
     required: false
@@ -1221,13 +3770,13 @@ files:
     note: "FM-NEW7 clone, inherits shared ROMs from fm7.zip parent"
     contents:
       - name: fbasic302.rom
-        description: "F-BASIC 3.02 ROM"
+        description: F-BASIC 3.02 ROM
         size: 31744
-        crc32: a96d19b6
+        crc32: "a96d19b6"
       - name: boot_dos.rom
-        description: "Boot DOS ROM"
+        description: Boot DOS ROM
         size: 512
-        crc32: 198614ff
+        crc32: "198614ff"
 
   # Technosys Aamber Pegasus
   - name: pegasus.zip
@@ -1238,41 +3787,41 @@ files:
     note: "6809-based home computer (1981, New Zealand). 8 monitor BIOS variants, 5 cartridge expansion slots."
     contents:
       - name: mon11_2674.bin
-        description: "Monitor 1.1 r2674 (default)"
+        description: Monitor 1.1 r2674 (default)
         size: 4096
-        crc32: 1640ff7e
+        crc32: "1640ff7e"
       - name: mon10_2569.bin
-        description: "Monitor 1.0 r2569"
+        description: Monitor 1.0 r2569
         size: 4096
-        crc32: 910fc930
+        crc32: "910fc930"
       - name: mon11_2569.bin
-        description: "Monitor 1.1 r2569"
+        description: Monitor 1.1 r2569
         size: 4096
         crc32: "07b92002"
       - name: mon11_2669.bin
-        description: "Monitor 1.1 r2669"
+        description: Monitor 1.1 r2669
         size: 4096
-        crc32: f3ee23c8
+        crc32: "f3ee23c8"
       - name: mon22_2856.bin
-        description: "Monitor 2.2 r2856"
+        description: Monitor 2.2 r2856
         size: 4096
-        crc32: 5f5f688a
+        crc32: "5f5f688a"
       - name: mon22b_2856.bin
-        description: "Monitor 2.2B r2856"
+        description: Monitor 2.2B r2856
         size: 4096
-        crc32: a47b0308
+        crc32: "a47b0308"
       - name: mon23_2601.bin
-        description: "Monitor 2.3 r2601"
+        description: Monitor 2.3 r2601
         size: 4096
-        crc32: 0e024222
+        crc32: "0e024222"
       - name: mon23a_2569.bin
-        description: "Monitor 2.3A r2569"
+        description: Monitor 2.3A r2569
         size: 4096
-        crc32: 248e62c9
+        crc32: "248e62c9"
       - name: 6571.bin
-        description: "MCM6571A character generator"
+        description: MCM6571A character generator
         size: 2048
-        crc32: 5a25144b
+        crc32: "5a25144b"
 
   # Amstrad PCW (Joyce)
   - name: pcw8256.zip
@@ -1289,11 +3838,11 @@ files:
       separate daisywheel printer MCU (pcw9512.zip).
     contents:
       - name: 40026.ic701
-        description: "i8041 9-pin dot-matrix printer MCU"
+        description: i8041 9-pin dot-matrix printer MCU
         size: 1024
-        crc32: ee8890ae
+        crc32: "ee8890ae"
       - name: 40027.ic801
-        description: "i8048 keyboard MCU"
+        description: i8048 keyboard MCU
         size: 1024
         crc32: "25260958"
 
@@ -1308,9 +3857,9 @@ files:
       Keyboard MCU (40027.ic801) inherited from parent pcw8256.zip.
     contents:
       - name: 40103.ic109
-        description: "i8041 daisywheel printer MCU"
+        description: i8041 daisywheel printer MCU
         size: 8192
-        crc32: a64d450a
+        crc32: "a64d450a"
 
   # Tandy VIS (Video Information System)
   # vis.cpp: vis (parent, WORKING). Tandy/Memorex MD-2500 (1992).
@@ -1322,13 +3871,13 @@ files:
     source_ref: "src/mame/trs/vis.cpp:1062-1066"
     contents:
       - name: p513bk0b.bin
-        description: "BIOS bank 0"
+        description: BIOS bank 0
         size: 524288
-        crc32: 364e3f74
+        crc32: "364e3f74"
       - name: p513bk1b.bin
-        description: "BIOS bank 1"
+        description: BIOS bank 1
         size: 524288
-        crc32: e18239c4
+        crc32: "e18239c4"
 
   # Tandy TRS-80 family
   # Model I (trs80.cpp): trs80 (Level I, parent, WORKING), trs80l2 (Level II, parent),
@@ -1344,13 +3893,13 @@ files:
     note: "TRS-80 Model I Level I Basic (1977). Only fully working TRS-80 machine in MAME."
     contents:
       - name: level1.rom
-        description: "Level I BASIC ROM (4KB)"
+        description: Level I BASIC ROM (4KB)
         size: 4096
-        crc32: 70d06dff
+        crc32: "70d06dff"
       - name: mcm6670p.z29
-        description: "MCM6670P character generator ROM"
+        description: MCM6670P character generator ROM
         size: 1024
-        crc32: 0033f2b9
+        crc32: "0033f2b9"
 
   - name: trs80l2.zip
     required: true
@@ -1363,33 +3912,33 @@ files:
       MACHINE_NOT_WORKING.
     contents:
       - name: rom-a.z1
-        description: "Level II ROM A (default)"
+        description: Level II ROM A (default)
         size: 4096
-        crc32: 37c59db2
+        crc32: "37c59db2"
       - name: rom-b.z2
-        description: "Level II ROM B (default)"
+        description: Level II ROM B (default)
         size: 4096
         crc32: "05818718"
       - name: rom-c.z3
-        description: "Level II ROM C (default)"
+        description: Level II ROM C (default)
         size: 4096
-        crc32: 306e5d66
+        crc32: "306e5d66"
       - name: rom-a_alt.z1
-        description: "Level II ROM A (alternate dump)"
+        description: Level II ROM A (alternate dump)
         size: 4096
-        crc32: be46faf5
+        crc32: "be46faf5"
       - name: rom-b_alt.z2
-        description: "Level II ROM B (alternate dump)"
+        description: Level II ROM B (alternate dump)
         size: 4096
-        crc32: 6c791c2d
+        crc32: "6c791c2d"
       - name: rom-c_alt.z3
-        description: "Level II ROM C (alternate dump)"
+        description: Level II ROM C (alternate dump)
         size: 4096
-        crc32: 55b3ad13
+        crc32: "55b3ad13"
       - name: mcm6670p.z29
-        description: "MCM6670P character generator ROM"
+        description: MCM6670P character generator ROM
         size: 1024
-        crc32: 0033f2b9
+        crc32: "0033f2b9"
 
   - name: eg3003.zip
     required: false
@@ -1402,25 +3951,25 @@ files:
       MACHINE_NOT_WORKING.
     contents:
       - name: 3001.z10
-        description: "ROM A (BASIC part 1)"
+        description: ROM A (BASIC part 1)
         size: 4096
-        crc32: 8f5214de
+        crc32: "8f5214de"
       - name: 3002.z11
-        description: "ROM B (BASIC part 2)"
+        description: ROM B (BASIC part 2)
         size: 4096
-        crc32: 46e88fbf
+        crc32: "46e88fbf"
       - name: 3003.z12
-        description: "ROM C (BASIC part 3)"
+        description: ROM C (BASIC part 3)
         size: 4096
-        crc32: 306e5d66
+        crc32: "306e5d66"
       - name: tcs-ext.z13
-        description: "TCS extension ROM"
+        description: TCS extension ROM
         size: 2048
-        crc32: 8f2ac112
+        crc32: "8f2ac112"
       - name: tcs-ext.z25
-        description: "TCS character generator ROM"
+        description: TCS character generator ROM
         size: 2048
-        crc32: 150c5f1f
+        crc32: "150c5f1f"
 
   - name: sys80.zip
     required: false
@@ -1430,13 +3979,13 @@ files:
     note: "EACA System-80 (1980). Clone of eg3003 with different extension ROM. sys80p (50 Hz) shares ROMs."
     contents:
       - name: sys80.z13
-        description: "System-80 extension ROM"
+        description: System-80 extension ROM
         size: 2048
-        crc32: 2a851e33
+        crc32: "2a851e33"
       - name: 2513.z25
-        description: "Character generator ROM"
+        description: Character generator ROM
         size: 1024
-        crc32: 0033f2b9
+        crc32: "0033f2b9"
 
   - name: ht1080z.zip
     required: false
@@ -1446,9 +3995,9 @@ files:
     note: "Hiradastechnika HT-1080Z Series I (1983). Hungarian clone of eg3003."
     contents:
       - name: ht1080z.z25
-        description: "HT-1080Z character generator ROM"
+        description: HT-1080Z character generator ROM
         size: 2048
-        crc32: e8c59d4f
+        crc32: "e8c59d4f"
 
   - name: ht1080z2.zip
     required: false
@@ -1458,13 +4007,13 @@ files:
     note: "Hiradastechnika HT-1080Z Series II (1984). Clone of eg3003."
     contents:
       - name: ht1080z2.z13
-        description: "HT-1080Z II extension ROM"
+        description: HT-1080Z II extension ROM
         size: 2048
         crc32: "07415ac6"
       - name: ht1080z2.z25
-        description: "HT-1080Z II character generator ROM"
+        description: HT-1080Z II character generator ROM
         size: 2048
-        crc32: 6728f0ab
+        crc32: "6728f0ab"
 
   - name: ht108064.zip
     required: false
@@ -1474,21 +4023,21 @@ files:
     note: "Hiradastechnika HT-1080Z/64 (1985). 64-column clone of eg3003."
     contents:
       - name: 3001_64.z10
-        description: "ROM A (64-col BASIC part 1)"
+        description: ROM A (64-col BASIC part 1)
         size: 4096
-        crc32: 59ec132e
+        crc32: "59ec132e"
       - name: 3002_64.z11
-        description: "ROM B (64-col BASIC part 2)"
+        description: ROM B (64-col BASIC part 2)
         size: 4096
-        crc32: a7a73e8c
+        crc32: "a7a73e8c"
       - name: ht108064.z13
-        description: "HT-1080Z/64 extension ROM"
+        description: HT-1080Z/64 extension ROM
         size: 2048
-        crc32: fc12bd28
+        crc32: "fc12bd28"
       - name: ht108064.z25
-        description: "HT-1080Z/64 character generator ROM"
+        description: HT-1080Z/64 character generator ROM
         size: 2048
-        crc32: e76b73a4
+        crc32: "e76b73a4"
 
   - name: trs80m3.zip
     required: true
@@ -1501,33 +4050,33 @@ files:
       Level 1. MACHINE_NOT_WORKING.
     contents:
       - name: 8041364.u104
-        description: "Level 2 ROM A"
+        description: Level 2 ROM A
         size: 8192
-        crc32: ec0c6daa
+        crc32: "ec0c6daa"
       - name: 8040332.u105
-        description: "Level 2 ROM B"
+        description: Level 2 ROM B
         size: 4096
-        crc32: ed4ee921
+        crc32: "ed4ee921"
       - name: 8040316c.u106
-        description: "Level 2 ROM C Rev C (default)"
+        description: Level 2 ROM C Rev C (default)
         size: 2048
-        crc32: c8f79433
+        crc32: "c8f79433"
       - name: 8040316b.u106
-        description: "Level 2 ROM C Rev B"
+        description: Level 2 ROM C Rev B
         size: 2048
-        crc32: 84a5702d
+        crc32: "84a5702d"
       - name: 276a.u106
-        description: "Network III v2 ROM C"
+        description: Network III v2 ROM C
         size: 2048
-        crc32: 7d38720a
+        crc32: "7d38720a"
       - name: 8040032.u104
-        description: "Level 1 BIOS"
+        description: Level 1 BIOS
         size: 4096
-        crc32: 6418d641
+        crc32: "6418d641"
       - name: 8044316a.u36
-        description: "Character generator ROM (rev A)"
+        description: Character generator ROM (rev A)
         size: 2048
-        crc32: 444c8b60
+        crc32: "444c8b60"
 
   - name: trs80m4.zip
     required: false
@@ -1539,13 +4088,13 @@ files:
       (should be split into 3 like trs80m3). MACHINE_NOT_WORKING.
     contents:
       - name: trs80m4.rom
-        description: "Combined system ROM (BAD_DUMP)"
+        description: Combined system ROM (BAD_DUMP)
         size: 14336
-        crc32: 1a92d54d
+        crc32: "1a92d54d"
       - name: 8044316a.u36
-        description: "Character generator ROM"
+        description: Character generator ROM
         size: 2048
-        crc32: 444c8b60
+        crc32: "444c8b60"
 
   - name: trs80m4p.zip
     required: false
@@ -1559,17 +4108,17 @@ files:
       MACHINE_NOT_WORKING.
     contents:
       - name: 8075332.u69
-        description: "Bootloader ROM"
+        description: Bootloader ROM
         size: 4096
-        crc32: 3a738aa9
+        crc32: "3a738aa9"
       - name: trs80m4p_loader_hack.rom
-        description: "Disk loader hack ROM"
+        description: Disk loader hack ROM
         size: 504
-        crc32: 7ff336f4
+        crc32: "7ff336f4"
       - name: 8049007.u103
-        description: "Character generator ROM"
+        description: Character generator ROM
         size: 2048
-        crc32: 1ac44bea
+        crc32: "1ac44bea"
 
   - name: cp500.zip
     required: false
@@ -1579,13 +4128,13 @@ files:
     note: "Prologica CP-500 (1982). Brazilian TRS-80 Model III clone. MACHINE_NOT_WORKING."
     contents:
       - name: s_8407_cn62516n_cp500a_prologica_83.ci111
-        description: "Combined system + boot ROM"
+        description: Combined system + boot ROM
         size: 16384
-        crc32: c2fc1b92
+        crc32: "c2fc1b92"
       - name: 100.105.ci36
-        description: "Character generator ROM"
+        description: Character generator ROM
         size: 2048
-        crc32: 1765931e
+        crc32: "1765931e"
 
   # TI-99/4A
   - name: ti99_4a.zip
@@ -1596,25 +4145,25 @@ files:
     note: "TI-99/4A Home Computer (1981). Parent machine ROM set."
     contents:
       - name: 994a_grom0.u500
-        description: "Console GROM 0"
+        description: Console GROM 0
         size: 6144
-        crc32: 2445a5e8
+        crc32: "2445a5e8"
       - name: 994a_grom1.u501
-        description: "Console GROM 1"
+        description: Console GROM 1
         size: 6144
-        crc32: b8f367ab
+        crc32: "b8f367ab"
       - name: 994a_grom2.u502
-        description: "Console GROM 2"
+        description: Console GROM 2
         size: 6144
-        crc32: e0bb5341
+        crc32: "e0bb5341"
       - name: 994a_rom_hb.u610
-        description: "CPU ROM high byte"
+        description: CPU ROM high byte
         size: 4096
-        crc32: ee859c5f
+        crc32: "ee859c5f"
       - name: 994a_rom_lb.u611
-        description: "CPU ROM low byte"
+        description: CPU ROM low byte
         size: 4096
-        crc32: 37859301
+        crc32: "37859301"
 
   - name: ti99_speech.zip
     required: false
@@ -1624,13 +4173,13 @@ files:
     note: "TI-99 Speech Synthesizer sidecar. 2 TMS6100 vocabulary ROMs."
     contents:
       - name: cd2325a.u2a
-        description: "TMS6100 vocabulary ROM (bottom)"
+        description: TMS6100 vocabulary ROM (bottom)
         size: 16384
-        crc32: 1f58b571
+        crc32: "1f58b571"
       - name: cd2326a.u2b
-        description: "TMS6100 vocabulary ROM (top)"
+        description: TMS6100 vocabulary ROM (top)
         size: 16384
-        crc32: 65d00401
+        crc32: "65d00401"
 
   # Tomy Tutor
   - name: tutor.zip
@@ -1645,13 +4194,13 @@ files:
       "tutor".
     contents:
       - name: tutor1.bin
-        description: "System ROM"
+        description: System ROM
         size: 32768
-        crc32: 702c38ba
+        crc32: "702c38ba"
       - name: tutor2.bin
-        description: "BASIC ROM"
+        description: BASIC ROM
         size: 16384
-        crc32: 05f228f5
+        crc32: "05f228f5"
 
   # Philips VG-5000
   - name: vg5k.zip
@@ -1666,17 +4215,17 @@ files:
       ROM versions (v1.0, v1.1). Software list "vg5k" (cassettes).
     contents:
       - name: vg5k11.bin
-        description: "BASIC v1.1 ROM (default)"
+        description: BASIC v1.1 ROM (default)
         size: 16384
-        crc32: a6f4a0ea
+        crc32: "a6f4a0ea"
       - name: vg5k10.bin
-        description: "BASIC v1.0 ROM (BAD_DUMP)"
+        description: BASIC v1.0 ROM (BAD_DUMP)
         size: 16384
-        crc32: 57983260
+        crc32: "57983260"
       - name: charset.rom
-        description: "EF9345 character generator (BAD_DUMP, from DCVG5K)"
+        description: EF9345 character generator (BAD_DUMP, from DCVG5K)
         size: 8192
-        crc32: b2f49eb3
+        crc32: "b2f49eb3"
 
   # Device ROMs — sound chip ROM data
   - name: qsound.zip
@@ -1689,9 +4238,9 @@ files:
     validation: [crc32]
     contents:
       - name: dl-1425.bin
-        description: "QSound DSP microcode"
+        description: QSound DSP microcode
         size: 24576
-        crc32: d6cf5ef5
+        crc32: "d6cf5ef5"
 
   - name: ym2413.zip
     required: false
@@ -1703,9 +4252,9 @@ files:
     validation: [crc32]
     contents:
       - name: ym2413_instruments.bin
-        description: "OPLL preset instrument table"
+        description: OPLL preset instrument table
         size: 144
-        crc32: 6f582d01
+        crc32: "6f582d01"
 
   - name: ym2608.zip
     required: false
@@ -1718,6 +4267,230 @@ files:
     validation: [crc32]
     contents:
       - name: ym2608_adpcm_rom.bin
-        description: "OPNA ADPCM rhythm samples"
+        description: OPNA ADPCM rhythm samples
         size: 8192
-        crc32: 23c9e0d8
+        crc32: "23c9e0d8"
+
+  - name: ekara.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/tvgames/xavix.cpp:2878"
+    contents:
+      - name: ekara.bin
+        size: 1048576
+        crc32: "9b27c4a2"
+        sha1: "d75dda7434933135d2f7e353840a9384e9a0d586"
+
+  - name: ekaraa.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/tvgames/xavix.cpp:2879"
+    contents:
+      - name: ekara2.bin
+        size: 1048576
+        crc32: "3c92d48d"
+        sha1: "450fbe53826cdb87ec797f84b9757987afcc1ec5"
+
+  - name: ekaraj.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/tvgames/xavix.cpp:2880"
+    contents:
+      - name: ekarajapan.bin
+        size: 1048576
+        crc32: "e459e43b"
+        sha1: "58b7f36a81571a2df5e812c118fdf68812a05abc"
+
+  - name: ekarag.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/tvgames/xavix.cpp:2881"
+    contents:
+      - name: ekaragermany.bin
+        size: 2097152
+        crc32: "644f06b0"
+        sha1: "433e65a6ea029b67ee62b4b3de52ff3504cfdf16"
+
+  - name: ekaras.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/tvgames/xavix.cpp:2882"
+    contents:
+      - name: ekaraspanish.bin
+        size: 2097152
+        crc32: "77925ab0"
+        sha1: "402053e22e371c5f5e8069a4bf3b33841e742375"
+
+  - name: isinger.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/tvgames/xavix.cpp:2884"
+    contents:
+      - name: kr_isinger.bin
+        size: 1048576
+        crc32: "6ad588fe"
+        sha1: "879da069ca8c126232a1b2dfcce25c8615540e48"
+
+  - name: ekaraphs.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/tvgames/xavix.cpp:2887"
+    contents:
+      - name: ekaraheadset.bin
+        size: 2097152
+        crc32: "dd9b3cd7"
+        sha1: "baaf35d56fa45b6f995b8466331bb30f0035f734"
+
+  - name: epitch.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/tvgames/xavix.cpp:2890"
+    contents:
+      - name: ekarajapan.bin
+        size: 1048576
+        crc32: "e459e43b"
+        sha1: "58b7f36a81571a2df5e812c118fdf68812a05abc"
+
+  - name: ekaramix.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/tvgames/xavix.cpp:2893"
+    contents:
+      - name: ekaramix.bin
+        size: 2097152
+        crc32: "ee71576e"
+        sha1: "26f8c9edcbbed77e86a1cb5a0b91c92a16fef433"
+
+  - name: ddrfammt.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/tvgames/xavix.cpp:2896"
+    contents:
+      - name: ekara_ddr_ha010_81947.bin
+        size: 2097152
+        crc32: "737d5d1a"
+        sha1: "a1043047056dd27bca69767ee2044461ec549465"
+
+  - name: popira.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/tvgames/xavix.cpp:2899"
+    contents:
+      - name: popira.bin
+        size: 1048576
+        crc32: "71d20afc"
+        sha1: "fb2ae023fc8a188c79b2d6550f737e06c05e12da"
+
+  - name: popirak.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/tvgames/xavix.cpp:2901"
+    contents:
+      - name: kr_main.u2
+        size: 1048576
+        crc32: "785d8e21"
+        sha1: "7877ac33b57bdd8ceac6bda3b0006a3274ad4dce"
+
+  - name: popira2.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/tvgames/xavix.cpp:2904"
+    contents:
+      - name: popira2.bin
+        size: 2097152
+        crc32: "6acd8be0"
+        sha1: "8b6c812d37e2dc2f2531b0e47d84ad8485729dc5"
+
+  - name: taikodp.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/tvgames/xavix.cpp:2907"
+    contents:
+      - name: taikodepopira.bin
+        size: 2097152
+        crc32: "037a8472"
+        sha1: "03cae465965935fc084fb906f8f5de7679f42dd1"
+
+  - name: jpopira.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/tvgames/xavix.cpp:2910"
+    contents:
+      - name: jumpingpopira.bin
+        size: 2097152
+        crc32: "a7bedbd2"
+        sha1: "d62d4ca660c8df14891217fb7b7a2b4a931ff35f"
+      - name: i2cmem.bin
+        size: 256
+        crc32: "70a05af1"
+        sha1: "e8f4ab51445777fe459f9ff09333f548c4e3507c"
+
+  - name: evio.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/tvgames/xavix.cpp:2913"
+    contents:
+      - name: evio.bin
+        size: 2097152
+        crc32: "ee22c764"
+        sha1: "f2b7e213eb78065a63ef484a619bcfc61299e30e"
+
+  - name: tak_daig.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/tvgames/xavix.cpp:2918"
+    contents:
+      - name: robottransformer_unit.bin
+        size: 2097152
+        crc32: "02deddaa"
+        sha1: "7d7b54684f8b0b92daf02738560779c7df627b91"
+
+  - name: gcslottv.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/tvgames/xavix.cpp:2920"
+    contents:
+      - name: sammyslotunit.bin
+        size: 2097152
+        crc32: "2ba6f3ab"
+        sha1: "1c7fc0c85d817db1550d40c0258f424770e0bd81"
+
+  - name: hikara.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/tvgames/xavix.cpp:2925"
+    contents:
+      - name: hikara.u3
+        size: 1048576
+        crc32: "6b91102a"
+        sha1: "684dcfeaa8ac2888da2055617603494ce5fed93c"
+
+  - name: galgames.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/mame/ces/galgames.cpp:1301"
+    contents:
+      - name: galaxy_u2__v1.90_12-01-98.u2
+        size: 1048576
+        crc32: "e51ff184"
+        sha1: "aaa795f2c15ec29b3ceeb5c917b643db0dbb7083"
+      - name: galaxy_u1__v1.90_12-01-98.u1
+        size: 1048576
+        crc32: "c6d7bc6d"
+        sha1: "93c032f9aa38cbbdda59a8a25ff9f38f7ad9c760"
+      - name: galaxy_u2__v1.80_10-15-98.u2
+        size: 1048576
+        crc32: "73cff284"
+        sha1: "e6f7d92999cdb478c21c3b65a04eade84299ac12"
+      - name: galaxy_u1__v1.80_10-15-98.u1
+        size: 1048576
+        crc32: "e3ae423c"
+        sha1: "66d1964845a99a5ed4b19b4135b55cde6b5fe295"
+      - name: galaxy_u2__v1.71_7-8-98.u2
+        size: 1048576
+        crc32: "d1c3dbb3"
+        sha1: "ebe74ed7f2d8c4abcd6743b9d9c77cc347efc444"
+      - name: galaxy_u1__v1.71_7-8-98.u1
+        size: 1048576
+        crc32: "604415c8"
+        sha1: "6c67c3be1aca03d009b6244e3bd911caaa2ca666"

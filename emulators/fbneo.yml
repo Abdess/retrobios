@@ -5,7 +5,7 @@ source: "https://github.com/libretro/FBNeo"
 upstream: "https://github.com/finalburnneo/FBNeo"
 logo: "https://raw.githubusercontent.com/finalburnneo/FBNeo/master/projectfiles/xcode/Emulator/Assets.xcassets/AppIcon.appiconset/icon_512.png"
 profiled_date: "2026-03-23"
-core_version: "v1.0.0.03"
+core_version: "v1.0.0.2"
 display_name: "Arcade (FinalBurn Neo)"
 cores:
   - fbneo
@@ -1485,3 +1485,94 @@ files:
     size: 155000000
     note: "Two Tigers with Journey CD audio samples (2 WAVs)"
     source_ref: "src/burn/snd/samples.cpp"
+
+  - name: "coleco.rom"
+    archive: cv_coleco.zip
+    required: true
+    size: 8192
+    crc32: "3aa93ef3"
+    source_ref: "src/burn/drv/coleco/d_coleco.cpp:1079"
+
+  - name: "colecoa.rom"
+    archive: cv_coleco.zip
+    required: true
+    size: 8192
+    crc32: "39bb16fc"
+    source_ref: "src/burn/drv/coleco/d_coleco.cpp:1079"
+
+  - name: "svi603.rom"
+    archive: cv_coleco.zip
+    required: true
+    size: 8192
+    crc32: "19e91b82"
+    source_ref: "src/burn/drv/coleco/d_coleco.cpp:1079"
+
+  - name: "czz50.rom"
+    archive: cv_coleco.zip
+    required: true
+    size: 16384
+    crc32: "4999abc6"
+    source_ref: "src/burn/drv/coleco/d_coleco.cpp:1079"
+
+  - name: "fdsbios.nes"
+    archive: fds_fdsbios.zip
+    required: true
+    size: 8192
+    crc32: "5e607dcf"
+    source_ref: "src/burn/drv/nes/d_nes.cpp:523"
+
+  - name: "st010.bin"
+    archive: snes_st010.zip
+    required: true
+    size: 69632
+    crc32: "aa11ee2d"
+    source_ref: "src/burn/drv/snes/d_snes.cpp:577"
+
+  - name: "st011.bin"
+    archive: snes_st011.zip
+    required: true
+    size: 69632
+    crc32: "34d2952c"
+    source_ref: "src/burn/drv/snes/d_snes.cpp:596"
+
+  - name: "msx.rom"
+    archive: msx_msx.zip
+    required: true
+    size: 32768
+    crc32: "a317e6b4"
+    source_ref: "src/burn/drv/msx/d_msx.cpp:1781"
+
+  - name: "msxj.rom"
+    archive: msx_msx.zip
+    required: true
+    size: 32768
+    crc32: "071135e0"
+    source_ref: "src/burn/drv/msx/d_msx.cpp:1781"
+
+  - name: "kanji.rom"
+    archive: msx_msx.zip
+    required: true
+    size: 262144
+    crc32: "1f6406fb"
+    source_ref: "src/burn/drv/msx/d_msx.cpp:1781"
+
+  - name: "supernova_modbios-japan.u10"
+    archive: skns.zip
+    required: true
+    size: 524288
+    crc32: "b8d3190c"
+    source_ref: "src/burn/drv/pst90s/d_suprnova.cpp:1865"
+
+  - name: "supernova-modbios-korea.u10"
+    archive: skns.zip
+    required: true
+    size: 524288
+    crc32: "1d90517c"
+    source_ref: "src/burn/drv/pst90s/d_suprnova.cpp:1865"
+
+  - name: "mcu"
+    archive: bubsys.zip
+    required: true
+    size: 4096
+    crc32: "00000000"
+    source_ref: "src/burn/drv/konami/d_nemesis.cpp:4539"
