@@ -4372,7 +4372,7 @@ systems:
     - name: peribox_ev.zip
       destination: bios/peribox_ev.zip
       required: true
-      md5: e32bdbc9488e706ab0360db52e0eee63
+      md5: e32bdbc9488e706a30533540e059e0dc
     - name: permedia2.zip
       destination: bios/permedia2.zip
       required: true
@@ -4384,7 +4384,7 @@ systems:
     - name: peribox_gen.zip
       destination: bios/peribox_gen.zip
       required: true
-      md5: c35855fdc7f6a72fa11f80cfb94b3c80
+      md5: c35855fdc7f6a72f1e4c56a0e2eabf88
     - name: peribox_sg.zip
       destination: bios/peribox_sg.zip
       required: true

@@ -3,7 +3,7 @@
   "platform": "lakka",
   "display_name": "Lakka",
   "version": "1.0",
-  "generated": "2026-03-31T12:32:49Z",
+  "generated": "2026-03-31T21:00:57Z",
   "base_destination": "system",
   "detect": [
     {
@@ -3430,9 +3430,9 @@
     },
     {
       "dest": "Machines/Shared Roms/MSX2R2.ROM",
-      "sha1": "04990aa1c3a3fc7294ec884b81deaa89832df614",
+      "sha1": "ebb7eb540a390509edfd36c84288ba85e63f2d1f",
       "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/MSXR2.rom",
+      "repo_path": "bios/Microsoft/MSX/MSX2R2.ROM",
       "cores": [
         "blueMSX"
       ]

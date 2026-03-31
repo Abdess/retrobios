@@ -3,7 +3,7 @@
   "platform": "romm",
   "display_name": "RomM",
   "version": "1.0",
-  "generated": "2026-03-31T12:34:03Z",
+  "generated": "2026-03-31T21:02:00Z",
   "base_destination": "bios",
   "detect": [
     {

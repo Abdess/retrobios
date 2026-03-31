@@ -3,7 +3,7 @@
   "platform": "emudeck",
   "display_name": "EmuDeck",
   "version": "1.0",
-  "generated": "2026-03-31T12:32:33Z",
+  "generated": "2026-03-31T21:00:40Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -51,7 +51,7 @@
     }
   ],
   "total_files": 509,
-  "total_size": 3267793222,
+  "total_size": 3267803462,
   "files": [
     {
       "dest": "colecovision.rom",
@@ -3422,9 +3422,9 @@
     },
     {
       "dest": "psvita/PSP2UPDAT.PUP",
-      "sha1": "3ae832c9800fcaa007eccfc48f24242967c111f8",
-      "size": 56768512,
-      "repo_path": "bios/Sony/PlayStation Vita/.variants/PSP2UPDAT.PUP",
+      "sha1": "ed3a4cb264fff283209f10ae58c96c6090fed187",
+      "size": 56778752,
+      "repo_path": "bios/Sony/PlayStation Vita/PSP2UPDAT.PUP",
       "cores": [
         "Vita3K"
       ],

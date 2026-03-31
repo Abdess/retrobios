@@ -1646,7 +1646,7 @@ systems:
     - name: sc3000.zip
       destination: sc3000.zip
       required: true
-      md5: a6a47eae38600e41cc67e887e36e70b7
+      md5: fda6619ba96bf00b849192f5e7460622
       zipped_file: sc3000.rom
     native_id: sc3000
     name: Sega SC-3000
@@ -3552,64 +3552,6 @@ systems:
       destination: bk/MONIT10.ROM
       required: true
       md5: 95f8c41c6abf7640e35a6a03cecebd01
-    - name: bk0010.zip
-      destination: bk0010.zip
-      required: true
-    - name: bk0010.zip
-      destination: bk0010.zip
-      required: true
-      md5: 95f8c41c6abf7640e35a6a03cecebd01
-      zipped_file: monit10.rom
-    - name: bk0010.zip
-      destination: bk0010.zip
-      required: true
-      md5: eb9e1cf1c1b36a2dece89624bfc59323
-      zipped_file: focal.rom
-    - name: bk0010.zip
-      destination: bk0010.zip
-      required: true
-      md5: 93d2776ecf9abf49fb45f58ce3182143
-      zipped_file: tests.rom
-    - name: bk0010.zip
-      destination: bk0010.zip
-      required: true
-      md5: 4a4530347ee18c547a0563aca73cf43d
-      zipped_file: basic10-1.rom
-    - name: bk0010.zip
-      destination: bk0010.zip
-      required: true
-      md5: 86fc2f7797a0333300159aa222c3ad3f
-      zipped_file: basic10-2.rom
-    - name: bk0010.zip
-      destination: bk0010.zip
-      required: true
-      md5: fb8875a62b9b02a66670dcefc270d441
-      zipped_file: basic10-3.rom
-    - name: bk0010.zip
-      destination: bk0010.zip
-      required: true
-      md5: c113a36e51f4557594817bc35a4b63b7
-      zipped_file: bk11m_328_basic2.rom
-    - name: bk0010.zip
-      destination: bk0010.zip
-      required: true
-      md5: 823d35a8c98f70d2d378a2c7568c3b23
-      zipped_file: bk11m_329_basic3.rom
-    - name: bk0010.zip
-      destination: bk0010.zip
-      required: true
-      md5: 1e6637f32aa7d1de03510030cac40bcf
-      zipped_file: bk11m_327_basic1.rom
-    - name: bk0010.zip
-      destination: bk0010.zip
-      required: true
-      md5: dc52f365d56fa1951f5d35b1101b9e3f
-      zipped_file: bk11m_325_ext.rom
-    - name: bk0010.zip
-      destination: bk0010.zip
-      required: true
-      md5: fe4627d1e3a1535874085050733263e7
-      zipped_file: bk11m_324_bos.rom
     native_id: bk
     name: Elektronika BK
 standalone_cores:

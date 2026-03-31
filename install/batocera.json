@@ -3,7 +3,7 @@
   "platform": "batocera",
   "display_name": "Batocera",
   "version": "1.0",
-  "generated": "2026-03-31T12:32:22Z",
+  "generated": "2026-03-31T21:00:28Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -14,8 +14,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 1524,
-  "total_size": 3888134489,
+  "total_files": 1523,
+  "total_size": 3888059911,
   "files": [
     {
       "dest": "panafz1.bin",
@@ -862,13 +862,6 @@
       "sha1": "4e83a94ae5155bbea14d7331a5a8db82457bd5ae",
       "size": 8192,
       "repo_path": "bios/Elektronika/BK/MONIT10.ROM",
-      "cores": null
-    },
-    {
-      "dest": "bk0010.zip",
-      "sha1": "4aa3cec86fb5eb0cec7d7b3c8ddfe28b7f1c7963",
-      "size": 74578,
-      "repo_path": "bios/Arcade/MAME/bk0010.zip",
       "cores": null
     },
     {
@@ -2307,7 +2300,7 @@
       "dest": "psvita/PSP2UPDAT.PUP",
       "sha1": "ed3a4cb264fff283209f10ae58c96c6090fed187",
       "size": 56778752,
-      "repo_path": "",
+      "repo_path": "bios/Sony/PlayStation Vita/PSP2UPDAT.PUP",
       "cores": null,
       "storage": "release",
       "release_asset": "PSP2UPDAT.PUP"
@@ -2903,9 +2896,9 @@
     },
     {
       "dest": "Machines/Shared Roms/MSX2R2.ROM",
-      "sha1": "04990aa1c3a3fc7294ec884b81deaa89832df614",
+      "sha1": "ebb7eb540a390509edfd36c84288ba85e63f2d1f",
       "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/MSXR2.rom",
+      "repo_path": "bios/Microsoft/MSX/MSX2R2.ROM",
       "cores": [
         "blueMSX"
       ]

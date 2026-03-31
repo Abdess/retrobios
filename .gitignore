@@ -29,7 +29,7 @@ data/
 # Large files stored as GitHub Release assets (additional)
 bios/Arcade/MAME/artwork/snspell.zip
 bios/Arcade/MAME/MAME 0.174 Arcade XML.dat
-bios/Sony/PlayStation Vita/.variants/PSP2UPDAT.PUP
+bios/Sony/PlayStation Vita/.variants/PSP2UPDAT.PUP.3ae832c9
 bios/Nintendo/DS/DSi_Nand_JPN.bin
 bios/Nintendo/DS/DSi_Nand_EUR.bin
 bios/Nintendo/DS/DSi_Nand_USA.bin
