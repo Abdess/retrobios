@@ -348,7 +348,9 @@ def _collect_emulator_extras(
         # For archive entries, use the archive name for resolution
         archive = u.get("archive")
         name = archive if archive else u["name"]
-        dest = archive if archive else (u.get("path") or u["name"])
+        raw_dest = archive if archive else (u.get("path") or u["name"])
+        # Directory path: append filename (e.g. "cafeLibs/" + "snd_user.rpl")
+        dest = f"{raw_dest}{u['name']}" if raw_dest.endswith("/") else raw_dest
         full_dest = f"{base_dest}/{dest}" if base_dest else dest
         if full_dest in seen_dests:
             continue
@@ -402,9 +404,10 @@ def _collect_emulator_extras(
             if load_from and load_from != "system_dir":
                 continue
             if is_standalone:
-                dest = f.get("standalone_path") or f.get("path") or fname
+                raw = f.get("standalone_path") or f.get("path") or fname
             else:
-                dest = f.get("path") or fname
+                raw = f.get("path") or fname
+            dest = f"{raw}{fname}" if raw.endswith("/") else raw
             if dest == fname:
                 continue  # no alternative destination
             full_dest = f"{base_dest}/{dest}" if base_dest else dest
@@ -2643,25 +2646,43 @@ def verify_pack_against_platform(
                     errors.append(f"baseline missing: {expected}")
 
         # 2. Core extras presence (files from emulator profiles, in repo)
+        #    Mirror the pack builder's skip logic: only count files that
+        #    can actually be resolved and don't have path conflicts.
         core_checked = 0
         core_present = 0
         if db is not None:
             undeclared = find_undeclared_files(config, emulators_dir, db, emu_profiles)
+            seen_conformance: set[str] = set(zip_set)
+            seen_parents: set[str] = set()
+            for n in zip_set:
+                parts = n.split("/")
+                for i in range(1, len(parts)):
+                    seen_parents.add("/".join(parts[:i]))
             for u in undeclared:
                 if not u["in_repo"]:
                     continue
-                dest = u.get("path") or u["name"]
+                raw_dest = u.get("path") or u["name"]
+                dest = f"{raw_dest}{u['name']}" if raw_dest.endswith("/") else raw_dest
                 if base_dest:
                     full = f"{base_dest}/{dest}"
                 elif "/" not in dest:
                     full = f"bios/{dest}"
                 else:
                     full = dest
+                # Skip path conflicts (same logic as pack builder)
+                if _has_path_conflict(full, seen_conformance, seen_parents):
+                    continue
+                # Skip unresolvable files (game_data dirs, etc.)
+                fe = {"name": u["name"], "destination": dest}
+                local_path, status = resolve_file(fe, db, "bios", {},
+                                                  dest_hint=raw_dest)
+                if status in ("not_found", "external", "user_provided"):
+                    continue
                 core_checked += 1
-
                 if full in zip_set or full.lower() in zip_lower:
                     core_present += 1
-                # Not an error if missing -some get deduped or filtered
+                    seen_conformance.add(full)
+                    _register_path(full, seen_conformance, seen_parents)
 
         checked = baseline_checked + core_checked
         present = baseline_present + core_present
