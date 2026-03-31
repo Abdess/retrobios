@@ -3,7 +3,7 @@
   "platform": "retrobat",
   "display_name": "RetroBat",
   "version": "1.0",
-  "generated": "2026-03-31T11:41:39Z",
+  "generated": "2026-03-31T12:33:39Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -1537,9 +1537,9 @@
     },
     {
       "dest": "openMSX/share/systemroms/fmpac.rom",
-      "sha1": "fec451b9256570a0e4869355a40329c57f40705f",
+      "sha1": "9d789166e3caf28e4742fe933d962e99618c633d",
       "size": 65536,
-      "repo_path": "bios/Microsoft/MSX/openmsx/fmpac.rom",
+      "repo_path": "bios/Microsoft/MSX/FMPAC.ROM",
       "cores": null
     },
     {
@@ -2167,16 +2167,16 @@
     },
     {
       "dest": "sgb_boot.bin",
-      "sha1": "369e6eb5e0c975eaa52a4a3f6ee07b2a3c3c16de",
+      "sha1": "aa2f50a77dfb4823da96ba99309085a3c6278515",
       "size": 256,
-      "repo_path": "bios/Nintendo/Super Game Boy/sgb_boot.bin",
+      "repo_path": "bios/Nintendo/Game Boy/GB_sgb.bin",
       "cores": null
     },
     {
       "dest": "sgb2_boot.bin",
-      "sha1": "f282b3aaf98f8423dab7d77f1aa0192be630f2fb",
+      "sha1": "93407ea10d2f30ab96a314d8eca44fe160aea734",
       "size": 256,
-      "repo_path": "bios/Nintendo/Super Game Boy/sgb2_boot.bin",
+      "repo_path": "bios/Nintendo/Game Boy/GB_sgb2.bin",
       "cores": null
     },
     {
@@ -2335,9 +2335,9 @@
     },
     {
       "dest": "xmil/IPLROM.X1",
-      "sha1": "c4db9a6e99873808c8022afd1c50fef556a8b44d",
+      "sha1": "d3395e9aeb5b8bbba7654dd471bcd8af228ee69a",
       "size": 4096,
-      "repo_path": "bios/Sharp/X1/.variants/IPLROM.X1.c4db9a6e",
+      "repo_path": "bios/Sharp/X1/iplrom.x1",
       "cores": null
     },
     {

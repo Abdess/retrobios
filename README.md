@@ -59,14 +59,14 @@ Full list with per-file details: **[https://abdess.github.io/retrobios/](https:/
 
 | Platform | Coverage | Verified | Untested | Missing |
 |----------|----------|----------|----------|---------|
-| Batocera | 361/362 (99.7%) | 354 | 7 | 1 |
+| Batocera | 361/362 (99.7%) | 359 | 2 | 1 |
 | BizHawk | 118/118 (100.0%) | 118 | 0 | 0 |
 | EmuDeck | 161/161 (100.0%) | 161 | 0 | 0 |
 | Lakka | 448/448 (100.0%) | 448 | 0 | 0 |
-| Recalbox | 346/346 (100.0%) | 343 | 3 | 0 |
+| Recalbox | 346/346 (100.0%) | 345 | 1 | 0 |
 | RetroArch | 448/448 (100.0%) | 448 | 0 | 0 |
-| RetroBat | 339/339 (100.0%) | 335 | 4 | 0 |
-| RetroDECK | 2006/2006 (100.0%) | 1980 | 26 | 0 |
+| RetroBat | 339/339 (100.0%) | 339 | 0 | 0 |
+| RetroDECK | 2006/2006 (100.0%) | 2004 | 2 | 0 |
 | RetroPie | 448/448 (100.0%) | 448 | 0 | 0 |
 | RomM | 374/374 (100.0%) | 374 | 0 | 0 |
 
@@ -130,4 +130,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 This repository provides BIOS files for personal backup and archival purposes.
 
-*Auto-generated on 2026-03-31T11:57:27Z*
+*Auto-generated on 2026-03-31T12:15:43Z*

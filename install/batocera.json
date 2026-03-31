@@ -3,7 +3,7 @@
   "platform": "batocera",
   "display_name": "Batocera",
   "version": "1.0",
-  "generated": "2026-03-31T11:40:31Z",
+  "generated": "2026-03-31T12:32:22Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -1825,16 +1825,16 @@
     },
     {
       "dest": "dsi_bios7.bin",
-      "sha1": "d2b17224e156ee5e55b5d8d9f323b1c9b86dd951",
+      "sha1": "a3aa751eb6bdaaf8a827ba9e03576a6f1ab0f547",
       "size": 65536,
-      "repo_path": "bios/Nintendo/DS/dsi_bios7.bin",
+      "repo_path": "bios/Nintendo/Nintendo DS/biosdsi7.bin",
       "cores": null
     },
     {
       "dest": "dsi_bios9.bin",
-      "sha1": "db61fa39ddbc5f5ed71fb19cda47609ef0201723",
+      "sha1": "7bf549b8be9e48ab0cdc9b0fdadd49a5131f97eb",
       "size": 65536,
-      "repo_path": "bios/Nintendo/DS/dsi_bios9.bin",
+      "repo_path": "bios/Nintendo/Nintendo DS/biosdsi9.bin",
       "cores": null
     },
     {
@@ -1918,16 +1918,16 @@
     },
     {
       "dest": "sgb_boot.bin",
-      "sha1": "369e6eb5e0c975eaa52a4a3f6ee07b2a3c3c16de",
+      "sha1": "aa2f50a77dfb4823da96ba99309085a3c6278515",
       "size": 256,
-      "repo_path": "bios/Nintendo/Super Game Boy/sgb_boot.bin",
+      "repo_path": "bios/Nintendo/Game Boy/GB_sgb.bin",
       "cores": null
     },
     {
       "dest": "sgb2_boot.bin",
-      "sha1": "f282b3aaf98f8423dab7d77f1aa0192be630f2fb",
+      "sha1": "93407ea10d2f30ab96a314d8eca44fe160aea734",
       "size": 256,
-      "repo_path": "bios/Nintendo/Super Game Boy/sgb2_boot.bin",
+      "repo_path": "bios/Nintendo/Game Boy/GB_sgb2.bin",
       "cores": null
     },
     {
@@ -2128,9 +2128,9 @@
     },
     {
       "dest": "xmil/IPLROM.X1",
-      "sha1": "c4db9a6e99873808c8022afd1c50fef556a8b44d",
+      "sha1": "d3395e9aeb5b8bbba7654dd471bcd8af228ee69a",
       "size": 4096,
-      "repo_path": "bios/Sharp/X1/.variants/IPLROM.X1.c4db9a6e",
+      "repo_path": "bios/Sharp/X1/iplrom.x1",
       "cores": null
     },
     {

@@ -3,7 +3,7 @@
   "platform": "emudeck",
   "display_name": "EmuDeck",
   "version": "1.0",
-  "generated": "2026-03-31T11:40:42Z",
+  "generated": "2026-03-31T12:32:33Z",
   "base_destination": "bios",
   "detect": [
     {

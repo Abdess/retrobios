@@ -3,7 +3,7 @@
   "platform": "recalbox",
   "display_name": "Recalbox",
   "version": "1.0",
-  "generated": "2026-03-31T11:41:28Z",
+  "generated": "2026-03-31T12:33:29Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -15,7 +15,7 @@
   ],
   "standalone_copies": [],
   "total_files": 1093,
-  "total_size": 3499167790,
+  "total_size": 3499462394,
   "files": [
     {
       "dest": "3do/panafz1.bin",
@@ -180,9 +180,9 @@
     },
     {
       "dest": "atarist/tos.img",
-      "sha1": "735793fdba07fe8d5295caa03484f6ef3de931f5",
+      "sha1": "9a6e4c88533a9eaa4d55cdc040e47443e0226eb2",
       "size": 196608,
-      "repo_path": "bios/Atari/ST/tos.img",
+      "repo_path": "bios/Atari/ST/st.img",
       "cores": null
     },
     {
@@ -201,23 +201,23 @@
     },
     {
       "dest": "atarist/megaste.img",
-      "sha1": "ee58768bdfc602c9b14942ce5481e97dd24e7c83",
+      "sha1": "0af0264b63d14828ea9146b5434a5918561d8015",
       "size": 262144,
-      "repo_path": "bios/Atari/ST/megaste.img",
+      "repo_path": "bios/Atari/ST/tos205de.img",
       "cores": null
     },
     {
       "dest": "atarist/tt.img",
-      "sha1": "4f0b344231719e80c2a4d4ade3769d7f0d0629b6",
+      "sha1": "80af04499d1c3b8551fc4d72142ff02c2182e64a",
       "size": 524288,
-      "repo_path": "bios/Atari/ST/tt.img",
+      "repo_path": "bios/Atari/ST/tos306de.img",
       "cores": null
     },
     {
       "dest": "atarist/falcon.img",
-      "sha1": "7157f6a8aff275cfbb5ea6aa8e788dda8a977e56",
-      "size": 524288,
-      "repo_path": "bios/Atari/ST/falcon.img",
+      "sha1": "d74d09f11a0bf37a86ccb50c6e7f91aac4d4b11b",
+      "size": 524287,
+      "repo_path": "bios/Atari/ST/tos400.img",
       "cores": null
     },
     {
@@ -1006,9 +1006,9 @@
     },
     {
       "dest": "gamecube/EUR/IPL.bin",
-      "sha1": "a1837968288253ed541f2b11440b68f5a9b33875",
+      "sha1": "f27c63e5394e2fd1606f70df004c4fc2d6027700",
       "size": 2097152,
-      "repo_path": "bios/Nintendo/GameCube/GC/JAP/IPL.bin",
+      "repo_path": "bios/Nintendo/GameCube/.variants/gc-pal-10.bin",
       "cores": null
     },
     {
@@ -1020,9 +1020,9 @@
     },
     {
       "dest": "gamecube/USA/IPL.bin",
-      "sha1": "a1837968288253ed541f2b11440b68f5a9b33875",
+      "sha1": "f3cd0c7c61cbcefa85e7de3aff4cfa50bc508714",
       "size": 2097152,
-      "repo_path": "bios/Nintendo/GameCube/GC/JAP/IPL.bin",
+      "repo_path": "bios/Nintendo/GameCube/.variants/gc-pal-11.bin",
       "cores": null
     },
     {
@@ -1181,23 +1181,23 @@
     },
     {
       "dest": "quasi88/n88_1.rom",
-      "sha1": "4ae4d37409ff99411a623da9f6a44192170a854e",
+      "sha1": "8528eef7946edf6501a6ccb1f416b60c64efac7c",
       "size": 8192,
-      "repo_path": "bios/NEC/PC-98/n88_1.rom",
+      "repo_path": "bios/NEC/PC-98/N88EXT1.ROM",
       "cores": null
     },
     {
       "dest": "quasi88/n88_2.rom",
-      "sha1": "e94278682ef9e9bbb82201f72c50382748dcea2a",
+      "sha1": "b7c8bcea219b77d9cc3ee0efafe343cc307425d1",
       "size": 8192,
-      "repo_path": "bios/NEC/PC-98/n88_2.rom",
+      "repo_path": "bios/NEC/PC-98/N88EXT2.ROM",
       "cores": null
     },
     {
       "dest": "quasi88/n88_3.rom",
-      "sha1": "af452aed79b072c4d17985830b7c5dca64d4b412",
+      "sha1": "efce0b51cab9f0da6cf68507757f1245a2867a72",
       "size": 8192,
-      "repo_path": "bios/NEC/PC-98/n88_3.rom",
+      "repo_path": "bios/NEC/PC-98/N88EXT3.ROM",
       "cores": null
     },
     {
@@ -1209,9 +1209,9 @@
     },
     {
       "dest": "quasi88/disk.rom",
-      "sha1": "8063185d4dd653dd75a68855148c9ee15b71164c",
-      "size": 8192,
-      "repo_path": "bios/NEC/PC-98/disk.rom",
+      "sha1": "bb7103a0818850a039c67ff666a31ce49a8d516f",
+      "size": 2048,
+      "repo_path": "bios/NEC/PC-98/N88SUB.ROM",
       "cores": null
     },
     {
@@ -1223,9 +1223,9 @@
     },
     {
       "dest": "np2kai/bios.rom",
-      "sha1": "76a7360502fa0296ea93b4c537174610a834d367",
+      "sha1": "2e92346727b0355bc1ec9a7ded1b444a4917f2b9",
       "size": 98304,
-      "repo_path": "bios/NEC/PC-98/bios.rom",
+      "repo_path": "bios/NEC/PC-98/bios9821.rom",
       "cores": null
     },
     {
@@ -1279,9 +1279,9 @@
     },
     {
       "dest": "np2kai/2608_sd.wav",
-      "sha1": "3c79663ef74c0b0439d13351326eb1c52a657008",
-      "size": 15558,
-      "repo_path": "bios/NEC/PC-98/2608_sd.wav",
+      "sha1": "0ea4f93b81df9dbb8d48590b440f5910c0b798b6",
+      "size": 6700,
+      "repo_path": "bios/NEC/PC-98/.variants/2608_SD.WAV.0ea4f93b",
       "cores": null
     },
     {
@@ -1594,9 +1594,9 @@
     },
     {
       "dest": "neocdz.zip",
-      "sha1": "4f28af31ca0defdd73d80edec2fa296908e624dc",
-      "size": 214681,
-      "repo_path": "bios/Arcade/Arcade/.variants/neocdz.zip.4f28af31",
+      "sha1": "7bb26d1e5d1e930515219cb18bcde5b7b23e2eda",
+      "size": 524288,
+      "repo_path": "bios/SNK/Neo Geo CD/neocd.bin",
       "cores": null
     },
     {
@@ -1720,9 +1720,9 @@
     },
     {
       "dest": "scph1001.bin",
-      "sha1": "10155d8d6e6e832d6ea66db9bc098321fb5e8ebf",
+      "sha1": "649895efd79d14790eabb362e94eb0622093dfb9",
       "size": 524288,
-      "repo_path": "bios/Sony/PlayStation/scph1001.bin",
+      "repo_path": "bios/Sony/PlayStation/scph1001_v20.bin",
       "cores": null
     },
     {
@@ -1930,9 +1930,9 @@
     },
     {
       "dest": "xmil/IPLROM.X1",
-      "sha1": "c4db9a6e99873808c8022afd1c50fef556a8b44d",
+      "sha1": "d3395e9aeb5b8bbba7654dd471bcd8af228ee69a",
       "size": 4096,
-      "repo_path": "bios/Sharp/X1/.variants/IPLROM.X1.c4db9a6e",
+      "repo_path": "bios/Sharp/X1/iplrom.x1",
       "cores": null
     },
     {

@@ -3,7 +3,7 @@
   "platform": "retrodeck",
   "display_name": "RetroDECK",
   "version": "1.0",
-  "generated": "2026-03-31T11:42:04Z",
+  "generated": "2026-03-31T12:33:57Z",
   "base_destination": "",
   "detect": [
     {
@@ -15,7 +15,7 @@
   ],
   "standalone_copies": [],
   "total_files": 3139,
-  "total_size": 5889977326,
+  "total_size": 5886070769,
   "files": [
     {
       "dest": "bios/panafz1.bin",
@@ -1895,9 +1895,9 @@
     },
     {
       "dest": "bios/at_mb.zip",
-      "sha1": "010e3c7b17b4339fce7770f6f9b2e030e0437939",
-      "size": 3655,
-      "repo_path": "bios/Arcade/MAME/at_mb.zip",
+      "sha1": "0ecc5f931e755421e05676085ca1334f1592a0a0",
+      "size": 2575,
+      "repo_path": "bios/Arcade/Arcade/at_keybc.zip",
       "cores": null
     },
     {
@@ -3008,9 +3008,9 @@
     },
     {
       "dest": "bios/cc90_232.zip",
-      "sha1": "9f9ab9a092e0936758ad2fb93a537533231468c8",
-      "size": 574980,
-      "repo_path": "bios/Arcade/MAME/cc90_232.zip",
+      "sha1": "e92c1797f962812e911c85cbfd7f91169738e9ac",
+      "size": 445329,
+      "repo_path": "bios/Arcade/Arcade/acorn_vib.zip",
       "cores": null
     },
     {
@@ -3372,9 +3372,9 @@
     },
     {
       "dest": "bios/coco_ide.zip",
-      "sha1": "a866079ab029389bb00be91f48ae06133a47d52f",
-      "size": 1859954,
-      "repo_path": "bios/Arcade/MAME/coco_ide.zip",
+      "sha1": "360f00989f921dac09eef7965464f9b7b9f1ecc0",
+      "size": 46446,
+      "repo_path": "bios/Arcade/Arcade/coco_multipack.zip",
       "cores": null
     },
     {
@@ -4093,9 +4093,9 @@
     },
     {
       "dest": "bios/dragon_msx2.zip",
-      "sha1": "562e5be9ed255804af505bdace7d104571ed6f79",
-      "size": 313,
-      "repo_path": "bios/Arcade/MAME/dragon_msx2.zip",
+      "sha1": "900e8c6cd152704a79905b6838fe3229c9499f8c",
+      "size": 286,
+      "repo_path": "bios/Arcade/MAME/ym2413.zip",
       "cores": null
     },
     {
@@ -9273,9 +9273,9 @@
     },
     {
       "dest": "bios/spectrum_opus.zip",
-      "sha1": "8aaa6099ccaa133cb8f54846f65348dff3851c19",
-      "size": 2046403,
-      "repo_path": "bios/Arcade/MAME/spectrum_opus.zip",
+      "sha1": "0cb430aea9354d8c151933a12c33fa2bb69c16d3",
+      "size": 40604,
+      "repo_path": "bios/Arcade/Arcade/spectrum_fuller.zip",
       "cores": null
     },
     {
@@ -9371,9 +9371,9 @@
     },
     {
       "dest": "bios/spi.zip",
-      "sha1": "b22847ad1d8c5ee0fff41b3bd31aab6cbf8778ea",
-      "size": 479847,
-      "repo_path": "bios/Arcade/MAME/spi.zip",
+      "sha1": "bbf1cb3e776129524d54d1f885c54d0f1b8d489c",
+      "size": 439853,
+      "repo_path": "bios/Arcade/Arcade/a7ports.zip",
       "cores": null
     },
     {
@@ -10526,9 +10526,9 @@
     },
     {
       "dest": "bios/ym2413.zip",
-      "sha1": "900e8c6cd152704a79905b6838fe3229c9499f8c",
-      "size": 286,
-      "repo_path": "bios/Arcade/MAME/ym2413.zip",
+      "sha1": "562e5be9ed255804af505bdace7d104571ed6f79",
+      "size": 313,
+      "repo_path": "bios/Arcade/MAME/dragon_msx2.zip",
       "cores": null
     },
     {
@@ -10848,9 +10848,9 @@
     },
     {
       "dest": "bios/A78_highscore.bin",
-      "sha1": "a3af676991391a6dd716c79022d4947206b78164",
-      "size": 4096,
-      "repo_path": "bios/Atari/7800/A78_highscore.bin",
+      "sha1": "d47baf4953fa3297f68886f392b373e204c20a8f",
+      "size": 16364,
+      "repo_path": "bios/Atari/7800/ProSystem.dat",
       "cores": null
     },
     {
@@ -11338,9 +11338,9 @@
     },
     {
       "dest": "bios/MSX.ROM",
-      "sha1": "409e82adac40f6bdd18eb6c84e8b2fbdc7fb5498",
+      "sha1": "e998f0c441f4f1800ef44e42cd1659150206cf79",
       "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/MSX.ROM",
+      "repo_path": "bios/Microsoft/MSX/MSX_8020-20bios.rom",
       "cores": null
     },
     {
@@ -11415,9 +11415,9 @@
     },
     {
       "dest": "bios/FMPAC16.ROM",
-      "sha1": "2dc4517ebd5a061f9b5aa6b449cc4d4a2073540c",
-      "size": 16384,
-      "repo_path": "bios/Microsoft/MSX/FMPAC16.ROM",
+      "sha1": "bf5fb954db868e523febccc68549ed9187961076",
+      "size": 33152,
+      "repo_path": "bios/Microsoft/MSX/.variants/CARTS.SHA.bf5fb954",
       "cores": null
     },
     {
@@ -11653,23 +11653,23 @@
     },
     {
       "dest": "bios/n88.rom",
-      "sha1": "3518193b8207bdebf22c1380c2db8c554baff329",
+      "sha1": "3b31fc68fa7f47b21c1a1cb027b86b9e87afbfff",
       "size": 32768,
-      "repo_path": "bios/NEC/PC-98/n88.rom",
+      "repo_path": "bios/NEC/PC-98/.variants/N88.ROM.3b31fc68",
       "cores": null
     },
     {
       "dest": "bios/disk.rom",
-      "sha1": "8063185d4dd653dd75a68855148c9ee15b71164c",
-      "size": 8192,
-      "repo_path": "bios/NEC/PC-98/disk.rom",
+      "sha1": "bb7103a0818850a039c67ff666a31ce49a8d516f",
+      "size": 2048,
+      "repo_path": "bios/NEC/PC-98/N88SUB.ROM",
       "cores": null
     },
     {
       "dest": "bios/n88n.rom",
-      "sha1": "063609dd518c124a4fc9ba35d1bae35771666a34",
+      "sha1": "5b922ed9de07d2a729bdf1da7b57c50ddf08809a",
       "size": 32768,
-      "repo_path": "bios/NEC/PC-98/n88n.rom",
+      "repo_path": "bios/NEC/PC-98/.variants/N88N.ROM.5b922ed9",
       "cores": null
     },
     {
@@ -11681,30 +11681,30 @@
     },
     {
       "dest": "bios/n88_0.rom",
-      "sha1": "d1ae642aed4f0584eeb81ff50180db694e5101d4",
+      "sha1": "d239c26ad7ac5efac6e947b0e9549b1534aa970d",
       "size": 8192,
-      "repo_path": "bios/NEC/PC-98/n88_0.rom",
+      "repo_path": "bios/NEC/PC-98/N88EXT0.ROM",
       "cores": null
     },
     {
       "dest": "bios/n88_1.rom",
-      "sha1": "4ae4d37409ff99411a623da9f6a44192170a854e",
+      "sha1": "8528eef7946edf6501a6ccb1f416b60c64efac7c",
       "size": 8192,
-      "repo_path": "bios/NEC/PC-98/n88_1.rom",
+      "repo_path": "bios/NEC/PC-98/N88EXT1.ROM",
       "cores": null
     },
     {
       "dest": "bios/n88_2.rom",
-      "sha1": "e94278682ef9e9bbb82201f72c50382748dcea2a",
+      "sha1": "b7c8bcea219b77d9cc3ee0efafe343cc307425d1",
       "size": 8192,
-      "repo_path": "bios/NEC/PC-98/n88_2.rom",
+      "repo_path": "bios/NEC/PC-98/N88EXT2.ROM",
       "cores": null
     },
     {
       "dest": "bios/n88_3.rom",
-      "sha1": "af452aed79b072c4d17985830b7c5dca64d4b412",
+      "sha1": "efce0b51cab9f0da6cf68507757f1245a2867a72",
       "size": 8192,
-      "repo_path": "bios/NEC/PC-98/n88_3.rom",
+      "repo_path": "bios/NEC/PC-98/N88EXT3.ROM",
       "cores": null
     },
     {
@@ -11821,44 +11821,44 @@
     },
     {
       "dest": "bios/2608_BD.WAV",
-      "sha1": "22fb2cd4412df057762c23dd22729ebcb922fe0e",
-      "size": 5352,
-      "repo_path": "bios/NEC/PC-98/.variants/2608_BD.WAV.22fb2cd4",
+      "sha1": "0a56c142ef40cec50f3ee56a6e42d0029c9e2818",
+      "size": 19192,
+      "repo_path": "bios/NEC/PC-98/2608_bd.wav",
       "cores": null
     },
     {
       "dest": "bios/2608_SD.WAV",
-      "sha1": "0ea4f93b81df9dbb8d48590b440f5910c0b798b6",
-      "size": 6700,
-      "repo_path": "bios/NEC/PC-98/.variants/2608_SD.WAV.0ea4f93b",
+      "sha1": "3c79663ef74c0b0439d13351326eb1c52a657008",
+      "size": 15558,
+      "repo_path": "bios/NEC/PC-98/2608_sd.wav",
       "cores": null
     },
     {
       "dest": "bios/2608_TOP.WAV",
-      "sha1": "a160bf60a4f148fd191edc989429e6909d431fcb",
-      "size": 62290,
-      "repo_path": "bios/NEC/PC-98/.variants/2608_TOP.WAV.a160bf60",
+      "sha1": "aa4a8f766a86b830687d5083fd3b9db0652f46fc",
+      "size": 57016,
+      "repo_path": "bios/NEC/PC-98/2608_top.wav",
       "cores": null
     },
     {
       "dest": "bios/2608_HH.WAV",
-      "sha1": "ac7bc5f6849eb16087c04e88680ea477d553b436",
-      "size": 5040,
-      "repo_path": "bios/NEC/PC-98/.variants/2608_HH.WAV.ac7bc5f6",
+      "sha1": "12f676cef249b82480b6f19c454e234b435ca7b6",
+      "size": 36722,
+      "repo_path": "bios/NEC/PC-98/2608_hh.wav",
       "cores": null
     },
     {
       "dest": "bios/2608_TOM.WAV",
-      "sha1": "aa29f5e47cbd710077fa723929592c66d8bcb876",
-      "size": 13824,
-      "repo_path": "bios/NEC/PC-98/.variants/2608_TOM.WAV.aa29f5e4",
+      "sha1": "9513fb4a3f41e75a972a273a5104cbd834c1e2c5",
+      "size": 23092,
+      "repo_path": "bios/NEC/PC-98/2608_tom.wav",
       "cores": null
     },
     {
       "dest": "bios/2608_RIM.WAV",
-      "sha1": "4ecf900db8d0f69d6154bde376206d727ddddaae",
-      "size": 4170,
-      "repo_path": "bios/NEC/PC-98/.variants/2608_RIM.WAV.4ecf900d",
+      "sha1": "c65592330c9dd84011151daed52f9aec926b7e56",
+      "size": 5288,
+      "repo_path": "bios/NEC/PC-98/2608_rim.wav",
       "cores": null
     },
     {
@@ -12136,9 +12136,9 @@
     },
     {
       "dest": "bios/sgb2_boot.bin",
-      "sha1": "f282b3aaf98f8423dab7d77f1aa0192be630f2fb",
+      "sha1": "93407ea10d2f30ab96a314d8eca44fe160aea734",
       "size": 256,
-      "repo_path": "bios/Nintendo/Super Game Boy/sgb2_boot.bin",
+      "repo_path": "bios/Nintendo/Game Boy/GB_sgb2.bin",
       "cores": null
     },
     {
@@ -12873,9 +12873,9 @@
     },
     {
       "dest": "bios/tape_48.szx",
-      "sha1": "d6e092730f822c9e8828ca12f54eb8d65228f30c",
-      "size": 708,
-      "repo_path": "bios/Sinclair/ZX Spectrum/tape_48.szx",
+      "sha1": "5af71025c02358b325bf8b4bfaa2662488abf1d2",
+      "size": 1799,
+      "repo_path": "bios/Sinclair/ZX Spectrum/tape_2068.szx",
       "cores": null
     },
     {
