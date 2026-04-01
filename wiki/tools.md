@@ -7,7 +7,7 @@ All tools are Python scripts in `scripts/`. Single dependency: `pyyaml`.
 Run everything in sequence:
 
 ```bash
-python scripts/pipeline.py --offline              # DB + verify + packs + manifests + readme + site
+python scripts/pipeline.py --offline              # DB + verify + packs + manifests + integrity + readme + site
 python scripts/pipeline.py --offline --skip-packs  # DB + verify only
 python scripts/pipeline.py --offline --skip-docs   # skip readme + site generation
 python scripts/pipeline.py --offline --target switch  # filter by hardware target
@@ -20,21 +20,22 @@ Pipeline steps:
 
 | Step | Description | Skipped by |
 |------|-------------|------------|
-| 1/9 | Generate database | - |
-| 2/9 | Refresh data directories | `--offline` |
+| 1/8 | Generate database | - |
+| 2/8 | Refresh data directories | `--offline` |
 | 2a | Refresh MAME BIOS hashes | `--offline` |
 | 2a2 | Refresh FBNeo BIOS hashes | `--offline` |
 | 2b | Check buildbot staleness | only with `--check-buildbot` |
 | 2c | Generate truth YAMLs | only with `--with-truth` / `--with-export` |
 | 2d | Diff truth vs scraped | only with `--with-truth` / `--with-export` |
 | 2e | Export native formats | only with `--with-export` |
-| 3/9 | Verify all platforms | - |
-| 4/9 | Generate packs | `--skip-packs` |
+| 3/8 | Verify all platforms | - |
+| 4/8 | Generate packs | `--skip-packs` |
 | 4b | Generate install manifests | `--skip-packs` |
 | 4c | Generate target manifests | `--skip-packs` |
-| 5/9 | Consistency check | if verify or pack skipped |
-| 8/9 | Generate README | `--skip-docs` |
-| 9/9 | Generate site | `--skip-docs` |
+| 5/8 | Consistency check | if verify or pack skipped |
+| 6/8 | Pack integrity (extract + hash) | `--skip-packs` |
+| 7/8 | Generate README | `--skip-docs` |
+| 8/8 | Generate site | `--skip-docs` |
 
 ## Individual tools
 
@@ -132,6 +133,8 @@ Reports files that cores need beyond what platforms declare.
 python scripts/cross_reference.py                    # all
 python scripts/cross_reference.py --emulator dolphin  # single
 python scripts/cross_reference.py --emulator dolphin --json  # JSON output
+python scripts/cross_reference.py --platform batocera        # single platform
+python scripts/cross_reference.py --platform retroarch --target switch
 ```
 
 ### truth.py, generate_truth.py, diff_truth.py
@@ -168,6 +171,8 @@ from upstream repositories into `data/`.
 ```bash
 python scripts/refresh_data_dirs.py
 python scripts/refresh_data_dirs.py --key dolphin-sys --force
+python scripts/refresh_data_dirs.py --dry-run              # preview without downloading
+python scripts/refresh_data_dirs.py --platform batocera    # single platform only
 ```
 
 ### Other tools

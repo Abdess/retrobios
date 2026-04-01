@@ -48,7 +48,7 @@ truth.py generates       diff_truth.py         export_native.py
 
 Pipeline runs all steps in sequence: DB, data dirs, MAME/FBNeo hashes,
 verify, packs, install manifests, target manifests, consistency check,
-README, site. See [tools](tools.md) for the full pipeline reference.
+pack integrity, README, site. See [tools](tools.md) for the full pipeline reference.
 
 ```mermaid
 graph LR
@@ -59,12 +59,14 @@ graph LR
     E --> F[install manifests]
     F --> G[target manifests]
     G --> H[consistency check]
-    H --> I[generate_readme]
+    H --> H2[pack integrity]
+    H2 --> I[generate_readme]
     I --> J[generate_site]
 
     style A fill:#2d333b,stroke:#adbac7,color:#adbac7
     style D fill:#2d333b,stroke:#adbac7,color:#adbac7
     style E fill:#2d333b,stroke:#adbac7,color:#adbac7
+    style H2 fill:#2d333b,stroke:#adbac7,color:#adbac7
     style J fill:#2d333b,stroke:#adbac7,color:#adbac7
 ```
 
@@ -234,14 +236,15 @@ user's platform, filter files by hardware target, and download with SHA1 verific
 
 ## Tests
 
-4 test files with synthetic fixtures:
+5 test files, 249 tests total:
 
-| File | Coverage |
-|------|----------|
-| `test_e2e.py` | file resolution, verification, severity, cross-reference, aliases, inheritance, shared groups, data dirs, storage tiers, HLE, launchers, platform grouping, core resolution, target filtering, truth/diff, exporters |
-| `test_mame_parser.py` | BIOS root set detection, ROM block parsing, macro expansion |
-| `test_fbneo_parser.py` | BIOS set detection, ROM info parsing |
-| `test_hash_merge.py` | MAME/FBNeo YAML merge, diff detection |
+| File | Tests | Coverage |
+|------|-------|----------|
+| `test_e2e.py` | 186 | file resolution, verification, severity, cross-reference, aliases, inheritance, shared groups, data dirs, storage tiers, HLE, launchers, platform grouping, core resolution, target filtering, truth/diff, exporters |
+| `test_pack_integrity.py` | 8 | extract ZIP packs to disk, verify paths + hashes per platform's native mode |
+| `test_mame_parser.py` | 22 | BIOS root set detection, ROM block parsing, macro expansion |
+| `test_fbneo_parser.py` | 16 | BIOS set detection, ROM info parsing |
+| `test_hash_merge.py` | 17 | MAME/FBNeo YAML merge, diff detection |
 
 ```bash
 python -m unittest tests.test_e2e -v

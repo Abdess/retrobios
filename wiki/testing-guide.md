@@ -11,6 +11,7 @@ Run a single test module:
 
 ```bash
 python -m unittest tests.test_e2e -v
+python -m unittest tests.test_pack_integrity -v
 python -m unittest tests.test_mame_parser -v
 python -m unittest tests.test_fbneo_parser -v
 python -m unittest tests.test_hash_merge -v
@@ -119,6 +120,30 @@ def test_42_my_new_behavior(self):
     self.assertEqual(result[0]["status"], Status.OK)
 ```
 
+### test_pack_integrity.py
+
+End-to-end pack verification. Extracts each platform ZIP to `tmp/` (in the
+repo, not `/tmp` which is tmpfs on WSL) and verifies that every file declared
+in the platform YAML:
+
+1. Exists at the correct path on disk after extraction
+2. Has the correct hash per the platform's native verification mode
+
+Handles inner ZIP verification for MAME/FBNeo ROM sets (checkInsideZip,
+md5_composite, inner ROM MD5) and path collision deduplication.
+
+8 tests (one per active platform): RetroArch, Batocera, BizHawk, EmuDeck,
+Recalbox, RetroBat, RetroDECK, RomM.
+
+```bash
+python -m unittest tests.test_pack_integrity -v
+# or via CLI:
+python scripts/generate_pack.py --all --verify-packs --output-dir dist/
+```
+
+Integrated as pipeline step 6/8 (runs after consistency check, before
+README generation). Requires packs in `dist/` — skip with `--skip-packs`.
+
 ## Verification discipline
 
 The test suite is one layer of verification. The full quality gate is:
@@ -127,6 +152,7 @@ The test suite is one layer of verification. The full quality gate is:
 2. The full pipeline completes without error (`python scripts/pipeline.py --offline`)
 3. No unexpected CRITICAL entries in the verify output
 4. Pack file counts match verification file counts (consistency check)
+5. Pack integrity passes (every declared file extractable with correct hash)
 
 If a change passes tests but breaks the pipeline, it's worth investigating before merging. Similarly, new CRITICAL entries in the verify output after a change usually indicate something to look into. The pipeline is designed so that all steps agree: if verify reports N files for a platform, the pack should contain exactly N files.
 
