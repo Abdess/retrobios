@@ -388,12 +388,11 @@ def generate_platform_index(coverages: dict) -> str:
     lines = [
         f"# Platforms - {SITE_NAME}",
         "",
-        f"{len(coverages)} supported platforms, "
-        f"{total_present:,}/{total_files:,} files present, "
-        f"{total_verified:,} verified.",
+        f"{len(coverages)} supported platforms with "
+        f"{total_present:,} verified files.",
         "",
-        "| Platform | Coverage | Verification | Status |",
-        "|----------|----------|-------------|--------|",
+        "| Platform | Files | Verification | Download |",
+        "|----------|-------|-------------|----------|",
     ]
 
     mode_labels = {
@@ -404,38 +403,16 @@ def generate_platform_index(coverages: dict) -> str:
 
     for name, cov in sorted(coverages.items(), key=lambda x: x[1]["platform"]):
         display = cov["platform"]
-        pct_val = cov["present"] / cov["total"] * 100 if cov["total"] else 0
-        pct = _pct(cov["present"], cov["total"])
-        plat_status = cov["config"].get("status", "active")
-
-        badge_cls = (
-            "rb-badge-success"
-            if pct_val >= 95
-            else "rb-badge-warning"
-            if pct_val >= 70
-            else "rb-badge-danger"
-        )
-        coverage_str = (
-            f'{cov["present"]}/{cov["total"]} '
-            f'<span class="rb-badge {badge_cls}">{pct}</span>'
-        )
 
         mode_html = mode_labels.get(
             cov["mode"],
             f'<span class="rb-badge rb-badge-muted">{cov["mode"]}</span>',
         )
 
-        if plat_status == "archived":
-            status = '<span class="rb-badge rb-badge-muted">archived</span>'
-        elif pct_val >= 100:
-            status = '<span class="rb-badge rb-badge-success">complete</span>'
-        elif pct_val >= 95:
-            status = '<span class="rb-badge rb-badge-warning">near</span>'
-        else:
-            status = '<span class="rb-badge rb-badge-danger">partial</span>'
-
         lines.append(
-            f"| [{display}]({name}.md) | {coverage_str} | {mode_html} | {status} |"
+            f"| [{display}]({name}.md) | "
+            f"{cov['present']:,} | {mode_html} | "
+            f"[Pack]({RELEASE_URL}){{ .md-button .md-button--primary }} |"
         )
 
     return "\n".join(lines) + "\n"
@@ -721,38 +698,66 @@ def generate_system_page(
             md5_full = f.get("md5", "unknown")
             size = _fmt_size(f.get("size", 0))
 
-            # Cross-reference: which platforms declare this file
+            # Cross-reference
             plats = sorted(p for p, names in platform_files.items() if name in names)
-            # Cross-reference: which emulators load this file
             emus = sorted(
                 e
                 for e, data in emulator_files.items()
                 if name in data.get("files", set())
             )
 
-            lines.append(f"**`{name}`** ({size})")
+            # Truncated hashes for readability
+            sha1_short = sha1_full[:12] if sha1_full != "unknown" else "-"
+            md5_short = md5_full[:12] if md5_full != "unknown" else "-"
+
+            lines.append('<div class="rb-sys-file" markdown>')
             lines.append("")
-            lines.append(f"- SHA1: `{sha1_full}`")
-            lines.append(f"- MD5: `{md5_full}`")
+            lines.append(
+                f'**`{name}`** '
+                f'<span class="rb-badge rb-badge-muted">{size}</span>'
+            )
+            lines.append("")
+            lines.append(
+                f'- SHA1: <span class="rb-hash" '
+                f'title="{sha1_full}">`{sha1_short}...`</span>'
+            )
+            lines.append(
+                f'- MD5: <span class="rb-hash" '
+                f'title="{md5_full}">`{md5_short}...`</span>'
+            )
             if plats:
-                plat_links = [_platform_link(p, p, "../") for p in plats]
-                lines.append(f"- Platforms: {', '.join(plat_links)}")
+                plat_badges = " ".join(
+                    f'<span class="rb-badge rb-badge-info">'
+                    f"[{p}](../platforms/{p}.md)</span>"
+                    for p in plats
+                )
+                lines.append(f"- Platforms: {plat_badges}")
             if emus:
                 emu_links = [_emulator_link(e, "../") for e in emus]
                 lines.append(f"- Emulators: {', '.join(emu_links)}")
             lines.append("")
+            lines.append("</div>")
+            lines.append("")
 
         if variant_files:
-            lines.append("**Variants:**")
+            lines.append(
+                f'??? note "Variants ({len(variant_files)})"'
+            )
             lines.append("")
             for v in sorted(variant_files, key=lambda x: x["name"]):
                 vname = v["name"]
                 vmd5 = v.get("md5", "unknown")
-                lines.append(f"- `{vname}` MD5: `{vmd5}`")
+                vmd5_short = vmd5[:12] if vmd5 != "unknown" else "-"
+                lines.append(
+                    f'    - `{vname}` '
+                    f'<span class="rb-hash" title="{vmd5}">'
+                    f"MD5: {vmd5_short}...</span>"
+                )
+            lines.append("")
 
         lines.append("")
 
-    lines.append(f"*Generated on {_timestamp()}*")
+    lines.append(f'<div class="rb-timestamp">Generated on {_timestamp()}.</div>')
     return "\n".join(lines) + "\n"
 
 
@@ -891,6 +896,8 @@ def generate_emulator_page(
     lines = [
         f"# {emu_name} - {SITE_NAME}",
         "",
+        '<div class="rb-meta-card" markdown>',
+        "",
         "| | |",
         "|---|---|",
         f"| Type | {emu_type} |",
@@ -945,6 +952,8 @@ def generate_emulator_page(
             lines.append(f"| {label} | [{val}]({val}) |")
         else:
             lines.append(f"| {label} | {val} |")
+    lines.append("")
+    lines.append("</div>")
     lines.append("")
 
     # Platform-specific details (rich structured data)
@@ -1184,13 +1193,25 @@ def generate_emulator_page(
                     bounds.append(f"max {_fmt_size(fmax)}")
                 details.append(f"Size: {', '.join(bounds)}")
             if fsha1:
-                details.append(f"SHA1: `{fsha1}`")
+                s = fsha1[:12]
+                details.append(
+                    f'SHA1: <span class="rb-hash" title="{fsha1}">'
+                    f"`{s}...`</span>"
+                )
             if fmd5:
-                details.append(f"MD5: `{fmd5}`")
+                s = fmd5[:12]
+                details.append(
+                    f'MD5: <span class="rb-hash" title="{fmd5}">'
+                    f"`{s}...`</span>"
+                )
             if fcrc32:
                 details.append(f"CRC32: `{fcrc32}`")
             if fsha256:
-                details.append(f"SHA256: `{fsha256}`")
+                s = fsha256[:12]
+                details.append(
+                    f'SHA256: <span class="rb-hash" title="{fsha256}">'
+                    f"`{s}...`</span>"
+                )
             if fadler32:
                 details.append(f"Adler32: `{fadler32}`")
             if aliases:
