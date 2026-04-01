@@ -20,6 +20,8 @@ theme:
       icon: material/brightness-4
       name: Switch to auto
   font: false
+  icon:
+    logo: material/chip
   features:
   - navigation.tabs
   - navigation.sections
@@ -29,6 +31,8 @@ theme:
   - search.highlight
   - content.tabs.link
   - toc.follow
+extra_css:
+- stylesheets/extra.css
 markdown_extensions:
 - tables
 - admonition

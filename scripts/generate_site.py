@@ -38,6 +38,19 @@ GENERATED_DIRS = ["platforms", "systems", "emulators"]
 WIKI_SRC_DIR = "wiki"  # manually maintained wiki sources
 SYSTEM_ICON_BASE = "https://raw.githubusercontent.com/libretro/retroarch-assets/master/xmb/systematic/png"
 
+CLS_LABELS = {
+    "official_port": "Official ports",
+    "community_fork": "Community forks",
+    "pure_libretro": "Pure libretro",
+    "game_engine": "Game engines",
+    "enhanced_fork": "Enhanced forks",
+    "frozen_snapshot": "Frozen snapshots",
+    "embedded_hle": "Embedded HLE",
+    "launcher": "Launchers",
+    "unclassified": "Unclassified",
+    "other": "Other",
+}
+
 # Global index: maps system_id -> (manufacturer_slug, console_name) for cross-linking
 _system_page_map: dict[str, tuple[str, str]] = {}
 
@@ -229,80 +242,93 @@ def generate_home(
         cls = p.get("core_classification", "unclassified")
         classifications[cls] = classifications.get(cls, 0) + 1
 
+    # Count total systems across all profiles
+    all_systems = set()
+    for p in unique.values():
+        all_systems.update(p.get("systems", []))
+
     lines = [
+        '<div class="rb-hero" markdown>',
+        "",
         f"# {SITE_NAME}",
         "",
         "Source-verified BIOS and firmware packs for retrogaming platforms.",
         "",
-        "## Quick start",
+        "</div>",
         "",
-        "1. Find your platform in the table below",
-        "2. Click **Pack** to download the ZIP",
-        "3. Extract to your emulator's BIOS directory",
+        '<div class="rb-stats" markdown>',
         "",
-        "| Platform | Extract to |",
-        "|----------|-----------|",
-        "| RetroArch / Lakka | `system/` |",
-        "| Batocera | `/userdata/bios/` |",
-        "| Recalbox | `/recalbox/share/bios/` |",
-        "| RetroBat | `bios/` |",
-        "| RetroDECK | `~/retrodeck/bios/` |",
-        "| EmuDeck | `Emulation/bios/` |",
+        '<div class="rb-stat" markdown>',
+        f'<span class="rb-stat-value">{total_files:,}</span>',
+        '<span class="rb-stat-label">Files</span>',
+        "</div>",
         "",
-        "---",
+        '<div class="rb-stat" markdown>',
+        f'<span class="rb-stat-value">{len(coverages)}</span>',
+        '<span class="rb-stat-label">Platforms</span>',
+        "</div>",
         "",
-        "## Methodology",
+        '<div class="rb-stat" markdown>',
+        f'<span class="rb-stat-value">{emulator_count}</span>',
+        '<span class="rb-stat-label">Emulators profiled</span>',
+        "</div>",
         "",
-        "Documentation and metadata can drift from what emulators actually load at runtime.",
-        "To keep packs accurate, each file here is checked against the emulator's source code.",
+        '<div class="rb-stat" markdown>',
+        f'<span class="rb-stat-value">{_fmt_size(total_size)}</span>',
+        '<span class="rb-stat-label">Total size</span>',
+        "</div>",
         "",
-        "The source code is the primary reference because it reflects actual behavior.",
-        "Other sources remain useful but are verified against it:",
-        "",
-        "1. **Upstream emulator source** - what the original project loads (Dolphin, PCSX2, Mednafen...)",
-        "2. **Libretro core source** - the RetroArch port, which may adapt paths or add files",
-        "3. **`.info` declarations** - metadata that platforms rely on, checked for accuracy",
-        "",
-        f"**{emulator_count}** emulators profiled. "
-        f"Each profile documents what the code loads, what it validates, "
-        f"and where the port differs from the original.",
-        "",
-        f"**{total_files:,}** files | **{len(coverages)}** platforms | "
-        f"**{emulator_count}** emulator profiles | **{_fmt_size(total_size)}** total",
-        "",
-        "---",
+        "</div>",
         "",
     ]
 
-    # Platform table
+    # Platforms FIRST (main action)
     lines.extend(
         [
             "## Platforms",
             "",
-            "| | Platform | Coverage | Verified | Download |",
-            "|---|----------|----------|----------|----------|",
+            "| | Platform | Files | Verification | Download |",
+            "|---|----------|-------|-------------|----------|",
         ]
     )
 
+    mode_icons = {"md5": "MD5", "sha1": "SHA1", "existence": "exists"}
+
     for name, cov in sorted(coverages.items(), key=lambda x: x[1]["platform"]):
         display = cov["platform"]
-        pct = _pct(cov["present"], cov["total"])
         logo_url = (registry or {}).get(name, {}).get("logo", "")
         logo_md = (
             f"![{display}]({logo_url}){{ width=20 loading=lazy }}" if logo_url else ""
         )
+        mode_label = mode_icons.get(cov["mode"], cov["mode"])
 
         lines.append(
             f"| {logo_md} | [{display}](platforms/{name}.md) | "
-            f"{cov['present']}/{cov['total']} ({pct}) | "
-            f"{cov['verified']} | "
-            f"[Pack]({RELEASE_URL}) |"
+            f"{cov['present']:,} | {mode_label} | "
+            f"[Pack]({RELEASE_URL}){{ .md-button .md-button--primary }} |"
         )
+
+    # Quick start (collapsible -- secondary info)
+    lines.extend(
+        [
+            "",
+            '??? info "Where to extract"',
+            "",
+            "    | Platform | Extract to |",
+            "    |----------|-----------|",
+            "    | RetroArch / Lakka | `system/` |",
+            "    | Batocera | `/userdata/bios/` |",
+            "    | Recalbox | `/recalbox/share/bios/` |",
+            "    | RetroBat | `bios/` |",
+            "    | RetroDECK | `~/retrodeck/bios/` |",
+            "    | EmuDeck | `Emulation/bios/` |",
+            "",
+        ]
+    )
 
     # Emulator classification breakdown
     lines.extend(
         [
-            "",
             "## Emulator profiles",
             "",
             "| Classification | Count |",
@@ -310,21 +336,41 @@ def generate_home(
         ]
     )
     for cls, count in sorted(classifications.items(), key=lambda x: -x[1]):
-        lines.append(f"| {cls} | {count} |")
+        label = CLS_LABELS.get(cls, cls)
+        lines.append(f"| [{label}](emulators/index.md#{cls}) | {count} |")
+
+    # Methodology (collapsible)
+    lines.extend(
+        [
+            "",
+            '??? abstract "Methodology"',
+            "",
+            "    Each file is checked against the emulator's source code. "
+            "Documentation and metadata can drift from actual runtime behavior, "
+            "so the source is the primary reference.",
+            "",
+            "    1. **Upstream emulator source** -- what the original project "
+            "loads (Dolphin, PCSX2, Mednafen...)",
+            "    2. **Libretro core source** -- the RetroArch port, which may "
+            "adapt paths or add files",
+            "    3. **`.info` declarations** -- metadata that platforms rely on, "
+            "checked for accuracy",
+            "",
+        ]
+    )
 
     # Quick links
     lines.extend(
         [
-            "",
             "---",
             "",
-            "[Systems](systems/){ .md-button } "
-            "[Emulators](emulators/){ .md-button } "
+            "[Systems](systems/index.md){ .md-button } "
+            "[Emulators](emulators/index.md){ .md-button } "
             "[Cross-reference](cross-reference.md){ .md-button } "
             "[Gap Analysis](gaps.md){ .md-button } "
             "[Contributing](contributing.md){ .md-button .md-button--primary }",
             "",
-            f"*Generated on {ts}.*",
+            f'<div class="rb-timestamp">Generated on {ts}.</div>',
         ]
     )
 
@@ -335,24 +381,61 @@ def generate_home(
 
 
 def generate_platform_index(coverages: dict) -> str:
+    total_files = sum(c["total"] for c in coverages.values())
+    total_present = sum(c["present"] for c in coverages.values())
+    total_verified = sum(c["verified"] for c in coverages.values())
+
     lines = [
         f"# Platforms - {SITE_NAME}",
+        "",
+        f"{len(coverages)} supported platforms, "
+        f"{total_present:,}/{total_files:,} files present, "
+        f"{total_verified:,} verified.",
         "",
         "| Platform | Coverage | Verification | Status |",
         "|----------|----------|-------------|--------|",
     ]
 
+    mode_labels = {
+        "md5": '<span class="rb-badge rb-badge-success">MD5</span>',
+        "sha1": '<span class="rb-badge rb-badge-success">SHA1</span>',
+        "existence": '<span class="rb-badge rb-badge-info">existence</span>',
+    }
+
     for name, cov in sorted(coverages.items(), key=lambda x: x[1]["platform"]):
         display = cov["platform"]
+        pct_val = cov["present"] / cov["total"] * 100 if cov["total"] else 0
         pct = _pct(cov["present"], cov["total"])
         plat_status = cov["config"].get("status", "active")
-        status = (
-            "archived" if plat_status == "archived" else _status_icon(cov["percentage"])
+
+        badge_cls = (
+            "rb-badge-success"
+            if pct_val >= 95
+            else "rb-badge-warning"
+            if pct_val >= 70
+            else "rb-badge-danger"
         )
+        coverage_str = (
+            f'{cov["present"]}/{cov["total"]} '
+            f'<span class="rb-badge {badge_cls}">{pct}</span>'
+        )
+
+        mode_html = mode_labels.get(
+            cov["mode"],
+            f'<span class="rb-badge rb-badge-muted">{cov["mode"]}</span>',
+        )
+
+        if plat_status == "archived":
+            status = '<span class="rb-badge rb-badge-muted">archived</span>'
+        elif pct_val >= 100:
+            status = '<span class="rb-badge rb-badge-success">complete</span>'
+        elif pct_val >= 95:
+            status = '<span class="rb-badge rb-badge-warning">near</span>'
+        else:
+            status = '<span class="rb-badge rb-badge-danger">partial</span>'
+
         lines.append(
-            f"| [{display}]({name}.md) | "
-            f"{cov['present']}/{cov['total']} ({pct}) | "
-            f"{cov['mode']} | {status} |"
+            f"| [{display}]({name}.md) | {coverage_str} | {mode_html} | {status} |"
         )
 
     return "\n".join(lines) + "\n"
@@ -379,14 +462,58 @@ def generate_platform_page(
     hash_type = config.get("hash_type", "")
     base_dest = config.get("base_destination", "")
 
+    pct_val = cov["present"] / cov["total"] * 100 if cov["total"] else 0
+    coverage_badge = (
+        "rb-badge-success"
+        if pct_val >= 95
+        else "rb-badge-warning"
+        if pct_val >= 70
+        else "rb-badge-danger"
+    )
+    mode_badge = (
+        "rb-badge-success" if mode in ("md5", "sha1") else "rb-badge-info"
+    )
+
     lines = [
         f"# {display} - {SITE_NAME}",
         "",
-        logo_md + "| | |",
-        "|---|---|",
-        f"| Verification | {mode} |",
-        f"| Hash type | {hash_type} |",
+        logo_md,
     ]
+
+    # Stat cards
+    lines.extend(
+        [
+            '<div class="rb-stats" markdown>',
+            "",
+            '<div class="rb-stat" markdown>',
+            f'<span class="rb-stat-value">{cov["present"]}/{cov["total"]}</span>',
+            f'<span class="rb-stat-label">Coverage ({pct})</span>',
+            "</div>",
+            "",
+            '<div class="rb-stat" markdown>',
+            f'<span class="rb-stat-value">{cov["verified"]}</span>',
+            '<span class="rb-stat-label">Verified</span>',
+            "</div>",
+            "",
+            '<div class="rb-stat" markdown>',
+            f'<span class="rb-stat-value">{cov["missing"]}</span>',
+            '<span class="rb-stat-label">Missing</span>',
+            "</div>",
+            "",
+            '<div class="rb-stat" markdown>',
+            f'<span class="rb-stat-value">'
+            f'<span class="rb-badge {mode_badge}">{mode}</span></span>',
+            '<span class="rb-stat-label">Verification</span>',
+            "</div>",
+            "",
+            "</div>",
+            "",
+            "| | |",
+            "|---|---|",
+        ]
+    )
+    if hash_type:
+        lines.append(f"| Hash type | {hash_type} |")
     if version:
         lines.append(f"| Version | {version} |")
     if base_dest:
@@ -396,10 +523,8 @@ def generate_platform_page(
     lines.extend(
         [
             "",
-            f"**Coverage:** {cov['present']}/{cov['total']} ({pct}) | "
-            f"**Verified:** {cov['verified']} | **Untested:** {cov['untested']} | **Missing:** {cov['missing']}",
-            "",
-            f"[Download {display} Pack]({RELEASE_URL}){{ .md-button }}",
+            f"[Download {display} Pack]({RELEASE_URL})"
+            "{ .md-button .md-button--primary }",
             "",
         ]
     )
@@ -431,7 +556,13 @@ def generate_platform_page(
         ok_count = sum(1 for f in files if f["status"] == "ok")
         total = len(files)
         non_ok = total - ok_count
-        status = "OK" if non_ok == 0 else f"{non_ok} issue{'s' if non_ok > 1 else ''}"
+        if non_ok == 0:
+            status = '<span class="rb-badge rb-badge-success">OK</span>'
+        else:
+            status = (
+                f'<span class="rb-badge rb-badge-warning">'
+                f'{non_ok} issue{"s" if non_ok > 1 else ""}</span>'
+            )
         sys_emus = []
         if emulator_files:
             for emu_name, emu_data in emulator_files.items():
@@ -537,8 +668,17 @@ def _group_by_manufacturer(db: dict) -> dict[str, dict[str, list]]:
 
 
 def generate_systems_index(manufacturers: dict) -> str:
+    total_mfr = len(manufacturers)
+    total_consoles = sum(len(c) for c in manufacturers.values())
+    total_files = sum(
+        len(files) for consoles in manufacturers.values() for files in consoles.values()
+    )
+
     lines = [
         f"# Systems - {SITE_NAME}",
+        "",
+        f"{total_mfr} manufacturers, {total_consoles} consoles, "
+        f"{total_files:,} files in the repository.",
         "",
         "| Manufacturer | Consoles | Files |",
         "|-------------|----------|-------|",
@@ -671,18 +811,22 @@ def generate_emulators_index(profiles: dict) -> str:
         entries = by_class.get(cls, [])
         if not entries:
             continue
+        label = CLS_LABELS.get(cls, cls)
         desc = cls_desc.get(cls, "")
-        lines.append(f"| [{cls}](#{cls}) | {len(entries)} | {desc} |")
+        lines.append(f"| [{label}](#{cls}) | {len(entries)} | {desc} |")
     lines.append("")
 
-    # Per-classification sections
     for cls in cls_order:
         entries = by_class.get(cls, [])
         if not entries:
             continue
+        label = CLS_LABELS.get(cls, cls)
+        desc = cls_desc.get(cls, "")
         lines.extend(
             [
-                f"## {cls}",
+                f'## <span class="rb-cls-dot rb-dot-{cls}"></span>{label} {{ #{cls} }}',
+                "",
+                f"*{desc}* -- {len(entries)} profiles",
                 "",
                 "| Engine | Systems | Files |",
                 "|--------|---------|-------|",
@@ -696,7 +840,9 @@ def generate_emulators_index(profiles: dict) -> str:
             sys_str = ", ".join(systems[:3])
             if len(systems) > 3:
                 sys_str += f" +{len(systems) - 3}"
-            lines.append(f"| [{emu_name}]({name}.md) | {sys_str} | {len(files)} |")
+            file_count = len(files)
+            file_str = str(file_count) if file_count else "-"
+            lines.append(f"| [{emu_name}]({name}.md) | {sys_str} | {file_str} |")
         lines.append("")
 
     if aliases:
@@ -750,7 +896,8 @@ def generate_emulator_page(
         f"| Type | {emu_type} |",
     ]
     if classification:
-        lines.append(f"| Classification | {classification} |")
+        cls_display = CLS_LABELS.get(classification, classification)
+        lines.append(f"| Classification | {cls_display} |")
     if source:
         lines.append(f"| Source | [{source}]({source}) |")
     if upstream and upstream != source:
@@ -939,40 +1086,79 @@ def generate_emulator_page(
             size_options = f.get("size_options", [])
             size_range = f.get("size_range", "")
 
-            # Status badges
+            # Status badges (HTML)
             badges = []
             if required:
-                badges.append("**required**")
-            else:
-                badges.append("optional")
-            if hle:
-                badges.append("HLE available")
-            if mode:
-                badges.append(mode)
-            if category and category != "bios":
-                badges.append(category)
-            if region:
                 badges.append(
+                    '<span class="rb-badge rb-badge-danger">required</span>'
+                )
+            else:
+                badges.append(
+                    '<span class="rb-badge rb-badge-muted">optional</span>'
+                )
+            if not in_repo:
+                badges.append(
+                    '<span class="rb-badge rb-badge-warning">missing</span>'
+                )
+            elif in_repo:
+                badges.append(
+                    '<span class="rb-badge rb-badge-success">in repo</span>'
+                )
+            if hle:
+                badges.append(
+                    '<span class="rb-badge rb-badge-info">HLE fallback</span>'
+                )
+            if mode:
+                badges.append(
+                    f'<span class="rb-badge rb-badge-muted">{mode}</span>'
+                )
+            if category and category != "bios":
+                badges.append(
+                    f'<span class="rb-badge rb-badge-info">{category}</span>'
+                )
+            if region:
+                region_str = (
                     ", ".join(region) if isinstance(region, list) else str(region)
                 )
+                badges.append(
+                    f'<span class="rb-badge rb-badge-muted">{region_str}</span>'
+                )
             if storage and storage != "embedded":
-                badges.append(storage)
+                badges.append(
+                    f'<span class="rb-badge rb-badge-muted">{storage}</span>'
+                )
             if bundled:
-                badges.append("bundled in binary")
+                badges.append(
+                    '<span class="rb-badge rb-badge-muted">bundled</span>'
+                )
             if embedded:
-                badges.append("embedded")
+                badges.append(
+                    '<span class="rb-badge rb-badge-muted">embedded</span>'
+                )
             if has_builtin:
-                badges.append("has built-in fallback")
+                badges.append(
+                    '<span class="rb-badge rb-badge-info">built-in fallback</span>'
+                )
             if archive:
-                badges.append(f"in `{archive}`")
+                badges.append(
+                    f'<span class="rb-badge rb-badge-muted">in {archive}</span>'
+                )
             if ftype and ftype != "bios":
-                badges.append(ftype)
-            if not in_repo:
-                badges.append("missing from repo")
+                badges.append(
+                    f'<span class="rb-badge rb-badge-muted">{ftype}</span>'
+                )
 
-            lines.append(f"**`{fname}`** -{', '.join(badges)}")
+            badge_str = " ".join(badges)
+            border_cls = (
+                "rb-file-entry-required" if required else "rb-file-entry-optional"
+            )
+            lines.append(
+                f'<div class="rb-file-entry {border_cls}" markdown>'
+            )
+            lines.append("")
+            lines.append(f"**`{fname}`** {badge_str}")
             if desc:
-                lines.append(f": {desc}")
+                lines.append(f"<br>{desc}")
             lines.append("")
 
             details = []
@@ -1069,6 +1255,8 @@ def generate_emulator_page(
                 if len(contents) > 10:
                     lines.append(f"    - ... and {len(contents) - 10} more")
             lines.append("")
+            lines.append("</div>")
+            lines.append("")
 
     # Data directories
     if data_dirs:
@@ -1090,179 +1278,352 @@ def generate_gap_analysis(
     profiles: dict,
     coverages: dict,
     db: dict,
+    data_names: set[str] | None = None,
 ) -> str:
-    """Generate a global gap analysis page showing all missing/undeclared files."""
-    by_name = db.get("indexes", {}).get("by_name", {})
-    platform_files = _build_platform_file_index(coverages)
+    """Generate a unified gap analysis page.
+
+    Combines verification results (from coverages/verify.py) with source
+    provenance (from cross_reference) into a single truth dashboard.
+
+    Sections:
+    1. Verification status -- aggregated across all platforms
+    2. Problem files -- missing, untested, hash mismatch
+    3. Core complement -- emulator files not declared by any platform
+    """
+    from cross_reference import cross_reference as run_cross_reference
+
+    from common import resolve_platform_cores
+
+    # ---- Section 1: aggregate verify results across all platforms ----
+
+    total_verified = 0
+    total_untested = 0
+    total_missing_verify = 0
+    total_files_verify = 0
+
+    platform_problems: list[dict] = []
+    for pname, cov in sorted(coverages.items(), key=lambda x: x[1]["platform"]):
+        total_verified += cov["verified"]
+        total_untested += cov["untested"]
+        total_missing_verify += cov["missing"]
+        total_files_verify += cov["total"]
+
+        for d in cov["details"]:
+            if d["status"] != "ok" or d.get("discrepancy"):
+                platform_problems.append({
+                    "platform": cov["platform"],
+                    "platform_key": pname,
+                    "name": d["name"],
+                    "status": d["status"],
+                    "required": d.get("required", True),
+                    "reason": d.get("reason", ""),
+                    "discrepancy": d.get("discrepancy", ""),
+                    "system": d.get("system", ""),
+                })
+
+    pct_verified = (
+        f"{total_verified / total_files_verify * 100:.0f}%"
+        if total_files_verify
+        else "0%"
+    )
 
     lines = [
         f"# Gap Analysis - {SITE_NAME}",
         "",
-        "Files that emulators load but platforms don't declare, and their availability.",
+        "Unified view of BIOS verification, file provenance, and coverage gaps.",
+        "",
+        '<div class="rb-stats" markdown>',
+        "",
+        '<div class="rb-stat" markdown>',
+        f'<span class="rb-stat-value">{total_files_verify:,}</span>',
+        '<span class="rb-stat-label">Total files (all platforms)</span>',
+        "</div>",
+        "",
+        '<div class="rb-stat" markdown>',
+        f'<span class="rb-stat-value">{total_verified:,}</span>',
+        f'<span class="rb-stat-label">Verified ({pct_verified})</span>',
+        "</div>",
+        "",
+        '<div class="rb-stat" markdown>',
+        f'<span class="rb-stat-value">{total_untested:,}</span>',
+        '<span class="rb-stat-label">Untested</span>',
+        "</div>",
+        "",
+        '<div class="rb-stat" markdown>',
+        f'<span class="rb-stat-value">{total_missing_verify:,}</span>',
+        '<span class="rb-stat-label">Missing</span>',
+        "</div>",
+        "",
+        "</div>",
         "",
     ]
 
-    # Global stats
-    total_undeclared = 0
-    total_in_repo = 0
-    total_missing = 0
+    # ---- Verification per platform ----
 
-    # Build global set of all platform-declared filenames (once)
-    all_platform_names = set()
-    for pfiles in platform_files.values():
-        all_platform_names.update(pfiles)
+    lines.extend([
+        "## Verification by Platform",
+        "",
+        "| Platform | Files | Verified | Untested | Missing | Mode |",
+        "|----------|------:|---------:|---------:|--------:|------|",
+    ])
 
-    emulator_gaps = []
-    for emu_name, profile in sorted(profiles.items()):
-        if profile.get("type") == "alias":
-            continue
-        files = profile.get("files", [])
-        if not files:
-            continue
-
-        undeclared = []
-        for f in files:
-            fname = f.get("name", "")
-            if not fname or fname.startswith("<"):
-                continue
-            if fname not in all_platform_names:
-                in_repo = fname in by_name
-                undeclared.append(
-                    {
-                        "name": fname,
-                        "required": f.get("required", False),
-                        "in_repo": in_repo,
-                        "source_ref": f.get("source_ref", ""),
-                    }
-                )
-                total_undeclared += 1
-                if in_repo:
-                    total_in_repo += 1
-                else:
-                    total_missing += 1
-
-        if undeclared:
-            emulator_gaps.append(
-                (emu_name, profile.get("emulator", emu_name), undeclared)
-            )
-
-    lines.extend(
-        [
-            "## Summary",
-            "",
-            "| Metric | Count |",
-            "|--------|-------|",
-            f"| Total undeclared files | {total_undeclared} |",
-            f"| Already in repo | {total_in_repo} |",
-            f"| Missing from repo | {total_missing} |",
-            f"| Emulators with gaps | {len(emulator_gaps)} |",
-            "",
-        ]
-    )
-
-    # Per-emulator breakdown
-    lines.extend(
-        [
-            "## Per Emulator",
-            "",
-            "| Emulator | Undeclared | In Repo | Missing |",
-            "|----------|-----------|---------|---------|",
-        ]
-    )
-
-    for emu_name, display, gaps in sorted(emulator_gaps, key=lambda x: -len(x[2])):
-        in_repo = sum(1 for g in gaps if g["in_repo"])
-        missing = len(gaps) - in_repo
+    for pname, cov in sorted(coverages.items(), key=lambda x: x[1]["platform"]):
+        display = cov["platform"]
+        m = cov["missing"]
+        u = cov["untested"]
+        missing_str = (
+            f'<span class="rb-badge rb-badge-danger">{m}</span>'
+            if m > 0
+            else '<span class="rb-badge rb-badge-success">0</span>'
+        )
+        untested_str = (
+            f'<span class="rb-badge rb-badge-warning">{u}</span>'
+            if u > 0
+            else str(u)
+        )
         lines.append(
-            f"| [{display}](emulators/{emu_name}.md) | {len(gaps)} | {in_repo} | {missing} |"
+            f"| [{display}](platforms/{pname}.md) "
+            f"| {cov['total']} "
+            f"| {cov['verified']} "
+            f"| {untested_str} "
+            f"| {missing_str} "
+            f"| {cov['mode']} |"
+        )
+    lines.append("")
+
+    # ---- Section 2: Problem files ----
+
+    missing_files: dict[str, dict] = {}
+    untested_files: dict[str, dict] = {}
+    mismatch_files: dict[str, dict] = {}
+
+    for p in platform_problems:
+        fname = p["name"]
+        if p["status"] == "missing":
+            entry = missing_files.setdefault(fname, {
+                "name": fname, "required": p["required"],
+                "platforms": [], "reason": p["reason"],
+            })
+            entry["platforms"].append(p["platform"])
+            if p["required"]:
+                entry["required"] = True
+        elif p["status"] == "untested":
+            entry = untested_files.setdefault(fname, {
+                "name": fname, "required": p["required"],
+                "platforms": [], "reason": p["reason"],
+            })
+            entry["platforms"].append(p["platform"])
+        if p.get("discrepancy"):
+            entry = mismatch_files.setdefault(fname, {
+                "name": fname, "platforms": [],
+                "discrepancy": p["discrepancy"],
+            })
+            entry["platforms"].append(p["platform"])
+
+    total_problems = len(missing_files) + len(untested_files) + len(mismatch_files)
+
+    if total_problems > 0:
+        lines.extend([
+            "## Problem Files",
+            "",
+            f"{len(missing_files)} missing, {len(untested_files)} untested, "
+            f"{len(mismatch_files)} hash mismatch.",
+            "",
+        ])
+
+        if missing_files:
+            lines.extend([
+                f'### Missing <span class="rb-badge rb-badge-danger">'
+                f"{len(missing_files)} files</span>",
+                "",
+                "| File | Required | Platforms |",
+                "|------|----------|-----------|",
+            ])
+            for fname in sorted(missing_files):
+                f = missing_files[fname]
+                req = "yes" if f["required"] else "no"
+                plats = ", ".join(sorted(set(f["platforms"])))
+                lines.append(f"| `{fname}` | {req} | {plats} |")
+            lines.append("")
+
+        if untested_files:
+            lines.extend([
+                f'### Untested <span class="rb-badge rb-badge-warning">'
+                f"{len(untested_files)} files</span>",
+                "",
+                "Present but hash not verified.",
+                "",
+                "| File | Platforms | Reason |",
+                "|------|----------|--------|",
+            ])
+            for fname in sorted(untested_files):
+                f = untested_files[fname]
+                plats = ", ".join(sorted(set(f["platforms"])))
+                lines.append(f"| `{fname}` | {plats} | {f['reason']} |")
+            lines.append("")
+
+        if mismatch_files:
+            lines.extend([
+                f'### Hash Mismatch <span class="rb-badge rb-badge-warning">'
+                f"{len(mismatch_files)} files</span>",
+                "",
+                "Platform says OK but emulator validation disagrees.",
+                "",
+                "| File | Platforms | Discrepancy |",
+                "|------|----------|-------------|",
+            ])
+            for fname in sorted(mismatch_files):
+                f = mismatch_files[fname]
+                plats = ", ".join(sorted(set(f["platforms"])))
+                lines.append(f"| `{fname}` | {plats} | {f['discrepancy']} |")
+            lines.append("")
+
+    # ---- Section 3: Core complement (cross-reference provenance) ----
+
+    all_declared: set[str] = set()
+    declared: dict[str, set[str]] = {}
+    for _name, cov in coverages.items():
+        config = cov["config"]
+        for sys_id, system in config.get("systems", {}).items():
+            for fe in system.get("files", []):
+                fname = fe.get("name", "")
+                if fname:
+                    declared.setdefault(sys_id, set()).add(fname)
+                    all_declared.add(fname)
+
+    active_profiles = {
+        k: v for k, v in profiles.items() if v.get("type") != "alias"
+    }
+
+    report = run_cross_reference(
+        active_profiles, declared, db,
+        data_names=data_names, all_declared=all_declared,
+    )
+
+    src_totals: dict[str, int] = {"bios": 0, "data": 0, "large_file": 0, "missing": 0}
+    total_undeclared = 0
+    emulator_gaps = []
+
+    for emu_name, data in sorted(report.items()):
+        if data["gaps"] == 0:
+            continue
+        total_undeclared += data["gaps"]
+        for key in src_totals:
+            src_totals[key] += data.get(f"gap_{key}", 0)
+        emulator_gaps.append((emu_name, data))
+
+    if total_undeclared > 0:
+        total_available = (
+            src_totals["bios"] + src_totals["data"] + src_totals["large_file"]
+        )
+        pct_available = (
+            f"{total_available / total_undeclared * 100:.0f}%"
+            if total_undeclared
+            else "0%"
         )
 
-    # Missing files detail (not in repo)
-    all_missing = set()
-    missing_details = []
-    for emu_name, display, gaps in emulator_gaps:
-        for g in gaps:
-            if not g["in_repo"] and g["name"] not in all_missing:
-                all_missing.add(g["name"])
-                missing_details.append(
-                    {
+        lines.extend([
+            "## Core Complement",
+            "",
+            f"Files loaded by emulators but not declared by any platform. "
+            f"{total_undeclared:,} files across {len(emulator_gaps)} emulators, "
+            f"{total_available:,} available ({pct_available}), "
+            f"{src_totals['missing']} to source.",
+            "",
+            "### Provenance",
+            "",
+            "| Source | Count | Description |",
+            "|--------|------:|-------------|",
+            f"| bios/ | {src_totals['bios']} | In repository (database.json) |",
+            f"| data/ | {src_totals['data']} | Data directories (buildbot, GitHub) |",
+            f"| release | {src_totals['large_file']} "
+            "| GitHub release assets (large files) |",
+            f"| missing | {src_totals['missing']} | Not available, needs sourcing |",
+            "",
+            "### Per Emulator",
+            "",
+            "| Emulator | Undeclared | bios | data | release | Missing |",
+            "|----------|----------:|-----:|-----:|--------:|--------:|",
+        ])
+
+        for emu_name, data in sorted(emulator_gaps, key=lambda x: -x[1]["gaps"]):
+            display = data["emulator"]
+            m = data.get("gap_missing", 0)
+            missing_str = (
+                f'<span class="rb-badge rb-badge-danger">{m}</span>'
+                if m > 0
+                else '<span class="rb-badge rb-badge-success">0</span>'
+            )
+            lines.append(
+                f"| [{display}](emulators/{emu_name}.md) "
+                f"| {data['gaps']} "
+                f"| {data.get('gap_bios', 0)} "
+                f"| {data.get('gap_data', 0)} "
+                f"| {data.get('gap_large_file', 0)} "
+                f"| {missing_str} |"
+            )
+        lines.append("")
+
+        # List truly missing files with platform impact
+        emu_to_platforms: dict[str, set[str]] = {}
+        unique_profiles = {
+            k: v
+            for k, v in profiles.items()
+            if v.get("type") not in ("alias", "test")
+        }
+        for pname in coverages:
+            config = coverages[pname]["config"]
+            matched = resolve_platform_cores(config, unique_profiles)
+            for emu_name in matched:
+                emu_to_platforms.setdefault(emu_name, set()).add(pname)
+
+        all_src_missing: set[str] = set()
+        src_missing_details: list[dict] = []
+        for emu_name, data in emulator_gaps:
+            for g in data["gap_details"]:
+                if g["source"] == "missing" and g["name"] not in all_src_missing:
+                    all_src_missing.add(g["name"])
+                    src_missing_details.append({
                         "name": g["name"],
-                        "emulator": display,
+                        "emulator": data["emulator"],
+                        "emu_key": emu_name,
                         "required": g["required"],
                         "source_ref": g["source_ref"],
-                    }
+                    })
+
+        if src_missing_details:
+            req_src = [m for m in src_missing_details if m["required"]]
+            lines.extend([
+                f"### Files to Source ({len(src_missing_details)} unique, "
+                f"{len(req_src)} required)",
+                "",
+                "| File | Emulator | Required | Affects platforms | Source ref |",
+                "|------|----------|----------|------------------|-----------|",
+            ])
+            for m in sorted(
+                src_missing_details,
+                key=lambda x: (not x["required"], x["name"]),
+            ):
+                plats = sorted(emu_to_platforms.get(m["emu_key"], set()))
+                plat_badges = (
+                    " ".join(
+                        f'<span class="rb-badge rb-badge-info">{p}</span>'
+                        for p in plats
+                    )
+                    if plats
+                    else "-"
                 )
-
-    # Build reverse map: emulator -> platforms that use it (via cores: field)
-    from common import resolve_platform_cores
-
-    emu_to_platforms: dict[str, set[str]] = {}
-    unique_profiles = {
-        k: v for k, v in profiles.items() if v.get("type") not in ("alias", "test")
-    }
-    for pname in coverages:
-        config = coverages[pname]["config"]
-        matched = resolve_platform_cores(config, unique_profiles)
-        for emu_name in matched:
-            emu_to_platforms.setdefault(emu_name, set()).add(pname)
-
-    if missing_details:
-        req_missing = [m for m in missing_details if m["required"]]
-        opt_missing = [m for m in missing_details if not m["required"]]
-
-        lines.extend(
-            [
-                "",
-                f"## Missing Files ({len(missing_details)} unique, {len(req_missing)} required)",
-                "",
-                "Files loaded by emulators but not available in the repository.",
-                "Adding these files would improve pack completeness.",
-                "",
-            ]
-        )
-
-        if req_missing:
-            lines.extend(
-                [
-                    "### Required (highest priority)",
-                    "",
-                    "These files are needed for the emulator to function.",
-                    "",
-                    "| File | Emulator | Affects platforms | Source |",
-                    "|------|----------|------------------|--------|",
-                ]
-            )
-            for m in sorted(req_missing, key=lambda x: x["name"]):
-                emu_key = next(
-                    (
-                        k
-                        for k, v in profiles.items()
-                        if v.get("emulator") == m["emulator"]
-                    ),
-                    "",
-                )
-                plats = sorted(emu_to_platforms.get(emu_key, set()))
-                plat_str = ", ".join(plats) if plats else "-"
+                req = "yes" if m["required"] else "no"
                 lines.append(
-                    f"| `{m['name']}` | {m['emulator']} | {plat_str} | {m['source_ref']} |"
+                    f"| `{m['name']}` | {m['emulator']} | {req} | "
+                    f"{plat_badges} | {m['source_ref']} |"
                 )
             lines.append("")
 
-        if opt_missing:
-            lines.extend(
-                [
-                    "### Optional",
-                    "",
-                    "| File | Emulator | Source |",
-                    "|------|----------|--------|",
-                ]
-            )
-            for m in sorted(opt_missing, key=lambda x: x["name"]):
-                lines.append(f"| `{m['name']}` | {m['emulator']} | {m['source_ref']} |")
-            lines.append("")
-
-    lines.extend(["", f"*Generated on {_timestamp()}*"])
+    lines.extend(["", f'<div class="rb-timestamp">Generated on {_timestamp()}.</div>'])
     return "\n".join(lines) + "\n"
+
+
 
 
 def generate_cross_reference(
@@ -1280,10 +1641,19 @@ def generate_cross_reference(
         for core in p.get("cores", [pname]):
             core_to_profile[str(core)] = pname
 
+    total_cores = len(unique)
+    total_upstreams = len({
+        p.get("upstream", p.get("source", ""))
+        for p in unique.values()
+        if p.get("upstream") or p.get("source")
+    })
+
     lines = [
         f"# Cross-reference - {SITE_NAME}",
         "",
-        "Platform >Core >Systems >Upstream emulator.",
+        f"Platform > Core > Systems > Upstream emulator. "
+        f"{total_cores} cores across {len(coverages)} platforms, "
+        f"tracing back to {total_upstreams} upstream projects.",
         "",
         "The libretro core is a port of the upstream emulator. "
         "Files, features, and validation may differ between the two.",
@@ -1333,7 +1703,8 @@ def generate_cross_reference(
         for emu_name in sorted(matched.keys()):
             p = matched[emu_name]
             emu_display = p.get("emulator", emu_name)
-            cls = p.get("core_classification", "-")
+            cls_raw = p.get("core_classification", "-")
+            cls = CLS_LABELS.get(cls_raw, cls_raw)
             p.get("type", "")
             upstream = p.get("upstream", "")
             source = p.get("source", "")
@@ -1413,7 +1784,8 @@ def generate_cross_reference(
         classifications = set()
         all_plats: set[str] = set()
         for c in cores:
-            classifications.add(unique[c].get("core_classification", "-"))
+            raw_cls = unique[c].get("core_classification", "-")
+            classifications.add(CLS_LABELS.get(raw_cls, raw_cls))
             all_plats.update(platform_membership.get(c, set()))
 
         cls_str = ", ".join(sorted(classifications))
@@ -1799,7 +2171,8 @@ def main():
     # Generate gap analysis page
     print("Generating gap analysis page...")
     write_if_changed(
-        str(docs / "gaps.md"), generate_gap_analysis(profiles, coverages, db)
+        str(docs / "gaps.md"),
+        generate_gap_analysis(profiles, coverages, db, suppl_names),
     )
 
     # Wiki pages: copy manually maintained sources + generate dynamic ones
@@ -1850,6 +2223,8 @@ theme:
       icon: material/brightness-4
       name: Switch to auto
   font: false
+  icon:
+    logo: material/chip
   features:
   - navigation.tabs
   - navigation.sections
@@ -1859,6 +2234,8 @@ theme:
   - search.highlight
   - content.tabs.link
   - toc.follow
+extra_css:
+- stylesheets/extra.css
 markdown_extensions:
 - tables
 - admonition

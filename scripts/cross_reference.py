@@ -103,32 +103,41 @@ def _build_supplemental_index(
     return names
 
 
-def _find_in_repo(
+def _resolve_source(
     fname: str,
     by_name: dict[str, list],
     by_name_lower: dict[str, str],
     data_names: set[str] | None = None,
-) -> bool:
+    by_path_suffix: dict | None = None,
+) -> str | None:
+    """Return the source category for a file, or None if not found.
+
+    Returns ``"bios"`` (in database.json / bios/), ``"data"`` (in data/),
+    or ``None`` (not available anywhere).
+    """
+    # bios/ via database.json by_name
     if fname in by_name:
-        return True
-    # For directory entries or paths, extract the meaningful basename
+        return "bios"
     stripped = fname.rstrip("/")
     basename = stripped.rsplit("/", 1)[-1] if "/" in stripped else None
     if basename and basename in by_name:
-        return True
+        return "bios"
     key = fname.lower()
     if key in by_name_lower:
-        return True
+        return "bios"
     if basename:
-        key = basename.lower()
-        if key in by_name_lower:
-            return True
+        if basename.lower() in by_name_lower:
+            return "bios"
+    # bios/ via by_path_suffix (regional variants)
+    if by_path_suffix and fname in by_path_suffix:
+        return "bios"
+    # data/ supplemental index
     if data_names:
         if fname in data_names or key in data_names:
-            return True
+            return "data"
         if basename and (basename in data_names or basename.lower() in data_names):
-            return True
-    return False
+            return "data"
+    return None
 
 
 def cross_reference(
@@ -137,30 +146,44 @@ def cross_reference(
     db: dict,
     platform_data_dirs: dict[str, set[str]] | None = None,
     data_names: set[str] | None = None,
+    all_declared: set[str] | None = None,
 ) -> dict:
     """Compare emulator profiles against platform declarations.
 
     Returns a report with gaps (files emulators need but platforms don't list)
-    and coverage stats. Files covered by matching data_directories between
-    emulator profile and platform config are not reported as gaps.
-    Checks both bios/ (via database) and data/ (via data_names index).
+    and coverage stats.  Each gap entry carries a ``source`` field indicating
+    where the file is available: ``"bios"`` (bios/ via database.json),
+    ``"data"`` (data/ directory), ``"large_file"`` (GitHub release asset),
+    or ``"missing"`` (not available anywhere).
+
+    The boolean ``in_repo`` is derived: ``source != "missing"``.
+
+    When *all_declared* is provided (flat set of every filename declared by
+    any platform for any system), it is used for the ``in_platform`` check
+    instead of the per-system lookup.  This is appropriate for the global
+    gap analysis page where "undeclared" means "no platform declares it at all".
     """
     platform_data_dirs = platform_data_dirs or {}
     by_name = db.get("indexes", {}).get("by_name", {})
     by_name_lower = {k.lower(): k for k in by_name}
+    by_md5 = db.get("indexes", {}).get("by_md5", {})
+    by_path_suffix = db.get("indexes", {}).get("by_path_suffix", {})
+    db_files = db.get("files", {})
     report = {}
 
     for emu_name, profile in profiles.items():
         emu_files = profile.get("files", [])
         systems = profile.get("systems", [])
 
-        platform_names = set()
-        for sys_id in systems:
-            platform_names.update(declared.get(sys_id, set()))
+        if all_declared is not None:
+            platform_names = all_declared
+        else:
+            platform_names = set()
+            for sys_id in systems:
+                platform_names.update(declared.get(sys_id, set()))
 
         gaps = []
         covered = []
-        by_md5 = db.get("indexes", {}).get("by_md5", {})
         for f in emu_files:
             fname = f.get("name", "")
             if not fname:
@@ -174,37 +197,45 @@ def cross_reference(
             if "path" in f and f["path"] is None:
                 continue
 
-            # Skip release asset files (stored in GitHub releases, not bios/)
-            if f.get("storage") == "release":
-                continue
-
             # Skip standalone-only files
             file_mode = f.get("mode", "both")
             if file_mode == "standalone":
                 continue
 
+            # --- resolve source provenance ---
+            storage = f.get("storage", "")
+            if storage in ("release", "large_file"):
+                source = "large_file"
+            else:
+                source = _resolve_source(
+                    fname, by_name, by_name_lower, data_names, by_path_suffix
+                )
+                if source is None:
+                    path_field = f.get("path", "")
+                    if path_field and path_field != fname:
+                        source = _resolve_source(
+                            path_field, by_name, by_name_lower,
+                            data_names, by_path_suffix,
+                        )
+                # Try MD5 hash match
+                if source is None:
+                    md5_raw = f.get("md5", "")
+                    if md5_raw:
+                        for md5_val in md5_raw.split(","):
+                            md5_val = md5_val.strip().lower()
+                            if md5_val and by_md5.get(md5_val):
+                                source = "bios"
+                                break
+                # Try SHA1 hash match
+                if source is None:
+                    sha1 = f.get("sha1", "")
+                    if sha1 and sha1 in db_files:
+                        source = "bios"
+                if source is None:
+                    source = "missing"
+
+            in_repo = source != "missing"
             in_platform = fname in platform_names
-            in_repo = _find_in_repo(fname, by_name, by_name_lower, data_names)
-            if not in_repo:
-                path_field = f.get("path", "")
-                if path_field and path_field != fname:
-                    in_repo = _find_in_repo(
-                        path_field, by_name, by_name_lower, data_names
-                    )
-            # Try MD5 hash match (handles files that exist under different names)
-            if not in_repo:
-                md5_raw = f.get("md5", "")
-                if md5_raw:
-                    for md5_val in md5_raw.split(","):
-                        md5_val = md5_val.strip().lower()
-                        if md5_val and by_md5.get(md5_val):
-                            in_repo = True
-                            break
-            # Try SHA1 hash match
-            if not in_repo:
-                sha1 = f.get("sha1", "")
-                if sha1 and sha1 in db.get("files", {}):
-                    in_repo = True
 
             entry = {
                 "name": fname,
@@ -213,6 +244,7 @@ def cross_reference(
                 "source_ref": f.get("source_ref", ""),
                 "in_platform": in_platform,
                 "in_repo": in_repo,
+                "source": source,
             }
 
             if not in_platform:
@@ -227,7 +259,10 @@ def cross_reference(
             "platform_covered": len(covered),
             "gaps": len(gaps),
             "gap_in_repo": sum(1 for g in gaps if g["in_repo"]),
-            "gap_missing": sum(1 for g in gaps if not g["in_repo"]),
+            "gap_missing": sum(1 for g in gaps if g["source"] == "missing"),
+            "gap_bios": sum(1 for g in gaps if g["source"] == "bios"),
+            "gap_data": sum(1 for g in gaps if g["source"] == "data"),
+            "gap_large_file": sum(1 for g in gaps if g["source"] == "large_file"),
             "gap_details": gaps,
         }
 
@@ -240,15 +275,19 @@ def print_report(report: dict) -> None:
     print("=" * 60)
 
     total_gaps = 0
-    total_in_repo = 0
-    total_missing = 0
+    totals: dict[str, int] = {"bios": 0, "data": 0, "large_file": 0, "missing": 0}
 
     for emu_name, data in sorted(report.items()):
         gaps = data["gaps"]
         if gaps == 0:
-            status = "OK"
-        else:
-            status = f"{data['gap_in_repo']} in repo, {data['gap_missing']} missing"
+            continue
+
+        parts = []
+        for key in ("bios", "data", "large_file", "missing"):
+            count = data.get(f"gap_{key}", 0)
+            if count:
+                parts.append(f"{count} {key}")
+        status = ", ".join(parts) if parts else "OK"
 
         print(f"\n{data['emulator']} ({', '.join(data['systems'])})")
         print(
@@ -256,23 +295,24 @@ def print_report(report: dict) -> None:
             f"{data['platform_covered']} declared by platforms, "
             f"{gaps} undeclared"
         )
+        print(f"  Gaps: {status}")
 
-        if gaps > 0:
-            print(f"  Gaps: {status}")
-            for g in data["gap_details"]:
-                req = "*" if g["required"] else " "
-                loc = "repo" if g["in_repo"] else "MISSING"
-                note = f" -- {g['note']}" if g["note"] else ""
-                print(f"    {req} {g['name']} [{loc}]{note}")
+        for g in data["gap_details"]:
+            req = "*" if g["required"] else " "
+            src = g.get("source", "missing").upper()
+            note = f" -- {g['note']}" if g["note"] else ""
+            print(f"    {req} {g['name']} [{src}]{note}")
 
         total_gaps += gaps
-        total_in_repo += data["gap_in_repo"]
-        total_missing += data["gap_missing"]
+        for key in totals:
+            totals[key] += data.get(f"gap_{key}", 0)
 
     print(f"\n{'=' * 60}")
     print(f"Total: {total_gaps} undeclared files across all emulators")
-    print(f"  {total_in_repo} already in repo (can be added to packs)")
-    print(f"  {total_missing} missing from repo (need to be sourced)")
+    available = totals["bios"] + totals["data"] + totals["large_file"]
+    print(f"  {available} available (bios: {totals['bios']}, data: {totals['data']}, "
+          f"large_file: {totals['large_file']})")
+    print(f"  {totals['missing']} missing (need to be sourced)")
 
 
 def main():
