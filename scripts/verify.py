@@ -94,6 +94,7 @@ def verify_entry_existence(
     file_entry: dict,
     local_path: str | None,
     validation_index: dict[str, dict] | None = None,
+    db: dict | None = None,
 ) -> dict:
     """RetroArch verification: path_is_valid() -file exists = OK."""
     name = file_entry.get("name", "")
@@ -104,9 +105,19 @@ def verify_entry_existence(
     if validation_index:
         reason = check_file_validation(local_path, name, validation_index)
         if reason:
-            ventry = validation_index.get(name, {})
-            emus = ", ".join(ventry.get("emulators", []))
-            result["discrepancy"] = f"file present (OK) but {emus} says {reason}"
+            suppressed = False
+            if db:
+                better = _find_best_variant(
+                    file_entry, db, local_path, validation_index,
+                )
+                if better:
+                    suppressed = True
+            if not suppressed:
+                ventry = validation_index.get(name, {})
+                emus = ", ".join(ventry.get("emulators", []))
+                result["discrepancy"] = (
+                    f"file present (OK) but {emus} says {reason}"
+                )
     return result
 
 
@@ -561,35 +572,90 @@ def _find_best_variant(
     current_path: str,
     validation_index: dict,
 ) -> str | None:
-    """Search for a repo file that passes both platform MD5 and emulator validation."""
+    """Search for a repo file that passes emulator validation.
+
+    Two-pass search:
+    1. Hash lookup — use the emulator's expected hashes (sha1, md5, sha256,
+       crc32) to find candidates directly in the DB indexes.  This finds
+       variants stored under different filenames (e.g. megacd2_v200_eu.bin
+       for bios_CD_E.bin).
+    2. Name lookup — check all files sharing the same name (aliases,
+       .variants/ with name-based suffixes).
+
+    If any candidate on disk passes ``check_file_validation``, the
+    discrepancy is suppressed — the repo has what the emulator needs.
+    """
     fname = file_entry.get("name", "")
     if not fname or fname not in validation_index:
         return None
 
-    md5_expected = file_entry.get("md5", "")
-    md5_set = (
-        {m.strip().lower() for m in md5_expected.split(",") if m.strip()}
-        if md5_expected
-        else set()
-    )
-
-    by_name = db.get("indexes", {}).get("by_name", {})
     files_db = db.get("files", {})
+    current_real = os.path.realpath(current_path)
+    seen_paths: set[str] = set()
 
-    for sha1 in by_name.get(fname, []):
+    def _try_candidate(sha1: str) -> str | None:
         candidate = files_db.get(sha1, {})
         path = candidate.get("path", "")
-        if (
-            not path
-            or not os.path.exists(path)
-            or os.path.realpath(path) == os.path.realpath(current_path)
-        ):
-            continue
-        if md5_set and candidate.get("md5", "").lower() not in md5_set:
-            continue
-        reason = check_file_validation(path, fname, validation_index)
-        if reason is None:
+        if not path or not os.path.exists(path):
+            return None
+        rp = os.path.realpath(path)
+        if rp == current_real or rp in seen_paths:
+            return None
+        seen_paths.add(rp)
+        if check_file_validation(path, fname, validation_index) is None:
             return path
+        return None
+
+    # Pass 1: hash-based lookup from emulator expected values
+    ventry = validation_index[fname]
+    for hash_type, db_index_key in (
+        ("sha1", "by_sha1"),
+        ("md5", "by_md5"),
+        ("crc32", "by_crc32"),
+    ):
+        expected = ventry.get(hash_type)
+        if not expected:
+            continue
+        db_index = db.get("indexes", {}).get(db_index_key, {})
+        if not db_index:
+            # by_sha1 is the files dict itself (sha1 = primary key)
+            if hash_type == "sha1":
+                for h in expected:
+                    if h in files_db:
+                        result = _try_candidate(h)
+                        if result:
+                            return result
+            continue
+        for h in expected:
+            entries = db_index.get(h)
+            if not entries:
+                continue
+            if isinstance(entries, list):
+                for sha1 in entries:
+                    result = _try_candidate(sha1)
+                    if result:
+                        return result
+            elif isinstance(entries, str):
+                result = _try_candidate(entries)
+                if result:
+                    return result
+
+    # Pass 2: SHA256 scan (no index, but emulators like ares validate by sha256)
+    expected_sha256 = ventry.get("sha256")
+    if expected_sha256:
+        for sha1, entry in files_db.items():
+            if entry.get("sha256", "").lower() in expected_sha256:
+                result = _try_candidate(sha1)
+                if result:
+                    return result
+
+    # Pass 3: name-based lookup (aliases, .variants/ with same filename)
+    by_name = db.get("indexes", {}).get("by_name", {})
+    for sha1 in by_name.get(fname, []):
+        result = _try_candidate(sha1)
+        if result:
+            return result
+
     return None
 
 
@@ -655,6 +721,7 @@ def verify_platform(
                     file_entry,
                     local_path,
                     validation_index,
+                    db,
                 )
             elif mode == "sha1":
                 result = verify_entry_sha1(file_entry, local_path)
