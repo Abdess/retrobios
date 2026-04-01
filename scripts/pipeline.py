@@ -99,7 +99,7 @@ def check_consistency(verify_output: str, pack_output: str) -> bool:
     v = parse_verify_counts(verify_output)
     p = parse_pack_counts(pack_output)
 
-    print("\n--- 5/9 consistency check ---")
+    print("\n--- 5/8 consistency check ---")
     all_ok = True
 
     for v_label, (v_ok, v_total) in sorted(v.items()):
@@ -164,7 +164,7 @@ def main():
     ok, out = run(
         [sys.executable, "scripts/generate_db.py", "--force",
          "--bios-dir", "bios", "--output", "database.json"],
-        "1/9 generate database",
+        "1/8 generate database",
     )
     results["generate_db"] = ok
     if not ok:
@@ -175,11 +175,11 @@ def main():
     if not args.offline:
         ok, out = run(
             [sys.executable, "scripts/refresh_data_dirs.py"],
-            "2/9 refresh data directories",
+            "2/8 refresh data directories",
         )
         results["refresh_data"] = ok
     else:
-        print("\n--- 2/9 refresh data directories: SKIPPED (--offline) ---")
+        print("\n--- 2/8 refresh data directories: SKIPPED (--offline) ---")
         results["refresh_data"] = True
 
     # Step 2a: Refresh MAME BIOS hashes
@@ -259,7 +259,7 @@ def main():
         verify_cmd.append("--include-archived")
     if args.target:
         verify_cmd.extend(["--target", args.target])
-    ok, verify_output = run(verify_cmd, "3/9 verify all platforms")
+    ok, verify_output = run(verify_cmd, "3/8 verify all platforms")
     results["verify"] = ok
     all_ok = all_ok and ok
 
@@ -278,11 +278,11 @@ def main():
             pack_cmd.append("--include-extras")
         if args.target:
             pack_cmd.extend(["--target", args.target])
-        ok, pack_output = run(pack_cmd, "4/9 generate packs")
+        ok, pack_output = run(pack_cmd, "4/8 generate packs")
         results["generate_packs"] = ok
         all_ok = all_ok and ok
     else:
-        print("\n--- 4/9 generate packs: SKIPPED (--skip-packs) ---")
+        print("\n--- 4/8 generate packs: SKIPPED (--skip-packs) ---")
         results["generate_packs"] = True
 
     # Step 4b: Generate install manifests
@@ -297,11 +297,11 @@ def main():
             manifest_cmd.append("--offline")
         if args.target:
             manifest_cmd.extend(["--target", args.target])
-        ok, _ = run(manifest_cmd, "4b/9 generate install manifests")
+        ok, _ = run(manifest_cmd, "4b/8 generate install manifests")
         results["generate_manifests"] = ok
         all_ok = all_ok and ok
     else:
-        print("\n--- 4b/9 generate install manifests: SKIPPED (--skip-packs) ---")
+        print("\n--- 4b/8 generate install manifests: SKIPPED (--skip-packs) ---")
         results["generate_manifests"] = True
 
     # Step 4c: Generate target manifests
@@ -310,11 +310,11 @@ def main():
             sys.executable, "scripts/generate_pack.py",
             "--manifest-targets", "--output-dir", "install/targets",
         ]
-        ok, _ = run(target_cmd, "4c/9 generate target manifests")
+        ok, _ = run(target_cmd, "4c/8 generate target manifests")
         results["generate_target_manifests"] = ok
         all_ok = all_ok and ok
     else:
-        print("\n--- 4c/9 generate target manifests: SKIPPED (--skip-packs) ---")
+        print("\n--- 4c/8 generate target manifests: SKIPPED (--skip-packs) ---")
         results["generate_target_manifests"] = True
 
     # Step 5: Consistency check
@@ -323,32 +323,44 @@ def main():
         results["consistency"] = ok
         all_ok = all_ok and ok
     else:
-        print("\n--- 5/9 consistency check: SKIPPED ---")
+        print("\n--- 5/8 consistency check: SKIPPED ---")
         results["consistency"] = True
 
-    # Step 8: Generate README
+    # Step 6: Pack integrity (extract + hash verification)
+    if not args.skip_packs:
+        ok, _ = run(
+            [sys.executable, "-m", "unittest", "tests.test_pack_integrity", "-v"],
+            "6/8 pack integrity",
+        )
+        results["pack_integrity"] = ok
+        all_ok = all_ok and ok
+    else:
+        print("\n--- 6/8 pack integrity: SKIPPED (--skip-packs) ---")
+        results["pack_integrity"] = True
+
+    # Step 7: Generate README
     if not args.skip_docs:
         ok, _ = run(
             [sys.executable, "scripts/generate_readme.py",
              "--db", "database.json", "--platforms-dir", "platforms"],
-            "8/9 generate readme",
+            "7/8 generate readme",
         )
         results["generate_readme"] = ok
         all_ok = all_ok and ok
     else:
-        print("\n--- 8/9 generate readme: SKIPPED (--skip-docs) ---")
+        print("\n--- 7/8 generate readme: SKIPPED (--skip-docs) ---")
         results["generate_readme"] = True
 
-    # Step 9: Generate site pages
+    # Step 8: Generate site pages
     if not args.skip_docs:
         ok, _ = run(
             [sys.executable, "scripts/generate_site.py"],
-            "9/9 generate site",
+            "8/8 generate site",
         )
         results["generate_site"] = ok
         all_ok = all_ok and ok
     else:
-        print("\n--- 9/9 generate site: SKIPPED (--skip-docs) ---")
+        print("\n--- 8/8 generate site: SKIPPED (--skip-docs) ---")
         results["generate_site"] = True
 
     # Summary
