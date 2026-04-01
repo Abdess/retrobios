@@ -328,10 +328,13 @@ def main():
 
     # Step 6: Pack integrity (extract + hash verification)
     if not args.skip_packs:
-        ok, _ = run(
-            [sys.executable, "-m", "unittest", "tests.test_pack_integrity", "-v"],
-            "6/8 pack integrity",
-        )
+        integrity_cmd = [
+            sys.executable, "scripts/generate_pack.py", "--all",
+            "--verify-packs", "--output-dir", args.output_dir,
+        ]
+        if args.include_archived:
+            integrity_cmd.append("--include-archived")
+        ok, _ = run(integrity_cmd, "6/8 pack integrity")
         results["pack_integrity"] = ok
         all_ok = all_ok and ok
     else:

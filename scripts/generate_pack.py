@@ -2066,6 +2066,118 @@ def _run_manifest_mode(args, groups, db, zip_contents, emu_profiles, target_core
             print(f"  ERROR: {e}")
 
 
+def _run_verify_packs(args):
+    """Extract each pack and verify file paths + hashes."""
+    import shutil
+
+    platforms = list_registered_platforms(args.platforms_dir)
+    if args.platform:
+        platforms = [args.platform]
+    elif not args.all:
+        print("ERROR: --verify-packs requires --platform or --all")
+        sys.exit(1)
+
+    all_ok = True
+    for platform_name in platforms:
+        config = load_platform_config(platform_name, args.platforms_dir)
+        display = config.get("platform", platform_name).replace(" ", "_")
+        base_dest = config.get("base_destination", "")
+        mode = config.get("verification_mode", "existence")
+        systems = config.get("systems", {})
+
+        # Find ZIP
+        zip_path = None
+        if os.path.isdir(args.output_dir):
+            for f in os.listdir(args.output_dir):
+                if f.endswith("_BIOS_Pack.zip") and display in f:
+                    zip_path = os.path.join(args.output_dir, f)
+                    break
+        if not zip_path:
+            print(f"  {platform_name}: SKIP (no pack in {args.output_dir})")
+            continue
+
+        extract_dir = os.path.join("tmp", "verify_packs", platform_name)
+        os.makedirs(extract_dir, exist_ok=True)
+        try:
+            # Extract
+            with zipfile.ZipFile(zip_path) as zf:
+                zf.extractall(extract_dir)
+
+            missing = []
+            hash_fail = []
+            ok = 0
+            for sys_id, sys_data in systems.items():
+                for fe in sys_data.get("files", []):
+                    dest = fe.get("destination", fe.get("name", ""))
+                    if not dest:
+                        continue
+                    fp = os.path.join(extract_dir, base_dest, dest) if base_dest else os.path.join(extract_dir, dest)
+                    # Case-insensitive fallback
+                    if not os.path.exists(fp):
+                        parent = os.path.dirname(fp)
+                        bn = os.path.basename(fp)
+                        if os.path.isdir(parent):
+                            for e in os.listdir(parent):
+                                if e.lower() == bn.lower():
+                                    fp = os.path.join(parent, e)
+                                    break
+                    if not os.path.exists(fp):
+                        missing.append(f"{sys_id}: {dest}")
+                        continue
+                    if mode == "existence":
+                        ok += 1
+                        continue
+                    if mode == "sha1":
+                        expected = fe.get("sha1", "")
+                        if not expected:
+                            ok += 1
+                            continue
+                        actual = hashlib.sha1(open(fp, "rb").read()).hexdigest()
+                        if actual == expected.lower():
+                            ok += 1
+                        else:
+                            hash_fail.append(f"{sys_id}: {dest}")
+                        continue
+                    # MD5
+                    expected_md5 = fe.get("md5", "")
+                    if not expected_md5:
+                        ok += 1
+                        continue
+                    md5_list = [m.strip().lower() for m in expected_md5.split(",") if m.strip()]
+                    actual_md5 = hashlib.md5(open(fp, "rb").read()).hexdigest()
+                    if actual_md5 in md5_list or any(actual_md5.startswith(m) for m in md5_list if len(m) < 32):
+                        ok += 1
+                        continue
+                    # ZIP inner content
+                    if fp.endswith(".zip"):
+                        ok += 1  # inner content verified by verify.py
+                        continue
+                    # Path collision
+                    bn = os.path.basename(dest)
+                    collision = sum(1 for sd in systems.values() for ff in sd.get("files", [])
+                                    if os.path.basename(ff.get("destination", ff.get("name", "")) or "") == bn) > 1
+                    if collision:
+                        ok += 1
+                    else:
+                        hash_fail.append(f"{sys_id}: {dest}")
+
+            total = sum(len([f for f in s.get("files", []) if f.get("destination", f.get("name", ""))]) for s in systems.values())
+            if missing or hash_fail:
+                print(f"  {platform_name}: FAIL ({len(missing)} missing, {len(hash_fail)} hash errors / {total})")
+                for m in missing[:5]:
+                    print(f"    MISSING: {m}")
+                for h in hash_fail[:5]:
+                    print(f"    HASH: {h}")
+                all_ok = False
+            else:
+                print(f"  {platform_name}: OK ({ok}/{total} verified)")
+        finally:
+            shutil.rmtree(extract_dir, ignore_errors=True)
+
+    if not all_ok:
+        sys.exit(1)
+
+
 def _run_platform_packs(args, groups, db, zip_contents, data_registry,
                         emu_profiles, target_cores_cache, system_filter):
     """Generate ZIP packs for platform groups and verify."""
@@ -2167,9 +2279,14 @@ def main():
                         help="Output JSON manifests instead of ZIP packs")
     parser.add_argument("--manifest-targets", action="store_true",
                         help="Convert target YAMLs to installer JSON")
+    parser.add_argument("--verify-packs", action="store_true",
+                        help="Extract and verify pack integrity (path + hash)")
     args = parser.parse_args()
 
     # Quick-exit modes
+    if args.verify_packs:
+        _run_verify_packs(args)
+        return
     if args.manifest_targets:
         generate_target_manifests(
             os.path.join(args.platforms_dir, "targets"), args.output_dir)
