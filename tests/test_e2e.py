@@ -4510,5 +4510,68 @@ struct BurnDriver BurnDrvneogeo = {
             self.assertIn(name, all_names)
 
 
+    def test_202_pack_source_platform(self):
+        """source='platform' skips core extras."""
+        from generate_pack import generate_pack
+
+        output_dir = os.path.join(self.root, "pack_platform")
+        os.makedirs(output_dir, exist_ok=True)
+        profiles = load_emulator_profiles(self.emulators_dir)
+        zip_path = generate_pack(
+            "test_existence",
+            self.platforms_dir,
+            self.db,
+            self.bios_dir,
+            output_dir,
+            emu_profiles=profiles,
+            emulators_dir=self.emulators_dir,
+            source="platform",
+        )
+        self.assertIsNotNone(zip_path)
+        self.assertIn("_Platform_", os.path.basename(zip_path))
+
+    def test_203_pack_source_truth(self):
+        """source='truth' uses emulator profile files."""
+        from generate_pack import generate_pack
+
+        output_dir = os.path.join(self.root, "pack_truth")
+        os.makedirs(output_dir, exist_ok=True)
+        profiles = load_emulator_profiles(self.emulators_dir)
+        zip_path = generate_pack(
+            "test_existence",
+            self.platforms_dir,
+            self.db,
+            self.bios_dir,
+            output_dir,
+            emu_profiles=profiles,
+            emulators_dir=self.emulators_dir,
+            source="truth",
+        )
+        self.assertIsNotNone(zip_path)
+        self.assertIn("_Truth_", os.path.basename(zip_path))
+
+    def test_204_pack_source_full_unchanged(self):
+        """source='full' (default) has no source tag in filename."""
+        from generate_pack import generate_pack
+
+        output_dir = os.path.join(self.root, "pack_full")
+        os.makedirs(output_dir, exist_ok=True)
+        profiles = load_emulator_profiles(self.emulators_dir)
+        zip_path = generate_pack(
+            "test_existence",
+            self.platforms_dir,
+            self.db,
+            self.bios_dir,
+            output_dir,
+            emu_profiles=profiles,
+            emulators_dir=self.emulators_dir,
+            source="full",
+        )
+        self.assertIsNotNone(zip_path)
+        bn = os.path.basename(zip_path)
+        self.assertNotIn("_Platform_", bn)
+        self.assertNotIn("_Truth_", bn)
+
+
 if __name__ == "__main__":
     unittest.main()

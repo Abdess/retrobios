@@ -983,6 +983,7 @@ def generate_pack(
     required_only: bool = False,
     system_filter: list[str] | None = None,
     precomputed_extras: list[dict] | None = None,
+    source: str = "full",
 ) -> str | None:
     """Generate a ZIP pack for a platform.
 
@@ -999,6 +1000,7 @@ def generate_pack(
     version = config.get("version", config.get("dat_version", ""))
     version_tag = f"_{version.replace(' ', '')}" if version else ""
     req_tag = "_Required" if required_only else ""
+    source_tag = {"platform": "_Platform", "truth": "_Truth"}.get(source, "")
 
     sys_tag = ""
     if system_filter:
@@ -1013,7 +1015,7 @@ def generate_pack(
             display_parts.append("_".join(p.title() for p in parts if p))
         sys_tag = "_" + "_".join(display_parts)
 
-    zip_name = f"{platform_display.replace(' ', '_')}{version_tag}{req_tag}_BIOS_Pack{sys_tag}.zip"
+    zip_name = f"{platform_display.replace(' ', '_')}{version_tag}{source_tag}{req_tag}_BIOS_Pack{sys_tag}.zip"
     zip_path = os.path.join(output_dir, zip_name)
     os.makedirs(output_dir, exist_ok=True)
 
@@ -1071,6 +1073,7 @@ def generate_pack(
         pack_systems = filtered
 
     with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:
+      if source != "truth":
         for sys_id, system in sorted(pack_systems.items()):
             for file_entry in system.get("files", []):
                 if required_only and file_entry.get("required") is False:
@@ -1319,9 +1322,11 @@ def generate_pack(
         # Core requirements: files platform's cores need but YAML doesn't declare
         if emu_profiles is None:
             emu_profiles = load_emulator_profiles(emulators_dir)
-        if precomputed_extras is not None:
+        if source == "platform":
+            core_files = []
+        elif precomputed_extras is not None:
             core_files = precomputed_extras
-        elif system_filter:
+        elif system_filter and source != "truth":
             core_files = []
         else:
             core_files = _collect_emulator_extras(
@@ -1332,7 +1337,31 @@ def generate_pack(
                 base_dest,
                 emu_profiles,
                 target_cores=target_cores,
+                include_all=(source == "truth"),
             )
+
+        # Truth mode + system_filter: filter core files by system ID
+        if system_filter and source == "truth" and core_files:
+            from common import _norm_system_id
+
+            norm_filter = {_norm_system_id(s) for s in system_filter} | set(
+                system_filter
+            )
+            emu_system_map: dict[str, set[str]] = {}
+            for _emu_name, _p in (emu_profiles or {}).items():
+                raw = set(_p.get("systems", []))
+                norm = {_norm_system_id(s) for s in raw}
+                combined = raw | norm
+                emu_system_map[_emu_name] = combined
+                _display = _p.get("emulator", "")
+                if _display and _display != _emu_name:
+                    emu_system_map[_display] = combined
+            core_files = [
+                fe
+                for fe in core_files
+                if emu_system_map.get(fe.get("source_emulator", ""), set())
+                & norm_filter
+            ]
         core_count = 0
         for fe in core_files:
             if required_only and fe.get("required") is False:
@@ -1442,10 +1471,22 @@ def generate_pack(
         parts.append(f"{files_untested} untested")
     if files_miss:
         parts.append(f"{files_miss} missing")
-    baseline = total_files - core_count
-    print(
-        f"  {zip_path}: {total_files} files packed ({baseline} baseline + {core_count} from cores), {', '.join(parts)} [{verification_mode}]"
-    )
+    if source == "platform":
+        print(
+            f"  {zip_path}: {total_files} files packed (platform baseline only), "
+            f"{', '.join(parts)} [{verification_mode}]"
+        )
+    elif source == "truth":
+        print(
+            f"  {zip_path}: {total_files} files packed (ground truth only), "
+            f"{', '.join(parts)} [{verification_mode}]"
+        )
+    else:
+        baseline = total_files - core_count
+        print(
+            f"  {zip_path}: {total_files} files packed ({baseline} baseline + "
+            f"{core_count} from cores), {', '.join(parts)} [{verification_mode}]"
+        )
 
     for key, reason in sorted(file_reasons.items()):
         status = file_status.get(key, "")
