@@ -2275,47 +2275,66 @@ def _run_manifest_mode(
     if os.path.exists(registry_path):
         with open(registry_path) as _rf:
             registry = yaml.safe_load(_rf) or {}
-    for group_platforms, representative in groups:
-        print(f"\nGenerating manifest for {representative}...")
-        try:
-            tc = target_cores_cache.get(representative) if args.target else None
-            manifest = generate_manifest(
-                representative,
-                args.platforms_dir,
-                db,
-                args.bios_dir,
-                registry_path,
-                emulators_dir=args.emulators_dir,
-                zip_contents=zip_contents,
-                emu_profiles=emu_profiles,
-                target_cores=tc,
-            )
-            out_path = os.path.join(args.output_dir, f"{representative}.json")
-            _write_manifest_if_changed(out_path, manifest)
-            print(
-                f"  {out_path}: {manifest['total_files']} files, "
-                f"{manifest['total_size']} bytes"
-            )
-            # Create aliases for grouped platforms (e.g., lakka -> retroarch)
-            for alias_plat in group_platforms:
-                if alias_plat != representative:
-                    alias_path = os.path.join(args.output_dir, f"{alias_plat}.json")
-                    alias_manifest = dict(manifest)
-                    alias_manifest["platform"] = alias_plat
-                    alias_cfg = load_platform_config(alias_plat, args.platforms_dir)
-                    alias_manifest["display_name"] = alias_cfg.get(
-                        "platform", alias_plat
-                    )
-                    alias_registry = registry.get("platforms", {}).get(alias_plat, {})
-                    alias_install = alias_registry.get("install", {})
-                    alias_manifest["detect"] = alias_install.get("detect", [])
-                    alias_manifest["standalone_copies"] = alias_install.get(
-                        "standalone_copies", []
-                    )
-                    _write_manifest_if_changed(alias_path, alias_manifest)
-                    print(f"  {alias_path}: alias of {representative}")
-        except (FileNotFoundError, OSError, yaml.YAMLError) as e:
-            print(f"  ERROR: {e}")
+
+    if args.all_variants:
+        variants = [
+            ("full", False), ("full", True),
+            ("platform", False), ("platform", True),
+            ("truth", False), ("truth", True),
+        ]
+    else:
+        variants = [(args.source, args.required_only)]
+
+    for source, required_only in variants:
+        for group_platforms, representative in groups:
+            print(f"\nGenerating manifest for {representative} [source={source}]...")
+            try:
+                tc = target_cores_cache.get(representative) if args.target else None
+                manifest = generate_manifest(
+                    representative,
+                    args.platforms_dir,
+                    db,
+                    args.bios_dir,
+                    registry_path,
+                    emulators_dir=args.emulators_dir,
+                    zip_contents=zip_contents,
+                    emu_profiles=emu_profiles,
+                    target_cores=tc,
+                    source=source,
+                )
+                source_suffix = {"platform": "_platform", "truth": "_truth"}.get(source, "")
+                req_suffix = "_required" if required_only else ""
+                out_path = os.path.join(
+                    args.output_dir, f"{representative}{source_suffix}{req_suffix}.json"
+                )
+                _write_manifest_if_changed(out_path, manifest)
+                print(
+                    f"  {out_path}: {manifest['total_files']} files, "
+                    f"{manifest['total_size']} bytes"
+                )
+                # Create aliases for grouped platforms (e.g., lakka -> retroarch)
+                for alias_plat in group_platforms:
+                    if alias_plat != representative:
+                        alias_path = os.path.join(
+                            args.output_dir,
+                            f"{alias_plat}{source_suffix}{req_suffix}.json",
+                        )
+                        alias_manifest = dict(manifest)
+                        alias_manifest["platform"] = alias_plat
+                        alias_cfg = load_platform_config(alias_plat, args.platforms_dir)
+                        alias_manifest["display_name"] = alias_cfg.get(
+                            "platform", alias_plat
+                        )
+                        alias_registry = registry.get("platforms", {}).get(alias_plat, {})
+                        alias_install = alias_registry.get("install", {})
+                        alias_manifest["detect"] = alias_install.get("detect", [])
+                        alias_manifest["standalone_copies"] = alias_install.get(
+                            "standalone_copies", []
+                        )
+                        _write_manifest_if_changed(alias_path, alias_manifest)
+                        print(f"  {alias_path}: alias of {representative}")
+            except (FileNotFoundError, OSError, yaml.YAMLError) as e:
+                print(f"  ERROR: {e}")
 
 
 def _run_verify_packs(args):
@@ -2470,70 +2489,82 @@ def _run_platform_packs(
     system_filter,
 ):
     """Generate ZIP packs for platform groups and verify."""
-    for group_platforms, representative in groups:
-        variants = [p for p in group_platforms if p != representative]
-        if variants:
-            all_names = [
-                load_platform_config(p, args.platforms_dir).get("platform", p)
-                for p in group_platforms
-            ]
-            label = " / ".join(all_names)
-            print(f"\nGenerating pack for {label}...")
-        else:
-            print(f"\nGenerating pack for {representative}...")
+    if args.all_variants:
+        variants = [
+            ("full", False), ("full", True),
+            ("platform", False), ("platform", True),
+            ("truth", False), ("truth", True),
+        ]
+    else:
+        variants = [(args.source, args.required_only)]
 
-        try:
-            tc = target_cores_cache.get(representative) if args.target else None
-            if args.split:
-                zip_paths = generate_split_packs(
-                    representative,
-                    args.platforms_dir,
-                    db,
-                    args.bios_dir,
-                    args.output_dir,
-                    group_by=args.group_by,
-                    emulators_dir=args.emulators_dir,
-                    zip_contents=zip_contents,
-                    data_registry=data_registry,
-                    emu_profiles=emu_profiles,
-                    target_cores=tc,
-                    required_only=args.required_only,
-                )
-                print(f"  Split into {len(zip_paths)} packs")
-            else:
-                zip_path = generate_pack(
-                    representative,
-                    args.platforms_dir,
-                    db,
-                    args.bios_dir,
-                    args.output_dir,
-                    include_extras=args.include_extras,
-                    emulators_dir=args.emulators_dir,
-                    zip_contents=zip_contents,
-                    data_registry=data_registry,
-                    emu_profiles=emu_profiles,
-                    target_cores=tc,
-                    required_only=args.required_only,
-                    system_filter=system_filter,
-                )
-            if not args.split and zip_path and variants:
-                rep_cfg = load_platform_config(representative, args.platforms_dir)
-                ver = rep_cfg.get("version", rep_cfg.get("dat_version", ""))
-                ver_tag = f"_{ver.replace(' ', '')}" if ver else ""
+    for source, required_only in variants:
+        for group_platforms, representative in groups:
+            aliases = [p for p in group_platforms if p != representative]
+            if aliases:
                 all_names = [
                     load_platform_config(p, args.platforms_dir).get("platform", p)
                     for p in group_platforms
                 ]
-                combined = (
-                    "_".join(n.replace(" ", "") for n in all_names)
-                    + f"{ver_tag}_BIOS_Pack.zip"
-                )
-                new_path = os.path.join(os.path.dirname(zip_path), combined)
-                if new_path != zip_path:
-                    os.rename(zip_path, new_path)
-                    print(f"  Renamed -> {os.path.basename(new_path)}")
-        except (FileNotFoundError, OSError, yaml.YAMLError) as e:
-            print(f"  ERROR: {e}")
+                label = " / ".join(all_names)
+                print(f"\nGenerating pack for {label} [source={source}]...")
+            else:
+                print(f"\nGenerating pack for {representative} [source={source}]...")
+
+            try:
+                tc = target_cores_cache.get(representative) if args.target else None
+                if args.split:
+                    zip_paths = generate_split_packs(
+                        representative,
+                        args.platforms_dir,
+                        db,
+                        args.bios_dir,
+                        args.output_dir,
+                        group_by=args.group_by,
+                        emulators_dir=args.emulators_dir,
+                        zip_contents=zip_contents,
+                        data_registry=data_registry,
+                        emu_profiles=emu_profiles,
+                        target_cores=tc,
+                        required_only=required_only,
+                        source=source,
+                    )
+                    print(f"  Split into {len(zip_paths)} packs")
+                else:
+                    zip_path = generate_pack(
+                        representative,
+                        args.platforms_dir,
+                        db,
+                        args.bios_dir,
+                        args.output_dir,
+                        include_extras=args.include_extras,
+                        emulators_dir=args.emulators_dir,
+                        zip_contents=zip_contents,
+                        data_registry=data_registry,
+                        emu_profiles=emu_profiles,
+                        target_cores=tc,
+                        required_only=required_only,
+                        system_filter=system_filter,
+                        source=source,
+                    )
+                if not args.split and zip_path and aliases:
+                    rep_cfg = load_platform_config(representative, args.platforms_dir)
+                    ver = rep_cfg.get("version", rep_cfg.get("dat_version", ""))
+                    ver_tag = f"_{ver.replace(' ', '')}" if ver else ""
+                    all_names = [
+                        load_platform_config(p, args.platforms_dir).get("platform", p)
+                        for p in group_platforms
+                    ]
+                    combined = (
+                        "_".join(n.replace(" ", "") for n in all_names)
+                        + f"{ver_tag}_BIOS_Pack.zip"
+                    )
+                    new_path = os.path.join(os.path.dirname(zip_path), combined)
+                    if new_path != zip_path:
+                        os.rename(zip_path, new_path)
+                        print(f"  Renamed -> {os.path.basename(new_path)}")
+            except (FileNotFoundError, OSError, yaml.YAMLError) as e:
+                print(f"  ERROR: {e}")
 
     print("\nVerifying packs and generating manifests...")
     skip_conf = bool(system_filter or args.split)
@@ -2598,6 +2629,17 @@ def main():
         "--required-only",
         action="store_true",
         help="Only include required files, skip optional",
+    )
+    parser.add_argument(
+        "--source",
+        choices=["platform", "truth", "full"],
+        default="full",
+        help="File source: platform (YAML only), truth (emulator profiles), full (both)",
+    )
+    parser.add_argument(
+        "--all-variants",
+        action="store_true",
+        help="Generate all 6 source x required combinations",
     )
     parser.add_argument(
         "--split", action="store_true", help="Generate one ZIP per system/manufacturer"
