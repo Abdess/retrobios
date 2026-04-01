@@ -166,6 +166,8 @@ def main():
         help="(no-op) Core requirements are always included",
     )
     parser.add_argument("--target", "-t", help="Hardware target (e.g., switch, rpi4)")
+    parser.add_argument("--source", choices=["platform", "truth", "full"], default="full")
+    parser.add_argument("--all-variants", action="store_true")
     parser.add_argument(
         "--check-buildbot",
         action="store_true",
@@ -326,6 +328,10 @@ def main():
             pack_cmd.append("--include-extras")
         if args.target:
             pack_cmd.extend(["--target", args.target])
+        if args.source != "full":
+            pack_cmd.extend(["--source", args.source])
+        if args.all_variants:
+            pack_cmd.append("--all-variants")
         ok, pack_output = run(pack_cmd, "4/8 generate packs")
         results["generate_packs"] = ok
         all_ok = all_ok and ok
