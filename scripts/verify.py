@@ -1230,13 +1230,24 @@ def verify_emulator(
                 check = check_file_validation(local_path, name, validation_index)
                 if check:
                     reason, _emus = check
-                    result = {
-                        "name": name,
-                        "status": Status.UNTESTED,
-                        "required": required,
-                        "path": local_path,
-                        "reason": reason,
-                    }
+                    better = _find_best_variant(
+                        file_entry, db, local_path, validation_index,
+                    )
+                    if better:
+                        result = {
+                            "name": name,
+                            "status": Status.OK,
+                            "required": required,
+                            "path": better,
+                        }
+                    else:
+                        result = {
+                            "name": name,
+                            "status": Status.UNTESTED,
+                            "required": required,
+                            "path": local_path,
+                            "reason": reason,
+                        }
                 else:
                     result = {
                         "name": name,
