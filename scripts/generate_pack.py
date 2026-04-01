@@ -748,6 +748,7 @@ def _build_readme(
     base_dest: str,
     total_files: int,
     num_systems: int,
+    source: str = "full",
 ) -> str:
     """Build a personalized step-by-step README for each platform pack."""
     sep = "=" * 50
@@ -945,7 +946,23 @@ def _build_readme(
         f"{sep}\n"
     )
 
-    return header + guide + footer
+    source_info = ""
+    if source == "platform":
+        source_info = (
+            "PACK TYPE: Platform Only\n\n"
+            f"  This pack contains only files declared by {platform_display}.\n"
+            "  Core extras from emulator profiles are not included.\n"
+            "  Use the Full pack for maximum coverage.\n\n"
+        )
+    elif source == "truth":
+        source_info = (
+            "PACK TYPE: Ground Truth\n\n"
+            "  This pack contains files that emulators actually load,\n"
+            "  based on source code analysis of emulator profiles.\n"
+            "  Independent of platform scraper accuracy.\n\n"
+        )
+
+    return header + source_info + guide + footer
 
 
 def _build_agnostic_rename_readme(
@@ -1457,7 +1474,8 @@ def generate_pack(
         # README.txt for users -personalized step-by-step per platform
         num_systems = len(pack_systems)
         readme_text = _build_readme(
-            platform_name, platform_display, base_dest, total_files, num_systems
+            platform_name, platform_display, base_dest, total_files, num_systems,
+            source=source,
         )
         zf.writestr("README.txt", readme_text)
 
