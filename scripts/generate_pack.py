@@ -1936,11 +1936,13 @@ def generate_split_packs(
     emu_profiles: dict | None = None,
     target_cores: set[str] | None = None,
     required_only: bool = False,
+    source: str = "full",
 ) -> list[str]:
     """Generate split packs (one ZIP per system or manufacturer)."""
     config = load_platform_config(platform_name, platforms_dir)
     platform_display = config.get("platform", platform_name)
-    split_dir = os.path.join(output_dir, f"{platform_display.replace(' ', '_')}_Split")
+    source_tag = {"platform": "_Platform", "truth": "_Truth"}.get(source, "")
+    split_dir = os.path.join(output_dir, f"{platform_display.replace(' ', '_')}{source_tag}_Split")
     os.makedirs(split_dir, exist_ok=True)
 
     systems = config.get("systems", {})
@@ -1955,15 +1957,12 @@ def generate_split_packs(
     if emu_profiles is None:
         emu_profiles = load_emulator_profiles(emulators_dir)
     base_dest = config.get("base_destination", "")
-    if emu_profiles:
+    if source == "platform":
+        all_extras = []
+    elif emu_profiles:
         all_extras = _collect_emulator_extras(
-            config,
-            emulators_dir,
-            db,
-            set(),
-            base_dest,
-            emu_profiles,
-            target_cores=target_cores,
+            config, emulators_dir, db, set(), base_dest, emu_profiles,
+            target_cores=target_cores, include_all=(source == "truth"),
         )
     else:
         all_extras = []
@@ -2007,13 +2006,14 @@ def generate_split_packs(
             required_only=required_only,
             system_filter=group_system_ids,
             precomputed_extras=group_extras,
+            source=source,
         )
         if zip_path:
             version = config.get("version", config.get("dat_version", ""))
             ver_tag = f"_{version.replace(' ', '')}" if version else ""
             req_tag = "_Required" if required_only else ""
             safe_group = group_name.replace(" ", "_")
-            new_name = f"{platform_display.replace(' ', '_')}{ver_tag}{req_tag}_{safe_group}_BIOS_Pack.zip"
+            new_name = f"{platform_display.replace(' ', '_')}{ver_tag}{source_tag}{req_tag}_{safe_group}_BIOS_Pack.zip"
             new_path = os.path.join(split_dir, new_name)
             if new_path != zip_path:
                 os.rename(zip_path, new_path)
@@ -2859,6 +2859,7 @@ def generate_manifest(
     zip_contents: dict | None = None,
     emu_profiles: dict | None = None,
     target_cores: set[str] | None = None,
+    source: str = "full",
 ) -> dict:
     """Generate a JSON manifest for a platform (same resolution as generate_pack).
 
@@ -2905,71 +2906,76 @@ def generate_manifest(
     total_size = 0
 
     # Phase 1: baseline files
-    for sys_id, system in sorted(pack_systems.items()):
-        for file_entry in system.get("files", []):
-            dest = _sanitize_path(file_entry.get("destination", file_entry["name"]))
-            if not dest:
-                continue
-            full_dest = f"{base_dest}/{dest}" if base_dest else dest
+    if source != "truth":
+        for sys_id, system in sorted(pack_systems.items()):
+            for file_entry in system.get("files", []):
+                dest = _sanitize_path(file_entry.get("destination", file_entry["name"]))
+                if not dest:
+                    continue
+                full_dest = f"{base_dest}/{dest}" if base_dest else dest
 
-            dedup_key = full_dest
-            if dedup_key in seen_destinations:
-                continue
-            if case_insensitive and dedup_key.lower() in seen_lower:
-                continue
-            if _has_path_conflict(full_dest, seen_destinations, seen_parents):
-                continue
+                dedup_key = full_dest
+                if dedup_key in seen_destinations:
+                    continue
+                if case_insensitive and dedup_key.lower() in seen_lower:
+                    continue
+                if _has_path_conflict(full_dest, seen_destinations, seen_parents):
+                    continue
 
-            storage = file_entry.get("storage", "embedded")
-            if storage == "user_provided":
-                continue
+                storage = file_entry.get("storage", "embedded")
+                if storage == "user_provided":
+                    continue
 
-            local_path, status = resolve_file(file_entry, db, bios_dir, zip_contents)
-            if status in ("not_found", "external"):
-                continue
+                local_path, status = resolve_file(file_entry, db, bios_dir, zip_contents)
+                if status in ("not_found", "external"):
+                    continue
 
-            # Get SHA1 and size
-            sha1 = file_entry.get("sha1", "")
-            file_size = 0
-            if local_path and os.path.exists(local_path):
-                file_size = os.path.getsize(local_path)
-                if not sha1:
-                    hashes = compute_hashes(local_path)
-                    sha1 = hashes["sha1"]
+                # Get SHA1 and size
+                sha1 = file_entry.get("sha1", "")
+                file_size = 0
+                if local_path and os.path.exists(local_path):
+                    file_size = os.path.getsize(local_path)
+                    if not sha1:
+                        hashes = compute_hashes(local_path)
+                        sha1 = hashes["sha1"]
 
-            repo_path = _get_repo_path(sha1, db) if sha1 else ""
+                repo_path = _get_repo_path(sha1, db) if sha1 else ""
 
-            entry: dict = {
-                "dest": dest,
-                "sha1": sha1,
-                "size": file_size,
-                "repo_path": repo_path,
-                "cores": None,
-            }
+                entry: dict = {
+                    "dest": dest,
+                    "sha1": sha1,
+                    "size": file_size,
+                    "repo_path": repo_path,
+                    "cores": None,
+                }
 
-            if _is_large_file(local_path or "", repo_root):
-                entry["storage"] = "release"
-                entry["release_asset"] = (
-                    os.path.basename(local_path) if local_path else file_entry["name"]
-                )
+                if _is_large_file(local_path or "", repo_root):
+                    entry["storage"] = "release"
+                    entry["release_asset"] = (
+                        os.path.basename(local_path) if local_path else file_entry["name"]
+                    )
 
-            manifest_files.append(entry)
-            total_size += file_size
-            seen_destinations.add(dedup_key)
-            _register_path(dedup_key, seen_destinations, seen_parents)
-            if case_insensitive:
-                seen_lower.add(dedup_key.lower())
+                manifest_files.append(entry)
+                total_size += file_size
+                seen_destinations.add(dedup_key)
+                _register_path(dedup_key, seen_destinations, seen_parents)
+                if case_insensitive:
+                    seen_lower.add(dedup_key.lower())
 
     # Phase 2: core complement (emulator extras)
-    core_files = _collect_emulator_extras(
-        config,
-        emulators_dir,
-        db,
-        seen_destinations,
-        base_dest,
-        emu_profiles,
-        target_cores=target_cores,
-    )
+    if source != "platform":
+        core_files = _collect_emulator_extras(
+            config,
+            emulators_dir,
+            db,
+            seen_destinations,
+            base_dest,
+            emu_profiles,
+            target_cores=target_cores,
+            include_all=(source == "truth"),
+        )
+    else:
+        core_files = []
     extras_pfx = _detect_extras_prefix(config, base_dest)
     for fe in core_files:
         dest = _sanitize_path(fe.get("destination", fe["name"]))
@@ -3038,6 +3044,7 @@ def generate_manifest(
 
     result: dict = {
         "manifest_version": 1,
+        "source": source,
         "platform": platform_name,
         "display_name": platform_display,
         "version": "1.0",
