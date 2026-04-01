@@ -3,7 +3,7 @@
   "platform": "retrodeck",
   "display_name": "RetroDECK",
   "version": "1.0",
-  "generated": "2026-03-31T21:01:54Z",
+  "generated": "2026-04-01T09:05:30Z",
   "base_destination": "",
   "detect": [
     {
@@ -14,8 +14,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 3139,
-  "total_size": 5886081009,
+  "total_files": 3127,
+  "total_size": 5865074692,
   "files": [
     {
       "dest": "bios/panafz1.bin",
@@ -16803,42 +16803,6 @@
       ]
     },
     {
-      "dest": "SGB1.sfc/sgb1.boot.rom",
-      "sha1": "aa2f50a77dfb4823da96ba99309085a3c6278515",
-      "size": 256,
-      "repo_path": "bios/Nintendo/Game Boy/GB_sgb.bin",
-      "cores": [
-        "higan (SFC Accuracy)"
-      ]
-    },
-    {
-      "dest": "SGB1.sfc/program.rom",
-      "sha1": "973e10840db683cf3faf61bd443090786b3a9f04",
-      "size": 262144,
-      "repo_path": "bios/Nintendo/Super Game Boy/SGB1.sfc/program.rom",
-      "cores": [
-        "higan (SFC Accuracy)"
-      ]
-    },
-    {
-      "dest": "SGB2.sfc/sgb2.boot.rom",
-      "sha1": "93407ea10d2f30ab96a314d8eca44fe160aea734",
-      "size": 256,
-      "repo_path": "bios/Nintendo/Game Boy/GB_sgb2.bin",
-      "cores": [
-        "higan (SFC Accuracy)"
-      ]
-    },
-    {
-      "dest": "SGB2.sfc/program.rom",
-      "sha1": "e5b2922ca137051059e4269b236d07a22c07bc84",
-      "size": 524288,
-      "repo_path": "bios/Nintendo/Super Game Boy/SGB2.sfc/program.rom",
-      "cores": [
-        "higan (SFC Accuracy)"
-      ]
-    },
-    {
       "dest": "Wii/sd.raw",
       "sha1": "8c8134f08b2e3baa603206ede30d3935365009b8",
       "size": 134217728,
@@ -22444,82 +22408,10 @@
       ]
     },
     {
-      "dest": "dc/dc_boot.bin",
-      "sha1": "8951d1bb219ab2ff8583033d2119c899cc81f18c",
-      "size": 2097152,
-      "repo_path": "bios/Sega/Dreamcast/dc_bios.bin",
-      "cores": [
-        "Flycast"
-      ]
-    },
-    {
-      "dest": "dc/naomi_boot.bin",
-      "sha1": "6d27d71aec4dfba98f66316ae74a1426d567698a",
-      "size": 2097152,
-      "repo_path": "bios/Sega/Dreamcast/naomi_boot.bin",
-      "cores": [
-        "Flycast"
-      ]
-    },
-    {
-      "dest": "dc/naomi.zip",
-      "sha1": "788aee0f30ee80ea54dcd705afe93944accafc31",
-      "size": 9651827,
-      "repo_path": "bios/Arcade/Arcade/naomi.zip",
-      "cores": [
-        "Flycast"
-      ]
-    },
-    {
-      "dest": "dc/airlbios.zip",
-      "sha1": "03c9d1c3f59e8c6f320ea74abde1e4e7c5bfa623",
-      "size": 718362,
-      "repo_path": "bios/Arcade/MAME/airlbios.zip",
-      "cores": [
-        "Flycast"
-      ]
-    },
-    {
-      "dest": "dc/f355bios.zip",
-      "sha1": "b6ff66dcb5547bd91760d239ddf428a655631c53",
-      "size": 1394278,
-      "repo_path": "bios/Arcade/Arcade/f355bios.zip",
-      "cores": [
-        "Flycast"
-      ]
-    },
-    {
-      "dest": "dc/f355dlx.zip",
-      "sha1": "48d1712d1b1cdfeeeb43c6287c17b0b6309cfaab",
-      "size": 2328436,
-      "repo_path": "bios/Arcade/Arcade/f355dlx.zip",
-      "cores": [
-        "Flycast"
-      ]
-    },
-    {
-      "dest": "dc/hod2bios.zip",
-      "sha1": "07fd3fae7af650a37a3329ed09d039bd7360294f",
-      "size": 1889870,
-      "repo_path": "bios/Arcade/MAME/hod2bios.zip",
-      "cores": [
-        "Flycast"
-      ]
-    },
-    {
       "dest": "dc/naomigd.zip",
       "sha1": "a0f07de6070d98f86d55a4ecd61b4a5b05a4a0d5",
       "size": 3387512,
       "repo_path": "bios/Arcade/MAME/naomigd.zip",
-      "cores": [
-        "Flycast"
-      ]
-    },
-    {
-      "dest": "dc/awbios.zip",
-      "sha1": "7940c7bf29eee85a5b2fdec78750b19aa22895dc",
-      "size": 42296,
-      "repo_path": "bios/Arcade/Arcade/awbios.zip",
       "cores": [
         "Flycast"
       ]

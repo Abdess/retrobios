@@ -311,6 +311,109 @@ def download_external(file_entry: dict, dest_path: str) -> bool:
     return True
 
 
+def _detect_extras_prefix(config: dict, base_dest: str) -> str:
+    """Detect the effective BIOS prefix for core extras.
+
+    When base_destination is empty (RetroDECK), infer the prefix from
+    the dominant root of YAML-declared destinations.  Returns the prefix
+    to prepend to every core-extra destination (may be empty).
+    """
+    if base_dest:
+        return base_dest
+    dests: list[str] = []
+    for sys_data in config.get("systems", {}).values():
+        for f in sys_data.get("files", []):
+            d = f.get("destination", "")
+            if d and "/" in d:
+                dests.append(d)
+    if not dests:
+        return ""
+    from collections import Counter
+    roots = Counter(d.split("/", 1)[0] for d in dests)
+    most_common, count = roots.most_common(1)[0]
+    if count / len(dests) > 0.9:
+        return most_common
+    return ""
+
+
+def _detect_slug_structure(config: dict) -> tuple[bool, dict[str, str]]:
+    """Detect whether a platform uses per-system slug destinations.
+
+    Returns ``(is_slug_based, system_to_slug)`` where ``system_to_slug``
+    maps system IDs to their destination slug prefix.  Slug-based means
+    each system's files live under a per-system subfolder (e.g. RomM's
+    ``bios/{platform_slug}/{file}``), with varying slugs across systems.
+
+    Only returns True when nearly ALL destinations have a subfolder and
+    nearly ALL systems map to a consistent slug, distinguishing true
+    slug-based layouts (RomM) from platforms that happen to have some
+    subfoldered files (RetroArch ``dc/``, ``neocd/``).
+    """
+    total_files = 0
+    files_with_slash = 0
+    sys_to_slug: dict[str, str] = {}
+    total_systems_with_files = 0
+    for sys_id, sys_data in config.get("systems", {}).items():
+        files = sys_data.get("files", [])
+        if not files:
+            continue
+        total_systems_with_files += 1
+        slugs: set[str] = set()
+        for f in files:
+            d = f.get("destination", "")
+            if d:
+                total_files += 1
+                if "/" in d:
+                    files_with_slash += 1
+                    slugs.add(d.split("/", 1)[0])
+        if len(slugs) == 1:
+            sys_to_slug[sys_id] = slugs.pop()
+
+    if not sys_to_slug or total_files == 0:
+        return False, {}
+    # All conditions must hold for slug-based detection:
+    # 1. Nearly all files have a subfolder
+    # 2. Multiple distinct slugs (not a constant prefix)
+    # 3. Nearly all systems with files map to a slug
+    # 4. Files are exactly slug/filename (depth 2), not deeper
+    unique_slugs = set(sys_to_slug.values())
+    all_have_slash = files_with_slash / total_files > 0.95
+    varying_slugs = len(unique_slugs) > 1
+    high_coverage = len(sys_to_slug) / total_systems_with_files > 0.9
+    # Count files deeper than slug/filename (e.g., amiga/bios/kick.rom)
+    deep_files = 0
+    for sys_data in config.get("systems", {}).values():
+        for f in sys_data.get("files", []):
+            d = f.get("destination", "")
+            if d and d.count("/") > 1:
+                deep_files += 1
+    shallow = deep_files / total_files < 0.05 if total_files else True
+    return (all_have_slash and varying_slugs and high_coverage
+            and shallow), sys_to_slug
+
+
+def _map_emulator_to_slug(
+    profile: dict,
+    platform_systems: set[str], norm_map: dict[str, str],
+    sys_to_slug: dict[str, str],
+) -> str:
+    """Map an emulator to a destination slug for slug-based platforms."""
+    from common import _norm_system_id
+    emu_systems = set(profile.get("systems", []))
+    # Direct match
+    direct = emu_systems & platform_systems
+    if direct:
+        target = sorted(direct)[0]
+        return sys_to_slug.get(target, "")
+    # Normalized match
+    for es in sorted(emu_systems):
+        norm = _norm_system_id(es)
+        if norm in norm_map:
+            target = norm_map[norm]
+            return sys_to_slug.get(target, "")
+    return ""
+
+
 def _collect_emulator_extras(
     config: dict,
     emulators_dir: str,
@@ -334,10 +437,19 @@ def _collect_emulator_extras(
 
     Works for ANY platform (RetroArch, Batocera, Recalbox, etc.)
     """
-    from common import resolve_platform_cores
+    from common import resolve_platform_cores, _norm_system_id
     from verify import find_undeclared_files
 
     profiles = emu_profiles if emu_profiles is not None else load_emulator_profiles(emulators_dir)
+
+    # Detect destination conventions for core extras
+    extras_prefix = _detect_extras_prefix(config, base_dest)
+    is_slug_based, sys_to_slug = _detect_slug_structure(config)
+    platform_systems = set(config.get("systems", {}).keys())
+    norm_map: dict[str, str] = {}
+    if is_slug_based:
+        for sid in platform_systems:
+            norm_map[_norm_system_id(sid)] = sid
 
     undeclared = find_undeclared_files(config, emulators_dir, db, emu_profiles, target_cores=target_cores)
     extras = []
@@ -351,7 +463,25 @@ def _collect_emulator_extras(
         raw_dest = archive if archive else (u.get("path") or u["name"])
         # Directory path: append filename (e.g. "cafeLibs/" + "snd_user.rpl")
         dest = f"{raw_dest}{u['name']}" if raw_dest.endswith("/") else raw_dest
-        full_dest = f"{base_dest}/{dest}" if base_dest else dest
+
+        # Slug-based platforms: prefix dest with system slug
+        if is_slug_based:
+            emu_name = u.get("emulator", "")
+            profile = profiles.get(emu_name, {})
+            # Try finding profile by display name if key lookup failed
+            if not profile:
+                for pn, pp in profiles.items():
+                    if pp.get("emulator") == emu_name:
+                        profile = pp
+                        break
+            slug = _map_emulator_to_slug(
+                profile, platform_systems, norm_map, sys_to_slug,
+            )
+            if not slug:
+                continue  # can't place without slug
+            dest = f"{slug}/{dest}"
+
+        full_dest = f"{extras_prefix}/{dest}" if extras_prefix else dest
         if full_dest in seen_dests:
             continue
         seen_dests.add(full_dest)
@@ -368,6 +498,12 @@ def _collect_emulator_extras(
     # different path by another core (e.g. neocd/ vs root, same_cdi/bios/ vs root).
     # Only adds a copy when the file is ALREADY covered at a different path -
     # never introduces a file that wasn't selected by the first pass.
+    #
+    # Skip for slug-based platforms (RomM): alternative paths don't map to
+    # the required {platform_slug}/{file} structure.
+    if is_slug_based:
+        return extras
+
     relevant = resolve_platform_cores(config, profiles, target_cores=target_cores)
     standalone_set = {str(c) for c in config.get("standalone_cores", [])}
     by_name = db.get("indexes", {}).get("by_name", {})
@@ -410,7 +546,7 @@ def _collect_emulator_extras(
             dest = f"{raw}{fname}" if raw.endswith("/") else raw
             if dest == fname:
                 continue  # no alternative destination
-            full_dest = f"{base_dest}/{dest}" if base_dest else dest
+            full_dest = f"{extras_prefix}/{dest}" if extras_prefix else dest
             if full_dest in seen_dests:
                 continue
             # Check file exists in repo or data dirs
@@ -447,7 +583,7 @@ def _collect_emulator_extras(
             if archive_name not in covered_names:
                 continue
             dest = f"{prefix}/{archive_name}"
-            full_dest = f"{base_dest}/{dest}" if base_dest else dest
+            full_dest = f"{extras_prefix}/{dest}" if extras_prefix else dest
             if full_dest in seen_dests:
                 continue
             if not by_name.get(archive_name):
@@ -533,7 +669,7 @@ def _collect_emulator_extras(
                 if not scan_name:
                     continue
                 dest = scan_name
-                full_dest = f"{base_dest}/{dest}" if base_dest else dest
+                full_dest = f"{extras_prefix}/{dest}" if extras_prefix else dest
                 if full_dest in seen_dests:
                     continue
                 seen_dests.add(full_dest)
@@ -662,9 +798,11 @@ def _build_readme(platform_name: str, platform_display: str,
             "  ----------------\n"
             "  1. Open Dolphin file manager\n"
             "  2. Show hidden files (Ctrl+H)\n"
-            "  3. Navigate to ~/retrodeck/bios/\n"
-            "  4. Open this archive and go into the top-level folder\n"
-            "  5. Copy ALL contents into ~/retrodeck/bios/\n\n"
+            "  3. Navigate to ~/retrodeck/\n"
+            "  4. Open the \"bios\" folder from this archive\n"
+            "  5. Copy ALL contents into ~/retrodeck/bios/\n"
+            "  6. If the archive contains a \"roms\" folder, copy\n"
+            "     its contents into ~/retrodeck/roms/\n\n"
             "  NOTE: RetroDECK uses its own BIOS checker. After\n"
             "  copying, open RetroDECK > Tools > BIOS Checker to\n"
             "  verify everything is detected.\n\n"
@@ -1086,14 +1224,16 @@ def generate_pack(
             dest = _sanitize_path(fe.get("destination", fe["name"]))
             if not dest:
                 continue
-            # Core extras use flat filenames; prepend base_destination or
-            # default to the platform's most common BIOS path prefix
-            if base_dest:
-                full_dest = f"{base_dest}/{dest}"
-            elif "/" not in dest:
-                # Bare filename with empty base_destination -infer bios/ prefix
-                # to match platform conventions (RetroDECK: ~/retrodeck/bios/)
-                full_dest = f"bios/{dest}"
+            # Core extras: _collect_emulator_extras already adjusted
+            # destinations for slug-based platforms.  Apply the effective
+            # prefix (base_dest, or inferred from YAML when base_dest is
+            # empty — e.g. RetroDECK infers "bios").
+            extras_pfx = _detect_extras_prefix(config, base_dest)
+            if extras_pfx:
+                if not dest.startswith(f"{extras_pfx}/"):
+                    full_dest = f"{extras_pfx}/{dest}"
+                else:
+                    full_dest = dest
             else:
                 full_dest = dest
             if full_dest in seen_destinations:
@@ -1867,6 +2007,25 @@ def _validate_args(args, parser):
         parser.error("--manifest is incompatible with --split")
 
 
+def _write_manifest_if_changed(path: str, manifest: dict) -> None:
+    """Write manifest JSON only if content (excluding timestamp) changed."""
+    new_json = json.dumps(manifest, indent=2)
+    if os.path.exists(path):
+        with open(path) as f:
+            try:
+                old = json.load(f)
+            except (json.JSONDecodeError, OSError):
+                old = None
+        if old is not None:
+            # Compare everything except the generated timestamp
+            old_cmp = {k: v for k, v in old.items() if k != "generated"}
+            new_cmp = {k: v for k, v in manifest.items() if k != "generated"}
+            if old_cmp == new_cmp:
+                return  # no content change, keep existing timestamp
+    with open(path, "w") as f:
+        f.write(new_json)
+
+
 def _run_manifest_mode(args, groups, db, zip_contents, emu_profiles, target_cores_cache):
     """Generate JSON manifests instead of ZIP packs."""
     registry_path = os.path.join(args.platforms_dir, "_registry.yml")
@@ -1886,8 +2045,7 @@ def _run_manifest_mode(args, groups, db, zip_contents, emu_profiles, target_core
                 target_cores=tc,
             )
             out_path = os.path.join(args.output_dir, f"{representative}.json")
-            with open(out_path, "w") as f:
-                json.dump(manifest, f, indent=2)
+            _write_manifest_if_changed(out_path, manifest)
             print(f"  {out_path}: {manifest['total_files']} files, "
                   f"{manifest['total_size']} bytes")
             # Create aliases for grouped platforms (e.g., lakka -> retroarch)
@@ -1902,8 +2060,7 @@ def _run_manifest_mode(args, groups, db, zip_contents, emu_profiles, target_core
                     alias_install = alias_registry.get("install", {})
                     alias_manifest["detect"] = alias_install.get("detect", [])
                     alias_manifest["standalone_copies"] = alias_install.get("standalone_copies", [])
-                    with open(alias_path, "w") as f:
-                        json.dump(alias_manifest, f, indent=2)
+                    _write_manifest_if_changed(alias_path, alias_manifest)
                     print(f"  {alias_path}: alias of {representative}")
         except (FileNotFoundError, OSError, yaml.YAMLError) as e:
             print(f"  ERROR: {e}")
@@ -2290,14 +2447,16 @@ def generate_manifest(
         config, emulators_dir, db,
         seen_destinations, base_dest, emu_profiles, target_cores=target_cores,
     )
+    extras_pfx = _detect_extras_prefix(config, base_dest)
     for fe in core_files:
         dest = _sanitize_path(fe.get("destination", fe["name"]))
         if not dest:
             continue
-        if base_dest:
-            full_dest = f"{base_dest}/{dest}"
-        elif "/" not in dest:
-            full_dest = f"bios/{dest}"
+        if extras_pfx:
+            if not dest.startswith(f"{extras_pfx}/"):
+                full_dest = f"{extras_pfx}/{dest}"
+            else:
+                full_dest = dest
         else:
             full_dest = dest
 
@@ -2658,15 +2817,17 @@ def verify_pack_against_platform(
                 parts = n.split("/")
                 for i in range(1, len(parts)):
                     seen_parents.add("/".join(parts[:i]))
+            extras_pfx = _detect_extras_prefix(config, base_dest)
             for u in undeclared:
                 if not u["in_repo"]:
                     continue
                 raw_dest = u.get("path") or u["name"]
                 dest = f"{raw_dest}{u['name']}" if raw_dest.endswith("/") else raw_dest
-                if base_dest:
-                    full = f"{base_dest}/{dest}"
-                elif "/" not in dest:
-                    full = f"bios/{dest}"
+                if extras_pfx:
+                    if not dest.startswith(f"{extras_pfx}/"):
+                        full = f"{extras_pfx}/{dest}"
+                    else:
+                        full = dest
                 else:
                     full = dest
                 # Skip path conflicts (same logic as pack builder)
