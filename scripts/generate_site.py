@@ -497,6 +497,17 @@ def generate_platform_page(
         lines.append(f"| BIOS path | `{base_dest}/` |")
     if homepage:
         lines.append(f"| Homepage | [{homepage}]({homepage}) |")
+    contrib_list = (registry or {}).get(name, {}).get("contributed_by", [])
+    if contrib_list:
+        for cb in contrib_list:
+            username = cb.get("username", "")
+            contribution = cb.get("contribution", "")
+            pr = cb.get("pr")
+            pr_link = f" ([#{pr}]({REPO_URL}/pull/{pr}))" if pr else ""
+            lines.append(
+                f"| Contributed by | [@{username}](https://github.com/{username})"
+                f" - {contribution}{pr_link} |"
+            )
     lines.extend(
         [
             "",
@@ -865,7 +876,11 @@ def generate_emulators_index(profiles: dict) -> str:
 
 
 def generate_emulator_page(
-    name: str, profile: dict, db: dict, platform_files: dict | None = None
+    name: str,
+    profile: dict,
+    db: dict,
+    platform_files: dict | None = None,
+    data_names: set[str] | None = None,
 ) -> str:
     if profile.get("type") == "alias":
         parent = profile.get("alias_of", profile.get("bios_identical_to", "unknown"))
@@ -1022,15 +1037,52 @@ def generate_emulator_page(
                 ]
             )
     else:
+        from cross_reference import _resolve_source
+
         by_name = db.get("indexes", {}).get("by_name", {})
-        db.get("files", {})
+        by_name_lower = {k.lower(): k for k in by_name}
+        by_path_suffix = db.get("indexes", {}).get("by_path_suffix", {})
+        by_md5 = db.get("indexes", {}).get("by_md5", {})
+        db_files = db.get("files", {})
+
+        def _file_available(f: dict) -> bool:
+            """Check if a file is available using the same resolution as cross_reference."""
+            fname = f.get("name", "")
+            if not fname:
+                return False
+            storage = f.get("storage", "")
+            if storage in ("release", "large_file"):
+                return True
+            src = _resolve_source(
+                fname, by_name, by_name_lower, data_names, by_path_suffix,
+            )
+            if src is not None:
+                return True
+            path_field = f.get("path", "")
+            if path_field and path_field != fname:
+                src = _resolve_source(
+                    path_field, by_name, by_name_lower, data_names,
+                    by_path_suffix,
+                )
+                if src is not None:
+                    return True
+            md5_raw = f.get("md5", "")
+            if md5_raw:
+                for md5_val in md5_raw.split(","):
+                    md5_val = md5_val.strip().lower()
+                    if md5_val and by_md5.get(md5_val):
+                        return True
+            sha1 = f.get("sha1", "")
+            if sha1 and sha1 in db_files:
+                return True
+            return False
 
         # Stats by category
         bios_files = [f for f in files if f.get("category", "bios") == "bios"]
         game_data = [f for f in files if f.get("category") == "game_data"]
         bios_zips = [f for f in files if f.get("category") == "bios_zip"]
 
-        in_repo_count = sum(1 for f in files if f.get("name", "") in by_name)
+        in_repo_count = sum(1 for f in files if _file_available(f))
         missing_count = len(files) - in_repo_count
         req_count = sum(1 for f in files if f.get("required"))
         opt_count = len(files) - req_count
@@ -1058,7 +1110,7 @@ def generate_emulator_page(
         for f in files:
             fname = f.get("name", "")
             required = f.get("required", False)
-            in_repo = fname in by_name
+            in_repo = _file_available(f)
             source_ref = f.get("source_ref", "")
             mode = f.get("mode", "")
             hle = f.get("hle_fallback", False)
@@ -1504,19 +1556,32 @@ def generate_gap_analysis(
 
     # ---- Section 3: Core complement (cross-reference provenance) ----
 
+    from common import expand_platform_declared_names
+
     all_declared: set[str] = set()
     declared: dict[str, set[str]] = {}
     for _name, cov in coverages.items():
         config = cov["config"]
+        # Enrich with alias resolution (MD5 -> SHA1 -> canonical name + aliases)
+        all_declared.update(expand_platform_declared_names(config, db))
         for sys_id, system in config.get("systems", {}).items():
             for fe in system.get("files", []):
                 fname = fe.get("name", "")
                 if fname:
                     declared.setdefault(sys_id, set()).add(fname)
-                    all_declared.add(fname)
 
+    # Only include profiles relevant to at least one platform
+    unique_profiles = {
+        k: v
+        for k, v in profiles.items()
+        if v.get("type") not in ("alias", "test")
+    }
+    relevant_set: set[str] = set()
+    for _name, cov in coverages.items():
+        matched = resolve_platform_cores(cov["config"], unique_profiles)
+        relevant_set.update(matched)
     active_profiles = {
-        k: v for k, v in profiles.items() if v.get("type") != "alias"
+        k: v for k, v in unique_profiles.items() if k in relevant_set
     }
 
     report = run_cross_reference(
@@ -2190,7 +2255,7 @@ def main():
         str(docs / "emulators" / "index.md"), generate_emulators_index(profiles)
     )
     for name, profile in profiles.items():
-        page = generate_emulator_page(name, profile, db, platform_files)
+        page = generate_emulator_page(name, profile, db, platform_files, suppl_names)
         write_if_changed(str(docs / "emulators" / f"{name}.md"), page)
 
     # Generate cross-reference page
