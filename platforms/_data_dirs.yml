@@ -150,22 +150,23 @@ data_directories:
     description: "SDLPAL Chinese Paladin game data (.mkf archives)"
 
   # ref: OpenTyrian2000 — system/opentyrian/tyrian/
-  # Tyrian 2.1 freeware data (also on buildbot as OpenTyrian.zip)
+  # Tyrian 2.1 freeware data (buildbot URLs removed, sourced from release asset)
   opentyrian:
-    source_url: "https://buildbot.libretro.com/assets/system/OpenTyrian%20%28Game%20Data%29.zip"
+    source_url: "https://github.com/Abdess/retrobios/releases/download/large-files/opentyrian-data.zip"
     source_type: zip
     for_platforms: [retroarch, lakka, retropie]
     local_cache: data/opentyrian
     description: "OpenTyrian Tyrian 2.1 freeware game data"
 
   # ref: syobonaction — system/syobonaction/
-  # Freeware game data from OpenSyobonAction
+  # Freeware game data from OpenSyobonAction (BGM, res, SE directories)
   syobonaction:
-    source_url: "https://github.com/akemin-dayo/OpenSyobonAction"
-    source_type: git_subtree
-    source_path: "res"
+    source_url: "https://github.com/akemin-dayo/OpenSyobonAction/archive/refs/heads/{version}.tar.gz"
+    source_type: tarball
+    source_path: "OpenSyobonAction-master"
     version: master
     local_cache: data/syobonaction
+    exclude: [DxLib.cpp, DxLib.h, icon.ico, joyconfig.h, loadg.cpp, main.cpp, main.h, Makefile, README_ja.md, README.md]
     description: "Syobon Action (Cat Mario) game data (sprites, BGM, SE)"
 
   # =========================================================================
@@ -190,9 +191,10 @@ data_directories:
   # Not on buildbot — sourced from libretro repo
   # 532 files (tiles, fonts, databases, lua scripts, level descriptions)
   stonesoup:
-    source_url: "https://github.com/libretro/crawl-ref"
-    source_type: git_subtree
-    source_path: "crawl-ref/source/dat"
+    source_url: "https://github.com/libretro/crawl-ref/archive/refs/heads/{version}.tar.gz"
+    source_type: tarball
+    source_path: "crawl-ref-master/crawl-ref/source/dat"
+    version: master
     local_cache: data/stonesoup
     description: "DCSS game data (tiles, fonts, databases, lua, level descriptions)"
 

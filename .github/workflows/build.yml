@@ -58,16 +58,32 @@ jobs:
         run: |
           mkdir -p .cache/large
           gh release download large-files -D .cache/large/ 2>/dev/null || true
-          for f in .cache/large/*; do
-            [ -f "$f" ] || continue
-            name=$(basename "$f")
-            target=$(grep "$name" .gitignore | head -1)
-            if [ -n "$target" ] && [ ! -f "$target" ]; then
-              mkdir -p "$(dirname "$target")"
-              cp "$f" "$target"
-              echo "Restored: $target"
-            fi
-          done
+          python3 -c "
+          import hashlib, json, os, shutil
+          db = json.load(open('database.json'))
+          with open('.gitignore') as f:
+              ignored = {l.strip() for l in f if l.strip().startswith('bios/')}
+          cache = '.cache/large'
+          if not os.path.isdir(cache):
+              exit(0)
+          idx = {}
+          for fn in os.listdir(cache):
+              fp = os.path.join(cache, fn)
+              if os.path.isfile(fp):
+                  h = hashlib.sha1(open(fp, 'rb').read()).hexdigest()
+                  idx[h] = fp
+          restored = 0
+          for sha1, entry in db['files'].items():
+              path = entry['path']
+              if path in ignored and not os.path.exists(path):
+                  src = idx.get(sha1)
+                  if src:
+                      os.makedirs(os.path.dirname(path), exist_ok=True)
+                      shutil.copy2(src, path)
+                      print(f'Restored: {path}')
+                      restored += 1
+          print(f'Total: {restored} files restored')
+          "
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
