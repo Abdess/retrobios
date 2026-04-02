@@ -2,7 +2,7 @@
 
 Complete BIOS and firmware packs for Batocera, BizHawk, EmuDeck, Lakka, Recalbox, RetroArch, RetroBat, RetroDECK, RetroPie, and RomM.
 
-**7,295** verified files across **396** systems, ready to extract into your emulator's BIOS directory.
+**7,296** verified files across **396** systems, ready to extract into your emulator's BIOS directory.
 
 ## Quick Install
 
@@ -46,7 +46,7 @@ Each file is checked against the emulator's source code to match what the code a
 - **10 platforms** supported with platform-specific verification
 - **329 emulators** profiled from source (RetroArch cores + standalone)
 - **396 systems** covered (NES, SNES, PlayStation, Saturn, Dreamcast, ...)
-- **7,295 files** verified with MD5, SHA1, CRC32 checksums
+- **7,296 files** verified with MD5, SHA1, CRC32 checksums
 - **8765 MB** total collection size
 
 ## Supported systems
@@ -130,4 +130,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 This repository provides BIOS files for personal backup and archival purposes.
 
-*Auto-generated on 2026-03-31T20:38:37Z*
+*Auto-generated on 2026-04-02T05:33:10Z*

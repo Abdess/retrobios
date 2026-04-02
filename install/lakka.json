@@ -4,7 +4,7 @@
   "platform": "lakka",
   "display_name": "Lakka",
   "version": "1.0",
-  "generated": "2026-04-01T14:42:08Z",
+  "generated": "2026-04-02T08:32:35Z",
   "base_destination": "system",
   "detect": [
     {
@@ -15,8 +15,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 1620,
-  "total_size": 5255358024,
+  "total_files": 1621,
+  "total_size": 5255390792,
   "files": [
     {
       "dest": "3do_arcade_saot.bin",
@@ -3434,6 +3434,15 @@
       "sha1": "5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02",
       "size": 16384,
       "repo_path": "bios/Microsoft/MSX/MSX2EXT.ROM",
+      "cores": [
+        "blueMSX"
+      ]
+    },
+    {
+      "dest": "Machines/Shared Roms/MSX2J.rom",
+      "sha1": "0081ea0d25bc5cd8d70b60ad8cfdc7307812c0fd",
+      "size": 32768,
+      "repo_path": "bios/Microsoft/MSX/.variants/MSX2.ROM.0081ea0d",
       "cores": [
         "blueMSX"
       ]

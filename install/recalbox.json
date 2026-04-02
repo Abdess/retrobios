@@ -4,7 +4,7 @@
   "platform": "recalbox",
   "display_name": "Recalbox",
   "version": "1.0",
-  "generated": "2026-04-01T14:42:39Z",
+  "generated": "2026-04-02T08:33:02Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -15,8 +15,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 1097,
-  "total_size": 3500142330,
+  "total_files": 1098,
+  "total_size": 3500175098,
   "files": [
     {
       "dest": "3do/panafz1.bin",
@@ -849,6 +849,13 @@
       "sha1": "5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02",
       "size": 16384,
       "repo_path": "bios/Microsoft/MSX/MSX2EXT.ROM",
+      "cores": null
+    },
+    {
+      "dest": "Machines/Shared Roms/MSX2J.rom",
+      "sha1": "0081ea0d25bc5cd8d70b60ad8cfdc7307812c0fd",
+      "size": 32768,
+      "repo_path": "bios/Microsoft/MSX/.variants/MSX2.ROM.0081ea0d",
       "cores": null
     },
     {

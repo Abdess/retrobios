@@ -4,7 +4,7 @@
   "platform": "retrobat",
   "display_name": "RetroBat",
   "version": "1.0",
-  "generated": "2026-04-01T14:42:50Z",
+  "generated": "2026-04-02T08:33:12Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -14,8 +14,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 1162,
-  "total_size": 4297772175,
+  "total_files": 1163,
+  "total_size": 4297804943,
   "files": [
     {
       "dest": "panafz1.bin",
@@ -2521,6 +2521,15 @@
       "sha1": "5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02",
       "size": 16384,
       "repo_path": "bios/Microsoft/MSX/MSX2EXT.ROM",
+      "cores": [
+        "blueMSX"
+      ]
+    },
+    {
+      "dest": "Machines/Shared Roms/MSX2J.rom",
+      "sha1": "0081ea0d25bc5cd8d70b60ad8cfdc7307812c0fd",
+      "size": 32768,
+      "repo_path": "bios/Microsoft/MSX/.variants/MSX2.ROM.0081ea0d",
       "cores": [
         "blueMSX"
       ]

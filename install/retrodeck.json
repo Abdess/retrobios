@@ -4,7 +4,7 @@
   "platform": "retrodeck",
   "display_name": "RetroDECK",
   "version": "1.0",
-  "generated": "2026-04-01T14:43:08Z",
+  "generated": "2026-04-02T08:33:28Z",
   "base_destination": "",
   "detect": [
     {
@@ -15,8 +15,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 3144,
-  "total_size": 5871582893,
+  "total_files": 3146,
+  "total_size": 5871648429,
   "files": [
     {
       "dest": "bios/panafz1.bin",
@@ -11478,6 +11478,13 @@
       "cores": null
     },
     {
+      "dest": "bios/MSX2J.rom",
+      "sha1": "0081ea0d25bc5cd8d70b60ad8cfdc7307812c0fd",
+      "size": 32768,
+      "repo_path": "bios/Microsoft/MSX/.variants/MSX2.ROM.0081ea0d",
+      "cores": null
+    },
+    {
       "dest": "bios/MSX2R2.ROM",
       "sha1": "04990aa1c3a3fc7294ec884b81deaa89832df614",
       "size": 32768,
@@ -22296,6 +22303,15 @@
       "sha1": "df48902f5f12af8867ae1a87f255145f0e5e0774",
       "size": 32768,
       "repo_path": "bios/Microsoft/MSX/MSX_4000bios.rom",
+      "cores": [
+        "blueMSX"
+      ]
+    },
+    {
+      "dest": "Machines/Shared Roms/MSX2J.rom",
+      "sha1": "0081ea0d25bc5cd8d70b60ad8cfdc7307812c0fd",
+      "size": 32768,
+      "repo_path": "bios/Microsoft/MSX/.variants/MSX2.ROM.0081ea0d",
       "cores": [
         "blueMSX"
       ]
