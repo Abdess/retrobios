@@ -36,6 +36,27 @@ jobs:
 
       - run: pip install pyyaml mkdocs-material pymdown-extensions
 
+      - name: Restore large files from release
+        run: |
+          mkdir -p .cache/large
+          gh release download large-files -D .cache/large/ 2>/dev/null || true
+          for f in .cache/large/*; do
+            [ -f "$f" ] || continue
+            name=$(basename "$f")
+            target=$(grep "$name" .gitignore | head -1)
+            if [ -n "$target" ] && [ ! -f "$target" ]; then
+              mkdir -p "$(dirname "$target")"
+              cp "$f" "$target"
+              echo "Restored: $target"
+            fi
+          done
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Refresh data directories
+        run: python scripts/refresh_data_dirs.py
+        continue-on-error: true
+
       - name: Generate site
         run: |
           python scripts/generate_site.py
