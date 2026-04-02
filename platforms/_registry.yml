@@ -719,6 +719,10 @@ platforms:
     source_format: github_component_manifests
     hash_type: md5
     schedule: monthly
+    contributed_by:
+      - username: monster-penguin
+        contribution: platform support
+        pr: 36
     cores:
     - azahar
     - cemu
@@ -758,6 +762,10 @@ platforms:
     source_format: json
     hash_type: sha1
     schedule: monthly
+    contributed_by:
+      - username: PixNyb
+        contribution: platform support
+        pr: 37
     inherits_from: emulatorjs
     target_scraper: null
     target_source: null
