@@ -93,6 +93,20 @@ def fetch_contributors() -> list[dict]:
         return []
 
 
+def _build_contributor_map(registry: dict) -> dict[str, list[dict]]:
+    """Map GitHub username to list of {platform, contribution, pr}."""
+    result: dict[str, list[dict]] = {}
+    for platform_name, entry in registry.items():
+        for c in entry.get("contributed_by", []):
+            username = c["username"]
+            result.setdefault(username, []).append({
+                "platform": platform_name,
+                "contribution": c.get("contribution", ""),
+                "pr": c.get("pr"),
+            })
+    return result
+
+
 def generate_readme(db: dict, platforms_dir: str) -> str:
     total_files = db.get("total_files", 0)
     total_size = db.get("total_size", 0)
@@ -100,6 +114,13 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
     ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
     platform_names = list_registered_platforms(platforms_dir, include_archived=True)
+
+    registry_path = Path(platforms_dir) / "_registry.yml"
+    registry = {}
+    if registry_path.exists():
+        import yaml
+        with open(registry_path) as f:
+            registry = (yaml.safe_load(f) or {}).get("platforms", {})
 
     from common import load_data_dir_registry
     from cross_reference import _build_supplemental_index
@@ -332,19 +353,43 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
 
     contributors = fetch_contributors()
     if contributors:
+        contributor_map = _build_contributor_map(registry)
+
         lines.extend(
             [
                 "## Contributors",
                 "",
             ]
         )
+
+        platform_display: dict[str, str] = {}
+        for name, cov in coverages.items():
+            platform_display[name] = cov["platform"]
+
         for c in contributors:
             login = c["login"]
             avatar = c.get("avatar_url", "")
             url = c.get("html_url", f"https://github.com/{login}")
-            lines.append(
-                f'<a href="{url}"><img src="{avatar}" width="50" title="{login}"></a>'
-            )
+
+            contributions = contributor_map.get(login, [])
+            if contributions:
+                parts = []
+                for contrib in contributions:
+                    display = platform_display.get(contrib["platform"], contrib["platform"])
+                    pr = contrib.get("pr")
+                    label = display
+                    if pr:
+                        label += f" [#{pr}](https://github.com/Abdess/retrobios/pull/{pr})"
+                    parts.append(label)
+                desc = ", ".join(parts)
+            else:
+                desc = ""
+
+            line = f'<a href="{url}"><img src="{avatar}" width="50" title="{login}"></a>'
+            if desc:
+                line += f" {desc}"
+            lines.append(line)
+
         lines.append("")
 
     lines.extend(
@@ -374,6 +419,16 @@ def generate_contributing() -> str:
 2. Place the file in `bios/Manufacturer/Console/filename`
 3. Variants (alternate hashes): `bios/Manufacturer/Console/.variants/`
 4. Create a Pull Request - checksums are verified automatically
+
+## Add a new platform
+
+1. Write a scraper in `scripts/scraper/`
+2. Create the platform YAML in `platforms/`
+3. Register in `platforms/_registry.yml`
+4. Submit a Pull Request
+
+Contributors who add platform support are credited in the README,
+on the documentation site, and in the BIOS packs.
 
 ## File conventions
 
