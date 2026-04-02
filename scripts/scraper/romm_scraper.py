@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Scraper for RomM BIOS requirements.
 
+Platform contributed by @PixNyb (#37).
+
 Source: https://github.com/rommapp/romm
 Format: JSON fixture mapping "slug:filename" to {size, crc, md5, sha1}
 Hash: SHA1 primary (all four hashes available per entry)

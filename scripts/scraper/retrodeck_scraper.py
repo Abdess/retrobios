@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Scraper for RetroDECK BIOS requirements.
 
+Platform contributed by @monster-penguin (#36).
+
 Source: https://github.com/RetroDECK/components
 Format: component_manifest.json per component directory
 Hash:   MD5 (primary), SHA256 for some entries (melonDS DSi)
