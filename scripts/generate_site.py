@@ -127,11 +127,22 @@ def _build_system_page_map_from_data(
                         break
 
 
+def _slugify_anchor(text: str) -> str:
+    """Slugify text for MkDocs anchor compatibility."""
+    import re
+
+    slug = text.lower()
+    slug = re.sub(r"[^\w\s-]", "", slug)
+    slug = re.sub(r"[\s]+", "-", slug)
+    slug = slug.strip("-")
+    return slug
+
+
 def _system_link(sys_id: str, prefix: str = "") -> str:
     """Generate a markdown link to a system page with anchor."""
     if sys_id in _system_page_map:
         slug, console = _system_page_map[sys_id]
-        anchor = console.lower().replace(" ", "-").replace("/", "-")
+        anchor = _slugify_anchor(console)
         return f"[{sys_id}]({prefix}systems/{slug}.md#{anchor})"
     return sys_id
 
@@ -239,7 +250,9 @@ def generate_home(
     # Classification stats
     classifications: dict[str, int] = {}
     for p in unique.values():
-        cls = p.get("core_classification", "unclassified")
+        cls = p.get("core_classification", "other")
+        if cls not in CLS_LABELS or cls == "unclassified":
+            cls = "other"
         classifications[cls] = classifications.get(cls, 0) + 1
 
     # Count total systems across all profiles
@@ -893,8 +906,10 @@ def generate_emulator_page(
     emu_name = profile.get("emulator", name)
     emu_type = profile.get("type", "unknown")
     classification = profile.get("core_classification", "")
-    source = profile.get("source", "")
-    upstream = profile.get("upstream", "")
+    source_raw = profile.get("source", "")
+    source = str(source_raw) if not isinstance(source_raw, dict) else ""
+    upstream_raw = profile.get("upstream", "")
+    upstream = str(upstream_raw) if not isinstance(upstream_raw, dict) else ""
     version = profile.get("core_version", "unknown")
     profile.get("display_name", emu_name)
     profiled = profile.get("profiled_date", "unknown")
@@ -920,10 +935,32 @@ def generate_emulator_page(
     if classification:
         cls_display = CLS_LABELS.get(classification, classification)
         lines.append(f"| Classification | {cls_display} |")
-    if source:
-        lines.append(f"| Source | [{source}]({source}) |")
-    if upstream and upstream != source:
-        lines.append(f"| Upstream | [{upstream}]({upstream}) |")
+    if isinstance(source_raw, dict):
+        parts = []
+        for k, v in source_raw.items():
+            if isinstance(v, str) and v.startswith("http"):
+                parts.append(f"[{k}]({v})")
+            else:
+                parts.append(f"{k}: {v}")
+        lines.append(f"| Source | {', '.join(parts)} |")
+    elif source:
+        if source.startswith("http"):
+            lines.append(f"| Source | [{source}]({source}) |")
+        else:
+            lines.append(f"| Source | {source} |")
+    if isinstance(upstream_raw, dict):
+        parts = []
+        for k, v in upstream_raw.items():
+            if isinstance(v, str) and v.startswith("http"):
+                parts.append(f"[{k}]({v})")
+            else:
+                parts.append(f"{k}: {v}")
+        lines.append(f"| Upstream | {', '.join(parts)} |")
+    elif upstream and upstream != source:
+        if upstream.startswith("http"):
+            lines.append(f"| Upstream | [{upstream}]({upstream}) |")
+        else:
+            lines.append(f"| Upstream | {upstream} |")
     lines.append(f"| Version | {version} |")
     lines.append(f"| Profiled | {profiled} |")
     if cores:
@@ -1824,8 +1861,10 @@ def generate_cross_reference(
             cls_raw = p.get("core_classification", "-")
             cls = CLS_LABELS.get(cls_raw, cls_raw)
             p.get("type", "")
-            upstream = p.get("upstream", "")
-            source = p.get("source", "")
+            upstream_raw2 = p.get("upstream", "")
+            upstream = str(upstream_raw2) if not isinstance(upstream_raw2, dict) else ""
+            source_raw2 = p.get("source", "")
+            source = str(source_raw2) if not isinstance(source_raw2, dict) else ""
             systems = p.get("systems", [])
             files = p.get("files", [])
 
@@ -1847,12 +1886,16 @@ def generate_cross_reference(
                 file_str += f" ({', '.join(parts)})"
 
             upstream_display = "-"
-            if upstream:
+            if upstream and upstream.startswith("http"):
                 upstream_short = upstream.replace("https://github.com/", "")
                 upstream_display = f"[{upstream_short}]({upstream})"
-            elif source:
+            elif upstream:
+                upstream_display = upstream
+            elif source and source.startswith("http"):
                 source_short = source.replace("https://github.com/", "")
                 upstream_display = f"[{source_short}]({source})"
+            elif source:
+                upstream_display = source
 
             lines.append(
                 f"    | [{emu_display}](emulators/{emu_name}.md) | {cls} | "
@@ -1874,9 +1917,10 @@ def generate_cross_reference(
     # Group profiles by upstream
     by_upstream: dict[str, list[str]] = {}
     for emu_name, p in sorted(unique.items()):
-        upstream = p.get("upstream", p.get("source", ""))
-        if upstream:
-            by_upstream.setdefault(upstream, []).append(emu_name)
+        raw_up = p.get("upstream", p.get("source", ""))
+        up_str = str(raw_up) if not isinstance(raw_up, dict) else ""
+        if up_str:
+            by_upstream.setdefault(up_str, []).append(emu_name)
 
     # Build platform membership per core
     platform_membership: dict[str, set[str]] = {}
@@ -1910,8 +1954,12 @@ def generate_cross_reference(
         plat_str = ", ".join(sorted(all_plats)) if all_plats else "-"
         core_links = ", ".join(f"[{c}](emulators/{c}.md)" for c in sorted(cores))
 
+        if upstream_url.startswith("http"):
+            upstream_cell = f"[{upstream_short}]({upstream_url})"
+        else:
+            upstream_cell = upstream_short
         lines.append(
-            f"| [{upstream_short}]({upstream_url}) | {core_links} | "
+            f"| {upstream_cell} | {core_links} | "
             f"{cls_str} | {plat_str} |"
         )
 
@@ -1973,6 +2021,7 @@ def generate_wiki_data_model(db: dict, profiles: dict) -> str:
     by_name = len(db.get("indexes", {}).get("by_name", {}))
     by_crc32 = len(db.get("indexes", {}).get("by_crc32", {}))
     by_path = len(db.get("indexes", {}).get("by_path_suffix", {}))
+    by_sha256 = len(db.get("indexes", {}).get("by_sha256", {}))
 
     lines = [
         f"# Data model - {SITE_NAME}",
@@ -2004,6 +2053,7 @@ def generate_wiki_data_model(db: dict, profiles: dict) -> str:
         f"| `by_name` | {by_name} | filename to SHA1 list (name-based resolution) |",
         f"| `by_crc32` | {by_crc32} | CRC32 to SHA1 lookup |",
         f"| `by_path_suffix` | {by_path} | relative path to SHA1 (regional variant disambiguation) |",
+        f"| `by_sha256` | {by_sha256} | SHA256 to SHA1 lookup (emulator profile validation) |",
         "",
         "### File resolution order",
         "",
@@ -2016,6 +2066,8 @@ def generate_wiki_data_model(db: dict, profiles: dict) -> str:
         "5. Name + alias with md5_composite / direct MD5 per candidate",
         "6. zippedFile content match via inner ROM MD5 index",
         "7. MAME clone fallback (deduped ZIP mapped to canonical name)",
+        "8. Data directory scan (exact path then case-insensitive basename walk)",
+        "9. Agnostic fallback (size-constrained match under system path prefix)",
         "",
         "## Platform YAML",
         "",

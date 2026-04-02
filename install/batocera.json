@@ -4,7 +4,7 @@
   "platform": "batocera",
   "display_name": "Batocera",
   "version": "1.0",
-  "generated": "2026-04-02T08:32:09Z",
+  "generated": "2026-04-02T13:52:15Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -15,8 +15,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 1541,
-  "total_size": 3891648039,
+  "total_files": 1547,
+  "total_size": 4371484317,
   "files": [
     {
       "dest": "panafz1.bin",
@@ -6158,6 +6158,39 @@
       ]
     },
     {
+      "dest": "fbneo/samples/donpachi.zip",
+      "sha1": "d380fb29287eb7fc9ff901a7653ad40785f7deb1",
+      "size": 208549253,
+      "repo_path": "",
+      "cores": [
+        "FinalBurn Neo"
+      ],
+      "storage": "release",
+      "release_asset": "donpachi.zip"
+    },
+    {
+      "dest": "fbneo/samples/sfz3mix.zip",
+      "sha1": "937cdc6ccf9de418b94d8b762aad36822f857ec9",
+      "size": 116329446,
+      "repo_path": "",
+      "cores": [
+        "FinalBurn Neo"
+      ],
+      "storage": "release",
+      "release_asset": "sfz3mix.zip"
+    },
+    {
+      "dest": "fbneo/samples/twotiger.zip",
+      "sha1": "74399cc36d97e9f74b387b87900505ebbf260ca9",
+      "size": 154888877,
+      "repo_path": "",
+      "cores": [
+        "FinalBurn Neo"
+      ],
+      "storage": "release",
+      "release_asset": "twotiger.zip"
+    },
+    {
       "dest": "gamegenie.nes",
       "sha1": "f430a0d752a9fa0c7032db8131f9090d18f71779",
       "size": 24592,
@@ -8394,6 +8427,24 @@
       "sha1": "91d75a87872cbb88964bead92e0cbf8b72e836b6",
       "size": 1478656,
       "repo_path": "bios/Other/NXEngine/Doukutsu.exe",
+      "cores": [
+        "NXEngine"
+      ]
+    },
+    {
+      "dest": "nxengine/data/sprites.sif",
+      "sha1": "73acccee601b56a2b7f624b0227fa7e1d662ef4b",
+      "size": 59482,
+      "repo_path": "bios/Other/NXEngine/nxengine/data/sprites.sif",
+      "cores": [
+        "NXEngine"
+      ]
+    },
+    {
+      "dest": "nxengine/tilekey.dat",
+      "sha1": "74c14b15dbc2f36c81d2ad9cb65e2893298415da",
+      "size": 1028,
+      "repo_path": "bios/Other/NXEngine/nxengine/tilekey.dat",
       "cores": [
         "NXEngine"
       ]
@@ -10662,6 +10713,15 @@
       "sha1": "9513091f37adf330f66a0c08f4e200344ad2e082",
       "size": 16384,
       "repo_path": "bios/Dragon/Dragon/cdos20.rom",
+      "cores": [
+        "XRoar"
+      ]
+    },
+    {
+      "dest": "delta2.rom",
+      "sha1": "686ebb5f39dd4fc907a0b748867d0a022d2f1a60",
+      "size": 8192,
+      "repo_path": "bios/Dragon/Dragon/delta2.rom",
       "cores": [
         "XRoar"
       ]

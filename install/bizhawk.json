@@ -4,7 +4,7 @@
   "platform": "bizhawk",
   "display_name": "BizHawk",
   "version": "1.0",
-  "generated": "2026-04-01T14:00:10Z",
+  "generated": "2026-04-02T13:52:21Z",
   "base_destination": "Firmware",
   "detect": [
     {
@@ -19,8 +19,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 527,
-  "total_size": 2068127713,
+  "total_files": 530,
+  "total_size": 2547895289,
   "files": [
     {
       "dest": "panafz1.bin",
@@ -1273,6 +1273,39 @@
       "cores": [
         "FinalBurn Neo"
       ]
+    },
+    {
+      "dest": "fbneo/samples/donpachi.zip",
+      "sha1": "d380fb29287eb7fc9ff901a7653ad40785f7deb1",
+      "size": 208549253,
+      "repo_path": "",
+      "cores": [
+        "FinalBurn Neo"
+      ],
+      "storage": "release",
+      "release_asset": "donpachi.zip"
+    },
+    {
+      "dest": "fbneo/samples/sfz3mix.zip",
+      "sha1": "937cdc6ccf9de418b94d8b762aad36822f857ec9",
+      "size": 116329446,
+      "repo_path": "",
+      "cores": [
+        "FinalBurn Neo"
+      ],
+      "storage": "release",
+      "release_asset": "sfz3mix.zip"
+    },
+    {
+      "dest": "fbneo/samples/twotiger.zip",
+      "sha1": "74399cc36d97e9f74b387b87900505ebbf260ca9",
+      "size": 154888877,
+      "repo_path": "",
+      "cores": [
+        "FinalBurn Neo"
+      ],
+      "storage": "release",
+      "release_asset": "twotiger.zip"
     },
     {
       "dest": "sl31253.bin",

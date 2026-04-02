@@ -236,11 +236,11 @@ user's platform, filter files by hardware target, and download with SHA1 verific
 
 ## Tests
 
-5 test files, 249 tests total:
+5 test files, 259 tests total:
 
 | File | Tests | Coverage |
 |------|-------|----------|
-| `test_e2e.py` | 186 | file resolution, verification, severity, cross-reference, aliases, inheritance, shared groups, data dirs, storage tiers, HLE, launchers, platform grouping, core resolution, target filtering, truth/diff, exporters |
+| `test_e2e.py` | 196 | file resolution, verification, severity, cross-reference, aliases, inheritance, shared groups, data dirs, storage tiers, HLE, launchers, platform grouping, core resolution, target filtering, truth/diff, exporters |
 | `test_pack_integrity.py` | 8 | extract ZIP packs to disk, verify paths + hashes per platform's native mode |
 | `test_mame_parser.py` | 22 | BIOS root set detection, ROM block parsing, macro expansion |
 | `test_fbneo_parser.py` | 16 | BIOS set detection, ROM info parsing |

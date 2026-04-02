@@ -4,7 +4,7 @@
   "platform": "romm",
   "display_name": "RomM",
   "version": "1.0",
-  "generated": "2026-04-01T14:43:09Z",
+  "generated": "2026-04-02T13:53:45Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -14,8 +14,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 535,
-  "total_size": 1076531155,
+  "total_files": 538,
+  "total_size": 1556298731,
   "files": [
     {
       "dest": "3do/3do_arcade_saot.bin",
@@ -2795,6 +2795,39 @@
       "cores": [
         "ep128emu-core"
       ]
+    },
+    {
+      "dest": "colecovision/fbneo/samples/donpachi.zip",
+      "sha1": "d380fb29287eb7fc9ff901a7653ad40785f7deb1",
+      "size": 208549253,
+      "repo_path": "",
+      "cores": [
+        "FinalBurn Neo"
+      ],
+      "storage": "release",
+      "release_asset": "donpachi.zip"
+    },
+    {
+      "dest": "colecovision/fbneo/samples/sfz3mix.zip",
+      "sha1": "937cdc6ccf9de418b94d8b762aad36822f857ec9",
+      "size": 116329446,
+      "repo_path": "",
+      "cores": [
+        "FinalBurn Neo"
+      ],
+      "storage": "release",
+      "release_asset": "sfz3mix.zip"
+    },
+    {
+      "dest": "colecovision/fbneo/samples/twotiger.zip",
+      "sha1": "74399cc36d97e9f74b387b87900505ebbf260ca9",
+      "size": 154888877,
+      "repo_path": "",
+      "cores": [
+        "FinalBurn Neo"
+      ],
+      "storage": "release",
+      "release_asset": "twotiger.zip"
     },
     {
       "dest": "fds/gamegenie.nes",

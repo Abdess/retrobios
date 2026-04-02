@@ -4,7 +4,7 @@
   "platform": "retroarch",
   "display_name": "RetroArch",
   "version": "1.0",
-  "generated": "2026-04-02T08:32:35Z",
+  "generated": "2026-04-02T13:52:45Z",
   "base_destination": "system",
   "detect": [
     {
@@ -33,8 +33,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 1621,
-  "total_size": 5255390792,
+  "total_files": 1627,
+  "total_size": 5735234905,
   "files": [
     {
       "dest": "3do_arcade_saot.bin",
@@ -5098,6 +5098,39 @@
       "release_asset": "vimana.zip"
     },
     {
+      "dest": "fbneo/samples/donpachi.zip",
+      "sha1": "d380fb29287eb7fc9ff901a7653ad40785f7deb1",
+      "size": 208549253,
+      "repo_path": "",
+      "cores": [
+        "FinalBurn Neo"
+      ],
+      "storage": "release",
+      "release_asset": "donpachi.zip"
+    },
+    {
+      "dest": "fbneo/samples/sfz3mix.zip",
+      "sha1": "937cdc6ccf9de418b94d8b762aad36822f857ec9",
+      "size": 116329446,
+      "repo_path": "",
+      "cores": [
+        "FinalBurn Neo"
+      ],
+      "storage": "release",
+      "release_asset": "sfz3mix.zip"
+    },
+    {
+      "dest": "fbneo/samples/twotiger.zip",
+      "sha1": "74399cc36d97e9f74b387b87900505ebbf260ca9",
+      "size": 154888877,
+      "repo_path": "",
+      "cores": [
+        "FinalBurn Neo"
+      ],
+      "storage": "release",
+      "release_asset": "twotiger.zip"
+    },
+    {
       "dest": "nes.pal",
       "sha1": "37027d92e1015b82a7dc5c43e9f1649a961577ab",
       "size": 192,
@@ -7890,6 +7923,24 @@
       ]
     },
     {
+      "dest": "nxengine/data/sprites.sif",
+      "sha1": "73acccee601b56a2b7f624b0227fa7e1d662ef4b",
+      "size": 59482,
+      "repo_path": "bios/Other/NXEngine/nxengine/data/sprites.sif",
+      "cores": [
+        "NXEngine"
+      ]
+    },
+    {
+      "dest": "nxengine/tilekey.dat",
+      "sha1": "74c14b15dbc2f36c81d2ad9cb65e2893298415da",
+      "size": 1028,
+      "repo_path": "bios/Other/NXEngine/nxengine/tilekey.dat",
+      "cores": [
+        "NXEngine"
+      ]
+    },
+    {
       "dest": "mda.rom",
       "sha1": "c2a8b10808bf51a3c123ba3eb1e9dd608231916f",
       "size": 8192,
@@ -9675,6 +9726,15 @@
       "repo_path": "bios/Nintendo/Game Boy Color/agb_boot.bin",
       "cores": [
         "SameBoy"
+      ]
+    },
+    {
+      "dest": "sdlpal/desc.dat",
+      "sha1": "8c20ff26ebfefbf9b050b67af8083704003595ba",
+      "size": 16027,
+      "repo_path": "bios/sdlpal/desc.dat",
+      "cores": [
+        "SDLPAL"
       ]
     },
     {
