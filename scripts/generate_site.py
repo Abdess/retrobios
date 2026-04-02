@@ -1709,6 +1709,35 @@ def generate_gap_analysis(
                 )
             lines.append("")
 
+    # ---- Section 4: Acknowledged gaps (unsourceable files) ----
+
+    all_unsourceable: list[dict] = []
+    for emu_name, data in sorted(report.items()):
+        for u in data.get("unsourceable", []):
+            all_unsourceable.append({
+                "name": u["name"],
+                "emulator": data["emulator"],
+                "reason": u["reason"],
+                "source_ref": u.get("source_ref", ""),
+            })
+
+    if all_unsourceable:
+        lines.extend([
+            "## Acknowledged Gaps",
+            "",
+            f"{len(all_unsourceable)} files documented as unsourceable "
+            "(verified from source code).",
+            "",
+            "| File | Emulator | Reason | Source ref |",
+            "|------|----------|--------|-----------|",
+        ])
+        for u in sorted(all_unsourceable, key=lambda x: x["name"]):
+            lines.append(
+                f"| `{u['name']}` | {u['emulator']} | {u['reason']} "
+                f"| {u['source_ref']} |"
+            )
+        lines.append("")
+
     lines.extend(["", f'<div class="rb-timestamp">Generated on {_timestamp()}.</div>'])
     return "\n".join(lines) + "\n"
 

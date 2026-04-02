@@ -397,5 +397,6 @@ files:
     system: dragon64
     description: "Ikon Ultra Drive Dragonfly ROM 2.3"
     required: false
+    unsourceable: "not yet dumped, only v1.3 publicly available, XRoar support is experimental (#ifdef WANT_EXPERIMENTAL)"
     source_ref: "xroar.c:715 (romlist ikon), ikon.c:151 (default @ikon)"
     note: "Experimental. Ikon Ultra Drive storage interface. Older version: dragonfly-1.3."

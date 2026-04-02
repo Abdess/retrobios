@@ -247,6 +247,7 @@ files:
   - name: "WHDLoad.key"
     system: commodore-amiga
     required: false
+    unsourceable: "per-user signed registration key, never distributed generically, WHDLoad free since v18.2"
     note: "WHDLoad license key. Copied to saves/WHDLoad/L/ for registered WHDLoad use."
     source_ref: "libretro/libretro-core.c:5985-5998"
 

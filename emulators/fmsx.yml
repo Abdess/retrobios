@@ -238,6 +238,7 @@ files:
   - name: CARTS.CRC
     required: false
     bundled: false
+    unsourceable: "dead legacy code path, never created or distributed, replaced by CARTS.SHA"
     note: "CRC database for cartridge identification and mapper detection. Tried first, before CARTS.SHA (fMSX/MSX.c:2697)."
 
   - name: CARTS.SHA

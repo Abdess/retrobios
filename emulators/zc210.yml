@@ -138,6 +138,8 @@ files:
 
   - name: Custom.dat
     path: zc210/sfx/Custom.dat
+    category: game_data
     description: user-provided custom SFX replacement
     required: false
+    unsourceable: "user placeholder slot, README says 'rename your own SFX dat file to this name'"
     source_ref: "zelda.cpp:1193-1218, libretro.cpp:148"

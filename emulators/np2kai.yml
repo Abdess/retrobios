@@ -186,6 +186,7 @@ files:
     path: "np2kai/gpib.rom"
     size: 8192
     required: false
+    unsourceable: "never publicly dumped, GP-IB emulation is stub code (source comment: not implemented)"
     note: >
       GP-IB interface BIOS ROM (8 KB). If missing, GP-IB emulation
       is disabled entirely.
@@ -198,6 +199,8 @@ files:
   - name: "key.txt"
     path: "np2kai/key.txt"
     required: false
+    hle_fallback: true
+    unsourceable: "user-created keyboard config, no default distributed in any NP2kai release"
     note: >
       Keyboard remapping configuration (text file). User-created file
       for custom keyboard layout. The core uses built-in defaults if absent.

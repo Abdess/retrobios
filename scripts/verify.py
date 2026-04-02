@@ -298,13 +298,23 @@ def _name_in_index(
     by_name: dict,
     by_path_suffix: dict | None = None,
     data_names: set[str] | None = None,
+    by_name_lower: dict[str, str] | None = None,
 ) -> bool:
     """Check if a name is resolvable in the database indexes or data directories."""
+    # Strip trailing slash for directory-type entries (e.g. nestopia/samples/foo/)
+    name = name.rstrip("/")
     if name in by_name:
         return True
-    basename = name.rsplit("/", 1)[-1]
+    basename = name.rsplit("/", 1)[-1] if "/" in name else name
     if basename != name and basename in by_name:
         return True
+    # Case-insensitive by_name lookup
+    if by_name_lower:
+        key = name.lower()
+        if key in by_name_lower:
+            return True
+        if basename != name and basename.lower() in by_name_lower:
+            return True
     if by_path_suffix and name in by_path_suffix:
         return True
     if data_names:
@@ -345,6 +355,7 @@ def find_undeclared_files(
                 declared_dd.add(ref)
 
     by_name = db.get("indexes", {}).get("by_name", {})
+    by_name_lower = {k.lower(): k for k in by_name}
     by_path_suffix = db.get("indexes", {}).get("by_path_suffix", {})
     profiles = (
         emu_profiles
@@ -377,6 +388,10 @@ def find_undeclared_files(
         for f in profile.get("files", []):
             fname = f.get("name", "")
             if not fname or fname in seen_files:
+                continue
+            # Skip unsourceable files (documented reason, not a gap)
+            if f.get("unsourceable"):
+                seen_files.add(fname)
                 continue
             # Skip pattern placeholders (e.g., <user-selected>.bin)
             if "<" in fname or ">" in fname or "*" in fname:
@@ -416,7 +431,8 @@ def find_undeclared_files(
             if archive:
                 if archive not in archive_entries:
                     in_repo = _name_in_index(
-                        archive, by_name, by_path_suffix, data_names
+                        archive, by_name, by_path_suffix, data_names,
+                        by_name_lower,
                     )
                     archive_entries[archive] = {
                         "emulator": profile.get("emulator", emu_name),
@@ -447,11 +463,20 @@ def find_undeclared_files(
             else:
                 dest = f.get("path") or fname
 
-            # Resolution: try name, then path basename, then path_suffix
-            in_repo = _name_in_index(fname, by_name, by_path_suffix, data_names)
-            if not in_repo and dest != fname:
-                path_base = dest.rsplit("/", 1)[-1]
-                in_repo = _name_in_index(path_base, by_name, by_path_suffix, data_names)
+            # Resolution: storage flag, then name, then path basename
+            storage = f.get("storage", "")
+            if storage in ("release", "large_file"):
+                in_repo = True
+            else:
+                in_repo = _name_in_index(
+                    fname, by_name, by_path_suffix, data_names, by_name_lower,
+                )
+                if not in_repo and dest != fname:
+                    path_base = dest.rsplit("/", 1)[-1]
+                    in_repo = _name_in_index(
+                        path_base, by_name, by_path_suffix, data_names,
+                        by_name_lower,
+                    )
 
             checks = _parse_validation(f.get("validation"))
             undeclared.append(

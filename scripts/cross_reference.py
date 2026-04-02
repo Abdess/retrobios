@@ -140,6 +140,20 @@ def _resolve_source(
     return None
 
 
+def _resolve_archive_source(
+    archive_name: str,
+    by_name: dict[str, list],
+    by_name_lower: dict[str, str],
+    data_names: set[str] | None = None,
+    by_path_suffix: dict | None = None,
+) -> str:
+    """Resolve source for an archive (ZIP) name, returning a source category string."""
+    result = _resolve_source(
+        archive_name, by_name, by_name_lower, data_names, by_path_suffix,
+    )
+    return result if result is not None else "missing"
+
+
 def cross_reference(
     profiles: dict[str, dict],
     declared: dict[str, set[str]],
@@ -175,6 +189,10 @@ def cross_reference(
         emu_files = profile.get("files", [])
         systems = profile.get("systems", [])
 
+        # Skip filename-agnostic profiles (BIOS detected without fixed names)
+        if profile.get("bios_mode") == "agnostic":
+            continue
+
         if all_declared is not None:
             platform_names = all_declared
         else:
@@ -184,13 +202,28 @@ def cross_reference(
 
         gaps = []
         covered = []
+        unsourceable_list: list[dict] = []
+        archive_gaps: dict[str, dict] = {}
+        seen_files: set[str] = set()
         for f in emu_files:
             fname = f.get("name", "")
-            if not fname:
+            if not fname or fname in seen_files:
+                continue
+
+            # Collect unsourceable files separately (documented, not a gap)
+            unsourceable_reason = f.get("unsourceable", "")
+            if unsourceable_reason:
+                seen_files.add(fname)
+                unsourceable_list.append({
+                    "name": fname,
+                    "required": f.get("required", False),
+                    "reason": unsourceable_reason,
+                    "source_ref": f.get("source_ref", ""),
+                })
                 continue
 
             # Skip pattern placeholders (e.g., <bios>.bin, <user-selected>.bin)
-            if "<" in fname or ">" in fname:
+            if "<" in fname or ">" in fname or "*" in fname:
                 continue
 
             # Skip UI-imported files with explicit path: null (not resolvable by pack)
@@ -200,6 +233,61 @@ def cross_reference(
             # Skip standalone-only files
             file_mode = f.get("mode", "both")
             if file_mode == "standalone":
+                continue
+
+            # Skip files loaded from non-system directories (save_dir, content_dir)
+            load_from = f.get("load_from", "")
+            if load_from and load_from != "system_dir":
+                continue
+
+            # Skip filename-agnostic files (handled by agnostic scan)
+            if f.get("agnostic"):
+                continue
+
+            archive = f.get("archive")
+
+            # Check platform declaration (by name or archive)
+            in_platform = fname in platform_names
+            if not in_platform and archive:
+                in_platform = archive in platform_names
+
+            if in_platform:
+                seen_files.add(fname)
+                covered.append({
+                    "name": fname,
+                    "required": f.get("required", False),
+                    "in_platform": True,
+                })
+                continue
+
+            seen_files.add(fname)
+
+            # Group archived files by archive name
+            if archive:
+                if archive not in archive_gaps:
+                    source = _resolve_archive_source(
+                        archive, by_name, by_name_lower, data_names,
+                        by_path_suffix,
+                    )
+                    archive_gaps[archive] = {
+                        "name": archive,
+                        "required": False,
+                        "note": "",
+                        "source_ref": "",
+                        "in_platform": False,
+                        "in_repo": source != "missing",
+                        "source": source,
+                        "archive": archive,
+                        "archive_file_count": 0,
+                        "archive_required_count": 0,
+                    }
+                entry = archive_gaps[archive]
+                entry["archive_file_count"] += 1
+                if f.get("required", False):
+                    entry["archive_required_count"] += 1
+                    entry["required"] = True
+                if not entry["source_ref"] and f.get("source_ref"):
+                    entry["source_ref"] = f["source_ref"]
                 continue
 
             # --- resolve source provenance ---
@@ -235,22 +323,21 @@ def cross_reference(
                     source = "missing"
 
             in_repo = source != "missing"
-            in_platform = fname in platform_names
 
             entry = {
                 "name": fname,
                 "required": f.get("required", False),
                 "note": f.get("note", ""),
                 "source_ref": f.get("source_ref", ""),
-                "in_platform": in_platform,
+                "in_platform": False,
                 "in_repo": in_repo,
                 "source": source,
             }
+            gaps.append(entry)
 
-            if not in_platform:
-                gaps.append(entry)
-            else:
-                covered.append(entry)
+        # Append grouped archive gaps
+        for ag in sorted(archive_gaps.values(), key=lambda e: e["name"]):
+            gaps.append(ag)
 
         report[emu_name] = {
             "emulator": profile.get("emulator", emu_name),
@@ -264,6 +351,7 @@ def cross_reference(
             "gap_data": sum(1 for g in gaps if g["source"] == "data"),
             "gap_large_file": sum(1 for g in gaps if g["source"] == "large_file"),
             "gap_details": gaps,
+            "unsourceable": unsourceable_list,
         }
 
     return report
@@ -301,7 +389,12 @@ def print_report(report: dict) -> None:
             req = "*" if g["required"] else " "
             src = g.get("source", "missing").upper()
             note = f" -- {g['note']}" if g["note"] else ""
-            print(f"    {req} {g['name']} [{src}]{note}")
+            archive_info = ""
+            if g.get("archive"):
+                fc = g.get("archive_file_count", 0)
+                rc = g.get("archive_required_count", 0)
+                archive_info = f" ({fc} files, {rc} required)"
+            print(f"    {req} {g['name']} [{src}]{archive_info}{note}")
 
         total_gaps += gaps
         for key in totals:
