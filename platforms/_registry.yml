@@ -752,7 +752,7 @@ platforms:
       - os: linux
         method: path_exists
         path: $HOME/.var/app/net.retrodeck.retrodeck
-        bios_path: $HOME/retrodeck/bios
+        bios_path: $HOME/retrodeck
   romm:
     config: romm.yml
     status: active

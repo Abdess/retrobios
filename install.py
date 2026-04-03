@@ -192,9 +192,9 @@ def detect_platforms(os_type: str) -> list[tuple[str, Path]]:
         if retrodeck_cfg.exists():
             bios_path = _parse_bash_var(retrodeck_cfg, "rdhome")
             if bios_path:
-                found.append(("retrodeck", Path(bios_path) / "bios"))
+                found.append(("retrodeck", Path(bios_path)))
             else:
-                found.append(("retrodeck", home / "retrodeck" / "bios"))
+                found.append(("retrodeck", home / "retrodeck"))
 
         # RetroArch Flatpak
         flatpak_cfg = home / ".var" / "app" / "org.libretro.RetroArch" / "config" / "retroarch" / "retroarch.cfg"
