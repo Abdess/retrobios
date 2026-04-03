@@ -2136,6 +2136,97 @@ def _build_emulator_file_index(profiles: dict) -> dict[str, dict]:
 # mkdocs.yml nav generator
 
 
+def generate_which_pack() -> str:
+    """Generate the 'Which pack?' decision page."""
+    return """\
+# Which pack?
+
+## Automatic install (recommended)
+
+The installer auto-detects the platform and BIOS directory.
+
+**Linux / Mac / Steam Deck:**
+
+    curl -fsSL https://raw.githubusercontent.com/Abdess/retrobios/main/install.sh | sh
+
+**Windows (PowerShell):**
+
+    iwr -useb https://raw.githubusercontent.com/Abdess/retrobios/main/install.ps1 | iex
+
+## By device
+
+### PC (Windows)
+
+| Software installed | Recommended pack |
+|---|---|
+| RetroArch | RetroArch pack |
+| RetroBat | RetroBat pack |
+| BizHawk | BizHawk pack |
+| LaunchBox (with RetroArch) | RetroArch pack |
+
+### PC (Linux)
+
+| Software installed | Recommended pack |
+|---|---|
+| RetroArch | RetroArch pack |
+| Batocera | Batocera pack |
+| Recalbox | Recalbox pack |
+
+### Steam Deck
+
+| Software installed | Recommended pack |
+|---|---|
+| EmuDeck | EmuDeck pack |
+| RetroDECK | RetroDECK pack |
+| RetroArch standalone | RetroArch pack |
+
+### Raspberry Pi / Single-board computers
+
+| Software installed | Recommended pack |
+|---|---|
+| RetroPie | RetroArch / Lakka pack |
+| Lakka | RetroArch / Lakka pack |
+| Batocera | Batocera pack |
+| Recalbox | Recalbox pack |
+
+### Dedicated emulation box
+
+| Software installed | Recommended pack |
+|---|---|
+| Batocera | Batocera pack |
+| Recalbox | Recalbox pack |
+| Lakka | RetroArch / Lakka pack |
+
+### Android handheld (Retroid Pocket, R36S, Miyoo, etc.)
+
+RetroArch is the most common emulator on Android handhelds.
+Download the RetroArch pack and extract the files into the
+RetroArch system folder on internal storage or SD card.
+
+### Self-hosted ROM manager
+
+| Software | Recommended pack |
+|---|---|
+| RomM | RomM pack |
+
+## Full pack vs Platform pack
+
+Two pack types are available for each platform:
+
+- **Full pack** (recommended): the platform's BIOS list plus all files
+  needed by each emulator core. Covers alternate cores, optional firmware,
+  and edge cases.
+- **Platform pack**: only the files the platform officially checks for.
+  Smaller download, good for limited storage or default cores only.
+
+When in doubt, the full pack is the safest choice.
+
+## Download
+
+All packs are on the [releases page](https://github.com/Abdess/retrobios/releases).
+"""
+
+
 def generate_mkdocs_nav(
     coverages: dict,
     manufacturers: dict,
@@ -2378,6 +2469,10 @@ def main():
     write_if_changed(
         str(wiki_dest / "data-model.md"), generate_wiki_data_model(db, profiles)
     )
+
+    # Generate which-pack page
+    print("Generating which-pack page...")
+    write_if_changed(str(docs / "which-pack.md"), generate_which_pack())
 
     # Generate contributing
     print("Generating contributing page...")
