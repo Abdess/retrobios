@@ -790,15 +790,14 @@ def _build_readme(
             "  1. Find your RetroArch system directory:\n"
             "     - RetroArch > Settings > Directory > System/BIOS\n"
             "     - Default: retroarch/system/\n"
-            '  2. Open the "system" folder from this archive\n'
-            "  3. Copy ALL contents into your system directory\n"
-            "  4. Overwrite if asked\n\n"
+            "  2. Extract all files from this archive directly into your system directory\n"
+            "  3. Overwrite if asked\n\n"
             "  Option C: Manual (handheld / SD card)\n"
             "  -------------------------------------\n"
             "  Anbernic, Retroid, Miyoo, Trimui, etc.:\n"
             "  1. Connect your SD card to your PC\n"
             "  2. Find the BIOS folder (usually BIOS/ or system/)\n"
-            '  3. Copy ALL contents of "system" from this archive\n'
+            "  3. Extract all files from this archive directly into that folder\n"
             "  4. Eject SD card and reboot your device\n\n"
             "  Common paths by device:\n"
             "    Anbernic (ArkOS/JELOS): BIOS/\n"
@@ -817,14 +816,13 @@ def _build_readme(
             "  1. On your PC, open the Batocera network share:\n"
             "     - Windows: \\\\BATOCERA\\share\\bios\\\n"
             "     - Mac/Linux: smb://batocera/share/bios/\n"
-            '  2. Open the "bios" folder from this archive\n'
-            "  3. Copy ALL contents into the share\n"
-            "  4. Overwrite if asked\n\n"
+            "  2. Extract all files from this archive directly into the share\n"
+            "  3. Overwrite if asked\n\n"
             "  Option C: Manual (SD card)\n"
             "  --------------------------\n"
             "  1. Put the SD card in your PC\n"
             "  2. Navigate to /userdata/bios/ on the SHARE partition\n"
-            '  3. Copy ALL contents of "bios" from this archive\n\n'
+            "  3. Extract all files from this archive directly into that folder\n\n"
             "  NOTE: Dreamcast flash memory is named dc_nvmem.bin\n"
             "  (if your setup asks for dc_flash.bin, same file).\n\n"
         ),
@@ -838,13 +836,12 @@ def _build_readme(
             "  1. On your PC, open the Recalbox network share:\n"
             "     - Windows: \\\\RECALBOX\\share\\bios\\\n"
             "     - Mac/Linux: smb://recalbox/share/bios/\n"
-            '  2. Open the "bios" folder from this archive\n'
-            "  3. Copy ALL contents into the share\n\n"
+            "  2. Extract all files from this archive directly into the share\n\n"
             "  Option C: Manual (SD card)\n"
             "  --------------------------\n"
             "  1. Put the SD card in your PC\n"
             "  2. Navigate to /recalbox/share/bios/\n"
-            '  3. Copy ALL contents of "bios" from this archive\n\n'
+            "  3. Extract all files from this archive directly into that folder\n\n"
         ),
         "emudeck": (
             "INSTALLATION GUIDE (Steam Deck / Linux)\n\n"
@@ -858,8 +855,7 @@ def _build_readme(
             "  ----------------\n"
             "  1. Open Dolphin file manager\n"
             "  2. Navigate to ~/Emulation/bios/\n"
-            '  3. Open the "bios" folder from this archive\n'
-            "  4. Copy ALL contents into ~/Emulation/bios/\n\n"
+            "  3. Extract all files from this archive directly into ~/Emulation/bios/\n\n"
             "  STANDALONE EMULATORS (extra step)\n"
             "  Switch and 3DS emulators need keys in specific folders:\n"
             "    prod.keys  -> ~/.local/share/yuzu/keys/\n"
@@ -878,11 +874,8 @@ def _build_readme(
             "  ----------------\n"
             "  1. Open Dolphin file manager\n"
             "  2. Show hidden files (Ctrl+H)\n"
-            "  3. Navigate to ~/retrodeck/\n"
-            '  4. Open the "bios" folder from this archive\n'
-            "  5. Copy ALL contents into ~/retrodeck/bios/\n"
-            '  6. If the archive contains a "roms" folder, copy\n'
-            "     its contents into ~/retrodeck/roms/\n\n"
+            "  3. Navigate to ~/retrodeck/bios/\n"
+            "  4. Extract all files from this archive directly into ~/retrodeck/bios/\n\n"
             "  NOTE: RetroDECK uses its own BIOS checker. After\n"
             "  copying, open RetroDECK > Tools > BIOS Checker to\n"
             "  verify everything is detected.\n\n"
@@ -898,9 +891,8 @@ def _build_readme(
             "  1. Open your RetroBat installation folder\n"
             "  2. Navigate to the bios\\ subfolder\n"
             "     (default: C:\\RetroBat\\bios\\)\n"
-            '  3. Open the "bios" folder from this archive\n'
-            "  4. Copy ALL contents into your bios\\ folder\n"
-            "  5. Overwrite if asked\n\n"
+            "  3. Extract all files from this archive directly into your bios\\ folder\n"
+            "  4. Overwrite if asked\n\n"
         ),
         "bizhawk": (
             "INSTALLATION GUIDE\n\n"
@@ -908,16 +900,15 @@ def _build_readme(
             "  2. Navigate to the Firmware subfolder:\n"
             "     - Windows: BizHawk\\Firmware\\\n"
             "     - Linux: ~/.config/BizHawk/Firmware/\n"
-            '  3. Open the "Firmware" folder from this archive\n'
-            "  4. Copy ALL contents into your Firmware folder\n"
-            "  5. In BizHawk: Config > Paths > Firmware should\n"
+            "  3. Extract all files from this archive directly into your Firmware folder\n"
+            "  4. In BizHawk: Config > Paths > Firmware should\n"
             "     point to this folder\n\n"
         ),
         "romm": (
             "INSTALLATION GUIDE (RomM server)\n\n"
             "  1. Locate your RomM library folder\n"
             "  2. Navigate to the bios/ subdirectory\n"
-            '  3. Copy ALL contents of "bios" from this archive\n'
+            "  3. Extract all files from this archive directly into that folder\n"
             "  4. Restart the RomM service to detect new files\n\n"
         ),
         "retropie": (
@@ -925,7 +916,7 @@ def _build_readme(
             "  Option A: Via network share\n"
             "  --------------------------\n"
             "  1. On your PC, open: \\\\RETROPIE\\bios\\\n"
-            '  2. Copy ALL contents of "BIOS" from this archive\n\n'
+            "  2. Extract all files from this archive directly into that folder\n\n"
             "  Option B: Via SSH\n"
             "  -----------------\n"
             "  1. SSH into your Pi: ssh pi@retropie\n"
@@ -934,7 +925,7 @@ def _build_readme(
             "  ---------------------\n"
             "  1. Put the SD card in your PC\n"
             "  2. Navigate to /home/pi/RetroPie/BIOS/\n"
-            '  3. Copy ALL contents of "BIOS" from this archive\n\n'
+            "  3. Extract all files from this archive directly into that folder\n\n"
         ),
     }
 
@@ -945,9 +936,8 @@ def _build_readme(
         platform_name,
         (
             f"INSTALLATION\n\n"
-            f'  1. Open the "{base_dest or "files"}" folder in this archive\n'
-            f"  2. Copy ALL contents to your BIOS directory\n"
-            f"  3. Overwrite if asked\n\n"
+            f"  1. Extract all files from this archive directly into your BIOS directory\n"
+            f"  2. Overwrite if asked\n\n"
         ),
     )
 
@@ -3287,7 +3277,11 @@ def verify_pack(
             # Data directory: check against cached files
             if status == "untracked" and _data_index:
                 _bn = os.path.basename(name)
-                _pr = name[len("system/") :] if name.startswith("system/") else name
+                _pr = name
+                for _known_prefix in ("system/", "bios/", "BIOS/", "Firmware/"):
+                    if name.startswith(_known_prefix):
+                        _pr = name[len(_known_prefix):]
+                        break
                 _cands = []
                 if _pr in _data_path_index:
                     _cands.append(_data_path_index[_pr])
@@ -3454,6 +3448,13 @@ def verify_pack_against_platform(
         zip_set = set(zf.namelist())
         zip_lower = {n.lower(): n for n in zip_set}
 
+        # Auto-detect flat vs nested ZIP
+        is_flat = bool(base_dest) and not any(
+            n.startswith(base_dest + "/")
+            for n in zip_set
+            if n not in ("README.txt", "manifest.json") and not n.endswith("/")
+        )
+
         # Structural checks
         dupes = sum(1 for c in Counter(zf.namelist()).values() if c > 1)
         if dupes:
@@ -3483,7 +3484,7 @@ def verify_pack_against_platform(
                 dest = fe.get("destination", fe.get("name", ""))
                 if not dest:
                     continue
-                expected = f"{base_dest}/{dest}" if base_dest else dest
+                expected = f"{base_dest}/{dest}" if base_dest and not is_flat else dest
                 baseline_checked += 1
 
                 if expected in zip_set or expected.lower() in zip_lower:
@@ -3510,7 +3511,7 @@ def verify_pack_against_platform(
                     continue
                 raw_dest = u.get("path") or u["name"]
                 dest = f"{raw_dest}{u['name']}" if raw_dest.endswith("/") else raw_dest
-                if extras_pfx:
+                if extras_pfx and not (is_flat and extras_pfx == base_dest):
                     if not dest.startswith(f"{extras_pfx}/"):
                         full = f"{extras_pfx}/{dest}"
                     else:
