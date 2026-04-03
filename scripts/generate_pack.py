@@ -2432,6 +2432,11 @@ def _run_verify_packs(args):
             with zipfile.ZipFile(zip_path) as zf:
                 zf.extractall(extract_dir)
 
+            # Auto-detect flat vs nested extraction
+            is_flat = bool(base_dest) and not os.path.isdir(
+                os.path.join(extract_dir, base_dest)
+            )
+
             missing = []
             hash_fail = []
             ok = 0
@@ -2442,7 +2447,7 @@ def _run_verify_packs(args):
                         continue
                     fp = (
                         os.path.join(extract_dir, base_dest, dest)
-                        if base_dest
+                        if base_dest and not is_flat
                         else os.path.join(extract_dir, dest)
                     )
                     # Case-insensitive fallback

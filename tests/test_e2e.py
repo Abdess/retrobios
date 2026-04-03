@@ -3383,10 +3383,17 @@ class TestE2E(unittest.TestCase):
             registry_path,
             emulators_dir=self.emulators_dir,
         )
+        # Detect flat vs nested ZIP to build expected paths
         base = manifest.get("base_destination", "")
+        is_flat = bool(base) and not any(
+            n.startswith(base + "/") for n in zip_names
+        )
         manifest_dests = set()
         for f in manifest["files"]:
-            d = f"{base}/{f['dest']}" if base else f["dest"]
+            if base and not is_flat:
+                d = f"{base}/{f['dest']}"
+            else:
+                d = f["dest"]
             manifest_dests.add(d)
 
         self.assertEqual(manifest_dests, zip_names)
