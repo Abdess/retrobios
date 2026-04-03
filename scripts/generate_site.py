@@ -2138,7 +2138,7 @@ def _build_emulator_file_index(profiles: dict) -> dict[str, dict]:
 
 def generate_which_pack() -> str:
     """Generate the 'Which pack?' decision page."""
-    releases = "https://github.com/Abdess/retrobios/releases"
+    rel = "https://github.com/Abdess/retrobios/releases"
     return f"""\
 # Getting started
 
@@ -2171,61 +2171,61 @@ Nothing else needed. The installer handles everything.
 
 ## Manual download
 
-Pick the pack that matches the setup from the [{releases}]({releases}),
+Pick the pack that matches the setup from the [releases page]({rel}),
 download it, and extract the files into the BIOS folder listed below.
 After extraction, launch a game. If it needed BIOS, it will find it.
 
 ### Steam Deck
 
-| Setup | What it is | Pack to download | Extract to |
-|-------|-----------|-----------------|-----------|
-| [EmuDeck](https://www.emudeck.com/) | Installs and configures multiple emulators, adds each game to the Steam library | [EmuDeck pack]({releases}) | `~/Emulation/bios/` |
-| [RetroDECK](https://retrodeck.net/) | Single Flatpak app, all emulators bundled, one-click install from Discover | [RetroDECK pack]({releases}) | `~/retrodeck/` |
-| RetroArch standalone | Installed from Discover, Steam, or Flatpak | [RetroArch / Lakka pack]({releases}) | `~/.var/app/org.libretro.RetroArch/config/retroarch/system/` (Flatpak) |
+| Setup | What it is | Pack | Extract to |
+|-------|-----------|------|-----------|
+| [EmuDeck](https://www.emudeck.com/) | Installs and configures multiple emulators, adds each game to the Steam library | [EmuDeck]({rel}) | `~/Emulation/bios/` |
+| [RetroDECK](https://retrodeck.net/) | Single Flatpak app, all emulators bundled, one-click install from Discover | [RetroDECK]({rel}) | `~/retrodeck/` |
+| RetroArch standalone | Installed from Discover, Steam, or Flatpak | [RetroArch]({rel}) | Open RetroArch > Settings > Directory > System, that is the folder |
 
 ### Windows
 
-| Setup | What it is | Pack to download | Extract to |
-|-------|-----------|-----------------|-----------|
-| [RetroArch](https://www.retroarch.com/) | Multi-system emulator, loads different cores for each console | [RetroArch / Lakka pack]({releases}) | `RetroArch\\system\\` (next to retroarch.exe) |
-| [RetroBat](https://www.retrobat.org/) | Windows-native frontend with EmulationStation, includes RetroArch | [RetroBat pack]({releases}) | `RetroBat\\bios\\` |
-| [BizHawk](https://tasvideos.org/BizHawk) | Accuracy-focused multi-system emulator, popular for speedruns and TAS | [BizHawk pack]({releases}) | `BizHawk\\Firmware\\` |
-| [LaunchBox](https://www.launchbox-app.com/) | Game library manager and launcher, uses RetroArch or standalone emulators | [RetroArch / Lakka pack]({releases}) | The RetroArch system folder configured in LaunchBox |
+| Setup | What it is | Pack | Extract to |
+|-------|-----------|------|-----------|
+| [RetroArch](https://www.retroarch.com/) | Multi-system emulator, loads different cores for each console | [RetroArch]({rel}) | The `system` folder next to `retroarch.exe` |
+| [RetroBat](https://www.retrobat.org/) | Windows frontend with EmulationStation, includes RetroArch and standalone emulators | [RetroBat]({rel}) | The `bios` folder inside the RetroBat installation |
+| [BizHawk](https://tasvideos.org/BizHawk) | Accuracy-focused multi-system emulator, popular for speedruns and TAS | [BizHawk]({rel}) | The `Firmware` folder inside the BizHawk installation |
+| [LaunchBox](https://www.launchbox-app.com/) | Game library manager and launcher, uses RetroArch or standalone emulators behind the scenes | [RetroArch]({rel}) | Open RetroArch (via LaunchBox) > Settings > Directory > System |
 
 ### Linux
 
-| Setup | What it is | Pack to download | Extract to |
-|-------|-----------|-----------------|-----------|
-| RetroArch (native) | Installed via package manager or AppImage | [RetroArch / Lakka pack]({releases}) | `~/.config/retroarch/system/` |
-| RetroArch (Flatpak) | Installed from Flathub | [RetroArch / Lakka pack]({releases}) | `~/.var/app/org.libretro.RetroArch/config/retroarch/system/` |
-| [Batocera](https://batocera.org/) | Bootable OS dedicated to gaming, runs from USB or full install, works on PC and SBC | [Batocera pack]({releases}) | `/userdata/bios/` |
-| [Recalbox](https://www.recalbox.com/) | Bootable OS for retro gaming, streamlined interface, auto-configured | [Recalbox pack]({releases}) | `/recalbox/share/bios/` |
+| Setup | What it is | Pack | Extract to |
+|-------|-----------|------|-----------|
+| RetroArch (native) | Installed via package manager or AppImage | [RetroArch]({rel}) | `~/.config/retroarch/system/` |
+| RetroArch (Flatpak) | Installed from Flathub | [RetroArch]({rel}) | `~/.var/app/org.libretro.RetroArch/config/retroarch/system/` |
+| [Batocera](https://batocera.org/) | Bootable OS dedicated to gaming, runs from USB or full install, supports PC and SBC | [Batocera]({rel}) | `/userdata/bios/` |
+| [Recalbox](https://www.recalbox.com/) | Bootable OS for retro gaming, streamlined interface, auto-configured | [Recalbox]({rel}) | `/recalbox/share/bios/` |
 
 ### macOS
 
-| Setup | What it is | Pack to download | Extract to |
-|-------|-----------|-----------------|-----------|
-| [RetroArch](https://www.retroarch.com/) | Multi-system emulator | [RetroArch / Lakka pack]({releases}) | `~/Library/Application Support/RetroArch/system/` |
+| Setup | What it is | Pack | Extract to |
+|-------|-----------|------|-----------|
+| [RetroArch](https://www.retroarch.com/) | Multi-system emulator | [RetroArch]({rel}) | `~/Library/Application Support/RetroArch/system/` |
 
-### Raspberry Pi / Single-board computers
+### Raspberry Pi and single-board computers
 
-| Setup | What it is | Pack to download | Extract to |
-|-------|-----------|-----------------|-----------|
-| [RetroPie](https://retropie.org.uk/) | The classic Pi emulation setup, largest community, most online guides | [RetroArch / Lakka pack]({releases}) | `~/RetroPie/BIOS/` |
-| [Lakka](https://www.lakka.tv/) | Lightweight RetroArch OS, minimal config, boots straight into the UI | [RetroArch / Lakka pack]({releases}) | `/storage/system/` |
-| [Batocera](https://batocera.org/) | Easy setup, works on Pi 3/4/5 and many other boards (Odroid, etc.) | [Batocera pack]({releases}) | `/userdata/bios/` |
-| [Recalbox](https://www.recalbox.com/) | Plug-and-play experience, good for a first setup | [Recalbox pack]({releases}) | `/recalbox/share/bios/` |
+| Setup | What it is | Pack | Extract to |
+|-------|-----------|------|-----------|
+| [RetroPie](https://retropie.org.uk/) | The classic Pi emulation setup, largest community, most online guides | [RetroArch]({rel}) | `~/RetroPie/BIOS/` |
+| [Lakka](https://www.lakka.tv/) | Lightweight RetroArch OS, minimal config, boots straight into the UI | [RetroArch]({rel}) | `/storage/system/` |
+| [Batocera](https://batocera.org/) | Easy setup, works on Pi 3/4/5 and many other boards (Odroid, etc.) | [Batocera]({rel}) | `/userdata/bios/` |
+| [Recalbox](https://www.recalbox.com/) | Plug-and-play experience, good for a first build | [Recalbox]({rel}) | `/recalbox/share/bios/` |
 
 ### Android handheld (Retroid Pocket, R36S, Miyoo, etc.)
 
-Most Android handhelds run RetroArch. Download the [RetroArch / Lakka pack]({releases})
+Most Android handhelds run RetroArch. Download the [RetroArch pack]({rel})
 and extract into `RetroArch/system/` on internal storage or SD card.
 
 ### Self-hosted ROM manager
 
-| Setup | What it is | Pack to download | Extract to |
-|-------|-----------|-----------------|-----------|
-| [RomM](https://github.com/rommapp/romm) | Web-based ROM manager, plays games in the browser via EmulatorJS | [RomM pack]({releases}) | The bios folder in the RomM library, one subfolder per system |
+| Setup | What it is | Pack | Extract to |
+|-------|-----------|------|-----------|
+| [RomM](https://github.com/rommapp/romm) | Web-based ROM manager, plays games in the browser via EmulatorJS | [RomM]({rel}) | The `bios` folder in the RomM library, one subfolder per system |
 
 ---
 
