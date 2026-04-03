@@ -974,10 +974,7 @@ def _build_readme(
         credits = "\nCONTRIBUTORS\n\n"
         for cb in contributors:
             username = cb.get("username", "")
-            contribution = cb.get("contribution", "")
-            pr = cb.get("pr")
-            pr_ref = f" (#{pr})" if pr else ""
-            credits += f"  @{username} - {contribution}{pr_ref}\n"
+            credits += f"  @{username}\n"
         credits += "\n"
 
     return header + source_info + guide + credits + footer

@@ -743,15 +743,13 @@ def group_identical_platforms(
             inherits[platform] = False
             continue
 
-        base_dest = config.get("base_destination", "")
         entries = []
         for sys_id, system in sorted(config.get("systems", {}).items()):
             for fe in system.get("files", []):
                 dest = fe.get("destination", fe.get("name", ""))
-                full_dest = f"{base_dest}/{dest}" if base_dest else dest
                 sha1 = fe.get("sha1", "")
                 md5 = fe.get("md5", "")
-                entries.append(f"{full_dest}|{sha1}|{md5}")
+                entries.append(f"{dest}|{sha1}|{md5}")
 
         fp = hashlib.sha1("|".join(sorted(entries)).encode()).hexdigest()
         if target_cores_cache:

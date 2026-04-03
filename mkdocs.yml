@@ -52,6 +52,7 @@ plugins:
 - search
 nav:
 - Home: index.md
+- Which pack?: which-pack.md
 - Platforms:
   - Overview: platforms/index.md
   - Batocera: platforms/batocera.md

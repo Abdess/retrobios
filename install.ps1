@@ -101,4 +101,50 @@ foreach ($f in $toDownload) {
     }
 }
 
+# Standalone emulator copies
+if ($manifest.standalone_copies) {
+    Write-Host "`nStandalone emulators:"
+    foreach ($entry in $manifest.standalone_copies) {
+        if ($entry.note) {
+            $detectPaths = @()
+            if ($entry.detect -and $entry.detect.windows) {
+                $detectPaths = $entry.detect.windows
+            }
+            foreach ($dp in $detectPaths) {
+                $expanded = [Environment]::ExpandEnvironmentVariables($dp)
+                if (Test-Path $expanded) {
+                    Write-Host "  $($entry.note)"
+                    break
+                }
+            }
+            continue
+        }
+        $sources = @()
+        if ($entry.pattern) {
+            $sources = Get-ChildItem -Path $biosPath -Filter $entry.pattern -File -ErrorAction SilentlyContinue
+        } elseif ($entry.file) {
+            $src = Join-Path $biosPath $entry.file
+            if (Test-Path $src) { $sources = @(Get-Item $src) }
+        }
+        if ($sources.Count -eq 0) { continue }
+        $targetDirs = @()
+        if ($entry.targets -and $entry.targets.windows) {
+            $targetDirs = $entry.targets.windows
+        }
+        foreach ($td in $targetDirs) {
+            $expanded = [Environment]::ExpandEnvironmentVariables($td)
+            if (-not (Test-Path $expanded)) { continue }
+            foreach ($s in $sources) {
+                $dest = Join-Path $expanded $s.Name
+                try {
+                    Copy-Item $s.FullName $dest -Force
+                    Write-Host "  $($s.Name) -> $expanded"
+                } catch {
+                    Write-Host "  $($s.Name) -> $expanded FAILED" -ForegroundColor Red
+                }
+            }
+        }
+    }
+}
+
 Write-Host "`nDone. $downloaded downloaded, $upToDate already up to date."

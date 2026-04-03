@@ -2215,6 +2215,7 @@ def generate_mkdocs_nav(
 
     return [
         {"Home": "index.md"},
+        {"Which pack?": "which-pack.md"},
         {"Platforms": platform_nav},
         {"Systems": system_nav},
         {"Emulators": emu_nav},

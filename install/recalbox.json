@@ -4,7 +4,7 @@
   "platform": "recalbox",
   "display_name": "Recalbox",
   "version": "1.0",
-  "generated": "2026-04-02T13:53:15Z",
+  "generated": "2026-04-03T09:44:06Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -14,7 +14,222 @@
       "bios_path": "/recalbox/share/bios"
     }
   ],
-  "standalone_copies": [],
+  "standalone_copies": [
+    {
+      "file": "prod.keys",
+      "targets": {
+        "linux": [
+          "$HOME/.local/share/yuzu/keys",
+          "$HOME/.local/share/eden/keys",
+          "$HOME/.local/share/citron/keys",
+          "$HOME/.local/share/suyu/keys",
+          "$HOME/.config/Ryujinx/system"
+        ],
+        "windows": [
+          "%APPDATA%\\yuzu\\keys",
+          "%APPDATA%\\eden\\keys",
+          "%APPDATA%\\citron\\keys",
+          "%APPDATA%\\suyu\\keys",
+          "%APPDATA%\\Ryujinx\\system"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/yuzu/keys",
+          "$HOME/Library/Application Support/Ryujinx/system"
+        ]
+      }
+    },
+    {
+      "file": "title.keys",
+      "targets": {
+        "linux": [
+          "$HOME/.local/share/yuzu/keys",
+          "$HOME/.local/share/eden/keys",
+          "$HOME/.local/share/citron/keys",
+          "$HOME/.local/share/suyu/keys"
+        ],
+        "windows": [
+          "%APPDATA%\\yuzu\\keys",
+          "%APPDATA%\\eden\\keys",
+          "%APPDATA%\\citron\\keys",
+          "%APPDATA%\\suyu\\keys"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/yuzu/keys"
+        ]
+      }
+    },
+    {
+      "file": "Citra/sysdata/aes_keys.txt",
+      "targets": {
+        "linux": [
+          "$HOME/.local/share/azahar/sysdata"
+        ],
+        "windows": [
+          "%APPDATA%\\Azahar\\sysdata"
+        ]
+      }
+    },
+    {
+      "file": "Citra/sysdata/boot9.bin",
+      "targets": {
+        "linux": [
+          "$HOME/.local/share/azahar/sysdata"
+        ],
+        "windows": [
+          "%APPDATA%\\Azahar\\sysdata"
+        ]
+      }
+    },
+    {
+      "pattern": "scph*.bin",
+      "targets": {
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ],
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios",
+          "%USERPROFILE%\\Documents\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ]
+      }
+    },
+    {
+      "pattern": "ps2-*.bin",
+      "targets": {
+        "linux": [
+          "$HOME/.config/PCSX2/bios",
+          "$HOME/.var/app/net.pcsx2.PCSX2/config/PCSX2/bios"
+        ],
+        "windows": [
+          "%USERPROFILE%\\Documents\\PCSX2\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/PCSX2/bios"
+        ]
+      }
+    },
+    {
+      "note": "PS3 firmware (PS3UPDAT.PUP) found. Install via RPCS3 > File > Install Firmware.",
+      "detect": {
+        "linux": [
+          "$HOME/.config/rpcs3"
+        ],
+        "windows": [
+          "%APPDATA%\\rpcs3"
+        ]
+      }
+    },
+    {
+      "file": "GC/USA/IPL.bin",
+      "targets": {
+        "linux": [
+          "$HOME/.local/share/dolphin-emu/GC/USA"
+        ],
+        "windows": [
+          "%APPDATA%\\Dolphin Emulator\\GC\\USA"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/Dolphin/GC/USA"
+        ]
+      }
+    },
+    {
+      "file": "GC/EUR/IPL.bin",
+      "targets": {
+        "linux": [
+          "$HOME/.local/share/dolphin-emu/GC/EUR"
+        ],
+        "windows": [
+          "%APPDATA%\\Dolphin Emulator\\GC\\EUR"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/Dolphin/GC/EUR"
+        ]
+      }
+    },
+    {
+      "file": "GC/JAP/IPL.bin",
+      "targets": {
+        "linux": [
+          "$HOME/.local/share/dolphin-emu/GC/JAP"
+        ],
+        "windows": [
+          "%APPDATA%\\Dolphin Emulator\\GC\\JAP"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/Dolphin/GC/JAP"
+        ]
+      }
+    },
+    {
+      "file": "dsp_rom.bin",
+      "targets": {
+        "linux": [
+          "$HOME/.local/share/dolphin-emu"
+        ],
+        "windows": [
+          "%APPDATA%\\Dolphin Emulator"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/Dolphin"
+        ]
+      }
+    },
+    {
+      "file": "dsp_coef.bin",
+      "targets": {
+        "linux": [
+          "$HOME/.local/share/dolphin-emu"
+        ],
+        "windows": [
+          "%APPDATA%\\Dolphin Emulator"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/Dolphin"
+        ]
+      }
+    },
+    {
+      "file": "PPSSPP/ppge_atlas.zim",
+      "targets": {
+        "linux": [
+          "$HOME/.config/ppsspp/PSP/SYSTEM"
+        ],
+        "windows": [
+          "%USERPROFILE%\\Documents\\PPSSPP\\PSP\\SYSTEM"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/PPSSPP/PSP/SYSTEM"
+        ]
+      }
+    },
+    {
+      "file": "dc/dc_boot.bin",
+      "targets": {
+        "linux": [
+          "$HOME/.local/share/flycast/data",
+          "$HOME/.var/app/org.flycast.Flycast/data/flycast"
+        ],
+        "windows": [
+          "%APPDATA%\\flycast\\data"
+        ]
+      }
+    },
+    {
+      "file": "dc/dc_nvmem.bin",
+      "targets": {
+        "linux": [
+          "$HOME/.local/share/flycast/data",
+          "$HOME/.var/app/org.flycast.Flycast/data/flycast"
+        ],
+        "windows": [
+          "%APPDATA%\\flycast\\data"
+        ]
+      }
+    }
+  ],
   "total_files": 1107,
   "total_size": 3980096655,
   "files": [
