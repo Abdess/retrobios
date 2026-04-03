@@ -2231,7 +2231,7 @@ and extract into `RetroArch/system/` on internal storage or SD card.
 
 ## Full pack or Platform pack?
 
-Each platform has two pack types on the [releases page]({releases}).
+Each platform has two pack types on the [releases page]({rel}).
 
 **Full pack** (recommended)
 
