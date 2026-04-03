@@ -352,6 +352,13 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
     lines.extend(
         [
             "",
+            "## Community tools",
+            "",
+            "- [BIOS Preservation Tool](https://github.com/monster-penguin/BIOS-Preservation-Tool)"
+            " by [monster-penguin](https://github.com/monster-penguin)"
+            " - scan, verify, and stage your own BIOS collection"
+            " using RetroBIOS hash metadata",
+            "",
             "## Contributing",
             "",
             "See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.",
