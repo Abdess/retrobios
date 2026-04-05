@@ -1,0 +1,327 @@
+platform: MiSTer FPGA
+version: latest
+homepage: 'https://misterfpga.org'
+source: 'https://github.com/ajgowans/BiosDB_MiSTer'
+base_destination: games
+hash_type: md5
+verification_mode: md5
+systems:
+  3do:
+    files:
+    - name: panafz1.bin
+      destination: 3DO/boot.rom
+      required: true
+      md5: f47264dd47fe30f73ab3c010015c155b
+      sha1: 34bf189111295f74d7b7dfc1f304d98b8d36325a
+      crc32: c8c8ff89
+      size: 1048576
+    - name: panafz1j-kanji.bin
+      destination: 3DO/kanji.rom
+      required: true
+      md5: c23fb5d5e6bb1c240d02cf968972be37
+      sha1: 884515605ee243577ab20767ef8c1a7368e4e407
+      crc32: 45f478b1
+      size: 1048576
+    native_id: MiSTer - 3DO Interactive Multiplayer
+    core: 3DO_MiSTer
+    manufacturer: Panasonic
+    docs: 'https://github.com/MiSTer-devel/3DO_MiSTer'
+  atari-lynx:
+    files:
+    - name: Atari_LYNX_boot.img
+      destination: AtariLynx/boot.rom
+      required: true
+      md5: fcd403db69f54290b51035d82f835e7b
+      sha1: e4ed47fae31693e016b081c6bda48da5b70d7ccb
+      crc32: 0d973c9d
+      size: 512
+    native_id: MiSTer - Atari Lynx
+    core: AtariLynx_MiSTer
+    manufacturer: Atari
+    docs: 'https://github.com/MiSTer-devel/AtariLynx_MiSTer'
+  coco3:
+    files:
+    - name: coco3.rom
+      destination: COCO3/boot0.rom
+      required: true
+      md5: 7233c6c429f3ce1c7392f28a933e0b6f
+      sha1: e0d82953fb6fd03768604933df1ce8bc51fc427d
+      crc32: b4c88d6c
+      size: 32768
+    - name: disk11.rom
+      destination: COCO3/boot1.rom
+      required: true
+      md5: 8cab28f4b7311b8df63c07bb3b59bfd5
+      sha1: 10bdc5aa2d7d7f205f67b47b19003a4bd89defd1
+      crc32: 0b9c5415
+      size: 8192
+    - name: orch90.rom
+      destination: COCO3/boot2.rom
+      required: true
+      md5: 171fb7a5d3b808565295b45c773abaaf
+      sha1: 6a20fee9c70b36a6435ac8378f31d5b626017df0
+      crc32: 15fb39af
+      size: 8192
+    native_id: MiSTer - Tandy TRS-80 Color Computer 3
+    core: CoCo3_MiSTer
+    manufacturer: Tandy
+    docs: 'https://github.com/MiSTer-devel/CoCo3_MiSTer'
+  game-boy:
+    files:
+    - name: GBC_cgb.bin
+      destination: GAMEBOY/boot1.rom
+      required: true
+      md5: dbfce9db9deaa2567f6a84fde55f9680
+      sha1: 1293d68bf9643bc4f36954c1e80e38f39864528d
+      crc32: 41884e46
+      size: 2304
+    native_id: MiSTer - Game Boy / Game Boy Color
+    core: Gameboy_MiSTer
+    manufacturer: Nintendo
+    docs: 'https://github.com/MiSTer-devel/Gameboy_MiSTer'
+  game-boy-advance:
+    files:
+    - name: GBA_bios.rom
+      destination: GBA/boot.rom
+      required: true
+      md5: a860e8c0b6d573d191e4ec7db1b1e4f6
+      sha1: 300c20df6731a33952ded8c436f7f186d25d3492
+      crc32: 81977335
+      size: 16384
+    native_id: MiSTer - Game Boy Advance
+    core: GBA_MiSTer
+    manufacturer: Nintendo
+    docs: 'https://github.com/MiSTer-devel/GBA_MiSTer'
+  intellivision:
+    files:
+    - name: INTV_EROM.bin
+      destination: Intellivision/boot0.rom
+      required: true
+      md5: 62e761035cb657903761800f4437b8af
+      sha1: 5a65b922b562cb1f57dab51b73151283f0e20c7a
+      crc32: cbce86f7
+      size: 8192
+    - name: INTV_GROM.bin
+      destination: Intellivision/boot1.rom
+      required: true
+      md5: 0cd5946c6473e42e8e4c2137785e427f
+      sha1: f9608bb4ad1cfe3640d02844c7ad8e0bcd974917
+      crc32: 683a4158
+      size: 2048
+    - name: IVOICE.BIN
+      destination: Intellivision/boot2.rom
+      required: true
+      md5: d5530f74681ec6e0f282dab42e6b1c5f
+      sha1: 618563e512ff5665183664f52270fa9606c9d289
+      crc32: 0de7579d
+      size: 2048
+    - name: ECS.bin
+      destination: Intellivision/boot3.rom
+      required: true
+      md5: 2e72a9a2b897d330a35c8b07a6146c52
+      sha1: b7ccb38b881d7f8426cd6f1f8a7aabbd31784fc5
+      crc32: ea790a06
+      size: 24576
+    native_id: MiSTer - Intellivision
+    core: Intellivision_MiSTer
+    manufacturer: Mattel
+    docs: 'https://github.com/MiSTer-devel/Intellivision_MiSTer'
+  msx:
+    files:
+    - name: vg8020_basic-bios1.rom
+      destination: MSX1/boot.rom
+      required: true
+      md5: a0452dbf5ace7d2e49d0a8029efed09a
+      sha1: 829c00c3114f25b3dae5157c0a238b52a3ac37db
+      crc32: 8205795e
+      size: 32768
+    native_id: MiSTer - MSX1
+    core: MSX_MiSTer
+    manufacturer: Microsoft
+    docs: 'https://github.com/MiSTer-devel/MSX_MiSTer'
+  neo-geo:
+    files:
+    - name: 000-lo.lo
+      destination: NEOGEO/000-lo.lo
+      required: true
+      md5: fc7599f3f871578fe9a0453662d1c966
+      sha1: 5992277debadeb64d1c1c64b0a92d9293eaf7e4a
+      crc32: 5a86cff2
+      size: 131072
+    native_id: MiSTer - Neo Geo (AES/MVS)
+    core: NeoGeo_MiSTer
+    manufacturer: SNK
+    docs: 'https://github.com/MiSTer-devel/NeoGeo_MiSTer'
+  neo-geo-cd:
+    files:
+    - name: neocd.bin
+      destination: NeoGeo-CD/neocd.bin
+      required: true
+      md5: f39572af7584cb5b3f70ae8cc848aba2
+      sha1: 7bb26d1e5d1e930515219cb18bcde5b7b23e2eda
+      crc32: df9de490
+      size: 524288
+    - name: top-sp1.bin
+      destination: NeoGeo-CD/top-sp1.bin
+      required: true
+      md5: 122aee210324c72e8a11116e6ef9c0d0
+      sha1: 235f4d1d74364415910f73c10ae5482d90b4274f
+      crc32: c36a47c0
+      size: 524288
+    - name: uni-bioscd.rom
+      destination: NeoGeo-CD/uni-bioscd.rom
+      required: true
+      md5: 08ca8b2dba6662e8024f9e789711c6fc
+      sha1: 5142f205912869b673a71480c5828b1eaed782a8
+      crc32: ff3abc59
+      size: 524288
+    native_id: MiSTer - Neo Geo CD
+    core: NeoGeo_MiSTer
+    manufacturer: SNK
+    docs: 'https://github.com/MiSTer-devel/NeoGeo_MiSTer'
+  nes-fds:
+    files:
+    - name: FDS_disksys-nintendo.rom
+      destination: NES/boot0.rom
+      required: true
+      md5: ca30b50f880eb660a320674ed365ef7a
+      sha1: 57fe1bdee955bb48d357e463ccbf129496930b62
+      crc32: 5e607dcf
+      size: 8192
+    native_id: MiSTer - NES / Famicom Disk System
+    core: NES_MiSTer
+    manufacturer: Nintendo
+    docs: 'https://github.com/MiSTer-devel/NES_MiSTer'
+  philips-cdi:
+    files:
+    - name: cdi200.rom
+      destination: CD-i/boot0.rom
+      required: true
+      md5: 2969341396aa61e0143dc2351aaa6ef6
+      sha1: d961de803c89b3d1902d656ceb9ce7c02dccb40a
+      crc32: 40c4e6b9
+      size: 524288
+    - name: zx405042p__cdi_slave_2.0__b43t__zzmk9213.mc68hc705c8a_withtestrom.7206
+      destination: CD-i/boot1.rom
+      required: true
+      md5: 3d20cf7550f1b723158b42a1fd5bac62
+      sha1: 56d0acd7caad51c7de703247cd6d842b36173079
+      crc32: 688cda63
+      size: 8192
+    native_id: MiSTer - Philips CD-i
+    core: CDi_MiSTer
+    manufacturer: Philips
+    docs: 'https://github.com/MiSTer-devel/CDi_MiSTer'
+  playstation:
+    files:
+    - name: scph7001.bin
+      destination: PSX/boot.rom
+      required: true
+      md5: 1e68c231d0896b7eadcad1d7d8e76129
+      sha1: 14df4f6c1e367ce097c11deae21566b4fe5647a9
+      crc32: 502224b6
+      size: 524288
+    - name: scph7000.bin
+      destination: PSX/boot1.rom
+      required: true
+      md5: 8e4c14f567745eff2f0408c8129f72a6
+      sha1: 77b10118d21ac7ffa9b35f9c4fd814da240eb3e9
+      crc32: ec541cd0
+      size: 524288
+    - name: scph7002.bin
+      destination: PSX/boot2.rom
+      required: true
+      md5: b9d9a0286c33dc6b7237bb13cd46fdee
+      sha1: 8d5de56a79954f29e9006929ba3fed9b6a418c1d
+      crc32: 318178bf
+      size: 524288
+    native_id: MiSTer - Sony PlayStation
+    core: PSX_MiSTer
+    manufacturer: Sony
+    docs: 'https://github.com/MiSTer-devel/PSX_MiSTer'
+  pokemon-mini:
+    files:
+    - name: bios.min
+      destination: PokemonMini/boot.rom
+      required: true
+      md5: 1e4fb124a3a886865acb574f388c803d
+      sha1: daad4113713ed776fbd47727762bca81ba74915f
+      crc32: aed3c14d
+      size: 4096
+    native_id: MiSTer - Pokémon Mini
+    core: PokemonMini_MiSTer
+    manufacturer: Nintendo
+    docs: 'https://github.com/MiSTer-devel/PokemonMini_MiSTer'
+  sega-cd:
+    files:
+    - name: eu_mcd2_9306.bin
+      destination: MegaCD/Europe/cd_bios.rom
+      required: true
+      md5: 9b562ebf2d095bf1dabadbc1881f519a
+      sha1: 7063192ae9f6b696c5b81bc8f0a9fe6f0c400e58
+      crc32: 0507b590
+      size: 131072
+    - name: jp_mcd2_921222.bin
+      destination: MegaCD/Japan/cd_bios.rom
+      required: true
+      md5: 683a8a9e273662561172468dfa2858eb
+      sha1: d203cfe22c03ae479dd8ca33840cf8d9776eb3ff
+      crc32: dd6cc972
+      size: 131072
+    - name: us_scd2_9306.bin
+      destination: MegaCD/USA/cd_bios.rom
+      required: true
+      md5: 310a9081d2edf2d316ab38813136725e
+      sha1: 5a8c4b91d3034c1448aac4b5dc9a6484fce51636
+      crc32: 8af65f58
+      size: 131072
+    native_id: MiSTer - Sega CD / Mega-CD
+    core: MegaCD_MiSTer
+    manufacturer: Sega
+    docs: 'https://github.com/MiSTer-devel/MegaCD_MiSTer'
+  sega-saturn:
+    files:
+    - name: hisaturn_v103.bin
+      destination: Saturn/boot.rom
+      required: true
+      md5: 0306c0e408d6682dd2d86324bd4ac661
+      sha1: 8c031bf9908fd0142fdd10a9cdd79389f8a3f2fc
+      crc32: 6abfefea
+      size: 524288
+    native_id: MiSTer - Sega Saturn
+    core: Saturn_MiSTer
+    manufacturer: Sega
+    docs: 'https://github.com/MiSTer-devel/Saturn_MiSTer'
+  snes:
+    files:
+    - name: BS-X.bin
+      destination: SNES/bsx_bios.rom
+      required: true
+      md5: 96cf17bf589fcbfa6f8de2dc84f19fa2
+      sha1: 4891d739a8a8b67923681bad4fb67edab2e90e50
+      crc32: e5a91ad4
+      size: 1048576
+    native_id: MiSTer - Super NES / Super Famicom
+    core: SNES_MiSTer
+    manufacturer: Nintendo
+    docs: 'https://github.com/MiSTer-devel/SNES_MiSTer'
+  super-game-boy:
+    files:
+    - name: program.rom
+      destination: SGB/Super Game Boy 2.sfc
+      required: true
+      md5: 8ecd73eb4edf7ed7e81aef1be80031d5
+      sha1: e5b2922ca137051059e4269b236d07a22c07bc84
+      crc32: cb176e45
+      size: 524288
+    - name: program.rom
+      destination: SGB/Super Game Boy.sfc
+      required: true
+      md5: b15ddb15721c657d82c5bab6db982ee9
+      sha1: 973e10840db683cf3faf61bd443090786b3a9f04
+      crc32: 8a4a174f
+      size: 262144
+    native_id: MiSTer - Super Game Boy
+    core: SGB_MiSTer
+    manufacturer: Nintendo
+    docs: 'https://github.com/MiSTer-devel/SGB_MiSTer'
