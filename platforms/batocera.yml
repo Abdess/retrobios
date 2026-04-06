@@ -1,7 +1,7 @@
 platform: Batocera
 version: '42'
-homepage: https://batocera.org
-source: https://raw.githubusercontent.com/batocera-linux/batocera.linux/master/package/batocera/core/batocera-scripts/scripts/batocera-systems
+homepage: "https://batocera.org"
+source: "https://raw.githubusercontent.com/batocera-linux/batocera.linux/master/package/batocera/core/batocera-scripts/scripts/batocera-systems"
 base_destination: bios
 hash_type: md5
 verification_mode: md5
@@ -1638,18 +1638,6 @@ systems:
       required: true
     native_id: macintosh
     name: Apple Macintosh
-  sc3000:
-    files:
-    - name: sc3000.zip
-      destination: sc3000.zip
-      required: true
-    - name: sc3000.zip
-      destination: sc3000.zip
-      required: true
-      md5: fda6619ba96bf00b849192f5e7460622
-      zipped_file: sc3000.rom
-    native_id: sc3000
-    name: Sega SC-3000
   segaai:
     files:
     - name: segaai.zip
@@ -3344,102 +3332,54 @@ systems:
     name: Oric Atmos
   enterprise-64-128:
     files:
-    - name: basic21.bin
-      destination: Enterprise/basic21.bin
-      required: true
-      md5: e972fe42b398c9ff1d93ff014786aec6
-    - name: exos21.bin
-      destination: Enterprise/exos21.bin
-      required: true
-      md5: f36f24cbb87745fbd2714e4df881db09
     - name: exos21.rom
-      destination: exos21.rom
+      destination: ep128emu/roms/exos21.rom
       required: true
       md5: f36f24cbb87745fbd2714e4df881db09
     - name: basic21.rom
-      destination: basic21.rom
+      destination: ep128emu/roms/basic21.rom
       required: true
       md5: e972fe42b398c9ff1d93ff014786aec6
     - name: exdos13.rom
-      destination: exdos13.rom
+      destination: ep128emu/roms/exdos13.rom
       required: true
       md5: ddff70c014d1958dc75378b6c9aab6f8
+    - name: epfileio.rom
+      destination: ep128emu/roms/epfileio.rom
+      required: true
+      md5: a68ebcbc73a4d2178d755b7755bf18fe
     - name: exos20.rom
-      destination: exos20.rom
+      destination: ep128emu/roms/exos20.rom
       required: true
       md5: 5ad3baaad3b5156d6b60b34229a676fb
     - name: basic20.rom
-      destination: basic20.rom
+      destination: ep128emu/roms/basic20.rom
       required: true
       md5: 8e18edce4a7acb2c33cc0ab18f988482
-    - name: epfileio.rom
-      destination: epfileio.rom
-      required: true
-      md5: a68ebcbc73a4d2178d755b7755bf18fe
     - name: exos24uk.rom
-      destination: exos24uk.rom
+      destination: ep128emu/roms/exos24uk.rom
       required: true
       md5: 55af78f877a21ca45eb2df68a74fcc60
     - name: hun.rom
-      destination: hun.rom
+      destination: ep128emu/roms/hun.rom
       required: true
       md5: 22167938f142c222f40992839aa21a06
-    - name: epdos16f.rom
-      destination: epdos16f.rom
+    - name: epd19hft.rom
+      destination: ep128emu/roms/epd19hft.rom
       required: true
-      md5: 6593dff00ab32a4b1fc084674ededf2b
-    - name: exdos14isdos10uk.rom
-      destination: exdos14isdos10uk.rom
+      md5: 12cfc9c7e48c8a16c2e09edbd926d467
+    - name: zt19hfnt.rom
+      destination: ep128emu/roms/zt19hfnt.rom
       required: true
-      md5: f91c4a507cc6895bdd9c43df4f021df3
+      md5: 653daaf7b9b29c2c4e577f489580f247
     - name: brd.rom
-      destination: brd.rom
+      destination: ep128emu/roms/brd.rom
       required: true
       md5: 6af0402906944fd134004b85097c8524
     - name: zt19uk.rom
-      destination: zt19uk.rom
+      destination: ep128emu/roms/zt19uk.rom
       required: true
       md5: 228540b6be83ae2acd7569c8ff0f91d0
-    - name: tvc22_sys.rom
-      destination: tvc22_sys.rom
-      required: true
-      md5: 8c54285f541930cde766069942bad0f2
-    - name: tvc22_ext.rom
-      destination: tvc22_ext.rom
-      required: true
-      md5: 5ce95a26ceed5bec73995d83568da9cf
-    - name: tvcfileio.rom
-      destination: tvcfileio.rom
-      required: true
-      md5: a2cf86ba8e7fc58b242137fe59036832
-    - name: tvc_dos12d.rom
-      destination: tvc_dos12d.rom
-      required: true
-      md5: 88dc7876d584f90e4106f91444ab23b7
-    - name: cpc464.rom
-      destination: cpc464.rom
-      required: true
-      md5: a993f85b88ac4350cf4d41554e87fe4f
-    - name: cpc664.rom
-      destination: cpc664.rom
-      required: true
-      md5: 5a384a2310f472c7857888371c00ed66
-    - name: cpc6128.rom
-      destination: cpc6128.rom
-      required: true
-      md5: b96280dc6c95a48857b4b8eb931533ae
-    - name: cpc_amsdos.rom
-      destination: cpc_amsdos.rom
-      required: true
-      md5: 25629dfe870d097469c217b95fdc1c95
-    - name: zx128.rom
-      destination: zx128.rom
-      required: true
-      md5: 85fede415f4294cc777517d7eada482e
-    - name: zx48.rom
-      destination: zx48.rom
-      required: true
-      md5: 4c42a2f075212361c3117015b107ff68
     - name: ep64.zip
       destination: ep64.zip
       required: true
@@ -3460,19 +3400,19 @@ systems:
   videoton-tvc:
     files:
     - name: tvc22_sys.rom
-      destination: tvc22_sys.rom
+      destination: ep128emu/roms/tvc22_sys.rom
       required: true
       md5: 8c54285f541930cde766069942bad0f2
     - name: tvc22_ext.rom
-      destination: tvc22_ext.rom
+      destination: ep128emu/roms/tvc22_ext.rom
       required: true
       md5: 5ce95a26ceed5bec73995d83568da9cf
     - name: tvcfileio.rom
-      destination: tvcfileio.rom
+      destination: ep128emu/roms/tvcfileio.rom
       required: true
       md5: a2cf86ba8e7fc58b242137fe59036832
     - name: tvc_dos12d.rom
-      destination: tvc_dos12d.rom
+      destination: ep128emu/roms/tvc_dos12d.rom
       required: true
       md5: 88dc7876d584f90e4106f91444ab23b7
     - name: tvc64.zip
@@ -3552,6 +3492,64 @@ systems:
       destination: bk/MONIT10.ROM
       required: true
       md5: 95f8c41c6abf7640e35a6a03cecebd01
+    - name: bk0010.zip
+      destination: bk0010.zip
+      required: true
+    - name: bk0010.zip
+      destination: bk0010.zip
+      required: true
+      md5: 95f8c41c6abf7640e35a6a03cecebd01
+      zipped_file: monit10.rom
+    - name: bk0010.zip
+      destination: bk0010.zip
+      required: true
+      md5: eb9e1cf1c1b36a2dece89624bfc59323
+      zipped_file: focal.rom
+    - name: bk0010.zip
+      destination: bk0010.zip
+      required: true
+      md5: 93d2776ecf9abf49fb45f58ce3182143
+      zipped_file: tests.rom
+    - name: bk0010.zip
+      destination: bk0010.zip
+      required: true
+      md5: 4a4530347ee18c547a0563aca73cf43d
+      zipped_file: basic10-1.rom
+    - name: bk0010.zip
+      destination: bk0010.zip
+      required: true
+      md5: 86fc2f7797a0333300159aa222c3ad3f
+      zipped_file: basic10-2.rom
+    - name: bk0010.zip
+      destination: bk0010.zip
+      required: true
+      md5: fb8875a62b9b02a66670dcefc270d441
+      zipped_file: basic10-3.rom
+    - name: bk0010.zip
+      destination: bk0010.zip
+      required: true
+      md5: c113a36e51f4557594817bc35a4b63b7
+      zipped_file: bk11m_328_basic2.rom
+    - name: bk0010.zip
+      destination: bk0010.zip
+      required: true
+      md5: 823d35a8c98f70d2d378a2c7568c3b23
+      zipped_file: bk11m_329_basic3.rom
+    - name: bk0010.zip
+      destination: bk0010.zip
+      required: true
+      md5: 1e6637f32aa7d1de03510030cac40bcf
+      zipped_file: bk11m_327_basic1.rom
+    - name: bk0010.zip
+      destination: bk0010.zip
+      required: true
+      md5: dc52f365d56fa1951f5d35b1101b9e3f
+      zipped_file: bk11m_325_ext.rom
+    - name: bk0010.zip
+      destination: bk0010.zip
+      required: true
+      md5: fe4627d1e3a1535874085050733263e7
+      zipped_file: bk11m_324_bos.rom
     native_id: bk
     name: Elektronika BK
 standalone_cores:
