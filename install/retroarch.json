@@ -4,7 +4,7 @@
   "platform": "retroarch",
   "display_name": "RetroArch",
   "version": "1.0",
-  "generated": "2026-04-03T09:43:38Z",
+  "generated": "2026-04-18T07:55:35Z",
   "base_destination": "system",
   "detect": [
     {
@@ -10070,66 +10070,66 @@
       ]
     },
     {
-      "dest": "kvs1.wav",
+      "dest": "KVS1.WAV",
       "sha1": "b094c2c1fca81a0e531e0541f302346150ec4604",
       "size": 3436329,
       "repo_path": "bios/Atari/2600/KVS1.WAV",
       "cores": [
-        "Stella 2014"
+        "Stella 2023"
       ]
     },
     {
-      "dest": "kvs2.wav",
+      "dest": "KVS2.WAV",
       "sha1": "8b83b2eea01b3e08ceb885aeb153d4084bddb63c",
       "size": 2086275,
       "repo_path": "bios/Atari/2600/KVS2.WAV",
       "cores": [
-        "Stella 2014"
+        "Stella 2023"
       ]
     },
     {
-      "dest": "kvs3.wav",
+      "dest": "KVS3.WAV",
       "sha1": "86896a1e272d8715489de9b407f0b8a42f82d4a0",
       "size": 3720920,
       "repo_path": "bios/Atari/2600/KVS3.WAV",
       "cores": [
-        "Stella 2014"
+        "Stella 2023"
       ]
     },
     {
-      "dest": "kvb1.wav",
+      "dest": "KVB1.WAV",
       "sha1": "6a582aebcefd6e2a97bdd8968202aab9851a889c",
       "size": 4219542,
       "repo_path": "bios/Atari/2600/KVB1.WAV",
       "cores": [
-        "Stella 2014"
+        "Stella 2023"
       ]
     },
     {
-      "dest": "kvb2.wav",
+      "dest": "KVB2.WAV",
       "sha1": "60a425c6bde3226ab731995562716321be20fc49",
       "size": 9593878,
       "repo_path": "bios/Atari/2600/KVB2.WAV",
       "cores": [
-        "Stella 2014"
+        "Stella 2023"
       ]
     },
     {
-      "dest": "kvb3.wav",
+      "dest": "KVB3.WAV",
       "sha1": "5e34125c4d6c209b21d1c892f3df0ec1644fd0d8",
       "size": 7676992,
       "repo_path": "bios/Atari/2600/KVB3.WAV",
       "cores": [
-        "Stella 2014"
+        "Stella 2023"
       ]
     },
     {
-      "dest": "kvshared.wav",
+      "dest": "KVSHARED.WAV",
       "sha1": "9adf10cdf1de833b194c7d8797ad1f041ad98dd3",
       "size": 3059116,
       "repo_path": "bios/Atari/2600/KVSHARED.WAV",
       "cores": [
-        "Stella 2014"
+        "Stella 2023"
       ]
     },
     {

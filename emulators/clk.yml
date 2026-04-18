@@ -720,7 +720,8 @@ files:
   # MSX (machine_name: "MSX")
   # -------------------------------------------------------
   - name: msx.rom
-    path: MSX/msx.rom
+    aliases: [MSX.ROM]
+    path: MSX/MSX.ROM
     description: "Generic MSX BIOS"
     size: 32768
     crc32: "94ee12f3"
@@ -768,7 +769,8 @@ files:
     source_ref: "Machines/Utility/ROMCatalogue.cpp:763-769"
 
   - name: msx2.rom
-    path: MSX/msx2.rom
+    aliases: [MSX2.ROM]
+    path: MSX/MSX2.ROM
     description: "Generic MSX2 BIOS"
     size: 32768
     crc32: "6cdaf3a5"
@@ -778,7 +780,8 @@ files:
     source_ref: "Machines/Utility/ROMCatalogue.cpp:771-778"
 
   - name: msx2ext.rom
-    path: MSX/msx2ext.rom
+    aliases: [MSX2EXT.ROM]
+    path: MSX/MSX2EXT.ROM
     description: "MSX2 extension ROM"
     size: 16384
     crc32: "66237ecf"

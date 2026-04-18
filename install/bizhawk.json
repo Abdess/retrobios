@@ -4,7 +4,7 @@
   "platform": "bizhawk",
   "display_name": "BizHawk",
   "version": "1.0",
-  "generated": "2026-04-02T13:52:21Z",
+  "generated": "2026-04-18T07:55:07Z",
   "base_destination": "Firmware",
   "detect": [
     {
@@ -285,7 +285,7 @@
       "dest": "VEC_Minestorm.vec",
       "sha1": "65d07426b520ddd3115d40f255511e0fd2e20ae7",
       "size": 8192,
-      "repo_path": "bios/GCE/Vectrex/VEC_MineStorm.vec",
+      "repo_path": "bios/GCE/Vectrex/VEC_Minestorm.vec",
       "cores": null
     },
     {

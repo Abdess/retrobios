@@ -7978,8 +7978,8 @@ systems:
     - name: Vectrex_Bios.bin
       destination: bios/Vectrex_Bios.bin
       required: false
-    - name: VEC_MineStorm.vec
-      destination: bios/VEC_MineStorm.vec
+    - name: VEC_Minestorm.vec
+      destination: bios/VEC_Minestorm.vec
       required: false
   vsmile:
     files:

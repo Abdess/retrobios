@@ -24,36 +24,43 @@ notes: |
 
 files:
   - name: kvs1.wav
+    aliases: [KVS1.WAV]
     description: "KidVid Voice Module audio tape 1 (Smurfs Save the Day)"
     required: false
     category: game_data
     source_ref: "stella/src/emucore/KidVid.cxx:167,182"
   - name: kvs2.wav
+    aliases: [KVS2.WAV]
     description: "KidVid Voice Module audio tape 2 (Smurfs Save the Day)"
     required: false
     category: game_data
     source_ref: "stella/src/emucore/KidVid.cxx:167,182"
   - name: kvs3.wav
+    aliases: [KVS3.WAV]
     description: "KidVid Voice Module audio tape 3 (Smurfs Save the Day)"
     required: false
     category: game_data
     source_ref: "stella/src/emucore/KidVid.cxx:167,182"
   - name: kvb1.wav
+    aliases: [KVB1.WAV]
     description: "KidVid Voice Module audio tape 1 (Berenstain Bears)"
     required: false
     category: game_data
     source_ref: "stella/src/emucore/KidVid.cxx:167,182"
   - name: kvb2.wav
+    aliases: [KVB2.WAV]
     description: "KidVid Voice Module audio tape 2 (Berenstain Bears)"
     required: false
     category: game_data
     source_ref: "stella/src/emucore/KidVid.cxx:167,182"
   - name: kvb3.wav
+    aliases: [KVB3.WAV]
     description: "KidVid Voice Module audio tape 3 (Berenstain Bears)"
     required: false
     category: game_data
     source_ref: "stella/src/emucore/KidVid.cxx:167,182"
   - name: kvshared.wav
+    aliases: [KVSHARED.WAV]
     description: "KidVid Voice Module shared audio samples"
     required: false
     category: game_data
