@@ -4,7 +4,7 @@ core_classification: official_port
 source: "https://github.com/libretro/bsnes-libretro"
 upstream: "https://github.com/bsnes-emu/bsnes"
 logo: "https://raw.githubusercontent.com/bsnes-emu/bsnes/master/bsnes/target-bsnes/resource/bsnes.svg"
-profiled_date: "2026-03-23"
+profiled_date: "2026-04-05"
 core_version: "115"
 display_name: "Nintendo - SNES / SFC (bsnes)"
 cores: [bsnes]
@@ -29,71 +29,91 @@ files:
   # program ROM: 2048 x 24-bit words, data ROM: 1024 x 16-bit words
 
   - name: "dsp1.program.rom"
-    size: 6144  # 0x1800
+    system: nintendo-snes
+    size: 6144
+    validation: [size]
     required: false
     hle_fallback: true
-    note: "NEC uPD7725 program ROM for DSP1. HLE fallback available"
+    note: "NEC uPD7725 program ROM for DSP1"
     source_ref: "sfc/cartridge/load.cpp:490-494, heuristics/super-famicom.cpp:601"
 
   - name: "dsp1.data.rom"
-    size: 2048  # 0x800
+    system: nintendo-snes
+    size: 2048
+    validation: [size]
     required: false
     hle_fallback: true
-    note: "NEC uPD7725 data ROM for DSP1. HLE fallback available"
+    note: "NEC uPD7725 data ROM for DSP1"
     source_ref: "sfc/cartridge/load.cpp:498-503"
 
   - name: "dsp1b.program.rom"
-    size: 6144  # 0x1800
+    system: nintendo-snes
+    size: 6144
+    validation: [size]
     required: false
     hle_fallback: true
-    note: "NEC uPD7725 program ROM for DSP1B (default NEC identifier). HLE fallback available"
+    note: "NEC uPD7725 program ROM for DSP1B (default NEC identifier)"
     source_ref: "heuristics/super-famicom.cpp:606"
 
   - name: "dsp1b.data.rom"
-    size: 2048  # 0x800
+    system: nintendo-snes
+    size: 2048
+    validation: [size]
     required: false
     hle_fallback: true
-    note: "NEC uPD7725 data ROM for DSP1B. HLE fallback available"
+    note: "NEC uPD7725 data ROM for DSP1B"
     source_ref: "heuristics/super-famicom.cpp:606"
 
   - name: "dsp2.program.rom"
-    size: 6144  # 0x1800
+    system: nintendo-snes
+    size: 6144
+    validation: [size]
     required: false
     hle_fallback: true
-    note: "NEC uPD7725 program ROM for DSP2 (Dungeon Master). HLE fallback available"
+    note: "NEC uPD7725 program ROM for DSP2 (Dungeon Master)"
     source_ref: "sfc/cartridge/load.cpp:515-520, heuristics/super-famicom.cpp:602"
 
   - name: "dsp2.data.rom"
-    size: 2048  # 0x800
+    system: nintendo-snes
+    size: 2048
+    validation: [size]
     required: false
     hle_fallback: true
-    note: "NEC uPD7725 data ROM for DSP2. HLE fallback available"
+    note: "NEC uPD7725 data ROM for DSP2"
     source_ref: "sfc/cartridge/load.cpp:498-503"
 
   - name: "dsp3.program.rom"
-    size: 6144  # 0x1800
+    system: nintendo-snes
+    size: 6144
+    validation: [size]
     required: true
     note: "NEC uPD7725 program ROM for DSP3 (SD Gundam GX). No HLE fallback"
     source_ref: "sfc/cartridge/load.cpp:531-534"
 
   - name: "dsp3.data.rom"
-    size: 2048  # 0x800
+    system: nintendo-snes
+    size: 2048
+    validation: [size]
     required: true
     note: "NEC uPD7725 data ROM for DSP3. No HLE fallback"
     source_ref: "sfc/cartridge/load.cpp:531-534"
 
   - name: "dsp4.program.rom"
-    size: 6144  # 0x1800
+    system: nintendo-snes
+    size: 6144
+    validation: [size]
     required: false
     hle_fallback: true
-    note: "NEC uPD7725 program ROM for DSP4 (Top Gear 3000). HLE fallback available"
+    note: "NEC uPD7725 program ROM for DSP4 (Top Gear 3000)"
     source_ref: "sfc/cartridge/load.cpp:522-528, heuristics/super-famicom.cpp:604-605"
 
   - name: "dsp4.data.rom"
-    size: 2048  # 0x800
+    system: nintendo-snes
+    size: 2048
+    validation: [size]
     required: false
     hle_fallback: true
-    note: "NEC uPD7725 data ROM for DSP4. HLE fallback available"
+    note: "NEC uPD7725 data ROM for DSP4"
     source_ref: "sfc/cartridge/load.cpp:498-503"
 
   # -- NEC uPD96050 coprocessor (ST010, ST011) --
@@ -101,27 +121,35 @@ files:
   # program ROM: 16384 x 24-bit words, data ROM: 2048 x 16-bit words
 
   - name: "st010.program.rom"
-    size: 49152  # 0xC000
+    system: nintendo-snes
+    size: 49152
+    validation: [size]
     required: false
     hle_fallback: true
-    note: "NEC uPD96050 program ROM for ST010. HLE fallback available"
+    note: "NEC uPD96050 program ROM for ST010"
     source_ref: "sfc/cartridge/load.cpp:570-574, heuristics/super-famicom.cpp:583-587"
 
   - name: "st010.data.rom"
-    size: 4096  # 0x1000
+    system: nintendo-snes
+    size: 4096
+    validation: [size]
     required: false
     hle_fallback: true
-    note: "NEC uPD96050 data ROM for ST010. HLE fallback available"
+    note: "NEC uPD96050 data ROM for ST010"
     source_ref: "sfc/cartridge/load.cpp:578-583"
 
   - name: "st011.program.rom"
-    size: 49152  # 0xC000
+    system: nintendo-snes
+    size: 49152
+    validation: [size]
     required: true
     note: "NEC uPD96050 program ROM for ST011 (2dan Morita Shougi). No HLE fallback"
     source_ref: "sfc/cartridge/load.cpp:599-601, heuristics/super-famicom.cpp:586"
 
   - name: "st011.data.rom"
-    size: 4096  # 0x1000
+    system: nintendo-snes
+    size: 4096
+    validation: [size]
     required: true
     note: "NEC uPD96050 data ROM for ST011. No HLE fallback"
     source_ref: "sfc/cartridge/load.cpp:599-601"
@@ -131,13 +159,17 @@ files:
   # No HLE fallback exists
 
   - name: "st018.program.rom"
-    size: 131072  # 0x20000 (128 KB)
+    system: nintendo-snes
+    size: 131072
+    validation: [size]
     required: true
     note: "ARM6 program ROM for ST018 (Hayazashi Nidan Morita Shougi). No HLE fallback"
     source_ref: "sfc/cartridge/load.cpp:379-385, armdsp/armdsp.hpp:31, heuristics/super-famicom.cpp:580"
 
   - name: "st018.data.rom"
-    size: 32768  # 0x8000 (32 KB)
+    system: nintendo-snes
+    size: 32768
+    validation: [size]
     required: true
     note: "ARM6 data ROM for ST018. No HLE fallback"
     source_ref: "sfc/cartridge/load.cpp:387-393, armdsp/armdsp.hpp:32"
@@ -148,11 +180,16 @@ files:
   # Built-in staticDataROM fallback also present for LLE when file missing
 
   - name: "cx4.data.rom"
-    size: 3072  # 0xC00
+    system: nintendo-snes
+    size: 3072
+    sha1: a002f4efba42775a31185d443f3ed1790b0e949a
+    md5: 037ac4296b6b6a5c47c440188d3c72e3
+    crc32: b6e76a6a
+    validation: [size]
     required: false
     hle_fallback: true
     note: "Hitachi HG51BS169 data ROM for Cx4 (Mega Man X2/X3). HLE fallback and built-in static ROM available"
-    source_ref: "sfc/cartridge/load.cpp:444-456, hitachidsp/hitachidsp.hpp:49, heuristics/super-famicom.cpp:597"
+    source_ref: "sfc/cartridge/load.cpp:444-456, hitachidsp/hitachidsp.hpp:49, heuristics/super-famicom.cpp:597, hitachidsp/data-rom.cpp:3 (staticDataROM[3072])"
 
   # -- Super Game Boy cartridge ROM --
   # The SGB boot ROMs (256 bytes each) are embedded in icd/boot-roms.cpp.
@@ -160,23 +197,26 @@ files:
   # Core option bsnes_sgb_bios selects between SGB1.sfc and SGB2.sfc.
 
   - name: "SGB1.sfc"
+    system: nintendo-super-game-boy
     required: false
-    note: "Super Game Boy 1 cartridge ROM. Needed to play Game Boy games via SGB mode"
-    source_ref: "target-libretro/libretro.cpp:689,933, target-libretro/libretro_core_options.h:689"
+    note: "Super Game Boy 1 cartridge ROM, loaded when playing .gb/.gbc via SGB mode"
+    source_ref: "target-libretro/libretro.cpp:926-935 (system_dir + sgb_bios), libretro.cpp:509 (core option bsnes_sgb_bios)"
 
   - name: "SGB2.sfc"
+    system: nintendo-super-game-boy
     required: false
-    note: "Super Game Boy 2 cartridge ROM. Uses dedicated oscillator for accurate GB speed"
-    source_ref: "target-libretro/libretro.cpp:690,933, target-libretro/libretro_core_options.h:690"
+    note: "Super Game Boy 2 cartridge ROM, uses dedicated oscillator for accurate GB speed"
+    source_ref: "target-libretro/libretro.cpp:926-935 (system_dir + sgb_bios), libretro.cpp:509 (core option bsnes_sgb_bios)"
 
   # -- BS-X Satellaview BIOS --
   # Required for loading .bs (BS Memory) format games.
   # Hardcoded filename in libretro.cpp.
 
   - name: "BS-X.bin"
+    system: nintendo-satellaview
     required: true
-    note: "BS-X Satellaview BIOS ROM. Required for .bs games"
-    source_ref: "target-libretro/libretro.cpp:948"
+    note: "BS-X Satellaview BIOS ROM, loaded from system_dir when running .bs games"
+    source_ref: "target-libretro/libretro.cpp:944-951 (system_dir + BS-X.bin hardcoded, .bs extension branch)"
 
 notes:
   hle_available: true
