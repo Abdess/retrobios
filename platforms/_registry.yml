@@ -1690,3 +1690,46 @@ platforms:
       - os: linux
         method: path_exists
         path: $HOME/.config/BizHawk/Firmware
+  misterfpga:
+    config: misterfpga.yml
+    status: active
+    logo: https://avatars.githubusercontent.com/u/47264183
+    scraper: null
+    source_url: https://raw.githubusercontent.com/ajgowans/BiosDB_MiSTer/db/bios_db.json.zip
+    source_format: json_zip
+    hash_type: md5
+    verification_mode: md5
+    base_destination: games
+    case_insensitive_fs: false
+    schedule: weekly
+    cores: all_mister
+    target_scraper: null
+    target_source: https://github.com/MiSTer-devel/Distribution_MiSTer
+    contributed_by:
+      - username: Takiiiiiii
+        contribution: platform support
+        pr: TBD
+    install:
+      detect:
+      # Running on MiSTer FPGA hardware itself (Linux-based, SD card mounted at /media/fat)
+      - os: linux
+        method: path_exists
+        path: /media/fat/MiSTer
+        bios_path: /media/fat/games
+      # Host PC with SD card mounted at a common location — scan for the MiSTer binary signature
+      - os: linux
+        method: path_glob
+        patterns:
+          - /media/*/MiSTer_Data/MiSTer
+          - /media/*/*/MiSTer
+        bios_path_template: '{dirname}/games'
+      - os: macos
+        method: path_glob
+        patterns:
+          - /Volumes/*/MiSTer
+        bios_path_template: '{dirname}/games'
+      - os: windows
+        method: path_glob
+        patterns:
+          - '?:\MiSTer'
+        bios_path_template: '{dirname}\games'
