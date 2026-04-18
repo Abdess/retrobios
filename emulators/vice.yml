@@ -86,6 +86,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 8192
+    sha1: 79015323128650c742a3694c9429aa91f355905e
+    md5: 57af4ae21d4b705c2991d98ed5c1f7b8
+    crc32: f833d117
     note: "C64 BASIC V2 ROM. Embedded in core."
     source_ref: "vice/src/c64/c64rom.h:31"
 
@@ -95,6 +98,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 8192
+    sha1: 1d503e56df85a62fee696e7618dc5b4e781df1bb
+    md5: 39065497630802346bce17963f13c092
+    crc32: dbe3e7c7
     note: "C64 Kernal Rev 3 (default). Embedded in core."
     source_ref: "vice/src/c64/c64rom.h:52"
 
@@ -104,6 +110,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 8192
+    sha1: 87cc04d61fc748b82df09856847bb5c2754a2033
+    md5: 1ae0ea224f2b291dafa2c20b990bb7d4
+    crc32: dce782fa
     note: "C64 Kernal Rev 1. Embedded in core."
     source_ref: "vice/src/c64/c64rom.h:50"
 
@@ -113,6 +122,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 8192
+    sha1: 0e2e4ee3f2d41f00bed72f9ab588b83e306fdb13
+    md5: 7360b296d64e18b88f6cf52289fd99a1
+    crc32: a5c687b3
     note: "C64 Kernal Rev 2. Embedded in core."
     source_ref: "vice/src/c64/c64rom.h:51"
 
@@ -122,6 +134,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 8192
+    sha1: 3ad6cc1837c679a11f551ad1cf1a32dd84ace719
+    md5: ddee89b0fed19572da5245ea68ff11b5
+    crc32: 505365d4
     note: "C64 GS (Games System) Kernal. Embedded in core."
     source_ref: "vice/src/c64/c64rom.h:53"
 
@@ -131,6 +146,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 8192
+    sha1: aa136e91ecf3c5ac64f696b3dbcbfc5ba0871c98
+    md5: 187b8c713b51931e070872bd390b472a
+    crc32: 2c5965d4
     note: "SX-64 Kernal. Embedded in core."
     source_ref: "vice/src/c64/c64rom.h:54"
 
@@ -140,6 +158,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 8192
+    sha1: 6c4fa9465f6091b174df27dfe679499df447503c
+    md5: da92801e3a03b005b746a4dd0b639c7c
+    crc32: 789c8cc5
     note: "PET64/Educator64 (4064) Kernal. Embedded in core."
     source_ref: "vice/src/c64/c64rom.h:55"
 
@@ -149,6 +170,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 8192
+    sha1: 4ff0f11e80f4b57430d8f0c3799ed0f0e0f4565d
+    md5: 479553fd53346ec84054f0b1c6237397
+    crc32: 3a9ef6f1
     note: "C64 Japanese Kernal. Embedded in core."
     source_ref: "vice/src/c64/c64rom.h:49"
 
@@ -158,6 +182,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 4096
+    sha1: adc7c31e18c7c7413d54802ef2f4193da14711aa
+    md5: 12a4202f5331d45af846af6c58fba946
+    crc32: ec4272ee
     note: "C64 Character Generator ROM (default). Embedded in core."
     source_ref: "vice/src/c64/c64rom.h:60"
 
@@ -167,6 +194,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 4096
+    sha1: 0fad19dbcdb12461c99657b2979dbb5c2e47b527
+    md5: cf32a93c0a693ed359a4f483ef6db53d
+    crc32: 1604f6c1
     note: "C64 Japanese Character Generator ROM. Embedded in core."
     source_ref: "vice/src/c64/c64rom.h:61"
 
@@ -180,6 +210,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 16384
+    sha1: ceb6e1a1bf7e08eb9cbc651afa29e26adccf38ab
+    md5: 01f6903033b90cd506cde7802ec743c3
+    crc32: ba456b8e
     note: "C128 Kernal (default international). Embedded in core."
     source_ref: "vice/src/c128/c128rom.h:103"
 
@@ -189,6 +222,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 16384
+    sha1: 3629b3fa28b6a30bcc027b647f26654929ed1b0f
+    md5: 9837409b6bdb7ce055409fa3eb3e9cf0
+    crc32: bff7550b
     note: "C128 Kernal German. Embedded in core."
     source_ref: "vice/src/c128/c128rom.h:105"
 
@@ -198,6 +234,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 16384
+    sha1: 98c34e0dec9f52d7862b56bb287d2573eb3f6364
+    md5: 90907477d39db1b8fe1732692278a0e9
+    crc32: d311dab1
     note: "C128 Kernal Swiss. Embedded in core."
     source_ref: "vice/src/c128/c128rom.h:104"
 
@@ -207,6 +246,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 16384
+    sha1: 925177c99ee7e02870c32ad62a054db1327cf0c2
+    md5: 7852922295c103f067ba3c0f56378a95
+    crc32: 1cf7f729
     note: "C128 Kernal Swedish. Embedded in core."
     source_ref: "vice/src/c128/c128rom.h:110"
 
@@ -216,6 +258,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 16384
+    sha1: d08e7991a6df14a843e92daafaf6756337959ba4
+    md5: 0a0eb549ec08624de11cf1f249f6f3dc
+    crc32: d3ecea84
     note: "C128 Kernal Finnish (unidentified part number). Embedded in core."
     source_ref: "vice/src/c128/c128rom.h:106"
 
@@ -225,6 +270,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 16384
+    sha1: a0680d04db3232fa9f58598e5c9f09c4fe94f601
+    md5: 7a7747aa70fd63402c6a95fba0bd6806
+    crc32: 2df282b8
     note: "C128 Kernal French (unidentified part number). Embedded in core."
     source_ref: "vice/src/c128/c128rom.h:107"
 
@@ -234,6 +282,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 16384
+    sha1: 592a626eb2b5372596ac374d3505c3ce78dd040f
+    md5: 142c8bd5934e9d97addb6776a2f2e8b8
+    crc32: 74d6b084
     note: "C128 Kernal Italian (unidentified part number). Embedded in core."
     source_ref: "vice/src/c128/c128rom.h:108"
 
@@ -243,6 +294,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 16384
+    sha1: 00fe2fd610a812121befab1e7238fa882c0f8257
+    md5: 498fdedaeab458931b6103d52d5a3ea1
+    crc32: a5406848
     note: "C128 Kernal Norwegian (unidentified part number). Embedded in core."
     source_ref: "vice/src/c128/c128rom.h:109"
 
@@ -252,6 +306,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 16384
+    sha1: d53a7884404f7d18ebd60dd3080c8f8d71067441
+    md5: b86ce827c9108fbc7b9e02c690e81a23
+    crc32: 9f9c355b
     note: "C128 BASIC low (BASIC part). Embedded in core."
     source_ref: "vice/src/c128/c128rom.h:115"
 
@@ -261,6 +318,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 16384
+    sha1: c4fb4a714e48a7bf6c28659de0302183a0e0d6c0
+    md5: 87bb251707d0a2c915d6e0c69fdb0fed
+    crc32: 6e2c91a7
     note: "C128 BASIC high (Editor part). Embedded in core."
     source_ref: "vice/src/c128/c128rom.h:116"
 
@@ -288,6 +348,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 8192
+    sha1: b4862cac7b9319d8e912887c97fc270d4c239349
+    md5: 8fa940c39225d40f37ddf7082fba8b21
+    crc32: dd2976d2
     note: "C128 C64-mode Kernal Norwegian. Embedded in core."
     source_ref: "vice/src/c128/c128rom.h:136"
 
@@ -297,6 +360,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 8192
+    sha1: e4f52d9b36c030eb94524eb49f6f0774c1d02e5e
+    md5: 27e26dbb267c8ebf1cd47105a6ca71e7
+    crc32: f10c2c25
     note: "C128 C64-mode Kernal Swedish. Embedded in core."
     source_ref: "vice/src/c128/c128rom.h:137"
 
@@ -306,6 +372,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 8192
+    sha1: 29ed066d513f2d5c09ff26d9166ba23c2afb2b3f
+    md5: 46b3cb2140f244c0ed1150c819e7bdc4
+    crc32: 6aaaafe6
     note: "C128 Character Generator (default international). Embedded in core."
     source_ref: "vice/src/c128/c128rom.h:92"
 
@@ -315,6 +384,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 8192
+    sha1: 638f8aff51c2ac4f99a55b12c4f8c985ef4bebd3
+    md5: ec9e71614010c4efb851b83bcd685e9c
+    crc32: fe5a2db1
     note: "C128 Character Generator German. Embedded in core."
     source_ref: "vice/src/c128/c128rom.h:95"
 
@@ -324,6 +396,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 8192
+    sha1: 9119b27a1bf885fa4c76fff5d858c74c194dd2b8
+    md5: de3e110a48de76457dbc9ad320e2caa5
+    crc32: bad36b88
     note: "C128 Character Generator Italian/French/Belgian. Embedded in core."
     source_ref: "vice/src/c128/c128rom.h:93"
 
@@ -333,6 +408,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 8192
+    sha1: 70eccd8b944146f6b60f1519b830a4ee8928d4fa
+    md5: 5cc3635e434fdc7023d0035e965ce76f
+    crc32: c8def186
     note: "C128 Character Generator Swiss. Embedded in core."
     source_ref: "vice/src/c128/c128rom.h:94"
 
@@ -342,6 +420,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 8192
+    sha1: 5a87faa457979e7b6f434251a9e32f4483b337b3
+    md5: 7eead22a114154c809b33320c9250e26
+    crc32: ba95c625
     note: "C128 Character Generator Norwegian. Embedded in core."
     source_ref: "vice/src/c128/c128rom.h:99"
 
@@ -351,6 +432,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 8192
+    sha1: aca3f7321ee7e6152f1f0afad646ae41964de4fb
+    md5: 06e46af13d13aa869218275e64d48b00
+    crc32: 7a70d9b8
     note: "C128 Character Generator Finnish/Swedish. Embedded in core."
     source_ref: "vice/src/c128/c128rom.h:96"
 
@@ -364,6 +448,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 2097152
+    sha1: 72b4c8da075646cc9940e4377004c81192c7b0b1
+    md5: d6efbc538195f53cfc209543640cde71
+    crc32: 242daa5a
     note: "C64 DTV flash ROM (2 MB). Contains kernal, basic, chargen. Embedded in core."
     source_ref: "vice/src/c64dtv/c64dtvflash.c:59-64"
 
@@ -373,6 +460,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 8192
+    sha1: 79015323128650c742a3694c9429aa91f355905e
+    md5: 57af4ae21d4b705c2991d98ed5c1f7b8
+    crc32: f833d117
     note: "C64 BASIC V2 ROM (DTV copy). Embedded in core."
     source_ref: "vice/data/C64DTV/"
 
@@ -382,6 +472,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 4096
+    sha1: adc7c31e18c7c7413d54802ef2f4193da14711aa
+    md5: 12a4202f5331d45af846af6c58fba946
+    crc32: ec4272ee
     note: "C64 Character Generator (DTV copy). Embedded in core."
     source_ref: "vice/data/C64DTV/"
 
@@ -391,6 +484,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 8192
+    sha1: 1d503e56df85a62fee696e7618dc5b4e781df1bb
+    md5: 39065497630802346bce17963f13c092
+    crc32: dbe3e7c7
     note: "C64 Kernal Rev 3 (DTV copy). Embedded in core."
     source_ref: "vice/data/C64DTV/"
 
@@ -404,6 +500,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 8192
+    sha1: 587d1e90950675ab6b12d91248a3f0d640d02e8d
+    md5: 8b9237706f47a9b3498d8f881ef0244d
+    crc32: db4c43c1
     note: "VIC-20 BASIC ROM. Embedded in core."
     source_ref: "vice/src/vic20/vic20rom.h:43"
 
@@ -413,6 +512,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 8192
+    sha1: ce0137ed69f003a299f43538fa9eee27898e621e
+    md5: f0587624dcd7685710a8fdb35939617f
+    crc32: 4be07cb4
     note: "VIC-20 Kernal PAL (default). Embedded in core."
     source_ref: "vice/src/vic20/vic20rom.h:53"
 
@@ -422,6 +524,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 8192
+    sha1: 06de7ec017a5e78bd6746d89c2ecebb646efeb19
+    md5: 0313e31e5f31e1f739c2377792460d67
+    crc32: e5e7c174
     note: "VIC-20 Kernal NTSC. Embedded in core."
     source_ref: "vice/src/vic20/vic20rom.h:52"
 
@@ -431,6 +536,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 8192
+    sha1: c9ead45e6674d1042ca6199160e8583c23aeac22
+    md5: 317f93bcbc5ee15da085a51a306f2c61
+    crc32: 336900d7
     note: "VIC-20 Kernal Japanese NTSC Rev 2. Embedded in core."
     source_ref: "vice/src/vic20/vic20rom.h:51"
 
@@ -440,6 +548,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 4096
+    sha1: 4fd85ab6647ee2ac7ba40f729323f2472d35b9b4
+    md5: d390e340e94e1bef0f2fdfe9fa850993
+    crc32: 83e032a6
     note: "VIC-20 Character Generator (default). Embedded in core."
     source_ref: "vice/src/vic20/vic20rom.h:56"
 
@@ -449,6 +560,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 4096
+    sha1: dae61ac03065aa2904af5c123ce821855898c555
+    md5: 7e6e41b5b60fec798743afd7063b42ed
+    crc32: fcfd8a4b
     note: "VIC-20 Japanese Character Generator. Embedded in core."
     source_ref: "vice/src/vic20/vic20rom.h:57"
 
@@ -462,6 +576,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 16384
+    sha1: 161c96b4ad20f3a4f2321808e37a5ded26a135dd
+    md5: 44a4ae400e3b4f7533a47ae0df1be78c
+    crc32: 74eaae87
     note: "Plus/4 BASIC ROM. Embedded in core."
     source_ref: "vice/src/plus4/plus4rom.h:33"
 
@@ -471,6 +588,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 16384
+    sha1: 7c7e07f016391174a557e790c4ef1cbe33512cdb
+    md5: 89f5263665a8dc10c8f8abc38f5f7eb9
+    crc32: 71c07bd4
     note: "Plus/4 Kernal PAL Rev 5 (default PAL). Embedded in core."
     source_ref: "vice/src/plus4/plus4rom.h:36"
 
@@ -480,6 +600,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 16384
+    sha1: a3d9e5be091b98de39a046ab167fb7632d053682
+    md5: b3c450c36a88b491281d18fdf3e94ab0
+    crc32: 70295038
     note: "Plus/4 Kernal NTSC Rev 5 (default NTSC). Embedded in core."
     source_ref: "vice/src/plus4/plus4rom.h:37"
 
@@ -489,6 +612,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 16384
+    sha1: 3c77caf72914c1c0a0875b3a7f6935cd30c54201
+    md5: a213823557421b66f9813ff19af48c01
+    crc32: dbdc3319
     note: "Plus/4 Kernal NTSC Rev 1 (V232 prototype). Embedded in core."
     source_ref: "vice/src/plus4/plus4rom.h:35"
 
@@ -498,6 +624,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 16384
+    sha1: b9a5b5dacd57ca117ef0b3af29e91998bf4d7e5f
+    md5: 7abb51257595b233a1a63ae58c330a65
+    crc32: 84fd4f7a
     note: "Commodore 364 prototype Kernal. Embedded in core."
     source_ref: "vice/src/plus4/plus4rom.h:38"
 
@@ -507,6 +636,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 16384
+    sha1: 3b69f6e7cb4c18bb08e203fb18b7dabfa853390f
+    md5: 2994d5463ef8524deb4231a9c764767c
+    crc32: 4fd1d8cb
     note: "3-Plus-1 software ROM low. Embedded in core."
     source_ref: "vice/src/plus4/plus4rom.h:40"
 
@@ -516,6 +648,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 16384
+    sha1: 0ad7ac2db7da692d972e586ca0dfd747d82c7693
+    md5: ac34591c820fe607d527e04e95bce465
+    crc32: 109de2fc
     note: "3-Plus-1 software ROM high. Embedded in core."
     source_ref: "vice/src/plus4/plus4rom.h:41"
 
@@ -525,6 +660,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 16384
+    sha1: 59af401cbb2194f689898271c6e8aafa28a7af11
+    md5: 0073ace3874a2c5ca5de9cf64cdfbbd4
+    crc32: 5227c2ee
     note: "Commodore 364 prototype function ROM low. Embedded in core."
     source_ref: "vice/src/plus4/plus4rom.h:43"
 
@@ -538,6 +676,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 8192
+    sha1: 3be9cd41b646fefa00d80f1c3433a06146e97c59
+    md5: f328e785835907006604423222db7bbf
+    crc32: aff78300
     note: "PET BASIC 1.0 ROM (PET 2001). Embedded in core."
     source_ref: "vice/src/pet/petrom.h:55"
 
@@ -547,6 +688,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 8192
+    sha1: 9322a9f0354b9049847d98d3a045fbec860a6264
+    md5: b69739387bebe999227ae0cf25aa1e91
+    crc32: cf35e68b
     note: "PET BASIC 2.0 ROM. Embedded in core."
     source_ref: "vice/src/pet/petrom.h:56"
 
@@ -556,6 +700,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 12288
+    sha1: d70bec479e1e3a0d0908a4897066e9959bbc11c8
+    md5: d22d2a1912a0cdbd9e7c8b103541b2c6
+    crc32: 2a940f0a
     note: "PET BASIC 4.0 ROM. Embedded in core."
     source_ref: "vice/src/pet/petrom.h:57"
 
@@ -565,6 +712,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 4096
+    sha1: 32dc08828e88c74d6433156e64d402b564556308
+    md5: 61b7e2fd04d63b0702951ba40899cd72
+    crc32: f0186492
     note: "PET Kernal 1.0 (PET 2001). Embedded in core."
     source_ref: "vice/src/pet/petrom.h:51"
 
@@ -574,6 +724,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 4096
+    sha1: 38742bdf449f629bcba6276ef24d3daeb7da6e84
+    md5: 51a38bfef8f9e72cb64bf7d874b4c8c6
+    crc32: f02238e2
     note: "PET Kernal 2.0. Embedded in core."
     source_ref: "vice/src/pet/petrom.h:52"
 
@@ -583,6 +736,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 4096
+    sha1: 96a0fa56e0c937da92971d9c99d504e44e898806
+    md5: 16ec21443ea5431ab63d511061054e6f
+    crc32: cc5298a1
     note: "PET Kernal 4.0. Embedded in core."
     source_ref: "vice/src/pet/petrom.h:53"
 
@@ -592,6 +748,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 2048
+    sha1: f02f5fb492ba93dbbd390f24c10f7a832dec432a
+    md5: ef9bd0e62dfc47eb463fef20d0344826
+    crc32: 9e1c5cea
     note: "PET Editor 1.0 Normal (graphics keyboard). Embedded in core."
     source_ref: "vice/src/pet/petrom.h:59"
 
@@ -601,6 +760,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 2048
+    sha1: 5e5502ce32f5a7e387d65efe058916282041e54b
+    md5: cb8e8404c0b28eda10469792dfd1dbc2
+    crc32: e459ab32
     note: "PET Editor 2.0 Normal (graphics keyboard). Embedded in core."
     source_ref: "vice/src/pet/petrom.h:60"
 
@@ -610,6 +772,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 2048
+    sha1: 174ace3a8c0348cd21d39cc864e2adc58b0101a9
+    md5: 7f87889ca7ee2537f0c1993d35d0fb18
+    crc32: 05db957e
     note: "PET Editor 2.0 Business keyboard. Embedded in core."
     source_ref: "vice/src/pet/petrom.h:61"
 
@@ -619,6 +784,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 2048
+    sha1: 05af284c914d53a52987b5f602466de75765f650
+    md5: b76d756e7ac8752ae0035f3ce5f1383c
+    crc32: 3370e359
     note: "PET Editor 4.0, 40 col, Normal keyboard, 50Hz. Embedded in core."
     source_ref: "vice/src/pet/petrom.h:62"
 
@@ -628,6 +796,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 2048
+    sha1: 9f91fbabfdd532d003d2508f399574ba8ec6ee5f
+    md5: 8e69e040489098522846b1b1c63682c2
+    crc32: 16fb070c
     note: "PET Editor 4.0, 40 col, Business keyboard, 50Hz. Embedded in core."
     source_ref: "vice/src/pet/petrom.h:65"
 
@@ -637,6 +808,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 2048
+    sha1: 81975eab31a8f4f51ae2a20d099a567c7b3f2dd1
+    md5: 3a0e2ef328040aa30b30a8134426879a
+    crc32: 845a44e6
     note: "PET Editor 4.0, 80 col, Business keyboard, 50Hz. Embedded in core."
     source_ref: "vice/src/pet/petrom.h:63"
 
@@ -646,6 +820,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 2048
+    sha1: 3e067cc621e4beafca2b90cb8f6dba975df2855b
+    md5: 29a82eb54e73ebc5673c718c489b174b
+    crc32: 54f32f45
     note: "PET Character Generator 1 (original PET 2001). Embedded in core."
     source_ref: "vice/src/pet/petrom.h:46"
 
@@ -655,6 +832,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 2048
+    sha1: 0157a2d55b7ac4eaeb38475889ebeea52e2593db
+    md5: 9880432e633b15998d58884ff34c4e70
+    crc32: d8408674
     note: "PET Character Generator 2. Embedded in core."
     source_ref: "vice/src/pet/petrom.h:47"
 
@@ -664,6 +844,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 4096
+    sha1: bf346f11595a3e65e55d6aeeaa2c0cec807b66c7
+    md5: dd30641d9e6a221edd725d1e529dcbdb
+    crc32: ee8229c4
     note: "SuperPET Character Generator. Embedded in core."
     source_ref: "vice/src/pet/petrom.h:48"
 
@@ -673,6 +856,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 4096
+    sha1: 0414b3ab847c8977eb05c2fcc72efcf2f9d92871
+    md5: 6eb1c1bfa6ce1444737794432966dfcc
+    crc32: 728a998b
     note: "SuperPET Waterloo microEngine 6809 ROM at $A000. Embedded in core."
     source_ref: "vice/src/pet/petrom.h:75"
 
@@ -682,6 +868,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 4096
+    sha1: df154939b934d0aeeb376813ec1ba0d43c2a3378
+    md5: 537498d75ecf761d4991f9ebd85129ca
+    crc32: 6beb7c62
     note: "SuperPET Waterloo microEngine 6809 ROM at $B000. Embedded in core."
     source_ref: "vice/src/pet/petrom.h:76"
 
@@ -691,6 +880,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 4096
+    sha1: 6c5b0cce97068f8841112ba6d5cd8e568b562fa3
+    md5: 3e8dd04902dc9fee172084698f84695f
+    crc32: 5db4983d
     note: "SuperPET Waterloo microEngine 6809 ROM at $C000. Embedded in core."
     source_ref: "vice/src/pet/petrom.h:77"
 
@@ -700,6 +892,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 4096
+    sha1: b42a2050a319a1ffca7868a8d8d635fadd37ec37
+    md5: 80f4d2351ee19673820989919c7c1e9b
+    crc32: f55fc559
     note: "SuperPET Waterloo microEngine 6809 ROM at $D000. Embedded in core."
     source_ref: "vice/src/pet/petrom.h:78"
 
@@ -709,6 +904,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 2048
+    sha1: e8ce8347451a001214a5e71a13081b38b4be23bc
+    md5: a740ff5d0d1132ab18cfc1974fca908d
+    crc32: b2cee903
     note: "SuperPET Waterloo microEngine 6809 ROM at $E000. Embedded in core."
     source_ref: "vice/src/pet/petrom.h:79"
 
@@ -718,6 +916,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 4096
+    sha1: 9b4a5134d20345171e7303445f87c4e0b9addc96
+    md5: 049e2d26fde71a741f6075ecbf0a432d
+    crc32: f42df0cb
     note: "SuperPET Waterloo microEngine 6809 ROM at $F000. Embedded in core."
     source_ref: "vice/src/pet/petrom.h:80"
 
@@ -731,6 +932,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 16384
+    sha1: 9409f92e167984096fe4d5913714bff6214c3b2d
+    md5: 3ad5c7182006bcad1597583dbc8505c9
+    crc32: a8ff9372
     note: "CBM-II BASIC 128 (CBM 610/620/710/720). Embedded in core."
     source_ref: "vice/src/cbm2/cbm2rom.h:41"
 
@@ -740,6 +944,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 16384
+    sha1: 53314b4d565cc405a67a0936b935e6e08955580d
+    md5: 6a505014e543c62e99668080a3b80b40
+    crc32: 5db15870
     note: "CBM-II BASIC 256 (CBM 710/720 with 256K). Embedded in core."
     source_ref: "vice/src/cbm2/cbm2rom.h:42"
 
@@ -749,6 +956,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 16384
+    sha1: e69531d45f5993f8e53c6bd9ab2a7bc10fe2d02f
+    md5: 5a9559ceaf1a0bef0e721242c67a030d
+    crc32: 9a468e5d
     note: "CBM-II BASIC 500 (CBM 510/P500). Embedded in core."
     source_ref: "vice/src/cbm2/cbm2rom.h:43"
 
@@ -758,6 +968,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 8192
+    sha1: abb26418b9e1614a8f52bdeee0822d4a96071439
+    md5: e0346953e77bd1353ebf53aaa5b6f0b0
+    crc32: 09a5667e
     note: "CBM-II Kernal (CBM 610/620/710/720). Embedded in core."
     source_ref: "vice/src/cbm2/cbm2rom.h:45"
 
@@ -767,6 +980,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 8192
+    sha1: 097197d4d08e0b82e0466a5f1fbd49a24f3d2523
+    md5: 1a19593625acdc5af96a5e78b1a23f37
+    crc32: f46bbd2b
     note: "CBM-II Kernal 500 (CBM 510/P500). Embedded in core."
     source_ref: "vice/src/cbm2/cbm2rom.h:46"
 
@@ -776,6 +992,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 4096
+    sha1: adc7c31e18c7c7413d54802ef2f4193da14711aa
+    md5: 12a4202f5331d45af846af6c58fba946
+    crc32: ec4272ee
     note: "CBM-II Character Generator 500 (VIC-II based, CBM 510/P500). Embedded in core."
     source_ref: "vice/src/cbm2/cbm2rom.h:37"
 
@@ -785,6 +1004,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 4096
+    sha1: e63bf18da48e5a53c99ef127c1ae721333d1d102
+    md5: 2818722af27ceae6952c08cf83a076f9
+    crc32: 1acf5098
     note: "CBM-II Character Generator 600 (CBM 610/620). Embedded in core."
     source_ref: "vice/src/cbm2/cbm2rom.h:38"
 
@@ -794,6 +1016,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 4096
+    sha1: e7f3cbc8e282f79a00c3e95d75c8d725ee3c6287
+    md5: 03f32477905d77e2135857076ec31efa
+    crc32: 3a350bc3
     note: "CBM-II Character Generator 700 (CBM 710/720). Embedded in core."
     source_ref: "vice/src/cbm2/cbm2rom.h:39"
 
@@ -807,6 +1032,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 65536
+    sha1: f5b6da17ee8206ff0d2258e1d6e8b798147c2650
+    md5: 006862e9a52d987970435988e3803c71
+    crc32: 89c1a062
     note: "SuperCPU64 internal ROM (default). Embedded in core."
     source_ref: "retrodep/ui.c:269"
 
@@ -816,6 +1044,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 4096
+    sha1: adc7c31e18c7c7413d54802ef2f4193da14711aa
+    md5: 12a4202f5331d45af846af6c58fba946
+    crc32: ec4272ee
     note: "C64 Character Generator (used by SCPU64). Embedded in core."
     source_ref: "vice/src/scpu64/scpu64rom.h:36"
 
@@ -825,6 +1056,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 4096
+    sha1: 0fad19dbcdb12461c99657b2979dbb5c2e47b527
+    md5: cf32a93c0a693ed359a4f483ef6db53d
+    crc32: 1604f6c1
     note: "C64 Japanese Character Generator (used by SCPU64). Embedded in core."
     source_ref: "vice/src/scpu64/scpu64rom.h:37"
 
@@ -854,6 +1088,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 16384
+    sha1: 3477c14e0c79faa445224dad16534f04ed143e44
+    md5: 87e849da3c87549848550fe4dd4d1aae
+    crc32: 718d42b1
     note: "1540 drive DOS ROM. Embedded in core."
     source_ref: "vice/src/drive/driverom.h:88"
 
@@ -863,6 +1100,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 16384
+    sha1: ab16f56989b27d89babe5f89c5a8cb3da71a82f0
+    md5: a0ce8439d1b8dcf2e1430461f7233a72
+    crc32: 57224cde
     note: "1541 drive DOS ROM. Embedded in core."
     source_ref: "vice/src/drive/driverom.h:89"
 
@@ -872,6 +1112,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 16384
+    sha1: d3b78c3dbac55f5199f33f3fe0036439811f7fb3
+    md5: ada295382a1f2df772a7e5c5c6f34215
+    crc32: 899fa3c5
     note: "1541-II drive DOS ROM. Embedded in core."
     source_ref: "vice/src/drive/driverom.h:90"
 
@@ -881,6 +1124,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 16384
+    sha1: fae3c788ad9a6cc2dbdfbcf6c0264b2ca921d55e
+    md5: 0c767bf0a84d7751af056e53a074c9e2
+    crc32: 6d16d024
     note: "1551 drive DOS ROM (Plus/4 specific). Embedded in core."
     source_ref: "vice/src/drive/driverom.h:92"
 
@@ -890,6 +1136,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 32768
+    sha1: 5fc06dc82ff6840f183bd43a4d9b8a16956b2f56
+    md5: f0799353f0e22cf7d783e447adcafde2
+    crc32: 5a0c7937
     note: "1570 drive DOS ROM. Embedded in core."
     source_ref: "vice/src/drive/driverom.h:93"
 
@@ -899,6 +1148,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 32768
+    sha1: f1be619c106641a685f6609e4d43d6fc9eac1e70
+    md5: dae964d64b7843ff86c008d396dda208
+    crc32: 5755bae3
     note: "1571 drive DOS ROM. Embedded in core."
     source_ref: "vice/src/drive/driverom.h:94"
 
@@ -908,6 +1160,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 32768
+    sha1: 14ee7a0fb7e1c59c51fbf781f944387037daa3ee
+    md5: f9158328494b3e269f86ef419792c2e5
+    crc32: f24efcc4
     note: "1571CR drive DOS ROM (cost-reduced, C128D internal). Embedded in core."
     source_ref: "vice/src/drive/driverom.h:95"
 
@@ -917,6 +1172,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 32768
+    sha1: 01228eae6f066bd9b7b2b6a7fa3f667e41dad393
+    md5: 6a82f92aea2a3afa190fe32d565f39e7
+    crc32: a9011b84
     note: "1581 drive DOS ROM. Embedded in core."
     source_ref: "vice/src/drive/driverom.h:96"
 
@@ -926,6 +1184,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 16384
+    sha1: d50b093828888146596f17ae0df9ef3dfde71b05
+    md5: 2d967790361aa77de87a24fb93e342f9
+    crc32: 87e6a94e
     note: "CBM 1001 (SFD-1001) drive DOS ROM. Embedded in core."
     source_ref: "vice/src/drive/driverom.h:70"
 
@@ -935,6 +1196,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 16384
+    sha1: c53e180a96649ceb3f421739e8dc66faba7cba44
+    md5: 3454c06fd2275f5bcbfe936dcdf8059b
+    crc32: 21b80fdf
     note: "CBM 2031 drive DOS ROM. Embedded in core."
     source_ref: "vice/src/drive/driverom.h:73"
 
@@ -944,6 +1208,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 8192
+    sha1: e37b3bfd801eb19dea50cf8b4a6af8613c3520d3
+    md5: 3efff682000fd841b4dd6560bf53e37c
+    crc32: d04c1fbb
     note: "CBM 2040 dual drive DOS ROM. Embedded in core."
     source_ref: "vice/src/drive/driverom.h:76"
 
@@ -953,6 +1220,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 12288
+    sha1: 02bd4b0c8508b3874b95799a9a63caf369c837de
+    md5: 139e72a58b7ddb2f92ceb18c8735c53c
+    crc32: f4967a7f
     note: "CBM 3040 dual drive DOS ROM. Embedded in core."
     source_ref: "vice/src/drive/driverom.h:79"
 
@@ -962,6 +1232,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 12288
+    sha1: 245abbe76581558d270cdbb6fe55f56748403d8e
+    md5: 2fce6a76c738d1a10c189bf0660d868e
+    crc32: 40e0ebaa
     note: "CBM 4040 dual drive DOS ROM. Embedded in core."
     source_ref: "vice/src/drive/driverom.h:82"
 
@@ -971,6 +1244,9 @@ files:
     hle_fallback: true
     embedded: true
     size: 16384
+    sha1: c48df2cbb0eea656c3243df7ea8bfefcd171b8e8
+    md5: d6d4df6f2811767de6f5bf46ad7fba69
+    crc32: 632a328e
     note: "CBM D9090/D9060 hard drive DOS ROM. Embedded in core."
     source_ref: "vice/src/drive/driverom.h:85"
 
