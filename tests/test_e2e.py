@@ -3095,20 +3095,23 @@ class TestE2E(unittest.TestCase):
                     "system": "test-system",
                     "required": True,
                     "mode": "both",
+                    "sha1": "aaaa",
                 },
                 {
                     "name": "lr_only.bin",
                     "system": "test-system",
                     "required": True,
                     "mode": "libretro",
+                    "sha1": "bbbb",
                 },
                 {
                     "name": "sa_only.bin",
                     "system": "test-system",
                     "required": True,
                     "mode": "standalone",
+                    "sha1": "cccc",
                 },
-                {"name": "nomode.bin", "system": "test-system", "required": True},
+                {"name": "nomode.bin", "system": "test-system", "required": True, "sha1": "dddd"},
             ],
         }
         with open(os.path.join(self.emulators_dir, "dualmode.yml"), "w") as f:
@@ -3142,12 +3145,14 @@ class TestE2E(unittest.TestCase):
                     "system": "test-system",
                     "required": True,
                     "mode": "libretro",
+                    "sha1": "aaaa",
                 },
                 {
                     "name": "sa_file.bin",
                     "system": "test-system",
                     "required": True,
                     "mode": "standalone",
+                    "sha1": "bbbb",
                 },
             ],
         }
@@ -3183,6 +3188,7 @@ class TestE2E(unittest.TestCase):
                     "system": "test-system",
                     "required": False,
                     "source_ref": "a.cpp:10",
+                    "sha1": "aaaa",
                 },
             ],
         }
@@ -3197,6 +3203,7 @@ class TestE2E(unittest.TestCase):
                     "system": "test-system",
                     "required": True,
                     "source_ref": "b.cpp:20",
+                    "sha1": "aaaa",
                 },
             ],
         }

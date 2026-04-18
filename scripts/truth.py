@@ -12,6 +12,16 @@ from common import _norm_system_id, resolve_platform_cores
 from validation import filter_files_by_mode
 
 
+def _serialize_source_ref(sr: object) -> str:
+    """Convert a source_ref value to a clean string for serialization."""
+    if isinstance(sr, str):
+        return sr
+    if isinstance(sr, dict):
+        parts = [f"{k}: {v}" for k, v in sr.items()]
+        return "; ".join(parts)
+    return str(sr)
+
+
 def _determine_core_mode(
     emu_name: str,
     profile: dict,
@@ -35,31 +45,78 @@ def _determine_core_mode(
 
 
 def _enrich_hashes(entry: dict, db: dict) -> None:
-    """Fill missing hash fields from the database."""
-    sha1 = entry.get("sha1", "")
-    md5 = entry.get("md5", "")
+    """Fill missing sibling hashes from the database, ground-truth preserving.
 
-    # Hashes can be lists (multi-hash) — use first string value
-    if isinstance(sha1, list):
-        sha1 = sha1[0] if sha1 else ""
-    if isinstance(md5, list):
-        md5 = md5[0] if md5 else ""
+    The profile's hashes come from the emulator source code (ground truth).
+    Any hash of a given file set of bytes is a projection of that same
+    ground truth — sha1, md5, crc32 all identify the same bytes. If the
+    profile has ONE ground-truth hash, the DB can supply its siblings.
+
+    Lookup order (all are hash-anchored, never name-based):
+      1. SHA1 direct
+      2. MD5 -> SHA1 via indexes.by_md5
+      3. CRC32 -> SHA1 via indexes.by_crc32 (weaker 32-bit anchor,
+         requires size match when profile has size)
+
+    Name-based enrichment is NEVER used: a name alone has no ground-truth
+    anchor, the file in bios/ may not match what the source code expects.
+
+    Multi-hash entries (lists of accepted variants) are left untouched to
+    preserve variant information.
+    """
+    # Skip multi-hash entries — they express ground truth as "any of these N
+    # variants", enriching with a single sibling would lose that information.
+    for h in ("sha1", "md5", "crc32"):
+        if isinstance(entry.get(h), list):
+            return
+
+    files_db = db.get("files", {})
+    indexes = db.get("indexes", {})
 
     record = None
-    if sha1 and isinstance(sha1, str) and db.get("files"):
-        record = db["files"].get(sha1)
-    if record is None and md5:
-        by_md5 = db.get("by_md5", {})
-        md5_str = md5 if isinstance(md5, str) else md5[0] if md5 else ""
-        ref_sha1 = by_md5.get(md5_str.lower()) if md5_str else None
-        if ref_sha1 and db.get("files"):
-            record = db["files"].get(ref_sha1)
+
+    # Anchor 1: SHA1 (strongest)
+    sha1 = entry.get("sha1")
+    if sha1 and isinstance(sha1, str):
+        record = files_db.get(sha1)
+
+    # Anchor 2: MD5 (strong)
+    if record is None:
+        md5 = entry.get("md5")
+        if md5 and isinstance(md5, str):
+            by_md5 = indexes.get("by_md5", {})
+            ref = by_md5.get(md5.lower())
+            if ref:
+                ref_sha1 = ref if isinstance(ref, str) else (ref[0] if ref else None)
+                if ref_sha1:
+                    record = files_db.get(ref_sha1)
+
+    # Anchor 3: CRC32 (32-bit, collisions theoretically possible).
+    # Require size match when profile has a size to guard against collisions.
+    if record is None:
+        crc = entry.get("crc32")
+        if crc and isinstance(crc, str):
+            by_crc32 = indexes.get("by_crc32", {})
+            ref = by_crc32.get(crc.lower())
+            if ref:
+                ref_sha1 = ref if isinstance(ref, str) else (ref[0] if ref else None)
+                if ref_sha1:
+                    candidate = files_db.get(ref_sha1)
+                    if candidate is not None:
+                        profile_size = entry.get("size")
+                        if not profile_size or candidate.get("size") == profile_size:
+                            record = candidate
+
     if record is None:
         return
 
+    # Copy sibling hashes and size from the anchored record.
+    # These are projections of the same ground-truth bytes.
     for field in ("sha1", "md5", "sha256", "crc32"):
         if not entry.get(field) and record.get(field):
             entry[field] = record[field]
+    if not entry.get("size") and record.get("size"):
+        entry["size"] = record["size"]
 
 
 def _merge_file_into_system(
@@ -82,7 +139,7 @@ def _merge_file_into_system(
         existing["_cores"] = existing.get("_cores", set()) | {emu_name}
         sr = file_entry.get("source_ref")
         if sr is not None:
-            sr_key = str(sr) if not isinstance(sr, str) else sr
+            sr_key = _serialize_source_ref(sr)
             existing["_source_refs"] = existing.get("_source_refs", set()) | {sr_key}
         else:
             existing.setdefault("_source_refs", set())
@@ -91,14 +148,41 @@ def _merge_file_into_system(
         for h in ("sha1", "md5", "sha256", "crc32"):
             theirs = file_entry.get(h, "")
             ours = existing.get(h, "")
-            if theirs and ours and theirs.lower() != ours.lower():
+            # Skip empty strings
+            if not theirs or theirs == "":
+                continue
+            if not ours or ours == "":
+                existing[h] = theirs
+                continue
+            # Normalize to sets for multi-hash comparison
+            t_list = theirs if isinstance(theirs, list) else [theirs]
+            o_list = ours if isinstance(ours, list) else [ours]
+            t_set = {str(v).lower() for v in t_list}
+            o_set = {str(v).lower() for v in o_list}
+            if not t_set & o_set:
                 print(
                     f"WARNING: hash conflict for {file_entry['name']} "
                     f"({h}: {ours} vs {theirs}, core {emu_name})",
                     file=sys.stderr,
                 )
-            elif theirs and not ours:
-                existing[h] = theirs
+        # Merge non-hash data fields if existing lacks them.
+        # A core that creates an entry without size/path/validation may be
+        # enriched by a sibling core that has those fields.
+        for field in (
+            "size",
+            "min_size",
+            "max_size",
+            "path",
+            "validation",
+            "description",
+            "category",
+            "hle_fallback",
+            "note",
+            "aliases",
+            "contents",
+        ):
+            if file_entry.get(field) is not None and existing.get(field) is None:
+                existing[field] = file_entry[field]
         return
 
     entry: dict = {"name": file_entry["name"]}
@@ -119,14 +203,25 @@ def _merge_file_into_system(
         "min_size",
         "max_size",
         "aliases",
+        "contents",
     ):
         val = file_entry.get(field)
         if val is not None:
             entry[field] = val
+    # Strip empty string hashes (profile says "" when hash is unknown)
+    for h in ("sha1", "md5", "sha256", "crc32"):
+        if entry.get(h) == "":
+            del entry[h]
+    # Normalize CRC32: strip 0x prefix, lowercase
+    crc = entry.get("crc32")
+    if isinstance(crc, str) and crc.startswith("0x"):
+        entry["crc32"] = crc[2:].lower()
+    elif isinstance(crc, str) and crc != crc.lower():
+        entry["crc32"] = crc.lower()
     entry["_cores"] = {emu_name}
     sr = file_entry.get("source_ref")
     if sr is not None:
-        sr_key = str(sr) if not isinstance(sr, str) else sr
+        sr_key = _serialize_source_ref(sr)
         entry["_source_refs"] = {sr_key}
     else:
         entry["_source_refs"] = set()
@@ -135,6 +230,23 @@ def _merge_file_into_system(
         _enrich_hashes(entry, db)
 
     files.append(entry)
+
+
+def _has_exploitable_data(entry: dict) -> bool:
+    """Check if an entry has any data beyond its name that can drive verification.
+
+    Applied AFTER merging all cores so entries benefit from enrichment by
+    sibling cores before being judged empty.
+    """
+    return bool(
+        any(entry.get(h) for h in ("sha1", "md5", "sha256", "crc32"))
+        or entry.get("path")
+        or entry.get("size")
+        or entry.get("min_size")
+        or entry.get("max_size")
+        or entry.get("validation")
+        or entry.get("contents")
+    )
 
 
 def generate_platform_truth(
@@ -273,6 +385,15 @@ def generate_platform_truth(
                 },
             )
             sys_cov["unprofiled"].add(emu_name)
+
+    # Drop files with no exploitable data AFTER all cores have contributed.
+    # A file declared by one core without hash/size/path may be enriched by
+    # another core that has the same entry with data — the filter must run
+    # once at the end, not per-core at creation time.
+    for sys_data in systems.values():
+        files_list = sys_data.get("files", [])
+        if files_list:
+            sys_data["files"] = [fe for fe in files_list if _has_exploitable_data(fe)]
 
     # Convert sets to sorted lists for serialization
     for sys_id, sys_data in systems.items():
