@@ -29,7 +29,7 @@ Pick your platform, download the ZIP, extract to the BIOS path.
 
 | Platform | BIOS files | Extract to | Download |
 |----------|-----------|-----------|----------|
-| Batocera | 361 | `/userdata/bios/` | [Download](../../releases/latest) |
+| Batocera | 353 | `/userdata/bios/` | [Download](../../releases/latest) |
 | BizHawk | 118 | `Firmware/` | [Download](../../releases/latest) |
 | EmuDeck | 161 | `Emulation/bios/` | [Download](../../releases/latest) |
 | Lakka | 448 | `system/` | [Download](../../releases/latest) |
@@ -61,7 +61,7 @@ Full list with per-file details: **[https://abdess.github.io/retrobios/](https:/
 
 | Platform | Coverage | Verified | Untested | Missing |
 |----------|----------|----------|----------|---------|
-| Batocera | 361/361 (100.0%) | 361 | 0 | 0 |
+| Batocera | 352/353 (99.7%) | 351 | 1 | 1 |
 | BizHawk | 118/118 (100.0%) | 118 | 0 | 0 |
 | EmuDeck | 161/161 (100.0%) | 161 | 0 | 0 |
 | Lakka | 448/448 (100.0%) | 448 | 0 | 0 |
@@ -136,4 +136,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 This repository provides BIOS files for personal backup and archival purposes.
 
-*Auto-generated on 2026-04-03T12:59:52Z*
+*Auto-generated on 2026-05-04T08:31:44Z*
