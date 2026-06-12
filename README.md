@@ -75,6 +75,7 @@ Full list with per-file details: **[https://abdess.github.io/retrobios/](https:/
 ## Build your own pack
 
 Clone the repo and generate packs for any platform, emulator, or system:
+NOTE: Create "tmp" folder inside the extracted retrobios-main.zip file.
 
 ```bash
 # Full platform pack
