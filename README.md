@@ -124,6 +124,7 @@ To keep packs accurate, each file is checked against the emulator's source code.
 
 <a href="https://github.com/PixNyb"><img src="https://avatars.githubusercontent.com/u/40770831?v=4" width="50" title="PixNyb"></a>
 <a href="https://github.com/monster-penguin"><img src="https://avatars.githubusercontent.com/u/266009589?v=4" width="50" title="monster-penguin"></a>
+<a href="https://github.com/TayDon35"><img src="https://avatars.githubusercontent.com/u/105522363?v=4&size=64" width="50" title="BrainJerker"></a>
 
 
 ## Community tools
