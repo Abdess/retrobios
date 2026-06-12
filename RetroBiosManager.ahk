@@ -128,7 +128,29 @@ RunGenerateCmd(*) {
             MsgBox("Invalid Emulator Selection.", "Selection Error", "Icon!")
             return
         }
-        cmd := "python.exe `"" A_ScriptDir "\scripts\generate_pack.py`" --emulator " DdlEmu.Text " --output `"" GenPathEdit.Value "`""
+        
+        ; Convert chosen emulator to lowercase for safe string comparison
+        selectedEmuLower := Format("{:L}", DdlEmu.Text)
+        
+        ; Array of emulators that require the '--platform' syntax
+        PlatformEmus := ["batocera", "bizhawk", "emudeck", "lakka", "recalbox", "retroarch", "retrobat", "retrodeck", "retropie", "romm"]
+        
+        ; Check if the selected emulator is in the platform override list
+        isPlatform := false
+        for emu in PlatformEmus {
+            if (selectedEmuLower == emu) {
+                isPlatform := true
+                break
+            }
+        }
+        
+        ; Route to the correct flag syntax based on the check
+        if isPlatform {
+            cmd := "python.exe `"" A_ScriptDir "\scripts\generate_pack.py`" --platform " DdlEmu.Text " --output `"" GenPathEdit.Value "`""
+        } else {
+            cmd := "python.exe `"" A_ScriptDir "\scripts\generate_pack.py`" --emulator " DdlEmu.Text " --output `"" GenPathEdit.Value "`""
+        }
+        
     } else {
         if (DdlSys.Text = "" || InStr(DdlSys.Text, "Error:")) {
             MsgBox("Invalid System Selection.", "Selection Error", "Icon!")

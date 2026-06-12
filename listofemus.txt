@@ -311,3 +311,13 @@
   ymir                           ymir                                     [standalone + libretro] sega-saturn
   yuzu                           Yuzu                                     [standalone] nintendo-switch
   zc210                          Zelda Classic v2.10                      [libretro] zc210
+  batocera
+  bizhawk
+  emudeck
+  lakka
+  recalbox
+  retroarch
+  retrobat
+  retrodeck
+  retropie
+  romm
