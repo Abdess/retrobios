@@ -1,6 +1,12 @@
 ﻿#Requires AutoHotkey v2.0
 #SingleInstance Force
 
+/*
+
+Author: BrainJerker (TayDon35)
+
+*/
+
 ; ==========================================
 ; Initialize & Parse Data Files
 ; ==========================================
