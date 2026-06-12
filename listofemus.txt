@@ -1,0 +1,313 @@
+  00_example                     00_example                               [libretro] 
+  2048                           2048                                     [libretro] 
+  3dengine                       3DEngine                                 [libretro] 
+  81                             EightyOne                                [standalone + libretro] sinclair-zx81, sinclair-zx80, sinclair-zx-spectrum...
+  a5200                          a5200                                    [libretro] atari-5200
+  advanced_tests                 advanced_tests                           [libretro] 
+  amiarcadia                     amiarcadia                               [libretro] emerson-arcadia-2001, interton-vc4000, elektor-tv-games-computer
+  amiberry                       Amiberry                                 [standalone + libretro] commodore-amiga, commodore-cd32, commodore-cdtv
+  anarch                         Anarch                                   [libretro] 
+  applewin                       AppleWin                                 [libretro] apple-ii
+  ardens                         Ardens                                   [libretro] arduboy
+  arduous                        Arduous                                  [libretro] arduboy
+  ares                           ares                                     [standalone] arcade, atari-2600, colecovision...
+  atari800                       Atari800                                 [standalone + libretro] atari-400-800, atari-5200, xegs
+  azahar                         Azahar                                   [standalone + libretro] nintendo-3ds
+  b2                             b2                                       [standalone + libretro] bbc-micro-b, bbc-micro-bplus, bbc-master-128
+  beetle_gba                     Beetle GBA (Mednafen)                    [libretro] nintendo-gba
+  beetle_lynx                    Beetle Lynx (Mednafen Lynx)              [libretro] atari-lynx
+  beetle_ngp                     Beetle NGP (Mednafen Neo Geo Pocket)     [libretro] snk-ngp, snk-ngpc
+  beetle_pce                     Beetle PCE (Mednafen PCE)                [libretro] nec-pc-engine
+  beetle_pcfx                    Beetle PC-FX (Mednafen)                  [libretro] nec-pcfx
+  beetle_psx                     Beetle PSX (Mednafen PSX)                [libretro] sony-playstation
+  beetle_saturn                  beetle_saturn                            [libretro] sega-saturn
+  beetle_vb                      Beetle VB (Mednafen Virtual Boy)         [libretro] nintendo-virtualboy
+  beetle_wswan                   Beetle WonderSwan (Mednafen WonderSwan)  [libretro] bandai-wswan, bandai-wswanc
+  bennugd                        BennuGD                                  [libretro] bennugd
+  bigpemu                        BigPEmu                                  [standalone] atari-jaguar, atari-jaguarcd
+  bk                             bk-emulator                              [libretro] elektronika-bk
+  blastem                        BlastEm                                  [standalone + libretro] sega-megadrive, sega-mastersystem
+  bluemsx                        blueMSX                                  [standalone + libretro] msx, msx2, msx2plus...
+  bnes                           bnes                                     [libretro] nes
+  boom3                          boom3                                    [libretro] doom3
+  boytacean                      Boytacean                                [standalone + libretro] nintendo-gb, nintendo-gbc
+  bsnes                          bsnes                                    [libretro] nintendo-snes, nintendo-super-game-boy, nintendo-satellaview
+  bsnes-jg                       bsnes-jg                                 [libretro] nintendo-snes, nintendo-sgb, nintendo-satellaview...
+  bsnes2014                      bsnes 2014                               [libretro] nintendo-snes, nintendo-sgb, nintendo-satellaview...
+  bsnes_cplusplus98              bsnes C++98                              [libretro] nintendo-snes, nintendo-sufami-turbo, nintendo-satellaview
+  bsnes_hd_beta                  bsnes-hd beta                            [libretro] nintendo-snes, nintendo-sgb, nintendo-satellaview...
+  bsnes_mercury                  bsnes-mercury                            [libretro] nintendo-snes, nintendo-sgb, nintendo-satellaview...
+  cannonball                     Cannonball                               [libretro] sega-outrun
+  cap32                          Caprice32                                [standalone + libretro] amstrad-cpc
+  cdi2015                        CDi 2015                                 [libretro] philips-cdi
+  cemu                           Cemu                                     [standalone] nintendo-wiiu
+  chailove                       ChaiLove                                 [libretro] 
+  chimerasnes                    ChimeraSNES                              [libretro] nintendo-snes, nintendo-satellaview, nintendo-sufami-turbo
+  citra                          Citra                                    [standalone + libretro] nintendo-3ds
+  citra2018                      Citra 2018                               [libretro] nintendo-3ds
+  citra_canary                   Citra Canary                             [libretro] nintendo-3ds
+  citron                         Citron                                   [standalone] nintendo-switch
+  clk                            Clock Signal (CLK)                       [standalone] amstrad-cpc, acorn-archimedes, acorn-electron...
+  clownmdemu                     ClownMDEmu                               [standalone + libretro] sega-megadrive, sega-megacd
+  craft                          Craft                                    [libretro] 
+  crocods                        CrocoDS                                  [libretro] amstrad-cpc
+  cruzes                         Cruzes                                   [libretro] game
+  daphne                         Daphne                                   [standalone + libretro] arcade-laserdisc
+  demul                          Demul                                    [standalone] sega-dreamcast, sega-naomi, sega-naomi2...
+  desmume                        DeSmuME                                  [libretro] nintendo-ds
+  desmume2015                    DeSmuME 2015                             [libretro] nintendo-ds
+  dice                           DICE                                     [libretro] discrete-arcade
+  dinothawr                      Dinothawr                                [libretro] dinothawr
+  directxbox                     DirectXBox                               [libretro] xbox
+  dirksimple                     DirkSimple                               [standalone + libretro] laserdisc-arcade
+  dolphin                        Dolphin                                  [standalone + libretro] nintendo-gamecube, nintendo-wii
+  dolphin_launcher               Dolphin Launcher                         [launcher] nintendo-gamecube, nintendo-wii
+  dosbox                         DOSBox                                   [libretro] dos
+  dosbox_core                    DOSBox-core                              [libretro] dos
+  dosbox_pure                    DOSBox Pure                              [standalone + libretro] dos
+  dosbox_svn                     DOSBox-SVN                               [libretro] dos
+  dosbox_svn_ce                  DOSBox-SVN CE                            [libretro] dos
+  doublecherrygb                 DoubleCherryGB                           [libretro] nintendo-gb, nintendo-gbc
+  doukutsu_rs                    doukutsu-rs                              [standalone + libretro] cavestory
+  duckstation                    DuckStation                              [standalone + libretro] sony-playstation
+  easyrpg                        EasyRPG Player                           [standalone + libretro] rpgmaker
+  ecwolf                         ECWolf                                   [standalone + libretro] wolfenstein3d
+  eden                           Eden                                     [standalone] nintendo-switch
+  eka2l1                         eka2l1                                   [standalone] ngage
+  emuscv                         EmuSCV                                   [libretro] scv
+  emux_chip8                     emux (CHIP-8)                            [libretro] chip8
+  emux_gb                        emux (Game Boy)                          [libretro] nintendo-gb
+  emux_nes                       emux (NES)                               [libretro] nes
+  emux_sms                       emux (SMS)                               [libretro] sms
+  ep128emu                       ep128emu-core                            [libretro] enterprise-64, enterprise-128, videoton-tvc...
+  ep128emu_core                  ep128emu_core                            [libretro] enterprise-64, enterprise-128, videoton-tvc...
+  fake08                         FAKE-08                                  [libretro] pico8
+  fbalpha2012                    FB Alpha 2012                            [libretro] arcade, neogeo, cps1...
+  fbalpha2012_cps1               FB Alpha 2012 CPS-1                      [libretro] cps1
+  fbalpha2012_cps2               FB Alpha 2012 CPS-2                      [libretro] cps2
+  fbalpha2012_cps3               FB Alpha 2012 CPS-3                      [libretro] cps3
+  fbalpha2012_neogeo             FB Alpha 2012 Neo Geo                    [libretro] neogeo
+  fbneo                          FinalBurn Neo                            [libretro] snk-neogeo-mvs, snk-neogeo-aes, snk-neogeo-cd...
+  fbneo_cps12                    FinalBurn Neo (CPS-1/CPS-2)              [libretro] cps1, cps2
+  fbneo_neogeo                   FinalBurn Neo (Neo Geo)                  [libretro] snk-neogeo-mvs, snk-neogeo-aes, snk-neogeo-cd
+  fceumm                         FCEUmm                                   [libretro] nintendo-nes, nintendo-fds
+  ffmpeg                         FFmpeg                                   [libretro] 
+  fixgb                          fixGB                                    [libretro] nintendo-gbc
+  fixnes                         fixNES                                   [libretro] nintendo-nes, nintendo-fds
+  flycast                        Flycast                                  [standalone + libretro] sega-dreamcast, sega-naomi, sega-naomi2...
+  fmsx                           fMSX                                     [libretro] msx, msx2, msx2plus
+  freechaf                       FreeChaF                                 [libretro] fairchild-channelf
+  freeintv                       FreeIntv                                 [libretro] intellivision
+  freej2me                       FreeJ2ME                                 [libretro] j2me
+  frodo                          Frodo                                    [libretro] commodore-c64
+  fsuae                          FS-UAE                                   [standalone + libretro] amiga
+  fuse                           Fuse                                     [libretro] sinclair-zxspectrum
+  galaksija                      galaksija                                [libretro] galaksija
+  gam4980                        GAM4980                                  [libretro] bbk-longman-4980
+  gambatte                       Gambatte                                 [libretro] nintendo-gb, nintendo-gbc
+  gearboy                        Gearboy                                  [libretro] nintendo-gb, nintendo-gbc
+  gearcoleco                     Gearcoleco                               [libretro] colecovision
+  geargrafx                      Geargrafx                                [libretro] nec-pc-engine, nec-supergrafx, nec-pc-engine-cd
+  gearlynx                       Gearlynx                                 [libretro] atari-lynx
+  gearsystem                     Gearsystem                               [libretro] sega-mastersystem, sega-gamegear, sega-sg1000
+  genesis_plus_gx                Genesis Plus GX                          [libretro] sega-megadrive, sega-megacd, sega-mastersystem...
+  genesis_plus_gx_wide           Genesis Plus GX Wide                     [libretro] sega-megadrive, sega-megacd, sega-mastersystem...
+  geolith                        Geolith                                  [libretro] snk-neogeo-mvs, snk-neogeo-aes
+  gme                            Game Music Emu                           [libretro] 
+  gong                           Gong                                     [libretro] 
+  gpsp                           gpSP                                     [libretro] nintendo-gba
+  gsplus                         GSplus                                   [standalone] apple-iigs, apple-iie
+  gw                             Game & Watch                             [libretro] handheld-electronic
+  handy                          Handy                                    [libretro] atari-lynx
+  hatari                         Hatari                                   [standalone + libretro] atari-st, atari-ste, atari-tt...
+  hbmame                         HBMAME (Homebrew MAME)                   [libretro] arcade
+  higan_sfc                      higan (SFC Accuracy)                     [libretro] nintendo-snes, nintendo-sgb
+  higan_sfc_balanced             nSide (SFC Balanced)                     [libretro] nintendo-snes, nintendo-sgb
+  holani                         Holani                                   [libretro] atari-lynx
+  imageviewer                    Image Viewer                             [libretro] 
+  ishiiruka                      Ishiiruka                                [standalone + libretro] nintendo-gamecube, nintendo-wii
+  jaxe                           JAXE                                     [libretro] chip8
+  jollycv                        JollyCV                                  [libretro] colecovision, creativision, myvision
+  jumpnbump                      Jump 'n Bump                             [libretro] 
+  kronos                         Kronos                                   [libretro] sega-saturn, sega-stv
+  lexaloffle                     Lexaloffle                               [standalone] pico8, voxatron
+  lowresnx                       LowRes NX                                [libretro] lowresnx
+  lrps2                          LRPS2                                    [libretro] sony-playstation-2
+  lutro                          Lutro                                    [libretro] 
+  m2000                          M2000                                    [libretro] philips-p2000t
+  mame                           MAME                                     [standalone + libretro] snk-neogeo-mvs, snk-neogeo-aes, igs-pgm...
+  mame2000                       MAME 2000                                [libretro] snk-neogeo-mvs, deco-cassette
+  mame2003                       MAME 2003                                [libretro] snk-neogeo-mvs, snk-neogeo-aes, igs-pgm...
+  mame2003_midway                MAME 2003 Midway                         [libretro] 
+  mame2003_plus                  MAME 2003-Plus                           [libretro] snk-neogeo-mvs, snk-neogeo-aes, igs-pgm...
+  mame2009                       MAME 2009                                [libretro] snk-neogeo-mvs, snk-neogeo-aes, igs-pgm...
+  mame2010                       MAME 2010                                [libretro] snk-neogeo-mvs, igs-pgm, sega-naomi...
+  mame2015                       MAME 2015                                [libretro] snk-neogeo-mvs, snk-neogeo-aes, igs-pgm...
+  mame2016                       MAME 2016                                [libretro] snk-neogeo-mvs, snk-neogeo-aes, igs-pgm...
+  mamearcade                     MAME Arcade                              [libretro] snk-neogeo-mvs, igs-pgm, sega-naomi...
+  mamemess                       MAME MESS                                [libretro] apple2, apple2gs, astrocde...
+  mcsoftserve                    MCSoftserve                              [libretro] 
+  mednafen_gba                   mednafen_gba                             [libretro] gba
+  mednafen_pce                   mednafen_pce                             [libretro] nec-pc-engine
+  mednafen_pce_fast              mednafen_pce_fast                        [libretro] nec-pc-engine
+  mednafen_snes                  mednafen_snes                            [libretro] nintendo-snes
+  mednafen_supafaust             mednafen_supafaust                       [libretro] nintendo-snes
+  mednafen_supergrafx            mednafen_supergrafx                      [libretro] nec-pc-engine
+  melonds                        melonDS                                  [standalone + libretro] nintendo-ds, nintendo-dsi
+  melonds_ds                     melonDS DS                               [libretro] nintendo-ds, nintendo-dsi
+  mesen                          Mesen                                    [libretro] nintendo-nes, nintendo-fds
+  mesen-s                        mesen-s                                  [libretro] nintendo-snes, nintendo-gb, nintendo-gbc...
+  mess2015                       MESS 2015                                [libretro] 
+  meteor                         Meteor GBA                               [libretro] nintendo-gba
+  mgba                           mGBA                                     [libretro] nintendo-gba, nintendo-gb, nintendo-gbc...
+  minivmac                       Mini vMac                                [libretro] macintosh-ii
+  mkxp_z                         mkxp-z                                   [libretro] rpgmaker
+  model2                         Model 2 Emulator                         [standalone] sega-model2
+  mojozork                       MojoZork                                 [libretro] zmachine
+  moonlight                      Moonlight                                [libretro] 
+  mpv                            mpv                                      [libretro] 
+  mrboom                         Mr.Boom                                  [libretro] 
+  mu                             Mu                                       [libretro] palm-os
+  mupen64plus_next               Mupen64Plus-Next                         [libretro] nintendo-64, nintendo-64dd
+  nekop2                         nekop2                                   [libretro] pc-98
+  neocd                          NeoCD                                    [libretro] snk-neogeo-cd
+  nes                            nes                                      [libretro] nintendo-nes
+  nestopia                       Nestopia UE                              [libretro] nintendo-nes, nintendo-fds
+  noods                          NooDS                                    [libretro] nintendo-ds, nintendo-gba
+  np2kai                         NP2kai                                   [libretro] pc-98
+  numero                         Numero                                   [libretro] ti-83
+  nxengine                       NXEngine                                 [libretro] cave-story
+  o2em                           O2EM                                     [libretro] odyssey2, videopac
+  oberon                         Oberon                                   [libretro] oberon
+  onscripter                     ONScripter                               [libretro] onscripter
+  onsyuri                        ONScripter Yuri                          [libretro] onscripter
+  openlara                       OpenLara                                 [libretro] tomb-raider
+  openmsx                        openMSX                                  [standalone] msx, msx1, msx2...
+  opentyrian                     OpenTyrian                               [libretro] tyrian
+  opera                          Opera (4DO)                              [libretro] 3do
+  panda3ds                       Panda3DS                                 [standalone + libretro] nintendo-3ds
+  parallel_n64                   ParaLLEl N64                             [libretro] nintendo-64, nintendo-64dd
+  pascal_pong                    Pascal Pong                              [libretro] 
+  pcem                           PCem                                     [libretro] ibm-pc, ibm-xt, ibm-at...
+  pcsx1                          PCSX1                                    [libretro] sony-playstation
+  pcsx2                          PCSX2                                    [standalone] sony-playstation-2
+  pcsx_rearmed                   PCSX-ReARMed                             [libretro] sony-playstation
+  pd777                          PD777                                    [libretro] epochcv
+  picodrive                      PicoDrive                                [libretro] sega-megadrive, sega-genesis, sega-megacd...
+  play                           play                                     [libretro] sony-playstation-2
+  pocketcdg                      PocketCDG                                [libretro] 
+  pokemini                       PokeMini                                 [libretro] nintendo-pokemon-mini
+  potator                        Potator                                  [libretro] watara-supervision
+  ppsspp                         PPSSPP                                   [standalone + libretro] sony-psp
+  prboom                         PrBoom                                   [libretro] doom
+  primehack                      PrimeHack                                [standalone] nintendo-gamecube, nintendo-wii
+  prosystem                      ProSystem                                [libretro] atari-7800
+  puae                           PUAE (P-UAE)                             [libretro] commodore-amiga, commodore-amiga-cd32, commodore-cdtv
+  puae2021                       PUAE 2021                                [libretro] commodore-amiga, commodore-amiga-cd32, commodore-cdtv
+  puzzlescript                   PuzzleScript                             [libretro] 
+  px68k                          px68k                                    [libretro] sharp-x68000
+  qemu                           QEMU                                     [libretro] ibm-pc, x86, x86-64...
+  quasi88                        QUASI88                                  [libretro] nec-pc-88, nec-pc-80
+  quicknes                       QuickNES                                 [libretro] nintendo-nes
+  race                           RACE (Neo Geo Pocket)                    [libretro] snk-ngp, snk-ngpc
+  redbook                        Redbook                                  [libretro] 
+  redream                        Redream                                  [libretro] sega-dreamcast
+  reminiscence                   REminiscence                             [libretro] flashback
+  remotejoy                      RemoteJoy                                [libretro] 
+  retro8                         Retro8                                   [libretro] pico8
+  retrodream                     RetroDream                               [libretro] sega-dreamcast
+  romcleaner                     ROM Cleaner                              [libretro] 
+  rpcs3                          RPCS3                                    [standalone] sony-playstation-3
+  rustation                      Rustation                                [libretro] sony-playstation
+  rvvm                           RVVM                                     [libretro] riscv
+  ryujinx                        Ryujinx                                  [standalone] nintendo-switch
+  same_cdi                       SAME CDi                                 [libretro] cdi
+  sameboy                        SameBoy                                  [libretro] nintendo-gb, nintendo-gbc, nintendo-sgb
+  sameduck                       sameduck                                 [libretro] mega-duck
+  scummvm                        ScummVM                                  [libretro] scummvm
+  sdlpal                         SDLPAL                                   [libretro] sdlpal
+  shadps4                        shadps4                                  [standalone] ps4
+  simcp                          SimCoupe                                 [libretro] sam-coupe
+  skyemu                         skyemu                                   [standalone + libretro] nintendo-gb, nintendo-gbc, nintendo-gba...
+  smsplus                        SMS Plus GX                              [standalone + libretro] sega-master-system, sega-game-gear, colecovision...
+  snes9x                         snes9x                                   [libretro] nintendo-snes, nintendo-satellaview, nintendo-sufami-turbo
+  snes9x2002                     Snes9x 2002                              [libretro] snes, sufami-turbo, satellaview
+  snes9x2005                     Snes9x 2005                              [libretro] snes, sufami-turbo, satellaview
+  snes9x2005_plus                Snes9x 2005 Plus                         [libretro] snes, sufami-turbo, satellaview
+  snes9x2010                     Snes9x 2010                              [libretro] snes, sufami-turbo, satellaview
+  squirreljme                    SquirrelJME                              [libretro] j2me
+  stella2014                     Stella 2014                              [libretro] atari_2600
+  stella2023                     Stella 2023                              [libretro] atari_2600
+  stonesoup                      Stone Soup                               [libretro] 
+  superbroswar                   Super Bros War                           [libretro] 
+  supermodel                     Supermodel                               [standalone] sega-model3
+  suyu                           Suyu                                     [standalone] nintendo-switch
+  swanstation                    swanstation                              [libretro] sony-playstation
+  syobonaction                   Syobon Action                            [libretro] 
+  tamalibretro                   TamaLIBretro                             [libretro] tamagotchi-p1
+  tempgba                        TempGBA                                  [libretro] nintendo-gba
+  test                           test                                     [libretro] 
+  test_netplay                   test_netplay                             [libretro] 
+  testaudio_callback             testaudio_callback                       [libretro] 
+  testaudio_no_callback          testaudio_no_callback                    [libretro] 
+  testaudio_playback_wav         testaudio_playback_wav                   [libretro] 
+  testgl                         testgl                                   [libretro] 
+  testgl_compute_shaders         testgl_compute_shaders                   [libretro] 
+  testgl_ff                      testgl_ff                                [libretro] 
+  testinput_buttontest           testinput_buttontest                     [libretro] 
+  testretroluxury                testretroluxury                          [libretro] 
+  testsw                         testsw                                   [libretro] 
+  testsw_vram                    testsw_vram                              [libretro] 
+  testvulkan                     testvulkan                               [libretro] 
+  testvulkan_async_compute       testvulkan_async_compute                 [libretro] 
+  tgbdual                        TGB Dual                                 [libretro] nintendo-gb, nintendo-gbc
+  theodore                       Theodore                                 [libretro] thomson-to7, thomson-to770, thomson-to8...
+  thepowdertoy                   The Powder Toy                           [libretro] 
+  ti99sim                        ti99sim                                  [standalone] ti99
+  tic80                          TIC-80                                   [libretro] tic80
+  trident                        trident                                  [libretro] 3ds
+  tsugaru                        tsugaru                                  [standalone] fmtowns
+  tyrquake                       TyrQuake                                 [libretro] quake
+  uae4arm                        uae4arm                                  [libretro] commodore-amiga
+  ume2015                        UME 2015                                 [libretro] snk-neogeo-mvs, snk-neogeo-aes, igs-pgm...
+  uw8                            MicroW8                                  [libretro] 
+  uxn                            UXN                                      [libretro] 
+  uzem                           uzem                                     [libretro] uzebox
+  vaporspec                      VaporSpec                                [libretro] vaporspec
+  vba_m                          VBA-M                                    [libretro] nintendo-gb, nintendo-gbc, nintendo-gba
+  vba_next                       VBA-Next                                 [libretro] nintendo-gba
+  vbam                           VBA-M                                    [standalone + libretro] nintendo-gba, nintendo-gb, nintendo-gbc
+  vecx                           vecx                                     [libretro] gce-vectrex
+  vemulator                      VeMUlator                                [libretro] sega-vmu
+  vice                           VICE                                     [libretro] commodore-c64, commodore-c128, commodore-c64dtv...
+  vice_x128                      VICE x128                                [libretro] commodore-c128
+  vice_x64                       VICE x64                                 [libretro] commodore-c64
+  vice_x64dtv                    VICE x64dtv                              [libretro] commodore-c64dtv
+  vice_x64sc                     VICE x64sc                               [libretro] commodore-c64
+  vice_xcbm2                     VICE xcbm2                               [libretro] commodore-cbm-ii
+  vice_xcbm5x0                   VICE xcbm5x0                             [libretro] commodore-cbm-ii
+  vice_xpet                      VICE xpet                                [libretro] commodore-pet
+  vice_xplus4                    VICE xplus4                              [libretro] commodore-plus4
+  vice_xscpu64                   VICE xscpu64                             [libretro] commodore-c64-supercpu
+  vice_xvic                      VICE xvic                                [libretro] commodore-vic20
+  vidtest                        vidtest                                  [libretro] 
+  vircon32                       Vircon32                                 [libretro] vircon32
+  virtualjaguar                  Virtual Jaguar                           [libretro] atari-jaguar
+  virtualxt                      VirtualXT                                [libretro] ibm-pc
+  vita3k                         Vita3K                                   [standalone] sony-playstation-vita
+  vitaquake2                     vitaQuakeII                              [libretro] quake2
+  vitaquake3                     vitaQuakeIII                             [libretro] quake3
+  vitavoyager                    vitavoyager                              [libretro] quake3
+  wasm4                          WASM-4                                   [libretro] 
+  x1                             X Millennium                             [libretro] sharp-x1
+  x16emu                         x16emu                                   [standalone] commanderx16
+  x64sdl                         x64sdl                                   [libretro] commodore-c64
+  xemu                           Xemu                                     [standalone] microsoft-xbox
+  xenia                          Xenia Canary                             [standalone] microsoft-xbox-360
+  xrick                          XRick                                    [libretro] xrick
+  xroar                          XRoar                                    [standalone] dragon32, dragon64, coco...
+  yabasanshiro                   yabasanshiro                             [libretro] sega-saturn
+  yabause                        yabause                                  [libretro] sega-saturn
+  ymir                           ymir                                     [standalone + libretro] sega-saturn
+  yuzu                           Yuzu                                     [standalone] nintendo-switch
+  zc210                          Zelda Classic v2.10                      [libretro] zc210
