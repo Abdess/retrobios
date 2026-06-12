@@ -74,7 +74,6 @@ Full list with per-file details: **[https://abdess.github.io/retrobios/](https:/
 
 ## Build your own pack
 
-NOTE: Create "tmp" folder inside the extracted retrobios-main.zip file.
 Clone the repo and generate packs for any platform, emulator, or system:
 
 ```bash
@@ -96,6 +95,8 @@ python scripts/verify.py --platform batocera
 python scripts/verify.py --emulator flycast
 python scripts/verify.py --platform retroarch --verbose  # emulator ground truth
 ```
+
+NOTE: Create "tmp" folder inside the extracted retrobios-main.zip file or cloned repository.
 
 Only dependency: Python 3 + `pyyaml`.
 
