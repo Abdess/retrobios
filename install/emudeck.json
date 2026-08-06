@@ -4,7 +4,7 @@
   "platform": "emudeck",
   "display_name": "EmuDeck",
   "version": "1.0",
-  "generated": "2026-08-06T12:29:25Z",
+  "generated": "2026-08-06T18:09:38Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -243,8 +243,8 @@
       }
     }
   ],
-  "total_files": 527,
-  "total_size": 3277238718,
+  "total_files": 524,
+  "total_size": 1769405209,
   "files": [
     {
       "dest": "colecovision.rom",
@@ -297,9 +297,9 @@
     },
     {
       "dest": "firmware.bin",
-      "sha1": "cfe072921ee3fb93f688743f8beef89043c3e9ad",
+      "sha1": "5b2acbd499b39fb1af1b36ef7de5eb047d83401c",
       "size": 262144,
-      "repo_path": "bios/Nintendo/Nintendo DS/firmware.bin",
+      "repo_path": "bios/Arcade/Arcade/firmware.bin",
       "cores": null
     },
     {
@@ -318,9 +318,9 @@
     },
     {
       "dest": "prod.keys",
-      "sha1": "c146b651696d25287241f4bab18226e488bc45b3",
-      "size": 16025,
-      "repo_path": "bios/Nintendo/Switch/prod.keys",
+      "sha1": "d6cedce971a2a4ab2588e39285a9d2fb37b62924",
+      "size": 15039,
+      "repo_path": "bios/Arcade/Arcade/switch/prod.keys",
       "cores": null
     },
     {
@@ -2945,9 +2945,9 @@
     },
     {
       "dest": "rx78.zip",
-      "sha1": "b3a26e21574395a279a37922238802b349c303b7",
-      "size": 6397,
-      "repo_path": "bios/Bandai/RX-78/rx78.zip",
+      "sha1": "cda1387bb14dfd502fb8e0b143ada0be84f200a6",
+      "size": 6375,
+      "repo_path": "bios/Arcade/Arcade/rx78.zip",
       "cores": [
         "MAME"
       ]
@@ -2972,36 +2972,36 @@
     },
     {
       "dest": "lynx48k.zip",
-      "sha1": "64947e9b7d17870839aba5d93217183d480ff897",
-      "size": 25078,
-      "repo_path": "bios/Camputers/Lynx/lynx48k.zip",
+      "sha1": "54bd40c0784dc67fe88372f1e9db93d6c7d9703a",
+      "size": 76468,
+      "repo_path": "bios/Arcade/Arcade/lynx48k.zip",
       "cores": [
         "MAME"
       ]
     },
     {
       "dest": "lynx96k.zip",
-      "sha1": "df95ea702606e88b4c906a0233c8fec54c02ff01",
-      "size": 32888,
-      "repo_path": "bios/Camputers/Lynx/lynx96k.zip",
+      "sha1": "f59800796cd1a354dc9440e1aa41137403ef67b6",
+      "size": 32910,
+      "repo_path": "bios/Arcade/Arcade/lynx96k.zip",
       "cores": [
         "MAME"
       ]
     },
     {
       "dest": "lynx128k.zip",
-      "sha1": "5300a352007976102d61d53f1e8c48063d2f3026",
-      "size": 24796,
-      "repo_path": "bios/Camputers/Lynx/lynx128k.zip",
+      "sha1": "fa8c360e3590ddeaf9e3fcfa7eeecac502a84abc",
+      "size": 24818,
+      "repo_path": "bios/Arcade/Arcade/lynx128k.zip",
       "cores": [
         "MAME"
       ]
     },
     {
       "dest": "crvision.zip",
-      "sha1": "87526fb12fabbcc01292dd01dc698fdc762ab7dc",
-      "size": 441619,
-      "repo_path": "bios/VTech/CreatiVision/crvision.zip",
+      "sha1": "887bde265f0567db6b210721f568ec9ebf42a8a2",
+      "size": 1810,
+      "repo_path": "bios/Arcade/Arcade/crvision.zip",
       "cores": [
         "MAME"
       ]
@@ -3170,9 +3170,9 @@
     },
     {
       "dest": "trs80.zip",
-      "sha1": "a9b8931c42303e8dfb475112fc18ff200b7252ce",
-      "size": 14558,
-      "repo_path": "bios/Tandy/TRS-80/trs80.zip",
+      "sha1": "b7234d5a61a9b52b1b656e672d559bd3cb6526a1",
+      "size": 14019,
+      "repo_path": "bios/Arcade/Arcade/trs80.zip",
       "cores": [
         "MAME"
       ]
@@ -3251,9 +3251,9 @@
     },
     {
       "dest": "trs80m4p.zip",
-      "sha1": "497eea6e0ed80501ca3beee714d71a5815495b07",
-      "size": 4880,
-      "repo_path": "bios/Tandy/TRS-80/trs80m4p.zip",
+      "sha1": "d68ba83b7fa06c499ef6261b0aaad5e3f544de92",
+      "size": 448800,
+      "repo_path": "bios/Arcade/Arcade/trs80m4p.zip",
       "cores": [
         "MAME"
       ]
@@ -3530,9 +3530,9 @@
     },
     {
       "dest": "dsi_firmware.bin",
-      "sha1": "d2a5af338f09c5cbdd5d7628db5b9c075c69b616",
+      "sha1": "93c0598b08192a1f630e5edb2cd9f60d1e3ea7b3",
       "size": 131072,
-      "repo_path": "bios/Nintendo/Nintendo DS/dsi_firmware.bin",
+      "repo_path": "bios/Arcade/Arcade/dsi_firmware.bin",
       "cores": [
         "melonDS"
       ]
@@ -3839,72 +3839,6 @@
       "cores": [
         "Dolphin"
       ]
-    },
-    {
-      "dest": "DSi_Nand_AUS.bin",
-      "sha1": "7d006f8943171a4d50ae89bf2fca12b764d27e8b",
-      "size": 251658304,
-      "repo_path": "bios/Nintendo/DS/DSi_Nand_AUS.bin",
-      "cores": [
-        "melonDS"
-      ],
-      "storage": "release",
-      "release_asset": "DSi_Nand_AUS.bin"
-    },
-    {
-      "dest": "DSi_Nand_CHN.bin",
-      "sha1": "4b3b3de0cb2c2aef80daa68394d5b804b8706d9f",
-      "size": 251658304,
-      "repo_path": "bios/Nintendo/DS/DSi_Nand_CHN.bin",
-      "cores": [
-        "melonDS"
-      ],
-      "storage": "release",
-      "release_asset": "DSi_Nand_CHN.bin"
-    },
-    {
-      "dest": "DSi_Nand_EUR.bin",
-      "sha1": "bc4091b6cab4feba3812ac0f23e23d0353481ecf",
-      "size": 251658304,
-      "repo_path": "bios/Nintendo/DS/DSi_Nand_EUR.bin",
-      "cores": [
-        "melonDS"
-      ],
-      "storage": "release",
-      "release_asset": "DSi_Nand_EUR.bin"
-    },
-    {
-      "dest": "DSi_Nand_JPN.bin",
-      "sha1": "c82d60626ac05b49ccec0cfb30001d4a3f31c5b9",
-      "size": 251658304,
-      "repo_path": "bios/Nintendo/DS/DSi_Nand_JPN.bin",
-      "cores": [
-        "melonDS"
-      ],
-      "storage": "release",
-      "release_asset": "DSi_Nand_JPN.bin"
-    },
-    {
-      "dest": "DSi_Nand_KOR.bin",
-      "sha1": "4b061953d8f870bcda006ce86ce136f112cc1793",
-      "size": 251658304,
-      "repo_path": "bios/Nintendo/DS/DSi_Nand_KOR.bin",
-      "cores": [
-        "melonDS"
-      ],
-      "storage": "release",
-      "release_asset": "DSi_Nand_KOR.bin"
-    },
-    {
-      "dest": "DSi_Nand_USA.bin",
-      "sha1": "ef08ae02c5fbe1a22a208c36e25607f5a9d5ae98",
-      "size": 251658304,
-      "repo_path": "bios/Nintendo/DS/DSi_Nand_USA.bin",
-      "cores": [
-        "melonDS"
-      ],
-      "storage": "release",
-      "release_asset": "DSi_Nand_USA.bin"
     },
     {
       "dest": "dsi_nand.bin",
@@ -4746,6 +4680,15 @@
       ]
     },
     {
+      "dest": "SCPH30004R.nvm",
+      "sha1": "62f5a0b54a174daf2bf66634b86c6f2a3cd297ce",
+      "size": 1024,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH30004R.nvm",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
       "dest": "ps2-dvd-110u.bin",
       "sha1": "0bc9143cb6839471d62b8fdd0b2fc05e941527d3",
       "size": 2097152,
@@ -4899,15 +4842,6 @@
       ]
     },
     {
-      "dest": "SCPH30004R.nvm",
-      "sha1": "62f5a0b54a174daf2bf66634b86c6f2a3cd297ce",
-      "size": 1024,
-      "repo_path": "bios/Sony/PlayStation 2/SCPH30004R.nvm",
-      "cores": [
-        "PCSX2"
-      ]
-    },
-    {
       "dest": "cheats_ni.zip",
       "sha1": "dec5e4f137890c338babe13cfb9d41ff869fa721",
       "size": 42525,
@@ -4935,10 +4869,37 @@
       ]
     },
     {
+      "dest": "patches.zip",
+      "sha1": "541a74165496fb7ef35ce6ec03f711ebbe263e11",
+      "size": 2060269,
+      "repo_path": "bios/Sony/PlayStation 2/patches.zip",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
       "dest": "rom1.bin",
       "sha1": "47d2ec4b342649e4c391043ab915d4435f9d180d",
       "size": 199680,
       "repo_path": "bios/Sony/PlayStation 2/rom1.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "scph30004fr.nvm",
+      "sha1": "92ce9e739dcbfa0d6afb442620b71919d26bf283",
+      "size": 1024,
+      "repo_path": "bios/Sony/PlayStation 2/scph30004fr.nvm",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "scph39001.nvm",
+      "sha1": "0195572b9ad3be15bd0c47b906b2c14826cd681c",
+      "size": 1024,
+      "repo_path": "bios/Sony/PlayStation 2/scph39001.nvm",
       "cores": [
         "PCSX2"
       ]

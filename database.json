@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-06T17:28:04Z",
-  "total_files": 7629,
+  "generated_at": "2026-08-06T17:54:05Z",
+  "total_files": 7628,
   "total_size": 10093874908,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
@@ -3332,16 +3332,6 @@
       "sha256": "a954c8be4ee219b419873db54e54103c91f496d3055111044112c75e23fa11b8",
       "crc32": "c7f665ca",
       "adler32": "365a557b"
-    },
-    "da39a3ee5e6b4b0d3255bfef95601890afd80709": {
-      "path": "bios/Arcade/Arcade/cemu/keys.txt",
-      "name": "keys.txt",
-      "size": 0,
-      "sha1": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
-      "md5": "d41d8cd98f00b204e9800998ecf8427e",
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "crc32": "00000000",
-      "adler32": "00000001"
     },
     "31a137495fe03d502404674fa951a2dda724c0ba": {
       "path": "bios/Arcade/Arcade/cffa1.zip",
@@ -76629,7 +76619,6 @@
       "c59f92647701428bc453976740eb75cf": "5d0b1b55b0d0958a5c9069c3219d4da5a87a6b93",
       "285bea2c7e667dec9d41bedf8c0ad454": "fcf7cf06e6106a369e69e40ffb9c10917129deb4",
       "4fbf5780a3c949b52e5796897f9ec993": "ef96ef15207789cdc75ed1836934934ad8c02883",
-      "d41d8cd98f00b204e9800998ecf8427e": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
       "1bd6008157dfc6e03fa77d55c8d1435e": "31a137495fe03d502404674fa951a2dda724c0ba",
       "50686c18ea5d543e9d8224e040cd4ec9": "da272af2fb1da8883c539b19c1bda97c5301dc80",
       "7c63eb3049f81aa3a3f7dfe65e3c1044": "82743e58e4df5600c6b1c5a0920abe5a71ffd48c",
@@ -84940,10 +84929,6 @@
       "cedmag.zip": [
         "ef96ef15207789cdc75ed1836934934ad8c02883",
         "bbded1bbdee072a0f000db3a13353d221add0a55"
-      ],
-      "keys.txt": [
-        "da39a3ee5e6b4b0d3255bfef95601890afd80709",
-        "9edc52be45201ec99f6e4ceb5dc6abfc633c4eae"
       ],
       "cffa1.zip": [
         "31a137495fe03d502404674fa951a2dda724c0ba",
@@ -95776,6 +95761,9 @@
       ],
       "snduser2.rpl": [
         "5d2a5df3eeacde8acc496ded03d7b360cc4c36df"
+      ],
+      "keys.txt": [
+        "9edc52be45201ec99f6e4ceb5dc6abfc633c4eae"
       ],
       "WIIU_ACCOUNT_1_CERT.der": [
         "7e6b6092d4142418a80c1066f54f56e891a8dce8"
@@ -109136,7 +109124,6 @@
       "0a67ff2c": "5d0b1b55b0d0958a5c9069c3219d4da5a87a6b93",
       "072b236a": "fcf7cf06e6106a369e69e40ffb9c10917129deb4",
       "c7f665ca": "ef96ef15207789cdc75ed1836934934ad8c02883",
-      "00000000": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
       "794f865e": "31a137495fe03d502404674fa951a2dda724c0ba",
       "076db7e8": "da272af2fb1da8883c539b19c1bda97c5301dc80",
       "d9ef9121": "82743e58e4df5600c6b1c5a0920abe5a71ffd48c",
@@ -116767,7 +116754,6 @@
       "315306e1cbb232fa1cb35219a43e3f4ebe997f6da9627b56ad680a708db52f9a": "5d0b1b55b0d0958a5c9069c3219d4da5a87a6b93",
       "903cdf0ff90816e965c47136ec05116cae96149502abb7ffd32bf5ee88afb710": "fcf7cf06e6106a369e69e40ffb9c10917129deb4",
       "a954c8be4ee219b419873db54e54103c91f496d3055111044112c75e23fa11b8": "ef96ef15207789cdc75ed1836934934ad8c02883",
-      "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
       "074ddd7c0d3c02509e4ceb9c08f939178ad3471b9387525c8e08125c15e0a044": "31a137495fe03d502404674fa951a2dda724c0ba",
       "fa44ace4974d3ea140711b5db44232a1ecb6151f3f945ae69961e528bf7f1fd5": "da272af2fb1da8883c539b19c1bda97c5301dc80",
       "d4f4e99f23bd8128855424adcabd288f379d917c1a8f85ffea745646227ffa6d": "82743e58e4df5600c6b1c5a0920abe5a71ffd48c",
@@ -124211,9 +124197,6 @@
       ],
       ".variants/ym2608.zip.0b651920": [
         "0b6519209766ed883e3fca4c61bf866804c89004"
-      ],
-      "cemu/keys.txt": [
-        "da39a3ee5e6b4b0d3255bfef95601890afd80709"
       ],
       "commanderx16/rom.bin": [
         "5fcf5b992b1c67ebac71254a6b579adde9dae09f"

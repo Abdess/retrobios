@@ -4,7 +4,7 @@
   "platform": "romm",
   "display_name": "RomM",
   "version": "1.0",
-  "generated": "2026-08-06T12:30:53Z",
+  "generated": "2026-08-06T17:49:51Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -14,8 +14,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 541,
-  "total_size": 1486548090,
+  "total_files": 542,
+  "total_size": 1486691402,
   "files": [
     {
       "dest": "3do/3do_arcade_saot.bin",
@@ -351,6 +351,13 @@
       "sha1": "e21545723fe8374e91342617604f1b3d703094f1",
       "size": 524288,
       "repo_path": "bios/Commodore/Amiga/amiga-os-310-a1200.rom",
+      "cores": null
+    },
+    {
+      "dest": "doom/prboom.wad",
+      "sha1": "5f4aed208301449c2e9514edfd325fe9dead76fa",
+      "size": 143312,
+      "repo_path": "bios/Id Software/Doom/prboom.wad",
       "cores": null
     },
     {
@@ -3227,9 +3234,9 @@
     },
     {
       "dest": "nds/dsi_firmware.bin",
-      "sha1": "d2a5af338f09c5cbdd5d7628db5b9c075c69b616",
+      "sha1": "93c0598b08192a1f630e5edb2cd9f60d1e3ea7b3",
       "size": 131072,
-      "repo_path": "bios/Nintendo/Nintendo DS/dsi_firmware.bin",
+      "repo_path": "bios/Arcade/Arcade/dsi_firmware.bin",
       "cores": [
         "melonDS"
       ]
