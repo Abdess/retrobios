@@ -4702,6 +4702,184 @@ struct BurnDriver BurnDrvneogeo = {
         self.assertEqual(len(zips), 6, f"Expected 6 ZIPs, got {len(zips)}: {zips}")
         self.assertEqual(len(set(zips)), 6)
 
+    def _make_hash_zip_fixture(self, tmpdir, declare_md5=True):
+        """Platform fixture with one ZIP file, optionally md5-declared."""
+        import hashlib as hl
+
+        plat_dir = os.path.join(tmpdir, "platforms")
+        bios_dir = os.path.join(tmpdir, "bios", "Arcade")
+        out_dir = os.path.join(tmpdir, "dist")
+        os.makedirs(plat_dir)
+        os.makedirs(bios_dir)
+
+        zip_src = os.path.join(bios_dir, "testbios.zip")
+        with zipfile.ZipFile(zip_src, "w", zipfile.ZIP_DEFLATED) as zf:
+            info = zipfile.ZipInfo("rom.bin", date_time=(2020, 6, 15, 12, 0, 0))
+            zf.writestr(info, b"rom_content_bytes")
+        from common import compute_hashes
+
+        h = compute_hashes(zip_src)
+
+        db = {
+            "files": {
+                h["sha1"]: {
+                    "name": "testbios.zip",
+                    "md5": h["md5"],
+                    "sha1": h["sha1"],
+                    "path": zip_src,
+                    "paths": ["Arcade/testbios.zip"],
+                },
+            },
+            "indexes": {
+                "by_md5": {h["md5"]: h["sha1"]},
+                "by_name": {"testbios.zip": [h["sha1"]]},
+                "by_crc32": {},
+                "by_path_suffix": {},
+            },
+        }
+        entry = {"name": "testbios.zip", "destination": "dc/testbios.zip"}
+        if declare_md5:
+            entry["md5"] = h["md5"]
+        config = {
+            "platform": "HashZipTest",
+            "verification_mode": "md5",
+            "base_destination": "bios",
+            "systems": {"arcade-sys": {"files": [entry]}},
+        }
+        with open(os.path.join(plat_dir, "test_hashzip.yml"), "w") as fh:
+            yaml.dump(config, fh)
+        return plat_dir, os.path.join(tmpdir, "bios"), out_dir, db, h, hl
+
+    def test_210_pack_copies_md5_declared_zip_byte_identical(self):
+        """md5-declared ZIPs are copied unchanged, never rebuilt."""
+        import tempfile
+
+        from generate_pack import generate_pack
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            plat_dir, bios_root, out_dir, db, h, hl = self._make_hash_zip_fixture(
+                tmpdir, declare_md5=True
+            )
+            zip_path = generate_pack(
+                "test_hashzip", plat_dir, db, bios_root, out_dir
+            )
+            self.assertIsNotNone(zip_path)
+            with zipfile.ZipFile(zip_path) as zf:
+                data = zf.read("dc/testbios.zip")
+            self.assertEqual(hl.md5(data).hexdigest(), h["md5"])
+
+    def test_211_pack_rebuilds_zip_without_declared_hash(self):
+        """ZIPs without declared hash are rebuilt deterministically."""
+        import io
+        import tempfile
+
+        from generate_pack import generate_pack
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            plat_dir, bios_root, out_dir, db, h, hl = self._make_hash_zip_fixture(
+                tmpdir, declare_md5=False
+            )
+            zip_path = generate_pack(
+                "test_hashzip", plat_dir, db, bios_root, out_dir
+            )
+            self.assertIsNotNone(zip_path)
+            with zipfile.ZipFile(zip_path) as zf:
+                data = zf.read("dc/testbios.zip")
+            # Outer hash differs (1980 timestamps), inner content identical
+            self.assertNotEqual(hl.md5(data).hexdigest(), h["md5"])
+            with zipfile.ZipFile(io.BytesIO(data)) as inner:
+                self.assertEqual(inner.read("rom.bin"), b"rom_content_bytes")
+
+    def test_212_verify_pack_flags_native_md5_mismatch(self):
+        """Pack verification reproduces the native md5 check per member."""
+        import tempfile
+
+        from generate_pack import verify_pack_against_platform
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            plat_dir, bios_root, out_dir, db, h, hl = self._make_hash_zip_fixture(
+                tmpdir, declare_md5=True
+            )
+            os.makedirs(out_dir)
+            bad_pack = os.path.join(out_dir, "HashZipTest_BIOS_Pack.zip")
+            with zipfile.ZipFile(bad_pack, "w") as zf:
+                zf.writestr("dc/testbios.zip", b"wrong bytes entirely")
+            result = verify_pack_against_platform(
+                bad_pack, "test_hashzip", plat_dir, db=None
+            )
+            errors = result[3]
+            self.assertTrue(
+                any("md5" in e for e in errors),
+                f"expected md5 mismatch error, got: {errors}",
+            )
+
+    def test_213_verify_pack_passes_correct_member_hash(self):
+        """Pack verification passes when member bytes match declared md5."""
+        import tempfile
+
+        from generate_pack import verify_pack_against_platform
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            plat_dir, bios_root, out_dir, db, h, hl = self._make_hash_zip_fixture(
+                tmpdir, declare_md5=True
+            )
+            os.makedirs(out_dir)
+            good_pack = os.path.join(out_dir, "HashZipTest_BIOS_Pack.zip")
+            src = os.path.join(bios_root, "Arcade", "testbios.zip")
+            with zipfile.ZipFile(good_pack, "w") as zf:
+                zf.write(src, "dc/testbios.zip")
+            result = verify_pack_against_platform(
+                good_pack, "test_hashzip", plat_dir, db=None
+            )
+            self.assertEqual(result[3], [], f"unexpected errors: {result[3]}")
+
+    def test_214_hash_matches_truncated_and_multi(self):
+        """Declared-hash compare handles truncation, case, multi-values."""
+        from generate_pack import _hash_matches
+
+        full = "85254fbe320ca82a768ec2c26bb08def"
+        self.assertTrue(_hash_matches(full, full))
+        self.assertTrue(_hash_matches(full.upper(), full))
+        self.assertTrue(_hash_matches(full[:29], full))  # Batocera truncated
+        self.assertTrue(_hash_matches(f"deadbeef, {full}", full))
+        self.assertFalse(_hash_matches("0" * 32, full))
+        self.assertFalse(_hash_matches("", full))
+
+    def test_215_check_member_hash_inside_zip(self):
+        """zipped_file entries verify the ROM inside the ZIP, not the ZIP."""
+        import hashlib as hl
+        import tempfile
+
+        from generate_pack import _check_member_hash
+
+        rom = b"inner rom bytes"
+        rom_md5 = hl.md5(rom).hexdigest()
+        with tempfile.TemporaryDirectory() as tmpdir:
+            pack = os.path.join(tmpdir, "pack.zip")
+            import io
+
+            inner_buf = io.BytesIO()
+            with zipfile.ZipFile(inner_buf, "w") as inner:
+                inner.writestr("EPR-123.IC27", rom)
+            with zipfile.ZipFile(pack, "w") as zf:
+                zf.writestr("dc/game.zip", inner_buf.getvalue())
+            with zipfile.ZipFile(pack) as zf:
+                # Case-insensitive inner match (Batocera casefold)
+                ok = _check_member_hash(
+                    zf,
+                    "dc/game.zip",
+                    {"zipped_file": "epr-123.ic27", "md5": rom_md5},
+                    "md5",
+                )
+                self.assertIsNone(ok)
+                bad = _check_member_hash(
+                    zf,
+                    "dc/game.zip",
+                    {"zipped_file": "epr-123.ic27", "md5": "0" * 32},
+                    "md5",
+                )
+                self.assertIsNotNone(bad)
+
 
 if __name__ == "__main__":
     unittest.main()

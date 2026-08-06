@@ -1105,6 +1105,48 @@ def generate_pack(
             return None
         pack_systems = filtered
 
+    # Constrained-entry preference: platforms may declare the same
+    # destination several times (bare in one system, hash-constrained in
+    # another). First-come dedup would let the bare entry pack a wrong
+    # same-named file, so when a hash-constrained sibling resolves to a
+    # matching repo file, it claims the destination instead.
+    preferred_entries: dict[str, int] = {}
+    if source != "truth":
+        dest_entries: dict[str, list[dict]] = {}
+        for sys_id, system in sorted(pack_systems.items()):
+            for file_entry in system.get("files", []):
+                if required_only and file_entry.get("required") is False:
+                    continue
+                dest = _sanitize_path(
+                    file_entry.get("destination", file_entry.get("name", ""))
+                )
+                if not dest:
+                    continue
+                full = f"{base_dest}/{dest}" if base_dest else dest
+                dest_entries.setdefault(full, []).append(file_entry)
+        for full, entries in dest_entries.items():
+            if len(entries) < 2:
+                continue
+            constrained = [
+                fe
+                for fe in entries
+                if fe.get("md5") or fe.get("sha1") or fe.get("zipped_file")
+            ]
+            if not constrained:
+                continue
+            best = None
+            for fe in constrained:
+                _lp, _st = resolve_file(
+                    fe, db, bios_dir, zip_contents, data_dir_registry=data_registry
+                )
+                if _lp and _st == "md5_exact":
+                    best = fe
+                    break
+                if best is None and _lp and _st in ("exact", "zip_exact"):
+                    best = fe
+            if best is not None:
+                preferred_entries[full] = id(best)
+
     with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:
       if source != "truth":
         for sys_id, system in sorted(pack_systems.items()):
@@ -1130,6 +1172,10 @@ def generate_pack(
                 already_packed = dedup_key in seen_destinations or (
                     case_insensitive and dedup_key.lower() in seen_lower
                 )
+
+                preferred = preferred_entries.get(dedup_key)
+                if preferred is not None and id(file_entry) != preferred:
+                    continue
 
                 if _has_path_conflict(full_dest, seen_destinations, seen_parents):
                     continue
@@ -1348,7 +1394,7 @@ def generate_pack(
                 if extract and local_path.endswith(".zip"):
                     _extract_zip_to_archive(local_path, flat_dest, zf)
                 elif local_path.endswith(".zip"):
-                    _normalize_zip_for_pack(local_path, flat_dest, zf)
+                    _add_zip_to_pack(local_path, flat_dest, zf, file_entry)
                 else:
                     zf.write(local_path, flat_dest)
                 total_files += 1
@@ -1438,7 +1484,7 @@ def generate_pack(
 
           flat_dest = _flat(full_dest, base_dest, flatten)
           if local_path.endswith(".zip"):
-              _normalize_zip_for_pack(local_path, flat_dest, zf)
+              _add_zip_to_pack(local_path, flat_dest, zf, fe)
           else:
               zf.write(local_path, flat_dest)
           seen_destinations.add(full_dest)
@@ -1553,6 +1599,35 @@ def _extract_zip_to_archive(
             data = src.read(info.filename)
             target_path = f"{dest_prefix}/{clean_name}" if dest_prefix else clean_name
             target_zf.writestr(target_path, data)
+
+
+def _add_zip_to_pack(
+    source_zip: str,
+    dest_path: str,
+    target_zf: zipfile.ZipFile,
+    file_entry: dict | None = None,
+):
+    """Write a source ZIP into the pack.
+
+    A declared outer hash (md5/sha1/crc32) means the platform or profile
+    verifies the ZIP bytes themselves (Batocera md5sum, System.dat), so
+    the resolved file is copied unchanged: a rebuild would change the
+    outer hash and fail the native check. Entries with zipped_file
+    declare the hash of a ROM inside the ZIP (checkInsideZip), which a
+    content-preserving rebuild does not affect.
+    """
+    if (
+        file_entry
+        and not file_entry.get("zipped_file")
+        and (
+            file_entry.get("md5")
+            or file_entry.get("sha1")
+            or file_entry.get("crc32")
+        )
+    ):
+        target_zf.write(source_zip, dest_path)
+        return
+    _normalize_zip_for_pack(source_zip, dest_path, target_zf)
 
 
 def _normalize_zip_for_pack(
@@ -1755,7 +1830,7 @@ def generate_emulator_pack(
                 )
                 if local_path and status not in ("not_found",):
                     if local_path.endswith(".zip"):
-                        _normalize_zip_for_pack(local_path, archive_dest, zf)
+                        _add_zip_to_pack(local_path, archive_dest, zf, archive_entry)
                     else:
                         zf.write(local_path, archive_dest)
                     seen_destinations.add(archive_dest)
@@ -1837,7 +1912,7 @@ def generate_emulator_pack(
                     seen_hashes.add(dedup_key_hash)
 
                 if local_path.endswith(".zip"):
-                    _normalize_zip_for_pack(local_path, dest, zf)
+                    _add_zip_to_pack(local_path, dest, zf, fe)
                 else:
                     zf.write(local_path, dest)
                 seen_destinations.add(dest)
@@ -3118,8 +3193,14 @@ def generate_manifest(
         repo_path = _get_repo_path(sha1, db) if sha1 else ""
         source_emu = fe.get("source_emulator", "")
 
+        # Manifest dests are relative to base_destination; keep the inferred
+        # extras prefix when it is an internal layout dir (RetroDECK bios/).
+        manifest_dest = full_dest
+        if base_dest and manifest_dest.startswith(f"{base_dest}/"):
+            manifest_dest = manifest_dest[len(base_dest) + 1:]
+
         entry = {
-            "dest": dest,
+            "dest": manifest_dest,
             "sha1": sha1,
             "size": file_size,
             "repo_path": repo_path,
@@ -3413,6 +3494,133 @@ def generate_sha256sums(output_dir: str) -> str | None:
     return sums_path
 
 
+def _hash_matches(declared: str, actual: str) -> bool:
+    """Compare a declared hash value against an actual hex digest.
+
+    Handles comma-separated multi-hash lists and uppercase (Recalbox)
+    and truncated MD5s (Batocera 29-char): a declared value shorter
+    than the digest matches by prefix.
+    """
+    actual = actual.lower()
+    for cand in declared.split(","):
+        cand = cand.strip().lower()
+        if not cand:
+            continue
+        if len(cand) < len(actual):
+            if actual.startswith(cand):
+                return True
+        elif actual == cand:
+            return True
+    return False
+
+
+def _check_member_hash(
+    zf: zipfile.ZipFile, member: str, file_entry: dict, mode: str
+) -> str | None:
+    """Verify a pack member against its platform-declared hash.
+
+    Reproduces the platform's native check inside the pack: md5/sha1 of
+    the member bytes, or checkInsideZip when zipped_file is set
+    (Batocera hashes a ROM inside the ZIP, matched case-insensitively).
+    Returns an error string, or None when the member passes.
+    """
+    declared = str(file_entry.get(mode) or "").strip()
+    if not declared:
+        return None
+
+    zipped_file = file_entry.get("zipped_file")
+    if zipped_file:
+        import io
+
+        try:
+            with zipfile.ZipFile(io.BytesIO(zf.read(member))) as inner:
+                want = zipped_file.casefold()
+                target = next(
+                    (n for n in inner.namelist() if n.casefold() == want), None
+                )
+                if target is None:
+                    return f"{member}: {zipped_file} not found inside ZIP"
+                actual = hashlib.md5(inner.read(target)).hexdigest()
+        except zipfile.BadZipFile:
+            return f"{member}: not a valid ZIP"
+        if not _hash_matches(declared, actual):
+            return (
+                f"{member}: {zipped_file} inside-zip md5 {actual} "
+                f"!= declared {declared}"
+            )
+        return None
+
+    h = hashlib.md5() if mode == "md5" else hashlib.sha1()
+    with zf.open(member) as f:
+        for chunk in iter(lambda: f.read(65536), b""):
+            h.update(chunk)
+    actual = h.hexdigest()
+    if _hash_matches(declared, actual):
+        return None
+
+    # Recalbox Md5Composite: MD5 over sorted inner contents of a ZIP,
+    # independent of compression and metadata (Zip::Md5Composite()).
+    if mode == "md5" and member.endswith(".zip"):
+        import io
+
+        try:
+            with zipfile.ZipFile(io.BytesIO(zf.read(member))) as inner:
+                names = sorted(n for n in inner.namelist() if not n.endswith("/"))
+                ch = hashlib.md5()
+                for n in names:
+                    ch.update(inner.read(n))
+            if _hash_matches(declared, ch.hexdigest()):
+                return None
+        except (zipfile.BadZipFile, OSError):
+            pass
+
+    return f"{member}: {mode} {actual} != declared {declared}"
+
+
+def _repo_satisfies_declaration(
+    entries: list[dict], db: dict, mode: str
+) -> bool:
+    """Check whether any repo file matches one of the declared hashes.
+
+    Used to separate pack divergence (a matching file exists but was not
+    packed) from data coverage gaps (no repo file matches the upstream
+    declaration): only the former is a pack generation error.
+    """
+    from common import md5_composite
+
+    files_db = db.get("files", {})
+    by_md5 = db.get("indexes", {}).get("by_md5", {})
+    by_name = db.get("indexes", {}).get("by_name", {})
+
+    for fe in entries:
+        declared = str(fe.get(mode) or "").strip()
+        if not declared:
+            continue
+        hashes = [h.strip().lower() for h in declared.split(",") if h.strip()]
+        for h in hashes:
+            if mode == "sha1":
+                entry = files_db.get(h)
+            else:
+                entry = files_db.get(by_md5.get(h, ""))
+            if entry and os.path.exists(entry.get("path", "")):
+                return True
+        if mode == "md5":
+            hash_set = set(hashes)
+            for cand_sha in by_name.get(fe.get("name", ""), []):
+                entry = files_db.get(cand_sha)
+                if not entry:
+                    continue
+                path = entry.get("path", "")
+                if not path.endswith(".zip") or not os.path.exists(path):
+                    continue
+                try:
+                    if md5_composite(path).lower() in hash_set:
+                        return True
+                except (zipfile.BadZipFile, OSError):
+                    continue
+    return False
+
+
 def verify_pack_against_platform(
     zip_path: str,
     platform_name: str,
@@ -3478,9 +3686,11 @@ def verify_pack_against_platform(
                 ):
                     errors.append(f"zero-byte: {info.filename}")
 
-        # 1. Baseline file presence
+        # 1. Baseline file presence + native hash check
+        verification_mode = config.get("verification_mode", "existence")
         baseline_checked = 0
         baseline_present = 0
+        decl_by_member: dict[str, list[dict]] = {}
         for sys_id, system in config.get("systems", {}).items():
             for fe in system.get("files", []):
                 dest = fe.get("destination", fe.get("name", ""))
@@ -3489,10 +3699,45 @@ def verify_pack_against_platform(
                 expected = f"{base_dest}/{dest}" if base_dest and not is_flat else dest
                 baseline_checked += 1
 
-                if expected in zip_set or expected.lower() in zip_lower:
-                    baseline_present += 1
+                if expected in zip_set:
+                    member = expected
+                elif expected.lower() in zip_lower:
+                    member = zip_lower[expected.lower()]
                 else:
                     errors.append(f"baseline missing: {expected}")
+                    continue
+                baseline_present += 1
+                decl_by_member.setdefault(member, []).append(fe)
+
+        # Reproduce the platform's native hash check on pack bytes.
+        # A destination declared by several entries passes when the packed
+        # member satisfies any of them. A failure only counts as a pack
+        # error when the repo holds a file matching a declaration: without
+        # one, the pack ships its best effort and the gap is a data issue
+        # reported by verify.py, not a generation bug.
+        if verification_mode in ("md5", "sha1"):
+            for member, decl_entries in decl_by_member.items():
+                checkable = [
+                    fe
+                    for fe in decl_entries
+                    if str(fe.get(verification_mode) or "").strip()
+                ]
+                if not checkable:
+                    continue
+                member_errors = []
+                satisfied = False
+                for fe in checkable:
+                    err = _check_member_hash(zf, member, fe, verification_mode)
+                    if err is None:
+                        satisfied = True
+                        break
+                    member_errors.append(err)
+                if satisfied:
+                    continue
+                if db is None or _repo_satisfies_declaration(
+                    checkable, db, verification_mode
+                ):
+                    errors.append(member_errors[0])
 
         # 2. Core extras presence (files from emulator profiles, in repo)
         #    Mirror the pack builder's skip logic: only count files that
