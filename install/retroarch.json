@@ -4,7 +4,7 @@
   "platform": "retroarch",
   "display_name": "RetroArch",
   "version": "1.0",
-  "generated": "2026-08-05T17:07:45Z",
+  "generated": "2026-08-06T07:03:09Z",
   "base_destination": "system",
   "detect": [
     {
@@ -1499,9 +1499,9 @@
     },
     {
       "dest": "dsi_nand.bin",
-      "sha1": "9a7b8225680df6c80e1af34150ab1ff64c607af3",
+      "sha1": "b48f44194fe918aaaec5298861479512b581d661",
       "size": 251658304,
-      "repo_path": "",
+      "repo_path": "bios/Nintendo/DS/dsi_nand.bin",
       "cores": null,
       "storage": "release",
       "release_asset": "dsi_nand.bin"

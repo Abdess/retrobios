@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-05T15:59:09Z",
-  "total_files": 7303,
-  "total_size": 9190496321,
+  "generated_at": "2026-08-06T07:01:03Z",
+  "total_files": 7304,
+  "total_size": 9190512705,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -37232,6 +37232,16 @@
       "sha256": "fd2547724b505f487e6dcb29ec2ecff3af35a841a77ab2e85fd87350abd36570",
       "crc32": "81977335",
       "adler32": "8483f3a3"
+    },
+    "aa98a2ad32b86106340665d1222d7d973a1361c7": {
+      "path": "bios/Nintendo/Game Boy Advance/gba_bios_jdebug.bin",
+      "name": "gba_bios_jdebug.bin",
+      "size": 16384,
+      "sha1": "aa98a2ad32b86106340665d1222d7d973a1361c7",
+      "md5": "e60e599135009129b288988a1cba91df",
+      "sha256": "9758dbf0c4c5ffefa2a710405f4df7ddc7de0399b0975e85e12fb43d8843b63d",
+      "crc32": "15e1f676",
+      "adler32": "f6361162"
     },
     "598c0b2c6c5d15bbba218773574c9e7856d141f3": {
       "path": "bios/Nintendo/Game Boy Advance/open_gba_bios.bin",
@@ -76759,6 +76769,7 @@
       "6344d08bbbcbedbbaef9ddbdf7632c74": "1db57a1e8b6e4096f811587f9eab0c6675fd9755",
       "df79723ee8093b0580496f3df436e4c4": "9817bdae9335a3accb584f77c165dc5726555d1f",
       "a860e8c0b6d573d191e4ec7db1b1e4f6": "300c20df6731a33952ded8c436f7f186d25d3492",
+      "e60e599135009129b288988a1cba91df": "aa98a2ad32b86106340665d1222d7d973a1361c7",
       "1876f71b0d8c65eef3454547896ffb11": "598c0b2c6c5d15bbba218773574c9e7856d141f3",
       "62cfda90d22405cdff59700c388a57f6": "113903775a9d34b798c2f8076672da6626815a91",
       "e6cefb5f7d352fab6681989763917c73": "fa5287e24b0fa533b3b5ef2b28a81245346c1a0f",
@@ -90934,6 +90945,9 @@
       ],
       "GBA_bios.rom": [
         "300c20df6731a33952ded8c436f7f186d25d3492"
+      ],
+      "gba_bios_jdebug.bin": [
+        "aa98a2ad32b86106340665d1222d7d973a1361c7"
       ],
       "open_gba_bios.bin": [
         "598c0b2c6c5d15bbba218773574c9e7856d141f3"
@@ -108011,6 +108025,7 @@
       "07a278d0": "1db57a1e8b6e4096f811587f9eab0c6675fd9755",
       "08f6fc29": "9817bdae9335a3accb584f77c165dc5726555d1f",
       "81977335": "300c20df6731a33952ded8c436f7f186d25d3492",
+      "15e1f676": "aa98a2ad32b86106340665d1222d7d973a1361c7",
       "9ea7e05e": "598c0b2c6c5d15bbba218773574c9e7856d141f3",
       "8113b4d8": "113903775a9d34b798c2f8076672da6626815a91",
       "ffd6b0f1": "fa5287e24b0fa533b3b5ef2b28a81245346c1a0f",
@@ -115316,6 +115331,7 @@
       "6f64da4cecd7e54e2f928eb3e3ba7810a7a567d0d247cc71737d1771e073a916": "1db57a1e8b6e4096f811587f9eab0c6675fd9755",
       "12eb4b96f8c2c19cd51c209af1f0a5aa19e01f886114ae848258a592f408ef4e": "9817bdae9335a3accb584f77c165dc5726555d1f",
       "fd2547724b505f487e6dcb29ec2ecff3af35a841a77ab2e85fd87350abd36570": "300c20df6731a33952ded8c436f7f186d25d3492",
+      "9758dbf0c4c5ffefa2a710405f4df7ddc7de0399b0975e85e12fb43d8843b63d": "aa98a2ad32b86106340665d1222d7d973a1361c7",
       "661a9afb93624f2c5e77d07dab137bd8d23cff79e8639c62fe621b49bb064749": "598c0b2c6c5d15bbba218773574c9e7856d141f3",
       "f767b8e7e510a255f81328c89dba6e0c996b370e1bc86aebb8584a7da47a5bba": "113903775a9d34b798c2f8076672da6626815a91",
       "fe3cceb79930c4cb6c6f62f742c2562fd4c96b827584ef8ea89d49b387bd6860": "fa5287e24b0fa533b3b5ef2b28a81245346c1a0f",
