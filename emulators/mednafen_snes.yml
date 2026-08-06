@@ -6,7 +6,7 @@ upstream: "https://mednafen.github.io/"
 profiled_date: "2026-03-24"
 core_version: "v0.9.26"
 display_name: "Nintendo - SNES / SFC (Beetle bsnes)"
-cores: [mednafen_snes]
+cores: [mednafen_snes, beetle_bsnes, beetle-bsnes]
 systems: [nintendo-snes]
 
 # Frozen at Mednafen's SNES module, itself based on bsnes v059.
