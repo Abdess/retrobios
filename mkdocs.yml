@@ -61,6 +61,7 @@ nav:
   - BizHawk: platforms/bizhawk.md
   - EmuDeck: platforms/emudeck.md
   - Lakka: platforms/lakka.md
+  - ROCKNIX: platforms/rocknix.md
   - Recalbox: platforms/recalbox.md
   - RetroArch: platforms/retroarch.md
   - RetroBat: platforms/retrobat.md
