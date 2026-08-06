@@ -39,6 +39,16 @@ RELEASE_URL = (
 )
 MAX_RETRIES = 3
 
+# Fallback BIOS destination per platform when --platform is forced
+# but auto-detection finds nothing on the machine.
+DEFAULT_DESTS = {
+    "batocera": Path("/userdata/bios"),
+    "recalbox": Path("/recalbox/share/bios"),
+    "lakka": Path("/storage/system"),
+    "retrodeck": Path.home() / "retrodeck",
+    "emudeck": Path.home() / "Emulation" / "bios",
+}
+
 
 def detect_os() -> str:
     """Return normalized OS identifier."""
@@ -98,8 +108,46 @@ def _parse_retroarch_system_dir(cfg_path: Path) -> Path | None:
     return None
 
 
+def _shell_unquote(value: str) -> str:
+    """Resolve a shell right-hand side into its effective string value.
+
+    Handles concatenated quoted/unquoted segments the way bash does
+    (e.g. "/run/media/deck/EmuSD"/Emulation), expands variables in
+    double-quoted and unquoted segments, and stops at unquoted
+    whitespace or a comment.
+    """
+    parts: list[str] = []
+    i = 0
+    n = len(value)
+    while i < n:
+        c = value[i]
+        if c == '"':
+            end = value.find('"', i + 1)
+            if end == -1:
+                parts.append(os.path.expandvars(value[i + 1:]))
+                break
+            parts.append(os.path.expandvars(value[i + 1:end]))
+            i = end + 1
+        elif c == "'":
+            end = value.find("'", i + 1)
+            if end == -1:
+                parts.append(value[i + 1:])
+                break
+            parts.append(value[i + 1:end])
+            i = end + 1
+        elif c.isspace() or c == "#":
+            break
+        else:
+            end = i
+            while end < n and value[end] not in "\"'#" and not value[end].isspace():
+                end += 1
+            parts.append(os.path.expandvars(value[i:end]))
+            i = end
+    return os.path.expanduser("".join(parts))
+
+
 def _parse_bash_var(path: Path, key: str) -> str | None:
-    """Extract value of key= from a bash/shell file."""
+    """Extract the effective value of key= from a bash/shell file."""
     if not path.exists():
         return None
     try:
@@ -107,10 +155,23 @@ def _parse_bash_var(path: Path, key: str) -> str | None:
             line = line.strip()
             if line.startswith(f"{key}="):
                 _, _, value = line.partition("=")
-                return value.strip('"').strip("'")
+                return _shell_unquote(value)
     except OSError:
         pass
     return None
+
+
+def _parse_json_path(path: Path, *keys: str) -> str | None:
+    """Extract a nested string value from a JSON file."""
+    if not path.exists():
+        return None
+    try:
+        data = json.loads(path.read_text(encoding="utf-8", errors="replace"))
+        for key in keys:
+            data = data[key]
+        return data if isinstance(data, str) and data else None
+    except (OSError, json.JSONDecodeError, KeyError, TypeError):
+        return None
 
 
 def _parse_ps1_var(path: Path, key: str) -> str | None:
@@ -152,7 +213,10 @@ def _detect_embedded() -> list[tuple[str, Path]]:
         found.append(("batocera", Path("/userdata/bios")))
         return found
 
-    if Path("/usr/bin/recalbox-settings").exists():
+    if (
+        Path("/recalbox/recalbox.version").exists()
+        or Path("/usr/bin/recalbox-settings").exists()
+    ):
         found.append(("recalbox", Path("/recalbox/share/bios")))
         return found
 
@@ -187,14 +251,17 @@ def detect_platforms(os_type: str) -> list[tuple[str, Path]]:
                 bios_dir = Path(emu_path) / "bios"
                 found.append(("emudeck", bios_dir))
 
-        # RetroDECK
-        retrodeck_cfg = home / ".var" / "app" / "net.retrodeck.retrodeck" / "config" / "retrodeck" / "retrodeck.cfg"
-        if retrodeck_cfg.exists():
-            bios_path = _parse_bash_var(retrodeck_cfg, "rdhome")
-            if bios_path:
-                found.append(("retrodeck", Path(bios_path)))
-            else:
-                found.append(("retrodeck", home / "retrodeck"))
+        # RetroDECK: retrodeck.json since the cfg-to-json migration, which
+        # renames the old retrodeck.cfg to retrodeck.bak (global.sh:149-153)
+        retrodeck_conf_dir = home / ".var" / "app" / "net.retrodeck.retrodeck" / "config" / "retrodeck"
+        retrodeck_json = retrodeck_conf_dir / "retrodeck.json"
+        retrodeck_cfg = retrodeck_conf_dir / "retrodeck.cfg"
+        if retrodeck_json.exists():
+            rd_home = _parse_json_path(retrodeck_json, "paths", "rd_home_path")
+            found.append(("retrodeck", Path(rd_home) if rd_home else home / "retrodeck"))
+        elif retrodeck_cfg.exists():
+            rd_home = _parse_bash_var(retrodeck_cfg, "rdhome")
+            found.append(("retrodeck", Path(rd_home) if rd_home else home / "retrodeck"))
 
         # RetroArch Flatpak
         flatpak_cfg = home / ".var" / "app" / "org.libretro.RetroArch" / "config" / "retroarch" / "retroarch.cfg"
@@ -572,8 +639,12 @@ def main() -> None:
         if matched:
             platforms = matched
         else:
-            print(f"  Platform '{args.platform}' not detected, using default path.")
-            platforms = [(args.platform, Path.home() / "bios")]
+            default_dest = DEFAULT_DESTS.get(args.platform, Path.home() / "bios")
+            print(
+                f"  Platform '{args.platform}' not detected, "
+                f"using default path: {default_dest}"
+            )
+            platforms = [(args.platform, default_dest)]
     elif args.dest:
         print(f"  Using destination: {args.dest}")
         platforms = [("retroarch", args.dest)]
