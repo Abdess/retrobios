@@ -96,6 +96,21 @@ jobs:
         if: steps.rate.outputs.skip != 'true'
         run: python scripts/generate_pack.py --all --output-dir dist/
 
+      - name: Split oversized packs
+        if: steps.rate.outputs.skip != 'true'
+        run: |
+          # GitHub releases cap assets at 2 GB. Use the .zip.001 volume
+          # convention: 7-Zip and PeaZip open the .001 part directly,
+          # unlike .partNN names which they reject as corrupt archives.
+          for f in dist/*.zip; do
+            size=$(stat -c%s "$f")
+            if [ "$size" -gt 2000000000 ]; then
+              split --bytes=1900M --numeric-suffixes=1 --suffix-length=3 "$f" "$f."
+              rm "$f"
+              echo "Split $(basename "$f") into $(ls "$f".* | wc -l) parts"
+            fi
+          done
+
       - name: Release
         if: steps.rate.outputs.skip != 'true'
         run: |
@@ -107,9 +122,9 @@ jobs:
           CHANGES=$(git log --oneline -15 --no-merges -- bios/ platforms/ | sed 's/^/- /')
           TOTAL=$(python3 -c "import json; print(json.load(open('database.json'))['total_files'])")
           SIZE=$(python3 -c "import json; print(f'{json.load(open(\"database.json\"))[\"total_size\"]/1024/1024:.0f}')")
-          PACKS=$(ls dist/*.zip 2>/dev/null | while read f; do echo "- **$(basename $f)** ($(du -m "$f" | cut -f1) MB)"; done)
+          PACKS=$(ls dist/*.zip dist/*.zip.001 2>/dev/null | while read f; do echo "- **$(basename $f)** ($(du -m "$f" | cut -f1) MB)"; done)
 
-          gh release create "$TAG" dist/*.zip \
+          gh release create "$TAG" dist/*.zip* \
             --repo "${{ github.repository }}" \
             --title "BIOS Pack $TAG" \
             --notes "${TOTAL} files, ${SIZE} MB, verified checksums.
@@ -119,6 +134,12 @@ jobs:
 
           ### Install
           Download the pack matching your frontend, extract to the BIOS directory.
+
+          Packs over 2 GB are split into numbered volumes (.zip.001, .zip.002).
+          Download every part, then either open the .001 file directly with
+          7-Zip / PeaZip, or join the parts first:
+          - Linux/macOS: \`cat PackName.zip.0* > PackName.zip\`
+          - Windows (cmd): \`copy /b PackName.zip.001+PackName.zip.002 PackName.zip\`
 
           | Platform | Pack | Path |
           |----------|------|------|

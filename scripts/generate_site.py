@@ -2175,6 +2175,13 @@ Pick the pack that matches the setup from the [releases page]({rel}),
 download it, and extract the files into the BIOS folder listed below.
 After extraction, launch a game. If it needed BIOS, it will find it.
 
+Packs over 2 GB are split into numbered volumes (`.zip.001`, `.zip.002`).
+Download every part, then open the `.001` file with 7-Zip or PeaZip, which
+extract the whole archive directly. To join the parts manually instead:
+
+- Linux/macOS: `cat PackName.zip.0* > PackName.zip`
+- Windows (cmd): `copy /b PackName.zip.001+PackName.zip.002 PackName.zip`
+
 ### Steam Deck
 
 | Setup | What it is | Pack | Extract to |
