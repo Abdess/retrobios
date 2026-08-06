@@ -1,0 +1,1 @@
+-installer le .zip du firmware via l'application ryujinx -->tools-->install firmware-->install a firmware from XCI or ZIP et selectionner le .zip du firmware

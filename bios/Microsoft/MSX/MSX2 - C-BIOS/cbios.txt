@@ -1,0 +1,199 @@
+$Id: cbios.txt 555 2009-01-04 16:00:07Z mthuurne $
+
+C-BIOS 0.23
+===========
+
+This software is a substitute BIOS which is can be used for running MSX
+emulators. It currently supports only execution of cartridge image ("ROMs").
+Before you use it, you should read and accept the license (see below).
+
+On the C-BIOS web site, you can download newer versions, download the source
+code, and report bugs.
+
+http://cbios.sourceforge.net/
+
+
+License
+-------
+
+Copyright (c) 2002-2005 BouKiCHi.  All rights reserved.
+Copyright (c) 2003 Reikan.  All rights reserved.
+Copyright (c) 2004-2006,2008 Maarten ter Huurne.  All rights reserved.
+Copyright (c) 2004-2006,2008 Albert Beevendorp.  All rights reserved.
+Copyright (c) 2004-2005 Patrick van Arkel.  All rights reserved.
+Copyright (c) 2004 Manuel Bilderbeek.  All rights reserved.
+Copyright (c) 2004-2006 Joost Yervante Damad.  All rights reserved.
+Copyright (c) 2004-2006 Jussi Pitkänen.  All rights reserved.
+Copyright (c) 2004-2007 Eric Boon.  All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+1. Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+History
+-------
+
+ver 0.01  Initial
+ver 0.02  2002-08-15(JST)
+          * Added original font and drawing screen.
+          * Added dump-mode.
+          * Changed recognition method of cartridges
+           to recognize cartridges taking priority.
+ver 0.03  2002-08-19(JST)
+          * Based on a suggestion from Ms.Okei,
+           wrote 20h of BIOS(compare HL and DE).
+           In the result, shooting game of a certain company became runnable
+           more correctly.
+           Thank Ms.Okei!!
+ver 0.04  2002-08-20(JST)
+          * Added initialize of FCC2h-FCC4h.
+          * Added function of GTSTCK and GTTRIG temporarily.
+          * Divided msxb.bin to halfs.
+           doing combining/copying with setb.bat now.
+ver 0.05  2002-08-27(JST)
+          * Added INITGRP(only screen2), CHGMOD(graphic mode change routine),
+           a routine calls H.STKE.
+          * Rewrite memory recognition routine.
+          * Some bug fixes.
+          * Added sound test function.
+ver 0.06  2002-09-01(JST)
+          * Fixed around of color.
+ver 0.07  2002-09-09(JST)
+          * Added some sorts of keyboard routines.
+          * Added joystich function to GTSTCK and GTTRIG.
+ver 0.08  2002-09-12(JST)
+          * Restructured memory initialize routine.
+          * Added error display routine.
+          * Fixed routine of finding kinds of cartridges.
+          * Fixed using method of EXPTBL.
+          * Added initialize of from RG8SAV to RG23SA.
+          * Now return within disabled interrupt from ENASLT routine.
+ver 0.09  2002-09-19(JST)
+          * Made the rest half of font.
+          * Improved key input routine.
+          * Added CHPUT. With it, rewrote display routine.
+          * Fixed init_grp.
+          * Changed filenames to CBIOS.ROM, CBIOS_SUB.ROM.
+ver 0.10  2002-09-20(JST)
+          * Fixed indent.
+          * and so on...
+ver 0.10a 2002-09-22(JST)
+          * Fixed license.
+          * Added support of ROMs in page3.
+ver 0.11  2002-09-22(JST)
+          * Small fix in init_sc5.
+ver 0.12beta
+          2002-09-25(JST)
+          * Added test routine for disk access. need DISK.ROM.
+          * Added init_sc7.
+          * Improved ENASLT. now finding cartridge uses ENASLT.
+          * Improved RAM detection.
+ver 0.12  2002-09-27(JST)
+          * Changed finding cartridge again.
+          * Changed screen mode of cartridge running time.
+          * Fixed keyboard routine.
+          * Fixed stick routine against to interrupt.
+ver 0.13  2002-10-02(JST)
+          * Based on info from Mr.Maarten (a member of openMSX developers),
+           fixed around of SCREEN 5.
+           For detail, switching line numbers,
+           temporary treatment for a bug of reading from VDP status register,
+           and so on.
+ver 0.14  2002-10-10(JST)
+          * Rewrote comments in source within Japanese.
+ver 0.15  2003-02-26(JST)
+          * Rewrote some of comments back to English again.
+          * Fixed non-assemblable condition becauseof lack of font file.
+          * Changed filename, some of label name, strings and so on.
+ver 0.16  2003-04-16(JST)
+          * Separated sound test from source. (Disabled)
+ver 0.16a 2003-06-01(JST)
+          * CHGMOD: When screen0/1, now load font to VRAM.
+          * CHPUT:  Now support also screen1 not only screen0.
+ver 0.16b 2003-08-10(JST)
+          * Added entry: INITXT, INIT32.
+           These were exist only as internal routine of CHGMOD.
+          * INITXT, INIT32: Fixed screen clear failure.
+          * CHPUT: Fixed scroll failure.
+ver 0.17  2003-08-10(JST)
+          * Changed LICENSE.
+           New LICENSE will be suitable in various situations.
+           e.g. use as a firmware for hand-made hardware.
+ver 0.18  2004-12-18(CET)
+          * First release since moving to SourceForge.
+          * Much improved support for MSX2 games.
+          * Graphical boot logo.
+          * Included machine config files for several MSX emulators.
+          * Various bug fixes.
+ver 0.19  2004-12-24(CET)
+          * Added support for SCREEN4 and SCREEN8.
+          * Added support for clock chip.
+          * Added support for palette. This fixes a lot of wrong colours.
+          * Stubbed many calls: non-implemented calls print their name on the
+            openMSX debugdevice (if present).
+          * Various bug fixes.
+ver 0.20  2005-02-09(CET)
+          * Added an MSX2+ configuration, which includes V9958 and MSX MUSIC.
+          * Separate main ROMs for MSX1/MSX2/MSX2+.
+          * Implemented several MSX2 specific routines, including BLT*.
+          * Display is disabled when switching to a different screen mode.
+          * Improved CHPUT a lot; implemented control and escape codes.
+          * Rewrote key buffering; fixes bug of keys being repeated.
+          * New boot logo, even cooler than the previous one.
+          * New font, placed at a fixed address so all games can find it.
+          * Started work on a disk ROM, but it is not functional yet, so it
+            is not enabled in the configurations.
+          * Stubbed all non-implemented calls.
+          * Various bug fixes.
+ver 0.21  2005-06-07(CET)
+          * Fixed RuMSX configuration files, thanks to Rudolf Lechleitner.
+          * Rewrote ROM search code; now all ROMs are recognized.
+            Also a clear error message is printed for BASIC ROMs.
+          * New boot logo for MSX2 and MSX2+.
+          * Changed boot sequence:
+            Show logo, switch to SCREEN 1 and search for ROMs.
+          * Improved video code; fixes several games.
+          * Various bug fixes.
+ver 0.22  2008-12-27(CET)
+          * Use separate logo ROM to save space in the main ROM.
+          * Set lower bits of PSG reg 15 before reading joystick trigger status.
+          * Improved RAM search.
+          * Many new routines implemented and existing implementations made
+            more complete, especially character I/O and bitmap graphics.
+          * Added lots of documentation to system variables.
+          * Added support for GNU assembler.
+          * Various bug fixes.
+ver 0.23  2009-01-04(CET)
+          * Updated blueMSX configuration files, thanks to Benoît Delvaux.
+          * Fixed version reported by MSX1 logo ROM.
+          * Fixed several video routines so they work on MSX1 VDPs (TMS99xx).
+          * A couple of other bug fixes.
+
+Special Thanks
+--------------
+
+People uploading MSX information to the internet.
+People developing any kind of emulators.
+All users.
+
+Font edit tool:
+ Gameboy Tile Designer version 2.2
+ Copyright H. Mulder 1999
+
