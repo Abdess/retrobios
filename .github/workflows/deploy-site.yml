@@ -21,8 +21,11 @@ permissions:
   id-token: write
 
 concurrency:
-  group: deploy-site
-  cancel-in-progress: true
+  # Pages deployments must run to completion: cancelling one mid-flight
+  # leaves the deployment stuck and makes the next runs time out waiting
+  # on it. Queued runs collapse to the latest instead.
+  group: pages
+  cancel-in-progress: false
 
 jobs:
   build:
