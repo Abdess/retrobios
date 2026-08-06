@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-06T17:09:00Z",
-  "total_files": 7628,
-  "total_size": 9842216604,
+  "generated_at": "2026-08-06T17:28:04Z",
+  "total_files": 7629,
+  "total_size": 10093874908,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -39262,6 +39262,16 @@
       "sha256": "ebe16830b7faaf1cf1679d0d614f77a8fff0415972a3b4fba433a6cfc67897a0",
       "crc32": "0a439597",
       "adler32": "ac11629c"
+    },
+    "2b972cec368e83a2699e6ab38165638b1bc1302c": {
+      "path": "bios/Nintendo/DS/.variants/dsi_nand.bin.8b79a73c",
+      "name": "dsi_nand.bin",
+      "size": 251658304,
+      "sha1": "2b972cec368e83a2699e6ab38165638b1bc1302c",
+      "md5": "d71edf897ddd06bf335feeb68edeb272",
+      "sha256": "eb8960711bb99c11d1c92de195c29c8e1bf927e8e1a5d134155fd69a9a11134e",
+      "crc32": "8b79a73c",
+      "adler32": "b18d75e0"
     },
     "3ab9b6fc56bc5aa95b021c3b91d2e4d3f47104af": {
       "path": "bios/Nintendo/DS/DSi_Firmware.bin",
@@ -80212,6 +80222,7 @@
       "37c36e4286d36892a9fc70eafe4104be": "3c5b93ca231550c68693a14f03cea8d5dbd1be9e",
       "8d3d9f294b6e174bc7b1d2fd1c727530": "bf861922dcb78c316360e3e742f4f70ff63c9bc3",
       "93dbb42c5b3d7a2109b4d27105c9e3aa": "b61d72863932b3918aec5a2262beaffd74b69770",
+      "d71edf897ddd06bf335feeb68edeb272": "2b972cec368e83a2699e6ab38165638b1bc1302c",
       "5d0eb142e50ff5002cab221c99292f28": "3ab9b6fc56bc5aa95b021c3b91d2e4d3f47104af",
       "dea75484409757cec264e27bc5a4d802": "7d006f8943171a4d50ae89bf2fca12b764d27e8b",
       "aafcdf3a8cfefc6870740046c58e6fc0": "4b3b3de0cb2c2aef80daa68394d5b804b8706d9f",
@@ -95056,6 +95067,10 @@
       "64DD_IPL_v12_JPN.bin": [
         "bf861922dcb78c316360e3e742f4f70ff63c9bc3"
       ],
+      "dsi_nand.bin": [
+        "2b972cec368e83a2699e6ab38165638b1bc1302c",
+        "b48f44194fe918aaaec5298861479512b581d661"
+      ],
       "DSi_Firmware.bin": [
         "3ab9b6fc56bc5aa95b021c3b91d2e4d3f47104af"
       ],
@@ -95097,9 +95112,6 @@
       ],
       "dsi_bios9.bin": [
         "db61fa39ddbc5f5ed71fb19cda47609ef0201723"
-      ],
-      "dsi_nand.bin": [
-        "b48f44194fe918aaaec5298861479512b581d661"
       ],
       "disksys.rom": [
         "af5af53f66982e749643fdf8b2acbb7d4d3ed229",
@@ -112717,6 +112729,7 @@
       "d0f567ca": "3c5b93ca231550c68693a14f03cea8d5dbd1be9e",
       "7f933ce2": "bf861922dcb78c316360e3e742f4f70ff63c9bc3",
       "0a439597": "b61d72863932b3918aec5a2262beaffd74b69770",
+      "8b79a73c": "2b972cec368e83a2699e6ab38165638b1bc1302c",
       "9a25cceb": "3ab9b6fc56bc5aa95b021c3b91d2e4d3f47104af",
       "84791b97": "7d006f8943171a4d50ae89bf2fca12b764d27e8b",
       "11736b45": "4b3b3de0cb2c2aef80daa68394d5b804b8706d9f",
@@ -120347,6 +120360,7 @@
       "e9fec87a45fba02399e88064b9e2f8cf0f2106e351c58279a87f05da5bc984ad": "3c5b93ca231550c68693a14f03cea8d5dbd1be9e",
       "806400ec0df94b0755de6c5b8249d6b6a9866124c5ddbdac198bde22499bfb8b": "bf861922dcb78c316360e3e742f4f70ff63c9bc3",
       "ebe16830b7faaf1cf1679d0d614f77a8fff0415972a3b4fba433a6cfc67897a0": "b61d72863932b3918aec5a2262beaffd74b69770",
+      "eb8960711bb99c11d1c92de195c29c8e1bf927e8e1a5d134155fd69a9a11134e": "2b972cec368e83a2699e6ab38165638b1bc1302c",
       "b11199b686515ae97c74ce7274f64d63372187f52fd8c99a8746dc769a33950f": "3ab9b6fc56bc5aa95b021c3b91d2e4d3f47104af",
       "4149fc5552f8932f28b7999de506f2b2a6cf3093140b7bfcdcc88ade51d970d2": "7d006f8943171a4d50ae89bf2fca12b764d27e8b",
       "f5ab272f9c62a63d059934f146bf66c2abbfe5e864d852ab7708f97b53ad0fcb": "4b3b3de0cb2c2aef80daa68394d5b804b8706d9f",
@@ -129138,6 +129152,9 @@
       ],
       ".variants/dsi_firmware.bin.b61d7286": [
         "b61d72863932b3918aec5a2262beaffd74b69770"
+      ],
+      ".variants/dsi_nand.bin.8b79a73c": [
+        "2b972cec368e83a2699e6ab38165638b1bc1302c"
       ],
       ".variants/disksys.rom.af5af53f": [
         "af5af53f66982e749643fdf8b2acbb7d4d3ed229"
