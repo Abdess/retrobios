@@ -1,8 +1,8 @@
 platform: RetroArch
 version: v1.22.2
 dat_version: v1.19.0
-homepage: https://www.retroarch.com
-source: https://github.com/libretro/libretro-database/blob/master/dat/System.dat
+homepage: "https://www.retroarch.com"
+source: "https://github.com/libretro/libretro-database/blob/master/dat/System.dat"
 base_destination: system
 hash_type: sha1
 verification_mode: existence
@@ -103,32 +103,32 @@ systems:
     native_id: 3DO Company, The - 3DO
     core: opera
     manufacturer: Panasonic|GoldStar|Sanyo
-    docs: https://docs.libretro.com/library/opera/
+    docs: "https://docs.libretro.com/library/opera/"
   amstrad-cpc:
     files:
     - name: cpc464.rom
-      destination: cpc464.rom
+      destination: ep128emu/roms/cpc464.rom
       required: true
       sha1: 56d39c463da60968d93e58b4ba0e675829412a20
       md5: a993f85b88ac4350cf4d41554e87fe4f
       crc32: 40852f25
       size: 32768
-    - name: cpc664.rom
-      destination: cpc664.rom
-      required: true
-      sha1: 073a7665527b5bd8a148747a3947dbd3328682c8
-      md5: 5a384a2310f472c7857888371c00ed66
-      crc32: 9ab5a036
-      size: 32768
     - name: cpc6128.rom
-      destination: cpc6128.rom
+      destination: ep128emu/roms/cpc6128.rom
       required: true
       sha1: 5977adbad3f7c1e0e082cd02fe76a700d9860c30
       md5: b96280dc6c95a48857b4b8eb931533ae
       crc32: 9e827fe1
       size: 32768
+    - name: cpc664.rom
+      destination: ep128emu/roms/cpc664.rom
+      required: true
+      sha1: 073a7665527b5bd8a148747a3947dbd3328682c8
+      md5: 5a384a2310f472c7857888371c00ed66
+      crc32: 9ab5a036
+      size: 32768
     - name: cpc_amsdos.rom
-      destination: cpc_amsdos.rom
+      destination: ep128emu/roms/cpc_amsdos.rom
       required: true
       sha1: 39102c8e9cb55fcc0b9b62098780ed4a3cb6a4bb
       md5: 25629dfe870d097469c217b95fdc1c95
@@ -137,41 +137,6 @@ systems:
     native_id: Amstrad - CPC
   arcade:
     files:
-    - name: bubsys.zip
-      destination: bubsys.zip
-      required: true
-      sha1: 1c0ffcd308b0c8c6dbb74ad8b811a0767200d366
-      md5: f81298afd68a1a24a49a1a2d9f087964
-      crc32: 8fc2fd2e
-      size: 7950
-    - name: cchip.zip
-      destination: cchip.zip
-      required: true
-      sha1: 364f2302a145a0fd6de767d7f8484badde1d1a6e
-      md5: df6f8a3d83c028a5cb9f2f2be60773f3
-      crc32: 23debecb
-      size: 2700
-    - name: decocass.zip
-      destination: decocass.zip
-      required: true
-      sha1: 30b97b2670b79d0de41cba190324c504846c6fa1
-      md5: b7e1189b341bf6a8e270017c096d21b0
-      crc32: 5de524e5
-      size: 16107
-    - name: isgsm.zip
-      destination: isgsm.zip
-      required: true
-      sha1: f590ccf688b4c05fa1da5c5dd92c224545170c3b
-      md5: 4a56d56e2219c5e2b006b66a4263c01c
-      crc32: 26856bf9
-      size: 10207
-    - name: midssio.zip
-      destination: midssio.zip
-      required: true
-      sha1: 54275c9833e497f71f76ab239030cc386c863991
-      md5: 5904b0de768d1d506e766aa7e18994c1
-      crc32: 7620bd32
-      size: 163
     - name: neogeo.zip
       destination: neogeo.zip
       required: true
@@ -179,87 +144,181 @@ systems:
       md5: 00dad01abdbf8ea9e79ad2fe11bdb182
       crc32: '81315163'
       size: 1859335
+    - name: bubsys.zip
+      destination: fbneo/bubsys.zip
+      required: true
+      sha1: 1c0ffcd308b0c8c6dbb74ad8b811a0767200d366
+      md5: f81298afd68a1a24a49a1a2d9f087964
+      crc32: 8fc2fd2e
+      size: 7950
+    - name: cchip.zip
+      destination: fbneo/cchip.zip
+      required: true
+      sha1: 364f2302a145a0fd6de767d7f8484badde1d1a6e
+      md5: df6f8a3d83c028a5cb9f2f2be60773f3
+      crc32: 23debecb
+      size: 2700
+    - name: decocass.zip
+      destination: fbneo/decocass.zip
+      required: true
+      sha1: 30b97b2670b79d0de41cba190324c504846c6fa1
+      md5: b7e1189b341bf6a8e270017c096d21b0
+      crc32: 5de524e5
+      size: 16107
+    - name: isgsm.zip
+      destination: fbneo/isgsm.zip
+      required: true
+      sha1: f590ccf688b4c05fa1da5c5dd92c224545170c3b
+      md5: 4a56d56e2219c5e2b006b66a4263c01c
+      crc32: 26856bf9
+      size: 10207
+    - name: midssio.zip
+      destination: fbneo/midssio.zip
+      required: true
+      sha1: 54275c9833e497f71f76ab239030cc386c863991
+      md5: 5904b0de768d1d506e766aa7e18994c1
+      crc32: 7620bd32
+      size: 163
+    - name: neogeo.zip
+      destination: fbneo/neogeo.zip
+      required: true
+      sha1: deb62b0074b8cae4f162c257662136733cfc76ad
+      md5: 00dad01abdbf8ea9e79ad2fe11bdb182
+      crc32: '81315163'
+      size: 1859335
     - name: nmk004.zip
-      destination: nmk004.zip
+      destination: fbneo/nmk004.zip
       required: true
       sha1: 489256f5e2001070d2ad94c90d255282c71ed274
       md5: bfacf1a68792d5348f93cf724d2f1dda
       crc32: a6099353
       size: 3556
     - name: pgm.zip
-      destination: pgm.zip
+      destination: fbneo/pgm.zip
       required: true
       sha1: c0c001ec80fa860857000f4cfc9844a28498a355
       md5: 87cc944eef4c671aa2629a8ba48a08e0
       crc32: bf3dd2ef
       size: 2094636
     - name: skns.zip
-      destination: skns.zip
+      destination: fbneo/skns.zip
       required: true
       sha1: 4257bd14b541fafbd555cb98ba079a3416a45934
       md5: 3f956c4e7008804cb47cbde49bd5b908
       crc32: 5692af22
       size: 924762
     - name: ym2608.zip
-      destination: ym2608.zip
+      destination: fbneo/ym2608.zip
       required: true
       sha1: 06fc753d015b43ca1787f4cfd9331b1674202e64
       md5: 79ae0d2bb1901b7e606b6dc339b79a97
       crc32: 5b4c29c4
       size: 7609
-    - name: namcoc69.zip
-      destination: namcoc69.zip
-      required: true
-    - name: namcoc70.zip
-      destination: namcoc70.zip
-      required: true
-    - name: namcoc75.zip
-      destination: namcoc75.zip
-      required: true
-    - name: msx.zip
-      destination: msx.zip
-      required: true
-    - name: qsound.zip
-      destination: qsound.zip
-      required: true
-    - name: channelf.zip
-      destination: channelf.zip
-      required: true
-    - name: coleco.zip
-      destination: coleco.zip
-      required: true
-    - name: neocdz.zip
-      destination: neocdz.zip
-      required: true
-    - name: ngp.zip
-      destination: ngp.zip
-      required: true
-    - name: spectrum.zip
-      destination: spectrum.zip
-      required: true
-    - name: spec128.zip
-      destination: spec128.zip
-      required: true
-    - name: spec1282a.zip
-      destination: spec1282a.zip
-      required: true
-    - name: fdsbios.zip
-      destination: fdsbios.zip
-      required: true
     - name: aes.zip
       destination: aes.zip
+      required: true
+      sha1: 43c6aa6ba46adbeefb2b014899bcb4b2db7986af
+      md5: 9d2ff2333e23910cf56f7f785609d36a
+      crc32: 91e93107
+      size: 850591
+    - name: channelf.zip
+      destination: fbneo/channelf.zip
+      required: true
+      sha1: 1cb23b462b990241013deb4b5e07ce741af28267
+      md5: 2f2f8de3827ae1faf2495e497ca95232
+      crc32: 332807d9
+      size: 2705
+    - name: coleco.zip
+      destination: fbneo/coleco.zip
+      required: true
+      sha1: db2190922f359f19b47f8270fa87a7c1b38f5b2b
+      md5: 94915714a814a84f7c292e6db71f3ad2
+      crc32: eea6c08b
+      size: 28014
+    - name: fdsbios.zip
+      destination: fbneo/fdsbios.zip
+      required: true
+      sha1: c25686d24c7205473741f948f8a9df9906823145
+      md5: c26bf1744cb7f6ffe441f463870321f8
+      crc32: 3d54fe55
+      size: 5758
+    - name: hiscore.dat
+      destination: fbneo/hiscore.dat
+      required: true
+      sha1: 1bef29ccc16eeb2e3c0759bfd2a4f86b1aba03a7
+      md5: 37fc4e050b53a1ef2c2e7f3042553025
+      crc32: 92cfba00
+      size: 324575
+    - name: msx.zip
+      destination: fbneo/msx.zip
+      required: true
+      sha1: c0673df5af0ea7728aedf637f18d118e6f7cb778
+      md5: 25a8912d7bf3cdad9beaa6d5cc14ea38
+      crc32: 2ae71804
+      size: 193854
+    - name: namcoc69.zip
+      destination: fbneo/namcoc69.zip
+      required: true
+      sha1: 1cc7452608d44af8171270530a995644fb213d1d
+      md5: ad9af7a9560cad74f1644328213748f6
+      crc32: be241255
+      size: 7771
+    - name: namcoc70.zip
+      destination: fbneo/namcoc70.zip
+      required: true
+      sha1: ab8375fcb12791d35b11df801041f965a40b21d9
+      md5: aa569a303793510b2b4173480148de4b
+      crc32: 2d71120c
+      size: 7822
+    - name: namcoc75.zip
+      destination: fbneo/namcoc75.zip
+      required: true
+      sha1: 0649e27b7d605add7fc4215ee628b71e3c835328
+      md5: 17516c33298e52424ffb58afc2ad208c
+      crc32: cf65b189
+      size: 8709
+    - name: neocdz.zip
+      destination: fbneo/neocdz.zip
+      required: true
+      sha1: 4f28af31ca0defdd73d80edec2fa296908e624dc
+      md5: 62d56b126e78f3d82faa4ee8a92c3e82
+      crc32: 6fc3e0de
+      size: 214681
+    - name: ngp.zip
+      destination: fbneo/ngp.zip
+      required: true
+      sha1: f677361cd05cf2d146730890298985290b3dbc69
+      md5: 5bc25f80395a68790a69b7eb3e57b897
+      crc32: 6a679292
+      size: 74758
+    - name: spec128.zip
+      destination: fbneo/spec128.zip
+      required: true
+      sha1: b88619a845cbba8bc04ad396e99a02aa6d2da7c1
+      md5: 1a524bfa489cec90c941e6587d553a56
+      crc32: 705f7138
+      size: 25489
+    - name: spectrum.zip
+      destination: fbneo/spectrum.zip
+      required: true
+      sha1: 9428d8b7c6d4db78f00a58915dccdf33f3b5d98b
+      md5: 4698414be3369fff17bf6d3111734c6c
+      crc32: eea59503
+      size: 12432
+    - name: spec1282a.zip
+      destination: fbneo/spec1282a.zip
+      required: true
+      sha1: d3a94d7a098a0cad5f49cf19a74ed1f9138a20f7
+      md5: b2fed9c6a9e54af7d90b6f2b3516fcf9
+      crc32: b952cbe2
+      size: 41653
+    - name: qsound.zip
+      destination: qsound.zip
       required: true
     native_id: Arcade
     core: fbneo
     manufacturer: Various
-    docs: https://docs.libretro.com/library/fbneo/
-    data_directories:
-    - ref: fbneo-hiscore
-      destination: ''
-    - ref: fbneo-cheats
-      destination: fbneo
-    - ref: fbneo-samples
-      destination: fbneo
+    docs: "https://docs.libretro.com/library/fbneo/"
   atari-400-800:
     files:
     - name: ATARIBAS.ROM
@@ -317,18 +376,18 @@ systems:
     native_id: Atari - 5200
     core: a5200
     manufacturer: Atari
-    docs: https://docs.libretro.com/library/a5200/
+    docs: "https://docs.libretro.com/library/a5200/"
   atari-7800:
     files:
-    - name: 7800 BIOS (E).rom
-      destination: 7800 BIOS (E).rom
+    - name: "7800 BIOS (E).rom"
+      destination: "7800 BIOS (E).rom"
       required: true
       sha1: 5a140136a16d1d83e4ff32a19409ca376a8df874
       md5: 397bb566584be7b9764e7a68974c4263
       crc32: d5b61170
       size: 16384
-    - name: 7800 BIOS (U).rom
-      destination: 7800 BIOS (U).rom
+    - name: "7800 BIOS (U).rom"
+      destination: "7800 BIOS (U).rom"
       required: true
       sha1: d9d134bb6b36907c615a594cc7688f7bfcef5b43
       md5: 0763f1ffb006ddbe32e52d497ee848ae
@@ -337,7 +396,7 @@ systems:
     native_id: Atari - 7800
     core: prosystem
     manufacturer: Atari
-    docs: https://docs.libretro.com/library/prosystem/
+    docs: "https://docs.libretro.com/library/prosystem/"
   atari-lynx:
     files:
     - name: lynxboot.img
@@ -350,7 +409,7 @@ systems:
     native_id: Atari - Lynx
     core: handy
     manufacturer: Atari
-    docs: https://docs.libretro.com/library/handy/
+    docs: "https://docs.libretro.com/library/handy/"
   atari-st:
     files:
     - name: tos.img
@@ -363,7 +422,7 @@ systems:
     native_id: Atari - ST
     core: hatari
     manufacturer: Atari
-    docs: https://docs.libretro.com/library/hatari/
+    docs: "https://docs.libretro.com/library/hatari/"
   coleco-colecovision:
     files:
     - name: colecovision.rom
@@ -376,12 +435,24 @@ systems:
     - name: BIOS.col
       destination: BIOS.col
       required: true
-    - name: coleco.rom
-      destination: coleco.rom
-      required: true
+      sha1: 45bedc4cbdeac66c7df59e9e599195c778d86a92
+      md5: 2c66f5911e5b42b8ebe113403548eee7
+      crc32: 3aa93ef3
+      size: 8192
     - name: bioscv.rom
       destination: bioscv.rom
       required: true
+      sha1: 5ac620c529e4965efb5560fe824854a44c983757
+      md5: 3b1ef759d8e3fb4071582efd33dd05f9
+      crc32: c3c590c6
+      size: 2048
+    - name: coleco.rom
+      destination: coleco.rom
+      required: true
+      sha1: 45bedc4cbdeac66c7df59e9e599195c778d86a92
+      md5: 2c66f5911e5b42b8ebe113403548eee7
+      crc32: 3aa93ef3
+      size: 8192
     native_id: Coleco - ColecoVision
   commodore-amiga:
     files:
@@ -472,44 +543,9 @@ systems:
     native_id: Commodore - Amiga
     core: puae
     manufacturer: Commodore
-    docs: https://docs.libretro.com/library/puae/
+    docs: "https://docs.libretro.com/library/puae/"
   commodore-c128:
     files:
-    - name: JiffyDOS_C128.bin
-      destination: JiffyDOS_C128.bin
-      required: true
-      sha1: 7d1898f32beae4b2ae610d469ce578a588efaa7c
-      md5: cbbd1bbcb5e4fd8046b6030ab71fc021
-      crc32: 4b7964de
-      size: 16384
-    - name: JiffyDOS_C64.bin
-      destination: JiffyDOS_C64.bin
-      required: true
-      sha1: 31e73e66eccb28732daea8ec3ad1addd9b39a017
-      md5: be09394f0576cf81fa8bacf634daf9a2
-      crc32: 2f79984c
-      size: 8192
-    - name: JiffyDOS_1541-II.bin
-      destination: JiffyDOS_1541-II.bin
-      required: true
-      sha1: b1a5b826304d3df2a27d7163c6a81a532e040d32
-      md5: 1b1e985ea5325a1f46eb7fd9681707bf
-      crc32: dd409902
-      size: 16384
-    - name: JiffyDOS_1571_repl310654.bin
-      destination: JiffyDOS_1571_repl310654.bin
-      required: true
-      sha1: d4b79b60cf1eaa399d0932200eb7811e00455249
-      md5: 41c6cc528e9515ffd0ed9b180f8467c0
-      crc32: fe6cac6d
-      size: 32768
-    - name: JiffyDOS_1581.bin
-      destination: JiffyDOS_1581.bin
-      required: true
-      sha1: 65bbf2be7bcd5bdcbff609d6c66471ffb9d04bfe
-      md5: 20b6885c6dc2d42c38754a365b043d71
-      crc32: 98873d0f
-      size: 32768
     - name: scpu-dos-1.4.bin
       destination: scpu-dos-1.4.bin
       required: true
@@ -518,10 +554,45 @@ systems:
       destination: scpu-dos-2.04.bin
       required: true
       md5: b2869f8678b8b274227f35aad26ba509
+    - name: JiffyDOS_1541-II.bin
+      destination: vice/JiffyDOS_1541-II.bin
+      required: true
+      sha1: b1a5b826304d3df2a27d7163c6a81a532e040d32
+      md5: 1b1e985ea5325a1f46eb7fd9681707bf
+      crc32: dd409902
+      size: 16384
+    - name: JiffyDOS_1571_repl310654.bin
+      destination: vice/JiffyDOS_1571_repl310654.bin
+      required: true
+      sha1: d4b79b60cf1eaa399d0932200eb7811e00455249
+      md5: 41c6cc528e9515ffd0ed9b180f8467c0
+      crc32: fe6cac6d
+      size: 32768
+    - name: JiffyDOS_1581.bin
+      destination: vice/JiffyDOS_1581.bin
+      required: true
+      sha1: 65bbf2be7bcd5bdcbff609d6c66471ffb9d04bfe
+      md5: 20b6885c6dc2d42c38754a365b043d71
+      crc32: 98873d0f
+      size: 32768
+    - name: JiffyDOS_C128.bin
+      destination: vice/JiffyDOS_C128.bin
+      required: true
+      sha1: 7d1898f32beae4b2ae610d469ce578a588efaa7c
+      md5: cbbd1bbcb5e4fd8046b6030ab71fc021
+      crc32: 4b7964de
+      size: 16384
+    - name: JiffyDOS_C64.bin
+      destination: vice/JiffyDOS_C64.bin
+      required: true
+      sha1: 31e73e66eccb28732daea8ec3ad1addd9b39a017
+      md5: be09394f0576cf81fa8bacf634daf9a2
+      crc32: 2f79984c
+      size: 8192
     native_id: Commodore - C128
     core: vice_x128
     manufacturer: Commodore
-    docs: https://docs.libretro.com/library/vice_x128/
+    docs: "https://docs.libretro.com/library/vice_x128/"
   dinothawr:
     files:
     - name: Dinothawr.zip
@@ -562,6 +633,48 @@ systems:
       md5: 08cdcfa0ed93e9cb16afa76e6ac5f0a4
       crc32: 4b961eba
       size: 1048576
+    - name: bass.dll
+      destination: bass.dll
+      required: true
+      sha1: 75c9fa407e0a027713ed563f135747fffec0590d
+      md5: 7253a9fabc089044b3b8e9156b07d6f9
+      crc32: 03e3f03c
+      size: 144696
+    - name: bassmidi.dll
+      destination: bassmidi.dll
+      required: true
+      sha1: 2ea6df7253ce0a14094d20cd04c098505cc14c23
+      md5: 0b00a4ab6b68960efa49272d416b040d
+      crc32: fd70a398
+      size: 73600
+    - name: libbass.dylib
+      destination: libbass.dylib
+      required: true
+      sha1: 8833196b70002f7f2068d8f6c5eb96862777b018
+      md5: 19addeb0da536c753797ed59b44d5ba3
+      crc32: 9ba00bc0
+      size: 874240
+    - name: libbass.so
+      destination: libbass.so
+      required: true
+      sha1: 415365e930b4c7d33e9af3225bea230e15bdebe7
+      md5: 255fb8ab523b179320f08f44db36a9fa
+      crc32: 61f3237e
+      size: 248952
+    - name: libbassmidi.dylib
+      destination: libbassmidi.dylib
+      required: true
+      sha1: efa4fdedfac60c98c53f3aec10fb44b324a35835
+      md5: ea143b23779d01152633442abb1e0c67
+      crc32: e5d1e180
+      size: 519808
+    - name: libbassmidi.so
+      destination: libbassmidi.so
+      required: true
+      sha1: 77d07d7518104896e0acfee24073356f1a6bd51b
+      md5: 3a48c08c224c32f2f4829b960e95f73b
+      crc32: 0a8e277a
+      size: 142080
     native_id: DOS
   elektronika-bk:
     files:
@@ -621,72 +734,9 @@ systems:
       md5: 95f8c41c6abf7640e35a6a03cecebd01
       crc32: 26c6e8a0
       size: 8192
-    native_id: Elektronika - BK-0010/BK-0011(M)
+    native_id: "Elektronika - BK-0010/BK-0011(M)"
   enterprise-64-128:
     files:
-    - name: hun.rom
-      destination: hun.rom
-      required: true
-      sha1: 325a5e28c2a0d896711f8829e7ff14fed5dd4103
-      md5: 22167938f142c222f40992839aa21a06
-      crc32: 596ab6d6
-      size: 16384
-    - name: brd.rom
-      destination: brd.rom
-      required: true
-      sha1: f34f0c330b44dbf2548329bea954d5991dec30ca
-      md5: 6af0402906944fd134004b85097c8524
-      crc32: 6999d6a3
-      size: 16384
-    - name: exos20.rom
-      destination: exos20.rom
-      required: true
-      sha1: 6033a0535136c40c47137e4d1cd9273c06d5fdff
-      md5: 5ad3baaad3b5156d6b60b34229a676fb
-      crc32: d421795f
-      size: 32768
-    - name: exos21.rom
-      destination: exos21.rom
-      required: true
-      sha1: 55315b20fecb4441a07ee4bc5dc7153f396e0a2e
-      md5: f36f24cbb87745fbd2714e4df881db09
-      crc32: 982a3b44
-      size: 32768
-    - name: zt19uk.rom
-      destination: zt19uk.rom
-      required: true
-      sha1: b7af62f0bc95fdca4b31d236f8327dafc80f83b7
-      md5: 228540b6be83ae2acd7569c8ff0f91d0
-      crc32: d6deedf1
-      size: 32768
-    - name: basic20.rom
-      destination: basic20.rom
-      required: true
-      sha1: 61d0987b906146e21b94f265d5b51b4938c986a9
-      md5: 8e18edce4a7acb2c33cc0ab18f988482
-      crc32: 1228de34
-      size: 16384
-    - name: basic21.rom
-      destination: basic21.rom
-      required: true
-      sha1: 03bbb386cf530e804363acdfc1d13e64cf28af2e
-      md5: e972fe42b398c9ff1d93ff014786aec6
-      crc32: 55f96251
-      size: 16384
-    - name: exdos13.rom
-      destination: exdos13.rom
-      required: true
-      sha1: cb43ab3676b93c279f1ed8ffcb0d4dcd4b34e631
-      md5: ddff70c014d1958dc75378b6c9aab6f8
-      crc32: e0135929
-      size: 32768
-    - name: epd19hft.rom
-      destination: epd19hft.rom
-      required: true
-      sha1: 8f28fe73d13e94dd1da02519908ecc6eebe104f6
-      md5: 12cfc9c7e48c8a16c2e09edbd926d467
-      crc32: bd503eeb
-      size: 32768
     - name: zt18hfnt.rom
       destination: zt18hfnt.rom
       required: true
@@ -694,20 +744,90 @@ systems:
       md5: 3082dc488d32f30a612761b99074199b
       crc32: 76c9dbf6
       size: 32768
+    - name: basic20.rom
+      destination: ep128emu/roms/basic20.rom
+      required: true
+      sha1: 61d0987b906146e21b94f265d5b51b4938c986a9
+      md5: 8e18edce4a7acb2c33cc0ab18f988482
+      crc32: 1228de34
+      size: 16384
+    - name: basic21.rom
+      destination: ep128emu/roms/basic21.rom
+      required: true
+      sha1: 03bbb386cf530e804363acdfc1d13e64cf28af2e
+      md5: e972fe42b398c9ff1d93ff014786aec6
+      crc32: 55f96251
+      size: 16384
+    - name: brd.rom
+      destination: ep128emu/roms/brd.rom
+      required: true
+      sha1: f34f0c330b44dbf2548329bea954d5991dec30ca
+      md5: 6af0402906944fd134004b85097c8524
+      crc32: 6999d6a3
+      size: 16384
+    - name: epd19hft.rom
+      destination: ep128emu/roms/epd19hft.rom
+      required: true
+      sha1: 8f28fe73d13e94dd1da02519908ecc6eebe104f6
+      md5: 12cfc9c7e48c8a16c2e09edbd926d467
+      crc32: bd503eeb
+      size: 32768
     - name: epfileio.rom
-      destination: epfileio.rom
+      destination: ep128emu/roms/epfileio.rom
       required: true
       sha1: 2f9077bcd89b1ec42dbdcd55d335bdbaf361eff3
       md5: a68ebcbc73a4d2178d755b7755bf18fe
       crc32: 60c79925
       size: 16384
+    - name: exdos13.rom
+      destination: ep128emu/roms/exdos13.rom
+      required: true
+      sha1: cb43ab3676b93c279f1ed8ffcb0d4dcd4b34e631
+      md5: ddff70c014d1958dc75378b6c9aab6f8
+      crc32: e0135929
+      size: 32768
+    - name: exos20.rom
+      destination: ep128emu/roms/exos20.rom
+      required: true
+      sha1: 6033a0535136c40c47137e4d1cd9273c06d5fdff
+      md5: 5ad3baaad3b5156d6b60b34229a676fb
+      crc32: d421795f
+      size: 32768
+    - name: exos21.rom
+      destination: ep128emu/roms/exos21.rom
+      required: true
+      sha1: 55315b20fecb4441a07ee4bc5dc7153f396e0a2e
+      md5: f36f24cbb87745fbd2714e4df881db09
+      crc32: 982a3b44
+      size: 32768
     - name: exos24uk.rom
-      destination: exos24uk.rom
+      destination: ep128emu/roms/exos24uk.rom
       required: true
       sha1: cf12e971623a54bf8c4f891ca3a36d969f205c49
       md5: 55af78f877a21ca45eb2df68a74fcc60
       crc32: c099a5e3
       size: 65536
+    - name: hun.rom
+      destination: ep128emu/roms/hun.rom
+      required: true
+      sha1: 325a5e28c2a0d896711f8829e7ff14fed5dd4103
+      md5: 22167938f142c222f40992839aa21a06
+      crc32: 596ab6d6
+      size: 16384
+    - name: zt19uk.rom
+      destination: ep128emu/roms/zt19uk.rom
+      required: true
+      sha1: b7af62f0bc95fdca4b31d236f8327dafc80f83b7
+      md5: 228540b6be83ae2acd7569c8ff0f91d0
+      crc32: d6deedf1
+      size: 32768
+    - name: zt19hfnt.rom
+      destination: ep128emu/roms/zt19hfnt.rom
+      required: true
+      sha1: 9dd7f38a74f119f142b17e5a16ebd8afa7bbea01
+      md5: 653daaf7b9b29c2c4e577f489580f247
+      crc32: '58239527'
+      size: 32768
     native_id: Enterprise - 64/128
     includes:
     - ep128emu
@@ -745,6 +865,30 @@ systems:
       crc32: 015c1e38
       size: 1024
     native_id: Fairchild Channel F
+  galaksija:
+    files:
+    - name: CHRGEN.BIN
+      destination: galaksija/CHRGEN.BIN
+      required: true
+      sha1: cc73b0386b84383b4841e58a1c328cb67b0121d8
+      md5: ecae5c55d75a2fe0871d0ebd95663628
+      crc32: fd77b6d2
+      size: 2048
+    - name: ROM1.BIN
+      destination: galaksija/ROM1.BIN
+      required: true
+      sha1: aea7a4c0c7ffe1f212f7b9faecfd728862ac6904
+      md5: c7ce14d6a81062db862f3ce5afedcfb6
+      crc32: e6853bc1
+      size: 4096
+    - name: ROM2.BIN
+      destination: galaksija/ROM2.BIN
+      required: true
+      sha1: 1bae895fbdd658cfb56c53cc2139282cc1e778de
+      md5: b406d05922dac2eaf3c2e68157b1b468
+      crc32: b5fad94a
+      size: 8192
+    native_id: Galaksija
   doom:
     files:
     - name: prboom.wad
@@ -778,10 +922,66 @@ systems:
       md5: 29a92d0867da2917275b7c6c805d256f
       crc32: ffb98ffa
       size: 552039
+    - name: squirreljme-0.3.0-fast.jar
+      destination: squirreljme-0.3.0-fast.jar
+      required: true
+      sha1: 8a2ddc37df2366d4e205e9904cd8bac22db2afd5
+      md5: 8e98b0c8e5c96c191a8b2a9d29d0454b
+      crc32: 1690ba5c
+      size: 15181774
+    - name: squirreljme-0.3.0-slow-test.jar
+      destination: squirreljme-0.3.0-slow-test.jar
+      required: true
+      sha1: 8a2ddc37df2366d4e205e9904cd8bac22db2afd5
+      md5: 8e98b0c8e5c96c191a8b2a9d29d0454b
+      crc32: 1690ba5c
+      size: 15181774
+    - name: squirreljme-0.3.0-slow.jar
+      destination: squirreljme-0.3.0-slow.jar
+      required: true
+      sha1: 8a2ddc37df2366d4e205e9904cd8bac22db2afd5
+      md5: 8e98b0c8e5c96c191a8b2a9d29d0454b
+      crc32: 1690ba5c
+      size: 15181774
+    - name: squirreljme-0.3.0.jar
+      destination: squirreljme-0.3.0.jar
+      required: true
+      sha1: 8a2ddc37df2366d4e205e9904cd8bac22db2afd5
+      md5: 8e98b0c8e5c96c191a8b2a9d29d0454b
+      crc32: 1690ba5c
+      size: 15181774
+    - name: squirreljme-fast.jar
+      destination: squirreljme-fast.jar
+      required: true
+      sha1: 8a2ddc37df2366d4e205e9904cd8bac22db2afd5
+      md5: 8e98b0c8e5c96c191a8b2a9d29d0454b
+      crc32: 1690ba5c
+      size: 15181774
+    - name: squirreljme-slow-test.jar
+      destination: squirreljme-slow-test.jar
+      required: true
+      sha1: 8a2ddc37df2366d4e205e9904cd8bac22db2afd5
+      md5: 8e98b0c8e5c96c191a8b2a9d29d0454b
+      crc32: 1690ba5c
+      size: 15181774
+    - name: squirreljme-slow.jar
+      destination: squirreljme-slow.jar
+      required: true
+      sha1: 8a2ddc37df2366d4e205e9904cd8bac22db2afd5
+      md5: 8e98b0c8e5c96c191a8b2a9d29d0454b
+      crc32: 1690ba5c
+      size: 15181774
+    - name: squirreljme.jar
+      destination: squirreljme.jar
+      required: true
+      sha1: 6933bbe1fc29f58581a7f64f859f756db9ef78a7
+      md5: cf849d4b36cd8b7782de7887d318182a
+      crc32: c3e532d3
+      size: 4700395
     native_id: J2ME
     core: freej2me
     manufacturer: Java
-    docs: https://docs.libretro.com/library/freej2me/
+    docs: "https://docs.libretro.com/library/freej2me/"
   apple-macintosh-ii:
     files:
     - name: MacII.ROM
@@ -825,7 +1025,7 @@ systems:
     native_id: Magnavox - Odyssey2
     core: o2em
     manufacturer: Magnavox|Philips
-    docs: https://docs.libretro.com/library/o2em/
+    docs: "https://docs.libretro.com/library/o2em/"
   mattel-intellivision:
     files:
     - name: exec.bin
@@ -953,11 +1153,25 @@ systems:
       md5: 279efd1eae0d358eecd4edc7d9adedf3
       crc32: ab6874f8
       size: 16640
+    - name: msxromdb.xml
+      destination: Databases/msxromdb.xml
+      required: true
+      sha1: 573aa830b7bef4452808b40df883469907db2fed
+      md5: c0a94965701431e0df29949189e424dd
+      crc32: ed4c6720
+      size: 930986
+    - name: MSX.rom
+      destination: Machines/Shared Roms/MSX.rom
+      required: true
+      sha1: e998f0c441f4f1800ef44e42cd1659150206cf79
+      md5: 364a1a579fe5cb8dba54519bcfcdac0d
+      crc32: a317e6b4
+      size: 32768
     native_id: Microsoft - MSX
     core: bluemsx
     manufacturer: Spectravideo|Philips|Al Alamiah|Sony|Sanyo|Mitsubishi|Toshiba|Hitachi|Panasonic|Canon|Casio|Pioneer|Fujitsu|Yamaha|JVC|Kyocera|GoldStar|Samsung|Daewoo|Gradiente|Sharp|Talent|NTT|ACVS/CIEL|DDX|AGE
       Labs
-    docs: https://docs.libretro.com/library/bluemsx/
+    docs: "https://docs.libretro.com/library/bluemsx/"
     data_directories:
     - ref: bluemsx
       destination: ''
@@ -1015,51 +1229,58 @@ systems:
     native_id: NEC - PC Engine - TurboGrafx 16 - SuperGrafx
     core: mednafen_pce_fast
     manufacturer: NEC
-    docs: https://docs.libretro.com/library/mednafen_pce_fast/
+    docs: "https://docs.libretro.com/library/mednafen_pce_fast/"
   nec-pc-98:
     files:
-    - name: 2608_bd.wav
-      destination: np2kai/2608_bd.wav
+    - name: 2608_BD.WAV
+      destination: np2kai/2608_BD.WAV
       required: true
       sha1: 0a56c142ef40cec50f3ee56a6e42d0029c9e2818
       md5: d94546e70f17fd899be8df3544ab6cbb
       crc32: bb038714
       size: 19192
-    - name: 2608_hh.wav
-      destination: np2kai/2608_hh.wav
+    - name: 2608_HH.WAV
+      destination: np2kai/2608_HH.WAV
       required: true
       sha1: 12f676cef249b82480b6f19c454e234b435ca7b6
       md5: 08c54a0c1f774a5538a848a6665a34b4
       crc32: 9898b372
       size: 36722
-    - name: 2608_rim.wav
-      destination: np2kai/2608_rim.wav
+    - name: 2608_RIM.WAV
+      destination: np2kai/2608_RIM.WAV
       required: true
       sha1: c65592330c9dd84011151daed52f9aec926b7e56
       md5: 465ea0768b27da404aec45dfc501404b
       crc32: 638864c1
       size: 5288
-    - name: 2608_sd.wav
-      destination: np2kai/2608_sd.wav
+    - name: 2608_SD.WAV
+      destination: np2kai/2608_SD.WAV
       required: true
       sha1: 3c79663ef74c0b0439d13351326eb1c52a657008
       md5: d71004351c8bbfdad53b18222c061d49
       crc32: 542cc58c
       size: 15558
-    - name: 2608_tom.wav
-      destination: np2kai/2608_tom.wav
+    - name: 2608_TOM.WAV
+      destination: np2kai/2608_TOM.WAV
       required: true
       sha1: 9513fb4a3f41e75a972a273a5104cbd834c1e2c5
       md5: 96a4ead13f364734f79b0c58af2f0e1f
       crc32: 93c57bba
       size: 23092
-    - name: 2608_top.wav
-      destination: np2kai/2608_top.wav
+    - name: 2608_TOP.WAV
+      destination: np2kai/2608_TOP.WAV
       required: true
       sha1: aa4a8f766a86b830687d5083fd3b9db0652f46fc
       md5: 593cff6597ab9380d822b8f824fd2c28
       crc32: ab73a296
       size: 57016
+    - name: FONT.ROM
+      destination: np2kai/FONT.ROM
+      required: true
+      sha1: 78ba9960f135372825ab7244b5e4e73a810002ff
+      md5: 38d32748ae49d1815b0614970849fd40
+      crc32: 456d9fc7
+      size: 288768
     - name: bios.rom
       destination: np2kai/bios.rom
       required: true
@@ -1074,13 +1295,6 @@ systems:
       md5: 7da1e5b7c482d4108d22a5b09631d967
       crc32: d271798b
       size: 524350
-    - name: font.rom
-      destination: np2kai/font.rom
-      required: true
-      sha1: 78ba9960f135372825ab7244b5e4e73a810002ff
-      md5: 38d32748ae49d1815b0614970849fd40
-      crc32: 456d9fc7
-      size: 288768
     - name: itf.rom
       destination: np2kai/itf.rom
       required: true
@@ -1098,9 +1312,82 @@ systems:
     native_id: NEC - PC-98
     core: np2kai
     manufacturer: NEC
-    docs: https://docs.libretro.com/library/np2kai/
+    docs: "https://docs.libretro.com/library/np2kai/"
     includes:
     - np2kai
+  nec---pc-8801:
+    files:
+    - name: n88_0.rom
+      destination: quasi88/n88_0.rom
+      required: true
+      sha1: d1ae642aed4f0584eeb81ff50180db694e5101d4
+      md5: e28fe3f520bea594350ea8fb00395370
+      crc32: 61984bab
+      size: 8192
+    - name: n88_1.rom
+      destination: quasi88/n88_1.rom
+      required: true
+      sha1: 4ae4d37409ff99411a623da9f6a44192170a854e
+      md5: a8e298da7ac947669bcb1ff25cee0a83
+      crc32: 7ad5d943
+      size: 8192
+    - name: n88_2.rom
+      destination: quasi88/n88_2.rom
+      required: true
+      sha1: e94278682ef9e9bbb82201f72c50382748dcea2a
+      md5: 9d03154fd9abfc28c4e6d4dc705e6e23
+      crc32: 6aee9a4e
+      size: 8192
+    - name: n88_3.rom
+      destination: quasi88/n88_3.rom
+      required: true
+      sha1: af452aed79b072c4d17985830b7c5dca64d4b412
+      md5: e1791f8154f1cdf22b576a1a365b6e1f
+      crc32: 692cbcd8
+      size: 8192
+    - name: n88jisho.rom
+      destination: quasi88/n88jisho.rom
+      required: true
+      sha1: deef0cc2a9734ba891a6d6c022aa70ffc66f783e
+      md5: 2e548679423370262f36cbde38a22789
+      crc32: bd6eb062
+      size: 524288
+    - name: disk.rom
+      destination: quasi88/disk.rom
+      required: true
+      sha1: bb7103a0818850a039c67ff666a31ce49a8d516f
+      md5: 793f86784e5608352a5d7f03f03e0858
+      crc32: 2158d307
+      size: 2048
+    - name: n88.rom
+      destination: quasi88/n88.rom
+      required: true
+      sha1: 3b31fc68fa7f47b21c1a1cb027b86b9e87afbfff
+      md5: 4f984e04a99d56c4cfe36115415d6eb8
+      crc32: a0fc0473
+      size: 32768
+    - name: n88n.rom
+      destination: quasi88/n88n.rom
+      required: true
+      sha1: 5b922ed9de07d2a729bdf1da7b57c50ddf08809a
+      md5: 2ff07b8769367321128e03924af668a0
+      crc32: 27e1857d
+      size: 32768
+    - name: n88knj1.rom
+      destination: quasi88/n88knj1.rom
+      required: true
+      sha1: 82e11a177af6a5091dd67f50a2f4bafda84d6556
+      md5: d81c6d5d7ad1a4bbbd6ae22a01257603
+      crc32: 6178bd43
+      size: 131072
+    - name: n88knj2.rom
+      destination: quasi88/n88knj2.rom
+      required: true
+      sha1: b86b932cb4ce34472e0fe0f01a4a4350e15dcb53
+      md5: 898a3b7b6c3326e8b2069765bca2b944
+      crc32: 96d1ef44
+      size: 131072
+    native_id: NEC - PC-8801
   nec-pc-fx:
     files:
     - name: fx-scsi.rom
@@ -1141,7 +1428,7 @@ systems:
     native_id: NEC - PC-FX
     core: mednafen_pcfx
     manufacturer: NEC
-    docs: https://docs.libretro.com/library/mednafen_pcfx/
+    docs: "https://docs.libretro.com/library/mednafen_pcfx/"
   nintendo-fds:
     files:
     - name: disksys.rom
@@ -1175,10 +1462,17 @@ systems:
       md5: 32fbbd84168d3482956eb3c5051637f5
       crc32: 59c8598e
       size: 256
+    - name: dmg_rom.bin
+      destination: dmg_rom.bin
+      required: true
+      sha1: 4ed31ec6b0b175bb109c0eb5fd3d193da823339f
+      md5: 32fbbd84168d3482956eb3c5051637f5
+      crc32: 59c8598e
+      size: 256
     native_id: Nintendo - Gameboy
     core: gambatte
     manufacturer: Nintendo
-    docs: https://docs.libretro.com/library/gambatte/
+    docs: "https://docs.libretro.com/library/gambatte/"
   nintendo-gba:
     files:
     - name: gba_bios.bin
@@ -1191,7 +1485,7 @@ systems:
     native_id: Nintendo - Game Boy Advance
     core: gpsp
     manufacturer: Nintendo
-    docs: https://docs.libretro.com/library/gpsp/
+    docs: "https://docs.libretro.com/library/gpsp/"
   nintendo-gbc:
     files:
     - name: cgb_boot.bin
@@ -1203,6 +1497,13 @@ systems:
       size: 2304
     - name: gbc_bios.bin
       destination: gbc_bios.bin
+      required: true
+      sha1: 1293d68bf9643bc4f36954c1e80e38f39864528d
+      md5: dbfce9db9deaa2567f6a84fde55f9680
+      crc32: 41884e46
+      size: 2304
+    - name: cgb_bios.bin
+      destination: cgb_bios.bin
       required: true
       sha1: 1293d68bf9643bc4f36954c1e80e38f39864528d
       md5: dbfce9db9deaa2567f6a84fde55f9680
@@ -1281,6 +1582,34 @@ systems:
       md5: db92574caab77a7ec99d4605fd6f2450
       crc32: ad1b7f16
       size: 2097152
+    - name: IPL.bin
+      destination: dolphin-emu/Sys/GC/EUR/IPL.bin
+      required: true
+      sha1: 80b8744ff5e43585392f55546bd03a673d11ef5f
+      md5: db92574caab77a7ec99d4605fd6f2450
+      crc32: ad1b7f16
+      size: 2097152
+    - name: IPL.bin
+      destination: dolphin-emu/Sys/GC/JAP/IPL.bin
+      required: true
+      sha1: ef9194ab4804aa0aa8540d846caf291b28331165
+      md5: b17148254a5799684c7d783206504926
+      crc32: '86573808'
+      size: 2097152
+    - name: IPL.bin
+      destination: dolphin-emu/Sys/GC/USA/IPL.bin
+      required: true
+      sha1: ef9194ab4804aa0aa8540d846caf291b28331165
+      md5: b17148254a5799684c7d783206504926
+      crc32: '86573808'
+      size: 2097152
+    - name: codehandler.bin
+      destination: dolphin-emu/Sys/codehandler.bin
+      required: true
+      sha1: e6c0050b3c67ee26198488fbbe4a5d019c15b628
+      md5: 1f118b8735fcf40c20b38c3184eebfd9
+      crc32: ba8dfa56
+      size: 2880
     - name: gc-ntsc-12.bin
       destination: dolphin-emu/Sys/GC/USA/IPL.bin
       required: false
@@ -1305,7 +1634,7 @@ systems:
     native_id: Nintendo - GameCube
     core: dolphin
     manufacturer: Nintendo
-    docs: https://docs.libretro.com/library/dolphin/
+    docs: "https://docs.libretro.com/library/dolphin/"
     data_directories:
     - ref: dolphin-sys
       destination: dolphin-emu/Sys
@@ -1313,6 +1642,13 @@ systems:
     files:
     - name: 64DD_IPL.bin
       destination: 64DD_IPL.bin
+      required: true
+      sha1: bf861922dcb78c316360e3e742f4f70ff63c9bc3
+      md5: 8d3d9f294b6e174bc7b1d2fd1c727530
+      crc32: 7f933ce2
+      size: 4194304
+    - name: IPL.n64
+      destination: Mupen64plus/IPL.n64
       required: true
       sha1: bf861922dcb78c316360e3e742f4f70ff63c9bc3
       md5: 8d3d9f294b6e174bc7b1d2fd1c727530
@@ -1342,6 +1678,20 @@ systems:
       md5: e45033d9b0fa6b0de071292bba7c9d13
       crc32: 945f9dc9
       size: 262144
+    - name: nds7.bin
+      destination: nds7.bin
+      required: true
+      sha1: 24f67bdea115a2c847c8813a262502ee1607b7df
+      md5: df692a80a5b1bc90728bc3dfc76cd948
+      crc32: 1280f0d5
+      size: 16384
+    - name: nds9.bin
+      destination: nds9.bin
+      required: true
+      sha1: bfaac75f101c135e32e2aaf541de6b1be4c8c62d
+      md5: a392174eb3e572fed6447e956bde4b25
+      crc32: 2ab23573
+      size: 4096
     - name: dsi_bios7.bin
       destination: dsi_bios7.bin
       required: true
@@ -1357,7 +1707,24 @@ systems:
     native_id: Nintendo - Nintendo DS
     core: desmume
     manufacturer: Nintendo
-    docs: https://docs.libretro.com/library/desmume/
+    docs: "https://docs.libretro.com/library/desmume/"
+  nintendo---nintendo-dsi:
+    files:
+    - name: dsi_bios7.bin
+      destination: dsi_bios7.bin
+      required: true
+      sha1: a3aa751eb6bdaaf8a827ba9e03576a6f1ab0f547
+      md5: 559dae4ea78eb9d67702c56c1d791e81
+      crc32: 9f1840d9
+      size: 65536
+    - name: dsi_bios9.bin
+      destination: dsi_bios9.bin
+      required: true
+      sha1: 7bf549b8be9e48ab0cdc9b0fdadd49a5131f97eb
+      md5: 87b665fce118f76251271c3732532777
+      crc32: 3d64d498
+      size: 65536
+    native_id: Nintendo - Nintendo DSi
   nintendo-nes:
     files:
     - name: NstDatabase.xml
@@ -1370,7 +1737,7 @@ systems:
     native_id: Nintendo - Nintendo Entertainment System
     core: fceumm
     manufacturer: Nintendo
-    docs: https://docs.libretro.com/library/fceumm/
+    docs: "https://docs.libretro.com/library/fceumm/"
   nintendo-pokemon-mini:
     files:
     - name: bios.min
@@ -1390,15 +1757,15 @@ systems:
       md5: fed4d8242cfbed61343d53d48432aced
       crc32: f51f07a0
       size: 1048576
-    - name: BS-X (En).bin
-      destination: BS-X (En).bin
+    - name: "BS-X (En).bin"
+      destination: "BS-X (En).bin"
       required: true
       sha1: f3cdff70de5d0f5c52ca3a8f46588b863d48b8ec
       md5: 33b62505da6ca4525e3839db4e1a7bca
       crc32: 347e1c4e
       size: 1048576
-    - name: BS-X (En) (DRM-Free).bin
-      destination: BS-X (En) (DRM-Free).bin
+    - name: "BS-X (En) (DRM-Free).bin"
+      destination: "BS-X (En) (DRM-Free).bin"
       required: true
       sha1: 7996bd1c01b99800e0d5d34beff93db283784864
       md5: 4ed9648505ab33a4daec93707b16caba
@@ -1431,13 +1798,6 @@ systems:
       md5: 8ecd73eb4edf7ed7e81aef1be80031d5
       crc32: cb176e45
       size: 524288
-    - name: sgb1.boot.rom
-      destination: sgb1.boot.rom
-      required: true
-      sha1: aa2f50a77dfb4823da96ba99309085a3c6278515
-      md5: d574d4f9c12f305074798f54c091a8b4
-      crc32: ec8a83b9
-      size: 256
     - name: sgb1.program.rom
       destination: sgb1.program.rom
       required: true
@@ -1445,13 +1805,6 @@ systems:
       md5: b15ddb15721c657d82c5bab6db982ee9
       crc32: 8a4a174f
       size: 262144
-    - name: sgb2.boot.rom
-      destination: sgb2.boot.rom
-      required: true
-      sha1: 93407ea10d2f30ab96a314d8eca44fe160aea734
-      md5: e0430bca9925fb9882148fd2dc2418c1
-      crc32: 53d0dd63
-      size: 256
     - name: sgb2.program.rom
       destination: sgb2.program.rom
       required: true
@@ -1473,9 +1826,55 @@ systems:
       md5: d574d4f9c12f305074798f54c091a8b4
       crc32: ec8a83b9
       size: 256
+    - name: sgb1.boot.rom
+      destination: SGB1.sfc/sgb1.boot.rom
+      required: true
+      sha1: aa2f50a77dfb4823da96ba99309085a3c6278515
+      md5: d574d4f9c12f305074798f54c091a8b4
+      crc32: ec8a83b9
+      size: 256
+    - name: sgb2.boot.rom
+      destination: SGB2.sfc/sgb2.boot.rom
+      required: true
+      sha1: 93407ea10d2f30ab96a314d8eca44fe160aea734
+      md5: e0430bca9925fb9882148fd2dc2418c1
+      crc32: 53d0dd63
+      size: 256
+    - name: sgb_boot.bin
+      destination: sgb_boot.bin
+      required: true
+      sha1: aa2f50a77dfb4823da96ba99309085a3c6278515
+      md5: d574d4f9c12f305074798f54c091a8b4
+      crc32: ec8a83b9
+      size: 256
     - name: sgb.boot.rom
       destination: sgb.boot.rom
-      required: false
+      required: true
+      sha1: aa2f50a77dfb4823da96ba99309085a3c6278515
+      md5: d574d4f9c12f305074798f54c091a8b4
+      crc32: ec8a83b9
+      size: 256
+    - name: sgb2_boot.bin
+      destination: sgb2_boot.bin
+      required: true
+      sha1: 93407ea10d2f30ab96a314d8eca44fe160aea734
+      md5: e0430bca9925fb9882148fd2dc2418c1
+      crc32: 53d0dd63
+      size: 256
+    - name: program.rom
+      destination: SGB1.sfc/program.rom
+      required: true
+      sha1: 973e10840db683cf3faf61bd443090786b3a9f04
+      md5: b15ddb15721c657d82c5bab6db982ee9
+      crc32: 8a4a174f
+      size: 262144
+    - name: program.rom
+      destination: SGB2.sfc/program.rom
+      required: true
+      sha1: e5b2922ca137051059e4269b236d07a22c07bc84
+      md5: 8ecd73eb4edf7ed7e81aef1be80031d5
+      crc32: cb176e45
+      size: 524288
     native_id: Nintendo - Super Game Boy
   nintendo-snes:
     files:
@@ -1601,7 +2000,7 @@ systems:
     native_id: Nintendo - Super Nintendo Entertainment System
     core: bsnes
     manufacturer: Nintendo
-    docs: https://docs.libretro.com/library/bsnes/
+    docs: "https://docs.libretro.com/library/bsnes/"
   philips-videopac:
     files:
     - name: c52.bin
@@ -1626,6 +2025,75 @@ systems:
       crc32: 11647ca5
       size: 1024
     native_id: Phillips - Videopac+
+  philips---cd-i:
+    files:
+    - name: cdimono1.zip
+      destination: cdimono1.zip
+      required: true
+      sha1: 7bf3ef19a559808658578bc4da233d71b774b8e2
+      md5: 801c529739b83e1490b897f2d3ffbb3a
+      crc32: fbe6f674
+      size: 661670
+    - name: cdibios.zip
+      destination: same_cdi/bios/cdibios.zip
+      required: true
+      sha1: 16072afaa65d1b059346616ac5b5a600c63ff1d1
+      md5: 709acce6e9c4043b851ea7429b8e7eff
+      crc32: 1d5bb3da
+      size: 472798
+    - name: cdimono1.zip
+      destination: same_cdi/bios/cdimono1.zip
+      required: true
+      sha1: 5d0b1b55b0d0958a5c9069c3219d4da5a87a6b93
+      md5: c59f92647701428bc453976740eb75cf
+      crc32: 0a67ff2c
+      size: 660996
+    - name: cdimono2.zip
+      destination: same_cdi/bios/cdimono2.zip
+      required: true
+      sha1: 9492247203b71c12d88fad0a5437376941c7870a
+      md5: 97aa5f47030cd9fdb679d4fafbb0e332
+      crc32: 4eab5eda
+      size: 244291
+    native_id: Philips - CD-i
+  palm-os:
+    files:
+    - name: bootloader-dbvz.rom
+      destination: bootloader-dbvz.rom
+      required: true
+      sha1: cea669f6d740f29ca248d2e8837a4b4f86fbe75a
+      md5: 9da101cd2317830649a31f8fa46debec
+      crc32: a975efe4
+      size: 512
+    - name: palmos40-en-m500.rom
+      destination: palmos40-en-m500.rom
+      required: true
+      sha1: a368b40751dd017163c9c1a615d6f3506b7dcbdf
+      md5: abed11421f47bbf3f654af618e0c6a8a
+      crc32: 9261a5aa
+      size: 2359296
+    - name: palmos41-en-m515.rom
+      destination: palmos41-en-m515.rom
+      required: true
+      sha1: cc4898ee8cae4669fc19e184c5b560c770e731b3
+      md5: 83cb1d1c76e568b916dc2e7c0bf669f6
+      crc32: 6481a088
+      size: 4194304
+    - name: palmos52-en-t3.rom
+      destination: palmos52-en-t3.rom
+      required: true
+      sha1: 3d4fc4a7c0b86342cab5a7f53b0b77737b48a0d2
+      md5: a46861541c63b20aba7bf172b0d853e1
+      crc32: 443752f6
+      size: 16777216
+    - name: palmos60-en-t3.rom
+      destination: palmos60-en-t3.rom
+      required: true
+      sha1: 858c62e21d3a42d2e70641d001a46ad44e923614
+      md5: c2fae3ff41cc4f94be0fdaed1523ea99
+      crc32: 25314c62
+      size: 16777216
+    native_id: Palm OS
   sega-dreamcast:
     files:
     - name: dc_boot.bin
@@ -1652,7 +2120,7 @@ systems:
     native_id: Sega - Dreamcast
     core: flycast
     manufacturer: Sega
-    docs: https://docs.libretro.com/library/flycast/
+    docs: "https://docs.libretro.com/library/flycast/"
   sega-dreamcast-arcade:
     files:
     - name: airlbios.zip
@@ -1820,7 +2288,7 @@ systems:
     native_id: Sega - Mega Drive - Genesis
     core: genesis_plus_gx
     manufacturer: Sega
-    docs: https://docs.libretro.com/library/genesis_plus_gx/
+    docs: "https://docs.libretro.com/library/genesis_plus_gx/"
   sega-saturn:
     files:
     - name: hisaturn.bin
@@ -1900,26 +2368,37 @@ systems:
       md5: ac4e4b6522e200c0d23d371a8cecbfd3
       crc32: e4d61811
       size: 524288
+    - name: saturn_bios.bin
+      destination: kronos/saturn_bios.bin
+      required: true
+      sha1: 2b8cb4f87580683eb4d760e4ed210813d667f0a2
+      md5: af5828fdff51384f99b3c4926be27762
+      crc32: 2aba43c2
+      size: 524288
     - name: stvbios.zip
       destination: kronos/stvbios.zip
       required: true
+      sha1: 279375f97736d8bc37f240b9f7d119d007df1c0e
+      md5: 0e92c1e02862dfeb4cdef7f4414b14a9
+      crc32: e597acb5
+      size: 2956357
     native_id: Sega - Saturn
     core: kronos
     manufacturer: Sega
-    docs: https://docs.libretro.com/library/kronos/
+    docs: "https://docs.libretro.com/library/kronos/"
     includes:
     - kronos
   sharp-x1:
     files:
-    - name: iplrom.x1
-      destination: iplrom.x1
+    - name: IPLROM.X1
+      destination: xmil/IPLROM.X1
       required: true
       sha1: d3395e9aeb5b8bbba7654dd471bcd8af228ee69a
       md5: eeeea1cd29c6e0e8b094790ae969bfa7
       crc32: e70011d3
       size: 4096
-    - name: iplrom.x1t
-      destination: iplrom.x1t
+    - name: IPLROM.X1T
+      destination: xmil/IPLROM.X1T
       required: true
       sha1: 1c1a0d8c9f4c446ccd7470516b215ddca5052fb2
       md5: 851e4a5936f17d13f8c39a980cf00d77
@@ -1928,9 +2407,23 @@ systems:
     native_id: Sharp - X1
     core: x1
     manufacturer: Sharp
-    docs: https://docs.libretro.com/library/x1/
+    docs: "https://docs.libretro.com/library/x1/"
   sharp-x68000:
     files:
+    - name: iplromco.dat
+      destination: keropi/iplromco.dat
+      required: true
+      sha1: 77511fc58798404701f66b6bbc9cbde06596eba7
+      md5: cc78d4f4900f622bd6de1aed7f52592f
+      crc32: 6c7ef608
+      size: 131072
+    - name: iplromxv.dat
+      destination: keropi/iplromxv.dat
+      required: true
+      sha1: e33cdcdb69cd257b0b211ef46e7a8b144637db57
+      md5: 0617321daa182c3f3d6f41fd02fb3275
+      crc32: 00eeb408
+      size: 131072
     - name: cgrom.dat
       destination: keropi/cgrom.dat
       required: true
@@ -1952,24 +2445,10 @@ systems:
       md5: f373003710ab4322642f527f567e020a
       crc32: e8f8fdad
       size: 131072
-    - name: iplromco.dat
-      destination: keropi/iplromco.dat
-      required: true
-      sha1: 77511fc58798404701f66b6bbc9cbde06596eba7
-      md5: cc78d4f4900f622bd6de1aed7f52592f
-      crc32: 6c7ef608
-      size: 131072
-    - name: iplromxv.dat
-      destination: keropi/iplromxv.dat
-      required: true
-      sha1: e33cdcdb69cd257b0b211ef46e7a8b144637db57
-      md5: 0617321daa182c3f3d6f41fd02fb3275
-      crc32: 00eeb408
-      size: 131072
     native_id: Sharp - X68000
     core: px68k
     manufacturer: Sharp
-    docs: https://docs.libretro.com/library/px68k/
+    docs: "https://docs.libretro.com/library/px68k/"
     includes:
     - keropi
   sinclair-zx-spectrum:
@@ -2002,48 +2481,6 @@ systems:
       md5: 4f341936594cbcab75cfa62ce96e3682
       crc32: 6010e796
       size: 16384
-    - name: 128p-0.rom
-      destination: 128p-0.rom
-      required: true
-      sha1: d07fcdeca892ee80494d286ea9ea5bf3928a1aca
-      md5: a249565f03b98d004ee7f019570069cd
-      crc32: 124ad9e0
-      size: 16384
-    - name: 128p-1.rom
-      destination: 128p-1.rom
-      required: true
-      sha1: 80080644289ed93d71a1103992a154cc9802b2fa
-      md5: 6e09e5d3c4aef166601669feaaadc01c
-      crc32: b96a36be
-      size: 16384
-    - name: 256s-0.rom
-      destination: 256s-0.rom
-      required: true
-      sha1: 477114ff0fe1388e0979df1423602b21248164e5
-      md5: b9fda5b6a747ff037365b0e2d8c4379a
-      crc32: 0eb40a09
-      size: 16384
-    - name: 256s-1.rom
-      destination: 256s-1.rom
-      required: true
-      sha1: 367b5a102fb663beee8e7930b8c4acc219c1f7b3
-      md5: 643861ad34831b255bf2eb64e8b6ecb8
-      crc32: 9d513013
-      size: 16384
-    - name: 256s-2.rom
-      destination: 256s-2.rom
-      required: true
-      sha1: 07783ee295274d8ff15d935bfd787c8ac1d54900
-      md5: d8ad507b1c915a9acfe0d73957082926
-      crc32: fd0d3ce1
-      size: 16384
-    - name: 256s-3.rom
-      destination: 256s-3.rom
-      required: true
-      sha1: 33703e97cc93b7edfcc0334b64233cf81b7930db
-      md5: ce0723f9bc02f4948c15d3b3230ae831
-      crc32: 1fe1d003
-      size: 16384
     - name: 48.rom
       destination: 48.rom
       required: true
@@ -2065,13 +2502,6 @@ systems:
       md5: e6db6b9f6ad15012851115a7bc4b31d8
       crc32: c2c6cba7
       size: 1568
-    - name: gluck.rom
-      destination: gluck.rom
-      required: true
-      sha1: 015eb96dafb273d4f4512c467e9b43c305fd1bc4
-      md5: d5869034604dbfd2c1d54170e874fd0a
-      crc32: ca321d79
-      size: 16384
     - name: if1-1.rom
       destination: if1-1.rom
       required: true
@@ -2296,114 +2726,177 @@ systems:
       md5: 575d203c6e15e679fba0b73f854ec7a2
       crc32: ae16233a
       size: 8192
-    - name: trdos.rom
-      destination: trdos.rom
-      required: true
-      sha1: 21695e3f2a8f796386ce66eea8a246b0ac44810c
-      md5: 0da70a5d2a0e733398e005b96b7e4ba6
-      crc32: 10751aba
-      size: 16384
-    - name: zx48.rom
-      destination: zx48.rom
-      required: true
-      sha1: 5ea7c2b824672e914525d1d5c419d71b84a426a2
-      md5: 4c42a2f075212361c3117015b107ff68
-      crc32: ddee531f
-      size: 16384
     - name: zx128.rom
-      destination: zx128.rom
+      destination: ep128emu/roms/zx128.rom
       required: true
       sha1: 16375d42ea109b47edded7a16028de7fdb3013a1
       md5: 85fede415f4294cc777517d7eada482e
       crc32: 2cbe8995
       size: 32768
+    - name: zx48.rom
+      destination: ep128emu/roms/zx48.rom
+      required: true
+      sha1: 5ea7c2b824672e914525d1d5c419d71b84a426a2
+      md5: 4c42a2f075212361c3117015b107ff68
+      crc32: ddee531f
+      size: 16384
+    - name: 128p-0.rom
+      destination: fuse/128p-0.rom
+      required: true
+      sha1: d07fcdeca892ee80494d286ea9ea5bf3928a1aca
+      md5: a249565f03b98d004ee7f019570069cd
+      crc32: 124ad9e0
+      size: 16384
+    - name: 128p-1.rom
+      destination: fuse/128p-1.rom
+      required: true
+      sha1: 80080644289ed93d71a1103992a154cc9802b2fa
+      md5: 6e09e5d3c4aef166601669feaaadc01c
+      crc32: b96a36be
+      size: 16384
+    - name: 256s-0.rom
+      destination: fuse/256s-0.rom
+      required: true
+      sha1: 477114ff0fe1388e0979df1423602b21248164e5
+      md5: b9fda5b6a747ff037365b0e2d8c4379a
+      crc32: 0eb40a09
+      size: 16384
+    - name: 256s-1.rom
+      destination: fuse/256s-1.rom
+      required: true
+      sha1: 367b5a102fb663beee8e7930b8c4acc219c1f7b3
+      md5: 643861ad34831b255bf2eb64e8b6ecb8
+      crc32: 9d513013
+      size: 16384
+    - name: 256s-2.rom
+      destination: fuse/256s-2.rom
+      required: true
+      sha1: 07783ee295274d8ff15d935bfd787c8ac1d54900
+      md5: d8ad507b1c915a9acfe0d73957082926
+      crc32: fd0d3ce1
+      size: 16384
+    - name: 256s-3.rom
+      destination: fuse/256s-3.rom
+      required: true
+      sha1: 33703e97cc93b7edfcc0334b64233cf81b7930db
+      md5: ce0723f9bc02f4948c15d3b3230ae831
+      crc32: 1fe1d003
+      size: 16384
+    - name: gluck.rom
+      destination: fuse/gluck.rom
+      required: true
+      sha1: 015eb96dafb273d4f4512c467e9b43c305fd1bc4
+      md5: d5869034604dbfd2c1d54170e874fd0a
+      crc32: ca321d79
+      size: 16384
+    - name: trdos.rom
+      destination: fuse/trdos.rom
+      required: true
+      sha1: 21695e3f2a8f796386ce66eea8a246b0ac44810c
+      md5: 0da70a5d2a0e733398e005b96b7e4ba6
+      crc32: 10751aba
+      size: 16384
     native_id: Sinclair - ZX Spectrum
     core: fuse
     manufacturer: Sinclair|Amstrad
-    docs: https://docs.libretro.com/library/fuse/
+    docs: "https://docs.libretro.com/library/fuse/"
   snk-neogeo-cd:
     files:
     - name: 000-lo.lo
-      destination: 000-lo.lo
+      destination: neocd/000-lo.lo
       required: true
       sha1: 5992277debadeb64d1c1c64b0a92d9293eaf7e4a
       md5: fc7599f3f871578fe9a0453662d1c966
       crc32: 5a86cff2
       size: 131072
     - name: front-sp1.bin
-      destination: front-sp1.bin
+      destination: neocd/front-sp1.bin
       required: true
       sha1: 53bc1f283cdf00fa2efbb79f2e36d4c8038d743a
       md5: 5c2366f25ff92d71788468ca492ebeca
       crc32: cac62307
       size: 524288
     - name: neocd.bin
-      destination: neocd.bin
+      destination: neocd/neocd.bin
       required: true
       sha1: 7bb26d1e5d1e930515219cb18bcde5b7b23e2eda
       md5: f39572af7584cb5b3f70ae8cc848aba2
       crc32: df9de490
       size: 524288
     - name: neocd_f.rom
-      destination: neocd_f.rom
+      destination: neocd/neocd_f.rom
       required: true
       sha1: a5f4a7a627b3083c979f6ebe1fabc5d2df6d083b
       md5: 8834880c33164ccbe6476b559f3e37de
       crc32: 6fd2a520
       size: 524288
     - name: neocd_sf.rom
-      destination: neocd_sf.rom
+      destination: neocd/neocd_sf.rom
       required: true
       sha1: 4a94719ee5d0e3f2b981498f70efc1b8f1cef325
       md5: 043d76d5f0ef836500700c34faef774d
       crc32: 1101f313
       size: 524288
     - name: neocd_st.rom
-      destination: neocd_st.rom
+      destination: neocd/neocd_st.rom
       required: true
       sha1: 19729b51bdab60c42aafef6e20ea9234c7eb8410
       md5: f6325a33c6d63ea4b9162a3fa8c32727
       crc32: 01c299cc
       size: 524288
     - name: neocd_sz.rom
-      destination: neocd_sz.rom
+      destination: neocd/neocd_sz.rom
       required: true
       sha1: 6a947457031dd3a702a296862446d7485aa89dbb
       md5: 971ee8a36fb72da57aed01758f0a37f5
       crc32: 42f6b6c4
       size: 524288
     - name: neocd_t.rom
-      destination: neocd_t.rom
+      destination: neocd/neocd_t.rom
       required: true
       sha1: cc92b54a18a8bff6e595aabe8e5c360ba9e62eb5
       md5: de3cf45d227ad44645b22aa83b49f450
       crc32: 56c9ecba
       size: 524288
     - name: neocd_z.rom
-      destination: neocd_z.rom
+      destination: neocd/neocd_z.rom
       required: true
       sha1: b0f1c4fa8d4492a04431805f6537138b842b549f
       md5: 11526d58d4c524daef7d5d677dc6b004
       crc32: '33697892'
       size: 524288
     - name: top-sp1.bin
-      destination: top-sp1.bin
+      destination: neocd/top-sp1.bin
       required: true
       sha1: 235f4d1d74364415910f73c10ae5482d90b4274f
       md5: 122aee210324c72e8a11116e6ef9c0d0
       crc32: c36a47c0
       size: 524288
     - name: uni-bioscd.rom
-      destination: uni-bioscd.rom
+      destination: neocd/uni-bioscd.rom
       required: true
       sha1: 5142f205912869b673a71480c5828b1eaed782a8
       md5: 08ca8b2dba6662e8024f9e789711c6fc
       crc32: ff3abc59
       size: 524288
+    - name: neocdz.zip
+      destination: neocdz.zip
+      required: true
+      sha1: 29380243b6f6c8e67816cf518a272cc8d932e2b5
+      md5: 66bf2aeb1b870eac603925601e48af82
+      crc32: a034e470
+      size: 953078
+    - name: ng-lo.rom
+      destination: neocd/ng-lo.rom
+      required: true
+      sha1: 2b1c719531dac9bb503f22644e6e4236b91e7cfc
+      md5: e255264d85d5765013b1b2fa8109dd53
+      crc32: e09e253c
+      size: 65536
     native_id: SNK - NeoGeo CD
     core: neocd
     manufacturer: SNK
-    docs: https://docs.libretro.com/library/neocd/
+    docs: "https://docs.libretro.com/library/neocd/"
   sony-playstation:
     files:
     - name: scph1000.bin
@@ -2539,8 +3032,8 @@ systems:
       md5: b9d9a0286c33dc6b7237bb13cd46fdee
       crc32: 318178bf
       size: 524288
-    - name: scph9002(7502).bin
-      destination: scph9002(7502).bin
+    - name: "scph9002(7502).bin"
+      destination: "scph9002(7502).bin"
       required: true
       sha1: 8d5de56a79954f29e9006929ba3fed9b6a418c1d
       md5: b9d9a0286c33dc6b7237bb13cd46fdee
@@ -2563,7 +3056,7 @@ systems:
     native_id: Sony - PlayStation
     core: duckstation
     manufacturer: Sony
-    docs: https://docs.libretro.com/library/duckstation/
+    docs: "https://docs.libretro.com/library/duckstation/"
   sony-playstation-2:
     files:
     - name: ps2-0100jd-20000117.bin
@@ -3077,11 +3570,18 @@ systems:
       md5: d3e81e95db25f5a86a7b7474550a2155
       crc32: 4e8c160c
       size: 4194304
+    - name: GameIndex.yaml
+      destination: pcsx2/resources/GameIndex.yaml
+      required: true
+      sha1: 57369df9ca82a460e596cea7835c5a0797dee668
+      md5: 526291c9c9bae8b184b0e5f4bfa94eb9
+      crc32: 20b4ea53
+      size: 1737799
     native_id: Sony - PlayStation 2
   sony-psp:
     files:
     - name: ppge_atlas.zim
-      destination: ppge_atlas.zim
+      destination: PPSSPP/ppge_atlas.zim
       required: true
       sha1: 30a33f3651f8e1b0967a5dfe6ff714baebcce41a
       md5: 866855cc330b9b95cc69135fb7b41d38
@@ -3090,7 +3590,7 @@ systems:
     native_id: Sony - PlayStation Portable
     core: ppsspp
     manufacturer: Sony
-    docs: https://docs.libretro.com/library/ppsspp/
+    docs: "https://docs.libretro.com/library/ppsspp/"
     data_directories:
     - ref: ppsspp-assets
       destination: PPSSPP
@@ -3120,38 +3620,48 @@ systems:
     native_id: Texas Instruments TI-83
     core: numero
     manufacturer: Texas Instruments
-    docs: https://docs.libretro.com/library/numero/
+    docs: "https://docs.libretro.com/library/numero/"
   videoton-tvc:
     files:
-    - name: tvcfileio.rom
-      destination: tvcfileio.rom
-      required: true
-      sha1: 98889c3a56b11dedf077f866ed2e12d51b604113
-      md5: a2cf86ba8e7fc58b242137fe59036832
-      crc32: 950e32fd
-      size: 8192
     - name: tvc22_ext.rom
-      destination: tvc22_ext.rom
+      destination: ep128emu/roms/tvc22_ext.rom
       required: true
       sha1: abf119cf947ea32defd08b29a8a25d75f6bd4987
       md5: 5ce95a26ceed5bec73995d83568da9cf
       crc32: 05e1c3a8
       size: 8192
     - name: tvc22_sys.rom
-      destination: tvc22_sys.rom
+      destination: ep128emu/roms/tvc22_sys.rom
       required: true
       sha1: f2572ee83d09fc08f4de4a62f101c8bb301a9505
       md5: 8c54285f541930cde766069942bad0f2
       crc32: 79fa818c
       size: 16384
     - name: tvc_dos12d.rom
-      destination: tvc_dos12d.rom
+      destination: ep128emu/roms/tvc_dos12d.rom
       required: true
       sha1: 072c6160d4e7d406f5d8f5b1b66066c797d35561
       md5: 88dc7876d584f90e4106f91444ab23b7
       crc32: 1466aed4
       size: 16384
+    - name: tvcfileio.rom
+      destination: ep128emu/roms/tvcfileio.rom
+      required: true
+      sha1: 98889c3a56b11dedf077f866ed2e12d51b604113
+      md5: a2cf86ba8e7fc58b242137fe59036832
+      crc32: 950e32fd
+      size: 8192
     native_id: Videoton - TV Computer
+  vircon32:
+    files:
+    - name: Vircon32Bios.v32
+      destination: Vircon32Bios.v32
+      required: true
+      sha1: 67ddbcd018f03ed74b6e013074d92cc5f1f51c80
+      md5: 73f04397cbb2dafcf2047b19a856153a
+      crc32: d4f7327d
+      size: 1073060
+    native_id: Vircon32
   wolfenstein-3d:
     files:
     - name: ecwolf.pk3
@@ -3171,24 +3681,289 @@ systems:
       md5: a17e0e0150155400d8cced329563d9c8
       crc32: a93f1c4b
       size: 9523360
+    - name: Roland_SC-55.sf2
+      destination: scummvm/extra/Roland_SC-55.sf2
+      required: true
+      sha1: 9dba9212f2e34446ab034595665809f09f303d63
+      md5: dbb97c34404b753724a66fe0108a32e1
+      crc32: 2f280fcc
+      size: 3283278
+    - name: access.dat
+      destination: scummvm/extra/access.dat
+      required: true
+      sha1: 2b0cc66a507a159a3a44160cc80c561171798f85
+      md5: f1925ac548f9551d9d8f648dbc92c897
+      crc32: c21aaf8f
+      size: 409472
+    - name: achievements.dat
+      destination: scummvm/extra/achievements.dat
+      required: true
+      sha1: 379f9def6d0de4b4bad18b0177df81783a51f17b
+      md5: 73cf5bd61896442a990e363f284a0bc2
+      crc32: 6b35801f
+      size: 249239
+    - name: cryo.dat
+      destination: scummvm/extra/cryo.dat
+      required: true
+      sha1: 220c2fe52d26b8607abeb2ad4a8ea4324daea5ba
+      md5: fc5886ea5388f20eae299bb408da5bcc
+      crc32: 34b2202c
+      size: 12499
+    - name: cryomni3d.dat
+      destination: scummvm/extra/cryomni3d.dat
+      required: true
+      sha1: 32a9e6f7a80e585c679b7e09df90bf2d2d20e8ad
+      md5: 474e9a57b74c368acc8d19e8d63e3288
+      crc32: 3f109488
+      size: 34576
+    - name: drascula.dat
+      destination: scummvm/extra/drascula.dat
+      required: true
+      sha1: 16a45d421e92b74cbc8cfe53486474700cc176d7
+      md5: 2647b6dff6d117b217dd9896cd25b34e
+      crc32: e4d1d147
+      size: 259619
+    - name: encoding.dat
+      destination: scummvm/extra/encoding.dat
+      required: true
+      sha1: 11d3873337827195bc16c3d3175ad00f1777ed95
+      md5: f2e88b2faec499a4914c3a0bcffc7db1
+      crc32: d3235017
+      size: 179670
+    - name: fonts.dat
+      destination: scummvm/extra/fonts.dat
+      required: true
+      sha1: 1f194d6a55882967e4c4d4e4692fb4aa5c992069
+      md5: 65025f90c134e4538efd306e36341aa1
+      crc32: 099d83fd
+      size: 1996401
+    - name: freescape.dat
+      destination: scummvm/extra/freescape.dat
+      required: true
+      sha1: 4ed259b5b27d8dfcf4815a73a9946f4ed709457e
+      md5: 30ca162d03b65f46997fa43e1093839e
+      crc32: b02f9abb
+      size: 55245
+    - name: grim-patch.lab
+      destination: scummvm/extra/grim-patch.lab
+      required: true
+      sha1: 3c43b7a0125f88a9f83ae4307dca57867ffd637c
+      md5: 32b777b824f02b1e1259903740964058
+      crc32: d4ccf3ab
+      size: 9341
+    - name: hadesch_translations.dat
+      destination: scummvm/extra/hadesch_translations.dat
+      required: true
+      sha1: 17aae444b3010e72e092635d25d3b93c104b0ad2
+      md5: 7857da7e56a11e0749fb45100c323b3c
+      crc32: 2bde2e57
+      size: 431
+    - name: hugo.dat
+      destination: scummvm/extra/hugo.dat
+      required: true
+      sha1: 932c0d6f73effea91a6fca7ac73439e104952205
+      md5: 0856a20f18b3319c92b710ef80d886cd
+      crc32: e8d147ef
+      size: 189584
+    - name: kyra.dat
+      destination: scummvm/extra/kyra.dat
+      required: true
+      sha1: dda6002f09035101a4bf004c1623f8490d739aa1
+      md5: 21a57f79886e46f410cfb50186ed8d77
+      crc32: 75cbdf42
+      size: 1696846
+    - name: lure.dat
+      destination: scummvm/extra/lure.dat
+      required: true
+      sha1: 22c05c0a49c218a4194ccfb670604c8277b9a1f2
+      md5: 75a83c781ac7024fc9c1b6f7ecc5b936
+      crc32: 8b7dc57f
+      size: 637824
+    - name: macgui.dat
+      destination: scummvm/extra/macgui.dat
+      required: true
+      sha1: 1eed577281b8819367d1ee99b1a76ff3e1920735
+      md5: d97f2965013b343dd3d4fdbbc7192f15
+      crc32: 858d3d40
+      size: 65656
+    - name: macventure.dat
+      destination: scummvm/extra/macventure.dat
+      required: true
+      sha1: 156d1b9a18e5bd3b90b1b2820acf198af1f65ead
+      md5: d855abc95d2b7c03b748631c08603ebb
+      crc32: 3cf789f2
+      size: 4167
+    - name: mm.dat
+      destination: scummvm/extra/mm.dat
+      required: true
+      sha1: d3ae68a09f8c60a32ce42736ed8d276825fbf446
+      md5: fc20f5064386a19d39bd5f9df0a542fa
+      crc32: e8217e0e
+      size: 266845
+    - name: monkey4-patch.m4b
+      destination: scummvm/extra/monkey4-patch.m4b
+      required: true
+      sha1: 49fc530e77b61f326f6e1d5a5147daa2fd67d1e2
+      md5: 9eb7b7e7cc7dad1fe08be6e73d749abe
+      crc32: a229c4cf
+      size: 2990
+    - name: mort.dat
+      destination: scummvm/extra/mort.dat
+      required: true
+      sha1: 0b9d0fa2a18eadf61aeddc19128ef90898ab7206
+      md5: 3cfb16d7bab4d77606b3b1274b8ae870
+      crc32: 6d234148
+      size: 76302
+    - name: myst3.dat
+      destination: scummvm/extra/myst3.dat
+      required: true
+      sha1: 5fbf7b1a596219f0daab60a8ceb2f1e59e042243
+      md5: 54e9056211f2fff255b6f66a3fe39a8d
+      crc32: 316151a0
+      size: 358287
+    - name: nancy.dat
+      destination: scummvm/extra/nancy.dat
+      required: true
+      sha1: 18fb24c236adb974ade847794044914a81d539aa
+      md5: e482c84f583783b4b9dea5374aa232da
+      crc32: 05e6dbc9
+      size: 251046
+    - name: neverhood.dat
+      destination: scummvm/extra/neverhood.dat
+      required: true
+      sha1: 490012c996ba0c56dd8d077e1418ee53b1e96397
+      md5: dfaab12ffb265646f31f51b6904246d1
+      crc32: 25b76433
+      size: 23804
+    - name: queen.tbl
+      destination: scummvm/extra/queen.tbl
+      required: true
+      sha1: 800ed1a38a1ba46c3e57281c6d50671dd62d44ff
+      md5: 4f5b513b52c4ef6fb1c46e984760a3b7
+      crc32: ee33b23c
+      size: 1084522
+    - name: sky.cpt
+      destination: scummvm/extra/sky.cpt
+      required: true
+      sha1: fa03ede717223eaf011491d2066e37eb112e735b
+      md5: 9d00157b1cebd6368cbf88135c098f40
+      crc32: a7957203
+      size: 419427
+    - name: supernova.dat
+      destination: scummvm/extra/supernova.dat
+      required: true
+      sha1: f81b0a129e7ac35bd0e9e29a3205eb2c7f26bfbb
+      md5: f6af52d51152447f43cf3cf9a50bc144
+      crc32: b5e601a3
+      size: 420725
+    - name: teenagent.dat
+      destination: scummvm/extra/teenagent.dat
+      required: true
+      sha1: 6a5c43732e30e25ace6b6ba2b28f038b24cc497f
+      md5: aaaf8792af40c80122d7dbecaf1dee20
+      crc32: 6ae16bb9
+      size: 141090
+    - name: titanic.dat
+      destination: scummvm/extra/titanic.dat
+      required: true
+      sha1: 15f51828f08fdbe01b56123e96312b5859a968c0
+      md5: 4b2fb71201dc3795cff45df6200a1918
+      crc32: 96ce1712
+      size: 3197968
+    - name: tony.dat
+      destination: scummvm/extra/tony.dat
+      required: true
+      sha1: a5e19f364bda6a0d2330495114c9ad665bb79ad0
+      md5: 891022a4e2917bb54b5cdc9a46f5b3df
+      crc32: d525aac3
+      size: 24584
+    - name: toon.dat
+      destination: scummvm/extra/toon.dat
+      required: true
+      sha1: 6f8a60b0d51de1e86ab3a51c932a78a642c1567a
+      md5: 730f63ea46169f56bb4f9fa0637baef0
+      crc32: c8ceacc9
+      size: 17986
+    - name: ultima.dat
+      destination: scummvm/extra/ultima.dat
+      required: true
+      sha1: c9207e9c33264134e94cfaf28c638431fdcd8772
+      md5: 420ef1f96eee6dc15395330f28923be2
+      crc32: f2699208
+      size: 15979622
+    - name: vkeybd_default.zip
+      destination: scummvm/extra/vkeybd_default.zip
+      required: true
+      sha1: 4d787bd5a071c729c4f374e6e7c7d7b06d7f9f63
+      md5: bf51a61f07625ea20e891058afaa892c
+      crc32: f6c16f98
+      size: 184946
+    - name: wintermute.zip
+      destination: scummvm/extra/wintermute.zip
+      required: true
+      sha1: 9f4b31838c16baf518ae14dd44dc54973a3508df
+      md5: 46ab65cb137a4fc8710a8f3b9455e50e
+      crc32: 972efe9a
+      size: 4057
+    - name: gui-icons.dat
+      destination: scummvm/theme/gui-icons.dat
+      required: true
+      sha1: 7fd69a142d0333e1514a8c819b610a7471162d9e
+      md5: 17150a7a6ed5c4d5c0384b95c5fce479
+      crc32: 9b4519e8
+      size: 3300128
+    - name: residualvm.zip
+      destination: scummvm/theme/residualvm.zip
+      required: true
+      sha1: f1bcabae2c99b34bc88975c89d042a179caef9d8
+      md5: 9cbffee094a6bfa1765e2f6ba15a268e
+      crc32: 8a482338
+      size: 90553
+    - name: scummclassic.zip
+      destination: scummvm/theme/scummclassic.zip
+      required: true
+      sha1: 8e5aff75e4aa42b365e8f32223d6fef0b789d646
+      md5: 57aaebd10238ffe3863192254629aaa9
+      crc32: 8387238f
+      size: 15872
+    - name: scummmodern.zip
+      destination: scummvm/theme/scummmodern.zip
+      required: true
+      sha1: 132dcce3ea2f9b6c33b17e55fa2e75f5ee34a33a
+      md5: b470c7205246a0bb4718ca0a27d25055
+      crc32: a641843b
+      size: 283299
+    - name: scummremastered.zip
+      destination: scummvm/theme/scummremastered.zip
+      required: true
+      sha1: 6016da4b71e5f46f5866f5acf824c337a0e3ee5c
+      md5: 15600f0b0274f2ab4dd0c181e4ae3e95
+      crc32: f1d52065
+      size: 283227
+    - name: shaders.dat
+      destination: scummvm/theme/shaders.dat
+      required: true
+      sha1: c67ec35c3f6e2ba7f09b8f61a78df7f713ff040c
+      md5: f073f17187d0bfa3e7ebb7f328847969
+      crc32: cb68c12e
+      size: 657234
+    - name: translations.dat
+      destination: scummvm/theme/translations.dat
+      required: true
+      sha1: e3e3470ff75afa10b7cbdebbd41fba45a7fe0f94
+      md5: 1ca707498f9024c292ca745c5727a751
+      crc32: bd7a5f25
+      size: 3191299
     native_id: ScummVM
     core: scummvm
     manufacturer: Various
-    docs: https://docs.libretro.com/library/scummvm/
+    docs: "https://docs.libretro.com/library/scummvm/"
   nec-pc-88:
     includes:
     - quasi88
     core: quasi88
     manufacturer: NEC
-    docs: https://docs.libretro.com/library/quasi88/
-  vircon32:
-    files:
-    - name: Vircon32Bios.v32
-      destination: Vircon32Bios.v32
-      required: true
-    core: vircon32
-    manufacturer: Vircon
-    docs: https://docs.libretro.com/library/vircon32/
+    docs: "https://docs.libretro.com/library/quasi88/"
   xrick:
     files:
     - name: data.zip
@@ -3196,6 +3971,4 @@ systems:
       required: true
     core: xrick
     manufacturer: Other
-    docs: https://docs.libretro.com/library/xrick/
-case_insensitive_fs: true
-cores: all_libretro
+    docs: "https://docs.libretro.com/library/xrick/"

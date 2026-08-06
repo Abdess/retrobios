@@ -1,8 +1,8 @@
 inherits: emulatorjs
 platform: RomM
-version: 4.7.0
-homepage: https://romm.app
-source: https://raw.githubusercontent.com/rommapp/romm/master/backend/models/fixtures/known_bios_files.json
+version: 5.1.0
+homepage: "https://romm.app"
+source: "https://raw.githubusercontent.com/rommapp/romm/5.1.0/backend/models/fixtures/known_bios_files.json"
 base_destination: bios
 hash_type: sha1
 verification_mode: md5
@@ -262,15 +262,15 @@ systems:
       size: 2048
   atari-7800:
     files:
-    - name: 7800 BIOS (E).rom
-      destination: atari7800/7800 BIOS (E).rom
+    - name: "7800 BIOS (E).rom"
+      destination: "atari7800/7800 BIOS (E).rom"
       required: true
       sha1: 5a140136a16d1d83e4ff32a19409ca376a8df874
       md5: 397bb566584be7b9764e7a68974c4263
       crc32: d5b61170
       size: 16384
-    - name: 7800 BIOS (U).rom
-      destination: atari7800/7800 BIOS (U).rom
+    - name: "7800 BIOS (U).rom"
+      destination: "atari7800/7800 BIOS (U).rom"
       required: true
       sha1: d9d134bb6b36907c615a594cc7688f7bfcef5b43
       md5: 0763f1ffb006ddbe32e52d497ee848ae
@@ -960,8 +960,8 @@ systems:
     - name: NstDatabase.xml
       destination: nes/NstDatabase.xml
       required: true
-      sha1: f92312bae56e29c5bf00a5103105fce78472bf5c
-      md5: 0ee6cbdc6f5c96ce9c8aa5edb59066f4
+      sha1: 26322f182540211e9b5e3647675b7c593706ae2b
+      md5: 7bfe8c0540ed4bd6a0f1e2a0f0118ced
       crc32: ebb2196c
       size: 1009534
   nintendo-pokemon-mini:
@@ -982,15 +982,15 @@ systems:
       md5: fed4d8242cfbed61343d53d48432aced
       crc32: f51f07a0
       size: 1048576
-    - name: BS-X (En).bin
-      destination: satellaview/BS-X (En).bin
+    - name: "BS-X (En).bin"
+      destination: "satellaview/BS-X (En).bin"
       required: true
       sha1: f3cdff70de5d0f5c52ca3a8f46588b863d48b8ec
       md5: 33b62505da6ca4525e3839db4e1a7bca
       crc32: 347e1c4e
       size: 1048576
-    - name: BS-X (En) (DRM-Free).bin
-      destination: satellaview/BS-X (En) (DRM-Free).bin
+    - name: "BS-X (En) (DRM-Free).bin"
+      destination: "satellaview/BS-X (En) (DRM-Free).bin"
       required: true
       sha1: 7996bd1c01b99800e0d5d34beff93db283784864
       md5: 4ed9648505ab33a4daec93707b16caba
@@ -1641,23 +1641,23 @@ systems:
     - name: plus3e-0.rom
       destination: zxs/plus3e-0.rom
       required: true
-      sha1: 649fbd233490bf58b35350b0123d36caaaa011eb
-      md5: bc123f625e245c225f92ef05933ed134
-      crc32: 7f4a5482
+      sha1: a837f66977040f7b51ed053a2483c10f3d070ab7
+      md5: 3abdc20e72890a750dd3c745d286dfba
+      crc32: a10230c0
       size: 16384
     - name: plus3e-1.rom
       destination: zxs/plus3e-1.rom
       required: true
-      sha1: f12198108cbb14de4f03c6695bc16d08c85ee214
-      md5: 617364264c587d20c9fc4746c29679f2
-      crc32: 5aeb4675
+      sha1: 6a4364f25513e4079f048f2de131a896d30edc64
+      md5: 8361a1d9c8bcef89c0c39293776564ad
+      crc32: 09b9c3ca
       size: 16384
     - name: plus3e-2.rom
       destination: zxs/plus3e-2.rom
       required: true
-      sha1: 773633dce5ba323a9e00d9d0f9e4d8c295df7c87
-      md5: c363e95dcd0a90e6e7f847e6e47e0179
-      crc32: 504755cb
+      sha1: 0a747cc0b827a94b4fd74cfd818ca792437a38f7
+      md5: f36c5c2d1f2a682caadeaa6f947db0da
+      crc32: a60285a0
       size: 16384
     - name: plus3e-3.rom
       destination: zxs/plus3e-3.rom
@@ -2041,8 +2041,8 @@ systems:
       md5: b9d9a0286c33dc6b7237bb13cd46fdee
       crc32: 318178bf
       size: 524288
-    - name: scph9002(7502).bin
-      destination: psx/scph9002(7502).bin
+    - name: "scph9002(7502).bin"
+      destination: "psx/scph9002(7502).bin"
       required: true
       sha1: 8d5de56a79954f29e9006929ba3fed9b6a418c1d
       md5: b9d9a0286c33dc6b7237bb13cd46fdee
@@ -2071,11 +2071,10 @@ systems:
     - name: scummvm.zip
       destination: scummvm/scummvm.zip
       required: true
-      sha1: 320801896408d7c1566ce26dd5e4b5eb0f0caa6c
-      md5: 368bdb1816a02640f873310faa9dedf7
-      crc32: 52c47eb1
-      size: 79379908
-    # upstream fix: previous hashes from obsolete 9.5MB scummvm.zip build
+      sha1: 718c1a00d38e0810a1ad0ffde79f73447f846f01
+      md5: a17e0e0150155400d8cced329563d9c8
+      crc32: a93f1c4b
+      size: 9523360
   amstrad-cpc:
     files:
     - name: cpc464.rom

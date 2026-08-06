@@ -1,6 +1,6 @@
 platform: retroarch
 source: https://buildbot.libretro.com/nightly/
-scraped_at: '2026-03-26T08:31:53Z'
+scraped_at: '2026-08-06T11:31:07Z'
 targets:
   linux-x86_64:
     architecture: x86_64
@@ -16,7 +16,9 @@ targets:
     - ardens
     - arduous
     - atari800
+    - azahar
     - b2
+    - bbkemu
     - bk
     - blastem
     - bluemsx
@@ -87,7 +89,9 @@ targets:
     - gw
     - handy
     - hatari
+    - hbmame
     - holani
+    - irogb
     - jaxe
     - jollycv
     - jumpnbump
@@ -127,11 +131,13 @@ targets:
     - mrboom
     - mu
     - mupen64plus_next
+    - native32emu
     - nekop2
     - neocd
     - nestopia
     - noods
     - np2kai
+    - nuance
     - numero
     - nxengine
     - o2em
@@ -140,6 +146,7 @@ targets:
     - opera
     - panda3ds
     - parallel_n64
+    - pcee2
     - pcsx2
     - pcsx_rearmed
     - pd777
@@ -147,6 +154,7 @@ targets:
     - play
     - pocketcdg
     - pokemini
+    - pokketstation
     - potator
     - ppsspp
     - prboom
@@ -161,6 +169,7 @@ targets:
     - reminiscence
     - retro8
     - romcleaner
+    - rustynes
     - same_cdi
     - sameboy
     - sameduck
@@ -182,6 +191,7 @@ targets:
     - tgbdual
     - theodore
     - thepowdertoy
+    - tia
     - tic80
     - tyrquake
     - uw8
@@ -213,6 +223,7 @@ targets:
     - xrick
     - yabasanshiro
     - yabause
+    - ymir
   linux-armhf:
     architecture: armhf
     cores:
@@ -430,7 +441,9 @@ targets:
     - ardens
     - arduous
     - atari800
+    - azahar
     - b2
+    - bbkemu
     - bk
     - blastem
     - bluemsx
@@ -501,7 +514,9 @@ targets:
     - gw
     - handy
     - hatari
+    - hbmame
     - holani
+    - irogb
     - jaxe
     - jollycv
     - jumpnbump
@@ -541,11 +556,13 @@ targets:
     - mrboom
     - mu
     - mupen64plus_next
+    - native32emu
     - nekop2
     - neocd
     - nestopia
     - noods
     - np2kai
+    - nuance
     - numero
     - nxengine
     - o2em
@@ -554,6 +571,7 @@ targets:
     - opera
     - panda3ds
     - parallel_n64
+    - pcee2
     - pcsx2
     - pcsx_rearmed
     - pd777
@@ -561,6 +579,7 @@ targets:
     - play
     - pocketcdg
     - pokemini
+    - pokketstation
     - potator
     - ppsspp
     - prboom
@@ -575,6 +594,7 @@ targets:
     - reminiscence
     - retro8
     - romcleaner
+    - rustynes
     - same_cdi
     - sameboy
     - sameduck
@@ -596,6 +616,7 @@ targets:
     - tgbdual
     - theodore
     - thepowdertoy
+    - tia
     - tic80
     - tyrquake
     - uw8
@@ -627,6 +648,7 @@ targets:
     - xrick
     - yabasanshiro
     - yabause
+    - ymir
   windows-x86:
     architecture: x86
     cores:
@@ -755,6 +777,7 @@ targets:
     - play
     - pocketcdg
     - pokemini
+    - pokketstation
     - potator
     - ppsspp
     - prboom
@@ -789,6 +812,7 @@ targets:
     - tgbdual
     - theodore
     - thepowdertoy
+    - tia
     - tic80
     - tyrquake
     - uw8
@@ -833,7 +857,9 @@ targets:
     - ardens
     - arduous
     - atari800
+    - azahar
     - b2
+    - bbkemu
     - bk
     - bluemsx
     - boom3
@@ -900,7 +926,9 @@ targets:
     - gw
     - handy
     - hatari
+    - hbmame
     - holani
+    - irogb
     - jaxe
     - jollycv
     - jumpnbump
@@ -941,6 +969,7 @@ targets:
     - mu
     - mupen64plus_next_gles2
     - mupen64plus_next_gles3
+    - native32emu
     - nekop2
     - neocd
     - nestopia
@@ -960,6 +989,7 @@ targets:
     - play
     - pocketcdg
     - pokemini
+    - pokketstation
     - potator
     - ppsspp
     - prboom
@@ -974,6 +1004,7 @@ targets:
     - reminiscence
     - retro8
     - romcleaner
+    - rustynes
     - same_cdi
     - sameboy
     - sameduck
@@ -996,6 +1027,7 @@ targets:
     - tgbdual
     - theodore
     - thepowdertoy
+    - tia
     - tic80
     - tyrquake
     - uw8
@@ -1026,6 +1058,7 @@ targets:
     - xrick
     - yabasanshiro
     - yabause
+    - ymir
   android-armeabi-v7a:
     architecture: armv7
     cores:
@@ -1039,8 +1072,10 @@ targets:
     - ardens
     - arduous
     - atari800
+    - bbkemu
     - bk
     - bluemsx
+    - boom3
     - bsnes
     - bsnes-jg
     - bsnes2014_accuracy
@@ -1063,6 +1098,7 @@ targets:
     - dice
     - dinothawr
     - dirksimple
+    - dolphin
     - dosbox_core
     - dosbox_pure
     - dosbox_svn
@@ -1131,6 +1167,7 @@ targets:
     - mednafen_vb
     - mednafen_wswan
     - melonds
+    - melondsds
     - mesen
     - mesen-s
     - meteor
@@ -1141,6 +1178,7 @@ targets:
     - mu
     - mupen64plus_next_gles2
     - mupen64plus_next_gles3
+    - native32emu
     - nekop2
     - neocd
     - nestopia
@@ -1159,6 +1197,7 @@ targets:
     - play
     - pocketcdg
     - pokemini
+    - pokketstation
     - potator
     - ppsspp
     - prboom
@@ -1173,6 +1212,7 @@ targets:
     - reminiscence
     - retro8
     - romcleaner
+    - rustynes
     - same_cdi
     - sameboy
     - sameduck
@@ -1195,6 +1235,7 @@ targets:
     - tgbdual
     - theodore
     - thepowdertoy
+    - tia
     - tic80
     - tyrquake
     - uw8
@@ -1238,8 +1279,10 @@ targets:
     - ardens
     - arduous
     - atari800
+    - bbkemu
     - bk
     - bluemsx
+    - boom3
     - bsnes
     - bsnes-jg
     - bsnes2014_accuracy
@@ -1343,6 +1386,7 @@ targets:
     - mu
     - mupen64plus_next_gles2
     - mupen64plus_next_gles3
+    - native32emu
     - nekop2
     - neocd
     - nestopia
@@ -1360,6 +1404,7 @@ targets:
     - play
     - pocketcdg
     - pokemini
+    - pokketstation
     - potator
     - ppsspp
     - prboom
@@ -1374,6 +1419,7 @@ targets:
     - reminiscence
     - retro8
     - romcleaner
+    - rustynes
     - same_cdi
     - sameboy
     - sameduck
@@ -1396,6 +1442,7 @@ targets:
     - tgbdual
     - theodore
     - thepowdertoy
+    - tia
     - tic80
     - tyrquake
     - uw8
@@ -1426,6 +1473,7 @@ targets:
     - xrick
     - yabasanshiro
     - yabause
+    - ymir
   android-x86:
     architecture: x86
     cores:
@@ -1439,6 +1487,7 @@ targets:
     - ardens
     - arduous
     - atari800
+    - bbkemu
     - bk
     - bluemsx
     - bsnes
@@ -1515,6 +1564,7 @@ targets:
     - mame2003_midway
     - mame2003_plus
     - mame2010
+    - mamearcade
     - mcsoftserve
     - mednafen_gba
     - mednafen_lynx
@@ -1542,6 +1592,7 @@ targets:
     - mu
     - mupen64plus_next_gles2
     - mupen64plus_next_gles3
+    - native32emu
     - nekop2
     - neocd
     - nestopia
@@ -1559,6 +1610,7 @@ targets:
     - play
     - pocketcdg
     - pokemini
+    - pokketstation
     - potator
     - ppsspp
     - prboom
@@ -1573,6 +1625,7 @@ targets:
     - reminiscence
     - retro8
     - romcleaner
+    - rustynes
     - sameboy
     - sameduck
     - scummvm
@@ -1594,6 +1647,7 @@ targets:
     - tgbdual
     - theodore
     - thepowdertoy
+    - tia
     - tic80
     - tyrquake
     - uw8
@@ -1637,7 +1691,9 @@ targets:
     - ardens
     - arduous
     - atari800
+    - azahar
     - b2
+    - bbkemu
     - bk
     - blastem
     - bluemsx
@@ -1707,6 +1763,7 @@ targets:
     - hatari
     - higan_sfc
     - holani
+    - irogb
     - ishiiruka
     - jaxe
     - jollycv
@@ -1743,6 +1800,7 @@ targets:
     - mrboom
     - mu
     - mupen64plus_next
+    - native32emu
     - nekop2
     - neocd
     - nestopia
@@ -1763,6 +1821,7 @@ targets:
     - play
     - pocketcdg
     - pokemini
+    - pokketstation
     - potator
     - ppsspp
     - prboom
@@ -1778,6 +1837,7 @@ targets:
     - remotejoy
     - retro8
     - romcleaner
+    - rustynes
     - same_cdi
     - sameboy
     - sameduck
@@ -1800,6 +1860,7 @@ targets:
     - tgbdual
     - theodore
     - thepowdertoy
+    - tia
     - tic80
     - tyrquake
     - uw8
@@ -1831,6 +1892,7 @@ targets:
     - xrick
     - yabasanshiro
     - yabause
+    - ymir
   osx-arm64:
     architecture: aarch64
     cores:
@@ -1844,7 +1906,9 @@ targets:
     - ardens
     - arduous
     - atari800
+    - azahar
     - b2
+    - bbkemu
     - bk
     - bluemsx
     - boom3
@@ -1906,7 +1970,9 @@ targets:
     - gw
     - handy
     - hatari
+    - hbmame
     - holani
+    - irogb
     - jaxe
     - jollycv
     - jumpnbump
@@ -1942,6 +2008,7 @@ targets:
     - mrboom
     - mu
     - mupen64plus_next
+    - native32emu
     - nekop2
     - neocd
     - nestopia
@@ -1953,12 +2020,14 @@ targets:
     - oberon
     - opera
     - panda3ds
+    - parallel_n64
     - pcsx_rearmed
     - pd777
     - picodrive
     - play
     - pocketcdg
     - pokemini
+    - pokketstation
     - potator
     - ppsspp
     - prboom
@@ -1973,6 +2042,7 @@ targets:
     - reminiscence
     - retro8
     - romcleaner
+    - rustynes
     - same_cdi
     - sameboy
     - sameduck
@@ -1994,6 +2064,7 @@ targets:
     - tgbdual
     - theodore
     - thepowdertoy
+    - tia
     - tic80
     - tyrquake
     - uw8
@@ -2025,6 +2096,7 @@ targets:
     - xrick
     - yabasanshiro
     - yabause
+    - ymir
   ios-arm64:
     architecture: aarch64
     cores:
@@ -2038,7 +2110,9 @@ targets:
     - ardens
     - arduous
     - atari800
+    - azahar
     - b2
+    - bbkemu
     - bk
     - bluemsx
     - boom3
@@ -2100,7 +2174,9 @@ targets:
     - gw
     - handy
     - hatari
+    - hbmame
     - holani
+    - irogb
     - jaxe
     - jollycv
     - jumpnbump
@@ -2136,6 +2212,7 @@ targets:
     - mrboom
     - mu
     - mupen64plus_next
+    - native32emu
     - nekop2
     - neocd
     - nestopia
@@ -2167,6 +2244,7 @@ targets:
     - reminiscence
     - retro8
     - romcleaner
+    - rustynes
     - same_cdi
     - sameboy
     - sameduck
@@ -2187,6 +2265,7 @@ targets:
     - tgbdual
     - theodore
     - thepowdertoy
+    - tia
     - tyrquake
     - uw8
     - uzem
@@ -2216,6 +2295,7 @@ targets:
     - xrick
     - yabasanshiro
     - yabause
+    - ymir
   tvos-arm64:
     architecture: aarch64
     cores:
@@ -2229,7 +2309,9 @@ targets:
     - ardens
     - arduous
     - atari800
+    - azahar
     - b2
+    - bbkemu
     - bk
     - bluemsx
     - boom3
@@ -2291,7 +2373,9 @@ targets:
     - gw
     - handy
     - hatari
+    - hbmame
     - holani
+    - irogb
     - jaxe
     - jollycv
     - jumpnbump
@@ -2327,6 +2411,7 @@ targets:
     - mrboom
     - mu
     - mupen64plus_next
+    - native32emu
     - nekop2
     - neocd
     - nestopia
@@ -2356,6 +2441,7 @@ targets:
     - reminiscence
     - retro8
     - romcleaner
+    - rustynes
     - same_cdi
     - sameboy
     - sameduck
@@ -2376,6 +2462,7 @@ targets:
     - tgbdual
     - theodore
     - thepowdertoy
+    - tia
     - tyrquake
     - uw8
     - uzem
@@ -2405,6 +2492,7 @@ targets:
     - xrick
     - yabasanshiro
     - yabause
+    - ymir
   nintendo-switch:
     architecture: aarch64
     cores:
@@ -2525,6 +2613,7 @@ targets:
     - tamalibretro
     - tgbdual
     - theodore
+    - tia
     - tic80
     - tyrquake
     - uw8
@@ -2648,6 +2737,7 @@ targets:
     - tgbdual
     - theodore
     - thepowdertoy
+    - tia
     - tic80
     - tyrquake
     - uw8
@@ -2738,6 +2828,7 @@ targets:
     - picodrive
     - pocketcdg
     - pokemini
+    - potator
     - prboom
     - prosystem
     - quasi88
@@ -2755,6 +2846,7 @@ targets:
     - stella2014
     - tamalibretro
     - theodore
+    - tia
     - tic80
     - tyrquake
     - uw8
@@ -2838,6 +2930,7 @@ targets:
     - picodrive
     - pocketcdg
     - pokemini
+    - potator
     - prboom
     - prosystem
     - quasi88
@@ -2857,6 +2950,7 @@ targets:
     - superbroswar
     - tamalibretro
     - theodore
+    - tia
     - tic80
     - tyrquake
     - uw8
@@ -2958,6 +3052,7 @@ targets:
     - picodrive
     - pocketcdg
     - pokemini
+    - potator
     - prboom
     - prosystem
     - puae
@@ -2979,6 +3074,7 @@ targets:
     - superbroswar
     - tgbdual
     - theodore
+    - tia
     - tic80
     - tyrquake
     - uw8
@@ -3061,6 +3157,7 @@ targets:
     - tamalibretro
     - tgbdual
     - theodore
+    - tia
     - uw8
     - uzem
     - vaporspec
@@ -3133,6 +3230,7 @@ targets:
     - squirreljme
     - tgbdual
     - theodore
+    - tia
     - uw8
     - uzem
     - vaporspec
@@ -3209,6 +3307,7 @@ targets:
     - quasi88
     - quicknes
     - race
+    - rustynes
     - smsplus
     - snes9x2002
     - snes9x2005

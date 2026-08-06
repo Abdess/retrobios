@@ -1,203 +1,102 @@
 platform: Recalbox
-version: '10.0'
+version: 10.0.8
 homepage: "https://www.recalbox.com"
-source: "https://gitlab.com/recalbox/recalbox/-/raw/master/board/recalbox/fsoverlay/recalbox/share_init/system/.emulationstation/es_bios.xml"
+source: "https://gitlab.com/recalbox/recalbox/-/raw/10.0.8/board/recalbox/fsoverlay/recalbox/share_init/system/.emulationstation/es_bios.xml"
 base_destination: bios
 hash_type: md5
 verification_mode: md5
 cores:
-  - "2048"
-  - 81
-  - a5200
-  - advancemame
-  - amiberry
-  - applewin
-  - arduous
-  - atari800
-  - b2
-  - beebem
-  - bk
-  - bluemsx
-  - boom3
-  - bsnes
-  - bsneshd
-  - cannonball
-  - cap32
-  - cdi2015
-  - corsixth
-  - craft
-  - crocods
-  - daphne
-  - desmume
-  - dice
-  - dinothawr
-  - dirksimple
-  - dolphin
-  - dolphin-gui
-  - dosbox
-  - dosbox_pure
-  - duckstation
-  - easyrpg
-  - ecwolf
-  - emuscv
-  - fake08
-  - fba2x
-  - fbneo
-  - fceumm
-  - flycast
-  - flycast-next
-  - fmsx
-  - freechaf
-  - freeintv
-  - frotz
-  - fuse
-  - gambatte
-  - gearcoleco
-  - geargrafx
-  - gearsystem
-  - genesisplusgx
-  - genesisplusgx_ex
-  - genesisplusgxwide
-  - geolith
-  - glide64mk2
-  - gliden64
-  - gliden64_20
-  - gong
-  - gpsp
-  - gsplus
-  - gw
-  - handy
-  - hatari
-  - hatarib
-  - holani
-  - imageviewer
-  - julius
-  - kronos
-  - lowresnx
-  - lutro
-  - mame0258
-  - mame0278
-  - mame2000
-  - mame2003
-  - mame2003_plus
-  - mame2010
-  - mame2015
-  - mame2016
-  - mednafen_lynx
-  - mednafen_ngp
-  - mednafen_pce_fast
-  - mednafen_pcfx
-  - mednafen_psx
-  - mednafen_psx_hw
-  - mednafen_saturn
-  - mednafen_supafaust
-  - mednafen_supergrafx
-  - mednafen_vb
-  - mednafen_wswan
-  - melonds
-  - mesen
-  - mesen_s
-  - meteor
-  - mgba
-  - minivmac
-  - mojozork
-  - moonlight
-  - mrboom
-  - mu
-  - mupen64plus
-  - mupen64plus_next
-  - n64_gles2
-  - neocd
-  - nestopia
-  - np2kai
-  - nxengine
-  - o2em
-  - openbor
-  - openlara
-  - opera
-  - oricutron
-  - parallel_n64
-  - pcsx2
-  - pcsx_rearmed
-  - pico8
-  - picodrive
-  - pisnes
-  - pokemini
-  - potator
-  - ppsspp
-  - prboom
-  - prosystem
-  - ps2
-  - puae
-  - px68k
-  - quasi88
-  - quicknes
-  - race
-  - rb5000
-  - reicast
-  - reminiscence
-  - retro8
-  - retrodream
-  - rice
-  - rice_gles2
-  - sameboy
-  - same_cdi
-  - sameduck
-  - scummvm
-  - sdlpop
-  - simcoupe
-  - snes9x
-  - snes9x2002
-  - snes9x2005
-  - snes9x2010
-  - solarus
-  - stella
-  - stella2014
-  - stonesoup
-  - supermodel
-  - swanstation
-  - tamalibretro
-  - tgbdual
-  - theodore
-  - thepowdertoy
-  - ti99sim
-  - tic80
-  - tyrquake
-  - uae4all
-  - uae4arm
-  - uzem
-  - vecx
-  - vice_x128
-  - vice_x64
-  - vice_x64sc
-  - vice_xcbm2
-  - vice_xcbm5x0
-  - vice_xpet
-  - vice_xplus4
-  - vice_xscpu64
-  - vice_xvic
-  - virtualjaguar
-  - vitaquake2
-  - vitaquake3
-  - vitavoyager
-  - vpinball
-  - vvvvvv
-  - wasm4
-  - x1
-  - x128
-  - x64
-  - x64sx
-  - xcbm2
-  - xcbm5x0
-  - xemu
-  - xpet
-  - xplus4
-  - xrick
-  - xroar
-  - xscpu64
-  - xvic
-  - yabasanshiro
-  - yabause
+- amiberry
+- dolphin
+- duckstation
+- gsplus
+- hatari
+- libretro-hatari
+- libretro/ mame2003-plus
+- libretro/a5200
+- libretro/atari800
+- libretro/bk
+- libretro/bluemsx
+- libretro/bsnes
+- libretro/bsnes-hd
+- libretro/cdi2015
+- libretro/desmume
+- libretro/dolphin
+- libretro/emuscv
+- libretro/fba2x
+- libretro/fbneo
+- libretro/fceumm
+- libretro/flycast
+- libretro/fmsx
+- libretro/freechaf
+- libretro/freeintv
+- libretro/fuse
+- libretro/gambatte
+- libretro/gearcoleco
+- libretro/geargrafx
+- libretro/gearsystem
+- libretro/genesisplusgx
+- libretro/genesisplusgxwide
+- libretro/geolith
+- libretro/gpsp
+- libretro/handy
+- libretro/hatari
+- libretro/kronos
+- libretro/mame2000
+- libretro/mame2003
+- libretro/mame2003-plus
+- libretro/mame2010
+- libretro/mame2015
+- libretro/mednafen_lynx
+- libretro/mednafen_pce_fast
+- libretro/mednafen_psx
+- libretro/mednafen_psx_hw
+- libretro/mednafen_saturn
+- libretro/mednafen_supergrafx
+- libretro/melonds
+- libretro/mesen
+- libretro/mesen_s
+- libretro/meteor
+- libretro/mgba
+- libretro/minivmac
+- libretro/mu
+- libretro/mupen64plus_next
+- libretro/neocd
+- libretro/nestopia
+- libretro/np2kai
+- libretro/o2em
+- libretro/opera
+- libretro/parallel_n64
+- libretro/pcfx
+- libretro/pcsx2
+- libretro/pcsx_rearmed
+- libretro/picodrive
+- libretro/pokemini
+- libretro/prosystem
+- libretro/px68k
+- libretro/quasi88
+- libretro/same_cdi
+- libretro/sameboy
+- libretro/scummvm
+- libretro/snes9x
+- libretro/swanstation
+- libretro/uae
+- libretro/uae4all
+- libretro/uae4arm
+- libretro/vice_x128
+- libretro/vice_x64
+- libretro/vice_x64sc
+- libretro/xmil
+- libretro/xscpu64
+- libretro/yabasanshiro
+- libretro/yabause
+- oricutron
+- pcsx2
+- reicast
+- scummvm
+- ti99sim
+- xemu
+- xroar
 systems:
   commodore-amiga:
     files:
@@ -249,6 +148,7 @@ systems:
       destination: amiga/bios/kick40060.CD32.ext
       required: false
       md5: bb72565701b1b6faece07d68ea5da639
+    native_id: amiga600
   apple2gs:
     files:
     - name: apple2gs1.rom
@@ -259,6 +159,7 @@ systems:
       destination: apple2gs3.rom
       required: true
       md5: ba89edf2729a28a17cd9e0f7a0ac9a39
+    native_id: apple2gs
   macintosh:
     files:
     - name: MacII.ROM
@@ -269,6 +170,7 @@ systems:
       destination: macintosh/MinivMacBootv2.dsk
       required: true
       md5: 16ddb8838d48be26e471a2f2bb85a961,e66dc7952c8b9673868ad2faba3c0d20
+    native_id: macintosh
   atari-400-800:
     files:
     - name: ATARIBAS.ROM
@@ -287,12 +189,14 @@ systems:
       destination: atari800/ATARIXL.ROM
       required: true
       md5: 06daac977823773a3eea3422fd26a703
+    native_id: atari800
   atari-5200:
     files:
     - name: 5200.rom
       destination: atari5200/5200.rom
       required: false
       md5: 281f20ea4320404ec820fb7ec0693b38
+    native_id: atari5200
   atari-7800:
     files:
     - name: "7800 BIOS (U).rom"
@@ -303,6 +207,7 @@ systems:
       destination: "atari7800/7800 BIOS (E).rom"
       required: false
       md5: 397bb566584be7b9764e7a68974c4263
+    native_id: atari7800
   bk:
     files:
     - name: B11M_BOS.ROM
@@ -333,6 +238,7 @@ systems:
       destination: bk/MONIT10.ROM
       required: true
       md5: 95f8c41c6abf7640e35a6a03cecebd01
+    native_id: bk
   sega-dreamcast-arcade:
     files:
     - name: awbios.zip
@@ -355,6 +261,7 @@ systems:
       destination: dc/naomigd.zip
       required: true
       md5: 288cde03a112e7726fa8093e05d46853,416b5914acb3d0b4a190a1d358c8710d,bd9f19b4be0692e92e272d0eb82402f7,be57d3744e71a3396fb8dc59830e880a
+    native_id: atomiswave
   commodore-c64:
     files:
     - name: JiffyDOS_C64.bin
@@ -385,6 +292,7 @@ systems:
       destination: vice/SCPU64/scpu-dos-2.04.bin
       required: false
       md5: b2869f8678b8b274227f35aad26ba509
+    native_id: c64
   sega-dreamcast:
     files:
     - name: dc_boot.bin
@@ -395,6 +303,7 @@ systems:
       destination: dc/dc_flash.bin
       required: true
       md5: d6e11a23f1fa01cddb5dfccf7e4cc8d7,93a9766f14159b403178ac77417c6b68,0a93f7940c455905bea6e392dfde92a4,23df18aa53c8b30784cd9a84e061d008,69c036adfca4ebea0b0c6fa4acfc8538,74e3f69c2bb92bc1fc5d9a53dcf6ffe2,2f818338f47701c606ade664a3e16a8a
+    native_id: dreamcast
   pc88:
     files:
     - name: n88.rom
@@ -429,6 +338,7 @@ systems:
       destination: quasi88/n88knj1.rom
       required: false
       md5: d81c6d5d7ad1a4bbbd6ae22a01257603
+    native_id: pc88
   pc98:
     files:
     - name: bios.rom
@@ -475,6 +385,7 @@ systems:
       destination: np2kai/2608_top.wav
       required: false
       md5: 3721ace646ffd56439aebbb2154e9263,593cff6597ab9380d822b8f824fd2c28
+    native_id: pc98
   sega-mega-cd:
     files:
     - name: bios_CD_E.bin
@@ -489,12 +400,14 @@ systems:
       destination: segacd/bios_CD_J.bin
       required: true
       md5: 278a9397d192149e84e820ac621a8edd,bdeb4c47da613946d422d97d98b21cda
+    native_id: segacd
   nintendo-fds:
     files:
     - name: disksys.rom
       destination: fds/disksys.rom
       required: true
       md5: ca30b50f880eb660a320674ed365ef7a
+    native_id: fds
   nintendo-gba:
     files:
     - name: gba_bios.bin
@@ -505,18 +418,21 @@ systems:
       destination: gba/open_gba_bios.bin
       required: false
       md5: 1876f71b0d8c65eef3454547896ffb11
+    native_id: gba
   satellaview:
     files:
     - name: BS-X.bin
       destination: satellaview/BS-X.bin
       required: true
       md5: 96cf17bf589fcbfa6f8de2dc84f19fa2,d5af0ab2545c053b90ffa0866074ecf1,9c72de0cf4c9c88003292a79ddd0144d,fed4d8242cfbed61343d53d48432aced
+    native_id: satellaview
   sufami:
     files:
     - name: STBIOS.bin
       destination: sufami/STBIOS.bin
       required: true
       md5: d3a44ba7d42a74d3ac58cb9c14c6a5ca
+    native_id: sufami
   nec-pc-engine:
     files:
     - name: gexpress.pce
@@ -543,12 +459,14 @@ systems:
       destination: pcenginecd/syscard3u.pce
       required: false
       md5: 0754f903b52e3b3342202bdafb13efa5
+    native_id: pcengine
   nec-pc-fx:
     files:
     - name: pcfx.rom
       destination: pcfx/pcfx.rom
       required: true
       md5: 08e36edbea28a017f79f8d4f7ff9b6d7
+    native_id: pcfx
   msx1,msx2:
     files:
     - name: CARTS.SHA
@@ -611,12 +529,14 @@ systems:
       destination: msx/RS232.ROM
       required: true
       md5: 279efd1eae0d358eecd4edc7d9adedf3
+    native_id: msx1,msx2
   lynx:
     files:
     - name: lynxboot.img
       destination: lynx/lynxboot.img
       required: false
       md5: fcd403db69f54290b51035d82f835e7b
+    native_id: lynx
   atari-st:
     files:
     - name: tos.img
@@ -647,6 +567,7 @@ systems:
       destination: atarist/emutos.img
       required: true
       md5: e2c861c588fca2d0cf6be3df3aaf05f2
+    native_id: atarist
   magnavox-odyssey2:
     files:
     - name: o2rom.bin
@@ -657,6 +578,7 @@ systems:
       destination: o2em/c52.bin
       required: true
       md5: f1071cdb0b6b10dde94d3bc8a6146387
+    native_id: o2em
   videopacplus:
     files:
     - name: g7400.bin
@@ -667,6 +589,7 @@ systems:
       destination: o2em/jopac.bin
       required: true
       md5: 279008e4a0db2dc5f1c048853b033828
+    native_id: videopacplus
   3do:
     files:
     - name: panafz1.bin
@@ -721,6 +644,7 @@ systems:
       destination: 3do/panafz10ja-anvil-kanji.bin
       required: false
       md5: 428577250f43edc902ea239c50d2240d
+    native_id: 3do
   sharp-x68000:
     files:
     - name: iplrom.dat
@@ -743,6 +667,7 @@ systems:
       destination: keropi/iplromxv.dat
       required: false
       md5: 0617321daa182c3f3d6f41fd02fb3275
+    native_id: x68000
   x1:
     files:
     - name: IPLROM.X1
@@ -753,6 +678,7 @@ systems:
       destination: xmil/IPLROM.X1T
       required: true
       md5: 56c28adcf1f3a2f87cf3d57c378013f5
+    native_id: x1
   sony-playstation:
     files:
     - name: scph5500.bin
@@ -783,6 +709,7 @@ systems:
       destination: ps1_rom.bin
       required: false
       md5: 81bbe60ba7a3d1cea1d48c14cbcc647b
+    native_id: psx
   sony-playstation-2:
     files:
     - name: ps2-0230a-20080220.bin
@@ -801,6 +728,7 @@ systems:
       destination: ps2/ps2-0230j-20080220.bin
       required: true
       md5: 80ac46fa7e77b8ab4366e86948e54f83
+    native_id: ps2
   fairchild-channel-f:
     files:
     - name: sl31254.bin
@@ -815,6 +743,7 @@ systems:
       destination: channelf/sl90025.bin
       required: false
       md5: 95d339631d867c8f1d15a5f2ec26069d
+    native_id: channelf
   mattel-intellivision:
     files:
     - name: exec.bin
@@ -825,12 +754,14 @@ systems:
       destination: intellivision/grom.bin
       required: true
       md5: 0cd5946c6473e42e8e4c2137785e427f
+    native_id: intellivision
   pokemini:
     files:
     - name: bios.min
       destination: pokemini/bios.min
       required: false
       md5: 1e4fb124a3a886865acb574f388c803d
+    native_id: pokemini
   nintendo-ds:
     files:
     - name: bios7.bin
@@ -845,6 +776,7 @@ systems:
       destination: nds/firmware.bin
       required: true
       md5: 145eaef5bd3037cbc247c213bb3da1b3,e45033d9b0fa6b0de071292bba7c9d13,3ad72b2c9a736b24953f2d391da4bfcc
+    native_id: nds
   palm:
     files:
     - name: palmos41-en-m515.rom
@@ -855,6 +787,7 @@ systems:
       destination: palm/bootloader-dbvz.rom
       required: false
       md5: 9da101cd2317830649a31f8fa46debec
+    native_id: palm
   oricatmos:
     files:
     - name: basic11b.rom
@@ -897,6 +830,7 @@ systems:
       destination: oricutron/telmon24.rom
       required: true
       md5: 9a432244d9ee4a49e8ddcde64af94e05
+    native_id: oricatmos
   spectravideo:
     files:
     - name: svi318.rom
@@ -931,6 +865,7 @@ systems:
       destination: Machines/SVI - Spectravideo SVI-328/svi328.rom
       required: true
       md5: 2cebd1db9dda475a011b7bce65c984a2
+    native_id: spectravideo
   coleco-colecovision:
     files:
     - name: czz50-1.rom
@@ -957,6 +892,7 @@ systems:
       destination: coleco/boot.rom
       required: true
       md5: 2c66f5911e5b42b8ebe113403548eee7
+    native_id: colecovision
   msx1,msx2,msxturbor:
     files:
     - name: pesadelo.rom
@@ -1279,12 +1215,14 @@ systems:
       destination: Machines/Shared Roms/nowindDos2.rom
       required: true
       md5: 1847398c014384b833868c64f149f338
+    native_id: msx1,msx2,msxturbor
   sega-game-gear:
     files:
     - name: bios.gg
       destination: gamegear/bios.gg
       required: false
       md5: 672e104c3be3a238301aceffc3b23fd6
+    native_id: gamegear
   sega-master-system:
     files:
     - name: bios_E.sms
@@ -1299,12 +1237,14 @@ systems:
       destination: mastersystem/bios_J.sms
       required: false
       md5: 24a519c53f67b00640d0048ef7089105
+    native_id: mastersystem
   sega-mega-drive:
     files:
     - name: bios_MD.bin
       destination: megadrive/bios_MD.bin
       required: false
       md5: 45e298905a08f9cfb38fd504cd6dbc84
+    native_id: megadrive
   nintendo-gb:
     files:
     - name: gb_bios.bin
@@ -1319,6 +1259,7 @@ systems:
       destination: gb/mgb_boot.bin
       required: false
       md5: df79723ee8093b0580496f3df436e4c4
+    native_id: gb
   gb,gbc:
     files:
     - name: sgb_bios.bin
@@ -1341,6 +1282,7 @@ systems:
       destination: sgb/SGB2.sfc
       required: true
       md5: 8ecd73eb4edf7ed7e81aef1be80031d5
+    native_id: gb,gbc
   nintendo-gbc:
     files:
     - name: gbc_bios.bin
@@ -1355,6 +1297,7 @@ systems:
       destination: gbc/agb_boot.bin
       required: false
       md5: 8e29ae4f331830d54ae764f3e10cebae
+    native_id: gbc
   sinclair-zx-spectrum:
     files:
     - name: 128p-0.rom
@@ -1389,6 +1332,7 @@ systems:
       destination: fuse/256s-3.rom
       required: false
       md5: ce0723f9bc02f4948c15d3b3230ae831
+    native_id: zxspectrum
   nintendo-gamecube:
     files:
     - name: IPL.bin
@@ -1403,18 +1347,21 @@ systems:
       destination: gamecube/USA/IPL.bin
       required: false
       md5: 339848a0b7c2124cf155276c1e79cbd0
+    native_id: gamecube
   64dd:
     files:
     - name: IPL.n64
       destination: Mupen64plus/IPL.n64
       required: true
       md5: 8d3d9f294b6e174bc7b1d2fd1c727530
+    native_id: 64dd
   scv:
     files:
     - name: upd7801g.s01
       destination: scv/upd7801g.s01
       required: true
       md5: 635A978FD40DB9A18EE44EFF449FC126
+    native_id: scv
   sega-saturn:
     files:
     - name: saturn_bios.bin
@@ -1441,6 +1388,7 @@ systems:
       destination: saturn/mpr-19367-mx.ic1
       required: true
       md5: 1cd19988d1d72a3e7caa0b73234c96b4
+    native_id: saturn
   snk-neogeo:
     files:
     - name: neogeo.zip
@@ -1455,6 +1403,7 @@ systems:
       destination: geolith/neogeo.zip
       required: true
       md5: 00dad01abdbf8ea9e79ad2fe11bdb182,912c0a56bafe0fba39d0c668b139b250,b2c8175567ab9e0bd72d4e2633f2c650
+    native_id: neogeo
   snk-neogeo-cd:
     files:
     - name: neocdz.zip
@@ -1509,6 +1458,7 @@ systems:
       destination: neocd/ng-lo.rom
       required: false
       md5: e255264d85d5765013b1b2fa8109dd53
+    native_id: neogeocd
   ti994a:
     files:
     - name: TI-994A.ctg
@@ -1523,6 +1473,7 @@ systems:
       destination: ti994a/ti-disk.ctg
       required: false
       md5: 04714f43347cefb2a051a77116344b3f
+    native_id: ti994a
   dragon:
     files:
     - name: d32.rom
@@ -1597,6 +1548,7 @@ systems:
       destination: dragon/sdose8.rom
       required: false
       md5: 167f409b7a4b992faabb784b061ab4c6
+    native_id: dragon
   trs80coco:
     files:
     - name: bas10.rom
@@ -1659,6 +1611,7 @@ systems:
       destination: trs80coco/alice4k.rom
       required: false
       md5: 78af465c2f31cf4e05dec1efda77da01
+    native_id: trs80coco
   cdi:
     files:
     - name: cdimono1.zip
@@ -1673,12 +1626,14 @@ systems:
       destination: cdi/cdimono2.zip
       required: false
       md5: 2ac8cd5bb23287e022ca17d616949255
+    native_id: cdi
   naomi2:
     files:
     - name: naomi2.zip
       destination: dc/naomi2.zip
       required: true
       md5: 34f9c1acdaf53d6a50dd8de052e506ca
+    native_id: naomi2
   xbox:
     files:
     - name: Complex_4627.bin
@@ -1689,6 +1644,7 @@ systems:
       destination: xbox/mcpx_1.0.bin
       required: true
       md5: d49c52a4102f6df7bcf8d0617ac475ed
+    native_id: xbox
   scummvm:
     files:
     - name: MT32_CONTROL.ROM
@@ -1699,3 +1655,4 @@ systems:
       destination: scummvm/MT32_PCM.ROM
       required: false
       md5: 89e42e386e82e0cacb4a2704a03706ca
+    native_id: scummvm

@@ -1,7 +1,7 @@
 platform: RetroBat
-version: 7.5.3
-homepage: https://www.retrobat.org
-source: https://raw.githubusercontent.com/RetroBat-Official/emulatorlauncher/master/batocera-systems/Resources/batocera-systems.json
+version: 8.1.2
+homepage: "https://www.retrobat.org"
+source: "https://raw.githubusercontent.com/RetroBat-Official/emulatorlauncher/master/batocera-systems/Resources/batocera-systems.json"
 base_destination: bios
 hash_type: md5
 verification_mode: md5
@@ -20,6 +20,7 @@ systems:
       destination: goldstar.bin
       required: true
       md5: 8639fd5e549bd6238cfee79e3e749114
+    name: 3DO
   adam:
     files:
     - name: adam.zip
@@ -46,6 +47,7 @@ systems:
     - name: adam_flop.xml
       destination: mame/hash/adam_flop.xml
       required: true
+    name: Coleco Adam
   advision:
     files:
     - name: advision.zip
@@ -55,6 +57,7 @@ systems:
     - name: advision.xml
       destination: mame/hash/advision.xml
       required: true
+    name: Adventure Vision
   amiga500:
     files:
     - name: kick33180.A500
@@ -69,18 +72,21 @@ systems:
       destination: kick37175.A500
       required: true
       md5: dc10d7bdd1b6f450773dfb558477c230
+    name: Amiga 500
   amiga1200:
     files:
     - name: kick40068.A1200
       destination: kick40068.A1200
       required: true
       md5: 646773759326fbac3b2311fd8c8793ee
+    name: Amiga 1200
   amiga4000:
     files:
     - name: kick40068.A4000
       destination: kick40068.A4000
       required: true
       md5: 9bdedde6a4f33555b4a270c8ca53297d
+    name: Amiga 4000
   amigacdtv:
     files:
     - name: kick40060.CD32.ext
@@ -91,6 +97,7 @@ systems:
       destination: kick34005.CDTV
       required: true
       md5: 89da1838a24460e4b93f4f0c5d92d48d
+    name: Amiga CDTV
   amigacd32:
     files:
     - name: kick40060.CD32.ext
@@ -101,6 +108,7 @@ systems:
       destination: kick40060.CD32
       required: true
       md5: 5f8924d013dd57a89cf349f4cdedc6b1
+    name: Amiga CD32
   apfm1000:
     files:
     - name: apfm1000.zip
@@ -110,6 +118,7 @@ systems:
     - name: apfm1000.xml
       destination: mame/hash/apfm1000.xml
       required: true
+    name: APF M-1000
   apple2:
     files:
     - name: apple2.zip
@@ -172,6 +181,7 @@ systems:
     - name: apple2_flop_orig.xml
       destination: mame/hash/apple2_flop_orig.xml
       required: true
+    name: Apple II
   apple2gs:
     files:
     - name: APPLE2GS.ROM
@@ -190,6 +200,7 @@ systems:
     - name: apple2gs_flop_orig.xml
       destination: mame/hash/apple2gs_flop_orig.xml
       required: true
+    name: Apple II GS
   aquarius:
     files:
     - name: aquarius.zip
@@ -210,6 +221,7 @@ systems:
     - name: aquarius_cass.xml
       destination: mame/hash/aquarius_cass.xml
       required: true
+    name: Aquarius
   arcadia:
     files:
     - name: ar_bios.zip
@@ -219,6 +231,7 @@ systems:
     - name: arcadia.xml
       destination: mame/hash/arcadia.xml
       required: true
+    name: Arcadia 2001
   archimedes:
     files:
     - name: aa310.zip
@@ -230,6 +243,7 @@ systems:
     - name: archimedes.xml
       destination: mame/hash/archimedes.xml
       required: true
+    name: Acorn Archimedes
   astrocde:
     files:
     - name: astrocde.zip
@@ -239,6 +253,7 @@ systems:
     - name: astrocde.xml
       destination: mame/hash/astrocde.xml
       required: true
+    name: Astrocade
   atari800:
     files:
     - name: ATARIXL.ROM
@@ -257,20 +272,22 @@ systems:
       destination: ATARIOSB.ROM
       required: true
       md5: a3e8d617c95d08031fe1b20d541434b2
+    name: Atari 800
   atari5200:
     files:
     - name: 5200.rom
       destination: 5200.rom
       required: true
       md5: 281f20ea4320404ec820fb7ec0693b38
+    name: Atari 5200
   atari7800:
     files:
-    - name: 7800 BIOS (E).rom
-      destination: 7800 BIOS (E).rom
+    - name: "7800 BIOS (E).rom"
+      destination: "7800 BIOS (E).rom"
       required: true
       md5: 397bb566584be7b9764e7a68974c4263
-    - name: 7800 BIOS (U).rom
-      destination: 7800 BIOS (U).rom
+    - name: "7800 BIOS (U).rom"
+      destination: "7800 BIOS (U).rom"
       required: true
       md5: 0763f1ffb006ddbe32e52d497ee848ae
     - name: ProSystem.dat
@@ -280,6 +297,7 @@ systems:
     - name: A78_highscore.bin
       destination: A78_highscore.bin
       required: true
+    name: Atari 7800
   atarist:
     files:
     - name: tos.img
@@ -315,6 +333,7 @@ systems:
     - name: tos206.img
       destination: hatarib/tos206.img
       required: true
+    name: Atari ST
   atom:
     files:
     - name: atom.zip
@@ -329,12 +348,14 @@ systems:
     - name: atom_rom.xml
       destination: mame/hash/atom_rom.xml
       required: true
+    name: Acorn Atom
   atomiswave:
     files:
     - name: awbios.zip
       destination: dc/awbios.zip
       required: true
       md5: 0ec5ae5b5a5c4959fa8b43fcf8687f7c
+    name: Atomiswave
   bbcmicro:
     files:
     - name: bbcb.zip
@@ -388,6 +409,7 @@ systems:
     - name: bbcmc_flop.xml
       destination: mame/hash/bbcmc_flop.xml
       required: true
+    name: BBC
   bk:
     files:
     - name: B11M_BOS.ROM
@@ -422,6 +444,7 @@ systems:
       destination: bk/MONIT10.ROM
       required: true
       md5: 95f8c41c6abf7640e35a6a03cecebd01
+    name: Elektronika BK
   loopy:
     files:
     - name: casloopy.zip
@@ -431,6 +454,7 @@ systems:
     - name: casloopy.xml
       destination: mame/hash/casloopy.xml
       required: true
+    name: Casio Loopy
   cdi:
     files:
     - name: cdibios.zip
@@ -454,6 +478,7 @@ systems:
     - name: cdimono2.zip
       destination: same_cdi/bios/cdimono2.zip
       required: true
+    name: Philips CD-I
   channelf:
     files:
     - name: sl31253.bin
@@ -468,6 +493,7 @@ systems:
       destination: sl90025.bin
       required: true
       md5: 95d339631d867c8f1d15a5f2ec26069d
+    name: Fairchild ChannelF
   coco:
     files:
     - name: coco.zip
@@ -491,8 +517,13 @@ systems:
     - name: coco_flop.xml
       destination: mame/hash/coco_flop.xml
       required: true
+    name: Color Computer
   colecovision:
     files:
+    - name: coleco.rom
+      destination: coleco.rom
+      required: true
+      md5: 2c66f5911e5b42b8ebe113403548eee7
     - name: colecovision.rom
       destination: colecovision.rom
       required: true
@@ -501,14 +532,20 @@ systems:
       destination: openMSX/share/systemroms/coleco.rom
       required: true
       md5: 2c66f5911e5b42b8ebe113403548eee7
+    name: ColecoVision
   crvision:
     files:
+    - name: bioscv.rom
+      destination: bioscv.rom
+      required: true
+      md5: 3b1ef759d8e3fb4071582efd33dd05f9
     - name: crvision.zip
       destination: crvision.zip
       required: true
     - name: crvision.xml
       destination: mame/hash/crvision.xml
       required: true
+    name: Creativision
   dragon32:
     files:
     - name: d32.rom
@@ -523,6 +560,7 @@ systems:
       destination: dragon/d64_2.rom
       required: true
       md5: fd91edce7be5e7c2d88e46b76956a8aa
+    name: Dragon
   dreamcast:
     files:
     - name: dc_boot.bin
@@ -536,6 +574,7 @@ systems:
     - name: dc.zip
       destination: dc/dc.zip
       required: true
+    name: Dreamcast
   electron:
     files:
     - name: electron.zip
@@ -559,18 +598,21 @@ systems:
     - name: electron_flop.xml
       destination: mame/hash/electron_flop.xml
       required: true
+    name: Acorn Electron
   fds:
     files:
     - name: disksys.rom
       destination: disksys.rom
       required: true
       md5: ca30b50f880eb660a320674ed365ef7a
+    name: Nintendo Family Computer Disk System
   ecwolf:
     files:
     - name: ecwolf.pk3
       destination: ecwolf.pk3
       required: true
       md5: dbaa5c4e20a11000d1c4db3a2a28f374
+    name: ECWolf
   fm7:
     files:
     - name: fm7.zip
@@ -588,6 +630,7 @@ systems:
     - name: fm77av.xml
       destination: mame/hash/fm77av.xml
       required: true
+    name: FM-7
   fmtowns:
     files:
     - name: fmtowns.zip
@@ -628,6 +671,7 @@ systems:
     - name: fmtowns_flop_orig.xml
       destination: mame/hash/fmtowns_flop_orig.xml
       required: true
+    name: FMTowns
   gamate:
     files:
     - name: gamate.zip
@@ -637,6 +681,7 @@ systems:
     - name: gamate.xml
       destination: mame/hash/gamate.xml
       required: true
+    name: Gamate
   gamecom:
     files:
     - name: gamecom.zip
@@ -646,6 +691,7 @@ systems:
     - name: gamecom.xml
       destination: mame/hash/gamecom.xml
       required: true
+    name: Game.com
   gamepock:
     files:
     - name: gamepock.zip
@@ -655,24 +701,28 @@ systems:
     - name: gamepock.xml
       destination: mame/hash/gamepock.xml
       required: true
+    name: Game Pocket
   gb:
     files:
     - name: gb_bios.bin
       destination: gb_bios.bin
       required: true
       md5: 32fbbd84168d3482956eb3c5051637f5
+    name: Game Boy
   gba:
     files:
     - name: gba_bios.bin
       destination: gba_bios.bin
       required: true
       md5: a860e8c0b6d573d191e4ec7db1b1e4f6
+    name: Game Boy Advance
   gbc:
     files:
     - name: gbc_bios.bin
       destination: gbc_bios.bin
       required: true
       md5: dbfce9db9deaa2567f6a84fde55f9680
+    name: Game Boy Color
   gmaster:
     files:
     - name: gmaster.zip
@@ -682,6 +732,7 @@ systems:
     - name: gmaster.xml
       destination: mame/hash/gmaster.xml
       required: true
+    name: Game Master
   gp32:
     files:
     - name: gp32.zip
@@ -691,6 +742,7 @@ systems:
     - name: gp32.xml
       destination: mame/hash/gp32.xml
       required: true
+    name: Game Park 32
   hikaru:
     files:
     - name: hikaru.zip
@@ -701,6 +753,7 @@ systems:
       destination: mie.zip
       required: true
       md5: e95415b161121bef35ade12367138c63
+    name: Hikaru
   intellivision:
     files:
     - name: exec.bin
@@ -711,44 +764,49 @@ systems:
       destination: grom.bin
       required: true
       md5: 0cd5946c6473e42e8e4c2137785e427f
+    name: Mattel Intellivision
   j2me:
     files:
     - name: freej2me-lr.jar
       destination: freej2me-lr.jar
       required: true
       md5: a6f31483d1da4558cc19025e21f95c1d
+    name: Java
   jaguar:
     files:
-    - name: '[BIOS] Atari Jaguar (World).j64'
-      destination: '[BIOS] Atari Jaguar (World).j64'
+    - name: "[BIOS] Atari Jaguar (World).j64"
+      destination: "[BIOS] Atari Jaguar (World).j64"
       required: true
       md5: bcfe348c565d9dedb173822ee6850dea
+    name: Jaguar
   laseractive:
     files:
-    - name: '[BIOS] LaserActive PAC-N1 (Japan) (v1.02).bin'
-      destination: laseractive/[BIOS] LaserActive PAC-N1 (Japan) (v1.02).bin
+    - name: "[BIOS] LaserActive PAC-N1 (Japan) (v1.02).bin"
+      destination: "laseractive/[BIOS] LaserActive PAC-N1 (Japan) (v1.02).bin"
       required: true
       md5: f69f173b251d8bf7649b10a9167a10bf
-    - name: '[BIOS] LaserActive PAC-N10 (US) (v1.02).bin'
-      destination: laseractive/[BIOS] LaserActive PAC-N10 (US) (v1.02).bin
+    - name: "[BIOS] LaserActive PAC-N10 (US) (v1.02).bin"
+      destination: "laseractive/[BIOS] LaserActive PAC-N10 (US) (v1.02).bin"
       required: true
       md5: f0fb8a4605ac7eefbafd4f2d5a793cc8
-    - name: '[BIOS] LaserActive PCE-LP1 (Japan) (v1.02).bin'
-      destination: laseractive/[BIOS] LaserActive PCE-LP1 (Japan) (v1.02).bin
+    - name: "[BIOS] LaserActive PCE-LP1 (Japan) (v1.02).bin"
+      destination: "laseractive/[BIOS] LaserActive PCE-LP1 (Japan) (v1.02).bin"
       required: true
       md5: 761fea207d0eafd4cfd78da7c44cac88
-    - name: '[BIOS] LaserActive PAC-S10 (US) (v1.04).bin'
-      destination: laseractive/[BIOS] LaserActive PAC-S10 (US) (v1.04).bin
+    - name: "[BIOS] LaserActive PAC-S10 (US) (v1.04).bin"
+      destination: "laseractive/[BIOS] LaserActive PAC-S10 (US) (v1.04).bin"
       required: true
-    - name: '[BIOS] LaserActive PAC-S1 (Japan) (v1.05).bin'
-      destination: laseractive/[BIOS] LaserActive PAC-S1 (Japan) (v1.05).bin
+    - name: "[BIOS] LaserActive PAC-S1 (Japan) (v1.05).bin"
+      destination: "laseractive/[BIOS] LaserActive PAC-S1 (Japan) (v1.05).bin"
       required: true
+    name: Pioneer Laseractive
   lynx:
     files:
     - name: lynxboot.img
       destination: lynxboot.img
       required: true
       md5: fcd403db69f54290b51035d82f835e7b
+    name: Lynx
   camplynx:
     files:
     - name: lynx48k.zip
@@ -784,14 +842,16 @@ systems:
     - name: camplynx_flop.xml
       destination: mame/hash/camplynx_flop.xml
       required: true
+    name: Camputers Lynx
   mastersystem:
     files:
-    - name: '[BIOS] Sega Master System (USA, Europe) (v1.3).sms'
-      destination: '[BIOS] Sega Master System (USA, Europe) (v1.3).sms'
+    - name: "[BIOS] Sega Master System (USA, Europe) (v1.3).sms"
+      destination: "[BIOS] Sega Master System (USA, Europe) (v1.3).sms"
       required: true
-    - name: '[BIOS] Sega Master System (Japan) (v2.1).sms'
-      destination: '[BIOS] Sega Master System (Japan) (v2.1).sms'
+    - name: "[BIOS] Sega Master System (Japan) (v2.1).sms"
+      destination: "[BIOS] Sega Master System (Japan) (v2.1).sms"
       required: true
+    name: Master System
   msx:
     files:
     - name: MSX.ROM
@@ -846,6 +906,7 @@ systems:
       destination: openMSX/share/systemroms/yrw801.rom
       required: true
       md5: 42af93619160ef2116416f74a6cb12f2
+    name: MSX
   msx2:
     files:
     - name: MSX2.ROM
@@ -904,6 +965,7 @@ systems:
       destination: openMSX/share/systemroms/yrw801.rom
       required: true
       md5: 42af93619160ef2116416f74a6cb12f2
+    name: MSX2
   msx2+:
     files:
     - name: MSX2P.ROM
@@ -950,6 +1012,7 @@ systems:
       destination: openMSX/share/systemroms/yrw801.rom
       required: true
       md5: 42af93619160ef2116416f74a6cb12f2
+    name: MSX2+
   msxturbor:
     files:
     - name: fs-a1gt_firmware.rom
@@ -968,6 +1031,7 @@ systems:
       destination: openMSX/share/systemroms/yrw801.rom
       required: true
       md5: 42af93619160ef2116416f74a6cb12f2
+    name: MSX Turbo R
   n64dd:
     files:
     - name: IPL_JAP.n64
@@ -982,17 +1046,20 @@ systems:
       destination: Mupen64plus/IPL_DEV.n64
       required: true
       md5: aad37b1492886b892f1821f37fd3ae34
+    name: Nintendo 64 DD
   naomi:
     files:
     - name: naomi.zip
       destination: dc/naomi.zip
       required: true
       md5: eb4099aeb42ef089cfe94f8fe95e51f6
+    name: Naomi
   naomi2:
     files:
     - name: naomi2.zip
       destination: dc/naomi2.zip
       required: true
+    name: Naomi2
   nds:
     files:
     - name: firmware.bin
@@ -1015,18 +1082,21 @@ systems:
     - name: dsi_firmware.bin
       destination: dsi_firmware.bin
       required: true
+    name: Nintendo DS
   neogeo:
     files:
     - name: neogeo.zip
       destination: neogeo.zip
       required: true
       md5: dffb72f116d36d025068b23970a4f6df
+    name: NeoGeo
   neogeo64:
     files:
     - name: neogeo.zip
       destination: neogeo.zip
       required: true
       md5: dffb72f116d36d025068b23970a4f6df
+    name: Hyper NeoGeo 64
   neogeocd:
     files:
     - name: neogeo.zip
@@ -1067,22 +1137,26 @@ systems:
     - name: uni-bioscd.rom
       destination: neocd/uni-bioscd.rom
       required: true
+    name: NeoGeo CD
   ngage:
     files:
     - name: SYM.ROM
       destination: eka2l1/data/roms/NEM-4/SYM.ROM
       required: true
       md5: 64a95a4a884cf4cc15a566b856603193
+    name: Nokia N-gage
   ngp:
     files:
-    - name: '[BIOS] SNK Neo Geo Pocket (Japan, Europe) (En,Ja).ngp'
-      destination: '[BIOS] SNK Neo Geo Pocket (Japan, Europe) (En,Ja).ngp'
+    - name: "[BIOS] SNK Neo Geo Pocket (Japan, Europe) (En,Ja).ngp"
+      destination: "[BIOS] SNK Neo Geo Pocket (Japan, Europe) (En,Ja).ngp"
       required: true
+    name: Neo Geo Pocket
   ngpc:
     files:
-    - name: '[BIOS] SNK Neo Geo Pocket (Japan, Europe) (En,Ja).ngp'
-      destination: '[BIOS] SNK Neo Geo Pocket (Japan, Europe) (En,Ja).ngp'
+    - name: "[BIOS] SNK Neo Geo Pocket (Japan, Europe) (En,Ja).ngp"
+      destination: "[BIOS] SNK Neo Geo Pocket (Japan, Europe) (En,Ja).ngp"
       required: true
+    name: Neo Geo Pocket Color
   odyssey2:
     files:
     - name: o2rom.bin
@@ -1101,6 +1175,7 @@ systems:
       destination: jopac.bin
       required: true
       md5: 279008e4a0db2dc5f1c048853b033828
+    name: Odyssey 2
   pc88:
     files:
     - name: N88.ROM
@@ -1131,6 +1206,7 @@ systems:
       destination: quasi88/N88EXT3.ROM
       required: true
       md5: fc4b76a402ba501e6ba6de4b3e8b4273
+    name: NEC PC-8800
   pc98:
     files:
     - name: BIOS.ROM
@@ -1153,18 +1229,21 @@ systems:
       destination: np2kai/font.bmp
       required: true
       md5: 7da1e5b7c482d4108d22a5b09631d967
+    name: NEC PC-9800
   pcengine:
     files:
     - name: syscard3.pce
       destination: syscard3.pce
       required: true
       md5: 38179df8f4ac870017db21ebcbf53114
+    name: PC Engine
   pcenginecd:
     files:
     - name: syscard3.pce
       destination: syscard3.pce
       required: true
       md5: 38179df8f4ac870017db21ebcbf53114
+    name: PC Engine CD
   pcfx:
     files:
     - name: pcfx.rom
@@ -1174,6 +1253,7 @@ systems:
     - name: fx-scsi.rom
       destination: fx-scsi.rom
       required: true
+    name: PC-FX
   pegasus:
     files:
     - name: pegasus.zip
@@ -1183,35 +1263,41 @@ systems:
     - name: pegasus_cart.xml
       destination: mame/hash/pegasus_cart.xml
       required: true
+    name: Aamber Pegasus
   pokemini:
     files:
     - name: bios.min
       destination: bios.min
       required: true
       md5: 1e4fb124a3a886865acb574f388c803d
+    name: Nintendo Pokemon Mini
   sony-playstation-2:
     files:
     - name: ps2-0230a-20080220.bin
       destination: pcsx2/bios/ps2-0230a-20080220.bin
       required: true
       md5: 21038400dc633070a78ad53090c53017
+    name: PS2
   psx:
     files:
     - name: psxonpsp660.bin
       destination: psxonpsp660.bin
       required: true
       md5: c53ca5908936d412331790f4426c6c33
+    name: PSX
   pv1000:
     files:
     - name: pv1000.xml
       destination: mame/hash/pv1000.xml
       required: true
+    name: PV-1000
   satellaview:
     files:
     - name: BS-X.bin
       destination: BS-X.bin
       required: true
       md5: fed4d8242cfbed61343d53d48432aced
+    name: Satellaview
   saturn:
     files:
     - name: sega_101.bin
@@ -1238,6 +1324,7 @@ systems:
       destination: kronos/saturn_bios.bin
       required: true
       md5: af5828fdff51384f99b3c4926be27762
+    name: Sega Saturn
   scummvm:
     files:
     - name: MT32_CONTROL.ROM
@@ -1248,6 +1335,7 @@ systems:
       destination: scummvm/extra/MT32_PCM.ROM
       required: true
       md5: 89e42e386e82e0cacb4a2704a03706ca
+    name: ScummVM
   scv:
     files:
     - name: scv.zip
@@ -1261,6 +1349,7 @@ systems:
     - name: scv.xml
       destination: mame/hash/scv.xml
       required: true
+    name: Super Cassette Vision
   sega32x:
     files:
     - name: 32X_G_BIOS.BIN
@@ -1272,6 +1361,7 @@ systems:
     - name: 32X_S_BIOS.BIN
       destination: 32X_S_BIOS.BIN
       required: true
+    name: Sega 32X
   megacd:
     files:
     - name: bios_CD_E.bin
@@ -1286,11 +1376,13 @@ systems:
       destination: bios_CD_J.bin
       required: true
       md5: 278a9397d192149e84e820ac621a8edd
+    name: Sega CD
   segastv:
     files:
     - name: stvbios.zip
       destination: kronos/stvbios.zip
       required: true
+    name: Sega ST-V
   sgb:
     files:
     - name: sgb_boot.bin
@@ -1309,18 +1401,21 @@ systems:
       destination: SGB2.sfc
       required: true
       md5: 8ecd73eb4edf7ed7e81aef1be80031d5
+    name: Super Game Boy
   sufami:
     files:
     - name: STBIOS.bin
       destination: STBIOS.bin
       required: true
       md5: d3a44ba7d42a74d3ac58cb9c14c6a5ca
+    name: Sufami
   supergrafx:
     files:
     - name: syscard3.pce
       destination: syscard3.pce
       required: true
       md5: 38179df8f4ac870017db21ebcbf53114
+    name: Supergrafx
   supracan:
     files:
     - name: supracan.zip
@@ -1332,6 +1427,7 @@ systems:
     - name: supracan.xml
       destination: mame/hash/supracan.xml
       required: true
+    name: Super A Can
   ti99:
     files:
     - name: ti99_4a.zip
@@ -1343,11 +1439,13 @@ systems:
     - name: ti99_cart.xml
       destination: mame/hash/ti99_cart.xml
       required: true
+    name: TI/99
   triforce:
     files:
     - name: segaboot.gcm
       destination: emulators/dolphin-emu/User/Triforce/segaboot.gcm
       required: true
+    name: Triforce
   tutor:
     files:
     - name: tutor.zip
@@ -1356,16 +1454,19 @@ systems:
     - name: tutor.xml
       destination: mame/hash/tutor.xml
       required: true
+    name: APF M-1000
   vc4000:
     files:
     - name: vc4000.xml
       destination: mame/hash/vc4000.xml
       required: true
+    name: VC4000
   vectrex:
     files:
     - name: Vectrex_Bios.bin
       destination: Vectrex_Bios.bin
       required: true
+    name: Vectrex
   vg5k:
     files:
     - name: vg5k.zip
@@ -1374,6 +1475,7 @@ systems:
     - name: vg5k.xml
       destination: mame/hash/vg5k.xml
       required: true
+    name: VG5000
   vsmile:
     files:
     - name: vsmile.zip
@@ -1391,6 +1493,7 @@ systems:
     - name: vsmileb_cart.xml
       destination: mame/hash/vsmileb_cart.xml
       required: true
+    name: V. Smile
   x1:
     files:
     - name: IPLROM.X1
@@ -1401,6 +1504,7 @@ systems:
       destination: xmil/iplrom.x1t
       required: true
       md5: 56c28adcf1f3a2f87cf3d57c378013f5
+    name: Sharp x1
   x68000:
     files:
     - name: iplrom.dat
@@ -1411,6 +1515,7 @@ systems:
       destination: keropi/cgrom.dat
       required: true
       md5: cb0a5cfcf7247a7eab74bb2716260269
+    name: Sharp x68000
   xbox:
     files:
     - name: mcpx_1.0.bin
@@ -1421,6 +1526,7 @@ systems:
       destination: Complex_4627.bin
       required: true
       md5: 39cee882148a87f93cb440b99dde3ceb
+    name: XBox
   xegs:
     files:
     - name: xegs.zip
@@ -1429,3 +1535,4 @@ systems:
     - name: xegs.xml
       destination: mame/hash/xegs.xml
       required: true
+    name: Atari XEGS

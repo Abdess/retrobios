@@ -1,6 +1,6 @@
 platform: emudeck
 source: https://github.com/dragoonDorise/EmuDeck
-scraped_at: '2026-03-27T09:27:29Z'
+scraped_at: '2026-08-06T11:31:07Z'
 targets:
   steamos:
     architecture: x86_64
@@ -19,6 +19,7 @@ targets:
     - atari800
     - azahar
     - b2
+    - bbkemu
     - bigpemu
     - bk
     - blastem
@@ -94,7 +95,9 @@ targets:
     - gw
     - handy
     - hatari
+    - hbmame
     - holani
+    - irogb
     - jaxe
     - jollycv
     - jumpnbump
@@ -135,11 +138,13 @@ targets:
     - mrboom
     - mu
     - mupen64plus_next
+    - native32emu
     - nekop2
     - neocd
     - nestopia
     - noods
     - np2kai
+    - nuance
     - numero
     - nxengine
     - o2em
@@ -148,6 +153,7 @@ targets:
     - opera
     - panda3ds
     - parallel_n64
+    - pcee2
     - pcsx2
     - pcsx_rearmed
     - pd777
@@ -155,6 +161,7 @@ targets:
     - play
     - pocketcdg
     - pokemini
+    - pokketstation
     - potator
     - ppsspp
     - prboom
@@ -171,6 +178,7 @@ targets:
     - retro8
     - romcleaner
     - rpcs3
+    - rustynes
     - ryujinx
     - same_cdi
     - sameboy
@@ -196,6 +204,7 @@ targets:
     - tgbdual
     - theodore
     - thepowdertoy
+    - tia
     - tic80
     - tyrquake
     - uw8
@@ -230,6 +239,7 @@ targets:
     - xrick
     - yabasanshiro
     - yabause
+    - ymir
     - yuzu
   windows:
     architecture: x86_64
@@ -247,6 +257,7 @@ targets:
     - atari800
     - azahar
     - b2
+    - bbkemu
     - bigpemu
     - bk
     - blastem
@@ -322,7 +333,9 @@ targets:
     - gw
     - handy
     - hatari
+    - hbmame
     - holani
+    - irogb
     - jaxe
     - jollycv
     - jumpnbump
@@ -363,11 +376,13 @@ targets:
     - mrboom
     - mu
     - mupen64plus_next
+    - native32emu
     - nekop2
     - neocd
     - nestopia
     - noods
     - np2kai
+    - nuance
     - numero
     - nxengine
     - o2em
@@ -376,6 +391,7 @@ targets:
     - opera
     - panda3ds
     - parallel_n64
+    - pcee2
     - pcsx2
     - pcsx_rearmed
     - pd777
@@ -383,6 +399,7 @@ targets:
     - play
     - pocketcdg
     - pokemini
+    - pokketstation
     - potator
     - ppsspp
     - prboom
@@ -399,6 +416,7 @@ targets:
     - retro8
     - romcleaner
     - rpcs3
+    - rustynes
     - ryujinx
     - same_cdi
     - sameboy
@@ -424,6 +442,7 @@ targets:
     - tgbdual
     - theodore
     - thepowdertoy
+    - tia
     - tic80
     - tyrquake
     - uw8
@@ -458,4 +477,5 @@ targets:
     - xrick
     - yabasanshiro
     - yabause
+    - ymir
     - yuzu

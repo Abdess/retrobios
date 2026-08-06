@@ -1,7 +1,7 @@
 platform: BizHawk
-version: releasebranch-svn-end
-homepage: https://tasvideos.org/BizHawk
-source: https://raw.githubusercontent.com/TASEmulators/BizHawk/master/src/BizHawk.Emulation.Common/Database/FirmwareDatabase.cs
+version: 2.11.1
+homepage: "https://tasvideos.org/BizHawk"
+source: "https://raw.githubusercontent.com/TASEmulators/BizHawk/2.11.1/src/BizHawk.Emulation.Common/Database/FirmwareDatabase.cs"
 base_destination: Firmware
 hash_type: sha1
 verification_mode: sha1
@@ -300,8 +300,8 @@ systems:
       size: 1024
   nec-pc-engine-cd:
     files:
-    - name: PCECD_3.0-(J).pce
-      destination: PCECD_3.0-(J).pce
+    - name: "PCECD_3.0-(J).pce"
+      destination: "PCECD_3.0-(J).pce"
       required: true
       sha1: 79f5ff55dd10187c7fd7b8daab0b3ffbd1f56a2c
       size: 262144
@@ -322,33 +322,33 @@ systems:
       required: true
       sha1: 56c1b93da6b660bf393fbf48ca47569000ef4047
       size: 2097152
-    - name: SAT_1.01-(J).bin
-      destination: SAT_1.01-(J).bin
+    - name: "SAT_1.01-(J).bin"
+      destination: "SAT_1.01-(J).bin"
       required: true
       sha1: df94c5b4d47eb3cc404d88b33a8fda237eaf4720
       size: 524288
-    - name: SAT_1.00-(U+E).bin
-      destination: SAT_1.00-(U+E).bin
+    - name: "SAT_1.00-(U+E).bin"
+      destination: "SAT_1.00-(U+E).bin"
       required: true
       sha1: faa8ea183a6d7bbe5d4e03bb1332519800d3fbc3
       size: 524288
-    - name: SAT_1.00-(U+E).bin
-      destination: SAT_1.00-(U+E).bin
+    - name: "SAT_1.00-(U+E).bin"
+      destination: "SAT_1.00-(U+E).bin"
       required: true
       sha1: faa8ea183a6d7bbe5d4e03bb1332519800d3fbc3
       size: 524288
-    - name: SAT_STV_20091-(J).bin
-      destination: SAT_STV_20091-(J).bin
+    - name: "SAT_STV_20091-(J).bin"
+      destination: "SAT_STV_20091-(J).bin"
       required: true
       sha1: eff0f54c70bce05ff3a289bf30b1027e1c8cd117
       size: 524288
-    - name: SAT_STV_17952A-(U).bin
-      destination: SAT_STV_17952A-(U).bin
+    - name: "SAT_STV_17952A-(U).bin"
+      destination: "SAT_STV_17952A-(U).bin"
       required: true
       sha1: eaf1c3e5d602e1139d2090a78d7e19f04f916794
       size: 524288
-    - name: SAT_STV_17954A-(E).bin
-      destination: SAT_STV_17954A-(E).bin
+    - name: "SAT_STV_17954A-(E).bin"
+      destination: "SAT_STV_17954A-(E).bin"
       required: true
       sha1: af79cff317e5b57d49e463af16a9f616ed1eee08
       size: 524288
@@ -399,13 +399,13 @@ systems:
       required: true
       sha1: 91383b92745cc7cc4f15409ac5bc2c2f699a43f1
       size: 163840
-    - name: SNES_SGB_(JU).sfc
-      destination: SNES_SGB_(JU).sfc
+    - name: "SNES_SGB_(JU).sfc"
+      destination: "SNES_SGB_(JU).sfc"
       required: true
       sha1: 6ed55c4368333b57f6a2f8bbd70ccd87ed48058e
       size: 262144
-    - name: SNES_SGB2_(J).sfc
-      destination: SNES_SGB2_(J).sfc
+    - name: "SNES_SGB2_(J).sfc"
+      destination: "SNES_SGB2_(J).sfc"
       required: true
       sha1: e5b2922ca137051059e4269b236d07a22c07bc84
       size: 524288
