@@ -4,7 +4,7 @@
   "platform": "romm",
   "display_name": "RomM",
   "version": "1.0",
-  "generated": "2026-08-05T16:19:25Z",
+  "generated": "2026-08-06T08:36:22Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -546,21 +546,21 @@
       "dest": "fairchild-channel-f/sl31253.bin",
       "sha1": "81193965a374d77b99b4743d317824b53c3e3c78",
       "size": 1024,
-      "repo_path": "bios/Fairchild/Channel F/ChannelF_SL31253.rom",
+      "repo_path": "bios/Arcade/FBNeo/sl31253.rom",
       "cores": null
     },
     {
       "dest": "fairchild-channel-f/sl31254.bin",
       "sha1": "8f70d1b74483ba3a37e86cf16c849d601a8c3d2c",
       "size": 1024,
-      "repo_path": "bios/Fairchild/Channel F/ChannelF_SL31254.rom",
+      "repo_path": "bios/Arcade/FBNeo/sl31254.rom",
       "cores": null
     },
     {
       "dest": "fairchild-channel-f/sl90025.bin",
       "sha1": "759e2ed31fbde4a2d8daf8b9f3e0dffebc90dae2",
       "size": 1024,
-      "repo_path": "bios/Fairchild/Channel F/ChannelF_sl90025.rom",
+      "repo_path": "bios/Arcade/FBNeo/sl90025.rom",
       "cores": null
     },
     {
@@ -924,7 +924,7 @@
       "dest": "fds/disksys.rom",
       "sha1": "57fe1bdee955bb48d357e463ccbf129496930b62",
       "size": 8192,
-      "repo_path": "bios/Nintendo/Famicom Disk System/FDS_disksys-nintendo.rom",
+      "repo_path": "bios/Arcade/FBNeo/fdsbios.nes",
       "cores": null
     },
     {
@@ -1542,14 +1542,14 @@
       "dest": "zxs/128-0.rom",
       "sha1": "4f4b11ec22326280bdb96e3baf9db4b4cb1d02c5",
       "size": 16384,
-      "repo_path": "bios/Sinclair/ZX Spectrum/128-0.rom",
+      "repo_path": "bios/Arcade/FBNeo/zx128_0.rom",
       "cores": null
     },
     {
       "dest": "zxs/128-1.rom",
       "sha1": "80080644289ed93d71a1103992a154cc9802b2fa",
       "size": 16384,
-      "repo_path": "bios/Sinclair/ZX Spectrum/128-1.rom",
+      "repo_path": "bios/Arcade/FBNeo/zx128_1.rom",
       "cores": null
     },
     {
@@ -1577,7 +1577,7 @@
       "dest": "zxs/128p-1.rom",
       "sha1": "80080644289ed93d71a1103992a154cc9802b2fa",
       "size": 16384,
-      "repo_path": "bios/Sinclair/ZX Spectrum/128-1.rom",
+      "repo_path": "bios/Arcade/FBNeo/zx128_1.rom",
       "cores": null
     },
     {
@@ -1612,7 +1612,7 @@
       "dest": "zxs/48.rom",
       "sha1": "5ea7c2b824672e914525d1d5c419d71b84a426a2",
       "size": 16384,
-      "repo_path": "bios/Enterprise/64-128/zx48.rom",
+      "repo_path": "bios/Arcade/FBNeo/spectrum.rom",
       "cores": null
     },
     {
@@ -1941,7 +1941,7 @@
       "dest": "neo-geo-cd/uni-bioscd.rom",
       "sha1": "5142f205912869b673a71480c5828b1eaed782a8",
       "size": 524288,
-      "repo_path": "bios/SNK/Neo Geo CD/uni-bioscd.rom",
+      "repo_path": "bios/SNK/Neo Geo/uni-bioscd33.rom",
       "cores": null
     },
     {
@@ -2791,7 +2791,7 @@
       "dest": "acpc/ep128emu/roms/zx48.rom",
       "sha1": "5ea7c2b824672e914525d1d5c419d71b84a426a2",
       "size": 16384,
-      "repo_path": "bios/Enterprise/64-128/zx48.rom",
+      "repo_path": "bios/Arcade/FBNeo/spectrum.rom",
       "cores": [
         "ep128emu-core"
       ]
@@ -2851,7 +2851,7 @@
       "dest": "zxs/fuse/48.rom",
       "sha1": "5ea7c2b824672e914525d1d5c419d71b84a426a2",
       "size": 16384,
-      "repo_path": "bios/Enterprise/64-128/zx48.rom",
+      "repo_path": "bios/Arcade/FBNeo/spectrum.rom",
       "cores": [
         "Fuse"
       ]
@@ -2860,7 +2860,7 @@
       "dest": "zxs/fuse/128-0.rom",
       "sha1": "4f4b11ec22326280bdb96e3baf9db4b4cb1d02c5",
       "size": 16384,
-      "repo_path": "bios/Sinclair/ZX Spectrum/128-0.rom",
+      "repo_path": "bios/Arcade/FBNeo/zx128_0.rom",
       "cores": [
         "Fuse"
       ]
@@ -2869,7 +2869,7 @@
       "dest": "zxs/fuse/128-1.rom",
       "sha1": "80080644289ed93d71a1103992a154cc9802b2fa",
       "size": 16384,
-      "repo_path": "bios/Sinclair/ZX Spectrum/128-1.rom",
+      "repo_path": "bios/Arcade/FBNeo/zx128_1.rom",
       "cores": [
         "Fuse"
       ]
@@ -3022,7 +3022,7 @@
       "dest": "zxs/fuse/128p-1.rom",
       "sha1": "80080644289ed93d71a1103992a154cc9802b2fa",
       "size": 16384,
-      "repo_path": "bios/Sinclair/ZX Spectrum/128-1.rom",
+      "repo_path": "bios/Arcade/FBNeo/zx128_1.rom",
       "cores": [
         "Fuse"
       ]

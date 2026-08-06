@@ -4,7 +4,7 @@
   "platform": "retrobat",
   "display_name": "RetroBat",
   "version": "1.0",
-  "generated": "2026-08-05T16:19:05Z",
+  "generated": "2026-08-06T08:36:03Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -229,8 +229,8 @@
       }
     }
   ],
-  "total_files": 1169,
-  "total_size": 4777641221,
+  "total_files": 1170,
+  "total_size": 4778161205,
   "files": [
     {
       "dest": "panafz1.bin",
@@ -1139,21 +1139,21 @@
       "dest": "sl31253.bin",
       "sha1": "81193965a374d77b99b4743d317824b53c3e3c78",
       "size": 1024,
-      "repo_path": "bios/Fairchild/Channel F/ChannelF_SL31253.rom",
+      "repo_path": "bios/Arcade/FBNeo/sl31253.rom",
       "cores": null
     },
     {
       "dest": "sl31254.bin",
       "sha1": "8f70d1b74483ba3a37e86cf16c849d601a8c3d2c",
       "size": 1024,
-      "repo_path": "bios/Fairchild/Channel F/ChannelF_SL31254.rom",
+      "repo_path": "bios/Arcade/FBNeo/sl31254.rom",
       "cores": null
     },
     {
       "dest": "sl90025.bin",
       "sha1": "759e2ed31fbde4a2d8daf8b9f3e0dffebc90dae2",
       "size": 1024,
-      "repo_path": "bios/Fairchild/Channel F/ChannelF_sl90025.rom",
+      "repo_path": "bios/Arcade/FBNeo/sl90025.rom",
       "cores": null
     },
     {
@@ -1335,7 +1335,7 @@
       "dest": "disksys.rom",
       "sha1": "57fe1bdee955bb48d357e463ccbf129496930b62",
       "size": 8192,
-      "repo_path": "bios/Nintendo/Famicom Disk System/FDS_disksys-nintendo.rom",
+      "repo_path": "bios/Arcade/FBNeo/fdsbios.nes",
       "cores": null
     },
     {
@@ -2082,9 +2082,9 @@
     },
     {
       "dest": "neocd/uni-bioscd.rom",
-      "sha1": "5142f205912869b673a71480c5828b1eaed782a8",
+      "sha1": "5158b728e62b391fb69493743dcf7abbc62abc82",
       "size": 524288,
-      "repo_path": "bios/SNK/Neo Geo CD/uni-bioscd.rom",
+      "repo_path": "bios/SNK/Neo Geo/uni-bioscd32.rom",
       "cores": null
     },
     {
@@ -2098,7 +2098,7 @@
       "dest": "[BIOS] SNK Neo Geo Pocket (Japan, Europe) (En,Ja).ngp",
       "sha1": "edc13192054a59be49c6d55f83b70e2510968e86",
       "size": 65536,
-      "repo_path": "bios/SNK/Neo Geo Pocket/[BIOS] SNK Neo Geo Pocket (Japan, Europe) (En,Ja).ngp",
+      "repo_path": "bios/SNK/Neo Geo Pocket/SNK Neo-Geo Pocket Color BIOS (1999)(SNK)(en-ja).bin",
       "cores": null
     },
     {
@@ -4253,6 +4253,15 @@
       ]
     },
     {
+      "dest": "dc/font.bin",
+      "sha1": "94c6ff701f79742ee23c0a028ac0be5aead77c73",
+      "size": 519984,
+      "repo_path": "bios/Sega/Dreamcast/font.bin",
+      "cores": [
+        "Flycast"
+      ]
+    },
+    {
       "dest": "dc/naomi_boot.bin",
       "sha1": "6d27d71aec4dfba98f66316ae74a1426d567698a",
       "size": 2097152,
@@ -4265,7 +4274,7 @@
       "dest": "fuse/48.rom",
       "sha1": "5ea7c2b824672e914525d1d5c419d71b84a426a2",
       "size": 16384,
-      "repo_path": "bios/Enterprise/64-128/zx48.rom",
+      "repo_path": "bios/Arcade/FBNeo/spectrum.rom",
       "cores": [
         "Fuse"
       ]
@@ -4274,7 +4283,7 @@
       "dest": "fuse/128-0.rom",
       "sha1": "4f4b11ec22326280bdb96e3baf9db4b4cb1d02c5",
       "size": 16384,
-      "repo_path": "bios/Sinclair/ZX Spectrum/128-0.rom",
+      "repo_path": "bios/Arcade/FBNeo/zx128_0.rom",
       "cores": [
         "Fuse"
       ]
@@ -4283,7 +4292,7 @@
       "dest": "fuse/128-1.rom",
       "sha1": "80080644289ed93d71a1103992a154cc9802b2fa",
       "size": 16384,
-      "repo_path": "bios/Sinclair/ZX Spectrum/128-1.rom",
+      "repo_path": "bios/Arcade/FBNeo/zx128_1.rom",
       "cores": [
         "Fuse"
       ]
@@ -4436,7 +4445,7 @@
       "dest": "fuse/128p-1.rom",
       "sha1": "80080644289ed93d71a1103992a154cc9802b2fa",
       "size": 16384,
-      "repo_path": "bios/Sinclair/ZX Spectrum/128-1.rom",
+      "repo_path": "bios/Arcade/FBNeo/zx128_1.rom",
       "cores": [
         "Fuse"
       ]

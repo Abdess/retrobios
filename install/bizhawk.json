@@ -4,7 +4,7 @@
   "platform": "bizhawk",
   "display_name": "BizHawk",
   "version": "1.0",
-  "generated": "2026-08-05T16:18:01Z",
+  "generated": "2026-08-06T08:35:00Z",
   "base_destination": "Firmware",
   "detect": [
     {
@@ -257,21 +257,21 @@
       "dest": "ChannelF_SL31253.rom",
       "sha1": "81193965a374d77b99b4743d317824b53c3e3c78",
       "size": 1024,
-      "repo_path": "bios/Fairchild/Channel F/ChannelF_SL31253.rom",
+      "repo_path": "bios/Arcade/FBNeo/sl31253.rom",
       "cores": null
     },
     {
       "dest": "ChannelF_SL31254.rom",
       "sha1": "8f70d1b74483ba3a37e86cf16c849d601a8c3d2c",
       "size": 1024,
-      "repo_path": "bios/Fairchild/Channel F/ChannelF_SL31254.rom",
+      "repo_path": "bios/Arcade/FBNeo/sl31254.rom",
       "cores": null
     },
     {
       "dest": "ChannelF_sl90025.rom",
       "sha1": "759e2ed31fbde4a2d8daf8b9f3e0dffebc90dae2",
       "size": 1024,
-      "repo_path": "bios/Fairchild/Channel F/ChannelF_sl90025.rom",
+      "repo_path": "bios/Arcade/FBNeo/sl90025.rom",
       "cores": null
     },
     {
@@ -542,7 +542,7 @@
       "dest": "FDS_disksys-nintendo.rom",
       "sha1": "57fe1bdee955bb48d357e463ccbf129496930b62",
       "size": 8192,
-      "repo_path": "bios/Nintendo/Famicom Disk System/FDS_disksys-nintendo.rom",
+      "repo_path": "bios/Arcade/FBNeo/fdsbios.nes",
       "cores": null
     },
     {
@@ -815,21 +815,21 @@
       "dest": "SAT_STV_20091-(J).bin",
       "sha1": "eff0f54c70bce05ff3a289bf30b1027e1c8cd117",
       "size": 524288,
-      "repo_path": "bios/Sega/Saturn/SAT_STV_20091-(J).bin",
+      "repo_path": "bios/Sega/ST-V/epr-20091.ic8",
       "cores": null
     },
     {
       "dest": "SAT_STV_17952A-(U).bin",
       "sha1": "eaf1c3e5d602e1139d2090a78d7e19f04f916794",
       "size": 524288,
-      "repo_path": "bios/Sega/Saturn/SAT_STV_17952A-(U).bin",
+      "repo_path": "bios/Sega/ST-V/epr-17952a.ic8",
       "cores": null
     },
     {
       "dest": "SAT_STV_17954A-(E).bin",
       "sha1": "af79cff317e5b57d49e463af16a9f616ed1eee08",
       "size": 524288,
-      "repo_path": "bios/Sega/Saturn/SAT_STV_17954A-(E).bin",
+      "repo_path": "bios/Sega/ST-V/epr-17954a.ic8",
       "cores": null
     },
     {
@@ -1311,7 +1311,7 @@
       "dest": "sl31253.bin",
       "sha1": "81193965a374d77b99b4743d317824b53c3e3c78",
       "size": 1024,
-      "repo_path": "bios/Fairchild/Channel F/ChannelF_SL31253.rom",
+      "repo_path": "bios/Arcade/FBNeo/sl31253.rom",
       "cores": [
         "FreeChaF"
       ]
@@ -1320,7 +1320,7 @@
       "dest": "sl31254.bin",
       "sha1": "8f70d1b74483ba3a37e86cf16c849d601a8c3d2c",
       "size": 1024,
-      "repo_path": "bios/Fairchild/Channel F/ChannelF_SL31254.rom",
+      "repo_path": "bios/Arcade/FBNeo/sl31254.rom",
       "cores": [
         "FreeChaF"
       ]
@@ -1329,7 +1329,7 @@
       "dest": "sl90025.bin",
       "sha1": "759e2ed31fbde4a2d8daf8b9f3e0dffebc90dae2",
       "size": 1024,
-      "repo_path": "bios/Fairchild/Channel F/ChannelF_sl90025.rom",
+      "repo_path": "bios/Arcade/FBNeo/sl90025.rom",
       "cores": [
         "FreeChaF"
       ]

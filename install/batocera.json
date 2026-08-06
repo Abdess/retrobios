@@ -4,7 +4,7 @@
   "platform": "batocera",
   "display_name": "Batocera",
   "version": "1.0",
-  "generated": "2026-08-05T16:17:56Z",
+  "generated": "2026-08-06T08:34:55Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -230,8 +230,8 @@
       }
     }
   ],
-  "total_files": 1540,
-  "total_size": 4337691265,
+  "total_files": 1555,
+  "total_size": 4338357681,
   "files": [
     {
       "dest": "panafz1.bin",
@@ -1490,7 +1490,7 @@
       "dest": "zx48.rom",
       "sha1": "5ea7c2b824672e914525d1d5c419d71b84a426a2",
       "size": 16384,
-      "repo_path": "bios/Enterprise/64-128/zx48.rom",
+      "repo_path": "bios/Arcade/FBNeo/spectrum.rom",
       "cores": null
     },
     {
@@ -1518,21 +1518,21 @@
       "dest": "sl31253.bin",
       "sha1": "81193965a374d77b99b4743d317824b53c3e3c78",
       "size": 1024,
-      "repo_path": "bios/Fairchild/Channel F/ChannelF_SL31253.rom",
+      "repo_path": "bios/Arcade/FBNeo/sl31253.rom",
       "cores": null
     },
     {
       "dest": "sl31254.bin",
       "sha1": "8f70d1b74483ba3a37e86cf16c849d601a8c3d2c",
       "size": 1024,
-      "repo_path": "bios/Fairchild/Channel F/ChannelF_SL31254.rom",
+      "repo_path": "bios/Arcade/FBNeo/sl31254.rom",
       "cores": null
     },
     {
       "dest": "sl90025.bin",
       "sha1": "759e2ed31fbde4a2d8daf8b9f3e0dffebc90dae2",
       "size": 1024,
-      "repo_path": "bios/Fairchild/Channel F/ChannelF_sl90025.rom",
+      "repo_path": "bios/Arcade/FBNeo/sl90025.rom",
       "cores": null
     },
     {
@@ -2066,7 +2066,7 @@
       "dest": "disksys.rom",
       "sha1": "57fe1bdee955bb48d357e463ccbf129496930b62",
       "size": 8192,
-      "repo_path": "bios/Nintendo/Famicom Disk System/FDS_disksys-nintendo.rom",
+      "repo_path": "bios/Arcade/FBNeo/fdsbios.nes",
       "cores": null
     },
     {
@@ -2437,7 +2437,7 @@
       "dest": "neocd/uni-bioscd.rom",
       "sha1": "5142f205912869b673a71480c5828b1eaed782a8",
       "size": 524288,
-      "repo_path": "bios/SNK/Neo Geo CD/uni-bioscd.rom",
+      "repo_path": "bios/SNK/Neo Geo/uni-bioscd33.rom",
       "cores": null
     },
     {
@@ -4335,10 +4335,100 @@
       ]
     },
     {
+      "dest": "BBCMicro/dfs09.rom",
+      "sha1": "5cc0f14b8f46855c70eaa653cca4ad079b458732",
+      "size": 8192,
+      "repo_path": "bios/Other/Clock Signal/BBCMicro/dfs09.rom",
+      "cores": [
+        "Clock Signal (CLK)"
+      ]
+    },
+    {
+      "dest": "BBCMicro/adfs-1.30.rom",
+      "sha1": "301fd05c475a629c4bec70510d4507256a5b00d8",
+      "size": 16384,
+      "repo_path": "bios/Other/Clock Signal/BBCMicro/adfs-1.30.rom",
+      "cores": [
+        "Clock Signal (CLK)"
+      ]
+    },
+    {
+      "dest": "BBCMicro/ADT-1.40.rom",
+      "sha1": "227ec84ea3dcb9b3d3db15a543ac19e5923732d8",
+      "size": 16384,
+      "repo_path": "bios/Other/Clock Signal/BBCMicro/ADT-1.40.rom",
+      "cores": [
+        "Clock Signal (CLK)"
+      ]
+    },
+    {
+      "dest": "BBCMicro/TUBE110.rom",
+      "sha1": "5f461811edd22c08d5fb0e13a7bae99ee571c9f6",
+      "size": 2048,
+      "repo_path": "bios/Other/Clock Signal/BBCMicro/TUBE110.rom",
+      "cores": [
+        "Clock Signal (CLK)"
+      ]
+    },
+    {
+      "dest": "BBCMicro/Z80_122.rom",
+      "sha1": "a2e3763120349cae6c22be196be3604cf99ec96b",
+      "size": 4096,
+      "repo_path": "bios/Other/Clock Signal/BBCMicro/Z80_122.rom",
+      "cores": [
+        "Clock Signal (CLK)"
+      ]
+    },
+    {
       "dest": "Electron/os.rom",
       "sha1": "a48b8fa0cfb09140e808ac8a187316c605a0b32e",
       "size": 16384,
       "repo_path": "bios/Acorn/Electron/os.rom",
+      "cores": [
+        "Clock Signal (CLK)"
+      ]
+    },
+    {
+      "dest": "Electron/ADFS-E00_1.rom",
+      "sha1": "462b4687823f6ce2babb810ceb8d4f3da2733506",
+      "size": 16384,
+      "repo_path": "bios/Other/Clock Signal/Electron/ADFS-E00_1.rom",
+      "cores": [
+        "Clock Signal (CLK)"
+      ]
+    },
+    {
+      "dest": "Electron/ADFS-E00_2.rom",
+      "sha1": "7e465cd58e8ad923bdc4168e429e3b41727604e3",
+      "size": 16384,
+      "repo_path": "bios/Other/Clock Signal/Electron/ADFS-E00_2.rom",
+      "cores": [
+        "Clock Signal (CLK)"
+      ]
+    },
+    {
+      "dest": "Electron/adfs.rom",
+      "sha1": "e7c7a1094d50a3579751df2007269067c8ff6812",
+      "size": 16384,
+      "repo_path": "bios/Other/Clock Signal/Electron/adfs.rom",
+      "cores": [
+        "Clock Signal (CLK)"
+      ]
+    },
+    {
+      "dest": "Electron/DFS-1770-2.20.rom",
+      "sha1": "99449db032a16795efa28c211d8a257ec36c1eae",
+      "size": 16384,
+      "repo_path": "bios/Other/Clock Signal/Electron/DFS-1770-2.20.rom",
+      "cores": [
+        "Clock Signal (CLK)"
+      ]
+    },
+    {
+      "dest": "Electron/ELK130E.rom",
+      "sha1": "818b50e0b77cb920276d2ff733b68a9058ccd303",
+      "size": 16384,
+      "repo_path": "bios/Other/Clock Signal/Electron/ELK130E.rom",
       "cores": [
         "Clock Signal (CLK)"
       ]
@@ -4723,9 +4813,9 @@
     },
     {
       "dest": "MSX/MSX.ROM",
-      "sha1": "409e82adac40f6bdd18eb6c84e8b2fbdc7fb5498",
+      "sha1": "e998f0c441f4f1800ef44e42cd1659150206cf79",
       "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/MSX.ROM",
+      "repo_path": "bios/Microsoft/MSX/MSX_8020-20bios.rom",
       "cores": [
         "Clock Signal (CLK)"
       ]
@@ -4812,6 +4902,24 @@
       ]
     },
     {
+      "dest": "Oric/ORIC.PAL-PROM-TBP24S10-1ab9b572.bin",
+      "sha1": "7459a97e38a2f149b6ad5ff93d807f56d4638a36",
+      "size": 256,
+      "repo_path": "bios/Other/Clock Signal/Oric/ORIC.PAL-PROM-TBP24S10-1ab9b572.bin",
+      "cores": [
+        "Clock Signal (CLK)"
+      ]
+    },
+    {
+      "dest": "Oric/PRAVETZ-8D.PAL-PROM-82S129-1576a69b.bin",
+      "sha1": "6a62e3cacafa0fc9bf946522d67636d0f077e654",
+      "size": 256,
+      "repo_path": "bios/Other/Clock Signal/Oric/PRAVETZ-8D.PAL-PROM-82S129-1576a69b.bin",
+      "cores": [
+        "Clock Signal (CLK)"
+      ]
+    },
+    {
       "dest": "Oric/bd500.rom",
       "sha1": "447975ed022379fb6b80a22fa37c2d188ca3aa88",
       "size": 8192,
@@ -4834,6 +4942,15 @@
       "sha1": "0d2ef6e67322f48f4b7e08d8bbe68827e2074561",
       "size": 8192,
       "repo_path": "bios/Oric/Oric/microdis.rom",
+      "cores": [
+        "Clock Signal (CLK)"
+      ]
+    },
+    {
+      "dest": "Oric/8dos.rom",
+      "sha1": "8aa28471c04d4e249c7da94ab6b54482d3fff2ed",
+      "size": 512,
+      "repo_path": "bios/Other/Clock Signal/Oric/8dos.rom",
       "cores": [
         "Clock Signal (CLK)"
       ]
@@ -4983,6 +5100,15 @@
       ]
     },
     {
+      "dest": "Thomson/mo5-v1.0.rom",
+      "sha1": "9d25947e3334b367789b20196c56338573d4efc6",
+      "size": 16384,
+      "repo_path": "bios/Other/Clock Signal/Thomson/mo5-v1.0.rom",
+      "cores": [
+        "Clock Signal (CLK)"
+      ]
+    },
+    {
       "dest": "Vic20/basic.bin",
       "sha1": "587d1e90950675ab6b12d91248a3f0d640d02e8d",
       "size": 8192,
@@ -5076,7 +5202,7 @@
       "dest": "ZXSpectrum/48.rom",
       "sha1": "5ea7c2b824672e914525d1d5c419d71b84a426a2",
       "size": 16384,
-      "repo_path": "bios/Enterprise/64-128/zx48.rom",
+      "repo_path": "bios/Arcade/FBNeo/spectrum.rom",
       "cores": [
         "Clock Signal (CLK)"
       ]
@@ -6433,6 +6559,15 @@
       ]
     },
     {
+      "dest": "dc/font.bin",
+      "sha1": "94c6ff701f79742ee23c0a028ac0be5aead77c73",
+      "size": 519984,
+      "repo_path": "bios/Sega/Dreamcast/font.bin",
+      "cores": [
+        "Flycast"
+      ]
+    },
+    {
       "dest": "dc/naomi_boot.bin",
       "sha1": "6d27d71aec4dfba98f66316ae74a1426d567698a",
       "size": 2097152,
@@ -6616,7 +6751,7 @@
       "dest": "fuse/48.rom",
       "sha1": "5ea7c2b824672e914525d1d5c419d71b84a426a2",
       "size": 16384,
-      "repo_path": "bios/Enterprise/64-128/zx48.rom",
+      "repo_path": "bios/Arcade/FBNeo/spectrum.rom",
       "cores": [
         "Fuse"
       ]
@@ -6625,7 +6760,7 @@
       "dest": "fuse/128-0.rom",
       "sha1": "4f4b11ec22326280bdb96e3baf9db4b4cb1d02c5",
       "size": 16384,
-      "repo_path": "bios/Sinclair/ZX Spectrum/128-0.rom",
+      "repo_path": "bios/Arcade/FBNeo/zx128_0.rom",
       "cores": [
         "Fuse"
       ]
@@ -6634,7 +6769,7 @@
       "dest": "fuse/128-1.rom",
       "sha1": "80080644289ed93d71a1103992a154cc9802b2fa",
       "size": 16384,
-      "repo_path": "bios/Sinclair/ZX Spectrum/128-1.rom",
+      "repo_path": "bios/Arcade/FBNeo/zx128_1.rom",
       "cores": [
         "Fuse"
       ]
@@ -6787,7 +6922,7 @@
       "dest": "fuse/128p-1.rom",
       "sha1": "80080644289ed93d71a1103992a154cc9802b2fa",
       "size": 16384,
-      "repo_path": "bios/Sinclair/ZX Spectrum/128-1.rom",
+      "repo_path": "bios/Arcade/FBNeo/zx128_1.rom",
       "cores": [
         "Fuse"
       ]
@@ -11674,7 +11809,7 @@
       "dest": "ep128emu/roms/zx48.rom",
       "sha1": "5ea7c2b824672e914525d1d5c419d71b84a426a2",
       "size": 16384,
-      "repo_path": "bios/Enterprise/64-128/zx48.rom",
+      "repo_path": "bios/Arcade/FBNeo/spectrum.rom",
       "cores": [
         "ep128emu_core"
       ]

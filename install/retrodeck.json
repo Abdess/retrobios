@@ -4,7 +4,7 @@
   "platform": "retrodeck",
   "display_name": "RetroDECK",
   "version": "1.0",
-  "generated": "2026-08-05T16:19:23Z",
+  "generated": "2026-08-06T08:36:20Z",
   "base_destination": "",
   "detect": [
     {
@@ -230,8 +230,8 @@
       }
     }
   ],
-  "total_files": 3146,
-  "total_size": 6317712466,
+  "total_files": 3147,
+  "total_size": 6318232450,
   "files": [
     {
       "dest": "bios/panafz1.bin",
@@ -11486,21 +11486,21 @@
       "dest": "bios/sl31253.bin",
       "sha1": "81193965a374d77b99b4743d317824b53c3e3c78",
       "size": 1024,
-      "repo_path": "bios/Fairchild/Channel F/ChannelF_SL31253.rom",
+      "repo_path": "bios/Arcade/FBNeo/sl31253.rom",
       "cores": null
     },
     {
       "dest": "bios/sl31254.bin",
       "sha1": "8f70d1b74483ba3a37e86cf16c849d601a8c3d2c",
       "size": 1024,
-      "repo_path": "bios/Fairchild/Channel F/ChannelF_SL31254.rom",
+      "repo_path": "bios/Arcade/FBNeo/sl31254.rom",
       "cores": null
     },
     {
       "dest": "bios/sl90025.bin",
       "sha1": "759e2ed31fbde4a2d8daf8b9f3e0dffebc90dae2",
       "size": 1024,
-      "repo_path": "bios/Fairchild/Channel F/ChannelF_sl90025.rom",
+      "repo_path": "bios/Arcade/FBNeo/sl90025.rom",
       "cores": null
     },
     {
@@ -12186,7 +12186,7 @@
       "dest": "bios/ngpc.zip",
       "sha1": "edc13192054a59be49c6d55f83b70e2510968e86",
       "size": 65536,
-      "repo_path": "bios/SNK/Neo Geo Pocket/[BIOS] SNK Neo Geo Pocket (Japan, Europe) (En,Ja).ngp",
+      "repo_path": "bios/SNK/Neo Geo Pocket/SNK Neo-Geo Pocket Color BIOS (1999)(SNK)(en-ja).bin",
       "cores": null
     },
     {
@@ -12270,7 +12270,7 @@
       "dest": "bios/disksys.rom",
       "sha1": "57fe1bdee955bb48d357e463ccbf129496930b62",
       "size": 8192,
-      "repo_path": "bios/Nintendo/Famicom Disk System/FDS_disksys-nintendo.rom",
+      "repo_path": "bios/Arcade/FBNeo/fdsbios.nes",
       "cores": null
     },
     {
@@ -12874,7 +12874,7 @@
       "dest": "bios/128p-1.rom",
       "sha1": "80080644289ed93d71a1103992a154cc9802b2fa",
       "size": 16384,
-      "repo_path": "bios/Sinclair/ZX Spectrum/128-1.rom",
+      "repo_path": "bios/Arcade/FBNeo/zx128_1.rom",
       "cores": null
     },
     {
@@ -12937,7 +12937,7 @@
       "dest": "bios/zxs:48.rom",
       "sha1": "5ea7c2b824672e914525d1d5c419d71b84a426a2",
       "size": 16384,
-      "repo_path": "bios/Enterprise/64-128/zx48.rom",
+      "repo_path": "bios/Arcade/FBNeo/spectrum.rom",
       "cores": null
     },
     {
@@ -13243,9 +13243,9 @@
     },
     {
       "dest": "bios/uni-bioscd.rom",
-      "sha1": "5142f205912869b673a71480c5828b1eaed782a8",
+      "sha1": "5158b728e62b391fb69493743dcf7abbc62abc82",
       "size": 524288,
-      "repo_path": "bios/SNK/Neo Geo CD/uni-bioscd.rom",
+      "repo_path": "bios/SNK/Neo Geo/uni-bioscd32.rom",
       "cores": null
     },
     {
@@ -16427,7 +16427,7 @@
       "dest": "bios/ep128emu/roms/zx48.rom",
       "sha1": "5ea7c2b824672e914525d1d5c419d71b84a426a2",
       "size": 16384,
-      "repo_path": "bios/Enterprise/64-128/zx48.rom",
+      "repo_path": "bios/Arcade/FBNeo/spectrum.rom",
       "cores": [
         "ep128emu-core"
       ]
@@ -16568,6 +16568,15 @@
       "sha1": "72c65f2a11ee7b72b77b9945187b7a332632e14a",
       "size": 131072,
       "repo_path": "bios/Sega/Dreamcast/dc_nvmem.bin",
+      "cores": [
+        "Flycast"
+      ]
+    },
+    {
+      "dest": "bios/dc/font.bin",
+      "sha1": "94c6ff701f79742ee23c0a028ac0be5aead77c73",
+      "size": 519984,
+      "repo_path": "bios/Sega/Dreamcast/font.bin",
       "cores": [
         "Flycast"
       ]
@@ -16738,7 +16747,7 @@
       "dest": "bios/fuse/48.rom",
       "sha1": "5ea7c2b824672e914525d1d5c419d71b84a426a2",
       "size": 16384,
-      "repo_path": "bios/Enterprise/64-128/zx48.rom",
+      "repo_path": "bios/Arcade/FBNeo/spectrum.rom",
       "cores": [
         "Fuse"
       ]
@@ -16747,7 +16756,7 @@
       "dest": "bios/fuse/128-0.rom",
       "sha1": "4f4b11ec22326280bdb96e3baf9db4b4cb1d02c5",
       "size": 16384,
-      "repo_path": "bios/Sinclair/ZX Spectrum/128-0.rom",
+      "repo_path": "bios/Arcade/FBNeo/zx128_0.rom",
       "cores": [
         "Fuse"
       ]
@@ -16756,7 +16765,7 @@
       "dest": "bios/fuse/128-1.rom",
       "sha1": "80080644289ed93d71a1103992a154cc9802b2fa",
       "size": 16384,
-      "repo_path": "bios/Sinclair/ZX Spectrum/128-1.rom",
+      "repo_path": "bios/Arcade/FBNeo/zx128_1.rom",
       "cores": [
         "Fuse"
       ]
@@ -16909,7 +16918,7 @@
       "dest": "bios/fuse/128p-1.rom",
       "sha1": "80080644289ed93d71a1103992a154cc9802b2fa",
       "size": 16384,
-      "repo_path": "bios/Sinclair/ZX Spectrum/128-1.rom",
+      "repo_path": "bios/Arcade/FBNeo/zx128_1.rom",
       "cores": [
         "Fuse"
       ]
@@ -23097,9 +23106,9 @@
     },
     {
       "dest": "bios/neocd/uni-bioscd.rom",
-      "sha1": "5142f205912869b673a71480c5828b1eaed782a8",
+      "sha1": "5158b728e62b391fb69493743dcf7abbc62abc82",
       "size": 524288,
-      "repo_path": "bios/SNK/Neo Geo CD/uni-bioscd.rom",
+      "repo_path": "bios/SNK/Neo Geo/uni-bioscd32.rom",
       "cores": [
         "NeoCD"
       ]

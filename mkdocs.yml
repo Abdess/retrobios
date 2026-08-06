@@ -93,7 +93,6 @@ nav:
   - Enterprise: systems/enterprise.md
   - Entex: systems/entex.md
   - Epoch: systems/epoch.md
-  - Fairchild: systems/fairchild.md
   - Fujitsu: systems/fujitsu.md
   - Funtech: systems/funtech.md
   - GCE: systems/gce.md
@@ -131,6 +130,7 @@ nav:
   - Sharp: systems/sharp.md
   - Sinclair: systems/sinclair.md
   - Sony: systems/sony.md
+  - Sord: systems/sord.md
   - Synertek: systems/synertek.md
   - Tandy: systems/tandy.md
   - Texas Instruments: systems/texas-instruments.md
@@ -391,7 +391,7 @@ nav:
     - WASM-4: emulators/wasm4.md
     - XRick: emulators/xrick.md
     - Zelda Classic v2.10: emulators/zc210.md
-  - Enhanced forks (13):
+  - Enhanced forks (14):
     - bsnes-hd beta: emulators/bsnes_hd_beta.md
     - bsnes-mercury: emulators/bsnes_mercury.md
     - DOSBox Pure: emulators/dosbox_pure.md
@@ -401,6 +401,7 @@ nav:
     - nSide (SFC Balanced): emulators/higan_sfc_balanced.md
     - Ishiiruka: emulators/ishiiruka.md
     - MAME 2003-Plus: emulators/mame2003_plus.md
+    - MesenCE: emulators/mesence.md
     - Mupen64Plus-Next: emulators/mupen64plus_next.md
     - NP2kai: emulators/np2kai.md
     - PrimeHack: emulators/primehack.md

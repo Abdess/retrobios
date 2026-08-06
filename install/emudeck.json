@@ -4,7 +4,7 @@
   "platform": "emudeck",
   "display_name": "EmuDeck",
   "version": "1.0",
-  "generated": "2026-08-05T16:18:08Z",
+  "generated": "2026-08-06T08:35:07Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -243,8 +243,8 @@
       }
     }
   ],
-  "total_files": 526,
-  "total_size": 3276718750,
+  "total_files": 527,
+  "total_size": 3277238734,
   "files": [
     {
       "dest": "colecovision.rom",
@@ -313,7 +313,7 @@
       "dest": "disksys.rom",
       "sha1": "57fe1bdee955bb48d357e463ccbf129496930b62",
       "size": 8192,
-      "repo_path": "bios/Nintendo/Famicom Disk System/FDS_disksys-nintendo.rom",
+      "repo_path": "bios/Arcade/FBNeo/fdsbios.nes",
       "cores": null
     },
     {
@@ -2048,6 +2048,15 @@
       "sha1": "72c65f2a11ee7b72b77b9945187b7a332632e14a",
       "size": 131072,
       "repo_path": "bios/Sega/Dreamcast/dc_nvmem.bin",
+      "cores": [
+        "Flycast"
+      ]
+    },
+    {
+      "dest": "dc/font.bin",
+      "sha1": "94c6ff701f79742ee23c0a028ac0be5aead77c73",
+      "size": 519984,
+      "repo_path": "bios/Sega/Dreamcast/font.bin",
       "cores": [
         "Flycast"
       ]
