@@ -429,6 +429,20 @@ def resolve_local_file(
         if os.path.exists(path):
             return path, "exact"
 
+    # 1b. SHA256 exact match (profiles hashed from sources that publish
+    # sha256, e.g. MesenCE). A full sha256 is a strong identifier.
+    sha256_raw = str(file_entry.get("sha256", "") or "")
+    if sha256_raw:
+        by_sha256 = db.get("indexes", {}).get("by_sha256", {})
+        for cand in sha256_raw.split(","):
+            cand = cand.strip().lower()
+            if len(cand) == 64:
+                match = by_sha256.get(cand)
+                if match and match in files_db:
+                    path = files_db[match]["path"]
+                    if os.path.exists(path):
+                        return path, "exact"
+
     # 2. MD5 direct lookup (skip for zipped_file: md5 is inner ROM, not container)
     # Guard: only accept if the found file's name matches the requested name
     # (or is a .variants/ derivative). Prevents cross-contamination when an

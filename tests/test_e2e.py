@@ -4845,6 +4845,46 @@ struct BurnDriver BurnDrvneogeo = {
         self.assertFalse(_hash_matches("0" * 32, full))
         self.assertFalse(_hash_matches("", full))
 
+    def test_216_resolve_by_sha256(self):
+        """resolve_local_file matches files by declared sha256."""
+        import tempfile
+
+        from common import resolve_local_file
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = os.path.join(tmpdir, "SNES_dsp1.rom")
+            with open(path, "wb") as fh:
+                fh.write(b"dsp firmware bytes")
+            import hashlib as hl
+
+            sha256 = hl.sha256(b"dsp firmware bytes").hexdigest()
+            db = {
+                "files": {
+                    "sha1x": {"name": "SNES_dsp1.rom", "path": path},
+                },
+                "indexes": {
+                    "by_md5": {},
+                    "by_name": {"SNES_dsp1.rom": ["sha1x"]},
+                    "by_sha256": {sha256: "sha1x"},
+                    "by_crc32": {},
+                    "by_path_suffix": {},
+                },
+            }
+            # Name differs, only sha256 identifies the content
+            entry = {"name": "dsp1.rom", "sha256": sha256}
+            local, status = resolve_local_file(entry, db)
+            self.assertEqual(local, path)
+            self.assertEqual(status, "exact")
+            # Multi-hash list also resolves
+            entry = {"name": "dsp1.rom", "sha256": f"{'0' * 64},{sha256}"}
+            local, status = resolve_local_file(entry, db)
+            self.assertEqual(local, path)
+            # Unknown sha256 falls through to not_found
+            entry = {"name": "dsp1.rom", "sha256": "f" * 64}
+            local, status = resolve_local_file(entry, db)
+            self.assertIsNone(local)
+            self.assertEqual(status, "not_found")
+
     def test_215_check_member_hash_inside_zip(self):
         """zipped_file entries verify the ROM inside the ZIP, not the ZIP."""
         import hashlib as hl
