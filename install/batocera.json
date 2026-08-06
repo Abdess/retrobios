@@ -4,7 +4,7 @@
   "platform": "batocera",
   "display_name": "Batocera",
   "version": "1.0",
-  "generated": "2026-08-06T08:34:55Z",
+  "generated": "2026-08-06T12:29:14Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -230,8 +230,8 @@
       }
     }
   ],
-  "total_files": 1555,
-  "total_size": 4338357681,
+  "total_files": 1545,
+  "total_size": 4371851490,
   "files": [
     {
       "dest": "panafz1.bin",
@@ -1081,6 +1081,13 @@
       "cores": null
     },
     {
+      "dest": "bk0010.zip",
+      "sha1": "4aa3cec86fb5eb0cec7d7b3c8ddfe28b7f1c7963",
+      "size": 74578,
+      "repo_path": "bios/Arcade/MAME/bk0010.zip",
+      "cores": null
+    },
+    {
       "dest": "lynx48k.zip",
       "sha1": "64947e9b7d17870839aba5d93217183d480ff897",
       "size": 25078,
@@ -1326,171 +1333,87 @@
       "cores": null
     },
     {
-      "dest": "Enterprise/basic21.bin",
-      "sha1": "03bbb386cf530e804363acdfc1d13e64cf28af2e",
-      "size": 16384,
-      "repo_path": "bios/Enterprise/64-128/basic21.rom",
-      "cores": null
-    },
-    {
-      "dest": "Enterprise/exos21.bin",
+      "dest": "ep128emu/roms/exos21.rom",
       "sha1": "55315b20fecb4441a07ee4bc5dc7153f396e0a2e",
       "size": 32768,
       "repo_path": "bios/Enterprise/64-128/exos21.rom",
       "cores": null
     },
     {
-      "dest": "exos21.rom",
-      "sha1": "55315b20fecb4441a07ee4bc5dc7153f396e0a2e",
-      "size": 32768,
-      "repo_path": "bios/Enterprise/64-128/exos21.rom",
-      "cores": null
-    },
-    {
-      "dest": "basic21.rom",
+      "dest": "ep128emu/roms/basic21.rom",
       "sha1": "03bbb386cf530e804363acdfc1d13e64cf28af2e",
       "size": 16384,
       "repo_path": "bios/Enterprise/64-128/basic21.rom",
       "cores": null
     },
     {
-      "dest": "exdos13.rom",
+      "dest": "ep128emu/roms/exdos13.rom",
       "sha1": "cb43ab3676b93c279f1ed8ffcb0d4dcd4b34e631",
       "size": 32768,
       "repo_path": "bios/Enterprise/64-128/exdos13.rom",
       "cores": null
     },
     {
-      "dest": "exos20.rom",
-      "sha1": "6033a0535136c40c47137e4d1cd9273c06d5fdff",
-      "size": 32768,
-      "repo_path": "bios/Enterprise/64-128/exos20.bin",
-      "cores": null
-    },
-    {
-      "dest": "basic20.rom",
-      "sha1": "61d0987b906146e21b94f265d5b51b4938c986a9",
-      "size": 16384,
-      "repo_path": "bios/Enterprise/64-128/basic20.rom",
-      "cores": null
-    },
-    {
-      "dest": "epfileio.rom",
+      "dest": "ep128emu/roms/epfileio.rom",
       "sha1": "2f9077bcd89b1ec42dbdcd55d335bdbaf361eff3",
       "size": 16384,
       "repo_path": "bios/Enterprise/64-128/epfileio.rom",
       "cores": null
     },
     {
-      "dest": "exos24uk.rom",
+      "dest": "ep128emu/roms/exos20.rom",
+      "sha1": "6033a0535136c40c47137e4d1cd9273c06d5fdff",
+      "size": 32768,
+      "repo_path": "bios/Enterprise/64-128/exos20.bin",
+      "cores": null
+    },
+    {
+      "dest": "ep128emu/roms/basic20.rom",
+      "sha1": "61d0987b906146e21b94f265d5b51b4938c986a9",
+      "size": 16384,
+      "repo_path": "bios/Enterprise/64-128/basic20.rom",
+      "cores": null
+    },
+    {
+      "dest": "ep128emu/roms/exos24uk.rom",
       "sha1": "cf12e971623a54bf8c4f891ca3a36d969f205c49",
       "size": 65536,
       "repo_path": "bios/Enterprise/64-128/exos24uk.rom",
       "cores": null
     },
     {
-      "dest": "hun.rom",
+      "dest": "ep128emu/roms/hun.rom",
       "sha1": "325a5e28c2a0d896711f8829e7ff14fed5dd4103",
       "size": 16384,
       "repo_path": "bios/Enterprise/64-128/hun.rom",
       "cores": null
     },
     {
-      "dest": "epdos16f.rom",
-      "sha1": "9a9eac31e601a1ab0f7a5d2b13175d092fa84bd3",
+      "dest": "ep128emu/roms/epd19hft.rom",
+      "sha1": "8f28fe73d13e94dd1da02519908ecc6eebe104f6",
       "size": 32768,
-      "repo_path": "bios/Enterprise/64-128/epdos16f.rom",
+      "repo_path": "bios/Enterprise/64-128/epd19hft.rom",
       "cores": null
     },
     {
-      "dest": "exdos14isdos10uk.rom",
-      "sha1": "b82e21b6e3214432b6dc13f650e97de88fc90a72",
+      "dest": "ep128emu/roms/zt19hfnt.rom",
+      "sha1": "9dd7f38a74f119f142b17e5a16ebd8afa7bbea01",
       "size": 32768,
-      "repo_path": "bios/Enterprise/64-128/exdos14isdos10uk.rom",
+      "repo_path": "bios/Enterprise/64-128/zt19hfnt.rom",
       "cores": null
     },
     {
-      "dest": "brd.rom",
+      "dest": "ep128emu/roms/brd.rom",
       "sha1": "f34f0c330b44dbf2548329bea954d5991dec30ca",
       "size": 16384,
       "repo_path": "bios/Enterprise/64-128/brd.rom",
       "cores": null
     },
     {
-      "dest": "zt19uk.rom",
+      "dest": "ep128emu/roms/zt19uk.rom",
       "sha1": "b7af62f0bc95fdca4b31d236f8327dafc80f83b7",
       "size": 32768,
       "repo_path": "bios/Enterprise/64-128/zt19uk.rom",
-      "cores": null
-    },
-    {
-      "dest": "tvc22_sys.rom",
-      "sha1": "f2572ee83d09fc08f4de4a62f101c8bb301a9505",
-      "size": 16384,
-      "repo_path": "bios/Enterprise/64-128/tvc22_sys.rom",
-      "cores": null
-    },
-    {
-      "dest": "tvc22_ext.rom",
-      "sha1": "abf119cf947ea32defd08b29a8a25d75f6bd4987",
-      "size": 8192,
-      "repo_path": "bios/Enterprise/64-128/tvc22_ext.rom",
-      "cores": null
-    },
-    {
-      "dest": "tvcfileio.rom",
-      "sha1": "98889c3a56b11dedf077f866ed2e12d51b604113",
-      "size": 8192,
-      "repo_path": "bios/Enterprise/64-128/tvcfileio.rom",
-      "cores": null
-    },
-    {
-      "dest": "tvc_dos12d.rom",
-      "sha1": "072c6160d4e7d406f5d8f5b1b66066c797d35561",
-      "size": 16384,
-      "repo_path": "bios/Enterprise/64-128/tvc_dos12d.rom",
-      "cores": null
-    },
-    {
-      "dest": "cpc464.rom",
-      "sha1": "56d39c463da60968d93e58b4ba0e675829412a20",
-      "size": 32768,
-      "repo_path": "bios/Amstrad/CPC/cpc464.rom",
-      "cores": null
-    },
-    {
-      "dest": "cpc664.rom",
-      "sha1": "073a7665527b5bd8a148747a3947dbd3328682c8",
-      "size": 32768,
-      "repo_path": "bios/Amstrad/CPC/cpc664.rom",
-      "cores": null
-    },
-    {
-      "dest": "cpc6128.rom",
-      "sha1": "5977adbad3f7c1e0e082cd02fe76a700d9860c30",
-      "size": 32768,
-      "repo_path": "bios/Amstrad/CPC/cpc6128.rom",
-      "cores": null
-    },
-    {
-      "dest": "cpc_amsdos.rom",
-      "sha1": "39102c8e9cb55fcc0b9b62098780ed4a3cb6a4bb",
-      "size": 16384,
-      "repo_path": "bios/Amstrad/CPC/amsdos.rom",
-      "cores": null
-    },
-    {
-      "dest": "zx128.rom",
-      "sha1": "16375d42ea109b47edded7a16028de7fdb3013a1",
-      "size": 32768,
-      "repo_path": "bios/Enterprise/64-128/zx128.rom",
-      "cores": null
-    },
-    {
-      "dest": "zx48.rom",
-      "sha1": "5ea7c2b824672e914525d1d5c419d71b84a426a2",
-      "size": 16384,
-      "repo_path": "bios/Arcade/FBNeo/spectrum.rom",
       "cores": null
     },
     {
@@ -2238,13 +2161,6 @@
       "cores": null
     },
     {
-      "dest": "sc3000.zip",
-      "sha1": "c983bfa2f4c6d077e70e6ff9c7ed59b72368e355",
-      "size": 21232,
-      "repo_path": "bios/Sega/SC-3000/sc3000.zip",
-      "cores": null
-    },
-    {
       "dest": "scummvm/extra/MT32_PCM.ROM",
       "sha1": "f6b1eebc4b2d200ec6d3d21d51325d5b48c60252",
       "size": 524288,
@@ -2288,8 +2204,8 @@
     },
     {
       "dest": "dc/naomi2.zip",
-      "sha1": "46278151f85b74951592d57155441485fe3e0274",
-      "size": 7038242,
+      "sha1": "da79eca49c59f7661737643b5e11e63a73b51fcc",
+      "size": 7038226,
       "repo_path": "bios/Arcade/Arcade/naomi2.zip",
       "cores": null
     },
@@ -2647,6 +2563,34 @@
       "sha1": "54b8d2c1317628de51a85fc1c424423a986775e4",
       "size": 1024,
       "repo_path": "bios/Philips/Videopac+/jopac.bin",
+      "cores": null
+    },
+    {
+      "dest": "ep128emu/roms/tvc22_sys.rom",
+      "sha1": "f2572ee83d09fc08f4de4a62f101c8bb301a9505",
+      "size": 16384,
+      "repo_path": "bios/Enterprise/64-128/tvc22_sys.rom",
+      "cores": null
+    },
+    {
+      "dest": "ep128emu/roms/tvc22_ext.rom",
+      "sha1": "abf119cf947ea32defd08b29a8a25d75f6bd4987",
+      "size": 8192,
+      "repo_path": "bios/Enterprise/64-128/tvc22_ext.rom",
+      "cores": null
+    },
+    {
+      "dest": "ep128emu/roms/tvcfileio.rom",
+      "sha1": "98889c3a56b11dedf077f866ed2e12d51b604113",
+      "size": 8192,
+      "repo_path": "bios/Enterprise/64-128/tvcfileio.rom",
+      "cores": null
+    },
+    {
+      "dest": "ep128emu/roms/tvc_dos12d.rom",
+      "sha1": "072c6160d4e7d406f5d8f5b1b66066c797d35561",
+      "size": 16384,
+      "repo_path": "bios/Enterprise/64-128/tvc_dos12d.rom",
       "cores": null
     },
     {
@@ -6140,7 +6084,7 @@
       "dest": "ps2_scph50006.bin",
       "sha1": "caa18ed04854a91e68f2d61a782560edd6373bbf",
       "size": 4194304,
-      "repo_path": "bios/Sony/PlayStation 2/ps2-0190h-20030623.bin",
+      "repo_path": "bios/Sony/PlayStation 2/ps2_scph50006.bin",
       "cores": [
         "DuckStation"
       ]
@@ -6158,7 +6102,7 @@
       "dest": "ps2_scph50008.bin",
       "sha1": "34a81db03ab617fbfdd7f9b861692dd2ecd57b82",
       "size": 4194304,
-      "repo_path": "bios/Sony/PlayStation 2/ps2-0190r-20030623.bin",
+      "repo_path": "bios/Sony/PlayStation 2/ps2_scph50008.bin",
       "cores": [
         "DuckStation"
       ]
@@ -6487,6 +6431,78 @@
       "repo_path": "bios/Nokia/N-Gage/SYM.ROM",
       "cores": [
         "eka2l1"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/exdos14isdos10uk.rom",
+      "sha1": "b82e21b6e3214432b6dc13f650e97de88fc90a72",
+      "size": 32768,
+      "repo_path": "bios/Enterprise/64-128/exdos14isdos10uk.rom",
+      "cores": [
+        "ep128emu_core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/epdos16f.rom",
+      "sha1": "9a9eac31e601a1ab0f7a5d2b13175d092fa84bd3",
+      "size": 32768,
+      "repo_path": "bios/Enterprise/64-128/epdos16f.rom",
+      "cores": [
+        "ep128emu_core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/cpc464.rom",
+      "sha1": "56d39c463da60968d93e58b4ba0e675829412a20",
+      "size": 32768,
+      "repo_path": "bios/Amstrad/CPC/cpc464.rom",
+      "cores": [
+        "ep128emu_core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/cpc664.rom",
+      "sha1": "073a7665527b5bd8a148747a3947dbd3328682c8",
+      "size": 32768,
+      "repo_path": "bios/Amstrad/CPC/cpc664.rom",
+      "cores": [
+        "ep128emu_core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/cpc6128.rom",
+      "sha1": "5977adbad3f7c1e0e082cd02fe76a700d9860c30",
+      "size": 32768,
+      "repo_path": "bios/Amstrad/CPC/cpc6128.rom",
+      "cores": [
+        "ep128emu_core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/cpc_amsdos.rom",
+      "sha1": "39102c8e9cb55fcc0b9b62098780ed4a3cb6a4bb",
+      "size": 16384,
+      "repo_path": "bios/Amstrad/CPC/amsdos.rom",
+      "cores": [
+        "ep128emu_core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/zx128.rom",
+      "sha1": "16375d42ea109b47edded7a16028de7fdb3013a1",
+      "size": 32768,
+      "repo_path": "bios/Enterprise/64-128/zx128.rom",
+      "cores": [
+        "ep128emu_core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/zx48.rom",
+      "sha1": "5ea7c2b824672e914525d1d5c419d71b84a426a2",
+      "size": 16384,
+      "repo_path": "bios/Arcade/FBNeo/spectrum.rom",
+      "cores": [
+        "ep128emu_core"
       ]
     },
     {
@@ -9511,6 +9527,69 @@
       ]
     },
     {
+      "dest": "kvs1.wav",
+      "sha1": "b094c2c1fca81a0e531e0541f302346150ec4604",
+      "size": 3436329,
+      "repo_path": "bios/Atari/2600/KVS1.WAV",
+      "cores": [
+        "Stella 2014"
+      ]
+    },
+    {
+      "dest": "kvs2.wav",
+      "sha1": "8b83b2eea01b3e08ceb885aeb153d4084bddb63c",
+      "size": 2086275,
+      "repo_path": "bios/Atari/2600/KVS2.WAV",
+      "cores": [
+        "Stella 2014"
+      ]
+    },
+    {
+      "dest": "kvs3.wav",
+      "sha1": "86896a1e272d8715489de9b407f0b8a42f82d4a0",
+      "size": 3720920,
+      "repo_path": "bios/Atari/2600/KVS3.WAV",
+      "cores": [
+        "Stella 2014"
+      ]
+    },
+    {
+      "dest": "kvb1.wav",
+      "sha1": "6a582aebcefd6e2a97bdd8968202aab9851a889c",
+      "size": 4219542,
+      "repo_path": "bios/Atari/2600/KVB1.WAV",
+      "cores": [
+        "Stella 2014"
+      ]
+    },
+    {
+      "dest": "kvb2.wav",
+      "sha1": "60a425c6bde3226ab731995562716321be20fc49",
+      "size": 9593878,
+      "repo_path": "bios/Atari/2600/KVB2.WAV",
+      "cores": [
+        "Stella 2014"
+      ]
+    },
+    {
+      "dest": "kvb3.wav",
+      "sha1": "5e34125c4d6c209b21d1c892f3df0ec1644fd0d8",
+      "size": 7676992,
+      "repo_path": "bios/Atari/2600/KVB3.WAV",
+      "cores": [
+        "Stella 2014"
+      ]
+    },
+    {
+      "dest": "kvshared.wav",
+      "sha1": "9adf10cdf1de833b194c7d8797ad1f041ad98dd3",
+      "size": 3059116,
+      "repo_path": "bios/Atari/2600/KVSHARED.WAV",
+      "cores": [
+        "Stella 2014"
+      ]
+    },
+    {
       "dest": "KVS1.WAV",
       "sha1": "b094c2c1fca81a0e531e0541f302346150ec4604",
       "size": 3436329,
@@ -11149,6 +11228,15 @@
       ]
     },
     {
+      "dest": "astro_astrocde.zip",
+      "sha1": "141b2f039e91a3e4154f0f6c9090700cb233e549",
+      "size": 6778,
+      "repo_path": "bios/Arcade/FBNeo/astro_astrocde.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
       "dest": "cchip.zip",
       "sha1": "364f2302a145a0fd6de767d7f8484badde1d1a6e",
       "size": 2700,
@@ -11536,6 +11624,15 @@
       ]
     },
     {
+      "dest": "snes_st018.zip",
+      "sha1": "268af28171e79f6ed8391b98c84c075a2d0c76ea",
+      "size": 62579,
+      "repo_path": "bios/Arcade/FBNeo/snes_st018.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
       "dest": "spec128.zip",
       "sha1": "e56f7be80abcf2c298310e8d2af66b9f29a6db31",
       "size": 32986,
@@ -11614,204 +11711,6 @@
       "repo_path": "bios/Nintendo/Game Boy Advance/GBA_bios.rom",
       "cores": [
         "Dolphin"
-      ]
-    },
-    {
-      "dest": "ep128emu/roms/exos21.rom",
-      "sha1": "55315b20fecb4441a07ee4bc5dc7153f396e0a2e",
-      "size": 32768,
-      "repo_path": "bios/Enterprise/64-128/exos21.rom",
-      "cores": [
-        "ep128emu_core"
-      ]
-    },
-    {
-      "dest": "ep128emu/roms/exos20.rom",
-      "sha1": "6033a0535136c40c47137e4d1cd9273c06d5fdff",
-      "size": 32768,
-      "repo_path": "bios/Enterprise/64-128/exos20.bin",
-      "cores": [
-        "ep128emu_core"
-      ]
-    },
-    {
-      "dest": "ep128emu/roms/exos24uk.rom",
-      "sha1": "cf12e971623a54bf8c4f891ca3a36d969f205c49",
-      "size": 65536,
-      "repo_path": "bios/Enterprise/64-128/exos24uk.rom",
-      "cores": [
-        "ep128emu_core"
-      ]
-    },
-    {
-      "dest": "ep128emu/roms/basic21.rom",
-      "sha1": "03bbb386cf530e804363acdfc1d13e64cf28af2e",
-      "size": 16384,
-      "repo_path": "bios/Enterprise/64-128/basic21.rom",
-      "cores": [
-        "ep128emu_core"
-      ]
-    },
-    {
-      "dest": "ep128emu/roms/basic20.rom",
-      "sha1": "61d0987b906146e21b94f265d5b51b4938c986a9",
-      "size": 16384,
-      "repo_path": "bios/Enterprise/64-128/basic20.rom",
-      "cores": [
-        "ep128emu_core"
-      ]
-    },
-    {
-      "dest": "ep128emu/roms/exdos13.rom",
-      "sha1": "cb43ab3676b93c279f1ed8ffcb0d4dcd4b34e631",
-      "size": 32768,
-      "repo_path": "bios/Enterprise/64-128/exdos13.rom",
-      "cores": [
-        "ep128emu_core"
-      ]
-    },
-    {
-      "dest": "ep128emu/roms/exdos14isdos10uk.rom",
-      "sha1": "b82e21b6e3214432b6dc13f650e97de88fc90a72",
-      "size": 32768,
-      "repo_path": "bios/Enterprise/64-128/exdos14isdos10uk.rom",
-      "cores": [
-        "ep128emu_core"
-      ]
-    },
-    {
-      "dest": "ep128emu/roms/epfileio.rom",
-      "sha1": "2f9077bcd89b1ec42dbdcd55d335bdbaf361eff3",
-      "size": 16384,
-      "repo_path": "bios/Enterprise/64-128/epfileio.rom",
-      "cores": [
-        "ep128emu_core"
-      ]
-    },
-    {
-      "dest": "ep128emu/roms/epdos16f.rom",
-      "sha1": "9a9eac31e601a1ab0f7a5d2b13175d092fa84bd3",
-      "size": 32768,
-      "repo_path": "bios/Enterprise/64-128/epdos16f.rom",
-      "cores": [
-        "ep128emu_core"
-      ]
-    },
-    {
-      "dest": "ep128emu/roms/hun.rom",
-      "sha1": "325a5e28c2a0d896711f8829e7ff14fed5dd4103",
-      "size": 16384,
-      "repo_path": "bios/Enterprise/64-128/hun.rom",
-      "cores": [
-        "ep128emu_core"
-      ]
-    },
-    {
-      "dest": "ep128emu/roms/brd.rom",
-      "sha1": "f34f0c330b44dbf2548329bea954d5991dec30ca",
-      "size": 16384,
-      "repo_path": "bios/Enterprise/64-128/brd.rom",
-      "cores": [
-        "ep128emu_core"
-      ]
-    },
-    {
-      "dest": "ep128emu/roms/zt19uk.rom",
-      "sha1": "b7af62f0bc95fdca4b31d236f8327dafc80f83b7",
-      "size": 32768,
-      "repo_path": "bios/Enterprise/64-128/zt19uk.rom",
-      "cores": [
-        "ep128emu_core"
-      ]
-    },
-    {
-      "dest": "ep128emu/roms/tvc22_sys.rom",
-      "sha1": "f2572ee83d09fc08f4de4a62f101c8bb301a9505",
-      "size": 16384,
-      "repo_path": "bios/Enterprise/64-128/tvc22_sys.rom",
-      "cores": [
-        "ep128emu_core"
-      ]
-    },
-    {
-      "dest": "ep128emu/roms/tvc22_ext.rom",
-      "sha1": "abf119cf947ea32defd08b29a8a25d75f6bd4987",
-      "size": 8192,
-      "repo_path": "bios/Enterprise/64-128/tvc22_ext.rom",
-      "cores": [
-        "ep128emu_core"
-      ]
-    },
-    {
-      "dest": "ep128emu/roms/tvcfileio.rom",
-      "sha1": "98889c3a56b11dedf077f866ed2e12d51b604113",
-      "size": 8192,
-      "repo_path": "bios/Enterprise/64-128/tvcfileio.rom",
-      "cores": [
-        "ep128emu_core"
-      ]
-    },
-    {
-      "dest": "ep128emu/roms/tvc_dos12d.rom",
-      "sha1": "072c6160d4e7d406f5d8f5b1b66066c797d35561",
-      "size": 16384,
-      "repo_path": "bios/Enterprise/64-128/tvc_dos12d.rom",
-      "cores": [
-        "ep128emu_core"
-      ]
-    },
-    {
-      "dest": "ep128emu/roms/cpc464.rom",
-      "sha1": "56d39c463da60968d93e58b4ba0e675829412a20",
-      "size": 32768,
-      "repo_path": "bios/Amstrad/CPC/cpc464.rom",
-      "cores": [
-        "ep128emu_core"
-      ]
-    },
-    {
-      "dest": "ep128emu/roms/cpc664.rom",
-      "sha1": "073a7665527b5bd8a148747a3947dbd3328682c8",
-      "size": 32768,
-      "repo_path": "bios/Amstrad/CPC/cpc664.rom",
-      "cores": [
-        "ep128emu_core"
-      ]
-    },
-    {
-      "dest": "ep128emu/roms/cpc6128.rom",
-      "sha1": "5977adbad3f7c1e0e082cd02fe76a700d9860c30",
-      "size": 32768,
-      "repo_path": "bios/Amstrad/CPC/cpc6128.rom",
-      "cores": [
-        "ep128emu_core"
-      ]
-    },
-    {
-      "dest": "ep128emu/roms/cpc_amsdos.rom",
-      "sha1": "39102c8e9cb55fcc0b9b62098780ed4a3cb6a4bb",
-      "size": 16384,
-      "repo_path": "bios/Amstrad/CPC/amsdos.rom",
-      "cores": [
-        "ep128emu_core"
-      ]
-    },
-    {
-      "dest": "ep128emu/roms/zx128.rom",
-      "sha1": "16375d42ea109b47edded7a16028de7fdb3013a1",
-      "size": 32768,
-      "repo_path": "bios/Enterprise/64-128/zx128.rom",
-      "cores": [
-        "ep128emu_core"
-      ]
-    },
-    {
-      "dest": "ep128emu/roms/zx48.rom",
-      "sha1": "5ea7c2b824672e914525d1d5c419d71b84a426a2",
-      "size": 16384,
-      "repo_path": "bios/Arcade/FBNeo/spectrum.rom",
-      "cores": [
-        "ep128emu_core"
       ]
     },
     {
@@ -11929,6 +11828,24 @@
       "repo_path": "bios/Commodore/Amiga/mt32-roms/pcm_cm32l.rom",
       "cores": [
         "ScummVM"
+      ]
+    },
+    {
+      "dest": "fbneo/astro_astrocde.zip",
+      "sha1": "141b2f039e91a3e4154f0f6c9090700cb233e549",
+      "size": 6778,
+      "repo_path": "bios/Arcade/FBNeo/astro_astrocde.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/atarisy1.zip",
+      "sha1": "4fb1f00681d2540b476add2def2bbf07ca3e3993",
+      "size": 49385,
+      "repo_path": "bios/Arcade/Arcade/atarisy1.zip",
+      "cores": [
+        "FinalBurn Neo"
       ]
     },
     {
@@ -12368,6 +12285,15 @@
       "sha1": "4257bd14b541fafbd555cb98ba079a3416a45934",
       "size": 924762,
       "repo_path": "bios/Arcade/Arcade/skns.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/snes_st018.zip",
+      "sha1": "268af28171e79f6ed8391b98c84c075a2d0c76ea",
+      "size": 62579,
+      "repo_path": "bios/Arcade/FBNeo/snes_st018.zip",
       "cores": [
         "FinalBurn Neo"
       ]
@@ -13025,7 +12951,7 @@
     },
     {
       "dest": "ps2-0190h-20030623.bin",
-      "sha1": "caa18ed04854a91e68f2d61a782560edd6373bbf",
+      "sha1": "3e18fefb5b5a59046baf25a3f13da1e3a40b92be",
       "size": 4194304,
       "repo_path": "bios/Sony/PlayStation 2/ps2-0190h-20030623.bin",
       "cores": [
@@ -13061,7 +12987,7 @@
     },
     {
       "dest": "ps2-0190r-20030623.bin",
-      "sha1": "34a81db03ab617fbfdd7f9b861692dd2ecd57b82",
+      "sha1": "c77d61114bbcc0eddca169ac16a6af87c2e9e638",
       "size": 4194304,
       "repo_path": "bios/Sony/PlayStation 2/ps2-0190r-20030623.bin",
       "cores": [

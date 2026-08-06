@@ -4,7 +4,7 @@
   "platform": "retrobat",
   "display_name": "RetroBat",
   "version": "1.0",
-  "generated": "2026-08-06T08:36:03Z",
+  "generated": "2026-08-06T12:30:34Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -229,8 +229,8 @@
       }
     }
   ],
-  "total_files": 1170,
-  "total_size": 4778161205,
+  "total_files": 1179,
+  "total_size": 4786748136,
   "files": [
     {
       "dest": "panafz1.bin",
@@ -1206,6 +1206,13 @@
       "cores": null
     },
     {
+      "dest": "coleco.rom",
+      "sha1": "45bedc4cbdeac66c7df59e9e599195c778d86a92",
+      "size": 8192,
+      "repo_path": "bios/Coleco/ColecoVision/BIOS.col",
+      "cores": null
+    },
+    {
       "dest": "colecovision.rom",
       "sha1": "45bedc4cbdeac66c7df59e9e599195c778d86a92",
       "size": 8192,
@@ -1217,6 +1224,13 @@
       "sha1": "45bedc4cbdeac66c7df59e9e599195c778d86a92",
       "size": 8192,
       "repo_path": "bios/Coleco/ColecoVision/BIOS.col",
+      "cores": null
+    },
+    {
+      "dest": "bioscv.rom",
+      "sha1": "5ac620c529e4965efb5560fe824854a44c983757",
+      "size": 2048,
+      "repo_path": "bios/VTech/CreatiVision/bioscv.rom",
       "cores": null
     },
     {
@@ -1956,8 +1970,8 @@
     },
     {
       "dest": "dc/naomi2.zip",
-      "sha1": "46278151f85b74951592d57155441485fe3e0274",
-      "size": 7038242,
+      "sha1": "da79eca49c59f7661737643b5e11e63a73b51fcc",
+      "size": 7038226,
       "repo_path": "bios/Arcade/Arcade/naomi2.zip",
       "cores": null
     },
@@ -7967,6 +7981,15 @@
       ]
     },
     {
+      "dest": "astro_astrocde.zip",
+      "sha1": "141b2f039e91a3e4154f0f6c9090700cb233e549",
+      "size": 6778,
+      "repo_path": "bios/Arcade/FBNeo/astro_astrocde.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
       "dest": "cchip.zip",
       "sha1": "364f2302a145a0fd6de767d7f8484badde1d1a6e",
       "size": 2700,
@@ -8345,6 +8368,15 @@
       ]
     },
     {
+      "dest": "snes_st018.zip",
+      "sha1": "268af28171e79f6ed8391b98c84c075a2d0c76ea",
+      "size": 62579,
+      "repo_path": "bios/Arcade/FBNeo/snes_st018.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
       "dest": "spec128.zip",
       "sha1": "e56f7be80abcf2c298310e8d2af66b9f29a6db31",
       "size": 32986,
@@ -8513,6 +8545,24 @@
       "repo_path": "bios/Commodore/Amiga/mt32-roms/pcm_cm32l.rom",
       "cores": [
         "ScummVM"
+      ]
+    },
+    {
+      "dest": "fbneo/astro_astrocde.zip",
+      "sha1": "141b2f039e91a3e4154f0f6c9090700cb233e549",
+      "size": 6778,
+      "repo_path": "bios/Arcade/FBNeo/astro_astrocde.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/atarisy1.zip",
+      "sha1": "4fb1f00681d2540b476add2def2bbf07ca3e3993",
+      "size": 49385,
+      "repo_path": "bios/Arcade/Arcade/atarisy1.zip",
+      "cores": [
+        "FinalBurn Neo"
       ]
     },
     {
@@ -8952,6 +9002,15 @@
       "sha1": "4257bd14b541fafbd555cb98ba079a3416a45934",
       "size": 924762,
       "repo_path": "bios/Arcade/Arcade/skns.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/snes_st018.zip",
+      "sha1": "268af28171e79f6ed8391b98c84c075a2d0c76ea",
+      "size": 62579,
+      "repo_path": "bios/Arcade/FBNeo/snes_st018.zip",
       "cores": [
         "FinalBurn Neo"
       ]
@@ -9611,7 +9670,7 @@
     },
     {
       "dest": "ps2-0190h-20030623.bin",
-      "sha1": "caa18ed04854a91e68f2d61a782560edd6373bbf",
+      "sha1": "3e18fefb5b5a59046baf25a3f13da1e3a40b92be",
       "size": 4194304,
       "repo_path": "bios/Sony/PlayStation 2/ps2-0190h-20030623.bin",
       "cores": [
@@ -9647,7 +9706,7 @@
     },
     {
       "dest": "ps2-0190r-20030623.bin",
-      "sha1": "34a81db03ab617fbfdd7f9b861692dd2ecd57b82",
+      "sha1": "c77d61114bbcc0eddca169ac16a6af87c2e9e638",
       "size": 4194304,
       "repo_path": "bios/Sony/PlayStation 2/ps2-0190r-20030623.bin",
       "cores": [
@@ -9902,6 +9961,24 @@
       "sha1": "4b5ef16b67e3b523d28ed2406106cb80470a06d0",
       "size": 4194304,
       "repo_path": "bios/Sony/PlayStation 2/ps2-0250j-20100415.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2_scph50006.bin",
+      "sha1": "caa18ed04854a91e68f2d61a782560edd6373bbf",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2_scph50006.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
+      "dest": "ps2_scph50008.bin",
+      "sha1": "34a81db03ab617fbfdd7f9b861692dd2ecd57b82",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/ps2_scph50008.bin",
       "cores": [
         "PCSX2"
       ]

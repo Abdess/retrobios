@@ -4,7 +4,7 @@
   "platform": "romm",
   "display_name": "RomM",
   "version": "1.0",
-  "generated": "2026-08-06T08:36:22Z",
+  "generated": "2026-08-06T12:30:53Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -14,8 +14,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 538,
-  "total_size": 1556298731,
+  "total_files": 541,
+  "total_size": 1486548090,
   "files": [
     {
       "dest": "3do/3do_arcade_saot.bin",
@@ -1034,9 +1034,9 @@
     },
     {
       "dest": "nes/NstDatabase.xml",
-      "sha1": "f92312bae56e29c5bf00a5103105fce78472bf5c",
-      "size": 1022369,
-      "repo_path": "bios/Nintendo/NES/NstDatabase.xml",
+      "sha1": "26322f182540211e9b5e3647675b7c593706ae2b",
+      "size": 1009534,
+      "repo_path": "bios/Nintendo/NES/.variants/NstDatabase.xml.26322f18",
       "cores": null
     },
     {
@@ -1272,12 +1272,10 @@
     },
     {
       "dest": "scummvm/scummvm.zip",
-      "sha1": "320801896408d7c1566ce26dd5e4b5eb0f0caa6c",
-      "size": 79379908,
-      "repo_path": "bios/ScummVM/scummvm.zip",
-      "cores": null,
-      "storage": "release",
-      "release_asset": "scummvm.zip"
+      "sha1": "718c1a00d38e0810a1ad0ffde79f73447f846f01",
+      "size": 9523360,
+      "repo_path": "bios/ScummVM/.variants/scummvm.zip.a93f1c4b",
+      "cores": null
     },
     {
       "dest": "dc/dc_boot.bin",
@@ -1694,23 +1692,23 @@
     },
     {
       "dest": "zxs/plus3e-0.rom",
-      "sha1": "649fbd233490bf58b35350b0123d36caaaa011eb",
+      "sha1": "a837f66977040f7b51ed053a2483c10f3d070ab7",
       "size": 16384,
-      "repo_path": "bios/Sinclair/ZX Spectrum/plus3e-0.rom",
+      "repo_path": "bios/Sinclair/ZX Spectrum/.variants/plus3-0.rom.a10230c0",
       "cores": null
     },
     {
       "dest": "zxs/plus3e-1.rom",
-      "sha1": "f12198108cbb14de4f03c6695bc16d08c85ee214",
+      "sha1": "6a4364f25513e4079f048f2de131a896d30edc64",
       "size": 16384,
-      "repo_path": "bios/Sinclair/ZX Spectrum/plus3e-1.rom",
+      "repo_path": "bios/Sinclair/ZX Spectrum/.variants/plus3-1.rom.09b9c3ca",
       "cores": null
     },
     {
       "dest": "zxs/plus3e-2.rom",
-      "sha1": "773633dce5ba323a9e00d9d0f9e4d8c295df7c87",
+      "sha1": "0a747cc0b827a94b4fd74cfd818ca792437a38f7",
       "size": 16384,
-      "repo_path": "bios/Sinclair/ZX Spectrum/plus3e-2.rom",
+      "repo_path": "bios/Sinclair/ZX Spectrum/.variants/plus3-2.rom.a60285a0",
       "cores": null
     },
     {
@@ -2389,14 +2387,14 @@
       "dest": "ps2/ps2-0190h-20030623.bin",
       "sha1": "caa18ed04854a91e68f2d61a782560edd6373bbf",
       "size": 4194304,
-      "repo_path": "bios/Sony/PlayStation 2/ps2-0190h-20030623.bin",
+      "repo_path": "bios/Sony/PlayStation 2/ps2_scph50006.bin",
       "cores": null
     },
     {
       "dest": "ps2/ps2-0190r-20030623.bin",
       "sha1": "34a81db03ab617fbfdd7f9b861692dd2ecd57b82",
       "size": 4194304,
-      "repo_path": "bios/Sony/PlayStation 2/ps2-0190r-20030623.bin",
+      "repo_path": "bios/Sony/PlayStation 2/ps2_scph50008.bin",
       "cores": null
     },
     {
@@ -3723,6 +3721,24 @@
       ]
     },
     {
+      "dest": "colecovision/astro_astrocde.zip",
+      "sha1": "141b2f039e91a3e4154f0f6c9090700cb233e549",
+      "size": 6778,
+      "repo_path": "bios/Arcade/FBNeo/astro_astrocde.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "colecovision/atarisy1.zip",
+      "sha1": "4fb1f00681d2540b476add2def2bbf07ca3e3993",
+      "size": 49385,
+      "repo_path": "bios/Arcade/Arcade/atarisy1.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
       "dest": "colecovision/channelf.zip",
       "sha1": "1cb23b462b990241013deb4b5e07ce741af28267",
       "size": 2705,
@@ -4069,6 +4085,15 @@
       "sha1": "e8fcd1507a6811f0c2643d0497c0ac3f405f2438",
       "size": 132562,
       "repo_path": "bios/Arcade/Arcade/sfiiiu.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "colecovision/snes_st018.zip",
+      "sha1": "268af28171e79f6ed8391b98c84c075a2d0c76ea",
+      "size": 62579,
+      "repo_path": "bios/Arcade/FBNeo/snes_st018.zip",
       "cores": [
         "FinalBurn Neo"
       ]

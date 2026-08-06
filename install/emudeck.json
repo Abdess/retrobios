@@ -4,7 +4,7 @@
   "platform": "emudeck",
   "display_name": "EmuDeck",
   "version": "1.0",
-  "generated": "2026-08-06T08:35:07Z",
+  "generated": "2026-08-06T12:29:25Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -244,7 +244,7 @@
     }
   ],
   "total_files": 527,
-  "total_size": 3277238734,
+  "total_size": 3277238718,
   "files": [
     {
       "dest": "colecovision.rom",
@@ -1723,7 +1723,7 @@
       "dest": "ps2_scph50006.bin",
       "sha1": "caa18ed04854a91e68f2d61a782560edd6373bbf",
       "size": 4194304,
-      "repo_path": "bios/Sony/PlayStation 2/ps2-0190h-20030623.bin",
+      "repo_path": "bios/Sony/PlayStation 2/ps2_scph50006.bin",
       "cores": [
         "DuckStation"
       ]
@@ -1741,7 +1741,7 @@
       "dest": "ps2_scph50008.bin",
       "sha1": "34a81db03ab617fbfdd7f9b861692dd2ecd57b82",
       "size": 4194304,
-      "repo_path": "bios/Sony/PlayStation 2/ps2-0190r-20030623.bin",
+      "repo_path": "bios/Sony/PlayStation 2/ps2_scph50008.bin",
       "cores": [
         "DuckStation"
       ]
@@ -2135,8 +2135,8 @@
     },
     {
       "dest": "naomi2.zip",
-      "sha1": "46278151f85b74951592d57155441485fe3e0274",
-      "size": 7038242,
+      "sha1": "da79eca49c59f7661737643b5e11e63a73b51fcc",
+      "size": 7038226,
       "repo_path": "bios/Arcade/Arcade/naomi2.zip",
       "cores": [
         "MAME"
@@ -4432,7 +4432,7 @@
     },
     {
       "dest": "ps2-0190h-20030623.bin",
-      "sha1": "caa18ed04854a91e68f2d61a782560edd6373bbf",
+      "sha1": "3e18fefb5b5a59046baf25a3f13da1e3a40b92be",
       "size": 4194304,
       "repo_path": "bios/Sony/PlayStation 2/ps2-0190h-20030623.bin",
       "cores": [
@@ -4468,7 +4468,7 @@
     },
     {
       "dest": "ps2-0190r-20030623.bin",
-      "sha1": "34a81db03ab617fbfdd7f9b861692dd2ecd57b82",
+      "sha1": "c77d61114bbcc0eddca169ac16a6af87c2e9e638",
       "size": 4194304,
       "repo_path": "bios/Sony/PlayStation 2/ps2-0190r-20030623.bin",
       "cores": [
