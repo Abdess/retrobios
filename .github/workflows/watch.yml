@@ -28,7 +28,7 @@ jobs:
       - name: Install dependencies
         run: pip install pyyaml
 
-      - name: Regenerate platform configs from live sources
+      - name: Regenerate platform configs from stable upstream sources
         run: |
           python3 -c "
           import sys, yaml
@@ -40,20 +40,27 @@ jobs:
               return dumper.represent_scalar('tag:yaml.org,2002:str', data)
           yaml.add_representer(str, str_representer)
 
-          # Regenerate retroarch.yml from live System.dat + core-info
-          from scraper.libretro_scraper import Scraper as LS
-          config = LS().generate_platform_yaml()
-          with open('platforms/retroarch.yml', 'w') as f:
-              yaml.dump(config, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
-          print(f'RetroArch: {len(config[\"systems\"])} systems, version={config[\"version\"]}')
-
-          # Regenerate batocera.yml from live batocera-systems
-          from scraper.batocera_scraper import Scraper as BS
-          config = BS().generate_platform_yaml()
-          with open('platforms/batocera.yml', 'w') as f:
-              yaml.dump(config, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
-          print(f'Batocera: {len(config[\"systems\"])} systems, version={config[\"version\"]}')
+          targets = {
+              'libretro': 'retroarch', 'batocera': 'batocera',
+              'recalbox': 'recalbox', 'retrobat': 'retrobat',
+              'romm': 'romm', 'bizhawk': 'bizhawk',
+              'retrodeck': 'retrodeck', 'emudeck': 'emudeck',
+          }
+          for scraper_name, out in targets.items():
+              mod = __import__(f'scraper.{scraper_name}_scraper', fromlist=['Scraper'])
+              config = mod.Scraper().generate_platform_yaml()
+              with open(f'platforms/{out}.yml', 'w') as f:
+                  yaml.dump(config, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
+              print(f'{out}: {len(config[\"systems\"])} systems, version={config[\"version\"]}')
           "
+
+      - name: Refresh hardware target configs
+        run: |
+          python -m scripts.scraper.targets.batocera_targets_scraper -o platforms/targets/batocera.yml
+          python -m scripts.scraper.targets.retroarch_targets_scraper -o platforms/targets/retroarch.yml
+          python -m scripts.scraper.targets.emudeck_targets_scraper -o platforms/targets/emudeck.yml
+          python -m scripts.scraper.targets.retropie_targets_scraper -o platforms/targets/retropie.yml
+        continue-on-error: true
 
       - name: Auto-fetch missing BIOS files
         run: |

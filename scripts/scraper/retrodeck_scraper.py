@@ -422,9 +422,15 @@ class Scraper(BaseScraper):
                 file_entry["md5"] = req.md5
             sys_entry["files"].append(file_entry)
 
+        try:
+            from .base_scraper import fetch_github_latest_version
+        except ImportError:
+            from scraper.base_scraper import fetch_github_latest_version
+        version = fetch_github_latest_version("RetroDECK/RetroDECK") or ""
+
         return {
             "platform": "RetroDECK",
-            "version": "",
+            "version": version,
             "homepage": "https://retrodeck.net",
             "source": "https://github.com/RetroDECK/components",
             "base_destination": "",
@@ -436,7 +442,10 @@ class Scraper(BaseScraper):
 
 
 def main() -> None:
-    from scraper.base_scraper import scraper_cli
+    try:
+        from .base_scraper import scraper_cli
+    except ImportError:
+        from scraper.base_scraper import scraper_cli
 
     scraper_cli(Scraper, "Scrape RetroDECK BIOS requirements")
 

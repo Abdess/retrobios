@@ -24,25 +24,27 @@ try:
     from .base_scraper import (
         BaseScraper,
         BiosRequirement,
-        fetch_github_latest_tag,
+        fetch_github_latest_version,
         scraper_cli,
     )
 except ImportError:
     from base_scraper import (
         BaseScraper,
         BiosRequirement,
-        fetch_github_latest_tag,
+        fetch_github_latest_version,
         scraper_cli,
     )
 
 PLATFORM_NAME = "bizhawk"
 
-SOURCE_URL = (
-    "https://raw.githubusercontent.com/TASEmulators/BizHawk/"
-    "master/src/BizHawk.Emulation.Common/Database/FirmwareDatabase.cs"
-)
-
 GITHUB_REPO = "TASEmulators/BizHawk"
+
+_STABLE_TAG = fetch_github_latest_version(GITHUB_REPO) or "master"
+
+SOURCE_URL = (
+    f"https://raw.githubusercontent.com/TASEmulators/BizHawk/{_STABLE_TAG}"
+    "/src/BizHawk.Emulation.Common/Database/FirmwareDatabase.cs"
+)
 
 STATUS_RANK = {
     "Bad": 0,
@@ -378,7 +380,7 @@ class Scraper(BaseScraper):
 
             systems[req.system]["files"].append(entry)
 
-        version = fetch_github_latest_tag(GITHUB_REPO) or ""
+        version = _STABLE_TAG if _STABLE_TAG != "master" else ""
 
         return {
             "platform": "BizHawk",

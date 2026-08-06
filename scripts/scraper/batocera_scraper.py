@@ -18,18 +18,57 @@ from pathlib import Path
 
 import yaml
 
-from .base_scraper import BaseScraper, BiosRequirement, fetch_github_latest_tag
+from .base_scraper import BaseScraper, BiosRequirement
 
 PLATFORM_NAME = "batocera"
 
+_RAW_BASE = "https://raw.githubusercontent.com/batocera-linux/batocera.linux"
+
+
+def pick_stable_tag(names: list[str]) -> str | None:
+    """Pick the highest batocera-N(.M) tag from a list of tag names."""
+    import re
+
+    stable = []
+    for name in names:
+        m = re.fullmatch(r"batocera-(\d+(?:\.\d+)?)", name)
+        if m:
+            stable.append((tuple(int(x) for x in m.group(1).split(".")), name))
+    return max(stable)[1] if stable else None
+
+
+def fetch_stable_tag() -> str | None:
+    """Return the newest stable batocera-N(.M) tag name."""
+    import json
+    import urllib.error
+    import urllib.request
+
+    url = "https://api.github.com/repos/batocera-linux/batocera.linux/tags?per_page=100"
+    try:
+        req = urllib.request.Request(
+            url,
+            headers={
+                "User-Agent": "retrobios-scraper/1.0",
+                "Accept": "application/vnd.github.v3+json",
+            },
+        )
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            tags = json.loads(resp.read())
+    except (urllib.error.URLError, urllib.error.HTTPError, json.JSONDecodeError):
+        return None
+    return pick_stable_tag([tag["name"] for tag in tags])
+
+
+_STABLE_TAG = fetch_stable_tag() or "master"
+
 SOURCE_URL = (
-    "https://raw.githubusercontent.com/batocera-linux/batocera.linux/"
-    "master/package/batocera/core/batocera-scripts/scripts/batocera-systems"
+    f"{_RAW_BASE}/{_STABLE_TAG}"
+    "/package/batocera/core/batocera-scripts/scripts/batocera-systems"
 )
 
 CONFIGGEN_DEFAULTS_URL = (
-    "https://raw.githubusercontent.com/batocera-linux/batocera.linux/"
-    "master/package/batocera/core/batocera-configgen/configs/"
+    f"{_RAW_BASE}/{_STABLE_TAG}"
+    "/package/batocera/core/batocera-configgen/configs/"
     "configgen-defaults.yml"
 )
 
@@ -337,14 +376,9 @@ class Scraper(BaseScraper):
 
             systems[req.system]["files"].append(entry)
 
-        tag = fetch_github_latest_tag(
-            "batocera-linux/batocera.linux", prefix="batocera-"
-        )
         batocera_version = ""
-        if tag:
-            num = tag.removeprefix("batocera-")
-            if num.isdigit():
-                batocera_version = num
+        if _STABLE_TAG != "master":
+            batocera_version = _STABLE_TAG.removeprefix("batocera-")
         if not batocera_version:
             # Preserve existing version when fetch fails (offline mode)
             existing = (

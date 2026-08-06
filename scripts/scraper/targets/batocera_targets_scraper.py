@@ -24,7 +24,13 @@ from . import BaseTargetScraper
 PLATFORM_NAME = "batocera"
 
 GITHUB_API = "https://api.github.com/repos/batocera-linux/batocera.linux/contents"
-RAW_BASE = "https://raw.githubusercontent.com/batocera-linux/batocera.linux/master"
+try:
+    from ..batocera_scraper import fetch_stable_tag
+except ImportError:
+    from scraper.batocera_scraper import fetch_stable_tag
+
+_STABLE_TAG = fetch_stable_tag() or "master"
+RAW_BASE = f"https://raw.githubusercontent.com/batocera-linux/batocera.linux/{_STABLE_TAG}"
 
 CONFIG_IN_URL = f"{RAW_BASE}/package/batocera/core/batocera-system/Config.in"
 ES_SYSTEMS_URL = (

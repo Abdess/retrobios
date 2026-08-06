@@ -32,12 +32,14 @@ except ImportError:
 
 PLATFORM_NAME = "romm"
 
-SOURCE_URL = (
-    "https://raw.githubusercontent.com/rommapp/romm/"
-    "master/backend/models/fixtures/known_bios_files.json"
-)
-
 GITHUB_REPO = "rommapp/romm"
+
+_STABLE_TAG = fetch_github_latest_version(GITHUB_REPO) or "master"
+
+SOURCE_URL = (
+    f"https://raw.githubusercontent.com/rommapp/romm/{_STABLE_TAG}"
+    "/backend/models/fixtures/known_bios_files.json"
+)
 
 # IGDB slug -> retrobios system ID
 SLUG_MAP: dict[str, str] = {
@@ -201,10 +203,7 @@ class Scraper(BaseScraper):
 
             systems[req.system]["files"].append(entry)
 
-        version = ""
-        tag = fetch_github_latest_version(GITHUB_REPO)
-        if tag:
-            version = tag
+        version = _STABLE_TAG if _STABLE_TAG != "master" else ""
 
         return {
             "inherits": "emulatorjs",

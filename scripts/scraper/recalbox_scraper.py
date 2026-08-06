@@ -18,12 +18,32 @@ from __future__ import annotations
 import sys
 import xml.etree.ElementTree as ET
 
-from .base_scraper import BaseScraper, BiosRequirement, fetch_github_latest_tag
+from .base_scraper import BaseScraper, BiosRequirement
 
 PLATFORM_NAME = "recalbox"
 
+def _fetch_gitlab_stable_tag() -> str | None:
+    """Fetch the latest stable x.y.z tag from the Recalbox GitLab."""
+    import json
+    import re
+    import urllib.error
+    import urllib.request
+
+    url = "https://gitlab.com/api/v4/projects/recalbox%2Frecalbox/repository/tags?per_page=50"
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": "retrobios-scraper/1.0"})
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            tags = json.loads(resp.read())
+    except (urllib.error.URLError, urllib.error.HTTPError, json.JSONDecodeError):
+        return None
+    stable = [t["name"] for t in tags if re.fullmatch(r"[0-9]+\.[0-9]+(\.[0-9]+)?", t["name"])]
+    return stable[0] if stable else None
+
+
+_STABLE_TAG = _fetch_gitlab_stable_tag() or "master"
+
 SOURCE_URL = (
-    "https://gitlab.com/recalbox/recalbox/-/raw/master/"
+    f"https://gitlab.com/recalbox/recalbox/-/raw/{_STABLE_TAG}/"
     "board/recalbox/fsoverlay/recalbox/share_init/system/"
     ".emulationstation/es_bios.xml"
 )
@@ -225,8 +245,7 @@ class Scraper(BaseScraper):
 
             systems[req.system]["files"].append(entry)
 
-        version = fetch_github_latest_tag("recalbox/recalbox", prefix="") or ""
-        # Recalbox uses GitLab - GitHub API may not resolve
+        version = _STABLE_TAG if _STABLE_TAG != "master" else ""
         if not version:
             version = "10.0"
 
