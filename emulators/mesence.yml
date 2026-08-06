@@ -1,0 +1,451 @@
+emulator: MesenCE
+type: standalone
+core_classification: enhanced_fork
+source: "https://github.com/nesdev-org/MesenCE"
+upstream: "https://github.com/SourMesen/Mesen2"
+profiled_date: "2026-08-06"
+core_version: "2.2.1"
+display_name: "Multi-System (MesenCE)"
+cores: [mesence]
+systems:
+  - nintendo-nes
+  - nintendo-fds
+  - nintendo-snes
+  - nintendo-satellaview
+  - nintendo-sufami-turbo
+  - nintendo-super-game-boy
+  - nintendo-gb
+  - nintendo-gbc
+  - nintendo-gba
+  - nec-pc-engine
+  - nec-pc-engine-cd
+  - nec-supergrafx
+  - sega-mastersystem
+  - sega-gamegear
+  - sega-sg1000
+  - coleco-colecovision
+  - bandai-wswan
+  - bandai-wswanc
+  - pocket-challenge-v2
+
+notes: |
+  MesenCE is the community edition of Mesen2, a multi-system emulator
+  covering NES/FDS, SNES (with Satellaview, Sufami Turbo, Super Game Boy),
+  GB/GBC/GBA, PC Engine (including CD-ROM and SuperGrafx), SMS/Game Gear/
+  SG-1000/ColecoVision and WonderSwan (including Pocket Challenge V2).
+
+  All firmware is loaded from a flat <home>/Firmware/ folder
+  (FolderUtilities::GetFirmwareFolder, Utilities/FolderUtilities.cpp:81-91).
+  The core enforces exact file sizes at load time (FirmwareHelper.h
+  AttemptLoadFirmware). The UI additionally knows SHA256 values per file
+  (UI/Interop/FirmwareTypeExtensions.cs) and warns on mismatch when
+  importing through the firmware prompt, but a mismatched file can still
+  be used. The sha256 values below come from that table.
+
+  SNES DSP-1/1B/2/3/4 and ST010/ST011 firmware is loaded from the combined
+  file listed below, or from a split pair <name>.program.rom + <name>.data.rom
+  (FirmwareHelper.h AttemptLoadDspFirmware). ROM dumps with the firmware
+  appended to the game ROM need no external file (LoadDspFirmware embedded
+  path, FirmwareHelper.h:131-135).
+
+  GB/GBC/SGB boot ROM images are compiled into the core
+  (Core/Gameboy/GbBootRom.h:8,49,99); the external files below override them.
+  Super Game Boy mode falls back to the plain GB core when SGB1.sfc/SGB2.sfc
+  is missing (BaseCartridge.cpp:698-717).
+
+  Satellaview data broadcasts are read from <home>/Satellaview/ as
+  BSX<channel>-<index>.bin (BsxStream.cpp:67-74). Five stream files and
+  MesenNesDB.txt ship inside the application binary (Dependencies.zip) and
+  are extracted to the home folder at startup; user-provided replacements
+  are preserved (UI/Utilities/DependencyHelper.cs:14-66). NES and SNES
+  cheat databases (CheatDb.Nes.json, CheatDb.Snes.json) are read directly
+  from the embedded archive and never touch the filesystem
+  (DependencyHelper.cs GetFileContent, CheatDatabaseViewModel.cs:33).
+
+  HdPacks are per-game texture/audio replacements under <home>/HdPacks/,
+  game content rather than system files.
+
+files:
+  # -------------------------------------------------------
+  # SNES coprocessor firmware
+  # -------------------------------------------------------
+  - name: "dsp1.rom"
+    path: "Firmware/dsp1.rom"
+    system: nintendo-snes
+    required: true
+    size: 8192
+    validation: [size]
+    sha256: "91e87d11e1c30d172556bed2211cce2efa94ba595f58c5d264809ef4d363a97b"
+    note: "DSP-1 program+data (0x1800+0x800). Split pair dsp1.program.rom + dsp1.data.rom also accepted. Not needed when the game dump embeds the firmware."
+    source_ref: "Core/SNES/Coprocessors/DSP/NecDsp.cpp:102, Core/Shared/FirmwareHelper.h:59-79,130-152"
+
+  - name: "dsp1b.rom"
+    path: "Firmware/dsp1b.rom"
+    system: nintendo-snes
+    required: true
+    size: 8192
+    validation: [size]
+    sha256: "d789cb3c36b05c0b23b6c6f23be7aa37c6e78b6ee9ceac8d2d2aa9d8c4d35fa9"
+    note: "DSP-1B revision. Split pair dsp1b.program.rom + dsp1b.data.rom also accepted."
+    source_ref: "Core/SNES/Coprocessors/DSP/NecDsp.cpp:103, Core/Shared/FirmwareHelper.h:59-79"
+
+  - name: "dsp2.rom"
+    path: "Firmware/dsp2.rom"
+    system: nintendo-snes
+    required: true
+    size: 8192
+    validation: [size]
+    sha256: "03ef4ef26c9f701346708cb5d07847b5203cf1b0818bf2930acd34510ffdd717"
+    note: "DSP-2 (Dungeon Master). Split pair dsp2.program.rom + dsp2.data.rom also accepted."
+    source_ref: "Core/SNES/Coprocessors/DSP/NecDsp.cpp:104, Core/Shared/FirmwareHelper.h:59-79"
+
+  - name: "dsp3.rom"
+    path: "Firmware/dsp3.rom"
+    system: nintendo-snes
+    required: true
+    size: 8192
+    validation: [size]
+    sha256: "0971b08f396c32e61989d1067dddf8e4b14649d548b2188f7c541b03d7c69e4e"
+    note: "DSP-3 (SD Gundam GX). Split pair dsp3.program.rom + dsp3.data.rom also accepted."
+    source_ref: "Core/SNES/Coprocessors/DSP/NecDsp.cpp:105, Core/Shared/FirmwareHelper.h:59-79"
+
+  - name: "dsp4.rom"
+    path: "Firmware/dsp4.rom"
+    system: nintendo-snes
+    required: true
+    size: 8192
+    validation: [size]
+    sha256: "752d03b2d74441e430b7f713001fa241f8bbcfc1a0d890ed4143f174dbe031da"
+    note: "DSP-4 (Top Gear 3000). Split pair dsp4.program.rom + dsp4.data.rom also accepted."
+    source_ref: "Core/SNES/Coprocessors/DSP/NecDsp.cpp:106, Core/Shared/FirmwareHelper.h:59-79"
+
+  - name: "st010.rom"
+    path: "Firmware/st010.rom"
+    system: nintendo-snes
+    required: true
+    size: 53248
+    validation: [size]
+    sha256: "fa9bced838fedea11c6f6ace33d1878024bdd0d02cc9485899d0bdd4015ec24c"
+    note: "ST010 (F1 ROC II) program+data (0xC000+0x1000). Split pair st010.program.rom + st010.data.rom also accepted."
+    source_ref: "Core/SNES/Coprocessors/DSP/NecDsp.cpp:107, Core/Shared/FirmwareHelper.h:59-79"
+
+  - name: "st011.rom"
+    path: "Firmware/st011.rom"
+    system: nintendo-snes
+    required: true
+    size: 53248
+    validation: [size]
+    sha256: "8b2b3f3f3e6e29f4d21d8bc736b400bc988b7d2214ebee15643f01c1fee2f364"
+    note: "ST011 (Hayazashi Nidan Morita Shogi) program+data. Split pair st011.program.rom + st011.data.rom also accepted."
+    source_ref: "Core/SNES/Coprocessors/DSP/NecDsp.cpp:108, Core/Shared/FirmwareHelper.h:59-79"
+
+  - name: "st018.rom"
+    path: "Firmware/st018.rom"
+    system: nintendo-snes
+    required: true
+    size: 163840
+    validation: [size]
+    sha256: "6df209ab5d2524d1839c038be400ae5eb20dafc14a3771a3239cd9e8acd53806"
+    note: "ST018 ARM coprocessor (Hayazashi Nidan Morita Shogi 2). Missing file leaves the coprocessor ROMs zero-filled."
+    source_ref: "Core/SNES/Coprocessors/ST018/St018.cpp:32-36, Core/Shared/FirmwareHelper.h:153-171"
+
+  - name: "BS-X.bin"
+    path: "Firmware/BS-X.bin"
+    system: nintendo-satellaview
+    required: true
+    size: 1048576
+    min_size: 32768
+    validation: [size]
+    sha256: "27cfdb99f7e4252bf3740d420147b63c4c88616883bc5e7fe43f2f30bf8c8cbb,a49827b45ff9ac9cf5b4658190e1428e59251bc82d8a63d8e9e0f71e439f008f,3ce321496edc5d77038de2034eb3fb354d7724afd0bc7fd0319f3eb5d57b984d,77d94d64d745014bf8b51280a4204056cdeb9d41ea30eae80dbc006675bebef8"
+    note: "BS-X application cartridge ROM, mandatory for .bs Satellaview files. Core accepts any file of 32 KB or more; the known dumps are 1 MB (Japan/English, with and without DRM)."
+    source_ref: "Core/SNES/BaseCartridge.cpp:60-64, Core/Shared/FirmwareHelper.h:81-92,172-188"
+
+  - name: "SufamiTurbo.sfc"
+    path: "Firmware/SufamiTurbo.sfc"
+    system: nintendo-sufami-turbo
+    required: true
+    size: 262144
+    validation: [size]
+    sha256: "edacb453da14f825f05d1134d6035f4bf034e55f7cfb97c70c4ee107eabc7342"
+    note: "Sufami Turbo base cartridge BIOS, mandatory for .st files."
+    source_ref: "Core/SNES/Coprocessors/SufamiTurbo/SufamiTurbo.h:38-42, Core/Shared/FirmwareHelper.h:189-207"
+
+  - name: "SGB1.sfc"
+    path: "Firmware/SGB1.sfc"
+    system: nintendo-super-game-boy
+    required: false
+    size: 262144
+    validation: [size]
+    sha256: "bba9c269273bedb9b38bd5eb23bfaa6e509b8decc7cb80bb5513905af04f4ceb,c6c4daab5c899b69900c460787de6089edabe94b760f96d9f583d30cc0a5bb30,a75160f7b89b1f0e20fd2f6441bb86285c7378db5035ef6885485eaff6059376"
+    note: "Super Game Boy SNES-side ROM (Rev 0/1/2). Without it, GB games run on the plain GB core instead of SGB mode."
+    source_ref: "Core/SNES/BaseCartridge.cpp:698-714, Core/Shared/FirmwareHelper.h:208-228"
+
+  - name: "SGB2.sfc"
+    path: "Firmware/SGB2.sfc"
+    system: nintendo-super-game-boy
+    required: false
+    size: 524288
+    validation: [size]
+    sha256: "c172498a23d1176672931bab33b629c7d28f914a43dca9e540b8af1b37ccf2c6"
+    note: "Super Game Boy 2 SNES-side ROM, used when the SGB2 option is enabled."
+    source_ref: "Core/SNES/BaseCartridge.cpp:698-714, Core/Shared/FirmwareHelper.h:208-228"
+
+  # -------------------------------------------------------
+  # Game Boy boot ROMs (embedded copies used when absent)
+  # -------------------------------------------------------
+  - name: "dmg_boot.bin"
+    path: "Firmware/dmg_boot.bin"
+    aliases: ["gb_bios.bin"]
+    system: nintendo-gb
+    required: false
+    size: 256
+    validation: [size]
+    sha256: "cf053eccb4ccafff9e67339d4e78e98dce7d1ed59be819d2a1ba2232c6fce1c7,26e71cf01e301e5dc40e987cd2ecbf6d0276245890ac829db2a25323da86818e"
+    note: "DMG boot ROM override. An embedded copy is used when the file is absent."
+    source_ref: "Core/Shared/FirmwareHelper.h:229-271, Core/Gameboy/Gameboy.cpp:102-110, Core/Gameboy/GbBootRom.h:8"
+
+  - name: "cgb_boot.bin"
+    path: "Firmware/cgb_boot.bin"
+    aliases: ["gbc_bios.bin"]
+    system: nintendo-gbc
+    required: false
+    size: 2304
+    validation: [size]
+    sha256: "b4f2e416a35eef52cba161b159c7c8523a92594facb924b3ede0d722867c50c7,3a307a41689bee99a9a32ea021bf45136906c86b2e4f06c806738398e4f92e45"
+    note: "GBC boot ROM override. An embedded copy is used when the file is absent."
+    source_ref: "Core/Shared/FirmwareHelper.h:229-271, Core/Gameboy/GbBootRom.h:99"
+
+  - name: "sgb_boot.bin"
+    path: "Firmware/sgb_boot.bin"
+    aliases: ["sgb_bios.bin"]
+    system: nintendo-super-game-boy
+    required: false
+    size: 256
+    validation: [size]
+    sha256: "0e4ddff32fc9d1eeaae812a157dd246459b00c9e14f2f61751f661f32361e360"
+    note: "SGB1 GB-side boot ROM override. An embedded copy is used when the file is absent."
+    source_ref: "Core/Shared/FirmwareHelper.h:229-271, Core/Gameboy/GbBootRom.h:49"
+
+  - name: "sgb2_boot.bin"
+    path: "Firmware/sgb2_boot.bin"
+    aliases: ["sgb_bios.bin"]
+    system: nintendo-super-game-boy
+    required: false
+    size: 256
+    validation: [size]
+    sha256: "fd243c4fb27008986316ce3df29e9cfbcdc0cd52704970555a8bb76edbec3988"
+    note: "SGB2 GB-side boot ROM override. An embedded copy is used when the file is absent."
+    source_ref: "Core/Shared/FirmwareHelper.h:229-271, Core/Gameboy/GbBootRom.h:49"
+
+  # -------------------------------------------------------
+  # Game Boy Advance
+  # -------------------------------------------------------
+  - name: "gba_bios.bin"
+    path: "Firmware/gba_bios.bin"
+    system: nintendo-gba
+    required: true
+    size: 16384
+    validation: [size]
+    sha256: "fd2547724b505f487e6dcb29ec2ecff3af35a841a77ab2e85fd87350abd36570"
+    note: "GBA BIOS. When missing, the boot ROM region is zero-filled and games calling BIOS routines fail; there is no HLE replacement."
+    source_ref: "Core/GBA/GbaConsole.cpp:76-79, Core/Shared/FirmwareHelper.h:272-291"
+
+  # -------------------------------------------------------
+  # NES / Famicom
+  # -------------------------------------------------------
+  - name: "disksys.rom"
+    path: "Firmware/disksys.rom"
+    aliases: ["FdsBios.bin"]
+    system: nintendo-fds
+    required: true
+    size: 8192
+    validation: [size]
+    sha256: "99c18490ed9002d9c6d999b9d8d15be5c051bdfa7cc7e73318053c9a994b0178,a0a9d57cbace21bf9c85c2b85e86656317f0768d7772acc90c7411ab1dbff2bf"
+    note: "FDS BIOS. When missing, the BIOS region is zero-filled and disk games cannot boot."
+    source_ref: "Core/NES/Mappers/FDS/Fds.cpp:21-28, Core/Shared/FirmwareHelper.h:292-310"
+
+  - name: "StudyBox.bin"
+    path: "Firmware/StudyBox.bin"
+    system: nintendo-nes
+    required: false
+    size: 262144
+    validation: [size]
+    sha256: "365f84c86f7f7c3aaa2042d78494d41448e998ec5a89ac1b5fecb452951d514c"
+    note: "Famicom Study Box BIOS, mandatory for .studybox tape dumps only. When missing, the BIOS region is zero-filled."
+    source_ref: "Core/NES/Mappers/StudyBox.h:64-70, Core/Shared/FirmwareHelper.h:311-329"
+
+  - name: "ymf288_adpcm_rom.bin"
+    path: "Firmware/ymf288_adpcm_rom.bin"
+    system: nintendo-nes
+    required: false
+    size: 8192
+    validation: [size]
+    sha256: "53afd0fa9c62eda3e2be939e23f3adf48a2af8ad37bb1640261726c5d5adeba8"
+    note: "YMF288 ADPCM rhythm ROM for EPSM expansion audio (NES 2.0 header flag). Without it, EPSM sound is incorrect."
+    source_ref: "Core/NES/BaseMapper.cpp:763-768, Core/Shared/FirmwareHelper.h:439-458"
+
+  - name: "lh5323m1.bin"
+    path: "Firmware/lh5323m1.bin"
+    system: nintendo-nes
+    required: false
+    size: 262144
+    note: "Famicom Network System kanji ROM. Read without size validation; a zero-filled 256 KB buffer is used when absent."
+    source_ref: "Core/NES/Mappers/Nintendo/FnsMmc1.h:31-36"
+
+  - name: "MesenNesDB.txt"
+    path: "MesenNesDB.txt"
+    category: game_data
+    system: nintendo-nes
+    required: false
+    size: 548608
+    sha256: "7eee6516f351ccc7db286587917bec415a1d8042ff5ef87c279f38200a3418dd"
+    note: "NES game database for mapper and input detection, read from the home folder root. Deployed automatically from the application's embedded Dependencies.zip."
+    source_ref: "Core/NES/GameDatabase.cpp:92-101, UI/Utilities/DependencyHelper.cs:14-66"
+
+  # -------------------------------------------------------
+  # PC Engine
+  # -------------------------------------------------------
+  - name: "[BIOS] Super CD-ROM System (Japan) (v3.0).pce"
+    path: "Firmware/[BIOS] Super CD-ROM System (Japan) (v3.0).pce"
+    aliases: ["syscard3.pce"]
+    system: nec-pc-engine-cd
+    required: true
+    size: 262144
+    validation: [size]
+    sha256: "e11527b3b96ce112a037138988ca72fd117a6b0779c2480d9e03eaebece3d9ce"
+    note: "Super CD-ROM System card, mandatory for CD games. Load fails without it."
+    source_ref: "Core/PCE/PceConsole.cpp:61-63,151-164, Core/Shared/FirmwareHelper.h:330-349"
+
+  - name: "[BIOS] Games Express CD Card (Japan).pce"
+    path: "Firmware/[BIOS] Games Express CD Card (Japan).pce"
+    aliases: ["gecard.pce"]
+    system: nec-pc-engine-cd
+    required: false
+    size: 32768
+    validation: [size]
+    sha256: "4b86bb96a48a4ca8375fc0109631d0b1d64f255a03b01de70594d40788ba6c3d,da173b20694c2b52087b099b8c44e471d3ee08a666c90d4afd997f8e1382add8"
+    note: "Games Express CD card, mandatory for Games Express discs (auto-detected by sector signature). Exactly 0x8000 or 0x4000 bytes accepted."
+    source_ref: "Core/PCE/PceConsole.cpp:153-160, Core/Shared/FirmwareHelper.h:350-368"
+
+  # -------------------------------------------------------
+  # SMS / Game Gear / ColecoVision
+  # -------------------------------------------------------
+  - name: "bios.sms"
+    path: "Firmware/bios.sms"
+    system: sega-mastersystem
+    required: false
+    sha256: "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50,1eb16fc06ceaf05651d7cfd69d1713e6ddccc4349a511f6fd17e037d71f9d85b,67846e26764bd862f19179294347f7353a4166b62ac4198a5ec32933b7da486e,cb01de3464797a77b52e82f5f9b05398540df8c1151d31128d49584028589062,6f4e6de10f1d07bda695c629c67457bb0248eeb8ffa0c61a2742b8529274de30,0c08e17b0ecc3967e1094f12841fdc97fdcbbf986e3bf9a06b35b69e7d95e4cd,1a73bc6e1a9973b98432774a1480b3ac1259027a97590d5e67d52745159abbbc,e9eb04ec80ded8658f765c4eca75cdbe23cbc7d8fed73f9c3db7a868dbf649ff,13c0639cc037167f53e6151dbdea013758c3d09a76b064a894bf15c39c0a3897,aaf39841be10f9cd6908a95a7451c3a0c8ac77125eb412b7a41cad260c888ab5,57abf3c00c82a8e042ebeb2bfe412adac9ba005e9009845236390de3ee645248,c51ec80b7a609c5ee3d203ceee2b602ae4dfb4479caf15dc1d030c40c0364e93"
+    note: "Master System boot ROM, mapped when present. Loaded without any size check; known dumps are 8/16/128/256 KB."
+    source_ref: "Core/SMS/SmsConsole.cpp:71-76, Core/Shared/FirmwareHelper.h:369-380"
+
+  - name: "bios.gg"
+    path: "Firmware/bios.gg"
+    system: sega-gamegear
+    required: false
+    size: 1024
+    sha256: "8c8a21335038285cfa03dc076100c1f0bfadf3e4ff70796f11f3dfaaab60eee2"
+    note: "Game Gear boot ROM, mapped when present. Loaded without any size check."
+    source_ref: "Core/SMS/SmsConsole.cpp:71-76, Core/Shared/FirmwareHelper.h:369-380"
+
+  - name: "bios.col"
+    path: "Firmware/bios.col"
+    system: coleco-colecovision
+    required: true
+    size: 8192
+    validation: [size]
+    sha256: "990bf1956f10207d8781b619eb74f89b00d921c8d45c95c334c16c8cceca09ad,fb4a898eb93b19b36773d87a6c70eb28f981b2686bebdd2d431b05dcdf9cffd4"
+    note: "ColecoVision BIOS. The system boots through it; games cannot start without it."
+    source_ref: "Core/SMS/SmsConsole.cpp:71-74, Core/Shared/FirmwareHelper.h:381-399"
+
+  # -------------------------------------------------------
+  # WonderSwan
+  # -------------------------------------------------------
+  - name: "bootrom.ws"
+    path: "Firmware/bootrom.ws"
+    system: bandai-wswan
+    required: false
+    size: 4096
+    validation: [size]
+    sha256: "bf4480dbea1c47c8b54ce7be9382bc1006148f431fbe4277e136351fa74f635e"
+    note: "WonderSwan boot ROM, also used for Pocket Challenge V2. Loaded only when the UseBootRom setting is enabled (default off); without it the boot screen is skipped."
+    source_ref: "Core/WS/WsConsole.cpp:145-150, Core/Shared/SettingTypes.h:806, Core/Shared/FirmwareHelper.h:400-438"
+
+  - name: "bootrom.wsc"
+    path: "Firmware/bootrom.wsc"
+    system: bandai-wswanc
+    required: false
+    size: 8192
+    validation: [size]
+    sha256: "f5a5c044d84ce1681f94e9ef74287cb989784497be5bd5108df17908dfa55db2"
+    note: "WonderSwan Color boot ROM. Loaded only when the UseBootRom setting is enabled."
+    source_ref: "Core/WS/WsConsole.cpp:145-150, Core/Shared/FirmwareHelper.h:400-438"
+
+  - name: "bootrom_sc.wsc"
+    path: "Firmware/bootrom_sc.wsc"
+    system: bandai-wswanc
+    required: false
+    size: 8192
+    validation: [size]
+    sha256: "82e96addf5ab1ce09a84b6eedaa904e4ca432756851f7e0cc0649006c183834d"
+    note: "SwanCrystal boot ROM. Loaded only when the UseBootRom setting is enabled and the SwanCrystal model is selected."
+    source_ref: "Core/WS/WsConsole.cpp:145-150, Core/Shared/FirmwareHelper.h:400-438"
+
+  # -------------------------------------------------------
+  # Satellaview broadcast data (auto-deployed)
+  # -------------------------------------------------------
+  - name: "BSX0120-0.bin"
+    path: "Satellaview/BSX0120-0.bin"
+    category: game_data
+    system: nintendo-satellaview
+    required: false
+    size: 34
+    sha256: "ba0c17b5786724959bc206714fc18f708c16fdcd77f8fb19aaf9768338e3ce01"
+    note: "Satellaview data stream for channel 0120 (time channel). Deployed automatically from the application's embedded Dependencies.zip; user replacements are preserved."
+    source_ref: "Core/SNES/Coprocessors/BSX/BsxStream.cpp:67-74, UI/Utilities/DependencyHelper.cs:46-49"
+
+  - name: "BSX0121-0.bin"
+    path: "Satellaview/BSX0121-0.bin"
+    category: game_data
+    system: nintendo-satellaview
+    required: false
+    size: 34
+    sha256: "fbe51a53638dd366b50ea53adf92f54447667d7767c502e508d89b008e31c53f"
+    note: "Satellaview data stream for channel 0121. Deployed automatically; user replacements are preserved."
+    source_ref: "Core/SNES/Coprocessors/BSX/BsxStream.cpp:67-74, UI/Utilities/DependencyHelper.cs:46-49"
+
+  - name: "BSX0122-0.bin"
+    path: "Satellaview/BSX0122-0.bin"
+    category: game_data
+    system: nintendo-satellaview
+    required: false
+    size: 1031
+    sha256: "a0329450e1d42cd18d30070a86e0e481a876cb5c9cfbaab4a0d8895150976ee7"
+    note: "Satellaview data stream for channel 0122. Deployed automatically; user replacements are preserved."
+    source_ref: "Core/SNES/Coprocessors/BSX/BsxStream.cpp:67-74, UI/Utilities/DependencyHelper.cs:46-49"
+
+  - name: "BSX0123-0.bin"
+    path: "Satellaview/BSX0123-0.bin"
+    category: game_data
+    system: nintendo-satellaview
+    required: false
+    size: 16
+    sha256: "dbf5ef12ce586712ee666fc5805e6dfcaa1e253fdd36644f773909514868a590"
+    note: "Satellaview data stream for channel 0123. Deployed automatically; user replacements are preserved."
+    source_ref: "Core/SNES/Coprocessors/BSX/BsxStream.cpp:67-74, UI/Utilities/DependencyHelper.cs:46-49"
+
+  - name: "BSX0124-0.bin"
+    path: "Satellaview/BSX0124-0.bin"
+    category: game_data
+    system: nintendo-satellaview
+    required: false
+    size: 97
+    sha256: "4d7d7bf5afe5c4f71b96965e58003816c70c13e8af9b581431504d5e52a0cec1"
+    note: "Satellaview data stream for channel 0124. Deployed automatically; user replacements are preserved."
+    source_ref: "Core/SNES/Coprocessors/BSX/BsxStream.cpp:67-74, UI/Utilities/DependencyHelper.cs:46-49"
+
+platform_details:
+  firmware_folder: "Firmware/"
+  firmware_size_check: exact
+  ui_hash_check: "sha256, advisory (UI/Interop/FirmwareTypeExtensions.cs)"
+  satellaview_streams: "Satellaview/BSX<channel>-<index>.bin"
+  source_ref: "Utilities/FolderUtilities.cpp:81-91, Core/Shared/FirmwareHelper.h"
