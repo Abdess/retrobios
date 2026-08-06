@@ -4,7 +4,7 @@
   "platform": "lakka",
   "display_name": "Lakka",
   "version": "1.0",
-  "generated": "2026-04-18T07:55:35Z",
+  "generated": "2026-08-05T17:07:45Z",
   "base_destination": "system",
   "detect": [
     {
@@ -16,7 +16,7 @@
   ],
   "standalone_copies": [],
   "total_files": 1627,
-  "total_size": 5735234905,
+  "total_size": 5735237297,
   "files": [
     {
       "dest": "3do_arcade_saot.bin",
@@ -1266,9 +1266,9 @@
     },
     {
       "dest": "dsi_nand.bin",
-      "sha1": "b48f44194fe918aaaec5298861479512b581d661",
+      "sha1": "9a7b8225680df6c80e1af34150ab1ff64c607af3",
       "size": 251658304,
-      "repo_path": "bios/Nintendo/DS/dsi_nand.bin",
+      "repo_path": "",
       "cores": null,
       "storage": "release",
       "release_asset": "dsi_nand.bin"
@@ -3953,8 +3953,8 @@
     },
     {
       "dest": "Citra/sysdata/aes_keys.txt",
-      "sha1": "7baeca44cb73b5cc4c7fc6a9cc36705379f878f5",
-      "size": 4965,
+      "sha1": "29556640b022cbfaf427874695838b43a5e8aff4",
+      "size": 7357,
       "repo_path": "bios/Nintendo/3DS/aes_keys.txt",
       "cores": [
         "Citra"
@@ -9175,7 +9175,7 @@
     },
     {
       "dest": "us_scd2_9306.bin",
-      "sha1": "5a8c4b91d3034c1448aac4b5dc9a6484fce51636",
+      "sha1": "5adb6c3af218c60868e6b723ec47e36bbdf5e6f0",
       "size": 131072,
       "repo_path": "bios/Sega/Mega CD/us_scd2_9306.bin",
       "cores": [
@@ -9184,7 +9184,7 @@
     },
     {
       "dest": "SegaCDBIOS9303.bin",
-      "sha1": "5adb6c3af218c60868e6b723ec47e36bbdf5e6f0",
+      "sha1": "5a8c4b91d3034c1448aac4b5dc9a6484fce51636",
       "size": 131072,
       "repo_path": "bios/Sega/Mega CD/SegaCDBIOS9303.bin",
       "cores": [
@@ -9202,7 +9202,7 @@
     },
     {
       "dest": "eu_mcd2_9306.bin",
-      "sha1": "7063192ae9f6b696c5b81bc8f0a9fe6f0c400e58",
+      "sha1": "f5f60f03501908962446ee02fc27d98694dd157d",
       "size": 131072,
       "repo_path": "bios/Sega/Mega CD/eu_mcd2_9306.bin",
       "cores": [
@@ -9211,7 +9211,7 @@
     },
     {
       "dest": "eu_mcd2_9303.bin",
-      "sha1": "f5f60f03501908962446ee02fc27d98694dd157d",
+      "sha1": "7063192ae9f6b696c5b81bc8f0a9fe6f0c400e58",
       "size": 131072,
       "repo_path": "bios/Sega/Mega CD/eu_mcd2_9303.bin",
       "cores": [

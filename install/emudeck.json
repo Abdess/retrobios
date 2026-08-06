@@ -4,7 +4,7 @@
   "platform": "emudeck",
   "display_name": "EmuDeck",
   "version": "1.0",
-  "generated": "2026-04-03T09:43:22Z",
+  "generated": "2026-08-05T16:18:08Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -244,7 +244,7 @@
     }
   ],
   "total_files": 526,
-  "total_size": 3276716358,
+  "total_size": 3276718750,
   "files": [
     {
       "dest": "colecovision.rom",
@@ -255,8 +255,8 @@
     },
     {
       "dest": "aes_keys.txt",
-      "sha1": "7baeca44cb73b5cc4c7fc6a9cc36705379f878f5",
-      "size": 4965,
+      "sha1": "29556640b022cbfaf427874695838b43a5e8aff4",
+      "size": 7357,
       "repo_path": "bios/Nintendo/3DS/aes_keys.txt",
       "cores": null
     },

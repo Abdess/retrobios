@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-04-18T07:32:14Z",
-  "total_files": 7302,
-  "total_size": 9190488848,
+  "generated_at": "2026-08-05T15:59:09Z",
+  "total_files": 7303,
+  "total_size": 9190496321,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -36693,6 +36693,16 @@
       "crc32": "9700d851",
       "adler32": "1920b214"
     },
+    "1b85b4a8a3cfbeb9aafba08b9e4cd8fccfe4f66d": {
+      "path": "bios/Nintendo/3DS/.variants/aes_keys.txt.895630a0",
+      "name": "aes_keys.txt",
+      "size": 5081,
+      "sha1": "1b85b4a8a3cfbeb9aafba08b9e4cd8fccfe4f66d",
+      "md5": "7bc60d579492e665690e67f29cc213e2",
+      "sha256": "d61fac70abede99e71f52d37862a0d03218daaffab1d74f5118a5c02f424c3cd",
+      "crc32": "895630a0",
+      "adler32": "e7e8ce16"
+    },
     "44b6a43eb05833d787d8b02a5572e3a684f23683": {
       "path": "bios/Nintendo/3DS/.variants/shared_font.bin.44b6a43e",
       "name": "shared_font.bin",
@@ -36933,15 +36943,15 @@
       "crc32": "28418e6d",
       "adler32": "f0cd6595"
     },
-    "7baeca44cb73b5cc4c7fc6a9cc36705379f878f5": {
+    "29556640b022cbfaf427874695838b43a5e8aff4": {
       "path": "bios/Nintendo/3DS/aes_keys.txt",
       "name": "aes_keys.txt",
-      "size": 4965,
-      "sha1": "7baeca44cb73b5cc4c7fc6a9cc36705379f878f5",
-      "md5": "20b223bbf6f2243c2cc7e68114d3e80f",
-      "sha256": "2983b7645170e5268d75237925a672017e10fb8a7c38e1c2c6690165833020ee",
-      "crc32": "0b58c050",
-      "adler32": "7538842b"
+      "size": 7357,
+      "sha1": "29556640b022cbfaf427874695838b43a5e8aff4",
+      "md5": "ebc55bc942335965f30ce283c51e9a30",
+      "sha256": "0d866e062cf62275fbb291ba44af253e67fdc5bd76c7640b6c4a9dfe742510d9",
+      "crc32": "cd2384bd",
+      "adler32": "8a323aa6"
     },
     "5a3d3d6df4743e6b50afe0fc717fa8a12bc888e6": {
       "path": "bios/Nintendo/3DS/boot9.bin",
@@ -68104,8 +68114,8 @@
       "adler32": "0eddf01e"
     },
     "5adb6c3af218c60868e6b723ec47e36bbdf5e6f0": {
-      "path": "bios/Sega/Mega CD/SegaCDBIOS9303.bin",
-      "name": "SegaCDBIOS9303.bin",
+      "path": "bios/Sega/Mega CD/us_scd2_9306.bin",
+      "name": "us_scd2_9306.bin",
       "size": 131072,
       "sha1": "5adb6c3af218c60868e6b723ec47e36bbdf5e6f0",
       "md5": "854b9150240a198070150e4566ae1290",
@@ -68114,8 +68124,8 @@
       "adler32": "580765a2"
     },
     "7063192ae9f6b696c5b81bc8f0a9fe6f0c400e58": {
-      "path": "bios/Sega/Mega CD/eu_mcd2_9306.bin",
-      "name": "eu_mcd2_9306.bin",
+      "path": "bios/Sega/Mega CD/eu_mcd2_9303.bin",
+      "name": "eu_mcd2_9303.bin",
       "size": 131072,
       "sha1": "7063192ae9f6b696c5b81bc8f0a9fe6f0c400e58",
       "md5": "9b562ebf2d095bf1dabadbc1881f519a",
@@ -68134,8 +68144,8 @@
       "adler32": "eaeae651"
     },
     "f5f60f03501908962446ee02fc27d98694dd157d": {
-      "path": "bios/Sega/Mega CD/eu_mcd2_9303.bin",
-      "name": "eu_mcd2_9303.bin",
+      "path": "bios/Sega/Mega CD/eu_mcd2_9306.bin",
+      "name": "eu_mcd2_9306.bin",
       "size": 131072,
       "sha1": "f5f60f03501908962446ee02fc27d98694dd157d",
       "md5": "b10c0a97abc57b758497d3fae6ab35a4",
@@ -68184,8 +68194,8 @@
       "adler32": "b8023dff"
     },
     "5a8c4b91d3034c1448aac4b5dc9a6484fce51636": {
-      "path": "bios/Sega/Mega CD/us_scd2_9306.bin",
-      "name": "us_scd2_9306.bin",
+      "path": "bios/Sega/Mega CD/SegaCDBIOS9303.bin",
+      "name": "SegaCDBIOS9303.bin",
       "size": 131072,
       "sha1": "5a8c4b91d3034c1448aac4b5dc9a6484fce51636",
       "md5": "310a9081d2edf2d316ab38813136725e",
@@ -76695,6 +76705,7 @@
       "e2fb7c7220e3a7838c2dd7e401a7f3d8": "8b662f7548078be52a871565e19511ccca28c5c8",
       "6fd0dc38d37af0e6b894799c298a7659": "874b5796186536559f5703989e98525d85c6bd2a",
       "9b3715c06494dd081ea9e2f725359832": "493984d62ccf557833ecf4b138f29237af2bfab6",
+      "7bc60d579492e665690e67f29cc213e2": "1b85b4a8a3cfbeb9aafba08b9e4cd8fccfe4f66d",
       "ced196afd79497857d8c5a0bfc2c0d4e": "44b6a43eb05833d787d8b02a5572e3a684f23683",
       "8c1c0d4c1ece975a003a88cd3baf3694": "bca99203a54259269a3be7df175a1a83f21612c9",
       "80e44b73d8c6144abebb57803af0f37f": "a09da5a90b0d953568012b003b899243660ff6cd",
@@ -76719,7 +76730,7 @@
       "2bd43b0d99125d2e6a4005f2985fb4e9": "f0332b7252e9c01b30bf5d5a63ceb22dc47968aa",
       "bb555415337408a88851f0b7fba797d1": "9e2c006997761082be87cf316e57c4da5cddbc62",
       "73718beedb418a70bed8f16f2f2fb853": "60022d6d026c8df950722478aab25702a0dfa067",
-      "20b223bbf6f2243c2cc7e68114d3e80f": "7baeca44cb73b5cc4c7fc6a9cc36705379f878f5",
+      "ebc55bc942335965f30ce283c51e9a30": "29556640b022cbfaf427874695838b43a5e8aff4",
       "d8675e80e5dd3a9afaaf885d79b14e9c": "5a3d3d6df4743e6b50afe0fc717fa8a12bc888e6",
       "aad37b1492886b892f1821f37fd3ae34": "10c4173c2a7eb09c6579818f72ef18fa0b6d32de",
       "37c36e4286d36892a9fc70eafe4104be": "3c5b93ca231550c68693a14f03cea8d5dbd1be9e",
@@ -90790,7 +90801,8 @@
       ],
       "aes_keys.txt": [
         "493984d62ccf557833ecf4b138f29237af2bfab6",
-        "7baeca44cb73b5cc4c7fc6a9cc36705379f878f5"
+        "1b85b4a8a3cfbeb9aafba08b9e4cd8fccfe4f66d",
+        "29556640b022cbfaf427874695838b43a5e8aff4"
       ],
       "shared_font.bin": [
         "44b6a43eb05833d787d8b02a5572e3a684f23683",
@@ -99252,16 +99264,16 @@
       "SMS_us_1.3.sms": [
         "c315672807d8ddb8d91443729405c766dd95cae7"
       ],
-      "SegaCDBIOS9303.bin": [
+      "us_scd2_9306.bin": [
         "5adb6c3af218c60868e6b723ec47e36bbdf5e6f0"
       ],
-      "eu_mcd2_9306.bin": [
+      "eu_mcd2_9303.bin": [
         "7063192ae9f6b696c5b81bc8f0a9fe6f0c400e58"
       ],
       "jp_mcd2_921222.bin": [
         "d203cfe22c03ae479dd8ca33840cf8d9776eb3ff"
       ],
-      "eu_mcd2_9303.bin": [
+      "eu_mcd2_9306.bin": [
         "f5f60f03501908962446ee02fc27d98694dd157d"
       ],
       "megacd_v100g_jp.bin": [
@@ -99276,7 +99288,7 @@
       "megacd_v100s_jp.bin": [
         "230ebfc49dc9e15422089474bcc9fa040f2c57eb"
       ],
-      "us_scd2_9306.bin": [
+      "SegaCDBIOS9303.bin": [
         "5a8c4b91d3034c1448aac4b5dc9a6484fce51636"
       ],
       "segacd2_v211x_us.bin": [
@@ -102541,8 +102553,11 @@
       "bios_U.sms": [
         "c315672807d8ddb8d91443729405c766dd95cae7"
       ],
-      "sega-mega-cd:854b9150240a198070150e4566ae1290": [
-        "5adb6c3af218c60868e6b723ec47e36bbdf5e6f0"
+      "segacd2_v200_us.bin": [
+        "5a8c4b91d3034c1448aac4b5dc9a6484fce51636"
+      ],
+      "sega-mega-cd:310a9081d2edf2d316ab38813136725e": [
+        "5a8c4b91d3034c1448aac4b5dc9a6484fce51636"
       ],
       "bios_CD_E.bin": [
         "f891e0ea651e2232af0c5c4cb46a0cae2ee8f356"
@@ -102562,17 +102577,17 @@
       "sega-mega-cd:278a9397d192149e84e820ac621a8edd": [
         "4846f448160059a7da0215a5df12ca160f26dd69"
       ],
-      "megacd2_v200w_eu.bin": [
-        "f5f60f03501908962446ee02fc27d98694dd157d"
-      ],
-      "sega-mega-cd:b10c0a97abc57b758497d3fae6ab35a4": [
-        "f5f60f03501908962446ee02fc27d98694dd157d"
-      ],
       "megacd2_v200_eu.bin": [
         "7063192ae9f6b696c5b81bc8f0a9fe6f0c400e58"
       ],
       "sega-mega-cd:9b562ebf2d095bf1dabadbc1881f519a": [
         "7063192ae9f6b696c5b81bc8f0a9fe6f0c400e58"
+      ],
+      "megacd2_v200w_eu.bin": [
+        "f5f60f03501908962446ee02fc27d98694dd157d"
+      ],
+      "sega-mega-cd:b10c0a97abc57b758497d3fae6ab35a4": [
+        "f5f60f03501908962446ee02fc27d98694dd157d"
       ],
       "megacd2_v200c_jp.bin": [
         "d203cfe22c03ae479dd8ca33840cf8d9776eb3ff"
@@ -102589,11 +102604,8 @@
       "sega-mega-cd:2efd74e3232ff260e371b99f84024f7f": [
         "f4f315adcef9b8feb0364c21ab7f0eaf5457f3ed"
       ],
-      "segacd2_v200_us.bin": [
-        "5a8c4b91d3034c1448aac4b5dc9a6484fce51636"
-      ],
-      "sega-mega-cd:310a9081d2edf2d316ab38813136725e": [
-        "5a8c4b91d3034c1448aac4b5dc9a6484fce51636"
+      "sega-mega-cd:854b9150240a198070150e4566ae1290": [
+        "5adb6c3af218c60868e6b723ec47e36bbdf5e6f0"
       ],
       "cdb_rom.bin": [
         "b3c20fbe57cd2eb595e9edac86817e5948dccae4"
@@ -107945,6 +107957,7 @@
       "236102c9": "8b662f7548078be52a871565e19511ccca28c5c8",
       "90b2a0f2": "874b5796186536559f5703989e98525d85c6bd2a",
       "9700d851": "493984d62ccf557833ecf4b138f29237af2bfab6",
+      "895630a0": "1b85b4a8a3cfbeb9aafba08b9e4cd8fccfe4f66d",
       "4036c26b": "44b6a43eb05833d787d8b02a5572e3a684f23683",
       "5b414f0b": "bca99203a54259269a3be7df175a1a83f21612c9",
       "00e4e89d": "a09da5a90b0d953568012b003b899243660ff6cd",
@@ -107969,7 +107982,7 @@
       "a18204cc": "f0332b7252e9c01b30bf5d5a63ceb22dc47968aa",
       "20ce44b8": "9e2c006997761082be87cf316e57c4da5cddbc62",
       "28418e6d": "60022d6d026c8df950722478aab25702a0dfa067",
-      "0b58c050": "7baeca44cb73b5cc4c7fc6a9cc36705379f878f5",
+      "cd2384bd": "29556640b022cbfaf427874695838b43a5e8aff4",
       "e0989f6d": "5a3d3d6df4743e6b50afe0fc717fa8a12bc888e6",
       "b78064d9": "10c4173c2a7eb09c6579818f72ef18fa0b6d32de",
       "d0f567ca": "3c5b93ca231550c68693a14f03cea8d5dbd1be9e",
@@ -115249,6 +115262,7 @@
       "285b247298aa42b411ad67555e9f591b851c25d26c69ffdf6906786b8c99df18": "8b662f7548078be52a871565e19511ccca28c5c8",
       "009917c0b62baccad5c029939e3d9f78c905a9b08bb4dbf5e123c0e7a1ea1e1b": "874b5796186536559f5703989e98525d85c6bd2a",
       "6f2392f756f48d376b004bc06899de2aff5971637f4ec83047fb0f97f5964b09": "493984d62ccf557833ecf4b138f29237af2bfab6",
+      "d61fac70abede99e71f52d37862a0d03218daaffab1d74f5118a5c02f424c3cd": "1b85b4a8a3cfbeb9aafba08b9e4cd8fccfe4f66d",
       "52882f93bfae76e5139dded77beafa0db45c0b08c6a3213a61cae1cd90078328": "44b6a43eb05833d787d8b02a5572e3a684f23683",
       "ddebeea9d7d262d145ed367c28602e647299fb762f6426741b359d6148175099": "bca99203a54259269a3be7df175a1a83f21612c9",
       "4a4f770d617d93bffa1d6437d1caae0626b31b9f01c15d43aa3ed9bbb566b20b": "a09da5a90b0d953568012b003b899243660ff6cd",
@@ -115273,7 +115287,7 @@
       "93c2e20cc377f2cb0fa9a2ee58c39be22e00baa94b890545e585e53b3eb4039f": "f0332b7252e9c01b30bf5d5a63ceb22dc47968aa",
       "ff485c60090185aff05354ece01f86b61f6020332bed0f9090c58d4678e5a180": "9e2c006997761082be87cf316e57c4da5cddbc62",
       "a06aaf6b50ebc38ebdccc59b913d4a1c0cc7005289957530acaaf78ffc49dddd": "60022d6d026c8df950722478aab25702a0dfa067",
-      "2983b7645170e5268d75237925a672017e10fb8a7c38e1c2c6690165833020ee": "7baeca44cb73b5cc4c7fc6a9cc36705379f878f5",
+      "0d866e062cf62275fbb291ba44af253e67fdc5bd76c7640b6c4a9dfe742510d9": "29556640b022cbfaf427874695838b43a5e8aff4",
       "2f88744feed717856386400a44bba4b9ca62e76a32c715d4f309c399bf28166f": "5a3d3d6df4743e6b50afe0fc717fa8a12bc888e6",
       "9c2962a8b994a29e4cd04b3a6e4ed730a751414655ab6a9799ebf5fc08b79d44": "10c4173c2a7eb09c6579818f72ef18fa0b6d32de",
       "e9fec87a45fba02399e88064b9e2f8cf0f2106e351c58279a87f05da5bc984ad": "3c5b93ca231550c68693a14f03cea8d5dbd1be9e",
@@ -123632,6 +123646,9 @@
       ],
       ".variants/aes_keys.txt.493984d6": [
         "493984d62ccf557833ecf4b138f29237af2bfab6"
+      ],
+      ".variants/aes_keys.txt.895630a0": [
+        "1b85b4a8a3cfbeb9aafba08b9e4cd8fccfe4f66d"
       ],
       ".variants/shared_font.bin.44b6a43e": [
         "44b6a43eb05833d787d8b02a5572e3a684f23683"
@@ -132706,14 +132723,14 @@
         "914aa165e3d879f060be77870d345b60cfeb4ede",
         "a8c1b39a2e41137835eda6a5de6d46dd9fadbaf2",
         "c315672807d8ddb8d91443729405c766dd95cae7",
-        "5adb6c3af218c60868e6b723ec47e36bbdf5e6f0",
+        "5a8c4b91d3034c1448aac4b5dc9a6484fce51636",
         "f891e0ea651e2232af0c5c4cb46a0cae2ee8f356",
         "4846f448160059a7da0215a5df12ca160f26dd69",
-        "f5f60f03501908962446ee02fc27d98694dd157d",
         "7063192ae9f6b696c5b81bc8f0a9fe6f0c400e58",
+        "f5f60f03501908962446ee02fc27d98694dd157d",
         "d203cfe22c03ae479dd8ca33840cf8d9776eb3ff",
         "f4f315adcef9b8feb0364c21ab7f0eaf5457f3ed",
-        "5a8c4b91d3034c1448aac4b5dc9a6484fce51636",
+        "5adb6c3af218c60868e6b723ec47e36bbdf5e6f0",
         "faa8ea183a6d7bbe5d4e03bb1332519800d3fbc3",
         "a67cd4f550751f8b91de2b8b74528ab4e0c11c77",
         "56c1b93da6b660bf393fbf48ca47569000ef4047",
@@ -135411,20 +135428,20 @@
       ".variants/naomi2.zip.2962e338": [
         "2962e338ccc9f66f29b409f73ca27aeee79633ac"
       ],
-      ".variants/bios_CD_U.bin.5adb6c3a": [
-        "5adb6c3af218c60868e6b723ec47e36bbdf5e6f0"
-      ],
-      ".variants/megacd2_v200w_eu.bin": [
-        "f5f60f03501908962446ee02fc27d98694dd157d"
+      ".variants/segacd2_v200_us.bin": [
+        "5a8c4b91d3034c1448aac4b5dc9a6484fce51636"
       ],
       ".variants/megacd2_v200_eu.bin": [
         "7063192ae9f6b696c5b81bc8f0a9fe6f0c400e58"
       ],
+      ".variants/megacd2_v200w_eu.bin": [
+        "f5f60f03501908962446ee02fc27d98694dd157d"
+      ],
       ".variants/megacd2_v200c_jp.bin": [
         "d203cfe22c03ae479dd8ca33840cf8d9776eb3ff"
       ],
-      ".variants/segacd2_v200_us.bin": [
-        "5a8c4b91d3034c1448aac4b5dc9a6484fce51636"
+      ".variants/bios_CD_U.bin.5adb6c3a": [
+        "5adb6c3af218c60868e6b723ec47e36bbdf5e6f0"
       ],
       "cdb/cdb_rom.bin": [
         "b3c20fbe57cd2eb595e9edac86817e5948dccae4"

@@ -4,7 +4,7 @@
   "platform": "recalbox",
   "display_name": "Recalbox",
   "version": "1.0",
-  "generated": "2026-04-18T07:56:06Z",
+  "generated": "2026-08-05T16:18:55Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -6745,7 +6745,7 @@
     },
     {
       "dest": "us_scd2_9306.bin",
-      "sha1": "5a8c4b91d3034c1448aac4b5dc9a6484fce51636",
+      "sha1": "5adb6c3af218c60868e6b723ec47e36bbdf5e6f0",
       "size": 131072,
       "repo_path": "bios/Sega/Mega CD/us_scd2_9306.bin",
       "cores": [
@@ -6754,7 +6754,7 @@
     },
     {
       "dest": "SegaCDBIOS9303.bin",
-      "sha1": "5adb6c3af218c60868e6b723ec47e36bbdf5e6f0",
+      "sha1": "5a8c4b91d3034c1448aac4b5dc9a6484fce51636",
       "size": 131072,
       "repo_path": "bios/Sega/Mega CD/SegaCDBIOS9303.bin",
       "cores": [
@@ -6772,7 +6772,7 @@
     },
     {
       "dest": "eu_mcd2_9306.bin",
-      "sha1": "7063192ae9f6b696c5b81bc8f0a9fe6f0c400e58",
+      "sha1": "f5f60f03501908962446ee02fc27d98694dd157d",
       "size": 131072,
       "repo_path": "bios/Sega/Mega CD/eu_mcd2_9306.bin",
       "cores": [
@@ -6781,7 +6781,7 @@
     },
     {
       "dest": "eu_mcd2_9303.bin",
-      "sha1": "f5f60f03501908962446ee02fc27d98694dd157d",
+      "sha1": "7063192ae9f6b696c5b81bc8f0a9fe6f0c400e58",
       "size": 131072,
       "repo_path": "bios/Sega/Mega CD/eu_mcd2_9303.bin",
       "cores": [
