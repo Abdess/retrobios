@@ -1578,3 +1578,129 @@ files:
     size: 4096
     crc32: "00000000"
     source_ref: "src/burn/drv/konami/d_nemesis.cpp:4539"
+
+  - name: "gba_bios.bin"
+    archive: gba_gba.zip
+    required: true
+    size: 16384
+    crc32: "81977335"
+    source_ref: "src/burn/drv/gba/d_gba.cpp:334"
+
+  - name: "st018.bin"
+    archive: snes_st018.zip
+    required: true
+    size: 163840
+    crc32: "5c403cc5"
+    source_ref: "src/burn/drv/snes/d_snes.cpp:618"
+
+  - name: "136032.205.l13"
+    archive: atarisy1.zip
+    required: true
+    size: 16384
+    crc32: "88d0be26"
+    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1232"
+
+  - name: "136032.206.l12"
+    archive: atarisy1.zip
+    required: true
+    size: 16384
+    crc32: "3c79ef05"
+    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1232"
+
+  - name: "136032.104.f5"
+    archive: atarisy1.zip
+    required: true
+    size: 8192
+    crc32: "7a29dc07"
+    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1232"
+
+  - name: "136032.101.e3"
+    archive: atarisy1.zip
+    required: true
+    size: 256
+    crc32: "7e84972a"
+    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1232"
+
+  - name: "136032.102.e5"
+    archive: atarisy1.zip
+    required: true
+    size: 256
+    crc32: "ebf1e0ae"
+    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1232"
+
+  - name: "136032.103.f7"
+    archive: atarisy1.zip
+    required: true
+    size: 235
+    crc32: "92d6a0b4"
+    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1232"
+
+  - name: "136032.105.l13"
+    archive: atarisy1.zip
+    required: true
+    size: 16384
+    crc32: "79021d3c"
+    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1232"
+
+  - name: "136032.106.l12"
+    archive: atarisy1.zip
+    required: true
+    size: 16384
+    crc32: "76ee86c4"
+    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1232"
+
+  - name: "136032.104.f5"
+    archive: atarisy1.zip
+    required: true
+    size: 8192
+    crc32: "7a29dc07"
+    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1232"
+
+  - name: "136032.101.e3"
+    archive: atarisy1.zip
+    required: true
+    size: 256
+    crc32: "7e84972a"
+    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1232"
+
+  - name: "136032.102.e5"
+    archive: atarisy1.zip
+    required: true
+    size: 256
+    crc32: "ebf1e0ae"
+    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1232"
+
+  - name: "136032.103.f7"
+    archive: atarisy1.zip
+    required: true
+    size: 235
+    crc32: "92d6a0b4"
+    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1232"
+
+  - name: "136032.114.j11"
+    archive: atarisy1.zip
+    required: true
+    size: 16384
+    crc32: "195c54ad"
+    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1232"
+
+  - name: "136032.115.j10"
+    archive: atarisy1.zip
+    required: true
+    size: 16384
+    crc32: "7275b4dc"
+    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1232"
+
+  - name: "136032.107.b2"
+    archive: atarisy1.zip
+    required: true
+    size: 8192
+    crc32: "7a29dc07"
+    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1232"
+
+  - name: "astro.bin"
+    archive: astro_astrocde.zip
+    required: true
+    size: 8192
+    crc32: "ebc77f3a"
+    source_ref: "src/burn/drv/pre90s/d_astrocde.cpp:3040"
