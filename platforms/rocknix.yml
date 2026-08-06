@@ -1,0 +1,217 @@
+platform: ROCKNIX
+version: '20260801'
+homepage: "https://rocknix.org"
+source: "https://raw.githubusercontent.com/ROCKNIX/distribution/next/projects/ROCKNIX/packages/rocknix/sources/scripts/rocknix-systems"
+base_destination: bios
+hash_type: md5
+verification_mode: md5
+cores: all_libretro
+systems:
+  microsoft-xbox:
+    files:
+    - name: mcpx_1.0.bin
+      destination: xemu/bios/mcpx_1.0.bin
+      required: true
+      md5: d49c52a4102f6df7bcf8d0617ac475ed
+    - name: Complex_4627v1.03.bin
+      destination: xemu/bios/Complex_4627v1.03.bin
+      required: true
+      md5: 21445c6f28fca7285b0f167ea770d1e5
+    native_id: xbox
+    name: Microsoft Xbox
+  nintendo-gamecube:
+    files:
+    - name: IPL.bin
+      destination: GC/EUR/IPL.bin
+      required: true
+      md5: db92574caab77a7ec99d4605fd6f2450
+    - name: IPL.bin
+      destination: GC/JAP/IPL.bin
+      required: true
+      md5: b17148254a5799684c7d783206504926
+    - name: IPL.bin
+      destination: GC/USA/IPL.bin
+      required: true
+      md5: b17148254a5799684c7d783206504926
+    native_id: gamecube
+    name: Nintendo GameCube
+  nintendo-ds:
+    files:
+    - name: firmware.bin
+      destination: firmware.bin
+      required: true
+      md5: 94bc5094607c5e6598d50472c52f27f2
+    - name: bios7.bin
+      destination: bios7.bin
+      required: true
+      md5: df692a80a5b1bc90728bc3dfc76cd948
+    - name: bios9.bin
+      destination: bios9.bin
+      required: true
+      md5: a392174eb3e572fed6447e956bde4b25
+    - name: dsi_bios7.bin
+      destination: dsi_bios7.bin
+      required: true
+      md5: 559dae4ea78eb9d67702c56c1d791e81
+    - name: dsi_bios9.bin
+      destination: dsi_bios9.bin
+      required: true
+      md5: 87b665fce118f76251271c3732532777
+    - name: dsi_firmware.bin
+      destination: dsi_firmware.bin
+      required: true
+      md5: 74f23348012d7b3e1cc216c47192ffeb
+    - name: dsi_nand.bin
+      destination: dsi_nand.bin
+      required: true
+      md5: d71edf897ddd06bf335feeb68edeb272
+    native_id: nds
+    name: Nintendo DS
+  nintendo-gb:
+    files:
+    - name: gb_bios.bin
+      destination: gb_bios.bin
+      required: true
+      md5: 32fbbd84168d3482956eb3c5051637f5
+    native_id: gb
+    name: Nintendo Gameboy
+  nintendo-gba:
+    files:
+    - name: gba_bios.bin
+      destination: gba_bios.bin
+      required: true
+      md5: a860e8c0b6d573d191e4ec7db1b1e4f6
+    native_id: gba
+    name: Nintendo Gameboy Advance
+  nintendo-gbc:
+    files:
+    - name: gbc_bios.bin
+      destination: gbc_bios.bin
+      required: true
+      md5: dbfce9db9deaa2567f6a84fde55f9680
+    native_id: gbc
+    name: Nintendo Gameboy Color
+  sega-dreamcast:
+    files:
+    - name: dc_boot.bin
+      destination: dc/dc_boot.bin
+      required: true
+      md5: e10c53c2f8b90bab96ead2d368858623
+    - name: dc_flash.bin
+      destination: dc/dc_flash.bin
+      required: true
+      md5: 0a93f7940c455905bea6e392dfde92a4
+    - name: naomi_boot.bin
+      destination: dc/naomi_boot.bin
+      required: true
+      md5: 3bffafac42a7767d8dcecf771f5552ba
+    native_id: dreamcast
+    name: Sega Dreamcast
+  sega-game-gear:
+    files:
+    - name: bios.gg
+      destination: bios.gg
+      required: true
+      md5: 672e104c3be3a238301aceffc3b23fd6
+    native_id: gamegear
+    name: Sega Game Gear
+  sega-master-system:
+    files:
+    - name: bios.sms
+      destination: bios.sms
+      required: true
+      md5: 840481177270d5642a14ca71ee72844c
+    native_id: mastersystem
+    name: Sega Master System
+  sega-mega-cd:
+    files:
+    - name: bios_CD_E.bin
+      destination: bios_CD_E.bin
+      required: true
+      md5: e66fa1dc5820d254611fdcdba0662372
+    - name: bios_CD_U.bin
+      destination: bios_CD_U.bin
+      required: true
+      md5: 2efd74e3232ff260e371b99f84024f7f
+    - name: bios_CD_J.bin
+      destination: bios_CD_J.bin
+      required: true
+      md5: 278a9397d192149e84e820ac621a8edd
+    native_id: segacd
+    name: Sega CD
+  sega-saturn:
+    files:
+    - name: sega_101.bin
+      destination: sega_101.bin
+      required: true
+      md5: 85ec9ca47d8f6807718151cbcca8b964
+    - name: mpr-17933.bin
+      destination: mpr-17933.bin
+      required: true
+      md5: 3240872c70984b6cbfda1586cab68dbe
+    - name: mpr-18811-mx.ic1
+      destination: mpr-18811-mx.ic1
+      required: true
+      md5: 255113ba943c92a54facd25a10fd780c
+    - name: mpr-19367-mx.ic1
+      destination: mpr-19367-mx.ic1
+      required: true
+      md5: 1cd19988d1d72a3e7caa0b73234c96b4
+    - name: saturn_bios.bin
+      destination: saturn_bios.bin
+      required: true
+      md5: af5828fdff51384f99b3c4926be27762
+    native_id: saturn
+    name: Sega Saturn
+  sony-playstation:
+    files:
+    - name: psxonpsp660.bin
+      destination: psxonpsp660.bin
+      required: true
+      md5: c53ca5908936d412331790f4426c6c33
+    - name: scph101.bin
+      destination: scph101.bin
+      required: true
+      md5: 6e3735ff4c7dc899ee98981385f6f3d0
+    - name: scph1001.bin
+      destination: scph1001.bin
+      required: true
+      md5: dc2b9bf8da62ec93e868cfd29f0d067d
+    - name: scph5500.bin
+      destination: scph5500.bin
+      required: true
+      md5: 8dd7d5296a650fac7319bce665a6a53c
+    - name: scph5501.bin
+      destination: scph5501.bin
+      required: true
+      md5: 490f666e1afb15b7362b406ed1cea246
+    - name: scph5502.bin
+      destination: scph5502.bin
+      required: true
+      md5: 32736f17079d0b2b7024407c39bd3050
+    - name: scph7001.bin
+      destination: scph7001.bin
+      required: true
+      md5: 1e68c231d0896b7eadcad1d7d8e76129
+    native_id: psx
+    name: PSX
+  sony-playstation-2:
+    files:
+    - name: ps2-0230a-20080220.bin
+      destination: pcsx2/bios/ps2-0230a-20080220.bin
+      required: true
+      md5: 21038400dc633070a78ad53090c53017
+    - name: ps2-0230a-20080220.bin
+      destination: aethersx2/bios/ps2-0230a-20080220.bin
+      required: true
+      md5: 21038400dc633070a78ad53090c53017
+    native_id: ps2
+    name: PS2
+  sony-playstation-3:
+    files:
+    - name: PS3UPDAT.PUP
+      destination: PS3UPDAT.PUP
+      required: true
+      md5: a2b60b6ac1d2e49e230144345616927c
+    native_id: ps3
+    name: PS3

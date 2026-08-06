@@ -1614,6 +1614,19 @@ platforms:
     - squirreljme
     - x1
     - xemu
+  rocknix:
+    config: rocknix.yml
+    status: active
+    logo: https://avatars.githubusercontent.com/u/152618023
+    scraper: rocknix
+    cores: all_libretro
+    schedule: weekly
+    install:
+      detect:
+      - os: linux
+        method: os_release_id
+        value: rocknix
+        path: /storage/roms/bios
   retropie:
     config: retropie.yml
     status: archived
