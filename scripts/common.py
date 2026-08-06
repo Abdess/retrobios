@@ -98,6 +98,21 @@ def md5sum(source: str | Path | object) -> str:
 
 _md5_composite_cache: dict[str, str] = {}
 
+_casefold_index_cache: dict[int, dict[str, list[str]]] = {}
+
+
+def _casefold_name_index(by_name: dict) -> dict[str, list[str]]:
+    """Build (and cache) a casefolded view of the by_name index."""
+    key = id(by_name)
+    cached = _casefold_index_cache.get(key)
+    if cached is not None:
+        return cached
+    folded: dict[str, list[str]] = {}
+    for name, sha1s in by_name.items():
+        folded.setdefault(name.casefold(), []).extend(sha1s)
+    _casefold_index_cache[key] = folded
+    return folded
+
 
 def md5_composite(filepath: str | Path) -> str:
     """Compute composite MD5 of a ZIP - matches Recalbox's Zip::Md5Composite().
@@ -386,7 +401,7 @@ def resolve_local_file(
     exact, zip_exact, hash_mismatch, not_found.
     """
     sha1 = file_entry.get("sha1")
-    md5_raw = file_entry.get("md5", "")
+    md5_raw = str(file_entry.get("md5", "") or "")
     name = file_entry.get("name", "")
     zipped_file = file_entry.get("zipped_file")
     aliases = file_entry.get("aliases", [])
@@ -423,11 +438,13 @@ def resolve_local_file(
                 if os.path.exists(path):
                     return path, "exact"
 
-    # 1. SHA1 exact match
-    if sha1 and sha1 in files_db:
-        path = files_db[sha1]["path"]
-        if os.path.exists(path):
-            return path, "exact"
+    # 1. SHA1 exact match (accept list-valued sha1 from profiles)
+    sha1_candidates = sha1 if isinstance(sha1, list) else [sha1] if sha1 else []
+    for cand in sha1_candidates:
+        if isinstance(cand, str) and cand in files_db:
+            path = files_db[cand]["path"]
+            if os.path.exists(path):
+                return path, "exact"
 
     # 1b. SHA256 exact match (profiles hashed from sources that publish
     # sha256, e.g. MesenCE). A full sha256 is a strong identifier.
@@ -442,6 +459,20 @@ def resolve_local_file(
                     path = files_db[match]["path"]
                     if os.path.exists(path):
                         return path, "exact"
+
+    # 1c. CRC32 + size exact match, only when no stronger hash is declared
+    # (crc-only profiles: FBNeo, Clock Signal). CRC32 alone is weak, so the
+    # declared size must confirm the match.
+    crc_raw = str(file_entry.get("crc32", "") or "").strip().lower()
+    declared_size = file_entry.get("size")
+    if crc_raw and declared_size and not zipped_file and not md5_raw:
+        by_crc32 = db.get("indexes", {}).get("by_crc32", {})
+        match = by_crc32.get(crc_raw)
+        if match and match in files_db:
+            entry = files_db[match]
+            path = entry["path"]
+            if entry.get("size") == declared_size and os.path.exists(path):
+                return path, "exact"
 
     # 2. MD5 direct lookup (skip for zipped_file: md5 is inner ROM, not container)
     # Guard: only accept if the found file's name matches the requested name
@@ -483,6 +514,18 @@ def resolve_local_file(
                     path = files_db[match_sha1]["path"]
                     if os.path.exists(path) and path not in candidates:
                         candidates.append(path)
+        if not candidates:
+            # Case-insensitive fallback: upstream platforms disagree on
+            # casing (VEC_MineStorm.vec vs VEC_Minestorm.vec). Safe by
+            # invariant: dedup keeps a single casing per content, so a
+            # casefold match cannot pick a different file.
+            folded = _casefold_name_index(by_name)
+            for try_name in names_to_try:
+                for match_sha1 in folded.get(try_name.casefold(), []):
+                    if match_sha1 in files_db:
+                        path = files_db[match_sha1]["path"]
+                        if os.path.exists(path) and path not in candidates:
+                            candidates.append(path)
         if candidates:
             if zipped_file:
                 candidates = [p for p in candidates if ".zip" in os.path.basename(p)]
