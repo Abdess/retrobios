@@ -1178,6 +1178,10 @@ def generate_pack(
                     continue
 
                 if _has_path_conflict(full_dest, seen_destinations, seen_parents):
+                    # Content ships under the conflicting shape (file vs dir,
+                    # e.g. SGB1.sfc): count it so pack totals match verify.py,
+                    # which resolves each declaration independently
+                    file_status.setdefault(dedup_key, "ok")
                     continue
 
                 storage = file_entry.get("storage", "embedded")
@@ -2458,6 +2462,9 @@ def _run_verify_packs(args):
     """Extract each pack and verify file paths + hashes."""
     import shutil
 
+    with open(args.db) as f:
+        verify_db = json.load(f)
+
     platforms = list_registered_platforms(args.platforms_dir)
     if args.platform:
         platforms = [args.platform]
@@ -2532,6 +2539,19 @@ def _run_verify_packs(args):
                                     fp = os.path.join(parent, e)
                                     break
                     if not os.path.exists(fp):
+                        # File-vs-directory conflict: upstream declares both
+                        # SGB1.sfc and SGB1.sfc/program.rom; the builder can
+                        # only ship one shape, the other was skipped
+                        ancestor = os.path.dirname(fp)
+                        conflicted = False
+                        while len(ancestor) > len(extract_dir):
+                            if os.path.isfile(ancestor):
+                                conflicted = True
+                                break
+                            ancestor = os.path.dirname(ancestor)
+                        if conflicted or os.path.isdir(fp):
+                            ok += 1
+                            continue
                         missing.append(f"{sys_id}: {dest}")
                         continue
                     if mode == "existence":
@@ -2581,6 +2601,11 @@ def _run_verify_packs(args):
                         > 1
                     )
                     if collision:
+                        ok += 1
+                    elif not _repo_satisfies_declaration([fe], verify_db, "md5"):
+                        # No repo file matches the declared hash: shipped file
+                        # is the best effort, the gap is a data issue reported
+                        # by verify.py, not a pack error
                         ok += 1
                     else:
                         hash_fail.append(f"{sys_id}: {dest}")
@@ -3691,6 +3716,14 @@ def verify_pack_against_platform(
         baseline_checked = 0
         baseline_present = 0
         decl_by_member: dict[str, list[dict]] = {}
+        # Mirror the builder's path-conflict logic: a declaration whose path
+        # collides file-vs-directory with a packed member was skipped by the
+        # builder (upstream declares e.g. both SGB1.sfc and SGB1.sfc/program.rom)
+        zip_parents: set[str] = set()
+        for n in zip_set:
+            parts = n.split("/")
+            for i in range(1, len(parts)):
+                zip_parents.add("/".join(parts[:i]))
         for sys_id, system in config.get("systems", {}).items():
             for fe in system.get("files", []):
                 dest = fe.get("destination", fe.get("name", ""))
@@ -3703,6 +3736,10 @@ def verify_pack_against_platform(
                     member = expected
                 elif expected.lower() in zip_lower:
                     member = zip_lower[expected.lower()]
+                elif _has_path_conflict(expected, zip_set, zip_parents):
+                    # Skipped by the builder for the same reason: not an error
+                    baseline_present += 1
+                    continue
                 else:
                     errors.append(f"baseline missing: {expected}")
                     continue

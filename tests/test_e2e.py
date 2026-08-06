@@ -4885,6 +4885,81 @@ struct BurnDriver BurnDrvneogeo = {
             self.assertIsNone(local)
             self.assertEqual(status, "not_found")
 
+    def test_219_batocera_stable_tag_selection(self):
+        """Stable tag picker takes the highest batocera-N(.M) tag."""
+        from scripts.scraper.batocera_scraper import pick_stable_tag
+
+        tags = [
+            "uboot-rockpro64", "batocera-pre-br2-external",
+            "batocera-41", "batocera-42", "batocera-43", "batocera-43.1",
+            "master_20180518",
+        ]
+        self.assertEqual(pick_stable_tag(tags), "batocera-43.1")
+        self.assertEqual(pick_stable_tag(["batocera-9", "batocera-10"]), "batocera-10")
+        self.assertIsNone(pick_stable_tag(["uboot-x", "random"]))
+
+    def test_218_resolve_by_crc32_and_size(self):
+        """crc-only profile entries resolve by crc32 confirmed by size."""
+        import tempfile
+        import zlib
+
+        from common import resolve_local_file
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            data = b"exos rom bytes" * 100
+            path = os.path.join(tmpdir, "exos21.rom")
+            with open(path, "wb") as fh:
+                fh.write(data)
+            crc = f"{zlib.crc32(data) & 0xffffffff:08x}"
+            db = {
+                "files": {
+                    "sha1e": {"name": "exos21.rom", "path": path, "size": len(data)},
+                },
+                "indexes": {
+                    "by_md5": {},
+                    "by_name": {"exos21.rom": ["sha1e"]},
+                    "by_crc32": {crc: "sha1e"},
+                    "by_path_suffix": {},
+                },
+            }
+            # Different extension in the profile, crc32+size identify it
+            local, status = resolve_local_file(
+                {"name": "exos21.bin", "crc32": crc, "size": len(data)}, db
+            )
+            self.assertEqual(local, path)
+            self.assertEqual(status, "exact")
+            # Wrong size rejects the crc match
+            local, status = resolve_local_file(
+                {"name": "exos21.bin", "crc32": crc, "size": 1}, db
+            )
+            self.assertIsNone(local)
+
+    def test_217_resolve_name_casefold_fallback(self):
+        """Name resolution falls back to a case-insensitive match."""
+        import tempfile
+
+        from common import resolve_local_file
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = os.path.join(tmpdir, "VEC_Minestorm.vec")
+            with open(path, "wb") as fh:
+                fh.write(b"minestorm rom")
+            db = {
+                "files": {"sha1v": {"name": "VEC_Minestorm.vec", "path": path}},
+                "indexes": {
+                    "by_md5": {},
+                    "by_name": {"VEC_Minestorm.vec": ["sha1v"]},
+                    "by_crc32": {},
+                    "by_path_suffix": {},
+                },
+            }
+            # Upstream declares a different casing, no hash
+            local, status = resolve_local_file(
+                {"name": "VEC_MineStorm.vec"}, db
+            )
+            self.assertEqual(local, path)
+            self.assertEqual(status, "exact")
+
     def test_215_check_member_hash_inside_zip(self):
         """zipped_file entries verify the ROM inside the ZIP, not the ZIP."""
         import hashlib as hl

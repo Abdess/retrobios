@@ -313,6 +313,23 @@ def main():
     # Step 4: Generate packs
     pack_output = ""
     if not args.skip_packs:
+        # Purge stale packs: leftover ZIPs from previous builds would be
+        # picked up by pack verification and shipped in releases.
+        out_dir = Path(args.output_dir)
+        if out_dir.is_dir():
+            stale = [
+                p for p in out_dir.iterdir()
+                if p.is_file() and (
+                    p.suffix == ".zip"
+                    or ".zip." in p.name
+                    or p.name == "SHA256SUMS.txt"
+                )
+            ]
+            for p in stale:
+                p.unlink()
+            if stale:
+                print(f"Purged {len(stale)} stale pack file(s) from {out_dir}/")
+
         pack_cmd = [
             sys.executable,
             "scripts/generate_pack.py",

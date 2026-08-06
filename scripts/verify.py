@@ -477,6 +477,11 @@ def find_undeclared_files(
                         path_base, by_name, by_path_suffix, data_names,
                         by_name_lower,
                     )
+                if not in_repo:
+                    # Hash fallback: the repo may hold the content under a
+                    # different filename (exos21.rom vs exos21.bin)
+                    _lp, _st = resolve_local_file(f, db, dest_hint=dest)
+                    in_repo = _st not in ("not_found",) and _lp is not None
 
             checks = _parse_validation(f.get("validation"))
             undeclared.append(
