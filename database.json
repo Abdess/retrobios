@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-06T12:10:22Z",
-  "total_files": 7483,
-  "total_size": 9255055489,
+  "generated_at": "2026-08-06T16:35:15Z",
+  "total_files": 7484,
+  "total_size": 9461253405,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -73113,6 +73113,16 @@
       "crc32": "2c3bcd32",
       "adler32": "26412551"
     },
+    "ae2a4f49ec6c09d124fed20f84231ce27d10c7b7": {
+      "path": "bios/Sony/PlayStation 3/.variants/PS3UPDAT.PUP.ed8ab192",
+      "name": "PS3UPDAT.PUP",
+      "size": 206197916,
+      "sha1": "ae2a4f49ec6c09d124fed20f84231ce27d10c7b7",
+      "md5": "a2b60b6ac1d2e49e230144345616927c",
+      "sha256": "158471fd834f8ea8036136b6aab43cd86c7ba73d79ca30e0af3c0fe0001cf365",
+      "crc32": "ed8ab192",
+      "adler32": "82e06f63"
+    },
     "093f8698b54b78dcb701de2043f82639de51d63b": {
       "path": "bios/Sony/PlayStation 3/PS3UPDAT.PUP",
       "name": "PS3UPDAT.PUP",
@@ -82147,6 +82157,7 @@
       "5dea62f70439682a6cee16ba3823d11e": "6eddec30056cde7c664a0cf508dcad29353a12bb",
       "de6da198a7359d1200c3eeb6df9c7eda": "40ecf6138c99a0aba775ef93240b295025a45500",
       "44552702b05697a14ccbe2ca22ee7139": "47d2ec4b342649e4c391043ab915d4435f9d180d",
+      "a2b60b6ac1d2e49e230144345616927c": "ae2a4f49ec6c09d124fed20f84231ce27d10c7b7",
       "05fe32f5dc8c78acbcd84d36ee7fdc5b": "093f8698b54b78dcb701de2043f82639de51d63b",
       "8013477b612e63d96fcee2244c9fc2c6": "eec337f4d127e6a2c404e4e08250d88e714a989c",
       "3a880f0c9dd5d330cf6a38641e34c29e": "f432cc1e121ad40d7fb826defdc0f2142cadaf40",
@@ -102697,6 +102708,7 @@
         "47d2ec4b342649e4c391043ab915d4435f9d180d"
       ],
       "PS3UPDAT.PUP": [
+        "ae2a4f49ec6c09d124fed20f84231ce27d10c7b7",
         "093f8698b54b78dcb701de2043f82639de51d63b"
       ],
       "libSceAudiodec.sprx": [
@@ -104268,7 +104280,8 @@
         "fe0254cbfc11405b79e7c86c7769bd6322b04995"
       ],
       "Complex_4627v1.03.bin": [
-        "3944392c954cfb176d4210544e88353b3c5d36b1"
+        "3944392c954cfb176d4210544e88353b3c5d36b1",
+        "358a20e61ec1a2387127b1fa92113034fb279f9b"
       ],
       "PCECD_3.0-(J).pce": [
         "79f5ff55dd10187c7fd7b8daab0b3ffbd1f56a2c"
@@ -114188,6 +114201,7 @@
       "0b805686": "6eddec30056cde7c664a0cf508dcad29353a12bb",
       "a3e573a0": "40ecf6138c99a0aba775ef93240b295025a45500",
       "2c3bcd32": "47d2ec4b342649e4c391043ab915d4435f9d180d",
+      "ed8ab192": "ae2a4f49ec6c09d124fed20f84231ce27d10c7b7",
       "24bdb2db": "093f8698b54b78dcb701de2043f82639de51d63b",
       "961ab43e": "eec337f4d127e6a2c404e4e08250d88e714a989c",
       "8d63e4ba": "f432cc1e121ad40d7fb826defdc0f2142cadaf40",
@@ -121673,6 +121687,7 @@
       "3e14a0d3db871704a9652a5d90d4ba62be2bceefbca6bb46da65275b09d4f78e": "6eddec30056cde7c664a0cf508dcad29353a12bb",
       "483face8f50f5e96d89528059522be3766b44f5e07e854bae1fa92ff0111d0a7": "40ecf6138c99a0aba775ef93240b295025a45500",
       "41de2047af8382988bfd568035ff26eec5f1cabc3efe773680546aa00a82857d": "47d2ec4b342649e4c391043ab915d4435f9d180d",
+      "158471fd834f8ea8036136b6aab43cd86c7ba73d79ca30e0af3c0fe0001cf365": "ae2a4f49ec6c09d124fed20f84231ce27d10c7b7",
       "69070a95780f59fc9e0d82bcf53eb9b28fd4ed4a7d54d0a40045f80422fd98d6": "093f8698b54b78dcb701de2043f82639de51d63b",
       "bc2806808a735dc18e71226a07374496914a2ee6c19e1a27c17cd17be345b2c7": "eec337f4d127e6a2c404e4e08250d88e714a989c",
       "7adbabb78d520a3d3893099f12b31d5b0661e91a738b1800cd6cdf3731a8b67d": "f432cc1e121ad40d7fb826defdc0f2142cadaf40",
@@ -135350,6 +135365,9 @@
       "resources/GameIndex.yaml": [
         "40ecf6138c99a0aba775ef93240b295025a45500"
       ],
+      ".variants/PS3UPDAT.PUP.ed8ab192": [
+        "ae2a4f49ec6c09d124fed20f84231ce27d10c7b7"
+      ],
       "shadps4/sys_modules/libSceAudiodec.sprx": [
         "eec337f4d127e6a2c404e4e08250d88e714a989c"
       ],
@@ -135973,6 +135991,7 @@
         "c0a04b87ad138e6754a6688ad757004467950c08",
         "35e101f63194d75e234ef843ae6af893423b7f64",
         "e0c98d00fe3004942c4a2842f06e2702dd2bd7c7",
+        "358a20e61ec1a2387127b1fa92113034fb279f9b",
         "1db57a1e8b6e4096f811587f9eab0c6675fd9755",
         "80e3ee82416c1a74827a5459fde32f04bf51a1f6",
         "369e6eb5e0c975eaa52a4a3f6ee07b2a3c3c16de",
