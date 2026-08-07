@@ -808,6 +808,35 @@ def unique_emulator_profiles(profiles: dict[str, dict]) -> dict[str, dict]:
     }
 
 
+GAME_DATA_TOPS = ("RPG Maker", "ScummVM")
+
+
+def compute_composition(db: dict) -> dict:
+    """File and byte counts by tree area.
+
+    Three buckets, each re-derivable from paths alone: arcade ROM sets
+    (Arcade/), game and engine data (the RPG Maker/ and ScummVM/ trees),
+    and console or computer system files (everything else).
+    """
+    buckets = {
+        "systems": {"files": 0, "size_bytes": 0},
+        "arcade": {"files": 0, "size_bytes": 0},
+        "game_data": {"files": 0, "size_bytes": 0},
+    }
+    for entry in db.get("files", {}).values():
+        parts = entry.get("path", "").split("/")
+        top = parts[1] if len(parts) > 1 else ""
+        if top == "Arcade":
+            bucket = buckets["arcade"]
+        elif top in GAME_DATA_TOPS:
+            bucket = buckets["game_data"]
+        else:
+            bucket = buckets["systems"]
+        bucket["files"] += 1
+        bucket["size_bytes"] += entry.get("size", 0)
+    return buckets
+
+
 def group_identical_platforms(
     platforms: list[str],
     platforms_dir: str,

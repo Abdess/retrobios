@@ -18,6 +18,7 @@ from datetime import datetime, timezone
 
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (
+    compute_composition,
     list_registered_platforms,
     load_database,
     load_emulator_profiles,
@@ -143,6 +144,7 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
         load_emulator_profiles("emulators", skip_aliases=False)
     )
     emulator_count = len(profiles)
+    comp = compute_composition(db)
 
     system_ids: set[str] = set()
     for p in profiles.values():
@@ -231,7 +233,10 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
             f"- **{len(coverages)} platforms** supported with platform-specific verification",
             f"- **{emulator_count} emulators** profiled from source (RetroArch cores + standalone)",
             f"- **{len(system_ids)} systems** covered (NES, SNES, PlayStation, Saturn, Dreamcast, ...)",
-            f"- **{total_files:,} files** verified with MD5, SHA1, CRC32 checksums",
+            f"- **{total_files:,} files** verified with MD5, SHA1, CRC32 checksums:"
+            f" {comp['systems']['files']:,} system files,"
+            f" {comp['arcade']['files']:,} arcade ROM sets,"
+            f" {comp['game_data']['files']:,} game and engine data files",
             *_catalog_matched_line(db),
             f"- **{size_mb:.0f} MB** total collection size",
             "",

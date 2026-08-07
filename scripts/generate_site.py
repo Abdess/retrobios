@@ -21,6 +21,7 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (
+    compute_composition,
     list_registered_platforms,
     load_database,
     load_emulator_profiles,
@@ -294,6 +295,8 @@ def generate_home(
         "",
         "</div>",
         "",
+        composition_sentence(db),
+        "",
     ]
 
     # Platforms FIRST (main action)
@@ -417,9 +420,22 @@ def compute_stats(db: dict, coverages: dict, profiles: dict) -> dict:
         "platforms": len(coverages),
         "emulators": len(unique),
         "systems": len(systems),
+        "catalog_matched": sum(
+            1 for f in db.get("files", {}).values() if f.get("provenance")
+        ),
         "source": REPO_URL,
         "downloads": RELEASE_URL,
     }
+
+
+def composition_sentence(db: dict) -> str:
+    comp = compute_composition(db)
+    return (
+        f"Of these files, {comp['systems']['files']:,} are console and "
+        f"computer system files, {comp['arcade']['files']:,} arcade ROM sets "
+        f"(`Arcade/`), and {comp['game_data']['files']:,} game and engine "
+        "data (the `RPG Maker/` and `ScummVM/` trees)."
+    )
 
 
 def generate_stats(stats: dict) -> str:
@@ -2568,6 +2584,7 @@ def main():
     )
 
     stats = compute_stats(db, coverages, profiles)
+    stats["composition"] = compute_composition(db)
     write_if_changed(str(docs / "stats.json"), generate_stats(stats))
 
     # Build system_id -> manufacturer page map (needed by all generators)
