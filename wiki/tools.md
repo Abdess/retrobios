@@ -170,6 +170,31 @@ python scripts/export_native.py --platform batocera
 python scripts/export_native.py --all --output-dir dist/upstream/
 ```
 
+MAME and FBNeo entries are `.zip` ROM sets: their meaningful hashes belong
+to the files inside the archive, so the exported DAT lists those entries
+without a container sha1. Anyone submitting the DAT upstream should mention
+this.
+
+### check_profile_refs.py
+
+Audit `source_ref` line references against the profiled upstream. The
+commit under audit is the profile's `source_commit` when present, else the
+last upstream commit at `profiled_date`. Each referenced file is fetched
+at that commit and at HEAD, and the entry's declared hashes (or filename)
+are searched around the cited lines.
+
+```bash
+python scripts/check_profile_refs.py --emulator vice
+python scripts/check_profile_refs.py --all --json
+```
+
+Per ref and revision: `anchored` (found at the cited lines), `moved`
+(found elsewhere in the file), `gone` (absent from the file). `moved` at
+HEAD means upstream shifted since profiling; `gone` at pin means the
+declared value does not come from the referenced file and the entry
+deserves a re-read. Uses `GITHUB_TOKEN` when set; GitHub-hosted upstreams
+only.
+
 ### validation.py
 
 Validation index and ground truth formatting. Used by verify.py for emulator-level checks
