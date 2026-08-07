@@ -401,7 +401,11 @@ def resolve_local_file(
     exact, zip_exact, hash_mismatch, not_found.
     """
     sha1 = file_entry.get("sha1")
-    md5_raw = str(file_entry.get("md5", "") or "")
+    md5_field = file_entry.get("md5", "") or ""
+    if isinstance(md5_field, list):
+        md5_raw = ",".join(str(m) for m in md5_field)
+    else:
+        md5_raw = str(md5_field)
     name = file_entry.get("name", "")
     zipped_file = file_entry.get("zipped_file")
     aliases = file_entry.get("aliases", [])

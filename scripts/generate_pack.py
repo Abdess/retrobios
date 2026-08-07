@@ -287,12 +287,18 @@ def resolve_file(
     # missing OR has a hash mismatch (wrong variant on disk)
     name = file_entry.get("name", "")
     sha1 = file_entry.get("sha1")
+    first_sha1 = (sha1[0] if sha1 else "") if isinstance(sha1, list) else (sha1 or "")
     md5_raw = file_entry.get("md5", "")
-    md5_list = (
-        [m.strip().lower() for m in md5_raw.split(",") if m.strip()] if md5_raw else []
-    )
+    if isinstance(md5_raw, list):
+        md5_list = [str(m).strip().lower() for m in md5_raw if str(m).strip()]
+    else:
+        md5_list = (
+            [m.strip().lower() for m in md5_raw.split(",") if m.strip()]
+            if md5_raw
+            else []
+        )
     first_md5 = md5_list[0] if md5_list else ""
-    cached = fetch_large_file(name, expected_sha1=sha1 or "", expected_md5=first_md5)
+    cached = fetch_large_file(name, expected_sha1=first_sha1, expected_md5=first_md5)
     if cached:
         return cached, "release_asset"
 
@@ -554,6 +560,8 @@ def _collect_emulator_extras(
                 "required": u.get("required", False),
                 "hle_fallback": u.get("hle_fallback", False),
                 "source_emulator": u.get("emulator", ""),
+                "sha1": u.get("sha1"),
+                "md5": u.get("md5"),
             }
         )
 
@@ -1835,7 +1843,16 @@ def generate_emulator_pack(
                 if _has_path_conflict(archive_dest, seen_destinations, seen_parents):
                     continue
 
-                archive_entry = {"name": archive_name}
+                # Prefer the profile's own entry for the archive (carries
+                # hashes for exact resolution when several dumps share a name)
+                archive_entry = next(
+                    (
+                        f
+                        for f in files
+                        if f.get("name") == archive_name and not f.get("archive")
+                    ),
+                    {"name": archive_name},
+                )
                 local_path, status = resolve_file(
                     archive_entry,
                     db,
