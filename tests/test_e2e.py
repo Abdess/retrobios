@@ -935,6 +935,22 @@ class TestE2E(unittest.TestCase):
         profiles = load_emulator_profiles(self.emulators_dir)
         self.assertNotIn("test_alias", profiles)
 
+    def test_42b_profile_hash_fields_load_as_str(self):
+        """Unquoted digit-only hashes must load as strings, not YAML ints."""
+        with tempfile.TemporaryDirectory() as tmp:
+            Path(tmp, "numcrc.yml").write_text(
+                "emulator: NumCRC\n"
+                "type: libretro\n"
+                "files:\n"
+                "  - name: kernal.bin\n"
+                "    crc32: 70295038\n"
+                "    md5: [12345678901234567890123456789012]\n"
+            )
+            profiles = load_emulator_profiles(tmp)
+            entry = profiles["numcrc"]["files"][0]
+        self.assertEqual(entry["crc32"], "70295038")
+        self.assertEqual(entry["md5"], ["12345678901234567890123456789012"])
+
     def test_43_cross_ref_data_dir_does_not_suppress_files(self):
         config = load_platform_config("test_md5", self.platforms_dir)
         profiles = load_emulator_profiles(self.emulators_dir)
@@ -3841,6 +3857,34 @@ class TestE2E(unittest.TestCase):
         exporters = discover_exporters()
         self.assertIn("retroarch", exporters)
         self.assertIs(exporters["retroarch"], SystemDatExporter)
+
+    def test_systemdat_exporter_numeric_crc(self):
+        """Digit-only crc32 typed as int by YAML must not break the export."""
+        from exporter.systemdat_exporter import Exporter as SystemDatExporter
+
+        truth = {
+            "platform": "retroarch",
+            "systems": {
+                "commodore-plus4": {
+                    "files": [
+                        {
+                            "name": "kernal-318005-05.bin",
+                            "path": "kernal-318005-05.bin",
+                            "size": 16384,
+                            "crc32": 70295038,
+                            "required": False,
+                        },
+                    ],
+                },
+            },
+        }
+
+        out_path = os.path.join(self.root, "System_numeric.dat")
+        SystemDatExporter().export(truth, out_path, scraped_data={"systems": {}})
+
+        with open(out_path) as fh:
+            content = fh.read()
+        self.assertIn("crc 70295038", content)
 
     # ---------------------------------------------------------------
     # Full truth + diff integration test

@@ -602,7 +602,7 @@ files:
     size: 16384
     sha1: a3d9e5be091b98de39a046ab167fb7632d053682
     md5: b3c450c36a88b491281d18fdf3e94ab0
-    crc32: 70295038
+    crc32: "70295038"
     note: "Plus/4 Kernal NTSC Rev 5 (default NTSC). Embedded in core."
     source_ref: "vice/src/plus4/plus4rom.h:37"
 

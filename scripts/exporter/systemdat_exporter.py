@@ -96,7 +96,7 @@ class Exporter(BaseExporter):
                     rom_parts.append(f"size {size}")
                 crc = fe.get("crc32", "")
                 if crc:
-                    rom_parts.append(f"crc {crc.upper()}")
+                    rom_parts.append(f"crc {str(crc).upper()}")
                 md5 = fe.get("md5", "")
                 if isinstance(md5, list):
                     md5 = md5[0] if md5 else ""

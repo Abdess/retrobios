@@ -768,9 +768,33 @@ def load_emulator_profiles(
             continue
         if skip_aliases and profile.get("type") == "alias":
             continue
+        _normalize_hash_fields(profile)
         profiles[f.stem] = profile
     _emulator_profiles_cache[cache_key] = profiles
     return profiles
+
+
+_HASH_FIELDS = ("crc32", "md5", "sha1", "sha256")
+
+
+def _normalize_hash_fields(node: object) -> None:
+    """Coerce hash values to str in place.
+
+    YAML types unquoted digit-only hashes (e.g. crc32: 70295038) as int,
+    which breaks string comparisons and formatting downstream.
+    """
+    if isinstance(node, dict):
+        for key, val in node.items():
+            if key in _HASH_FIELDS:
+                if isinstance(val, int):
+                    node[key] = str(val)
+                elif isinstance(val, list):
+                    node[key] = [str(v) if isinstance(v, int) else v for v in val]
+            else:
+                _normalize_hash_fields(val)
+    elif isinstance(node, list):
+        for item in node:
+            _normalize_hash_fields(item)
 
 
 def unique_emulator_profiles(profiles: dict[str, dict]) -> dict[str, dict]:
