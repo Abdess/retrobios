@@ -39,6 +39,20 @@ A file earns its place when an emulator loads it from disk and does not bundle i
 
 This follows the platforms themselves: Batocera lists `prboom.wad` in its BIOS checker, and libretro declares these files in the `firmware` field of its core info. The word "BIOS" is their vocabulary for "external file the emulator needs". Files are tagged by category (`bios`, `game_data`, `bios_zip`) in the emulator profiles, so the distinction stays visible.
 
+## Are these files verified against original hardware dumps?
+
+No, and that is a deliberate boundary. The hashes here document what
+emulator code loads and accepts, read from the source. When several
+revisions or regions pass, all of them are kept (`.variants/` in the
+repository, per-emulator pages list each one), and the pack ships the
+variant satisfying the most checks, logging any conflict it cannot
+resolve.
+
+Whether a file byte-matches the original hardware ROM is a different
+question, answered by dump-preservation catalogs, not by emulator code.
+The two views usually agree; when they differ, this project follows the
+code, because that is what decides whether your emulator boots.
+
 ## How do I know which BIOS I need?
 
 Two approaches:
