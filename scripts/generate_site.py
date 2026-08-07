@@ -265,7 +265,8 @@ def generate_home(
         "",
         f"# {SITE_NAME}",
         "",
-        "Source-verified BIOS and firmware packs for retrogaming platforms.",
+        "BIOS and firmware packs verified with each platform's own checks, "
+        "with emulator source code as the deciding authority.",
         "",
         "</div>",
         "",
@@ -371,7 +372,8 @@ def generate_home(
             "",
             '??? abstract "Methodology"',
             "",
-            "    Each file is checked against the emulator's source code. "
+            "    Platform lists are checked against emulator source code, file "
+            "by file where a profile exists ([Source-backed counts](gaps.md)). "
             "Documentation and metadata can drift from actual runtime behavior, "
             "so the source is the primary reference.",
             "",

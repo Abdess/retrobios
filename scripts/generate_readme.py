@@ -206,8 +206,9 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
             "## What's included",
             "",
             "BIOS, firmware, and system files for consoles from Atari to PlayStation 3.",
-            "Each file is checked against the emulator's source code to match what the"
-            " code actually loads at runtime.",
+            "Every file passes its platform's own verification; where an emulator"
+            " profile exists, the expected hashes and sizes are read from the"
+            " emulator's source code (the Source-backed column below).",
             "",
             f"- **{len(coverages)} platforms** supported with platform-specific verification",
             f"- **{emulator_count} emulators** profiled from source (RetroArch cores + standalone)",
@@ -337,7 +338,9 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
             "## How it works",
             "",
             "Documentation and metadata can drift from what emulators actually load.",
-            "To keep packs accurate, each file is checked against the emulator's source code.",
+            "To keep packs accurate, platform lists are checked against emulator"
+            " source code, file by file where a profile exists; when the two"
+            " disagree, the code wins.",
             "",
             "1. **Read emulator source code** - trace every file the code loads, its expected hash and size",
             "2. **Cross-reference with platforms** - match against what each platform declares",
