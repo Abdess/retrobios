@@ -163,6 +163,12 @@ files:
     source_ref: Source/Core/Core/Boot/Boot_BS2Emu.cpp:42
 ```
 
+Record `source_commit` when profiling: upstream code moves, and a
+`source_ref` line number only stays checkable against the commit it was
+read at. Profiles written before this field existed carry `profiled_date`
+and `core_version` instead; they gain `source_commit` as they are
+re-verified.
+
 ### Writing style
 
 Notes in a profile describe what the core does, kept focused on:
@@ -255,6 +261,7 @@ even if documentation mentions it.
 | `upstream` | no | original emulator repository URL |
 | `profiled_date` | yes | date of source analysis |
 | `core_version` | yes | version analyzed |
+| `source_commit` | no | upstream commit SHA the source was read at; anchors every `source_ref` line number |
 | `display_name` | no | full display name (e.g. "Sega - Mega Drive (BlastEm)") |
 | `systems` | yes | list of system IDs this core handles |
 | `cores` | no | list of upstream core names for buildbot/target matching |
@@ -283,7 +290,7 @@ even if documentation mentions it.
 | `hle_fallback` | true if a high-level emulation path exists |
 | `category` | `bios` (default), `game_data`, `bios_zip` |
 | `region` | geographic region (e.g. `north-america`, `japan`) |
-| `source_ref` | source file and line number (e.g. `boot.cpp:42`) |
+| `source_ref` | source file and line number (e.g. `boot.cpp:42`), read at the profile's `source_commit` when set |
 | `path` | destination path relative to system directory |
 | `description` | what this file is |
 | `note` | additional context |
