@@ -202,6 +202,7 @@ python scripts/refresh_data_dirs.py --registry path/to/_data_dirs.yml
 | `generate_readme.py` | Generate README.md and CONTRIBUTING.md from database |
 | `generate_site.py` | Generate all MkDocs site pages (this documentation) |
 | `deterministic_zip.py` | Rebuild MAME BIOS ZIPs deterministically (same ROMs = same hash) |
+| `torrentzip.py` | Build TorrentZip archives for MAME/FBNeo ROM sets (archive bytes depend only on contents) |
 | `crypto_verify.py` | 3DS RSA signature and AES crypto verification |
 | `sect233r1.py` | Pure Python ECDSA verification on sect233r1 curve (3DS OTP cert) |
 | `check_buildbot_system.py` | Detect stale data directories by comparing with buildbot |
@@ -249,6 +250,8 @@ Located in `scripts/scraper/`. Each inherits `BaseScraper` and implements `fetch
 | `emudeck_scraper` | checkBIOS.sh | Bash + CSV |
 | `retrodeck_scraper` | component manifests | JSON per component |
 | `romm_scraper` | known_bios_files.json | JSON |
+| `rocknix_scraper` | rocknix-systems script | Python dict |
+| `misterfpga_scraper` | BiosDB_MiSTer bios_db.json.zip | JSON in ZIP |
 | `coreinfo_scraper` | .info files from libretro-core-info | INI-like |
 | `bizhawk_scraper` | FirmwareDatabase.cs | C# source |
 | `mame_hash_scraper` | mamedev/mame source tree | C source (sparse clone) |
