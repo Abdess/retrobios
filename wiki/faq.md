@@ -53,6 +53,16 @@ question, answered by dump-preservation catalogs, not by emulator code.
 The two views usually agree; when they differ, this project follows the
 code, because that is what decides whether your emulator boots.
 
+## Which MAME version do the arcade BIOS sets match?
+
+Arcade BIOS sets are coupled to the romset version, so there is one
+profile per MAME core generation: MAME 2000 (0.37b5), MAME 2003 (0.78),
+MAME 2003-Plus, MAME 2009 (0.135u4), MAME 2010 (0.139), MAME 2015
+(0.160), MAME 2016 (0.174), and current MAME (0.287), each read from that
+version's own source tree, because the BIOS root sets differ between
+versions. The pack ships the sets matching the core you run; a generic
+unversioned arcade pack cannot do that.
+
 ## How do I know which BIOS I need?
 
 Two approaches:
