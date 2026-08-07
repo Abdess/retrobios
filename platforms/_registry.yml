@@ -1717,7 +1717,7 @@ platforms:
     target_scraper: null
     target_source: null
     contributed_by:
-    - username: Takiiiiiii
+    - username: Takiiiiiiii
       contribution: platform support
       pr: 50
     install:
