@@ -53,9 +53,10 @@ BIOS, firmware, and system files for consoles from Atari to PlayStation 3.
 Every file passes its platform's own verification; where an emulator profile exists, the expected hashes and sizes are read from the emulator's source code (the Source-backed column below).
 
 - **12 platforms** supported with platform-specific verification
-- **310 emulators** profiled from source (RetroArch cores + standalone)
+- **311 emulators** profiled from source (RetroArch cores + standalone)
 - **396 systems** covered (NES, SNES, PlayStation, Saturn, Dreamcast, ...)
 - **7,649 files** verified with MD5, SHA1, CRC32 checksums
+- **144 files** matched to dump-preservation catalogs (Redump)
 - **9635 MB** total collection size
 
 ## Supported systems
@@ -82,7 +83,7 @@ Full list with per-file details: **[https://abdess.github.io/retrobios/](https:/
 | RomM | 374/374 (100.0%) | 374 | 0 | 0 | 84/374 (22%) |
 
 Coverage is measured against the file list each platform declares, using that platform's own verification mode.
-Source-backed counts the files whose expectations were also read from an emulator's source code; the rest rely on the platform list alone. A dash means no profiled emulator applies to the platform, whose own source is then the only authority.
+Source-backed counts the files whose content the emulator's own code checks: a size or hash read from its source, reproduced at verification. Files a profile documents without a content check are counted separately on the [gap analysis](https://abdess.github.io/retrobios/gaps/) page. A dash means no profiled emulator applies to the platform, whose own source is then the only authority.
 Where platform lists and emulator source code disagree, the differences are tracked in the [gap analysis](https://abdess.github.io/retrobios/gaps/).
 
 ## Build your own pack
@@ -119,7 +120,7 @@ The [documentation site](https://abdess.github.io/retrobios/) provides:
 - **Per-emulator profiles** with source code references for every file
 - **Per-system pages** showing which emulators and platforms cover each console
 - **Gap analysis** identifying missing files and undeclared core requirements
-- **Cross-reference** mapping files across 12 platforms and 310 emulators
+- **Cross-reference** mapping files across 12 platforms and 311 emulators
 
 ## How it works
 
@@ -156,4 +157,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software.
 The legal reasoning is laid out in the [FAQ](https://abdess.github.io/retrobios/wiki/faq/#is-this-legal).
 
-*Auto-generated on 2026-08-07T16:58:57Z*
+*Auto-generated on 2026-08-07T17:35:58Z*
