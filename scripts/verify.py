@@ -366,7 +366,7 @@ def find_undeclared_files(
     relevant = resolve_platform_cores(config, profiles, target_cores=target_cores)
     standalone_set = set(str(c) for c in config.get("standalone_cores", []))
     undeclared = []
-    seen_files: set[str] = set()
+    seen_files: set[tuple[str, str | None]] = set()
     # Track archives: archive_name -> {in_repo, emulator, files: [...], ...}
     archive_entries: dict[str, dict] = {}
 
@@ -387,11 +387,14 @@ def find_undeclared_files(
 
         for f in profile.get("files", []):
             fname = f.get("name", "")
-            if not fname or fname in seen_files:
+            # Dedup by (name, archive): a filename declared loose by one core
+            # and inside an archive by another are distinct packaging shapes
+            seen_key = (fname, f.get("archive"))
+            if not fname or seen_key in seen_files:
                 continue
             # Skip unsourceable files (documented reason, not a gap)
             if f.get("unsourceable"):
-                seen_files.add(fname)
+                seen_files.add(seen_key)
                 continue
             # Skip pattern placeholders (e.g., <user-selected>.bin)
             if "<" in fname or ">" in fname or "*" in fname:
@@ -419,13 +422,13 @@ def find_undeclared_files(
             # Skip files declared by the platform (by name or archive)
             if not include_all:
                 if fname in declared_names:
-                    seen_files.add(fname)
+                    seen_files.add(seen_key)
                     continue
                 if archive and archive in declared_names:
-                    seen_files.add(fname)
+                    seen_files.add(seen_key)
                     continue
 
-            seen_files.add(fname)
+            seen_files.add(seen_key)
 
             # Archived files are grouped by archive
             if archive:
@@ -497,6 +500,8 @@ def find_undeclared_files(
                     "checks": sorted(checks) if checks else [],
                     "source_ref": f.get("source_ref"),
                     "expected": _build_expected(f, checks),
+                    "sha1": f.get("sha1"),
+                    "md5": f.get("md5"),
                 }
             )
 
@@ -1194,7 +1199,16 @@ def verify_emulator(
             archive = file_entry.get("archive")
             if archive and archive not in seen_archives:
                 seen_archives.add(archive)
-                archive_entry = {"name": archive}
+                # Prefer the profile's own entry for the archive (carries
+                # hashes for exact resolution when several dumps share a name)
+                archive_entry = next(
+                    (
+                        f
+                        for f in files
+                        if f.get("name") == archive and not f.get("archive")
+                    ),
+                    {"name": archive},
+                )
                 local_path, _ = resolve_local_file(
                     archive_entry,
                     db,
