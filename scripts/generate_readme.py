@@ -342,6 +342,12 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
             " source code, file by file where a profile exists; when the two"
             " disagree, the code wins.",
             "",
+            "Hashes document what emulator code loads and accepts, not dump"
+            " provenance; that boundary, and how it relates to preservation"
+            " catalogs such as No-Intro, is drawn in the"
+            f" [FAQ]({SITE_URL}wiki/faq/"
+            "#are-these-files-verified-against-original-hardware-dumps).",
+            "",
             "1. **Read emulator source code** - trace every file the code loads, its expected hash and size",
             "2. **Cross-reference with platforms** - match against what each platform declares",
             "3. **Build packs** - include baseline files plus what each platform's cores need",
