@@ -1574,13 +1574,18 @@ def generate_gap_analysis(
             pname, cov["config"], (registry or {}).get(pname, {}), profiles, db
         )
         s = diff_platform_truth(truth_data, cov["config"])["summary"]
-        div_rows.append(
-            f"| [{cov['platform']}](platforms/{pname}.md) "
-            f"| {s['total_missing']} "
-            f"| {s['total_extra_phantom'] + s['total_extra_unprofiled']} "
-            f"| {s['total_hash_mismatch']} "
-            f"| {s['total_required_mismatch']} |"
-        )
+        if s["systems_compared"] == 0:
+            div_rows.append(
+                f"| [{cov['platform']}](platforms/{pname}.md) | - | - | - | - |"
+            )
+        else:
+            div_rows.append(
+                f"| [{cov['platform']}](platforms/{pname}.md) "
+                f"| {s['total_missing']} "
+                f"| {s['total_extra_phantom'] + s['total_extra_unprofiled']} "
+                f"| {s['total_hash_mismatch']} "
+                f"| {s['total_required_mismatch']} |"
+            )
 
     lines.extend([
         "## Platform Lists vs Emulator Source",
@@ -1599,6 +1604,10 @@ def generate_gap_analysis(
         "- **Phantom**: on the platform list, loaded by no profiled emulator",
         "- **Hash conflict**: the platform list and the emulator source expect different hashes",
         "- **Required status**: required/optional differs between list and code",
+        "",
+        "A dash means no profiled emulator overlaps the platform's systems, "
+        "so there is nothing to compare: the platform's own source is the "
+        "only authority for its files.",
         "",
         "The same comparison drives `scripts/exporter/`: each platform's "
         "corrected list can be regenerated in its native format "
