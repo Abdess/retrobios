@@ -45,6 +45,7 @@ jobs:
               'recalbox': 'recalbox', 'retrobat': 'retrobat',
               'romm': 'romm', 'bizhawk': 'bizhawk',
               'retrodeck': 'retrodeck', 'emudeck': 'emudeck',
+              'rocknix': 'rocknix', 'misterfpga': 'misterfpga',
           }
           for scraper_name, out in targets.items():
               mod = __import__(f'scraper.{scraper_name}_scraper', fromlist=['Scraper'])
