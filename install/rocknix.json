@@ -4,7 +4,7 @@
   "platform": "rocknix",
   "display_name": "ROCKNIX",
   "version": "1.0",
-  "generated": "2026-08-07T12:30:34Z",
+  "generated": "2026-08-07T16:58:58Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -16,8 +16,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 1489,
-  "total_size": 4049054358,
+  "total_files": 1495,
+  "total_size": 4058321299,
   "files": [
     {
       "dest": "xemu/bios/mcpx_1.0.bin",
@@ -516,9 +516,9 @@
     },
     {
       "dest": "ATARIOSB.ROM",
-      "sha1": "f1f0741b1d34fb4350cf7cb8ab3b6ea11cdd8174",
+      "sha1": "db1031585968cfc6ec2ecda5c9a5a52f61444a3b",
       "size": 10240,
-      "repo_path": "bios/Atari/400-800/ATARIOSB.ROM",
+      "repo_path": "bios/Atari/400-800/ROM_OS_B_NTSC",
       "cores": [
         "Atari800"
       ]
@@ -3819,9 +3819,9 @@
     },
     {
       "dest": "CARTS.SHA",
-      "sha1": "69dd7344e4dfa7e250973a71bbb3e8aa6fb08d81",
+      "sha1": "bf5fb954db868e523febccc68549ed9187961076",
       "size": 33152,
-      "repo_path": "bios/Microsoft/MSX/CARTS.SHA",
+      "repo_path": "bios/Microsoft/MSX/.variants/CARTS.SHA.bf5fb954",
       "cores": [
         "fMSX"
       ]
@@ -4484,6 +4484,51 @@
       ]
     },
     {
+      "dest": "aes.zip",
+      "sha1": "23c66caa80b93199914fae246a5ea6e84db1be29",
+      "size": 850311,
+      "repo_path": "bios/Arcade/Arcade/aes.zip",
+      "cores": [
+        "Geolith"
+      ]
+    },
+    {
+      "dest": "neogeo.zip",
+      "sha1": "deb62b0074b8cae4f162c257662136733cfc76ad",
+      "size": 1859335,
+      "repo_path": "bios/Arcade/Arcade/neogeo.zip",
+      "cores": [
+        "Geolith"
+      ]
+    },
+    {
+      "dest": "neocd.zip",
+      "sha1": "cef6a6e78989a595700337c15b79155523935333",
+      "size": 429431,
+      "repo_path": "bios/SNK/Neo Geo CD/neocd.zip",
+      "cores": [
+        "Geolith"
+      ]
+    },
+    {
+      "dest": "neocdz.zip",
+      "sha1": "712816a3c41baf4129e23d645305a536e03d69de",
+      "size": 955352,
+      "repo_path": "bios/SNK/Neo Geo CD/.variants/neocdz.zip.712816a3",
+      "cores": [
+        "Geolith"
+      ]
+    },
+    {
+      "dest": "irrmaze.zip",
+      "sha1": "0a8aa300042cdc8fdeb825ddaa840b59fad63f92",
+      "size": 5067452,
+      "repo_path": "bios/SNK/Neo Geo/irrmaze.zip",
+      "cores": [
+        "Geolith"
+      ]
+    },
+    {
       "dest": "howard.o",
       "sha1": "bdca7bbb647066cf7555ce5d555ce09de4ebc41b",
       "size": 513,
@@ -4537,15 +4582,6 @@
       "repo_path": "bios/Arcade/Arcade/stvbios.zip",
       "cores": [
         "Kronos"
-      ]
-    },
-    {
-      "dest": "neogeo.zip",
-      "sha1": "deb62b0074b8cae4f162c257662136733cfc76ad",
-      "size": 1859335,
-      "repo_path": "bios/Arcade/Arcade/neogeo.zip",
-      "cores": [
-        "MAME"
       ]
     },
     {
@@ -6898,6 +6934,24 @@
       ]
     },
     {
+      "dest": "neocd/neocd.bin",
+      "sha1": "7bb26d1e5d1e930515219cb18bcde5b7b23e2eda",
+      "size": 524288,
+      "repo_path": "bios/SNK/Neo Geo CD/neocd.bin",
+      "cores": [
+        "NeoCD"
+      ]
+    },
+    {
+      "dest": "neocd/neocd_sz.rom",
+      "sha1": "6a947457031dd3a702a296862446d7485aa89dbb",
+      "size": 524288,
+      "repo_path": "bios/SNK/Neo Geo CD/neocd_sz.rom",
+      "cores": [
+        "NeoCD"
+      ]
+    },
+    {
       "dest": "neocd/uni-bioscd.rom",
       "sha1": "5158b728e62b391fb69493743dcf7abbc62abc82",
       "size": 524288,
@@ -9064,6 +9118,15 @@
       ]
     },
     {
+      "dest": "boot.bin",
+      "sha1": "8951d1bb219ab2ff8583033d2119c899cc81f18c",
+      "size": 2097152,
+      "repo_path": "bios/Sega/Dreamcast/dc_bios.bin",
+      "cores": [
+        "RetroDream"
+      ]
+    },
+    {
       "dest": "flash.bin",
       "sha1": "94d44d7f9529ec1642ba3771ed3c5f756d5bc872",
       "size": 131072,
@@ -11192,15 +11255,6 @@
       "sha1": "0649e27b7d605add7fc4215ee628b71e3c835328",
       "size": 8709,
       "repo_path": "bios/Arcade/Arcade/namcoc75.zip",
-      "cores": [
-        "FinalBurn Neo"
-      ]
-    },
-    {
-      "dest": "neocdz.zip",
-      "sha1": "9cab31cfe7eacb6871d36cee105d87b90fd85b64",
-      "size": 1181333,
-      "repo_path": "bios/Arcade/Arcade/neocdz.zip",
       "cores": [
         "FinalBurn Neo"
       ]

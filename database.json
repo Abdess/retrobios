@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-07T11:49:21Z",
-  "total_files": 7646,
-  "total_size": 10096108965,
+  "generated_at": "2026-08-07T15:56:45Z",
+  "total_files": 7649,
+  "total_size": 10102561200,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -69743,6 +69743,16 @@
       "crc32": "362e948d",
       "adler32": "ce6883b2"
     },
+    "0a8aa300042cdc8fdeb825ddaa840b59fad63f92": {
+      "path": "bios/SNK/Neo Geo/irrmaze.zip",
+      "name": "irrmaze.zip",
+      "size": 5067452,
+      "sha1": "0a8aa300042cdc8fdeb825ddaa840b59fad63f92",
+      "md5": "0e369df30a70e45547cef9e4078dc511",
+      "sha256": "e331a487349cc6c1178ac7c84d7a5721b43450aa837ce5f697af14d8f1d1dce6",
+      "crc32": "36d7684f",
+      "adler32": "7fac01ea"
+    },
     "e92910e20092577a4523a6b39d578a71d4de7085": {
       "path": "bios/SNK/Neo Geo/japan-j3.bin",
       "name": "japan-j3.bin",
@@ -70173,6 +70183,16 @@
       "crc32": "e5554b80",
       "adler32": "bb53bd8b"
     },
+    "712816a3c41baf4129e23d645305a536e03d69de": {
+      "path": "bios/SNK/Neo Geo CD/.variants/neocdz.zip.712816a3",
+      "name": "neocdz.zip",
+      "size": 955352,
+      "sha1": "712816a3c41baf4129e23d645305a536e03d69de",
+      "md5": "b31a246b69493c35194fe0bac120dc37",
+      "sha256": "f885f2cc79b5c0120ca316b0db360183c2b9a60bc727cbe211b7518e12bd5548",
+      "crc32": "97ea8425",
+      "adler32": "6632ad7c"
+    },
     "891407e147b2c022ebedf8c51fe3a2f497304906": {
       "path": "bios/SNK/Neo Geo CD/.variants/neocdz.zip.891407e1",
       "name": "neocdz.zip",
@@ -70232,6 +70252,16 @@
       "sha256": "42dd3415b17e06d3ae8c7e8794cb2cbe76d6755ebe5b949660d251426818dbc1",
       "crc32": "8caec8d2",
       "adler32": "ebe5748d"
+    },
+    "cef6a6e78989a595700337c15b79155523935333": {
+      "path": "bios/SNK/Neo Geo CD/neocd.zip",
+      "name": "neocd.zip",
+      "size": 429431,
+      "sha1": "cef6a6e78989a595700337c15b79155523935333",
+      "md5": "006a881532f2caffc3fe9fb5593f2ed5",
+      "sha256": "a0cdb87bb7753c9a1a1d99b83f58ace4bcd54dee41211d9d2c96fe06098b3590",
+      "crc32": "85e8e171",
+      "adler32": "a5223308"
     },
     "a5f4a7a627b3083c979f6ebe1fabc5d2df6d083b": {
       "path": "bios/SNK/Neo Geo CD/neocd_f.rom",
@@ -83440,6 +83470,7 @@
       "b95fde264333c05a8e2e2754cdc8accc": "12b54bf6bf277791445c2618065ec88e0302957c",
       "67682655fa5fb32831e28429643e26c7": "cdbde4e73d49ed3a682b99f66c231eb3dfd90dc7",
       "dffb72f116d36d025068b23970a4f6df": "fc398ab4e13ca6bfef3366ed3391b1050e0eb5e8",
+      "0e369df30a70e45547cef9e4078dc511": "0a8aa300042cdc8fdeb825ddaa840b59fad63f92",
       "5b2d6f653ba4cf36e7fe237e4acb2f50": "e92910e20092577a4523a6b39d578a71d4de7085",
       "b11751ad42879c461d64ad2b7b2b0129": "1b3b22092f30c4d1b2c15f04d1670eb1e9fbea07",
       "1ec68104095d4b7236e8c18c77ea501b": "4e4a440cae46f3889d20234aebd7f8d5f522e22c",
@@ -83483,12 +83514,14 @@
       "08ca8b2dba6662e8024f9e789711c6fc": "5142f205912869b673a71480c5828b1eaed782a8",
       "530fb9761957e59aeb47f2e8782df288": "ecf01eda815909f1facec62abf3594eaa8d11075",
       "041fe48b90b1aed6d0b72da192fb76ef": "aed2cb663b6370efb10969a3373fd84c558edb4f",
+      "b31a246b69493c35194fe0bac120dc37": "712816a3c41baf4129e23d645305a536e03d69de",
       "a7cca75f3d5af6acc85efcce589ab04f": "891407e147b2c022ebedf8c51fe3a2f497304906",
       "c38cb8e50321783e413dc5ff292a3ff8": "bf6b379c204da77dece1aedf83ff35227a623e5d",
       "fc7599f3f871578fe9a0453662d1c966": "5992277debadeb64d1c1c64b0a92d9293eaf7e4a",
       "5c2366f25ff92d71788468ca492ebeca": "53bc1f283cdf00fa2efbb79f2e36d4c8038d743a",
       "f39572af7584cb5b3f70ae8cc848aba2": "7bb26d1e5d1e930515219cb18bcde5b7b23e2eda",
       "b39d656e4a1ff71e505b5424b87416b9": "43d114ed19550da818889dd3d002f0caa4b0be1f",
+      "006a881532f2caffc3fe9fb5593f2ed5": "cef6a6e78989a595700337c15b79155523935333",
       "8834880c33164ccbe6476b559f3e37de": "a5f4a7a627b3083c979f6ebe1fabc5d2df6d083b",
       "043d76d5f0ef836500700c34faef774d": "4a94719ee5d0e3f2b981498f70efc1b8f1cef325",
       "f6325a33c6d63ea4b9162a3fa8c32727": "19729b51bdab60c42aafef6e20ea9234c7eb8410",
@@ -84570,6 +84603,7 @@
         "4f28af31ca0defdd73d80edec2fa296908e624dc",
         "985d935c06fe278ce39d7690aa6c53df88954cd6",
         "9cab31cfe7eacb6871d36cee105d87b90fd85b64",
+        "712816a3c41baf4129e23d645305a536e03d69de",
         "891407e147b2c022ebedf8c51fe3a2f497304906",
         "bf6b379c204da77dece1aedf83ff35227a623e5d",
         "80c9a25ccf39c6b85d1a7c9c0d6fe527ab45ec1c"
@@ -103506,6 +103540,9 @@
       "ringo470.rom": [
         "191c4994adfffe4f83b98dc3959dde2724b1dbac"
       ],
+      "irrmaze.zip": [
+        "0a8aa300042cdc8fdeb825ddaa840b59fad63f92"
+      ],
       "japan-j3.bin": [
         "e92910e20092577a4523a6b39d578a71d4de7085"
       ],
@@ -103643,6 +103680,9 @@
       ],
       "neocd.srm": [
         "43d114ed19550da818889dd3d002f0caa4b0be1f"
+      ],
+      "neocd.zip": [
+        "cef6a6e78989a595700337c15b79155523935333"
       ],
       "neocd_f.rom": [
         "a5f4a7a627b3083c979f6ebe1fabc5d2df6d083b"
@@ -116038,6 +116078,7 @@
       "9e5ee4a2": "12b54bf6bf277791445c2618065ec88e0302957c",
       "3a1b0586": "cdbde4e73d49ed3a682b99f66c231eb3dfd90dc7",
       "362e948d": "fc398ab4e13ca6bfef3366ed3391b1050e0eb5e8",
+      "36d7684f": "0a8aa300042cdc8fdeb825ddaa840b59fad63f92",
       "dff6d41f": "e92910e20092577a4523a6b39d578a71d4de7085",
       "d27a71f1": "1b3b22092f30c4d1b2c15f04d1670eb1e9fbea07",
       "16d0c132": "4e4a440cae46f3889d20234aebd7f8d5f522e22c",
@@ -116081,12 +116122,14 @@
       "ff3abc59": "5142f205912869b673a71480c5828b1eaed782a8",
       "f0e8f27d": "ecf01eda815909f1facec62abf3594eaa8d11075",
       "e5554b80": "aed2cb663b6370efb10969a3373fd84c558edb4f",
+      "97ea8425": "712816a3c41baf4129e23d645305a536e03d69de",
       "05cfde8c": "891407e147b2c022ebedf8c51fe3a2f497304906",
       "19681e91": "bf6b379c204da77dece1aedf83ff35227a623e5d",
       "5a86cff2": "5992277debadeb64d1c1c64b0a92d9293eaf7e4a",
       "cac62307": "53bc1f283cdf00fa2efbb79f2e36d4c8038d743a",
       "df9de490": "7bb26d1e5d1e930515219cb18bcde5b7b23e2eda",
       "8caec8d2": "43d114ed19550da818889dd3d002f0caa4b0be1f",
+      "85e8e171": "cef6a6e78989a595700337c15b79155523935333",
       "6fd2a520": "a5f4a7a627b3083c979f6ebe1fabc5d2df6d083b",
       "1101f313": "4a94719ee5d0e3f2b981498f70efc1b8f1cef325",
       "01c299cc": "19729b51bdab60c42aafef6e20ea9234c7eb8410",
@@ -123686,6 +123729,7 @@
       "7b6e9b32a538a6ec326822fdeca8c3e8f0de9972874bdfd535e1294388e7447a": "12b54bf6bf277791445c2618065ec88e0302957c",
       "36a47cf50a585cafc812e19ef7646ad1556a5de90440d9dcb06f373926cd68ea": "cdbde4e73d49ed3a682b99f66c231eb3dfd90dc7",
       "d5eb00ce8a584ca185732cbbab7d99665f43023c1ef8d1237154d3431270b907": "fc398ab4e13ca6bfef3366ed3391b1050e0eb5e8",
+      "e331a487349cc6c1178ac7c84d7a5721b43450aa837ce5f697af14d8f1d1dce6": "0a8aa300042cdc8fdeb825ddaa840b59fad63f92",
       "cbbf40e1d6c406c5ebc74860dddd3530411f5913639372e1597f07a6131af5db": "e92910e20092577a4523a6b39d578a71d4de7085",
       "70f7906d68acbc3630b6e7792ebb485288b05ca72c6d4c243e07e230aae8d1e4": "1b3b22092f30c4d1b2c15f04d1670eb1e9fbea07",
       "b6e770df3f83ec559e2727357224eb8d31666402fc673f5b77586a465fdfbde3": "4e4a440cae46f3889d20234aebd7f8d5f522e22c",
@@ -123729,12 +123773,14 @@
       "1c3ec20824a58e5f5cbf47ccc2c91a10f34d21cfa2791b3413cea89b0c920db8": "5142f205912869b673a71480c5828b1eaed782a8",
       "9e9ad1123f9680bcb76fd3c33b9a77ffa64823f57d2d16136e3b674d7226d77c": "ecf01eda815909f1facec62abf3594eaa8d11075",
       "b9fe3ad49ab66038dd14292482fad157de828c29a24c1c6f3c5639bd5ed513a2": "aed2cb663b6370efb10969a3373fd84c558edb4f",
+      "f885f2cc79b5c0120ca316b0db360183c2b9a60bc727cbe211b7518e12bd5548": "712816a3c41baf4129e23d645305a536e03d69de",
       "61c9a0034ad19fc7199ff87785e2818712ea01bf1633bf9315166ffac9669a44": "891407e147b2c022ebedf8c51fe3a2f497304906",
       "71994d72072f0c1b554209a9055bbdbf6045df73999720ed3432ac072f394aba": "bf6b379c204da77dece1aedf83ff35227a623e5d",
       "2a76f023dc578804c6bcd58ed514ffc04fcb433b3bd75d4452575ffda57a0707": "5992277debadeb64d1c1c64b0a92d9293eaf7e4a",
       "2bd8ce118bcac5efde1bd7df71f96040d6750e0b1f495cec1af8c86d13c88e75": "53bc1f283cdf00fa2efbb79f2e36d4c8038d743a",
       "2e93af5848080ea04d17a7841b742f009330d30e4ff40c3410547581d921c892": "7bb26d1e5d1e930515219cb18bcde5b7b23e2eda",
       "42dd3415b17e06d3ae8c7e8794cb2cbe76d6755ebe5b949660d251426818dbc1": "43d114ed19550da818889dd3d002f0caa4b0be1f",
+      "a0cdb87bb7753c9a1a1d99b83f58ace4bcd54dee41211d9d2c96fe06098b3590": "cef6a6e78989a595700337c15b79155523935333",
       "4c881254c5aa505ca78dcdb59e3d91ed73786c79507ab9261021771dfc0f5126": "a5f4a7a627b3083c979f6ebe1fabc5d2df6d083b",
       "00adf65096bc7f3d64a6d996410f4d5b636223886bd0ced28d1576e82ef4788e": "4a94719ee5d0e3f2b981498f70efc1b8f1cef325",
       "7d2a7bfe2d46915eb3aa547860425ce17fb3deece0758d7d8c2caad7d1e4ee7e": "19729b51bdab60c42aafef6e20ea9234c7eb8410",
@@ -137907,6 +137953,9 @@
       ],
       ".variants/neocd_aed2cb66.srm": [
         "aed2cb663b6370efb10969a3373fd84c558edb4f"
+      ],
+      ".variants/neocdz.zip.712816a3": [
+        "712816a3c41baf4129e23d645305a536e03d69de"
       ],
       ".variants/neocdz.zip.891407e1": [
         "891407e147b2c022ebedf8c51fe3a2f497304906"

@@ -4,7 +4,7 @@
   "platform": "recalbox",
   "display_name": "Recalbox",
   "version": "1.0",
-  "generated": "2026-08-07T12:30:07Z",
+  "generated": "2026-08-07T16:16:21Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -230,8 +230,8 @@
       }
     }
   ],
-  "total_files": 1178,
-  "total_size": 2477465695,
+  "total_files": 1181,
+  "total_size": 2485059730,
   "files": [
     {
       "dest": "3do/panafz1.bin",
@@ -4956,6 +4956,24 @@
       ]
     },
     {
+      "dest": "neocd.zip",
+      "sha1": "cef6a6e78989a595700337c15b79155523935333",
+      "size": 429431,
+      "repo_path": "bios/SNK/Neo Geo CD/neocd.zip",
+      "cores": [
+        "Geolith"
+      ]
+    },
+    {
+      "dest": "irrmaze.zip",
+      "sha1": "0a8aa300042cdc8fdeb825ddaa840b59fad63f92",
+      "size": 5067452,
+      "repo_path": "bios/SNK/Neo Geo/irrmaze.zip",
+      "cores": [
+        "Geolith"
+      ]
+    },
+    {
       "dest": "ROM",
       "sha1": "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37",
       "size": 131072,
@@ -7419,6 +7437,15 @@
       "repo_path": "bios/NEC/PC-88/font3.rom",
       "cores": [
         "QUASI88"
+      ]
+    },
+    {
+      "dest": "boot.bin",
+      "sha1": "8951d1bb219ab2ff8583033d2119c899cc81f18c",
+      "size": 2097152,
+      "repo_path": "bios/Sega/Dreamcast/dc_bios.bin",
+      "cores": [
+        "RetroDream"
       ]
     },
     {

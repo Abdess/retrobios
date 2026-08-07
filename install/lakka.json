@@ -4,7 +4,7 @@
   "platform": "lakka",
   "display_name": "Lakka",
   "version": "1.0",
-  "generated": "2026-08-07T12:30:00Z",
+  "generated": "2026-08-07T16:16:14Z",
   "base_destination": "system",
   "detect": [
     {
@@ -15,8 +15,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 1628,
-  "total_size": 4189474903,
+  "total_files": 1630,
+  "total_size": 4194971786,
   "files": [
     {
       "dest": "3do_arcade_saot.bin",
@@ -6296,6 +6296,24 @@
       "repo_path": "bios/BBK/GAM4980/gam4980/E.BIN",
       "cores": [
         "GAM4980"
+      ]
+    },
+    {
+      "dest": "neocd.zip",
+      "sha1": "cef6a6e78989a595700337c15b79155523935333",
+      "size": 429431,
+      "repo_path": "bios/SNK/Neo Geo CD/neocd.zip",
+      "cores": [
+        "Geolith"
+      ]
+    },
+    {
+      "dest": "irrmaze.zip",
+      "sha1": "0a8aa300042cdc8fdeb825ddaa840b59fad63f92",
+      "size": 5067452,
+      "repo_path": "bios/SNK/Neo Geo/irrmaze.zip",
+      "cores": [
+        "Geolith"
       ]
     },
     {

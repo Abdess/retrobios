@@ -4,7 +4,7 @@
   "platform": "batocera",
   "display_name": "Batocera",
   "version": "1.0",
-  "generated": "2026-08-07T12:29:26Z",
+  "generated": "2026-08-07T16:30:30Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -7242,9 +7242,9 @@
     },
     {
       "dest": "CARTS.SHA",
-      "sha1": "69dd7344e4dfa7e250973a71bbb3e8aa6fb08d81",
+      "sha1": "bf5fb954db868e523febccc68549ed9187961076",
       "size": 33152,
-      "repo_path": "bios/Microsoft/MSX/CARTS.SHA",
+      "repo_path": "bios/Microsoft/MSX/.variants/CARTS.SHA.bf5fb954",
       "cores": [
         "fMSX"
       ]

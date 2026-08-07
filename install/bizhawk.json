@@ -4,7 +4,7 @@
   "platform": "bizhawk",
   "display_name": "BizHawk",
   "version": "1.0",
-  "generated": "2026-08-06T18:09:34Z",
+  "generated": "2026-08-07T16:15:44Z",
   "base_destination": "Firmware",
   "detect": [
     {
@@ -19,8 +19,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 537,
-  "total_size": 2548297316,
+  "total_files": 538,
+  "total_size": 2548313700,
   "files": [
     {
       "dest": "panafz1.bin",
@@ -3015,6 +3015,15 @@
       "repo_path": "bios/Nintendo/Nintendo DS/dsi_sd_card.bin",
       "cores": [
         "melonDS"
+      ]
+    },
+    {
+      "dest": "gba_bios.bin",
+      "sha1": "300c20df6731a33952ded8c436f7f186d25d3492",
+      "size": 16384,
+      "repo_path": "bios/Nintendo/Game Boy Advance/GBA_bios.rom",
+      "cores": [
+        "mGBA"
       ]
     },
     {

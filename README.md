@@ -9,7 +9,7 @@
 
 Complete BIOS and firmware packs for Batocera, BizHawk, EmuDeck, Lakka, MiSTer FPGA, ROCKNIX, Recalbox, RetroArch, RetroBat, RetroDECK, RetroPie, and RomM.
 
-**7,646** verified files across **396** systems, ready to extract into your emulator's BIOS directory.
+**7,649** verified files across **396** systems, ready to extract into your emulator's BIOS directory.
 
 ## Quick Install
 
@@ -50,13 +50,13 @@ Pick your platform, download the ZIP, extract to the BIOS path.
 ## What's included
 
 BIOS, firmware, and system files for consoles from Atari to PlayStation 3.
-Each file is checked against the emulator's source code to match what the code actually loads at runtime.
+Every file passes its platform's own verification; where an emulator profile exists, the expected hashes and sizes are read from the emulator's source code (the Source-backed column below).
 
 - **12 platforms** supported with platform-specific verification
 - **310 emulators** profiled from source (RetroArch cores + standalone)
 - **396 systems** covered (NES, SNES, PlayStation, Saturn, Dreamcast, ...)
-- **7,646 files** verified with MD5, SHA1, CRC32 checksums
-- **9628 MB** total collection size
+- **7,649 files** verified with MD5, SHA1, CRC32 checksums
+- **9635 MB** total collection size
 
 ## Supported systems
 
@@ -72,7 +72,7 @@ Full list with per-file details: **[https://abdess.github.io/retrobios/](https:/
 | BizHawk | 118/118 (100.0%) | 118 | 0 | 0 | 4/118 (3%) |
 | EmuDeck | 161/161 (100.0%) | 161 | 0 | 0 | 15/161 (9%) |
 | Lakka | 530/530 (100.0%) | 530 | 0 | 0 | 118/530 (22%) |
-| MiSTer FPGA | 65/65 (100.0%) | 65 | 0 | 0 | 0/65 (0%) |
+| MiSTer FPGA | 65/65 (100.0%) | 65 | 0 | 0 | - |
 | ROCKNIX | 38/38 (100.0%) | 38 | 0 | 0 | 29/38 (76%) |
 | Recalbox | 346/346 (100.0%) | 346 | 0 | 0 | 83/346 (24%) |
 | RetroArch | 530/530 (100.0%) | 530 | 0 | 0 | 118/530 (22%) |
@@ -82,7 +82,7 @@ Full list with per-file details: **[https://abdess.github.io/retrobios/](https:/
 | RomM | 374/374 (100.0%) | 374 | 0 | 0 | 84/374 (22%) |
 
 Coverage is measured against the file list each platform declares, using that platform's own verification mode.
-Source-backed counts the files whose expectations were also read from an emulator's source code; the rest rely on the platform list alone.
+Source-backed counts the files whose expectations were also read from an emulator's source code; the rest rely on the platform list alone. A dash means no profiled emulator applies to the platform, whose own source is then the only authority.
 Where platform lists and emulator source code disagree, the differences are tracked in the [gap analysis](https://abdess.github.io/retrobios/gaps/).
 
 ## Build your own pack
@@ -124,7 +124,9 @@ The [documentation site](https://abdess.github.io/retrobios/) provides:
 ## How it works
 
 Documentation and metadata can drift from what emulators actually load.
-To keep packs accurate, each file is checked against the emulator's source code.
+To keep packs accurate, platform lists are checked against emulator source code, file by file where a profile exists; when the two disagree, the code wins.
+
+Hashes document what emulator code loads and accepts, not dump provenance; that boundary, and how it relates to preservation catalogs such as No-Intro, is drawn in the [FAQ](https://abdess.github.io/retrobios/wiki/faq/#are-these-files-verified-against-original-hardware-dumps).
 
 1. **Read emulator source code** - trace every file the code loads, its expected hash and size
 2. **Cross-reference with platforms** - match against what each platform declares
@@ -154,4 +156,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software.
 The legal reasoning is laid out in the [FAQ](https://abdess.github.io/retrobios/wiki/faq/#is-this-legal).
 
-*Auto-generated on 2026-08-07T14:41:24Z*
+*Auto-generated on 2026-08-07T16:58:57Z*
