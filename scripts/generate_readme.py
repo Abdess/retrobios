@@ -273,15 +273,17 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
     for name, cov in sorted(coverages.items(), key=lambda x: x[1]["platform"]):
         pct = f"{cov['percentage']:.1f}%"
         gt = cov["ground_truth"]
-        gt_pct = (
-            f"{gt['with_validation'] / gt['total'] * 100:.0f}%"
-            if gt["total"]
-            else "0%"
-        )
+        if not gt.get("applicable", True):
+            gt_cell = "-"
+        elif gt["total"]:
+            gt_pct = f"{gt['with_validation'] / gt['total'] * 100:.0f}%"
+            gt_cell = f"{gt['with_validation']}/{gt['total']} ({gt_pct})"
+        else:
+            gt_cell = "0/0"
         lines.append(
             f"| {cov['platform']} | {cov['present']}/{cov['total']} ({pct}) | "
             f"{cov['verified']} | {cov['untested']} | {cov['missing']} | "
-            f"{gt['with_validation']}/{gt['total']} ({gt_pct}) |"
+            f"{gt_cell} |"
         )
 
     lines.extend(
@@ -291,7 +293,8 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
             " using that platform's own verification mode.",
             "Source-backed counts the files whose expectations were also read"
             " from an emulator's source code; the rest rely on the platform"
-            " list alone.",
+            " list alone. A dash means no profiled emulator applies to the"
+            " platform, whose own source is then the only authority.",
             "Where platform lists and emulator source code disagree, the"
             f" differences are tracked in the [gap analysis]({SITE_URL}gaps/).",
             "",

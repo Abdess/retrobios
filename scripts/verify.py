@@ -855,6 +855,7 @@ def verify_platform(
             "with_validation": with_validation,
             "platform_only": total - with_validation,
             "total": total,
+            "applicable": bool(resolve_platform_cores(config, profiles)),
         },
     }
 

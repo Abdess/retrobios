@@ -1539,11 +1539,13 @@ def generate_gap_analysis(
             else str(u)
         )
         gt = cov["ground_truth"]
-        gt_pct = (
-            f"{gt['with_validation'] / gt['total'] * 100:.0f}%"
-            if gt["total"]
-            else "0%"
-        )
+        if not gt.get("applicable", True):
+            gt_cell = "-"
+        elif gt["total"]:
+            gt_pct = f"{gt['with_validation'] / gt['total'] * 100:.0f}%"
+            gt_cell = f"{gt['with_validation']}/{gt['total']} ({gt_pct})"
+        else:
+            gt_cell = "0/0"
         lines.append(
             f"| [{display}](platforms/{pname}.md) "
             f"| {cov['total']} "
@@ -1551,7 +1553,7 @@ def generate_gap_analysis(
             f"| {untested_str} "
             f"| {missing_str} "
             f"| {cov['mode']} "
-            f"| {gt['with_validation']}/{gt['total']} ({gt_pct}) |"
+            f"| {gt_cell} |"
         )
     lines.extend([
         "",
@@ -1560,7 +1562,8 @@ def generate_gap_analysis(
         "measure the repository against the file list each platform declares. "
         "Source-backed counts the files whose expectations were also read "
         "from an emulator's source code; the rest rely on the platform list "
-        "alone.",
+        "alone. A dash means no profiled emulator applies to the platform, "
+        "whose own source is then the only authority.",
         "",
     ])
 
