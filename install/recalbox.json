@@ -4,7 +4,7 @@
   "platform": "recalbox",
   "display_name": "Recalbox",
   "version": "1.0",
-  "generated": "2026-08-06T17:49:23Z",
+  "generated": "2026-08-07T12:30:07Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -1980,7 +1980,7 @@
       "dest": "scv/upd7801g.s01",
       "sha1": "6e89d1227581c76441a53d605f9e324185f1da33",
       "size": 4096,
-      "repo_path": "bios/NEC/PC Engine/upd7801g.s01",
+      "repo_path": "bios/Epoch/Super Cassette Vision/upd7801g.s01",
       "cores": null
     },
     {

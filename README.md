@@ -130,6 +130,8 @@ To keep packs accurate, each file is checked against the emulator's source code.
 ## Contributors
 
 <a href="https://github.com/PixNyb"><img src="https://avatars.githubusercontent.com/u/40770831?v=4" width="50" title="PixNyb"></a>
+<a href="https://github.com/Takiiiiiii"><img src="https://avatars.githubusercontent.com/u/40776277?v=4" width="50" title="Takiiiiiii"></a>
+<a href="https://github.com/Takiiiiiiii"><img src="https://avatars.githubusercontent.com/u/43725718?v=4" width="50" title="Takiiiiiiii"></a>
 <a href="https://github.com/monster-penguin"><img src="https://avatars.githubusercontent.com/u/266009589?v=4" width="50" title="monster-penguin"></a>
 <a href="https://github.com/zjl88858"><img src="https://avatars.githubusercontent.com/u/29473998?v=4" width="50" title="zjl88858"></a>
 
@@ -146,4 +148,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 This repository provides BIOS files for personal backup and archival purposes.
 
-*Auto-generated on 2026-08-07T10:51:47Z*
+*Auto-generated on 2026-08-07T12:31:35Z*
