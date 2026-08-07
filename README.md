@@ -81,6 +81,9 @@ Full list with per-file details: **[https://abdess.github.io/retrobios/](https:/
 | RetroPie | 530/530 (100.0%) | 530 | 0 | 0 |
 | RomM | 374/374 (100.0%) | 374 | 0 | 0 |
 
+Coverage is measured against the file list each platform declares, using that platform's own verification mode.
+Where platform lists and emulator source code disagree, the differences are tracked in the [gap analysis](https://abdess.github.io/retrobios/gaps/).
+
 ## Build your own pack
 
 Clone the repo and generate packs for any platform, emulator, or system:
@@ -146,6 +149,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ## License
 
-This repository provides BIOS files for personal backup and archival purposes.
+The scripts and tooling are released under the [MIT License](LICENSE).
+The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software.
+The legal reasoning is laid out in the [FAQ](https://abdess.github.io/retrobios/wiki/faq/#is-this-legal).
 
-*Auto-generated on 2026-08-07T12:31:35Z*
+*Auto-generated on 2026-08-07T13:24:31Z*

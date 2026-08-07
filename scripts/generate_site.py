@@ -1435,6 +1435,7 @@ def generate_gap_analysis(
     coverages: dict,
     db: dict,
     data_names: set[str] | None = None,
+    registry: dict | None = None,
 ) -> str:
     """Generate a unified gap analysis page.
 
@@ -1545,7 +1546,55 @@ def generate_gap_analysis(
             f"| {missing_str} "
             f"| {cov['mode']} |"
         )
-    lines.append("")
+    lines.extend([
+        "",
+        "Verification follows each platform's own runtime check "
+        "([how each mode works](wiki/verification-modes.md)): the counts "
+        "measure the repository against the file list each platform declares.",
+        "",
+    ])
+
+    # ---- Section 1b: platform lists vs emulator source ----
+
+    from truth import diff_platform_truth, generate_platform_truth
+
+    div_rows = []
+    for pname, cov in sorted(coverages.items(), key=lambda x: x[1]["platform"]):
+        truth_data = generate_platform_truth(
+            pname, cov["config"], (registry or {}).get(pname, {}), profiles, db
+        )
+        s = diff_platform_truth(truth_data, cov["config"])["summary"]
+        div_rows.append(
+            f"| [{cov['platform']}](platforms/{pname}.md) "
+            f"| {s['total_missing']} "
+            f"| {s['total_extra_phantom'] + s['total_extra_unprofiled']} "
+            f"| {s['total_hash_mismatch']} "
+            f"| {s['total_required_mismatch']} |"
+        )
+
+    lines.extend([
+        "## Platform Lists vs Emulator Source",
+        "",
+        "Platform file lists are scraped as-is from each upstream project. "
+        "Emulator profiles are read from source code. The two do not always "
+        "agree, and this table counts the differences. Packs follow the "
+        "platform contract; these numbers show where that contract diverges "
+        "from what the code loads.",
+        "",
+        "| Platform | Missing from list | Phantom | Hash conflict | Required status |",
+        "|----------|------------------:|--------:|--------------:|----------------:|",
+        *div_rows,
+        "",
+        "- **Missing from list**: a profiled emulator loads the file, the platform list does not mention it",
+        "- **Phantom**: on the platform list, loaded by no profiled emulator",
+        "- **Hash conflict**: the platform list and the emulator source expect different hashes",
+        "- **Required status**: required/optional differs between list and code",
+        "",
+        "The same comparison drives `scripts/exporter/`: each platform's "
+        "corrected list can be regenerated in its native format "
+        "(System.dat, es_bios.xml, batocera-systems.json, ...).",
+        "",
+    ])
 
     # ---- Section 2: Problem files ----
 
@@ -2538,7 +2587,7 @@ def main():
     print("Generating gap analysis page...")
     write_if_changed(
         str(docs / "gaps.md"),
-        generate_gap_analysis(profiles, coverages, db, suppl_names),
+        generate_gap_analysis(profiles, coverages, db, suppl_names, registry),
     )
 
     # Wiki pages: copy manually maintained sources + generate dynamic ones

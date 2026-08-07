@@ -276,6 +276,11 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
     lines.extend(
         [
             "",
+            "Coverage is measured against the file list each platform declares,"
+            " using that platform's own verification mode.",
+            "Where platform lists and emulator source code disagree, the"
+            f" differences are tracked in the [gap analysis]({SITE_URL}gaps/).",
+            "",
             "## Build your own pack",
             "",
             "Clone the repo and generate packs for any platform, emulator, or system:",
@@ -358,7 +363,11 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
             "",
             "## License",
             "",
-            "This repository provides BIOS files for personal backup and archival purposes.",
+            "The scripts and tooling are released under the [MIT License](LICENSE).",
+            "The BIOS and firmware files are not covered by that license: they are"
+            " third-party system software, preserved and provided for personal"
+            " backup, archival, and interoperability with emulation software.",
+            f"The legal reasoning is laid out in the [FAQ]({SITE_URL}wiki/faq/#is-this-legal).",
             "",
             f"*Auto-generated on {ts}*",
         ]
