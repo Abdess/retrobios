@@ -5222,5 +5222,31 @@ struct BurnDriver BurnDrvneogeo = {
             self.assertEqual(only_alpha["shared-system"], {"a.bin"})
 
 
+    def test_227_manifest_injected_compressed(self):
+        """The manifest is deflated whichever injection path runs."""
+        import json as _json
+
+        from generate_pack import inject_manifest
+
+        manifest = {"files": [{"path": f"f{i}.bin"} for i in range(200)]}
+        raw = _json.dumps(manifest, indent=2, ensure_ascii=False)
+        sizes = []
+        with tempfile.TemporaryDirectory() as tmpdir:
+            for preexisting in (False, True):
+                path = os.path.join(tmpdir, f"pack{int(preexisting)}.zip")
+                with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as zf:
+                    zf.writestr("bios.bin", b"x" * 4096)
+                    if preexisting:
+                        zf.writestr("manifest.json", "{}")
+                inject_manifest(path, manifest)
+                with zipfile.ZipFile(path) as zf:
+                    info = zf.getinfo("manifest.json")
+                    self.assertEqual(info.compress_type, zipfile.ZIP_DEFLATED)
+                    self.assertEqual(_json.loads(zf.read("manifest.json")), manifest)
+                    sizes.append(info.compress_size)
+        self.assertLess(sizes[0], len(raw))
+        self.assertEqual(sizes[0], sizes[1])
+
+
 if __name__ == "__main__":
     unittest.main()

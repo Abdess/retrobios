@@ -3471,8 +3471,10 @@ def inject_manifest(zip_path: str, manifest: dict) -> None:
         has_manifest = "manifest.json" in zf.namelist()
 
     if not has_manifest:
-        # Fast path: append directly
-        with zipfile.ZipFile(zip_path, "a") as zf:
+        # Fast path: append directly. Append mode defaults to ZIP_STORED,
+        # which would leave the manifest uncompressed and give the same pack
+        # two different byte layouts depending on the path taken here.
+        with zipfile.ZipFile(zip_path, "a", zipfile.ZIP_DEFLATED) as zf:
             zf.writestr("manifest.json", manifest_json)
     else:
         # Rebuild to replace existing manifest
