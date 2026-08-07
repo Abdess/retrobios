@@ -12,6 +12,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import shutil
 import sys
@@ -24,6 +25,7 @@ from common import (
     load_database,
     load_emulator_profiles,
     require_yaml,
+    unique_emulator_profiles,
     write_if_changed,
 )
 
@@ -242,9 +244,7 @@ def generate_home(
     total_size = db.get("total_size", 0)
     ts = _timestamp()
 
-    unique = {
-        k: v for k, v in profiles.items() if v.get("type") not in ("alias", "test")
-    }
+    unique = unique_emulator_profiles(profiles)
     emulator_count = len(unique)
 
     # Classification stats
@@ -321,6 +321,16 @@ def generate_home(
             f"[Pack]({RELEASE_URL}){{ .md-button .md-button--primary }} |"
         )
 
+    lines.extend(
+        [
+            "",
+            "Verification is the check each platform runs itself, replicated "
+            "from its source code. RetroArch only tests that files exist; "
+            "Batocera compares MD5 checksums. "
+            "[How each mode works](wiki/verification-modes.md).",
+        ]
+    )
+
     # Quick start (collapsible -- secondary info)
     lines.extend(
         [
@@ -393,6 +403,27 @@ def generate_home(
     return "\n".join(lines) + "\n"
 
 
+def compute_stats(db: dict, coverages: dict, profiles: dict) -> dict:
+    unique = unique_emulator_profiles(profiles)
+    systems: set[str] = set()
+    for p in unique.values():
+        systems.update(p.get("systems", []))
+    return {
+        "generated_at": _timestamp(),
+        "files": db.get("total_files", 0),
+        "size_bytes": db.get("total_size", 0),
+        "platforms": len(coverages),
+        "emulators": len(unique),
+        "systems": len(systems),
+        "source": REPO_URL,
+        "downloads": RELEASE_URL,
+    }
+
+
+def generate_stats(stats: dict) -> str:
+    return json.dumps(stats, indent=2) + "\n"
+
+
 # Platform pages
 
 
@@ -430,6 +461,15 @@ def generate_platform_index(coverages: dict) -> str:
             f"{cov['present']:,} | {mode_html} | "
             f"[Pack]({RELEASE_URL}){{ .md-button .md-button--primary }} |"
         )
+
+    lines.extend(
+        [
+            "",
+            "Verification is the check each platform runs itself, replicated "
+            "from its source code. "
+            "[How each mode works](../wiki/verification-modes.md).",
+        ]
+    )
 
     return "\n".join(lines) + "\n"
 
@@ -2447,6 +2487,9 @@ def main():
     write_if_changed(
         str(docs / "index.md"), generate_home(db, coverages, profiles, registry)
     )
+
+    stats = compute_stats(db, coverages, profiles)
+    write_if_changed(str(docs / "stats.json"), generate_stats(stats))
 
     # Build system_id -> manufacturer page map (needed by all generators)
     print("Building system cross-reference map...")

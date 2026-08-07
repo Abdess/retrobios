@@ -15,13 +15,14 @@ import json
 import os
 import sys
 from datetime import datetime, timezone
-from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (
     list_registered_platforms,
     load_database,
+    load_emulator_profiles,
     load_platform_config,
+    unique_emulator_profiles,
     write_if_changed,
 )
 from verify import verify_platform
@@ -116,35 +117,25 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
         except FileNotFoundError:
             pass
 
-    emulator_count = (
-        sum(
-            1
-            for f in Path("emulators").glob("*.yml")
-            if not f.name.endswith(".old.yml")
-        )
-        if Path("emulators").exists()
-        else 0
+    profiles = unique_emulator_profiles(
+        load_emulator_profiles("emulators", skip_aliases=False)
     )
+    emulator_count = len(profiles)
 
-    # Count systems from emulator profiles
     system_ids: set[str] = set()
-    emu_dir = Path("emulators")
-    if emu_dir.exists():
-        try:
-            import yaml
-
-            for f in emu_dir.glob("*.yml"):
-                if f.name.endswith(".old.yml"):
-                    continue
-                with open(f) as fh:
-                    p = yaml.safe_load(fh) or {}
-                system_ids.update(p.get("systems", []))
-        except ImportError:
-            pass
+    for p in profiles.values():
+        system_ids.update(p.get("systems", []))
 
     lines = [
         '<p align="center">',
         '  <img src=".github/assets/banner.png" alt="RetroBIOS" width="400">',
+        "</p>",
+        "",
+        '<p align="center">',
+        '  <a href="https://github.com/Abdess/retrobios/actions/workflows/build.yml">'
+        '<img src="https://github.com/Abdess/retrobios/actions/workflows/build.yml/badge.svg" alt="Build"></a>',
+        '  <a href="https://github.com/Abdess/retrobios/actions/workflows/deploy-site.yml">'
+        '<img src="https://github.com/Abdess/retrobios/actions/workflows/deploy-site.yml/badge.svg" alt="Site"></a>',
         "</p>",
         "",
         f"Complete BIOS and firmware packs for "

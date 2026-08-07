@@ -773,6 +773,13 @@ def load_emulator_profiles(
     return profiles
 
 
+def unique_emulator_profiles(profiles: dict[str, dict]) -> dict[str, dict]:
+    """Profiles counting as distinct emulators (aliases and tests excluded)."""
+    return {
+        k: v for k, v in profiles.items() if v.get("type") not in ("alias", "test")
+    }
+
+
 def group_identical_platforms(
     platforms: list[str],
     platforms_dir: str,
