@@ -3,134 +3,108 @@ type: libretro
 core_classification: official_port
 source: "https://github.com/libretro/geolith-libretro"
 upstream: "https://gitlab.com/jgemu/geolith"
-profiled_date: "2026-03-21"
-core_version: "0.3.0"
+profiled_date: "2026-08-07"
+source_commit: "d0297113924848c60866e980a420d14ca7208d56"
+upstream_commit: "7ed2ef95a446ffb9bf17b6536d24c108310c94da"
+core_version: "0.4.1"
 display_name: "SNK - Neo Geo AES/MVS (Geolith)"
 cores:
   - geolith
 systems:
   - snk-neogeo-mvs
   - snk-neogeo-aes
+  - snk-neogeo-cd
 
 notes: |
-  Geolith is a highly accurate Neo Geo AES and MVS emulator using .NEO format
-  ROMs only. BIOS files must be provided as MAME-format ZIP archives in the
-  system directory. The core selects which ZIP to open based on the
-  "geolith_system_type" core option (libretro/libretro.c:1017-1018):
-    - AES mode  -> aes.zip
-    - MVS mode  -> neogeo.zip
-    - Uni mode  -> neogeo.zip (loads uni-bios_4_0.rom from it)
+  Geolith emulates the Neo Geo AES, MVS, CD, and CDZ. Cartridge systems use
+  .NEO format ROMs; CD systems use .cue or .chd disc images. System ROMs come
+  from MAME-format ZIP archives in the system directory.
 
-  Inside the ZIP, specific ROM files are extracted by filename
-  (src/geo.c:162-241):
-    1. One 68K BIOS ROM, selected by system type + region:
-       - AES Japan:  neo-po.bin
-       - AES other:  neo-epo.bin
-       - MVS US:     sp-u2.sp1
-       - MVS Japan:  japan-j3.bin
-       - MVS Asia:   sp-45.sp1
-       - MVS Europe: sp-s2.sp1
-       - Universe:   uni-bios_4_0.rom
-    2. 000-lo.lo  (zoom lookup table, always required)
-    3. sfix.sfix  (FIX layer tiles, required for MVS/Uni, not AES)
-    4. sm1.sm1    (Z80 sound BIOS, required for MVS/Uni, not AES)
+  Cartridge content opens aes.zip (System Type = AES, default) or neogeo.zip
+  (MVS and Universe BIOS) (libretro/libretro.c:1231-1234). CD content opens
+  neocd.zip (Front/Top Loader) or neocdz.zip (CDZ, default, and CD Universe
+  BIOS) (libretro/libretro.c:1222-1230); Front/Top Loader additionally reads
+  000-lo.lo from neocdz.zip, so neocdz.zip is needed in every CD mode
+  (libretro/libretro.c:1241-1248). The Irritating Maze in MVS mode loads
+  236-bios.sp1 from irrmaze.zip for trackball support; without it the game
+  runs but the trackball does not work (libretro/libretro.c:1300-1311).
 
-  The AES mode only needs the 68K BIOS + 000-lo.lo. MVS and Universe BIOS
-  modes additionally need sfix.sfix and sm1.sm1.
+  Inside the opened archive, members are extracted by exact filename
+  (src/geo.c:174-271). One 68K BIOS is selected by system type and region
+  (defaults: System Type AES, Region USA):
+    - AES Japan:          neo-po.bin
+    - AES other regions:  neo-epo.bin
+    - MVS USA:            sp-u2.sp1
+    - MVS Japan:          japan-j3.bin
+    - MVS Asia:           sp-45.sp1
+    - MVS Europe:         sp-s2.sp1
+    - Universe BIOS:      uni-bios_4_0.rom
+    - CD Front Loader:    front-sp1.bin
+    - CD Top Loader:      top-sp1.bin
+    - CDZ:                neocd.bin
+    - CD Universe BIOS:   uni-bioscd33.rom
+  000-lo.lo is required in every mode; only the Front/Top Loader tolerates
+  its absence from neocd.zip because it comes from neocdz.zip instead
+  (src/geo.c:234-243, 273-285). sfix.sfix and sm1.sm1 are required for MVS
+  and Universe BIOS modes only (src/geo.c:245-267).
+
+  The core performs no hash or size validation on System ROMs. CD BIOS family
+  detection and the optional CD speed hack patches use byte patterns and
+  apply only when the 68K BIOS is at least 512 KiB (src/geo_cd.c:1837-1859,
+  1904-1924). Upstream declares the expected archive MD5s through the Jolly
+  Good API BIOS list (jg.c:212-223); the md5 fields on the archives below
+  are copied from it.
 
 files:
   # -----------------------------------------------------------
-  # neogeo.zip - MVS and Universe BIOS
+  # BIOS archives (MAME format, opened by name in system dir)
   # -----------------------------------------------------------
+  - name: "aes.zip"
+    system: snk-neogeo-aes
+    required: true
+    md5: "ad9585c72130c56f04ae26aae87c289d"
+    note: "Neo Geo AES System ROMs. Opened when System Type is AES (default)."
+    source_ref: "libretro/libretro.c:1231-1234, jg.c:213-214"
 
-  # MVS 68K BIOS ROMs (one required per region)
-  - name: "sp-u2.sp1"
-    archive: neogeo.zip
+  - name: "neogeo.zip"
     system: snk-neogeo-mvs
     required: true
-    size: 131072
-    crc32: "e72943de"
-    note: "MVS USA ver. 5 (2 slot) - default for US region"
-    source_ref: "src/geo.c:174"
+    md5: "00dad01abdbf8ea9e79ad2fe11bdb182"
+    note: "Neo Geo MVS System ROMs. Opened for MVS and Universe BIOS modes."
+    source_ref: "libretro/libretro.c:1231-1234, jg.c:215-216"
 
-  - name: "japan-j3.bin"
-    archive: neogeo.zip
-    system: snk-neogeo-mvs
+  - name: "neocd.zip"
+    system: snk-neogeo-cd
     required: false
-    size: 131072
-    crc32: "dff6d41f"
-    note: "MVS Japan (J3) - default for JP region"
-    source_ref: "src/geo.c:177"
+    md5: "006a881532f2caffc3fe9fb5593f2ed5"
+    note: "Neo Geo CD Front/Top Loader System ROMs. Opened only when CD System is front or top loader."
+    source_ref: "libretro/libretro.c:1222-1229, jg.c:217-218"
 
-  - name: "sp-45.sp1"
-    archive: neogeo.zip
-    system: snk-neogeo-mvs
-    required: false
-    size: 524288
-    crc32: "03cc9f6a"
-    note: "NEO-MVH MV1C (Asia) - default for AS region"
-    source_ref: "src/geo.c:180"
-
-  - name: "sp-s2.sp1"
-    archive: neogeo.zip
-    system: snk-neogeo-mvs
-    required: false
-    size: 131072
-    crc32: "9036d879"
-    note: "MVS Asia/Europe ver. 5 (1 slot) - default for EU region"
-    source_ref: "src/geo.c:183"
-
-  # Universe BIOS (loaded from neogeo.zip when system type = uni)
-  - name: "uni-bios_4_0.rom"
-    archive: neogeo.zip
-    system: snk-neogeo-mvs
-    required: false
-    size: 131072
-    crc32: "a7aab458"
-    note: "Universe BIOS ver. 4.0 - only version supported by Geolith"
-    source_ref: "src/geo.c:189"
-
-  # Shared ROMs (required for MVS and Universe modes)
-  - name: "000-lo.lo"
-    archive: neogeo.zip
-    system: snk-neogeo-mvs
+  - name: "neocdz.zip"
+    system: snk-neogeo-cd
     required: true
-    size: 131072
-    crc32: "5a86cff2"
-    note: "Zoom lookup table (vertical shrink ROM)"
-    source_ref: "src/geo.c:207-208"
+    md5: "b31a246b69493c35194fe0bac120dc37"
+    note: "Neo Geo CDZ System ROMs. Opened for CDZ (default) and CD Universe BIOS; also supplies 000-lo.lo to Front/Top Loader mode."
+    source_ref: "libretro/libretro.c:1222-1248, jg.c:219-220"
 
-  - name: "sfix.sfix"
-    archive: neogeo.zip
+  - name: "irrmaze.zip"
     system: snk-neogeo-mvs
-    required: true
-    size: 131072
-    crc32: "c2ea0cfd"
-    note: "System FIX layer tiles (text layer)"
-    source_ref: "src/geo.c:218-219"
-
-  - name: "sm1.sm1"
-    archive: neogeo.zip
-    system: snk-neogeo-mvs
-    required: true
-    size: 131072
-    crc32: "94416d67"
-    note: "Z80 sound BIOS"
-    source_ref: "src/geo.c:229-230"
+    required: false
+    md5: "0e369df30a70e45547cef9e4078dc511"
+    note: "The Irritating Maze auxiliary BIOS. Loaded in MVS mode for trackball support; on failure the game runs without trackball."
+    source_ref: "libretro/libretro.c:1300-1311, jg.c:221-222"
 
   # -----------------------------------------------------------
-  # aes.zip - AES (Home Console)
+  # aes.zip members
   # -----------------------------------------------------------
-
-  # AES 68K BIOS ROMs (one required per region)
   - name: "neo-epo.bin"
     archive: aes.zip
     system: snk-neogeo-aes
     required: true
     size: 131072
     crc32: "d27a71f1"
-    note: "AES Asia/US/EU - default for non-JP regions"
-    source_ref: "src/geo.c:168"
+    note: "AES 68K BIOS, non-Japan regions. Default for Region USA."
+    source_ref: "src/geo.c:178-181"
 
   - name: "neo-po.bin"
     archive: aes.zip
@@ -138,15 +112,151 @@ files:
     required: false
     size: 131072
     crc32: "16d0c132"
-    note: "AES Japan - default for JP region"
-    source_ref: "src/geo.c:167-168"
+    note: "AES 68K BIOS, Japan region."
+    source_ref: "src/geo.c:178-181"
 
-  # Shared ROM (always required for AES)
   - name: "000-lo.lo"
     archive: aes.zip
     system: snk-neogeo-aes
     required: true
     size: 131072
     crc32: "5a86cff2"
-    note: "Zoom lookup table (same ROM as in neogeo.zip)"
-    source_ref: "src/geo.c:207-208"
+    note: "Zoom lookup table."
+    source_ref: "src/geo.c:234-243"
+
+  # -----------------------------------------------------------
+  # neogeo.zip members
+  # -----------------------------------------------------------
+  - name: "sp-u2.sp1"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: true
+    size: 131072
+    crc32: "e72943de"
+    note: "MVS 68K BIOS, USA. Default for Region USA."
+    source_ref: "src/geo.c:183-198"
+
+  - name: "japan-j3.bin"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 131072
+    crc32: "dff6d41f"
+    note: "MVS 68K BIOS, Japan."
+    source_ref: "src/geo.c:183-198"
+
+  - name: "sp-45.sp1"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 524288
+    crc32: "03cc9f6a"
+    note: "MVS 68K BIOS, Asia."
+    source_ref: "src/geo.c:183-198"
+
+  - name: "sp-s2.sp1"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 131072
+    crc32: "9036d879"
+    note: "MVS 68K BIOS, Europe."
+    source_ref: "src/geo.c:183-198"
+
+  - name: "uni-bios_4_0.rom"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 131072
+    crc32: "a7aab458"
+    note: "Universe BIOS 4.0, loaded when System Type is Universe BIOS. Emulated hardware type set by the geolith_unibios_hw option."
+    source_ref: "src/geo.c:200-203"
+
+  - name: "000-lo.lo"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: true
+    size: 131072
+    crc32: "5a86cff2"
+    note: "Zoom lookup table."
+    source_ref: "src/geo.c:234-243"
+
+  - name: "sfix.sfix"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: true
+    size: 131072
+    crc32: "c2ea0cfd"
+    note: "System FIX layer tiles. Loaded for MVS and Universe BIOS modes."
+    source_ref: "src/geo.c:245-255"
+
+  - name: "sm1.sm1"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: true
+    size: 131072
+    crc32: "94416d67"
+    note: "Z80 sound BIOS. Loaded for MVS and Universe BIOS modes."
+    source_ref: "src/geo.c:257-267"
+
+  # -----------------------------------------------------------
+  # neocd.zip members
+  # -----------------------------------------------------------
+  - name: "front-sp1.bin"
+    archive: neocd.zip
+    system: snk-neogeo-cd
+    required: false
+    note: "Neo Geo CD Front Loader 68K BIOS."
+    source_ref: "src/geo.c:204-207"
+
+  - name: "top-sp1.bin"
+    archive: neocd.zip
+    system: snk-neogeo-cd
+    required: false
+    note: "Neo Geo CD Top Loader 68K BIOS."
+    source_ref: "src/geo.c:208-211"
+
+  - name: "000-lo.lo"
+    archive: neocd.zip
+    system: snk-neogeo-cd
+    required: false
+    size: 131072
+    crc32: "5a86cff2"
+    note: "Zoom lookup table. Extraction is attempted but absence is tolerated in Front/Top Loader mode; the copy in neocdz.zip is used instead."
+    source_ref: "src/geo.c:234-243"
+
+  # -----------------------------------------------------------
+  # neocdz.zip members
+  # -----------------------------------------------------------
+  - name: "neocd.bin"
+    archive: neocdz.zip
+    system: snk-neogeo-cd
+    required: true
+    note: "Neo Geo CDZ 68K BIOS. Default for CD content."
+    source_ref: "src/geo.c:212-215"
+
+  - name: "uni-bioscd33.rom"
+    archive: neocdz.zip
+    system: snk-neogeo-cd
+    required: false
+    note: "Universe BIOS CD 3.3, loaded when CD System is CD Universe BIOS."
+    source_ref: "src/geo.c:216-219"
+
+  - name: "000-lo.lo"
+    archive: neocdz.zip
+    system: snk-neogeo-cd
+    required: true
+    size: 131072
+    crc32: "5a86cff2"
+    note: "Zoom lookup table. Read from neocdz.zip in every CD mode, including Front/Top Loader."
+    source_ref: "src/geo.c:234-243, 273-285, libretro/libretro.c:1241-1248"
+
+  # -----------------------------------------------------------
+  # irrmaze.zip member
+  # -----------------------------------------------------------
+  - name: "236-bios.sp1"
+    archive: irrmaze.zip
+    system: snk-neogeo-mvs
+    required: false
+    note: "The Irritating Maze auxiliary 68K BIOS, replaces the MVS BIOS to enable trackball input."
+    source_ref: "src/geo.c:286-299, libretro/libretro.c:1300-1311"
