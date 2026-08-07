@@ -53,7 +53,7 @@ BIOS, firmware, and system files for consoles from Atari to PlayStation 3.
 Each file is checked against the emulator's source code to match what the code actually loads at runtime.
 
 - **12 platforms** supported with platform-specific verification
-- **314 emulators** profiled from source (RetroArch cores + standalone)
+- **310 emulators** profiled from source (RetroArch cores + standalone)
 - **396 systems** covered (NES, SNES, PlayStation, Saturn, Dreamcast, ...)
 - **7,646 files** verified with MD5, SHA1, CRC32 checksums
 - **9628 MB** total collection size
@@ -119,7 +119,7 @@ The [documentation site](https://abdess.github.io/retrobios/) provides:
 - **Per-emulator profiles** with source code references for every file
 - **Per-system pages** showing which emulators and platforms cover each console
 - **Gap analysis** identifying missing files and undeclared core requirements
-- **Cross-reference** mapping files across 12 platforms and 314 emulators
+- **Cross-reference** mapping files across 12 platforms and 310 emulators
 
 ## How it works
 
@@ -154,4 +154,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software.
 The legal reasoning is laid out in the [FAQ](https://abdess.github.io/retrobios/wiki/faq/#is-this-legal).
 
-*Auto-generated on 2026-08-07T14:01:25Z*
+*Auto-generated on 2026-08-07T14:41:24Z*
