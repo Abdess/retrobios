@@ -1520,8 +1520,8 @@ def generate_gap_analysis(
     lines.extend([
         "## Verification by Platform",
         "",
-        "| Platform | Files | Verified | Untested | Missing | Mode |",
-        "|----------|------:|---------:|---------:|--------:|------|",
+        "| Platform | Files | Verified | Untested | Missing | Mode | Source-backed |",
+        "|----------|------:|---------:|---------:|--------:|------|--------------:|",
     ])
 
     for pname, cov in sorted(coverages.items(), key=lambda x: x[1]["platform"]):
@@ -1538,19 +1538,29 @@ def generate_gap_analysis(
             if u > 0
             else str(u)
         )
+        gt = cov["ground_truth"]
+        gt_pct = (
+            f"{gt['with_validation'] / gt['total'] * 100:.0f}%"
+            if gt["total"]
+            else "0%"
+        )
         lines.append(
             f"| [{display}](platforms/{pname}.md) "
             f"| {cov['total']} "
             f"| {cov['verified']} "
             f"| {untested_str} "
             f"| {missing_str} "
-            f"| {cov['mode']} |"
+            f"| {cov['mode']} "
+            f"| {gt['with_validation']}/{gt['total']} ({gt_pct}) |"
         )
     lines.extend([
         "",
         "Verification follows each platform's own runtime check "
         "([how each mode works](wiki/verification-modes.md)): the counts "
-        "measure the repository against the file list each platform declares.",
+        "measure the repository against the file list each platform declares. "
+        "Source-backed counts the files whose expectations were also read "
+        "from an emulator's source code; the rest rely on the platform list "
+        "alone.",
         "",
     ])
 

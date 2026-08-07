@@ -66,22 +66,23 @@ Full list with per-file details: **[https://abdess.github.io/retrobios/](https:/
 
 ## Coverage
 
-| Platform | Coverage | Verified | Untested | Missing |
-|----------|----------|----------|----------|---------|
-| Batocera | 353/353 (100.0%) | 353 | 0 | 0 |
-| BizHawk | 118/118 (100.0%) | 118 | 0 | 0 |
-| EmuDeck | 161/161 (100.0%) | 161 | 0 | 0 |
-| Lakka | 530/530 (100.0%) | 530 | 0 | 0 |
-| MiSTer FPGA | 65/65 (100.0%) | 65 | 0 | 0 |
-| ROCKNIX | 38/38 (100.0%) | 38 | 0 | 0 |
-| Recalbox | 346/346 (100.0%) | 346 | 0 | 0 |
-| RetroArch | 530/530 (100.0%) | 530 | 0 | 0 |
-| RetroBat | 341/341 (100.0%) | 341 | 0 | 0 |
-| RetroDECK | 2008/2008 (100.0%) | 2008 | 0 | 0 |
-| RetroPie | 530/530 (100.0%) | 530 | 0 | 0 |
-| RomM | 374/374 (100.0%) | 374 | 0 | 0 |
+| Platform | Coverage | Verified | Untested | Missing | Source-backed |
+|----------|----------|----------|----------|---------|---------------|
+| Batocera | 353/353 (100.0%) | 353 | 0 | 0 | 95/353 (27%) |
+| BizHawk | 118/118 (100.0%) | 118 | 0 | 0 | 4/118 (3%) |
+| EmuDeck | 161/161 (100.0%) | 161 | 0 | 0 | 15/161 (9%) |
+| Lakka | 530/530 (100.0%) | 530 | 0 | 0 | 118/530 (22%) |
+| MiSTer FPGA | 65/65 (100.0%) | 65 | 0 | 0 | 0/65 (0%) |
+| ROCKNIX | 38/38 (100.0%) | 38 | 0 | 0 | 29/38 (76%) |
+| Recalbox | 346/346 (100.0%) | 346 | 0 | 0 | 83/346 (24%) |
+| RetroArch | 530/530 (100.0%) | 530 | 0 | 0 | 118/530 (22%) |
+| RetroBat | 341/341 (100.0%) | 341 | 0 | 0 | 81/341 (24%) |
+| RetroDECK | 2008/2008 (100.0%) | 2008 | 0 | 0 | 104/2008 (5%) |
+| RetroPie | 530/530 (100.0%) | 530 | 0 | 0 | 118/530 (22%) |
+| RomM | 374/374 (100.0%) | 374 | 0 | 0 | 84/374 (22%) |
 
 Coverage is measured against the file list each platform declares, using that platform's own verification mode.
+Source-backed counts the files whose expectations were also read from an emulator's source code; the rest rely on the platform list alone.
 Where platform lists and emulator source code disagree, the differences are tracked in the [gap analysis](https://abdess.github.io/retrobios/gaps/).
 
 ## Build your own pack
@@ -153,4 +154,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software.
 The legal reasoning is laid out in the [FAQ](https://abdess.github.io/retrobios/wiki/faq/#is-this-legal).
 
-*Auto-generated on 2026-08-07T13:24:31Z*
+*Auto-generated on 2026-08-07T14:01:25Z*

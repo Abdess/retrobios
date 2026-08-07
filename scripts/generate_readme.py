@@ -60,6 +60,10 @@ def compute_coverage(
         "mode": config.get("verification_mode", "existence"),
         "details": result["details"],
         "config": config,
+        "ground_truth": result.get(
+            "ground_truth_coverage",
+            {"with_validation": 0, "platform_only": total, "total": total},
+        ),
     }
 
 
@@ -261,16 +265,23 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
             "",
             "## Coverage",
             "",
-            "| Platform | Coverage | Verified | Untested | Missing |",
-            "|----------|----------|----------|----------|---------|",
+            "| Platform | Coverage | Verified | Untested | Missing | Source-backed |",
+            "|----------|----------|----------|----------|---------|---------------|",
         ]
     )
 
     for name, cov in sorted(coverages.items(), key=lambda x: x[1]["platform"]):
         pct = f"{cov['percentage']:.1f}%"
+        gt = cov["ground_truth"]
+        gt_pct = (
+            f"{gt['with_validation'] / gt['total'] * 100:.0f}%"
+            if gt["total"]
+            else "0%"
+        )
         lines.append(
             f"| {cov['platform']} | {cov['present']}/{cov['total']} ({pct}) | "
-            f"{cov['verified']} | {cov['untested']} | {cov['missing']} |"
+            f"{cov['verified']} | {cov['untested']} | {cov['missing']} | "
+            f"{gt['with_validation']}/{gt['total']} ({gt_pct}) |"
         )
 
     lines.extend(
@@ -278,6 +289,9 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
             "",
             "Coverage is measured against the file list each platform declares,"
             " using that platform's own verification mode.",
+            "Source-backed counts the files whose expectations were also read"
+            " from an emulator's source code; the rest rely on the platform"
+            " list alone.",
             "Where platform lists and emulator source code disagree, the"
             f" differences are tracked in the [gap analysis]({SITE_URL}gaps/).",
             "",
