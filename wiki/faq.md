@@ -33,6 +33,12 @@ Two main reasons:
 
 Platforms that verify by MD5 accept specific hashes. If yours doesn't match any known hash, it may be a bad dump or an uncommon revision.
 
+## Why are there files that aren't BIOS?
+
+A file earns its place when an emulator loads it from disk and does not bundle it. That covers actual BIOS ROMs, console firmware, arcade BIOS sets, and also game data like `prboom.wad` for the PrBoom core or soundfonts for EasyRPG.
+
+This follows the platforms themselves: Batocera lists `prboom.wad` in its BIOS checker, and libretro declares these files in the `firmware` field of its core info. The word "BIOS" is their vocabulary for "external file the emulator needs". Files are tagged by category (`bios`, `game_data`, `bios_zip`) in the emulator profiles, so the distinction stays visible.
+
 ## How do I know which BIOS I need?
 
 Two approaches:
@@ -50,7 +56,7 @@ The `--verbose` flag shows source references and expected values from the emulat
 
 ## Is this legal?
 
-Yes. Distribution of BIOS files, firmware, and encryption keys for emulation and preservation is supported by established case law and statutory exemptions across multiple jurisdictions.
+The project believes so, in good faith and for the specific purposes it serves: preservation, personal backup, and interoperability with emulation software. That belief rests on case law and statutory exemptions across several jurisdictions, documented below so anyone can weigh the reasoning.
 
 ### Emulation and BIOS redistribution
 
@@ -77,7 +83,15 @@ This is the most contested area. The legal position:
 
 ### Summary
 
-This project distributes BIOS files, firmware, and encryption keys for personal use, archival, and interoperability with emulation software. The legal basis rests on fair use, statutory interoperability exemptions, preservation precedent, and the non-copyrightable nature of encryption keys.
+This project preserves BIOS files, firmware, and the keys emulators require, for personal use, archival, and interoperability. That position rests on fair use, statutory interoperability exemptions, preservation precedent, and the functional nature of the files involved.
+
+This reflects the project's good-faith understanding, not legal advice. Anyone with a concern about a specific file, rights holders included, can open an issue and will receive a considered answer.
+
+## Isn't the Switch or PS3 too recent for a retro project?
+
+Age is not what decides inclusion here; availability is. Firmware distribution depends on manufacturer servers, and those disappear: Nintendo closed the 3DS and Wii U eShops in March 2023, Sony shut the PSP store in 2021. Once a CDN goes offline, the files only survive where someone archived them.
+
+The project tries to archive files while they are still available rather than after they have become rare. "Retro" is a moving window: the PlayStation 2 was current hardware when its BIOS was first preserved, and today's consoles will be tomorrow's retro systems. A file is included for the same reason at any age: an emulator needs it, and nothing guarantees it stays available.
 
 ## What's a hash/checksum?
 
