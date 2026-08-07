@@ -4885,6 +4885,53 @@ struct BurnDriver BurnDrvneogeo = {
             self.assertIsNone(local)
             self.assertEqual(status, "not_found")
 
+    def test_220_large_file_dotted_asset_fallback(self):
+        """Files with spaces resolve to GitHub's dotted asset name."""
+        import tempfile
+        import urllib.error
+
+        import common
+
+        attempts = []
+
+        class FakeResponse:
+            def __init__(self, payload):
+                self._payload = payload
+
+            def read(self, _size=None):
+                data, self._payload = self._payload, b""
+                return data
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *_):
+                return False
+
+        def fake_urlopen(req, timeout=None):
+            url = req.full_url if hasattr(req, "full_url") else str(req)
+            attempts.append(url)
+            if "MAME%200.174" in url:
+                raise urllib.error.HTTPError(url, 404, "Not Found", {}, None)
+            return FakeResponse(b"payload")
+
+        original = common.urllib.request.urlopen
+        common.urllib.request.urlopen = fake_urlopen
+        try:
+            with tempfile.TemporaryDirectory() as tmpdir:
+                path = common.fetch_large_file(
+                    "MAME 0.174 Arcade XML.dat", dest_dir=tmpdir
+                )
+                self.assertIsNotNone(path)
+                with open(path, "rb") as fh:
+                    self.assertEqual(fh.read(), b"payload")
+        finally:
+            common.urllib.request.urlopen = original
+
+        self.assertEqual(len(attempts), 2, attempts)
+        self.assertIn("MAME%200.174", attempts[0])
+        self.assertIn("MAME.0.174.Arcade.XML.dat", attempts[1])
+
     def test_219_batocera_stable_tag_selection(self):
         """Stable tag picker takes the highest batocera-N(.M) tag."""
         from scripts.scraper.batocera_scraper import pick_stable_tag

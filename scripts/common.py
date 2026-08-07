@@ -1144,22 +1144,37 @@ def fetch_large_file(
         else:
             return cached
 
-    encoded_name = urllib.parse.quote(name)
-    url = f"https://github.com/{LARGE_FILES_REPO}/releases/download/{LARGE_FILES_RELEASE}/{encoded_name}"
     os.makedirs(dest_dir, exist_ok=True)
     tmp_path = cached + ".tmp"
-    try:
-        req = urllib.request.Request(url, headers={"User-Agent": "retrobios/1.0"})
-        with urllib.request.urlopen(req, timeout=300) as resp:
-            with open(tmp_path, "wb") as f:
-                while True:
-                    chunk = resp.read(65536)
-                    if not chunk:
-                        break
-                    f.write(chunk)
-    except (urllib.error.URLError, urllib.error.HTTPError):
-        if os.path.exists(tmp_path):
-            os.unlink(tmp_path)
+    # GitHub rewrites spaces to dots in release asset names, so a file whose
+    # name contains spaces is published under a dotted name.
+    candidates = [name]
+    if " " in name:
+        candidates.append(name.replace(" ", "."))
+
+    downloaded = False
+    for candidate in candidates:
+        encoded_name = urllib.parse.quote(candidate)
+        url = (
+            f"https://github.com/{LARGE_FILES_REPO}/releases/download/"
+            f"{LARGE_FILES_RELEASE}/{encoded_name}"
+        )
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": "retrobios/1.0"})
+            with urllib.request.urlopen(req, timeout=300) as resp:
+                with open(tmp_path, "wb") as f:
+                    while True:
+                        chunk = resp.read(65536)
+                        if not chunk:
+                            break
+                        f.write(chunk)
+            downloaded = True
+            break
+        except (urllib.error.URLError, urllib.error.HTTPError):
+            if os.path.exists(tmp_path):
+                os.unlink(tmp_path)
+
+    if not downloaded:
         return None
 
     if expected_sha1 or expected_md5:
