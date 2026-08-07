@@ -83,8 +83,8 @@ Full list with per-file details: **[https://abdess.github.io/retrobios/](https:/
 | RomM | 374/374 (100.0%) | 374 | 0 | 0 | 84/374 (22%) |
 
 Coverage is measured against the file list each platform declares, using that platform's own verification mode.
-Source-backed counts the files whose content the emulator's own code checks: a size or hash read from its source, reproduced at verification. Files a profile documents without a content check are counted separately on the [gap analysis](https://abdess.github.io/retrobios/gaps/) page. A dash means no profiled emulator applies to the platform, whose own source is then the only authority.
-Where platform lists and emulator source code disagree, the differences are tracked in the [gap analysis](https://abdess.github.io/retrobios/gaps/).
+Source-backed counts the files whose content the emulator's own code checks: a size or hash read from its source, reproduced at verification. A dash means no profiled emulator applies to the platform, whose own source is then the only authority.
+The [gap analysis](https://abdess.github.io/retrobios/gaps/) page counts separately the files a profile documents without a content check, and tracks where platform lists and emulator source code disagree.
 
 ## Build your own pack
 
@@ -157,4 +157,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software.
 The legal reasoning is laid out in the [FAQ](https://abdess.github.io/retrobios/wiki/faq/#is-this-legal).
 
-*Auto-generated on 2026-08-07T17:35:58Z*
+*Auto-generated on 2026-08-07T17:52:48Z*

@@ -98,6 +98,24 @@ def fetch_contributors() -> list[dict]:
         return []
 
 
+_CATALOG_LABELS = {"redump": "Redump", "no-intro": "No-Intro", "tosec": "TOSEC"}
+
+
+def _catalog_matched_line(db: dict) -> list[str]:
+    """Bullet line for files matched to dump-preservation catalogs."""
+    sources: set[str] = set()
+    matched = 0
+    for entry in db.get("files", {}).values():
+        provenance = entry.get("provenance")
+        if provenance:
+            matched += 1
+            sources.update(provenance)
+    if not matched:
+        return []
+    labels = ", ".join(_CATALOG_LABELS.get(s, s) for s in sorted(sources))
+    return [f"- **{matched:,} files** matched to dump-preservation catalogs ({labels})"]
+
+
 def generate_readme(db: dict, platforms_dir: str) -> str:
     total_files = db.get("total_files", 0)
     total_size = db.get("total_size", 0)
@@ -214,6 +232,7 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
             f"- **{emulator_count} emulators** profiled from source (RetroArch cores + standalone)",
             f"- **{len(system_ids)} systems** covered (NES, SNES, PlayStation, Saturn, Dreamcast, ...)",
             f"- **{total_files:,} files** verified with MD5, SHA1, CRC32 checksums",
+            *_catalog_matched_line(db),
             f"- **{size_mb:.0f} MB** total collection size",
             "",
             "## Supported systems",
@@ -294,13 +313,11 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
             " using that platform's own verification mode.",
             "Source-backed counts the files whose content the emulator's own"
             " code checks: a size or hash read from its source, reproduced at"
-            " verification. Files a profile documents without a content check"
-            " are counted separately on the"
-            f" [gap analysis]({SITE_URL}gaps/) page. A dash means no profiled"
-            " emulator applies to the platform, whose own source is then the"
-            " only authority.",
-            "Where platform lists and emulator source code disagree, the"
-            f" differences are tracked in the [gap analysis]({SITE_URL}gaps/).",
+            " verification. A dash means no profiled emulator applies to the"
+            " platform, whose own source is then the only authority.",
+            f"The [gap analysis]({SITE_URL}gaps/) page counts separately the"
+            " files a profile documents without a content check, and tracks"
+            " where platform lists and emulator source code disagree.",
             "",
             "## Build your own pack",
             "",
