@@ -39,6 +39,13 @@ RELEASE_URL = (
 )
 MAX_RETRIES = 3
 
+# Platforms with a manifest in install/. Manifest URLs are case sensitive,
+# so user input is normalized against this list before any fetch.
+AVAILABLE_PLATFORMS = (
+    "retroarch", "batocera", "recalbox", "retrobat", "emudeck",
+    "lakka", "retrodeck", "rocknix", "romm", "bizhawk", "misterfpga",
+)
+
 # Fallback BIOS destination per platform when --platform is forced
 # but auto-detection finds nothing on the machine.
 DEFAULT_DESTS = {
@@ -315,6 +322,17 @@ def detect_platforms(os_type: str) -> list[tuple[str, Path]]:
                 found.append(("retroarch", ra_dir))
 
     return found
+
+
+def normalize_platform(name: str) -> str:
+    """Return the canonical platform id for user-supplied input."""
+    plat = name.strip().lower()
+    if plat not in AVAILABLE_PLATFORMS:
+        print(f"Unknown platform '{name}'. Available platforms:", file=sys.stderr)
+        for p in AVAILABLE_PLATFORMS:
+            print(f"  {p}", file=sys.stderr)
+        sys.exit(1)
+    return plat
 
 
 def fetch_manifest(plat: str) -> dict:
@@ -624,12 +642,8 @@ def main() -> None:
 
     # Early exit for listing
     if args.list_platforms:
-        available = [
-            "retroarch", "batocera", "recalbox", "retrobat",
-            "emudeck", "lakka", "retrodeck", "rocknix", "romm", "bizhawk",
-        ]
         print("Available platforms:")
-        for p in available:
+        for p in AVAILABLE_PLATFORMS:
             print(f"  {p}")
         detected = detect_platforms(os_type)
         if detected:
@@ -639,6 +653,8 @@ def main() -> None:
         return
 
     # Platform detection or override
+    if args.platform:
+        args.platform = normalize_platform(args.platform)
     if args.platform and args.dest:
         platforms = [(args.platform, args.dest)]
     elif args.platform:

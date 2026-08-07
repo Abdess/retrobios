@@ -38,10 +38,15 @@ if (-not $platform) {
 
 # Fallback
 if (-not $platform) {
-    $platform = Read-Host "Platform (retroarch, batocera, emudeck, ...)"
-    $biosPath = Read-Host "BIOS directory path"
+    $available = @("retroarch", "batocera", "recalbox", "retrobat", "emudeck", "lakka", "retrodeck", "rocknix", "romm", "bizhawk", "misterfpga")
+    $platform = (Read-Host "Platform ($($available -join ', '))").Trim().ToLower()
+    $biosPath = (Read-Host "BIOS directory path").Trim()
     if (-not $platform -or -not $biosPath) {
         Write-Host "Aborted." -ForegroundColor Red; exit 1
+    }
+    if ($available -notcontains $platform) {
+        Write-Host "Unknown platform '$platform'. Available: $($available -join ', ')" -ForegroundColor Red
+        exit 1
     }
 }
 

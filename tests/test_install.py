@@ -4,6 +4,7 @@ from __future__ import annotations
 import importlib.util
 import json
 import os
+import re
 import tempfile
 import unittest
 from pathlib import Path
@@ -204,6 +205,43 @@ class TestEmbeddedDetection(unittest.TestCase):
 
     def test_no_embedded_os_detected(self):
         self.assertEqual(self._detect_with(set()), [])
+
+
+class TestNormalizePlatform(unittest.TestCase):
+    """Manifest URLs are case sensitive: user input must be normalized."""
+
+    def test_lowercases_input(self):
+        self.assertEqual(install.normalize_platform("Batocera"), "batocera")
+
+    def test_strips_whitespace(self):
+        self.assertEqual(install.normalize_platform(" retroarch "), "retroarch")
+
+    def test_unknown_platform_exits(self):
+        with self.assertRaises(SystemExit):
+            install.normalize_platform("launchbox")
+
+    def test_all_available_platforms_accepted(self):
+        for plat in install.AVAILABLE_PLATFORMS:
+            self.assertEqual(install.normalize_platform(plat), plat)
+
+
+class TestAvailablePlatforms(unittest.TestCase):
+    """The platform list must match the generated manifests."""
+
+    def test_matches_install_manifests(self):
+        manifests = {p.stem for p in (REPO_ROOT / "install").glob("*.json")}
+        self.assertEqual(set(install.AVAILABLE_PLATFORMS), manifests)
+
+    def test_powershell_installer_same_list(self):
+        content = (REPO_ROOT / "install.ps1").read_text()
+        match = re.search(r"\$available = @\(([^)]*)\)", content)
+        self.assertIsNotNone(match, "install.ps1 must define $available")
+        ps_list = set(re.findall(r'"([^"]+)"', match.group(1)))
+        self.assertEqual(ps_list, set(install.AVAILABLE_PLATFORMS))
+
+    def test_powershell_normalizes_input(self):
+        content = (REPO_ROOT / "install.ps1").read_text()
+        self.assertIn(".Trim().ToLower()", content)
 
 
 if __name__ == "__main__":
