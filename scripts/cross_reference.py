@@ -36,11 +36,15 @@ DEFAULT_DB = "database.json"
 
 def load_platform_files(
     platforms_dir: str,
+    platforms: list[str] | None = None,
 ) -> tuple[dict[str, set[str]], dict[str, set[str]]]:
-    """Load all platform configs and collect declared filenames + data_directories per system."""
+    """Collect declared filenames + data_directories per system.
+
+    Restricted to *platforms* when given, otherwise every registered platform.
+    """
     declared = {}
     platform_data_dirs = {}
-    for platform_name in list_registered_platforms(
+    for platform_name in platforms or list_registered_platforms(
         platforms_dir, include_archived=True
     ):
         config = load_platform_config(platform_name, platforms_dir)
@@ -415,7 +419,7 @@ def main():
     parser.add_argument("--db", default=DEFAULT_DB)
     parser.add_argument("--emulator", "-e", help="Analyze single emulator")
     parser.add_argument(
-        "--platform", "-p", help="Platform name (required for --target)"
+        "--platform", "-p", help="Restrict analysis to one platform's cores"
     )
     parser.add_argument("--target", "-t", help="Hardware target (e.g., switch, rpi4)")
     parser.add_argument("--json", action="store_true", help="JSON output")
@@ -425,13 +429,16 @@ def main():
     if args.emulator:
         profiles = {k: v for k, v in profiles.items() if k == args.emulator}
 
-    if args.target:
-        if not args.platform:
-            parser.error("--target requires --platform")
+    if args.target and not args.platform:
+        parser.error("--target requires --platform")
+
+    if args.platform:
         from common import load_target_config, resolve_platform_cores
 
-        target_cores = load_target_config(
-            args.platform, args.target, args.platforms_dir
+        target_cores = (
+            load_target_config(args.platform, args.target, args.platforms_dir)
+            if args.target
+            else None
         )
         config = load_platform_config(args.platform, args.platforms_dir)
         relevant = resolve_platform_cores(config, profiles, target_cores=target_cores)
@@ -441,7 +448,9 @@ def main():
         print("No emulator profiles found.", file=sys.stderr)
         return
 
-    declared, plat_data_dirs = load_platform_files(args.platforms_dir)
+    declared, plat_data_dirs = load_platform_files(
+        args.platforms_dir, [args.platform] if args.platform else None
+    )
     db = load_database(args.db)
     data_names = _build_supplemental_index()
     report = cross_reference(profiles, declared, db, plat_data_dirs, data_names)

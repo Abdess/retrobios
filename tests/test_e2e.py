@@ -5147,6 +5147,36 @@ struct BurnDriver BurnDrvneogeo = {
         self.assertEqual(len(systems), len(set(systems)))
 
 
+    def test_226_cross_reference_platform_filter(self):
+        """--platform restricts declarations to that platform alone."""
+        from cross_reference import load_platform_files
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            plat_dir = os.path.join(tmpdir, "platforms")
+            os.makedirs(plat_dir)
+            registry = {
+                "platforms": {
+                    "alpha": {"status": "active"},
+                    "beta": {"status": "active"},
+                }
+            }
+            with open(os.path.join(plat_dir, "_registry.yml"), "w") as f:
+                yaml.dump(registry, f)
+            for name, fname in (("alpha", "a.bin"), ("beta", "b.bin")):
+                cfg = {
+                    "platform": name,
+                    "verification_mode": "md5",
+                    "systems": {"shared-system": {"files": [{"name": fname}]}},
+                }
+                with open(os.path.join(plat_dir, f"{name}.yml"), "w") as f:
+                    yaml.dump(cfg, f)
+
+            everything, _ = load_platform_files(plat_dir)
+            self.assertEqual(everything["shared-system"], {"a.bin", "b.bin"})
+
+            only_alpha, _ = load_platform_files(plat_dir, ["alpha"])
+            self.assertEqual(only_alpha["shared-system"], {"a.bin"})
+
 
 if __name__ == "__main__":
     unittest.main()
