@@ -1624,9 +1624,10 @@ platforms:
     install:
       detect:
       - os: linux
-        method: os_release_id
-        value: rocknix
-        path: /storage/roms/bios
+        method: file_exists
+        file: /etc/os-release
+        match: 'ID=rocknix'
+        bios_path: /storage/roms/bios
   retropie:
     config: retropie.yml
     status: archived

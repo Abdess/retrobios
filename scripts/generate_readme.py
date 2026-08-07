@@ -194,6 +194,7 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
         "RetroDECK": "`~/retrodeck/bios/`",
         "EmuDeck": "`Emulation/bios/`",
         "RomM": "`bios/{platform_slug}/`",
+        "ROCKNIX": "`/storage/roms/bios/`",
     }
 
     for name, cov in sorted(coverages.items(), key=lambda x: x[1]["platform"]):

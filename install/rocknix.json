@@ -4,14 +4,15 @@
   "platform": "rocknix",
   "display_name": "ROCKNIX",
   "version": "1.0",
-  "generated": "2026-08-06T18:10:38Z",
+  "generated": "2026-08-07T09:24:57Z",
   "base_destination": "bios",
   "detect": [
     {
       "os": "linux",
-      "method": "os_release_id",
-      "value": "rocknix",
-      "path": "/storage/roms/bios"
+      "method": "file_exists",
+      "file": "/etc/os-release",
+      "match": "ID=rocknix",
+      "bios_path": "/storage/roms/bios"
     }
   ],
   "standalone_copies": [],

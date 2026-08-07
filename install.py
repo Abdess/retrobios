@@ -47,6 +47,7 @@ DEFAULT_DESTS = {
     "lakka": Path("/storage/system"),
     "retrodeck": Path.home() / "retrodeck",
     "emudeck": Path.home() / "Emulation" / "bios",
+    "rocknix": Path("/storage/roms/bios"),
 }
 
 
@@ -198,7 +199,7 @@ def _detect_embedded() -> list[tuple[str, Path]]:
     os_id = os_release.get("ID", "").lower()
 
     if os_id == "rocknix":
-        found.append(("retroarch", Path("/storage/roms/bios")))
+        found.append(("rocknix", Path("/storage/roms/bios")))
         return found
 
     if Path("/etc/knulli-release").exists():
@@ -617,7 +618,7 @@ def main() -> None:
     if args.list_platforms:
         available = [
             "retroarch", "batocera", "recalbox", "retrobat",
-            "emudeck", "lakka", "retrodeck", "romm", "bizhawk",
+            "emudeck", "lakka", "retrodeck", "rocknix", "romm", "bizhawk",
         ]
         print("Available platforms:")
         for p in available:

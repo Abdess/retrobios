@@ -33,7 +33,7 @@ Pick your platform, download the ZIP, extract to the BIOS path.
 | BizHawk | 118 | `Firmware/` | [Download](../../releases/latest) |
 | EmuDeck | 161 | `Emulation/bios/` | [Download](../../releases/latest) |
 | Lakka | 530 | `system/` | [Download](../../releases/latest) |
-| ROCKNIX | 38 |  | [Download](../../releases/latest) |
+| ROCKNIX | 38 | `/storage/roms/bios/` | [Download](../../releases/latest) |
 | Recalbox | 346 | `/recalbox/share/bios/` | [Download](../../releases/latest) |
 | RetroArch | 530 | `system/` | [Download](../../releases/latest) |
 | RetroBat | 341 | `bios/` | [Download](../../releases/latest) |
@@ -139,4 +139,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 This repository provides BIOS files for personal backup and archival purposes.
 
-*Auto-generated on 2026-08-06T18:11:39Z*
+*Auto-generated on 2026-08-07T09:21:54Z*
