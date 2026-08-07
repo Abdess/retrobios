@@ -61,6 +61,7 @@ nav:
   - BizHawk: platforms/bizhawk.md
   - EmuDeck: platforms/emudeck.md
   - Lakka: platforms/lakka.md
+  - MiSTer FPGA: platforms/misterfpga.md
   - ROCKNIX: platforms/rocknix.md
   - Recalbox: platforms/recalbox.md
   - RetroArch: platforms/retroarch.md
@@ -105,6 +106,7 @@ nav:
   - IBM: systems/ibm.md
   - Id Software: systems/id-software.md
   - Infocom: systems/infocom.md
+  - Interact: systems/interact.md
   - Java: systems/java.md
   - Jupiter: systems/jupiter.md
   - Lambda: systems/lambda.md

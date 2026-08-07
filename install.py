@@ -48,6 +48,7 @@ DEFAULT_DESTS = {
     "retrodeck": Path.home() / "retrodeck",
     "emudeck": Path.home() / "Emulation" / "bios",
     "rocknix": Path("/storage/roms/bios"),
+    "misterfpga": Path("/media/fat/games"),
 }
 
 
@@ -200,6 +201,13 @@ def _detect_embedded() -> list[tuple[str, Path]]:
 
     if os_id == "rocknix":
         found.append(("rocknix", Path("/storage/roms/bios")))
+        return found
+
+    # MiSTer keeps the SD card at /media/fat with the main binary at its root
+    # (Main_MiSTer file_io.cpp:1150-1156), and cores read from games/
+    # (file_io.h:168)
+    if Path("/media/fat/MiSTer").exists():
+        found.append(("misterfpga", Path("/media/fat/games")))
         return found
 
     if Path("/etc/knulli-release").exists():

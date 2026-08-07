@@ -5043,5 +5043,110 @@ struct BurnDriver BurnDrvneogeo = {
                 self.assertIsNotNone(bad)
 
 
+    # -- MiSTer FPGA scraper (BiosDB) -------------------------------------
+
+    MISTER_DB = {
+        "db_id": "bios_db",
+        "timestamp": 1785183064,
+        "files": {
+            "games/3DO/boot.rom": {
+                "hash": "f47264dd47fe30f73ab3c010015c155b",
+                "size": 1048576,
+                "url": "https://archive.org/download/x/3DO.zip/boot.rom",
+            },
+            "games/GameCom/boot.rom": {
+                "hash": "3f2178d717dd309ed7424d49ef92987f",
+                "size": 262144,
+                "url": "https://archive.org/download/x/GameCom.zip/boot.rom",
+            },
+        },
+        "archives": {
+            "neogeo_unibios": {
+                "archive_file": {"hash": "a" * 32, "size": 101498, "url": "http://x/u.zip"},
+                "summary_inline": {
+                    "files": {
+                        "games/NEOGEO/uni-bios.rom": {
+                            "hash": "4f0aeda8d2d145f596826b62d563c4ef",
+                            "size": 131072,
+                        }
+                    }
+                },
+            }
+        },
+    }
+
+    def _mister_scraper(self):
+        import json
+
+        from scraper.misterfpga_scraper import Scraper
+
+        scraper = Scraper()
+        scraper._raw_data = json.dumps(self.MISTER_DB)
+        return scraper
+
+    def test_221_mister_parse_db_inlines_archive_entries(self):
+        """Archive-provided files carry the extracted member hash."""
+        import json
+
+        from scraper.misterfpga_scraper import parse_db
+
+        entries = parse_db(json.dumps(self.MISTER_DB))
+        self.assertIn("games/NEOGEO/uni-bios.rom", entries)
+        self.assertEqual(
+            entries["games/NEOGEO/uni-bios.rom"]["hash"],
+            "4f0aeda8d2d145f596826b62d563c4ef",
+        )
+        self.assertEqual(len(entries), 3)
+
+    def test_222_mister_validate_format_rejects_foreign_db(self):
+        """Only the bios_db database is accepted."""
+        import json
+
+        scraper = self._mister_scraper()
+        self.assertTrue(scraper.validate_format(json.dumps(self.MISTER_DB)))
+        self.assertFalse(scraper.validate_format("not json"))
+        self.assertFalse(
+            scraper.validate_format(json.dumps({"db_id": "distribution_mister", "files": {}}))
+        )
+        broken = json.loads(json.dumps(self.MISTER_DB))
+        broken["files"]["games/3DO/boot.rom"].pop("size")
+        self.assertFalse(scraper.validate_format(json.dumps(broken)))
+
+    def test_223_mister_requirements_strip_games_prefix(self):
+        """Destinations are relative to base_destination games."""
+        reqs = {r.destination: r for r in self._mister_scraper().fetch_requirements()}
+        self.assertIn("3DO/boot.rom", reqs)
+        self.assertEqual(reqs["3DO/boot.rom"].name, "boot.rom")
+        self.assertEqual(reqs["3DO/boot.rom"].system, "3do")
+        self.assertEqual(reqs["3DO/boot.rom"].native_id, "3DO")
+        self.assertEqual(reqs["3DO/boot.rom"].size, 1048576)
+
+    def test_224_mister_platform_yaml_shape(self):
+        """The generated config declares md5 verification and no cores."""
+        config = self._mister_scraper().generate_platform_yaml()
+        self.assertEqual(config["verification_mode"], "md5")
+        self.assertEqual(config["base_destination"], "games")
+        self.assertEqual(config["cores"], [])
+        self.assertEqual(config["version"], "2026-07-27")
+        systems = config["systems"]
+        self.assertEqual(
+            systems["3do"]["docs"], "https://github.com/MiSTer-devel/3DO_MiSTer"
+        )
+        # No MiSTer-devel repository exists for the Game.com core
+        self.assertNotIn("docs", systems["tiger-game-com"])
+        entry = systems["3do"]["files"][0]
+        self.assertTrue(entry["required"])
+        self.assertEqual(entry["md5"], "f47264dd47fe30f73ab3c010015c155b")
+
+    def test_225_mister_docs_targets_are_unique_per_system(self):
+        """Every mapped system resolves to a distinct retrobios system ID."""
+        from scraper.misterfpga_scraper import SYSTEM_MAP
+
+        folders = list(SYSTEM_MAP)
+        systems = [SYSTEM_MAP[f][0] for f in folders]
+        self.assertEqual(len(systems), len(set(systems)))
+
+
+
 if __name__ == "__main__":
     unittest.main()

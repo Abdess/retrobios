@@ -166,6 +166,45 @@ class TestDefaultDests(unittest.TestCase):
             install.DEFAULT_DESTS["recalbox"], Path("/recalbox/share/bios")
         )
 
+    def test_mister_defaults_to_games_on_the_sd_card(self):
+        self.assertEqual(
+            install.DEFAULT_DESTS["misterfpga"], Path("/media/fat/games")
+        )
+
+
+class TestEmbeddedDetection(unittest.TestCase):
+    """MiSTer is identified by the main binary at the SD card root."""
+
+    def _detect_with(self, existing: set[str], os_id: str = ""):
+        real_exists = install.Path.exists
+        real_parse = install._parse_os_release
+
+        def fake_exists(self):
+            return str(self) in existing
+
+        install.Path.exists = fake_exists
+        install._parse_os_release = lambda: {"ID": os_id} if os_id else {}
+        try:
+            return install._detect_embedded()
+        finally:
+            install.Path.exists = real_exists
+            install._parse_os_release = real_parse
+
+    def test_mister_detected_from_main_binary(self):
+        self.assertEqual(
+            self._detect_with({"/media/fat/MiSTer"}),
+            [("misterfpga", Path("/media/fat/games"))],
+        )
+
+    def test_rocknix_wins_over_path_probes(self):
+        self.assertEqual(
+            self._detect_with({"/media/fat/MiSTer"}, os_id="rocknix"),
+            [("rocknix", Path("/storage/roms/bios"))],
+        )
+
+    def test_no_embedded_os_detected(self):
+        self.assertEqual(self._detect_with(set()), [])
+
 
 if __name__ == "__main__":
     unittest.main()

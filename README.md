@@ -2,9 +2,14 @@
   <img src=".github/assets/banner.png" alt="RetroBIOS" width="400">
 </p>
 
-Complete BIOS and firmware packs for Batocera, BizHawk, EmuDeck, Lakka, ROCKNIX, Recalbox, RetroArch, RetroBat, RetroDECK, RetroPie, and RomM.
+<p align="center">
+  <a href="https://github.com/Abdess/retrobios/actions/workflows/build.yml"><img src="https://github.com/Abdess/retrobios/actions/workflows/build.yml/badge.svg" alt="Build"></a>
+  <a href="https://github.com/Abdess/retrobios/actions/workflows/deploy-site.yml"><img src="https://github.com/Abdess/retrobios/actions/workflows/deploy-site.yml/badge.svg" alt="Site"></a>
+</p>
 
-**7,628** verified files across **396** systems, ready to extract into your emulator's BIOS directory.
+Complete BIOS and firmware packs for Batocera, BizHawk, EmuDeck, Lakka, MiSTer FPGA, ROCKNIX, Recalbox, RetroArch, RetroBat, RetroDECK, RetroPie, and RomM.
+
+**7,646** verified files across **396** systems, ready to extract into your emulator's BIOS directory.
 
 ## Quick Install
 
@@ -33,6 +38,7 @@ Pick your platform, download the ZIP, extract to the BIOS path.
 | BizHawk | 118 | `Firmware/` | [Download](../../releases/latest) |
 | EmuDeck | 161 | `Emulation/bios/` | [Download](../../releases/latest) |
 | Lakka | 530 | `system/` | [Download](../../releases/latest) |
+| MiSTer FPGA | 65 | `/media/fat/games/` | [Download](../../releases/latest) |
 | ROCKNIX | 38 | `/storage/roms/bios/` | [Download](../../releases/latest) |
 | Recalbox | 346 | `/recalbox/share/bios/` | [Download](../../releases/latest) |
 | RetroArch | 530 | `system/` | [Download](../../releases/latest) |
@@ -46,11 +52,11 @@ Pick your platform, download the ZIP, extract to the BIOS path.
 BIOS, firmware, and system files for consoles from Atari to PlayStation 3.
 Each file is checked against the emulator's source code to match what the code actually loads at runtime.
 
-- **11 platforms** supported with platform-specific verification
-- **330 emulators** profiled from source (RetroArch cores + standalone)
+- **12 platforms** supported with platform-specific verification
+- **314 emulators** profiled from source (RetroArch cores + standalone)
 - **396 systems** covered (NES, SNES, PlayStation, Saturn, Dreamcast, ...)
-- **7,628 files** verified with MD5, SHA1, CRC32 checksums
-- **9626 MB** total collection size
+- **7,646 files** verified with MD5, SHA1, CRC32 checksums
+- **9628 MB** total collection size
 
 ## Supported systems
 
@@ -66,6 +72,7 @@ Full list with per-file details: **[https://abdess.github.io/retrobios/](https:/
 | BizHawk | 118/118 (100.0%) | 118 | 0 | 0 |
 | EmuDeck | 161/161 (100.0%) | 161 | 0 | 0 |
 | Lakka | 530/530 (100.0%) | 530 | 0 | 0 |
+| MiSTer FPGA | 65/65 (100.0%) | 65 | 0 | 0 |
 | ROCKNIX | 38/38 (100.0%) | 38 | 0 | 0 |
 | Recalbox | 346/346 (100.0%) | 346 | 0 | 0 |
 | RetroArch | 530/530 (100.0%) | 530 | 0 | 0 |
@@ -108,7 +115,7 @@ The [documentation site](https://abdess.github.io/retrobios/) provides:
 - **Per-emulator profiles** with source code references for every file
 - **Per-system pages** showing which emulators and platforms cover each console
 - **Gap analysis** identifying missing files and undeclared core requirements
-- **Cross-reference** mapping files across 11 platforms and 330 emulators
+- **Cross-reference** mapping files across 12 platforms and 314 emulators
 
 ## How it works
 
@@ -139,4 +146,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 This repository provides BIOS files for personal backup and archival purposes.
 
-*Auto-generated on 2026-08-07T09:21:54Z*
+*Auto-generated on 2026-08-07T10:51:47Z*
