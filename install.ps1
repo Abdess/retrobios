@@ -89,12 +89,32 @@ foreach ($f in $toDownload) {
         $url = "$baseUrl/$($f.repo_path)"
     }
 
-    try {
-        Invoke-WebRequest -Uri $url -OutFile $dest -UseBasicParsing
+    $tmp = "$dest.tmp"
+    $ok = $false
+    foreach ($attempt in 1..3) {
+        try {
+            Invoke-WebRequest -Uri $url -OutFile $tmp -UseBasicParsing
+        } catch {
+            continue
+        }
+        if ($f.sha1) {
+            $actual = (Get-FileHash $tmp -Algorithm SHA1).Hash.ToLower()
+            if ($actual -ne $f.sha1) {
+                Remove-Item $tmp -Force -ErrorAction SilentlyContinue
+                continue
+            }
+        }
+        Move-Item $tmp $dest -Force
+        $ok = $true
+        break
+    }
+
+    if ($ok) {
         $downloaded++
         $i = $downloaded + $errors
         Write-Host "  [$i/$total] $($f.dest) ok"
-    } catch {
+    } else {
+        Remove-Item $tmp -Force -ErrorAction SilentlyContinue
         $errors++
         $i = $downloaded + $errors
         Write-Host "  [$i/$total] $($f.dest) FAILED" -ForegroundColor Red
