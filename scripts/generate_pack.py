@@ -1353,6 +1353,17 @@ def generate_pack(
                         file_status[dedup_key] = "untested"
                         file_reasons[dedup_key] = "hash mismatch"
                 else:
+                    if status == "hash_mismatch" and local_path:
+                        declared = file_entry.get("md5", "") or file_entry.get(
+                            "sha1", ""
+                        )
+                        actual = compute_hashes(local_path)
+                        file_reasons.setdefault(
+                            dedup_key,
+                            f"packed per {platform_display} existence check; "
+                            f"declared hash {declared}, file md5 "
+                            f"{actual['md5']} sha1 {actual['sha1']}",
+                        )
                     file_status.setdefault(dedup_key, "ok")
 
                 # Emulator-level validation: informational only for platform packs.

@@ -2089,6 +2089,51 @@ class TestE2E(unittest.TestCase):
         # Verify _Required tag in filename
         self.assertIn("_Required_", os.path.basename(zip_path))
 
+    def test_130b_existence_pack_reports_hash_mismatch(self):
+        """Existence mode packs a mismatched file but prints the proof."""
+        import contextlib
+        import io
+
+        from generate_pack import generate_pack
+
+        output_dir = os.path.join(self.root, "pack_mismatch")
+        os.makedirs(output_dir, exist_ok=True)
+        config = {
+            "platform": "MismatchTest",
+            "verification_mode": "existence",
+            "base_destination": "system",
+            "systems": {
+                "test-sys": {
+                    "files": [
+                        {
+                            "name": "wrong_hash.bin",
+                            "destination": "wrong_hash.bin",
+                            "md5": "ffffffffffffffffffffffffffffffff",
+                            "required": True,
+                        },
+                    ],
+                },
+            },
+        }
+        with open(os.path.join(self.platforms_dir, "test_mismatch.yml"), "w") as fh:
+            yaml.dump(config, fh)
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            zip_path = generate_pack(
+                "test_mismatch",
+                self.platforms_dir,
+                self.db,
+                self.bios_dir,
+                output_dir,
+            )
+        self.assertIsNotNone(zip_path)
+        with zipfile.ZipFile(zip_path) as zf:
+            names = zf.namelist()
+        self.assertTrue(any("wrong_hash.bin" in n for n in names))
+        report = out.getvalue()
+        self.assertIn("DISCREPANCY", report)
+        self.assertIn("declared hash ffffffffffffffffffffffffffffffff", report)
+
     def test_131_required_only_keeps_default_required(self):
         """--required-only keeps files with no required field (default = required)."""
         from generate_pack import generate_pack
