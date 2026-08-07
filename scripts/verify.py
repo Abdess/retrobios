@@ -835,6 +835,15 @@ def verify_platform(
 
     # Ground truth coverage
     gt_filenames = set(validation_index)
+    profiled_names: set[str] = set()
+    for profile in profiles.values():
+        if profile.get("type") in ("launcher", "alias"):
+            continue
+        for f in profile.get("files", []):
+            name = f.get("name", "")
+            if name:
+                profiled_names.add(name)
+            profiled_names.update(f.get("aliases") or [])
     dest_to_name: dict[str, str] = {}
     for sys_id, system in verify_systems.items():
         for fe in system.get("files", []):
@@ -844,6 +853,9 @@ def verify_platform(
             dest_to_name.setdefault(dest, fe.get("name", ""))
     with_validation = sum(
         1 for dest in file_status if dest_to_name.get(dest, "") in gt_filenames
+    )
+    with_profile = sum(
+        1 for dest in file_status if dest_to_name.get(dest, "") in profiled_names
     )
     total = len(file_status)
 
@@ -858,6 +870,7 @@ def verify_platform(
         "details": details,
         "ground_truth_coverage": {
             "with_validation": with_validation,
+            "with_profile": with_profile,
             "platform_only": total - with_validation,
             "total": total,
             "applicable": bool(resolve_platform_cores(config, profiles)),

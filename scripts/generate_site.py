@@ -1522,8 +1522,8 @@ def generate_gap_analysis(
     lines.extend([
         "## Verification by Platform",
         "",
-        "| Platform | Files | Verified | Untested | Missing | Mode | Source-backed |",
-        "|----------|------:|---------:|---------:|--------:|------|--------------:|",
+        "| Platform | Files | Verified | Untested | Missing | Mode | Profiled | Source-backed |",
+        "|----------|------:|---------:|---------:|--------:|------|---------:|--------------:|",
     ])
 
     for pname, cov in sorted(coverages.items(), key=lambda x: x[1]["platform"]):
@@ -1542,12 +1542,14 @@ def generate_gap_analysis(
         )
         gt = cov["ground_truth"]
         if not gt.get("applicable", True):
-            gt_cell = "-"
+            gt_cell = prof_cell = "-"
         elif gt["total"]:
             gt_pct = f"{gt['with_validation'] / gt['total'] * 100:.0f}%"
             gt_cell = f"{gt['with_validation']}/{gt['total']} ({gt_pct})"
+            prof_pct = f"{gt.get('with_profile', 0) / gt['total'] * 100:.0f}%"
+            prof_cell = f"{gt.get('with_profile', 0)}/{gt['total']} ({prof_pct})"
         else:
-            gt_cell = "0/0"
+            gt_cell = prof_cell = "0/0"
         lines.append(
             f"| [{display}](platforms/{pname}.md) "
             f"| {cov['total']} "
@@ -1555,6 +1557,7 @@ def generate_gap_analysis(
             f"| {untested_str} "
             f"| {missing_str} "
             f"| {cov['mode']} "
+            f"| {prof_cell} "
             f"| {gt_cell} |"
         )
     lines.extend([
@@ -1562,10 +1565,13 @@ def generate_gap_analysis(
         "Verification follows each platform's own runtime check "
         "([how each mode works](wiki/verification-modes.md)): the counts "
         "measure the repository against the file list each platform declares. "
-        "Source-backed counts the files whose expectations were also read "
-        "from an emulator's source code; the rest rely on the platform list "
-        "alone. A dash means no profiled emulator applies to the platform, "
-        "whose own source is then the only authority.",
+        "Profiled counts the files documented in an emulator profile (name or "
+        "alias read from source). Source-backed is stricter: the emulator's "
+        "own code checks the file's content (a size or hash read from its "
+        "source, reproduced at verification). A file can be profiled without "
+        "being source-backed when the code loads it but never checks it. "
+        "A dash means no profiled emulator applies to the platform, whose "
+        "own source is then the only authority.",
         "",
     ])
 

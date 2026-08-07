@@ -292,10 +292,13 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
             "",
             "Coverage is measured against the file list each platform declares,"
             " using that platform's own verification mode.",
-            "Source-backed counts the files whose expectations were also read"
-            " from an emulator's source code; the rest rely on the platform"
-            " list alone. A dash means no profiled emulator applies to the"
-            " platform, whose own source is then the only authority.",
+            "Source-backed counts the files whose content the emulator's own"
+            " code checks: a size or hash read from its source, reproduced at"
+            " verification. Files a profile documents without a content check"
+            " are counted separately on the"
+            f" [gap analysis]({SITE_URL}gaps/) page. A dash means no profiled"
+            " emulator applies to the platform, whose own source is then the"
+            " only authority.",
             "Where platform lists and emulator source code disagree, the"
             f" differences are tracked in the [gap analysis]({SITE_URL}gaps/).",
             "",
