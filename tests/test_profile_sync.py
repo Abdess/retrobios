@@ -37,6 +37,7 @@ from profile_sync import (
     detect_new_files,
     drift_score,
     fetch_plan,
+    find_field_line,
     format_markdown,
     format_report,
     insert_after_line,
@@ -863,18 +864,32 @@ class TestLineEdits(unittest.TestCase):
         out = insert_after_line(SAMPLE, "profiled_date", 'source_commit: "abc"')
         self.assertEqual(out.count("source_commit"), 1)
 
-    def test_replace_nth_source_ref(self):
-        out = replace_field_line(SAMPLE, "source_ref", 1, "b.c:5", "b.c:9")
+    def test_replace_targets_the_matching_value(self):
+        out, _ = replace_field_line(SAMPLE, "source_ref", "b.c:5", "b.c:9")
         self.assertIn('source_ref: "b.c:9"', out)
         self.assertIn('source_ref: "a.c:10-12"', out)
 
-    def test_replace_refuses_on_value_mismatch(self):
+    def test_replace_refuses_an_absent_value(self):
         with self.assertRaises(YamlWriteError):
-            replace_field_line(SAMPLE, "source_ref", 1, "not-there", "x")
+            replace_field_line(SAMPLE, "source_ref", "not-there", "x")
 
-    def test_replace_refuses_missing_occurrence(self):
+    def test_cursor_skips_earlier_lines(self):
+        index = find_field_line(SAMPLE, "source_ref", "a.c:10-12")
         with self.assertRaises(YamlWriteError):
-            replace_field_line(SAMPLE, "source_ref", 9, "b.c:5", "x")
+            find_field_line(SAMPLE, "source_ref", "a.c:10-12", index + 1)
+
+    def test_source_ref_outside_files_does_not_shift_the_match(self):
+        text = SAMPLE.replace(
+            "files:",
+            "data_directories:\n"
+            '  - key: "assets"\n'
+            '    source_ref: "elsewhere.c:1"\n'
+            "\nfiles:",
+            1,
+        )
+        out, _ = replace_field_line(text, "source_ref", "b.c:5", "b.c:9")
+        self.assertIn('source_ref: "b.c:9"', out)
+        self.assertIn('source_ref: "elsewhere.c:1"', out)
 
 
 class TestApplyEdit(unittest.TestCase):

@@ -829,24 +829,38 @@ def insert_after_line(text: str, key: str, new_line: str) -> str:
     return "\n".join(lines) + ("\n" if text.endswith("\n") else "")
 
 
-def replace_field_line(
-    text: str, key: str, occurrence: int, expected: str, value: str
-) -> str:
-    """Rewrite the Nth key line, only if it currently holds the expected value."""
+def _field_value(line: str) -> str:
+    return line.split(":", 1)[1].strip().strip('"').strip("'")
+
+
+def find_field_line(text: str, key: str, expected: str, start: int = 0) -> int:
+    """Index of the first `key:` line at or after `start` holding `expected`.
+
+    Positional counting is not safe here: `source_ref` also appears outside
+    `files:` in some profiles, under `data_directories:` for instance, which
+    shifts every ordinal past it.
+    """
     lines = text.splitlines()
     marker = f"{key}:"
-    found = [i for i, line in enumerate(lines) if line.strip().startswith(marker)]
-    if occurrence >= len(found):
-        raise YamlWriteError(f"{key}: occurrence {occurrence} not found")
-    index = found[occurrence]
-    current = lines[index].split(":", 1)[1].strip().strip('"').strip("'")
-    if current != expected:
-        raise YamlWriteError(
-            f"{key}: line {index + 1} holds {current!r}, expected {expected!r}"
-        )
-    indent = lines[index][: len(lines[index]) - len(lines[index].lstrip())]
+    for index in range(start, len(lines)):
+        line = lines[index]
+        if line.strip().startswith(marker) and _field_value(line) == expected:
+            return index
+    raise YamlWriteError(
+        f"{key}: no line holding {expected!r} at or after line {start + 1}"
+    )
+
+
+def replace_field_line(text: str, key: str, expected: str, value: str,
+                       start: int = 0) -> tuple[str, int]:
+    """Rewrite the first `key:` line holding `expected`. Returns text and index."""
+    index = find_field_line(text, key, expected, start)
+    lines = text.splitlines()
+    line = lines[index]
+    indent = line[: len(line) - len(line.lstrip())]
     lines[index] = f'{indent}{key}: "{value}"'
-    return "\n".join(lines) + ("\n" if text.endswith("\n") else "")
+    joined = "\n".join(lines) + ("\n" if text.endswith("\n") else "")
+    return joined, index
 
 
 def apply_edit(path: Path, new_text: str, expected: dict) -> None:
@@ -886,8 +900,9 @@ def rebase_refs(path: Path, report: ProfileReport) -> list[str]:
         if isinstance(entry, dict) and entry.get("source_ref")
     ]
     applied: list[str] = []
+    cursor = 0
 
-    for occurrence, entry in enumerate(report.entries):
+    for position, entry in enumerate(report.entries):
         rendered = []
         touched = False
         for part in entry.parts:
@@ -899,12 +914,16 @@ def rebase_refs(path: Path, report: ProfileReport) -> list[str]:
             else:
                 rendered.append(_original_part(part))
         if not touched:
+            # Still consume this entry's line so a later entry carrying the
+            # same ref cannot match it.
+            cursor = find_field_line(text, "source_ref", entry.source_ref, cursor) + 1
             continue
         new_ref = ", ".join(rendered)
-        text = replace_field_line(
-            text, "source_ref", occurrence, entry.source_ref, new_ref
+        text, index = replace_field_line(
+            text, "source_ref", entry.source_ref, new_ref, cursor
         )
-        carriers[occurrence]["source_ref"] = new_ref
+        cursor = index + 1
+        carriers[position]["source_ref"] = new_ref
         applied.append(f"{entry.source_ref} -> {new_ref}")
 
     if applied:
@@ -921,8 +940,8 @@ def bump_commit(path: Path, report: ProfileReport) -> bool:
     expected = dict(document)
     expected["source_commit"] = report.head
     if document.get("source_commit"):
-        new_text = replace_field_line(
-            text, "source_commit", 0, str(document["source_commit"]), report.head
+        new_text, _ = replace_field_line(
+            text, "source_commit", str(document["source_commit"]), report.head
         )
     else:
         new_text = insert_after_line(
@@ -1194,7 +1213,11 @@ def main() -> None:
             )
         reports.append(report)
         if writes:
-            _apply_writes(args, name, profile, report)
+            try:
+                _apply_writes(args, name, profile, report)
+            except YamlWriteError as exc:
+                # The guard already left the file untouched; keep going.
+                print(f"{name}: write refused: {exc}", file=sys.stderr)
 
     if args.as_json:
         print(json.dumps([report_to_dict(r) for r in reports], indent=2))
