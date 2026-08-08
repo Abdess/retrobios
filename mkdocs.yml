@@ -491,14 +491,16 @@ nav:
     - Stone Soup: emulators/stonesoup.md
     - UME 2015: emulators/ume2015.md
     - VBA-Next: emulators/vba_next.md
-  - Embedded HLE (4):
+  - Embedded HLE (5):
     - 3dSen: emulators/3dsen.md
     - izapple2: emulators/izapple2.md
     - Lindbergh Loader: emulators/lindbergh-loader.md
+    - MFME: emulators/mfme.md
     - PCSX-ReARMed: emulators/pcsx_rearmed.md
-  - Launchers (1):
+  - Launchers (2):
     - Dolphin Launcher: emulators/dolphin_launcher.md
-  - Other (32):
+    - Parallel Launcher: emulators/parallel-launcher.md
+  - Other (33):
     - ares: emulators/ares.md
     - Basilisk II: emulators/basiliskii.md
     - Beetle GBA (Mednafen): emulators/beetle_gba.md
@@ -519,6 +521,7 @@ nav:
     - Mednafen: emulators/mednafen.md
     - Model 2 Emulator: emulators/model2.md
     - openMSX: emulators/openmsx.md
+    - Oricutron: emulators/oricutron.md
     - Redream: emulators/redream.md
     - Ryujinx: emulators/ryujinx.md
     - shadps4: emulators/shadps4.md

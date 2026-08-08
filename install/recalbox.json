@@ -4,7 +4,7 @@
   "platform": "recalbox",
   "display_name": "Recalbox",
   "version": "1.0",
-  "generated": "2026-08-08T09:28:04Z",
+  "generated": "2026-08-08T10:49:03Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -236,8 +236,8 @@
       }
     }
   ],
-  "total_files": 1185,
-  "total_size": 2495429052,
+  "total_files": 1187,
+  "total_size": 2495461820,
   "files": [
     {
       "dest": "3do/panafz1.bin",
@@ -7236,6 +7236,24 @@
       "repo_path": "bios/Other/NXEngine/nxengine/tilekey.dat",
       "cores": [
         "NXEngine"
+      ]
+    },
+    {
+      "dest": "kernel.rom",
+      "sha1": "01f7a84d5a1973623eabd2be6c2cbac1ce5096a6",
+      "size": 16384,
+      "repo_path": "bios/Oric/Oric/kernel.rom",
+      "cores": [
+        "Oricutron"
+      ]
+    },
+    {
+      "dest": "shell.rom",
+      "sha1": "926b95e1cb574d4914dbed0681729a7c1a4bc68d",
+      "size": 16384,
+      "repo_path": "bios/Oric/Oric/shell.rom",
+      "cores": [
+        "Oricutron"
       ]
     },
     {
