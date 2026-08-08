@@ -54,13 +54,15 @@ The RetroDECK pack already contains its own `bios/` folder, so it extracts into 
 ## What's included
 
 BIOS, firmware, and system files for consoles from Atari to PlayStation 3.
-Every file passes the check its platform runs at startup: an MD5 or SHA1 comparison on most, file presence on RetroArch, Lakka and RetroPie, whose code checks nothing else. That is what the Verified by column reports, platform by platform. The collection itself carries SHA1, MD5, SHA256 and CRC32 for every file, and where an emulator profile exists the expected hashes and sizes come from that emulator's own source.
+These are the files an emulator needs but cannot ship itself.
+
+Each one is checked the way your platform checks it. Most compare a checksum, the fingerprint of a file's contents, so a corrupt or wrong-region copy is caught. RetroArch, Lakka and RetroPie only look for the filename, because that is all their code does: the Coverage table says which applies to you. Whatever your platform checks, the collection stores four fingerprints per file, and the expected values come from the emulator's own source code.
 
 - **91 files** the platforms' emulators load are not in the collection yet, named in the [gap analysis](https://abdess.github.io/retrobios/gaps/)
 - **12 platforms** supported with platform-specific verification
 - **340 emulators** profiled from source (RetroArch cores + standalone)
 - **412 systems** covered (NES, SNES, PlayStation, Saturn, Dreamcast, ...)
-- **7,763 files** indexed with SHA1, MD5, SHA256 and CRC32 checksums: 2,478 system files, 2,746 arcade ROM sets, 2,539 game and engine data files
+- **7,763 files**, each with its SHA1, MD5, SHA256 and CRC32 fingerprints: 2,478 system files, 2,746 arcade ROM sets, 2,539 game and engine data files
 - **531 of 2,478 system files** matched to dump-preservation catalogs (No-Intro, Redump, TOSEC); arcade sets and engine data fall outside what those catalogs index
 - **9854 MB** total collection size
 
@@ -72,8 +74,8 @@ Full list with per-file details: **[https://abdess.github.io/retrobios/](https:/
 
 ## Coverage
 
-| Platform | Platform list | Read from emulator code | Verified by |
-|----------|--------------:|------------------------:|-------------|
+| Platform | On its BIOS list | Files its emulators load | Checked by |
+|----------|-----------------:|-------------------------:|------------|
 | Batocera | 353/353 | 1,146/1,237 | MD5 hash |
 | BizHawk | 118/118 | 367/368 | SHA1 hash |
 | EmuDeck | 161/161 | 404/404 | MD5 hash |
@@ -87,9 +89,9 @@ Full list with per-file details: **[https://abdess.github.io/retrobios/](https:/
 | RetroPie * | 530/530 | 1,149/1,154 | file presence |
 | RomM | 374/374 | 267/270 | MD5 hash |
 
-Each fraction reads collected over needed, required and optional files alike, since both go in the pack. Platform list is the BIOS list the platform publishes. Read from emulator code counts the files the cores it ships load that the list never mentions, traced in their source: routinely several times the list itself, and it includes the files documented as impossible to source.
-It is a floor, not a ceiling: a core that accepts any file handed to it declares nothing to count, so what such an emulator can load is not enumerable from its code.
-The [gap analysis](https://abdess.github.io/retrobios/gaps/) page names those missing files and details how far each platform's files are corroborated against emulator source code.
+Each fraction is what the pack has over what is needed, counting required and optional files alike since both ship. The first column is the BIOS list the platform publishes. The second counts files its emulators load that this list never mentions, found by reading their source code, and it is routinely several times larger. A short fraction means files are still missing, and they are named in the [gap analysis](https://abdess.github.io/retrobios/gaps/).
+That second number is a floor, not a ceiling: an emulator that accepts any file handed to it names none in its code, so nothing there can be counted.
+Checked by is the test your platform runs on its own, replicated here from its source code, so the result matches what you would see in the frontend ([how each one works](https://abdess.github.io/retrobios/wiki/verification-modes/)).
 
 ## Build your own pack
 
@@ -162,4 +164,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software.
 The legal reasoning is laid out in the [FAQ](https://abdess.github.io/retrobios/wiki/faq/#is-this-legal).
 
-*Auto-generated on 2026-08-08T10:50:34Z*
+*Auto-generated on 2026-08-08T10:53:24Z*

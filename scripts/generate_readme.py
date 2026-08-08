@@ -318,13 +318,15 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
             "## What's included",
             "",
             "BIOS, firmware, and system files for consoles from Atari to PlayStation 3.",
-            "Every file passes the check its platform runs at startup: an MD5 or"
-            " SHA1 comparison on most, file presence on RetroArch, Lakka and"
-            " RetroPie, whose code checks nothing else. That is what the"
-            " Verified by column reports, platform by platform. The collection"
-            " itself carries SHA1, MD5, SHA256 and CRC32 for every file, and"
-            " where an emulator profile exists the expected hashes and sizes"
-            " come from that emulator's own source.",
+            "These are the files an emulator needs but cannot ship itself.",
+            "",
+            "Each one is checked the way your platform checks it. Most compare"
+            " a checksum, the fingerprint of a file's contents, so a corrupt or"
+            " wrong-region copy is caught. RetroArch, Lakka and RetroPie only"
+            " look for the filename, because that is all their code does: the"
+            " Coverage table says which applies to you. Whatever your platform"
+            " checks, the collection stores four fingerprints per file, and the"
+            " expected values come from the emulator's own source code.",
             "",
             (
                 f"- **{missing_total} files** the platforms' emulators load are"
@@ -337,7 +339,7 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
             f"- **{len(coverages)} platforms** supported with platform-specific verification",
             f"- **{emulator_count} emulators** profiled from source (RetroArch cores + standalone)",
             f"- **{len(system_ids)} systems** covered (NES, SNES, PlayStation, Saturn, Dreamcast, ...)",
-            f"- **{total_files:,} files** indexed with SHA1, MD5, SHA256 and CRC32 checksums:"
+            f"- **{total_files:,} files**, each with its SHA1, MD5, SHA256 and CRC32 fingerprints:"
             f" {comp['systems']['files']:,} system files,"
             f" {comp['arcade']['files']:,} arcade ROM sets,"
             f" {comp['game_data']['files']:,} game and engine data files",
@@ -394,8 +396,8 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
             "",
             "## Coverage",
             "",
-            "| Platform | Platform list | Read from emulator code | Verified by |",
-            "|----------|--------------:|------------------------:|-------------|",
+            "| Platform | On its BIOS list | Files its emulators load | Checked by |",
+            "|----------|-----------------:|-------------------------:|------------|",
         ]
     )
 
@@ -420,18 +422,20 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
     lines.extend(
         [
             "",
-            "Each fraction reads collected over needed, required and optional"
-            " files alike, since both go in the pack. Platform list is the BIOS"
-            " list the platform publishes. Read from emulator code counts the"
-            " files the cores it ships load that the list never mentions,"
-            " traced in their source: routinely several times the list itself,"
-            " and it includes the files documented as impossible to source.",
-            "It is a floor, not a ceiling: a core that accepts any file handed"
-            " to it declares nothing to count, so what such an emulator can"
-            " load is not enumerable from its code.",
-            f"The [gap analysis]({SITE_URL}gaps/) page names those missing files"
-            " and details how far each platform's files are corroborated against"
-            " emulator source code.",
+            "Each fraction is what the pack has over what is needed, counting"
+            " required and optional files alike since both ship. The first"
+            " column is the BIOS list the platform publishes. The second counts"
+            " files its emulators load that this list never mentions, found by"
+            " reading their source code, and it is routinely several times"
+            " larger. A short fraction means files are still missing, and they"
+            " are named in the"
+            f" [gap analysis]({SITE_URL}gaps/).",
+            "That second number is a floor, not a ceiling: an emulator that"
+            " accepts any file handed to it names none in its code, so nothing"
+            " there can be counted.",
+            "Checked by is the test your platform runs on its own, replicated"
+            " here from its source code, so the result matches what you would"
+            f" see in the frontend ([how each one works]({SITE_URL}wiki/verification-modes/)).",
             "",
             "## Build your own pack",
             "",

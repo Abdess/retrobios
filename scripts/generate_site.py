@@ -1850,8 +1850,8 @@ def generate_gap_analysis(
     lines.extend([
         "## What Each Pack Contains",
         "",
-        "| Platform | Platform list | Read from emulator code | Verified by |",
-        "|----------|--------------:|------------------------:|-------------|",
+        "| Platform | On its BIOS list | Files its emulators load | Checked by |",
+        "|----------|-----------------:|-------------------------:|------------|",
     ])
 
     mode_labels = {
@@ -1882,22 +1882,22 @@ def generate_gap_analysis(
         )
     lines.extend([
         "",
-        "Each fraction reads collected over needed, required and optional "
-        "files alike, since both go in the pack. Platform list is the BIOS "
-        "list the platform publishes. Read from emulator code counts the files "
-        "the cores it ships load that the list never mentions, traced in their "
-        "source: routinely several times the list itself, and it includes the "
-        "files documented as impossible to source. A short fraction is flagged "
-        "and named in the sections below. It is a floor, not a ceiling: a core "
-        "that accepts any file handed to it declares nothing to count, so what "
-        "such an emulator can load is not enumerable from its code. Verified "
-        "by is the check the platform runs at runtime, replicated here "
-        "([how each mode works](wiki/verification-modes.md)).",
+        "Each fraction is what the pack has over what is needed, counting "
+        "required and optional files alike since both ship. The first column "
+        "is the BIOS list the platform publishes. The second counts files its "
+        "emulators load that this list never mentions, found by reading their "
+        "source code, and it is routinely several times larger; a short "
+        "fraction is flagged and named in the sections below. That second "
+        "number is a floor, not a ceiling: an emulator that accepts any file "
+        "handed to it names none in its code, so nothing there can be counted. "
+        "Checked by is the test the platform runs on its own, replicated here "
+        "from its source code "
+        "([how each one works](wiki/verification-modes.md)).",
         "",
         "## Corroboration Against Emulator Source",
         "",
-        "| Platform | Declared by platform | Profiled | Content checked by emulator code |",
-        "|----------|---------------------:|---------:|---------------------------------:|",
+        "| Platform | On its BIOS list | Documented in a profile | Content the code checks |",
+        "|----------|-----------------:|------------------------:|------------------------:|",
     ])
 
     for pname, cov in sorted(coverages.items(), key=lambda x: x[1]["platform"]):
@@ -1918,10 +1918,12 @@ def generate_gap_analysis(
 
     lines.extend([
         "",
-        "Both columns count the files a platform declares. Profiled means the "
-        "file is documented in an emulator profile read from source. Content "
-        "checked is stricter: the emulator's code verifies a size or hash for "
-        "it, and this tool reproduces that check. The gap between the two is "
+        "Both columns count the files on the platform's own BIOS list, the "
+        "same number as the first column of the table above. Documented in a "
+        "profile means an emulator profile, written from source, describes the "
+        "file. Content the code checks is stricter: the emulator verifies a "
+        "size or hash for it, and this tool repeats that check. The gap "
+        "between the two is "
         "not a defect, it is what the emulator code does: many emulators load "
         "a file without ever checking its content, and no amount of profiling "
         "can invent a check the code does not perform. A dash means no "
