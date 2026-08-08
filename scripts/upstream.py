@@ -297,8 +297,11 @@ def resolve_commit_at(
 
 def _tags_url(repo: Repo) -> str:
     if repo.family == "gitlab":
-        return f"{repo.api_base}/projects/{_project(repo)}/repository/tags"
-    return f"{repo.api_base}/repos/{repo.slug}/tags"
+        return (
+            f"{repo.api_base}/projects/{_project(repo)}"
+            f"/repository/tags?per_page=100"
+        )
+    return f"{repo.api_base}/repos/{repo.slug}/tags?per_page=100"
 
 
 def list_tags(repo: Repo, cache_dir: str, offline: bool = False) -> list[str]:
@@ -323,6 +326,39 @@ def resolve_tag_commit(
         if isinstance(commit, dict):
             return commit.get("sha") or commit.get("id")
     return None
+
+
+def tag_commit(
+    repo: Repo, tag: str, cache_dir: str, offline: bool = False
+) -> str | None:
+    """Commit a named tag points at, looked up directly.
+
+    Listing tags is paginated, and a repository publishing nightly tags pushes
+    an old release far past the first page, so the tag is asked for by name.
+    An annotated tag points at a tag object, which is dereferenced.
+    """
+    if repo.family != "github":
+        return resolve_tag_commit(repo, tag, cache_dir, offline)
+    quoted = urllib.parse.quote(tag)
+    payload = _api(
+        f"{repo.api_base}/repos/{repo.slug}/git/ref/tags/{quoted}",
+        cache_dir,
+        offline,
+    )
+    if not isinstance(payload, dict):
+        return None
+    obj = payload.get("object")
+    if not isinstance(obj, dict):
+        return None
+    if obj.get("type") != "tag":
+        return obj.get("sha")
+    annotated = _api(
+        f"{repo.api_base}/repos/{repo.slug}/git/tags/{obj.get('sha')}",
+        cache_dir,
+        offline,
+    )
+    target = annotated.get("object") if isinstance(annotated, dict) else None
+    return target.get("sha") if isinstance(target, dict) else None
 
 
 def _releases_url(repo: Repo) -> str:

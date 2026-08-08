@@ -285,6 +285,57 @@ def _ambiguous(path, old, candidates):
     )
 
 
+class TestVerifyAtPin(unittest.TestCase):
+    """A tag-pinned profile is judged on self-consistency, not on HEAD."""
+
+    LINES = ["pad", "pad", 'ROM_LOAD("bios.bin", CRC(deadbeef))', "pad"]
+
+    def test_declared_value_present(self):
+        part = RefPart("a.c", 3, 3, "a.c:3")
+        self.assertEqual(
+            profile_sync.verify_at_pin(part, self.LINES, ["deadbeef"]).status,
+            "ANCHORED",
+        )
+
+    def test_value_found_within_the_context_window(self):
+        part = RefPart("a.c", 1, 1, "a.c:1")
+        self.assertEqual(
+            profile_sync.verify_at_pin(part, self.LINES, ["deadbeef"]).status,
+            "ANCHORED",
+        )
+
+    def test_declared_value_absent(self):
+        part = RefPart("a.c", 1, 1, "a.c:1")
+        result = profile_sync.verify_at_pin(part, self.LINES, ["cafebabe"])
+        self.assertEqual(result.status, "CHANGED")
+        self.assertIn("pinned revision", result.reason)
+
+    def test_missing_file(self):
+        part = RefPart("a.c", 1, 1, "a.c:1")
+        self.assertEqual(
+            profile_sync.verify_at_pin(part, None, ["deadbeef"]).status, "GONE"
+        )
+
+    def test_line_beyond_the_file(self):
+        part = RefPart("a.c", 99, 99, "a.c:99")
+        self.assertEqual(
+            profile_sync.verify_at_pin(part, self.LINES, ["deadbeef"]).status, "GONE"
+        )
+
+    def test_a_ref_without_a_line_is_accepted(self):
+        part = RefPart("a.c", None, None, "a.c")
+        self.assertEqual(
+            profile_sync.verify_at_pin(part, self.LINES, ["deadbeef"]).status,
+            "ANCHORED",
+        )
+
+    def test_an_entry_declaring_nothing_is_accepted(self):
+        part = RefPart("a.c", 1, 1, "a.c:1")
+        self.assertEqual(
+            profile_sync.verify_at_pin(part, self.LINES, []).status, "ANCHORED"
+        )
+
+
 class TestExternalCitation(unittest.TestCase):
     def test_project_name_then_file(self):
         self.assertTrue(profile_sync.is_external_citation("munt ROMInfo.cpp"))
@@ -624,15 +675,29 @@ class TestBuildReport(unittest.TestCase):
             profile_sync.upstream.resolve_commit_at,
             profile_sync.upstream.compare,
             profile_sync.upstream.list_tree,
+            profile_sync.upstream.list_tags,
+            profile_sync.upstream.resolve_tag_commit,
+            profile_sync.upstream.tag_commit,
             profile_sync.upstream._http_json,
             profile_sync.upstream._http_text,
         )
+        self.tags: list[str] = []
+        self.tag_commits: dict[str, str] = {}
         # Any code path reaching the HTTP layer is a leak, not a slow test.
         def _no_network(url):
             raise AssertionError(f"test reached the network: {url}")
 
         profile_sync.upstream._http_json = _no_network
         profile_sync.upstream._http_text = _no_network
+        profile_sync.upstream.list_tags = (
+            lambda repo, cache, offline=False: self.tags
+        )
+        profile_sync.upstream.resolve_tag_commit = (
+            lambda repo, tag, cache, offline=False: self.tag_commits.get(tag)
+        )
+        profile_sync.upstream.tag_commit = (
+            lambda repo, tag, cache, offline=False: self.tag_commits.get(tag)
+        )
         profile_sync.upstream.list_tree = (
             lambda repo, sha, cache_dir, offline=False: (
                 sorted({path for _, path in self.files}), False
@@ -660,6 +725,9 @@ class TestBuildReport(unittest.TestCase):
             profile_sync.upstream.resolve_commit_at,
             profile_sync.upstream.compare,
             profile_sync.upstream.list_tree,
+            profile_sync.upstream.list_tags,
+            profile_sync.upstream.resolve_tag_commit,
+            profile_sync.upstream.tag_commit,
             profile_sync.upstream._http_json,
             profile_sync.upstream._http_text,
         ) = self._orig
@@ -812,6 +880,45 @@ class TestBuildReport(unittest.TestCase):
         part = report.entries[0].parts[0]
         self.assertEqual(part.status, "RENAMED")
         self.assertEqual(part.new_path, "deep/src/stv.c")
+
+    def _versioned(self, version):
+        profile = self._profile(["a.c:2"])
+        profile["core_version"] = version
+        return profile
+
+    def test_pin_on_the_declared_version_tag_is_flagged(self):
+        self.files[("pinsha", "a.c")] = ["x", "hit"]
+        self.files[("headsha", "a.c")] = ["x", "hit"]
+        self.tag_commits = {"v1.6.0": "pinsha"}
+        report = build_report("test", self._versioned("1.6.0"), self.dir)
+        self.assertEqual(report.pinned_tag, "v1.6.0")
+
+    def test_a_bare_version_spelling_is_tried(self):
+        self.files[("pinsha", "a.c")] = ["x", "hit"]
+        self.files[("headsha", "a.c")] = ["x", "hit"]
+        self.tag_commits = {"0.78": "pinsha"}
+        report = build_report("test", self._versioned("v0.78"), self.dir)
+        self.assertEqual(report.pinned_tag, "0.78")
+
+    def test_a_tag_pointing_elsewhere_is_not_flagged(self):
+        self.files[("pinsha", "a.c")] = ["x", "hit"]
+        self.files[("headsha", "a.c")] = ["x", "hit"]
+        self.tag_commits = {"v1.6.0": "somethingelse"}
+        report = build_report("test", self._versioned("1.6.0"), self.dir)
+        self.assertIsNone(report.pinned_tag)
+
+    def test_prose_version_is_not_looked_up(self):
+        self.assertEqual(profile_sync.version_tag_candidates("SVN (2015 snapshot)"), [])
+        self.assertEqual(profile_sync.version_tag_candidates(""), [])
+
+    def test_pin_equal_to_head_is_never_flagged(self):
+        self.files[("pinsha", "a.c")] = ["x", "hit"]
+        self.files[("headsha", "a.c")] = ["x", "hit"]
+        self.tag_commits = {"v1.6.0": "pinsha"}
+        profile = self._versioned("1.6.0")
+        profile["source_commit"] = "headsha"
+        report = build_report("test", profile, self.dir)
+        self.assertIsNone(report.pinned_tag)
 
     def test_missing_date_and_commit_is_skipped(self):
         report = build_report(
@@ -1213,6 +1320,19 @@ class TestRebaseRefs(unittest.TestCase):
             [],
         )
 
+    def test_a_pin_on_a_superseded_tag_is_never_rebased(self):
+        part = PartResult(
+            RefPart("a.c", 10, 12, "a.c:10-12"), "RENAMED", "src/a.c", 20, 22, []
+        )
+        report = self._report(
+            [EntryReport("a.bin", "a.c:10-12", "RENAMED", [part])]
+        )
+        report.counts = {"RENAMED": 1}
+        report.pinned_tag = "v1.6.0"
+        self.assertEqual(rebase_refs(self.path, report), [])
+        self.assertEqual(rebase_refs(self.path, report, accept_changed=True), [])
+        self.assertIn('source_ref: "a.c:10-12"', self.path.read_text())
+
     def test_nothing_is_rebased_while_a_ref_needs_review(self):
         shifted = PartResult(RefPart("a.c", 10, 12), "SHIFTED", None, 20, 22, [])
         report = self._report(
@@ -1336,6 +1456,13 @@ class TestBumpCommit(unittest.TestCase):
         self.assertEqual(profile_sync.pending_recale(report), 0)
         self.assertTrue(bump_commit(self.path, report))
 
+    def test_refused_when_pinned_to_a_superseded_tag(self):
+        report = ProfileReport(
+            name="p", repo="o/n", pin="pin", head="newhead",
+            entries=[], counts={"ANCHORED": 3}, pinned_tag="v1.6.0",
+        )
+        self.assertFalse(bump_commit(self.path, report))
+
     def test_refused_while_a_changed_remains(self):
         report = ProfileReport(
             name="p", repo="o/n", pin="pin", head="newhead",
@@ -1363,6 +1490,7 @@ class TestCheckVersion(unittest.TestCase):
             profile_sync.upstream.latest_release,
             profile_sync.upstream.list_tags,
             profile_sync.upstream.resolve_tag_commit,
+            profile_sync.upstream.tag_commit,
         )
         profile_sync.upstream.latest_release = (
             lambda repo, cache, offline=False: profile_sync.upstream.Release(
@@ -1383,6 +1511,7 @@ class TestCheckVersion(unittest.TestCase):
             profile_sync.upstream.latest_release,
             profile_sync.upstream.list_tags,
             profile_sync.upstream.resolve_tag_commit,
+            profile_sync.upstream.tag_commit,
         ) = self._orig
         self.tmp.cleanup()
 

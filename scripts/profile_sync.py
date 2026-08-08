@@ -541,6 +541,7 @@ class ProfileReport:
     name: str
     repo: str | None = None
     repos: list[str] = None
+    pinned_tag: str | None = None
     host: str | None = None
     pin: str | None = None
     pin_origin: str | None = None
@@ -607,6 +608,71 @@ def select_views(
     return views
 
 
+SELF_CHECK_CONTEXT = 2
+
+
+def verify_at_pin(part: RefPart, pin_lines, tokens) -> PartResult:
+    """Check a ref against its own revision instead of against HEAD.
+
+    A profile pinned to a superseded tag documents a program HEAD no longer
+    contains, so comparing the two says nothing. What can still be checked is
+    self-consistency: does the cited range carry the value the entry declares?
+    """
+    if pin_lines is None:
+        return PartResult(
+            part, "GONE", None, None, None, [], "absent at the pinned revision"
+        )
+    if part.start is None:
+        return PartResult(part, "ANCHORED", None, None, None, [])
+    if part.start > len(pin_lines):
+        return PartResult(
+            part, "GONE", None, None, None, [], "beyond the end of the file"
+        )
+    if not tokens:
+        return PartResult(part, "ANCHORED", None, None, None, [])
+    lo = max(0, part.start - 1 - SELF_CHECK_CONTEXT)
+    hi = min(len(pin_lines), (part.end or part.start) + SELF_CHECK_CONTEXT)
+    window = "\n".join(pin_lines[lo:hi]).lower()
+    if any(token in window for token in tokens):
+        return PartResult(part, "ANCHORED", None, None, None, [])
+    return PartResult(
+        part, "CHANGED", None, None, None, [],
+        "declared value not found at the pinned revision",
+    )
+
+
+def version_tag_candidates(core_version: str) -> list[str]:
+    """Tag spellings a declared core_version might use."""
+    version = str(core_version or "").strip()
+    if not version or " " in version:
+        return []
+    bare = version.lstrip("vV")
+    return list(dict.fromkeys([version, f"v{bare}", bare]))
+
+
+def detect_pinned_tag(
+    profile: dict, repo, pin: str, head: str, cache_dir: str, offline: bool
+) -> str | None:
+    """Tag the profile is pinned to, when the repository has moved past it.
+
+    A profile can document a frozen release line that lives as a tag inside a
+    still-developed repository. HEAD is then a different program: the refs
+    describe the tag and must never be recaled onto modern code. `pcsx2-legacy`
+    is pinned to v1.6.0 of PCSX2, where a plugin-era DEV9 ref resolves onto the
+    modern built-in DEV9, a different code path.
+
+    The declared `core_version` names the tag, which is looked up by name so
+    that a repository publishing nightly tags cannot hide an old release behind
+    pagination.
+    """
+    if pin == head:
+        return None
+    for tag in version_tag_candidates(profile.get("core_version")):
+        if upstream.tag_commit(repo, tag, cache_dir, offline) == pin:
+            return tag
+    return None
+
+
 def build_report(
     name: str, profile: dict, cache_dir: str, offline: bool = False
 ) -> ProfileReport:
@@ -641,6 +707,9 @@ def build_report(
     report.repos = [v.repo.slug for v in views]
     report.pin, report.pin_origin = primary.pin, primary.origin
     report.head = primary.head
+    report.pinned_tag = detect_pinned_tag(
+        profile, primary.repo, primary.pin, primary.head, cache_dir, offline
+    )
 
     # A profile carrying no source_ref still has a pin worth writing and a
     # version worth checking, so the revisions above are resolved first.
@@ -727,13 +796,22 @@ def build_report(
         slug = view.repo.slug if view is not primary else None
         return slug, upstream.raw_url(view.repo, view.head, actual), actual
 
-    staged = [
-        (entry_name, ref, [
-            anchor_part(part, fetch, rename_getter, describe, tokens)
-            for part in split_source_ref(ref)
-        ])
-        for entry_name, ref, tokens in refs
-    ]
+    if report.pinned_tag:
+        staged = [
+            (entry_name, ref, [
+                verify_at_pin(part, fetch(PIN, part.path), tokens)
+                for part in split_source_ref(ref)
+            ])
+            for entry_name, ref, tokens in refs
+        ]
+    else:
+        staged = [
+            (entry_name, ref, [
+                anchor_part(part, fetch, rename_getter, describe, tokens)
+                for part in split_source_ref(ref)
+            ])
+            for entry_name, ref, tokens in refs
+        ]
 
     shifts = dominant_shifts([p for _, _, parts in staged for p in parts])
     for entry_name, ref, parts in staged:
@@ -797,6 +875,11 @@ def format_report(report: ProfileReport, changed_only: bool = False) -> str:
     if report.pin and report.head:
         lines.append(
             f"  {report.pin[:7]} -> {report.head[:7]}   pin: {report.pin_origin}"
+        )
+    if report.pinned_tag:
+        lines.append(
+            f"  pinned to tag {report.pinned_tag}: checked against its own "
+            "revision, not against HEAD"
         )
     if report.skipped:
         lines.append(f"  skipped: {report.skipped}")
@@ -1139,6 +1222,8 @@ def rebase_refs(
     and the next comparison would read the pinned revision at line numbers
     that only make sense at HEAD.
     """
+    if report.pinned_tag:
+        return []
     statuses = REBASE_STATUSES + (("CHANGED",) if accept_changed else ())
     blocking = [s for s in REVIEW_STATUSES if s not in statuses]
     if any((report.counts or {}).get(s) for s in blocking):
@@ -1212,7 +1297,7 @@ def bump_commit(
     path: Path, report: ProfileReport, accept_changed: bool = False
 ) -> bool:
     """Advance source_commit to HEAD when nothing needs a read again."""
-    if report.skipped or not report.head:
+    if report.skipped or not report.head or report.pinned_tag:
         return False
     blocking = REVIEW_STATUSES if not accept_changed else (
         s for s in REVIEW_STATUSES if s != "CHANGED"
