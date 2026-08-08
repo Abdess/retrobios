@@ -4,7 +4,7 @@ core_classification: official_port
 source: "https://github.com/BlitterStudio/amiberry"
 upstream: "https://github.com/tonioni/WinUAE"
 profiled_date: "2026-03-26"
-source_commit: "4eda9b757b10a0273710423d3e68f4dde7c57599"
+source_commit: "b98e9afc1d55d5e53bdb9abcbcf96535d280e9a3"
 core_version: "v8.1.2"
 display_name: "Commodore - Amiga (Amiberry)"
 cores: [amiberry]
@@ -93,21 +93,21 @@ files:
     required: false
     size: 524288
     note: "Kickstart v3.1 (generic), first candidate for A1200 and A4000"
-    source_ref: "libretro/libretro.cpp:1520-1521"
+    source_ref: "libretro/libretro.cpp:1779-1780 (candidate arrays)"
 
   - name: kick40068.A1200
     system: commodore-amiga
     required: false
     size: 524288
     note: "A1200 Kickstart v3.1 rev 40.68, fallback after kick31.rom"
-    source_ref: "libretro/libretro.cpp:1520"
+    source_ref: "libretro/libretro.cpp:758 (option label), libretro/libretro.cpp:1779 (candidates_a1200)"
 
   - name: kick40068.A4000
     system: commodore-amiga
     required: false
     size: 524288
     note: "A4000 Kickstart v3.1 rev 40.68, fallback after kick31.rom"
-    source_ref: "libretro/libretro.cpp:1521"
+    source_ref: "libretro/libretro.cpp:759 (option label), libretro/libretro.cpp:1780 (candidates_a4000)"
 
   - name: kick.rom
     system: commodore-amiga
@@ -150,21 +150,30 @@ files:
     source_ref: "libretro/libretro.cpp:1582 candidates_cdtv (find_ext_rom_in_system_dir)"
 
   # --- AROS replacement ROMs ---
-  # ref: src/memory.cpp:1871-1954 load_kickstart_replacement
+  # ref: src/memory.cpp:1925-1943 find_kickstart_replacement_directory,
+  #      src/memory.cpp:1948-2005 load_kickstart_replacement
+  # Both files must sit together in one of the configured ROM directories:
+  # the search accepts a directory only when it holds both of them.
 
   - name: aros-ext.bin
     system: commodore-amiga
     required: false
     hle_fallback: true
-    note: "AROS extended ROM replacement. Used when no Kickstart ROM is found."
-    source_ref: "src/memory.cpp:1877 load_kickstart_replacement"
+    note: >
+      AROS extended ROM replacement, used when no Kickstart ROM is found. Looked
+      up in the configured ROM directories, and only in a directory that also
+      holds aros-rom.bin.
+    source_ref: "src/memory.cpp:1933 (paired existence check), src/memory.cpp:1958-1959 (load)"
 
   - name: aros-rom.bin
     system: commodore-amiga
     required: false
     hle_fallback: true
-    note: "AROS main ROM replacement. Used with aros-ext.bin as Kickstart fallback."
-    source_ref: "src/memory.cpp:1910 load_kickstart_replacement"
+    note: >
+      AROS main ROM replacement, used with aros-ext.bin as Kickstart fallback.
+      Looked up in the configured ROM directories, and only in a directory that
+      also holds aros-ext.bin.
+    source_ref: "src/memory.cpp:1934 (paired existence check), src/memory.cpp:1987-1988 (load)"
 
   # --- Cloanto key ---
 
