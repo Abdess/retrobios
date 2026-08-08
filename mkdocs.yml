@@ -430,7 +430,7 @@ nav:
     - WASM-4: emulators/wasm4.md
     - XRick: emulators/xrick.md
     - Zelda Classic v2.10: emulators/zc210.md
-  - Enhanced forks (18):
+  - Enhanced forks (19):
     - A7800: emulators/a7800.md
     - AdvanceMAME: emulators/advancemame.md
     - bsnes-hd beta: emulators/bsnes_hd_beta.md
@@ -439,6 +439,7 @@ nav:
     - DOSBox-X: emulators/dosbox-x.md
     - DOSBox Pure: emulators/dosbox_pure.md
     - DoubleCherryGB: emulators/doublecherrygb.md
+    - Flycast Dojo: emulators/flycast-dojo.md
     - Genesis Plus GX Wide: emulators/genesis_plus_gx_wide.md
     - HBMAME (Homebrew MAME): emulators/hbmame.md
     - nSide (SFC Balanced): emulators/higan_sfc_balanced.md
@@ -487,7 +488,7 @@ nav:
     - PCSX-ReARMed: emulators/pcsx_rearmed.md
   - Launchers (1):
     - Dolphin Launcher: emulators/dolphin_launcher.md
-  - Other (26):
+  - Other (27):
     - ares: emulators/ares.md
     - Basilisk II: emulators/basiliskii.md
     - Beetle GBA (Mednafen): emulators/beetle_gba.md
@@ -497,6 +498,7 @@ nav:
     - ColEm: emulators/colem.md
     - CPCemu: emulators/cpcemu.md
     - Demul: emulators/demul.md
+    - DREAMM: emulators/dreamm.md
     - eka2l1: emulators/eka2l1.md
     - ep128emu-core: emulators/ep128emu.md
     - Lexaloffle: emulators/lexaloffle.md

@@ -4,7 +4,7 @@
   "platform": "retrodeck",
   "display_name": "RetroDECK",
   "version": "1.0",
-  "generated": "2026-08-08T00:31:25Z",
+  "generated": "2026-08-08T05:14:54Z",
   "base_destination": "",
   "detect": [
     {
@@ -236,8 +236,8 @@
       }
     }
   ],
-  "total_files": 3266,
-  "total_size": 4968928129,
+  "total_files": 3318,
+  "total_size": 4980181970,
   "files": [
     {
       "dest": "bios/panafz1.bin",
@@ -15903,9 +15903,9 @@
     },
     {
       "dest": "bios/MT32_CONTROL.ROM",
-      "sha1": "b083518fffb7f66b03c23b7eb4f868e62dc5a987",
+      "sha1": "a439fbb390da38cada95a7cbb1d6ca199cd66ef8",
       "size": 65536,
-      "repo_path": "bios/Commodore/Amiga/mt32-roms/mt32_control.rom",
+      "repo_path": "bios/Commodore/Amiga/mt32-roms/cm32l_control.rom",
       "cores": [
         "DOSBox"
       ]
@@ -17593,18 +17593,18 @@
     },
     {
       "dest": "bios/bios_U.sms",
-      "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
-      "size": 8192,
-      "repo_path": "bios/Sega/Master System/SMS_us_1.3.sms",
+      "sha1": "fc465122134d95363112eb51b9ab71db3576cefd",
+      "size": 16384,
+      "repo_path": "bios/Sega/Master System/.variants/bios_U.sms.ee2c29ba",
       "cores": [
         "Genesis Plus GX"
       ]
     },
     {
       "dest": "bios/bios_E.sms",
-      "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
-      "size": 8192,
-      "repo_path": "bios/Sega/Master System/SMS_us_1.3.sms",
+      "sha1": "6aca0e3dffe461ba1cb11a86cd4caf5b97e1b8df",
+      "size": 262144,
+      "repo_path": "bios/Sega/Master System/.variants/bios_E.sms.81c3476b",
       "cores": [
         "Genesis Plus GX"
       ]
@@ -20414,36 +20414,297 @@
     },
     {
       "dest": "bios/qemu/bios.bin",
-      "sha1": "cb1bd2cf5f89741900061955ac1a3b7cbd7a1ce9",
+      "sha1": "f402170ee4f374c304a7ce0b139d6cecb1732aff",
       "size": 131072,
-      "repo_path": "bios/Other/QEMU/bios.bin",
+      "repo_path": "bios/QEMU/bios.bin",
       "cores": [
         "QEMU"
       ]
     },
     {
       "dest": "bios/qemu/bios-256k.bin",
-      "sha1": "2d539603665b8194c671ef5189c5a2b6db3ac645",
+      "sha1": "5fe6078506094333106e6b3f33c7185dea7f0268",
       "size": 262144,
-      "repo_path": "bios/Other/QEMU/bios-256k.bin",
+      "repo_path": "bios/QEMU/bios-256k.bin",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/bios-microvm.bin",
+      "sha1": "56f33ced7ea0f7581d776396a0ac6cfe2c7c9257",
+      "size": 131072,
+      "repo_path": "bios/QEMU/bios-microvm.bin",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/qboot.rom",
+      "sha1": "339d3a93c967491c9f1fffe963484386f48bd22c",
+      "size": 65536,
+      "repo_path": "bios/QEMU/qboot.rom",
       "cores": [
         "QEMU"
       ]
     },
     {
       "dest": "bios/qemu/vgabios.bin",
-      "sha1": "214f09a25012e8702783d3ab9a22796071de5374",
+      "sha1": "63d87e2a6618c3a9b2aabecf03ac2456e5e63410",
       "size": 38912,
-      "repo_path": "bios/Other/QEMU/vgabios.bin",
+      "repo_path": "bios/QEMU/vgabios.bin",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/vgabios-cirrus.bin",
+      "sha1": "883eb2657ce29661a0466b6b41ce75411f37aad9",
+      "size": 38912,
+      "repo_path": "bios/QEMU/vgabios-cirrus.bin",
       "cores": [
         "QEMU"
       ]
     },
     {
       "dest": "bios/qemu/vgabios-stdvga.bin",
-      "sha1": "359becb4c1dcd61c139ab3786983da9640677701",
+      "sha1": "87fbc0ecb1ee7d4d8c8c88c7d8a2fb3ec8f99ea5",
       "size": 39424,
-      "repo_path": "bios/Other/QEMU/vgabios-stdvga.bin",
+      "repo_path": "bios/QEMU/vgabios-stdvga.bin",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/vgabios-bochs-display.bin",
+      "sha1": "9e2edd3d835219cde63a20e2cd58107d7e96ef5b",
+      "size": 28672,
+      "repo_path": "bios/QEMU/vgabios-bochs-display.bin",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/vgabios-ramfb.bin",
+      "sha1": "49df9be557f0f0277c8fedb889257e279586d536",
+      "size": 28672,
+      "repo_path": "bios/QEMU/vgabios-ramfb.bin",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/vgabios-ati.bin",
+      "sha1": "ded141cacdebf557ec552597cbf57cd989cec3e2",
+      "size": 39424,
+      "repo_path": "bios/QEMU/vgabios-ati.bin",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/vgabios-qxl.bin",
+      "sha1": "527227abd5f3348c382d4b02703389fbeb83b067",
+      "size": 39424,
+      "repo_path": "bios/QEMU/vgabios-qxl.bin",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/vgabios-virtio.bin",
+      "sha1": "cddc53b94793609d1e837d78cd5468fcc1ed9164",
+      "size": 39424,
+      "repo_path": "bios/QEMU/vgabios-virtio.bin",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/vgabios-vmware.bin",
+      "sha1": "c54901ab8f526ab201ebf1b3ecdf711e38e6c259",
+      "size": 39424,
+      "repo_path": "bios/QEMU/vgabios-vmware.bin",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/kvmvapic.bin",
+      "sha1": "670c9cc79b4859944705eece710dc332188b79b4",
+      "size": 9216,
+      "repo_path": "bios/QEMU/kvmvapic.bin",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/linuxboot.bin",
+      "sha1": "fd19bef7f5647960952520389f448364762ed948",
+      "size": 1024,
+      "repo_path": "bios/QEMU/linuxboot.bin",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/linuxboot_dma.bin",
+      "sha1": "0bff50c10727bd9c85c831ea92b7a52699959992",
+      "size": 1536,
+      "repo_path": "bios/QEMU/linuxboot_dma.bin",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/multiboot.bin",
+      "sha1": "a8b58ae464fc6fb26799432ae867bf57c546ff80",
+      "size": 1024,
+      "repo_path": "bios/QEMU/multiboot.bin",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/multiboot_dma.bin",
+      "sha1": "32ab1cf336b674bfb154eb7a939a3e3275a92647",
+      "size": 1024,
+      "repo_path": "bios/QEMU/multiboot_dma.bin",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/pvh.bin",
+      "sha1": "c2191e6495103c1f43e9b6ca8930e44c2245e476",
+      "size": 1536,
+      "repo_path": "bios/QEMU/pvh.bin",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/pxe-e1000.rom",
+      "sha1": "368e8e9827ae8757a7449319831078b6d5efb83f",
+      "size": 67072,
+      "repo_path": "bios/QEMU/pxe-e1000.rom",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/pxe-eepro100.rom",
+      "sha1": "b19572c9c2a11f03282df81c0397aceed409a86c",
+      "size": 61440,
+      "repo_path": "bios/QEMU/pxe-eepro100.rom",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/pxe-ne2k_pci.rom",
+      "sha1": "f37f43f89dc99afe0442ee0b7a431ee790ad6bf6",
+      "size": 61440,
+      "repo_path": "bios/QEMU/pxe-ne2k_pci.rom",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/pxe-pcnet.rom",
+      "sha1": "13a039bf9916f1db42d3a019591d372b4cf4aee9",
+      "size": 61440,
+      "repo_path": "bios/QEMU/pxe-pcnet.rom",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/pxe-rtl8139.rom",
+      "sha1": "7b512c0a7a13bc3c254a25237e4d4612170f4391",
+      "size": 61440,
+      "repo_path": "bios/QEMU/pxe-rtl8139.rom",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/pxe-virtio.rom",
+      "sha1": "3e3f77cfe70af904133db94f27ec24e3c9c43648",
+      "size": 60416,
+      "repo_path": "bios/QEMU/pxe-virtio.rom",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/efi-e1000.rom",
+      "sha1": "a3df5fc33ab0190f470b34104ff3c0679cecbab6",
+      "size": 159232,
+      "repo_path": "bios/QEMU/efi-e1000.rom",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/efi-e1000e.rom",
+      "sha1": "1d37f3ae6748d4deefe9fd5188a2f557bf265d61",
+      "size": 159232,
+      "repo_path": "bios/QEMU/efi-e1000e.rom",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/efi-eepro100.rom",
+      "sha1": "956d9592fea33374ef0f1900a185b6e1109ea765",
+      "size": 159232,
+      "repo_path": "bios/QEMU/efi-eepro100.rom",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/efi-ne2k_pci.rom",
+      "sha1": "adb7199f545fdb66c325b142c8dbc4cddb99a20d",
+      "size": 157696,
+      "repo_path": "bios/QEMU/efi-ne2k_pci.rom",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/efi-pcnet.rom",
+      "sha1": "9e5a4bb247c6a1777c89117ca091f94342b9046d",
+      "size": 157696,
+      "repo_path": "bios/QEMU/efi-pcnet.rom",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/efi-rtl8139.rom",
+      "sha1": "99a1e431cc0cb0a78d5803875dfa687e12a947f4",
+      "size": 160768,
+      "repo_path": "bios/QEMU/efi-rtl8139.rom",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/efi-virtio.rom",
+      "sha1": "1596e9b97f0bc8b5ff3e444235690a549ee982c6",
+      "size": 160768,
+      "repo_path": "bios/QEMU/efi-virtio.rom",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/efi-vmxnet3.rom",
+      "sha1": "6557242402387a6319a0db6abb916ada48e1391c",
+      "size": 156672,
+      "repo_path": "bios/QEMU/efi-vmxnet3.rom",
       "cores": [
         "QEMU"
       ]
@@ -20545,10 +20806,181 @@
       ]
     },
     {
+      "dest": "bios/qemu/openbios-ppc",
+      "sha1": "0ef5051dcb318c0bc45d1908f8318d6eece8686a",
+      "size": 677196,
+      "repo_path": "bios/QEMU/openbios-ppc",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/slof.bin",
+      "sha1": "a03a94acfe555804d66cc6c74760ae1375a71a64",
+      "size": 995000,
+      "repo_path": "bios/QEMU/slof.bin",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/skiboot.lid",
+      "sha1": "8052069aa9714c23be05b4e62fb245a3d572cb0f",
+      "size": 2527328,
+      "repo_path": "bios/QEMU/skiboot.lid",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/vof.bin",
+      "sha1": "fc737b34a390f5752cb7e35b33d71f4f438ab607",
+      "size": 3456,
+      "repo_path": "bios/QEMU/vof.bin",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/vof-nvram.bin",
+      "sha1": "5d1184609b87f78635f0575467a1c3f440900ff0",
+      "size": 16384,
+      "repo_path": "bios/QEMU/vof-nvram.bin",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/u-boot.e500",
+      "sha1": "9ea03f249f856cdcb4399cc1f5a5031729379911",
+      "size": 421720,
+      "repo_path": "bios/QEMU/u-boot.e500",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/u-boot-sam460-20100605.bin",
+      "sha1": "0399a79ac0cf77f0da70af9baec7548a3b368f0a",
+      "size": 524288,
+      "repo_path": "bios/QEMU/u-boot-sam460-20100605.bin",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/qemu_vga.ndrv",
+      "sha1": "638c6262a6eb579ec3d1c9292566ac94c942dc15",
+      "size": 18752,
+      "repo_path": "bios/QEMU/qemu_vga.ndrv",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/openbios-sparc32",
+      "sha1": "5a4f2124c8f093f8aee99fbcebcf5d17d789ff26",
+      "size": 382080,
+      "repo_path": "bios/QEMU/openbios-sparc32",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/openbios-sparc64",
+      "sha1": "c6e215fe460629d35688ab8e51faf6f765827cd6",
+      "size": 1593408,
+      "repo_path": "bios/QEMU/openbios-sparc64",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/QEMU,tcx.bin",
+      "sha1": "5f1792a73ee47d78b2160191ecb2c92f353f93ad",
+      "size": 1402,
+      "repo_path": "bios/QEMU/QEMU,tcx.bin",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/QEMU,cgthree.bin",
+      "sha1": "619b86fb02faf8f682474be3f0653b58015008ba",
+      "size": 850,
+      "repo_path": "bios/QEMU/QEMU,cgthree.bin",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
       "dest": "bios/qemu/u-boot.bin",
       "sha1": "2aa01b414a703880192277f9ce0dae193e9d2c8d",
       "size": 141072,
       "repo_path": "bios/QEMU/u-boot.bin",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/palcode-clipper",
+      "sha1": "47b0870aaa45a7aa0d48847fd905908fb06f3e9f",
+      "size": 153728,
+      "repo_path": "bios/QEMU/palcode-clipper",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/opensbi-riscv32-generic-fw_dynamic.bin",
+      "sha1": "7a23dfdeef3d78ffc89d86e89fc06a36f1e4386f",
+      "size": 268312,
+      "repo_path": "bios/QEMU/opensbi-riscv32-generic-fw_dynamic.bin",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/opensbi-riscv64-generic-fw_dynamic.bin",
+      "sha1": "6883bfd1991c0ef0d67b0967e7dcbd60420dd480",
+      "size": 272504,
+      "repo_path": "bios/QEMU/opensbi-riscv64-generic-fw_dynamic.bin",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/s390-ccw.img",
+      "sha1": "7b4fa888d32ca8ddbc752f7442e4d055cee1871a",
+      "size": 42608,
+      "repo_path": "bios/QEMU/s390-ccw.img",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/s390-netboot.img",
+      "sha1": "f6cec671408117bd9a31e982682662f27ef4fb2c",
+      "size": 67232,
+      "repo_path": "bios/QEMU/s390-netboot.img",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/hppa-firmware.img",
+      "sha1": "605c36ede6c120c6cc7efe147a75a3dc4b7e4fb0",
+      "size": 167820,
+      "repo_path": "bios/QEMU/hppa-firmware.img",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/hppa-firmware64.img",
+      "sha1": "b42f6d4ca74073de6c038579b4a9323ad0a6b398",
+      "size": 206024,
+      "repo_path": "bios/QEMU/hppa-firmware64.img",
       "cores": [
         "QEMU"
       ]
@@ -20603,6 +21035,51 @@
       "sha1": "3df540b7517f27b3a76e31f193821d04e5805f89",
       "size": 4194304,
       "repo_path": "bios/QEMU/canon-a1100-rom1.bin",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/npcm7xx_bootrom.bin",
+      "sha1": "22a75d26a0591d2c7763765b6381fa2f73de43e1",
+      "size": 768,
+      "repo_path": "bios/QEMU/npcm7xx_bootrom.bin",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/bamboo.dtb",
+      "sha1": "ebdf1745479f4ec88459bbd9ef16ee1114018508",
+      "size": 3211,
+      "repo_path": "bios/QEMU/bamboo.dtb",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/canyonlands.dtb",
+      "sha1": "8a2fda0b4f23a92eb44776b5d7ffe951987062da",
+      "size": 9779,
+      "repo_path": "bios/QEMU/canyonlands.dtb",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/petalogix-ml605.dtb",
+      "sha1": "892d265838866869b8a8ef104252ff5b2fda156f",
+      "size": 9882,
+      "repo_path": "bios/QEMU/petalogix-ml605.dtb",
+      "cores": [
+        "QEMU"
+      ]
+    },
+    {
+      "dest": "bios/qemu/petalogix-s3adsp1800.dtb",
+      "sha1": "976600e3f89ecc1f3564b7077f53c58e0b565280",
+      "size": 8161,
+      "repo_path": "bios/QEMU/petalogix-s3adsp1800.dtb",
       "cores": [
         "QEMU"
       ]
@@ -21286,8 +21763,8 @@
     },
     {
       "dest": "bios/vice/C128/kernal64-325182-01.bin",
-      "sha1": "267654823c4fdf2167050f41faa118218d2569ce",
-      "size": 16384,
+      "sha1": "e4f52d9b36c030eb94524eb49f6f0774c1d02e5e",
+      "size": 8192,
       "repo_path": "bios/Commodore/C128/vice/C128/kernal64-325182-01.bin",
       "cores": [
         "VICE"
@@ -22792,15 +23269,6 @@
       ]
     },
     {
-      "dest": "bios/astro_astrocde.zip",
-      "sha1": "141b2f039e91a3e4154f0f6c9090700cb233e549",
-      "size": 6778,
-      "repo_path": "bios/Arcade/FBNeo/astro_astrocde.zip",
-      "cores": [
-        "FinalBurn Neo"
-      ]
-    },
-    {
       "dest": "bios/dsp1.zip",
       "sha1": "c720161b382fbc6b36e58b9df67f4a872d9bebc1",
       "size": 10354,
@@ -23089,15 +23557,6 @@
       ]
     },
     {
-      "dest": "bios/snes_st018.zip",
-      "sha1": "268af28171e79f6ed8391b98c84c075a2d0c76ea",
-      "size": 62579,
-      "repo_path": "bios/Arcade/FBNeo/snes_st018.zip",
-      "cores": [
-        "FinalBurn Neo"
-      ]
-    },
-    {
       "dest": "bios/st010.zip",
       "sha1": "a6c6acd09c690b8efa85c96993fee85bede0b7fc",
       "size": 69800,
@@ -23111,6 +23570,15 @@
       "sha1": "441a7d2a63e5f1a2d94a62404fa8afad99e7634a",
       "size": 69800,
       "repo_path": "bios/Arcade/Arcade/st011.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "bios/st018.zip",
+      "sha1": "268af28171e79f6ed8391b98c84c075a2d0c76ea",
+      "size": 62579,
+      "repo_path": "bios/Arcade/Arcade/st018.zip",
       "cores": [
         "FinalBurn Neo"
       ]
@@ -24341,18 +24809,18 @@
     },
     {
       "dest": "bios/scummvm/extra/MT32_CONTROL.ROM",
-      "sha1": "b083518fffb7f66b03c23b7eb4f868e62dc5a987",
+      "sha1": "a439fbb390da38cada95a7cbb1d6ca199cd66ef8",
       "size": 65536,
-      "repo_path": "bios/Commodore/Amiga/mt32-roms/mt32_control.rom",
+      "repo_path": "bios/Commodore/Amiga/mt32-roms/cm32l_control.rom",
       "cores": [
         "ScummVM"
       ]
     },
     {
       "dest": "bios/scummvm/extra/MT32_PCM.ROM",
-      "sha1": "f6b1eebc4b2d200ec6d3d21d51325d5b48c60252",
-      "size": 524288,
-      "repo_path": "bios/Commodore/Amiga/mt32-roms/pcm_mt32.rom",
+      "sha1": "289cc298ad532b702461bfc738009d9ebe8025ea",
+      "size": 1048576,
+      "repo_path": "bios/Commodore/Amiga/mt32-roms/pcm_cm32l.rom",
       "cores": [
         "ScummVM"
       ]
@@ -24412,10 +24880,10 @@
       ]
     },
     {
-      "dest": "bios/fbneo/astro_astrocde.zip",
-      "sha1": "141b2f039e91a3e4154f0f6c9090700cb233e549",
-      "size": 6778,
-      "repo_path": "bios/Arcade/FBNeo/astro_astrocde.zip",
+      "dest": "bios/fbneo/astrocde.zip",
+      "sha1": "8641b09be090c0dc45f4ee5459fec3cc6fb9d78e",
+      "size": 6800,
+      "repo_path": "bios/Bally/Astrocade/astrocde.zip",
       "cores": [
         "FinalBurn Neo"
       ]
@@ -24871,15 +25339,6 @@
       ]
     },
     {
-      "dest": "bios/fbneo/snes_st018.zip",
-      "sha1": "268af28171e79f6ed8391b98c84c075a2d0c76ea",
-      "size": 62579,
-      "repo_path": "bios/Arcade/FBNeo/snes_st018.zip",
-      "cores": [
-        "FinalBurn Neo"
-      ]
-    },
-    {
       "dest": "bios/fbneo/spec128.zip",
       "sha1": "e56f7be80abcf2c298310e8d2af66b9f29a6db31",
       "size": 32986,
@@ -24920,6 +25379,15 @@
       "sha1": "441a7d2a63e5f1a2d94a62404fa8afad99e7634a",
       "size": 69800,
       "repo_path": "bios/Arcade/Arcade/st011.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "bios/fbneo/st018.zip",
+      "sha1": "268af28171e79f6ed8391b98c84c075a2d0c76ea",
+      "size": 62579,
+      "repo_path": "bios/Arcade/Arcade/st018.zip",
       "cores": [
         "FinalBurn Neo"
       ]

@@ -4,7 +4,7 @@
   "platform": "bizhawk",
   "display_name": "BizHawk",
   "version": "1.0",
-  "generated": "2026-08-07T18:49:15Z",
+  "generated": "2026-08-08T04:39:58Z",
   "base_destination": "Firmware",
   "detect": [
     {
@@ -19,8 +19,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 539,
-  "total_size": 2548980230,
+  "total_files": 538,
+  "total_size": 2549235618,
   "files": [
     {
       "dest": "panafz1.bin",
@@ -1399,18 +1399,18 @@
     },
     {
       "dest": "bios_U.sms",
-      "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
-      "size": 8192,
-      "repo_path": "bios/Sega/Master System/SMS_us_1.3.sms",
+      "sha1": "fc465122134d95363112eb51b9ab71db3576cefd",
+      "size": 16384,
+      "repo_path": "bios/Sega/Master System/.variants/bios_U.sms.ee2c29ba",
       "cores": [
         "Genesis Plus GX"
       ]
     },
     {
       "dest": "bios_E.sms",
-      "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
-      "size": 8192,
-      "repo_path": "bios/Sega/Master System/SMS_us_1.3.sms",
+      "sha1": "6aca0e3dffe461ba1cb11a86cd4caf5b97e1b8df",
+      "size": 262144,
+      "repo_path": "bios/Sega/Master System/.variants/bios_E.sms.81c3476b",
       "cores": [
         "Genesis Plus GX"
       ]
@@ -3603,15 +3603,6 @@
       ]
     },
     {
-      "dest": "astro_astrocde.zip",
-      "sha1": "141b2f039e91a3e4154f0f6c9090700cb233e549",
-      "size": 6778,
-      "repo_path": "bios/Arcade/FBNeo/astro_astrocde.zip",
-      "cores": [
-        "FinalBurn Neo"
-      ]
-    },
-    {
       "dest": "cchip.zip",
       "sha1": "364f2302a145a0fd6de767d7f8484badde1d1a6e",
       "size": 2700,
@@ -3693,10 +3684,10 @@
       ]
     },
     {
-      "dest": "gba_gba.zip",
+      "dest": "gba.zip",
       "sha1": "ddb271d497462a6443bb88ca6520e0a6af693f18",
       "size": 13624,
-      "repo_path": "bios/Arcade/FBNeo/gba_gba.zip",
+      "repo_path": "bios/Arcade/Arcade/gba.zip",
       "cores": [
         "FinalBurn Neo"
       ]
@@ -4008,15 +3999,6 @@
       ]
     },
     {
-      "dest": "snes_st018.zip",
-      "sha1": "268af28171e79f6ed8391b98c84c075a2d0c76ea",
-      "size": 62579,
-      "repo_path": "bios/Arcade/FBNeo/snes_st018.zip",
-      "cores": [
-        "FinalBurn Neo"
-      ]
-    },
-    {
       "dest": "spec128.zip",
       "sha1": "e56f7be80abcf2c298310e8d2af66b9f29a6db31",
       "size": 32986,
@@ -4057,6 +4039,15 @@
       "sha1": "441a7d2a63e5f1a2d94a62404fa8afad99e7634a",
       "size": 69800,
       "repo_path": "bios/Arcade/Arcade/st011.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "st018.zip",
+      "sha1": "268af28171e79f6ed8391b98c84c075a2d0c76ea",
+      "size": 62579,
+      "repo_path": "bios/Arcade/Arcade/st018.zip",
       "cores": [
         "FinalBurn Neo"
       ]
@@ -4107,10 +4098,10 @@
       ]
     },
     {
-      "dest": "fbneo/astro_astrocde.zip",
-      "sha1": "141b2f039e91a3e4154f0f6c9090700cb233e549",
-      "size": 6778,
-      "repo_path": "bios/Arcade/FBNeo/astro_astrocde.zip",
+      "dest": "fbneo/astrocde.zip",
+      "sha1": "8641b09be090c0dc45f4ee5459fec3cc6fb9d78e",
+      "size": 6800,
+      "repo_path": "bios/Bally/Astrocade/astrocde.zip",
       "cores": [
         "FinalBurn Neo"
       ]
@@ -4224,10 +4215,10 @@
       ]
     },
     {
-      "dest": "fbneo/gba_gba.zip",
+      "dest": "fbneo/gba.zip",
       "sha1": "ddb271d497462a6443bb88ca6520e0a6af693f18",
       "size": 13624,
-      "repo_path": "bios/Arcade/FBNeo/gba_gba.zip",
+      "repo_path": "bios/Arcade/Arcade/gba.zip",
       "cores": [
         "FinalBurn Neo"
       ]
@@ -4575,15 +4566,6 @@
       ]
     },
     {
-      "dest": "fbneo/snes_st018.zip",
-      "sha1": "268af28171e79f6ed8391b98c84c075a2d0c76ea",
-      "size": 62579,
-      "repo_path": "bios/Arcade/FBNeo/snes_st018.zip",
-      "cores": [
-        "FinalBurn Neo"
-      ]
-    },
-    {
       "dest": "fbneo/spec128.zip",
       "sha1": "e56f7be80abcf2c298310e8d2af66b9f29a6db31",
       "size": 32986,
@@ -4624,6 +4606,15 @@
       "sha1": "441a7d2a63e5f1a2d94a62404fa8afad99e7634a",
       "size": 69800,
       "repo_path": "bios/Arcade/Arcade/st011.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/st018.zip",
+      "sha1": "268af28171e79f6ed8391b98c84c075a2d0c76ea",
+      "size": 62579,
+      "repo_path": "bios/Arcade/Arcade/st018.zip",
       "cores": [
         "FinalBurn Neo"
       ]

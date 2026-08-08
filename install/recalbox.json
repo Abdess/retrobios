@@ -4,7 +4,7 @@
   "platform": "recalbox",
   "display_name": "Recalbox",
   "version": "1.0",
-  "generated": "2026-08-08T01:20:56Z",
+  "generated": "2026-08-08T04:40:35Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -237,7 +237,7 @@
     }
   ],
   "total_files": 1184,
-  "total_size": 2494020078,
+  "total_size": 2494547388,
   "files": [
     {
       "dest": "3do/panafz1.bin",
@@ -2194,9 +2194,9 @@
     },
     {
       "dest": "fuse/trdos.rom",
-      "sha1": "21695e3f2a8f796386ce66eea8a246b0ac44810c",
-      "size": 16384,
-      "repo_path": "bios/Sinclair/ZX Spectrum/beta128.trdos.v5-03.rom",
+      "sha1": "0de79c33e378c601e238ee37c219f8aa8442787a",
+      "size": 4096,
+      "repo_path": "bios/Sinclair/ZX Spectrum/.variants/trdos.rom.41c0ba0a",
       "cores": null
     },
     {
@@ -2661,6 +2661,15 @@
       "sha1": "32fc78415114a976af9c2ee53ea13de9f40b55ee",
       "size": 7971360,
       "repo_path": "bios/Arcade/MAME/cheat.dat",
+      "cores": [
+        "AdvanceMAME"
+      ]
+    },
+    {
+      "dest": "event.dat",
+      "sha1": "8c34c85f92bc6771d789e880953a1cc43341485e",
+      "size": 22066,
+      "repo_path": "bios/Arcade/MAME/event.dat",
       "cores": [
         "AdvanceMAME"
       ]
@@ -7941,15 +7950,6 @@
       ]
     },
     {
-      "dest": "astro_astrocde.zip",
-      "sha1": "141b2f039e91a3e4154f0f6c9090700cb233e549",
-      "size": 6778,
-      "repo_path": "bios/Arcade/FBNeo/astro_astrocde.zip",
-      "cores": [
-        "FinalBurn Neo"
-      ]
-    },
-    {
       "dest": "cchip.zip",
       "sha1": "364f2302a145a0fd6de767d7f8484badde1d1a6e",
       "size": 2700,
@@ -8328,15 +8328,6 @@
       ]
     },
     {
-      "dest": "snes_st018.zip",
-      "sha1": "268af28171e79f6ed8391b98c84c075a2d0c76ea",
-      "size": 62579,
-      "repo_path": "bios/Arcade/FBNeo/snes_st018.zip",
-      "cores": [
-        "FinalBurn Neo"
-      ]
-    },
-    {
       "dest": "spec128.zip",
       "sha1": "e56f7be80abcf2c298310e8d2af66b9f29a6db31",
       "size": 32986,
@@ -8377,6 +8368,15 @@
       "sha1": "441a7d2a63e5f1a2d94a62404fa8afad99e7634a",
       "size": 69800,
       "repo_path": "bios/Arcade/Arcade/st011.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "st018.zip",
+      "sha1": "268af28171e79f6ed8391b98c84c075a2d0c76ea",
+      "size": 62579,
+      "repo_path": "bios/Arcade/Arcade/st018.zip",
       "cores": [
         "FinalBurn Neo"
       ]
@@ -8581,18 +8581,18 @@
     },
     {
       "dest": "scummvm/extra/MT32_CONTROL.ROM",
-      "sha1": "b083518fffb7f66b03c23b7eb4f868e62dc5a987",
+      "sha1": "a439fbb390da38cada95a7cbb1d6ca199cd66ef8",
       "size": 65536,
-      "repo_path": "bios/Commodore/Amiga/mt32-roms/mt32_control.rom",
+      "repo_path": "bios/Commodore/Amiga/mt32-roms/cm32l_control.rom",
       "cores": [
         "ScummVM"
       ]
     },
     {
       "dest": "scummvm/extra/MT32_PCM.ROM",
-      "sha1": "f6b1eebc4b2d200ec6d3d21d51325d5b48c60252",
-      "size": 524288,
-      "repo_path": "bios/Commodore/Amiga/mt32-roms/pcm_mt32.rom",
+      "sha1": "289cc298ad532b702461bfc738009d9ebe8025ea",
+      "size": 1048576,
+      "repo_path": "bios/Commodore/Amiga/mt32-roms/pcm_cm32l.rom",
       "cores": [
         "ScummVM"
       ]
@@ -8616,10 +8616,10 @@
       ]
     },
     {
-      "dest": "fbneo/astro_astrocde.zip",
-      "sha1": "141b2f039e91a3e4154f0f6c9090700cb233e549",
-      "size": 6778,
-      "repo_path": "bios/Arcade/FBNeo/astro_astrocde.zip",
+      "dest": "fbneo/astrocde.zip",
+      "sha1": "8641b09be090c0dc45f4ee5459fec3cc6fb9d78e",
+      "size": 6800,
+      "repo_path": "bios/Bally/Astrocade/astrocde.zip",
       "cores": [
         "FinalBurn Neo"
       ]
@@ -9075,15 +9075,6 @@
       ]
     },
     {
-      "dest": "fbneo/snes_st018.zip",
-      "sha1": "268af28171e79f6ed8391b98c84c075a2d0c76ea",
-      "size": 62579,
-      "repo_path": "bios/Arcade/FBNeo/snes_st018.zip",
-      "cores": [
-        "FinalBurn Neo"
-      ]
-    },
-    {
       "dest": "fbneo/spec128.zip",
       "sha1": "e56f7be80abcf2c298310e8d2af66b9f29a6db31",
       "size": 32986,
@@ -9124,6 +9115,15 @@
       "sha1": "441a7d2a63e5f1a2d94a62404fa8afad99e7634a",
       "size": 69800,
       "repo_path": "bios/Arcade/Arcade/st011.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "fbneo/st018.zip",
+      "sha1": "268af28171e79f6ed8391b98c84c075a2d0c76ea",
+      "size": 62579,
+      "repo_path": "bios/Arcade/Arcade/st018.zip",
       "cores": [
         "FinalBurn Neo"
       ]

@@ -4,7 +4,7 @@
   "platform": "romm",
   "display_name": "RomM",
   "version": "1.0",
-  "generated": "2026-08-07T18:50:25Z",
+  "generated": "2026-08-08T04:41:05Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -15,7 +15,7 @@
   ],
   "standalone_copies": [],
   "total_files": 543,
-  "total_size": 1487357932,
+  "total_size": 1487357954,
   "files": [
     {
       "dest": "3do/3do_arcade_saot.bin",
@@ -3735,10 +3735,10 @@
       ]
     },
     {
-      "dest": "colecovision/astro_astrocde.zip",
-      "sha1": "141b2f039e91a3e4154f0f6c9090700cb233e549",
-      "size": 6778,
-      "repo_path": "bios/Arcade/FBNeo/astro_astrocde.zip",
+      "dest": "colecovision/astrocde.zip",
+      "sha1": "8641b09be090c0dc45f4ee5459fec3cc6fb9d78e",
+      "size": 6800,
+      "repo_path": "bios/Bally/Astrocade/astrocde.zip",
       "cores": [
         "FinalBurn Neo"
       ]
@@ -4104,15 +4104,6 @@
       ]
     },
     {
-      "dest": "colecovision/snes_st018.zip",
-      "sha1": "268af28171e79f6ed8391b98c84c075a2d0c76ea",
-      "size": 62579,
-      "repo_path": "bios/Arcade/FBNeo/snes_st018.zip",
-      "cores": [
-        "FinalBurn Neo"
-      ]
-    },
-    {
       "dest": "colecovision/spec128.zip",
       "sha1": "e56f7be80abcf2c298310e8d2af66b9f29a6db31",
       "size": 32986,
@@ -4153,6 +4144,15 @@
       "sha1": "441a7d2a63e5f1a2d94a62404fa8afad99e7634a",
       "size": 69800,
       "repo_path": "bios/Arcade/Arcade/st011.zip",
+      "cores": [
+        "FinalBurn Neo"
+      ]
+    },
+    {
+      "dest": "colecovision/st018.zip",
+      "sha1": "268af28171e79f6ed8391b98c84c075a2d0c76ea",
+      "size": 62579,
+      "repo_path": "bios/Arcade/Arcade/st018.zip",
       "cores": [
         "FinalBurn Neo"
       ]

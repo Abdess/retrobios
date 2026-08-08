@@ -4,7 +4,7 @@
   "platform": "emudeck",
   "display_name": "EmuDeck",
   "version": "1.0",
-  "generated": "2026-08-08T00:30:33Z",
+  "generated": "2026-08-08T04:40:01Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -250,7 +250,7 @@
     }
   ],
   "total_files": 525,
-  "total_size": 1770071739,
+  "total_size": 1770596027,
   "files": [
     {
       "dest": "colecovision.rom",
@@ -3619,18 +3619,18 @@
     },
     {
       "dest": "scummvm/extra/MT32_CONTROL.ROM",
-      "sha1": "b083518fffb7f66b03c23b7eb4f868e62dc5a987",
+      "sha1": "a439fbb390da38cada95a7cbb1d6ca199cd66ef8",
       "size": 65536,
-      "repo_path": "bios/Commodore/Amiga/mt32-roms/mt32_control.rom",
+      "repo_path": "bios/Commodore/Amiga/mt32-roms/cm32l_control.rom",
       "cores": [
         "ScummVM"
       ]
     },
     {
       "dest": "scummvm/extra/MT32_PCM.ROM",
-      "sha1": "f6b1eebc4b2d200ec6d3d21d51325d5b48c60252",
-      "size": 524288,
-      "repo_path": "bios/Commodore/Amiga/mt32-roms/pcm_mt32.rom",
+      "sha1": "289cc298ad532b702461bfc738009d9ebe8025ea",
+      "size": 1048576,
+      "repo_path": "bios/Commodore/Amiga/mt32-roms/pcm_cm32l.rom",
       "cores": [
         "ScummVM"
       ]
