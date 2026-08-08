@@ -430,7 +430,7 @@ class TestProvenancePage(unittest.TestCase):
 
     def test_page_states_match_count_and_boundary(self):
         page = self._page()
-        self.assertIn("**1** of 2 files", page)
+        self.assertIn("**1** of 2 system files", page)
         self.assertIn("## What the badge means", page)
         self.assertIn("## What it does not mean", page)
         self.assertIn("A file without a badge is not inferior", page)
@@ -465,7 +465,7 @@ class TestProvenancePage(unittest.TestCase):
 
     def test_page_without_any_match(self):
         page = self._page(provenance=False)
-        self.assertIn("**0** of 2 files", page)
+        self.assertIn("**0** of 2 system files", page)
 
 
 if __name__ == "__main__":
