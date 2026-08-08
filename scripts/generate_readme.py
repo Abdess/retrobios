@@ -24,6 +24,7 @@ from common import (
     load_emulator_profiles,
     load_platform_config,
     load_platform_registry,
+    resolve_platform_cores,
     unique_emulator_profiles,
     write_if_changed,
 )
@@ -54,6 +55,19 @@ def compute_coverage(
     undeclared = result.get("undeclared_files", [])
     core_present = sum(1 for u in undeclared if u.get("in_repo"))
     core_missing = len(undeclared) - core_present
+    # Files a profile marks unsourceable never reach the undeclared list, so
+    # the gap they represent has to be counted back in.
+    profiles = load_emulator_profiles("emulators")
+    unsourceable_names = {
+        f.get("name", "")
+        for emu in resolve_platform_cores(config, profiles)
+        for f in (profiles.get(emu) or {}).get("files", []) or []
+        if f.get("unsourceable")
+    }
+    core_unsourceable = len(unsourceable_names)
+    missing_names = unsourceable_names | {
+        u.get("name", "") for u in undeclared if not u.get("in_repo")
+    }
     return {
         "platform": config.get("platform", platform_name),
         "total": total,
@@ -64,6 +78,8 @@ def compute_coverage(
         "percentage": pct,
         "core_present": core_present,
         "core_missing": core_missing,
+        "core_unsourceable": core_unsourceable,
+        "missing_names": missing_names,
         "pack_files": present + core_present,
         "total_missing": missing + core_missing,
         "mode": config.get("verification_mode", "existence"),
@@ -180,7 +196,7 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
     )
     emulator_count = len(profiles)
     comp = compute_composition(db)
-    missing_total = sum(c["total_missing"] for c in coverages.values())
+    missing_total = len(set().union(*(c["missing_names"] for c in coverages.values())))
 
     system_ids: set[str] = set()
     for p in profiles.values():
@@ -359,8 +375,8 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
             "",
             "## Coverage",
             "",
-            "| Platform | Platform list | Its emulators need | Verified by |",
-            "|----------|--------------:|-------------------:|-------------|",
+            "| Platform | Platform list | Read from emulator code | Verified by |",
+            "|----------|--------------:|------------------------:|-------------|",
         ]
     )
 
@@ -373,7 +389,9 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
     for name, cov in sorted(coverages.items(), key=lambda x: x[1]["platform"]):
         display = f"{cov['platform']} *" if name in archived else cov["platform"]
         checked = mode_labels.get(cov["mode"], cov["mode"])
-        core_total = cov["core_present"] + cov["core_missing"]
+        core_total = (
+            cov["core_present"] + cov["core_missing"] + cov["core_unsourceable"]
+        )
         core_cell = f"{cov['core_present']:,}/{core_total:,}" if core_total else "-"
         lines.append(
             f"| {display} | {cov['present']:,}/{cov['total']:,} |"
@@ -383,12 +401,15 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
     lines.extend(
         [
             "",
-            "Each fraction reads collected over needed. Platform list is the"
-            " BIOS list the platform publishes. Its emulators need counts what"
-            " the cores it ships actually load, read from their source code,"
-            " that the list never mentions: routinely several times the list"
-            " itself. Both go in the pack, so a full pair means nothing is"
-            " missing. Verified by is the check the platform itself runs.",
+            "Each fraction reads collected over needed, required and optional"
+            " files alike, since both go in the pack. Platform list is the BIOS"
+            " list the platform publishes. Read from emulator code counts the"
+            " files the cores it ships load that the list never mentions,"
+            " traced in their source: routinely several times the list itself,"
+            " and it includes the files documented as impossible to source.",
+            "It is a floor, not a ceiling: a core that accepts any file handed"
+            " to it declares nothing to count, so what such an emulator can"
+            " load is not enumerable from its code.",
             f"The [gap analysis]({SITE_URL}gaps/) page names those missing files"
             " and details how far each platform's files are corroborated against"
             " emulator source code.",

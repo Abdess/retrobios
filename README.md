@@ -56,7 +56,7 @@ The RetroDECK pack already contains its own `bios/` folder, so it extracts into 
 BIOS, firmware, and system files for consoles from Atari to PlayStation 3.
 Every file passes its platform's own verification; where an emulator profile exists, the expected hashes and sizes are read from the emulator's source code (the Source-backed column below).
 
-- **142 files** the platforms' emulators load are not in the collection yet, named in the [gap analysis](https://abdess.github.io/retrobios/gaps/)
+- **77 files** the platforms' emulators load are not in the collection yet, named in the [gap analysis](https://abdess.github.io/retrobios/gaps/)
 - **12 platforms** supported with platform-specific verification
 - **328 emulators** profiled from source (RetroArch cores + standalone)
 - **409 systems** covered (NES, SNES, PlayStation, Saturn, Dreamcast, ...)
@@ -72,22 +72,23 @@ Full list with per-file details: **[https://abdess.github.io/retrobios/](https:/
 
 ## Coverage
 
-| Platform | Platform list | Its emulators need | Verified by |
-|----------|--------------:|-------------------:|-------------|
-| Batocera | 353/353 | 1,145/1,216 | MD5 hash |
-| BizHawk | 118/118 | 366/366 | SHA1 hash |
+| Platform | Platform list | Read from emulator code | Verified by |
+|----------|--------------:|------------------------:|-------------|
+| Batocera | 353/353 | 1,145/1,222 | MD5 hash |
+| BizHawk | 118/118 | 366/367 | SHA1 hash |
 | EmuDeck | 161/161 | 404/404 | MD5 hash |
-| Lakka | 530/530 | 1,148/1,148 | file presence |
+| Lakka | 530/530 | 1,148/1,153 | file presence |
 | MiSTer FPGA | 65/65 | - | MD5 hash |
-| ROCKNIX | 38/38 | 1,483/1,483 | MD5 hash |
-| Recalbox | 346/346 | 714/714 | MD5 hash |
-| RetroArch | 530/530 | 1,148/1,148 | file presence |
-| RetroBat | 341/341 | 808/879 | MD5 hash |
-| RetroDECK | 2,008/2,008 | 1,182/1,182 | MD5 hash |
-| RetroPie * | 530/530 | 1,148/1,148 | file presence |
-| RomM | 374/374 | 266/266 | MD5 hash |
+| ROCKNIX | 38/38 | 1,483/1,488 | MD5 hash |
+| Recalbox | 346/346 | 714/719 | MD5 hash |
+| RetroArch | 530/530 | 1,148/1,153 | file presence |
+| RetroBat | 341/341 | 808/884 | MD5 hash |
+| RetroDECK | 2,008/2,008 | 1,182/1,188 | MD5 hash |
+| RetroPie * | 530/530 | 1,148/1,153 | file presence |
+| RomM | 374/374 | 266/269 | MD5 hash |
 
-Each fraction reads collected over needed. Platform list is the BIOS list the platform publishes. Its emulators need counts what the cores it ships actually load, read from their source code, that the list never mentions: routinely several times the list itself. Both go in the pack, so a full pair means nothing is missing. Verified by is the check the platform itself runs.
+Each fraction reads collected over needed, required and optional files alike, since both go in the pack. Platform list is the BIOS list the platform publishes. Read from emulator code counts the files the cores it ships load that the list never mentions, traced in their source: routinely several times the list itself, and it includes the files documented as impossible to source.
+It is a floor, not a ceiling: a core that accepts any file handed to it declares nothing to count, so what such an emulator can load is not enumerable from its code.
 The [gap analysis](https://abdess.github.io/retrobios/gaps/) page names those missing files and details how far each platform's files are corroborated against emulator source code.
 
 ## Build your own pack
@@ -161,4 +162,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software.
 The legal reasoning is laid out in the [FAQ](https://abdess.github.io/retrobios/wiki/faq/#is-this-legal).
 
-*Auto-generated on 2026-08-08T06:45:48Z*
+*Auto-generated on 2026-08-08T07:00:03Z*

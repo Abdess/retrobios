@@ -1734,8 +1734,8 @@ def generate_gap_analysis(
     lines.extend([
         "## What Each Pack Contains",
         "",
-        "| Platform | Platform list | Its emulators need | Verified by |",
-        "|----------|--------------:|-------------------:|-------------|",
+        "| Platform | Platform list | Read from emulator code | Verified by |",
+        "|----------|--------------:|------------------------:|-------------|",
     ])
 
     mode_labels = {
@@ -1755,7 +1755,9 @@ def generate_gap_analysis(
 
     for pname, cov in sorted(coverages.items(), key=lambda x: x[1]["platform"]):
         display = cov["platform"]
-        core_total = cov["core_present"] + cov["core_missing"]
+        core_total = (
+            cov["core_present"] + cov["core_missing"] + cov["core_unsourceable"]
+        )
         lines.append(
             f"| [{display}](platforms/{pname}.md) "
             f"| {_ratio(cov['present'], cov['total'])} "
@@ -1764,13 +1766,16 @@ def generate_gap_analysis(
         )
     lines.extend([
         "",
-        "Each fraction reads collected over needed. Platform list is the BIOS "
-        "list the platform publishes. Its emulators need counts what the cores "
-        "it ships actually load, read from their source code, that the list "
-        "never mentions: routinely several times the list itself. Both go in "
-        "the pack, so a full pair means nothing is missing; a short one is "
-        "flagged and named in the sections below. Verified by is the check the "
-        "platform runs at runtime, replicated here "
+        "Each fraction reads collected over needed, required and optional "
+        "files alike, since both go in the pack. Platform list is the BIOS "
+        "list the platform publishes. Read from emulator code counts the files "
+        "the cores it ships load that the list never mentions, traced in their "
+        "source: routinely several times the list itself, and it includes the "
+        "files documented as impossible to source. A short fraction is flagged "
+        "and named in the sections below. It is a floor, not a ceiling: a core "
+        "that accepts any file handed to it declares nothing to count, so what "
+        "such an emulator can load is not enumerable from its code. Verified "
+        "by is the check the platform runs at runtime, replicated here "
         "([how each mode works](wiki/verification-modes.md)).",
         "",
         "## Corroboration Against Emulator Source",
