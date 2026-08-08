@@ -3406,6 +3406,49 @@ class TestE2E(unittest.TestCase):
             self.assertIsInstance(f["size"], int)
             self.assertGreater(len(f["sha1"]), 0)
 
+    def test_91b_manifest_hash_points_at_a_fetchable_file(self):
+        """A declared hash no local file carries must not blank repo_path.
+
+        install.py builds its download URL from repo_path, so an upstream
+        hash that resolves to nothing leaves the file unfetchable.
+        """
+        from generate_pack import generate_manifest
+
+        registry_path = os.path.join(self.platforms_dir, "_test_registry2.yml")
+        with open(registry_path, "w") as fh:
+            yaml.dump({"platforms": {"test_existence": {"install": {}}}}, fh)
+
+        config_path = os.path.join(self.platforms_dir, "test_existence.yml")
+        with open(config_path) as fh:
+            config = yaml.safe_load(fh)
+        for system in config.get("systems", {}).values():
+            for entry in system.get("files", []):
+                entry["sha1"] = "0" * 40  # upstream hash, absent from the repo
+        with open(config_path, "w") as fh:
+            yaml.dump(config, fh)
+        from common import _platform_config_cache
+
+        _platform_config_cache.clear()
+
+        manifest = generate_manifest(
+            "test_existence",
+            self.platforms_dir,
+            self.db,
+            self.bios_dir,
+            registry_path,
+            emulators_dir=self.emulators_dir,
+        )
+
+        self.assertGreater(len(manifest["files"]), 0)
+        for f in manifest["files"]:
+            if f.get("release_asset"):
+                continue
+            self.assertTrue(
+                f["repo_path"],
+                f"{f['dest']} has no repo_path, install.py cannot fetch it",
+            )
+            self.assertNotEqual(f["sha1"], "0" * 40)
+
     def test_92_manifest_matches_zip(self):
         """Manifest file destinations match ZIP contents (excluding metadata)."""
         from generate_pack import generate_manifest, generate_pack

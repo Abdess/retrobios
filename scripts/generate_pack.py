@@ -3179,14 +3179,15 @@ def generate_manifest(
                 if status in ("not_found", "external"):
                     continue
 
-                # Get SHA1 and size
+                # Get SHA1 and size. The installer fetches by hash, so record
+                # the copy this repo holds: an upstream hash carried by no
+                # local file resolves to no download URL at all.
                 sha1 = file_entry.get("sha1", "")
                 file_size = 0
                 if local_path and os.path.exists(local_path):
                     file_size = os.path.getsize(local_path)
-                    if not sha1:
-                        hashes = compute_hashes(local_path)
-                        sha1 = hashes["sha1"]
+                    if not sha1 or not _get_repo_path(sha1, db):
+                        sha1 = compute_hashes(local_path)["sha1"]
 
                 repo_path = _get_repo_path(sha1, db) if sha1 else ""
 
