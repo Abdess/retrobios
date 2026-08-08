@@ -1021,12 +1021,14 @@ def generate_provenance_page(db: dict, report: dict) -> str:
     total_missing = sum(len(d["missing"]) for d in report.values())
     lines.extend(
         [
-            "## Missing from the collection",
+            "## Wanted: catalogued dumps this project does not have",
             "",
-            f"**{total_missing:,}** catalogued dumps are absent, listed here "
-            "with their hashes so anyone can check a personal collection "
-            "against them. A contribution matching one of these hashes is "
-            "welcome: see [Contributing](contributing.md).",
+            f"The tables below list **{total_missing:,}** dumps a catalog "
+            "describes and the collection lacks. Nothing here ships in any "
+            "pack: it is an acquisition list, published with hashes so anyone "
+            "can check a personal collection against it. A contribution "
+            "matching one of these hashes is welcome: see "
+            "[Contributing](contributing.md).",
             "",
         ]
     )
