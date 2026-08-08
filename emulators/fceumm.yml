@@ -4,7 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/libretro-fceumm"
 upstream: "https://sourceforge.net/projects/fceumm/"
 profiled_date: "2026-03-23"
-source_commit: "bf2a9ad3d5fca5997047925bd8d28c350c708c6f"
+source_commit: "b5e3566515c27dc66c9c20572171673126532e06"
 core_version: "SVN"
 display_name: "Nintendo - NES / Famicom (FCEUmm)"
 cores:
@@ -29,7 +29,7 @@ files:
     required: true
     size: 8192
     validation: [size]
-    source_ref: "src/fds.c:636-667 (FDSLoad), src/general.c:64-66 (FCEUMKF_FDSROM)"
+    source_ref: "src/fds.c:680-715 (FDSLoad), src/general.c:65-67 (FCEUMKF_FDSROM)"
     note: "Loaded at 0xE000, mapped as 8 KB PRG bank 0. Load fails if missing or short read."
 
   # --- Game Genie ROM (optional, core option fceumm_game_genie) ---
@@ -37,7 +37,7 @@ files:
     system: nintendo-nes
     description: "Game Genie add-on cartridge ROM"
     required: false
-    source_ref: "src/cart.c:344-398 (FCEU_OpenGenie), src/general.c:60-62 (FCEUMKF_GGROM)"
+    source_ref: "src/cart.c:401-455 (FCEU_OpenGenie), src/general.c:61-63 (FCEUMKF_GGROM)"
     note: "iNES format ROM (4 KB PRG + 256 bytes CHR). Core option disabled by default. Only applies to cartridge games."
 
   # --- Custom palette (optional, core option fceumm_palette) ---
@@ -45,5 +45,5 @@ files:
     system: nintendo-nes
     description: "External NES color palette"
     required: false
-    source_ref: "src/palette.c:170-200 (FCEU_LoadGamePalette), src/general.c:68-70 (FCEUMKF_PALETTE), src/drivers/libretro/libretro.c:1890-1899"
+    source_ref: "src/palette.c:170-200 (FCEU_LoadGamePalette), src/general.c:69-71 (FCEUMKF_PALETTE), src/drivers/libretro/libretro.c:1991-2000"
     note: "RGB triplets (64 standard or 512 with de-emphasis). Only loaded when palette core option is set to Custom."

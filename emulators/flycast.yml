@@ -5,7 +5,7 @@ source: "https://github.com/libretro/flycast"
 upstream: "https://github.com/flyinghead/flycast"
 logo: "https://raw.githubusercontent.com/flyinghead/flycast/master/shell/linux/flycast.png"
 profiled_date: "2026-03-23"
-source_commit: "b897744e27c730c7519784b2aef12ba7f658de31"
+source_commit: "45bd2f4e59708a7c16a5bb1cb90a94d1b39e330d"
 core_version: "0.1"
 display_name: "Sega - Dreamcast/Naomi (Flycast)"
 cores:
@@ -84,7 +84,7 @@ files:
     system: sega-dreamcast
     required: false
     note: "Dreamcast system font for HLE BIOS text rendering. Built-in font used as fallback."
-    source_ref: "core/reios/reios.cpp:736-754"
+    source_ref: "core/reios/reios.cpp:737-753"
 
   # -------------------------------------------------------
   # Sega NAOMI
