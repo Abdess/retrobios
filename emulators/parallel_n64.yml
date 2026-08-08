@@ -4,7 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/parallel-n64"
 upstream: "https://github.com/mupen64plus/mupen64plus-core"
 profiled_date: "2026-03-24"
-source_commit: "1da824e13e725a7144f3245324f43d59623974f8"
+source_commit: "37605bb45964c7a2695e6301e80f5c6a4feb5558"
 core_version: "2.0-rc2"
 display_name: "Nintendo - Nintendo 64 (ParaLLEl N64)"
 systems: [nintendo-64, nintendo-64dd]
@@ -16,7 +16,7 @@ files:
     required: false
     description: "64DD IPL ROM"
     note: "Only loaded when a 64DD disk image (.ndd) is present via subsystem API. Core fails to load disk games without it."
-    source_ref: "libretro/libretro.c:576-623"
+    source_ref: "libretro/libretro.c:723"
 
 notes:
   hle_available: true
