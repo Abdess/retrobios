@@ -4,6 +4,7 @@ core_classification: game_engine
 source: "https://github.com/libretro/libretro-chailove"
 upstream: "https://github.com/libretro/libretro-chailove"
 profiled_date: "2026-03-23"
+source_commit: "467cd453e3b1761c5c3611746b35e709328a2ced"
 core_version: "2.0.0"
 display_name: "ChaiLove"
 cores: [chailove]

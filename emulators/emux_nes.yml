@@ -4,6 +4,7 @@ core_classification: official_port
 source: "https://github.com/libretro/emux"
 upstream: "https://github.com/sronsse/emux"
 profiled_date: "2026-03-23"
+source_commit: "120362977493765032cba7bed9c7aee1ff5b8579"
 core_version: "0.1"
 display_name: "Nintendo - NES / Famicom (Emux NES)"
 cores:

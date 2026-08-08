@@ -3,6 +3,7 @@ type: standalone
 source: "https://github.com/EKA2L1/EKA2L1"
 upstream: "https://github.com/EKA2L1/EKA2L1"
 profiled_date: "2026-03-26"
+source_commit: "46ef1ebdcfbd7454c080d0f1efb5fb54cfa7f622"
 core_version: "continuous"
 display_name: "EKA2L1 (Symbian OS / N-Gage)"
 cores:

@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/beetle-pce-fast-libretro"
 upstream: "https://mednafen.github.io/"
 profiled_date: "2026-03-24"
+source_commit: "0fa44d2500ebc9bf96d2808209be27a69006df79"
 core_version: "v1.31.0.0"
 display_name: "NEC - PC Engine / CD (Beetle PCE FAST)"
 cores: [mednafen_pce_fast, pce_fast, beetle_pce_fast]

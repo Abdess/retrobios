@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/vitaquake3"
 upstream: "https://github.com/ioquake/ioq3"
 profiled_date: "2026-03-25"
+source_commit: "198e9959e2d5b692a592aa6fd7537e9a00869c42"
 core_version: "git"
 display_name: "Quake III: Arena (vitaQuake 3)"
 cores: [vitaquake3]

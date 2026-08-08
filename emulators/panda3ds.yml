@@ -5,6 +5,7 @@ core_name: panda3ds_libretro
 source: "https://github.com/panda3ds-emu/panda3ds"
 upstream: "https://github.com/panda3ds-emu/panda3ds"
 profiled_date: "2026-03-24"
+source_commit: "3787358bdae41d5532ccd00c8998a527ae949949"
 core_version: "Git"
 display_name: "Nintendo - 3DS (Panda3DS)"
 cores: [panda3ds]

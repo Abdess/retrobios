@@ -3,6 +3,7 @@ type: libretro
 core_classification: pure_libretro
 source: "https://github.com/libretro/FreeChaF"
 profiled_date: "2026-03-23"
+source_commit: "76c7a84f1f7e80f3e6f2bba96fe100cb24e99124"
 core_version: "GIT"
 display_name: "Fairchild - ChannelF (FreeChaF)"
 cores:

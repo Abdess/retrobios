@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/libretro-vecx"
 upstream: "https://github.com/jhawthorn/vecx"
 profiled_date: "2026-03-25"
+source_commit: "eacee1f6f029688b043ed802cece29dd3c320e21"
 core_version: "SVN"
 display_name: "GCE - Vectrex (vecx)"
 cores:

@@ -4,6 +4,7 @@ core_classification: pure_libretro
 source: "https://github.com/libretro/libretro-3dengine"
 upstream: "https://github.com/libretro/libretro-3dengine"
 profiled_date: "2026-03-22"
+source_commit: "7772bd5965ab244ecc53580c8969a22455aa91d5"
 core_version: "v1"
 display_name: "Test Core - 3D Engine"
 cores: [3dengine]

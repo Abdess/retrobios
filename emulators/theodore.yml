@@ -4,6 +4,7 @@ core_classification: pure_libretro
 source: "https://github.com/Zlika/theodore"
 upstream: "http://dcmoto.free.fr/"
 profiled_date: "2026-03-25"
+source_commit: "242e932d838284a61b81aa7641c60d813934025e"
 core_version: "Git (post-3.1)"
 display_name: "Thomson - MO/TO (Theodore)"
 cores: [theodore]

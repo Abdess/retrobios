@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/mittonk/dice-libretro"
 upstream: "https://sourceforge.net/projects/dice/"
 profiled_date: "2026-03-23"
+source_commit: "72d66a67a296b004fa0bb7a57dbab9cfcec462b9"
 core_version: "v0.4.2"
 display_name: "Arcade (DICE)"
 cores:

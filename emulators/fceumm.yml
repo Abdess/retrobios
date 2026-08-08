@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/libretro-fceumm"
 upstream: "https://sourceforge.net/projects/fceumm/"
 profiled_date: "2026-03-23"
+source_commit: "bf2a9ad3d5fca5997047925bd8d28c350c708c6f"
 core_version: "SVN"
 display_name: "Nintendo - NES / Famicom (FCEUmm)"
 cores:
@@ -44,5 +45,5 @@ files:
     system: nintendo-nes
     description: "External NES color palette"
     required: false
-    source_ref: "src/palette.c:170-200 (FCEU_LoadGamePalette), src/general.c:68-70 (FCEUMKF_PALETTE), src/drivers/libretro/libretro.c:1789-1798"
+    source_ref: "src/palette.c:170-200 (FCEU_LoadGamePalette), src/general.c:68-70 (FCEUMKF_PALETTE), src/drivers/libretro/libretro.c:1890-1899"
     note: "RGB triplets (64 standard or 512 with de-emphasis). Only loaded when palette core option is set to Custom."

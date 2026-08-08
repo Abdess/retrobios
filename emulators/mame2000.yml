@@ -4,6 +4,7 @@ core_classification: frozen_snapshot
 source: "https://github.com/libretro/mame2000-libretro"
 upstream: "https://www.mamedev.org"
 profiled_date: "2026-03-24"
+source_commit: "f099ba44c7664906fd7e01cbed89d13a7e32dee1"
 core_version: "0.37b5"
 display_name: "Arcade (MAME 2000)"
 
@@ -40,7 +41,7 @@ files:
     path: "mame2000/cheat/cheat.dat"
     required: false
     category: game_data
-    source_ref: "src/cheat.c:210,618,830"
+    source_ref: "src/cheat.c:210, src/cheat.c:618, src/cheat.c:833"
     note: "cheat definitions, loaded from system_dir/mame2000/cheat/"
 
   - name: history.dat

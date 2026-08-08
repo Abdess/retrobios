@@ -4,6 +4,7 @@ core_classification: official_port
 source: "https://github.com/libretro/picodrive"
 upstream: "https://github.com/irixxxx/picodrive"
 profiled_date: "2026-03-24"
+source_commit: "6248b51ffbe212ce441de023ccea6b10fa4d7082"
 core_version: "1.99"
 display_name: "Sega - MS/GG/MD/CD/32X (PicoDrive)"
 cores: [picodrive]

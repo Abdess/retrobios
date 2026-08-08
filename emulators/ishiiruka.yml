@@ -4,6 +4,7 @@ core_classification: enhanced_fork
 source: "https://github.com/libretro/ishiiruka"
 upstream: "https://github.com/Tinob/Ishiiruka"
 profiled_date: "2026-03-24"
+source_commit: "f228bde5fbf4861ba749a229803addcd6238663f"
 core_version: "Git"
 display_name: "Nintendo - GameCube / Wii (Ishiiruka)"
 cores:

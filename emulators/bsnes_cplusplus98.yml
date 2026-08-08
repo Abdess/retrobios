@@ -4,6 +4,7 @@ core_classification: frozen_snapshot
 source: "https://github.com/libretro/bsnes-libretro-cplusplus98"
 upstream: "https://byuu.org/"
 profiled_date: "2026-03-23"
+source_commit: "0ac6a163490b4ffb1c09350e17bad060857c33d2"
 core_version: "v085 (Performance)"
 display_name: "Nintendo - SNES / SFC (bsnes C++98 (v085))"
 cores: [bsnes_cplusplus98]

@@ -5,6 +5,7 @@ source: "https://github.com/libretro/mame2016-libretro"
 upstream: "https://github.com/mamedev/mame/tree/mame0174"
 logo: "https://raw.githubusercontent.com/mamedev/mame/master/docs/source/images/MAMElogo.svg"
 profiled_date: "2026-03-22"
+source_commit: "3529f4e2cb8e74c88d83bc9fc9d695f78dc9a975"
 core_version: "0.174"
 
 cores:

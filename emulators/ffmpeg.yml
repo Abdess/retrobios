@@ -4,6 +4,7 @@ core_classification: pure_libretro
 source: "https://github.com/libretro/FFmpeg"
 upstream: "https://www.ffmpeg.org/"
 profiled_date: "2026-03-23"
+source_commit: "4920879d2f09a78cdf855403c349457cee1c31da"
 core_version: "Git"
 display_name: "FFmpeg"
 cores:

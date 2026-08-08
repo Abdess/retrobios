@@ -4,6 +4,7 @@ core_classification: official_port
 source: "https://github.com/tiberiusbrown/ardens"
 upstream: "https://github.com/tiberiusbrown/ardens"
 profiled_date: "2026-03-23"
+source_commit: "8237fb9ecfe413abcdb2cc865ada80755486dfa9"
 core_version: "Git"
 display_name: "Arduboy (Ardens)"
 cores:

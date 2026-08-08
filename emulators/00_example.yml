@@ -3,6 +3,7 @@ type: libretro
 core_classification: pure_libretro
 source: "https://github.com/libretro/libretro-core-info"
 profiled_date: "2026-03-22"
+source_commit: "bd81a0b73b50449c0862b65bd755d87860925f65"
 core_version: ~
 display_name: "Example Core (.info template)"
 cores:

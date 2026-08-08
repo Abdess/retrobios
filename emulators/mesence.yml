@@ -4,6 +4,7 @@ core_classification: enhanced_fork
 source: "https://github.com/nesdev-org/MesenCE"
 upstream: "https://github.com/SourMesen/Mesen2"
 profiled_date: "2026-08-06"
+source_commit: "bec4fe632cb21ec97ad2b39cd6fdc826ecd02753"
 core_version: "2.2.1"
 display_name: "Multi-System (MesenCE)"
 cores: [mesence]

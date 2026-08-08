@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/TempGBA-libretro"
 upstream: "https://github.com/Nebuleon/ReGBA"
 profiled_date: "2026-03-25"
+source_commit: "b0c2652797a4c11f3edd30f9e59a77a5b88ce5fb"
 core_version: "26731013"
 display_name: "Nintendo - Game Boy Advance (TempGBA)"
 cores:

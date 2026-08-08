@@ -4,6 +4,7 @@ core_classification: frozen_snapshot
 source: "https://github.com/libretro/desmume2015"
 upstream: "https://github.com/TASEmulators/desmume"
 profiled_date: "2026-03-23"
+source_commit: "af397ff3d1f208c27f3922cc8f2b8e08884ba893"
 core_version: "SVN (2015 snapshot)"
 display_name: "Nintendo - DS (DeSmuME 2015)"
 cores: [desmume2015]

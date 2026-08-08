@@ -4,6 +4,7 @@ core_classification: pure_libretro
 source: "https://github.com/libretro/libretro-remotejoy"
 upstream: "https://github.com/akiraink/RemoteJoyLite"
 profiled_date: "2026-03-25"
+source_commit: "61211d841d06955081cf730e8f78fa69ba5dec6a"
 core_version: "v1"
 display_name: "PSP RemotePlay (RemoteJoy)"
 cores:

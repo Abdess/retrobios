@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/81-libretro"
 upstream: "https://github.com/charlierobson/EightyOne"
 profiled_date: "2026-03-22"
+source_commit: "fa7094910d040baa5fd8b11dbf6a1a618330ecd9"
 core_version: "1.0a"
 display_name: "Sinclair - ZX 81 (EightyOne)"
 cores: [81]
@@ -43,21 +44,21 @@ files:
     md5: db398d4e4e93a6d4dee3bfe146918219
     validation: [crc32]
     note: "ZX81 8K BASIC ROM (edition 3, default). Embedded in libretro core as zx81.rom."
-    source_ref: "EightyOne/Source/zx81config.cpp:260, 81-libretro/81/zx81/snap.c:489"
+    source_ref: "Source/zx81config.cpp:260, 81/zx81/snap.c:489"
   - name: zx81.edition1.rom
     system: sinclair-zx81
     required: false
     mode: standalone
     size: 8192
     md5: 56efa70bbaf311915c56cfdc70584e96
-    source_ref: "EightyOne/Source/HW_.cpp:2747"
+    source_ref: "Source/HW_.cpp:2747"
   - name: zx81.edition2.rom
     system: sinclair-zx81
     required: false
     mode: standalone
     size: 8192
     md5: b9fd58d324b6297f2a696d40722f95dc
-    source_ref: "EightyOne/Source/HW_.cpp:2748"
+    source_ref: "Source/HW_.cpp:2748"
 
   # ZX80
   - name: zx80.rom
@@ -67,7 +68,7 @@ files:
     size: 4096
     md5: e03bd725f98be45aac39c85f7fd41ce4
     validation: [crc32]
-    source_ref: "EightyOne/Source/zx81config.cpp:259, EightyOne/Source/HW_.cpp:2741"
+    source_ref: "Source/zx81config.cpp:259, Source/HW_.cpp:2741"
 
   # ZX97LE
   - name: zx97.rom
@@ -76,7 +77,7 @@ files:
     mode: standalone
     size: 32768
     md5: cc69fdd6195acdfd1e533b2eb4c2a632
-    source_ref: "EightyOne/Source/zx81config.cpp:281, EightyOne/Source/HW_.cpp:2792"
+    source_ref: "Source/zx81config.cpp:281, Source/HW_.cpp:2792"
 
   # Jupiter ACE
   - name: jupiterace.rom
@@ -86,7 +87,7 @@ files:
     size: 8192
     md5: db6efdfd82cebdfbb493d85b1a5efc3c
     validation: [crc32]
-    source_ref: "EightyOne/Source/zx81config.cpp:279, EightyOne/Source/HW_.cpp:2787"
+    source_ref: "Source/zx81config.cpp:279, Source/HW_.cpp:2787"
 
   # Timex TS1500
   - name: ts1500.rom
@@ -95,7 +96,7 @@ files:
     mode: standalone
     size: 8192
     md5: dea07eb23c5768ddf3ed90740eab85cb
-    source_ref: "EightyOne/Source/zx81config.cpp:271, EightyOne/Source/HW_.cpp:2764"
+    source_ref: "Source/zx81config.cpp:271, Source/HW_.cpp:2764"
 
   # Timex TS2068
   - name: ts2068.rom
@@ -104,7 +105,7 @@ files:
     mode: standalone
     size: 24576
     md5: 9194283503a105f3f3dfba13e61e993f
-    source_ref: "EightyOne/Source/zx81config.cpp:274-275, EightyOne/Source/HW_.cpp:2884-2886"
+    source_ref: "Source/zx81config.cpp:274-275, Source/HW_.cpp:2884-2886"
 
   # Lambda 8300
   - name: lambda8300colour.rom
@@ -114,7 +115,7 @@ files:
     size: 8192
     md5: 03aeea3abc7b1ca5f241935477ce71be
     note: "Lambda 8300 colour version (default ROM for Lambda machine)."
-    source_ref: "EightyOne/Source/zx81config.cpp:276, EightyOne/Source/HW_.cpp:2771"
+    source_ref: "Source/zx81config.cpp:276, Source/HW_.cpp:2771"
   - name: lambda8300.rom
     system: lambda-8300
     required: false
@@ -122,7 +123,7 @@ files:
     size: 8192
     md5: e232dfce1dcae65953583f66af146232
     note: "Lambda 8300 non-colour version (alternative)."
-    source_ref: "EightyOne/Source/HW_.cpp:2770"
+    source_ref: "Source/HW_.cpp:2770"
   - name: lambda8300characterset.bin
     system: lambda-8300
     required: false
@@ -130,7 +131,7 @@ files:
     size: 512
     md5: be906890c4bf42dd99f1a3bcb6003647
     note: "Lambda 8300 external font. Loaded when extfont is enabled."
-    source_ref: "EightyOne/Source/zx81/zx81.cpp:312"
+    source_ref: "Source/zx81/zx81.cpp:312"
 
   # Ringo R470
   - name: ringo470.rom
@@ -139,7 +140,7 @@ files:
     mode: standalone
     size: 8192
     md5: a70bbb0dfe4bb8556e74258062766f5d
-    source_ref: "EightyOne/Source/zx81config.cpp:277, EightyOne/Source/HW_.cpp:2777"
+    source_ref: "Source/zx81config.cpp:277, Source/HW_.cpp:2777"
 
   # Microdigital TK85
   - name: tk85.rom
@@ -148,7 +149,7 @@ files:
     mode: standalone
     size: 10240
     md5: b301cdad72448d92598197b45bead8fe
-    source_ref: "EightyOne/Source/zx81config.cpp:278, EightyOne/Source/HW_.cpp:2782"
+    source_ref: "Source/zx81config.cpp:278, Source/HW_.cpp:2782"
 
   # Timex TC2048
   - name: tc2048.rom
@@ -157,7 +158,7 @@ files:
     mode: standalone
     size: 16384
     md5: 9dd7ecf784a6c04265c073c236f5fadb
-    source_ref: "EightyOne/Source/zx81config.cpp:272, EightyOne/Source/HW_.cpp:2874-2876"
+    source_ref: "Source/zx81config.cpp:272, Source/HW_.cpp:2874-2876"
 
   # --- Graphics board ROMs ---
   # Loaded by zx81_initialise() when corresponding hardware is selected
@@ -170,7 +171,7 @@ files:
     size: 4096
     md5: 5cba3a306fbb94454811ba262b27c958
     note: "dK'tronics character ROM. Embedded in libretro core as dkchr.rom."
-    source_ref: "EightyOne/Source/zx81/zx81.cpp:316, EightyOne/Source/zx81config.cpp:195-196"
+    source_ref: "Source/zx81/zx81.cpp:316, Source/zx81config.cpp:195-196"
   - name: kaydegraphics.rom
     system: sinclair-zx81
     required: false
@@ -178,7 +179,7 @@ files:
     size: 4096
     md5: 4944facea84bea43f4495eaca19006d0
     note: "Kayde character ROM."
-    source_ref: "EightyOne/Source/zx81/zx81.cpp:320, EightyOne/Source/zx81config.cpp:197-198"
+    source_ref: "Source/zx81/zx81.cpp:320, Source/zx81config.cpp:197-198"
   - name: memotechhrg.rom
     system: sinclair-zx81
     required: false
@@ -186,7 +187,7 @@ files:
     size: 2048
     md5: 70320cad0ab528e62dcc2ca847870995
     note: "Memotech HRG ROM."
-    source_ref: "EightyOne/Source/zx81/zx81.cpp:334, EightyOne/Source/zx81config.cpp:201-202"
+    source_ref: "Source/zx81/zx81.cpp:334, Source/zx81config.cpp:201-202"
   - name: quicksilvahires.rom
     system: sinclair-zx81
     required: false
@@ -194,7 +195,7 @@ files:
     size: 2048
     md5: 1e7408a9a6d329751acc9d0810fd633d
     note: "Quicksilva Hi-Res ROM."
-    source_ref: "EightyOne/Source/zx81/zx81.cpp:338, EightyOne/Source/zx81config.cpp:203-204"
+    source_ref: "Source/zx81/zx81.cpp:338, Source/zx81config.cpp:203-204"
   - name: g007hrg.rom
     system: sinclair-zx81
     required: false
@@ -202,7 +203,7 @@ files:
     size: 2048
     md5: 7f59a979b1332a168d2efbc971ce1df0
     note: "G007 HRG ROM."
-    source_ref: "EightyOne/Source/zx81/zx81.cpp:343, EightyOne/Source/zx81config.cpp:199-200"
+    source_ref: "Source/zx81/zx81.cpp:343, Source/zx81config.cpp:199-200"
 
   # --- Interface ROMs ---
   # Loaded by zx81_initialise() when corresponding hardware is selected
@@ -213,14 +214,14 @@ files:
     mode: standalone
     size: 4096
     md5: b1581a2fcf4e5083d5fd92a1da373efa
-    source_ref: "EightyOne/Source/zx81/zx81.cpp:348, EightyOne/Source/zx81config.cpp:206"
+    source_ref: "Source/zx81/zx81.cpp:348, Source/zx81config.cpp:206"
   - name: memocalc.rom
     system: sinclair-zx81
     required: false
     mode: standalone
     size: 4096
     md5: fae8c8cd2cef2ca6b72be5b1cd8509d8
-    source_ref: "EightyOne/Source/zx81/zx81.cpp:352, EightyOne/Source/zx81config.cpp:207-208"
+    source_ref: "Source/zx81/zx81.cpp:352, Source/zx81config.cpp:207-208"
 
   # --- FDC ROMs ---
   # Loaded by zx81_initialise() (larken81) or spec48_initialise() (others)
@@ -232,7 +233,7 @@ files:
     size: 2048
     md5: dec8c7f864c209db4defcfbe0774e220
     note: "Larken 81 floppy controller ROM."
-    source_ref: "EightyOne/Source/zx81/zx81.cpp:361, EightyOne/Source/zx81config.cpp:171-172"
+    source_ref: "Source/zx81/zx81.cpp:361, Source/zx81config.cpp:171-172"
   - name: interface1.edition2.rom
     system: sinclair-zx-spectrum
     required: false
@@ -240,7 +241,7 @@ files:
     size: 8192
     md5: 31b704ae925305e74f50699271fddd9a
     note: "ZX Interface 1 ROM (default edition 2)."
-    source_ref: "EightyOne/Source/zx81config.cpp:174-175"
+    source_ref: "Source/zx81config.cpp:174-175"
   - name: interface1.edition1.rom
     system: sinclair-zx-spectrum
     required: false
@@ -255,7 +256,7 @@ files:
     size: 8192
     md5: 42e5de16fb5e50082bb954ec7ce45851
     note: "Plus D G+DOS ROM (default v1-a)."
-    source_ref: "EightyOne/Source/zx81config.cpp:163-164"
+    source_ref: "Source/zx81config.cpp:163-164"
   - name: disciple.gdos.v3.rom
     system: sinclair-zx-spectrum
     required: false
@@ -263,7 +264,7 @@ files:
     size: 16384
     md5: 2b0c5e2fa87e0b641bdb26634faea234
     note: "DISCiPLE GDOS ROM v3."
-    source_ref: "EightyOne/Source/zx81config.cpp:165-166"
+    source_ref: "Source/zx81config.cpp:165-166"
   - name: discovery.v2-22.rom
     system: sinclair-zx-spectrum
     required: false
@@ -271,7 +272,7 @@ files:
     size: 8192
     md5: 3beeddbf0aa716b7aba7deec2bfb3028
     note: "Opus Discovery DOS ROM (default v2-22)."
-    source_ref: "EightyOne/Source/zx81config.cpp:167-168"
+    source_ref: "Source/zx81config.cpp:167-168"
   - name: beta128.trdos.v5-03.rom
     system: sinclair-zx-spectrum
     required: false
@@ -279,7 +280,7 @@ files:
     size: 16384
     md5: 0da70a5d2a0e733398e005b96b7e4ba6
     note: "Beta 128 TR-DOS ROM (default v5-03)."
-    source_ref: "EightyOne/Source/zx81config.cpp:169-170"
+    source_ref: "Source/zx81config.cpp:169-170"
 
   # --- IDE ROMs ---
   # Loaded by zx81_initialise() (mwcfide) or spec48 peripherals (others)
@@ -291,7 +292,7 @@ files:
     size: 14648
     md5: d02ed1b39669c9b163f1fa2b1ffb41ee
     note: "MWCF IDE ROM."
-    source_ref: "EightyOne/Source/zx81/zx81.cpp:381, EightyOne/Source/zx81config.cpp:183-184"
+    source_ref: "Source/zx81/zx81.cpp:381, Source/zx81config.cpp:183-184"
   - name: zxcflba.rom
     system: sinclair-zx81
     required: false
@@ -299,7 +300,7 @@ files:
     size: 16384
     md5: e518c0736cb4ce0484ac8091f5ea3e01
     note: "ZXCF CompactFlash IDE ROM."
-    source_ref: "EightyOne/Source/zx81config.cpp:181-182"
+    source_ref: "Source/zx81config.cpp:181-182"
   - name: zx8blbs.rom
     system: sinclair-zx81
     required: false
@@ -307,7 +308,7 @@ files:
     size: 16384
     md5: d8f203d2bebfe57d725b0d1067f3b92d
     note: "Simple 8-bit IDE ROM."
-    source_ref: "EightyOne/Source/zx81config.cpp:177-178"
+    source_ref: "Source/zx81config.cpp:177-178"
   - name: zxidelbs.rom
     system: sinclair-zx81
     required: false
@@ -315,7 +316,7 @@ files:
     size: 16384
     md5: 6cfbf044b8f435b7f70eae37d9ee5c28
     note: "Simple 16-bit IDE ROM."
-    source_ref: "EightyOne/Source/zx81config.cpp:179-180"
+    source_ref: "Source/zx81config.cpp:179-180"
 
   # --- Spectrum peripheral ROMs ---
   # Loaded by spec48_initialise() or Spectrum peripheral code
@@ -327,7 +328,7 @@ files:
     size: 2048
     md5: 052f6af718337e35e76693723e1d73e3
     note: "Currah uSpeech ROM."
-    source_ref: "EightyOne/Source/Spectrum/spec48.cpp:344, EightyOne/Source/zx81config.cpp:186-187"
+    source_ref: "Source/Spectrum/spec48.cpp:344, Source/zx81config.cpp:186-187"
   - name: usource.rom
     system: sinclair-zx81
     required: false
@@ -335,7 +336,7 @@ files:
     size: 8192
     md5: ebe1490920cbb62bde7282ae24928d95
     note: "Currah uSource ROM."
-    source_ref: "EightyOne/Source/Spectrum/spec48.cpp:350, EightyOne/Source/zx81config.cpp:188-189"
+    source_ref: "Source/Spectrum/spec48.cpp:350, Source/zx81config.cpp:188-189"
   - name: multiface128.rom
     system: sinclair-zx-spectrum
     required: false
@@ -343,7 +344,7 @@ files:
     size: 8192
     md5: c420ef03f6e0c477d9474efe3441a556
     note: "Multiface 128 ROM."
-    source_ref: "EightyOne/Source/zx81config.cpp:190-191"
+    source_ref: "Source/zx81config.cpp:190-191"
   - name: multiface3.rom
     system: sinclair-zx-spectrum
     required: false
@@ -351,7 +352,7 @@ files:
     size: 8192
     md5: afe2218c3a6a43f1854fe824424d4167
     note: "Multiface 3 ROM."
-    source_ref: "EightyOne/Source/zx81config.cpp:192-193"
+    source_ref: "Source/zx81config.cpp:192-193"
 
   # --- Digitalker speech ROMs ---
   # Loaded by Digitalk::Init() when Digitalker speech is selected
@@ -363,7 +364,7 @@ files:
     size: 8192
     md5: 864beefecf0021fa6b0f5a5aff55c167
     note: "Digitalker speech ROM bank 1a."
-    source_ref: "EightyOne/Source/Digitalker/Digitalkdrv.cpp:40-45"
+    source_ref: "Source/Digitalker/Digitalkdrv.cpp:40-45"
   - name: SSR2.bin
     system: sinclair-zx81
     required: false
@@ -371,7 +372,7 @@ files:
     size: 8192
     md5: d3924ecc0efda0a58c4bda43044061e4
     note: "Digitalker speech ROM bank 1b."
-    source_ref: "EightyOne/Source/Digitalker/Digitalkdrv.cpp:49-54"
+    source_ref: "Source/Digitalker/Digitalkdrv.cpp:49-54"
   - name: SSR5.bin
     system: sinclair-zx81
     required: false
@@ -379,7 +380,7 @@ files:
     size: 8192
     md5: dd2793938c50217c0e5e8aef75b98856
     note: "Digitalker speech ROM bank 2a."
-    source_ref: "EightyOne/Source/Digitalker/Digitalkdrv.cpp:58-63"
+    source_ref: "Source/Digitalker/Digitalkdrv.cpp:58-63"
   - name: SSR6.bin
     system: sinclair-zx81
     required: false
@@ -387,7 +388,7 @@ files:
     size: 8192
     md5: 5d6ee8cdf1b12816c4f152b5a1e13977
     note: "Digitalker speech ROM bank 2b."
-    source_ref: "EightyOne/Source/Digitalker/Digitalkdrv.cpp:67-72"
+    source_ref: "Source/Digitalker/Digitalkdrv.cpp:67-72"
 
   # --- ZXpand overlay ROMs (standalone only) ---
   # Loaded when ZXpand SD card interface is enabled
@@ -398,21 +399,21 @@ files:
     mode: standalone
     size: 8192
     md5: 49b1bd3485d080bb242e94fd698f028d
-    source_ref: "EightyOne/Source/zx81/zx81.cpp:298-303"
+    source_ref: "Source/zx81/zx81.cpp:298-303"
   - name: zx80.zxpand.ovl
     system: sinclair-zx80
     required: false
     mode: standalone
     size: 8192
     md5: 37cea5c1e7144de898a7dc4b102fb7fd
-    source_ref: "EightyOne/Source/zx81/zx81.cpp:304-305"
+    source_ref: "Source/zx81/zx81.cpp:304-305"
   - name: ts1500.zxpand.ovl
     system: timex-ts1500
     required: false
     mode: standalone
     size: 8192
     md5: 49b1bd3485d080bb242e94fd698f028d
-    source_ref: "EightyOne/Source/zx81/zx81.cpp:298-303"
+    source_ref: "Source/zx81/zx81.cpp:298-303"
 
   # --- ZX Spectrum machine ROMs (standalone mode) ---
 
@@ -423,14 +424,14 @@ files:
     size: 16384
     md5: 4c42a2f075212361c3117015b107ff68
     note: "Spectrum 48K."
-    source_ref: "EightyOne/Source/zx81config.cpp:261-263, EightyOne/Source/HW_.cpp:2800-2807"
+    source_ref: "Source/zx81config.cpp:261-263, Source/HW_.cpp:2800-2807"
   - name: spectrum48.spanish.rom
     system: sinclair-zx-spectrum
     required: false
     mode: standalone
     size: 16384
     md5: 60e1bd8b4d59b55e5b2175126239517f
-    source_ref: "EightyOne/Source/HW_.cpp:2812"
+    source_ref: "Source/HW_.cpp:2812"
   - name: spectrum48.arabic.rom
     system: sinclair-zx-spectrum
     required: false
@@ -444,21 +445,21 @@ files:
     mode: standalone
     size: 16384
     md5: a6a1e3a68bb5523997103c3925a46fe4
-    source_ref: "EightyOne/Source/HW_.cpp:2813,2820"
+    source_ref: "Source/HW_.cpp:2813, Source/HW_.cpp:2820"
   - name: spectrum48.arabic.version2.rom
     system: sinclair-zx-spectrum
     required: false
     mode: standalone
     size: 16384
     md5: fac3d08455328c34f0d06344d89cec0e
-    source_ref: "EightyOne/Source/HW_.cpp:2828,2837"
+    source_ref: "Source/HW_.cpp:2828, Source/HW_.cpp:2837"
   - name: spectrum48.nordic.rom
     system: sinclair-zx-spectrum
     required: false
     mode: standalone
     size: 16384
     md5: f058f27ae61af225fe5baacc1d89adfc
-    source_ref: "EightyOne/Source/HW_.cpp:2806"
+    source_ref: "Source/HW_.cpp:2806"
   - name: spectrum128.rom
     system: sinclair-zx-spectrum
     required: false
@@ -466,14 +467,14 @@ files:
     size: 32768
     md5: 85fede415f4294cc777517d7eada482e
     note: "Spectrum 128K."
-    source_ref: "EightyOne/Source/zx81config.cpp:264, EightyOne/Source/HW_.cpp:2817-2821"
+    source_ref: "Source/zx81config.cpp:264, Source/HW_.cpp:2817-2821"
   - name: spectrum128.spanish.rom
     system: sinclair-zx-spectrum
     required: false
     mode: standalone
     size: 32768
     md5: 84aef735da122d55e41a33455c7c3506
-    source_ref: "EightyOne/Source/HW_.cpp:2819"
+    source_ref: "Source/HW_.cpp:2819"
   - name: spectrum+2.rom
     system: sinclair-zx-spectrum
     required: false
@@ -481,21 +482,21 @@ files:
     size: 32768
     md5: 238f77692156a5c49d20c0aa2862e8bb
     note: "Spectrum +2."
-    source_ref: "EightyOne/Source/zx81config.cpp:266, EightyOne/Source/HW_.cpp:2824-2829"
+    source_ref: "Source/zx81config.cpp:266, Source/HW_.cpp:2824-2829"
   - name: spectrum+2.french.rom
     system: sinclair-zx-spectrum
     required: false
     mode: standalone
     size: 32768
     md5: 1fff14aeca8e1dd3670142982cc6bb36
-    source_ref: "EightyOne/Source/HW_.cpp:2826"
+    source_ref: "Source/HW_.cpp:2826"
   - name: spectrum+2.spanish.rom
     system: sinclair-zx-spectrum
     required: false
     mode: standalone
     size: 32768
     md5: 43cf648e27efc9be8186bb7049505d79
-    source_ref: "EightyOne/Source/HW_.cpp:2827"
+    source_ref: "Source/HW_.cpp:2827"
   - name: spectrum+3.version4-0.rom
     system: sinclair-zx-spectrum
     required: false
@@ -503,14 +504,14 @@ files:
     size: 65536
     md5: 05de80a055b5e7866f55769db0584d6e
     note: "Spectrum +3."
-    source_ref: "EightyOne/Source/HW_.cpp:2833,2854"
+    source_ref: "Source/HW_.cpp:2833, Source/HW_.cpp:2854"
   - name: spectrum+3.version4-0.spanish.rom
     system: sinclair-zx-spectrum
     required: false
     mode: standalone
     size: 65536
     md5: 990dfe9d37b48595f5befe0e4ff4b7c6
-    source_ref: "EightyOne/Source/HW_.cpp:2835,2856"
+    source_ref: "Source/HW_.cpp:2835, Source/HW_.cpp:2856"
   - name: spectrum+3.version4-1.rom
     system: sinclair-zx-spectrum
     required: false
@@ -518,21 +519,21 @@ files:
     size: 65536
     md5: 7e00ed3562abfd188d0d4da03e80bc0a
     note: "Spectrum +3 (default for +2A and +3)."
-    source_ref: "EightyOne/Source/zx81config.cpp:267-268, EightyOne/Source/HW_.cpp:2834,2855"
+    source_ref: "Source/zx81config.cpp:267-268, Source/HW_.cpp:2834, Source/HW_.cpp:2855"
   - name: spectrum+3.version4-1.spanish.rom
     system: sinclair-zx-spectrum
     required: false
     mode: standalone
     size: 65536
     md5: 52d130178c1106fef765b5f119fb43bc
-    source_ref: "EightyOne/Source/HW_.cpp:2836,2857"
+    source_ref: "Source/HW_.cpp:2836, Source/HW_.cpp:2857"
   - name: spectrum+3.arabic3-a.english4-0.rom
     system: sinclair-zx-spectrum
     required: false
     mode: standalone
     size: 131072
     md5: 30316fa0ed7ee6682933960e11b48d60
-    source_ref: "EightyOne/Source/HW_.cpp:2858"
+    source_ref: "Source/HW_.cpp:2858"
   - name: tk90.rom
     system: sinclair-zx-spectrum
     required: false

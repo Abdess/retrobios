@@ -3,6 +3,7 @@ type: libretro
 core_classification: pure_libretro
 source: "https://github.com/libretro/libretro-directxbox"
 profiled_date: "2026-03-23"
+source_commit: "a157f3c1a68cb40dd74d5a664c0e39a245aaa59c"
 core_version: "alpha"
 display_name: "Microsoft - Xbox (DirectXbox)"
 cores:

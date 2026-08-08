@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/libretro-minivmac"
 upstream: "https://www.gryphel.com/c/minivmac/"
 profiled_date: "2026-03-24"
+source_commit: "babdf7b53d361a7225858b68a8a64efe8b06f5e5"
 core_version: "36.04"
 display_name: "Mac II (minivmac)"
 cores: [minivmac]

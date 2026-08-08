@@ -4,6 +4,7 @@ core_classification: game_engine
 source: "https://github.com/libretro/jumpnbump-libretro"
 upstream: "https://github.com/fabiangreffrath/jumpnbump"
 profiled_date: "2026-03-24"
+source_commit: "4e68831f5576075c45c147f86865812afb816139"
 core_version: "v0.1"
 display_name: "Jump 'n Bump"
 cores: [jumpnbump]

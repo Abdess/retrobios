@@ -4,6 +4,7 @@ core_classification: official_port
 source: "https://github.com/drhelius/Gearcoleco"
 upstream: "https://github.com/drhelius/Gearcoleco"
 profiled_date: "2026-03-23"
+source_commit: "d82ceda40ecc6c1f3f123bb2c753936435b5b675"
 core_version: "1.0.0"
 display_name: "Coleco - ColecoVision (Gearcoleco)"
 cores:

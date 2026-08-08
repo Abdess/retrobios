@@ -4,6 +4,7 @@ core_classification: pure_libretro
 source: "https://github.com/libretro/libretro-2048"
 upstream: "https://github.com/gabrielecirulli/2048"
 profiled_date: "2026-03-22"
+source_commit: "e70c3f82d2b861c64943aaff7fcc29a63013997d"
 core_version: "1.0"
 display_name: "2048"
 cores: [2048]

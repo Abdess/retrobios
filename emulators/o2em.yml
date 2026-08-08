@@ -6,6 +6,7 @@ cores: [o2em_libretro]
 source: "https://github.com/libretro/libretro-o2em"
 upstream: "https://sourceforge.net/projects/o2em/"
 profiled_date: "2026-03-24"
+source_commit: "3ba4231c1dc8dcdf487428712856b790d2e4b8f3"
 core_version: "1.18"
 display_name: "Magnavox - Odyssey2 / Philips Videopac+ (O2EM)"
 systems:
@@ -41,7 +42,7 @@ files:
     crc32: "8016a315"
     validation: [size, crc32]
     note: "Odyssey2 BIOS (G7000 NTSC). Default, vpp=0."
-    source_ref: "libretro.c:182-186"
+    source_ref: "libretro.c:199-203"
 
   - name: "c52.bin"
     system: videopac
@@ -53,7 +54,7 @@ files:
     crc32: "a318e8d6"
     validation: [size, crc32]
     note: "Videopac G7000 European BIOS. vpp=0, auto-sets PAL."
-    source_ref: "libretro.c:192-197"
+    source_ref: "libretro.c:209-214"
 
   - name: "g7400.bin"
     system: videopac
@@ -65,7 +66,7 @@ files:
     crc32: "e20a9f41"
     validation: [size, crc32]
     note: "Videopac+ G7400 European BIOS. vpp=1."
-    source_ref: "libretro.c:187-191"
+    source_ref: "libretro.c:204-208"
 
   - name: "jopac.bin"
     system: videopac
@@ -77,10 +78,10 @@ files:
     crc32: "11647ca5"
     validation: [size, crc32]
     note: "Videopac+ G7400 French BIOS (JoPac). vpp=1."
-    source_ref: "libretro.c:198-203"
+    source_ref: "libretro.c:215-220"
 
   - name: "voice/"
     required: false
     category: game_data
     note: "The Voice speech synthesis WAV samples. 9 banks (E4, E8-EF) × 128 samples."
-    source_ref: "voice.c:38-79, libretro.c:1025-1032"
+    source_ref: "voice.c:38-79, libretro.c:1060-1067"

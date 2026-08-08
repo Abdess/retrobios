@@ -4,6 +4,7 @@ core_classification: official_port
 source: "https://github.com/libretro/rustation-libretro"
 upstream: "https://github.com/simias/rustation"
 profiled_date: "2026-03-25"
+source_commit: "3e328e3967e312e1f239aeeecd479a7b4bfda850"
 core_version: "v1"
 display_name: "Sony - PlayStation (Rustation)"
 cores: [rustation]

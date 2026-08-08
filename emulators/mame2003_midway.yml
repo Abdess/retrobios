@@ -4,6 +4,7 @@ core_classification: frozen_snapshot
 source: "https://github.com/libretro/mame2003_midway"
 upstream: "https://www.mamedev.org"
 profiled_date: "2026-03-24"
+source_commit: "52d8432b13fb2be032abccdf465b9fee94078080"
 core_version: "0.78"
 display_name: "Arcade (MAME 2003 Midway)"
 

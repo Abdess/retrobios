@@ -4,6 +4,7 @@ core_classification: official_port
 source: "https://github.com/kurtjd/jaxe"
 upstream: "https://github.com/kurtjd/jaxe"
 profiled_date: "2026-03-24"
+source_commit: "e8e90e3d683bb560df5882f0ad62ed28f96a541a"
 core_version: "GIT"
 display_name: "CHIP-8/S-CHIP/XO-CHIP (JAXE)"
 cores:

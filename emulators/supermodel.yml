@@ -3,6 +3,7 @@ type: standalone
 source: https://github.com/trzy/Supermodel
 upstream: https://github.com/trzy/Supermodel
 profiled_date: "2026-03-26"
+source_commit: "d6dec3dcf0922459801907950d966e5767c674de"
 core_version: "0.3a"
 display_name: "Supermodel (Sega Model 3)"
 cores:

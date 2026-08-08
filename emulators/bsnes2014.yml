@@ -4,6 +4,7 @@ core_classification: frozen_snapshot
 source: "https://github.com/libretro/bsnes2014"
 upstream: "https://github.com/bsnes-emu/bsnes"
 profiled_date: "2026-03-25"
+source_commit: "1a6b3caf187605e53fa9970996bcfa49b8c90ce3"
 core_version: "v094"
 display_name: "Nintendo - SNES / SFC (bsnes 2014)"
 cores: [bsnes2014_accuracy, bsnes2014_balanced, bsnes2014_performance]

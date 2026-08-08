@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/yabause"
 upstream: "https://github.com/Yabause/yabause"
 profiled_date: "2026-03-25"
+source_commit: "65af22e96beb6d9b0b9a50a81a39c86a6d604c1c"
 core_version: "v0.9.15"
 display_name: "Sega - Saturn (Yabause)"
 cores:

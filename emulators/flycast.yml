@@ -5,6 +5,7 @@ source: "https://github.com/libretro/flycast"
 upstream: "https://github.com/flyinghead/flycast"
 logo: "https://raw.githubusercontent.com/flyinghead/flycast/master/shell/linux/flycast.png"
 profiled_date: "2026-03-23"
+source_commit: "b897744e27c730c7519784b2aef12ba7f658de31"
 core_version: "0.1"
 display_name: "Sega - Dreamcast/Naomi (Flycast)"
 cores:

@@ -4,6 +4,7 @@ core_classification: pure_libretro
 source: "https://github.com/libretro/neocd_libretro"
 upstream: "https://github.com/libretro/neocd_libretro"
 profiled_date: "2026-03-24"
+source_commit: "7136e35c2dcdd7682ad30024da58eab5136db91a"
 core_version: "2022"
 display_name: "SNK - Neo Geo CD (NeoCD)"
 cores:

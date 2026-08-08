@@ -4,6 +4,7 @@ core_classification: official_port
 source: "https://github.com/jpd002/Play-"
 upstream: "https://github.com/jpd002/Play-"
 profiled_date: "2026-03-24"
+source_commit: "2193ca112b576896a3022478a225661a7f84feb5"
 core_version: "Git"
 display_name: "Sony - PlayStation 2 (Play!)"
 cores:

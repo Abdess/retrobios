@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/rock88/moonlight-libretro"
 upstream: "https://github.com/moonlight-stream/moonlight-embedded"
 profiled_date: "2026-03-24"
+source_commit: "20d2d77d219613a2809fa9afe9606f6cf3be2aa0"
 core_version: "1.0.3"
 display_name: "Moonlight"
 cores:

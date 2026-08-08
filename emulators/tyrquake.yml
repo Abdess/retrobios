@@ -4,6 +4,7 @@ core_classification: game_engine
 source: "https://github.com/libretro/tyrquake"
 upstream: "http://disenchant.net/tyrquake/"
 profiled_date: "2026-03-25"
+source_commit: "471f2a72d2a7b0416f6a21eb945e5af831df06a4"
 core_version: "v0.62"
 display_name: "Quake (TyrQuake)"
 cores: [tyrquake]

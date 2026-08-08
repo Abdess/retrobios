@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/Genesis-Plus-GX"
 upstream: "https://github.com/ekeeke/Genesis-Plus-GX"
 profiled_date: "2026-03-23"
+source_commit: "84fcf2ec8e6b8d901c2fec55c884f285f93a1679"
 core_version: "v1.7.4"
 display_name: "Sega - MS/GG/MD/CD (Genesis Plus GX)"
 cores:
@@ -91,7 +92,7 @@ files:
     system: sega-megadrive
     required: false
     note: "Mega Drive TMSS boot ROM. Shows 'Produced by or under license' screen."
-    source_ref: "libretro/libretro.c:3651"
+    source_ref: "libretro/libretro.c:3780"
 
   # -------------------------------------------------------
   # Lock-on ROMs (optional, feature-gated)

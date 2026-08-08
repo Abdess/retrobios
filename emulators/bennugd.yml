@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/diekleinekuh/BennuGD_libretro"
 upstream: "https://github.com/SplinterGU/BennuGD"
 profiled_date: "2026-03-23"
+source_commit: "a78319991d62520bed4e873d3538657ad0ae2ca7"
 core_version: "git"
 display_name: "Bennu Game Development"
 cores:

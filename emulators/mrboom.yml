@@ -4,6 +4,7 @@ core_classification: official_port
 source: "https://github.com/libretro/mrboom-libretro"
 upstream: "https://github.com/libretro/mrboom-libretro"
 profiled_date: "2026-03-24"
+source_commit: "d011acfbdb2d93ed38bd684ccfa0db79bda1c932"
 core_version: "3.1"
 display_name: "Mr.Boom (Bomberman)"
 cores: [mrboom]

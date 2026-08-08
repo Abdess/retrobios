@@ -4,6 +4,7 @@ core_classification: frozen_snapshot
 source: "https://github.com/libretro/snes9x2005"
 upstream: "https://github.com/ShadauxCat/CATSFC"
 profiled_date: "2026-03-25"
+source_commit: "74d871db9b4dba6dbe6c5ecebc88cbf255be5349"
 core_version: "v1.36"
 display_name: "Nintendo - SNES / SFC (Snes9x 2005 Plus)"
 cores:

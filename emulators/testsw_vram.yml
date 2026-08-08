@@ -5,6 +5,7 @@ source: "https://github.com/libretro/libretro-samples"
 upstream: "https://github.com/libretro/libretro-samples"
 source_ref: "video/software/rendering_direct_to_vram/libretro-test.c"
 profiled_date: "2026-03-25"
+source_commit: "bce193bc1b8c9a3da43b2ead0158a69e28b37ed8"
 core_version: "v1"
 display_name: "TestSW VRAM"
 cores:

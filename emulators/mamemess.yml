@@ -4,6 +4,7 @@ core_classification: official_port
 source: "https://github.com/libretro/mame"
 upstream: "https://github.com/mamedev/mame"
 profiled_date: "2026-03-29"
+source_commit: "c4127c164af8fcf0aea781cc039aaf9b8044696d"
 core_version: "0.287"
 display_name: "Multi (MAME/MESS)"
 
@@ -249,7 +250,7 @@ files:
   - name: ekara.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2878"
+    source_ref: "src/mame/tvgames/xavix.cpp:2904"
     contents:
       - name: ekara.bin
         size: 1048576
@@ -259,7 +260,7 @@ files:
   - name: ekaraa.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2879"
+    source_ref: "src/mame/tvgames/xavix.cpp:2905"
     contents:
       - name: ekara2.bin
         size: 1048576
@@ -269,7 +270,7 @@ files:
   - name: ekaraj.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2880"
+    source_ref: "src/mame/tvgames/xavix.cpp:2906"
     contents:
       - name: ekarajapan.bin
         size: 1048576
@@ -279,7 +280,7 @@ files:
   - name: ekarag.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2881"
+    source_ref: "src/mame/tvgames/xavix.cpp:2907"
     contents:
       - name: ekaragermany.bin
         size: 2097152
@@ -289,7 +290,7 @@ files:
   - name: ekaras.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2882"
+    source_ref: "src/mame/tvgames/xavix.cpp:2908"
     contents:
       - name: ekaraspanish.bin
         size: 2097152
@@ -299,7 +300,7 @@ files:
   - name: isinger.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2884"
+    source_ref: "src/mame/tvgames/xavix.cpp:2910"
     contents:
       - name: kr_isinger.bin
         size: 1048576
@@ -309,7 +310,7 @@ files:
   - name: ekaraphs.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2887"
+    source_ref: "src/mame/tvgames/xavix.cpp:2913"
     contents:
       - name: ekaraheadset.bin
         size: 2097152
@@ -319,7 +320,7 @@ files:
   - name: epitch.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2890"
+    source_ref: "src/mame/tvgames/xavix.cpp:2916"
     contents:
       - name: ekarajapan.bin
         size: 1048576
@@ -329,7 +330,7 @@ files:
   - name: ekaramix.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2893"
+    source_ref: "src/mame/tvgames/xavix.cpp:2919"
     contents:
       - name: ekaramix.bin
         size: 2097152
@@ -340,7 +341,7 @@ files:
   - name: ddrfammt.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2896"
+    source_ref: "src/mame/tvgames/xavix.cpp:2922"
     contents:
       - name: ekara_ddr_ha010_81947.bin
         size: 2097152
@@ -350,7 +351,7 @@ files:
   - name: popira.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2899"
+    source_ref: "src/mame/tvgames/xavix.cpp:2925"
     contents:
       - name: popira.bin
         size: 1048576
@@ -360,7 +361,7 @@ files:
   - name: popirak.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2901"
+    source_ref: "src/mame/tvgames/xavix.cpp:2927"
     contents:
       - name: kr_main.u2
         size: 1048576
@@ -370,7 +371,7 @@ files:
   - name: popira2.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2904"
+    source_ref: "src/mame/tvgames/xavix.cpp:2930"
     contents:
       - name: popira2.bin
         size: 2097152
@@ -380,7 +381,7 @@ files:
   - name: taikodp.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2907"
+    source_ref: "src/mame/tvgames/xavix.cpp:2933"
     contents:
       - name: taikodepopira.bin
         size: 2097152
@@ -390,7 +391,7 @@ files:
   - name: jpopira.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2910"
+    source_ref: "src/mame/tvgames/xavix.cpp:2936"
     contents:
       - name: jumpingpopira.bin
         size: 2097152
@@ -404,7 +405,7 @@ files:
   - name: evio.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2913"
+    source_ref: "src/mame/tvgames/xavix.cpp:2939"
     contents:
       - name: evio.bin
         size: 2097152
@@ -414,7 +415,7 @@ files:
   - name: tak_daig.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2918"
+    source_ref: "src/mame/tvgames/xavix.cpp:2944"
     contents:
       - name: robottransformer_unit.bin
         size: 2097152
@@ -424,7 +425,7 @@ files:
   - name: gcslottv.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2920"
+    source_ref: "src/mame/tvgames/xavix.cpp:2946"
     contents:
       - name: sammyslotunit.bin
         size: 2097152
@@ -434,7 +435,7 @@ files:
   - name: hikara.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2925"
+    source_ref: "src/mame/tvgames/xavix.cpp:2951"
     contents:
       - name: hikara.u3
         size: 1048576
@@ -446,7 +447,7 @@ files:
     required: true
     category: bios_zip
     system: astrocde
-    source_ref: "src/mame/midway/astrohome.cpp:244-247"
+    source_ref: "src/mame/bally/astrohome.cpp:244-247"
     contents:
       - name: astro.bin
         description: On-board BIOS ROM (Bally Professional Arcade)
@@ -457,7 +458,7 @@ files:
     required: false
     category: bios_zip
     system: astrocde
-    source_ref: "src/mame/midway/astrohome.cpp:249-251"
+    source_ref: "src/mame/bally/astrohome.cpp:249-251"
     contents:
       - name: ballyhlc.bin
         description: Bally Home Library Computer BIOS
@@ -468,7 +469,7 @@ files:
     required: false
     category: bios_zip
     system: astrocde
-    source_ref: "src/mame/midway/astrohome.cpp:254-257"
+    source_ref: "src/mame/bally/astrohome.cpp:254-257"
     contents:
       - name: bioswhit.bin
         description: Bally Computer System BIOS
@@ -480,7 +481,7 @@ files:
     required: true
     category: bios_zip
     system: apple2
-    source_ref: "src/mame/apple/apple2.cpp:988"
+    source_ref: "src/mame/apple/apple2.cpp:883"
     contents:
       - name: a2.chr
         description: Character generator ROM
@@ -511,7 +512,7 @@ files:
     required: true
     category: bios_zip
     system: apple2
-    source_ref: "src/mame/apple/apple2.cpp:1006"
+    source_ref: "src/mame/apple/apple2.cpp:900"
     contents:
       - name: 341-0036.chr
         description: Character generator ROM
@@ -569,7 +570,7 @@ files:
     required: true
     category: bios_zip
     system: apple2
-    source_ref: "src/mame/apple/apple2e.cpp:5649"
+    source_ref: "src/mame/apple/apple2e.cpp:5669"
     contents:
       - name: 342-0265-a.chr
         description: Enhanced character generator ROM
@@ -629,7 +630,7 @@ files:
     required: false
     category: bios_zip
     system: apple2
-    source_ref: "src/devices/sound/votrax.cpp:42"
+    source_ref: "src/devices/sound/votrax.cpp:44"
     note: "Votrax SC-01 speech synthesis chip, shared device"
     contents:
       - name: sc01.bin
@@ -641,7 +642,7 @@ files:
     required: false
     category: bios_zip
     system: apple2
-    source_ref: "src/devices/sound/votrax.cpp:47"
+    source_ref: "src/devices/sound/votrax.cpp:49"
     note: "Votrax SC-01A speech synthesis chip, shared device"
     contents:
       - name: sc01a.bin
@@ -654,7 +655,7 @@ files:
     required: true
     category: bios_zip
     system: apple2gs
-    source_ref: "src/mame/apple/apple2gs.cpp:3898-3912"
+    source_ref: "src/mame/apple/apple2gs.cpp:3883-3897"
     contents:
       - name: 341s0632-2.bin
         description: ADB microcontroller ROM (M50740/50741)
@@ -1350,7 +1351,7 @@ files:
     required: true
     category: bios_zip
     system: fm7
-    source_ref: "src/mame/fujitsu/fm7.cpp:2211-2232"
+    source_ref: "src/mame/fujitsu/fm7.cpp:2209-2230"
     contents:
       - name: initiate.rom
         description: Initiate ROM (boot sequencer)
@@ -1466,7 +1467,7 @@ files:
     required: true
     category: bios_zip
     system: mz2500
-    source_ref: "src/mame/sharp/mz2500.cpp:1875-1894"
+    source_ref: "src/mame/sharp/mz2500.cpp:1878-1897"
     contents:
       - name: ipl.rom
         description: IPL ROM
@@ -1538,7 +1539,7 @@ files:
     required: true
     category: bios_zip
     system: pc60
-    source_ref: "src/mame/nec/pc6001.cpp:1869-1881"
+    source_ref: "src/mame/nec/pc6001.cpp:1714-1726"
     contents:
       - name: basicrom.60
         description: BASIC ROM

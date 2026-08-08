@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/nSide"
 upstream: "https://github.com/byuu/higan"
 profiled_date: "2026-03-23"
+source_commit: "5e965d0db4c0d05e7e8fb6449035538781c73473"
 core_version: "v105 (Super Famicom Accuracy)"
 display_name: "Nintendo - SNES / Famicom (higan Accuracy)"
 cores:

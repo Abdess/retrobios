@@ -4,6 +4,7 @@ core_classification: enhanced_fork
 source: "https://github.com/libretro/Genesis-Plus-GX-Wide"
 upstream: "https://github.com/ekeeke/Genesis-Plus-GX"
 profiled_date: "2026-03-23"
+source_commit: "b7ad005431f5f0b55e559f6d598d1ed2479bf13b"
 core_version: "v1.7.4"
 display_name: "Sega - MS/GG/MD/CD (Genesis Plus GX Wide)"
 cores:
@@ -45,28 +46,28 @@ files:
   - name: bios_U.sms
     system: sega-mastersystem
     required: false
-    source_ref: "core/loadrom.c:510"
+    source_ref: "core/loadrom.c:512"
 
   - name: bios_E.sms
     system: sega-mastersystem
     required: false
-    source_ref: "core/loadrom.c:513"
+    source_ref: "core/loadrom.c:515"
 
   - name: bios_J.sms
     system: sega-mastersystem
     required: false
-    source_ref: "core/loadrom.c:516"
+    source_ref: "core/loadrom.c:518"
 
   - name: bios.gg
     system: sega-gamegear
     required: false
-    source_ref: "core/loadrom.c:479"
+    source_ref: "core/loadrom.c:481"
 
   - name: bios_MD.bin
     system: sega-megadrive
     required: false
     size: 2048
-    source_ref: "libretro/libretro.c:3682"
+    source_ref: "libretro/libretro.c:3939"
 
   - name: ggenie.bin
     system: sega-megadrive

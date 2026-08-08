@@ -4,6 +4,7 @@ core_classification: enhanced_fork
 source: "https://github.com/TimOelrichs/doublecherryGB-libretro"
 upstream: "https://github.com/libertyernie/tgbdual"
 profiled_date: "2026-03-22"
+source_commit: "2e7a8bd5442ad7b2cb98ea07dbb5000ac95193e9"
 core_version: "v0.18.1"
 display_name: "Nintendo - Game Boy / Color (DoubleCherryGB)"
 cores:

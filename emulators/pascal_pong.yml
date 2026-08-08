@@ -4,6 +4,7 @@ core_classification: pure_libretro
 source: "https://github.com/libretro/pascal-pong-libretro"
 upstream: "https://github.com/libretro/pascal-pong-libretro"
 profiled_date: "2026-03-24"
+source_commit: "2a0cfd44652c0b215862de3ef56916d1384ad8a0"
 core_version: "v1.0"
 display_name: "PascalPong"
 cores: [pascal_pong]

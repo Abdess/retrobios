@@ -5,6 +5,7 @@ source: "https://github.com/libretro/snes9x"
 upstream: "https://github.com/snes9xgit/snes9x"
 logo: "https://raw.githubusercontent.com/snes9xgit/snes9x/master/gtk/data/snes9x.svg"
 profiled_date: "2026-03-25"
+source_commit: "84463db14290192bf13adca2302f5f8da2421df5"
 core_version: "1.61"
 display_name: "Nintendo - SNES / SFC (Snes9x)"
 systems: [nintendo-snes, nintendo-satellaview, nintendo-sufami-turbo]
@@ -41,7 +42,7 @@ files:
     required: false
     size: 262144
     validation: [size]
-    source_ref: "libretro.cpp:1203,1317, memmap.cpp:1672"
+    source_ref: "libretro.cpp:1203, libretro.cpp:1317, memmap.cpp:1688"
     note: "Needed for Sufami Turbo multi-cart games."
 
 notes:

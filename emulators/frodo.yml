@@ -5,6 +5,7 @@ cores: [frodo]
 source: "https://github.com/libretro/frodo-libretro"
 upstream: "https://github.com/cebix/frodo4"
 profiled_date: "2026-03-23"
+source_commit: "29dd1864b89d903ed93f1d86d85636ef9e194359"
 core_version: "v4.2"
 display_name: "Commodore - C64 (Frodo)"
 systems: [commodore-c64]

@@ -4,6 +4,7 @@ core_classification: frozen_snapshot
 source: "https://github.com/libretro/crawl-ref"
 upstream: "https://github.com/crawl/crawl"
 profiled_date: "2026-03-25"
+source_commit: "cc2530f377a3a5d686d4b6a360d88b01de0fbc59"
 core_version: "0.16-a0"
 display_name: "Dungeon Crawl Stone Soup"
 cores: [stonesoup]

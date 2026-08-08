@@ -4,6 +4,7 @@ core_classification: official_port
 source: "https://github.com/timoinutilis/lowres-nx"
 upstream: "https://github.com/timoinutilis/lowres-nx"
 profiled_date: "2026-03-25"
+source_commit: "85c80181d26bb5c2147ebc76bfc48bce9f8d73a8"
 core_version: "v1.2"
 display_name: "LowRes NX"
 cores:

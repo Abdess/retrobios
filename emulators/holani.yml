@@ -4,6 +4,7 @@ core_classification: official_port
 source: "https://github.com/LLeny/holani-retro"
 upstream: "https://github.com/LLeny/holani"
 profiled_date: "2026-03-24"
+source_commit: "19b974f77247a937369adf48280d2b34a5a66245"
 core_version: "0.9.9"
 display_name: "Atari - Lynx (Holani)"
 cores: [holani]

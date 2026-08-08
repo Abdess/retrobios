@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/quasi88-libretro"
 upstream: "https://www.retropc.net/showzoh/quasi88/"
 profiled_date: "2026-03-29"
+source_commit: "b5a0e044a914c9a6b8d7b2dd2ddd152f93d35687"
 core_version: "0.6.4"
 display_name: "NEC - PC-8000 / PC-8800 series (QUASI88)"
 cores:

@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://codeberg.org/iyzsong/anarch-libretro"
 upstream: "https://gitlab.com/drummyfish/anarch"
 profiled_date: "2026-03-22"
+source_commit: "c0c0b78e5c30644019f7d4fcdddfed4f22db24d7"
 core_version: "1.1d"
 display_name: "Anarch"
 cores: [anarch]

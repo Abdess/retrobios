@@ -5,6 +5,7 @@ exclusion_note: "stub core calls standalone Dolphin — all BIOS in Dolphin's ow
 source: "https://github.com/RobLoach/libretro-dolphin-launcher"
 upstream: "https://github.com/dolphin-emu/dolphin"
 profiled_date: "2026-03-23"
+source_commit: "6d72f3093d33461821e4f7fde6d3308187e644b9"
 core_version: "1.2.0"
 display_name: "Nintendo - GameCube / Wii (Dolphin Launcher)"
 cores:

@@ -4,6 +4,7 @@ core_classification: official_port
 source: "https://github.com/BlitterStudio/amiberry"
 upstream: "https://github.com/tonioni/WinUAE"
 profiled_date: "2026-03-26"
+source_commit: "4eda9b757b10a0273710423d3e68f4dde7c57599"
 core_version: "v8.1.2"
 display_name: "Commodore - Amiga (Amiberry)"
 cores: [amiberry]

@@ -5,6 +5,7 @@ core_classification: community_fork
 source: https://github.com/DanAlexMorton/3dsTrident
 upstream: https://github.com/wheremyfoodat/Panda3DS
 profiled_date: "2026-03-25"
+source_commit: "1e9ecf7a0fbf35315bc5f6114b3d0b4f13422a2e"
 core_version: git
 
 cores:

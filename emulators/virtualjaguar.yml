@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/virtualjaguar-libretro"
 upstream: "http://shamusworld.gotdns.org/git/virtualjaguar"
 profiled_date: "2025-03-25"
+source_commit: "48096c1f6f8b98cfff048a5cb4e6a86686631072"
 core_version: "v2.1.0"
 display_name: "Atari - Jaguar (Virtual Jaguar)"
 cores:

@@ -4,6 +4,7 @@ core_classification: enhanced_fork
 source: "https://github.com/libretro/smsplus-gx"
 upstream: "https://github.com/ekeeke/smsplus-gx"
 profiled_date: "2026-03-25"
+source_commit: "c642bbd0680b5959180a420036108893d0aec961"
 core_version: "1.8"
 display_name: "Sega - MS/GG (SMS Plus GX)"
 cores:

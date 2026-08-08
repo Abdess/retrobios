@@ -4,6 +4,7 @@ core_classification: official_port
 source: "https://github.com/libretro/FBNeo"
 upstream: "https://github.com/finalburnneo/FBNeo"
 profiled_date: "2026-03-23"
+source_commit: "ef1f64b7023bc511858e96b8961f99c18a09f112"
 core_version: "v1.0.0.03"
 display_name: "Arcade (FinalBurn Neo) (CPS-1 / CPS-2)"
 cores:
@@ -39,4 +40,4 @@ files:
     path: "fbneo/hiscore.dat"
     required: false
     note: "High score database, enables persistent high scores across all arcade games"
-    source_ref: "src/burn/hiscore.cpp:406"
+    source_ref: "src/burn/hiscore.cpp:407"

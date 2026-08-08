@@ -4,6 +4,7 @@ core_classification: official_port
 source: "https://github.com/joamag/boytacean"
 upstream: "https://github.com/joamag/boytacean"
 profiled_date: "2026-03-23"
+source_commit: "440213b507cfaefcc3adf6a62460097407379bcc"
 core_version: "0.11.5"
 display_name: "Nintendo - Game Boy / Color (Boytacean)"
 cores:

@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://codeberg.org/iyzsong/uxn-libretro"
 upstream: "https://github.com/chmod222/zuxn"
 profiled_date: "2026-03-25"
+source_commit: "65e28e59929a9946916221337397808a3d8c67a3"
 core_version: "0.0.1"
 display_name: "Uxn / Varvara (zuxn)"
 cores: [uxn]

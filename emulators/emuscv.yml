@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/wzcwzc/emuscv"
 upstream: "http://takeda-toshiya.my.coocan.jp/"
 profiled_date: "2026-03-23"
+source_commit: "6d6e4594d79862dd5c2ff7f725c109e4266f0b03"
 core_version: "0.12"
 display_name: "EPOCH/YENO Super Cassette Vision"
 cores:

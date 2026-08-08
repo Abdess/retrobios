@@ -4,6 +4,7 @@ core_classification: official_port
 source: "https://github.com/libretro/yabause/tree/yabasanshiro"
 upstream: "https://github.com/devmiyax/yabause"
 profiled_date: "2026-03-25"
+source_commit: "65af22e96beb6d9b0b9a50a81a39c86a6d604c1c"
 core_version: "v2.6.8"
 display_name: "Sega - Saturn (YabaSanshiro)"
 cores:

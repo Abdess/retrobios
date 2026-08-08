@@ -4,6 +4,7 @@ core_classification: pure_libretro
 source: "https://github.com/libretro/libretro-pocketcdg"
 upstream: "https://github.com/redbug26/libretro-pocketcdg"
 profiled_date: "2026-03-24"
+source_commit: "b48b807e770aeea9a9e8f7af36f5e04ed4727aaa"
 core_version: "Git"
 display_name: "PocketCDG"
 cores: [pocketcdg]

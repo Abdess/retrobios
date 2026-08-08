@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/libretro-simcoupe"
 upstream: "https://github.com/simonowen/simcoupe"
 profiled_date: "2026-03-25"
+source_commit: "c28046241ac6a4d79e55326b6e354dc02f92fa34"
 core_version: "Git"
 display_name: "SAM Coupe (SimCoupe)"
 cores:

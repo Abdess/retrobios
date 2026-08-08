@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/citra"
 upstream: "https://github.com/citra-emu/citra"
 profiled_date: "2026-03-23"
+source_commit: "4268124a74b55ddba69f29dc9858f222c4bd006d"
 core_version: "Git"
 display_name: "Nintendo - 3DS (Citra Canary/Experimental)"
 cores: [citra_canary]

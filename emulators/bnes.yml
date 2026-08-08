@@ -4,6 +4,7 @@ core_classification: frozen_snapshot
 source: "https://github.com/libretro/bnes-libretro"
 upstream: "https://github.com/Alcaro/bsnes-gc"
 profiled_date: "2026-03-23"
+source_commit: "8e26e89a93bef8eb8992d1921b539dce1792660a"
 core_version: "v083"
 display_name: "Nintendo - NES / Famicom (bnes)"
 cores:

@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/iyzsong/syobonaction-libretro"
 upstream: "https://github.com/akemin-dayo/OpenSyobonAction"
 profiled_date: "2026-03-25"
+source_commit: "792c40cb590bcc7286cf720b5fb85807082b534e"
 core_version: "0.3"
 display_name: "Syobon Action"
 cores: [syobonaction]
@@ -24,63 +25,63 @@ files:
     description: "Player character sprites"
     required: true
     category: game_data
-    source_ref: "OpenSyobonAction/loadg.cpp:40"
+    source_ref: "loadg.cpp:40"
 
   - name: brock.PNG
     path: SyobonAction/res/brock.PNG
     description: "Block tileset"
     required: true
     category: game_data
-    source_ref: "OpenSyobonAction/loadg.cpp:42"
+    source_ref: "loadg.cpp:42"
 
   - name: item.PNG
     path: SyobonAction/res/item.PNG
     description: "Item sprites"
     required: true
     category: game_data
-    source_ref: "OpenSyobonAction/loadg.cpp:44"
+    source_ref: "loadg.cpp:44"
 
   - name: teki.PNG
     path: SyobonAction/res/teki.PNG
     description: "Enemy sprites"
     required: true
     category: game_data
-    source_ref: "OpenSyobonAction/loadg.cpp:46"
+    source_ref: "loadg.cpp:46"
 
   - name: haikei.PNG
     path: SyobonAction/res/haikei.PNG
     description: "Background graphics"
     required: true
     category: game_data
-    source_ref: "OpenSyobonAction/loadg.cpp:48"
+    source_ref: "loadg.cpp:48"
 
   - name: brock2.PNG
     path: SyobonAction/res/brock2.PNG
     description: "Alternate block tileset"
     required: true
     category: game_data
-    source_ref: "OpenSyobonAction/loadg.cpp:50"
+    source_ref: "loadg.cpp:50"
 
   - name: omake.PNG
     path: SyobonAction/res/omake.PNG
     description: "Bonus sprites"
     required: true
     category: game_data
-    source_ref: "OpenSyobonAction/loadg.cpp:52"
+    source_ref: "loadg.cpp:52"
 
   - name: omake2.PNG
     path: SyobonAction/res/omake2.PNG
     description: "Bonus sprites (set 2)"
     required: true
     category: game_data
-    source_ref: "OpenSyobonAction/loadg.cpp:54"
+    source_ref: "loadg.cpp:54"
 
   - name: syobon3.PNG
     path: SyobonAction/res/syobon3.PNG
     description: "Title screen"
     required: true
     category: game_data
-    source_ref: "OpenSyobonAction/loadg.cpp:56"
+    source_ref: "loadg.cpp:56"
 
   # ── res/ - Font (required: TTF_OpenFont → exit(1) on failure) ──
 
@@ -89,7 +90,7 @@ files:
     description: "Sazanami Gothic Japanese font for text rendering"
     required: true
     category: game_data
-    source_ref: "OpenSyobonAction/DxLib.cpp:73"
+    source_ref: "DxLib.cpp:73"
 
   # ── BGM/ - Music (optional: LoadMusicMem → NULL on failure, game continues) ──
 
@@ -98,35 +99,35 @@ files:
     description: "Field stage music"
     required: false
     category: game_data
-    source_ref: "OpenSyobonAction/loadg.cpp:220"
+    source_ref: "loadg.cpp:220"
 
   - name: dungeon.ogg
     path: SyobonAction/BGM/dungeon.ogg
     description: "Dungeon stage music"
     required: false
     category: game_data
-    source_ref: "OpenSyobonAction/loadg.cpp:221"
+    source_ref: "loadg.cpp:221"
 
   - name: star4.ogg
     path: SyobonAction/BGM/star4.ogg
     description: "Star power music"
     required: false
     category: game_data
-    source_ref: "OpenSyobonAction/loadg.cpp:222"
+    source_ref: "loadg.cpp:222"
 
   - name: castle.ogg
     path: SyobonAction/BGM/castle.ogg
     description: "Castle stage music"
     required: false
     category: game_data
-    source_ref: "OpenSyobonAction/loadg.cpp:223"
+    source_ref: "loadg.cpp:223"
 
   - name: puyo.ogg
     path: SyobonAction/BGM/puyo.ogg
     description: "Puyo stage music"
     required: false
     category: game_data
-    source_ref: "OpenSyobonAction/loadg.cpp:224"
+    source_ref: "loadg.cpp:224"
 
   # ── SE/ - Sound effects (optional: LoadSoundMem → NULL on failure, game continues) ──
 
@@ -135,116 +136,116 @@ files:
     description: "Jump sound"
     required: false
     category: game_data
-    source_ref: "OpenSyobonAction/loadg.cpp:228"
+    source_ref: "loadg.cpp:228"
 
   - name: brockbreak.ogg
     path: SyobonAction/SE/brockbreak.ogg
     description: "Block break sound"
     required: false
     category: game_data
-    source_ref: "OpenSyobonAction/loadg.cpp:230"
+    source_ref: "loadg.cpp:230"
 
   - name: coin.ogg
     path: SyobonAction/SE/coin.ogg
     description: "Coin sound"
     required: false
     category: game_data
-    source_ref: "OpenSyobonAction/loadg.cpp:231"
+    source_ref: "loadg.cpp:231"
 
   - name: humi.ogg
     path: SyobonAction/SE/humi.ogg
     description: "Stomp sound"
     required: false
     category: game_data
-    source_ref: "OpenSyobonAction/loadg.cpp:232"
+    source_ref: "loadg.cpp:232"
 
   - name: koura.ogg
     path: SyobonAction/SE/koura.ogg
     description: "Shell sound"
     required: false
     category: game_data
-    source_ref: "OpenSyobonAction/loadg.cpp:233"
+    source_ref: "loadg.cpp:233"
 
   - name: dokan.ogg
     path: SyobonAction/SE/dokan.ogg
     description: "Pipe sound"
     required: false
     category: game_data
-    source_ref: "OpenSyobonAction/loadg.cpp:234"
+    source_ref: "loadg.cpp:234"
 
   - name: brockkinoko.ogg
     path: SyobonAction/SE/brockkinoko.ogg
     description: "Mushroom from block sound"
     required: false
     category: game_data
-    source_ref: "OpenSyobonAction/loadg.cpp:235"
+    source_ref: "loadg.cpp:235"
 
   - name: powerup.ogg
     path: SyobonAction/SE/powerup.ogg
     description: "Power-up sound"
     required: false
     category: game_data
-    source_ref: "OpenSyobonAction/loadg.cpp:236"
+    source_ref: "loadg.cpp:236"
 
   - name: kirra.ogg
     path: SyobonAction/SE/kirra.ogg
     description: "Star sound"
     required: false
     category: game_data
-    source_ref: "OpenSyobonAction/loadg.cpp:237"
+    source_ref: "loadg.cpp:237"
 
   - name: goal.ogg
     path: SyobonAction/SE/goal.ogg
     description: "Goal sound"
     required: false
     category: game_data
-    source_ref: "OpenSyobonAction/loadg.cpp:238"
+    source_ref: "loadg.cpp:238"
 
   - name: death.ogg
     path: SyobonAction/SE/death.ogg
     description: "Death sound"
     required: false
     category: game_data
-    source_ref: "OpenSyobonAction/loadg.cpp:239"
+    source_ref: "loadg.cpp:239"
 
   - name: Pswitch.ogg
     path: SyobonAction/SE/Pswitch.ogg
     description: "P-switch sound"
     required: false
     category: game_data
-    source_ref: "OpenSyobonAction/loadg.cpp:240"
+    source_ref: "loadg.cpp:240"
 
   - name: jumpBlock.ogg
     path: SyobonAction/SE/jumpBlock.ogg
     description: "Jump block sound"
     required: false
     category: game_data
-    source_ref: "OpenSyobonAction/loadg.cpp:241"
+    source_ref: "loadg.cpp:241"
 
   - name: hintBlock.ogg
     path: SyobonAction/SE/hintBlock.ogg
     description: "Hint block sound"
     required: false
     category: game_data
-    source_ref: "OpenSyobonAction/loadg.cpp:242"
+    source_ref: "loadg.cpp:242"
 
   - name: 4-clear.ogg
     path: SyobonAction/SE/4-clear.ogg
     description: "Stage clear sound"
     required: false
     category: game_data
-    source_ref: "OpenSyobonAction/loadg.cpp:243"
+    source_ref: "loadg.cpp:243"
 
   - name: allclear.ogg
     path: SyobonAction/SE/allclear.ogg
     description: "All stages clear sound"
     required: false
     category: game_data
-    source_ref: "OpenSyobonAction/loadg.cpp:244"
+    source_ref: "loadg.cpp:244"
 
   - name: tekifire.ogg
     path: SyobonAction/SE/tekifire.ogg
     description: "Enemy fire sound"
     required: false
     category: game_data
-    source_ref: "OpenSyobonAction/loadg.cpp:245"
+    source_ref: "loadg.cpp:245"

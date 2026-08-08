@@ -4,6 +4,7 @@ core_classification: official_port
 source: "https://github.com/libretro/galaxy-libretro"
 upstream: "https://github.com/nikp123/Galaksija-Emulator"
 profiled_date: "2026-03-23"
+source_commit: "4e197680d2dc9f8159d3a5565fcc4bbdd0e905ea"
 core_version: "v0.1"
 display_name: "Elektronika Inženjering - Galaksija (Galaksija)"
 cores:

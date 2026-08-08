@@ -3,6 +3,7 @@ type: libretro
 core_classification: official_port
 source: "https://github.com/drhelius/Gearlynx"
 profiled_date: "2026-03-23"
+source_commit: "74b85cb73d915d2df9fa75acbcd5beb7b8eecdd6"
 core_version: "1.0.0"
 display_name: "Atari - Lynx (GearLynx)"
 cores: [gearlynx]

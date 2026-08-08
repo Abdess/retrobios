@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/redream-next"
 upstream: "https://github.com/inolen/redream"
 profiled_date: "2026-03-25"
+source_commit: "d826ece7f987c6fed336246e7272e2ded6cefa69"
 core_version: "Git"
 display_name: "Sega - Dreamcast (RetroDream)"
 cores:

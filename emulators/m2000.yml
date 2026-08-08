@@ -4,6 +4,7 @@ core_classification: official_port
 source: "https://github.com/p2000t/M2000"
 upstream: "https://github.com/p2000t/M2000"
 profiled_date: "2026-03-24"
+source_commit: "fb0c1162de393608d339132d7200b1a4c3b95b72"
 core_version: "0.9.4"
 display_name: "Philips - P2000T (M2000)"
 cores:

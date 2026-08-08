@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/libretro-fsuae"
 upstream: "https://github.com/FrodeSolheim/fs-uae"
 profiled_date: "2026-03-26"
+source_commit: "06e3030a46a6063aa0f7028c269d972f06c46d5d"
 core_version: "v5.0.7"
 display_name: "Commodore - Amiga (FS-UAE)"
 cores:

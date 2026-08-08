@@ -6,6 +6,7 @@ cores: [opera]
 source: "https://github.com/libretro/opera-libretro"
 upstream: "https://sourceforge.net/projects/freedo/"
 profiled_date: "2026-03-24"
+source_commit: "636a8dd6340bce7073168ddefd29841fc5e2d213"
 core_version: "1.0.0"
 display_name: "The 3DO Company - 3DO (Opera)"
 systems:

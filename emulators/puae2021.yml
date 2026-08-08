@@ -5,6 +5,7 @@ cores: [puae2021]
 source: "https://github.com/libretro/libretro-uae/tree/2.6.1"
 upstream: "https://github.com/GnoStiC/PUAE"
 profiled_date: "2026-03-24"
+source_commit: "96ebfcfc2c66233ad37f6dc99ee991211dc719ad"
 core_version: "2.6.1"
 display_name: "Commodore - Amiga (PUAE 2021)"
 systems:
@@ -246,20 +247,20 @@ files:
     system: commodore-amiga
     required: false
     note: "Amiga Forever ROM decryption key. Copied to saves/WHDLoad/Devs/Kickstarts/ for WHDLoad."
-    source_ref: "libretro/libretro-core.c:5887-5898"
+    source_ref: "libretro/libretro-core.c:5885-5896"
 
   - name: "WHDLoad.key"
     system: commodore-amiga
     required: false
     unsourceable: "per-user signed registration key, never distributed generically, WHDLoad free since v18.2"
     note: "WHDLoad license key. Copied to saves/WHDLoad/L/ for registered WHDLoad use."
-    source_ref: "libretro/libretro-core.c:5903-5916"
+    source_ref: "libretro/libretro-core.c:5901-5914"
 
   - name: "WHDLoad.prefs"
     system: commodore-amiga
     required: false
     note: "WHDLoad preferences. Copied to saves/WHDLoad/S/ when present."
-    source_ref: "libretro/libretro-core.c:5920-5943"
+    source_ref: "libretro/libretro-core.c:5918-5941"
 
 model_kickstart_map:
   A500:     {kickstart: "kick34005.A500", ext: null}

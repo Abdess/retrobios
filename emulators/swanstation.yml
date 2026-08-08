@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/swanstation"
 upstream: "https://github.com/stenzek/duckstation"
 profiled_date: "2026-03-25"
+source_commit: "8f026d31542cf63a6df48380ba692715ca58ac30"
 core_version: "v0.1"
 display_name: "Sony - PlayStation (SwanStation)"
 cores: [swanstation]
@@ -36,7 +37,7 @@ files:
     md5: "8dd7d5296a650fac7319bce665a6a53c"
     size: 524288
     validation: [size, md5]
-    source_ref: "src/core/bios.cpp:47"
+    source_ref: "src/core/bios.cpp:48"
     aliases: []
 
   - name: "scph5501.bin"
@@ -46,7 +47,7 @@ files:
     md5: "490f666e1afb15b7362b406ed1cea246"
     size: 524288
     validation: [size, md5]
-    source_ref: "src/core/bios.cpp:48-49"
+    source_ref: "src/core/bios.cpp:49-50"
     aliases: []
 
   - name: "scph5502.bin"
@@ -56,7 +57,7 @@ files:
     md5: "32736f17079d0b2b7024407c39bd3050"
     size: 524288
     validation: [size, md5]
-    source_ref: "src/core/bios.cpp:50-51"
+    source_ref: "src/core/bios.cpp:51-52"
     aliases: []
 
   - name: "psxonpsp660.bin"
@@ -66,7 +67,7 @@ files:
     md5: "c53ca5908936d412331790f4426c6c33"
     size: 524288
     validation: [size, md5]
-    source_ref: "src/core/bios.cpp:65-66"
+    source_ref: "src/core/bios.cpp:66-67"
     aliases: []
 
   - name: "ps1_rom.bin"
@@ -77,5 +78,5 @@ files:
     size: [524288, 4194304, 4089584]
     validation: [size, md5]
     note: "Accepts PS1 (512KB), PS2 (4MB), and PS3 (0x3E66F0) sizes. Only first 512KB used."
-    source_ref: "src/core/bios.h:9, src/core/bios.cpp:70,83"
+    source_ref: "src/core/bios.h:9, src/core/bios.cpp:71, src/core/bios.cpp:84"
     aliases: []

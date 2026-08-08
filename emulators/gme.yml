@@ -4,6 +4,7 @@ core_classification: pure_libretro
 source: "https://github.com/libretro/libretro-gme"
 upstream: "https://github.com/libgme/game-music-emu"
 profiled_date: "2026-03-23"
+source_commit: "495431b0f5951b9428253064370ac1272994c657"
 core_version: "Git"
 display_name: "Game Music Emu"
 cores: [gme]

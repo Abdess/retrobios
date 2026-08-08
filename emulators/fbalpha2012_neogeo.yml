@@ -4,6 +4,7 @@ core_classification: frozen_snapshot
 source: "https://github.com/libretro/fbalpha2012_neogeo"
 upstream: "https://www.fbalpha.com"
 profiled_date: "2026-03-23"
+source_commit: "ce4949b1557cc7134e736342801ed25b2f3bd790"
 core_version: "v0.2.97.29"
 display_name: "Arcade (FB Alpha 2012 Neo Geo)"
 cores:

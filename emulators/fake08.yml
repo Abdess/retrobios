@@ -4,6 +4,7 @@ core_classification: game_engine
 source: "https://github.com/jtothebell/fake-08"
 upstream: "https://github.com/jtothebell/fake-08"
 profiled_date: "2026-03-23"
+source_commit: "3e89519ca4b4eaf65be9e8cb982ea2c1ccd34e5d"
 core_version: "v0.0.2.19"
 display_name: "PICO-8 (FAKE-08)"
 cores:

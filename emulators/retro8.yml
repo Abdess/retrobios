@@ -4,6 +4,7 @@ core_classification: game_engine
 source: "https://github.com/libretro/retro8"
 upstream: "https://github.com/Jakz/retro8"
 profiled_date: "2026-03-25"
+source_commit: "a235ff8e3ca1b44bcf88293748d5a492c76a2c7b"
 core_version: "0.1b"
 display_name: "PICO-8 (Retro8)"
 cores:

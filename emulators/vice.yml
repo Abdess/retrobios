@@ -14,6 +14,7 @@ cores:
 source: "https://github.com/libretro/vice-libretro"
 logo: "https://raw.githubusercontent.com/VICE-Team/svn-mirror/main/vice/data/common/vice-logo-black.svg"
 profiled_date: "2026-03-18"
+source_commit: "8818c3a39146b9a26df23a1e4880b4420f93a255"
 core_version: "3.9"
 display_name: "Commodore - C64 (VICE x64, fast)"
 systems:
@@ -1068,7 +1069,7 @@ files:
     hle_fallback: true
     embedded: false
     note: "SuperCPU DOS v1.40 external kernal. Optional, selected via core option. Goes in system/vice/SCPU64/."
-    source_ref: "retrodep/ui.c:266, libretro/libretro-core.c:2823"
+    source_ref: "retrodep/ui.c:266, libretro/libretro-core.c:2824"
 
   - name: "vice/SCPU64/scpu-dos-2.04.bin"
     system: commodore-c64
@@ -1076,7 +1077,7 @@ files:
     hle_fallback: true
     embedded: false
     note: "SuperCPU DOS v2.04 external kernal. Optional, selected via core option. Goes in system/vice/SCPU64/."
-    source_ref: "retrodep/ui.c:263, libretro/libretro-core.c:2825"
+    source_ref: "retrodep/ui.c:263, libretro/libretro-core.c:2826"
 
   # -------------------------------------------------------
   # Drive ROMs (shared across all cores with True Drive Emulation)
@@ -1260,7 +1261,7 @@ files:
     hle_fallback: true
     embedded: false
     note: "JiffyDOS C64 kernal replacement. Optional, proprietary. Requires True Drive Emulation + 1541/1571/1581 drive."
-    source_ref: "retrodep/ui.c:302, libretro/libretro-core.c:2853"
+    source_ref: "retrodep/ui.c:302, libretro/libretro-core.c:2854"
 
   - name: "vice/JiffyDOS_SX-64.bin"
     system: commodore-c64
@@ -1276,7 +1277,7 @@ files:
     hle_fallback: true
     embedded: false
     note: "JiffyDOS C128 kernal replacement. Optional, proprietary. C128 core only."
-    source_ref: "retrodep/ui.c:309, libretro/libretro-core.c:2855"
+    source_ref: "retrodep/ui.c:309, libretro/libretro-core.c:2856"
 
   - name: "vice/JiffyDOS_1541-II.bin"
     system: commodore-c64

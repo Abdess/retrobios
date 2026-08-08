@@ -1,5 +1,6 @@
 emulator: MicroW8
 profiled_date: "2026-03-25"
+source_commit: "2dced6e1b990222033e269d5fb269b2e2f9ee543"
 core_version: "0.2.2"
 display_name: "MicroW8"
 type: libretro

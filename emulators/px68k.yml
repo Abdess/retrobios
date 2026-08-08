@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/px68k-libretro"
 upstream: "https://github.com/hissorii/px68k"
 profiled_date: "2026-03-25"
+source_commit: "cc45b55983b4d30c961a313a77df9bcf9461dc63"
 core_version: "0.15+"
 display_name: "Sharp - X68000 (PX68k)"
 cores:

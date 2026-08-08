@@ -4,6 +4,7 @@ core_classification: frozen_snapshot
 source: "https://github.com/libretro/snes9x2002"
 upstream: "https://github.com/snes9xgit/snes9x"
 profiled_date: "2026-03-25"
+source_commit: "a0709ec7dcd6de2fbebb43106bd757b649e3b7cf"
 core_version: "7.2.0"
 display_name: "Nintendo - SNES / SFC (Snes9x 2002)"
 cores:

@@ -4,6 +4,7 @@ core_classification: official_port
 source: "https://github.com/vircon32/vircon32-libretro"
 upstream: "https://github.com/vircon32/ComputerSoftware"
 profiled_date: "2026-03-25"
+source_commit: "3a1b4ae3fb75c1216fab9cc8715e9a122c461a3a"
 core_version: "2026.2.18"
 display_name: "Vircon32"
 cores:

@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/potator"
 upstream: "https://github.com/alekmaul/potator"
 profiled_date: "2026-03-24"
+source_commit: "ad87bc6068ef126e48339b440465fb0bf5a2794f"
 core_version: "1.0.5"
 display_name: "Watara - Supervision (Potator)"
 cores:

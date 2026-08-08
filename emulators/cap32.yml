@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/libretro-cap32"
 upstream: "https://github.com/ColinPitrat/caprice32"
 profiled_date: "2026-03-23"
+source_commit: "4abfb8be233bec630f369379fb6c1d92d31f1c7d"
 core_version: "v4.2.0"
 display_name: "Amstrad - CPC/GX4000 (Caprice32)"
 cores:
@@ -54,7 +55,7 @@ files:
     mode: standalone
     size: 32768
     note: "CPC 464 OS + BASIC 1.0"
-    source_ref: "caprice32/src/cap32.cpp:1006, rom/cpc464.rom"
+    source_ref: "src/cap32.cpp:1015, rom/cpc464.rom"
   - name: cpc664.rom
     system: amstrad-cpc
     required: false
@@ -75,7 +76,7 @@ files:
     mode: standalone
     size: 16384
     note: "AMSDOS disc ROM (sideways slot 7)"
-    source_ref: "caprice32/src/cap32.cpp:1166"
+    source_ref: "src/cap32.cpp:1178"
   - name: system.cpr
     system: amstrad-cpc
     required: false
@@ -89,7 +90,7 @@ files:
     mode: standalone
     size: 8192
     note: "Multiface 2 ROM"
-    source_ref: "caprice32/rom/MF2.rom, caprice32/src/cap32.cpp:1244-1263"
+    source_ref: "caprice32/rom/MF2.rom, src/cap32.cpp:1256-1275"
 
 platform_details:
   bios_mapping:

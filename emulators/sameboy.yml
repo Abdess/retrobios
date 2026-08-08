@@ -4,6 +4,7 @@ core_classification: official_port
 source: "https://github.com/libretro/SameBoy"
 upstream: "https://github.com/LIJI32/SameBoy"
 profiled_date: "2026-03-25"
+source_commit: "51433012a871a44555492273fd22f29867d12655"
 core_version: "0.15.4"
 display_name: "Nintendo - Game Boy / Color (SameBoy)"
 cores:

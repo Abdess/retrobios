@@ -5,6 +5,7 @@ source: "https://github.com/white-axe/mkxp-z"
 source_ref: "branch: libretro (PR #255 to mkxp-z/mkxp-z)"
 upstream: "https://github.com/mkxp-z/mkxp-z"
 profiled_date: "2026-03-24"
+source_commit: "19f2d8c814c2554a7455e5ed08e963d8a8caddfe"
 core_version: "f4bc5aa"
 display_name: "RPG Maker XP/VX/VX Ace (mkxp-z)"
 cores:

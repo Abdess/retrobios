@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/r-type/sdlvice-libretro"
 upstream: "https://sourceforge.net/projects/vice-emu/"
 profiled_date: "2026-03-25"
+source_commit: "baaaeed97ce1c0a07ed78e3e155cfbd6f508b472"
 core_version: "3.1"
 display_name: "Commodore - C64 (VICE SDL)"
 cores: [x64sdl]

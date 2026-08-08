@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/blueMSX-libretro"
 upstream: "http://bluemsx.msxblue.com/"
 profiled_date: "2026-03-23"
+source_commit: "0f32f52c48d3e772bfdf0379756f81f00b4e08bc"
 core_version: "SVN"
 display_name: "MSX/SVI/ColecoVision/SG-1000 (blueMSX)"
 cores:
@@ -396,7 +397,7 @@ files:
     required: false
     hle_fallback: true
     note: "FM-PAC cartridge ROM (YM2413 FM synthesis). If missing, core uses built-in minimal ROM stub."
-    source_ref: "Src/Memory/MegaromCartridge.c:289-305"
+    source_ref: "Src/Memory/MegaromCartridge.c:290-306"
 
   - name: XBASIC2.rom
     path: "Machines/Shared Roms/XBASIC2.rom"
@@ -477,35 +478,35 @@ files:
     size: 65536
     required: false
     note: "Sunrise IDE interface ROM. Loaded as expansion cartridge."
-    source_ref: "Src/Memory/MegaromCartridge.c:310"
+    source_ref: "Src/Memory/MegaromCartridge.c:311"
 
   - name: BEERIDE.ROM
     path: "Machines/Shared Roms/BEERIDE.ROM"
     size: 16384
     required: false
     note: "Beer IDE interface ROM."
-    source_ref: "Src/Memory/MegaromCartridge.c:318"
+    source_ref: "Src/Memory/MegaromCartridge.c:319"
 
   - name: NOVAXIS.rom
     path: "Machines/Shared Roms/NOVAXIS.rom"
     size: 16384
     required: false
     note: "Novaxis SCSI interface ROM."
-    source_ref: "Src/Memory/MegaromCartridge.c:326"
+    source_ref: "Src/Memory/MegaromCartridge.c:327"
 
   - name: nowindDos1.rom
     path: "Machines/Shared Roms/nowindDos1.rom"
     size: 524288
     required: false
     note: "Nowind USB disk interface with MSX-DOS 1."
-    source_ref: "Src/Memory/MegaromCartridge.c:334"
+    source_ref: "Src/Memory/MegaromCartridge.c:335"
 
   - name: nowindDos2.rom
     path: "Machines/Shared Roms/nowindDos2.rom"
     size: 524288
     required: false
     note: "Nowind USB disk interface with MSX-DOS 2."
-    source_ref: "Src/Memory/MegaromCartridge.c:338"
+    source_ref: "Src/Memory/MegaromCartridge.c:339"
 
   - name: GCVMX80.ROM
     path: "Machines/Shared Roms/GCVMX80.ROM"

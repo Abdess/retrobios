@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/dosbox-svn"
 upstream: "https://sourceforge.net/projects/dosbox/"
 profiled_date: "2026-03-23"
+source_commit: "53ca2f6303a652d129321cfc521f000cd7ec5531"
 core_version: "SVN"
 display_name: "DOS (DOSBox-SVN)"
 cores: [dosbox_svn]

@@ -3,6 +3,7 @@ type: libretro
 core_classification: pure_libretro
 source: "https://github.com/libretro/redbook"
 profiled_date: "2026-03-25"
+source_commit: "43544bb988f37a8f3df5af5d2c6f89dd255b8235"
 core_version: "1.0"
 display_name: "Redbook Audio Player"
 cores:

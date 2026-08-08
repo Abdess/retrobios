@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/tgbdual-libretro"
 upstream: "http://gigo.retrogames.com/download.html#tgb-dual"
 profiled_date: "2026-03-25"
+source_commit: "933707c0ba8f12360f6d79712f735a917713709a"
 core_version: "v0.8.3"
 display_name: "Nintendo - Game Boy / Color (TGB Dual)"
 cores:

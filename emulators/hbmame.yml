@@ -5,6 +5,7 @@ source: "https://github.com/libretro/hbmame-libretro"
 upstream: "https://github.com/Robbbert/hbmame"
 logo: "https://raw.githubusercontent.com/mamedev/mame/master/docs/source/images/MAMElogo.svg"
 profiled_date: "2026-03-23"
+source_commit: "8cd20238f85126adac06d4e419c8f712142e62cd"
 core_version: "Git"
 display_name: "Arcade (HBMAME)"
 cores:

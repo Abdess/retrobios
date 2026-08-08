@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/dosbox-libretro"
 upstream: "https://sourceforge.net/projects/dosbox/"
 profiled_date: "2026-03-23"
+source_commit: "4cf18ddf91c3f5faa4c715ed715d449d8a6f6f6c"
 core_version: "0.74"
 display_name: "DOS (DOSBox)"
 cores: [dosbox]

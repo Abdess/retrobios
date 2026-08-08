@@ -4,6 +4,7 @@ core_classification: game_engine
 source: "https://github.com/libretro/ecwolf"
 upstream: "https://bitbucket.org/ecwolf/ecwolf"
 profiled_date: "2026-03-23"
+source_commit: "15c1aa3114b2b9cdb1baec0a6467b2b868371446"
 core_version: "1.3.99999"
 display_name: "Wolfenstein 3D (ECWolf)"
 cores: [ecwolf]

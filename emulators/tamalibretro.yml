@@ -5,6 +5,7 @@ source: "https://github.com/celerizer/tamalibretro"
 upstream: "https://github.com/jcrona/tamalib"
 source_ref: "main.c:345-365 (retro_load_game)"
 profiled_date: "2026-03-25"
+source_commit: "ec83dc1a5ea8bdbcd02cee81779c6dbe0e996ed2"
 core_version: "1.0"
 display_name: "Bandai - Tamagotchi P1 (TamaLIBretro)"
 cores: [tamalibretro]

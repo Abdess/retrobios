@@ -4,6 +4,7 @@ core_classification: pure_libretro
 source: "https://github.com/libretro/beetle-wswan-libretro"
 upstream: "https://mednafen.github.io/"
 profiled_date: "2026-03-24"
+source_commit: "2aeb47d3a58bf0360c686f842d9bb5bd201306fe"
 core_version: "v0.9.35.1"
 display_name: "Bandai - WonderSwan/Color (Beetle Wonderswan)"
 cores: [beetle_wswan, mednafen_wswan]

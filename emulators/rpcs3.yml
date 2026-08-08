@@ -6,6 +6,7 @@ upstream: "https://github.com/RPCS3/rpcs3"
 cores:
   - rpcs3
 profiled_date: "2026-03-30"
+source_commit: "3d587726a23f514be0e7c3ac43e2db0cf2fe931a"
 core_version: "0.0.35"
 display_name: "Sony - PlayStation 3 (RPCS3)"
 systems: [sony-playstation-3]

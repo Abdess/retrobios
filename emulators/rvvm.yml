@@ -4,6 +4,7 @@ core_classification: official_port
 source: "https://github.com/LekKit/RVVM"
 upstream: "https://github.com/LekKit/RVVM"
 profiled_date: "2026-03-25"
+source_commit: "7195d47431b1f9643a61a306bed6650571e6ecca"
 core_version: "0.6-git"
 display_name: "RVVM"
 cores: [rvvm]

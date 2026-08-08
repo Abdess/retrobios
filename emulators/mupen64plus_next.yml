@@ -4,6 +4,7 @@ core_classification: enhanced_fork
 source: "https://github.com/libretro/mupen64plus-libretro-nx"
 upstream: "https://github.com/mupen64plus/mupen64plus-core"
 profiled_date: "2026-03-24"
+source_commit: "f275caf4b2bfa1e6d1c51636746ea793f3d80320"
 core_version: "2.6.0"
 display_name: "Nintendo - Nintendo 64 (Mupen64Plus-Next)"
 systems: [nintendo-64, nintendo-64dd]

@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/xmil-libretro"
 upstream: "http://amethyst.yui.ne.jp/svn/x1/xmil/trunk/"
 profiled_date: "2026-03-25"
+source_commit: "3e7960a433c3bca820f8b8f5511a2b92bd666829"
 core_version: "0.60a"
 display_name: "Sharp X1 (X Millennium)"
 cores:

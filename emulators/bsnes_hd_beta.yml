@@ -4,6 +4,7 @@ core_classification: enhanced_fork
 source: "https://github.com/DerKoun/bsnes-hd"
 upstream: "https://github.com/bsnes-emu/bsnes"
 profiled_date: "2026-03-23"
+source_commit: "fc26b25ea236f0f877f0265d2a2c37dfd93dfde9"
 core_version: "v10.6"
 display_name: "Nintendo - SNES / SFC (bsnes-hd beta)"
 cores: [bsnes_hd_beta, bsneshd, bsnes_hd]

@@ -4,6 +4,7 @@ core_classification: enhanced_fork
 source: "https://github.com/libretro/nSide"
 upstream: "https://gitlab.com/higan/higan"
 profiled_date: "2026-03-23"
+source_commit: "5e965d0db4c0d05e7e8fb6449035538781c73473"
 core_version: "v105 (Super Famicom Balanced)"
 display_name: "Nintendo - SNES / Famicom (nSide Balanced)"
 cores:

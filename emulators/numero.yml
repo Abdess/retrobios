@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/nbarkhina/numero"
 upstream: "https://github.com/sputt/wabbitemu"
 profiled_date: "2026-03-24"
+source_commit: "867c40ad9cdfe5295e0be81e0a17b16964a4a33e"
 core_version: "v1.0"
 display_name: "Texas Instruments TI-83 (Numero)"
 cores:

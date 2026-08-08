@@ -4,6 +4,7 @@ core_classification: game_engine
 source: "https://github.com/DrGlaucous/doukutsu-rs-nm"
 upstream: "https://github.com/doukutsu-rs/doukutsu-rs"
 profiled_date: "2026-03-23"
+source_commit: "51e64c2e9615bcd476034c69b58927877fe73494"
 core_version: "1.2.0 - 0.101.0"
 display_name: "Cave Story (drs)"
 cores:

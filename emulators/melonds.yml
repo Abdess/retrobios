@@ -5,6 +5,7 @@ cores: [melonds]
 source: "https://github.com/libretro/melonDS"
 upstream: "https://github.com/melonDS-emu/melonDS"
 profiled_date: "2026-03-24"
+source_commit: "66b5d2634cd0a79030562811e6e05f5532f800ba"
 core_version: "Git"
 display_name: "Nintendo - DS (melonDS)"
 systems: [nintendo-ds, nintendo-dsi]

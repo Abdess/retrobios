@@ -3,6 +3,7 @@ type: standalone
 source: "https://github.com/cemu-project/Cemu"
 logo: "https://raw.githubusercontent.com/cemu-project/Cemu/main/dist/linux/info.cemu.Cemu.png"
 profiled_date: "2026-03-18"
+source_commit: "daacdda0bab55dd78a2b5aac2c12d6ebe8c8e868"
 core_version: "2.6"
 display_name: "Cemu (Wii U)"
 systems: [nintendo-wiiu]
@@ -329,13 +330,13 @@ files:
     required: false
     path: "cafeLibs/"
     note: "Wii U firmware sound library, improves audio accuracy for some games"
-    source_ref: "src/Cafe/OS/libs/snd_user/snd_user.cpp:1071"
+    source_ref: "src/Cafe/OS/libs/snd_user/snd_user.cpp:1225"
 
   - name: "snduser2.rpl"
     required: false
     path: "cafeLibs/"
     note: "Wii U firmware sound library v2, improves audio accuracy for some games"
-    source_ref: "src/Cafe/OS/libs/snd_user/snd_user.cpp:1071"
+    source_ref: "src/Cafe/OS/libs/snd_user/snd_user.cpp:1225"
 
 # Firmware title IDs referenced in the source
 firmware_titles:

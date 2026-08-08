@@ -4,6 +4,7 @@ core_classification: frozen_snapshot
 source: "https://github.com/libretro/stella2014-libretro"
 upstream: "https://github.com/stella-emu/stella"
 profiled_date: "2026-03-25"
+source_commit: "4a7da82595d27b8df7af1ecb467a64b642a41bc9"
 core_version: "3.9.3"
 display_name: "Atari - 2600 (Stella 2014)"
 cores:

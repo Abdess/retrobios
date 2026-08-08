@@ -4,6 +4,7 @@ core_classification: official_port
 source: "https://github.com/libretro/jollycv"
 upstream: "https://gitlab.com/jgemu/jollycv"
 profiled_date: "2026-03-24"
+source_commit: "eb14292005d51e2bef954cb75145981037ee9988"
 core_version: "2.0.0"
 display_name: "ColecoVision/CreatiVision/My Vision (JollyCV)"
 cores:

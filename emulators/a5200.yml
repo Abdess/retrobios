@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/a5200"
 upstream: "https://github.com/alekmaul/a5200"
 profiled_date: "2026-03-22"
+source_commit: "40c6f2f1ad4a3145b328d5baaf010fae6c7e752b"
 core_version: "2.0.2"
 display_name: "Atari - 5200 (a5200)"
 cores:
@@ -41,4 +42,4 @@ files:
     note: >
       Atari 5200 OS ROM. Core option "a5200_bios" controls official vs internal.
       Altirra replacement has lower compatibility with some titles.
-    source_ref: "libretro/libretro.c:58-59, libretro/libretro.c:408-499, emu/memory.c:46"
+    source_ref: "libretro/libretro.c:58-59, libretro/libretro.c:416-507, emu/memory.c:46"

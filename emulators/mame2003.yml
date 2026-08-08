@@ -4,6 +4,7 @@ core_classification: frozen_snapshot
 source: "https://github.com/libretro/mame2003-libretro"
 upstream: "https://www.mamedev.org"
 profiled_date: "2026-03-24"
+source_commit: "6c32fa9fc005d7e924909c6ff4684da9abb00ceb"
 core_version: "0.78"
 display_name: "Arcade (MAME 2003)"
 
@@ -64,14 +65,14 @@ files:
     path: "mame2003/history.dat"
     required: false
     category: game_data
-    source_ref: "src/datafile.c:327,608"
+    source_ref: "src/datafile.c:327, src/datafile.c:593"
     note: "game history and information database"
 
   - name: mameinfo.dat
     path: "mame2003/mameinfo.dat"
     required: false
     category: game_data
-    source_ref: "src/datafile.c:327,638"
+    source_ref: "src/datafile.c:327, src/datafile.c:623"
     note: "game technical information database"
 
   # SNK Neo Geo MVS/AES
@@ -145,14 +146,14 @@ files:
     required: true
     category: bios_zip
     system: sega-megaplay
-    source_ref: "src/drivers/segac2.c:4513"
+    source_ref: "src/drivers/segac2.c:4498"
 
   # Sega Mega Tech
   - name: megatech.zip
     required: true
     category: bios_zip
     system: sega-megatech
-    source_ref: "src/drivers/segac2.c:4435"
+    source_ref: "src/drivers/segac2.c:4420"
 
   # DECO Cassette
   - name: decocass.zip
@@ -187,7 +188,7 @@ files:
     required: true
     category: bios_zip
     system: konami-gx
-    source_ref: "src/drivers/konamigx.c:3434"
+    source_ref: "src/drivers/konamigx.c:3413"
 
   # Century Electronics CVS
   - name: cvs.zip

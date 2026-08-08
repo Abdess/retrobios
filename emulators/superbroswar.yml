@@ -4,6 +4,7 @@ core_classification: game_engine
 source: "https://github.com/libretro/superbroswar-libretro"
 upstream: "https://github.com/mmatyas/supermariowar"
 profiled_date: "2026-03-25"
+source_commit: "ae824f626ad80c8b7ee848698b3d1dcebe9a5ccb"
 core_version: "v0.1"
 display_name: "Super Bros War"
 cores: [superbroswar]

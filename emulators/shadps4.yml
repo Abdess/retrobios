@@ -3,6 +3,7 @@ type: standalone
 source: "https://github.com/shadps4-emu/shadPS4"
 upstream: "https://github.com/shadps4-emu/shadPS4"
 profiled_date: "2026-03-26"
+source_commit: "e0a86dc8f926df913b8b478b4ba897ddb8d27c79"
 core_version: "pre-release 2026-03-25"
 display_name: "shadPS4 (PlayStation 4)"
 cores:
@@ -120,7 +121,7 @@ files:
     required: false
     path: "shadps4/sys_modules/"
     description: "PS4 character encoding conversion"
-    source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:222"
+    source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:221"
 
   - name: "libSceAudiodec.sprx"
     required: false

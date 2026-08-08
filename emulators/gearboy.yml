@@ -4,6 +4,7 @@ core_classification: official_port
 source: "https://github.com/drhelius/Gearboy"
 upstream: "https://github.com/drhelius/Gearboy"
 profiled_date: "2026-03-23"
+source_commit: "1a4735bec1c93a4d208b39873439cd0a2cb422ac"
 core_version: "3.4.1"
 display_name: "Nintendo - Game Boy / Color (Gearboy)"
 cores:

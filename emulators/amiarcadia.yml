@@ -4,6 +4,7 @@ core_classification: official_port
 source: "https://github.com/warmenhoven/amiarcadia"
 upstream: "https://amigan.1emu.net/releases/"
 profiled_date: "2026-03-22"
+source_commit: "4b84422985457b53dcc22ab46f525d7c34d3e51f"
 core_version: "4.42"
 display_name: "Arcadia 2001 / Interton VC 4000 (AmiArcadia)"
 cores:

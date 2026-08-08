@@ -3,6 +3,7 @@ type: standalone
 source: "https://github.com/xemu-project/xemu"
 logo: "https://raw.githubusercontent.com/xemu-project/xemu/master/data/xemu_64x64.png"
 profiled_date: "2026-03-18"
+source_commit: "d77f11b4d08468d90575f3840d6631b3ce484b38"
 core_version: "0.8.x"
 display_name: "xemu (Xbox)"
 systems: [microsoft-xbox]

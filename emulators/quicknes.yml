@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/QuickNES_Core"
 upstream: "https://github.com/kode54/QuickNES"
 profiled_date: "2026-03-25"
+source_commit: "dbf19f73e3eb9701d1c7f5898f57c097e05c9fbd"
 core_version: "1.0-WIP"
 display_name: "Nintendo - NES / Famicom (QuickNES)"
 cores:

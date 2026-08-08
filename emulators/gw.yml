@@ -4,6 +4,7 @@ core_classification: pure_libretro
 source: "https://github.com/libretro/gw-libretro"
 upstream: "http://www.madrigaldesign.it/sim/"
 profiled_date: "2026-03-25"
+source_commit: "435e5cfd4bf6aea03a84259e9b8dba3daf3ff5bd"
 core_version: "Git"
 display_name: "Handheld Electronic (GW)"
 cores:

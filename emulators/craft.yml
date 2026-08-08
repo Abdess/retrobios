@@ -4,6 +4,7 @@ core_classification: pure_libretro
 source: "https://github.com/libretro/Craft"
 upstream: "https://github.com/fogleman/Craft"
 profiled_date: "2026-03-23"
+source_commit: "675c5b2fc690d2e80f6099f46407bf23827c59d4"
 core_version: "v1"
 display_name: "Minecraft (Craft)"
 cores: [craft]

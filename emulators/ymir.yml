@@ -6,6 +6,7 @@ source:
   libretro: "https://github.com/warmenhoven/Ymir/tree/libretro"
 upstream: "https://github.com/StrikerX3/Ymir"
 profiled_date: "2026-03-26"
+source_commit: "5e9310410baa47cb7da5b068f399c9e4a34eedbc"
 core_version:
   standalone: "v0.2.1"
   libretro: "PR#746"

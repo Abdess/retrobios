@@ -4,6 +4,7 @@ core_classification: official_port
 source: "https://github.com/libretro/blastem"
 upstream: "https://www.retrodev.com/blastem/"
 profiled_date: "2026-03-23"
+source_commit: "84e567e17b6fb3cea23146c4209c18d50d46cbf0"
 core_version: "v0.6.3-pre"
 display_name: "Sega - Mega Drive - Genesis (BlastEm)"
 cores:
@@ -52,7 +53,7 @@ files:
     mode: standalone
     size: 2048
     note: "TMSS startup ROM. Standalone only (models md1va6, md2va1+). Libretro core uses md1va3 (tmss off), no way to change."
-    source_ref: "genesis.c:1910-1923"
+    source_ref: "genesis.c:3027-3040"
 
 analysis:
   tmss:

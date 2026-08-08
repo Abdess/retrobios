@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/beetle-pce-libretro"
 upstream: "https://mednafen.github.io/"
 profiled_date: "2026-03-24"
+source_commit: "9a301c0773c53702a882bbaa42ee9cbc6d523787"
 core_version: "v0.9.38.7"
 display_name: "NEC - PC Engine / SuperGrafx / CD (Beetle PCE)"
 cores: [mednafen_pce]

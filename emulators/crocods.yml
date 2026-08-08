@@ -4,6 +4,7 @@ core_classification: official_port
 source: "https://github.com/libretro/libretro-crocods"
 upstream: "https://github.com/redbug26/crocods-core"
 profiled_date: "2026-03-23"
+source_commit: "a320f6e38af49af84a63f81329a1bdb9322022b4"
 core_version: "v1"
 display_name: "Amstrad - CPC (CrocoDS)"
 cores:

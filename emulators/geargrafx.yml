@@ -4,6 +4,7 @@ core_classification: official_port
 source: "https://github.com/drhelius/Geargrafx"
 upstream: "https://github.com/drhelius/Geargrafx"
 profiled_date: "2026-03-23"
+source_commit: "4084ff459561e6a3584bce5d60d8e742d8c1810b"
 core_version: "1.6.0"
 display_name: "NEC - PC Engine / SuperGrafx / CD (Geargrafx)"
 cores:

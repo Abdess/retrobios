@@ -5,6 +5,7 @@ source: "https://github.com/libretro/bsnes-libretro"
 upstream: "https://github.com/bsnes-emu/bsnes"
 logo: "https://raw.githubusercontent.com/bsnes-emu/bsnes/master/bsnes/target-bsnes/resource/bsnes.svg"
 profiled_date: "2026-04-05"
+source_commit: "289af312429e4ca4101f9dfa45f3e941b6559780"
 core_version: "115"
 display_name: "Nintendo - SNES / SFC (bsnes)"
 cores: [bsnes]

@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/bsnes-jg"
 upstream: "https://gitlab.com/jgemu/bsnes"
 profiled_date: "2026-03-23"
+source_commit: "aedc27e367b65f002afb5098684f39eb6124079c"
 core_version: "2.1.0"
 display_name: "Nintendo - SNES / SFC (bsnes-jg)"
 cores: [bsnes-jg]

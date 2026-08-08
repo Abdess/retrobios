@@ -4,6 +4,7 @@ core_classification: official_port
 source: https://github.com/skylersaleh/SkyEmu/blob/v5/src/libretro.c
 upstream: https://github.com/skylersaleh/SkyEmu
 profiled_date: "2026-03-25"
+source_commit: "01516d6798e3652b583e6a366085bb51c43b528d"
 core_version: "v5"
 display_name: "Nintendo - Game Boy/GBA/NDS (SkyEmu)"
 

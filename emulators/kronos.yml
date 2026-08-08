@@ -4,6 +4,7 @@ core_classification: official_port
 source: "https://github.com/libretro/yabause"
 upstream: "https://github.com/FCare/Kronos"
 profiled_date: "2026-03-24"
+source_commit: "65af22e96beb6d9b0b9a50a81a39c86a6d604c1c"
 core_version: "v2.6.0"
 display_name: "Sega - Saturn/ST-V (Kronos)"
 cores:

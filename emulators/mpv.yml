@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/libretro-mpv"
 upstream: "https://github.com/mpv-player/mpv"
 profiled_date: "2026-03-24"
+source_commit: "99f7fe4fd43d68da45006301829eaf37c7edbcc2"
 core_version: "0.2.alpha"
 display_name: "MPV"
 cores:

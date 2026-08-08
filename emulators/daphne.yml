@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/daphne"
 upstream: "https://github.com/mirror/daphne-emu"
 profiled_date: "2026-03-23"
+source_commit: "1586978f7b71f40675f8d0a08d9872ecd2415422"
 core_version: "Git"
 display_name: "Arcade (Daphne)"
 cores:

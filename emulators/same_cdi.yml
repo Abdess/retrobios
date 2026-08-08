@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/same_cdi"
 upstream: "https://github.com/mamedev/mame"
 profiled_date: "2026-03-25"
+source_commit: "7ee1d8e9cb4307b7cd44ee1dd757e9b3f48f41d5"
 core_version: "Git"
 display_name: "Philips - CDi (SAME CDi)"
 cores: [same_cdi]
@@ -41,7 +42,7 @@ files:
     system: cdi
     required: true
     note: "Forced system. Main CPU BIOS (3 region variants via MAME BIOS switch) + servo/slave MCU dumps."
-    source_ref: "src/mame/drivers/cdi.cpp:574-589"
+    source_ref: "src/mame/drivers/cdi.cpp:428-443"
     contents:
       - name: cdi200.rom
         description: Magnavox CD-i 200 BIOS (default, US)
@@ -75,7 +76,7 @@ files:
     system: cdi
     required: false
     note: "CD-i Mono-II (NTSC). MACHINE_NOT_WORKING. Listed in .info as optional."
-    source_ref: "src/mame/drivers/cdi.cpp:609-618"
+    source_ref: "src/mame/drivers/cdi.cpp:463-472"
     contents:
       - name: "philips__cdi-220_ph3_r1.2__mb834200b-15__02f_aa__9402_z04.tc574200-le._1.7211"
         description: Mono-II main CPU BIOS, Philips CDI-220 PH3 R1.2
@@ -123,7 +124,7 @@ files:
     system: cdi
     required: false
     note: "CD-i 910-17P Mini-MMC (PAL). MACHINE_NOT_WORKING. Not in .info firmware list."
-    source_ref: "src/mame/drivers/cdi.cpp:591-607"
+    source_ref: "src/mame/drivers/cdi.cpp:445-461"
     contents:
       - name: "philips__cd-i_2.1__mb834200b-15__26b_aa__9224_z01.tc574200.7211"
         description: CD-i 910-17P Mini-MMC BIOS (default)
@@ -162,7 +163,7 @@ files:
     system: cdi
     required: false
     note: "CD-i 490. MACHINE_NOT_WORKING. Not in .info firmware list."
-    source_ref: "src/mame/drivers/cdi.cpp:620-628"
+    source_ref: "src/mame/drivers/cdi.cpp:474-482"
     contents:
       - name: cdi490a.rom
         description: CD-i 490 main CPU BIOS

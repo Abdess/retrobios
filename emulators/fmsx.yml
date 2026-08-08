@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/fmsx-libretro"
 upstream: "https://fms.komkon.org/fMSX/"
 profiled_date: "2026-03-23"
+source_commit: "f013e213458e06d9df718e4bc4b09d46f88aa899"
 core_version: "6.0"
 display_name: "Microsoft - MSX (fMSX)"
 cores:

@@ -4,6 +4,7 @@ core_classification: pure_libretro
 source: "https://github.com/libretro/libretro-uzem"
 upstream: "https://github.com/Uzebox/uzebox"
 profiled_date: "2026-03-25"
+source_commit: "cd6004ea143435cfdb6b12e7c6779dab499f7829"
 core_version: "v2.0"
 display_name: "Uzebox (Uzem)"
 cores:

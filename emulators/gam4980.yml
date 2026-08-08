@@ -4,6 +4,7 @@ core_classification: pure_libretro
 source: "https://github.com/ThisBoringWorld/gam4980"
 upstream: "https://codeberg.org/iyzsong/gam4980"
 profiled_date: "2026-03-23"
+source_commit: "2fbed643f61c6bde758f179c93d6f0595ef0a7e6"
 core_version: "0.2"
 display_name: "GAM4980"
 cores:

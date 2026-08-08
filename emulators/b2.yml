@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/zoltanvb/b2-libretro"
 upstream: "https://github.com/tom-seddon/b2"
 profiled_date: "2026-03-23"
+source_commit: "6485984cddf50e20fb7d9d5d350a9d54265c283c"
 core_version: "v0.4"
 display_name: "Acorn - BBC Micro (b2)"
 cores: [b2]

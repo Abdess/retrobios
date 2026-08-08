@@ -4,6 +4,7 @@ core_classification: pure_libretro
 source: "https://github.com/libretro/ThePowderToy"
 upstream: "https://github.com/ThePowderToy/The-Powder-Toy"
 profiled_date: "2026-03-25"
+source_commit: "cb3cd4c2e5beddb98b34e6b800fa24e8f96322d9"
 core_version: "v92.5.336"
 display_name: "The Powder Toy"
 cores: [thepowdertoy]

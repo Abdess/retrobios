@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/pcsx1-libretro"
 upstream: "https://github.com/notaz/pcsx_rearmed"
 profiled_date: "2026-03-24"
+source_commit: "35dabb85ff3af6825820f54090d344945f65d24e"
 core_version: "r22"
 display_name: "Sony - PlayStation (PCSX1)"
 cores: [pcsx1]

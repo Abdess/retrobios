@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/libretro-meowPC98"
 upstream: "https://np2.yui.ne.jp (dead; source preserved in libretro repo)"
 profiled_date: "2026-03-24"
+source_commit: "0ba5965247834317fd1026dc19d302677849b9e4"
 core_version: "0.86"
 display_name: "NEC - PC-98 (Neko Project II)"
 cores: [nekop2]

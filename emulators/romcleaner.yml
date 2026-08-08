@@ -4,6 +4,7 @@ core_classification: pure_libretro
 source: "https://github.com/JesseTG/rom-cleaner"
 upstream: "https://github.com/JesseTG/rom-cleaner"
 profiled_date: "2026-03-25"
+source_commit: "d2f474a439ab1a642aaed11caa4419d3663062c1"
 core_version: "1.0.0"
 display_name: "ROM Cleaner"
 cores:

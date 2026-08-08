@@ -4,6 +4,7 @@ core_classification: game_engine
 source: "https://github.com/libretro/TIC-80"
 upstream: "https://github.com/nesbox/TIC-80"
 profiled_date: "2026-03-25"
+source_commit: "6412f72d0f4725c153ce3d245729b829e713542e"
 core_version: "0.80.0"
 display_name: "TIC-80"
 cores:

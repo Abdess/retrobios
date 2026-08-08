@@ -4,6 +4,7 @@ core_classification: official_port
 source: "https://github.com/Clownacy/clownmdemu-libretro"
 upstream: "https://github.com/Clownacy/clownmdemu"
 profiled_date: "2026-03-23"
+source_commit: "3b278c900c278678763d96087f1d343a6aed6e58"
 core_version: "Git"
 display_name: "Sega - MD/CD (ClownMDEmu)"
 cores:

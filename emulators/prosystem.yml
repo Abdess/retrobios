@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/prosystem-libretro"
 upstream: "https://github.com/gstanton/ProSystem1_3"
 profiled_date: "2026-03-24"
+source_commit: "363b6dfbd3e240762e022c2b4897b4fe55722be3"
 core_version: "1.3e"
 display_name: "Atari - 7800 (ProSystem)"
 cores:

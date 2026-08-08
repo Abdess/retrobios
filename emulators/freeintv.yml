@@ -3,6 +3,7 @@ type: libretro
 core_classification: pure_libretro
 source: "https://github.com/libretro/FreeIntv"
 profiled_date: "2026-03-23"
+source_commit: "428915baf2bfc032fc03e645f4f8f9c6c3144979"
 core_version: "2018.1.5"
 display_name: "Mattel - Intellivision (FreeIntv)"
 cores:

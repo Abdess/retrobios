@@ -3,6 +3,7 @@ type: standalone
 source: "https://github.com/ares-emulator/ares"
 upstream: "https://github.com/ares-emulator/ares"
 profiled_date: "2026-03-26"
+source_commit: "dfa6ec0c79dc88cadd62936777ba8a2e83306c7d"
 core_version: "v147"
 display_name: "ares"
 cores: [ares]
@@ -208,7 +209,7 @@ files:
     sha256: "413a2b601a94b3792e054be2439cc77a1819cceadbfa9542f88d51c7480f2ef0"
     validation: [sha256]
     description: "MSX BIOS ROM (Japan)"
-    source_ref: "desktop-ui/emulator/msx.cpp:15"
+    source_ref: "desktop-ui/emulator/msx.cpp:19"
 
   # --- MSX2 ---
   - name: MSX2.ROM
@@ -338,7 +339,7 @@ files:
     sha256: "0e87a3385a27b3a4cac51934819b7eefa5b3d690768d2495633838488cd0e2e4"
     validation: [sha256]
     description: "NEC PAC-N10 LaserActive module (US)"
-    source_ref: "desktop-ui/emulator/pc-engine-ld.cpp:20"
+    source_ref: "desktop-ui/emulator/pc-engine-ld.cpp:16"
 
   - name: pac-n1.pce
     system: pc-engine-ld
@@ -347,7 +348,7 @@ files:
     sha256: "459325690a458baebd77495c91e37c4dddfdd542ba13a821ce954e5bb245627f"
     validation: [sha256]
     description: "NEC PAC-N1 LaserActive module (Japan)"
-    source_ref: "desktop-ui/emulator/pc-engine-ld.cpp:21"
+    source_ref: "desktop-ui/emulator/pc-engine-ld.cpp:19"
 
   - name: pce-lp1.pce
     system: pc-engine-ld
@@ -356,7 +357,7 @@ files:
     sha256: "3f43b3b577117d84002e99cb0baeb97b0d65b1d70b4adadc68817185c6a687f0"
     validation: [sha256]
     description: "NEC PCE-LP1 LaserActive module (Japan)"
-    source_ref: "desktop-ui/emulator/pc-engine-ld.cpp:22"
+    source_ref: "desktop-ui/emulator/pc-engine-ld.cpp:18"
 
   # --- PlayStation ---
   - name: scph5501.bin

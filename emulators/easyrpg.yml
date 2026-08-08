@@ -4,6 +4,7 @@ core_classification: game_engine
 source: "https://github.com/libretro/easyrpg-libretro"
 upstream: "https://github.com/EasyRPG/Player"
 profiled_date: "2026-03-23"
+source_commit: "6a244c1f078405ca654a7b040830522a26c25ba1"
 core_version: "0.8.1.0"
 display_name: "RPG Maker 2000/2003 (EasyRPG)"
 cores:

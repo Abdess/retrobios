@@ -4,6 +4,7 @@ core_classification: pure_libretro
 source: "https://github.com/libretro/retroluxury"
 upstream: "https://github.com/leiradel/retroluxury"
 profiled_date: "2026-03-25"
+source_commit: "fdcd94fe4099735edcbea638760da3f2297bc520"
 core_version: "v1"
 display_name: "Test RetroLuxury"
 cores:

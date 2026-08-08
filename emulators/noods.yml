@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/jonian/libretro-noods"
 upstream: "https://github.com/Hydr8gon/NooDS"
 profiled_date: "2026-03-24"
+source_commit: "9a2665306927ede64f4b5c109df79f4015607dbc"
 core_version: "Git"
 display_name: "Nintendo - DS (NooDS)"
 cores: [noods]
@@ -60,5 +61,5 @@ files:
     system: nintendo-ds
     description: "DLDI SD card image for homebrew"
     required: false
-    source_ref: "src/dldi.cpp:80-83, src/libretro/libretro.cpp:331"
+    source_ref: "src/dldi.cpp:80-83, src/libretro/libretro.cpp:324"
     note: "Opened on DLDI startup() call from homebrew ROMs; user-created FAT image"

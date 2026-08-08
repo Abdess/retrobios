@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/oberon-risc-emu"
 upstream: "https://github.com/pdewacht/oberon-risc-emu"
 profiled_date: "2026-03-24"
+source_commit: "532b44c31190640628fea388bb593cc247814612"
 core_version: "2020-07-01"
 display_name: "Oberon RISC Emulator"
 cores:

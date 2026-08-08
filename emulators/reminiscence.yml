@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/REminiscence"
 upstream: "https://github.com/cyxx/REminiscence"
 profiled_date: "2026-03-25"
+source_commit: "e80d7b1aa287010e30c54f72252a9303173f1c7e"
 core_version: "0.3.6"
 display_name: "Flashback (REminiscence)"
 cores:

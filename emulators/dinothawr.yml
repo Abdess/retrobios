@@ -4,6 +4,7 @@ core_classification: game_engine
 source: "https://github.com/libretro/Dinothawr"
 upstream: "https://github.com/libretro/Dinothawr"
 profiled_date: "2026-03-23"
+source_commit: "d66dde551be8e68e47c05e88838b4f1c6b114c99"
 core_version: "v1.0"
 display_name: "Dinothawr"
 cores: [dinothawr]

@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/beetle-lynx-libretro"
 upstream: "https://mednafen.github.io/"
 profiled_date: "2026-03-24"
+source_commit: "efd1797c7aa5a83c354507b1b61ac24222ebaa58"
 core_version: "v1.24.0"
 display_name: "Atari - Lynx (Beetle Lynx)"
 cores: [mednafen_lynx]

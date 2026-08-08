@@ -5,6 +5,7 @@ source: "https://github.com/libretro/libretro-samples"
 upstream: null
 source_ref: "video/opengl/libretro_test_gl_fixedfunction/libretro_gl_ff_test.c"
 profiled_date: "2026-03-25"
+source_commit: "bce193bc1b8c9a3da43b2ead0158a69e28b37ed8"
 core_version: "v1"
 display_name: "TestGL (FF)"
 cores:

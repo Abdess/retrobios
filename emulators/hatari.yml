@@ -5,6 +5,7 @@ source: "https://github.com/libretro/hatari"
 upstream: "https://github.com/hatari/hatari"
 logo: "https://raw.githubusercontent.com/hatari/hatari/main/share/icons/hicolor/scalable/apps/hatari.svg"
 profiled_date: "2026-03-23"
+source_commit: "92e2874e664be40e1b51b97e0ff925a1aa917f22"
 core_version: "1.8"
 display_name: "Atari - ST/STE/TT/Falcon (Hatari)"
 cores:
@@ -42,7 +43,7 @@ files:
       TOS ROM image. Any valid version (1.00 through 4.04) or EmuTOS works.
       The core auto-detects version from the ROM header and adjusts machine type.
       Default location is system/tos.img, additional images go in system/hatari/tos/.
-    source_ref: "src/tos.c:575-696, libretro/libretro.c:387-410"
+    source_ref: "src/tos.c:575-696, libretro/libretro.c:390-413"
 
   # -- Cartridge ROM (optional) --
   # External cartridge image, max 128 KB. Formats: .img, .rom, .stc
@@ -65,7 +66,7 @@ files:
     note: >
       Floppy image used for GEMDOS HD bootstrapping with .gem files.
       Libretro port addition (not in upstream Hatari).
-    source_ref: "libretro/libretro.c:1649"
+    source_ref: "libretro/libretro.c:1669"
 
 # Supported TOS versions (from patch table in tos.c):
 #   0x100 - TOS 1.00 (ST, 68000 only, no VDI extensions)

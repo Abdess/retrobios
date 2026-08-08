@@ -3,6 +3,7 @@ type: standalone
 source: "https://github.com/Vita3K/Vita3K"
 upstream: "https://github.com/Vita3K/Vita3K"
 profiled_date: "2026-03-29"
+source_commit: "99694acd967a47f462b73dd631bad7c9fde89fc0"
 core_version: "0.2.1"
 display_name: "Vita3K (PS Vita)"
 systems: [sony-playstation-vita]

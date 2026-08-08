@@ -2,6 +2,7 @@ emulator: x16emu
 type: standalone
 upstream: "https://github.com/X16Community/x16-emulator"
 profiled_date: "2026-03-26"
+source_commit: "49b1fbd6d058cc8c6f126ed86d9b6ccfaaa8335b"
 core_version: "r50"
 display_name: "Commander X16 (x16emu)"
 cores:
@@ -25,7 +26,7 @@ files:
     required: true
     size: 524288
     description: "Commander X16 system ROM (KERNAL, BASIC, DOS, charset)"
-    source_ref: "x16-emulator/src/main.c:602,1158-1165; glue.h:19,24"
+    source_ref: "src/main.c:602, 1158-1165; glue.h:19, 1158-1165; glue.h:24"
     note: >
       Default filename "rom.bin", loaded from executable directory or via -rom flag.
       ROM_SIZE = NUM_ROM_BANKS(32) * 16384 = 524288 bytes. exit(1) if file not found.

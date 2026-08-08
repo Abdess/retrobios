@@ -5,6 +5,7 @@ cores: [uae4arm]
 source: "https://github.com/libretro/uae4arm-libretro"
 upstream: "https://github.com/PandTomB/uae4arm"
 profiled_date: "2026-03-25"
+source_commit: "16f63d30b98aa8070a996f25f64df6dfff82938b"
 core_version: "v0.5"
 display_name: "Commodore - Amiga (UAE4ARM)"
 systems:
@@ -29,7 +30,7 @@ files:
     description: "Amiga 500 Kickstart v1.3 rev 34.005"
     required: false
     hle_fallback: true
-    source_ref: "libretro/core/libretro-core.cpp:73,420 src/memory.cpp:2080-2180"
+    source_ref: "libretro/core/libretro-core.cpp:78, 420 src/memory.cpp:2080-2180"
 
   - name: "kick40063.A600"
     description: "Amiga 600 Kickstart v3.1 rev 40.063"
@@ -41,7 +42,7 @@ files:
     description: "Amiga 1200 Kickstart v3.1 rev 40.068"
     required: false
     hle_fallback: true
-    source_ref: "libretro/core/libretro-core.cpp:75,405 src/memory.cpp:2080-2180"
+    source_ref: "libretro/core/libretro-core.cpp:80, 405 src/memory.cpp:2080-2180"
 
   - name: "kick34005.CDTV"
     description: "CDTV extended ROM v1.00 rev 34.005"

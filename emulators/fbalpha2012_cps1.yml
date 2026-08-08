@@ -4,6 +4,7 @@ core_classification: frozen_snapshot
 source: "https://github.com/libretro/fbalpha2012_cps1"
 upstream: "https://www.fbalpha.com"
 profiled_date: "2026-03-23"
+source_commit: "5542c1848ef81e92db311193b01dc349bc29d7cc"
 core_version: "v0.2.97.28"
 display_name: "Arcade (FB Alpha 2012 CPS-1)"
 cores:
