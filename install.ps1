@@ -1,6 +1,6 @@
 # RetroBIOS installer for Windows (PowerShell 5+, no Python required)
 $ErrorActionPreference = "Stop"
-$baseUrl = "https://raw.githubusercontent.com/Abdess/retrobios/main"
+$baseUrl = if ($env:RETROBIOS_BASE_URL) { $env:RETROBIOS_BASE_URL } else { "https://raw.githubusercontent.com/Abdess/retrobios/main" }
 $releaseUrl = "https://github.com/Abdess/retrobios/releases/download/large-files"
 
 $platform = $null
@@ -17,22 +17,179 @@ if (Test-Path $emudeckSettings) {
     }
 }
 
+# Expand the notations RetroArch writes into its config values:
+# '~' is the home directory and ':' the application directory, both dropping
+# two leading characters (libretro-common/file/file_path.c).
+function Expand-RetroArchPath {
+    param([string]$Value, [string]$AppDir)
+    if ($Value.StartsWith('~')) { return Join-Path $env:USERPROFILE $Value.Substring(2) }
+    if ($Value.StartsWith(':')) { return Join-Path $AppDir $Value.Substring(2) }
+    return [Environment]::ExpandEnvironmentVariables($Value)
+}
+
+function Get-RetroArchSystemDir {
+    param([string]$CfgPath, [string]$AppDir)
+    if (-not (Test-Path $CfgPath)) { return $null }
+    foreach ($line in Get-Content $CfgPath) {
+        if ($line -match '^\s*system_directory\s*=\s*"?([^"]*)"?') {
+            $val = $Matches[1].Trim()
+            if (-not $val -or $val -eq "default") { return Join-Path $AppDir "system" }
+            return Expand-RetroArchPath -Value $val -AppDir $AppDir
+        }
+    }
+    return $null
+}
+
 # Detect RetroArch
 if (-not $platform) {
     $raCfg = Join-Path $env:APPDATA "RetroArch\retroarch.cfg"
     if (Test-Path $raCfg) {
         $platform = "retroarch"
-        $biosPath = Join-Path $env:APPDATA "RetroArch\system"
-        foreach ($line in Get-Content $raCfg) {
-            if ($line -match '^\s*system_directory\s*=\s*"?([^"]+)"?') {
-                $val = $Matches[1].Trim()
-                if ($val -and $val -ne "default") {
-                    $biosPath = $val
+        $raRoot = Join-Path $env:APPDATA "RetroArch"
+        $found = Get-RetroArchSystemDir -CfgPath $raCfg -AppDir $raRoot
+        $biosPath = if ($found) { $found } else { Join-Path $raRoot "system" }
+        Write-Host "Found RetroArch at $biosPath"
+    }
+}
+
+# Locate LaunchBox. It installs wherever the user points its installer and
+# writes no uninstall registry key, so the Start menu shortcut is the only
+# record of that choice.
+function Get-LaunchBoxRoot {
+    $candidates = @()
+    $lnk = Join-Path $env:APPDATA "Microsoft\Windows\Start Menu\Programs\LaunchBox\LaunchBox.lnk"
+    if (Test-Path $lnk) {
+        $bytes = [System.IO.File]::ReadAllBytes($lnk)
+        $text = [System.Text.Encoding]::ASCII.GetString($bytes)
+        if ($text -match '([A-Za-z]:\\[ -~]{0,260}?LaunchBox\.exe)') {
+            # The shortcut points at Core\LaunchBox.exe
+            $exeDir = Split-Path $Matches[1] -Parent
+            $candidates += (Split-Path $exeDir -Parent)
+            $candidates += $exeDir
+        }
+    }
+    $candidates += (Join-Path $env:USERPROFILE "LaunchBox")
+    foreach ($root in $candidates) {
+        if (Test-Path (Join-Path $root "Data\Emulators.xml")) { return $root }
+    }
+    return $null
+}
+
+# Map each emulator LaunchBox knows about to its installation directory.
+# ApplicationPath is either absolute or relative to the LaunchBox root.
+function Get-LaunchBoxEmulators {
+    param([string]$Root)
+    $map = @{}
+    if (-not $Root) { return $map }
+    $xmlPath = Join-Path $Root "Data\Emulators.xml"
+    if (-not (Test-Path $xmlPath)) { return $map }
+    $doc = $null
+    try { $doc = [xml](Get-Content $xmlPath -Raw) } catch { return $map }
+    foreach ($emu in $doc.LaunchBox.Emulator) {
+        $app = "$($emu.ApplicationPath)"
+        if (-not $app) { continue }
+        $exe = if ($app -match '^[A-Za-z]:' -or $app.StartsWith('\')) { $app } else { Join-Path $Root $app }
+        $dir = Split-Path $exe -Parent
+        $name = (Split-Path $exe -Leaf).ToLower()
+        if ((Test-Path $dir) -and -not $map.ContainsKey($name)) { $map[$name] = $dir }
+    }
+    return $map
+}
+
+# BIOS directories LaunchBox itself computes for the emulators it manages.
+function Get-LaunchBoxBiosDirs {
+    $dirs = @{}
+    $root = Get-LaunchBoxRoot
+    if (-not $root) { return $dirs }
+    $emulators = Get-LaunchBoxEmulators -Root $root
+    $documents = Join-Path $env:USERPROFILE "Documents"
+
+    if ($emulators.ContainsKey("pcsx2.exe")) {
+        # portable.ini or portable.txt next to the executable moves the data
+        # root there, portable.txt naming a subfolder when it holds one
+        # (EmuFolders in pcsx2/Pcsx2Config.cpp). Otherwise it is Documents.
+        $emuDir = $emulators["pcsx2.exe"]
+        $portableTxt = Join-Path $emuDir "portable.txt"
+        $portable = (Test-Path (Join-Path $emuDir "portable.ini")) -or (Test-Path $portableTxt)
+        if ($portable) {
+            $subpath = if (Test-Path $portableTxt) { (Get-Content $portableTxt -Raw).Trim() } else { "" }
+            $dataRoot = if ($subpath) { Join-Path $emuDir $subpath } else { $emuDir }
+        } else {
+            $dataRoot = Join-Path $documents "PCSX2"
+        }
+        $ini = Join-Path $dataRoot "inis\PCSX2.ini"
+        $bios = Join-Path $dataRoot "bios"
+        if (Test-Path $ini) {
+            foreach ($line in Get-Content $ini) {
+                if ($line.StartsWith("Bios = ")) {
+                    $val = $line.Substring(7).Trim()
+                    $bios = if ($val -match '^[A-Za-z]:' -or $val.StartsWith('\')) { $val } else { Join-Path $dataRoot $val }
+                    break
                 }
-                break
             }
         }
-        Write-Host "Found RetroArch at $biosPath"
+        $dirs["pcsx2"] = $bios
+    }
+
+    if ($emulators.ContainsKey("xemu.exe")) {
+        # bootrom_path and flashrom_path name a file whose directory holds
+        # the images; both default to bios/ under the executable.
+        $emuDir = $emulators["xemu.exe"]
+        $toml = Join-Path $emuDir "xemu.toml"
+        if (-not (Test-Path $toml)) { $toml = Join-Path $env:APPDATA "xemu\xemu\xemu.toml" }
+        $bios = Join-Path $emuDir "bios"
+        if (Test-Path $toml) {
+            foreach ($line in Get-Content $toml) {
+                if ($line.StartsWith("bootrom_path") -or $line.StartsWith("flashrom_path")) {
+                    $parts = $line.Split("'")
+                    if ($parts.Count -gt 1 -and (Test-Path $parts[1])) {
+                        $bios = Split-Path $parts[1] -Parent
+                        break
+                    }
+                }
+            }
+        }
+        $dirs["xemu"] = $bios
+    }
+
+    if ($emulators.ContainsKey("dolphin.exe")) {
+        # portable.txt beside the executable moves the user directory to User
+        # (SetUserDirectory in Source/Core/UICommon/UICommon.cpp)
+        $emuDir = $emulators["dolphin.exe"]
+        if (Test-Path (Join-Path $emuDir "portable.txt")) {
+            $dirs["dolphin"] = Join-Path $emuDir "User"
+        }
+    }
+    return $dirs
+}
+
+# Detect LaunchBox (portable RetroArch referenced in Data\Emulators.xml)
+if (-not $platform) {
+    $lbRoot = Get-LaunchBoxRoot
+    $lbXml = if ($lbRoot) { Join-Path $lbRoot "Data\Emulators.xml" } else { $null }
+    if ($lbXml -and (Test-Path $lbXml)) {
+        $lb = $null
+        try { $lb = [xml](Get-Content $lbXml -Raw) } catch { Write-Host "Warning: could not parse $lbXml" }
+        if ($lb) {
+            foreach ($emu in $lb.LaunchBox.Emulator) {
+                $app = "$($emu.ApplicationPath)".Replace('\', '/')
+                if ($app -notmatch 'retroarch\.exe$') { continue }
+                $lbRoot = Split-Path (Split-Path $lbXml -Parent) -Parent
+                if ($app -match '^[A-Za-z]:' -or $app.StartsWith('/')) {
+                    $exe = $app
+                } else {
+                    $exe = Join-Path $lbRoot $app
+                }
+                $raDir = Split-Path $exe -Parent
+                if (Test-Path $raDir) {
+                    $platform = "retroarch"
+                    $found = Get-RetroArchSystemDir -CfgPath (Join-Path $raDir "retroarch.cfg") -AppDir $raDir
+                    $biosPath = if ($found) { $found } else { Join-Path $raDir "system" }
+                    Write-Host "Found LaunchBox with RetroArch at $biosPath"
+                    break
+                }
+            }
+        }
     }
 }
 
@@ -73,11 +230,6 @@ foreach ($f in $files) {
 }
 
 Write-Host "  $upToDate/$($files.Count) up to date, $($toDownload.Count) to download"
-
-if ($toDownload.Count -eq 0) {
-    Write-Host "`nDone. 0 downloaded, $upToDate already up to date."
-    exit 0
-}
 
 $downloaded = 0
 $errors = 0
@@ -129,6 +281,7 @@ foreach ($f in $toDownload) {
 # Standalone emulator copies
 if ($manifest.standalone_copies) {
     Write-Host "`nStandalone emulators:"
+    $extraDirs = Get-LaunchBoxBiosDirs
     foreach ($entry in $manifest.standalone_copies) {
         if ($entry.note) {
             $detectPaths = @()
@@ -156,6 +309,12 @@ if ($manifest.standalone_copies) {
         if ($entry.targets -and $entry.targets.windows) {
             $targetDirs = $entry.targets.windows
         }
+        if ($entry.emulator -and $extraDirs.ContainsKey($entry.emulator)) {
+            $extra = $extraDirs[$entry.emulator]
+            $subdir = if ($entry.file) { Split-Path $entry.file -Parent } else { "" }
+            if ($subdir) { $extra = Join-Path $extra $subdir }
+            $targetDirs += $extra
+        }
         foreach ($td in $targetDirs) {
             $expanded = [Environment]::ExpandEnvironmentVariables($td)
             if (-not (Test-Path $expanded)) { continue }
@@ -167,6 +326,7 @@ if ($manifest.standalone_copies) {
                 } catch {
                     Write-Host "  $($s.Name) -> $expanded FAILED" -ForegroundColor Red
                 }
+
             }
         }
     }

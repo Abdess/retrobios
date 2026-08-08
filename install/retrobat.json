@@ -4,7 +4,7 @@
   "platform": "retrobat",
   "display_name": "RetroBat",
   "version": "1.0",
-  "generated": "2026-08-07T12:30:14Z",
+  "generated": "2026-08-08T00:31:14Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -96,6 +96,7 @@
     },
     {
       "pattern": "ps2-*.bin",
+      "emulator": "pcsx2",
       "targets": {
         "linux": [
           "$HOME/.config/PCSX2/bios",
@@ -122,6 +123,7 @@
     },
     {
       "file": "GC/USA/IPL.bin",
+      "emulator": "dolphin",
       "targets": {
         "linux": [
           "$HOME/.local/share/dolphin-emu/GC/USA"
@@ -136,6 +138,7 @@
     },
     {
       "file": "GC/EUR/IPL.bin",
+      "emulator": "dolphin",
       "targets": {
         "linux": [
           "$HOME/.local/share/dolphin-emu/GC/EUR"
@@ -150,6 +153,7 @@
     },
     {
       "file": "GC/JAP/IPL.bin",
+      "emulator": "dolphin",
       "targets": {
         "linux": [
           "$HOME/.local/share/dolphin-emu/GC/JAP"
@@ -164,6 +168,7 @@
     },
     {
       "file": "dsp_rom.bin",
+      "emulator": "dolphin",
       "targets": {
         "linux": [
           "$HOME/.local/share/dolphin-emu"
@@ -178,6 +183,7 @@
     },
     {
       "file": "dsp_coef.bin",
+      "emulator": "dolphin",
       "targets": {
         "linux": [
           "$HOME/.local/share/dolphin-emu"
@@ -229,8 +235,8 @@
       }
     }
   ],
-  "total_files": 1234,
-  "total_size": 3283257651,
+  "total_files": 1235,
+  "total_size": 3283924181,
   "files": [
     {
       "dest": "panafz1.bin",
@@ -7234,6 +7240,15 @@
       "repo_path": "bios/Sega/Mega CD/MCD_jp_100p.bin",
       "cores": [
         "PicoDrive"
+      ]
+    },
+    {
+      "dest": "PPSSPP/ppge_atlas.zim",
+      "sha1": "30a33f3651f8e1b0967a5dfe6ff714baebcce41a",
+      "size": 666530,
+      "repo_path": "bios/Sony/PlayStation Portable/ppge_atlas.zim",
+      "cores": [
+        "PPSSPP"
       ]
     },
     {

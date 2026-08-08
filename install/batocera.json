@@ -4,7 +4,7 @@
   "platform": "batocera",
   "display_name": "Batocera",
   "version": "1.0",
-  "generated": "2026-08-07T16:30:30Z",
+  "generated": "2026-08-08T00:30:24Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -97,6 +97,7 @@
     },
     {
       "pattern": "ps2-*.bin",
+      "emulator": "pcsx2",
       "targets": {
         "linux": [
           "$HOME/.config/PCSX2/bios",
@@ -123,6 +124,7 @@
     },
     {
       "file": "GC/USA/IPL.bin",
+      "emulator": "dolphin",
       "targets": {
         "linux": [
           "$HOME/.local/share/dolphin-emu/GC/USA"
@@ -137,6 +139,7 @@
     },
     {
       "file": "GC/EUR/IPL.bin",
+      "emulator": "dolphin",
       "targets": {
         "linux": [
           "$HOME/.local/share/dolphin-emu/GC/EUR"
@@ -151,6 +154,7 @@
     },
     {
       "file": "GC/JAP/IPL.bin",
+      "emulator": "dolphin",
       "targets": {
         "linux": [
           "$HOME/.local/share/dolphin-emu/GC/JAP"
@@ -165,6 +169,7 @@
     },
     {
       "file": "dsp_rom.bin",
+      "emulator": "dolphin",
       "targets": {
         "linux": [
           "$HOME/.local/share/dolphin-emu"
@@ -179,6 +184,7 @@
     },
     {
       "file": "dsp_coef.bin",
+      "emulator": "dolphin",
       "targets": {
         "linux": [
           "$HOME/.local/share/dolphin-emu"
@@ -230,8 +236,8 @@
       }
     }
   ],
-  "total_files": 1600,
-  "total_size": 2868353323,
+  "total_files": 1601,
+  "total_size": 2869019853,
   "files": [
     {
       "dest": "panafz1.bin",
@@ -9569,6 +9575,15 @@
       "repo_path": "bios/Nintendo/Pokemon Mini/bios.min",
       "cores": [
         "PokeMini"
+      ]
+    },
+    {
+      "dest": "PPSSPP/ppge_atlas.zim",
+      "sha1": "30a33f3651f8e1b0967a5dfe6ff714baebcce41a",
+      "size": 666530,
+      "repo_path": "bios/Sony/PlayStation Portable/ppge_atlas.zim",
+      "cores": [
+        "PPSSPP"
       ]
     },
     {

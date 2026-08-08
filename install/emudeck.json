@@ -4,7 +4,7 @@
   "platform": "emudeck",
   "display_name": "EmuDeck",
   "version": "1.0",
-  "generated": "2026-08-06T18:09:38Z",
+  "generated": "2026-08-08T00:30:33Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -110,6 +110,7 @@
     },
     {
       "pattern": "ps2-*.bin",
+      "emulator": "pcsx2",
       "targets": {
         "linux": [
           "$HOME/.config/PCSX2/bios",
@@ -136,6 +137,7 @@
     },
     {
       "file": "GC/USA/IPL.bin",
+      "emulator": "dolphin",
       "targets": {
         "linux": [
           "$HOME/.local/share/dolphin-emu/GC/USA"
@@ -150,6 +152,7 @@
     },
     {
       "file": "GC/EUR/IPL.bin",
+      "emulator": "dolphin",
       "targets": {
         "linux": [
           "$HOME/.local/share/dolphin-emu/GC/EUR"
@@ -164,6 +167,7 @@
     },
     {
       "file": "GC/JAP/IPL.bin",
+      "emulator": "dolphin",
       "targets": {
         "linux": [
           "$HOME/.local/share/dolphin-emu/GC/JAP"
@@ -178,6 +182,7 @@
     },
     {
       "file": "dsp_rom.bin",
+      "emulator": "dolphin",
       "targets": {
         "linux": [
           "$HOME/.local/share/dolphin-emu"
@@ -192,6 +197,7 @@
     },
     {
       "file": "dsp_coef.bin",
+      "emulator": "dolphin",
       "targets": {
         "linux": [
           "$HOME/.local/share/dolphin-emu"
@@ -243,8 +249,8 @@
       }
     }
   ],
-  "total_files": 524,
-  "total_size": 1769405209,
+  "total_files": 525,
+  "total_size": 1770071739,
   "files": [
     {
       "dest": "colecovision.rom",
@@ -3589,6 +3595,15 @@
       "repo_path": "bios/Nintendo/Nintendo 64DD/Mupen64plus/font.ttf",
       "cores": [
         "Mupen64Plus-Next"
+      ]
+    },
+    {
+      "dest": "PPSSPP/ppge_atlas.zim",
+      "sha1": "30a33f3651f8e1b0967a5dfe6ff714baebcce41a",
+      "size": 666530,
+      "repo_path": "bios/Sony/PlayStation Portable/ppge_atlas.zim",
+      "cores": [
+        "PPSSPP"
       ]
     },
     {

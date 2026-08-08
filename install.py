@@ -19,13 +19,15 @@ import hashlib
 import json
 import os
 import platform
+import re
 import shutil
 import sys
 import tempfile
 import urllib.error
 import urllib.parse
 import urllib.request
-from pathlib import Path
+import xml.etree.ElementTree as ET
+from pathlib import Path, PurePosixPath
 
 BASE_URL = os.environ.get(
     "RETROBIOS_BASE_URL",
@@ -98,10 +100,32 @@ def _parse_os_release() -> dict[str, str]:
     return result
 
 
-def _parse_retroarch_system_dir(cfg_path: Path) -> Path | None:
-    """Parse system_directory from retroarch.cfg."""
+def _expand_retroarch_path(value: str, app_dir: Path) -> Path:
+    """Expand the notations RetroArch writes into its config values.
+
+    fill_pathname_expand_special (libretro-common/file/file_path.c) maps a
+    leading '~' to the home directory and a leading ':' to the application
+    directory, dropping the two leading characters in both cases.
+    """
+    if value[:1] == "~":
+        return Path(str(Path.home())) / value[2:]
+    if value[:1] == ":":
+        return app_dir / value[2:]
+    return Path(os.path.expandvars(os.path.expanduser(value)))
+
+
+def _parse_retroarch_system_dir(
+    cfg_path: Path, app_dir: Path | None = None
+) -> Path | None:
+    """Parse system_directory from retroarch.cfg.
+
+    app_dir is RetroArch's application directory, used to expand ':' values.
+    It defaults to the directory holding the config, which is where a portable
+    install keeps both.
+    """
     if not cfg_path.exists():
         return None
+    app_dir = app_dir or cfg_path.parent
     try:
         for line in cfg_path.read_text(encoding="utf-8", errors="replace").splitlines():
             line = line.strip()
@@ -109,9 +133,8 @@ def _parse_retroarch_system_dir(cfg_path: Path) -> Path | None:
                 _, _, value = line.partition("=")
                 value = value.strip().strip('"').strip("'")
                 if not value or value == "default":
-                    return cfg_path.parent / "system"
-                value = os.path.expandvars(os.path.expanduser(value))
-                return Path(value)
+                    return app_dir / "system"
+                return _expand_retroarch_path(value, app_dir)
     except OSError:
         pass
     return None
@@ -251,6 +274,206 @@ def _detect_embedded() -> list[tuple[str, Path]]:
     return found
 
 
+def _lnk_target(lnk_path: Path, exe_name: str) -> Path | None:
+    """Read the target path of a Windows shortcut.
+
+    Shortcuts embed the target as a plain local path; scanning for it avoids
+    parsing the whole .lnk structure for the one field that matters here.
+    """
+    try:
+        if lnk_path.stat().st_size > 64 * 1024:
+            return None
+        blob = lnk_path.read_bytes()
+    except OSError:
+        return None
+    pattern = re.compile(
+        rb"[A-Za-z]:\\[ -~]{0,260}?" + re.escape(exe_name.encode()), re.IGNORECASE
+    )
+    match = pattern.search(blob)
+    if not match:
+        return None
+    return Path(match.group().decode("ascii", "replace").replace("\\", "/"))
+
+
+def launchbox_root(os_type: str) -> Path | None:
+    """Locate the LaunchBox installation directory.
+
+    LaunchBox installs wherever the user points its installer and writes no
+    uninstall registry key, so the Start menu shortcut is the only record of
+    that choice. Everything else falls back to the default location.
+    """
+    if os_type not in ("windows", "wsl"):
+        return None
+    candidates: list[Path] = []
+    appdata = os.environ.get("APPDATA", "")
+    if appdata:
+        lnk = (
+            Path(appdata)
+            / "Microsoft"
+            / "Windows"
+            / "Start Menu"
+            / "Programs"
+            / "LaunchBox"
+            / "LaunchBox.lnk"
+        )
+        if lnk.exists():
+            target = _lnk_target(lnk, "LaunchBox.exe")
+            if target:
+                # The shortcut points at Core/LaunchBox.exe
+                candidates.append(target.parent.parent)
+                candidates.append(target.parent)
+    userprofile = os.environ.get("USERPROFILE", "")
+    if userprofile:
+        candidates.append(Path(userprofile) / "LaunchBox")
+    for root in candidates:
+        if (root / "Data" / "Emulators.xml").exists():
+            return root
+    return None
+
+
+def launchbox_emulators(emulators_xml: Path) -> dict[str, Path]:
+    """Map each emulator LaunchBox knows about to its installation directory.
+
+    LaunchBox stores its emulator list in Data/Emulators.xml; ApplicationPath
+    is either absolute or relative to the LaunchBox root directory. Keys are
+    the lowercase executable names.
+    """
+    found: dict[str, Path] = {}
+    if not emulators_xml.exists():
+        return found
+    try:
+        if emulators_xml.stat().st_size > 10 * 1024 * 1024:
+            return found
+        raw = emulators_xml.read_text(encoding="utf-8", errors="replace")
+        # ElementTree expands internal entities; LaunchBox writes no doctype
+        if "<!DOCTYPE" in raw.upper():
+            return found
+        tree = ET.ElementTree(ET.fromstring(raw))
+    except (ET.ParseError, OSError):
+        return found
+    lb_root = emulators_xml.parent.parent
+    for emu in tree.getroot().iter("Emulator"):
+        app_path = (emu.findtext("ApplicationPath") or "").replace("\\", "/")
+        if not app_path:
+            continue
+        exe = Path(app_path)
+        if not exe.is_absolute():
+            exe = lb_root / exe
+        if exe.parent.is_dir():
+            found.setdefault(exe.name.lower(), exe.parent)
+    return found
+
+
+def _launchbox_retroarch_system_dir(emulators_xml: Path) -> Path | None:
+    """Resolve the system dir of a RetroArch referenced by LaunchBox.
+
+    Mirrors the plugin's UpdateSystemPath: read system_directory from the
+    retroarch.cfg sitting next to the executable, else assume system/.
+    """
+    emu_dir = launchbox_emulators(emulators_xml).get("retroarch.exe")
+    if emu_dir is None:
+        return None
+    system_dir = _parse_retroarch_system_dir(emu_dir / "retroarch.cfg", emu_dir)
+    return system_dir or emu_dir / "system"
+
+
+def _pcsx2_bios_dir(emu_dir: Path) -> Path:
+    """Resolve the BIOS folder of a PCSX2 installed under LaunchBox.
+
+    EmuFolders (pcsx2/Pcsx2Config.cpp) enters portable mode when portable.ini
+    or portable.txt sits next to the executable, and then takes the data root
+    from the contents of portable.txt, relative to the executable. Otherwise
+    the data root is Documents/PCSX2. Bios defaults to "bios" below it and the
+    Bios key of PCSX2.ini overrides that.
+    """
+    documents = Path(os.environ.get("USERPROFILE", str(Path.home()))) / "Documents"
+    portable_txt = emu_dir / "portable.txt"
+    portable = (emu_dir / "portable.ini").exists() or portable_txt.exists()
+    if portable:
+        subpath = ""
+        try:
+            subpath = portable_txt.read_text(
+                encoding="utf-8", errors="replace"
+            ).strip()
+        except OSError:
+            pass
+        data_root = emu_dir / subpath if subpath else emu_dir
+    else:
+        data_root = documents / "PCSX2"
+    ini = data_root / "inis" / "PCSX2.ini"
+    try:
+        for line in ini.read_text(encoding="utf-8", errors="replace").splitlines():
+            if line.startswith("Bios = "):
+                value = line[len("Bios = "):].strip()
+                candidate = Path(value)
+                return candidate if candidate.is_absolute() else data_root / value
+    except OSError:
+        pass
+    return data_root / "bios"
+
+
+def _xemu_bios_dir(emu_dir: Path) -> Path:
+    """Resolve the BIOS folder of a xemu managed by LaunchBox.
+
+    Follows the plugin: xemu.toml next to the executable else the roaming
+    copy, with bootrom_path and flashrom_path naming a file whose directory
+    holds the images. Both default to bios/ under the executable.
+    """
+    appdata = os.environ.get("APPDATA", "")
+    toml = emu_dir / "xemu.toml"
+    if not toml.exists() and appdata:
+        toml = Path(appdata) / "xemu" / "xemu" / "xemu.toml"
+    if toml.exists():
+        try:
+            for line in toml.read_text(encoding="utf-8", errors="replace").splitlines():
+                if line.startswith(("bootrom_path", "flashrom_path")):
+                    parts = line.split("'")
+                    if len(parts) > 1 and Path(parts[1]).exists():
+                        return Path(parts[1]).parent
+        except OSError:
+            pass
+    return emu_dir / "bios"
+
+
+def launchbox_bios_dirs(root: Path) -> dict[str, Path]:
+    """Map emulator ids to the BIOS directory LaunchBox expects for them.
+
+    Only emulators whose destination LaunchBox itself computes are listed;
+    the rest keep the default locations declared in the manifest.
+    """
+    emulators = launchbox_emulators(root / "Data" / "Emulators.xml")
+    dirs: dict[str, Path] = {}
+    emu_dir = emulators.get("pcsx2.exe")
+    if emu_dir:
+        dirs["pcsx2"] = _pcsx2_bios_dir(emu_dir)
+    emu_dir = emulators.get("xemu.exe")
+    if emu_dir:
+        dirs["xemu"] = _xemu_bios_dir(emu_dir)
+    emu_dir = emulators.get("dolphin.exe")
+    if emu_dir and (emu_dir / "portable.txt").exists():
+        # portable.txt beside the executable moves the user directory to
+        # User (SetUserDirectory in Source/Core/UICommon/UICommon.cpp,
+        # PORTABLE_USER_DIR in Source/Core/Common/CommonPaths.h)
+        dirs["dolphin"] = emu_dir / "User"
+    return dirs
+
+
+def detect_frontends(os_type: str, home: Path | None = None) -> list[str]:
+    """Detect frontends that reference emulators without owning a BIOS dir.
+
+    ES-DE resolves its application data directory to $ESDE_APPDATA_DIR or
+    <home>/ES-DE (es-core FileSystemUtil.cpp getAppDataDirectory).
+    """
+    home = home or Path.home()
+    frontends: list[str] = []
+    esde_env = os.environ.get("ESDE_APPDATA_DIR", "")
+    if (esde_env and Path(esde_env).is_dir()) or (home / "ES-DE").is_dir():
+        frontends.append("esde")
+    if launchbox_root(os_type) is not None:
+        frontends.append("launchbox")
+    return frontends
+
+
 def detect_platforms(os_type: str) -> list[tuple[str, Path]]:
     """Detect installed emulator platforms and their BIOS directories."""
     found: list[tuple[str, Path]] = []
@@ -320,6 +543,15 @@ def detect_platforms(os_type: str) -> list[tuple[str, Path]]:
             ra_dir = _parse_retroarch_system_dir(win_cfg)
             if ra_dir:
                 found.append(("retroarch", ra_dir))
+
+        # Portable RetroArch referenced by LaunchBox
+        lb_root = launchbox_root(os_type)
+        if lb_root and not any(name == "retroarch" for name, _ in found):
+            system_dir = _launchbox_retroarch_system_dir(
+                lb_root / "Data" / "Emulators.xml"
+            )
+            if system_dir:
+                found.append(("retroarch", system_dir))
 
     return found
 
@@ -480,7 +712,8 @@ def download_files(
 
 
 def do_standalone_copies(
-    manifest: dict, bios_path: Path, os_type: str
+    manifest: dict, bios_path: Path, os_type: str,
+    extra_dirs: dict[str, Path] | None = None,
 ) -> tuple[int, int]:
     """Copy BIOS files to standalone emulator directories.
 
@@ -489,6 +722,10 @@ def do_standalone_copies(
     - pattern: glob match (e.g. "scph*.bin")
     - note: informational message when detect path exists
     - WSL fallback to linux targets
+
+    extra_dirs maps the emulator id of an entry to a root that replaces the
+    default per-OS locations, for setups such as LaunchBox that keep their
+    emulators outside them. The layout below the root is the same.
 
     Returns (copied_count, skipped_count).
     """
@@ -532,8 +769,17 @@ def do_standalone_copies(
         if not targets and os_type == "wsl":
             targets = entry.get("targets", {}).get("linux", [])
 
-        for target_dir_str in targets:
-            target_dir = Path(os.path.expandvars(os.path.expanduser(target_dir_str)))
+        target_dirs = [
+            Path(os.path.expandvars(os.path.expanduser(t))) for t in targets
+        ]
+        extra_root = (extra_dirs or {}).get(entry.get("emulator", ""))
+        if extra_root is not None:
+            subdir = PurePosixPath(entry.get("file", "")).parent
+            extra = extra_root if str(subdir) == "." else extra_root / subdir
+            if extra not in target_dirs:
+                target_dirs.append(extra)
+
+        for target_dir in target_dirs:
             if not target_dir.is_dir():
                 skipped += len(sources)
                 continue
@@ -675,6 +921,11 @@ def main() -> None:
         platforms = [("retroarch", args.dest)]
     else:
         print("Detecting platform...")
+        frontends = detect_frontends(os_type)
+        if "esde" in frontends:
+            print("  Found ES-DE (BIOS files go to each emulator, not to ES-DE itself)")
+        if "launchbox" in frontends:
+            print("  Found LaunchBox")
         platforms = detect_platforms(os_type)
         if not platforms:
             print("  No supported platform detected.")
@@ -755,7 +1006,11 @@ def main() -> None:
         # Standalone copies
         if manifest.get("standalone_copies") and not args.check:
             print("\nStandalone emulators:")
-            copied, skipped = do_standalone_copies(manifest, bios_path, os_type)
+            lb_root = launchbox_root(os_type)
+            extra_dirs = launchbox_bios_dirs(lb_root) if lb_root else None
+            copied, skipped = do_standalone_copies(
+                manifest, bios_path, os_type, extra_dirs
+            )
             if copied or skipped:
                 print(f"  {copied} copied, {skipped} skipped (dir not found)")
 

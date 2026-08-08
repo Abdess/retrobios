@@ -4,7 +4,7 @@
   "platform": "bizhawk",
   "display_name": "BizHawk",
   "version": "1.0",
-  "generated": "2026-08-07T16:15:44Z",
+  "generated": "2026-08-07T18:49:15Z",
   "base_destination": "Firmware",
   "detect": [
     {
@@ -19,8 +19,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 538,
-  "total_size": 2548313700,
+  "total_files": 539,
+  "total_size": 2548980230,
   "files": [
     {
       "dest": "panafz1.bin",
@@ -3240,6 +3240,15 @@
       "repo_path": "bios/Sega/Mega CD/MCD_jp_100p.bin",
       "cores": [
         "PicoDrive"
+      ]
+    },
+    {
+      "dest": "PPSSPP/ppge_atlas.zim",
+      "sha1": "30a33f3651f8e1b0967a5dfe6ff714baebcce41a",
+      "size": 666530,
+      "repo_path": "bios/Sony/PlayStation Portable/ppge_atlas.zim",
+      "cores": [
+        "PPSSPP"
       ]
     },
     {

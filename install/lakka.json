@@ -4,7 +4,7 @@
   "platform": "lakka",
   "display_name": "Lakka",
   "version": "1.0",
-  "generated": "2026-08-07T16:16:14Z",
+  "generated": "2026-08-07T18:49:47Z",
   "base_destination": "system",
   "detect": [
     {
@@ -15,8 +15,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 1630,
-  "total_size": 4194971786,
+  "total_files": 1631,
+  "total_size": 4195638316,
   "files": [
     {
       "dest": "3do_arcade_saot.bin",
@@ -3301,6 +3301,13 @@
       "sha1": "57369df9ca82a460e596cea7835c5a0797dee668",
       "size": 1737799,
       "repo_path": "bios/Sony/PlayStation 2/.variants/GameIndex.yaml.57369df9",
+      "cores": null
+    },
+    {
+      "dest": "PPSSPP/ppge_atlas.zim",
+      "sha1": "30a33f3651f8e1b0967a5dfe6ff714baebcce41a",
+      "size": 666530,
+      "repo_path": "bios/Sony/PlayStation Portable/ppge_atlas.zim",
       "cores": null
     },
     {

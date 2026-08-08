@@ -4,7 +4,7 @@
   "platform": "rocknix",
   "display_name": "ROCKNIX",
   "version": "1.0",
-  "generated": "2026-08-07T16:58:58Z",
+  "generated": "2026-08-07T18:50:23Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -16,8 +16,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 1495,
-  "total_size": 4058321299,
+  "total_files": 1496,
+  "total_size": 4058987829,
   "files": [
     {
       "dest": "xemu/bios/mcpx_1.0.bin",
@@ -8587,6 +8587,15 @@
       "repo_path": "bios/Nintendo/Pokemon Mini/bios.min",
       "cores": [
         "PokeMini"
+      ]
+    },
+    {
+      "dest": "PPSSPP/ppge_atlas.zim",
+      "sha1": "30a33f3651f8e1b0967a5dfe6ff714baebcce41a",
+      "size": 666530,
+      "repo_path": "bios/Sony/PlayStation Portable/ppge_atlas.zim",
+      "cores": [
+        "PPSSPP"
       ]
     },
     {

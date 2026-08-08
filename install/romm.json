@@ -4,7 +4,7 @@
   "platform": "romm",
   "display_name": "RomM",
   "version": "1.0",
-  "generated": "2026-08-06T17:49:51Z",
+  "generated": "2026-08-07T18:50:25Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -14,8 +14,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 542,
-  "total_size": 1486691402,
+  "total_files": 543,
+  "total_size": 1487357932,
   "files": [
     {
       "dest": "3do/3do_arcade_saot.bin",
@@ -2591,6 +2591,13 @@
       "sha1": "4b5ef16b67e3b523d28ed2406106cb80470a06d0",
       "size": 4194304,
       "repo_path": "bios/Sony/PlayStation 2/ps2-0250j-20100415.bin",
+      "cores": null
+    },
+    {
+      "dest": "psp/ppge_atlas.zim",
+      "sha1": "30a33f3651f8e1b0967a5dfe6ff714baebcce41a",
+      "size": 666530,
+      "repo_path": "bios/Sony/PlayStation Portable/ppge_atlas.zim",
       "cores": null
     },
     {
