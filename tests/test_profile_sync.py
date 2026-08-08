@@ -646,8 +646,8 @@ class TestMovedStatus(unittest.TestCase):
 
     def test_declared_value_inside_the_new_range_gives_moved(self):
         fetch = make_fetch({
-            (PIN, "a.c"): ["x", 'load("bios.bin", 0x1000)'],
-            (HEAD, "a.c"): ["pad", "pad", 'load("bios.bin", 0x2000, flags)'],
+            (PIN, "a.c"): ["ctx", 'load("bios.bin", 0x1000)', "tail"],
+            (HEAD, "a.c"): ["pad", "ctx", 'load("bios.bin", 0x2000, flags)', "tail"],
         })
         result = anchor_part(
             RefPart("a.c", 2, 2, "a.c:2"),
@@ -673,6 +673,36 @@ class TestMovedStatus(unittest.TestCase):
             ["bios.bin"],
         )
         self.assertEqual(result.status, "CHANGED")
+
+    def test_a_unique_occurrence_at_head_is_followed(self):
+        fetch = make_fetch({
+            (PIN, "a.c"): ["unique marker"],
+            (HEAD, "a.c"): ["x"] * 40 + ['load("bios.bin")'] + ["y"] * 40,
+        })
+        result = anchor_part(
+            RefPart("a.c", 1, 1, "a.c:1"),
+            fetch,
+            renamer(CompareResult([], False)),
+            None,
+            ["bios.bin"],
+        )
+        self.assertEqual(result.status, "MOVED")
+        self.assertEqual(result.start, 41)
+        self.assertIn("occurs once", result.reason)
+
+    def test_several_occurrences_are_left_alone(self):
+        fetch = make_fetch({
+            (PIN, "a.c"): ["unique marker"],
+            (HEAD, "a.c"): ['load("bios.bin")', 'reload("bios.bin")'],
+        })
+        result = anchor_part(
+            RefPart("a.c", 1, 1, "a.c:1"),
+            fetch,
+            renamer(CompareResult([], False)),
+            None,
+            ["bios.bin"],
+        )
+        self.assertEqual(result.status, "GONE")
 
     def test_moved_is_mechanically_recalable(self):
         self.assertIn("MOVED", profile_sync.REBASE_STATUSES)

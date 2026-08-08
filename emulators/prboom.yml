@@ -4,7 +4,7 @@ core_classification: game_engine
 source: "https://github.com/libretro/libretro-prboom"
 upstream: "http://prboom.sourceforge.net/"
 profiled_date: "2026-03-24"
-source_commit: "93c8e7a2074e4fd8410398e3d571c6d9afec1d84"
+source_commit: "b4046cef3641d6bb28c0394915bfcc732cc49652"
 core_version: "v2.5.0"
 display_name: "Doom (PrBoom)"
 cores: [prboom]
@@ -51,5 +51,5 @@ files:
     md5: "72ae1b47820fcc93cc0df9c428d0face"
     sha1: "5f4aed208301449c2e9514edfd325fe9dead76fa"
     crc32: "a5751b99"
-    source_ref: "d_main.c:1069-1078 (PACKAGE .wad load), libretro.c:1742-1784 (I_FindFile search), config.h:46 (PACKAGE=prboom)"
+    source_ref: "src/d_main.c:1402-1440 (PACKAGE .wad load), libretro/libretro.c:3974-4050 (I_FindFile search), src/config.h:39 (PACKAGE=prboom)"
     note: "Searched in system/prboom/ then system/. Falls back to internal defaults if missing, but menus and HUD may render incorrectly without it."

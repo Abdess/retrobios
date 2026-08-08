@@ -73,7 +73,7 @@ files:
     size: 32768
     required: false
     validation: [size, crc32]
-    source_ref: "platforms/libretro/libretro.cpp:582, platforms/libretro/libretro.cpp:596-597, libretro.cpp:481-482, src/media.cpp:339-436, src/defines.h:53, src/game_db.h:53-54"
+    source_ref: "platforms/libretro/libretro.cpp:582, platforms/libretro/libretro.cpp:596-597, platforms/libretro/libretro.cpp:481-482, src/media.cpp:339-436, src/defines.h:53, src/game_db.h:53-54"
     note: >
       Always loaded alongside the selected System Card BIOS (libretro.cpp:481).
       Required for Game Express CD-ROM titles. game_db.h recognizes Blue Version

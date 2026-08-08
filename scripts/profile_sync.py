@@ -379,6 +379,36 @@ def _narrow(matches: list[str], path: str) -> list[str]:
     return same if len(same) == 1 else matches
 
 
+def locate_by_declared_value(
+    head_lines: list[str], anchored: AnchorResult, tokens
+) -> tuple[int, int, str] | None:
+    """Follow a ref whose subject can still be pinpointed at HEAD.
+
+    Two cases carry enough evidence to move a ref without judging the edit
+    itself: the mapped range already contains the declared value, or the value
+    occurs exactly once in the whole file. A value occurring several times is
+    left alone, since nothing says which one the ref meant.
+    """
+    lowered = [line.lower() for line in head_lines]
+    if anchored.start is not None:
+        end = anchored.end or anchored.start
+        block = "\n".join(lowered[anchored.start - 1 : end])
+        if any(token in block for token in tokens):
+            return (
+                anchored.start,
+                end,
+                "content edited, declared value present in the new range",
+            )
+    hits = [
+        i + 1
+        for i, line in enumerate(lowered)
+        if any(token in line for token in tokens)
+    ]
+    if len(hits) == 1:
+        return hits[0], hits[0], "declared value occurs once at HEAD"
+    return None
+
+
 def anchor_part(
     part: RefPart, fetch, rename_getter, describe=None, tokens=()
 ) -> PartResult:
@@ -463,16 +493,12 @@ def anchor_part(
                 anchored = retry
                 note = f"cited line was {nudged[0] - part.start:+d} off its subject"
     status = anchored.status
-    if status == "CHANGED" and anchored.start is not None and tokens:
-        # The cited code changed, but the value the entry declares is provably
-        # inside the new range, so the ref can follow it without a judgement
-        # call on the edit itself.
-        block = "\n".join(
-            head_lines[anchored.start - 1 : (anchored.end or anchored.start)]
-        ).lower()
-        if any(token in block for token in tokens):
-            status = "MOVED"
-            note = "content edited, declared value present in the new range"
+    if status in ("CHANGED", "GONE") and tokens:
+        located = locate_by_declared_value(head_lines, anchored, tokens)
+        if located is not None:
+            start, end, why = located
+            anchored = AnchorResult("MOVED", start, end, [])
+            status, note = "MOVED", why
     if renamed and status in ("ANCHORED", "SHIFTED"):
         status = "RENAMED"
     return PartResult(

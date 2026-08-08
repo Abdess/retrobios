@@ -4,7 +4,7 @@ core_classification: frozen_snapshot
 source: "https://github.com/libretro/snes9x2010"
 upstream: "https://github.com/snes9xgit/snes9x"
 profiled_date: "2026-03-25"
-source_commit: "f9ae8fd28b13070a945a829ccf41cbf90a21d0f7"
+source_commit: "214cb51f22ddec66952c304fe1e5e01fd83a9ac6"
 core_version: "v1.52.4"
 display_name: "Nintendo - SNES / SFC (Snes9x 2010)"
 cores:
@@ -34,7 +34,7 @@ files:
     size: 1048576
     validation: [size]
     aliases: ["BS-X.bios"]
-    source_ref: "src/bsx.c:959-993 (BSX_LoadBIOS), src/bsx.c:1068 (caller in S9xInitBSX)"
+    source_ref: "src/bsx.c:1263-1295 (BSX_LoadBIOS), src/bsx.c:1317 (caller in S9xInitBSX)"
     note: |
       Loaded when a BS game is auto-detected (is_bsx checks ROM header at
       0x7FC0/0xFFC0). Without this file, BSX.bootup is set to FALSE and
