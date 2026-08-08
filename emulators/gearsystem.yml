@@ -4,7 +4,7 @@ core_classification: official_port
 source: "https://github.com/drhelius/Gearsystem"
 upstream: "https://github.com/drhelius/Gearsystem"
 profiled_date: "2026-03-23"
-source_commit: "7e98f6895cb5f95a666376e58480e12ddccb6663"
+source_commit: "d547ae361bf242f25c45260aad29d4adc26e672a"
 core_version: "3.2.0"
 display_name: "Sega - MS/GG/SG-1000 (Gearsystem)"
 cores:
@@ -34,12 +34,12 @@ files:
   - name: "bios.sms"
     system: sega-mastersystem
     required: false
-    source_ref: "platforms/libretro/libretro.cpp:534, 417 (load_bootroms)"
+    source_ref: "platforms/libretro/libretro.cpp:534, platforms/libretro/libretro.cpp:537 (load_bootroms)"
 
   - name: "bios.gg"
     system: sega-gamegear
     required: false
-    source_ref: "platforms/libretro/libretro.cpp:535, 418 (load_bootroms)"
+    source_ref: "platforms/libretro/libretro.cpp:814, platforms/libretro/libretro.cpp:537 (load_bootroms)"
 
 platform_details:
   mastersystem:
