@@ -4,7 +4,7 @@ core_classification: game_engine
 source: "https://github.com/libretro/ecwolf"
 upstream: "https://bitbucket.org/ecwolf/ecwolf"
 profiled_date: "2026-03-23"
-source_commit: "15c1aa3114b2b9cdb1baec0a6467b2b868371446"
+source_commit: "f5a68634244c8719645626ef714387b268a5ae32"
 core_version: "1.3.99999"
 display_name: "Wolfenstein 3D (ECWolf)"
 cores: [ecwolf]
@@ -19,8 +19,12 @@ notes: |
   DECORATE actor definitions, MAPINFO, SNDINFO, fonts, and localization strings.
   Without this file: "Could not open ecwolf.pk3!" fatal error.
 
-  Libretro: ecwolf.pk3 searched in system_dir.
-  ref: libretro.cpp:831-832 (sysDir passed to SelectGame)
+  Libretro no longer reads ecwolf.pk3 from disk: it is compiled into the core as
+  a byte array and opened through a MemoryReader, with a fatal error naming it
+  "embedded" when that fails. The system directory is still passed to SelectGame,
+  but for the game data search, not for the engine package.
+  ref: src/libretro/ecwolf_pk3_data.c, src/wl_iwad.cpp:664-672,
+  src/libretro/libretro.cpp:990-992
 
   Standalone: ecwolf.pk3 searched in progdir (binary directory).
   ref: wl_main.cpp:1295 (progdir passed to SelectGame)
@@ -37,8 +41,9 @@ files:
   - name: "ecwolf.pk3"
     description: "ECWolf engine data package"
     required: true
+    mode: standalone
     md5: "c011b428819eea4a80b455c245a5a04d"
-    source_ref: "version.h:12 (MAIN_PK3), wl_iwad.cpp:642-657 (open + fatal), libretro.cpp:831-832 (sysDir)"
+    source_ref: "src/version.h:12 (MAIN_PK3), src/wl_iwad.cpp:664-672 (embedded open + fatal)"
     note: >
       Built from wadsrc/static/ via zipdir. Contains IWADINFO (game detection rules),
       palettes (wolfpal, spearpal, blakepal, noahpal), map lump remappers (wl6map,
