@@ -641,6 +641,48 @@ class TestAnchorPart(unittest.TestCase):
         self.assertIn("no rename found", result.reason)
 
 
+class TestMovedStatus(unittest.TestCase):
+    """A changed range whose subject is provably inside it can be followed."""
+
+    def test_declared_value_inside_the_new_range_gives_moved(self):
+        fetch = make_fetch({
+            (PIN, "a.c"): ["x", 'load("bios.bin", 0x1000)'],
+            (HEAD, "a.c"): ["pad", "pad", 'load("bios.bin", 0x2000, flags)'],
+        })
+        result = anchor_part(
+            RefPart("a.c", 2, 2, "a.c:2"),
+            fetch,
+            renamer(CompareResult([], False)),
+            None,
+            ["bios.bin"],
+        )
+        self.assertEqual(result.status, "MOVED")
+        self.assertEqual(result.start, 3)
+        self.assertIn("declared value present", result.reason)
+
+    def test_value_absent_from_the_new_range_stays_changed(self):
+        fetch = make_fetch({
+            (PIN, "a.c"): ["x", 'load("bios.bin")'],
+            (HEAD, "a.c"): ["x", 'load("other.bin")'],
+        })
+        result = anchor_part(
+            RefPart("a.c", 2, 2, "a.c:2"),
+            fetch,
+            renamer(CompareResult([], False)),
+            None,
+            ["bios.bin"],
+        )
+        self.assertEqual(result.status, "CHANGED")
+
+    def test_moved_is_mechanically_recalable(self):
+        self.assertIn("MOVED", profile_sync.REBASE_STATUSES)
+        self.assertNotIn("MOVED", profile_sync.REVIEW_STATUSES)
+
+    def test_moved_ranks_below_ambiguous(self):
+        self.assertEqual(worst_status(["MOVED", "AMBIGUOUS"]), "AMBIGUOUS")
+        self.assertEqual(worst_status(["MOVED", "SHIFTED"]), "MOVED")
+
+
 class TestSelectRepo(unittest.TestCase):
     def test_source_wins_over_upstream(self):
         repo = select_repo(

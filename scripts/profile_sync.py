@@ -33,10 +33,11 @@ ANON_QUOTA = 60
 TRIAGE_PATH_SAMPLE = 5
 
 STATUS_ORDER = (
-    "ANCHORED", "EXTERNAL", "SHIFTED", "RENAMED", "AMBIGUOUS", "CHANGED", "GONE",
+    "ANCHORED", "EXTERNAL", "SHIFTED", "RENAMED", "MOVED", "AMBIGUOUS",
+    "CHANGED", "GONE",
 )
 REVIEW_STATUSES = ("CHANGED", "GONE", "AMBIGUOUS")
-REBASE_STATUSES = ("SHIFTED", "RENAMED")
+REBASE_STATUSES = ("SHIFTED", "RENAMED", "MOVED")
 
 WIDEN_STEPS = (0, 3, 6, 12, 25, 50)
 MAX_MATCH_LINES = 20000
@@ -462,6 +463,16 @@ def anchor_part(
                 anchored = retry
                 note = f"cited line was {nudged[0] - part.start:+d} off its subject"
     status = anchored.status
+    if status == "CHANGED" and anchored.start is not None and tokens:
+        # The cited code changed, but the value the entry declares is provably
+        # inside the new range, so the ref can follow it without a judgement
+        # call on the edit itself.
+        block = "\n".join(
+            head_lines[anchored.start - 1 : (anchored.end or anchored.start)]
+        ).lower()
+        if any(token in block for token in tokens):
+            status = "MOVED"
+            note = "content edited, declared value present in the new range"
     if renamed and status in ("ANCHORED", "SHIFTED"):
         status = "RENAMED"
     return PartResult(
