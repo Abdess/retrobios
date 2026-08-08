@@ -1,0 +1,281 @@
+emulator: ACE-DL
+type: standalone
+core_classification: community_fork
+source: "https://roudoudou.com/ACE-DL/"
+upstream: "http://ace.cpcscene.net"
+profiled_date: "2026-08-08"
+core_version: "2026-06-03"
+display_name: "Amstrad - CPC/Plus (ACE-DL)"
+cores:
+  - ace-dl
+  - acedl
+systems:
+  - amstrad-cpc
+mode: standalone
+
+notes: |
+  SDL port of ACE, the Amstrad CPC/Plus emulator written by Philippe Rimauro
+  (OffseT) for MorphOS. ACE-DL is built by Edouard Bergé (Roudoudou) from the
+  MorphOS sources and released for Windows, macOS, Linux and Raspberry Pi;
+  a third port targets Haiku. All three are closed source, the original author
+  keeps the sources private, so the entries below were established on the
+  official 2026-06-03 Linux x86-64 build: path constants read from the binary,
+  file opens traced with strace, and required/optional decided by removing each
+  file and observing the result.
+
+  Machines are CPC 464, 664 and 6128 plus the Plus range, which boots from a
+  cartridge and covers the GX-4000. An operating system is one 32 KB file
+  holding the 16 KB firmware ROM followed by the 16 KB BASIC ROM; the AMSDOS
+  disc ROM is a separate 16 KB file mapped in slot 7. The upstream MorphOS
+  release keeps the three ROMs apart under System/ and composes them at
+  startup, ACE-DL ships them pre-joined under private/firmware/ with one file
+  per machine and language. The pairs are exact:
+
+    OS464_UK.rom        Firmware v1 + BASIC 1.00
+    OS464_FR.rom        Firmware f1 + French BASIC 1.0 (md5 824f5213…)
+    OS664_UK.rom        Firmware v2 + BASIC 1.10
+    OS6128_UK.rom       Firmware v3 + BASIC 1.20
+    OS6128_FR.rom       Firmware f3 + BASIC 1.23
+    OS6128_S.rom        Firmware s3 + BASIC 1.21
+    OS6128_DK.rom       Firmware d3 + BASIC 1.20
+    XMEM_FW_3_15_UK.rom XMEM 3.15 firmware + BASIC 1.20
+    XMEM_FW_3_15_FR.rom XMEM 3.15 firmware + BASIC 1.23
+
+  Firmware versions run 1 to 4 for the 464, 664, 6128 and Plus, and the letter
+  is the country: v English, f French, s Spanish, d Danish. The BASIC revision
+  attached to a version 3 firmware follows the country, 1.23 for France, 1.21
+  for Spain, 1.20 elsewhere, which is what the pairs above show. The XMEM files
+  replace the firmware half with the X-MEM expansion firmware and keep the
+  stock BASIC.
+
+  The nine operating systems are the entries of the Machine configuration
+  selector. OS6128_UK.rom is the built-in default and is opened at every
+  startup even when the config OS= key names another file. Command line -fuk,
+  -ffr, -fsp and -fdk switch to the UK, French, Spanish and Danish 6128 files.
+  A machine needs at least 32 KB in the file: truncated to 16384 bytes the
+  emulator prints "Error initializing ROMs!" and dies, padded to 40000 bytes it
+  boots, so the check is a lower bound rather than an exact length. The AMSDOS
+  ROM is checked for presence only, an 8 KB stub boots.
+
+  Plus machines boot from a cartridge and no cartridge filename is compiled
+  into the binary, the three Amstrad_?4.cpr files are the system cartridges the
+  author ships in the same directory, which is also the default browse root of
+  the cartridge requester. The loader walks the RIFF chunk list and reports
+  "Cartridge Load Error (Header)" on a bad header and "truncated file!" when a
+  cb00..cb07 bank is short, each bank being 16 KB for 128 KB total.
+
+  Plugins pull three more ROMs. Multiface II reads multiface2.rom, the Hacker
+  plugin reads hackit400uk.rom in its UK flavour and hacker481fr.rom in its
+  French one, and Play2CPC reads the YM2608 ADPCM rhythm ROM, warning with
+  "ym2608_adpcm_rom.bin not found!" and running without it. The Windows package
+  omits that ROM, the Linux and Raspberry Pi packages carry it.
+
+  Expansion ROMs are user business: config keys ROM0 to ROM255 hold whatever
+  the user picks through the requester rooted at media/rom/, and the release
+  seeds that directory with third-party ROMs (ParaDOS, Protext, Maxam, Utopia,
+  uniDOS, SymbOS, FutureOS, Orgams, Discology and others). Disc, tape,
+  snapshot, Dandanator and X-MASS images are user content the same way, and the
+  Nova plugin regenerates its 32 KB private/Nova/nova.nvram when the file is
+  absent. Outside emulation the binary loads its own payload: seventeen QOI
+  images, fatal with "Error loading QOI file please reinstall"; seventeen WAV
+  drive and monitor samples, each merely reported as not found; and the
+  private/messages catalog holding the French, English and Spanish
+  translations. private/sounds/hitachi_long_seek.wav ships with every package
+  but appears in no path constant and is never opened.
+
+files:
+  # -- Operating systems, firmware ROM + BASIC ROM joined in one 32 KB file --
+  - name: OS6128_UK.rom
+    path: "private/firmware/OS6128_UK.rom"
+    system: amstrad-cpc
+    required: true
+    min_size: 32768
+    validation: [size]
+    md5: b96280dc6c95a48857b4b8eb931533ae
+    sha1: 5977adbad3f7c1e0e082cd02fe76a700d9860c30
+    source_ref: "AceDL 2026-06-03: private/firmware/OS6128_UK.rom, default machine, opened at every startup"
+    note: >-
+      CPC 6128 English. Firmware v3 followed by BASIC 1.20. Absence stops
+      startup with "Error initializing ROMs!".
+
+  - name: OS6128_FR.rom
+    path: "private/firmware/OS6128_FR.rom"
+    system: amstrad-cpc
+    required: false
+    min_size: 32768
+    validation: [size]
+    md5: 5ee871d5600eb9b5a22989c295f902a5
+    sha1: 200d59076dfef36db061d6d7d21d80021cab1237
+    source_ref: "AceDL 2026-06-03: Machine configuration entry OS6128_FR.rom, command line -ffr"
+    note: "CPC 6128 French. Firmware f3 followed by BASIC 1.23."
+
+  - name: OS6128_S.rom
+    path: "private/firmware/OS6128_S.rom"
+    system: amstrad-cpc
+    required: false
+    min_size: 32768
+    validation: [size]
+    md5: 0246740371010333385665dfeb7cd0ec
+    sha1: 1acd01c2c03424a78b32c9440f4d890fb1104815
+    source_ref: "AceDL 2026-06-03: Machine configuration entry OS6128_S.rom, command line -fsp"
+    note: "CPC 6128 Spanish. Firmware s3 followed by BASIC 1.21."
+
+  - name: OS6128_DK.rom
+    path: "private/firmware/OS6128_DK.rom"
+    system: amstrad-cpc
+    required: false
+    min_size: 32768
+    validation: [size]
+    md5: ca1635fd992e2aa7a776b30da13467e5
+    sha1: a9e7ee6355730f319a37c95ca0a714212b88c3b1
+    source_ref: "AceDL 2026-06-03: Machine configuration entry OS6128_DK.rom, command line -fdk"
+    note: "CPC 6128 Danish. Firmware d3 followed by BASIC 1.20."
+
+  - name: OS464_UK.rom
+    path: "private/firmware/OS464_UK.rom"
+    system: amstrad-cpc
+    required: false
+    min_size: 32768
+    validation: [size]
+    md5: a993f85b88ac4350cf4d41554e87fe4f
+    sha1: 56d39c463da60968d93e58b4ba0e675829412a20
+    source_ref: "AceDL 2026-06-03: Machine configuration entry OS464_UK.rom"
+    note: "CPC 464 English. Firmware v1 followed by BASIC 1.00."
+
+  - name: OS464_FR.rom
+    path: "private/firmware/OS464_FR.rom"
+    system: amstrad-cpc
+    required: false
+    min_size: 32768
+    validation: [size]
+    md5: a588b7c9e1c142b5d8ebec65ac7713d8
+    sha1: c68d84f37ab9defbb19200598c24948c97c9a644
+    source_ref: "AceDL 2026-06-03: Machine configuration entry OS464_FR.rom"
+    note: >-
+      CPC 464 French. Firmware f1 followed by a French BASIC 1.0 that the
+      upstream MorphOS release does not carry.
+
+  - name: OS664_UK.rom
+    path: "private/firmware/OS664_UK.rom"
+    system: amstrad-cpc
+    required: false
+    min_size: 32768
+    validation: [size]
+    md5: 5a384a2310f472c7857888371c00ed66
+    sha1: 073a7665527b5bd8a148747a3947dbd3328682c8
+    source_ref: "AceDL 2026-06-03: Machine configuration entry OS664_UK.rom"
+    note: "CPC 664 English. Firmware v2 followed by BASIC 1.10."
+
+  - name: XMEM_FW_3_15_UK.rom
+    path: "private/firmware/XMEM_FW_3_15_UK.rom"
+    system: amstrad-cpc
+    required: false
+    min_size: 32768
+    validation: [size]
+    md5: 85accc17e98c79dbbdde826cbfaf4692
+    sha1: c7d7e5116665e4f21ae3b9bcdca2ce3685f00293
+    source_ref: "AceDL 2026-06-03: Machine configuration entry XMEM_FW_3_15_UK.rom"
+    note: "X-MEM firmware 3.15 English, followed by BASIC 1.20."
+
+  - name: XMEM_FW_3_15_FR.rom
+    path: "private/firmware/XMEM_FW_3_15_FR.rom"
+    system: amstrad-cpc
+    required: false
+    min_size: 32768
+    validation: [size]
+    md5: 046fa182f7574bde3ab97ee873f6e736
+    sha1: faa49a3aeb1d7e972437f6b77515455d14e2d680
+    source_ref: "AceDL 2026-06-03: Machine configuration entry XMEM_FW_3_15_FR.rom"
+    note: "X-MEM firmware 3.15 French, followed by BASIC 1.23."
+
+  # -- Disc ROM, mapped in slot 7 --
+  - name: Amsdos.rom
+    path: "private/amsdos/Amsdos.rom"
+    system: amstrad-cpc
+    required: true
+    size: 16384
+    md5: 25629dfe870d097469c217b95fdc1c95
+    sha1: 39102c8e9cb55fcc0b9b62098780ed4a3cb6a4bb
+    source_ref: "AceDL 2026-06-03: private/amsdos/Amsdos.rom, opened at every startup"
+    note: >-
+      AMSDOS disc ROM. Absence prints "Error loading AMSDOS ROM" then
+      "Error initializing ROMs!" and stops startup. Length is not checked.
+
+  # -- Plus system cartridges, 8 banks of 16 KB in RIFF chunks --
+  - name: Amstrad_v4.cpr
+    path: "private/firmware/Amstrad_v4.cpr"
+    system: amstrad-cpc
+    required: false
+    size: 131156
+    md5: 39b565e648172980aa552293e667070f
+    sha1: 405e341437fab8db477606238af0c20eca2e39ee
+    source_ref: "AceDL 2026-06-03: private/firmware, cartridge requester root, CPR loader"
+    note: "464plus/6128plus/GX-4000 system cartridge, English, firmware version 4."
+
+  - name: Amstrad_f4.cpr
+    path: "private/firmware/Amstrad_f4.cpr"
+    system: amstrad-cpc
+    required: false
+    size: 131156
+    md5: e7159fd674022ba05f9b347ae3cdafc6
+    sha1: e5aa80c501cfb435e2cba35ad92e427240394164
+    source_ref: "AceDL 2026-06-03: private/firmware, cartridge requester root, CPR loader"
+    note: "464plus/6128plus/GX-4000 system cartridge, French, firmware version 4."
+
+  - name: Amstrad_s4.cpr
+    path: "private/firmware/Amstrad_s4.cpr"
+    system: amstrad-cpc
+    required: false
+    size: 131156
+    md5: 6eeed3fdd4abc98a2a932da810410128
+    sha1: 05fb14df24b2b504a3ae463a086f02f0adcc07b9
+    source_ref: "AceDL 2026-06-03: private/firmware, cartridge requester root, CPR loader"
+    note: "464plus/6128plus/GX-4000 system cartridge, Spanish, firmware version 4."
+
+  # -- Plugin ROMs --
+  - name: multiface2.rom
+    path: "private/multiface2/multiface2.rom"
+    system: amstrad-cpc
+    required: false
+    size: 8192
+    md5: 4c9f014e91d407cc6509fad0095ab909
+    sha1: 1431ec628d38f000715545dd2186b684c5fe5a6f
+    source_ref: "AceDL 2026-06-03: private/multiface2/multiface2.rom, read when PLUGIN_MULTIFACE2=1"
+    note: "Romantic Robot Multiface Two ROM. The plugin loads without it."
+
+  - name: hackit400uk.rom
+    path: "private/hacker/hackit400uk.rom"
+    system: amstrad-cpc
+    required: false
+    size: 16384
+    md5: 9a293eaaebca601f671070ad56cb81b6
+    sha1: 56306e7234bcffd14b4f977d42d237c4ad9c12d5
+    source_ref: "AceDL 2026-06-03: private/hacker/hackit400uk.rom, read when PLUGIN_HACKER=1"
+    note: >-
+      HackIt 4.00 by Siren Software, English, UK flavour of the Hacker plugin.
+
+  - name: hacker481fr.rom
+    path: "private/hacker/hacker481fr.rom"
+    system: amstrad-cpc
+    required: false
+    size: 16384
+    md5: dfdd9924295f491d54f30569874287f8
+    sha1: 0c15d6753cf0ae2a1737b6e857e8e82ee135a697
+    source_ref: "AceDL 2026-06-03: private/hacker/hacker481fr.rom, read when PLUGIN_HACKER=1 and PLUGIN_HACKERFR=1"
+    note: >-
+      Le Hackeur 4.81, the French edition of the same Siren Software ROM,
+      French flavour of the Hacker plugin.
+
+  - name: ym2608_adpcm_rom.bin
+    path: "private/sounds/ym2608_adpcm_rom.bin"
+    system: amstrad-cpc
+    required: false
+    size: 8192
+    md5: 8740932cda05e518a9955f1d08d6786f
+    sha1: 50b6c3e288eaa12ad275d4f323267bb72b0445df
+    source_ref: "AceDL 2026-06-03: private/sounds/ym2608_adpcm_rom.bin, read when PLUGIN_PLAY2CPC=1"
+    note: >-
+      YM2608 internal ADPCM rhythm ROM used by the Play2CPC cartridge sound.
+      Missing file prints "Warning: ym2608_adpcm_rom.bin not found!" and the
+      plugin keeps running. Shipped in the Linux and Raspberry Pi packages,
+      absent from the Windows package.

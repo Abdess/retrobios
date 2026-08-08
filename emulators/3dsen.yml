@@ -1,0 +1,40 @@
+emulator: 3dSen
+type: standalone
+core_classification: embedded_hle
+source: "https://geodstudio.net"
+upstream: "https://geodstudio.net"
+profiled_date: "2026-08-07"
+core_version: "1.1"
+display_name: "3dSen (3D NES)"
+cores:
+  - 3dsen
+  - 3dsen-windows
+systems:
+  - nintendo-nes
+mode: standalone
+
+notes: |
+  Closed-source Unity/C# NES emulator by Geod Studio, sold on Steam and
+  itch.io for Windows, macOS and Linux. Rebuilds NES cartridge games as
+  voxel scenes at runtime. Emulation is compiled into the binary and the
+  NES has no boot ROM, so no external BIOS or firmware is loaded. Cartridge
+  games only, no Famicom Disk System and therefore no disksys.rom: ES-DE
+  lists it under nes and famicom but not fds, and RetroBat maps it to nes3d
+  alone and documents "No specific BIOS is required to play NES games".
+
+  Games are registered through the emulator UI, which writes rom.json in
+  the Unity persistent data path (Windows AppData\LocalLow\Geod Studio\3dSen\,
+  Linux ~/.config/unity3d/Geod Studio/3dSen/, macOS ~/Library/Logs/Geod
+  Studio/3dSen/) binding a fixed numeric ID to the user ROM. Launching
+  passes that ID rather than a path: 3dSen.exe -id=N.
+
+  Per-game 3D profiles are .3dn files, protobuf-serialized behind a "3dn"
+  title header and a version field (3DNesManager Classes/3DNTools.cs:14-31,
+  51-58), loaded when a game starts (3DNes_Engine Engine3D.cs:37, Load3DN).
+  The 100 official profiles ship inside the application. Profiles built
+  with 3dSenMaker are optional per-game additions installed from the UI
+  since v0.9, and cover art packs are optional files placed in CoverArt/
+  under the same data path. ROMs are user-supplied, the emulator ships
+  with no game content.
+
+files: []

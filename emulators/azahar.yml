@@ -68,10 +68,10 @@ files:
     path: nand/private/movable.sed
     system: nintendo-3ds
     required: false
-    size: 320
+    size: [288, 320]
     validation: [size, signature]
-    note: "console-unique key seed"
-    source_ref: "src/core/hw/unique_data.cpp:170-200, src/core/hw/unique_data.cpp:217"
+    note: "console-unique key seed; 288 bytes without the AES MAC block, 320 with it"
+    source_ref: "src/core/hw/unique_data.cpp:170-200, src/core/hw/unique_data.cpp:217, src/core/hw/unique_data.h:103-133"
 
   - name: SecureInfo_A
     path: nand/rw/sys/SecureInfo_A
@@ -86,7 +86,7 @@ files:
     path: nand/rw/sys/LocalFriendCodeSeed_B
     system: nintendo-3ds
     required: false
-    size: 284
+    size: 272
     validation: [size, signature]
     note: "friend code generation seed"
-    source_ref: "src/core/hw/unique_data.cpp:94-123, src/core/hw/unique_data.cpp:209"
+    source_ref: "src/core/hw/unique_data.cpp:94-123, src/core/hw/unique_data.cpp:209, src/core/hw/unique_data.h:76"

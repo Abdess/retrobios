@@ -1,0 +1,81 @@
+emulator: ColEm
+type: standalone
+core_classification: other
+source: "https://fms.komkon.org/ColEm/"
+upstream: "https://fms.komkon.org/ColEm/"
+profiled_date: "2026-08-08"
+core_version: "5.6"
+display_name: "Coleco - ColecoVision / Adam (ColEm)"
+cores:
+  - colem
+systems:
+  - coleco-colecovision
+  - coleco-adam
+mode: standalone
+
+notes: |
+  ColecoVision and Coleco Adam emulator by Marat Fayzullin, published as
+  versioned archives on a personal site rather than a repository. The 5.6
+  source archive carries the portable core (ColEm/, EMULib/, Z80/) and the
+  Unix port; Windows and Android builds are binary-only.
+
+  Three system ROMs are read by StartColeco (Coleco.c:266-300) before the
+  hardware reset and before the cartridge. Lookup runs in the directory
+  named by -home, which main() defaults to the directory holding the
+  executable (ColEm.c:66-72), so the ROMs sit next to the binary the way the
+  official archives ship them. Each name is passed to fopen as written, in
+  uppercase.
+
+  COLECO.ROM is fatal. A failed open or a file yielding fewer than 8192
+  bytes sets the error string, and StartColeco returns before ResetColeco
+  and RunZ80 (Coleco.c:306). It is loaded in both modes and maps at 0000h
+  on the ColecoVision and under the Super Game Module (Coleco.c:651).
+  Nothing in the tree substitutes for it.
+
+  WRITER.ROM and EOS.ROM gate Adam emulation. Each has to yield its full
+  read to advance the AdamROMs counter, EOS.ROM is attempted only once
+  WRITER.ROM succeeded, and Coleco.c:300 collapses the counter unless both
+  landed. ResetColeco then clears CV_ADAM when the counter is zero
+  (Coleco.c:749), so -adam falls back to ColecoVision, and inserting the
+  first disk or tape into drive A: is refused (Coleco.c:1454, 1460, 1496,
+  1502). SmartWriter maps at 0000h on boot and EOS at 4000h once port 20h
+  enables it (Coleco.c:628-646).
+
+  No hash or magic number is checked on the three ROMs; the read length is
+  the only gate. CRC32 is computed for cartridges alone, feeding the
+  GuessROM hardware heuristics (Coleco.c:482-486).
+
+  Cartridges, .DSK/.FDI disks and .DDP tapes are user content. Beside a
+  loaded cartridge, FindState (Coleco.c:1529-1548) probes <name>.sav,
+  <name>.sta, <name>.cht and <name>.pal, and StartColeco tries the palette
+  file named by -palette, defaulting to ColEm.pal (Coleco.c:75, 327-332).
+  Those are written by the emulator or hand-authored, and ChangePalette
+  supplies one of three built-in palettes when no file is found
+  (Coleco.c:324, 543). Console fonts are compiled-in arrays (Console.c:46,
+  130), and LoadPNG (Image.c:1230) sits behind an undefined LIBPNG guard
+  with no caller.
+
+files:
+  - name: COLECO.ROM
+    system: coleco-colecovision
+    required: true
+    min_size: 8192
+    validation: [size]
+    description: "OS7 ColecoVision BIOS, read into the 8kB ROM_OS7 window"
+    source_ref: "ColEm/Coleco.c:266-273, 306; ColEm/Coleco.h:78-79"
+
+  - name: WRITER.ROM
+    system: coleco-adam
+    required: true
+    min_size: 32768
+    validation: [size]
+    description: "Adam SmartWriter ROM, read into the 32kB ROM_WRITER window"
+    source_ref: "ColEm/Coleco.c:275-285, 300, 749; ColEm/Coleco.h:75"
+
+  - name: EOS.ROM
+    system: coleco-adam
+    required: true
+    min_size: 8192
+    validation: [size]
+    description: "Adam EOS, read into the 8kB ROM_EOS window"
+    source_ref: "ColEm/Coleco.c:287-297, 300, 749; ColEm/Coleco.h:83"

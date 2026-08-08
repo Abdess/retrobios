@@ -1,0 +1,121 @@
+emulator: A7800
+type: standalone
+core_classification: enhanced_fork
+source: "https://github.com/7800-devtools/a7800"
+upstream: "https://github.com/mamedev/mame"
+profiled_date: "2026-08-08"
+source_commit: "7a2afdc1ea08fc331b16b750d8c1f02d4ef62fc8"
+core_version: "5.2"
+display_name: "Atari - 7800 (A7800)"
+cores:
+  - a7800
+systems:
+  - atari-7800
+mode: standalone
+
+notes: |
+  MAME fork by 7800.8bitdev.org built with the Atari 7800 driver alone. The
+  released binary carries eight machines, all declaring a7800 as parent: NTSC
+  and PAL at three palette temperatures, plus a developer mode showing DMA
+  usage per scanline (a7800.cpp:1837-1844). The temperature variants were
+  renamed after 5.2, from a7800u1/a7800u2/a7800pu1/a7800pu2 to
+  a7800a1/a7800a2/a7800pa1/a7800pa2. ROM definitions are identical in both.
+
+  Console BIOS is optional. Every entry carries ROM_OPTIONAL, so absence
+  yields a warning rather than the fatal "Required files are missing" exit
+  (romload.cpp:373-379, 488-493). The region is ERASEFF, and machine_reset
+  reads the reset vector: when 0xfffe and 0xffff both hold 0xff, m_ctrl_reg is
+  set to 4 and the console starts the cartridge (a7800.cpp:1529-1532). No code
+  substitutes for the BIOS when it is absent.
+
+  Lookup runs under rompath, which the shipped a7800.ini sets to "bios;roms".
+  open_rom_file walks the parent chain (romload.cpp:567-572), so all eight
+  machines fall back to the a7800 set, and the manual documents one merged
+  archive at bios/a7800.zip. Inside an archive the search tries name with CRC,
+  then CRC alone, then name (fileio.cpp:692-701), so a ROM whose filename
+  differs from the driver still resolves; loose files under rompath/a7800/
+  match by name only. Loaded ROMs are checked for exact length and against the
+  declared CRC32 and SHA1, and a mismatch is a warning (romload.cpp:417-455).
+
+  The PAL BIOS keeps the filename 7800pal.rom, which mainline MAME has since
+  renamed to c300558-001b.u7 for the same dump. Mainline also marks the 7800
+  ROMs mandatory.
+
+  Software list a7800 (hash/a7800.xml), attached by every machine
+  (a7800.cpp:1577, 1608, 1654, 1684), holds add-on hardware rather than games:
+  the High Score Cartridge and the XM Expansion Module, both backed by the
+  same 4KB highscre.bin served as the pass-through cart ROM
+  (hiscore.cpp:49-52, xm.cpp:177-183). Software list ROMs resolve as
+  a7800/<setname> then <setname> under rompath (romload.cpp:628-650) and carry
+  no optional flag, so selecting either configuration without the image exits
+  with EMU_ERR_MISSING_FILES.
+
+  The release ships the binary, a7800.ini, the manual, hash/a7800.xml, cfg
+  defaults, bgfx shaders and artwork masks, and no roms, samples, plugins or
+  language directory. The driver adds no samples device and no external
+  layout. Crosshair bitmaps fall back to a compiled-in shape
+  (crsshair.cpp:180-214) and the UI font to compiled-in data
+  (rendfont.cpp:587-600).
+
+files:
+  - name: a7800.zip
+    required: false
+    category: bios_zip
+    system: atari-7800
+    source_ref: "src/mame/drivers/a7800.cpp:1698-1748"
+    note: >-
+      Merged console BIOS archive documented by the manual at bios/a7800.zip.
+      Serves all eight machines through the parent chain, since the PAL
+      machines are clones of a7800 rather than of a7800p.
+    validation: [size, crc32, sha1]
+    contents:
+      - name: 7800.u7
+        description: NTSC BIOS, default system BIOS "a7800", mapped at 0x3000
+        size: 4096
+        crc32: "5d13730c"
+        sha1: "d9d134bb6b36907c615a594cc7688f7bfcef5b43"
+      - name: c300558-001a.u7
+        description: NTSC prototype BIOS with Asteroids, system BIOS "a7800pr"
+        size: 16384
+        crc32: "a0e10edf"
+        sha1: "14584b1eafe9721804782d4b1ac3a4a7313e455f"
+      - name: 7800pal.rom
+        description: PAL BIOS with Asteroids, named c300558-001b.u7 in mainline MAME
+        size: 16384
+        crc32: "d5b61170"
+        sha1: "5a140136a16d1d83e4ff32a19409ca376a8df874"
+
+  - name: hiscore.zip
+    required: false
+    category: bios_zip
+    system: atari-7800
+    source_ref: "hash/a7800.xml:8-21"
+    note: >-
+      Software list set for the High Score Cartridge configuration (CX78HSC,
+      slot a78_hsc). Fatal when that configuration is selected and the set is
+      absent.
+    validation: [size, crc32, sha1]
+    contents:
+      - name: highscre.bin
+        description: High Score Cartridge ROM, read through the pass-through cart
+        size: 4096
+        crc32: "9be408d3"
+        sha1: "a3af676991391a6dd716c79022d4947206b78164"
+
+  - name: xm.zip
+    required: false
+    category: bios_zip
+    system: atari-7800
+    source_ref: "hash/a7800.xml:24-38"
+    note: >-
+      Software list set for the XM Expansion Module configuration (slot
+      a78_xm), which reuses the High Score Cartridge ROM alongside 128KB RAM,
+      POKEY and YM2151. Fatal when that configuration is selected and the set
+      is absent.
+    validation: [size, crc32, sha1]
+    contents:
+      - name: highscre.bin
+        description: High Score Cartridge ROM, gated by XM control register bit 3
+        size: 4096
+        crc32: "9be408d3"
+        sha1: "a3af676991391a6dd716c79022d4947206b78164"

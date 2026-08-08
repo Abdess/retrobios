@@ -1,0 +1,72 @@
+emulator: Basilisk II
+type: standalone
+source: "https://github.com/cebix/macemu"
+upstream: "https://github.com/cebix/macemu"
+profiled_date: "2026-08-08"
+source_commit: "96e512bd6376e78a2869f16dcc8a9028bce5ee72"
+core_version: "1.0"
+display_name: "Apple - Macintosh 68k (Basilisk II)"
+cores:
+  - basiliskii
+systems:
+  - apple-macintosh
+  - macintosh-ii
+mode: standalone
+
+notes: |
+  68k Macintosh emulator living in the macemu tree alongside SheepShaver.
+  Emulates a Mac Classic or a Mac II series machine depending on the ROM
+  supplied. Default model ID is 5 (Mac IIci) on a 68030
+  (prefs_items.cpp:88-89).
+
+  ROM loading (main_unix.cpp:681-702, main_windows.cpp:367,
+  main_macosx.mm:431): the path comes from the "rom" prefs item
+  (prefs_items.cpp:51) and falls back to a file named ROM in the working
+  directory (main_unix.cpp:109). A missing or unreadable file raises
+  STR_NO_ROM_FILE_ERR and calls QuitEmulator.
+
+  Two gates run on the image. main_unix.cpp:692 accepts only sizes of 64K,
+  128K, 256K, 512K or 1024K. CheckROM (rom_patches.cpp:830-842), called from
+  InitAll at main.cpp:67, then reads the version word at ROM offset 8 and
+  accepts 0x067c (32-bit clean Mac II, 512K/1MB) under real and direct
+  addressing, adding 0x0276 (SE/Classic, 256K/512K) under banks addressing.
+  configure.ac:61-68,1440-1477 defaults --enable-addressing to fastest,
+  which resolves to real or direct, so a stock build takes 32-bit clean ROMs
+  only. 0x0000 (Mac 128K), 0x0075 (Mac Plus) and 0x0178 (non 32-bit clean
+  Mac II) are refused by every addressing mode. PatchROM
+  (rom_patches.cpp:1834-1852) then rewrites the image in memory, injecting
+  replacement .Sony, .Disk, .AppleCD and serial drivers. Nothing is
+  checksummed: print_rom_info (rom_patches.cpp:298-310) prints the ROM header
+  checksum without comparing it against anything.
+
+  Mac OS itself and the games live in disk images referenced by the disk,
+  floppy and cdrom prefs items, supplied by the user.
+
+  Four files are installed by the emulator's own Makefile into
+  $(datadir)/BasiliskII (Makefile.in:25,155-157) and read from there:
+    keycodes            X keycode to Mac keycode table, read only when the
+                        keycodes prefs item is true, which defaults to false
+                        (prefs_unix.cpp:119). Overridable with keycodefile.
+                        video_sdl2.cpp:94-97,1231, video_x.cpp:1492
+    BasiliskII_keycodes tried when keycodes is absent (video_sdl2.cpp:98,
+                        1232), shipped in src/MacOSX/
+    fbdevices           frame buffer device table, read by the X11 backend
+                        built with --enable-fbdev-dga. Overridable with
+                        fbdevicefile. video_x.cpp:1152,1186
+    tunconfig           script run to configure the tunN interface for
+                        ethernet. Overridable with etherconfig.
+                        ether_unix.cpp:108,381
+
+  The preferences file (.basilisk_ii_prefs, prefs_unix.cpp:50) and the PRAM
+  file (.basilisk_ii_xpram on Unix, BasiliskII_xpram.dat on Windows,
+  xpram_unix.cpp:32, xpram_windows.cpp:33) are written by the emulator when
+  absent.
+
+files:
+  - name: ROM
+    required: true
+    min_size: 524288
+    max_size: 1048576
+    validation: [size]
+    description: "Macintosh ROM image, 512 KB SE/Classic or 512 KB / 1 MB 32-bit clean Mac II"
+    source_ref: "src/Unix/main_unix.cpp:109,685,692, src/rom_patches.cpp:830-842, src/main.cpp:67"

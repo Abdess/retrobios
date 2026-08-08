@@ -1,0 +1,795 @@
+emulator: AdvanceMAME
+type: standalone
+core_classification: enhanced_fork
+source: "https://github.com/amadvance/advancemame"
+upstream: "https://www.mamedev.org"
+profiled_date: "2026-08-08"
+source_commit: "0f6a7677ad42b4dfdfa36b046f74bef5238d5837"
+core_version: "5.0"
+mame_version: "0.106"
+display_name: "Arcade (AdvanceMAME)"
+mode: standalone
+
+cores:
+  - advancemame
+  - advmame
+
+systems:
+  - snk-neogeo-mvs
+  - igs-pgm
+  - sega-stv
+  - sega-megaplay
+  - sega-megatech
+  - deco-cassette
+  - nintendo-playch10
+  - nintendo-nss
+  - super-kaneko-nova
+  - konami-gx
+  - konami-gv
+  - century-cvs
+  - capcom-zn1
+  - capcom-zn2
+  - tecmo-tps
+  - taito-fx1
+  - eighting-zn1
+  - atlus-zn1
+  - atari-zn1
+  - acclaim-zn1
+  - hyper-neogeo64
+  - arcadia-systems
+  - exidy-maxaflex
+  - brezzasoft-crystal
+  - imax-macs
+
+notes: |
+  MAME 0.106 core (src/version.c:12) carrying its own video layer and driver
+  backports from later MAME releases. Twenty-six BIOS root sets, each a
+  NOT_A_DRIVER entry (src/driver.h:180) registered in src/mamedriv.c.
+  src/drivers/macs.c:613 declares a twenty-seventh, macs2bios, that
+  src/mamedriv.c never registers, so no build reaches it and the five MACS
+  games all parent to macsbios. The set is unchanged between release 5.0 and
+  the profiled commit.
+
+  ROM archives are searched under dir_rom, defaulting to $home/rom:$data/rom
+  on Linux and Mac OS X and to rom on DOS and Windows, in the forms
+  DIR/GAME/ROM.EXT, DIR/GAME.zip/ROM.EXT and DIR/GAME/ROM.zip/ROM
+  (advance/osd/fileio.c:74, doc/advmame.d:680,699-701). $home is $ADVANCE, or
+  $HOME/.advance when that variable is unset (doc/advmame.d:503-509). Each ROM
+  is looked up along the parent chain (src/romload.c:481-483), so a child game
+  reads its BIOS from the root set's own archive, which has to sit beside the
+  game archive. Inside an archive a member is matched by name, then by its
+  printable CRC32 (src/fileio.c:1213-1223).
+
+  No BIOS ROM carries ROM_OPTIONAL or a no-good-dump marker, so a missing one
+  counts as an error rather than a warning and aborts with "required files are
+  missing, the game cannot be run" (src/romload.c:248-268,385-388). Loaded
+  ROMs are checked for exact length and against the declared CRC32 and SHA1,
+  both mismatches being warnings (src/romload.c:327-363).
+
+  Where a system offers several BIOS revisions, SYSTEM_BIOS_ADD names them and
+  misc_bios selects one, entry 0 being the default (doc/advmame.d:2086-2094).
+  Only the selected revision is read; the others share the archive as
+  alternatives. Neo Geo lists MVS revisions alone, the AES, Universe and debug
+  entries being commented out (src/drivers/neogeo.c:1420-1423,1439-1442).
+
+  The four support files sit directly in $home or $data
+  (advance/osd/fileio.c:81,88-90, advance/linux/file.c:249-256). Samples and
+  artwork are per-game archives under dir_sample and dir_artwork, ZIP only,
+  named after the driver: WAV members for samples
+  (src/sound/samples.c:198-200), a <driver>.art layout and its PNGs for
+  artwork (src/artwork.c:2119,2224).
+
+  misc_historyfile and misc_infofile were retired and are discarded when found
+  in a configuration file (advance/osd/emu.c:517-518), leaving history.dat and
+  mameinfo.dat unread. options.controller is pinned to zero
+  (advance/osd/glue.c:708), so no controller file is read either. blitmax.dat,
+  startup.dat and help.dat are compiled into the binary
+  (advance/osd/video.c:1787,1795, advance/osd/ui.c:1575).
+
+files:
+  # Support files ($home or $data)
+  - name: hiscore.dat
+    required: false
+    category: game_data
+    source_ref: "src/hiscore.c:28,313"
+    note: >-
+      High score definitions, selected by misc_hiscorefile
+      (advance/osd/glue.c:800,3293). Absent, hiscore_open matches no entry and
+      no high score is restored or saved.
+
+  - name: cheat.dat
+    required: false
+    category: game_data
+    source_ref: "src/cheat.c:8682,8751"
+    note: >-
+      Cheat definitions, selected by misc_cheatfile
+      (advance/osd/glue.c:799,3291) and read only when misc_cheat is on, which
+      it is not by default. Absent, the cheat menu reads "cheat database not
+      found" (src/cheat.c:2536).
+
+  - name: event.dat
+    required: false
+    category: game_data
+    source_ref: "advance/osd/safequit.c:165-180,260"
+    note: >-
+      Event and safequit definitions, selected by misc_eventfile and read
+      straight from $home then $data rather than through the file type table.
+      Absent, the exit menu always prompts instead of checking coin and play
+      state.
+
+  - name: english.lng
+    required: false
+    category: game_data
+    source_ref: "advance/osd/glue.c:716,3290"
+    note: >-
+      User interface translation, extension lng
+      (src/fileio.c:941), selected by misc_languagefile. Absent, uistring_init
+      keeps the built-in English strings (src/ui_text.c:263-265).
+
+  # SNK Neo Geo MVS
+  - name: neogeo.zip
+    required: true
+    category: bios_zip
+    system: snk-neogeo-mvs
+    source_ref: "src/drivers/neogeo.c:7939-7953,8553"
+    note: >-
+      Eight MVS BIOS variants selected with misc_bios (euro, euro-s1, us,
+      us-e, asia, japan, japan-s2, japan-s1), euro by default. sm1.sm1,
+      000-lo.lo and sfix.sfx are loaded whichever variant is selected.
+    validation: [size, crc32, sha1]
+    contents:
+      - name: sp-s2.sp1
+        description: Europe MVS (Ver. 2)
+        size: 131072
+        crc32: "9036d879"
+        sha1: "4f5ed7105b7128794654ce82b51723e16e389543"
+      - name: sp-s.sp1
+        description: Europe MVS (Ver. 1)
+        size: 131072
+        crc32: "c7f2fa45"
+        sha1: "09576ff20b4d6b365e78e6a5698ea450262697cd"
+      - name: usa_2slt.bin
+        description: US MVS (Ver. 2)
+        size: 131072
+        crc32: "e72943de"
+        sha1: "5c6bba07d2ec8ac95776aa3511109f5e1e2e92eb"
+      - name: sp-e.sp1
+        description: US MVS (Ver. 1)
+        size: 131072
+        crc32: "2723a5b5"
+        sha1: "5dbff7531cf04886cde3ef022fb5ca687573dcb8"
+      - name: asia-s3.rom
+        description: Asia MVS (Ver. 3)
+        size: 131072
+        crc32: "91b64be3"
+        sha1: "720a3e20d26818632aedf2c2fd16c54f213543e1"
+      - name: vs-bios.rom
+        description: Japan MVS (Ver. 3)
+        size: 131072
+        crc32: "f0e8f27d"
+        sha1: "ecf01eda815909f1facec62abf3594eaa8d11075"
+      - name: sp-j2.rom
+        description: Japan MVS (Ver. 2)
+        size: 131072
+        crc32: "acede59c"
+        sha1: "b6f97acd282fd7e94d9426078a90f059b5e9dd91"
+      - name: sp1.jipan.1024
+        description: Japan MVS (Ver. 1)
+        size: 131072
+        crc32: "9fb0abe4"
+        sha1: "18a987ce2229df79a8cf6a84f968f0e42ce4e59d"
+      - name: sm1.sm1
+        description: Z80 sound BIOS
+        size: 131072
+        crc32: "97cf998b"
+        sha1: "977387a7c76ef9b21d0b01fa69830e949a9a9626"
+      - name: 000-lo.lo
+        description: Y zoom control
+        size: 65536
+        crc32: "e09e253c"
+        sha1: "2b1c719531dac9bb503f22644e6e4236b91e7cfc"
+      - name: sfix.sfx
+        description: fix layer tiles
+        size: 131072
+        crc32: "354029fc"
+        sha1: "4ae4bf23b4c2acff875775d4cbff5583893ce2a1"
+
+  # IGS PGM
+  - name: pgm.zip
+    required: true
+    category: bios_zip
+    system: igs-pgm
+    source_ref: "src/drivers/pgm.c:3708-3719,5487"
+    validation: [size, crc32, sha1]
+    contents:
+      - name: pgm_p01s.rom
+        description: 68000 BIOS
+        size: 131072
+        crc32: "e42b166e"
+        sha1: "2a9df9ec746b14b74fae48b1a438da14973702ea"
+      - name: pgm_t01s.rom
+        description: text layer tiles
+        size: 2097152
+        crc32: "1a7123a0"
+        sha1: "cc567f577bfbf45427b54d6695b11b74f2578af3"
+      - name: pgm_m01s.rom
+        description: samples
+        size: 2097152
+        crc32: "45ae7159"
+        sha1: "d3ed3ff3464557fd0df6b069b2e431528b0ebfa8"
+
+  # Sega ST-V
+  - name: stvbios.zip
+    required: true
+    category: bios_zip
+    system: sega-stv
+    source_ref: "src/drivers/stv.c:3092-3094,4026"
+    note: >-
+      Nine BIOS variants selected with misc_bios (japan, japana, us, japanb,
+      taiwan, europe, unknown, dev1061, japanc), japan by default.
+    validation: [size, crc32, sha1]
+    contents:
+      - name: epr19730.ic8
+        description: Japan (bios epr19730)
+        size: 524288
+        crc32: "d0e0889d"
+        sha1: "fae53107c894e0c41c49e191dbe706c9cd6e50bd"
+      - name: mp17951a.s
+        description: Japan (bios mp17951a)
+        size: 524288
+        crc32: "2672f9d8"
+        sha1: "63cf4a6432f6c87952f9cf3ab0f977aed2367303"
+      - name: mp17952a.s
+        description: USA (bios mp17952a)
+        size: 524288
+        crc32: "d1be2adf"
+        sha1: "eaf1c3e5d602e1139d2090a78d7e19f04f916794"
+      - name: 20091.bin
+        description: Japan (bios 20091)
+        size: 524288
+        crc32: "59ed40f4"
+        sha1: "eff0f54c70bce05ff3a289bf30b1027e1c8cd117"
+      - name: mp17953a.ic8
+        description: Taiwan (bios mp17953a)
+        size: 524288
+        crc32: "a4c47570"
+        sha1: "9efc73717ec8a13417e65c54344ded9fc25bf5ef"
+      - name: mp17954a.s
+        description: Europe (bios mp17954a)
+        size: 524288
+        crc32: "f7722da3"
+        sha1: "af79cff317e5b57d49e463af16a9f616ed1eee08"
+      - name: stv110.bin
+        description: Unknown (debug?)
+        size: 524288
+        crc32: "3dfeda92"
+        sha1: "8eb33192a57df5f3a1dfb57263054867c6b2db6d"
+      - name: stv1061.bin
+        description: Development (bios 1.061)
+        size: 524288
+        crc32: "728dbca3"
+        sha1: "0ed2030177f0aa8285645c395ae9ad9f568ab1d6"
+      - name: epr-17740.bin
+        description: Japan (bios epr17740)
+        size: 524288
+        crc32: "5c5aa63d"
+        sha1: "06860d96923b81afbc21e0ad32ee19487d8ff6e7"
+
+  # Sega Mega Play
+  - name: megaplay.zip
+    required: true
+    category: bios_zip
+    system: sega-megaplay
+    source_ref: "src/drivers/megaplay.c:735-738,933"
+    note: >-
+      Two BIOS variants selected with misc_bios (ver1, ver2), ver1 by
+      default.
+    validation: [size, crc32, sha1]
+    contents:
+      - name: ep15294.ic2
+        description: Mega Play BIOS (Ver. 1)
+        size: 131072
+        crc32: "aa8dc2d8"
+        sha1: "96771ad7b79dc9c83a1594243250d65052d23176"
+      - name: epr-a15294.ic2
+        description: Mega Play BIOS (Ver. 2)
+        size: 131072
+        crc32: "f97c68aa"
+        sha1: "bcabc879950bca1ced11c550a484e697ec5706b2"
+
+  # Sega Mega-Tech
+  - name: megatech.zip
+    required: true
+    category: bios_zip
+    system: sega-megatech
+    source_ref: "src/drivers/megatech.c:454-457,866"
+    validation: [size, crc32, sha1]
+    contents:
+      - name: epr12664.20
+        size: 32768
+        crc32: "f71e9526"
+        sha1: "1c7887541d02c41426992d17f8e3db9e03975953"
+
+  # DECO Cassette System
+  - name: decocass.zip
+    required: true
+    category: bios_zip
+    system: deco-cassette
+    source_ref: "src/drivers/decocass.c:727-730,1213"
+    note: >-
+      Two main CPU BIOS variants selected with misc_bios (bios0, bios1),
+      bios0 by default. The audio CPU, MCU and PROMs are loaded whichever
+      variant is selected.
+    validation: [size, crc32, sha1]
+    contents:
+      - name: rms8.cpu
+        description: main CPU BIOS (bios0)
+        size: 4096
+        crc32: "23d929b7"
+        sha1: "063f83020ba3d6f43ab8471f95ca919767b93aa4"
+      - name: dsp3.p0b
+        description: main CPU BIOS (bios1)
+        size: 2048
+        crc32: "b67a91d9"
+        sha1: "681c040be0f0ed1ba0a50161b36d0ad8e1c8c5cb"
+      - name: dsp3.p1b
+        description: main CPU BIOS (bios1)
+        size: 2048
+        crc32: "3bfff5f3"
+        sha1: "4e9437cb1b76d64da6b37f01bd6e879fb399e8ce"
+      - name: rms8.snd
+        description: audio CPU
+        size: 2048
+        crc32: "b66b2c2a"
+        sha1: "0097f38beb4872e735e560148052e258a26b08fd"
+      - name: cass8041.bin
+        description: MCU
+        size: 1024
+        crc32: "a6df18fd"
+        sha1: "1f9ea47e372d31767c936c15852b43df2b0ee8ff"
+      - name: dsp8.3m
+        description: PROM
+        size: 32
+        crc32: "238fdb40"
+        sha1: "b88e8fabb82092105c3828154608ea067acbf2e5"
+      - name: dsp8.10d
+        description: PROM
+        size: 32
+        crc32: "3b5836b4"
+        sha1: "b630bb277d9ec09d46ef26b944014dd6165b35d8"
+      - name: rms8.j3
+        description: DRAM banking and timing PROM
+        size: 32
+        crc32: "51eef657"
+        sha1: "eaedce5caf55624ad6ae706aedf82c5717c60f1f"
+
+  # Nintendo PlayChoice-10
+  - name: playch10.zip
+    required: true
+    category: bios_zip
+    system: nintendo-playch10
+    source_ref: "src/drivers/playch10.c:1648-1651,1659"
+    note: >-
+      Two BIOS variants selected with misc_bios (dual, single), dual by
+      default. Tiles and PROMs are loaded whichever variant is selected.
+    validation: [size, crc32, sha1]
+    contents:
+      - name: pch1-c.8t
+        description: Dual Monitor Version
+        size: 16384
+        crc32: "d52fa07a"
+        sha1: "55cabf52ae10c050c2229081a80b9fe5454ab8c5"
+      - name: pck1-c.8t
+        description: Single Monitor Version
+        size: 16384
+        crc32: "503ee8b1"
+        sha1: "3bd20bc71cac742d1b8c1430a6426d0a19db7ad0"
+      - name: pch1-c.8p
+        description: BIOS tiles
+        size: 8192
+        crc32: "30c15e23"
+        sha1: "69166afdb2fe827c7f1919cdf4197caccbd961fa"
+      - name: pch1-c.8m
+        description: BIOS tiles
+        size: 8192
+        crc32: "c1232eee"
+        sha1: "beaf9fa2d091a3c7f70c51e966d885b1f9f0935f"
+      - name: pch1-c.8k
+        description: BIOS tiles
+        size: 8192
+        crc32: "9acffb30"
+        sha1: "b814f10ef23f2ca445fabafcbf7f25e2d454ba8c"
+      - name: pch1-c.6f
+        description: PROM
+        size: 256
+        crc32: "e5414ca3"
+        sha1: "d2878411cda84ffe0afb2e538a67457f51bebffb"
+      - name: pch1-c.6e
+        description: PROM
+        size: 256
+        crc32: "a2625c6e"
+        sha1: "a448b47c9289902e26a3d3c4c7d5a7968c385e81"
+      - name: pch1-c.6d
+        description: PROM
+        size: 256
+        crc32: "1213ebd4"
+        sha1: "0ad386fc3eab5e53c0288ad1de33639a9e461b7c"
+
+  # Nintendo Super System
+  - name: nss.zip
+    required: true
+    category: bios_zip
+    system: nintendo-nss
+    source_ref: "src/drivers/nss.c:524-526,657"
+    validation: [size, crc32, sha1]
+    contents:
+      - name: spc700.rom
+        description: SPC700 IPL ROM
+        size: 64
+        crc32: "44bb3a40"
+        sha1: "97e352553e94242ae823547cd853eecda55c20f0"
+      - name: dsp1data.bin
+        description: DSP1 data ROM
+        size: 2048
+        crc32: "4b02d66d"
+        sha1: "1534f4403d2a0f68ba6e35186fe7595d33de34b1"
+      - name: nss-c.dat
+        description: BIOS CPU
+        size: 32768
+        crc32: "a8e202b3"
+        sha1: "b7afcfe4f5cf15df53452dc04be81929ced1efb2"
+      - name: nss-ic14.02
+        description: BIOS CPU
+        size: 32768
+        crc32: "e06cb58f"
+        sha1: "62f507e91a2797919a78d627af53f029c7d81477"
+
+  # Super Kaneko Nova System
+  - name: skns.zip
+    required: true
+    category: bios_zip
+    system: super-kaneko-nova
+    source_ref: "src/drivers/suprnova.c:1269-1276,1744"
+    note: >-
+      Five region BIOS ROMs, all loaded into the same region.
+    validation: [size, crc32, sha1]
+    contents:
+      - name: sknsj1.u10
+        description: Japan
+        size: 524288
+        crc32: "7e2b836c"
+        sha1: "92c5a7a2472496028bff0e5980d41dd294f42144"
+      - name: sknse1.u10
+        description: Europe
+        size: 524288
+        crc32: "e2b9d7d1"
+        sha1: "b530a3bb9dedc8cfafcba9f1f10277590be04a15"
+      - name: sknsa1.u10
+        description: Asia
+        size: 524288
+        crc32: "745e5212"
+        sha1: "caba649ab2d83b2d7e007eecee0fc582c019df38"
+      - name: sknsu1.u10
+        description: USA
+        size: 524288
+        crc32: "384d21ec"
+        sha1: "a27e8a18099d9cea64fa32db28d01101c2a78815"
+      - name: sknsk1.u10
+        description: Korea
+        size: 524288
+        crc32: "ff1c9f79"
+        sha1: "a51e598d43e76d37da69b1f094c111273bdfc94a"
+
+  # Konami System GX
+  - name: konamigx.zip
+    required: true
+    category: bios_zip
+    system: konami-gx
+    source_ref: "src/drivers/konamigx.c:2138-2141,3485"
+    validation: [size, crc32, sha1]
+    contents:
+      - name: 300a01.34k
+        size: 131072
+        crc32: "d5fa95f5"
+        sha1: "c483aa98ff8ef40cdac359c19ad23fea5ecc1906"
+
+  # Konami Baby Phoenix/GV System
+  - name: konamigv.zip
+    required: true
+    category: bios_zip
+    system: konami-gv
+    source_ref: "src/drivers/konamigv.c:972-976,1058"
+    validation: [size, crc32, sha1]
+    contents:
+      - name: 999a01.7e
+        size: 524288
+        crc32: "ad498d2d"
+        sha1: "02a82a2fe1fba0404517c3602324bfa64e23e478"
+
+  # Century Electronics CVS
+  - name: cvs.zip
+    required: true
+    category: bios_zip
+    system: century-cvs
+    source_ref: "src/drivers/cvs.c:420-430,1401"
+    validation: [size, crc32, sha1]
+    contents:
+      - name: 5b.bin
+        description: sound CPU
+        size: 2048
+        crc32: "f055a624"
+        sha1: "5dfe89d7271092e665cdd5cd59d15a2b70f92f43"
+      - name: 82s185.10h
+        description: PROM
+        size: 2048
+        crc32: "c205bca6"
+        sha1: "ec9bd220e75f7b067ede6139763ef8aca0fb7a29"
+      - name: 82s123.10k
+        description: PROM
+        size: 32
+        crc32: "b5221cec"
+        sha1: "71d9830b33b1a8140b0fe1a2ba8024ba8e6e48e0"
+
+  # Capcom ZN1
+  - name: cpzn1.zip
+    required: true
+    category: bios_zip
+    system: capcom-zn1
+    source_ref: "src/drivers/zn.c:3127-3129,4513"
+    validation: [size, crc32, sha1]
+    contents:
+      - name: coh-1000c.353
+        size: 524288
+        crc32: "50033af6"
+        sha1: "486d92ff6c7f1e54f8e0ef41cd9116eca0e10e1a"
+
+  # Capcom ZN2
+  - name: cpzn2.zip
+    required: true
+    category: bios_zip
+    system: capcom-zn2
+    source_ref: "src/drivers/zn.c:3362-3364,4531"
+    validation: [size, crc32, sha1]
+    contents:
+      - name: coh-3002c.353
+        size: 524288
+        crc32: "e860ea8b"
+        sha1: "66e7e1d4e426466b8f48a2ba055a91b475569504"
+
+  # Tecmo TPS
+  - name: tps.zip
+    required: true
+    category: bios_zip
+    system: tecmo-tps
+    source_ref: "src/drivers/zn.c:3805-3807,4578"
+    validation: [size, crc32, sha1]
+    contents:
+      - name: coh-1002m.353
+        size: 524288
+        crc32: "69ffbcb4"
+        sha1: "03eb2febfab3fcde716defff291babd9392de965"
+
+  # Taito FX1
+  - name: taitofx1.zip
+    required: true
+    category: bios_zip
+    system: taito-fx1
+    source_ref: "src/drivers/zn.c:4040-4042,4603"
+    validation: [size, crc32, sha1]
+    contents:
+      - name: coh-1000t.353
+        size: 524288
+        crc32: "e3f23b6e"
+        sha1: "e18907cf8c6ba54d96edba0a9a00487a90219e0d"
+
+  # Eighting/Raizing PS Arcade 95
+  - name: psarc95.zip
+    required: true
+    category: bios_zip
+    system: eighting-zn1
+    source_ref: "src/drivers/zn.c:4312-4314,4630"
+    validation: [size, crc32, sha1]
+    contents:
+      - name: coh-1002e.353
+        size: 524288
+        crc32: "910f3a8b"
+        sha1: "cd68532967a25f476a6d73473ec6b6f4df2e1689"
+
+  # Atlus PSX
+  - name: atluspsx.zip
+    required: true
+    category: bios_zip
+    system: atlus-zn1
+    source_ref: "src/drivers/zn.c:4483-4485,4642"
+    validation: [size, crc32, sha1]
+    contents:
+      - name: coh-1001l.353
+        size: 524288
+        crc32: "6721146b"
+        sha1: "9511d24bfe25eb180fb2db0835b131cb4a12730e"
+
+  # Atari PSX
+  - name: atpsx.zip
+    required: true
+    category: bios_zip
+    system: atari-zn1
+    source_ref: "src/drivers/zn.c:4398-4400,4558"
+    validation: [size, crc32, sha1]
+    contents:
+      - name: coh-1000w.353
+        size: 524288
+        crc32: "45e8a4b4"
+        sha1: "815488d8563c85f97fbc3384ff21f08e4c88b7b7"
+
+  # Acclaim PSX
+  - name: acpsx.zip
+    required: true
+    category: bios_zip
+    system: acclaim-zn1
+    source_ref: "src/drivers/zn.c:4421-4423,4567"
+    validation: [size, crc32, sha1]
+    contents:
+      - name: coh-1000a.353
+        size: 524288
+        crc32: "8d8d0764"
+        sha1: "7ee83d317190bb1cef2f8f01c81eaaae47150ebb"
+
+  # SNK Hyper Neo Geo 64
+  - name: hng64.zip
+    required: true
+    category: bios_zip
+    system: hyper-neogeo64
+    source_ref: "src/drivers/hng64.c:1425-1431,1718"
+    validation: [size, crc32, sha1]
+    contents:
+      - name: brom1.bin
+        description: R4300 BIOS
+        size: 524288
+        crc32: "a30dd3de"
+        sha1: "3e2fd0a56214e6f5dcb93687e409af13d065ea30"
+      - name: from1.bin
+        description: unused BIOS ROM
+        size: 524288
+        crc32: "6b933005"
+        sha1: "e992747f46c48b66e5509fe0adf19c91250b00c7"
+      - name: rom1.bin
+        description: unused BIOS ROM
+        size: 130866
+        crc32: "4a6832dc"
+        sha1: "ae504f7733c2f40450157cd1d3b85bc83fac8569"
+
+  # Arcadia Systems
+  - name: ar_bios.zip
+    required: true
+    category: bios_zip
+    system: arcadia-systems
+    source_ref: "src/drivers/arcadia.c:352-354,717"
+    note: >-
+      Three BIOS variants selected with misc_bios (onep300, onep211,
+      tenp211), onep300 by default. kick12.rom is loaded whichever variant
+      is selected.
+    validation: [size, crc32, sha1]
+    contents:
+      - name: kick12.rom
+        description: Amiga Kickstart 1.2
+        size: 262144
+        crc32: "a6ce1636"
+        sha1: "11f9e62cf299f72184835b7b2a70a16333fc0d88"
+      - name: scpav3_0.1h
+        description: OnePlay 3.00
+        size: 65536
+        crc32: "2d8e1a06"
+        sha1: "be187f34624aeda110017c4a09242f7c00ef56a4"
+      - name: scpav3_0.1l
+        description: OnePlay 3.00
+        size: 65536
+        crc32: "e4f38fab"
+        sha1: "01c2eb5965070893be6734eb1372576727716476"
+      - name: scpa211h
+        description: OnePlay 2.11
+        size: 65536
+        crc32: "be9dbdc5"
+        sha1: "1554da09f051ec53937d65d4e451de51bc0c69e5"
+      - name: scpa211l
+        description: OnePlay 2.11
+        size: 65536
+        crc32: "95b84504"
+        sha1: "99999fc40909001b37aa1b543918118becc81800"
+      - name: gcp-1-hi
+        description: TenPlay 2.11
+        size: 65536
+        crc32: "67d44523"
+        sha1: "f3e3699132cdf741518accb890c04d17374c4049"
+      - name: gcp-1-lo
+        description: TenPlay 2.11
+        size: 65536
+        crc32: "65d9b9cf"
+        sha1: "5c60a0dd4a0a7d9b938ce6b0446a6ad2ecaf07ec"
+      - name: gcp-2-hi
+        description: TenPlay 2.11
+        size: 65536
+        crc32: "1d7594ae"
+        sha1: "6173bbfecf18d7d9ee6bc2b6753ca9d42fabd781"
+      - name: gcp-2-lo
+        description: TenPlay 2.11
+        size: 65536
+        crc32: "e776198d"
+        sha1: "694ca4cc99ed84a95d18201c94a3332f8599654f"
+      - name: gcp-3-hi
+        description: TenPlay 2.11
+        size: 65536
+        crc32: "3e7364be"
+        sha1: "26e10d0ddc031a891138db36ce4f1732722e6847"
+      - name: gcp-3-lo
+        description: TenPlay 2.11
+        size: 65536
+        crc32: "87229e0d"
+        sha1: "0b18544801e529f954b9e03226bd2e5475f36351"
+
+  # Exidy Max-A-Flex
+  - name: maxaflex.zip
+    required: true
+    category: bios_zip
+    system: exidy-maxaflex
+    source_ref: "src/drivers/maxaflex.c:518-527,583"
+    validation: [size, crc32, sha1]
+    contents:
+      - name: atarixl.rom
+        description: main CPU ROM
+        size: 16384
+        crc32: "1f9cd270"
+        sha1: "ae4f523ba08b6fd59f3cae515a2b2410bbd98f55"
+      - name: maxaflex.uc
+        description: microcontroller
+        size: 2048
+        crc32: "fe9cf53c"
+        sha1: "4b02bc2f0c8a1eab799814fac82d5812c0160206"
+      - name: maxprom.prm
+        description: PROM
+        size: 512
+        crc32: "edf5c950"
+        sha1: "9ad046ea41a61585dd8d2f2d4167a3cc39d2928f"
+
+  # Brezzasoft Crystal System
+  - name: crysbios.zip
+    required: true
+    category: bios_zip
+    system: brezzasoft-crystal
+    source_ref: "src/drivers/crystal.c:854-857,923"
+    validation: [size, crc32, sha1]
+    contents:
+      - name: mx27l1000.u14
+        size: 131072
+        crc32: "beff39a9"
+        sha1: "b6f6dda58d9c82273f9422c1bd623411e58982cb"
+
+  # I'Max Multi Amenity Cassette System
+  - name: macsbios.zip
+    required: true
+    category: bios_zip
+    system: imax-macs
+    source_ref: "src/drivers/macs.c:394-402,612"
+    validation: [size, crc32, sha1]
+    contents:
+      - name: macsos_l.u43
+        description: BIOS low byte
+        size: 524288
+        crc32: "0b5aed5e"
+        sha1: "042e705017ee34656e2c6af45825bb2dd3447747"
+      - name: macsos_h.u44
+        description: BIOS high byte
+        size: 524288
+        crc32: "538b68e4"
+        sha1: "a0534147791e94e726f49451d0e95671ae0a87d5"
+
+  # Barcrest MPU4 Video
+  - name: bctvidbs.zip
+    required: true
+    category: bios_zip
+    source_ref: "src/drivers/mpu4.c:2014-2017,2175"
+    validation: [size, crc32, sha1]
+    contents:
+      - name: vid.p1
+        size: 65536
+        crc32: "e996bc18"
+        sha1: "49798165640627eb31024319353da04380787b10"
