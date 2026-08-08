@@ -1977,7 +1977,6 @@ def generate_gap_analysis(
         unique_profiles, declared, db,
         data_names=data_names, all_declared=all_declared,
     )
-    report = {k: v for k, v in report_all.items() if k in relevant_set}
 
     src_totals: dict[str, int] = {"bios": 0, "data": 0, "large_file": 0, "missing": 0}
     total_undeclared = 0
@@ -1991,7 +1990,6 @@ def generate_gap_analysis(
             src_totals[key] += data.get(f"gap_{key}", 0)
         emulator_gaps.append((emu_name, data))
 
-    shipped_missing = sum(d["gap_missing"] for d in report.values())
 
     if total_undeclared > 0:
         total_available = (
@@ -2011,11 +2009,11 @@ def generate_gap_analysis(
             f"{total_available:,} available ({pct_available}), "
             f"{src_totals['missing']} to source.",
             "",
-            f"This counts every profiled emulator, including those no platform "
-            f"ships yet. Restricted to the emulators the platforms above do "
-            f"ship, {shipped_missing} of these files are absent, which is why "
-            f"the packs report no missing file. The rest are acquisition "
-            f"targets, named per emulator below.",
+            "This counts every profiled emulator, including those no platform "
+            "ships yet, so it reaches past what the pack tables above measure: "
+            "those cover only the emulators each platform actually ships. "
+            "Whatever is not in the collection is an acquisition target, named "
+            "per emulator below.",
             "",
             "### Provenance",
             "",
@@ -2110,7 +2108,7 @@ def generate_gap_analysis(
     # ---- Section 4: Acknowledged gaps (unsourceable files) ----
 
     all_unsourceable: list[dict] = []
-    for emu_name, data in sorted(report.items()):
+    for emu_name, data in sorted(report_all.items()):
         for u in data.get("unsourceable", []):
             all_unsourceable.append({
                 "name": u["name"],
