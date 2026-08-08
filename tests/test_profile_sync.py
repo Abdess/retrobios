@@ -662,6 +662,16 @@ class TestBuildReport(unittest.TestCase):
         report = build_report("test", self._profile(["other/absent.c:2"]), self.dir)
         self.assertEqual(report.entries[0].parts[0].status, "GONE")
 
+    def test_rename_is_searched_in_every_declared_repository(self):
+        self.files[("pinsha", "deep/src/stv.c")] = ["x", "hit"]
+        self.files[("headsha", "deep/src/stv.c")] = ["x", "hit"]
+        report = build_report(
+            "test", self._two_repo_profile(["ctrl/src/stv.c:2"]), self.dir
+        )
+        part = report.entries[0].parts[0]
+        self.assertEqual(part.status, "RENAMED")
+        self.assertEqual(part.new_path, "deep/src/stv.c")
+
     def test_missing_date_and_commit_is_skipped(self):
         report = build_report(
             "test",
@@ -1061,6 +1071,15 @@ class TestRebaseRefs(unittest.TestCase):
             ),
             [],
         )
+
+    def test_nothing_is_rebased_while_a_ref_needs_review(self):
+        shifted = PartResult(RefPart("a.c", 10, 12), "SHIFTED", None, 20, 22, [])
+        report = self._report(
+            [EntryReport("a.bin", "a.c:10-12", "SHIFTED", [shifted])]
+        )
+        report.counts = {"SHIFTED": 1, "CHANGED": 1}
+        self.assertEqual(rebase_refs(self.path, report), [])
+        self.assertIn('source_ref: "a.c:10-12"', self.path.read_text())
 
     def test_annotated_ref_is_never_rewritten(self):
         self.path.write_text(

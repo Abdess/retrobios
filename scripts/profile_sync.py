@@ -527,9 +527,7 @@ def build_report(
             owners[path] = _locate(path)
         return owners[path]
 
-    def rename_getter(path: str) -> tuple[str | None, list[str]]:
-        """Resolved only when a cited file has vanished, then memoised."""
-        view, actual = resolve_path(path)
+    def _context_for(view: RepoView):
         key = view.repo.slug
         if key not in context:
             comparison = upstream.compare(
@@ -545,8 +543,28 @@ def build_report(
                     "rename search is partial",
                     file=sys.stderr,
                 )
-        comparison, tree = context[key]
-        return resolve_rename(comparison, actual, tree)
+        return context[key]
+
+    def rename_getter(path: str) -> tuple[str | None, list[str]]:
+        """Resolved only when a cited file has vanished, then memoised.
+
+        Every declared repository is searched, not just the one that owns the
+        path: a profile citing both a port and its upstream may point at a file
+        that only the other one carries.
+        """
+        owner, actual = resolve_path(path)
+        ordered = [owner] + [v for v in views if v is not owner]
+        candidates: list[str] = []
+        for view in ordered:
+            comparison, tree = _context_for(view)
+            found, near = resolve_rename(comparison, actual, tree)
+            if found:
+                return found, []
+            # Only the owning repository reports near misses: pooling them
+            # across repositories turns a resolvable path into an ambiguous one.
+            if view is owner:
+                candidates = near
+        return None, candidates
 
     def fetch(which: str, path: str):
         view, actual = resolve_path(path)
@@ -938,7 +956,16 @@ def _is_rewritable(ref: str) -> bool:
 
 
 def rebase_refs(path: Path, report: ProfileReport) -> list[str]:
-    """Recale the line ranges of parts whose content is unchanged."""
+    """Recale the line ranges of parts whose content is unchanged.
+
+    All or nothing per profile. `source_commit` names the revision the refs
+    are written against, so moving some refs to HEAD while others still
+    describe the pinned revision would leave the profile self-contradictory,
+    and the next comparison would read the pinned revision at line numbers
+    that only make sense at HEAD.
+    """
+    if report.needs_review():
+        return []
     text = path.read_text(encoding="utf-8")
     document = yaml.safe_load(text)
     carriers = [
