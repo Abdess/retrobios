@@ -1510,14 +1510,14 @@ files:
     source_ref: "src/burn/drv/konami/d_nemesis.cpp:4539"
 
   - name: "gba_bios.bin"
-    archive: gba_gba.zip
+    archive: gba.zip
     required: true
     size: 16384
     crc32: "81977335"
     source_ref: "src/burn/drv/gba/d_gba.cpp:334"
 
   - name: "st018.bin"
-    archive: snes_st018.zip
+    archive: st018.zip
     required: true
     size: 163840
     crc32: "5c403cc5"
@@ -1629,7 +1629,7 @@ files:
     source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1232"
 
   - name: "astro.bin"
-    archive: astro_astrocde.zip
+    archive: astrocde.zip
     required: true
     size: 8192
     crc32: "ebc77f3a"
