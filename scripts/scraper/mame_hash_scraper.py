@@ -211,7 +211,7 @@ def _format_diff(
         lines.append(f"    + {len(added)} new sets available (main profile only)")
 
     for set_name in updated:
-        lines.append(f"    ~ {set_name}.zip (contents changed)")
+        lines.append(f"    ~ {set_name}.zip (refreshed)")
 
     oos = diff.get("out_of_scope", 0)
     lines.append(f"    = {unchanged} unchanged")

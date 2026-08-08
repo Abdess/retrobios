@@ -10,6 +10,7 @@ from pathlib import Path
 import yaml
 
 from scripts.scraper._hash_merge import (
+    _build_source_ref,
     compute_diff,
     merge_fbneo_profile,
     merge_mame_profile,
@@ -425,3 +426,100 @@ class TestDiff(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+class TestSourceRefDrift(unittest.TestCase):
+    """A set whose ROMs are unchanged but whose driver line moved is an update."""
+
+    HASHES = {
+        "version": "0.289",
+        "bios_sets": {
+            "neogeo": {
+                "source_file": "src/mame/snk/neogeo.cpp",
+                "source_line": 2500,
+                "roms": [
+                    {"name": "sp-s2.sp1", "size": 131072, "crc32": "9036d879",
+                     "sha1": "4f5ed7105b7128794654ce82b51723e16e389543"},
+                ],
+            }
+        },
+    }
+
+    def _profile(self, source_ref):
+        return {
+            "emulator": "MAME",
+            "core_version": "0.287",
+            "files": [
+                {
+                    "name": "neogeo.zip",
+                    "category": "bios_zip",
+                    "source_ref": source_ref,
+                    "contents": [
+                        {"name": "sp-s2.sp1", "size": 131072, "crc32": "9036d879",
+                         "sha1": "4f5ed7105b7128794654ce82b51723e16e389543"},
+                    ],
+                }
+            ],
+        }
+
+    def _diff(self, source_ref):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            prof = _write_yaml(root / "p.yml", self._profile(source_ref))
+            hashes = root / "h.json"
+            hashes.write_text(json.dumps(self.HASHES), encoding="utf-8")
+            return compute_diff(prof, str(hashes), mode="mame")
+
+    def test_a_moved_line_counts_as_an_update(self):
+        diff = self._diff("src/mame/snk/neogeo.cpp:2428")
+        self.assertEqual(diff["updated"], ["neogeo"])
+        self.assertEqual(diff["unchanged"], 0)
+
+    def test_an_identical_ref_stays_unchanged(self):
+        expected = _build_source_ref(self.HASHES["bios_sets"]["neogeo"])
+        diff = self._diff(expected)
+        self.assertEqual(diff["updated"], [])
+        self.assertEqual(diff["unchanged"], 1)
+
+class TestDerivativeVersion(unittest.TestCase):
+    """Only MAME itself is relabelled with the upstream version."""
+
+    HASHES = {
+        "version": "0.289",
+        "bios_sets": {
+            "cdibios": {
+                "source_file": "src/mame/philips/cdi.cpp",
+                "source_line": 484,
+                "roms": [
+                    {"name": "cdi200.rom", "size": 262144, "crc32": "40c4e6b9",
+                     "sha1": "d5e9e75bec84e93ea67d0e3f0b8b7e0b6f7d0f5f"},
+                ],
+            }
+        },
+    }
+
+    def _run(self, add_new):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            prof = _write_yaml(root / "p.yml", {
+                "emulator": "SAME CDi",
+                "core_version": "Git",
+                "files": [{"name": "cdibios.zip", "category": "bios_zip",
+                           "source_ref": "old.cpp:1", "contents": []}],
+            })
+            hashes = root / "h.json"
+            hashes.write_text(json.dumps(self.HASHES), encoding="utf-8")
+            return merge_mame_profile(
+                prof, str(hashes), write=False, add_new=add_new
+            )
+
+    def test_a_derivative_keeps_its_own_version(self):
+        self.assertEqual(self._run(add_new=False)["core_version"], "Git")
+
+    def test_the_main_profile_takes_the_upstream_version(self):
+        self.assertEqual(self._run(add_new=True)["core_version"], "0.289")
+
+    def test_the_ref_is_refreshed_either_way(self):
+        for add_new in (False, True):
+            entry = self._run(add_new)["files"][0]
+            self.assertEqual(entry["source_ref"], "src/mame/philips/cdi.cpp:484")
+

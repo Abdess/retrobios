@@ -34,7 +34,11 @@ def merge_mame_profile(
     profile = _load_yaml(profile_path)
     hashes = _load_json(hashes_path)
 
-    profile["core_version"] = hashes.get("version", profile.get("core_version"))
+    # Only MAME itself carries the upstream version. A derivative pins its own
+    # release line: same_cdi and a7800 would otherwise be relabelled with a
+    # MAME version they were never built from.
+    if add_new:
+        profile["core_version"] = hashes.get("version", profile.get("core_version"))
 
     files = profile.get("files", [])
     bios_zip, non_bios = _split_files(files, lambda f: f.get("category") == "bios_zip")
@@ -201,8 +205,14 @@ def _diff_mame(
         old_entry = existing_by_name[set_name]
         new_contents = _build_contents(set_data.get("roms", []))
         old_contents = old_entry.get("contents", [])
+        new_ref = _build_source_ref(set_data)
 
-        if _contents_differ(old_contents, new_contents):
+        # A driver keeping the same ROMs still moves inside its file between
+        # releases. Without this the hashes stay current while the source_ref
+        # rots, which is exactly what profile_sync then reports as drift.
+        ref_moved = bool(new_ref) and old_entry.get("source_ref") != new_ref
+
+        if _contents_differ(old_contents, new_contents) or ref_moved:
             updated.append(set_name)
         else:
             unchanged += 1
