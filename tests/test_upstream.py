@@ -2,11 +2,14 @@
 
 from __future__ import annotations
 
+import contextlib
+import http.client
 import os
 import sys
 import tempfile
 import unittest
 import urllib.error
+import urllib.request
 from pathlib import Path
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
@@ -18,6 +21,18 @@ from upstream import make_repo, parse_repo, raw_url
 def _no_network(url: str):
     """Any call reaching here is a leak: the suite must stay offline."""
     raise AssertionError(f"test reached the network: {url}")
+
+
+class _Body:
+    def __init__(self, payload: bytes):
+        self._payload = payload
+
+    def read(self) -> bytes:
+        return self._payload
+
+
+def _http_error(code: int, headers=None) -> urllib.error.HTTPError:
+    return urllib.error.HTTPError("https://host/x", code, "msg", headers, None)
 
 
 class TestParseRepo(unittest.TestCase):
@@ -141,38 +156,92 @@ class TestTokenScope(unittest.TestCase):
 class TestHttpFailure(unittest.TestCase):
     """Only an actual quota signal may abort a whole run."""
 
-    @staticmethod
-    def _error(code, headers=None):
-        return urllib.error.HTTPError(
-            "https://host/x", code, "msg", headers, None
-        )
-
     def test_429_is_a_rate_limit(self):
         self.assertIsInstance(
-            upstream._http_failure("u", self._error(429)), upstream.RateLimitError
+            upstream._http_failure("u", _http_error(429)), upstream.RateLimitError
         )
 
     def test_403_with_exhausted_quota_is_a_rate_limit(self):
-        exc = self._error(403, {"X-RateLimit-Remaining": "0"})
+        exc = _http_error(403, {"X-RateLimit-Remaining": "0"})
         self.assertIsInstance(
             upstream._http_failure("u", exc), upstream.RateLimitError
         )
 
     def test_403_with_quota_left_is_not(self):
-        exc = self._error(403, {"X-RateLimit-Remaining": "4970"})
+        exc = _http_error(403, {"X-RateLimit-Remaining": "4970"})
         failure = upstream._http_failure("u", exc)
         self.assertIsInstance(failure, upstream.UpstreamError)
         self.assertNotIsInstance(failure, upstream.RateLimitError)
 
     def test_bare_403_from_a_forge_is_not_a_rate_limit(self):
-        failure = upstream._http_failure("u", self._error(403))
+        failure = upstream._http_failure("u", _http_error(403))
         self.assertIsInstance(failure, upstream.UpstreamError)
         self.assertNotIsInstance(failure, upstream.RateLimitError)
 
     def test_525_is_a_plain_upstream_error(self):
-        failure = upstream._http_failure("u", self._error(525))
+        failure = upstream._http_failure("u", _http_error(525))
         self.assertIsInstance(failure, upstream.UpstreamError)
         self.assertNotIsInstance(failure, upstream.RateLimitError)
+
+
+class TestFetchRetry(unittest.TestCase):
+    """Transient network failures are retried, definitive answers are not."""
+
+    def setUp(self):
+        self._orig = (urllib.request.urlopen, upstream._sleep)
+        self.slept: list[float] = []
+        upstream._sleep = self.slept.append
+
+    def tearDown(self):
+        urllib.request.urlopen, upstream._sleep = self._orig
+
+    def _serve(self, outcomes):
+        self.calls = 0
+
+        def opener(req, timeout=None):
+            outcome = outcomes[min(self.calls, len(outcomes) - 1)]
+            self.calls += 1
+            if isinstance(outcome, Exception):
+                raise outcome
+            return contextlib.nullcontext(_Body(outcome))
+
+        urllib.request.urlopen = opener
+
+    def test_dropped_connection_is_retried_then_succeeds(self):
+        dropped = http.client.RemoteDisconnected("closed")
+        self._serve([dropped, b"payload"])
+        self.assertEqual(upstream._fetch("https://host/x"), b"payload")
+        self.assertEqual(self.calls, 2)
+        self.assertEqual(len(self.slept), 1)
+
+    def test_retries_are_bounded(self):
+        self._serve([http.client.RemoteDisconnected("closed")])
+        with self.assertRaises(upstream.UpstreamError):
+            upstream._fetch("https://host/x")
+        self.assertEqual(self.calls, upstream.RETRIES)
+
+    def test_server_error_is_retried(self):
+        self._serve([_http_error(503)])
+        with self.assertRaises(upstream.UpstreamError):
+            upstream._fetch("https://host/x")
+        self.assertEqual(self.calls, upstream.RETRIES)
+
+    def test_forbidden_is_not_retried(self):
+        self._serve([_http_error(403)])
+        with self.assertRaises(upstream.UpstreamError):
+            upstream._fetch("https://host/x")
+        self.assertEqual(self.calls, 1)
+
+    def test_missing_file_is_not_retried(self):
+        self._serve([_http_error(404)])
+        self.assertIsNone(upstream._fetch("https://host/x"))
+        self.assertEqual(self.calls, 1)
+
+    def test_rate_limit_is_not_retried(self):
+        self._serve([_http_error(429)])
+        with self.assertRaises(upstream.RateLimitError):
+            upstream._fetch("https://host/x")
+        self.assertEqual(self.calls, 1)
 
 
 class TestCache(unittest.TestCase):

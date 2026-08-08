@@ -8,9 +8,11 @@ structure.
 from __future__ import annotations
 
 import hashlib
+import http.client
 import json
 import os
 import tempfile
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -20,6 +22,8 @@ from pathlib import Path
 USER_AGENT = "retrobios-profile-sync/1.0"
 ABSENT = "\0absent\0"
 GITHUB_COMPARE_CAP = 300
+RETRIES = 3
+RETRY_BACKOFF = (0.5, 2.0)
 GITHUB_HOSTS = frozenset(
     {"github.com", "api.github.com", "raw.githubusercontent.com"}
 )
@@ -47,6 +51,9 @@ _HOSTS: dict[str, tuple[str, str, str]] = {
         "https://git.eden-emu.dev",
     ),
 }
+
+
+_sleep = time.sleep
 
 
 class UpstreamError(Exception):
@@ -156,32 +163,42 @@ def _http_failure(url: str, exc: urllib.error.HTTPError) -> UpstreamError:
     return UpstreamError(f"{url}: HTTP {exc.code}")
 
 
+def _fetch(url: str, accept_json: bool = False) -> bytes | None:
+    """Body of a GET, or None on 404.
+
+    A pass over every profile issues thousands of requests, so a dropped
+    connection or a transient 5xx is a certainty rather than an accident.
+    Those are retried; a definitive answer from the forge is not.
+    """
+    failure: UpstreamError | None = None
+    for attempt in range(RETRIES):
+        req = urllib.request.Request(url, headers=_headers(url, accept_json))
+        try:
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                return resp.read()
+        except urllib.error.HTTPError as exc:
+            if exc.code == 404:
+                return None
+            failure = _http_failure(url, exc)
+            if isinstance(failure, RateLimitError) or exc.code < 500:
+                raise failure from exc
+        except (urllib.error.URLError, http.client.HTTPException, OSError) as exc:
+            failure = UpstreamError(f"{url}: {exc}")
+        if attempt + 1 < RETRIES:
+            _sleep(RETRY_BACKOFF[attempt])
+    raise failure
+
+
 def _http_text(url: str) -> str | None:
-    """Body of a GET, or None on 404. Replaced in tests."""
-    req = urllib.request.Request(url, headers=_headers(url))
-    try:
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            return resp.read().decode("utf-8", errors="replace")
-    except urllib.error.HTTPError as exc:
-        if exc.code == 404:
-            return None
-        raise _http_failure(url, exc) from exc
-    except urllib.error.URLError as exc:
-        raise UpstreamError(f"{url}: {exc.reason}") from exc
+    """Text body of a GET, or None on 404. Replaced in tests."""
+    body = _fetch(url)
+    return None if body is None else body.decode("utf-8", errors="replace")
 
 
 def _http_json(url: str) -> object | None:
     """Parsed JSON body of a GET, or None on 404. Replaced in tests."""
-    req = urllib.request.Request(url, headers=_headers(url, accept_json=True))
-    try:
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            return json.loads(resp.read().decode())
-    except urllib.error.HTTPError as exc:
-        if exc.code == 404:
-            return None
-        raise _http_failure(url, exc) from exc
-    except urllib.error.URLError as exc:
-        raise UpstreamError(f"{url}: {exc.reason}") from exc
+    body = _fetch(url, accept_json=True)
+    return None if body is None else json.loads(body.decode())
 
 
 def cache_path(cache_dir: str, repo: Repo, sha: str, path: str) -> Path:
