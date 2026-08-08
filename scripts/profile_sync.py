@@ -36,7 +36,7 @@ STATUS_ORDER = ("ANCHORED", "SHIFTED", "RENAMED", "AMBIGUOUS", "CHANGED", "GONE"
 REVIEW_STATUSES = ("CHANGED", "GONE", "AMBIGUOUS")
 REBASE_STATUSES = ("SHIFTED", "RENAMED")
 
-WIDEN_STEPS = (0, 3, 6, 12)
+WIDEN_STEPS = (0, 3, 6, 12, 25, 50)
 MAX_MATCH_LINES = 20000
 
 PIN = "pin"
@@ -381,6 +381,57 @@ def anchor_part(part: RefPart, fetch, rename_getter, describe=None) -> PartResul
     )
 
 
+SHIFT_SUPPORT = 3
+
+
+def dominant_shifts(parts, support: int = SHIFT_SUPPORT) -> dict[str, int]:
+    """Most common line shift per file, taken from the unambiguous anchors.
+
+    A file whose refs mostly moved by the same amount gives strong evidence
+    for the ones that stayed ambiguous: repetitive tables, as in the NeoGeo
+    driver, match a cited line in several places, and only one of them sits
+    where the rest of the file moved to.
+    """
+    by_file: dict[str, dict[int, int]] = {}
+    for part in parts:
+        if part.status not in ("ANCHORED", "SHIFTED"):
+            continue
+        if part.start is None or part.part.start is None:
+            continue
+        counts = by_file.setdefault(part.part.path, {})
+        delta = part.start - part.part.start
+        counts[delta] = counts.get(delta, 0) + 1
+    shifts = {}
+    for path, counts in by_file.items():
+        delta, seen = max(counts.items(), key=lambda kv: kv[1])
+        if seen >= support:
+            shifts[path] = delta
+    return shifts
+
+
+def resolve_by_shift(part: PartResult, shifts: dict[str, int]) -> PartResult:
+    """Settle an ambiguous part when one candidate matches the file's shift."""
+    if part.status != "AMBIGUOUS" or not part.candidates:
+        return part
+    if part.part.start is None or part.part.path not in shifts:
+        return part
+    wanted = part.part.start + shifts[part.part.path]
+    if part.candidates.count(wanted) != 1:
+        return part
+    span = (part.part.end or part.part.start) - part.part.start
+    return PartResult(
+        part.part,
+        "ANCHORED" if wanted == part.part.start else "SHIFTED",
+        part.new_path,
+        wanted,
+        wanted + span,
+        [],
+        f"settled by the {shifts[part.part.path]:+d} line shift of its file",
+        part.repo,
+        part.head_url,
+    )
+
+
 @dataclass
 class EntryReport:
     name: str
@@ -576,11 +627,17 @@ def build_report(
         slug = view.repo.slug if view is not primary else None
         return slug, upstream.raw_url(view.repo, view.head, actual), actual
 
-    for entry_name, ref in refs:
-        parts = [
+    staged = [
+        (entry_name, ref, [
             anchor_part(part, fetch, rename_getter, describe)
             for part in split_source_ref(ref)
-        ]
+        ])
+        for entry_name, ref in refs
+    ]
+
+    shifts = dominant_shifts([p for _, _, parts in staged for p in parts])
+    for entry_name, ref, parts in staged:
+        parts = [resolve_by_shift(p, shifts) for p in parts]
         status = worst_status([p.status for p in parts])
         report.entries.append(EntryReport(entry_name, ref, status, parts))
         report.counts[status] = report.counts.get(status, 0) + 1

@@ -244,7 +244,7 @@ class TestAnchorBlock(unittest.TestCase):
         self.assertEqual((result.status, result.start), ("SHIFTED", 6))
 
     def test_ambiguous_when_widening_never_resolves(self):
-        result = anchor_block(["dup"] * 40, ["dup"] * 40, 5, 5)
+        result = anchor_block(["dup"] * 400, ["dup"] * 400, 5, 5)
         self.assertEqual(result.status, "AMBIGUOUS")
         self.assertGreater(len(result.candidates), 1)
 
@@ -273,6 +273,56 @@ class TestAnchorBlock(unittest.TestCase):
         self.assertEqual(result.status, "CHANGED")
         self.assertIsNotNone(result.reason)
         self.assertIsNone(result.start)
+
+
+def _part(path, old, new, status):
+    return PartResult(RefPart(path, old, old), status, None, new, new, [])
+
+
+def _ambiguous(path, old, candidates):
+    return PartResult(RefPart(path, old, old), "AMBIGUOUS", None, None, None, candidates)
+
+
+class TestDominantShift(unittest.TestCase):
+    def test_shift_needs_enough_support(self):
+        parts = [_part("a.c", 10, 30, "SHIFTED"), _part("a.c", 20, 40, "SHIFTED")]
+        self.assertEqual(profile_sync.dominant_shifts(parts), {})
+
+    def test_shift_is_taken_from_resolved_anchors(self):
+        parts = [_part("a.c", i, i + 20, "SHIFTED") for i in (10, 20, 30)]
+        self.assertEqual(profile_sync.dominant_shifts(parts), {"a.c": 20})
+
+    def test_ambiguous_parts_do_not_vote(self):
+        parts = [_part("a.c", i, i + 20, "SHIFTED") for i in (10, 20, 30)]
+        parts.append(_ambiguous("a.c", 40, [99, 500]))
+        self.assertEqual(profile_sync.dominant_shifts(parts), {"a.c": 20})
+
+    def test_candidate_matching_the_shift_is_selected(self):
+        part = _ambiguous("a.c", 1624, [1644, 1790, 1834])
+        settled = profile_sync.resolve_by_shift(part, {"a.c": 20})
+        self.assertEqual(settled.status, "SHIFTED")
+        self.assertEqual(settled.start, 1644)
+        self.assertIn("+20", settled.reason)
+
+    def test_no_candidate_matches_the_shift(self):
+        part = _ambiguous("a.c", 1624, [1790, 1834])
+        self.assertEqual(profile_sync.resolve_by_shift(part, {"a.c": 20}).status,
+                         "AMBIGUOUS")
+
+    def test_two_candidates_on_the_shift_stay_ambiguous(self):
+        part = _ambiguous("a.c", 1624, [1644, 1644])
+        self.assertEqual(profile_sync.resolve_by_shift(part, {"a.c": 20}).status,
+                         "AMBIGUOUS")
+
+    def test_range_length_is_preserved(self):
+        part = PartResult(RefPart("a.c", 100, 104), "AMBIGUOUS", None, None, None, [120])
+        settled = profile_sync.resolve_by_shift(part, {"a.c": 20})
+        self.assertEqual((settled.start, settled.end), (120, 124))
+
+    def test_file_without_a_known_shift_is_untouched(self):
+        part = _ambiguous("b.c", 10, [30])
+        self.assertEqual(profile_sync.resolve_by_shift(part, {"a.c": 20}).status,
+                         "AMBIGUOUS")
 
 
 PIN = profile_sync.PIN
