@@ -56,17 +56,17 @@ The RetroDECK pack already contains its own `bios/` folder, so it extracts into 
 BIOS, firmware, and system files for consoles from Atari to PlayStation 3.
 Every file passes its platform's own verification; where an emulator profile exists, the expected hashes and sizes are read from the emulator's source code (the Source-backed column below).
 
-- **77 files** the platforms' emulators load are not in the collection yet, named in the [gap analysis](https://abdess.github.io/retrobios/gaps/)
+- **91 files** the platforms' emulators load are not in the collection yet, named in the [gap analysis](https://abdess.github.io/retrobios/gaps/)
 - **12 platforms** supported with platform-specific verification
-- **328 emulators** profiled from source (RetroArch cores + standalone)
-- **409 systems** covered (NES, SNES, PlayStation, Saturn, Dreamcast, ...)
+- **336 emulators** profiled from source (RetroArch cores + standalone)
+- **410 systems** covered (NES, SNES, PlayStation, Saturn, Dreamcast, ...)
 - **7,763 files** indexed with SHA1, MD5, SHA256 and CRC32 checksums: 2,478 system files, 2,746 arcade ROM sets, 2,539 game and engine data files
-- **542 files** matched to dump-preservation catalogs (No-Intro, Redump, TOSEC)
+- **531 of 2,478 system files** matched to dump-preservation catalogs (No-Intro, Redump, TOSEC); arcade sets and engine data fall outside what those catalogs index
 - **9854 MB** total collection size
 
 ## Supported systems
 
-NES, SNES, Nintendo 64, GameCube, Wii, Game Boy, Game Boy Advance, Nintendo DS, Nintendo 3DS, Switch, PlayStation, PlayStation 2, PlayStation 3, PSP, PS Vita, Mega Drive, Saturn, Dreamcast, Game Gear, Master System, Neo Geo, Atari 2600, Atari 7800, Atari Lynx, Atari ST, MSX, PC Engine, TurboGrafx-16, ColecoVision, Intellivision, Commodore 64, Amiga, ZX Spectrum, Arcade (MAME), and 375+ more.
+NES, SNES, Nintendo 64, GameCube, Wii, Game Boy, Game Boy Advance, Nintendo DS, Nintendo 3DS, Switch, PlayStation, PlayStation 2, PlayStation 3, PSP, PS Vita, Mega Drive, Saturn, Dreamcast, Game Gear, Master System, Neo Geo, Atari 2600, Atari 7800, Atari Lynx, Atari ST, MSX, PC Engine, TurboGrafx-16, ColecoVision, Intellivision, Commodore 64, Amiga, ZX Spectrum, Arcade (MAME), and 376+ more.
 
 Full list with per-file details: **[https://abdess.github.io/retrobios/](https://abdess.github.io/retrobios/)**
 
@@ -74,7 +74,7 @@ Full list with per-file details: **[https://abdess.github.io/retrobios/](https:/
 
 | Platform | Platform list | Read from emulator code | Verified by |
 |----------|--------------:|------------------------:|-------------|
-| Batocera | 353/353 | 1,145/1,222 | MD5 hash |
+| Batocera | 353/353 | 1,145/1,236 | MD5 hash |
 | BizHawk | 118/118 | 366/367 | SHA1 hash |
 | EmuDeck | 161/161 | 404/404 | MD5 hash |
 | Lakka | 530/530 | 1,148/1,153 | file presence |
@@ -82,7 +82,7 @@ Full list with per-file details: **[https://abdess.github.io/retrobios/](https:/
 | ROCKNIX | 38/38 | 1,483/1,488 | MD5 hash |
 | Recalbox | 346/346 | 714/719 | MD5 hash |
 | RetroArch | 530/530 | 1,148/1,153 | file presence |
-| RetroBat | 341/341 | 808/884 | MD5 hash |
+| RetroBat | 341/341 | 808/898 | MD5 hash |
 | RetroDECK | 2,008/2,008 | 1,182/1,188 | MD5 hash |
 | RetroPie * | 530/530 | 1,148/1,153 | file presence |
 | RomM | 374/374 | 266/269 | MD5 hash |
@@ -125,7 +125,7 @@ The [documentation site](https://abdess.github.io/retrobios/) provides:
 - **Per-emulator profiles** with source code references for every file
 - **Per-system pages** showing which emulators and platforms cover each console
 - **Gap analysis** identifying missing files and undeclared core requirements
-- **Cross-reference** mapping files across 12 platforms and 328 emulators
+- **Cross-reference** mapping files across 12 platforms and 336 emulators
 
 ## How it works
 
@@ -162,4 +162,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software.
 The legal reasoning is laid out in the [FAQ](https://abdess.github.io/retrobios/wiki/faq/#is-this-legal).
 
-*Auto-generated on 2026-08-08T07:00:03Z*
+*Auto-generated on 2026-08-08T09:02:08Z*

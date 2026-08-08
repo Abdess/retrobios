@@ -54,6 +54,35 @@ ICON_CACHE_PATH = Path(".cache") / "system_icons.json"
 _icon_available: dict[str, bool] = {}
 
 
+def _content_check_ceiling(profiles: dict) -> str:
+    """How far content checking can reach across every profiled entry."""
+    hashed = sized = neither = 0
+    for profile in unique_emulator_profiles(profiles).values():
+        for f in profile.get("files", []) or []:
+            if any(
+                f.get(k)
+                for k in ("md5", "sha1", "crc32", "sha256", "known_hash_adler32")
+            ):
+                hashed += 1
+            elif any(f.get(k) for k in ("size", "min_size", "max_size")):
+                sized += 1
+            else:
+                neither += 1
+    total = hashed + sized + neither
+    if not total:
+        return ""
+    return (
+        f"Across every profiled entry, {hashed:,} of {total:,} "
+        f"({hashed / total * 100:.0f}%) carry a hash the code checks, "
+        f"{sized:,} ({sized / total * 100:.0f}%) only a size, and "
+        f"{neither:,} ({neither / total * 100:.0f}%) neither. That last share "
+        "is the ceiling of the method: where an emulator validates nothing, "
+        "reading its source establishes which file it loads, never whether "
+        "the content is the right dump. The provenance field answers that "
+        "other question, for the files a dump catalog indexes."
+    )
+
+
 def _icon_name(manufacturer: str, console_name: str) -> str:
     return f"{manufacturer} - {console_name}".replace("/", " ")
 
@@ -1883,6 +1912,8 @@ def generate_gap_analysis(
         "can invent a check the code does not perform. A dash means no "
         "profiled emulator applies to the platform, whose own source is then "
         "the only authority.",
+        "",
+        _content_check_ceiling(profiles),
         "",
     ])
 

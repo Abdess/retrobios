@@ -1672,6 +1672,9 @@ def _normalize_zip_for_pack(
     """
     import tempfile as _tmp
 
+    # tmp/ is gitignored, so a fresh clone does not carry it. WSL keeps /tmp
+    # on a 4 GB tmpfs that MAME sets overflow, hence the repo-local scratch.
+    os.makedirs("tmp", exist_ok=True)
     tmp_fd, tmp_path = _tmp.mkstemp(suffix=".zip", dir="tmp")
     os.close(tmp_fd)
     try:

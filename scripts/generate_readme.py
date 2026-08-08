@@ -18,6 +18,7 @@ from datetime import datetime, timezone
 
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (
+    GAME_DATA_TOPS,
     compute_composition,
     list_registered_platforms,
     load_database,
@@ -154,18 +155,32 @@ _CATALOG_LABELS = {"redump": "Redump", "no-intro": "No-Intro", "tosec": "TOSEC"}
 
 
 def _catalog_matched_line(db: dict) -> list[str]:
-    """Bullet line for files matched to dump-preservation catalogs."""
+    """Bullet line for files matched to dump-preservation catalogs.
+
+    Counted against the system files alone: those catalogs index console and
+    computer dumps, so arcade ROM sets and engine data sit outside their
+    scope and would only dilute the ratio.
+    """
     sources: set[str] = set()
     matched = 0
     for entry in db.get("files", {}).values():
         provenance = entry.get("provenance")
-        if provenance:
+        if not provenance:
+            continue
+        sources.update(provenance)
+        parts = entry.get("path", "").split("/")
+        top = parts[1] if len(parts) > 1 else ""
+        if top != "Arcade" and top not in GAME_DATA_TOPS:
             matched += 1
-            sources.update(provenance)
     if not matched:
         return []
+    system_files = compute_composition(db)["systems"]["files"]
     labels = ", ".join(_CATALOG_LABELS.get(s, s) for s in sorted(sources))
-    return [f"- **{matched:,} files** matched to dump-preservation catalogs ({labels})"]
+    return [
+        f"- **{matched:,} of {system_files:,} system files** matched to"
+        f" dump-preservation catalogs ({labels}); arcade sets and engine data"
+        f" fall outside what those catalogs index"
+    ]
 
 
 def generate_readme(db: dict, platforms_dir: str) -> str:
