@@ -152,6 +152,12 @@ def _cleanup() -> None:
 # ── Profile discovery ────────────────────────────────────────────────
 
 
+_MAME_TREES = frozenset({
+    "https://github.com/mamedev/mame",
+    "https://github.com/libretro/mame",
+})
+
+
 def _find_mame_profiles() -> list[Path]:
     profiles: list[Path] = []
     for path in sorted(_EMULATORS_DIR.glob("*.yml")):
@@ -163,11 +169,19 @@ def _find_mame_profiles() -> list[Path]:
             if not isinstance(data, dict):
                 continue
             upstream = data.get("upstream", "")
+            source = data.get("source", "")
             # Only match profiles tracking current MAME (not frozen snapshots
-            # which have upstream like "mamedev/mame/tree/mame0139")
+            # which have upstream like "mamedev/mame/tree/mame0139"), and only
+            # those whose own tree is MAME's. GroovyMAME, A7800 and SAME CDi
+            # declare mamedev/mame upstream but build from their own fork at
+            # another release: refreshing their refs from current MAME moves
+            # them onto paths their tree does not have, such as the 0.289 move
+            # of neogeo.cpp from src/mame/neogeo/ to src/mame/snk/.
             if (
                 isinstance(upstream, str)
                 and upstream.rstrip("/") == "https://github.com/mamedev/mame"
+                and isinstance(source, str)
+                and source.rstrip("/") in _MAME_TREES
             ):
                 profiles.append(path)
         except (yaml.YAMLError, OSError):

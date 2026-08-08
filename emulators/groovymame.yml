@@ -118,7 +118,7 @@ files:
     required: true
     category: bios_zip
     system: snk-neogeo-mvs
-    source_ref: "src/mame/snk/neogeo.cpp:2428"
+    source_ref: "src/mame/neogeo/neogeo.cpp:2432"
     contents:
       - name: sp-s2.sp1
         size: 131072
@@ -547,7 +547,7 @@ files:
     required: true
     category: bios_zip
     system: sammy-atomiswave
-    source_ref: "src/mame/sega/dc_atomiswave.cpp:1519"
+    source_ref: "src/mame/sega/dc_atomiswave.cpp:1480"
     contents:
       - name: bios0.ic23
         size: 131072
@@ -682,7 +682,7 @@ files:
     required: true
     category: bios_zip
     system: sega-stv
-    source_ref: "src/mame/sega/stv.cpp:4068"
+    source_ref: "src/mame/sega/stv.cpp:3949"
     contents:
       - name: epr-23603.ic8
         size: 524288
@@ -752,17 +752,17 @@ files:
     source_ref: "src/mame/sega/lindbergh.cpp:639"
     contents:
       - name: 6.0.0010a.bin
-        description: 6.0.0010 alternate version
+        description: "6.0.0010 alternate version"
         size: 1048576
         crc32: "10dd9b76"
         sha1: "1fdf1f921bc395846a7c3180fbdbc4ca287a9670"
       - name: 6.0.0009.bin
-        description: 6.0.0009
+        description: "6.0.0009"
         size: 1048576
         crc32: "5ffdfbf8"
         sha1: "605bc4967b749b4e6d13fc2ebb845ba956a259a7"
       - name: 6.0.0010.bin
-        description: 6.0.0010
+        description: "6.0.0010"
         size: 1048576
         crc32: "ea2bf888"
         sha1: "c9c5b6f0d4f4f36620939b15dd2f128a74347e37"
@@ -900,7 +900,7 @@ files:
     required: true
     category: bios_zip
     system: sega-triforce
-    source_ref: "src/mame/sega/triforce.cpp:1310"
+    source_ref: "src/mame/sega/triforce.cpp:1308"
     contents:
       - name: triforce_bootrom.bin
         size: 2097152
@@ -910,7 +910,7 @@ files:
   - name: shtzone.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/sega/shtzone.cpp:376"
+    source_ref: "src/mame/sega/shtzone.cpp:378"
     contents:
       - name: epr10894a.20
         size: 16384
@@ -920,20 +920,20 @@ files:
   - name: sammymdl.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/sigma/sammymdl.cpp:1025"
+    source_ref: "src/mame/sigma/sammymdl.cpp:1027"
     contents:
       - name: vm1211l01.u2
-        description: IPL Ver. 5.0
+        description: "IPL Ver. 5.0"
         size: 524288
         crc32: "c3c74dc5"
         sha1: "07352e6dba7514214e778ba39e1ca773e4698858"
       - name: mt201l04.u012
-        description: IPL Ver. 4.0
+        description: "IPL Ver. 4.0"
         size: 524288
         crc32: "c8c6d25f"
         sha1: "5be39fa72b65f2e455ccc146dbab58d24ab46505"
       - name: vm1201l01.u012
-        description: IPL Ver. 1.0
+        description: "IPL Ver. 1.0"
         size: 524288
         crc32: "21b2ccbd"
         sha1: "c3ceea196e5c1c6a9e03cf3a22e9f25f0099a38e"
@@ -942,7 +942,7 @@ files:
     required: true
     category: bios_zip
     system: sega-megaplay
-    source_ref: "src/mame/sega/megaplay.cpp:1018"
+    source_ref: "src/mame/sega/megaplay.cpp:1016"
     contents:
       - name: ep15294.ic2
         size: 131072
@@ -982,25 +982,25 @@ files:
     required: true
     category: bios_zip
     system: sega-megatech
-    source_ref: "src/mame/sega/megatech.cpp:1430"
+    source_ref: "src/mame/sega/megatech.cpp:1442"
     contents:
       - name: epr-12664.20
-        description: Ver 1
+        description: "Ver 1"
         size: 32768
         crc32: "f71e9526"
         sha1: "1c7887541d02c41426992d17f8e3db9e03975953"
       - name: epr-12263a.20
-        description: Ver 0 Rev A
+        description: "Ver 0 Rev A"
         size: 32768
         crc32: "07c3f423"
         sha1: "50c28bbc2d4349c820d988ae3f20aae3f808545f"
       - name: epr-12263b.20
-        description: Ver 0 Rev B
+        description: "Ver 0 Rev B"
         size: 32768
         crc32: "ca26c87a"
         sha1: "987a18bede6e54cd73c4434426eb6c302a37cdc5"
       - name: epr-12604a.20
-        description: Ver 0 Rev B (alt?)
+        description: "Ver 0 Rev B (alt?)"
         size: 32768
         crc32: "884e4aa5"
         sha1: "c9008c431a937c084fb475273093ca0b434b5f47"
@@ -1216,7 +1216,7 @@ files:
     required: true
     category: bios_zip
     system: nintendo-playch10
-    source_ref: "src/mame/nintendo/playch10.cpp:2981"
+    source_ref: "src/mame/nintendo/playch10.cpp:2982"
     contents:
       - name: pch1-c__8t_e-2.8t
         size: 16384
@@ -1310,17 +1310,17 @@ files:
     source_ref: "src/mame/nintendo/nss.cpp:1099"
     contents:
       - name: nss-ic14.02.ic14
-        description: Nintendo Super System (Single Cart BIOS)
+        description: "Nintendo Super System (Single Cart BIOS)"
         size: 32768
         crc32: "e06cb58f"
         sha1: "62f507e91a2797919a78d627af53f029c7d81477"
       - name: nss-c.ic14
-        description: Nintendo Super System (Multi Cart BIOS)
+        description: "Nintendo Super System (Multi Cart BIOS)"
         size: 32768
         crc32: "a8e202b3"
         sha1: "b7afcfe4f5cf15df53452dc04be81929ced1efb2"
       - name: nss-v3.ic14
-        description: Nintendo Super System (Single Cart BIOS v3, hack?)
+        description: "Nintendo Super System (Single Cart BIOS v3, hack?)"
         size: 32768
         crc32: "ac385b53"
         sha1: "e3942f9d508c3c8074c3c3941376c37ca68b8e54"
@@ -1332,12 +1332,12 @@ files:
     source_ref: "src/mame/nintendo/sfcbox.cpp:586"
     contents:
       - name: krom2.00.ic1
-        description: SFCBox BIOS Version 2.00
+        description: "SFCBox BIOS Version 2.00"
         size: 131072
         crc32: "e31b5580"
         sha1: "4a6a34a9a94c8249c3b441c2516bdd03e198c458"
       - name: krom1.ic1
-        description: SFCBox BIOS Version 1.00
+        description: "SFCBox BIOS Version 1.00"
         size: 65536
         crc32: "c9010002"
         sha1: "f4c74086a83b728b1c1af3a021a60efa80eff5a4"
@@ -1371,12 +1371,12 @@ files:
     source_ref: "src/mame/philips/cdi.cpp:922"
     contents:
       - name: cdi200.rom
-        description: Magnavox CD-i 200
+        description: "Magnavox CD-i 200"
         size: 524288
         crc32: "40c4e6b9"
         sha1: "d961de803c89b3d1902d656ceb9ce7c02dccb40a"
       - name: cdi220b.rom
-        description: Philips CD-i 220 F2
+        description: "Philips CD-i 220 F2"
         size: 524288
         crc32: "279683ca"
         sha1: "53360a1f21ddac952e95306ced64186a3fc0b93e"
@@ -1423,35 +1423,35 @@ files:
     required: true
     category: bios_zip
     system: namco-system573
-    source_ref: "src/mame/konami/ksys573.cpp:6415"
+    source_ref: "src/mame/konami/ksys573.cpp:6470"
     contents:
       - name: 700a01.22g
-        description: Standard
+        description: "Standard"
         size: 524288
         crc32: "11812ef8"
         sha1: "e1284add4aaddd5337bd7f4e27614460d52b5b48"
       - name: 700a01,gchgchmp.22g
-        description: Found on Gacha Gachamp
+        description: "Found on Gacha Gachamp"
         size: 524288
         crc32: "39ebb0ca"
         sha1: "9aab8c637dd2be84d79007e52f108abe92bf29dd"
       - name: 700b01.22g
-        description: Found on Dancing Stage Euro Mix 2
+        description: "Found on Dancing Stage Euro Mix 2"
         size: 524288
         crc32: "6cf852af"
         sha1: "a2421d0a494892c0e71003c96995ce8f945064dd"
       - name: h8a01.bin
-        description: Standard
+        description: "Standard"
         size: 64
         crc32: "131e0359"
         sha1: "967f66578ebc0cf6b044d71af09b59bce1f4a1d0"
       - name: h8a01.bin
-        description: Found on Gacha Gachamp
+        description: "Found on Gacha Gachamp"
         size: 64
         crc32: "131e0359"
         sha1: "967f66578ebc0cf6b044d71af09b59bce1f4a1d0"
       - name: h8b01.bin
-        description: Found on Dancing Stage Euro Mix 2
+        description: "Found on Dancing Stage Euro Mix 2"
         size: 64
         crc32: "508b057d"
         sha1: "779177e6312ef272483eeb64a5e84bbae6e301f2"
@@ -1459,7 +1459,7 @@ files:
   - name: konamigx.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/konami/konamigx.cpp:4191"
+    source_ref: "src/mame/konami/konamigx.cpp:4193"
     contents:
       - name: 300a01.34k
         size: 131072
@@ -1470,7 +1470,7 @@ files:
     required: true
     category: bios_zip
     system: konami-gv
-    source_ref: "src/mame/konami/konamigv.cpp:1447"
+    source_ref: "src/mame/konami/konamigv.cpp:1444"
     contents:
       - name: 999a01.7e
         size: 524288
@@ -1480,7 +1480,7 @@ files:
   - name: kviper.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/konami/viper.cpp:3213"
+    source_ref: "src/mame/konami/viper.cpp:3269"
     contents:
       - name: 941b01.u25
         size: 262144
@@ -1513,7 +1513,7 @@ files:
   - name: bubsys.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/konami/nemesis.cpp:3140"
+    source_ref: "src/mame/konami/nemesis.cpp:3269"
     contents:
       - name: boot.bin
         size: 480
@@ -1566,15 +1566,15 @@ files:
     required: true
     category: bios_zip
     system: capcom-zn1
-    source_ref: "src/mame/sony/zn.cpp:5969"
+    source_ref: "src/mame/sony/zn.cpp:5967"
     contents:
       - name: m534002c-13.ic353
-        description: japan
+        description: "japan"
         size: 524288
         crc32: "50033af6"
         sha1: "486d92ff6c7f1e54f8e0ef41cd9116eca0e10e1a"
       - name: msm27c402zb.ic353
-        description: english (debug)
+        description: "english (debug)"
         size: 524288
         crc32: "f20f7fe5"
         sha1: "9aac7d3b3d0cc0bbbe4056164b73078dce41d91c"
@@ -1587,7 +1587,7 @@ files:
     required: true
     category: bios_zip
     system: capcom-zn2
-    source_ref: "src/mame/sony/zn.cpp:6055"
+    source_ref: "src/mame/sony/zn.cpp:6053"
     contents:
       - name: m534002c-59.ic353
         size: 524288
@@ -1601,7 +1601,7 @@ files:
   - name: coh1000t.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/sony/zn.cpp:5989"
+    source_ref: "src/mame/sony/zn.cpp:5987"
     contents:
       - name: m534002c-14.ic353
         size: 524288
@@ -1615,7 +1615,7 @@ files:
   - name: coh1000a.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/sony/zn.cpp:6015"
+    source_ref: "src/mame/sony/zn.cpp:6013"
     contents:
       - name: m534002c-15.ic353
         size: 524288
@@ -1629,7 +1629,7 @@ files:
   - name: coh1000w.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/sony/zn.cpp:6024"
+    source_ref: "src/mame/sony/zn.cpp:6022"
     contents:
       - name: msm27c402zb.ic353
         size: 524288
@@ -1643,7 +1643,7 @@ files:
   - name: coh1001l.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/sony/zn.cpp:6028"
+    source_ref: "src/mame/sony/zn.cpp:6026"
     contents:
       - name: m534002c-17.ic353
         size: 524288
@@ -1657,7 +1657,7 @@ files:
   - name: coh1002v.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/sony/zn.cpp:6032"
+    source_ref: "src/mame/sony/zn.cpp:6030"
     contents:
       - name: coh-1002v.ic353
         size: 524288
@@ -1671,7 +1671,7 @@ files:
   - name: coh1002e.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/sony/zn.cpp:6038"
+    source_ref: "src/mame/sony/zn.cpp:6036"
     contents:
       - name: m27c402cz-54.ic353
         size: 524288
@@ -1685,7 +1685,7 @@ files:
   - name: coh1002m.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/sony/zn.cpp:6089"
+    source_ref: "src/mame/sony/zn.cpp:6087"
     contents:
       - name: m534002c-61.ic353
         size: 524288
@@ -1699,7 +1699,7 @@ files:
   - name: coh3002t.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/sony/taitogn.cpp:1341"
+    source_ref: "src/mame/sony/taitogn.cpp:1349"
     contents:
       - name: m534002c-60.ic353
         size: 524288
@@ -1718,22 +1718,22 @@ files:
         crc32: "c48c8236"
         sha1: "c6dad60266ce2ff635696bc0d91903c543273559"
       - name: f35-01_m27c800_v1.bin
-        description: G NET BIOS v1 flasher
+        description: "G NET BIOS v1 flasher"
         size: 1048576
         crc32: "cd15cc30"
         sha1: "78361f46fa7186d5058937c86c66247a86b1257f"
       - name: f35-01_m27c800.bin
-        description: G NET BIOS v2 flasher
+        description: "G NET BIOS v2 flasher"
         size: 1048576
         crc32: "6225ec11"
         sha1: "047852d456b6ff85f8e640887caa03cf3e63ffad"
       - name: f35-01_m27c800_modbios_mb-2009_dump_by_aje_fr.bin
-        description: MB2009
+        description: "MB2009"
         size: 1048576
         crc32: "6367aedf"
         sha1: "8400775e0c974c8b017e26ef9339144cad457c63"
       - name: f35-01_m27c800_modbios_mb-2011.bin
-        description: MB2011
+        description: "MB2011"
         size: 1048576
         crc32: "f98ae118"
         sha1: "c6918dfbb6fcf686dde4b731e84f740177ab31f0"
@@ -1741,7 +1741,7 @@ files:
   - name: coh1002t.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/sony/taitogn.cpp:1342"
+    source_ref: "src/mame/sony/taitogn.cpp:1350"
     contents:
       - name: m534002c-14.ic353
         size: 524288
@@ -1763,7 +1763,7 @@ files:
   - name: taitotz.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/taito/taitotz.cpp:3016"
+    source_ref: "src/mame/taito/taitotz.cpp:3014"
     contents:
       - name: e68-05-1.ic6
         size: 524288
@@ -1778,7 +1778,7 @@ files:
     required: true
     category: bios_zip
     system: super-kaneko-nova
-    source_ref: "src/mame/kaneko/suprnova.cpp:2135"
+    source_ref: "src/mame/kaneko/suprnova.cpp:2133"
     contents:
       - name: sknsj1.u10
         size: 524288
@@ -1840,22 +1840,22 @@ files:
     source_ref: "src/mame/misc/3do.cpp:565"
     contents:
       - name: panafz10.bin
-        description: Panasonic FZ-10 R.E.A.L. 3DO Interactive Multiplayer
+        description: "Panasonic FZ-10 R.E.A.L. 3DO Interactive Multiplayer"
         size: 1048576
         crc32: "58242cee"
         sha1: "3c912300775d1ad730dc35757e279c274c0acaad"
       - name: goldstar.bin
-        description: Goldstar 3DO Interactive Multiplayer v1.01m
+        description: "Goldstar 3DO Interactive Multiplayer v1.01m"
         size: 1048576
         crc32: "b6f5028b"
         sha1: "c4a2e5336f77fb5f743de1eea2cda43675ee2de7"
       - name: panafz1.bin
-        description: Panasonic FZ-1 R.E.A.L. 3DO Interactive Multiplayer
+        description: "Panasonic FZ-1 R.E.A.L. 3DO Interactive Multiplayer"
         size: 1048576
         crc32: "c8c8ff89"
         sha1: "34bf189111295f74d7b7dfc1f304d98b8d36325a"
       - name: sanyotry.bin
-        description: Sanyo TRY 3DO Interactive Multiplayer
+        description: "Sanyo TRY 3DO Interactive Multiplayer"
         size: 1048576
         crc32: "d5cbc509"
         sha1: "b01c53da256dde43ffec4ad3fc3adfa8d635e943"
@@ -1874,7 +1874,7 @@ files:
     required: true
     category: bios_zip
     system: hyper-neogeo64
-    source_ref: "src/mame/snk/hng64.cpp:3238"
+    source_ref: "src/mame/snk/hng64.cpp:3241"
     contents:
       - name: brom1.bin
         size: 524288
@@ -2013,7 +2013,7 @@ files:
     source_ref: "src/mame/amiga/alg.cpp:923"
     contents:
       - name: 315093-02.u2
-        description: Kickstart 1.3 (34.5)
+        description: "Kickstart 1.3 (34.5)"
         size: 262144
         crc32: "c4f0f55f"
         sha1: "891e9a547772fe0c6c19b610baf8bc4ea7fcb785"
@@ -2087,7 +2087,7 @@ files:
   - name: maxaflex.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/atari/maxaflex.cpp:448"
+    source_ref: "src/mame/atari/maxaflex.cpp:450"
     contents:
       - name: atarixl.rom
         size: 16384
@@ -2105,15 +2105,15 @@ files:
   - name: crysbios.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/misc/crystal.cpp:845"
+    source_ref: "src/mame/misc/crystal.cpp:847"
     contents:
       - name: mx27l1000.u14
-        description: AMG0110B PCB
+        description: "AMG0110B PCB"
         size: 131072
         crc32: "beff39a9"
         sha1: "b6f6dda58d9c82273f9422c1bd623411e58982cb"
       - name: mx27l1000-alt.u14
-        description: AMG0110D PCB
+        description: "AMG0110D PCB"
         size: 131072
         crc32: "1e8175c8"
         sha1: "f60c016be2ff11e47b2192acddb92676043af501"
@@ -2632,7 +2632,7 @@ files:
   - name: allied.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/pinball/allied.cpp:772"
+    source_ref: "src/mame/pinball/allied.cpp:775"
     contents:
       - name: 6530-009.u5
         size: 1024
@@ -2650,7 +2650,7 @@ files:
   - name: gp_110.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/pinball/gp_1.cpp:575"
+    source_ref: "src/mame/pinball/gp_1.cpp:577"
     contents:
       - name: a-110.u12
         size: 2048
@@ -2664,7 +2664,7 @@ files:
   - name: gts1.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/pinball/gts1.cpp:1070"
+    source_ref: "src/mame/pinball/gts1.cpp:1074"
     contents:
       - name: a1752cf.u5
         size: 2048
@@ -2678,7 +2678,7 @@ files:
   - name: recel.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/pinball/recel.cpp:546"
+    source_ref: "src/mame/pinball/recel.cpp:547"
     contents:
       - name: a2361.b1
         size: 1024
@@ -2692,100 +2692,100 @@ files:
   - name: slvrball.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/misc/silverball.cpp:259"
+    source_ref: "src/mame/misc/silverball.cpp:258"
     contents:
       - name: bios47.bin
-        description: BIOS47 (Acorp 694XT/694XT1)
+        description: "BIOS47 (Acorp 694XT/694XT1)"
         size: 262144
         crc32: "248910ed"
         sha1: "2901c94fb003e5eaea7e91127ad1f7953826a248"
       - name: bios46.bin
-        description: BIOS46 (Acorp 694XT/694XT1)
+        description: "BIOS46 (Acorp 694XT/694XT1)"
         size: 262144
         crc32: "90074f2b"
         sha1: "08fdabad6114ede03a15ce51dec775080585b650"
       - name: bios45.bin
-        description: BIOS45 (Acorp 694XT/694XT1)
+        description: "BIOS45 (Acorp 694XT/694XT1)"
         size: 262144
         crc32: "790d5db0"
         sha1: "6bbfb35275eb0c7bb740ff9b1e299042d4c5952a"
       - name: bios44.bin
-        description: BIOS44 (Acorp 694XT/694XT1)
+        description: "BIOS44 (Acorp 694XT/694XT1)"
         size: 262144
         crc32: "a4b2703e"
         sha1: "9baa5e3aaaf120054979039e42bf1bca2a50616e"
       - name: bios42.bin
-        description: BIOS42 (Acorp 694XT/694XT1)
+        description: "BIOS42 (Acorp 694XT/694XT1)"
         size: 262144
         crc32: "820c057e"
         sha1: "b553961c1bbb6b4afa366eb0dba7ed29ca148f5e"
       - name: bios41.bin
-        description: BIOS41 (Acorp 694XT/694XT1)
+        description: "BIOS41 (Acorp 694XT/694XT1)"
         size: 262144
         crc32: "0940aebd"
         sha1: "38c8645eed9e17ef8e2cd0856f929697ce13df74"
       - name: bios40.bin
-        description: BIOS40 (Acorp 694XT/694XT1)
+        description: "BIOS40 (Acorp 694XT/694XT1)"
         size: 262144
         crc32: "c5ed7d4f"
         sha1: "9fcffb385b5d68bf8cf87615ffee781f38f5fb74"
       - name: bios39.bin
-        description: BIOS39 (unknown motherboard)
+        description: "BIOS39 (unknown motherboard)"
         size: 262144
         crc32: "e7541a28"
         sha1: "dad1aff2cb142d65e7c8736064dce8004451ea4b"
       - name: bios38.bin
-        description: BIOS38 (unknown motherboard)
+        description: "BIOS38 (unknown motherboard)"
         size: 262144
         crc32: "cb49085b"
         sha1: "867b95ebef8fd53dad5b71cd4430ede08cf03540"
       - name: bios37.bin
-        description: BIOS37 (unknown motherboard)
+        description: "BIOS37 (unknown motherboard)"
         size: 262144
         crc32: "9f35e2d2"
         sha1: "83026fc9fc72f795bc3229af98099b409c9bdc81"
       - name: bios36.bin
-        description: BIOS36 (unknown motherboard)
+        description: "BIOS36 (unknown motherboard)"
         size: 262144
         crc32: "83ca05e9"
         sha1: "9d06677907c88481a167e52cc149995cfef0ff40"
       - name: bios35.bin
-        description: BIOS35 (unknown motherboard)
+        description: "BIOS35 (unknown motherboard)"
         size: 262144
         crc32: "d5a2f966"
         sha1: "4f4c9688501814bc00b4cde58ac590b6e961816e"
       - name: bios34.bin
-        description: BIOS34 (unknown motherboard)
+        description: "BIOS34 (unknown motherboard)"
         size: 262144
         crc32: "400702fe"
         sha1: "63a9e04d2ea3d4ace3e5c9f11cc62d0131bc4af0"
       - name: bios33.bin
-        description: BIOS33 (Soyo SY-7IZB+)
+        description: "BIOS33 (Soyo SY-7IZB+)"
         size: 262144
         crc32: "96658274"
         sha1: "1a5fc83cf84a4c774abc055688fa0c32c3784086"
       - name: bios32.bin
-        description: BIOS32 (Soyo SY-7IZB+)
+        description: "BIOS32 (Soyo SY-7IZB+)"
         size: 262144
         crc32: "63318d8a"
         sha1: "1194a30a65186f2d0a9e11742d51232598c16011"
       - name: bios31.bin
-        description: BIOS31 (Soyo SY-7IZB+)
+        description: "BIOS31 (Soyo SY-7IZB+)"
         size: 262144
         crc32: "5121b267"
         sha1: "97e51ed4d53d19ed69db1faba5395b46a1edb6b0"
       - name: bios30.bin
-        description: BIOS30 (Soyo SY-7IZB+)
+        description: "BIOS30 (Soyo SY-7IZB+)"
         size: 262144
         crc32: "c6e30fb1"
         sha1: "1d9a900a5383bf58b66a2e9f7fb34c61397dd327"
       - name: bios29.bin
-        description: BIOS29 (Soyo SY-5EAS)
+        description: "BIOS29 (Soyo SY-5EAS)"
         size: 131072
         crc32: "ddbd94f4"
         sha1: "60ad74e56265a7936cf19e8480c657223d11f2d0"
       - name: test.bin
-        description: TEST (Soyo SY-5EAS)
+        description: "TEST (Soyo SY-5EAS)"
         size: 131072
         crc32: "ddbd94f4"
         sha1: "60ad74e56265a7936cf19e8480c657223d11f2d0"
@@ -2824,62 +2824,62 @@ files:
     source_ref: "src/mame/itech/iteagle.cpp:756"
     contents:
       - name: eagle_u15_v209.u15
-        description: Eagle 40MB bootrom 2.09
+        description: "Eagle 40MB bootrom 2.09"
         size: 1048576
         crc32: "e0fc1a16"
         sha1: "c9524f7ee6b95bd484a3b75bcbe2243cb273f84c"
       - name: eagle_u15_v208.u15
-        description: Eagle 40MB bootrom 2.08
+        description: "Eagle 40MB bootrom 2.08"
         size: 1048576
         crc32: "772f2864"
         sha1: "085063a4e34f29ebe3814823cd2c6323a050da36"
       - name: eagle_u15_v204.u15
-        description: Eagle 40MB bootrom 2.04
+        description: "Eagle 40MB bootrom 2.04"
         size: 1048576
         crc32: "f02e5523"
         sha1: "b979cf72a6992f1ecad9695a08c8d51e315ab537"
       - name: eagle_u15_v201.u15
-        description: Eagle 40MB bootrom 2.01
+        description: "Eagle 40MB bootrom 2.01"
         size: 1048576
         crc32: "e180442b"
         sha1: "4f50821fed5bcd786d989520aa2559d6c416fb1f"
       - name: golf_fore_u15_v107.u15
-        description: Eagle 40MB bootrom 1.07
+        description: "Eagle 40MB bootrom 1.07"
         size: 1048576
         crc32: "97a01fc9"
         sha1: "a421dbf4d097b2f50cc005d3cd0d63e562e03df8"
       - name: golf_fore_u15_v106a.u15
-        description: Eagle 40MB bootrom 1.06a
+        description: "Eagle 40MB bootrom 1.06a"
         size: 1048576
         crc32: "9c79b7ad"
         sha1: "ccf1c86e79d65bee30f399e0fa33a7839570d93b"
       - name: golf_fore_u15_v106.u15
-        description: Eagle 40MB bootrom 1.06
+        description: "Eagle 40MB bootrom 1.06"
         size: 1048576
         crc32: "56bc193d"
         sha1: "e531d208ef27f777d0784414885f390d1be654b9"
       - name: golf_fore_u15_v105.u15
-        description: Eagle 40MB bootrom 1.05
+        description: "Eagle 40MB bootrom 1.05"
         size: 1048576
         crc32: "3870dbe0"
         sha1: "09be2d86c7259cd81d945c757044b167a76f30db"
       - name: golf_fore_u15_v103.u15
-        description: Eagle bootrom 1.03
+        description: "Eagle bootrom 1.03"
         size: 1048576
         crc32: "c35f4cf2"
         sha1: "45301c18c7f8f78754c8ad60ea4d2da5a7dc55fb"
       - name: bbh_u15_v102.u15
-        description: BBH 8meg bootrom 1.02
+        description: "BBH 8meg bootrom 1.02"
         size: 1048576
         crc32: "1fd39e73"
         sha1: "d1ac758f94defc5c55c62594b3999a406dd9ef1f"
       - name: golf_fore_u15_v102.u15
-        description: Eagle bootrom 1.02
+        description: "Eagle bootrom 1.02"
         size: 1048576
         crc32: "4c000c5e"
         sha1: "4fd5ea2a0874759b621c9cd52cee55d282443e5d"
       - name: golf_fore_u15_v101.u15
-        description: Eagle bootrom 1.01
+        description: "Eagle bootrom 1.01"
         size: 1048576
         crc32: "2600bc2b"
         sha1: "c4b89e69c51e4a3bb1874407c4d30b6caed4f396"
@@ -3092,57 +3092,57 @@ files:
     source_ref: "src/mame/pce/tourvis.cpp:448"
     contents:
       - name: v4-60.ic29
-        description: V4-60
+        description: "V4-60"
         size: 32768
         crc32: "1fd27e22"
         sha1: "b103d365eac3fa447c2e9addddf6974b4403ed41"
       - name: v4-55.ic29
-        description: V4-55
+        description: "V4-55"
         size: 32768
         crc32: "87cf66c1"
         sha1: "d6b42137be7a07a0e299c2d922328a6a9a2b7b8f"
       - name: v4-54.ic29
-        description: V4-54
+        description: "V4-54"
         size: 32768
         crc32: "125e7a6e"
         sha1: "6f03c49acaad4feb9c2187f84fc1cb5451d0eb2b"
       - name: v4-53.ic29
-        description: V4-53
+        description: "V4-53"
         size: 32768
         crc32: "bccb53c9"
         sha1: "a27113d70cf348c7eafa39fc7a76f55f63723ad7"
       - name: v4-52.ic29
-        description: V4-52
+        description: "V4-52"
         size: 32768
         crc32: "ffd7b0fe"
         sha1: "d1804865c91e925a01b05cf441e8458a3db23f50"
       - name: v4-51.ic29
-        description: V4-51
+        description: "V4-51"
         size: 32768
         crc32: "2de0b946"
         sha1: "c13051453aff3a2329f18ebade75c69aa3b1c28d"
       - name: v4-43.ic29
-        description: V4-43
+        description: "V4-43"
         size: 32768
         crc32: "88da23f3"
         sha1: "9d24faa116129783e55c7f79a4a08902a236d5a6"
       - name: v4-42.ic29
-        description: V4-42
+        description: "V4-42"
         size: 32768
         crc32: "0372606d"
         sha1: "8c6a63865b0b4951ea032725cf022d353115b93b"
       - name: v4-40.ic29
-        description: V4-40
+        description: "V4-40"
         size: 32768
         crc32: "ba6290cc"
         sha1: "92b0e9f55791e892ec209de4fadd80faef370622"
       - name: vt_2.0.bin
-        description: VT-20
+        description: "VT-20"
         size: 32768
         crc32: "36012f88"
         sha1: "5bd42fb51aa48ff65e704ea06a9181bb87ed2137"
       - name: vt_1.1.bin
-        description: VT-11
+        description: "VT-11"
         size: 32768
         crc32: "27abbc36"
         sha1: "881ea7802b9e241473bc8ced0472e0f1851c9886"
@@ -3150,7 +3150,7 @@ files:
   - name: v4bios.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/barcrest/mpu4vid.cpp:8698"
+    source_ref: "src/mame/barcrest/mpu4vid.cpp:8696"
     contents:
       - name: vid.p1
         size: 65536
@@ -3170,15 +3170,15 @@ files:
   - name: pumpitup.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/misc/xtom3d.cpp:997"
+    source_ref: "src/mame/misc/xtom3d.cpp:996"
     contents:
       - name: mk3_1.0_bios.u22
-        description: mk3 v1.0
+        description: "mk3 v1.0"
         size: 131072
         crc32: "a2b5546b"
         sha1: "d99d29615e2b9c8784e03d4270cf7bb6569f389d"
       - name: mk3_1.1_bios.u22
-        description: mk3 v1.1
+        description: "mk3 v1.1"
         size: 131072
         crc32: "4540c23f"
         sha1: "bba697dbe234e4f14c23aac126ea36df216f8c93"
@@ -3360,17 +3360,17 @@ files:
     source_ref: "src/devices/bus/adamnet/fdc.cpp:76"
     contents:
       - name: 320ta.u10
-        description: Minh Ta?
+        description: "Minh Ta?"
         size: 4096
         crc32: "dcd865b3"
         sha1: "dde583e0d18ce4406e9ea44ab34d083e73ee30e2"
       - name: dbl2-4.u10
-        description: DBL
+        description: "DBL"
         size: 4096
         crc32: "5df49f15"
         sha1: "43d5710e4fb05f520e813869a049585b41ada86b"
       - name: pmhdfdc.u10
-        description: PMHD
+        description: "PMHD"
         size: 4096
         crc32: "fed4006c"
         sha1: "bc8dd00dd5cde9500a4cd7dc1e4d74330184472a"
@@ -3441,17 +3441,17 @@ files:
     source_ref: "src/mame/apf/apf.cpp:642"
     contents:
       - name: apf_4000.rom
-        description: Standard
+        description: "Standard"
         size: 2048
         crc32: "cc6ac840"
         sha1: "1110a234bcad99bd0894ad44c591389d16376ca4"
       - name: trash-ii.bin
-        description: Trash II
+        description: "Trash II"
         size: 4096
         crc32: "3bd8640a"
         sha1: "da4cd8163990adbc5acd3eab604b41e1066bb832"
       - name: mod_bios.bin
-        description: Mod BIOS
+        description: "Mod BIOS"
         size: 4096
         crc32: "f320aba6"
         sha1: "9442349fca8b001a5765e2fe8b84db4ece7886c1"
@@ -3527,22 +3527,22 @@ files:
     source_ref: "src/mame/camputers/camplynx.cpp:1033"
     contents:
       - name: lynx48-1.ic46
-        description: Set1
+        description: "Set1"
         size: 8192
         crc32: "56feec44"
         sha1: "7ded5184561168e159a30fa8e9d3fde5e52aa91a"
       - name: lynx48-2.ic45
-        description: Set1
+        description: "Set1"
         size: 8192
         crc32: "d894562e"
         sha1: "c08a78ecb4eb05baa4c52488fce3648cd2688744"
       - name: lynx4811.ic46
-        description: Set2
+        description: "Set2"
         size: 8192
         crc32: "a933e577"
         sha1: "c7b30a28d99b38dbe63a1314c78e3e614287143b"
       - name: lynx4812.ic45
-        description: Set2
+        description: "Set2"
         size: 8192
         crc32: "3d3fdd0e"
         sha1: "259d124f05367a96f891790f9418cc9c7798e2f8"
@@ -3562,17 +3562,17 @@ files:
         crc32: "f596b9a3"
         sha1: "3fca46bd68422d34c6cd801dd904507e52bd8846"
       - name: lynx9644.ic44
-        description: Original
+        description: "Original"
         size: 4096
         crc32: "4b96b0de"
         sha1: "c372a8d26399b9b45e615b674d61ccda76491b8b"
       - name: skorprom.ic44
-        description: Scorpion
+        description: "Scorpion"
         size: 8192
         crc32: "698d3de9"
         sha1: "c707bdcecef79774c2a8a23d1f3e9ba382cb9304"
       - name: danish96k3.ic44
-        description: Danish
+        description: "Danish"
         size: 8192
         crc32: "795c22ea"
         sha1: "0a57394cd986c5b338b38d514e894bace7f6e47b"
@@ -3643,11 +3643,11 @@ files:
     system: crvision
     source_ref: "src/mame/vtech/crvision.cpp:975"
     contents:
-      - name: 01
+      - name: "01"
         size: 8192
         crc32: "702f4cf5"
         sha1: "cd14ee74e787d24b76c166de484dae24206e219b"
-      - name: 23
+      - name: "23"
         size: 8192
         crc32: "46489d88"
         sha1: "467f5bcd62d0b4117c443e13373df8f3c45df7b2"
@@ -3659,12 +3659,12 @@ files:
     source_ref: "src/mame/vtech/vtech1.cpp:628"
     contents:
       - name: vtechv20.u12
-        description: BASIC V2.0
+        description: "BASIC V2.0"
         size: 16384
         crc32: "613de12c"
         sha1: "f216c266bc09b0dbdbad720796e5ea9bc7d91e53"
       - name: vtechv21.u12
-        description: BASIC V2.1 (hack)
+        description: "BASIC V2.1 (hack)"
         size: 16384
         crc32: "f7df980f"
         sha1: "5ba14a7a2eedca331b033901080fa5d205e245ea"
@@ -3703,17 +3703,17 @@ files:
     source_ref: "src/mame/vtech/vsmile.cpp:403"
     contents:
       - name: vsmile_v103.bin
-        description: v103
+        description: "v103"
         size: 2097152
         crc32: "387fbc24"
         sha1: "5f2fd211b6ff3a6f5121b14adc6bbf4f49e89f33"
       - name: vsmile_v102.bin
-        description: v102
+        description: "v102"
         size: 2097152
         crc32: "0cd0bdf5"
         sha1: "5c8d1eada1b6b545555b8d2b09325d7127681af8"
       - name: vsmile_v100.bin
-        description: v100
+        description: "v100"
         size: 2097152
         crc32: "205c5296"
         sha1: "7fbcf761b5885c8b1524607aabaf364b4559c8cc"
@@ -3725,12 +3725,12 @@ files:
     source_ref: "src/mame/bitcorp/gamate.cpp:240"
     contents:
       - name: gamate_bios_umc.bin
-        description: DEFAULT
+        description: "DEFAULT"
         size: 4096
         crc32: "07090415"
         sha1: "ea449dc607601f9a68d855ad6ab53800d2e99297"
       - name: gamate_bios_bit.bin
-        description: NEWER
+        description: "NEWER"
         size: 4096
         crc32: "03a5f3a7"
         sha1: "4e9dfbfe916ca485530ef4221593ab68738e2217"
@@ -3779,27 +3779,27 @@ files:
     source_ref: "src/mame/gamepark/gp32.cpp:1727"
     contents:
       - name: gp32157e.bin
-        description: Firmware 1.5.7 (English)
+        description: "Firmware 1.5.7 (English)"
         size: 524288
         crc32: "b1e35643"
         sha1: "1566bc2a27980602e9eb501cf8b2d62939bfd1e5"
       - name: gp32100k.bin
-        description: Firmware 1.0.0 (Korean)
+        description: "Firmware 1.0.0 (Korean)"
         size: 524288
         crc32: "d9925ac9"
         sha1: "3604d0d7210ed72eddd3e3e0c108f1102508423c"
       - name: gp32156k.bin
-        description: Firmware 1.5.6 (Korean)
+        description: "Firmware 1.5.6 (Korean)"
         size: 524288
         crc32: "667fb1c8"
         sha1: "d179ab8e96411272b6a1d683e59da752067f9da8"
       - name: gp32166m.bin
-        description: Firmware 1.6.6 (European)
+        description: "Firmware 1.6.6 (European)"
         size: 524288
         crc32: "4548a840"
         sha1: "1ad0cab0af28fb45c182e5e8c87ead2aaa4fffe1"
       - name: gp32mfv2.bin
-        description: Mr. Spiv Multi Firmware V2
+        description: "Mr. Spiv Multi Firmware V2"
         size: 524288
         crc32: "7ddaaaeb"
         sha1: "5a85278f721beb3b00125db5c912d1dc552c5897"
@@ -3914,42 +3914,42 @@ files:
     source_ref: "src/mame/ausnz/pegasus.cpp:575"
     contents:
       - name: mon11_2674.bin
-        description: Monitor 1.1 r2674
+        description: "Monitor 1.1 r2674"
         size: 4096
         crc32: "1640ff7e"
         sha1: "8199643749fb40fb8be05e9f311c75620ca939b1"
       - name: mon10_2569.bin
-        description: Monitor 1.0 r2569
+        description: "Monitor 1.0 r2569"
         size: 4096
         crc32: "910fc930"
         sha1: "a4f6bbe5def0268cc49ee7045616a39017dd8052"
       - name: mon11_2569.bin
-        description: Monitor 1.1 r2569
+        description: "Monitor 1.1 r2569"
         size: 4096
         crc32: "07b92002"
         sha1: "3c434601120870c888944ecd9ade5186432ddbc2"
       - name: mon11_2669.bin
-        description: Monitor 1.1 r2669
+        description: "Monitor 1.1 r2669"
         size: 4096
         crc32: "f3ee23c8"
         sha1: "3ac96935668f5e53799c90db5140393c2ef9ce36"
       - name: mon22_2856.bin
-        description: Monitor 2.2 r2856
+        description: "Monitor 2.2 r2856"
         size: 4096
         crc32: "5f5f688a"
         sha1: "3719eecc347e158dd027ea7aa8a068cdafc00d9b"
       - name: mon22b_2856.bin
-        description: Monitor 2.2B r2856
+        description: "Monitor 2.2B r2856"
         size: 4096
         crc32: "a47b0308"
         sha1: "f215e51aa8df6aed99c10f3df6a3589cb9f63d46"
       - name: mon23_2601.bin
-        description: Monitor 2.3 r2601
+        description: "Monitor 2.3 r2601"
         size: 4096
         crc32: "0e024222"
         sha1: "9950cba08996931b9d5a3368b44c7309638b4e08"
       - name: mon23a_2569.bin
-        description: Monitor 2.3A r2569
+        description: "Monitor 2.3A r2569"
         size: 4096
         crc32: "248e62c9"
         sha1: "adbde27e69b38b29ff89bacf28d0240a8e5d90f3"
@@ -4025,32 +4025,32 @@ files:
     source_ref: "src/mame/trs/trs80.cpp:681"
     contents:
       - name: rom-a.z1
-        description: Radio Shack Level II Basic
+        description: "Radio Shack Level II Basic"
         size: 4096
         crc32: "37c59db2"
         sha1: "e8f8f6a4460a6f6755873580be6ff70cebe14969"
       - name: rom-b.z2
-        description: Radio Shack Level II Basic
+        description: "Radio Shack Level II Basic"
         size: 4096
         crc32: "05818718"
         sha1: "43c538ca77623af6417474ca5b95fb94205500c1"
       - name: rom-c.z3
-        description: Radio Shack Level II Basic
+        description: "Radio Shack Level II Basic"
         size: 4096
         crc32: "306e5d66"
         sha1: "1e1abcfb5b02d4567cf6a81ffc35318723442369"
       - name: rom-a_alt.z1
-        description: R/S L2 Basic
+        description: "R/S L2 Basic"
         size: 4096
         crc32: "be46faf5"
         sha1: "0e63fc11e207bfd5288118be5d263e7428cc128b"
       - name: rom-b_alt.z2
-        description: R/S L2 Basic
+        description: "R/S L2 Basic"
         size: 4096
         crc32: "6c791c2d"
         sha1: "2a38e0a248f6619d38f1a108eea7b95761cf2aee"
       - name: rom-c_alt.z3
-        description: R/S L2 Basic
+        description: "R/S L2 Basic"
         size: 4096
         crc32: "55b3ad13"
         sha1: "6279f6a68f927ea8628458b278616736f0b3c339"
@@ -4201,52 +4201,52 @@ files:
     source_ref: "src/mame/trs/trs80m3.cpp:569"
     contents:
       - name: 8041364.u104
-        description: Level 2 bios, RomC Rev C
+        description: "Level 2 bios, RomC Rev C"
         size: 8192
         crc32: "ec0c6daa"
         sha1: "257cea6b9b46912d4681251019ec2b84f1b95fc8"
       - name: 8040332.u105
-        description: Level 2 bios, RomC Rev C
+        description: "Level 2 bios, RomC Rev C"
         size: 4096
         crc32: "ed4ee921"
         sha1: "ec0a19d4b72f71e51965de63250009c3c4e4cab3"
       - name: 8040316c.u106
-        description: Level 2 bios, RomC Rev C
+        description: "Level 2 bios, RomC Rev C"
         size: 2048
         crc32: "c8f79433"
         sha1: "6f395bba822d39d3cd2b73c8ea25aab4c4c26da7"
       - name: 8041364.u104
-        description: Level 2 bios, RomC Rev B
+        description: "Level 2 bios, RomC Rev B"
         size: 8192
         crc32: "ec0c6daa"
         sha1: "257cea6b9b46912d4681251019ec2b84f1b95fc8"
       - name: 8040332.u105
-        description: Level 2 bios, RomC Rev B
+        description: "Level 2 bios, RomC Rev B"
         size: 4096
         crc32: "ed4ee921"
         sha1: "ec0a19d4b72f71e51965de63250009c3c4e4cab3"
       - name: 8040316b.u106
-        description: Level 2 bios, RomC Rev B
+        description: "Level 2 bios, RomC Rev B"
         size: 2048
         crc32: "84a5702d"
         sha1: "297dca756a9d3c6fd13e0fa6f93d172ff795b520"
       - name: 8041364.u104
-        description: Level 2 bios, Network III v2 (student)
+        description: "Level 2 bios, Network III v2 (student)"
         size: 8192
         crc32: "ec0c6daa"
         sha1: "257cea6b9b46912d4681251019ec2b84f1b95fc8"
       - name: 8040332.u105
-        description: Level 2 bios, Network III v2 (student)
+        description: "Level 2 bios, Network III v2 (student)"
         size: 4096
         crc32: "ed4ee921"
         sha1: "ec0a19d4b72f71e51965de63250009c3c4e4cab3"
       - name: 276a.u106
-        description: Level 2 bios, Network III v2 (student)
+        description: "Level 2 bios, Network III v2 (student)"
         size: 2048
         crc32: "7d38720a"
         sha1: "bef621e5ae2a8c1f9e7f6325b7841f5ab8ab7e6a"
       - name: 8040032.u104
-        description: Level 1 bios
+        description: "Level 1 bios"
         size: 4096
         crc32: "6418d641"
         sha1: "f823ab6ceb102588d27e5f5c751e31175289291c"
@@ -4278,12 +4278,12 @@ files:
     source_ref: "src/mame/trs/trs80m3.cpp:571"
     contents:
       - name: 8075332.u69
-        description: Level 2 bios, gate array machine
+        description: "Level 2 bios, gate array machine"
         size: 4096
         crc32: "3a738aa9"
         sha1: "6393396eaa10a84b9e9f0cf5930aba73defc5c52"
       - name: trs80m4p_loader_hack.rom
-        description: Disk loader hack
+        description: "Disk loader hack"
         size: 504
         crc32: "7ff336f4"
         sha1: "41184f5240b4b54f3804f5a22b4d78bbba52ed1d"
@@ -4375,12 +4375,12 @@ files:
     source_ref: "src/mame/philips/vg5k.cpp:479"
     contents:
       - name: vg5k11.bin
-        description: BASIC v1.1
+        description: "BASIC v1.1"
         size: 16384
         crc32: "a6f4a0ea"
         sha1: "58eccce33cc21fc17bc83921018f531b8001eda3"
       - name: vg5k10.bin
-        description: BASIC v1.0
+        description: "BASIC v1.0"
         size: 16384
         crc32: "57983260"
         sha1: "5ad1787a6a597b5c3eedb7c3704b649faa9be4ca"
