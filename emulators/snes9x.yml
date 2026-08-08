@@ -42,7 +42,7 @@ files:
     required: false
     size: 262144
     validation: [size]
-    source_ref: "libretro.cpp:1203, libretro.cpp:1317, memmap.cpp:1688"
+    source_ref: "libretro.cpp:1203, libretro.cpp:1317, memmap.cpp:1704"
     note: "Needed for Sufami Turbo multi-cart games."
 
 notes:

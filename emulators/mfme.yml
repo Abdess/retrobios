@@ -1,0 +1,672 @@
+emulator: MFME
+type: standalone
+core_classification: embedded_hle
+source: "https://www.desertislandfruits.com/"
+upstream: closed-source
+profiled_date: "2026-08-08"
+core_version: "20.1"
+display_name: "MFME (Fruit Machines)"
+cores:
+  - mfme
+  - mfme-windows
+systems:
+  - fruitmachine
+mode: standalone
+
+notes: |
+  Closed-source Delphi emulator for British and European fruit machines, written
+  by Chris Wren (Wizard) and distributed as a Windows installer. MFME.exe carries
+  FileVersion 20.1.0.0, FileDescription "Multiple Fruit Machine Emulator" and
+  copyright "C.J.Wren 1997-2020"; the installer targets Windows 10, defaults to
+  C:\MFME\v20 (history.txt:323) and writes HKCU\Software\CJW\MFME. The binary is
+  ASPack compressed, imports dinput8, xaudio2_9, d2d1 and d3d11 for input, sound
+  and the hardware accelerated scaler added in v19.0 (history.txt:8-9), and holds
+  its layout engine in Delphi units around an EasyCompression Library core.
+  Development ended with the author's death and Update.exe, reached from File ->
+  Check For Updates (history.txt:235), no longer finds a server, leaving 20.1 as
+  the last build. ES-DE calls MFME.exe with a .gam path and the working directory
+  set to the emulator folder, through find rules MFME and MFME-WINDOWS, and runs
+  it under Wine or Proton on Linux; .gam is in the arcade and mame extension
+  lists.
+
+  A machine is a folder holding a .gam file, the .fml layout it names and the ROM
+  set. The .gam is plain text: a System line naming the tech, DIP switch, reel,
+  stake, jackpot, percentage and meter state, a Layout line naming the .fml, a
+  Game line, and one ROM line per ROM file. Layouts before v5 used .dat and are
+  converted by loading them in v5 or v6 and saving; v20 loads .fml only. The .fml
+  is an AACS container whose password is derived from a four byte seed at the end
+  of the file through a mixer, hashed with RIPEMD-128 into a Rijndael key, and
+  each chunk is zlib compressed; it holds the Delphi layout stream with every
+  bitmap embedded, carries no external file path, and text components name a font
+  family rather than a font file. MFME.exe takes the .gam path as its only
+  argument (history.txt:271).
+
+  ROM sets are per machine and self contained. Barcrest S4 and S5 sets are .LO and
+  .HI program files with a .BIN sound ROM, MPU5 sets are .p1 to .p4, and other
+  techs use .hex or .rom members named by the .gam. Fruit machine hardware has no
+  system BIOS, so nothing is shared between machines, and sound ROMs belong to the
+  machine as well: an S4 game whose sound ROMs are absent still runs and reports
+  Wrong Snd Err (history.txt:301). v20.0 added an automatic ROM download for DIF
+  legacy layouts (history.txt:293). Ctrl-K resets a game with its alternate ROM
+  set (tips.txt).
+
+  Effect samples are the mechanical cabinet sounds MFME plays itself, distinct
+  from the game audio the sound ROM produces. Each effect has a fixed filename
+  resolved in the game folder first, then DefaultSounds\Custom\<tech>\<cabinet
+  style>, then DefaultSounds (DefaultSounds/Readme.txt:78-84), and files are
+  opened when required rather than at layout load (history.txt:210-211). A
+  preference forces the defaults over the ones a layout selects
+  (history.txt:219). The distribution ships Custom folders for 40 techs: ACEVIDEO,
+  ADDER5, ASTRASYSA1, BLACKBOX, COINMASTER, ELECTROCOIN, EPOCH, IGTS+, IGTS2000,
+  IMPACT, INDER, M1AB, M1VIDEO, MACH2000A, MACH2000E, MACH2000S, MMM, MPS2, MPU2,
+  MPU3, MPU4, MPU4PLASMA, MPU4VIDEO, MPU5, PCLMAXI, PHOENIX, PHOENIX2, PLUTO5,
+  PROCONN, SCORPION1, SCORPION2, SCORPION4, SCORPION5, SRU, SYS1, SYS5, SYS83,
+  SYS85, SYSTEM80 and spACE, with cabinet subfolders Eclipse for ADDER5,
+  SCORPION4 and SCORPION5, Elegance for EPOCH, and Genesis for MPU4 and MPU5.
+  DefaultSounds/Readme.txt:35-37 lists the electronic token mech effects as
+  CoinInToken, CoinInTokenSwitch and CoinInTokenRejected; the files that ship and
+  the entry that introduced them name them TokenIn, TokenInSwitch and
+  TokenInRejected (history.txt:80).
+
+  Three shipped directories are enumerated rather than looked up by name and
+  therefore expect no particular filename. DefaultBackdrops and DefaultTiles hold
+  the images offered as a backdrop or tiled background in the full screen modes,
+  picked at random when the preference is set (history.txt:48, 55-56), and ship
+  one wallpaper and six tiles. DefaultSounds/MiscSounds holds alternate payout,
+  coin and note recordings that a user copies over an effect name. Fonts is
+  scanned for the fonts a layout names, so its contents grow with the layouts
+  installed.
+
+files:
+  # -- Output hardware library --
+
+  - name: PacDrive32.dll
+    system: fruitmachine
+    required: true
+    bundled: true
+    description: "Ultimarc PacDrive, PacLed64 and UltimateIO output library"
+    source_ref: "MFME.exe import directory, history.txt:278-279"
+    note: >-
+      Listed in the MFME.exe import descriptors, so the Windows loader resolves it
+      at process start and MFME does not launch when it is absent from the
+      application directory. Drives real cabinet lamps, hoppers and meters through
+      Ultimarc boards; v20.0 updated the library and added PacLed64 and UltimateIO
+      support.
+
+  # -- Fonts, scanned from the Fonts folder beside MFME.exe --
+
+  - name: LITHOGRB.TTF
+    system: fruitmachine
+    path: "Fonts/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Lithograph Bold, the font layouts name for machine text"
+    source_ref: "history.txt:38, 309"
+    note: >-
+      v19.0 moved font loading from installed system fonts to the Fonts folder
+      where MFME is located. Layouts store a font family name, not a file: the
+      decoded layout stream names Lithograph. A layout whose font is missing shows
+      the name in red in the properties screen and renders with a substitute.
+
+  - name: LITHOGRL.TTF
+    system: fruitmachine
+    path: "Fonts/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Lithograph Light, the font layouts name for machine text"
+    source_ref: "history.txt:38, 309"
+    note: "Same mechanism as LITHOGRB.TTF, the light weight of the same family."
+
+  - name: MFME.ttf
+    system: fruitmachine
+    path: "Fonts/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "MFME segment and display font"
+    source_ref: "history.txt:38, 168"
+    note: "Shipped font used by MFME's own displays, updated in v19.5."
+
+  # -- Reel masks, applied when the Default option is selected --
+
+  - name: ReelGradientMask.bmp
+    system: fruitmachine
+    path: "DefaultMasks/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Reel gradient mask applied to reel bands"
+    source_ref: "DefaultMasks/Readme.txt:1"
+    note: >-
+      Used when the Default option is chosen for the mask in the reel properties
+      window. A custom mask stored in the layout replaces it.
+
+  - name: ReelLampMask.bmp
+    system: fruitmachine
+    path: "DefaultMasks/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Reel lamp mask applied to reel bands"
+    source_ref: "DefaultMasks/Readme.txt:1"
+    note: "Same mechanism as ReelGradientMask.bmp, for the reel lamp overlay."
+
+  # -- Payout solenoid slides --
+
+  - name: 2pSlide.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "2p payout solenoid"
+    source_ref: "DefaultSounds/Readme.txt:9, history.txt:44"
+
+  - name: 10pSlide.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "10p payout solenoid"
+    source_ref: "DefaultSounds/Readme.txt:10"
+
+  - name: 20pSlide.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "20p payout solenoid"
+    source_ref: "DefaultSounds/Readme.txt:11"
+
+  - name: 50pSlide.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "50p payout solenoid"
+    source_ref: "DefaultSounds/Readme.txt:12"
+
+  - name: PoundSlide.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "One pound payout solenoid"
+    source_ref: "DefaultSounds/Readme.txt:13"
+
+  - name: TokenSlide.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "10p and 20p token payout solenoid"
+    source_ref: "DefaultSounds/Readme.txt:14"
+
+  - name: MiscSlide.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Five by 50p slide"
+    source_ref: "DefaultSounds/Readme.txt:15"
+
+  # -- Meters and buttons --
+
+  - name: meter.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Electromechanical meter step"
+    source_ref: "DefaultSounds/Readme.txt:17"
+    note: "Listed as Meter.wav in the readme, shipped as meter.wav."
+
+  - name: ButtonDown.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Layout button pressed"
+    source_ref: "DefaultSounds/Readme.txt:19"
+    note: "PROCONN ships its own copy under DefaultSounds/Custom/PROCONN/."
+
+  - name: ButtonUp.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Layout button released"
+    source_ref: "DefaultSounds/Readme.txt:20"
+    note: "PROCONN ships its own copy under DefaultSounds/Custom/PROCONN/."
+
+  # -- Hoppers --
+
+  - name: HopperMotor1.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Hopper 1 motor running"
+    source_ref: "DefaultSounds/Readme.txt:22"
+    note: >-
+      Cabinet specific copies ship under DefaultSounds/Custom/ for ADDER5/Eclipse,
+      EPOCH/Elegance, MPU4/Genesis, MPU5/Genesis, SCORPION4/Eclipse and
+      SCORPION5/Eclipse.
+
+  - name: HopperCoin1.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Coin paid out from hopper 1"
+    source_ref: "DefaultSounds/Readme.txt:23"
+    note: "Same cabinet specific copies as HopperMotor1.wav."
+
+  - name: HopperMotor2.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Hopper 2 motor running"
+    source_ref: "DefaultSounds/Readme.txt:24"
+    note: "Same cabinet specific copies as HopperMotor1.wav."
+
+  - name: HopperCoin2.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Coin paid out from hopper 2"
+    source_ref: "DefaultSounds/Readme.txt:25"
+    note: >-
+      Same cabinet specific copies as HopperMotor1.wav, plus an alternate in
+      DefaultSounds/MiscSounds/.
+
+  # -- Note acceptor --
+
+  - name: NoteIn.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Note inserted into the note acceptor"
+    source_ref: "DefaultSounds/Readme.txt:27"
+
+  - name: NoteInReject.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Note rejected by the note acceptor"
+    source_ref: "DefaultSounds/Readme.txt:28"
+
+  - name: NoteInStack.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Note accepted and sent to the stacker"
+    source_ref: "DefaultSounds/Readme.txt:29"
+
+  # -- Roll down electronic coin mech --
+
+  - name: CoinIn.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Coin inserted into a roll down electronic mech"
+    source_ref: "DefaultSounds/Readme.txt:31"
+
+  - name: CoinInSwitch.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Coin accepted by the mech"
+    source_ref: "DefaultSounds/Readme.txt:32"
+
+  - name: CoinInRejected.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Coin rejected by the mech into the payout tray"
+    source_ref: "DefaultSounds/Readme.txt:33"
+
+  - name: TokenIn.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Token inserted into an electronic token mech"
+    source_ref: "history.txt:80, DefaultSounds/Readme.txt:35"
+
+  - name: TokenInSwitch.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Token accepted by an electronic token mech"
+    source_ref: "history.txt:80, DefaultSounds/Readme.txt:36"
+
+  - name: TokenInRejected.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Token rejected by an electronic token mech"
+    source_ref: "history.txt:80, DefaultSounds/Readme.txt:37"
+
+  # -- S1 and S10 mechs --
+
+  - name: CoinInS1.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Coin inserted in an S1 type mech"
+    source_ref: "history.txt:148"
+
+  - name: CoinInS1Switch.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Coin accepted by an S1 type mech"
+    source_ref: "history.txt:148"
+
+  - name: CoinInS1Token.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Token inserted in an S1 token type mech"
+    source_ref: "history.txt:148"
+
+  - name: CoinInS1TokenSwitch.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Token accepted by an S1 token type mech"
+    source_ref: "history.txt:148"
+
+  - name: CoinInS10.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Coin inserted in an S1 or S10 type mech"
+    source_ref: "DefaultSounds/Readme.txt:39"
+
+  - name: CoinInS10Rejected.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Coin rejected from an S10 type mech"
+    source_ref: "DefaultSounds/Readme.txt:40, history.txt:47, 153"
+
+  - name: CoinInS10Switch.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Coin accepted by an S1 or S10 type mech"
+    source_ref: "DefaultSounds/Readme.txt:41, history.txt:47"
+
+  - name: CoinInS10Token.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Token inserted in an S10 token type mech"
+    source_ref: "DefaultSounds/Readme.txt:43"
+
+  - name: CoinInS10TokenRejected.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Token rejected from an S10 token type mech"
+    source_ref: "DefaultSounds/Readme.txt:44, history.txt:47, 153"
+
+  - name: CoinInS10TokenSwitch.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Token accepted by an S10 token type mech"
+    source_ref: "DefaultSounds/Readme.txt:45, history.txt:47"
+
+  - name: S1Locked.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Coin refused by a locked out S1 mech"
+    source_ref: "DefaultSounds/Readme.txt:50"
+
+  # -- Comparator mech --
+
+  - name: CoinInDrop.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Coin inserted in a comparator style mech"
+    source_ref: "DefaultSounds/Readme.txt:47"
+
+  - name: CoinDropReject.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Coin rejected from a comparator style mech"
+    source_ref: "DefaultSounds/Readme.txt:48"
+
+  # -- Lockout solenoid --
+
+  - name: LockoutOn.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Lockout solenoid activated"
+    source_ref: "DefaultSounds/Readme.txt:52"
+
+  - name: LockoutOff.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Lockout solenoid deactivated"
+    source_ref: "DefaultSounds/Readme.txt:53"
+
+  # -- Stepper reels --
+
+  - name: Stepper.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "SRU, SYS80 and MPS2 200 step reel motor"
+    source_ref: "DefaultSounds/Readme.txt:55, history.txt:74"
+    note: >-
+      Shipped only as tech copies under DefaultSounds/Custom/ for ELECTROCOIN,
+      MPS2, SRU and SYSTEM80, and as stepper.wav for M1AB. Reel effects were
+      extended to Maygay M1a and made available to other techs in v20.0.
+
+  # -- Prize vend --
+
+  - name: PrizeMotor.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Prize vend motor started"
+    source_ref: "DefaultSounds/Readme.txt:57"
+
+  - name: PrizeVend.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Prize dispensed"
+    source_ref: "DefaultSounds/Readme.txt:58"
+    note: "Listed as Prizevend.wav in the readme, shipped as PrizeVend.wav."
+
+  # -- Pull handle --
+
+  - name: PullHandleSlow.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Pull handle drawn slowly"
+    source_ref: "DefaultSounds/Readme.txt:60, history.txt:207"
+
+  - name: PullHandleNormal.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Pull handle drawn at normal speed"
+    source_ref: "DefaultSounds/Readme.txt:61, history.txt:207"
+
+  - name: PullHandleFast.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Pull handle drawn quickly"
+    source_ref: "DefaultSounds/Readme.txt:62, history.txt:207"
+
+  - name: PullHandleRelease.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Pull handle released"
+    source_ref: "DefaultSounds/Readme.txt:63, history.txt:207"
+
+  # -- Electromechanical cabinets --
+
+  - name: MotorOn.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Reel motor activated on an EM machine"
+    source_ref: "DefaultSounds/Readme.txt:68"
+
+  - name: Wiper.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Reel with studs spinning on an EM machine"
+    source_ref: "DefaultSounds/Readme.txt:69"
+
+  - name: SolenoidOn.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Reel solenoid activated on an EM machine"
+    source_ref: "DefaultSounds/Readme.txt:70"
+
+  - name: SolenoidOff.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Reel solenoid deactivated on an EM machine"
+    source_ref: "DefaultSounds/Readme.txt:71"
+
+  - name: BellOn.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Bell switched on"
+    source_ref: "DefaultSounds/Readme.txt:72"
+
+  - name: BellOff.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Bell switched off"
+    source_ref: "DefaultSounds/Readme.txt:73"
+
+  - name: Buzzer.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    bundled: true
+    category: game_data
+    description: "Nudge buzzer activated"
+    source_ref: "DefaultSounds/Readme.txt:74"
+
+  - name: Sounder.wav
+    system: fruitmachine
+    path: "DefaultSounds/"
+    required: false
+    category: game_data
+    description: "Feature sounder activated on an EM machine"
+    source_ref: "DefaultSounds/Readme.txt:75"
+    note: "Effect name documented by MFME with no sample in the distribution."

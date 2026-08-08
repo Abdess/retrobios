@@ -4,7 +4,7 @@ core_classification: official_port
 source: "https://github.com/hex007/freej2me"
 upstream: "https://github.com/hex007/freej2me"
 profiled_date: "2026-03-23"
-source_commit: "6c534cb88d429ec638d84381185b9aa808c8b584"
+source_commit: "b1c4cf13e012938f9d5270621fddea60e5554858"
 core_version: "GIT"
 display_name: "Mobile - J2ME (FreeJ2ME)"
 cores:

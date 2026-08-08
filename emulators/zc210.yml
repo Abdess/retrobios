@@ -6,6 +6,7 @@ upstream: https://www.zeldaclassic.com/
 core_version: "2.10 Beta 5"
 display_name: Zelda Classic v2.10 (ZC210)
 profiled_date: "2026-03-26"
+source_commit: "b6426da40b074245fda097fd345fa7c9cdbf152a"
 cores:
   - zc210
 systems:

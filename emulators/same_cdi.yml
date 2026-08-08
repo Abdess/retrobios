@@ -76,7 +76,7 @@ files:
     system: cdi
     required: false
     note: "CD-i Mono-II (NTSC). MACHINE_NOT_WORKING. Listed in .info as optional."
-    source_ref: "src/mame/drivers/cdi.cpp:463-472"
+    source_ref: "src/mame/drivers/cdi.cpp:337-346"
     contents:
       - name: "philips__cdi-220_ph3_r1.2__mb834200b-15__02f_aa__9402_z04.tc574200-le._1.7211"
         description: Mono-II main CPU BIOS, Philips CDI-220 PH3 R1.2
@@ -124,7 +124,7 @@ files:
     system: cdi
     required: false
     note: "CD-i 910-17P Mini-MMC (PAL). MACHINE_NOT_WORKING. Not in .info firmware list."
-    source_ref: "src/mame/drivers/cdi.cpp:445-461"
+    source_ref: "src/mame/drivers/cdi.cpp:319-335"
     contents:
       - name: "philips__cd-i_2.1__mb834200b-15__26b_aa__9224_z01.tc574200.7211"
         description: CD-i 910-17P Mini-MMC BIOS (default)

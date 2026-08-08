@@ -4,7 +4,7 @@ core_classification: other
 source: "https://github.com/JetSetIlly/Gopher2600"
 upstream: "https://github.com/JetSetIlly/Gopher2600"
 profiled_date: "2026-08-08"
-source_commit: "7f9b2f73630979c0f38dbde4c6f3c7162d99bac1"
+source_commit: "6bfd0abeb61ff109e3e354efad8274da1ac629d6"
 core_version: "v0.57.0"
 display_name: "Atari - 2600 (Gopher2600)"
 cores:

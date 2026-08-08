@@ -5,7 +5,7 @@ source: "https://github.com/libretro/Mesen"
 upstream: "https://github.com/SourMesen/Mesen"
 logo: "https://raw.githubusercontent.com/SourMesen/Mesen2/master/UI/Assets/Mesen.svg"
 profiled_date: "2026-03-24"
-source_commit: "791c5e8153ee6e29691d45b5df2cf1151ff416f9"
+source_commit: "0102910c39ad1a62bc3f784466f3f67ca9eae335"
 core_version: "0.9.9"
 display_name: "Nintendo - NES / Famicom (Mesen)"
 cores: [mesen, mesens]

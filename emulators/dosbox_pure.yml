@@ -191,7 +191,7 @@ files:
     description: "General MIDI SoundFont (any .sf2/.sf3 accepted)"
     required: false
     hle_fallback: true
-    source_ref: "dosbox_pure_libretro.cpp:1407, dosbox_pure_libretro.cpp:2803"
+    source_ref: "dosbox_pure_libretro.cpp:1439, dosbox_pure_libretro.cpp:2846"
     note: >
       Any .SF2 or .SF3 file in the system directory works. The core lists all
       found SoundFonts in the MIDI config dropdown. DOSBOX.SF2 is the conventional

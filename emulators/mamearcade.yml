@@ -709,7 +709,7 @@ files:
     required: true
     category: bios_zip
     system: sammy-medal
-    source_ref: "src/mame/sigma/sammymdl.cpp:1025"
+    source_ref: "src/mame/sigma/sammymdl.cpp:1023"
     contents:
       - name: vm1211l01.u2
         description: IPL Ver. 5.0
@@ -732,7 +732,7 @@ files:
     required: true
     category: bios_zip
     system: sega-megaplay
-    source_ref: "src/mame/sega/megaplay.cpp:1018"
+    source_ref: "src/mame/sega/megaplay.cpp:1020"
     contents:
       - name: ep15294.ic2
         size: 131072
@@ -772,7 +772,7 @@ files:
     required: true
     category: bios_zip
     system: sega-megatech
-    source_ref: "src/mame/sega/megatech.cpp:1430"
+    source_ref: "src/mame/sega/megatech.cpp:1418"
     contents:
       - name: epr-12664.20
         description: Ver 1
@@ -999,7 +999,7 @@ files:
     required: true
     category: bios_zip
     system: nintendo-playch10
-    source_ref: "src/mame/nintendo/playch10.cpp:2980"
+    source_ref: "src/mame/nintendo/playch10.cpp:2978"
     contents:
       - name: pch1-c__8t_e-2.8t
         size: 16384
@@ -1155,7 +1155,7 @@ files:
     required: true
     category: bios_zip
     system: commodore-cubo
-    source_ref: "src/mame/amiga/cubo.cpp:1435"
+    source_ref: "src/mame/amiga/cubo.cpp:1437"
     contents:
       - name: 391640-03.u6a
         size: 1048576
@@ -1167,7 +1167,7 @@ files:
     required: true
     category: bios_zip
     system: namco-system573
-    source_ref: "src/mame/konami/ksys573.cpp:6415"
+    source_ref: "src/mame/konami/ksys573.cpp:6541"
     contents:
       - name: 700a01.22g
         description: Standard
@@ -1216,7 +1216,7 @@ files:
     required: true
     category: bios_zip
     system: konami-gv
-    source_ref: "src/mame/konami/konamigv.cpp:1447"
+    source_ref: "src/mame/konami/konamigv.cpp:1450"
     contents:
       - name: 999a01.7e
         size: 524288
@@ -1227,7 +1227,7 @@ files:
     required: true
     category: bios_zip
     system: konami-viper
-    source_ref: "src/mame/konami/viper.cpp:3213"
+    source_ref: "src/mame/konami/viper.cpp:3159"
     contents:
       - name: 941b01.u25
         size: 262144
@@ -1246,7 +1246,7 @@ files:
     required: true
     category: bios_zip
     system: konami-twinkle
-    source_ref: "src/mame/konami/twinkle.cpp:1648"
+    source_ref: "src/mame/konami/twinkle.cpp:1636"
 
   - name: bubsys.zip
     required: true
@@ -1276,7 +1276,7 @@ files:
     required: true
     category: bios_zip
     system: capcom-zn1
-    source_ref: "src/mame/sony/zn.cpp:5969"
+    source_ref: "src/mame/sony/zn.cpp:5971"
     contents:
       - name: m534002c-13.ic353
         description: japan
@@ -1297,7 +1297,7 @@ files:
     required: true
     category: bios_zip
     system: capcom-zn2
-    source_ref: "src/mame/sony/zn.cpp:6055"
+    source_ref: "src/mame/sony/zn.cpp:6057"
     contents:
       - name: m534002c-59.ic353
         size: 524288
@@ -1312,7 +1312,7 @@ files:
     required: true
     category: bios_zip
     system: taito-fx1
-    source_ref: "src/mame/sony/zn.cpp:5989"
+    source_ref: "src/mame/sony/zn.cpp:5991"
     contents:
       - name: m534002c-14.ic353
         size: 524288
@@ -1327,7 +1327,7 @@ files:
     required: true
     category: bios_zip
     system: acclaim-zn1
-    source_ref: "src/mame/sony/zn.cpp:6015"
+    source_ref: "src/mame/sony/zn.cpp:6017"
     contents:
       - name: m534002c-15.ic353
         size: 524288
@@ -1372,7 +1372,7 @@ files:
     required: true
     category: bios_zip
     system: videosystem-zn1
-    source_ref: "src/mame/sony/zn.cpp:6032"
+    source_ref: "src/mame/sony/zn.cpp:6034"
     contents:
       - name: coh-1002v.ic353
         size: 524288
@@ -1387,7 +1387,7 @@ files:
     required: true
     category: bios_zip
     system: eighting-zn1
-    source_ref: "src/mame/sony/zn.cpp:6038"
+    source_ref: "src/mame/sony/zn.cpp:6040"
     contents:
       - name: m27c402cz-54.ic353
         size: 524288
@@ -1402,7 +1402,7 @@ files:
     required: true
     category: bios_zip
     system: tecmo-tps
-    source_ref: "src/mame/sony/zn.cpp:6089"
+    source_ref: "src/mame/sony/zn.cpp:6091"
     contents:
       - name: m534002c-61.ic353
         size: 524288
@@ -1485,7 +1485,7 @@ files:
     required: true
     category: bios_zip
     system: super-kaneko-nova
-    source_ref: "src/mame/kaneko/suprnova.cpp:2135"
+    source_ref: "src/mame/kaneko/suprnova.cpp:2185"
     contents:
       - name: sknsj1.u10
         size: 524288
@@ -1546,7 +1546,7 @@ files:
     required: true
     category: bios_zip
     system: hyper-neogeo64
-    source_ref: "src/mame/snk/hng64.cpp:3238"
+    source_ref: "src/mame/snk/hng64.cpp:3235"
     contents:
       - name: brom1.bin
         size: 524288
@@ -1897,7 +1897,7 @@ files:
     required: true
     category: bios_zip
     system: andamiro-pumpitup
-    source_ref: "src/mame/misc/xtom3d.cpp:997"
+    source_ref: "src/mame/misc/xtom3d.cpp:998"
     contents:
       - name: mk3_1.0_bios.u22
         description: mk3 v1.0

@@ -4,7 +4,7 @@ core_classification: official_port
 source: "https://github.com/libretro/vbam-libretro"
 upstream: "https://github.com/visualboyadvance-m/visualboyadvance-m"
 profiled_date: "2026-03-25"
-source_commit: "60b48a3a4a46562f29120c1868a54778b40b60a2"
+source_commit: "e8b2875d6cad10fc3c7c9f57bb5f1acc324d7c10"
 core_version: "2.1.4"
 display_name: "Nintendo - Game Boy Advance (VBA-M)"
 cores:
