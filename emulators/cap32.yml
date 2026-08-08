@@ -55,7 +55,7 @@ files:
     mode: standalone
     size: 32768
     note: "CPC 464 OS + BASIC 1.0"
-    source_ref: "src/cap32.cpp:1024, rom/cpc464.rom"
+    source_ref: "src/cap32.cpp:213, rom/cpc464.rom"
   - name: cpc664.rom
     system: amstrad-cpc
     required: false

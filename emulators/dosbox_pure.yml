@@ -5,7 +5,7 @@ source: "https://github.com/libretro/dosbox-pure"
 upstream: "https://github.com/schellingb/dosbox-pure"
 logo: "https://raw.githubusercontent.com/schellingb/dosbox-pure/main/images/logo.png"
 profiled_date: "2026-03-23"
-source_commit: "f587236b2d016f4f16d672e9ce2829bdf507bf9b"
+source_commit: "a4a0bab7f8931433588f2fcad9045c85b277373d"
 core_version: "1.0-preview5"
 display_name: "DOS (DOSBox-Pure)"
 cores: [dosbox_pure]
@@ -191,7 +191,7 @@ files:
     description: "General MIDI SoundFont (any .sf2/.sf3 accepted)"
     required: false
     hle_fallback: true
-    source_ref: "dosbox_pure_libretro.cpp:1439, dosbox_pure_libretro.cpp:2846"
+    source_ref: "dosbox_pure_libretro.cpp:1410 (scan classifies .SF* as a SoundFont), dosbox_pure_libretro.cpp:2492-2495 (path taken from the system directory), dosbox_pure_libretro.cpp:2803-2805 (auto-detected on the mounted C: drive)"
     note: >
       Any .SF2 or .SF3 file in the system directory works. The core lists all
       found SoundFonts in the MIDI config dropdown. DOSBOX.SF2 is the conventional

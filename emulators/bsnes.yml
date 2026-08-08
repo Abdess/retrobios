@@ -5,7 +5,7 @@ source: "https://github.com/libretro/bsnes-libretro"
 upstream: "https://github.com/bsnes-emu/bsnes"
 logo: "https://raw.githubusercontent.com/bsnes-emu/bsnes/master/bsnes/target-bsnes/resource/bsnes.svg"
 profiled_date: "2026-04-05"
-source_commit: "289af312429e4ca4101f9dfa45f3e941b6559780"
+source_commit: "9c1285dda7dd6bb9a9951d37bcee8794ada640e6"
 core_version: "115"
 display_name: "Nintendo - SNES / SFC (bsnes)"
 cores: [bsnes]
@@ -201,13 +201,13 @@ files:
     system: nintendo-super-game-boy
     required: false
     note: "Super Game Boy 1 cartridge ROM, loaded when playing .gb/.gbc via SGB mode"
-    source_ref: "target-libretro/libretro.cpp:926-935 (system_dir + sgb_bios), libretro.cpp:509 (core option bsnes_sgb_bios)"
+    source_ref: "bsnes/target-libretro/libretro.cpp:926-935 (system_dir + sgb_bios), bsnes/target-libretro/libretro.cpp:393 (core option bsnes_sgb_bios)"
 
   - name: "SGB2.sfc"
     system: nintendo-super-game-boy
     required: false
     note: "Super Game Boy 2 cartridge ROM, uses dedicated oscillator for accurate GB speed"
-    source_ref: "target-libretro/libretro.cpp:926-935 (system_dir + sgb_bios), libretro.cpp:509 (core option bsnes_sgb_bios)"
+    source_ref: "bsnes/target-libretro/libretro.cpp:926-935 (system_dir + sgb_bios), bsnes/target-libretro/libretro.cpp:393 (core option bsnes_sgb_bios)"
 
   # -- BS-X Satellaview BIOS --
   # Required for loading .bs (BS Memory) format games.
