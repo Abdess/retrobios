@@ -95,3 +95,6 @@ Full libretro docs: `https://docs.libretro.com/library/<core>/`
 | Recalbox | md5 | multi-hash comma-separated | `es_bios.xml` + `Bios.cpp` |
 | RetroDECK | md5 | MD5 per file via component manifests | `api_data_processing.sh` |
 | RomM | md5 | size + any hash (MD5/SHA1/CRC32) | `firmware.py` |
+| ROCKNIX | md5 | `md5sum()` + `checkInsideZip()` with `altmd5` | `rocknix-systems` |
+| MiSTer FPGA | md5 | MD5 of the file at its destination | `process_db_index_worker.py` |
+| BizHawk | sha1 | SHA1 per firmware entry | `FirmwareDatabase.cs` |

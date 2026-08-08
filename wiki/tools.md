@@ -13,7 +13,8 @@ python scripts/pipeline.py --offline --skip-docs   # skip readme + site generati
 python scripts/pipeline.py --offline --target switch  # filter by hardware target
 python scripts/pipeline.py --offline --with-truth  # include truth generation + diff
 python scripts/pipeline.py --offline --with-export # include native format export
-python scripts/pipeline.py --check-buildbot        # check buildbot data freshness
+python scripts/pipeline.py --offline --include-archived  # include archived platforms
+python scripts/pipeline.py --check-buildbot        # online run + buildbot freshness check
 ```
 
 Pipeline steps:
@@ -21,10 +22,11 @@ Pipeline steps:
 | Step | Description | Skipped by |
 |------|-------------|------------|
 | 1/8 | Generate database | - |
+| 1b | Dump-catalog coverage report | - (offline, reads `provenance/`) |
 | 2/8 | Refresh data directories | `--offline` |
 | 2a | Refresh MAME BIOS hashes | `--offline` |
 | 2a2 | Refresh FBNeo BIOS hashes | `--offline` |
-| 2b | Check buildbot staleness | only with `--check-buildbot` |
+| 2b | Check buildbot staleness | only with `--check-buildbot`, skipped by `--offline` |
 | 2c | Generate truth YAMLs | only with `--with-truth` / `--with-export` |
 | 2d | Diff truth vs scraped | only with `--with-truth` / `--with-export` |
 | 2e | Export native formats | only with `--with-export` |
@@ -36,6 +38,25 @@ Pipeline steps:
 | 6/8 | Pack integrity (extract + hash) | `--skip-packs` |
 | 7/8 | Generate README | `--skip-docs` |
 | 8/8 | Generate site | `--skip-docs` |
+
+Pipeline flags:
+
+| Flag | Effect |
+|------|--------|
+| `--offline` | skip every step that needs the network (2, 2a, 2a2, 2b) |
+| `--skip-packs` | skip steps 4, 4b, 4c, 6 and the consistency check |
+| `--skip-docs` | skip steps 7 and 8 |
+| `--include-archived` | include archived platforms in verify, packs, truth and export |
+| `--target TARGET` | filter verify, packs and truth by hardware target |
+| `--source {platform,truth,full}` | pack file source, passed through to `generate_pack.py` |
+| `--all-variants` | build the 6 source x required combinations |
+| `--check-buildbot` | run step 2b; additive, and ignored under `--offline` |
+| `--with-truth` | run steps 2c and 2d |
+| `--with-export` | run steps 2c, 2d and 2e |
+| `--output-dir DIR` | pack output directory (default `dist/`) |
+
+`--check-buildbot` runs the whole pipeline online. For the freshness check
+alone, run `python scripts/check_buildbot_system.py`.
 
 ## Individual tools
 
@@ -71,12 +92,16 @@ Verification modes per platform:
 | Platform | Mode | Logic |
 |----------|------|-------|
 | RetroArch, Lakka, RetroPie | existence | file present = OK |
-| Batocera, RetroBat | md5 | MD5 hash match |
-| Recalbox | md5 | MD5 multi-hash, 3 severity levels |
+| Batocera, RetroBat | md5 | MD5 hash match, plus `checkInsideZip` for `zippedFile` entries |
+| Recalbox | md5 | MD5 multi-hash, `md5_composite` for ZIPs, 3 severity levels |
 | EmuDeck | md5 | MD5 whitelist per system |
 | RetroDECK | md5 | MD5 per file via component manifests |
-| RomM | md5 | size + any hash (MD5/SHA1/CRC32) |
-| BizHawk | sha1 | SHA1 per firmware from FirmwareDatabase.cs |
+| RomM | md5 | size + any hash (MD5/SHA1/CRC32), no ZIP inspection |
+| ROCKNIX | md5 | MD5 hash match, same shape as Batocera |
+| MiSTer FPGA | md5 | MD5 of the file at its destination, no ZIP inspection |
+| BizHawk | sha1 | SHA1 per firmware from `FirmwareDatabase.cs` |
+
+Full details and severity mapping: [verification modes](verification-modes.md).
 
 ### generate_pack.py
 
@@ -111,8 +136,16 @@ python scripts/generate_pack.py --platform retroarch --source full      # both (
 python scripts/generate_pack.py --all --all-variants --output-dir dist/ # all 6 combinations
 python scripts/generate_pack.py --all --all-variants --verify-packs --output-dir dist/
 
+# Listing and integrity
+python scripts/generate_pack.py --list                # list available platforms
+python scripts/generate_pack.py --list-emulators
+python scripts/generate_pack.py --list-systems
+python scripts/generate_pack.py --platform retroarch --list-targets
+python scripts/generate_pack.py --all --verify-packs --output-dir dist/  # extract + hash
+
 # Data refresh
 python scripts/generate_pack.py --all --refresh-data  # force re-download data dirs
+python scripts/generate_pack.py --all --offline       # skip the refresh entirely
 
 # Install manifests (consumed by install.py)
 python scripts/generate_pack.py --all --manifest --output-dir install/
@@ -224,6 +257,8 @@ python scripts/refresh_data_dirs.py --registry path/to/_data_dirs.yml
 | `auto_fetch.py` | Fetch missing BIOS files from known sources (4-step pipeline) |
 | `list_platforms.py` | List active platforms (`--all` includes archived, used by CI) |
 | `download.py` | Download packs from GitHub releases (Python, multi-threaded) |
+| `download.sh` | Same, as a shell one-liner (`curl` + `unzip`) |
+| `provenance_report.py` | Dump-catalog coverage and acquisition targets (see above) |
 | `generate_readme.py` | Generate README.md and CONTRIBUTING.md from database |
 | `generate_site.py` | Generate all MkDocs site pages (this documentation) |
 | `deterministic_zip.py` | Rebuild MAME BIOS ZIPs deterministically (same ROMs = same hash) |
@@ -284,12 +319,40 @@ Located in `scripts/scraper/`. Each inherits `BaseScraper` and implements `fetch
 
 Internal modules: `base_scraper.py` (abstract base with `_fetch_raw()` caching
 and shared CLI), `dat_parser.py` (clrmamepro DAT format parser),
+`logiqx_parser.py` (Logiqx XML DAT parser, used by the dump catalogs),
 `mame_parser.py` (MAME C source BIOS root set parser),
 `fbneo_parser.py` (FBNeo C source BIOS set parser),
 `_hash_merge.py` (text-based YAML patching that preserves formatting).
 
 Adding a scraper: inherit `BaseScraper`, implement `fetch_requirements()`,
 call `scraper_cli(YourScraper)` in `__main__`.
+
+## Dump-catalog provenance
+
+Snapshots of the preservation catalogs are committed to `provenance/` and
+refreshed manually. `generate_db.py` joins them into `database.json`;
+`provenance_report.py` reports the gaps.
+
+```bash
+python -m scripts.scraper.redump_dat_scraper --dry-run
+python -m scripts.scraper.redump_dat_scraper --output provenance/redump.json
+python -m scripts.scraper.dat_pack_importer --source no-intro --pack no-intro.zip
+python -m scripts.scraper.dat_pack_importer --source tosec --pack TOSEC-v2025.zip
+python scripts/provenance_report.py            # coverage summary (pipeline step 1b)
+python scripts/provenance_report.py --missing  # list acquisition targets
+python scripts/provenance_report.py --json     # full report
+```
+
+| Catalog | Acquisition | Notes |
+|---------|------------|-------|
+| Redump | direct fetch from redump.info `/static/bios` | 4 BIOS DATs. redump.org serves stale DATs |
+| No-Intro | local pack, imported with `dat_pack_importer` | Dat-o-Matic blocks automation; the `hugo19941994/auto-datfile-generator` mirror rebuilds daily |
+| TOSEC | local pack, imported with `dat_pack_importer` | annual pack from tosecdev.org, 138 Firmware DATs |
+
+The join is by SHA1, then by MD5 + size. A match sets the `provenance` field
+on the database entry and renders a verified dump badge on the system pages.
+It never overrides the emulator source code: see
+[architecture](architecture.md#dump-catalog-provenance).
 
 ## Target scrapers
 

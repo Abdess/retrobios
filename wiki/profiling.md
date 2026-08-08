@@ -214,6 +214,21 @@ A few field conventions that protect the toolchain:
 ```bash
 python scripts/cross_reference.py --emulator dolphin --json
 python scripts/verify.py --emulator dolphin
+python scripts/verify.py --emulator dolphin --verbose   # per-core checks + source refs
+python scripts/check_profile_refs.py --emulator dolphin # do the source_ref lines still hold
+```
+
+The profile also has to satisfy `schemas/emulator.schema.json`, which CI checks
+on every PR touching `emulators/`:
+
+```bash
+python -c "
+import json, yaml, sys
+from jsonschema import validate
+schema = json.load(open('schemas/emulator.schema.json'))
+validate(yaml.safe_load(open('emulators/dolphin.yml')), schema)
+print('ok')
+"
 ```
 
 ### Lessons learned
@@ -252,26 +267,37 @@ even if documentation mentions it.
 
 ### Profile fields
 
+The authoritative version of this table is `schemas/emulator.schema.json`,
+which CI validates every profile against.
+
 | Field | Required | Description |
 |-------|----------|-------------|
 | `emulator` | yes | display name |
 | `type` | yes | `libretro`, `standalone`, `standalone + libretro`, `alias`, `launcher`, `game`, `utility`, `test` |
-| `core_classification` | no | `pure_libretro`, `official_port`, `community_fork`, `frozen_snapshot`, `enhanced_fork`, `game_engine`, `embedded_hle`, `launcher`, `other` |
-| `source` | yes | libretro core repository URL |
+| `core_classification` | no | `pure_libretro`, `official_port`, `community_fork`, `frozen_snapshot`, `enhanced_fork`, `game_engine`, `embedded_hle`, `launcher`, `alias`, `other` |
+| `source` | yes | libretro core repository URL. A dict when the core ships under several repos |
 | `upstream` | no | original emulator repository URL |
-| `profiled_date` | yes | date of source analysis |
+| `profiled_date` | yes | date of source analysis. Quote it, or YAML parses it as a date object |
 | `core_version` | yes | version analyzed |
-| `source_commit` | no | upstream commit SHA the source was read at; anchors every `source_ref` line number |
+| `source_commit` | no | commit SHA of `source` the code was read at; anchors every `source_ref` line number |
+| `upstream_commit` | no | same, for `upstream` |
 | `display_name` | no | full display name (e.g. "Sega - Mega Drive (BlastEm)") |
+| `logo` | no | image URL used on the emulator page |
 | `systems` | yes | list of system IDs this core handles |
-| `cores` | no | list of upstream core names for buildbot/target matching |
+| `cores` | no | every upstream name the core is known by, for buildbot/target matching |
+| `alias_of` | for `type: alias` | profile key this one aliases; the alias carries no `files` |
 | `mode` | no | default mode: `standalone`, `libretro`, or `both` |
-| `verification` | no | how the core verifies BIOS: `existence` or `md5` |
-| `files` | yes | list of file entries |
+| `verification` | no | how the core verifies BIOS: `existence`, `md5`, `sha1`, `crc32` |
+| `files` | yes, unless `type: alias` | list of file entries |
+| `data_directories` | no | whole directory trees the core needs, referencing `_data_dirs.yml` keys |
 | `notes` | no | free-form technical notes |
+| `note` | no | single-paragraph variant of `notes` |
 | `exclusion_note` | no | why the profile has no files despite .info declaring firmware |
 | `analysis` | no | structured per-subsystem analysis (capabilities, supported modes) |
+| `analysis_date`, `analysis_commit` | no | when and at which commit `analysis` was produced |
 | `platform_details` | no | per-system platform-specific details (paths, romsets, forced systems) |
+| `mame_version` | no | MAME romset generation a MAME-family profile targets |
+| `archive_prefix`, `pack_structure` | no | how arcade entries are laid out inside the pack |
 
 ### File entry fields
 
@@ -280,7 +306,8 @@ even if documentation mentions it.
 | `name` | filename as the core expects it |
 | `required` | true if the core needs this file to function |
 | `system` | system ID this file belongs to (for multi-system profiles) |
-| `size` | expected size in bytes |
+| `archive` | ROM set the file lives inside, for arcade entries (e.g. `neogeo.zip`) |
+| `size` | expected size in bytes; a list when the code accepts several exact sizes |
 | `min_size`, `max_size` | size range when the code accepts a range |
 | `md5`, `sha1`, `crc32`, `sha256` | expected hashes from source code |
 | `known_hash_adler32` | expected Adler-32 hash (used by Dolphin IPL files) |
@@ -289,13 +316,21 @@ even if documentation mentions it.
 | `mode` | `libretro`, `standalone`, or `both` |
 | `hle_fallback` | true if a high-level emulation path exists |
 | `category` | `bios` (default), `game_data`, `bios_zip` |
-| `region` | geographic region (e.g. `north-america`, `japan`) |
-| `source_ref` | source file and line number (e.g. `boot.cpp:42`), read at the profile's `source_commit` when set |
+| `region` | geographic region (e.g. `north-america`, `japan`); a list when one file covers several |
+| `region_check` | true if the core refuses to boot a game whose region does not match the BIOS |
+| `fast_boot` | BIOS generation label the core uses to decide whether fast boot is available |
+| `priority` | tie-breaker when several BIOS files satisfy the same slot, higher wins |
+| `embedded` | true if the data is compiled into the binary and the external file is optional |
+| `bundled` | true if the file ships with the emulator rather than being user-provided |
+| `has_builtin` | true if the core falls back to a built-in copy when the file is absent |
+| `config_key` | configuration key the emulator exposes to point at the file |
+| `load_from` | directory the core reads the file from when it is not the system directory |
+| `source_ref` | source file and line number (e.g. `boot.cpp:42`), read at the profile's `source_commit` when set. A dict splits `standalone` from `libretro` when they diverge |
 | `path` | destination path relative to system directory |
 | `description` | what this file is |
 | `note` | additional context |
 | `contents` | structure of files inside a BIOS ZIP (`name`, `description`, `size`, `crc32`) |
-| `storage` | `large_file` for files > 50 MB stored as release assets |
+| `storage` | `embedded` (default), `external`, `user_provided`, or `large_file`/`release` for files > 50 MB stored as release assets |
 | `agnostic` | true if any file under the system path within size constraints satisfies the requirement |
 | `unsourceable` | reason why the file cannot be sourced (acknowledged gap) |
 | `destination` | target path within the BIOS directory |

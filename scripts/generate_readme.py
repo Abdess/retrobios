@@ -23,6 +23,7 @@ from common import (
     load_database,
     load_emulator_profiles,
     load_platform_config,
+    load_platform_registry,
     unique_emulator_profiles,
     write_if_changed,
 )
@@ -198,26 +199,48 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
         "|----------|-----------|-----------|----------|",
     ]
 
+    # Where the pack itself is extracted, which is not always the BIOS folder:
+    # a pack whose entries already carry their own root (RetroDECK) extracts
+    # one level above it.
     extract_paths = {
         "RetroArch": "`system/`",
-        "Lakka": "`system/`",
+        "Lakka": "`/storage/system/`",
         "Batocera": "`/userdata/bios/`",
         "BizHawk": "`Firmware/`",
         "Recalbox": "`/recalbox/share/bios/`",
         "RetroBat": "`bios/`",
-        "RetroPie": "`BIOS/`",
-        "RetroDECK": "`~/retrodeck/bios/`",
-        "EmuDeck": "`Emulation/bios/`",
+        "RetroPie": "`~/RetroPie/BIOS/`",
+        "RetroDECK": "`~/retrodeck/`",
+        "EmuDeck": "`~/Emulation/bios/`",
         "RomM": "`bios/{platform_slug}/`",
         "ROCKNIX": "`/storage/roms/bios/`",
         "MiSTer FPGA": "`/media/fat/games/`",
     }
+    archived = {
+        name
+        for name, entry in load_platform_registry(platforms_dir).items()
+        if entry.get("status") == "archived"
+    }
 
     for name, cov in sorted(coverages.items(), key=lambda x: x[1]["platform"]):
         display = cov["platform"]
-        path = extract_paths.get(display, "")
+        if name in archived:
+            display = f"{display} *"
+        path = extract_paths.get(cov["platform"], "")
         lines.append(
             f"| {display} | {cov['total']} | {path} | [Download]({RELEASE_URL}) |"
+        )
+
+    if archived:
+        lines.extend(
+            [
+                "",
+                "The RetroDECK pack already contains its own `bios/` folder, so it"
+                " extracts into `~/retrodeck/` rather than into the BIOS folder.",
+                "",
+                "\\* Archived: the configuration is kept and packs are still built,"
+                " but upstream is no longer scraped on a schedule.",
+            ]
         )
 
     lines.extend(
@@ -233,7 +256,7 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
             f"- **{len(coverages)} platforms** supported with platform-specific verification",
             f"- **{emulator_count} emulators** profiled from source (RetroArch cores + standalone)",
             f"- **{len(system_ids)} systems** covered (NES, SNES, PlayStation, Saturn, Dreamcast, ...)",
-            f"- **{total_files:,} files** verified with MD5, SHA1, CRC32 checksums:"
+            f"- **{total_files:,} files** indexed with SHA1, MD5, SHA256 and CRC32 checksums:"
             f" {comp['systems']['files']:,} system files,"
             f" {comp['arcade']['files']:,} arcade ROM sets,"
             f" {comp['game_data']['files']:,} game and engine data files",
@@ -305,8 +328,9 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
             gt_cell = f"{gt['with_validation']}/{gt['total']} ({gt_pct})"
         else:
             gt_cell = "0/0"
+        display = f"{cov['platform']} *" if name in archived else cov["platform"]
         lines.append(
-            f"| {cov['platform']} | {cov['present']}/{cov['total']} ({pct}) | "
+            f"| {display} | {cov['present']}/{cov['total']} ({pct}) | "
             f"{cov['verified']} | {cov['untested']} | {cov['missing']} | "
             f"{gt_cell} |"
         )
@@ -428,30 +452,62 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
 
 
 def generate_contributing() -> str:
-    return """# Contributing to RetroBIOS
+    return f"""# Contributing to RetroBIOS
 
 ## Add a BIOS file
 
 1. Fork this repository
 2. Place the file in `bios/Manufacturer/Console/filename`
-3. Variants (alternate hashes): `bios/Manufacturer/Console/.variants/`
-4. Create a Pull Request - checksums are verified automatically
+3. Variants (alternate hashes for the same file): `bios/Manufacturer/Console/.variants/`
+4. Open a Pull Request - hashes are verified automatically and reported as a comment
 
-## Add a new platform
+The [dump provenance]({SITE_URL}provenance/) page lists catalogued dumps still
+missing from the collection, with their hashes. A file matching one of those is
+the most useful contribution.
 
-1. Write a scraper in `scripts/scraper/`
-2. Create the platform YAML in `platforms/`
-3. Register in `platforms/_registry.yml`
-4. Submit a Pull Request
+## Add a platform
 
-Contributors who add platform support are credited in the README,
-on the documentation site, and in the BIOS packs.
+1. Write a scraper in `scripts/scraper/` (inherit `BaseScraper`)
+2. Read the platform's upstream source to determine how it checks BIOS files
+3. Register it in `platforms/_registry.yml`
+4. Generate the platform YAML and test: `python scripts/verify.py --platform <name>`
+
+Full walkthrough: [adding a platform]({SITE_URL}wiki/adding-a-platform/).
+
+## Add an emulator profile
+
+1. Clone the emulator's source code, upstream and libretro port
+2. Trace the file loading from the entry point, not from a keyword grep
+3. Document every file the code loads, with a `source_ref` line reference
+4. Write the YAML to `emulators/<name>.yml`
+5. Test: `python scripts/cross_reference.py --emulator <name>`
+
+Full walkthrough: [profiling guide]({SITE_URL}wiki/profiling/).
 
 ## File conventions
 
+- `bios/Manufacturer/Console/filename` for canonical files
+- `bios/Manufacturer/Console/.variants/filename.sha1prefix` for alternate versions
 - Files >50 MB go in GitHub release assets (`large-files` release)
 - RPG Maker and ScummVM directories are excluded from deduplication
-- See the [documentation site](https://abdess.github.io/retrobios/) for full details
+- Two paths differing only by case break clones on Windows and macOS;
+  `tests/test_no_case_collisions.py` enforces this
+
+## Before opening a PR
+
+```bash
+python -m unittest discover tests
+python scripts/pipeline.py --offline
+```
+
+## PR validation
+
+CI computes SHA1/MD5/CRC32 for every new file, checks them against the platform
+configs, validates the YAML against the schemas, runs the test suite, and posts
+a report on the PR.
+
+Contributors who add platform support are credited in the README,
+on the documentation site, and in the BIOS packs.
 """
 
 

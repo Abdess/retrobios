@@ -358,15 +358,22 @@ def generate_home(
             "",
             "    | Platform | Extract to |",
             "    |----------|-----------|",
-            "    | RetroArch / Lakka | `system/` |",
+            "    | RetroArch | `system/` |",
             "    | Batocera | `/userdata/bios/` |",
             "    | BizHawk | `Firmware/` |",
-            "    | EmuDeck | `Emulation/bios/` |",
+            "    | EmuDeck | `~/Emulation/bios/` |",
+            "    | Lakka | `/storage/system/` |",
+            "    | MiSTer FPGA | `/media/fat/games/` |",
+            "    | ROCKNIX | `/storage/roms/bios/` |",
             "    | Recalbox | `/recalbox/share/bios/` |",
             "    | RetroBat | `bios/` |",
-            "    | RetroDECK | `~/retrodeck/bios/` |",
+            "    | RetroDECK | `~/retrodeck/` |",
             "    | RetroPie | `~/RetroPie/BIOS/` |",
             "    | RomM | `bios/{platform_slug}/` |",
+            "",
+            "    The RetroDECK pack already carries its own `bios/` folder, so it "
+            "extracts one level above it. Every other pack extracts straight into "
+            "the BIOS folder. [Full instructions per setup](which-pack.md).",
             "",
         ]
     )
@@ -461,7 +468,7 @@ def generate_stats(stats: dict) -> str:
 # Platform pages
 
 
-def generate_platform_index(coverages: dict) -> str:
+def generate_platform_index(coverages: dict, registry: dict | None = None) -> str:
     total_files = sum(c["total"] for c in coverages.values())
     total_present = sum(c["present"] for c in coverages.values())
     total_verified = sum(c["verified"] for c in coverages.values())
@@ -472,8 +479,8 @@ def generate_platform_index(coverages: dict) -> str:
         f"{len(coverages)} supported platforms with "
         f"{total_present:,} verified files.",
         "",
-        "| Platform | Files | Verification | Download |",
-        "|----------|-------|-------------|----------|",
+        "| Platform | Files | Verification | Status | Download |",
+        "|----------|-------|-------------|--------|----------|",
     ]
 
     mode_labels = {
@@ -482,6 +489,7 @@ def generate_platform_index(coverages: dict) -> str:
         "existence": '<span class="rb-badge rb-badge-info">existence</span>',
     }
 
+    archived_any = False
     for name, cov in sorted(coverages.items(), key=lambda x: x[1]["platform"]):
         display = cov["platform"]
 
@@ -489,10 +497,16 @@ def generate_platform_index(coverages: dict) -> str:
             cov["mode"],
             f'<span class="rb-badge rb-badge-muted">{cov["mode"]}</span>',
         )
+        status = (registry or {}).get(name, {}).get("status", "active")
+        if status == "archived":
+            archived_any = True
+            status_html = '<span class="rb-badge rb-badge-muted">archived</span>'
+        else:
+            status_html = '<span class="rb-badge rb-badge-success">active</span>'
 
         lines.append(
             f"| [{display}]({name}.md) | "
-            f"{cov['present']:,} | {mode_html} | "
+            f"{cov['present']:,} | {mode_html} | {status_html} | "
             f"[Pack]({RELEASE_URL}){{ .md-button .md-button--primary }} |"
         )
 
@@ -504,6 +518,15 @@ def generate_platform_index(coverages: dict) -> str:
             "[How each mode works](../wiki/verification-modes.md).",
         ]
     )
+
+    if archived_any:
+        lines.extend(
+            [
+                "",
+                "An archived platform keeps its configuration and still gets a "
+                "pack, but upstream is no longer scraped on a schedule.",
+            ]
+        )
 
     return "\n".join(lines) + "\n"
 
@@ -546,6 +569,18 @@ def generate_platform_page(
         "",
         logo_md,
     ]
+
+    if (registry or {}).get(name, {}).get("status") == "archived":
+        lines.extend(
+            [
+                '!!! warning "Archived platform"',
+                "",
+                "    The configuration is kept and packs are still built, but "
+                "upstream is no longer scraped on a schedule, so the file list "
+                "reflects the last sync rather than today's upstream.",
+                "",
+            ]
+        )
 
     # Stat cards
     lines.extend(
@@ -2273,23 +2308,31 @@ def generate_contributing() -> str:
 1. Fork this repository
 2. Place the file in `bios/Manufacturer/Console/filename`
 3. Variants (alternate hashes for the same file): place in `bios/Manufacturer/Console/.variants/`
-4. Create a Pull Request - hashes are verified automatically
+4. Open a Pull Request - hashes are verified automatically and reported as a comment
+
+The [dump provenance](provenance.md) page lists catalogued dumps still missing
+from the collection, with their hashes. A file matching one of those is the
+most useful contribution.
 
 ## Add a platform
 
 1. Create a scraper in `scripts/scraper/` (inherit `BaseScraper`)
-2. Read the platform's upstream source code to understand its BIOS check logic
-3. Add entry to `platforms/_registry.yml`
+2. Read the platform's upstream source to determine how it checks BIOS files
+3. Add an entry to `platforms/_registry.yml`
 4. Generate the platform YAML config
 5. Test: `python scripts/verify.py --platform <name>`
 
+Full walkthrough: [adding a platform](wiki/adding-a-platform.md).
+
 ## Add an emulator profile
 
-1. Clone the emulator's source code
-2. Search for BIOS/firmware loading (grep for `bios`, `rom`, `firmware`, `fopen`)
-3. Document every file the emulator loads with source code references
-4. Write YAML to `emulators/<name>.yml`
+1. Clone the emulator's source code, upstream and libretro port
+2. Trace the file loading from the entry point, not from a keyword grep
+3. Document every file the code loads, with a `source_ref` line reference
+4. Write the YAML to `emulators/<name>.yml`
 5. Test: `python scripts/cross_reference.py --emulator <name>`
+
+Full walkthrough: [profiling guide](wiki/profiling.md).
 
 ## File conventions
 
@@ -2297,13 +2340,24 @@ def generate_contributing() -> str:
 - `bios/Manufacturer/Console/.variants/filename.sha1prefix` for alternate versions
 - Files >50 MB go in GitHub release assets (`large-files` release)
 - RPG Maker and ScummVM directories are excluded from deduplication
+- Two paths differing only by case break clones on Windows and macOS;
+  `tests/test_no_case_collisions.py` enforces this
+
+## Before opening a PR
+
+```bash
+python -m unittest discover tests
+python scripts/pipeline.py --offline
+```
 
 ## PR validation
 
-The CI automatically:
-- Computes SHA1/MD5/CRC32 of new files
-- Checks against known hashes in platform configs
-- Reports coverage impact
+CI computes SHA1/MD5/CRC32 for every new file, checks them against the platform
+configs, validates the YAML against the schemas, runs the test suite, and posts
+a report on the PR.
+
+Contributors who add platform support are credited in the README, on this site,
+and in the BIOS packs.
 """
 
 
@@ -2339,9 +2393,17 @@ def generate_wiki_data_model(db: dict, profiles: dict) -> str:
         '  "md5": "...",',
         '  "sha256": "...",',
         '  "crc32": "...",',
-        '  "adler32": "..."',
+        '  "adler32": "...",',
+        '  "provenance": {',
+        '    "redump": {"dat": "...", "name": "...", "description": "..."}',
+        "  }",
         "}",
         "```",
+        "",
+        "`provenance` maps each catalog that lists the file to the DAT and entry "
+        "it was matched against. It is present only when the file matches a "
+        "snapshot under `provenance/`; the join runs by SHA1 first, then by "
+        "MD5 + size. See [dump provenance](../provenance.md).",
         "",
         "### Indexes",
         "",
@@ -2359,13 +2421,18 @@ def generate_wiki_data_model(db: dict, profiles: dict) -> str:
         "",
         "1. Path suffix exact match (for regional variants with same filename)",
         "2. SHA1 exact match",
-        "3. MD5 direct lookup (supports truncated Batocera 29-char MD5)",
-        "4. Name + alias lookup without hash (existence mode)",
-        "5. Name + alias with md5_composite / direct MD5 per candidate",
-        "6. zippedFile content match via inner ROM MD5 index",
-        "7. MAME clone fallback (deduped ZIP mapped to canonical name)",
-        "8. Data directory scan (exact path then case-insensitive basename walk)",
-        "9. Agnostic fallback (size-constrained match under system path prefix)",
+        "3. SHA256 exact match (profiles whose upstream publishes SHA256)",
+        "4. CRC32 + size exact match (CRC-only profiles; size confirms the match)",
+        "5. MD5 direct lookup (supports truncated Batocera 29-char MD5)",
+        "6. Name + alias lookup without hash (existence mode)",
+        "7. Name + alias with md5_composite / direct MD5 per candidate",
+        "8. zippedFile content match via inner ROM MD5 index",
+        "9. MAME clone fallback (deduped ZIP mapped to canonical name)",
+        "10. Data directory scan (exact path then case-insensitive basename walk)",
+        "11. Agnostic fallback (size-constrained match under system path prefix)",
+        "",
+        "The first match wins. Steps and their return codes are described in "
+        "[verification modes](verification-modes.md#file-resolution-chain).",
         "",
         "## Platform YAML",
         "",
@@ -2389,9 +2456,15 @@ def generate_wiki_data_model(db: dict, profiles: dict) -> str:
         "Supports inheritance (`inherits: retroarch`) and shared groups",
         "(`includes: [group_name]` referencing `_shared.yml`).",
         "",
+        "`base_destination` is the prefix the pack applies to every entry. It is",
+        "empty when the upstream destinations already carry their own root, which",
+        "is why the RetroDECK pack ships `bios/` and `roms/` at its top level.",
+        "",
         "## Emulator YAML",
         "",
-        f"**{len(profiles)}** profiles. Source-verified from emulator code.",
+        f"**{len(profiles)}** profile files, **{len(unique_emulator_profiles(profiles))}** "
+        "distinct emulators once aliases are folded in. Source-verified from "
+        "emulator code.",
         "",
         "See the [profiling guide](profiling.md) for the full field reference.",
         "",
@@ -2435,12 +2508,16 @@ def generate_which_pack() -> str:
     """Generate the 'Which pack?' decision page."""
     rel = "https://github.com/Abdess/retrobios/releases"
     return f"""\
-# Getting started
+# Download
 
 Some retro consoles need firmware files (commonly called BIOS) to run games.
 Without them, the emulator either refuses to start the game or runs it with
 reduced accuracy. This project collects and verifies those files so they are
 ready to use.
+
+This page picks the right pack for a setup. For BIOS directory paths per
+platform, verification, and the CLI, see
+[Getting started](wiki/getting-started.md).
 
 ## Quick install
 
@@ -2482,7 +2559,7 @@ extract the whole archive directly. To join the parts manually instead:
 | Setup | What it is | Pack | Extract to |
 |-------|-----------|------|-----------|
 | [EmuDeck](https://www.emudeck.com/) | Installs and configures multiple emulators, adds each game to the Steam library | [EmuDeck]({rel}) | `~/Emulation/bios/` |
-| [RetroDECK](https://retrodeck.net/) | Single Flatpak app, all emulators bundled, one-click install from Discover | [RetroDECK]({rel}) | `~/retrodeck/` |
+| [RetroDECK](https://retrodeck.net/) | Single Flatpak app, all emulators bundled, one-click install from Discover | [RetroDECK]({rel}) | `~/retrodeck/` (the pack carries its own `bios/`) |
 | RetroArch standalone | Installed from Discover, Steam, or Flatpak | [RetroArch]({rel}) | Open RetroArch > Settings > Directory > System, that is the folder |
 
 ### Windows
@@ -2518,10 +2595,19 @@ extract the whole archive directly. To join the parts manually instead:
 | [Batocera](https://batocera.org/) | Easy setup, works on Pi 3/4/5 and many other boards (Odroid, etc.) | [Batocera]({rel}) | `/userdata/bios/` |
 | [Recalbox](https://www.recalbox.com/) | Plug-and-play experience, good for a first build | [Recalbox]({rel}) | `/recalbox/share/bios/` |
 
-### Android handheld (Retroid Pocket, R36S, Miyoo, etc.)
+### Handhelds
 
-Most Android handhelds run RetroArch. Download the [RetroArch pack]({rel})
-and extract into `RetroArch/system/` on internal storage or SD card.
+| Setup | What it is | Pack | Extract to |
+|-------|-----------|------|-----------|
+| Android (Retroid Pocket, Odin, etc.) | Most Android handhelds run RetroArch | [RetroArch]({rel}) | `RetroArch/system/` on internal storage or SD card |
+| [ROCKNIX](https://rocknix.org/) | Linux OS for ARM and x86 handhelds (RG35XX, RG552, Deck) | [ROCKNIX]({rel}) | `/storage/roms/bios/`, over SSH or the network share |
+| [Batocera](https://batocera.org/) | Also images many handhelds | [Batocera]({rel}) | `/userdata/bios/` |
+
+### FPGA
+
+| Setup | What it is | Pack | Extract to |
+|-------|-----------|------|-----------|
+| [MiSTer FPGA](https://mister-devel.github.io/MkDocs_MiSTer/) | Hardware-level recreation of consoles on a DE10-Nano board | [MiSTer FPGA]({rel}) | `/media/fat/games/`, one subfolder per core |
 
 ### Self-hosted ROM manager
 
@@ -2757,7 +2843,8 @@ def main():
     # Generate platform pages
     print("Generating platform pages...")
     write_if_changed(
-        str(docs / "platforms" / "index.md"), generate_platform_index(coverages)
+        str(docs / "platforms" / "index.md"),
+        generate_platform_index(coverages, registry),
     )
     for name, cov in coverages.items():
         write_if_changed(
@@ -2836,9 +2923,17 @@ def main():
     # Rewrite mkdocs.yml entirely (static config + generated nav)
     mkdocs_static = """\
 site_name: RetroBIOS
+site_description: Source-verified BIOS and firmware packs for RetroArch, Batocera,
+  Recalbox, Lakka, RetroPie, EmuDeck, RetroBat, RetroDECK, RomM, BizHawk, ROCKNIX
+  and MiSTer FPGA.
 site_url: https://abdess.github.io/retrobios/
 repo_url: https://github.com/Abdess/retrobios
 repo_name: Abdess/retrobios
+# Almost every page is generated from platforms/, emulators/ and database.json,
+# so a per-page edit link would point at a file that does not exist.
+edit_uri: ''
+copyright: MIT for the tooling. BIOS and firmware files are third-party system
+  software, preserved for personal backup, archival and interoperability.
 theme:
   name: material
   palette:
@@ -2862,24 +2957,46 @@ theme:
   icon:
     logo: material/chip
   features:
+  - navigation.instant
+  - navigation.instant.prefetch
+  - navigation.instant.progress
   - navigation.tabs
+  - navigation.tabs.sticky
   - navigation.sections
   - navigation.top
+  - navigation.tracking
   - navigation.indexes
+  # 400+ pages: pruning keeps the navigation out of every page's HTML.
+  - navigation.prune
+  - navigation.footer
   - search.suggest
   - search.highlight
+  - search.share
+  - content.code.copy
   - content.tabs.link
   - toc.follow
 extra_css:
 - stylesheets/extra.css
+extra:
+  social:
+  - icon: fontawesome/brands/github
+    link: https://github.com/Abdess/retrobios
+    name: RetroBIOS on GitHub
 markdown_extensions:
-- tables
+- abbr
 - admonition
 - attr_list
+- def_list
+- footnotes
 - md_in_html
+- tables
 - toc:
     permalink: true
 - pymdownx.details
+- pymdownx.highlight:
+    anchor_linenums: true
+- pymdownx.inlinehilite
+- pymdownx.keys
 - pymdownx.superfences:
     custom_fences:
     - name: mermaid
@@ -2889,6 +3006,13 @@ markdown_extensions:
     alternate_style: true
 plugins:
 - search
+# Link rot fails the build: deploy-site.yml runs `mkdocs build --strict`.
+# omitted_files stays at its default (info) so a stale local docs/ does not
+# break a local build; CI regenerates docs/ from scratch anyway.
+validation:
+  absolute_links: warn
+  unrecognized_links: warn
+  anchors: warn
 """
     write_if_changed("mkdocs.yml", mkdocs_static + nav_yaml)
 
@@ -2902,7 +3026,9 @@ plugins:
         + 1
         + len(profiles)  # emulator index + detail
         + 1  # gap analysis
-        + 14  # wiki pages (copied from wiki/ + generated data-model)
+        + 1  # which-pack
+        + len(list(Path("wiki").glob("*.md")))  # wiki pages copied verbatim
+        + 1  # generated wiki/data-model
         + 1  # contributing
     )
     print(f"\nGenerated {total_pages} pages in {args.docs_dir}/")

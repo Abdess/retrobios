@@ -2,20 +2,11 @@
 
 This page covers how to run, understand, and extend the test suite.
 
-All tests use synthetic fixtures. No real BIOS files, platform configs, or
-network access required.
+10 modules, 400 tests. No network access anywhere. Most modules build synthetic
+fixtures in a temp directory; the three that read the working tree skip cleanly
+when the data they need is absent.
 
 ## Running tests
-
-Run a single test module:
-
-```bash
-python -m unittest tests.test_e2e -v
-python -m unittest tests.test_pack_integrity -v
-python -m unittest tests.test_mame_parser -v
-python -m unittest tests.test_fbneo_parser -v
-python -m unittest tests.test_hash_merge -v
-```
 
 Run the full suite:
 
@@ -23,8 +14,38 @@ Run the full suite:
 python -m unittest discover tests -v
 ```
 
+Run a single module:
+
+```bash
+python -m unittest tests.test_e2e -v
+python -m unittest tests.test_install -v
+python -m unittest tests.test_provenance -v
+python -m unittest tests.test_mame_parser -v
+python -m unittest tests.test_hash_merge -v
+python -m unittest tests.test_fbneo_parser -v
+python -m unittest tests.test_profile_refs -v
+python -m unittest tests.test_pack_integrity -v
+python -m unittest tests.test_torrentzip -v
+python -m unittest tests.test_no_case_collisions -v
+```
+
 The only dependency is `pyyaml`. No test framework beyond the standard
 library `unittest` module.
+
+## Modules at a glance
+
+| Module | Tests | Fixtures | What it covers |
+|--------|-------|----------|----------------|
+| `test_e2e.py` | 217 | synthetic | resolution, verification, packs, cross-reference, targets, truth |
+| `test_install.py` | 70 | synthetic | `install.py` detection, config parsing, manifest handling |
+| `test_provenance.py` | 29 | synthetic | Logiqx/Redump parsing, DAT import, provenance join, coverage report |
+| `test_mame_parser.py` | 22 | inline C | BIOS root sets, ROM blocks, macro expansion |
+| `test_hash_merge.py` | 17 | synthetic | YAML hash merge, diff, formatting preservation |
+| `test_fbneo_parser.py` | 16 | inline C | `BDF_BOARDROM` sets, ROM info parsing |
+| `test_profile_refs.py` | 12 | synthetic | `check_profile_refs` pure functions, no network |
+| `test_pack_integrity.py` | 8 | real packs | extract each ZIP, verify paths and hashes |
+| `test_torrentzip.py` | 8 | real romsets | TorrentZip builder byte-for-byte |
+| `test_no_case_collisions.py` | 1 | real `bios/` | no case-colliding paths on Windows/macOS clones |
 
 ## Test architecture
 
@@ -49,8 +70,16 @@ logic.
 |-------|----------|
 | `test_01`--`test_14` | File resolution (SHA1, MD5, name, alias, truncated MD5, composite, zip contents, variants, hash mismatch) |
 | `test_20`--`test_31` | Verification (existence mode, MD5 mode, required/optional severity, zipped file, multi-hash) |
-| `test_40`--`test_47` | Cross-reference (undeclared files, standalone skip, alias profiles, data dir suppression, exclusion notes) |
-| `test_50`+ | Platform config (inheritance, shared groups, data directories, grouping, core resolution, target filtering, ground truth) |
+| `test_40`--`test_51` | Cross-reference and platform grouping (undeclared files, standalone skip, alias profiles, data dir suppression, exclusion notes) |
+| `test_60`--`test_61` | Storage tiers (external, user-provided) |
+| `test_70`--`test_84` | Emulator-level validation (index build, size, CRC32, MD5, SHA1, crypto) |
+| `test_90`--`test_125` | Per-emulator and per-system verification, `dest_hint` resolution, registry metadata |
+| `test_130`--`test_183` | Pack generation (required-only, split, `--from-md5`, path conflicts, archive extras, truth generation, exporters) |
+| `test_200`--`test_227` | Pack source variants, deterministic ZIPs, SHA256/CRC32 resolution, MiSTer scraper, manifests |
+
+Numbers are stable anchors, not an execution order. When a range fills up, a
+letter suffix keeps a new test next to the behavior it covers
+(`test_130b_existence_pack_reports_hash_mismatch`).
 
 Each test calls the same functions that `verify.py` and `generate_pack.py` use
 in production, against the synthetic fixtures.
@@ -81,6 +110,38 @@ upstream BIOS hashes into emulator profiles. Covers:
 
 Fixtures are programmatically generated YAML/JSON files written to a temp
 directory.
+
+### Provenance and installer tests
+
+**test_provenance.** Covers the dump-catalog pipeline end to end on synthetic
+DATs: the Logiqx XML parser, the Redump scraper's parsing path, the DAT pack
+importer, the SHA1-then-MD5+size join performed by `generate_db.py`, and the
+coverage report's covered/uncovered DAT accounting.
+
+**test_install.** Covers `install.py` without touching the network: OS
+detection, each registry detection method (`config_file`, `path_exists`,
+`file_exists`), config-file key parsing, manifest loading, target filtering,
+and destination resolution.
+
+**test_profile_refs.** Covers the pure functions of `check_profile_refs`
+(anchor matching, line-window search, hash extraction). The GitHub fetching
+path is not exercised, so the module runs offline.
+
+### Tests that read the working tree
+
+Three modules assert on real repository data instead of fixtures. Each skips
+when its input is missing, so a partial checkout still runs green.
+
+**test_torrentzip.** Rebuilds real MAME romsets through the TorrentZip builder
+and asserts the output is byte-identical, which is what keeps arcade ZIP hashes
+stable across rebuilds.
+
+**test_no_case_collisions.** Walks `bios/` and fails on two paths that differ
+only by case. On Windows and macOS, git can only check out one of them, which
+silently corrupts the clone. `.variants/` is exempt: those names are
+disambiguated by a hash suffix on purpose.
+
+**test_pack_integrity.** Described below; needs packs in `dist/`.
 
 ## How to add a test
 
@@ -162,13 +223,16 @@ Ideally, tests, code, and documentation ship together. When profiles and platfor
 
 The `validate.yml` workflow runs `test_e2e` on every pull request that touches
 `bios/` or `platforms/` files. The test job (`run-tests`) runs in parallel
-with BIOS validation, schema validation, and auto-labeling.
+with BIOS validation, schema validation, and auto-labeling. `build.yml` runs
+the same module before building release packs.
+
+CI runs `test_e2e` only, not the whole suite: the other modules either need
+build artifacts (`test_pack_integrity` needs packs in `dist/`) or duplicate
+work the workflow already does. Run `python -m unittest discover tests` locally
+before pushing.
 
 Tests must pass before merge. If a test fails in CI, reproduce locally with:
 
 ```bash
 python -m unittest tests.test_e2e -v 2>&1 | head -50
 ```
-
-The `build.yml` workflow also runs the test suite before building release
-packs.

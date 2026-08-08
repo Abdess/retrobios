@@ -182,6 +182,8 @@ normalize them into `BiosRequirement` entries.
 | C# source | BizHawk `FirmwareDatabase.cs` | Regex for method calls and string literals |
 | C source | MAME/FBNeo drivers | Use `mame_parser` or `fbneo_parser` (see below) |
 | JSON (GitHub API) | RetroDECK component manifests | `json.loads()` per manifest file |
+| JSON in ZIP | MiSTer `bios_db.json.zip` | `zipfile` then `json.loads()` |
+| Logiqx XML | Redump, No-Intro, TOSEC DATs | Use `logiqx_parser` (see below) |
 
 ### System ID mapping
 
@@ -310,6 +312,22 @@ game (
 
 Produces `DatRom` dataclass instances with `name`, `size`, `crc32`, `md5`, `sha1`,
 and `system` fields. The `libretro_scraper` uses this parser.
+
+### logiqx_parser
+
+Parses Logiqx XML DATs, the format the dump-preservation catalogs publish:
+
+```xml
+<datafile>
+  <header><name>Sony - PlayStation - BIOS Images</name></header>
+  <game name="..."><rom name="..." size="524288" crc="..." md5="..." sha1="..."/></game>
+</datafile>
+```
+
+Used by `redump_dat_scraper` (fetches the four Redump BIOS DATs directly) and
+by `dat_pack_importer` (reads a locally downloaded No-Intro or TOSEC pack,
+since neither can be fetched without a browser). Both write a snapshot to
+`provenance/`; they do not touch platform YAMLs.
 
 ### mame_parser
 

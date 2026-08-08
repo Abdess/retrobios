@@ -8,27 +8,50 @@ BIOS files are firmware dumps from original console hardware. Emulators need the
 
 Three ways to get BIOS files in place, from easiest to most manual.
 
-### Option 1: install.py (recommended)
+### Option 1: the installer (recommended)
 
-Self-contained Python script, no dependencies beyond Python 3.10+. Auto-detects your platform and BIOS directory.
+One command, nothing to clone. It fetches `install.py`, detects the platform
+and its BIOS directory, downloads only what is missing, and verifies SHA1
+checksums before writing anything.
+
+```bash
+# Linux / macOS / Steam Deck
+curl -fsSL https://raw.githubusercontent.com/Abdess/retrobios/main/install.sh | sh
+
+# Windows (PowerShell)
+irm https://raw.githubusercontent.com/Abdess/retrobios/main/install.ps1 | iex
+```
+
+Running `install.py` directly works the same way and needs nothing beyond
+Python 3.10+:
 
 ```bash
 python install.py
 ```
 
-Override detection if needed:
+Override detection when needed:
 
 ```bash
 python install.py --platform retroarch --dest ~/custom/bios
-python install.py --check          # verify existing files without downloading
-python install.py --list-platforms  # show supported platforms
+python install.py --target switch      # keep only files for that hardware
+python install.py --check              # verify existing files, download nothing
+python install.py --list-platforms     # supported platforms and what was detected
+python install.py --list-targets       # hardware targets for a platform
+python install.py --jobs 4             # parallel downloads (default 8)
+python install.py --verbose
 ```
 
-The installer downloads files from GitHub releases, verifies SHA1 checksums, and places them in the correct directory.
+Arguments pass through the one-liner too, which is how you target an SD card
+mounted on another machine:
 
-### Option 2: download.sh (Linux/macOS)
+```bash
+curl -fsSL https://raw.githubusercontent.com/Abdess/retrobios/main/install.sh \
+  | sh -s -- --platform retroarch --dest /path/to/sdcard
+```
 
-One-liner for systems with `curl` or `wget`:
+### Option 2: download.sh (Linux/macOS, from a clone)
+
+Downloads a whole pack rather than the missing files. Needs `curl` and `unzip`:
 
 ```bash
 bash scripts/download.sh retroarch ~/RetroArch/system/
@@ -41,6 +64,11 @@ bash scripts/download.sh --list  # show available packs
 2. Download the ZIP pack for your platform
 3. Extract to the BIOS directory listed below
 
+Packs over 2 GB are split into numbered volumes (`.zip.001`, `.zip.002`).
+Download every part and open the `.001` file with 7-Zip or PeaZip, which
+extracts the whole set. See [Download](../which-pack.md) for the pack
+variants and per-setup instructions.
+
 ## BIOS directory by platform
 
 ### RetroArch
@@ -49,12 +77,18 @@ RetroArch uses the `system_directory` setting in `retroarch.cfg`. Default locati
 
 | OS | Default path |
 |----|-------------|
-| Windows | `%APPDATA%\RetroArch\system\` |
+| Windows (installer) | `%APPDATA%\RetroArch\system\` |
+| Windows (portable .7z) | `system\` next to `retroarch.exe` |
 | Linux | `~/.config/retroarch/system/` |
 | Linux (Flatpak) | `~/.var/app/org.libretro.RetroArch/config/retroarch/system/` |
 | macOS | `~/Library/Application Support/RetroArch/system/` |
-| Steam Deck | `~/.var/app/org.libretro.RetroArch/config/retroarch/system/` |
+| Steam Deck (Flatpak) | `~/.var/app/org.libretro.RetroArch/config/retroarch/system/` |
 | Android | `/storage/emulated/0/RetroArch/system/` |
+
+Windows has two layouts because the installer stores its data under `%APPDATA%`
+while the portable archive keeps everything inside the folder you extracted it
+to. If both exist on the machine, the one RetroArch actually reads is the one
+shown in the UI.
 
 To check your actual path: open RetroArch, go to **Settings > Directory > System/BIOS**, or look for `system_directory` in `retroarch.cfg`.
 
@@ -88,6 +122,13 @@ Relative to the RetroBat installation directory (e.g., `C:\RetroBat\bios\`).
 ~/retrodeck/bios/
 ```
 
+On a MicroSD install the root moves, e.g. `/run/media/mmcblk0p1/retrodeck/bios/`.
+
+The RetroDECK pack is the exception to "extract into the BIOS directory": its
+entries already start with `bios/` (and one with `roms/`), so extract it into
+`~/retrodeck/` and the files land in the right place. Extracting into
+`~/retrodeck/bios/` would create `~/retrodeck/bios/bios/`.
+
 ### EmuDeck
 
 ```
@@ -110,6 +151,29 @@ Accessible via SSH or Samba.
 ~/RetroPie/BIOS/
 ```
 
+RetroPie is archived in this project: its configuration is kept and packs are
+still built, but the upstream data is no longer scraped on a schedule. It
+inherits RetroArch's file set, so the RetroArch pack applies as well.
+
+### ROCKNIX
+
+```
+/storage/roms/bios/
+```
+
+Accessible via SSH or Samba, like Lakka.
+
+### MiSTer FPGA
+
+```
+/media/fat/games/
+```
+
+Files go under the per-core subdirectory the MiSTer BIOS database declares
+(e.g. `/media/fat/games/3DO/boot.rom`). Only the entries the BIOS database
+lists with a download URL are in scope: the rest ship with the MiSTer
+distribution and install themselves.
+
 ### BizHawk
 
 ```
@@ -120,12 +184,14 @@ Relative to the BizHawk installation directory.
 
 ### RomM
 
-BIOS files are managed through the RomM web interface. Check the
+BIOS files live in the RomM library under `bios/{platform_slug}/`, one
+subfolder per system, and are managed through the web interface. Check the
 [RomM documentation](https://github.com/rommapp/romm) for setup details.
 
 ## Verifying your setup
 
-After placing BIOS files, verify that everything is correct:
+`install.py --check` verifies an existing install without downloading anything.
+For the full report, run `verify.py` from a clone of the repository:
 
 ```bash
 python scripts/verify.py --platform retroarch
@@ -133,7 +199,14 @@ python scripts/verify.py --platform batocera
 python scripts/verify.py --platform recalbox
 ```
 
-The output shows each expected file with its status: OK, MISSING, or HASH MISMATCH. Platforms that verify by MD5 (Batocera, Recalbox, EmuDeck) will catch wrong versions. RetroArch only checks that files exist.
+The output shows each expected file with its status: `ok`, `missing`, or
+`untested`. `untested` means the file is there but its hash is not the expected
+one, which is how a wrong revision or a bad dump shows up.
+
+Only hash-checking platforms can catch a wrong version: Batocera, RetroBat,
+Recalbox, EmuDeck, RetroDECK, RomM, ROCKNIX and MiSTer FPGA compare MD5,
+BizHawk compares SHA1. RetroArch, Lakka and RetroPie only check that the file
+exists, so add `--verbose` there to compare against the emulator ground truth.
 
 For a single system:
 

@@ -28,7 +28,7 @@ Lakka and RetroPie inherit this behavior through platform config inheritance
 
 ## MD5 Mode
 
-**Platforms**: Batocera, RetroBat, Recalbox, EmuDeck, RetroDECK, RomM
+**Platforms**: Batocera, RetroBat, Recalbox, EmuDeck, RetroDECK, RomM, ROCKNIX, MiSTer FPGA
 
 All MD5-mode platforms compute a hash of the file and compare it against an expected value.
 The details vary by platform.
@@ -97,6 +97,29 @@ RomM uses MD5 verification (`verification_mode: md5`). The platform YAML stores
 SHA1, MD5, and CRC32 for reference, but `verify.py` checks only the MD5 field,
 matching the platform's runtime behavior. ZIP files are not opened; only the
 container is checked.
+
+### ROCKNIX verification
+
+**Source**: `rocknix-systems`, function `checkBios`
+
+ROCKNIX derives its BIOS checker from Batocera's, so the logic has the same
+shape: `md5sum()` on the file, `checkInsideZip()` for archive entries, and an
+`altmd5` field that accepts a second hash for the same entry. Every entry the
+platform declares is mandatory in its own data, so the platform YAML marks all
+38 files `required: true` and none of them use `zippedFile`.
+
+### MiSTer FPGA verification
+
+**Source**: `Downloader_MiSTer`, `jobs/process_db_index_worker.py`
+
+The MiSTer downloader hashes the file at its destination path and compares it
+against the MD5 recorded in the BIOS database. There is no ZIP inspection and
+no required/optional distinction: an entry either matches or it does not.
+
+Scope note: only the BiosDB entries are in scope. They carry an explicit `url`
+because MiSTer cannot host them, which is exactly what the user has to supply.
+The 208 `games/` files shipped by the `Distribution_MiSTer` repository carry no
+URL and install themselves, so they are not part of the pack.
 
 
 ## SHA1 Mode
@@ -201,9 +224,11 @@ The function tries these steps in order, returning the first match:
 | Step | Method | Returns | When it applies |
 |------|--------|---------|-----------------|
 | 0 | Path suffix exact | `exact` | `dest_hint` matches `by_path_suffix` index (regional variants with same filename, e.g., `GC/USA/IPL.bin` vs `GC/EUR/IPL.bin`) |
-| 1 | SHA1 exact | `exact` | SHA1 present in the file entry and found in database |
-| 2 | MD5 direct lookup | `md5_exact` | MD5 present, not a `zipped_file` entry, name matches (prevents cross-contamination from unrelated files sharing an MD5) |
-| 3 | Name/alias existence | `exact` | No MD5 in entry; any file with matching name or alias exists. Prefers primary over `.variants/` |
+| 1 | SHA1 exact | `exact` | SHA1 present in the file entry and found in database. A list-valued `sha1` from a profile is accepted |
+| 1b | SHA256 exact | `exact` | SHA256 present, for profiles read from sources that publish SHA256 (e.g. MesenCE) |
+| 1c | CRC32 + size exact | `exact` | Only when no stronger hash is declared (CRC-only profiles such as FBNeo and Clock Signal). CRC32 alone is weak, so the declared size has to confirm the match |
+| 2 | MD5 direct lookup | `md5_exact` | MD5 present, not a `zipped_file` entry. A full 32-char MD5 is trusted on its own; a truncated MD5 also has to match the name, which prevents cross-contamination from unrelated files sharing a prefix |
+| 3 | Name/alias existence | `exact` | No MD5 in entry; any file with matching name or alias exists. Prefers primary over `.variants/`, with a case-insensitive fallback for upstreams that disagree on casing |
 | 4 | Name + md5_composite/MD5 | `exact` or `hash_mismatch` | Name matches, checks md5_composite for ZIPs and direct MD5 per candidate. Falls back to hash_mismatch if name matches but no hash does |
 | 5 | ZIP contents index | `zip_exact` | `zipped_file` with MD5; searches inner ROM MD5 across all ZIPs when name-based resolution failed |
 | 6 | MAME clone fallback | `mame_clone` | File was deduped; resolves via canonical set name (up to 3 levels deep) |

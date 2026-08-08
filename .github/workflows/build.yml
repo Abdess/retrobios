@@ -141,15 +141,20 @@ jobs:
           - Linux/macOS: \`cat PackName.zip.0* > PackName.zip\`
           - Windows (cmd): \`copy /b PackName.zip.001+PackName.zip.002 PackName.zip\`
 
-          | Platform | Pack | Path |
-          |----------|------|------|
-          | RetroArch / Lakka | RetroArch_Lakka_BIOS_Pack.zip | system/ |
-          | Batocera | Batocera_BIOS_Pack.zip | /userdata/bios/ |
-          | Recalbox | Recalbox_BIOS_Pack.zip | /recalbox/share/bios/ |
-          | RetroBat | RetroBat_BIOS_Pack.zip | bios/ |
-          | RetroDECK | RetroDECK_BIOS_Pack.zip | ~/retrodeck/bios/ |
-          | EmuDeck | EmuDeck_BIOS_Pack.zip | Emulation/bios/ |
-          | RomM | RomM_BIOS_Pack.zip | bios/{platform_slug}/ |
+          | Platform | Extract to |
+          |----------|------------|
+          | RetroArch | system/ |
+          | Lakka | /storage/system/ |
+          | RetroPie | ~/RetroPie/BIOS/ |
+          | Batocera | /userdata/bios/ |
+          | Recalbox | /recalbox/share/bios/ |
+          | RetroBat | bios/ |
+          | RetroDECK | ~/retrodeck/ (the pack carries its own bios/) |
+          | EmuDeck | ~/Emulation/bios/ |
+          | ROCKNIX | /storage/roms/bios/ |
+          | MiSTer FPGA | /media/fat/games/ |
+          | BizHawk | Firmware/ |
+          | RomM | bios/{platform_slug}/ |
 
           ### Changes
           ${CHANGES}

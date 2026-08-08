@@ -2,6 +2,11 @@
 
 Technical documentation for the RetroBIOS toolchain.
 
+Pages are grouped by what you came to do. **For users** walks through
+installing and checking files. **Technical reference** describes how the
+toolchain behaves, one subject per page. **For contributors** is task-oriented:
+each page takes one job from start to finish.
+
 ## For users
 
 - **[Getting started](getting-started.md)** - installation, BIOS directory paths per platform, verification
@@ -17,6 +22,9 @@ If you just want to download BIOS packs, see the [home page](../index.md).
 - **[Verification modes](verification-modes.md)** - how each platform verifies BIOS files, severity matrix, resolution chain
 - **[Data model](data-model.md)** - database.json structure, indexes, file resolution order, YAML formats
 - **[Troubleshooting](troubleshooting.md)** - diagnosis by symptom: missing BIOS, hash mismatch, pack issues, verify errors
+
+See also [dump provenance](../provenance.md) for how the collection lines up
+against the No-Intro, Redump and TOSEC catalogs.
 
 ## For contributors
 
@@ -53,3 +61,12 @@ See [contributing](../contributing.md) for submission guidelines.
 - **optional** - a file the core functions without, possibly with reduced accuracy or missing features
 - **hle_fallback** - flag on a file indicating the core has an HLE path; absence is downgraded to INFO severity
 - **severity** - the urgency of a verification result: OK (verified), INFO (negligible), WARNING (degraded), CRITICAL (broken)
+- **status** - the outcome of a single file check: `ok`, `untested` (present, hash not the expected one), or `missing`
+- **discrepancy** - a file that passes the platform check but fails the emulator's own size or hash validation
+- **shared group** - a file group in `_shared.yml` that several platforms include, carrying the destination a core expects
+- **data directory** - a whole directory tree a core needs (Dolphin `Sys/`, PPSSPP assets), cached in `data/`, not indexed in the database
+- **storage tier** - where a file comes from: `embedded` (in `bios/`), `external` (downloaded at build), `user_provided`
+- **truth** - platform-shaped data generated from emulator profiles, used to diff against what the platform declares
+- **dump catalog** - a preservation project (Redump, No-Intro, TOSEC) publishing DATs of verified hardware dumps
+- **provenance** - the catalogs that list a file, joined into the database by hash; an annotation, never an authority
+- **manifest** - the JSON file list per platform in `install/`, consumed by `install.py`

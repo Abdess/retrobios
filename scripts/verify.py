@@ -7,6 +7,10 @@ Replicates the exact verification logic of each platform:
 - Recalbox: MD5 + mandatory/hashMatchMandatory, 3-color severity (Bios.cpp:109-130)
 - RetroBat: same as Batocera
 - EmuDeck: MD5 whitelist per system
+- RetroDECK: MD5 per file via component manifests
+- RomM: size + any hash, no ZIP inspection (firmware.py verify_file_hashes)
+- ROCKNIX: MD5 + checkInsideZip with altmd5 (rocknix-systems checkBios)
+- MiSTer FPGA: MD5 of the file at its destination, no ZIP inspection
 - BizHawk: SHA1 firmware hash verification
 
 Cross-references emulator profiles to detect undeclared files used by available cores.

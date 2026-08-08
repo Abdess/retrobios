@@ -12,6 +12,7 @@ platforms/               one YAML config per platform (scraped from upstream)
   _registry.yml          platform metadata (logos, scrapers, status, install config)
   _data_dirs.yml         data directory definitions (Dolphin Sys, PPSSPP...)
   targets/               hardware target configs + _overrides.yml
+provenance/              dump-catalog snapshots (redump, no-intro, tosec)
 scripts/                 all tooling (Python, pyyaml only dependency)
   scraper/               upstream scrapers (libretro, batocera, recalbox...)
   scraper/targets/       hardware target scrapers (retroarch, batocera, emudeck, retropie)
@@ -19,12 +20,19 @@ scripts/                 all tooling (Python, pyyaml only dependency)
 install/                 JSON install manifests per platform
   targets/               JSON target manifests per platform (cores per architecture)
 data/                    cached data directories (not BIOS, fetched at build)
-schemas/                 JSON schemas for validation
-tests/                   E2E test suite with synthetic fixtures
+schemas/                 JSON schemas for platform and emulator YAML (checked in CI)
+tests/                   test suite with synthetic fixtures
+wiki/                    hand-written documentation sources
+docs/                    generated MkDocs site (gitignored, rebuilt in CI)
 _mame_clones.json        MAME parent/clone set mappings
+database.json            file index built from bios/ (SHA1 primary key)
 dist/                    generated packs (gitignored)
 .cache/                  hash cache and large file downloads (gitignored)
 ```
+
+`docs/` is never edited by hand: `generate_site.py` rebuilds it from
+`platforms/`, `emulators/`, `database.json`, and the `wiki/` sources.
+Documentation changes belong in `wiki/` or in the generator.
 
 ## Data flow
 
@@ -35,7 +43,12 @@ Upstream sources          Scrapers parse       generate_db.py scans
   es_bios.xml (recalbox)                       (SHA1 primary key,
   core-info .info files                         indexes: by_md5, by_name,
   FirmwareDatabase.cs                           by_crc32, by_sha256, by_path_suffix)
+  bios_db.json.zip (MiSTer)
   MAME/FBNeo source
+
+provenance/*.json        generate_db.py joins  database.json entries carry
+  redump, no-intro,       by SHA1, then by      a provenance field naming
+  tosec snapshots         MD5 + size            the catalogs that list them
 
 emulators/*.yml          verify.py checks      generate_pack.py resolves
   source-verified         platform-native       files by hash, builds ZIP
@@ -46,13 +59,15 @@ truth.py generates       diff_truth.py         export_native.py
   emulator profiles       scraped platform      (DAT, XML, JSON, Bash)
 ```
 
-Pipeline runs all steps in sequence: DB, data dirs, MAME/FBNeo hashes,
-verify, packs, install manifests, target manifests, consistency check,
-pack integrity, README, site. See [tools](tools.md) for the full pipeline reference.
+Pipeline runs all steps in sequence: DB, provenance report, data dirs,
+MAME/FBNeo hashes, verify, packs, install manifests, target manifests,
+consistency check, pack integrity, README, site. See [tools](tools.md)
+for the full pipeline reference.
 
 ```mermaid
 graph LR
-    A[generate_db] --> B[refresh_data_dirs]
+    A[generate_db] --> A2[provenance report]
+    A2 --> B[refresh_data_dirs]
     B --> C[MAME/FBNeo hashes]
     C --> D[verify --all]
     D --> E[generate_pack --all]
@@ -105,6 +120,26 @@ graph TD
     style PG fill:#2d333b,stroke:#adbac7,color:#adbac7
     style ZIP fill:#2d333b,stroke:#adbac7,color:#adbac7
 ```
+
+## Dump-catalog provenance
+
+Snapshots of the dump-preservation catalogs (Redump, No-Intro, TOSEC) live in
+`provenance/` as committed JSON. `generate_db.py` joins them against the
+collection by SHA1, falling back to MD5 + size, and writes a `provenance` field
+on each matching database entry. The system pages render it as a verified dump
+badge.
+
+Provenance is an annotation, never an authority. It answers "does this file
+byte-match a catalogued dump", which is a different question from "does the
+emulator accept it". When the two disagree, pack contents and verification
+follow the emulator source code.
+
+`provenance_report.py` reports the reverse direction: catalog entries absent
+from the collection, which become acquisition targets. A DAT counts as covered
+when the collection holds at least one of its entries; entries from DATs the
+collection does not cover are counted but not listed, since No-Intro tags every
+non-game dump as `[BIOS]`, including tens of thousands of digital-distribution
+entries that are out of scope here.
 
 ## Pack grouping
 
@@ -174,7 +209,11 @@ graph TD
     S0 -- yes --> EXACT([exact])
     S0 -- no --> S1{SHA1<br/>exact match?}
     S1 -- yes --> EXACT
-    S1 -- no --> S2{MD5 direct<br/>or truncated?}
+    S1 -- no --> S1B{SHA256<br/>exact match?}
+    S1B -- yes --> EXACT
+    S1B -- no --> S1C{CRC32 + size,<br/>no stronger hash?}
+    S1C -- yes --> EXACT
+    S1C -- no --> S2{MD5 direct<br/>or truncated?}
     S2 -- yes --> MD5([md5_exact])
     S2 -- no --> S3{name + aliases<br/>no MD5?}
     S3 -- yes --> EXACT
@@ -236,19 +275,32 @@ user's platform, filter files by hardware target, and download with SHA1 verific
 
 ## Tests
 
-5 test files, 259 tests total:
+10 test files, 400 tests total:
 
 | File | Tests | Coverage |
 |------|-------|----------|
-| `test_e2e.py` | 196 | file resolution, verification, severity, cross-reference, aliases, inheritance, shared groups, data dirs, storage tiers, HLE, launchers, platform grouping, core resolution, target filtering, truth/diff, exporters |
-| `test_pack_integrity.py` | 8 | extract ZIP packs to disk, verify paths + hashes per platform's native mode |
+| `test_e2e.py` | 217 | file resolution, verification, severity, cross-reference, aliases, inheritance, shared groups, data dirs, storage tiers, HLE, launchers, platform grouping, core resolution, target filtering, truth/diff, exporters |
+| `test_install.py` | 70 | `install.py` platform detection, config-file parsing, manifest handling |
+| `test_provenance.py` | 29 | Logiqx/Redump parsers, DAT pack import, provenance join, coverage report |
 | `test_mame_parser.py` | 22 | BIOS root set detection, ROM block parsing, macro expansion |
+| `test_hash_merge.py` | 17 | MAME/FBNeo YAML merge, diff detection, formatting preservation |
 | `test_fbneo_parser.py` | 16 | BIOS set detection, ROM info parsing |
-| `test_hash_merge.py` | 17 | MAME/FBNeo YAML merge, diff detection |
+| `test_profile_refs.py` | 12 | `check_profile_refs` pure functions (no network) |
+| `test_pack_integrity.py` | 8 | extract ZIP packs to disk, verify paths + hashes per platform's native mode |
+| `test_torrentzip.py` | 8 | TorrentZip builder against real MAME romsets |
+| `test_no_case_collisions.py` | 1 | guard against case-colliding paths in `bios/` |
 
 ```bash
-python -m unittest tests.test_e2e -v
+python -m unittest discover tests -v      # full suite
+python -m unittest tests.test_e2e -v      # single module
 ```
+
+`test_e2e.py`, `test_install.py`, `test_provenance.py`, the parser tests and
+`test_profile_refs.py` run on synthetic fixtures with no network and no real
+BIOS files. `test_pack_integrity.py`, `test_torrentzip.py` and
+`test_no_case_collisions.py` read the working tree and skip when the data they
+need is absent. See the [testing guide](testing-guide.md) for the fixture
+pattern and how to add a test.
 
 ## CI workflows
 

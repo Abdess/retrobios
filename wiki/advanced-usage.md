@@ -57,6 +57,41 @@ For MD5-mode platforms (Batocera), all declared files are treated as required un
 explicitly marked optional.
 
 
+## Pack Source Variants
+
+A pack is built from two file sources: the platform's own declared list
+(layer 1) and the requirements of the emulator profiles that apply to it
+(layer 3). `--source` selects which of the two contributes.
+
+| `--source` | Contents | Name suffix |
+|-----------|----------|-------------|
+| `full` (default) | platform baseline plus everything its cores need | none |
+| `platform` | only what the platform itself declares | `_Platform` |
+| `truth` | only what the emulator profiles require | `_Truth` |
+
+`--required-only` crosses with each of them and adds `_Required`:
+
+```bash
+python scripts/generate_pack.py --platform retroarch --source platform
+python scripts/generate_pack.py --platform retroarch --source truth --required-only
+python scripts/generate_pack.py --all --all-variants --output-dir dist/
+```
+
+`--all-variants` builds all six combinations in one run, producing names like
+`RetroArch_Lakka_v1.22.2_BIOS_Pack.zip`,
+`RetroArch_Lakka_v1.22.2_Platform_BIOS_Pack.zip` and
+`RetroArch_Lakka_v1.22.2_Truth_Required_BIOS_Pack.zip`.
+
+Which one to pick: `full` is the one to ship, since it covers alternate cores
+and optional firmware. `platform` is much smaller and matches exactly what the
+frontend checks for, which suits SD cards and handhelds. `truth` is a
+diagnostic build: it shows what the emulator source code asks for, independent
+of what the platform declares, and is how a gap between the two becomes
+visible.
+
+Variants compose with `--split`, `--target` and `--manifest`.
+
+
 ## Hardware Target Filtering
 
 ### What targets are

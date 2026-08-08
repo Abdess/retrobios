@@ -43,10 +43,17 @@ The file exists on disk, but the emulator reports it as missing.
 
 Each platform expects BIOS files in a specific base directory:
 
-- RetroArch, Lakka: `system/` inside the RetroArch directory
+- RetroArch: `system/` inside the RetroArch directory
+- Lakka: `/storage/system/`
 - Batocera: `/userdata/bios/`
 - Recalbox: `/recalbox/share/bios/`
 - RetroPie: `~/RetroPie/BIOS/`
+- ROCKNIX: `/storage/roms/bios/`
+- MiSTer FPGA: `/media/fat/games/`
+- BizHawk: `Firmware/` inside the BizHawk directory
+- EmuDeck: `~/Emulation/bios/`
+- RetroDECK: `~/retrodeck/bios/`
+- RetroBat: `bios/` inside the RetroBat directory
 
 Some cores expect files in subdirectories (e.g. `dc/` for Dreamcast, `pcsx2/bios/`
 for PlayStation 2). Check the `path:` field in the emulator profile for the exact
@@ -81,12 +88,14 @@ or emulator expects. The reason field shows the expected vs actual hash prefix.
 To find the correct version, check the system page on the site. It lists every
 known BIOS file with its expected MD5 and SHA1.
 
-**UNTESTED:**
+**Existence-mode platforms never report UNTESTED:**
 
-On existence-only platforms (RetroArch, Lakka, RetroPie), the file is present
-but its hash was not verified against a known value. The platform itself only
-checks that the file exists. The `--verbose` flag shows ground truth data from
-emulator profiles, which can confirm whether the file's hash is actually correct.
+On RetroArch, Lakka and RetroPie, verification only asks whether the file is
+there, so the only outcomes are OK and MISSING. A wrong-region or corrupt file
+still shows as OK. To find out whether the content is right on those platforms,
+run `verify.py --verbose`: it adds the emulator ground truth from the profiles
+and flags a `DISCREPANCY` when the file passes the platform check but fails the
+emulator's own size or hash validation.
 
 **The .variants/ directory:**
 
@@ -109,10 +118,13 @@ important:
 
 | Severity | Meaning | Action needed |
 |----------|---------|---------------|
-| CRITICAL | Required file missing or hash mismatch on MD5 platforms | Must fix. Core won't function. |
-| WARNING | Optional file missing, or hash mismatch on existence platforms | Core works but with reduced functionality. |
-| INFO | Optional file missing on existence-only platforms, or HLE fallback available | Core works fine, BIOS improves accuracy. |
+| CRITICAL | Required file missing on an MD5 or SHA1 platform | Must fix. Core won't function. |
+| WARNING | Optional file missing on an MD5 or SHA1 platform, hash mismatch (UNTESTED) on any hash platform, or a required file missing on an existence platform | Core works but with reduced functionality, or runs on content nobody verified. |
+| INFO | Optional file missing on an existence-only platform, or a missing file the core covers with an HLE fallback | Core works fine, BIOS improves accuracy. |
 | OK | File present and verified | No action needed. |
+
+The full mapping, including how `hle_fallback` overrides the platform mode, is
+in [verification modes](verification-modes.md#severity-matrix).
 
 Focus on CRITICAL issues first. WARNING files improve the experience but aren't
 strictly necessary. INFO files are nice to have.

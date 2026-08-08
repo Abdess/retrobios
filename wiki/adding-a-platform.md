@@ -117,6 +117,11 @@ This fetches from upstream and prints a summary without writing anything.
 
 Add an entry to `platforms/_registry.yml` under the `platforms:` key.
 
+The registry describes *where the data comes from*. How the platform behaves
+at runtime (`verification_mode`, `base_destination`) belongs to the platform
+YAML, because that is what `verify.py` and `generate_pack.py` load. Keeping the
+two apart means a re-scrape can rewrite the YAML without touching the registry.
+
 ### Required fields
 
 ```yaml
@@ -124,16 +129,21 @@ platforms:
   myplatform:
     config: myplatform.yml           # platform YAML filename in platforms/
     status: active                   # active or archived
-    scraper: myplatform              # matches PLATFORM_NAME in the scraper
+    scraper: myplatform              # matches PLATFORM_NAME, null if hand-maintained
+    schedule: weekly                 # weekly, monthly, or null for no auto-scrape
     source_url: https://...          # upstream data URL
-    source_format: json              # json, xml, clrmamepro_dat, python_dict, bash_script+csv, csharp_firmware_database, github_component_manifests
+    source_format: json              # json, xml, clrmamepro_dat, python_dict,
+                                     # bash_script+csv, csharp_firmware_database,
+                                     # github_component_manifests, mister_downloader_db
     hash_type: md5                   # primary hash in the upstream data
-    verification_mode: md5           # how the platform checks files: existence, md5, sha1
-    base_destination: bios           # where files go on disk
     cores:                           # which emulator profiles apply
     - core_a
     - core_b
 ```
+
+A platform without a scraper (`scraper: null`, `schedule: null`) keeps its YAML
+as a hand-maintained file. RetroPie is the example: it inherits RetroArch's
+file set and has nothing of its own to fetch.
 
 The `cores` field determines which emulator profiles are resolved for this platform.
 Three strategies exist:
@@ -148,11 +158,15 @@ Three strategies exist:
 
 ```yaml
     logo: https://...                # SVG or PNG for UI/docs
-    schedule: weekly                 # scrape frequency: weekly, monthly, or null
     inherits_from: retroarch         # inherit systems/cores from another platform
     case_insensitive_fs: true        # if the platform runs on case-insensitive filesystems
-    target_scraper: myplatform_targets  # hardware target scraper name
+    source_wiki: https://...         # human-readable upstream reference
+    target_scraper: myplatform_targets  # hardware target scraper name, null if static
     target_source: https://...       # target data source URL
+    contributed_by:                  # credited in README, site, and packs
+    - username: someone
+      contribution: platform support
+      pr: 50
     install:
       detect:                        # auto-detection for install.py
       - os: linux
@@ -160,6 +174,25 @@ Three strategies exist:
         config: $HOME/.config/myplatform/config.ini
         parse_key: bios_directory
 ```
+
+### Platform YAML header
+
+The runtime behavior lives at the top of `platforms/myplatform.yml`:
+
+```yaml
+platform: MyPlatform
+verification_mode: md5   # existence, md5, or sha1
+hash_type: md5           # primary hash stored in the file entries
+base_destination: bios   # root directory the pack extracts into
+inherits: retroarch      # optional, merges the parent's systems
+systems:
+  sony-playstation:
+    files: [...]
+```
+
+`base_destination` is what the pack prefixes every entry with. Leave it empty
+when the upstream destinations already carry their own root, as RetroDECK does
+with `bios/` and `roms/`.
 
 ### Inheritance
 
@@ -191,13 +224,17 @@ python scripts/verify.py --platform myplatform --verbose
 ## Step 4: Add verification logic
 
 Check how the platform verifies BIOS files by reading its source code.
-The `verification_mode` in the registry tells `verify.py` which strategy to use:
+The `verification_mode` in the platform YAML tells `verify.py` which strategy
+to use:
 
 | Mode | Behavior | Example platforms |
 |------|----------|-------------------|
 | `existence` | File must exist, no hash check | RetroArch, Lakka, RetroPie |
-| `md5` | MD5 must match the declared hash | Batocera, Recalbox, RetroBat, EmuDeck, RetroDECK |
+| `md5` | MD5 must match the declared hash | Batocera, Recalbox, RetroBat, EmuDeck, RetroDECK, RomM, ROCKNIX, MiSTer FPGA |
 | `sha1` | SHA1 must match | BizHawk |
+
+Inheriting platforms take the parent's mode: Lakka and RetroPie do not declare
+one, they get `existence` from RetroArch.
 
 If the platform has unique verification behavior (e.g. Batocera's `checkInsideZip`,
 Recalbox's multi-hash comma-separated MD5, RomM's size + any-hash), add the logic
@@ -324,13 +361,19 @@ python scripts/pipeline.py --offline
 This executes in sequence:
 
 1. `generate_db.py` - rebuild `database.json` from `bios/`
+1b. `provenance_report.py` - dump-catalog coverage from `provenance/`
 2. `refresh_data_dirs.py` - update data directories (skipped with `--offline`)
 3. `verify.py --all` - verify all platforms including the new one
-4. `generate_pack.py --all` - build ZIP packs + install manifests
+4. `generate_pack.py --all` - build ZIP packs + install and target manifests
 5. Consistency check - verify counts match between verify and pack
 6. Pack integrity - extract ZIPs and verify hashes per platform mode
-7. `generate_readme.py` - regenerate README
-8. `generate_site.py` - regenerate documentation site
+7. `generate_readme.py` - regenerate README and CONTRIBUTING
+8. `generate_site.py` - regenerate documentation site and `mkdocs.yml`
+
+A new platform is archived-by-default nowhere: `status: active` puts it in
+`list_platforms.py`, the CI matrix, and the weekly scrape. Set
+`status: archived` to keep the configuration without the automation; archived
+platforms are excluded unless `--all` or `--include-archived` is passed.
 
 Check the output for:
 

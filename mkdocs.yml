@@ -1,7 +1,15 @@
 site_name: RetroBIOS
+site_description: Source-verified BIOS and firmware packs for RetroArch, Batocera,
+  Recalbox, Lakka, RetroPie, EmuDeck, RetroBat, RetroDECK, RomM, BizHawk, ROCKNIX
+  and MiSTer FPGA.
 site_url: https://abdess.github.io/retrobios/
 repo_url: https://github.com/Abdess/retrobios
 repo_name: Abdess/retrobios
+# Almost every page is generated from platforms/, emulators/ and database.json,
+# so a per-page edit link would point at a file that does not exist.
+edit_uri: ''
+copyright: MIT for the tooling. BIOS and firmware files are third-party system
+  software, preserved for personal backup, archival and interoperability.
 theme:
   name: material
   palette:
@@ -25,24 +33,46 @@ theme:
   icon:
     logo: material/chip
   features:
+  - navigation.instant
+  - navigation.instant.prefetch
+  - navigation.instant.progress
   - navigation.tabs
+  - navigation.tabs.sticky
   - navigation.sections
   - navigation.top
+  - navigation.tracking
   - navigation.indexes
+  # 400+ pages: pruning keeps the navigation out of every page's HTML.
+  - navigation.prune
+  - navigation.footer
   - search.suggest
   - search.highlight
+  - search.share
+  - content.code.copy
   - content.tabs.link
   - toc.follow
 extra_css:
 - stylesheets/extra.css
+extra:
+  social:
+  - icon: fontawesome/brands/github
+    link: https://github.com/Abdess/retrobios
+    name: RetroBIOS on GitHub
 markdown_extensions:
-- tables
+- abbr
 - admonition
 - attr_list
+- def_list
+- footnotes
 - md_in_html
+- tables
 - toc:
     permalink: true
 - pymdownx.details
+- pymdownx.highlight:
+    anchor_linenums: true
+- pymdownx.inlinehilite
+- pymdownx.keys
 - pymdownx.superfences:
     custom_fences:
     - name: mermaid
@@ -52,6 +82,13 @@ markdown_extensions:
     alternate_style: true
 plugins:
 - search
+# Link rot fails the build: deploy-site.yml runs `mkdocs build --strict`.
+# omitted_files stays at its default (info) so a stale local docs/ does not
+# break a local build; CI regenerates docs/ from scratch anyway.
+validation:
+  absolute_links: warn
+  unrecognized_links: warn
+  anchors: warn
 nav:
 - Home: index.md
 - Download: which-pack.md
@@ -211,12 +248,14 @@ nav:
     - vitaQuakeII: emulators/vitaquake2.md
     - yabasanshiro: emulators/yabasanshiro.md
     - Yuzu: emulators/yuzu.md
-  - Community forks (109):
+  - Community forks (111):
     - EightyOne: emulators/81.md
     - a5200: emulators/a5200.md
+    - ACE-DL: emulators/ace-dl.md
     - Anarch: emulators/anarch.md
     - AppleWin: emulators/applewin.md
     - Azahar: emulators/azahar.md
+    - AzaharPlus: emulators/azaharplus.md
     - b2: emulators/b2.md
     - Beetle Lynx (Mednafen Lynx): emulators/beetle_lynx.md
     - Beetle NGP (Mednafen Neo Geo Pocket): emulators/beetle_ngp.md
@@ -390,7 +429,9 @@ nav:
     - WASM-4: emulators/wasm4.md
     - XRick: emulators/xrick.md
     - Zelda Classic v2.10: emulators/zc210.md
-  - Enhanced forks (14):
+  - Enhanced forks (16):
+    - A7800: emulators/a7800.md
+    - AdvanceMAME: emulators/advancemame.md
     - bsnes-hd beta: emulators/bsnes_hd_beta.md
     - bsnes-mercury: emulators/bsnes_mercury.md
     - DOSBox Pure: emulators/dosbox_pure.md
@@ -438,16 +479,20 @@ nav:
     - Stone Soup: emulators/stonesoup.md
     - UME 2015: emulators/ume2015.md
     - VBA-Next: emulators/vba_next.md
-  - Embedded HLE (1):
+  - Embedded HLE (2):
+    - 3dSen: emulators/3dsen.md
     - PCSX-ReARMed: emulators/pcsx_rearmed.md
-  - Launchers (1):
+  - Launchers (2):
     - Dolphin Launcher: emulators/dolphin_launcher.md
-  - Other (23):
+    - ES-DE: emulators/es-de.md
+  - Other (25):
     - ares: emulators/ares.md
+    - Basilisk II: emulators/basiliskii.md
     - Beetle GBA (Mednafen): emulators/beetle_gba.md
     - BigPEmu: emulators/bigpemu.md
     - Cemu: emulators/cemu.md
     - Clock Signal (CLK): emulators/clk.md
+    - ColEm: emulators/colem.md
     - Demul: emulators/demul.md
     - eka2l1: emulators/eka2l1.md
     - ep128emu-core: emulators/ep128emu.md
@@ -468,6 +513,7 @@ nav:
     - XRoar: emulators/xroar.md
 - Cross-reference: cross-reference.md
 - Gap Analysis: gaps.md
+- Dump provenance: provenance.md
 - Wiki:
   - Overview: wiki/index.md
   - Getting started: wiki/getting-started.md

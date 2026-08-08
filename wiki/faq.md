@@ -8,7 +8,7 @@ Most likely a missing or incorrect BIOS file. Run verification for your platform
 python scripts/verify.py --platform retroarch
 ```
 
-Look for MISSING or HASH MISMATCH entries. If a file shows HASH MISMATCH, you have a BIOS file but it's the wrong version or a bad dump. Replace it with one that matches the expected hash.
+Look for `missing` or `untested` entries. `missing` means the file is not there at all. `untested` means the file is there but its hash is not the expected one, so it is the wrong version or a bad dump: replace it with one matching the hash listed on the system page.
 
 Some cores also support HLE (see below), so a missing BIOS may not always be the cause. Check the emulator's logs for error messages.
 
@@ -57,6 +57,9 @@ absent from the collection are tracked as acquisition targets. When
 the two views differ, this project follows the code, because that is
 what decides whether your emulator boots.
 
+The [dump provenance](../provenance.md) page has the current coverage
+per catalog and the full list of catalogued dumps still missing.
+
 ## Which MAME version do the arcade BIOS sets match?
 
 Arcade BIOS sets are coupled to the romset version, so there is one
@@ -99,7 +102,7 @@ This is the most contested area. The legal position:
 
 - **Keys are not copyrightable.** Encryption keys are mathematical values, not creative expression. Copyright protects original works of authorship; a 256-bit number does not meet the threshold of originality. *Bernstein v. DOJ* (1996) established that code and algorithms are protected speech, and the mere publication of numeric values cannot be restricted under copyright.
 - **DMCA 1201(f) interoperability exemption.** The DMCA prohibits circumvention of technological protection measures, but Section 1201(f) explicitly permits circumvention for the purpose of achieving interoperability between programs. Emulators require these keys to decrypt and run legally purchased game software. The keys enable interoperability, not piracy.
-- **Library of Congress DMCA exemptions.** The triennial rulemaking process has repeatedly expanded exemptions for video game preservation. The 2024 exemption (37 CFR 201.40) covers circumvention for preservation of software and video games, including when the original hardware is no longer available.
+- **Library of Congress DMCA exemptions.** The triennial rulemaking process has granted and renewed exemptions for video game and software preservation. The exemptions at 37 CFR 201.40 let an eligible library, archive or museum circumvent access controls to preserve a lawfully acquired video game whose external server support has ended, and to preserve computer programs generally, with access limited to the institution's premises. The Ninth Triennial Proceeding (2024 cycle) renewed those exemptions but declined to extend them to off-premises remote access, so the direction of travel favors preservation without having settled it.
 - **Keys derived from consumer hardware.** These keys are extracted from retail hardware owned by consumers. Once a product is sold, the manufacturer cannot indefinitely control how the purchaser uses or examines their own property. *Chamberlain v. Skylink* (2004) held that using a product in a way the manufacturer dislikes is not automatically a DMCA violation.
 - **No trade secret protection.** For keys to qualify as trade secrets, the holder must take reasonable steps to maintain secrecy. Keys embedded in millions of consumer devices and widely published online do not meet this standard.
 
@@ -123,23 +126,30 @@ The project tries to archive files while they are still available rather than af
 
 ## What's a hash/checksum?
 
-A hash is a fixed-length fingerprint computed from a file's contents. If even one byte differs, the hash changes completely. The project uses three types:
+A hash is a fixed-length fingerprint computed from a file's contents. If even one byte differs, the hash changes completely. Every file in the database carries these:
 
-| Type | Length | Example |
-|------|--------|---------|
-| MD5 | 32 hex chars | `924e392ed05558ffdb115408c263dccf` |
-| SHA1 | 40 hex chars | `10155d8d6e6e832d8ea1571511e40dfb15fede05` |
-| CRC32 | 8 hex chars | `2F468B96` |
+| Type | Length | Example | Used for |
+|------|--------|---------|----------|
+| SHA1 | 40 hex chars | `10155d8d6e6e832d8ea1571511e40dfb15fede05` | database primary key, BizHawk, installer downloads |
+| MD5 | 32 hex chars | `924e392ed05558ffdb115408c263dccf` | most platform verification |
+| SHA256 | 64 hex chars | `9a1c...` | emulator profiles whose upstream publishes SHA256 |
+| CRC32 | 8 hex chars | `2F468B96` | ROM-set matching, arcade DATs |
 
-Different platforms use different hash types for verification. Batocera uses MD5, RetroArch checks existence only, BizHawk uses SHA1, and RomM uses MD5.
+Emulator profiles add Adler-32 where the code checks it, which is how Dolphin
+validates its IPL files.
+
+Verification uses whichever one the platform itself uses: MD5 for Batocera,
+RetroBat, Recalbox, EmuDeck, RetroDECK, RomM, ROCKNIX and MiSTer FPGA, SHA1 for
+BizHawk, and nothing at all for RetroArch, Lakka and RetroPie, which only check
+that the file exists.
 
 ## Why does my verification report say UNTESTED?
 
-UNTESTED means the file exists on disk but its hash does not match the expected value. This happens on MD5/SHA1-mode platforms (Batocera, Recalbox, BizHawk, etc.) when the file is present but contains different data than what the platform declares.
+`untested` means the file exists on disk but its hash does not match the expected value. This happens on MD5 and SHA1 platforms (Batocera, Recalbox, BizHawk, ROCKNIX, MiSTer FPGA, and the rest) when the file is present but contains different data than what the platform declares.
 
-On existence-mode platforms (RetroArch, Lakka, RetroPie), files are never UNTESTED because the platform only checks presence, not content. Those files show as OK if present.
+On existence-mode platforms (RetroArch, Lakka, RetroPie), files are never `untested` because the platform only checks presence, not content. Those files show as `ok` if present, whatever they contain.
 
-Running `verify.py --emulator <core> --verbose` shows the emulator-level ground truth, which can confirm whether the file's hash matches what the source code expects.
+Running `verify.py --emulator <core> --verbose` shows the emulator-level ground truth, which can confirm whether the file's hash matches what the source code expects. On an existence platform, that verbose report is the only thing that can tell you the file is wrong.
 
 ## Can I use BIOS from one platform on another?
 
