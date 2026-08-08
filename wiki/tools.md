@@ -208,25 +208,55 @@ to the files inside the archive, so the exported DAT lists those entries
 without a container sha1. Anyone submitting the DAT upstream should mention
 this.
 
-### check_profile_refs.py
+### profile_sync.py
 
-Audit `source_ref` line references against the profiled upstream. The
-commit under audit is the profile's `source_commit` when present, else the
-last upstream commit at `profiled_date`. Each referenced file is fetched
-at that commit and at HEAD, and the entry's declared hashes (or filename)
-are searched around the cited lines.
+Confront a profile with its upstream. The pinned commit is the profile's
+`source_commit` when present, else the last upstream commit at
+`profiled_date`. Each cited line range is extracted at the pin and located
+in the HEAD revision of the same file.
 
 ```bash
-python scripts/check_profile_refs.py --emulator vice
-python scripts/check_profile_refs.py --all --json
+python scripts/profile_sync.py --emulator vice
+python scripts/profile_sync.py --emulator vice --full-diff
+python scripts/profile_sync.py --all --triage
+python scripts/profile_sync.py --all --changed-only --json
+python scripts/profile_sync.py --emulator vice --fetch-plan
 ```
 
-Per ref and revision: `anchored` (found at the cited lines), `moved`
-(found elsewhere in the file), `gone` (absent from the file). `moved` at
-HEAD means upstream shifted since profiling; `gone` at pin means the
-declared value does not come from the referenced file and the entry
-deserves a re-read. Uses `GITHUB_TOKEN` when set; GitHub-hosted upstreams
-only.
+Per part of a ref: `ANCHORED` (same content, same lines), `SHIFTED` (same
+content, moved), `RENAMED` (the source file moved), `CHANGED` (content
+edited), `AMBIGUOUS` (several equally good candidates), `GONE` (nothing
+left to anchor to). An entry carries the worst status of its parts.
+
+A single cited line is often not distinctive, so the anchor widens by
+steps of ±3, ±6 and ±12 lines until it is unique. Anything still ambiguous
+is reported, never guessed.
+
+Three shorthand forms appear in the corpus and are resolved rather than
+reported missing. A part reduced to a line range continues the previous
+part's file (`geo.c:234-243, 273-285`). A profile whose `source` differs
+from its `upstream` may cite paths from both, and each path is attributed
+to the repository that carries it. A path prefixed with a repository
+directory name (`EightyOne/Source/HW_.cpp`) is stripped as a last resort,
+only after the path as written has failed everywhere, and the result is
+reported as `RENAMED` so `--rebase-refs` cleans the profile.
+
+`--check-version` compares `core_version` with the latest upstream tag and
+release. `--detect-new-files` lists filename literals at HEAD the profile
+does not declare. `--watch-hashes` lists hash literals added upstream that
+match no entry. `--tree-diff` shows added, removed and renamed files in the
+directories the refs point at.
+
+Writes are explicit and mechanical only. `--backfill-commits` fills a
+missing `source_commit`, `--rebase-refs` recales `SHIFTED` and `RENAMED`
+line ranges, `--bump-commit` advances `source_commit` to HEAD only when
+nothing needs a re-read. All three refuse to run on a dirty `emulators/`
+without `--force`, and every write is verified by reparsing the document.
+
+Uses `GITHUB_TOKEN` when set, which `--all` requires. Responses are cached
+under `.cache/upstream/`, addressed by commit sha, so `--offline` replays a
+previous run. GitHub, GitLab and Forgejo upstreams; other hosts are
+reported as skipped.
 
 ### validation.py
 

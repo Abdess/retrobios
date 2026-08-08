@@ -1,0 +1,420 @@
+"""Access to upstream source repositories.
+
+Resolves revisions, fetches files by sha, and compares trees across the
+forge families the emulator profiles point at. Knows nothing about profile
+structure.
+"""
+
+from __future__ import annotations
+
+import hashlib
+import json
+import os
+import tempfile
+import urllib.error
+import urllib.parse
+import urllib.request
+from dataclasses import dataclass
+from pathlib import Path
+
+USER_AGENT = "retrobios-profile-sync/1.0"
+ABSENT = "\0absent\0"
+GITHUB_COMPARE_CAP = 300
+
+_HOSTS: dict[str, tuple[str, str, str]] = {
+    "github.com": (
+        "github",
+        "https://api.github.com",
+        "https://raw.githubusercontent.com",
+    ),
+    "gitlab.com": ("gitlab", "https://gitlab.com/api/v4", "https://gitlab.com"),
+    "codeberg.org": (
+        "forgejo",
+        "https://codeberg.org/api/v1",
+        "https://codeberg.org",
+    ),
+    "git.citron-emu.org": (
+        "forgejo",
+        "https://git.citron-emu.org/api/v1",
+        "https://git.citron-emu.org",
+    ),
+    "git.eden-emu.dev": (
+        "forgejo",
+        "https://git.eden-emu.dev/api/v1",
+        "https://git.eden-emu.dev",
+    ),
+}
+
+
+class UpstreamError(Exception):
+    """Any failure while talking to a forge."""
+
+
+class RateLimitError(UpstreamError):
+    """The forge refused the request for quota reasons."""
+
+
+@dataclass(frozen=True)
+class Repo:
+    host: str
+    family: str
+    api_base: str
+    raw_base: str
+    owner: str
+    name: str
+
+    @property
+    def slug(self) -> str:
+        return f"{self.owner}/{self.name}"
+
+
+@dataclass(frozen=True)
+class Release:
+    tag: str
+    date: str
+    is_prerelease: bool
+
+
+@dataclass(frozen=True)
+class FileChange:
+    status: str
+    path: str
+    previous_path: str | None
+
+
+@dataclass(frozen=True)
+class CompareResult:
+    files: list[FileChange]
+    truncated: bool
+
+
+def parse_repo(url: str) -> Repo | None:
+    """Build a Repo from a forge URL, or None when the host is unknown."""
+    if not url:
+        return None
+    parts = urllib.parse.urlsplit(url.strip())
+    entry = _HOSTS.get(parts.netloc)
+    if entry is None:
+        return None
+    segments = [s for s in parts.path.split("/") if s]
+    if len(segments) < 2:
+        return None
+    owner, name = segments[0], segments[1]
+    if name.endswith(".git"):
+        name = name[:-4]
+    family, api_base, raw_base = entry
+    return Repo(parts.netloc, family, api_base, raw_base, owner, name)
+
+
+def make_repo(host: str, owner: str, name: str) -> Repo | None:
+    """Rebuild a Repo from a host and slug already known to be supported."""
+    entry = _HOSTS.get(host)
+    if entry is None:
+        return None
+    family, api_base, raw_base = entry
+    return Repo(host, family, api_base, raw_base, owner, name)
+
+
+def raw_url(repo: Repo, sha: str, path: str) -> str:
+    """URL serving the raw bytes of one path at one revision."""
+    quoted = urllib.parse.quote(path)
+    if repo.family == "github":
+        return f"{repo.raw_base}/{repo.owner}/{repo.name}/{sha}/{quoted}"
+    if repo.family == "gitlab":
+        return f"{repo.raw_base}/{repo.owner}/{repo.name}/-/raw/{sha}/{quoted}"
+    return f"{repo.raw_base}/{repo.owner}/{repo.name}/raw/commit/{sha}/{quoted}"
+
+
+def _headers(accept_json: bool = False) -> dict[str, str]:
+    headers = {"User-Agent": USER_AGENT}
+    if accept_json:
+        headers["Accept"] = "application/json"
+    token = os.environ.get("GITHUB_TOKEN", "")
+    if token:
+        headers["Authorization"] = f"token {token}"
+    return headers
+
+
+def _http_text(url: str) -> str | None:
+    """Body of a GET, or None on 404. Replaced in tests."""
+    req = urllib.request.Request(url, headers=_headers())
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            return resp.read().decode("utf-8", errors="replace")
+    except urllib.error.HTTPError as exc:
+        if exc.code == 404:
+            return None
+        if exc.code in (403, 429):
+            raise RateLimitError(f"{url}: HTTP {exc.code}") from exc
+        raise UpstreamError(f"{url}: HTTP {exc.code}") from exc
+    except urllib.error.URLError as exc:
+        raise UpstreamError(f"{url}: {exc.reason}") from exc
+
+
+def _http_json(url: str) -> object | None:
+    """Parsed JSON body of a GET, or None on 404. Replaced in tests."""
+    req = urllib.request.Request(url, headers=_headers(accept_json=True))
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            return json.loads(resp.read().decode())
+    except urllib.error.HTTPError as exc:
+        if exc.code == 404:
+            return None
+        if exc.code in (403, 429):
+            raise RateLimitError(f"{url}: HTTP {exc.code}") from exc
+        raise UpstreamError(f"{url}: HTTP {exc.code}") from exc
+    except urllib.error.URLError as exc:
+        raise UpstreamError(f"{url}: {exc.reason}") from exc
+
+
+def cache_path(cache_dir: str, repo: Repo, sha: str, path: str) -> Path:
+    """Content-addressed location for one path at one revision."""
+    root = Path(cache_dir) / repo.host / repo.owner / repo.name / sha
+    safe = path.replace("\\", "/").strip("/")
+    target = (root / safe).resolve()
+    base = root.resolve()
+    if not str(target).startswith(str(base) + os.sep) and target != base:
+        target = base / safe.replace("/", "_").replace("..", "_")
+    return target
+
+
+def write_cache(target: Path, text: str) -> None:
+    """Atomic write: unique scratch in the target directory, then replace."""
+    target.parent.mkdir(parents=True, exist_ok=True)
+    fd, scratch = tempfile.mkstemp(dir=str(target.parent), suffix=".part")
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as fh:
+            fh.write(text)
+        os.replace(scratch, target)
+    except OSError:
+        Path(scratch).unlink(missing_ok=True)
+        raise
+
+
+def fetch_file(
+    repo: Repo,
+    sha: str,
+    path: str,
+    cache_dir: str,
+    offline: bool = False,
+) -> list[str] | None:
+    """Lines of one path at one revision, or None when absent."""
+    target = cache_path(cache_dir, repo, sha, path)
+    if target.is_file():
+        text = target.read_text(encoding="utf-8")
+        return None if text == ABSENT else text.splitlines()
+    if offline:
+        return None
+    text = _http_text(raw_url(repo, sha, path))
+    write_cache(target, ABSENT if text is None else text)
+    return None if text is None else text.splitlines()
+
+
+def _api(url: str, cache_dir: str, offline: bool) -> object | None:
+    """Cached API call. The cache stores absence as well as payloads."""
+    key = hashlib.sha256(url.encode()).hexdigest()
+    target = Path(cache_dir) / "_api" / f"{key}.json"
+    if target.is_file():
+        raw = target.read_text(encoding="utf-8")
+        return None if raw == ABSENT else json.loads(raw)
+    if offline:
+        return None
+    payload = _http_json(url)
+    write_cache(target, ABSENT if payload is None else json.dumps(payload))
+    return payload
+
+
+def _project(repo: Repo) -> str:
+    return urllib.parse.quote(f"{repo.owner}/{repo.name}", safe="")
+
+
+def _commits_url(repo: Repo, date: str | None) -> str:
+    if repo.family == "github":
+        base = f"{repo.api_base}/repos/{repo.slug}/commits?per_page=1"
+    elif repo.family == "gitlab":
+        base = (
+            f"{repo.api_base}/projects/{_project(repo)}"
+            f"/repository/commits?per_page=1"
+        )
+    else:
+        base = f"{repo.api_base}/repos/{repo.slug}/commits?limit=1"
+    return f"{base}&until={date}T23:59:59Z" if date else base
+
+
+def _first_sha(payload: object) -> str | None:
+    if isinstance(payload, list) and payload:
+        head = payload[0]
+        if isinstance(head, dict):
+            return head.get("sha") or head.get("id")
+    return None
+
+
+def resolve_head(repo: Repo, cache_dir: str, offline: bool = False) -> str | None:
+    """Sha of the default branch tip."""
+    return _first_sha(_api(_commits_url(repo, None), cache_dir, offline))
+
+
+def resolve_commit_at(
+    repo: Repo, date: str, cache_dir: str, offline: bool = False
+) -> str | None:
+    """Last default-branch commit on or before a date."""
+    return _first_sha(_api(_commits_url(repo, date), cache_dir, offline))
+
+
+def _tags_url(repo: Repo) -> str:
+    if repo.family == "gitlab":
+        return f"{repo.api_base}/projects/{_project(repo)}/repository/tags"
+    return f"{repo.api_base}/repos/{repo.slug}/tags"
+
+
+def list_tags(repo: Repo, cache_dir: str, offline: bool = False) -> list[str]:
+    """Tag names, newest first as the forge orders them."""
+    payload = _api(_tags_url(repo), cache_dir, offline)
+    if not isinstance(payload, list):
+        return []
+    return [t["name"] for t in payload if isinstance(t, dict) and t.get("name")]
+
+
+def resolve_tag_commit(
+    repo: Repo, tag: str, cache_dir: str, offline: bool = False
+) -> str | None:
+    """Commit a tag points at."""
+    payload = _api(_tags_url(repo), cache_dir, offline)
+    if not isinstance(payload, list):
+        return None
+    for entry in payload:
+        if not isinstance(entry, dict) or entry.get("name") != tag:
+            continue
+        commit = entry.get("commit")
+        if isinstance(commit, dict):
+            return commit.get("sha") or commit.get("id")
+    return None
+
+
+def _releases_url(repo: Repo) -> str:
+    if repo.family == "gitlab":
+        return f"{repo.api_base}/projects/{_project(repo)}/releases"
+    return f"{repo.api_base}/repos/{repo.slug}/releases/latest"
+
+
+def latest_release(
+    repo: Repo, cache_dir: str, offline: bool = False
+) -> Release | None:
+    """Most recent release the forge exposes."""
+    payload = _api(_releases_url(repo), cache_dir, offline)
+    if isinstance(payload, list):
+        payload = payload[0] if payload else None
+    if not isinstance(payload, dict):
+        return None
+    tag = payload.get("tag_name") or payload.get("tag") or ""
+    stamp = payload.get("published_at") or payload.get("released_at") or ""
+    if not tag:
+        return None
+    return Release(str(tag), str(stamp)[:10], bool(payload.get("prerelease")))
+
+
+def _compare_url(repo: Repo, base: str, head: str) -> str:
+    if repo.family == "gitlab":
+        return (
+            f"{repo.api_base}/projects/{_project(repo)}"
+            f"/repository/compare?from={base}&to={head}"
+        )
+    return f"{repo.api_base}/repos/{repo.slug}/compare/{base}...{head}"
+
+
+def _changes_from_github(payload: dict) -> list[FileChange]:
+    return [
+        FileChange(
+            entry.get("status", "modified"),
+            entry.get("filename", ""),
+            entry.get("previous_filename"),
+        )
+        for entry in (payload.get("files") or [])
+        if isinstance(entry, dict)
+    ]
+
+
+def _changes_from_gitlab(payload: dict) -> list[FileChange]:
+    changes = []
+    for entry in payload.get("diffs") or []:
+        if not isinstance(entry, dict):
+            continue
+        if entry.get("renamed_file"):
+            status = "renamed"
+        elif entry.get("new_file"):
+            status = "added"
+        elif entry.get("deleted_file"):
+            status = "removed"
+        else:
+            status = "modified"
+        previous = entry.get("old_path") if status == "renamed" else None
+        changes.append(FileChange(status, entry.get("new_path", ""), previous))
+    return changes
+
+
+def compare(
+    repo: Repo, base: str, head: str, cache_dir: str, offline: bool = False
+) -> CompareResult:
+    """Tree difference between two revisions."""
+    payload = _api(_compare_url(repo, base, head), cache_dir, offline)
+    if not isinstance(payload, dict):
+        return CompareResult([], True)
+    if repo.family == "gitlab":
+        files = _changes_from_gitlab(payload)
+    else:
+        files = _changes_from_github(payload)
+    truncated = bool(payload.get("truncated")) or len(files) >= GITHUB_COMPARE_CAP
+    return CompareResult(files, truncated)
+
+
+def find_renamed(result: CompareResult, path: str) -> str | None:
+    """New path of a file the comparison reports as renamed."""
+    for change in result.files:
+        if change.status == "renamed" and change.previous_path == path:
+            return change.path
+    return None
+
+
+def _tree_url(repo: Repo, sha: str) -> str | None:
+    if repo.family == "gitlab":
+        return None
+    return f"{repo.api_base}/repos/{repo.slug}/git/trees/{sha}?recursive=1"
+
+
+def list_tree(
+    repo: Repo, sha: str, cache_dir: str, offline: bool = False
+) -> tuple[list[str], bool]:
+    """Every blob path at one revision, and whether the forge truncated it."""
+    url = _tree_url(repo, sha)
+    if url is None:
+        return [], True
+    payload = _api(url, cache_dir, offline)
+    if not isinstance(payload, dict):
+        return [], True
+    paths = [
+        entry["path"]
+        for entry in payload.get("tree") or []
+        if isinstance(entry, dict) and entry.get("type") == "blob" and entry.get("path")
+    ]
+    return paths, bool(payload.get("truncated"))
+
+
+def commits_touching(
+    repo: Repo, path: str, base: str, cache_dir: str, offline: bool = False
+) -> int:
+    """Commits touching one path since a revision."""
+    quoted = urllib.parse.quote(path)
+    if repo.family == "gitlab":
+        url = (
+            f"{repo.api_base}/projects/{_project(repo)}"
+            f"/repository/commits?path={quoted}&per_page=100"
+        )
+    elif repo.family == "github":
+        url = (
+            f"{repo.api_base}/repos/{repo.slug}/commits"
+            f"?path={quoted}&sha={base}&per_page=100"
+        )
+    else:
+        url = f"{repo.api_base}/repos/{repo.slug}/commits?path={quoted}&limit=100"
+    payload = _api(url, cache_dir, offline)
+    return len(payload) if isinstance(payload, list) else 0

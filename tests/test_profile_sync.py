@@ -1,0 +1,1161 @@
+"""Tests for the profile synchronisation tool (no network)."""
+
+from __future__ import annotations
+
+import contextlib
+import io
+import json
+import os
+import sys
+import tempfile
+import unittest
+from pathlib import Path
+
+import yaml
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
+
+import profile_sync
+from profile_sync import (
+    EntryReport,
+    PartResult,
+    ProfileReport,
+    RefPart,
+    VersionReport,
+    YamlWriteError,
+    anchor_block,
+    anchor_part,
+    apply_edit,
+    backfill_commit,
+    build_parser,
+    build_report,
+    bump_commit,
+    check_version,
+    collect_tokens,
+    declared_hashes,
+    declared_names,
+    detect_new_files,
+    drift_score,
+    fetch_plan,
+    format_markdown,
+    format_report,
+    insert_after_line,
+    parse_source_ref,
+    rebase_refs,
+    replace_field_line,
+    report_to_dict,
+    resolve_rename,
+    select_profiles,
+    select_repo,
+    split_source_ref,
+    tree_diff,
+    unified_for_path,
+    version_warning,
+    watch_hashes,
+    worst_status,
+)
+from upstream import CompareResult, FileChange
+
+
+class TestParseSourceRef(unittest.TestCase):
+    def test_path_with_single_line(self):
+        self.assertEqual(
+            parse_source_ref("src/core/bios.cpp:258"),
+            ("src/core/bios.cpp", 258, 258),
+        )
+
+    def test_path_with_line_range(self):
+        self.assertEqual(
+            parse_source_ref("Machines/Utility/ROMCatalogue.cpp:123-129"),
+            ("Machines/Utility/ROMCatalogue.cpp", 123, 129),
+        )
+
+    def test_path_without_line(self):
+        self.assertEqual(
+            parse_source_ref("FirmwareDatabase.cs"),
+            ("FirmwareDatabase.cs", None, None),
+        )
+
+
+class TestSplitSourceRef(unittest.TestCase):
+    def test_single_part(self):
+        parts = split_source_ref("a.c:1-3")
+        self.assertEqual(len(parts), 1)
+        self.assertEqual(
+            (parts[0].path, parts[0].start, parts[0].end), ("a.c", 1, 3)
+        )
+
+    def test_multiple_parts(self):
+        parts = split_source_ref("a.c:1-3, b.c:9, c.h")
+        self.assertEqual([p.path for p in parts], ["a.c", "b.c", "c.h"])
+        self.assertIsNone(parts[2].start)
+
+    def test_empty_ref(self):
+        self.assertEqual(split_source_ref(""), [])
+
+    def test_bare_range_continues_the_previous_file(self):
+        parts = split_source_ref("src/geo.c:234-243, 273-285")
+        self.assertEqual(
+            [(p.path, p.start, p.end) for p in parts],
+            [("src/geo.c", 234, 243), ("src/geo.c", 273, 285)],
+        )
+
+    def test_bare_single_line_continues_the_previous_file(self):
+        parts = split_source_ref("HW_.cpp:2813,2820")
+        self.assertEqual(
+            [(p.path, p.start, p.end) for p in parts],
+            [("HW_.cpp", 2813, 2813), ("HW_.cpp", 2820, 2820)],
+        )
+
+    def test_bare_range_carries_across_several_continuations(self):
+        parts = split_source_ref("a.c:1-2, 5-6, 9")
+        self.assertEqual([p.path for p in parts], ["a.c", "a.c", "a.c"])
+        self.assertEqual(parts[2].start, 9)
+
+    def test_continuation_stops_at_a_new_path(self):
+        parts = split_source_ref("a.c:1-2, 5-6, b.c:3, 8")
+        self.assertEqual(
+            [(p.path, p.start) for p in parts],
+            [("a.c", 1), ("a.c", 5), ("b.c", 3), ("b.c", 8)],
+        )
+
+    def test_leading_bare_range_stays_a_path(self):
+        parts = split_source_ref("273-285")
+        self.assertEqual(parts[0].path, "273-285")
+
+
+class TestCollectTokens(unittest.TestCase):
+    def test_hashes_preferred_over_name(self):
+        entry = {
+            "name": "kernal.bin",
+            "sha1": "6C4FA9465F6091B174DF27DFE679499DF447503C",
+            "crc32": "789c8cc5",
+        }
+        tokens = collect_tokens(entry)
+        self.assertIn("6c4fa9465f6091b174df27dfe679499df447503c", tokens)
+        self.assertIn("789c8cc5", tokens)
+        self.assertNotIn("kernal.bin", tokens)
+
+    def test_name_fallback_without_hashes(self):
+        self.assertEqual(collect_tokens({"name": "GC/USA/IPL.bin"}), ["ipl.bin"])
+
+    def test_adler_prefix_stripped(self):
+        self.assertEqual(
+            collect_tokens({"known_hash_adler32": "0x4f1f6f5c"}), ["4f1f6f5c"]
+        )
+
+    def test_hash_lists(self):
+        self.assertEqual(
+            collect_tokens({"md5": ["AABB", "ccdd"]}), ["aabb", "ccdd"]
+        )
+
+
+class TestWorstStatus(unittest.TestCase):
+    def test_gone_beats_everything(self):
+        self.assertEqual(worst_status(["ANCHORED", "GONE", "SHIFTED"]), "GONE")
+
+    def test_changed_beats_ambiguous(self):
+        self.assertEqual(worst_status(["AMBIGUOUS", "CHANGED"]), "CHANGED")
+
+    def test_all_anchored(self):
+        self.assertEqual(worst_status(["ANCHORED", "ANCHORED"]), "ANCHORED")
+
+    def test_empty(self):
+        self.assertEqual(worst_status([]), "ANCHORED")
+
+
+class TestAnchorBlock(unittest.TestCase):
+    def test_anchored_same_position(self):
+        lines = ["a", "target", "b"]
+        result = anchor_block(lines, list(lines), 2, 2)
+        self.assertEqual(result.status, "ANCHORED")
+        self.assertEqual((result.start, result.end), (2, 2))
+
+    def test_shifted_when_block_moved(self):
+        pin = ["a", "target line", "b"]
+        head = ["x", "y", "z", "a", "target line", "b"]
+        result = anchor_block(pin, head, 2, 2)
+        self.assertEqual(result.status, "SHIFTED")
+        self.assertEqual((result.start, result.end), (5, 5))
+
+    def test_shifted_on_whitespace_only_change(self):
+        self.assertEqual(
+            anchor_block(["  value = 1"], ["\t\tvalue = 1"], 1, 1).status, "ANCHORED"
+        )
+
+    def test_range_preserved_when_shifted(self):
+        pin = ["p", "one", "two", "three", "q"]
+        head = ["x", "x", "p", "one", "two", "three", "q"]
+        result = anchor_block(pin, head, 2, 4)
+        self.assertEqual((result.status, result.start, result.end), ("SHIFTED", 4, 6))
+
+    def test_widening_disambiguates_duplicate_line(self):
+        pin = ["header A", "dup", "tail A", "header B", "dup", "tail B"]
+        head = ["pad", "header A", "dup", "tail A", "header B", "dup", "tail B"]
+        result = anchor_block(pin, head, 5, 5)
+        self.assertEqual((result.status, result.start), ("SHIFTED", 6))
+
+    def test_ambiguous_when_widening_never_resolves(self):
+        result = anchor_block(["dup"] * 40, ["dup"] * 40, 5, 5)
+        self.assertEqual(result.status, "AMBIGUOUS")
+        self.assertGreater(len(result.candidates), 1)
+
+    def test_changed_maps_to_new_range(self):
+        pin = ["a", "b", "value = 1", "c", "d"]
+        head = ["a", "b", "value = 2", "c", "d"]
+        result = anchor_block(pin, head, 3, 3)
+        self.assertEqual(result.status, "CHANGED")
+        self.assertEqual(result.start, 3)
+
+    def test_gone_when_content_vanished(self):
+        result = anchor_block(["a", "unique marker", "b"], ["x"] * 200, 2, 2)
+        self.assertEqual(result.status, "GONE")
+
+    def test_gone_when_start_beyond_pin_file(self):
+        self.assertEqual(anchor_block(["a"], ["a"], 50, 50).status, "GONE")
+
+    def test_blank_cited_range_is_changed(self):
+        result = anchor_block(["a", "", "b"], ["a", "", "b"], 2, 2)
+        self.assertEqual(result.status, "CHANGED")
+
+    def test_large_file_skips_mapping_with_reason(self):
+        pin = [f"line {i}" for i in range(25000)]
+        head = [f"other {i}" for i in range(25000)]
+        result = anchor_block(pin, head, 10, 10)
+        self.assertEqual(result.status, "CHANGED")
+        self.assertIsNotNone(result.reason)
+        self.assertIsNone(result.start)
+
+
+PIN = profile_sync.PIN
+HEAD = profile_sync.HEAD
+
+
+def make_fetch(files: dict[tuple[str, str], list[str]]):
+    return lambda sha, path: files.get((sha, path))
+
+
+def renamer(result: CompareResult, head_paths=()):
+    return lambda path: resolve_rename(result, path, head_paths)
+
+
+class TestResolveRename(unittest.TestCase):
+    def test_uses_comparison_when_available(self):
+        result = CompareResult([FileChange("renamed", "new.c", "old.c")], False)
+        self.assertEqual(resolve_rename(result, "old.c")[0], "new.c")
+
+    def test_basename_fallback_when_truncated(self):
+        result = CompareResult(
+            [
+                FileChange("added", "a/b/driver.cpp", None),
+                FileChange("added", "z/other.cpp", None),
+            ],
+            True,
+        )
+        found, candidates = resolve_rename(result, "src/driver.cpp")
+        self.assertEqual(found, "a/b/driver.cpp")
+        self.assertEqual(candidates, [])
+
+    def test_basename_fallback_ambiguous(self):
+        result = CompareResult(
+            [
+                FileChange("added", "a/driver.cpp", None),
+                FileChange("added", "b/driver.cpp", None),
+            ],
+            True,
+        )
+        found, candidates = resolve_rename(result, "src/driver.cpp")
+        self.assertIsNone(found)
+        self.assertEqual(len(candidates), 2)
+
+    def test_nothing_found(self):
+        self.assertEqual(resolve_rename(CompareResult([], False), "x.c"), (None, []))
+
+    def test_head_tree_wins_over_comparison_files(self):
+        result = CompareResult([FileChange("added", "wrong/a.c", None)], True)
+        found, _ = resolve_rename(result, "old/a.c", ["src/a.c", "docs/readme.md"])
+        self.assertEqual(found, "src/a.c")
+
+    def test_stem_fallback_when_extension_changed(self):
+        result = CompareResult([], True)
+        found, _ = resolve_rename(
+            result, "libretro.cpp", ["libretro.c", "libretro_cbs.h", "other.c"]
+        )
+        self.assertEqual(found, "libretro.c")
+
+    def test_same_directory_breaks_a_stem_tie(self):
+        found, _ = resolve_rename(
+            CompareResult([], True),
+            "libretro.cpp",
+            ["libretro-common/include/libretro.h", "libretro.c"],
+        )
+        self.assertEqual(found, "libretro.c")
+
+    def test_same_directory_tie_break_needs_a_single_winner(self):
+        found, candidates = resolve_rename(
+            CompareResult([], True), "src/a.cpp", ["src/a.c", "src/a.h"]
+        )
+        self.assertIsNone(found)
+        self.assertEqual(len(candidates), 2)
+
+    def test_stem_fallback_ambiguous_across_directories(self):
+        found, candidates = resolve_rename(
+            CompareResult([], True), "src/driver.cpp", ["a/driver.c", "b/driver.cc"]
+        )
+        self.assertIsNone(found)
+        self.assertEqual(len(candidates), 2)
+
+
+class TestAnchorPart(unittest.TestCase):
+    def test_anchored(self):
+        fetch = make_fetch({(PIN, "a.c"): ["x", "hit"], (HEAD, "a.c"): ["x", "hit"]})
+        result = anchor_part(
+            RefPart("a.c", 2, 2), fetch, renamer(CompareResult([], False))
+        )
+        self.assertEqual(result.status, "ANCHORED")
+
+    def test_path_only_ref_present_at_head(self):
+        fetch = make_fetch({(PIN, "a.c"): ["x"], (HEAD, "a.c"): ["y"]})
+        result = anchor_part(
+            RefPart("a.c", None, None), fetch, renamer(CompareResult([], False))
+        )
+        self.assertEqual(result.status, "ANCHORED")
+
+    def test_path_only_ref_absent_at_head(self):
+        fetch = make_fetch({(PIN, "a.c"): ["x"]})
+        result = anchor_part(
+            RefPart("a.c", None, None), fetch, renamer(CompareResult([], False))
+        )
+        self.assertEqual(result.status, "GONE")
+
+    def test_renamed_then_anchored_at_new_path(self):
+        fetch = make_fetch(
+            {(PIN, "old.c"): ["x", "hit"], (HEAD, "new.c"): ["x", "hit"]}
+        )
+        comparison = CompareResult([FileChange("renamed", "new.c", "old.c")], False)
+        result = anchor_part(RefPart("old.c", 2, 2), fetch, renamer(comparison))
+        self.assertEqual(result.status, "RENAMED")
+        self.assertEqual(result.new_path, "new.c")
+        self.assertEqual(result.start, 2)
+
+    def test_gone_when_pin_file_missing(self):
+        result = anchor_part(
+            RefPart("a.c", 1, 1), make_fetch({}), renamer(CompareResult([], False))
+        )
+        self.assertEqual(result.status, "GONE")
+
+    def test_ambiguous_rename_candidates_reported(self):
+        fetch = make_fetch({(PIN, "src/d.cpp"): ["x"]})
+        comparison = CompareResult(
+            [
+                FileChange("added", "a/d.cpp", None),
+                FileChange("added", "b/d.cpp", None),
+            ],
+            True,
+        )
+        result = anchor_part(RefPart("src/d.cpp", 1, 1), fetch, renamer(comparison))
+        self.assertEqual(result.status, "AMBIGUOUS")
+        self.assertIsNotNone(result.reason)
+
+    def test_rename_resolver_is_not_called_when_file_is_present(self):
+        calls = []
+
+        def getter(path):
+            calls.append(path)
+            return None, []
+
+        fetch = make_fetch({(PIN, "a.c"): ["x"], (HEAD, "a.c"): ["x"]})
+        anchor_part(RefPart("a.c", 1, 1), fetch, getter)
+        self.assertEqual(calls, [])
+
+    def test_gone_carries_a_reason(self):
+        result = anchor_part(
+            RefPart("a.c", 1, 1), make_fetch({}), renamer(CompareResult([], False))
+        )
+        self.assertIn("no rename found", result.reason)
+
+
+class TestSelectRepo(unittest.TestCase):
+    def test_source_wins_over_upstream(self):
+        repo = select_repo(
+            {
+                "source": "https://github.com/libretro/beetle-psx-libretro",
+                "upstream": "https://mednafen.github.io/",
+            }
+        )
+        self.assertEqual(repo.name, "beetle-psx-libretro")
+
+    def test_falls_back_to_upstream(self):
+        repo = select_repo(
+            {
+                "source": "https://www.mamedev.org/",
+                "upstream": "https://github.com/mamedev/mame",
+            }
+        )
+        self.assertEqual(repo.name, "mame")
+
+    def test_none_when_no_supported_host(self):
+        self.assertIsNone(select_repo({"source": "https://www.6809.org.uk/"}))
+
+
+class TestBuildReport(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.dir = self.tmp.name
+        self.files: dict[tuple[str, str], list[str]] = {}
+        self._orig = (
+            profile_sync.upstream.fetch_file,
+            profile_sync.upstream.resolve_head,
+            profile_sync.upstream.resolve_commit_at,
+            profile_sync.upstream.compare,
+            profile_sync.upstream.list_tree,
+            profile_sync.upstream._http_json,
+            profile_sync.upstream._http_text,
+        )
+        # Any code path reaching the HTTP layer is a leak, not a slow test.
+        def _no_network(url):
+            raise AssertionError(f"test reached the network: {url}")
+
+        profile_sync.upstream._http_json = _no_network
+        profile_sync.upstream._http_text = _no_network
+        profile_sync.upstream.list_tree = (
+            lambda repo, sha, cache_dir, offline=False: (
+                sorted({path for _, path in self.files}), False
+            )
+        )
+        profile_sync.upstream.fetch_file = (
+            lambda repo, sha, path, cache_dir, offline=False: self.files.get(
+                (sha, path)
+            )
+        )
+        profile_sync.upstream.resolve_head = (
+            lambda repo, cache_dir, offline=False: "headsha"
+        )
+        profile_sync.upstream.resolve_commit_at = (
+            lambda repo, date, cache_dir, offline=False: "pinsha"
+        )
+        profile_sync.upstream.compare = (
+            lambda repo, base, head, cache_dir, offline=False: CompareResult([], False)
+        )
+
+    def tearDown(self):
+        (
+            profile_sync.upstream.fetch_file,
+            profile_sync.upstream.resolve_head,
+            profile_sync.upstream.resolve_commit_at,
+            profile_sync.upstream.compare,
+            profile_sync.upstream.list_tree,
+            profile_sync.upstream._http_json,
+            profile_sync.upstream._http_text,
+        ) = self._orig
+        self.tmp.cleanup()
+
+    def _profile(self, refs):
+        return {
+            "emulator": "Test",
+            "source": "https://github.com/o/n",
+            "profiled_date": "2026-03-29",
+            "files": [
+                {"name": f"f{i}.bin", "source_ref": ref}
+                for i, ref in enumerate(refs)
+            ],
+        }
+
+    def test_counts_by_status(self):
+        self.files[("pinsha", "a.c")] = ["x", "hit", "y"]
+        self.files[("headsha", "a.c")] = ["pad", "x", "hit", "y"]
+        report = build_report("test", self._profile(["a.c:2"]), self.dir)
+        self.assertEqual(report.pin, "pinsha")
+        self.assertEqual(report.head, "headsha")
+        self.assertEqual(report.host, "github.com")
+        self.assertEqual(report.counts["SHIFTED"], 1)
+
+    def test_entry_takes_worst_part_status(self):
+        self.files[("pinsha", "a.c")] = ["x", "hit"]
+        self.files[("headsha", "a.c")] = ["x", "hit"]
+        self.files[("pinsha", "b.c")] = ["gone marker"]
+        self.files[("headsha", "b.c")] = ["z"] * 100
+        report = build_report("test", self._profile(["a.c:2, b.c:1"]), self.dir)
+        self.assertEqual(report.entries[0].status, "GONE")
+
+    def test_existing_source_commit_is_used(self):
+        profile = self._profile(["a.c:1"])
+        profile["source_commit"] = "pinned"
+        self.files[("pinned", "a.c")] = ["x"]
+        self.files[("headsha", "a.c")] = ["x"]
+        report = build_report("test", profile, self.dir)
+        self.assertEqual(report.pin, "pinned")
+        self.assertEqual(report.pin_origin, "source_commit")
+
+    def test_unsupported_host_is_skipped_with_reason(self):
+        report = build_report(
+            "test", {"emulator": "T", "source": "https://www.6809.org.uk/"}, self.dir
+        )
+        self.assertIn("unsupported host", report.skipped)
+
+    def test_profile_without_refs_is_reported_not_empty(self):
+        profile = {
+            "emulator": "T",
+            "source": "https://github.com/o/n",
+            "profiled_date": "2026-03-29",
+            "files": [{"name": "a.bin"}],
+        }
+        report = build_report("test", profile, self.dir)
+        self.assertEqual(report.entries, [])
+        self.assertEqual(report.skipped, "no source_ref")
+
+    def test_profile_without_refs_still_resolves_its_pin(self):
+        profile = {
+            "emulator": "T",
+            "source": "https://github.com/o/n",
+            "profiled_date": "2026-03-29",
+            "files": [{"name": "a.bin"}],
+        }
+        report = build_report("test", profile, self.dir)
+        self.assertEqual(report.pin, "pinsha")
+        self.assertEqual(report.head, "headsha")
+        self.assertEqual(report.needs_review(), 0)
+
+    def _two_repo_profile(self, refs):
+        profile = self._profile(refs)
+        profile["upstream"] = "https://gitlab.com/g/p"
+        return profile
+
+    def test_path_absent_from_source_resolves_against_upstream(self):
+        self.files[("pinsha", "src/a.c")] = ["x", "hit"]
+        self.files[("headsha", "src/a.c")] = ["x", "hit"]
+        report = build_report(
+            "test", self._two_repo_profile(["src/a.c:2"]), self.dir
+        )
+        self.assertEqual(report.entries[0].status, "ANCHORED")
+        self.assertEqual(report.repos, ["o/n", "g/p"])
+
+    def test_part_records_the_repository_that_carries_it(self):
+        self.files[("pinsha", "only_here.c")] = ["x", "hit"]
+        self.files[("headsha", "only_here.c")] = ["x", "hit"]
+        report = build_report(
+            "test", self._two_repo_profile(["only_here.c:2"]), self.dir
+        )
+        part = report.entries[0].parts[0]
+        self.assertIsNotNone(part.head_url)
+
+    def test_single_repo_profile_lists_one_slug(self):
+        self.files[("pinsha", "a.c")] = ["x"]
+        self.files[("headsha", "a.c")] = ["x"]
+        report = build_report("test", self._profile(["a.c:1"]), self.dir)
+        self.assertEqual(report.repos, ["o/n"])
+
+    def test_upstream_commit_pins_the_second_repository(self):
+        profile = self._two_repo_profile(["a.c:1"])
+        profile["upstream_commit"] = "upinned"
+        self.files[("pinsha", "a.c")] = ["x"]
+        self.files[("headsha", "a.c")] = ["x"]
+        report = build_report("test", profile, self.dir)
+        self.assertEqual(report.pin, "pinsha")
+        self.assertEqual(report.repos, ["o/n", "g/p"])
+
+    def test_repo_name_prefix_is_stripped_as_a_last_resort(self):
+        self.files[("pinsha", "Source/HW_.cpp")] = ["x", "hit"]
+        self.files[("headsha", "Source/HW_.cpp")] = ["x", "hit"]
+        report = build_report(
+            "test", self._profile(["n/Source/HW_.cpp:2"]), self.dir
+        )
+        part = report.entries[0].parts[0]
+        self.assertEqual(part.status, "RENAMED")
+        self.assertEqual(part.new_path, "Source/HW_.cpp")
+
+    def test_declared_path_wins_over_the_stripped_one(self):
+        self.files[("pinsha", "n/a.c")] = ["x", "declared"]
+        self.files[("headsha", "n/a.c")] = ["x", "declared"]
+        self.files[("pinsha", "a.c")] = ["x", "stripped"]
+        self.files[("headsha", "a.c")] = ["x", "stripped"]
+        report = build_report("test", self._profile(["n/a.c:2"]), self.dir)
+        part = report.entries[0].parts[0]
+        self.assertEqual(part.status, "ANCHORED")
+        self.assertIsNone(part.new_path)
+
+    def test_prefix_matching_no_repository_is_not_stripped(self):
+        self.files[("pinsha", "a.c")] = ["x", "hit"]
+        self.files[("headsha", "a.c")] = ["x", "hit"]
+        report = build_report("test", self._profile(["other/a.c:2"]), self.dir)
+        self.assertEqual(report.entries[0].parts[0].status, "GONE")
+
+    def test_missing_date_and_commit_is_skipped(self):
+        report = build_report(
+            "test",
+            {
+                "emulator": "T",
+                "source": "https://github.com/o/n",
+                "files": [{"name": "a", "source_ref": "a.c:1"}],
+            },
+            self.dir,
+        )
+        self.assertIn("no source_commit", report.skipped)
+
+
+def _sample_report():
+    shifted = PartResult(RefPart("a.c", 2, 4), "SHIFTED", None, 10, 12, [])
+    changed = PartResult(RefPart("b.c", 5, 5), "CHANGED", None, 7, 7, [])
+    return ProfileReport(
+        name="demo",
+        repo="o/n",
+        host="github.com",
+        pin="pinsha0000",
+        pin_origin="profiled_date 2026-03-29",
+        head="headsha000",
+        entries=[
+            EntryReport("f0.bin", "a.c:2-4", "SHIFTED", [shifted]),
+            EntryReport("f1.bin", "b.c:5", "CHANGED", [changed]),
+        ],
+        counts={"SHIFTED": 1, "CHANGED": 1},
+    )
+
+
+class TestFormatReport(unittest.TestCase):
+    def test_header_shows_both_revisions(self):
+        text = format_report(_sample_report())
+        self.assertIn("pinsha0", text)
+        self.assertIn("headsha", text)
+
+    def test_shifted_shows_new_range(self):
+        self.assertIn("10-12", format_report(_sample_report()))
+
+    def test_anchored_does_not_repeat_its_range(self):
+        part = PartResult(RefPart("a.c", 2, 4), "ANCHORED", None, 2, 4, [])
+        report = ProfileReport(
+            name="d", repo="o/n", host="github.com", pin="p" * 10, head="h" * 10,
+            pin_origin="source_commit",
+            entries=[EntryReport("f.bin", "a.c:2-4", "ANCHORED", [part])],
+            counts={"ANCHORED": 1},
+        )
+        self.assertEqual(format_report(report).count("2-4"), 2)
+
+    def test_review_count_in_summary(self):
+        self.assertIn("1 demandent une relecture", format_report(_sample_report()))
+
+    def test_skipped_profile_states_reason(self):
+        text = format_report(ProfileReport(name="x", skipped="no source_ref"))
+        self.assertIn("no source_ref", text)
+
+    def test_skipped_profile_still_shows_a_known_pin(self):
+        text = format_report(
+            ProfileReport(
+                name="x",
+                pin="pinsha0000",
+                head="headsha000",
+                pin_origin="profiled_date 2026-03-29",
+                skipped="no source_ref",
+            )
+        )
+        self.assertIn("pinsha0", text)
+        self.assertIn("no source_ref", text)
+
+    def test_changed_only_hides_clean_entries(self):
+        text = format_report(_sample_report(), changed_only=True)
+        self.assertIn("b.c:5", text)
+        self.assertNotIn("a.c:2-4", text)
+
+
+class TestElidedSummary(unittest.TestCase):
+    def test_groups_untouched_profiles_by_reason(self):
+        reports = [
+            ProfileReport(name="a", entries=[], counts={"CHANGED": 1}),
+            ProfileReport(name="b", entries=[], counts={}, skipped="no source_ref"),
+            ProfileReport(name="c", entries=[], counts={}, skipped="no source_ref"),
+            ProfileReport(name="d", entries=[], counts={"ANCHORED": 4}),
+        ]
+        buffer = io.StringIO()
+        with contextlib.redirect_stdout(buffer):
+            profile_sync._print_elided(reports, printed=1)
+        text = buffer.getvalue()
+        self.assertIn("3 non listes", text)
+        self.assertIn("2  no source_ref", text)
+        self.assertIn("1  nothing to review", text)
+
+    def test_silent_when_everything_was_listed(self):
+        buffer = io.StringIO()
+        with contextlib.redirect_stdout(buffer):
+            profile_sync._print_elided(
+                [ProfileReport(name="a", entries=[], counts={"GONE": 1})], printed=1
+            )
+        self.assertEqual(buffer.getvalue(), "")
+
+
+class TestReportToDict(unittest.TestCase):
+    def test_round_trips_through_json(self):
+        payload = report_to_dict(_sample_report())
+        self.assertEqual(json.loads(json.dumps(payload))["counts"]["CHANGED"], 1)
+
+    def test_parts_are_serialisable(self):
+        payload = report_to_dict(_sample_report())
+        self.assertEqual(payload["entries"][0]["parts"][0]["status"], "SHIFTED")
+
+    def test_markdown_lists_every_profile(self):
+        text = format_markdown([_sample_report()])
+        self.assertIn("demo", text)
+
+
+class TestFetchPlan(unittest.TestCase):
+    def test_only_entries_needing_review(self):
+        urls = fetch_plan(_sample_report())
+        self.assertEqual(len(urls), 1)
+        self.assertIn("b.c", urls[0])
+
+    def test_url_carries_head_revision(self):
+        self.assertIn("headsha000", fetch_plan(_sample_report())[0])
+
+    def test_url_uses_the_recorded_host(self):
+        report = _sample_report()
+        report.host = "codeberg.org"
+        self.assertIn("codeberg.org", fetch_plan(report)[0])
+
+    def test_empty_when_nothing_to_review(self):
+        report = _sample_report()
+        report.entries = [report.entries[0]]
+        report.counts = {"SHIFTED": 1}
+        self.assertEqual(fetch_plan(report), [])
+
+
+PROFILES = {
+    "alpha": {
+        "emulator": "A",
+        "type": "libretro",
+        "systems": ["sony-playstation"],
+        "profiled_date": "2026-03-01",
+    },
+    "beta": {
+        "emulator": "B",
+        "type": "standalone",
+        "systems": ["nintendo-64"],
+        "profiled_date": "2026-08-01",
+    },
+    "gamma": {
+        "emulator": "C",
+        "type": "alias",
+        "systems": ["sony-playstation"],
+        "profiled_date": "2026-03-01",
+    },
+}
+
+
+def _args(**kwargs):
+    argv = []
+    for key, value in kwargs.items():
+        flag = "--" + key.replace("_", "-")
+        if value is True:
+            argv.append(flag)
+        else:
+            argv.extend([flag, str(value)])
+    return build_parser().parse_args(argv)
+
+
+class TestSelectProfiles(unittest.TestCase):
+    def test_single_emulator(self):
+        self.assertEqual(
+            list(select_profiles(PROFILES, _args(emulator="alpha"))), ["alpha"]
+        )
+
+    def test_all_excludes_aliases(self):
+        self.assertEqual(
+            sorted(select_profiles(PROFILES, _args(all=True))), ["alpha", "beta"]
+        )
+
+    def test_filter_by_system(self):
+        self.assertEqual(
+            list(
+                select_profiles(
+                    PROFILES, _args(all=True, system="sony-playstation")
+                )
+            ),
+            ["alpha"],
+        )
+
+    def test_filter_by_type(self):
+        self.assertEqual(
+            list(select_profiles(PROFILES, _args(all=True, type="standalone"))),
+            ["beta"],
+        )
+
+    def test_stale_before(self):
+        self.assertEqual(
+            list(
+                select_profiles(PROFILES, _args(all=True, stale_before="2026-06-01"))
+            ),
+            ["alpha"],
+        )
+
+    def test_limit(self):
+        self.assertEqual(len(select_profiles(PROFILES, _args(all=True, limit=1))), 1)
+
+    def test_unknown_emulator_raises(self):
+        with self.assertRaises(SystemExit):
+            select_profiles(PROFILES, _args(emulator="nope"))
+
+
+SAMPLE = '''emulator: Test
+source: "https://github.com/o/n"
+profiled_date: "2026-03-29"
+
+notes: >
+  A note mentioning profiled_date: "1999-01-01" inside prose.
+
+files:
+  - name: "a.bin"
+    source_ref: "a.c:10-12"
+  - name: "b.bin"
+    source_ref: "b.c:5"
+'''
+
+
+class TestLineEdits(unittest.TestCase):
+    def test_insert_after_profiled_date(self):
+        out = insert_after_line(SAMPLE, "profiled_date", 'source_commit: "abc"')
+        lines = out.splitlines()
+        index = lines.index('profiled_date: "2026-03-29"')
+        self.assertEqual(lines[index + 1], 'source_commit: "abc"')
+
+    def test_insert_ignores_indented_occurrence_in_prose(self):
+        out = insert_after_line(SAMPLE, "profiled_date", 'source_commit: "abc"')
+        self.assertEqual(out.count("source_commit"), 1)
+
+    def test_replace_nth_source_ref(self):
+        out = replace_field_line(SAMPLE, "source_ref", 1, "b.c:5", "b.c:9")
+        self.assertIn('source_ref: "b.c:9"', out)
+        self.assertIn('source_ref: "a.c:10-12"', out)
+
+    def test_replace_refuses_on_value_mismatch(self):
+        with self.assertRaises(YamlWriteError):
+            replace_field_line(SAMPLE, "source_ref", 1, "not-there", "x")
+
+    def test_replace_refuses_missing_occurrence(self):
+        with self.assertRaises(YamlWriteError):
+            replace_field_line(SAMPLE, "source_ref", 9, "b.c:5", "x")
+
+
+class TestApplyEdit(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.path = Path(self.tmp.name) / "p.yml"
+        self.path.write_text(SAMPLE, encoding="utf-8")
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def test_backfill_writes_commit_and_preserves_comments(self):
+        self.assertTrue(backfill_commit(self.path, "abc123"))
+        text = self.path.read_text(encoding="utf-8")
+        self.assertIn('source_commit: "abc123"', text)
+        self.assertIn("A note mentioning", text)
+        self.assertEqual(yaml.safe_load(text)["source_commit"], "abc123")
+
+    def test_backfill_skips_when_already_present(self):
+        backfill_commit(self.path, "abc123")
+        self.assertFalse(backfill_commit(self.path, "def456"))
+
+    def test_guard_restores_file_on_structural_drift(self):
+        expected = yaml.safe_load(SAMPLE)
+        broken = SAMPLE.replace("emulator: Test", "emulator: Other")
+        with self.assertRaises(YamlWriteError):
+            apply_edit(self.path, broken, expected)
+        self.assertEqual(self.path.read_text(encoding="utf-8"), SAMPLE)
+
+    def test_guard_accepts_single_field_change(self):
+        expected = yaml.safe_load(SAMPLE)
+        expected["source_commit"] = "abc"
+        new_text = insert_after_line(SAMPLE, "profiled_date", 'source_commit: "abc"')
+        apply_edit(self.path, new_text, expected)
+        self.assertEqual(
+            yaml.safe_load(self.path.read_text())["source_commit"], "abc"
+        )
+
+
+class TestRebaseRefs(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.path = Path(self.tmp.name) / "p.yml"
+        self.path.write_text(SAMPLE, encoding="utf-8")
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def _report(self, entries):
+        return ProfileReport(
+            name="p", repo="o/n", pin="pin", head="head", entries=entries, counts={}
+        )
+
+    def test_shifted_range_is_rewritten(self):
+        part = PartResult(RefPart("a.c", 10, 12), "SHIFTED", None, 20, 22, [])
+        applied = rebase_refs(
+            self.path,
+            self._report([EntryReport("a.bin", "a.c:10-12", "SHIFTED", [part])]),
+        )
+        self.assertEqual(applied, ["a.c:10-12 -> a.c:20-22"])
+        self.assertIn('source_ref: "a.c:20-22"', self.path.read_text())
+
+    def test_renamed_path_is_rewritten(self):
+        part = PartResult(RefPart("a.c", 10, 12), "RENAMED", "src/a.c", 10, 12, [])
+        rebase_refs(
+            self.path,
+            self._report([EntryReport("a.bin", "a.c:10-12", "RENAMED", [part])]),
+        )
+        self.assertIn('source_ref: "src/a.c:10-12"', self.path.read_text())
+
+    def test_changed_is_never_touched(self):
+        part = PartResult(RefPart("b.c", 5, 5), "CHANGED", None, 9, 9, [])
+        self.assertEqual(
+            rebase_refs(
+                self.path,
+                self._report([EntryReport("b.bin", "b.c:5", "CHANGED", [part])]),
+            ),
+            [],
+        )
+        self.assertIn('source_ref: "b.c:5"', self.path.read_text())
+
+    def test_ambiguous_is_never_touched(self):
+        part = PartResult(RefPart("b.c", 5, 5), "AMBIGUOUS", None, None, None, [3, 9])
+        self.assertEqual(
+            rebase_refs(
+                self.path,
+                self._report([EntryReport("b.bin", "b.c:5", "AMBIGUOUS", [part])]),
+            ),
+            [],
+        )
+
+    def test_shifted_part_beside_changed_part_is_rebased(self):
+        shifted = PartResult(RefPart("a.c", 10, 12), "SHIFTED", None, 20, 22, [])
+        changed = PartResult(RefPart("b.c", 5, 5), "CHANGED", None, 9, 9, [])
+        rebase_refs(
+            self.path,
+            self._report(
+                [
+                    EntryReport("a.bin", "a.c:10-12", "SHIFTED", [shifted]),
+                    EntryReport("b.bin", "b.c:5", "CHANGED", [changed]),
+                ]
+            ),
+        )
+        text = self.path.read_text()
+        self.assertIn('source_ref: "a.c:20-22"', text)
+        self.assertIn('source_ref: "b.c:5"', text)
+
+
+class TestBumpCommit(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.path = Path(self.tmp.name) / "p.yml"
+        self.path.write_text(SAMPLE, encoding="utf-8")
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def test_refused_while_a_changed_remains(self):
+        report = ProfileReport(
+            name="p", repo="o/n", pin="pin", head="newhead",
+            entries=[], counts={"CHANGED": 1},
+        )
+        self.assertFalse(bump_commit(self.path, report))
+
+    def test_accepted_when_everything_anchors(self):
+        report = ProfileReport(
+            name="p", repo="o/n", pin="pin", head="newhead",
+            entries=[], counts={"ANCHORED": 3, "SHIFTED": 1},
+        )
+        self.assertTrue(bump_commit(self.path, report))
+        self.assertEqual(
+            yaml.safe_load(self.path.read_text())["source_commit"], "newhead"
+        )
+
+
+class TestCheckVersion(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.dir = self.tmp.name
+        self.repo = profile_sync.upstream.parse_repo("https://github.com/o/n")
+        self._orig = (
+            profile_sync.upstream.latest_release,
+            profile_sync.upstream.list_tags,
+            profile_sync.upstream.resolve_tag_commit,
+        )
+        profile_sync.upstream.latest_release = (
+            lambda repo, cache, offline=False: profile_sync.upstream.Release(
+                "v3.1.2", "2026-06-14", False
+            )
+        )
+        profile_sync.upstream.list_tags = (
+            lambda repo, cache, offline=False: ["v3.1.2", "v3.0.0"]
+        )
+        profile_sync.upstream.resolve_tag_commit = (
+            lambda repo, tag, cache, offline=False: (
+                "tagsha" if tag == "v3.0.0" else None
+            )
+        )
+
+    def tearDown(self):
+        (
+            profile_sync.upstream.latest_release,
+            profile_sync.upstream.list_tags,
+            profile_sync.upstream.resolve_tag_commit,
+        ) = self._orig
+        self.tmp.cleanup()
+
+    def test_reports_declared_and_latest(self):
+        result = check_version({"core_version": "v3.0.0"}, self.repo, self.dir, False)
+        self.assertEqual(result.declared, "v3.0.0")
+        self.assertEqual(result.latest_release, "v3.1.2")
+        self.assertEqual(result.release_date, "2026-06-14")
+
+    def test_detects_declared_version_is_a_tag(self):
+        result = check_version({"core_version": "v3.0.0"}, self.repo, self.dir, False)
+        self.assertTrue(result.tag_matches_declared)
+        self.assertEqual(result.tag_commit, "tagsha")
+
+    def test_declared_version_not_a_tag(self):
+        result = check_version({"core_version": "5.2"}, self.repo, self.dir, False)
+        self.assertFalse(result.tag_matches_declared)
+        self.assertIsNone(result.tag_commit)
+
+    def test_none_without_core_version(self):
+        self.assertIsNone(check_version({}, self.repo, self.dir, False))
+
+    def test_warning_when_tag_commit_differs_from_pin(self):
+        result = check_version({"core_version": "v3.0.0"}, self.repo, self.dir, False)
+        self.assertIsNotNone(version_warning(result, "otherpin"))
+
+    def test_no_warning_when_tag_commit_matches_pin(self):
+        result = check_version({"core_version": "v3.0.0"}, self.repo, self.dir, False)
+        self.assertIsNone(version_warning(result, "tagsha"))
+
+
+HASH_PROFILE = {
+    "files": [
+        {
+            "name": "scph5500.bin",
+            "sha1": "B05DEF971D8EC59F346F2D9AC21FB742E3EB6917",
+            "aliases": ["SCPH-5500.bin"],
+        },
+        {"name": "gba_bios.bin", "md5": "a860e8c0b6d573d191e4ec7db1b1e4f6"},
+    ]
+}
+
+
+class TestDeclared(unittest.TestCase):
+    def test_names_include_aliases_casefolded(self):
+        names = declared_names(HASH_PROFILE)
+        self.assertIn("scph5500.bin", names)
+        self.assertIn("scph-5500.bin", names)
+
+    def test_hashes_lowercased(self):
+        self.assertIn(
+            "b05def971d8ec59f346f2d9ac21fb742e3eb6917", declared_hashes(HASH_PROFILE)
+        )
+
+
+class TestDetectNewFiles(unittest.TestCase):
+    def test_finds_undeclared_filename(self):
+        lines = ['load("scph5500.bin");', 'load("scph7001.bin");']
+        found, elided = detect_new_files(lines, declared_names(HASH_PROFILE))
+        self.assertEqual(found, [(2, "scph7001.bin")])
+        self.assertEqual(elided, 0)
+
+    def test_ignores_declared_alias(self):
+        found, _ = detect_new_files(
+            ['open("SCPH-5500.bin")'], declared_names(HASH_PROFILE)
+        )
+        self.assertEqual(found, [])
+
+    def test_cap_reports_elided_count(self):
+        lines = [f'load("rom{i}.bin");' for i in range(40)]
+        found, elided = detect_new_files(lines, set(), cap=25)
+        self.assertEqual(len(found), 25)
+        self.assertEqual(elided, 15)
+
+    def test_source_file_extensions_are_not_matched(self):
+        found, _ = detect_new_files(['#include "driver.cpp"'], set())
+        self.assertEqual(found, [])
+
+
+class TestWatchHashes(unittest.TestCase):
+    def test_finds_new_sha1(self):
+        added = ['+  { "x.bin", "0123456789abcdef0123456789abcdef01234567" },']
+        found = watch_hashes(added, declared_hashes(HASH_PROFILE))
+        self.assertEqual(found[0][1], "0123456789abcdef0123456789abcdef01234567")
+
+    def test_ignores_declared_hash(self):
+        added = ["+  b05def971d8ec59f346f2d9ac21fb742e3eb6917"]
+        self.assertEqual(watch_hashes(added, declared_hashes(HASH_PROFILE)), [])
+
+    def test_crc32_needs_a_filename_on_the_line(self):
+        self.assertEqual(watch_hashes(["+  mask = 0xdeadbeef;"], set()), [])
+        found = watch_hashes(['+  { "a.rom", 0xdeadbeef }'], set())
+        self.assertEqual(found[0][1], "deadbeef")
+
+
+class TestUnifiedForPath(unittest.TestCase):
+    def test_produces_a_hunk(self):
+        out = unified_for_path(["a", "b"], ["a", "c"], "f.c", 1)
+        self.assertIn("-b", out)
+        self.assertIn("+c", out)
+        self.assertIn("f.c", out)
+
+    def test_identical_files_produce_nothing(self):
+        self.assertEqual(unified_for_path(["a"], ["a"], "f.c", 3), "")
+
+
+class TestTreeDiff(unittest.TestCase):
+    def test_filters_to_ref_directories(self):
+        result = CompareResult(
+            [
+                FileChange("added", "src/new.cpp", None),
+                FileChange("added", "docs/readme.md", None),
+            ],
+            False,
+        )
+        self.assertEqual(tree_diff(result, {"src"}), ["added  src/new.cpp"])
+
+    def test_rename_shows_both_paths(self):
+        result = CompareResult([FileChange("renamed", "src/b.c", "src/a.c")], False)
+        self.assertEqual(tree_diff(result, {"src"}), ["renamed  src/a.c -> src/b.c"])
+
+    def test_repository_root_is_a_directory(self):
+        result = CompareResult(
+            [
+                FileChange("modified", "libretro.c", None),
+                FileChange("modified", "deps/lightning/lib/jit_arm.c", None),
+            ],
+            False,
+        )
+        self.assertEqual(tree_diff(result, {""}), ["modified  libretro.c"])
+
+    def test_empty_ref_dirs_show_everything(self):
+        result = CompareResult([FileChange("modified", "a/b.c", None)], False)
+        self.assertEqual(tree_diff(result, set()), ["modified  a/b.c"])
+
+    def test_truncation_is_announced(self):
+        result = CompareResult([FileChange("added", "src/a.c", None)], True)
+        self.assertIn("truncated", "\n".join(tree_diff(result, {"src"})))
+
+
+class TestDriftScore(unittest.TestCase):
+    def test_review_statuses_dominate(self):
+        heavy = ProfileReport(name="a", entries=[], counts={"GONE": 1})
+        light = ProfileReport(name="b", entries=[], counts={"SHIFTED": 20})
+        self.assertGreater(drift_score(heavy, None, 0), drift_score(light, None, 0))
+
+    def test_version_mismatch_adds_weight(self):
+        report = ProfileReport(name="a", entries=[], counts={})
+        stale = VersionReport("v1.0", "v2.0", "v2.0", "2026-06-01", False, None)
+        current = VersionReport("v2.0", "v2.0", "v2.0", "2026-06-01", True, None)
+        self.assertGreater(
+            drift_score(report, stale, 0), drift_score(report, current, 0)
+        )
+
+    def test_commit_count_is_a_light_signal(self):
+        report = ProfileReport(name="a", entries=[], counts={})
+        self.assertGreater(drift_score(report, None, 100), drift_score(report, None, 0))
+
+    def test_clean_profile_scores_zero(self):
+        report = ProfileReport(name="a", entries=[], counts={"ANCHORED": 5})
+        self.assertEqual(drift_score(report, None, 0), 0)
+
+
+if __name__ == "__main__":
+    unittest.main()

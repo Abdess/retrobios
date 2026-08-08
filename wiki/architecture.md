@@ -275,19 +275,23 @@ user's platform, filter files by hardware target, and download with SHA1 verific
 
 ## Tests
 
-10 test files, 400 tests total:
+14 test files, 586 tests total:
 
 | File | Tests | Coverage |
 |------|-------|----------|
-| `test_e2e.py` | 217 | file resolution, verification, severity, cross-reference, aliases, inheritance, shared groups, data dirs, storage tiers, HLE, launchers, platform grouping, core resolution, target filtering, truth/diff, exporters |
+| `test_e2e.py` | 218 | file resolution, verification, severity, cross-reference, aliases, inheritance, shared groups, data dirs, storage tiers, HLE, launchers, platform grouping, core resolution, target filtering, truth/diff, exporters |
+| `test_profile_sync.py` | 129 | ref anchoring, guarded profile writes, detection, triage |
 | `test_install.py` | 70 | `install.py` platform detection, config-file parsing, manifest handling |
+| `test_upstream.py` | 38 | forge URL parsing, cache, revision resolution, tree comparison |
 | `test_provenance.py` | 29 | Logiqx/Redump parsers, DAT pack import, provenance join, coverage report |
-| `test_mame_parser.py` | 22 | BIOS root set detection, ROM block parsing, macro expansion |
+| `test_mame_parser.py` | 25 | BIOS root set detection, ROM block parsing, macro expansion |
 | `test_hash_merge.py` | 17 | MAME/FBNeo YAML merge, diff detection, formatting preservation |
 | `test_fbneo_parser.py` | 16 | BIOS set detection, ROM info parsing |
-| `test_profile_refs.py` | 12 | `check_profile_refs` pure functions (no network) |
+| `test_deterministic_zip.py` | 12 | streaming rebuild, metadata normalisation, entry ordering, source CRC |
+| `test_artifact_lock.py` | 10 | writer/writer and writer/reader exclusion, reader sharing, release on error |
 | `test_pack_integrity.py` | 8 | extract ZIP packs to disk, verify paths + hashes per platform's native mode |
 | `test_torrentzip.py` | 8 | TorrentZip builder against real MAME romsets |
+| `test_large_file_cache.py` | 5 | concurrent downloads, temporary file residue, hash rejection |
 | `test_no_case_collisions.py` | 1 | guard against case-colliding paths in `bios/` |
 
 ```bash
@@ -295,9 +299,9 @@ python -m unittest discover tests -v      # full suite
 python -m unittest tests.test_e2e -v      # single module
 ```
 
-`test_e2e.py`, `test_install.py`, `test_provenance.py`, the parser tests and
-`test_profile_refs.py` run on synthetic fixtures with no network and no real
-BIOS files. `test_pack_integrity.py`, `test_torrentzip.py` and
+`test_e2e.py`, `test_install.py`, `test_provenance.py`, the parser tests,
+`test_profile_sync.py` and `test_upstream.py` run on synthetic fixtures with no
+network and no real BIOS files. `test_pack_integrity.py`, `test_torrentzip.py` and
 `test_no_case_collisions.py` read the working tree and skip when the data they
 need is absent. See the [testing guide](testing-guide.md) for the fixture
 pattern and how to add a test.

@@ -1,0 +1,1236 @@
+#!/usr/bin/env python3
+"""Confront emulator profiles with their upstream source.
+
+Anchors every source_ref of a profile against the commit the profile was
+written at and against upstream HEAD, separating what is mechanically
+recalable from what needs the code read again.
+"""
+
+from __future__ import annotations
+
+import argparse
+import difflib
+import json
+import os
+import posixpath
+import re
+import subprocess
+import sys
+from dataclasses import asdict, dataclass
+from datetime import date
+from pathlib import Path
+
+import yaml
+
+sys.path.insert(0, os.path.dirname(__file__))
+
+import upstream
+from common import load_emulator_profiles
+from upstream import CompareResult, find_renamed
+
+DEFAULT_CACHE = ".cache/upstream"
+ANON_QUOTA = 60
+TRIAGE_PATH_SAMPLE = 5
+
+STATUS_ORDER = ("ANCHORED", "SHIFTED", "RENAMED", "AMBIGUOUS", "CHANGED", "GONE")
+REVIEW_STATUSES = ("CHANGED", "GONE", "AMBIGUOUS")
+REBASE_STATUSES = ("SHIFTED", "RENAMED")
+
+WIDEN_STEPS = (0, 3, 6, 12)
+MAX_MATCH_LINES = 20000
+
+PIN = "pin"
+HEAD = "head"
+
+_REF_RE = re.compile(r"^(?P<path>[^:]+?)(?::(?P<start>\d+)(?:-(?P<end>\d+))?)?$")
+_BARE_RANGE_RE = re.compile(r"^\d+(?:-\d+)?$")
+
+
+@dataclass(frozen=True)
+class RefPart:
+    path: str
+    start: int | None
+    end: int | None
+
+
+@dataclass(frozen=True)
+class AnchorResult:
+    status: str
+    start: int | None
+    end: int | None
+    candidates: list[int]
+    reason: str | None = None
+
+
+@dataclass(frozen=True)
+class PartResult:
+    part: RefPart
+    status: str
+    new_path: str | None
+    start: int | None
+    end: int | None
+    candidates: list[int]
+    reason: str | None = None
+    repo: str | None = None
+    head_url: str | None = None
+
+
+@dataclass(frozen=True)
+class RepoView:
+    """One repository a profile cites, at the two revisions under comparison."""
+
+    repo: object
+    pin: str
+    head: str
+    origin: str
+    field: str
+
+
+def parse_source_ref(ref: str) -> tuple[str, int | None, int | None]:
+    """Split 'path/file.cpp:123-129' into (path, start, end)."""
+    m = _REF_RE.match(ref.strip())
+    if not m:
+        return ref.strip(), None, None
+    start = int(m.group("start")) if m.group("start") else None
+    end = int(m.group("end")) if m.group("end") else start
+    return m.group("path"), start, end
+
+
+def split_source_ref(ref: str) -> list[RefPart]:
+    """A source_ref may carry several comma-separated references.
+
+    A part reduced to a line or a line range continues the previous part's
+    file: `geo.c:234-243, 273-285` cites two ranges of the same file. 430
+    parts across 69 profiles use that form.
+    """
+    parts: list[RefPart] = []
+    for chunk in (c.strip() for c in str(ref or "").split(",")):
+        if not chunk:
+            continue
+        if _BARE_RANGE_RE.match(chunk) and parts:
+            start, _, end = chunk.partition("-")
+            parts.append(
+                RefPart(parts[-1].path, int(start), int(end or start))
+            )
+            continue
+        path, start_line, end_line = parse_source_ref(chunk)
+        parts.append(RefPart(path, start_line, end_line))
+    return parts
+
+
+def collect_tokens(entry: dict) -> list[str]:
+    """Values declared by one file entry: hashes, then name as fallback."""
+    tokens: list[str] = []
+    for field in ("sha1", "md5", "crc32", "sha256", "known_hash_adler32"):
+        val = entry.get(field)
+        vals = val if isinstance(val, list) else [val] if val else []
+        for v in vals:
+            v = str(v).lower().removeprefix("0x")
+            if v:
+                tokens.append(v)
+    if not tokens:
+        name = entry.get("name", "")
+        if name:
+            tokens.append(os.path.basename(name).lower())
+    return tokens
+
+
+def worst_status(statuses) -> str:
+    """Severity of an entry is the worst severity among its parts."""
+    worst = "ANCHORED"
+    for status in statuses:
+        if STATUS_ORDER.index(status) > STATUS_ORDER.index(worst):
+            worst = status
+    return worst
+
+
+def _normalize(lines: list[str]) -> list[str]:
+    return [line.strip() for line in lines]
+
+
+def _find_all(haystack: list[str], needle: list[str]) -> list[int]:
+    """Zero-based offsets where the needle sequence occurs."""
+    size = len(needle)
+    if not size or size > len(haystack):
+        return []
+    first = needle[0]
+    hits = []
+    for i in range(len(haystack) - size + 1):
+        if haystack[i] == first and haystack[i : i + size] == needle:
+            hits.append(i)
+    return hits
+
+
+def _map_index(opcodes, index: int) -> int | None:
+    for tag, i1, i2, j1, j2 in opcodes:
+        if i1 <= index < i2:
+            return j1 + (index - i1) if tag == "equal" else j1
+    return None
+
+
+def _map_changed(pin: list[str], head: list[str], lo: int, hi: int) -> AnchorResult:
+    """Map a pinned range onto HEAD once exact anchoring has failed."""
+    if len(pin) > MAX_MATCH_LINES or len(head) > MAX_MATCH_LINES:
+        return AnchorResult(
+            "CHANGED", None, None, [], f"file over {MAX_MATCH_LINES} lines"
+        )
+    matcher = difflib.SequenceMatcher(None, pin, head, autojunk=False)
+    opcodes = matcher.get_opcodes()
+    if not any(tag == "equal" for tag, *_ in opcodes):
+        return AnchorResult("GONE", None, None, [])
+    new_lo = _map_index(opcodes, lo)
+    new_hi = _map_index(opcodes, max(lo, hi - 1))
+    if new_lo is None or new_hi is None:
+        return AnchorResult("GONE", None, None, [])
+    return AnchorResult("CHANGED", new_lo + 1, max(new_lo, new_hi) + 1, [])
+
+
+def anchor_block(
+    pin_lines: list[str], head_lines: list[str], start: int, end: int
+) -> AnchorResult:
+    """Locate the pinned line range inside the HEAD revision of a file."""
+    pin = _normalize(pin_lines)
+    head = _normalize(head_lines)
+    lo, hi = start - 1, end
+    if lo < 0 or lo >= len(pin):
+        return AnchorResult("GONE", None, None, [])
+    if not any(pin[lo:hi]):
+        return AnchorResult("CHANGED", None, None, [], "cited range is blank")
+
+    candidates: list[int] = []
+    for pad in WIDEN_STEPS:
+        a = max(0, lo - pad)
+        b = min(len(pin), hi + pad)
+        hits = _find_all(head, pin[a:b])
+        offset = lo - a
+        if len(hits) == 1:
+            new_start = hits[0] + offset + 1
+            new_end = new_start + (hi - lo) - 1
+            status = "ANCHORED" if new_start == start else "SHIFTED"
+            return AnchorResult(status, new_start, new_end, [])
+        if not hits:
+            break
+        candidates = [h + offset + 1 for h in hits]
+    else:
+        return AnchorResult("AMBIGUOUS", None, None, candidates)
+
+    if candidates:
+        return AnchorResult("AMBIGUOUS", None, None, candidates)
+    return _map_changed(pin, head, lo, hi)
+
+
+def resolve_rename(
+    result: CompareResult, path: str, head_paths=()
+) -> tuple[str | None, list[str]]:
+    """New path of a moved file, or the candidates when several match.
+
+    The comparison is authoritative when it reports the rename. Otherwise the
+    HEAD tree is searched by basename, then by stem: a C++ file rewritten in C
+    keeps its stem and loses its basename.
+    """
+    renamed = find_renamed(result, path)
+    if renamed:
+        return renamed, []
+    pool = list(head_paths) or [change.path for change in result.files]
+    base = posixpath.basename(path)
+    matches = _narrow(
+        [p for p in pool if p != path and posixpath.basename(p) == base], path
+    )
+    if len(matches) == 1:
+        return matches[0], []
+    if not matches:
+        stem = base.rsplit(".", 1)[0]
+        matches = _narrow(
+            [
+                p
+                for p in pool
+                if p != path and posixpath.basename(p).rsplit(".", 1)[0] == stem
+            ],
+            path,
+        )
+        if len(matches) == 1:
+            return matches[0], []
+    return None, matches
+
+
+def _narrow(matches: list[str], path: str) -> list[str]:
+    """Prefer candidates sitting in the directory the file came from."""
+    if len(matches) < 2:
+        return matches
+    directory = posixpath.dirname(path)
+    same = [p for p in matches if posixpath.dirname(p) == directory]
+    return same if len(same) == 1 else matches
+
+
+def anchor_part(part: RefPart, fetch, rename_getter, describe=None) -> PartResult:
+    """Locate one reference part at HEAD, following a rename when needed.
+
+    `describe(path)` returns (repo slug, raw URL at HEAD) for the repository
+    that owns the path, or (None, None) when the caller does not track it.
+    """
+    slug, url, actual = (
+        describe(part.path) if describe else (None, None, part.path)
+    )
+    head_lines = fetch(HEAD, part.path)
+    path = actual
+    renamed = actual != part.path
+
+    if head_lines is None:
+        moved, candidates = rename_getter(part.path)
+        if moved is None:
+            if candidates:
+                return PartResult(
+                    part,
+                    "AMBIGUOUS",
+                    None,
+                    None,
+                    None,
+                    [],
+                    f"{len(candidates)} candidates: {', '.join(candidates[:5])}",
+                    slug,
+                    url,
+                )
+            return PartResult(
+                part,
+                "GONE",
+                None,
+                None,
+                None,
+                [],
+                "absent at HEAD, no rename found",
+                slug,
+                url,
+            )
+        path = moved
+        head_lines = fetch(HEAD, path)
+        if head_lines is None:
+            return PartResult(
+                part, "GONE", None, None, None, [], None, slug, url
+            )
+        renamed = True
+        if describe:
+            slug, url, _ = describe(path)
+
+    if part.start is None:
+        status = "RENAMED" if renamed else "ANCHORED"
+        return PartResult(
+            part, status, path if renamed else None, None, None, [], None, slug, url
+        )
+
+    pin_lines = fetch(PIN, part.path)
+    if pin_lines is None:
+        return PartResult(
+            part, "GONE", None, None, None, [], "pin revision missing", slug, url
+        )
+
+    anchored = anchor_block(pin_lines, head_lines, part.start, part.end or part.start)
+    status = anchored.status
+    if renamed and status in ("ANCHORED", "SHIFTED"):
+        status = "RENAMED"
+    return PartResult(
+        part,
+        status,
+        path if renamed else None,
+        anchored.start,
+        anchored.end,
+        anchored.candidates,
+        anchored.reason,
+        slug,
+        url,
+    )
+
+
+@dataclass
+class EntryReport:
+    name: str
+    source_ref: str
+    status: str
+    parts: list[PartResult]
+
+
+@dataclass
+class ProfileReport:
+    name: str
+    repo: str | None = None
+    repos: list[str] = None
+    host: str | None = None
+    pin: str | None = None
+    pin_origin: str | None = None
+    head: str | None = None
+    entries: list[EntryReport] = None
+    skipped: str | None = None
+    counts: dict[str, int] = None
+
+    def needs_review(self) -> int:
+        counts = self.counts or {}
+        return sum(counts.get(status, 0) for status in REVIEW_STATUSES)
+
+
+def select_repo(profile: dict) -> upstream.Repo | None:
+    """Repository the profile was read from: source first, then upstream."""
+    for field in ("source", "upstream"):
+        repo = upstream.parse_repo(str(profile.get(field) or ""))
+        if repo is not None:
+            return repo
+    return None
+
+
+def resolve_pin(
+    profile: dict, repo, cache_dir: str, offline: bool, field: str = "source"
+) -> tuple[str | None, str | None]:
+    """Commit the profile was written at, and how it was obtained.
+
+    `field` selects which declared pin applies: `source_commit` for the port
+    the profile was read from, `upstream_commit` for the original project.
+    """
+    pinned = profile.get(f"{field}_commit")
+    if pinned:
+        return str(pinned), f"{field}_commit"
+    date = str(profile.get("profiled_date") or "")
+    if not date:
+        return None, None
+    sha = upstream.resolve_commit_at(repo, date, cache_dir, offline)
+    return sha, (f"profiled_date {date}" if sha else None)
+
+
+def select_views(
+    profile: dict, cache_dir: str, offline: bool
+) -> list[RepoView]:
+    """Every repository the profile cites, source before upstream.
+
+    241 profiles declare a `source` distinct from their `upstream`, and 168 of
+    those have both on a supported forge. Their refs mix paths from the two, so
+    a single repository cannot resolve them all.
+    """
+    views: list[RepoView] = []
+    seen: set[tuple[str, str]] = set()
+    for field in ("source", "upstream"):
+        repo = upstream.parse_repo(str(profile.get(field) or ""))
+        if repo is None or (repo.host, repo.slug) in seen:
+            continue
+        pin, origin = resolve_pin(profile, repo, cache_dir, offline, field)
+        if not pin:
+            continue
+        head = upstream.resolve_head(repo, cache_dir, offline)
+        if not head:
+            continue
+        seen.add((repo.host, repo.slug))
+        views.append(RepoView(repo, pin, head, origin, field))
+    return views
+
+
+def build_report(
+    name: str, profile: dict, cache_dir: str, offline: bool = False
+) -> ProfileReport:
+    """Confront one profile with its upstream."""
+    report = ProfileReport(name=name, entries=[], counts={})
+
+    refs = [
+        (entry.get("name", ""), str(entry.get("source_ref")))
+        for entry in (profile.get("files") or [])
+        if isinstance(entry, dict) and entry.get("source_ref")
+    ]
+
+    if select_repo(profile) is None:
+        declared = str(profile.get("source") or profile.get("upstream") or "")
+        report.skipped = f"unsupported host: {declared or 'none declared'}"
+        return report
+
+    views = select_views(profile, cache_dir, offline)
+    if not views:
+        report.skipped = (
+            "no source_commit and no resolvable profiled_date "
+            "on any declared repository"
+        )
+        return report
+    primary = views[0]
+    report.repo, report.host = primary.repo.slug, primary.repo.host
+    report.repos = [v.repo.slug for v in views]
+    report.pin, report.pin_origin = primary.pin, primary.origin
+    report.head = primary.head
+
+    # A profile carrying no source_ref still has a pin worth writing and a
+    # version worth checking, so the revisions above are resolved first.
+    if not refs:
+        report.skipped = "no source_ref"
+        return report
+
+    owners: dict[str, RepoView] = {}
+    context: dict[str, object] = {}
+
+    def _locate(path: str) -> tuple[RepoView, str]:
+        """Repository and real path carrying a cited path, HEAD before pin.
+
+        A ref may prefix the path with the repository directory name, as it
+        appears in a parent folder holding both clones: 270 parts across 21
+        profiles do. That prefix is stripped only as a last resort, once the
+        path as written has failed against every repository and revision.
+        """
+        candidates = [path]
+        head, _, tail = path.partition("/")
+        if tail and any(head == v.repo.name for v in views):
+            candidates.append(tail)
+        for candidate in candidates:
+            for sha_of in (lambda v: v.head, lambda v: v.pin):
+                for view in views:
+                    found = upstream.fetch_file(
+                        view.repo, sha_of(view), candidate, cache_dir, offline
+                    )
+                    if found is not None:
+                        return view, candidate
+        return primary, path
+
+    def resolve_path(path: str) -> tuple[RepoView, str]:
+        if path not in owners:
+            owners[path] = _locate(path)
+        return owners[path]
+
+    def rename_getter(path: str) -> tuple[str | None, list[str]]:
+        """Resolved only when a cited file has vanished, then memoised."""
+        view, actual = resolve_path(path)
+        key = view.repo.slug
+        if key not in context:
+            comparison = upstream.compare(
+                view.repo, view.pin, view.head, cache_dir, offline
+            )
+            tree, truncated = upstream.list_tree(
+                view.repo, view.head, cache_dir, offline
+            )
+            context[key] = (comparison, tree)
+            if truncated and tree:
+                print(
+                    f"{name}: {key} HEAD tree truncated by the forge, "
+                    "rename search is partial",
+                    file=sys.stderr,
+                )
+        comparison, tree = context[key]
+        return resolve_rename(comparison, actual, tree)
+
+    def fetch(which: str, path: str):
+        view, actual = resolve_path(path)
+        sha = view.pin if which == PIN else view.head
+        return upstream.fetch_file(view.repo, sha, actual, cache_dir, offline)
+
+    def describe(path: str) -> tuple[str | None, str | None, str]:
+        view, actual = resolve_path(path)
+        slug = view.repo.slug if view is not primary else None
+        return slug, upstream.raw_url(view.repo, view.head, actual), actual
+
+    for entry_name, ref in refs:
+        parts = [
+            anchor_part(part, fetch, rename_getter, describe)
+            for part in split_source_ref(ref)
+        ]
+        status = worst_status([p.status for p in parts])
+        report.entries.append(EntryReport(entry_name, ref, status, parts))
+        report.counts[status] = report.counts.get(status, 0) + 1
+
+    return report
+
+
+def _render_span(path: str, start: int | None, end: int | None) -> str:
+    if start is None:
+        return path
+    if end and end != start:
+        return f"{path}:{start}-{end}"
+    return f"{path}:{start}"
+
+
+def _original_part(part: PartResult) -> str:
+    return _render_span(part.part.path, part.part.start, part.part.end)
+
+
+def _rendered_part(part: PartResult) -> str:
+    return _render_span(part.new_path or part.part.path, part.start, part.end)
+
+
+def _part_line(part: PartResult) -> str:
+    detail = part.status
+    if part.new_path:
+        detail += f" -> {part.new_path}"
+    if part.start is not None and part.status != "ANCHORED":
+        span = f"{part.start}"
+        if part.end and part.end != part.start:
+            span += f"-{part.end}"
+        detail += f" -> {span}"
+    if part.candidates:
+        detail += f"  candidats: {', '.join(str(c) for c in part.candidates)}"
+    if part.reason:
+        detail += f"  ({part.reason})"
+    if part.repo:
+        detail += f"  [{part.repo}]"
+    return f"      {_original_part(part)}  {detail}"
+
+
+def format_report(report: ProfileReport, changed_only: bool = False) -> str:
+    """Human-readable report for one profile."""
+    slugs = " + ".join(report.repos) if report.repos else (report.repo or "")
+    lines = [f"{report.name}  {slugs}".rstrip()]
+    if report.pin and report.head:
+        lines.append(
+            f"  {report.pin[:7]} -> {report.head[:7]}   pin: {report.pin_origin}"
+        )
+    if report.skipped:
+        lines.append(f"  skipped: {report.skipped}")
+        return "\n".join(lines)
+    for entry in report.entries:
+        if changed_only and entry.status not in REVIEW_STATUSES:
+            continue
+        lines.append(f"  {entry.name}  {entry.source_ref}")
+        for part in entry.parts:
+            lines.append(_part_line(part))
+    summary = ", ".join(
+        f"{count} {status.lower()}" for status, count in sorted(report.counts.items())
+    )
+    lines.append(f"  {len(report.entries)} refs: {summary}")
+    lines.append(f"  {report.needs_review()} demandent une relecture")
+    return "\n".join(lines)
+
+
+def report_to_dict(report: ProfileReport) -> dict:
+    """Serialisable form of one report."""
+    payload = asdict(report)
+    payload["needs_review"] = report.needs_review()
+    return payload
+
+
+def format_markdown(reports: list[ProfileReport]) -> str:
+    """Report set as a markdown document."""
+    lines = [
+        "# profile-sync",
+        "",
+        "| profil | depot | refs | relecture |",
+        "|---|---|---|---|",
+    ]
+    for report in reports:
+        if report.skipped:
+            lines.append(
+                f"| {report.name} | {report.repo or ''} | skipped | {report.skipped} |"
+            )
+            continue
+        lines.append(
+            f"| {report.name} | {report.repo} | {len(report.entries)} "
+            f"| {report.needs_review()} |"
+        )
+    for report in reports:
+        lines.extend(["", "```", format_report(report), "```"])
+    return "\n".join(lines)
+
+
+def fetch_plan(report: ProfileReport) -> list[str]:
+    """Raw URLs at HEAD for the refs that need the code read again."""
+    if report.skipped or not report.head or not report.host:
+        return []
+    owner, _, name = (report.repo or "").partition("/")
+    fallback = upstream.make_repo(report.host, owner, name)
+    urls = []
+    for entry in report.entries:
+        if entry.status not in REVIEW_STATUSES:
+            continue
+        for part in entry.parts:
+            url = part.head_url
+            if url is None:
+                if fallback is None:
+                    continue
+                path = part.new_path or part.part.path
+                url = upstream.raw_url(fallback, report.head, path)
+            if part.part.start:
+                url += f"#L{part.part.start}"
+            urls.append(url)
+    return urls
+
+
+@dataclass(frozen=True)
+class VersionReport:
+    declared: str
+    latest_tag: str | None
+    latest_release: str | None
+    release_date: str | None
+    tag_matches_declared: bool
+    tag_commit: str | None
+
+
+def check_version(
+    profile: dict, repo, cache_dir: str, offline: bool
+) -> VersionReport | None:
+    """Declared core_version against the latest upstream tag and release."""
+    declared = str(profile.get("core_version") or "")
+    if not declared:
+        return None
+    tags = upstream.list_tags(repo, cache_dir, offline)
+    release = upstream.latest_release(repo, cache_dir, offline)
+    matches = declared in tags
+    commit = (
+        upstream.resolve_tag_commit(repo, declared, cache_dir, offline)
+        if matches
+        else None
+    )
+    return VersionReport(
+        declared,
+        tags[0] if tags else None,
+        release.tag if release else None,
+        release.date if release else None,
+        matches,
+        commit,
+    )
+
+
+def version_warning(report: VersionReport | None, pin: str | None) -> str | None:
+    """Flag a declared version that names a tag away from the resolved pin."""
+    if report is None or not report.tag_commit or not pin:
+        return None
+    if report.tag_commit == pin:
+        return None
+    return (
+        f"core_version {report.declared} names tag commit {report.tag_commit[:7]}, "
+        f"the pin resolved to {pin[:7]}"
+    )
+
+
+FILE_EXTENSIONS = (
+    "bin", "rom", "zip", "dat", "bios", "img", "chd", "nvram", "sav",
+    "ips", "pal", "fnt",
+)
+
+_FILE_RE = re.compile(
+    r"[\w./+-]+\.(?:" + "|".join(FILE_EXTENSIONS) + r")\b", re.IGNORECASE
+)
+_SHA1_RE = re.compile(r"\b[0-9a-fA-F]{40}\b")
+_MD5_RE = re.compile(r"\b[0-9a-fA-F]{32}\b")
+_CRC_RE = re.compile(r"\b(?:0x)?([0-9a-fA-F]{8})\b")
+
+
+def declared_names(profile: dict) -> set[str]:
+    """Every filename the profile covers, aliases included."""
+    names = set()
+    for entry in profile.get("files") or []:
+        if not isinstance(entry, dict):
+            continue
+        for value in [entry.get("name", "")] + list(entry.get("aliases") or []):
+            if value:
+                names.add(os.path.basename(str(value)).casefold())
+    return names
+
+
+def declared_hashes(profile: dict) -> set[str]:
+    """Every hash the profile declares."""
+    hashes = set()
+    for entry in profile.get("files") or []:
+        if isinstance(entry, dict):
+            hashes.update(collect_tokens(entry))
+    return hashes
+
+
+def detect_new_files(
+    head_lines: list[str], known: set[str], cap: int = 25
+) -> tuple[list[tuple[int, str]], int]:
+    """Filename literals at HEAD the profile does not declare."""
+    found: list[tuple[int, str]] = []
+    seen: set[str] = set()
+    elided = 0
+    for number, line in enumerate(head_lines, start=1):
+        for match in _FILE_RE.findall(line):
+            name = os.path.basename(match).casefold()
+            if name in known or name in seen:
+                continue
+            seen.add(name)
+            if len(found) >= cap:
+                elided += 1
+                continue
+            found.append((number, os.path.basename(match)))
+    return found, elided
+
+
+def watch_hashes(added_lines: list[str], known: set[str]) -> list[tuple[str, str]]:
+    """Hash literals in added lines that no profile entry declares."""
+    found: list[tuple[str, str]] = []
+    for line in added_lines:
+        strong = bool(_SHA1_RE.search(line) or _MD5_RE.search(line))
+        for pattern, kind in ((_SHA1_RE, "sha1"), (_MD5_RE, "md5")):
+            for value in pattern.findall(line):
+                if value.lower() not in known:
+                    found.append((kind, value.lower()))
+        if strong or not _FILE_RE.search(line):
+            continue
+        for value in _CRC_RE.findall(line):
+            if value.lower() not in known:
+                found.append(("crc32", value.lower()))
+    return found
+
+
+def unified_for_path(
+    pin_lines: list[str], head_lines: list[str], path: str, context: int
+) -> str:
+    """Unified diff of one cited file between the two revisions."""
+    diff = difflib.unified_diff(
+        pin_lines,
+        head_lines,
+        fromfile=f"a/{path}",
+        tofile=f"b/{path}",
+        n=context,
+        lineterm="",
+    )
+    return "\n".join(diff)
+
+
+def tree_diff(result: CompareResult, ref_dirs: set[str]) -> list[str]:
+    """Tree changes restricted to the directories the refs point at."""
+    lines = []
+    for change in result.files:
+        directory = posixpath.dirname(change.path)
+        if ref_dirs and not any(
+            directory == d or directory.startswith(d + "/") for d in ref_dirs
+        ):
+            continue
+        if change.status == "renamed" and change.previous_path:
+            lines.append(f"renamed  {change.previous_path} -> {change.path}")
+        else:
+            lines.append(f"{change.status}  {change.path}")
+    if result.truncated:
+        lines.append("comparison truncated by the forge, list is partial")
+    return lines
+
+
+DRIFT_WEIGHTS = {"GONE": 40, "CHANGED": 30, "AMBIGUOUS": 15, "SHIFTED": 1}
+
+
+def drift_score(
+    report: ProfileReport, version: VersionReport | None, commits: int
+) -> int:
+    """Rank profiles by how far they have drifted from their pin."""
+    counts = report.counts or {}
+    score = sum(DRIFT_WEIGHTS.get(k, 0) * v for k, v in counts.items())
+    if version is not None and not version.tag_matches_declared:
+        if version.latest_release and version.latest_release != version.declared:
+            score += 10
+    score += min(commits, 20) // 4
+    return score
+
+
+class YamlWriteError(Exception):
+    """A profile edit did not land exactly as intended."""
+
+
+def _top_level_indices(lines: list[str], key: str) -> list[int]:
+    """Indices of lines declaring a key at the top level of the document."""
+    prefix = f"{key}:"
+    return [i for i, line in enumerate(lines) if line.startswith(prefix)]
+
+
+def insert_after_line(text: str, key: str, new_line: str) -> str:
+    """Insert a line right after a top-level key."""
+    lines = text.splitlines()
+    indices = _top_level_indices(lines, key)
+    if len(indices) != 1:
+        raise YamlWriteError(
+            f"{key}: expected one top-level line, found {len(indices)}"
+        )
+    lines.insert(indices[0] + 1, new_line)
+    return "\n".join(lines) + ("\n" if text.endswith("\n") else "")
+
+
+def replace_field_line(
+    text: str, key: str, occurrence: int, expected: str, value: str
+) -> str:
+    """Rewrite the Nth key line, only if it currently holds the expected value."""
+    lines = text.splitlines()
+    marker = f"{key}:"
+    found = [i for i, line in enumerate(lines) if line.strip().startswith(marker)]
+    if occurrence >= len(found):
+        raise YamlWriteError(f"{key}: occurrence {occurrence} not found")
+    index = found[occurrence]
+    current = lines[index].split(":", 1)[1].strip().strip('"').strip("'")
+    if current != expected:
+        raise YamlWriteError(
+            f"{key}: line {index + 1} holds {current!r}, expected {expected!r}"
+        )
+    indent = lines[index][: len(lines[index]) - len(lines[index].lstrip())]
+    lines[index] = f'{indent}{key}: "{value}"'
+    return "\n".join(lines) + ("\n" if text.endswith("\n") else "")
+
+
+def apply_edit(path: Path, new_text: str, expected: dict) -> None:
+    """Write, then verify the parsed document matches what was intended."""
+    original = path.read_text(encoding="utf-8")
+    path.write_text(new_text, encoding="utf-8")
+    try:
+        written = yaml.safe_load(new_text)
+    except yaml.YAMLError as exc:
+        path.write_text(original, encoding="utf-8")
+        raise YamlWriteError(f"{path}: parse failed after write: {exc}") from exc
+    if written != expected:
+        path.write_text(original, encoding="utf-8")
+        raise YamlWriteError(f"{path}: structure changed beyond the intended field")
+
+
+def backfill_commit(path: Path, sha: str) -> bool:
+    """Insert source_commit after profiled_date. False when already present."""
+    text = path.read_text(encoding="utf-8")
+    document = yaml.safe_load(text)
+    if document.get("source_commit"):
+        return False
+    new_text = insert_after_line(text, "profiled_date", f'source_commit: "{sha}"')
+    expected = dict(document)
+    expected["source_commit"] = sha
+    apply_edit(path, new_text, expected)
+    return True
+
+
+def rebase_refs(path: Path, report: ProfileReport) -> list[str]:
+    """Recale the line ranges of parts whose content is unchanged."""
+    text = path.read_text(encoding="utf-8")
+    document = yaml.safe_load(text)
+    carriers = [
+        entry
+        for entry in (document.get("files") or [])
+        if isinstance(entry, dict) and entry.get("source_ref")
+    ]
+    applied: list[str] = []
+
+    for occurrence, entry in enumerate(report.entries):
+        rendered = []
+        touched = False
+        for part in entry.parts:
+            if part.status in REBASE_STATUSES and part.start is not None:
+                recaled = _rendered_part(part)
+                if recaled != _original_part(part):
+                    touched = True
+                rendered.append(recaled)
+            else:
+                rendered.append(_original_part(part))
+        if not touched:
+            continue
+        new_ref = ", ".join(rendered)
+        text = replace_field_line(
+            text, "source_ref", occurrence, entry.source_ref, new_ref
+        )
+        carriers[occurrence]["source_ref"] = new_ref
+        applied.append(f"{entry.source_ref} -> {new_ref}")
+
+    if applied:
+        apply_edit(path, text, document)
+    return applied
+
+
+def bump_commit(path: Path, report: ProfileReport) -> bool:
+    """Advance source_commit to HEAD when nothing needs a read again."""
+    if report.skipped or report.needs_review() or not report.head:
+        return False
+    text = path.read_text(encoding="utf-8")
+    document = yaml.safe_load(text)
+    expected = dict(document)
+    expected["source_commit"] = report.head
+    if document.get("source_commit"):
+        new_text = replace_field_line(
+            text, "source_commit", 0, str(document["source_commit"]), report.head
+        )
+    else:
+        new_text = insert_after_line(
+            text, "profiled_date", f'source_commit: "{report.head}"'
+        )
+    apply_edit(path, new_text, expected)
+    return True
+
+
+def emulators_dir_is_dirty(emulators_dir: str) -> bool:
+    """True when the profile directory carries uncommitted changes."""
+    result = subprocess.run(
+        ["git", "status", "--porcelain", "--", emulators_dir],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    return bool(result.stdout.strip())
+
+
+def build_parser() -> argparse.ArgumentParser:
+    """Command line: selection, output, detection, writes, network."""
+    parser = argparse.ArgumentParser(
+        description="Confront emulator profiles with their upstream source"
+    )
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument("--emulator", help="a single profile")
+    group.add_argument("--all", action="store_true", help="every profile")
+    parser.add_argument("--emulators-dir", default="emulators")
+    parser.add_argument("--system", help="keep profiles covering this system")
+    parser.add_argument("--type", dest="type_", help="keep profiles of this type")
+    parser.add_argument("--stale-before", help="keep profiles profiled before a date")
+    parser.add_argument("--limit", type=int, help="stop after N profiles")
+    parser.add_argument("--changed-only", action="store_true")
+    parser.add_argument("--json", action="store_true", dest="as_json")
+    parser.add_argument("--markdown", action="store_true")
+    parser.add_argument("--fetch-plan", action="store_true")
+    parser.add_argument("--full-diff", action="store_true")
+    parser.add_argument("--ref", help="restrict --full-diff to one cited path")
+    parser.add_argument("--context", type=int, default=3)
+    parser.add_argument("--check-version", action="store_true")
+    parser.add_argument("--detect-new-files", action="store_true")
+    parser.add_argument("--watch-hashes", action="store_true")
+    parser.add_argument("--tree-diff", action="store_true")
+    parser.add_argument("--triage", action="store_true")
+    parser.add_argument("--backfill-commits", action="store_true")
+    parser.add_argument("--rebase-refs", action="store_true")
+    parser.add_argument("--bump-commit", action="store_true")
+    parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--force", action="store_true")
+    parser.add_argument("--offline", action="store_true")
+    parser.add_argument("--cache-dir", default=DEFAULT_CACHE)
+    return parser
+
+
+def select_profiles(profiles: dict, args) -> dict:
+    """Profiles matching the selection flags."""
+    if args.emulator:
+        if args.emulator not in profiles:
+            print(f"unknown profile: {args.emulator}", file=sys.stderr)
+            raise SystemExit(1)
+        return {args.emulator: profiles[args.emulator]}
+
+    selected = {}
+    for name, profile in sorted(profiles.items()):
+        if profile.get("type") in ("alias", "test"):
+            continue
+        if args.system and args.system not in (profile.get("systems") or []):
+            continue
+        if args.type_ and profile.get("type") != args.type_:
+            continue
+        if args.stale_before:
+            profiled = str(profile.get("profiled_date") or "")
+            if not profiled or profiled >= args.stale_before:
+                continue
+        selected[name] = profile
+        if args.limit and len(selected) >= args.limit:
+            break
+    return selected
+
+
+def _check_quota(count: int, offline: bool) -> None:
+    """Refuse a run the anonymous quota cannot carry to completion."""
+    if offline or os.environ.get("GITHUB_TOKEN"):
+        return
+    if count * 4 > ANON_QUOTA:
+        print(
+            f"{count} profiles need roughly {count * 4} API calls, the anonymous "
+            f"quota is {ANON_QUOTA} per hour. Set GITHUB_TOKEN or use --offline.",
+            file=sys.stderr,
+        )
+        raise SystemExit(1)
+
+
+def _apply_writes(args, name: str, profile: dict, report: ProfileReport) -> None:
+    path = Path(args.emulators_dir) / f"{name}.yml"
+    if not path.is_file():
+        return
+    if args.backfill_commits and report.pin and not profile.get("source_commit"):
+        if args.dry_run:
+            print(f"{name}: would write source_commit {report.pin[:7]}")
+        elif backfill_commit(path, report.pin):
+            print(f"{name}: source_commit {report.pin[:7]}")
+    if args.rebase_refs and not args.dry_run and not report.skipped:
+        for line in rebase_refs(path, report):
+            print(f"{name}: {line}")
+    if args.bump_commit and not args.dry_run and bump_commit(path, report):
+        print(f"{name}: source_commit -> {report.head[:7]}")
+
+
+def _cited_paths(report: ProfileReport) -> list[str]:
+    return sorted(
+        {part.new_path or part.part.path for e in report.entries for part in e.parts}
+    )
+
+
+def _print_version(args, profile: dict, report: ProfileReport, repo) -> None:
+    version = check_version(profile, repo, args.cache_dir, args.offline)
+    if version is None:
+        return
+    print(
+        f"  version: declared {version.declared}, "
+        f"latest tag {version.latest_tag}, "
+        f"latest release {version.latest_release} ({version.release_date})"
+    )
+    warning = version_warning(version, report.pin)
+    if warning:
+        print(f"  {warning}")
+
+
+def _print_detection(args, profile: dict, report: ProfileReport, repo) -> None:
+    names, hashes = declared_names(profile), declared_hashes(profile)
+    for path in _cited_paths(report):
+        head_lines = upstream.fetch_file(
+            repo, report.head, path, args.cache_dir, args.offline
+        )
+        if head_lines is None:
+            continue
+        if args.detect_new_files:
+            found, elided = detect_new_files(head_lines, names)
+            for number, name in found:
+                print(f"  new file: {path}:{number}  {name}")
+            if elided:
+                print(f"  new file: {elided} further matches not shown")
+        if args.watch_hashes:
+            pin_lines = (
+                upstream.fetch_file(
+                    repo, report.pin, path, args.cache_dir, args.offline
+                )
+                or []
+            )
+            added = [
+                line
+                for line in difflib.unified_diff(pin_lines, head_lines, n=0)
+                if line.startswith("+") and not line.startswith("+++")
+            ]
+            for kind, value in watch_hashes(added, hashes):
+                print(f"  new {kind}: {path}  {value}")
+
+
+def _print_extras(args, profile: dict, report: ProfileReport) -> None:
+    """Optional per-profile sections beyond the ref report."""
+    wants = (
+        args.check_version
+        or args.detect_new_files
+        or args.watch_hashes
+        or args.full_diff
+        or args.tree_diff
+    )
+    if not wants or not report.head:
+        return
+    repo = select_repo(profile)
+    if repo is None:
+        return
+
+    if args.check_version:
+        _print_version(args, profile, report, repo)
+    if args.detect_new_files or args.watch_hashes:
+        _print_detection(args, profile, report, repo)
+    if args.full_diff:
+        for path in _cited_paths(report):
+            if args.ref and args.ref not in path:
+                continue
+            pin_lines = (
+                upstream.fetch_file(
+                    repo, report.pin, path, args.cache_dir, args.offline
+                )
+                or []
+            )
+            head_lines = (
+                upstream.fetch_file(
+                    repo, report.head, path, args.cache_dir, args.offline
+                )
+                or []
+            )
+            text = unified_for_path(pin_lines, head_lines, path, args.context)
+            if text:
+                print(text)
+    if args.tree_diff:
+        comparison = upstream.compare(
+            repo, report.pin, report.head, args.cache_dir, args.offline
+        )
+        # The repository root is a directory like any other: dropping the
+        # empty dirname would turn the filter off and list the whole tree.
+        ref_dirs = {posixpath.dirname(p) for p in _cited_paths(report)}
+        for line in tree_diff(comparison, ref_dirs):
+            print(f"  {line}")
+
+
+def _print_triage(args, selected: dict, reports: list[ProfileReport]) -> None:
+    """Profiles ranked by drift, worst first."""
+    ranked = []
+    for report in reports:
+        profile = selected[report.name]
+        version = None
+        commits = 0
+        repo = select_repo(profile)
+        if report.head and repo is not None:
+            version = check_version(profile, repo, args.cache_dir, args.offline)
+            paths = _cited_paths(report)
+            for path in paths[:TRIAGE_PATH_SAMPLE]:
+                commits += upstream.commits_touching(
+                    repo, path, report.pin, args.cache_dir, args.offline
+                )
+            if len(paths) > TRIAGE_PATH_SAMPLE:
+                print(
+                    f"{report.name}: commit count sampled on "
+                    f"{TRIAGE_PATH_SAMPLE} of {len(paths)} paths",
+                    file=sys.stderr,
+                )
+        ranked.append((drift_score(report, version, commits), report))
+    for score, report in sorted(ranked, key=lambda item: -item[0]):
+        state = report.skipped or f"{report.needs_review()} to review"
+        print(f"{score:5d}  {report.name:30s}  {state}")
+
+
+def main() -> None:
+    """Build one report per selected profile, then apply writes and output."""
+    args = build_parser().parse_args()
+    profiles = load_emulator_profiles(args.emulators_dir, skip_aliases=False)
+    selected = select_profiles(profiles, args)
+    _check_quota(len(selected), args.offline)
+
+    writes = args.backfill_commits or args.rebase_refs or args.bump_commit
+    if (
+        writes
+        and not args.dry_run
+        and not args.force
+        and emulators_dir_is_dirty(args.emulators_dir)
+    ):
+        print(
+            f"{args.emulators_dir} carries uncommitted changes. "
+            "Commit them first or pass --force.",
+            file=sys.stderr,
+        )
+        raise SystemExit(1)
+
+    reports = []
+    for name, profile in selected.items():
+        report = build_report(name, profile, args.cache_dir, args.offline)
+        reports.append(report)
+        if writes:
+            _apply_writes(args, name, profile, report)
+
+    if args.as_json:
+        print(json.dumps([report_to_dict(r) for r in reports], indent=2))
+        return
+    if args.markdown:
+        target = Path("claudedocs") / f"profile-sync-{date.today().isoformat()}.md"
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(format_markdown(reports), encoding="utf-8")
+        print(f"written: {target}")
+        return
+    if args.fetch_plan:
+        for report in reports:
+            for url in fetch_plan(report):
+                print(url)
+        return
+    if args.triage:
+        _print_triage(args, selected, reports)
+        return
+    printed = 0
+    for report in reports:
+        if args.changed_only and not report.needs_review():
+            continue
+        printed += 1
+        print(format_report(report, args.changed_only))
+        _print_extras(args, selected[report.name], report)
+        print()
+    if args.changed_only:
+        _print_elided(reports, printed)
+
+
+def _print_elided(reports: list[ProfileReport], printed: int) -> None:
+    """Account for what --changed-only left out, grouped by reason."""
+    reasons: dict[str, int] = {}
+    for report in reports:
+        if report.needs_review():
+            continue
+        key = report.skipped or "nothing to review"
+        reasons[key] = reasons.get(key, 0) + 1
+    if not reasons:
+        return
+    total = sum(reasons.values())
+    print(f"{printed} profils listes, {total} non listes:")
+    for reason, count in sorted(reasons.items(), key=lambda item: -item[1]):
+        print(f"  {count:4d}  {reason}")
+
+
+if __name__ == "__main__":
+    main()

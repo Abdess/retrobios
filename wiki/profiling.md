@@ -215,7 +215,7 @@ A few field conventions that protect the toolchain:
 python scripts/cross_reference.py --emulator dolphin --json
 python scripts/verify.py --emulator dolphin
 python scripts/verify.py --emulator dolphin --verbose   # per-core checks + source refs
-python scripts/check_profile_refs.py --emulator dolphin # do the source_ref lines still hold
+python scripts/profile_sync.py --emulator dolphin       # do the source_ref lines still hold
 ```
 
 The profile also has to satisfy `schemas/emulator.schema.json`, which CI checks

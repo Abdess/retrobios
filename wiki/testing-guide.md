@@ -23,7 +23,11 @@ python -m unittest tests.test_provenance -v
 python -m unittest tests.test_mame_parser -v
 python -m unittest tests.test_hash_merge -v
 python -m unittest tests.test_fbneo_parser -v
-python -m unittest tests.test_profile_refs -v
+python -m unittest tests.test_profile_sync -v
+python -m unittest tests.test_upstream -v
+python -m unittest tests.test_deterministic_zip -v
+python -m unittest tests.test_artifact_lock -v
+python -m unittest tests.test_large_file_cache -v
 python -m unittest tests.test_pack_integrity -v
 python -m unittest tests.test_torrentzip -v
 python -m unittest tests.test_no_case_collisions -v
@@ -36,15 +40,19 @@ library `unittest` module.
 
 | Module | Tests | Fixtures | What it covers |
 |--------|-------|----------|----------------|
-| `test_e2e.py` | 217 | synthetic | resolution, verification, packs, cross-reference, targets, truth |
+| `test_e2e.py` | 218 | synthetic | resolution, verification, packs, cross-reference, targets, truth |
+| `test_profile_sync.py` | 129 | synthetic | ref anchoring, guarded profile writes, detection, triage |
 | `test_install.py` | 70 | synthetic | `install.py` detection, config parsing, manifest handling |
+| `test_upstream.py` | 38 | synthetic | forge URL parsing, cache, revision resolution, tree comparison |
 | `test_provenance.py` | 29 | synthetic | Logiqx/Redump parsing, DAT import, provenance join, coverage report |
-| `test_mame_parser.py` | 22 | inline C | BIOS root sets, ROM blocks, macro expansion |
+| `test_mame_parser.py` | 25 | inline C | BIOS root sets, ROM blocks, macro expansion |
 | `test_hash_merge.py` | 17 | synthetic | YAML hash merge, diff, formatting preservation |
 | `test_fbneo_parser.py` | 16 | inline C | `BDF_BOARDROM` sets, ROM info parsing |
-| `test_profile_refs.py` | 12 | synthetic | `check_profile_refs` pure functions, no network |
+| `test_deterministic_zip.py` | 12 | synthetic | streaming rebuild, metadata normalisation, entry ordering, source CRC |
+| `test_artifact_lock.py` | 10 | synthetic | writer/writer and writer/reader exclusion, reader sharing, release on error |
 | `test_pack_integrity.py` | 8 | real packs | extract each ZIP, verify paths and hashes |
 | `test_torrentzip.py` | 8 | real romsets | TorrentZip builder byte-for-byte |
+| `test_large_file_cache.py` | 5 | synthetic | concurrent downloads, temporary file residue, hash rejection |
 | `test_no_case_collisions.py` | 1 | real `bios/` | no case-colliding paths on Windows/macOS clones |
 
 ## Test architecture
@@ -123,9 +131,15 @@ detection, each registry detection method (`config_file`, `path_exists`,
 `file_exists`), config-file key parsing, manifest loading, target filtering,
 and destination resolution.
 
-**test_profile_refs.** Covers the pure functions of `check_profile_refs`
-(anchor matching, line-window search, hash extraction). The GitHub fetching
-path is not exercised, so the module runs offline.
+**test_profile_sync.** Covers ref anchoring end to end: the six statuses,
+widening a one-line anchor until it is unique, refusing to rebase an ambiguous
+one, following a rename, and the guarded YAML writes. Network access is
+replaced by an injected fetch function.
+
+**test_upstream.** Covers forge URL parsing for GitHub, GitLab and Forgejo,
+the content-addressed cache and its atomic write, revision and tag resolution,
+and tree comparison. The HTTP layer is replaced at module level, so nothing
+leaves the machine.
 
 ### Tests that read the working tree
 
