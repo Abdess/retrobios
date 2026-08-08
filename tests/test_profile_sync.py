@@ -140,6 +140,33 @@ class TestSplitSourceRef(unittest.TestCase):
             [("src/emulator.cpp", 234, 234), ("src/core/aes.cpp", 13, 92)],
         )
 
+    def test_annotation_containing_a_separator_is_not_split(self):
+        parts = split_source_ref(
+            "libretro.cpp:944-951 (system_dir + name, then fopen), core.c:12"
+        )
+        self.assertEqual(
+            [(p.path, p.start) for p in parts],
+            [("libretro.cpp", 944), ("core.c", 12)],
+        )
+
+    def test_trailing_prose_after_a_location_is_dropped(self):
+        parts = split_source_ref("libretro/libretro.cpp:1520-1521 candidates_a1200")
+        self.assertEqual(
+            (parts[0].path, parts[0].start, parts[0].end),
+            ("libretro/libretro.cpp", 1520, 1521),
+        )
+
+    def test_bare_range_followed_by_prose_still_continues(self):
+        parts = split_source_ref("a.c:10-12, 151-156 load loop")
+        self.assertEqual(
+            [(p.path, p.start, p.end) for p in parts],
+            [("a.c", 10, 12), ("a.c", 151, 156)],
+        )
+
+    def test_external_project_citation_is_kept_whole(self):
+        parts = split_source_ref("munt ROMInfo.cpp")
+        self.assertEqual(parts[0].path, "munt ROMInfo.cpp")
+
     def test_leading_bare_range_stays_a_path(self):
         parts = split_source_ref("273-285")
         self.assertEqual(parts[0].path, "273-285")
@@ -358,6 +385,32 @@ class TestAnchorPart(unittest.TestCase):
         self.assertEqual(result.status, "RENAMED")
         self.assertEqual(result.new_path, "new.c")
         self.assertEqual(result.start, 2)
+
+    def test_bare_filename_resolves_at_both_revisions(self):
+        fetch = make_fetch(
+            {
+                (PIN, "src/midi/mt32.cpp"): ["x", "hit"],
+                (HEAD, "src/midi/mt32.cpp"): ["x", "hit"],
+            }
+        )
+        comparison = CompareResult([], True)
+        result = anchor_part(
+            RefPart("mt32.cpp", 2, 2),
+            fetch,
+            renamer(comparison, ["src/midi/mt32.cpp"]),
+        )
+        self.assertEqual(result.status, "RENAMED")
+        self.assertEqual(result.new_path, "src/midi/mt32.cpp")
+        self.assertEqual(result.start, 2)
+
+    def test_genuine_rename_still_reads_the_pin_at_the_old_path(self):
+        fetch = make_fetch(
+            {(PIN, "old.c"): ["x", "hit"], (HEAD, "new.c"): ["pad", "x", "hit"]}
+        )
+        comparison = CompareResult([FileChange("renamed", "new.c", "old.c")], False)
+        result = anchor_part(RefPart("old.c", 2, 2), fetch, renamer(comparison))
+        self.assertEqual(result.status, "RENAMED")
+        self.assertEqual(result.start, 3)
 
     def test_gone_when_pin_file_missing(self):
         result = anchor_part(
@@ -595,10 +648,18 @@ class TestBuildReport(unittest.TestCase):
         self.assertEqual(part.status, "ANCHORED")
         self.assertIsNone(part.new_path)
 
-    def test_prefix_matching_no_repository_is_not_stripped(self):
+    def test_unknown_prefix_resolves_by_basename_not_by_stripping(self):
         self.files[("pinsha", "a.c")] = ["x", "hit"]
         self.files[("headsha", "a.c")] = ["x", "hit"]
         report = build_report("test", self._profile(["other/a.c:2"]), self.dir)
+        part = report.entries[0].parts[0]
+        self.assertEqual(part.status, "RENAMED")
+        self.assertEqual(part.new_path, "a.c")
+
+    def test_basename_absent_everywhere_stays_gone(self):
+        self.files[("pinsha", "a.c")] = ["x", "hit"]
+        self.files[("headsha", "a.c")] = ["x", "hit"]
+        report = build_report("test", self._profile(["other/absent.c:2"]), self.dir)
         self.assertEqual(report.entries[0].parts[0].status, "GONE")
 
     def test_missing_date_and_commit_is_skipped(self):

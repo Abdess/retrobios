@@ -45,7 +45,8 @@ HEAD = "head"
 _REF_RE = re.compile(r"^(?P<path>[^:]+?)(?::(?P<start>\d+)(?:-(?P<end>\d+))?)?$")
 _BARE_RANGE_RE = re.compile(r"^\d+(?:-\d+)?$")
 _SPLIT_RE = re.compile(r"[,;]")
-_ANNOTATION_RE = re.compile(r"\s*\([^)]*\)")
+_ANNOTATION_RE = re.compile(r"\s*\([^)]*\)?")
+_LOCATED_RE = re.compile(r"^[^\s:]+:\d+(?:-\d+)?$")
 
 
 @dataclass(frozen=True)
@@ -119,8 +120,11 @@ def split_source_ref(ref: str) -> list[RefPart]:
     across 50 profiles carry them.
     """
     parts: list[RefPart] = []
-    for raw in _SPLIT_RE.split(str(ref or "")):
-        chunk = _ANNOTATION_RE.sub("", raw).strip()
+    # Annotations come out first: they may contain the separators themselves,
+    # and splitting inside one would cut it into meaningless fragments.
+    cleaned = _ANNOTATION_RE.sub("", str(ref or ""))
+    for raw in _SPLIT_RE.split(cleaned):
+        chunk = _trim_prose(raw.strip())
         if not chunk:
             continue
         if _BARE_RANGE_RE.match(chunk) and parts:
@@ -132,6 +136,22 @@ def split_source_ref(ref: str) -> list[RefPart]:
         path, start_line, end_line = parse_source_ref(chunk)
         parts.append(RefPart(path, start_line, end_line))
     return parts
+
+
+def _trim_prose(chunk: str) -> str:
+    """Drop a trailing comment written without parentheses.
+
+    `libretro.cpp:1520-1521 candidates_a1200` cites a location followed by a
+    note. The leading token is kept only when it already reads as a reference,
+    so `munt ROMInfo.cpp`, which names an external project, stays intact and
+    is reported rather than silently truncated to `munt`.
+    """
+    if " " not in chunk:
+        return chunk
+    head = chunk.split(" ", 1)[0]
+    if _LOCATED_RE.match(head) or _BARE_RANGE_RE.match(head):
+        return head
+    return chunk
 
 
 def collect_tokens(entry: dict) -> list[str]:
@@ -334,6 +354,11 @@ def anchor_part(part: RefPart, fetch, rename_getter, describe=None) -> PartResul
         )
 
     pin_lines = fetch(PIN, part.path)
+    if pin_lines is None and path != part.path:
+        # A ref may cite a bare filename the tree search resolved at HEAD; the
+        # same resolved path usually holds at the pin. A genuine rename keeps
+        # the old path at the pin, which is why that one is tried first.
+        pin_lines = fetch(PIN, path)
     if pin_lines is None:
         return PartResult(
             part, "GONE", None, None, None, [], "pin revision missing", slug, url
