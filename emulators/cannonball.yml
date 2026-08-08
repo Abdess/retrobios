@@ -4,7 +4,7 @@ core_classification: game_engine
 source: "https://github.com/libretro/cannonball"
 upstream: "https://github.com/djyt/cannonball"
 profiled_date: "2026-03-23"
-source_commit: "5137a791d229a5b9c7c089cf1edcce4db3c57d64"
+source_commit: "0d83575d920ea4c0a280847a19d7802f673e6a68"
 core_version: "1.0"
 display_name: "Cannonball"
 cores:

@@ -102,7 +102,7 @@ files:
     size: 65536
     sha1: "5a5cb5a77d7d55ee69657c2f870416daed52dea7"
     validation: [sha1, size]
-    source_ref: "mt32emu.h:5112,5129"
+    source_ref: "src/gui/mt32emu.h:5112, src/gui/mt32emu.h:5129"
 
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control v1.05"
@@ -111,7 +111,7 @@ files:
     size: 65536
     sha1: "e17a3a6d265bf1fa150312061134293d2b58288c"
     validation: [sha1, size]
-    source_ref: "mt32emu.h:5113,5130"
+    source_ref: "src/gui/mt32emu.h:5113, src/gui/mt32emu.h:5130"
 
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control v1.06"
@@ -120,7 +120,7 @@ files:
     size: 65536
     sha1: "a553481f4e2794c10cfe597fef154eef0d8257de"
     validation: [sha1, size]
-    source_ref: "mt32emu.h:5114,5131"
+    source_ref: "src/gui/mt32emu.h:5114, src/gui/mt32emu.h:5131"
 
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control v1.07"
@@ -129,7 +129,7 @@ files:
     size: 65536
     sha1: "b083518fffb7f66b03c23b7eb4f868e62dc5a987"
     validation: [sha1, size]
-    source_ref: "mt32emu.h:5115,5132"
+    source_ref: "src/gui/mt32emu.h:5115, src/gui/mt32emu.h:5132"
 
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control BlueRidge"
@@ -138,7 +138,7 @@ files:
     size: 65536
     sha1: "7b8c2a5ddb42fd0732e2f22b3340dcf5360edf92"
     validation: [sha1, size]
-    source_ref: "mt32emu.h:5116,5133"
+    source_ref: "src/gui/mt32emu.h:5116, src/gui/mt32emu.h:5133"
 
   # -- MT-32 v2.x control ROMs (128 KB, pair with MT32_PCM.ROM) --
 
@@ -149,7 +149,7 @@ files:
     size: 131072
     sha1: "5837064c9df4741a55f7c4d8787ac158dff2d3ce"
     validation: [sha1, size]
-    source_ref: "mt32emu.h:5118,5135"
+    source_ref: "src/gui/mt32emu.h:5118, src/gui/mt32emu.h:5135"
 
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control v2.04"
@@ -158,7 +158,7 @@ files:
     size: 131072
     sha1: "2c16432b6c73dd2a3947cba950a0f4c19d6180eb"
     validation: [sha1, size]
-    source_ref: "mt32emu.h:5119,5136"
+    source_ref: "src/gui/mt32emu.h:5119, src/gui/mt32emu.h:5136"
 
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control v2.06"
@@ -167,7 +167,7 @@ files:
     size: 131072
     sha1: "2869cf4c235d671668cfcb62415e2ce8323ad4ed"
     validation: [sha1, size]
-    source_ref: "mt32emu.h:5120,5137"
+    source_ref: "src/gui/mt32emu.h:5120, src/gui/mt32emu.h:5137"
 
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control v2.07"
@@ -176,7 +176,7 @@ files:
     size: 131072
     sha1: "47b52adefedaec475c925e54340e37673c11707c"
     validation: [sha1, size]
-    source_ref: "mt32emu.h:5121,5138"
+    source_ref: "src/gui/mt32emu.h:5121, src/gui/mt32emu.h:5138"
 
   # -- CM-32L / LAPC-I control ROMs (64 KB, pair with CM32L_PCM.ROM) --
 
@@ -187,7 +187,7 @@ files:
     size: 65536
     sha1: "73683d585cd6948cc19547942ca0e14a0319456d"
     validation: [sha1, size]
-    source_ref: "mt32emu.h:5122,5139"
+    source_ref: "src/gui/mt32emu.h:5122, src/gui/mt32emu.h:5139"
 
   - name: "CM32L_CONTROL.ROM"
     description: "CM-32L/LAPC-I Control v1.02"
@@ -196,7 +196,7 @@ files:
     size: 65536
     sha1: "a439fbb390da38cada95a7cbb1d6ca199cd66ef8"
     validation: [sha1, size]
-    source_ref: "mt32emu.h:5123,5140"
+    source_ref: "src/gui/mt32emu.h:5123, src/gui/mt32emu.h:5140"
 
   # -- CM-32LN / CM-500 / LAPC-N control ROM (64 KB, pairs with CM32L_PCM.ROM) --
 
@@ -207,7 +207,7 @@ files:
     size: 65536
     sha1: "dc1c5b1b90a4646d00f7daf3679733c7badc7077"
     validation: [sha1, size]
-    source_ref: "mt32emu.h:5124,5141"
+    source_ref: "src/gui/mt32emu.h:5124, src/gui/mt32emu.h:5141"
 
   # -- PCM ROMs --
 
@@ -218,7 +218,7 @@ files:
     size: 524288
     sha1: "f6b1eebc4b2d200ec6d3d21d51325d5b48c60252"
     validation: [sha1, size]
-    source_ref: "mt32emu.h:5126,5143"
+    source_ref: "src/gui/mt32emu.h:5126, src/gui/mt32emu.h:5143"
     note: "accepted by every MT-32 control ROM, v1.x and v2.x (pcmCount 128)"
 
   - name: "CM32L_PCM.ROM"
@@ -229,7 +229,7 @@ files:
     sha1: "289cc298ad532b702461bfc738009d9ebe8025ea"
     validation: [sha1, size]
     aliases: ["CM32LN_PCM.ROM"]
-    source_ref: "mt32emu.h:5127,5144"
+    source_ref: "src/gui/mt32emu.h:5127, src/gui/mt32emu.h:5144"
     note: >
       accepted by the CM-32L and CM-32LN control ROMs (pcmCount 256). The
       alias covers the name derived from CM32LN_CONTROL.ROM.
