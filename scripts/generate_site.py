@@ -755,6 +755,15 @@ def generate_systems_index(manufacturers: dict) -> str:
     return "\n".join(lines) + "\n"
 
 
+_PROVENANCE_LABELS = {"redump": "Redump", "no-intro": "No-Intro", "tosec": "TOSEC"}
+
+
+def _prov_title(data: dict) -> str:
+    """Tooltip text for a provenance badge."""
+    parts = [data.get("dat", ""), data.get("description", "")]
+    return ": ".join(p for p in parts if p).replace('"', "&quot;")
+
+
 def generate_system_page(
     manufacturer: str,
     consoles: dict[str, list],
@@ -820,6 +829,14 @@ def generate_system_page(
             if emus:
                 emu_links = [_emulator_link(e, "../") for e in emus]
                 lines.append(f"- Emulators: {', '.join(emu_links)}")
+            provenance = f.get("provenance", {})
+            if provenance:
+                prov_badges = " ".join(
+                    f'<span class="rb-badge rb-badge-success" '
+                    f'title="{_prov_title(data)}">{_PROVENANCE_LABELS.get(s, s)}</span>'
+                    for s, data in sorted(provenance.items())
+                )
+                lines.append(f"- Verified dump: {prov_badges}")
             lines.append("")
             lines.append("</div>")
             lines.append("")

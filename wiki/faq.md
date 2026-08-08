@@ -50,9 +50,12 @@ resolve.
 
 Whether a file byte-matches the original hardware ROM is a different
 question, answered by dump-preservation catalogs such as No-Intro,
-Redump, and TOSEC, not by emulator code.
-The two views usually agree; when they differ, this project follows the
-code, because that is what decides whether your emulator boots.
+Redump, and TOSEC, not by emulator code. The collection is
+cross-referenced against their DATs: files matching a catalog entry
+carry a verified dump badge on the system pages, and catalog entries
+absent from the collection are tracked as acquisition targets. When
+the two views differ, this project follows the code, because that is
+what decides whether your emulator boots.
 
 ## Which MAME version do the arcade BIOS sets match?
 
