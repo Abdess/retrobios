@@ -371,7 +371,7 @@ def generate_home(
         "",
         f"# {SITE_NAME}",
         "",
-        "BIOS and firmware packs verified with each platform's own checks, "
+        "BIOS and firmware packs checked the way each platform checks them, "
         "with emulator source code as the deciding authority.",
         "",
         "</div>",
@@ -501,7 +501,7 @@ def generate_home(
             '??? abstract "Methodology"',
             "",
             "    Platform lists are checked against emulator source code, file "
-            "by file where a profile exists ([Source-backed counts](gaps.md)). "
+            "by file where a profile exists ([how far that reaches](gaps.md)). "
             "Documentation and metadata can drift from actual runtime behavior, "
             "so the source is the primary reference.",
             "",

@@ -318,9 +318,13 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
             "## What's included",
             "",
             "BIOS, firmware, and system files for consoles from Atari to PlayStation 3.",
-            "Every file passes its platform's own verification; where an emulator"
-            " profile exists, the expected hashes and sizes are read from the"
-            " emulator's source code (the Source-backed column below).",
+            "Every file passes the check its platform runs at startup: an MD5 or"
+            " SHA1 comparison on most, file presence on RetroArch, Lakka and"
+            " RetroPie, whose code checks nothing else. That is what the"
+            " Verified by column reports, platform by platform. The collection"
+            " itself carries SHA1, MD5, SHA256 and CRC32 for every file, and"
+            " where an emulator profile exists the expected hashes and sizes"
+            " come from that emulator's own source.",
             "",
             (
                 f"- **{missing_total} files** the platforms' emulators load are"

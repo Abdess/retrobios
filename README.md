@@ -54,19 +54,19 @@ The RetroDECK pack already contains its own `bios/` folder, so it extracts into 
 ## What's included
 
 BIOS, firmware, and system files for consoles from Atari to PlayStation 3.
-Every file passes its platform's own verification; where an emulator profile exists, the expected hashes and sizes are read from the emulator's source code (the Source-backed column below).
+Every file passes the check its platform runs at startup: an MD5 or SHA1 comparison on most, file presence on RetroArch, Lakka and RetroPie, whose code checks nothing else. That is what the Verified by column reports, platform by platform. The collection itself carries SHA1, MD5, SHA256 and CRC32 for every file, and where an emulator profile exists the expected hashes and sizes come from that emulator's own source.
 
 - **91 files** the platforms' emulators load are not in the collection yet, named in the [gap analysis](https://abdess.github.io/retrobios/gaps/)
 - **12 platforms** supported with platform-specific verification
-- **337 emulators** profiled from source (RetroArch cores + standalone)
-- **410 systems** covered (NES, SNES, PlayStation, Saturn, Dreamcast, ...)
+- **339 emulators** profiled from source (RetroArch cores + standalone)
+- **412 systems** covered (NES, SNES, PlayStation, Saturn, Dreamcast, ...)
 - **7,763 files** indexed with SHA1, MD5, SHA256 and CRC32 checksums: 2,478 system files, 2,746 arcade ROM sets, 2,539 game and engine data files
 - **531 of 2,478 system files** matched to dump-preservation catalogs (No-Intro, Redump, TOSEC); arcade sets and engine data fall outside what those catalogs index
 - **9854 MB** total collection size
 
 ## Supported systems
 
-NES, SNES, Nintendo 64, GameCube, Wii, Game Boy, Game Boy Advance, Nintendo DS, Nintendo 3DS, Switch, PlayStation, PlayStation 2, PlayStation 3, PSP, PS Vita, Mega Drive, Saturn, Dreamcast, Game Gear, Master System, Neo Geo, Atari 2600, Atari 7800, Atari Lynx, Atari ST, MSX, PC Engine, TurboGrafx-16, ColecoVision, Intellivision, Commodore 64, Amiga, ZX Spectrum, Arcade (MAME), and 376+ more.
+NES, SNES, Nintendo 64, GameCube, Wii, Game Boy, Game Boy Advance, Nintendo DS, Nintendo 3DS, Switch, PlayStation, PlayStation 2, PlayStation 3, PSP, PS Vita, Mega Drive, Saturn, Dreamcast, Game Gear, Master System, Neo Geo, Atari 2600, Atari 7800, Atari Lynx, Atari ST, MSX, PC Engine, TurboGrafx-16, ColecoVision, Intellivision, Commodore 64, Amiga, ZX Spectrum, Arcade (MAME), and 378+ more.
 
 Full list with per-file details: **[https://abdess.github.io/retrobios/](https://abdess.github.io/retrobios/)**
 
@@ -80,7 +80,7 @@ Full list with per-file details: **[https://abdess.github.io/retrobios/](https:/
 | Lakka | 530/530 | 1,149/1,154 | file presence |
 | MiSTer FPGA | 65/65 | - | MD5 hash |
 | ROCKNIX | 38/38 | 1,484/1,489 | MD5 hash |
-| Recalbox | 346/346 | 715/720 | MD5 hash |
+| Recalbox | 346/346 | 717/722 | MD5 hash |
 | RetroArch | 530/530 | 1,149/1,154 | file presence |
 | RetroBat | 341/341 | 808/898 | MD5 hash |
 | RetroDECK | 2,008/2,008 | 1,183/1,189 | MD5 hash |
@@ -125,7 +125,7 @@ The [documentation site](https://abdess.github.io/retrobios/) provides:
 - **Per-emulator profiles** with source code references for every file
 - **Per-system pages** showing which emulators and platforms cover each console
 - **Gap analysis** identifying missing files and undeclared core requirements
-- **Cross-reference** mapping files across 12 platforms and 337 emulators
+- **Cross-reference** mapping files across 12 platforms and 339 emulators
 
 ## How it works
 
@@ -162,4 +162,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software.
 The legal reasoning is laid out in the [FAQ](https://abdess.github.io/retrobios/wiki/faq/#is-this-legal).
 
-*Auto-generated on 2026-08-08T09:29:33Z*
+*Auto-generated on 2026-08-08T10:38:43Z*
