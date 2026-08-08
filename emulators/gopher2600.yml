@@ -1,0 +1,169 @@
+emulator: Gopher2600
+type: standalone
+core_classification: other
+source: "https://github.com/JetSetIlly/Gopher2600"
+upstream: "https://github.com/JetSetIlly/Gopher2600"
+profiled_date: "2026-08-08"
+source_commit: "7f9b2f73630979c0f38dbde4c6f3c7162d99bac1"
+core_version: "v0.57.0"
+display_name: "Atari - 2600 (Gopher2600)"
+cores:
+  - gopher2600
+systems:
+  - atari-2600
+mode: standalone
+
+notes: |
+  Atari 2600 emulator written in Go. The 6507, TIA and RIOT are emulated in
+  software and the console needs no ROM of its own, so a plain cartridge boots
+  with nothing supplied.
+
+  Supercharger emulation is the only path that reads a BIOS. NewSupercharger
+  branches three ways (supercharger.go:93-119). A tape held as WAV or MP3 sets
+  Loader.IsSoundData and calls loadBIOS, and the error is returned, so the
+  cartridge fails to attach without the file. A demo unit image calls loadBIOS
+  and substitutes fastloadOnlyBIOS() on failure. Everything else, including the
+  usual Supercharger BIN, takes fastloadOnlyBIOS() without ever looking for the
+  file: a 2048 byte stub holding a touch of the tape load register and the CPU
+  jump table (bios.go:151-166).
+
+  loadBIOS reads the current working directory, then the directory holding the
+  tape or BIN, then the configuration directory (bios.go:53-116). Each candidate
+  name is tried in turn and the content is gated on MD5 before the caller checks
+  the 2048 byte length, so a file under the right name with the wrong content is
+  refused. ReqSpec selects the PAL table and the PAL hash (bios.go:56-59);
+  ReqSpec comes from the television specification, the stella.pro entry or the
+  filename (cartridgeloader/loader.go:194-201).
+
+  The demo unit is recognised by MD5 of the 256 bytes at 0x300 of the loaded
+  image (demounit.go:58,78). When that image carries more than 2048 bytes it
+  holds the Schweber chip and the carousel together; otherwise the eight ROMs
+  are read from the directory of the loaded file (demounit_controller.go:
+  178-200). A read error or a length other than 8192 logs and returns nil, and
+  the peripheral is left unplugged.
+
+  stella.pro is Stella's cartridge properties database, read from the
+  configuration directory (properties.go:28,48-58). It is loaded by
+  NewDebugger (debugger.go:356), which drives play as well as debug
+  (gopher2600.go:261,307,326), so it applies to the plain `gopher2600 <rom>`
+  invocation. A missing file is logged and start-up continues; the ROM selector
+  then falls back to the filename and no television specification is inferred
+  from the cartridge name.
+
+  The ROM selector also reads a Named_Boxarts directory from the configuration
+  directory, listing it at start-up and fuzzy matching the cartridge name
+  against the entries before reading one image (win_rom_select.go:92,127-138,
+  678-689). It holds the box art of the libretro-thumbnails Atari 2600 set,
+  pinned upstream at commit 4ea759821724d6c7bcf2f46020d79fc4270ed2f6
+  (win_rom_select.go:91). Its content is whatever the user copies in and no
+  name is fixed by the code, so it carries no file entry here.
+
+  Fonts, shaders, bevels, the CPU instruction table and the Movie Cart core are
+  compiled in with go:embed. The remaining paths under the configuration
+  directory are written by the emulator or authored by hand: preferences,
+  debugger_imgui.ini, managerState, managerHotkeys, savekey, fa2_nvram,
+  elf_nvram, regression, patches and setupDB. ARM map files and DWARF sources
+  are read from a project build tree beside the ROM. AtariVox speech calls the
+  festival binary as a process, with the path taken from preferences
+  (atarivox_preferences.go:51).
+
+files:
+  - name: "Supercharger BIOS.bin"
+    system: atari-2600
+    aliases:
+      - "Supercharger.BIOS.bin"
+      - "Supercharger_BIOS.bin"
+      - "supercharger_bios.bin"
+      - "SUPERCHARGER_BIOS.bin"
+    region: "NTSC"
+    required: false
+    hle_fallback: true
+    size: 2048
+    md5: "4565c1a7abce773e53c75b35414adefd"
+    validation: [size, md5]
+    description: "Starpath Supercharger BIOS, required to load a tape held as WAV or MP3"
+    source_ref: "hardware/memory/cartridge/supercharger/bios.go:30-36,45,53-116,141"
+
+  - name: "Supercharger BIOS PAL.bin"
+    system: atari-2600
+    aliases:
+      - "Supercharger_BIOS_PAL.bin"
+      - "SUPERCHARGER_BIOS_PAL.bin"
+    region: "PAL"
+    required: false
+    hle_fallback: true
+    size: 2048
+    md5: "4a8c743396b8ad69d97e6fd3dd3e3132"
+    validation: [size, md5]
+    description: "PAL Supercharger BIOS, selected when the loader resolves a PAL specification"
+    source_ref: "hardware/memory/cartridge/supercharger/bios.go:38-42,46,56-59,141"
+
+  - name: "Starpath Demonstration Unit 1P.bin"
+    system: atari-2600
+    required: false
+    size: 8192
+    validation: [size]
+    description: "Demo unit carousel ROM 1, read from the directory of the loaded image"
+    source_ref: "hardware/memory/cartridge/supercharger/demounit_controller.go:37-46,178-200"
+
+  - name: "Starpath Demonstration Unit 2P.bin"
+    system: atari-2600
+    required: false
+    size: 8192
+    validation: [size]
+    description: "Demo unit carousel ROM 2, read from the directory of the loaded image"
+    source_ref: "hardware/memory/cartridge/supercharger/demounit_controller.go:37-46,178-200"
+
+  - name: "Starpath Demonstration Unit 3P.bin"
+    system: atari-2600
+    required: false
+    size: 8192
+    validation: [size]
+    description: "Demo unit carousel ROM 3, read from the directory of the loaded image"
+    source_ref: "hardware/memory/cartridge/supercharger/demounit_controller.go:37-46,178-200"
+
+  - name: "Starpath Demonstration Unit 4P.bin"
+    system: atari-2600
+    required: false
+    size: 8192
+    validation: [size]
+    description: "Demo unit carousel ROM 4, read from the directory of the loaded image"
+    source_ref: "hardware/memory/cartridge/supercharger/demounit_controller.go:37-46,178-200"
+
+  - name: "Starpath Demonstration Unit 5P.bin"
+    system: atari-2600
+    required: false
+    size: 8192
+    validation: [size]
+    description: "Demo unit carousel ROM 5, read from the directory of the loaded image"
+    source_ref: "hardware/memory/cartridge/supercharger/demounit_controller.go:37-46,178-200"
+
+  - name: "Starpath Demonstration Unit 6P.bin"
+    system: atari-2600
+    required: false
+    size: 8192
+    validation: [size]
+    description: "Demo unit carousel ROM 6, read from the directory of the loaded image"
+    source_ref: "hardware/memory/cartridge/supercharger/demounit_controller.go:37-46,178-200"
+
+  - name: "Starpath Demonstration Unit 7P.bin"
+    system: atari-2600
+    required: false
+    size: 8192
+    validation: [size]
+    description: "Demo unit carousel ROM 7, read from the directory of the loaded image"
+    source_ref: "hardware/memory/cartridge/supercharger/demounit_controller.go:37-46,178-200"
+
+  - name: "Starpath Demonstration Unit 8P.bin"
+    system: atari-2600
+    required: false
+    size: 8192
+    validation: [size]
+    description: "Demo unit carousel ROM 8, read from the directory of the loaded image"
+    source_ref: "hardware/memory/cartridge/supercharger/demounit_controller.go:37-46,178-200"
+
+  - name: "stella.pro"
+    system: atari-2600
+    required: false
+    description: "Stella cartridge properties database, keyed by cartridge MD5"
+    source_ref: "properties/properties.go:28,48-58; debugger/debugger.go:356"

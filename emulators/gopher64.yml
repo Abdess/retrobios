@@ -1,0 +1,68 @@
+emulator: gopher64
+type: standalone
+core_classification: other
+source: "https://github.com/gopher64/gopher64"
+upstream: "https://github.com/gopher64/gopher64"
+profiled_date: "2026-08-08"
+source_commit: "efe78e544a96ac6724a2c2651d8f0a62044e7467"
+core_version: "v1.1.34"
+display_name: "Nintendo - Nintendo 64 (gopher64)"
+cores:
+  - gopher64
+systems:
+  - nintendo-64
+mode: standalone
+
+notes: |
+  Nintendo 64 emulator written in Rust by Logan McNaughton, with parallel-rdp
+  driving the RDP and rcheevos providing RetroAchievements. Portions of the
+  emulation are adapted from mupen64plus and ares. ES-DE and RetroBat both run
+  the release binary, RetroBat in portable mode.
+
+  The boot chain reads no file. Both PIF ROMs are compiled in as 1984 byte
+  arrays, the size of the PIF ROM window (src/device/pif/rom.rs:1,90;
+  src/device/pif.rs:7). reset_pif installs the PAL image when the cartridge
+  country code is one of DFIPSUXY and the NTSC image otherwise
+  (src/device/pif.rs:252-257, src/device/cart/rom.rs:137-143), and the VR4300
+  runs IPL1 and IPL2 out of that array: reads below the PIF RAM offset are
+  served from it and writes there panic (src/device/pif.rs:31-58). The CIC needs
+  no file either. set_cic hashes the cartridge IPL3 region with SHA-256 and maps
+  the six known digests to a seed byte, with the 6102 seed as the fallback
+  (src/device/cart/rom.rs:147-175).
+
+  64DD is not emulated, so no IPL image is involved.
+
+  A Transfer Pak port reads two files whose paths come from the configuration,
+  gb_rom_path and gb_ram_path, and attaches them when both are set
+  (src/lib.rs:194-200). The pair is a Game Boy cartridge and its save, supplied
+  by the player: the loader takes the ROM as is and only inspects the tail of
+  the RAM for MBC3 clock state (src/device/controller/gbcart.rs:37-75), then
+  writes the RAM back on shutdown (src/lib.rs:276-288). The code fixes no name,
+  size or hash for either, so neither carries a file entry here.
+
+  The SC64 SD card image is created rather than obtained: an empty save is
+  resized to 64 MB and FAT formatted on first access
+  (src/device/cart/sc64.rs:4,34-38). Cartridges come from argv, plain or as the
+  first matching entry of a zip or 7z archive (src/device.rs:188-256).
+
+  Everything else under the configuration, data and cache directories is written
+  by the emulator: config.json and cheats.json (src/ui/config.rs:99-111,134-146),
+  retroachievements.json (src/lib.rs:209; src/retroachievements.rs:37,61),
+  ice_config.json from the netplay server response (src/ui/netplay.rs:713-716,
+  src/netplay.rs:419), the eeprom, sram, flash, mempak, sdcard and romsave saves
+  and the savestates (src/ui/storage.rs:212-232; src/savestates.rs:179,236). For
+  a netplay launch the GUI serialises the cheats to the cache directory, passes
+  them to a re-exec of itself through the hidden --cheats flag and deletes the
+  file afterwards (src/ui/gui.rs:583-593,600-615,630; src/lib.rs:141-147).
+  portable.txt is tested for existence only, to move those three directories
+  beside the executable (src/ui.rs:164-178).
+
+  Compiled-in data: the cheat database (src/cheats.rs:31), the No-Intro
+  Nintendo 64 export that names entries in the ROM browser
+  (src/ui/gui.rs:688-690), the RobotoMono face handed to SDL_ttf from memory
+  (src/ui/video.rs:109, src/ui/input_profile.rs:99), the parallel-rdp SPIR-V
+  modules (parallel-rdp/spirv.hpp and parallel-rdp/spirv_crt.hpp, used at
+  parallel-rdp/interface.cpp:4-5,615) and the Slint translations bundled at
+  build time (build.rs:11).
+
+files: []

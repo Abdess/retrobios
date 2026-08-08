@@ -1,0 +1,592 @@
+emulator: DREAMM
+type: standalone
+core_classification: other
+source: "https://dreamm.aarongiles.com/"
+upstream: "https://dreamm.aarongiles.com/"
+profiled_date: "2026-08-08"
+core_version: "4.0"
+display_name: "LucasArts (DREAMM)"
+cores:
+  - dreamm
+systems:
+  - dos
+  - ibm-pc
+  - tandy-1000
+  - fmtowns
+mode: standalone
+
+notes: |
+  Closed-source emulator by Aaron Giles for LucasArts, Lucasfilm Games and
+  Lucas Learning titles, shipped as a single executable for Windows, macOS and
+  Linux on x64 and ARM64. The game database is compiled in: 67 definitions
+  covering 1013 variants, keyed on machine = pc, fmtowns or tandy and
+  osenv = dos, windows or fmtowns. Windows titles run on a reimplemented Win16
+  and Win32 layer carried inside the executable. The game directory is passed
+  on the command line and the title is detected from its contents.
+  ref: DREAMM 4.0 linux-x64, appended zip game/*.dreamm
+
+  Support files live in the SDL preference path for organisation
+  "Aaron Giles" and application "DREAMM":
+  %APPDATA%\Aaron Giles\DREAMM on Windows,
+  ~/Library/Application Support/Aaron Giles/DREAMM on macOS,
+  $XDG_DATA_HOME/Aaron Giles/DREAMM on Linux. Paths below are relative to that
+  directory. Startup writes config.json and creates install, gamedelta,
+  screenshots, logs and sounddata.
+  ref: SDL_GetPrefPath; strace of DREAMM 4.0 linux-x64 with a clean HOME
+
+  Audio hardware is set per game and per variant: speaker, cms, adlib, sb16,
+  tandy, mt32 and gmidi. MT-32 and General MIDI output can go to an external
+  MIDI device, to the OPL MIDI generator or to a SoundFont, so no ROM file is
+  needed to play any title. ROMs add the two hardware synthesiser options.
+  ref: game/*.dreamm audiohw; "Expected one of 'speaker', 'cms', 'adlib',
+       'sb16', 'mt32', or 'gmidi' in audiohw"
+
+  MT-32 and CM-32L are emulated by a bundled munt build, unpacked at runtime
+  to sounddata/mt32emu-dreamm.so and driven through mt32emu_get_service_i.
+  Twelve ROM sets are declared in a table of twelve 64-byte records holding
+  display name, id, control ROM full image, control chips A and B, PCM full
+  image and PCM low and high halves: MT-32 v1.04, v1.05, v1.06, v1.07, Blue
+  Ridge Enhanced, v2.03, v2.04, v2.06, v2.07, CM-32L v1.00, CM-32L v1.02 and
+  CM-32LN v1.00. A set is offered once a control ROM is present as the full
+  image or as both chips, and a PCM ROM is present as the full image or as
+  both halves. The CM-32L sets name cm32l_pcm.rom as the full image,
+  mt32_pcm_l.rom as the low half and cm32l_pcm_h.rom as the high half. munt
+  identifies each file by size then SHA1 before opening the synth.
+  ref: set table 0x23db4a8, id lookup 0x164d050, availability 0x164d2a8;
+       munt ROMInfo.cpp:206-214 ROMInfo::getROMInfo
+
+  The SC-55 is emulated by the Nuked SC-55 CLAP plug-in, unpacked to
+  sounddata/Nuked-SC55.clap, which reads one model directory under
+  Nuked-SC55-Resources/ROMs. Five models are probed at startup: SC-55 v1.00,
+  v1.20, v1.21, v2.00 and SC-55mk2 v1.01. The plug-in identifies a set by
+  hashing the directory contents, so its own loader does not depend on the
+  file names.
+  ref: strace of DREAMM 4.0 linux-x64; Nuked-SC55-CLAP nuked_sc55.cpp:145-212
+       GetRomBasePaths and Init, rom_loader.cpp:31-80 DetectRomsetsByHash
+
+  Both families install by dropping files on the Manage Sound Fonts & ROMs
+  screen, or by copying them into sounddata by hand. A dropped file is matched
+  against a 51-entry manifest of {crc32, size, name} sorted by name: one path
+  resolves a file by name and checks its size then its CRC32, the other maps a
+  size and CRC32 back to the destination paths listed below. The manifest
+  sizes agree with the bundled munt ROM table. mt32_ctrl_2_03.rom is named by
+  the v2.03 set but has no manifest entry, so it loads from sounddata and
+  cannot be installed by drag and drop.
+  ref: manifest 0x23daf78, name match 0x16456a0, reverse lookup 0x1645880;
+       "To install Sound Fonts (.sf2 files) or ROMs for Roland MIDI emulation,
+       drop them onto this screen."
+
+  SoundFonts are read from sounddata as well: the directory is scanned at
+  startup and every .sf2 found becomes a MIDI output option for both MT-32 and
+  GMIDI. No name and no hash is compiled in and the file keeps the name it
+  arrived with, so none is listed below.
+  ref: sounddata scan; "Error loading soundfont '{}': {}", "Font file '{}'
+       seems to be an MT-32 set, not compatible with GMIDI"
+
+  Everything else the emulator reads is appended to the executable and
+  unpacked at runtime: the game definitions and their icons, the copy
+  protection artwork, gamecontrollerdb.txt, the shaders, the UI fonts and
+  images, the two synthesiser plug-ins, and the Win16 and Win32 system files,
+  fonts and sounds.
+  ref: appended zip, 488 entries
+
+files:
+  # -- Roland MT-32 and CM-32L, sounddata/mt32emu --
+  # A set needs one control ROM and one PCM ROM, each supplied as the full
+  # image or as the two chip dumps.
+  - name: mt32_ctrl_1_04.rom
+    path: "sounddata/mt32emu/mt32_ctrl_1_04.rom"
+    description: "Roland MT-32 v1.04 control ROM"
+    required: false
+    size: 65536
+    crc32: "4c91fa96"
+    sha1: "5a5cb5a77d7d55ee69657c2f870416daed52dea7"
+    validation: [size, crc32, sha1]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23dafc8, set table 0x23db4a8; sounddata/mt32emu-dreamm.so ROM table"
+
+  - name: mt32_ctrl_1_04_a.rom
+    path: "sounddata/mt32emu/mt32_ctrl_1_04_a.rom"
+    description: "Roland MT-32 v1.04 control ROM, chip A"
+    required: false
+    size: 32768
+    crc32: "a93b65f2"
+    sha1: "9cd4858014c4e8a9dff96053f784bfaac1092a2e"
+    validation: [size, crc32, sha1]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23dafd8, set table 0x23db4a8; sounddata/mt32emu-dreamm.so ROM table"
+
+  - name: mt32_ctrl_1_04_b.rom
+    path: "sounddata/mt32emu/mt32_ctrl_1_04_b.rom"
+    description: "Roland MT-32 v1.04 control ROM, chip B"
+    required: false
+    size: 32768
+    crc32: "b5ee2192"
+    sha1: "fe8db469b5bfeb37edb269fd47e3ce6d91014652"
+    validation: [size, crc32, sha1]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23dafe8, set table 0x23db4a8; sounddata/mt32emu-dreamm.so ROM table"
+
+  - name: mt32_ctrl_1_05.rom
+    path: "sounddata/mt32emu/mt32_ctrl_1_05.rom"
+    description: "Roland MT-32 v1.05 control ROM"
+    required: false
+    size: 65536
+    crc32: "e6bb2b77"
+    sha1: "e17a3a6d265bf1fa150312061134293d2b58288c"
+    validation: [size, crc32, sha1]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23daff8, set table 0x23db4a8; sounddata/mt32emu-dreamm.so ROM table"
+
+  - name: mt32_ctrl_1_05_a.rom
+    path: "sounddata/mt32emu/mt32_ctrl_1_05_a.rom"
+    description: "Roland MT-32 v1.05 control ROM, chip A"
+    required: false
+    size: 32768
+    crc32: "3281216c"
+    sha1: "57a09d80d2f7ca5b9734edbe9645e6e700f83701"
+    validation: [size, crc32, sha1]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23db008, set table 0x23db4a8; sounddata/mt32emu-dreamm.so ROM table"
+
+  - name: mt32_ctrl_1_05_b.rom
+    path: "sounddata/mt32emu/mt32_ctrl_1_05_b.rom"
+    description: "Roland MT-32 v1.05 control ROM, chip B"
+    required: false
+    size: 32768
+    crc32: "e06d8020"
+    sha1: "52e3c6666db9ef962591a8ee99be0cde17f3a6b6"
+    validation: [size, crc32, sha1]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23db018, set table 0x23db4a8; sounddata/mt32emu-dreamm.so ROM table"
+
+  - name: mt32_ctrl_1_06.rom
+    path: "sounddata/mt32emu/mt32_ctrl_1_06.rom"
+    description: "Roland MT-32 v1.06 control ROM"
+    required: false
+    size: 65536
+    crc32: "d63319e8"
+    sha1: "a553481f4e2794c10cfe597fef154eef0d8257de"
+    validation: [size, crc32, sha1]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23db028, set table 0x23db4a8; sounddata/mt32emu-dreamm.so ROM table"
+
+  - name: mt32_ctrl_1_06_a.rom
+    path: "sounddata/mt32emu/mt32_ctrl_1_06_a.rom"
+    description: "Roland MT-32 v1.06 control ROM, chip A"
+    required: false
+    size: 32768
+    crc32: "29369ae1"
+    sha1: "cc83bf23cee533097fb4c7e2c116e43b50ebacc8"
+    validation: [size, crc32, sha1]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23db038, set table 0x23db4a8; sounddata/mt32emu-dreamm.so ROM table"
+
+  - name: mt32_ctrl_1_06_b.rom
+    path: "sounddata/mt32emu/mt32_ctrl_1_06_b.rom"
+    description: "Roland MT-32 v1.06 control ROM, chip B"
+    required: false
+    size: 32768
+    crc32: "4d495d98"
+    sha1: "bf4f15666bc46679579498386704893b630c1171"
+    validation: [size, crc32, sha1]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23db048, set table 0x23db4a8; sounddata/mt32emu-dreamm.so ROM table"
+
+  - name: mt32_ctrl_1_07.rom
+    path: "sounddata/mt32emu/mt32_ctrl_1_07.rom"
+    description: "Roland MT-32 v1.07 control ROM"
+    required: false
+    size: 65536
+    crc32: "a7c1531b"
+    sha1: "b083518fffb7f66b03c23b7eb4f868e62dc5a987"
+    validation: [size, crc32, sha1]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23db058, set table 0x23db4a8; sounddata/mt32emu-dreamm.so ROM table"
+
+  - name: mt32_ctrl_1_07_a.rom
+    path: "sounddata/mt32emu/mt32_ctrl_1_07_a.rom"
+    description: "Roland MT-32 v1.07 control ROM, chip A"
+    required: false
+    size: 32768
+    crc32: "67fd8968"
+    sha1: "13f06b38f0d9e0fc050b6503ab777bb938603260"
+    validation: [size, crc32, sha1]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23db068, set table 0x23db4a8; sounddata/mt32emu-dreamm.so ROM table"
+
+  - name: mt32_ctrl_1_07_b.rom
+    path: "sounddata/mt32emu/mt32_ctrl_1_07_b.rom"
+    description: "Roland MT-32 v1.07 control ROM, chip B"
+    required: false
+    size: 32768
+    crc32: "60f45882"
+    sha1: "c55e165487d71fa88bd8c5e9c083bc456c1a89aa"
+    validation: [size, crc32, sha1]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23db078, set table 0x23db4a8; sounddata/mt32emu-dreamm.so ROM table"
+
+  - name: mt32_ctrl_bluer.rom
+    path: "sounddata/mt32emu/mt32_ctrl_bluer.rom"
+    description: "Roland MT-32 Blue Ridge Enhanced control ROM"
+    required: false
+    size: 65536
+    crc32: "627b9a51"
+    sha1: "7b8c2a5ddb42fd0732e2f22b3340dcf5360edf92"
+    validation: [size, crc32, sha1]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23db0b8, set table 0x23db4a8; sounddata/mt32emu-dreamm.so ROM table"
+
+  - name: mt32_ctrl_bluer_a.rom
+    path: "sounddata/mt32emu/mt32_ctrl_bluer_a.rom"
+    description: "Roland MT-32 Blue Ridge Enhanced control ROM, chip A"
+    required: false
+    size: 32768
+    crc32: "d75fc3d9"
+    sha1: "11a6ae5d8b6ee328b371af7f1e40b82125aa6b4d"
+    validation: [size, crc32, sha1]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23db0c8, set table 0x23db4a8; sounddata/mt32emu-dreamm.so ROM table"
+
+  - name: mt32_ctrl_bluer_b.rom
+    path: "sounddata/mt32emu/mt32_ctrl_bluer_b.rom"
+    description: "Roland MT-32 Blue Ridge Enhanced control ROM, chip B"
+    required: false
+    size: 32768
+    crc32: "5816476f"
+    sha1: "e0934320d7cbb5edfaa29e0d01ae835ef620085b"
+    validation: [size, crc32, sha1]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23db0d8, set table 0x23db4a8; sounddata/mt32emu-dreamm.so ROM table"
+
+  - name: mt32_ctrl_2_03.rom
+    path: "sounddata/mt32emu/mt32_ctrl_2_03.rom"
+    description: "Roland MT-32 v2.03 control ROM"
+    required: false
+    size: 131072
+    sha1: "5837064c9df4741a55f7c4d8787ac158dff2d3ce"
+    validation: [size, sha1]
+    source_ref: "DREAMM 4.0 linux-x64: set table 0x23db5a8; sounddata/mt32emu-dreamm.so ROM table"
+
+  - name: mt32_ctrl_2_04.rom
+    path: "sounddata/mt32emu/mt32_ctrl_2_04.rom"
+    description: "Roland MT-32 v2.04 control ROM"
+    required: false
+    size: 131072
+    crc32: "59a49d5c"
+    sha1: "2c16432b6c73dd2a3947cba950a0f4c19d6180eb"
+    validation: [size, crc32, sha1]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23db088, set table 0x23db4a8; sounddata/mt32emu-dreamm.so ROM table"
+
+  - name: mt32_ctrl_2_06.rom
+    path: "sounddata/mt32emu/mt32_ctrl_2_06.rom"
+    description: "Roland MT-32 v2.06 control ROM"
+    required: false
+    size: 131072
+    crc32: "94815415"
+    sha1: "2869cf4c235d671668cfcb62415e2ce8323ad4ed"
+    validation: [size, crc32, sha1]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23db098, set table 0x23db4a8; sounddata/mt32emu-dreamm.so ROM table"
+
+  - name: mt32_ctrl_2_07.rom
+    path: "sounddata/mt32emu/mt32_ctrl_2_07.rom"
+    description: "Roland MT-32 v2.07 control ROM"
+    required: false
+    size: 131072
+    crc32: "a016b607"
+    sha1: "47b52adefedaec475c925e54340e37673c11707c"
+    validation: [size, crc32, sha1]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23db0a8, set table 0x23db4a8; sounddata/mt32emu-dreamm.so ROM table"
+
+  - name: cm32l_ctrl_1_00.rom
+    path: "sounddata/mt32emu/cm32l_ctrl_1_00.rom"
+    description: "Roland CM-32L v1.00 control ROM"
+    required: false
+    size: 65536
+    crc32: "ee62022f"
+    sha1: "73683d585cd6948cc19547942ca0e14a0319456d"
+    validation: [size, crc32, sha1]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23daf88, set table 0x23db4a8; sounddata/mt32emu-dreamm.so ROM table"
+
+  - name: cm32l_ctrl_1_02.rom
+    path: "sounddata/mt32emu/cm32l_ctrl_1_02.rom"
+    description: "Roland CM-32L v1.02 control ROM"
+    required: false
+    size: 65536
+    crc32: "b998047e"
+    sha1: "a439fbb390da38cada95a7cbb1d6ca199cd66ef8"
+    validation: [size, crc32, sha1]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23daf98, set table 0x23db4a8; sounddata/mt32emu-dreamm.so ROM table"
+
+  - name: cm32ln_ctrl_1_00.rom
+    path: "sounddata/mt32emu/cm32ln_ctrl_1_00.rom"
+    description: "Roland CM-32LN v1.00 control ROM"
+    required: false
+    size: 65536
+    crc32: "4a3bb4ef"
+    sha1: "dc1c5b1b90a4646d00f7daf3679733c7badc7077"
+    validation: [size, crc32, sha1]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23daf78, set table 0x23db4a8; sounddata/mt32emu-dreamm.so ROM table"
+
+  # -- MT-32 and CM-32L PCM ROMs --
+  - name: mt32_pcm.rom
+    path: "sounddata/mt32emu/mt32_pcm.rom"
+    description: "Roland MT-32 PCM ROM"
+    required: false
+    size: 524288
+    crc32: "573e31cc"
+    sha1: "f6b1eebc4b2d200ec6d3d21d51325d5b48c60252"
+    validation: [size, crc32, sha1]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23db0e8, set table 0x23db4a8; sounddata/mt32emu-dreamm.so ROM table"
+
+  - name: mt32_pcm_l.rom
+    path: "sounddata/mt32emu/mt32_pcm_l.rom"
+    description: "Roland MT-32 PCM ROM, low half"
+    required: false
+    size: 262144
+    crc32: "dd9deac3"
+    sha1: "3a1e19b0cd4036623fd1d1d11f5f25995585962b"
+    validation: [size, crc32, sha1]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23db108, set table 0x23db4a8; sounddata/mt32emu-dreamm.so ROM table"
+
+  - name: mt32_pcm_h.rom
+    path: "sounddata/mt32emu/mt32_pcm_h.rom"
+    description: "Roland MT-32 PCM ROM, high half"
+    required: false
+    size: 262144
+    crc32: "4ee6506c"
+    sha1: "2cadb99d21a6a4a6f5b61b6218d16e9b43f61d01"
+    validation: [size, crc32, sha1]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23db0f8, set table 0x23db4a8; sounddata/mt32emu-dreamm.so ROM table"
+
+  - name: cm32l_pcm.rom
+    path: "sounddata/mt32emu/cm32l_pcm.rom"
+    description: "Roland CM-32L PCM ROM"
+    required: false
+    size: 1048576
+    crc32: "4b961eba"
+    sha1: "289cc298ad532b702461bfc738009d9ebe8025ea"
+    validation: [size, crc32, sha1]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23dafa8, set table 0x23db4a8; sounddata/mt32emu-dreamm.so ROM table"
+
+  - name: cm32l_pcm_h.rom
+    path: "sounddata/mt32emu/cm32l_pcm_h.rom"
+    description: "Roland CM-32L PCM ROM, high half"
+    required: false
+    size: 524288
+    crc32: "8e9ea06e"
+    sha1: "3ad889fde5db5b6437cbc2eb6e305312fec3df93"
+    validation: [size, crc32, sha1]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23dafb8, set table 0x23db4a8; sounddata/mt32emu-dreamm.so ROM table"
+
+  # -- Roland SC-55, sounddata/Nuked-SC55-Resources/ROMs --
+  # One complete set per model directory; the plugin loads a single directory.
+  - name: sc55_rom1.bin
+    path: "sounddata/Nuked-SC55-Resources/ROMs/SC-55-v1.00/sc55_rom1.bin"
+    description: "Roland SC-55 v1.00 program ROM (ROM1)"
+    required: false
+    size: 32768
+    crc32: "d072c251"
+    validation: [size, crc32]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23db118"
+
+  - name: sc55_rom2.bin
+    path: "sounddata/Nuked-SC55-Resources/ROMs/SC-55-v1.00/sc55_rom2.bin"
+    description: "Roland SC-55 v1.00 program ROM (ROM2)"
+    required: false
+    size: 262144
+    crc32: "dbaaae8f"
+    validation: [size, crc32]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23db128"
+
+  - name: sc55_waverom1.bin
+    path: "sounddata/Nuked-SC55-Resources/ROMs/SC-55-v1.00/sc55_waverom1.bin"
+    description: "Roland SC-55 v1.00 wave ROM (WAVEROM1)"
+    required: false
+    size: 1048576
+    crc32: "1ac774d3"
+    validation: [size, crc32]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23db138"
+
+  - name: sc55_waverom2.bin
+    path: "sounddata/Nuked-SC55-Resources/ROMs/SC-55-v1.00/sc55_waverom2.bin"
+    description: "Roland SC-55 v1.00 wave ROM (WAVEROM2)"
+    required: false
+    size: 1048576
+    crc32: "8dcc592a"
+    validation: [size, crc32]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23db148"
+
+  - name: sc55_waverom3.bin
+    path: "sounddata/Nuked-SC55-Resources/ROMs/SC-55-v1.00/sc55_waverom3.bin"
+    description: "Roland SC-55 v1.00 wave ROM (WAVEROM3)"
+    required: false
+    size: 1048576
+    crc32: "e21ebc04"
+    validation: [size, crc32]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23db158"
+
+  - name: sc55_rom1.bin
+    path: "sounddata/Nuked-SC55-Resources/ROMs/SC-55-v1.20/sc55_rom1.bin"
+    description: "Roland SC-55 v1.20 program ROM (ROM1)"
+    required: false
+    size: 32768
+    crc32: "4ed0d171"
+    validation: [size, crc32]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23db168"
+
+  - name: sc55_rom2.bin
+    path: "sounddata/Nuked-SC55-Resources/ROMs/SC-55-v1.20/sc55_rom2.bin"
+    description: "Roland SC-55 v1.20 program ROM (ROM2)"
+    required: false
+    size: 262144
+    crc32: "ebd488fd"
+    validation: [size, crc32]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23db178"
+
+  - name: sc55_waverom1.bin
+    path: "sounddata/Nuked-SC55-Resources/ROMs/SC-55-v1.20/sc55_waverom1.bin"
+    description: "Roland SC-55 v1.20 wave ROM (WAVEROM1)"
+    required: false
+    size: 1048576
+    crc32: "1ac774d3"
+    validation: [size, crc32]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23db188"
+
+  - name: sc55_waverom2.bin
+    path: "sounddata/Nuked-SC55-Resources/ROMs/SC-55-v1.20/sc55_waverom2.bin"
+    description: "Roland SC-55 v1.20 wave ROM (WAVEROM2)"
+    required: false
+    size: 1048576
+    crc32: "8dcc592a"
+    validation: [size, crc32]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23db198"
+
+  - name: sc55_waverom3.bin
+    path: "sounddata/Nuked-SC55-Resources/ROMs/SC-55-v1.20/sc55_waverom3.bin"
+    description: "Roland SC-55 v1.20 wave ROM (WAVEROM3)"
+    required: false
+    size: 1048576
+    crc32: "e21ebc04"
+    validation: [size, crc32]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23db1a8"
+
+  - name: sc55_rom1.bin
+    path: "sounddata/Nuked-SC55-Resources/ROMs/SC-55-v1.21/sc55_rom1.bin"
+    description: "Roland SC-55 v1.21 program ROM (ROM1)"
+    required: false
+    size: 32768
+    crc32: "4ed0d171"
+    validation: [size, crc32]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23db1b8"
+
+  - name: sc55_rom2.bin
+    path: "sounddata/Nuked-SC55-Resources/ROMs/SC-55-v1.21/sc55_rom2.bin"
+    description: "Roland SC-55 v1.21 program ROM (ROM2)"
+    required: false
+    size: 262144
+    crc32: "2dc58549"
+    validation: [size, crc32]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23db1c8"
+
+  - name: sc55_waverom1.bin
+    path: "sounddata/Nuked-SC55-Resources/ROMs/SC-55-v1.21/sc55_waverom1.bin"
+    description: "Roland SC-55 v1.21 wave ROM (WAVEROM1)"
+    required: false
+    size: 1048576
+    crc32: "1ac774d3"
+    validation: [size, crc32]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23db1d8"
+
+  - name: sc55_waverom2.bin
+    path: "sounddata/Nuked-SC55-Resources/ROMs/SC-55-v1.21/sc55_waverom2.bin"
+    description: "Roland SC-55 v1.21 wave ROM (WAVEROM2)"
+    required: false
+    size: 1048576
+    crc32: "8dcc592a"
+    validation: [size, crc32]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23db1e8"
+
+  - name: sc55_waverom3.bin
+    path: "sounddata/Nuked-SC55-Resources/ROMs/SC-55-v1.21/sc55_waverom3.bin"
+    description: "Roland SC-55 v1.21 wave ROM (WAVEROM3)"
+    required: false
+    size: 1048576
+    crc32: "e21ebc04"
+    validation: [size, crc32]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23db1f8"
+
+  - name: sc55_rom1.bin
+    path: "sounddata/Nuked-SC55-Resources/ROMs/SC-55-v2.00/sc55_rom1.bin"
+    description: "Roland SC-55 v2.00 program ROM (ROM1)"
+    required: false
+    size: 32768
+    crc32: "a160da90"
+    validation: [size, crc32]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23db208"
+
+  - name: sc55_rom2.bin
+    path: "sounddata/Nuked-SC55-Resources/ROMs/SC-55-v2.00/sc55_rom2.bin"
+    description: "Roland SC-55 v2.00 program ROM (ROM2)"
+    required: false
+    size: 262144
+    crc32: "1768cc18"
+    validation: [size, crc32]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23db218"
+
+  - name: sc55_waverom1.bin
+    path: "sounddata/Nuked-SC55-Resources/ROMs/SC-55-v2.00/sc55_waverom1.bin"
+    description: "Roland SC-55 v2.00 wave ROM (WAVEROM1)"
+    required: false
+    size: 1048576
+    crc32: "1ac774d3"
+    validation: [size, crc32]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23db228"
+
+  - name: sc55_waverom2.bin
+    path: "sounddata/Nuked-SC55-Resources/ROMs/SC-55-v2.00/sc55_waverom2.bin"
+    description: "Roland SC-55 v2.00 wave ROM (WAVEROM2)"
+    required: false
+    size: 1048576
+    crc32: "8dcc592a"
+    validation: [size, crc32]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23db238"
+
+  - name: sc55_waverom3.bin
+    path: "sounddata/Nuked-SC55-Resources/ROMs/SC-55-v2.00/sc55_waverom3.bin"
+    description: "Roland SC-55 v2.00 wave ROM (WAVEROM3)"
+    required: false
+    size: 1048576
+    crc32: "e21ebc04"
+    validation: [size, crc32]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23db248"
+
+  - name: rom1.bin
+    path: "sounddata/Nuked-SC55-Resources/ROMs/SC-55mk2-v1.01/rom1.bin"
+    description: "Roland SC-55mk2 v1.01 program ROM (ROM1)"
+    required: false
+    size: 32768
+    crc32: "9b66631f"
+    validation: [size, crc32]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23db258"
+
+  - name: rom2.bin
+    path: "sounddata/Nuked-SC55-Resources/ROMs/SC-55mk2-v1.01/rom2.bin"
+    description: "Roland SC-55mk2 v1.01 program ROM (ROM2)"
+    required: false
+    size: 524288
+    crc32: "fcee1e8e"
+    validation: [size, crc32]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23db268"
+
+  - name: rom_sm.bin
+    path: "sounddata/Nuked-SC55-Resources/ROMs/SC-55mk2-v1.01/rom_sm.bin"
+    description: "Roland SC-55mk2 v1.01 sub-MCU ROM (SMROM)"
+    required: false
+    size: 4096
+    crc32: "702c0a82"
+    validation: [size, crc32]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23db278"
+
+  - name: waverom1.bin
+    path: "sounddata/Nuked-SC55-Resources/ROMs/SC-55mk2-v1.01/waverom1.bin"
+    description: "Roland SC-55mk2 v1.01 wave ROM (WAVEROM1)"
+    required: false
+    size: 2097152
+    crc32: "1519d3b3"
+    validation: [size, crc32]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23db288"
+
+  - name: waverom2.bin
+    path: "sounddata/Nuked-SC55-Resources/ROMs/SC-55mk2-v1.01/waverom2.bin"
+    description: "Roland SC-55mk2 v1.01 wave ROM (WAVEROM2)"
+    required: false
+    size: 1048576
+    crc32: "0f826c7f"
+    validation: [size, crc32]
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest 0x23db298"
