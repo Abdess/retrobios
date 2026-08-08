@@ -126,7 +126,10 @@ class TestSplitSourceRef(unittest.TestCase):
 
     def test_parenthetical_annotation_is_dropped(self):
         parts = split_source_ref("mia/system/game-gear.cpp:8 (//optional)")
-        self.assertEqual((parts[0].path, parts[0].start), ("mia/system/game-gear.cpp", 8))
+        self.assertEqual(
+            (parts[0].path, parts[0].start),
+            ("mia/system/game-gear.cpp", 8),
+        )
 
     def test_annotations_between_parts(self):
         parts = split_source_ref(
@@ -1007,7 +1010,11 @@ class TestRebaseRefs(unittest.TestCase):
         applied = rebase_refs(
             self.path,
             self._report(
-                [EntryReport("a.bin", "a.c:10-12 (loads the kernel)", "SHIFTED", [part])]
+                [
+                    EntryReport(
+                        "a.bin", "a.c:10-12 (loads the kernel)", "SHIFTED", [part]
+                    )
+                ]
             ),
         )
         self.assertEqual(applied, [])
