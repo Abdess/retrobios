@@ -16,6 +16,10 @@ import json
 import os
 import shutil
 import sys
+import urllib.error
+import urllib.parse
+import urllib.request
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -42,6 +46,75 @@ RELEASE_URL = f"{REPO_URL}/releases/latest"
 GENERATED_DIRS = ["platforms", "systems", "emulators"]
 WIKI_SRC_DIR = "wiki"  # manually maintained wiki sources
 SYSTEM_ICON_BASE = "https://raw.githubusercontent.com/libretro/retroarch-assets/master/xmb/systematic/png"
+ICON_CACHE_PATH = Path(".cache") / "system_icons.json"
+
+# Icon names confirmed to exist upstream. A name absent from this map has not
+# been checked yet; a name mapped to False has no icon and gets none rendered,
+# because a heading with a broken image reads worse than a heading without one.
+_icon_available: dict[str, bool] = {}
+
+
+def _icon_name(manufacturer: str, console_name: str) -> str:
+    return f"{manufacturer} - {console_name}".replace("/", " ")
+
+
+def _icon_url(icon_name: str) -> str:
+    return f"{SYSTEM_ICON_BASE}/{urllib.parse.quote(icon_name)}.png"
+
+
+def prime_system_icons(names: set[str]) -> None:
+    """Record which system icons upstream actually serves.
+
+    Results persist in ``.cache`` so later runs skip the network. Names that
+    cannot be checked stay unavailable: the site never links an image it has
+    not seen answer.
+    """
+    cached: dict[str, bool] = {}
+    if ICON_CACHE_PATH.exists():
+        try:
+            with open(ICON_CACHE_PATH) as f:
+                cached = json.load(f)
+        except (json.JSONDecodeError, OSError):
+            cached = {}
+
+    unknown = sorted(n for n in names if n not in cached)
+    if unknown:
+        def check(name: str) -> tuple[str, bool | None]:
+            """True when served, False when upstream says it is gone.
+
+            None on a transient failure, so a flaky run never records an
+            icon as absent for every later build.
+            """
+            req = urllib.request.Request(_icon_url(name), method="HEAD")
+            try:
+                with urllib.request.urlopen(req, timeout=15) as resp:
+                    return name, resp.status == 200
+            except urllib.error.HTTPError as exc:
+                return name, False if exc.code == 404 else None
+            except (urllib.error.URLError, OSError):
+                return name, None
+
+        print(f"Checking {len(unknown)} system icons...")
+        with ThreadPoolExecutor(max_workers=8) as pool:
+            for name, ok in pool.map(check, unknown):
+                if ok is not None:
+                    cached[name] = ok
+        ICON_CACHE_PATH.parent.mkdir(parents=True, exist_ok=True)
+        with open(ICON_CACHE_PATH, "w") as f:
+            json.dump(cached, f, indent=2, sort_keys=True)
+
+    _icon_available.update(cached)
+    missing = sum(1 for n in names if not cached.get(n))
+    if missing:
+        print(f"  {missing} systems have no upstream icon")
+
+
+def system_icon_markdown(manufacturer: str, console_name: str) -> str:
+    """Icon image for a system heading, empty when upstream serves none."""
+    name = _icon_name(manufacturer, console_name)
+    if not _icon_available.get(name):
+        return ""
+    return f"![{console_name}]({_icon_url(name)}){{ width=24 }} "
 
 CLS_LABELS = {
     "official_port": "Official ports",
@@ -955,9 +1028,8 @@ def generate_system_page(
 
     for console_name in sorted(consoles.keys()):
         files = consoles[console_name]
-        icon_name = f"{manufacturer} - {console_name}".replace("/", " ")
-        icon_url = f"{SYSTEM_ICON_BASE}/{icon_name.replace(' ', '%20')}.png"
-        lines.append(f"## ![{console_name}]({icon_url}){{ width=24 }} {console_name}")
+        icon_md = system_icon_markdown(manufacturer, console_name)
+        lines.append(f"## {icon_md}{console_name}")
         lines.append("")
         # Separate main files from variants
         main_files = [f for f in files if "/.variants/" not in f["path"]]
@@ -2888,6 +2960,12 @@ def main():
 
     # Generate system pages
     print("Generating system pages...")
+
+    prime_system_icons({
+        _icon_name(mfr, console)
+        for mfr, consoles in manufacturers.items()
+        for console in consoles
+    })
 
     write_if_changed(
         str(docs / "systems" / "index.md"), generate_systems_index(manufacturers)

@@ -969,7 +969,7 @@ platforms:
   bizhawk:
     config: bizhawk.yml
     status: active
-    logo: https://raw.githubusercontent.com/TASEmulators/BizHawk/master/Assets/bizhawk.ico
+    logo: https://avatars.githubusercontent.com/u/11743303
     scraper: bizhawk
     source_url: https://raw.githubusercontent.com/TASEmulators/BizHawk/master/src/BizHawk.Emulation.Common/Database/FirmwareDatabase.cs
     source_format: csharp_firmware_database
