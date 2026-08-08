@@ -13,6 +13,7 @@ and 3-tier storage (embedded/external/user_provided).
 from __future__ import annotations
 
 import argparse
+import contextlib
 import hashlib
 import json
 import os
@@ -26,7 +27,9 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (
+    ArtifactLockBusy,
     MANUFACTURER_PREFIXES,
+    artifact_lock,
     build_target_cores_cache,
     build_zip_contents_index,
     check_inside_zip,
@@ -2486,6 +2489,17 @@ def _run_manifest_mode(
                 print(f"  ERROR: {e}")
 
 
+@contextlib.contextmanager
+def _pack_output_lock(output_dir: str, exclusive: bool = True):
+    """Hold the output directory for the duration of a pack run."""
+    try:
+        with artifact_lock(output_dir, exclusive=exclusive):
+            yield
+    except ArtifactLockBusy as exc:
+        print(f"ERROR: {exc}")
+        sys.exit(1)
+
+
 def _run_verify_packs(args):
     """Extract each pack and verify file paths + hashes."""
     import shutil
@@ -2870,7 +2884,8 @@ def main():
     # Quick-exit modes: --verify-packs alone = verify existing packs only
     # Combined with --all-variants, generation runs first then verify
     if args.verify_packs and not args.all_variants:
-        _run_verify_packs(args)
+        with _pack_output_lock(args.output_dir, exclusive=False):
+            _run_verify_packs(args)
         return
     if args.manifest_targets:
         generate_target_manifests(
@@ -3028,16 +3043,17 @@ def main():
             args, groups, db, zip_contents, emu_profiles, target_cores_cache
         )
     else:
-        _run_platform_packs(
-            args,
-            groups,
-            db,
-            zip_contents,
-            data_registry,
-            emu_profiles,
-            target_cores_cache,
-            system_filter,
-        )
+        with _pack_output_lock(args.output_dir):
+            _run_platform_packs(
+                args,
+                groups,
+                db,
+                zip_contents,
+                data_registry,
+                emu_profiles,
+                target_cores_cache,
+                system_filter,
+            )
 
 
 # Manifest generation (JSON inventory for install.py)

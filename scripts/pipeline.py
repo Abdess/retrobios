@@ -29,6 +29,9 @@ import sys
 import time
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).parent))
+from common import ArtifactLockBusy, artifact_lock
+
 
 def run(cmd: list[str], label: str) -> tuple[bool, str]:
     """Run a command. Returns (success, captured_output)."""
@@ -326,18 +329,23 @@ def main():
         # picked up by pack verification and shipped in releases.
         out_dir = Path(args.output_dir)
         if out_dir.is_dir():
-            stale = [
-                p for p in out_dir.iterdir()
-                if p.is_file() and (
-                    p.suffix == ".zip"
-                    or ".zip." in p.name
-                    or p.name == "SHA256SUMS.txt"
-                )
-            ]
-            for p in stale:
-                p.unlink()
-            if stale:
-                print(f"Purged {len(stale)} stale pack file(s) from {out_dir}/")
+            try:
+                with artifact_lock(str(out_dir)):
+                    stale = [
+                        p for p in out_dir.iterdir()
+                        if p.is_file() and (
+                            p.suffix == ".zip"
+                            or ".zip." in p.name
+                            or p.name == "SHA256SUMS.txt"
+                        )
+                    ]
+                    for p in stale:
+                        p.unlink()
+                    if stale:
+                        print(f"Purged {len(stale)} stale pack file(s) from {out_dir}/")
+            except ArtifactLockBusy as exc:
+                print(f"ERROR: {exc}")
+                sys.exit(1)
 
         pack_cmd = [
             sys.executable,

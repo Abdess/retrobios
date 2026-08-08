@@ -6,6 +6,7 @@ and file resolution - eliminates DRY violations across scripts.
 
 from __future__ import annotations
 
+import contextlib
 import hashlib
 import json
 import os
@@ -256,6 +257,15 @@ def load_data_dir_registry(platforms_dir: str = "platforms") -> dict:
     with open(registry_path) as f:
         data = yaml.safe_load(f) or {}
     return data.get("data_directories", {})
+
+
+def load_platform_registry(platforms_dir: str = "platforms") -> dict:
+    """Return the `platforms:` mapping from _registry.yml, empty if absent."""
+    registry_path = os.path.join(platforms_dir, "_registry.yml")
+    if not os.path.exists(registry_path):
+        return {}
+    with open(registry_path) as f:
+        return (yaml.safe_load(f) or {}).get("platforms", {})
 
 
 def list_registered_platforms(
@@ -1424,3 +1434,39 @@ def write_provenance_snapshot(
         "entries": sorted(entries, key=lambda e: (e["dat"], e["name"])),
     }
     return write_if_changed(path, json.dumps(snapshot, indent=2) + "\n")
+
+
+class ArtifactLockBusy(RuntimeError):
+    """Raised when another process already holds the artifact directory."""
+
+
+@contextlib.contextmanager
+def artifact_lock(directory: str, exclusive: bool = True):
+    """Serialize access to a shared artifact directory across processes.
+
+    Two pipeline runs building the same dist/ leave readers looking at
+    half-written ZIPs, which surfaces as BadZipFile far from its cause.
+    Writers take the lock exclusively, readers share it. On platforms
+    without flock the lock is a no-op.
+    """
+    try:
+        import fcntl
+    except ImportError:
+        yield
+        return
+
+    os.makedirs(directory, exist_ok=True)
+    lock_path = os.path.join(directory, ".lock")
+    mode = fcntl.LOCK_EX if exclusive else fcntl.LOCK_SH
+    with open(lock_path, "w") as handle:
+        try:
+            fcntl.flock(handle, mode | fcntl.LOCK_NB)
+        except OSError as exc:
+            raise ArtifactLockBusy(
+                f"{directory} is in use by another run "
+                f"(lock: {lock_path}). Wait for it to finish."
+            ) from exc
+        try:
+            yield
+        finally:
+            fcntl.flock(handle, fcntl.LOCK_UN)
