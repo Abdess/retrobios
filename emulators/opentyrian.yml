@@ -157,84 +157,84 @@ files:
     system: tyrian
     description: "Episode 2 level data"
     required: false
-    source_ref: "episodes.c:274"
+    source_ref: "src/episodes.c:274"
 
   - name: "levels2.dat"
     category: game_data
     system: tyrian
     description: "Episode 2 level definitions"
     required: false
-    source_ref: "episodes.c:263"
+    source_ref: "src/episodes.c:263"
 
   - name: "cubetxt2.dat"
     category: game_data
     system: tyrian
     description: "Episode 2 datacube text"
     required: false
-    source_ref: "episodes.c:262"
+    source_ref: "src/episodes.c:262"
 
   - name: "tyrian3.lvl"
     category: game_data
     system: tyrian
     description: "Episode 3 level data"
     required: false
-    source_ref: "episodes.c:274"
+    source_ref: "src/episodes.c:274"
 
   - name: "levels3.dat"
     category: game_data
     system: tyrian
     description: "Episode 3 level definitions"
     required: false
-    source_ref: "episodes.c:263"
+    source_ref: "src/episodes.c:263"
 
   - name: "cubetxt3.dat"
     category: game_data
     system: tyrian
     description: "Episode 3 datacube text"
     required: false
-    source_ref: "episodes.c:262"
+    source_ref: "src/episodes.c:262"
 
   - name: "tyrian4.lvl"
     category: game_data
     system: tyrian
     description: "Episode 4 level data"
     required: false
-    source_ref: "episodes.c:274"
+    source_ref: "src/episodes.c:274"
 
   - name: "levels4.dat"
     category: game_data
     system: tyrian
     description: "Episode 4 level definitions"
     required: false
-    source_ref: "episodes.c:263"
+    source_ref: "src/episodes.c:263"
 
   - name: "cubetxt4.dat"
     category: game_data
     system: tyrian
     description: "Episode 4 datacube text"
     required: false
-    source_ref: "episodes.c:262"
+    source_ref: "src/episodes.c:262"
 
   - name: "tyrian5.lvl"
     category: game_data
     system: tyrian
     description: "Episode 5 level data"
     required: false
-    source_ref: "episodes.c:274"
+    source_ref: "src/episodes.c:274"
 
   - name: "levels5.dat"
     category: game_data
     system: tyrian
     description: "Episode 5 level definitions"
     required: false
-    source_ref: "episodes.c:263"
+    source_ref: "src/episodes.c:263"
 
   - name: "cubetxt5.dat"
     category: game_data
     system: tyrian
     description: "Episode 5 datacube text"
     required: false
-    source_ref: "episodes.c:262"
+    source_ref: "src/episodes.c:262"
 
   # -----------------------------------------------------------
   # Level tileset shapes (loaded per-level from .lvl data)
@@ -249,31 +249,31 @@ files:
     category: game_data
     system: tyrian
     required: true
-    source_ref: "tyrian2.c:3039-3079"
+    source_ref: "src/tyrian2.c:3039-3079"
 
   - name: "shapesw.dat"
     category: game_data
     system: tyrian
     required: true
-    source_ref: "tyrian2.c:3039-3079"
+    source_ref: "src/tyrian2.c:3039-3079"
 
   - name: "shapesx.dat"
     category: game_data
     system: tyrian
     required: true
-    source_ref: "tyrian2.c:3039-3079"
+    source_ref: "src/tyrian2.c:3039-3079"
 
   - name: "shapesy.dat"
     category: game_data
     system: tyrian
     required: true
-    source_ref: "tyrian2.c:3039-3079"
+    source_ref: "src/tyrian2.c:3039-3079"
 
   - name: "shapesz.dat"
     category: game_data
     system: tyrian
     required: true
-    source_ref: "tyrian2.c:3039-3079"
+    source_ref: "src/tyrian2.c:3039-3079"
 
   # -----------------------------------------------------------
   # Compressed shape files (newshX.shp, loaded per-level)
@@ -309,14 +309,14 @@ files:
     system: tyrian
     description: "Christmas mode shape tables (replaces tyrian.shp at Xmas)"
     required: false
-    source_ref: "opentyr.c:301-309"
+    source_ref: "src/opentyr.c:301-309"
 
   - name: "voicesc.snd"
     category: game_data
     system: tyrian
     description: "Christmas mode voice samples (replaces voices.snd at Xmas)"
     required: false
-    source_ref: "opentyr.c:301,333"
+    source_ref: "src/opentyr.c:301, src/opentyr.c:333"
 
   - name: "tyrend.anm"
     category: game_data
@@ -330,7 +330,7 @@ files:
     system: tyrian
     description: "Additional ship graphics (PCX image)"
     required: false
-    source_ref: "tyrian2.c:2757, pcxload.c:25-29"
+    source_ref: "src/tyrian2.c:2757, src/pcxload.c:25-29"
 
   - name: "estsc.shp"
     category: game_data
@@ -344,32 +344,32 @@ files:
     system: tyrian
     description: "Demo replay file 1"
     required: false
-    source_ref: "mainint.c:1781-1786"
+    source_ref: "src/mainint.c:1781-1786"
 
   - name: "demo.2"
     category: game_data
     system: tyrian
     description: "Demo replay file 2"
     required: false
-    source_ref: "mainint.c:1781-1786"
+    source_ref: "src/mainint.c:1781-1786"
 
   - name: "demo.3"
     category: game_data
     system: tyrian
     description: "Demo replay file 3"
     required: false
-    source_ref: "mainint.c:1781-1786"
+    source_ref: "src/mainint.c:1781-1786"
 
   - name: "demo.4"
     category: game_data
     system: tyrian
     description: "Demo replay file 4"
     required: false
-    source_ref: "mainint.c:1781-1786"
+    source_ref: "src/mainint.c:1781-1786"
 
   - name: "demo.5"
     category: game_data
     system: tyrian
     description: "Demo replay file 5"
     required: false
-    source_ref: "mainint.c:1781-1786"
+    source_ref: "src/mainint.c:1781-1786"

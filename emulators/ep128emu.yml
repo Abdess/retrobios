@@ -74,7 +74,7 @@ files:
     system: enterprise-128
     has_builtin: true
     note: "Enterprise 128 EXOS 2.1. Default OS for EP128 machines."
-    source_ref: "core/core.cpp:236-239"
+    source_ref: "core/core.cpp:237-240"
 
   - name: exos20.rom
     path: ep128emu/roms/exos20.rom
@@ -84,7 +84,7 @@ files:
     system: enterprise-64
     has_builtin: true
     note: "Enterprise 64 EXOS 2.0. Used when EP64 machine type is selected."
-    source_ref: "core/core.cpp:228-231"
+    source_ref: "core/core.cpp:229-232"
 
   - name: exos24uk.rom
     path: ep128emu/roms/exos24uk.rom
@@ -94,7 +94,7 @@ files:
     system: enterprise-128
     has_builtin: true
     note: "Enterprise 128 EXOS 2.4 (UK). Used when enhanced ROM mode is enabled. 64K, loaded across segments 0-3."
-    source_ref: "core/core.cpp:216-223"
+    source_ref: "core/core.cpp:217-224"
 
   # ============================================================
   # Enterprise 64/128 - BASIC interpreter
@@ -108,7 +108,7 @@ files:
     system: enterprise-128
     has_builtin: true
     note: "Enterprise 128 BASIC 2.1. Loaded when cartridge mode is active (default)."
-    source_ref: "core/core.cpp:250, core/core.cpp:278"
+    source_ref: "core/core.cpp:251, core/core.cpp:279"
 
   - name: basic20.rom
     path: ep128emu/roms/basic20.rom
@@ -118,7 +118,7 @@ files:
     system: enterprise-64
     has_builtin: true
     note: "Enterprise 64 BASIC 2.0. Used with EP64 machine type."
-    source_ref: "core/core.cpp:248, core/core.cpp:266, core/core.cpp:276"
+    source_ref: "core/core.cpp:249, core/core.cpp:267, core/core.cpp:277"
 
   # ============================================================
   # Enterprise 64/128 - disk controllers
@@ -158,7 +158,7 @@ files:
     has_builtin: true
     bundled: true
     note: "Direct file I/O extension. Loaded for EP128_FILE and EP64_FILE modes. Source included in roms/ directory."
-    source_ref: "core/core.cpp:285-286"
+    source_ref: "core/core.cpp:286-287"
 
   - name: zt19uk.rom
     path: ep128emu/roms/zt19uk.rom
@@ -168,7 +168,7 @@ files:
     system: enterprise-128
     has_builtin: true
     note: "ZozoTools 1.9 (UK). Loaded for DTF (direct tape file) mode. 32K across segments 0x40-0x41."
-    source_ref: "core/core.cpp:289-292"
+    source_ref: "core/core.cpp:290-293"
 
   # ============================================================
   # Enterprise 64/128 - locale extensions
@@ -182,7 +182,7 @@ files:
     system: enterprise-128
     has_builtin: true
     note: "Hungarian language extension. Auto-loaded when content locale is Hungarian."
-    source_ref: "core/core.cpp:244-245"
+    source_ref: "core/core.cpp:245-246"
 
   - name: epdos16f.rom
     path: ep128emu/roms/epdos16f.rom
@@ -203,7 +203,7 @@ files:
     system: enterprise-128
     has_builtin: true
     note: "German (BRD) language extension. Auto-loaded when content locale is German."
-    source_ref: "core/core.cpp:262-263"
+    source_ref: "core/core.cpp:263-264"
 
   # epd19hft.rom and zt19hfnt.rom: listed in .info (firmware8, firmware9) but
   # NOT referenced in core source code and NOT in builtin_rom map (roms.hpp:46516-46538).
@@ -231,7 +231,7 @@ files:
     system: videoton-tvc
     has_builtin: true
     note: "TVC extension ROM v2.2. Loaded alongside tvc22_sys.rom."
-    source_ref: "core/core.cpp:348-349"
+    source_ref: "core/core.cpp:366-367"
 
   - name: tvcfileio.rom
     path: ep128emu/roms/tvcfileio.rom
@@ -242,7 +242,7 @@ files:
     has_builtin: true
     bundled: true
     note: "TVC direct file I/O extension. Used for TVC64_FILE mode. Source included in roms/ directory."
-    source_ref: "core/core.cpp:352-353"
+    source_ref: "core/core.cpp:370-371"
 
   - name: tvc_dos12d.rom
     path: ep128emu/roms/tvc_dos12d.rom
@@ -252,7 +252,7 @@ files:
     system: videoton-tvc
     has_builtin: true
     note: "TVC DOS 1.2d. Loaded for TVC64_DISK mode."
-    source_ref: "core/core.cpp:357-358"
+    source_ref: "core/core.cpp:375-376"
 
   # ============================================================
   # Amstrad CPC
@@ -266,7 +266,7 @@ files:
     system: amstrad-cpc
     has_builtin: true
     note: "CPC 464 combined ROM (OS + BASIC). 32K loaded at segments 0x10 (OS) and 0x00 (BASIC) with offset."
-    source_ref: "core/core.cpp:371-374"
+    source_ref: "core/core.cpp:389-392"
 
   - name: cpc664.rom
     path: ep128emu/roms/cpc664.rom
@@ -276,7 +276,7 @@ files:
     system: amstrad-cpc
     has_builtin: true
     note: "CPC 664 combined ROM (OS + BASIC). Used for CPC_664_DISK mode."
-    source_ref: "core/core.cpp:379-382"
+    source_ref: "core/core.cpp:397-400"
 
   - name: cpc6128.rom
     path: ep128emu/roms/cpc6128.rom
@@ -286,7 +286,7 @@ files:
     system: amstrad-cpc
     has_builtin: true
     note: "CPC 6128 combined ROM (OS + BASIC). Default CPC machine when no specific model requested."
-    source_ref: "core/core.cpp:388-391"
+    source_ref: "core/core.cpp:406-409"
 
   - name: cpc_amsdos.rom
     path: ep128emu/roms/cpc_amsdos.rom
@@ -296,7 +296,7 @@ files:
     system: amstrad-cpc
     has_builtin: true
     note: "AMSDOS disk controller ROM. Loaded for CPC_DISK and CPC_664_DISK modes."
-    source_ref: "core/core.cpp:395-396"
+    source_ref: "core/core.cpp:413-414"
 
   # ============================================================
   # ZX Spectrum
@@ -310,7 +310,7 @@ files:
     system: zx-spectrum
     has_builtin: true
     note: "ZX Spectrum 128K ROM. 32K loaded at segments 0x00-0x01."
-    source_ref: "core/core.cpp:418-421"
+    source_ref: "core/core.cpp:436-439"
 
   - name: zx48.rom
     path: ep128emu/roms/zx48.rom
@@ -320,4 +320,4 @@ files:
     system: zx-spectrum
     has_builtin: true
     note: "ZX Spectrum 48K ROM. Used for ZX16 and ZX48 modes."
-    source_ref: "core/core.cpp:425-426"
+    source_ref: "core/core.cpp:443-444"

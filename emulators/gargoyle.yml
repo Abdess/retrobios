@@ -176,54 +176,54 @@ files:
     path: "themes/Blue.json"
     description: "Blue color theme"
     required: false
-    source_ref: "theme.cpp:304-316, garglk/CMakeLists.txt:524"
+    source_ref: "garglk/theme.cpp:304-316, garglk/CMakeLists.txt:524"
 
   - name: "Breeze Darker.json"
     path: "themes/Breeze Darker.json"
     description: "Breeze Darker color theme"
     required: false
-    source_ref: "theme.cpp:304-316, garglk/CMakeLists.txt:525"
+    source_ref: "garglk/theme.cpp:304-316, garglk/CMakeLists.txt:525"
 
   - name: "Lectrote Dark.json"
     path: "themes/Lectrote Dark.json"
     description: "Lectrote Dark color theme"
     required: false
-    source_ref: "theme.cpp:304-316, garglk/CMakeLists.txt:526"
+    source_ref: "garglk/theme.cpp:304-316, garglk/CMakeLists.txt:526"
 
   - name: "Lectrote Sepia.json"
     path: "themes/Lectrote Sepia.json"
     description: "Lectrote Sepia color theme"
     required: false
-    source_ref: "theme.cpp:304-316, garglk/CMakeLists.txt:527"
+    source_ref: "garglk/theme.cpp:304-316, garglk/CMakeLists.txt:527"
 
   - name: "Lectrote Slate.json"
     path: "themes/Lectrote Slate.json"
     description: "Lectrote Slate color theme"
     required: false
-    source_ref: "theme.cpp:304-316, garglk/CMakeLists.txt:528"
+    source_ref: "garglk/theme.cpp:304-316, garglk/CMakeLists.txt:528"
 
   - name: "Pencil.json"
     path: "themes/Pencil.json"
     description: "Pencil color theme"
     required: false
-    source_ref: "theme.cpp:304-316, garglk/CMakeLists.txt:529"
+    source_ref: "garglk/theme.cpp:304-316, garglk/CMakeLists.txt:529"
 
   - name: "Zoom.json"
     path: "themes/Zoom.json"
     description: "Zoom color theme"
     required: false
-    source_ref: "theme.cpp:304-316, garglk/CMakeLists.txt:530"
+    source_ref: "garglk/theme.cpp:304-316, garglk/CMakeLists.txt:530"
 
   - name: "dark.json"
     path: "themes/dark.json"
     description: "Dark color theme"
     required: false
-    source_ref: "theme.cpp:268-282,304-316, garglk/CMakeLists.txt:80-85,531"
+    source_ref: "garglk/theme.cpp:268-282, garglk/theme.cpp:304-316, garglk/CMakeLists.txt:80-85, garglk/CMakeLists.txt:531"
     note: "Also compiled in as the built-in dark theme."
 
   - name: "light.json"
     path: "themes/light.json"
     description: "Light color theme"
     required: false
-    source_ref: "theme.cpp:268-282,304-316, garglk/CMakeLists.txt:87-92,532"
+    source_ref: "garglk/theme.cpp:268-282, garglk/theme.cpp:304-316, garglk/CMakeLists.txt:87-92, garglk/CMakeLists.txt:532"
     note: "Also compiled in as the built-in light theme."

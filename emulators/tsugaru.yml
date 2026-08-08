@@ -4,7 +4,7 @@ type: standalone
 source: "https://github.com/captainys/TOWNSEMU"
 upstream: "https://github.com/captainys/TOWNSEMU"
 profiled_date: "2026-03-26"
-source_commit: "5651deea4c92010d47cc33a45f86ac2396155b41"
+source_commit: "8ecfa27759919586e33f674038ed73d36e56c2b6"
 cores:
   - tsugaru
 systems:
@@ -23,21 +23,21 @@ files:
     size: 262144
     validation:
       - size
-    source_ref: "physmem.cpp:392,503-507"
+    source_ref: "src/towns/memory/physmem.cpp:392, src/towns/memory/physmem.cpp:503-507"
   - name: FMT_DOS.ROM
     description: DOS ROM
     required: true
     size: 524288
     validation:
       - size
-    source_ref: "physmem.cpp:395,508-512"
+    source_ref: "src/towns/memory/physmem.cpp:395, src/towns/memory/physmem.cpp:508-512"
   - name: FMT_FNT.ROM
     description: font ROM
     required: true
     size: 262144
     validation:
       - size
-    source_ref: "physmem.cpp:398,513-517"
+    source_ref: "src/towns/memory/physmem.cpp:398, src/towns/memory/physmem.cpp:513-517"
   - name: FMT_F20.ROM
     description: 20-dot font ROM, filled with 0xFF if missing
     required: false
@@ -45,48 +45,48 @@ files:
     hle_fallback: true
     validation:
       - size
-    source_ref: "physmem.cpp:401,518-527"
+    source_ref: "src/towns/memory/physmem.cpp:401, src/towns/memory/physmem.cpp:518-527"
   - name: FMT_DIC.ROM
     description: dictionary ROM
     required: true
     size: 524288
     validation:
       - size
-    source_ref: "physmem.cpp:404,528-532"
+    source_ref: "src/towns/memory/physmem.cpp:404, src/towns/memory/physmem.cpp:528-532"
   - name: MYTOWNS.ROM
     description: serial ROM for machine identity, uses defaults if absent
     required: false
     min_size: 32
-    source_ref: "physmem.cpp:407,533-539"
+    source_ref: "src/towns/memory/physmem.cpp:407, src/towns/memory/physmem.cpp:533-539"
   - name: FMT_ALL.ROM
     description: combined ROM file, alternative to individual ROM files
     required: false
-    source_ref: "physmem.cpp:420-500"
+    source_ref: "src/towns/memory/physmem.cpp:420-500"
   - name: MAR_EX0.ROM
     description: Marty extra ROM 0, all 4 MAR_EX ROMs needed for Marty mode
     required: false
     size: 524288
     validation:
       - size
-    source_ref: "physmem.cpp:410,541-564"
+    source_ref: "src/towns/memory/physmem.cpp:410, src/towns/memory/physmem.cpp:541-564"
   - name: MAR_EX1.ROM
     description: Marty extra ROM 1
     required: false
     size: 524288
     validation:
       - size
-    source_ref: "physmem.cpp:412,541-564"
+    source_ref: "src/towns/memory/physmem.cpp:412, src/towns/memory/physmem.cpp:541-564"
   - name: MAR_EX2.ROM
     description: Marty extra ROM 2
     required: false
     size: 524288
     validation:
       - size
-    source_ref: "physmem.cpp:414,541-564"
+    source_ref: "src/towns/memory/physmem.cpp:414, src/towns/memory/physmem.cpp:541-564"
   - name: MAR_EX3.ROM
     description: Marty extra ROM 3
     required: false
     size: 524288
     validation:
       - size
-    source_ref: "physmem.cpp:416,541-564"
+    source_ref: "src/towns/memory/physmem.cpp:416, src/towns/memory/physmem.cpp:541-564"

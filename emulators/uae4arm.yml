@@ -36,13 +36,13 @@ files:
     description: "Amiga 600 Kickstart v3.1 rev 40.063"
     required: false
     hle_fallback: true
-    source_ref: "libretro/core/libretro-core.cpp:74,391 src/memory.cpp:2080-2180"
+    source_ref: "libretro/core/libretro-core.cpp:74, libretro/core/libretro-core.cpp:396"
 
   - name: "kick40068.A1200"
     description: "Amiga 1200 Kickstart v3.1 rev 40.068"
     required: false
     hle_fallback: true
-    source_ref: "libretro/core/libretro-core.cpp:85, 405 src/memory.cpp:2080-2180"
+    source_ref: "libretro/core/libretro-core.cpp:85, libretro/core/libretro-core.cpp:410"
 
   - name: "kick34005.CDTV"
     description: "CDTV extended ROM v1.00 rev 34.005"

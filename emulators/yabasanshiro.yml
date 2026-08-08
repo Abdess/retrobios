@@ -4,7 +4,7 @@ core_classification: official_port
 source: "https://github.com/libretro/yabause/tree/yabasanshiro"
 upstream: "https://github.com/devmiyax/yabause"
 profiled_date: "2026-03-25"
-source_commit: "65af22e96beb6d9b0b9a50a81a39c86a6d604c1c"
+source_commit: "8926b0c6c347f8c5c755911ddb0ac695420ffbf8"
 core_version: "v2.6.8"
 display_name: "Sega - Saturn (YabaSanshiro)"
 cores:
@@ -37,7 +37,7 @@ files:
     required: true
     hle_fallback: true
     note: "Primary Saturn BIOS. Any region accepted."
-    source_ref: "libretro.c:1048"
+    source_ref: "yabause/src/libretro/libretro.c:1048"
 
   - name: "sega_101.bin"
     system: sega-saturn
@@ -45,7 +45,7 @@ files:
     required: false
     hle_fallback: true
     note: "Saturn BIOS v1.01 (Japan). Fallback if saturn_bios.bin missing."
-    source_ref: "libretro.c:1052"
+    source_ref: "yabause/src/libretro/libretro.c:1052"
 
   - name: "mpr-17933.bin"
     system: sega-saturn
@@ -53,4 +53,4 @@ files:
     required: false
     hle_fallback: true
     note: "Saturn BIOS v1.003 (NA/EU). Last fallback."
-    source_ref: "libretro.c:1056"
+    source_ref: "yabause/src/libretro/libretro.c:1056"

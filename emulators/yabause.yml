@@ -4,7 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/yabause"
 upstream: "https://github.com/Yabause/yabause"
 profiled_date: "2026-03-25"
-source_commit: "65af22e96beb6d9b0b9a50a81a39c86a6d604c1c"
+source_commit: "8926b0c6c347f8c5c755911ddb0ac695420ffbf8"
 core_version: "v0.9.15"
 display_name: "Sega - Saturn (Yabause)"
 cores:
@@ -39,7 +39,7 @@ files:
     max_size: 524288
     validation: [max_size]
     note: "Primary Saturn BIOS. Any region accepted."
-    source_ref: "libretro.c:1035"
+    source_ref: "yabause/src/libretro/libretro.c:1035"
 
   - name: "sega_101.bin"
     system: sega-saturn
@@ -49,7 +49,7 @@ files:
     max_size: 524288
     validation: [max_size]
     note: "Saturn BIOS v1.01 (Japan). Fallback if saturn_bios.bin missing."
-    source_ref: "libretro.c:1039"
+    source_ref: "yabause/src/libretro/libretro.c:1039"
 
   - name: "mpr-17933.bin"
     system: sega-saturn
@@ -59,4 +59,4 @@ files:
     max_size: 524288
     validation: [max_size]
     note: "Saturn BIOS (NA/EU). Last fallback."
-    source_ref: "libretro.c:1043"
+    source_ref: "yabause/src/libretro/libretro.c:1043"

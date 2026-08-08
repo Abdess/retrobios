@@ -4,7 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/beetle-pce-libretro"
 upstream: "https://mednafen.github.io/"
 profiled_date: "2026-03-24"
-source_commit: "9a301c0773c53702a882bbaa42ee9cbc6d523787"
+source_commit: "ae99235c2139c176c1a8d0fde2957bf701d3cab0"
 core_version: "v0.9.38.7"
 display_name: "NEC - PC Engine / SuperGrafx / CD (Beetle PCE)"
 cores: [mednafen_pce]
@@ -27,7 +27,7 @@ files:
     required: true
     sha1: "79f5ff55dd10187c7fd7b8daab0b3ffbd1f56a2c"
     md5: "38179df8f4ac870017db21ebcbf53114"
-    source_ref: "libretro.cpp:1051-1052, settings.cpp:40"
+    source_ref: "libretro.cpp:1051-1052, mednafen/settings.cpp:40"
     note: "Default value for pce_cdbios option."
 
   - name: "syscard3u.pce"
@@ -72,6 +72,6 @@ files:
     required: false
     sha1: "014881a959e045e00f4db8f52955200865d40280"
     md5: "6d2cb14fc3e1f65ceb135633d1694122"
-    source_ref: "libretro.cpp:1057-1058, settings.cpp:41, pce.cpp:374-411"
+    source_ref: "libretro.cpp:1057-1058, mednafen/settings.cpp:41, mednafen/pce/pce.cpp:374-411"
     aliases: ["gecard.pce"]
     note: "pce_cdbios = 'Games Express' or auto-detected via DetectGECD()."

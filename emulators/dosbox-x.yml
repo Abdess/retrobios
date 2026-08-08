@@ -3,7 +3,7 @@ type: standalone
 core_classification: enhanced_fork
 source: "https://github.com/joncampbell123/dosbox-x"
 upstream: "https://github.com/joncampbell123/dosbox-x"
-source_commit: "9fc3c0e000890504bcfc0ef5620cb97bdfc11262"
+source_commit: "6cad735d685406bd4ef2a0b60a4613569e211fd8"
 profiled_date: "2026-08-08"
 core_version: "2026.08.02"
 display_name: "DOS (DOSBox-X)"
@@ -126,7 +126,7 @@ files:
     sha1: "5a5cb5a77d7d55ee69657c2f870416daed52dea7"
     validation: [sha1, size]
     aliases: ["CM32L_CONTROL.ROM"]
-    source_ref: "midi_mt32.h:81-89, ROMInfo.cpp:59,89"
+    source_ref: "src/gui/midi_mt32.h:81-89, src/libs/mt32/ROMInfo.cpp:59, src/libs/mt32/ROMInfo.cpp:89"
 
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control v1.05"
@@ -135,7 +135,7 @@ files:
     sha1: "e17a3a6d265bf1fa150312061134293d2b58288c"
     validation: [sha1, size]
     aliases: ["CM32L_CONTROL.ROM"]
-    source_ref: "midi_mt32.h:81-89, ROMInfo.cpp:62,92"
+    source_ref: "src/gui/midi_mt32.h:81-89, src/libs/mt32/ROMInfo.cpp:62, src/libs/mt32/ROMInfo.cpp:92"
 
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control v1.06"
@@ -144,7 +144,7 @@ files:
     sha1: "a553481f4e2794c10cfe597fef154eef0d8257de"
     validation: [sha1, size]
     aliases: ["CM32L_CONTROL.ROM"]
-    source_ref: "midi_mt32.h:81-89, ROMInfo.cpp:65,95"
+    source_ref: "src/gui/midi_mt32.h:81-89, src/libs/mt32/ROMInfo.cpp:65, src/libs/mt32/ROMInfo.cpp:95"
 
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control v1.07"
@@ -153,7 +153,7 @@ files:
     sha1: "b083518fffb7f66b03c23b7eb4f868e62dc5a987"
     validation: [sha1, size]
     aliases: ["CM32L_CONTROL.ROM"]
-    source_ref: "midi_mt32.h:81-89, ROMInfo.cpp:68,98"
+    source_ref: "src/gui/midi_mt32.h:81-89, src/libs/mt32/ROMInfo.cpp:68, src/libs/mt32/ROMInfo.cpp:98"
 
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control BlueRidge"
@@ -162,7 +162,7 @@ files:
     sha1: "7b8c2a5ddb42fd0732e2f22b3340dcf5360edf92"
     validation: [sha1, size]
     aliases: ["CM32L_CONTROL.ROM"]
-    source_ref: "midi_mt32.h:81-89, ROMInfo.cpp:71,101"
+    source_ref: "src/gui/midi_mt32.h:81-89, src/libs/mt32/ROMInfo.cpp:71, src/libs/mt32/ROMInfo.cpp:101"
 
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control v2.03"
@@ -171,7 +171,7 @@ files:
     sha1: "5837064c9df4741a55f7c4d8787ac158dff2d3ce"
     validation: [sha1, size]
     aliases: ["CM32L_CONTROL.ROM"]
-    source_ref: "midi_mt32.h:81-89, ROMInfo.cpp:73,103"
+    source_ref: "src/gui/midi_mt32.h:81-89, src/libs/mt32/ROMInfo.cpp:73, src/libs/mt32/ROMInfo.cpp:103"
 
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control v2.04"
@@ -180,7 +180,7 @@ files:
     sha1: "2c16432b6c73dd2a3947cba950a0f4c19d6180eb"
     validation: [sha1, size]
     aliases: ["CM32L_CONTROL.ROM"]
-    source_ref: "midi_mt32.h:81-89, ROMInfo.cpp:74,104"
+    source_ref: "src/gui/midi_mt32.h:81-89, src/libs/mt32/ROMInfo.cpp:74, src/libs/mt32/ROMInfo.cpp:104"
 
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control v2.06"
@@ -189,7 +189,7 @@ files:
     sha1: "2869cf4c235d671668cfcb62415e2ce8323ad4ed"
     validation: [sha1, size]
     aliases: ["CM32L_CONTROL.ROM"]
-    source_ref: "midi_mt32.h:81-89, ROMInfo.cpp:75,105"
+    source_ref: "src/gui/midi_mt32.h:81-89, src/libs/mt32/ROMInfo.cpp:75, src/libs/mt32/ROMInfo.cpp:105"
 
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control v2.07"
@@ -198,7 +198,7 @@ files:
     sha1: "47b52adefedaec475c925e54340e37673c11707c"
     validation: [sha1, size]
     aliases: ["CM32L_CONTROL.ROM"]
-    source_ref: "midi_mt32.h:81-89, ROMInfo.cpp:76,106"
+    source_ref: "src/gui/midi_mt32.h:81-89, src/libs/mt32/ROMInfo.cpp:76, src/libs/mt32/ROMInfo.cpp:106"
 
   - name: "CM32L_CONTROL.ROM"
     description: "CM-32L/LAPC-I Control v1.00"
@@ -207,7 +207,7 @@ files:
     sha1: "73683d585cd6948cc19547942ca0e14a0319456d"
     validation: [sha1, size]
     aliases: ["MT32_CONTROL.ROM"]
-    source_ref: "midi_mt32.h:81-89, ROMInfo.cpp:77,107"
+    source_ref: "src/gui/midi_mt32.h:81-89, src/libs/mt32/ROMInfo.cpp:77, src/libs/mt32/ROMInfo.cpp:107"
 
   - name: "CM32L_CONTROL.ROM"
     description: "CM-32L/LAPC-I Control v1.02"
@@ -216,7 +216,7 @@ files:
     sha1: "a439fbb390da38cada95a7cbb1d6ca199cd66ef8"
     validation: [sha1, size]
     aliases: ["MT32_CONTROL.ROM"]
-    source_ref: "midi_mt32.h:81-89, ROMInfo.cpp:78,108"
+    source_ref: "src/gui/midi_mt32.h:81-89, src/libs/mt32/ROMInfo.cpp:78, src/libs/mt32/ROMInfo.cpp:108"
 
   - name: "CM32L_CONTROL.ROM"
     description: "CM-32LN/CM-500/LAPC-N Control v1.00"
@@ -225,7 +225,7 @@ files:
     sha1: "dc1c5b1b90a4646d00f7daf3679733c7badc7077"
     validation: [sha1, size]
     aliases: ["MT32_CONTROL.ROM"]
-    source_ref: "midi_mt32.h:81-89, ROMInfo.cpp:79,109"
+    source_ref: "src/gui/midi_mt32.h:81-89, src/libs/mt32/ROMInfo.cpp:79, src/libs/mt32/ROMInfo.cpp:109"
 
   # -- MT-32 and CM-32L PCM ROMs --
   # Every MT-32 control ROM pairs with the MT-32 PCM ROM, every CM-32L family
@@ -238,7 +238,7 @@ files:
     sha1: "f6b1eebc4b2d200ec6d3d21d51325d5b48c60252"
     validation: [sha1, size]
     aliases: ["CM32L_PCM.ROM"]
-    source_ref: "midi_mt32.h:93-105, ROMInfo.cpp:83,113"
+    source_ref: "src/gui/midi_mt32.h:93-105, src/libs/mt32/ROMInfo.cpp:83, src/libs/mt32/ROMInfo.cpp:113"
 
   - name: "CM32L_PCM.ROM"
     description: "CM-32L/CM-64/LAPC-I PCM ROM"
@@ -247,7 +247,7 @@ files:
     sha1: "289cc298ad532b702461bfc738009d9ebe8025ea"
     validation: [sha1, size]
     aliases: ["MT32_PCM.ROM"]
-    source_ref: "midi_mt32.h:93-105, ROMInfo.cpp:85,117"
+    source_ref: "src/gui/midi_mt32.h:93-105, src/libs/mt32/ROMInfo.cpp:85, src/libs/mt32/ROMInfo.cpp:117"
 
   # -- FluidSynth SoundFont --
 
@@ -260,7 +260,7 @@ files:
     note: >
       any SF2 or SF3 file loads; fluid.soundfont names it and
       fluid_synth_sfload is the only check
-    source_ref: "midi_synth.h:346-384, 462-473, dosbox.cpp:3710"
+    source_ref: "src/gui/midi_synth.h:346-384, src/gui/midi_synth.h:462-473, src/dosbox.cpp:3710"
 
   # -- PC-98 character generator --
 
@@ -274,7 +274,7 @@ files:
       256 8x8 cells at 0x0, 256 8x16 cells at 0x800, 96 by 92 16x16 cells at
       0x1800; a file of any other length is rejected. Enabled by
       pc-98 try font rom, on by default
-    source_ref: "int10.cpp:1487-1549, dosbox.cpp:2477-2478"
+    source_ref: "src/ints/int10.cpp:1487-1549, src/dosbox.cpp:2477-2478"
 
   - name: "ANEX86.BMP"
     description: "PC-98 character generator, Anex86 bitmap"
@@ -285,7 +285,7 @@ files:
       pixel, no compression, inverse colour scheme; the first row is the 8x16
       single-width set and the rest is 16x16 full-width. Also reachable through
       the pc-98 anex86 font setting, which is tried before FONT.ROM
-    source_ref: "int10.cpp:1555-1647, dosbox.cpp:2481-2484"
+    source_ref: "src/ints/int10.cpp:1555-1647, src/dosbox.cpp:2481-2484"
 
   - name: "FREECG98.BMP"
     description: "PC-98 character generator, free generated bitmap"
@@ -294,7 +294,7 @@ files:
     note: >
       same bitmap layout as ANEX86.BMP and tried after it; ships in the resource
       directory
-    source_ref: "int10.cpp:1577-1580, src/Makefile.am:17"
+    source_ref: "src/ints/int10.cpp:1577-1580, src/Makefile.am:17"
 
   # -- CJK bitmap fonts --
   # Read when the guest code page is 936, 949, 950 or 951 and a character has no
@@ -306,14 +306,14 @@ files:
     required: false
     aliases: ["wqy_12pt.pcf"]
     note: "ships in the resource directory"
-    source_ref: "int_dosv.cpp:1197-1218, src/Makefile.am:19"
+    source_ref: "src/ints/int_dosv.cpp:1197-1218, src/Makefile.am:19"
 
   - name: "wqy_11pt.bdf"
     description: "WenQuanYi 14-pixel bitmap font"
     required: false
     aliases: ["wqy_11pt.pcf"]
     note: "ships in the resource directory"
-    source_ref: "int_dosv.cpp:1296-1316, src/Makefile.am:18"
+    source_ref: "src/ints/int_dosv.cpp:1296-1316, src/Makefile.am:18"
 
   - name: "SarasaGothicFixed.ttf"
     description: "CJK fixed-width TrueType font"
@@ -323,7 +323,7 @@ files:
       tried by the TTF output on PC-98 and on double-byte code pages when
       ttf.font is unset, and by the printer when the selected typeface file is
       missing; ships in the resource directory
-    source_ref: "output_ttf.cpp:655-668, printer.cpp:354-380, src/Makefile.am:21"
+    source_ref: "src/output/output_ttf.cpp:655-668, src/hardware/parport/printer.cpp:354-380, src/Makefile.am:21"
 
   # -- Printer typefaces --
   # Read from the directory named by the printer fontpath setting, default
@@ -335,32 +335,32 @@ files:
     description: "Printer Roman typeface"
     required: false
     note: "also the fallback typeface for any unmapped LQ selection"
-    source_ref: "printer.cpp:320-321, 336-337, dosbox.cpp:4597"
+    source_ref: "src/hardware/parport/printer.cpp:320-321, src/hardware/parport/printer.cpp:336-337, src/dosbox.cpp:4597"
 
   - name: "sansserif.ttf"
     path: "FONTS/sansserif.ttf"
     description: "Printer Sans Serif typeface"
     required: false
-    source_ref: "printer.cpp:323-324, dosbox.cpp:4597"
+    source_ref: "src/hardware/parport/printer.cpp:323-324, src/dosbox.cpp:4597"
 
   - name: "courier.ttf"
     path: "FONTS/courier.ttf"
     description: "Printer Courier typeface"
     required: false
-    source_ref: "printer.cpp:326-327, dosbox.cpp:4597"
+    source_ref: "src/hardware/parport/printer.cpp:326-327, src/dosbox.cpp:4597"
 
   - name: "script.ttf"
     path: "FONTS/script.ttf"
     description: "Printer Script typeface"
     required: false
-    source_ref: "printer.cpp:329-330, dosbox.cpp:4597"
+    source_ref: "src/hardware/parport/printer.cpp:329-330, src/dosbox.cpp:4597"
 
   - name: "ocra.ttf"
     path: "FONTS/ocra.ttf"
     description: "Printer OCR-A typeface"
     required: false
     note: "serves both the OCR-A and OCR-B selections"
-    source_ref: "printer.cpp:332-334, dosbox.cpp:4597"
+    source_ref: "src/hardware/parport/printer.cpp:332-334, src/dosbox.cpp:4597"
 
   # -- PC-98 sound board BIOS --
 
@@ -373,7 +373,7 @@ files:
     note: >
       16 KB read into CC000h from the working directory only, when
       pc-98 sound bios and pc-98 load sound bios rom file are both set
-    source_ref: "pc98_fm.cpp:367-385, dosbox.cpp:2378-2386"
+    source_ref: "src/hardware/pc98_fm.cpp:367-385, src/dosbox.cpp:2378-2386"
 
   # -- Video BIOS ROM images --
   # Loaded in place of the built-in INT 10h when vga bios use rom image is set.
@@ -387,7 +387,7 @@ files:
     max_size: 65536
     validation: [size]
     note: "default file name for machine = svga_et4000"
-    source_ref: "dosbox.cpp:938-982, 2745-2757"
+    source_ref: "src/dosbox.cpp:938-982, src/dosbox.cpp:2745-2757"
 
   - name: "TRIO64 (Ver. 1.5-07) [VGA] (S3 Incorporated).bin"
     description: "S3 Trio64 video BIOS"
@@ -396,7 +396,7 @@ files:
     max_size: 65536
     validation: [size]
     note: "default file name for machine = svga_s3"
-    source_ref: "dosbox.cpp:943-945, 2745-2757"
+    source_ref: "src/dosbox.cpp:943-945, src/dosbox.cpp:2745-2757"
 
   - name: "Video BIOS option ROM"
     description: "Option ROM image mapped at C000:0 and initialised"
@@ -408,7 +408,7 @@ files:
       read by LOADROM.COM from a mounted local drive; accepted when the file
       starts with 55 AA, byte 3 masked with 0xFC equals 0xE8 and the string IBM
       appears at offset 0x1E, and the machine is EGA or better
-    source_ref: "dos_programs.cpp:3520-3546, 3557-3562"
+    source_ref: "src/dos/dos_programs.cpp:3523-3549, src/dos/dos_programs.cpp:3560-3565"
 
   # -- IBM ROM BASIC --
 
@@ -423,7 +423,7 @@ files:
       32 KB to 64 KB in 4 KB steps; LOADROM.COM maps the same image at F600:0
       when it is exactly 32768 bytes, starts with E9 8F 7E and carries the
       string IBM at offset 0x4CD4
-    source_ref: "bios.cpp:13007-13027, dos_programs.cpp:3547-3551, dosbox.cpp:1931-1933"
+    source_ref: "src/ints/bios.cpp:13074-13094, src/dos/dos_programs.cpp:3550-3554, src/dosbox.cpp:1931-1933"
 
   # -- PCjr --
 
@@ -436,7 +436,7 @@ files:
       read during PCjr cartridge boot; bytes 0x3000 to 0xDFFF are copied to
       physical F3000. A short read leaves the region untouched and the cartridge
       still boots
-    source_ref: "dos_programs.cpp:3058-3067"
+    source_ref: "src/dos/dos_programs.cpp:3061-3070"
 
   # -- Whole system BIOS images --
 
@@ -447,7 +447,7 @@ files:
       loaded at the top of the first megabyte, rounded up to a paragraph and
       truncated to 128 KB, or to 96 KB on PC-98; a larger image is clamped
       rather than rejected
-    source_ref: "dos_programs.cpp:2243-2292"
+    source_ref: "src/dos/dos_programs.cpp:2244-2293"
 
   - name: "ITF.ROM"
     description: "PC-98 Initial Firmware Test BIOS"
@@ -458,4 +458,4 @@ files:
       served through the port 43Dh bank switch alongside a BOOT -bios image;
       <image>.itf.rom is tried before the bare name so one directory can hold
       several
-    source_ref: "dos_programs.cpp:2294-2325"
+    source_ref: "src/dos/dos_programs.cpp:2295-2326"

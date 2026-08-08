@@ -41,7 +41,7 @@ files:
     size: 262144
     required: true
     validation: [size, crc32]
-    source_ref: "libretro.cpp:453,471-473, media.cpp:241-307, defines.h:52, game_db.h:50,52"
+    source_ref: "platforms/libretro/libretro.cpp:581, platforms/libretro/libretro.cpp:599-601, media.cpp:241-307, src/defines.h:52, src/game_db.h:50, src/game_db.h:52"
     note: >
       Default BIOS for CD-ROM games (cdrom_bios Auto or System Card 3).
       game_db.h recognizes Japan (CRC32 6D9A73EF) and USA (CRC32 2B5B75FE)
@@ -52,7 +52,7 @@ files:
     size: 262144
     required: false
     validation: [size, crc32]
-    source_ref: "libretro.cpp:452,462-463, media.cpp:241-307, game_db.h:48-49,51"
+    source_ref: "platforms/libretro/libretro.cpp:580, platforms/libretro/libretro.cpp:590-591, media.cpp:241-307, src/game_db.h:48-49, src/game_db.h:51"
     note: >
       cdrom_bios = 'System Card 2'. For older CD-ROM2 titles. game_db.h
       recognizes three variants: v2.0 Japan (CRC32 52520BC6), v2.1 Japan
@@ -63,7 +63,7 @@ files:
     size: 262144
     required: false
     validation: [size, crc32]
-    source_ref: "libretro.cpp:451,459-460, media.cpp:241-307, game_db.h:47"
+    source_ref: "platforms/libretro/libretro.cpp:579, platforms/libretro/libretro.cpp:587-588, media.cpp:241-307, src/game_db.h:47"
     note: >
       cdrom_bios = 'System Card 1'. Very early CD-ROM2 games only.
       CRC32 3F9F95A4.
@@ -73,7 +73,7 @@ files:
     size: 32768
     required: false
     validation: [size, crc32]
-    source_ref: "libretro.cpp:454,468-469,481-482, media.cpp:241-307, defines.h:53, game_db.h:53-54"
+    source_ref: "platforms/libretro/libretro.cpp:582, platforms/libretro/libretro.cpp:596-597, libretro.cpp:481-482, media.cpp:241-307, src/defines.h:53, src/game_db.h:53-54"
     note: >
       Always loaded alongside the selected System Card BIOS (libretro.cpp:481).
       Required for Game Express CD-ROM titles. game_db.h recognizes Blue Version

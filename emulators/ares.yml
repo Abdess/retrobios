@@ -339,7 +339,7 @@ files:
     sha256: "0e87a3385a27b3a4cac51934819b7eefa5b3d690768d2495633838488cd0e2e4"
     validation: [sha256]
     description: "NEC PAC-N10 LaserActive module (US)"
-    source_ref: "desktop-ui/emulator/pc-engine-ld.cpp:14"
+    source_ref: "desktop-ui/emulator/pc-engine-ld.cpp:12"
 
   - name: pac-n1.pce
     system: pc-engine-ld
@@ -357,7 +357,7 @@ files:
     sha256: "3f43b3b577117d84002e99cb0baeb97b0d65b1d70b4adadc68817185c6a687f0"
     validation: [sha256]
     description: "NEC PCE-LP1 LaserActive module (Japan)"
-    source_ref: "desktop-ui/emulator/pc-engine-ld.cpp:16"
+    source_ref: "desktop-ui/emulator/pc-engine-ld.cpp:14"
 
   # --- PlayStation ---
   - name: scph5501.bin

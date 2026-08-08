@@ -38,52 +38,52 @@ files:
     system: nintendo-snes
     required: false
     hle_fallback: true
-    source_ref: "sfc/cartridge/load.cpp:490-494,506-513"
+    source_ref: "bsnes/sfc/cartridge/load.cpp:490-494, bsnes/sfc/cartridge/load.cpp:506-513"
   - name: dsp1.data.rom
     system: nintendo-snes
     required: false
     hle_fallback: true
-    source_ref: "sfc/cartridge/load.cpp:498-503,506-513"
+    source_ref: "bsnes/sfc/cartridge/load.cpp:498-503, bsnes/sfc/cartridge/load.cpp:506-513"
   - name: dsp1b.program.rom
     system: nintendo-snes
     required: false
     hle_fallback: true
-    source_ref: "sfc/cartridge/load.cpp:490-494,506-513"
+    source_ref: "bsnes/sfc/cartridge/load.cpp:490-494, bsnes/sfc/cartridge/load.cpp:506-513"
   - name: dsp1b.data.rom
     system: nintendo-snes
     required: false
     hle_fallback: true
-    source_ref: "sfc/cartridge/load.cpp:498-503,506-513"
+    source_ref: "bsnes/sfc/cartridge/load.cpp:498-503, bsnes/sfc/cartridge/load.cpp:506-513"
   - name: dsp2.program.rom
     system: nintendo-snes
     required: false
     hle_fallback: true
-    source_ref: "sfc/cartridge/load.cpp:490-494,515-520"
+    source_ref: "bsnes/sfc/cartridge/load.cpp:490-494, bsnes/sfc/cartridge/load.cpp:515-520"
   - name: dsp2.data.rom
     system: nintendo-snes
     required: false
     hle_fallback: true
-    source_ref: "sfc/cartridge/load.cpp:498-503,515-520"
+    source_ref: "bsnes/sfc/cartridge/load.cpp:498-503, bsnes/sfc/cartridge/load.cpp:515-520"
   - name: dsp3.program.rom
     system: nintendo-snes
     required: false
     note: "no HLE — required for SD Gundam GX"
-    source_ref: "sfc/cartridge/load.cpp:490-494,531-534"
+    source_ref: "bsnes/sfc/cartridge/load.cpp:490-494, bsnes/sfc/cartridge/load.cpp:531-534"
   - name: dsp3.data.rom
     system: nintendo-snes
     required: false
     note: "no HLE — required for SD Gundam GX"
-    source_ref: "sfc/cartridge/load.cpp:498-503,531-534"
+    source_ref: "bsnes/sfc/cartridge/load.cpp:498-503, bsnes/sfc/cartridge/load.cpp:531-534"
   - name: dsp4.program.rom
     system: nintendo-snes
     required: false
     hle_fallback: true
-    source_ref: "sfc/cartridge/load.cpp:490-494,522-528"
+    source_ref: "bsnes/sfc/cartridge/load.cpp:490-494, bsnes/sfc/cartridge/load.cpp:522-528"
   - name: dsp4.data.rom
     system: nintendo-snes
     required: false
     hle_fallback: true
-    source_ref: "sfc/cartridge/load.cpp:498-503,522-528"
+    source_ref: "bsnes/sfc/cartridge/load.cpp:498-503, bsnes/sfc/cartridge/load.cpp:522-528"
 
   # Hitachi HG51BS169 coprocessor (CX4)
   # code requests hg51bs169.data.rom internally
@@ -92,7 +92,7 @@ files:
     required: false
     hle_fallback: true
     size: 3072
-    source_ref: "sfc/cartridge/load.cpp:431-454"
+    source_ref: "bsnes/sfc/cartridge/load.cpp:431-454"
 
   # NEC uPD96050 coprocessor (ST010/ST011)
   # code requests upd96050.program.rom / upd96050.data.rom internally
@@ -100,22 +100,22 @@ files:
     system: nintendo-snes
     required: false
     hle_fallback: true
-    source_ref: "sfc/cartridge/load.cpp:570-574,586-596"
+    source_ref: "bsnes/sfc/cartridge/load.cpp:570-574, bsnes/sfc/cartridge/load.cpp:586-596"
   - name: st010.data.rom
     system: nintendo-snes
     required: false
     hle_fallback: true
-    source_ref: "sfc/cartridge/load.cpp:578-583,586-596"
+    source_ref: "bsnes/sfc/cartridge/load.cpp:578-583, bsnes/sfc/cartridge/load.cpp:586-596"
   - name: st011.program.rom
     system: nintendo-snes
     required: false
     note: "no HLE — required for Hayazashi Nidan Morita Shougi"
-    source_ref: "sfc/cartridge/load.cpp:570-574,599-602"
+    source_ref: "bsnes/sfc/cartridge/load.cpp:570-574, bsnes/sfc/cartridge/load.cpp:599-602"
   - name: st011.data.rom
     system: nintendo-snes
     required: false
     note: "no HLE — required for Hayazashi Nidan Morita Shougi"
-    source_ref: "sfc/cartridge/load.cpp:578-583,599-602"
+    source_ref: "bsnes/sfc/cartridge/load.cpp:578-583, bsnes/sfc/cartridge/load.cpp:599-602"
 
   # ARM6 coprocessor (ST018)
   # code requests arm6.program.rom / arm6.data.rom internally
@@ -123,12 +123,12 @@ files:
     system: nintendo-snes
     required: false
     note: "no HLE — required for Hayazashi Nidan Morita Shougi 2"
-    source_ref: "sfc/cartridge/load.cpp:379-384"
+    source_ref: "bsnes/sfc/cartridge/load.cpp:379-384"
   - name: st018.data.rom
     system: nintendo-snes
     required: false
     note: "no HLE — required for Hayazashi Nidan Morita Shougi 2"
-    source_ref: "sfc/cartridge/load.cpp:387-393"
+    source_ref: "bsnes/sfc/cartridge/load.cpp:387-393"
 
   # SGB cartridge ROMs (boot ROMs embedded in icd/boot-roms.cpp)
   # sgb_bios core option selects SGB1.sfc or SGB2.sfc (default: SGB1.sfc)
@@ -137,17 +137,17 @@ files:
     required: false
     md5: b15ddb15721c657d82c5bab6db982ee9
     note: "SGB1 cartridge ROM. Boot ROM embedded in icd/boot-roms.cpp:1"
-    source_ref: "target-libretro/libretro.cpp:1022,1040"
+    source_ref: "bsnes/target-libretro/libretro.cpp:1022, bsnes/target-libretro/libretro.cpp:1040"
   - name: SGB2.sfc
     system: nintendo-sgb
     required: false
     md5: 8ecd73eb4edf7ed7e81aef1be80031d5
     note: "SGB2 cartridge ROM. Boot ROM embedded in icd/boot-roms.cpp:12"
-    source_ref: "target-libretro/libretro.cpp:1022,1040"
+    source_ref: "bsnes/target-libretro/libretro.cpp:1022, bsnes/target-libretro/libretro.cpp:1040"
 
   # Satellaview BIOS
   - name: BS-X.bin
     system: nintendo-satellaview
     required: false
     note: "required when loading .bs files, core returns false if missing"
-    source_ref: "target-libretro/libretro.cpp:1054-1060"
+    source_ref: "bsnes/target-libretro/libretro.cpp:1054-1060"

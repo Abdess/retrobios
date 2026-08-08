@@ -5,7 +5,7 @@ source: "https://github.com/stenzek/duckstation"
 upstream: "https://github.com/stenzek/duckstation"
 logo: "https://raw.githubusercontent.com/stenzek/duckstation/master/data/resources/images/duck.png"
 profiled_date: "2026-03-23"
-source_commit: "125c3ec70fd1b4fdcf61d52500e5afad72be17e5"
+source_commit: "6f704d405b2374a35944d85e330452e4c3cbc08b"
 core_version: "v0.1"
 display_name: "Sony - PlayStation (DuckStation)"
 cores: [duckstation]
@@ -24,6 +24,13 @@ notes: |
   105 known BIOS entries: 24 PS1 + 80 PS2 (identified by MD5) + 1 OpenBIOS (by signature).
   ref: src/core/bios.cpp:34-139 (s_image_info_by_hash)
   Each image has: region, region_check, fast_boot_patch type, priority score.
+
+  ImageInfo gained a version and an expected_filename field after the previous
+  profiling pass. Neither takes part in identification: expected_filename is read
+  only by the two settings screens, which fall back to the real filename when it
+  is null.
+  ref: src/core/bios.h:41-43 (field declarations)
+  ref: src/duckstation-qt/biossettingswidget.cpp:150, src/core/fullscreenui_settings.cpp:3219
   Lower priority = preferred. PS2 deprioritized (>= 100) for dynamic fast boot.
   Late PAL deprioritized (>= 150) due to additional regional checks.
   OpenBIOS detected by signature at offset 0x78, not by hash.

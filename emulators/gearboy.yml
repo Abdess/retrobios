@@ -27,7 +27,7 @@ files:
     required: false
     hle_fallback: true
     validation: [size]
-    source_ref: "libretro.cpp:208,211 Memory.cpp:601-606,699-738"
+    source_ref: "platforms/libretro/libretro.cpp:359, libretro.cpp:211, libretro.cpp:699-738"
 
   - name: cgb_boot.bin
     description: Game Boy Color bootrom
@@ -35,4 +35,4 @@ files:
     required: false
     hle_fallback: true
     validation: [size]
-    source_ref: "libretro.cpp:209,212 Memory.cpp:608-611,699-738"
+    source_ref: "platforms/libretro/libretro.cpp:360, libretro.cpp:212, libretro.cpp:699-738"

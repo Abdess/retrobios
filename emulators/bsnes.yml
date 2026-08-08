@@ -36,7 +36,7 @@ files:
     required: false
     hle_fallback: true
     note: "NEC uPD7725 program ROM for DSP1"
-    source_ref: "sfc/cartridge/load.cpp:490-494, heuristics/super-famicom.cpp:601"
+    source_ref: "bsnes/sfc/cartridge/load.cpp:490-494, bsnes/heuristics/super-famicom.cpp:601"
 
   - name: "dsp1.data.rom"
     system: nintendo-snes
@@ -45,7 +45,7 @@ files:
     required: false
     hle_fallback: true
     note: "NEC uPD7725 data ROM for DSP1"
-    source_ref: "sfc/cartridge/load.cpp:498-503"
+    source_ref: "bsnes/sfc/cartridge/load.cpp:498-503"
 
   - name: "dsp1b.program.rom"
     system: nintendo-snes
@@ -54,7 +54,7 @@ files:
     required: false
     hle_fallback: true
     note: "NEC uPD7725 program ROM for DSP1B (default NEC identifier)"
-    source_ref: "heuristics/super-famicom.cpp:606"
+    source_ref: "bsnes/heuristics/super-famicom.cpp:606"
 
   - name: "dsp1b.data.rom"
     system: nintendo-snes
@@ -63,7 +63,7 @@ files:
     required: false
     hle_fallback: true
     note: "NEC uPD7725 data ROM for DSP1B"
-    source_ref: "heuristics/super-famicom.cpp:606"
+    source_ref: "bsnes/heuristics/super-famicom.cpp:606"
 
   - name: "dsp2.program.rom"
     system: nintendo-snes
@@ -72,7 +72,7 @@ files:
     required: false
     hle_fallback: true
     note: "NEC uPD7725 program ROM for DSP2 (Dungeon Master)"
-    source_ref: "sfc/cartridge/load.cpp:515-520, heuristics/super-famicom.cpp:602"
+    source_ref: "bsnes/sfc/cartridge/load.cpp:515-520, bsnes/heuristics/super-famicom.cpp:602"
 
   - name: "dsp2.data.rom"
     system: nintendo-snes
@@ -81,7 +81,7 @@ files:
     required: false
     hle_fallback: true
     note: "NEC uPD7725 data ROM for DSP2"
-    source_ref: "sfc/cartridge/load.cpp:498-503"
+    source_ref: "bsnes/sfc/cartridge/load.cpp:498-503"
 
   - name: "dsp3.program.rom"
     system: nintendo-snes
@@ -89,7 +89,7 @@ files:
     validation: [size]
     required: true
     note: "NEC uPD7725 program ROM for DSP3 (SD Gundam GX). No HLE fallback"
-    source_ref: "sfc/cartridge/load.cpp:531-534"
+    source_ref: "bsnes/sfc/cartridge/load.cpp:531-534"
 
   - name: "dsp3.data.rom"
     system: nintendo-snes
@@ -97,7 +97,7 @@ files:
     validation: [size]
     required: true
     note: "NEC uPD7725 data ROM for DSP3. No HLE fallback"
-    source_ref: "sfc/cartridge/load.cpp:531-534"
+    source_ref: "bsnes/sfc/cartridge/load.cpp:531-534"
 
   - name: "dsp4.program.rom"
     system: nintendo-snes
@@ -106,7 +106,7 @@ files:
     required: false
     hle_fallback: true
     note: "NEC uPD7725 program ROM for DSP4 (Top Gear 3000)"
-    source_ref: "sfc/cartridge/load.cpp:522-528, heuristics/super-famicom.cpp:604-605"
+    source_ref: "bsnes/sfc/cartridge/load.cpp:522-528, bsnes/heuristics/super-famicom.cpp:604-605"
 
   - name: "dsp4.data.rom"
     system: nintendo-snes
@@ -115,7 +115,7 @@ files:
     required: false
     hle_fallback: true
     note: "NEC uPD7725 data ROM for DSP4"
-    source_ref: "sfc/cartridge/load.cpp:498-503"
+    source_ref: "bsnes/sfc/cartridge/load.cpp:498-503"
 
   # -- NEC uPD96050 coprocessor (ST010, ST011) --
   # Used by: Exhaust Heat 2 / F1 ROC II (ST010), 2dan Morita Shougi (ST011)
@@ -128,7 +128,7 @@ files:
     required: false
     hle_fallback: true
     note: "NEC uPD96050 program ROM for ST010"
-    source_ref: "sfc/cartridge/load.cpp:570-574, heuristics/super-famicom.cpp:583-587"
+    source_ref: "bsnes/sfc/cartridge/load.cpp:570-574, bsnes/heuristics/super-famicom.cpp:583-587"
 
   - name: "st010.data.rom"
     system: nintendo-snes
@@ -137,7 +137,7 @@ files:
     required: false
     hle_fallback: true
     note: "NEC uPD96050 data ROM for ST010"
-    source_ref: "sfc/cartridge/load.cpp:578-583"
+    source_ref: "bsnes/sfc/cartridge/load.cpp:578-583"
 
   - name: "st011.program.rom"
     system: nintendo-snes
@@ -145,7 +145,7 @@ files:
     validation: [size]
     required: true
     note: "NEC uPD96050 program ROM for ST011 (2dan Morita Shougi). No HLE fallback"
-    source_ref: "sfc/cartridge/load.cpp:599-601, heuristics/super-famicom.cpp:586"
+    source_ref: "bsnes/sfc/cartridge/load.cpp:599-601, bsnes/heuristics/super-famicom.cpp:586"
 
   - name: "st011.data.rom"
     system: nintendo-snes
@@ -153,7 +153,7 @@ files:
     validation: [size]
     required: true
     note: "NEC uPD96050 data ROM for ST011. No HLE fallback"
-    source_ref: "sfc/cartridge/load.cpp:599-601"
+    source_ref: "bsnes/sfc/cartridge/load.cpp:599-601"
 
   # -- SETA ST018 (ARM6 coprocessor) --
   # Used by: Hayazashi Nidan Morita Shougi
@@ -165,7 +165,7 @@ files:
     validation: [size]
     required: true
     note: "ARM6 program ROM for ST018 (Hayazashi Nidan Morita Shougi). No HLE fallback"
-    source_ref: "sfc/cartridge/load.cpp:379-385, armdsp/armdsp.hpp:31, heuristics/super-famicom.cpp:580"
+    source_ref: "bsnes/sfc/cartridge/load.cpp:379-385, bsnes/sfc/coprocessor/armdsp/armdsp.hpp:31, bsnes/heuristics/super-famicom.cpp:580"
 
   - name: "st018.data.rom"
     system: nintendo-snes
@@ -173,7 +173,7 @@ files:
     validation: [size]
     required: true
     note: "ARM6 data ROM for ST018. No HLE fallback"
-    source_ref: "sfc/cartridge/load.cpp:387-393, armdsp/armdsp.hpp:32"
+    source_ref: "bsnes/sfc/cartridge/load.cpp:387-393, bsnes/sfc/coprocessor/armdsp/armdsp.hpp:32"
 
   # -- Hitachi HG51BS169 (Cx4 coprocessor) --
   # Used by: Mega Man X2, Mega Man X3

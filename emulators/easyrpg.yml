@@ -4,7 +4,7 @@ core_classification: game_engine
 source: "https://github.com/libretro/easyrpg-libretro"
 upstream: "https://github.com/EasyRPG/Player"
 profiled_date: "2026-03-23"
-source_commit: "6a244c1f078405ca654a7b040830522a26c25ba1"
+source_commit: "03dda252dae0a133181e1c61b77d68c8feb9412d"
 core_version: "0.8.1.0"
 display_name: "RPG Maker 2000/2003 (EasyRPG)"
 cores:
@@ -71,7 +71,7 @@ files:
     path: "easyrpg.soundfont"
     required: false
     hle_fallback: true
-    source_ref: "decoder_fluidsynth.cpp:125"
+    source_ref: "src/decoder_fluidsynth.cpp:125"
     note: >
       General MIDI soundfont (SF2 format) for MIDI music playback. Many RPG
       Maker games use MIDI for background music. Without a soundfont, MIDI
@@ -88,7 +88,7 @@ files:
     path: "wildmidi.cfg"
     required: false
     hle_fallback: true
-    source_ref: "decoder_wildmidi.cpp:103-104"
+    source_ref: "src/decoder_wildmidi.cpp:103-104"
     note: >
       WildMidi configuration file pointing to GUS patch sets for MIDI
       playback. Alternative to FluidSynth/SF2. Only used if WildMidi
@@ -104,7 +104,7 @@ files:
     path: "rtp/2000/"
     required: false
     type: directory
-    source_ref: "filefinder_rtp.cpp:73-74"
+    source_ref: "src/filefinder_rtp.cpp:73-74"
     note: >
       Run-Time Package for RPG Maker 2000 games. Contains default tilesets,
       character sprites, battle animations, music, and sound effects. Only
@@ -123,7 +123,7 @@ files:
     path: "rtp/2003/"
     required: false
     type: directory
-    source_ref: "filefinder_rtp.cpp:73-74"
+    source_ref: "src/filefinder_rtp.cpp:73-74"
     note: >
       Run-Time Package for RPG Maker 2003 games. Same concept as the 2000
       RTP but with additional battle system assets for the side-view ATB

@@ -4,7 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/libretro-handy"
 upstream: "https://handy.sourceforge.net/"
 profiled_date: "2026-03-23"
-source_commit: "fca239207e9c111da3e85d2faf0b1b9d7524e498"
+source_commit: "bc55d462f0b2d6b073ea93dc552ebd73cec60fd1"
 core_version: "0.95"
 display_name: "Atari - Lynx (Handy)"
 cores:

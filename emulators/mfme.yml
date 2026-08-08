@@ -14,18 +14,18 @@ systems:
 mode: standalone
 
 notes: |
-  Closed-source Delphi emulator for British and European fruit machines, written
-  by Chris Wren (Wizard) and distributed as a Windows installer. MFME.exe carries
-  FileVersion 20.1.0.0, FileDescription "Multiple Fruit Machine Emulator" and
+  Closed-source Delphi emulator for fruit machine and slot machine hardware,
+  written by Chris Wren (Wizard) and distributed as a Windows installer. MFME.exe
+  carries FileVersion 20.1.0.0, FileDescription "Multiple Fruit Machine Emulator" and
   copyright "C.J.Wren 1997-2020"; the installer targets Windows 10, defaults to
   C:\MFME\v20 (history.txt:323) and writes HKCU\Software\CJW\MFME. The binary is
   ASPack compressed, imports dinput8, xaudio2_9, d2d1 and d3d11 for input, sound
   and the hardware accelerated scaler added in v19.0 (history.txt:8-9), and holds
   its layout engine in Delphi units around an EasyCompression Library core.
-  Development ended with the author's death and Update.exe, reached from File ->
-  Check For Updates (history.txt:235), no longer finds a server, leaving 20.1 as
-  the last build. ES-DE calls MFME.exe with a .gam path and the working directory
-  set to the emulator folder, through find rules MFME and MFME-WINDOWS, and runs
+  Development ended with the author's death, and Update.exe, reached from File ->
+  Check For Updates (history.txt:235), no longer finds a server. ES-DE calls
+  MFME.exe with a .gam path and the working directory set to the emulator
+  folder, through find rules MFME and MFME-WINDOWS, and runs
   it under Wine or Proton on Linux; .gam is in the arcade and mame extension
   lists.
 
@@ -38,7 +38,7 @@ notes: |
   of the file through a mixer, hashed with RIPEMD-128 into a Rijndael key, and
   each chunk is zlib compressed; it holds the Delphi layout stream with every
   bitmap embedded, carries no external file path, and text components name a font
-  family rather than a font file. MFME.exe takes the .gam path as its only
+  family rather than a font file. MFME.exe is started with the .gam path as its
   argument (history.txt:271).
 
   ROM sets are per machine and self contained. Barcrest S4 and S5 sets are .LO and
@@ -97,7 +97,7 @@ files:
 
   - name: LITHOGRB.TTF
     system: fruitmachine
-    path: "Fonts/"
+    path: "Fonts/LITHOGRB.TTF"
     required: false
     bundled: true
     category: game_data
@@ -111,7 +111,7 @@ files:
 
   - name: LITHOGRL.TTF
     system: fruitmachine
-    path: "Fonts/"
+    path: "Fonts/LITHOGRL.TTF"
     required: false
     bundled: true
     category: game_data
@@ -121,7 +121,7 @@ files:
 
   - name: MFME.ttf
     system: fruitmachine
-    path: "Fonts/"
+    path: "Fonts/MFME.ttf"
     required: false
     bundled: true
     category: game_data
@@ -133,7 +133,7 @@ files:
 
   - name: ReelGradientMask.bmp
     system: fruitmachine
-    path: "DefaultMasks/"
+    path: "DefaultMasks/ReelGradientMask.bmp"
     required: false
     bundled: true
     category: game_data
@@ -145,7 +145,7 @@ files:
 
   - name: ReelLampMask.bmp
     system: fruitmachine
-    path: "DefaultMasks/"
+    path: "DefaultMasks/ReelLampMask.bmp"
     required: false
     bundled: true
     category: game_data
@@ -157,7 +157,7 @@ files:
 
   - name: 2pSlide.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/2pSlide.wav"
     required: false
     bundled: true
     category: game_data
@@ -166,7 +166,7 @@ files:
 
   - name: 10pSlide.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/10pSlide.wav"
     required: false
     bundled: true
     category: game_data
@@ -175,7 +175,7 @@ files:
 
   - name: 20pSlide.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/20pSlide.wav"
     required: false
     bundled: true
     category: game_data
@@ -184,7 +184,7 @@ files:
 
   - name: 50pSlide.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/50pSlide.wav"
     required: false
     bundled: true
     category: game_data
@@ -193,7 +193,7 @@ files:
 
   - name: PoundSlide.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/PoundSlide.wav"
     required: false
     bundled: true
     category: game_data
@@ -202,7 +202,7 @@ files:
 
   - name: TokenSlide.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/TokenSlide.wav"
     required: false
     bundled: true
     category: game_data
@@ -211,7 +211,7 @@ files:
 
   - name: MiscSlide.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/MiscSlide.wav"
     required: false
     bundled: true
     category: game_data
@@ -222,7 +222,7 @@ files:
 
   - name: meter.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/meter.wav"
     required: false
     bundled: true
     category: game_data
@@ -232,7 +232,7 @@ files:
 
   - name: ButtonDown.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/ButtonDown.wav"
     required: false
     bundled: true
     category: game_data
@@ -242,7 +242,7 @@ files:
 
   - name: ButtonUp.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/ButtonUp.wav"
     required: false
     bundled: true
     category: game_data
@@ -254,7 +254,7 @@ files:
 
   - name: HopperMotor1.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/HopperMotor1.wav"
     required: false
     bundled: true
     category: game_data
@@ -267,7 +267,7 @@ files:
 
   - name: HopperCoin1.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/HopperCoin1.wav"
     required: false
     bundled: true
     category: game_data
@@ -277,7 +277,7 @@ files:
 
   - name: HopperMotor2.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/HopperMotor2.wav"
     required: false
     bundled: true
     category: game_data
@@ -287,7 +287,7 @@ files:
 
   - name: HopperCoin2.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/HopperCoin2.wav"
     required: false
     bundled: true
     category: game_data
@@ -301,7 +301,7 @@ files:
 
   - name: NoteIn.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/NoteIn.wav"
     required: false
     bundled: true
     category: game_data
@@ -310,7 +310,7 @@ files:
 
   - name: NoteInReject.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/NoteInReject.wav"
     required: false
     bundled: true
     category: game_data
@@ -319,7 +319,7 @@ files:
 
   - name: NoteInStack.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/NoteInStack.wav"
     required: false
     bundled: true
     category: game_data
@@ -330,7 +330,7 @@ files:
 
   - name: CoinIn.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/CoinIn.wav"
     required: false
     bundled: true
     category: game_data
@@ -339,7 +339,7 @@ files:
 
   - name: CoinInSwitch.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/CoinInSwitch.wav"
     required: false
     bundled: true
     category: game_data
@@ -348,7 +348,7 @@ files:
 
   - name: CoinInRejected.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/CoinInRejected.wav"
     required: false
     bundled: true
     category: game_data
@@ -357,7 +357,7 @@ files:
 
   - name: TokenIn.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/TokenIn.wav"
     required: false
     bundled: true
     category: game_data
@@ -366,7 +366,7 @@ files:
 
   - name: TokenInSwitch.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/TokenInSwitch.wav"
     required: false
     bundled: true
     category: game_data
@@ -375,7 +375,7 @@ files:
 
   - name: TokenInRejected.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/TokenInRejected.wav"
     required: false
     bundled: true
     category: game_data
@@ -386,7 +386,7 @@ files:
 
   - name: CoinInS1.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/CoinInS1.wav"
     required: false
     bundled: true
     category: game_data
@@ -395,7 +395,7 @@ files:
 
   - name: CoinInS1Switch.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/CoinInS1Switch.wav"
     required: false
     bundled: true
     category: game_data
@@ -404,7 +404,7 @@ files:
 
   - name: CoinInS1Token.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/CoinInS1Token.wav"
     required: false
     bundled: true
     category: game_data
@@ -413,7 +413,7 @@ files:
 
   - name: CoinInS1TokenSwitch.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/CoinInS1TokenSwitch.wav"
     required: false
     bundled: true
     category: game_data
@@ -422,7 +422,7 @@ files:
 
   - name: CoinInS10.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/CoinInS10.wav"
     required: false
     bundled: true
     category: game_data
@@ -431,7 +431,7 @@ files:
 
   - name: CoinInS10Rejected.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/CoinInS10Rejected.wav"
     required: false
     bundled: true
     category: game_data
@@ -440,7 +440,7 @@ files:
 
   - name: CoinInS10Switch.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/CoinInS10Switch.wav"
     required: false
     bundled: true
     category: game_data
@@ -449,7 +449,7 @@ files:
 
   - name: CoinInS10Token.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/CoinInS10Token.wav"
     required: false
     bundled: true
     category: game_data
@@ -458,7 +458,7 @@ files:
 
   - name: CoinInS10TokenRejected.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/CoinInS10TokenRejected.wav"
     required: false
     bundled: true
     category: game_data
@@ -467,7 +467,7 @@ files:
 
   - name: CoinInS10TokenSwitch.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/CoinInS10TokenSwitch.wav"
     required: false
     bundled: true
     category: game_data
@@ -476,7 +476,7 @@ files:
 
   - name: S1Locked.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/S1Locked.wav"
     required: false
     bundled: true
     category: game_data
@@ -487,7 +487,7 @@ files:
 
   - name: CoinInDrop.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/CoinInDrop.wav"
     required: false
     bundled: true
     category: game_data
@@ -496,7 +496,7 @@ files:
 
   - name: CoinDropReject.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/CoinDropReject.wav"
     required: false
     bundled: true
     category: game_data
@@ -507,7 +507,7 @@ files:
 
   - name: LockoutOn.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/LockoutOn.wav"
     required: false
     bundled: true
     category: game_data
@@ -516,7 +516,7 @@ files:
 
   - name: LockoutOff.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/LockoutOff.wav"
     required: false
     bundled: true
     category: game_data
@@ -527,7 +527,7 @@ files:
 
   - name: Stepper.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/Stepper.wav"
     required: false
     bundled: true
     category: game_data
@@ -542,7 +542,7 @@ files:
 
   - name: PrizeMotor.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/PrizeMotor.wav"
     required: false
     bundled: true
     category: game_data
@@ -551,7 +551,7 @@ files:
 
   - name: PrizeVend.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/PrizeVend.wav"
     required: false
     bundled: true
     category: game_data
@@ -563,7 +563,7 @@ files:
 
   - name: PullHandleSlow.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/PullHandleSlow.wav"
     required: false
     bundled: true
     category: game_data
@@ -572,7 +572,7 @@ files:
 
   - name: PullHandleNormal.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/PullHandleNormal.wav"
     required: false
     bundled: true
     category: game_data
@@ -581,7 +581,7 @@ files:
 
   - name: PullHandleFast.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/PullHandleFast.wav"
     required: false
     bundled: true
     category: game_data
@@ -590,7 +590,7 @@ files:
 
   - name: PullHandleRelease.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/PullHandleRelease.wav"
     required: false
     bundled: true
     category: game_data
@@ -601,7 +601,7 @@ files:
 
   - name: MotorOn.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/MotorOn.wav"
     required: false
     bundled: true
     category: game_data
@@ -610,7 +610,7 @@ files:
 
   - name: Wiper.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/Wiper.wav"
     required: false
     bundled: true
     category: game_data
@@ -619,7 +619,7 @@ files:
 
   - name: SolenoidOn.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/SolenoidOn.wav"
     required: false
     bundled: true
     category: game_data
@@ -628,7 +628,7 @@ files:
 
   - name: SolenoidOff.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/SolenoidOff.wav"
     required: false
     bundled: true
     category: game_data
@@ -637,7 +637,7 @@ files:
 
   - name: BellOn.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/BellOn.wav"
     required: false
     bundled: true
     category: game_data
@@ -646,7 +646,7 @@ files:
 
   - name: BellOff.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/BellOff.wav"
     required: false
     bundled: true
     category: game_data
@@ -655,7 +655,7 @@ files:
 
   - name: Buzzer.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/Buzzer.wav"
     required: false
     bundled: true
     category: game_data
@@ -664,7 +664,7 @@ files:
 
   - name: Sounder.wav
     system: fruitmachine
-    path: "DefaultSounds/"
+    path: "DefaultSounds/Sounder.wav"
     required: false
     category: game_data
     description: "Feature sounder activated on an EM machine"

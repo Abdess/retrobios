@@ -106,7 +106,7 @@ files:
     size: 65536
     sha1: "5a5cb5a77d7d55ee69657c2f870416daed52dea7"
     validation: [sha1, size]
-    source_ref: "mt32.cpp:110,154-160, munt ROMInfo.cpp:59,89"
+    source_ref: "src/midi/mt32.cpp:110, src/midi/mt32.cpp:154-160, munt ROMInfo.cpp:59, munt ROMInfo.cpp:89"
 
   - name: "ctrl_mt32_1_05.rom"
     path: "mt32-roms/ctrl_mt32_1_05.rom"
@@ -115,7 +115,7 @@ files:
     size: 65536
     sha1: "e17a3a6d265bf1fa150312061134293d2b58288c"
     validation: [sha1, size]
-    source_ref: "mt32.cpp:114,162-168, munt ROMInfo.cpp:62,92"
+    source_ref: "src/midi/mt32.cpp:114, src/midi/mt32.cpp:162-168, munt ROMInfo.cpp:62, munt ROMInfo.cpp:92"
 
   - name: "ctrl_mt32_1_06.rom"
     path: "mt32-roms/ctrl_mt32_1_06.rom"
@@ -124,7 +124,7 @@ files:
     size: 65536
     sha1: "a553481f4e2794c10cfe597fef154eef0d8257de"
     validation: [sha1, size]
-    source_ref: "mt32.cpp:118,170-176, munt ROMInfo.cpp:65,95"
+    source_ref: "src/midi/mt32.cpp:118, src/midi/mt32.cpp:170-176, munt ROMInfo.cpp:65, munt ROMInfo.cpp:95"
 
   - name: "ctrl_mt32_1_07.rom"
     path: "mt32-roms/ctrl_mt32_1_07.rom"
@@ -133,7 +133,7 @@ files:
     size: 65536
     sha1: "b083518fffb7f66b03c23b7eb4f868e62dc5a987"
     validation: [sha1, size]
-    source_ref: "mt32.cpp:122,178-184, munt ROMInfo.cpp:68,98"
+    source_ref: "src/midi/mt32.cpp:122, src/midi/mt32.cpp:178-184, munt ROMInfo.cpp:68, munt ROMInfo.cpp:98"
 
   - name: "ctrl_mt32_bluer.rom"
     path: "mt32-roms/ctrl_mt32_bluer.rom"
@@ -142,7 +142,7 @@ files:
     size: 65536
     sha1: "7b8c2a5ddb42fd0732e2f22b3340dcf5360edf92"
     validation: [sha1, size]
-    source_ref: "mt32.cpp:126,186-192, munt ROMInfo.cpp:71,101"
+    source_ref: "src/midi/mt32.cpp:126, src/midi/mt32.cpp:186-192, munt ROMInfo.cpp:71, munt ROMInfo.cpp:101"
 
   # -- MT-32 v2.x control ROMs, full images (131072 bytes) --
   # MAME dumps mt32_2.0.3.ic28, mt32_2.0.4.ic28 and mt32_2.0.7.ic28.
@@ -154,7 +154,7 @@ files:
     size: 131072
     sha1: "5837064c9df4741a55f7c4d8787ac158dff2d3ce"
     validation: [sha1, size]
-    source_ref: "mt32.cpp:130,194-200, munt ROMInfo.cpp:73,103"
+    source_ref: "src/midi/mt32.cpp:130, src/midi/mt32.cpp:194-200, munt ROMInfo.cpp:73, munt ROMInfo.cpp:103"
 
   - name: "ctrl_mt32_2_04.rom"
     path: "mt32-roms/ctrl_mt32_2_04.rom"
@@ -163,7 +163,7 @@ files:
     size: 131072
     sha1: "2c16432b6c73dd2a3947cba950a0f4c19d6180eb"
     validation: [sha1, size]
-    source_ref: "mt32.cpp:132,202-208, munt ROMInfo.cpp:74,104"
+    source_ref: "src/midi/mt32.cpp:132, src/midi/mt32.cpp:202-208, munt ROMInfo.cpp:74, munt ROMInfo.cpp:104"
 
   - name: "ctrl_mt32_2_06.rom"
     path: "mt32-roms/ctrl_mt32_2_06.rom"
@@ -172,7 +172,7 @@ files:
     size: 131072
     sha1: "2869cf4c235d671668cfcb62415e2ce8323ad4ed"
     validation: [sha1, size]
-    source_ref: "mt32.cpp:134,210-216, munt ROMInfo.cpp:75,105"
+    source_ref: "src/midi/mt32.cpp:134, src/midi/mt32.cpp:210-216, munt ROMInfo.cpp:75, munt ROMInfo.cpp:105"
 
   - name: "ctrl_mt32_2_07.rom"
     path: "mt32-roms/ctrl_mt32_2_07.rom"
@@ -181,7 +181,7 @@ files:
     size: 131072
     sha1: "47b52adefedaec475c925e54340e37673c11707c"
     validation: [sha1, size]
-    source_ref: "mt32.cpp:136,218-224, munt ROMInfo.cpp:76,106"
+    source_ref: "src/midi/mt32.cpp:136, src/midi/mt32.cpp:218-224, munt ROMInfo.cpp:76, munt ROMInfo.cpp:106"
 
   # -- CM-32L family control ROMs, full images (65536 bytes) --
   # MAME dumps lapc-i.v1.0.0.ic3.bin and cm32l_control.rom.
@@ -193,7 +193,7 @@ files:
     size: 65536
     sha1: "73683d585cd6948cc19547942ca0e14a0319456d"
     validation: [sha1, size]
-    source_ref: "mt32.cpp:143,226-232, munt ROMInfo.cpp:77,107"
+    source_ref: "src/midi/mt32.cpp:143, src/midi/mt32.cpp:226-232, munt ROMInfo.cpp:77, munt ROMInfo.cpp:107"
 
   - name: "ctrl_cm32l_1_02.rom"
     path: "mt32-roms/ctrl_cm32l_1_02.rom"
@@ -202,7 +202,7 @@ files:
     size: 65536
     sha1: "a439fbb390da38cada95a7cbb1d6ca199cd66ef8"
     validation: [sha1, size]
-    source_ref: "mt32.cpp:144,234-240, munt ROMInfo.cpp:78,108"
+    source_ref: "src/midi/mt32.cpp:144, src/midi/mt32.cpp:234-240, munt ROMInfo.cpp:78, munt ROMInfo.cpp:108"
 
   - name: "ctrl_cm32ln_1_00.rom"
     path: "mt32-roms/ctrl_cm32ln_1_00.rom"
@@ -211,7 +211,7 @@ files:
     size: 65536
     sha1: "dc1c5b1b90a4646d00f7daf3679733c7badc7077"
     validation: [sha1, size]
-    source_ref: "mt32.cpp:145,242-248, munt ROMInfo.cpp:79,109"
+    source_ref: "src/midi/mt32.cpp:145, src/midi/mt32.cpp:242-248, munt ROMInfo.cpp:79, munt ROMInfo.cpp:109"
 
   # -- MT-32 control ROM chip dumps (32768 bytes each) --
   # The _a dump holds the even bytes, the _b dump the odd ones; munt
@@ -226,7 +226,7 @@ files:
     size: 32768
     sha1: "9cd4858014c4e8a9dff96053f784bfaac1092a2e"
     validation: [sha1, size]
-    source_ref: "mt32.cpp:111,154-160, munt ROMInfo.cpp:57,87"
+    source_ref: "src/midi/mt32.cpp:111, src/midi/mt32.cpp:154-160, munt ROMInfo.cpp:57, munt ROMInfo.cpp:87"
 
   - name: "ctrl_mt32_1_04_b.rom"
     path: "mt32-roms/ctrl_mt32_1_04_b.rom"
@@ -235,7 +235,7 @@ files:
     size: 32768
     sha1: "fe8db469b5bfeb37edb269fd47e3ce6d91014652"
     validation: [sha1, size]
-    source_ref: "mt32.cpp:112,154-160, munt ROMInfo.cpp:58,88"
+    source_ref: "src/midi/mt32.cpp:112, src/midi/mt32.cpp:154-160, munt ROMInfo.cpp:58, munt ROMInfo.cpp:88"
 
   - name: "ctrl_mt32_1_05_a.rom"
     path: "mt32-roms/ctrl_mt32_1_05_a.rom"
@@ -244,7 +244,7 @@ files:
     size: 32768
     sha1: "57a09d80d2f7ca5b9734edbe9645e6e700f83701"
     validation: [sha1, size]
-    source_ref: "mt32.cpp:115,162-168, munt ROMInfo.cpp:60,90"
+    source_ref: "src/midi/mt32.cpp:115, src/midi/mt32.cpp:162-168, munt ROMInfo.cpp:60, munt ROMInfo.cpp:90"
 
   - name: "ctrl_mt32_1_05_b.rom"
     path: "mt32-roms/ctrl_mt32_1_05_b.rom"
@@ -253,7 +253,7 @@ files:
     size: 32768
     sha1: "52e3c6666db9ef962591a8ee99be0cde17f3a6b6"
     validation: [sha1, size]
-    source_ref: "mt32.cpp:116,162-168, munt ROMInfo.cpp:61,91"
+    source_ref: "src/midi/mt32.cpp:116, src/midi/mt32.cpp:162-168, munt ROMInfo.cpp:61, munt ROMInfo.cpp:91"
 
   - name: "ctrl_mt32_1_06_a.rom"
     path: "mt32-roms/ctrl_mt32_1_06_a.rom"
@@ -262,7 +262,7 @@ files:
     size: 32768
     sha1: "cc83bf23cee533097fb4c7e2c116e43b50ebacc8"
     validation: [sha1, size]
-    source_ref: "mt32.cpp:119,170-176, munt ROMInfo.cpp:63,93"
+    source_ref: "src/midi/mt32.cpp:119, src/midi/mt32.cpp:170-176, munt ROMInfo.cpp:63, munt ROMInfo.cpp:93"
 
   - name: "ctrl_mt32_1_06_b.rom"
     path: "mt32-roms/ctrl_mt32_1_06_b.rom"
@@ -271,7 +271,7 @@ files:
     size: 32768
     sha1: "bf4f15666bc46679579498386704893b630c1171"
     validation: [sha1, size]
-    source_ref: "mt32.cpp:120,170-176, munt ROMInfo.cpp:64,94"
+    source_ref: "src/midi/mt32.cpp:120, src/midi/mt32.cpp:170-176, munt ROMInfo.cpp:64, munt ROMInfo.cpp:94"
 
   - name: "ctrl_mt32_1_07_a.rom"
     path: "mt32-roms/ctrl_mt32_1_07_a.rom"
@@ -280,7 +280,7 @@ files:
     size: 32768
     sha1: "13f06b38f0d9e0fc050b6503ab777bb938603260"
     validation: [sha1, size]
-    source_ref: "mt32.cpp:123,178-184, munt ROMInfo.cpp:66,96"
+    source_ref: "src/midi/mt32.cpp:123, src/midi/mt32.cpp:178-184, munt ROMInfo.cpp:66, munt ROMInfo.cpp:96"
 
   - name: "ctrl_mt32_1_07_b.rom"
     path: "mt32-roms/ctrl_mt32_1_07_b.rom"
@@ -289,7 +289,7 @@ files:
     size: 32768
     sha1: "c55e165487d71fa88bd8c5e9c083bc456c1a89aa"
     validation: [sha1, size]
-    source_ref: "mt32.cpp:124,178-184, munt ROMInfo.cpp:67,97"
+    source_ref: "src/midi/mt32.cpp:124, src/midi/mt32.cpp:178-184, munt ROMInfo.cpp:67, munt ROMInfo.cpp:97"
 
   - name: "ctrl_mt32_bluer_a.rom"
     path: "mt32-roms/ctrl_mt32_bluer_a.rom"
@@ -298,7 +298,7 @@ files:
     size: 32768
     sha1: "11a6ae5d8b6ee328b371af7f1e40b82125aa6b4d"
     validation: [sha1, size]
-    source_ref: "mt32.cpp:127,186-192, munt ROMInfo.cpp:69,99"
+    source_ref: "src/midi/mt32.cpp:127, src/midi/mt32.cpp:186-192, munt ROMInfo.cpp:69, munt ROMInfo.cpp:99"
 
   - name: "ctrl_mt32_bluer_b.rom"
     path: "mt32-roms/ctrl_mt32_bluer_b.rom"
@@ -307,7 +307,7 @@ files:
     size: 32768
     sha1: "e0934320d7cbb5edfaa29e0d01ae835ef620085b"
     validation: [sha1, size]
-    source_ref: "mt32.cpp:128,186-192, munt ROMInfo.cpp:70,100"
+    source_ref: "src/midi/mt32.cpp:128, src/midi/mt32.cpp:186-192, munt ROMInfo.cpp:70, munt ROMInfo.cpp:100"
 
   # -- PCM ROMs --
   # Every MT-32 model, v1.x and v2.x, pairs with the MT-32 PCM ROM. The CM-32L
@@ -325,7 +325,7 @@ files:
     note: >
       also serves as the first half of the CM-32L PCM ROM, paired with
       pcm_cm32l_h.rom
-    source_ref: "mt32.cpp:138,151, munt ROMInfo.cpp:83,113,115"
+    source_ref: "src/midi/mt32.cpp:138, src/midi/mt32.cpp:151, munt ROMInfo.cpp:83, munt ROMInfo.cpp:113, munt ROMInfo.cpp:115"
 
   - name: "pcm_mt32_l.rom"
     path: "mt32-roms/pcm_mt32_l.rom"
@@ -334,7 +334,7 @@ files:
     size: 262144
     sha1: "3a1e19b0cd4036623fd1d1d11f5f25995585962b"
     validation: [sha1, size]
-    source_ref: "mt32.cpp:139, munt ROMInfo.cpp:81,111"
+    source_ref: "src/midi/mt32.cpp:139, munt ROMInfo.cpp:81, munt ROMInfo.cpp:111"
 
   - name: "pcm_mt32_h.rom"
     path: "mt32-roms/pcm_mt32_h.rom"
@@ -343,7 +343,7 @@ files:
     size: 262144
     sha1: "2cadb99d21a6a4a6f5b61b6218d16e9b43f61d01"
     validation: [sha1, size]
-    source_ref: "mt32.cpp:140, munt ROMInfo.cpp:82,112"
+    source_ref: "src/midi/mt32.cpp:140, munt ROMInfo.cpp:82, munt ROMInfo.cpp:112"
 
   - name: "pcm_cm32l.rom"
     path: "mt32-roms/pcm_cm32l.rom"
@@ -352,7 +352,7 @@ files:
     size: 1048576
     sha1: "289cc298ad532b702461bfc738009d9ebe8025ea"
     validation: [sha1, size]
-    source_ref: "mt32.cpp:147,226-248, munt ROMInfo.cpp:85,117"
+    source_ref: "src/midi/mt32.cpp:147, src/midi/mt32.cpp:226-248, munt ROMInfo.cpp:85, munt ROMInfo.cpp:117"
 
   - name: "pcm_cm32l_h.rom"
     path: "mt32-roms/pcm_cm32l_h.rom"
@@ -361,7 +361,7 @@ files:
     size: 524288
     sha1: "3ad889fde5db5b6437cbc2eb6e305312fec3df93"
     validation: [sha1, size]
-    source_ref: "mt32.cpp:148, munt ROMInfo.cpp:84,116"
+    source_ref: "src/midi/mt32.cpp:148, munt ROMInfo.cpp:84, munt ROMInfo.cpp:116"
 
   # -- Roland SC-55 wave ROMs --
   # Shared by every SC-55 firmware version. The plugin scans one model
@@ -599,7 +599,7 @@ files:
       any SoundFont loads; GeneralUser GS, Fluid R3, the AWE32 4MB GM/GS/MT
       bank and the Trevor0402 SC-55 SoundFont are recognised by filename or
       RIFF INFO name and get their own reverb, chorus and filter presets
-    source_ref: "fluidsynth.cpp:672-689, 816-883, 1229-1242"
+    source_ref: "src/midi/fluidsynth.cpp:672-689, src/midi/fluidsynth.cpp:816-883, src/midi/fluidsynth.cpp:1229-1242"
 
   # -- PCjr system ROM --
 
@@ -613,7 +613,7 @@ files:
       the host working directory; bytes 0x3000 to 0xDFFF are copied to
       physical F3000. A short read leaves the region untouched and the
       cartridge still boots
-    source_ref: "boot.cpp:379-397, 83-124"
+    source_ref: "src/dos/programs/boot.cpp:379-397, src/dos/programs/boot.cpp:83-124"
 
   # -- LOADROM images --
   # Read from the mounted DOS drive under the name given on the command line
@@ -627,7 +627,7 @@ files:
     note: >
       accepted when the file is exactly 32768 bytes, starts with E9 8F 7E and
       carries the string IBM at offset 0x4CD4
-    source_ref: "loadrom.cpp:56-80,95"
+    source_ref: "src/dos/programs/loadrom.cpp:56-80, src/dos/programs/loadrom.cpp:95"
 
   - name: "Video BIOS ROM"
     description: "Option ROM image mapped at C000:0 and initialised"
@@ -639,4 +639,4 @@ files:
       accepted when the file is 16384 bytes or larger, starts with 55 AA,
       has byte 3 masked to E8 and carries the string IBM at offset 0x1E;
       needs an EGA or better machine type
-    source_ref: "loadrom.cpp:56-75,88-93"
+    source_ref: "src/dos/programs/loadrom.cpp:56-75, src/dos/programs/loadrom.cpp:88-93"

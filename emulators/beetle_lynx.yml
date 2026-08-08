@@ -4,7 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/beetle-lynx-libretro"
 upstream: "https://mednafen.github.io/"
 profiled_date: "2026-03-24"
-source_commit: "efd1797c7aa5a83c354507b1b61ac24222ebaa58"
+source_commit: "fcdefcfb3c11d6d2e71be076a5d3df2e88ab73ed"
 core_version: "v1.24.0"
 display_name: "Atari - Lynx (Beetle Lynx)"
 cores: [mednafen_lynx]
@@ -32,5 +32,5 @@ files:
     required: true
     size: 512
     crc32: "0d973c9d"
-    source_ref: "libretro.cpp:191, rom.cpp:50-78, cart.cpp:67"
+    source_ref: "libretro.cpp:191, mednafen/lynx/rom.cpp:50-78, mednafen/lynx/cart.cpp:67"
     note: "512-byte boot ROM. Core silently degrades without it but games will not run."

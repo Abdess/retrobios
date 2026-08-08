@@ -65,7 +65,7 @@ files:
     path: "mame2003/history.dat"
     required: false
     category: game_data
-    source_ref: "src/datafile.c:327, src/datafile.c:578"
+    source_ref: "src/datafile.c:327, src/datafile.c:563"
     note: "game history and information database"
 
   - name: mameinfo.dat
@@ -146,14 +146,14 @@ files:
     required: true
     category: bios_zip
     system: sega-megaplay
-    source_ref: "src/drivers/segac2.c:4483"
+    source_ref: "src/drivers/segac2.c:4468"
 
   # Sega Mega Tech
   - name: megatech.zip
     required: true
     category: bios_zip
     system: sega-megatech
-    source_ref: "src/drivers/segac2.c:4405"
+    source_ref: "src/drivers/segac2.c:4390"
 
   # DECO Cassette
   - name: decocass.zip

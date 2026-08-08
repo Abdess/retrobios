@@ -4,7 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/desmume"
 upstream: "https://github.com/TASEmulators/desmume"
 profiled_date: "2026-03-23"
-source_commit: "7f05a8d447b00acd9e0798aee97b4f72eb505ef9"
+source_commit: "ae0f7f51f96d9b5741b47b425505a4a4224b91fa"
 core_version: "SVN"
 display_name: "Nintendo - DS (DeSmuME)"
 cores: [desmume]
@@ -24,7 +24,7 @@ files:
     hle_fallback: true
     size: 16384
     validation: [size]
-    source_ref: "desmume/src/NDSSystem.cpp:2178-2182, frontend/libretro/libretro.cpp:763"
+    source_ref: "desmume/src/NDSSystem.cpp:2178-2182, desmume/src/frontend/libretro/libretro.cpp:763"
     note: "Native file needed for firmware boot and SWI-from-BIOS accuracy"
 
   - name: "bios9.bin"
@@ -34,7 +34,7 @@ files:
     hle_fallback: true
     size: 4096
     validation: [size]
-    source_ref: "desmume/src/NDSSystem.cpp:2236-2239, frontend/libretro/libretro.cpp:764"
+    source_ref: "desmume/src/NDSSystem.cpp:2236-2239, desmume/src/frontend/libretro/libretro.cpp:764"
     note: "Native file needed for firmware boot and logo comparison (Pal Park)"
 
   - name: "firmware.bin"
@@ -42,5 +42,5 @@ files:
     description: "NDS firmware image"
     required: false
     hle_fallback: true
-    source_ref: "desmume/src/firmware.cpp:249-280, frontend/libretro/libretro.cpp:765"
+    source_ref: "desmume/src/firmware.cpp:249-280, desmume/src/frontend/libretro/libretro.cpp:765"
     note: "Loaded only if both BIOS files present; needed for boot animation, wifi config, user settings"

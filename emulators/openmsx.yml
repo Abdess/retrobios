@@ -3,7 +3,7 @@ type: standalone
 source: "https://github.com/openMSX/openMSX"
 upstream: "https://github.com/openMSX/openMSX"
 profiled_date: "2026-03-26"
-source_commit: "8965ec15372f3d542ac5fac6a0a63dd872a8a4fe"
+source_commit: "632d46cc00015bc37be6cbb63cacb70e90434094"
 core_version: "21.0"
 display_name: "MSX / ColecoVision / Spectravideo (openMSX)"
 cores:
@@ -70,14 +70,14 @@ files:
     required: true
     description: "Sanyo PHC-70FD2 MSX-BASIC Kun compiler ROM"
     validation: [sha1]
-    source_ref: "share/machines/Boosted_MSX2_EN.xml:89, Boosted_MSX2+_JP.xml:167, Boosted_MSXturboR_with_IDE.xml:79"
+    source_ref: "share/machines/Boosted_MSX2_EN.xml:89, share/machines/Boosted_MSX2+_JP.xml:167, share/machines/Boosted_MSXturboR_with_IDE.xml:79"
 
   - name: yrw801.rom
     sha1: 32760893ce06dbe3930627755ba065cc3d8ec6ca
     required: true
     description: "Yamaha YRW801 MoonSound wavetable ROM"
     validation: [sha1]
-    source_ref: "share/machines/Boosted_MSX2_EN.xml:186, Boosted_MSX2+_JP.xml:120, Boosted_MSXturboR_with_IDE.xml:202"
+    source_ref: "share/machines/Boosted_MSX2_EN.xml:186, share/machines/Boosted_MSX2+_JP.xml:120, share/machines/Boosted_MSXturboR_with_IDE.xml:203"
 
   # -------------------------------------------------------
   # Boosted_MSX2+_JP (msx2+)
@@ -131,7 +131,7 @@ files:
     required: true
     description: "Kanji font ROM (shared by FS-A1WSX and FS-A1GT machines)"
     validation: [sha1]
-    source_ref: "share/machines/Boosted_MSX2+_JP.xml:28, Boosted_MSXturboR_with_IDE.xml:215"
+    source_ref: "share/machines/Boosted_MSX2+_JP.xml:28, share/machines/Boosted_MSXturboR_with_IDE.xml:216"
 
   # -------------------------------------------------------
   # Boosted_MSXturboR_with_IDE (msxturbor)

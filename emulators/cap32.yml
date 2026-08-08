@@ -76,7 +76,7 @@ files:
     mode: standalone
     size: 16384
     note: "AMSDOS disc ROM (sideways slot 7)"
-    source_ref: "src/cap32.cpp:1190"
+    source_ref: "src/cap32.cpp:1202"
   - name: system.cpr
     system: amstrad-cpc
     required: false
@@ -90,7 +90,7 @@ files:
     mode: standalone
     size: 8192
     note: "Multiface 2 ROM"
-    source_ref: "caprice32/rom/MF2.rom, src/cap32.cpp:1268-1287"
+    source_ref: "caprice32/rom/MF2.rom, src/cap32.cpp:1280-1299"
 
 platform_details:
   bios_mapping:

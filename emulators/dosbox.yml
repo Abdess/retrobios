@@ -4,7 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/dosbox-libretro"
 upstream: "https://sourceforge.net/projects/dosbox/"
 profiled_date: "2026-03-23"
-source_commit: "4cf18ddf91c3f5faa4c715ed715d449d8a6f6f6c"
+source_commit: "4024bf0048c261db58ef98cb5e16de291c429f4e"
 core_version: "0.74"
 display_name: "DOS (DOSBox)"
 cores: [dosbox]
@@ -40,7 +40,7 @@ files:
     sha1: "5a5cb5a77d7d55ee69657c2f870416daed52dea7"
     validation: [sha1, size]
     mode: libretro
-    source_ref: "midi_mt32.h:92, munt/ROMInfo.cpp:30"
+    source_ref: "src/midi/midi_mt32.h:92, src/midi/munt/ROMInfo.cpp:30"
 
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control v1.05"
@@ -50,7 +50,7 @@ files:
     sha1: "e17a3a6d265bf1fa150312061134293d2b58288c"
     validation: [sha1, size]
     mode: libretro
-    source_ref: "midi_mt32.h:92, munt/ROMInfo.cpp:31"
+    source_ref: "src/midi/midi_mt32.h:92, src/midi/munt/ROMInfo.cpp:31"
 
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control v1.06"
@@ -60,7 +60,7 @@ files:
     sha1: "a553481f4e2794c10cfe597fef154eef0d8257de"
     validation: [sha1, size]
     mode: libretro
-    source_ref: "midi_mt32.h:92, munt/ROMInfo.cpp:32"
+    source_ref: "src/midi/midi_mt32.h:92, src/midi/munt/ROMInfo.cpp:32"
 
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control v1.07"
@@ -70,7 +70,7 @@ files:
     sha1: "b083518fffb7f66b03c23b7eb4f868e62dc5a987"
     validation: [sha1, size]
     mode: libretro
-    source_ref: "midi_mt32.h:92, munt/ROMInfo.cpp:33"
+    source_ref: "src/midi/midi_mt32.h:92, src/midi/munt/ROMInfo.cpp:33"
 
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control BlueRidge"
@@ -80,7 +80,7 @@ files:
     sha1: "7b8c2a5ddb42fd0732e2f22b3340dcf5360edf92"
     validation: [sha1, size]
     mode: libretro
-    source_ref: "midi_mt32.h:92, munt/ROMInfo.cpp:34"
+    source_ref: "src/midi/midi_mt32.h:92, src/midi/munt/ROMInfo.cpp:34"
 
   # -- CM-32L / LAPC-I Control ROMs --
   # Same fixed filename MT32_CONTROL.ROM — no CM32L_CONTROL.ROM in this core.
@@ -93,7 +93,7 @@ files:
     sha1: "73683d585cd6948cc19547942ca0e14a0319456d"
     validation: [sha1, size]
     mode: libretro
-    source_ref: "midi_mt32.h:92, munt/ROMInfo.cpp:36"
+    source_ref: "src/midi/midi_mt32.h:92, src/midi/munt/ROMInfo.cpp:36"
 
   - name: "MT32_CONTROL.ROM"
     description: "CM-32L/LAPC-I Control v1.02"
@@ -103,7 +103,7 @@ files:
     sha1: "a439fbb390da38cada95a7cbb1d6ca199cd66ef8"
     validation: [sha1, size]
     mode: libretro
-    source_ref: "midi_mt32.h:92, munt/ROMInfo.cpp:37"
+    source_ref: "src/midi/midi_mt32.h:92, src/midi/munt/ROMInfo.cpp:37"
 
   # -- PCM ROMs --
   # Loaded from system_directory/MT32_PCM.ROM.
@@ -117,7 +117,7 @@ files:
     sha1: "f6b1eebc4b2d200ec6d3d21d51325d5b48c60252"
     validation: [sha1, size]
     mode: libretro
-    source_ref: "midi_mt32.h:99, munt/ROMInfo.cpp:39"
+    source_ref: "src/midi/midi_mt32.h:99, src/midi/munt/ROMInfo.cpp:39"
 
   - name: "MT32_PCM.ROM"
     description: "CM-32L/CM-64/LAPC-I PCM ROM"
@@ -127,4 +127,4 @@ files:
     sha1: "289cc298ad532b702461bfc738009d9ebe8025ea"
     validation: [sha1, size]
     mode: libretro
-    source_ref: "midi_mt32.h:99, munt/ROMInfo.cpp:40"
+    source_ref: "src/midi/midi_mt32.h:99, src/midi/munt/ROMInfo.cpp:40"

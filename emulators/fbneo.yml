@@ -100,7 +100,7 @@ files:
     size: 131072
     crc32: "9036d879"
     note: "MVS Asia/Europe ver. 5 (1 slot)"
-    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1645"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1665"
 
   - name: "sp-s.sp1"
     archive: neogeo.zip
@@ -109,7 +109,7 @@ files:
     size: 131072
     crc32: "c7f2fa45"
     note: "MVS Asia/Europe ver. 3 (4 slot)"
-    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1646"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1666"
 
   - name: "sp-u2.sp1"
     aliases: ["usa_2slt.bin"]
@@ -119,7 +119,7 @@ files:
     size: 131072
     crc32: "e72943de"
     note: "MVS USA ver. 5 (2 slot)"
-    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1647"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1667"
 
   - name: "sp1-u2"
     archive: neogeo.zip
@@ -128,7 +128,7 @@ files:
     size: 131072
     crc32: "62f021f4"
     note: "MVS USA ver. 5 (4 slot)"
-    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1648"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1668"
 
   - name: "sp-e.sp1"
     archive: neogeo.zip
@@ -137,7 +137,7 @@ files:
     size: 131072
     crc32: "2723a5b5"
     note: "MVS USA ver. 5 (6 slot)"
-    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1649"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1669"
 
   - name: "sp1-u4.bin"
     archive: neogeo.zip
@@ -146,7 +146,7 @@ files:
     size: 131072
     crc32: "1179a30f"
     note: "MVS USA (U4)"
-    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1650"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1670"
 
   - name: "sp1-u3.bin"
     archive: neogeo.zip
@@ -164,7 +164,7 @@ files:
     size: 131072
     crc32: "f0e8f27d"
     note: "MVS Japan ver. 6"
-    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1652"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1672"
 
   - name: "sp-j2.sp1"
     archive: neogeo.zip
@@ -173,7 +173,7 @@ files:
     size: 131072
     crc32: "acede59c"
     note: "MVS Japan ver. 5"
-    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1653"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1673"
 
   - name: "sp1.jipan.1024"
     archive: neogeo.zip
@@ -182,7 +182,7 @@ files:
     size: 131072
     crc32: "9fb0abe4"
     note: "MVS Japan ver. 3 (4 slot)"
-    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1654"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1674"
 
   - name: "sp-45.sp1"
     archive: neogeo.zip
@@ -209,7 +209,7 @@ files:
     size: 131072
     crc32: "dff6d41f"
     note: "MVS Japan (J3)"
-    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1657"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1677"
 
   - name: "sp1-j3.bin"
     archive: neogeo.zip
@@ -255,7 +255,7 @@ files:
     size: 131072
     crc32: "162f0ebe"
     note: "Deck ver. 6 (Git Ver 1.3)"
-    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1668"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1688"
 
   # Universe BIOS (third-party, multiple versions)
   - name: "uni-bios_4_0.rom"
@@ -265,7 +265,7 @@ files:
     size: 131072
     crc32: "a7aab458"
     note: "Universe BIOS ver. 4.0 (hack)"
-    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1669"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1689"
 
   - name: "uni-bios_3_3.rom"
     archive: neogeo.zip
@@ -274,7 +274,7 @@ files:
     size: 131072
     crc32: "24858466"
     note: "Universe BIOS ver. 3.3 (hack)"
-    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1670"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1690"
 
   - name: "uni-bios_3_2.rom"
     archive: neogeo.zip
@@ -310,7 +310,7 @@ files:
     size: 131072
     crc32: "27664eb5"
     note: "Universe BIOS ver. 2.3 (hack)"
-    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1674"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1694"
 
   - name: "uni-bios_2_3o.rom"
     archive: neogeo.zip
@@ -382,7 +382,7 @@ files:
     size: 131072
     crc32: "5dda0d84"
     note: "Universe BIOS ver. 1.1 (hack)"
-    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1682"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1702"
 
   - name: "uni-bios_1_0.rom"
     archive: neogeo.zip
@@ -400,7 +400,7 @@ files:
     size: 131072
     crc32: "cb915e76"
     note: "NeoOpen BIOS v0.1 beta (hack)"
-    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1685"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1705"
 
   # Neo Geo shared ROMs (always required)
   - name: "sm1.sm1"
@@ -428,7 +428,7 @@ files:
     size: 131072
     crc32: "5a86cff2"
     note: "Zoom lookup table"
-    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1694"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1714"
 
   # -------------------------------------------------------
   # Neo Geo Trackball BIOS (for irrmaze)
@@ -470,7 +470,7 @@ files:
     size: 524288
     crc32: "148dd727"
     note: "PCB BIOS for KOF 2003 PCB"
-    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1919"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1939"
 
   # -------------------------------------------------------
   # Neo Geo CDZ (neocdz.zip)
@@ -491,7 +491,7 @@ files:
     size: 524288
     crc32: "42f6b6c4"
     note: "Neo Geo CDZ custom BIOS by SMKDan"
-    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:2004"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:2024"
 
   - name: "uni-bioscd33.rom"
     archive: neocdz.zip
@@ -500,7 +500,7 @@ files:
     size: 524288
     crc32: "ff3abc59"
     note: "Universe BIOS CD ver. 3.3 (hack)"
-    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:2005"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:2025"
 
   - name: "uni-bioscd32.rom"
     archive: neocdz.zip
@@ -1336,7 +1336,7 @@ files:
     size: 131072  # 0x20000
     crc32: "2292585c"
     note: "ISG Selection Master Type 2006 BIOS"
-    source_ref: "src/burn/drv/sega/d_sys16b.cpp:11495"
+    source_ref: "src/burn/drv/sega/d_sys16b.cpp:11720"
 
   # -------------------------------------------------------
   # NMK16 (nmk004.zip)
@@ -1396,7 +1396,7 @@ files:
     size: 69632  # 0x11000
     crc32: "aa11ee2d"
     note: "Seta ST010 coprocessor microcode"
-    source_ref: "src/burn/drv/snes/d_snes.cpp:577"
+    source_ref: "src/burn/drv/snes/d_snes.cpp:580"
 
   - name: "st011.bin"
     archive: st011.zip
@@ -1405,7 +1405,7 @@ files:
     size: 69632  # 0x11000
     crc32: "34d2952c"
     note: "Seta ST011 coprocessor microcode"
-    source_ref: "src/burn/drv/snes/d_snes.cpp:596"
+    source_ref: "src/burn/drv/snes/d_snes.cpp:599"
 
   - name: "dsp1.bin"
     archive: dsp1.zip
@@ -1414,7 +1414,7 @@ files:
     size: 10240  # 0x2800
     crc32: "2838f9f5"
     note: "DSP-1 coprocessor microcode"
-    source_ref: "src/burn/drv/snes/d_snes.cpp:654"
+    source_ref: "src/burn/drv/snes/d_snes.cpp:676"
 
   - name: "dsp1b.bin"
     archive: dsp1b.zip
@@ -1423,7 +1423,7 @@ files:
     size: 10240  # 0x2800
     crc32: "453557e0"
     note: "DSP-1B coprocessor microcode (revised)"
-    source_ref: "src/burn/drv/snes/d_snes.cpp:673"
+    source_ref: "src/burn/drv/snes/d_snes.cpp:695"
 
   - name: "dsp2.bin"
     archive: dsp2.zip
@@ -1432,7 +1432,7 @@ files:
     size: 10240  # 0x2800
     crc32: "8e9fbd9b"
     note: "DSP-2 coprocessor microcode"
-    source_ref: "src/burn/drv/snes/d_snes.cpp:692"
+    source_ref: "src/burn/drv/snes/d_snes.cpp:714"
 
   - name: "dsp3.bin"
     archive: dsp3.zip
@@ -1441,7 +1441,7 @@ files:
     size: 10240  # 0x2800
     crc32: "6b86728a"
     note: "DSP-3 coprocessor microcode"
-    source_ref: "src/burn/drv/snes/d_snes.cpp:711"
+    source_ref: "src/burn/drv/snes/d_snes.cpp:733"
 
   - name: "dsp4.bin"
     archive: dsp4.zip
@@ -1450,7 +1450,7 @@ files:
     size: 10240  # 0x2800
     crc32: "ce0c7783"
     note: "DSP-4 coprocessor microcode"
-    source_ref: "src/burn/drv/snes/d_snes.cpp:730"
+    source_ref: "src/burn/drv/snes/d_snes.cpp:752"
 
   # -------------------------------------------------------
   # System support files (fbneo/)
@@ -1522,7 +1522,7 @@ files:
     required: true
     size: 163840
     crc32: "5c403cc5"
-    source_ref: "src/burn/drv/snes/d_snes.cpp:662"
+    source_ref: "src/burn/drv/snes/d_snes.cpp:684"
 
   - name: "136032.205.l13"
     archive: atarisy1.zip

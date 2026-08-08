@@ -76,7 +76,7 @@ files:
     system: cdi
     required: false
     note: "CD-i Mono-II (NTSC). MACHINE_NOT_WORKING. Listed in .info as optional."
-    source_ref: "src/mame/drivers/cdi.cpp:337-346"
+    source_ref: "src/mame/drivers/cdi.cpp:210-219"
     contents:
       - name: "philips__cdi-220_ph3_r1.2__mb834200b-15__02f_aa__9402_z04.tc574200-le._1.7211"
         description: Mono-II main CPU BIOS, Philips CDI-220 PH3 R1.2
