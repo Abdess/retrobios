@@ -180,6 +180,7 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
     )
     emulator_count = len(profiles)
     comp = compute_composition(db)
+    missing_total = sum(c["total_missing"] for c in coverages.values())
 
     system_ids: set[str] = set()
     for p in profiles.values():
@@ -290,10 +291,14 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
             " profile exists, the expected hashes and sizes are read from the"
             " emulator's source code (the Source-backed column below).",
             "",
-            f"- **{sum(c['total_missing'] for c in coverages.values())} files missing**"
-            f" from the packs: every file the platforms' emulators load is in the"
-            f" collection. Files needed only by emulators no platform ships yet"
-            f" are counted in the [gap analysis]({SITE_URL}gaps/)",
+            (
+                f"- **{missing_total} files** the platforms' emulators load are"
+                f" not in the collection yet, named in the"
+                f" [gap analysis]({SITE_URL}gaps/)"
+                if missing_total
+                else "- **Nothing missing**: every file the platforms'"
+                " emulators load is in the collection"
+            ),
             f"- **{len(coverages)} platforms** supported with platform-specific verification",
             f"- **{emulator_count} emulators** profiled from source (RetroArch cores + standalone)",
             f"- **{len(system_ids)} systems** covered (NES, SNES, PlayStation, Saturn, Dreamcast, ...)",
@@ -354,8 +359,8 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
             "",
             "## Coverage",
             "",
-            "| Platform | Files in pack | Declared by platform | Required by its emulators | Still missing | Verified by |",
-            "|----------|--------------:|---------------------:|--------------------------:|--------------:|-------------|",
+            "| Platform | Platform list | Its emulators need | Verified by |",
+            "|----------|--------------:|-------------------:|-------------|",
         ]
     )
 
@@ -367,27 +372,23 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
 
     for name, cov in sorted(coverages.items(), key=lambda x: x[1]["platform"]):
         display = f"{cov['platform']} *" if name in archived else cov["platform"]
-        files = manifest_totals(name)[0] or cov["pack_files"]
         checked = mode_labels.get(cov["mode"], cov["mode"])
+        core_total = cov["core_present"] + cov["core_missing"]
+        core_cell = f"{cov['core_present']:,}/{core_total:,}" if core_total else "-"
         lines.append(
-            f"| {display} | {files:,} | {cov['present']:,} |"
-            f" {cov['core_present']:,} | {cov['total_missing']} | {checked} |"
+            f"| {display} | {cov['present']:,}/{cov['total']:,} |"
+            f" {core_cell} | {checked} |"
         )
 
     lines.extend(
         [
             "",
-            "Declared by platform is the platform's own BIOS list. Required by"
-            " its emulators counts what the cores it ships actually load,"
-            " read from their source code, that the list never mentions: it is"
-            " routinely several times the list itself. Both ship in the pack."
-            " Files in pack counts what the ZIP actually holds, each file once"
-            " at its destination, so it does not add up from the two: a file"
-            " several systems need is counted once, and the data directories"
-            " some emulators need are counted too.",
-            "Still missing counts files an emulator needs that are not in the"
-            " collection yet; verified by is the check the platform itself runs"
-            " on them.",
+            "Each fraction reads collected over needed. Platform list is the"
+            " BIOS list the platform publishes. Its emulators need counts what"
+            " the cores it ships actually load, read from their source code,"
+            " that the list never mentions: routinely several times the list"
+            " itself. Both go in the pack, so a full pair means nothing is"
+            " missing. Verified by is the check the platform itself runs.",
             f"The [gap analysis]({SITE_URL}gaps/) page names those missing files"
             " and details how far each platform's files are corroborated against"
             " emulator source code.",

@@ -1734,8 +1734,8 @@ def generate_gap_analysis(
     lines.extend([
         "## What Each Pack Contains",
         "",
-        "| Platform | Files in pack | Declared by platform | Required by its emulators | Still missing | Verified by |",
-        "|----------|--------------:|---------------------:|--------------------------:|--------------:|-------------|",
+        "| Platform | Platform list | Its emulators need | Verified by |",
+        "|----------|--------------:|-------------------:|-------------|",
     ])
 
     mode_labels = {
@@ -1744,35 +1744,33 @@ def generate_gap_analysis(
         "existence": "file presence",
     }
 
+    def _ratio(done: int, total: int) -> str:
+        """A collected-over-needed cell, flagged when short."""
+        if not total:
+            return "-"
+        cell = f"{done:,}/{total:,}"
+        if done < total:
+            return f'<span class="rb-badge rb-badge-danger">{cell}</span>'
+        return cell
+
     for pname, cov in sorted(coverages.items(), key=lambda x: x[1]["platform"]):
         display = cov["platform"]
-        gone = cov["total_missing"]
-        missing_str = (
-            f'<span class="rb-badge rb-badge-danger">{gone}</span>'
-            if gone > 0
-            else '<span class="rb-badge rb-badge-success">0</span>'
-        )
-        files = manifest_totals(pname)[0] or cov["pack_files"]
+        core_total = cov["core_present"] + cov["core_missing"]
         lines.append(
             f"| [{display}](platforms/{pname}.md) "
-            f"| {files:,} "
-            f"| {cov['present']:,} "
-            f"| {cov['core_present']:,} "
-            f"| {missing_str} "
+            f"| {_ratio(cov['present'], cov['total'])} "
+            f"| {_ratio(cov['core_present'], core_total)} "
             f"| {mode_labels.get(cov['mode'], cov['mode'])} |"
         )
     lines.extend([
         "",
-        "Declared by platform is the platform's own BIOS list. Required by its "
-        "emulators counts what the cores it ships actually load, read from "
-        "their source code, that the list never mentions: it is routinely "
-        "several times the list itself. Both ship in the pack. Files in pack "
-        "counts what the ZIP holds, each file once at its destination, so it "
-        "does not add up from the two: a file several systems need is counted "
-        "once, and the data directories some emulators need are counted too. "
-        "Still missing counts files an emulator needs that are not in the "
-        "collection yet, named in the sections below. Verified by is the check "
-        "the platform runs at runtime, replicated here "
+        "Each fraction reads collected over needed. Platform list is the BIOS "
+        "list the platform publishes. Its emulators need counts what the cores "
+        "it ships actually load, read from their source code, that the list "
+        "never mentions: routinely several times the list itself. Both go in "
+        "the pack, so a full pair means nothing is missing; a short one is "
+        "flagged and named in the sections below. Verified by is the check the "
+        "platform runs at runtime, replicated here "
         "([how each mode works](wiki/verification-modes.md)).",
         "",
         "## Corroboration Against Emulator Source",
