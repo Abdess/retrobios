@@ -139,6 +139,23 @@ def _headers(url: str, accept_json: bool = False) -> dict[str, str]:
     return headers
 
 
+def _http_failure(url: str, exc: urllib.error.HTTPError) -> UpstreamError:
+    """Classify an HTTP error. Only a real quota signal is fatal.
+
+    A forge answering 403 is usually refusing the request, not reporting a
+    quota: small Forgejo instances behind anti-bot filters do it routinely.
+    GitHub reports exhaustion with X-RateLimit-Remaining: 0, and 429 is the
+    standard quota status everywhere, so those two are the only fatal cases.
+    """
+    if exc.code == 429:
+        return RateLimitError(f"{url}: HTTP 429")
+    if exc.code == 403 and exc.headers is not None:
+        remaining = exc.headers.get("X-RateLimit-Remaining")
+        if remaining is not None and remaining.strip() == "0":
+            return RateLimitError(f"{url}: HTTP 403, quota exhausted")
+    return UpstreamError(f"{url}: HTTP {exc.code}")
+
+
 def _http_text(url: str) -> str | None:
     """Body of a GET, or None on 404. Replaced in tests."""
     req = urllib.request.Request(url, headers=_headers(url))
@@ -148,9 +165,7 @@ def _http_text(url: str) -> str | None:
     except urllib.error.HTTPError as exc:
         if exc.code == 404:
             return None
-        if exc.code in (403, 429):
-            raise RateLimitError(f"{url}: HTTP {exc.code}") from exc
-        raise UpstreamError(f"{url}: HTTP {exc.code}") from exc
+        raise _http_failure(url, exc) from exc
     except urllib.error.URLError as exc:
         raise UpstreamError(f"{url}: {exc.reason}") from exc
 
@@ -164,9 +179,7 @@ def _http_json(url: str) -> object | None:
     except urllib.error.HTTPError as exc:
         if exc.code == 404:
             return None
-        if exc.code in (403, 429):
-            raise RateLimitError(f"{url}: HTTP {exc.code}") from exc
-        raise UpstreamError(f"{url}: HTTP {exc.code}") from exc
+        raise _http_failure(url, exc) from exc
     except urllib.error.URLError as exc:
         raise UpstreamError(f"{url}: {exc.reason}") from exc
 

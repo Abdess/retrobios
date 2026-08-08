@@ -6,6 +6,7 @@ import os
 import sys
 import tempfile
 import unittest
+import urllib.error
 from pathlib import Path
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
@@ -135,6 +136,43 @@ class TestTokenScope(unittest.TestCase):
         os.environ.pop("GITHUB_TOKEN", None)
         h = upstream._headers("https://api.github.com/repos/o/n")
         self.assertNotIn("Authorization", h)
+
+
+class TestHttpFailure(unittest.TestCase):
+    """Only an actual quota signal may abort a whole run."""
+
+    @staticmethod
+    def _error(code, headers=None):
+        return urllib.error.HTTPError(
+            "https://host/x", code, "msg", headers, None
+        )
+
+    def test_429_is_a_rate_limit(self):
+        self.assertIsInstance(
+            upstream._http_failure("u", self._error(429)), upstream.RateLimitError
+        )
+
+    def test_403_with_exhausted_quota_is_a_rate_limit(self):
+        exc = self._error(403, {"X-RateLimit-Remaining": "0"})
+        self.assertIsInstance(
+            upstream._http_failure("u", exc), upstream.RateLimitError
+        )
+
+    def test_403_with_quota_left_is_not(self):
+        exc = self._error(403, {"X-RateLimit-Remaining": "4970"})
+        failure = upstream._http_failure("u", exc)
+        self.assertIsInstance(failure, upstream.UpstreamError)
+        self.assertNotIsInstance(failure, upstream.RateLimitError)
+
+    def test_bare_403_from_a_forge_is_not_a_rate_limit(self):
+        failure = upstream._http_failure("u", self._error(403))
+        self.assertIsInstance(failure, upstream.UpstreamError)
+        self.assertNotIsInstance(failure, upstream.RateLimitError)
+
+    def test_525_is_a_plain_upstream_error(self):
+        failure = upstream._http_failure("u", self._error(525))
+        self.assertIsInstance(failure, upstream.UpstreamError)
+        self.assertNotIsInstance(failure, upstream.RateLimitError)
 
 
 class TestCache(unittest.TestCase):
