@@ -347,6 +347,44 @@ class TestProvenanceReport(unittest.TestCase):
         self.assertEqual(report["redump"]["matched"], 1)
         missing = [e["name"] for e in report["redump"]["missing"]]
         self.assertEqual(missing, ["ps-41a.bin", "no-sha1.bin"])
+        self.assertEqual(report["redump"]["out_of_scope"], 0)
+        self.assertEqual(
+            report["redump"]["covered_dats"], ["Sony - PlayStation - BIOS Images"]
+        )
+
+    def test_uncovered_dat_entries_are_out_of_scope(self):
+        """Entries from a DAT the collection never matches are not targets.
+
+        No-Intro tags digital title distribution "[BIOS]" too, so an
+        uncovered DAT must not swamp the acquisition list.
+        """
+        entries = _snapshot_entries() + [
+            {
+                "dat": "Nintendo - Wii U (Digital) (CDN)",
+                "name": "00000001.app",
+                "description": "[BIOS] Account Settings (Japan)",
+                "size": 999,
+                "crc32": "aaaaaaaa",
+                "md5": "99999999999999999999999999999999",
+                "sha1": "9999999999999999999999999999999999999999",
+            }
+        ]
+        db = {
+            "files": {
+                "b05def971d8ec59f346f2d9ac21fb742e3eb6917": {
+                    "name": "scph5500.bin",
+                    "size": 524288,
+                    "md5": "8dd7d5296a650fac7319bce665a6a53c",
+                }
+            }
+        }
+        report = build_report(db, {"no-intro": {"entries": entries}})
+        data = report["no-intro"]
+        self.assertEqual(data["out_of_scope"], 1)
+        self.assertNotIn(
+            "Nintendo - Wii U (Digital) (CDN)",
+            [e["dat"] for e in data["missing"]],
+        )
 
 
 if __name__ == "__main__":
