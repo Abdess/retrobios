@@ -1,0 +1,247 @@
+emulator: DOSBox Pure Unleashed
+type: standalone
+core_classification: official_port
+source: "https://github.com/schellingb/dosbox-pure-unleashed"
+upstream: "https://github.com/schellingb/dosbox-pure"
+source_commit: "4a11412248ca4c862751a7d9e6818023795031e9"
+upstream_commit: "7f6e8fb7385fa446d1444d671063268520bf9b54"
+logo: "https://raw.githubusercontent.com/schellingb/dosbox-pure-unleashed/main/images/logo.png"
+profiled_date: "2026-08-08"
+core_version: "1.0-preview6"
+display_name: "DOS (DOSBox Pure Unleashed)"
+cores:
+  - dosbox-pure-unleashed
+  - dosboxpure
+systems:
+  - dos
+mode: standalone
+verification: sha1
+
+notes: |
+  Desktop build of DOSBox Pure by the same author. The repository holds only
+  the platform layer (main.cpp, vfs_implementation.cpp) and compiles the
+  emulation core from a sibling checkout of schellingb/dosbox-pure with
+  -D__LIBRETRO__ -DDBP_STANDALONE, using ZillaLib for video, input and audio.
+  ref: Makefile:7,9-14,34
+
+  No BIOS. Windows 3.x and 9x run as guest operating systems installed into
+  the emulated DOS machine, not as separate emulated hardware.
+
+  System directory: the program keeps DOSBoxPure.cfg in a base directory and
+  creates saves and system folders next to it. Base directory is
+  %APPDATA%\DOSBoxPure on Windows when the user creates that folder, else the
+  directory of the executable; $HOME/.config/DOSBoxPure on Linux and
+  $HOME/Library/Application Support/DOSBoxPure on macOS, else the working
+  directory. The system folder can be redirected with the path_system key in
+  DOSBoxPure.cfg. It is returned to the core as RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY.
+  ref: main.cpp:1985-2045,973-974
+
+  System directory scan (recursive, DBP_ScanSystem):
+    *.SF2 and *.SF3 listed as General MIDI SoundFonts, any file whose last
+    four characters are ".SF" plus one.
+    *_CONTROL.ROM listed as Roland MT-32/CM-32L control ROMs.
+    ref: dosbox_pure_libretro.cpp:1380-1412
+    Both feed the Audio > MIDI SoundFont option, prefixed with the system
+    directory path at apply time.
+    ref: dosbox_pure_libretro.cpp:2495
+    With no MIDI file selected, mpu401 is set to none and games fall back to
+    their OPL or Sound Blaster music driver. A General MIDI over OPL
+    synthesizer is built in and opens on midiconfig=adlib.
+    ref: dosbox_pure_libretro.cpp:2497, midi_opl.h:46-49
+
+  MT-32 pairing: the PCM ROM is not scanned. Its name is derived from the
+  control ROM path by replacing CONTROL with PCM, preserving the case of both
+  letters, so MT32_CONTROL.ROM resolves MT32_PCM.ROM. Open fails unless both
+  are found.
+  ref: midi_mt32.h:182-201,194-195
+  ZIP archives are accepted and picked by size instead of name: 65536 or
+  131072 for control, 524288 or 1048576 for PCM.
+  ref: midi_mt32.h:163
+  Bundled MUNT (header-only mt32emu.h) validates size and SHA1 against a
+  14 entry table and rejects anything else, failing Synth::open.
+  ref: mt32emu.h:5185,2979-2989,3013-3020
+  Each control ROM fixes the PCM size it accepts through its pcmCount: 128
+  requires the 524288 byte MT-32 PCM ROM, 256 requires the 1048576 byte
+  CM-32L PCM ROM. The MT-32 v2.x control ROMs carry pcmCount 128 and so pair
+  with the MT-32 PCM ROM.
+  ref: mt32emu.h:2586-2598,3167,3024-3029
+
+  SoundFonts are parsed by TinySoundFont with no size or hash check. SF3 ogg
+  compressed samples decode through the bundled stb_vorbis.
+  ref: midi_tsf.h:22,65,96-105
+
+  Per game override: a DOSBOX.SF2, or an MT32_PCM.ROM together with an
+  MT32_CONTROL.ROM, found on the mounted C: drive replaces the option value
+  and is marked fixed. The control ROM is matched through its 8.3 forms
+  MT32TROL.ROM inside ZIPs and MT32_C~1.ROM on local file systems.
+  ref: dosbox_pure_libretro.cpp:2803-2813
+  MIDI ZIPs are looked up in the content directory before the system directory.
+  ref: dosbox_pure_libretro.cpp:906-914
+
+  Keyboard layouts and codepages are compiled in, external keyboard.sys,
+  keybrd2.sys, keybrd3.sys and EGA*.CPI loading is disabled.
+  ref: include/config.h:58, dos_keyboard_layout.cpp:729-819
+
+  Other system directory entries carry no fixed identity and are not listed
+  as files. Hard disk images (*.IMG, *.IMA, *.VHD of at least 7 MB and a
+  multiple of 512 bytes) are created by the Install New Operating System
+  feature and booted as C:. *.DOSZ archives are shells the user assembles,
+  underlaid below C: and started through WINDOWS.BAT, AUTOEXEC.BAT or
+  WINDOWS\WIN.COM. DOSBoxPureMidiCache.txt is written by the emulator when a
+  scan exceeds two seconds and read back to skip later scans.
+  ref: dosbox_pure_libretro.cpp:1413-1424,1425-1446,1452-1466,
+       dosbox_pure_run.h:187-210,289-297
+
+files:
+  # -- MT-32 control ROMs (64 KB, pair with MT32_PCM.ROM) --
+
+  - name: "MT32_CONTROL.ROM"
+    description: "MT-32 Control v1.04"
+    required: false
+    hle_fallback: true
+    size: 65536
+    sha1: "5a5cb5a77d7d55ee69657c2f870416daed52dea7"
+    validation: [sha1, size]
+    source_ref: "mt32emu.h:5112,5129"
+
+  - name: "MT32_CONTROL.ROM"
+    description: "MT-32 Control v1.05"
+    required: false
+    hle_fallback: true
+    size: 65536
+    sha1: "e17a3a6d265bf1fa150312061134293d2b58288c"
+    validation: [sha1, size]
+    source_ref: "mt32emu.h:5113,5130"
+
+  - name: "MT32_CONTROL.ROM"
+    description: "MT-32 Control v1.06"
+    required: false
+    hle_fallback: true
+    size: 65536
+    sha1: "a553481f4e2794c10cfe597fef154eef0d8257de"
+    validation: [sha1, size]
+    source_ref: "mt32emu.h:5114,5131"
+
+  - name: "MT32_CONTROL.ROM"
+    description: "MT-32 Control v1.07"
+    required: false
+    hle_fallback: true
+    size: 65536
+    sha1: "b083518fffb7f66b03c23b7eb4f868e62dc5a987"
+    validation: [sha1, size]
+    source_ref: "mt32emu.h:5115,5132"
+
+  - name: "MT32_CONTROL.ROM"
+    description: "MT-32 Control BlueRidge"
+    required: false
+    hle_fallback: true
+    size: 65536
+    sha1: "7b8c2a5ddb42fd0732e2f22b3340dcf5360edf92"
+    validation: [sha1, size]
+    source_ref: "mt32emu.h:5116,5133"
+
+  # -- MT-32 v2.x control ROMs (128 KB, pair with MT32_PCM.ROM) --
+
+  - name: "MT32_CONTROL.ROM"
+    description: "MT-32 Control v2.03"
+    required: false
+    hle_fallback: true
+    size: 131072
+    sha1: "5837064c9df4741a55f7c4d8787ac158dff2d3ce"
+    validation: [sha1, size]
+    source_ref: "mt32emu.h:5118,5135"
+
+  - name: "MT32_CONTROL.ROM"
+    description: "MT-32 Control v2.04"
+    required: false
+    hle_fallback: true
+    size: 131072
+    sha1: "2c16432b6c73dd2a3947cba950a0f4c19d6180eb"
+    validation: [sha1, size]
+    source_ref: "mt32emu.h:5119,5136"
+
+  - name: "MT32_CONTROL.ROM"
+    description: "MT-32 Control v2.06"
+    required: false
+    hle_fallback: true
+    size: 131072
+    sha1: "2869cf4c235d671668cfcb62415e2ce8323ad4ed"
+    validation: [sha1, size]
+    source_ref: "mt32emu.h:5120,5137"
+
+  - name: "MT32_CONTROL.ROM"
+    description: "MT-32 Control v2.07"
+    required: false
+    hle_fallback: true
+    size: 131072
+    sha1: "47b52adefedaec475c925e54340e37673c11707c"
+    validation: [sha1, size]
+    source_ref: "mt32emu.h:5121,5138"
+
+  # -- CM-32L / LAPC-I control ROMs (64 KB, pair with CM32L_PCM.ROM) --
+
+  - name: "CM32L_CONTROL.ROM"
+    description: "CM-32L/LAPC-I Control v1.00"
+    required: false
+    hle_fallback: true
+    size: 65536
+    sha1: "73683d585cd6948cc19547942ca0e14a0319456d"
+    validation: [sha1, size]
+    source_ref: "mt32emu.h:5122,5139"
+
+  - name: "CM32L_CONTROL.ROM"
+    description: "CM-32L/LAPC-I Control v1.02"
+    required: false
+    hle_fallback: true
+    size: 65536
+    sha1: "a439fbb390da38cada95a7cbb1d6ca199cd66ef8"
+    validation: [sha1, size]
+    source_ref: "mt32emu.h:5123,5140"
+
+  # -- CM-32LN / CM-500 / LAPC-N control ROM (64 KB, pairs with CM32L_PCM.ROM) --
+
+  - name: "CM32LN_CONTROL.ROM"
+    description: "CM-32LN/CM-500/LAPC-N Control v1.00"
+    required: false
+    hle_fallback: true
+    size: 65536
+    sha1: "dc1c5b1b90a4646d00f7daf3679733c7badc7077"
+    validation: [sha1, size]
+    source_ref: "mt32emu.h:5124,5141"
+
+  # -- PCM ROMs --
+
+  - name: "MT32_PCM.ROM"
+    description: "MT-32 PCM ROM"
+    required: false
+    hle_fallback: true
+    size: 524288
+    sha1: "f6b1eebc4b2d200ec6d3d21d51325d5b48c60252"
+    validation: [sha1, size]
+    source_ref: "mt32emu.h:5126,5143"
+    note: "accepted by every MT-32 control ROM, v1.x and v2.x (pcmCount 128)"
+
+  - name: "CM32L_PCM.ROM"
+    description: "CM-32L/CM-64/LAPC-I PCM ROM"
+    required: false
+    hle_fallback: true
+    size: 1048576
+    sha1: "289cc298ad532b702461bfc738009d9ebe8025ea"
+    validation: [sha1, size]
+    aliases: ["CM32LN_PCM.ROM"]
+    source_ref: "mt32emu.h:5127,5144"
+    note: >
+      accepted by the CM-32L and CM-32LN control ROMs (pcmCount 256). The
+      alias covers the name derived from CM32LN_CONTROL.ROM.
+
+  # -- General MIDI SoundFont --
+
+  - name: "DOSBOX.SF2"
+    description: "General MIDI SoundFont (any .sf2/.sf3 accepted)"
+    required: false
+    hle_fallback: true
+    source_ref: "dosbox_pure_libretro.cpp:1407,2805"
+    note: >
+      Any .SF2 or .SF3 in the system directory is listed in the MIDI option.
+      DOSBOX.SF2 is the fixed name looked up on the mounted C: drive as a per
+      game override.

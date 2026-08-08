@@ -1,0 +1,266 @@
+emulator: CPCemu
+type: standalone
+core_classification: other
+source: "https://www.cpc-emu.org/"
+upstream: "https://www.cpc-emu.org/"
+profiled_date: "2026-08-08"
+core_version: "3.0.2"
+display_name: "Amstrad - CPC (CPCemu)"
+cores:
+  - cpcemu
+systems:
+  - amstrad-cpc
+mode: standalone
+
+notes: |
+  Amstrad CPC emulator by Marco Vieth and Rainer Loritz, closed-source freeware
+  for Windows, macOS, Linux, Android and iOS. Machines are the CPC 464, 664 and
+  6128; the firmware identifier and the message catalogue also know the 464+,
+  the 6128+ and the KC compact.
+
+  Two packages were used. The 3.0.2 Windows portable and macOS builds of
+  2025-04-24 carry the same fourteen ROM files and the same data files, and
+  provide the path constants, the message catalogue and the v3.0 help file. The
+  2.5 Linux x86-64 build of 2022-08-13 is still the newest Linux release, the
+  3.0.2 Linux archives listed on the download page being absent from the
+  server, and provides the runtime behaviour:
+  file opens traced with strace, required and optional decided by removing,
+  truncating and patching each file and reading the emulator's own messages.
+
+  ROMs live in ROM_PATH, "./ROM/" in the shipped configuration, resolved against
+  the working directory; the macOS build reads them from the application bundle
+  Resources folder. Slots are filled by ROM_BLOCK lines naming a ROM number, a
+  file in ROM_PATH and a 16 KB block position inside that file:
+
+    ROM_BLOCK = 255, "CPC6128.ROM", 0    lower ROM
+    ROM_BLOCK = 0  , "CPC6128.ROM", 1    foreground ROM
+    ROM_BLOCK = 7  , "CPCADOS.ROM", 0    AMSDOS
+    ROM_BLOCK = 6  , "M4.ROM"     , 0    M4 board
+
+  The shipped cpcemu0.cfg repeats the first three for every CPC_TYPE from 0 to
+  5, with CPC464.ROM for types 0 and 3, CPC664.ROM for type 1 and CPC6128.ROM
+  for types 2, 4 and 5, and adds the M4 line once for all types. A file named by
+  a ROM_BLOCK line that cannot be opened prints "ROM: Cannot open file" and ends
+  the process with status 3 before audio initialisation, whichever slot it fills
+  and whether or not the matching device is enabled; deleting the line instead
+  lets the emulator start.
+
+  The machine is identified from the foreground ROM, not from the lower half and
+  not from CPC_TYPE. CPCemu reads the four-byte CPC ROM header at the start of
+  block 1: byte 0 has to be 0x80, and byte 2 selects the machine, 0x00 for the
+  464, 0x01 for the 664, 0x02 for the 6128. A random block 1 gives "ROM: No
+  foreground ROM found.", an unlisted version byte gives "ROM: Unknown ROM
+  version.", and both end on "CPC type not configured or ROM for CPC type not
+  available. Unable to continue." The modification byte is ignored, the lower
+  16 KB half is never inspected, and padding past 32768 bytes is accepted, so
+  the length requirement is a lower bound: a block 1 has to exist.
+
+  Types 3, 4 and 5 need ROM images the packages do not carry. The help file
+  states they have to be supplied in CPCEMU.CFG first, and no filename for them
+  is compiled into the binary, the user names the file in the ROM_BLOCK line.
+  Left on the shipped configuration those types load the 464 and 6128 files and
+  report the machine those files describe. There is no cartridge support, the
+  file types handled on the command line are dsk, sna, cfg and zip.
+
+  M4 board emulation is on by default. HACK.ROM, the board's lower ROM, is
+  opened at every startup whatever M4_ENABLED holds, after M4_SD_PATH +
+  NMIROM.BIN has been tried, so a NMIROM.BIN placed on the emulated SD card
+  replaces it; with neither present the emulator prints "Unable to load
+  HACK.ROM" and keeps running. M4.ROM contents are checked, a zeroed file boots
+  the CPC and reports "M4 ROM not valid." The firmware updater downloads
+  M4FIRM.BIN from spinpoint.org and rewrites M4.ROM and HACK.ROM in place.
+
+  Alongside the ROMs the binary reads its own payload from the program
+  directory: cpcemu.msg, the message catalogue, whose absence leaves every
+  message unprinted; cpcemu.dat, colours and key tables; cpcemu.hlp, the online
+  help opened on F1; cpcemu.dbf, the poke database opened from the poke menu;
+  and cpcemu0.cfg, the template used when no user configuration exists.
+  Configuration is looked up first in the user profile, ~/.CPCemu/cpcemu.cfg on
+  Linux, then cpcemu0.cfg in the working directory; with neither, startup stops
+  on "CPCEMU: Use INSTALL first". The disc, tape and snapshot folders and the
+  M4 SD card folder hold user content.
+
+files:
+  # -- Firmware, lower ROM in block 0 and foreground ROM in block 1 --
+  - name: CPC6128.ROM
+    path: "ROM/CPC6128.ROM"
+    system: amstrad-cpc
+    required: true
+    min_size: 32768
+    validation: [size, signature]
+    md5: b96280dc6c95a48857b4b8eb931533ae
+    sha1: 5977adbad3f7c1e0e082cd02fe76a700d9860c30
+    source_ref: "CPCemu 2.5/3.0.2: ROM/CPC6128.ROM, cpcemu0.cfg ROM_BLOCK 255 and 0 for CPC_TYPE 2, 4 and 5"
+    note: >-
+      CPC 6128 firmware and BASIC. Loaded for the shipped CPC_TYPE 2 and opened
+      twice, once per block. Foreground ROM header 80 01 02 00.
+
+  - name: CPC464.ROM
+    path: "ROM/CPC464.ROM"
+    system: amstrad-cpc
+    required: false
+    min_size: 32768
+    validation: [size, signature]
+    md5: a993f85b88ac4350cf4d41554e87fe4f
+    sha1: 56d39c463da60968d93e58b4ba0e675829412a20
+    source_ref: "CPCemu 2.5/3.0.2: ROM/CPC464.ROM, cpcemu0.cfg ROM_BLOCK 255 and 0 for CPC_TYPE 0 and 3"
+    note: >-
+      CPC 464 firmware and BASIC, selected by CPC_TYPE 0 or the -t 0 command
+      line. Foreground ROM header 80 01 00 00.
+
+  - name: CPC664.ROM
+    path: "ROM/CPC664.ROM"
+    system: amstrad-cpc
+    required: false
+    min_size: 32768
+    validation: [size, signature]
+    md5: 5a384a2310f472c7857888371c00ed66
+    sha1: 073a7665527b5bd8a148747a3947dbd3328682c8
+    source_ref: "CPCemu 2.5/3.0.2: ROM/CPC664.ROM, cpcemu0.cfg ROM_BLOCK 255 and 0 for CPC_TYPE 1"
+    note: >-
+      CPC 664 firmware and BASIC, selected by CPC_TYPE 1 or the -t 1 command
+      line. Foreground ROM header 80 01 01 00.
+
+  # -- Disc ROM, slot 7 --
+  - name: CPCADOS.ROM
+    path: "ROM/CPCADOS.ROM"
+    system: amstrad-cpc
+    required: true
+    size: 16384
+    md5: aa2fb251814bd971b2b9874ab0971b3f
+    sha1: 0e247123b9d3204784eeadb4629b9d35b9dfd984
+    source_ref: "CPCemu 2.5/3.0.2: ROM/CPCADOS.ROM, cpcemu0.cfg ROM_BLOCK 7 for every CPC_TYPE"
+    note: >-
+      AMSDOS disc ROM, the 8 KB image zero-padded to 16 KB. Declared for every
+      machine by the shipped configuration, so startup ends on status 3 without
+      it; dropping the ROM_BLOCK line instead boots with "ROM: No AMSDOS ROM
+      found." and no disc support. Length is not checked, an 8 KB file installs
+      the AMSDOS speedup all the same.
+
+  # -- M4 board, ROM slot 6 plus the board's own lower ROM --
+  - name: M4.ROM
+    path: "ROM/M4.ROM"
+    system: amstrad-cpc
+    required: true
+    size: 16384
+    validation: [signature]
+    md5: 28a7e368badca8299ba24a15bb4ebe9b
+    sha1: 05f9447d307ab17eae9e2100f91c36b0c9560d4b
+    source_ref: "CPCemu 2.5/3.0.2: ROM/M4.ROM, cpcemu0.cfg ROM_BLOCK 6, M4_ENABLED = 1"
+    note: >-
+      M4 board firmware by Duke. Declared by the shipped configuration, so
+      startup ends on status 3 without it even when M4_ENABLED is 0. Contents
+      are checked, a zeroed file boots and reports "M4 ROM not valid."
+
+  - name: HACK.ROM
+    path: "ROM/HACK.ROM"
+    system: amstrad-cpc
+    required: false
+    size: 7994
+    md5: ffcbcbce32223a152753d30766ad6215
+    sha1: 582dd1706391f6f0161ad3486ae75a04fb0f7d5b
+    source_ref: "CPCemu 2.5/3.0.2: ROM_PATH + /HACK.ROM, opened after M4_SD_PATH + NMIROM.BIN"
+    note: >-
+      M4 hack ROM, the lower ROM behind the Shift+F1 menu. Opened at every
+      startup, and superseded by a NMIROM.BIN on the emulated SD card. Missing
+      prints "Unable to load HACK.ROM" and emulation continues.
+
+  # -- National firmware, configured by the 3.0.2 keyboard layout dialog --
+  - name: CPC6128.ROM.UK
+    path: "ROM/National/CPC6128.ROM.UK"
+    system: amstrad-cpc
+    required: false
+    min_size: 32768
+    validation: [size, signature]
+    md5: b96280dc6c95a48857b4b8eb931533ae
+    sha1: 5977adbad3f7c1e0e082cd02fe76a700d9860c30
+    source_ref: "CPCemu 2.5/3.0.2: ROM/National/CPC6128.ROM.UK"
+    note: >-
+      English CPC 6128 firmware, the same image as CPC6128.ROM. Ships in the
+      National folder without being named by any path constant.
+
+  - name: CPC6128.ROM.FR
+    path: "ROM/National/CPC6128.ROM.FR"
+    system: amstrad-cpc
+    required: false
+    min_size: 32768
+    validation: [size, signature]
+    md5: 5ee871d5600eb9b5a22989c295f902a5
+    sha1: 200d59076dfef36db061d6d7d21d80021cab1237
+    source_ref: "CPCemu 3.0.2: National/CPC6128.ROM.FR, keyboard layout dialog on first start"
+    note: "French CPC 6128 firmware, configured when the French layout is picked."
+
+  - name: CPC6128.ROM.ES
+    path: "ROM/National/CPC6128.ROM.ES"
+    system: amstrad-cpc
+    required: false
+    min_size: 32768
+    validation: [size, signature]
+    md5: 0246740371010333385665dfeb7cd0ec
+    sha1: 1acd01c2c03424a78b32c9440f4d890fb1104815
+    source_ref: "CPCemu 3.0.2: National/CPC6128.ROM.ES, keyboard layout dialog on first start"
+    note: "Spanish CPC 6128 firmware, configured when the Spanish layout is picked."
+
+  - name: CPC6128.ROM.DK
+    path: "ROM/National/CPC6128.ROM.DK"
+    system: amstrad-cpc
+    required: false
+    min_size: 32768
+    validation: [size, signature]
+    md5: ca1635fd992e2aa7a776b30da13467e5
+    sha1: a9e7ee6355730f319a37c95ca0a714212b88c3b1
+    source_ref: "CPCemu 3.0.2: National/CPC6128.ROM.DK, keyboard layout dialog on first start"
+    note: "Danish CPC 6128 firmware, configured when the Danish layout is picked."
+
+  - name: CPC6128.ROM.SE
+    path: "ROM/National/CPC6128.ROM.SE"
+    system: amstrad-cpc
+    required: false
+    min_size: 32768
+    validation: [size, signature]
+    md5: 8ca256a832e83c875f5432b3dee8a36f
+    sha1: 6765a91a42fed68a807325bf62a728e5ac5d622f
+    source_ref: "CPCemu 2.5/3.0.2: ROM/National/CPC6128.ROM.SE"
+    note: >-
+      Swedish CPC 6128 firmware. Ships in the National folder without being
+      named by any path constant, the layout dialog offering English, French,
+      Spanish and Danish only.
+
+  # -- Expansion ROMs mapped through a user ROM_BLOCK line --
+  - name: XDDOS210.ROM
+    path: "ROM/XDDOS210.ROM"
+    system: amstrad-cpc
+    required: false
+    size: 16384
+    md5: 1d91a9ef315b302d335cd7e04e8d8d86
+    sha1: 2f1bd4d6e2d2e62818b01e6e7a26488362a7a8ee
+    source_ref: "CPCemu 3.0.2: ROM/XDDOS210.ROM, cpcemu0.cfg commented ROM_BLOCK 7, help topic DOBBERTIN HD20 ENABLED"
+    note: >-
+      X-DDOS 2.10 by Dobbertin, the disc operating system of the HD20 hard disk.
+      Required in a ROM slot to use DOBBERTIN_HD_ENABLED = 1. Added in 3.0, not
+      shipped with 2.5.
+
+  - name: COPYMATE.ROM
+    path: "ROM/COPYMATE.ROM"
+    system: amstrad-cpc
+    required: false
+    size: 16512
+    md5: e9c4288eab8885a1e6ae7504a4736115
+    sha1: 15d52de01320d9b954e03b4c2e71ec75fd301bbb
+    source_ref: "CPCemu 2.5/3.0.2: ROM/COPYMATE.ROM, cpcemu0.cfg commented ROM_BLOCK 4"
+    note: >-
+      Copy utility ROM, carrying a 128-byte AMSDOS file header ahead of the
+      16 KB image. Shipped as the example expansion ROM of the configuration
+      file and loaded once the line is uncommented.
+
+  - name: multface.rom
+    path: "ROM/multface.rom"
+    system: amstrad-cpc
+    required: false
+    size: 8192
+    md5: 4c9f014e91d407cc6509fad0095ab909
+    sha1: 1431ec628d38f000715545dd2186b684c5fe5a6f
+    source_ref: "CPCemu 2.5/3.0.2: ROM/multface.rom, ROM_BLOCK filename or ROM Manager entry"
+    note: >-
+      Romantic Robot Multiface Two ROM. Ships in the ROM folder for the user to
+      map into a slot, no path constant naming it.

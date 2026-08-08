@@ -164,7 +164,10 @@ files:
     sha1: "f6b1eebc4b2d200ec6d3d21d51325d5b48c60252"
     validation: [sha1, size]
     source_ref: "mt32emu.h:5126,5143"
-    note: "pairs with any MT-32 v1.x control ROM"
+    note: >
+      accepted by every MT-32 control ROM, v1.x and v2.x. Each control ROM
+      fixes the PCM size it accepts through its pcmCount: 128 requires this
+      524288 byte image. ref: mt32emu.h:2586-2598,3167,3025
 
   - name: "CM32L_PCM.ROM"
     description: "CM-32L/CM-64/LAPC-I PCM ROM"
@@ -173,8 +176,13 @@ files:
     size: 1048576
     sha1: "289cc298ad532b702461bfc738009d9ebe8025ea"
     validation: [sha1, size]
+    aliases: ["CM32LN_PCM.ROM"]
     source_ref: "mt32emu.h:5127,5144"
-    note: "pairs with MT-32 v2.x or CM-32L control ROMs. Lower half aliases MT-32 PCM."
+    note: >
+      accepted by the CM-32L and CM-32LN control ROMs, which carry pcmCount
+      256 and require this 1048576 byte image. The alias covers the name
+      derived from CM32LN_CONTROL.ROM.
+      ref: mt32emu.h:2586-2598,3167,3025, midi_mt32.h:194-195
 
   # -- General MIDI SoundFont --
 

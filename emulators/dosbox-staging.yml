@@ -1,0 +1,642 @@
+emulator: DOSBox Staging
+type: standalone
+core_classification: enhanced_fork
+source: "https://github.com/dosbox-staging/dosbox-staging"
+upstream: "https://github.com/dosbox-staging/dosbox-staging"
+source_commit: "18756c8df3425db24373bb856d620ede868b7568"
+profiled_date: "2026-08-08"
+core_version: "0.84.0-alpha"
+display_name: "DOS (DOSBox Staging)"
+cores:
+  - dosbox-staging
+systems:
+  - dos
+  - ibm-pc
+  - ibm-pcjr
+  - tandy-1000
+mode: standalone
+
+notes: |
+  Continuation of DOSBox on a C++23 codebase, SDL3, libmt32emu and FluidSynth
+  from vcpkg. The machine setting selects a video adapter (hercules, cga,
+  cga_mono, ega, svga_s3, svga_et3000, svga_et4000, svga_paradise, vesa_nolfb,
+  vesa_oldvbe) or a machine (pcjr, tandy).
+  ref: dosbox.cpp:1317-1329, vcpkg.json
+
+  No system BIOS: the PC BIOS, video BIOS fonts, keyboard layouts and codepage
+  tables are implemented in code.
+  ref: int10_memory.cpp:160, dos_keyboard_layout_data.h
+
+  MIDI devices that need external data are mt32, soundcanvas and fluidsynth.
+  A device that fails to initialise throws, MIDI_Init warns and retries with
+  mididevice = port, then disables MIDI output. Emulation continues either way.
+  ref: midi.cpp:794-850
+
+  MT-32/CM-32L: libmt32emu identifies every candidate by file size then SHA1,
+  so file names carry no meaning; a directory scan caches which ROM ids each
+  directory holds and logs anything unrecognised.
+  ref: mt32_lasynth_model.cpp:36-97, munt ROMInfo.cpp:206-213
+  A model needs one control ROM and one PCM ROM, supplied either as a full
+  image (addROMFile) or as the two chip dumps merged in memory
+  (mergeAndAddROMFiles): control halves are byte-interleaved, PCM halves are
+  concatenated.
+  ref: mt32_lasynth_model.cpp:114-151, munt ROMInfo.cpp:312-331
+  model = auto resolves the first available of cm32l_102, cm32l_100,
+  cm32ln_100, mt32_107, mt32_106, mt32_105, mt32_104, mt32_bluer, mt32_207,
+  mt32_206, mt32_204, mt32_203; the aliases cm32l, mt32, mt32_old and mt32_new
+  restrict that list. MIXER /LISTMIDI prints what was found.
+  ref: mt32.cpp:278-331, 504-557
+  Search order is romdir, then mt32-roms in the configuration directory, then
+  the platform locations (C:\mt32-rom-data on Windows;
+  ~/Library/Audio/Sounds/MT32-Roms and /usr/{local/,}share/mt32-rom-data on
+  macOS; $XDG_DATA_HOME/dosbox/mt32-roms, $XDG_DATA_HOME/mt32-rom-data,
+  $XDG_DATA_DIRS/mt32-rom-data and $XDG_CONFIG_HOME/dosbox/mt32-roms on Linux).
+  A relative romdir resolves against the working directory, so a game folder
+  can carry its own set.
+  ref: mt32.cpp:385-396, 416-485
+
+  Sound Canvas: the SC-55 is emulated by the Nuked SC55 CLAP plugin, loaded
+  from a plugins directory next to the executable, in the configuration
+  directory or under the XDG data directories. DOSBox Staging resolves the ROM
+  directory candidates, canonicalises the ones that exist and exports them as
+  SOUNDCANVAS_ROM_PATH; the plugin appends the per-model subdirectory, hashes
+  every file under 4 MB it finds there and matches SHA256 against its table.
+  ref: soundcanvas.cpp:326-373, support.cpp:351-379,
+       Nuked-SC55-CLAP nuked_sc55.cpp:117-215, rom_loader.cpp:32-63,
+       rom_io.cpp:271-564
+  soundcanvas_model = auto resolves sc55_121, sc55_120, sc55_110, sc55_100,
+  sc55_200, sc55mk2_101, sc55mk2_100 in that order by matching plugin names.
+  The plugin publishes six descriptors: SC-55 v1.00, v1.10, v1.20, v1.21,
+  v2.00 and SC-55mk2 v1.01.
+  ref: soundcanvas.cpp:55-71, 80-147, Nuked-SC55-CLAP plugin.cpp:23-90
+
+  FluidSynth: the soundfont setting names a file, tried as given and with .sf2
+  appended, in soundfont_dir, then soundfonts in the configuration directory,
+  then the platform locations. fluid_synth_sfload is the only check. The
+  SoundFont name from the RIFF INFO chunk and the file stem select reverb,
+  chorus and filter presets for four known banks.
+  ref: fluidsynth.cpp:107-230, 672-689, 816-883, 1229-1252
+
+  Bundled data ships with the program and is read from the resources directory
+  next to the executable: FreeDOS codepages and keyboard layouts, translations,
+  shaders and shader presets, CGA colour presets, drive noise samples, the
+  mounted Y: drive utilities, the web interface and the manual pages.
+  ref: support.cpp:300-320, dos_code_page.cpp:1828, dos_keyboard_layout.cpp:70,
+       messages.cpp:1073, shader_manager.cpp:236,404, int10_modes.cpp:2302,
+       disk_noise.cpp:187, autoexec.cpp:759
+
+  BIOSTEST.COM loads an arbitrary BIOS image at F000:0 and is compiled only
+  when the debugger is enabled, which is off by default.
+  ref: dos/CMakeLists.txt:81-83, biostest.h
+
+files:
+  # File names are documentation only: libmt32emu and the Sound Canvas plugin
+  # scan their directory and identify every candidate by hash, so any name
+  # works. The names used here are the ROM identifiers of libmt32emu and the
+  # file names of the published Sound Canvas ROM pack.
+
+  # -- MT-32 control ROMs, full images (65536 bytes) --
+  # Loaded through addROMFile. Interleaved chip dumps are listed below and
+  # merged in memory when the full image is absent.
+
+  - name: "ctrl_mt32_1_04.rom"
+    path: "mt32-roms/ctrl_mt32_1_04.rom"
+    description: "MT-32 Control v1.04"
+    required: false
+    size: 65536
+    sha1: "5a5cb5a77d7d55ee69657c2f870416daed52dea7"
+    validation: [sha1, size]
+    source_ref: "mt32.cpp:110,154-160, munt ROMInfo.cpp:59,89"
+
+  - name: "ctrl_mt32_1_05.rom"
+    path: "mt32-roms/ctrl_mt32_1_05.rom"
+    description: "MT-32 Control v1.05"
+    required: false
+    size: 65536
+    sha1: "e17a3a6d265bf1fa150312061134293d2b58288c"
+    validation: [sha1, size]
+    source_ref: "mt32.cpp:114,162-168, munt ROMInfo.cpp:62,92"
+
+  - name: "ctrl_mt32_1_06.rom"
+    path: "mt32-roms/ctrl_mt32_1_06.rom"
+    description: "MT-32 Control v1.06"
+    required: false
+    size: 65536
+    sha1: "a553481f4e2794c10cfe597fef154eef0d8257de"
+    validation: [sha1, size]
+    source_ref: "mt32.cpp:118,170-176, munt ROMInfo.cpp:65,95"
+
+  - name: "ctrl_mt32_1_07.rom"
+    path: "mt32-roms/ctrl_mt32_1_07.rom"
+    description: "MT-32 Control v1.07"
+    required: false
+    size: 65536
+    sha1: "b083518fffb7f66b03c23b7eb4f868e62dc5a987"
+    validation: [sha1, size]
+    source_ref: "mt32.cpp:122,178-184, munt ROMInfo.cpp:68,98"
+
+  - name: "ctrl_mt32_bluer.rom"
+    path: "mt32-roms/ctrl_mt32_bluer.rom"
+    description: "MT-32 Control BlueRidge"
+    required: false
+    size: 65536
+    sha1: "7b8c2a5ddb42fd0732e2f22b3340dcf5360edf92"
+    validation: [sha1, size]
+    source_ref: "mt32.cpp:126,186-192, munt ROMInfo.cpp:71,101"
+
+  # -- MT-32 v2.x control ROMs, full images (131072 bytes) --
+  # MAME dumps mt32_2.0.3.ic28, mt32_2.0.4.ic28 and mt32_2.0.7.ic28.
+
+  - name: "ctrl_mt32_2_03.rom"
+    path: "mt32-roms/ctrl_mt32_2_03.rom"
+    description: "MT-32 Control v2.03"
+    required: false
+    size: 131072
+    sha1: "5837064c9df4741a55f7c4d8787ac158dff2d3ce"
+    validation: [sha1, size]
+    source_ref: "mt32.cpp:130,194-200, munt ROMInfo.cpp:73,103"
+
+  - name: "ctrl_mt32_2_04.rom"
+    path: "mt32-roms/ctrl_mt32_2_04.rom"
+    description: "MT-32 Control v2.04"
+    required: false
+    size: 131072
+    sha1: "2c16432b6c73dd2a3947cba950a0f4c19d6180eb"
+    validation: [sha1, size]
+    source_ref: "mt32.cpp:132,202-208, munt ROMInfo.cpp:74,104"
+
+  - name: "ctrl_mt32_2_06.rom"
+    path: "mt32-roms/ctrl_mt32_2_06.rom"
+    description: "MT-32 Control v2.06"
+    required: false
+    size: 131072
+    sha1: "2869cf4c235d671668cfcb62415e2ce8323ad4ed"
+    validation: [sha1, size]
+    source_ref: "mt32.cpp:134,210-216, munt ROMInfo.cpp:75,105"
+
+  - name: "ctrl_mt32_2_07.rom"
+    path: "mt32-roms/ctrl_mt32_2_07.rom"
+    description: "MT-32 Control v2.07"
+    required: false
+    size: 131072
+    sha1: "47b52adefedaec475c925e54340e37673c11707c"
+    validation: [sha1, size]
+    source_ref: "mt32.cpp:136,218-224, munt ROMInfo.cpp:76,106"
+
+  # -- CM-32L family control ROMs, full images (65536 bytes) --
+  # MAME dumps lapc-i.v1.0.0.ic3.bin and cm32l_control.rom.
+
+  - name: "ctrl_cm32l_1_00.rom"
+    path: "mt32-roms/ctrl_cm32l_1_00.rom"
+    description: "CM-32L/LAPC-I Control v1.00"
+    required: false
+    size: 65536
+    sha1: "73683d585cd6948cc19547942ca0e14a0319456d"
+    validation: [sha1, size]
+    source_ref: "mt32.cpp:143,226-232, munt ROMInfo.cpp:77,107"
+
+  - name: "ctrl_cm32l_1_02.rom"
+    path: "mt32-roms/ctrl_cm32l_1_02.rom"
+    description: "CM-32L/LAPC-I Control v1.02"
+    required: false
+    size: 65536
+    sha1: "a439fbb390da38cada95a7cbb1d6ca199cd66ef8"
+    validation: [sha1, size]
+    source_ref: "mt32.cpp:144,234-240, munt ROMInfo.cpp:78,108"
+
+  - name: "ctrl_cm32ln_1_00.rom"
+    path: "mt32-roms/ctrl_cm32ln_1_00.rom"
+    description: "CM-32LN/CM-500/LAPC-N Control v1.00"
+    required: false
+    size: 65536
+    sha1: "dc1c5b1b90a4646d00f7daf3679733c7badc7077"
+    validation: [sha1, size]
+    source_ref: "mt32.cpp:145,242-248, munt ROMInfo.cpp:79,109"
+
+  # -- MT-32 control ROM chip dumps (32768 bytes each) --
+  # The _a dump holds the even bytes, the _b dump the odd ones; munt
+  # interleaves the pair into the full 65536 byte image.
+  # MAME dumps mt32_1.0.X.ic27.bin (_a) and mt32_1.0.X.ic26.bin (_b),
+  # blue_ridge__mt32a.bin (_a) and blue_ridge__mt32b.bin (_b).
+
+  - name: "ctrl_mt32_1_04_a.rom"
+    path: "mt32-roms/ctrl_mt32_1_04_a.rom"
+    description: "MT-32 Control v1.04, even bytes"
+    required: false
+    size: 32768
+    sha1: "9cd4858014c4e8a9dff96053f784bfaac1092a2e"
+    validation: [sha1, size]
+    source_ref: "mt32.cpp:111,154-160, munt ROMInfo.cpp:57,87"
+
+  - name: "ctrl_mt32_1_04_b.rom"
+    path: "mt32-roms/ctrl_mt32_1_04_b.rom"
+    description: "MT-32 Control v1.04, odd bytes"
+    required: false
+    size: 32768
+    sha1: "fe8db469b5bfeb37edb269fd47e3ce6d91014652"
+    validation: [sha1, size]
+    source_ref: "mt32.cpp:112,154-160, munt ROMInfo.cpp:58,88"
+
+  - name: "ctrl_mt32_1_05_a.rom"
+    path: "mt32-roms/ctrl_mt32_1_05_a.rom"
+    description: "MT-32 Control v1.05, even bytes"
+    required: false
+    size: 32768
+    sha1: "57a09d80d2f7ca5b9734edbe9645e6e700f83701"
+    validation: [sha1, size]
+    source_ref: "mt32.cpp:115,162-168, munt ROMInfo.cpp:60,90"
+
+  - name: "ctrl_mt32_1_05_b.rom"
+    path: "mt32-roms/ctrl_mt32_1_05_b.rom"
+    description: "MT-32 Control v1.05, odd bytes"
+    required: false
+    size: 32768
+    sha1: "52e3c6666db9ef962591a8ee99be0cde17f3a6b6"
+    validation: [sha1, size]
+    source_ref: "mt32.cpp:116,162-168, munt ROMInfo.cpp:61,91"
+
+  - name: "ctrl_mt32_1_06_a.rom"
+    path: "mt32-roms/ctrl_mt32_1_06_a.rom"
+    description: "MT-32 Control v1.06, even bytes"
+    required: false
+    size: 32768
+    sha1: "cc83bf23cee533097fb4c7e2c116e43b50ebacc8"
+    validation: [sha1, size]
+    source_ref: "mt32.cpp:119,170-176, munt ROMInfo.cpp:63,93"
+
+  - name: "ctrl_mt32_1_06_b.rom"
+    path: "mt32-roms/ctrl_mt32_1_06_b.rom"
+    description: "MT-32 Control v1.06, odd bytes"
+    required: false
+    size: 32768
+    sha1: "bf4f15666bc46679579498386704893b630c1171"
+    validation: [sha1, size]
+    source_ref: "mt32.cpp:120,170-176, munt ROMInfo.cpp:64,94"
+
+  - name: "ctrl_mt32_1_07_a.rom"
+    path: "mt32-roms/ctrl_mt32_1_07_a.rom"
+    description: "MT-32 Control v1.07, even bytes"
+    required: false
+    size: 32768
+    sha1: "13f06b38f0d9e0fc050b6503ab777bb938603260"
+    validation: [sha1, size]
+    source_ref: "mt32.cpp:123,178-184, munt ROMInfo.cpp:66,96"
+
+  - name: "ctrl_mt32_1_07_b.rom"
+    path: "mt32-roms/ctrl_mt32_1_07_b.rom"
+    description: "MT-32 Control v1.07, odd bytes"
+    required: false
+    size: 32768
+    sha1: "c55e165487d71fa88bd8c5e9c083bc456c1a89aa"
+    validation: [sha1, size]
+    source_ref: "mt32.cpp:124,178-184, munt ROMInfo.cpp:67,97"
+
+  - name: "ctrl_mt32_bluer_a.rom"
+    path: "mt32-roms/ctrl_mt32_bluer_a.rom"
+    description: "MT-32 Control BlueRidge, even bytes"
+    required: false
+    size: 32768
+    sha1: "11a6ae5d8b6ee328b371af7f1e40b82125aa6b4d"
+    validation: [sha1, size]
+    source_ref: "mt32.cpp:127,186-192, munt ROMInfo.cpp:69,99"
+
+  - name: "ctrl_mt32_bluer_b.rom"
+    path: "mt32-roms/ctrl_mt32_bluer_b.rom"
+    description: "MT-32 Control BlueRidge, odd bytes"
+    required: false
+    size: 32768
+    sha1: "e0934320d7cbb5edfaa29e0d01ae835ef620085b"
+    validation: [sha1, size]
+    source_ref: "mt32.cpp:128,186-192, munt ROMInfo.cpp:70,100"
+
+  # -- PCM ROMs --
+  # Every MT-32 model, v1.x and v2.x, pairs with the MT-32 PCM ROM. The CM-32L
+  # models pair with the 1 MB image, whose first half is the MT-32 PCM ROM.
+  # MAME dumps r15449121.ic37.bin (ic9 on CM-32L boards), r15179844.ic21.bin,
+  # r15179845.ic22.bin and r15179945.ic8.bin.
+
+  - name: "pcm_mt32.rom"
+    path: "mt32-roms/pcm_mt32.rom"
+    description: "MT-32 PCM ROM"
+    required: false
+    size: 524288
+    sha1: "f6b1eebc4b2d200ec6d3d21d51325d5b48c60252"
+    validation: [sha1, size]
+    note: >
+      also serves as the first half of the CM-32L PCM ROM, paired with
+      pcm_cm32l_h.rom
+    source_ref: "mt32.cpp:138,151, munt ROMInfo.cpp:83,113,115"
+
+  - name: "pcm_mt32_l.rom"
+    path: "mt32-roms/pcm_mt32_l.rom"
+    description: "MT-32 PCM ROM, first half"
+    required: false
+    size: 262144
+    sha1: "3a1e19b0cd4036623fd1d1d11f5f25995585962b"
+    validation: [sha1, size]
+    source_ref: "mt32.cpp:139, munt ROMInfo.cpp:81,111"
+
+  - name: "pcm_mt32_h.rom"
+    path: "mt32-roms/pcm_mt32_h.rom"
+    description: "MT-32 PCM ROM, second half"
+    required: false
+    size: 262144
+    sha1: "2cadb99d21a6a4a6f5b61b6218d16e9b43f61d01"
+    validation: [sha1, size]
+    source_ref: "mt32.cpp:140, munt ROMInfo.cpp:82,112"
+
+  - name: "pcm_cm32l.rom"
+    path: "mt32-roms/pcm_cm32l.rom"
+    description: "CM-32L/CM-64/LAPC-I PCM ROM"
+    required: false
+    size: 1048576
+    sha1: "289cc298ad532b702461bfc738009d9ebe8025ea"
+    validation: [sha1, size]
+    source_ref: "mt32.cpp:147,226-248, munt ROMInfo.cpp:85,117"
+
+  - name: "pcm_cm32l_h.rom"
+    path: "mt32-roms/pcm_cm32l_h.rom"
+    description: "CM-32L/CM-64/LAPC-I PCM ROM, second half"
+    required: false
+    size: 524288
+    sha1: "3ad889fde5db5b6437cbc2eb6e305312fec3df93"
+    validation: [sha1, size]
+    source_ref: "mt32.cpp:148, munt ROMInfo.cpp:84,116"
+
+  # -- Roland SC-55 wave ROMs --
+  # Shared by every SC-55 firmware version. The plugin scans one model
+  # directory at a time, so each SC-55-v* directory in use needs its own copy.
+
+  - name: "sc55_waverom1.bin"
+    path: "soundcanvas-roms/SC-55-v1.21/sc55_waverom1.bin"
+    description: "SC-55 wave ROM A (R15209276)"
+    required: false
+    max_size: 2097152
+    sha256: "5655509a531804f97ea2d7ef05b8fec20ebf46216b389a84c44169257a4d2007"
+    validation: [sha256, size]
+    source_ref: "Nuked-SC55-CLAP rom_io.cpp:340, emu.cpp:238, pcm.h:83"
+
+  - name: "sc55_waverom2.bin"
+    path: "soundcanvas-roms/SC-55-v1.21/sc55_waverom2.bin"
+    description: "SC-55 wave ROM B (R15209277)"
+    required: false
+    max_size: 2097152
+    sha256: "c655b159792d999b90df9e4fa782cf56411ba1eaa0bb3ac2bdaf09e1391006b1"
+    validation: [sha256, size]
+    source_ref: "Nuked-SC55-CLAP rom_io.cpp:342, emu.cpp:238, pcm.h:84"
+
+  - name: "sc55_waverom3.bin"
+    path: "soundcanvas-roms/SC-55-v1.21/sc55_waverom3.bin"
+    description: "SC-55 wave ROM C (R15209281)"
+    required: false
+    max_size: 1048576
+    sha256: "334b2d16be3c2362210fdbec1c866ad58badeb0f84fd9bf5d0ac599baf077cc2"
+    validation: [sha256, size]
+    source_ref: "Nuked-SC55-CLAP rom_io.cpp:344, emu.cpp:238, pcm.h:85"
+
+  # -- Roland SC-55 MCU ROMs, one pair per firmware version --
+
+  - name: "sc55_rom1.bin"
+    path: "soundcanvas-roms/SC-55-v1.00/sc55_rom1.bin"
+    description: "SC-55 v1.00 MCU ROM (R15199748)"
+    required: false
+    max_size: 32768
+    sha256: "b4ecf44bc0520322b0d114d397951d3bf92ca6fa51d0d27b2407df58a6be2efe"
+    validation: [sha256, size]
+    source_ref: "Nuked-SC55-CLAP rom_io.cpp:336, emu.cpp:238, mcu.h:216"
+
+  - name: "sc55_rom2.bin"
+    path: "soundcanvas-roms/SC-55-v1.00/sc55_rom2.bin"
+    description: "SC-55 v1.00 program ROM (R15449258)"
+    required: false
+    max_size: 524288
+    sha256: "014e2e21ea30de7a1e4f1cdea14dd9a719960535e257a9e40e98dbb1a5870226"
+    validation: [sha256, size]
+    source_ref: "Nuked-SC55-CLAP rom_io.cpp:338, emu.cpp:247-254, mcu.h:217"
+
+  - name: "sc55_rom1.bin"
+    path: "soundcanvas-roms/SC-55-v1.10/sc55_rom1.bin"
+    description: "SC-55 v1.10 MCU ROM (R15199736)"
+    required: false
+    max_size: 32768
+    sha256: "2fe88ec39f3ef4b1de8cdf74527419467975c47f7aacfcd07605e01d54bd89b5"
+    validation: [sha256, size]
+    source_ref: "Nuked-SC55-CLAP rom_io.cpp:351, emu.cpp:238, mcu.h:216"
+
+  - name: "sc55_rom2.bin"
+    path: "soundcanvas-roms/SC-55-v1.10/sc55_rom2.bin"
+    description: "SC-55 v1.10 program ROM (R15209275)"
+    required: false
+    max_size: 524288
+    sha256: "ec064d6c4fc70ec990911089d966043cb819fba0e26e6f6afdd0a05e5301b91b"
+    validation: [sha256, size]
+    source_ref: "Nuked-SC55-CLAP rom_io.cpp:353, emu.cpp:247-254, mcu.h:217"
+
+  - name: "sc55_rom1.bin"
+    path: "soundcanvas-roms/SC-55-v1.20/sc55_rom1.bin"
+    description: "SC-55 v1.20 and v1.21 MCU ROM (R15199778)"
+    required: false
+    max_size: 32768
+    sha256: "7e1bacd1d7c62ed66e465ba05597dcd60dfc13fc23de0287fdbce6cf906c6544"
+    validation: [sha256, size]
+    note: "same dump in the SC-55-v1.20 and SC-55-v1.21 directories"
+    source_ref: "Nuked-SC55-CLAP rom_io.cpp:366,381, emu.cpp:238, mcu.h:216"
+
+  - name: "sc55_rom2.bin"
+    path: "soundcanvas-roms/SC-55-v1.20/sc55_rom2.bin"
+    description: "SC-55 v1.20 program ROM (R15209337)"
+    required: false
+    max_size: 524288
+    sha256: "22ce6ca59e6332143b335525e81fab501ea6fccce4b7e2f3bfc2cc8bf6612ff6"
+    validation: [sha256, size]
+    source_ref: "Nuked-SC55-CLAP rom_io.cpp:368, emu.cpp:247-254, mcu.h:217"
+
+  - name: "sc55_rom2.bin"
+    path: "soundcanvas-roms/SC-55-v1.21/sc55_rom2.bin"
+    description: "SC-55 v1.21 program ROM (R15209363)"
+    required: false
+    max_size: 524288
+    sha256: "effc6132d68f7e300aaef915ccdd08aba93606c22d23e580daf9ea6617913af1"
+    validation: [sha256, size]
+    source_ref: "Nuked-SC55-CLAP rom_io.cpp:383, emu.cpp:247-254, mcu.h:217"
+
+  - name: "sc55_rom1.bin"
+    path: "soundcanvas-roms/SC-55-v2.00/sc55_rom1.bin"
+    description: "SC-55 v2.00 MCU ROM (R15199799)"
+    required: false
+    max_size: 32768
+    sha256: "24a65c97cdbaa847d6f59193523ce63c73394b4b693a6517ee79441f2fb8a3ee"
+    validation: [sha256, size]
+    source_ref: "Nuked-SC55-CLAP rom_io.cpp:396, emu.cpp:238, mcu.h:216"
+
+  - name: "sc55_rom2.bin"
+    path: "soundcanvas-roms/SC-55-v2.00/sc55_rom2.bin"
+    description: "SC-55 v2.00 program ROM (R15209387)"
+    required: false
+    max_size: 524288
+    sha256: "f5dac35d450ab986570a209dff3816eec75cee669e161f54b51224b467dd0bcc"
+    validation: [sha256, size]
+    source_ref: "Nuked-SC55-CLAP rom_io.cpp:398, emu.cpp:247-254, mcu.h:217"
+
+  # -- Roland SC-55mk2 v1.01 --
+
+  - name: "rom1.bin"
+    path: "soundcanvas-roms/SC-55mk2-v1.01/rom1.bin"
+    description: "SC-55mk2 v1.01 MCU ROM (R15199858)"
+    required: false
+    max_size: 32768
+    sha256: "8a1eb33c7599b746c0c50283e4349a1bb1773b5c0ec0e9661219bf6c067d2042"
+    validation: [sha256, size]
+    source_ref: "Nuked-SC55-CLAP rom_io.cpp:295, emu.cpp:238, mcu.h:216"
+
+  - name: "rom2.bin"
+    path: "soundcanvas-roms/SC-55mk2-v1.01/rom2.bin"
+    description: "SC-55mk2 v1.01 program ROM (R00233567)"
+    required: false
+    max_size: 524288
+    sha256: "a4c9fd821059054c7e7681d61f49ce6f42ed2fe407a7ec1ba0dfdc9722582ce0"
+    validation: [sha256, size]
+    source_ref: "Nuked-SC55-CLAP rom_io.cpp:297, emu.cpp:247-254, mcu.h:217"
+
+  - name: "rom_sm.bin"
+    path: "soundcanvas-roms/SC-55mk2-v1.01/rom_sm.bin"
+    description: "SC-55mk2 v1.01 sub-MCU ROM (R15199880)"
+    required: false
+    max_size: 4096
+    sha256: "b0b5f865a403f7308b4be8d0ed3ba2ed1c22db881b8a8326769dea222f6431d8"
+    validation: [sha256, size]
+    source_ref: "Nuked-SC55-CLAP rom_io.cpp:299, emu.cpp:238, submcu.h:62"
+
+  - name: "waverom1.bin"
+    path: "soundcanvas-roms/SC-55mk2-v1.01/waverom1.bin"
+    description: "SC-55mk2 wave ROM 16M (R15209359)"
+    required: false
+    max_size: 2097152
+    sha256: "c6429e21b9b3a02fbd68ef0b2053668433bee0bccd537a71841bc70b8874243b"
+    validation: [sha256, size]
+    source_ref: "Nuked-SC55-CLAP rom_io.cpp:301, emu.cpp:238, pcm.h:83"
+
+  - name: "waverom2.bin"
+    path: "soundcanvas-roms/SC-55mk2-v1.01/waverom2.bin"
+    description: "SC-55mk2 wave ROM 8M (R15279813)"
+    required: false
+    max_size: 2097152
+    sha256: "5b753f6cef4cfc7fcafe1430fecbb94a739b874e55356246a46abe24097ee491"
+    validation: [sha256, size]
+    source_ref: "Nuked-SC55-CLAP rom_io.cpp:303, emu.cpp:238, pcm.h:84"
+
+  # -- SC-55mk2 program ROMs with Capital Tone Fallback restored --
+  # Accepted in place of the stock SC-55mk2 program ROM.
+
+  - name: "rom2.bin"
+    path: "soundcanvas-roms/SC-55mk2-v1.01/rom2.bin"
+    description: "SC-55mk2 program ROM, strict SC-55 tones, SC-55 v1.21 drums"
+    required: false
+    max_size: 524288
+    sha256: "64f8c9daf1021cf86ea4ddf03a29b81b5ea0c18e74f462833023436388bb9dc4"
+    validation: [sha256, size]
+    source_ref: "Nuked-SC55-CLAP rom_io.cpp:553"
+
+  - name: "rom2.bin"
+    path: "soundcanvas-roms/SC-55mk2-v1.01/rom2.bin"
+    description: "SC-55mk2 program ROM, strict SC-55 tones, SC-55 v2.00 drums"
+    required: false
+    max_size: 524288
+    sha256: "14d14778caf46ffa9e3d608aa8e9c1a60c32bd4a536c26af3b2e1d81784c60f9"
+    validation: [sha256, size]
+    source_ref: "Nuked-SC55-CLAP rom_io.cpp:555"
+
+  - name: "rom2.bin"
+    path: "soundcanvas-roms/SC-55mk2-v1.01/rom2.bin"
+    description: "SC-55mk2 program ROM, SC-55 tones, SC-55 v1.21 drums"
+    required: false
+    max_size: 524288
+    sha256: "10b3f09485a74bb014f1a940d5c67f380c7979b62891d540d788154c83f17430"
+    validation: [sha256, size]
+    source_ref: "Nuked-SC55-CLAP rom_io.cpp:557"
+
+  - name: "rom2.bin"
+    path: "soundcanvas-roms/SC-55mk2-v1.01/rom2.bin"
+    description: "SC-55mk2 program ROM, SC-55 tones, SC-55 v2.00 drums"
+    required: false
+    max_size: 524288
+    sha256: "a2c720be1ab9115930d27f821a413c0366b7bf0c4ddfe0dadc5086136a1a4345"
+    validation: [sha256, size]
+    source_ref: "Nuked-SC55-CLAP rom_io.cpp:559"
+
+  - name: "rom2.bin"
+    path: "soundcanvas-roms/SC-55mk2-v1.01/rom2.bin"
+    description: "SC-55mk2 program ROM, SC-55mkII tones, SC-55 v1.21 drums"
+    required: false
+    max_size: 524288
+    sha256: "16cec615da10089beffe6de5129ba8ba33fa1bf017a5e6b78ad1d6d15cf4708e"
+    validation: [sha256, size]
+    source_ref: "Nuked-SC55-CLAP rom_io.cpp:561"
+
+  - name: "rom2.bin"
+    path: "soundcanvas-roms/SC-55mk2-v1.01/rom2.bin"
+    description: "SC-55mk2 program ROM, SC-55mkII tones, SC-55 v2.00 drums"
+    required: false
+    max_size: 524288
+    sha256: "c22bf7d34a3406530924d750b007bbdb470f3216c65086edb6e53023383ee907"
+    validation: [sha256, size]
+    source_ref: "Nuked-SC55-CLAP rom_io.cpp:563"
+
+  # -- FluidSynth SoundFont --
+
+  - name: "default.sf2"
+    path: "soundfonts/default.sf2"
+    description: "General MIDI SoundFont"
+    required: false
+    aliases:
+      - "GeneralUser-GS.sf2"
+      - "FluidR3_GM.sf2"
+      - "Fluid_R3_GM_GS.sf2"
+      - "4gmgsmt-sf2_04-compat.sf2"
+      - "4GMGSMT.SF2"
+      - "synthgs-sf2_04-compat.sf2"
+    note: >
+      any SoundFont loads; GeneralUser GS, Fluid R3, the AWE32 4MB GM/GS/MT
+      bank and the Trevor0402 SC-55 SoundFont are recognised by filename or
+      RIFF INFO name and get their own reverb, chorus and filter presets
+    source_ref: "fluidsynth.cpp:672-689, 816-883, 1229-1242"
+
+  # -- PCjr system ROM --
+
+  - name: "system.rom"
+    description: "IBM PCjr system ROM"
+    required: false
+    min_size: 57344
+    validation: [size]
+    note: >
+      read during PCjr cartridge boot from the current DOS drive, then from
+      the host working directory; bytes 0x3000 to 0xDFFF are copied to
+      physical F3000. A short read leaves the region untouched and the
+      cartridge still boots
+    source_ref: "boot.cpp:379-397, 83-124"
+
+  # -- LOADROM images --
+  # Read from the mounted DOS drive under the name given on the command line
+  # and identified by their contents.
+
+  - name: "IBM PC Cassette BASIC ROM"
+    description: "IBM BASIC ROM image mapped at F600:0"
+    required: false
+    size: 32768
+    validation: [size]
+    note: >
+      accepted when the file is exactly 32768 bytes, starts with E9 8F 7E and
+      carries the string IBM at offset 0x4CD4
+    source_ref: "loadrom.cpp:56-80,95"
+
+  - name: "Video BIOS ROM"
+    description: "Option ROM image mapped at C000:0 and initialised"
+    required: false
+    min_size: 16384
+    max_size: 32768
+    validation: [size]
+    note: >
+      accepted when the file is 16384 bytes or larger, starts with 55 AA,
+      has byte 3 masked to E8 and carries the string IBM at offset 0x1E;
+      needs an EGA or better machine type
+    source_ref: "loadrom.cpp:56-75,88-93"
