@@ -1,0 +1,441 @@
+emulator: Mednafen
+type: standalone
+core_classification: other
+source: "https://mednafen.github.io/"
+upstream: "https://mednafen.github.io/"
+profiled_date: "2026-08-08"
+core_version: "1.32.1"
+display_name: "Mednafen"
+cores: [mednafen]
+mode: standalone
+systems:
+  - apple-ii
+  - apple-iie
+  - atari-lynx
+  - bandai-wswan
+  - bandai-wswanc
+  - nec-pc-engine
+  - nec-pc-engine-cd
+  - nec-pcfx
+  - nec-supergrafx
+  - nintendo-fds
+  - nintendo-gb
+  - nintendo-gbc
+  - nintendo-gba
+  - nintendo-nes
+  - nintendo-snes
+  - nintendo-virtualboy
+  - sega-gamegear
+  - sega-mastersystem
+  - sega-megacd
+  - sega-megadrive
+  - sega-saturn
+  - sega-stv
+  - snk-ngp
+  - snk-ngpc
+  - sony-playstation
+
+notes: |
+  Multi-system emulator by the Mednafen Team, the upstream of the beetle_* and
+  mednafen_* libretro cores, which are forks of individual modules. A module is
+  picked automatically from the file, or forced with -force_module <name>.
+
+  Every firmware file resolves to <base>/<filesys.path_firmware>/<name>, with
+  filesys.path_firmware defaulting to "firmware" and the base directory being
+  ~/.mednafen on Unix. An absolute path in either the setting or the per-file
+  path setting bypasses that. A file placed directly in the base directory is
+  still found, as a pre-0.9.0 compatibility fallback.
+  ref: general.cpp:277-300, mednafen.cpp:124
+
+  Modules compiled by default that load no external file: gb, snes, snes_faust,
+  vb, wswan, ngp, sms, gg. The snes module (bsnes 0.059) has every coprocessor
+  ROM compiled in; snes_faust synthesises the DSP-1 and CX4 data ROMs
+  (cart/dsp1-datarom-synth.h, cart/cx4.cpp:58); ngp installs a reverse
+  engineered HLE BIOS (ngp/bios.cpp:182-239).
+
+  The nes_new module is declared but never built: configure.ac:392-393 keeps
+  both the AC_DEFINE and the AM_CONDITIONAL commented out.
+
+  cdplay (audio CD), ssfplay (Saturn SSF) and sasplay (Sega Model 2/3 SCSP
+  sound) are player modules, not system emulation. sasplay reads the board's
+  sound ROM set from the directory of the loaded file, never from the firmware
+  directory (sasplay.cpp:869-886), so those ROMs are game content.
+
+  Two settings name an external file that is not firmware data. wswan.excomm.path
+  ("wonderfence") is an executable forked and execlp'd for link comms
+  (comm.cpp:56-65). Custom palettes resolve to <gamebase>.pal,
+  <gamebase>.<md5>.pal or <shortname>.pal (general.cpp:303-322) and are
+  user-authored.
+
+  ES-DE invokes the binary as %EMULATOR_MEDNAFEN% -force_module <module> %ROM%
+  and declares no BIOS of its own.
+
+files:
+  # --- apple2 ---
+  # apple2.model defaults to "ii_ii+" (apple2.cpp:3137). Under that model the
+  # system firmware is Applesoft and the ROM card is Integer (apple2.cpp:1868-1870),
+  # but the ROM card is skipped while the language card is active, which 64 KiB
+  # of RAM enables (apple2.cpp:2238, 2362). Loading a DOS 3.2 disk forces RAM to
+  # 48 KiB and the Disk II firmware to 13-sector (apple2.cpp:2000-2006), which
+  # brings both the ROM card and the 13-sector pair into play with no user action.
+
+  - name: "apple2-asoft-auto.rom"
+    system: apple-ii
+    description: "Apple II+ AppleSoft BASIC and Autostart system ROMs, concatenated (341-0011, 341-0012, 341-0013, 341-0014, 341-0015, 341-0020)"
+    required: true
+    min_size: 12288
+    sha256: "fc3e9d41e9428534a883df5aa10eb55b73ea53d2fcbb3ee4f39bed1b07a82905"
+    validation: [size]
+    source_ref: "apple2/apple2.cpp:1342-1350, 1869, 2282, 1473-1476"
+    note: "System firmware for model ii+, ROM card for model ii. Read as 0x3000 bytes at $D000. The hash is in the ROMDB table and only labels the dump in the startup log; nothing rejects a mismatch."
+
+  - name: "apple2-int-auto.rom"
+    system: apple-ii
+    description: "Apple II Integer BASIC and Autostart system ROMs, concatenated (341-0001, 341-0002, 341-0003, 341-0020)"
+    required: true
+    min_size: 8192
+    sha256: "cb52b212a62f808c2f59600b2823491ee12bd91cab8e0260fe34b5f14c47552f"
+    validation: [size]
+    source_ref: "apple2/apple2.cpp:1352-1363, 1860, 2284, 2392, 1468-1471"
+    note: "System firmware for model ii, ROM card for model ii+. Read as 0x2000 bytes at $E000, the $D000-$DFFF window stays unmapped. Reached under the default model when a DOS 3.2 disk drops RAM to 48 KiB."
+
+  - name: "apple2e.rom"
+    system: apple-iie
+    description: "Apple IIe BASIC and system ROMs, concatenated (342-0135-A, 342-0134-A)"
+    required: true
+    min_size: 16384
+    sha256: "1fb812584c6633fa16b77b20915986ed1178d1e6fc07a647f7ee8d4e6ab9d40b"
+    validation: [size]
+    source_ref: "apple2/apple2.cpp:1320-1325, 2266, 1478-1481"
+    note: "Loaded unconditionally when apple2.model is iie. Read as 0x4000 bytes at $C000."
+
+  - name: "apple2e-video.rom"
+    system: apple-iie
+    description: "Apple IIe video (character generator) ROM, 342-0133-A"
+    required: true
+    min_size: 4096
+    sha256: "ed5bdd4afa509134e85f1d020685af7ff50e279226eb869a17825b471cc1634c"
+    validation: [size]
+    source_ref: "apple2/apple2.cpp:2299-2324, 1488-1491"
+    note: "Loading aborts on sha256 0d54ff735c060c55d54b8a22d0112af78a6465ce9c9aae4a865d207e5c8ff1e7, a known bad dump (apple2.cpp:2319-2320). No positive hash check."
+
+  - name: "apple2e-kb.rom"
+    system: apple-iie
+    description: "Apple IIe keyboard ASCII mapping ROM, 342-0132-B"
+    required: true
+    min_size: 2048
+    sha256: "68198ae95923926b0307893d03ec286f00822c93a0b6dabfca565f6718dd5a56"
+    validation: [size]
+    source_ref: "apple2/apple2.cpp:2331-2351, 1498-1506"
+    note: "The revised IIe dump 342-0132-C, sha256 fbb9620e01f4f728e5a8ba86544900978d7803f6a7d577d384e288dfed9a4907, is equally recognised at this filename. Read as 0x800 bytes."
+
+  - name: "apple2e-enh.rom"
+    system: apple-iie
+    description: "Enhanced Apple IIe BASIC and system ROMs, concatenated (342-0304-A, 342-0303-A, 342-0349-B)"
+    required: true
+    min_size: 16384
+    sha256: "aab38a03ca8deabbb2f868733148c2efd6f655a59cd9c5d058ef3e0b7aa86a1a"
+    validation: [size]
+    source_ref: "apple2/apple2.cpp:1327-1332, 2264, 1483-1486"
+    note: "Loaded unconditionally when apple2.model is iie_enh. Read as 0x4000 bytes at $C000."
+
+  - name: "apple2e-enh-video.rom"
+    system: apple-iie
+    description: "Enhanced Apple IIe video (character generator) ROM, 342-0265-A"
+    required: true
+    min_size: 4096
+    sha256: "52c3b87900ac939f6525402cab1ccfd8f8259290fc6df54da48fb4c98ae3ed0f"
+    validation: [size]
+    source_ref: "apple2/apple2.cpp:2299-2324, 1493-1496"
+    note: "Same bad-dump rejection as apple2e-video.rom."
+
+  - name: "apple2e-enh-kb.rom"
+    system: apple-iie
+    description: "Enhanced Apple IIe keyboard ASCII mapping ROM, 341-0132-D"
+    required: true
+    min_size: 2048
+    sha256: "a1989da84ea4381d309e7e08783771f884e913236b9bcc71c3d649aacf76537a"
+    validation: [size]
+    source_ref: "apple2/apple2.cpp:2331-2351, 1508-1511"
+
+  - name: "disk2-16boot.rom"
+    system: apple-ii
+    description: "Disk II interface 16-sector P5 boot ROM, 341-0027"
+    required: true
+    size: 256
+    sha256: "de1e3e035878bab43d0af8fe38f5839c527e9548647036598ee6fe7ec74d2a7d"
+    validation: [size, sha256]
+    source_ref: "apple2/apple2.cpp:2119, 2127-2137, 1620"
+    note: "Default Disk II firmware. The sha256 is enforced: a mismatch throws \"Firmware data ... is corrupt or otherwise wrong\"."
+
+  - name: "disk2-16seq.rom"
+    system: apple-ii
+    description: "Disk II interface 16-sector P6 sequencer ROM, 341-0028"
+    required: true
+    size: 256
+    sha256: "e5e30615040567c1e7a2d21599681f8dac820edbdcda177b816a64d74b3a12f2"
+    validation: [size, sha256]
+    source_ref: "apple2/apple2.cpp:2120, 2127-2137, 1620"
+    note: "P6 sequencer dumps taken linearly through the P5 socket must have A7 swapped with A5, D4 with D7 and D5 with D6 before Mednafen accepts them. P5 boot ROMs need no such rearranging."
+
+  - name: "disk2-13boot.rom"
+    system: apple-ii
+    description: "Disk II interface 13-sector P5 boot ROM, 341-0009"
+    required: true
+    size: 256
+    sha256: "2d2599521fc5763d4e8c308c2ee7c5c4d5c93785b8fb9a4f7d0381dfd5eb60b6"
+    validation: [size, sha256]
+    source_ref: "apple2/apple2.cpp:2113, 2127-2137, 2000-2006"
+    note: "Selected automatically for DOS 3.2 disks, or by disk2.firmware 13sec in a MAI file."
+
+  - name: "disk2-13seq.rom"
+    system: apple-ii
+    description: "Disk II interface 13-sector P6 sequencer ROM, 341-0010"
+    required: true
+    size: 256
+    sha256: "4234aed053c622b266014c4e06ab1ce9e0e085d94a28512aa4030462be0a3cb9"
+    validation: [size, sha256]
+    source_ref: "apple2/apple2.cpp:2114, 2127-2137, 2000-2006"
+    note: "Same P6 rearranging as disk2-16seq.rom. A linear P5-socket dump hashes to 383c55f5333cbfde39dd41528186631e5aca2eddfec30716344f03b6a4d44655 and is rejected."
+
+  # --- lynx ---
+
+  - name: "lynxboot.img"
+    system: atari-lynx
+    description: "Atari Lynx boot ROM"
+    required: true
+    min_size: 512
+    validation: [size]
+    source_ref: "lynx/system.cpp:101, lynx/rom.cpp:55-74"
+    note: "Loaded for every cartridge, before the cart itself. Throws if the file is under 512 bytes; the first 512 bytes are used. No hash check and no HLE fallback."
+
+  # --- nes ---
+
+  - name: "disksys.rom"
+    system: nintendo-fds
+    description: "Famicom Disk System BIOS"
+    required: true
+    min_size: 8192
+    validation: [size]
+    source_ref: "nes/fds.cpp:603-617"
+    note: "Read as 8192 bytes. An iNES header is detected and skipped, with a further 16384-byte skip when the header declares 2 PRG banks."
+
+  - name: "gg.rom"
+    system: nintendo-nes
+    description: "Game Genie ROM image"
+    required: false
+    min_size: 4352
+    source_ref: "nes/cart.cpp:570-597, nes/nes.cpp:298-299, nes/nes.cpp:454-455"
+    note: "Loaded only when nes.gg is enabled; that setting defaults to 0. Path comes from nes.ggrom. An iNES image is read as 4096 bytes of PRG plus 256 bytes of CHR taken 16384 bytes further in; a raw image is read as 4352 contiguous bytes."
+
+  # --- pce and pce_fast ---
+
+  - name: "syscard3.pce"
+    system: nec-pc-engine-cd
+    description: "CD-ROM System Card 3.0"
+    required: true
+    size: 262144
+    source_ref: "pce/pce.cpp:647-656, 1103, pce_fast/pce.cpp:480-487, 647"
+    note: "Default of both pce.cdbios and pce_fast.cdbios. The pce module imposes no size constraint, the file length drives the bank mapping (pce/huc.cpp:308-372). The pce_fast module reads exactly 262144 bytes and skips a 512-byte copier header when the file size has bit 9 set (pce_fast/huc.cpp:296-301). Arcade Card mode extends the same image, it does not need another file."
+
+  - name: "gecard.pce"
+    system: nec-pc-engine-cd
+    description: "Games Express CD Card BIOS"
+    required: false
+    size: 262144
+    source_ref: "pce/pce.cpp:514-550, 647-648, 1104"
+    note: "Default of pce.gecdbios, used instead of pce.cdbios when DetectGECD recognises the disc. The pce_fast module has no equivalent setting."
+
+  # --- pcfx ---
+
+  - name: "pcfx.rom"
+    system: nec-pcfx
+    description: "PC-FX BIOS"
+    required: true
+    size: 1048576
+    validation: [size]
+    source_ref: "pcfx/pcfx.cpp:605-618, 1115"
+    note: "Default of pcfx.bios. Must be exactly 1048576 bytes or loading throws. No hash check."
+
+  - name: "FX-SCSI ROM"
+    system: nec-pcfx
+    description: "PC-FX FX-SCSI expansion ROM"
+    required: false
+    min_size: 524288
+    source_ref: "pcfx/pcfx.cpp:620-632, 1116"
+    note: "Path comes from pcfx.fxscsi, which defaults to \"0\" and is skipped for the values 0, none and the empty string. Mednafen names no default file and opens the path with a bare FileStream, so it is not resolved under the firmware directory. Marked developer-only upstream. 524288 bytes are read and mapped at 0x80780000."
+
+  # --- psx ---
+
+  - name: "scph5500.bin"
+    system: sony-playstation
+    description: "SCPH-5500 / v3.0J BIOS"
+    region: [japan]
+    required: true
+    size: 524288
+    sha256: "9c0421858e217805f4abe18698afea8d5aa36ff0727eb8484944e00eb5e7eadb"
+    validation: [size, sha256]
+    source_ref: "psx/psx.cpp:1764-1769, 1773-1781, 2373, 251"
+    note: "Default of psx.bios_jp. Size must be exactly 524288. With psx.bios_sanity on, which is the default, a hash listed as a bad dump or as belonging to another region throws; an unknown hash only logs a warning."
+
+  - name: "scph5501.bin"
+    system: sony-playstation
+    description: "SCPH-5501 / v3.0A BIOS"
+    region: [north-america]
+    required: true
+    size: 524288
+    sha256: "11052b6499e466bbf0a709b1f9cb6834a9418e66680387912451e971cf8a1fef"
+    validation: [size, sha256]
+    source_ref: "psx/psx.cpp:1764-1769, 1773-1781, 2374, 252"
+    note: "Default of psx.bios_na. The BIOS table carries 24 recognised dumps in total, two of them flagged bad (psx.cpp:228-268)."
+
+  - name: "scph5502.bin"
+    system: sony-playstation
+    description: "SCPH-5502 / v3.0E BIOS"
+    region: [europe]
+    required: true
+    size: 524288
+    sha256: "1faaa18fa820a0225e488d9f086296b8e6c46df739666093987ff7d8fd352c09"
+    validation: [size, sha256]
+    source_ref: "psx/psx.cpp:1764-1769, 1773-1781, 2375, 253"
+    note: "Default of psx.bios_eu."
+
+  # --- ss (Saturn and ST-V) ---
+  # ss.bios_jp serves the JP and Asia NTSC areas, ss.bios_na_eu every other
+  # area (ss.cpp:1431-1434). With ss.bios_sanity on, which is the default, the
+  # five hashes below are checked three ways: a file carrying one of these
+  # names must hash to the matching digest, a recognised hash must belong to
+  # the area being emulated, and a Saturn hash is refused for ST-V and the
+  # reverse (ss.cpp:1447-1492).
+
+  - name: "sega_101.bin"
+    system: sega-saturn
+    description: "Saturn BIOS v1.01 (Japan)"
+    region: [japan, asia-ntsc]
+    required: true
+    size: 524288
+    sha256: "dcfef4b99605f872b6c3b6d05c045385cdea3d1b702906a0ed930df7bcb7deac"
+    validation: [size, sha256]
+    source_ref: "ss/ss.cpp:1431-1434, 1437-1445, 2441, 1459"
+    note: "Default of ss.bios_jp."
+
+  - name: "mpr-17933.bin"
+    system: sega-saturn
+    description: "Saturn BIOS (North America and Europe)"
+    region: [north-america, europe, south-korea, asia-pal, brazil, latin-america]
+    required: true
+    size: 524288
+    sha256: "96e106f740ab448cf89f0dd49dfbac7fe5391cb6bd6e14ad5e3061c13330266f"
+    validation: [size, sha256]
+    source_ref: "ss/ss.cpp:1431-1434, 1437-1445, 2442, 1461"
+    note: "Default of ss.bios_na_eu."
+
+  - name: "sega1003.bin"
+    system: sega-saturn
+    description: "Saturn BIOS v1.003 (Japan)"
+    region: [japan, asia-ntsc]
+    required: false
+    size: 524288
+    sha256: "cc1e1b7f88f1c6e6fc35994bae2c2292e06fdae258c79eb26a1f1391e72914a8"
+    validation: [size, sha256]
+    source_ref: "ss/ss.cpp:1457, 1447-1492"
+    note: "Recognised alternative for ss.bios_jp."
+
+  - name: "sega_100.bin"
+    system: sega-saturn
+    description: "Saturn BIOS v1.00 (Japan)"
+    region: [japan, asia-ntsc]
+    required: false
+    size: 524288
+    sha256: "ae4058627bb5db9be6d8d83c6be95a4aa981acc8a89042e517e73317886c8bc2"
+    validation: [size, sha256]
+    source_ref: "ss/ss.cpp:1458, 1447-1492"
+    note: "Recognised alternative for ss.bios_jp."
+
+  - name: "sega_100a.bin"
+    system: sega-saturn
+    description: "Saturn BIOS v1.00a (North America and Europe)"
+    region: [north-america, europe, south-korea, asia-pal, brazil, latin-america]
+    required: false
+    size: 524288
+    sha256: "87293093fad802fcff31fcab427a16caff1acbc5184899b8383b360fd58efb73"
+    validation: [size, sha256]
+    source_ref: "ss/ss.cpp:1460, 1447-1492"
+    note: "Recognised alternative for ss.bios_na_eu."
+
+  - name: "epr-20091.ic8"
+    system: sega-stv
+    description: "ST-V BIOS (Japan)"
+    region: [japan, asia-ntsc]
+    required: true
+    size: 524288
+    validation: [size]
+    source_ref: "ss/ss.cpp:1420-1428, 1437-1445, 2444"
+    note: "Default of ss.bios_stv_jp. ST-V dumps are absent from the sanity table, so only the 524288-byte size is enforced. Loaded byte-swapped the other way round from a Saturn BIOS (ss.cpp:1495-1499)."
+
+  - name: "epr-17952a.ic8"
+    system: sega-stv
+    description: "ST-V BIOS (North America)"
+    region: [north-america]
+    required: true
+    size: 524288
+    validation: [size]
+    source_ref: "ss/ss.cpp:1420-1428, 1437-1445, 2445"
+    note: "Default of ss.bios_stv_na, used for every area that is not Japan, Asia NTSC or PAL Europe."
+
+  - name: "epr-17954a.ic8"
+    system: sega-stv
+    description: "ST-V BIOS (Europe)"
+    region: [europe]
+    required: true
+    size: 524288
+    validation: [size]
+    source_ref: "ss/ss.cpp:1420-1428, 1437-1445, 2446"
+    note: "Default of ss.bios_stv_eu."
+
+  - name: "mpr-18811-mx.ic1"
+    system: sega-saturn
+    description: "King of Fighters '95 ROM cart"
+    required: false
+    min_size: 2097152
+    source_ref: "ss/ss.cpp:1332, 1389-1397, 2477, ss/cart/rom.cpp:37-48"
+    note: "Default of ss.cart.kof95_path. Loaded when the cart type resolves to KOF95, which ss.cart auto does from the internal game database. 0x200000 bytes are read and byte-swapped."
+
+  - name: "mpr-19367-mx.ic1"
+    system: sega-saturn
+    description: "Ultraman: Hikari no Kyojin Densetsu ROM cart"
+    required: false
+    min_size: 2097152
+    source_ref: "ss/ss.cpp:1333, 1389-1397, 2478, ss/cart/rom.cpp:37-48"
+    note: "Default of ss.cart.ultraman_path. Same loading path as the KoF 95 cart."
+
+  - name: "satar4mp.bin"
+    system: sega-saturn
+    description: "Action Replay 4M Plus firmware"
+    required: false
+    min_size: 262144
+    source_ref: "ss/ss.cpp:1334, 1389-1397, 2479, ss/cart/ar4mp.cpp:125-140"
+    note: "Default of ss.cart.satar4mp_path. 0x40000 bytes are read into the flash array and byte-swapped. The setting is hidden from the documentation and the cart is marked unfinished upstream, pending CPU UBC emulation (ar4mp.cpp:22-24)."
+
+  # --- md ---
+
+  - name: "us_scd1_9210.bin"
+    system: sega-megacd
+    description: "Sega CD BIOS"
+    required: true
+    size: 131072
+    validation: [size]
+    source_ref: "md/cd/cd.cpp:894-915, 971-989, md/system.cpp:630-641, 801, 755"
+    note: "Default of md.cdbios. LoadCD is wired into the module and reaches MDCD_Init, which throws unless the file is exactly 131072 bytes. The setting's own help text states that Sega CD emulation is currently nonfunctional."
+
+  # --- gba ---
+
+  - name: "GBA BIOS ROM image"
+    system: nintendo-gba
+    description: "Game Boy Advance BIOS"
+    required: false
+    hle_fallback: true
+    size: 16384
+    validation: [size]
+    source_ref: "gba/GBA.cpp:2470-2494, 3278, 772"
+    note: "Path comes from gba.bios, which defaults to the empty string and is skipped for the values 0, none and the empty string, so Mednafen names no default file. When set, the file must be exactly 16384 bytes. Otherwise the built-in HLE BIOS myROM is used, and the setting is ignored outright for GSF playback."

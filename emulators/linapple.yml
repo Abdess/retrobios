@@ -1,0 +1,255 @@
+emulator: LinApple
+type: standalone
+core_classification: community_fork
+source: "https://github.com/linappleii/linapple"
+upstream: "https://github.com/AppleWin/AppleWin"
+profiled_date: "2026-08-08"
+source_commit: "b7a26b46773996130a602b9ac7ac2ebeae5c0b11"
+core_version: "2.3.0"
+display_name: "Apple - Apple II (LinApple)"
+cores:
+  - linapple
+systems:
+  - apple-ii
+mode: standalone
+
+notes: |
+  SDL port of AppleWin for Linux. The tree was taken off SourceForge by
+  maxolasersquad, forked further by several users, and now sits under the
+  linappleii namespace (README.md:8-22). Machine types are Apple ][,
+  Apple ][+, Apple //e and Enhanced Apple //e.
+
+  Every ROM is compiled into the binary as a C string literal. MemInitialize
+  picks one of four system ROM arrays by g_Apple2Type and copies it into
+  memrom, splitting off the first 4 KB as internal Cx ROM for the two //e
+  types (Memory.cpp:1012-1052). The four IDR_APPLE2*_ROM macros defined just
+  above that switch hold .rom filenames and are never referenced. Peripheral
+  firmware is embedded the same way and installed by MemInitialize: parallel
+  printer in slot 1, Super Serial Card in slot 2, mouse in slot 4, Disk II in
+  slot 6, hard disk in slot 7 (Memory.cpp:1057-1062). Slot 4 is filled only
+  when g_Slot4 is CT_MouseInterface, slot 7 only when the hard disk is
+  enabled (Harddisk.cpp:279-281).
+
+  Character generators are res/charset40*.png, converted to XPM arrays by the
+  Makefile and included at Video.cpp:43-47. One of five is chosen from the
+  machine type and g_KeyboardLanguage (Video.cpp:1264-1291). The window icon,
+  status font and splash screen are XPM arrays as well (asset.cpp:29-31,61-75).
+
+  Master.dsk is the only data file the emulator searches for. Path::FindDataFile
+  walks ~/.local/share/linapple, the XDG config directory, the executable
+  directory, the compiled-in ASSET_DIR and the two share paths
+  (Util_Path.h:43-68). ImageOpen rejects an image that no format detector
+  claims, and for a .dsk the detector that runs first is DoDetect, which gates
+  on file size (DiskImage.cpp:424-427,977-1034).
+
+  The debugger reads its symbol tables through g_sProgramDir, a buffer declared
+  empty at Applewin.cpp:87 and never assigned anywhere in the tree, so the
+  names resolve against the working directory. g_sFileNameSymbols lists nine
+  tables (Debugger_Symbols.cpp:48-58) and DebugInitialize preloads three with
+  missing-file reporting suppressed (Debug.cpp:8676-8696); the other six load
+  from the matching SYM command. A table that is absent leaves the debugger
+  running without its symbols (Debugger_Symbols.cpp:576-584).
+
+  linapple.conf carries preferences only, and is searched over ./, the XDG
+  config and data directories, every $XDG_CONFIG_DIRS entry and /etc
+  (Applewin.cpp:803-815). Each accessor returns a compiled-in default when a
+  key is missing (Registry.cpp:87-116), and Configuration::Save is compiled
+  out unless REGISTRY_WRITEABLE is defined (Registry.cpp:63-85).
+
+files:
+  - name: Master.dsk
+    required: false
+    description: "Boot floppy inserted into slot 6 drive 1 at startup"
+    min_size: 143105
+    max_size: 143364
+    validation: [size]
+    source_ref: "asset.cpp:33,101-128; Applewin.cpp:626-633; DiskImage.cpp:424-427"
+    note: >
+      Inserted only when the Slot 6 Autoload preference is off; when it is on,
+      the two configured disk images are loaded instead. Asset_FindMasterDisk
+      prints a warning and returns 255 when no search path holds the file, and
+      the emulator starts with an empty drive. No hash or content check is
+      performed. DoDetect also accepts the discrete sizes 143403 and 143488 for
+      DOS-order images. LinApple and Batocera ship different images under this
+      name, both 143360 bytes.
+
+  - name: APPLE2E.SYM
+    required: false
+    description: "Debugger symbol table for the main ROM"
+    source_ref: "Debugger_Symbols.cpp:49,553-584,751-767; Debug.cpp:8679-8680"
+    note: >
+      Preloaded into the Main table when the debugger initialises. Parsed as
+      text lines of address and symbol name, with no size or hash check.
+
+  - name: A2_BASIC.SYM
+    required: false
+    description: "Debugger symbol table for Applesoft BASIC"
+    source_ref: "Debugger_Symbols.cpp:50,553-584,751-767; Debug.cpp:8682-8683"
+    note: >
+      Preloaded into the Basic table when the debugger initialises. Parsed as
+      text lines of address and symbol name, with no size or hash check.
+
+analysis:
+  embedded_roms:
+    mechanism: "C string literals compiled into the binary, installed with memcpy"
+    extraction: "hashes computed from the decoded hex-escape literals"
+
+    system_roms:
+      - symbol: Apple2_rom
+        machine: "Apple ]["
+        machine_type: A2TYPE_APPLE2
+        source_ref: "inc/resource.h:3; Memory.cpp:1015-1018"
+        size: 12288
+        md5: 3c406514b9806a7c57ee65fb0b0c39b4
+        sha1: 09288be705464b608ff190519ab008d3dfcd1b05
+
+      - symbol: Apple2plus_rom
+        machine: "Apple ][+"
+        machine_type: A2TYPE_APPLE2PLUS
+        source_ref: "inc/resource.h:774; Memory.cpp:1019-1022"
+        size: 12288
+        md5: 572b3005a4fa49bc54917b069b82c1ab
+        sha1: 33a24f5489ba9195b44be77d9afb2252594cb5c7
+
+      - symbol: Apple2e_rom
+        machine: "Apple //e"
+        machine_type: A2TYPE_APPLE2E
+        source_ref: "inc/resource.h:1545; Memory.cpp:1023-1026"
+        size: 16384
+        md5: 346bc782c6a08a531c460e33bc03daf4
+        sha1: 61fa9254628e5bb7236fb474006116d67684d747
+        note: "First 4 KB loaded as internal Cx ROM, remaining 12 KB at $D000"
+
+      - symbol: Apple2eEnhanced_rom
+        machine: "Enhanced Apple //e"
+        machine_type: A2TYPE_APPLE2EEHANCED
+        source_ref: "inc/resource.h:2573; Memory.cpp:1027-1030"
+        size: 16384
+        md5: 38063e08c778503fc03ecebb979769e9
+        sha1: b8ea90abe135a0031065e01697c4a3a20d51198b
+        note: "First 4 KB loaded as internal Cx ROM, remaining 12 KB at $D000"
+
+    peripheral_firmware:
+      - symbol: Parallel_bin
+        device: "Parallel printer card"
+        slot: 1
+        source_ref: "src/ParallelPrinter.cpp:33,61-65"
+        size: 256
+        md5: 5902996f16dc78fc013f6e1db14805b3
+        sha1: c75c751589cbcc1ad4ab4f63676af7abadd86f5b
+
+      - symbol: SSC_rom
+        device: "Super Serial Card"
+        slot: 2
+        source_ref: "src/SerialComms.cpp:53,774-794"
+        size: 2048
+        md5: 67c0d61ab0911183faf05270f881a97e
+        sha1: 6dab633470c6bc4cb3e81d09fda46597caf8ee57
+        note: "Slot firmware taken from offset 0x700, full 2 KB kept as expansion ROM"
+
+      - symbol: MouseInterface_rom
+        device: "Mouse interface card"
+        slot: 4
+        source_ref: "src/MouseInterface.cpp:39,207-224"
+        size: 2048
+        md5: 22563ab338024dac7b03510371d49c57
+        sha1: 3a9d881a8a8d30f55b9719aceebbcf717f829d6f
+        note: "Installed only when g_Slot4 is CT_MouseInterface"
+
+      - symbol: Disk2_rom
+        device: "Disk II controller, 16 sector"
+        slot: 6
+        source_ref: "src/Disk.cpp:44,832-846"
+        size: 256
+        md5: 2020aa1413ff77fe29353f3ee72dc295
+        sha1: d4181c9f046aafc3fb326b381baac809d9e38d16
+        note: "Three bytes at $C64C are patched after the copy to drop a wait routine"
+
+      - symbol: Hddrvr_dat
+        device: "Hard disk controller"
+        slot: 7
+        source_ref: "src/Harddisk.cpp:108,279-288"
+        size: 256
+        md5: 9e5b56c2daf2a10bd8fd76db60273e08
+        sha1: b2430836d5fedb11ae9a680f14dedef0d41ed92e
+        note: "Installed only when the hard disk is enabled. Differs from the firmware carried by current AppleWin"
+
+    character_generators:
+      mechanism: "PNG converted to XPM by the Makefile, included at Video.cpp:43-47"
+      selection: "machine type, then g_KeyboardLanguage (Video.cpp:1264-1291)"
+      accepted_geometry: "128x128, or 128x256 for the Euro ROMs carrying a second language"
+      images:
+        - filename: charset40.png
+          used_for: "Apple //e and Enhanced //e, English (US)"
+          size: 2745
+          md5: c6029ef4d4fa272083769673bdcf2b6c
+          sha1: d79aa8af6446c3637401cb75ffdda92fdf7f3853
+        - filename: charset40_IIplus.png
+          used_for: "Apple ][ and Apple ][+"
+          size: 1956
+          md5: 2104f293d5df7137fdd579ea405da847
+          sha1: bc9aa5cbadfcffe82b5b20ce954555b9d07fa260
+        - filename: charset40_british.png
+          used_for: "English (UK)"
+          size: 5300
+          md5: aa001ec528e3c6c472d02cbb09c5b365
+          sha1: ac363e069b40658f86ccd1e2d57438db732dbc84
+        - filename: charset40_french.png
+          used_for: "French (FR)"
+          size: 5330
+          md5: f163ec67c91501b604ca349afef93fc3
+          sha1: 5b454a2e7194863df3a997cc21e7ea6d61eb61d7
+        - filename: charset40_german.png
+          used_for: "German (DE)"
+          size: 5290
+          md5: 4d8ab9d3f15ee19d9e62c1f163df7e48
+          sha1: f86bd5238604247e04d616850f244b489daef18d
+
+  symbol_tables:
+    source_ref: "src/Debugger/Debugger_Symbols.cpp:48-58"
+    lookup: "g_sProgramDir + filename, and g_sProgramDir is never assigned"
+    preloaded_at_init:
+      - APPLE2E.SYM
+      - A2_BASIC.SYM
+      - A2_USER1.SYM
+    loaded_on_command:
+      - A2_ASM.SYM
+      - A2_USER2.SYM
+      - A2_SRC1.SYM
+      - A2_SRC2.SYM
+      - A2_DOS33.SYM
+      - A2_PRODOS.SYM
+    note: >
+      Only APPLE2E.SYM and A2_BASIC.SYM are distributed with the emulator and
+      copied to the build output by the Makefile (:98-99,205-206). The user
+      slots and the remaining tables have no shipped counterpart.
+
+  debugger_scripts:
+    - filename: DebuggerAutoRun.txt
+      source_ref: "src/Debugger/Debug.cpp:8745-8755"
+      note: >
+        Run once through CmdOutputRun when the debugger first initialises, with
+        g_bReportMissingScripts cleared so absence is silent. Holds debugger
+        commands written by the user and has no counterpart in the source tree.
+
+  generated_files:
+    written_only:
+      - AppleWin.log
+      - Profile.txt
+      - Trace.txt
+      - AppleWin_Text40.txt
+      - AppleWin_Text80.txt
+      - "save states"
+      - "printer spool file"
+      - "FTP directory cache"
+    written_and_read_back:
+      - LinAppleDebugger.cfg
+    note: "Produced by the emulator, none is user-supplied"
+
+  unused_resources:
+    - filename: font.bmp
+      reason: "Asset_LoadBMP (asset.cpp:37-51) has no call sites and is not declared in asset.h"
+    - filename: icon.bmp
+      reason: "Asset_LoadBMP (asset.cpp:37-51) has no call sites and is not declared in asset.h"
+    - filename: fixedsys-excelsior-regular.ttf
+      reason: "no TTF symbol in the tree and no SDL_ttf in the Makefile link line"

@@ -1,0 +1,123 @@
+emulator: Mandarine
+type: standalone
+core_classification: community_fork
+source: "https://github.com/ptyfyre/mandarine-neo"
+upstream: "https://github.com/ptyfyre/mandarine-neo"
+profiled_date: "2026-08-08"
+source_commit: "7f8ec960b6183be4350bca099d23ddd9fc7bcaa3"
+core_version: "1.3.0"
+display_name: "Nintendo - 3DS (Mandarine)"
+cores:
+  - mandarine
+  - mandarine-qt
+systems:
+  - nintendo-3ds
+mode: standalone
+
+notes: |
+  Citra fork, renamed Mandarine-Neo at release 1.3.0. External files live in
+  sysdata/ and nand/ under the user directory: user/ next to the executable when
+  that directory exists, otherwise Mandarine on Windows and macOS and
+  mandarine-emu on Linux, with Citra and citra-emu kept as legacy locations.
+  ref: src/common/common_paths.h:16-70, src/common/file_util.cpp:770-839
+
+  InitKeys reads boot9.bin then aes_keys.txt. Encrypted content needs one of the
+  two; a ROM without crypto reads neither.
+  ref: src/core/hw/aes/key.cpp:315-324, src/core/file_sys/ncch_container.cpp:200-210
+
+  Failure to derive a key or to find a seed marks the content undecryptable and
+  loading stops with ErrorEncrypted.
+  ref: src/core/file_sys/ncch_container.cpp:219-223, src/core/file_sys/ncch_container.cpp:236-280, src/core/file_sys/ncch_container.cpp:347-349
+
+  System archives resolve to the NAND title tree. Shared font, Mii data, country
+  list and bad word list fall back to open-source replacements built into the
+  binary when the title is absent.
+  ref: src/core/file_sys/archive_ncch.cpp:126-179, externals/open_source_archives/Readme.md
+
+  The embedded shared font only answers title low ID 0x00014002. CHN, KOR and TWN
+  resolve to 0x00014102, 0x00014202 and 0x00014302, which fall through to
+  shared_font.bin and then to ErrorSystemFiles, reported as recoverable.
+  ref: src/core/hle/service/apt/apt.cpp:195-213, src/core/hle/service/apt/apt.cpp:276-291, src/mandarine_qt/main.cpp:3209-3215
+
+  ClCertA is read from NAND title 0x0004001B00010002 and its ctr-common-1-cert.bin
+  and ctr-common-1-key.bin members are decrypted with the KeySlot 0x0D normal key.
+  Both the title and the key slot are needed for authenticated HTTPS.
+  ref: src/core/hle/service/http/http_c.cpp:1963-2036
+
+  System titles are downloaded and installed in-app from the Nintendo CDN, so the
+  NAND title tree is not user-supplied.
+  ref: src/mandarine_qt/configuration/configure_system.cpp:672-678, src/core/hle/service/am/am.cpp:536, src/core/nus_download.cpp:12-13
+
+  DumpKeys.gm9, a GodMode9 script producing aes_keys.txt and seeddb.bin, ships in
+  the tree and documents sysdata/ as their destination.
+  ref: dist/dumpkeys/README.md, dist/dumpkeys/DumpKeys.gm9
+
+  The plugin loader scans sdmc/luma/plugins/<title id>/ for any .3gx file and
+  falls back to sdmc/luma/plugins/default.3gx. Plugins carry no fixed identity.
+  ref: src/core/hle/service/plgldr/plgldr.cpp:112-146
+
+  mcu.dat holds per-installation MCU state that the emulator writes itself when
+  the file is absent or carries the wrong magic.
+  ref: src/core/hle/service/cfg/cfg.cpp:734-756, src/core/hle/service/cfg/cfg.h:425-439
+
+  sector0x96.bin is defined but read by no code path.
+  ref: src/common/common_paths.h:70
+
+files:
+  - name: boot9.bin
+    path: sysdata/boot9.bin
+    system: nintendo-3ds
+    required: false
+    size: 65536
+    validation: [size]
+    note: "AES key section read at offset 55760, RSA modulus and exponent at 0xB3E0 and 0xB4E0"
+    source_ref: "src/core/hw/aes/key.cpp:137-206, src/core/hw/rsa/rsa.cpp:49-80, src/common/common_paths.h:69"
+
+  - name: aes_keys.txt
+    path: sysdata/aes_keys.txt
+    system: nintendo-3ds
+    required: false
+    note: "key slots, common keys, DLP and NFC key Ys and NFC secrets, one per line"
+    source_ref: "src/core/hw/aes/key.cpp:208-311, src/common/common_paths.h:68"
+
+  - name: seeddb.bin
+    path: sysdata/seeddb.bin
+    system: nintendo-3ds
+    required: false
+    note: "game seed database for 9.6+ titles; an empty database is written when the file is absent"
+    source_ref: "src/core/file_sys/seed_db.cpp:12-58"
+
+  - name: shared_font.bin
+    path: sysdata/shared_font.bin
+    system: nintendo-3ds
+    required: false
+    hle_fallback: true
+    note: "legacy path, tried after the shared font system archive; decompressed BCFNT with the 0x80 byte APT header"
+    source_ref: "src/core/hle/service/apt/apt.cpp:254-270, src/common/common_paths.h:67"
+
+  - name: CTCert.bin
+    path: sysdata/CTCert.bin
+    system: nintendo-3ds
+    required: false
+    size: 384
+    validation: [size]
+    note: "console client certificate; signature type must be 0x010005 and the issuer one of the two Nintendo CA G3 strings"
+    source_ref: "src/core/hle/service/am/am.cpp:2427-2454, src/core/hle/service/am/am.cpp:83-93, src/core/hle/service/am/am.h:95"
+
+  - name: SecureInfo_A
+    path: nand/rw/sys/SecureInfo_A
+    system: nintendo-3ds
+    required: false
+    size: 273
+    validation: [size]
+    note: "console region and serial number; loaded on a size check alone, and paired with LocalFriendCodeSeed_B"
+    source_ref: "src/core/hle/service/cfg/cfg.cpp:689-709, src/core/hle/service/cfg/cfg.h:180-186"
+
+  - name: LocalFriendCodeSeed_B
+    path: nand/rw/sys/LocalFriendCodeSeed_B
+    system: nintendo-3ds
+    required: false
+    size: 272
+    validation: [size]
+    note: "friend code generation seed; loaded on a size check alone, and paired with SecureInfo_A"
+    source_ref: "src/core/hle/service/cfg/cfg.cpp:711-732, src/core/hle/service/cfg/cfg.h:188-193"

@@ -1,0 +1,316 @@
+emulator: izapple2
+type: standalone
+core_classification: embedded_hle
+source: "https://github.com/ivanizag/izapple2"
+upstream: "https://github.com/ivanizag/izapple2"
+profiled_date: "2026-08-08"
+source_commit: "01deea8a97b19ac782a1d11fe1e8d07f07b6c835"
+core_version: "v2.4.0"
+display_name: "Apple - Apple II (izapple2)"
+cores:
+  - izapple2
+systems:
+  - apple-ii
+mode: standalone
+
+notes: |
+  Apple II emulator written in Go by Ivan Izaguirre. Boards: Apple ][ and ][+
+  with 48 KB, Apple IIe and //e enhanced with 128 KB, and two clones, the Copam
+  Base 64A and the Basis 108 (setup.go:36-58).
+
+  Every ROM the machine needs is compiled into the binary. The whole resources
+  directory is embedded with //go:embed (resources.go:25-26) and the 17 machine
+  configs with //go:embed configs/*.cfg (configuration.go:51-52). LoadResource
+  routes a name by its prefix: <internal>/ reads the embedded filesystem,
+  http:// and https:// fetch over the network, anything else is a path on disk
+  (resources.go:55-88). The shipped configs name main ROM, character ROM and
+  boot diskette as <internal>/ paths, so the emulator starts into DOS 3.3 with
+  no file on disk. The base64a and basis108 configs set rom: <custom>, which
+  dispatches to loadMultiPageRom over six embedded PROM dumps each
+  (setup.go:189-199, boardBase64a.go:7-16, boardBasis108.go:28-37).
+
+  Two of the 27 registered cards name an image the emulator downloads instead
+  of carrying: prodosromdrive and prodosromcard3 (cardBuilder.go:85-86). Both
+  read the card slot ROM out of that image, so neither card has a boot ROM
+  without it. No shipped model uses either card, they are reached with -sN.
+  prodosnvramdrive is left out of the factory (cardBuilder.go:87).
+
+  -rom and -charrom replace the embedded main and character ROM with a file of
+  the user's choosing, and every disk, hard disk and cassette parameter takes
+  user media and defaults to empty.
+
+  Seven frontends besides the core: a2sdl, a2sdl3, a2fyne, a2ebiten, a2wasm,
+  console and headless. ES-DE runs a2sdl, built as izapple2sdl_linux_amd64 or
+  izapple2sdl_windows_amd64.exe, and passes the image as a positional argument.
+  The libretro core in frontend/a2libretro builds from source only, is absent
+  from the buildbot and the RetroArch online updater (doc/libretro.md), and its
+  izapple2_libretro.info declares firmware_count = 0. It exposes the machine as
+  a model option and no card configuration, so the two card images cannot be
+  reached through it.
+
+files:
+  - name: "ProDOS_2.4.3_TJ.po"
+    required: false
+    description: "ProDOS ROM Drive card image, a 1 MB solid state disk by Terence Boldt"
+    source_ref: "cardProDOSRomDrive.go:31,39,46"
+    note: "Fetched from https://github.com/Alex-Kw/ProDOS-ROM-Drive-Images/raw/main/ProDOS_2.4.3_TJ.po when the card is added with no image parameter. The card slot ROM is read at offset 0x300. No size or hash check."
+
+  - name: "ProDOS-ROMCARD3_4MB_A2D.v1.4_v37.po"
+    required: false
+    size: 4194304
+    validation: [size]
+    description: "ProDOS ROM Card 3 image, a 4 MB ROM card by Ralle Palaveev"
+    source_ref: "cardProDOSRomCard3.go:29,37,42-44,48"
+    note: "Fetched from https://github.com/rallepalaveev/ProDOS-Romcard3/raw/main/ProDOS-ROMCARD3_4MB_A2D.v1.4_v37.po when the card is added with no image parameter. The card slot ROM is read at offset 0x200. Rejected unless exactly 4 MB."
+
+analysis:
+  embedded_resources:
+    mechanism: "//go:embed resources, served by LoadResource on the <internal>/ prefix"
+    source_ref: "resources.go:25-26,55-70"
+    count: 59
+    main_roms:
+      - filename: "341-000x_integer.rom"
+        size: 8192
+        md5: 894e6980cadd7bb3178b1ac8a15798df
+        sha1: 102fbf7dea8b8d6de5de1c484ff45e7b5dfb28d5
+      - filename: Apple2_Plus.rom
+        size: 12288
+        md5: 572b3005a4fa49bc54917b069b82c1ab
+        sha1: 33a24f5489ba9195b44be77d9afb2252594cb5c7
+      - filename: Apple2e.rom
+        size: 16384
+        md5: 346bc782c6a08a531c460e33bc03daf4
+        sha1: 61fa9254628e5bb7236fb474006116d67684d747
+      - filename: Apple2e_Enhanced.rom
+        size: 16384
+        md5: 38063e08c778503fc03ecebb979769e9
+        sha1: b8ea90abe135a0031065e01697c4a3a20d51198b
+      - filename: wozaniam_integer.rom
+        size: 32768
+        md5: 2f52e3571b952c0c6a7111bbe7d40b06
+        sha1: 5f7b851dbcab1df8f1883d2112f6ab1d16109f24
+
+    main_roms_clones:
+      - filename: BASE64A_D0.BIN
+        size: 4096
+        md5: 3be17e122814854eef489aa18fb2a18b
+        sha1: bd68bc9144483faff473e66a12eddd31fe369b68
+      - filename: BASE64A_D8.BIN
+        size: 4096
+        md5: 85fe91818dc1a6104a632f667d5d50ae
+        sha1: 8f19accf1d531779940be3f3c12af8277a3c412f
+      - filename: BASE64A_E0.BIN
+        size: 4096
+        md5: 1713e0a1013ac7f219de68a03e24acb7
+        sha1: f698da38f4f48bb9db73a71f85e6e350eb645c51
+      - filename: BASE64A_E8.BIN
+        size: 4096
+        md5: 9fc4cef642511e173a85e155e0dd17a6
+        sha1: 9fbf0faf5df19d7d2e6bfd4bacd12eccc3fc4cf9
+      - filename: BASE64A_F0.BIN
+        size: 4096
+        md5: 620957f7d52e44dbc8cfe0432d1c75d6
+        sha1: e397c2c154917a62866059b9c54b2c7796463a12
+      - filename: BASE64A_F8.BIN
+        size: 8192
+        md5: 20cf7dcd355196f77c4e490cb27d7050
+        sha1: 6141c21c5d6a06729355083e3e36c6af72e534f2
+      - filename: Basis108_D83_D0.BIN
+        size: 4096
+        md5: 4324e16f31623b3d6b06b0e6509407cb
+        sha1: 7901203845adab588850ae35f81e4ee2a2248686
+      - filename: Basis108_D70_D8.BIN
+        size: 4096
+        md5: 64bd9f89b1aeb32de7783fb3f8f7466f
+        sha1: b2a418818e4130859afd6c08b5695328a3edd2c5
+      - filename: Basis108_D56_E0.BIN
+        size: 4096
+        md5: e376cc43d22035a851703163551d033d
+        sha1: 938884eb3ebd0870f99df33ee7a03e93cd625ab4
+      - filename: Basis108_D40_E8.BIN
+        size: 4096
+        md5: ca3491a23265be503eefd52dbf6debaa
+        sha1: 380ffcf0dba008f0bc43a483931e98034b1d0d52
+      - filename: Basis108_D39_F0.BIN
+        size: 4096
+        md5: ff63fbda7a4cccf29236d3255fbe8bd5
+        sha1: b5ffc9b3552b13b2f577a42196addae71289203d
+      - filename: Basis108_D25_F8.BIN
+        size: 4096
+        md5: 242d0c2562d280843a16ebc70a8b30bc
+        sha1: 66b7eadfdb938cda0de01dbeab1b74aa88bd096c
+
+    character_roms:
+      - filename: Apple2rev7CharGen.rom
+        size: 2048
+        md5: 9ac0dc8c4d0002eb45b0b84be0bde5ec
+        sha1: f9d312f128c9557d9d6ac03bfad6c3ddf83e5659
+      - filename: Apple IIe Video Unenhanced.bin
+        size: 4096
+        md5: 2fbc2be2a84ea742de37be9925c7d7cd
+        sha1: 58ad0008df72896a18601e090ee0d58155ffa5be
+      - filename: Apple IIe Video Enhanced.bin
+        size: 4096
+        md5: 9123fff3442c0e688cc6816be88dd4ab
+        sha1: b2b5d87f52693817fc747df087a4aa1ddcdb1f10
+      - filename: BASE64A_ROM7_CharGen.BIN
+        size: 4096
+        md5: 0b144915453e5fa9d1f4a4cb85438eb7
+        sha1: d3827e22f377b681de1f8b18d8e57c66ca85cf38
+      - filename: D29_basis_cg_2532.rom.BIN
+        size: 4096
+        md5: 37a23661f21e4945aef680ac94f4d435
+        sha1: e6e4e357b3834a143df9e5834abfb4a9139457d4
+      - filename: ROMXce Production 1Mb Text ROM V5.bin
+        size: 131072
+        md5: 3e9255b76fcd20a84d4a40e99904c15d
+        sha1: 12b5596ffeb3ee334d43c1d8031ea3c0b1e2429c
+      - filename: "80ColumnP109.BIN"
+        size: 1024
+        md5: e564b4bb5728cc7b5f2c4c56330f7ad5
+        sha1: b1fad3f20e84c3063f25ba66555a1624563fff6b
+      - filename: "80ColumnP110.BIN"
+        size: 2048
+        md5: ce6630f0a1f3ba08127a2e82facc7a25
+        sha1: aefae76fb07740d042cf294f01424efa7cc7a199
+      - filename: videx_ultraterm_chs_7859.bin
+        size: 4096
+        md5: 1d77cc5edd8ea1330745efbb9bb4c902
+        sha1: 3517fa9e7a39573f1cb159b3161d6939dec199ba
+
+    card_firmware:
+      - filename: Apple Disk II 16 Sector Interface Card ROM P5 - 341-0027.bin
+        size: 256
+        md5: 2020aa1413ff77fe29353f3ee72dc295
+        sha1: d4181c9f046aafc3fb326b381baac809d9e38d16
+      - filename: Apple Disk II 16 Sector Interface Card ROM P6 - 341-0028.bin
+        size: 256
+        md5: 5f1be0c1cdff26f5956eef9643911886
+        sha1: bc39fbd5b9a8d2287ac5d0a42e639fc4d3c2f9d4
+      - filename: Apple Disk II 13 Sector Interface Card ROM P5 - 341-0009.bin
+        size: 256
+        md5: 4f80448507cf43ab40c17ac08d89e278
+        sha1: afd060e6f35faf3bb0146fa889fc787adf56330a
+      - filename: Apple Disk II 13 Sector Interface Card ROM P6 - 341-0010.bin
+        size: 256
+        md5: 897b0edef70b440133c99f65a507ebb6
+        sha1: e3d6d1c30653572b49ecc2dc54ce073978411a04
+      - filename: Apple II Parallel Printer Interface Card ROM fixed.bin
+        size: 256
+        md5: 275a06e8fec1e53a8315df54d1719822
+        sha1: 6392019fdb1498149d00a3cd98b1723b3f245847
+      - filename: Apple II Interface 341-0271-A ROM 2716 for 5MB Profile.bin
+        size: 2048
+        md5: 82015e7e3462116e2d1aa1d35d4f52b1
+        sha1: d9d4a7a2c14232c3872f9bbf55aff1b31f9a1cb5
+      - filename: Apple II Interface 341-0299-B ROM 2716 for 10MB Profile.bin
+        size: 2048
+        md5: e841f266fcc2e2452b26c73c4fb93eb0
+        sha1: 81750f023f964c2f3781d687cee5b1ea5b49d4ea
+      - filename: MemoryExpansionCard-341-0344a.bin
+        size: 4096
+        md5: a434738170b38589261bf93f3027a528
+        sha1: 6e823a1fa40ed37eeddcef23f5df24da2ea1463e
+      - filename: ramfactor_rom_14.bin
+        size: 8192
+        md5: e3f6a5c1ff75d278362a08403f8b1fec
+        sha1: 32cb02a6a915dd3962bfa1f0184a94253e03ba6b
+      - filename: ThunderclockPlusROM.bin
+        size: 2048
+        md5: 138b1f7e30953fcaa58fcbf562c15001
+        sha1: 60f434f5325899d7ea257a6e56e6f53eae65146a
+      - filename: Videx Videoterm ROM 2.4.bin
+        size: 1024
+        md5: acdb3732b38ddaee5ad357e08eea7676
+        sha1: bb653836e84850ce3197f461d4e19355f738cfbf
+      - filename: videx_ultraterm_frm_b537.bin
+        size: 4096
+        md5: 72972c464ecd229db27e03da1c92c332
+        sha1: b4acd1775c08ae43996ab4edf6d8e28f4736346b
+      - filename: SwyftCard ROM.bin
+        size: 16384
+        md5: 95a5579c1229944dd4841a1fb34e9e47
+        sha1: 1554bd03c536789f0ff7d1ef6c992265e311935d
+      - filename: ApplesoftInteger.BIN
+        size: 65536
+        md5: a7bae7a0a70cb4019c5145060e6a3451
+        sha1: b929f27b15de61391e28c18951e8d17dd8fd9435
+      - filename: MultiRom(SP boot)-Prog aid-28C256.BIN
+        size: 32768
+        md5: ecf5aa6f46a85ace61eb5cec505a908d
+        sha1: fb69c1f4551626749e7cfcfa5e2c27af7f195b8d
+      - filename: Apple2CardFirmware.bin
+        size: 512
+        md5: 76e795393f308a0788f2f95a67431b9a
+        sha1: b8b0458e8b0c3b406e03f5e8096cbc5cebd127b0
+      - filename: Apple2CardFirmwareImproved.bin
+        size: 512
+        md5: d2cf1b181b1934f9533c6d8b9d02f44c
+        sha1: 5e2737d233f5769df654d2d5aa96d24f2fd85671
+
+    diskettes:
+      - filename: dos33.dsk
+        size: 143360
+        md5: b13de32fd7a97d817744bf2dd71d5479
+        sha1: 63392d078a159342b12667d0fdfea7a01a961978
+      - filename: dos32.nib
+        size: 232960
+        md5: 082e79bb10fa5dcf07b2e49f689f5439
+        sha1: 3549a3a7d990d5b258f56fdc765258cb2ffb81ff
+      - filename: ProDOS_2_4_3.po
+        size: 143360
+        md5: 0577bdbb9c082787d00d50c830a75d67
+        sha1: 4bd80c2220b48cdcdcbe3876529a34b9a18efe5f
+      - filename: cpm_2.20B_56K.po
+        size: 143360
+        md5: c2c24f49d7c736e6317f6fe45d8f7468
+        sha1: cbd86f70ad822af826ae5039955997d722ae9d6a
+      - filename: CPM3.1_Disk_1.dsk
+        size: 143360
+        md5: e28e1efa972cf4789aec6f29e9e08013
+        sha1: 0305c74cf24b618b29047bf6b624e607071c954b
+      - filename: CPM3.1_Disk_2.dsk
+        size: 143360
+        md5: 5c5e948e7636c2b1e11735661788e24d
+        sha1: daecdcd23366029b066fc28694c924c958acab26
+      - filename: cpm65.po
+        size: 143360
+        md5: 685800279db9ee7131bb284061c8a007
+        sha1: 88fbea7f89ce2171afa10e86c825511913603ad7
+      - filename: A2DeskTop-1.4-en_800k.2mg
+        size: 819264
+        md5: 304a4585cefc808f9b7b9e585e6dc9c2
+        sha1: 88ccfe5fffbcc3d170d9c864cfcbbe9debc98cf7
+      - filename: Card Cat 1.7.dsk
+        size: 143360
+        md5: d9aeb6dcd25cbe06f1e0a5e39ae7d23f
+        sha1: 8dd11509479d37e9f46a29cb120eb0a1028b2c0d
+      - filename: Videx Ultraterm Utilities.dsk
+        size: 143360
+        md5: 81306cc573bf67153ca8d3f93a4528aa
+        sha1: 76f6d461e959f75be9cfcbbbf6479bdc8af6d176
+      - filename: SwyftWare_-_SwyftCard_Tutorial.woz
+        size: 101807
+        md5: 9ab515de46831b4b1274cae01c14b621
+        sha1: c27a1e4ad98be52ce6dbfef801d8083578084569
+      - filename: audit.dsk
+        size: 143360
+        md5: 917056239add083b76d5d72f8264cdda
+        sha1: 489cea555cdbe0957a9d31b7ae29b013a1a2525c
+      - filename: Apple II Pascal 1.3 APPLE0_ 680-0282-A.dsk
+        size: 143360
+        md5: 8f01fb2ab2826adf336061c102a7b94d
+        sha1: 58023a7e41623250213b9ab60b47798dcab00031
+      - filename: Apple II Pascal 1.3 APPLE1_ 680-0283-A.dsk
+        size: 143360
+        md5: 4f328d449cb9d34da866bfd9caad7efb
+        sha1: 8bbf47dce65ab672928ac16fe31e883afcf36f8a
+      - filename: Apple II Pascal 1.3 APPLE2_ 680-0284-A.dsk
+        size: 143360
+        md5: 41ed020ea6b1d4c682d9f92cf3b7c770
+        sha1: f46b04bda181cb0b6c79088d0f9efa8dd5b1db83
+      - filename: Apple II Pascal 1.3 APPLE3_ 680-0290-A.dsk
+        size: 143360
+        md5: 88c0f98953b4c7c1cb42ea1d745c518e
+        sha1: 10d2187111a1ccab8ed5b8141db81329e3e30768
+

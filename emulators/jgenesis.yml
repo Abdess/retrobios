@@ -1,0 +1,244 @@
+emulator: jgenesis
+type: standalone
+core_classification: other
+source: "https://github.com/jsgroth/jgenesis"
+upstream: "https://github.com/jsgroth/jgenesis"
+profiled_date: "2026-08-08"
+source_commit: "aba5813336765825e3e96b3059cfe49173c4faa5"
+core_version: "0.14.0"
+display_name: "Multi-System (jgenesis)"
+cores:
+  - jgenesis
+systems:
+  - sega-megadrive
+  - sega-megacd
+  - sega-32x
+  - sega-mastersystem
+  - sega-gamegear
+  - sega-sg1000
+  - nintendo-nes
+  - nintendo-snes
+  - nintendo-gb
+  - nintendo-gbc
+  - nintendo-gba
+  - nec-pc-engine
+mode: standalone
+
+notes: |
+  Multi-system emulator written in Rust by James Groth. One binary covers
+  thirteen hardware modes: Master System, Game Gear, SG-1000, Genesis, Sega CD,
+  32X, Sega CD 32X, NES, SNES, Game Boy, Game Boy Color, Game Boy Advance and
+  PC Engine (frontend/jgenesis-native-driver/src/extensions.rs:172-186).
+
+  No path is hardcoded. Every BIOS, boot ROM and coprocessor ROM is an
+  Option<PathBuf> in the config, defaulting to None and set through a file
+  dialog or the TOML config file (frontend/jgenesis-native-driver/src/config.rs
+  :76-78,95-99,146-159,191-193,205). The emulator identifies these files by
+  size and layout, never by name or hash, so the names below are the ones the
+  dumps circulate under rather than strings read from the source. RetroBat
+  writes bios_CD_U/E/J.bin and gba_bios.bin into the TOML directly
+  (emulatorLauncher/Generators/Jgenesis.Generator.cs:226-229,283-294).
+
+  Sega CD selects the BIOS by disc region and per_region_bios defaults to true,
+  so the US, European and Japanese images are each reachable
+  (frontend/jgenesis-native-driver/src/mainloop/genesis.rs:233-262,
+  frontend/jgenesis-native-config/src/genesis.rs:115). Setting "Use US BIOS for
+  all regions" collapses all three onto the US slot.
+
+  SNES coprocessor ROMs use the merged layout, program ROM followed by data ROM
+  in one file, not the split .program.rom / .data.rom pair. Program ROM
+  endianness is auto-detected from the first four opcodes, so either byte order
+  of a given dump loads (backend/snes-coprocessors/src/upd77c25.rs:382-390,405-419).
+  There is one DSP slot for DSP-1: guess_dsp_variant only returns Dsp1, Dsp2,
+  Dsp3 or Dsp4, and DSP-1B titles fall through to the DSP-1 slot
+  (backend/snes-core/src/memory/cartridge.rs:926-936). None of the seven chips
+  has an HLE implementation, so an affected game refuses to load when its slot
+  is empty.
+
+  32X needs no user file. The two SH-2 boot ROMs and the 68000 vector table are
+  compiled into the binary (backend/s32x-core/src/bootrom.rs:3-6). A Sega CD
+  BIOS is only consulted when the hardware mode is Sega CD or Sega CD 32X.
+
+  NES, SG-1000 and PC Engine need no BIOS. PC Engine has no CD-ROM² support, so
+  no System Card is involved. CX4, SA-1, S-DD1, SPC7110, Super FX, OBC1 and the
+  S-RTC are emulated from cartridge data alone and take no firmware file.
+
+  Written by the emulator, not obtained: save files, save states, the per-game
+  cheats TOML in its own serde format (frontend/jgenesis-native-config/src/lib.rs
+  :215,244-275) and the config file itself. The GUI exports a palette to
+  nespalette.pal (frontend/jgenesis-gui/src/app/nes.rs:428-430). portable.txt is
+  tested for existence only, to keep the settings beside the executable
+  (frontend/jgenesis-native-config/src/paths.rs:57-64).
+
+files:
+  # -------------------------------------------------------
+  # Sega CD
+  # -------------------------------------------------------
+  - name: "bios_CD_U.bin"
+    system: sega-megacd
+    description: "Sega CD BIOS (US)"
+    required: true
+    mode: standalone
+    size: 131072
+    validation: [size]
+    source_ref: "frontend/jgenesis-native-driver/src/mainloop/genesis.rs:41-51 (read), :256-262 (bios_path_for_region), backend/segacd-core/src/api.rs:77-79 (BIOS_LEN check)"
+    note: "Selected when the disc region is Americas, and for every region when per_region_bios is off."
+
+  - name: "bios_CD_E.bin"
+    system: sega-megacd
+    description: "Mega CD BIOS (Europe)"
+    required: true
+    mode: standalone
+    size: 131072
+    validation: [size]
+    source_ref: "frontend/jgenesis-native-driver/src/mainloop/genesis.rs:256-262 (eu_bios_path), backend/segacd-core/src/api.rs:77-79"
+
+  - name: "bios_CD_J.bin"
+    system: sega-megacd
+    description: "Mega CD BIOS (Japan)"
+    required: true
+    mode: standalone
+    size: 131072
+    validation: [size]
+    source_ref: "frontend/jgenesis-native-driver/src/mainloop/genesis.rs:256-262 (jp_bios_path), backend/segacd-core/src/api.rs:77-79"
+
+  # -------------------------------------------------------
+  # Game Boy Advance
+  # -------------------------------------------------------
+  - name: "gba_bios.bin"
+    system: nintendo-gba
+    description: "Game Boy Advance BIOS"
+    required: true
+    mode: standalone
+    size: 16384
+    validation: [size]
+    source_ref: "frontend/jgenesis-native-driver/src/mainloop/gba.rs:29-33 (GbaNoBios), backend/gba-core/src/memory.rs:10,102-107 (BIOS_ROM_LEN check)"
+    note: "Every GBA load fails without it. skip_bios_animation only skips the intro, the BIOS is still mapped and read for SWI calls."
+
+  # -------------------------------------------------------
+  # SNES coprocessor firmware (merged program+data layout)
+  # -------------------------------------------------------
+  - name: "dsp1.rom"
+    aliases: ["SNES_dsp1.rom"]
+    system: nintendo-snes
+    description: "NEC uPD77C25 firmware for DSP-1"
+    required: true
+    mode: standalone
+    size: 8192
+    source_ref: "backend/snes-core/src/memory/cartridge.rs:336-353 (MissingDsp1Rom), backend/snes-coprocessors/src/upd77c25.rs:28-31,35-38,382-390"
+    note: "0x1800 program plus 0x800 data. Also used by DSP-1B titles, which have no separate slot. Layout is sliced at a fixed offset, size is not checked."
+
+  - name: "dsp2.rom"
+    aliases: ["SNES_dsp2.rom"]
+    system: nintendo-snes
+    description: "NEC uPD77C25 firmware for DSP-2"
+    required: true
+    mode: standalone
+    size: 8192
+    source_ref: "backend/snes-core/src/memory/cartridge.rs:340-342 (MissingDsp2Rom), :929 (Dungeon Master CRC32 match), backend/snes-coprocessors/src/upd77c25.rs:382-390"
+
+  - name: "dsp3.rom"
+    aliases: ["SNES_dsp3.rom"]
+    system: nintendo-snes
+    description: "NEC uPD77C25 firmware for DSP-3"
+    required: true
+    mode: standalone
+    size: 8192
+    source_ref: "backend/snes-core/src/memory/cartridge.rs:343-345 (MissingDsp3Rom), :931 (SD Gundam GX CRC32 match), backend/snes-coprocessors/src/upd77c25.rs:382-390"
+
+  - name: "dsp4.rom"
+    aliases: ["SNES_dsp4.rom"]
+    system: nintendo-snes
+    description: "NEC uPD77C25 firmware for DSP-4"
+    required: true
+    mode: standalone
+    size: 8192
+    source_ref: "backend/snes-core/src/memory/cartridge.rs:346-348 (MissingDsp4Rom), :933 (Top Gear 3000 CRC32 match), backend/snes-coprocessors/src/upd77c25.rs:382-390"
+
+  - name: "st010.rom"
+    aliases: ["SNES_st010.rom"]
+    system: nintendo-snes
+    description: "NEC uPD96050 firmware for ST010"
+    required: true
+    mode: standalone
+    size: 53248
+    source_ref: "backend/snes-core/src/memory/cartridge.rs:294-305 (MissingSt010Rom), :938-943 (variant detection), backend/snes-coprocessors/src/upd77c25.rs:28-31,35-38"
+    note: "0xC000 program plus 0x1000 data. Used by F1 ROC II."
+
+  - name: "st011.rom"
+    aliases: ["SNES_st011.rom"]
+    system: nintendo-snes
+    description: "NEC uPD96050 firmware for ST011"
+    required: true
+    mode: standalone
+    size: 53248
+    source_ref: "backend/snes-core/src/memory/cartridge.rs:298-300 (MissingSt011Rom), :938-943 (Hayazashi Nidan Morita Shougi CRC32 match)"
+
+  - name: "st018.rom"
+    aliases: ["SNES_st018.rom"]
+    system: nintendo-snes
+    description: "ARM firmware for ST018"
+    required: true
+    mode: standalone
+    min_size: 163840
+    validation: [size]
+    source_ref: "backend/snes-core/src/memory/cartridge.rs:310-320 (MissingSt018Rom), backend/snes-coprocessors/src/st018.rs:18-22,346-352 (TOTAL_ROM_LEN check)"
+    note: "0x20000 program plus 0x8000 data. Used by Hayazashi Nidan Morita Shougi 2. Files larger than the expected length are accepted, shorter ones are rejected."
+
+  # -------------------------------------------------------
+  # Master System / Game Gear
+  # -------------------------------------------------------
+  - name: "bios.sms"
+    system: sega-mastersystem
+    description: "Master System BIOS"
+    required: false
+    mode: standalone
+    source_ref: "frontend/jgenesis-native-driver/src/mainloop/smsgg.rs:27-33,50-56,74-80,112-122, backend/smsgg-core/src/memory.rs:101-106,148-168"
+    note: "Read only when sms_boot_from_bios is enabled or the emulator runs without a cartridge, both off by default. One slot accepts any regional dump, no size or content check."
+
+  - name: "bios.gg"
+    system: sega-gamegear
+    description: "Game Gear BIOS"
+    required: false
+    mode: standalone
+    source_ref: "frontend/jgenesis-native-driver/src/mainloop/smsgg.rs:27-33,50-56,74-80,112-122"
+    note: "Read only when gg_boot_from_bios is enabled or the emulator runs without a cartridge, both off by default."
+
+  # -------------------------------------------------------
+  # Game Boy / Game Boy Color
+  # -------------------------------------------------------
+  - name: "dmg_boot.bin"
+    system: nintendo-gb
+    description: "Game Boy boot ROM"
+    required: false
+    mode: standalone
+    size: 256
+    validation: [size]
+    source_ref: "frontend/jgenesis-native-driver/src/mainloop/gb.rs:29-33,77-89, backend/gb-core/src/memory.rs:9,45-63 (DMG_BOOT_ROM_LEN check)"
+    note: "Loaded only when dmg_boot_rom is enabled, off by default. Without it the CPU starts post-boot."
+
+  - name: "cgb_boot.bin"
+    system: nintendo-gbc
+    description: "Game Boy Color boot ROM"
+    required: false
+    mode: standalone
+    min_size: 2048
+    max_size: 2304
+    validation: [size]
+    source_ref: "frontend/jgenesis-native-driver/src/mainloop/gb.rs:34-38,77-89, backend/gb-core/src/memory.rs:10,45-63,168 (CGB_BOOT_ROM_LEN check and pad_cgb_boot_rom)"
+    note: "Loaded only when cgb_boot_rom is enabled, off by default. 2304 bytes is taken as is, 2048 bytes gets the filler page inserted."
+
+  # -------------------------------------------------------
+  # NES
+  # -------------------------------------------------------
+  - name: "nes.pal"
+    aliases: ["nespalette.pal"]
+    system: nintendo-nes
+    description: "External NES color palette"
+    required: false
+    mode: standalone
+    min_size: 192
+    max_size: 1536
+    validation: [size]
+    source_ref: "config/nes-config/src/lib.rs:92-109 (NesPalette::read_from), frontend/jgenesis-gui/src/app/nes.rs:407-417"
+    note: "1536 bytes gives 512 colors, 192 bytes gives 64 colors extrapolated to 512. Smaller files are rejected and the built-in palette stays in use."

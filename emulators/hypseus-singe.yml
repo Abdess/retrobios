@@ -1,0 +1,1635 @@
+emulator: Hypseus Singe
+type: standalone
+core_classification: enhanced_fork
+source: "https://github.com/DirtBagXon/hypseus-singe"
+upstream: "https://github.com/mirror/daphne-emu"
+source_commit: "cda87965fe0a031d027b2253c6715d37cca6b56a"
+profiled_date: "2026-08-08"
+core_version: "v3.0.0"
+display_name: "Arcade (Hypseus Singe)"
+cores:
+  - hypseus-singe
+  - hypseus
+systems:
+  - arcade-laserdisc
+mode: standalone
+
+notes: |
+  Fork of Matt Ownby's Daphne by DirtBagXon, rebuilt on SDL3, with Singe Lua
+  scripting for fan-made American Laser Games conversions. Platforms invoke it
+  as hypseus-singe (Batocera, RetroBat, ES-DE find rule HYPSEUS-SINGE) against
+  the hypseus.bin binary.
+
+  Each Daphne game loads its own arcade ROM set. game::load_roms() walks the
+  driver rom_def table and opens roms/<set>.zip, locating each member by name
+  case-insensitively; a member missing from the archive falls back to a loose
+  file at roms/<set>/<member> (game.cpp:636-768). The set name is the rom_def
+  dir field when set, otherwise the driver shortgamename, so a variant can pull
+  members out of another game's archive. roms/ resolves under -romdir when
+  given, otherwise under the home directory, with the application directory as
+  fallback (homedir.cpp:97-108, 145-157).
+
+  Member size is enforced: load_rom and load_compressed_rom only report success
+  when the byte count read equals rom_def.size (game.cpp:857, 906). CRC32 is
+  computed and compared but a mismatch only logs a warning (game.cpp:708-726),
+  and a driver that passes crc32 0 skips the comparison entirely
+  (game.cpp:712-716). A member that cannot be read at all aborts startup with
+  "Could not load ROM images! You must supply these." (hypseus.cpp:205-260).
+  Hashing is per member, never over the archive.
+
+  The Dragon's Lair Enhancement and Space Ace Enhancement sets carry an extra
+  readme member checked by exact CRC32 through verify_required_file(); a
+  missing or altered readme calls set_quitflag() and the game does not run
+  (game.cpp:773-837, lair.cpp:197-205, 261-275, 373-380).
+
+  Singe games are not covered by rom_def. The Lua script, framefile and video
+  arrive with the content and are passed on the command line (-script, -zlua,
+  -framefile); singe_utils.cpp:35-42 only exposes the roms path to scripts.
+
+  The emulator asset tree ships in the source distribution and packagers
+  install it beside the binary (Batocera copies pics, fonts, sound and the
+  doc .ini files to /usr/share/hypseus-singe). It is read from the working
+  directory, not from a system directory:
+    pics/ - led0.bmp through led17.bmp (LED_RANGE, video.h:71), player1.bmp,
+      player2.bmp, lives.bmp, credits.bmp, time.bmp, ldp1450font.bmp, one of
+      overlayleds1.bmp or overlayleds2.bmp, cadet.bmp, captain.bmp,
+      spaceace.bmp, offcadet.bmp, offcaptain.bmp, offspaceace.bmp, oncadet.bmp,
+      oncaptain.bmp, onspaceace.bmp, annunon.png, annunoff.png. load_bmps()
+      returns false if any is absent and startup ends on "Video initialization
+      failed!" (video.cpp:1020-1074, hypseus.cpp:201). tqkeys.png is read for
+      the Thayer's Quest key overlay (video.cpp:632-635). A bezel directory,
+      default bezels/, takes precedence for the bmp and png entries.
+    fonts/ - default.ttf plus daphne.ttf for legacy overlay and Singe games or
+      digital.ttf otherwise; a font that fails to open calls set_quitflag()
+      (video.cpp:271-293, splash.cpp:45).
+    sound/ - the per-game wav samples named by each driver, plus grumble.wav
+      loaded for every game. load_waves() failure fails sound::init() and
+      startup ends on "Sound initialization failed!" (sound.cpp:254-307,
+      sound.cpp:156-186, hypseus.cpp:202). Under -nosound the branch is
+      skipped and init returns true (sound.cpp:143, 193-196).
+    doc/ - hypinput.ini, or hypinput_gamepad.ini under -gamepad. An
+      unreadable file falls back to the compiled-in keymap (input.cpp:72,
+      340-350, 1879).
+
+  midi/soundfont.sf2 ships in the tree but no code path reads it in v3.0.0.
+  midi/SOUNDFONTS.txt records that the SDL3 migration dropped the environment
+  variable convention the SDL2 build relied on. pics/ConsoleFont.bmp is
+  likewise unreferenced. starrider.cpp:99 keeps its ROM table in a
+  commented-out load_roms, so the driver loads nothing.
+
+files:
+  - name: gamecontrollerdb.txt
+    system: arcade-laserdisc
+    category: game_data
+    required: false
+    note: "SDL gamepad mappings, read under -gamepad when present. Not shipped with the emulator"
+    source_ref: "src/io/input.cpp:981-996"
+
+  - name: ace.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Space Ace rev A3. Loaded by ace, ace_a, ace_a2"
+    source_ref: "src/game/lair.cpp:292"
+    validation: [size, crc32]
+    contents:
+      - name: "sa_a3_u1.bin"
+        size: 8192
+        crc32: "427522d0"
+      - name: "sa_a3_u2.bin"
+        size: 8192
+        crc32: "18d0262d"
+      - name: "sa_a3_u3.bin"
+        size: 8192
+        crc32: "4646832d"
+      - name: "sa_a3_u4.bin"
+        size: 8192
+        crc32: "57db2a79"
+      - name: "sa_a3_u5.bin"
+        size: 8192
+        crc32: "85cbcdc4"
+
+  - name: ace91.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Space Ace '91"
+    source_ref: "src/game/lair2.cpp:154"
+    validation: [size, crc32]
+    contents:
+      - name: "ace91.bin"
+        size: 65536
+        crc32: "de93a213"
+
+  - name: ace91_euro.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Space Ace '91 Euro"
+    source_ref: "src/game/lair2.cpp:157"
+    validation: [size, crc32]
+    contents:
+      - name: "sa91euro1.3.bin"
+        size: 65536
+        crc32: "27dd0486"
+
+  - name: ace_a.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Space Ace rev A"
+    source_ref: "src/game/lair.cpp:323"
+    validation: [size, crc32]
+    contents:
+      - name: "sa_a_u1.bin"
+        size: 8192
+        crc32: "8eb1889e"
+
+  - name: ace_a2.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Space Ace rev A2"
+    source_ref: "src/game/lair.cpp:312"
+    validation: [size, crc32]
+    contents:
+      - name: "sa_a2_u1.bin"
+        size: 8192
+        crc32: "71b39e27"
+
+  - name: aceeuro.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Space Ace PAL"
+    source_ref: "src/game/laireuro.cpp:106"
+    validation: [size, crc32]
+    contents:
+      - name: "sa_u33a.bin"
+        size: 8192
+        crc32: "a8c14612"
+      - name: "sa_u45a.bin"
+        size: 8192
+        crc32: "41264d46"
+      - name: "sa_u46a.bin"
+        size: 8192
+        crc32: "bc1c70cf"
+      - name: "sa_u47a.bin"
+        size: 8192
+        crc32: "ff3f77c7"
+      - name: "sa_u48a.bin"
+        size: 8192
+        crc32: "8c83ac81"
+      - name: "sa_u49a.bin"
+        size: 8192
+        crc32: "03b58fc3"
+
+  - name: astron.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Astron Belt. Loaded by astron, astronp, blazer, cobraab, galaxy, galaxyp"
+    source_ref: "src/game/astron.cpp:97"
+    validation: [size, crc32]
+    contents:
+      - name: "5279"
+        size: 512
+        crc32: "8716aeb5"
+      - name: "5280"
+        size: 2048
+        crc32: "583af1ff"
+      - name: "5281"
+        size: 2048
+        crc32: "7b5c820c"
+      - name: "5284"
+        size: 16384
+        crc32: "eec6db27"
+      - name: "5285"
+        size: 16384
+        crc32: "820e154e"
+      - name: "5286"
+        size: 16384
+        crc32: "8eb1c28e"
+      - name: "5338"
+        size: 16384
+        crc32: "94ca5f9a"
+      - name: "5473c"
+        size: 16384
+        crc32: "0f24baaa"
+      - name: "5474a"
+        size: 16384
+        crc32: "5d44603d"
+      - name: "pr-5275.bin"
+        size: 32
+        crc32: "0c872a9b"
+      - name: "pr-5276.bin"
+        size: 32
+        crc32: "91267e8a"
+      - name: "pr-5277.bin"
+        size: 256
+        crc32: "bf2c33ab"
+      - name: "pr-5278.bin"
+        size: 256
+        crc32: "e81613da"
+
+  - name: astronp.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Astron Belt, alternate program ROMs"
+    source_ref: "src/game/astron.cpp:97"
+    validation: [size, crc32]
+    contents:
+      - name: "abp-ic03.bin"
+        size: 16384
+        crc32: "fd0dcfc9"
+      - name: "abp-ic10.bin"
+        size: 16384
+        crc32: "a3746393"
+
+  - name: badlandp.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Badlands, prototype board"
+    source_ref: "src/game/badlands.cpp:125"
+    validation: [size, crc32]
+    contents:
+      - name: "bl_hit_4f.bin"
+        size: 32
+        crc32: "0226f881"
+      - name: "bl_hit_6a.bin"
+        size: 8192
+        crc32: "4c287f37"
+      - name: "bl_hit_7a.bin"
+        size: 8192
+        crc32: "a135e444"
+      - name: "bl_hit_9c.bin"
+        size: 8192
+        crc32: "44c3441e"
+
+  - name: badlands.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Badlands"
+    source_ref: "src/game/badlands.cpp:94"
+    validation: [size, crc32]
+    contents:
+      - name: "badlands.a13"
+        size: 8192
+        crc32: "a44776d6"
+      - name: "badlands.a14"
+        size: 8192
+        crc32: "82cb4614"
+      - name: "badlands.c4"
+        size: 32
+        crc32: "6757be8d"
+      - name: "badlands.c8"
+        size: 8192
+        crc32: "590209fe"
+
+  - name: bega.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Bega's Battle ver. 3. Loaded by bega, begar1"
+    source_ref: "src/game/bega.cpp:121"
+    validation: [size, crc32]
+    contents:
+      - name: "an00-3"
+        size: 8192
+        crc32: "124a3a36"
+      - name: "an01"
+        size: 8192
+        crc32: "15f8921d"
+      - name: "an02-3"
+        size: 8192
+        crc32: "98ce4ca0"
+      - name: "an03-3"
+        size: 8192
+        crc32: "79438d80"
+      - name: "an04-3"
+        size: 8192
+        crc32: "935b2b0a"
+      - name: "an05-3"
+        size: 8192
+        crc32: "c917a283"
+      - name: "an06"
+        size: 8192
+        crc32: "cbbcd730"
+      - name: "an07"
+        size: 8192
+        crc32: "6b8ad735"
+      - name: "an08"
+        size: 8192
+        crc32: "b5518391"
+      - name: "an09"
+        size: 8192
+        crc32: "b7375fd7"
+      - name: "an0a"
+        size: 8192
+        crc32: "e429305d"
+      - name: "an0b"
+        size: 8192
+        crc32: "09e4b780"
+      - name: "an0c"
+        size: 8192
+        crc32: "0c127207"
+
+  - name: begar1.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Bega's Battle rev 1"
+    source_ref: "src/game/bega.cpp:156"
+    validation: [size, crc32]
+    contents:
+      - name: "an00"
+        size: 8192
+        crc32: "184297f3"
+      - name: "an02"
+        size: 8192
+        crc32: "84d13c20"
+      - name: "an03"
+        size: 8192
+        crc32: "d2d85cdf"
+      - name: "an04"
+        size: 8192
+        crc32: "670966fe"
+      - name: "an05"
+        size: 8192
+        crc32: "91a05549"
+
+  - name: blazer.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Star Blazer"
+    source_ref: "src/game/astron.cpp:143"
+    validation: [size, crc32]
+    contents:
+      - name: "epr-5590.bin"
+        size: 16384
+        crc32: "c06e41bb"
+      - name: "epr-5591.bin"
+        size: 16384
+        crc32: "b179d18c"
+
+  - name: cliff.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Cliff Hanger"
+    source_ref: "src/game/cliff.cpp:107"
+    validation: [size, crc32]
+    contents:
+      - name: "cliff_u1.bin"
+        size: 8192
+        crc32: "a86ec38f"
+      - name: "cliff_u2.bin"
+        size: 8192
+        crc32: "b8d33b6b"
+      - name: "cliff_u3.bin"
+        size: 8192
+        crc32: "75a64cd2"
+      - name: "cliff_u4.bin"
+        size: 8192
+        crc32: "906b2af1"
+      - name: "cliff_u5.bin"
+        size: 8192
+        crc32: "5922e710"
+
+  - name: cliff_ox.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Cliff Hanger, 0X set"
+    source_ref: "src/game/cliff.cpp:193"
+    validation: [size, crc32]
+    contents:
+      - name: "cliff-0X_u0.bin"
+        size: 8192
+        crc32: "8a3dff2c"
+      - name: "cliff-0X_u1.bin"
+        size: 8192
+        crc32: "ec2c00a9"
+      - name: "cliff-0X_u2.bin"
+        size: 8192
+        crc32: "3423c748"
+      - name: "cliff-0X_u3.bin"
+        size: 8192
+        crc32: "60a8de46"
+      - name: "cliff-0X_u4.bin"
+        size: 8192
+        crc32: "b05438f8"
+
+  - name: cliffalt.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Cliff Hanger, alternate set"
+    source_ref: "src/game/cliff.cpp:152"
+    validation: [size, crc32]
+    contents:
+      - name: "cliff_alt_0.bin"
+        size: 8192
+        crc32: "27caa67c"
+      - name: "cliff_alt_1.bin"
+        size: 8192
+        crc32: "6e5f1515"
+      - name: "cliff_alt_2.bin"
+        size: 8192
+        crc32: "045f895d"
+      - name: "cliff_alt_3.bin"
+        size: 8192
+        crc32: "54cdb4a1"
+
+  - name: cliffalt2.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Cliff Hanger, second alternate set"
+    source_ref: "src/game/cliff.cpp:172"
+    validation: [size, crc32]
+    contents:
+      - name: "cliff_alt2_0.bin"
+        size: 8192
+        crc32: "598d57fc"
+      - name: "cliff_alt2_1.bin"
+        size: 8192
+        crc32: "7bce618e"
+      - name: "cliff_alt2_2.bin"
+        size: 8192
+        crc32: "65d2b984"
+      - name: "cliff_alt2_3.bin"
+        size: 8192
+        crc32: "f43a5269"
+
+  - name: cobra.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Cobra Command"
+    source_ref: "src/game/bega.cpp:189"
+    validation: [size, crc32]
+    contents:
+      - name: "au00-2"
+        size: 8192
+        crc32: "6c0f1f16"
+      - name: "au01-2"
+        size: 8192
+        crc32: "523dd8f6"
+      - name: "au02-2"
+        size: 8192
+        crc32: "7db11acf"
+      - name: "au03-2"
+        size: 8192
+        crc32: "8f0a8fba"
+      - name: "au06"
+        size: 8192
+        crc32: "ccc94eb0"
+      - name: "au07"
+        size: 8192
+        crc32: "d4bf12a5"
+      - name: "au08"
+        size: 8192
+        crc32: "63158274"
+      - name: "au09"
+        size: 8192
+        crc32: "74e93394"
+      - name: "au0a"
+        size: 8192
+        crc32: "6aaedcf3"
+      - name: "au0b"
+        size: 8192
+        crc32: "92247877"
+      - name: "au0c"
+        size: 8192
+        crc32: "d00a2762"
+
+  - name: cobraab.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Cobra Command on Astron Belt hardware"
+    source_ref: "src/game/astron.cpp:318"
+    validation: [size, crc32]
+    contents:
+      - name: "ic-1.bin"
+        size: 16384
+        crc32: "079783c7"
+      - name: "ic-11.bin"
+        size: 2048
+        crc32: "5a2e8f4e"
+      - name: "ic-12.bin"
+        size: 2048
+        crc32: "4b89d7ed"
+      - name: "ic-13.bin"
+        size: 512
+        crc32: "3547a14c"
+      - name: "ic-2.bin"
+        size: 8192
+        crc32: "40c0b825"
+      - name: "ic-7.bin"
+        size: 8192
+        crc32: "9e12b19c"
+      - name: "ic-8.bin"
+        size: 8192
+        crc32: "201041c0"
+
+  - name: cobraconv.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Cobra Command conversion board"
+    source_ref: "src/game/cobraconv.cpp:106"
+    validation: [size, crc32]
+    contents:
+      - name: "bd00"
+        size: 8192
+        crc32: "8d9ad777"
+      - name: "bd01"
+        size: 8192
+        crc32: "1b4db507"
+      - name: "bd02"
+        size: 8192
+        crc32: "3d802707"
+      - name: "bd03"
+        size: 8192
+        crc32: "f1b9df77"
+      - name: "bd04"
+        size: 8192
+        crc32: "33013cc2"
+      - name: "bd05"
+        size: 8192
+        crc32: "98412178"
+      - name: "bd06"
+        size: 8192
+        crc32: "b1340125"
+      - name: "bd07"
+        size: 8192
+        crc32: "584d714a"
+      - name: "lp4-2.pld"
+        size: 554
+        crc32: "4bc65ab0"
+      - name: "vd0-c.bpr"
+        size: 32
+        crc32: "02c27aa0"
+      - name: "vd0-t.bpr"
+        size: 32
+        crc32: "78449942"
+
+  - name: cobram3.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Cobra Command on M.A.C.H. 3 hardware"
+    source_ref: "src/game/mach3.cpp:303"
+    validation: [size, crc32]
+    contents:
+      - name: "bh00"
+        size: 8192
+        crc32: "c19ad038"
+      - name: "bh01"
+        size: 8192
+        crc32: "7d86ab08"
+      - name: "bh02"
+        size: 8192
+        crc32: "928ef670"
+      - name: "bh03"
+        size: 8192
+        crc32: "755cbbf5"
+      - name: "bh05"
+        size: 8192
+        crc32: "d8f49994"
+      - name: "bh06"
+        size: 8192
+        crc32: "ab6c7cf1"
+      - name: "bh07"
+        size: 8192
+        crc32: "f94668d2"
+      - name: "bh08"
+        size: 8192
+        crc32: "d6439e2f"
+      - name: "bh09"
+        size: 4096
+        crc32: "8c5dfac0"
+      - name: "bh0a"
+        size: 4096
+        crc32: "8b8da8dc"
+
+  - name: cputest.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Z80 CPU test programs, shipped under roms/cputest/ in the emulator source. Loaded by cputest, mcputest"
+    source_ref: "src/game/multicputest.cpp:61"
+    validation: [size, crc32]
+    contents:
+      - name: "branchtest.bin"
+        size: 106
+        crc32: "7d0c9115"
+      - name: "prog1.bin"
+        size: 113
+        crc32: "aefca341"
+      - name: "prog2.bin"
+        size: 113
+        crc32: "0c6c8ce9"
+      - name: "savage.com"
+        size: 14080
+        crc32: "c8d0edf6"
+      - name: "zexall.com"
+        size: 8704
+        crc32: "ecf70fd6"
+
+  - name: dle11.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Dragon's Lair Enhancement v1.1"
+    source_ref: "src/game/lair.cpp:178"
+    validation: [size, crc32]
+    contents:
+      - name: "dle11u1l.bin"
+        size: 8192
+        crc32: "9e65b33d"
+      - name: "dle11u2l.bin"
+        size: 8192
+        crc32: "f16fa36f"
+      - name: "dle11u3l.bin"
+        size: 8192
+        crc32: "b8d07a16"
+      - name: "dle11u4l.bin"
+        size: 8192
+        crc32: "20fc79b7"
+      - name: "readme11.txt"
+        crc32: "4bf84551"
+        description: "verified by CRC32 at boot, lair.cpp:197"
+
+  - name: dle20.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Dragon's Lair Enhancement v2.0"
+    source_ref: "src/game/lair.cpp:242"
+    validation: [size, crc32]
+    contents:
+      - name: "DLE20_U1.bin"
+        size: 8192
+        crc32: "0aca15b4"
+      - name: "DLE20_U2.bin"
+        size: 8192
+        crc32: "1cea7622"
+      - name: "DLE20_U3.bin"
+        size: 8192
+        crc32: "21a7e7ca"
+      - name: "DLE20_U4.bin"
+        size: 8192
+        crc32: "4ae26073"
+      - name: "readme20.txt"
+        crc32: "51c50010"
+        description: "verified by CRC32 at boot, lair.cpp:261"
+
+  - name: dle21.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Dragon's Lair Enhancement v2.1"
+    source_ref: "src/game/lair.cpp:224"
+    validation: [size, crc32]
+    contents:
+      - name: "DLE21_U1.bin"
+        size: 8192
+        crc32: "4f8af481"
+      - name: "DLE21_U2.bin"
+        size: 8192
+        crc32: "5fca04c5"
+      - name: "DLE21_U3.bin"
+        size: 8192
+        crc32: "c14f36b3"
+      - name: "readme21.txt"
+        crc32: "a68f0d21"
+        description: "verified by CRC32 at boot, lair.cpp:268"
+
+  - name: esh.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Esh's Aurunmilla. Loaded by esh, eshalt, eshalt2, eshfix7, eshfix7alt, eshfix7alt2"
+    source_ref: "src/game/esh.cpp:96"
+    validation: [size, crc32]
+    contents:
+      - name: "c5_h.bin"
+        size: 256
+        crc32: "abde5e4b"
+      - name: "c6_v.bin"
+        size: 256
+        crc32: "7157ba22"
+      - name: "f8_is2.bin"
+        size: 8192
+        crc32: "0e3b6e62"
+      - name: "h8_is1.bin"
+        size: 8192
+        crc32: "114c912b"
+      - name: "j1_rgb.bin"
+        size: 512
+        crc32: "1e9f795f"
+      - name: "k3_c.bin"
+        size: 4096
+        crc32: "a936ef01"
+      - name: "l3_b.bin"
+        size: 4096
+        crc32: "9366dde7"
+      - name: "m3_a.bin"
+        size: 4096
+        crc32: "a04736d8"
+
+  - name: eshalt.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Esh's Aurunmilla, alternate set 1"
+    source_ref: "src/game/esh.cpp:124"
+    validation: [size, crc32]
+    contents:
+      - name: "f8_alt1.bin"
+        size: 8192
+        crc32: "7a562f49"
+
+  - name: eshalt2.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Esh's Aurunmilla, alternate set 2. Loaded by eshalt2, eshfix7alt2"
+    source_ref: "src/game/esh.cpp:146"
+    validation: [size, crc32]
+    contents:
+      - name: "h8_alt2.bin"
+        size: 8192
+        crc32: "8d27d363"
+
+  - name: eshfix7.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Esh's Aurunmilla, stage 7 fix"
+    source_ref: "src/game/esh.cpp:168"
+    validation: [size, crc32]
+    contents:
+      - name: "f8_is2-fixed.bin"
+        size: 8192
+        crc32: "1f05561d"
+
+  - name: eshfix7alt.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Esh's Aurunmilla, stage 7 fix for alternate set 1"
+    source_ref: "src/game/esh.cpp:190"
+    validation: [size, crc32]
+    contents:
+      - name: "f8_is2-fixed-alt.bin"
+        size: 8192
+        crc32: "6b681736"
+
+  - name: eshfix7alt2.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Esh's Aurunmilla, stage 7 fix for alternate set 2"
+    source_ref: "src/game/esh.cpp:212"
+    validation: [size, crc32]
+    contents:
+      - name: "f8_is2-fixed.bin"
+        size: 8192
+        crc32: "1f05561d"
+
+  - name: firefox.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Firefox. Main program, four ROM banks and character graphics. Loaded by firefox, firefoxa"
+    source_ref: "src/game/firefox.cpp:142"
+    validation: [size, crc32]
+    contents:
+      - name: "136026.101"
+        size: 16384
+        crc32: "91bba45a"
+      - name: "136026.102"
+        size: 16384
+        crc32: "5f1e423d"
+      - name: "136026.105"
+        size: 16384
+        crc32: "83f1d4ed"
+      - name: "136026.106"
+        size: 16384
+        crc32: "c5d8d417"
+      - name: "136026.109"
+        size: 16384
+        crc32: "7639270c"
+      - name: "136026.110"
+        size: 16384
+        crc32: "f3102944"
+      - name: "136026.111"
+        size: 16384
+        crc32: "8a230bb5"
+      - name: "136026.125"
+        size: 8192
+        crc32: "8a32f9f1"
+
+  - name: firefoxa.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Firefox alternate program and banks. Driver passes crc32 0, so no CRC check"
+    source_ref: "src/game/firefox.cpp:170"
+    validation: [size]
+    contents:
+      - name: "136026.127"
+        size: 8192
+      - name: "136026.201"
+        size: 16384
+      - name: "136026.205"
+        size: 16384
+      - name: "136026.209"
+        size: 16384
+      - name: "136026.210"
+        size: 16384
+      - name: "136026.211"
+        size: 16384
+
+  - name: galaxy.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Galaxy Ranger. Loaded by blazer, galaxy, galaxyp"
+    source_ref: "src/game/astron.cpp:143"
+    validation: [size, crc32]
+    contents:
+      - name: "gr5592.bin"
+        size: 16384
+        crc32: "d13715f8"
+      - name: "gr5593.bin"
+        size: 16384
+        crc32: "b0a557aa"
+      - name: "gr5594.bin"
+        size: 16384
+        crc32: "4403ef5a"
+      - name: "gr5595.bin"
+        size: 16384
+        crc32: "ccbaec4f"
+      - name: "gr5611.bin"
+        size: 16384
+        crc32: "b16bdfe4"
+      - name: "gr5612.bin"
+        size: 16384
+        crc32: "e312d080"
+      - name: "gr5633.bin"
+        size: 16384
+        crc32: "398f6b23"
+      - name: "gr5634.bin"
+        size: 16384
+        crc32: "2c5be1b7"
+
+  - name: galaxyp.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Galaxy Ranger, alternate program ROMs"
+    source_ref: "src/game/astron.cpp:191"
+    validation: [size, crc32]
+    contents:
+      - name: "epr-5613.bin"
+        size: 16384
+        crc32: "6617e702"
+      - name: "epr-5614.bin"
+        size: 16384
+        crc32: "73ad8932"
+
+  - name: gpworld.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "GP World. Driver passes crc32 0, so no CRC check"
+    source_ref: "src/game/gpworld.cpp:101"
+    validation: [size]
+    contents:
+      - name: "gpw_5501.bin"
+        size: 256
+      - name: "gpw_6146.bin"
+        size: 32
+      - name: "gpw_6147.bin"
+        size: 256
+      - name: "gpw_6148.bin"
+        size: 4096
+      - name: "gpw_6149.bin"
+        size: 16384
+      - name: "gpw_6150.bin"
+        size: 16384
+      - name: "gpw_6151.bin"
+        size: 16384
+      - name: "gpw_6152.bin"
+        size: 16384
+      - name: "gpw_6153.bin"
+        size: 16384
+      - name: "gpw_6154.bin"
+        size: 16384
+      - name: "gpw_6155.bin"
+        size: 16384
+      - name: "gpw_6156.bin"
+        size: 16384
+      - name: "gpw_6157.bin"
+        size: 16384
+      - name: "gpw_6158.bin"
+        size: 16384
+      - name: "gpw_6162a.bin"
+        size: 16384
+      - name: "gpw_6163.bin"
+        size: 16384
+      - name: "gpw_6164.bin"
+        size: 16384
+
+  - name: gtg.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Goal to Go"
+    source_ref: "src/game/cliff.cpp:131"
+    validation: [size, crc32]
+    contents:
+      - name: "gtg.rm0"
+        size: 8192
+        crc32: "d8efddea"
+      - name: "gtg.rm1"
+        size: 8192
+        crc32: "69953d38"
+      - name: "gtg.rm2"
+        size: 8192
+        crc32: "b043e205"
+      - name: "gtg.rm3"
+        size: 8192
+        crc32: "ec305f5e"
+      - name: "gtg.rm4"
+        size: 8192
+        crc32: "9e4c8aa2"
+
+  - name: interstellar.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Interstellar"
+    source_ref: "src/game/interstellar.cpp:165"
+    validation: [size, crc32]
+    contents:
+      - name: "blue6d.bot"
+        size: 256
+        crc32: "5ebb81f9"
+      - name: "green6c.bot"
+        size: 256
+        crc32: "7d8c845c"
+      - name: "red6b.bot"
+        size: 256
+        crc32: "5c52f844"
+      - name: "rom1.top"
+        size: 8192
+        crc32: "4f34fb1d"
+      - name: "rom11.bot"
+        size: 8192
+        crc32: "165cbc57"
+      - name: "rom2.top"
+        size: 8192
+        crc32: "5d643381"
+      - name: "rom3.top"
+        size: 8192
+        crc32: "ce5a2b09"
+      - name: "rom4.top"
+        size: 8192
+        crc32: "7c2cb1f1"
+      - name: "rom5.top"
+        size: 8192
+        crc32: "354377f6"
+      - name: "rom6.top"
+        size: 8192
+        crc32: "0319bf40"
+      - name: "rom7.bot"
+        size: 8192
+        crc32: "1447ce3a"
+      - name: "rom8.bot"
+        size: 8192
+        crc32: "e9c9e490"
+      - name: "rom9.bot"
+        size: 8192
+        crc32: "9d79acb6"
+
+  - name: lair.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Dragon's Lair rev F2. Loaded by lair, lair_f"
+    source_ref: "src/game/lair.cpp:117"
+    validation: [size, crc32]
+    contents:
+      - name: "dl_f2_u1.bin"
+        size: 8192
+        crc32: "f5ea3b9d"
+      - name: "dl_f2_u2.bin"
+        size: 8192
+        crc32: "dcc1dff2"
+      - name: "dl_f2_u3.bin"
+        size: 8192
+        crc32: "ab514e5b"
+      - name: "dl_f2_u4.bin"
+        size: 8192
+        crc32: "f5ec23d2"
+
+  - name: lair2.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Dragon's Lair 2 v3.19"
+    source_ref: "src/game/lair2.cpp:138"
+    validation: [size, crc32]
+    contents:
+      - name: "dl2_319.bin"
+        size: 65536
+        crc32: "e9453a1b"
+
+  - name: lair2_211.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Dragon's Lair 2 v2.11"
+    source_ref: "src/game/lair2.cpp:109"
+    validation: [size, crc32]
+    contents:
+      - name: "dl2_211.bin"
+        size: 65536
+        crc32: "9f2660a3"
+
+  - name: lair2_300.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Dragon's Lair 2 v3.00"
+    source_ref: "src/game/lair2.cpp:113"
+    validation: [size, crc32]
+    contents:
+      - name: "dl2_300.bin"
+        size: 65536
+        crc32: "dec4f2e3"
+
+  - name: lair2_314.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Dragon's Lair 2 v3.14"
+    source_ref: "src/game/lair2.cpp:117"
+    validation: [size, crc32]
+    contents:
+      - name: "dl2_314.bin"
+        size: 65536
+        crc32: "af92b612"
+
+  - name: lair2_315.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Dragon's Lair 2 v3.15"
+    source_ref: "src/game/lair2.cpp:121"
+    validation: [size, crc32]
+    contents:
+      - name: "dl2_315.bin"
+        size: 65536
+        crc32: "13ec0600"
+
+  - name: lair2_316_euro.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Dragon's Lair 2 v3.16 Euro"
+    source_ref: "src/game/lair2.cpp:142"
+    validation: [size, crc32]
+    contents:
+      - name: "lair2_316_euro.bin"
+        size: 65536
+        crc32: "d68f1b13"
+
+  - name: lair2_318.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Dragon's Lair 2 v3.18"
+    source_ref: "src/game/lair2.cpp:134"
+    validation: [size, crc32]
+    contents:
+      - name: "dl2_318.bin"
+        size: 65536
+        crc32: "64706492"
+
+  - name: lair2_319_euro.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Dragon's Lair 2 v3.19 Euro"
+    source_ref: "src/game/lair2.cpp:146"
+    validation: [size, crc32]
+    contents:
+      - name: "dl2euro3.19.bin"
+        size: 65536
+        crc32: "cc23ad9f"
+
+  - name: lair2_319_span.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Dragon's Lair 2 v3.19 Spanish"
+    source_ref: "src/game/lair2.cpp:150"
+    validation: [size, crc32]
+    contents:
+      - name: "lair2_319_span.bin"
+        size: 65536
+        crc32: "4b9a811d"
+
+  - name: lair_a.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Dragon's Lair rev A. Loaded by lair_a, lair_b, lair_c"
+    source_ref: "src/game/lair.cpp:399"
+    validation: [size, crc32]
+    contents:
+      - name: "dl_a_u1.bin"
+        size: 8192
+        crc32: "d76e83ec"
+      - name: "dl_a_u2.bin"
+        size: 8192
+        crc32: "a6a723d8"
+      - name: "dl_a_u3.bin"
+        size: 8192
+        crc32: "52c59014"
+      - name: "dl_a_u4.bin"
+        size: 8192
+        crc32: "924d12f2"
+      - name: "dl_a_u5.bin"
+        size: 8192
+        crc32: "6ec2f9c1"
+
+  - name: lair_b.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Dragon's Lair rev B. Loaded by lair_b, lair_c"
+    source_ref: "src/game/lair.cpp:425"
+    validation: [size, crc32]
+    contents:
+      - name: "dl_b_u2.bin"
+        size: 8192
+        crc32: "6751103d"
+
+  - name: lair_c.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Dragon's Lair rev C"
+    source_ref: "src/game/lair.cpp:437"
+    validation: [size, crc32]
+    contents:
+      - name: "dl_c_u1.bin"
+        size: 8192
+        crc32: "cebfe26a"
+
+  - name: lair_d.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Dragon's Lair rev D"
+    source_ref: "src/game/lair.cpp:450"
+    validation: [size, crc32]
+    contents:
+      - name: "dl_d_u1.bin"
+        size: 8192
+        crc32: "0b5ab120"
+      - name: "dl_d_u2.bin"
+        size: 8192
+        crc32: "93ebfffb"
+      - name: "dl_d_u3.bin"
+        size: 8192
+        crc32: "22e6591f"
+      - name: "dl_d_u4.bin"
+        size: 8192
+        crc32: "5f7212cb"
+      - name: "dl_d_u5.bin"
+        size: 8192
+        crc32: "2b469c89"
+
+  - name: lair_d2.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Dragon's Lair PAL, third set"
+    source_ref: "src/game/laireuro.cpp:672"
+    validation: [size, crc32]
+    contents:
+      - name: "elu45_d2.bin"
+        size: 8192
+        crc32: "329b354a"
+
+  - name: lair_e.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Dragon's Lair rev E"
+    source_ref: "src/game/lair.cpp:149"
+    validation: [size, crc32]
+    contents:
+      - name: "dl_e_u1.bin"
+        size: 8192
+        crc32: "02980426"
+      - name: "dl_e_u2.bin"
+        size: 8192
+        crc32: "979d4c97"
+      - name: "dl_e_u3.bin"
+        size: 8192
+        crc32: "897bf075"
+      - name: "dl_e_u4.bin"
+        size: 8192
+        crc32: "4ebffba5"
+
+  - name: lair_f.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Dragon's Lair rev F"
+    source_ref: "src/game/lair.cpp:139"
+    validation: [size, crc32]
+    contents:
+      - name: "dl_f_u1.bin"
+        size: 8192
+        crc32: "06fc6941"
+      - name: "dl_f_u4.bin"
+        size: 8192
+        crc32: "a817324e"
+
+  - name: lair_ita.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Dragon's Lair PAL, Italian version"
+    source_ref: "src/game/laireuro.cpp:655"
+    validation: [size, crc32]
+    contents:
+      - name: "lair_ita_45.bin"
+        size: 8192
+        crc32: "2ed85958"
+      - name: "lair_ita_48.bin"
+        size: 8192
+        crc32: "0c0b3011"
+
+  - name: lair_n1.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Dragon's Lair NTSC prototype, machine serial number 1"
+    source_ref: "src/game/lair.cpp:462"
+    validation: [size, crc32]
+    contents:
+      - name: "dl_n1_u1.bin"
+        size: 8192
+        crc32: "a1856eac"
+      - name: "dl_n1_u2.bin"
+        size: 8192
+        crc32: "1b34406f"
+      - name: "dl_n1_u3.bin"
+        size: 8192
+        crc32: "cf3f4d3c"
+      - name: "dl_n1_u4.bin"
+        size: 8192
+        crc32: "a98880c5"
+      - name: "dl_n1_u5.bin"
+        size: 8192
+        crc32: "17b7336b"
+
+  - name: lair_x.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Dragon's Lair NTSC, early set of unknown revision"
+    source_ref: "src/game/lair.cpp:475"
+    validation: [size, crc32]
+    contents:
+      - name: "dl_x_u1.bin"
+        size: 8192
+        crc32: "ea6d5498"
+      - name: "dl_x_u2.bin"
+        size: 8192
+        crc32: "ffe84a95"
+      - name: "dl_x_u3.bin"
+        size: 8192
+        crc32: "6363fd84"
+      - name: "dl_x_u4.bin"
+        size: 8192
+        crc32: "84cabb86"
+      - name: "dl_x_u5.bin"
+        size: 8192
+        crc32: "8cc8f073"
+
+  - name: laireuro.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Dragon's Lair PAL. Loaded by lair_d2, lair_ita, laireuro"
+    source_ref: "src/game/laireuro.cpp:84"
+    validation: [size, crc32]
+    contents:
+      - name: "elu33.bin"
+        size: 8192
+        crc32: "e7506d96"
+      - name: "elu45.bin"
+        size: 8192
+        crc32: "4d3a9eac"
+      - name: "elu46.bin"
+        size: 8192
+        crc32: "8479612b"
+      - name: "elu47.bin"
+        size: 8192
+        crc32: "6a66f6b4"
+      - name: "elu48.bin"
+        size: 8192
+        crc32: "36575106"
+
+  - name: lgp.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Program and character ROMs. Driver passes crc32 0, so no CRC check"
+    source_ref: "src/game/lgp.cpp:93"
+    validation: [size]
+    contents:
+      - name: "A02_29.bin"
+        size: 8192
+      - name: "a02_01.bin"
+        size: 8192
+      - name: "a02_02.bin"
+        size: 8192
+      - name: "a02_03.bin"
+        size: 8192
+      - name: "a02_04.bin"
+        size: 8192
+      - name: "a02_14.bin"
+        size: 8192
+      - name: "a02_15.bin"
+        size: 8192
+      - name: "a02_16.bin"
+        size: 8192
+      - name: "a02_17.bin"
+        size: 8192
+
+  - name: mach3.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "M.A.C.H. 3"
+    source_ref: "src/game/mach3.cpp:229"
+    validation: [size, crc32]
+    contents:
+      - name: "m3drom1.bin"
+        size: 4096
+        crc32: "a6e29212"
+      - name: "m3rom0.bin"
+        size: 8192
+        crc32: "70c12bf4"
+      - name: "m3rom1.bin"
+        size: 8192
+        crc32: "3b0ba80b"
+      - name: "m3rom2.bin"
+        size: 8192
+        crc32: "fbdfb03d"
+      - name: "m3rom3.bin"
+        size: 8192
+        crc32: "b1b045af"
+      - name: "m3rom4.bin"
+        size: 8192
+        crc32: "8bfd5a44"
+      - name: "m3target.bin"
+        size: 971776
+        crc32: "a2a9f8e5"
+      - name: "m3yrom1.bin"
+        size: 4096
+        crc32: "eddf8872"
+      - name: "mach3bg0.bin"
+        size: 4096
+        crc32: "ea2f5257"
+      - name: "mach3bg1.bin"
+        size: 4096
+        crc32: "f543e4ce"
+      - name: "mach3fg0.bin"
+        size: 8192
+        crc32: "0bae12a5"
+      - name: "mach3fg1.bin"
+        size: 8192
+        crc32: "9b88767b"
+      - name: "mach3fg2.bin"
+        size: 8192
+        crc32: "2a59e99e"
+      - name: "mach3fg3.bin"
+        size: 8192
+        crc32: "472128b4"
+
+  - name: roadblaster.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Road Blaster"
+    source_ref: "src/game/bega.cpp:223"
+    validation: [size, crc32]
+    contents:
+      - name: "00.bin"
+        size: 8192
+        crc32: "084d6ae2"
+      - name: "01.bin"
+        size: 8192
+        crc32: "e4733c49"
+      - name: "02.bin"
+        size: 8192
+        crc32: "6c20335d"
+      - name: "03-06.bin"
+        size: 8192
+        crc32: "d1ff5ffb"
+      - name: "04-07.bin"
+        size: 8192
+        crc32: "da2c84d9"
+      - name: "05-08.bin"
+        size: 8192
+        crc32: "4608b516"
+
+  - name: sae.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Space Ace Enhancement"
+    source_ref: "src/game/lair.cpp:345"
+    validation: [size, crc32]
+    contents:
+      - name: "sae10_u1.bin"
+        size: 8192
+        crc32: "cbc5e425"
+      - name: "sae10_u2.bin"
+        size: 8192
+        crc32: "71a26f47"
+      - name: "sae10_u3.bin"
+        size: 8192
+        crc32: "bac5cdd8"
+      - name: "sae10_u4.bin"
+        size: 8192
+        crc32: "e18380f9"
+      - name: "sae10_u5.bin"
+        size: 8192
+        crc32: "8a536cb0"
+      - name: "readme.txt"
+        crc32: "ca4e20e6"
+        description: "verified by CRC32 at boot, lair.cpp:373"
+
+  - name: sdq.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Super Don Quix-ote. Loaded by sdq, sdqshort, sdqshortalt"
+    source_ref: "src/game/superd.cpp:196"
+    validation: [size, crc32]
+    contents:
+      - name: "sdq-char.bin"
+        size: 8192
+        crc32: "5fb0e440"
+      - name: "sdq-cprm.bin"
+        size: 32
+        crc32: "96701569"
+      - name: "sdq-prog.bin"
+        size: 16384
+        crc32: "96b931e2"
+
+  - name: sdqshort.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Super Don Quix-ote, short scenes set"
+    source_ref: "src/game/superd.cpp:214"
+    validation: [size, crc32]
+    contents:
+      - name: "sdq_c45.rom"
+        size: 16384
+        crc32: "0f4d4832"
+
+  - name: sdqshortalt.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Super Don Quix-ote, alternate short scenes set"
+    source_ref: "src/game/superd.cpp:234"
+    validation: [size, crc32]
+    contents:
+      - name: "sdq_c45alt.rom"
+        size: 16384
+        crc32: "b12ce1f8"
+
+  - name: timetrav.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Single 256 KB program ROM. Driver passes crc32 0, so no CRC check"
+    source_ref: "src/game/timetrav.cpp:64"
+    validation: [size]
+    contents:
+      - name: "TT061891.BIN"
+        size: 262144
+
+  - name: tq.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Thayer's Quest. Loaded by tq, tq_alt, tq_swear"
+    source_ref: "src/game/thayers.cpp:97"
+    validation: [size, crc32]
+    contents:
+      - name: "tq_cop.bin"
+        size: 1024
+        crc32: "6748e6b3"
+      - name: "tq_u1.bin"
+        size: 8192
+        crc32: "e8e7f566"
+      - name: "tq_u33.bin"
+        size: 32768
+        crc32: "82df5d89"
+
+  - name: tq_alt.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Thayer's Quest, alternate program ROM"
+    source_ref: "src/game/thayers.cpp:253"
+    validation: [size, crc32]
+    contents:
+      - name: "tq_u1.bin"
+        size: 8192
+        crc32: "33817e25"
+
+  - name: tq_swear.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Thayer's Quest, JnK's swearing hack"
+    source_ref: "src/game/thayers.cpp:264"
+    validation: [size, crc32]
+    contents:
+      - name: "tq_u33_mod.bin"
+        size: 32768
+        crc32: "7be981df"
+
+  - name: uvt.zip
+    system: arcade-laserdisc
+    category: bios_zip
+    required: true
+    note: "Us vs Them"
+    source_ref: "src/game/mach3.cpp:261"
+    validation: [size, crc32]
+    contents:
+      - name: "usvs.bg0"
+        size: 4096
+        crc32: "8a0de09f"
+      - name: "usvs.bg1"
+        size: 4096
+        crc32: "6fb64d3c"
+      - name: "usvs.fg0"
+        size: 16384
+        crc32: "7734e53f"
+      - name: "usvs.fg1"
+        size: 16384
+        crc32: "a2057430"
+      - name: "usvs.fg2"
+        size: 16384
+        crc32: "d3990707"
+      - name: "usvs.fg3"
+        size: 16384
+        crc32: "98703015"
+      - name: "usvs.rm0"
+        size: 8192
+        crc32: "30cf6bd9"
+      - name: "usvs.rm1"
+        size: 8192
+        crc32: "697bc989"
+      - name: "usvs.rm2"
+        size: 8192
+        crc32: "36770716"
+      - name: "usvs.rm3"
+        size: 8192
+        crc32: "6f32a671"
+      - name: "usvs.rm4"
+        size: 8192
+        crc32: "0d7a4072"
+      - name: "usvsdrom.1"
+        size: 8192
+        crc32: "c0b5cab0"
+      - name: "usvsyrom.1"
+        size: 8192
+        crc32: "c3d245ca"
+

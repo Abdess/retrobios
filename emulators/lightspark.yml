@@ -1,0 +1,60 @@
+emulator: lightspark
+type: standalone
+core_classification: game_engine
+source: "https://github.com/lightspark/lightspark"
+upstream: "https://github.com/lightspark/lightspark"
+profiled_date: "2026-08-08"
+source_commit: "d51ab60193b7baa56b2f6ec55f9a7789f99f6ee9"
+core_version: "0.9.0"
+display_name: "Adobe Flash (Lightspark)"
+cores:
+  - lightspark
+systems:
+  - flash
+mode: standalone
+
+notes: |
+  Open source implementation of the Flash player, playing SWF files of any
+  ActionScript version, as a standalone application or as a browser plugin. The
+  ActionScript built-in classes are implemented in C++ under src/scripting/flash,
+  so no external class library is read. ES-DE runs the binary as
+  `lightspark --fullscreen <rom>`, Batocera as
+  `lightspark -fs -s local-with-networking <rom>` off a 0.8.7 pin.
+
+  Startup reads nothing. The two GLSL shaders sit in the tree as
+  src/lightspark.frag and src/lightspark.vert but the preprocessor pulls them
+  into string literals, "directly include shader source to avoid filesystem
+  access" (src/backends/rendering.cpp:1042-1045,1062-1065), which is also how
+  0.8.7 builds them. The face given to nanoVG for text is Roboto Medium, decoded
+  at runtime from a base85 array in the binary (src/launcher.cpp:1567,
+  src/platforms/engineutils.cpp:500-502), and the launcher icon face is embedded
+  the same way (src/launcher.cpp:1094-1096,1333).
+  resources/openfonticons/OpenFontIcons.ttf and resources/ErrorConstants.xml are
+  build inputs, the second feeding the errorconstants.{h,cpp} generator
+  (tools/errorgen:20).
+
+  Fonts named by the content go through fontconfig, which answers with whatever
+  face the host has installed: FcFontMatch then FcPatternGetString(FC_FILE) hands
+  a path straight to nvgCreateFont (src/backends/cachedsurface.cpp:135-156). No
+  name, path, size or hash is fixed anywhere, README:27-30 marks fontconfig
+  itself optional, and an unmatched family leaves nanoVGFontID at -1 and falls
+  back to the embedded face.
+
+  dataFileRead is the only reader of LS_DATADIR and has no callers, at this
+  commit and at 0.8.7 (src/parsing/textfile.cpp:74-106). fontPath holds
+  "TimesNewRoman.ttf" on Windows (src/backends/rendering.cpp:102) but reaches
+  only cairo_select_font_face, which takes a family name rather than a path, and
+  only under ENABLE_CAIRO (src/backends/rendering.cpp:1277), left FALSE by
+  CMakeLists.txt.
+
+  Files the player writes rather than expects: lightspark.conf, an INI carrying
+  the cache directory and prefix whose absence leaves the hardcoded defaults
+  (src/backends/config.cpp:82-115), launcher.xml holding the recent entries
+  (src/launcher.cpp:1299-1310), and .sol SharedObjects under the data directory
+  (src/platforms/engineutils.cpp:849-914). application.xml, extension.xml and the
+  library.swf files under META-INF/AIR/extensions belong to the AIR package being
+  run (src/main.cpp:149, src/platforms/engineutils.cpp:785-800), and
+  crossdomain.xml is fetched from remote hosts
+  (src/backends/security.cpp:353,1025).
+
+files: []

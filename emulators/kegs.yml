@@ -1,0 +1,81 @@
+emulator: KEGS
+type: standalone
+core_classification: other
+source: "https://kegs.sourceforge.net/"
+upstream: "https://kegs.sourceforge.net/"
+profiled_date: "2026-08-08"
+core_version: "1.38"
+display_name: "Apple - Apple IIGS (KEGS)"
+cores:
+  - kegs
+systems:
+  - apple-iigs
+  - apple-ii
+mode: standalone
+
+notes: |
+  Apple IIGS emulator by Kent Dickey, shipped as one zip holding the sources
+  and the KEGSMAC, kegswin.exe and xkegs binaries.
+
+  The system ROM is the only file needed to boot. config_load_roms takes the
+  first name that stats across g_kegs_default_paths (config.c:149-151), which
+  covers the current directory, $HOME, $HOME/Library/KEGS, the executable
+  directory and a Mac bundle Resources directory. g_cfg_rom_path is tried
+  first, then the fixed list (config.c:407-410,1105-1109). ROM size selects
+  the machine, 32 KB for an Apple //e, 128 KB for a ROM 01 IIGS and 256 KB
+  for a ROM 03 IIGS, and any other size is refused (config.c:1136-1153).
+  Without a ROM, KEGS raises its config panel instead of starting
+  (config.c:1110-1115).
+
+  Three ROMs are compiled in. Slot 7 gets the SmartPort PROM literal
+  g_rom_c700[] (config.c:463,1165-1169). Slot 6 gets a Disk II PROM rebuilt
+  at load time, XORed out of the IIGS ROM through g_rom_c600_rom01_diffs[]
+  (config.c:428,1177-1183) or copied from offset 0x600 of a //e ROM
+  (config.c:1172-1176); the IIGS control panel reaches it by setting slot 6
+  to "Your Card". Text uses g_font_array[] from kegsfont.h (video.c:272-273,
+  prepared at sim65816.c:667).
+
+  Slots 1 to 5 and slot 7 carry empty name lists (config.c:413-417,420), so
+  slot 6 is the only slot that reads a card ROM from disk.
+
+  config.kegs carries the disk assignments and the battery RAM, and KEGS
+  creates it when none is found (config.c:638-672).
+
+files:
+  - name: ROM
+    aliases: [ROM.01, ROM.03, APPLE2GS.ROM, APPLE2GS.ROM2, xgs.rom, XGS.ROM, Rom03gd, 342-0077-b]
+    required: true
+    description: "Apple IIGS system ROM"
+    validation: [size]
+    source_ref: "config.c:135,407-410,1096-1161"
+    note: >
+      Accepted sizes are 32768 (Apple //e), 131072 (ROM 01) and 262144
+      (ROM 03). -rom on the command line and the g_cfg_rom_path config line
+      both replace the first search name (config.c:1465-1467). A 32 KB //e
+      ROM has to carry the Disk II PROM at offset 0x600, which KEGS reads
+      into slot 6.
+
+  - name: c600.rom
+    aliases: [controller.rom, disk.rom, DISK.ROM, diskII.prom]
+    required: false
+    hle_fallback: true
+    min_size: 256
+    validation: [size]
+    description: "Disk II controller PROM for slot 6"
+    source_ref: "config.c:418-419,1192-1224"
+    note: >
+      Replaces the built-in PROM. The first 256 bytes are read into slot 6
+      and a shorter file is rejected.
+
+  - name: "<charrom>"
+    required: false
+    hle_fallback: true
+    min_size: 4096
+    validation: [size]
+    description: "ROMX-compatible character ROM"
+    source_ref: "config.c:136-137,259-276,1070-1093"
+    note: >
+      Picked through the F4 config panel, which stores the path in
+      g_cfg_charrom_path; there is no default name. KEGS reads 4096 bytes at
+      0x1000 times the selected font number and replaces the built-in text
+      font with them. The 32 fonts it lists span a 131072-byte image.

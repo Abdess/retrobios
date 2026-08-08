@@ -1,0 +1,113 @@
+emulator: Lime3DS
+type: standalone
+core_classification: community_fork
+source: "https://github.com/Lime3DS/lime3ds-archive"
+upstream: "https://github.com/Lime3DS/lime3ds-archive"
+profiled_date: "2026-08-08"
+source_commit: "c9dbb5bb40d90dfa6a2b085d152ae6ecf915b2f9"
+core_version: "2119.1"
+display_name: "Nintendo - 3DS (Lime3DS)"
+cores:
+  - lime3ds
+  - lime3ds-gui
+  - lime-qt
+systems:
+  - nintendo-3ds
+mode: standalone
+
+notes: |
+  Fork of Citra, discontinued at 2119.1. Data dir: lime3ds-emu on Linux,
+  Lime3DS on Windows and macOS, with citra-emu and Citra kept as legacy
+  locations. External files live in sysdata/ and nand/.
+  ref: src/common/common_paths.h:18-32, src/common/file_util.cpp:834-835
+
+  InitKeys reads boot9.bin then aes_keys.txt. Encrypted content needs one of
+  the two files.
+  ref: src/core/hw/aes/key.cpp:313-322
+
+  System archives (shared font, Mii data, country list, bad word list) have
+  open-source replacements embedded in the binary.
+  ref: src/core/file_sys/archive_ncch.cpp:144-170
+
+  The embedded shared font only covers title low ID 0x00014002. CHN, KOR and
+  TWN resolve to 0x00014102, 0x00014202 and 0x00014302, which fall through to
+  shared_font.bin and then to ErrorSystemFiles.
+  ref: src/core/hle/service/apt/apt.cpp:213, src/core/hle/service/apt/apt.cpp:284-290
+
+  ClCertA is decrypted from the NAND archive with the KeySlot 0x0D normal key,
+  and HTTPS requests stay unauthenticated when either is unavailable.
+  ref: src/core/hle/service/http/http_c.cpp:1963-1999
+
+  System titles are downloaded and installed in-app from the Nintendo CDN, so
+  the NAND title tree is not user-supplied.
+  ref: src/core/nus_download.cpp:13, src/core/hle/service/am/am.cpp:536
+
+  DumpKeys.gm9, a GodMode9 script producing aes_keys.txt and seeddb.bin, ships
+  in the tree.
+  ref: dist/dumpkeys/README.md
+
+  sector0x96.bin is defined but read by no code path.
+  ref: src/common/common_paths.h:70
+
+  mcu.dat holds per-installation MCU state that the emulator writes itself when
+  the file is absent.
+  ref: src/core/hle/service/cfg/cfg.cpp:734-756
+
+files:
+  - name: aes_keys.txt
+    path: sysdata/aes_keys.txt
+    system: nintendo-3ds
+    required: false
+    note: "key slots, common keys, DLP and NFC key Ys and NFC secrets, one per line"
+    source_ref: "src/core/hw/aes/key.cpp:206-309, src/common/common_paths.h:68"
+
+  - name: boot9.bin
+    path: sysdata/boot9.bin
+    system: nintendo-3ds
+    required: false
+    size: 65536
+    validation: [size]
+    note: "AES key section read at offset 55760, RSA modulus and exponent at 0xB3E0 and 0xB4E0"
+    source_ref: "src/core/hw/aes/key.cpp:135-204, src/core/hw/rsa/rsa.cpp:49-80"
+
+  - name: shared_font.bin
+    path: sysdata/shared_font.bin
+    system: nintendo-3ds
+    required: false
+    hle_fallback: true
+    note: "legacy path, tried after the shared font system archive; decompressed BCFNT with the 0x80 byte APT header"
+    source_ref: "src/core/hle/service/apt/apt.cpp:254-270, src/core/hle/service/apt/apt.cpp:276-291"
+
+  - name: seeddb.bin
+    path: sysdata/seeddb.bin
+    system: nintendo-3ds
+    required: false
+    note: "game seed database for 9.6+ titles; an empty database is written when the file is absent"
+    source_ref: "src/core/file_sys/seed_db.cpp:12-58"
+
+  - name: CTCert.bin
+    path: sysdata/CTCert.bin
+    system: nintendo-3ds
+    required: false
+    size: 384
+    validation: [size]
+    note: "console client certificate; signature type must be 0x010005 and the issuer one of the two Nintendo CA G3 strings"
+    source_ref: "src/core/hle/service/am/am.cpp:2427-2454, src/core/hle/service/am/am.cpp:83-93, src/core/hle/service/am/am.h:95"
+
+  - name: SecureInfo_A
+    path: nand/rw/sys/SecureInfo_A
+    system: nintendo-3ds
+    required: false
+    size: 273
+    validation: [size]
+    note: "console region and serial number; loaded on a size check alone"
+    source_ref: "src/core/hle/service/cfg/cfg.cpp:689-709, src/core/hle/service/cfg/cfg.h:180-186"
+
+  - name: LocalFriendCodeSeed_B
+    path: nand/rw/sys/LocalFriendCodeSeed_B
+    system: nintendo-3ds
+    required: false
+    size: 272
+    validation: [size]
+    note: "friend code generation seed; loaded on a size check alone"
+    source_ref: "src/core/hle/service/cfg/cfg.cpp:711-732, src/core/hle/service/cfg/cfg.h:188-193"
