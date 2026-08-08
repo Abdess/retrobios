@@ -44,6 +44,8 @@ HEAD = "head"
 
 _REF_RE = re.compile(r"^(?P<path>[^:]+?)(?::(?P<start>\d+)(?:-(?P<end>\d+))?)?$")
 _BARE_RANGE_RE = re.compile(r"^\d+(?:-\d+)?$")
+_SPLIT_RE = re.compile(r"[,;]")
+_ANNOTATION_RE = re.compile(r"\s*\([^)]*\)")
 
 
 @dataclass(frozen=True)
@@ -96,15 +98,29 @@ def parse_source_ref(ref: str) -> tuple[str, int | None, int | None]:
     return m.group("path"), start, end
 
 
-def split_source_ref(ref: str) -> list[RefPart]:
-    """A source_ref may carry several comma-separated references.
+def source_ref_values(value) -> list[tuple[str, str]]:
+    """Flatten a source_ref into (label, refs) pairs.
 
-    A part reduced to a line or a line range continues the previous part's
-    file: `geo.c:234-243, 273-285` cites two ranges of the same file. 430
-    parts across 69 profiles use that form.
+    Most entries hold a plain string. `ymir` keys its refs by mode instead,
+    since its standalone and libretro builds read different files.
+    """
+    if isinstance(value, dict):
+        return [(str(k), str(v)) for k, v in value.items() if v]
+    return [("", str(value))] if value else []
+
+
+def split_source_ref(ref: str) -> list[RefPart]:
+    """A source_ref may carry several references.
+
+    Separators are the comma and the semicolon. A part reduced to a line or a
+    line range continues the previous part's file: `geo.c:234-243, 273-285`
+    cites two ranges of the same file, a form used by 430 parts across 69
+    profiles. Parenthetical annotations are prose and are dropped: 285 entries
+    across 50 profiles carry them.
     """
     parts: list[RefPart] = []
-    for chunk in (c.strip() for c in str(ref or "").split(",")):
+    for raw in _SPLIT_RE.split(str(ref or "")):
+        chunk = _ANNOTATION_RE.sub("", raw).strip()
         if not chunk:
             continue
         if _BARE_RANGE_RE.match(chunk) and parts:
@@ -426,9 +442,10 @@ def build_report(
     report = ProfileReport(name=name, entries=[], counts={})
 
     refs = [
-        (entry.get("name", ""), str(entry.get("source_ref")))
+        (entry.get("name", "") + (f" [{label}]" if label else ""), value)
         for entry in (profile.get("files") or [])
         if isinstance(entry, dict) and entry.get("source_ref")
+        for label, value in source_ref_values(entry.get("source_ref"))
     ]
 
     if select_repo(profile) is None:
@@ -890,6 +907,11 @@ def backfill_commit(path: Path, sha: str) -> bool:
     return True
 
 
+def _is_rewritable(ref: str) -> bool:
+    """A ref carrying prose cannot be regenerated from its parsed parts."""
+    return "(" not in ref and ";" not in ref
+
+
 def rebase_refs(path: Path, report: ProfileReport) -> list[str]:
     """Recale the line ranges of parts whose content is unchanged."""
     text = path.read_text(encoding="utf-8")
@@ -903,6 +925,10 @@ def rebase_refs(path: Path, report: ProfileReport) -> list[str]:
     cursor = 0
 
     for position, entry in enumerate(report.entries):
+        if not _is_rewritable(entry.source_ref) or entry.name.endswith("]"):
+            # Rewriting would drop the author's annotations, or the refs live
+            # under a mode key rather than on a source_ref line.
+            continue
         rendered = []
         touched = False
         for part in entry.parts:

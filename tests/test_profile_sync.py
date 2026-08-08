@@ -120,6 +120,23 @@ class TestSplitSourceRef(unittest.TestCase):
             [("a.c", 1), ("a.c", 5), ("b.c", 3), ("b.c", 8)],
         )
 
+    def test_semicolon_separates_parts(self):
+        parts = split_source_ref("a.c:1-2; b.c:3")
+        self.assertEqual([(p.path, p.start) for p in parts], [("a.c", 1), ("b.c", 3)])
+
+    def test_parenthetical_annotation_is_dropped(self):
+        parts = split_source_ref("mia/system/game-gear.cpp:8 (//optional)")
+        self.assertEqual((parts[0].path, parts[0].start), ("mia/system/game-gear.cpp", 8))
+
+    def test_annotations_between_parts(self):
+        parts = split_source_ref(
+            "src/emulator.cpp:234 (path check); src/core/aes.cpp:13-92 (loadKeys)"
+        )
+        self.assertEqual(
+            [(p.path, p.start, p.end) for p in parts],
+            [("src/emulator.cpp", 234, 234), ("src/core/aes.cpp", 13, 92)],
+        )
+
     def test_leading_bare_range_stays_a_path(self):
         parts = split_source_ref("273-285")
         self.assertEqual(parts[0].path, "273-285")
@@ -980,6 +997,31 @@ class TestRebaseRefs(unittest.TestCase):
             ),
             [],
         )
+
+    def test_annotated_ref_is_never_rewritten(self):
+        self.path.write_text(
+            SAMPLE.replace('"a.c:10-12"', '"a.c:10-12 (loads the kernel)"'),
+            encoding="utf-8",
+        )
+        part = PartResult(RefPart("a.c", 10, 12), "SHIFTED", None, 20, 22, [])
+        applied = rebase_refs(
+            self.path,
+            self._report(
+                [EntryReport("a.bin", "a.c:10-12 (loads the kernel)", "SHIFTED", [part])]
+            ),
+        )
+        self.assertEqual(applied, [])
+        self.assertIn("(loads the kernel)", self.path.read_text())
+
+    def test_mode_keyed_ref_is_never_rewritten(self):
+        part = PartResult(RefPart("a.c", 10, 12), "SHIFTED", None, 20, 22, [])
+        applied = rebase_refs(
+            self.path,
+            self._report(
+                [EntryReport("a.bin [libretro]", "a.c:10-12", "SHIFTED", [part])]
+            ),
+        )
+        self.assertEqual(applied, [])
 
     def test_shifted_part_beside_changed_part_is_rebased(self):
         shifted = PartResult(RefPart("a.c", 10, 12), "SHIFTED", None, 20, 22, [])
