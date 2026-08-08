@@ -256,6 +256,14 @@ preserve the prose of annotated refs, replacing only the location.
 has been read and judged benign. It applies to one profile at a time and
 is refused with `--all`.
 
+A profile can document a frozen release line that lives as a tag inside a
+still-developed repository. HEAD is then a different program, so comparing
+against it says nothing, and recaling would repoint refs at code the frozen
+release never contained. When the declared `core_version` names a tag whose
+commit is the pin, the profile is judged on self-consistency instead: does
+each cited range carry the value its entry declares, at the pinned revision?
+Recaling and bumping are refused outright for those profiles.
+
 Three shorthand forms appear in the corpus and are resolved rather than
 reported missing. A part reduced to a line range continues the previous
 part's file (`geo.c:234-243, 273-285`). A profile whose `source` differs
