@@ -41,9 +41,9 @@ library `unittest` module.
 | Module | Tests | Fixtures | What it covers |
 |--------|-------|----------|----------------|
 | `test_e2e.py` | 218 | synthetic | resolution, verification, packs, cross-reference, targets, truth |
-| `test_profile_sync.py` | 129 | synthetic | ref anchoring, guarded profile writes, detection, triage |
+| `test_profile_sync.py` | 175 | synthetic | ref anchoring, guarded profile writes, detection, triage |
 | `test_install.py` | 70 | synthetic | `install.py` detection, config parsing, manifest handling |
-| `test_upstream.py` | 38 | synthetic | forge URL parsing, cache, revision resolution, tree comparison |
+| `test_upstream.py` | 56 | synthetic | forge URL parsing, cache, revision resolution, tree comparison |
 | `test_provenance.py` | 29 | synthetic | Logiqx/Redump parsing, DAT import, provenance join, coverage report |
 | `test_mame_parser.py` | 25 | inline C | BIOS root sets, ROM blocks, macro expansion |
 | `test_hash_merge.py` | 17 | synthetic | YAML hash merge, diff, formatting preservation |

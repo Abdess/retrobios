@@ -226,11 +226,35 @@ python scripts/profile_sync.py --emulator vice --fetch-plan
 Per part of a ref: `ANCHORED` (same content, same lines), `SHIFTED` (same
 content, moved), `RENAMED` (the source file moved), `CHANGED` (content
 edited), `AMBIGUOUS` (several equally good candidates), `GONE` (nothing
-left to anchor to). An entry carries the worst status of its parts.
+left to anchor to), `EXTERNAL` (the ref names a project the profile does
+not declare, so no revision can confirm it). An entry carries the worst
+status of its parts. Only `CHANGED`, `GONE` and `AMBIGUOUS` count as
+needing a re-read.
 
 A single cited line is often not distinctive, so the anchor widens by
-steps of ±3, ±6 and ±12 lines until it is unique. Anything still ambiguous
-is reported, never guessed.
+steps of ±3, ±6, ±12, ±25 and ±50 lines until it is unique. Three further
+strategies settle what widening cannot, each requiring corroboration
+rather than a guess:
+
+- **File shift.** Refs already resolved in the same file vote on a line
+  shift. When at least three agree and exactly one candidate sits on that
+  shift, it is taken. Repetitive driver tables resolve this way.
+- **Declared value.** A cited line that is blank, or that misses its
+  subject, is moved onto the nearest line carrying the entry's hash or
+  name, within 60 lines and only when that line is unambiguous.
+- **Every declared repository.** A vanished path is looked for in all the
+  repositories the profile declares, not only the one that owns it.
+
+Anything still unsettled is reported, never guessed.
+
+`source_commit` always names the revision the refs are written against, so
+recaling is all or nothing per profile: a profile that still needs a
+re-read is left untouched and moves as a whole once resolved. Rewrites
+preserve the prose of annotated refs, replacing only the location.
+
+`--accept-changed` recales `CHANGED` refs too, for a profile whose diff
+has been read and judged benign. It applies to one profile at a time and
+is refused with `--all`.
 
 Three shorthand forms appear in the corpus and are resolved rather than
 reported missing. A part reduced to a line range continues the previous

@@ -275,14 +275,14 @@ user's platform, filter files by hardware target, and download with SHA1 verific
 
 ## Tests
 
-14 test files, 586 tests total:
+14 test files, 650 tests total:
 
 | File | Tests | Coverage |
 |------|-------|----------|
 | `test_e2e.py` | 218 | file resolution, verification, severity, cross-reference, aliases, inheritance, shared groups, data dirs, storage tiers, HLE, launchers, platform grouping, core resolution, target filtering, truth/diff, exporters |
-| `test_profile_sync.py` | 129 | ref anchoring, guarded profile writes, detection, triage |
+| `test_profile_sync.py` | 175 | ref anchoring, guarded profile writes, detection, triage |
 | `test_install.py` | 70 | `install.py` platform detection, config-file parsing, manifest handling |
-| `test_upstream.py` | 38 | forge URL parsing, cache, revision resolution, tree comparison |
+| `test_upstream.py` | 56 | forge URL parsing, cache, revision resolution, tree comparison |
 | `test_provenance.py` | 29 | Logiqx/Redump parsers, DAT pack import, provenance join, coverage report |
 | `test_mame_parser.py` | 25 | BIOS root set detection, ROM block parsing, macro expansion |
 | `test_hash_merge.py` | 17 | MAME/FBNeo YAML merge, diff detection, formatting preservation |
