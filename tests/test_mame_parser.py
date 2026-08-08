@@ -81,6 +81,43 @@ ROM_END
 GAME( 1980, pacman, 0, pacman, pacman, pacman_state, init_pacman, ROT90, "Namco", "Pac-Man", MACHINE_SUPPORTS_SAVE )
 """
 
+# Flag commented out inside the macro call, as xavix.cpp does for the e-kara family
+COMMENTED_FLAG_FIXTURE = """\
+ROM_START( ekara )
+    ROM_REGION( 0x100000, "bios", 0 )
+    ROM_LOAD( "ekara.bin", 0x000000, 0x100000, CRC(9b27c8bc) SHA1(4f5ed7105b7128794654ce82b51723e16e389543) )
+ROM_END
+
+ROM_START( popira )
+    ROM_REGION( 0x100000, "bios", 0 )
+    ROM_LOAD( "popira.bin", 0x000000, 0x100000, CRC(3c9b3b3a) SHA1(ecf01eda815909f1facec62abf3594eaa8d11075) )
+ROM_END
+
+CONS( 2000, ekara, 0, 0, ekara, ekara, ekara_state, init_xavix, "Takara", "e-kara", MACHINE_IMPERFECT_SOUND /*| MACHINE_IS_BIOS_ROOT*/ )
+CONS( 2000, popira, 0, 0, popira, popira, popira_state, init_xavix, "Takara", "Popira", MACHINE_IMPERFECT_SOUND/*|MACHINE_IS_BIOS_ROOT*/ ) // no BIOS
+"""
+
+# Line comment mentioning the flag outside any macro call
+LINE_COMMENT_FIXTURE = """\
+ROM_START( notbios )
+    ROM_REGION( 0x1000, "maincpu", 0 )
+    ROM_LOAD( "notbios.bin", 0x0000, 0x1000, CRC(c1e6ab10) SHA1(e87e059c5be45753f7e9f33dff851f16d6751181) )
+ROM_END
+
+// TODO: this should probably be MACHINE_IS_BIOS_ROOT one day
+GAME( 1990, notbios, 0, notbios, notbios, test_state, init_test, ROT0, "Test", "Not BIOS", MACHINE_SUPPORTS_SAVE )
+"""
+
+# A game title containing characters that must not confuse comment stripping
+QUOTED_SLASH_FIXTURE = """\
+ROM_START( rcgp )
+    ROM_REGION( 0x1000, "maincpu", 0 )
+    ROM_LOAD( "rcgp.bin", 0x0000, 0x1000, CRC(c1e6ab10) SHA1(e87e059c5be45753f7e9f33dff851f16d6751181) )
+ROM_END
+
+GAME( 1989, rcgp, 0, rcgp, rcgp, test_state, init_test, ROT0, "Namco", "R/C Grand Prix", MACHINE_IS_BIOS_ROOT )
+"""
+
 
 class TestFindBiosRootSets(unittest.TestCase):
     """Tests for find_bios_root_sets."""
@@ -110,6 +147,20 @@ class TestFindBiosRootSets(unittest.TestCase):
     def test_detects_from_baddump_fixture(self) -> None:
         result = find_bios_root_sets(BADDUMP_FIXTURE, "test.cpp")
         self.assertIn("testbd", result)
+
+    def test_ignores_block_commented_flag(self) -> None:
+        result = find_bios_root_sets(
+            COMMENTED_FLAG_FIXTURE, "src/mame/tvgames/xavix.cpp"
+        )
+        self.assertEqual(result, {})
+
+    def test_ignores_flag_in_line_comment(self) -> None:
+        result = find_bios_root_sets(LINE_COMMENT_FIXTURE, "test.cpp")
+        self.assertEqual(result, {})
+
+    def test_keeps_flag_when_title_contains_slash(self) -> None:
+        result = find_bios_root_sets(QUOTED_SLASH_FIXTURE, "test.cpp")
+        self.assertIn("rcgp", result)
 
 
 class TestParseRomBlock(unittest.TestCase):
