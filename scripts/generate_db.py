@@ -18,7 +18,14 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
-from common import compute_hashes, list_registered_platforms, write_if_changed
+from common import (
+    DEFAULT_PROVENANCE_DIR,
+    annotate_provenance,
+    compute_hashes,
+    list_registered_platforms,
+    load_provenance_snapshots,
+    write_if_changed,
+)
 
 CACHE_DIR = ".cache"
 CACHE_FILE = os.path.join(CACHE_DIR, "db_cache.json")
@@ -296,6 +303,11 @@ def main():
     parser.add_argument(
         "--output", "-o", default=DEFAULT_OUTPUT, help="Output JSON file"
     )
+    parser.add_argument(
+        "--provenance-dir",
+        default=DEFAULT_PROVENANCE_DIR,
+        help="Directory with dump-catalog snapshots",
+    )
     args = parser.parse_args()
 
     bios_dir = Path(args.bios_dir)
@@ -323,6 +335,9 @@ def main():
                 aliases[sha1] = []
             aliases[sha1].append(alias_entry)
 
+    snapshots = load_provenance_snapshots(args.provenance_dir)
+    provenance_counts = annotate_provenance(files, snapshots)
+
     indexes = build_indexes(files, aliases)
     total_size = sum(entry["size"] for entry in files.values())
 
@@ -344,6 +359,12 @@ def main():
     status = "Generated" if written else "Unchanged"
     print(f"{status} {args.output}: {len(files)} files, {total_size:,} bytes total")
     print(f"  Name index: {name_count} names ({alias_count} aliases)")
+    if provenance_counts:
+        matched = sum(1 for e in files.values() if "provenance" in e)
+        per_source = ", ".join(
+            f"{source} {count}" for source, count in sorted(provenance_counts.items())
+        )
+        print(f"  Provenance: {matched} files catalog-matched ({per_source})")
     return 0
 
 

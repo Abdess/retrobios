@@ -3,6 +3,7 @@
 
 Steps:
   1. generate_db.py --force     (rebuild database.json from bios/)
+  1b. provenance_report.py      (dump-catalog coverage from provenance/)
   2. refresh_data_dirs.py       (update Dolphin Sys, PPSSPP, etc.)
   3. verify.py --all            (check all platforms)
   4. generate_pack.py --all     (build ZIP packs)
@@ -206,6 +207,14 @@ def main():
     if not ok:
         print("\nDatabase generation failed, aborting.")
         sys.exit(1)
+
+    # Step 1b: Dump-catalog coverage (offline, reads provenance/ snapshots)
+    ok, _ = run(
+        [sys.executable, "scripts/provenance_report.py"],
+        "1b provenance report",
+    )
+    results["provenance"] = ok
+    all_ok = all_ok and ok
 
     # Step 2: Refresh data directories
     if not args.offline:
