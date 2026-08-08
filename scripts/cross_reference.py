@@ -24,6 +24,7 @@ from common import (
     load_database,
     load_emulator_profiles,
     load_platform_config,
+    name_match_size_ok,
     require_yaml,
 )
 
@@ -113,24 +114,44 @@ def _resolve_source(
     by_name_lower: dict[str, str],
     data_names: set[str] | None = None,
     by_path_suffix: dict | None = None,
+    file_entry: dict | None = None,
+    db_files: dict | None = None,
 ) -> str | None:
     """Return the source category for a file, or None if not found.
 
     Returns ``"bios"`` (in database.json / bios/), ``"data"`` (in data/),
     or ``None`` (not available anywhere).
+
+    A name hit whose size contradicts a size the emulator verifies is not the
+    file, so it does not count as available.
     """
+
+    def _name_hit(name: str) -> bool:
+        """Whether the files indexed under *name* can be this entry."""
+        if not file_entry or db_files is None:
+            return True
+        sha1s = by_name.get(name) or []
+        if not isinstance(sha1s, list):
+            sha1s = [sha1s]
+        return any(
+            name_match_size_ok(file_entry, db_files.get(sha1, {}).get("size"))
+            for sha1 in sha1s
+        )
+
     # bios/ via database.json by_name
-    if fname in by_name:
+    if fname in by_name and _name_hit(fname):
         return "bios"
     stripped = fname.rstrip("/")
     basename = stripped.rsplit("/", 1)[-1] if "/" in stripped else None
-    if basename and basename in by_name:
+    if basename and basename in by_name and _name_hit(basename):
         return "bios"
     key = fname.lower()
-    if key in by_name_lower:
+    if key in by_name_lower and _name_hit(by_name_lower[key]):
         return "bios"
     if basename:
-        if basename.lower() in by_name_lower:
+        if basename.lower() in by_name_lower and _name_hit(
+            by_name_lower[basename.lower()]
+        ):
             return "bios"
     # bios/ via by_path_suffix (regional variants)
     if by_path_suffix and fname in by_path_suffix:
@@ -300,14 +321,15 @@ def cross_reference(
                 source = "large_file"
             else:
                 source = _resolve_source(
-                    fname, by_name, by_name_lower, data_names, by_path_suffix
+                    fname, by_name, by_name_lower, data_names, by_path_suffix,
+                    f, db_files,
                 )
                 if source is None:
                     path_field = f.get("path", "")
                     if path_field and path_field != fname:
                         source = _resolve_source(
                             path_field, by_name, by_name_lower,
-                            data_names, by_path_suffix,
+                            data_names, by_path_suffix, f, db_files,
                         )
                 # Try MD5 hash match
                 if source is None:

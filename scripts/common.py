@@ -116,6 +116,30 @@ def _casefold_name_index(by_name: dict) -> dict[str, list[str]]:
     return folded
 
 
+def name_match_size_ok(file_entry: dict, candidate_size: int | None) -> bool:
+    """Whether a candidate found by name may be the file the entry describes.
+
+    Generic filenames collide across systems: rom1.bin is a Sony PlayStation 2
+    firmware and a Roland SC-55mk2 program ROM. A name carries no evidence on
+    its own, so a size the emulator verifies settles it. A size declared
+    without ``validation: [size]`` is informative and rejects nothing.
+    """
+    validation = file_entry.get("validation")
+    if isinstance(validation, dict):
+        validation = validation.get("core", [])
+    if "size" not in (validation or []) or candidate_size is None:
+        return True
+    declared = file_entry.get("size")
+    if declared is not None:
+        allowed = declared if isinstance(declared, list) else [declared]
+        return candidate_size in allowed
+    low = file_entry.get("min_size")
+    high = file_entry.get("max_size")
+    if low is not None and candidate_size < low:
+        return False
+    return not (high is not None and candidate_size > high)
+
+
 def md5_composite(filepath: str | Path) -> str:
     """Compute composite MD5 of a ZIP - matches Recalbox's Zip::Md5Composite().
 
@@ -521,11 +545,16 @@ def resolve_local_file(
                             return path, "md5_exact"
 
     # 3. No MD5 = any file with that name or alias (existence check)
+    def _size_ok(match_sha1: str) -> bool:
+        return name_match_size_ok(
+            file_entry, files_db.get(match_sha1, {}).get("size")
+        )
+
     if not md5_list:
         candidates = []
         for try_name in names_to_try:
             for match_sha1 in by_name.get(try_name, []):
-                if match_sha1 in files_db:
+                if match_sha1 in files_db and _size_ok(match_sha1):
                     path = files_db[match_sha1]["path"]
                     if os.path.exists(path) and path not in candidates:
                         candidates.append(path)
@@ -537,7 +566,7 @@ def resolve_local_file(
             folded = _casefold_name_index(by_name)
             for try_name in names_to_try:
                 for match_sha1 in folded.get(try_name.casefold(), []):
-                    if match_sha1 in files_db:
+                    if match_sha1 in files_db and _size_ok(match_sha1):
                         path = files_db[match_sha1]["path"]
                         if os.path.exists(path) and path not in candidates:
                             candidates.append(path)
