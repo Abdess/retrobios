@@ -63,6 +63,54 @@ _BAD_DUMP = re.compile(r"\bBAD_DUMP\b")
 _ROM_BIOS = re.compile(r"ROM_BIOS\s*\(\s*(\d+)\s*\)")
 
 
+def strip_comments(source: str) -> str:
+    """Remove C block and line comments, preserving string and char literals.
+
+    Drivers disable a flag by commenting it out inside the macro call, as in
+    MACHINE_IMPERFECT_SOUND /*| MACHINE_IS_BIOS_ROOT*/. A plain substring test
+    on the raw text reads those as active.
+    """
+    out: list[str] = []
+    i, end = 0, len(source)
+
+    while i < end:
+        ch = source[i]
+
+        if ch in ('"', "'"):
+            quote = ch
+            out.append(ch)
+            i += 1
+            while i < end:
+                out.append(source[i])
+                if source[i] == "\\":
+                    i += 2
+                    if i - 1 < end:
+                        out.append(source[i - 1])
+                    continue
+                if source[i] == quote:
+                    i += 1
+                    break
+                i += 1
+            continue
+
+        if ch == "/" and i + 1 < end:
+            if source[i + 1] == "*":
+                closing = source.find("*/", i + 2)
+                i = end if closing == -1 else closing + 2
+                out.append(" ")
+                continue
+            if source[i + 1] == "/":
+                newline = source.find("\n", i + 2)
+                i = end if newline == -1 else newline
+                out.append(" ")
+                continue
+
+        out.append(ch)
+        i += 1
+
+    return "".join(out)
+
+
 def find_bios_root_sets(source: str, filename: str) -> dict[str, dict]:
     """Find machine entries flagged as BIOS root sets.
 
@@ -77,7 +125,7 @@ def find_bios_root_sets(source: str, filename: str) -> dict[str, dict]:
         if block_end == -1:
             continue
 
-        block = source[start : block_end + 1]
+        block = strip_comments(source[start : block_end + 1])
         if "MACHINE_IS_BIOS_ROOT" not in block:
             continue
 
