@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-08T05:40:08Z",
+  "generated_at": "2026-08-08T07:33:54Z",
   "total_files": 7763,
   "total_size": 10332160603,
   "files": {
@@ -115350,6 +115350,9 @@
       "cgb_agb_boot.bin": [
         "80e3ee82416c1a74827a5459fde32f04bf51a1f6"
       ],
+      "nespalette.pal": [
+        "37027d92e1015b82a7dc5c43e9f1649a961577ab"
+      ],
       "usa_2slt.bin": [
         "5c6bba07d2ec8ac95776aa3511109f5e1e2e92eb"
       ],
@@ -145636,6 +145639,7 @@
         "80e3ee82416c1a74827a5459fde32f04bf51a1f6",
         "369e6eb5e0c975eaa52a4a3f6ee07b2a3c3c16de",
         "f282b3aaf98f8423dab7d77f1aa0192be630f2fb",
+        "37027d92e1015b82a7dc5c43e9f1649a961577ab",
         "5c6bba07d2ec8ac95776aa3511109f5e1e2e92eb",
         "4192c505d130f446b2ada6bdc91dae730acafb4c",
         "16df8b5fd524c5a1c7584b2457ac15aff9e3ad6d",

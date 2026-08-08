@@ -4,7 +4,7 @@
   "platform": "retrodeck",
   "display_name": "RetroDECK",
   "version": "1.0",
-  "generated": "2026-08-08T05:14:54Z",
+  "generated": "2026-08-08T08:00:55Z",
   "base_destination": "",
   "detect": [
     {
@@ -236,8 +236,8 @@
       }
     }
   ],
-  "total_files": 3318,
-  "total_size": 4980181970,
+  "total_files": 3317,
+  "total_size": 4976627546,
   "files": [
     {
       "dest": "bios/panafz1.bin",
@@ -15903,9 +15903,9 @@
     },
     {
       "dest": "bios/MT32_CONTROL.ROM",
-      "sha1": "a439fbb390da38cada95a7cbb1d6ca199cd66ef8",
+      "sha1": "5a5cb5a77d7d55ee69657c2f870416daed52dea7",
       "size": 65536,
-      "repo_path": "bios/Commodore/Amiga/mt32-roms/cm32l_control.rom",
+      "repo_path": "bios/Roland/mt32-roms/ctrl_mt32_1_04.rom",
       "cores": [
         "DOSBox"
       ]
@@ -15921,9 +15921,9 @@
     },
     {
       "dest": "bios/CM32L_CONTROL.ROM",
-      "sha1": "a439fbb390da38cada95a7cbb1d6ca199cd66ef8",
+      "sha1": "73683d585cd6948cc19547942ca0e14a0319456d",
       "size": 65536,
-      "repo_path": "bios/Commodore/Amiga/mt32-roms/cm32l_control.rom",
+      "repo_path": "bios/Roland/mt32-roms/ctrl_cm32l_1_00.rom",
       "cores": [
         "DOSBox-core"
       ]
@@ -24313,15 +24313,6 @@
       ]
     },
     {
-      "dest": "bios/dc/naomigd.zip",
-      "sha1": "a0f07de6070d98f86d55a4ecd61b4a5b05a4a0d5",
-      "size": 3387512,
-      "repo_path": "bios/Arcade/MAME/naomigd.zip",
-      "cores": [
-        "Flycast"
-      ]
-    },
-    {
       "dest": "bios/kronos/saturn_bios.bin",
       "sha1": "2b8cb4f87580683eb4d760e4ed210813d667f0a2",
       "size": 524288,
@@ -26096,9 +26087,9 @@
     },
     {
       "dest": "bios/rom1.bin",
-      "sha1": "47d2ec4b342649e4c391043ab915d4435f9d180d",
-      "size": 199680,
-      "repo_path": "bios/Sony/PlayStation 2/rom1.bin",
+      "sha1": "b91bb1d9dccffe831b7cfde7800a3fe32b2fbda6",
+      "size": 32768,
+      "repo_path": "bios/Roland/soundcanvas-roms/SC-55mk2-v1.01/rom1.bin",
       "cores": [
         "LRPS2"
       ]

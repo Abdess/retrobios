@@ -164,6 +164,7 @@ nav:
   - QEMU: systems/qemu.md
   - RPG Maker: systems/rpg-maker.md
   - Ringo: systems/ringo.md
+  - Roland: systems/roland.md
   - SNK: systems/snk.md
   - ScummVM: systems/scummvm.md
   - Sega: systems/sega.md
@@ -249,7 +250,7 @@ nav:
     - vitaQuakeII: emulators/vitaquake2.md
     - yabasanshiro: emulators/yabasanshiro.md
     - Yuzu: emulators/yuzu.md
-  - Community forks (111):
+  - Community forks (114):
     - EightyOne: emulators/81.md
     - a5200: emulators/a5200.md
     - ACE-DL: emulators/ace-dl.md
@@ -296,7 +297,10 @@ nav:
     - GSplus: emulators/gsplus.md
     - Handy: emulators/handy.md
     - higan (SFC Accuracy): emulators/higan_sfc.md
+    - Lime3DS: emulators/lime3ds.md
+    - LinApple: emulators/linapple.md
     - LRPS2: emulators/lrps2.md
+    - Mandarine: emulators/mandarine.md
     - mednafen_pce: emulators/mednafen_pce.md
     - mednafen_pce_fast: emulators/mednafen_pce_fast.md
     - mednafen_supafaust: emulators/mednafen_supafaust.md
@@ -404,7 +408,7 @@ nav:
     - MicroW8: emulators/uw8.md
     - uzem: emulators/uzem.md
     - VirtualXT: emulators/virtualxt.md
-  - Game engines (25):
+  - Game engines (27):
     - boom3: emulators/boom3.md
     - Cannonball: emulators/cannonball.md
     - ChaiLove: emulators/chailove.md
@@ -413,7 +417,9 @@ nav:
     - EasyRPG Player: emulators/easyrpg.md
     - ECWolf: emulators/ecwolf.md
     - FAKE-08: emulators/fake08.md
+    - Gargoyle: emulators/gargoyle.md
     - Jump 'n Bump: emulators/jumpnbump.md
+    - lightspark: emulators/lightspark.md
     - Lutro: emulators/lutro.md
     - mkxp-z: emulators/mkxp_z.md
     - NXEngine: emulators/nxengine.md
@@ -430,7 +436,7 @@ nav:
     - WASM-4: emulators/wasm4.md
     - XRick: emulators/xrick.md
     - Zelda Classic v2.10: emulators/zc210.md
-  - Enhanced forks (19):
+  - Enhanced forks (21):
     - A7800: emulators/a7800.md
     - AdvanceMAME: emulators/advancemame.md
     - bsnes-hd beta: emulators/bsnes_hd_beta.md
@@ -441,8 +447,10 @@ nav:
     - DoubleCherryGB: emulators/doublecherrygb.md
     - Flycast Dojo: emulators/flycast-dojo.md
     - Genesis Plus GX Wide: emulators/genesis_plus_gx_wide.md
+    - GroovyMAME: emulators/groovymame.md
     - HBMAME (Homebrew MAME): emulators/hbmame.md
     - nSide (SFC Balanced): emulators/higan_sfc_balanced.md
+    - Hypseus Singe: emulators/hypseus-singe.md
     - Ishiiruka: emulators/ishiiruka.md
     - MAME 2003-Plus: emulators/mame2003_plus.md
     - MesenCE: emulators/mesence.md
@@ -483,12 +491,14 @@ nav:
     - Stone Soup: emulators/stonesoup.md
     - UME 2015: emulators/ume2015.md
     - VBA-Next: emulators/vba_next.md
-  - Embedded HLE (2):
+  - Embedded HLE (4):
     - 3dSen: emulators/3dsen.md
+    - izapple2: emulators/izapple2.md
+    - Lindbergh Loader: emulators/lindbergh-loader.md
     - PCSX-ReARMed: emulators/pcsx_rearmed.md
   - Launchers (1):
     - Dolphin Launcher: emulators/dolphin_launcher.md
-  - Other (27):
+  - Other (31):
     - ares: emulators/ares.md
     - Basilisk II: emulators/basiliskii.md
     - Beetle GBA (Mednafen): emulators/beetle_gba.md
@@ -501,6 +511,10 @@ nav:
     - DREAMM: emulators/dreamm.md
     - eka2l1: emulators/eka2l1.md
     - ep128emu-core: emulators/ep128emu.md
+    - Gopher2600: emulators/gopher2600.md
+    - gopher64: emulators/gopher64.md
+    - jgenesis: emulators/jgenesis.md
+    - KEGS: emulators/kegs.md
     - Lexaloffle: emulators/lexaloffle.md
     - Model 2 Emulator: emulators/model2.md
     - openMSX: emulators/openmsx.md

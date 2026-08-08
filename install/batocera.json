@@ -4,7 +4,7 @@
   "platform": "batocera",
   "display_name": "Batocera",
   "version": "1.0",
-  "generated": "2026-08-08T04:39:52Z",
+  "generated": "2026-08-08T07:59:56Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -236,8 +236,8 @@
       }
     }
   ],
-  "total_files": 1600,
-  "total_size": 2869267049,
+  "total_files": 1598,
+  "total_size": 2864994263,
   "files": [
     {
       "dest": "panafz1.bin",
@@ -5980,9 +5980,9 @@
     },
     {
       "dest": "CM32L_CONTROL.ROM",
-      "sha1": "a439fbb390da38cada95a7cbb1d6ca199cd66ef8",
+      "sha1": "73683d585cd6948cc19547942ca0e14a0319456d",
       "size": 65536,
-      "repo_path": "bios/Commodore/Amiga/mt32-roms/cm32l_control.rom",
+      "repo_path": "bios/Roland/mt32-roms/ctrl_cm32l_1_00.rom",
       "cores": [
         "DOSBox Pure"
       ]
@@ -12242,15 +12242,6 @@
       ]
     },
     {
-      "dest": "dc/airlbios.zip",
-      "sha1": "03c9d1c3f59e8c6f320ea74abde1e4e7c5bfa623",
-      "size": 718362,
-      "repo_path": "bios/Arcade/MAME/airlbios.zip",
-      "cores": [
-        "Flycast"
-      ]
-    },
-    {
       "dest": "dc/f355bios.zip",
       "sha1": "b6ff66dcb5547bd91760d239ddf428a655631c53",
       "size": 1394278,
@@ -12273,15 +12264,6 @@
       "sha1": "07fd3fae7af650a37a3329ed09d039bd7360294f",
       "size": 1889870,
       "repo_path": "bios/Arcade/MAME/hod2bios.zip",
-      "cores": [
-        "Flycast"
-      ]
-    },
-    {
-      "dest": "dc/naomigd.zip",
-      "sha1": "a0f07de6070d98f86d55a4ecd61b4a5b05a4a0d5",
-      "size": 3387512,
-      "repo_path": "bios/Arcade/MAME/naomigd.zip",
       "cores": [
         "Flycast"
       ]
@@ -13709,6 +13691,15 @@
       ]
     },
     {
+      "dest": "rom1.bin",
+      "sha1": "b91bb1d9dccffe831b7cfde7800a3fe32b2fbda6",
+      "size": 32768,
+      "repo_path": "bios/Roland/soundcanvas-roms/SC-55mk2-v1.01/rom1.bin",
+      "cores": [
+        "PCSX2"
+      ]
+    },
+    {
       "dest": "GameIndex.yaml",
       "sha1": "b22389650f6c0a1e276b48213fed8a9c1c6476ce",
       "size": 2669341,
@@ -13920,15 +13911,6 @@
       "sha1": "541a74165496fb7ef35ce6ec03f711ebbe263e11",
       "size": 2060269,
       "repo_path": "bios/Sony/PlayStation 2/patches.zip",
-      "cores": [
-        "PCSX2"
-      ]
-    },
-    {
-      "dest": "rom1.bin",
-      "sha1": "47d2ec4b342649e4c391043ab915d4435f9d180d",
-      "size": 199680,
-      "repo_path": "bios/Sony/PlayStation 2/rom1.bin",
       "cores": [
         "PCSX2"
       ]

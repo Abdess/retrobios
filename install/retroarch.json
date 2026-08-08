@@ -4,7 +4,7 @@
   "platform": "retroarch",
   "display_name": "RetroArch",
   "version": "1.0",
-  "generated": "2026-08-08T05:14:28Z",
+  "generated": "2026-08-08T08:00:30Z",
   "base_destination": "system",
   "detect": [
     {
@@ -255,7 +255,7 @@
     }
   ],
   "total_files": 1683,
-  "total_size": 4206630013,
+  "total_size": 4206463101,
   "files": [
     {
       "dest": "3do_arcade_saot.bin",
@@ -6059,15 +6059,6 @@
       ]
     },
     {
-      "dest": "dc/naomigd.zip",
-      "sha1": "a0f07de6070d98f86d55a4ecd61b4a5b05a4a0d5",
-      "size": 3387512,
-      "repo_path": "bios/Arcade/MAME/naomigd.zip",
-      "cores": [
-        "Flycast"
-      ]
-    },
-    {
       "dest": "GMASTER2.ROM",
       "sha1": "5c00f9e3a48411e08fac89b1dfdd2a6e95853919",
       "size": 131072,
@@ -6590,6 +6581,15 @@
       ],
       "storage": "release",
       "release_asset": "sd.raw"
+    },
+    {
+      "dest": "naomigd.zip",
+      "sha1": "a0f07de6070d98f86d55a4ecd61b4a5b05a4a0d5",
+      "size": 3387512,
+      "repo_path": "bios/Arcade/MAME/naomigd.zip",
+      "cores": [
+        "MAME"
+      ]
     },
     {
       "dest": "lindbios.zip",
@@ -14447,9 +14447,9 @@
     },
     {
       "dest": "rom1.bin",
-      "sha1": "47d2ec4b342649e4c391043ab915d4435f9d180d",
-      "size": 199680,
-      "repo_path": "bios/Sony/PlayStation 2/rom1.bin",
+      "sha1": "b91bb1d9dccffe831b7cfde7800a3fe32b2fbda6",
+      "size": 32768,
+      "repo_path": "bios/Roland/soundcanvas-roms/SC-55mk2-v1.01/rom1.bin",
       "cores": [
         "LRPS2"
       ]
