@@ -63,7 +63,7 @@ files:
     min_size: 143105
     max_size: 143364
     validation: [size]
-    source_ref: "asset.cpp:33,101-128; Applewin.cpp:626-633; DiskImage.cpp:424-427"
+    source_ref: "src/asset.cpp:33, src/asset.cpp:101-128, src/Applewin.cpp:626-633, src/DiskImage.cpp:424-427"
     note: >
       Inserted only when the Slot 6 Autoload preference is off; when it is on,
       the two configured disk images are loaded instead. Asset_FindMasterDisk
@@ -76,7 +76,7 @@ files:
   - name: APPLE2E.SYM
     required: false
     description: "Debugger symbol table for the main ROM"
-    source_ref: "Debugger_Symbols.cpp:49,553-584,751-767; Debug.cpp:8679-8680"
+    source_ref: "src/Debugger/Debugger_Symbols.cpp:49, src/Debugger/Debugger_Symbols.cpp:553-584, src/Debugger/Debugger_Symbols.cpp:751-767, src/Debugger/Debug.cpp:8679-8680"
     note: >
       Preloaded into the Main table when the debugger initialises. Parsed as
       text lines of address and symbol name, with no size or hash check.
@@ -84,7 +84,7 @@ files:
   - name: A2_BASIC.SYM
     required: false
     description: "Debugger symbol table for Applesoft BASIC"
-    source_ref: "Debugger_Symbols.cpp:50,553-584,751-767; Debug.cpp:8682-8683"
+    source_ref: "src/Debugger/Debugger_Symbols.cpp:50, src/Debugger/Debugger_Symbols.cpp:553-584, src/Debugger/Debugger_Symbols.cpp:751-767, src/Debugger/Debug.cpp:8682-8683"
     note: >
       Preloaded into the Basic table when the debugger initialises. Parsed as
       text lines of address and symbol name, with no size or hash check.

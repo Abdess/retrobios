@@ -59,7 +59,7 @@ files:
     required: false
     hle_fallback: true
     size: 256
-    source_ref: "libretro.c:519,530,556 (boot_rom_load); Core/gb.c:1594 (request_boot_rom)"
+    source_ref: "libretro/libretro.c:519, libretro/libretro.c:530, libretro/libretro.c:556 (boot_rom_load), Core/gb.c:1594 (request_boot_rom)"
 
   - name: "sgb_boot.bin"
     system: nintendo-sgb
@@ -67,7 +67,7 @@ files:
     required: false
     hle_fallback: true
     size: 256
-    source_ref: "libretro.c:521,532,556; Core/gb.c:1600-1604"
+    source_ref: "libretro/libretro.c:521, libretro/libretro.c:532, libretro/libretro.c:556, Core/gb.c:1600-1604"
     note: "Used for SGB_NTSC, SGB_PAL models. Also loaded when borrowing SGB border (Core/gb.c:264)."
 
   - name: "sgb2_boot.bin"
@@ -76,7 +76,7 @@ files:
     required: false
     hle_fallback: true
     size: 256
-    source_ref: "libretro.c:522,533,556; Core/gb.c:1607"
+    source_ref: "libretro/libretro.c:522, libretro/libretro.c:533, libretro/libretro.c:556, Core/gb.c:1607"
 
   - name: "cgb_boot.bin"
     system: nintendo-gbc
@@ -84,7 +84,7 @@ files:
     required: false
     hle_fallback: true
     size: 2304
-    source_ref: "libretro.c:524,535,556; Core/gb.c:1613-1618"
+    source_ref: "libretro/libretro.c:524, libretro/libretro.c:535, libretro/libretro.c:556, Core/gb.c:1613-1618"
     note: "Used for CGB revisions A through E in the libretro port."
 
   - name: "agb_boot.bin"
@@ -93,7 +93,7 @@ files:
     required: false
     hle_fallback: true
     size: 2304
-    source_ref: "libretro.c:525,536,556; Core/gb.c:1621"
+    source_ref: "libretro/libretro.c:525, libretro/libretro.c:536, libretro/libretro.c:556, Core/gb.c:1621"
     note: "Enables GBA-enhanced palettes in compatible GBC games."
 
 builtin_boot_roms:

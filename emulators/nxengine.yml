@@ -45,7 +45,7 @@ files:
     size: 1478656
     md5: "38695d3d69d7a0ada8178072dad4c58b"
     sha1: "bb2d0441e073da9c584f23c2ad8c7ab8aac293bf"
-    source_ref: "main.cpp:77-78 (opened for extraction), libretro.cpp:258 (existence check)"
+    source_ref: "main.cpp:77-78 (opened for extraction), nxengine/libretro/libretro.cpp:258 (existence check)"
     note: "Placed in system/nxengine/. The core extracts ORG music, PXT sounds, stage tile attributes, BMP graphics, and wavetable from this binary at each launch."
 
   - name: "data/"
@@ -54,7 +54,7 @@ files:
     system: cave-story
     description: "Full game asset directory tree (399 files: sprites, NPC sheets, stage maps, scripts, backgrounds)"
     required: true
-    source_ref: "cachefiles.c:38-439 (filenames[] array loaded at init)"
+    source_ref: "nxengine/extract-auto/cachefiles.c:38-439 (filenames[] array loaded at init)"
     note: "Must contain root assets (Arms.pbm, MyChar.pbm, etc.), Npc/ (36 sprite sheets), and Stage/ (333 map/script/tileset files). All files from the original freeware release."
 
   - name: "data/npc.tbl"
@@ -73,7 +73,7 @@ files:
     description: "Sprite information file (sprite positions, sizes, animation data)"
     required: false
     hle_fallback: true
-    source_ref: "cachefiles.c:101 (in filenames[]), cachefiles.c:515-521 (compiled-in fallback from sprites_sif.h)"
+    source_ref: "nxengine/extract-auto/cachefiles.c:101 (in filenames[]), nxengine/extract-auto/cachefiles.c:515-521 (compiled-in fallback from sprites_sif.h)"
     note: "Not shipped in the freeware distribution. If missing, the core uses a compiled-in copy (sprites_sif.h)."
 
   - name: "tilekey.dat"

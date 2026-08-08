@@ -118,49 +118,49 @@ files:
   - name: "Gargoyle-Mono.ttf"
     description: "Gargoyle Mono regular (Go Mono)"
     required: true
-    source_ref: "draw.cpp:491 (make_entry monor), 300-350 (make_font, winabort)"
+    source_ref: "garglk/draw.cpp:491 (make_entry monor), garglk/draw.cpp:300-350 (make_font, winabort)"
 
   - name: "Gargoyle-Mono-Bold.ttf"
     description: "Gargoyle Mono bold (Go Mono)"
     required: true
-    source_ref: "draw.cpp:492 (make_entry monob), 300-350 (make_font, winabort)"
+    source_ref: "garglk/draw.cpp:492 (make_entry monob), garglk/draw.cpp:300-350 (make_font, winabort)"
 
   - name: "Gargoyle-Mono-Italic.ttf"
     description: "Gargoyle Mono italic (Go Mono)"
     required: true
-    source_ref: "draw.cpp:493 (make_entry monoi), 300-350 (make_font, winabort)"
+    source_ref: "garglk/draw.cpp:493 (make_entry monoi), garglk/draw.cpp:300-350 (make_font, winabort)"
 
   - name: "Gargoyle-Mono-Bold-Italic.ttf"
     description: "Gargoyle Mono bold italic (Go Mono)"
     required: true
-    source_ref: "draw.cpp:494 (make_entry monoz), 300-350 (make_font, winabort)"
+    source_ref: "garglk/draw.cpp:494 (make_entry monoz), garglk/draw.cpp:300-350 (make_font, winabort)"
 
   - name: "Gargoyle-Serif.ttf"
     description: "Gargoyle Serif regular (Charis SIL)"
     required: true
-    source_ref: "draw.cpp:495 (make_entry propr), 300-350 (make_font, winabort)"
+    source_ref: "garglk/draw.cpp:495 (make_entry propr), garglk/draw.cpp:300-350 (make_font, winabort)"
 
   - name: "Gargoyle-Serif-Bold.ttf"
     description: "Gargoyle Serif bold (Charis SIL)"
     required: true
-    source_ref: "draw.cpp:496 (make_entry propb), 300-350 (make_font, winabort)"
+    source_ref: "garglk/draw.cpp:496 (make_entry propb), garglk/draw.cpp:300-350 (make_font, winabort)"
 
   - name: "Gargoyle-Serif-Italic.ttf"
     description: "Gargoyle Serif italic (Charis SIL)"
     required: true
-    source_ref: "draw.cpp:497 (make_entry propi), 300-350 (make_font, winabort)"
+    source_ref: "garglk/draw.cpp:497 (make_entry propi), garglk/draw.cpp:300-350 (make_font, winabort)"
 
   - name: "Gargoyle-Serif-Bold-Italic.ttf"
     description: "Gargoyle Serif bold italic (Charis SIL)"
     required: true
-    source_ref: "draw.cpp:498 (make_entry propz), 300-350 (make_font, winabort)"
+    source_ref: "garglk/draw.cpp:498 (make_entry propz), garglk/draw.cpp:300-350 (make_font, winabort)"
 
   # -- Glyph substitution fonts, data directory root --
   # Tried for every face after the main fonts; a load failure is skipped.
   - name: "unifont.otf"
     description: "GNU Unifont, Basic Multilingual Plane glyph fallback"
     required: false
-    source_ref: "draw.cpp:352-375 (make_substitution_fonts), 476-478"
+    source_ref: "garglk/draw.cpp:352-375 (make_substitution_fonts), garglk/draw.cpp:476-478"
     note: >
       Covers glyphs missing from the text fonts. Loaded directly rather than
       through the system font mechanism, so it is not installed system-wide.
@@ -168,7 +168,7 @@ files:
   - name: "unifont_upper.otf"
     description: "GNU Unifont, planes above the BMP"
     required: false
-    source_ref: "draw.cpp:352-375 (make_substitution_fonts), 476-478"
+    source_ref: "garglk/draw.cpp:352-375 (make_substitution_fonts), garglk/draw.cpp:476-478"
 
   # -- Color themes, themes subdirectory --
   # Every *.json in the theme directories is parsed, keyed on its name field.

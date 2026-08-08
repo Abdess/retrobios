@@ -32,5 +32,5 @@ files:
     description: "Game Boy (DMG) boot ROM"
     required: true
     size: 256
-    source_ref: "controllers/mapper/gb_mapper.c:35 (bootrom_path), gb_mapper.h:13 (BOOTROM_SIZE=256), gb_mapper.c:225-232 (file_map + error)"
+    source_ref: "controllers/mapper/gb_mapper.c:35 (bootrom_path), controllers/mapper/gb_mapper.h:13 (BOOTROM_SIZE=256), controllers/mapper/gb_mapper.c:225-232 (file_map + error)"
     note: "Upstream name DMG_ROM.bin, renamed by libretro port (gb_mapper.c:33-34)."

@@ -32,7 +32,7 @@ files:
     validation: [size, sha256]
     md5: "8dd7d5296a650fac7319bce665a6a53c"
     sha256: "9c0421858e217805f4abe18698afea8d5aa36ff0727eb8484944e00eb5e7eadb"
-    source_ref: "rustation/src/bios/db.rs:158-167 (v3.0 Japan)"
+    source_ref: "src/bios/db.rs:158-167 (v3.0 Japan)"
 
   # -- Region: North America --
 
@@ -44,7 +44,7 @@ files:
     validation: [size, sha256]
     md5: "490f666e1afb15b7362b406ed1cea246"
     sha256: "11052b6499e466bbf0a709b1f9cb6834a9418e66680387912451e971cf8a1fef"
-    source_ref: "rustation/src/bios/db.rs:168-177 (v3.0 NorthAmerica)"
+    source_ref: "src/bios/db.rs:168-177 (v3.0 NorthAmerica)"
 
   # -- Region: Europe --
 
@@ -56,7 +56,7 @@ files:
     validation: [size, sha256]
     md5: "32736f17079d0b2b7024407c39bd3050"
     sha256: "1faaa18fa820a0225e488d9f086296b8e6c46df739666093987ff7d8fd352c09"
-    source_ref: "rustation/src/bios/db.rs:178-187 (v3.0 Europe)"
+    source_ref: "src/bios/db.rs:178-187 (v3.0 Europe)"
 
   # -- Alternatives: any of the 22 good entries is accepted. One per region needed. --
 
@@ -68,7 +68,7 @@ files:
     size: 524288
     validation: [size, sha256]
     sha256: "cfc1fc38eb442f6f80781452119e931bcae28100c1c97e7e6c5f2725bbb0f8bb"
-    source_ref: "rustation/src/bios/db.rs:38-47 (v1.0 Japan)"
+    source_ref: "src/bios/db.rs:38-47 (v1.0 Japan)"
 
   - name: "scph_v11j.bin"
     description: "v1.1 J"
@@ -77,7 +77,7 @@ files:
     size: 524288
     validation: [size, sha256]
     sha256: "5eb3aee495937558312b83b54323d76a4a015190decd4051214f1b6df06ac34b"
-    source_ref: "rustation/src/bios/db.rs:48-57 (v1.1 Japan)"
+    source_ref: "src/bios/db.rs:48-57 (v1.1 Japan)"
 
   - name: "scph3000.bin"
     description: "SCPH-3000 (v2.1 J)"
@@ -86,7 +86,7 @@ files:
     size: 524288
     validation: [size, sha256]
     sha256: "6f71ca1e716da761dc53187bd39e00c213f566e55090708fd3e2b4b425c8c989"
-    source_ref: "rustation/src/bios/db.rs:78-87 (v2.1 Japan)"
+    source_ref: "src/bios/db.rs:78-87 (v2.1 Japan)"
 
   - name: "scph3500.bin"
     description: "SCPH-3500 (v2.2 J)"
@@ -95,7 +95,7 @@ files:
     size: 524288
     validation: [size, sha256]
     sha256: "0c8359870cbac0ea091f1c87f188cd332dcc709753b91cafd9fd44a4a6188197"
-    source_ref: "rustation/src/bios/db.rs:108-117 (v2.2 Japan)"
+    source_ref: "src/bios/db.rs:108-117 (v2.2 Japan)"
     note: "A known-bad v2.2 J dump also exists in the DB but is rejected."
 
   - name: "scph5000.bin"
@@ -105,7 +105,7 @@ files:
     size: 524288
     validation: [size, sha256]
     sha256: "4018749b3698b8694387beebcbabfb48470513066840f9441459ee4c9f0f39bc"
-    source_ref: "rustation/src/bios/db.rs:148-157 (v2.2 Japan alt)"
+    source_ref: "src/bios/db.rs:148-157 (v2.2 Japan alt)"
 
   - name: "scph7000.bin"
     description: "SCPH-7000 (v4.0 J)"
@@ -114,7 +114,7 @@ files:
     size: 524288
     validation: [size, sha256]
     sha256: "e900504d1755f021f861b82c8258c5e6658c7b592f800cccd91f5d32ea380d28"
-    source_ref: "rustation/src/bios/db.rs:198-207 (v4.0 Japan)"
+    source_ref: "src/bios/db.rs:198-207 (v4.0 Japan)"
 
   - name: "scph7500.bin"
     description: "SCPH-7500 (v4.1 J)"
@@ -123,7 +123,7 @@ files:
     size: 524288
     validation: [size, sha256]
     sha256: "b3aa63cf30c81e0a40641740f4a43e25fda0b21b792fa9aaef60ce1675761479"
-    source_ref: "rustation/src/bios/db.rs:208-217 (v4.1 Japan)"
+    source_ref: "src/bios/db.rs:208-217 (v4.1 Japan)"
 
   - name: "scph9000.bin"
     description: "SCPH-9000 (v4.3 J)"
@@ -132,7 +132,7 @@ files:
     size: 524288
     validation: [size, sha256]
     sha256: "b29b4b5fcddef369bd6640acacda0865e0366fcf7ea54e40b2f1a8178004f89a"
-    source_ref: "rustation/src/bios/db.rs:238-247 (v4.3 Japan)"
+    source_ref: "src/bios/db.rs:238-247 (v4.3 Japan)"
 
   # North America alternatives
   - name: "scph1001.bin"
@@ -142,7 +142,7 @@ files:
     size: 524288
     validation: [size, sha256]
     sha256: "42e4124be7623e2e28b1db0d8d426539646faee49d74b71166d8ba5bd7c472ed"
-    source_ref: "rustation/src/bios/db.rs:58-67 (v2.0 NorthAmerica)"
+    source_ref: "src/bios/db.rs:58-67 (v2.0 NorthAmerica)"
 
   - name: "scph5001.bin"
     description: "SCPH-5001 (v2.1 A)"
@@ -151,7 +151,7 @@ files:
     size: 524288
     validation: [size, sha256]
     sha256: "6ad5521d105a6b86741f1af8da2e6ea1c732d34459940618c70305a105e8ec10"
-    source_ref: "rustation/src/bios/db.rs:88-97 (v2.1 NorthAmerica)"
+    source_ref: "src/bios/db.rs:88-97 (v2.1 NorthAmerica)"
 
   - name: "scph_v22a.bin"
     description: "v2.2 A"
@@ -160,7 +160,7 @@ files:
     size: 524288
     validation: [size, sha256]
     sha256: "71af94d1e47a68c11e8fdb9f8368040601514a42a5a399cda48c7d3bff1e99d3"
-    source_ref: "rustation/src/bios/db.rs:128-137 (v2.2 NorthAmerica)"
+    source_ref: "src/bios/db.rs:128-137 (v2.2 NorthAmerica)"
 
   - name: "scph7001.bin"
     description: "SCPH-7001 (v4.1 A)"
@@ -169,7 +169,7 @@ files:
     size: 524288
     validation: [size, sha256]
     sha256: "39dcc1a0717036c9b6ac52fefd1ee7a57d3808e8cfbc755879fa685a0a738278"
-    source_ref: "rustation/src/bios/db.rs:218-227 (v4.1 NorthAmerica)"
+    source_ref: "src/bios/db.rs:218-227 (v4.1 NorthAmerica)"
 
   - name: "scph101.bin"
     description: "SCPH-101 (v4.5 A)"
@@ -178,7 +178,7 @@ files:
     size: 524288
     validation: [size, sha256]
     sha256: "aca9cbfa974b933646baad6556a867eca9b81ce65d8af343a7843f7775b9ffc8"
-    source_ref: "rustation/src/bios/db.rs:258-267 (v4.5 NorthAmerica)"
+    source_ref: "src/bios/db.rs:258-267 (v4.5 NorthAmerica)"
 
   # Europe alternatives
   - name: "scph1002.bin"
@@ -188,7 +188,7 @@ files:
     size: 524288
     validation: [size, sha256]
     sha256: "0af2be3468d30b6018b3c3b0d98b8b64347e255e16d874d55f0363648973dbf0"
-    source_ref: "rustation/src/bios/db.rs:68-77 (v2.0 Europe)"
+    source_ref: "src/bios/db.rs:68-77 (v2.0 Europe)"
 
   - name: "scph_v21e.bin"
     description: "v2.1 E"
@@ -197,7 +197,7 @@ files:
     size: 524288
     validation: [size, sha256]
     sha256: "1efb0cfc5db8a8751a884c5312e9c6265ca1bc580dc0c2663eb2dea3bde9fcf7"
-    source_ref: "rustation/src/bios/db.rs:98-107 (v2.1 Europe)"
+    source_ref: "src/bios/db.rs:98-107 (v2.1 Europe)"
 
   - name: "scph_v22e.bin"
     description: "v2.2 E"
@@ -206,7 +206,7 @@ files:
     size: 524288
     validation: [size, sha256]
     sha256: "3d06d2c469313c2a2128d24fe2e0c71ff99bc2032be89a829a62337187f500b7"
-    source_ref: "rustation/src/bios/db.rs:138-147 (v2.2 Europe)"
+    source_ref: "src/bios/db.rs:138-147 (v2.2 Europe)"
 
   - name: "scph7002.bin"
     description: "SCPH-7002 (v4.1 E)"
@@ -215,7 +215,7 @@ files:
     size: 524288
     validation: [size, sha256]
     sha256: "5e84a94818cf5282f4217591fefd88be36b9b174b3cc7cb0bcd75199beb450f1"
-    source_ref: "rustation/src/bios/db.rs:228-237 (v4.1 Europe)"
+    source_ref: "src/bios/db.rs:228-237 (v4.1 Europe)"
 
   - name: "scph102.bin"
     description: "SCPH-102 (v4.4 E)"
@@ -224,7 +224,7 @@ files:
     size: 524288
     validation: [size, sha256]
     sha256: "5c0166da24e27deaa82246de8ff0108267fe4bb59f6df0fdec50e05e62448ca4"
-    source_ref: "rustation/src/bios/db.rs:248-257 (v4.4 Europe)"
+    source_ref: "src/bios/db.rs:248-257 (v4.4 Europe)"
 
   - name: "scph102_v45.bin"
     description: "v4.5 E"
@@ -233,4 +233,4 @@ files:
     size: 524288
     validation: [size, sha256]
     sha256: "42244b0c650821519751b7e77ad1d3222a0125e75586df2b4e84ba693b9809dc"
-    source_ref: "rustation/src/bios/db.rs:268-277 (v4.5 Europe)"
+    source_ref: "src/bios/db.rs:268-277 (v4.5 Europe)"

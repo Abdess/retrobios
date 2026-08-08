@@ -33,4 +33,4 @@ files:
     hle_fallback: true
     size: 512
     validation: [size]
-    source_ref: "src/lib.rs:110-124 (bios load), holani/src/rom.rs:72-79 (size validation)"
+    source_ref: "src/lib.rs:110-124 (bios load), src/rom.rs:72-79 (size validation)"

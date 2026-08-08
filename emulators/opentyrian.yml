@@ -77,56 +77,56 @@ files:
     system: tyrian
     description: "Main shape tables (12 sprite banks: fonts, interface, options, game sprites)"
     required: true
-    source_ref: "sprite.c:669-722 (JE_loadMainShapeTables)"
+    source_ref: "src/sprite.c:669-722 (JE_loadMainShapeTables)"
 
   - name: "palette.dat"
     category: game_data
     system: tyrian
     description: "Color palette data (all palettes used by the game)"
     required: true
-    source_ref: "palette.c:45 (JE_loadPals)"
+    source_ref: "src/palette.c:45 (JE_loadPals)"
 
   - name: "tyrian.hdt"
     category: game_data
     system: tyrian
     description: "Help and item data (weapons, ships, shields, enemies, help text)"
     required: true
-    source_ref: "episodes.c:60 (JE_loadItemDat), helptext.c:184 (JE_loadHelpText)"
+    source_ref: "src/episodes.c:60 (JE_loadItemDat), src/helptext.c:184 (JE_loadHelpText)"
 
   - name: "tyrian.pic"
     category: game_data
     system: tyrian
     description: "Picture data (menu backgrounds, cutscene images)"
     required: true
-    source_ref: "picload.c:32 (JE_loadPic)"
+    source_ref: "src/picload.c:32 (JE_loadPic)"
 
   - name: "tyrian.cdt"
     category: game_data
     system: tyrian
     description: "Credits text (encrypted pascal strings)"
     required: true
-    source_ref: "mainint.c:2002 (JE_drawCredits)"
+    source_ref: "src/mainint.c:2002 (JE_drawCredits)"
 
   - name: "tyrian.snd"
     category: game_data
     system: tyrian
     description: "Sound effects"
     required: true
-    source_ref: "nortsong.c:112, opentyr.c:333 (JE_loadSndFile)"
+    source_ref: "src/nortsong.c:112, src/opentyr.c:333 (JE_loadSndFile)"
 
   - name: "voices.snd"
     category: game_data
     system: tyrian
     description: "Voice samples"
     required: true
-    source_ref: "nortsong.c:134, opentyr.c:333 (JE_loadSndFile)"
+    source_ref: "src/nortsong.c:134, src/opentyr.c:333 (JE_loadSndFile)"
 
   - name: "music.mus"
     category: game_data
     system: tyrian
     description: "Music data (all game tracks)"
     required: true
-    source_ref: "loudness.c:196 (load_music)"
+    source_ref: "src/loudness.c:196 (load_music)"
 
   # -----------------------------------------------------------
   # Episode level files (episode 1 required, 2-5 optional)
@@ -136,21 +136,21 @@ files:
     system: tyrian
     description: "Episode 1 level data (also used as data directory detection marker)"
     required: true
-    source_ref: "file.c:51 (data_dir probe), episodes.c:274 (JE_scanForEpisodes)"
+    source_ref: "src/file.c:51 (data_dir probe), src/episodes.c:274 (JE_scanForEpisodes)"
 
   - name: "levels1.dat"
     category: game_data
     system: tyrian
     description: "Episode 1 level definitions"
     required: true
-    source_ref: "episodes.c:263 (JE_initEpisode), tyrian2.c:2434"
+    source_ref: "src/episodes.c:263 (JE_initEpisode), src/tyrian2.c:2434"
 
   - name: "cubetxt1.dat"
     category: game_data
     system: tyrian
     description: "Episode 1 datacube text (in-game story lore)"
     required: true
-    source_ref: "episodes.c:262 (JE_initEpisode), game_menu.c:1723"
+    source_ref: "src/episodes.c:262 (JE_initEpisode), src/game_menu.c:1723"
 
   - name: "tyrian2.lvl"
     category: game_data
@@ -285,21 +285,21 @@ files:
     system: tyrian
     description: "Compressed sprites (arrows, mouse cursor)"
     required: false
-    source_ref: "mainint.c:493,884,1462 (JE_loadCompShapes '1')"
+    source_ref: "src/mainint.c:493, src/mainint.c:884, src/mainint.c:1462 (JE_loadCompShapes '1')"
 
   - name: "newsh6.shp"
     category: game_data
     system: tyrian
     description: "Compressed sprites (explosions)"
     required: false
-    source_ref: "tyrian2.c:771 (JE_loadCompShapes '6')"
+    source_ref: "src/tyrian2.c:771 (JE_loadCompShapes '6')"
 
   - name: "newsh~.shp"
     category: game_data
     system: tyrian
     description: "Compressed sprites (destruct mode)"
     required: false
-    source_ref: "destruct.c:569 (JE_loadCompShapes '~')"
+    source_ref: "src/destruct.c:569 (JE_loadCompShapes '~')"
 
   # -----------------------------------------------------------
   # Optional / special mode files
@@ -323,7 +323,7 @@ files:
     system: tyrian
     description: "Ending animation sequence"
     required: false
-    source_ref: "tyrian2.c:2473 (JE_playAnim)"
+    source_ref: "src/tyrian2.c:2473 (JE_playAnim)"
 
   - name: "tshp2.pcx"
     category: game_data
@@ -337,7 +337,7 @@ files:
     system: tyrian
     description: "Ending sequence character sprites"
     required: false
-    source_ref: "mainint.c:1995 (load_sprites_file EXTRA_SHAPES)"
+    source_ref: "src/mainint.c:1995 (load_sprites_file EXTRA_SHAPES)"
 
   - name: "demo.1"
     category: game_data
