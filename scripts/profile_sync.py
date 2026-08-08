@@ -32,7 +32,9 @@ DEFAULT_CACHE = ".cache/upstream"
 ANON_QUOTA = 60
 TRIAGE_PATH_SAMPLE = 5
 
-STATUS_ORDER = ("ANCHORED", "SHIFTED", "RENAMED", "AMBIGUOUS", "CHANGED", "GONE")
+STATUS_ORDER = (
+    "ANCHORED", "EXTERNAL", "SHIFTED", "RENAMED", "AMBIGUOUS", "CHANGED", "GONE",
+)
 REVIEW_STATUSES = ("CHANGED", "GONE", "AMBIGUOUS")
 REBASE_STATUSES = ("SHIFTED", "RENAMED")
 
@@ -169,6 +171,20 @@ def collect_tokens(entry: dict) -> list[str]:
         if name:
             tokens.append(os.path.basename(name).lower())
     return tokens
+
+
+def is_external_citation(path: str) -> bool:
+    """True when a ref names a project rather than a path in a known repo.
+
+    `munt ROMInfo.cpp` and `Nuked-SC55-CLAP rom_io.cpp` cite where a ROM is
+    identified inside a dependency the profile does not declare, so no
+    revision of the declared repositories can confirm or deny them. Reporting
+    them as broken would be wrong: they are simply out of reach.
+    """
+    if " " not in path:
+        return False
+    head = path.split(" ", 1)[0]
+    return "/" not in head and "." not in head
 
 
 def _anchor_tokens(entry: dict) -> list[str]:
@@ -350,6 +366,11 @@ def anchor_part(
     `describe(path)` returns (repo slug, raw URL at HEAD) for the repository
     that owns the path, or (None, None) when the caller does not track it.
     """
+    if is_external_citation(part.path):
+        return PartResult(
+            part, "EXTERNAL", None, None, None, [],
+            "names a project the profile does not declare",
+        )
     slug, url, actual = (
         describe(part.path) if describe else (None, None, part.path)
     )

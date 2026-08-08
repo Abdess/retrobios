@@ -285,6 +285,38 @@ def _ambiguous(path, old, candidates):
     )
 
 
+class TestExternalCitation(unittest.TestCase):
+    def test_project_name_then_file(self):
+        self.assertTrue(profile_sync.is_external_citation("munt ROMInfo.cpp"))
+        self.assertTrue(
+            profile_sync.is_external_citation("Nuked-SC55-CLAP rom_io.cpp")
+        )
+        self.assertTrue(
+            profile_sync.is_external_citation("EmuDeck emuDeckares.sh")
+        )
+
+    def test_plain_paths_are_not_citations(self):
+        for path in ("src/midi/mt32.cpp", "libretro.c", "a/b/c.h"):
+            self.assertFalse(profile_sync.is_external_citation(path), path)
+
+    def test_a_path_with_a_directory_prefix_is_not_a_citation(self):
+        self.assertFalse(
+            profile_sync.is_external_citation("src/dir file.cpp")
+        )
+
+    def test_a_filename_prefix_is_not_a_citation(self):
+        self.assertFalse(profile_sync.is_external_citation("main.cpp note"))
+
+    def test_external_part_is_reported_not_reviewed(self):
+        result = anchor_part(
+            RefPart("munt ROMInfo.cpp", 59, 59),
+            make_fetch({}),
+            renamer(CompareResult([], False)),
+        )
+        self.assertEqual(result.status, "EXTERNAL")
+        self.assertNotIn("EXTERNAL", profile_sync.REVIEW_STATUSES)
+
+
 class TestAnchorTokens(unittest.TestCase):
     def test_archive_stem_is_searched_too(self):
         tokens = profile_sync._anchor_tokens({"name": "stvbios.zip"})
