@@ -1734,8 +1734,8 @@ def generate_gap_analysis(
     lines.extend([
         "## What Each Pack Contains",
         "",
-        "| Platform | Files in pack | Declared by platform | Still missing | Verified by |",
-        "|----------|--------------:|---------------------:|--------------:|-------------|",
+        "| Platform | Files in pack | Declared by platform | Required by its emulators | Still missing | Verified by |",
+        "|----------|--------------:|---------------------:|--------------------------:|--------------:|-------------|",
     ])
 
     mode_labels = {
@@ -1757,17 +1757,22 @@ def generate_gap_analysis(
             f"| [{display}](platforms/{pname}.md) "
             f"| {files:,} "
             f"| {cov['present']:,} "
+            f"| {cov['core_present']:,} "
             f"| {missing_str} "
             f"| {mode_labels.get(cov['mode'], cov['mode'])} |"
         )
     lines.extend([
         "",
-        "A pack carries the platform's own file list plus every file its "
-        "emulators load without that list mentioning them, which is why it "
-        "ships several times what the platform declares. Still missing counts "
-        "files an emulator needs that are not in the collection yet, named in "
-        "the sections below. Verified by is the check the platform runs at "
-        "runtime, replicated here "
+        "Declared by platform is the platform's own BIOS list. Required by its "
+        "emulators counts what the cores it ships actually load, read from "
+        "their source code, that the list never mentions: it is routinely "
+        "several times the list itself. Both ship in the pack. Files in pack "
+        "counts what the ZIP holds, each file once at its destination, so it "
+        "does not add up from the two: a file several systems need is counted "
+        "once, and the data directories some emulators need are counted too. "
+        "Still missing counts files an emulator needs that are not in the "
+        "collection yet, named in the sections below. Verified by is the check "
+        "the platform runs at runtime, replicated here "
         "([how each mode works](wiki/verification-modes.md)).",
         "",
         "## Corroboration Against Emulator Source",

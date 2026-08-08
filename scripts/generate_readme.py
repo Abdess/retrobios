@@ -354,8 +354,8 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
             "",
             "## Coverage",
             "",
-            "| Platform | Files in pack | Still missing | Verified by |",
-            "|----------|--------------:|--------------:|-------------|",
+            "| Platform | Files in pack | Declared by platform | Required by its emulators | Still missing | Verified by |",
+            "|----------|--------------:|---------------------:|--------------------------:|--------------:|-------------|",
         ]
     )
 
@@ -370,15 +370,21 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
         files = manifest_totals(name)[0] or cov["pack_files"]
         checked = mode_labels.get(cov["mode"], cov["mode"])
         lines.append(
-            f"| {display} | {files:,} | {cov['total_missing']} | {checked} |"
+            f"| {display} | {files:,} | {cov['present']:,} |"
+            f" {cov['core_present']:,} | {cov['total_missing']} | {checked} |"
         )
 
     lines.extend(
         [
             "",
-            "A pack carries what the platform declares plus what its emulators"
-            " load without the platform listing it, so it holds more files than"
-            " the platform's own list.",
+            "Declared by platform is the platform's own BIOS list. Required by"
+            " its emulators counts what the cores it ships actually load,"
+            " read from their source code, that the list never mentions: it is"
+            " routinely several times the list itself. Both ship in the pack."
+            " Files in pack counts what the ZIP actually holds, each file once"
+            " at its destination, so it does not add up from the two: a file"
+            " several systems need is counted once, and the data directories"
+            " some emulators need are counted too.",
             "Still missing counts files an emulator needs that are not in the"
             " collection yet; verified by is the check the platform itself runs"
             " on them.",

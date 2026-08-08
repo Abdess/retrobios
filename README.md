@@ -58,36 +58,36 @@ Every file passes its platform's own verification; where an emulator profile exi
 
 - **0 files missing** from the packs: every file the platforms' emulators load is in the collection. Files needed only by emulators no platform ships yet are counted in the [gap analysis](https://abdess.github.io/retrobios/gaps/)
 - **12 platforms** supported with platform-specific verification
-- **323 emulators** profiled from source (RetroArch cores + standalone)
-- **396 systems** covered (NES, SNES, PlayStation, Saturn, Dreamcast, ...)
-- **7,723 files** indexed with SHA1, MD5, SHA256 and CRC32 checksums: 2,438 system files, 2,746 arcade ROM sets, 2,539 game and engine data files
+- **327 emulators** profiled from source (RetroArch cores + standalone)
+- **409 systems** covered (NES, SNES, PlayStation, Saturn, Dreamcast, ...)
+- **7,763 files** indexed with SHA1, MD5, SHA256 and CRC32 checksums: 2,478 system files, 2,746 arcade ROM sets, 2,539 game and engine data files
 - **542 files** matched to dump-preservation catalogs (No-Intro, Redump, TOSEC)
-- **9843 MB** total collection size
+- **9854 MB** total collection size
 
 ## Supported systems
 
-NES, SNES, Nintendo 64, GameCube, Wii, Game Boy, Game Boy Advance, Nintendo DS, Nintendo 3DS, Switch, PlayStation, PlayStation 2, PlayStation 3, PSP, PS Vita, Mega Drive, Saturn, Dreamcast, Game Gear, Master System, Neo Geo, Atari 2600, Atari 7800, Atari Lynx, Atari ST, MSX, PC Engine, TurboGrafx-16, ColecoVision, Intellivision, Commodore 64, Amiga, ZX Spectrum, Arcade (MAME), and 362+ more.
+NES, SNES, Nintendo 64, GameCube, Wii, Game Boy, Game Boy Advance, Nintendo DS, Nintendo 3DS, Switch, PlayStation, PlayStation 2, PlayStation 3, PSP, PS Vita, Mega Drive, Saturn, Dreamcast, Game Gear, Master System, Neo Geo, Atari 2600, Atari 7800, Atari Lynx, Atari ST, MSX, PC Engine, TurboGrafx-16, ColecoVision, Intellivision, Commodore 64, Amiga, ZX Spectrum, Arcade (MAME), and 375+ more.
 
 Full list with per-file details: **[https://abdess.github.io/retrobios/](https://abdess.github.io/retrobios/)**
 
 ## Coverage
 
-| Platform | Files in pack | Still missing | Verified by |
-|----------|--------------:|--------------:|-------------|
-| Batocera | 1,600 | 0 | MD5 hash |
-| BizHawk | 538 | 0 | SHA1 hash |
-| EmuDeck | 525 | 0 | MD5 hash |
-| Lakka | 1,683 | 0 | file presence |
-| MiSTer FPGA | 65 | 0 | MD5 hash |
-| ROCKNIX | 1,548 | 0 | MD5 hash |
-| Recalbox | 1,184 | 0 | MD5 hash |
-| RetroArch | 1,683 | 0 | file presence |
-| RetroBat | 1,234 | 0 | MD5 hash |
-| RetroDECK | 3,318 | 0 | MD5 hash |
-| RetroPie * | 1,678 | 0 | file presence |
-| RomM | 543 | 0 | MD5 hash |
+| Platform | Files in pack | Declared by platform | Required by its emulators | Still missing | Verified by |
+|----------|--------------:|---------------------:|--------------------------:|--------------:|-------------|
+| Batocera | 1,600 | 353 | 1,144 | 0 | MD5 hash |
+| BizHawk | 538 | 118 | 366 | 0 | SHA1 hash |
+| EmuDeck | 525 | 161 | 404 | 0 | MD5 hash |
+| Lakka | 1,683 | 530 | 1,148 | 0 | file presence |
+| MiSTer FPGA | 65 | 65 | 0 | 0 | MD5 hash |
+| ROCKNIX | 1,548 | 38 | 1,483 | 0 | MD5 hash |
+| Recalbox | 1,184 | 346 | 714 | 0 | MD5 hash |
+| RetroArch | 1,683 | 530 | 1,148 | 0 | file presence |
+| RetroBat | 1,234 | 341 | 807 | 0 | MD5 hash |
+| RetroDECK | 3,318 | 2,008 | 1,182 | 0 | MD5 hash |
+| RetroPie * | 1,678 | 530 | 1,148 | 0 | file presence |
+| RomM | 543 | 374 | 266 | 0 | MD5 hash |
 
-A pack carries what the platform declares plus what its emulators load without the platform listing it, so it holds more files than the platform's own list.
+Declared by platform is the platform's own BIOS list. Required by its emulators counts what the cores it ships actually load, read from their source code, that the list never mentions: it is routinely several times the list itself. Both ship in the pack. Files in pack counts what the ZIP actually holds, each file once at its destination, so it does not add up from the two: a file several systems need is counted once, and the data directories some emulators need are counted too.
 Still missing counts files an emulator needs that are not in the collection yet; verified by is the check the platform itself runs on them.
 The [gap analysis](https://abdess.github.io/retrobios/gaps/) page names those missing files and details how far each platform's files are corroborated against emulator source code.
 
@@ -125,7 +125,7 @@ The [documentation site](https://abdess.github.io/retrobios/) provides:
 - **Per-emulator profiles** with source code references for every file
 - **Per-system pages** showing which emulators and platforms cover each console
 - **Gap analysis** identifying missing files and undeclared core requirements
-- **Cross-reference** mapping files across 12 platforms and 323 emulators
+- **Cross-reference** mapping files across 12 platforms and 327 emulators
 
 ## How it works
 
@@ -162,4 +162,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software.
 The legal reasoning is laid out in the [FAQ](https://abdess.github.io/retrobios/wiki/faq/#is-this-legal).
 
-*Auto-generated on 2026-08-08T05:16:05Z*
+*Auto-generated on 2026-08-08T06:29:40Z*
