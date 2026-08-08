@@ -4,7 +4,7 @@
   "platform": "bizhawk",
   "display_name": "BizHawk",
   "version": "1.0",
-  "generated": "2026-08-08T04:39:58Z",
+  "generated": "2026-08-08T09:27:28Z",
   "base_destination": "Firmware",
   "detect": [
     {
@@ -19,8 +19,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 538,
-  "total_size": 2549235618,
+  "total_files": 539,
+  "total_size": 2550284194,
   "files": [
     {
       "dest": "panafz1.bin",
@@ -982,6 +982,15 @@
       "sha1": "b05def971d8ec59f346f2d9ac21fb742e3eb6917",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/scph5500.bin",
+      "cores": [
+        "Beetle PSX (Mednafen PSX)"
+      ]
+    },
+    {
+      "dest": "scph5903.bin",
+      "sha1": "15c94da3cc5a38a582429575af4198c487fe893c",
+      "size": 1048576,
+      "repo_path": "bios/Sony/PlayStation/scph5903.bin",
       "cores": [
         "Beetle PSX (Mednafen PSX)"
       ]

@@ -4,7 +4,7 @@
   "platform": "retrodeck",
   "display_name": "RetroDECK",
   "version": "1.0",
-  "generated": "2026-08-08T08:00:55Z",
+  "generated": "2026-08-08T09:28:22Z",
   "base_destination": "",
   "detect": [
     {
@@ -236,8 +236,8 @@
       }
     }
   ],
-  "total_files": 3317,
-  "total_size": 4976627546,
+  "total_files": 3318,
+  "total_size": 4977676122,
   "files": [
     {
       "dest": "bios/panafz1.bin",
@@ -14565,6 +14565,15 @@
       "repo_path": "bios/NEC/PC Engine/syscard3u.pce",
       "cores": [
         "Beetle PCE (Mednafen PCE)"
+      ]
+    },
+    {
+      "dest": "bios/scph5903.bin",
+      "sha1": "15c94da3cc5a38a582429575af4198c487fe893c",
+      "size": 1048576,
+      "repo_path": "bios/Sony/PlayStation/scph5903.bin",
+      "cores": [
+        "Beetle PSX (Mednafen PSX)"
       ]
     },
     {

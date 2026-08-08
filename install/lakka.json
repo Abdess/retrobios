@@ -4,7 +4,7 @@
   "platform": "lakka",
   "display_name": "Lakka",
   "version": "1.0",
-  "generated": "2026-08-08T08:00:30Z",
+  "generated": "2026-08-08T09:27:56Z",
   "base_destination": "system",
   "detect": [
     {
@@ -15,8 +15,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 1683,
-  "total_size": 4206463101,
+  "total_files": 1684,
+  "total_size": 4207511677,
   "files": [
     {
       "dest": "3do_arcade_saot.bin",
@@ -3621,6 +3621,15 @@
       "repo_path": "bios/Nintendo/3DS/Citra/nand/rw/sys/LocalFriendCodeSeed_B",
       "cores": [
         "Azahar"
+      ]
+    },
+    {
+      "dest": "scph5903.bin",
+      "sha1": "15c94da3cc5a38a582429575af4198c487fe893c",
+      "size": 1048576,
+      "repo_path": "bios/Sony/PlayStation/scph5903.bin",
+      "cores": [
+        "Beetle PSX (Mednafen PSX)"
       ]
     },
     {

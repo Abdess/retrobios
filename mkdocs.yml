@@ -498,7 +498,7 @@ nav:
     - PCSX-ReARMed: emulators/pcsx_rearmed.md
   - Launchers (1):
     - Dolphin Launcher: emulators/dolphin_launcher.md
-  - Other (31):
+  - Other (32):
     - ares: emulators/ares.md
     - Basilisk II: emulators/basiliskii.md
     - Beetle GBA (Mednafen): emulators/beetle_gba.md
@@ -516,6 +516,7 @@ nav:
     - jgenesis: emulators/jgenesis.md
     - KEGS: emulators/kegs.md
     - Lexaloffle: emulators/lexaloffle.md
+    - Mednafen: emulators/mednafen.md
     - Model 2 Emulator: emulators/model2.md
     - openMSX: emulators/openmsx.md
     - Redream: emulators/redream.md
