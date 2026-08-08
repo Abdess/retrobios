@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-07T15:56:45Z",
-  "total_files": 7649,
-  "total_size": 10102561200,
+  "generated_at": "2026-08-07T18:33:38Z",
+  "total_files": 7651,
+  "total_size": 10309353966,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -38111,7 +38111,14 @@
       "md5": "2870d58a459c745d7cc4c6122ceb3dcb",
       "sha256": "c5824ad228be6513b252fb25822cbacb45faad97fef628febfa1f81fb003c4f6",
       "crc32": "94ce376b",
-      "adler32": "e54be8f5"
+      "adler32": "e54be8f5",
+      "provenance": {
+        "redump": {
+          "dat": "Microsoft - Xbox - BIOS Images",
+          "name": "mcpx-1.1.bin",
+          "description": "MCPX Boot ROM v1.1 (Southbridge Chip)"
+        }
+      }
     },
     "5d270675b54eb8071b480e42d22a3015ac211cef": {
       "path": "bios/Microsoft/Xbox/mcpx_1.0.bin",
@@ -38121,7 +38128,14 @@
       "md5": "d49c52a4102f6df7bcf8d0617ac475ed",
       "sha256": "e99e3a772bf5f5d262786aee895664eb96136196e37732fe66e14ae062f20335",
       "crc32": "0b07d1f1",
-      "adler32": "6e1bd817"
+      "adler32": "6e1bd817",
+      "provenance": {
+        "redump": {
+          "dat": "Microsoft - Xbox - BIOS Images",
+          "name": "mcpx-1.0.bin",
+          "description": "MCPX Boot ROM v1.0 (Southbridge Chip)"
+        }
+      }
     },
     "67054fc88bda94e33e86f1b19be60efec0724fb6": {
       "path": "bios/Microsoft/Xbox/xbox-3944.bin",
@@ -38131,7 +38145,14 @@
       "md5": "e8b39b98cf775496c1c76e4f7756e6ed",
       "sha256": "2bda1753b6e535af95fa9d7f7c6b1ce746f4de3f470856814e63a72d94bcb3b8",
       "crc32": "32a9ecb6",
-      "adler32": "9afb58c7"
+      "adler32": "9afb58c7",
+      "provenance": {
+        "redump": {
+          "dat": "Microsoft - Xbox - BIOS Images",
+          "name": "xbox-3944.bin",
+          "description": "Xbox v1.0 (Kernel Version 1.00.3944.01)"
+        }
+      }
     },
     "ab676b712204fb1728bf89f9cd541a8f5a64ab97": {
       "path": "bios/Microsoft/Xbox/xbox-4034.bin",
@@ -38141,7 +38162,14 @@
       "md5": "b49a417511b2dbb485aa255a32a319d1",
       "sha256": "6053cec50eea1f246ae830c31a4d0ddc75a0fcc1530c168e125a8995433b65fa",
       "crc32": "0d6fc88f",
-      "adler32": "68295898"
+      "adler32": "68295898",
+      "provenance": {
+        "redump": {
+          "dat": "Microsoft - Xbox - BIOS Images",
+          "name": "xbox-4034.bin",
+          "description": "Xbox v1.0 (Kernel Version 1.00.4034.01)"
+        }
+      }
     },
     "dc955bd4d3ca71e01214a49e5d0aba615270c03c": {
       "path": "bios/Microsoft/Xbox/xbox-4817.bin",
@@ -38151,7 +38179,14 @@
       "md5": "430b3edf0f1ea5c77f47845ed3cbd22b",
       "sha256": "db0587bce6f4708fdc2a07757470495652f85da7e12cc772db1bf45627cf5099",
       "crc32": "3f30863a",
-      "adler32": "4ccc6953"
+      "adler32": "4ccc6953",
+      "provenance": {
+        "redump": {
+          "dat": "Microsoft - Xbox - BIOS Images",
+          "name": "xbox-4817.bin",
+          "description": "Xbox v1.1 (Kernel Version 1.00.4817.01)"
+        }
+      }
     },
     "5108e1025f48071c07a6823661d708c66dee97a9": {
       "path": "bios/Microsoft/Xbox/xbox-5101.bin",
@@ -38161,7 +38196,14 @@
       "md5": "769898e9682e1f5d065b5961460d03e6",
       "sha256": "f8b77144401dd403d79a2cb370c141a69db47c5eddf28ab63414e538f03310b6",
       "crc32": "e8a9224e",
-      "adler32": "1d16ce17"
+      "adler32": "1d16ce17",
+      "provenance": {
+        "redump": {
+          "dat": "Microsoft - Xbox - BIOS Images",
+          "name": "xbox-5101.bin",
+          "description": "Xbox v1.2/v1.3/v1.4/v1.5 (Kernel Version 1.00.5101.01)"
+        }
+      }
     },
     "40fa73277013be3168135e1768b09623a987ff63": {
       "path": "bios/Microsoft/Xbox/xbox-5530.bin",
@@ -38171,7 +38213,14 @@
       "md5": "e455feb286dfc16272ad94d773c24460",
       "sha256": "d4873903998fa997307bba3183a2f408558ec11c1f9da9a78bee021082d5c9b5",
       "crc32": "9569c4d3",
-      "adler32": "686d7cc3"
+      "adler32": "686d7cc3",
+      "provenance": {
+        "redump": {
+          "dat": "Microsoft - Xbox - BIOS Images",
+          "name": "xbox-5530.bin",
+          "description": "Xbox v1.4/v1.5 (Kernel Version 1.00.5530.01)"
+        }
+      }
     },
     "8b7ccc4648ccd78cdb7b65cfca09621eaf2d4238": {
       "path": "bios/Microsoft/Xbox/xbox-5713.bin",
@@ -38181,7 +38230,14 @@
       "md5": "e27bbf815c67bcbf359907a68ea46978",
       "sha256": "fcde15fdefeb8b585758e8068626ef7fcb4fff3d44b5bcc9c7e7c6bae2df800a",
       "crc32": "58fd8173",
-      "adler32": "529b8c4e"
+      "adler32": "529b8c4e",
+      "provenance": {
+        "redump": {
+          "dat": "Microsoft - Xbox - BIOS Images",
+          "name": "xbox-5713.bin",
+          "description": "Xbox v1.4/v1.5 (Kernel Version 1.00.5713.01)"
+        }
+      }
     },
     "b9489e883c650b5e5fe2f83a32237dbf74f0e9f1": {
       "path": "bios/Microsoft/Xbox/xbox-5838.bin",
@@ -38191,7 +38247,14 @@
       "md5": "c5907d241de37c22b083b6e30fa934b0",
       "sha256": "148d279bdaa85f54f823722d55ea50eece78fc8a537e7d1efeea653b5201481f",
       "crc32": "5be2413d",
-      "adler32": "d2f85a2f"
+      "adler32": "d2f85a2f",
+      "provenance": {
+        "redump": {
+          "dat": "Microsoft - Xbox - BIOS Images",
+          "name": "xbox-5838.bin",
+          "description": "Xbox v1.6 (Kernel Version 1.00.5838.01)"
+        }
+      }
     },
     "9da5f9ecfb1c9c32efa616f0300d02e8f702244d": {
       "path": "bios/Microsoft/Xbox/xbox_hdd.qcow2",
@@ -39701,7 +39764,14 @@
       "md5": "fc924a7c879b661abc37cec4f018fdf3",
       "sha256": "5b2f2617cc63f1861a1f4ae44bb135caf10e202b5b9b79271daaf60f8caaf37d",
       "crc32": "6dac1f2a",
-      "adler32": "b2fcdb25"
+      "adler32": "b2fcdb25",
+      "provenance": {
+        "redump": {
+          "dat": "Nintendo - GameCube - BIOS Images",
+          "name": "gc-ntsc-10.bin",
+          "description": "DOL-001(USA) / DOL-001(JPN) / DOT-001 / SL-GC10 (NTSC Revision 1.0)"
+        }
+      }
     },
     "239eacd86527ff9a75aeb7282da65797baeef010": {
       "path": "bios/Nintendo/GameCube/.variants/gc-ntsc-11.bin",
@@ -39711,7 +39781,14 @@
       "md5": "019e39822a9ca3029124f74dd4d55ac4",
       "sha256": "92f1411fb2c3e6c37bb6a5819d01f84f945fda31cfe26db8c81d997ed471a62e",
       "crc32": "d5e6feea",
-      "adler32": "4d5935d1"
+      "adler32": "4d5935d1",
+      "provenance": {
+        "redump": {
+          "dat": "Nintendo - GameCube - BIOS Images",
+          "name": "gc-ntsc-11.bin",
+          "description": "DOL-001(USA) / DOL-001(JPN) / DOT-001 (NTSC Revision 1.1)"
+        }
+      }
     },
     "ef9194ab4804aa0aa8540d846caf291b28331165": {
       "path": "bios/Nintendo/GameCube/GC/USA/IPL.bin",
@@ -39721,7 +39798,14 @@
       "md5": "b17148254a5799684c7d783206504926",
       "sha256": "7c833f95839c226699108b93ab6acbe772788bfa3f05132b8ced5e78f5bc9a26",
       "crc32": "86573808",
-      "adler32": "df6cf65b"
+      "adler32": "df6cf65b",
+      "provenance": {
+        "redump": {
+          "dat": "Nintendo - GameCube - BIOS Images",
+          "name": "gc-ntsc-12-101.bin",
+          "description": "DOL-101(USA) / DOL-101(JPN) (NTSC Revision 1.2)"
+        }
+      }
     },
     "f27c63e5394e2fd1606f70df004c4fc2d6027700": {
       "path": "bios/Nintendo/GameCube/.variants/gc-pal-10.bin",
@@ -39731,7 +39815,14 @@
       "md5": "0cdda509e2da83c85bfe423dd87346cc",
       "sha256": "a782522d3b941da91b0f7ef23adc3120efa8b74e0e23a0deecd2a98d79343176",
       "crc32": "4f319f43",
-      "adler32": "af912c43"
+      "adler32": "af912c43",
+      "provenance": {
+        "redump": {
+          "dat": "Nintendo - GameCube - BIOS Images",
+          "name": "gc-pal-10.bin",
+          "description": "DOL-001(EUR) / DOT-001P (PAL Revision 1.0)"
+        }
+      }
     },
     "f3cd0c7c61cbcefa85e7de3aff4cfa50bc508714": {
       "path": "bios/Nintendo/GameCube/.variants/gc-pal-11.bin",
@@ -39741,7 +39832,14 @@
       "md5": "339848a0b7c2124cf155276c1e79cbd0",
       "sha256": "7973d3f9922b7d7f2b71648939036bc984ac9feee92ed10b5175803aeb8a4696",
       "crc32": "667d0b64",
-      "adler32": "473f64d1"
+      "adler32": "473f64d1",
+      "provenance": {
+        "redump": {
+          "dat": "Nintendo - GameCube - BIOS Images",
+          "name": "gc-pal-11.bin",
+          "description": "DOL-002(BRA) (MPAL Revision 1.1)"
+        }
+      }
     },
     "80b8744ff5e43585392f55546bd03a673d11ef5f": {
       "path": "bios/Nintendo/GameCube/GC/EUR/IPL.bin",
@@ -39751,7 +39849,14 @@
       "md5": "db92574caab77a7ec99d4605fd6f2450",
       "sha256": "85ffcbc834238eb24c87fce27ba7b438cc53a77db013a0a7c59c78e0af08cb84",
       "crc32": "ad1b7f16",
-      "adler32": "d9bd2dfd"
+      "adler32": "d9bd2dfd",
+      "provenance": {
+        "redump": {
+          "dat": "Nintendo - GameCube - BIOS Images",
+          "name": "gc-pal-12.bin",
+          "description": "DOL-101(EUR) (PAL Revision 1.2)"
+        }
+      }
     },
     "6f305c37dc1fbe332883bb8153eee26d3d325629": {
       "path": "bios/Nintendo/GameCube/GC/EUR/.variants/IPL.bin.6f305c37",
@@ -40461,7 +40566,14 @@
       "md5": "561532ad496f644897952d2cef5bb431",
       "sha256": "eedf0655080361d38f50e74a357e9fa44886999e52d8d95b2eec3d5e8bdb9844",
       "crc32": "c047465a",
-      "adler32": "7470a1da"
+      "adler32": "7470a1da",
+      "provenance": {
+        "redump": {
+          "dat": "Nintendo - GameCube - BIOS Images",
+          "name": "gc-dvd-20010608.bin",
+          "description": "GC-D2 B (2001-06-08)"
+        }
+      }
     },
     "ae7233cae8f94749796e0b740d6021e3b00a8926": {
       "path": "bios/Nintendo/GameCube/gc-dvd-20010831.bin",
@@ -40471,7 +40583,14 @@
       "md5": "b953eb1a8fc9922b3f7051c1cdc451f1",
       "sha256": "8c4296f62d3d0152e989b0be7e661df879733cab9ef8c5461d78c4da5d62f8cd",
       "crc32": "54c7d10e",
-      "adler32": "e51a9049"
+      "adler32": "e51a9049",
+      "provenance": {
+        "redump": {
+          "dat": "Nintendo - GameCube - BIOS Images",
+          "name": "gc-dvd-20010831.bin",
+          "description": "GC-D3 (2001-08-31)"
+        }
+      }
     },
     "691e46213d8428befdf568157e670b971ab94e1d": {
       "path": "bios/Nintendo/GameCube/gc-dvd-20020402.bin",
@@ -40481,7 +40600,14 @@
       "md5": "413154dd0e2c824c9b18b807fd03ec4e",
       "sha256": "08f72003475abe7a4fdaa577bac435b5deb5e1ae6750eb668496cb10ac88f783",
       "crc32": "8bbef508",
-      "adler32": "83409def"
+      "adler32": "83409def",
+      "provenance": {
+        "redump": {
+          "dat": "Nintendo - GameCube - BIOS Images",
+          "name": "gc-dvd-20020402.bin",
+          "description": "GC-D2 C (2002-04-02)"
+        }
+      }
     },
     "2faaf92bcaffe675f54f7249d30f3791507e22ab": {
       "path": "bios/Nintendo/GameCube/gc-dvd-20020823.bin",
@@ -40491,7 +40617,14 @@
       "md5": "c03f6bbaf644eb9b3ee261dbe199eb42",
       "sha256": "fec9929499bafef98ee16a0b65cc951c3a55ea03b584bc59da84867c91c563af",
       "crc32": "5205222b",
-      "adler32": "34389d20"
+      "adler32": "34389d20",
+      "provenance": {
+        "redump": {
+          "dat": "Nintendo - GameCube - BIOS Images",
+          "name": "gc-dvd-20020823.bin",
+          "description": "GC-D2 D (2002-08-23)"
+        }
+      }
     },
     "26322f182540211e9b5e3647675b7c593706ae2b": {
       "path": "bios/Nintendo/NES/.variants/NstDatabase.xml.26322f18",
@@ -71901,7 +72034,14 @@
       "md5": "d063803adcced52217989bd825d69eb8",
       "sha256": "01bbee75b0dbbd615263850f9a0534e4aa73c00346fa93a5ea6aef578f906132",
       "crc32": "d1883221",
-      "adler32": "a3d34620"
+      "adler32": "a3d34620",
+      "provenance": {
+        "redump": {
+          "dat": "Nintendo - GameCube - BIOS Images",
+          "name": "triforce.bin",
+          "description": "Triforce (ARCADE BOOTROM)"
+        }
+      }
     },
     "5d0b640e3296eeddb58b1663a25ca3173dbed603": {
       "path": "bios/Sega/Triforce/.variants/segaboot.gcm.e35756db",
@@ -73141,7 +73281,14 @@
       "md5": "dc2b9bf8da62ec93e868cfd29f0d067d",
       "sha256": "42e4124be7623e2e28b1db0d8d426539646faee49d74b71166d8ba5bd7c472ed",
       "crc32": "55847d8c",
-      "adler32": "560e2da1"
+      "adler32": "560e2da1",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation - BIOS Images",
+          "name": "ps-20a.bin",
+          "description": "SCPH-1001/DTL-H1001 (Version 2.0 05/07/95 A)"
+        }
+      }
     },
     "b6a11579caef3875504fcf3831b8e3922746df2c": {
       "path": "bios/Sony/PlayStation/scph1002c.bin",
@@ -73151,7 +73298,14 @@
       "md5": "e2110b8a2b97a8e0b857a45d32f7e187",
       "sha256": "3d06d2c469313c2a2128d24fe2e0c71ff99bc2032be89a829a62337187f500b7",
       "crc32": "1e26792f",
-      "adler32": "42ea6879"
+      "adler32": "42ea6879",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation - BIOS Images",
+          "name": "ps-22e.bin",
+          "description": "SCPH-1002/DTL-H1202/DTL-H3002 (Version 2.2 12/04/95 E)"
+        }
+      }
     },
     "7771d6e90980408f753891648685def6dd42ef6d": {
       "path": "bios/Sony/PlayStation/scph101_v44.bin",
@@ -73161,7 +73315,14 @@
       "md5": "9a09ab7e49b422c007e6d54d7c49b965",
       "sha256": "8434528690df0d444dfe4e931eb5501be53df70497e63f4c9a21184631cdbb87",
       "crc32": "6a0e22a0",
-      "adler32": "46021520"
+      "adler32": "46021520",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation - BIOS Images",
+          "name": "psone-44a.bin",
+          "description": "SCPH-101 (Version 4.4 03/24/00 A)"
+        }
+      }
     },
     "e38466a4ba8005fba7e9e3c7b9efeba7205bee3f": {
       "path": "bios/Sony/PlayStation/scph3500.bin",
@@ -73171,7 +73332,14 @@
       "md5": "cba733ceeff5aef5c32254f1d617fa62",
       "sha256": "6f71ca1e716da761dc53187bd39e00c213f566e55090708fd3e2b4b425c8c989",
       "crc32": "bc190209",
-      "adler32": "a8e56981"
+      "adler32": "a8e56981",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation - BIOS Images",
+          "name": "ps-21j.bin",
+          "description": "SCPH-3500 (Version 2.1 07/17/95 J)"
+        }
+      }
     },
     "ffa7f9a7fb19d773a0c3985a541c8e5623d2c30d": {
       "path": "bios/Sony/PlayStation/scph5000.bin",
@@ -73181,7 +73349,14 @@
       "md5": "57a06303dfa9cf9351222dfcbb4a29d9",
       "sha256": "0c8359870cbac0ea091f1c87f188cd332dcc709753b91cafd9fd44a4a6188197",
       "crc32": "24fc7e17",
-      "adler32": "1ac46cf1"
+      "adler32": "1ac46cf1",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation - BIOS Images",
+          "name": "ps-22j.bin",
+          "description": "SCPH-5000/DTL-H1200/DTL-H3000 (Version 2.2 12/04/95 J)"
+        }
+      }
     },
     "e340db2696274dda5fdc25e434a914db71e8b02b": {
       "path": "bios/Sony/PlayStation/.variants/scph5000.bin.eb201d2d",
@@ -73211,7 +73386,14 @@
       "md5": "ca5cfc321f916756e3f0effbfaeba13b",
       "sha256": "4018749b3698b8694387beebcbabfb48470513066840f9441459ee4c9f0f39bc",
       "crc32": "decb22f5",
-      "adler32": "e7ca4fad"
+      "adler32": "e7ca4fad",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation - BIOS Images",
+          "name": "ps-22d.bin",
+          "description": "DTL-H1100 (Version 2.2 03/06/96 D)"
+        }
+      }
     },
     "389df7981873d9e6e46c84c20cd43af0e4226cf8": {
       "path": "bios/Sony/PlayStation/openbios.bin",
@@ -73291,7 +73473,14 @@
       "md5": "8abc1b549a4a80954addc48ef02c4521",
       "sha256": "b29b4b5fcddef369bd6640acacda0865e0366fcf7ea54e40b2f1a8178004f89a",
       "crc32": "f2af798b",
-      "adler32": "b6ef0d64"
+      "adler32": "b6ef0d64",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation - BIOS Images",
+          "name": "psone-43j.bin",
+          "description": "SCPH-100 (Version 4.3 03/11/00 J)"
+        }
+      }
     },
     "343883a7b555646da8cee54aadd2795b6e7dd070": {
       "path": "bios/Sony/PlayStation/scph1000.bin",
@@ -73301,7 +73490,14 @@
       "md5": "239665b1a3dade1b5a52c06338011044",
       "sha256": "cfc1fc38eb442f6f80781452119e931bcae28100c1c97e7e6c5f2725bbb0f8bb",
       "crc32": "3b601fc8",
-      "adler32": "38f5c1fe"
+      "adler32": "38f5c1fe",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation - BIOS Images",
+          "name": "ps-10j.bin",
+          "description": "SCPH-1000/DTL-H1000 (Version 1.0 J)"
+        }
+      }
     },
     "7082bd57141fa0007b3adcd031f7ba23a20108a0": {
       "path": "bios/Sony/PlayStation/scph1000r.bin",
@@ -73321,7 +73517,14 @@
       "md5": "924e392ed05558ffdb115408c263dccf",
       "sha256": "71af94d1e47a68c11e8fdb9f8368040601514a42a5a399cda48c7d3bff1e99d3",
       "crc32": "37157331",
-      "adler32": "daa2e0a6"
+      "adler32": "daa2e0a6",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation - BIOS Images",
+          "name": "ps-22a.bin",
+          "description": "SCPH-1001/SCPH-5003/DTL-H1201/DTL-H3001 (Version 2.2 12/04/95 A)"
+        }
+      }
     },
     "ca7af30b50d9756cbd764640126c454cff658479": {
       "path": "bios/Sony/PlayStation/scph1001_v21.bin",
@@ -73331,7 +73534,14 @@
       "md5": "da27e8b6dab242d8f91a9b25d80c63b8",
       "sha256": "6ad5521d105a6b86741f1af8da2e6ea1c732d34459940618c70305a105e8ec10",
       "crc32": "aff00f2f",
-      "adler32": "68d2dd36"
+      "adler32": "68d2dd36",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation - BIOS Images",
+          "name": "ps-21a.bin",
+          "description": "SCPH-1001/DTL-H1101 (Version 2.1 07/17/95 A)"
+        }
+      }
     },
     "20b98f3d80f11cbf5a7bfd0779b0e63760ecc62c": {
       "path": "bios/Sony/PlayStation/scph1002.bin",
@@ -73341,7 +73551,14 @@
       "md5": "54847e693405ffeb0359c6287434cbef",
       "sha256": "0af2be3468d30b6018b3c3b0d98b8b64347e255e16d874d55f0363648973dbf0",
       "crc32": "9bb87c4b",
-      "adler32": "1002e6b5"
+      "adler32": "1002e6b5",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation - BIOS Images",
+          "name": "ps-20e.bin",
+          "description": "SCPH-1002/DTL-H1002 (Version 2.0 05/10/95 E)"
+        }
+      }
     },
     "76cf6b1b2a7c571a6ad07f2bac0db6cd8f71e2cc": {
       "path": "bios/Sony/PlayStation/scph1002b.bin",
@@ -73351,7 +73568,14 @@
       "md5": "417b34706319da7cf001e76e40136c23",
       "sha256": "1efb0cfc5db8a8751a884c5312e9c6265ca1bc580dc0c2663eb2dea3bde9fcf7",
       "crc32": "86c30531",
-      "adler32": "d10b6509"
+      "adler32": "d10b6509",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation - BIOS Images",
+          "name": "ps-21e.bin",
+          "description": "SCPH-1002/DTL-H1102 (Version 2.1 07/17/95 E)"
+        }
+      }
     },
     "dcffe16bd90a723499ad46c641424981338d8378": {
       "path": "bios/Sony/PlayStation/scph101.bin",
@@ -73361,7 +73585,14 @@
       "md5": "6e3735ff4c7dc899ee98981385f6f3d0",
       "sha256": "aca9cbfa974b933646baad6556a867eca9b81ce65d8af343a7843f7775b9ffc8",
       "crc32": "171bdcec",
-      "adler32": "7de956a4"
+      "adler32": "7de956a4",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation - BIOS Images",
+          "name": "psone-45a.bin",
+          "description": "SCPH-101 (Version 4.5 05/25/00 A)"
+        }
+      }
     },
     "beb0ac693c0dc26daf5665b3314db81480fa5c7c": {
       "path": "bios/Sony/PlayStation/scph102.bin",
@@ -73371,7 +73602,14 @@
       "md5": "b10f5e0e3d9eb60e5159690680b1e774",
       "sha256": "5c0166da24e27deaa82246de8ff0108267fe4bb59f6df0fdec50e05e62448ca4",
       "crc32": "0bad7ea9",
-      "adler32": "48ba1524"
+      "adler32": "48ba1524",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation - BIOS Images",
+          "name": "psone-44e.bin",
+          "description": "SCPH-102 (Version 4.4 03/24/00 E)"
+        }
+      }
     },
     "dbc7339e5d85827c095764fc077b41f78fd2ecae": {
       "path": "bios/Sony/PlayStation/scph102B.bin",
@@ -73381,7 +73619,14 @@
       "md5": "de93caec13d1a141a40a79f5c86168d6",
       "sha256": "42244b0c650821519751b7e77ad1d3222a0125e75586df2b4e84ba693b9809dc",
       "crc32": "76b880e5",
-      "adler32": "80a156a8"
+      "adler32": "80a156a8",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation - BIOS Images",
+          "name": "psone-45e.bin",
+          "description": "SCPH-102 (Version 4.5 05/25/00 E)"
+        }
+      }
     },
     "b06f4a861f74270be819aa2a07db8d0563a7cc4e": {
       "path": "bios/Sony/PlayStation/scph3000.bin",
@@ -73391,7 +73636,14 @@
       "md5": "849515939161e62f6b866f6853006780",
       "sha256": "5eb3aee495937558312b83b54323d76a4a015190decd4051214f1b6df06ac34b",
       "crc32": "3539def6",
-      "adler32": "9e7d4faa"
+      "adler32": "9e7d4faa",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation - BIOS Images",
+          "name": "ps-11j.bin",
+          "description": "SCPH-3000/DTL-H1000H (Version 1.1 01/22/95)"
+        }
+      }
     },
     "b05def971d8ec59f346f2d9ac21fb742e3eb6917": {
       "path": "bios/Sony/PlayStation/scph5500.bin",
@@ -73401,7 +73653,14 @@
       "md5": "8dd7d5296a650fac7319bce665a6a53c",
       "sha256": "9c0421858e217805f4abe18698afea8d5aa36ff0727eb8484944e00eb5e7eadb",
       "crc32": "ff3eeb8c",
-      "adler32": "a6cf18fe"
+      "adler32": "a6cf18fe",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation - BIOS Images",
+          "name": "ps-30j.bin",
+          "description": "SCPH-5500 (Version 3.0 09/09/96 J)"
+        }
+      }
     },
     "0555c6fae8906f3f09baf5988f00e55f88e9f30b": {
       "path": "bios/Sony/PlayStation/scph5501.bin",
@@ -73411,7 +73670,14 @@
       "md5": "490f666e1afb15b7362b406ed1cea246",
       "sha256": "11052b6499e466bbf0a709b1f9cb6834a9418e66680387912451e971cf8a1fef",
       "crc32": "8d8cb7e4",
-      "adler32": "24e21a0e"
+      "adler32": "24e21a0e",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation - BIOS Images",
+          "name": "ps-30a.bin",
+          "description": "SCPH-5501/SCPH-5503/SCPH-7003 (Version 3.0 11/18/96 A)"
+        }
+      }
     },
     "f6bc2d1f5eb6593de7d089c425ac681d6fffd3f0": {
       "path": "bios/Sony/PlayStation/scph5502.bin",
@@ -73421,7 +73687,14 @@
       "md5": "32736f17079d0b2b7024407c39bd3050",
       "sha256": "1faaa18fa820a0225e488d9f086296b8e6c46df739666093987ff7d8fd352c09",
       "crc32": "d786f0b9",
-      "adler32": "68ee15cc"
+      "adler32": "68ee15cc",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation - BIOS Images",
+          "name": "ps-30e.bin",
+          "description": "SCPH-5502/SCPH-5552 (Version 3.0 01/06/97 E)"
+        }
+      }
     },
     "15c94da3cc5a38a582429575af4198c487fe893c": {
       "path": "bios/Sony/PlayStation/scph5903.bin",
@@ -73431,7 +73704,14 @@
       "md5": "81328b966e6dcf7ea1e32e55e1c104bb",
       "sha256": "6ac8348c8dcd1e34882d5df2f4ba453e4de69847a88bb845ddda3915fa042df0",
       "crc32": "446ec5b2",
-      "adler32": "3d12b445"
+      "adler32": "3d12b445",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation - BIOS Images",
+          "name": "ps-22j(v).bin",
+          "description": "SCPH-5903 (Version 2.2 12/04/95 J)"
+        }
+      }
     },
     "77b10118d21ac7ffa9b35f9c4fd814da240eb3e9": {
       "path": "bios/Sony/PlayStation/scph7000.bin",
@@ -73441,7 +73721,14 @@
       "md5": "8e4c14f567745eff2f0408c8129f72a6",
       "sha256": "e900504d1755f021f861b82c8258c5e6658c7b592f800cccd91f5d32ea380d28",
       "crc32": "ec541cd0",
-      "adler32": "9eff111b"
+      "adler32": "9eff111b",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation - BIOS Images",
+          "name": "ps-40j.bin",
+          "description": "SCPH-7000/SCPH-7500/SCPH-9000 (Version 4.0 08/18/97 J)"
+        }
+      }
     },
     "1b0dbdb23da9dc0776aac58d0755dc80fea20975": {
       "path": "bios/Sony/PlayStation/scph7000w.bin",
@@ -73451,7 +73738,14 @@
       "md5": "b84be139db3ee6cbd075630aa20a6553",
       "sha256": "b3aa63cf30c81e0a40641740f4a43e25fda0b21b792fa9aaef60ce1675761479",
       "crc32": "b7c43dad",
-      "adler32": "fc19d59e"
+      "adler32": "fc19d59e",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation - BIOS Images",
+          "name": "ps-41a(w).bin",
+          "description": "SCPH-7000W (Version 4.1 11/14/97 A)"
+        }
+      }
     },
     "14df4f6c1e367ce097c11deae21566b4fe5647a9": {
       "path": "bios/Sony/PlayStation/scph7001.bin",
@@ -73461,7 +73755,14 @@
       "md5": "1e68c231d0896b7eadcad1d7d8e76129",
       "sha256": "39dcc1a0717036c9b6ac52fefd1ee7a57d3808e8cfbc755879fa685a0a738278",
       "crc32": "502224b6",
-      "adler32": "61e5b760"
+      "adler32": "61e5b760",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation - BIOS Images",
+          "name": "ps-41a.bin",
+          "description": "SCPH-7001/SCPH-7501/SCPH-7503/SCPH-9001/SCPH-9003/SCPH-9903 (Version 4.1 12/16/97 A)"
+        }
+      }
     },
     "8d5de56a79954f29e9006929ba3fed9b6a418c1d": {
       "path": "bios/Sony/PlayStation/scph7002.bin",
@@ -73471,7 +73772,14 @@
       "md5": "b9d9a0286c33dc6b7237bb13cd46fdee",
       "sha256": "5e84a94818cf5282f4217591fefd88be36b9b174b3cc7cb0bcd75199beb450f1",
       "crc32": "318178bf",
-      "adler32": "649db764"
+      "adler32": "649db764",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation - BIOS Images",
+          "name": "ps-41e.bin",
+          "description": "SCPH-7002/SCPH-7502/SCPH-9002 (Version 4.1 12/16/97 E)"
+        }
+      }
     },
     "57369df9ca82a460e596cea7835c5a0797dee668": {
       "path": "bios/Sony/PlayStation 2/.variants/GameIndex.yaml.57369df9",
@@ -73511,7 +73819,14 @@
       "md5": "31a671627b9bf2d88f5e3f6680941fa6",
       "sha256": "76918ccab7350149d8236c136c4df1fc7c5c7fcba245f92a0d8bbe81e82dd251",
       "crc32": "95e51761",
-      "adler32": "601748be"
+      "adler32": "601748be",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-dvd-110u.bin",
+          "description": "SCPH-30001 (Version 1.10U)"
+        }
+      }
     },
     "ceab36633cd5d6050a3080ed8312a6f79d68a6f3": {
       "path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-120e.bin",
@@ -73521,7 +73836,14 @@
       "md5": "22080eed26576f4e2282c905dc6e0a4b",
       "sha256": "50dca18f79136b51ae3a5838eb80a7a14daa7bcfc4abd0577070468a41add3f7",
       "crc32": "394e64e8",
-      "adler32": "3543e518"
+      "adler32": "3543e518",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-dvd-120e.bin",
+          "description": "SCPH-30003/SCPH-30004 (Version 1.20E)"
+        }
+      }
     },
     "f1e306ebefb03af3e1fc2a3695089e4e459968ed": {
       "path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-120u.bin",
@@ -73531,7 +73853,14 @@
       "md5": "20a4e401b9e7885e25f1c31f6bfcbe0c",
       "sha256": "8a10d31388df41bef362d127b2f40053d3e5a527f801c458c52638b9466f65ce",
       "crc32": "37a86c9e",
-      "adler32": "a301b125"
+      "adler32": "a301b125",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-dvd-120u.bin",
+          "description": "SCPH-30001 (Version 1.20U)"
+        }
+      }
     },
     "062f287fb56b18ffbac85ec5f21841b03243ba5a": {
       "path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-130e.bin",
@@ -73541,7 +73870,14 @@
       "md5": "a1a15b62cef142575faaea17fb23dbd1",
       "sha256": "06513ecdd3ba38edabebfd86479ad67ae7493c82fe98b6b7abd0fa6327b52373",
       "crc32": "11c77794",
-      "adler32": "03adfe4c"
+      "adler32": "03adfe4c",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-dvd-130e.bin",
+          "description": "SCPH-30003/SCPH-30004/SCPH-35003/SCPH-35004 (Version 1.30E)"
+        }
+      }
     },
     "7f2e4a49835cd6f9e30a1c2999975a9b1ce870bc": {
       "path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-130u.bin",
@@ -73551,7 +73887,14 @@
       "md5": "567fe068711a9e5914e836cb650600af",
       "sha256": "dd9314c37ace0308a4e86131e68221803d55fbc3ef434cc73bad8ffab4d5eeab",
       "crc32": "43683b3a",
-      "adler32": "f2f0a81b"
+      "adler32": "f2f0a81b",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-dvd-130u.bin",
+          "description": "SCPH-30001/SCPH-35001 (Version 1.30U)"
+        }
+      }
     },
     "0ba4ea6909ad1bb67d6654ecb27cd65a4f14e3e5": {
       "path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-200j.bin",
@@ -73561,7 +73904,14 @@
       "md5": "8afc4544e572842a6bb301ad92dc0c02",
       "sha256": "b5f317d1abcdfea931a24b3eab0b6bee8fcd90c5247e656c3ab04750136bff75",
       "crc32": "6c1f070e",
-      "adler32": "70281b26"
+      "adler32": "70281b26",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-dvd-200j.bin",
+          "description": "SCPH-18000 (Version 2.00J)"
+        }
+      }
     },
     "7625f77742dee6745e3be8f89cbd59a1143db104": {
       "path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-210e.bin",
@@ -73571,7 +73921,14 @@
       "md5": "d5118e3979eb2a3814ebbfa32825e7b0",
       "sha256": "58b34f9eee14cec21e7f6fc29f81cf1a022b2dd06ed91bcda7105d56df65fe65",
       "crc32": "8741cc92",
-      "adler32": "2d488e11"
+      "adler32": "2d488e11",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-dvd-210e.bin",
+          "description": "SCPH-30003R/SCPH-30004R (Version 2.10E)"
+        }
+      }
     },
     "250d3e279ec30f78c46b7a92dca60bc4adc7df1d": {
       "path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-210j.bin",
@@ -73581,7 +73938,14 @@
       "md5": "f0b2e6b7f6d06561e230a5b85e5d1bf9",
       "sha256": "6600577b5c9fba8c272c56357da1e633af04ce72b0484ab660150ab1b2c4d3e9",
       "crc32": "db611d70",
-      "adler32": "c69ab9c1"
+      "adler32": "c69ab9c1",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-dvd-210j.bin",
+          "description": "SCPH-30000 (Version 2.10J)"
+        }
+      }
     },
     "8fd801131621b0dcd556e3d6df59f5eb021fbf6a": {
       "path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-210u.bin",
@@ -73591,7 +73955,14 @@
       "md5": "d0f79251699fdeff073a7c2365d0c526",
       "sha256": "5f0ef27a1c87722a4dc9337d69d016d9fb367aedbeac2b47b7709e00e6617490",
       "crc32": "fb64b4a1",
-      "adler32": "c07654cf"
+      "adler32": "c07654cf",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-dvd-210u.bin",
+          "description": "SCPH-30001R (Version 2.10U)"
+        }
+      }
     },
     "a10bc145413cf43204d6b8ee0fff34370c092673": {
       "path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-212g.bin",
@@ -73601,7 +73972,14 @@
       "md5": "32abbe7ab7c1b72d5ffc24d4963bd6c6",
       "sha256": "1982321946e2ee1bf9ac8ab438bc16920aa0a721c89a9418e6604cbb1da45e57",
       "crc32": "1428b7a1",
-      "adler32": "c44167d6"
+      "adler32": "c44167d6",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-dvd-212g.bin",
+          "description": "SCPH-30006R (Version 2.12G)"
+        }
+      }
     },
     "d1a60da85dfcb5354f53b716fbcb5747ab4a1e56": {
       "path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-212u.bin",
@@ -73611,7 +73989,14 @@
       "md5": "4499f6303d05d4caeb289c2344ea3469",
       "sha256": "614e6cabaf4a11bc2e5686e148de622a10a9bf018ef5e606d6d18e8e02b493c8",
       "crc32": "5cc1a412",
-      "adler32": "5e40f717"
+      "adler32": "5e40f717",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-dvd-212u.bin",
+          "description": "SCPH-39001 (Version 2.12U)"
+        }
+      }
     },
     "010ab71354a1ae5065640a2cb85e829ff8141a66": {
       "path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-213e.bin",
@@ -73621,7 +74006,14 @@
       "md5": "6bdb45a952f697f367cd1646cdf09235",
       "sha256": "d2771caf67eff17849796ba2782e1e4f956db64a3eabe7c39f7d67acf56aeeab",
       "crc32": "71026453",
-      "adler32": "8b5137ba"
+      "adler32": "8b5137ba",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-dvd-213e.bin",
+          "description": "SCPH-39003/SCPH-39004 (Version 2.13E)"
+        }
+      }
     },
     "12d8531ca73ae33a9cd363797835a45f50fdf8f9": {
       "path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-215g.bin",
@@ -73631,7 +74023,14 @@
       "md5": "d609f69d9e3ef236f6e2bf0a80762b6f",
       "sha256": "cec3c22ce94d817d938da25ec9144ecf568624e951f4b73b8c7e92a8fab6a311",
       "crc32": "c74098d7",
-      "adler32": "4a14310a"
+      "adler32": "4a14310a",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-dvd-215g.bin",
+          "description": "SCPH-39006/SCPH-39007 (Version 2.15G)"
+        }
+      }
     },
     "bbfdc1a2df333885f62cca4e8920228e40e94e29": {
       "path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-300e.bin",
@@ -73641,7 +74040,14 @@
       "md5": "f40466438d83a02c1eecba3efff20b6a",
       "sha256": "7ff12f0d3e24f55c57c86274ca59dff400c5540762d79dee7451567edb07b98c",
       "crc32": "7a3208ce",
-      "adler32": "4ff0719e"
+      "adler32": "4ff0719e",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-dvd-300e.bin",
+          "description": "SCPH-50003/SCPH-50004 (Version 3.00E)"
+        }
+      }
     },
     "6219ad4ead2ece9c4d32df5b040c4c391b763e5a": {
       "path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-300u.bin",
@@ -73651,7 +74057,14 @@
       "md5": "e414c981647883e33f17642da827a739",
       "sha256": "ae6d65d7814a5f2078266e33b8fcd5a0aba9ca33b9e0fb7c6987a1d59f572925",
       "crc32": "5343a330",
-      "adler32": "bb5c854d"
+      "adler32": "bb5c854d",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-dvd-300u.bin",
+          "description": "SCPH-50001/SCPH-50010 (Version 3.00U)"
+        }
+      }
     },
     "aa21592362b5797109ea38ec2df31e949ad3effd": {
       "path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-302c.bin",
@@ -73671,7 +74084,14 @@
       "md5": "503115717429b64e19fa6103e3fa5a35",
       "sha256": "b185af56f028e71426c032d956141bc39464219257955a5e937ecbb698b8cb65",
       "crc32": "2bb87c5a",
-      "adler32": "ac638622"
+      "adler32": "ac638622",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-dvd-302e.bin",
+          "description": "SCPH-50003/SCPH-50004 (Version 3.02E)"
+        }
+      }
     },
     "17380f704f16cc8ec44cf0ba1b349dda3a514b77": {
       "path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-302u.bin",
@@ -73681,7 +74101,14 @@
       "md5": "2ac40eec790adecf4bc5ee1090a27676",
       "sha256": "6528268399a92f2a0e767f8451b9775bc4a758a37af34c8b66db696b25846707",
       "crc32": "a1092a68",
-      "adler32": "5f9a8883"
+      "adler32": "5f9a8883",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-dvd-302u.bin",
+          "description": "SCPH-50001 (Version 3.02U)"
+        }
+      }
     },
     "cd8b548d6db7f7bdd4a0d90e21081520e7e05a40": {
       "path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-310.bin",
@@ -73691,7 +74118,14 @@
       "md5": "a2b55c44a3c3eec0abe5647cfb6a6493",
       "sha256": "7ee91bf0093ff1260f7a2c342a9a286e19e971a637d9ad84ec78789bbc736700",
       "crc32": "df8f104f",
-      "adler32": "0eb173e4"
+      "adler32": "0eb173e4",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-dvd-310.bin",
+          "description": "SCPH-700xx (Version 3.10)"
+        }
+      }
     },
     "747e36b086aceceb300c72c0d1bbab38e2920e63": {
       "path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-311.bin",
@@ -73701,7 +74135,14 @@
       "md5": "79b4880006769a1af9b0a6c7302cc18d",
       "sha256": "98da02e0b2d264a438b4c3a918dd533641dcd9363e902413d1f424b0dbd2deb9",
       "crc32": "cecc5e2d",
-      "adler32": "8b10a7a4"
+      "adler32": "8b10a7a4",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-dvd-311.bin",
+          "description": "SCPH-750xx/SCPH-770xx/SCPH-790xx/SCPH-900xx/PX300 (Version 3.11)"
+        }
+      }
     },
     "adb4dbb7feb8247811506a38896ddcb789c4b477": {
       "path": "bios/Sony/PlayStation 2/EROM.BIN",
@@ -73751,7 +74192,14 @@
       "md5": "acf4730ceb38ac9d8c7d8e21f2614600",
       "sha256": "c4dad3b5c6ad58bce70a47fc332602880f041c0338ac6be89061c928f6919ab1",
       "crc32": "b7ef81a9",
-      "adler32": "eeda70bc"
+      "adler32": "eeda70bc",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0100j-20000117-050310.bin",
+          "description": "SCPH-10000 (Version 5.0 01/17/00 T)"
+        }
+      }
     },
     "8fa040852d4b8688f0c84bcfffc65eb208f2b432": {
       "path": "bios/Sony/PlayStation 2/SCPH-30004R.bin",
@@ -73771,7 +74219,14 @@
       "md5": "d5ce2c7d119f563ce04bc04dbc3a323e",
       "sha256": "f4c948e61a291d4b3f92a141e550cf8357204287a31ff784caccbedaef910c9d",
       "crc32": "a19e0bf5",
-      "adler32": "b298cd3e"
+      "adler32": "b298cd3e",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0160a-20020207-164243.bin",
+          "description": "SCPH-39001/SCPH-39010 (Version 5.0 02/07/02 A)"
+        }
+      }
     },
     "434bc0b4eb4827da0773ec0795aadc5162569a07": {
       "path": "bios/Sony/PlayStation 2/SCPH-70004.BIN",
@@ -73781,7 +74236,14 @@
       "md5": "dc752f160044f2ed5fc1f4964db2a095",
       "sha256": "d6653f4e93be2f6f9e9d690a934f26cf0f6ad4e348b69f41ef736732c3a6685b",
       "crc32": "6f8e3c29",
-      "adler32": "13dd6649"
+      "adler32": "13dd6649",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0200e-20040614-100914.bin",
+          "description": "SCPH-70002/SCPH-70003/SCPH-70004/SCPH-70008 (Version 5.0 06/14/04 E)"
+        }
+      }
     },
     "ec0121bb8e2a209044309780d2efc2559c9a0ef1": {
       "path": "bios/Sony/PlayStation 2/SCPH-70004.EROM",
@@ -73861,7 +74323,14 @@
       "md5": "32f2e4d5ff5ee11072a6bc45530f5765",
       "sha256": "76f465dc8961c3b905ac2882351c5c86bf5ff9ff03e7349775c65924e73fa3f0",
       "crc32": "5a04500c",
-      "adler32": "9a594c47"
+      "adler32": "9a594c47",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0100jd-20000117-050652.bin",
+          "description": "DTL-H10000 (Version 5.0 01/17/00 T)"
+        }
+      }
     },
     "916e02431bcd73140504da3355c9598143b77e11": {
       "path": "bios/Sony/PlayStation 2/ps2-0101j-20000217.bin",
@@ -73871,7 +74340,14 @@
       "md5": "b1459d7446c69e3e97e6ace3ae23dd1c",
       "sha256": "4aa33132cfc93d785c5b3f0541ef67725e02d9ded66ae1b6beb25f8c97736b84",
       "crc32": "211dfb6a",
-      "adler32": "a694c00a"
+      "adler32": "a694c00a",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0101j-20000217-181313.bin",
+          "description": "SCPH-10000/SCPH-15000 (Version 5.0 02/17/00 T)"
+        }
+      }
     },
     "16f4a284d0e760ee13a2aff2f7dda928255e3080": {
       "path": "bios/Sony/PlayStation 2/ps2-0101jd-20000217.bin",
@@ -73881,7 +74357,14 @@
       "md5": "acf9968c8f596d2b15f42272082513d1",
       "sha256": "a15fe29628a94b38efc8989bddd17ae243e510da080e711bb52e7d3b3ef34b55",
       "crc32": "4f8b4205",
-      "adler32": "c3519a9c"
+      "adler32": "c3519a9c",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0101jd-20000217-181557.bin",
+          "description": "DTL-H10000 (Version 5.0 02/17/00 T)"
+        }
+      }
     },
     "4440b246bfde7bb31002c584a76c6ef384908e84": {
       "path": "bios/Sony/PlayStation 2/ps2-0101xd-20000224.bin",
@@ -73891,7 +74374,14 @@
       "md5": "d3f1853a16c2ec18f3cd1ae655213308",
       "sha256": "4737c76a87ff738aeeeb65096c39ce9d164dcaa1b48497bbf451cade3310e753",
       "crc32": "2fef9faf",
-      "adler32": "1e6b876f"
+      "adler32": "1e6b876f",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0101xd-20000224-172900.bin",
+          "description": "DTL-H10000 (Version 5.0 02/24/00 T)"
+        }
+      }
     },
     "20f6ce6693cf97e9494f8f0227f2b7988ffaf961": {
       "path": "bios/Sony/PlayStation 2/ps2-0110a-20000727.bin",
@@ -73901,7 +74391,14 @@
       "md5": "a20c97c02210f16678ca3010127caf36",
       "sha256": "b0bf7184d50a209cf7ceb1ab0eb3a0c9b8c583f5f6b3c819e6536f282b93063b",
       "crc32": "9678ad6a",
-      "adler32": "6d5bbcf3"
+      "adler32": "6d5bbcf3",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0110a-20000727-013725.bin",
+          "description": "SCPH-30001 (Version 5.0 07/27/00 A)"
+        }
+      }
     },
     "339c646cf0699268552df5b05f18f0a03a9f55ff": {
       "path": "bios/Sony/PlayStation 2/ps2-0110ad-20000727.bin",
@@ -73911,7 +74408,14 @@
       "md5": "63e6fd9b3c72e0d7b920e80cf76645cd",
       "sha256": "62d372752c6362883e1734fac06dd947af9bf3db2d626d379a89dace5434e9e3",
       "crc32": "795578c1",
-      "adler32": "b05b3efa"
+      "adler32": "b05b3efa",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0110ad-20000727-013728.bin",
+          "description": "DTL-H30001 (Version 5.0 07/27/00 A)"
+        }
+      }
     },
     "dbc2318a1029347b5af3a0c74b0bdf88d19efee6": {
       "path": "bios/Sony/PlayStation 2/ps2-0120a-20000902.bin",
@@ -73921,7 +74425,14 @@
       "md5": "8db2fbbac7413bf3e7154c1e0715e565",
       "sha256": "87f6b61cf51876f676f4962e94cf68c250b90a93b09d28a9b5d54d0a531f439f",
       "crc32": "1ae71e5d",
-      "adler32": "2d77093e"
+      "adler32": "2d77093e",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0120a-20000902-234318.bin",
+          "description": "SCPH-30001 (Version 5.0 09/02/00 A)"
+        }
+      }
     },
     "274c05fec654913a3f698d4b0d592085866a2cbd": {
       "path": "bios/Sony/PlayStation 2/ps2-0120e-20000902.bin",
@@ -73931,7 +74442,14 @@
       "md5": "b7fa11e87d51752a98b38e3e691cbf17",
       "sha256": "5a9e4aab4af2fa94ed0c1ac7ba9aa0544125b1792ca375a702437d850b5096d0",
       "crc32": "7b08c33b",
-      "adler32": "f8207285"
+      "adler32": "f8207285",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0120e-20000902-234321.bin",
+          "description": "SCPH-30002/SCPH-30003/SCPH-30004 (Version 5.0 09/02/00 E)"
+        }
+      }
     },
     "1b73dec999fcc2b92fa958110ff6bfe4d0af276e": {
       "path": "bios/Sony/PlayStation 2/ps2-0120ed-20000902-20030110.bin",
@@ -73941,7 +74459,14 @@
       "md5": "3016b3dd42148a67e2c048595ca4d7ce",
       "sha256": "936d408dc91230fe9715aedd7339c4d4aff279ef56ab4e2a2031d5c466e9f4af",
       "crc32": "e2f78425",
-      "adler32": "a895a180"
+      "adler32": "a895a180",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0120ed-20030110-134044.bin",
+          "description": "DTL-H30102 (Version 5.0 09/02/00 E)"
+        }
+      }
     },
     "3bb1eecd618ab5c973c7bc53671a4475a02e1d5b": {
       "path": "bios/Sony/PlayStation 2/ps2-0120ed-20000902.bin",
@@ -73951,7 +74476,14 @@
       "md5": "91c87cb2f2eb6ce529a2360f80ce2457",
       "sha256": "97362769363ad65f0432eb97f661a6912d51497f915f3fe312718bae470bc141",
       "crc32": "25495aa7",
-      "adler32": "51508064"
+      "adler32": "51508064",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0120ed-20000902-234323.bin",
+          "description": "DTL-H30002 (Version 5.0 09/02/00 E)"
+        }
+      }
     },
     "e481079eca752225555f0c26d14c9d0f94d9a8e9": {
       "path": "bios/Sony/PlayStation 2/ps2-0120j-20001027-185015.bin",
@@ -73961,7 +74493,14 @@
       "md5": "f63bc530bd7ad7c026fcd6f7bd0d9525",
       "sha256": "fb05637eaa8f9528c6424780d7f603c847434e5c77d1f0ce7058c8cd8785d9d5",
       "crc32": "9b096622",
-      "adler32": "0a983672"
+      "adler32": "0a983672",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0120j-20001027-185015.bin",
+          "description": "SCPH-18000 (GH-003) (Version 5.0 10/27/00 J)"
+        }
+      }
     },
     "a9f5d8ed56cfff18add1b599010493461fa02448": {
       "path": "bios/Sony/PlayStation 2/ps2-0120j-20001027-191435.bin",
@@ -73971,7 +74510,14 @@
       "md5": "cee06bd68c333fc5768244eae77e4495",
       "sha256": "5d6157bab61b40de134d5796af03284211eaab5120705b88e8bb4978d6387e71",
       "crc32": "c1ccf3f6",
-      "adler32": "a89e367f"
+      "adler32": "a89e367f",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0120j-20001027-191435.bin",
+          "description": "SCPH-18000 (GH-008) (Version 5.0 10/27/00 J)"
+        }
+      }
     },
     "5af5b5077d84a9c037ebe12bfab8a38b31d8a543": {
       "path": "bios/Sony/PlayStation 2/ps2-0150a-20001228.bin",
@@ -73981,7 +74527,14 @@
       "md5": "8accc3c49ac45f5ae2c5db0adc854633",
       "sha256": "c641edbd8fcc1ef363639710795a670850b4549efa0de7dbadabc2b6eb363c4a",
       "crc32": "bce74746",
-      "adler32": "0090b8e9"
+      "adler32": "0090b8e9",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0150a-20001228-190952.bin",
+          "description": "SCPH-30001/SCPH-35001 (Version 5.0 12/28/00 A)"
+        }
+      }
     },
     "7284b9d16df9935afc384318e024c87ef0574fe5": {
       "path": "bios/Sony/PlayStation 2/ps2-0150ad-20001228-20030520.bin",
@@ -73991,7 +74544,14 @@
       "md5": "0bf988e9c7aaa4c051805b0fa6eb3387",
       "sha256": "79c55576524ee8aae590d85d7581b1b725e6519c427071392e36b3b1f7662856",
       "crc32": "0380c2ce",
-      "adler32": "1c31e5f1"
+      "adler32": "1c31e5f1",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0150ad-20030520-144137.bin",
+          "description": "DTL-H30101 (Version 5.0 12/28/00 A)"
+        }
+      }
     },
     "e22ef231faf3661edd92f2ee449a71297c82a092": {
       "path": "bios/Sony/PlayStation 2/ps2-0150e-20001228.bin",
@@ -74001,7 +74561,14 @@
       "md5": "838544f12de9b0abc90811279ee223c8",
       "sha256": "ea635b3dad3eb90fedd8113134819d0af2a2f4d4797d1fb5d99b9c9062f41efd",
       "crc32": "1559fd43",
-      "adler32": "ea3e43c0"
+      "adler32": "ea3e43c0",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0150e-20001228-234538.bin",
+          "description": "SCPH-30002/SCPH-30003/SCPH-30004/SCPH-35002/SCPH-35003/SCPH-35004 (Version 5.0 12/28/00 E)"
+        }
+      }
     },
     "d004326c9d8060812b4433c3f07646b04854d6c4": {
       "path": "bios/Sony/PlayStation 2/ps2-0150ed-20001228-20030520.bin",
@@ -74011,7 +74578,14 @@
       "md5": "6f9a6feb749f0533aaae2cc45090b0ed",
       "sha256": "e25227b01cda1f0ef4b56e8f85596f0e50cfc303026a23c3d55e161d9e346d8b",
       "crc32": "60bc0031",
-      "adler32": "32ba70d3"
+      "adler32": "32ba70d3",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0150ed-20030520-144207.bin",
+          "description": "DTL-H30102 (Version 5.0 12/28/00 E)"
+        }
+      }
     },
     "d6f365a0f07cd04ed28108e6ec5076e2f81e5f72": {
       "path": "bios/Sony/PlayStation 2/ps2-0150j-20010118.bin",
@@ -74021,7 +74595,14 @@
       "md5": "815ac991d8bc3b364696bead3457de7d",
       "sha256": "6943d96a246f61ebc3d1af2b9dc4f4435283244c1d1d3334ed74065c0cd30947",
       "crc32": "4fc3b495",
-      "adler32": "53c8827e"
+      "adler32": "53c8827e",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0150j-20010118-210306.bin",
+          "description": "SCPH-30000/SCPH-35000 (Version 5.0 01/18/01 J)"
+        }
+      }
     },
     "334e029fc7fd50222a399c50384ff42732652259": {
       "path": "bios/Sony/PlayStation 2/ps2-0150jd-20010118.bin",
@@ -74031,7 +74612,14 @@
       "md5": "bb6bbc850458fff08af30e969ffd0175",
       "sha256": "01f0f761aaa69029e3509ed3404acfb529376e8a1830550f8ce7ed534813ffdd",
       "crc32": "0b3ec2bc",
-      "adler32": "dee70ca6"
+      "adler32": "dee70ca6",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0150jd-20010118-210307.bin",
+          "description": "DTL-H30000 (Version 5.0 01/18/01 J)"
+        }
+      }
     },
     "7331a40b4b4feb1b3f0f77b013b6d38483577baa": {
       "path": "bios/Sony/PlayStation 2/ps2-0160a-20010427.bin",
@@ -74041,7 +74629,14 @@
       "md5": "b107b5710042abe887c0f6175f6e94bb",
       "sha256": "868545167e795e7975628d0c5f41614cbe79e53ba5c2b2d2c7e6750208268482",
       "crc32": "4008ac18",
-      "adler32": "3a2299ac"
+      "adler32": "3a2299ac",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0160a-20010427-140043.bin",
+          "description": "SCPH-30001R (Version 5.0 04/27/01 A)"
+        }
+      }
     },
     "ce92e8e8c88665f2f645a9522e337823d47a914a": {
       "path": "bios/Sony/PlayStation 2/ps2-0160a-20010704.bin",
@@ -74051,7 +74646,14 @@
       "md5": "18bcaadb9ff74ed3add26cdf709fff2e",
       "sha256": "02211f5a70f9b8c29c87925a27c1daf1ad6607adb94d64c73a37c606d6b55ac1",
       "crc32": "c506c693",
-      "adler32": "692d412b"
+      "adler32": "692d412b",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0160a-20010704-160658.bin",
+          "description": "SCPH-30001R (Version 5.0 07/04/01 A)"
+        }
+      }
     },
     "d257bce6ecaf3bafb704c75a1b4741b910bd2d49": {
       "path": "bios/Sony/PlayStation 2/ps2-0160a-20011004.bin",
@@ -74061,7 +74663,14 @@
       "md5": "7200a03d51cacc4c14fcdfdbc4898431",
       "sha256": "089c73b4dea8a181ba3ef7eaa5057a2ce3cd5521f036b713d3bd08937a8b2790",
       "crc32": "a01ec625",
-      "adler32": "61d26dd4"
+      "adler32": "61d26dd4",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0160a-20011004-175827.bin",
+          "description": "SCPH-30001R (Version 5.0 10/04/01 A)"
+        }
+      }
     },
     "3cbd048e437c785b5a05a0feced00117a8a42545": {
       "path": "bios/Sony/PlayStation 2/ps2-0160e-20010704.bin",
@@ -74071,7 +74680,14 @@
       "md5": "491209dd815ceee9de02dbbc408c06d6",
       "sha256": "9c076c04c345229d7f4150fd295193719a620a97d3e32ea9752ff951597cc96e",
       "crc32": "f1ac735f",
-      "adler32": "f778cbe7"
+      "adler32": "f778cbe7",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0160e-20010704-160707.bin",
+          "description": "SCPH-30002R/SCPH-30003R/SCPH-30004R (Version 5.0 07/04/01 E)"
+        }
+      }
     },
     "ee34c3a87c53c75ca2a37d77b0042ca24d07831f": {
       "path": "bios/Sony/PlayStation 2/ps2-0160e-20011004.bin",
@@ -74081,7 +74697,14 @@
       "md5": "8359638e857c8bc18c3c18ac17d9cc3c",
       "sha256": "b6e08640bce5ad6f75c5f503ad969e6c416dc0eb7393d203c4cbdf708938bae9",
       "crc32": "82aa5055",
-      "adler32": "26a8f8aa"
+      "adler32": "26a8f8aa",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0160e-20011004-175839.bin",
+          "description": "SCPH-30002R/SCPH-30003R/SCPH-30004R (Version 5.0 10/04/01 E)"
+        }
+      }
     },
     "bff2902bd0ce9729a060581132541e9fd1a9fab6": {
       "path": "bios/Sony/PlayStation 2/ps2-0160e-20020319.bin",
@@ -74091,7 +74714,14 @@
       "md5": "0d2228e6fd4fb639c9c39d077a9ec10c",
       "sha256": "5b7cfc4dfdcf556d70ea975b754da6ec26542f6a0e3dfa43a6fcef2902e8f60d",
       "crc32": "2fe21e4d",
-      "adler32": "3a10a27c"
+      "adler32": "3a10a27c",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0160e-20020319-181154.bin",
+          "description": "SCPH-39002/SCPH-39003/SCPH-39004 (Version 5.0 03/19/02 E)"
+        }
+      }
     },
     "d106b757ae2544dfe63f7e1924e59d5ad44c0c29": {
       "path": "bios/Sony/PlayStation 2/ps2-0160e-20020426.bin",
@@ -74101,7 +74731,14 @@
       "md5": "5b1f47fbeb277c6be2fccdd6344ff2fd",
       "sha256": "7b5fdb035668e7241aad447dfaae6484865de923dc75192c9f3d837569a6cb30",
       "crc32": "dad0baec",
-      "adler32": "6c74913f"
+      "adler32": "6c74913f",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0160e-20020426-130201.bin",
+          "description": "SCPH-39008 (Version 5.0 04/26/02 E)"
+        }
+      }
     },
     "ba15dcf7aac13864c08222037e9321d7468c87d1": {
       "path": "bios/Sony/PlayStation 2/ps2-0160h-20010730.bin",
@@ -74111,7 +74748,14 @@
       "md5": "352d2ff9b3f68be7e6fa7e6dd8389346",
       "sha256": "8f3a9759d10cd75521af5631e7b89c3f57fd25d60d26ac835b79c2397f797f03",
       "crc32": "75f83c67",
-      "adler32": "54663d2a"
+      "adler32": "54663d2a",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0160h-20010730-223219.bin",
+          "description": "SCPH-30005R/SCPH-30006R/SCPH-30007R (Version 5.0 07/30/01 J)"
+        }
+      }
     },
     "e3a74125c426bcacabca00b513fab928665c8846": {
       "path": "bios/Sony/PlayStation 2/ps2-0160h-20020426.bin",
@@ -74121,7 +74765,14 @@
       "md5": "315a4003535dfda689752cb25f24785c",
       "sha256": "9ea2c64c0d1df4208208e0aeb7aefbd5d24e9540029e7f4cf703b3d9b5662257",
       "crc32": "3355623e",
-      "adler32": "78493d5d"
+      "adler32": "78493d5d",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0160h-20020426-130207.bin",
+          "description": "SCPH-39006/SCPH-39007 (Version 5.0 04/26/02 J)"
+        }
+      }
     },
     "f03bc2b7e7722d1788c9e7a341e43ac3ffe33a47": {
       "path": "bios/Sony/PlayStation 2/ps2-0160h-20030602.bin",
@@ -74131,7 +74782,14 @@
       "md5": "ff7511ca675790b28ac2415b26a8f424",
       "sha256": "92f82dede483432b040475408a88763ff6794667757d9ed302b86b783a1b5fc2",
       "crc32": "a0547046",
-      "adler32": "23a5e997"
+      "adler32": "23a5e997",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0160h-20030602-144444.bin",
+          "description": "SCPH-39005 (Version 5.0 06/02/03 J)"
+        }
+      }
     },
     "e525a0c900e37acf0ae5a655d82a0abcb07c6f1f": {
       "path": "bios/Sony/PlayStation 2/ps2-0160j-20010427.bin",
@@ -74141,7 +74799,14 @@
       "md5": "ab55cceea548303c22c72570cfd4dd71",
       "sha256": "630a1ea45e214535d5dcd6db425ebd68c3e5ec11aa0e95b44782a5de3d4a74ca",
       "crc32": "c268ef47",
-      "adler32": "d6b7cd94"
+      "adler32": "d6b7cd94",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0160j-20010427-140035.bin",
+          "description": "SCPH-30000 (Version 5.0 04/27/01 J)"
+        }
+      }
     },
     "e63a786590b62867faef4c47af6ca71c19368216": {
       "path": "bios/Sony/PlayStation 2/ps2-0160j-20011004.bin",
@@ -74151,7 +74816,14 @@
       "md5": "dab594636558c1e8fc4364488aaa9639",
       "sha256": "67166152eaa33ac6ff2cd4240230ffa58bd73fbbb05adf4deec5be457c260cbc",
       "crc32": "14feb48c",
-      "adler32": "355ba1a7"
+      "adler32": "355ba1a7",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0160j-20011004-175812.bin",
+          "description": "SCPH-30000 (Version 5.0 10/04/01 J)"
+        }
+      }
     },
     "003628c137dae577ff3b04b93ca1787b0c944702": {
       "path": "bios/Sony/PlayStation 2/ps2-0160j-20020426.bin",
@@ -74161,7 +74833,14 @@
       "md5": "72da56fccb8fcd77bba16d1b6f479914",
       "sha256": "51ed0afe0d806871e7fa7b9c87cc3f87cb0271915484832a3a8114c30f00b8f3",
       "crc32": "c9363baf",
-      "adler32": "a5db3a65"
+      "adler32": "a5db3a65",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0160j-20020426-130151.bin",
+          "description": "SCPH-37000/SCPH-39000 (Version 5.0 04/26/02 J)"
+        }
+      }
     },
     "d269d1ed513227f3ef7133c76cf1b3a64f97b15d": {
       "path": "bios/Sony/PlayStation 2/ps2-0170a-20030325.bin",
@@ -74171,7 +74850,14 @@
       "md5": "8aa12ce243210128c5074552d3b86251",
       "sha256": "5b3832b97baa0886e7ceddd542bacef3237896eb9bd3f270581e274c2337fb2e",
       "crc32": "9a99e3f4",
-      "adler32": "0d1053e9"
+      "adler32": "0d1053e9",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0170a-20030325-181554.bin",
+          "description": "SCPH-50001/SCPH-50010 (Version 5.0 03/25/03 A)"
+        }
+      }
     },
     "c5bc6e893b4c43d528142e56c96073024de64157": {
       "path": "bios/Sony/PlayStation 2/ps2-0170ad-20030325.bin",
@@ -74181,7 +74867,14 @@
       "md5": "eb960de68f0c0f7f9fa083e9f79d0360",
       "sha256": "4844a181b51032b772624f8d38eb0307645175f579d697a255ba27b63c62a4bf",
       "crc32": "0e1ece79",
-      "adler32": "6b9c7b5b"
+      "adler32": "6b9c7b5b",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0170ad-20030325-181555.bin",
+          "description": "DTL-H50001 (Version 5.0 03/25/03 A)"
+        }
+      }
     },
     "ad15bd7eabd5bd81ba011516a5be44947d6641aa": {
       "path": "bios/Sony/PlayStation 2/ps2-0170e-20030227.bin",
@@ -74191,7 +74884,14 @@
       "md5": "6e69920fa6eef8522a1d688a11e41bc6",
       "sha256": "3e5b57d30d703245edec4b9b504574f849139c61c497725e837427b5f3404647",
       "crc32": "51b5fb8b",
-      "adler32": "fce97ccf"
+      "adler32": "fce97ccf",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0170e-20030227-193050.bin",
+          "description": "SCPH-50002/SCPH-50003/SCPH-50004 (Version 5.0 02/27/03 E)"
+        }
+      }
     },
     "e220bb282378c1f48ea1b585b3675e51a6dca572": {
       "path": "bios/Sony/PlayStation 2/ps2-0170ed-20030227.bin",
@@ -74201,7 +74901,14 @@
       "md5": "666018ffec65c5c7e04796081295c6c7",
       "sha256": "a9f7262f4ba8ac2523cdcf2765c40b326954b99c51b0c2d29f19296c5cf08277",
       "crc32": "970a9c56",
-      "adler32": "90d0a432"
+      "adler32": "90d0a432",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0170ed-20030227-193050.bin",
+          "description": "DTL-H50002 (Version 5.0 02/27/03 E)"
+        }
+      }
     },
     "d812ac65c357d392396ca9edee812dc41bed8bde": {
       "path": "bios/Sony/PlayStation 2/ps2-0170j-20030206.bin",
@@ -74211,7 +74918,14 @@
       "md5": "312ad4816c232a9606e56f946bc0678a",
       "sha256": "6c003a0ca1beb501fba2063b12573521c9b3ec8cdcfb7f5e6a310771ebf166da",
       "crc32": "9457f64e",
-      "adler32": "a4bb4522"
+      "adler32": "a4bb4522",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0170j-20030206-083918.bin",
+          "description": "SCPH-50000/SCPH-55000 (Version 5.0 02/06/03 J)"
+        }
+      }
     },
     "03c6531a1feba6da75a32c2a69c7bb89be61dcda": {
       "path": "bios/Sony/PlayStation 2/ps2-0170jd-20030206.bin",
@@ -74221,7 +74935,14 @@
       "md5": "54ecde087258557e2ddb5c3ddb004028",
       "sha256": "8c9468efa963e350a3b8836db2f5aaf835b52ff4bf358e797cea711b99ca04b0",
       "crc32": "baff17c4",
-      "adler32": "7a156c95"
+      "adler32": "7a156c95",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0170jd-20030206-083919.bin",
+          "description": "DTL-H50000 (Version 5.0 02/06/03 J)"
+        }
+      }
     },
     "2de87767008fc4a303af64a46251156e965d9065": {
       "path": "bios/Sony/PlayStation 2/ps2-0180cd-20030224.bin",
@@ -74231,7 +74952,14 @@
       "md5": "240d4c5ddd4b54069bdc4a3cd2faf99d",
       "sha256": "6dafc33b4376f8da0c9865ffd4ace6ca90f522666b13f73f67c805b9406123e2",
       "crc32": "8c1a04cf",
-      "adler32": "20959814"
+      "adler32": "20959814",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0180cd-20030224-185856.bin",
+          "description": "DTL-H50009 (Version 5.0 02/24/03 J)"
+        }
+      }
     },
     "aa4a35c14ee342cf7a03b1dde294ca10e64889e1": {
       "path": "bios/Sony/PlayStation 2/ps2-0180j-20031028.bin",
@@ -74241,7 +74969,14 @@
       "md5": "1c6cd089e6c83da618fbf2a081eb4888",
       "sha256": "c6b51566ae5f2004c779f62bd5bf88ba837be6a47d3bced28a94471e760738b9",
       "crc32": "585fd27c",
-      "adler32": "8c4baf96"
+      "adler32": "8c4baf96",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0180j-20031028-053521.bin",
+          "description": "DESR-5000/DESR-5100/DESR-7000/DESR-7100 (Version 5.0 10/28/03 J)"
+        }
+      }
     },
     "c74d92a2952a2912b6698cbcf7742adac8f784d3": {
       "path": "bios/Sony/PlayStation 2/ps2-0190a-20030623.bin",
@@ -74251,7 +74986,14 @@
       "md5": "35461cecaa51712b300b2d6798825048",
       "sha256": "3eebdc1250c9737b8c9d5ed4c4ad3db7e454e5c69024b6b2bc5f783230cba517",
       "crc32": "b3e87709",
-      "adler32": "6eeb1424"
+      "adler32": "6eeb1424",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0190a-20030623-142356.bin",
+          "description": "SCPH-50001/SCPH-50010 (Version 5.0 06/23/03 A)"
+        }
+      }
     },
     "b68c05f5cd86bf03cb38a643a723b7a97b759531": {
       "path": "bios/Sony/PlayStation 2/ps2-0190a-20040329.bin",
@@ -74261,7 +75003,14 @@
       "md5": "81f4336c1de607dd0865011c0447052e",
       "sha256": "e6fe40f5add81143af683e767c0e9694b651bded2fbd25c6676321dd82fb0108",
       "crc32": "9ba4c32f",
-      "adler32": "1b7b43c4"
+      "adler32": "1b7b43c4",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0190a-20040329-172942.bin",
+          "description": "SCPH-50011 (Version 5.0 03/29/04 A)"
+        }
+      }
     },
     "fe19d2c52729e2ce4fea30e0e6a501587285d93f": {
       "path": "bios/Sony/PlayStation 2/ps2-0190ad-20030623.bin",
@@ -74271,7 +75020,14 @@
       "md5": "ab9d49ad40ae49f19856ad187777b1b3",
       "sha256": "ce5c3a6e62f815fc30d1d6689e368e07c238cb741919990a884adb84a2a39b0e",
       "crc32": "7d1ae57f",
-      "adler32": "f87ba5b6"
+      "adler32": "f87ba5b6",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0190ad-20030623-142357.bin",
+          "description": "DTL-H50001 (Version 5.0 06/23/03 A)"
+        }
+      }
     },
     "92d9eb4b11cef97bb69a275b2851b72f7b0023d6": {
       "path": "bios/Sony/PlayStation 2/ps2-0190c-20030623.bin",
@@ -74281,7 +75037,14 @@
       "md5": "1b6e631b536247756287b916f9396872",
       "sha256": "a7af55393f114b2f7ee4eacfb4a9689224b2163bf28e89a76e8c7375daec6f3e",
       "crc32": "d2347ee7",
-      "adler32": "6019488c"
+      "adler32": "6019488c",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0190c-20030623-142419.bin",
+          "description": "SCPH-50009 (Version 5.0 06/23/03 J)"
+        }
+      }
     },
     "1e63d563a3f62acf5b9be611391e2c196c5a4243": {
       "path": "bios/Sony/PlayStation 2/ps2-0190cd-20030623.bin",
@@ -74291,7 +75054,14 @@
       "md5": "122bbf34cbae1f4fdc6b2f6fae473094",
       "sha256": "bfc1b152a3d0ff4d456d9d94faf29cfca9b1120b384f1495dd3e0f7831f09348",
       "crc32": "33e31008",
-      "adler32": "ca27fcf0"
+      "adler32": "ca27fcf0",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0190cd-20030623-142420.bin",
+          "description": "SCPH-50009 (Version 5.0 06/23/03 J)"
+        }
+      }
     },
     "18b9ba833c469c4683676cc20da5124080d980bb": {
       "path": "bios/Sony/PlayStation 2/ps2-0190e-20030623.bin",
@@ -74301,7 +75071,14 @@
       "md5": "bd6415094e1ce9e05daabe85de807666",
       "sha256": "0fcb0bd98a33e77a99f30d3b4095f43a219ea36f3506589dbba5189ff2b4c337",
       "crc32": "1752a52e",
-      "adler32": "7e9a4825"
+      "adler32": "7e9a4825",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0190e-20030623-142401.bin",
+          "description": "SCPH-50002/SCPH-50003/SCPH-50004 (Version 5.0 06/23/03 E)"
+        }
+      }
     },
     "6e1f0eb4aec51a6288b3d802d3bcdb477cf52104": {
       "path": "bios/Sony/PlayStation 2/ps2-0190e-20030822.bin",
@@ -74311,7 +75088,14 @@
       "md5": "afde410bd026c16be605a1ae4bd651fd",
       "sha256": "cc7b333bf7dc7c77a7c8818b1d34be715bc85bd1c5ecd89d785cc879a935bc4e",
       "crc32": "3afd1d1e",
-      "adler32": "b4eb52ea"
+      "adler32": "b4eb52ea",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0190e-20030822-152247.bin",
+          "description": "SCPH-50004 (Version 5.0 08/22/03 E)"
+        }
+      }
     },
     "3e18fefb5b5a59046baf25a3f13da1e3a40b92be": {
       "path": "bios/Sony/PlayStation 2/ps2-0190h-20030623.bin",
@@ -74331,7 +75115,14 @@
       "md5": "463d87789c555a4a7604e97d7db545d1",
       "sha256": "a8837d7aa51481593e6bd87b6ffe37682d33c017a3618793a69310b1ff21ee64",
       "crc32": "7c10a967",
-      "adler32": "c61a06f4"
+      "adler32": "c61a06f4",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0190j-20030623-142351.bin",
+          "description": "SCPH-55000 (Version 5.0 06/23/03 J)"
+        }
+      }
     },
     "0ea98a25a32145dda514de2f0d4bfbbd806bd00c": {
       "path": "bios/Sony/PlayStation 2/ps2-0190j-20030822.bin",
@@ -74341,7 +75132,14 @@
       "md5": "00da1b177096cfd2532c8fa22b43e667",
       "sha256": "8876e0d1f81edb0378b0e744d15a884f75cdf38969190499257ad7ae35d2a664",
       "crc32": "79d60546",
-      "adler32": "52c9a9fb"
+      "adler32": "52c9a9fb",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0190j-20030822-152237.bin",
+          "description": "SCPH-50000 (Version 5.0 08/22/03 J)"
+        }
+      }
     },
     "ad8b9b5aa87b1575fec6a70d1cec77851c9c0e29": {
       "path": "bios/Sony/PlayStation 2/ps2-0190k-20030623.bin",
@@ -74351,7 +75149,14 @@
       "md5": "50d5b97b57d8c9b6534adcb46c2027d4",
       "sha256": "0330e785f2228d4f30ebc9f19efc102ac4c1466513ede0e2b51993821dcd8d83",
       "crc32": "45ee47c1",
-      "adler32": "5e12070d"
+      "adler32": "5e12070d",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0190k-20030623-142424.bin",
+          "description": "SCPH-50005/SCPH-55005 (Version 5.0 06/23/03 J)"
+        }
+      }
     },
     "c77d61114bbcc0eddca169ac16a6af87c2e9e638": {
       "path": "bios/Sony/PlayStation 2/ps2-0190r-20030623.bin",
@@ -74371,7 +75176,14 @@
       "md5": "d333558cc14561c1fdc334c75d5f37b7",
       "sha256": "6d23d001daf2a0fa8b381a5d49f51753c36e3622d0f04be46af1a0c548be4744",
       "crc32": "7ebd68de",
-      "adler32": "7fa25647"
+      "adler32": "7fa25647",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0200a-20040614-100909.bin",
+          "description": "SCPH-70001/SCPH-70011/SCPH-70012 (Version 5.0 06/14/04 A)"
+        }
+      }
     },
     "6b42b59c772027c48ef0df89ad165e6c17f2886e": {
       "path": "bios/Sony/PlayStation 2/ps2-0200ad-20040614.bin",
@@ -74381,7 +75193,14 @@
       "md5": "27261501ade9f6c1c3528376c6cec5a2",
       "sha256": "bb2cbff059c5903c17dd54b4d7126db7918f47194083e8819e1de602612f9eff",
       "crc32": "d0efb184",
-      "adler32": "7e66a338"
+      "adler32": "7e66a338",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0200ad-20040614-100910.bin",
+          "description": "DTL-H70011S (Version 5.0 06/14/04 A)"
+        }
+      }
     },
     "902f4680b258abd40c0922f6b0d581cbd8f8a73e": {
       "path": "bios/Sony/PlayStation 2/ps2-0200ed-20040614.bin",
@@ -74391,7 +75210,14 @@
       "md5": "63ead1d74893bf7f36880af81f68a82d",
       "sha256": "c2eacbbf2538c64269411abc45eea706e657f943288ecfe9c66475793aa03b0d",
       "crc32": "881c9aa9",
-      "adler32": "d8a1b353"
+      "adler32": "d8a1b353",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0200ed-20040614-100915.bin",
+          "description": "DTL-H70002 (Version 5.0 06/14/04 E)"
+        }
+      }
     },
     "7f8e812cab7c7393c85eac6c42661e1fd0a642df": {
       "path": "bios/Sony/PlayStation 2/ps2-0200h-20040614.bin",
@@ -74401,7 +75227,14 @@
       "md5": "3e3e030c0f600442fa05b94f87a1e238",
       "sha256": "79b89a771d6f36fd96a0c4267df2559d034e5c96cd140e536a20f3c0c97efe16",
       "crc32": "b57201bf",
-      "adler32": "eebc2d0b"
+      "adler32": "eebc2d0b",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0200h-20040614-100920.bin",
+          "description": "SCPH-70005/SCPH-70006/SCPH-70007 (Version 5.0 06/14/04 J)"
+        }
+      }
     },
     "224ab5704ab719edeb05ca1d835812252c97c1b3": {
       "path": "bios/Sony/PlayStation 2/ps2-0200j-20040614.bin",
@@ -74411,7 +75244,14 @@
       "md5": "0eee5d1c779aa50e94edd168b4ebf42e",
       "sha256": "3b377ce5f7bb8d880260851867a5452b59149aeb8bb189c5df41e3bace7b8e09",
       "crc32": "2f314730",
-      "adler32": "63ba1bd8"
+      "adler32": "63ba1bd8",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0200j-20040614-100905.bin",
+          "description": "SCPH-70000 (Version 5.0 06/14/04 J)"
+        }
+      }
     },
     "bbb1af3085e77599691ec430d147810157da934f": {
       "path": "bios/Sony/PlayStation 2/ps2-0210j-20040917.bin",
@@ -74421,7 +75261,14 @@
       "md5": "1ad977bb539fc9448a08ab276a836bbc",
       "sha256": "1065ca6d4b3d9753ec206f4f66ec411137c108b0bee86fe20be8007c8cb95a81",
       "crc32": "55710d11",
-      "adler32": "9d1846e1"
+      "adler32": "9d1846e1",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0210j-20040917-150737.bin",
+          "description": "DESR-5500/DESR-5700/DESR-7500/DESR-7700 (Version 5.0 09/17/04 J)"
+        }
+      }
     },
     "48d0445dffd1e879c7ae752c5166ec3101921555": {
       "path": "bios/Sony/PlayStation 2/ps2-0220a-20050620.bin",
@@ -74431,7 +75278,14 @@
       "md5": "929a14baca1776b00869f983aa6e14d2",
       "sha256": "040cadcc57760082fcd42bcaa9c7cfb627f6d40660b0986dcea133f5700f65b6",
       "crc32": "d305a97a",
-      "adler32": "cb5f3d65"
+      "adler32": "cb5f3d65",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0220a-20050620-175641.bin",
+          "description": "SCPH-75001/SCPH-75010 (Version 5.0 06/20/05 A)"
+        }
+      }
     },
     "92e488d5b2705e4cca83d4d1efbc421012faf83e": {
       "path": "bios/Sony/PlayStation 2/ps2-0220a-20060210.bin",
@@ -74441,7 +75295,14 @@
       "md5": "cb801b7920a7d536ba07b6534d2433ca",
       "sha256": "c7628a01da23d7d38851aec8403e535581d0f2a781fee5b86b1c648b13a9970d",
       "crc32": "1279fce9",
-      "adler32": "58ce625b"
+      "adler32": "58ce625b",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0220a-20060210-142424.bin",
+          "description": "SCPH-77001/SCPH-77010 (Version 5.0 02/10/06 A)"
+        }
+      }
     },
     "8361d615cc895962e0f0838489337574dbdc9173": {
       "path": "bios/Sony/PlayStation 2/ps2-0220a-20060905.bin",
@@ -74451,7 +75312,14 @@
       "md5": "40c11c063b3b9409aa5e4058e984e30c",
       "sha256": "e76d9c8f4019041fb17f41fff25d57d608c1a3f205c99bda9eb47402c43e8c93",
       "crc32": "1c17eafc",
-      "adler32": "b8cb5973"
+      "adler32": "b8cb5973",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0220a-20060905-125923.bin",
+          "description": "SCPH-79001/SCPH-79010/SCPH-90001 (Version 5.0 09/05/06 A)"
+        }
+      }
     },
     "7c7efdfcec7705f4e84bb47f45322104e39eed09": {
       "path": "bios/Sony/PlayStation 2/ps2-0220ad-20050620.bin",
@@ -74461,7 +75329,14 @@
       "md5": "9959ad7a8685cad66206e7752ca23f8b",
       "sha256": "0e216b4e1a9985452db34ba933eef9422a6138205a79b9fdc1eed7da06b39953",
       "crc32": "181f1bda",
-      "adler32": "ef27f0dc"
+      "adler32": "ef27f0dc",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0220ad-20050620-175642.bin",
+          "description": "DTL-H75000A (Version 5.0 06/20/05 A)"
+        }
+      }
     },
     "4191b5842f31a9985b5428bc9d2b733ce3abb583": {
       "path": "bios/Sony/PlayStation 2/ps2-0220ad-20060905.bin",
@@ -74471,7 +75346,14 @@
       "md5": "21fe4cad111f7dc0f9af29477057f88d",
       "sha256": "55c1380236cad07a6018784a1b3ba4ef1d073cc0a4de89826d9cda59000013fc",
       "crc32": "431d9b7f",
-      "adler32": "54bb0d09"
+      "adler32": "54bb0d09",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0220ad-20060905-125924.bin",
+          "description": "DTL-H90000 (Version 5.0 09/05/06 A)"
+        }
+      }
     },
     "929a85e974faf4b40d0a7785023b758402c43bd9": {
       "path": "bios/Sony/PlayStation 2/ps2-0220e-20050620.bin",
@@ -74481,7 +75363,14 @@
       "md5": "573f7d4a430c32b3cc0fd0c41e104bbd",
       "sha256": "d8c41bc3b26a015840f10abaced57806bfa1e602dff166d929e961af12346321",
       "crc32": "e2862e39",
-      "adler32": "ec473d6d"
+      "adler32": "ec473d6d",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0220e-20050620-175641.bin",
+          "description": "SCPH-75002/SCPH-75003/SCPH-75004/SCPH-75008 (Version 5.0 06/20/05 E)"
+        }
+      }
     },
     "28ad756d0cfd1e7b2e2de3de5d9e14207ee89761": {
       "path": "bios/Sony/PlayStation 2/ps2-0220e-20060210.bin",
@@ -74491,7 +75380,14 @@
       "md5": "af60e6d1a939019d55e5b330d24b1c25",
       "sha256": "8921e73006ac2c01922fcc7b76da6b9caed6b20fbd4e69f165635e18542de6ab",
       "crc32": "23fa7baa",
-      "adler32": "79b66263"
+      "adler32": "79b66263",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0220e-20060210-142424.bin",
+          "description": "SCPH-77002/SCPH-77003/SCPH-77004/SCPH-77008 (Version 5.0 02/10/06 E)"
+        }
+      }
     },
     "da5aacead2fb55807d6d4e70b1f10f4fdcfd3281": {
       "path": "bios/Sony/PlayStation 2/ps2-0220e-20060905.bin",
@@ -74501,7 +75397,14 @@
       "md5": "80bbb237a6af9c611df43b16b930b683",
       "sha256": "a4c762498379a722398efc9a7d392f1d5464bd6dc23601070548e91282c783f3",
       "crc32": "2d946dbf",
-      "adler32": "d9b3597b"
+      "adler32": "d9b3597b",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0220e-20060905-125923.bin",
+          "description": "SCPH-79002/SCPH-79003/SCPH-79004/SCPH-79008/SCPH-90002/SCPH-90003/SCPH-90004 (Version 5.0 09/05/06 E)"
+        }
+      }
     },
     "0a071d1b46607a7694770407606d8599f62a372b": {
       "path": "bios/Sony/PlayStation 2/ps2-0220h-20050620.bin",
@@ -74511,7 +75414,14 @@
       "md5": "df63a604e8bff5b0599bd1a6c2721bd0",
       "sha256": "76c6c82491f9d123b254df0cd31d5515818e113205070ecbaf1c96cf0df28dc6",
       "crc32": "e27c4a6c",
-      "adler32": "0cf03d75"
+      "adler32": "0cf03d75",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0220h-20050620-175641.bin",
+          "description": "SCPH-75006 (Version 5.0 06/20/05 J)"
+        }
+      }
     },
     "fce2a24e5e0400cc6d98c08f426405d19173813e": {
       "path": "bios/Sony/PlayStation 2/ps2-0220h-20060210.bin",
@@ -74521,7 +75431,14 @@
       "md5": "549a66d0c698635ca9fa3ab012da7129",
       "sha256": "d1382662830786dd8b7e3f3931be7ad73420e5c2e7be0fd832d2ccf104f4be9f",
       "crc32": "23001fff",
-      "adler32": "9a50626b"
+      "adler32": "9a50626b",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0220h-20060210-142424.bin",
+          "description": "SCPH-77006/SCPH-77007 (Version 5.0 02/10/06 J)"
+        }
+      }
     },
     "a5a2ee0dd9a86ca35b94e97ca92476a584f755bf": {
       "path": "bios/Sony/PlayStation 2/ps2-0220h-20060905.bin",
@@ -74531,7 +75448,14 @@
       "md5": "c37bce95d32b2be480f87dd32704e664",
       "sha256": "7d280652ed921d455a48fe9e4f6134a2c30e7bda1ee4af83ae24433efa3fd219",
       "crc32": "2d6e09ea",
-      "adler32": "fa4d5983"
+      "adler32": "fa4d5983",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0220h-20060905-125923.bin",
+          "description": "SCPH-79006/SCPH-79007/SCPH-90006/SCPH-90007 (Version 5.0 09/05/06 J)"
+        }
+      }
     },
     "7ffa75d142cb8eeea6c777dbcf263143655275d5": {
       "path": "bios/Sony/PlayStation 2/ps2-0220j-20050620.bin",
@@ -74541,7 +75465,14 @@
       "md5": "eb4f40fcf4911ede39c1bbfe91e7a89a",
       "sha256": "5aff52ae270a519b52e3c7c50f780c63b771da4634d565c4f954b37ce250b620",
       "crc32": "d27fc41d",
-      "adler32": "15783d77"
+      "adler32": "15783d77",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0220j-20050620-175641.bin",
+          "description": "SCPH-75000 (Version 5.0 06/20/05 J)"
+        }
+      }
     },
     "0edf1fbb772a8e6a79ae00e977450e3ade25c4f3": {
       "path": "bios/Sony/PlayStation 2/ps2-0220j-20060210.bin",
@@ -74551,7 +75482,14 @@
       "md5": "5b1ba4bb914406fae75ab8e38901684d",
       "sha256": "ae5e5d6b9301d9c097fb693cabd1abb1b8e93a110f49c7046c35ae7cd19051a5",
       "crc32": "1303918e",
-      "adler32": "a2d8626d"
+      "adler32": "a2d8626d",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0220j-20060210-142424.bin",
+          "description": "SCPH-77000 (Version 5.0 02/10/06 J)"
+        }
+      }
     },
     "3baf847c1c217aa71ac6d298389c88edb3db32e2": {
       "path": "bios/Sony/PlayStation 2/ps2-0220j-20060905.bin",
@@ -74561,7 +75499,14 @@
       "md5": "5de9d0d730ff1e7ad122806335332524",
       "sha256": "e093ef89810ed826a86c0fdb9ccef5761bd69b48fdc8480c96cbf33cdaa970a3",
       "crc32": "1d6d879b",
-      "adler32": "02e45985"
+      "adler32": "02e45985",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0220j-20060905-125923.bin",
+          "description": "SCPH-79000/SCPH-90000 (Version 5.0 09/05/06 J)"
+        }
+      }
     },
     "458adf85d216856892d6480213575670894049c6": {
       "path": "bios/Sony/PlayStation 2/ps2-0220jd-20050620.bin",
@@ -74571,7 +75516,14 @@
       "md5": "bf0078ba5e19d57eae18047407f3b6e5",
       "sha256": "03c0a3798e588f081f24c23e9a14f78f13e8ddc471fbff270e902d7f37c87cd1",
       "crc32": "196576bd",
-      "adler32": "3940f0ee"
+      "adler32": "3940f0ee",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0220jd-20050620-175642.bin",
+          "description": "DTL-H75000 (Version 5.0 06/20/05 J)"
+        }
+      }
     },
     "3d095a3c2c38ebef3e48f31c7cfbb77ad4b04166": {
       "path": "bios/Sony/PlayStation 2/ps2-0220jd-20060905.bin",
@@ -74581,7 +75533,14 @@
       "md5": "5e2014472c88f74f7547d8c2c60eca45",
       "sha256": "79614b495dcae4e6867f6aff40466a331c6408e966ffac1f2af0bf4dee94b027",
       "crc32": "4267f618",
-      "adler32": "9ec50d1b"
+      "adler32": "9ec50d1b",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0220jd-20060905-125924.bin",
+          "description": "DTL-H90000 (Version 5.0 09/05/06 J)"
+        }
+      }
     },
     "f9229fe159d0353b9f0632f3fdc66819c9030458": {
       "path": "bios/Sony/PlayStation 2/ps2-0230a-20080220.bin",
@@ -74591,7 +75550,14 @@
       "md5": "21038400dc633070a78ad53090c53017",
       "sha256": "f609ed1ca62437519828cdd824b5ea79417fd756e71a4178443483e3781fedd2",
       "crc32": "286897c2",
-      "adler32": "db9b689a"
+      "adler32": "db9b689a",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0230a-20080220-175343.bin",
+          "description": "SCPH-90001/SCPH-90010 (Version 5.0 02/20/08 A)"
+        }
+      }
     },
     "9915b5ba56798f4027ac1bd8d10abe0c1c9c326a": {
       "path": "bios/Sony/PlayStation 2/ps2-0230e-20080220.bin",
@@ -74601,7 +75567,14 @@
       "md5": "dc69f0643a3030aaa4797501b483d6c4",
       "sha256": "cb5a91fda0e8e2b2a012c0b4d7db5831281c32a89cd659c6e8f64df1fe204e69",
       "crc32": "19eb1081",
-      "adler32": "fc8368a2"
+      "adler32": "fc8368a2",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0230e-20080220-175343.bin",
+          "description": "SCPH-90002/SCPH-90003/SCPH-90004/SCPH-90008 (Version 5.0 02/20/08 E)"
+        }
+      }
     },
     "a277b456849697abec11285c6b35bc734598c220": {
       "path": "bios/Sony/PlayStation 2/ps2-0230h-20080220.bin",
@@ -74611,7 +75584,14 @@
       "md5": "30d56e79d89fbddf10938fa67fe3f34e",
       "sha256": "ae052523f69be651770e21b700e2c195c4e97c41e5ed08580deaa5feaf4247c4",
       "crc32": "191174d4",
-      "adler32": "1d2c68aa"
+      "adler32": "1d2c68aa",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0230h-20080220-175343.bin",
+          "description": "SCPH-90005/SCPH-90006/SCPH-90007 (Version 5.0 02/20/08 J)"
+        }
+      }
     },
     "fbd54bfc020af34008b317dcb80b812dd29b3759": {
       "path": "bios/Sony/PlayStation 2/ps2-0230j-20080220.bin",
@@ -74621,7 +75601,14 @@
       "md5": "80ac46fa7e77b8ab4366e86948e54f83",
       "sha256": "9e9540f7ace6651a029942c1d29b6694a9b55a80becf40b92e2033d00da9de3b",
       "crc32": "2912faa5",
-      "adler32": "25b468ac"
+      "adler32": "25b468ac",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0230j-20080220-175343.bin",
+          "description": "SCPH-90000 (Version 5.0 02/20/08 J)"
+        }
+      }
     },
     "b9cb5775af29cd4d1ec5521e8231f8b6636e2e44": {
       "path": "bios/Sony/PlayStation 2/ps2-0250e-20100415.bin",
@@ -74631,7 +75618,14 @@
       "md5": "93ea3bcee4252627919175ff1b16a1d9",
       "sha256": "b384f663c0202794207659d5a4767e317a904bbbea63c93ed17f5ef205d33995",
       "crc32": "7e75fc28",
-      "adler32": "7952104c"
+      "adler32": "7952104c",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0250e-20100415-124238.bin",
+          "description": "KDL-22PX300 (Version 5.0 04/15/10 E)"
+        }
+      }
     },
     "4b5ef16b67e3b523d28ed2406106cb80470a06d0": {
       "path": "bios/Sony/PlayStation 2/ps2-0250j-20100415.bin",
@@ -74651,7 +75645,14 @@
       "md5": "2e70ad008d4ec8549aada8002fdf42fb",
       "sha256": "6b61e27861c288a99ee9b4878862ed824173a037ebaca2bef0581017a85241e1",
       "crc32": "41391dd3",
-      "adler32": "d241085b"
+      "adler32": "d241085b",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0190h-20030623-142406.bin",
+          "description": "SCPH-50006/SCPH-55006 (Version 5.0 06/23/03 J)"
+        }
+      }
     },
     "34a81db03ab617fbfdd7f9b861692dd2ecd57b82": {
       "path": "bios/Sony/PlayStation 2/ps2_scph50008.bin",
@@ -74661,7 +75662,14 @@
       "md5": "b53d51edc7fc086685e31b811dc32aad",
       "sha256": "e8eed9831c39fc298be087ba11d620673134bc683b97ccc909c555d29cc1b207",
       "crc32": "25f6212a",
-      "adler32": "3456485f"
+      "adler32": "3456485f",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-0190r-20030623-142429.bin",
+          "description": "SCPH-50008 (Version 5.0 06/23/03 E)"
+        }
+      }
     },
     "6eddec30056cde7c664a0cf508dcad29353a12bb": {
       "path": "bios/Sony/PlayStation 2/resources/.variants/GameIndex.yaml",
@@ -74912,6 +75920,16 @@
       "sha256": "21f750db6891374818bbec9496182e1438ecbe61f8b288a2a33894e5b39d7bdc",
       "crc32": "5abcff18",
       "adler32": "254ab1ee"
+    },
+    "30a33f3651f8e1b0967a5dfe6ff714baebcce41a": {
+      "path": "bios/Sony/PlayStation Portable/ppge_atlas.zim",
+      "name": "ppge_atlas.zim",
+      "size": 666530,
+      "sha1": "30a33f3651f8e1b0967a5dfe6ff714baebcce41a",
+      "md5": "866855cc330b9b95cc69135fb7b41d38",
+      "sha256": "3ab7fcf6956d0281ada94d501fc6d1cfa8fc034f139e25fed6c829f723d92a95",
+      "crc32": "7b57fa78",
+      "adler32": "4ea2101e"
     },
     "5c34edb64e86f90ecf2702f40f5c09e92892d2f2": {
       "path": "bios/Sony/PlayStation Portable/ppsspp.zip",
@@ -76492,6 +77510,16 @@
       "sha256": "0d6487d6832488130bc94b1ec5ee71766717b929c249693327089e461460ae40",
       "crc32": "5ea6b7fc",
       "adler32": "27df2df0"
+    },
+    "18f30b9d0dba64516d90a4a1f30891b13e90da69": {
+      "path": "bios/Sony/PlayStation 3/PS3UPDAT.PUP",
+      "name": "PS3UPDAT.PUP",
+      "size": 206126236,
+      "sha1": "18f30b9d0dba64516d90a4a1f30891b13e90da69",
+      "md5": "ca3b043898530c56d9522704c2b99329",
+      "sha256": "f2e611ee2b92bd3e76d8b9e9fd0aeb86221bc7b8be51c3b74197b279d4f13e5a",
+      "crc32": "05594b10",
+      "adler32": "0923b1c2"
     }
   },
   "indexes": {
@@ -83987,6 +85015,7 @@
       "14e32774093f9b52cb69c8ec857e12a0": "b2239203bf736aca4c3a67620e6c538fcfb6668c",
       "35cc288198ccfabcc4d6c913452a2be1": "60bb275122daf353d04dcdfd8ee705d8c6825b0a",
       "12bf703aaf5657e25356f7d395e6dbfa": "a8e0dfbe537b6f6495ee646fde4894cdc21e8520",
+      "866855cc330b9b95cc69135fb7b41d38": "30a33f3651f8e1b0967a5dfe6ff714baebcce41a",
       "e8daf776024fb6a4fb5bb6b5b4cfaa1d": "5c34edb64e86f90ecf2702f40f5c09e92892d2f2",
       "0855ac416f10de26d5c82909e9393b39": "9e6289f74d1e07d132fe8145a49fb367797aaa3b",
       "0244fe811723f2e0013dbc50eee72fd5": "736699a9d933153f0624bc587c65dab50800214b",
@@ -84144,7 +85173,8 @@
       "8d4abc7dd31a64f2ddd811c19ae8c09e": "b3730071e789877bea3373ffa59ca673a4b1f4c9",
       "6e7e391c629332cc9d29902b98e52f94": "48024e2f5943ed86cb1b8e9443603991cdb05808",
       "bbd27768c16e6077b1a90dc0eb8558a3": "24a487f22f3da292e179b3edd6c30222a8ff933d",
-      "084b6bc9804710a89a542335a3e4b1e0": "8c20ff26ebfefbf9b050b67af8083704003595ba"
+      "084b6bc9804710a89a542335a3e4b1e0": "8c20ff26ebfefbf9b050b67af8083704003595ba",
+      "ca3b043898530c56d9522704c2b99329": "18f30b9d0dba64516d90a4a1f30891b13e90da69"
     },
     "by_name": {
       "3do_arcade_saot.bin": [
@@ -104895,7 +105925,8 @@
       ],
       "PS3UPDAT.PUP": [
         "ae2a4f49ec6c09d124fed20f84231ce27d10c7b7",
-        "093f8698b54b78dcb701de2043f82639de51d63b"
+        "093f8698b54b78dcb701de2043f82639de51d63b",
+        "18f30b9d0dba64516d90a4a1f30891b13e90da69"
       ],
       "libSceAudiodec.sprx": [
         "eec337f4d127e6a2c404e4e08250d88e714a989c"
@@ -104947,6 +105978,9 @@
       ],
       "ppsspp.xml": [
         "a8e0dfbe537b6f6495ee646fde4894cdc21e8520"
+      ],
+      "ppge_atlas.zim": [
+        "30a33f3651f8e1b0967a5dfe6ff714baebcce41a"
       ],
       "ppsspp.zip": [
         "5c34edb64e86f90ecf2702f40f5c09e92892d2f2"
@@ -116595,6 +117629,7 @@
       "f479094b": "b2239203bf736aca4c3a67620e6c538fcfb6668c",
       "2226cfb8": "60bb275122daf353d04dcdfd8ee705d8c6825b0a",
       "5abcff18": "a8e0dfbe537b6f6495ee646fde4894cdc21e8520",
+      "7b57fa78": "30a33f3651f8e1b0967a5dfe6ff714baebcce41a",
       "9c66abe4": "5c34edb64e86f90ecf2702f40f5c09e92892d2f2",
       "a642e41c": "9e6289f74d1e07d132fe8145a49fb367797aaa3b",
       "630218f2": "736699a9d933153f0624bc587c65dab50800214b",
@@ -116752,7 +117787,8 @@
       "bf1e4b9b": "b3730071e789877bea3373ffa59ca673a4b1f4c9",
       "e6b9ebfb": "48024e2f5943ed86cb1b8e9443603991cdb05808",
       "a42ef0fd": "24a487f22f3da292e179b3edd6c30222a8ff933d",
-      "5ea6b7fc": "8c20ff26ebfefbf9b050b67af8083704003595ba"
+      "5ea6b7fc": "8c20ff26ebfefbf9b050b67af8083704003595ba",
+      "05594b10": "18f30b9d0dba64516d90a4a1f30891b13e90da69"
     },
     "by_sha256": {
       "72a88b5b47b76bd5604b30c102c948fa7e0ee90ccbc83aba496c45cf90b5a0e7": "520d3d1b5897800af47f92efd2444a26b7a7dead",
@@ -124246,6 +125282,7 @@
       "ef1d81d66634d4b8efd929487af0ff8195b78aa8d6762a90ab800da839e2575d": "b2239203bf736aca4c3a67620e6c538fcfb6668c",
       "f7a4e09fc7b7e4ba2e62717fb0200fe1906c6709fba0776c0e6a3d721fb26c61": "60bb275122daf353d04dcdfd8ee705d8c6825b0a",
       "21f750db6891374818bbec9496182e1438ecbe61f8b288a2a33894e5b39d7bdc": "a8e0dfbe537b6f6495ee646fde4894cdc21e8520",
+      "3ab7fcf6956d0281ada94d501fc6d1cfa8fc034f139e25fed6c829f723d92a95": "30a33f3651f8e1b0967a5dfe6ff714baebcce41a",
       "c21a329a400860a4bcf24de72a566cc7c9520e265e24b4fea3b3f29fe0911d06": "5c34edb64e86f90ecf2702f40f5c09e92892d2f2",
       "c230aed91e49a48d5bff76843bc96bfa7197fc3253c82a418a21c5e831500395": "9e6289f74d1e07d132fe8145a49fb367797aaa3b",
       "ef3a4003c66e851c2916b4352eb54ef623884695908d27a85fb3f6818969af1b": "736699a9d933153f0624bc587c65dab50800214b",
@@ -124403,7 +125440,8 @@
       "c06a6ae0804b20ded47b9ab9101ffe3a6438382b9ec664a2ec0fcd010f8566f4": "b3730071e789877bea3373ffa59ca673a4b1f4c9",
       "37ed55d89afe24a013de30feecf21fb0d75c58f3f0ff9a8449098eaaabe75aac": "48024e2f5943ed86cb1b8e9443603991cdb05808",
       "7dc407fbccbf684dc677bed81120f45f0d3406ff7945eaf207a5c38b036c30e0": "24a487f22f3da292e179b3edd6c30222a8ff933d",
-      "0d6487d6832488130bc94b1ec5ee71766717b929c249693327089e461460ae40": "8c20ff26ebfefbf9b050b67af8083704003595ba"
+      "0d6487d6832488130bc94b1ec5ee71766717b929c249693327089e461460ae40": "8c20ff26ebfefbf9b050b67af8083704003595ba",
+      "f2e611ee2b92bd3e76d8b9e9fd0aeb86221bc7b8be51c3b74197b279d4f13e5a": "18f30b9d0dba64516d90a4a1f30891b13e90da69"
     },
     "by_path_suffix": {
       ".variants/aa310.zip": [
