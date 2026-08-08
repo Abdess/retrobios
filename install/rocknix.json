@@ -4,7 +4,7 @@
   "platform": "rocknix",
   "display_name": "ROCKNIX",
   "version": "1.0",
-  "generated": "2026-08-08T09:28:31Z",
+  "generated": "2026-08-08T11:34:39Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -16,8 +16,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 1549,
-  "total_size": 4071123334,
+  "total_files": 1548,
+  "total_size": 4070944579,
   "files": [
     {
       "dest": "xemu/bios/mcpx_1.0.bin",
@@ -3207,15 +3207,6 @@
       "repo_path": "bios/RPG Maker/wildmidi.cfg",
       "cores": [
         "EasyRPG Player"
-      ]
-    },
-    {
-      "dest": "ecwolf.pk3",
-      "sha1": "9259b87edfe9b9f6d0749788a75a6ccf158f50aa",
-      "size": 178755,
-      "repo_path": "bios/Id Software/Wolfenstein 3D/ecwolf.pk3",
-      "cores": [
-        "ECWolf"
       ]
     },
     {

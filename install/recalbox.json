@@ -4,7 +4,7 @@
   "platform": "recalbox",
   "display_name": "Recalbox",
   "version": "1.0",
-  "generated": "2026-08-08T10:49:03Z",
+  "generated": "2026-08-08T11:34:11Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -236,8 +236,8 @@
       }
     }
   ],
-  "total_files": 1187,
-  "total_size": 2495461820,
+  "total_files": 1186,
+  "total_size": 2495283065,
   "files": [
     {
       "dest": "3do/panafz1.bin",
@@ -4719,15 +4719,6 @@
       "repo_path": "bios/RPG Maker/wildmidi.cfg",
       "cores": [
         "EasyRPG Player"
-      ]
-    },
-    {
-      "dest": "ecwolf.pk3",
-      "sha1": "9259b87edfe9b9f6d0749788a75a6ccf158f50aa",
-      "size": 178755,
-      "repo_path": "bios/Id Software/Wolfenstein 3D/ecwolf.pk3",
-      "cores": [
-        "ECWolf"
       ]
     },
     {

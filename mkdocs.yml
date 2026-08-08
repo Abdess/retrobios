@@ -436,7 +436,7 @@ nav:
     - WASM-4: emulators/wasm4.md
     - XRick: emulators/xrick.md
     - Zelda Classic v2.10: emulators/zc210.md
-  - Enhanced forks (21):
+  - Enhanced forks (22):
     - A7800: emulators/a7800.md
     - AdvanceMAME: emulators/advancemame.md
     - bsnes-hd beta: emulators/bsnes_hd_beta.md
@@ -456,9 +456,10 @@ nav:
     - MesenCE: emulators/mesence.md
     - Mupen64Plus-Next: emulators/mupen64plus_next.md
     - NP2kai: emulators/np2kai.md
+    - PCSX2x6: emulators/pcsx2x6.md
     - PrimeHack: emulators/primehack.md
     - SMS Plus GX: emulators/smsplus.md
-  - Frozen snapshots (32):
+  - Frozen snapshots (33):
     - bnes: emulators/bnes.md
     - bsnes 2014: emulators/bsnes2014.md
     - bsnes C++98: emulators/bsnes_cplusplus98.md
@@ -481,6 +482,7 @@ nav:
     - mednafen_gba: emulators/mednafen_gba.md
     - mednafen_snes: emulators/mednafen_snes.md
     - MESS 2015: emulators/mess2015.md
+    - PCSX2 Legacy: emulators/pcsx2-legacy.md
     - PUAE 2021: emulators/puae2021.md
     - Snes9x 2002: emulators/snes9x2002.md
     - Snes9x 2005: emulators/snes9x2005.md
