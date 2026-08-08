@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/beetle-psx-libretro"
 upstream: "https://mednafen.github.io/"
 profiled_date: "2026-03-29"
+source_commit: "1093a5d0c22775b08bef18087735c911e6f5eebd"
 core_version: "v0.9.44.1"
 display_name: "Sony - PlayStation (Beetle PSX)"
 cores: [beetle_psx, mednafen_psx, mednafen_psx_hw]
@@ -16,6 +17,13 @@ notes: >
   Embedded OpenBIOS (512KB) compiled into the binary serves as HLE fallback when no BIOS found.
   "Skip BIOS" option patches BIOS ROM but causes compatibility issues.
   Upstream Mednafen loads the same 3 region BIOS; override BIOS and HLE fallback are libretro additions.
+  Two BIOS geometries are accepted: the stock 512 KB kernel and the 1 MB SCPH-5903 part,
+  selected by file size at load time (libretro.c:2974-2988). A 1 MB image switches Video CD
+  from HLE to daughterboard emulation (libretro.c:5838). Reached through the BIOS path
+  override only: the region name lists carry no SCPH-5903 entry, and the firmware scan
+  compares against the region SHA1, so a 1 MB file never matches there (libretro.c:324-332).
+  Mednafen rejects a BIOS that is not 524288 bytes (psx.cpp:1777), so this geometry is
+  libretro only.
 
 files:
   # -- Region: Japan (REGION_JP) --
@@ -30,8 +38,19 @@ files:
     md5: "8dd7d5296a650fac7319bce665a6a53c"
     validation: [sha1]
     mode: both
-    source_ref: "libretro.cpp:261-269"
+    source_ref: "libretro.c:433-441"
     aliases: ["SCPH5500.bin", "SCPH-5500.bin"]
+
+  - name: "scph5903.bin"
+    description: "SCPH-5903 (System ROM Version 2.2 12/04/95 J), Video CD daughterboard"
+    region: "NTSC-J"
+    required: false
+    size: 1048576
+    sha1: "15c94da3cc5a38a582429575af4198c487fe893c"
+    md5: "81328b966e6dcf7ea1e32e55e1c104bb"
+    validation: [size, sha1]
+    mode: libretro
+    source_ref: "libretro.c:443-450, 2974-2988, 3007-3009, 5838"
 
   # -- Region: North America (REGION_NA) --
 
@@ -45,7 +64,7 @@ files:
     md5: "490f666e1afb15b7362b406ed1cea246"
     validation: [sha1]
     mode: both
-    source_ref: "libretro.cpp:271-289"
+    source_ref: "libretro.c:452-470"
     aliases:
       - "SCPH5501.bin"
       - "SCPH-5501.bin"
@@ -68,7 +87,7 @@ files:
     md5: "32736f17079d0b2b7024407c39bd3050"
     validation: [sha1]
     mode: both
-    source_ref: "libretro.cpp:291-305"
+    source_ref: "libretro.c:472-486"
     aliases:
       - "SCPH5502.bin"
       - "SCPH-5502.bin"
@@ -87,7 +106,7 @@ files:
     md5: "c53ca5908936d412331790f4426c6c33"
     validation: [sha1]
     mode: libretro
-    source_ref: "libretro.cpp:192-198"
+    source_ref: "libretro.c:362-368"
     aliases: ["PSXONPSP660.bin"]
     note: "override_bios=1. Falls back to region BIOS if not found."
 
@@ -99,7 +118,7 @@ files:
     md5: "81bbe60ba7a3d1cea1d48c14cbcc647b"
     validation: [sha1]
     mode: libretro
-    source_ref: "libretro.cpp:200-206"
+    source_ref: "libretro.c:370-376"
     aliases: ["PS1_ROM.bin"]
     note: "override_bios=2. Falls back to region BIOS if not found."
 
@@ -109,6 +128,6 @@ files:
     required: false
     size: 524288
     mode: libretro
-    source_ref: "libretro.cpp:208-214"
+    source_ref: "libretro.c:378-384"
     aliases: ["OPENBIOS.bin"]
     note: "override_bios=3. No SHA1 validation. Falls back to region BIOS if not found. Also embedded in binary as HLE fallback (libretro.cpp:2157-2159)."
