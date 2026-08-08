@@ -1222,12 +1222,38 @@ class TestRebaseRefs(unittest.TestCase):
         self.assertEqual(rebase_refs(self.path, report), [])
         self.assertIn('source_ref: "a.c:10-12"', self.path.read_text())
 
-    def test_annotated_ref_is_never_rewritten(self):
+    def test_accept_changed_recales_a_reviewed_diff(self):
+        part = PartResult(RefPart("a.c", 10, 12), "CHANGED", None, 30, 32, [])
+        report = self._report(
+            [EntryReport("a.bin", "a.c:10-12", "CHANGED", [part])]
+        )
+        report.counts = {"CHANGED": 1}
+        self.assertEqual(rebase_refs(self.path, report), [])
+        applied = rebase_refs(self.path, report, accept_changed=True)
+        self.assertEqual(applied, ["a.c:10-12 -> a.c:30-32"])
+
+    def test_accept_changed_does_not_cover_gone(self):
+        part = PartResult(RefPart("a.c", 10, 12), "CHANGED", None, 30, 32, [])
+        report = self._report(
+            [EntryReport("a.bin", "a.c:10-12", "CHANGED", [part])]
+        )
+        report.counts = {"CHANGED": 1, "GONE": 1}
+        self.assertEqual(rebase_refs(self.path, report, accept_changed=True), [])
+
+    def test_accept_changed_is_refused_on_every_profile(self):
+        args = profile_sync.build_parser().parse_args(["--all", "--accept-changed"])
+        self.assertTrue(args.accept_changed)
+        self.assertIsNone(args.emulator)
+
+    def test_annotated_ref_keeps_its_prose_when_rewritten(self):
         self.path.write_text(
             SAMPLE.replace('"a.c:10-12"', '"a.c:10-12 (loads the kernel)"'),
             encoding="utf-8",
         )
-        part = PartResult(RefPart("a.c", 10, 12), "SHIFTED", None, 20, 22, [])
+        part = PartResult(
+            RefPart("a.c", 10, 12, "a.c:10-12 (loads the kernel)"),
+            "SHIFTED", None, 20, 22, [],
+        )
         applied = rebase_refs(
             self.path,
             self._report(
@@ -1238,8 +1264,13 @@ class TestRebaseRefs(unittest.TestCase):
                 ]
             ),
         )
-        self.assertEqual(applied, [])
-        self.assertIn("(loads the kernel)", self.path.read_text())
+        self.assertEqual(len(applied), 1)
+        text = self.path.read_text()
+        self.assertIn('source_ref: "a.c:20-22 (loads the kernel)"', text)
+
+    def test_a_chunk_that_is_only_prose_blocks_the_rewrite(self):
+        self.assertFalse(profile_sync._is_rewritable("a.c:1, (just a note)"))
+        self.assertTrue(profile_sync._is_rewritable("a.c:1 (note), b.c:2"))
 
     def test_mode_keyed_ref_is_never_rewritten(self):
         part = PartResult(RefPart("a.c", 10, 12), "SHIFTED", None, 20, 22, [])
@@ -1276,6 +1307,34 @@ class TestBumpCommit(unittest.TestCase):
 
     def tearDown(self):
         self.tmp.cleanup()
+
+    def test_refused_when_a_ref_could_not_move(self):
+        part = PartResult(
+            RefPart("a.c", 10, 12, "a.c:10-12"), "SHIFTED", None, 30, 32, []
+        )
+        report = ProfileReport(
+            name="p", repo="o/n", pin="pin", head="newhead",
+            entries=[
+                EntryReport("a.bin", "a.c:10-12, (just a note)", "SHIFTED", [part])
+            ],
+            counts={"SHIFTED": 1},
+        )
+        self.assertEqual(profile_sync.pending_recale(report), 1)
+        self.assertFalse(bump_commit(self.path, report))
+
+    def test_accepted_when_nothing_had_to_move(self):
+        part = PartResult(
+            RefPart("a.c", 10, 12, "a.c:10-12"), "ANCHORED", None, 10, 12, []
+        )
+        report = ProfileReport(
+            name="p", repo="o/n", pin="pin", head="newhead",
+            entries=[
+                EntryReport("a.bin", "a.c:10-12, (just a note)", "ANCHORED", [part])
+            ],
+            counts={"ANCHORED": 1},
+        )
+        self.assertEqual(profile_sync.pending_recale(report), 0)
+        self.assertTrue(bump_commit(self.path, report))
 
     def test_refused_while_a_changed_remains(self):
         report = ProfileReport(

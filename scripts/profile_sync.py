@@ -56,6 +56,7 @@ class RefPart:
     path: str
     start: int | None
     end: int | None
+    raw: str = ""
 
 
 @dataclass(frozen=True)
@@ -122,22 +123,41 @@ def split_source_ref(ref: str) -> list[RefPart]:
     across 50 profiles carry them.
     """
     parts: list[RefPart] = []
-    # Annotations come out first: they may contain the separators themselves,
-    # and splitting inside one would cut it into meaningless fragments.
-    cleaned = _ANNOTATION_RE.sub("", str(ref or ""))
-    for raw in _SPLIT_RE.split(cleaned):
-        chunk = _trim_prose(raw.strip())
+    for raw in split_outside_parentheses(str(ref or "")):
+        chunk = _trim_prose(_ANNOTATION_RE.sub("", raw).strip())
         if not chunk:
             continue
         if _BARE_RANGE_RE.match(chunk) and parts:
             start, _, end = chunk.partition("-")
             parts.append(
-                RefPart(parts[-1].path, int(start), int(end or start))
+                RefPart(parts[-1].path, int(start), int(end or start), raw)
             )
             continue
         path, start_line, end_line = parse_source_ref(chunk)
-        parts.append(RefPart(path, start_line, end_line))
+        parts.append(RefPart(path, start_line, end_line, raw))
     return parts
+
+
+def split_outside_parentheses(text: str) -> list[str]:
+    """Split on commas and semicolons, ignoring those inside an annotation.
+
+    Each chunk keeps its annotation, so a rewrite can put the prose back.
+    """
+    chunks: list[str] = []
+    current: list[str] = []
+    depth = 0
+    for char in text:
+        if char == "(":
+            depth += 1
+        elif char == ")":
+            depth = max(0, depth - 1)
+        if char in ",;" and depth == 0:
+            chunks.append("".join(current))
+            current = []
+        else:
+            current.append(char)
+    chunks.append("".join(current))
+    return [c for c in (chunk.strip() for chunk in chunks) if c]
 
 
 def _trim_prose(chunk: str) -> str:
@@ -734,11 +754,22 @@ def _render_span(path: str, start: int | None, end: int | None) -> str:
 
 
 def _original_part(part: PartResult) -> str:
-    return _render_span(part.part.path, part.part.start, part.part.end)
+    """The part exactly as the profile writes it today."""
+    return part.part.raw or _render_span(
+        part.part.path, part.part.start, part.part.end
+    )
 
 
 def _rendered_part(part: PartResult) -> str:
-    return _render_span(part.new_path or part.part.path, part.start, part.end)
+    """The part rewritten onto its new location, annotation preserved."""
+    span = _render_span(part.new_path or part.part.path, part.start, part.end)
+    raw = part.part.raw
+    if not raw:
+        return span
+    located = _trim_prose(_ANNOTATION_RE.sub("", raw).strip())
+    if located and located in raw:
+        return raw.replace(located, span, 1)
+    return span
 
 
 def _part_line(part: PartResult) -> str:
@@ -1088,11 +1119,18 @@ def backfill_commit(path: Path, sha: str) -> bool:
 
 
 def _is_rewritable(ref: str) -> bool:
-    """A ref carrying prose cannot be regenerated from its parsed parts."""
-    return "(" not in ref and ";" not in ref
+    """Every ref whose parts can be put back with their prose intact."""
+    parts = split_source_ref(ref)
+    if not parts:
+        return False
+    return ", ".join(p.raw for p in parts) == ", ".join(
+        chunk for chunk in split_outside_parentheses(ref)
+    )
 
 
-def rebase_refs(path: Path, report: ProfileReport) -> list[str]:
+def rebase_refs(
+    path: Path, report: ProfileReport, accept_changed: bool = False
+) -> list[str]:
     """Recale the line ranges of parts whose content is unchanged.
 
     All or nothing per profile. `source_commit` names the revision the refs
@@ -1101,7 +1139,9 @@ def rebase_refs(path: Path, report: ProfileReport) -> list[str]:
     and the next comparison would read the pinned revision at line numbers
     that only make sense at HEAD.
     """
-    if report.needs_review():
+    statuses = REBASE_STATUSES + (("CHANGED",) if accept_changed else ())
+    blocking = [s for s in REVIEW_STATUSES if s not in statuses]
+    if any((report.counts or {}).get(s) for s in blocking):
         return []
     text = path.read_text(encoding="utf-8")
     document = yaml.safe_load(text)
@@ -1121,7 +1161,7 @@ def rebase_refs(path: Path, report: ProfileReport) -> list[str]:
         rendered = []
         touched = False
         for part in entry.parts:
-            if part.status in REBASE_STATUSES and part.start is not None:
+            if part.status in statuses and part.start is not None:
                 recaled = _rendered_part(part)
                 if recaled != _original_part(part):
                     touched = True
@@ -1146,9 +1186,40 @@ def rebase_refs(path: Path, report: ProfileReport) -> list[str]:
     return applied
 
 
-def bump_commit(path: Path, report: ProfileReport) -> bool:
+def pending_recale(report: ProfileReport, accept_changed: bool = False) -> int:
+    """Parts that ought to move but sit in a ref the writer will not touch.
+
+    An annotated ref cannot be regenerated without losing its prose, so its
+    parts stay on the pinned line numbers. Advancing the pin while they do
+    would leave the profile describing two revisions at once.
+    """
+    movable = REBASE_STATUSES + (("CHANGED",) if accept_changed else ())
+    pending = 0
+    for entry in report.entries or []:
+        if _is_rewritable(entry.source_ref) and not entry.name.endswith("]"):
+            continue
+        pending += sum(
+            1
+            for part in entry.parts
+            if part.status in movable
+            and part.start is not None
+            and _rendered_part(part) != _original_part(part)
+        )
+    return pending
+
+
+def bump_commit(
+    path: Path, report: ProfileReport, accept_changed: bool = False
+) -> bool:
     """Advance source_commit to HEAD when nothing needs a read again."""
-    if report.skipped or report.needs_review() or not report.head:
+    if report.skipped or not report.head:
+        return False
+    blocking = REVIEW_STATUSES if not accept_changed else (
+        s for s in REVIEW_STATUSES if s != "CHANGED"
+    )
+    if any((report.counts or {}).get(s) for s in blocking):
+        return False
+    if pending_recale(report, accept_changed):
         return False
     text = path.read_text(encoding="utf-8")
     document = yaml.safe_load(text)
@@ -1205,6 +1276,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--backfill-commits", action="store_true")
     parser.add_argument("--rebase-refs", action="store_true")
     parser.add_argument("--bump-commit", action="store_true")
+    parser.add_argument(
+        "--accept-changed",
+        action="store_true",
+        help="recale CHANGED refs too, after their diff has been read",
+    )
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--force", action="store_true")
     parser.add_argument("--offline", action="store_true")
@@ -1261,9 +1337,13 @@ def _apply_writes(args, name: str, profile: dict, report: ProfileReport) -> None
         elif backfill_commit(path, report.pin):
             print(f"{name}: source_commit {report.pin[:7]}")
     if args.rebase_refs and not args.dry_run and not report.skipped:
-        for line in rebase_refs(path, report):
+        for line in rebase_refs(path, report, args.accept_changed):
             print(f"{name}: {line}")
-    if args.bump_commit and not args.dry_run and bump_commit(path, report):
+    if (
+        args.bump_commit
+        and not args.dry_run
+        and bump_commit(path, report, args.accept_changed)
+    ):
         print(f"{name}: source_commit -> {report.head[:7]}")
 
 
@@ -1396,6 +1476,13 @@ def _print_triage(args, selected: dict, reports: list[ProfileReport]) -> None:
 def main() -> None:
     """Build one report per selected profile, then apply writes and output."""
     args = build_parser().parse_args()
+    if args.accept_changed and not args.emulator:
+        print(
+            "--accept-changed applies to one profile at a time: its diff has "
+            "to be read before its CHANGED refs can be recaled.",
+            file=sys.stderr,
+        )
+        raise SystemExit(1)
     profiles = load_emulator_profiles(args.emulators_dir, skip_aliases=False)
     selected = select_profiles(profiles, args)
     _check_quota(len(selected), args.offline)
