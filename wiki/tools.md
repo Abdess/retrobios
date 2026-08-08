@@ -258,6 +258,11 @@ under `.cache/upstream/`, addressed by commit sha, so `--offline` replays a
 previous run. GitHub, GitLab and Forgejo upstreams; other hosts are
 reported as skipped.
 
+The forge side lives in `upstream.py`: it resolves a revision, fetches a
+file at a given sha, and compares trees, for the forge families the
+profiles point at. It knows nothing about profile structure, so anchoring
+logic and repository access stay testable apart.
+
 ### validation.py
 
 Validation index and ground truth formatting. Used by verify.py for emulator-level checks
@@ -402,7 +407,8 @@ python -m scripts.scraper.targets.batocera_targets_scraper --dry-run
 
 ## Exporters
 
-Located in `scripts/exporter/`. Each inherits `BaseExporter` and implements `export()`.
+Located in `scripts/exporter/`. Each inherits `BaseExporter`, defined in
+`base_exporter.py` with `export()` and `validate()`, and implements both.
 
 | Exporter | Output format |
 |----------|--------------|
