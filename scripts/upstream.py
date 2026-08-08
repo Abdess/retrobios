@@ -20,6 +20,9 @@ from pathlib import Path
 USER_AGENT = "retrobios-profile-sync/1.0"
 ABSENT = "\0absent\0"
 GITHUB_COMPARE_CAP = 300
+GITHUB_HOSTS = frozenset(
+    {"github.com", "api.github.com", "raw.githubusercontent.com"}
+)
 
 _HOSTS: dict[str, tuple[str, str, str]] = {
     "github.com": (
@@ -125,19 +128,20 @@ def raw_url(repo: Repo, sha: str, path: str) -> str:
     return f"{repo.raw_base}/{repo.owner}/{repo.name}/raw/commit/{sha}/{quoted}"
 
 
-def _headers(accept_json: bool = False) -> dict[str, str]:
+def _headers(url: str, accept_json: bool = False) -> dict[str, str]:
+    """Request headers. GITHUB_TOKEN is only ever sent to GitHub."""
     headers = {"User-Agent": USER_AGENT}
     if accept_json:
         headers["Accept"] = "application/json"
     token = os.environ.get("GITHUB_TOKEN", "")
-    if token:
+    if token and urllib.parse.urlsplit(url).netloc in GITHUB_HOSTS:
         headers["Authorization"] = f"token {token}"
     return headers
 
 
 def _http_text(url: str) -> str | None:
     """Body of a GET, or None on 404. Replaced in tests."""
-    req = urllib.request.Request(url, headers=_headers())
+    req = urllib.request.Request(url, headers=_headers(url))
     try:
         with urllib.request.urlopen(req, timeout=30) as resp:
             return resp.read().decode("utf-8", errors="replace")
@@ -153,7 +157,7 @@ def _http_text(url: str) -> str | None:
 
 def _http_json(url: str) -> object | None:
     """Parsed JSON body of a GET, or None on 404. Replaced in tests."""
-    req = urllib.request.Request(url, headers=_headers(accept_json=True))
+    req = urllib.request.Request(url, headers=_headers(url, accept_json=True))
     try:
         with urllib.request.urlopen(req, timeout=30) as resp:
             return json.loads(resp.read().decode())
