@@ -25,6 +25,7 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (
+    GAME_DATA_TOPS,
     compute_composition,
     list_registered_platforms,
     load_database,
@@ -925,16 +926,28 @@ def _prov_title(data: dict) -> str:
 
 def generate_provenance_page(db: dict, report: dict) -> str:
     """Page explaining the verified dump badges and listing catalog gaps."""
-    matched_files = sum(1 for f in db.get("files", {}).values() if f.get("provenance"))
-    total_files = db.get("total_files", 0)
+    # Scoped to system files: these catalogs index console and computer dumps,
+    # so arcade ROM sets and engine data can never match and would only make
+    # the ratio look worse than the work behind it.
+    matched_files = 0
+    for entry in db.get("files", {}).values():
+        if not entry.get("provenance"):
+            continue
+        parts = entry.get("path", "").split("/")
+        top = parts[1] if len(parts) > 1 else ""
+        if top != "Arcade" and top not in GAME_DATA_TOPS:
+            matched_files += 1
+    total_files = compute_composition(db)["systems"]["files"]
 
     lines = [
         f"# Dump provenance - {SITE_NAME}",
         "",
-        f"**{matched_files:,}** of {total_files:,} files match an entry in a "
-        "dump-preservation catalog. Those files carry a "
+        f"**{matched_files:,}** of {total_files:,} system files match an entry "
+        "in a dump-preservation catalog. Those files carry a "
         '<span class="rb-badge rb-badge-success">Verified dump</span> badge on '
-        "the [system pages](systems/index.md).",
+        "the [system pages](systems/index.md). Arcade ROM sets and engine data "
+        "sit outside what those catalogs index, so they are left out of the "
+        "ratio rather than counted as failures.",
         "",
         "## What the badge means",
         "",
