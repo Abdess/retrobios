@@ -6,6 +6,7 @@ on:
     paths:
       - "platforms/**"
       - "emulators/**"
+      - "provenance/**"
       - "wiki/**"
       - "scripts/generate_site.py"
       - "scripts/generate_readme.py"
@@ -37,7 +38,9 @@ jobs:
         with:
           python-version: "3.12"
 
-      - run: pip install pyyaml mkdocs-material pymdown-extensions
+      # mkdocs-material >= 9.7.5 caps mkdocs < 2; the upper bound keeps a major
+      # theme release from changing the site without a deliberate bump here.
+      - run: pip install pyyaml "mkdocs-material>=9.7.5,<10" "pymdown-extensions>=10.14"
 
       - name: Restore large files from release
         run: |
@@ -80,7 +83,7 @@ jobs:
         run: |
           python scripts/generate_site.py
           python scripts/generate_readme.py --db database.json --platforms-dir platforms
-          mkdocs build
+          mkdocs build --strict
 
       - name: Setup Pages
         uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d  # v6
