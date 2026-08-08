@@ -10,6 +10,7 @@ import contextlib
 import hashlib
 import json
 import os
+import tempfile
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -1220,7 +1221,12 @@ def fetch_large_file(
             return cached
 
     os.makedirs(dest_dir, exist_ok=True)
-    tmp_path = cached + ".tmp"
+    # A per-process scratch name: two runs fetching the same asset into one
+    # shared path interleave their writes into a full-size, corrupt file.
+    tmp_fd, tmp_path = tempfile.mkstemp(
+        dir=dest_dir, prefix=os.path.basename(cached) + ".", suffix=".tmp"
+    )
+    os.close(tmp_fd)
     # GitHub rewrites spaces to dots in release asset names, so a file whose
     # name contains spaces is published under a dotted name.
     candidates = [name]
@@ -1250,6 +1256,8 @@ def fetch_large_file(
                 os.unlink(tmp_path)
 
     if not downloaded:
+        if os.path.exists(tmp_path):
+            os.unlink(tmp_path)
         return None
 
     if expected_sha1 or expected_md5:
