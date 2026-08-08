@@ -374,7 +374,7 @@ files:
     max_size: 2097152
     sha256: "5655509a531804f97ea2d7ef05b8fec20ebf46216b389a84c44169257a4d2007"
     validation: [sha256, size]
-    source_ref: "Nuked-SC55-CLAP rom_io.cpp:340, emu.cpp:238, pcm.h:83"
+    source_ref: "Nuked-SC55-CLAP rom_io.cpp:340, Nuked-SC55-CLAP emu.cpp:238, Nuked-SC55-CLAP pcm.h:83"
 
   - name: "sc55_waverom2.bin"
     path: "soundcanvas-roms/SC-55-v1.21/sc55_waverom2.bin"
@@ -383,7 +383,7 @@ files:
     max_size: 2097152
     sha256: "c655b159792d999b90df9e4fa782cf56411ba1eaa0bb3ac2bdaf09e1391006b1"
     validation: [sha256, size]
-    source_ref: "Nuked-SC55-CLAP rom_io.cpp:342, emu.cpp:238, pcm.h:84"
+    source_ref: "Nuked-SC55-CLAP rom_io.cpp:342, Nuked-SC55-CLAP emu.cpp:238, Nuked-SC55-CLAP pcm.h:84"
 
   - name: "sc55_waverom3.bin"
     path: "soundcanvas-roms/SC-55-v1.21/sc55_waverom3.bin"
@@ -392,7 +392,7 @@ files:
     max_size: 1048576
     sha256: "334b2d16be3c2362210fdbec1c866ad58badeb0f84fd9bf5d0ac599baf077cc2"
     validation: [sha256, size]
-    source_ref: "Nuked-SC55-CLAP rom_io.cpp:344, emu.cpp:238, pcm.h:85"
+    source_ref: "Nuked-SC55-CLAP rom_io.cpp:344, Nuked-SC55-CLAP emu.cpp:238, Nuked-SC55-CLAP pcm.h:85"
 
   # -- Roland SC-55 MCU ROMs, one pair per firmware version --
 
@@ -403,7 +403,7 @@ files:
     max_size: 32768
     sha256: "b4ecf44bc0520322b0d114d397951d3bf92ca6fa51d0d27b2407df58a6be2efe"
     validation: [sha256, size]
-    source_ref: "Nuked-SC55-CLAP rom_io.cpp:336, emu.cpp:238, mcu.h:216"
+    source_ref: "Nuked-SC55-CLAP rom_io.cpp:336, Nuked-SC55-CLAP emu.cpp:238, Nuked-SC55-CLAP mcu.h:216"
 
   - name: "sc55_rom2.bin"
     path: "soundcanvas-roms/SC-55-v1.00/sc55_rom2.bin"
@@ -412,7 +412,7 @@ files:
     max_size: 524288
     sha256: "014e2e21ea30de7a1e4f1cdea14dd9a719960535e257a9e40e98dbb1a5870226"
     validation: [sha256, size]
-    source_ref: "Nuked-SC55-CLAP rom_io.cpp:338, emu.cpp:247-254, mcu.h:217"
+    source_ref: "Nuked-SC55-CLAP rom_io.cpp:338, Nuked-SC55-CLAP emu.cpp:247-254, Nuked-SC55-CLAP mcu.h:217"
 
   - name: "sc55_rom1.bin"
     path: "soundcanvas-roms/SC-55-v1.10/sc55_rom1.bin"
@@ -421,7 +421,7 @@ files:
     max_size: 32768
     sha256: "2fe88ec39f3ef4b1de8cdf74527419467975c47f7aacfcd07605e01d54bd89b5"
     validation: [sha256, size]
-    source_ref: "Nuked-SC55-CLAP rom_io.cpp:351, emu.cpp:238, mcu.h:216"
+    source_ref: "Nuked-SC55-CLAP rom_io.cpp:351, Nuked-SC55-CLAP emu.cpp:238, Nuked-SC55-CLAP mcu.h:216"
 
   - name: "sc55_rom2.bin"
     path: "soundcanvas-roms/SC-55-v1.10/sc55_rom2.bin"
@@ -430,7 +430,7 @@ files:
     max_size: 524288
     sha256: "ec064d6c4fc70ec990911089d966043cb819fba0e26e6f6afdd0a05e5301b91b"
     validation: [sha256, size]
-    source_ref: "Nuked-SC55-CLAP rom_io.cpp:353, emu.cpp:247-254, mcu.h:217"
+    source_ref: "Nuked-SC55-CLAP rom_io.cpp:353, Nuked-SC55-CLAP emu.cpp:247-254, Nuked-SC55-CLAP mcu.h:217"
 
   - name: "sc55_rom1.bin"
     path: "soundcanvas-roms/SC-55-v1.20/sc55_rom1.bin"
@@ -440,7 +440,7 @@ files:
     sha256: "7e1bacd1d7c62ed66e465ba05597dcd60dfc13fc23de0287fdbce6cf906c6544"
     validation: [sha256, size]
     note: "same dump in the SC-55-v1.20 and SC-55-v1.21 directories"
-    source_ref: "Nuked-SC55-CLAP rom_io.cpp:366,381, emu.cpp:238, mcu.h:216"
+    source_ref: "Nuked-SC55-CLAP rom_io.cpp:366, Nuked-SC55-CLAP 381, Nuked-SC55-CLAP emu.cpp:238, Nuked-SC55-CLAP mcu.h:216"
 
   - name: "sc55_rom2.bin"
     path: "soundcanvas-roms/SC-55-v1.20/sc55_rom2.bin"
@@ -449,7 +449,7 @@ files:
     max_size: 524288
     sha256: "22ce6ca59e6332143b335525e81fab501ea6fccce4b7e2f3bfc2cc8bf6612ff6"
     validation: [sha256, size]
-    source_ref: "Nuked-SC55-CLAP rom_io.cpp:368, emu.cpp:247-254, mcu.h:217"
+    source_ref: "Nuked-SC55-CLAP rom_io.cpp:368, Nuked-SC55-CLAP emu.cpp:247-254, Nuked-SC55-CLAP mcu.h:217"
 
   - name: "sc55_rom2.bin"
     path: "soundcanvas-roms/SC-55-v1.21/sc55_rom2.bin"
@@ -458,7 +458,7 @@ files:
     max_size: 524288
     sha256: "effc6132d68f7e300aaef915ccdd08aba93606c22d23e580daf9ea6617913af1"
     validation: [sha256, size]
-    source_ref: "Nuked-SC55-CLAP rom_io.cpp:383, emu.cpp:247-254, mcu.h:217"
+    source_ref: "Nuked-SC55-CLAP rom_io.cpp:383, Nuked-SC55-CLAP emu.cpp:247-254, Nuked-SC55-CLAP mcu.h:217"
 
   - name: "sc55_rom1.bin"
     path: "soundcanvas-roms/SC-55-v2.00/sc55_rom1.bin"
@@ -467,7 +467,7 @@ files:
     max_size: 32768
     sha256: "24a65c97cdbaa847d6f59193523ce63c73394b4b693a6517ee79441f2fb8a3ee"
     validation: [sha256, size]
-    source_ref: "Nuked-SC55-CLAP rom_io.cpp:396, emu.cpp:238, mcu.h:216"
+    source_ref: "Nuked-SC55-CLAP rom_io.cpp:396, Nuked-SC55-CLAP emu.cpp:238, Nuked-SC55-CLAP mcu.h:216"
 
   - name: "sc55_rom2.bin"
     path: "soundcanvas-roms/SC-55-v2.00/sc55_rom2.bin"
@@ -476,7 +476,7 @@ files:
     max_size: 524288
     sha256: "f5dac35d450ab986570a209dff3816eec75cee669e161f54b51224b467dd0bcc"
     validation: [sha256, size]
-    source_ref: "Nuked-SC55-CLAP rom_io.cpp:398, emu.cpp:247-254, mcu.h:217"
+    source_ref: "Nuked-SC55-CLAP rom_io.cpp:398, Nuked-SC55-CLAP emu.cpp:247-254, Nuked-SC55-CLAP mcu.h:217"
 
   # -- Roland SC-55mk2 v1.01 --
 
@@ -487,7 +487,7 @@ files:
     max_size: 32768
     sha256: "8a1eb33c7599b746c0c50283e4349a1bb1773b5c0ec0e9661219bf6c067d2042"
     validation: [sha256, size]
-    source_ref: "Nuked-SC55-CLAP rom_io.cpp:295, emu.cpp:238, mcu.h:216"
+    source_ref: "Nuked-SC55-CLAP rom_io.cpp:295, Nuked-SC55-CLAP emu.cpp:238, Nuked-SC55-CLAP mcu.h:216"
 
   - name: "rom2.bin"
     path: "soundcanvas-roms/SC-55mk2-v1.01/rom2.bin"
@@ -496,7 +496,7 @@ files:
     max_size: 524288
     sha256: "a4c9fd821059054c7e7681d61f49ce6f42ed2fe407a7ec1ba0dfdc9722582ce0"
     validation: [sha256, size]
-    source_ref: "Nuked-SC55-CLAP rom_io.cpp:297, emu.cpp:247-254, mcu.h:217"
+    source_ref: "Nuked-SC55-CLAP rom_io.cpp:297, Nuked-SC55-CLAP emu.cpp:247-254, Nuked-SC55-CLAP mcu.h:217"
 
   - name: "rom_sm.bin"
     path: "soundcanvas-roms/SC-55mk2-v1.01/rom_sm.bin"
@@ -505,7 +505,7 @@ files:
     max_size: 4096
     sha256: "b0b5f865a403f7308b4be8d0ed3ba2ed1c22db881b8a8326769dea222f6431d8"
     validation: [sha256, size]
-    source_ref: "Nuked-SC55-CLAP rom_io.cpp:299, emu.cpp:238, submcu.h:62"
+    source_ref: "Nuked-SC55-CLAP rom_io.cpp:299, Nuked-SC55-CLAP emu.cpp:238, Nuked-SC55-CLAP submcu.h:62"
 
   - name: "waverom1.bin"
     path: "soundcanvas-roms/SC-55mk2-v1.01/waverom1.bin"
@@ -514,7 +514,7 @@ files:
     max_size: 2097152
     sha256: "c6429e21b9b3a02fbd68ef0b2053668433bee0bccd537a71841bc70b8874243b"
     validation: [sha256, size]
-    source_ref: "Nuked-SC55-CLAP rom_io.cpp:301, emu.cpp:238, pcm.h:83"
+    source_ref: "Nuked-SC55-CLAP rom_io.cpp:301, Nuked-SC55-CLAP emu.cpp:238, Nuked-SC55-CLAP pcm.h:83"
 
   - name: "waverom2.bin"
     path: "soundcanvas-roms/SC-55mk2-v1.01/waverom2.bin"
@@ -523,7 +523,7 @@ files:
     max_size: 2097152
     sha256: "5b753f6cef4cfc7fcafe1430fecbb94a739b874e55356246a46abe24097ee491"
     validation: [sha256, size]
-    source_ref: "Nuked-SC55-CLAP rom_io.cpp:303, emu.cpp:238, pcm.h:84"
+    source_ref: "Nuked-SC55-CLAP rom_io.cpp:303, Nuked-SC55-CLAP emu.cpp:238, Nuked-SC55-CLAP pcm.h:84"
 
   # -- SC-55mk2 program ROMs with Capital Tone Fallback restored --
   # Accepted in place of the stock SC-55mk2 program ROM.
