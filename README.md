@@ -9,7 +9,7 @@
 
 Complete BIOS and firmware packs for Batocera, BizHawk, EmuDeck, Lakka, MiSTer FPGA, ROCKNIX, Recalbox, RetroArch, RetroBat, RetroDECK, RetroPie, and RomM.
 
-**7,649** verified files across **396** systems, ready to extract into your emulator's BIOS directory.
+**7,651** verified files across **396** systems, ready to extract into your emulator's BIOS directory.
 
 ## Quick Install
 
@@ -53,11 +53,11 @@ BIOS, firmware, and system files for consoles from Atari to PlayStation 3.
 Every file passes its platform's own verification; where an emulator profile exists, the expected hashes and sizes are read from the emulator's source code (the Source-backed column below).
 
 - **12 platforms** supported with platform-specific verification
-- **311 emulators** profiled from source (RetroArch cores + standalone)
+- **313 emulators** profiled from source (RetroArch cores + standalone)
 - **396 systems** covered (NES, SNES, PlayStation, Saturn, Dreamcast, ...)
-- **7,649 files** verified with MD5, SHA1, CRC32 checksums
-- **144 files** matched to dump-preservation catalogs (Redump)
-- **9635 MB** total collection size
+- **7,651 files** verified with MD5, SHA1, CRC32 checksums: 2,366 system files, 2,746 arcade ROM sets, 2,539 game and engine data files
+- **527 files** matched to dump-preservation catalogs (No-Intro, Redump, TOSEC)
+- **9832 MB** total collection size
 
 ## Supported systems
 
@@ -120,7 +120,7 @@ The [documentation site](https://abdess.github.io/retrobios/) provides:
 - **Per-emulator profiles** with source code references for every file
 - **Per-system pages** showing which emulators and platforms cover each console
 - **Gap analysis** identifying missing files and undeclared core requirements
-- **Cross-reference** mapping files across 12 platforms and 311 emulators
+- **Cross-reference** mapping files across 12 platforms and 313 emulators
 
 ## How it works
 
@@ -157,4 +157,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software.
 The legal reasoning is laid out in the [FAQ](https://abdess.github.io/retrobios/wiki/faq/#is-this-legal).
 
-*Auto-generated on 2026-08-07T17:52:48Z*
+*Auto-generated on 2026-08-08T00:28:41Z*
