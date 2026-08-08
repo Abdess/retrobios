@@ -3,7 +3,7 @@ type: standalone
 source: "https://github.com/ares-emulator/ares"
 upstream: "https://github.com/ares-emulator/ares"
 profiled_date: "2026-03-26"
-source_commit: "dfa6ec0c79dc88cadd62936777ba8a2e83306c7d"
+source_commit: "b80f67d38312648d197762121c3a27b02c0887db"
 core_version: "v147"
 display_name: "ares"
 cores: [ares]
@@ -191,15 +191,19 @@ files:
     system: mega-ld
     required: true
     mode: standalone
-    description: "LaserActive SEGA PAC BIOS (US)"
-    source_ref: "desktop-ui/emulator/mega-ld.cpp:18"
+    sha256: "e89b5a319f66406611ec82fe5c4aa6827c175a05135bd7bd177366cba0465021"
+    validation: [sha256]
+    description: "LaserActive SEGA PAC BIOS (US), v1.04"
+    source_ref: "desktop-ui/emulator/mega-ld.cpp:16"
 
   - name: mega_ld_bios_J.bin
     system: mega-ld
     required: true
     mode: standalone
-    description: "LaserActive SEGA PAC BIOS (Japan)"
-    source_ref: "desktop-ui/emulator/mega-ld.cpp:19"
+    sha256: "dca942d977217f703d8d1c6eb1aeb6b32c78ecc421486bbb46c459d385161c94"
+    validation: [sha256]
+    description: "LaserActive SEGA PAC BIOS (Japan), v1.02"
+    source_ref: "desktop-ui/emulator/mega-ld.cpp:17"
 
   # --- MSX ---
   - name: MSX.ROM
@@ -339,7 +343,7 @@ files:
     sha256: "0e87a3385a27b3a4cac51934819b7eefa5b3d690768d2495633838488cd0e2e4"
     validation: [sha256]
     description: "NEC PAC-N10 LaserActive module (US)"
-    source_ref: "desktop-ui/emulator/pc-engine-ld.cpp:14"
+    source_ref: "desktop-ui/emulator/pc-engine-ld.cpp:18"
 
   - name: pac-n1.pce
     system: pc-engine-ld
@@ -357,7 +361,7 @@ files:
     sha256: "3f43b3b577117d84002e99cb0baeb97b0d65b1d70b4adadc68817185c6a687f0"
     validation: [sha256]
     description: "NEC PCE-LP1 LaserActive module (Japan)"
-    source_ref: "desktop-ui/emulator/pc-engine-ld.cpp:16"
+    source_ref: "desktop-ui/emulator/pc-engine-ld.cpp:20"
 
   # --- PlayStation ---
   - name: scph5501.bin
