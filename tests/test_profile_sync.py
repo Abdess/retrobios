@@ -656,6 +656,51 @@ class TestFormatReport(unittest.TestCase):
         self.assertNotIn("a.c:2-4", text)
 
 
+class TestRunResilience(unittest.TestCase):
+    """One unreachable forge must not abandon the other profiles."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self._orig = profile_sync.upstream.resolve_commit_at
+        self.seen: list[str] = []
+
+        def flaky(repo, date, cache_dir, offline=False):
+            self.seen.append(repo.slug)
+            if repo.slug == "o/bad":
+                raise profile_sync.upstream.UpstreamError("HTTP 401")
+            return "pinsha"
+
+        profile_sync.upstream.resolve_commit_at = flaky
+
+    def tearDown(self):
+        profile_sync.upstream.resolve_commit_at = self._orig
+        self.tmp.cleanup()
+
+    def test_upstream_error_becomes_a_skip(self):
+        profile = {
+            "emulator": "T",
+            "source": "https://github.com/o/bad",
+            "profiled_date": "2026-03-29",
+            "files": [{"name": "a.bin", "source_ref": "a.c:1"}],
+        }
+        with self.assertRaises(profile_sync.upstream.UpstreamError):
+            build_report("bad", profile, self.tmp.name)
+
+    def test_rate_limit_still_propagates(self):
+        def limited(repo, date, cache_dir, offline=False):
+            raise profile_sync.upstream.RateLimitError("HTTP 403")
+
+        profile_sync.upstream.resolve_commit_at = limited
+        profile = {
+            "emulator": "T",
+            "source": "https://github.com/o/n",
+            "profiled_date": "2026-03-29",
+            "files": [{"name": "a.bin", "source_ref": "a.c:1"}],
+        }
+        with self.assertRaises(profile_sync.upstream.RateLimitError):
+            build_report("x", profile, self.tmp.name)
+
+
 class TestElidedSummary(unittest.TestCase):
     def test_groups_untouched_profiles_by_reason(self):
         reports = [

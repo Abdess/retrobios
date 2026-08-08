@@ -1182,7 +1182,16 @@ def main() -> None:
 
     reports = []
     for name, profile in selected.items():
-        report = build_report(name, profile, args.cache_dir, args.offline)
+        try:
+            report = build_report(name, profile, args.cache_dir, args.offline)
+        except upstream.RateLimitError:
+            raise
+        except upstream.UpstreamError as exc:
+            # One unreachable forge must not abandon the other profiles.
+            print(f"{name}: {exc}", file=sys.stderr)
+            report = ProfileReport(
+                name=name, entries=[], counts={}, skipped=f"upstream error: {exc}"
+            )
         reports.append(report)
         if writes:
             _apply_writes(args, name, profile, report)
