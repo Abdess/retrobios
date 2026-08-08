@@ -6,7 +6,7 @@ upstream: "https://github.com/mamedev/mame"
 logo: "https://raw.githubusercontent.com/mamedev/mame/master/docs/source/images/MAMElogo.svg"
 profiled_date: "2026-03-29"
 source_commit: "c4127c164af8fcf0aea781cc039aaf9b8044696d"
-core_version: "0.287"
+core_version: "0.289"
 display_name: "Arcade (MAME)"
 
 cores:
@@ -551,7 +551,7 @@ files:
     required: true
     category: bios_zip
     system: sammy-atomiswave
-    source_ref: "src/mame/sega/dc_atomiswave.cpp:1480"
+    source_ref: "src/mame/sega/dc_atomiswave.cpp:1519"
     contents:
       - name: bios0.ic23
         size: 131072
@@ -688,7 +688,7 @@ files:
     required: true
     category: bios_zip
     system: sega-stv
-    source_ref: "src/mame/sega/stv.cpp:3948"
+    source_ref: "src/mame/sega/stv.cpp:4068"
     contents:
       - name: epr-23603.ic8
         size: 524288
@@ -906,7 +906,7 @@ files:
     required: true
     category: bios_zip
     system: sega-triforce
-    source_ref: "src/mame/sega/triforce.cpp:1316"
+    source_ref: "src/mame/sega/triforce.cpp:1310"
     contents:
       - name: triforce_bootrom.bin
         size: 2097152
@@ -926,7 +926,7 @@ files:
   - name: sammymdl.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/sigma/sammymdl.cpp:1023"
+    source_ref: "src/mame/sigma/sammymdl.cpp:1025"
     contents:
       - name: vm1211l01.u2
         description: IPL Ver. 5.0
@@ -949,7 +949,7 @@ files:
     required: true
     category: bios_zip
     system: sega-megaplay
-    source_ref: "src/mame/sega/megaplay.cpp:1020"
+    source_ref: "src/mame/sega/megaplay.cpp:1018"
     contents:
       - name: ep15294.ic2
         size: 131072
@@ -989,7 +989,7 @@ files:
     required: true
     category: bios_zip
     system: sega-megatech
-    source_ref: "src/mame/sega/megatech.cpp:1418"
+    source_ref: "src/mame/sega/megatech.cpp:1430"
     contents:
       - name: epr-12664.20
         description: Ver 1
@@ -1225,7 +1225,7 @@ files:
     required: true
     category: bios_zip
     system: nintendo-playch10
-    source_ref: "src/mame/nintendo/playch10.cpp:2978"
+    source_ref: "src/mame/nintendo/playch10.cpp:2981"
     contents:
       - name: pch1-c__8t_e-2.8t
         size: 16384
@@ -1401,7 +1401,7 @@ files:
     required: true
     category: bios_zip
     system: commodore-cubo
-    source_ref: "src/mame/amiga/cubo.cpp:1437"
+    source_ref: "src/mame/amiga/cubo.cpp:1435"
     contents:
       - name: 391640-03.u6a
         size: 1048576
@@ -1435,7 +1435,7 @@ files:
     required: true
     category: bios_zip
     system: namco-system573
-    source_ref: "src/mame/konami/ksys573.cpp:6541"
+    source_ref: "src/mame/konami/ksys573.cpp:6415"
     contents:
       - name: 700a01.22g
         description: Standard
@@ -1483,7 +1483,7 @@ files:
     required: true
     category: bios_zip
     system: konami-gv
-    source_ref: "src/mame/konami/konamigv.cpp:1450"
+    source_ref: "src/mame/konami/konamigv.cpp:1447"
     contents:
       - name: 999a01.7e
         size: 524288
@@ -1493,7 +1493,7 @@ files:
   - name: kviper.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/konami/viper.cpp:3159"
+    source_ref: "src/mame/konami/viper.cpp:3213"
     contents:
       - name: 941b01.u25
         size: 262144
@@ -1517,7 +1517,7 @@ files:
   - name: bubsys.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/konami/nemesis.cpp:3246"
+    source_ref: "src/mame/konami/nemesis.cpp:3140"
     contents:
       - name: boot.bin
         size: 480
@@ -1571,7 +1571,7 @@ files:
     required: true
     category: bios_zip
     system: capcom-zn1
-    source_ref: "src/mame/sony/zn.cpp:5971"
+    source_ref: "src/mame/sony/zn.cpp:5969"
     contents:
       - name: m534002c-13.ic353
         description: japan
@@ -1592,7 +1592,7 @@ files:
     required: true
     category: bios_zip
     system: capcom-zn2
-    source_ref: "src/mame/sony/zn.cpp:6057"
+    source_ref: "src/mame/sony/zn.cpp:6055"
     contents:
       - name: m534002c-59.ic353
         size: 524288
@@ -1606,7 +1606,7 @@ files:
   - name: coh1000t.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/sony/zn.cpp:5991"
+    source_ref: "src/mame/sony/zn.cpp:5989"
     contents:
       - name: m534002c-14.ic353
         size: 524288
@@ -1620,7 +1620,7 @@ files:
   - name: coh1000a.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/sony/zn.cpp:6017"
+    source_ref: "src/mame/sony/zn.cpp:6015"
     contents:
       - name: m534002c-15.ic353
         size: 524288
@@ -1662,7 +1662,7 @@ files:
   - name: coh1002v.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/sony/zn.cpp:6034"
+    source_ref: "src/mame/sony/zn.cpp:6032"
     contents:
       - name: coh-1002v.ic353
         size: 524288
@@ -1676,7 +1676,7 @@ files:
   - name: coh1002e.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/sony/zn.cpp:6040"
+    source_ref: "src/mame/sony/zn.cpp:6038"
     contents:
       - name: m27c402cz-54.ic353
         size: 524288
@@ -1690,7 +1690,7 @@ files:
   - name: coh1002m.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/sony/zn.cpp:6091"
+    source_ref: "src/mame/sony/zn.cpp:6089"
     contents:
       - name: m534002c-61.ic353
         size: 524288
@@ -1705,7 +1705,7 @@ files:
   - name: coh3002t.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/sony/taitogn.cpp:1377"
+    source_ref: "src/mame/sony/taitogn.cpp:1341"
     contents:
       - name: m534002c-60.ic353
         size: 524288
@@ -1747,7 +1747,7 @@ files:
   - name: coh1002t.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/sony/taitogn.cpp:1378"
+    source_ref: "src/mame/sony/taitogn.cpp:1342"
     contents:
       - name: m534002c-14.ic353
         size: 524288
@@ -1769,7 +1769,7 @@ files:
   - name: taitotz.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/taito/taitotz.cpp:3018"
+    source_ref: "src/mame/taito/taitotz.cpp:3016"
     contents:
       - name: e68-05-1.ic6
         size: 524288
@@ -1785,7 +1785,7 @@ files:
     required: true
     category: bios_zip
     system: super-kaneko-nova
-    source_ref: "src/mame/kaneko/suprnova.cpp:2185"
+    source_ref: "src/mame/kaneko/suprnova.cpp:2135"
     contents:
       - name: sknsj1.u10
         size: 524288
@@ -1882,7 +1882,7 @@ files:
     required: true
     category: bios_zip
     system: hyper-neogeo64
-    source_ref: "src/mame/snk/hng64.cpp:3235"
+    source_ref: "src/mame/snk/hng64.cpp:3238"
     contents:
       - name: brom1.bin
         size: 524288
@@ -2097,7 +2097,7 @@ files:
   - name: maxaflex.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/atari/maxaflex.cpp:447"
+    source_ref: "src/mame/atari/maxaflex.cpp:448"
     contents:
       - name: atarixl.rom
         size: 16384
@@ -2575,7 +2575,7 @@ files:
   - name: gp_110.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/pinball/gp_1.cpp:573"
+    source_ref: "src/mame/pinball/gp_1.cpp:575"
     contents:
       - name: a-110.u12
         size: 2048
@@ -2589,7 +2589,7 @@ files:
   - name: gts1.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/pinball/gts1.cpp:1066"
+    source_ref: "src/mame/pinball/gts1.cpp:1070"
     contents:
       - name: a1752cf.u5
         size: 2048
@@ -3078,7 +3078,7 @@ files:
   - name: v4bios.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/barcrest/mpu4vid.cpp:8700"
+    source_ref: "src/mame/barcrest/mpu4vid.cpp:8698"
     contents:
       - name: vid.p1
         size: 65536
@@ -3098,7 +3098,7 @@ files:
   - name: pumpitup.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/misc/xtom3d.cpp:998"
+    source_ref: "src/mame/misc/xtom3d.cpp:997"
     contents:
       - name: mk3_1.0_bios.u22
         description: mk3 v1.0
@@ -3543,11 +3543,11 @@ files:
     source_ref: "src/mame/vtech/crvision.cpp:955-959"
     note: "Salora Manager (Finnish variant)"
     contents:
-      - name: "01"
+      - name: 01
         description: ROM bank 0-1
         size: 8192
         crc32: "702f4cf5"
-      - name: "23"
+      - name: 23
         description: ROM bank 2-3
         size: 8192
         crc32: "46489d88"

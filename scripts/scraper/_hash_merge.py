@@ -8,11 +8,15 @@ Supports two strategies:
 from __future__ import annotations
 
 import json
+import re
 import shutil
 from pathlib import Path
 from typing import Any
 
 import yaml
+
+
+_MAME_RELEASE_RE = re.compile(r"^0\.\d+")
 
 
 def merge_mame_profile(
@@ -34,10 +38,11 @@ def merge_mame_profile(
     profile = _load_yaml(profile_path)
     hashes = _load_json(hashes_path)
 
-    # Only MAME itself carries the upstream version. A derivative pins its own
-    # release line: same_cdi and a7800 would otherwise be relabelled with a
-    # MAME version they were never built from.
-    if add_new:
+    # The version follows the refs only for profiles already labelled with a
+    # MAME release. A derivative pins its own line: same_cdi ("Git") and a7800
+    # ("5.2") would otherwise be relabelled with a MAME version they were
+    # never built from.
+    if _MAME_RELEASE_RE.match(str(profile.get("core_version") or "")):
         profile["core_version"] = hashes.get("version", profile.get("core_version"))
 
     files = profile.get("files", [])

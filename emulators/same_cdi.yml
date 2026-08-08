@@ -59,12 +59,12 @@ files:
         size: 524288
         crc32: "584c0af8"
         sha1: "5d757ab46b8c8fc36361555d978d7af768342d47"
-      - name: "zx405037p__cdi_servo_2.1__b43t__llek9215.mc68hc705c8a_withtestrom.7201"
+      - name: zx405037p__cdi_servo_2.1__b43t__llek9215.mc68hc705c8a_withtestrom.7201
         description: Servo MCU 2.1 MC68HC705C8A (BAD_DUMP, from cdi910)
         size: 8192
         crc32: "7a3af407"
         sha1: "fdf8d78d6a0df4a56b5b963d72eabd39fcec163f"
-      - name: "zx405042p__cdi_slave_2.0__b43t__zzmk9213.mc68hc705c8a_withtestrom.7206"
+      - name: zx405042p__cdi_slave_2.0__b43t__zzmk9213.mc68hc705c8a_withtestrom.7206
         description: Slave MCU 2.0 MC68HC705C8A (BAD_DUMP, from cdi910)
         size: 8192
         crc32: "688cda63"
@@ -78,17 +78,17 @@ files:
     note: "CD-i Mono-II (NTSC). MACHINE_NOT_WORKING. Listed in .info as optional."
     source_ref: "src/mame/drivers/cdi.cpp:337-346"
     contents:
-      - name: "philips__cdi-220_ph3_r1.2__mb834200b-15__02f_aa__9402_z04.tc574200-le._1.7211"
+      - name: philips__cdi-220_ph3_r1.2__mb834200b-15__02f_aa__9402_z04.tc574200-le._1.7211
         description: Mono-II main CPU BIOS, Philips CDI-220 PH3 R1.2
         size: 524288
         crc32: "17d723e7"
         sha1: "6c317a82e35d60ca5e7a74fc99f665055693169d"
-      - name: "zc405351p__servo_cdi_4.1__0d67p__lluk9404.mc68hc705c8a.7490"
+      - name: zc405351p__servo_cdi_4.1__0d67p__lluk9404.mc68hc705c8a.7490
         description: Mono-II servo MCU 4.1
         size: 8192
         crc32: "2bc8e4e9"
         sha1: "8cd052b532fc052d6b0077261c12f800e8655bb1"
-      - name: "zc405352p__slave_cdi_4.1__0d67p__lltr9403.mc68hc705c8a.7206"
+      - name: zc405352p__slave_cdi_4.1__0d67p__lltr9403.mc68hc705c8a.7206
         description: Mono-II slave MCU 4.1
         size: 8192
         crc32: "5b19da07"
@@ -100,23 +100,23 @@ files:
     system: cdi
     required: false
     note: "CD-i BIOS for Quizard arcade. MACHINE_IS_BIOS_ROOT. Subset of cdimono1 + slave MCU."
-    source_ref: "src/mame/drivers/cdi.cpp:630-640"
+    source_ref: "src/mame/philips/cdi.cpp:922"
     contents:
       - name: cdi200.rom
-        description: Magnavox CD-i 200 BIOS (same as cdimono1)
+        description: Magnavox CD-i 200
         size: 524288
         crc32: "40c4e6b9"
         sha1: "d961de803c89b3d1902d656ceb9ce7c02dccb40a"
       - name: cdi220b.rom
-        description: Philips CD-i 220 F2 BIOS (same as cdimono1)
+        description: Philips CD-i 220 F2
         size: 524288
         crc32: "279683ca"
         sha1: "53360a1f21ddac952e95306ced64186a3fc0b93e"
-      - name: "zx405042p__cdi_slave_2.0__b43t__zzmk9213.mc68hc705c8a_withtestrom.7206"
-        description: Slave MCU 2.0 (BAD_DUMP, same as cdimono1)
+      - name: zx405042p__cdi_slave_2.0__b43t__zzmk9213.mc68hc705c8a_withtestrom.7206
         size: 8192
         crc32: "688cda63"
         sha1: "56d0acd7caad51c7de703247cd6d842b36173079"
+        bad_dump: true
 
   - name: cdi910.zip
     path: "same_cdi/bios/cdi910.zip"
@@ -126,7 +126,7 @@ files:
     note: "CD-i 910-17P Mini-MMC (PAL). MACHINE_NOT_WORKING. Not in .info firmware list."
     source_ref: "src/mame/drivers/cdi.cpp:319-335"
     contents:
-      - name: "philips__cd-i_2.1__mb834200b-15__26b_aa__9224_z01.tc574200.7211"
+      - name: philips__cd-i_2.1__mb834200b-15__26b_aa__9224_z01.tc574200.7211
         description: CD-i 910-17P Mini-MMC BIOS (default)
         size: 524288
         crc32: "4ae3bee3"
@@ -136,22 +136,22 @@ files:
         size: 524288
         crc32: "2f3048d2"
         sha1: "11c4c3e602060518b52e77156345fa01f619e793"
-      - name: "zx405037p__cdi_servo_2.1__b43t__llek9215.mc68hc705c8a_withtestrom.7201"
+      - name: zx405037p__cdi_servo_2.1__b43t__llek9215.mc68hc705c8a_withtestrom.7201
         description: Servo MCU 2.1 (same ROM as cdimono1, not BAD_DUMP here)
         size: 8192
         crc32: "7a3af407"
         sha1: "fdf8d78d6a0df4a56b5b963d72eabd39fcec163f"
-      - name: "zx405042p__cdi_slave_2.0__b43t__zzmk9213.mc68hc705c8a_withtestrom.7206"
+      - name: zx405042p__cdi_slave_2.0__b43t__zzmk9213.mc68hc705c8a_withtestrom.7206
         description: Slave MCU 2.0 (same ROM as cdimono1, not BAD_DUMP here)
         size: 8192
         crc32: "688cda63"
         sha1: "56d0acd7caad51c7de703247cd6d842b36173079"
-      - name: "ti_portugal_206xf__tibpal20l8-15cnt__m7205n.7205.bin"
+      - name: ti_portugal_206xf__tibpal20l8-15cnt__m7205n.7205.bin
         description: PAL chip dump
         size: 324
         crc32: "dd167e0d"
         sha1: "2ba82a4619d7a0f19e62e02a2841afd4d45d56ba"
-      - name: "ti_portugal_774_206xf__tibpal16l8-10cn_m7204n.7204.bin"
+      - name: ti_portugal_774_206xf__tibpal16l8-10cn_m7204n.7204.bin
         description: PAL chip dump
         size: 260
         crc32: "04e6bd37"

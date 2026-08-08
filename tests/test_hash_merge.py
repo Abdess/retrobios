@@ -497,12 +497,12 @@ class TestDerivativeVersion(unittest.TestCase):
         },
     }
 
-    def _run(self, add_new):
+    def _run(self, add_new, version="Git"):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             prof = _write_yaml(root / "p.yml", {
                 "emulator": "SAME CDi",
-                "core_version": "Git",
+                "core_version": version,
                 "files": [{"name": "cdibios.zip", "category": "bios_zip",
                            "source_ref": "old.cpp:1", "contents": []}],
             })
@@ -514,9 +514,11 @@ class TestDerivativeVersion(unittest.TestCase):
 
     def test_a_derivative_keeps_its_own_version(self):
         self.assertEqual(self._run(add_new=False)["core_version"], "Git")
+        self.assertEqual(self._run(add_new=True)["core_version"], "Git")
 
-    def test_the_main_profile_takes_the_upstream_version(self):
-        self.assertEqual(self._run(add_new=True)["core_version"], "0.289")
+    def test_a_profile_labelled_with_a_mame_release_follows_it(self):
+        merged = self._run(add_new=False, version="0.287")
+        self.assertEqual(merged["core_version"], "0.289")
 
     def test_the_ref_is_refreshed_either_way(self):
         for add_new in (False, True):
