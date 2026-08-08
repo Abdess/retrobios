@@ -1,0 +1,1036 @@
+; EVENT.DAT Version 0.4
+;
+; Data for the "Event" and "Safe Quit" systems of AdvanceMAME
+;
+; This is the logic behind the "Safe Quit" engine:
+; 
+; IF (number of credits in game = 0) AND (game is in demo mode)
+;       enable the safequit (game can exit when asked)
+; ELSE
+;       disable the safequit (game will show a confirmation screen)
+;
+; This file can be edited with a text editor, but keep the same format:
+; all fields are separated by a colon (:)
+;
+; <gamename>:
+; <event>:<cpu>:<address>:<action>:<mask>:<result>
+; [repeat the above as many times as necessary]
+;
+; The rule apply to "gamename" and any clone. To override the definition
+; for a clone put it after (and not before) the parent definition.
+;
+; For <action> = match
+; Load <gamename> and get the value inside <address> on CPU <cpu> RAM area.
+; Perform an AND operation with <mask> and compare with <result>.
+; If they DO match for at least one second the  event <event> is TRUE.
+;
+; For <action> = nomatch
+; Load <gamename> and get the value inside <address> on CPU <cpu> RAM area.
+; Perform an AND operation with <mask> and compare with <result>.
+; If they DO NOT match for at least one second the event <event> is TRUE.
+;
+; For <action> = on
+; The result is always TRUE.
+;
+; For <action> = off
+; The result is always FALSE.
+;
+; To enable the event, all listed actions must be TRUE.
+; An event assumes the value FALSE immediately. To assume the value TRUE
+; it's necessary ** ALL ITS COMPONENTS ** are TRUE for at least 1 second.
+;
+; The field <event> can be "zerocoin" or "demomode" for the "Safe Quit"
+; system or "event1", "event2", ..., "event14" for the "Event" system.
+;
+; The event "zerocoin" tests the "waiting coins" (not yet played).
+; I searched for addresses corresponding to coin slot 1 only, but you are
+; welcome to include addresses for other coin slots too.
+;
+; The event "demomode" tests the current game status. In some games it's
+; necessary more than one address to determine the current game status.
+; I call them "event components": a game is in play mode if any of the
+; demomode components are FALSE. When all are TRUE together for at least
+; one second then the event "demomode" is TRUE.
+;
+; Depending on the dipswitch setting about number of coin slots and
+; simultaneous players, the address of the waiting coins may differ;
+; an example of this behaviour is dino. The addresses in this file were
+; found on games with 2 simultaneous players and one active coin slot.
+; This doesn't mean they won't work on games configured for 3, 4 or more
+; simultaneous players.
+;
+;
+; HISTORY
+;
+; Version 0.4
+; * Remove the clone name specifications, they are now automatic.
+; * Added a few games.
+; * Removed all the empty specifications.
+;
+; Version 0.3
+; * Renamed in event.dat
+; * Renamed action 00 in "match" and 01 in "nomatch".
+; * Minor fixes on the format
+;
+; Version 0.2 * released by Bugfinder *
+; * This version supports a total of 551 (+31) games and clones.
+;
+;
+; AUTHORS
+;
+; The following people have contributed to this file:
+;
+; Filipe de V. Estima (Bugfinder)
+;
+; If you discover addresses for other games then please
+; send your submissions to mamebugfinder@hotmail.com
+;
+
+1942:
+zerocoin:0:e011:match:ff:00
+demomode:0:e000:match:ff:00
+
+1943:
+1943kai:
+zerocoin:0:e312:match:ff:00
+demomode:0:e310:match:ff:00
+
+invaders:
+zerocoin:0:20eb:match:ff:00
+demomode:0:20e7:match:01:00
+demomode:0:20ef:match:01:00
+
+amidar:
+turtles:
+zerocoin:0:8002:match:ff:00
+demomode:0:8006:match:ff:00
+
+argus:
+zerocoin:0:e021:match:ff:00
+demomode:0:e000:match:f0:00
+
+butasan:
+zerocoin:0:e018:match:ff:00
+demomode:0:e000:match:ff:03
+
+valtric:
+zerocoin:0:e018:match:ff:00
+demomode:0:e001:match:0f:00
+
+atetris:
+zerocoin:0:0051:match:ff:00
+demomode:0:00c2:match:ff:00
+
+; In bagman and clones, when you start a 2 players game the address
+; where the game stores the play mode takes more than 4 seconds
+; to be updated after pressing 2P start.
+; In sbagman this time is reduced to a little more than a second.
+bagman:
+sbagman:
+zerocoin:0:6000:match:ff:00
+demomode:0:6210:match:ff:00
+
+pickin:
+zerocoin:0:7000:match:ff:00
+demomode:0:7053:match:ff:00
+
+bankp:
+zerocoin:0:e009:match:ff:00
+demomode:0:e001:match:e0:00
+
+; Needs more work, this game is tricky - probably
+; stores accurate information only inside registers
+; berzerk:
+; zerocoin:0:08a3:match:ff:00
+; demomode:0:42f8:match:10:10
+
+; Needs more work, this game is tricky - probably
+; stores accurate information only inside registers
+; frenzy:
+; zerocoin:0:f8ca:match:ff:00
+; demomode:0:4056:match:ff:00
+
+bionicc:
+zerocoin:0:ffc551:match:ff:00
+demomode:0:ffc56a:match:ff:00
+
+; This game doesn't accept coins during gameplay (as of MAME 0.37 beta 15),
+; only when in demo mode, in "press start" or in the continue screens.
+; Oddly, the service coin is accepted (key 9).
+blktiger:
+zerocoin:0:e1ff:match:ff:00
+demomode:0:f3c0:match:0f:00
+
+bombjack:
+zerocoin:0:8017:match:ff:00
+demomode:0:8070:match:ff:00
+
+bosco:
+zerocoin:0:8bc0:match:ff:00
+demomode:0:83ae:match:ff:01
+
+brkthru:
+zerocoin:0:0406:match:ff:00
+demomode:0:0401:match:ff:00
+
+darwin:
+zerocoin:0:1b63:match:ff:00
+demomode:0:107c:match:ff:00
+
+cabal:
+zerocoin:0:040028:match:ff:00
+demomode:0:040042:match:80:00
+
+centiped:
+; This game takes more than a second to register a coin.
+zerocoin:0:00c8:match:ff:00
+demomode:0:0086:match:ff:00
+
+; This game doesn't accept coins during gameplay (as of MAME 0.37 beta 15),
+; only when in demo mode or in "press start" screen.
+circus:
+zerocoin:0:0048:match:ff:00
+demomode:0:0002:match:ff:00
+
+crash:
+; This game doesn't accept coins during gameplay (as of MAME 0.37 beta 15),
+; only when in demo mode or in "press start" screen.
+zerocoin:0:0013:match:ff:00
+demomode:0:0002:match:ff:00
+
+robotbwl:
+; This game doesn't accept coins during gameplay (as of MAME 0.37 beta 15),
+; only when in demo mode or in "press start" screen.
+; This game only updates the coin address when another coin is inserted
+; after the last game is over. It knows that the last game was played by
+; one or two players then uses this information to update automatically
+; upon a new coin insertion.
+; zerocoin:0:0027:match:ff:00
+demomode:0:002b:match:80:00
+
+circusc:
+zerocoin:0:2002:match:ff:00
+demomode:0:2022:match:ff:00
+
+congo:
+zerocoin:0:8012:match:ff:00
+demomode:0:8005:match:ff:01
+
+1941:
+zerocoin:0:ff0d59:match:ff:00
+demomode:0:ff0d82:match:ff:00
+
+3wonders:
+zerocoin:0:ff0d59:match:ff:00
+demomode:0:ff0d82:match:ff:00
+
+unsquad:
+zerocoin:0:ff0ffe:match:ff:00
+demomode:0:ff10d5:match:ff:00
+
+captcomm:
+zerocoin:0:ffa850:match:ff:00
+demomode:0:ffa860:match:ff:00
+
+cawing:
+zerocoin:0:ff82ab:match:ff:00
+demomode:0:ff82ae:match:ff:00
+
+mtwins:
+zerocoin:0:ff0f3e:match:ff:00
+demomode:0:ff0f66:match:ff:00
+
+cworld2j:
+zerocoin:0:ff0ee3:match:ff:00
+demomode:0:ff10c9:match:ff:00
+
+ghouls:
+zerocoin:0:ff0647:match:ff:00
+demomode:0:ff06ce:match:ff:00
+
+dino:
+zerocoin:0:ff846a:match:ff:00
+demomode:0:ff84cc:match:ff:00
+
+dw:
+zerocoin:0:ff81a3:match:ff:00
+demomode:0:ff8155:match:ff:00
+
+ffight:
+zerocoin:0:ff804d:match:ff:00
+demomode:0:ffd47e:match:ff:00
+
+forgottn:
+zerocoin:0:ffb263:match:ff:00
+demomode:0:ff80b0:match:ff:00
+
+knights:
+zerocoin:0:ffa450:match:ff:00
+demomode:0:ffa4a5:match:ff:00
+
+kod:
+zerocoin:0:ff1068:match:ff:00
+demomode:0:ff0e47:match:ff:00
+
+slammast:
+zerocoin:0:ffcb58:match:ff:00
+demomode:0:ffcb51:match:ff:00
+
+megaman:
+zerocoin:0:ff8068:match:ff:00
+demomode:0:ff80a1:match:ff:00
+
+mercs:
+zerocoin:0:ff0f5f:match:ff:00
+demomode:0:ff0e7a:match:ff:00
+
+msword:
+zerocoin:0:ffa86a:match:ff:00
+demomode:0:ffa851:match:ff:00
+
+nemo:
+zerocoin:0:ff82ab:match:ff:00
+demomode:0:ff82ae:match:ff:00
+
+pang3:
+zerocoin:0:ff8b65:match:ff:00
+demomode:0:ff8b67:match:ff:00
+
+pnickj:
+zerocoin:0:ff80b0:match:ff:00
+demomode:0:ff8105:match:ff:00
+
+punisher:
+zerocoin:0:ff5b15:match:ff:00
+demomode:0:ff524d:match:ff:00
+
+qad:
+zerocoin:0:ffe01d:match:ff:00
+demomode:0:ffe01b:match:ff:00
+
+qtono2:
+zerocoin:0:ff8050:match:ff:00
+demomode:0:ff8058:match:ff:00
+
+sf2:
+zerocoin:0:ff82dd:match:ff:00
+demomode:0:ff82e4:match:ff:00
+
+sf2ce:
+zerocoin:0:ff82d9:match:ff:00
+demomode:0:ff82e0:match:ff:00
+; This one is for adjustment
+demomode:0:ff0029:nomatch:ff:00
+
+strider:
+zerocoin:0:ff0c57:match:ff:00
+demomode:0:ff0c84:match:ff:00
+
+varth:
+zerocoin:0:ff82ab:match:ff:00
+demomode:0:ff82ae:match:ff:00
+
+willow:
+; This game doesn't accept coins during gameplay (as of MAME 0.37 beta 15),
+; only when in demo mode, in "press start" or in the continue screens.
+; Oddly, the service coin is accepted (key 9).
+zerocoin:0:ff82a2:match:ff:00
+demomode:0:ff0071:match:ff:00
+
+wof:
+zerocoin:0:ff62f7:match:ff:00
+demomode:0:ff63aa:match:ff:00
+
+19xx:
+zerocoin:0:ff4d15:match:ff:00
+demomode:0:ff40c1:match:ff:00
+
+armwar:
+zerocoin:0:ff805e:match:ff:00
+demomode:0:ff81da:match:ff:00
+
+avsp:
+zerocoin:0:ff818c:match:ff:00
+demomode:0:ff81bf:match:ff:00
+; This one is for adjustment
+demomode:0:ff81ab:match:ff:00
+
+csclub:
+zerocoin:0:ff8ae9:match:ff:00
+demomode:0:ff8bdb:match:ff:00
+; This one is for adjustment
+demomode:0:ff8be0:nomatch:ff:ff
+
+cybots:
+zerocoin:0:ff80b6:match:ff:00
+demomode:0:ff80ff:match:ff:00
+
+ddsom:
+zerocoin:0:ff8450:match:ff:00
+demomode:0:ff8030:match:ff:00
+; This one is for adjustment
+demomode:0:ffffcd:nomatch:ff:01
+
+ddtod:
+zerocoin:0:ff858a:match:ff:00
+demomode:0:ff804a:match:ff:00
+; This one is for adjustment
+demomode:0:fff774:nomatch:ff:01
+
+dstlk:
+zerocoin:0:ff81d0:match:ff:00
+demomode:0:ff0091:match:ff:00
+
+msh:
+zerocoin:0:ff4c09:match:ff:00
+demomode:0:ff4880:match:ff:00
+
+qndream:
+zerocoin:0:ff8d67:match:ff:00
+demomode:0:ff8281:match:ff:00
+
+sfa:
+zerocoin:0:ff8170:match:ff:00
+demomode:0:ff81a8:match:ff:00
+
+sfa2:
+zerocoin:0:ff8076:match:ff:00
+demomode:0:ff80a8:match:ff:00
+; This one is for adjustment
+demomode:0:ff032f:match:ff:00
+
+sfa3:
+zerocoin:0:ff8076:match:ff:00
+demomode:0:ff80a8:match:ff:00
+; This one is for adjustment
+demomode:0:ff8082:match:ff:00
+
+spf2t:
+zerocoin:0:ff8076:match:ff:00
+demomode:0:ff80a8:match:ff:00
+
+ssf2:
+demomode:0:ff82e9:match:ff:00
+demomode:0:ff82f0:match:ff:00
+
+vsav:
+zerocoin:0:ff8076:match:ff:00
+demomode:0:ff80a8:match:ff:00
+; This one is for adjustment
+demomode:0:ff8082:nomatch:ff:01
+
+mshvsf:
+zerocoin:0:ff4c75:match:ff:00
+demomode:0:ff4900:match:ff:00
+; Not necessary for adjustment
+
+xmcota:
+zerocoin:0:ff4bdd:match:ff:00
+demomode:0:ff4880:match:ff:00
+; Not necessary for adjustment
+
+xmvsf:
+zerocoin:0:ff545f:match:ff:00
+demomode:0:ff5100:match:ff:00
+; This one is for adjustment
+demomode:0:ff5100:nomatch:ff:ff
+
+crimfght:
+; Needs special attention, to correctly identify zerocoin and demomode in
+; this game was a hard task. Here's what I got so far:
+;
+; When the master event zerocoin becomes FALSE and then TRUE (when one
+; credit is used) this will obligate all demomode components to be TRUE.
+; We check for an inserted coin watching CPU (1) (0x82c9) for 0x39 - that's
+; "Konami" speech.
+;
+; When a player dies, the message insert coin appears. This corresponds to 
+; the value 0x72 in 0x5c22 (P1), 0x5c42 (P2), 0x5c62 (P3), 0x5c82 (P4) and
+; these are the only reliable indicators of game over without remaining coins.
+;
+; If these addresses are 0x72 all together at same time then the game is
+; over without any coins left.
+zerocoin:1:82c9:match:ff:39
+demomode:0:5c22:match:ff:72
+demomode:0:5c42:match:ff:72
+demomode:0:5c62:match:ff:72
+demomode:0:5c82:match:ff:72
+
+crimfght:
+zerocoin:0:0400:match:ff:00
+demomode:0:052b:match:ff:00
+demomode:0:052c:match:ff:00
+
+digdug:
+zerocoin:0:85a5:match:ff:00
+demomode:0:8657:match:ff:43
+
+ddragon:
+zerocoin:0:0021:match:ff:00
+demomode:0:0026:match:ff:00
+
+ctribe:
+zerocoin:0:1c0003:match:ff:00
+demomode:0:1c0015:match:ff:00
+
+ddragon3:
+zerocoin:0:1c002f:match:ff:00
+demomode:0:1c1d46:match:ff:00
+
+dkong:
+zerocoin:0:6001:match:ff:00
+demomode:0:6005:match:ff:01
+
+dkong3:
+zerocoin:0:6004:match:ff:00
+demomode:0:6005:match:ff:01
+
+huncholy:
+zerocoin:0:1e50:match:ff:00
+demomode:0:1e6e:match:ff:00
+
+hunchbak:
+zerocoin:0:1d98:match:ff:00
+demomode:0:1dbd:match:ff:00
+
+espial:
+zerocoin:0:5802:match:ff:00
+demomode:0:5825:match:ff:b0
+
+exedexes:
+zerocoin:0:e61f:match:ff:00
+demomode:0:f007:match:ff:00
+demomode:0:f087:match:ff:00
+
+exerion:
+zerocoin:0:6001:match:ff:00
+demomode:0:6010:match:ff:00
+
+frogger:
+zerocoin:0:83e1:match:ff:00
+demomode:0:83fe:match:ff:00
+
+funkybee:
+zerocoin:0:8000:match:ff:00
+demomode:0:801c:match:ff:30
+
+galaga:
+zerocoin:0:99b5:match:ff:00
+demomode:0:98f2:match:ff:00
+
+azurian:
+; Needs more work, this game is tricky - probably
+; stores accurate information only inside registers
+zerocoin:0:40b0:match:ff:00
+demomode:0:0000:match:ff:00
+
+phoenix:
+zerocoin:0:428f:match:ff:00
+demomode:0:42a2:match:ff:00
+
+blkhole:
+zerocoin:0:4003:match:ff:00
+demomode:0:40f0:match:ff:00
+
+checkman:
+; Needs more work, this game is tricky - probably
+; stores accurate information only inside registers
+; Not perfect but usable, for 1 player only
+zerocoin:0:8008:match:ff:00
+demomode:0:8107:match:ff:03
+demomode:0:810f:match:ff:00
+demomode:0:8155:nomatch:13:12
+
+devilfsh:
+zerocoin:0:4002:match:ff:00
+demomode:0:4005:nomatch:02:02
+
+mooncrst:
+zerocoin:0:8032:match:ff:00
+demomode:0:8035:match:01:00
+
+redufo:
+zerocoin:0:4002:match:ff:00
+demomode:0:4005:nomatch:02:02
+demomode:0:4005:nomatch:04:04
+
+galaxian:
+zerocoin:0:4002:match:ff:00
+demomode:0:4005:nomatch:02:02
+demomode:0:4005:nomatch:04:04
+
+uniwars:
+zerocoin:0:4002:match:ff:00
+demomode:0:4005:nomatch:02:02
+demomode:0:4005:nomatch:04:04
+
+jumpbug:
+zerocoin:0:4214:match:ff:00
+demomode:0:4107:match:ff:08
+
+kingball:
+zerocoin:0:8315:match:ff:00
+demomode:0:8317:match:ff:01
+
+levers:
+zerocoin:0:4178:match:ff:00
+demomode:0:41c6:match:ff:00
+
+moonal2:
+zerocoin:0:8002:match:ff:00
+demomode:0:8005:nomatch:02:02
+demomode:0:8005:nomatch:04:04
+
+moonqsr:
+zerocoin:0:8032:match:ff:00
+demomode:0:8038:match:01:00
+
+gberet:
+zerocoin:0:db1f:match:ff:00
+demomode:0:db1e:match:ff:00
+
+diamond:
+zerocoin:0:04a5:match:ff:00
+demomode:0:049b:match:ff:00
+
+gng:
+zerocoin:0:0023:match:ff:00
+demomode:0:0028:match:ff:00
+
+gyruss:
+zerocoin:0:9406:match:ff:00
+demomode:0:9669:match:ff:00
+
+fnkyfish:
+zerocoin:0:e02f:match:ff:00
+demomode:0:e03c:match:ff:ff
+
+kangaroo:
+zerocoin:0:e02f:match:ff:00
+demomode:0:e029:nomatch:ff:00
+
+ladybug:
+snapjack:
+cavenger:
+zerocoin:0:605e:match:ff:00
+demomode:0:605f:match:01:00
+
+avengers:
+zerocoin:0:c030:match:ff:00
+demomode:0:c000:match:04:00
+
+lwings:
+trojan:
+sectionz:
+zerocoin:0:c030:match:ff:00
+demomode:0:c000:match:02:00
+
+battroad:
+zerocoin:0:ed00:match:ff:00
+demomode:0:efff:match:ff:10
+
+kidniki:
+zerocoin:0:e013:match:ff:00
+demomode:0:e002:match:80:00
+
+kungfum:
+zerocoin:0:e913:match:ff:00
+demomode:0:e001:match:ff:00
+
+ldrun:
+zerocoin:0:e5b2:match:ff:00
+demomode:0:e5a7:match:ff:01
+
+ldrun2:
+ldrun3:
+zerocoin:0:e68a:match:ff:00
+demomode:0:e67f:match:ff:01
+
+ldrun4:
+zerocoin:0:e702:match:ff:00
+demomode:0:e6f7:match:ff:01
+
+lotlot:
+zerocoin:0:e848:match:ff:00
+demomode:0:e841:match:80:00
+
+spelunkr:
+zerocoin:0:e023:match:ff:00
+demomode:0:e000:match:ff:00
+
+spelunk2:
+zerocoin:0:e043:match:ff:00
+demomode:0:e011:match:ff:00
+
+nspirit:
+zerocoin:0:a392a:match:ff:00
+
+rtype:
+zerocoin:0:42f06:match:ff:00
+demomode:0:42f32:match:ff:00
+demomode:0:42f3a:match:ff:00
+demomode:0:429d8:match:10:00
+
+rtype2:
+zerocoin:0:e37ec:match:ff:00
+
+avspirit:
+zerocoin:0:078f8b:match:ff:00
+demomode:0:079579:nomatch:1c:10
+
+mpatrol:
+zerocoin:0:e048:match:ff:00
+demomode:0:e046:match:90:00
+
+mpatrolw:
+zerocoin:0:e04a:match:ff:00
+demomode:0:e048:match:90:00
+
+mrdo:
+zerocoin:0:e006:match:ff:00
+demomode:0:e000:match:80:00
+
+neogeo:
+zerocoin:0:d00034:match:ff:00
+demomode:0:10fdb6:match:ff:00
+demomode:0:10fdb7:match:ff:00
+; This one is for adjustment
+demomode:0:320000:nomatch:ff:01
+
+alibaba:
+zerocoin:0:4e6e:match:ff:00
+demomode:0:4e00:match:02:00
+
+suprglob:
+zerocoin:0:4c36:match:ff:00
+demomode:0:4c14:match:ff:01
+
+crush:
+zerocoin:0:4c1e:match:ff:00
+demomode:0:4cae:match:ff:00
+
+crush3:
+mbrush:
+paintrlr:
+zerocoin:0:4c1e:match:ff:00
+demomode:0:4c20:match:03:00
+
+eyes:
+zerocoin:0:4ce3:match:ff:00
+demomode:0:4cdc:match:01:00
+
+puckman:
+zerocoin:0:4e6e:match:ff:00
+demomode:0:4e00:match:02:00
+
+jumpshot:
+zerocoin:0:4ce1:match:ff:00
+demomode:0:4ce0:match:0f:04
+
+lizwiz:
+zerocoin:0:400c:match:ff:00
+demomode:0:4d91:match:0f:00
+
+mrtnt:
+zerocoin:0:4c9d:match:ff:00
+demomode:0:4c96:match:0f:00
+
+ponpoko:
+zerocoin:0:4e6e:match:ff:00
+demomode:0:4c46:match:ff:00
+
+shootbul:
+zerocoin:0:4d77:match:ff:00
+demomode:0:4c66:match:ff:01
+
+pbaction:
+zerocoin:0:c013:match:ff:00
+demomode:0:c000:match:07:00
+
+pengo:
+zerocoin:0:8808:match:ff:00
+demomode:0:8819:match:ff:00
+
+phoenix:
+pleiads:
+zerocoin:0:438f:match:ff:00
+demomode:0:43a2:match:ff:00
+
+prehisle:
+zerocoin:0:070053:match:ff:00
+zerocoin:0:07341f:match:ff:00
+demomode:0:070051:match:10:00
+
+psychic5:
+zerocoin:0:fc80:match:ff:00
+demomode:0:fc90:match:ff:00
+
+nrallyx:
+rallyx:
+zerocoin:0:8024:match:ff:00
+demomode:0:8021:match:ff:00
+
+scobra:
+zerocoin:0:8002:match:ff:00
+demomode:0:8006:match:ff:00
+
+baluba:
+zerocoin:0:8018:match:ff:00
+demomode:0:8000:match:ff:00
+
+starforc:
+zerocoin:0:8037:match:ff:00
+demomode:0:8018:match:ff:00
+
+senjyo:
+zerocoin:0:8010:match:ff:00
+demomode:0:8025:match:ff:00
+
+kicker:
+zerocoin:0:2a21:match:ff:00
+demomode:0:2a02:match:ff:01
+
+wboy:
+zerocoin:0:c016:match:ff:00
+demomode:0:c005:match:01:01
+
+elevator:
+zerocoin:0:80a2:match:ff:00
+demomode:0:87fd:nomatch:04:04
+
+junglek:
+zerocoin:0:8169:match:ff:00
+demomode:0:8000:nomatch:02:02
+
+gemini:
+zerocoin:0:c012:match:ff:00
+demomode:0:c303:match:ff:00
+demomode:0:c343:match:ff:00
+
+rygar:
+zerocoin:0:c03a:match:ff:00
+demomode:0:c190:match:ff:00
+demomode:0:c029:nomatch:03:00
+demomode:0:c029:nomatch:02:02
+demomode:0:cffe:match:08:00
+
+silkworm:
+zerocoin:0:d021:match:ff:00
+demomode:0:d009:match:ff:00
+
+f1dream:
+zerocoin:0:ffce52:match:ff:00
+demomode:0:ffc060:match:ff:00
+
+tigeroad:
+toramich:
+zerocoin:0:ffc116:match:ff:00
+demomode:0:ffc08d:match:ff:01
+
+blswhstl:
+zerocoin:0:204025:match:ff:00
+demomode:0:0000:match:ff:00
+
+glfgreat:
+zerocoin:0:0000:match:ff:00
+demomode:0:0000:match:ff:00
+
+lgtnfght:
+zerocoin:0:0000:match:ff:00
+demomode:0:0000:match:ff:00
+
+mia:
+zerocoin:0:0000:match:ff:00
+demomode:0:0000:match:ff:00
+
+punkshot:
+zerocoin:0:0000:match:ff:00
+demomode:0:0000:match:ff:00
+
+qgakumon:
+zerocoin:0:0000:match:ff:00
+demomode:0:0000:match:ff:00
+
+thndrx2:
+zerocoin:0:0000:match:ff:00
+demomode:0:0000:match:ff:00
+
+tmnt:
+zerocoin:0:0600b7:match:ff:00
+demomode:0:0600a3:match:ff:00
+
+vendetta:
+zerocoin:0:3cff:match:ff:00
+zerocoin:0:3d00:match:ff:00
+zerocoin:0:3d5f:match:ff:00
+zerocoin:0:3d60:match:ff:00
+zerocoin:0:3dbf:match:ff:00
+zerocoin:0:3dc0:match:ff:00
+zerocoin:0:3e1f:match:ff:00
+zerocoin:0:3e20:match:ff:00
+demomode:0:3df2:match:ff:00
+
+scion:
+zerocoin:0:c020:match:ff:00
+demomode:0:c7ff:match:10:10
+
+stinger:
+zerocoin:0:c0ac:match:ff:00
+demomode:0:c7ff:match:f0:00
+
+wiz:
+zerocoin:0:c003:match:ff:00
+demomode:0:c066:match:a2:00
+
+mk:
+zerocoin:0:0028021c:match:ff:00
+demomode:0:0020a240:match:ff:00
+demomode:0:0020a29c:match:ff:00
+; This one is for adjustment
+demomode:0:00300004:match:ff:00
+
+mk2:
+zerocoin:0:0028021c:match:ff:00
+demomode:0:0020c03e:match:ff:00
+demomode:0:0020c1b8:match:ff:00
+
+nbajam:
+zerocoin:0:00280480:match:ff:00
+demomode:0:0021ca68:match:ff:00
+
+mk3:
+zerocoin:0:00280354:match:ff:00
+demomode:0:0020c130:match:ff:00
+demomode:0:0020c2a6:match:ff:00
+
+nbahangt:
+zerocoin:0:00280510:match:ff:00
+demomode:0:00226452:match:ff:00
+
+openice:
+zerocoin:0:002804b0:match:ff:00
+demomode:0:002206ea:match:ff:00
+
+rmpgwt:
+; Needs special attention, if you have more than 1 credit and
+; press start, the game asks if you want to buy more lives and
+; in this period of time, there's a time-regressive address that
+; counts from 0x2c to 0x00 then back to 0xff and until 0x00 again.
+; It's necessary to add to the engine another requirement: all
+; events must be TRUE for at least some seconds.
+zerocoin:0:002804b0:match:ff:00
+demomode:0:00252584:nomatch:ff:fa
+demomode:0:0022cce2:match:ff:2c
+
+rmpgwt11:
+; Needs special attention, if you have more than 1 credit and
+; press start, the game asks if you want to buy more lives and
+; in this period of time, there's a time-regressive address that
+; counts from 0x2c to 0x00 then back to 0xff and until 0x00 again.
+; It's necessary to add to the engine another requirement: all
+; events must be TRUE for at least some seconds.
+zerocoin:0:002804b0:match:ff:00
+demomode:0:0025257b:nomatch:ff:fa
+demomode:0:0022ccde:match:ff:2c
+
+umk3:
+umk3r11:
+zerocoin:0:00280354:match:ff:00
+demomode:0:0020c134:match:ff:00
+demomode:0:0020c2aa:match:ff:00
+
+wwfmania:
+zerocoin:0:00280528:match:ff:00
+demomode:0:0021e44c:match:ff:00
+
+hiimpact:
+zerocoin:0:00211e45:match:ff:30
+demomode:0:00211e89:match:ff:00
+
+shimpact:
+zerocoin:0:00211c5b:match:ff:30
+demomode:0:00211c9f:match:ff:00
+
+term2:
+zerocoin:0:0021cd9b:match:ff:30
+demomode:0:0021cd84:match:ff:00
+
+trog:
+zerocoin:0:0021e129:match:ff:30
+demomode:0:0021e446:match:ff:00
+
+slyspy:
+zerocoin:0:30601b:match:ff:00
+demomode:0:30600c:match:ff:ff
+
+ckong:
+zerocoin:0:6001:match:ff:00
+demomode:0:6005:match:03:01
+
+pitfight:
+zerocoin:0:ffc021:match:ff:00
+demomode:0:ffc11a:match:ff:00
+; This one is for adjustment
+demomode:0:fe820b:nomatch:ff:1e
+
+hydra:
+zerocoin:0:ff8021:match:ff:00
+demomode:0:ff8229:match:ff:01
+
+crimec:
+zerocoin:0:a02341:match:ff:00
+demomode:0:a02399:match:ff:40
+
+baddudes:
+zerocoin:0:ffa8bf:match:ff:00
+demomode:0:ff8215:match:ff:40
+
+newfant:
+zerocoin:0:c80f82:match:ff:00
+demomode:0:c80ffc:match:f0:10
+
+rambo3:
+zerocoin:0:802217:match:ff:00
+demomode:0:802271:match:ff:00
+
+robocop:
+zerocoin:0:ff8dc5:match:0f:00
+demomode:0:ff8000:nomatch:0f:02
+demomode:0:ff8000:nomatch:0f:06
+demomode:0:ff8000:nomatch:0f:07
+
+galaga88:
+zerocoin:0:4039:match:ff:00
+demomode:0:4845:match:ff:01
+
+vulgus:
+zerocoin:0:e022:match:ff:00
+demomode:0:e520:match:ff:00
+
+timeplt:
+zerocoin:0:a986:match:ff:00
+demomode:0:ad30:match:ff:00
+
+sonson:
+zerocoin:0:0026:match:ff:00
+demomode:0:0099:match:ff:01
+
+metrocrs:
+zerocoin:1:0080:match:ff:00
+demomode:1:00c3:match:ff:11
+
+terracre:
+zerocoin:0:2023a:match:ff:00
+demomode:0:20232:match:ff:ff
+
+gemini:
+zerocoin:0:c012:match:ff:00
+
+magmax:
+zerocoin:0:18cd4:match:ff:00
+demomode:0:18b48:match:ff:01
+
+scramble:
+zerocoin:0:4002:match:ff:00
+demomode:0:400b:nomatch:ff:00
+
