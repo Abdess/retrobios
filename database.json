@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-08T00:27:55Z",
-  "total_files": 7651,
-  "total_size": 10309353966,
+  "generated_at": "2026-08-08T04:14:39Z",
+  "total_files": 7652,
+  "total_size": 10309376032,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -16048,6 +16048,16 @@
       "sha256": "125c4ecfd281ee9ebbf2b8d34fc3824eacd4a8439d16096668509324052f12d8",
       "crc32": "563387ed",
       "adler32": "1789640e"
+    },
+    "8c34c85f92bc6771d789e880953a1cc43341485e": {
+      "path": "bios/Arcade/MAME/event.dat",
+      "name": "event.dat",
+      "size": 22066,
+      "sha1": "8c34c85f92bc6771d789e880953a1cc43341485e",
+      "md5": "ee99bb541116967f8785a5bc09932475",
+      "sha256": "1c4db4f1fd467f606183cddcc3f66d1ceec10639b37934d1f5619d3bbbf3537d",
+      "crc32": "ed0b8ad8",
+      "adler32": "023be215"
     },
     "71b489cac8f942d5ff21feee098d1c3059ecb608": {
       "path": "bios/Arcade/MAME/everdrive_md.zip",
@@ -82870,6 +82880,7 @@
       "6f1afed99e4e70687bdd5038701fdb1b": "3fde8189f23d63d436c7b5da1cb91082859c87b9",
       "3ebb4628dc07a12a37c48d6c1b093ea1": "849fd1c44ba6949d12ea65cb5b44365caa22689f",
       "95459323fd429f996745a7a21140f24a": "aa69a44188038d65e905b82ab94bd66a41bb1a0b",
+      "ee99bb541116967f8785a5bc09932475": "8c34c85f92bc6771d789e880953a1cc43341485e",
       "c16da7ee9d69835df190103b15516e4d": "71b489cac8f942d5ff21feee098d1c3059ecb608",
       "d9ec27adc66a2b0c182757019e70db9e": "a3578a485c2bc298cee25c3e9f1b4a589160c345",
       "593918d7c14a8bf1e2d9f9424480d2e9": "27e83d3571a1c66a760ea42397faffc78ec55c96",
@@ -93539,6 +93550,9 @@
       ],
       "ev346.zip": [
         "aa69a44188038d65e905b82ab94bd66a41bb1a0b"
+      ],
+      "event.dat": [
+        "8c34c85f92bc6771d789e880953a1cc43341485e"
       ],
       "everdrive_md.zip": [
         "71b489cac8f942d5ff21feee098d1c3059ecb608"
@@ -111915,15 +111929,23 @@
         "e5741010ac7f941cdb3c01865a1eda016a479dfd"
       ],
       "CM32L_CONTROL.ROM": [
-        "a439fbb390da38cada95a7cbb1d6ca199cd66ef8"
-      ],
-      "CM32L_PCM.ROM": [
-        "289cc298ad532b702461bfc738009d9ebe8025ea"
-      ],
-      "MT32_CONTROL.ROM": [
+        "a439fbb390da38cada95a7cbb1d6ca199cd66ef8",
         "b083518fffb7f66b03c23b7eb4f868e62dc5a987"
       ],
+      "MT32_CONTROL.ROM": [
+        "a439fbb390da38cada95a7cbb1d6ca199cd66ef8",
+        "b083518fffb7f66b03c23b7eb4f868e62dc5a987",
+        "dc1c5b1b90a4646d00f7daf3679733c7badc7077"
+      ],
+      "CM32L_PCM.ROM": [
+        "289cc298ad532b702461bfc738009d9ebe8025ea",
+        "f6b1eebc4b2d200ec6d3d21d51325d5b48c60252"
+      ],
+      "CM32LN_PCM.ROM": [
+        "289cc298ad532b702461bfc738009d9ebe8025ea"
+      ],
       "MT32_PCM.ROM": [
+        "289cc298ad532b702461bfc738009d9ebe8025ea",
         "f6b1eebc4b2d200ec6d3d21d51325d5b48c60252"
       ],
       "uni-bioscd.rom": [
@@ -113730,6 +113752,27 @@
       "upd7801g.bios": [
         "6e89d1227581c76441a53d605f9e324185f1da33"
       ],
+      "FluidR3_GM.sf2": [
+        "22bcfeb5b6c6481569b90db96aa3f4b5f06c8848"
+      ],
+      "GeneralUser_GS.sf2": [
+        "22bcfeb5b6c6481569b90db96aa3f4b5f06c8848"
+      ],
+      "GeneralUser-GS.sf2": [
+        "22bcfeb5b6c6481569b90db96aa3f4b5f06c8848"
+      ],
+      "Fluid_R3_GM_GS.sf2": [
+        "22bcfeb5b6c6481569b90db96aa3f4b5f06c8848"
+      ],
+      "4gmgsmt-sf2_04-compat.sf2": [
+        "22bcfeb5b6c6481569b90db96aa3f4b5f06c8848"
+      ],
+      "4GMGSMT.SF2": [
+        "22bcfeb5b6c6481569b90db96aa3f4b5f06c8848"
+      ],
+      "synthgs-sf2_04-compat.sf2": [
+        "22bcfeb5b6c6481569b90db96aa3f4b5f06c8848"
+      ],
       "dragon32": [
         "f2dab125673e653995a83bf6b793e3390ec7f65a"
       ],
@@ -115484,6 +115527,7 @@
       "7fd40b78": "3fde8189f23d63d436c7b5da1cb91082859c87b9",
       "9478a59a": "849fd1c44ba6949d12ea65cb5b44365caa22689f",
       "563387ed": "aa69a44188038d65e905b82ab94bd66a41bb1a0b",
+      "ed0b8ad8": "8c34c85f92bc6771d789e880953a1cc43341485e",
       "8b082522": "71b489cac8f942d5ff21feee098d1c3059ecb608",
       "6d0c12b2": "a3578a485c2bc298cee25c3e9f1b4a589160c345",
       "3fef4f7a": "27e83d3571a1c66a760ea42397faffc78ec55c96",
@@ -123137,6 +123181,7 @@
       "8c6e9f61a7b2794473aa61f7280a777b24d9b2880a6910ec9cb2c5aa5f6ca012": "3fde8189f23d63d436c7b5da1cb91082859c87b9",
       "5cbcbf97b46ad463f7ea85dbb3181c1717e433fcee2273206a3432ca4da79e62": "849fd1c44ba6949d12ea65cb5b44365caa22689f",
       "125c4ecfd281ee9ebbf2b8d34fc3824eacd4a8439d16096668509324052f12d8": "aa69a44188038d65e905b82ab94bd66a41bb1a0b",
+      "1c4db4f1fd467f606183cddcc3f66d1ceec10639b37934d1f5619d3bbbf3537d": "8c34c85f92bc6771d789e880953a1cc43341485e",
       "498127f06dffa55eca35389d6ab950b521da3bf40e66e0e9aef7d01f97ab25d2": "71b489cac8f942d5ff21feee098d1c3059ecb608",
       "65ac2929b3b386cea6d634721f366d7db75cbc69d3c14cf1bb09435f340ce0f7": "a3578a485c2bc298cee25c3e9f1b4a589160c345",
       "31739b9cbde8976027bb2942ae3d3365d9fdfc42da432a945c4b594d6cd30085": "27e83d3571a1c66a760ea42397faffc78ec55c96",
@@ -143628,6 +143673,8 @@
         "273a9933b68a290c5aedcd6d69faa7b1d22c0344",
         "af5af53f66982e749643fdf8b2acbb7d4d3ed229",
         "6e89d1227581c76441a53d605f9e324185f1da33",
+        "dc1c5b1b90a4646d00f7daf3679733c7badc7077",
+        "22bcfeb5b6c6481569b90db96aa3f4b5f06c8848",
         "f2dab125673e653995a83bf6b793e3390ec7f65a",
         "628543ee8b47a56df2b2175cfb763c0051517b90",
         "c25632f3c2cfd1af3ee26b2f233a1ce1eccc365d",

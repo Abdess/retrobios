@@ -4,7 +4,7 @@
   "platform": "retroarch",
   "display_name": "RetroArch",
   "version": "1.0",
-  "generated": "2026-08-08T00:30:59Z",
+  "generated": "2026-08-08T03:34:13Z",
   "base_destination": "system",
   "detect": [
     {
@@ -462,9 +462,9 @@
     },
     {
       "dest": "aes.zip",
-      "sha1": "43c6aa6ba46adbeefb2b014899bcb4b2db7986af",
+      "sha1": "23c66caa80b93199914fae246a5ea6e84db1be29",
       "size": 850311,
-      "repo_path": "",
+      "repo_path": "bios/Arcade/Arcade/aes.zip",
       "cores": null
     },
     {
@@ -490,9 +490,9 @@
     },
     {
       "dest": "fbneo/hiscore.dat",
-      "sha1": "1bef29ccc16eeb2e3c0759bfd2a4f86b1aba03a7",
+      "sha1": "7381472bf046126257e51a0124e4553282f020e5",
       "size": 322458,
-      "repo_path": "",
+      "repo_path": "bios/Arcade/Arcade/hiscore.dat",
       "cores": null
     },
     {
@@ -539,9 +539,9 @@
     },
     {
       "dest": "fbneo/spec128.zip",
-      "sha1": "b88619a845cbba8bc04ad396e99a02aa6d2da7c1",
+      "sha1": "e56f7be80abcf2c298310e8d2af66b9f29a6db31",
       "size": 32986,
-      "repo_path": "",
+      "repo_path": "bios/Arcade/Arcade/spec128.zip",
       "cores": null
     },
     {
@@ -553,9 +553,9 @@
     },
     {
       "dest": "fbneo/spec1282a.zip",
-      "sha1": "d3a94d7a098a0cad5f49cf19a74ed1f9138a20f7",
+      "sha1": "a20dfda5804a9624e35baaf2fad2ac2011e70d9d",
       "size": 41646,
-      "repo_path": "",
+      "repo_path": "bios/Arcade/FBNeo/spec1282a.zip",
       "cores": null
     },
     {
@@ -805,9 +805,9 @@
     },
     {
       "dest": "Dinothawr.zip",
-      "sha1": "693d8bb4d992c645e6413a57195acf4eca2f5a2e",
+      "sha1": "eadb966430454b40a17387acc7302ff1683cc9f2",
       "size": 6724506,
-      "repo_path": "",
+      "repo_path": "bios/Dinothawr/Dinothawr/Dinothawr.zip",
       "cores": null
     },
     {
@@ -2088,9 +2088,9 @@
     },
     {
       "dest": "cdimono1.zip",
-      "sha1": "7bf3ef19a559808658578bc4da233d71b774b8e2",
+      "sha1": "5d0b1b55b0d0958a5c9069c3219d4da5a87a6b93",
       "size": 660996,
-      "repo_path": "",
+      "repo_path": "bios/Arcade/Arcade/cdimono1.zip",
       "cores": null
     },
     {
@@ -2382,9 +2382,9 @@
     },
     {
       "dest": "kronos/stvbios.zip",
-      "sha1": "279375f97736d8bc37f240b9f7d119d007df1c0e",
+      "sha1": "b14bbed4bf459439cf7e96d2f79d7adea5d31448",
       "size": 3455065,
-      "repo_path": "",
+      "repo_path": "bios/Arcade/Arcade/stvbios.zip",
       "cores": null
     },
     {
@@ -2858,9 +2858,9 @@
     },
     {
       "dest": "neocdz.zip",
-      "sha1": "29380243b6f6c8e67816cf518a272cc8d932e2b5",
+      "sha1": "9cab31cfe7eacb6871d36cee105d87b90fd85b64",
       "size": 1181333,
-      "repo_path": "",
+      "repo_path": "bios/Arcade/Arcade/neocdz.zip",
       "cores": null
     },
     {

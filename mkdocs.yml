@@ -184,7 +184,7 @@ nav:
   - sdlpal: systems/sdlpal.md
 - Emulators:
   - Overview: emulators/index.md
-  - Official ports (63):
+  - Official ports (64):
     - amiarcadia: emulators/amiarcadia.md
     - Amiberry: emulators/amiberry.md
     - Ardens: emulators/ardens.md
@@ -195,6 +195,7 @@ nav:
     - ClownMDEmu: emulators/clownmdemu.md
     - CrocoDS: emulators/crocods.md
     - DirkSimple: emulators/dirksimple.md
+    - DOSBox Pure Unleashed: emulators/dosbox-pure-unleashed.md
     - DuckStation: emulators/duckstation.md
     - emux (CHIP-8): emulators/emux_chip8.md
     - emux (Game Boy): emulators/emux_gb.md
@@ -429,11 +430,13 @@ nav:
     - WASM-4: emulators/wasm4.md
     - XRick: emulators/xrick.md
     - Zelda Classic v2.10: emulators/zc210.md
-  - Enhanced forks (16):
+  - Enhanced forks (18):
     - A7800: emulators/a7800.md
     - AdvanceMAME: emulators/advancemame.md
     - bsnes-hd beta: emulators/bsnes_hd_beta.md
     - bsnes-mercury: emulators/bsnes_mercury.md
+    - DOSBox Staging: emulators/dosbox-staging.md
+    - DOSBox-X: emulators/dosbox-x.md
     - DOSBox Pure: emulators/dosbox_pure.md
     - DoubleCherryGB: emulators/doublecherrygb.md
     - Genesis Plus GX Wide: emulators/genesis_plus_gx_wide.md
@@ -482,10 +485,9 @@ nav:
   - Embedded HLE (2):
     - 3dSen: emulators/3dsen.md
     - PCSX-ReARMed: emulators/pcsx_rearmed.md
-  - Launchers (2):
+  - Launchers (1):
     - Dolphin Launcher: emulators/dolphin_launcher.md
-    - ES-DE: emulators/es-de.md
-  - Other (25):
+  - Other (26):
     - ares: emulators/ares.md
     - Basilisk II: emulators/basiliskii.md
     - Beetle GBA (Mednafen): emulators/beetle_gba.md
@@ -493,6 +495,7 @@ nav:
     - Cemu: emulators/cemu.md
     - Clock Signal (CLK): emulators/clk.md
     - ColEm: emulators/colem.md
+    - CPCemu: emulators/cpcemu.md
     - Demul: emulators/demul.md
     - eka2l1: emulators/eka2l1.md
     - ep128emu-core: emulators/ep128emu.md
