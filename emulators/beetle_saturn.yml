@@ -5,7 +5,7 @@ core: mednafen_saturn_libretro
 source: "https://github.com/libretro/beetle-saturn-libretro"
 upstream: "https://mednafen.github.io/"
 profiled_date: "2026-03-24"
-source_commit: "b4df47a9f0f30d09eb95b07a4435d0f435a2e95d"
+source_commit: "84461434f249c1b5cd10c83ae922feae84e1acf8"
 core_version: "v0.9.45.1"
 display_name: "Sega - Saturn (Beetle Saturn)"
 cores:
@@ -36,7 +36,7 @@ files:
     size: 524288
     validation: [size]
     note: "Saturn BIOS v1.01 (Japan). Used when region is JP or Asia NTSC."
-    source_ref: "mednafen/ss/ss.cpp:928-929,937-949"
+    source_ref: "mednafen/ss/ss.c:1761 (region filename), mednafen/ss/ss.c:1784-1899 (open, size check, read, sha256)"
 
   - name: "mpr-17933.bin"
     system: sega-saturn
@@ -45,25 +45,25 @@ files:
     size: 524288
     validation: [size]
     note: "Saturn BIOS (NA/EU). Used for all non-JP/Asia-NTSC regions."
-    source_ref: "mednafen/ss/ss.cpp:930-931,937-949"
+    source_ref: "mednafen/ss/ss.c:1763 (region filename), mednafen/ss/ss.c:1784-1899 (open, size check, read, sha256)"
 
   - name: "mpr-18811-mx.ic1"
     system: sega-saturn
     required: false
     size: 2097152
     note: "KOF95 expansion ROM cart. Loaded when cart type set to KOF95."
-    source_ref: "mednafen/ss/cart.cpp:157-172, mednafen/ss/cart/rom.cpp:32-43"
+    source_ref: "mednafen/ss/cart.c:200-215 (firmware path + open), mednafen/ss/cart/rom.c:51 (CART_ROM_Init)"
 
   - name: "mpr-19367-mx.ic1"
     system: sega-saturn
     required: false
     size: 2097152
     note: "Ultraman expansion ROM cart. Loaded when cart type set to Ultraman."
-    source_ref: "mednafen/ss/cart.cpp:157-172, mednafen/ss/cart/rom.cpp:32-43"
+    source_ref: "mednafen/ss/cart.c:200-215 (firmware path + open), mednafen/ss/cart/rom.c:51 (CART_ROM_Init)"
 
   - name: "satar4mp.bin"
     system: sega-saturn
     required: false
     size: 262144
     note: "Action Replay 4M Plus firmware. Unfinished in source (ar4mp.cpp:22-24), needs CPU UBC emulation. Cart type not exposed in core options."
-    source_ref: "mednafen/ss/cart.cpp:174-188, mednafen/ss/cart/ar4mp.cpp:120-159"
+    source_ref: "mednafen/ss/cart.c:218 (CART_AR4MP case), mednafen/ss/cart/ar4mp.c:150 (CART_AR4MP_Init)"

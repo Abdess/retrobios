@@ -46,7 +46,8 @@ PIN = "pin"
 HEAD = "head"
 
 _REF_RE = re.compile(r"^(?P<path>[^:]+?)(?::(?P<start>\d+)(?:-(?P<end>\d+))?)?$")
-_BARE_RANGE_RE = re.compile(r"^\d+(?:-\d+)?$")
+_BARE_RANGE_RE = re.compile(r"^:?(\d+(?:-\d+)?)$")
+HEADER_SUFFIXES = (".h", ".hpp", ".hh", ".hxx", ".inc", ".inl")
 _SPLIT_RE = re.compile(r"[,;]")
 _ANNOTATION_RE = re.compile(r"\s*\([^)]*\)?")
 _LOCATED_RE = re.compile(r"^[^\s:]+:\d+(?:-\d+)?$")
@@ -128,8 +129,9 @@ def split_source_ref(ref: str) -> list[RefPart]:
         chunk = _trim_prose(_ANNOTATION_RE.sub("", raw).strip())
         if not chunk:
             continue
-        if _BARE_RANGE_RE.match(chunk) and parts:
-            start, _, end = chunk.partition("-")
+        bare = _BARE_RANGE_RE.match(chunk)
+        if bare and parts:
+            start, _, end = bare.group(1).partition("-")
             parts.append(
                 RefPart(parts[-1].path, int(start), int(end or start), raw)
             )
@@ -370,13 +372,25 @@ def resolve_rename(
     return None, matches
 
 
+def _is_header(path: str) -> bool:
+    return path.lower().endswith(HEADER_SUFFIXES)
+
+
 def _narrow(matches: list[str], path: str) -> list[str]:
-    """Prefer candidates sitting in the directory the file came from."""
+    """Prefer candidates of the same kind, then of the same directory.
+
+    A stem search on `ss.cpp` matches both `ss.c` and `ss.h`, and only one of
+    them is the implementation the ref meant.
+    """
     if len(matches) < 2:
         return matches
+    kind = [p for p in matches if _is_header(p) == _is_header(path)]
+    if len(kind) == 1:
+        return kind
+    pool = kind or matches
     directory = posixpath.dirname(path)
-    same = [p for p in matches if posixpath.dirname(p) == directory]
-    return same if len(same) == 1 else matches
+    same = [p for p in pool if posixpath.dirname(p) == directory]
+    return same if len(same) == 1 else pool
 
 
 def locate_by_declared_value(

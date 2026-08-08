@@ -167,6 +167,23 @@ class TestSplitSourceRef(unittest.TestCase):
         parts = split_source_ref("munt ROMInfo.cpp")
         self.assertEqual(parts[0].path, "munt ROMInfo.cpp")
 
+    def test_leading_colon_continues_the_previous_file(self):
+        parts = split_source_ref("sms_mapper.c:12, :61, :162-170")
+        self.assertEqual(
+            [(p.path, p.start, p.end) for p in parts],
+            [("sms_mapper.c", 12, 12), ("sms_mapper.c", 61, 61),
+             ("sms_mapper.c", 162, 170)],
+        )
+
+    def test_leading_colon_with_annotations(self):
+        parts = split_source_ref(
+            "genesis.rs:41-51 (read), :256-262 (bios_path_for_region)"
+        )
+        self.assertEqual(
+            [(p.path, p.start, p.end) for p in parts],
+            [("genesis.rs", 41, 51), ("genesis.rs", 256, 262)],
+        )
+
     def test_leading_bare_range_stays_a_path(self):
         parts = split_source_ref("273-285")
         self.assertEqual(parts[0].path, "273-285")
@@ -531,9 +548,21 @@ class TestResolveRename(unittest.TestCase):
         )
         self.assertEqual(found, "libretro.c")
 
-    def test_same_directory_tie_break_needs_a_single_winner(self):
-        found, candidates = resolve_rename(
+    def test_an_implementation_wins_over_a_header(self):
+        found, _ = resolve_rename(
             CompareResult([], True), "src/a.cpp", ["src/a.c", "src/a.h"]
+        )
+        self.assertEqual(found, "src/a.c")
+
+    def test_a_header_ref_picks_the_header(self):
+        found, _ = resolve_rename(
+            CompareResult([], True), "src/a.hpp", ["src/a.c", "src/a.h"]
+        )
+        self.assertEqual(found, "src/a.h")
+
+    def test_two_implementations_stay_ambiguous(self):
+        found, candidates = resolve_rename(
+            CompareResult([], True), "src/a.cpp", ["one/a.c", "two/a.cc"]
         )
         self.assertIsNone(found)
         self.assertEqual(len(candidates), 2)
