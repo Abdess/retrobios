@@ -318,15 +318,19 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
             "## What's included",
             "",
             "BIOS, firmware, and system files for consoles from Atari to PlayStation 3.",
-            "These are the files an emulator needs but cannot ship itself.",
+            "These are the files an emulator loads from disk instead of"
+            " carrying inside itself. Some are required to boot a system,"
+            " others improve accuracy or unlock a feature; the packs carry"
+            " both.",
             "",
-            "Each one is checked the way your platform checks it. Most compare"
-            " a checksum, the fingerprint of a file's contents, so a corrupt or"
-            " wrong-region copy is caught. RetroArch, Lakka and RetroPie only"
+            "Each file is checked the way your platform checks it. Most compare"
+            " a checksum, the fingerprint of a file's contents, which catches a"
+            " corrupt or unexpected copy. RetroArch, Lakka and RetroPie only"
             " look for the filename, because that is all their code does: the"
-            " Coverage table says which applies to you. Whatever your platform"
-            " checks, the collection stores four fingerprints per file, and the"
-            " expected values come from the emulator's own source code.",
+            " Coverage table says which applies to you. Independently of that,"
+            " the collection records five fingerprints per file, and wherever"
+            " an emulator's code states an expected size or hash, that value is"
+            " read from its source and rechecked here.",
             "",
             (
                 f"- **{missing_total} files** the platforms' emulators load are"
@@ -338,8 +342,8 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
             ),
             f"- **{len(coverages)} platforms** supported with platform-specific verification",
             f"- **{emulator_count} emulators** profiled from source (RetroArch cores + standalone)",
-            f"- **{len(system_ids)} systems** covered (NES, SNES, PlayStation, Saturn, Dreamcast, ...)",
-            f"- **{total_files:,} files**, each with its SHA1, MD5, SHA256 and CRC32 fingerprints:"
+            f"- **{len(system_ids)} systems** handled by those emulators (NES, SNES, PlayStation, Saturn, Dreamcast, ...)",
+            f"- **{total_files:,} files**, each with its SHA1, MD5, SHA256, CRC32 and Adler-32 fingerprints:"
             f" {comp['systems']['files']:,} system files,"
             f" {comp['arcade']['files']:,} arcade ROM sets,"
             f" {comp['game_data']['files']:,} game and engine data files",

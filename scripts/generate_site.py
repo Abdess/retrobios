@@ -409,8 +409,8 @@ def generate_home(
         [
             "## Platforms",
             "",
-            "| | Platform | Files | Verification | Download |",
-            "|---|----------|-------|-------------|----------|",
+            "| | Platform | Files | Checked by | Download |",
+            "|---|----------|-------|-----------|----------|",
         ]
     )
 
@@ -433,9 +433,10 @@ def generate_home(
     lines.extend(
         [
             "",
-            "Verification is the check each platform runs itself, replicated "
-            "from its source code. RetroArch only tests that files exist; "
-            "Batocera compares MD5 checksums. "
+            "Checked by is the test each platform runs on its own, replicated "
+            "from its source code. RetroArch only looks for the filename; "
+            "Batocera compares MD5 checksums, the fingerprint of a file's "
+            "contents. "
             "[How each mode works](wiki/verification-modes.md).",
         ]
     )
@@ -582,8 +583,8 @@ def generate_platform_index(coverages: dict, registry: dict | None = None) -> st
         f"{len(coverages)} supported platforms with "
         f"{total_present:,} verified files.",
         "",
-        "| Platform | Files | Verification | Status | Download |",
-        "|----------|-------|-------------|--------|----------|",
+        "| Platform | Files | Checked by | Status | Download |",
+        "|----------|-------|-----------|--------|----------|",
     ]
 
     mode_labels = {
@@ -616,7 +617,7 @@ def generate_platform_index(coverages: dict, registry: dict | None = None) -> st
     lines.extend(
         [
             "",
-            "Verification is the check each platform runs itself, replicated "
+            "Checked by is the test each platform runs on its own, replicated "
             "from its source code. "
             "[How each mode works](../wiki/verification-modes.md).",
         ]
@@ -708,7 +709,7 @@ def generate_platform_page(
             '<div class="rb-stat" markdown>',
             f'<span class="rb-stat-value">'
             f'<span class="rb-badge {mode_badge}">{mode}</span></span>',
-            '<span class="rb-stat-label">Verification</span>',
+            '<span class="rb-stat-label">Checked by</span>',
             "</div>",
             "",
             "</div>",
@@ -1364,7 +1365,7 @@ def generate_emulator_page(
         ("resources_directory", "Resources directory"),
         ("rom_path", "ROM path"),
         ("game_count", "Game count"),
-        ("verification", "Verification mode"),
+        ("verification", "Checked by"),
         ("source_ref", "Source ref"),
         ("analysis_date", "Analysis date"),
         ("analysis_commit", "Analysis commit"),

@@ -54,15 +54,15 @@ The RetroDECK pack already contains its own `bios/` folder, so it extracts into 
 ## What's included
 
 BIOS, firmware, and system files for consoles from Atari to PlayStation 3.
-These are the files an emulator needs but cannot ship itself.
+These are the files an emulator loads from disk instead of carrying inside itself. Some are required to boot a system, others improve accuracy or unlock a feature; the packs carry both.
 
-Each one is checked the way your platform checks it. Most compare a checksum, the fingerprint of a file's contents, so a corrupt or wrong-region copy is caught. RetroArch, Lakka and RetroPie only look for the filename, because that is all their code does: the Coverage table says which applies to you. Whatever your platform checks, the collection stores four fingerprints per file, and the expected values come from the emulator's own source code.
+Each file is checked the way your platform checks it. Most compare a checksum, the fingerprint of a file's contents, which catches a corrupt or unexpected copy. RetroArch, Lakka and RetroPie only look for the filename, because that is all their code does: the Coverage table says which applies to you. Independently of that, the collection records five fingerprints per file, and wherever an emulator's code states an expected size or hash, that value is read from its source and rechecked here.
 
 - **91 files** the platforms' emulators load are not in the collection yet, named in the [gap analysis](https://abdess.github.io/retrobios/gaps/)
 - **12 platforms** supported with platform-specific verification
-- **340 emulators** profiled from source (RetroArch cores + standalone)
-- **412 systems** covered (NES, SNES, PlayStation, Saturn, Dreamcast, ...)
-- **7,763 files**, each with its SHA1, MD5, SHA256 and CRC32 fingerprints: 2,478 system files, 2,746 arcade ROM sets, 2,539 game and engine data files
+- **341 emulators** profiled from source (RetroArch cores + standalone)
+- **412 systems** handled by those emulators (NES, SNES, PlayStation, Saturn, Dreamcast, ...)
+- **7,763 files**, each with its SHA1, MD5, SHA256, CRC32 and Adler-32 fingerprints: 2,478 system files, 2,746 arcade ROM sets, 2,539 game and engine data files
 - **531 of 2,478 system files** matched to dump-preservation catalogs (No-Intro, Redump, TOSEC); arcade sets and engine data fall outside what those catalogs index
 - **9854 MB** total collection size
 
@@ -127,7 +127,7 @@ The [documentation site](https://abdess.github.io/retrobios/) provides:
 - **Per-emulator profiles** with source code references for every file
 - **Per-system pages** showing which emulators and platforms cover each console
 - **Gap analysis** identifying missing files and undeclared core requirements
-- **Cross-reference** mapping files across 12 platforms and 340 emulators
+- **Cross-reference** mapping files across 12 platforms and 341 emulators
 
 ## How it works
 
@@ -164,4 +164,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software.
 The legal reasoning is laid out in the [FAQ](https://abdess.github.io/retrobios/wiki/faq/#is-this-legal).
 
-*Auto-generated on 2026-08-08T10:53:24Z*
+*Auto-generated on 2026-08-08T11:10:23Z*
