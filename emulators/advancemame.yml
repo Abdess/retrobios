@@ -72,8 +72,11 @@ notes: |
   alternatives. Neo Geo lists MVS revisions alone, the AES, Universe and debug
   entries being commented out (src/drivers/neogeo.c:1420-1423,1439-1442).
 
-  The four support files sit directly in $home or $data
-  (advance/osd/fileio.c:81,88-90, advance/linux/file.c:249-256). Samples and
+  The support files sit directly in $home or $data
+  (advance/osd/fileio.c:81,88-90, advance/linux/file.c:249-256). A language
+  file is read too, under whatever name misc_languagefile carries
+  (advance/osd/glue.c:715-716); the project ships none, English being built
+  into the binary (src/ui_text.c:263-265). Samples and
   artwork are per-game archives under dir_sample and dir_artwork, ZIP only,
   named after the driver: WAV members for samples
   (src/sound/samples.c:198-200), a <driver>.art layout and its PNGs for
@@ -116,15 +119,6 @@ files:
       straight from $home then $data rather than through the file type table.
       Absent, the exit menu always prompts instead of checking coin and play
       state.
-
-  - name: english.lng
-    required: false
-    category: game_data
-    source_ref: "advance/osd/glue.c:716,3290"
-    note: >-
-      User interface translation, extension lng
-      (src/fileio.c:941), selected by misc_languagefile. Absent, uistring_init
-      keeps the built-in English strings (src/ui_text.c:263-265).
 
   # SNK Neo Geo MVS
   - name: neogeo.zip
