@@ -171,6 +171,20 @@ def collect_tokens(entry: dict) -> list[str]:
     return tokens
 
 
+def _anchor_tokens(entry: dict) -> list[str]:
+    """Values worth searching for when a cited line misses its subject.
+
+    Archive entries are named `stvbios.zip` while the driver source writes the
+    set name alone, so the stem is searched as well as the full name.
+    """
+    tokens = collect_tokens(entry)
+    name = os.path.basename(str(entry.get("name", ""))).lower()
+    stem = name.rsplit(".", 1)[0]
+    if stem and stem not in tokens and len(stem) > 2:
+        tokens.append(stem)
+    return tokens
+
+
 def worst_status(statuses) -> str:
     """Severity of an entry is the worst severity among its parts."""
     worst = "ANCHORED"
@@ -255,6 +269,36 @@ def anchor_block(
     return _map_changed(pin, head, lo, hi)
 
 
+NUDGE_WINDOW = 60
+
+
+def nudge_to_declared(
+    pin_lines: list[str], start: int, end: int, tokens
+) -> tuple[int, int] | None:
+    """Move a cited range onto the nearest line carrying a declared value.
+
+    Some refs sit a few lines off their subject, and a few land on a blank
+    line, which anchors nothing. When the entry declares a hash or a name and
+    that value appears close by, the ref plainly meant that line.
+    """
+    if not tokens:
+        return None
+    lowered = [line.lower() for line in pin_lines]
+    hits = [
+        i + 1
+        for i, line in enumerate(lowered)
+        if any(token in line for token in tokens)
+    ]
+    if not hits:
+        return None
+    nearest = min(hits, key=lambda n: abs(n - start))
+    if abs(nearest - start) > NUDGE_WINDOW or nearest == start:
+        return None
+    if sum(1 for h in hits if abs(h - nearest) <= 1) > 1:
+        return None
+    return nearest, nearest + (end - start)
+
+
 def resolve_rename(
     result: CompareResult, path: str, head_paths=()
 ) -> tuple[str | None, list[str]]:
@@ -298,7 +342,9 @@ def _narrow(matches: list[str], path: str) -> list[str]:
     return same if len(same) == 1 else matches
 
 
-def anchor_part(part: RefPart, fetch, rename_getter, describe=None) -> PartResult:
+def anchor_part(
+    part: RefPart, fetch, rename_getter, describe=None, tokens=()
+) -> PartResult:
     """Locate one reference part at HEAD, following a rename when needed.
 
     `describe(path)` returns (repo slug, raw URL at HEAD) for the repository
@@ -364,7 +410,16 @@ def anchor_part(part: RefPart, fetch, rename_getter, describe=None) -> PartResul
             part, "GONE", None, None, None, [], "pin revision missing", slug, url
         )
 
-    anchored = anchor_block(pin_lines, head_lines, part.start, part.end or part.start)
+    end = part.end or part.start
+    anchored = anchor_block(pin_lines, head_lines, part.start, end)
+    note = anchored.reason
+    if anchored.status in REVIEW_STATUSES:
+        nudged = nudge_to_declared(pin_lines, part.start, end, tokens)
+        if nudged is not None:
+            retry = anchor_block(pin_lines, head_lines, *nudged)
+            if retry.status not in REVIEW_STATUSES:
+                anchored = retry
+                note = f"cited line was {nudged[0] - part.start:+d} off its subject"
     status = anchored.status
     if renamed and status in ("ANCHORED", "SHIFTED"):
         status = "RENAMED"
@@ -375,7 +430,7 @@ def anchor_part(part: RefPart, fetch, rename_getter, describe=None) -> PartResul
         anchored.start,
         anchored.end,
         anchored.candidates,
-        anchored.reason,
+        note,
         slug,
         url,
     )
@@ -518,7 +573,11 @@ def build_report(
     report = ProfileReport(name=name, entries=[], counts={})
 
     refs = [
-        (entry.get("name", "") + (f" [{label}]" if label else ""), value)
+        (
+            entry.get("name", "") + (f" [{label}]" if label else ""),
+            value,
+            _anchor_tokens(entry),
+        )
         for entry in (profile.get("files") or [])
         if isinstance(entry, dict) and entry.get("source_ref")
         for label, value in source_ref_values(entry.get("source_ref"))
@@ -629,10 +688,10 @@ def build_report(
 
     staged = [
         (entry_name, ref, [
-            anchor_part(part, fetch, rename_getter, describe)
+            anchor_part(part, fetch, rename_getter, describe, tokens)
             for part in split_source_ref(ref)
         ])
-        for entry_name, ref in refs
+        for entry_name, ref, tokens in refs
     ]
 
     shifts = dominant_shifts([p for _, _, parts in staged for p in parts])

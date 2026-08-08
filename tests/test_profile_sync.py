@@ -280,7 +280,64 @@ def _part(path, old, new, status):
 
 
 def _ambiguous(path, old, candidates):
-    return PartResult(RefPart(path, old, old), "AMBIGUOUS", None, None, None, candidates)
+    return PartResult(
+        RefPart(path, old, old), "AMBIGUOUS", None, None, None, candidates
+    )
+
+
+class TestAnchorTokens(unittest.TestCase):
+    def test_archive_stem_is_searched_too(self):
+        tokens = profile_sync._anchor_tokens({"name": "stvbios.zip"})
+        self.assertIn("stvbios.zip", tokens)
+        self.assertIn("stvbios", tokens)
+
+    def test_hashes_still_win(self):
+        tokens = profile_sync._anchor_tokens(
+            {"name": "a.zip", "sha1": "AABB" * 10}
+        )
+        self.assertIn("aabb" * 10, tokens)
+
+    def test_very_short_stem_is_skipped(self):
+        self.assertNotIn("ab", profile_sync._anchor_tokens({"name": "ab.zip"}))
+
+
+class TestNudgeToDeclared(unittest.TestCase):
+    LINES = ["pad"] * 20 + ["ROM_START( stvbios )"] + ["pad"] * 20
+
+    def test_moves_onto_the_declared_value(self):
+        self.assertEqual(
+            profile_sync.nudge_to_declared(self.LINES, 19, 19, ["stvbios"]),
+            (21, 21),
+        )
+
+    def test_range_length_is_kept(self):
+        self.assertEqual(
+            profile_sync.nudge_to_declared(self.LINES, 19, 22, ["stvbios"]),
+            (21, 24),
+        )
+
+    def test_nothing_when_already_on_target(self):
+        self.assertIsNone(
+            profile_sync.nudge_to_declared(self.LINES, 21, 21, ["stvbios"])
+        )
+
+    def test_nothing_beyond_the_window(self):
+        lines = ["pad"] * 500 + ["ROM_START( stvbios )"]
+        self.assertIsNone(profile_sync.nudge_to_declared(lines, 1, 1, ["stvbios"]))
+
+    def test_nothing_without_tokens(self):
+        self.assertIsNone(profile_sync.nudge_to_declared(self.LINES, 19, 19, []))
+
+    def test_nothing_when_the_value_is_absent(self):
+        self.assertIsNone(
+            profile_sync.nudge_to_declared(self.LINES, 19, 19, ["absent"])
+        )
+
+    def test_adjacent_duplicates_are_refused(self):
+        lines = ["pad"] * 20 + ["stvbios a", "stvbios b"] + ["pad"] * 20
+        self.assertIsNone(
+            profile_sync.nudge_to_declared(lines, 19, 19, ["stvbios"])
+        )
 
 
 class TestDominantShift(unittest.TestCase):
@@ -315,7 +372,9 @@ class TestDominantShift(unittest.TestCase):
                          "AMBIGUOUS")
 
     def test_range_length_is_preserved(self):
-        part = PartResult(RefPart("a.c", 100, 104), "AMBIGUOUS", None, None, None, [120])
+        part = PartResult(
+            RefPart("a.c", 100, 104), "AMBIGUOUS", None, None, None, [120]
+        )
         settled = profile_sync.resolve_by_shift(part, {"a.c": 20})
         self.assertEqual((settled.start, settled.end), (120, 124))
 
