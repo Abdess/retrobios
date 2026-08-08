@@ -51,6 +51,9 @@ def compute_coverage(
     total = result["total_files"]
     present = ok + untested
     pct = (present / total * 100) if total > 0 else 0
+    undeclared = result.get("undeclared_files", [])
+    core_present = sum(1 for u in undeclared if u.get("in_repo"))
+    core_missing = len(undeclared) - core_present
     return {
         "platform": config.get("platform", platform_name),
         "total": total,
@@ -59,6 +62,10 @@ def compute_coverage(
         "missing": missing,
         "present": present,
         "percentage": pct,
+        "core_present": core_present,
+        "core_missing": core_missing,
+        "pack_files": present + core_present,
+        "total_missing": missing + core_missing,
         "mode": config.get("verification_mode", "existence"),
         "details": result["details"],
         "config": config,
@@ -67,6 +74,33 @@ def compute_coverage(
             {"with_validation": 0, "platform_only": total, "total": total},
         ),
     }
+
+
+def manifest_totals(
+    platform_name: str, install_dir: str = "install"
+) -> tuple[int | None, int | None]:
+    """Files and bytes a platform's pack ships, from its install manifest.
+
+    The manifest is written when packs are built, so it reflects the real
+    pack contents (platform list, core complement and data directories).
+    Returns (None, None) when no manifest exists yet.
+    """
+    path = os.path.join(install_dir, f"{platform_name}.json")
+    if not os.path.exists(path):
+        return None, None
+    try:
+        with open(path) as f:
+            manifest = json.load(f)
+    except (json.JSONDecodeError, OSError):
+        return None, None
+    return manifest.get("total_files"), manifest.get("total_size")
+
+
+def format_size(size: int) -> str:
+    """Human-readable pack size."""
+    if size >= 1024**3:
+        return f"{size / 1024**3:.1f} GB"
+    return f"{size / 1024**2:.0f} MB"
 
 
 SITE_URL = "https://abdess.github.io/retrobios/"
@@ -195,8 +229,8 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
         "",
         "Pick your platform, download the ZIP, extract to the BIOS path.",
         "",
-        "| Platform | BIOS files | Extract to | Download |",
-        "|----------|-----------|-----------|----------|",
+        "| Platform | Size | Extract to | Download |",
+        "|----------|------|-----------|----------|",
     ]
 
     # Where the pack itself is extracted, which is not always the BIOS folder:
@@ -227,8 +261,10 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
         if name in archived:
             display = f"{display} *"
         path = extract_paths.get(cov["platform"], "")
+        _, size = manifest_totals(name)
+        size_cell = format_size(size) if size else "-"
         lines.append(
-            f"| {display} | {cov['total']} | {path} | [Download]({RELEASE_URL}) |"
+            f"| {display} | {size_cell} | {path} | [Download]({RELEASE_URL}) |"
         )
 
     if archived:
@@ -313,40 +349,37 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
             "",
             "## Coverage",
             "",
-            "| Platform | Coverage | Verified | Untested | Missing | Source-backed |",
-            "|----------|----------|----------|----------|---------|---------------|",
+            "| Platform | Files in pack | Still missing | Verified by |",
+            "|----------|--------------:|--------------:|-------------|",
         ]
     )
 
+    mode_labels = {
+        "md5": "MD5 hash",
+        "sha1": "SHA1 hash",
+        "existence": "file presence",
+    }
+
     for name, cov in sorted(coverages.items(), key=lambda x: x[1]["platform"]):
-        pct = f"{cov['percentage']:.1f}%"
-        gt = cov["ground_truth"]
-        if not gt.get("applicable", True):
-            gt_cell = "-"
-        elif gt["total"]:
-            gt_pct = f"{gt['with_validation'] / gt['total'] * 100:.0f}%"
-            gt_cell = f"{gt['with_validation']}/{gt['total']} ({gt_pct})"
-        else:
-            gt_cell = "0/0"
         display = f"{cov['platform']} *" if name in archived else cov["platform"]
+        files = manifest_totals(name)[0] or cov["pack_files"]
+        checked = mode_labels.get(cov["mode"], cov["mode"])
         lines.append(
-            f"| {display} | {cov['present']}/{cov['total']} ({pct}) | "
-            f"{cov['verified']} | {cov['untested']} | {cov['missing']} | "
-            f"{gt_cell} |"
+            f"| {display} | {files:,} | {cov['total_missing']} | {checked} |"
         )
 
     lines.extend(
         [
             "",
-            "Coverage is measured against the file list each platform declares,"
-            " using that platform's own verification mode.",
-            "Source-backed counts the files whose content the emulator's own"
-            " code checks: a size or hash read from its source, reproduced at"
-            " verification. A dash means no profiled emulator applies to the"
-            " platform, whose own source is then the only authority.",
-            f"The [gap analysis]({SITE_URL}gaps/) page counts separately the"
-            " files a profile documents without a content check, and tracks"
-            " where platform lists and emulator source code disagree.",
+            "A pack carries what the platform declares plus what its emulators"
+            " load without the platform listing it, so it holds more files than"
+            " the platform's own list.",
+            "Still missing counts files an emulator needs that are not in the"
+            " collection yet; verified by is the check the platform itself runs"
+            " on them.",
+            f"The [gap analysis]({SITE_URL}gaps/) page names those missing files"
+            " and details how far each platform's files are corroborated against"
+            " emulator source code.",
             "",
             "## Build your own pack",
             "",

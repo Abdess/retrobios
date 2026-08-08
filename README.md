@@ -32,20 +32,20 @@ The script auto-detects your platform, downloads only missing files, and verifie
 
 Pick your platform, download the ZIP, extract to the BIOS path.
 
-| Platform | BIOS files | Extract to | Download |
-|----------|-----------|-----------|----------|
-| Batocera | 353 | `/userdata/bios/` | [Download](../../releases/latest) |
-| BizHawk | 118 | `Firmware/` | [Download](../../releases/latest) |
-| EmuDeck | 161 | `~/Emulation/bios/` | [Download](../../releases/latest) |
-| Lakka | 530 | `/storage/system/` | [Download](../../releases/latest) |
-| MiSTer FPGA | 65 | `/media/fat/games/` | [Download](../../releases/latest) |
-| ROCKNIX | 38 | `/storage/roms/bios/` | [Download](../../releases/latest) |
-| Recalbox | 346 | `/recalbox/share/bios/` | [Download](../../releases/latest) |
-| RetroArch | 530 | `system/` | [Download](../../releases/latest) |
-| RetroBat | 341 | `bios/` | [Download](../../releases/latest) |
-| RetroDECK | 2008 | `~/retrodeck/` | [Download](../../releases/latest) |
-| RetroPie * | 530 | `~/RetroPie/BIOS/` | [Download](../../releases/latest) |
-| RomM | 374 | `bios/{platform_slug}/` | [Download](../../releases/latest) |
+| Platform | Size | Extract to | Download |
+|----------|------|-----------|----------|
+| Batocera | 2.7 GB | `/userdata/bios/` | [Download](../../releases/latest) |
+| BizHawk | 2.4 GB | `Firmware/` | [Download](../../releases/latest) |
+| EmuDeck | 1.6 GB | `~/Emulation/bios/` | [Download](../../releases/latest) |
+| Lakka | 3.9 GB | `/storage/system/` | [Download](../../releases/latest) |
+| MiSTer FPGA | 23 MB | `/media/fat/games/` | [Download](../../releases/latest) |
+| ROCKNIX | 3.8 GB | `/storage/roms/bios/` | [Download](../../releases/latest) |
+| Recalbox | 2.3 GB | `/recalbox/share/bios/` | [Download](../../releases/latest) |
+| RetroArch | 3.9 GB | `system/` | [Download](../../releases/latest) |
+| RetroBat | 3.1 GB | `bios/` | [Download](../../releases/latest) |
+| RetroDECK | 4.6 GB | `~/retrodeck/` | [Download](../../releases/latest) |
+| RetroPie * | - | `~/RetroPie/BIOS/` | [Download](../../releases/latest) |
+| RomM | 1.4 GB | `bios/{platform_slug}/` | [Download](../../releases/latest) |
 
 The RetroDECK pack already contains its own `bios/` folder, so it extracts into `~/retrodeck/` rather than into the BIOS folder.
 
@@ -57,7 +57,7 @@ BIOS, firmware, and system files for consoles from Atari to PlayStation 3.
 Every file passes its platform's own verification; where an emulator profile exists, the expected hashes and sizes are read from the emulator's source code (the Source-backed column below).
 
 - **12 platforms** supported with platform-specific verification
-- **318 emulators** profiled from source (RetroArch cores + standalone)
+- **320 emulators** profiled from source (RetroArch cores + standalone)
 - **396 systems** covered (NES, SNES, PlayStation, Saturn, Dreamcast, ...)
 - **7,651 files** indexed with SHA1, MD5, SHA256 and CRC32 checksums: 2,366 system files, 2,746 arcade ROM sets, 2,539 game and engine data files
 - **527 files** matched to dump-preservation catalogs (No-Intro, Redump, TOSEC)
@@ -71,24 +71,24 @@ Full list with per-file details: **[https://abdess.github.io/retrobios/](https:/
 
 ## Coverage
 
-| Platform | Coverage | Verified | Untested | Missing | Source-backed |
-|----------|----------|----------|----------|---------|---------------|
-| Batocera | 353/353 (100.0%) | 353 | 0 | 0 | 96/353 (27%) |
-| BizHawk | 118/118 (100.0%) | 118 | 0 | 0 | 4/118 (3%) |
-| EmuDeck | 161/161 (100.0%) | 161 | 0 | 0 | 16/161 (10%) |
-| Lakka | 530/530 (100.0%) | 530 | 0 | 0 | 124/530 (23%) |
-| MiSTer FPGA | 65/65 (100.0%) | 65 | 0 | 0 | - |
-| ROCKNIX | 38/38 (100.0%) | 38 | 0 | 0 | 29/38 (76%) |
-| Recalbox | 346/346 (100.0%) | 346 | 0 | 0 | 86/346 (25%) |
-| RetroArch | 530/530 (100.0%) | 530 | 0 | 0 | 124/530 (23%) |
-| RetroBat | 341/341 (100.0%) | 341 | 0 | 0 | 84/341 (25%) |
-| RetroDECK | 2008/2008 (100.0%) | 2008 | 0 | 0 | 121/2008 (6%) |
-| RetroPie * | 530/530 (100.0%) | 530 | 0 | 0 | 124/530 (23%) |
-| RomM | 374/374 (100.0%) | 374 | 0 | 0 | 88/374 (24%) |
+| Platform | Files in pack | Still missing | Verified by |
+|----------|--------------:|--------------:|-------------|
+| Batocera | 1,601 | 4 | MD5 hash |
+| BizHawk | 539 | 5 | SHA1 hash |
+| EmuDeck | 525 | 0 | MD5 hash |
+| Lakka | 1,631 | 4 | file presence |
+| MiSTer FPGA | 65 | 0 | MD5 hash |
+| ROCKNIX | 1,496 | 5 | MD5 hash |
+| Recalbox | 1,184 | 6 | MD5 hash |
+| RetroArch | 1,631 | 4 | file presence |
+| RetroBat | 1,235 | 4 | MD5 hash |
+| RetroDECK | 3,266 | 4 | MD5 hash |
+| RetroPie * | 1,678 | 4 | file presence |
+| RomM | 543 | 4 | MD5 hash |
 
-Coverage is measured against the file list each platform declares, using that platform's own verification mode.
-Source-backed counts the files whose content the emulator's own code checks: a size or hash read from its source, reproduced at verification. A dash means no profiled emulator applies to the platform, whose own source is then the only authority.
-The [gap analysis](https://abdess.github.io/retrobios/gaps/) page counts separately the files a profile documents without a content check, and tracks where platform lists and emulator source code disagree.
+A pack carries what the platform declares plus what its emulators load without the platform listing it, so it holds more files than the platform's own list.
+Still missing counts files an emulator needs that are not in the collection yet; verified by is the check the platform itself runs on them.
+The [gap analysis](https://abdess.github.io/retrobios/gaps/) page names those missing files and details how far each platform's files are corroborated against emulator source code.
 
 ## Build your own pack
 
@@ -124,7 +124,7 @@ The [documentation site](https://abdess.github.io/retrobios/) provides:
 - **Per-emulator profiles** with source code references for every file
 - **Per-system pages** showing which emulators and platforms cover each console
 - **Gap analysis** identifying missing files and undeclared core requirements
-- **Cross-reference** mapping files across 12 platforms and 318 emulators
+- **Cross-reference** mapping files across 12 platforms and 320 emulators
 
 ## How it works
 
@@ -161,4 +161,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software.
 The legal reasoning is laid out in the [FAQ](https://abdess.github.io/retrobios/wiki/faq/#is-this-legal).
 
-*Auto-generated on 2026-08-08T02:07:01Z*
+*Auto-generated on 2026-08-08T03:39:12Z*

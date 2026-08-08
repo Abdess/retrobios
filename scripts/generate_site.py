@@ -32,7 +32,7 @@ from common import (
 )
 
 yaml = require_yaml()
-from generate_readme import compute_coverage
+from generate_readme import compute_coverage, manifest_totals
 from provenance_report import build_report
 
 DOCS_DIR = "docs"
@@ -1731,58 +1731,77 @@ def generate_gap_analysis(
     # ---- Verification per platform ----
 
     lines.extend([
-        "## Verification by Platform",
+        "## What Each Pack Contains",
         "",
-        "| Platform | Files | Verified | Untested | Missing | Mode | Profiled | Source-backed |",
-        "|----------|------:|---------:|---------:|--------:|------|---------:|--------------:|",
+        "| Platform | Files in pack | Declared by platform | Still missing | Verified by |",
+        "|----------|--------------:|---------------------:|--------------:|-------------|",
     ])
+
+    mode_labels = {
+        "md5": "MD5 hash",
+        "sha1": "SHA1 hash",
+        "existence": "file presence",
+    }
 
     for pname, cov in sorted(coverages.items(), key=lambda x: x[1]["platform"]):
         display = cov["platform"]
-        m = cov["missing"]
-        u = cov["untested"]
+        gone = cov["total_missing"]
         missing_str = (
-            f'<span class="rb-badge rb-badge-danger">{m}</span>'
-            if m > 0
+            f'<span class="rb-badge rb-badge-danger">{gone}</span>'
+            if gone > 0
             else '<span class="rb-badge rb-badge-success">0</span>'
         )
-        untested_str = (
-            f'<span class="rb-badge rb-badge-warning">{u}</span>'
-            if u > 0
-            else str(u)
-        )
-        gt = cov["ground_truth"]
-        if not gt.get("applicable", True):
-            gt_cell = prof_cell = "-"
-        elif gt["total"]:
-            gt_pct = f"{gt['with_validation'] / gt['total'] * 100:.0f}%"
-            gt_cell = f"{gt['with_validation']}/{gt['total']} ({gt_pct})"
-            prof_pct = f"{gt.get('with_profile', 0) / gt['total'] * 100:.0f}%"
-            prof_cell = f"{gt.get('with_profile', 0)}/{gt['total']} ({prof_pct})"
-        else:
-            gt_cell = prof_cell = "0/0"
+        files = manifest_totals(pname)[0] or cov["pack_files"]
         lines.append(
             f"| [{display}](platforms/{pname}.md) "
-            f"| {cov['total']} "
-            f"| {cov['verified']} "
-            f"| {untested_str} "
+            f"| {files:,} "
+            f"| {cov['present']:,} "
             f"| {missing_str} "
-            f"| {cov['mode']} "
-            f"| {prof_cell} "
-            f"| {gt_cell} |"
+            f"| {mode_labels.get(cov['mode'], cov['mode'])} |"
         )
     lines.extend([
         "",
-        "Verification follows each platform's own runtime check "
-        "([how each mode works](wiki/verification-modes.md)): the counts "
-        "measure the repository against the file list each platform declares. "
-        "Profiled counts the files documented in an emulator profile (name or "
-        "alias read from source). Source-backed is stricter: the emulator's "
-        "own code checks the file's content (a size or hash read from its "
-        "source, reproduced at verification). A file can be profiled without "
-        "being source-backed when the code loads it but never checks it. "
-        "A dash means no profiled emulator applies to the platform, whose "
-        "own source is then the only authority.",
+        "A pack carries the platform's own file list plus every file its "
+        "emulators load without that list mentioning them, which is why it "
+        "ships several times what the platform declares. Still missing counts "
+        "files an emulator needs that are not in the collection yet, named in "
+        "the sections below. Verified by is the check the platform runs at "
+        "runtime, replicated here "
+        "([how each mode works](wiki/verification-modes.md)).",
+        "",
+        "## Corroboration Against Emulator Source",
+        "",
+        "| Platform | Declared by platform | Profiled | Content checked by emulator code |",
+        "|----------|---------------------:|---------:|---------------------------------:|",
+    ])
+
+    for pname, cov in sorted(coverages.items(), key=lambda x: x[1]["platform"]):
+        gt = cov["ground_truth"]
+        if not gt.get("applicable", True):
+            prof_cell = gt_cell = "-"
+        elif gt["total"]:
+            prof_pct = f"{gt.get('with_profile', 0) / gt['total'] * 100:.0f}%"
+            prof_cell = f"{gt.get('with_profile', 0)} ({prof_pct})"
+            gt_pct = f"{gt['with_validation'] / gt['total'] * 100:.0f}%"
+            gt_cell = f"{gt['with_validation']} ({gt_pct})"
+        else:
+            prof_cell = gt_cell = "0"
+        lines.append(
+            f"| [{cov['platform']}](platforms/{pname}.md) "
+            f"| {gt['total']:,} | {prof_cell} | {gt_cell} |"
+        )
+
+    lines.extend([
+        "",
+        "Both columns count the files a platform declares. Profiled means the "
+        "file is documented in an emulator profile read from source. Content "
+        "checked is stricter: the emulator's code verifies a size or hash for "
+        "it, and this tool reproduces that check. The gap between the two is "
+        "not a defect, it is what the emulator code does: many emulators load "
+        "a file without ever checking its content, and no amount of profiling "
+        "can invent a check the code does not perform. A dash means no "
+        "profiled emulator applies to the platform, whose own source is then "
+        "the only authority.",
         "",
     ])
 
