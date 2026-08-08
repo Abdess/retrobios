@@ -5,6 +5,7 @@ on:
     paths:
       - "bios/**"
       - "platforms/**"
+      - "emulators/**"
 
 permissions:
   contents: read
@@ -90,6 +91,34 @@ jobs:
                   errors.append(f'{yml_file.name}: {e.message}')
                   print(f'FAIL {yml_file.name}: {e.message}')
 
+          if errors:
+              sys.exit(1)
+          "
+
+      - name: Validate emulator profiles
+        run: |
+          python -c "
+          import json, yaml, sys
+          from jsonschema import validate, ValidationError
+          from pathlib import Path
+
+          with open('schemas/emulator.schema.json') as f:
+              schema = json.load(f)
+
+          errors = []
+          for yml_file in sorted(Path('emulators').glob('*.yml')):
+              if yml_file.name.endswith('.old.yml'):
+                  continue
+              with open(yml_file) as f:
+                  profile = yaml.safe_load(f)
+              try:
+                  validate(profile, schema)
+              except ValidationError as e:
+                  path = '/'.join(str(p) for p in e.absolute_path)
+                  errors.append(f'{yml_file.name}: {path}: {e.message}')
+                  print(f'FAIL {yml_file.name}: {path}: {e.message}')
+
+          print(f'{len(errors)} invalid profiles')
           if errors:
               sys.exit(1)
           "

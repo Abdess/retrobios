@@ -1,5 +1,6 @@
 emulator: "FreeIntv (Touchscreen Overlay)"
 type: alias
+alias_of: freeintv
 core_classification: alias
 source: "https://github.com/jcarr71/FreeIntvTSOverlay"
 upstream: "https://github.com/libretro/FreeIntv"

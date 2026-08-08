@@ -4,7 +4,7 @@ type: libretro
 core_classification: community_fork
 source: https://github.com/DanAlexMorton/3dsTrident
 upstream: https://github.com/wheremyfoodat/Panda3DS
-profiled_date: 2026-03-25
+profiled_date: "2026-03-25"
 core_version: git
 
 cores:

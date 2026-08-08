@@ -1,19 +1,72 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Emulator BIOS Profile",
+  "description": "One YAML per emulator core or engine, documenting every external file the code loads. Field reference: https://abdess.github.io/retrobios/wiki/profiling/",
   "type": "object",
-  "required": ["emulator", "source", "systems", "files"],
+  "required": ["emulator", "type"],
+  "allOf": [
+    {
+      "comment": "An alias profile points at another profile and carries no files of its own.",
+      "if": {
+        "properties": { "type": { "const": "alias" } },
+        "required": ["type"]
+      },
+      "then": { "required": ["alias_of"] },
+      "else": { "required": ["files"] }
+    }
+  ],
   "properties": {
     "emulator": { "type": "string" },
+    "display_name": { "type": "string" },
     "type": {
+      "description": "Operational: resolve_platform_cores() filters on it. Not a classification.",
       "type": "string",
-      "enum": ["standalone", "libretro", "standalone + libretro"]
+      "enum": [
+        "libretro",
+        "standalone",
+        "standalone + libretro",
+        "alias",
+        "launcher",
+        "game",
+        "utility",
+        "test"
+      ]
     },
-    "source": { "type": "string", "format": "uri" },
-    "systems": {
-      "type": "array",
-      "items": { "type": "string" }
+    "core_classification": {
+      "description": "Descriptive only, no effect on tooling.",
+      "type": "string",
+      "enum": [
+        "pure_libretro",
+        "official_port",
+        "community_fork",
+        "frozen_snapshot",
+        "enhanced_fork",
+        "game_engine",
+        "embedded_hle",
+        "launcher",
+        "alias",
+        "other"
+      ]
     },
+    "source": { "type": ["string", "object"] },
+    "upstream": { "type": ["string", "object", "null"] },
+    "source_commit": { "type": "string" },
+    "upstream_commit": { "type": "string" },
+    "profiled_date": {
+      "description": "Quote it: an unquoted YAML date parses to a date object.",
+      "type": ["string", "object"]
+    },
+    "core_version": { "type": ["string", "number", "object", "null"] },
+    "alias_of": { "type": "string" },
+    "cores": {
+      "description": "Upstream names the core is known by. A dict maps each name to per-variant metadata.",
+      "type": ["array", "object"]
+    },
+    "systems": { "type": "array", "items": { "type": "string" } },
+    "mode": { "type": "string", "enum": ["standalone", "libretro", "both"] },
+    "verification": { "type": "string", "enum": ["existence", "md5", "sha1", "crc32"] },
+    "exclusion_note": { "type": "string" },
+    "notes": { "type": ["string", "array", "object"] },
     "files": {
       "type": "array",
       "items": {
@@ -21,13 +74,70 @@
         "required": ["name"],
         "properties": {
           "name": { "type": "string" },
-          "region": { "type": "string" },
-          "required": { "type": "boolean", "default": false },
-          "md5": { "type": "string", "pattern": "^[a-fA-F0-9]{32}$" },
-          "sha1": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
-          "size": { "type": "integer" },
-          "source_ref": { "type": "string" },
-          "note": { "type": "string" }
+          "required": { "type": "boolean" },
+          "system": { "type": "string" },
+          "path": { "type": ["string", "null"] },
+          "destination": { "type": "string" },
+          "aliases": { "type": "array", "items": { "type": "string" } },
+          "archive": {
+            "description": "ROM set the file lives in, for arcade entries.",
+            "type": "string"
+          },
+          "category": {
+            "type": "string",
+            "enum": ["bios", "game_data", "bios_zip"]
+          },
+          "mode": { "type": "string", "enum": ["standalone", "libretro", "both"] },
+          "storage": {
+            "type": "string",
+            "enum": ["embedded", "external", "user_provided", "large_file", "release"]
+          },
+          "hle_fallback": { "type": "boolean" },
+          "agnostic": { "type": "boolean" },
+          "size": { "type": ["integer", "array", "null"] },
+          "min_size": { "type": "integer" },
+          "max_size": { "type": "integer" },
+          "md5": {
+            "oneOf": [
+              { "type": "null" },
+              { "type": "string", "pattern": "^[a-fA-F0-9]{32}$" },
+              {
+                "type": "array",
+                "items": { "type": "string", "pattern": "^[a-fA-F0-9]{32}$" }
+              }
+            ]
+          },
+          "sha1": {
+            "oneOf": [
+              { "type": "string", "pattern": "^[a-fA-F0-9]{40}$" },
+              {
+                "type": "array",
+                "items": { "type": "string", "pattern": "^[a-fA-F0-9]{40}$" }
+              }
+            ]
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-fA-F0-9]{64}(,[a-fA-F0-9]{64})*$"
+          },
+          "crc32": { "type": "string" },
+          "known_hash_adler32": { "type": ["string", "integer"] },
+          "validation": {
+            "description": "Checks the code performs. A dict splits core from upstream when they diverge.",
+            "oneOf": [
+              { "type": "array", "items": { "type": "string" } },
+              { "type": "object" }
+            ]
+          },
+          "region": { "type": ["string", "array"] },
+          "contents": { "type": "array", "items": { "type": "object" } },
+          "source_ref": {
+            "description": "A dict splits core from upstream when the two diverge.",
+            "type": ["string", "array", "object"]
+          },
+          "description": { "type": "string" },
+          "note": { "type": "string" },
+          "unsourceable": { "type": "string" }
         }
       }
     }
