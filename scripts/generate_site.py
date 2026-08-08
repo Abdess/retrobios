@@ -25,6 +25,7 @@ from common import (
     list_registered_platforms,
     load_database,
     load_emulator_profiles,
+    load_provenance_snapshots,
     require_yaml,
     unique_emulator_profiles,
     write_if_changed,
@@ -32,6 +33,7 @@ from common import (
 
 yaml = require_yaml()
 from generate_readme import compute_coverage
+from provenance_report import build_report
 
 DOCS_DIR = "docs"
 SITE_NAME = "RetroBIOS"
@@ -335,6 +337,19 @@ def generate_home(
         ]
     )
 
+    catalog_matched = sum(
+        1 for f in db.get("files", {}).values() if f.get("provenance")
+    )
+    if catalog_matched:
+        lines.extend(
+            [
+                "",
+                f"**{catalog_matched:,}** files are byte-identical to a dump "
+                "catalogued by No-Intro, Redump, or TOSEC, and say so on their "
+                "system page. [What that means](provenance.md).",
+            ]
+        )
+
     # Quick start (collapsible -- secondary info)
     lines.extend(
         [
@@ -399,6 +414,7 @@ def generate_home(
             "[Emulators](emulators/index.md){ .md-button } "
             "[Cross-reference](cross-reference.md){ .md-button } "
             "[Gap Analysis](gaps.md){ .md-button } "
+            "[Dump provenance](provenance.md){ .md-button } "
             "[Contributing](contributing.md){ .md-button .md-button--primary }",
             "",
             f'<div class="rb-timestamp">Generated on {ts}.</div>',
@@ -757,11 +773,137 @@ def generate_systems_index(manufacturers: dict) -> str:
 
 _PROVENANCE_LABELS = {"redump": "Redump", "no-intro": "No-Intro", "tosec": "TOSEC"}
 
+_PROVENANCE_HOMES = {
+    "redump": "http://redump.org/",
+    "no-intro": "https://no-intro.org/",
+    "tosec": "https://www.tosecdev.org/",
+}
+
 
 def _prov_title(data: dict) -> str:
     """Tooltip text for a provenance badge."""
     parts = [data.get("dat", ""), data.get("description", "")]
     return ": ".join(p for p in parts if p).replace('"', "&quot;")
+
+
+def generate_provenance_page(db: dict, report: dict) -> str:
+    """Page explaining the verified dump badges and listing catalog gaps."""
+    matched_files = sum(1 for f in db.get("files", {}).values() if f.get("provenance"))
+    total_files = db.get("total_files", 0)
+
+    lines = [
+        f"# Dump provenance - {SITE_NAME}",
+        "",
+        f"**{matched_files:,}** of {total_files:,} files match an entry in a "
+        "dump-preservation catalog. Those files carry a "
+        '<span class="rb-badge rb-badge-success">Verified dump</span> badge on '
+        "the [system pages](systems/index.md).",
+        "",
+        "## What the badge means",
+        "",
+        "The badge says the file is byte-identical to a dump catalogued by "
+        "No-Intro, Redump, or TOSEC. Matching is done on SHA1, falling back to "
+        "MD5 plus size for older catalog entries that predate SHA1. Filenames "
+        "are never used: the same dump is `fdsbios.nes` here, "
+        "`[BIOS] Family Computer Disk System (Japan) (En) (Rev 1).bin` at "
+        "No-Intro, and "
+        "`Nintendo Famicom Disk System BIOS (198x)(Nintendo)(JP)(en).bin` at "
+        "TOSEC.",
+        "",
+        "## What it does not mean",
+        "",
+        "A file without a badge is not inferior and works exactly the same. "
+        "Emulator behaviour is decided by [verification]"
+        "(wiki/verification-modes.md), which reads the emulator source code, "
+        "not by catalog membership. Plenty of files this project ships are "
+        "outside any catalog by nature: composites a core assembles for itself "
+        "(the MiSTer X68000 `boot.rom` is `cgrom.dat` joined to `iplrom.dat`), "
+        "modern console firmware updates, game data such as `prboom.wad`, and "
+        "arcade sets tracked by MAME driver source instead.",
+        "",
+        "When the two views disagree, this project follows the code, because "
+        "that is what decides whether your emulator boots. The reasoning is in "
+        "the [FAQ](wiki/faq.md#are-these-files-verified-against-original-"
+        "hardware-dumps).",
+        "",
+        "## Coverage",
+        "",
+        "| Catalog | In collection | Covered DATs | Snapshot |",
+        "|---------|--------------|-------------|----------|",
+    ]
+
+    for source, data in report.items():
+        label = _PROVENANCE_LABELS.get(source, source)
+        home = _PROVENANCE_HOMES.get(source, "")
+        in_scope = data["matched"] + len(data["missing"])
+        pct = 100 * data["matched"] / in_scope if in_scope else 0
+        name = f"[{label}]({home})" if home else label
+        lines.append(
+            f"| {name} | {data['matched']:,}/{in_scope:,} ({pct:.0f}%) | "
+            f"{len(data['covered_dats'])} | {data['imported_at']} |"
+        )
+
+    lines.extend(
+        [
+            "",
+            "Coverage counts only DATs the collection already reaches: a DAT "
+            "counts as covered once at least one of its entries is held. "
+            "No-Intro tags every non-game dump `[BIOS]`, including digital "
+            "title distribution such as the Wii U and 3DS CDN catalogues, "
+            "which this project does not ship.",
+            "",
+        ]
+    )
+
+    out_of_scope = {s: d["out_of_scope"] for s, d in report.items() if d["out_of_scope"]}
+    if out_of_scope:
+        detail = ", ".join(
+            f"{_PROVENANCE_LABELS.get(s, s)} {c:,}" for s, c in sorted(out_of_scope.items())
+        )
+        lines.extend(
+            [
+                f"Entries in DATs the collection does not cover at all are "
+                f"excluded from those numbers ({detail}).",
+                "",
+            ]
+        )
+
+    total_missing = sum(len(d["missing"]) for d in report.values())
+    lines.extend(
+        [
+            "## Missing from the collection",
+            "",
+            f"**{total_missing:,}** catalogued dumps are absent, listed here "
+            "with their hashes so anyone can check a personal collection "
+            "against them. A contribution matching one of these hashes is "
+            "welcome: see [Contributing](contributing.md).",
+            "",
+        ]
+    )
+
+    for source, data in report.items():
+        if not data["missing"]:
+            continue
+        label = _PROVENANCE_LABELS.get(source, source)
+        by_dat: dict[str, list] = {}
+        for entry in data["missing"]:
+            by_dat.setdefault(entry.get("dat", ""), []).append(entry)
+        lines.extend([f"### {label}", ""])
+        for dat in sorted(by_dat):
+            entries = by_dat[dat]
+            lines.extend([f'??? note "{dat} ({len(entries)})"', ""])
+            lines.append("    | Name | Description | SHA1 |")
+            lines.append("    |------|-------------|------|")
+            for entry in sorted(entries, key=lambda e: e["name"]):
+                sha1 = entry.get("sha1") or "-"
+                # A pipe in catalog text would split the markdown table row
+                name = entry["name"].replace("|", "-")
+                desc = (entry.get("description") or "").replace("|", "-")
+                lines.append(f"    | `{name}` | {desc} | `{sha1}` |")
+            lines.append("")
+
+    lines.append(f'<div class="rb-timestamp">Generated on {_timestamp()}.</div>')
+    return "\n".join(lines) + "\n"
 
 
 def generate_system_page(
@@ -833,7 +975,8 @@ def generate_system_page(
             if provenance:
                 prov_badges = " ".join(
                     f'<span class="rb-badge rb-badge-success" '
-                    f'title="{_prov_title(data)}">{_PROVENANCE_LABELS.get(s, s)}</span>'
+                    f'title="{_prov_title(data)}">'
+                    f"[{_PROVENANCE_LABELS.get(s, s)}](../provenance.md#{s})</span>"
                     for s, data in sorted(provenance.items())
                 )
                 lines.append(f"- Verified dump: {prov_badges}")
@@ -2506,6 +2649,7 @@ def generate_mkdocs_nav(
         {"Emulators": emu_nav},
         {"Cross-reference": "cross-reference.md"},
         {"Gap Analysis": "gaps.md"},
+        {"Dump provenance": "provenance.md"},
         {"Wiki": wiki_nav},
         {"Contributing": "contributing.md"},
     ]
@@ -2652,6 +2796,13 @@ def main():
     write_if_changed(
         str(docs / "gaps.md"),
         generate_gap_analysis(profiles, coverages, db, suppl_names, registry),
+    )
+
+    # Generate dump provenance page
+    print("Generating dump provenance page...")
+    provenance_report = build_report(db, load_provenance_snapshots())
+    write_if_changed(
+        str(docs / "provenance.md"), generate_provenance_page(db, provenance_report)
     )
 
     # Wiki pages: copy manually maintained sources + generate dynamic ones

@@ -14,6 +14,7 @@ from scripts.common import (
     load_provenance_snapshots,
     write_provenance_snapshot,
 )
+from scripts.generate_site import generate_provenance_page
 from scripts.provenance_report import build_report
 from scripts.scraper.dat_pack_importer import _bios_entries, import_pack
 from scripts.scraper.logiqx_parser import parse_logiqx, validate_logiqx_format
@@ -385,6 +386,86 @@ class TestProvenanceReport(unittest.TestCase):
             "Nintendo - Wii U (Digital) (CDN)",
             [e["dat"] for e in data["missing"]],
         )
+
+
+class TestProvenancePage(unittest.TestCase):
+    def _page(self, extra_entries=None, provenance=True):
+        db = {
+            "total_files": 2,
+            "files": {
+                "b05def971d8ec59f346f2d9ac21fb742e3eb6917": {
+                    "name": "scph5500.bin",
+                    "size": 524288,
+                    "md5": "8dd7d5296a650fac7319bce665a6a53c",
+                    **(
+                        {
+                            "provenance": {
+                                "redump": {
+                                    "dat": "Sony - PlayStation - BIOS Images",
+                                    "name": "ps-30j.bin",
+                                    "description": "SCPH-5500",
+                                }
+                            }
+                        }
+                        if provenance
+                        else {}
+                    ),
+                },
+                "cccccccccccccccccccccccccccccccccccccccc": {
+                    "name": "unrelated.bin",
+                    "size": 1,
+                    "md5": "cc",
+                },
+            },
+        }
+        snapshots = {
+            "redump": {
+                "source": "redump",
+                "imported_at": "2026-08-07",
+                "dats": {},
+                "entries": _snapshot_entries() + (extra_entries or []),
+            }
+        }
+        return generate_provenance_page(db, build_report(db, snapshots))
+
+    def test_page_states_match_count_and_boundary(self):
+        page = self._page()
+        self.assertIn("**1** of 2 files", page)
+        self.assertIn("## What the badge means", page)
+        self.assertIn("## What it does not mean", page)
+        self.assertIn("A file without a badge is not inferior", page)
+
+    def test_page_lists_missing_entries_with_hashes(self):
+        page = self._page()
+        self.assertIn("ps-41a.bin", page)
+        self.assertIn("14df4f6c1e367ce097c11deae21566b4fe5647a9", page)
+        self.assertIn("### Redump", page)
+
+    def test_page_has_anchor_targets_for_badges(self):
+        """System-page badges link to ../provenance.md#<source>."""
+        page = self._page()
+        self.assertIn("### Redump", page)
+
+    def test_pipe_in_catalog_text_does_not_break_table(self):
+        extra = [
+            {
+                "dat": "Sony - PlayStation - BIOS Images",
+                "name": "we|rd.bin",
+                "description": "has | pipe",
+                "size": 7,
+                "crc32": "0",
+                "md5": "77777777777777777777777777777777",
+                "sha1": "7777777777777777777777777777777777777777",
+            }
+        ]
+        page = self._page(extra)
+        row = next(line for line in page.split("\n") if "we-rd.bin" in line)
+        self.assertEqual(row.count("|"), 4)
+        self.assertIn("has - pipe", row)
+
+    def test_page_without_any_match(self):
+        page = self._page(provenance=False)
+        self.assertIn("**0** of 2 files", page)
 
 
 if __name__ == "__main__":
