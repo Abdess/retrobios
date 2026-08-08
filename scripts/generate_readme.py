@@ -205,8 +205,9 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
                 'platform'
             ])[-1]['platform']}.",
         "",
-        f"**{total_files:,}** verified files across **{len(system_ids)}** systems,"
-        f" ready to extract into your emulator's BIOS directory.",
+        f"Pick your platform below and extract the pack: it carries every file"
+        f" its emulators load, read from their source code. Nothing to"
+        f" configure, nothing to hunt down.",
         "",
         "## Quick Install",
         "",
@@ -289,6 +290,10 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
             " profile exists, the expected hashes and sizes are read from the"
             " emulator's source code (the Source-backed column below).",
             "",
+            f"- **{sum(c['total_missing'] for c in coverages.values())} files missing**"
+            f" from the packs: every file the platforms' emulators load is in the"
+            f" collection. Files needed only by emulators no platform ships yet"
+            f" are counted in the [gap analysis]({SITE_URL}gaps/)",
             f"- **{len(coverages)} platforms** supported with platform-specific verification",
             f"- **{emulator_count} emulators** profiled from source (RetroArch cores + standalone)",
             f"- **{len(system_ids)} systems** covered (NES, SNES, PlayStation, Saturn, Dreamcast, ...)",

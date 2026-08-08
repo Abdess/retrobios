@@ -9,7 +9,7 @@
 
 Complete BIOS and firmware packs for Batocera, BizHawk, EmuDeck, Lakka, MiSTer FPGA, ROCKNIX, Recalbox, RetroArch, RetroBat, RetroDECK, RetroPie, and RomM.
 
-**7,652** verified files across **396** systems, ready to extract into your emulator's BIOS directory.
+Pick your platform below and extract the pack: it carries every file its emulators load, read from their source code. Nothing to configure, nothing to hunt down.
 
 ## Quick Install
 
@@ -56,12 +56,13 @@ The RetroDECK pack already contains its own `bios/` folder, so it extracts into 
 BIOS, firmware, and system files for consoles from Atari to PlayStation 3.
 Every file passes its platform's own verification; where an emulator profile exists, the expected hashes and sizes are read from the emulator's source code (the Source-backed column below).
 
+- **0 files missing** from the packs: every file the platforms' emulators load is in the collection. Files needed only by emulators no platform ships yet are counted in the [gap analysis](https://abdess.github.io/retrobios/gaps/)
 - **12 platforms** supported with platform-specific verification
-- **321 emulators** profiled from source (RetroArch cores + standalone)
+- **322 emulators** profiled from source (RetroArch cores + standalone)
 - **396 systems** covered (NES, SNES, PlayStation, Saturn, Dreamcast, ...)
-- **7,652 files** indexed with SHA1, MD5, SHA256 and CRC32 checksums: 2,366 system files, 2,747 arcade ROM sets, 2,539 game and engine data files
-- **527 files** matched to dump-preservation catalogs (No-Intro, Redump, TOSEC)
-- **9832 MB** total collection size
+- **7,723 files** indexed with SHA1, MD5, SHA256 and CRC32 checksums: 2,438 system files, 2,746 arcade ROM sets, 2,539 game and engine data files
+- **542 files** matched to dump-preservation catalogs (No-Intro, Redump, TOSEC)
+- **9843 MB** total collection size
 
 ## Supported systems
 
@@ -73,16 +74,16 @@ Full list with per-file details: **[https://abdess.github.io/retrobios/](https:/
 
 | Platform | Files in pack | Still missing | Verified by |
 |----------|--------------:|--------------:|-------------|
-| Batocera | 1,601 | 0 | MD5 hash |
-| BizHawk | 539 | 0 | SHA1 hash |
+| Batocera | 1,600 | 0 | MD5 hash |
+| BizHawk | 538 | 0 | SHA1 hash |
 | EmuDeck | 525 | 0 | MD5 hash |
-| Lakka | 1,631 | 0 | file presence |
+| Lakka | 1,630 | 0 | file presence |
 | MiSTer FPGA | 65 | 0 | MD5 hash |
-| ROCKNIX | 1,496 | 0 | MD5 hash |
+| ROCKNIX | 1,495 | 0 | MD5 hash |
 | Recalbox | 1,184 | 0 | MD5 hash |
-| RetroArch | 1,631 | 0 | file presence |
-| RetroBat | 1,235 | 0 | MD5 hash |
-| RetroDECK | 3,266 | 0 | MD5 hash |
+| RetroArch | 1,630 | 0 | file presence |
+| RetroBat | 1,234 | 0 | MD5 hash |
+| RetroDECK | 3,265 | 0 | MD5 hash |
 | RetroPie * | 1,678 | 0 | file presence |
 | RomM | 543 | 0 | MD5 hash |
 
@@ -124,7 +125,7 @@ The [documentation site](https://abdess.github.io/retrobios/) provides:
 - **Per-emulator profiles** with source code references for every file
 - **Per-system pages** showing which emulators and platforms cover each console
 - **Gap analysis** identifying missing files and undeclared core requirements
-- **Cross-reference** mapping files across 12 platforms and 321 emulators
+- **Cross-reference** mapping files across 12 platforms and 322 emulators
 
 ## How it works
 
@@ -161,4 +162,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software.
 The legal reasoning is laid out in the [FAQ](https://abdess.github.io/retrobios/wiki/faq/#is-this-legal).
 
-*Auto-generated on 2026-08-08T04:18:10Z*
+*Auto-generated on 2026-08-08T04:58:16Z*

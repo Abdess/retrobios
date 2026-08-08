@@ -1348,6 +1348,7 @@ def generate_emulator_page(
                 return True
             src = _resolve_source(
                 fname, by_name, by_name_lower, data_names, by_path_suffix,
+                f, db_files,
             )
             if src is not None:
                 return True
@@ -1355,7 +1356,7 @@ def generate_emulator_page(
             if path_field and path_field != fname:
                 src = _resolve_source(
                     path_field, by_name, by_name_lower, data_names,
-                    by_path_suffix,
+                    by_path_suffix, f, db_files,
                 )
                 if src is not None:
                     return True
@@ -1969,26 +1970,28 @@ def generate_gap_analysis(
     for _name, cov in coverages.items():
         matched = resolve_platform_cores(cov["config"], unique_profiles)
         relevant_set.update(matched)
-    active_profiles = {
-        k: v for k, v in unique_profiles.items() if k in relevant_set
-    }
-
-    report = run_cross_reference(
-        active_profiles, declared, db,
+    # One pass over every profile, read twice: the packs' scope (emulators a
+    # platform ships) and the whole profiled corpus, so the two views cannot
+    # drift apart.
+    report_all = run_cross_reference(
+        unique_profiles, declared, db,
         data_names=data_names, all_declared=all_declared,
     )
+    report = {k: v for k, v in report_all.items() if k in relevant_set}
 
     src_totals: dict[str, int] = {"bios": 0, "data": 0, "large_file": 0, "missing": 0}
     total_undeclared = 0
     emulator_gaps = []
 
-    for emu_name, data in sorted(report.items()):
+    for emu_name, data in sorted(report_all.items()):
         if data["gaps"] == 0:
             continue
         total_undeclared += data["gaps"]
         for key in src_totals:
             src_totals[key] += data.get(f"gap_{key}", 0)
         emulator_gaps.append((emu_name, data))
+
+    shipped_missing = sum(d["gap_missing"] for d in report.values())
 
     if total_undeclared > 0:
         total_available = (
@@ -2007,6 +2010,12 @@ def generate_gap_analysis(
             f"{total_undeclared:,} files across {len(emulator_gaps)} emulators, "
             f"{total_available:,} available ({pct_available}), "
             f"{src_totals['missing']} to source.",
+            "",
+            f"This counts every profiled emulator, including those no platform "
+            f"ships yet. Restricted to the emulators the platforms above do "
+            f"ship, {shipped_missing} of these files are absent, which is why "
+            f"the packs report no missing file. The rest are acquisition "
+            f"targets, named per emulator below.",
             "",
             "### Provenance",
             "",
