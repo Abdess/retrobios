@@ -64,14 +64,14 @@ files:
     required: true
     size: 262144
     note: "A500 Kickstart v1.3 rev 34.005, default for A500 model"
-    source_ref: "libretro/libretro.cpp:1776"
+    source_ref: "libretro/libretro.cpp:1517"
 
   - name: kick12.rom
     system: commodore-amiga
     required: false
     size: 262144
     note: "A500 Kickstart v1.2 rev 33.180, for A500OG model"
-    source_ref: "libretro/libretro.cpp:1775"
+    source_ref: "libretro/libretro.cpp:1516"
 
   - name: kick20.rom
     system: commodore-amiga
@@ -79,41 +79,41 @@ files:
     size: 524288
     aliases: [kick204.rom]
     note: "A500+ Kickstart v2.04 rev 37.175"
-    source_ref: "libretro/libretro.cpp:1777"
+    source_ref: "libretro/libretro.cpp:1518"
 
   - name: kick205.rom
     system: commodore-amiga
     required: false
     size: 524288
     note: "A600 Kickstart v2.05 rev 37.350, also used for WHDLoad"
-    source_ref: "libretro/libretro.cpp:1778"
+    source_ref: "libretro/libretro.cpp:1519"
 
   - name: kick31.rom
     system: commodore-amiga
     required: false
     size: 524288
     note: "Kickstart v3.1 (generic), first candidate for A1200 and A4000"
-    source_ref: "libretro/libretro.cpp:1779-1780"
+    source_ref: "libretro/libretro.cpp:1520-1521"
 
   - name: kick40068.A1200
     system: commodore-amiga
     required: false
     size: 524288
     note: "A1200 Kickstart v3.1 rev 40.68, fallback after kick31.rom"
-    source_ref: "libretro/libretro.cpp:1779"
+    source_ref: "libretro/libretro.cpp:1520"
 
   - name: kick40068.A4000
     system: commodore-amiga
     required: false
     size: 524288
     note: "A4000 Kickstart v3.1 rev 40.68, fallback after kick31.rom"
-    source_ref: "libretro/libretro.cpp:1780"
+    source_ref: "libretro/libretro.cpp:1521"
 
   - name: kick.rom
     system: commodore-amiga
     required: false
     note: "Generic name, any Kickstart ROM. Last resort fallback for all models."
-    source_ref: "libretro/libretro.cpp:1769-1781"
+    source_ref: "libretro/libretro.cpp:1510-1522"
 
   # --- CD32 ROMs ---
 
@@ -123,7 +123,7 @@ files:
     size: 524288
     aliases: [amiga-os-310-cd32.rom, kick40060.CD32]
     note: "CD32 Kickstart v3.1 rev 40.60"
-    source_ref: "libretro/libretro.cpp:1781"
+    source_ref: "libretro/libretro.cpp:1522"
 
   - name: cd32ext.rom
     system: commodore-cd32
@@ -140,7 +140,7 @@ files:
     required: false
     aliases: [kick34005.CDTV]
     note: "CDTV extended ROM v1.00, used as kickstart candidate"
-    source_ref: "libretro/libretro.cpp:1782"
+    source_ref: "libretro/libretro.cpp:1523"
 
   - name: cdtvext.rom
     system: commodore-cdtv
@@ -172,7 +172,7 @@ files:
     system: commodore-amiga
     required: false
     note: "Decryption key for Cloanto Amiga Forever encrypted ROMs"
-    source_ref: "src/rommgr.cpp:1458-1539"
+    source_ref: "src/rommgr.cpp:1444-1525"
 
   # --- Keyboard MCU ROMs ---
   # Loaded when keyboard_mode is set to MCU emulation.
@@ -184,21 +184,21 @@ files:
     required: false
     size: 2048
     note: "6500-1/6570-036 keyboard MCU ROM for A500/A600/A1000 models"
-    source_ref: "src/kbmcu/keyboard_mcu_6500_1.cpp:385-408, src/rommgr.cpp:136"
+    source_ref: "src/kbmcu/keyboard_mcu_6500_1.cpp:385-408, src/rommgr.cpp:126"
 
   - name: "68HC05.rom"
     system: commodore-amiga
     required: false
     size: 8192
     note: "68HC05 keyboard MCU ROM for A1200"
-    source_ref: "src/kbmcu/keyboard_mcu_6805.cpp:544-567, src/rommgr.cpp:138"
+    source_ref: "src/kbmcu/keyboard_mcu_6805.cpp:544-567, src/rommgr.cpp:128"
 
   - name: "D8039HLC.rom"
     system: commodore-amiga
     required: false
     size: 2048
     note: "D8039HLC keyboard MCU ROM for A2000"
-    source_ref: "src/kbmcu/keyboard_mcu_d8039hlc.cpp:235-258, src/rommgr.cpp:140"
+    source_ref: "src/kbmcu/keyboard_mcu_d8039hlc.cpp:235-258, src/rommgr.cpp:130"
 
   # --- Munt MT-32/CM-32L MIDI ROMs ---
   # Located in mt32-roms/ subdirectory of the ROM path.
@@ -221,14 +221,14 @@ files:
       - mt32-roms/ctrl_mt32_2_06.rom
       - mt32-roms/ctrl_mt32_2_03.rom
     note: "Roland MT-32 control ROM for Munt MIDI emulation"
-    source_ref: "src/midiemu.cpp:38-62, src/midiemu.cpp:159-164"
+    source_ref: "src/midiemu.cpp:38-62, src/midiemu.cpp:151-156"
 
   - name: mt32-roms/pcm_mt32.rom
     system: commodore-amiga
     required: false
     aliases: [mt32-roms/mt32_pcm.rom]
     note: "Roland MT-32 PCM ROM for Munt MIDI emulation"
-    source_ref: "src/midiemu.cpp:141-148"
+    source_ref: "src/midiemu.cpp:133-140"
 
   - name: mt32-roms/cm32l_control.rom
     system: commodore-amiga
@@ -239,11 +239,11 @@ files:
       - mt32-roms/ctrl_cm32l_1_02.rom
       - mt32-roms/ctrl_cm32l_1_00.rom
     note: "Roland CM-32L control ROM for Munt MIDI emulation"
-    source_ref: "src/midiemu.cpp:25-37, src/midiemu.cpp:159-164"
+    source_ref: "src/midiemu.cpp:25-37, src/midiemu.cpp:151-156"
 
   - name: mt32-roms/pcm_cm32l.rom
     system: commodore-amiga
     required: false
     aliases: [mt32-roms/cm32l_pcm.rom]
     note: "Roland CM-32L PCM ROM for Munt MIDI emulation"
-    source_ref: "src/midiemu.cpp:150-157"
+    source_ref: "src/midiemu.cpp:142-149"

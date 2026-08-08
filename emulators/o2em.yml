@@ -42,7 +42,7 @@ files:
     crc32: "8016a315"
     validation: [size, crc32]
     note: "Odyssey2 BIOS (G7000 NTSC). Default, vpp=0."
-    source_ref: "libretro.c:233-237"
+    source_ref: "libretro.c:216-220"
 
   - name: "c52.bin"
     system: videopac
@@ -54,7 +54,7 @@ files:
     crc32: "a318e8d6"
     validation: [size, crc32]
     note: "Videopac G7000 European BIOS. vpp=0, auto-sets PAL."
-    source_ref: "libretro.c:243-248"
+    source_ref: "libretro.c:226-231"
 
   - name: "g7400.bin"
     system: videopac
@@ -66,7 +66,7 @@ files:
     crc32: "e20a9f41"
     validation: [size, crc32]
     note: "Videopac+ G7400 European BIOS. vpp=1."
-    source_ref: "libretro.c:238-242"
+    source_ref: "libretro.c:221-225"
 
   - name: "jopac.bin"
     system: videopac
@@ -78,10 +78,10 @@ files:
     crc32: "11647ca5"
     validation: [size, crc32]
     note: "Videopac+ G7400 French BIOS (JoPac). vpp=1."
-    source_ref: "libretro.c:249-254"
+    source_ref: "libretro.c:232-237"
 
   - name: "voice/"
     required: false
     category: game_data
     note: "The Voice speech synthesis WAV samples. 9 banks (E4, E8-EF) × 128 samples."
-    source_ref: "voice.c:38-79, libretro.c:1130-1137"
+    source_ref: "voice.c:38-79, libretro.c:1095-1102"

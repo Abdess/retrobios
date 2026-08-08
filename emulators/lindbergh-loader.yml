@@ -70,7 +70,7 @@ files:
     required: true
     validation: [signature]
     description: "NVIDIA Cg 2.0.0.12 runtime used to recompile the game shaders"
-    source_ref: "src/lindbergh/shaderPatches.c:1028-1108, src/lindbergh/shaderPatches.c:1110-1170"
+    source_ref: "shaderPatches.c:1028-1108, shaderPatches.c:1110-1170"
     note: >-
       Searched at LIBCG_PATH, /app/lib32/libCg2.so, $APP_IMG_ROOT/usr/lib32/
       libCg2.so, then ./libCg.so and $LINDBERGH_LOADER_CURRENT_DIR/libCg.so. The
@@ -85,7 +85,7 @@ files:
     system: sega-lindbergh
     required: true
     description: "NVIDIA Cg 3.1 OpenGL runtime linked by the game binaries"
-    source_ref: "src/lindbergh/lindbergh.c:336-378, scripts/flatpak/com.github.lindberghloader.yml:181-189"
+    source_ref: "lindbergh.c:336-378, scripts/flatpak/com.github.lindberghloader.yml:181-189"
     note: >-
       Resolved by the dynamic linker for the game ELF through the
       LD_LIBRARY_PATH the launcher builds, not opened by loader code. Upstream
@@ -97,7 +97,7 @@ files:
     system: sega-lindbergh
     required: true
     description: "NVIDIA Cg 3.1 runtime linked by the game binaries"
-    source_ref: "src/lindbergh/lindbergh.c:336-378, scripts/flatpak/com.github.lindberghloader.yml:181-189"
+    source_ref: "lindbergh.c:336-378, scripts/flatpak/com.github.lindberghloader.yml:181-189"
     note: >-
       Same origin and mechanism as libCgGL.so, and a different build from the
       2.0.0.12 library the shader recompiler loads. Batocera keeps the two Cg
@@ -111,7 +111,7 @@ files:
     system: sega-lindbergh
     required: false
     description: "OpenSSL 0.9.7 crypto library linked by the networked games"
-    source_ref: "src/lindbergh/lindbergh.c:336-378, scripts/flatpak/com.github.lindberghloader.yml:244"
+    source_ref: "lindbergh.c:336-378, scripts/flatpak/com.github.lindberghloader.yml:244"
     note: >-
       Vendored as libs/libcrypto.so.0.9.7 and installed into the runtime library
       directory by both the AppImage and Flatpak builds. Resolved by the dynamic
@@ -121,14 +121,14 @@ files:
     system: sega-lindbergh
     required: false
     description: "OpenSSL 0.9.7 TLS library linked by the networked games"
-    source_ref: "src/lindbergh/lindbergh.c:336-378, scripts/flatpak/com.github.lindberghloader.yml:245"
+    source_ref: "lindbergh.c:336-378, scripts/flatpak/com.github.lindberghloader.yml:245"
     note: "Vendored as libs/libssl.so.0.9.7, paired with libcrypto.so.0.9.7."
 
   - name: libopenal.so.0
     system: sega-lindbergh
     required: false
     description: "OpenAL runtime preloaded for Quiz Answer x Answer"
-    source_ref: "src/lindbergh/lindbergh.c:22, src/lindbergh/lindbergh.c:315-328, src/lindbergh/lindbergh.c:882-890"
+    source_ref: "lindbergh.c:22, lindbergh.c:315-328, lindbergh.c:882-890"
     note: >-
       When the ELF is q2satl_lind the launcher looks the file up through
       findPreloadLibrary and appends it to LD_PRELOAD. Absence prints "You might
@@ -143,7 +143,7 @@ files:
     crc32: "38d56318"
     validation: [crc32]
     description: "Sega Lindbergh boot and hardware check program, version 2.4"
-    source_ref: "src/lindbergh/lindbergh.c:696-698, src/lindbergh/lindbergh.c:892-895, config.h:57-58, src/lindbergh/gameData.c:51-52"
+    source_ref: "lindbergh.c:696-698, lindbergh.c:892-895, config.h:57-58, gameData.c:51-52"
     note: >-
       Run as "segaboot -t" under -s or --segaboot. detectGame() matches the
       ELF CRC32 against the table, where 0x38d56318 is Segaboot 2.4 and
@@ -159,7 +159,7 @@ files:
     required: false
     hle_fallback: true
     description: "Lindbergh boot logo, read from /usr/lib/boot on the original system"
-    source_ref: "src/lindbergh/hook.c:655-667, src/lindbergh/hook.c:888-900"
+    source_ref: "hook.c:655-667, hook.c:888-900"
     note: >-
       Read from the game directory only when DISABLE_BUILTIN_LOGOS is set.
       Otherwise the logoLL array in resources/logo.h answers the read.
@@ -169,7 +169,7 @@ files:
     required: false
     hle_fallback: true
     description: "Lindbergh Red boot logo, read from /usr/lib/boot on the original system"
-    source_ref: "src/lindbergh/hook.c:669-681, src/lindbergh/hook.c:874-886"
+    source_ref: "hook.c:669-681, hook.c:874-886"
     note: >-
       Read from the game directory only when DISABLE_BUILTIN_LOGOS is set.
       Otherwise the logoLLRed array in resources/logo.h answers the read.
@@ -179,7 +179,7 @@ files:
     required: false
     hle_fallback: true
     description: "Sega Kaku Gothic console font texture"
-    source_ref: "src/lindbergh/hook.c:718-730, src/lindbergh/hook.c:902-914"
+    source_ref: "hook.c:718-730, hook.c:902-914"
     note: >-
       Read from the game directory only when DISABLE_BUILTIN_FONT is set.
       Otherwise the fontTGA array in resources/font.h answers the read.
@@ -189,7 +189,7 @@ files:
     required: false
     hle_fallback: true
     description: "Sega Kaku Gothic console font metrics"
-    source_ref: "src/lindbergh/hook.c:732-744, src/lindbergh/hook.c:916-928"
+    source_ref: "hook.c:732-744, hook.c:916-928"
     note: >-
       Read from the game directory only when DISABLE_BUILTIN_FONT is set.
       Otherwise the fontABC array in resources/font.h answers the read, with
@@ -200,7 +200,7 @@ files:
     required: false
     hle_fallback: true
     description: "Lucida Console font texture"
-    source_ref: "src/lindbergh/hook.c:683-695"
+    source_ref: "hook.c:683-695"
     note: >-
       Read from the game directory only when DISABLE_BUILTIN_FONT is set.
       Otherwise the fontTGA array in resources/font.h answers the read.
@@ -210,7 +210,7 @@ files:
     required: false
     hle_fallback: true
     description: "Lucida Console font metrics"
-    source_ref: "src/lindbergh/hook.c:697-709"
+    source_ref: "hook.c:697-709"
     note: >-
       Read from the game directory only when DISABLE_BUILTIN_FONT is set.
       Otherwise the fontABC array in resources/font.h answers the read.
@@ -221,7 +221,7 @@ files:
     system: sega-lindbergh
     required: false
     description: "Lindbergh runtime configuration read by the games from /root"
-    source_ref: "src/lindbergh/hook.c:650-653"
+    source_ref: "hook.c:650-653"
     note: >-
       The fopen hook rewrites /root/lindbergrc to lindbergrc in the game
       directory. The loader neither creates the file nor substitutes for it.
@@ -231,7 +231,7 @@ files:
     category: game_data
     required: false
     description: "SDL gamepad mappings added on top of the built-in table"
-    source_ref: "src/lindbergh/lindbergh.c:415-430, src/lindbergh/lindbergh.c:478, src/lindbergh/sdlInput.c:209-217"
+    source_ref: "lindbergh.c:415-430, lindbergh.c:478, sdlInput.c:209-217"
     note: >-
       Loaded from the path given by -d or --controllerdb, passed through the
       LINDBERGH_CONTROLS_DB_PATH environment variable. The built-in mappings in

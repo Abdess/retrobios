@@ -32,7 +32,7 @@ files:
     required: false
     size: 1048576
     validation: [size]
-    source_ref: "libretro/libretro.cpp:1414, bsx.cpp:1209, bsx.cpp:1214"
+    source_ref: "libretro.cpp:1209, bsx.cpp:1209, bsx.cpp:1214"
     aliases: ["BS-X.bios"]
     note: "Needed for Satellaview (.bs) games."
 
@@ -42,7 +42,7 @@ files:
     required: false
     size: 262144
     validation: [size]
-    source_ref: "libretro.cpp:1203, libretro/libretro.cpp:1546, memmap.cpp:1720"
+    source_ref: "libretro.cpp:1203, libretro.cpp:1317, memmap.cpp:1704"
     note: "Needed for Sufami Turbo multi-cart games."
 
 notes:

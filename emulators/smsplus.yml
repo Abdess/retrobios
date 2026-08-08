@@ -39,7 +39,7 @@ files:
     description: "Sega Master System boot ROM"
     required: false
     aliases: ["BIOS.sms"]
-    source_ref: "source/ports/libretro/smsplus_libretro.c:219-237"
+    source_ref: "smsplus_libretro.c:211-229"
     note: |
       Loaded into bios.rom (up to 1 MB allocated). Only active when core
       option smsplus_sms_bios is "auto". Displays SMS startup screen
@@ -50,7 +50,7 @@ files:
     description: "ColecoVision BIOS ROM"
     required: true
     size: 8192
-    source_ref: "source/ports/libretro/smsplus_libretro.c:240-256"
+    source_ref: "smsplus_libretro.c:232-248"
     note: |
       Required for ColecoVision games. Read as 0x2000 (8192) bytes into
       coleco.rom. Without this file, retro_load_game() returns false for

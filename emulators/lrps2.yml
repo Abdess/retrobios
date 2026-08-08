@@ -68,7 +68,7 @@ files:
     hle_fallback: true
     size: 1024
     description: "NVRAM / EEPROM data"
-    source_ref: "pcsx2/CDVD/CDVD.cpp:224-267"
+    source_ref: "pcsx2/CDVD/CDVD.cpp:201-244"
     note: >
       Console EEPROM data (language, timezone, region, iLink ID, OSD settings).
       Path derived from BIOS path with extension replaced to .nvm.
@@ -80,7 +80,7 @@ files:
     hle_fallback: true
     size: 4
     description: "Mechacon version"
-    source_ref: "pcsx2/CDVD/CDVD.cpp:255-266"
+    source_ref: "pcsx2/CDVD/CDVD.cpp:232-243"
     note: >
       Mechacon (disc drive controller) version as u32.
       Auto-created with default 0x00020603 if missing.
@@ -89,7 +89,7 @@ files:
     path: "pcsx2/resources/GameIndex.yaml"
     required: false
     description: "game compatibility database"
-    source_ref: "pcsx2/GameDatabase.cpp:47, pcsx2/GameDatabase.cpp:904"
+    source_ref: "pcsx2/GameDatabase.cpp:47, pcsx2/GameDatabase.cpp:896"
     note: >
       YAML database of per-game patches, settings overrides, and compatibility fixes.
       OSD warning shown if missing. Some games may not boot or have issues without it.
