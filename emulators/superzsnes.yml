@@ -1,0 +1,116 @@
+emulator: SUPER ZSNES
+type: standalone
+core_classification: other
+source: "https://www.zsnes.com"
+upstream: "https://www.zsnes.com"
+profiled_date: "2026-08-08"
+core_version: "v0.230b"
+display_name: "Nintendo - SNES / SFC (SUPER ZSNES)"
+cores:
+  - superzsnes
+  - SUPERZSNES
+systems:
+  - nintendo-snes
+mode: standalone
+
+notes: |
+  Super Famicom emulator by zsKnight and _Demo_, written from scratch with a
+  GPU-rendered PPU and unrelated to the ZSNES codebase. Shipped as binaries
+  only, for Windows, macOS, Linux and Android; the desktop builds are Unity
+  Mono, so the emulator is Assembly-CSharp.dll and the per-game tables are
+  serialized into the level0 scene. The Windows and Linux 0.230b builds carry
+  the same tables and the same emulation sources.
+
+  One NEC uPD7725 interpreter serves every cartridge whose header declares a
+  DSP. RomLoader.GetROMType reads the cartridge type byte at $FFD6 and returns
+  COProcessorType.DSP when the low nibble is 3 to 6 and the high nibble is 0,
+  or when the high nibble is F and the subtype byte at $FFBF is 1 or 2.
+  MainMemoryMap.InitSpecialChips builds the DSP1 object for that type alone.
+  The DSP1 constructor picks the filename from a table keyed on the CRC32 of
+  the 21 raw header title bytes, taken as Latin-1 and re-encoded UTF-8,
+  falling back to dsp1b.rom when no entry matches. Words are assembled little
+  endian, 2048 24-bit program words from offset 0 then 1024 16-bit data words
+  from offset 6144.
+
+  Three locations are tried in order: the folder holding the loaded ROM, the
+  Unity persistent data folder (ZEMU Software Inc./SUPERZSNES), then the
+  folder holding the executable. None of them goes through the srm and bps
+  path overrides. When all three miss, a "Need DSP ROM" dialog names the file
+  and the chip runs on a zero-filled 8192-byte buffer.
+
+  No other file is read. SA-1, SPC7110, S-RTC, Cx4, OBC-1, Super Game Boy and
+  the ST01x and ST018 enum entries build no chip, the SPC700 IPL is a 64-byte
+  array in CPUSPC700, and the enhancement data, the audio replacement data and
+  testgame.smc are Unity resources inside the build. Save RAM, save states,
+  cheats, bps patches and MSU-1 packs are all named after the loaded ROM.
+
+files:
+  # NEC uPD7725 microcode, program and data ROM in one file.
+  # The name is chosen by CRC32 of the 21-byte header title; dsp1b.rom is the
+  # default when no entry in the table matches.
+
+  - name: "dsp1b.rom"
+    aliases: ["SNES_dsp1b.rom"]
+    system: nintendo-snes
+    description: "NEC uPD7725 DSP-1B microcode"
+    required: true
+    size: 8192
+    crc32: 465c4e1c
+    validation: [crc32]
+    source_ref: "Assets/Scripts/SpecialChips/DSP1.cs:88-89 (name and expected CRC32 1180454428), DSP1.cs:151-155 (compare, warn on mismatch), Assets/Scripts/SpecialChips/DSP1Core.cs:756-769 (8192-byte layout)"
+    note: "Default for every DSP cartridge with no table entry, so it covers DSP-1 and DSP-1A titles as well. A mismatched CRC32 warns and the data is used anyway."
+
+  - name: "dsp2.rom"
+    aliases: ["SNES_dsp2.rom"]
+    system: nintendo-snes
+    description: "NEC uPD7725 DSP-2 microcode"
+    required: true
+    size: 8192
+    source_ref: "Assets/Scripts/SpecialChips/DSP1.cs:98-114 (table lookup, no CRC32 check), SUPERZSNES_Data/level0 (VersionNo.dspDetections entry 1, title CRC32 0x84690f8b)"
+    note: "Selected for header title 'DUNGEON MASTER' (Dungeon Master)."
+
+  - name: "dsp3.rom"
+    aliases: ["SNES_dsp3.rom"]
+    system: nintendo-snes
+    description: "NEC uPD7725 DSP-3 microcode"
+    required: true
+    size: 8192
+    source_ref: "Assets/Scripts/SpecialChips/DSP1.cs:98-114 (table lookup, no CRC32 check), SUPERZSNES_Data/level0 (VersionNo.dspDetections entry 2, title CRC32 0xfa7f8076)"
+    note: "Selected for the half-width katakana header title of SD Gundam GX, 'SD' then $B6 $DE $DD $C0 $DE $D1 then 'GX'."
+
+  - name: "dsp4.rom"
+    aliases: ["SNES_dsp4.rom"]
+    system: nintendo-snes
+    description: "NEC uPD7725 DSP-4 microcode"
+    required: true
+    size: 8192
+    source_ref: "Assets/Scripts/SpecialChips/DSP1.cs:98-114 (table lookup, no CRC32 check), SUPERZSNES_Data/level0 (VersionNo.dspDetections entry 3, title CRC32 0x42578645)"
+    note: "Selected for header title 'TOP GEAR 3000' (Top Gear 3000)."
+
+  # Seta parts. The table routes their cartridges to the same uPD7725
+  # interpreter, which reads the first 8192 bytes and checks neither size nor
+  # hash.
+
+  - name: "st010.rom"
+    aliases: ["SNES_st010.rom"]
+    system: nintendo-snes
+    description: "Seta ST010 microcode"
+    required: true
+    source_ref: "Assets/Scripts/SpecialChips/DSP1.cs:98-114 (table lookup, no CRC32 check), SUPERZSNES_Data/level0 (VersionNo.dspDetections entry 4, title CRC32 0x04e7aca6)"
+    note: "Selected for header title 'F1 ROC II' with $00 as the 21st byte (F1 ROC II: Race of Champions)."
+
+  - name: "st011.rom"
+    aliases: ["SNES_st011.rom"]
+    system: nintendo-snes
+    description: "Seta ST011 microcode"
+    required: true
+    source_ref: "Assets/Scripts/SpecialChips/DSP1.cs:98-114 (table lookup, no CRC32 check), SUPERZSNES_Data/level0 (VersionNo.dspDetections entry 5, title CRC32 0xc96d71c1)"
+    note: "Selected for header title '2DAN MORITA SHOUGI' with $00 as the 21st byte (Hayazashi Nidan Morita Shougi)."
+
+  - name: "st018.rom"
+    aliases: ["SNES_st018.rom"]
+    system: nintendo-snes
+    description: "Seta ST018 firmware"
+    required: true
+    source_ref: "Assets/Scripts/SpecialChips/DSP1.cs:98-114 (table lookup, no CRC32 check), SUPERZSNES_Data/level0 (VersionNo.dspDetections entry 6, title CRC32 0x85885c5e)"
+    note: "Selected for header title 'NIDAN MORITASHOGI2' (Hayazashi Nidan Morita Shougi 2)."

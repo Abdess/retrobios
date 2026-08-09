@@ -1,0 +1,169 @@
+emulator: PCSX2x6
+type: standalone
+core_classification: enhanced_fork
+bios_mode: agnostic
+source: "https://github.com/PS2Homebrew-arcade/pcsx2x6"
+upstream: "https://github.com/PCSX2/pcsx2"
+profiled_date: "2026-08-08"
+source_commit: "e69b265ef4bc98565deffb7c4a4b7d08143d4cf9"
+upstream_commit: "5c611f85e13ba250a69c155c678482b219b10d48"
+core_version: "v0.2.20"
+display_name: "Namco - System 246 / 256 (PCSX2x6)"
+cores:
+  - pcsx2x6
+  - PCSX2X6
+systems:
+  - namco-system246
+  - namco-system256
+
+notes: |
+  Namco System 246 and 256 arcade boards, which are Sony COH-H PlayStation 2
+  motherboards. The Namco hardware sits on the DEV9 bus: ATA and ATAPI media,
+  the ACCORE interrupt controller, JVS input, the expansion RAM board and the
+  settings SRAM. Super 256 is the 256 with a higher bus clock, selected by
+  platform=super256 in the game config.
+  ref: pcsx2/DEV9/ACATA.cpp, pcsx2/DEV9/ACCORE.cpp, pcsx2/DEV9/ACJV.cpp,
+       pcsx2/DEV9/ACRAM.cpp, pcsx2/DEV9/ACSRAM.cpp, pcsx2/VMManager.cpp:1382-1418
+
+  The BIOS must come from a COH-H board. A romver whose region letter is T
+  followed by Z is read as zone COH-H, region 11, and the EXTINFO serial names
+  the board: 20040519-145634 for System 256, 20021119-163841 for System 246
+  Rack C, 20000901-114731 for the COH-H A-000-010. Boot aborts when no image
+  loads.
+  ref: pcsx2/ps2/BiosTools.cpp:149-153, pcsx2/ps2/BiosTools.cpp:178-181,
+       pcsx2/VMManager.cpp:1657-1667
+
+  Detection is by content. The scan lists the BIOS folder with a * mask, keeps
+  files between 4 and 8 MB, and accepts the ones whose romdir carries a RESET
+  entry followed by a readable ROMVER; EXTINFO supplies the serial. The picker
+  in the settings window runs the same romdir test without the size filter, so
+  a manually selected image of any length is accepted. No name and no hash is
+  matched anywhere.
+  ref: pcsx2/ps2/BiosTools.cpp:16-17, pcsx2/ps2/BiosTools.cpp:80-207,
+       pcsx2/ps2/BiosTools.cpp:268-292,
+       pcsx2-qt/Settings/BIOSSettingsWidget.cpp:65-73
+
+  Companions derive from the selected BIOS path. Each extension is appended to
+  the full name first, then substituted for the existing one, so an image at
+  COH-H31100.rom0 is followed by COH-H31100.rom0.rom1 then COH-H31100.rom1.
+  The project's dumper writes that exact set from a live board: .rom0 of
+  0x400000, .rom1 of 0x400000, .rom2 of 0x80000, .nvm of 1024 bytes and .mec
+  of 4 bytes, all named after the board model.
+  ref: pcsx2/ps2/BiosTools.cpp:224-251, pcsx2/CDVD/CDVD.cpp:164-167,
+       biosdrain dump.c:32-36, biosdrain dump.c:70-120
+
+  A game is launched from an .acgame config in INI form. It names the boot elf,
+  the security dongle image in the memcards folder, an optional save card, the
+  CD/DVD/HDD image and the settings SRAM, and everything but the seven
+  character NM gameid can be resolved from the shipped database. Those files
+  are the game itself, one set per title.
+  ref: pcsx2/VMManager.cpp:1345-1490, pcsx2/VMManager.cpp:2667-2670,
+       pcsx2/DEV9/ACSRAM.cpp:17-40
+
+  The 256 regional signature normally comes from the iLinkId held in the nvm.
+  A 256Region entry in the .acgame feeds ASIA4, ASIA5 or JAPAN into the
+  mechacon read instead, which the Taiko games use to pick their region.
+  ref: pcsx2/CDVD/CDVD.cpp:2595-2608, pcsx2/VMManager.cpp:1371-1378
+
+  Read from the distribution tree and versioned with the build: the shader
+  sources every GS backend compiles at startup, the OSD fonts and fullscreen
+  UI textures, and the achievement notification sounds.
+  ref: pcsx2/GS/Renderers/Common/GSDevice.cpp:363-366,
+       pcsx2/ImGui/ImGuiFullscreen.cpp:300, pcsx2/ImGui/ImGuiFullscreen.cpp:396,
+       pcsx2/Achievements.cpp:1158, pcsx2/Achievements.cpp:1214,
+       pcsx2/Achievements.cpp:1339
+
+files:
+  - name: COH-H31100.rom0
+    system: namco-system246
+    required: true
+    min_size: 4194304
+    max_size: 8388608
+    validation: [size]
+    description: "COH-H arcade board BIOS"
+    note: "Any image whose romdir holds RESET and ROMVER is accepted, whatever its name. The 4 to 8 MB range gates the folder scan; a manually selected image skips it. Named after the board model by the dumper, extension rom0."
+    source_ref: "pcsx2/ps2/BiosTools.cpp:268-292, pcsx2/ps2/BiosTools.cpp:80-207, pcsx2/ps2/BiosTools.cpp:327-379"
+
+  - name: COH-H31100.rom1
+    system: namco-system246
+    required: false
+    max_size: 4194304
+    description: "ROM1 board region"
+    note: "Tried as {bios}.rom1 then {biosbase}.rom1. Read into the 4 MB ROM1 region and truncated to it. Logged and skipped when absent. Mapped at 0xB0000000, where rom0:ACDEV declares rom1: on a COH-H."
+    source_ref: "pcsx2/ps2/BiosTools.cpp:224-251, pcsx2/ps2/BiosTools.cpp:376, pcsx2/MemoryTypes.h:14, pcsx2/Memory.cpp:416"
+
+  - name: COH-H31100.rom2
+    system: namco-system246
+    required: false
+    max_size: 4194304
+    description: "ROM2 board region"
+    note: "Tried as {bios}.rom2 then {biosbase}.rom2. Read into the 4 MB ROM2 region and truncated to it. The dumper reads 512 KB off the board."
+    source_ref: "pcsx2/ps2/BiosTools.cpp:224-251, pcsx2/ps2/BiosTools.cpp:377, pcsx2/MemoryTypes.h:15"
+
+  - name: COH-H31100.nvm
+    system: namco-system246
+    required: false
+    hle_fallback: true
+    size: 1024
+    description: "Board NVRAM"
+    note: "Read from the BIOS path with the extension replaced by nvm. Carries the iLinkId the 256 games read as a regional signature; a hardcoded id stands in when the file is missing or blank there. A default image is built when the file cannot be read."
+    source_ref: "pcsx2/CDVD/CDVD.cpp:47, pcsx2/CDVD/CDVD.cpp:140-178, pcsx2/CDVD/CDVD.cpp:2608"
+
+  - name: COH-H31100.mec
+    system: namco-system246
+    required: false
+    hle_fallback: true
+    size: 4
+    description: "Mechacon version"
+    note: "Read from the BIOS path with the extension replaced by mec. Written with 0x0104020A, the version of a COH-H31100, when absent."
+    source_ref: "pcsx2/CDVD/CDVD.cpp:51-52, pcsx2/CDVD/CDVD.cpp:196-209"
+
+  - name: eeprom.dat
+    system: namco-system246
+    required: false
+    hle_fallback: true
+    size: 64
+    description: "DEV9 EEPROM"
+    note: "Opened from the working directory at DEV9 init and mapped over 64 bytes. A compiled-in 64 byte image stands in when the file is missing or cannot be mapped."
+    source_ref: "pcsx2/DEV9/DEV9.cpp:67-77, pcsx2/DEV9/DEV9.cpp:116-167"
+
+  - name: flash.dat
+    system: namco-system246
+    required: false
+    hle_fallback: true
+    max_size: 8650752
+    description: "DEV9 SmartMedia flash image"
+    note: "Opened from the working directory at DEV9 init and read as 1024 blocks of 16 pages of 512 bytes plus 16 ECC bytes. The card is filled with 0xFF when the file is absent or short."
+    source_ref: "pcsx2/DEV9/flash.cpp:9-16, pcsx2/DEV9/flash.cpp:62-86, pcsx2/DEV9/DEV9.cpp:114"
+
+  - name: GameIndex.yaml
+    path: bin/resources/GameIndex.yaml
+    system: namco-system246
+    required: false
+    description: "Arcade game database"
+    note: "Keyed by NM gameid, one entry per arcade title, carrying the board variant, the media type, the boot program and the GS fixes. Supplies the platform and media values a minimal .acgame leaves out. Console error when missing."
+    source_ref: "pcsx2/GameDatabase.cpp:39, pcsx2/GameDatabase.cpp:979-990, pcsx2/VMManager.cpp:1385-1415"
+
+  - name: RedumpDatabase.yaml
+    path: bin/resources/RedumpDatabase.yaml
+    system: namco-system246
+    required: false
+    description: "Disc hash database"
+    note: "Read on demand to match a disc against its catalogue entry in the game summary. Console error when missing."
+    source_ref: "pcsx2/GameDatabase.cpp:1086, pcsx2/GameDatabase.cpp:1143-1152"
+
+  - name: patches.zip
+    path: bin/resources/patches.zip
+    system: namco-system246
+    required: false
+    description: "Bundled patch archive"
+    note: "Opened read-only from the resources folder. Built-in patches are unavailable and an on-screen error is shown when it cannot be opened. Fetched from the patches repository at build time, not committed."
+    source_ref: "pcsx2/Patch.cpp:117, pcsx2/Patch.cpp:289-315, .github/workflows/linux_build_qt.yml:129"
+
+  - name: game_controller_db.txt
+    path: bin/resources/game_controller_db.txt
+    system: namco-system246
+    required: false
+    description: "SDL controller mapping database"
+    note: "A copy in the user data root takes precedence over the one in resources. Fed to SDL as a hint; without either, SDL falls back to its built-in mappings and an error is logged."
+    source_ref: "pcsx2/Input/SDLInputSource.cpp:24, pcsx2/Input/SDLInputSource.cpp:614-629"

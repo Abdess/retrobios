@@ -1,0 +1,84 @@
+emulator: SheepShaver
+type: standalone
+core_classification: other
+source: "https://github.com/cebix/macemu"
+upstream: "https://github.com/cebix/macemu"
+profiled_date: "2026-08-08"
+source_commit: "96e512bd6376e78a2869f16dcc8a9028bce5ee72"
+core_version: "2.4"
+display_name: "Apple - Macintosh PowerPC (SheepShaver)"
+cores:
+  - sheepshaver
+systems:
+  - apple-macintosh
+mode: standalone
+
+notes: |
+  PowerPC Macintosh emulator living in the macemu tree alongside Basilisk II,
+  version 2.4 (version.h:24-25). Runs MacOS 7.5.2 through 9.0.4 (README.md) on
+  a PCI PowerMac or NewWorld ROM image.
+
+  ROM loading (main_unix.cpp:581-613, main_windows.cpp:329-360): the path comes
+  from the "rom" prefs item (prefs_items.cpp:45). When that is empty, the file
+  named ROM is opened, then the file named Mac OS ROM (main_unix.cpp:162-163,
+  main_windows.cpp:58-59). Neither found raises STR_NO_ROM_FILE_ERR and
+  main_unix.cpp:987 aborts startup. The filename does not select the format:
+  both names go through the same decoder.
+
+  At most ROM_SIZE = 0x400000 bytes are read (cpu_emulation.h:30). DecodeROM
+  (rom_patches.cpp:148-200) accepts two forms. A read of exactly 4 MB is taken
+  as a plain image and copied as is. A buffer opening on <CHRP-BOOT> is
+  decompressed instead, either LZSS through the lzss-offset and lzss-size
+  constants (decode_lzss, rom_patches.cpp:80) or parcel by parcel through
+  parcels-offset and parcels-size (decode_parcels, rom_patches.cpp:123).
+  Anything else fails, and main_unix.cpp:602-609 picks the message from the
+  file size on disk: STR_ROM_SIZE_ERR when it is not 4 MB,
+  STR_ROM_FILE_READ_ERR otherwise (user_strings.cpp:66-67).
+
+  PatchROM (rom_patches.cpp:671-731), called from InitAll at main.cpp:161,
+  reads the nanokernel ID at offset 0x30d064 of the decoded image and accepts
+  Boot TNT, Boot Alchemy, Boot Zanzibar, Boot Gazelle, Boot Gossamer and
+  NewWorld (rom_patches.cpp:682-695). Any other string raises
+  STR_UNSUPPORTED_ROM_TYPE_ERR. The free space checks at
+  rom_patches.cpp:698-707 and the four patch passes at rom_patches.cpp:710-713
+  then rewrite the image in memory, and rom_patches.cpp:729 copies its last
+  megabyte past the 4 MB mark for the 68k emulator. Nothing is checksummed:
+  the ROM checksum at offset 0 is only printed by a debug build
+  (rom_patches.cpp:674).
+
+  MacOS itself and the applications live in disk images referenced by the
+  disk, floppy and cdrom prefs items, supplied by the user.
+
+  Two files are installed by the emulator's own Makefile into
+  $(datadir)/SheepShaver (Makefile.in:21,162-164) and read from there:
+    keycodes    keycode to Mac keycode table, read only when the keycodes
+                prefs item is true, which defaults to false
+                (prefs_unix.cpp:117). Overridable with keycodefile.
+                configure.ac:754,775 picks ../SDL/keycodes or keycodes
+                according to the video backend. video_x.cpp:79,1200,
+                video_sdl2.cpp:97,1231
+    tunconfig   script run to configure the tunN interface for ethernet.
+                Overridable with etherconfig. ether_unix.cpp:108,381
+  The SDL2 backend falls back to BasiliskII_keycodes in the same directory
+  (video_sdl2.cpp:98,1232).
+
+  The preferences file (.sheepshaver_prefs, prefs_unix.cpp:49;
+  SheepShaver_prefs, prefs_windows.cpp:66) and the NVRAM file
+  (.sheepshaver_nvram, xpram_unix.cpp:30; SheepShaver_nvram.dat,
+  xpram_windows.cpp:31) are written by the emulator when absent. Passing a
+  .sheepvm directory on the command line reads the preferences from inside it
+  instead (main_unix.cpp:371-384, prefs_unix.cpp:57-69).
+
+files:
+  - name: ROM
+    aliases: ["Mac OS ROM"]
+    required: true
+    validation: [signature]
+    description: "PowerPC Macintosh ROM, 4 MB PCI PowerMac image or CHRP-BOOT Mac OS ROM"
+    source_ref: "src/Unix/main_unix.cpp:162-163,585-593,987, src/Windows/main_windows.cpp:58-59,330-344, src/rom_patches.cpp:148-200,671-695, src/main.cpp:161"
+    note: >
+      No size is enforced on its own: DecodeROM takes a 4 MB read as a plain
+      image and any other length only through the <CHRP-BOOT> header. The check
+      every accepted image passes is the nanokernel ID at offset 0x30d064 of
+      the decoded 4 MB image, which PatchROM matches against Boot TNT, Boot
+      Alchemy, Boot Zanzibar, Boot Gazelle, Boot Gossamer and NewWorld.

@@ -75,7 +75,6 @@ files:
       - "Supercharger_BIOS.bin"
       - "supercharger_bios.bin"
       - "SUPERCHARGER_BIOS.bin"
-    region: "NTSC"
     required: false
     hle_fallback: true
     size: 2048
@@ -89,7 +88,6 @@ files:
     aliases:
       - "Supercharger_BIOS_PAL.bin"
       - "SUPERCHARGER_BIOS_PAL.bin"
-    region: "PAL"
     required: false
     hle_fallback: true
     size: 2048

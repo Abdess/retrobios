@@ -1,0 +1,83 @@
+emulator: puNES
+type: standalone
+core_classification: other
+source: "https://github.com/punesemu/puNES"
+upstream: "https://github.com/punesemu/puNES"
+profiled_date: "2026-08-08"
+source_commit: "2ed5b1b2cffcde48ff36f359091756d17d8fe193"
+core_version: "0.112"
+display_name: "Nintendo - NES / Famicom (puNES)"
+cores:
+  - punes
+systems:
+  - nintendo-nes
+  - nintendo-fds
+mode: standalone
+
+notes: |
+  Qt emulator of the NES, the Famicom and the Family Computer Disk System,
+  also playing NSF and NSFE music files. A cartridge boots with nothing
+  supplied: the 2A03, the PPU and every mapper are emulated in software.
+
+  Four names are fixed by the code. disksys.rom and gamegenie.rom share one
+  four-step lookup (src/core/fds.c:265-309, src/core/cheat.c:74-108): the path
+  recorded in the configuration, the working directory, the directory holding
+  the loaded image, then the bios folder of the data directory. nes20db.xml
+  and dip.cfg are read from the XDG data directories under a puNES
+  subdirectory, then the base of the data directory, then the application
+  directory (src/gui/nes20db.cpp:50-79, src/gui/dipswitch.cpp:61-85); the
+  installer writes both into the shared data directory
+  (CMakeLists.txt:227-228).
+
+  The data directory is the application directory under --portable,
+  %APPDATA%/puNES on Windows and ~/.local/share/puNES elsewhere
+  (src/gui/qt.cpp:561-575), so the bios folder is ~/.local/share/puNES/bios.
+
+  No length and no hash is ever compared. fds_load_bios computes a CRC32 of
+  the BIOS it loaded (src/core/fds.c:329) and the only reader of that value is
+  the log line at src/core/fds.c:502-503.
+
+  The iNES 1.0 game database is compiled in as src/core/database.h and carries
+  the Vs. System PPU type and the region, so Vs. System titles need no
+  external file. The uPD7756 ADPCM samples of mappers 018, 086 and 072 come
+  from the Misc ROM area of the NES 2.0 dump itself
+  (src/core/mappers/mapper_018.c:51, mapper_086.c:56, mapper_072.c:45).
+  loadWaveFiles, which would read <data>/samples/<name>/NN.wav
+  (src/core/mappers/waveFile.cpp:76-84), is declared and defined but called
+  from nowhere in the tree, so no wave file is ever opened.
+
+  Palettes, shaders, cheat imports and soft patches are opened from paths the
+  user picks in a file dialog and no name is fixed by the code, so they carry
+  no file entry here. A palette shorter than 192 bytes is refused and a
+  built-in table is used instead (src/core/palette.c:39-64,
+  src/video/gfx.c:323-334).
+
+files:
+  - name: "disksys.rom"
+    system: nintendo-fds
+    description: "Family Computer Disk System BIOS"
+    required: true
+    size: 8192
+    source_ref: "src/core/fds.c:34,259-332 (fds_load_bios); src/core/fds.c:191-193 (caller); src/core/mappers/mapper_FDS.c:81 (mapping)"
+    note: "8192 bytes are read into PRG ROM and mapped at 0xE000. When none of the four locations holds the file, fds_load_bios logs FDS;bios not found and returns EXIT_ERROR, which the caller propagates, so the disk image does not load. A short read only logs FDS;error on reading bios."
+
+  - name: "gamegenie.rom"
+    system: nintendo-nes
+    description: "Game Genie ROM, booted in place of the cartridge to reach the code entry screen"
+    required: false
+    source_ref: "src/core/cheat.c:30,69-120 (gamegenie_check_rom_present),121-179 (gamegenie_load_rom); src/core/ines.c:97-99 (caller)"
+    note: "Loaded only while the cheat mode is set to Game Genie. The whole file is read, its length taken from the file itself. Absent, gamegenie_load_rom returns early and the cartridge boots directly."
+
+  - name: "nes20db.xml"
+    system: nintendo-nes
+    description: "NES 2.0 header database, matched by ROM hash"
+    required: false
+    source_ref: "src/gui/nes20db.cpp:31,49-81 (nes20db_search); src/core/ines.c:276-278, src/core/unif.c:316 (callers); CMakeLists.txt:227 (install)"
+    note: "Supplies mapper, submapper, mirroring, region, RAM sizes and Vs. System hardware for dumps whose own header is absent or wrong. A miss leaves info.mapper.nes20db.in_use false and the header carried by the ROM is used."
+
+  - name: "dip.cfg"
+    system: nintendo-nes
+    description: "DIP switch database for multicart and Vs. System boards, keyed by CRC32"
+    required: false
+    source_ref: "src/gui/dipswitch.cpp:30,60-86 (dipswitch_search); src/core/mappers.c:44 (caller); CMakeLists.txt:228 (install)"
+    note: "Read on every mapper init. A miss leaves dipswitch.used false, which mappers 001, 043, 045, 176, 215, 412 and 447 and the selection dialog at src/gui/qt.cpp:754 all guard on, so the board runs on its reset value."

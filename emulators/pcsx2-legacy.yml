@@ -1,0 +1,121 @@
+emulator: PCSX2 Legacy
+type: standalone
+core_classification: frozen_snapshot
+bios_mode: agnostic
+source: "https://github.com/PCSX2/pcsx2"
+upstream: "https://github.com/PCSX2/pcsx2"
+profiled_date: "2026-08-08"
+source_commit: "aaaf29557fe63870ede815dd6d2e48a98279ca59"
+core_version: "1.6.0"
+display_name: "Sony - PlayStation 2 (PCSX2 Legacy)"
+cores:
+  - pcsx2-legacy
+  - PCSX2-LEGACY
+systems:
+  - sony-playstation-2
+mode: standalone
+
+notes: |
+  wxWidgets line, frozen at 1.6.0. Emulation is split across separate plugin
+  binaries loaded at runtime: GSdx, Spu2-X, LilyPad, cdvdGigaherz, DEV9ghzdrk,
+  USBnull and FWnull. Default BIOS folder is bios/ under the user documents
+  directory.
+  ref: pcsx2/gui/AppConfig.cpp:76-80, pcsx2/gui/AppConfig.cpp:192-195
+
+  BIOS selection lists every file in the folder with a *.* mask and keeps the
+  ones whose romdir carries a RESET entry followed by a readable ROMVER, which
+  supplies the version, the zone letter and the build date. Neither size nor
+  hash is checked; the length test that would reject small images is commented
+  out. A missing or zero-length image raises BiosLoadFailed.
+  ref: pcsx2/gui/Panels/BiosSelectorPanel.cpp:151-177,
+       pcsx2/ps2/BiosTools.cpp:74-167, pcsx2/ps2/BiosTools.cpp:325-341,
+       pcsx2/ps2/BiosTools.cpp:261-323
+
+  The three companion ROMs derive from the selected BIOS path. Each extension
+  is first appended to the full name, then substituted for the existing one, so
+  a BIOS at scph39001.bin is followed by scph39001.bin.rom1 then scph39001.rom1.
+  A missing companion is logged and skipped, and a read error is downgraded to a
+  warning. Every read is truncated to its destination region: 256 KB for rom1,
+  512 KB for rom2, 1.75 MB for erom.
+  ref: pcsx2/ps2/BiosTools.cpp:190-229, pcsx2/ps2/BiosTools.cpp:298-300,
+       pcsx2/MemoryTypes.h:21-24
+
+  The nvm and mec companions follow the same naming rule and are written with
+  defaults when absent, so neither is user-supplied: 1024 zero bytes plus an
+  iLink id for nvm, the four bytes 03 06 02 00 for mec.
+  ref: pcsx2/CDVD/CDVD.cpp:93-122, pcsx2/CDVD/CDVD.cpp:138-182
+
+  Two entries pair an XOR fold of the whole 4 MB ROM region with a ROMVER
+  version to select debugger thread offsets. They gate nothing and cover no
+  file on disk.
+  ref: pcsx2/ps2/BiosTools.cpp:57-62, pcsx2/ps2/BiosTools.cpp:175-181,
+       pcsx2/ps2/BiosTools.cpp:305-313
+
+  An IRX image is injected at ROM+0x3C0000 when one is named on the command
+  line. The path is whatever the user passes, so there is no fixed file.
+  ref: pcsx2/ps2/BiosTools.cpp:302-303, pcsx2/gui/AppInit.cpp:542
+
+  Shipped in the distribution tree and read from it: GameIndex.dbf, the
+  widescreen patch archive cheats_ws.zip, which is skipped when a cheats_ws
+  folder holds the patches, the pcsx2_Main and pcsx2_Iconized catalogs under
+  Langs, and the external shader pair shaders/GSdx.fx and
+  shaders/GSdx_FX_Settings.ini, off by default.
+  ref: pcsx2/gui/AppGameDatabase.h:53, pcsx2/gui/AppCoreThread.cpp:459-465,
+       pcsx2/gui/i18n.cpp:82-89, plugins/GSdx/GSdx.cpp:441-443
+
+  host.irx sits behind a comment. ps2hw.dat is read only by zerogs and
+  zzogl-pg, both gated on EXTRA_PLUGINS, which carries no default and is off,
+  and both absent from the Windows solution that builds the release. USBqemu
+  ships in the same disused solution and GSdx_legacy is gated on GSDX_LEGACY.
+  ref: pcsx2/ps2/BiosTools.cpp:296, cmake/SelectPcsx2Plugins.cmake:178-209,
+       cmake/BuildParameters.cmake:41-50, old_plugins.sln
+
+files:
+  - name: ps2-0230a-20080220.bin
+    system: sony-playstation-2
+    required: true
+    description: "PS2 console BIOS"
+    note: "Any file in the BIOS folder whose romdir holds RESET and ROMVER is accepted, whatever its name or size. Naming convention ps2-VVVVr-YYYYMMDD.bin carries version, region and date."
+    source_ref: "pcsx2/ps2/BiosTools.cpp:261-323, pcsx2/ps2/BiosTools.cpp:74-167"
+
+  - name: rom1.bin
+    system: sony-playstation-2
+    required: false
+    max_size: 262144
+    description: "DVD player ROM"
+    note: "Tried as {bios}.rom1 then {biosbase}.rom1. Read into the 256 KB ROM1 region and truncated to it. Logged and skipped when absent."
+    source_ref: "pcsx2/ps2/BiosTools.cpp:190-229, pcsx2/ps2/BiosTools.cpp:298, pcsx2/MemoryTypes.h:22"
+
+  - name: ROM2.BIN
+    system: sony-playstation-2
+    required: false
+    max_size: 524288
+    description: "Chinese ROM extension"
+    note: "Tried as {bios}.rom2 then {biosbase}.rom2. Read into the 512 KB ROM2 region and truncated to it. Present on Chinese region consoles."
+    source_ref: "pcsx2/ps2/BiosTools.cpp:190-229, pcsx2/ps2/BiosTools.cpp:299, pcsx2/MemoryTypes.h:23"
+
+  - name: EROM.BIN
+    system: sony-playstation-2
+    required: false
+    max_size: 1835008
+    description: "DVD player extension ROM"
+    note: "Tried as {bios}.erom then {biosbase}.erom. Read into the 1.75 MB EROM region and truncated to it."
+    source_ref: "pcsx2/ps2/BiosTools.cpp:190-229, pcsx2/ps2/BiosTools.cpp:300, pcsx2/MemoryTypes.h:24"
+
+  - name: eeprom.dat
+    system: sony-playstation-2
+    required: false
+    hle_fallback: true
+    size: 64
+    description: "DEV9 network adapter EEPROM"
+    note: "Opened by the DEV9ghzdrk plugin from the working directory and mapped over 64 bytes. A compiled-in EEPROM holding the default MAC stands in when the file is missing or cannot be mapped."
+    source_ref: "plugins/dev9ghzdrk/DEV9.cpp:176-227, plugins/dev9ghzdrk/DEV9.cpp:71-81"
+
+  - name: flash.dat
+    system: sony-playstation-2
+    required: false
+    hle_fallback: true
+    max_size: 8650752
+    description: "DEV9 SmartMedia flash image"
+    note: "Opened by the DEV9ghzdrk plugin from the working directory at init and read as 1024 blocks of 16 pages of 512 bytes plus 16 ECC bytes. The card is filled with 0xFF when the file is absent or short."
+    source_ref: "plugins/dev9ghzdrk/flash.cpp:60-83, plugins/dev9ghzdrk/flash.cpp:21-28"

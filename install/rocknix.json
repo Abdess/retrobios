@@ -4,7 +4,7 @@
   "platform": "rocknix",
   "display_name": "ROCKNIX",
   "version": "1.0",
-  "generated": "2026-08-08T11:34:39Z",
+  "generated": "2026-08-08T15:54:15Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -16,8 +16,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 1548,
-  "total_size": 4070944579,
+  "total_files": 1549,
+  "total_size": 4073041731,
   "files": [
     {
       "dest": "xemu/bios/mcpx_1.0.bin",
@@ -2130,6 +2130,15 @@
       "sha1": "c116d867ba001dcd6bf6d399ff4bf38d340f556c",
       "size": 4096,
       "repo_path": "bios/Nintendo/GameCube/.variants/dsp_coef.bin.c116d867",
+      "cores": [
+        "Dolphin"
+      ]
+    },
+    {
+      "dest": "Triforce/segaboot.gcm",
+      "sha1": "7297a11be143011ceb75a0720f96855003415a5d",
+      "size": 2097152,
+      "repo_path": "bios/Sega/Triforce/segaboot.gcm",
       "cores": [
         "Dolphin"
       ]

@@ -1,0 +1,423 @@
+"""Region vocabulary, hierarchy, and rank resolution."""
+
+from __future__ import annotations
+
+import os
+import sys
+import unittest
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
+
+import region
+
+
+class TestVocabulary(unittest.TestCase):
+    def test_world_is_a_region(self):
+        self.assertIn(region.WORLD, region.REGIONS)
+
+    def test_super_regions_and_members_are_all_regions(self):
+        for parent, members in region.REGION_TREE.items():
+            self.assertIn(parent, region.REGIONS)
+            for member in members:
+                self.assertIn(member, region.REGIONS)
+
+    def test_hierarchy_is_two_levels(self):
+        for members in region.REGION_TREE.values():
+            for member in members:
+                self.assertNotIn(member, region.REGION_TREE)
+
+    def test_no_member_has_two_parents(self):
+        seen: set[str] = set()
+        for members in region.REGION_TREE.values():
+            for member in members:
+                self.assertNotIn(member, seen)
+                seen.add(member)
+
+
+class TestComparable(unittest.TestCase):
+    def test_equal(self):
+        self.assertTrue(region.comparable("japan", "japan"))
+
+    def test_parent_matches_child(self):
+        self.assertTrue(region.comparable("europe", "france"))
+
+    def test_child_matches_parent(self):
+        self.assertTrue(region.comparable("france", "europe"))
+
+    def test_siblings_do_not_match(self):
+        self.assertFalse(region.comparable("france", "germany"))
+
+    def test_disjoint_super_regions_do_not_match(self):
+        self.assertFalse(region.comparable("europe", "asia"))
+
+    def test_saturn_fused_slug_is_under_asia(self):
+        self.assertTrue(region.comparable("asia", "asia-ntsc"))
+
+
+class TestNormalizeDeclared(unittest.TestCase):
+    def test_none_is_empty(self):
+        self.assertEqual(region.normalize_declared(None), set())
+
+    def test_list_passes_through(self):
+        self.assertEqual(region.normalize_declared(["japan"]), {"japan"})
+
+    def test_legacy_signal_string_maps_to_geography(self):
+        self.assertEqual(region.normalize_declared("NTSC-J"), {"japan"})
+        self.assertEqual(region.normalize_declared("NTSC-U"), {"north-america"})
+        self.assertEqual(region.normalize_declared("PAL"), {"europe"})
+
+    def test_legacy_auto_and_world_map_to_world(self):
+        self.assertEqual(region.normalize_declared("Auto"), {region.WORLD})
+        self.assertEqual(region.normalize_declared("World"), {region.WORLD})
+
+    def test_unknown_value_raises(self):
+        with self.assertRaises(ValueError):
+            region.normalize_declared("atlantis")
+
+
+class TestParseRequested(unittest.TestCase):
+    def test_single_alias(self):
+        self.assertEqual(region.parse_requested("us"), ["north-america"])
+
+    def test_order_is_preserved(self):
+        self.assertEqual(
+            region.parse_requested("us,eu,jp"),
+            ["north-america", "europe", "japan"],
+        )
+
+    def test_duplicates_collapse_keeping_first_position(self):
+        self.assertEqual(
+            region.parse_requested("us,usa,eu"), ["north-america", "europe"]
+        )
+
+    def test_whitespace_and_case_tolerated(self):
+        self.assertEqual(
+            region.parse_requested(" US , Eu "), ["north-america", "europe"]
+        )
+
+    def test_unknown_region_raises(self):
+        with self.assertRaises(ValueError):
+            region.parse_requested("us,atlantis")
+
+    def test_empty_raises(self):
+        with self.assertRaises(ValueError):
+            region.parse_requested("  ")
+
+
+class TestRank(unittest.TestCase):
+    def test_exact_match_is_zero(self):
+        self.assertEqual(region.rank({"north-america"}, ["north-america"]), 0)
+
+    def test_second_choice_is_one(self):
+        self.assertEqual(region.rank({"europe"}, ["north-america", "europe"]), 1)
+
+    def test_no_match_is_lowest(self):
+        self.assertEqual(region.rank({"japan"}, ["north-america", "europe"]), 2)
+
+    def test_child_matches_requested_parent(self):
+        self.assertEqual(region.rank({"france"}, ["europe"]), 0)
+
+    def test_parent_matches_requested_child(self):
+        self.assertEqual(region.rank({"europe"}, ["france"]), 0)
+
+    def test_best_of_several_declared_regions_wins(self):
+        self.assertEqual(
+            region.rank({"japan", "north-america"}, ["north-america", "japan"]), 0
+        )
+
+    def test_empty_declared_is_lowest(self):
+        self.assertEqual(region.rank(set(), ["north-america"]), 1)
+
+
+class TestRegionTag(unittest.TestCase):
+    def test_single(self):
+        self.assertEqual(region.region_tag(["north-america"]), "NorthAmerica")
+
+    def test_multiple_joined(self):
+        self.assertEqual(
+            region.region_tag(["north-america", "japan"]), "NorthAmerica_Japan"
+        )
+
+
+class TestRegionIndex(unittest.TestCase):
+    def setUp(self):
+        self.profiles = {
+            "dolphin": {
+                "files": [
+                    {
+                        "name": "IPL.bin",
+                        "path": "GC/USA/IPL.bin",
+                        "region": ["north-america"],
+                    },
+                    {
+                        "name": "IPL.bin",
+                        "path": "GC/EUR/IPL.bin",
+                        "region": ["europe"],
+                    },
+                    {
+                        "name": "IPL.bin",
+                        "path": "GC/JAP/IPL.bin",
+                        "region": ["japan"],
+                    },
+                    {"name": "dsp_rom.bin"},
+                ]
+            },
+            "beetle_psx": {
+                "files": [
+                    {"name": "scph5501.bin", "region": "NTSC-U"},
+                    {"name": "psxonpsp660.bin", "region": "Auto"},
+                ]
+            },
+            "swanstation": {
+                "files": [{"name": "scph5501.bin", "region": "NTSC-U"}]
+            },
+            "launcher_profile": {
+                "type": "launcher",
+                "files": [{"name": "ignored.bin", "region": ["japan"]}],
+            },
+        }
+        self.index = region.build_region_index(self.profiles)
+
+    def test_path_keyed_entries_stay_separate(self):
+        self.assertEqual(
+            region.lookup_regions(self.index, "GC/USA/IPL.bin", "IPL.bin"),
+            {"north-america"},
+        )
+        self.assertEqual(
+            region.lookup_regions(self.index, "GC/JAP/IPL.bin", "IPL.bin"),
+            {"japan"},
+        )
+
+    def test_bare_name_lookup_unions_ambiguous_entries(self):
+        self.assertEqual(
+            region.lookup_regions(self.index, "", "IPL.bin"),
+            {"north-america", "europe", "japan"},
+        )
+
+    def test_destination_suffix_bridges_platform_entry(self):
+        self.assertEqual(
+            region.lookup_regions(
+                self.index, "dolphin-emu/GC/EUR/IPL.bin", "IPL.bin"
+            ),
+            {"europe"},
+        )
+
+    def test_untagged_file_has_no_regions(self):
+        self.assertEqual(
+            region.lookup_regions(self.index, "dsp_rom.bin", "dsp_rom.bin"), set()
+        )
+
+    def test_unknown_file_has_no_regions(self):
+        self.assertEqual(
+            region.lookup_regions(self.index, "nope.bin", "nope.bin"), set()
+        )
+
+    def test_legacy_string_values_are_normalised(self):
+        self.assertEqual(
+            region.lookup_regions(self.index, "scph5501.bin", "scph5501.bin"),
+            {"north-america"},
+        )
+        self.assertEqual(
+            region.lookup_regions(self.index, "psxonpsp660.bin", "psxonpsp660.bin"),
+            {region.WORLD},
+        )
+
+    def test_two_profiles_agreeing_merge(self):
+        entry = self.index["scph5501.bin"]
+        self.assertEqual(entry["regions"], {"north-america"})
+        self.assertEqual(entry["emulators"], ["beetle_psx", "swanstation"])
+
+    def test_launcher_profiles_are_skipped(self):
+        self.assertEqual(
+            region.lookup_regions(self.index, "ignored.bin", "ignored.bin"), set()
+        )
+
+    def test_unknown_value_names_the_profile_and_file(self):
+        with self.assertRaises(ValueError) as ctx:
+            region.build_region_index(
+                {"badcore": {"files": [{"name": "x.bin", "region": ["atlantis"]}]}}
+            )
+        self.assertIn("badcore", str(ctx.exception))
+        self.assertIn("x.bin", str(ctx.exception))
+
+
+class TestResolveRegionDrops(unittest.TestCase):
+    def setUp(self):
+        self.index = region.build_region_index(
+            {
+                "psx": {
+                    "files": [
+                        {"name": "scph5501.bin", "region": ["north-america"]},
+                        {"name": "scph5500.bin", "region": ["japan"]},
+                        {"name": "scph5502.bin", "region": ["europe"]},
+                        {"name": "psxonpsp660.bin", "region": ["world"]},
+                        {"name": "gamepad.cfg"},
+                    ]
+                },
+                "fds": {"files": [{"name": "disksys.rom", "region": ["japan"]}]},
+                "o2em": {"files": [{"name": "c52.bin", "region": ["france"]}]},
+            }
+        )
+
+    def _drops(self, groups, requested):
+        return region.resolve_region_drops(groups, self.index, requested)
+
+    def test_best_rank_wins_and_siblings_drop(self):
+        groups = {
+            "psx": [
+                ("scph5501.bin", "scph5501.bin"),
+                ("scph5500.bin", "scph5500.bin"),
+                ("scph5502.bin", "scph5502.bin"),
+            ]
+        }
+        self.assertEqual(
+            self._drops(groups, ["north-america"]),
+            {"scph5500.bin", "scph5502.bin"},
+        )
+
+    def test_priority_order_selects_second_choice(self):
+        groups = {
+            "psx": [
+                ("scph5500.bin", "scph5500.bin"),
+                ("scph5502.bin", "scph5502.bin"),
+            ]
+        }
+        self.assertEqual(
+            self._drops(groups, ["north-america", "europe", "japan"]),
+            {"scph5500.bin"},
+        )
+
+    def test_group_with_no_match_is_kept_whole(self):
+        groups = {"fds": [("disksys.rom", "disksys.rom")]}
+        self.assertEqual(self._drops(groups, ["north-america"]), set())
+
+    def test_world_never_competes(self):
+        groups = {
+            "psx": [
+                ("scph5501.bin", "scph5501.bin"),
+                ("scph5500.bin", "scph5500.bin"),
+                ("psxonpsp660.bin", "psxonpsp660.bin"),
+            ]
+        }
+        self.assertEqual(self._drops(groups, ["north-america"]), {"scph5500.bin"})
+
+    def test_untagged_files_never_drop(self):
+        groups = {
+            "psx": [
+                ("scph5501.bin", "scph5501.bin"),
+                ("gamepad.cfg", "gamepad.cfg"),
+                ("scph5500.bin", "scph5500.bin"),
+            ]
+        }
+        self.assertEqual(self._drops(groups, ["north-america"]), {"scph5500.bin"})
+
+    def test_child_region_satisfies_requested_parent(self):
+        groups = {"o2em": [("c52.bin", "c52.bin")]}
+        self.assertEqual(self._drops(groups, ["europe"]), set())
+
+    def test_destination_kept_by_any_group_is_not_dropped(self):
+        groups = {
+            "psx": [
+                ("scph5501.bin", "scph5501.bin"),
+                ("scph5500.bin", "scph5500.bin"),
+            ],
+            "psx-import": [("scph5500.bin", "scph5500.bin")],
+        }
+        self.assertEqual(self._drops(groups, ["north-america"]), set())
+
+    def test_no_requested_regions_drops_nothing(self):
+        groups = {"psx": [("scph5500.bin", "scph5500.bin")]}
+        self.assertEqual(self._drops(groups, []), set())
+
+
+class TestFallbackGroups(unittest.TestCase):
+    def setUp(self):
+        self.index = region.build_region_index(
+            {
+                "psx": {
+                    "files": [
+                        {"name": "scph5501.bin", "region": ["north-america"]}
+                    ]
+                },
+                "fds": {"files": [{"name": "disksys.rom", "region": ["japan"]}]},
+            }
+        )
+
+    def test_only_unmatched_groups_are_reported(self):
+        groups = {
+            "psx": [("scph5501.bin", "scph5501.bin")],
+            "fds": [("disksys.rom", "disksys.rom")],
+        }
+        self.assertEqual(
+            region.fallback_groups(groups, self.index, ["north-america"]), ["fds"]
+        )
+
+    def test_no_requested_regions_reports_nothing(self):
+        groups = {"fds": [("disksys.rom", "disksys.rom")]}
+        self.assertEqual(region.fallback_groups(groups, self.index, []), [])
+
+
+class TestProfileConformance(unittest.TestCase):
+    """Every region: value in the repo is a list of canonical slugs."""
+
+    def setUp(self):
+        import glob
+
+        import yaml
+
+        self.repo_profiles = sorted(
+            glob.glob(
+                os.path.join(os.path.dirname(__file__), "..", "emulators", "*.yml")
+            )
+        )
+        if not self.repo_profiles:
+            self.skipTest("emulators/ not present")
+        self.yaml = yaml
+
+    def test_all_region_values_are_canonical_lists(self):
+        offenders: list[str] = []
+        for path in self.repo_profiles:
+            with open(path, encoding="utf-8") as fh:
+                profile = self.yaml.safe_load(fh) or {}
+            for f in profile.get("files") or []:
+                if not isinstance(f, dict) or "region" not in f:
+                    continue
+                raw = f["region"]
+                if not isinstance(raw, list):
+                    offenders.append(
+                        f"{os.path.basename(path)}: {f.get('name')} not a list"
+                    )
+                    continue
+                for value in raw:
+                    if value not in region.REGIONS:
+                        offenders.append(
+                            f"{os.path.basename(path)}: {f.get('name')} -> {value!r}"
+                        )
+        self.assertEqual(offenders, [], "\n".join(offenders))
+
+    def test_index_builds_over_every_repo_profile(self):
+        profiles = {}
+        for path in self.repo_profiles:
+            with open(path, encoding="utf-8") as fh:
+                profiles[os.path.basename(path)[:-4]] = self.yaml.safe_load(fh) or {}
+        index = region.build_region_index(profiles)
+        self.assertGreater(len(index), 0)
+
+
+class TestSchemaMatchesModule(unittest.TestCase):
+    def test_schema_enum_equals_module_regions(self):
+        import json
+
+        path = os.path.join(
+            os.path.dirname(__file__), "..", "schemas", "emulator.schema.json"
+        )
+        if not os.path.exists(path):
+            self.skipTest("schema not present")
+        with open(path, encoding="utf-8") as fh:
+            schema = json.load(fh)
+        node = schema["properties"]["files"]["items"]["properties"]["region"]
+        self.assertEqual(set(node["items"]["enum"]), set(region.REGIONS))
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -28,7 +28,7 @@ notes: >
 files:
   - name: "lynxboot.img"
     description: "Atari Lynx boot ROM"
-    region: "World"
+    region: [world]
     required: true
     size: 512
     crc32: "0d973c9d"

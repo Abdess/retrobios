@@ -30,7 +30,7 @@ files:
 
   - name: "scph5500.bin"
     description: "SCPH-5500 (v3.0 09-09-96 J)"
-    region: "NTSC-J"
+    region: [japan]
     required: true
     hle_fallback: true
     size: 524288
@@ -43,7 +43,7 @@ files:
 
   - name: "scph5903.bin"
     description: "SCPH-5903 (System ROM Version 2.2 12/04/95 J), Video CD daughterboard"
-    region: "NTSC-J"
+    region: [japan]
     required: false
     size: 1048576
     sha1: "15c94da3cc5a38a582429575af4198c487fe893c"
@@ -56,7 +56,7 @@ files:
 
   - name: "scph5501.bin"
     description: "SCPH-5501, 5503, 7003 (v3.0 11-18-96 A)"
-    region: "NTSC-U"
+    region: [north-america]
     required: true
     hle_fallback: true
     size: 524288
@@ -79,7 +79,7 @@ files:
 
   - name: "scph5502.bin"
     description: "SCPH-5502, 5552 (v3.0 01-06-97 E)"
-    region: "PAL"
+    region: [europe]
     required: true
     hle_fallback: true
     size: 524288
@@ -99,7 +99,7 @@ files:
 
   - name: "psxonpsp660.bin"
     description: "PSP embedded PS1 BIOS (region-free override)"
-    region: "Auto"
+    region: [world]
     required: false
     size: 524288
     sha1: "96880d1ca92a016ff054be5159bb06fe03cb4e14"
@@ -112,7 +112,7 @@ files:
 
   - name: "ps1_rom.bin"
     description: "PS3 embedded PS1 BIOS, first 512KB extracted (region-free override)"
-    region: "Auto"
+    region: [world]
     required: false
     sha1: "c40146361eb8cf670b19fdc9759190257803cab7"
     md5: "81bbe60ba7a3d1cea1d48c14cbcc647b"
@@ -124,7 +124,7 @@ files:
 
   - name: "openbios.bin"
     description: "OpenBIOS (open-source PS1 HLE BIOS, region-free override)"
-    region: "Auto"
+    region: [world]
     required: false
     size: 524288
     mode: libretro

@@ -31,6 +31,7 @@ from common import (
     load_database,
     load_emulator_profiles,
     load_provenance_snapshots,
+    parse_md5_list,
     require_yaml,
     unique_emulator_profiles,
     write_if_changed,
@@ -1479,9 +1480,8 @@ def generate_emulator_page(
                     return True
             md5_raw = f.get("md5", "")
             if md5_raw:
-                for md5_val in md5_raw.split(","):
-                    md5_val = md5_val.strip().lower()
-                    if md5_val and by_md5.get(md5_val):
+                for md5_val in parse_md5_list(md5_raw):
+                    if by_md5.get(md5_val):
                         return True
             sha1 = f.get("sha1", "")
             if sha1 and sha1 in db_files:

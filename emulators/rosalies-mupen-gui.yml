@@ -1,0 +1,144 @@
+emulator: Rosalie's Mupen GUI
+type: standalone
+core_classification: community_fork
+source: "https://github.com/Rosalie241/RMG"
+upstream: "https://github.com/Rosalie241/RMG"
+profiled_date: "2026-08-08"
+source_commit: "9dced048f747085f942f55941dd4304279acc145"
+core_version: "v0.9.0"
+display_name: "Nintendo - Nintendo 64 (Rosalie's Mupen GUI)"
+cores:
+  - rosalies-mupen-gui
+  - RMG
+  - com.github.Rosalie241.RMG
+systems:
+  - nintendo-64
+  - nintendo-64dd
+mode: standalone
+
+notes: |
+  Qt front end by Rosalie Wanders built around its own vendored fork of
+  mupen64plus-core, compiled with OSD=0, NEW_DYNAREC=1 and VULKAN=0
+  (Source/3rdParty/CMakeLists.txt:74-96). Forks of the RSP plugins hle, cxd4
+  and parallel, the video plugins GLideN64, parallel and angrylion-plus, and
+  the raphnetraw input plugin are vendored alongside it, plus RMG's own audio
+  and input plugins. ES-DE runs it as `--nogui -q <rom>` for both n64 and
+  n64dd. Against mupen64plus-core 6dca4c15 the media loader, the DD region
+  enum and load_dd_rom are unchanged; the fork diverges on SDL3, video
+  capture, netplay and the dynarec.
+
+  Cartridge boot needs no boot ROM. The PIF boot ROM is simulated
+  (device/pif/bootrom_hle.c:48, reached from r4300/interrupt.c:448,499) and the
+  CIC-NUS-6105 challenge is answered by an algorithm rather than a stored
+  table (device/pif/n64_cic_nus_6105.c:93).
+
+  Which 64DD IPL is used is not a user choice. scan_and_expand_disk_format
+  accepts a disk only when one of eight candidate blocks holds system data
+  carrying a known region word, and marks it development when that block sits
+  at index 2, 3, 10 or 11 (device/dd/disk.c:412-475). The core hands the
+  resulting region to the front end, which answers with one of three
+  configured paths, or with nothing when the region stayed unknown
+  (RMG-Core/MediaLoader.cpp:47-74). All three settings default to empty
+  (RMG-Core/Settings.cpp:284-292) and are filled from a file dialog filtered
+  on *.n64 (RMG/UserInterface/Dialog/SettingsDialog.cpp:1377-1390).
+
+  A bare .ndd or .d64 opens as a disk with no cartridge
+  (RMG-Core/Rom.cpp:111-133), which is the route ES-DE takes, so the IPL is
+  the only boot ROM and the core bails before starting when it is absent
+  (main/main.c:1723-1739). Passing a cartridge with --disk
+  (RMG/main.cpp:219,232,287) boots the cartridge and switches 64DD off instead.
+  Disk content inside a .zip or .7z is extracted to the user cache directory
+  first (RMG-Core/MediaLoader.cpp:164-215, RMG-Core/Archive.cpp:188-227).
+
+  Transfer Pak carts come from the input profile, which copies its GameboyRom
+  and GameboySave paths into the per player core settings
+  (RMG-Input/main.cpp:317-318,469-480, RMG-Core/MediaLoader.cpp:76-114). The
+  core rejects a ROM under 32 KiB and an unknown cart type byte at 0x147
+  (device/gb/gb_cart.c:999-1012) and fixes no name, size or hash, so neither
+  the cart nor its save carries an entry here.
+
+  Data the install places in the shared data directory (CMakeLists.txt:130-153;
+  /usr/share/RMG, or Data beside the executable for portable and Windows
+  builds, Directories.cpp:406-431): mupen64plus.ini, read as the ROM database
+  (main/rom.c:585-604) and used by GLideN64 to locate that same directory
+  (mupenplus/CommonAPIImpl_mupenplus.cpp:77-85); GLideN64.custom.ini, per ROM
+  overrides keyed on the uppercased header name
+  (mupenplus/Config_mupenplus.cpp:329-348); font.ttf, reached only after the
+  configured font name fails both as a system font path and as a full path
+  (TextDrawer.cpp:202-230); Cheats/<name>.cht, named from the header CRC pair
+  and country code, or from the ROM MD5 when all three are zero, and merged
+  with a user copy under the config directory
+  (RMG-Core/Cheats.cpp:82-116,579-598); InputProfileDB.json
+  (RMG-Input/Utilities/InputProfileDB.cpp:26-36); gamecontrollerdb.txt
+  (RMG-Input/main.cpp:1063-1069); and for VRU builds
+  vosk-model-small-en-us-0.15.zip, extracted into the user data directory when
+  any of the thirteen model files it checks for is missing
+  (RMG-Input/VRU.cpp:154-232). The published AppImage is the features-on build,
+  so the model ships with it (.github/workflows/build.yml:10,79,91).
+
+  Optional files with no canonical artifact: a .qss stylesheet under Styles in
+  the shared data directory (RMG/UserInterface/MainWindow.cpp:405-425), hi-res
+  texture packs under hires_texture in the user data directory
+  (GLideN64 Config.cpp:118-123), and alp_screen.vert and alp_screen.frag, which
+  angrylion-plus opens as working directory relative paths before falling back
+  to its embedded shaders (angrylion-plus output/vdac.c:120-175,257-258).
+
+  Written rather than obtained: mupen64plus.cfg in the config directory,
+  GLideN64.ini written there by the plugin settings pages and read back from
+  both that directory and the shared data directory
+  (GLideNUI/Config_GLideNUI.cpp:20-21,45-46, GLideNUI/Settings.cpp:352-368),
+  the mempak, eeprom, flashram and sram saves opened with default
+  content when absent (main/main.c:1712-1716), 64DD disk saves in the format
+  the SaveDiskFormat setting selects (main/main.c:1286-1298), savestates,
+  screenshots, the ROM browser header cache
+  (RMG-Core/CachedRomHeaderAndSettings.cpp:152), the GLideN64 texture cache and
+  texture dumps (GLideN64 Config.cpp:120-123) and the parallel-rdp pipeline
+  cache (video-parallel vulkan/device.cpp:760,834).
+
+  Two files in the tree this build never reads: the vendored core's
+  data/mupencheat.txt, which RMG neither installs nor parses since cheats use
+  its own .cht format and the core's cheat.c opens no file, and cxd4's
+  rsp_conf.bin, whose reader is the zilmar variant of update_conf behind
+  #if !defined(M64P_PLUGIN_API); the variant this build compiles takes settings
+  from the core config API and ignores its filename argument
+  (mupen64plus-rsp-cxd4/module.c:89-99,652-673).
+
+files:
+  - name: "64DD_IPL_JP.n64"
+    aliases: ["64DD_IPL_v12_JPN.bin", "64DD_IPL.bin"]
+    system: nintendo-64dd
+    required: true
+    description: "64DD IPL ROM (Japanese retail)"
+    note: >
+      Selected when the disk system data holds the Japanese region word
+      0xe848d316, which covers the retail library. The path is set in the
+      settings dialog and no name is fixed by the code. Loaded whole, then
+      byteswapped after identifying the first word as one of 0x80270740 (z64),
+      0x40072780 (n64) or 0x27804007 (v64); any other value disables 64DD.
+      Size is not checked and no hash is computed.
+    source_ref: "Source/RMG-Core/MediaLoader.cpp:47-74, Source/RMG-Core/Settings.cpp:284-286, Source/3rdParty/mupen64plus-core/src/main/main.c:1190-1255, Source/3rdParty/mupen64plus-core/src/device/dd/disk.c:434-445"
+
+  - name: "64DD_IPL_US.n64"
+    aliases: ["64DD_IPL_USA.bin", "IPL_USA.n64"]
+    system: nintendo-64dd
+    required: true
+    description: "64DD IPL ROM (American retail)"
+    note: >
+      Selected when the disk system data holds the US region word 0x2263ee56.
+      The other two IPL settings are not consulted for such a disk, so no
+      substitution is possible. Same load path, format check and absence of
+      size or hash validation as the Japanese image.
+    source_ref: "Source/RMG-Core/MediaLoader.cpp:54-56, Source/RMG-Core/Settings.cpp:287-289, Source/3rdParty/mupen64plus-core/src/main/main.c:1190-1255, Source/3rdParty/mupen64plus-core/src/device/dd/disk.c:434-445"
+
+  - name: "64DD_IPL_DEV.n64"
+    aliases: ["64DD_IPL_DEV.bin", "IPL_DEV.n64"]
+    system: nintendo-64dd
+    required: true
+    description: "64DD IPL ROM (Japanese development)"
+    note: >
+      Selected when the disk system data holds the development region word
+      0x00000000, and also whenever the valid system data block sits at index
+      2, 3, 10 or 11, which is the development disk layout. Same load path,
+      format check and absence of size or hash validation as the Japanese
+      image.
+    source_ref: "Source/RMG-Core/MediaLoader.cpp:57-59, Source/RMG-Core/Settings.cpp:290-292, Source/3rdParty/mupen64plus-core/src/main/main.c:1190-1255, Source/3rdParty/mupen64plus-core/src/device/dd/disk.c:412-475"

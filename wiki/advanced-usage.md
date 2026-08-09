@@ -56,6 +56,56 @@ What counts as "required" depends on the platform YAML. For existence-mode platf
 For MD5-mode platforms (Batocera), all declared files are treated as required unless
 explicitly marked optional.
 
+### Region filtering
+
+Keep one regional BIOS per system instead of all of them:
+
+```bash
+python scripts/generate_pack.py --platform retroarch --region us
+python scripts/generate_pack.py --platform retroarch --region us,eu,jp
+```
+
+The list is an **ordered priority**, best first, the same model ROM managers use
+for 1G1R. `--region us,eu,jp` means prefer North America, fall back to Europe,
+fall back to Japan. It does not mean "keep all three": when a US BIOS exists for
+a system, the European and Japanese ones are dropped.
+
+Accepted names are territory slugs (`japan`, `north-america`, `europe`,
+`south-korea`, `taiwan`, `brazil`, `france`...) plus short aliases (`jp`, `us`,
+`eu`, `kr`) and the signal spellings (`ntsc-j`, `ntsc-u`, `pal`). Territories
+nest, so `--region europe` keeps a BIOS declared `[france]`, and `--region france`
+keeps one declared `[europe]`.
+
+Three rules keep a filtered pack usable:
+
+- **No system is ever emptied.** If nothing matches, the whole group is kept.
+  `--region us` still ships `disksys.rom`, because the Famicom Disk System has no
+  American BIOS.
+- **Region-free files always survive.** `psxonpsp660.bin`, `ps1_rom.bin` and
+  `openbios.bin` are declared `[world]`; they add a capability rather than
+  competing regionally.
+- **Untagged files always survive.** Most BIOS are not regional and carry no
+  `region:` at all.
+
+What this does and does not do: it shrinks the pack. It does not change how cores
+pick a BIOS. Most cores already select per region from fixed filename lists driven
+by the game's region (PicoDrive in `libretro.c`, Genesis Plus GX in `loadrom.c`),
+so a USA game already gets the US BIOS when it is present. Only cores that load a
+single unqualified file change behaviour. Loading imports from another region may
+need the unfiltered pack.
+
+Verification takes the same flag, and needs it: a filtered pack checked without it
+reports every dropped file as missing.
+
+```bash
+python scripts/generate_pack.py --platform recalbox --region us --verify-packs
+```
+
+`--region` composes with `--split`, `--target`, `--required-only`, `--source`,
+`--emulator` and `--system`. It is mutually exclusive with `--from-md5`, which
+selects by hash. `pipeline.py` never passes it, so the released packs stay
+complete.
+
 
 ## Pack Source Variants
 

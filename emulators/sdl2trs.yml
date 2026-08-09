@@ -1,0 +1,279 @@
+emulator: SDL2TRS
+type: standalone
+core_classification: community_fork
+source: "https://gitlab.com/jengun/sdltrs"
+upstream: "http://sdltrs.sourceforge.net"
+profiled_date: "2026-08-08"
+source_commit: "a9b30ff3cfe2b44ccff094fcd5d3c5b60e78b8a2"
+core_version: "1.2.35"
+display_name: "Tandy - TRS-80 (SDL2TRS)"
+cores:
+  - sdl2trs
+  - sdltrs
+systems:
+  - trs80
+mode: standalone
+
+notes: |
+  TRS-80 Model I, III, 4 and 4P emulator. Jens Guenther's GitLab tree continues
+  Mark Grebe's SDLTRS, itself an SDL port of Tim Mann's xtrs, whose licence
+  still ships as xtrs.LICENSE. The sdl2 branch builds the sdl2trs binary that
+  ES-DE and RetroDECK look for; master builds sdltrs for hosts without SDL2
+  (README.md:106-111). The branches diverge only in the display and paste code:
+  trs_cmd_rom.c and trs_memory.c are byte-identical between them.
+
+  Three ROM slots exist, one per model family, and trs_rom_init picks one from
+  trs_model. Model I takes romfile1, Model III and Model 4 share romfile3, and
+  Model 4P takes romfile4p (trs_cmd_rom.c:868-894). The defaults are level2.rom,
+  model3.rom and model4p.rom, each prefixed by ROM_PATH (trs_options.c:900-902).
+  ROM_PATH is a build define left empty unless a packager sets it
+  (trs_options.c:53-54, CMakeLists.txt:42), so a stock build resolves the names
+  against the working directory.
+
+  -rom, -r and -romfile write to the slot of the model selected at the moment
+  they are parsed (trs_options.c:611-622). Options are applied in command-line
+  order after the config file has been read (trs_options.c:1020-1040), so -m has
+  to come first to redirect them, and a model key in the config file otherwise
+  decides. -rom1, -rom3 and -rom4p address a slot directly. The GUI ROM browser
+  filters on .bin, .hex, .iii and .rom (trs_sdl_gui.h:63, trs_sdl_gui.c:2591-2597).
+
+  trs_load_rom sniffs the first byte. A colon means Intel hex, and load_hex
+  rejects the file on a line checksum mismatch. A 1 or a 5 on Model III or later
+  means a MODELA/III CMD file, rejected above 14 KB. Anything else is read as
+  raw binary with no check (trs_cmd_rom.c:720-767, 779-843), which is the path a
+  dump takes. No hash is computed anywhere in the tree. rom_write drops any byte
+  at or past MAX_ROM_SIZE, 18432 (trs_memory.c:63, 742-745), and trs_rom_size,
+  the extent of the plain ROM mapping, is capped at 14336 (trs_cmd_rom.c:896-898).
+
+  A failed load is not fatal. Model I and Model III/4 fall back to trs_fakerom,
+  which prints "You do not have a ROM image installed for Model" and spins.
+  Model 4P falls back to trs_rom4p, Pete Cervasio's free boot ROM, which boots
+  Model 4 operating systems from floppy (trs_cmd_rom.c:871-893). -stringy
+  overlays the built-in Exatron Stringy Floppy ROM at 0x3000 over the Model I
+  image (trs_cmd_rom.c:875-876), and -hdboot rewrites the loaded Model I ROM in
+  place to boot from a hard drive (trs_cmd_rom.c:447-610, 882-883).
+
+  The clones run off the same three slots and are recognised from the ROM data
+  rather than from an option (trs_clones.c:8-20, html/Features.html), so their
+  larger images load as a Model I or a Model III ROM. None has a filename of its
+  own anywhere in the tree.
+
+files:
+  - name: level2.rom
+    description: "TRS-80 Model I ROM"
+    required: true
+    max_size: 18432
+    source_ref: "src/trs_options.c:81 (romfile1), src/trs_options.c:900 (default name), src/trs_cmd_rom.c:871-884 (trs_model 1)"
+    note: >
+      Model I is the model a stock configuration selects (trs_options.c:927), so
+      this is the slot an unconfigured run reads. Without it the machine runs the
+      compiled-in diagnostic stub and nothing else. max_size is the shared ROM
+      buffer ceiling: a longer file is truncated, never rejected, and only the
+      first 14336 bytes reach the plain memory map.
+
+  - name: model3.rom
+    description: "TRS-80 Model III and Model 4 ROM"
+    required: true
+    max_size: 18432
+    source_ref: "src/trs_options.c:82 (romfile3), src/trs_options.c:901 (default name), src/trs_cmd_rom.c:885-889 (trs_model 3 and 4)"
+    note: >
+      Serves Model III and Model 4 alike; the stub text spells out that Model 4
+      mode needs a Model 3 image (trs_cmd_rom.c:110-115). This is the one slot
+      that also accepts a MODELA/III CMD file, which html/index.html presents as
+      the substitute for a real Model III ROM. Same truncating ceiling as the
+      Model I slot.
+
+  - name: model4p.rom
+    description: "TRS-80 Model 4P boot ROM"
+    required: false
+    max_size: 18432
+    source_ref: "src/trs_options.c:83 (romfile4p), src/trs_options.c:902 (default name), src/trs_cmd_rom.c:890-893 (trs_model 5)"
+    note: >
+      Optional because the compiled-in replacement is a working boot ROM rather
+      than a stub. html/index.html states the free ROM boots only Model 4
+      operating systems, not Model III, and only from floppy, so the original
+      image is what restores Model III mode and hard-drive booting. Hard drive
+      unit 0 is tried before floppy by the Radio Shack ROM, and F2 held at boot
+      forces floppy (html/Features.html).
+
+analysis:
+  embedded_roms:
+    mechanism: "Uint8 arrays in trs_cmd_rom.c, copied into the ROM buffer by trs_load_compiled_rom (trs_cmd_rom.c:769-777)"
+    extraction: "hashes computed from the decoded byte literals"
+
+    entries:
+      - symbol: trs_fakerom
+        role: "Fallback for Model I and Model III/4 when the slot cannot be read"
+        source_ref: "src/trs_cmd_rom.c:56-116, src/trs_cmd_rom.c:873,888"
+        load_address: 0
+        size: 461
+        crc32: 5f85edf9
+        md5: de9617738e7ee6633d305777e0ce6a15
+        sha1: 42736ddff1944fcd4631168d35f773fc824eeb9b
+        note: >
+          Writes "You do not have a ROM image installed for Model" plus the model
+          digit to the screen and halts on a JR -2. It runs no TRS-80 software,
+          which is why both slots it covers are required.
+
+      - symbol: trs_rom4p
+        role: "Fallback for Model 4P"
+        source_ref: "src/trs_cmd_rom.c:126-193, src/trs_cmd_rom.c:892"
+        load_address: 0
+        size: 518
+        crc32: 57ec35ee
+        md5: c8551e6aa36c4bea256d3073c7255ed5
+        sha1: 60d4ff043525256fa3072e59ba283a3cb98399f4
+        note: >
+          Pete Cervasio's free Model 4P boot ROM version 0.06, carried under a
+          copy-and-modify notice in the header. Reads and runs a boot sector and
+          reports CRC errors, a missing boot sector and an empty drive.
+          utilities/xtrsrom4p.z80 is its source and xtrsrom4p.README its manual.
+
+      - symbol: trs_romesf
+        role: "Exatron Stringy Floppy firmware, overlaid on the Model I image"
+        source_ref: "src/trs_cmd_rom.c:199-441, src/trs_cmd_rom.c:875-876"
+        load_address: 12288
+        size: 1920
+        crc32: 99e3fdc6
+        md5: 235d1eb412cfc5696aad8a0a2dc6c53a
+        sha1: b2612037600031b5290bace247951e1f99700b36
+        note: >
+          Loaded over 0x3000-0x377F whenever -stringy is set, on top of whatever
+          the Model I slot supplied, and leaves trs_rom_size at 0x3780. Taken
+          from the ESF Advanced Programmer's Guide and held to be public domain
+          by the header. utilities/esfrom.z80 is its source.
+
+  extended_rom_images:
+    note: >
+      The clones and the Holmes video card need images larger than a stock ROM,
+      and the memory mapper reads the extra regions straight out of the same
+      buffer. They arrive through romfile1 or romfile3 like any other image and
+      are recognised from the ROM data, so the emulator defines no filename for
+      them and no option selects them.
+    source_ref: "src/trs_clones.c:8-20 (clone table), src/trs_memory.c:63 (MAX_ROM_SIZE)"
+    layouts:
+      - machine: "Prologica CP-300, CP-500 and CP-500 M80"
+        slot: model3.rom
+        image_size: 16384
+        source_ref: "src/trs_cp500.c:1-22, src/trs_cp500.c:153-160, src/trs_memory.c:1052-1054"
+        note: >
+          14 KB of patched Model III ROM plus a 2 KB resident monitor read back
+          from 0x3800-0x3FFF and banked into 0x3000-0x37FF. README.md:21 and
+          html/Features.html name CP-300 and CP-500 for this 16 KB image.
+
+      - machine: "Holmes VID-80 (VX-3) on Model III"
+        slot: model3.rom
+        image_size: 18432
+        source_ref: "src/trs_memory.c:577-586, src/trs_memory.c:1057-1080"
+        note: "4 KB VID-80 ROM with the Model III ROM appended behind it; this pairing is what sets MAX_ROM_SIZE."
+
+      - machine: "TCS SpeedMaster, also sold as Genie IIs"
+        slot: level2.rom
+        image_size: 16384
+        source_ref: "src/trs_memory.c:1025-1048"
+        note: "BASIC at 0x0000-0x2FFF and a ROM card read from 0x1000-0x3FFF into 0x4000-0xBFFF. Needs -speedup tcs (html/Features.html)."
+
+      - machine: "Aster CT-80"
+        slot: level2.rom
+        image_size: 14336
+        source_ref: "src/trs_memory.c:962-994"
+        note: "BASIC at 0x0000-0x2FFF plus a 2 KB boot ROM at 0x3000-0x37FF, mirrored into 0xEC00 in CP/M mode."
+
+      - machine: "EACA EG 3200 Genie III"
+        slot: level2.rom
+        image_size: 14336
+        source_ref: "src/trs_memory.c:909-931"
+        note: "Bank 1 is read through trs_rom_size, so the 14 KB cap on the plain mapping is the ceiling."
+
+      - machine: "TCS Genie IIIs"
+        slot: level2.rom
+        image_size: 12288
+        source_ref: "src/trs_memory.c:932-961"
+        note: "Reads 0x0000-0x2FFF only; the rest of the address space is banked RAM, video and the HRG window."
+
+      - machine: "LNW Research LNW80/II"
+        slot: level2.rom
+        image_size: 12288
+        source_ref: "src/trs_memory.c:995-1024"
+        note: "Reads 0x0000-0x2FFF only. -speedup lnw sets the 4 MHz clock and the low 16 KB banking."
+
+  character_generators:
+    source_ref: "src/trs_chars.c:12 (trs_char_data), src/trs_options.c:404-436 (charset names), src/trs_sdl_interface.c:585"
+    note: >
+      Every character set is a compiled-in bitmap table selected by -charset1,
+      -charset3 and -charset4. The tree holds no external font file and reads
+      none. The sets cover the Model I generators, the Model III and Model 4
+      Katakana and international sets, and the Video Genie, System 80, HT-1080Z,
+      Meritum and Aster CT-80 clones.
+
+  frontend_conventions:
+    note: >
+      Two frontends fix names and paths the emulator itself does not know. Both
+      belong to the platform layer.
+    entries:
+      - frontend: ES-DE
+        source_ref: "resources/systems/linux/es_systems.xml:2211-2213, USERGUIDE.md:3334-3362"
+        note: >
+          Passes -rom %ROMPATH%/trs-80/level2.rom on all three launch commands
+          and -disk0 %ROMPATH%/trs-80/boot.dsk on the DOS Diskette one, with
+          boot.dsk documented as a copy of a TRS-80 DOS, NewDos/80 v2.0
+          recommended. No command passes -m, so the slot -rom writes to follows
+          the config file, which is Model I unless the user changed it, and
+          model3.rom and model4p.rom are never named. USERGUIDE.md:3338 records
+          that both filenames are case sensitive.
+      - frontend: RetroDECK
+        source_ref: "RetroDECK/components archive_later/sdl2trs/component_manifest.json"
+        note: >
+          Declares level1.rom, level2.rom, level3.rom, level4.rom, level4p.rom
+          and boot.dsk under $roms_path/trs-80. Of those the emulator opens only
+          level2.rom by default; level3.rom, level4.rom and level4p.rom are
+          renames of the model3.rom and model4p.rom slots, and level1.rom is a
+          Level I BASIC image for the Model I slot. The manifest hashes come
+          from the frontend, not from the emulator, which computes none.
+
+  shipped_content:
+    source_ref: "CMakeLists.txt:50, CMakeLists.txt:145-146"
+    files:
+      - diskimages/utility.dsk
+      - diskimages/cpmutil.dsk
+    note: >
+      Installed into the shared data directory by the emulator's own packaging
+      and carrying the IMPORT, EXPORT, SETTIME, XTRSHARD, XTRSMOUS and CP/M
+      helper programs whose sources sit in utilities/. No code path names them:
+      they reach the machine only when a user mounts them with -disk.
+
+  user_supplied_paths:
+    note: "Named on the command line, in the config file or in a disk set, with no fixed filename"
+    entries:
+      - what: "floppy images in drives 0-7, JV1, JV3 and DMK"
+        source_ref: "src/trs_options.c:589-594, src/trs_disk.c:789-921"
+      - what: "hard drive images, units 0-3"
+        source_ref: "src/trs_options.c:595-600, src/trs_hard.c:212-220, src/trs_hard.c:528-609"
+      - what: "cassette images, .cas, .cpt and .wav"
+        source_ref: "src/trs_options.c:583-588, src/trs_cassette.c:526-553"
+      - what: "stringy floppy wafers in drives 0-7, .esf"
+        source_ref: "src/trs_options.c:601-606, src/trs_stringy.c:278-316, src/trs_stringy.c:342-346"
+      - what: "disk set, a plain list of the paths above"
+        source_ref: "src/trs_options.c:607-610, src/trs_disk.c:3765-3802"
+      - what: "CMD program loaded straight into memory, from a bare argument"
+        source_ref: "src/trs_options.c:1014-1015, src/trs_cmd_rom.c:845-866"
+      - what: "serial port tty, defaulting to /dev/ttyS0 on Linux"
+        source_ref: "src/trs_uart.c:54-56, src/trs_uart.c:144-202"
+
+  generated_files:
+    written_and_read_back:
+      - filename: ".sdltrs.t8c"
+        source_ref: "src/trs_options.c:939-955, src/trs_options.c:1049"
+        note: "Configuration, written to the home directory on first run when none is found."
+      - filename: "<name>.t8s"
+        source_ref: "src/trs_state_save.c:38-66, src/trs_state_save.c:68-113"
+        note: "Emulator state, written and read by the GUI or a bare command-line argument."
+      - filename: "blank disk, wafer and hard drive images"
+        source_ref: "src/trs_mkdisk.c:192-308, src/trs_stringy.c:187-197"
+    written_only:
+      - filename: "trsprn####.txt"
+        source_ref: "src/trs_printer.c:60-81"
+        note: "Printer output, numbered up to 9999 in the printer directory."
+      - filename: "screenshots as BMP"
+        source_ref: "src/trs_sdl_gui.c:2673"
+    note: "Produced by the emulator, none is user-supplied"

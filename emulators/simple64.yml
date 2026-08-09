@@ -1,0 +1,167 @@
+emulator: simple64
+type: standalone
+core_classification: community_fork
+source: "https://github.com/simple64/simple64"
+upstream: "https://github.com/simple64/simple64"
+profiled_date: "2026-08-08"
+source_commit: "d8c969c7b932e3d76e6a25549d76348839dbaefd"
+core_version: "v2024.12.1"
+display_name: "Nintendo - Nintendo 64 (simple64)"
+cores:
+  - simple64
+  - simple64-gui
+  - io.github.simple64.simple64
+systems:
+  - nintendo-64
+mode: standalone
+
+notes: |
+  Qt front end by Logan McNaughton over a vendored fork of mupen64plus-core,
+  with parallel-rsp and parallel-rdp as the only RSP and video plugins
+  (wiki, simple64-FAQ.md). The monorepo holds the core, the GUI, the SDL2 audio
+  plugin, the Qt and raphnetraw input plugins and both parallel components as
+  squashed subtrees (pull_repos.sh). The core is compiled with M64P_PARALLEL,
+  M64P_NETPLAY and NO_ASM, and its source list leaves out src/osd and every
+  dynarec (mupen64plus-core/CMakeLists.txt:26,28-104). ES-DE runs the release
+  binary as `--nogui <rom>`; the GUI registers only verbose, nogui and test
+  (simple64-gui/main.cpp:14-24). Development stopped and the repository was
+  archived in February 2025, five commits past v2024.12.1, touching only the
+  README, the build script and a netplay dialog.
+
+  Boot runs the real PIF ROM when one is present, which is where this fork
+  parts company with mupen64plus upstream: upstream keeps open_pif behind the
+  M64CMD_PIF_OPEN command with a caller supplied length and ships no such image
+  in data/, while simple64 opens the file itself at a fixed length and ships
+  both images. get_pif_path names pif.pal.rom for SYSTEM_PAL and pif.ntsc.rom
+  for SYSTEM_NTSC and SYSTEM_MPAL, then resolves it against the shared data
+  path (mupen64plus-core/src/main/main.c:1565-1580;
+  mupen64plus-core/src/api/config.c:1610-1625;
+  mupen64plus-core/src/osal/files_unix.c:150-170). The GUI passes the directory
+  holding the executable as that path (simple64-gui/mainwindow.cpp:986-988,
+  mupen64plus-core/src/api/frontend.c:59,90), and build.sh copies both images
+  there (build.sh:26), so a release install always carries them.
+
+  Absence is not fatal. The lookup returns NULL when the file is not found and
+  the result reaches fopen unchecked; on a failed open, open_pif is never
+  called and g_start_address keeps its initialiser 0xa4000040
+  (mupen64plus-core/src/main/main.c:112,1624-1633). A digest that matches none
+  of the four accepted values returns M64ERR_INPUT_INVALID, which main_run
+  discards, leaving the same address. pif_bootrom_hle_execute returns
+  immediately when the address is 0xbfc00000 and otherwise simulates IPL1 and
+  IPL2 in full, quiescing the RSP, PI, VI and AI, deriving s3 to s7 from pif24,
+  copying IPL3 into DMEM and planting the stub CIC x105 needs
+  (mupen64plus-core/src/device/pif/bootrom_hle.c:48-151). It runs on cold boot
+  and on both reset paths (mupen64plus-core/src/main/main.c:1977;
+  mupen64plus-core/src/device/r4300/interrupt.c:445,496). The CIC challenge
+  reads no file either: process_cic_challenge answers with the CIC-NUS-6105
+  algorithm (mupen64plus-core/src/device/pif/pif.c:252-260,
+  mupen64plus-core/src/device/pif/n64_cic_nus_6105.c).
+
+  64DD is not reachable. The GUI's media loader supplies only the two Game Boy
+  cartridge callbacks and leaves set_dd_rom_region, get_dd_rom and get_dd_disk
+  null, the two functions that would have answered being commented out
+  (simple64-gui/interface/common.cpp:129-163,240;
+  mupen64plus-core/src/api/m64p_types.h:186-221). load_dd_rom is only reached
+  after load_dd_disk succeeds, and load_dd_disk bails on a null callback, so
+  the IPL image the core can otherwise load and byteswap is never requested
+  (mupen64plus-core/src/main/main.c:1175-1247,1722-1736). No IPL entry follows
+  from that, and the system list carries no 64DD line.
+
+  Transfer Pak carts come from Player1GBROM and Player1GBRAM through
+  Player4GBROM and Player4GBRAM, filled by a file dialog
+  (simple64-gui/mainwindow.cpp:84-117,
+  simple64-gui/interface/common.cpp:87-127). The pair is a Game Boy cartridge
+  and its save, supplied by the player, and the code fixes no name, size or
+  hash for either, so neither carries an entry here.
+
+  The Voice Recognition Unit is the one asset the user has to go and get. The
+  core's VRU controller forwards every word command to the input plugin
+  (mupen64plus-core/src/device/controllers/vru_controller.c:147-235), and
+  setupVosk loads libvosk from beside the executable, then hands
+  vosk-model-small-en-us-0.15 under the user data directory to vosk_model_new
+  once conf/mfcc.conf is found inside it (simple64-input-qt/main.cpp:769-813).
+  Choosing "Emulate VRU" for controller 4 tests that same file and, when it is
+  missing, downloads
+  https://alphacephei.com/vosk/models/vosk-model-small-en-us-0.15.zip and
+  unpacks it there with 7za (simple64-input-qt/configdialog.cpp:22-62,93-115).
+  build.sh fetches only the Vosk library, never the model (build.sh:89-101,
+  158-160), so no release carries it.
+
+  Data the build places beside the executable: mupen64plus.ini, parsed as the
+  ROM database and keyed on MD5 then CRC pair, which supplies save type, player
+  count, rumble, Transfer Pak, Controller Pak, bio pak and expansion memory per
+  title (mupen64plus-core/src/main/rom.c:190-235,674-691; build.sh:25); and
+  cheats.json, pulled from simple64/cheat-parser at build time and read by
+  header CRC pair and country code (simple64-gui/cheats.cpp:230-239;
+  build.sh:106-111). Neither is hashed or version checked, romdatabase_open
+  logs and returns when the file is absent, and loadCheatData yields an empty
+  object, so both degrade rather than fail.
+
+  Two data files in the tree this build never reads: data/font.ttf, whose only
+  consumer is src/osd/osd.c, absent from the source list, leaving
+  osd_new_message as the inline no-op behind M64P_OSD
+  (mupen64plus-core/src/osd/osd.h:93,104,118-121); and data/mupencheat.txt,
+  referenced nowhere under src/ since cheats come from the GUI's own JSON. The
+  parallel-rdp shaders are compiled in through shaders/slangmosh.hpp rather
+  than loaded (parallel-rdp-standalone/parallel-rdp/rdp_renderer.cpp:36), and
+  the file reads in parallel-rsp/main.cpp belong to a test harness that sits
+  outside that plugin's CMake target.
+
+  Written rather than obtained: mupen64plus.cfg in the config directory and
+  simple64-gui.ini beside the executable
+  (simple64-gui/mainwindow.cpp:249), the Controller Pak, EEPROM, FlashRAM and
+  SRAM saves opened with default content when absent
+  (mupen64plus-core/src/main/main.c:1160-1173,1717-1720), the per ROM save
+  metadata (mupen64plus-core/src/main/rom.c:263,347), savestates and
+  screenshots (mupen64plus-core/src/main/screenshot.c:174), and the Discord
+  game SDK and Vosk shared libraries, which are resolved by name at runtime
+  and are code rather than data (simple64-gui/mainwindow.cpp:356,
+  simple64-input-qt/main.cpp:773).
+
+files:
+  - name: "pif.ntsc.rom"
+    system: nintendo-64
+    required: false
+    hle_fallback: true
+    region: [world]
+    size: 1984
+    md5:
+      - "5c124e7948ada85da603a522782940d0"
+      - "4921d5f2165dee6e2496f4388c4c81da"
+    validation: [md5]
+    description: "PIF boot ROM (NTSC)"
+    note: >
+      Chosen for SYSTEM_NTSC and SYSTEM_MPAL. rom_country_code_to_system_type
+      returns SYSTEM_PAL only for country codes 0x44, 0x46, 0x49, 0x50, 0x53,
+      0x55, 0x58 and 0x59 and falls through to SYSTEM_NTSC for 0x37, 0x41,
+      0x45, 0x4a and, on its default arm, every other code, which is why the
+      region is recorded as world rather than an enumeration. main_run reads
+      1984 bytes, the size of the PIF ROM window, and open_pif digests exactly
+      that span, so the size given here is the length consumed rather than a
+      check the code performs. Two digests are accepted: the current one, which
+      is the image shipped in data/ and the No-Intro entry "[BIOS] Nintendo 64
+      - PIF (Japan, USA).bin" at 1984 bytes, and the digest of the earlier dump
+      kept for compatibility. On a match the image is byteswapped into PIF
+      memory and the reset vector moves to 0xbfc00000; on a mismatch the core
+      logs "Invalid PIF ROM" and boots through the HLE bootrom instead.
+    source_ref: "mupen64plus-core/src/main/main.c:1565-1580,1624-1633,2097-2135, mupen64plus-core/src/main/rom.c:502-525, mupen64plus-core/src/device/pif/pif.h:36"
+
+  - name: "pif.pal.rom"
+    system: nintendo-64
+    required: false
+    hle_fallback: true
+    region: [europe, australia]
+    size: 1984
+    md5:
+      - "d4232dc935cad0650ac2664d52281f3a"
+      - "2b6eec586faa43f3462333b844834554"
+    validation: [md5]
+    description: "PIF boot ROM (PAL)"
+    note: >
+      Chosen for SYSTEM_PAL, which covers the eight country codes 0x44 German,
+      0x46 French, 0x49 Italian, 0x50 European, 0x53 Spanish, 0x55 Australian,
+      0x58 and 0x59 European. Same read length, digest span and fallback as the
+      NTSC image. The current digest is the image shipped in data/ and the
+      No-Intro entry "[BIOS] Nintendo 64 - PIF (Europe).bin" at 1984 bytes; the
+      second value is the earlier dump the fork still accepts.
+    source_ref: "mupen64plus-core/src/main/main.c:1565-1580,1624-1633,2097-2135, mupen64plus-core/src/main/rom.c:502-525, mupen64plus-core/src/device/pif/pif.h:36"

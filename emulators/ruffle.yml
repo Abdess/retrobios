@@ -1,0 +1,150 @@
+emulator: ruffle
+type: standalone
+core_classification: game_engine
+source: "https://github.com/ruffle-rs/ruffle"
+upstream: "https://github.com/ruffle-rs/ruffle"
+profiled_date: "2026-08-08"
+source_commit: "f3a1263e164dc4cb56211ab1f113e1907730ce89"
+core_version: "0.5.0"
+display_name: "Adobe Flash (Ruffle)"
+cores:
+  - ruffle
+systems:
+  - flash
+mode: standalone
+
+notes: |
+  Flash Player and Adobe AIR runtime written in Rust, playing SWF files of any
+  ActionScript version, as a desktop binary or as a WebAssembly browser build.
+  Distribution is by nightly build: Batocera compiles the nightly-2026-01-31 tag
+  and installs ruffle_desktop as ruffle, RetroDECK pulls the rs.ruffle.Ruffle
+  Flathub build. ES-DE runs it as `ruffle --fullscreen <rom>`, Batocera as
+  `ruffle <rom>`, RetroBat as `ruffle.exe --graphics <renderer> --force-align
+  -q <quality> <rom>`, RetroDECK as `ruffle --graphics vulkan --config
+  /var/data/ruffle --save-directory <saves>/ruffle <rom>`. The ActionScript
+  class library is compiled by build_playerglobal into playerglobal_avm1.swf and
+  playerglobal_avm2.swf and linked into the binary from OUT_DIR
+  (core/src/avm1/globals.rs:89, core/src/avm2/globals.rs:546), so startup reads
+  nothing. Locale texts, wgsl shaders, the window icon and the OpenH264 license
+  are embedded the same way (desktop/src/gui/locale.rs:7-12,
+  desktop/src/app.rs:449, render/wgpu/src/shaders.rs:28-76).
+
+  H.264 video is the one external dependency. external_video is a default
+  feature and pulls ruffle_video_external with openh264
+  (desktop/Cargo.toml:26,83,90), and enable_openh264 defaults to true
+  (desktop/src/preferences.rs:283,307). OpenH264Codec::load first dlopens the
+  system sonames libopenh264.so.7, libopenh264.so.2.4.1 and libopenh264.so on
+  Linux, then falls back to <cache>/ruffle/video/ and fetches the Cisco binary
+  from ciscobinary.openh264.org bz2-compressed into it
+  (video/external/src/decoder/openh264.rs:53-56,109-133,173-191,
+  desktop/src/player.rs:234-241). Whether the library was already there or was
+  just downloaded, its SHA-256 is checked before loading and the size is read
+  only to format the mismatch message
+  (video/external/src/decoder/openh264.rs:135-146), and WelsGetCodecVersion must
+  answer 2.4.1 exactly (video/external/src/decoder/openh264.rs:46,153-166). The
+  cache root comes from dirs::cache_dir(), ~/.cache/ruffle by default, and
+  --cache-directory moves it (desktop/src/cli.rs:29-33,140). Without the library
+  the player still starts: ExternalVideoBackend wraps SoftwareVideoBackend, so
+  H.263, Screen Video and VP6 keep decoding and only H.264 streams fail
+  (video/external/src/backend.rs:41,51-69,73-80).
+
+  Text uses system fonts. fontdb::Database::load_system_fonts() fills the
+  database at startup (desktop/src/app.rs:418-419), and both the Flash device
+  fonts and the egui menu bar resolve family names against it, mmapping whatever
+  face the host answers with (desktop/src/backends/ui.rs:281-314,395-421,
+  desktop/src/gui/controller.rs:690-733). The families asked for are Times New
+  Roman, Arial, Courier New and their metric-compatible substitutes, plus the
+  CJK, Hebrew, Arabic and Thai faces (desktop/src/player.rs:361-412,
+  desktop/src/gui/controller.rs:569-641), and on Unix fontconfig sorts the
+  fallback chain (desktop/src/backends/ui.rs:318-329,460-472). No name, path,
+  size or hash is fixed anywhere. The compiled-in Noto Sans subset sits behind
+  the default_font feature, which the desktop build does not enable
+  (core/src/player.rs:82-83, core/Cargo.toml:82,96, desktop/Cargo.toml:22), so
+  an unmatched family leaves the run without that face rather than falling back
+  to a bundled one.
+
+  Files the player writes rather than expects: preferences.toml, bookmarks.toml
+  and recents.toml under --config, each defaulted when absent
+  (desktop/src/preferences.rs:53-95), .sol SharedObjects under --save-directory
+  (frontend-utils/src/backends/storage.rs:31-60), and the log file
+  (desktop/src/main.rs:156-166). ruffle-bundle.toml is the manifest inside a
+  .ruf bundle, which is content alongside the .swf rather than a runtime input
+  (frontend-utils/src/bundle/info.rs:11, frontend-utils/src/bundle.rs:42-53).
+  mms.cfg is not
+  implemented, the name appears only in an AVM2 error string
+  (core/src/avm2/error_messages.rs:237).
+
+files:
+  # -- OpenH264 2.4.1 decoder, one build per OS and architecture --
+
+  - name: libopenh264-2.4.1-linux64.7.so
+    path: "video/libopenh264-2.4.1-linux64.7.so"
+    system: flash
+    required: false
+    description: "OpenH264 2.4.1 decoder library, Linux x86_64"
+    sha256: "1392d21466bc638e68151b716d5b2086d54cd812afd43253f1adb5b6e0185f51"
+    validation: [sha256]
+    source_ref: "video/external/src/decoder/openh264.rs:65-68, 104-146, 173-191"
+
+  - name: libopenh264-2.4.1-linux-arm64.7.so
+    path: "video/libopenh264-2.4.1-linux-arm64.7.so"
+    system: flash
+    required: false
+    description: "OpenH264 2.4.1 decoder library, Linux aarch64"
+    sha256: "e8ea7e42855ceb4a90e7bd0b3abeba0c58b5f97166e8b0a30eefd58e099557a4"
+    validation: [sha256]
+    source_ref: "video/external/src/decoder/openh264.rs:73-76, 104-146, 173-191"
+
+  - name: libopenh264-2.4.1-linux-arm.7.so
+    path: "video/libopenh264-2.4.1-linux-arm.7.so"
+    system: flash
+    required: false
+    description: "OpenH264 2.4.1 decoder library, Linux arm"
+    sha256: "fd1dfb27d30bb72e903c9d2b4c650104a4369d2e7ffe8a4a533e8db2e7e9b19e"
+    validation: [sha256]
+    source_ref: "video/external/src/decoder/openh264.rs:69-72, 104-146, 173-191"
+
+  - name: libopenh264-2.4.1-linux32.7.so
+    path: "video/libopenh264-2.4.1-linux32.7.so"
+    system: flash
+    required: false
+    description: "OpenH264 2.4.1 decoder library, Linux x86"
+    sha256: "b7cf0e407f99056d90cbf62787a34820a7595b2129b165319d50766e00a66704"
+    validation: [sha256]
+    source_ref: "video/external/src/decoder/openh264.rs:61-64, 104-146, 173-191"
+
+  - name: libopenh264-2.4.1-mac-arm64.dylib
+    path: "video/libopenh264-2.4.1-mac-arm64.dylib"
+    system: flash
+    required: false
+    description: "OpenH264 2.4.1 decoder library, macOS aarch64"
+    sha256: "213ff93831cfa3dd6d7ad0c3a3403a6ceedf4ac1341e1278b5b869d42fefb496"
+    validation: [sha256]
+    source_ref: "video/external/src/decoder/openh264.rs:81-84, 104-146, 173-191"
+
+  - name: libopenh264-2.4.1-mac-x64.dylib
+    path: "video/libopenh264-2.4.1-mac-x64.dylib"
+    system: flash
+    required: false
+    description: "OpenH264 2.4.1 decoder library, macOS x86_64"
+    sha256: "cc0ba518a63791c37571f3c851f0aa03a4fbda5410acc214ecd4f24f8d1c478e"
+    validation: [sha256]
+    source_ref: "video/external/src/decoder/openh264.rs:77-80, 104-146, 173-191"
+
+  - name: openh264-2.4.1-win64.dll
+    path: "video/openh264-2.4.1-win64.dll"
+    system: flash
+    required: false
+    description: "OpenH264 2.4.1 decoder library, Windows x86_64"
+    sha256: "081b0c081480d177cbfddfbc90b1613640e702f875897b30d8de195cde73dd34"
+    validation: [sha256]
+    source_ref: "video/external/src/decoder/openh264.rs:89-92, 104-146, 173-191"
+
+  - name: openh264-2.4.1-win32.dll
+    path: "video/openh264-2.4.1-win32.dll"
+    system: flash
+    required: false
+    description: "OpenH264 2.4.1 decoder library, Windows x86"
+    sha256: "83270149640469c994a62cc32a6d8c0413cd7b802b7f1f2f532159f5bdc1cedd"
+    validation: [sha256]
+    source_ref: "video/external/src/decoder/openh264.rs:85-88, 104-146, 173-191"

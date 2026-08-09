@@ -1495,7 +1495,7 @@ def print_emulator_result(result: dict, verbose: bool = False) -> None:
             f"  Ground truth: {gt_cov['with_validation']}/{gt_cov['total']} files have emulator validation ({pct}%)"
         )
         if gt_cov["platform_only"]:
-            print(f"    {gt_cov['platform_only']} platform-only (no emulator profile)")
+            print(f"    {gt_cov['platform_only']} without declared validation")
 
 
 def main():

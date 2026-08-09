@@ -4,7 +4,7 @@
   "platform": "lakka",
   "display_name": "Lakka",
   "version": "1.0",
-  "generated": "2026-08-08T09:27:56Z",
+  "generated": "2026-08-08T15:53:41Z",
   "base_destination": "system",
   "detect": [
     {
@@ -15,8 +15,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 1684,
-  "total_size": 4207511677,
+  "total_files": 1685,
+  "total_size": 4209608829,
   "files": [
     {
       "dest": "3do_arcade_saot.bin",
@@ -4737,6 +4737,15 @@
       "repo_path": "bios/Microsoft/Xbox/cromwell_1024.bin",
       "cores": [
         "DirectXBox"
+      ]
+    },
+    {
+      "dest": "Triforce/segaboot.gcm",
+      "sha1": "7297a11be143011ceb75a0720f96855003415a5d",
+      "size": 2097152,
+      "repo_path": "bios/Sega/Triforce/segaboot.gcm",
+      "cores": [
+        "Dolphin"
       ]
     },
     {

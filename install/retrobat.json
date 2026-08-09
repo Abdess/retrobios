@@ -4,7 +4,7 @@
   "platform": "retrobat",
   "display_name": "RetroBat",
   "version": "1.0",
-  "generated": "2026-08-08T08:00:44Z",
+  "generated": "2026-08-08T15:53:55Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -235,8 +235,8 @@
       }
     }
   ],
-  "total_files": 1232,
-  "total_size": 3279906783,
+  "total_files": 1233,
+  "total_size": 3282003935,
   "files": [
     {
       "dest": "panafz1.bin",
@@ -8981,6 +8981,15 @@
       "sha1": "a1837968288253ed541f2b11440b68f5a9b33875",
       "size": 2097152,
       "repo_path": "bios/Nintendo/GameCube/GC/JAP/IPL.bin",
+      "cores": [
+        "Dolphin"
+      ]
+    },
+    {
+      "dest": "Triforce/segaboot.gcm",
+      "sha1": "7297a11be143011ceb75a0720f96855003415a5d",
+      "size": 2097152,
+      "repo_path": "bios/Sega/Triforce/segaboot.gcm",
       "cores": [
         "Dolphin"
       ]

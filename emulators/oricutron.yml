@@ -1,0 +1,328 @@
+emulator: Oricutron
+type: standalone
+core_classification: other
+source: "https://github.com/pete-gordon/oricutron"
+upstream: "https://www.petergordon.org.uk/oricutron/"
+profiled_date: "2026-08-08"
+source_commit: "002279fce9fa756d1d63cdc40ae97939eb7de7ed"
+core_version: "1.2.0"
+display_name: "Tangerine - Oric (Oricutron)"
+cores:
+  - oricutron
+systems:
+  - oric
+  - oricatmos
+mode: standalone
+
+notes: |
+  Oric-1, Oric-1 16K, Oric Atmos, Telestrat and Pravetz 8D emulator by Peter
+  Gordon. Recalbox packages it for its oricatmos system, ES-DE offers it for
+  oric alongside MAME and starts it with the working directory set to the
+  emulator directory.
+
+  ROM names are configured without the extension: load_rom appends ".rom"
+  (machine.c:1089-1093). The defaults are set in preinit_gui (gui.c:2283-2297)
+  behind ROMPREFIX, which is "roms/" everywhere except AmigaOS
+  ("PROGDIR:roms/") and the emscripten build ("assets/roms/") (system.h:38-68).
+  A path read from oricutron.cfg goes through read_config_path
+  (main.c:341-347), which prepends the program directory resolved from argv[0]
+  (main.c:196-236), so a relative path resolves against the directory holding
+  the binary rather than the working directory.
+
+  The machine ROM is loaded by init_machine for the selected machine type and
+  a failure returns SDL_FALSE, after which the emulator exits
+  (main.c:1442-1446). The four disk controller ROMs are loaded once at startup
+  by load_diskroms (main.c:1407, machine.c:1249-1255) whatever the machine and
+  the drive setting; a failure only clears the matching flag and startup
+  continues. Of those flags only pravetzrom_valid is read afterwards
+  (machine.c:1055): the Microdisc, BD-500 and Jasmin buffers are mapped into
+  the CPU address space whether or not the file was read, so a missing file
+  leaves the selected controller running on zeroed memory.
+
+  Size is the only property the code checks. A machine ROM is rejected above
+  16384 bytes and is loaded right-aligned in its bank, so a shorter file is
+  accepted (machine.c:1101-1118). A disk controller ROM is read as one
+  fixed-length block, which fails when the file is shorter than that length
+  and ignores anything past it (machine.c:1120-1126). No hash is computed
+  anywhere in the tree.
+
+  Telestrat banks 0 to 4 hold RAM unless the config names a file for them
+  (machine.c:2029-2038). The Twilighte board is off by default and is switched
+  on with twilighte_board in oricutron.cfg (main.c:660). Its bank config is
+  opened as a bare relative path (oric_twilighte_board_plugin.c:132) and the
+  bank filenames in it are read with read_config_string rather than
+  read_config_path (oric_twilighte_board_plugin.c:174,182), so both resolve
+  against the working directory and not the program directory.
+
+files:
+  - name: basic11b.rom
+    description: "Oric Atmos BASIC 1.1b ROM"
+    required: true
+    max_size: 16384
+    validation: [size]
+    source_ref: "gui.c:2283 (default roms/basic11b), main.c:553 (atmosrom), machine.c:2006-2007 (MACH_ATMOS)"
+    note: >
+      Atmos is the machine oricutron.cfg selects, so this is the ROM a stock
+      configuration needs. Also named by twilbankrom06 in the Twilighte board
+      config (plugins/twilighte_board/twilighte.cfg:3).
+
+  - name: basic10.rom
+    description: "Oric-1 BASIC 1.0 ROM"
+    required: true
+    max_size: 16384
+    validation: [size]
+    source_ref: "gui.c:2284 (default roms/basic10), main.c:554 (oric1rom), machine.c:1932-1933 (MACH_ORIC1_16K), machine.c:1969-1970 (MACH_ORIC1)"
+    note: "Serves both the 48K Oric-1 and the 16K Oric-1, selected with -m oric1 or -m o16k."
+
+  - name: pravetzt.rom
+    description: "Pravetz 8D BASIC ROM"
+    required: true
+    max_size: 16384
+    validation: [size]
+    source_ref: "gui.c:2288 (default roms/pravetzt), main.c:558 (pravetzrom), machine.c:2082-2083 (MACH_PRAVETZ)"
+    note: "Selected with -m pravetz. roms/pravetzt-1.0.pch and .sym ship for an earlier revision of this ROM."
+
+  - name: teleass.rom
+    description: "Telestrat TELEASS ROM, bank 5"
+    required: true
+    max_size: 16384
+    validation: [size]
+    source_ref: "gui.c:2295 (default roms/teleass), main.c:588-589 (telebank5), machine.c:2029-2033 (MACH_TELESTRAT)"
+
+  - name: hyperbas.rom
+    description: "Telestrat HYPER BASIC ROM, bank 6"
+    required: true
+    max_size: 16384
+    validation: [size]
+    source_ref: "gui.c:2296 (default roms/hyperbas), main.c:588-589 (telebank6), machine.c:2029-2033 (MACH_TELESTRAT)"
+
+  - name: telmon24.rom
+    description: "Telestrat TELEMON 2.4 ROM, bank 7"
+    required: true
+    max_size: 16384
+    validation: [size]
+    source_ref: "gui.c:2297 (default roms/telmon24), main.c:588-589 (telebank7), machine.c:2029-2033 (MACH_TELESTRAT)"
+    note: "Bank 7 is the bank mapped at reset (machine.c:2041-2043)."
+
+  - name: microdis.rom
+    description: "Microdisc disk controller ROM"
+    required: false
+    min_size: 8192
+    validation: [size]
+    source_ref: "gui.c:2285 (default roms/microdis), main.c:555 (mdiscrom), machine.c:1251, machine.c:904-911 (mapped at $E000)"
+    note: >
+      Conditional: needed for the Microdisc controller, which is the drive type
+      a disk image falls back to when none is given (main.c:1409-1410,
+      1488-1489). Loaded whatever the machine and not fatal, and
+      setup_for_microdisc raises romdis, so an absent file leaves the $E000
+      overlay reading zeroes.
+
+  - name: bd500.rom
+    description: "ByteDrive BD-500 disk controller ROM"
+    required: false
+    min_size: 8192
+    validation: [size]
+    source_ref: "gui.c:2286 (default roms/bd500), main.c:556 (bd500rom), machine.c:1252, machine.c:937-944 (mapped at $E000)"
+    note: >
+      Conditional: needed for the BD-500 controller, selected with -k bd500 or
+      by autodetecting a BD-500 image (main.c:1478-1481). Same non-fatal load
+      and same zeroed overlay as the Microdisc ROM. The rom16 and dos70 config
+      keys change how ROMDIS disables the chips (oricutron.cfg:98-106).
+
+  - name: jasmin.rom
+    description: "Jasmin disk controller ROM"
+    required: false
+    min_size: 2048
+    validation: [size]
+    source_ref: "gui.c:2287 (default roms/jasmin), main.c:557 (jasminrom), machine.c:1253, machine.c:836-844 (mapped at $F800)"
+    note: >
+      Conditional: needed for the Jasmin controller, selected with -k jasmin or
+      by autodetecting a Jasmin image (main.c:1468-1471). setup_for_jasmin
+      leaves romdis clear, so the machine still boots from its BASIC ROM.
+
+  - name: 8dos2.rom
+    description: "Pravetz 8D floppy controller boot PROM"
+    required: false
+    min_size: 512
+    validation: [size]
+    source_ref: "gui.c:2289 (default roms/8dos2), main.c:559 (pravetz8drom), machine.c:1254, machine.c:1053-1058 (mapped at $320-$3FF)"
+    note: >
+      Conditional: needed for the Pravetz 8D drive. The only disk ROM whose
+      load flag is read back, so the Pravetz machine boots without it and only
+      the drive is lost. oricutron.cfg:44-45 gives roms/8dos as the other
+      value for this key, and roms/8dos.sym ships for it.
+
+  - name: kernel.rom
+    description: "Orix kernel, Twilighte board ROM bank 7"
+    required: false
+    max_size: 16384
+    validation: [size]
+    source_ref: "plugins/twilighte_board/twilighte.cfg:2 (twilbankrom07), plugins/twilighte_board/oric_twilighte_board_plugin.c:167-216 (parse and load), plugins/twilighte_board/oric_twilighte_board_plugin.c:63-115 (load_rom_twilighte)"
+    note: >
+      Loaded only when twilighte_board is on (main.c:660). A configured bank
+      file that cannot be read makes twilighte_oric_init return NULL.
+      ReadMe.txt:506-519 records the copy in the tree as Orix v2022.1 and
+      points at repo.orix.oric.org for later builds.
+
+  - name: shell.rom
+    description: "Orix shell, Twilighte board ROM bank 5"
+    required: false
+    max_size: 16384
+    validation: [size]
+    source_ref: "plugins/twilighte_board/twilighte.cfg:4 (twilbankrom05), plugins/twilighte_board/oric_twilighte_board_plugin.c:167-216 (parse and load), plugins/twilighte_board/oric_twilighte_board_plugin.c:63-115 (load_rom_twilighte)"
+    note: >
+      Loaded only when twilighte_board is on (main.c:660). ReadMe.txt:506
+      names kernel.rom in bank 7 and shell.rom in bank 5 as the minimum
+      configuration for the board to start.
+
+analysis:
+  gui_images:
+    source_ref: "gui.c:100-117 (gimgs table), gui.c:425-492 (gimg_load), gui.c:2464-2466 (init_gui)"
+    lookup: "program directory + IMAGEPREFIX, which is images/ everywhere except AmigaOS and the emscripten build (system.h:38-68)"
+    validation: "uncompressed 24-bit BMP, one plane, at the exact width and height declared in the table"
+    fatal: true
+    note: >
+      init_gui returns SDL_FALSE on the first image it cannot read and the
+      emulator exits (main.c:1416-1420). The set ships in the source tree and
+      in the binary releases, and packagers install it beside the binary:
+      the RetroDECK recipe copies the whole images directory
+      (RetroDECK/components archive_later/oricutron/component_recipe.json) and
+      the ES-DE guide has Linux users take images and roms out of the Windows
+      archive (USERGUIDE.md:3377-3391).
+    files:
+      - statusbar.bmp
+      - disk_ejected.bmp
+      - disk_idle.bmp
+      - disk_active.bmp
+      - disk_modified.bmp
+      - disk_modactive.bmp
+      - tape_ejected.bmp
+      - tape_pause.bmp
+      - tape_play.bmp
+      - tape_stop.bmp
+      - tape_record.bmp
+      - avirec.bmp
+      - gfx_oric1kbd.bmp
+      - gfx_atmoskbd.bmp
+      - gfx_pravetzkbd.bmp
+    conditional_entries:
+      note: >
+        gfx_oric1kbd.bmp sits behind WWW_NO_ORIC1 and gfx_pravetzkbd.bmp
+        behind WWW_NO_PRAVETZ (gui.c:112-118, gui.h:114-120), both of which
+        only cut down the emscripten build. A native build carries all
+        fifteen.
+    non_fatal:
+      - filename: winicon.bmp
+        source_ref: "gui.c:2306-2307"
+        note: "Read with SDL_LoadBMP and passed to SDL_COMPAT_WM_SetIcon, which takes a null surface."
+    unused:
+      - filename: status_bar.bmp
+        reason: "the gimgs table names statusbar.bmp; no code path reads this second file"
+
+  rom_sidecars:
+    note: >
+      Both sidecars are keyed on the ROM basename from the config, so renaming
+      or relocating a ROM moves them with it.
+
+    symbols:
+      pattern: "<rom basename>.sym"
+      source_ref: "machine.c:1129-1133 (load_rom), monitor.c:2676-2691 (mon_new_symbols)"
+      note: >
+        Read for all ten ROMs right after the ROM itself, with verbose off, so
+        an absent file is silent. Fills the debugger symbol tables and nothing
+        else. Compiled out under WWW_NO_MONITOR.
+      shipped:
+        - basic10.sym
+        - basic11b.sym
+        - pravetzt.sym
+        - teleass.sym
+        - telmon24.sym
+        - microdis.sym
+        - jasmin.sym
+        - bd500.sym
+        - 8dos2.sym
+      referenced_but_not_shipped:
+        - hyperbas.sym
+
+    patches:
+      pattern: "<rom basename>.pch"
+      source_ref: "machine.c:1726-1740 (load_patches), machine.c:1933,1970,2007,2033,2083 (call sites)"
+      note: >
+        Read for the machine ROMs only, never for the disk controller ROMs.
+        Carries the keyboard layout, the CLOAD/CSAVE filename decoding
+        addresses, the tape turbo hook addresses and any number of literal
+        byte patches. An absent file returns silently and leaves
+        pch_tt_available false (machine.c:1810-1815), so tape turbo stays off
+        and tapes load at real speed (tape.c:243, 1322-1462).
+      shipped:
+        - basic10.pch
+        - basic11b.pch
+        - pravetzt.pch
+        - telmon24.pch
+      referenced_but_not_shipped:
+        - teleass.pch
+        - hyperbas.pch
+
+    unconfigured_basenames:
+      note: >
+        These sidecars ship for ROM basenames no default config names. They
+        take effect only once a config key points at that basename, and each
+        one implies a ROM dump Oricutron can run.
+      files:
+        - filename: Bas122uk.pch
+          implies: "Oric BASIC 1.22 UK, as an atmosrom value"
+        - filename: Bas122fr.pch
+          implies: "Oric BASIC 1.22 French, as an atmosrom value"
+        - filename: Bas122de.pch
+          implies: "Oric BASIC 1.22 German, as an atmosrom value"
+        - filename: pravetzt-1.0.pch
+          implies: "Pravetz BASIC revision 1.0, as a pravetzrom value"
+        - filename: pravetzt-1.0.sym
+          implies: "Pravetz BASIC revision 1.0, as a pravetzrom value"
+        - filename: 8dos.sym
+          implies: "the earlier Pravetz 8-DOS boot PROM, offered as pravetz8drom in oricutron.cfg:44"
+        - filename: cumana.sym
+          implies: "a Cumana controller ROM; its symbols run from $F800, the window jasminrom feeds"
+        - filename: sedoric.sym
+          implies: "a Sedoric DOS ROM; its symbols name the Microdisc FDC registers at $310-$318"
+
+  unused_resources:
+    - filename: empty_orix.rom
+      reason: "no reference anywhere in the tree; not named by any config default nor by twilighte.cfg"
+    - filename: orixbank1.rom
+      reason: "no reference anywhere in the tree; loadable only once a twilbankromNN key names it"
+    - filename: orixbank2.rom
+      reason: "no reference anywhere in the tree; loadable only once a twilbankromNN key names it"
+    - filename: orixbank3.rom
+      reason: "no reference anywhere in the tree; loadable only once a twilbankromNN key names it"
+    - filename: orixbank4.rom
+      reason: "no reference anywhere in the tree; loadable only once a twilbankromNN key names it"
+    - filename: orixbank5.rom
+      reason: "no reference anywhere in the tree; loadable only once a twilbankromNN key names it"
+    - filename: orixbank6.rom
+      reason: "no reference anywhere in the tree; loadable only once a twilbankromNN key names it"
+    - filename: orixbank7.rom
+      reason: "no reference anywhere in the tree; loadable only once a twilbankromNN key names it"
+
+  user_supplied_paths:
+    note: "Named on the command line or in the config, with no fixed filename"
+    entries:
+      - what: "disk, tape and snapshot images"
+        source_ref: "main.c:1361-1504, oricutron.cfg:63-86"
+      - what: "debugger symbol file, -s or --symbols"
+        source_ref: "main.c:1533-1545"
+      - what: "breakpoint list, -r or --breakpoint with a leading colon"
+        source_ref: "main.c:1547-1574"
+      - what: "keyboard mapping, autoload_keyboard_mapping"
+        source_ref: "main.c:665 (config key), main.c:2188, keyboard.c:587-598, oricutron.cfg:220"
+      - what: "CH376 sdcard and usbdrive trees, telestrat mode"
+        source_ref: "plugins/ch376/ch376.c:1186, ReadMe.txt:512-514"
+
+  generated_files:
+    written_only:
+      - printer_out.txt
+      - "AVI captures"
+      - "snapshots"
+      - "tape captures"
+      - "debugger log and memory dumps"
+    note: "Produced by the emulator, none is user-supplied"

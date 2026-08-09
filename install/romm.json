@@ -4,7 +4,7 @@
   "platform": "romm",
   "display_name": "RomM",
   "version": "1.0",
-  "generated": "2026-08-08T09:28:33Z",
+  "generated": "2026-08-08T15:54:17Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -14,8 +14,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 544,
-  "total_size": 1488406530,
+  "total_files": 545,
+  "total_size": 1490503682,
   "files": [
     {
       "dest": "3do/3do_arcade_saot.bin",
@@ -2721,6 +2721,15 @@
       "sha1": "c116d867ba001dcd6bf6d399ff4bf38d340f556c",
       "size": 4096,
       "repo_path": "bios/Nintendo/GameCube/.variants/dsp_coef.bin.c116d867",
+      "cores": [
+        "Dolphin"
+      ]
+    },
+    {
+      "dest": "ngc/Triforce/segaboot.gcm",
+      "sha1": "7297a11be143011ceb75a0720f96855003415a5d",
+      "size": 2097152,
+      "repo_path": "bios/Sega/Triforce/segaboot.gcm",
       "cores": [
         "Dolphin"
       ]

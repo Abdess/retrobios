@@ -164,9 +164,16 @@ def md5_composite(filepath: str | Path) -> str:
     return result
 
 
-def parse_md5_list(raw: str) -> list[str]:
-    """Parse comma-separated MD5 string into normalized lowercase list."""
-    return [m.strip().lower() for m in raw.split(",") if m.strip()] if raw else []
+def parse_md5_list(raw: str | list | None) -> list[str]:
+    """Normalize an md5 field into a lowercase list.
+
+    Platform YAMLs carry Recalbox multi-hash as one comma-separated string,
+    emulator profiles carry a YAML list. Both reach here.
+    """
+    if not raw:
+        return []
+    values = raw if isinstance(raw, list) else str(raw).split(",")
+    return [str(m).strip().lower() for m in values if str(m).strip()]
 
 
 _shared_yml_cache: dict[str, dict] = {}
@@ -436,11 +443,6 @@ def resolve_local_file(
     exact, zip_exact, hash_mismatch, not_found.
     """
     sha1 = file_entry.get("sha1")
-    md5_field = file_entry.get("md5", "") or ""
-    if isinstance(md5_field, list):
-        md5_raw = ",".join(str(m) for m in md5_field)
-    else:
-        md5_raw = str(md5_field)
     name = file_entry.get("name", "")
     zipped_file = file_entry.get("zipped_file")
     aliases = file_entry.get("aliases", [])
@@ -461,9 +463,7 @@ def resolve_local_file(
         if hint_base and hint_base not in names_to_try:
             names_to_try.append(hint_base)
 
-    md5_list = (
-        [m.strip().lower() for m in md5_raw.split(",") if m.strip()] if md5_raw else []
-    )
+    md5_list = parse_md5_list(file_entry.get("md5"))
     files_db = db.get("files", {})
     by_md5 = db.get("indexes", {}).get("by_md5", {})
     by_name = db.get("indexes", {}).get("by_name", {})
@@ -504,7 +504,7 @@ def resolve_local_file(
     # declared size must confirm the match.
     crc_raw = str(file_entry.get("crc32", "") or "").strip().lower()
     declared_size = file_entry.get("size")
-    if crc_raw and declared_size and not zipped_file and not md5_raw:
+    if crc_raw and declared_size and not zipped_file and not md5_list:
         by_crc32 = db.get("indexes", {}).get("by_crc32", {})
         match = by_crc32.get(crc_raw)
         if match and match in files_db:

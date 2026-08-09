@@ -4,7 +4,7 @@
   "platform": "recalbox",
   "display_name": "Recalbox",
   "version": "1.0",
-  "generated": "2026-08-08T11:34:11Z",
+  "generated": "2026-08-08T15:53:48Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -236,8 +236,8 @@
       }
     }
   ],
-  "total_files": 1186,
-  "total_size": 2495283065,
+  "total_files": 1187,
+  "total_size": 2497380217,
   "files": [
     {
       "dest": "3do/panafz1.bin",
@@ -3714,6 +3714,15 @@
       "sha1": "c116d867ba001dcd6bf6d399ff4bf38d340f556c",
       "size": 4096,
       "repo_path": "bios/Nintendo/GameCube/.variants/dsp_coef.bin.c116d867",
+      "cores": [
+        "Dolphin"
+      ]
+    },
+    {
+      "dest": "Triforce/segaboot.gcm",
+      "sha1": "7297a11be143011ceb75a0720f96855003415a5d",
+      "size": 2097152,
+      "repo_path": "bios/Sega/Triforce/segaboot.gcm",
       "cores": [
         "Dolphin"
       ]

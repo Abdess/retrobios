@@ -5335,6 +5335,324 @@ struct BurnDriver BurnDrvneogeo = {
         self.assertLess(sizes[0], len(raw))
         self.assertEqual(sizes[0], sizes[1])
 
+    # ---------------------------------------------------------------
+    # Region filter
+    # ---------------------------------------------------------------
+
+    def _region_profiles(self) -> dict:
+        return {
+            "rgncore": {
+                "emulator": "RegionCore",
+                "type": "libretro",
+                "systems": ["region-console"],
+                "files": [
+                    {"name": "rgn_us.bin", "region": ["north-america"]},
+                    {"name": "rgn_jp.bin", "region": ["japan"]},
+                    {"name": "rgn_eu.bin", "region": ["europe"]},
+                    {"name": "rgn_world.bin", "region": ["world"]},
+                    {"name": "rgn_plain.bin"},
+                ],
+            }
+        }
+
+    def _create_region_fixtures(self) -> None:
+        names = (
+            "rgn_us.bin",
+            "rgn_jp.bin",
+            "rgn_eu.bin",
+            "rgn_world.bin",
+            "rgn_plain.bin",
+        )
+        for name in names:
+            self._make_file(name, name.encode())
+        self.db = self._build_db()
+        config = {
+            "platform": "RegionPlat",
+            "verification_mode": "existence",
+            "systems": {
+                "region-console": {
+                    "files": [
+                        {
+                            "name": n,
+                            "destination": n,
+                            "required": n
+                            in ("rgn_us.bin", "rgn_jp.bin", "rgn_eu.bin"),
+                        }
+                        for n in names
+                    ]
+                }
+            },
+        }
+        with open(
+            os.path.join(self.platforms_dir, "regionplat.yml"), "w", encoding="utf-8"
+        ) as fh:
+            yaml.safe_dump(config, fh)
+
+    def _region_pack(self, **kwargs) -> str:
+        from generate_pack import generate_pack
+
+        self._create_region_fixtures()
+        out = generate_pack(
+            "regionplat",
+            self.platforms_dir,
+            self.db,
+            self.bios_dir,
+            self.root,
+            emu_profiles=self._region_profiles(),
+            **kwargs,
+        )
+        self.assertIsNotNone(out)
+        return out
+
+    @staticmethod
+    def _names_in(zip_path: str) -> set[str]:
+        with zipfile.ZipFile(zip_path) as zf:
+            return {os.path.basename(n) for n in zf.namelist()}
+
+    def test_region_filter_drops_other_regions(self):
+        names = self._names_in(self._region_pack(regions=["north-america"]))
+        self.assertIn("rgn_us.bin", names)
+        self.assertNotIn("rgn_jp.bin", names)
+        self.assertNotIn("rgn_eu.bin", names)
+
+    def test_region_priority_selects_second_choice(self):
+        names = self._names_in(self._region_pack(regions=["oceania", "europe"]))
+        self.assertIn("rgn_eu.bin", names)
+        self.assertNotIn("rgn_us.bin", names)
+        self.assertNotIn("rgn_jp.bin", names)
+
+    def test_region_filter_keeps_group_with_no_match(self):
+        names = self._names_in(self._region_pack(regions=["oceania"]))
+        for expected in ("rgn_us.bin", "rgn_jp.bin", "rgn_eu.bin"):
+            self.assertIn(expected, names)
+
+    def test_region_filter_keeps_untagged_and_world(self):
+        names = self._names_in(self._region_pack(regions=["north-america"]))
+        self.assertIn("rgn_plain.bin", names)
+        self.assertIn("rgn_world.bin", names)
+
+    def test_region_tag_in_pack_name(self):
+        out = self._region_pack(regions=["north-america", "japan"])
+        self.assertIn("NorthAmerica_Japan", os.path.basename(out))
+
+    def test_no_region_argument_changes_nothing(self):
+        names = self._names_in(self._region_pack())
+        for expected in (
+            "rgn_us.bin",
+            "rgn_jp.bin",
+            "rgn_eu.bin",
+            "rgn_plain.bin",
+            "rgn_world.bin",
+        ):
+            self.assertIn(expected, names)
+
+    def test_region_composes_with_required_only(self):
+        out = self._region_pack(regions=["north-america"], required_only=True)
+        names = self._names_in(out)
+        self.assertIn("rgn_us.bin", names)
+        self.assertNotIn("rgn_jp.bin", names)
+        self.assertNotIn("rgn_eu.bin", names)
+        self.assertIn("NorthAmerica", os.path.basename(out))
+        self.assertIn("Required", os.path.basename(out))
+
+    def test_region_composes_with_source_platform(self):
+        names = self._names_in(
+            self._region_pack(regions=["north-america"], source="platform")
+        )
+        self.assertIn("rgn_us.bin", names)
+        self.assertNotIn("rgn_jp.bin", names)
+        self.assertNotIn("rgn_eu.bin", names)
+        self.assertIn("rgn_world.bin", names)
+        self.assertIn("rgn_plain.bin", names)
+
+    def test_region_composes_with_split(self):
+        from generate_pack import generate_split_packs
+
+        self._create_region_fixtures()
+        paths = generate_split_packs(
+            "regionplat",
+            self.platforms_dir,
+            self.db,
+            self.bios_dir,
+            self.root,
+            emu_profiles=self._region_profiles(),
+            regions=["north-america"],
+        )
+        self.assertTrue(paths)
+        for p in paths:
+            self.assertIn("NorthAmerica", os.path.basename(p))
+            names = self._names_in(p)
+            self.assertNotIn("rgn_jp.bin", names)
+            self.assertNotIn("rgn_eu.bin", names)
+
+    def test_region_composes_with_manifest(self):
+        from generate_pack import generate_manifest
+
+        self._create_region_fixtures()
+        registry_path = os.path.join(self.platforms_dir, "_registry.yml")
+        if not os.path.exists(registry_path):
+            with open(registry_path, "w", encoding="utf-8") as fh:
+                yaml.safe_dump({"platforms": {}}, fh)
+        manifest = generate_manifest(
+            "regionplat",
+            self.platforms_dir,
+            self.db,
+            self.bios_dir,
+            registry_path,
+            emu_profiles=self._region_profiles(),
+            regions=["north-america"],
+        )
+        packed = {os.path.basename(f["dest"]) for f in manifest["files"]}
+        self.assertIn("rgn_us.bin", packed)
+        self.assertNotIn("rgn_jp.bin", packed)
+        self.assertNotIn("rgn_eu.bin", packed)
+
+    def test_manifest_without_region_keeps_every_variant(self):
+        from generate_pack import generate_manifest
+
+        self._create_region_fixtures()
+        registry_path = os.path.join(self.platforms_dir, "_registry.yml")
+        if not os.path.exists(registry_path):
+            with open(registry_path, "w", encoding="utf-8") as fh:
+                yaml.safe_dump({"platforms": {}}, fh)
+        manifest = generate_manifest(
+            "regionplat",
+            self.platforms_dir,
+            self.db,
+            self.bios_dir,
+            registry_path,
+            emu_profiles=self._region_profiles(),
+        )
+        packed = {os.path.basename(f["dest"]) for f in manifest["files"]}
+        for expected in ("rgn_us.bin", "rgn_jp.bin", "rgn_eu.bin"):
+            self.assertIn(expected, packed)
+
+    def test_region_composes_with_system_pack(self):
+        from generate_pack import generate_system_pack
+
+        self._create_region_fixtures()
+        os.makedirs(self.emulators_dir, exist_ok=True)
+        with open(
+            os.path.join(self.emulators_dir, "rgncore.yml"), "w", encoding="utf-8"
+        ) as fh:
+            yaml.safe_dump(self._region_profiles()["rgncore"], fh)
+        out = generate_system_pack(
+            ["region-console"],
+            self.emulators_dir,
+            self.db,
+            self.bios_dir,
+            self.root,
+            regions=["north-america"],
+        )
+        self.assertIsNotNone(out)
+        names = self._names_in(out)
+        self.assertIn("rgn_us.bin", names)
+        self.assertNotIn("rgn_jp.bin", names)
+
+    def test_readme_region_section_lists_fallback_systems(self):
+        from generate_pack import _build_readme
+
+        text = _build_readme(
+            "regionplat",
+            "RegionPlat",
+            "",
+            10,
+            2,
+            regions=["north-america"],
+            fallback_systems=["nintendo-fds"],
+        )
+        self.assertIn("PACK TYPE: Region Filtered", text)
+        self.assertIn("Region priority: North America", text)
+        self.assertIn("nintendo-fds", text)
+        self.assertIn("This pack was filtered", text)
+        self.assertNotIn("All are included", text)
+
+    def test_readme_without_region_keeps_the_regional_note(self):
+        from generate_pack import _build_readme
+
+        text = _build_readme("regionplat", "RegionPlat", "", 10, 2)
+        self.assertNotIn("PACK TYPE: Region Filtered", text)
+        self.assertIn("All are included", text)
+
+    def test_verify_agrees_with_region_filtered_pack(self):
+        from generate_pack import verify_pack_against_platform
+
+        out = self._region_pack(regions=["north-america"])
+        result = verify_pack_against_platform(
+            out,
+            "regionplat",
+            self.platforms_dir,
+            db=self.db,
+            emu_profiles=self._region_profiles(),
+            regions=["north-america"],
+        )
+        ok, _checked, _present, errors = result[:4]
+        self.assertTrue(ok, errors)
+
+    def test_verify_reports_the_gap_without_the_region_filter(self):
+        from generate_pack import verify_pack_against_platform
+
+        out = self._region_pack(regions=["north-america"])
+        result = verify_pack_against_platform(
+            out,
+            "regionplat",
+            self.platforms_dir,
+            db=self.db,
+            emu_profiles=self._region_profiles(),
+        )
+        ok, _checked, _present, errors = result[:4]
+        self.assertFalse(ok)
+        self.assertTrue(any("rgn_jp.bin" in e for e in errors), errors)
+
+    def test_region_composes_with_source_truth(self):
+        names = self._names_in(
+            self._region_pack(regions=["north-america"], source="truth")
+        )
+        self.assertIn("rgn_us.bin", names)
+        self.assertNotIn("rgn_jp.bin", names)
+
+    # ---- gap analysis resolves files the pack can already ship ----
+
+    @staticmethod
+    def _gap_db(repo_name: str, sha1: str, crc32: str) -> dict:
+        return {
+            "files": {sha1: {"path": f"bios/{repo_name}", "size": 8192}},
+            "indexes": {
+                "by_name": {repo_name: [sha1]},
+                "by_md5": {},
+                "by_crc32": {crc32: sha1},
+                "by_sha256": {},
+                "by_path_suffix": {},
+            },
+        }
+
+    def _gap_source(self, entry: dict, db: dict) -> str:
+        from cross_reference import cross_reference
+
+        report = cross_reference(
+            {"gapemu": {"emulator": "GapEmu", "systems": ["s"], "files": [entry]}},
+            {"s": set()},
+            db,
+        )
+        return report["gapemu"]["gap_details"][0]["source"]
+
+    def test_gap_analysis_resolves_by_alias(self):
+        """A file stored under an alias is in the repo, not a sourcing target."""
+        db = self._gap_db("REPO_chip.rom", "a" * 40, "465c4e1c")
+        entry = {"name": "chip.rom", "aliases": ["REPO_chip.rom"], "required": True}
+        self.assertEqual(self._gap_source(entry, db), "bios")
+
+    def test_gap_analysis_resolves_by_crc32(self):
+        """crc32 is the only hash some emulators declare."""
+        db = self._gap_db("REPO_chip.rom", "a" * 40, "465c4e1c")
+        entry = {"name": "chip.rom", "crc32": "465c4e1c", "required": True}
+        self.assertEqual(self._gap_source(entry, db), "bios")
+
+    def test_gap_analysis_reports_unknown_file_missing(self):
+        db = self._gap_db("REPO_chip.rom", "a" * 40, "465c4e1c")
+        entry = {"name": "chip.rom", "aliases": ["OTHER.rom"], "crc32": "deadbeef"}
+        self.assertEqual(self._gap_source(entry, db), "missing")
+
 
 if __name__ == "__main__":
     unittest.main()

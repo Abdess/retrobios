@@ -25,6 +25,7 @@ from common import (
     load_emulator_profiles,
     load_platform_config,
     name_match_size_ok,
+    parse_md5_list,
     require_yaml,
 )
 
@@ -206,6 +207,7 @@ def cross_reference(
     by_name = db.get("indexes", {}).get("by_name", {})
     by_name_lower = {k.lower(): k for k in by_name}
     by_md5 = db.get("indexes", {}).get("by_md5", {})
+    by_crc32 = db.get("indexes", {}).get("by_crc32", {})
     by_path_suffix = db.get("indexes", {}).get("by_path_suffix", {})
     db_files = db.get("files", {})
     report = {}
@@ -331,19 +333,31 @@ def cross_reference(
                             path_field, by_name, by_name_lower,
                             data_names, by_path_suffix, f, db_files,
                         )
+                # Try the alternate names the emulator accepts, like
+                # resolve_local_file does
+                if source is None:
+                    for alias in f.get("aliases") or []:
+                        source = _resolve_source(
+                            alias, by_name, by_name_lower,
+                            data_names, by_path_suffix, f, db_files,
+                        )
+                        if source is not None:
+                            break
                 # Try MD5 hash match
                 if source is None:
-                    md5_raw = f.get("md5", "")
-                    if md5_raw:
-                        for md5_val in md5_raw.split(","):
-                            md5_val = md5_val.strip().lower()
-                            if md5_val and by_md5.get(md5_val):
-                                source = "bios"
-                                break
+                    for md5_val in parse_md5_list(f.get("md5")):
+                        if by_md5.get(md5_val):
+                            source = "bios"
+                            break
                 # Try SHA1 hash match
                 if source is None:
                     sha1 = f.get("sha1", "")
                     if sha1 and sha1 in db_files:
+                        source = "bios"
+                # Try CRC32 hash match
+                if source is None:
+                    crc32 = str(f.get("crc32", "")).lower()
+                    if crc32 and by_crc32.get(crc32):
                         source = "bios"
                 if source is None:
                     source = "missing"

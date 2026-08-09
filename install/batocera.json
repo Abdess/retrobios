@@ -4,7 +4,7 @@
   "platform": "batocera",
   "display_name": "Batocera",
   "version": "1.0",
-  "generated": "2026-08-08T09:27:23Z",
+  "generated": "2026-08-08T15:53:07Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -236,8 +236,8 @@
       }
     }
   ],
-  "total_files": 1599,
-  "total_size": 2866042839,
+  "total_files": 1600,
+  "total_size": 2868139991,
   "files": [
     {
       "dest": "panafz1.bin",
@@ -12239,6 +12239,15 @@
       "repo_path": "bios/Coleco/ColecoVision/BIOS.col",
       "cores": [
         "Clock Signal (CLK)"
+      ]
+    },
+    {
+      "dest": "Triforce/segaboot.gcm",
+      "sha1": "7297a11be143011ceb75a0720f96855003415a5d",
+      "size": 2097152,
+      "repo_path": "bios/Sega/Triforce/segaboot.gcm",
+      "cores": [
+        "Dolphin"
       ]
     },
     {

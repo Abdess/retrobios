@@ -129,7 +129,23 @@
               { "type": "object" }
             ]
           },
-          "region": { "type": ["string", "array"] },
+          "region": {
+            "description": "Region the emulator code selects this file for, never the region of the dump.",
+            "type": "array",
+            "items": {
+              "enum": [
+                "world",
+                "north-america", "canada",
+                "latin-america", "brazil", "mexico", "argentina",
+                "europe", "uk", "france", "germany", "italy", "spain",
+                "netherlands", "portugal", "greece", "poland", "russia",
+                "sweden", "norway", "denmark", "finland",
+                "asia", "japan", "south-korea", "china", "taiwan",
+                "hong-kong", "singapore", "india", "asia-ntsc", "asia-pal",
+                "oceania", "australia", "new-zealand"
+              ]
+            }
+          },
           "contents": { "type": "array", "items": { "type": "object" } },
           "source_ref": {
             "description": "A dict splits core from upstream when the two diverge.",

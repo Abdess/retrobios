@@ -4,7 +4,7 @@
   "platform": "emudeck",
   "display_name": "EmuDeck",
   "version": "1.0",
-  "generated": "2026-08-08T08:00:05Z",
+  "generated": "2026-08-08T15:53:16Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -249,8 +249,8 @@
       }
     }
   ],
-  "total_files": 525,
-  "total_size": 1770429115,
+  "total_files": 526,
+  "total_size": 1772526267,
   "files": [
     {
       "dest": "colecovision.rom",
@@ -1062,6 +1062,15 @@
       "sha1": "c116d867ba001dcd6bf6d399ff4bf38d340f556c",
       "size": 4096,
       "repo_path": "bios/Nintendo/GameCube/.variants/dsp_coef.bin.c116d867",
+      "cores": [
+        "Dolphin"
+      ]
+    },
+    {
+      "dest": "Triforce/segaboot.gcm",
+      "sha1": "7297a11be143011ceb75a0720f96855003415a5d",
+      "size": 2097152,
+      "repo_path": "bios/Sega/Triforce/segaboot.gcm",
       "cores": [
         "Dolphin"
       ]

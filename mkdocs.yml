@@ -250,7 +250,7 @@ nav:
     - vitaQuakeII: emulators/vitaquake2.md
     - yabasanshiro: emulators/yabasanshiro.md
     - Yuzu: emulators/yuzu.md
-  - Community forks (114):
+  - Community forks (117):
     - EightyOne: emulators/81.md
     - a5200: emulators/a5200.md
     - ACE-DL: emulators/ace-dl.md
@@ -335,8 +335,11 @@ nav:
     - RACE (Neo Geo Pocket): emulators/race.md
     - REminiscence: emulators/reminiscence.md
     - RetroDream: emulators/retrodream.md
+    - Rosalie's Mupen GUI: emulators/rosalies-mupen-gui.md
     - SAME CDi: emulators/same_cdi.md
+    - SDL2TRS: emulators/sdl2trs.md
     - SimCoupe: emulators/simcp.md
+    - simple64: emulators/simple64.md
     - Suyu: emulators/suyu.md
     - swanstation: emulators/swanstation.md
     - Syobon Action: emulators/syobonaction.md
@@ -408,7 +411,7 @@ nav:
     - MicroW8: emulators/uw8.md
     - uzem: emulators/uzem.md
     - VirtualXT: emulators/virtualxt.md
-  - Game engines (27):
+  - Game engines (31):
     - boom3: emulators/boom3.md
     - Cannonball: emulators/cannonball.md
     - ChaiLove: emulators/chailove.md
@@ -427,16 +430,20 @@ nav:
     - OpenLara: emulators/openlara.md
     - OpenTyrian: emulators/opentyrian.md
     - PrBoom: emulators/prboom.md
+    - PrBoom+: emulators/prboom-plus.md
     - PuzzleScript: emulators/puzzlescript.md
     - Retro8: emulators/retro8.md
+    - ruffle: emulators/ruffle.md
     - ScummVM: emulators/scummvm.md
+    - solarus: emulators/solarus.md
     - Super Bros War: emulators/superbroswar.md
     - TIC-80: emulators/tic80.md
     - TyrQuake: emulators/tyrquake.md
+    - visual-pinball: emulators/visual-pinball.md
     - WASM-4: emulators/wasm4.md
     - XRick: emulators/xrick.md
     - Zelda Classic v2.10: emulators/zc210.md
-  - Enhanced forks (22):
+  - Enhanced forks (23):
     - A7800: emulators/a7800.md
     - AdvanceMAME: emulators/advancemame.md
     - bsnes-hd beta: emulators/bsnes_hd_beta.md
@@ -459,6 +466,7 @@ nav:
     - PCSX2x6: emulators/pcsx2x6.md
     - PrimeHack: emulators/primehack.md
     - SMS Plus GX: emulators/smsplus.md
+    - Triforce: emulators/triforce.md
   - Frozen snapshots (33):
     - bnes: emulators/bnes.md
     - bsnes 2014: emulators/bsnes2014.md
@@ -502,7 +510,7 @@ nav:
   - Launchers (2):
     - Dolphin Launcher: emulators/dolphin_launcher.md
     - Parallel Launcher: emulators/parallel-launcher.md
-  - Other (33):
+  - Other (37):
     - ares: emulators/ares.md
     - Basilisk II: emulators/basiliskii.md
     - Beetle GBA (Mednafen): emulators/beetle_gba.md
@@ -524,13 +532,17 @@ nav:
     - Model 2 Emulator: emulators/model2.md
     - openMSX: emulators/openmsx.md
     - Oricutron: emulators/oricutron.md
+    - puNES: emulators/punes.md
     - Redream: emulators/redream.md
     - Ryujinx: emulators/ryujinx.md
     - shadps4: emulators/shadps4.md
+    - SheepShaver: emulators/sheepshaver.md
     - Supermodel: emulators/supermodel.md
+    - SUPER ZSNES: emulators/superzsnes.md
     - ti99sim: emulators/ti99sim.md
     - tsugaru: emulators/tsugaru.md
     - VBA-M: emulators/vba_m.md
+    - veesem: emulators/veesem.md
     - VICE: emulators/vice.md
     - Vita3K: emulators/vita3k.md
     - x16emu: emulators/x16emu.md

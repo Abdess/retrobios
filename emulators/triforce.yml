@@ -1,0 +1,387 @@
+emulator: Triforce
+type: standalone
+core_classification: enhanced_fork
+source: "https://github.com/REG-Linux/dolphin-triforce"
+upstream: "https://github.com/dolphin-emu/dolphin"
+profiled_date: "2026-08-08"
+source_commit: "5c456e8ff0da0235be2cf1d55ba7bb2115b0cae2"
+core_version: "2407"
+display_name: "Namco / Sega / Nintendo - Triforce (Dolphin Triforce)"
+cores:
+  - triforce
+  - dolphin-triforce
+systems:
+  - sega-triforce
+  - nintendo-wii-arcade
+  - nintendo-gamecube
+  - nintendo-wii
+mode: standalone
+
+notes: |
+  crediar's Dolphin fork, which adds the Triforce arcade boards (AM-Baseboard on
+  the serial interface, AM-Mediaboard on the disc interface) and the Wii Arcade
+  boards on top of GameCube and Wii emulation. The tree self-reports Dolphin 2407
+  (CMake/ScmRevGen.cmake:34-35) and builds DolphinQt. crediar publishes the source
+  on crediar.dev; the commit profiled here is the REG-Linux mirror of it, whose
+  Data/Sys tree matches the Hancock33 and ReaverTeknoGods mirrors byte for byte.
+  ES-DE looks for dolphin-emu-triforce on Linux and Triforce.exe or
+  Triforce/DolphinWX.exe on Windows, RetroBat installs it as dolphin-triforce.
+
+  segaboot.gcm is the Triforce firmware. DVDInterface::Init calls
+  AMMediaboard::Init only when EXI serial port 1 holds the AM Mediaboard, so the
+  read happens on every Triforce launch and never otherwise
+  (Source/Core/Core/HW/DVD/DVDInterface.cpp:289-294). Init resolves the file under
+  Sys/Triforce, with no User fallback, and copies min(file size, 2 MiB) into the
+  firmware buffer without checking anything
+  (Source/Core/Core/HW/DVD/AMMediaboard.cpp:215-233). A missing file raises a
+  modal alert and returns before the buffer is filled, leaving it at 0xFF. The
+  guest reads that buffer whenever the firmware is mapped
+  (Source/Core/Core/HW/DVD/AMMediaboard.cpp:1083-1090), which is how the Service
+  and Test menus are reached. The tree ships the copy documented below, SegaBoot
+  v3.11 with a RELSAB header, and the mediaboard answers GetSegaBootVersion for
+  both 3.09 and 3.11 layouts
+  (Source/Core/Core/HW/DVD/AMMediaboard.cpp:1268-1269, 1397-1398).
+
+  Triforce mode also swaps the GameCube boot ROM name: GetBootROMPath returns
+  IPL_TRI.bin instead of IPL.bin, User first then Sys
+  (Source/Core/Core/Config/MainSettings.cpp:614-625). Load_BS2 reads at most 2 MiB,
+  CRC32s what it read against a table of Redump dumps and accepts 0xD1883221 as
+  the Triforce revision (Source/Core/Core/Boot/Boot.cpp:391-436). On that match it
+  patches OSReport and maps SegaBoot as firmware so the guest IPL can chain into
+  it (Source/Core/Core/Boot/Boot.cpp:482-489). SkipIPL defaults to true
+  (Source/Core/Core/Config/MainSettings.cpp:37) and EmulatedBS2 otherwise copies
+  the disc straight into DIMM memory and clears the firmware mapping
+  (Source/Core/Core/Boot/Boot_BS2Emu.cpp:332-347), so games run without any IPL.
+
+  Boot ROM directories follow the legacy naming: GetDirectoryForRegion defaults to
+  RegionDirectoryStyle::Legacy (Source/Core/Core/Config/MainSettings.h:369-370) and
+  every boot ROM caller takes the default, so NTSC-J resolves to JAP. FindIPLDump
+  probes USA, EUR and JAP and stops there
+  (Source/Core/Core/HW/EXI/EXI_DeviceIPL.cpp:180-189).
+
+  Wii Arcade runs as IOSC console type RVA, reached three ways: the RVA expansion
+  device in slot A (Source/Core/Core/IOS/IOSC.cpp:213-218), an RVA.txt file in the
+  System Menu title data (Source/Core/Core/Boot/Boot_BS2Emu.cpp:387-397), or a
+  ticket issued by Root-CA10000000-XS10000000
+  (Source/Core/Core/IOS/ES/Formats.cpp:490-493). That console type switches to the
+  development common key and root key held in the binary
+  (Source/Core/Core/IOS/IOSC.cpp:603-615).
+
+  Save data the emulator creates on first run is keyed on the disc, so none of it
+  can be supplied: tridimm_<game-id>.bin and backup_<game-id>.bin
+  (Source/Core/Core/HW/DVD/AMMediaboard.cpp:201-202), the baseboard backup
+  tribackup_<game-id>.bin
+  (Source/Core/Core/HW/EXI/EXI_DeviceAMBaseboard.cpp:77-100), the card reader image
+  tricard_<game-id>.bin
+  (Source/Core/Core/HW/SI/SI_DeviceAMBaseboard.cpp:1147-1310), and the three Wii
+  Arcade SRAM images under User/Arcade, sized 0x1400, 0x1A40 and 0x8000 by game
+  type (Source/Core/Core/HW/EXI/EXI_DeviceRVA.cpp:1249-1285).
+
+  Recognised Triforce titles are F-Zero AX, F-Zero AX Monster Ride, Mario Kart
+  Arcade GP 1 and 2, Virtua Striker 3 and 4, Gekitou Pro Yakyuu and Key of Avalon
+  (Source/Core/Core/HW/DVD/AMMediaboard.h:25-36).
+
+# Two roots. Paths starting with Sys/ are relative to the installation data
+# directory returned by File::GetSysDirectory (Source/Core/Common/FileUtil.cpp:800),
+# which is where the code looks and nowhere else. Every other path is relative to
+# the user directory (GC/, GBA/, Wii/, Triforce/, Arcade/, Load/), which the code
+# tries first, falling back to the same relative path under Sys/ for the GameCube
+# boot ROMs and DSP ROMs.
+
+files:
+  # -- Triforce firmware --
+  - name: "segaboot.gcm"
+    path: "Sys/Triforce/segaboot.gcm"
+    description: "SegaBoot, the Triforce system disc image held on the AM-Mediaboard"
+    system: sega-triforce
+    size: 2097152
+    sha1: "87918619c632ac9de270d4fdf396a57eb57fc620"
+    required: true
+    source_ref: "Source/Core/Core/HW/DVD/AMMediaboard.cpp:215-233, Source/Core/Core/HW/DVD/DVDInterface.cpp:289-294"
+    note: >
+      Read on every Triforce launch, Sys/Triforce only with no User fallback.
+      Nothing is validated, min(file size, 2 MiB) is copied into the firmware
+      buffer. The hash is the copy the fork's own Data/Sys tree carries, SegaBoot
+      v3.11.
+
+  # -- Triforce GameCube boot ROM --
+  # Region-specific directory, User/GC/<region>/ then Sys/GC/<region>/.
+  # One dump (Redump "Triforce (ARCADE BOOTROM)", DEV revision 1.0) serves every
+  # directory, the region only decides where the code looks.
+  - name: "IPL_TRI.bin"
+    path: "GC/USA/IPL_TRI.bin"
+    description: "Triforce boot ROM, NTSC-U directory"
+    system: sega-triforce
+    region: [north-america]
+    size: 2097152
+    crc32: "d1883221"
+    validation: [crc32]
+    required: false
+    hle_fallback: true
+    source_ref: "Source/Core/Common/CommonPaths.h:149, Source/Core/Core/Config/MainSettings.cpp:614-625, Source/Core/Core/Boot/Boot.cpp:400,415-436"
+    note: >
+      CRC32 is computed over the first 2 MiB and compared against the Redump
+      table, 0xD1883221 being the Triforce revision. An unknown value warns and
+      loading continues. A match also maps SegaBoot as firmware
+      (Source/Core/Core/Boot/Boot.cpp:482-489).
+
+  - name: "IPL_TRI.bin"
+    path: "GC/EUR/IPL_TRI.bin"
+    description: "Triforce boot ROM, PAL directory"
+    system: sega-triforce
+    region: [europe]
+    size: 2097152
+    crc32: "d1883221"
+    validation: [crc32]
+    required: false
+    hle_fallback: true
+    source_ref: "Source/Core/Core/Config/MainSettings.cpp:620-623"
+
+  - name: "IPL_TRI.bin"
+    path: "GC/JAP/IPL_TRI.bin"
+    description: "Triforce boot ROM, NTSC-J directory"
+    system: sega-triforce
+    region: [japan]
+    size: 2097152
+    crc32: "d1883221"
+    validation: [crc32]
+    required: false
+    hle_fallback: true
+    source_ref: "Source/Core/Core/Config/MainSettings.cpp:587-612,620-623"
+    note: "JAP is the directory the legacy naming style returns for NTSC-J."
+
+  # -- AM-Mediaboard system state --
+  - name: "trinetcfg.bin"
+    path: "Triforce/trinetcfg.bin"
+    description: "Mediaboard network configuration"
+    system: sega-triforce
+    required: false
+    unsourceable: "created empty by the emulator on first Triforce launch, written by the guest, no hardware dump equivalent"
+    source_ref: "Source/Core/Core/HW/DVD/AMMediaboard.cpp:169-177,198"
+
+  - name: "trinetctrl.bin"
+    path: "Triforce/trinetctrl.bin"
+    description: "Mediaboard network control block"
+    system: sega-triforce
+    required: false
+    unsourceable: "created empty by the emulator on first Triforce launch, written by the guest, no hardware dump equivalent"
+    source_ref: "Source/Core/Core/HW/DVD/AMMediaboard.cpp:169-177,199"
+
+  - name: "triextra.bin"
+    path: "Triforce/triextra.bin"
+    description: "Mediaboard extra settings block"
+    system: sega-triforce
+    required: false
+    unsourceable: "created empty by the emulator on first Triforce launch, written by the guest, no hardware dump equivalent"
+    source_ref: "Source/Core/Core/HW/DVD/AMMediaboard.cpp:169-177,200"
+
+  # -- Wii Arcade --
+  - name: "RVA.txt"
+    path: "Wii/title/00000001/00000002/data/RVA.txt"
+    description: "Marker that switches the emulated console to Wii Arcade mode"
+    system: nintendo-wii-arcade
+    required: false
+    unsourceable: "user-created marker inside the emulated NAND, only its presence is tested, no file is distributed"
+    source_ref: "Source/Core/Common/CommonPaths.h:165, Source/Core/Core/Boot/Boot_BS2Emu.cpp:387-397"
+    note: >
+      Opened for read inside the System Menu title data. Success sets console type
+      RVA and forces the RGB region settings. The RVA expansion device in slot A
+      reaches the same console type without it
+      (Source/Core/Core/IOS/IOSC.cpp:213-218).
+
+  # -- GameCube boot ROM --
+  # User/GC/<region>/ then Sys/GC/<region>/. Also the preferred source for the
+  # GameCube fonts when present.
+  - name: "IPL.bin"
+    path: "GC/USA/IPL.bin"
+    description: "GameCube NTSC-U boot ROM"
+    region: [north-america]
+    size: 2097152
+    required: false
+    hle_fallback: true
+    source_ref: "Source/Core/Common/CommonPaths.h:148, Source/Core/Core/Config/MainSettings.cpp:627-630, Source/Core/Core/HW/EXI/EXI_DeviceIPL.cpp:109-118,182-183"
+    note: "Needed to boot the GameCube menu and to take the fonts from a real dump."
+
+  - name: "IPL.bin"
+    path: "GC/EUR/IPL.bin"
+    description: "GameCube PAL boot ROM"
+    region: [europe]
+    size: 2097152
+    required: false
+    hle_fallback: true
+    source_ref: "Source/Core/Core/HW/EXI/EXI_DeviceIPL.cpp:184-185"
+
+  - name: "IPL.bin"
+    path: "GC/JAP/IPL.bin"
+    description: "GameCube NTSC-J boot ROM"
+    region: [japan]
+    size: 2097152
+    required: false
+    hle_fallback: true
+    source_ref: "Source/Core/Core/HW/EXI/EXI_DeviceIPL.cpp:186-187"
+
+  # -- DSP ROMs --
+  # User/GC/ then Sys/GC/. Used by DSP LLE, and dsp_coef.bin also by the HLE
+  # polyphase resampler.
+  - name: "dsp_rom.bin"
+    path: "GC/dsp_rom.bin"
+    description: "DSP instruction ROM"
+    size: 8192
+    validation: [size]
+    known_hash_adler32: "0x66f334fe"
+    adler32_byteswap: true
+    required: false
+    hle_fallback: true
+    source_ref: "Source/Core/Common/CommonPaths.h:145, Source/Core/Core/HW/DSPLLE/DSPLLE.cpp:87-105,109-118, Source/Core/Core/DSP/DSPCore.h:44, Source/Core/Core/DSP/DSPCore.cpp:36-38"
+    note: >
+      LoadDSPRom rejects any file whose length differs from DSP_IROM_BYTE_SIZE and
+      swaps every 16 bit word before storing it, so the Adler32 in the source is
+      taken over the swapped data (Source/Core/Core/HW/DSPLLE/DSPLLE.cpp:100-102).
+      The pair is matched against seven known sets, the first being the Nintendo
+      ROMs; a miss asks the user whether to stop
+      (Source/Core/Core/DSP/DSPCore.cpp:60-84).
+
+  - name: "dsp_coef.bin"
+    path: "GC/dsp_coef.bin"
+    description: "DSP coefficient ROM"
+    size: 4096
+    validation: [size]
+    known_hash_adler32: "0xf3b93527"
+    adler32_byteswap: true
+    required: false
+    hle_fallback: true
+    source_ref: "Source/Core/Common/CommonPaths.h:146, Source/Core/Core/HW/DSPLLE/DSPLLE.cpp:87-105,110-119, Source/Core/Core/DSP/DSPCore.h:58, Source/Core/Core/HW/DSPHLE/UCodes/AX.cpp:61-62"
+    note: >
+      Also read by the HLE AX ucode for polyphase resampling. Adler32 is taken over
+      the byte-swapped data (Source/Core/Core/HW/DSPLLE/DSPLLE.cpp:100-102).
+
+  # -- GameCube fonts --
+  # Sys/GC/ only. Skipped when an IPL dump is available, the fonts are then read
+  # out of the dump at 0x1aff00 and 0x1fcf00 instead.
+  - name: "font_western.bin"
+    path: "Sys/GC/font_western.bin"
+    description: "Windows-1252 font used by GameCube and Wii text rendering"
+    size: 9589
+    required: false
+    hle_fallback: true
+    source_ref: "Source/Core/Common/CommonPaths.h:142, Source/Core/Core/HW/EXI/EXI_DeviceIPL.cpp:131,203-247"
+    note: >
+      Size is the official font length the code reads from an IPL dump, 0x2575
+      (Source/Core/Core/HW/EXI/EXI_DeviceIPL.cpp:234-236). A standalone file is
+      read without any check.
+
+  - name: "font_japanese.bin"
+    path: "Sys/GC/font_japanese.bin"
+    description: "Shift-JIS font used by GameCube and Wii text rendering"
+    size: 303693
+    required: false
+    hle_fallback: true
+    source_ref: "Source/Core/Common/CommonPaths.h:143, Source/Core/Core/HW/EXI/EXI_DeviceIPL.cpp:130,203-247"
+    note: "Size is the official font length read from an IPL dump, 0x4a24d."
+
+  # -- GBA BIOS --
+  - name: "gba_bios.bin"
+    path: "GBA/gba_bios.bin"
+    description: "GBA BIOS for the GameCube to Game Boy Advance link"
+    required: false
+    hle_fallback: true
+    source_ref: "Source/Core/Common/CommonPaths.h:155, Source/Core/Common/FileUtil.cpp:917-919, Source/Core/Core/HW/GBACore.cpp:202-206,336-353"
+    note: >
+      Loaded into the integrated mGBA core, which fails to start without it. The
+      path is overridable by the Main.GBA BIOS setting
+      (Source/Core/Core/Config/MainSettings.cpp:361).
+
+  # -- Wii system files --
+  - name: "SYSCONF"
+    path: "Wii/shared2/sys/SYSCONF"
+    description: "Wii system configuration"
+    size: 16384
+    validation: [size]
+    required: false
+    hle_fallback: true
+    source_ref: "Source/Core/Common/CommonPaths.h:87,127, Source/Core/Core/SysConf.cpp:19,54-65"
+    note: >
+      SysConf::Load rejects any size other than SYSCONF_SIZE and falls back to
+      built-in defaults. Generated by the emulator, can come from a NAND backup
+      instead.
+
+  - name: "setting.txt"
+    path: "Wii/title/00000001/00000002/data/setting.txt"
+    description: "Wii region, area and serial settings"
+    size: 256
+    required: false
+    hle_fallback: true
+    source_ref: "Source/Core/Common/CommonPaths.h:163, Source/Core/Core/Boot/Boot_BS2Emu.cpp:412-424, Source/Core/Common/SettingsHandler.h:21,26"
+    note: >
+      Read into a fixed 256 byte buffer, then rewritten during Wii boot emulation
+      from the region settings table.
+
+  - name: "nand.bin"
+    path: null
+    description: "BootMii NAND backup, imported through the NAND importer"
+    required: false
+    hle_fallback: true
+    source_ref: "Source/Core/DiscIO/NANDImporter.cpp:26-40,42-57"
+    note: >
+      Accepted at 0x21000000 bytes, or 0x21000400 when the OTP and SEEPROM dump is
+      appended. Any other size is rejected.
+
+  - name: "keys.bin"
+    path: "Wii/keys.bin"
+    description: "OTP and SEEPROM dump holding the console keys"
+    size: 1024
+    required: false
+    hle_fallback: true
+    source_ref: "Source/Core/DiscIO/NANDImporter.cpp:19,76-88,288-298, Source/Core/Core/IOS/IOSC.cpp:639-665"
+    note: >
+      Asked for at import time when not appended to the NAND image, and written to
+      the Wii root. Read at every boot, absence falls back to the built-in default
+      key set.
+
+  - name: "clientca.pem"
+    path: "Wii/clientca.pem"
+    description: "SSL client certificate extracted from IOS13"
+    required: false
+    hle_fallback: true
+    source_ref: "Source/Core/DiscIO/NANDImporter.cpp:201-286"
+    note: "Located inside the IOS13 content during NAND import by its leading bytes."
+
+  - name: "clientcakey.pem"
+    path: "Wii/clientcakey.pem"
+    description: "SSL client private key extracted from IOS13"
+    required: false
+    hle_fallback: true
+    source_ref: "Source/Core/DiscIO/NANDImporter.cpp:237"
+
+  - name: "rootca.pem"
+    path: "Wii/rootca.pem"
+    description: "SSL root certificate extracted from IOS13"
+    required: false
+    hle_fallback: true
+    source_ref: "Source/Core/DiscIO/NANDImporter.cpp:238"
+
+  - name: "WiiSD.raw"
+    path: "Load/WiiSD.raw"
+    description: "Virtual SD card image for the Wii SD slot"
+    required: false
+    hle_fallback: true
+    source_ref: "Source/Core/Common/CommonPaths.h:160, Source/Core/Common/FileUtil.cpp:909"
+    note: "Created by the emulator, path overridable by the General WiiSDCardPath setting."
+
+  - name: "Wii System Menu"
+    path: null
+    description: "Wii System Menu WAD, installed into the emulated NAND"
+    required: false
+    hle_fallback: true
+    source_ref: "Source/Core/DolphinQt/MenuBar.cpp:290,1098-1112"
+    note: "Needed to boot the Wii Menu. Installed through Tools, Install WAD."
+
+  - name: "codehandler.bin"
+    path: "Sys/codehandler.bin"
+    description: "Gecko code handler used to apply cheat codes"
+    required: false
+    hle_fallback: true
+    source_ref: "Source/Core/Common/CommonPaths.h:167, Source/Core/Core/GeckoCode.cpp:121-134"
+    note: >
+      Read from the Sys root. Cheats are refused when it is missing and when it
+      exceeds the installer window.

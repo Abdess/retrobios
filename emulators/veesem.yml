@@ -1,0 +1,116 @@
+emulator: veesem
+type: standalone
+core_classification: other
+source: "https://github.com/sp1187/veesem"
+upstream: "https://github.com/sp1187/veesem"
+profiled_date: "2026-08-08"
+source_commit: "42fb8f07e7418f16ccfb7364127aef2217dda641"
+core_version: "0.2"
+display_name: "VTech - V.Smile (veesem)"
+cores:
+  - veesem
+systems:
+  - vtech-vsmile
+mode: standalone
+
+notes: |
+  V.Smile emulator written from scratch on top of a SunPlus SPG200 (unSP)
+  implementation, distributed as source only. No distribution packages it;
+  ES-DE offers it for its vsmile system beside MAME and the MAME libretro
+  core, and finds it by the binary name or the com.github.sp1187.veesem
+  flatpak.
+
+  The system ROM has no fixed name and no search path. -sysrom takes a path
+  (main.cc:64-70) which is opened directly (ui.cc:191), and the open is the
+  only check the tree performs: the read asks for sizeof *sysrom, the
+  1024*1024-word buffer of vsmile.h:17, so a shorter file keeps the zeros the
+  buffer was value-initialised with and anything past 2 MiB is never reached.
+  No size test, no hash, no signature anywhere. Every word is passed through
+  SDL_SwapLE16 after the read (ui.cc:196-197), so the image is consumed as
+  little-endian 16-bit words.
+
+  Without -sysrom the buffer is synthesised instead: zero-filled, with 0x31
+  written into the odd word of each pair over 0xFFFC0-0xFFFDB, called a
+  "game-compatible dummy system ROM" in the code (ui.cc:198-204) and a "dummy
+  ROM without boot animation" in the README.
+
+  Nothing boots from the system ROM. Extmem::Reset leaves address_decode at 0
+  (extmem.cc:7-10), routing every external address to ROMCSB, and bank 0 stays
+  the cartridge under all three decode modes (extmem.cc:20-52). The CPU takes
+  its reset vector from 0xfff7 (cpu.cc:91), FIQ from 0xfff6, IRQs from
+  0xfff8+n and BREAK from 0xfff5 (cpu.cc:116,125,228), all inside bank 0, so
+  the vectors always come from the cartridge. The system ROM sits on CSB3
+  (vsmile.cc:198-200), reachable at 0x300000-0x3FFFFF only once cartridge code
+  selects decode mode 2 or 3.
+
+  Region is a jumper, not a file. The low nibble of Port C carries the region
+  code and bit 4 the VTech logo jumper (vsmile.cc:148-152), defaulting to 0xe
+  with the logo on (main.cc:44-45) and settable with -region and -novtech. One
+  system ROM image serves every region; the table at vsmile.cc:3-25 maps the
+  sixteen jumper values to the intro each revision produces, and names
+  revisions 1.00, 1.02 and 1.03.
+
+files:
+  - name: vsmile_v103.bin
+    description: "V.Smile system ROM, revision 1.03"
+    required: false
+    hle_fallback: true
+    size: 2097152
+    source_ref: "src/main.cc:64-70 (-sysrom), src/ui/ui.cc:189-197 (load), src/core/vsmile/vsmile.h:17 (buffer), src/core/vsmile/vsmile.cc:198-200 (CSB3), src/core/vsmile/vsmile.cc:5,13 (jumper values for 1.03)"
+    note: >
+      Jumper 0x2 gives Italian and 0xa UK English without subtitle on this
+      revision, the two values 1.02 assigns the other way round.
+
+  - name: vsmile_v102.bin
+    description: "V.Smile system ROM, revision 1.02"
+    required: false
+    hle_fallback: true
+    size: 2097152
+    source_ref: "src/main.cc:64-70 (-sysrom), src/ui/ui.cc:189-197 (load), src/core/vsmile/vsmile.h:17 (buffer), src/core/vsmile/vsmile.cc:198-200 (CSB3), src/core/vsmile/vsmile.cc:4-9,13,17-18 (jumper values for 1.02+)"
+    note: >
+      The revision the "1.02+" entries describe: 0x0 and 0x1 suppress the
+      V.Smile screen, 0x3 to 0x5 select US English variants and 0xe and 0xf
+      carry the "Learning System" subtitle.
+
+  - name: vsmile_v100.bin
+    description: "V.Smile system ROM, revision 1.00"
+    required: false
+    hle_fallback: true
+    size: 2097152
+    source_ref: "src/main.cc:64-70 (-sysrom), src/ui/ui.cc:189-197 (load), src/core/vsmile/vsmile.h:17 (buffer), src/core/vsmile/vsmile.cc:198-200 (CSB3), src/core/vsmile/vsmile.cc:13,20-24 (jumper values and behaviour for 1.00)"
+    note: >
+      Its standard English subtitle is "TV Learning System", and with no
+      cartridge and a region code below 0x6 it shows a blinking blue VTech
+      logo in white.
+
+analysis:
+  user_supplied_paths:
+    note: "Named on the command line, with no fixed filename"
+    entries:
+      - what: "cartridge ROM, the positional argument"
+        source_ref: "src/main.cc:119-126, src/ui/ui.cc:180-187"
+        note: >
+          Read into a 4M-word buffer and mapped over ROMCSB, CSB1 and CSB2
+          (vsmile.cc:168-190). The dual-ROM cartridges pair a 4 MiB ROM on the
+          first two banks with a 2 MiB ROM on CSB2, which the code reads from
+          the same dump at word 0x200000.
+      - what: "system ROM, -sysrom"
+        source_ref: "src/main.cc:64-70, src/ui/ui.cc:189-197"
+
+  generated_files:
+    - what: "Art Studio CSB2 NVRAM, -art-nvram FILE"
+      source_ref: "src/main.cc:71-77 (flag), src/ui/ui.cc:206-221 (read), src/ui/ui.cc:153-170 (write)"
+      note: >
+        Save data rather than a dump to obtain. The 128K-word buffer is
+        allocated before the stream is tested (ui.cc:210-211), so an absent or
+        unreadable file leaves a blank NVRAM, and -art on its own selects the
+        same cartridge type with no file at all (ui.cc:218-220). It backs the
+        drawing area of V.Smile Art Studio (vsmile.cc:180-196) and is flushed
+        to the same path when the machine is unloaded.
+
+  settings_storage:
+    source_ref: "src/ui/ui.cc:126"
+    note: >
+      io.IniFilename is nullptr, so Dear ImGui reads and writes no imgui.ini.
+      Every setting comes from the command line or the UI, and no other path
+      in the tree is opened.

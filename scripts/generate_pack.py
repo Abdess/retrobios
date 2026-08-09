@@ -46,9 +46,11 @@ from common import (
     load_database,
     load_emulator_profiles,
     load_platform_config,
+    parse_md5_list,
     require_yaml,
     resolve_local_file,
 )
+import region as region_mod
 from deterministic_zip import rebuild_zip_deterministic
 from validation import (
     _build_validation_index,
@@ -291,15 +293,7 @@ def resolve_file(
     name = file_entry.get("name", "")
     sha1 = file_entry.get("sha1")
     first_sha1 = (sha1[0] if sha1 else "") if isinstance(sha1, list) else (sha1 or "")
-    md5_raw = file_entry.get("md5", "")
-    if isinstance(md5_raw, list):
-        md5_list = [str(m).strip().lower() for m in md5_raw if str(m).strip()]
-    else:
-        md5_list = (
-            [m.strip().lower() for m in md5_raw.split(",") if m.strip()]
-            if md5_raw
-            else []
-        )
+    md5_list = parse_md5_list(file_entry.get("md5"))
     first_md5 = md5_list[0] if md5_list else ""
     cached = fetch_large_file(name, expected_sha1=first_sha1, expected_md5=first_md5)
     if cached:
@@ -777,6 +771,8 @@ def _build_readme(
     num_systems: int,
     source: str = "full",
     contributors: list[dict] | None = None,
+    regions: list[str] | None = None,
+    fallback_systems: list[str] | None = None,
 ) -> str:
     """Build a personalized step-by-step README for each platform pack."""
     sep = "=" * 50
@@ -952,12 +948,22 @@ def _build_readme(
         ),
     )
 
+    if regions:
+        region_help = (
+            "  - Wrong region? This pack was filtered. Only the\n"
+            "    best-matching BIOS was kept per system. Use the\n"
+            "    unfiltered pack to play imports.\n"
+        )
+    else:
+        region_help = (
+            "  - Wrong region? Some systems have regional BIOS\n"
+            "    variants (USA/EUR/JAP). All are included.\n"
+        )
     footer = (
         "TROUBLESHOOTING\n\n"
         "  - Core says BIOS missing? Check the exact filename\n"
         "    and make sure it's in the right subfolder.\n"
-        "  - Wrong region? Some systems have regional BIOS\n"
-        "    variants (USA/EUR/JAP). All are included.\n"
+        f"{region_help}"
         "  - Need help? https://github.com/Abdess/retrobios/issues\n\n"
         f"{sep}\n"
         f"  https://github.com/Abdess/retrobios\n"
@@ -980,6 +986,30 @@ def _build_readme(
             "  Independent of platform scraper accuracy.\n\n"
         )
 
+    region_info = ""
+    if regions:
+        pretty = ", ".join(
+            " ".join(w.title() for w in slug.split("-")) for slug in regions
+        )
+        region_info = (
+            "PACK TYPE: Region Filtered\n\n"
+            f"  Region priority: {pretty}\n\n"
+            "  Only the best-matching BIOS was kept for each system.\n"
+        )
+        if fallback_systems:
+            listed = "\n".join(f"    {s}" for s in fallback_systems)
+            region_info += (
+                "\n  These systems have no BIOS in those regions, so all\n"
+                "  of theirs were kept:\n"
+                f"{listed}\n"
+            )
+        region_info += (
+            "\n  This shrinks the pack. It does not change how cores pick\n"
+            "  a BIOS: most already select per region from fixed filename\n"
+            "  lists driven by the game's region. Loading imports from\n"
+            "  another region may need the unfiltered pack.\n\n"
+        )
+
     credits = ""
     if contributors:
         credits = "\nCONTRIBUTORS\n\n"
@@ -988,7 +1018,7 @@ def _build_readme(
             credits += f"  @{username}\n"
         credits += "\n"
 
-    return header + source_info + guide + credits + footer
+    return header + source_info + region_info + guide + credits + footer
 
 
 def _build_agnostic_rename_readme(
@@ -1028,6 +1058,7 @@ def generate_pack(
     precomputed_extras: list[dict] | None = None,
     source: str = "full",
     flatten: bool = True,
+    regions: list[str] | None = None,
 ) -> str | None:
     """Generate a ZIP pack for a platform.
 
@@ -1045,6 +1076,7 @@ def generate_pack(
     version_tag = f"_{version.replace(' ', '')}" if version else ""
     req_tag = "_Required" if required_only else ""
     source_tag = {"platform": "_Platform", "truth": "_Truth"}.get(source, "")
+    region_tag_str = f"_{region_mod.region_tag(regions)}" if regions else ""
 
     sys_tag = ""
     if system_filter:
@@ -1059,7 +1091,7 @@ def generate_pack(
             display_parts.append("_".join(p.title() for p in parts if p))
         sys_tag = "_" + "_".join(display_parts)
 
-    zip_name = f"{platform_display.replace(' ', '_')}{version_tag}{source_tag}{req_tag}_BIOS_Pack{sys_tag}.zip"
+    zip_name = f"{platform_display.replace(' ', '_')}{version_tag}{source_tag}{region_tag_str}{req_tag}_BIOS_Pack{sys_tag}.zip"
     zip_path = os.path.join(output_dir, zip_name)
     os.makedirs(output_dir, exist_ok=True)
 
@@ -1158,6 +1190,55 @@ def generate_pack(
             if best is not None:
                 preferred_entries[full] = id(best)
 
+    # Region selection is decided once, over both the platform baseline and the
+    # core extras, so the two phases below consult a single set. Grouping uses a
+    # dedicated extras pass with an empty seen set: it only needs group
+    # membership, never destinations, and a superset of members is the safe
+    # direction. Runs only when --region is given.
+    region_drops: set[str] = set()
+    region_fallbacks: list[str] = []
+    if regions:
+        region_index = region_mod.build_region_index(emu_profiles or {})
+        region_groups: dict[str, list[tuple[str, str]]] = {}
+        for sys_id, system in pack_systems.items():
+            members = region_groups.setdefault(sys_id, [])
+            for file_entry in system.get("files", []):
+                dest = _sanitize_path(
+                    file_entry.get("destination", file_entry.get("name", ""))
+                )
+                if dest:
+                    members.append((dest, file_entry.get("name", "")))
+        if source != "platform":
+            emu_systems = {
+                n: list(p.get("systems", []))
+                for n, p in (emu_profiles or {}).items()
+            }
+            for fe in _collect_emulator_extras(
+                config,
+                emulators_dir,
+                db,
+                set(),
+                base_dest,
+                emu_profiles,
+                target_cores=target_cores,
+                include_all=(source == "truth"),
+            ):
+                dest = _sanitize_path(fe.get("destination", fe.get("name", "")))
+                if not dest:
+                    continue
+                for sys_id in emu_systems.get(
+                    fe.get("source_emulator", ""), ["_extras"]
+                ):
+                    region_groups.setdefault(sys_id, []).append(
+                        (dest, fe.get("name", ""))
+                    )
+        region_drops = region_mod.resolve_region_drops(
+            region_groups, region_index, regions
+        )
+        region_fallbacks = region_mod.fallback_groups(
+            region_groups, region_index, regions
+        )
+
     with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:
       if source != "truth":
         for sys_id, system in sorted(pack_systems.items()):
@@ -1165,6 +1246,8 @@ def generate_pack(
                 if required_only and file_entry.get("required") is False:
                     continue
                 dest = _sanitize_path(file_entry.get("destination", file_entry["name"]))
+                if region_drops and dest in region_drops:
+                    continue
                 if not dest:
                     # EmuDeck-style entries (system:md5 whitelist, no filename).
                     fkey = f"{sys_id}/{file_entry.get('name', '')}"
@@ -1473,6 +1556,8 @@ def generate_pack(
           if required_only and fe.get("required") is False:
               continue
           dest = _sanitize_path(fe.get("destination", fe["name"]))
+          if region_drops and dest in region_drops:
+              continue
           if not dest:
               continue
           # Core extras: _collect_emulator_extras already adjusted
@@ -1572,6 +1657,8 @@ def generate_pack(
           platform_name, platform_display, base_dest, total_files, num_systems,
           source=source,
           contributors=_pack_registry.get(platform_name, {}).get("contributed_by", []),
+          regions=regions,
+          fallback_systems=region_fallbacks,
       )
       zf.writestr("README.txt", readme_text)
 
@@ -1725,6 +1812,7 @@ def generate_emulator_pack(
     standalone: bool = False,
     zip_contents: dict | None = None,
     required_only: bool = False,
+    regions: list[str] | None = None,
 ) -> str | None:
     """Generate a ZIP pack for specific emulator profiles."""
     all_profiles = load_emulator_profiles(emulators_dir, skip_aliases=False)
@@ -1768,9 +1856,28 @@ def generate_emulator_pack(
 
     # ZIP naming
     display_names = [p.get("emulator", n).replace(" ", "") for n, p in selected]
-    zip_name = "_".join(display_names) + "_BIOS_Pack.zip"
+    region_tag_str = f"_{region_mod.region_tag(regions)}" if regions else ""
+    zip_name = "_".join(display_names) + f"{region_tag_str}_BIOS_Pack.zip"
     zip_path = os.path.join(output_dir, zip_name)
     os.makedirs(output_dir, exist_ok=True)
+
+    # One group per profile: a core's regional alternatives compete only with
+    # each other. Decided before the ZIP is opened so the loop below reads a
+    # single set.
+    region_drops: set[str] = set()
+    if regions:
+        region_index = region_mod.build_region_index(dict(selected))
+        region_groups: dict[str, list[tuple[str, str]]] = {}
+        for emu_name, profile in sorted(selected):
+            structure = profile.get("pack_structure")
+            members = region_groups.setdefault(emu_name, [])
+            for fe in filter_files_by_mode(profile.get("files", []), standalone):
+                dest = _resolve_destination(fe, structure, standalone)
+                if dest:
+                    members.append((dest, fe.get("name", "")))
+        region_drops = region_mod.resolve_region_drops(
+            region_groups, region_index, regions
+        )
 
     total_files = 0
     missing_files = []
@@ -1888,6 +1995,8 @@ def generate_emulator_pack(
                 dest = _resolve_destination(fe, pack_structure, standalone)
                 if not dest:
                     continue
+                if region_drops and dest in region_drops:
+                    continue
 
                 if dest.lower() in seen_lower:
                     continue
@@ -1989,6 +2098,7 @@ def generate_system_pack(
     standalone: bool = False,
     zip_contents: dict | None = None,
     required_only: bool = False,
+    regions: list[str] | None = None,
 ) -> str | None:
     """Generate a ZIP pack for all emulators supporting given system IDs."""
     profiles = load_emulator_profiles(emulators_dir)
@@ -2036,6 +2146,7 @@ def generate_system_pack(
         standalone,
         zip_contents,
         required_only=required_only,
+        regions=regions,
     )
     if result:
         # Rename to system-based name
@@ -2092,6 +2203,7 @@ def generate_split_packs(
     target_cores: set[str] | None = None,
     required_only: bool = False,
     source: str = "full",
+    regions: list[str] | None = None,
 ) -> list[str]:
     """Generate split packs (one ZIP per system or manufacturer)."""
     config = load_platform_config(platform_name, platforms_dir)
@@ -2162,13 +2274,15 @@ def generate_split_packs(
             system_filter=group_system_ids,
             precomputed_extras=group_extras,
             source=source,
+            regions=regions,
         )
         if zip_path:
             version = config.get("version", config.get("dat_version", ""))
             ver_tag = f"_{version.replace(' ', '')}" if version else ""
             req_tag = "_Required" if required_only else ""
+            rgn_tag = f"_{region_mod.region_tag(regions)}" if regions else ""
             safe_group = group_name.replace(" ", "_")
-            new_name = f"{platform_display.replace(' ', '_')}{ver_tag}{source_tag}{req_tag}_{safe_group}_BIOS_Pack.zip"
+            new_name = f"{platform_display.replace(' ', '_')}{ver_tag}{source_tag}{rgn_tag}{req_tag}_{safe_group}_BIOS_Pack.zip"
             new_path = os.path.join(split_dir, new_name)
             if new_path != zip_path:
                 os.rename(zip_path, new_path)
@@ -2399,6 +2513,8 @@ def _validate_args(args, parser):
         parser.error("--manifest is incompatible with --emulator")
     if args.manifest and args.split:
         parser.error("--manifest is incompatible with --split")
+    if getattr(args, "region", None) and has_from_md5:
+        parser.error("--region and --from-md5 are mutually exclusive")
 
 
 def _write_manifest_if_changed(path: str, manifest: dict) -> None:
@@ -2456,11 +2572,18 @@ def _run_manifest_mode(
                     emu_profiles=emu_profiles,
                     target_cores=tc,
                     source=source,
+                    regions=getattr(args, "regions", None),
                 )
                 source_suffix = {"platform": "_platform", "truth": "_truth"}.get(source, "")
                 req_suffix = "_required" if required_only else ""
+                rgn = getattr(args, "regions", None)
+                region_suffix = (
+                    f"_{region_mod.region_tag(rgn).lower()}" if rgn else ""
+                )
                 out_path = os.path.join(
-                    args.output_dir, f"{representative}{source_suffix}{req_suffix}.json"
+                    args.output_dir,
+                    f"{representative}{source_suffix}{region_suffix}"
+                    f"{req_suffix}.json",
                 )
                 _write_manifest_if_changed(out_path, manifest)
                 print(
@@ -2472,7 +2595,8 @@ def _run_manifest_mode(
                     if alias_plat != representative:
                         alias_path = os.path.join(
                             args.output_dir,
-                            f"{alias_plat}{source_suffix}{req_suffix}.json",
+                            f"{alias_plat}{source_suffix}{region_suffix}"
+                            f"{req_suffix}.json",
                         )
                         alias_manifest = dict(manifest)
                         alias_manifest["platform"] = alias_plat
@@ -2518,6 +2642,8 @@ def _run_verify_packs(args):
         sys.exit(1)
 
     all_ok = True
+    verify_regions = getattr(args, "regions", None)
+    verify_profiles = load_emulator_profiles(args.emulators_dir)
     for platform_name in platforms:
         config = load_platform_config(platform_name, args.platforms_dir)
         display = config.get("platform", platform_name).replace(" ", "_")
@@ -2561,6 +2687,43 @@ def _run_verify_packs(args):
                 os.path.join(extract_dir, base_dest)
             )
 
+            region_drops: set[str] = set()
+            if verify_regions:
+                region_index = region_mod.build_region_index(verify_profiles)
+                region_groups: dict[str, list[tuple[str, str]]] = {}
+                for sys_id, sys_data in systems.items():
+                    members = region_groups.setdefault(sys_id, [])
+                    for fe in sys_data.get("files", []):
+                        d = _sanitize_path(
+                            fe.get("destination", fe.get("name", ""))
+                        )
+                        if d:
+                            members.append((d, fe.get("name", "")))
+                # Core extras join the groups so a platform file dropped in
+                # favour of a better-ranked core file is not reported missing.
+                from verify import find_undeclared_files as _fud
+
+                emu_systems = {
+                    n: list(p.get("systems", []))
+                    for n, p in verify_profiles.items()
+                }
+                for u in _fud(
+                    config, args.emulators_dir, verify_db, verify_profiles
+                ):
+                    if not u.get("in_repo"):
+                        continue
+                    raw = u.get("path") or u["name"]
+                    d = _sanitize_path(
+                        f"{raw}{u['name']}" if raw.endswith("/") else raw
+                    )
+                    if not d:
+                        continue
+                    for sid in emu_systems.get(u.get("emulator", ""), ["_extras"]):
+                        region_groups.setdefault(sid, []).append((d, u["name"]))
+                region_drops = region_mod.resolve_region_drops(
+                    region_groups, region_index, verify_regions
+                )
+
             missing = []
             hash_fail = []
             ok = 0
@@ -2568,6 +2731,8 @@ def _run_verify_packs(args):
                 for fe in sys_data.get("files", []):
                     dest = fe.get("destination", fe.get("name", ""))
                     if not dest:
+                        continue
+                    if region_drops and _sanitize_path(dest) in region_drops:
                         continue
                     fp = (
                         os.path.join(extract_dir, base_dest, dest)
@@ -2733,6 +2898,7 @@ def _run_platform_packs(
                         target_cores=tc,
                         required_only=required_only,
                         source=source,
+                        regions=getattr(args, "regions", None),
                     )
                     print(f"  Split into {len(zip_paths)} packs")
                 else:
@@ -2751,6 +2917,7 @@ def _run_platform_packs(
                         required_only=required_only,
                         system_filter=system_filter,
                         source=source,
+                        regions=getattr(args, "regions", None),
                     )
                 if not args.split and zip_path and aliases:
                     rep_cfg = load_platform_config(representative, args.platforms_dir)
@@ -2776,14 +2943,22 @@ def _run_platform_packs(
     print("\nVerifying packs and generating manifests...")
     skip_conf = bool(system_filter or args.split)
     all_ok = verify_and_finalize_packs(
-        args.output_dir, db, skip_conformance=skip_conf, data_registry=data_registry
+        args.output_dir,
+        db,
+        skip_conformance=skip_conf,
+        data_registry=data_registry,
+        regions=getattr(args, "regions", None),
     )
     if args.split:
         for entry in os.listdir(args.output_dir):
             sub = os.path.join(args.output_dir, entry)
             if os.path.isdir(sub) and entry.endswith("_Split"):
                 ok = verify_and_finalize_packs(
-                    sub, db, skip_conformance=True, data_registry=data_registry
+                    sub,
+                    db,
+                    skip_conformance=True,
+                    data_registry=data_registry,
+                    regions=getattr(args, "regions", None),
                 )
                 all_ok = all_ok and ok
     if not all_ok:
@@ -2859,6 +3034,10 @@ def main():
     )
     parser.add_argument("--target", "-t", help="Hardware target (e.g., switch, rpi4)")
     parser.add_argument(
+        "--region",
+        help="Region priority list, best first (e.g. us,eu,jp)",
+    )
+    parser.add_argument(
         "--list-targets",
         action="store_true",
         help="List available targets for the platform",
@@ -2883,6 +3062,15 @@ def main():
         help="Extract and verify pack integrity (path + hash)",
     )
     args = parser.parse_args()
+
+    # Parsed before the quick-exit modes: --verify-packs returns early and
+    # still needs the region priority list to narrow its expectation.
+    args.regions = []
+    if args.region:
+        try:
+            args.regions = region_mod.parse_requested(args.region)
+        except ValueError as exc:
+            parser.error(str(exc))
 
     # Quick-exit modes: --verify-packs alone = verify existing packs only
     # Combined with --all-variants, generation runs first then verify
@@ -2975,6 +3163,7 @@ def main():
             args.standalone,
             zip_contents,
             required_only=args.required_only,
+            regions=getattr(args, "regions", None),
         ):
             sys.exit(1)
         return
@@ -2991,6 +3180,7 @@ def main():
             args.standalone,
             zip_contents,
             required_only=args.required_only,
+            regions=getattr(args, "regions", None),
         ):
             sys.exit(1)
         return
@@ -3112,6 +3302,7 @@ def generate_manifest(
     emu_profiles: dict | None = None,
     target_cores: set[str] | None = None,
     source: str = "full",
+    regions: list[str] | None = None,
 ) -> dict:
     """Generate a JSON manifest for a platform (same resolution as generate_pack).
 
@@ -3157,12 +3348,53 @@ def generate_manifest(
     manifest_files: list[dict] = []
     total_size = 0
 
+    region_drops: set[str] = set()
+    if regions:
+        region_index = region_mod.build_region_index(emu_profiles)
+        region_groups: dict[str, list[tuple[str, str]]] = {}
+        for sys_id, system in pack_systems.items():
+            members = region_groups.setdefault(sys_id, [])
+            for file_entry in system.get("files", []):
+                d = _sanitize_path(
+                    file_entry.get("destination", file_entry.get("name", ""))
+                )
+                if d:
+                    members.append((d, file_entry.get("name", "")))
+        if source != "platform":
+            emu_systems = {
+                n: list(p.get("systems", [])) for n, p in emu_profiles.items()
+            }
+            for fe in _collect_emulator_extras(
+                config,
+                emulators_dir,
+                db,
+                set(),
+                base_dest,
+                emu_profiles,
+                target_cores=target_cores,
+                include_all=(source == "truth"),
+            ):
+                d = _sanitize_path(fe.get("destination", fe.get("name", "")))
+                if not d:
+                    continue
+                for sid in emu_systems.get(
+                    fe.get("source_emulator", ""), ["_extras"]
+                ):
+                    region_groups.setdefault(sid, []).append(
+                        (d, fe.get("name", ""))
+                    )
+        region_drops = region_mod.resolve_region_drops(
+            region_groups, region_index, regions
+        )
+
     # Phase 1: baseline files
     if source != "truth":
         for sys_id, system in sorted(pack_systems.items()):
             for file_entry in system.get("files", []):
                 dest = _sanitize_path(file_entry.get("destination", file_entry["name"]))
                 if not dest:
+                    continue
+                if region_drops and dest in region_drops:
                     continue
                 full_dest = f"{base_dest}/{dest}" if base_dest else dest
 
@@ -3233,6 +3465,8 @@ def generate_manifest(
     for fe in core_files:
         dest = _sanitize_path(fe.get("destination", fe["name"]))
         if not dest:
+            continue
+        if region_drops and dest in region_drops:
             continue
         if extras_pfx:
             if not dest.startswith(f"{extras_pfx}/"):
@@ -3703,8 +3937,12 @@ def verify_pack_against_platform(
     db: dict | None = None,
     emulators_dir: str = "emulators",
     emu_profiles: dict | None = None,
+    regions: list[str] | None = None,
 ) -> tuple[bool, int, int, list[str]]:
     """Verify a pack ZIP against its platform config and core requirements.
+
+    A region priority list narrows the expectation to what the builder would
+    have packed, using the same selection function.
 
     Checks:
     1. Every baseline file declared by the platform exists in the ZIP
@@ -3728,6 +3966,37 @@ def verify_pack_against_platform(
 
     if emu_profiles is None:
         emu_profiles = load_emulator_profiles(emulators_dir)
+
+    region_drops: set[str] = set()
+    if regions:
+        region_index = region_mod.build_region_index(emu_profiles)
+        region_groups: dict[str, list[tuple[str, str]]] = {}
+        for sys_id, system in config.get("systems", {}).items():
+            members = region_groups.setdefault(sys_id, [])
+            for fe in system.get("files", []):
+                d = _sanitize_path(fe.get("destination", fe.get("name", "")))
+                if d:
+                    members.append((d, fe.get("name", "")))
+        if db is not None:
+            from verify import find_undeclared_files as _fud
+
+            emu_systems = {
+                n: list(p.get("systems", [])) for n, p in emu_profiles.items()
+            }
+            for u in _fud(config, emulators_dir, db, emu_profiles):
+                if not u.get("in_repo"):
+                    continue
+                raw = u.get("path") or u["name"]
+                d = _sanitize_path(
+                    f"{raw}{u['name']}" if raw.endswith("/") else raw
+                )
+                if not d:
+                    continue
+                for sys_id in emu_systems.get(u.get("emulator", ""), ["_extras"]):
+                    region_groups.setdefault(sys_id, []).append((d, u["name"]))
+        region_drops = region_mod.resolve_region_drops(
+            region_groups, region_index, regions
+        )
 
     with zipfile.ZipFile(zip_path, "r") as zf:
         zip_set = set(zf.namelist())
@@ -3778,6 +4047,8 @@ def verify_pack_against_platform(
             for fe in system.get("files", []):
                 dest = fe.get("destination", fe.get("name", ""))
                 if not dest:
+                    continue
+                if region_drops and _sanitize_path(dest) in region_drops:
                     continue
                 expected = f"{base_dest}/{dest}" if base_dest and not is_flat else dest
                 baseline_checked += 1
@@ -3845,6 +4116,8 @@ def verify_pack_against_platform(
                     continue
                 raw_dest = u.get("path") or u["name"]
                 dest = f"{raw_dest}{u['name']}" if raw_dest.endswith("/") else raw_dest
+                if region_drops and _sanitize_path(dest) in region_drops:
+                    continue
                 if extras_pfx and not (is_flat and extras_pfx == base_dest):
                     if not dest.startswith(f"{extras_pfx}/"):
                         full = f"{extras_pfx}/{dest}"
@@ -3889,6 +4162,7 @@ def verify_and_finalize_packs(
     platforms_dir: str = "platforms",
     skip_conformance: bool = False,
     data_registry: dict | None = None,
+    regions: list[str] | None = None,
 ) -> bool:
     """Verify all packs, inject manifests, generate SHA256SUMS.
 
@@ -3953,6 +4227,7 @@ def verify_and_finalize_packs(
                 pname,
                 platforms_dir,
                 db=db,
+                regions=regions,
             )
             status = "OK" if p_ok else "FAILED"
             print(

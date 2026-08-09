@@ -37,7 +37,7 @@ notes: |
 files:
   - name: "lynxboot.img"
     description: "Atari Lynx boot ROM"
-    region: "World"
+    region: [world]
     required: true
     size: 512
     sha1: "e4ed47fae31693e016b081c6bda48da5b70d7ccb"

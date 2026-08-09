@@ -1,0 +1,67 @@
+emulator: solarus
+type: standalone
+core_classification: game_engine
+source: "https://gitlab.com/solarus-games/solarus"
+upstream: "https://gitlab.com/solarus-games/solarus"
+profiled_date: "2026-08-08"
+source_commit: "bc2707d1fba2ec1e6529857f87202a20998bff13"
+core_version: "2.2.0"
+display_name: "Solarus Game Engine"
+cores:
+  - solarus
+systems:
+  - solarus
+mode: standalone
+
+notes: |
+  2D action-RPG engine running quests scripted in Lua, built as libsolarus with
+  the solarus-run command-line player and the Qt Solarus Launcher on top. ES-DE
+  runs `solarus-run <rom>` on a single .solarus file, Batocera as `solarus-run
+  -fullscreen=yes -cursor-visible=no -lua-console=no -quit-combo=<hotkey>+<start>
+  -joypad-num<n>=<index> <rom>` off a bbecaf31 pin, RetroDECK ships the v2.0.3
+  solarus-launcher AppImage.
+
+  The quest arrives as the content argument. get_quest_path takes the last
+  non-option argv and otherwise falls back to SOLARUS_DEFAULT_QUEST, which
+  defaults to "." (MainLoop.cpp:108-121, cmake/AddOptions.cmake:8,
+  Common.h:119-123). open_quest mounts that path through PhysFS directly, then
+  tries <path>/data, <path>/data.solarus and <path>/data.solarus.zip, each both
+  relative and under PHYSFS_getBaseDir (QuestFiles.cpp:151-165), and the quest
+  counts as found once quest.dat resolves (QuestFiles.cpp:228-233). The rest
+  comes out of that mount: quest.dat and project_db.dat
+  (CurrentQuest.cpp:44,49), fonts under fonts/ as .png, .ttf, .otf, .ttc or .fon
+  (FontResource.cpp:65-101), shaders under shaders/ (Shader.cpp:113), tilesets,
+  sprites and music (Tileset.cpp:156-174, SpriteAnimationSet.cpp:48,
+  MusicSystem.cpp:136-142).
+
+  Startup reads one file from outside the quest. System::initialize probes
+  SDL_GetBasePath() then SOLARUS_DATADIR_PATH for gamecontrollerdb.txt and hands
+  whichever it finds to SDL through SDL_HINT_GAMECONTROLLERCONFIG_FILE
+  (System.cpp:71-99). The GLSL fallbacks are raw string literals in
+  DefaultShaders.h:57,114, and glad, hqx and snes_spc compile in from
+  third_party/.
+
+  Files the engine writes rather than expects: settings.dat and savegames under
+  the quest write directory named in quest.dat (Settings.cpp:149-166,240-280,
+  Savegame.cpp:114), the write root from SDL_GetPrefPath (QuestFiles.cpp:540),
+  and error.txt under SOLARUS_FILE_LOGGING (Logger.cpp:29-45). Batocera's
+  002-pad.patch adds a read of /userdata/system/configs/solarus/pads.ini, which
+  its own generator rewrites at every launch. The editor and launcher subtrees
+  build separately from the root CMakeLists, which adds only cli/, tests/ and
+  third_party/, and their assets are Qt resources compiled into those binaries
+  (editor/cmake/AddQtFiles.cmake:46-50, launcher/cmake/addTarget.cmake:30).
+
+files:
+  - name: gamecontrollerdb.txt
+    system: solarus
+    category: game_data
+    required: false
+    description: "SDL gamepad mappings applied on top of the built-in table"
+    source_ref: "src/core/System.cpp:71-99, cmake/AddDefines.cmake:44-49, cmake/AddInstallTargets.cmake:23-28"
+    note: >-
+      Looked up next to the executable first, then under SOLARUS_DATADIR_PATH,
+      share/solarus by default (cmake/AddInstallDirs.cmake:14). Installed from
+      assets/gamecontrollerdb.txt when SOLARUS_GAMECONTROLLERDB_INSTALL is on,
+      which is the default (cmake/AddOptions.cmake:51), and carried in the
+      release archives (.gitlab-ci.yml:306). Both probes are guarded by an
+      existence test, and neither hitting leaves SDL on its built-in mappings.

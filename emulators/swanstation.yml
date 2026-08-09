@@ -32,7 +32,7 @@ notes: |
 files:
   - name: "scph5500.bin"
     description: "SCPH-5500 (v3.0 09-09-96 J)"
-    region: "NTSC-J"
+    region: [japan]
     required: false
     md5: "8dd7d5296a650fac7319bce665a6a53c"
     size: 524288
@@ -42,7 +42,7 @@ files:
 
   - name: "scph5501.bin"
     description: "SCPH-5501, 5503, 7003 (v3.0 11-18-96 A)"
-    region: "NTSC-U"
+    region: [north-america]
     required: false
     md5: "490f666e1afb15b7362b406ed1cea246"
     size: 524288
@@ -52,7 +52,7 @@ files:
 
   - name: "scph5502.bin"
     description: "SCPH-5502, 5552 (v3.0 01-06-97 E)"
-    region: "PAL"
+    region: [europe]
     required: false
     md5: "32736f17079d0b2b7024407c39bd3050"
     size: 524288
@@ -62,7 +62,7 @@ files:
 
   - name: "psxonpsp660.bin"
     description: "PSP, SCPH-1000R (v4.5 05-25-00 J)"
-    region: "Auto"
+    region: [world]
     required: false
     md5: "c53ca5908936d412331790f4426c6c33"
     size: 524288
@@ -72,7 +72,7 @@ files:
 
   - name: "ps1_rom.bin"
     description: "PS3 embedded PS1 BIOS (v5.0 06-23-03 A)"
-    region: "Auto"
+    region: [world]
     required: false
     md5: "81bbe60ba7a3d1cea1d48c14cbcc647b"
     size: [524288, 4194304, 4089584]

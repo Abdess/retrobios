@@ -10,7 +10,7 @@ core_version: "Git"
 display_name: "Nintendo - GameCube / Wii (Dolphin)"
 cores:
   - dolphin
-systems: [nintendo-gamecube, nintendo-wii]
+systems: [nintendo-gamecube, nintendo-wii, sega-triforce]
 
 # File paths are relative to Dolphin User directory:
 #   Standalone: User/GC/ and User/Wii/
@@ -100,6 +100,15 @@ files:
     hle_fallback: true
     note: "Shift-JIS font for Japanese text. Free alternative bundled, real one from IPL dump preferred"
     source_ref: "Source/Core/Common/CommonPaths.h:134, Source/Core/Core/HW/EXI/EXI_DeviceIPL.cpp:129,234"
+
+  # -- Triforce firmware --
+  # Loaded from User/Triforce/ only, no Sys fallback.
+  - name: "segaboot.gcm"
+    path: "Triforce/segaboot.gcm"
+    system: sega-triforce
+    required: true
+    note: "SegaBoot, the Triforce system disc image. Read on every Triforce boot, min(size, 2 MiB) copied into the firmware buffer, nothing validated"
+    source_ref: "Source/Core/Core/HW/DVD/AMMediaboard.cpp:159,512,531-551, Source/Core/Core/HW/DVD/DVDInterface.cpp:292-294, Source/Core/Core/System.h:147"
 
   # -- GBA BIOS (for GC-GBA link) --
   # Used by integrated mGBA core for GameCube-GBA connectivity.
