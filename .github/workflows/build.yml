@@ -3,7 +3,9 @@ name: Build & Release
 on:
   push:
     branches: [main]
-    paths: ["bios/**", "platforms/**"]
+    # A pack is the platform baseline plus what its cores need, so a profile
+    # change alters pack contents just as a platform list does.
+    paths: ["bios/**", "platforms/**", "emulators/**"]
   workflow_dispatch:
     inputs:
       force_release:
@@ -24,16 +26,20 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803  # v6
+      # The release notes are built from `git log -15`, which returns a single
+      # commit on the default shallow clone.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7
+        with:
+          fetch-depth: 0
 
-      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1  # v6
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v7
         with:
           python-version: "3.12"
 
       - run: pip install pyyaml
 
       - name: Run tests
-        run: python -m unittest tests.test_e2e -v
+        run: python -m unittest discover tests
 
       - name: Rate limit
         if: github.event.inputs.force_release != 'true'
@@ -90,11 +96,13 @@ jobs:
         if: steps.rate.outputs.skip != 'true'
         run: |
           DATE=$(date +%Y.%m.%d)
-          EXISTING=$(gh release list --repo "${{ github.repository }}" --json tagName -q ".[].tagName" | grep -c "^v${DATE}" || true)
+          EXISTING=$(gh release list --repo "${{ github.repository }}" \
+            --json tagName -q ".[].tagName" | grep -c "^v${DATE}" || true)
           TAG="v${DATE}"
           [ "$EXISTING" -gt 0 ] && TAG="v${DATE}.$((EXISTING+1))"
 
-          CHANGES=$(git log --oneline -15 --no-merges -- bios/ platforms/ | sed 's/^/- /')
+          CHANGES=$(git log --oneline -15 --no-merges \
+            -- bios/ platforms/ emulators/ | sed 's/^/- /')
           TOTAL=$(python3 -c "import json; print(json.load(open('database.json'))['total_files'])")
           SIZE=$(python3 -c "import json; print(f'{json.load(open(\"database.json\"))[\"total_size\"]/1024/1024:.0f}')")
           PACKS=$(ls dist/*.zip dist/*.zip.001 2>/dev/null | while read f; do echo "- **$(basename $f)** ($(du -m "$f" | cut -f1) MB)"; done)

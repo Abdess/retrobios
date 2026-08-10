@@ -9,7 +9,11 @@ on:
       - "schemas/**"
       - "scripts/**"
       - "tests/**"
+      # The bootstraps pin install.py's SHA-256 and a test enforces the pin,
+      # so editing one without the other has to fail the PR.
       - "install.py"
+      - "install.sh"
+      - "install.ps1"
 
 permissions:
   contents: read
@@ -23,11 +27,11 @@ jobs:
   validate-bios:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803  # v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1  # v6
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v7
         with:
           python-version: "3.12"
 
@@ -67,9 +71,9 @@ jobs:
   validate-configs:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803  # v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7
 
-      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1  # v6
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v7
         with:
           python-version: "3.12"
 
@@ -82,9 +86,9 @@ jobs:
   run-tests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803  # v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7
 
-      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1  # v6
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v7
         with:
           python-version: "3.12"
 
@@ -99,7 +103,7 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803  # v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7
         with:
           fetch-depth: 0
 

@@ -2,9 +2,19 @@
 name = "retrobios"
 version = "1.0.0"
 description = "BIOS collection manager for retrogaming platforms"
-requires-python = ">=3.10"
+# install.py is the only entry point a user runs before cloning, and both
+# bootstraps accept 3.8. Nothing here needs a newer runtime, so the floor
+# stays where the bootstraps put it.
+requires-python = ">=3.8"
 dependencies = [
     "pyyaml",
+]
+
+# jsonschema is tooling, not a runtime dependency: scripts/validate_schemas.py
+# and the CI contract check are the only callers, and no user path imports it.
+[project.optional-dependencies]
+dev = [
+    "jsonschema>=4.23",
 ]
 
 [project.urls]
