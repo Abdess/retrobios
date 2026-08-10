@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-10T11:02:41Z",
-  "total_files": 7779,
-  "total_size": 10362828387,
+  "generated_at": "2026-08-10T12:06:39Z",
+  "total_files": 7847,
+  "total_size": 10364770662,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -9432,6 +9432,686 @@
       "sha256": "d689e423c138c36dd5e826f50cc6e61cd91801832f99a55ee9f17e14ae490380",
       "crc32": "9a1857ba",
       "adler32": "89a21af5"
+    },
+    "b16784ac250df7d10d1b5496e7cde31090695e4a": {
+      "path": "bios/Arcade/Daphne/ace.zip",
+      "name": "ace.zip",
+      "size": 21283,
+      "sha1": "b16784ac250df7d10d1b5496e7cde31090695e4a",
+      "md5": "a0931b6cecbcdebe51ba2bc5329f6038",
+      "sha256": "05eca99a9541ccfc341c9956a40882f9509fa11ea81df32d0af0963a469159ce",
+      "crc32": "400fd660",
+      "adler32": "dcbf6a83"
+    },
+    "becd81c432953d875bf825a7b9312f509c4a299d": {
+      "path": "bios/Arcade/Daphne/ace91.zip",
+      "name": "ace91.zip",
+      "size": 27636,
+      "sha1": "becd81c432953d875bf825a7b9312f509c4a299d",
+      "md5": "3dd564de9cd843713b108c963200e88a",
+      "sha256": "dd8da02768ebbd8c7e44a8fda5e5033bf2f9cd6fda656ea06fc834e737bcfae4",
+      "crc32": "44719219",
+      "adler32": "a16b8171"
+    },
+    "b8576e5335f5c56546c6acfe6f29bfbc901c293f": {
+      "path": "bios/Arcade/Daphne/ace91_euro.zip",
+      "name": "ace91_euro.zip",
+      "size": 27381,
+      "sha1": "b8576e5335f5c56546c6acfe6f29bfbc901c293f",
+      "md5": "c0778636e30f690d9adcc0d2c0ba6b0e",
+      "sha256": "1813e077e074045c2cb62c24084f4a8ab3347c4f2adb0be084f208f08aaa4fe9",
+      "crc32": "4af1cd43",
+      "adler32": "421df5eb"
+    },
+    "66149ccca44efc9ea45ae50f6db07730f4e1057b": {
+      "path": "bios/Arcade/Daphne/ace_a.zip",
+      "name": "ace_a.zip",
+      "size": 3752,
+      "sha1": "66149ccca44efc9ea45ae50f6db07730f4e1057b",
+      "md5": "8b21150f03bbe29a7b3e0b3adf9e366b",
+      "sha256": "b1780df07e31bab2d6fdd3f316af02d44ac858b52e571bd06fa229f9e9d72c05",
+      "crc32": "dd706631",
+      "adler32": "5a961ee5"
+    },
+    "648028a31d8155bff712c43effbfc2e93cb49554": {
+      "path": "bios/Arcade/Daphne/ace_a2.zip",
+      "name": "ace_a2.zip",
+      "size": 3760,
+      "sha1": "648028a31d8155bff712c43effbfc2e93cb49554",
+      "md5": "0d42e4b788f2a783c20c950587f8fad9",
+      "sha256": "39545f1c4eb25fb49e05de3cd247fc3e107ab053313a47d2f07dcbd2b8d8966a",
+      "crc32": "1500bd19",
+      "adler32": "fac316d3"
+    },
+    "ebec27d569085c022d1ca38971b1a001b8ed7f13": {
+      "path": "bios/Arcade/Daphne/aceeuro.zip",
+      "name": "aceeuro.zip",
+      "size": 23853,
+      "sha1": "ebec27d569085c022d1ca38971b1a001b8ed7f13",
+      "md5": "2d5b68caeec51ec72885c8b22839e773",
+      "sha256": "1fb73c11e9d344722a957d7cd5e3284a6f081e5cafc784a6104414592777c969",
+      "crc32": "d82ef079",
+      "adler32": "c768a82a"
+    },
+    "da7b216a764a463faf17a867ac9040898234e7f3": {
+      "path": "bios/Arcade/Daphne/astron.zip",
+      "name": "astron.zip",
+      "size": 57886,
+      "sha1": "da7b216a764a463faf17a867ac9040898234e7f3",
+      "md5": "19a7be7a4b319ef48ade411987a400ca",
+      "sha256": "80158626da3d02cd94851bad9cb4f9e315843e4ae50eff7e8def7fd42170f7da",
+      "crc32": "356b7f80",
+      "adler32": "ca210edf"
+    },
+    "44f3533b3ec7b8011f14404bab87caf3cfb11905": {
+      "path": "bios/Arcade/Daphne/astronp.zip",
+      "name": "astronp.zip",
+      "size": 23339,
+      "sha1": "44f3533b3ec7b8011f14404bab87caf3cfb11905",
+      "md5": "f84474d6f60673f99d155e7dc8c2bdab",
+      "sha256": "5535d638602a848a8bd4f40028d6a0262bfb0bf71b404a5bbd422fd128a3148f",
+      "crc32": "0afbcc1b",
+      "adler32": "f703a6f0"
+    },
+    "acdec865d2b0ab26337d0ae5a608299c354d68dd": {
+      "path": "bios/Arcade/Daphne/badlandp.zip",
+      "name": "badlandp.zip",
+      "size": 8789,
+      "sha1": "acdec865d2b0ab26337d0ae5a608299c354d68dd",
+      "md5": "d42a0c5d8f9e4cdaa9358696d6ec302b",
+      "sha256": "e5af19dd3d80388a58a2a37f3306a9bc2bb644cc0fe76522ef2a8d7d2693d5fe",
+      "crc32": "9eea5ed0",
+      "adler32": "94b59202"
+    },
+    "4d0fa6bd458b1a78baf7e31ae2ddebcf4e84a395": {
+      "path": "bios/Arcade/Daphne/badlands.zip",
+      "name": "badlands.zip",
+      "size": 12872,
+      "sha1": "4d0fa6bd458b1a78baf7e31ae2ddebcf4e84a395",
+      "md5": "ec94bd04eb32141d3cdb4b5e6714bf1c",
+      "sha256": "39d59088df74f56ab7af5c3bbff674c94199641dc9b863fed32a84e19e124c3d",
+      "crc32": "0b2091f7",
+      "adler32": "f71ae88f"
+    },
+    "e28e710761335b29bc93d9798c6d3013b7e3a195": {
+      "path": "bios/Arcade/Daphne/bega.zip",
+      "name": "bega.zip",
+      "size": 48777,
+      "sha1": "e28e710761335b29bc93d9798c6d3013b7e3a195",
+      "md5": "0ef9a38b90faa0f93212dc923f917a7a",
+      "sha256": "3ed09fb06bd78883e851dab13bda7e2893ae551473951e67bef745f73a52b701",
+      "crc32": "f2b9c19c",
+      "adler32": "738f49fe"
+    },
+    "69ba4a32034712354c85106353dbbd1182c8e1d6": {
+      "path": "bios/Arcade/Daphne/begar1.zip",
+      "name": "begar1.zip",
+      "size": 19993,
+      "sha1": "69ba4a32034712354c85106353dbbd1182c8e1d6",
+      "md5": "eabd4dc320dfe1ec7d77d3c8aa942913",
+      "sha256": "83b57e96dedea76a4f1aab3a9d8ea1e729204a81e8a1b985bd2b38c846178320",
+      "crc32": "b59bbbb7",
+      "adler32": "bba13b2f"
+    },
+    "29200ce13490a0dcb146f7ccc1dbc3f7ee2daf1d": {
+      "path": "bios/Arcade/Daphne/blazer.zip",
+      "name": "blazer.zip",
+      "size": 19999,
+      "sha1": "29200ce13490a0dcb146f7ccc1dbc3f7ee2daf1d",
+      "md5": "c1d565cfa71905861619a120d4bee80e",
+      "sha256": "55fee4a8b4ae54ae10d0859e8f726fb24c8717ae687e9fd326b9750cb2c752c5",
+      "crc32": "9bbe255b",
+      "adler32": "a53a9b14"
+    },
+    "8ed9ed6b107fbb8c934b6474f0375b67f40529ed": {
+      "path": "bios/Arcade/Daphne/cliff.zip",
+      "name": "cliff.zip",
+      "size": 16725,
+      "sha1": "8ed9ed6b107fbb8c934b6474f0375b67f40529ed",
+      "md5": "ca153569f021f07f8a23f0ba11a1465c",
+      "sha256": "908e26994c8a629093eb8e4d45fb59554fce88690433702e5d2126cf210f35f2",
+      "crc32": "8a6d606e",
+      "adler32": "8f6ccca1"
+    },
+    "5d248b1a11ba1985d7a9db185eec3c41f3d4e5e3": {
+      "path": "bios/Arcade/Daphne/cliff_ox.zip",
+      "name": "cliff_ox.zip",
+      "size": 16879,
+      "sha1": "5d248b1a11ba1985d7a9db185eec3c41f3d4e5e3",
+      "md5": "ba68601c4e315e5bd39008303a35e7d2",
+      "sha256": "2ac00f525249af3aa645080e4ae8348cfd0ea67be13f76e073b2a8c895eac053",
+      "crc32": "ec58bf84",
+      "adler32": "144bf722"
+    },
+    "a554b6f2e0fa0eaeffa5fbf12217fbbab2241805": {
+      "path": "bios/Arcade/Daphne/cliffalt.zip",
+      "name": "cliffalt.zip",
+      "size": 15087,
+      "sha1": "a554b6f2e0fa0eaeffa5fbf12217fbbab2241805",
+      "md5": "10b16e359db341afd2f70e426b746223",
+      "sha256": "60b3e8b34585c63fe26b5bebe5d2af9fe2e0a7401f4de5cc4ccc0a7097608cae",
+      "crc32": "e6e4cc67",
+      "adler32": "9781e1a8"
+    },
+    "38a4211302afa9a058693728a680eb4b743b607c": {
+      "path": "bios/Arcade/Daphne/cliffalt2.zip",
+      "name": "cliffalt2.zip",
+      "size": 14504,
+      "sha1": "38a4211302afa9a058693728a680eb4b743b607c",
+      "md5": "f8f3850d8989743909e8b6ff910c825f",
+      "sha256": "3147c537692c7ccff8a152f7ccbb83727ca145afe65abc143eeb94802f2fade9",
+      "crc32": "7f2250b1",
+      "adler32": "c75b7706"
+    },
+    "b2f09fbc609146c967b7b43f173773c20c3895d0": {
+      "path": "bios/Arcade/Daphne/cobra.zip",
+      "name": "cobra.zip",
+      "size": 29388,
+      "sha1": "b2f09fbc609146c967b7b43f173773c20c3895d0",
+      "md5": "7860646f966b97f8195ac979d7198bdc",
+      "sha256": "f6f372e0673b6d562ab2c7f8a02c9e29ee419b82454977023e7c78735a024e71",
+      "crc32": "1a3b03cd",
+      "adler32": "ad33062a"
+    },
+    "f142f55434b464892c2bafb9eabaa563c9e18838": {
+      "path": "bios/Arcade/Daphne/cobraab.zip",
+      "name": "cobraab.zip",
+      "size": 20648,
+      "sha1": "f142f55434b464892c2bafb9eabaa563c9e18838",
+      "md5": "c0813af5a7d9d5ee8352b6b9b37239f3",
+      "sha256": "90c0d7fa838f5790a5e845eb850899fa82993825821811012b3647055e86d0a1",
+      "crc32": "f1b6c781",
+      "adler32": "8a3924da"
+    },
+    "dd83872debfb81a33a54edf9fb16c7d190437986": {
+      "path": "bios/Arcade/Daphne/cobraconv.zip",
+      "name": "cobraconv.zip",
+      "size": 27623,
+      "sha1": "dd83872debfb81a33a54edf9fb16c7d190437986",
+      "md5": "6d960bda1f53393ee0fe62c4e79f43e5",
+      "sha256": "543342df759b1aeaa72e79fc7758dbd5109202b7f6d9548398d4f39c0e38d12e",
+      "crc32": "261e225a",
+      "adler32": "dea5ae3c"
+    },
+    "330fa793de9e699e2c4b530f8423fec5526504f8": {
+      "path": "bios/Arcade/Daphne/cobram3.zip",
+      "name": "cobram3.zip",
+      "size": 23520,
+      "sha1": "330fa793de9e699e2c4b530f8423fec5526504f8",
+      "md5": "7869958bf1c5756c7c5f3f9cd9a1a667",
+      "sha256": "7e63920c8565851ce460bc370dba10f76a88be72e17842a43e4e6eb442f963fb",
+      "crc32": "aad083f4",
+      "adler32": "b810b345"
+    },
+    "24aa67d01b9e9959d090cf34690f2ecb867c304c": {
+      "path": "bios/Arcade/Daphne/cputest.zip",
+      "name": "cputest.zip",
+      "size": 11874,
+      "sha1": "24aa67d01b9e9959d090cf34690f2ecb867c304c",
+      "md5": "700fbe297c741e0242464dc5d79b1a09",
+      "sha256": "709532aa53ff925d94e38f0b9e1dc8278f0b173e25b1717567b3e044191b8d6b",
+      "crc32": "98bda1a5",
+      "adler32": "aca39dbd"
+    },
+    "31b914410aa3937bec41488fe057c2289540cd57": {
+      "path": "bios/Arcade/Daphne/dle11.zip",
+      "name": "dle11.zip",
+      "size": 28296,
+      "sha1": "31b914410aa3937bec41488fe057c2289540cd57",
+      "md5": "7a5a7111418d297d968aebfd71aba2bd",
+      "sha256": "7e671384974617e35dd44583dac8da0e671ced155cd465c5982fd5473ff9a10a",
+      "crc32": "4b05f131",
+      "adler32": "b2a7856a"
+    },
+    "a34f7bf04d9a456d106e2397686dbf275b9ae8ad": {
+      "path": "bios/Arcade/Daphne/dle20.zip",
+      "name": "dle20.zip",
+      "size": 25955,
+      "sha1": "a34f7bf04d9a456d106e2397686dbf275b9ae8ad",
+      "md5": "620ed1abb334082a7a2950fa6084ca4b",
+      "sha256": "78702e0f3c650ffc5f654f4448ead3cb2be43d812be6b8cef22f96125ec1c319",
+      "crc32": "3b430766",
+      "adler32": "2c564dc7"
+    },
+    "765be6f6faf486a5c094b2165f56af5021f03b61": {
+      "path": "bios/Arcade/Daphne/dle21.zip",
+      "name": "dle21.zip",
+      "size": 24883,
+      "sha1": "765be6f6faf486a5c094b2165f56af5021f03b61",
+      "md5": "c67b8c67e2829a79526dffd465639bab",
+      "sha256": "0b37b12c2e8484b8bb04fa08e3346953029d900b2ae09ea5d11c03d3aa37b395",
+      "crc32": "4625d51d",
+      "adler32": "66cbd422"
+    },
+    "f951fddf29ebfb76f96dd179be65c6fef8b06160": {
+      "path": "bios/Arcade/Daphne/esh.zip",
+      "name": "esh.zip",
+      "size": 16764,
+      "sha1": "f951fddf29ebfb76f96dd179be65c6fef8b06160",
+      "md5": "2400c690998975315d1cbf940d55a247",
+      "sha256": "6822122b4de12e3751750f75a06d5c590c449024f2ae6cb125484903b0dbb4ce",
+      "crc32": "879e884d",
+      "adler32": "14a7a041"
+    },
+    "8354ff4c6b505568a8751710fa8b6f71514a4a8f": {
+      "path": "bios/Arcade/Daphne/eshalt.zip",
+      "name": "eshalt.zip",
+      "size": 5660,
+      "sha1": "8354ff4c6b505568a8751710fa8b6f71514a4a8f",
+      "md5": "88b591ad7fa5d9de9a3e68e3e69d9a0e",
+      "sha256": "f98226d19cb3a782dcdb36b82a6350fc16858997da6b8c7fc22e15629243315e",
+      "crc32": "e2b92bc3",
+      "adler32": "512cbf26"
+    },
+    "2349d72ce7fe6272fe385f7b230a61e496977864": {
+      "path": "bios/Arcade/Daphne/eshalt2.zip",
+      "name": "eshalt2.zip",
+      "size": 5277,
+      "sha1": "2349d72ce7fe6272fe385f7b230a61e496977864",
+      "md5": "b0abf93297c91ed38622776c2ea7b1d7",
+      "sha256": "ddb264d78c63d5c1ccd6d6e90616d5adc8b144fe12b09cd3c2db8811ed03600a",
+      "crc32": "8968f26d",
+      "adler32": "1a3e2767"
+    },
+    "3a70893df319df7131d3272815b167cb5436b4fd": {
+      "path": "bios/Arcade/Daphne/eshfix7.zip",
+      "name": "eshfix7.zip",
+      "size": 5669,
+      "sha1": "3a70893df319df7131d3272815b167cb5436b4fd",
+      "md5": "31ddc6158274a5f5d1bfb980fb216db4",
+      "sha256": "51a08ee9d7446bcdc2de0bdecc35f4e432a06bde763fb534356316f40d79a69c",
+      "crc32": "7715de38",
+      "adler32": "8b5dc9bc"
+    },
+    "1a9d608d02ac7b63e4c7289212f843f3f1e74602": {
+      "path": "bios/Arcade/Daphne/eshfix7alt.zip",
+      "name": "eshfix7alt.zip",
+      "size": 5678,
+      "sha1": "1a9d608d02ac7b63e4c7289212f843f3f1e74602",
+      "md5": "68c0dfdd6763824979ee0d4ca82fcaed",
+      "sha256": "48cdcc553b17bacf37fc8d9ea77f52bbb08e29749af94e3e3cbc5184fdcb1de8",
+      "crc32": "c4b91ec2",
+      "adler32": "a398b686"
+    },
+    "e8093171eb6ce4f6c029ad3e7e1c826f7e625218": {
+      "path": "bios/Arcade/Daphne/firefox.zip",
+      "name": "firefox.zip",
+      "size": 53410,
+      "sha1": "e8093171eb6ce4f6c029ad3e7e1c826f7e625218",
+      "md5": "2017cd9199766dd73b96ca4ba92e0c51",
+      "sha256": "058f53fe8a6a850462cef9cef4fc580e6e395b4838517ecaa6bb89a7f9b7fab9",
+      "crc32": "f7781d19",
+      "adler32": "25034b05"
+    },
+    "e8954571f8961f037bb9b743d9140f63f0313505": {
+      "path": "bios/Arcade/Daphne/firefoxa.zip",
+      "name": "firefoxa.zip",
+      "size": 51026,
+      "sha1": "e8954571f8961f037bb9b743d9140f63f0313505",
+      "md5": "0190952376aeffd7d54a70188212d2dc",
+      "sha256": "ec6b186b2dcbed8489d5ac26f31fd68a536b0dc3fa8b734e863af2b1c96ea925",
+      "crc32": "f05bba9a",
+      "adler32": "953a65c3"
+    },
+    "c4cf478135199023f873c394835215a42a960a3a": {
+      "path": "bios/Arcade/Daphne/galaxy.zip",
+      "name": "galaxy.zip",
+      "size": 48574,
+      "sha1": "c4cf478135199023f873c394835215a42a960a3a",
+      "md5": "2898b96512c4aa0bda39ae1aa6a69226",
+      "sha256": "2325fa426343e5d34de5f9d6424fedf4dea2b26913aee2d376d2455654e7ba6a",
+      "crc32": "a76fb487",
+      "adler32": "12d9073c"
+    },
+    "e2dc9a11af6c195791b990a193b87ca833e22a27": {
+      "path": "bios/Arcade/Daphne/galaxyp.zip",
+      "name": "galaxyp.zip",
+      "size": 20042,
+      "sha1": "e2dc9a11af6c195791b990a193b87ca833e22a27",
+      "md5": "1f380f8f3496c53ee01edadd682186ea",
+      "sha256": "ce96d9e5fde1969d10d1e3f832efb6fb08bac538ffd96accf21e786abb0070c9",
+      "crc32": "7fa27962",
+      "adler32": "1fcd980d"
+    },
+    "e51f3cc2e3092bea573791f477ac08e644870d60": {
+      "path": "bios/Arcade/Daphne/gpworld.zip",
+      "name": "gpworld.zip",
+      "size": 86990,
+      "sha1": "e51f3cc2e3092bea573791f477ac08e644870d60",
+      "md5": "0a0e584547fa2d9f74c25f1a7d1d698d",
+      "sha256": "07c9f4fb193d2210c5ef4c238ecf88590a52938c788fdd547da6595760ffb249",
+      "crc32": "d63bf6e0",
+      "adler32": "33cf2cb8"
+    },
+    "72fd1f1c3e56fa943c8a1f57ce450dab4e4a71b8": {
+      "path": "bios/Arcade/Daphne/gtg.zip",
+      "name": "gtg.zip",
+      "size": 19748,
+      "sha1": "72fd1f1c3e56fa943c8a1f57ce450dab4e4a71b8",
+      "md5": "f6bfb812b6afbacb1129c96ee19c5387",
+      "sha256": "78fd5299fe2ca78af90f1b839194e5a8a7bf2fa477d2e0c41c1fcfd712975beb",
+      "crc32": "0be6c12f",
+      "adler32": "b7618291"
+    },
+    "5dd5db5662b2b1f02aa5813023a3643a3ae8f4fe": {
+      "path": "bios/Arcade/Daphne/interstellar.zip",
+      "name": "interstellar.zip",
+      "size": 39757,
+      "sha1": "5dd5db5662b2b1f02aa5813023a3643a3ae8f4fe",
+      "md5": "d8ce36be48149e4453bc0a73399f5ee3",
+      "sha256": "80dfd102da8b28f07e25d500d62805c9e0af1a1b5d953e321e34164f90ecc076",
+      "crc32": "e04da4d8",
+      "adler32": "08ec534e"
+    },
+    "625b7f77d2eb1028ab1efc21aebb4608c336a6e4": {
+      "path": "bios/Arcade/Daphne/lair.zip",
+      "name": "lair.zip",
+      "size": 17906,
+      "sha1": "625b7f77d2eb1028ab1efc21aebb4608c336a6e4",
+      "md5": "6353646d8423312c8bc4d131458738a8",
+      "sha256": "24f1e307b4283512d4a054b1647608ceb384e845650c5bcc238e04bfa263af05",
+      "crc32": "3e80ae11",
+      "adler32": "06bdc438"
+    },
+    "b361bd82b34ccc949e99a5c4a32bdd2f5c73f0d5": {
+      "path": "bios/Arcade/Daphne/lair2.zip",
+      "name": "lair2.zip",
+      "size": 25809,
+      "sha1": "b361bd82b34ccc949e99a5c4a32bdd2f5c73f0d5",
+      "md5": "0c2736f0e6a024ad111fe6c5150f38a4",
+      "sha256": "056b08994dd226c4a4cff98294c818d381e82beff042682bb4d6afa274ef359c",
+      "crc32": "76f3ad43",
+      "adler32": "7b90857d"
+    },
+    "dd7f57461ce427ffad884aa56d2886e34db374b3": {
+      "path": "bios/Arcade/Daphne/lair2_211.zip",
+      "name": "lair2_211.zip",
+      "size": 23278,
+      "sha1": "dd7f57461ce427ffad884aa56d2886e34db374b3",
+      "md5": "b583f9908a856c1e8a59c949cadcd0fd",
+      "sha256": "880cf919195355bae871a33fb8bcaaf58c2edabe5e4ca52230a357698189b2f4",
+      "crc32": "7ff236b9",
+      "adler32": "e51c9b3c"
+    },
+    "e97fef08483e1e1fcddf44ec8309378fd3fafee2": {
+      "path": "bios/Arcade/Daphne/lair2_300.zip",
+      "name": "lair2_300.zip",
+      "size": 24540,
+      "sha1": "e97fef08483e1e1fcddf44ec8309378fd3fafee2",
+      "md5": "74aa17184d6f46909c13b6a885c8c992",
+      "sha256": "24be28d0afbe1656020c23f02987b743ed1000594f7f9aa03b512aaa4550b126",
+      "crc32": "8634e028",
+      "adler32": "1ca6e4d2"
+    },
+    "dcf02ca2a19de7d44464f356c0197e1dff20f0f5": {
+      "path": "bios/Arcade/Daphne/lair2_314.zip",
+      "name": "lair2_314.zip",
+      "size": 25195,
+      "sha1": "dcf02ca2a19de7d44464f356c0197e1dff20f0f5",
+      "md5": "0d7c1678afbdbb73b58b32023040aa92",
+      "sha256": "8107bea44605c6d8b6accd1ca6c121f719d315a3c772c832f6ea53e148b8e120",
+      "crc32": "b2b01c6a",
+      "adler32": "b9c2aa16"
+    },
+    "147a01445c87f3872cfa420f1222ef60ba5386d3": {
+      "path": "bios/Arcade/Daphne/lair2_315.zip",
+      "name": "lair2_315.zip",
+      "size": 25271,
+      "sha1": "147a01445c87f3872cfa420f1222ef60ba5386d3",
+      "md5": "5990cd3e092c90d53af33266bc528dbc",
+      "sha256": "1d484aae501c3d936c1e92dfa9da7fc5cd54121131f285e971ac103dfdf5a082",
+      "crc32": "8c4c5038",
+      "adler32": "ed426a1e"
+    },
+    "fb4a59588727885ca9fa31f960249d9cdeecdf57": {
+      "path": "bios/Arcade/Daphne/lair2_316_euro.zip",
+      "name": "lair2_316_euro.zip",
+      "size": 25175,
+      "sha1": "fb4a59588727885ca9fa31f960249d9cdeecdf57",
+      "md5": "0c7728fd3491e8c47bfecf340eb297f1",
+      "sha256": "e26c4f3b600ddfd9451b86412542c734e814b796382c856c3774ae7caac20323",
+      "crc32": "b57b4f39",
+      "adler32": "c32b27d1"
+    },
+    "9b551d21c11992ce9525a58ae44362b9cd4d8e97": {
+      "path": "bios/Arcade/Daphne/lair2_318.zip",
+      "name": "lair2_318.zip",
+      "size": 25592,
+      "sha1": "9b551d21c11992ce9525a58ae44362b9cd4d8e97",
+      "md5": "ef568ed52f3848f138b674428dc1aa5c",
+      "sha256": "0e20bafb1a2c757a74e383296b17a2d704a348c7c74604ab0a29235b61bd456e",
+      "crc32": "878ae5c0",
+      "adler32": "68900836"
+    },
+    "7b60ff2db772b6f464781c70d8a2029f3d79fa12": {
+      "path": "bios/Arcade/Daphne/lair2_319_euro.zip",
+      "name": "lair2_319_euro.zip",
+      "size": 25493,
+      "sha1": "7b60ff2db772b6f464781c70d8a2029f3d79fa12",
+      "md5": "ee7d93dc1686d7066877703699c04706",
+      "sha256": "a2049d07f2b56cb10a8e3e13bad8448f6fa3de3d14880ad7130d40f1462fc004",
+      "crc32": "c6ce6efb",
+      "adler32": "1ec5ff0c"
+    },
+    "28edcc681866a5c9317fca5553970fc08459516d": {
+      "path": "bios/Arcade/Daphne/lair2_319_span.zip",
+      "name": "lair2_319_span.zip",
+      "size": 25828,
+      "sha1": "28edcc681866a5c9317fca5553970fc08459516d",
+      "md5": "cc0c50f2aa7ab9644f22fe5c9fbc7537",
+      "sha256": "2d55c860f4cb3fd7f4753e4035a132589793abfd89ac298965d6416fe638eac9",
+      "crc32": "95c20b66",
+      "adler32": "d5a9af04"
+    },
+    "0de301fe1d3307ea90d34292eccc593820bfdc2a": {
+      "path": "bios/Arcade/Daphne/lair_a.zip",
+      "name": "lair_a.zip",
+      "size": 21377,
+      "sha1": "0de301fe1d3307ea90d34292eccc593820bfdc2a",
+      "md5": "5c1fe04060140c0cdfb07fe4dfd3ca80",
+      "sha256": "15167ca91ed6041673b46e8645191b73571f72c64760a45a52ed85968157f7d3",
+      "crc32": "2dbda8e0",
+      "adler32": "bdfe77cf"
+    },
+    "a3038872cbdd46b4397179895a01090d00d00ecf": {
+      "path": "bios/Arcade/Daphne/lair_b.zip",
+      "name": "lair_b.zip",
+      "size": 4293,
+      "sha1": "a3038872cbdd46b4397179895a01090d00d00ecf",
+      "md5": "b17c385b7c93bfd05e6c266c09dab32e",
+      "sha256": "09d1577206d013b3fcac130d8a3b3f9c2eff830b7b4352e16c59694a730c588f",
+      "crc32": "86c3fe0e",
+      "adler32": "efbe2b0f"
+    },
+    "5643b96a310610d990b39c87e15221ed468b20b4": {
+      "path": "bios/Arcade/Daphne/lair_c.zip",
+      "name": "lair_c.zip",
+      "size": 968,
+      "sha1": "5643b96a310610d990b39c87e15221ed468b20b4",
+      "md5": "942b41c804b5441afba25b43e5e40fc6",
+      "sha256": "15b5002ea86079468e16aa46b80c1a4b90f01fa449f276b6ef0719459e1f72c7",
+      "crc32": "08113888",
+      "adler32": "7aa3abf9"
+    },
+    "938cd9ba8c5796a5e1c3eee51d84681457648f02": {
+      "path": "bios/Arcade/Daphne/lair_d.zip",
+      "name": "lair_d.zip",
+      "size": 27677,
+      "sha1": "938cd9ba8c5796a5e1c3eee51d84681457648f02",
+      "md5": "5e12e4096fdc222922e0bad12eb82132",
+      "sha256": "1788d45d8243a68a1ae6fafa11e03d5170a799e9206d0b369aa65d70edd148ce",
+      "crc32": "3d20d358",
+      "adler32": "c1b4e37a"
+    },
+    "4d919a1931b14063459ac5f86cacefd9c8df97b6": {
+      "path": "bios/Arcade/Daphne/lair_d2.zip",
+      "name": "lair_d2.zip",
+      "size": 4056,
+      "sha1": "4d919a1931b14063459ac5f86cacefd9c8df97b6",
+      "md5": "422f51ac71b719dd76d476a88c8ce0a0",
+      "sha256": "2d8b2b471c41333d54a5c4360e6fe09f7f54e5a87c123ecc91e44c286370c467",
+      "crc32": "7cb21101",
+      "adler32": "6d5aaac8"
+    },
+    "974bc0fe985ed94edfbb1f23475f5f7ca2076c1d": {
+      "path": "bios/Arcade/Daphne/lair_e.zip",
+      "name": "lair_e.zip",
+      "size": 20802,
+      "sha1": "974bc0fe985ed94edfbb1f23475f5f7ca2076c1d",
+      "md5": "5a469b1844922e9816f2f15a89f36f3a",
+      "sha256": "19259c90c5580e42d1672e1848e7df28421457f517dbf962f332a0efb440c934",
+      "crc32": "851a2256",
+      "adler32": "9c52991d"
+    },
+    "650364e230898e299f801010cc0682853d706573": {
+      "path": "bios/Arcade/Daphne/lair_f.zip",
+      "name": "lair_f.zip",
+      "size": 6027,
+      "sha1": "650364e230898e299f801010cc0682853d706573",
+      "md5": "9dba941b73f384845dce4a8378e10b8f",
+      "sha256": "0d6d8d00bee15536dca3c8b5864cd810995ea082508ade2028be54016f70bcc7",
+      "crc32": "dab4d1e6",
+      "adler32": "041e7a2e"
+    },
+    "d08057bc44009b458a436711bed3bfe440a6e95f": {
+      "path": "bios/Arcade/Daphne/lair_ita.zip",
+      "name": "lair_ita.zip",
+      "size": 6408,
+      "sha1": "d08057bc44009b458a436711bed3bfe440a6e95f",
+      "md5": "d8f220180d8b673a35487a4a404b26b4",
+      "sha256": "5de415c2ae6af0062e01ce6576afd4e465f25edffd2ac7927fb82825b7d30cab",
+      "crc32": "6a9620e2",
+      "adler32": "d5f05e84"
+    },
+    "0468026f5ffd4bf8cdd28107dfdd92224cb593fa": {
+      "path": "bios/Arcade/Daphne/lair_n1.zip",
+      "name": "lair_n1.zip",
+      "size": 26477,
+      "sha1": "0468026f5ffd4bf8cdd28107dfdd92224cb593fa",
+      "md5": "46804a3f99acc7920bc2604996bee7b7",
+      "sha256": "67c4708641728ebbb22906b98ddb36b74d7f0569254230abc72a3c430b7fc7d3",
+      "crc32": "e0639664",
+      "adler32": "6cac439b"
+    },
+    "73a156b7e995f4dfb4d975ff3759f78fe0e26f3c": {
+      "path": "bios/Arcade/Daphne/lair_x.zip",
+      "name": "lair_x.zip",
+      "size": 24316,
+      "sha1": "73a156b7e995f4dfb4d975ff3759f78fe0e26f3c",
+      "md5": "8a360eeb52429ae11653b4b538da9d88",
+      "sha256": "0b28858dc1edb7979e2a9e3217c0d783aff2805f8d5689d6f66a84e3d680e224",
+      "crc32": "cf6ef00d",
+      "adler32": "4c010229"
+    },
+    "27b98ce21948d6bce218a9fc32d641129b45b88b": {
+      "path": "bios/Arcade/Daphne/laireuro.zip",
+      "name": "laireuro.zip",
+      "size": 10771,
+      "sha1": "27b98ce21948d6bce218a9fc32d641129b45b88b",
+      "md5": "882670ab309cb1227ef7cdfc500e6cc2",
+      "sha256": "a87ac89567eb0d6cb63c4277b275017771c567ea4260fa977e78c9f2c65eb875",
+      "crc32": "6b041f9f",
+      "adler32": "09af6105"
+    },
+    "5c5f106444ea96a2a324110b34f03f1302d93be5": {
+      "path": "bios/Arcade/Daphne/mach3.zip",
+      "name": "mach3.zip",
+      "size": 441761,
+      "sha1": "5c5f106444ea96a2a324110b34f03f1302d93be5",
+      "md5": "00b0077d53b8b3e619a0620d82215ec1",
+      "sha256": "82fbb1fa88f48967ff9765f14252224040032aa8d636855096fa727c19b1d262",
+      "crc32": "ef8af43b",
+      "adler32": "408d8830"
+    },
+    "77647116dd7ec8e0473f107938d83f527335e2ce": {
+      "path": "bios/Arcade/Daphne/roadblaster.zip",
+      "name": "roadblaster.zip",
+      "size": 20664,
+      "sha1": "77647116dd7ec8e0473f107938d83f527335e2ce",
+      "md5": "fb3c4950b104ac4ca7b1736daf2e49cb",
+      "sha256": "cbaea6df93e0ddbabcf83568f56ccd3e9612d57311eb178a205080a01daea69b",
+      "crc32": "cab5e75c",
+      "adler32": "3ca41ecb"
+    },
+    "533a2a55615f783fbc9eab437c312cdce0f1bd0e": {
+      "path": "bios/Arcade/Daphne/sae.zip",
+      "name": "sae.zip",
+      "size": 27734,
+      "sha1": "533a2a55615f783fbc9eab437c312cdce0f1bd0e",
+      "md5": "e69a6d5f7d8656d842876bf98a292643",
+      "sha256": "06ec6b633dc8f6e953eea3ca691403d0d5a7615c719c74ef185cd26fd993ec45",
+      "crc32": "3241f717",
+      "adler32": "8bd7276c"
+    },
+    "ddf71fd109d3a3e7240ebc14b6cb22c7caa43201": {
+      "path": "bios/Arcade/Daphne/sdq.zip",
+      "name": "sdq.zip",
+      "size": 11467,
+      "sha1": "ddf71fd109d3a3e7240ebc14b6cb22c7caa43201",
+      "md5": "3f9f35038c865972e49d68068f130aa5",
+      "sha256": "f78e412a9ad52db0984387ae9f46807a967643d43f7d487c6420b9ce71e900f2",
+      "crc32": "62656b8e",
+      "adler32": "5c1e40cb"
+    },
+    "fd488c44567183aa2f4af097f52b3073365e56ae": {
+      "path": "bios/Arcade/Daphne/sdqshort.zip",
+      "name": "sdqshort.zip",
+      "size": 10147,
+      "sha1": "fd488c44567183aa2f4af097f52b3073365e56ae",
+      "md5": "eb5401532f318a32a142c8d134c2a3ab",
+      "sha256": "aeec9b3feb93bf8aa7cbfd417e723475942239e56d70d7405a4997c87979736a",
+      "crc32": "b6ab3d06",
+      "adler32": "9dbed093"
+    },
+    "9de70c75c24f27595b4c5985f6ef83da9e18a41f": {
+      "path": "bios/Arcade/Daphne/sdqshortalt.zip",
+      "name": "sdqshortalt.zip",
+      "size": 10161,
+      "sha1": "9de70c75c24f27595b4c5985f6ef83da9e18a41f",
+      "md5": "cd26930e1278a285522729a4d7faef4e",
+      "sha256": "13e6a0417ec986fc810ccd4cf9488cf470951359abcd618901af8c5626d0f725",
+      "crc32": "6b015608",
+      "adler32": "9709d433"
+    },
+    "3a2a274642f02ac0f9f2b0b877c11401613b224d": {
+      "path": "bios/Arcade/Daphne/tq.zip",
+      "name": "tq.zip",
+      "size": 24144,
+      "sha1": "3a2a274642f02ac0f9f2b0b877c11401613b224d",
+      "md5": "23f19f8465758ab58d9f3aaf4de59630",
+      "sha256": "5596560e42579a0c6b9898e66cffd95db98a5f0b8cdb95cbe5cfe2fe4723e6b1",
+      "crc32": "5f267bf6",
+      "adler32": "615d29bb"
+    },
+    "adbc01de2b85148080add3123cf1d78599dae8ea": {
+      "path": "bios/Arcade/Daphne/tq_alt.zip",
+      "name": "tq_alt.zip",
+      "size": 3831,
+      "sha1": "adbc01de2b85148080add3123cf1d78599dae8ea",
+      "md5": "cec002ace50f3a048a3f6c096b85e6da",
+      "sha256": "994d0a53357ca1f0a8712aa4ba37fc12b29222502befd8ffd943fcc73b303825",
+      "crc32": "c7052ca4",
+      "adler32": "74306af1"
+    },
+    "d7769bbda95fef35866ab00248628603595d4dce": {
+      "path": "bios/Arcade/Daphne/tq_swear.zip",
+      "name": "tq_swear.zip",
+      "size": 19758,
+      "sha1": "d7769bbda95fef35866ab00248628603595d4dce",
+      "md5": "9e7ec19b80ea4ac41953c6384850f148",
+      "sha256": "a4e5a732be1663eec6affbf19bec6509f4eec517e1660c4cb38fa5ae27611008",
+      "crc32": "04600953",
+      "adler32": "793db841"
+    },
+    "34bf7dc699080552e89342bf8ad59dc6a2f0a5db": {
+      "path": "bios/Arcade/Daphne/uvt.zip",
+      "name": "uvt.zip",
+      "size": 62052,
+      "sha1": "34bf7dc699080552e89342bf8ad59dc6a2f0a5db",
+      "md5": "05f3b12502bb6c9c1b986f4065528c65",
+      "sha256": "89f877baa90d76d058954eb364cdff9b3f099231141c7a892538cc7c856d7f8d",
+      "crc32": "732f8208",
+      "adler32": "fd717083"
     },
     "764ec667084bc237c1de6bd1db7541ad8cb59975": {
       "path": "bios/Arcade/FBAlpha 2012/samples/dkong.zip",
@@ -83644,6 +84324,74 @@
       "79ae0d2bb1901b7e606b6dc339b79a97": "06fc753d015b43ca1787f4cfd9331b1674202e64",
       "da4eeb6b587c0e64d3ec2f81abcb039d": "a5bd2c7c7a832723c799475013086933db751518",
       "d39ccb8e40cf419178d01d456c9862c8": "f26cf16bad0c06729143459f922d071c489c6d57",
+      "a0931b6cecbcdebe51ba2bc5329f6038": "b16784ac250df7d10d1b5496e7cde31090695e4a",
+      "3dd564de9cd843713b108c963200e88a": "becd81c432953d875bf825a7b9312f509c4a299d",
+      "c0778636e30f690d9adcc0d2c0ba6b0e": "b8576e5335f5c56546c6acfe6f29bfbc901c293f",
+      "8b21150f03bbe29a7b3e0b3adf9e366b": "66149ccca44efc9ea45ae50f6db07730f4e1057b",
+      "0d42e4b788f2a783c20c950587f8fad9": "648028a31d8155bff712c43effbfc2e93cb49554",
+      "2d5b68caeec51ec72885c8b22839e773": "ebec27d569085c022d1ca38971b1a001b8ed7f13",
+      "19a7be7a4b319ef48ade411987a400ca": "da7b216a764a463faf17a867ac9040898234e7f3",
+      "f84474d6f60673f99d155e7dc8c2bdab": "44f3533b3ec7b8011f14404bab87caf3cfb11905",
+      "d42a0c5d8f9e4cdaa9358696d6ec302b": "acdec865d2b0ab26337d0ae5a608299c354d68dd",
+      "ec94bd04eb32141d3cdb4b5e6714bf1c": "4d0fa6bd458b1a78baf7e31ae2ddebcf4e84a395",
+      "0ef9a38b90faa0f93212dc923f917a7a": "e28e710761335b29bc93d9798c6d3013b7e3a195",
+      "eabd4dc320dfe1ec7d77d3c8aa942913": "69ba4a32034712354c85106353dbbd1182c8e1d6",
+      "c1d565cfa71905861619a120d4bee80e": "29200ce13490a0dcb146f7ccc1dbc3f7ee2daf1d",
+      "ca153569f021f07f8a23f0ba11a1465c": "8ed9ed6b107fbb8c934b6474f0375b67f40529ed",
+      "ba68601c4e315e5bd39008303a35e7d2": "5d248b1a11ba1985d7a9db185eec3c41f3d4e5e3",
+      "10b16e359db341afd2f70e426b746223": "a554b6f2e0fa0eaeffa5fbf12217fbbab2241805",
+      "f8f3850d8989743909e8b6ff910c825f": "38a4211302afa9a058693728a680eb4b743b607c",
+      "7860646f966b97f8195ac979d7198bdc": "b2f09fbc609146c967b7b43f173773c20c3895d0",
+      "c0813af5a7d9d5ee8352b6b9b37239f3": "f142f55434b464892c2bafb9eabaa563c9e18838",
+      "6d960bda1f53393ee0fe62c4e79f43e5": "dd83872debfb81a33a54edf9fb16c7d190437986",
+      "7869958bf1c5756c7c5f3f9cd9a1a667": "330fa793de9e699e2c4b530f8423fec5526504f8",
+      "700fbe297c741e0242464dc5d79b1a09": "24aa67d01b9e9959d090cf34690f2ecb867c304c",
+      "7a5a7111418d297d968aebfd71aba2bd": "31b914410aa3937bec41488fe057c2289540cd57",
+      "620ed1abb334082a7a2950fa6084ca4b": "a34f7bf04d9a456d106e2397686dbf275b9ae8ad",
+      "c67b8c67e2829a79526dffd465639bab": "765be6f6faf486a5c094b2165f56af5021f03b61",
+      "2400c690998975315d1cbf940d55a247": "f951fddf29ebfb76f96dd179be65c6fef8b06160",
+      "88b591ad7fa5d9de9a3e68e3e69d9a0e": "8354ff4c6b505568a8751710fa8b6f71514a4a8f",
+      "b0abf93297c91ed38622776c2ea7b1d7": "2349d72ce7fe6272fe385f7b230a61e496977864",
+      "31ddc6158274a5f5d1bfb980fb216db4": "3a70893df319df7131d3272815b167cb5436b4fd",
+      "68c0dfdd6763824979ee0d4ca82fcaed": "1a9d608d02ac7b63e4c7289212f843f3f1e74602",
+      "2017cd9199766dd73b96ca4ba92e0c51": "e8093171eb6ce4f6c029ad3e7e1c826f7e625218",
+      "0190952376aeffd7d54a70188212d2dc": "e8954571f8961f037bb9b743d9140f63f0313505",
+      "2898b96512c4aa0bda39ae1aa6a69226": "c4cf478135199023f873c394835215a42a960a3a",
+      "1f380f8f3496c53ee01edadd682186ea": "e2dc9a11af6c195791b990a193b87ca833e22a27",
+      "0a0e584547fa2d9f74c25f1a7d1d698d": "e51f3cc2e3092bea573791f477ac08e644870d60",
+      "f6bfb812b6afbacb1129c96ee19c5387": "72fd1f1c3e56fa943c8a1f57ce450dab4e4a71b8",
+      "d8ce36be48149e4453bc0a73399f5ee3": "5dd5db5662b2b1f02aa5813023a3643a3ae8f4fe",
+      "6353646d8423312c8bc4d131458738a8": "625b7f77d2eb1028ab1efc21aebb4608c336a6e4",
+      "0c2736f0e6a024ad111fe6c5150f38a4": "b361bd82b34ccc949e99a5c4a32bdd2f5c73f0d5",
+      "b583f9908a856c1e8a59c949cadcd0fd": "dd7f57461ce427ffad884aa56d2886e34db374b3",
+      "74aa17184d6f46909c13b6a885c8c992": "e97fef08483e1e1fcddf44ec8309378fd3fafee2",
+      "0d7c1678afbdbb73b58b32023040aa92": "dcf02ca2a19de7d44464f356c0197e1dff20f0f5",
+      "5990cd3e092c90d53af33266bc528dbc": "147a01445c87f3872cfa420f1222ef60ba5386d3",
+      "0c7728fd3491e8c47bfecf340eb297f1": "fb4a59588727885ca9fa31f960249d9cdeecdf57",
+      "ef568ed52f3848f138b674428dc1aa5c": "9b551d21c11992ce9525a58ae44362b9cd4d8e97",
+      "ee7d93dc1686d7066877703699c04706": "7b60ff2db772b6f464781c70d8a2029f3d79fa12",
+      "cc0c50f2aa7ab9644f22fe5c9fbc7537": "28edcc681866a5c9317fca5553970fc08459516d",
+      "5c1fe04060140c0cdfb07fe4dfd3ca80": "0de301fe1d3307ea90d34292eccc593820bfdc2a",
+      "b17c385b7c93bfd05e6c266c09dab32e": "a3038872cbdd46b4397179895a01090d00d00ecf",
+      "942b41c804b5441afba25b43e5e40fc6": "5643b96a310610d990b39c87e15221ed468b20b4",
+      "5e12e4096fdc222922e0bad12eb82132": "938cd9ba8c5796a5e1c3eee51d84681457648f02",
+      "422f51ac71b719dd76d476a88c8ce0a0": "4d919a1931b14063459ac5f86cacefd9c8df97b6",
+      "5a469b1844922e9816f2f15a89f36f3a": "974bc0fe985ed94edfbb1f23475f5f7ca2076c1d",
+      "9dba941b73f384845dce4a8378e10b8f": "650364e230898e299f801010cc0682853d706573",
+      "d8f220180d8b673a35487a4a404b26b4": "d08057bc44009b458a436711bed3bfe440a6e95f",
+      "46804a3f99acc7920bc2604996bee7b7": "0468026f5ffd4bf8cdd28107dfdd92224cb593fa",
+      "8a360eeb52429ae11653b4b538da9d88": "73a156b7e995f4dfb4d975ff3759f78fe0e26f3c",
+      "882670ab309cb1227ef7cdfc500e6cc2": "27b98ce21948d6bce218a9fc32d641129b45b88b",
+      "00b0077d53b8b3e619a0620d82215ec1": "5c5f106444ea96a2a324110b34f03f1302d93be5",
+      "fb3c4950b104ac4ca7b1736daf2e49cb": "77647116dd7ec8e0473f107938d83f527335e2ce",
+      "e69a6d5f7d8656d842876bf98a292643": "533a2a55615f783fbc9eab437c312cdce0f1bd0e",
+      "3f9f35038c865972e49d68068f130aa5": "ddf71fd109d3a3e7240ebc14b6cb22c7caa43201",
+      "eb5401532f318a32a142c8d134c2a3ab": "fd488c44567183aa2f4af097f52b3073365e56ae",
+      "cd26930e1278a285522729a4d7faef4e": "9de70c75c24f27595b4c5985f6ef83da9e18a41f",
+      "23f19f8465758ab58d9f3aaf4de59630": "3a2a274642f02ac0f9f2b0b877c11401613b224d",
+      "cec002ace50f3a048a3f6c096b85e6da": "adbc01de2b85148080add3123cf1d78599dae8ea",
+      "9e7ec19b80ea4ac41953c6384850f148": "d7769bbda95fef35866ab00248628603595d4dce",
+      "05f3b12502bb6c9c1b986f4065528c65": "34bf7dc699080552e89342bf8ad59dc6a2f0a5db",
       "a93ed3e9468576c03528bceec8a6236a": "764ec667084bc237c1de6bd1db7541ad8cb59975",
       "c2428525597a69fc71621e0cdf114619": "2725373cc8e6e3c04bca4bf7bd0b027be6bec058",
       "40b8624b7a72c782998e52a0782b69e2": "9e52cc30850cf9e1855fbd2e26f987cbc05b910a",
@@ -93401,6 +94149,210 @@
       "zorba_kbd.zip": [
         "f26cf16bad0c06729143459f922d071c489c6d57",
         "aff37ceea8cc3a9d5e383f4c7fa564d246d06ff8"
+      ],
+      "ace.zip": [
+        "b16784ac250df7d10d1b5496e7cde31090695e4a"
+      ],
+      "ace91.zip": [
+        "becd81c432953d875bf825a7b9312f509c4a299d"
+      ],
+      "ace91_euro.zip": [
+        "b8576e5335f5c56546c6acfe6f29bfbc901c293f"
+      ],
+      "ace_a.zip": [
+        "66149ccca44efc9ea45ae50f6db07730f4e1057b"
+      ],
+      "ace_a2.zip": [
+        "648028a31d8155bff712c43effbfc2e93cb49554"
+      ],
+      "aceeuro.zip": [
+        "ebec27d569085c022d1ca38971b1a001b8ed7f13"
+      ],
+      "astron.zip": [
+        "da7b216a764a463faf17a867ac9040898234e7f3"
+      ],
+      "astronp.zip": [
+        "44f3533b3ec7b8011f14404bab87caf3cfb11905"
+      ],
+      "badlandp.zip": [
+        "acdec865d2b0ab26337d0ae5a608299c354d68dd"
+      ],
+      "badlands.zip": [
+        "4d0fa6bd458b1a78baf7e31ae2ddebcf4e84a395"
+      ],
+      "bega.zip": [
+        "e28e710761335b29bc93d9798c6d3013b7e3a195"
+      ],
+      "begar1.zip": [
+        "69ba4a32034712354c85106353dbbd1182c8e1d6"
+      ],
+      "blazer.zip": [
+        "29200ce13490a0dcb146f7ccc1dbc3f7ee2daf1d"
+      ],
+      "cliff.zip": [
+        "8ed9ed6b107fbb8c934b6474f0375b67f40529ed"
+      ],
+      "cliff_ox.zip": [
+        "5d248b1a11ba1985d7a9db185eec3c41f3d4e5e3"
+      ],
+      "cliffalt.zip": [
+        "a554b6f2e0fa0eaeffa5fbf12217fbbab2241805"
+      ],
+      "cliffalt2.zip": [
+        "38a4211302afa9a058693728a680eb4b743b607c"
+      ],
+      "cobra.zip": [
+        "b2f09fbc609146c967b7b43f173773c20c3895d0"
+      ],
+      "cobraab.zip": [
+        "f142f55434b464892c2bafb9eabaa563c9e18838"
+      ],
+      "cobraconv.zip": [
+        "dd83872debfb81a33a54edf9fb16c7d190437986"
+      ],
+      "cobram3.zip": [
+        "330fa793de9e699e2c4b530f8423fec5526504f8"
+      ],
+      "cputest.zip": [
+        "24aa67d01b9e9959d090cf34690f2ecb867c304c"
+      ],
+      "dle11.zip": [
+        "31b914410aa3937bec41488fe057c2289540cd57"
+      ],
+      "dle20.zip": [
+        "a34f7bf04d9a456d106e2397686dbf275b9ae8ad"
+      ],
+      "dle21.zip": [
+        "765be6f6faf486a5c094b2165f56af5021f03b61"
+      ],
+      "esh.zip": [
+        "f951fddf29ebfb76f96dd179be65c6fef8b06160"
+      ],
+      "eshalt.zip": [
+        "8354ff4c6b505568a8751710fa8b6f71514a4a8f"
+      ],
+      "eshalt2.zip": [
+        "2349d72ce7fe6272fe385f7b230a61e496977864"
+      ],
+      "eshfix7.zip": [
+        "3a70893df319df7131d3272815b167cb5436b4fd"
+      ],
+      "eshfix7alt.zip": [
+        "1a9d608d02ac7b63e4c7289212f843f3f1e74602"
+      ],
+      "firefox.zip": [
+        "e8093171eb6ce4f6c029ad3e7e1c826f7e625218"
+      ],
+      "firefoxa.zip": [
+        "e8954571f8961f037bb9b743d9140f63f0313505"
+      ],
+      "galaxy.zip": [
+        "c4cf478135199023f873c394835215a42a960a3a"
+      ],
+      "galaxyp.zip": [
+        "e2dc9a11af6c195791b990a193b87ca833e22a27"
+      ],
+      "gpworld.zip": [
+        "e51f3cc2e3092bea573791f477ac08e644870d60"
+      ],
+      "gtg.zip": [
+        "72fd1f1c3e56fa943c8a1f57ce450dab4e4a71b8"
+      ],
+      "interstellar.zip": [
+        "5dd5db5662b2b1f02aa5813023a3643a3ae8f4fe"
+      ],
+      "lair.zip": [
+        "625b7f77d2eb1028ab1efc21aebb4608c336a6e4"
+      ],
+      "lair2.zip": [
+        "b361bd82b34ccc949e99a5c4a32bdd2f5c73f0d5"
+      ],
+      "lair2_211.zip": [
+        "dd7f57461ce427ffad884aa56d2886e34db374b3"
+      ],
+      "lair2_300.zip": [
+        "e97fef08483e1e1fcddf44ec8309378fd3fafee2"
+      ],
+      "lair2_314.zip": [
+        "dcf02ca2a19de7d44464f356c0197e1dff20f0f5"
+      ],
+      "lair2_315.zip": [
+        "147a01445c87f3872cfa420f1222ef60ba5386d3"
+      ],
+      "lair2_316_euro.zip": [
+        "fb4a59588727885ca9fa31f960249d9cdeecdf57"
+      ],
+      "lair2_318.zip": [
+        "9b551d21c11992ce9525a58ae44362b9cd4d8e97"
+      ],
+      "lair2_319_euro.zip": [
+        "7b60ff2db772b6f464781c70d8a2029f3d79fa12"
+      ],
+      "lair2_319_span.zip": [
+        "28edcc681866a5c9317fca5553970fc08459516d"
+      ],
+      "lair_a.zip": [
+        "0de301fe1d3307ea90d34292eccc593820bfdc2a"
+      ],
+      "lair_b.zip": [
+        "a3038872cbdd46b4397179895a01090d00d00ecf"
+      ],
+      "lair_c.zip": [
+        "5643b96a310610d990b39c87e15221ed468b20b4"
+      ],
+      "lair_d.zip": [
+        "938cd9ba8c5796a5e1c3eee51d84681457648f02"
+      ],
+      "lair_d2.zip": [
+        "4d919a1931b14063459ac5f86cacefd9c8df97b6"
+      ],
+      "lair_e.zip": [
+        "974bc0fe985ed94edfbb1f23475f5f7ca2076c1d"
+      ],
+      "lair_f.zip": [
+        "650364e230898e299f801010cc0682853d706573"
+      ],
+      "lair_ita.zip": [
+        "d08057bc44009b458a436711bed3bfe440a6e95f"
+      ],
+      "lair_n1.zip": [
+        "0468026f5ffd4bf8cdd28107dfdd92224cb593fa"
+      ],
+      "lair_x.zip": [
+        "73a156b7e995f4dfb4d975ff3759f78fe0e26f3c"
+      ],
+      "laireuro.zip": [
+        "27b98ce21948d6bce218a9fc32d641129b45b88b"
+      ],
+      "mach3.zip": [
+        "5c5f106444ea96a2a324110b34f03f1302d93be5"
+      ],
+      "roadblaster.zip": [
+        "77647116dd7ec8e0473f107938d83f527335e2ce"
+      ],
+      "sae.zip": [
+        "533a2a55615f783fbc9eab437c312cdce0f1bd0e"
+      ],
+      "sdq.zip": [
+        "ddf71fd109d3a3e7240ebc14b6cb22c7caa43201"
+      ],
+      "sdqshort.zip": [
+        "fd488c44567183aa2f4af097f52b3073365e56ae"
+      ],
+      "sdqshortalt.zip": [
+        "9de70c75c24f27595b4c5985f6ef83da9e18a41f"
+      ],
+      "tq.zip": [
+        "3a2a274642f02ac0f9f2b0b877c11401613b224d"
+      ],
+      "tq_alt.zip": [
+        "adbc01de2b85148080add3123cf1d78599dae8ea"
+      ],
+      "tq_swear.zip": [
+        "d7769bbda95fef35866ab00248628603595d4dce"
+      ],
+      "uvt.zip": [
+        "34bf7dc699080552e89342bf8ad59dc6a2f0a5db"
       ],
       "dkong.zip": [
         "764ec667084bc237c1de6bd1db7541ad8cb59975"
@@ -112640,6 +113592,9 @@
       "vp700.zip": [
         "9139c00e5986b7a86c7e8dcbce39986126ab7db4"
       ],
+      "eshfix7alt2.zip": [
+        "3a70893df319df7131d3272815b167cb5436b4fd"
+      ],
       "a2mockbd.zip": [
         "14a5ff2c8ca68d35a77ebfbc227ed9c8e19d7524"
       ],
@@ -116765,6 +117720,74 @@
       "5b4c29c4": "06fc753d015b43ca1787f4cfd9331b1674202e64",
       "830dbafa": "a5bd2c7c7a832723c799475013086933db751518",
       "9a1857ba": "f26cf16bad0c06729143459f922d071c489c6d57",
+      "400fd660": "b16784ac250df7d10d1b5496e7cde31090695e4a",
+      "44719219": "becd81c432953d875bf825a7b9312f509c4a299d",
+      "4af1cd43": "b8576e5335f5c56546c6acfe6f29bfbc901c293f",
+      "dd706631": "66149ccca44efc9ea45ae50f6db07730f4e1057b",
+      "1500bd19": "648028a31d8155bff712c43effbfc2e93cb49554",
+      "d82ef079": "ebec27d569085c022d1ca38971b1a001b8ed7f13",
+      "356b7f80": "da7b216a764a463faf17a867ac9040898234e7f3",
+      "0afbcc1b": "44f3533b3ec7b8011f14404bab87caf3cfb11905",
+      "9eea5ed0": "acdec865d2b0ab26337d0ae5a608299c354d68dd",
+      "0b2091f7": "4d0fa6bd458b1a78baf7e31ae2ddebcf4e84a395",
+      "f2b9c19c": "e28e710761335b29bc93d9798c6d3013b7e3a195",
+      "b59bbbb7": "69ba4a32034712354c85106353dbbd1182c8e1d6",
+      "9bbe255b": "29200ce13490a0dcb146f7ccc1dbc3f7ee2daf1d",
+      "8a6d606e": "8ed9ed6b107fbb8c934b6474f0375b67f40529ed",
+      "ec58bf84": "5d248b1a11ba1985d7a9db185eec3c41f3d4e5e3",
+      "e6e4cc67": "a554b6f2e0fa0eaeffa5fbf12217fbbab2241805",
+      "7f2250b1": "38a4211302afa9a058693728a680eb4b743b607c",
+      "1a3b03cd": "b2f09fbc609146c967b7b43f173773c20c3895d0",
+      "f1b6c781": "f142f55434b464892c2bafb9eabaa563c9e18838",
+      "261e225a": "dd83872debfb81a33a54edf9fb16c7d190437986",
+      "aad083f4": "330fa793de9e699e2c4b530f8423fec5526504f8",
+      "98bda1a5": "24aa67d01b9e9959d090cf34690f2ecb867c304c",
+      "4b05f131": "31b914410aa3937bec41488fe057c2289540cd57",
+      "3b430766": "a34f7bf04d9a456d106e2397686dbf275b9ae8ad",
+      "4625d51d": "765be6f6faf486a5c094b2165f56af5021f03b61",
+      "879e884d": "f951fddf29ebfb76f96dd179be65c6fef8b06160",
+      "e2b92bc3": "8354ff4c6b505568a8751710fa8b6f71514a4a8f",
+      "8968f26d": "2349d72ce7fe6272fe385f7b230a61e496977864",
+      "7715de38": "3a70893df319df7131d3272815b167cb5436b4fd",
+      "c4b91ec2": "1a9d608d02ac7b63e4c7289212f843f3f1e74602",
+      "f7781d19": "e8093171eb6ce4f6c029ad3e7e1c826f7e625218",
+      "f05bba9a": "e8954571f8961f037bb9b743d9140f63f0313505",
+      "a76fb487": "c4cf478135199023f873c394835215a42a960a3a",
+      "7fa27962": "e2dc9a11af6c195791b990a193b87ca833e22a27",
+      "d63bf6e0": "e51f3cc2e3092bea573791f477ac08e644870d60",
+      "0be6c12f": "72fd1f1c3e56fa943c8a1f57ce450dab4e4a71b8",
+      "e04da4d8": "5dd5db5662b2b1f02aa5813023a3643a3ae8f4fe",
+      "3e80ae11": "625b7f77d2eb1028ab1efc21aebb4608c336a6e4",
+      "76f3ad43": "b361bd82b34ccc949e99a5c4a32bdd2f5c73f0d5",
+      "7ff236b9": "dd7f57461ce427ffad884aa56d2886e34db374b3",
+      "8634e028": "e97fef08483e1e1fcddf44ec8309378fd3fafee2",
+      "b2b01c6a": "dcf02ca2a19de7d44464f356c0197e1dff20f0f5",
+      "8c4c5038": "147a01445c87f3872cfa420f1222ef60ba5386d3",
+      "b57b4f39": "fb4a59588727885ca9fa31f960249d9cdeecdf57",
+      "878ae5c0": "9b551d21c11992ce9525a58ae44362b9cd4d8e97",
+      "c6ce6efb": "7b60ff2db772b6f464781c70d8a2029f3d79fa12",
+      "95c20b66": "28edcc681866a5c9317fca5553970fc08459516d",
+      "2dbda8e0": "0de301fe1d3307ea90d34292eccc593820bfdc2a",
+      "86c3fe0e": "a3038872cbdd46b4397179895a01090d00d00ecf",
+      "08113888": "5643b96a310610d990b39c87e15221ed468b20b4",
+      "3d20d358": "938cd9ba8c5796a5e1c3eee51d84681457648f02",
+      "7cb21101": "4d919a1931b14063459ac5f86cacefd9c8df97b6",
+      "851a2256": "974bc0fe985ed94edfbb1f23475f5f7ca2076c1d",
+      "dab4d1e6": "650364e230898e299f801010cc0682853d706573",
+      "6a9620e2": "d08057bc44009b458a436711bed3bfe440a6e95f",
+      "e0639664": "0468026f5ffd4bf8cdd28107dfdd92224cb593fa",
+      "cf6ef00d": "73a156b7e995f4dfb4d975ff3759f78fe0e26f3c",
+      "6b041f9f": "27b98ce21948d6bce218a9fc32d641129b45b88b",
+      "ef8af43b": "5c5f106444ea96a2a324110b34f03f1302d93be5",
+      "cab5e75c": "77647116dd7ec8e0473f107938d83f527335e2ce",
+      "3241f717": "533a2a55615f783fbc9eab437c312cdce0f1bd0e",
+      "62656b8e": "ddf71fd109d3a3e7240ebc14b6cb22c7caa43201",
+      "b6ab3d06": "fd488c44567183aa2f4af097f52b3073365e56ae",
+      "6b015608": "9de70c75c24f27595b4c5985f6ef83da9e18a41f",
+      "5f267bf6": "3a2a274642f02ac0f9f2b0b877c11401613b224d",
+      "c7052ca4": "adbc01de2b85148080add3123cf1d78599dae8ea",
+      "04600953": "d7769bbda95fef35866ab00248628603595d4dce",
+      "732f8208": "34bf7dc699080552e89342bf8ad59dc6a2f0a5db",
       "ff2dc92e": "764ec667084bc237c1de6bd1db7541ad8cb59975",
       "8e243fa9": "2725373cc8e6e3c04bca4bf7bd0b027be6bec058",
       "e37c02b4": "9e52cc30850cf9e1855fbd2e26f987cbc05b910a",
@@ -124546,6 +125569,74 @@
       "187ede0f57d1439092a7ac50ea923533871ab7ee65e29baabc4dcdfa7ad4823f": "06fc753d015b43ca1787f4cfd9331b1674202e64",
       "7399ca5496d9bc33805c4d089f72288d2818f73410bccf1b25174c7c22de3cc4": "a5bd2c7c7a832723c799475013086933db751518",
       "d689e423c138c36dd5e826f50cc6e61cd91801832f99a55ee9f17e14ae490380": "f26cf16bad0c06729143459f922d071c489c6d57",
+      "05eca99a9541ccfc341c9956a40882f9509fa11ea81df32d0af0963a469159ce": "b16784ac250df7d10d1b5496e7cde31090695e4a",
+      "dd8da02768ebbd8c7e44a8fda5e5033bf2f9cd6fda656ea06fc834e737bcfae4": "becd81c432953d875bf825a7b9312f509c4a299d",
+      "1813e077e074045c2cb62c24084f4a8ab3347c4f2adb0be084f208f08aaa4fe9": "b8576e5335f5c56546c6acfe6f29bfbc901c293f",
+      "b1780df07e31bab2d6fdd3f316af02d44ac858b52e571bd06fa229f9e9d72c05": "66149ccca44efc9ea45ae50f6db07730f4e1057b",
+      "39545f1c4eb25fb49e05de3cd247fc3e107ab053313a47d2f07dcbd2b8d8966a": "648028a31d8155bff712c43effbfc2e93cb49554",
+      "1fb73c11e9d344722a957d7cd5e3284a6f081e5cafc784a6104414592777c969": "ebec27d569085c022d1ca38971b1a001b8ed7f13",
+      "80158626da3d02cd94851bad9cb4f9e315843e4ae50eff7e8def7fd42170f7da": "da7b216a764a463faf17a867ac9040898234e7f3",
+      "5535d638602a848a8bd4f40028d6a0262bfb0bf71b404a5bbd422fd128a3148f": "44f3533b3ec7b8011f14404bab87caf3cfb11905",
+      "e5af19dd3d80388a58a2a37f3306a9bc2bb644cc0fe76522ef2a8d7d2693d5fe": "acdec865d2b0ab26337d0ae5a608299c354d68dd",
+      "39d59088df74f56ab7af5c3bbff674c94199641dc9b863fed32a84e19e124c3d": "4d0fa6bd458b1a78baf7e31ae2ddebcf4e84a395",
+      "3ed09fb06bd78883e851dab13bda7e2893ae551473951e67bef745f73a52b701": "e28e710761335b29bc93d9798c6d3013b7e3a195",
+      "83b57e96dedea76a4f1aab3a9d8ea1e729204a81e8a1b985bd2b38c846178320": "69ba4a32034712354c85106353dbbd1182c8e1d6",
+      "55fee4a8b4ae54ae10d0859e8f726fb24c8717ae687e9fd326b9750cb2c752c5": "29200ce13490a0dcb146f7ccc1dbc3f7ee2daf1d",
+      "908e26994c8a629093eb8e4d45fb59554fce88690433702e5d2126cf210f35f2": "8ed9ed6b107fbb8c934b6474f0375b67f40529ed",
+      "2ac00f525249af3aa645080e4ae8348cfd0ea67be13f76e073b2a8c895eac053": "5d248b1a11ba1985d7a9db185eec3c41f3d4e5e3",
+      "60b3e8b34585c63fe26b5bebe5d2af9fe2e0a7401f4de5cc4ccc0a7097608cae": "a554b6f2e0fa0eaeffa5fbf12217fbbab2241805",
+      "3147c537692c7ccff8a152f7ccbb83727ca145afe65abc143eeb94802f2fade9": "38a4211302afa9a058693728a680eb4b743b607c",
+      "f6f372e0673b6d562ab2c7f8a02c9e29ee419b82454977023e7c78735a024e71": "b2f09fbc609146c967b7b43f173773c20c3895d0",
+      "90c0d7fa838f5790a5e845eb850899fa82993825821811012b3647055e86d0a1": "f142f55434b464892c2bafb9eabaa563c9e18838",
+      "543342df759b1aeaa72e79fc7758dbd5109202b7f6d9548398d4f39c0e38d12e": "dd83872debfb81a33a54edf9fb16c7d190437986",
+      "7e63920c8565851ce460bc370dba10f76a88be72e17842a43e4e6eb442f963fb": "330fa793de9e699e2c4b530f8423fec5526504f8",
+      "709532aa53ff925d94e38f0b9e1dc8278f0b173e25b1717567b3e044191b8d6b": "24aa67d01b9e9959d090cf34690f2ecb867c304c",
+      "7e671384974617e35dd44583dac8da0e671ced155cd465c5982fd5473ff9a10a": "31b914410aa3937bec41488fe057c2289540cd57",
+      "78702e0f3c650ffc5f654f4448ead3cb2be43d812be6b8cef22f96125ec1c319": "a34f7bf04d9a456d106e2397686dbf275b9ae8ad",
+      "0b37b12c2e8484b8bb04fa08e3346953029d900b2ae09ea5d11c03d3aa37b395": "765be6f6faf486a5c094b2165f56af5021f03b61",
+      "6822122b4de12e3751750f75a06d5c590c449024f2ae6cb125484903b0dbb4ce": "f951fddf29ebfb76f96dd179be65c6fef8b06160",
+      "f98226d19cb3a782dcdb36b82a6350fc16858997da6b8c7fc22e15629243315e": "8354ff4c6b505568a8751710fa8b6f71514a4a8f",
+      "ddb264d78c63d5c1ccd6d6e90616d5adc8b144fe12b09cd3c2db8811ed03600a": "2349d72ce7fe6272fe385f7b230a61e496977864",
+      "51a08ee9d7446bcdc2de0bdecc35f4e432a06bde763fb534356316f40d79a69c": "3a70893df319df7131d3272815b167cb5436b4fd",
+      "48cdcc553b17bacf37fc8d9ea77f52bbb08e29749af94e3e3cbc5184fdcb1de8": "1a9d608d02ac7b63e4c7289212f843f3f1e74602",
+      "058f53fe8a6a850462cef9cef4fc580e6e395b4838517ecaa6bb89a7f9b7fab9": "e8093171eb6ce4f6c029ad3e7e1c826f7e625218",
+      "ec6b186b2dcbed8489d5ac26f31fd68a536b0dc3fa8b734e863af2b1c96ea925": "e8954571f8961f037bb9b743d9140f63f0313505",
+      "2325fa426343e5d34de5f9d6424fedf4dea2b26913aee2d376d2455654e7ba6a": "c4cf478135199023f873c394835215a42a960a3a",
+      "ce96d9e5fde1969d10d1e3f832efb6fb08bac538ffd96accf21e786abb0070c9": "e2dc9a11af6c195791b990a193b87ca833e22a27",
+      "07c9f4fb193d2210c5ef4c238ecf88590a52938c788fdd547da6595760ffb249": "e51f3cc2e3092bea573791f477ac08e644870d60",
+      "78fd5299fe2ca78af90f1b839194e5a8a7bf2fa477d2e0c41c1fcfd712975beb": "72fd1f1c3e56fa943c8a1f57ce450dab4e4a71b8",
+      "80dfd102da8b28f07e25d500d62805c9e0af1a1b5d953e321e34164f90ecc076": "5dd5db5662b2b1f02aa5813023a3643a3ae8f4fe",
+      "24f1e307b4283512d4a054b1647608ceb384e845650c5bcc238e04bfa263af05": "625b7f77d2eb1028ab1efc21aebb4608c336a6e4",
+      "056b08994dd226c4a4cff98294c818d381e82beff042682bb4d6afa274ef359c": "b361bd82b34ccc949e99a5c4a32bdd2f5c73f0d5",
+      "880cf919195355bae871a33fb8bcaaf58c2edabe5e4ca52230a357698189b2f4": "dd7f57461ce427ffad884aa56d2886e34db374b3",
+      "24be28d0afbe1656020c23f02987b743ed1000594f7f9aa03b512aaa4550b126": "e97fef08483e1e1fcddf44ec8309378fd3fafee2",
+      "8107bea44605c6d8b6accd1ca6c121f719d315a3c772c832f6ea53e148b8e120": "dcf02ca2a19de7d44464f356c0197e1dff20f0f5",
+      "1d484aae501c3d936c1e92dfa9da7fc5cd54121131f285e971ac103dfdf5a082": "147a01445c87f3872cfa420f1222ef60ba5386d3",
+      "e26c4f3b600ddfd9451b86412542c734e814b796382c856c3774ae7caac20323": "fb4a59588727885ca9fa31f960249d9cdeecdf57",
+      "0e20bafb1a2c757a74e383296b17a2d704a348c7c74604ab0a29235b61bd456e": "9b551d21c11992ce9525a58ae44362b9cd4d8e97",
+      "a2049d07f2b56cb10a8e3e13bad8448f6fa3de3d14880ad7130d40f1462fc004": "7b60ff2db772b6f464781c70d8a2029f3d79fa12",
+      "2d55c860f4cb3fd7f4753e4035a132589793abfd89ac298965d6416fe638eac9": "28edcc681866a5c9317fca5553970fc08459516d",
+      "15167ca91ed6041673b46e8645191b73571f72c64760a45a52ed85968157f7d3": "0de301fe1d3307ea90d34292eccc593820bfdc2a",
+      "09d1577206d013b3fcac130d8a3b3f9c2eff830b7b4352e16c59694a730c588f": "a3038872cbdd46b4397179895a01090d00d00ecf",
+      "15b5002ea86079468e16aa46b80c1a4b90f01fa449f276b6ef0719459e1f72c7": "5643b96a310610d990b39c87e15221ed468b20b4",
+      "1788d45d8243a68a1ae6fafa11e03d5170a799e9206d0b369aa65d70edd148ce": "938cd9ba8c5796a5e1c3eee51d84681457648f02",
+      "2d8b2b471c41333d54a5c4360e6fe09f7f54e5a87c123ecc91e44c286370c467": "4d919a1931b14063459ac5f86cacefd9c8df97b6",
+      "19259c90c5580e42d1672e1848e7df28421457f517dbf962f332a0efb440c934": "974bc0fe985ed94edfbb1f23475f5f7ca2076c1d",
+      "0d6d8d00bee15536dca3c8b5864cd810995ea082508ade2028be54016f70bcc7": "650364e230898e299f801010cc0682853d706573",
+      "5de415c2ae6af0062e01ce6576afd4e465f25edffd2ac7927fb82825b7d30cab": "d08057bc44009b458a436711bed3bfe440a6e95f",
+      "67c4708641728ebbb22906b98ddb36b74d7f0569254230abc72a3c430b7fc7d3": "0468026f5ffd4bf8cdd28107dfdd92224cb593fa",
+      "0b28858dc1edb7979e2a9e3217c0d783aff2805f8d5689d6f66a84e3d680e224": "73a156b7e995f4dfb4d975ff3759f78fe0e26f3c",
+      "a87ac89567eb0d6cb63c4277b275017771c567ea4260fa977e78c9f2c65eb875": "27b98ce21948d6bce218a9fc32d641129b45b88b",
+      "82fbb1fa88f48967ff9765f14252224040032aa8d636855096fa727c19b1d262": "5c5f106444ea96a2a324110b34f03f1302d93be5",
+      "cbaea6df93e0ddbabcf83568f56ccd3e9612d57311eb178a205080a01daea69b": "77647116dd7ec8e0473f107938d83f527335e2ce",
+      "06ec6b633dc8f6e953eea3ca691403d0d5a7615c719c74ef185cd26fd993ec45": "533a2a55615f783fbc9eab437c312cdce0f1bd0e",
+      "f78e412a9ad52db0984387ae9f46807a967643d43f7d487c6420b9ce71e900f2": "ddf71fd109d3a3e7240ebc14b6cb22c7caa43201",
+      "aeec9b3feb93bf8aa7cbfd417e723475942239e56d70d7405a4997c87979736a": "fd488c44567183aa2f4af097f52b3073365e56ae",
+      "13e6a0417ec986fc810ccd4cf9488cf470951359abcd618901af8c5626d0f725": "9de70c75c24f27595b4c5985f6ef83da9e18a41f",
+      "5596560e42579a0c6b9898e66cffd95db98a5f0b8cdb95cbe5cfe2fe4723e6b1": "3a2a274642f02ac0f9f2b0b877c11401613b224d",
+      "994d0a53357ca1f0a8712aa4ba37fc12b29222502befd8ffd943fcc73b303825": "adbc01de2b85148080add3123cf1d78599dae8ea",
+      "a4e5a732be1663eec6affbf19bec6509f4eec517e1660c4cb38fa5ae27611008": "d7769bbda95fef35866ab00248628603595d4dce",
+      "89f877baa90d76d058954eb364cdff9b3f099231141c7a892538cc7c856d7f8d": "34bf7dc699080552e89342bf8ad59dc6a2f0a5db",
       "a66bc2ea040ec792308259ee96ba57b4c88de48fbce244714800b6b6340c730d": "764ec667084bc237c1de6bd1db7541ad8cb59975",
       "73b9e51295fe7412712ccf73c7010d92181aa12d420c40c1c6bc4f8b948e5a11": "2725373cc8e6e3c04bca4bf7bd0b027be6bec058",
       "a9e936f78c9db009fa9561ebb35dc374b343ba38037133ae30e95906ab0ac312": "9e52cc30850cf9e1855fbd2e26f987cbc05b910a",

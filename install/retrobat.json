@@ -5,7 +5,7 @@
   "platform": "retrobat",
   "display_name": "RetroBat",
   "version": "1.0",
-  "generated": "2026-08-10T11:19:27Z",
+  "generated": "2026-08-10T12:23:31Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -236,8 +236,8 @@
       }
     }
   ],
-  "total_files": 1250,
-  "total_size": 3319194669,
+  "total_files": 1319,
+  "total_size": 3321142613,
   "total_omitted": 3,
   "omitted_files": [
     {
@@ -6016,6 +6016,696 @@
       "repo_path": "bios/Atari/ST/hatari/BOOT.ST",
       "cores": [
         "hatari"
+      ]
+    },
+    {
+      "dest": "ace.zip",
+      "sha1": "b16784ac250df7d10d1b5496e7cde31090695e4a",
+      "sha256": "05eca99a9541ccfc341c9956a40882f9509fa11ea81df32d0af0963a469159ce",
+      "size": 21283,
+      "repo_path": "bios/Arcade/Daphne/ace.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "ace91.zip",
+      "sha1": "becd81c432953d875bf825a7b9312f509c4a299d",
+      "sha256": "dd8da02768ebbd8c7e44a8fda5e5033bf2f9cd6fda656ea06fc834e737bcfae4",
+      "size": 27636,
+      "repo_path": "bios/Arcade/Daphne/ace91.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "ace91_euro.zip",
+      "sha1": "b8576e5335f5c56546c6acfe6f29bfbc901c293f",
+      "sha256": "1813e077e074045c2cb62c24084f4a8ab3347c4f2adb0be084f208f08aaa4fe9",
+      "size": 27381,
+      "repo_path": "bios/Arcade/Daphne/ace91_euro.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "ace_a.zip",
+      "sha1": "66149ccca44efc9ea45ae50f6db07730f4e1057b",
+      "sha256": "b1780df07e31bab2d6fdd3f316af02d44ac858b52e571bd06fa229f9e9d72c05",
+      "size": 3752,
+      "repo_path": "bios/Arcade/Daphne/ace_a.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "ace_a2.zip",
+      "sha1": "648028a31d8155bff712c43effbfc2e93cb49554",
+      "sha256": "39545f1c4eb25fb49e05de3cd247fc3e107ab053313a47d2f07dcbd2b8d8966a",
+      "size": 3760,
+      "repo_path": "bios/Arcade/Daphne/ace_a2.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "aceeuro.zip",
+      "sha1": "ebec27d569085c022d1ca38971b1a001b8ed7f13",
+      "sha256": "1fb73c11e9d344722a957d7cd5e3284a6f081e5cafc784a6104414592777c969",
+      "size": 23853,
+      "repo_path": "bios/Arcade/Daphne/aceeuro.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "astron.zip",
+      "sha1": "da7b216a764a463faf17a867ac9040898234e7f3",
+      "sha256": "80158626da3d02cd94851bad9cb4f9e315843e4ae50eff7e8def7fd42170f7da",
+      "size": 57886,
+      "repo_path": "bios/Arcade/Daphne/astron.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "astronp.zip",
+      "sha1": "44f3533b3ec7b8011f14404bab87caf3cfb11905",
+      "sha256": "5535d638602a848a8bd4f40028d6a0262bfb0bf71b404a5bbd422fd128a3148f",
+      "size": 23339,
+      "repo_path": "bios/Arcade/Daphne/astronp.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "badlandp.zip",
+      "sha1": "acdec865d2b0ab26337d0ae5a608299c354d68dd",
+      "sha256": "e5af19dd3d80388a58a2a37f3306a9bc2bb644cc0fe76522ef2a8d7d2693d5fe",
+      "size": 8789,
+      "repo_path": "bios/Arcade/Daphne/badlandp.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "badlands.zip",
+      "sha1": "4d0fa6bd458b1a78baf7e31ae2ddebcf4e84a395",
+      "sha256": "39d59088df74f56ab7af5c3bbff674c94199641dc9b863fed32a84e19e124c3d",
+      "size": 12872,
+      "repo_path": "bios/Arcade/Daphne/badlands.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "bega.zip",
+      "sha1": "e28e710761335b29bc93d9798c6d3013b7e3a195",
+      "sha256": "3ed09fb06bd78883e851dab13bda7e2893ae551473951e67bef745f73a52b701",
+      "size": 48777,
+      "repo_path": "bios/Arcade/Daphne/bega.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "begar1.zip",
+      "sha1": "69ba4a32034712354c85106353dbbd1182c8e1d6",
+      "sha256": "83b57e96dedea76a4f1aab3a9d8ea1e729204a81e8a1b985bd2b38c846178320",
+      "size": 19993,
+      "repo_path": "bios/Arcade/Daphne/begar1.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "blazer.zip",
+      "sha1": "29200ce13490a0dcb146f7ccc1dbc3f7ee2daf1d",
+      "sha256": "55fee4a8b4ae54ae10d0859e8f726fb24c8717ae687e9fd326b9750cb2c752c5",
+      "size": 19999,
+      "repo_path": "bios/Arcade/Daphne/blazer.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "cliff.zip",
+      "sha1": "8ed9ed6b107fbb8c934b6474f0375b67f40529ed",
+      "sha256": "908e26994c8a629093eb8e4d45fb59554fce88690433702e5d2126cf210f35f2",
+      "size": 16725,
+      "repo_path": "bios/Arcade/Daphne/cliff.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "cliff_ox.zip",
+      "sha1": "5d248b1a11ba1985d7a9db185eec3c41f3d4e5e3",
+      "sha256": "2ac00f525249af3aa645080e4ae8348cfd0ea67be13f76e073b2a8c895eac053",
+      "size": 16879,
+      "repo_path": "bios/Arcade/Daphne/cliff_ox.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "cliffalt.zip",
+      "sha1": "a554b6f2e0fa0eaeffa5fbf12217fbbab2241805",
+      "sha256": "60b3e8b34585c63fe26b5bebe5d2af9fe2e0a7401f4de5cc4ccc0a7097608cae",
+      "size": 15087,
+      "repo_path": "bios/Arcade/Daphne/cliffalt.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "cliffalt2.zip",
+      "sha1": "38a4211302afa9a058693728a680eb4b743b607c",
+      "sha256": "3147c537692c7ccff8a152f7ccbb83727ca145afe65abc143eeb94802f2fade9",
+      "size": 14504,
+      "repo_path": "bios/Arcade/Daphne/cliffalt2.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "cobra.zip",
+      "sha1": "b2f09fbc609146c967b7b43f173773c20c3895d0",
+      "sha256": "f6f372e0673b6d562ab2c7f8a02c9e29ee419b82454977023e7c78735a024e71",
+      "size": 29388,
+      "repo_path": "bios/Arcade/Daphne/cobra.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "cobraab.zip",
+      "sha1": "f142f55434b464892c2bafb9eabaa563c9e18838",
+      "sha256": "90c0d7fa838f5790a5e845eb850899fa82993825821811012b3647055e86d0a1",
+      "size": 20648,
+      "repo_path": "bios/Arcade/Daphne/cobraab.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "cobraconv.zip",
+      "sha1": "dd83872debfb81a33a54edf9fb16c7d190437986",
+      "sha256": "543342df759b1aeaa72e79fc7758dbd5109202b7f6d9548398d4f39c0e38d12e",
+      "size": 27623,
+      "repo_path": "bios/Arcade/Daphne/cobraconv.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "cobram3.zip",
+      "sha1": "330fa793de9e699e2c4b530f8423fec5526504f8",
+      "sha256": "7e63920c8565851ce460bc370dba10f76a88be72e17842a43e4e6eb442f963fb",
+      "size": 23520,
+      "repo_path": "bios/Arcade/Daphne/cobram3.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "cputest.zip",
+      "sha1": "24aa67d01b9e9959d090cf34690f2ecb867c304c",
+      "sha256": "709532aa53ff925d94e38f0b9e1dc8278f0b173e25b1717567b3e044191b8d6b",
+      "size": 11874,
+      "repo_path": "bios/Arcade/Daphne/cputest.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "dle11.zip",
+      "sha1": "31b914410aa3937bec41488fe057c2289540cd57",
+      "sha256": "7e671384974617e35dd44583dac8da0e671ced155cd465c5982fd5473ff9a10a",
+      "size": 28296,
+      "repo_path": "bios/Arcade/Daphne/dle11.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "dle20.zip",
+      "sha1": "a34f7bf04d9a456d106e2397686dbf275b9ae8ad",
+      "sha256": "78702e0f3c650ffc5f654f4448ead3cb2be43d812be6b8cef22f96125ec1c319",
+      "size": 25955,
+      "repo_path": "bios/Arcade/Daphne/dle20.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "dle21.zip",
+      "sha1": "765be6f6faf486a5c094b2165f56af5021f03b61",
+      "sha256": "0b37b12c2e8484b8bb04fa08e3346953029d900b2ae09ea5d11c03d3aa37b395",
+      "size": 24883,
+      "repo_path": "bios/Arcade/Daphne/dle21.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "esh.zip",
+      "sha1": "f951fddf29ebfb76f96dd179be65c6fef8b06160",
+      "sha256": "6822122b4de12e3751750f75a06d5c590c449024f2ae6cb125484903b0dbb4ce",
+      "size": 16764,
+      "repo_path": "bios/Arcade/Daphne/esh.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "eshalt.zip",
+      "sha1": "8354ff4c6b505568a8751710fa8b6f71514a4a8f",
+      "sha256": "f98226d19cb3a782dcdb36b82a6350fc16858997da6b8c7fc22e15629243315e",
+      "size": 5660,
+      "repo_path": "bios/Arcade/Daphne/eshalt.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "eshalt2.zip",
+      "sha1": "2349d72ce7fe6272fe385f7b230a61e496977864",
+      "sha256": "ddb264d78c63d5c1ccd6d6e90616d5adc8b144fe12b09cd3c2db8811ed03600a",
+      "size": 5277,
+      "repo_path": "bios/Arcade/Daphne/eshalt2.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "eshfix7.zip",
+      "sha1": "3a70893df319df7131d3272815b167cb5436b4fd",
+      "sha256": "51a08ee9d7446bcdc2de0bdecc35f4e432a06bde763fb534356316f40d79a69c",
+      "size": 5669,
+      "repo_path": "bios/Arcade/Daphne/eshfix7.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "eshfix7alt.zip",
+      "sha1": "1a9d608d02ac7b63e4c7289212f843f3f1e74602",
+      "sha256": "48cdcc553b17bacf37fc8d9ea77f52bbb08e29749af94e3e3cbc5184fdcb1de8",
+      "size": 5678,
+      "repo_path": "bios/Arcade/Daphne/eshfix7alt.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "eshfix7alt2.zip",
+      "sha1": "3a70893df319df7131d3272815b167cb5436b4fd",
+      "sha256": "51a08ee9d7446bcdc2de0bdecc35f4e432a06bde763fb534356316f40d79a69c",
+      "size": 5669,
+      "repo_path": "bios/Arcade/Daphne/eshfix7.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "firefox.zip",
+      "sha1": "e8093171eb6ce4f6c029ad3e7e1c826f7e625218",
+      "sha256": "058f53fe8a6a850462cef9cef4fc580e6e395b4838517ecaa6bb89a7f9b7fab9",
+      "size": 53410,
+      "repo_path": "bios/Arcade/Daphne/firefox.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "firefoxa.zip",
+      "sha1": "e8954571f8961f037bb9b743d9140f63f0313505",
+      "sha256": "ec6b186b2dcbed8489d5ac26f31fd68a536b0dc3fa8b734e863af2b1c96ea925",
+      "size": 51026,
+      "repo_path": "bios/Arcade/Daphne/firefoxa.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "galaxy.zip",
+      "sha1": "c4cf478135199023f873c394835215a42a960a3a",
+      "sha256": "2325fa426343e5d34de5f9d6424fedf4dea2b26913aee2d376d2455654e7ba6a",
+      "size": 48574,
+      "repo_path": "bios/Arcade/Daphne/galaxy.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "galaxyp.zip",
+      "sha1": "e2dc9a11af6c195791b990a193b87ca833e22a27",
+      "sha256": "ce96d9e5fde1969d10d1e3f832efb6fb08bac538ffd96accf21e786abb0070c9",
+      "size": 20042,
+      "repo_path": "bios/Arcade/Daphne/galaxyp.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "gpworld.zip",
+      "sha1": "e51f3cc2e3092bea573791f477ac08e644870d60",
+      "sha256": "07c9f4fb193d2210c5ef4c238ecf88590a52938c788fdd547da6595760ffb249",
+      "size": 86990,
+      "repo_path": "bios/Arcade/Daphne/gpworld.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "gtg.zip",
+      "sha1": "72fd1f1c3e56fa943c8a1f57ce450dab4e4a71b8",
+      "sha256": "78fd5299fe2ca78af90f1b839194e5a8a7bf2fa477d2e0c41c1fcfd712975beb",
+      "size": 19748,
+      "repo_path": "bios/Arcade/Daphne/gtg.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "interstellar.zip",
+      "sha1": "5dd5db5662b2b1f02aa5813023a3643a3ae8f4fe",
+      "sha256": "80dfd102da8b28f07e25d500d62805c9e0af1a1b5d953e321e34164f90ecc076",
+      "size": 39757,
+      "repo_path": "bios/Arcade/Daphne/interstellar.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "lair.zip",
+      "sha1": "625b7f77d2eb1028ab1efc21aebb4608c336a6e4",
+      "sha256": "24f1e307b4283512d4a054b1647608ceb384e845650c5bcc238e04bfa263af05",
+      "size": 17906,
+      "repo_path": "bios/Arcade/Daphne/lair.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "lair2.zip",
+      "sha1": "b361bd82b34ccc949e99a5c4a32bdd2f5c73f0d5",
+      "sha256": "056b08994dd226c4a4cff98294c818d381e82beff042682bb4d6afa274ef359c",
+      "size": 25809,
+      "repo_path": "bios/Arcade/Daphne/lair2.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "lair2_211.zip",
+      "sha1": "dd7f57461ce427ffad884aa56d2886e34db374b3",
+      "sha256": "880cf919195355bae871a33fb8bcaaf58c2edabe5e4ca52230a357698189b2f4",
+      "size": 23278,
+      "repo_path": "bios/Arcade/Daphne/lair2_211.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "lair2_300.zip",
+      "sha1": "e97fef08483e1e1fcddf44ec8309378fd3fafee2",
+      "sha256": "24be28d0afbe1656020c23f02987b743ed1000594f7f9aa03b512aaa4550b126",
+      "size": 24540,
+      "repo_path": "bios/Arcade/Daphne/lair2_300.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "lair2_314.zip",
+      "sha1": "dcf02ca2a19de7d44464f356c0197e1dff20f0f5",
+      "sha256": "8107bea44605c6d8b6accd1ca6c121f719d315a3c772c832f6ea53e148b8e120",
+      "size": 25195,
+      "repo_path": "bios/Arcade/Daphne/lair2_314.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "lair2_315.zip",
+      "sha1": "147a01445c87f3872cfa420f1222ef60ba5386d3",
+      "sha256": "1d484aae501c3d936c1e92dfa9da7fc5cd54121131f285e971ac103dfdf5a082",
+      "size": 25271,
+      "repo_path": "bios/Arcade/Daphne/lair2_315.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "lair2_316_euro.zip",
+      "sha1": "fb4a59588727885ca9fa31f960249d9cdeecdf57",
+      "sha256": "e26c4f3b600ddfd9451b86412542c734e814b796382c856c3774ae7caac20323",
+      "size": 25175,
+      "repo_path": "bios/Arcade/Daphne/lair2_316_euro.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "lair2_318.zip",
+      "sha1": "9b551d21c11992ce9525a58ae44362b9cd4d8e97",
+      "sha256": "0e20bafb1a2c757a74e383296b17a2d704a348c7c74604ab0a29235b61bd456e",
+      "size": 25592,
+      "repo_path": "bios/Arcade/Daphne/lair2_318.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "lair2_319_euro.zip",
+      "sha1": "7b60ff2db772b6f464781c70d8a2029f3d79fa12",
+      "sha256": "a2049d07f2b56cb10a8e3e13bad8448f6fa3de3d14880ad7130d40f1462fc004",
+      "size": 25493,
+      "repo_path": "bios/Arcade/Daphne/lair2_319_euro.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "lair2_319_span.zip",
+      "sha1": "28edcc681866a5c9317fca5553970fc08459516d",
+      "sha256": "2d55c860f4cb3fd7f4753e4035a132589793abfd89ac298965d6416fe638eac9",
+      "size": 25828,
+      "repo_path": "bios/Arcade/Daphne/lair2_319_span.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "lair_a.zip",
+      "sha1": "0de301fe1d3307ea90d34292eccc593820bfdc2a",
+      "sha256": "15167ca91ed6041673b46e8645191b73571f72c64760a45a52ed85968157f7d3",
+      "size": 21377,
+      "repo_path": "bios/Arcade/Daphne/lair_a.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "lair_b.zip",
+      "sha1": "a3038872cbdd46b4397179895a01090d00d00ecf",
+      "sha256": "09d1577206d013b3fcac130d8a3b3f9c2eff830b7b4352e16c59694a730c588f",
+      "size": 4293,
+      "repo_path": "bios/Arcade/Daphne/lair_b.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "lair_c.zip",
+      "sha1": "5643b96a310610d990b39c87e15221ed468b20b4",
+      "sha256": "15b5002ea86079468e16aa46b80c1a4b90f01fa449f276b6ef0719459e1f72c7",
+      "size": 968,
+      "repo_path": "bios/Arcade/Daphne/lair_c.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "lair_d.zip",
+      "sha1": "938cd9ba8c5796a5e1c3eee51d84681457648f02",
+      "sha256": "1788d45d8243a68a1ae6fafa11e03d5170a799e9206d0b369aa65d70edd148ce",
+      "size": 27677,
+      "repo_path": "bios/Arcade/Daphne/lair_d.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "lair_d2.zip",
+      "sha1": "4d919a1931b14063459ac5f86cacefd9c8df97b6",
+      "sha256": "2d8b2b471c41333d54a5c4360e6fe09f7f54e5a87c123ecc91e44c286370c467",
+      "size": 4056,
+      "repo_path": "bios/Arcade/Daphne/lair_d2.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "lair_e.zip",
+      "sha1": "974bc0fe985ed94edfbb1f23475f5f7ca2076c1d",
+      "sha256": "19259c90c5580e42d1672e1848e7df28421457f517dbf962f332a0efb440c934",
+      "size": 20802,
+      "repo_path": "bios/Arcade/Daphne/lair_e.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "lair_f.zip",
+      "sha1": "650364e230898e299f801010cc0682853d706573",
+      "sha256": "0d6d8d00bee15536dca3c8b5864cd810995ea082508ade2028be54016f70bcc7",
+      "size": 6027,
+      "repo_path": "bios/Arcade/Daphne/lair_f.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "lair_ita.zip",
+      "sha1": "d08057bc44009b458a436711bed3bfe440a6e95f",
+      "sha256": "5de415c2ae6af0062e01ce6576afd4e465f25edffd2ac7927fb82825b7d30cab",
+      "size": 6408,
+      "repo_path": "bios/Arcade/Daphne/lair_ita.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "lair_n1.zip",
+      "sha1": "0468026f5ffd4bf8cdd28107dfdd92224cb593fa",
+      "sha256": "67c4708641728ebbb22906b98ddb36b74d7f0569254230abc72a3c430b7fc7d3",
+      "size": 26477,
+      "repo_path": "bios/Arcade/Daphne/lair_n1.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "lair_x.zip",
+      "sha1": "73a156b7e995f4dfb4d975ff3759f78fe0e26f3c",
+      "sha256": "0b28858dc1edb7979e2a9e3217c0d783aff2805f8d5689d6f66a84e3d680e224",
+      "size": 24316,
+      "repo_path": "bios/Arcade/Daphne/lair_x.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "laireuro.zip",
+      "sha1": "27b98ce21948d6bce218a9fc32d641129b45b88b",
+      "sha256": "a87ac89567eb0d6cb63c4277b275017771c567ea4260fa977e78c9f2c65eb875",
+      "size": 10771,
+      "repo_path": "bios/Arcade/Daphne/laireuro.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "mach3.zip",
+      "sha1": "5c5f106444ea96a2a324110b34f03f1302d93be5",
+      "sha256": "82fbb1fa88f48967ff9765f14252224040032aa8d636855096fa727c19b1d262",
+      "size": 441761,
+      "repo_path": "bios/Arcade/Daphne/mach3.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "roadblaster.zip",
+      "sha1": "77647116dd7ec8e0473f107938d83f527335e2ce",
+      "sha256": "cbaea6df93e0ddbabcf83568f56ccd3e9612d57311eb178a205080a01daea69b",
+      "size": 20664,
+      "repo_path": "bios/Arcade/Daphne/roadblaster.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "sae.zip",
+      "sha1": "533a2a55615f783fbc9eab437c312cdce0f1bd0e",
+      "sha256": "06ec6b633dc8f6e953eea3ca691403d0d5a7615c719c74ef185cd26fd993ec45",
+      "size": 27734,
+      "repo_path": "bios/Arcade/Daphne/sae.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "sdq.zip",
+      "sha1": "ddf71fd109d3a3e7240ebc14b6cb22c7caa43201",
+      "sha256": "f78e412a9ad52db0984387ae9f46807a967643d43f7d487c6420b9ce71e900f2",
+      "size": 11467,
+      "repo_path": "bios/Arcade/Daphne/sdq.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "sdqshort.zip",
+      "sha1": "fd488c44567183aa2f4af097f52b3073365e56ae",
+      "sha256": "aeec9b3feb93bf8aa7cbfd417e723475942239e56d70d7405a4997c87979736a",
+      "size": 10147,
+      "repo_path": "bios/Arcade/Daphne/sdqshort.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "sdqshortalt.zip",
+      "sha1": "9de70c75c24f27595b4c5985f6ef83da9e18a41f",
+      "sha256": "13e6a0417ec986fc810ccd4cf9488cf470951359abcd618901af8c5626d0f725",
+      "size": 10161,
+      "repo_path": "bios/Arcade/Daphne/sdqshortalt.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "tq.zip",
+      "sha1": "3a2a274642f02ac0f9f2b0b877c11401613b224d",
+      "sha256": "5596560e42579a0c6b9898e66cffd95db98a5f0b8cdb95cbe5cfe2fe4723e6b1",
+      "size": 24144,
+      "repo_path": "bios/Arcade/Daphne/tq.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "tq_alt.zip",
+      "sha1": "adbc01de2b85148080add3123cf1d78599dae8ea",
+      "sha256": "994d0a53357ca1f0a8712aa4ba37fc12b29222502befd8ffd943fcc73b303825",
+      "size": 3831,
+      "repo_path": "bios/Arcade/Daphne/tq_alt.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "tq_swear.zip",
+      "sha1": "d7769bbda95fef35866ab00248628603595d4dce",
+      "sha256": "a4e5a732be1663eec6affbf19bec6509f4eec517e1660c4cb38fa5ae27611008",
+      "size": 19758,
+      "repo_path": "bios/Arcade/Daphne/tq_swear.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "uvt.zip",
+      "sha1": "34bf7dc699080552e89342bf8ad59dc6a2f0a5db",
+      "sha256": "89f877baa90d76d058954eb364cdff9b3f099231141c7a892538cc7c856d7f8d",
+      "size": 62052,
+      "repo_path": "bios/Arcade/Daphne/uvt.zip",
+      "cores": [
+        "hypseus-singe"
       ]
     },
     {
