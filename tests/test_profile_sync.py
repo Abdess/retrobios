@@ -1242,7 +1242,7 @@ class TestRunResilience(unittest.TestCase):
         self._orig = profile_sync.upstream.resolve_commit_at
         self.seen: list[str] = []
 
-        def flaky(repo, date, cache_dir, offline=False):
+        def flaky(repo, date, cache_dir, offline=False, branch=None):
             self.seen.append(repo.slug)
             if repo.slug == "o/bad":
                 raise profile_sync.upstream.UpstreamError("HTTP 401")
@@ -1265,7 +1265,7 @@ class TestRunResilience(unittest.TestCase):
             build_report("bad", profile, self.tmp.name)
 
     def test_rate_limit_still_propagates(self):
-        def limited(repo, date, cache_dir, offline=False):
+        def limited(repo, date, cache_dir, offline=False, branch=None):
             raise profile_sync.upstream.RateLimitError("HTTP 403")
 
         profile_sync.upstream.resolve_commit_at = limited

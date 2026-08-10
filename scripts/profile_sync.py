@@ -659,20 +659,28 @@ def select_repo(profile: dict) -> upstream.Repo | None:
 
 
 def resolve_pin(
-    profile: dict, repo, cache_dir: str, offline: bool, field: str = "source"
+    profile: dict, repo, cache_dir: str, offline: bool, field: str = "source",
+    mode: str = "", branch: str | None = None,
 ) -> tuple[str | None, str | None]:
     """Commit the profile was written at, and how it was obtained.
 
     `field` selects which declared pin applies: `source_commit` for the port
     the profile was read from, `upstream_commit` for the original project.
+    A profile whose builds live in different repositories keys its pin by
+    build mode, the way `ymir` keys `source` and `core_version`.
     """
     pinned = profile.get(f"{field}_commit")
+    if isinstance(pinned, dict):
+        pinned = pinned.get(mode)
+        origin = f"{field}_commit[{mode}]"
+    else:
+        origin = f"{field}_commit"
     if pinned:
-        return str(pinned), f"{field}_commit"
+        return str(pinned), origin
     date = str(profile.get("profiled_date") or "")
     if not date:
         return None, None
-    sha = upstream.resolve_commit_at(repo, date, cache_dir, offline)
+    sha = upstream.resolve_commit_at(repo, date, cache_dir, offline, branch)
     return sha, (f"profiled_date {date}" if sha else None)
 
 
@@ -689,22 +697,50 @@ def select_views(
     seen: set[tuple[str, str]] = set()
     # A port living on a branch of a fork is absent from the default tip, so
     # the branch it was read from is followed when the profile names one.
-    branch = str(profile.get("source_branch") or "") or None
-    for field in ("source", "upstream"):
-        repo = upstream.parse_repo(str(profile.get(field) or ""))
+    declared = str(profile.get("source_branch") or "") or None
+    for field, mode, url in declared_repositories(profile):
+        repo = upstream.parse_repo(url)
         if repo is None or (repo.host, repo.slug) in seen:
             continue
-        pin, origin = resolve_pin(profile, repo, cache_dir, offline, field)
+        branch = branch_in_url(url) or (declared if field == "source" else None)
+        pin, origin = resolve_pin(
+            profile, repo, cache_dir, offline, field, mode, branch
+        )
         if not pin:
             continue
-        head = upstream.resolve_head(
-            repo, cache_dir, offline, branch if field == "source" else None
-        )
+        head = upstream.resolve_head(repo, cache_dir, offline, branch)
         if not head:
             continue
         seen.add((repo.host, repo.slug))
         views.append(RepoView(repo, pin, head, origin, field))
     return views
+
+
+def declared_repositories(profile: dict) -> list[tuple[str, str, str]]:
+    """Every repository URL the profile declares, source before upstream.
+
+    `source` and `upstream` are usually plain strings. `ymir` keys them by
+    build mode instead, because its standalone and libretro builds live in
+    different repositories.
+    """
+    urls: list[tuple[str, str, str]] = []
+    for field in ("source", "upstream"):
+        value = profile.get(field)
+        if isinstance(value, dict):
+            urls.extend((field, str(k), str(v)) for k, v in value.items() if v)
+        elif value:
+            urls.append((field, "", str(value)))
+    return urls
+
+
+def branch_in_url(url: str) -> str | None:
+    """Branch named by a forge URL pointing inside a repository.
+
+    A profile can cite a fork as `.../Ymir/tree/libretro`, which names both
+    the repository and the branch the port lives on.
+    """
+    _, sep, tail = url.partition("/tree/")
+    return tail.strip("/") or None if sep else None
 
 
 SELF_CHECK_CONTEXT = 2

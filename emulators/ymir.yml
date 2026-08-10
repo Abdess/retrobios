@@ -3,10 +3,12 @@ type: standalone + libretro
 core_classification: community_fork
 source:
   standalone: "https://github.com/StrikerX3/Ymir"
-  libretro: "https://github.com/warmenhoven/Ymir/tree/libretro"
+  libretro: "https://github.com/warmenhoven/Emir/tree/libretro"
 upstream: "https://github.com/StrikerX3/Ymir"
 profiled_date: "2026-03-26"
-source_commit: "5e9310410baa47cb7da5b068f399c9e4a34eedbc"
+source_commit:
+  standalone: "5e9310410baa47cb7da5b068f399c9e4a34eedbc"
+  libretro: "5d99cbbf813206736f38b3574ecca7a8aedc07e5"
 core_version:
   standalone: "v0.2.1"
   libretro: "PR#746"
@@ -54,7 +56,7 @@ files:
     description: "Saturn IPL ROM (BIOS). Any region accepted."
     source_ref:
       standalone: "apps/ymir-sdl3/src/util/rom_loader.cpp:9-22, apps/ymir-sdl3/src/app/rom_manager.cpp:14-56, libs/ymir-core/include/ymir/sys/memory_defs.hpp:9"
-      libretro: "libretro.cpp:260-263,534-558"
+      libretro: "apps/ymir-libretro/src/libretro.cpp:260-263,534-558"
 
   - name: "cdb/cdb_rom.bin"
     system: sega-saturn
@@ -65,7 +67,7 @@ files:
     description: "SH1 CD Block ROM for low-level CD drive emulation. Scans cdb/ subdirectory for any matching file."
     source_ref:
       standalone: "apps/ymir-sdl3/src/util/rom_loader.cpp:25-38, apps/ymir-sdl3/src/app/rom_manager.cpp:58-93, libs/ymir-core/include/ymir/hw/sh1/sh1_defs.hpp:7"
-      libretro: "libretro.cpp:567-591"
+      libretro: "apps/ymir-libretro/src/libretro.cpp:565-591"
 
   - name: "mpr-18811-mx.ic1"
     system: sega-saturn
@@ -76,7 +78,7 @@ files:
     description: "ROM cartridge for The King of Fighters '95."
     source_ref:
       standalone: "apps/ymir-sdl3/src/app/rom_manager.cpp:96-131, libs/ymir-core/include/ymir/db/rom_cart_db.hpp:19-22"
-      libretro: "libretro.cpp:619-620,597-616"
+      libretro: "apps/ymir-libretro/src/libretro.cpp:621, 598-618"
 
   - name: "mpr-19367-mx.ic1"
     system: sega-saturn
@@ -87,4 +89,4 @@ files:
     description: "ROM cartridge for Ultraman: Hikari no Kyojin Densetsu."
     source_ref:
       standalone: "apps/ymir-sdl3/src/app/rom_manager.cpp:96-131, libs/ymir-core/include/ymir/db/rom_cart_db.hpp:25-28"
-      libretro: "libretro.cpp:619,621,597-616"
+      libretro: "apps/ymir-libretro/src/libretro.cpp:622, 598-618"

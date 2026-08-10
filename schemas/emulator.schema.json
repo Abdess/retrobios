@@ -84,10 +84,26 @@
       ]
     },
     "source_commit": {
-      "type": "string"
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object"
+        }
+      ],
+      "description": "Revision the profile was read at; an object keys it by build mode when the builds live in different repositories."
     },
     "upstream_commit": {
-      "type": "string"
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object"
+        }
+      ],
+      "description": "Revision the profile was read at; an object keys it by build mode when the builds live in different repositories."
     },
     "profiled_date": {
       "description": "Quote it: an unquoted YAML date parses to a date object.",
