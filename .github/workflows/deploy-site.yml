@@ -10,10 +10,17 @@ on:
       - "wiki/**"
       - "scripts/generate_site.py"
       - "scripts/generate_readme.py"
+      - "scripts/validate_site.py"
       - "scripts/verify.py"
       - "scripts/common.py"
+      - "schemas/**"
+      - "tests/**"
+      - "docs_assets/**"
+      - "install/**"
+      - "install.py"
       - "database.json"
       - "mkdocs.yml"
+      - ".github/workflows/deploy-site.yml"
   workflow_dispatch:
 
 permissions:
@@ -40,50 +47,23 @@ jobs:
 
       # mkdocs-material >= 9.7.5 caps mkdocs < 2; the upper bound keeps a major
       # theme release from changing the site without a deliberate bump here.
-      - run: pip install pyyaml "mkdocs-material>=9.7.5,<10" "pymdown-extensions>=10.14"
+      - run: pip install pyyaml jsonschema==4.23.0 "mkdocs-material>=9.7.5,<10" "pymdown-extensions>=10.14"
 
-      - name: Restore large files from release
-        run: |
-          mkdir -p .cache/large
-          gh release download large-files -D .cache/large/ 2>/dev/null || true
-          python3 -c "
-          import hashlib, json, os, shutil
-          db = json.load(open('database.json'))
-          with open('.gitignore') as f:
-              ignored = {l.strip() for l in f if l.strip().startswith('bios/')}
-          cache = '.cache/large'
-          if not os.path.isdir(cache):
-              exit(0)
-          idx = {}
-          for fn in os.listdir(cache):
-              fp = os.path.join(cache, fn)
-              if os.path.isfile(fp):
-                  h = hashlib.sha1(open(fp, 'rb').read()).hexdigest()
-                  idx[h] = fp
-          restored = 0
-          for sha1, entry in db['files'].items():
-              path = entry['path']
-              if path in ignored and not os.path.exists(path):
-                  src = idx.get(sha1)
-                  if src:
-                      os.makedirs(os.path.dirname(path), exist_ok=True)
-                      shutil.copy2(src, path)
-                      print(f'Restored: {path}')
-                      restored += 1
-          print(f'Total: {restored} files restored')
-          "
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Refresh data directories
-        run: python scripts/refresh_data_dirs.py
-        continue-on-error: true
+      - name: Validate data contracts
+        run: python scripts/validate_schemas.py
 
       - name: Generate site
         run: |
           python scripts/generate_site.py
           python scripts/generate_readme.py --db database.json --platforms-dir platforms
           mkdocs build --strict
+          python scripts/validate_site.py
+
+      # write_if_changed() compares content with its timestamp line stripped,
+      # so a run that only moves the clock leaves the file untouched and this
+      # stays a real staleness check rather than a guaranteed failure.
+      - name: Require committed README and CONTRIBUTING to be current
+        run: git diff --exit-code -- README.md CONTRIBUTING.md
 
       - name: Setup Pages
         uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d  # v6

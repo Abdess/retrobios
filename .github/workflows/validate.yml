@@ -6,6 +6,10 @@ on:
       - "bios/**"
       - "platforms/**"
       - "emulators/**"
+      - "schemas/**"
+      - "scripts/**"
+      - "tests/**"
+      - "install.py"
 
 permissions:
   contents: read
@@ -36,23 +40,27 @@ jobs:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
-          files=$(git diff --name-only "$BASE_SHA"..."$HEAD_SHA" | grep '^bios/' || true)
-          echo "files=$files" >> "$GITHUB_OUTPUT"
-          echo "$files" > /tmp/changed_files.txt
+          # NUL-separated and filtered to added/modified/renamed: a deleted
+          # file has no bytes left to hash, and a path with a space or a
+          # quote must survive the hand-off to validate_pr.py.
+          git diff --name-only --diff-filter=AMR -z "$BASE_SHA"..."$HEAD_SHA" \
+            -- bios/ > changed_files.zlist
 
       - name: Validate BIOS files
         id: validate
         run: |
-          if [ -s /tmp/changed_files.txt ]; then
-            xargs python scripts/validate_pr.py --markdown < /tmp/changed_files.txt > /tmp/report.md 2>&1 || true
+          if [ -s changed_files.zlist ]; then
+            xargs -0 python scripts/validate_pr.py --markdown -- \
+              < changed_files.zlist > report.md 2>&1 || true
           else
-            echo "No BIOS files changed" > /tmp/report.md
+            echo "No BIOS files changed" > report.md
           fi
+          cat report.md
 
       - name: Post validation report
         if: always()
         run: |
-          gh pr comment "${{ github.event.pull_request.number }}" --body-file /tmp/report.md
+          gh pr comment "${{ github.event.pull_request.number }}" --body-file report.md
         env:
           GH_TOKEN: ${{ github.token }}
 
@@ -68,60 +76,8 @@ jobs:
       - name: Install dependencies
         run: pip install pyyaml jsonschema==4.23.0
 
-      - name: Validate platform configs
-        run: |
-          python -c "
-          import json, yaml, sys
-          from jsonschema import validate, ValidationError
-          from pathlib import Path
-
-          with open('schemas/platform.schema.json') as f:
-              schema = json.load(f)
-
-          errors = []
-          for yml_file in Path('platforms').glob('*.yml'):
-              if yml_file.name.startswith('_'):
-                  continue
-              with open(yml_file) as f:
-                  config = yaml.safe_load(f)
-              try:
-                  validate(config, schema)
-                  print(f'OK {yml_file.name}')
-              except ValidationError as e:
-                  errors.append(f'{yml_file.name}: {e.message}')
-                  print(f'FAIL {yml_file.name}: {e.message}')
-
-          if errors:
-              sys.exit(1)
-          "
-
-      - name: Validate emulator profiles
-        run: |
-          python -c "
-          import json, yaml, sys
-          from jsonschema import validate, ValidationError
-          from pathlib import Path
-
-          with open('schemas/emulator.schema.json') as f:
-              schema = json.load(f)
-
-          errors = []
-          for yml_file in sorted(Path('emulators').glob('*.yml')):
-              if yml_file.name.endswith('.old.yml'):
-                  continue
-              with open(yml_file) as f:
-                  profile = yaml.safe_load(f)
-              try:
-                  validate(profile, schema)
-              except ValidationError as e:
-                  path = '/'.join(str(p) for p in e.absolute_path)
-                  errors.append(f'{yml_file.name}: {path}: {e.message}')
-                  print(f'FAIL {yml_file.name}: {path}: {e.message}')
-
-          print(f'{len(errors)} invalid profiles')
-          if errors:
-              sys.exit(1)
-          "
+      - name: Validate platform configs and emulator profiles
+        run: python scripts/validate_schemas.py --source-only
 
   run-tests:
     runs-on: ubuntu-latest
@@ -133,10 +89,10 @@ jobs:
           python-version: "3.12"
 
       - name: Install dependencies
-        run: pip install pyyaml
+        run: pip install pyyaml jsonschema==4.23.0
 
       - name: Run test suite
-        run: python -m unittest tests.test_e2e -v
+        run: python -m unittest discover tests -v
 
   label-pr:
     runs-on: ubuntu-latest
