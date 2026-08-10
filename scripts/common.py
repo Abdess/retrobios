@@ -16,9 +16,29 @@ import tempfile
 import urllib.error
 import urllib.parse
 import urllib.request
+import xml.etree.ElementTree as ET
 import zipfile
 import zlib
 from pathlib import Path
+
+
+def parse_untrusted_xml(content: str | bytes, label: str = "XML") -> ET.Element:
+    """Parse XML fetched from a third party.
+
+    ElementTree expands internal entities, so a document that declares them
+    can make the parser build a payload far larger than the bytes downloaded.
+    Nothing this project reads (DAT packs, es_bios.xml, Emulators.xml) ever
+    declares one, so a declaration is grounds to refuse the document rather
+    than something to expand carefully.
+
+    The check targets <!ENTITY rather than <!DOCTYPE because Logiqx DATs
+    legitimately carry a doctype pointing at logiqx.com, and ElementTree does
+    not resolve external entities, so a doctype alone fetches nothing.
+    """
+    text = content if isinstance(content, str) else content.decode("utf-8", "replace")
+    if "<!ENTITY" in text.upper():
+        raise ValueError(f"XML entity declarations are not allowed in {label}")
+    return ET.fromstring(content)
 
 try:
     import yaml
@@ -37,6 +57,30 @@ def require_yaml():
 
         print("Error: PyYAML required (pip install pyyaml)", file=sys.stderr)
         sys.exit(1)
+
+
+def _pick_yaml_loader():
+    """Prefer the libyaml loader when the wheel ships it.
+
+    Reading the emulator profiles is the single most expensive step of every
+    command here: 375 files, and the pure-Python scanner accounts for roughly
+    70% of a verify run. The C loader parses the same documents about eight
+    times faster and pyyaml only exposes it when libyaml was available at
+    build time, so the pure-Python class stays as the fallback.
+    """
+    if yaml is None:
+        return None
+    return getattr(yaml, "CSafeLoader", None) or yaml.SafeLoader
+
+
+_YAML_LOADER = _pick_yaml_loader()
+
+
+def yaml_load(stream):
+    """Parse YAML from a string or file object, safely and quickly."""
+    if yaml is None:
+        return require_yaml()  # exits with the install hint
+    return yaml.load(stream, Loader=_YAML_LOADER)
 
 
 _ALL_ALGORITHMS = frozenset({"sha1", "md5", "sha256", "crc32", "adler32"})
@@ -200,7 +244,7 @@ def load_platform_config(platform_name: str, platforms_dir: str = "platforms") -
         raise FileNotFoundError(f"Platform config not found: {config_file}")
 
     with open(config_file) as f:
-        config = yaml.safe_load(f) or {}
+        config = yaml_load(f) or {}
 
     # Resolve inheritance
     if "inherits" in config:
@@ -227,7 +271,7 @@ def load_platform_config(platform_name: str, platforms_dir: str = "platforms") -
         shared_real = os.path.realpath(shared_path)
         if shared_real not in _shared_yml_cache:
             with open(shared_path) as f:
-                _shared_yml_cache[shared_real] = yaml.safe_load(f) or {}
+                _shared_yml_cache[shared_real] = yaml_load(f) or {}
         shared = _shared_yml_cache[shared_real]
         shared_groups = shared.get("shared_groups", {})
         for system in config.get("systems", {}).values():
@@ -256,7 +300,7 @@ def load_platform_config(platform_name: str, platforms_dir: str = "platforms") -
         reg_real = os.path.realpath(registry_path)
         if reg_real not in _shared_yml_cache:
             with open(registry_path) as f:
-                _shared_yml_cache[reg_real] = yaml.safe_load(f) or {}
+                _shared_yml_cache[reg_real] = yaml_load(f) or {}
         reg = _shared_yml_cache[reg_real]
         reg_entry = reg.get("platforms", {}).get(platform_name, {})
 
@@ -289,7 +333,7 @@ def load_data_dir_registry(platforms_dir: str = "platforms") -> dict:
     if not os.path.exists(registry_path):
         return {}
     with open(registry_path) as f:
-        data = yaml.safe_load(f) or {}
+        data = yaml_load(f) or {}
     return data.get("data_directories", {})
 
 
@@ -299,7 +343,7 @@ def load_platform_registry(platforms_dir: str = "platforms") -> dict:
     if not os.path.exists(registry_path):
         return {}
     with open(registry_path) as f:
-        return (yaml.safe_load(f) or {}).get("platforms", {})
+        return (yaml_load(f) or {}).get("platforms", {})
 
 
 def list_registered_platforms(
@@ -315,7 +359,7 @@ def list_registered_platforms(
     if not os.path.exists(registry_path):
         return []
     with open(registry_path) as f:
-        registry = yaml.safe_load(f) or {}
+        registry = yaml_load(f) or {}
     platforms = []
     for name, meta in sorted(registry.get("platforms", {}).items()):
         status = meta.get("status", "active")
@@ -345,7 +389,7 @@ def load_target_config(
             f"No target config for platform '{platform_name}': {target_file}"
         )
     with open(target_file) as f:
-        data = yaml.safe_load(f) or {}
+        data = yaml_load(f) or {}
 
     targets = data.get("targets", {})
 
@@ -353,7 +397,7 @@ def load_target_config(
     overrides = {}
     if os.path.exists(overrides_file):
         with open(overrides_file) as f:
-            all_overrides = yaml.safe_load(f) or {}
+            all_overrides = yaml_load(f) or {}
         overrides = all_overrides.get(platform_name, {}).get("targets", {})
 
     alias_index: dict[str, str] = {}
@@ -400,13 +444,13 @@ def list_available_targets(
     if not os.path.exists(target_file):
         return []
     with open(target_file) as f:
-        data = yaml.safe_load(f) or {}
+        data = yaml_load(f) or {}
 
     overrides_file = os.path.join(targets_dir, "_overrides.yml")
     overrides = {}
     if os.path.exists(overrides_file):
         with open(overrides_file) as f:
-            all_overrides = yaml.safe_load(f) or {}
+            all_overrides = yaml_load(f) or {}
         overrides = all_overrides.get(platform_name, {}).get("targets", {})
 
     result = []
@@ -944,7 +988,7 @@ def load_emulator_profiles(
         if f.name.endswith(".old.yml"):
             continue
         with open(f) as fh:
-            profile = yaml.safe_load(fh) or {}
+            profile = yaml_load(fh) or {}
         if "emulator" not in profile:
             continue
         if skip_aliases and profile.get("type") == "alias":
@@ -1032,7 +1076,7 @@ def group_identical_platforms(
         try:
             raw_path = os.path.join(platforms_dir, f"{platform}.yml")
             with open(raw_path) as f:
-                raw = yaml.safe_load(f) or {}
+                raw = yaml_load(f) or {}
             inherits[platform] = "inherits" in raw
             config = load_platform_config(platform, platforms_dir)
         except FileNotFoundError:

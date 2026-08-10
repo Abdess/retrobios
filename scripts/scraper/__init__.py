@@ -10,9 +10,18 @@ from __future__ import annotations
 
 import importlib
 import pkgutil
+import sys
 from pathlib import Path
 
-from .base_scraper import BaseScraper
+# Scrapers run both as `python -m scripts.scraper.x` and as plain scripts, and
+# they share helpers with the rest of scripts/. Putting that directory on the
+# path once here is what lets every submodule say `from common import ...`
+# instead of carrying its own bootstrap.
+_SCRIPTS_DIR = str(Path(__file__).resolve().parent.parent)
+if _SCRIPTS_DIR not in sys.path:
+    sys.path.insert(0, _SCRIPTS_DIR)
+
+from .base_scraper import BaseScraper  # noqa: E402
 
 _scrapers: dict[str, type] = {}
 

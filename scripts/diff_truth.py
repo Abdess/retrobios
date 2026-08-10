@@ -16,7 +16,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
-from common import list_registered_platforms, load_platform_config, require_yaml
+from common import list_registered_platforms, load_platform_config, require_yaml, yaml_load
 from truth import diff_platform_truth
 
 yaml = require_yaml()
@@ -27,7 +27,7 @@ def _load_truth(truth_dir: str, platform: str) -> dict | None:
     if not os.path.exists(path):
         return None
     with open(path) as f:
-        return yaml.safe_load(f) or {}
+        return yaml_load(f) or {}
 
 
 def _format_terminal(report: dict) -> str:

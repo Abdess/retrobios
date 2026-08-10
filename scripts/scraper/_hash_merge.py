@@ -15,6 +15,8 @@ from typing import Any
 
 import yaml
 
+from common import yaml_load
+
 
 _MAME_RELEASE_RE = re.compile(r"^0\.\d+")
 
@@ -294,7 +296,7 @@ def _diff_fbneo(
 
 def _load_yaml(path: str) -> dict[str, Any]:
     with open(path, encoding="utf-8") as f:
-        return yaml.safe_load(f) or {}
+        return yaml_load(f) or {}
 
 
 def _load_json(path: str) -> dict[str, Any]:
@@ -496,7 +498,7 @@ def _patch_bios_entries(text: str, files: list[dict]) -> str:
 def _append_new_entries(text: str, files: list[dict], original: str) -> str:
     """Append new bios_zip entries (system=None) that aren't in the original."""
     # Parse original to get existing entry names (more reliable than text search)
-    existing_data = yaml.safe_load(original) or {}
+    existing_data = yaml_load(original) or {}
     existing_names = {f["name"] for f in existing_data.get("files", [])}
 
     new_entries = []
@@ -568,7 +570,7 @@ def _backup_and_write_fbneo(path: str, data: dict, hashes: dict) -> None:
     patched = _patch_core_version(original, data.get("core_version", ""))
 
     # Identify new ROM entries by comparing parsed data keys, not text search
-    existing_data = yaml.safe_load(original) or {}
+    existing_data = yaml_load(original) or {}
     existing_keys = {
         (f["archive"], f["name"])
         for f in existing_data.get("files", [])

@@ -16,7 +16,8 @@ Recalbox verification logic:
 from __future__ import annotations
 
 import sys
-import xml.etree.ElementTree as ET
+
+from common import parse_untrusted_xml
 
 from .base_scraper import BaseScraper, BiosRequirement
 
@@ -109,7 +110,7 @@ class Scraper(BaseScraper):
     def _fetch_cores(self) -> list[str]:
         """Extract unique core names from es_bios.xml bios elements."""
         raw = self._fetch_raw()
-        root = ET.fromstring(raw)
+        root = parse_untrusted_xml(raw, "es_bios.xml")
         cores: set[str] = set()
         for bios_elem in root.findall(".//system/bios"):
             raw_core = bios_elem.get("core", "").strip()
@@ -128,7 +129,7 @@ class Scraper(BaseScraper):
         if not self.validate_format(raw):
             raise ValueError("es_bios.xml format validation failed")
 
-        root = ET.fromstring(raw)
+        root = parse_untrusted_xml(raw, "es_bios.xml")
         requirements = []
         seen = set()
 
@@ -177,7 +178,7 @@ class Scraper(BaseScraper):
     def fetch_full_requirements(self) -> list[dict]:
         """Parse es_bios.xml preserving all Recalbox-specific fields."""
         raw = self._fetch_raw()
-        root = ET.fromstring(raw)
+        root = parse_untrusted_xml(raw, "es_bios.xml")
         requirements = []
 
         for system_elem in root.findall(".//system"):

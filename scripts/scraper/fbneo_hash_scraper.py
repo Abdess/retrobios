@@ -19,6 +19,8 @@ from typing import Any
 
 import yaml
 
+from common import yaml_load
+
 from scripts.scraper._hash_merge import compute_diff, merge_fbneo_profile
 from scripts.scraper.fbneo_parser import parse_fbneo_source_tree
 
@@ -194,7 +196,7 @@ def _find_fbneo_profiles() -> list[Path]:
         if path.name.endswith(".old.yml"):
             continue
         try:
-            data = yaml.safe_load(path.read_text(encoding="utf-8"))
+            data = yaml_load(path.read_text(encoding="utf-8"))
         except (yaml.YAMLError, OSError):
             continue
         if not data or not isinstance(data, dict):

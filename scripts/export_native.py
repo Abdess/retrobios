@@ -9,7 +9,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import yaml
-from common import list_registered_platforms, load_platform_config
+from common import list_registered_platforms, load_platform_config, yaml_load
 from exporter import discover_exporters
 
 OUTPUT_FILENAMES: dict[str, str] = {
@@ -60,7 +60,7 @@ def run(
             continue
 
         with open(truth_file) as f:
-            truth_data = yaml.safe_load(f) or {}
+            truth_data = yaml_load(f) or {}
 
         scraped: dict | None = None
         try:

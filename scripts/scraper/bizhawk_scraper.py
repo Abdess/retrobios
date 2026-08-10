@@ -54,8 +54,6 @@ STATUS_RANK = {
     "Ideal": 4,
 }
 
-GAME_DATA_SYSTEMS = {"BSX", "Doom"}
-GAME_DATA_FILES = {"VEC_Minestorm.vec"}
 
 SYSTEM_ID_MAP: dict[str, str] = {
     "32X": "sega-32x",

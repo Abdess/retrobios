@@ -17,6 +17,8 @@ from datetime import datetime, timezone
 
 import yaml
 
+from common import yaml_load
+
 from . import BaseTargetScraper
 
 PLATFORM_NAME = "emudeck"
@@ -134,7 +136,7 @@ class Scraper(BaseTargetScraper):
         if not os.path.exists(target_path):
             return []
         with open(target_path) as f:
-            data = yaml.safe_load(f) or {}
+            data = yaml_load(f) or {}
         # Find a target matching the architecture
         for tname, tinfo in data.get("targets", {}).items():
             if tinfo.get("architecture") == arch:

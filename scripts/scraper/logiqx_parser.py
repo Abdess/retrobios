@@ -15,6 +15,8 @@ from __future__ import annotations
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass, field
 
+from common import parse_untrusted_xml
+
 
 @dataclass
 class LogiqxRom:
@@ -46,10 +48,7 @@ def parse_logiqx(content: str | bytes) -> LogiqxDat:
     rejected: DAT files never define them, and expanding entities
     from untrusted packs opens entity-expansion attacks.
     """
-    haystack = content if isinstance(content, str) else content.decode("utf-8", "replace")
-    if "<!ENTITY" in haystack.upper():
-        raise ValueError("XML entity declarations are not allowed in DAT files")
-    root = ET.fromstring(content)
+    root = parse_untrusted_xml(content, "DAT files")
     dat = LogiqxDat()
 
     header = root.find("header")

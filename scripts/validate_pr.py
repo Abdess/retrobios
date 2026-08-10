@@ -25,7 +25,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
-from common import compute_hashes, list_registered_platforms, load_database
+from common import compute_hashes, list_registered_platforms, load_database, yaml_load
 
 try:
     import yaml
@@ -113,7 +113,7 @@ def load_platform_hashes(platforms_dir: str) -> dict:
         f = Path(platforms_dir) / f"{name}.yml"
         with open(f) as fh:
             try:
-                config = yaml.safe_load(fh) or {}
+                config = yaml_load(fh) or {}
             except yaml.YAMLError:
                 continue
 

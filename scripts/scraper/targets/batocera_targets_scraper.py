@@ -19,6 +19,8 @@ from datetime import datetime, timezone
 
 import yaml
 
+from common import yaml_load
+
 from . import BaseTargetScraper
 
 PLATFORM_NAME = "batocera"
@@ -221,7 +223,7 @@ def _parse_es_systems(text: str) -> dict[str, list[str]]:
           <core_name>: {requireAnyOf: [BR2_PACKAGE_FOO]}
     """
     try:
-        data = yaml.safe_load(text)
+        data = yaml_load(text)
     except yaml.YAMLError:
         return {}
 

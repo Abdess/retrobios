@@ -18,6 +18,8 @@ from pathlib import Path
 
 import yaml
 
+from common import yaml_load
+
 from .base_scraper import BaseScraper, BiosRequirement
 
 PLATFORM_NAME = "batocera"
@@ -203,7 +205,7 @@ class Scraper(BaseScraper):
             raise ConnectionError(
                 f"Failed to fetch {CONFIGGEN_DEFAULTS_URL}: {e}"
             ) from e
-        data = yaml.safe_load(raw)
+        data = yaml_load(raw)
         cores: set[str] = set()
         standalone: set[str] = set()
         for system, cfg in data.items():
@@ -386,7 +388,7 @@ class Scraper(BaseScraper):
             )
             if existing.exists():
                 with open(existing) as f:
-                    old = yaml.safe_load(f) or {}
+                    old = yaml_load(f) or {}
                 batocera_version = str(old.get("version", ""))
 
         cores, standalone = self._fetch_cores()

@@ -21,6 +21,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from pathlib import Path
+from common import yaml_load
 
 log = logging.getLogger(__name__)
 
@@ -55,7 +56,7 @@ def load_tracked_entries(
         print("Error: PyYAML required", file=sys.stderr)
         sys.exit(1)
     with open(registry_path) as f:
-        data = yaml.safe_load(f) or {}
+        data = yaml_load(f) or {}
     entries: dict[str, tuple[str, str]] = {}
     for key, entry in data.get("data_directories", {}).items():
         url = entry.get("source_url", "")

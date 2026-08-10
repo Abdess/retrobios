@@ -23,6 +23,7 @@ import urllib.error
 import urllib.request
 import zipfile
 from pathlib import Path
+from common import yaml_load
 
 try:
     import yaml
@@ -45,7 +46,7 @@ def load_registry(registry_path: str = DEFAULT_REGISTRY) -> dict[str, dict]:
     if not path.exists():
         raise FileNotFoundError(f"Registry not found: {registry_path}")
     with open(path) as f:
-        data = yaml.safe_load(f) or {}
+        data = yaml_load(f) or {}
     return data.get("data_directories", {})
 
 

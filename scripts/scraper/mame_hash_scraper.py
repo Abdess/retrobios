@@ -21,6 +21,8 @@ from typing import Any
 
 import yaml
 
+from common import yaml_load
+
 from ._hash_merge import compute_diff, merge_mame_profile
 from .mame_parser import parse_mame_source_tree
 
@@ -165,7 +167,7 @@ def _find_mame_profiles() -> list[Path]:
             continue
         try:
             with open(path, encoding="utf-8") as f:
-                data = yaml.safe_load(f)
+                data = yaml_load(f)
             if not isinstance(data, dict):
                 continue
             upstream = data.get("upstream", "")

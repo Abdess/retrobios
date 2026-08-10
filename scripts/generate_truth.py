@@ -20,6 +20,7 @@ from common import (
     load_platform_config,
     load_target_config,
     require_yaml,
+    yaml_load,
 )
 from truth import generate_platform_truth
 
@@ -72,7 +73,7 @@ def main(argv: list[str] | None = None) -> None:
     # Load registry
     registry_path = os.path.join(args.platforms_dir, "_registry.yml")
     with open(registry_path) as f:
-        registry = (yaml.safe_load(f) or {}).get("platforms", {})
+        registry = (yaml_load(f) or {}).get("platforms", {})
 
     # Load emulator profiles
     profiles = load_emulator_profiles(args.emulators_dir)
