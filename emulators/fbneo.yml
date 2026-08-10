@@ -491,7 +491,7 @@ files:
     size: 524288
     crc32: "42f6b6c4"
     note: "Neo Geo CDZ custom BIOS by SMKDan"
-    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:2004"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1984"
 
   - name: "uni-bioscd33.rom"
     archive: neocdz.zip
@@ -500,7 +500,7 @@ files:
     size: 524288
     crc32: "ff3abc59"
     note: "Universe BIOS CD ver. 3.3 (hack)"
-    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:2005"
+    source_ref: "src/burn/drv/neogeo/d_neogeo.cpp:1985"
 
   - name: "uni-bioscd32.rom"
     archive: neocdz.zip
@@ -1336,7 +1336,7 @@ files:
     size: 131072  # 0x20000
     crc32: "2292585c"
     note: "ISG Selection Master Type 2006 BIOS"
-    source_ref: "src/burn/drv/sega/d_sys16b.cpp:11495"
+    source_ref: "src/burn/drv/sega/d_sys16b.cpp:11270"
 
   # -------------------------------------------------------
   # NMK16 (nmk004.zip)
@@ -1372,7 +1372,7 @@ files:
     size: 32  # 0x20
     crc32: "e1281ee9"
     note: "Midway SSIO sound PROM"
-    source_ref: "src/burn/drv/pre90s/d_mcr.cpp:1631"
+    source_ref: "src/burn/drv/pre90s/d_mcr.cpp:1630"
 
   # -------------------------------------------------------
   # YM2608 ADPCM ROM (ym2608.zip, shared by multiple drivers)
@@ -1396,7 +1396,7 @@ files:
     size: 69632  # 0x11000
     crc32: "aa11ee2d"
     note: "Seta ST010 coprocessor microcode"
-    source_ref: "src/burn/drv/snes/d_snes.cpp:577"
+    source_ref: "src/burn/drv/snes/d_snes.cpp:574"
 
   - name: "st011.bin"
     archive: st011.zip
@@ -1405,7 +1405,7 @@ files:
     size: 69632  # 0x11000
     crc32: "34d2952c"
     note: "Seta ST011 coprocessor microcode"
-    source_ref: "src/burn/drv/snes/d_snes.cpp:596"
+    source_ref: "src/burn/drv/snes/d_snes.cpp:593"
 
   - name: "dsp1.bin"
     archive: dsp1.zip
@@ -1414,7 +1414,7 @@ files:
     size: 10240  # 0x2800
     crc32: "2838f9f5"
     note: "DSP-1 coprocessor microcode"
-    source_ref: "src/burn/drv/snes/d_snes.cpp:654"
+    source_ref: "src/burn/drv/snes/d_snes.cpp:632"
 
   - name: "dsp1b.bin"
     archive: dsp1b.zip
@@ -1423,7 +1423,7 @@ files:
     size: 10240  # 0x2800
     crc32: "453557e0"
     note: "DSP-1B coprocessor microcode (revised)"
-    source_ref: "src/burn/drv/snes/d_snes.cpp:673"
+    source_ref: "src/burn/drv/snes/d_snes.cpp:651"
 
   - name: "dsp2.bin"
     archive: dsp2.zip
@@ -1432,7 +1432,7 @@ files:
     size: 10240  # 0x2800
     crc32: "8e9fbd9b"
     note: "DSP-2 coprocessor microcode"
-    source_ref: "src/burn/drv/snes/d_snes.cpp:692"
+    source_ref: "src/burn/drv/snes/d_snes.cpp:670"
 
   - name: "dsp3.bin"
     archive: dsp3.zip
@@ -1441,7 +1441,7 @@ files:
     size: 10240  # 0x2800
     crc32: "6b86728a"
     note: "DSP-3 coprocessor microcode"
-    source_ref: "src/burn/drv/snes/d_snes.cpp:711"
+    source_ref: "src/burn/drv/snes/d_snes.cpp:689"
 
   - name: "dsp4.bin"
     archive: dsp4.zip
@@ -1450,7 +1450,7 @@ files:
     size: 10240  # 0x2800
     crc32: "ce0c7783"
     note: "DSP-4 coprocessor microcode"
-    source_ref: "src/burn/drv/snes/d_snes.cpp:730"
+    source_ref: "src/burn/drv/snes/d_snes.cpp:708"
 
   # -------------------------------------------------------
   # System support files (fbneo/)
@@ -1489,142 +1489,128 @@ files:
     note: "Two Tigers with Journey CD audio samples (2 WAVs)"
     source_ref: "src/burn/snd/samples.cpp"
 
-  - name: "supernova_modbios-japan.u10"
-    archive: skns.zip
-    required: true
-    size: 524288
-    crc32: "b8d3190c"
-    source_ref: "src/burn/drv/pst90s/d_suprnova.cpp:1865"
-
-  - name: "supernova-modbios-korea.u10"
-    archive: skns.zip
-    required: true
-    size: 524288
-    crc32: "1d90517c"
-    source_ref: "src/burn/drv/pst90s/d_suprnova.cpp:1865"
-
   - name: "gba_bios.bin"
     archive: gba.zip
     required: true
     size: 16384
     crc32: "81977335"
-    source_ref: "src/burn/drv/gba/d_gba.cpp:334"
+    source_ref: "src/burn/drv/gba/d_gba.cpp:328"
 
   - name: "st018.bin"
     archive: st018.zip
     required: true
     size: 163840
     crc32: "5c403cc5"
-    source_ref: "src/burn/drv/snes/d_snes.cpp:662"
+    source_ref: "src/burn/drv/snes/d_snes.cpp:612"
 
   - name: "136032.205.l13"
     archive: atarisy1.zip
     required: true
     size: 16384
     crc32: "88d0be26"
-    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1232"
+    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1196"
 
   - name: "136032.206.l12"
     archive: atarisy1.zip
     required: true
     size: 16384
     crc32: "3c79ef05"
-    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1232"
+    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1197"
 
   - name: "136032.104.f5"
     archive: atarisy1.zip
     required: true
     size: 8192
     crc32: "7a29dc07"
-    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1232"
+    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1198"
 
   - name: "136032.101.e3"
     archive: atarisy1.zip
     required: true
     size: 256
     crc32: "7e84972a"
-    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1232"
+    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1199"
 
   - name: "136032.102.e5"
     archive: atarisy1.zip
     required: true
     size: 256
     crc32: "ebf1e0ae"
-    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1232"
+    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1200"
 
   - name: "136032.103.f7"
     archive: atarisy1.zip
     required: true
     size: 235
     crc32: "92d6a0b4"
-    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1232"
+    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1201"
 
   - name: "136032.105.l13"
     archive: atarisy1.zip
     required: true
     size: 16384
     crc32: "79021d3c"
-    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1232"
+    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1205"
 
   - name: "136032.106.l12"
     archive: atarisy1.zip
     required: true
     size: 16384
     crc32: "76ee86c4"
-    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1232"
+    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1206"
 
   - name: "136032.104.f5"
     archive: atarisy1.zip
     required: true
     size: 8192
     crc32: "7a29dc07"
-    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1232"
+    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1207"
 
   - name: "136032.101.e3"
     archive: atarisy1.zip
     required: true
     size: 256
     crc32: "7e84972a"
-    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1232"
+    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1208"
 
   - name: "136032.102.e5"
     archive: atarisy1.zip
     required: true
     size: 256
     crc32: "ebf1e0ae"
-    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1232"
+    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1209"
 
   - name: "136032.103.f7"
     archive: atarisy1.zip
     required: true
     size: 235
     crc32: "92d6a0b4"
-    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1232"
+    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1210"
 
   - name: "136032.114.j11"
     archive: atarisy1.zip
     required: true
     size: 16384
     crc32: "195c54ad"
-    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1232"
+    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1214"
 
   - name: "136032.115.j10"
     archive: atarisy1.zip
     required: true
     size: 16384
     crc32: "7275b4dc"
-    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1232"
+    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1215"
 
   - name: "136032.107.b2"
     archive: atarisy1.zip
     required: true
     size: 8192
     crc32: "7a29dc07"
-    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1232"
+    source_ref: "src/burn/drv/atari/d_atarisy1.cpp:1216"
 
   - name: "astro.bin"
     archive: astrocde.zip
     required: true
     size: 8192
     crc32: "ebc77f3a"
-    source_ref: "src/burn/drv/pre90s/d_astrocde.cpp:3040"
+    source_ref: "src/burn/drv/pre90s/d_astrocde.cpp:3034"
