@@ -29,9 +29,15 @@ import urllib.request
 import xml.etree.ElementTree as ET
 from pathlib import Path, PurePosixPath
 
+# Manifests are read from the same ref the bootstrap verified this installer
+# against, so a file list and the code reading it always come from one commit.
+# RETROBIOS_REF pins an installation to a tag when reproducibility matters.
+DEFAULT_RELEASE_REF = "main"
+RELEASE_REF = os.environ.get("RETROBIOS_REF", DEFAULT_RELEASE_REF)
 BASE_URL = os.environ.get(
     "RETROBIOS_BASE_URL",
-    "https://raw.githubusercontent.com/Abdess/retrobios/main",
+    "https://raw.githubusercontent.com/Abdess/retrobios/"
+    + urllib.parse.quote(RELEASE_REF, safe=""),
 )
 MANIFEST_URL = f"{BASE_URL}/install/{{platform}}.json"
 TARGETS_URL = f"{BASE_URL}/install/targets/{{platform}}.json"
@@ -40,6 +46,13 @@ RELEASE_URL = (
     "https://github.com/Abdess/retrobios/releases/download/large-files/{asset}"
 )
 MAX_RETRIES = 3
+MAX_MANIFEST_BYTES = 16 * 1024 * 1024
+MAX_TARGETS_BYTES = 4 * 1024 * 1024
+MAX_MANIFEST_FILES = 100_000
+MAX_DOWNLOAD_SIZE = 1024 * 1024 * 1024
+MAX_TOTAL_DOWNLOAD_SIZE = 64 * 1024 * 1024 * 1024
+_SHA1_RE = re.compile(r"^[0-9a-fA-F]{40}$")
+_SHA256_RE = re.compile(r"^[0-9a-fA-F]{64}$")
 
 # Platforms with a manifest in install/. Manifest URLs are case sensitive,
 # so user input is normalized against this list before any fetch.
@@ -567,13 +580,235 @@ def normalize_platform(name: str) -> str:
     return plat
 
 
+def _read_limited_json(response, limit: int, label: str) -> object:
+    """Read a bounded UTF-8 JSON response."""
+    raw_length = response.headers.get("Content-Length") if response.headers else None
+    if raw_length:
+        try:
+            if int(raw_length) > limit:
+                raise ValueError(f"{label} exceeds {limit} bytes")
+        except ValueError as exc:
+            if "exceeds" in str(exc):
+                raise
+    payload = response.read(limit + 1)
+    if len(payload) > limit:
+        raise ValueError(f"{label} exceeds {limit} bytes")
+    try:
+        return json.loads(payload.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ValueError(f"invalid {label}: {exc}") from exc
+
+
+def _safe_relative_path(value: object, field: str) -> PurePosixPath:
+    """Validate a manifest-controlled relative POSIX path."""
+    if not isinstance(value, str) or not value or len(value) > 1024:
+        raise ValueError(f"invalid {field}")
+    if (
+        "\\" in value
+        or "\x00" in value
+        or "//" in value
+        or value.endswith("/")
+        or re.match(r"^[A-Za-z]:", value)
+    ):
+        raise ValueError(f"unsafe {field}: {value!r}")
+    path = PurePosixPath(value)
+    if path.is_absolute() or any(part in ("", ".", "..") for part in path.parts):
+        raise ValueError(f"unsafe {field}: {value!r}")
+    return path
+
+
+def _destination_path(root: Path, value: object) -> Path:
+    """Resolve a manifest destination and prove it remains below *root*."""
+    relative = _safe_relative_path(value, "dest")
+    resolved_root = root.resolve()
+    candidate = (resolved_root / Path(*relative.parts)).resolve()
+    try:
+        candidate.relative_to(resolved_root)
+    except ValueError as exc:
+        raise ValueError(f"destination escapes BIOS directory: {value!r}") from exc
+    return candidate
+
+
+def _validate_manifest(data: object, plat: str) -> dict:
+    """Validate the untrusted install-manifest boundary using stdlib only."""
+    if not isinstance(data, dict):
+        raise ValueError("manifest root must be an object")
+    if data.get("manifest_version") not in (1, 2):
+        raise ValueError("unsupported manifest_version")
+    if data.get("platform") != plat:
+        raise ValueError("manifest platform does not match request")
+    files = data.get("files")
+    if not isinstance(files, list) or len(files) > MAX_MANIFEST_FILES:
+        raise ValueError("invalid manifest files list")
+
+    seen_destinations: set[str] = set()
+    total_size = 0
+    for index, entry in enumerate(files):
+        if not isinstance(entry, dict):
+            raise ValueError(f"files[{index}] must be an object")
+        dest = str(_safe_relative_path(entry.get("dest"), f"files[{index}].dest"))
+        if dest in seen_destinations:
+            raise ValueError(f"duplicate manifest destination: {dest}")
+        seen_destinations.add(dest)
+
+        size = entry.get("size")
+        if isinstance(size, bool) or not isinstance(size, int) or not (0 <= size <= MAX_DOWNLOAD_SIZE):
+            raise ValueError(f"invalid size for {dest}")
+        total_size += size
+        if total_size > MAX_TOTAL_DOWNLOAD_SIZE:
+            raise ValueError("manifest total size exceeds safety limit")
+
+        sha1 = entry.get("sha1", "")
+        sha256 = entry.get("sha256", "")
+        if sha1 and (not isinstance(sha1, str) or not _SHA1_RE.fullmatch(sha1)):
+            raise ValueError(f"invalid SHA1 for {dest}")
+        if sha256 and (
+            not isinstance(sha256, str) or not _SHA256_RE.fullmatch(sha256)
+        ):
+            raise ValueError(f"invalid SHA256 for {dest}")
+        if not sha1 and not sha256:
+            raise ValueError(f"missing content hash for {dest}")
+
+        release_asset = entry.get("release_asset")
+        repo_path = entry.get("repo_path")
+        if release_asset:
+            asset = _safe_relative_path(release_asset, f"files[{index}].release_asset")
+            if len(asset.parts) != 1:
+                raise ValueError(f"release asset must be a basename: {release_asset}")
+        elif repo_path:
+            source = _safe_relative_path(repo_path, f"files[{index}].repo_path")
+            if source.parts[0] != "bios":
+                raise ValueError(f"repo_path outside bios/: {repo_path}")
+        else:
+            raise ValueError(f"no download source for {dest}")
+
+        cores = entry.get("cores")
+        if cores is not None and (
+            not isinstance(cores, list) or not all(isinstance(core, str) for core in cores)
+        ):
+            raise ValueError(f"invalid cores list for {dest}")
+
+    declared_total_files = data.get("total_files")
+    if declared_total_files is not None and declared_total_files != len(files):
+        raise ValueError("manifest total_files does not match files list")
+    declared_total_size = data.get("total_size")
+    if declared_total_size is not None and declared_total_size != total_size:
+        raise ValueError("manifest total_size does not match file sizes")
+
+    omitted = data.get("omitted_files", [])
+    if not isinstance(omitted, list) or len(omitted) > MAX_MANIFEST_FILES:
+        raise ValueError("invalid omitted_files list")
+    seen_omitted: set[str] = set()
+    allowed_omission_reasons = {
+        "hash_mismatch", "not_found", "external", "user_provided"
+    }
+    for index, entry in enumerate(omitted):
+        if not isinstance(entry, dict):
+            raise ValueError(f"omitted_files[{index}] must be an object")
+        dest = str(
+            _safe_relative_path(
+                entry.get("dest"), f"omitted_files[{index}].dest"
+            )
+        )
+        if dest in seen_destinations or dest in seen_omitted:
+            raise ValueError(f"duplicate or conflicting omitted destination: {dest}")
+        seen_omitted.add(dest)
+        if not isinstance(entry.get("name"), str) or not entry["name"]:
+            raise ValueError(f"invalid omitted file name for {dest}")
+        if not isinstance(entry.get("system", ""), str):
+            raise ValueError(f"invalid omitted system for {dest}")
+        if not isinstance(entry.get("required"), bool):
+            raise ValueError(f"invalid omitted required flag for {dest}")
+        if entry.get("reason") not in allowed_omission_reasons:
+            raise ValueError(f"invalid omission reason for {dest}")
+        cores = entry.get("cores")
+        if cores is not None and (
+            not isinstance(cores, list)
+            or not all(isinstance(core, str) for core in cores)
+        ):
+            raise ValueError(f"invalid omitted cores list for {dest}")
+    declared_total_omitted = data.get("total_omitted")
+    if (
+        declared_total_omitted is not None
+        and declared_total_omitted != len(omitted)
+    ):
+        raise ValueError("manifest total_omitted does not match omitted_files")
+
+    copies = data.get("standalone_copies", [])
+    if not isinstance(copies, list) or len(copies) > 10_000:
+        raise ValueError("invalid standalone_copies")
+    for index, entry in enumerate(copies):
+        if not isinstance(entry, dict):
+            raise ValueError(f"standalone_copies[{index}] must be an object")
+        if "file" in entry:
+            _safe_relative_path(
+                entry["file"], f"standalone_copies[{index}].file"
+            )
+        if "pattern" in entry:
+            pattern = entry["pattern"]
+            if (
+                not isinstance(pattern, str)
+                or not pattern
+                or len(pattern) > 256
+                or "/" in pattern
+                or "\\" in pattern
+                or ".." in pattern
+            ):
+                raise ValueError(f"invalid standalone copy pattern: {pattern!r}")
+        targets = entry.get("targets", {})
+        if targets and (
+            not isinstance(targets, dict)
+            or any(
+                not isinstance(values, list)
+                or len(values) > 100
+                or not all(
+                    isinstance(value, str) and len(value) <= 2048
+                    for value in values
+                )
+                for values in targets.values()
+            )
+        ):
+            raise ValueError(f"invalid standalone copy targets at index {index}")
+    return data
+
+
+def _validate_targets(data: object) -> dict[str, dict]:
+    """Validate and normalize legacy list-valued target manifests.
+
+    A null core list means the target publishes no core inventory. That is a
+    known target with no filter, not a broken manifest: rejecting it would
+    discard every other target on the platform.
+    """
+    if not isinstance(data, dict) or len(data) > 10_000:
+        raise ValueError("invalid targets manifest")
+    normalized: dict[str, dict] = {}
+    for target, value in data.items():
+        if not isinstance(target, str) or not target or len(target) > 128:
+            raise ValueError("invalid target name")
+        if isinstance(value, dict):
+            cores = value.get("cores")
+        else:
+            cores = value
+        if cores is None:
+            normalized[target] = {"cores": None}
+            continue
+        if not isinstance(cores, list) or len(cores) > 10_000 or not all(
+            isinstance(core, str) and 0 < len(core) <= 256 for core in cores
+        ):
+            raise ValueError(f"invalid core list for target {target}")
+        normalized[target] = {"cores": cores}
+    return normalized
+
+
 def fetch_manifest(plat: str) -> dict:
     """Download platform manifest JSON."""
     url = MANIFEST_URL.format(platform=plat)
     try:
         with urllib.request.urlopen(url, timeout=30) as resp:
-            return json.loads(resp.read().decode("utf-8"))
-    except (urllib.error.URLError, urllib.error.HTTPError, OSError) as exc:
+            return _validate_manifest(
+                _read_limited_json(resp, MAX_MANIFEST_BYTES, "manifest"), plat
+            )
+    except (urllib.error.URLError, urllib.error.HTTPError, OSError, ValueError) as exc:
         print(f"  Failed to fetch manifest for {plat}: {exc}", file=sys.stderr)
         sys.exit(1)
 
@@ -583,13 +818,15 @@ def fetch_targets(plat: str) -> dict:
     url = TARGETS_URL.format(platform=plat)
     try:
         with urllib.request.urlopen(url, timeout=30) as resp:
-            return json.loads(resp.read().decode("utf-8"))
+            return _validate_targets(
+                _read_limited_json(resp, MAX_TARGETS_BYTES, "targets manifest")
+            )
     except urllib.error.HTTPError as exc:
         if exc.code == 404:
             return {}
         print(f"  Warning: failed to fetch targets for {plat}: {exc}", file=sys.stderr)
         return {}
-    except (urllib.error.URLError, OSError):
+    except (urllib.error.URLError, OSError, ValueError):
         return {}
 
 
@@ -618,6 +855,15 @@ def _sha1_file(path: Path) -> str:
     return h.hexdigest()
 
 
+def _sha256_file(path: Path) -> str:
+    """Compute SHA256 of a file."""
+    h = hashlib.sha256()
+    with open(path, "rb") as fh:
+        for chunk in iter(lambda: fh.read(65536), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
 def check_local(
     files: list[dict], bios_path: Path
 ) -> tuple[list[dict], list[dict], list[dict]]:
@@ -630,16 +876,21 @@ def check_local(
     mismatched: list[dict] = []
 
     for f in files:
-        dest = bios_path / f["dest"]
+        dest = _destination_path(bios_path, f["dest"])
         if not dest.exists():
             to_download.append(f)
             continue
+        expected_sha256 = f.get("sha256", "")
         expected_sha1 = f.get("sha1", "")
-        if not expected_sha1:
+        if not expected_sha256 and not expected_sha1:
             up_to_date.append(f)
             continue
-        actual = _sha1_file(dest)
-        if actual == expected_sha1:
+        verified = True
+        if expected_sha256:
+            verified = _sha256_file(dest) == expected_sha256.lower()
+        if verified and expected_sha1:
+            verified = _sha1_file(dest) == expected_sha1.lower()
+        if verified:
             up_to_date.append(f)
         else:
             mismatched.append(f)
@@ -651,38 +902,77 @@ def _download_one(
     f: dict, bios_path: Path, verbose: bool = False
 ) -> tuple[str, bool]:
     """Download a single file. Returns (dest, success)."""
-    dest = bios_path / f["dest"]
+    try:
+        dest = _destination_path(bios_path, f["dest"])
+    except ValueError:
+        return str(f.get("dest", "?")), False
     dest.parent.mkdir(parents=True, exist_ok=True)
 
     if f.get("release_asset"):
-        url = RELEASE_URL.format(asset=urllib.parse.quote(f["release_asset"], safe="/"))
+        url = RELEASE_URL.format(asset=urllib.parse.quote(f["release_asset"], safe=""))
     else:
         url = RAW_FILE_URL.format(path=urllib.parse.quote(f["repo_path"], safe="/"))
 
-    tmp_path = dest.with_suffix(dest.suffix + ".tmp")
-
     for attempt in range(1, MAX_RETRIES + 1):
+        tmp_path: Path | None = None
         try:
             with urllib.request.urlopen(url, timeout=60) as resp:
-                with open(tmp_path, "wb") as out:
-                    shutil.copyfileobj(resp, out)
+                expected_size = f["size"]
+                raw_length = resp.headers.get("Content-Length") if resp.headers else None
+                if raw_length and int(raw_length) != expected_size:
+                    raise ValueError(
+                        f"Content-Length {raw_length} != expected {expected_size}"
+                    )
+                with tempfile.NamedTemporaryFile(
+                    mode="wb",
+                    dir=dest.parent,
+                    prefix=f".{dest.name}.",
+                    suffix=".part",
+                    delete=False,
+                ) as out:
+                    tmp_path = Path(out.name)
+                    downloaded = 0
+                    while True:
+                        chunk = resp.read(1024 * 1024)
+                        if not chunk:
+                            break
+                        downloaded += len(chunk)
+                        if downloaded > expected_size or downloaded > MAX_DOWNLOAD_SIZE:
+                            raise ValueError("download exceeded declared size")
+                        out.write(chunk)
+                if downloaded != expected_size:
+                    raise ValueError(
+                        f"downloaded {downloaded} bytes; expected {expected_size}"
+                    )
 
+            expected_sha256 = f.get("sha256", "")
             expected_sha1 = f.get("sha1", "")
+            if expected_sha256 and _sha256_file(tmp_path) != expected_sha256.lower():
+                if verbose:
+                    print(f"    SHA256 mismatch on attempt {attempt}", file=sys.stderr)
+                tmp_path.unlink(missing_ok=True)
+                continue
             if expected_sha1:
                 actual = _sha1_file(tmp_path)
-                if actual != expected_sha1:
+                if actual != expected_sha1.lower():
                     if verbose:
                         print(f"    SHA1 mismatch on attempt {attempt}", file=sys.stderr)
                     tmp_path.unlink(missing_ok=True)
                     continue
 
-            tmp_path.rename(dest)
+            os.replace(tmp_path, dest)
             return f["dest"], True
 
-        except (urllib.error.URLError, urllib.error.HTTPError, OSError) as exc:
+        except (
+            urllib.error.URLError,
+            urllib.error.HTTPError,
+            OSError,
+            ValueError,
+        ) as exc:
             if verbose:
                 print(f"    Attempt {attempt} failed: {exc}", file=sys.stderr)
-            tmp_path.unlink(missing_ok=True)
+            if tmp_path is not None:
+                tmp_path.unlink(missing_ok=True)
 
     return f["dest"], False
 
@@ -880,8 +1170,15 @@ def main() -> None:
         action="store_true",
         help="verbose output",
     )
+    parser.add_argument(
+        "--standalone-copies",
+        action="store_true",
+        help="opt in to copies into detected standalone-emulator directories",
+    )
 
     args = parser.parse_args()
+    if not 1 <= args.jobs <= 32:
+        parser.error("--jobs must be between 1 and 32")
     print("RetroBIOS\n")
 
     os_type = detect_os()
@@ -940,11 +1237,13 @@ def main() -> None:
     total_downloaded = 0
     total_up_to_date = 0
     total_errors = 0
+    total_omitted = 0
 
     for plat_name, bios_path in platforms:
         print(f"\nFetching file index for {plat_name}...")
         manifest = fetch_manifest(plat_name)
         files = manifest.get("files", [])
+        omitted_files = manifest.get("omitted_files", [])
 
         if args.list_targets:
             targets = fetch_targets(plat_name)
@@ -952,24 +1251,48 @@ def main() -> None:
                 print(f"  No targets available for {plat_name}")
             else:
                 for t in sorted(targets.keys()):
-                    cores = targets[t].get("cores", [])
-                    print(f"  {t} ({len(cores)} cores)")
+                    cores = targets[t].get("cores")
+                    label = "no core list" if cores is None else f"{len(cores)} cores"
+                    print(f"  {t} ({label})")
             continue
 
         # Target filtering
         if args.target:
             targets = fetch_targets(plat_name)
             target_info = targets.get(args.target)
-            if not target_info:
+            if target_info is None:
                 print(f"  Warning: target '{args.target}' not found for {plat_name}")
+            elif target_info.get("cores") is None:
+                print(
+                    f"  Target '{args.target}' publishes no core list; "
+                    "installing every file"
+                )
             else:
-                target_cores = target_info.get("cores", [])
+                target_cores = target_info["cores"]
                 before = len(files)
                 files = _filter_by_target(files, target_cores)
+                omitted_files = _filter_by_target(omitted_files, target_cores)
                 print(f"  Filtered {before} -> {len(files)} files for target {args.target}")
 
         total_size = sum(f.get("size", 0) for f in files)
         print(f"  {len(files)} files ({format_size(total_size)})")
+        if omitted_files:
+            required_omitted = sum(
+                1 for entry in omitted_files if entry.get("required", True)
+            )
+            reasons: dict[str, int] = {}
+            for entry in omitted_files:
+                reason = entry.get("reason", "unknown")
+                reasons[reason] = reasons.get(reason, 0) + 1
+            reason_summary = ", ".join(
+                f"{reason.replace('_', ' ')}: {count}"
+                for reason, count in sorted(reasons.items())
+            )
+            print(
+                f"  Safety notice: {len(omitted_files)} unavailable or unsafe "
+                f"entries omitted ({required_omitted} required; {reason_summary})."
+            )
+            total_omitted += len(omitted_files)
 
         print("\nChecking existing files...")
         to_download, up_to_date, mismatched = check_local(files, bios_path)
@@ -1004,7 +1327,11 @@ def main() -> None:
         total_up_to_date += len(up_to_date)
 
         # Standalone copies
-        if manifest.get("standalone_copies") and not args.check:
+        if (
+            manifest.get("standalone_copies")
+            and not args.check
+            and args.standalone_copies
+        ):
             print("\nStandalone emulators:")
             lb_root = launchbox_root(os_type)
             extra_dirs = launchbox_bios_dirs(lb_root) if lb_root else None
@@ -1013,11 +1340,17 @@ def main() -> None:
             )
             if copied or skipped:
                 print(f"  {copied} copied, {skipped} skipped (dir not found)")
+        elif manifest.get("standalone_copies") and not args.check:
+            print(
+                "\nStandalone copies skipped "
+                "(use --standalone-copies to opt in)."
+            )
 
     if not args.check and not args.list_targets:
         print(
             f"\nDone. {total_downloaded} downloaded, "
-            f"{total_up_to_date} up to date, {total_errors} errors."
+            f"{total_up_to_date} up to date, {total_errors} errors, "
+            f"{total_omitted} safely omitted."
         )
 
 

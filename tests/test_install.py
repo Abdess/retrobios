@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import functools
+import hashlib
 import http.server
 import importlib.util
 import json
@@ -575,9 +576,11 @@ class TestLaunchboxDetectionPowershell(unittest.TestCase):
             seed(userprofile)
         serve_root = Path(tempfile.mkdtemp())
         (serve_root / "install").mkdir()
-        (serve_root / "install" / "retroarch.json").write_text(
-            json.dumps(manifest if manifest is not None else {"files": []})
-        )
+        payload = dict(manifest if manifest is not None else {"files": []})
+        payload.setdefault("manifest_version", 2)
+        payload.setdefault("platform", "retroarch")
+        payload.setdefault("files", [])
+        (serve_root / "install" / "retroarch.json").write_text(json.dumps(payload))
         handler = functools.partial(
             http.server.SimpleHTTPRequestHandler, directory=str(serve_root)
         )
@@ -591,7 +594,10 @@ class TestLaunchboxDetectionPowershell(unittest.TestCase):
                 RETROBIOS_BASE_URL=f"http://127.0.0.1:{httpd.server_address[1]}",
             )
             proc = subprocess.run(
-                ["pwsh", "-NoProfile", "-File", str(REPO_ROOT / "install.ps1")],
+                [
+                    "pwsh", "-NoProfile", "-File",
+                    str(REPO_ROOT / "install.ps1"), "--standalone-copies",
+                ],
                 env=env,
                 capture_output=True,
                 text=True,
@@ -599,10 +605,12 @@ class TestLaunchboxDetectionPowershell(unittest.TestCase):
             )
         finally:
             httpd.shutdown()
+            httpd.server_close()
         return proc, ra_dir
 
     def _assert_resolved(self, proc, ra_dir):
-        self.assertIn("Found LaunchBox with RetroArch at", proc.stdout)
+        self.assertIn("Found LaunchBox", proc.stdout)
+        self.assertIn("Found Retroarch at", proc.stdout)
         self.assertIn(str(ra_dir), proc.stdout)
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
         self.assertIn("Done.", proc.stdout)
@@ -642,7 +650,8 @@ class TestLaunchboxDetectionPowershell(unittest.TestCase):
             "  </Emulator>\n",
             seed=seed,
         )
-        self.assertIn("Found LaunchBox with RetroArch at", proc.stdout)
+        self.assertIn("Found LaunchBox", proc.stdout)
+        self.assertIn("Found Retroarch at", proc.stdout)
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
         self.assertIn(str(ra_dir / "bios"), proc.stdout)
 
@@ -741,16 +750,74 @@ class TestAvailablePlatforms(unittest.TestCase):
         manifests = {p.stem for p in (REPO_ROOT / "install").glob("*.json")}
         self.assertEqual(set(install.AVAILABLE_PLATFORMS), manifests)
 
-    def test_powershell_installer_same_list(self):
+    def test_powershell_wrapper_pins_installer_hash(self):
         content = (REPO_ROOT / "install.ps1").read_text()
-        match = re.search(r"\$available = @\(([^)]*)\)", content)
-        self.assertIsNotNone(match, "install.ps1 must define $available")
-        ps_list = set(re.findall(r'"([^"]+)"', match.group(1)))
-        self.assertEqual(ps_list, set(install.AVAILABLE_PLATFORMS))
+        match = re.search(r'\$defaultInstallSha256 = "([0-9a-f]{64})"', content)
+        self.assertIsNotNone(match, "install.ps1 must embed the installer SHA256")
+        expected = hashlib.sha256((REPO_ROOT / "install.py").read_bytes()).hexdigest()
+        self.assertEqual(match.group(1), expected)
 
-    def test_powershell_normalizes_input(self):
+    def test_powershell_wrapper_rejects_non_https_bootstrap(self):
         content = (REPO_ROOT / "install.ps1").read_text()
-        self.assertIn(".Trim().ToLower()", content)
+        self.assertIn('$uri.Scheme -ne "https"', content)
+
+    def test_shell_wrapper_pins_installer_hash(self):
+        content = (REPO_ROOT / "install.sh").read_text()
+        match = re.search(r'DEFAULT_INSTALL_SHA256="([0-9a-f]{64})"', content)
+        self.assertIsNotNone(match, "install.sh must embed the installer SHA256")
+        expected = hashlib.sha256((REPO_ROOT / "install.py").read_bytes()).hexdigest()
+        self.assertEqual(match.group(1), expected)
+
+    def test_shell_one_liner_downloads_verifies_and_forwards_arguments(self):
+        scratch = REPO_ROOT / "tmp" / "tests"
+        scratch.mkdir(parents=True, exist_ok=True)
+        with tempfile.TemporaryDirectory(dir=scratch) as directory:
+            root = Path(directory)
+            # A piped script must not trust a same-named file in the caller's
+            # working directory; only a real local install.sh may use its peer.
+            (root / "install.py").write_text(
+                "raise SystemExit('untrusted cwd installer ran')\n",
+                encoding="utf-8",
+            )
+            fake_bin = root / "bin"
+            fake_bin.mkdir()
+            marker = root / "curl-called"
+            fake_curl = fake_bin / "curl"
+            fake_curl.write_text(
+                "#!/bin/sh\n"
+                "output=\n"
+                "while [ \"$#\" -gt 0 ]; do\n"
+                "  if [ \"$1\" = --output ]; then output=$2; shift 2; else shift; fi\n"
+                "done\n"
+                "cp -- \"$FAKE_INSTALLER_SOURCE\" \"$output\"\n"
+                ": > \"$FAKE_CURL_MARKER\"\n",
+                encoding="utf-8",
+            )
+            fake_curl.chmod(0o755)
+
+            env = os.environ.copy()
+            env.update(
+                PATH=f"{fake_bin}{os.pathsep}{env['PATH']}",
+                TMPDIR=str(root),
+                RETROBIOS_INSTALL_URL="https://example.invalid/install.py",
+                RETROBIOS_INSTALL_SHA256=hashlib.sha256(
+                    (REPO_ROOT / "install.py").read_bytes()
+                ).hexdigest(),
+                FAKE_INSTALLER_SOURCE=str(REPO_ROOT / "install.py"),
+                FAKE_CURL_MARKER=str(marker),
+            )
+            proc = subprocess.run(
+                ["sh", "-s", "--", "--list-platforms"],
+                cwd=root,
+                env=env,
+                input=(REPO_ROOT / "install.sh").read_text(encoding="utf-8"),
+                capture_output=True,
+                text=True,
+                timeout=30,
+            )
+            self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+            self.assertTrue(marker.is_file(), "piped bootstrap did not download install.py")
+            self.assertIn("retroarch", proc.stdout)
 
 
 if __name__ == "__main__":
