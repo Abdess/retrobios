@@ -885,10 +885,10 @@ class TestBuildReport(unittest.TestCase):
             )
         )
         profile_sync.upstream.resolve_head = (
-            lambda repo, cache_dir, offline=False: "headsha"
+            lambda repo, cache_dir, offline=False, branch=None: "headsha"
         )
         profile_sync.upstream.resolve_commit_at = (
-            lambda repo, date, cache_dir, offline=False: "pinsha"
+            lambda repo, date, cache_dir, offline=False, branch=None: "pinsha"
         )
         profile_sync.upstream.compare = (
             lambda repo, base, head, cache_dir, offline=False: CompareResult([], False)
