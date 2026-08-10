@@ -57,21 +57,21 @@ files:
   # --- Kickstart ROMs ---
   # Libretro: find_kickstart_in_system_dir() with per-model candidate lists
   # Standalone: get_kickstart_filehandle() with ROM database + config
-  # ref: libretro/libretro.cpp:1503-1566, src/memory.cpp:2030-2072
+  # ref: libretro/libretro.cpp:1762-1830, src/memory.cpp:2030-2072
 
   - name: kick13.rom
     system: commodore-amiga
     required: true
     size: 262144
     note: "A500 Kickstart v1.3 rev 34.005, default for A500 model"
-    source_ref: "libretro/libretro.cpp:1517"
+    source_ref: "libretro/libretro.cpp:1776 (candidates_a500)"
 
   - name: kick12.rom
     system: commodore-amiga
     required: false
     size: 262144
     note: "A500 Kickstart v1.2 rev 33.180, for A500OG model"
-    source_ref: "libretro/libretro.cpp:1516"
+    source_ref: "libretro/libretro.cpp:1775 (candidates_a500og)"
 
   - name: kick20.rom
     system: commodore-amiga
@@ -79,14 +79,14 @@ files:
     size: 524288
     aliases: [kick204.rom]
     note: "A500+ Kickstart v2.04 rev 37.175"
-    source_ref: "libretro/libretro.cpp:1518"
+    source_ref: "libretro/libretro.cpp:1777 (candidates_a500p)"
 
   - name: kick205.rom
     system: commodore-amiga
     required: false
     size: 524288
     note: "A600 Kickstart v2.05 rev 37.350, also used for WHDLoad"
-    source_ref: "libretro/libretro.cpp:1519"
+    source_ref: "libretro/libretro.cpp:1778 (candidates_a600)"
 
   - name: kick31.rom
     system: commodore-amiga
@@ -113,7 +113,7 @@ files:
     system: commodore-amiga
     required: false
     note: "Generic name, any Kickstart ROM. Last resort fallback for all models."
-    source_ref: "libretro/libretro.cpp:1510-1522"
+    source_ref: "libretro/libretro.cpp:1769-1774 (candidates_generic)"
 
   # --- CD32 ROMs ---
 
@@ -123,7 +123,7 @@ files:
     size: 524288
     aliases: [amiga-os-310-cd32.rom, kick40060.CD32]
     note: "CD32 Kickstart v3.1 rev 40.60"
-    source_ref: "libretro/libretro.cpp:1522"
+    source_ref: "libretro/libretro.cpp:1781 (candidates_cd32)"
 
   - name: cd32ext.rom
     system: commodore-cd32
@@ -131,7 +131,7 @@ files:
     size: 524288
     aliases: [amiga-ext-310-cd32.rom, "CD32 Extended.ROM"]
     note: "CD32 extended ROM rev 40.60. Not needed if using a combined 1MB ROM."
-    source_ref: "libretro/libretro.cpp:1580 candidates_cd32 (find_ext_rom_in_system_dir)"
+    source_ref: "libretro/libretro.cpp:1839 (candidates_cd32 in find_ext_rom_in_system_dir)"
 
   # --- CDTV ROMs ---
 
@@ -140,14 +140,14 @@ files:
     required: false
     aliases: [kick34005.CDTV]
     note: "CDTV extended ROM v1.00, used as kickstart candidate"
-    source_ref: "libretro/libretro.cpp:1523"
+    source_ref: "libretro/libretro.cpp:1782 (candidates_cdtv)"
 
   - name: cdtvext.rom
     system: commodore-cdtv
     required: false
     aliases: ["CDTV Extended.ROM"]
     note: "CDTV extended ROM file"
-    source_ref: "libretro/libretro.cpp:1582 candidates_cdtv (find_ext_rom_in_system_dir)"
+    source_ref: "libretro/libretro.cpp:1841 (candidates_cdtv in find_ext_rom_in_system_dir)"
 
   # --- AROS replacement ROMs ---
   # ref: src/memory.cpp:1925-1943 find_kickstart_replacement_directory,

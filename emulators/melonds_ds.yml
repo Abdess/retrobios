@@ -29,7 +29,7 @@ files:
     size: 16384
     validation: [size]
     crc32: 1280f0d5
-    source_ref: "src/libretro/config/console.cpp:219, melonDS:src/MemConstants.h:31, src/MemConstants.h:36"
+    source_ref: "src/libretro/config/console.cpp:219, src/MemConstants.h:31, src/MemConstants.h:36"
 
   - name: bios9.bin
     system: nintendo-ds
@@ -39,7 +39,7 @@ files:
     size: 4096
     validation: [size]
     crc32: 2ab23573
-    source_ref: "src/libretro/config/console.cpp:220, melonDS:src/MemConstants.h:30, src/MemConstants.h:37"
+    source_ref: "src/libretro/config/console.cpp:220, src/MemConstants.h:30, src/MemConstants.h:37"
 
   - name: firmware.bin
     system: nintendo-ds
@@ -57,7 +57,7 @@ files:
     size: 65536
     validation: [size]
     crc32: 4316cc42
-    source_ref: "src/libretro/config/console.cpp:333, melonDS:src/MemConstants.h:32, src/MemConstants.h:44"
+    source_ref: "src/libretro/config/console.cpp:333, src/MemConstants.h:32, src/MemConstants.h:44"
     note: "Contains eMMC key-Y at offset 0x8308 for NAND init"
 
   - name: dsi_bios9.bin
@@ -67,7 +67,7 @@ files:
     size: 65536
     validation: [size]
     crc32: bae84f6c
-    source_ref: "src/libretro/config/console.cpp:338, melonDS:src/MemConstants.h:32, src/MemConstants.h:45"
+    source_ref: "src/libretro/config/console.cpp:338, src/MemConstants.h:32, src/MemConstants.h:45"
 
   - name: dsi_firmware.bin
     system: nintendo-dsi
