@@ -68,7 +68,7 @@ files:
     md5: "1164ae723c9181698cc41dde6a341132"
     sha1: "8a799c6615702aac72016b784e30ea1abd3e197b"
     crc32: "a4626dfa"
-    source_ref: "prboom2/src/m_misc.c:1723-1724 (I_FindFile then I_Error), prboom2/src/d_main.c:1873-1895 (autoload), prboom2/src/w_wad.c:185-196 (LUMP_PRBOOM tagging), prboom2/CMakeLists.txt:41 (PACKAGE_TARNAME), prboom2/CMakeLists.txt:234-235 (WAD_DATA), prboom2/prboom2/data/CMakeLists.txt:364-370 (rdatawad build and install)"
+    source_ref: "prboom2/src/m_misc.c:1723-1724 (I_FindFile then I_Error), prboom2/src/d_main.c:1873-1895 (autoload), prboom2/src/w_wad.c:185-196 (LUMP_PRBOOM tagging), prboom2/CMakeLists.txt:41 (PACKAGE_TARNAME), prboom2/CMakeLists.txt:234-235 (WAD_DATA), prboom2/data/CMakeLists.txt:364-370 (rdatawad build and install)"
     note: >
       The code checks existence only, then rejects a file whose header is
       neither IWAD nor PWAD (prboom2/src/w_wad.c:216-218). Hashes are those of the file
@@ -81,7 +81,7 @@ files:
     description: "General MIDI soundfont for the fluidsynth MIDI player"
     required: false
     hle_fallback: true
-    source_ref: "prboom2/src/m_misc.c:445-446 (_WIN32 defaults for snd_midiplayer and snd_soundfont), MUSIC/flplayer.c:193-202 (I_FindFile2 then fluid_synth_sfload)"
+    source_ref: "prboom2/src/m_misc.c:445-446 (_WIN32 defaults for snd_midiplayer and snd_soundfont), prboom2/src/MUSIC/flplayer.c:193-202 (I_FindFile2 then fluid_synth_sfload)"
     note: >
       Named by the Windows default of snd_soundfont, where snd_midiplayer also
       defaults to fluidsynth, so a stock Windows configuration reads it. Any
@@ -95,7 +95,7 @@ files:
     description: "General MIDI soundfont named by the non-Windows soundfont default"
     required: false
     hle_fallback: true
-    source_ref: "prboom2/src/m_misc.c:448-449 (non-_WIN32 defaults, /usr/share/sounds/sf3/default-GM.sf3), MUSIC/flplayer.c:193-202 (I_FindFile2 then fluid_synth_sfload)"
+    source_ref: "prboom2/src/m_misc.c:448-449 (non-_WIN32 defaults, /usr/share/sounds/sf3/default-GM.sf3), prboom2/src/MUSIC/flplayer.c:193-202 (I_FindFile2 then fluid_synth_sfload)"
     note: >
       The default is an absolute path, which resolves through the unprefixed
       working directory entry of the search table. Reached once snd_midiplayer
