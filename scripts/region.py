@@ -128,9 +128,9 @@ def region_tag(requested: list[str]) -> str:
 def build_region_index(profiles: dict) -> dict[str, dict]:
     """Build a region lookup from emulator profiles.
 
-    Keyed by the entry's path when present, by name otherwise. Entries sharing a
-    key have their regions unioned, so an ambiguous lookup keeps more files
-    rather than fewer.
+    Keyed by the entry's path when present, by name otherwise.  Untagged
+    declarations are recorded as ambiguity evidence: if the same lookup key is
+    both tagged and untagged, filtering keeps it instead of inventing a region.
     """
     index: dict[str, dict] = {}
     for emu_name, profile in sorted(profiles.items()):
@@ -145,16 +145,19 @@ def build_region_index(profiles: dict) -> dict[str, dict]:
                 raise ValueError(
                     f"{emu_name}: {f.get('name', '?')}: {exc}"
                 ) from exc
-            if not regions:
-                continue
             name = f.get("name", "")
             path = f.get("path") or ""
             # Path-keyed so same-named entries stay separate (Dolphin declares
             # three IPL.bin), name-keyed so a candidate identified by name alone
             # sees the union and is never dropped on ambiguity.
             for key in {path, name} - {""}:
-                entry = index.setdefault(key, {"regions": set(), "emulators": []})
+                entry = index.setdefault(
+                    key,
+                    {"regions": set(), "has_untagged": False, "emulators": []},
+                )
                 entry["regions"] |= regions
+                if not regions:
+                    entry["has_untagged"] = True
                 if emu_name not in entry["emulators"]:
                     entry["emulators"].append(emu_name)
     return index
@@ -170,14 +173,16 @@ def lookup_regions(index: dict[str, dict], destination: str, name: str) -> set[s
     if destination:
         entry = index.get(destination)
         if entry:
-            return set(entry["regions"])
+            return set() if entry.get("has_untagged") else set(entry["regions"])
         parts = destination.split("/")
         for i in range(1, len(parts)):
             entry = index.get("/".join(parts[i:]))
             if entry:
-                return set(entry["regions"])
+                return set() if entry.get("has_untagged") else set(entry["regions"])
     entry = index.get(name)
-    return set(entry["regions"]) if entry else set()
+    if not entry or entry.get("has_untagged"):
+        return set()
+    return set(entry["regions"])
 
 
 def _competing_ranks(
@@ -206,8 +211,10 @@ def resolve_region_drops(
 ) -> set[str]:
     """Destinations to skip for a requested region priority list.
 
-    Per group, only the best rank actually present survives. A destination kept
-    by any group is kept overall.
+    Per group, an exact/parent regional match beats other regional candidates.
+    A world candidate beats unmatched regional fallbacks, while untagged files
+    always survive.  If neither a requested nor a world candidate exists, all
+    regional candidates survive so filtering can never empty a group.
     """
     if not requested:
         return set()
@@ -215,17 +222,31 @@ def resolve_region_drops(
     keep: set[str] = set()
     drop: set[str] = set()
     for members in groups.values():
-        ranked = _competing_ranks(members, index, requested)
-        competing = {dest for _r, dest in ranked}
-        keep |= {dest for dest, _name in members if dest not in competing}
-        if not ranked:
-            continue
-        best = min(r for r, _ in ranked)
-        for r, destination in ranked:
-            if r == best:
-                keep.add(destination)
+        regional: list[tuple[int, str]] = []
+        world: set[str] = set()
+        untagged: set[str] = set()
+        for destination, name in members:
+            regions = lookup_regions(index, destination, name)
+            if not regions:
+                untagged.add(destination)
+            elif WORLD in regions:
+                world.add(destination)
             else:
-                drop.add(destination)
+                regional.append((rank(regions, requested), destination))
+
+        keep |= untagged | world
+        if not regional:
+            continue
+        matched = [(r, destination) for r, destination in regional if r < len(requested)]
+        if matched:
+            best = min(r for r, _destination in matched)
+            keep |= {destination for r, destination in matched if r == best}
+            drop |= {destination for _r, destination in regional if destination not in keep}
+        elif world:
+            drop |= {destination for _r, destination in regional}
+        else:
+            # Preserve every unmatched candidate as a visible fallback.
+            keep |= {destination for _r, destination in regional}
     return drop - keep
 
 
@@ -240,6 +261,10 @@ def fallback_groups(
     out: list[str] = []
     for group_id, members in groups.items():
         ranked = _competing_ranks(members, index, requested)
-        if ranked and min(r for r, _ in ranked) == len(requested):
+        has_world = any(
+            WORLD in lookup_regions(index, destination, name)
+            for destination, name in members
+        )
+        if ranked and not has_world and min(r for r, _ in ranked) == len(requested):
             out.append(group_id)
     return sorted(out)

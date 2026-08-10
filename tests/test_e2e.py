@@ -754,7 +754,7 @@ class TestE2E(unittest.TestCase):
             "sha1": self.files["present_req.bin"]["sha1"],
         }
         path, status = resolve_local_file(entry, self.db)
-        self.assertEqual(status, "exact")
+        self.assertEqual(status, "sha1_exact")
         self.assertIn("present_req.bin", path)
 
     def test_02_resolve_md5(self):
@@ -768,12 +768,12 @@ class TestE2E(unittest.TestCase):
     def test_03_resolve_name_no_md5(self):
         entry = {"name": "no_md5.bin"}
         path, status = resolve_local_file(entry, self.db)
-        self.assertEqual(status, "exact")
+        self.assertEqual(status, "name_exact")
 
     def test_04_resolve_alias(self):
         entry = {"name": "alias_alt.bin", "aliases": []}
         path, status = resolve_local_file(entry, self.db)
-        self.assertEqual(status, "exact")
+        self.assertEqual(status, "name_exact")
         self.assertIn("alias_target.bin", path)
 
     def test_05_resolve_truncated_md5(self):
@@ -1328,8 +1328,8 @@ class TestE2E(unittest.TestCase):
         )
         self.assertIsNotNone(usa_path)
         self.assertIsNotNone(eur_path)
-        self.assertEqual(usa_status, "exact")
-        self.assertEqual(eur_status, "exact")
+        self.assertEqual(usa_status, "path_exact")
+        self.assertEqual(eur_status, "path_exact")
         # Must be DIFFERENT files
         self.assertNotEqual(usa_path, eur_path)
         # Verify content
@@ -2125,6 +2125,7 @@ class TestE2E(unittest.TestCase):
                 self.db,
                 self.bios_dir,
                 output_dir,
+                offline=True,
             )
         self.assertIsNotNone(zip_path)
         with zipfile.ZipFile(zip_path) as zf:
@@ -2894,6 +2895,7 @@ class TestE2E(unittest.TestCase):
             self.bios_dir,
             output_dir,
             emulators_dir=self.emulators_dir,
+            offline=True,
         )
         self.assertIsNotNone(zip_path)
         with zipfile.ZipFile(zip_path) as zf:
@@ -3381,15 +3383,18 @@ class TestE2E(unittest.TestCase):
             self.bios_dir,
             registry_path,
             emulators_dir=self.emulators_dir,
+            offline=True,
         )
 
-        self.assertEqual(manifest["manifest_version"], 1)
+        self.assertEqual(manifest["manifest_version"], 2)
+        self.assertEqual(manifest["regions"], [])
         self.assertEqual(manifest["platform"], "test_existence")
         self.assertEqual(manifest["display_name"], "TestExistence")
         self.assertIn("generated", manifest)
         self.assertIn("files", manifest)
         self.assertIsInstance(manifest["files"], list)
         self.assertEqual(manifest["total_files"], len(manifest["files"]))
+        self.assertEqual(manifest["total_omitted"], len(manifest["omitted_files"]))
         self.assertGreater(len(manifest["files"]), 0)
         self.assertEqual(manifest["base_destination"], "system")
         self.assertEqual(
@@ -3437,9 +3442,18 @@ class TestE2E(unittest.TestCase):
             self.bios_dir,
             registry_path,
             emulators_dir=self.emulators_dir,
+            offline=True,
         )
 
         self.assertGreater(len(manifest["files"]), 0)
+        self.assertGreater(len(manifest["omitted_files"]), 0)
+        self.assertTrue(
+            all(
+                entry["reason"] in {"hash_mismatch", "not_found"}
+                for entry in manifest["omitted_files"]
+                if entry["cores"] is None
+            )
+        )
         for f in manifest["files"]:
             if f.get("release_asset"):
                 continue
@@ -3474,6 +3488,7 @@ class TestE2E(unittest.TestCase):
             self.bios_dir,
             output_dir,
             emulators_dir=self.emulators_dir,
+            offline=True,
         )
         self.assertIsNotNone(zip_path)
 
@@ -3495,6 +3510,7 @@ class TestE2E(unittest.TestCase):
             self.bios_dir,
             registry_path,
             emulators_dir=self.emulators_dir,
+            offline=True,
         )
         # Detect flat vs nested ZIP to build expected paths
         base = manifest.get("base_destination", "")
@@ -4351,7 +4367,7 @@ class TestE2E(unittest.TestCase):
         exp = Exporter()
         exp.export(truth, out, scraped_data=scraped)
 
-        content = open(out).read()
+        content = Path(out).read_text(encoding="utf-8")
         self.assertIn('"psx"', content)
         self.assertIn("scph5501.bin", content)
         self.assertIn("b" * 32, content)
@@ -4387,7 +4403,7 @@ class TestE2E(unittest.TestCase):
         exp = Exporter()
         exp.export(truth, out, scraped_data=scraped)
 
-        content = open(out).read()
+        content = Path(out).read_text(encoding="utf-8")
         self.assertIn("<biosList", content)
         self.assertIn('platform="psx"', content)
         self.assertIn("fullname=", content)
@@ -4429,7 +4445,7 @@ class TestE2E(unittest.TestCase):
         exp = Exporter()
         exp.export(truth, out, scraped_data=scraped)
 
-        data = _json.loads(open(out).read())
+        data = _json.loads(Path(out).read_text(encoding="utf-8"))
         self.assertIn("psx", data)
         self.assertTrue(
             any("scph5501" in bf["file"] for bf in data["psx"]["biosFiles"])
@@ -4785,12 +4801,12 @@ struct BurnDriver BurnDrvneogeo = {
         manifest_full = generate_manifest(
             "test_existence", self.platforms_dir, self.db, self.bios_dir,
             registry_path, emulators_dir=self.emulators_dir, emu_profiles=profiles,
-            source="full",
+            source="full", offline=True,
         )
         manifest_plat = generate_manifest(
             "test_existence", self.platforms_dir, self.db, self.bios_dir,
             registry_path, emulators_dir=self.emulators_dir, emu_profiles=profiles,
-            source="platform",
+            source="platform", offline=True,
         )
         self.assertLessEqual(manifest_plat["total_files"], manifest_full["total_files"])
         self.assertEqual(manifest_plat.get("source"), "platform")
@@ -4992,7 +5008,11 @@ struct BurnDriver BurnDrvneogeo = {
             sha256 = hl.sha256(b"dsp firmware bytes").hexdigest()
             db = {
                 "files": {
-                    "sha1x": {"name": "SNES_dsp1.rom", "path": path},
+                    "sha1x": {
+                        "name": "SNES_dsp1.rom",
+                        "path": path,
+                        "sha256": sha256,
+                    },
                 },
                 "indexes": {
                     "by_md5": {},
@@ -5006,7 +5026,7 @@ struct BurnDriver BurnDrvneogeo = {
             entry = {"name": "dsp1.rom", "sha256": sha256}
             local, status = resolve_local_file(entry, db)
             self.assertEqual(local, path)
-            self.assertEqual(status, "exact")
+            self.assertEqual(status, "sha256_exact")
             # Multi-hash list also resolves
             entry = {"name": "dsp1.rom", "sha256": f"{'0' * 64},{sha256}"}
             local, status = resolve_local_file(entry, db)
@@ -5092,7 +5112,12 @@ struct BurnDriver BurnDrvneogeo = {
             crc = f"{zlib.crc32(data) & 0xffffffff:08x}"
             db = {
                 "files": {
-                    "sha1e": {"name": "exos21.rom", "path": path, "size": len(data)},
+                    "sha1e": {
+                        "name": "exos21.rom",
+                        "path": path,
+                        "size": len(data),
+                        "crc32": crc,
+                    },
                 },
                 "indexes": {
                     "by_md5": {},
@@ -5106,7 +5131,7 @@ struct BurnDriver BurnDrvneogeo = {
                 {"name": "exos21.bin", "crc32": crc, "size": len(data)}, db
             )
             self.assertEqual(local, path)
-            self.assertEqual(status, "exact")
+            self.assertEqual(status, "crc32_exact")
             # Wrong size rejects the crc match
             local, status = resolve_local_file(
                 {"name": "exos21.bin", "crc32": crc, "size": 1}, db
@@ -5137,7 +5162,7 @@ struct BurnDriver BurnDrvneogeo = {
                 {"name": "VEC_MineStorm.vec"}, db
             )
             self.assertEqual(local, path)
-            self.assertEqual(status, "exact")
+            self.assertEqual(status, "name_exact")
 
     def test_215_check_member_hash_inside_zip(self):
         """zipped_file entries verify the ROM inside the ZIP, not the ZIP."""
@@ -5421,10 +5446,11 @@ struct BurnDriver BurnDrvneogeo = {
         self.assertNotIn("rgn_us.bin", names)
         self.assertNotIn("rgn_jp.bin", names)
 
-    def test_region_filter_keeps_group_with_no_match(self):
+    def test_region_filter_uses_world_when_no_regional_match(self):
         names = self._names_in(self._region_pack(regions=["oceania"]))
+        self.assertIn("rgn_world.bin", names)
         for expected in ("rgn_us.bin", "rgn_jp.bin", "rgn_eu.bin"):
-            self.assertIn(expected, names)
+            self.assertNotIn(expected, names)
 
     def test_region_filter_keeps_untagged_and_world(self):
         names = self._names_in(self._region_pack(regions=["north-america"]))
@@ -5477,6 +5503,7 @@ struct BurnDriver BurnDrvneogeo = {
             self.root,
             emu_profiles=self._region_profiles(),
             regions=["north-america"],
+            offline=True,
         )
         self.assertTrue(paths)
         for p in paths:
@@ -5503,6 +5530,7 @@ struct BurnDriver BurnDrvneogeo = {
             regions=["north-america"],
         )
         packed = {os.path.basename(f["dest"]) for f in manifest["files"]}
+        self.assertEqual(manifest["regions"], ["north-america"])
         self.assertIn("rgn_us.bin", packed)
         self.assertNotIn("rgn_jp.bin", packed)
         self.assertNotIn("rgn_eu.bin", packed)
@@ -5522,6 +5550,7 @@ struct BurnDriver BurnDrvneogeo = {
             self.bios_dir,
             registry_path,
             emu_profiles=self._region_profiles(),
+            offline=True,
         )
         packed = {os.path.basename(f["dest"]) for f in manifest["files"]}
         for expected in ("rgn_us.bin", "rgn_jp.bin", "rgn_eu.bin"):
@@ -5545,6 +5574,7 @@ struct BurnDriver BurnDrvneogeo = {
             regions=["north-america"],
         )
         self.assertIsNotNone(out)
+        self.assertIn("NorthAmerica", os.path.basename(out))
         names = self._names_in(out)
         self.assertIn("rgn_us.bin", names)
         self.assertNotIn("rgn_jp.bin", names)

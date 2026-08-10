@@ -10,6 +10,8 @@ import contextlib
 import hashlib
 import json
 import os
+import re
+import stat
 import tempfile
 import urllib.error
 import urllib.parse
@@ -421,6 +423,24 @@ def list_available_targets(
     return result
 
 
+HASH_EXACT_RESOLUTION_STATUSES = frozenset(
+    {
+        "sha1_exact",
+        "sha256_exact",
+        "crc32_exact",
+        "md5_exact",
+        "md5_composite_exact",
+        "zip_exact",
+        "data_dir_hash_exact",
+    }
+)
+
+
+def resolution_is_hash_exact(status: str) -> bool:
+    """Whether *status* proves content identity with a declared hash."""
+    return status in HASH_EXACT_RESOLUTION_STATUSES
+
+
 def resolve_local_file(
     file_entry: dict,
     db: dict,
@@ -439,8 +459,12 @@ def resolve_local_file(
     disambiguate when multiple files share the same name. Matched against
     the by_path_suffix index built from the repo's directory structure.
 
-    Returns (local_path, status) where status is one of:
-    exact, zip_exact, hash_mismatch, not_found.
+    Returns ``(local_path, status)``.  Statuses describe the evidence used:
+    ``sha1_exact``, ``sha256_exact``, ``crc32_exact``, ``md5_exact``,
+    ``md5_composite_exact``, ``zip_exact``, ``path_exact``, ``name_exact``,
+    ``hash_mismatch`` or ``not_found`` (plus documented fallback statuses).
+
+    A path or filename is never allowed to override a declared strong hash.
     """
     sha1 = file_entry.get("sha1")
     name = file_entry.get("name", "")
@@ -464,54 +488,100 @@ def resolve_local_file(
             names_to_try.append(hint_base)
 
     md5_list = parse_md5_list(file_entry.get("md5"))
+    sha1_candidates = [
+        str(value).strip().lower()
+        for value in (sha1 if isinstance(sha1, list) else [sha1] if sha1 else [])
+        if str(value).strip()
+    ]
+    sha256_raw = file_entry.get("sha256")
+    sha256_values = sha256_raw if isinstance(sha256_raw, list) else [sha256_raw]
+    sha256_candidates = [
+        candidate.strip().lower()
+        for value in sha256_values
+        if value
+        for candidate in str(value).split(",")
+        if len(candidate.strip()) == 64
+    ]
+    crc_raw = str(file_entry.get("crc32", "") or "").strip().lower()
+    declared_size = file_entry.get("size")
+    has_strong_hash = bool(
+        sha1_candidates or sha256_candidates or md5_list or crc_raw
+    )
     files_db = db.get("files", {})
     by_md5 = db.get("indexes", {}).get("by_md5", {})
     by_name = db.get("indexes", {}).get("by_name", {})
     by_path_suffix = db.get("indexes", {}).get("by_path_suffix", {})
 
-    # 0. Path suffix exact match (for regional variants with same filename)
-    if dest_hint and by_path_suffix:
-        for match_sha1 in by_path_suffix.get(dest_hint, []):
-            if match_sha1 in files_db:
-                path = files_db[match_sha1]["path"]
-                if os.path.exists(path):
-                    return path, "exact"
+    def _record_match_status(match_sha1: str) -> str | None:
+        """Return hash evidence when a DB record satisfies every declaration."""
+        entry = files_db.get(match_sha1)
+        if not entry:
+            return None
+        statuses: list[str] = []
+        if sha1_candidates:
+            if match_sha1.lower() not in sha1_candidates:
+                return None
+            statuses.append("sha1_exact")
+        if sha256_candidates:
+            if str(entry.get("sha256", "")).lower() not in sha256_candidates:
+                return None
+            statuses.append("sha256_exact")
+        # With zipped_file the MD5 identifies the member, not the container.
+        if md5_list and not zipped_file:
+            actual_md5 = str(entry.get("md5", "")).lower()
+            if not any(actual_md5.startswith(expected) for expected in md5_list):
+                return None
+            statuses.append("md5_exact")
+        if crc_raw:
+            if str(entry.get("crc32", "")).lower() != crc_raw:
+                return None
+            if declared_size is not None:
+                allowed_sizes = (
+                    declared_size if isinstance(declared_size, list) else [declared_size]
+                )
+                if entry.get("size") not in allowed_sizes:
+                    return None
+            statuses.append("crc32_exact")
+        return statuses[0] if statuses else None
 
     # 1. SHA1 exact match (accept list-valued sha1 from profiles)
-    sha1_candidates = sha1 if isinstance(sha1, list) else [sha1] if sha1 else []
     for cand in sha1_candidates:
-        if isinstance(cand, str) and cand in files_db:
+        if cand in files_db:
             path = files_db[cand]["path"]
-            if os.path.exists(path):
-                return path, "exact"
+            status = _record_match_status(cand)
+            if status and os.path.exists(path):
+                return path, status
 
     # 1b. SHA256 exact match (profiles hashed from sources that publish
     # sha256, e.g. MesenCE). A full sha256 is a strong identifier.
-    sha256_raw = str(file_entry.get("sha256", "") or "")
-    if sha256_raw:
+    if sha256_candidates:
         by_sha256 = db.get("indexes", {}).get("by_sha256", {})
-        for cand in sha256_raw.split(","):
-            cand = cand.strip().lower()
-            if len(cand) == 64:
-                match = by_sha256.get(cand)
-                if match and match in files_db:
-                    path = files_db[match]["path"]
-                    if os.path.exists(path):
-                        return path, "exact"
+        for cand in sha256_candidates:
+            match = by_sha256.get(cand)
+            if match and match in files_db:
+                path = files_db[match]["path"]
+                status = _record_match_status(match)
+                if status and os.path.exists(path):
+                    return path, status
 
-    # 1c. CRC32 + size exact match, only when no stronger hash is declared
-    # (crc-only profiles: FBNeo, Clock Signal). CRC32 alone is weak, so the
-    # declared size must confirm the match.
-    crc_raw = str(file_entry.get("crc32", "") or "").strip().lower()
-    declared_size = file_entry.get("size")
-    if crc_raw and declared_size and not zipped_file and not md5_list:
+    # 1c. CRC32 lookup, only when no stronger hash is declared.  A declared
+    # size confirms it when available; a handful of emulators validate CRC32
+    # alone, so those entries retain the same (weaker) evidence as the core.
+    if (
+        crc_raw
+        and not zipped_file
+        and not md5_list
+        and not sha1_candidates
+        and not sha256_candidates
+    ):
         by_crc32 = db.get("indexes", {}).get("by_crc32", {})
         match = by_crc32.get(crc_raw)
         if match and match in files_db:
             entry = files_db[match]
             path = entry["path"]
-            if entry.get("size") == declared_size and os.path.exists(path):
-                return path, "exact"
+            status = _record_match_status(match)
+            if status and os.path.exists(path):
+                return path, status
 
     # 2. MD5 direct lookup (skip for zipped_file: md5 is inner ROM, not container)
     # Guard: only accept if the found file's name matches the requested name
@@ -534,15 +604,31 @@ def resolve_local_file(
                 # Full MD5 (32 chars) is a strong identifier: trust it
                 # without name guard. Truncated MD5 still needs name check
                 # to avoid cross-contamination.
-                if os.path.exists(path):
+                status = _record_match_status(sha1_match)
+                if status and os.path.exists(path):
                     if len(md5_candidate) >= 32 or _md5_name_ok(path):
-                        return path, "md5_exact"
+                        return path, status
             if len(md5_candidate) < 32:
                 for db_md5, db_sha1 in by_md5.items():
                     if db_md5.startswith(md5_candidate) and db_sha1 in files_db:
                         path = files_db[db_sha1]["path"]
-                        if os.path.exists(path) and _md5_name_ok(path):
-                            return path, "md5_exact"
+                        status = _record_match_status(db_sha1)
+                        if status and os.path.exists(path) and _md5_name_ok(path):
+                            return path, status
+
+    # 2b. Path suffix lookup is useful for same-named regional files, but it
+    # is identity evidence only when no content hash was declared.  A stale
+    # or incorrect destination can therefore never mask a hash mismatch.
+    if dest_hint and by_path_suffix:
+        for match_sha1 in by_path_suffix.get(dest_hint, []):
+            if match_sha1 in files_db:
+                path = files_db[match_sha1]["path"]
+                if os.path.exists(path):
+                    if not has_strong_hash:
+                        return path, "path_exact"
+                    status = _record_match_status(match_sha1)
+                    if status:
+                        return path, status
 
     # 3. No MD5 = any file with that name or alias (existence check)
     def _size_ok(match_sha1: str) -> bool:
@@ -550,7 +636,7 @@ def resolve_local_file(
             file_entry, files_db.get(match_sha1, {}).get("size")
         )
 
-    if not md5_list:
+    if not has_strong_hash:
         candidates = []
         for try_name in names_to_try:
             for match_sha1 in by_name.get(try_name, []):
@@ -575,7 +661,7 @@ def resolve_local_file(
                 candidates = [p for p in candidates if ".zip" in os.path.basename(p)]
             primary = [p for p in candidates if "/.variants/" not in p]
             if primary or candidates:
-                return (primary[0] if primary else candidates[0]), "exact"
+                return (primary[0] if primary else candidates[0]), "name_exact"
 
     # 4. Name + alias fallback with md5_composite + direct MD5 per candidate
     md5_set = set(md5_list)
@@ -595,17 +681,17 @@ def resolve_local_file(
             candidates = [
                 (p, m) for p, m in candidates if ".zip" in os.path.basename(p)
             ]
-        if md5_set:
+        if md5_set and not (sha1_candidates or sha256_candidates or crc_raw):
             for path, db_md5 in candidates:
                 if ".zip" in os.path.basename(path):
                     try:
                         composite = md5_composite(path).lower()
                         if composite in md5_set:
-                            return path, "exact"
+                            return path, "md5_composite_exact"
                     except (zipfile.BadZipFile, OSError):
                         pass
                 if db_md5.lower() in md5_set:
-                    return path, "exact"
+                    return path, "md5_exact"
         # When zipped_file is set, only accept candidates that contain it
         if zipped_file:
             valid = []
@@ -628,7 +714,12 @@ def resolve_local_file(
     # 5. zipped_file content match via pre-built index (last resort:
     # matches inner ROM MD5 across ALL ZIPs in the repo, so only use
     # when name-based resolution failed entirely)
-    if zipped_file and md5_list and zip_contents:
+    if (
+        zipped_file
+        and md5_list
+        and zip_contents
+        and not (sha1_candidates or sha256_candidates or crc_raw)
+    ):
         for md5_candidate in md5_list:
             if md5_candidate in zip_contents:
                 zip_sha1 = zip_contents[md5_candidate]
@@ -638,7 +729,7 @@ def resolve_local_file(
                         return path, "zip_exact"
 
     # MAME clone fallback: if a file was deduped, resolve via canonical
-    if _depth < 3:
+    if _depth < 3 and not has_strong_hash:
         clone_map = _get_mame_clone_map()
         canonical = clone_map.get(name)
         if canonical and canonical != name:
@@ -655,6 +746,42 @@ def resolve_local_file(
                 return result[0], "mame_clone"
 
     # Data directory fallback: scan data/ caches for matching filename
+    def _unindexed_path_status(candidate: str) -> str:
+        """Validate a data-directory candidate without trusting its filename."""
+        if not has_strong_hash:
+            return "data_dir"
+        algorithms: set[str] = set()
+        if sha1_candidates:
+            algorithms.add("sha1")
+        if sha256_candidates:
+            algorithms.add("sha256")
+        if md5_list and not zipped_file:
+            algorithms.add("md5")
+        if crc_raw:
+            algorithms.add("crc32")
+        actual = compute_hashes(candidate, frozenset(algorithms)) if algorithms else {}
+        if sha1_candidates and actual.get("sha1", "").lower() not in sha1_candidates:
+            return "hash_mismatch"
+        if sha256_candidates and actual.get("sha256", "").lower() not in sha256_candidates:
+            return "hash_mismatch"
+        if md5_list and not zipped_file and not any(
+            actual.get("md5", "").lower().startswith(expected) for expected in md5_list
+        ):
+            return "hash_mismatch"
+        if crc_raw and actual.get("crc32", "").lower() != crc_raw:
+            return "hash_mismatch"
+        if crc_raw and declared_size is not None:
+            allowed_sizes = declared_size if isinstance(declared_size, list) else [declared_size]
+            if os.path.getsize(candidate) not in allowed_sizes:
+                return "hash_mismatch"
+        if zipped_file and md5_list and not any(
+            check_inside_zip(candidate, zipped_file, expected) == "ok"
+            for expected in md5_list
+        ):
+            return "hash_mismatch"
+        return "data_dir_hash_exact"
+
+    data_dir_mismatch: str | None = None
     if data_dir_registry:
         for _dd_key, dd_entry in data_dir_registry.items():
             cache_dir = dd_entry.get("local_cache", "")
@@ -664,7 +791,10 @@ def resolve_local_file(
                 # Exact relative path
                 candidate = os.path.join(cache_dir, try_name)
                 if os.path.isfile(candidate):
-                    return candidate, "data_dir"
+                    status = _unindexed_path_status(candidate)
+                    if status != "hash_mismatch":
+                        return candidate, status
+                    data_dir_mismatch = data_dir_mismatch or candidate
             # Basename walk: find file anywhere in cache tree (case-insensitive)
             basename_targets = {
                 (n.rsplit("/", 1)[-1] if "/" in n else n).casefold()
@@ -673,11 +803,18 @@ def resolve_local_file(
             for root, _dirs, fnames in os.walk(cache_dir):
                 for fn in fnames:
                     if fn.casefold() in basename_targets:
-                        return os.path.join(root, fn), "data_dir"
+                        candidate = os.path.join(root, fn)
+                        status = _unindexed_path_status(candidate)
+                        if status != "hash_mismatch":
+                            return candidate, status
+                        data_dir_mismatch = data_dir_mismatch or candidate
+
+    if data_dir_mismatch:
+        return data_dir_mismatch, "hash_mismatch"
 
     # Agnostic fallback: for filename-agnostic files, find any DB file
     # matching the system path prefix and size criteria
-    if file_entry.get("agnostic"):
+    if file_entry.get("agnostic") and not has_strong_hash:
         agnostic_prefix = file_entry.get("agnostic_path_prefix", "")
         min_size = file_entry.get("min_size", 0)
         max_size = file_entry.get("max_size", float("inf"))
@@ -1228,8 +1365,10 @@ def fetch_large_file(
     dest_dir: str = LARGE_FILES_CACHE,
     expected_sha1: str = "",
     expected_md5: str = "",
+    *,
+    offline: bool = False,
 ) -> str | None:
-    """Download a large file from the 'large-files' GitHub release if not cached."""
+    """Return a verified cached large file, downloading it only when allowed."""
     cached = os.path.join(dest_dir, name)
     if os.path.exists(cached):
         if expected_sha1 or expected_md5:
@@ -1248,6 +1387,9 @@ def fetch_large_file(
                 return cached
         else:
             return cached
+
+    if offline:
+        return None
 
     os.makedirs(dest_dir, exist_ok=True)
     # A per-process scratch name: two runs fetching the same asset into one
@@ -1303,15 +1445,118 @@ def fetch_large_file(
     return cached
 
 
-def safe_extract_zip(zip_path: str, dest_dir: str) -> None:
-    """Extract a ZIP file safely, preventing zip-slip path traversal."""
+MAX_ZIP_MEMBERS = 100_000
+MAX_ZIP_MEMBER_SIZE = 8 * 1024 * 1024 * 1024
+# The largest generated pack is already ~5 GB uncompressed and the collection
+# only grows; this bounds a malicious archive without capping a real one.
+MAX_ZIP_TOTAL_SIZE = 64 * 1024 * 1024 * 1024
+# DEFLATE cannot exceed roughly 1,032:1, so this rejects a declared ratio no
+# real DEFLATE member can reach. Methods with a higher ceiling (bzip2, LZMA)
+# are exempt and bounded by the per-member and per-archive size limits alone.
+MAX_ZIP_COMPRESSION_RATIO = 1_100
+_BOUNDED_RATIO_METHODS = (zipfile.ZIP_STORED, zipfile.ZIP_DEFLATED)
+
+
+def safe_extract_zip(
+    zip_path: str,
+    dest_dir: str,
+    *,
+    max_members: int = MAX_ZIP_MEMBERS,
+    max_member_size: int = MAX_ZIP_MEMBER_SIZE,
+    max_total_size: int = MAX_ZIP_TOTAL_SIZE,
+    max_compression_ratio: int = MAX_ZIP_COMPRESSION_RATIO,
+) -> None:
+    """Extract a ZIP with traversal, link and resource-limit protection.
+
+    Files are streamed to a temporary sibling and atomically installed only
+    after their declared length and CRC have been checked by ``zipfile``.
+    """
     dest = os.path.realpath(dest_dir)
+    os.makedirs(dest, exist_ok=True)
     with zipfile.ZipFile(zip_path, "r") as zf:
-        for member in zf.infolist():
-            member_path = os.path.realpath(os.path.join(dest, member.filename))
-            if not member_path.startswith(dest + os.sep) and member_path != dest:
-                raise ValueError(f"Zip slip detected: {member.filename}")
-            zf.extract(member, dest)
+        members = zf.infolist()
+        if len(members) > max_members:
+            raise ValueError(
+                f"ZIP has {len(members)} members; limit is {max_members}"
+            )
+
+        declared_total = 0
+        seen: set[str] = set()
+        for member in members:
+            # Archives written on Windows store a backslash separator. It is a
+            # separator, not a filename character, so it is normalized before
+            # the component checks rather than rejected.
+            name = member.filename.replace("\\", "/")
+            if not name or "\x00" in name:
+                raise ValueError(f"Unsafe ZIP member name: {member.filename!r}")
+            if name.startswith("/") or re.match(r"^[A-Za-z]:", name):
+                raise ValueError(f"Absolute ZIP member path: {name}")
+            parts = [part for part in name.split("/") if part]
+            if any(part in (".", "..") for part in parts):
+                raise ValueError(f"ZIP traversal detected: {name}")
+            normalized = "/".join(parts)
+            if normalized in seen:
+                raise ValueError(f"Duplicate ZIP member path: {name}")
+            seen.add(normalized)
+
+            mode = (member.external_attr >> 16) & 0xFFFF
+            file_type = stat.S_IFMT(mode)
+            if file_type not in (0, stat.S_IFREG, stat.S_IFDIR):
+                raise ValueError(f"ZIP link or special file rejected: {name}")
+            if member.flag_bits & 0x1:
+                raise ValueError(f"Encrypted ZIP member rejected: {name}")
+            if member.file_size > max_member_size:
+                raise ValueError(
+                    f"ZIP member {name} is {member.file_size} bytes; "
+                    f"limit is {max_member_size}"
+                )
+            declared_total += member.file_size
+            if declared_total > max_total_size:
+                raise ValueError(
+                    f"ZIP expands to {declared_total} bytes; limit is {max_total_size}"
+                )
+            if member.file_size and member.compress_type in _BOUNDED_RATIO_METHODS:
+                if member.compress_size == 0:
+                    raise ValueError(f"Invalid compression size for ZIP member: {name}")
+                if member.file_size / member.compress_size > max_compression_ratio:
+                    raise ValueError(f"Suspicious compression ratio for ZIP member: {name}")
+
+            target = os.path.realpath(os.path.join(dest, *parts))
+            if not target.startswith(dest + os.sep) and target != dest:
+                raise ValueError(f"ZIP traversal detected: {name}")
+            if member.is_dir() or name.endswith("/"):
+                os.makedirs(target, exist_ok=True)
+                continue
+
+            os.makedirs(os.path.dirname(target), exist_ok=True)
+            tmp_path = ""
+            try:
+                with tempfile.NamedTemporaryFile(
+                    mode="wb", dir=os.path.dirname(target), delete=False
+                ) as tmp_file:
+                    tmp_path = tmp_file.name
+                    actual_size = 0
+                    with zf.open(member, "r") as source:
+                        while True:
+                            chunk = source.read(1024 * 1024)
+                            if not chunk:
+                                break
+                            actual_size += len(chunk)
+                            if actual_size > member.file_size or actual_size > max_member_size:
+                                raise ValueError(
+                                    f"ZIP member exceeded declared or configured size: {name}"
+                                )
+                            tmp_file.write(chunk)
+                if actual_size != member.file_size:
+                    raise ValueError(
+                        f"ZIP member size mismatch for {name}: "
+                        f"{actual_size} != {member.file_size}"
+                    )
+                os.replace(tmp_path, target)
+                tmp_path = ""
+            finally:
+                if tmp_path and os.path.exists(tmp_path):
+                    os.unlink(tmp_path)
 
 
 def list_emulator_profiles(emulators_dir: str, skip_aliases: bool = True) -> None:

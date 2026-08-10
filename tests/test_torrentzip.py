@@ -65,6 +65,59 @@ class TorrentZipTest(unittest.TestCase):
         if not checked:
             self.skipTest("no TorrentZip romset available")
 
+    def test_source_renamed_sets_stay_reproducible(self):
+        """Archives whose member names we corrected must rebuild identically.
+
+        Renaming a ROM by hand produced archives that matched no upstream set
+        and could not be regenerated from their contents either. The corrected
+        primaries carry the MAME 0.289 names and TorrentZip bytes, so anyone
+        holding the ROMs reproduces them exactly.
+        """
+        corrected = [
+            os.path.join(REPO_ROOT, "bios", "Arcade", "MAME", "manager.zip"),
+            os.path.join(REPO_ROOT, "bios", "Arcade", "Arcade", "sys573.zip"),
+            os.path.join(REPO_ROOT, "bios", "Arcade", "Arcade", "cedmag.zip"),
+            os.path.join(
+                REPO_ROOT, "bios", "Entex", "Adventure Vision", "advision.zip"
+            ),
+        ]
+        checked = 0
+        for path in corrected:
+            if not os.path.exists(path):
+                continue
+            self.assertTrue(is_torrentzip(path), path)
+            with open(path, "rb") as fh:
+                original = fh.read()
+            self.assertEqual(rebuild_torrentzip(path), original, path)
+            checked += 1
+        if not checked:
+            self.skipTest("corrected romsets not present in this checkout")
+
+    def test_source_renamed_sets_carry_the_source_names(self):
+        """The member names come from MAME, not from a YAML round-trip."""
+        expected = {
+            os.path.join(REPO_ROOT, "bios", "Arcade", "MAME", "manager.zip"): {
+                "01", "23",
+            },
+            os.path.join(
+                REPO_ROOT, "bios", "Entex", "Adventure Vision", "advision.zip"
+            ): {"ins8048-11kdp_n.u5", "cop411l-kcn_n.u8"},
+        }
+        checked = 0
+        for path, names in expected.items():
+            if not os.path.exists(path):
+                continue
+            with zipfile.ZipFile(path) as archive:
+                members = {
+                    info.filename
+                    for info in archive.infolist()
+                    if not info.is_dir()
+                }
+            self.assertEqual(members, names, path)
+            checked += 1
+        if not checked:
+            self.skipTest("corrected romsets not present in this checkout")
+
     def test_identify_romset_selects_matching_recipe(self):
         atoms = {"3610a686": b"alpha", "9d0d1b46": b"beta"}
         import zlib

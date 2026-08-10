@@ -126,6 +126,36 @@ class LargeFileCacheTest(unittest.TestCase):
             common.fetch_large_file("asset.bin", dest_dir=self.dir), str(cached)
         )
 
+    def test_offline_cache_miss_never_opens_the_network(self):
+        def fail(req, timeout=None):
+            raise AssertionError("offline mode must not open the network")
+
+        common.urllib.request.urlopen = fail
+        self.assertIsNone(
+            common.fetch_large_file(
+                "asset.bin", dest_dir=self.dir, offline=True
+            )
+        )
+        self.assertEqual(os.listdir(self.dir), [])
+
+    def test_offline_mode_still_uses_a_verified_cache_hit(self):
+        cached = Path(self.dir) / "asset.bin"
+        cached.write_bytes(PAYLOAD_A)
+
+        def fail(req, timeout=None):
+            raise AssertionError("offline cache hit must not open the network")
+
+        common.urllib.request.urlopen = fail
+        self.assertEqual(
+            common.fetch_large_file(
+                "asset.bin",
+                dest_dir=self.dir,
+                expected_sha1=hashlib.sha1(PAYLOAD_A).hexdigest(),
+                offline=True,
+            ),
+            str(cached),
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

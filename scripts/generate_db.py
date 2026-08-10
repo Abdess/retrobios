@@ -342,6 +342,7 @@ def main():
     total_size = sum(entry["size"] for entry in files.values())
 
     database = {
+        "schema_version": 1,
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "total_files": len(files),
         "total_size": total_size,

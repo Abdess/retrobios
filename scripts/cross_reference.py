@@ -230,17 +230,26 @@ def cross_reference(
         gaps = []
         covered = []
         unsourceable_list: list[dict] = []
-        archive_gaps: dict[str, dict] = {}
-        seen_files: set[str] = set()
+        archive_gaps: dict[tuple, dict] = {}
+        seen_files: set[tuple] = set()
         for f in emu_files:
             fname = f.get("name", "")
-            if not fname or fname in seen_files:
+            effective_path = f.get("path") or fname
+            seen_key = (
+                fname,
+                f.get("archive"),
+                effective_path,
+                f.get("system"),
+                f.get("variant_group"),
+                f.get("mode", "both"),
+            )
+            if not fname or seen_key in seen_files:
                 continue
 
             # Collect unsourceable files separately (documented, not a gap)
             unsourceable_reason = f.get("unsourceable", "")
             if unsourceable_reason:
-                seen_files.add(fname)
+                seen_files.add(seen_key)
                 unsourceable_list.append({
                     "name": fname,
                     "required": f.get("required", False),
@@ -279,25 +288,33 @@ def cross_reference(
                 in_platform = archive in platform_names
 
             if in_platform:
-                seen_files.add(fname)
+                seen_files.add(seen_key)
                 covered.append({
                     "name": fname,
+                    "path": effective_path,
                     "required": f.get("required", False),
                     "in_platform": True,
                 })
                 continue
 
-            seen_files.add(fname)
+            seen_files.add(seen_key)
 
             # Group archived files by archive name
             if archive:
-                if archive not in archive_gaps:
+                archive_key = (
+                    archive,
+                    f.get("system"),
+                    f.get("variant_group"),
+                    f.get("mode", "both"),
+                )
+                if archive_key not in archive_gaps:
                     source = _resolve_archive_source(
                         archive, by_name, by_name_lower, data_names,
                         by_path_suffix,
                     )
-                    archive_gaps[archive] = {
+                    archive_gaps[archive_key] = {
                         "name": archive,
+                        "path": archive,
                         "required": False,
                         "note": "",
                         "source_ref": "",
@@ -308,7 +325,7 @@ def cross_reference(
                         "archive_file_count": 0,
                         "archive_required_count": 0,
                     }
-                entry = archive_gaps[archive]
+                entry = archive_gaps[archive_key]
                 entry["archive_file_count"] += 1
                 if f.get("required", False):
                     entry["archive_required_count"] += 1
@@ -351,8 +368,9 @@ def cross_reference(
                             break
                 # Try SHA1 hash match
                 if source is None:
-                    sha1 = f.get("sha1", "")
-                    if sha1 and sha1 in db_files:
+                    raw_sha1 = f.get("sha1", "")
+                    sha1_values = raw_sha1 if isinstance(raw_sha1, list) else [raw_sha1]
+                    if any(value and value in db_files for value in sha1_values):
                         source = "bios"
                 # Try CRC32 hash match
                 if source is None:
@@ -366,6 +384,7 @@ def cross_reference(
 
             entry = {
                 "name": fname,
+                "path": effective_path,
                 "required": f.get("required", False),
                 "note": f.get("note", ""),
                 "source_ref": f.get("source_ref", ""),

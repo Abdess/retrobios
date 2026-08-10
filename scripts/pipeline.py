@@ -4,6 +4,7 @@
 Steps:
   1. generate_db.py --force     (rebuild database.json from bios/)
   1b. provenance_report.py      (dump-catalog coverage from provenance/)
+  1c. romset_recipes.py         (archive identification, reconstruction targets)
   2. refresh_data_dirs.py       (update Dolphin Sys, PPSSPP, etc.)
   3. verify.py --all            (check all platforms)
   4. generate_pack.py --all     (build ZIP packs)
@@ -24,6 +25,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import re
 import subprocess
 import sys
 import time
@@ -57,8 +59,6 @@ def parse_verify_counts(output: str) -> dict[str, tuple[int, int]]:
     Matches: "Label: X/Y OK ..." or "Label: X/Y present ..."
     Returns {group_label: (ok, total)}.
     """
-    import re
-
     counts = {}
     for line in output.splitlines():
         m = re.match(r"^(.+?):\s+(\d+)/(\d+)\s+(OK|present)", line)
@@ -75,14 +75,16 @@ def parse_pack_counts(output: str) -> dict[str, tuple[int, int]]:
 
     Returns {pack_label: (ok, total)}.
     """
-    import re
-
     counts = {}
     current_label = ""
     for line in output.splitlines():
         m = re.match(r"Generating (?:shared )?pack for (.+)\.\.\.", line)
         if m:
-            current_label = m.group(1)
+            # Labels carry execution metadata such as ``[source=full]``.
+            # It is not part of the platform identity used for consistency.
+            current_label = re.sub(
+                r"\s+\[source=[^\]]+\]$", "", m.group(1).strip()
+            )
             continue
         if "files packed" not in line:
             continue
@@ -100,34 +102,77 @@ def parse_pack_counts(output: str) -> dict[str, tuple[int, int]]:
     return counts
 
 
+def parse_pack_exclusions(output: str) -> dict[str, int]:
+    """Extract intentional unsafe-omission counts from pack output."""
+    exclusions: dict[str, int] = {}
+    current_label = ""
+    for line in output.splitlines():
+        label_match = re.match(r"Generating (?:shared )?pack for (.+)\.\.\.", line)
+        if label_match:
+            current_label = re.sub(
+                r"\s+\[source=[^\]]+\]$", "", label_match.group(1).strip()
+            )
+            continue
+        if "files packed" not in line:
+            continue
+        excluded_match = re.search(r"(\d+) unsafe excluded", line)
+        exclusions[current_label] = (
+            int(excluded_match.group(1)) if excluded_match else 0
+        )
+    return exclusions
+
+
+def _match_key(label: str) -> set[str]:
+    """Comparable identity for a platform label.
+
+    Display labels and registry ids differ in punctuation and spacing
+    (``MiSTer FPGA`` against ``misterfpga``), and grouped packs join their
+    members with either separator.
+    """
+    return {
+        re.sub(r"[^a-z0-9]+", "", part.strip().lower())
+        for part in label.replace("+", "/").split("/")
+    } - {""}
+
+
 def check_consistency(verify_output: str, pack_output: str) -> bool:
     """Verify that check counts match between verify and pack for each platform."""
     v = parse_verify_counts(verify_output)
     p = parse_pack_counts(pack_output)
+    excluded = parse_pack_exclusions(pack_output)
 
     print("\n--- 5/8 consistency check ---")
     all_ok = True
 
     for v_label, (v_ok, v_total) in sorted(v.items()):
-        # Match by name overlap (handles "Lakka + RetroArch" vs "Lakka / RetroArch")
+        # Match by normalized name overlap.  Platform display labels and
+        # registry IDs legitimately differ in punctuation and spacing
+        # (notably ``MiSTer FPGA`` vs ``misterfpga``).
         p_match = None
+        v_names = _match_key(v_label)
         for p_label in p:
-            v_names = {n.strip().lower() for n in v_label.split("/")}
-            p_names = {n.strip().lower() for n in p_label.replace("+", "/").split("/")}
-            if v_names & p_names:
+            if v_names & _match_key(p_label):
                 p_match = p_label
                 break
 
         if p_match:
             p_ok, p_total = p[p_match]
+            p_excluded = excluded.get(p_match, 0)
             if v_total != p_total:
                 print(f"  {v_label}: MISMATCH total verify {v_total} != pack {p_total}")
                 all_ok = False
-            elif p_ok < v_ok:
+            elif p_ok + p_excluded < v_ok:
                 print(
-                    f"  {v_label}: MISMATCH pack {p_ok} OK < verify {v_ok} OK (/{v_total})"
+                    f"  {v_label}: MISMATCH pack accounts for "
+                    f"{p_ok} OK + {p_excluded} unsafe exclusions "
+                    f"< verify {v_ok} OK (/{v_total})"
                 )
                 all_ok = False
+            elif p_ok < v_ok:
+                print(
+                    f"  {v_label}: verify {v_ok}/{v_total} native; pack {p_ok} safe, "
+                    f"{p_excluded} unsafe excluded OK"
+                )
             elif p_ok == v_ok:
                 print(
                     f"  {v_label}: verify {v_ok}/{v_total} == pack {p_ok}/{p_total} OK"
@@ -138,6 +183,7 @@ def check_consistency(verify_output: str, pack_output: str) -> bool:
                 )
         else:
             print(f"  {v_label}: {v_ok}/{v_total} (no separate pack)")
+            all_ok = False
 
     status = "OK" if all_ok else "FAILED"
     print(f"--- consistency check: {status} ---")
@@ -219,6 +265,16 @@ def main():
     results["provenance"] = ok
     all_ok = all_ok and ok
 
+    # Step 1c: Which emulator version each arcade archive corresponds to, and
+    # which pinned archive the collection could rebuild from ROMs it holds.
+    # Read-only: writing reconstructions is an explicit --write invocation.
+    ok, out = run(
+        [sys.executable, "scripts/romset_recipes.py"],
+        "1c romset recipes",
+    )
+    results["romset_recipes"] = ok
+    all_ok = all_ok and ok
+
     # Step 2: Refresh data directories
     if not args.offline:
         ok, out = run(
@@ -226,6 +282,7 @@ def main():
             "2/8 refresh data directories",
         )
         results["refresh_data"] = ok
+        all_ok = all_ok and ok
     else:
         print("\n--- 2/8 refresh data directories: SKIPPED (--offline) ---")
         results["refresh_data"] = True
@@ -237,6 +294,7 @@ def main():
             "2a refresh MAME hashes",
         )
         results["mame_hashes"] = ok
+        all_ok = all_ok and ok
     else:
         print("\n--- 2a refresh MAME hashes: SKIPPED (--offline) ---")
         results["mame_hashes"] = True
@@ -248,6 +306,7 @@ def main():
             "2a2 refresh FBNeo hashes",
         )
         results["fbneo_hashes"] = ok
+        all_ok = all_ok and ok
     else:
         print("\n--- 2a2 refresh FBNeo hashes: SKIPPED (--offline) ---")
         results["fbneo_hashes"] = True

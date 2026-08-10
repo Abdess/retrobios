@@ -19,7 +19,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import region
-from common import load_emulator_profiles, load_database
+from common import load_emulator_profiles, load_database, parse_md5_list
 
 # No-Intro filename tokens: full English territory names.
 NOINTRO = {
@@ -104,12 +104,16 @@ def resolve_sha1(file_entry: dict, db: dict) -> str | None:
     """Resolve a profile file entry to a repo SHA1, or None when ambiguous."""
     files = db["files"]
     indexes = db["indexes"]
-    declared = str(file_entry.get("sha1") or "").lower()
-    if declared and declared in files:
-        return declared
-    md5 = str(file_entry.get("md5") or "").lower()
-    if md5 and md5 in indexes["by_md5"]:
-        return indexes["by_md5"][md5]
+    raw_sha1 = file_entry.get("sha1")
+    declared = raw_sha1 if isinstance(raw_sha1, list) else [raw_sha1]
+    sha1_hits = [str(value).lower() for value in declared if value]
+    sha1_hits = [value for value in sha1_hits if value in files]
+    if len(sha1_hits) == 1:
+        return sha1_hits[0]
+    for md5 in parse_md5_list(file_entry.get("md5")):
+        hit = indexes["by_md5"].get(md5)
+        if hit:
+            return hit
     hits = indexes["by_name"].get(file_entry.get("name", ""), [])
     if isinstance(hits, str):
         hits = [hits]

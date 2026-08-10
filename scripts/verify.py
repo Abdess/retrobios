@@ -370,9 +370,9 @@ def find_undeclared_files(
     relevant = resolve_platform_cores(config, profiles, target_cores=target_cores)
     standalone_set = set(str(c) for c in config.get("standalone_cores", []))
     undeclared = []
-    seen_files: set[tuple[str, str | None]] = set()
+    seen_files: set[tuple] = set()
     # Track archives: archive_name -> {in_repo, emulator, files: [...], ...}
-    archive_entries: dict[str, dict] = {}
+    archive_entries: dict[tuple, dict] = {}
 
     for emu_name, profile in sorted(profiles.items()):
         if profile.get("type") in ("launcher", "alias"):
@@ -391,9 +391,25 @@ def find_undeclared_files(
 
         for f in profile.get("files", []):
             fname = f.get("name", "")
-            # Dedup by (name, archive): a filename declared loose by one core
-            # and inside an archive by another are distinct packaging shapes
-            seen_key = (fname, f.get("archive"))
+            effective_path = (
+                f.get("standalone_path") if is_standalone else f.get("path")
+            ) or fname
+            raw_regions = f.get("region") or []
+            region_key = tuple(
+                str(value) for value in (
+                    raw_regions if isinstance(raw_regions, list) else [raw_regions]
+                )
+            )
+            # Same-name requirements at different paths, for different systems,
+            # or in distinct variant groups are not interchangeable.
+            seen_key = (
+                fname,
+                f.get("archive"),
+                effective_path,
+                f.get("system"),
+                f.get("variant_group"),
+                region_key,
+            )
             if not fname or seen_key in seen_files:
                 continue
             # Skip unsourceable files (documented reason, not a gap)
@@ -436,13 +452,25 @@ def find_undeclared_files(
 
             # Archived files are grouped by archive
             if archive:
-                if archive not in archive_entries:
+                archive_key = (
+                    archive,
+                    f.get("system"),
+                    f.get("variant_group"),
+                    region_key,
+                    is_standalone,
+                )
+                if archive_key not in archive_entries:
                     in_repo = _name_in_index(
                         archive, by_name, by_path_suffix, data_names,
                         by_name_lower,
                     )
-                    archive_entries[archive] = {
+                    archive_entries[archive_key] = {
+                        "profile": emu_name,
                         "emulator": profile.get("emulator", emu_name),
+                        "systems": list(profile.get("systems", [])),
+                        "system": f.get("system"),
+                        "region": f.get("region"),
+                        "variant_group": f.get("variant_group"),
                         "name": archive,
                         "archive": archive,
                         "path": archive,
@@ -457,7 +485,7 @@ def find_undeclared_files(
                         "archive_file_count": 0,
                         "archive_required_count": 0,
                     }
-                entry = archive_entries[archive]
+                entry = archive_entries[archive_key]
                 entry["archive_file_count"] += 1
                 if f.get("required", False):
                     entry["archive_required_count"] += 1
@@ -487,13 +515,22 @@ def find_undeclared_files(
                 if not in_repo:
                     # Hash fallback: the repo may hold the content under a
                     # different filename (exos21.rom vs exos21.bin)
+                    # generate_pack ships a core extra whose local copy
+                    # contradicts the declared hash and reports the divergence.
+                    # verify must agree with the builder or the two reports
+                    # disagree on the same file.
                     _lp, _st = resolve_local_file(f, db, dest_hint=dest)
-                    in_repo = _st not in ("not_found",) and _lp is not None
+                    in_repo = _st != "not_found" and _lp is not None
 
             checks = _parse_validation(f.get("validation"))
             undeclared.append(
                 {
+                    "profile": emu_name,
                     "emulator": profile.get("emulator", emu_name),
+                    "systems": list(profile.get("systems", [])),
+                    "system": f.get("system"),
+                    "region": f.get("region"),
+                    "variant_group": f.get("variant_group"),
                     "name": fname,
                     "path": dest,
                     "required": f.get("required", False),

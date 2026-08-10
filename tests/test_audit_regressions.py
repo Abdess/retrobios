@@ -1,0 +1,704 @@
+"""Regression tests for the holistic reliability and security audit."""
+
+from __future__ import annotations
+
+import contextlib
+import hashlib
+import io
+import json
+import os
+import re
+import stat
+import sys
+import tempfile
+import unittest
+import zipfile
+from pathlib import Path
+from unittest import mock
+
+import yaml
+
+ROOT = Path(__file__).resolve().parent.parent
+TMP_ROOT = ROOT / "tmp" / "tests"
+TMP_ROOT.mkdir(parents=True, exist_ok=True)
+sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(ROOT / "scripts"))
+
+import install
+from scripts import pipeline, region, region_audit
+from scripts.common import resolve_local_file, safe_extract_zip
+from scripts.generate_pack import (
+    _emulator_region_group,
+    generate_target_manifests,
+    verify_pack_against_platform,
+)
+
+
+class ReadmeRegressions(unittest.TestCase):
+    """The README advertises commands; these must stay executable.
+
+    Wording is the maintainer's, so nothing here asserts prose. What is
+    asserted is that every flag and URL the README hands a reader is one the
+    shipped scripts actually accept.
+    """
+
+    def _quick_install(self) -> str:
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        return readme.split("## Quick Install", 1)[1].split(
+            "## Download BIOS packs", 1
+        )[0]
+
+    def test_advertised_bootstrap_urls_are_the_shipped_ones(self):
+        quick_install = self._quick_install()
+        for script in ("install.sh", "install.ps1"):
+            url = f"https://raw.githubusercontent.com/Abdess/retrobios/main/{script}"
+            self.assertIn(url, quick_install, f"{script} bootstrap URL missing")
+        self.assertIn(
+            "https://raw.githubusercontent.com/Abdess/retrobios/main/install.py",
+            (ROOT / "install.sh").read_text(encoding="utf-8"),
+            "install.sh must fetch install.py from the ref the README advertises",
+        )
+
+    def test_advertised_installer_flags_exist(self):
+        quick_install = self._quick_install()
+        advertised = set(re.findall(r"(?<![\w-])--[a-z][a-z-]+", quick_install))
+        parser_source = (ROOT / "install.py").read_text(encoding="utf-8")
+        supported = set(re.findall(r'add_argument\(\s*"(--[a-z][a-z-]+)"', parser_source))
+        unknown = advertised - supported
+        self.assertEqual(unknown, set(), f"README advertises unknown flags: {unknown}")
+
+
+class PipelineRegressions(unittest.TestCase):
+    def test_pack_parser_removes_source_metadata(self):
+        output = "\n".join(
+            [
+                "Generating pack for RetroArch [source=full]...",
+                "  3 files packed (2 baseline + 1 from cores), 2/2 files OK",
+            ]
+        )
+        self.assertEqual(pipeline.parse_pack_counts(output), {"RetroArch": (2, 2)})
+
+    def test_missing_pack_is_a_consistency_failure(self):
+        verify = "RetroArch: 2/2 OK"
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.assertFalse(pipeline.check_consistency(verify, ""))
+
+    def test_display_name_matches_compact_registry_id(self):
+        verify = "MiSTer FPGA: 65/65 OK [md5]"
+        pack = "\n".join(
+            [
+                "Generating pack for misterfpga [source=full]...",
+                "  pack.zip: 65 files packed (65 baseline + 0 from cores), "
+                "65/65 files OK [md5]",
+            ]
+        )
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.assertTrue(pipeline.check_consistency(verify, pack))
+
+    def test_native_existence_and_strict_pack_exclusions_are_consistent(self):
+        verify = "RetroArch: 3/3 present [existence]"
+        pack = "\n".join(
+            [
+                "Generating pack for RetroArch [source=full]...",
+                "  pack.zip: 2 files packed (2 baseline + 0 from cores), "
+                "2/3 files OK, 1 unsafe excluded [existence]",
+            ]
+        )
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.assertTrue(pipeline.check_consistency(verify, pack))
+        self.assertEqual(pipeline.parse_pack_exclusions(pack), {"RetroArch": 1})
+
+    def test_unaccounted_pack_omission_is_a_consistency_failure(self):
+        verify = "RetroArch: 3/3 present [existence]"
+        pack = "\n".join(
+            [
+                "Generating pack for RetroArch [source=full]...",
+                "  pack.zip: 1 files packed (1 baseline + 0 from cores), "
+                "1/3 files OK, 1 unsafe excluded, 1 missing [existence]",
+            ]
+        )
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.assertFalse(pipeline.check_consistency(verify, pack))
+
+    def test_every_refresh_failure_reaches_pipeline_exit_status(self):
+        for failed_label in (
+            "2/8 refresh data directories",
+            "2a refresh MAME hashes",
+            "2a2 refresh FBNeo hashes",
+        ):
+            with self.subTest(failed_label=failed_label):
+                def fake_run(_command, label):
+                    return label != failed_label, "RetroArch: 1/1 OK\n"
+
+                argv = ["pipeline.py", "--skip-packs", "--skip-docs"]
+                with (
+                    mock.patch.object(sys, "argv", argv),
+                    mock.patch.object(pipeline, "run", side_effect=fake_run),
+                    contextlib.redirect_stdout(io.StringIO()),
+                    self.assertRaises(SystemExit) as raised,
+                ):
+                    pipeline.main()
+                self.assertEqual(raised.exception.code, 1)
+
+
+class ResolverRegressions(unittest.TestCase):
+    def _database(self, entries: dict[str, Path], suffix: str | None = None) -> dict:
+        files = {}
+        by_name: dict[str, list[str]] = {}
+        by_suffix: dict[str, list[str]] = {}
+        for name, path in entries.items():
+            payload = path.read_bytes()
+            sha1 = hashlib.sha1(payload).hexdigest()
+            md5 = hashlib.md5(payload).hexdigest()
+            sha256 = hashlib.sha256(payload).hexdigest()
+            files[sha1] = {
+                "path": str(path),
+                "name": name,
+                "size": len(payload),
+                "md5": md5,
+                "sha256": sha256,
+                "crc32": "00000000",
+            }
+            by_name.setdefault(name, []).append(sha1)
+            if suffix and name == "firmware.bin":
+                by_suffix.setdefault(suffix, []).append(sha1)
+        return {
+            "files": files,
+            "indexes": {
+                "by_name": by_name,
+                "by_md5": {entry["md5"]: sha1 for sha1, entry in files.items()},
+                "by_sha256": {
+                    entry["sha256"]: sha1 for sha1, entry in files.items()
+                },
+                "by_crc32": {},
+                "by_path_suffix": by_suffix,
+            },
+        }
+
+    def test_hash_identity_wins_over_wrong_destination_hint(self):
+        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+            root = Path(directory)
+            wrong = root / "wrong" / "firmware.bin"
+            correct = root / "correct" / "firmware.bin"
+            wrong.parent.mkdir()
+            correct.parent.mkdir()
+            wrong.write_bytes(b"wrong")
+            correct.write_bytes(b"correct")
+            db = self._database(
+                {"firmware.bin": wrong, "correct-name.bin": correct},
+                suffix="Console/USA/firmware.bin",
+            )
+            expected = hashlib.sha1(b"correct").hexdigest()
+            path, status = resolve_local_file(
+                {"name": "firmware.bin", "sha1": expected},
+                db,
+                dest_hint="Console/USA/firmware.bin",
+            )
+            self.assertEqual(path, str(correct))
+            self.assertEqual(status, "sha1_exact")
+
+    def test_name_cannot_mask_a_declared_hash_mismatch(self):
+        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+            path = Path(directory) / "firmware.bin"
+            path.write_bytes(b"wrong")
+            db = self._database({"firmware.bin": path})
+            resolved, status = resolve_local_file(
+                {"name": "firmware.bin", "sha1": "f" * 40}, db
+            )
+            self.assertEqual(resolved, str(path))
+            self.assertEqual(status, "hash_mismatch")
+
+
+class PackExclusionRegressions(unittest.TestCase):
+    def test_slug_platform_core_requirement_uses_the_generated_destination(self):
+        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+            root = Path(directory)
+            platforms = root / "platforms"
+            platforms.mkdir()
+            core_payload = root / "extra.bin"
+            core_payload.write_bytes(b"mapped core payload")
+            core_sha1 = hashlib.sha1(core_payload.read_bytes()).hexdigest()
+            core_md5 = hashlib.md5(core_payload.read_bytes()).hexdigest()
+            database = {
+                "files": {
+                    core_sha1: {
+                        "name": "extra.bin",
+                        "path": str(core_payload),
+                        "md5": core_md5,
+                        "size": core_payload.stat().st_size,
+                    }
+                },
+                "indexes": {
+                    "by_name": {"extra.bin": [core_sha1]},
+                    "by_md5": {core_md5: core_sha1},
+                    "by_sha256": {},
+                    "by_crc32": {},
+                    "by_path_suffix": {},
+                },
+            }
+            config = {
+                "platform": "Slug platform",
+                "base_destination": "bios",
+                "verification_mode": "existence",
+                "cores": ["core_a"],
+                "systems": {
+                    "console-a": {
+                        "files": [
+                            {
+                                "name": "base-a.bin",
+                                "destination": "slug-a/base-a.bin",
+                            }
+                        ]
+                    },
+                    "console-b": {
+                        "files": [
+                            {
+                                "name": "base-b.bin",
+                                "destination": "slug-b/base-b.bin",
+                            }
+                        ]
+                    },
+                },
+            }
+            (platforms / "slug.yml").write_text(
+                yaml.safe_dump(config), encoding="utf-8"
+            )
+            profiles = {
+                "core_a": {
+                    "emulator": "Core A",
+                    "type": "libretro",
+                    "systems": ["console-a"],
+                    "files": [
+                        {
+                            "name": "extra.bin",
+                            "path": "extra.bin",
+                            "sha1": core_sha1,
+                        }
+                    ],
+                }
+            }
+            pack = root / "pack.zip"
+            with zipfile.ZipFile(pack, "w", zipfile.ZIP_DEFLATED) as archive:
+                archive.writestr("slug-a/base-a.bin", b"baseline a")
+                archive.writestr("slug-b/base-b.bin", b"baseline b")
+                archive.writestr("slug-a/extra.bin", core_payload.read_bytes())
+
+            result = verify_pack_against_platform(
+                str(pack),
+                "slug",
+                str(platforms),
+                db=database,
+                emu_profiles=profiles,
+            )
+            self.assertTrue(result[0], result[3])
+            self.assertEqual(result[3], [])
+            self.assertEqual(result[6:8], (1, 1))
+
+    def _mismatch_fixture(self, root: Path, mode: str) -> tuple[dict, Path]:
+        """A platform declaring a hash the only local payload contradicts."""
+        platforms = root / "platforms"
+        platforms.mkdir()
+        payload = root / "firmware.bin"
+        payload.write_bytes(b"wrong local variant")
+        sha1 = hashlib.sha1(payload.read_bytes()).hexdigest()
+        md5 = hashlib.md5(payload.read_bytes()).hexdigest()
+        database = {
+            "files": {
+                sha1: {
+                    "name": "firmware.bin",
+                    "path": str(payload),
+                    "md5": md5,
+                    "size": payload.stat().st_size,
+                }
+            },
+            "indexes": {
+                "by_name": {"firmware.bin": [sha1]},
+                "by_md5": {md5: sha1},
+                "by_sha256": {},
+                "by_crc32": {},
+                "by_path_suffix": {},
+            },
+        }
+        config = {
+            "platform": f"Platform {mode}",
+            "verification_mode": mode,
+            "systems": {
+                "console": {
+                    "files": [
+                        {
+                            "name": "firmware.bin",
+                            "destination": "firmware.bin",
+                            "sha1": "f" * 40,
+                        }
+                    ]
+                }
+            },
+        }
+        (platforms / "plat.yml").write_text(yaml.safe_dump(config), encoding="utf-8")
+        return database, platforms
+
+    def test_hash_platform_accounts_for_an_unsafe_exclusion(self):
+        """A platform that reads the bytes would reject the local payload."""
+        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+            root = Path(directory)
+            database, platforms = self._mismatch_fixture(root, "md5")
+            pack = root / "pack.zip"
+            with zipfile.ZipFile(pack, "w", zipfile.ZIP_DEFLATED) as archive:
+                archive.writestr("README.txt", "safe subset")
+
+            result = verify_pack_against_platform(
+                str(pack),
+                "plat",
+                str(platforms),
+                db=database,
+                emu_profiles={},
+            )
+            self.assertTrue(result[0], result[3])
+            self.assertEqual(result[3], [])
+            self.assertEqual(result[8], 1)
+
+    def test_existence_platform_never_withholds_over_a_declared_hash(self):
+        """RetroArch and friends only look for the filename.
+
+        An upstream hash the local dump contradicts must not remove a file the
+        frontend would have loaded, so its absence stays a conformance error.
+        """
+        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+            root = Path(directory)
+            database, platforms = self._mismatch_fixture(root, "existence")
+            pack = root / "pack.zip"
+            with zipfile.ZipFile(pack, "w", zipfile.ZIP_DEFLATED) as archive:
+                archive.writestr("README.txt", "no firmware")
+
+            result = verify_pack_against_platform(
+                str(pack),
+                "plat",
+                str(platforms),
+                db=database,
+                emu_profiles={},
+            )
+            self.assertFalse(result[0])
+            self.assertTrue(any("baseline missing" in e for e in result[3]), result[3])
+            self.assertEqual(result[8], 0)
+
+    def test_unexplained_missing_file_still_fails_conformance(self):
+        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+            root = Path(directory)
+            platforms = root / "platforms"
+            platforms.mkdir()
+            config = {
+                "platform": "Missing",
+                "verification_mode": "existence",
+                "systems": {
+                    "console": {
+                        "files": [
+                            {"name": "absent.bin", "destination": "absent.bin"}
+                        ]
+                    }
+                },
+            }
+            (platforms / "missing.yml").write_text(
+                yaml.safe_dump(config), encoding="utf-8"
+            )
+            pack = root / "pack.zip"
+            with zipfile.ZipFile(pack, "w", zipfile.ZIP_DEFLATED) as archive:
+                archive.writestr("README.txt", "incomplete")
+            database = {
+                "files": {},
+                "indexes": {
+                    "by_name": {},
+                    "by_md5": {},
+                    "by_sha256": {},
+                    "by_crc32": {},
+                    "by_path_suffix": {},
+                },
+            }
+
+            result = verify_pack_against_platform(
+                str(pack),
+                "missing",
+                str(platforms),
+                db=database,
+                emu_profiles={},
+            )
+            self.assertFalse(result[0])
+            self.assertTrue(any("baseline missing" in error for error in result[3]))
+
+
+class RegionRegressions(unittest.TestCase):
+    def test_tagged_and_untagged_same_path_is_preserved(self):
+        profiles = {
+            "tagged": {
+                "type": "libretro",
+                "files": [
+                    {"name": "bios.bin", "path": "sys/bios.bin", "region": ["japan"]}
+                ],
+            },
+            "untagged": {
+                "type": "libretro",
+                "files": [{"name": "bios.bin", "path": "sys/bios.bin"}],
+            },
+        }
+        index = region.build_region_index(profiles)
+        self.assertEqual(region.lookup_regions(index, "sys/bios.bin", "bios.bin"), set())
+        drops = region.resolve_region_drops(
+            {"system": [("sys/bios.bin", "bios.bin")]},
+            index,
+            ["north-america"],
+        )
+        self.assertEqual(drops, set())
+
+    def test_world_candidate_beats_unmatched_regional_fallback(self):
+        profiles = {
+            "core": {
+                "type": "libretro",
+                "files": [
+                    {"name": "ntsc.bin", "region": ["world"]},
+                    {"name": "pal.bin", "region": ["europe"]},
+                ],
+            }
+        }
+        index = region.build_region_index(profiles)
+        groups = {"system": [("ntsc.bin", "ntsc.bin"), ("pal.bin", "pal.bin")]}
+        self.assertEqual(
+            region.resolve_region_drops(groups, index, ["north-america"]),
+            {"pal.bin"},
+        )
+        self.assertEqual(region.resolve_region_drops(groups, index, ["europe"]), set())
+
+    def test_multi_system_emulator_uses_separate_region_groups(self):
+        profile = {"systems": ["odyssey2", "videopac"]}
+        north_america = _emulator_region_group(
+            "o2em", profile, {"name": "o2rom.bin", "system": "odyssey2"}
+        )
+        europe = _emulator_region_group(
+            "o2em", profile, {"name": "c52.bin", "system": "videopac"}
+        )
+        self.assertNotEqual(north_america, europe)
+
+    def test_region_audit_accepts_list_valued_md5(self):
+        sha1 = "a" * 40
+        md5 = "b" * 32
+        db = {
+            "files": {sha1: {}},
+            "indexes": {"by_md5": {md5: sha1}, "by_name": {}},
+        }
+        self.assertEqual(
+            region_audit.resolve_sha1({"name": "bios.bin", "md5": [md5]}, db),
+            sha1,
+        )
+
+
+class ArchiveSecurityRegressions(unittest.TestCase):
+    def _zip_path(self, directory: Path, name: str = "archive.zip") -> Path:
+        return directory / name
+
+    def test_member_count_limit_is_enforced(self):
+        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+            root = Path(directory)
+            archive = self._zip_path(root)
+            with zipfile.ZipFile(archive, "w") as handle:
+                handle.writestr("one.bin", b"1")
+                handle.writestr("two.bin", b"2")
+            with self.assertRaisesRegex(ValueError, "members"):
+                safe_extract_zip(str(archive), str(root / "out"), max_members=1)
+
+    def test_symlink_member_is_rejected(self):
+        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+            root = Path(directory)
+            archive = self._zip_path(root)
+            link = zipfile.ZipInfo("link")
+            link.create_system = 3
+            link.external_attr = (stat.S_IFLNK | 0o777) << 16
+            with zipfile.ZipFile(archive, "w") as handle:
+                handle.writestr(link, "target")
+            with self.assertRaisesRegex(ValueError, "link or special"):
+                safe_extract_zip(str(archive), str(root / "out"))
+
+    def test_windows_separator_is_a_path_not_a_rejection(self):
+        """Archives written on Windows store a backslash separator.
+
+        download.py feeds third-party archives to this function, so a legal
+        Windows path must extract into a subdirectory instead of failing.
+        """
+        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+            root = Path(directory)
+            archive = self._zip_path(root)
+            with zipfile.ZipFile(archive, "w") as handle:
+                handle.writestr("sub\\rom.bin", b"payload")
+            out = root / "out"
+            safe_extract_zip(str(archive), str(out))
+            self.assertEqual((out / "sub" / "rom.bin").read_bytes(), b"payload")
+
+    def test_windows_separator_cannot_smuggle_traversal(self):
+        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+            root = Path(directory)
+            archive = self._zip_path(root)
+            with zipfile.ZipFile(archive, "w") as handle:
+                handle.writestr("..\\escaped.bin", b"payload")
+            with self.assertRaisesRegex(ValueError, "traversal"):
+                safe_extract_zip(str(archive), str(root / "out"))
+
+    def test_high_ratio_method_is_bounded_by_size_not_ratio(self):
+        """bzip2 legitimately exceeds the DEFLATE ceiling."""
+        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+            root = Path(directory)
+            archive = self._zip_path(root)
+            with zipfile.ZipFile(archive, "w", zipfile.ZIP_BZIP2) as handle:
+                handle.writestr("zeros.bin", bytes(4_000_000))
+            out = root / "out"
+            safe_extract_zip(str(archive), str(out))
+            self.assertEqual((out / "zeros.bin").stat().st_size, 4_000_000)
+
+    def test_compression_ratio_limit_is_enforced(self):
+        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+            root = Path(directory)
+            archive = self._zip_path(root)
+            with zipfile.ZipFile(archive, "w", zipfile.ZIP_DEFLATED) as handle:
+                handle.writestr("zeros.bin", bytes(16_384))
+            with self.assertRaisesRegex(ValueError, "compression ratio"):
+                safe_extract_zip(
+                    str(archive), str(root / "out"), max_compression_ratio=2
+                )
+
+
+class InstallerBoundaryRegressions(unittest.TestCase):
+    def _manifest(self, dest: str) -> dict:
+        return {
+            "manifest_version": 2,
+            "platform": "retroarch",
+            "files": [
+                {
+                    "dest": dest,
+                    "size": 1,
+                    "sha1": "a" * 40,
+                    "sha256": "b" * 64,
+                    "repo_path": "bios/test.bin",
+                    "cores": None,
+                }
+            ],
+            "standalone_copies": [],
+        }
+
+    def test_manifest_destination_traversal_is_rejected(self):
+        with self.assertRaisesRegex(ValueError, "unsafe"):
+            install._validate_manifest(self._manifest("../escape"), "retroarch")
+
+    def test_manifest_repo_source_is_confined_to_bios(self):
+        manifest = self._manifest("safe.bin")
+        manifest["files"][0]["repo_path"] = "scripts/pipeline.py"
+        with self.assertRaisesRegex(ValueError, "outside bios"):
+            install._validate_manifest(manifest, "retroarch")
+
+    def test_omitted_destination_cannot_overlap_a_download(self):
+        manifest = self._manifest("safe.bin")
+        manifest["omitted_files"] = [
+            {
+                "dest": "safe.bin",
+                "name": "safe.bin",
+                "system": "console",
+                "required": True,
+                "reason": "hash_mismatch",
+                "cores": None,
+            }
+        ]
+        manifest["total_omitted"] = 1
+        with self.assertRaisesRegex(ValueError, "conflicting omitted"):
+            install._validate_manifest(manifest, "retroarch")
+
+    def test_omitted_destination_traversal_is_rejected(self):
+        manifest = self._manifest("safe.bin")
+        manifest["omitted_files"] = [
+            {
+                "dest": "../unsafe.bin",
+                "name": "unsafe.bin",
+                "system": "console",
+                "required": True,
+                "reason": "hash_mismatch",
+                "cores": None,
+            }
+        ]
+        manifest["total_omitted"] = 1
+        with self.assertRaisesRegex(ValueError, "unsafe"):
+            install._validate_manifest(manifest, "retroarch")
+
+    def test_target_schema_accepts_the_null_the_generator_emits(self):
+        """The schema and generate_target_manifests must agree on null.
+
+        A target with no core list is written as null; a schema that rejects
+        it turns a valid manifest into a CI failure.
+        """
+        from jsonschema import Draft202012Validator
+
+        schema = json.loads(
+            (ROOT / "schemas" / "target-manifest.schema.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        validator = Draft202012Validator(schema)
+        document = {"windows": None, "switch": ["a5200"]}
+        self.assertEqual(list(validator.iter_errors(document)), [])
+
+    def test_pack_manifests_are_read_from_inside_the_archive(self):
+        """generate_pack writes manifest.json into the ZIP, not beside it.
+
+        A filesystem glob over dist/ matches nothing and reports success
+        without validating a single document.
+        """
+        import validate_schemas
+
+        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+            dist = Path(directory)
+            broken = {
+                "schema_version": 1,
+                "version": 1,
+                "generator": "retrobios generate_pack.py",
+                "generated": "2026-08-10T00:00:00Z",
+                "files": [{"path": "a.bin", "sha1": "nope", "md5": "nope",
+                           "size": 1, "status": "verified", "name": "a.bin"}],
+                "summary": {"total_files": 1, "verified": 1, "untracked": 0,
+                            "errors": 0},
+                "errors": [],
+            }
+            with zipfile.ZipFile(dist / "Pack.zip", "w") as archive:
+                archive.writestr("manifest.json", json.dumps(broken))
+
+            errors = validate_schemas._validate_pack_manifests(dist)
+            self.assertTrue(errors, "an invalid in-archive manifest must be reported")
+            self.assertTrue(any("sha1" in message for message in errors), errors)
+
+    def test_null_core_list_keeps_the_other_targets(self):
+        """A target without a core inventory must not void the manifest.
+
+        generate_target_manifests emits null for a target that publishes no
+        core list; rejecting the document would silently disable --target for
+        every target on that platform.
+        """
+        normalized = install._validate_targets({"windows": None, "switch": ["a5200"]})
+        self.assertIsNone(normalized["windows"]["cores"])
+        self.assertEqual(normalized["switch"]["cores"], ["a5200"])
+
+    def test_legacy_target_lists_are_normalized(self):
+        self.assertEqual(
+            install._validate_targets({"rpi4": ["core-a", "core-b"]}),
+            {"rpi4": {"cores": ["core-a", "core-b"]}},
+        )
+
+
+class TargetManifestRegressions(unittest.TestCase):
+    def test_yaml_scalar_core_is_rejected_instead_of_leaking_to_json(self):
+        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+            root = Path(directory)
+            source = root / "source"
+            output = root / "output"
+            source.mkdir()
+            (source / "platform.yml").write_text(
+                "targets:\n  device:\n    cores: [81, valid-core]\n",
+                encoding="utf-8",
+            )
+            with self.assertRaisesRegex(ValueError, "non-empty strings"):
+                generate_target_manifests(str(source), str(output))
+
+
+if __name__ == "__main__":
+    unittest.main()
