@@ -8,6 +8,10 @@ repo_name: Abdess/retrobios
 # Almost every page is generated from platforms/, emulators/ and database.json,
 # so a per-page edit link would point at a file that does not exist.
 edit_uri: ''
+# Local implementation plans are preserved in docs/ for development sessions,
+# but are not part of the public reference site.
+exclude_docs: |
+  superpowers/**
 copyright: MIT for the tooling. BIOS and firmware files are third-party system
   software, preserved for personal backup, archival and interoperability.
 theme:
@@ -53,6 +57,8 @@ theme:
   - toc.follow
 extra_css:
 - stylesheets/extra.css
+extra_javascript:
+- javascripts/site.js
 extra:
   social:
   - icon: fontawesome/brands/github
@@ -64,6 +70,7 @@ markdown_extensions:
 - attr_list
 - def_list
 - footnotes
+- meta
 - md_in_html
 - tables
 - toc:
@@ -111,6 +118,7 @@ nav:
   - 3DO Company: systems/3do-company.md
   - APF: systems/apf.md
   - Acorn: systems/acorn.md
+  - Adobe: systems/adobe.md
   - Amstrad: systems/amstrad.md
   - Apple: systems/apple.md
   - Arcade: systems/arcade.md
@@ -510,7 +518,7 @@ nav:
   - Launchers (2):
     - Dolphin Launcher: emulators/dolphin_launcher.md
     - Parallel Launcher: emulators/parallel-launcher.md
-  - Other (37):
+  - Other (36):
     - ares: emulators/ares.md
     - Basilisk II: emulators/basiliskii.md
     - Beetle GBA (Mednafen): emulators/beetle_gba.md
@@ -541,7 +549,6 @@ nav:
     - SUPER ZSNES: emulators/superzsnes.md
     - ti99sim: emulators/ti99sim.md
     - tsugaru: emulators/tsugaru.md
-    - VBA-M: emulators/vba_m.md
     - veesem: emulators/veesem.md
     - VICE: emulators/vice.md
     - Vita3K: emulators/vita3k.md
@@ -551,6 +558,7 @@ nav:
 - Cross-reference: cross-reference.md
 - Gap Analysis: gaps.md
 - Dump provenance: provenance.md
+- Data & API: data.md
 - Wiki:
   - Overview: wiki/index.md
   - Getting started: wiki/getting-started.md

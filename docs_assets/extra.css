@@ -5,7 +5,8 @@
   --rb-primary: #4a4e8a;
   --rb-primary-light: #6366a0;
   --rb-primary-dark: #363870;
-  --rb-accent: #e8594f;
+  --rb-accent: #b42318;
+  --rb-link: #273c8f;
   --rb-success: #2e7d32;
   --rb-warning: #f57c00;
   --rb-danger: #c62828;
@@ -20,6 +21,8 @@
   --rb-surface: #1e1e2e;
   --rb-border: #313244;
   --rb-text-secondary: #a6adc8;
+  --rb-accent: #ff9a8f;
+  --rb-link: #aebcff;
 }
 
 /* ── Material theme overrides ── */
@@ -509,7 +512,8 @@
 /* Pack button in tables: smaller */
 .md-typeset table .md-button {
   font-size: 0.75rem;
-  padding: 0.3em 0.8em;
+  min-height: 44px;
+  padding: 0.55em 0.8em;
 }
 
 /* ── Hide permalink anchors in hero ── */
@@ -574,5 +578,109 @@
   }
   .rb-hero h1 {
     font-size: 1.3rem;
+  }
+}
+
+/* ── Accessibility and dense-data navigation ── */
+.md-typeset a:not(.md-button):not(.headerlink):not(.rb-badge) {
+  color: var(--rb-link);
+  text-decoration: underline;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.14em;
+}
+
+.md-typeset a:not(.md-button):not(.headerlink):hover {
+  text-decoration-thickness: 0.14em;
+}
+
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 3px solid var(--rb-accent);
+  outline-offset: 3px;
+}
+
+.md-typeset .md-button,
+.md-typeset button,
+.md-typeset input,
+.md-typeset select {
+  min-height: 44px;
+}
+
+.rb-visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.rb-table-filter {
+  display: grid;
+  grid-template-columns: minmax(14rem, 28rem) auto;
+  gap: 0.35rem 0.8rem;
+  align-items: end;
+  margin: 1rem 0 0.45rem;
+}
+
+.rb-table-filter label {
+  grid-column: 1 / -1;
+  color: var(--rb-text-secondary);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.rb-table-filter input {
+  width: 100%;
+  border: 2px solid var(--rb-border);
+  border-radius: 6px;
+  background: var(--md-default-bg-color);
+  color: var(--md-default-fg-color);
+  padding: 0.55rem 0.75rem;
+  font: inherit;
+}
+
+.rb-table-filter-count {
+  align-self: center;
+  color: var(--rb-text-secondary);
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.md-typeset__scrollwrap[role="region"]:focus-visible {
+  border-radius: 8px;
+  outline: 3px solid var(--rb-accent);
+  outline-offset: 2px;
+}
+
+/* Material's compact footer defaults sit just below WCAG AA on the dark bar. */
+.md-footer-meta .md-copyright {
+  color: #b5b5b5;
+}
+
+.md-footer-meta.md-typeset .md-copyright a {
+  color: #b8c6ff !important;
+}
+
+@media (max-width: 600px) {
+  .rb-table-filter {
+    grid-template-columns: 1fr;
+  }
+
+  .rb-table-filter label {
+    grid-column: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
   }
 }

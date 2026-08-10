@@ -476,6 +476,7 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
             "- **Per-system pages** showing which emulators and platforms cover each console",
             "- **Gap analysis** identifying missing files and undeclared core requirements",
             f"- **Cross-reference** mapping files across {len(coverages)} platforms and {emulator_count} emulators",
+            "- **Versioned data access** through JSON, CSV and SQLite exports with published SHA-256 checksums",
             "",
             "## How it works",
             "",

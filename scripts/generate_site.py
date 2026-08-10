@@ -12,9 +12,14 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import csv
+import hashlib
+import io
 import json
 import os
+import re
 import shutil
+import sqlite3
 import sys
 import urllib.error
 import urllib.parse
@@ -39,13 +44,16 @@ from common import (
 
 yaml = require_yaml()
 from generate_readme import compute_coverage, manifest_totals
+from profile_sync import source_ref_values, split_source_ref
 from provenance_report import build_report
+import upstream
 
 DOCS_DIR = "docs"
 SITE_NAME = "RetroBIOS"
 REPO_URL = "https://github.com/Abdess/retrobios"
 RELEASE_URL = f"{REPO_URL}/releases/latest"
-GENERATED_DIRS = ["platforms", "systems", "emulators"]
+SITE_URL = "https://abdess.github.io/retrobios/"
+GENERATED_DIRS = ["platforms", "systems", "emulators", "wiki", "api", "downloads"]
 WIKI_SRC_DIR = "wiki"  # manually maintained wiki sources
 SYSTEM_ICON_BASE = "https://raw.githubusercontent.com/libretro/retroarch-assets/master/xmb/systematic/png"
 ICON_CACHE_PATH = Path(".cache") / "system_icons.json"
@@ -54,6 +62,120 @@ ICON_CACHE_PATH = Path(".cache") / "system_icons.json"
 # been checked yet; a name mapped to False has no icon and gets none rendered,
 # because a heading with a broken image reads worse than a heading without one.
 _icon_available: dict[str, bool] = {}
+
+
+def _forge_sources(profile: dict, label: str = "") -> list[tuple[upstream.Repo, str]]:
+    """Supported source repositories and immutable revisions for a profile."""
+    candidates: list[tuple[upstream.Repo, str]] = []
+    seen: set[tuple[str, str, str]] = set()
+    source_repos: set[tuple[str, str]] = set()
+
+    for field in ("source", "upstream"):
+        raw = profile.get(field, "")
+        values: list[str] = []
+        if isinstance(raw, dict):
+            if label and isinstance(raw.get(label), str):
+                values.append(raw[label])
+            values.extend(str(value) for value in raw.values() if value)
+        elif raw:
+            values.append(str(raw))
+
+        for value in values:
+            repo = upstream.parse_repo(value)
+            if repo is None:
+                continue
+            repo_key = (repo.host, repo.slug)
+            pin = str(profile.get(f"{field}_commit") or "")
+            if field == "upstream" and not pin and repo_key in source_repos:
+                pin = str(profile.get("source_commit") or "")
+            if not pin:
+                continue
+            key = (repo.host, repo.slug, pin)
+            if key not in seen:
+                candidates.append((repo, pin))
+                seen.add(key)
+            if field == "source":
+                source_repos.add(repo_key)
+    return candidates
+
+
+def _source_permalink(repo: upstream.Repo, pin: str, path: str,
+                      start: int | None, end: int | None) -> str:
+    """Forge-specific browser URL for one file at one immutable revision."""
+    quoted_path = urllib.parse.quote(path, safe="/@:+-._~")
+    base = f"https://{repo.host}/{repo.owner}/{repo.name}"
+    if repo.family == "github":
+        url = f"{base}/blob/{pin}/{quoted_path}"
+    elif repo.family == "gitlab":
+        url = f"{base}/-/blob/{pin}/{quoted_path}"
+    else:
+        url = f"{base}/src/commit/{pin}/{quoted_path}"
+    if start is not None:
+        if repo.family == "gitlab":
+            url += f"#L{start}"
+            if end is not None and end != start:
+                url += f"-{end}"
+        else:
+            url += f"#L{start}"
+            if end is not None and end != start:
+                url += f"-L{end}"
+    return url
+
+
+def _source_ref_markdown(profile: dict, value) -> str:
+    """Render source_ref values as pinned links when their forge is known.
+
+    A profile can declare two repositories: the libretro port in ``source`` and
+    the original emulator in ``upstream``. Which of the two carries a given
+    path cannot be decided without reading their trees, and this generator runs
+    offline. Rather than guess, an unattributable path is rendered as plain
+    code: a citation with no link still names the file and the lines, while a
+    link to the wrong repository is a false citation.
+    """
+    rendered_groups: list[str] = []
+    path_re = re.compile(r"^[A-Za-z0-9_.@/+~-]+$")
+    for label, refs in source_ref_values(value):
+        candidates = _forge_sources(profile, label)
+        rendered: list[str] = []
+        for part in split_source_ref(refs):
+            display = part.path
+            if part.start is not None:
+                display += f":{part.start}"
+                if part.end is not None and part.end != part.start:
+                    display += f"-{part.end}"
+
+            selected: tuple[upstream.Repo, str] | None = None
+            real_path = part.path
+            if path_re.fullmatch(part.path) and candidates:
+                for repo, pin in candidates:
+                    prefix = f"{repo.name}/"
+                    if part.path.startswith(prefix):
+                        selected = (repo, pin)
+                        real_path = part.path[len(prefix):]
+                        break
+                if selected is None and len(candidates) == 1:
+                    selected = candidates[0]
+
+            if selected is None:
+                rendered.append(f"`{display}`")
+            else:
+                repo, pin = selected
+                url = _source_permalink(
+                    repo, pin, real_path, part.start, part.end
+                )
+                rendered.append(f"[`{display}`]({url})")
+
+        text = ", ".join(rendered) if rendered else f"`{refs}`"
+        if label:
+            text = f"**{label}:** {text}"
+        rendered_groups.append(text)
+    return "; ".join(rendered_groups)
+
+
+def _admonition_body(text: str) -> str:
+    """Indent prose without turning source tokens such as ``#if`` into H1s."""
+    escaped = re.sub(r"(?m)^(\s*)#", r"\1\\#", text)
+    return escaped.replace("\n", "\n    ")
 
 
 def _content_check_ceiling(profiles: dict) -> str:
@@ -372,8 +494,8 @@ def generate_home(
         "",
         f"# {SITE_NAME}",
         "",
-        "BIOS and firmware packs checked the way each platform checks them, "
-        "with emulator source code as the deciding authority.",
+        "BIOS and firmware metadata checked the way each platform checks it, "
+        "cross-referenced against revision-pinned emulator source code.",
         "",
         "</div>",
         "",
@@ -410,7 +532,7 @@ def generate_home(
         [
             "## Platforms",
             "",
-            "| | Platform | Files | Checked by | Download |",
+            "| Icon | Platform | Files | Checked by | Download |",
             "|---|----------|-------|-----------|----------|",
         ]
     )
@@ -527,6 +649,7 @@ def generate_home(
             "[Cross-reference](cross-reference.md){ .md-button } "
             "[Gap Analysis](gaps.md){ .md-button } "
             "[Dump provenance](provenance.md){ .md-button } "
+            "[Data & API](data.md){ .md-button } "
             "[Contributing](contributing.md){ .md-button .md-button--primary }",
             "",
             f'<div class="rb-timestamp">Generated on {ts}.</div>',
@@ -542,6 +665,7 @@ def compute_stats(db: dict, coverages: dict, profiles: dict) -> dict:
     for p in unique.values():
         systems.update(p.get("systems", []))
     return {
+        "schema_version": 1,
         "generated_at": _timestamp(),
         "files": db.get("total_files", 0),
         "size_bytes": db.get("total_size", 0),
@@ -568,6 +692,716 @@ def composition_sentence(db: dict) -> str:
 
 def generate_stats(stats: dict) -> str:
     return json.dumps(stats, indent=2) + "\n"
+
+
+def _json_text(value) -> str:
+    """Stable scalar representation for CSV and SQLite exports."""
+    if value is None:
+        return ""
+    if isinstance(value, (dict, list, tuple, bool)):
+        return json.dumps(value, ensure_ascii=False, sort_keys=True)
+    return str(value)
+
+
+def _csv_document(fieldnames: list[str], rows: list[dict]) -> str:
+    stream = io.StringIO(newline="")
+    writer = csv.DictWriter(
+        stream, fieldnames=fieldnames, extrasaction="ignore", lineterminator="\n"
+    )
+    writer.writeheader()
+    writer.writerows(rows)
+    return stream.getvalue()
+
+
+def _sha256_path(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _platform_export_rows(coverages: dict) -> tuple[list[dict], list[dict]]:
+    """Normalized platform summaries and one row per declared file."""
+    items: list[dict] = []
+    file_rows: list[dict] = []
+    for key, coverage in sorted(coverages.items()):
+        config = coverage["config"]
+        items.append({
+            "id": key,
+            "name": coverage["platform"],
+            "coverage": {
+                field: coverage.get(field, 0)
+                for field in (
+                    "total", "present", "verified", "untested", "missing",
+                    "core_present", "core_missing", "core_unsourceable",
+                )
+            },
+            "contract": config,
+        })
+        for system_id, system in sorted(config.get("systems", {}).items()):
+            for entry in system.get("files", []) or []:
+                file_rows.append({
+                    "platform_id": key,
+                    "platform": coverage["platform"],
+                    "system": system_id,
+                    "name": entry.get("name", ""),
+                    "destination": entry.get(
+                        "destination", entry.get("dest", entry.get("name", ""))
+                    ),
+                    "required": bool(entry.get("required", True)),
+                    "region": _json_text(entry.get("region")),
+                    "variant_group": _json_text(entry.get("variant_group")),
+                    "size": entry.get("size"),
+                    "sha1": _json_text(entry.get("sha1")),
+                    "sha256": _json_text(entry.get("sha256")),
+                    "md5": _json_text(entry.get("md5")),
+                    "crc32": _json_text(entry.get("crc32")),
+                })
+    return items, file_rows
+
+
+def _emulator_export_items(profiles: dict) -> list[dict]:
+    return [
+        {"id": key, "profile": profile}
+        for key, profile in sorted(profiles.items())
+    ]
+
+
+def build_emulator_gap_report(
+    profiles: dict,
+    coverages: dict,
+    db: dict,
+    data_names: set[str] | None = None,
+) -> dict:
+    """Files a core loads that no platform declares, per emulator profile.
+
+    The gap analysis page and the published gaps export must not compute this
+    twice and drift; both read this one report.
+    """
+    from common import expand_platform_declared_names
+    from cross_reference import cross_reference as run_cross_reference
+
+    all_declared: set[str] = set()
+    declared: dict[str, set[str]] = {}
+    for _name, cov in coverages.items():
+        config = cov["config"]
+        # Enrich with alias resolution (MD5 -> SHA1 -> canonical name + aliases)
+        all_declared.update(expand_platform_declared_names(config, db))
+        for sys_id, system in config.get("systems", {}).items():
+            for fe in system.get("files", []):
+                fname = fe.get("name", "")
+                if fname:
+                    declared.setdefault(sys_id, set()).add(fname)
+
+    unique_profiles = {
+        k: v
+        for k, v in profiles.items()
+        if v.get("type") not in ("alias", "test")
+    }
+    return run_cross_reference(
+        unique_profiles, declared, db,
+        data_names=data_names, all_declared=all_declared,
+    )
+
+
+def _gap_export_rows(coverages: dict, gap_report: dict | None = None) -> list[dict]:
+    """Every gap the site reports, both layers, in one table.
+
+    ``platform`` rows are anomalies against a platform's own BIOS list.
+    ``emulator`` rows are files a profiled core loads that no platform
+    declares, which is the larger number the gap analysis page leads with.
+    A `layer` column keeps the two apart instead of publishing only one.
+    """
+    rows: list[dict] = []
+    for key, coverage in sorted(coverages.items()):
+        for detail in coverage.get("details", []):
+            if detail.get("status") == "ok" and not detail.get("discrepancy"):
+                continue
+            rows.append({
+                "layer": "platform",
+                "platform_id": key,
+                "platform": coverage["platform"],
+                "emulator": "",
+                "system": detail.get("system", ""),
+                "name": detail.get("name", ""),
+                "status": detail.get("status", ""),
+                "required": bool(detail.get("required", True)),
+                "in_repo": "",
+                "reason": detail.get("reason", ""),
+                "discrepancy": detail.get("discrepancy", ""),
+            })
+    for emu_key, data in sorted((gap_report or {}).items()):
+        systems = ";".join(str(s) for s in data.get("systems", []) or [])
+        for gap in data.get("gap_details", []) or []:
+            rows.append({
+                "layer": "emulator",
+                "platform_id": "",
+                "platform": "",
+                "emulator": data.get("emulator", emu_key),
+                "system": systems,
+                "name": gap.get("name", ""),
+                "status": gap.get("source", ""),
+                "required": bool(gap.get("required", False)),
+                "in_repo": bool(gap.get("in_repo", False)),
+                "reason": gap.get("note", ""),
+                "discrepancy": "",
+            })
+        for entry in data.get("unsourceable", []) or []:
+            rows.append({
+                "layer": "emulator",
+                "platform_id": "",
+                "platform": "",
+                "emulator": data.get("emulator", emu_key),
+                "system": systems,
+                "name": entry.get("name", ""),
+                "status": "unsourceable",
+                "required": bool(entry.get("required", False)),
+                "in_repo": False,
+                "reason": entry.get("reason", ""),
+                "discrepancy": "",
+            })
+    return rows
+
+
+def _cross_reference_export_rows(coverages: dict, profiles: dict) -> list[dict]:
+    from common import resolve_platform_cores
+
+    unique = {
+        key: value
+        for key, value in profiles.items()
+        if value.get("type") not in ("alias", "test")
+    }
+    rows: list[dict] = []
+    for platform_id, coverage in sorted(coverages.items()):
+        for profile_id in sorted(resolve_platform_cores(coverage["config"], unique)):
+            profile = unique[profile_id]
+            cores = profile.get("cores") or [profile_id]
+            systems = profile.get("systems") or [""]
+            for core in cores:
+                for system in systems:
+                    rows.append({
+                        "platform_id": platform_id,
+                        "platform": coverage["platform"],
+                        "profile_id": profile_id,
+                        "emulator": profile.get("emulator", profile_id),
+                        "core": core,
+                        "system": system,
+                        "classification": profile.get("core_classification", ""),
+                        "type": profile.get("type", ""),
+                        "source": _json_text(profile.get("source")),
+                        "upstream": _json_text(profile.get("upstream")),
+                        "profiled_commit": profile.get("source_commit", ""),
+                        "file_count": len(profile.get("files", []) or []),
+                    })
+    return rows
+
+
+def _write_sqlite_export(
+    destination: Path,
+    db: dict,
+    platform_items: list[dict],
+    platform_files: list[dict],
+    emulator_items: list[dict],
+    gap_rows: list[dict],
+) -> None:
+    """Build a queryable, deterministic snapshot without embedding binaries."""
+    temp_dir = Path("tmp") / "site"
+    temp_dir.mkdir(parents=True, exist_ok=True)
+    temp_path = temp_dir / f"retrobios-{os.getpid()}.sqlite"
+    temp_path.unlink(missing_ok=True)
+    destination.parent.mkdir(parents=True, exist_ok=True)
+
+    connection = sqlite3.connect(temp_path)
+    try:
+        connection.executescript("""
+            PRAGMA journal_mode = OFF;
+            PRAGMA synchronous = OFF;
+            CREATE TABLE metadata (key TEXT PRIMARY KEY, value TEXT NOT NULL);
+            CREATE TABLE files (
+                sha1 TEXT PRIMARY KEY, path TEXT NOT NULL, name TEXT NOT NULL,
+                size INTEGER NOT NULL, md5 TEXT NOT NULL, sha256 TEXT NOT NULL,
+                crc32 TEXT NOT NULL, adler32 TEXT NOT NULL
+            );
+            CREATE TABLE file_provenance (
+                sha1 TEXT NOT NULL, catalog TEXT NOT NULL, details_json TEXT NOT NULL,
+                PRIMARY KEY (sha1, catalog),
+                FOREIGN KEY (sha1) REFERENCES files(sha1)
+            );
+            CREATE TABLE platforms (
+                id TEXT PRIMARY KEY, name TEXT NOT NULL, total INTEGER NOT NULL,
+                present INTEGER NOT NULL, verified INTEGER NOT NULL,
+                missing INTEGER NOT NULL, contract_json TEXT NOT NULL
+            );
+            CREATE TABLE platform_files (
+                platform_id TEXT NOT NULL, system TEXT NOT NULL, name TEXT NOT NULL,
+                destination TEXT NOT NULL, required INTEGER NOT NULL,
+                region TEXT, variant_group TEXT, size INTEGER,
+                sha1 TEXT, sha256 TEXT, md5 TEXT, crc32 TEXT
+            );
+            CREATE TABLE emulators (
+                id TEXT PRIMARY KEY, name TEXT NOT NULL, type TEXT,
+                classification TEXT, source TEXT, upstream TEXT,
+                source_commit TEXT, profile_json TEXT NOT NULL
+            );
+            CREATE TABLE emulator_systems (
+                emulator_id TEXT NOT NULL, system TEXT NOT NULL,
+                PRIMARY KEY (emulator_id, system)
+            );
+            CREATE TABLE emulator_files (
+                emulator_id TEXT NOT NULL, system TEXT, name TEXT NOT NULL,
+                path TEXT, required INTEGER NOT NULL, mode TEXT, region TEXT,
+                size TEXT, sha1 TEXT, sha256 TEXT, md5 TEXT, crc32 TEXT,
+                source_ref TEXT
+            );
+            CREATE TABLE gaps (
+                layer TEXT NOT NULL, platform_id TEXT, platform TEXT,
+                emulator TEXT, system TEXT, name TEXT NOT NULL,
+                status TEXT NOT NULL, required INTEGER NOT NULL,
+                in_repo TEXT, reason TEXT, discrepancy TEXT
+            );
+            CREATE INDEX files_name_idx ON files(name);
+            CREATE INDEX files_md5_idx ON files(md5);
+            CREATE INDEX files_sha256_idx ON files(sha256);
+            CREATE INDEX platform_files_name_idx ON platform_files(name);
+            CREATE INDEX emulator_files_name_idx ON emulator_files(name);
+            CREATE INDEX gaps_status_idx ON gaps(layer, status);
+        """)
+        metadata = {
+            "schema_version": "1",
+            "generated_at": str(db.get("generated_at") or _timestamp()),
+            "source": REPO_URL,
+            "scope": "metadata only; no BIOS or firmware payload bytes",
+        }
+        connection.executemany(
+            "INSERT INTO metadata(key, value) VALUES (?, ?)",
+            sorted(metadata.items()),
+        )
+        for sha1, entry in sorted(db.get("files", {}).items()):
+            connection.execute(
+                "INSERT INTO files VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                (
+                    sha1, entry.get("path", ""), entry.get("name", ""),
+                    entry.get("size", 0), entry.get("md5", ""),
+                    entry.get("sha256", ""), entry.get("crc32", ""),
+                    entry.get("adler32", ""),
+                ),
+            )
+            for catalog, details in sorted((entry.get("provenance") or {}).items()):
+                connection.execute(
+                    "INSERT INTO file_provenance VALUES (?, ?, ?)",
+                    (sha1, catalog, _json_text(details)),
+                )
+        for item in platform_items:
+            coverage = item["coverage"]
+            connection.execute(
+                "INSERT INTO platforms VALUES (?, ?, ?, ?, ?, ?, ?)",
+                (
+                    item["id"], item["name"], coverage.get("total", 0),
+                    coverage.get("present", 0), coverage.get("verified", 0),
+                    coverage.get("missing", 0), _json_text(item["contract"]),
+                ),
+            )
+        connection.executemany(
+            "INSERT INTO platform_files VALUES "
+            "(:platform_id, :system, :name, :destination, :required, :region, "
+            ":variant_group, :size, :sha1, :sha256, :md5, :crc32)",
+            platform_files,
+        )
+        for item in emulator_items:
+            profile = item["profile"]
+            connection.execute(
+                "INSERT INTO emulators VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                (
+                    item["id"], profile.get("emulator", item["id"]),
+                    profile.get("type", ""),
+                    profile.get("core_classification", ""),
+                    _json_text(profile.get("source")),
+                    _json_text(profile.get("upstream")),
+                    profile.get("source_commit", ""), _json_text(profile),
+                ),
+            )
+            for system in sorted(set(profile.get("systems", []) or [])):
+                connection.execute(
+                    "INSERT INTO emulator_systems VALUES (?, ?)",
+                    (item["id"], system),
+                )
+            for entry in profile.get("files", []) or []:
+                connection.execute(
+                    "INSERT INTO emulator_files VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    (
+                        item["id"], _json_text(entry.get("system")),
+                        entry.get("name", ""), entry.get("path", ""),
+                        int(bool(entry.get("required", False))),
+                        entry.get("mode", ""), _json_text(entry.get("region")),
+                        _json_text(entry.get("size")), _json_text(entry.get("sha1")),
+                        _json_text(entry.get("sha256")), _json_text(entry.get("md5")),
+                        _json_text(entry.get("crc32")),
+                        _json_text(entry.get("source_ref")),
+                    ),
+                )
+        connection.executemany(
+            "INSERT INTO gaps VALUES "
+            "(:layer, :platform_id, :platform, :emulator, :system, :name, "
+            ":status, :required, :in_repo, :reason, :discrepancy)",
+            gap_rows,
+        )
+        connection.commit()
+        connection.execute("VACUUM")
+    finally:
+        connection.close()
+    os.replace(temp_path, destination)
+
+
+def generate_data_exports(
+    docs: Path,
+    db: dict,
+    coverages: dict,
+    profiles: dict,
+    stats: dict,
+    gap_report: dict | None = None,
+) -> list[dict]:
+    """Create versioned static API, CSV and SQLite metadata snapshots."""
+    api = docs / "api" / "v1"
+    downloads = docs / "downloads"
+    schemas_dest = api / "schemas"
+    for directory in (api, downloads, schemas_dest):
+        directory.mkdir(parents=True, exist_ok=True)
+
+    generated_at = str(db.get("generated_at") or _timestamp())
+    platform_items, platform_files = _platform_export_rows(coverages)
+    emulator_items = _emulator_export_items(profiles)
+    gap_rows = _gap_export_rows(coverages, gap_report)
+    cross_rows = _cross_reference_export_rows(coverages, profiles)
+
+    envelopes = {
+        "platforms.json": ("platforms", platform_items),
+        "emulators.json": ("emulators", emulator_items),
+        "gaps.json": ("verification-and-coverage-gaps", gap_rows),
+    }
+    for filename, (kind, items) in envelopes.items():
+        document = {
+            "schema_version": 1,
+            "generated_at": generated_at,
+            "kind": kind,
+            "count": len(items),
+            "items": items,
+        }
+        write_if_changed(
+            str(api / filename),
+            json.dumps(document, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+        )
+    write_if_changed(str(api / "stats.json"), generate_stats(stats))
+    write_if_changed(
+        str(api / "database.json"),
+        json.dumps(db, ensure_ascii=False, indent=2) + "\n",
+    )
+
+    schema_names = (
+        "database.schema.json", "emulator.schema.json", "platform.schema.json",
+        "site-api-envelope.schema.json", "stats.schema.json",
+    )
+    for schema_name in schema_names:
+        shutil.copy2(Path("schemas") / schema_name, schemas_dest / schema_name)
+
+    file_rows = []
+    for sha1, entry in sorted(db.get("files", {}).items()):
+        file_rows.append({
+            "sha1": sha1,
+            "path": entry.get("path", ""),
+            "name": entry.get("name", ""),
+            "size": entry.get("size", 0),
+            "md5": entry.get("md5", ""),
+            "sha256": entry.get("sha256", ""),
+            "crc32": entry.get("crc32", ""),
+            "adler32": entry.get("adler32", ""),
+            "provenance_catalogs": ";".join(
+                sorted((entry.get("provenance") or {}).keys())
+            ),
+        })
+    write_if_changed(
+        str(downloads / "files.csv"),
+        _csv_document(
+            [
+                "sha1", "path", "name", "size", "md5", "sha256",
+                "crc32", "adler32", "provenance_catalogs",
+            ],
+            file_rows,
+        ),
+    )
+    write_if_changed(
+        str(downloads / "platform-files.csv"),
+        _csv_document(
+            [
+                "platform_id", "platform", "system", "name", "destination",
+                "required", "region", "variant_group", "size", "sha1",
+                "sha256", "md5", "crc32",
+            ],
+            platform_files,
+        ),
+    )
+    write_if_changed(
+        str(downloads / "cross-reference.csv"),
+        _csv_document(
+            [
+                "platform_id", "platform", "profile_id", "emulator", "core",
+                "system", "classification", "type", "source", "upstream",
+                "profiled_commit", "file_count",
+            ],
+            cross_rows,
+        ),
+    )
+    write_if_changed(
+        str(downloads / "gaps.csv"),
+        _csv_document(
+            [
+                "layer", "platform_id", "platform", "emulator", "system",
+                "name", "status", "required", "in_repo", "reason",
+                "discrepancy",
+            ],
+            gap_rows,
+        ),
+    )
+    _write_sqlite_export(
+        downloads / "retrobios.sqlite", db, platform_items, platform_files,
+        emulator_items, gap_rows,
+    )
+
+    assets = [
+        (api / "database.json", "Content database", "application/json", "schemas/database.schema.json"),
+        (api / "platforms.json", "Platform contracts", "application/json", "schemas/site-api-envelope.schema.json"),
+        (api / "emulators.json", "Emulator profiles", "application/json", "schemas/site-api-envelope.schema.json"),
+        (api / "gaps.json", "Verification and coverage gaps", "application/json", "schemas/site-api-envelope.schema.json"),
+        (api / "stats.json", "Project statistics", "application/json", "schemas/stats.schema.json"),
+        (downloads / "files.csv", "File hashes CSV", "text/csv", None),
+        (downloads / "platform-files.csv", "Platform declarations CSV", "text/csv", None),
+        (downloads / "cross-reference.csv", "Cross-reference CSV", "text/csv", None),
+        (downloads / "gaps.csv", "Verification and coverage gaps CSV", "text/csv", None),
+        (downloads / "retrobios.sqlite", "SQLite snapshot", "application/vnd.sqlite3", None),
+    ]
+    catalog_items: list[dict] = []
+    for path, title, media_type, schema in assets:
+        relative = path.relative_to(docs).as_posix()
+        item = {
+            "title": title,
+            "url": relative,
+            "media_type": media_type,
+            "bytes": path.stat().st_size,
+            "sha256": _sha256_path(path),
+        }
+        if schema:
+            item["schema"] = schema
+        catalog_items.append(item)
+    catalog = {
+        "schema_version": 1,
+        "generated_at": generated_at,
+        "kind": "catalog",
+        "count": len(catalog_items),
+        "items": catalog_items,
+    }
+    write_if_changed(
+        str(api / "catalog.json"),
+        json.dumps(catalog, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+    )
+    return catalog_items
+
+
+def generate_data_page(exports: list[dict]) -> str:
+    lines = [
+        f"# Data & API - {SITE_NAME}",
+        "",
+        "RetroBIOS publishes the same metadata used by its verifier, pack builder "
+        "and website as versioned static files. No account or API key is required.",
+        "",
+        "[API catalog](api/v1/catalog.json){ .md-button .md-button--primary } "
+        "[SQLite snapshot](downloads/retrobios.sqlite){ .md-button }",
+        "",
+        "## Stable JSON endpoints",
+        "",
+        "| Dataset | Endpoint | Schema | Size |",
+        "|---------|----------|--------|-----:|",
+    ]
+    for item in exports:
+        if item["media_type"] != "application/json":
+            continue
+        schema = (
+            f"[JSON Schema](api/v1/{item['schema']})"
+            if item.get("schema") else "-"
+        )
+        lines.append(
+            f"| {item['title']} | [`{item['url']}`]({item['url']}) | "
+            f"{schema} | {_fmt_size(item['bytes'])} |"
+        )
+    lines.extend([
+        "",
+        "Every JSON document carries `schema_version`. Breaking changes use a new "
+        "URL prefix (`/api/v2/`); fields may only be added compatibly within v1.",
+        "",
+        "## Bulk downloads",
+        "",
+        "| Export | Format | Size | SHA256 |",
+        "|--------|--------|-----:|--------|",
+    ])
+    for item in exports:
+        if item["media_type"] == "application/json":
+            continue
+        lines.append(
+            f"| [{item['title']}]({item['url']}) | `{item['media_type']}` | "
+            f"{_fmt_size(item['bytes'])} | `{item['sha256']}` |"
+        )
+    lines.extend([
+        "",
+        "The SQLite file contains indexed tables for content hashes, provenance "
+        "catalog matches, platform declarations, emulator profiles and current "
+        "gaps. It contains metadata only, never BIOS or firmware bytes.",
+        "",
+        "The gaps dataset carries both layers behind one `layer` column: "
+        "`platform` rows are anomalies against a platform's own BIOS list, "
+        "`emulator` rows are files a profiled core loads that no platform "
+        "declares. The two answer different questions and are not comparable "
+        "totals.",
+        "",
+        "## Semantics and limits",
+        "",
+        "Treat four questions separately: content identity (hashes), presence in "
+        "the collection, acceptance by a specific emulator, and catalog provenance. "
+        "One does not imply the others. In particular, presence, a matching dump "
+        "catalog, or emulator compatibility is not a statement about copyright, "
+        "ownership, or redistribution rights.",
+        "",
+        f"The data can be newer than the [latest published pack]({RELEASE_URL}); "
+        "pack publication is manual and only occurs after all release gates pass.",
+        "",
+        "See the [data model](wiki/data-model.md), [verification modes]"
+        "(wiki/verification-modes.md), and [methodology](wiki/architecture.md) "
+        "before interpreting aggregate counts.",
+        "",
+    ])
+    return "\n".join(lines)
+
+
+def _page_title(markdown: str, path: Path) -> str:
+    match = re.search(r"^#\s+(.+?)\s*$", markdown, flags=re.MULTILINE)
+    if match:
+        title = re.sub(r"<[^>]+>", "", match.group(1))
+        return title.replace(f" - {SITE_NAME}", "").strip()
+    return path.stem.replace("-", " ").title()
+
+
+def _browser_title(relative: Path, title: str) -> str:
+    """Return a concise, unique browser/search title for a generated page."""
+    key = relative.as_posix()
+    index_titles = {
+        "index.md": SITE_NAME,
+        "platforms/index.md": "Platforms",
+        "systems/index.md": "Systems",
+        "emulators/index.md": "Emulators",
+        "wiki/index.md": "Guide and methodology",
+    }
+    if key in index_titles:
+        return index_titles[key]
+    if key.startswith("emulators/"):
+        return f"{title} emulator firmware"
+    if key.startswith("systems/"):
+        return f"{title} systems"
+    return title
+
+
+def _plain_markdown(text: str) -> str:
+    text = re.sub(r"<[^>]+>", " ", text)
+    text = re.sub(r"!\[([^]]*)\]\([^)]*\)", r"\1", text)
+    text = re.sub(r"\[([^]]+)\]\([^)]*\)", r"\1", text)
+    text = re.sub(r"[`*_~]", "", text)
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def _page_description(markdown: str, relative: Path, title: str) -> str:
+    key = relative.as_posix()
+    specific = {
+        "index.md": "Source-traced BIOS and firmware metadata, platform verification, emulator profiles, gaps and reproducible retrogaming data exports.",
+        "data.md": "Versioned RetroBIOS JSON API, CSV exports, SQLite snapshot, schemas, checksums and data interpretation guidance.",
+        "cross-reference.md": "Cross-reference from retrogaming platforms to emulator cores, systems, upstream projects and profiled firmware files.",
+        "gaps.md": "Current RetroBIOS verification gaps, platform-to-emulator divergences, missing files and documented source limitations.",
+        "provenance.md": "Hash-based comparison of RetroBIOS metadata with No-Intro, Redump and TOSEC catalog snapshots.",
+        "which-pack.md": "One-line automatic RetroBIOS installation and platform-specific pack destinations, with verification and release caveats.",
+    }
+    if key in specific:
+        return specific[key]
+    if key.startswith("platforms/") and relative.stem != "index":
+        return f"{title}: declared BIOS contract, verification mode, coverage, destinations and emulator complement."
+    if key.startswith("emulators/") and relative.stem != "index":
+        return f"{title}: source-pinned emulator firmware profile with paths, hashes, requirements and validation behavior."
+    if key.startswith("systems/") and relative.stem != "index":
+        return f"{title}: indexed firmware files, hashes, variants, provenance and platform or emulator usage."
+
+    paragraphs = re.split(r"\n\s*\n", markdown)
+    for paragraph in paragraphs:
+        stripped = paragraph.strip()
+        if (
+            not stripped
+            or stripped.startswith(("#", "|", "```", "???", "<", "- ", "* "))
+        ):
+            continue
+        plain = _plain_markdown(stripped)
+        if len(plain) >= 35:
+            return plain[:157].rstrip(" ,;:-") + ("..." if len(plain) > 157 else "")
+    return f"{title}: RetroBIOS source-traced retrogaming firmware reference."
+
+
+def decorate_markdown_pages(docs: Path) -> None:
+    """Add per-page descriptions and machine-readable structured data."""
+    for path in sorted(docs.rglob("*.md")):
+        relative = path.relative_to(docs)
+        if relative.parts and relative.parts[0] == "superpowers":
+            continue
+        markdown = path.read_text(encoding="utf-8")
+        if markdown.startswith("---\n") and "generated_by: retrobios-site" in markdown[:300]:
+            end = markdown.find("\n---\n", 4)
+            if end != -1:
+                markdown = markdown[end + 5:].lstrip("\n")
+                script_end = markdown.find("</script>\n\n")
+                if markdown.startswith('<script type="application/ld+json">') and script_end != -1:
+                    markdown = markdown[script_end + len("</script>\n\n"):]
+        elif markdown.startswith("---\n"):
+            continue
+
+        title = _page_title(markdown, relative)
+        browser_title = _browser_title(relative, title)
+        description = _page_description(markdown, relative, title)
+        if relative.name == "index.md":
+            page_path = "" if len(relative.parts) == 1 else "/".join(relative.parts[:-1]) + "/"
+        else:
+            page_path = relative.with_suffix("").as_posix() + "/"
+        canonical = urllib.parse.urljoin(SITE_URL, page_path)
+        schema_type = "WebSite" if relative.as_posix() == "index.md" else "TechArticle"
+        if relative.as_posix() == "data.md":
+            schema_type = "Dataset"
+        structured = {
+            "@context": "https://schema.org",
+            "@type": schema_type,
+            "name": title,
+            "description": description,
+            "url": canonical,
+            "isPartOf": {
+                "@type": "WebSite",
+                "name": SITE_NAME,
+                "url": SITE_URL,
+            },
+        }
+        structured_json = json.dumps(
+            structured, ensure_ascii=False, separators=(",", ":")
+        ).replace("</", "<\\/")
+        front_matter = (
+            "---\n"
+            "generated_by: retrobios-site\n"
+            f"title: {json.dumps(browser_title, ensure_ascii=False)}\n"
+            f"description: {json.dumps(description, ensure_ascii=False)}\n"
+            "---\n\n"
+            '<script type="application/ld+json">\n'
+            f"{structured_json}\n"
+            "</script>\n\n"
+        )
+        write_if_changed(str(path), front_matter + markdown)
 
 
 # Platform pages
@@ -1367,7 +2201,6 @@ def generate_emulator_page(
         ("rom_path", "ROM path"),
         ("game_count", "Game count"),
         ("verification", "Checked by"),
-        ("source_ref", "Source ref"),
         ("analysis_date", "Analysis date"),
         ("analysis_commit", "Analysis commit"),
     ]:
@@ -1378,6 +2211,10 @@ def generate_emulator_page(
             lines.append(f"| {label} | [{val}]({val}) |")
         else:
             lines.append(f"| {label} | {val} |")
+    if profile.get("source_ref"):
+        lines.append(
+            f"| Source ref | {_source_ref_markdown(profile, profile['source_ref'])} |"
+        )
     lines.append("")
     lines.append("</div>")
     lines.append("")
@@ -1434,7 +2271,7 @@ def generate_emulator_page(
 
     # Notes
     if notes:
-        indented = notes.replace("\n", "\n    ")
+        indented = _admonition_body(notes)
         lines.extend(['???+ note "Technical notes"', f"    {indented}", ""])
 
     if not files:
@@ -1693,7 +2530,9 @@ def generate_emulator_page(
                     for scope, checks in validation.items():
                         details.append(f"Validation ({scope}): {', '.join(checks)}")
             if source_ref:
-                details.append(f"Source: `{source_ref}`")
+                details.append(
+                    f"Source: {_source_ref_markdown(profile, source_ref)}"
+                )
             if platform_files:
                 plats = sorted(
                     p for p, names in platform_files.items() if fname in names
@@ -1767,6 +2606,7 @@ def generate_gap_analysis(
     db: dict,
     data_names: set[str] | None = None,
     registry: dict | None = None,
+    gap_report: dict | None = None,
 ) -> str:
     """Generate a unified gap analysis page.
 
@@ -1819,6 +2659,10 @@ def generate_gap_analysis(
         f"# Gap Analysis - {SITE_NAME}",
         "",
         "Unified view of BIOS verification, file provenance, and coverage gaps.",
+        "",
+        "[Download gaps CSV](downloads/gaps.csv){ .md-button } "
+        "[Open gaps API](api/v1/gaps.json){ .md-button } "
+        "[All data exports](data.md){ .md-button }",
         "",
         '<div class="rb-stats" markdown>',
         "",
@@ -2075,21 +2919,6 @@ def generate_gap_analysis(
 
     # ---- Section 3: Core complement (cross-reference provenance) ----
 
-    from common import expand_platform_declared_names
-
-    all_declared: set[str] = set()
-    declared: dict[str, set[str]] = {}
-    for _name, cov in coverages.items():
-        config = cov["config"]
-        # Enrich with alias resolution (MD5 -> SHA1 -> canonical name + aliases)
-        all_declared.update(expand_platform_declared_names(config, db))
-        for sys_id, system in config.get("systems", {}).items():
-            for fe in system.get("files", []):
-                fname = fe.get("name", "")
-                if fname:
-                    declared.setdefault(sys_id, set()).add(fname)
-
-    # Only include profiles relevant to at least one platform
     unique_profiles = {
         k: v
         for k, v in profiles.items()
@@ -2099,13 +2928,9 @@ def generate_gap_analysis(
     for _name, cov in coverages.items():
         matched = resolve_platform_cores(cov["config"], unique_profiles)
         relevant_set.update(matched)
-    # One pass over every profile, read twice: the packs' scope (emulators a
-    # platform ships) and the whole profiled corpus, so the two views cannot
-    # drift apart.
-    report_all = run_cross_reference(
-        unique_profiles, declared, db,
-        data_names=data_names, all_declared=all_declared,
-    )
+    if gap_report is None:
+        gap_report = build_emulator_gap_report(profiles, coverages, db, data_names)
+    report_all = gap_report
 
     src_totals: dict[str, int] = {"bios": 0, "data": 0, "large_file": 0, "missing": 0}
     total_undeclared = 0
@@ -2230,7 +3055,8 @@ def generate_gap_analysis(
                 req = "yes" if m["required"] else "no"
                 lines.append(
                     f"| `{m['name']}` | {m['emulator']} | {req} | "
-                    f"{plat_badges} | {m['source_ref']} |"
+                    f"{plat_badges} | "
+                    f"{_source_ref_markdown(profiles[m['emu_key']], m['source_ref'])} |"
                 )
             lines.append("")
 
@@ -2242,6 +3068,7 @@ def generate_gap_analysis(
             all_unsourceable.append({
                 "name": u["name"],
                 "emulator": data["emulator"],
+                "emu_key": emu_name,
                 "reason": u["reason"],
                 "source_ref": u.get("source_ref", ""),
             })
@@ -2259,7 +3086,7 @@ def generate_gap_analysis(
         for u in sorted(all_unsourceable, key=lambda x: x["name"]):
             lines.append(
                 f"| `{u['name']}` | {u['emulator']} | {u['reason']} "
-                f"| {u['source_ref']} |"
+                f"| {_source_ref_markdown(profiles[u['emu_key']], u['source_ref'])} |"
             )
         lines.append("")
 
@@ -2301,6 +3128,10 @@ def generate_cross_reference(
         "The libretro core is a port of the upstream emulator. "
         "Files, features, and validation may differ between the two.",
         "",
+        "[Download cross-reference CSV](downloads/cross-reference.csv){ .md-button } "
+        "[Open emulator API](api/v1/emulators.json){ .md-button } "
+        "[All data exports](data.md){ .md-button }",
+        "",
     ]
 
     # Per platform
@@ -2310,7 +3141,12 @@ def generate_cross_reference(
         config = cov["config"]
         platform_cores = config.get("cores", [])
 
-        lines.append(f'??? abstract "[{display}](platforms/{pname}.md)"')
+        lines.append(f'??? abstract "{display}"')
+        lines.append("")
+        lines.append(
+            f"    [Open {display} platform profile](platforms/{pname}.md)"
+            "{ .md-button }"
+        )
         lines.append("")
 
         # Resolve which profiles this platform uses
@@ -2574,19 +3410,21 @@ def generate_wiki_data_model(db: dict, profiles: dict) -> str:
         "",
         "`resolve_local_file` tries these steps in order:",
         "",
-        "1. Path suffix exact match (for regional variants with same filename)",
-        "2. SHA1 exact match",
-        "3. SHA256 exact match (profiles whose upstream publishes SHA256)",
-        "4. CRC32 + size exact match (CRC-only profiles; size confirms the match)",
-        "5. MD5 direct lookup (supports truncated Batocera 29-char MD5)",
-        "6. Name + alias lookup without hash (existence mode)",
-        "7. Name + alias with md5_composite / direct MD5 per candidate",
-        "8. zippedFile content match via inner ROM MD5 index",
-        "9. MAME clone fallback (deduped ZIP mapped to canonical name)",
-        "10. Data directory scan (exact path then case-insensitive basename walk)",
-        "11. Agnostic fallback (size-constrained match under system path prefix)",
+        "1. SHA1 exact match; every other declared hash must agree with the record",
+        "2. SHA256 exact match, with the same all-declarations-must-agree rule",
+        "3. CRC32 plus declared size, only when no stronger hash is present",
+        "4. MD5 direct lookup (including explicitly supported truncated MD5 values)",
+        "5. Path suffix lookup for regional variants; with hashes it is accepted only if those hashes match",
+        "6. Name and alias lookup only when no content hash was declared",
+        "7. Candidate inspection for composite ZIP MD5 or direct MD5; a named candidate with the wrong content returns `hash_mismatch`",
+        "8. `zipped_file` content match via the inner-ROM MD5 index",
+        "9. MAME clone fallback, only for declarations without a content hash",
+        "10. Data-directory scan; declared hashes are computed over the candidate before it is accepted",
+        "11. Agnostic size/path fallback, only for declarations without a content hash",
         "",
-        "The first match wins. Steps and their return codes are described in "
+        "A filename or destination can never override a declared hash. The first "
+        "evidence-compatible match wins; otherwise the resolver reports a mismatch "
+        "or absence. Steps and their return codes are described in "
         "[verification modes](verification-modes.md#file-resolution-chain).",
         "",
         "## Platform YAML",
@@ -2622,6 +3460,13 @@ def generate_wiki_data_model(db: dict, profiles: dict) -> str:
         "emulator code.",
         "",
         "See the [profiling guide](profiling.md) for the full field reference.",
+        "",
+        "## Static API and bulk exports",
+        "",
+        "The website publishes versioned JSON, CSV and SQLite metadata generated "
+        "from these same structures. Start with the [Data & API](../data.md) "
+        "catalog; each downloadable artifact carries a SHA256 in "
+        "`api/v1/catalog.json`.",
         "",
     ]
     return "\n".join(lines) + "\n"
@@ -2661,14 +3506,14 @@ def _build_emulator_file_index(profiles: dict) -> dict[str, dict]:
 
 def generate_which_pack() -> str:
     """Generate the 'Which pack?' decision page."""
-    rel = "https://github.com/Abdess/retrobios/releases"
+    rel = RELEASE_URL
     return f"""\
 # Download
 
 Some retro consoles need firmware files (commonly called BIOS) to run games.
 Without them, the emulator either refuses to start the game or runs it with
-reduced accuracy. This project collects and verifies those files so they are
-ready to use.
+reduced accuracy. RetroBIOS maps those requirements to source-traced emulator
+profiles and verifies local content against the evidence each platform exposes.
 
 This page picks the right pack for a setup. For BIOS directory paths per
 platform, verification, and the CLI, see
@@ -2676,9 +3521,10 @@ platform, verification, and the CLI, see
 
 ## Quick install
 
-The installer detects the platform, finds the BIOS folder, downloads what
-is missing, and copies keys to standalone emulators (Yuzu, Eden, Ryujinx,
-DuckStation, PCSX2, Dolphin, etc.) when they are present on the system.
+One line detects the platform and BIOS directory, downloads only missing or
+incorrect files, verifies their hashes, and installs them atomically. The small
+bootstrap checks the Python installer against an embedded SHA-256 before running
+it, and the installer reads its file list from that same revision.
 
 **Linux / Mac / Steam Deck:**
 
@@ -2692,15 +3538,19 @@ curl -fsSL https://raw.githubusercontent.com/Abdess/retrobios/main/install.sh | 
 iwr -useb https://raw.githubusercontent.com/Abdess/retrobios/main/install.ps1 | iex
 ```
 
-Nothing else needed. The installer handles everything.
+That is the complete default flow. Extra copies into detected standalone
+emulator directories are deliberately opt-in with `--standalone-copies`, so
+automatic setup never writes outside the selected platform tree unexpectedly.
+Use `python install.py --check` from a checkout for a read-only verification.
 
 ---
 
 ## Manual download
 
-Pick the pack that matches the setup from the [releases page]({rel}),
+Pick the pack that matches the setup from the [latest release]({rel}),
 download it, and extract the files into the BIOS folder listed below.
-After extraction, launch a game. If it needed BIOS, it will find it.
+The metadata and website can be newer than that release: pack publication is
+manual and only happens after the release gates pass.
 
 Packs over 2 GB are split into numbered volumes (`.zip.001`, `.zip.002`).
 Download every part, then open the `.001` file with 7-Zip or PeaZip, which
@@ -2774,14 +3624,16 @@ extract the whole archive directly. To join the parts manually instead:
 
 ## Full pack or Platform pack?
 
-Each platform has two pack types on the [releases page]({rel}).
+Each platform has two pack types on the [latest release]({rel}).
 
 **Full pack** (recommended)
 
 Contains the platform's own BIOS list plus all files needed by each
 emulator core available on that platform. This covers alternate cores,
 optional firmware that improves accuracy, and edge cases. Larger download,
-but everything works out of the box with any core.
+and the best default when storage is not constrained. It is not a guarantee:
+source profiles can document missing, user-provided or unsourceable files, all
+of which remain visible in the [gap analysis](gaps.md).
 
 **Platform pack**
 
@@ -2789,14 +3641,15 @@ Contains only the files the platform officially checks for. Much smaller
 download. Good for limited storage (SD cards, handhelds) or setups that
 only use default cores.
 
-When in doubt, take the full pack.
+When in doubt, take the full pack and verify it against the platform page.
 
 ---
 
 ## After extraction
 
-Launch a game. If it needed a BIOS file, the emulator will find it
-automatically. No configuration needed.
+Launch a game and use the emulator's firmware status screen where available.
+Most supported frontends find files in the documented directory automatically;
+standalone emulators may still need their BIOS path configured.
 
 If a game still asks for a missing file, check the
 [platforms section](platforms/index.md) for the full file list, or the
@@ -2891,6 +3744,7 @@ def generate_mkdocs_nav(
         {"Cross-reference": "cross-reference.md"},
         {"Gap Analysis": "gaps.md"},
         {"Dump provenance": "provenance.md"},
+        {"Data & API": "data.md"},
         {"Wiki": wiki_nav},
         {"Contributing": "contributing.md"},
     ]
@@ -2928,6 +3782,11 @@ def main():
     if css_src.exists():
         css_dest.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(css_src, css_dest)
+    js_src = Path("docs_assets") / "site.js"
+    js_dest = docs / "javascripts" / "site.js"
+    if js_src.exists():
+        js_dest.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(js_src, js_dest)
 
     # Copy branding assets
     images_dest = docs / "assets" / "images"
@@ -2989,6 +3848,16 @@ def main():
     stats["composition"] = compute_composition(db)
     write_if_changed(str(docs / "stats.json"), generate_stats(stats))
 
+    # Computed once: the gap analysis page and the published gaps export must
+    # report the same files.
+    gap_report = build_emulator_gap_report(profiles, coverages, db, suppl_names)
+
+    print("Generating static API and bulk data exports...")
+    exports = generate_data_exports(
+        docs, db, coverages, profiles, stats, gap_report
+    )
+    write_if_changed(str(docs / "data.md"), generate_data_page(exports))
+
     # Build system_id -> manufacturer page map (needed by all generators)
     print("Building system cross-reference map...")
     manufacturers = _group_by_manufacturer(db)
@@ -3029,7 +3898,12 @@ def main():
     write_if_changed(
         str(docs / "emulators" / "index.md"), generate_emulators_index(profiles)
     )
-    for name, profile in profiles.items():
+    public_profiles = {
+        name: profile
+        for name, profile in profiles.items()
+        if profile.get("type") not in ("alias", "test")
+    }
+    for name, profile in public_profiles.items():
         page = generate_emulator_page(name, profile, db, platform_files, suppl_names)
         write_if_changed(str(docs / "emulators" / f"{name}.md"), page)
 
@@ -3043,7 +3917,9 @@ def main():
     print("Generating gap analysis page...")
     write_if_changed(
         str(docs / "gaps.md"),
-        generate_gap_analysis(profiles, coverages, db, suppl_names, registry),
+        generate_gap_analysis(
+            profiles, coverages, db, suppl_names, registry, gap_report
+        ),
     )
 
     # Generate dump provenance page
@@ -3074,6 +3950,9 @@ def main():
     print("Generating contributing page...")
     write_if_changed(str(docs / "contributing.md"), generate_contributing())
 
+    print("Adding page metadata and structured data...")
+    decorate_markdown_pages(docs)
+
     # Update mkdocs.yml nav section only (avoid yaml.dump round-trip mangling quotes)
     print("Updating mkdocs.yml nav...")
     nav = generate_mkdocs_nav(coverages, manufacturers, profiles)
@@ -3093,6 +3972,10 @@ repo_name: Abdess/retrobios
 # Almost every page is generated from platforms/, emulators/ and database.json,
 # so a per-page edit link would point at a file that does not exist.
 edit_uri: ''
+# Local implementation plans are preserved in docs/ for development sessions,
+# but are not part of the public reference site.
+exclude_docs: |
+  superpowers/**
 copyright: MIT for the tooling. BIOS and firmware files are third-party system
   software, preserved for personal backup, archival and interoperability.
 theme:
@@ -3138,6 +4021,8 @@ theme:
   - toc.follow
 extra_css:
 - stylesheets/extra.css
+extra_javascript:
+- javascripts/site.js
 extra:
   social:
   - icon: fontawesome/brands/github
@@ -3149,6 +4034,7 @@ markdown_extensions:
 - attr_list
 - def_list
 - footnotes
+- meta
 - md_in_html
 - tables
 - toc:
@@ -3185,12 +4071,16 @@ validation:
         + len(manufacturers)  # system index + detail
         + 1  # cross-reference
         + 1
-        + len(profiles)  # emulator index + detail
+        + sum(
+            1 for profile in profiles.values()
+            if profile.get("type") not in ("alias", "test")
+        )  # emulator detail pages (aliases/tests remain metadata-only)
         + 1  # gap analysis
         + 1  # which-pack
         + len(list(Path("wiki").glob("*.md")))  # wiki pages copied verbatim
         + 1  # generated wiki/data-model
         + 1  # contributing
+        + 1  # data and API
     )
     print(f"\nGenerated {total_pages} pages in {args.docs_dir}/")
 
