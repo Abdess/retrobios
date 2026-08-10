@@ -137,8 +137,20 @@ def validate_file(
     """Run all validation checks on a file."""
     result = ValidationResult(filepath)
 
+    # Whoever opened the pull request chose this path, so its shape is
+    # settled before anything is read. A symlink to an endless device would
+    # otherwise be hashed until the job timed out, and a symlink out of the
+    # checkout would be reported as though its target had been contributed.
+    if os.path.islink(filepath):
+        result.add_check(False, "Symlinks are not allowed")
+        return result
+
     if not os.path.exists(filepath):
         result.add_check(False, f"File not found: {filepath}")
+        return result
+
+    if not os.path.isfile(filepath):
+        result.add_check(False, "Not a regular file")
         return result
 
     result.size = os.path.getsize(filepath)
@@ -188,9 +200,7 @@ def validate_file(
         )
 
     normalized = os.path.normpath(filepath)
-    if os.path.islink(filepath):
-        result.add_check(False, "Symlinks are not allowed")
-    elif normalized.startswith("bios" + os.sep):
+    if normalized.startswith("bios" + os.sep):
         parts = normalized.split(os.sep)
         if len(parts) >= 4:
             result.add_check(True, f"Correct placement: bios/{parts[1]}/{parts[2]}/")
