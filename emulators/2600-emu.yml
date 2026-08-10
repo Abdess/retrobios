@@ -1,0 +1,126 @@
+emulator: "2600.emu"
+type: standalone
+core_classification: community_fork
+source: "https://github.com/Rakashazi/emu-ex-plus-alpha"
+upstream: "https://github.com/stella-emu/stella"
+profiled_date: "2026-08-11"
+source_commit: "1c12fac5ce49badaadff2e2f210dcc30b89f4943"
+upstream_commit: "d55b1aec0d067a4c901a6dcdf81cb8f579685659"
+core_version: "1.5.85"
+display_name: "Atari - 2600 (2600.emu)"
+mode: standalone
+cores:
+  - "2600-emu"
+  - "2600.emu"
+  - "2600-EMU"
+systems:
+  - atari-2600
+
+notes: |
+  Android and Linux member of the EX Emulator series by Robert Broglia,
+  published as com.explusalpha.A2600Emu (2600.emu/metadata/conf.mk:2,6,7) and
+  reached by ES-DE through its 2600-EMU find rule. Stella 7.0 is vendored under
+  2600.emu/src/stella (2600.emu/src/stella/common/Version.hxx:21, identical to
+  the upstream 7.0 tag) and driven by the app's own OSystem, FrameBuffer,
+  EventHandler and Sound.
+
+  The console needs no ROM of its own. The Supercharger BIOS is the built-in
+  ourDummyROMCode array, patched at load and copied into the ROM area
+  (2600.emu/src/stella/emucore/CartAR.cxx:263-278).
+
+  The build defines EMU_EX_PLATFORM, SOUND_SUPPORT and THUMB_SUPPORT
+  (2600.emu/CMakeLists.txt:22); DEBUGGER_SUPPORT and CHEATCODE_SUPPORT are
+  absent, so the cheat database and the debugger are not compiled. PropertiesSet
+  is constructed on CompositeKeyValueRepositoryNoop
+  (2600.emu/src/stella/emucore/PropsSet.cxx:29-32), so cartridge properties come
+  from the built-in DefProps table and no properties file is read.
+  checkUserPalette returns false and paletteFile returns an empty node
+  (2600.emu/src/OSystemEmuEx.hxx:69-70), which stops PaletteHandler before it
+  opens anything (2600.emu/src/stella/common/PaletteHandler.cxx:405-409).
+  Bezel.cxx and VideoModeHandler are not part of the build.
+
+  KidVid needs no menu entry to engage. Both tapes leave the controller columns
+  empty in the properties table
+  (2600.emu/src/stella/emucore/DefProps.hxx:2339,3420), the default AUTO
+  resolves to Type::Unknown (2600.emu/src/stella/emucore/Control.cxx:137-148),
+  and that is the condition ControllerDetector requires before running its
+  right-port signature test
+  (2600.emu/src/stella/emucore/ControllerDetector.cxx:29,90-92,771-780). The
+  controller is then built for either of the two matching cartridge MD5s
+  (2600.emu/src/stella/emucore/Console.cxx:1096-1105,
+  2600.emu/src/stella/emucore/KidVid.cxx:37-42). The app's own controller list
+  bounds the port 1 option only (2600.emu/src/main/system.ccm:80-93).
+
+  OSystem::baseDir hands the file name to EmuSystem::contentFilePath
+  (2600.emu/src/main/OSystem.cc:73-76), which appends it to the content name
+  instead of joining it as a directory entry (EmuFramework/src/EmuSystem.cc:
+  448-452, EmuFramework/include/emuframework/EmuSystem.hh:213-218), the content
+  name being the ROM file name without its dot extension
+  (EmuFramework/src/EmuSystem.cc:82,91). The tapes are read beside the ROM under
+  that name followed by the file name, as in
+  "Smurfs Save the Day (1983) (Coleco)KVSHARED.WAV". The upstream 7.0 tag builds
+  the same paths as baseDir().getPath() + fileName.
+
+  SoundEmuEx leaves playWav, stopWav and wavSize on their base class bodies,
+  which answer false, nothing and zero
+  (2600.emu/src/stella/emucore/Sound.hxx:121-134). The tapes are tested with
+  FSNode::exists and never read, and both games run without them through the
+  timing path in KidVid::setNextSong.
+
+  NVRAM is produced by the app. MT24LC256 fills a fresh EEPROM image with
+  INITIAL_VALUE when the file is missing or not 32768 bytes
+  (2600.emu/src/stella/emucore/MT24LC256.cxx:44-68), and the CTY and FA2
+  cartridge saves take the same route through nvramDir.
+  elf_executable_image.bin is a dump written under the elf.dump setting
+  (2600.emu/src/stella/emucore/CartELF.cxx:155). ui.png, gpOverlay.png and
+  kbOverlay.png are read from the application bundle through openAsset.
+
+files:
+  - name: KVSHARED.WAV
+    system: atari-2600
+    required: false
+    category: game_data
+    description: "KidVid Voice Module shared samples, tested for both games"
+    source_ref: "2600.emu/src/stella/emucore/KidVid.cxx:273,299"
+
+  - name: KVS1.WAV
+    system: atari-2600
+    required: false
+    category: game_data
+    description: "KidVid tape for Smurfs Save the Day, Harmony Smurf"
+    source_ref: "2600.emu/src/stella/emucore/KidVid.cxx:244,247-249,272"
+
+  - name: KVS2.WAV
+    system: atari-2600
+    required: false
+    category: game_data
+    description: "KidVid tape for Smurfs Save the Day, Handy Smurf"
+    source_ref: "2600.emu/src/stella/emucore/KidVid.cxx:244,247-249,272"
+
+  - name: KVS3.WAV
+    system: atari-2600
+    required: false
+    category: game_data
+    description: "KidVid tape for Smurfs Save the Day, Greedy Smurf"
+    source_ref: "2600.emu/src/stella/emucore/KidVid.cxx:244,247-249,272"
+
+  - name: KVB1.WAV
+    system: atari-2600
+    required: false
+    category: game_data
+    description: "KidVid tape for Berenstain Bears, Big Number Hunt"
+    source_ref: "2600.emu/src/stella/emucore/KidVid.cxx:245,247-249,272"
+
+  - name: KVB2.WAV
+    system: atari-2600
+    required: false
+    category: game_data
+    description: "KidVid tape for Berenstain Bears, Great Letter Roundup"
+    source_ref: "2600.emu/src/stella/emucore/KidVid.cxx:245,247-249,272"
+
+  - name: KVB3.WAV
+    system: atari-2600
+    required: false
+    category: game_data
+    description: "KidVid tape for Berenstain Bears, Spooky Spelling Bee"
+    source_ref: "2600.emu/src/stella/emucore/KidVid.cxx:245,247-249,272"
