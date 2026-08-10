@@ -19,12 +19,13 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (
-    DEFAULT_PROVENANCE_DIR,
     annotate_provenance,
     compute_hashes,
+    DEFAULT_PROVENANCE_DIR,
     list_registered_platforms,
     load_provenance_snapshots,
     write_if_changed,
+    yaml_load,
 )
 
 CACHE_DIR = ".cache"
@@ -33,6 +34,10 @@ DEFAULT_BIOS_DIR = "bios"
 DEFAULT_OUTPUT = "database.json"
 
 SKIP_PATTERNS = {".git", ".github", "__pycache__", ".cache", ".DS_Store", "desktop.ini"}
+
+# Every digest database.json publishes per file. The schema requires all five,
+# so a cache entry missing any of them cannot serve a database entry.
+CACHED_HASHES = frozenset({"sha1", "md5", "sha256", "crc32", "adler32"})
 
 
 def should_skip(path: Path) -> bool:
@@ -80,13 +85,14 @@ def scan_bios_dir(bios_dir: Path, cache: dict, force: bool) -> tuple[dict, dict,
 
         if not force and cache_key in cache:
             cached = cache[cache_key]
-            if cached.get("mtime") == mtime and cached.get("size") == size:
-                hashes = {
-                    "sha1": cached["sha1"],
-                    "md5": cached["md5"],
-                    "sha256": cached["sha256"],
-                    "crc32": cached["crc32"],
-                }
+            fresh = cached.get("mtime") == mtime and cached.get("size") == size
+            # Rebuilding the hash dict by hand dropped whichever digest the
+            # list forgot, and the entry was then written back to the cache
+            # without it, so the loss survived every later run. Requiring the
+            # full set instead turns a partial cache entry into a miss, which
+            # heals it.
+            if fresh and CACHED_HASHES.issubset(cached):
+                hashes = {name: cached[name] for name in CACHED_HASHES}
                 sha1 = hashes["sha1"]
                 is_variant = "/.variants/" in rel_path or "\\.variants\\" in rel_path
                 if sha1 in files:
@@ -273,6 +279,11 @@ def _preserve_large_file_entries(files: dict, db_path: str) -> int:
     except (FileNotFoundError, json.JSONDecodeError):
         return 0
 
+    # A path the scan just claimed holds known bytes. An older entry naming
+    # the same path describes a revision that is no longer there, and keeping
+    # it would publish a hash that contradicts the file it points at.
+    scanned_paths = {entry.get("path", "") for entry in files.values()}
+
     count = 0
     for sha1, entry in existing_db.get("files", {}).items():
         if sha1 in files:
@@ -289,6 +300,8 @@ def _preserve_large_file_entries(files: dict, db_path: str) -> int:
         )
         if cached:
             entry = {**entry, "path": cached}
+        elif path in scanned_paths:
+            continue
         files[sha1] = entry
         count += 1
     return count
@@ -402,7 +415,7 @@ def _collect_all_aliases(files: dict) -> dict:
                 config_file = platforms_dir / f"{platform_name}.yml"
                 try:
                     with open(config_file) as f:
-                        config = yaml.safe_load(f) or {}
+                        config = yaml_load(f) or {}
                 except (yaml.YAMLError, OSError) as e:
                     print(f"Warning: {config_file.name}: {e}", file=sys.stderr)
                     continue
@@ -451,7 +464,7 @@ def _collect_all_aliases(files: dict) -> dict:
                     continue
                 try:
                     with open(emu_file) as f:
-                        emu_config = yaml.safe_load(f) or {}
+                        emu_config = yaml_load(f) or {}
                 except (yaml.YAMLError, OSError):
                     continue
                 for file_entry in emu_config.get("files", []):

@@ -10,6 +10,8 @@ import zipfile
 from pathlib import Path, PurePosixPath
 
 import yaml
+
+from common import yaml_load
 from jsonschema import Draft202012Validator, FormatChecker
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -48,7 +50,7 @@ def _validate_yaml_directory(
             continue
         try:
             with path.open(encoding="utf-8") as handle:
-                data = yaml.safe_load(handle)
+                data = yaml_load(handle)
         except (OSError, yaml.YAMLError) as exc:
             out.append(f"{path.relative_to(ROOT)}: {exc}")
             continue
@@ -122,9 +124,20 @@ def _semantic_database_checks(database: dict) -> list[str]:
         out.append("database.json: total_files does not equal len(files)")
     if database.get("total_size") != sum(entry.get("size", 0) for entry in files.values()):
         out.append("database.json: total_size does not equal the file-size sum")
+    # One path holds one content. Two entries naming the same path means one
+    # of them declares a hash the file at that path does not have.
+    owners: dict[str, str] = {}
     for sha1, entry in files.items():
         if entry.get("sha1") != sha1:
             out.append(f"database.json: files/{sha1}: key and sha1 differ")
+        path = entry.get("path", "")
+        if not path:
+            continue
+        first = owners.setdefault(path, sha1)
+        if first != sha1:
+            out.append(
+                f"database.json: {path} is claimed by {first} and {sha1}"
+            )
     return out
 
 

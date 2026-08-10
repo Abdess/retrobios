@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import hashlib
 import io
+import json
 import os
 import sys
 import tempfile
@@ -155,6 +156,121 @@ class LargeFileCacheTest(unittest.TestCase):
             ),
             str(cached),
         )
+
+
+class HashCacheKeepsEveryDigest(unittest.TestCase):
+    """A cache hit must serve the same five digests a fresh hash produces.
+
+    The cache-hit path rebuilt the hash dict from a hand-written list that
+    omitted adler32, then wrote the entry back without it, so one run without
+    --force stripped the digest from all 7,850 entries for good.
+    """
+
+    def setUp(self):
+        import generate_db
+
+        self.generate_db = generate_db
+        self._tmp = tempfile.TemporaryDirectory()
+        self.bios = Path(self._tmp.name) / "bios"
+        (self.bios / "Sony" / "PS").mkdir(parents=True)
+        (self.bios / "Sony" / "PS" / "boot.bin").write_bytes(b"CACHED PAYLOAD")
+
+    def tearDown(self):
+        self._tmp.cleanup()
+
+    def test_cache_hit_serves_the_full_digest_set(self):
+        files, _, cache = self.generate_db.scan_bios_dir(self.bios, {}, force=False)
+        entry = next(iter(files.values()))
+        self.assertTrue(self.generate_db.CACHED_HASHES.issubset(entry))
+
+        # Second pass, this time served entirely from the cache.
+        again, _, cache2 = self.generate_db.scan_bios_dir(self.bios, cache, force=False)
+        entry2 = next(iter(again.values()))
+        self.assertTrue(
+            self.generate_db.CACHED_HASHES.issubset(entry2),
+            f"cache hit lost {self.generate_db.CACHED_HASHES - set(entry2)}",
+        )
+        self.assertEqual(
+            {k: entry[k] for k in self.generate_db.CACHED_HASHES},
+            {k: entry2[k] for k in self.generate_db.CACHED_HASHES},
+        )
+        self.assertTrue(
+            self.generate_db.CACHED_HASHES.issubset(next(iter(cache2.values())))
+        )
+
+    def test_a_partial_cache_entry_is_rehashed_instead_of_trusted(self):
+        _, _, cache = self.generate_db.scan_bios_dir(self.bios, {}, force=False)
+        key = next(iter(cache))
+        cache[key].pop("adler32")
+        files, _, healed = self.generate_db.scan_bios_dir(self.bios, cache, force=False)
+        entry = next(iter(files.values()))
+        self.assertTrue(self.generate_db.CACHED_HASHES.issubset(entry))
+        self.assertTrue(self.generate_db.CACHED_HASHES.issubset(healed[key]))
+
+
+class PreservedLargeFileEntries(unittest.TestCase):
+    """A preserved entry must never claim a path another entry already owns.
+
+    A large file replaced on disk by a newer firmware revision left its old
+    entry in the database forever, pointing at a path that now serves other
+    bytes.
+    """
+
+    def setUp(self):
+        import generate_db
+
+        self.generate_db = generate_db
+        self._tmp = tempfile.TemporaryDirectory()
+        self.tmp = Path(self._tmp.name)
+        self._cwd = os.getcwd()
+        os.chdir(self.tmp)
+        (self.tmp / ".gitignore").write_text("bios/Sony/PS3/FW.PUP\n")
+        self._real_fetch = common.fetch_large_file
+        generate_db.__dict__.pop("fetch_large_file", None)
+
+    def tearDown(self):
+        os.chdir(self._cwd)
+        common.fetch_large_file = self._real_fetch
+        self._tmp.cleanup()
+
+    def _write_db(self, entries: dict) -> str:
+        path = str(self.tmp / "database.json")
+        Path(path).write_text(json.dumps({"files": entries}))
+        return path
+
+    def test_stale_entry_for_a_rescanned_path_is_dropped(self):
+        common.fetch_large_file = lambda *a, **k: None
+        db_path = self._write_db(
+            {
+                "a" * 40: {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"},
+                "b" * 40: {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"},
+            }
+        )
+        # The scan found the current revision at that path.
+        files = {"a" * 40: {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"}}
+        count = self.generate_db._preserve_large_file_entries(files, db_path)
+        self.assertEqual(count, 0)
+        self.assertEqual(list(files), ["a" * 40])
+
+    def test_absent_large_file_is_still_preserved(self):
+        common.fetch_large_file = lambda *a, **k: None
+        db_path = self._write_db(
+            {"b" * 40: {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"}}
+        )
+        files: dict = {}
+        count = self.generate_db._preserve_large_file_entries(files, db_path)
+        self.assertEqual(count, 1)
+        self.assertIn("b" * 40, files)
+
+    def test_verified_cache_hit_repoints_the_entry(self):
+        common.fetch_large_file = lambda *a, **k: "/cache/large/FW.PUP"
+        db_path = self._write_db(
+            {"b" * 40: {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"}}
+        )
+        files = {"a" * 40: {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"}}
+        count = self.generate_db._preserve_large_file_entries(files, db_path)
+        self.assertEqual(count, 1)
+        self.assertEqual(files["b" * 40]["path"], "/cache/large/FW.PUP")
 
 
 if __name__ == "__main__":
