@@ -746,7 +746,7 @@ def branch_in_url(url: str) -> str | None:
 SELF_CHECK_CONTEXT = 2
 
 
-def verify_at_pin(part: RefPart, pin_lines, tokens) -> PartResult:
+def verify_at_pin(part: RefPart, pin_lines, tokens, hash_tokens=()) -> PartResult:
     """Check a ref against its own revision instead of against HEAD.
 
     A profile pinned to a superseded tag documents a program HEAD no longer
@@ -780,7 +780,12 @@ def verify_at_pin(part: RefPart, pin_lines, tokens) -> PartResult:
         return PartResult(part, "ANCHORED", None, None, None, [])
     # A ref that cites loading logic never spells the value out, so its absence
     # here proves nothing. Only finding the value somewhere else in the file
-    # shows the ref points at the wrong place.
+    # shows the ref points at the wrong place -- and only a hash carries that
+    # weight. A filename fragment matches by coincidence: `tyrian2` hits every
+    # line naming `tyrian2.c`, and a name built at runtime from a format
+    # string appears nowhere at all.
+    if not hash_tokens:
+        return PartResult(part, "ANCHORED", None, None, None, [])
     elsewhere = sorted(
         {
             index
@@ -877,6 +882,7 @@ def build_report(
             entry.get("name", "") + (f" [{label}]" if label else ""),
             value,
             _anchor_tokens(entry),
+            entry_hashes(entry),
         )
         for entry in (profile.get("files") or [])
         if isinstance(entry, dict) and entry.get("source_ref")
@@ -1028,10 +1034,12 @@ def build_report(
     if self_check:
         staged = [
             (entry_name, ref, reconcile_self_check([
-                verify_at_pin(part, fetch(PIN, part.path, part.start), tokens)
+                verify_at_pin(
+                    part, fetch(PIN, part.path, part.start), tokens, hashes
+                )
                 for part in split_source_ref(ref)
             ]))
-            for entry_name, ref, tokens in refs
+            for entry_name, ref, tokens, hashes in refs
         ]
     else:
         staged = [
@@ -1039,7 +1047,7 @@ def build_report(
                 anchor_part(part, fetch, rename_getter, describe, tokens)
                 for part in split_source_ref(ref)
             ])
-            for entry_name, ref, tokens in refs
+            for entry_name, ref, tokens, hashes in refs
         ]
 
     shifts = dominant_shifts([p for _, _, parts in staged for p in parts])

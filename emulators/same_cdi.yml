@@ -42,7 +42,7 @@ files:
     system: cdi
     required: true
     note: "Forced system. Main CPU BIOS (3 region variants via MAME BIOS switch) + servo/slave MCU dumps."
-    source_ref: "src/mame/drivers/cdi.cpp:428-443"
+    source_ref: "src/mame/drivers/cdi.cpp:829-443"
     contents:
       - name: cdi200.rom
         description: Magnavox CD-i 200 BIOS (default, US)
@@ -100,7 +100,7 @@ files:
     system: cdi
     required: false
     note: "CD-i BIOS for Quizard arcade. MACHINE_IS_BIOS_ROOT. Subset of cdimono1 + slave MCU."
-    source_ref: "src/mame/drivers/cdi.cpp:630-640"
+    source_ref: "src/mame/drivers/cdi.cpp:836-640"
     contents:
       - name: cdi200.rom
         description: Magnavox CD-i 200 BIOS (same as cdimono1)
@@ -124,7 +124,7 @@ files:
     system: cdi
     required: false
     note: "CD-i 910-17P Mini-MMC (PAL). MACHINE_NOT_WORKING. Not in .info firmware list."
-    source_ref: "src/mame/drivers/cdi.cpp:319-335"
+    source_ref: "src/mame/drivers/cdi.cpp:831-335"
     contents:
       - name: "philips__cd-i_2.1__mb834200b-15__26b_aa__9224_z01.tc574200.7211"
         description: CD-i 910-17P Mini-MMC BIOS (default)

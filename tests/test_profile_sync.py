@@ -337,14 +337,18 @@ class TestVerifyAtPin(unittest.TestCase):
     def test_declared_value_carried_by_another_line(self):
         lines = ["load()", "", "", "", "", "", 'rom("cafebabe")']
         part = RefPart("a.c", 1, 1, "a.c:1")
-        result = profile_sync.verify_at_pin(part, lines, ["cafebabe"])
+        result = profile_sync.verify_at_pin(
+            part, lines, ["cafebabe"], ["cafebabe"]
+        )
         self.assertEqual(result.status, "MOVED")
         self.assertEqual(result.start, 7)
 
     def test_declared_value_on_several_lines_is_ambiguous(self):
         lines = ["load()", "", "", "", 'a("cafebabe")', "", 'b("cafebabe")']
         part = RefPart("a.c", 1, 1, "a.c:1")
-        result = profile_sync.verify_at_pin(part, lines, ["cafebabe"])
+        result = profile_sync.verify_at_pin(
+            part, lines, ["cafebabe"], ["cafebabe"]
+        )
         self.assertEqual(result.status, "AMBIGUOUS")
 
     def test_one_anchored_part_settles_the_others(self):
@@ -385,6 +389,13 @@ class TestVerifyAtPin(unittest.TestCase):
         part = RefPart("munt ROMInfo.cpp", 1, 1, "munt ROMInfo.cpp:1")
         result = profile_sync.verify_at_pin(part, None, ["cafebabe"])
         self.assertEqual(result.status, "EXTERNAL")
+
+    def test_a_name_fragment_elsewhere_is_not_evidence(self):
+        # Only a hash is unique enough to prove a ref points elsewhere.
+        lines = ["load()", "", "", "", "", "", "tyrian2.c line"]
+        part = RefPart("a.c", 1, 1, "a.c:1")
+        result = profile_sync.verify_at_pin(part, lines, ["tyrian2"], [])
+        self.assertEqual(result.status, "ANCHORED")
 
     def test_missing_file(self):
         part = RefPart("a.c", 1, 1, "a.c:1")

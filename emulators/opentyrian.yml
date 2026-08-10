@@ -240,40 +240,40 @@ files:
   # Level tileset shapes (loaded per-level from .lvl data)
   # The level file specifies a character via fgetc() at tyrian2.c:3039,
   # which maps to shapes{char}.dat at tyrian2.c:3079.
-  # Only 5 characters are used by actual levels: ), W, X, Y, Z.
+  # Episode 4 uses Z, W, X and } (lvlmast.c:128-131).
   # Note: shapeFile[34] in lvlmast.c is a DIFFERENT mechanism —
   # it maps indices to characters for newsh?.shp (enemy sprites),
   # NOT for shapes?.dat (level tilesets).
   # -----------------------------------------------------------
-  - name: "shapes).dat"
+  - name: "shapes}.dat"
     category: game_data
     system: tyrian
     required: true
-    source_ref: "src/tyrian2.c:3039-3079"
+    source_ref: "src/tyrian2.c:3039, 3079, src/lvlmast.c:128-131"
 
   - name: "shapesw.dat"
     category: game_data
     system: tyrian
     required: true
-    source_ref: "src/tyrian2.c:3039-3079"
+    source_ref: "src/tyrian2.c:3039, 3079, src/lvlmast.c:128-131"
 
   - name: "shapesx.dat"
     category: game_data
     system: tyrian
     required: true
-    source_ref: "src/tyrian2.c:3039-3079"
+    source_ref: "src/tyrian2.c:3039, 3079, src/lvlmast.c:128-131"
 
   - name: "shapesy.dat"
     category: game_data
     system: tyrian
     required: true
-    source_ref: "src/tyrian2.c:3039-3079"
+    source_ref: "src/tyrian2.c:3039, 3079, src/lvlmast.c:128-131"
 
   - name: "shapesz.dat"
     category: game_data
     system: tyrian
     required: true
-    source_ref: "src/tyrian2.c:3039-3079"
+    source_ref: "src/tyrian2.c:3039, 3079, src/lvlmast.c:128-131"
 
   # -----------------------------------------------------------
   # Compressed shape files (newshX.shp, loaded per-level)

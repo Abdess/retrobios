@@ -111,7 +111,7 @@ files:
     size: 273
     validation: [size]
     note: "console region and serial number; loaded on a size check alone, and paired with LocalFriendCodeSeed_B"
-    source_ref: "src/core/hle/service/cfg/cfg.cpp:689-709, src/core/hle/service/cfg/cfg.h:180-186"
+    source_ref: "src/core/hle/service/cfg/cfg.cpp:608-610, 689-709, src/core/hle/service/cfg/cfg.h:180-186"
 
   - name: LocalFriendCodeSeed_B
     path: nand/rw/sys/LocalFriendCodeSeed_B
@@ -120,4 +120,4 @@ files:
     size: 272
     validation: [size]
     note: "friend code generation seed; loaded on a size check alone, and paired with SecureInfo_A"
-    source_ref: "src/core/hle/service/cfg/cfg.cpp:711-732, src/core/hle/service/cfg/cfg.h:188-193"
+    source_ref: "src/core/hle/service/cfg/cfg.cpp:604-606, 711-732, src/core/hle/service/cfg/cfg.h:188-193"
