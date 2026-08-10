@@ -19,14 +19,14 @@ notes: |
   LD_PRELOAD=lindbergh.so and an
   LD_LIBRARY_PATH covering the loader directory, the original directory, the
   game directory and ".:lib:../lib", then system()s the ELF
-  (lindbergh.c:315-378, 874-929). Platforms invoke it as lindbergh-loader
+  (src/lindbergh/lindbergh.c:315-378, 874-929). Platforms invoke it as lindbergh-loader
   (Batocera package and generator, RetroBat, ES-DE find rule LINDBERGH-LOADER).
 
   The Lindbergh hardware is emulated inside lindbergh.so with no external
   firmware. Hooked open() and fopen() redirect /dev/lbb (baseboard), /dev/i2c/0
   (eeprom), /dev/ttyS0 and /dev/ttyS1 (drive, ride, motion boards and card
   reader), /proc/bus/pci/01/00.0 and /proc/bus/pci/00/1f.0 to /dev/zero and
-  answer from code (hook.c:43, 530-615, 641-853). The security board is DIP
+  answer from code (src/lindbergh/hook.c:43, 530-615, 641-853). The security board is DIP
   switches and test/service lines computed in securityBoard.c:98-140, with no
   keychip dump. eeprom.bin and sram.bin are created on first run and their
   contents synthesised: eepromSettings.c builds every amSysDataRecord section
@@ -34,12 +34,12 @@ notes: |
   eepromSettings.c:24-120). Card_01.crd and Card_02.crd are written from a
   56-byte header held in the binary (cardReader.c:227-247). lindbergh.ini and
   controls.ini are optional; both fall back to compiled-in defaults and can be
-  emitted with --create (config.c:510-516, sdlInput.c:790-795).
+  emitted with --create (config.c:510-516, src/lindbergh/sdlInput.c:790-795).
 
   The one hard external dependency is the NVIDIA Cg runtime. findLibCg() checks
   LIBCG_PATH from the ini, then /app/lib32/libCg2.so, $APP_IMG_ROOT/usr/lib32/
   libCg2.so, ./libCg.so and $LINDBERGH_LOADER_CURRENT_DIR/libCg.so, and exits
-  when none is present (shaderPatches.c:1028-1108). Cg 3.1 is a separate
+  when none is present (src/lindbergh/shaderPatches.c:1028-1108). Cg 3.1 is a separate
   requirement: the game ELFs link libCg.so and libCgGL.so, which upstream
   vendors as libs/Cg-3.1.zip and installs into the runtime library directory
   (scripts/appimage/make-appimage.sh,
@@ -50,13 +50,13 @@ notes: |
   Shaders come from the game dump, not from the loader. cacheModedShaderFiles()
   reads ../fs/shader and /data/Shader relative to the ELF, patches the Cg
   source and serves the result back through the fopen, fread and ftell hooks
-  (shaderCache.c:474-488, 555-678, hook.c:778-808, 1140-1212).
+  (shaderCache.c:474-488, 555-678, src/lindbergh/hook.c:778-808, 1140-1212).
 
   Boot logos and console fonts were user-supplied until 2.0.1, which added
   built-in copies compiled into lindbergh.so and served from
   resources/logo.h and resources/font.h. The originals are read only when
   DISABLE_BUILTIN_LOGOS or DISABLE_BUILTIN_FONT is set, from the game
-  directory (hook.c:655-744, 874-926, fread hook at 1159-1181). Batocera
+  directory (src/lindbergh/hook.c:655-744, 874-926, fread hook at 1159-1181). Batocera
   exposes both switches as ORIGINAL LOGOS and ORIGINAL FONTS.
 
   Custom cursors and crosshairs load from arbitrary ini paths with no default
@@ -70,7 +70,7 @@ files:
     required: true
     validation: [signature]
     description: "NVIDIA Cg 2.0.0.12 runtime used to recompile the game shaders"
-    source_ref: "shaderPatches.c:1028-1108, shaderPatches.c:1110-1170"
+    source_ref: "src/lindbergh/shaderPatches.c:1028-1108, src/lindbergh/shaderPatches.c:1110-1170"
     note: >-
       Searched at LIBCG_PATH, /app/lib32/libCg2.so, $APP_IMG_ROOT/usr/lib32/
       libCg2.so, then ./libCg.so and $LINDBERGH_LOADER_CURRENT_DIR/libCg.so. The
@@ -85,7 +85,7 @@ files:
     system: sega-lindbergh
     required: true
     description: "NVIDIA Cg 3.1 OpenGL runtime linked by the game binaries"
-    source_ref: "lindbergh.c:336-378, scripts/flatpak/com.github.lindberghloader.yml:181-189"
+    source_ref: "src/lindbergh/lindbergh.c:336-378, scripts/flatpak/com.github.lindberghloader.yml:181-189"
     note: >-
       Resolved by the dynamic linker for the game ELF through the
       LD_LIBRARY_PATH the launcher builds, not opened by loader code. Upstream
@@ -97,7 +97,7 @@ files:
     system: sega-lindbergh
     required: true
     description: "NVIDIA Cg 3.1 runtime linked by the game binaries"
-    source_ref: "lindbergh.c:336-378, scripts/flatpak/com.github.lindberghloader.yml:181-189"
+    source_ref: "src/lindbergh/lindbergh.c:336-378, scripts/flatpak/com.github.lindberghloader.yml:181-189"
     note: >-
       Same origin and mechanism as libCgGL.so, and a different build from the
       2.0.0.12 library the shader recompiler loads. Batocera keeps the two Cg
@@ -111,7 +111,7 @@ files:
     system: sega-lindbergh
     required: false
     description: "OpenSSL 0.9.7 crypto library linked by the networked games"
-    source_ref: "lindbergh.c:336-378, scripts/flatpak/com.github.lindberghloader.yml:244"
+    source_ref: "src/lindbergh/lindbergh.c:336-378, scripts/flatpak/com.github.lindberghloader.yml:244"
     note: >-
       Vendored as libs/libcrypto.so.0.9.7 and installed into the runtime library
       directory by both the AppImage and Flatpak builds. Resolved by the dynamic
@@ -121,14 +121,14 @@ files:
     system: sega-lindbergh
     required: false
     description: "OpenSSL 0.9.7 TLS library linked by the networked games"
-    source_ref: "lindbergh.c:336-378, scripts/flatpak/com.github.lindberghloader.yml:245"
+    source_ref: "src/lindbergh/lindbergh.c:336-378, scripts/flatpak/com.github.lindberghloader.yml:245"
     note: "Vendored as libs/libssl.so.0.9.7, paired with libcrypto.so.0.9.7."
 
   - name: libopenal.so.0
     system: sega-lindbergh
     required: false
     description: "OpenAL runtime preloaded for Quiz Answer x Answer"
-    source_ref: "lindbergh.c:22, lindbergh.c:315-328, lindbergh.c:882-890"
+    source_ref: "src/lindbergh/lindbergh.c:22, src/lindbergh/lindbergh.c:315-328, src/lindbergh/lindbergh.c:882-890"
     note: >-
       When the ELF is q2satl_lind the launcher looks the file up through
       findPreloadLibrary and appends it to LD_PRELOAD. Absence prints "You might
@@ -141,7 +141,7 @@ files:
     system: sega-lindbergh
     required: false
     description: "Sega Lindbergh boot and hardware check program, version 2.4"
-    source_ref: "lindbergh.c:696-698, lindbergh.c:892-895, hook.c:1625-1632, config.h:57-58, gameData.c:51-52"
+    source_ref: "src/lindbergh/lindbergh.c:696-698, src/lindbergh/lindbergh.c:892-895, src/lindbergh/hook.c:1625-1632, src/lindbergh/config.h:57-58, src/lindbergh/gameData.c:51-52"
     unsourceable: >-
       Lives at /usr/sbin/segaboot on the board's hard disk, which no dump
       project covers. The /usr partition images that circulate are encrypted
@@ -150,12 +150,12 @@ files:
       Run as "segaboot -t" under -s or --segaboot. A 32-bit x86 Linux ELF.
       0x38d56318 identifies Segaboot 2.4 and 0xa518b18b the build carrying
       symbols, but neither is a whole-file checksum and neither belongs in a
-      hash field: hook.c computes them as CRC-32 over 0x4000 bytes starting
+      hash field: src/lindbergh/hook.c computes them as CRC-32 over 0x4000 bytes starting
       10 bytes into program header index 2, guarded by p_type == PT_LOAD and
       p_flags == 5. Declaring one as crc32 gives verify.py a value it can
       never reproduce. The comparison drives identification only: an unknown
       CRC logs a warning and startup continues. SEGABOOT 0x0027 and
-      SEGABOOT_2_6 0x0030 in config.h are placeholders, not checksums, and no
+      SEGABOOT_2_6 0x0030 in src/lindbergh/config.h are placeholders, not checksums, and no
       table entry uses them.
 
   # -- Lindbergh boot assets, replaced by built-in copies since 2.0.1 --
@@ -166,7 +166,7 @@ files:
     hle_fallback: true
     has_builtin: true
     description: "Lindbergh boot logo, read from /usr/lib/boot on the original system"
-    source_ref: "hook.c:655-667, hook.c:888-900"
+    source_ref: "src/lindbergh/hook.c:655-667, src/lindbergh/hook.c:888-900"
     note: >-
       Read from the game directory only when DISABLE_BUILTIN_LOGOS is set.
       Otherwise the logoLL array in resources/logo.h answers the read.
@@ -177,7 +177,7 @@ files:
     hle_fallback: true
     has_builtin: true
     description: "Lindbergh Red boot logo, read from /usr/lib/boot on the original system"
-    source_ref: "hook.c:669-681, hook.c:874-886"
+    source_ref: "src/lindbergh/hook.c:669-681, src/lindbergh/hook.c:874-886"
     note: >-
       Read from the game directory only when DISABLE_BUILTIN_LOGOS is set.
       Otherwise the logoLLRed array in resources/logo.h answers the read.
@@ -188,7 +188,7 @@ files:
     hle_fallback: true
     has_builtin: true
     description: "Sega Kaku Gothic console font texture"
-    source_ref: "hook.c:718-730, hook.c:902-914"
+    source_ref: "src/lindbergh/hook.c:718-730, src/lindbergh/hook.c:902-914"
     note: >-
       Read from the game directory only when DISABLE_BUILTIN_FONT is set.
       The built-in is one shared 128x256 atlas (fontTGA) and one metrics
@@ -214,7 +214,7 @@ files:
     hle_fallback: true
     has_builtin: true
     description: "Sega Kaku Gothic console font metrics"
-    source_ref: "hook.c:732-744, hook.c:916-928"
+    source_ref: "src/lindbergh/hook.c:732-744, src/lindbergh/hook.c:916-928"
     note: >-
       Read from the game directory only when DISABLE_BUILTIN_FONT is set.
       The built-in is one shared 128x256 atlas (fontTGA) and one metrics
@@ -241,7 +241,7 @@ files:
     hle_fallback: true
     has_builtin: true
     description: "Lucida Console font texture"
-    source_ref: "hook.c:683-695"
+    source_ref: "src/lindbergh/hook.c:683-695"
     note: >-
       Read from the game directory only when DISABLE_BUILTIN_FONT is set.
       The built-in is one shared 128x256 atlas (fontTGA) and one metrics
@@ -267,7 +267,7 @@ files:
     hle_fallback: true
     has_builtin: true
     description: "Lucida Console font metrics"
-    source_ref: "hook.c:697-709"
+    source_ref: "src/lindbergh/hook.c:697-709"
     note: >-
       Read from the game directory only when DISABLE_BUILTIN_FONT is set.
       The built-in is one shared 128x256 atlas (fontTGA) and one metrics
@@ -293,7 +293,7 @@ files:
     system: sega-lindbergh
     required: false
     description: "Lindbergh site configuration read by Sega's lxmaster boot supervisor"
-    source_ref: "hook.c:650-653"
+    source_ref: "src/lindbergh/hook.c:650-653"
     unsourceable: >-
       /root is a symlink to /usr/local/root, so the file sits on the same
       unpreserved hard-disk partition as segaboot. Nothing canonical exists to
@@ -312,7 +312,7 @@ files:
     category: game_data
     required: false
     description: "SDL gamepad mappings added on top of the built-in table"
-    source_ref: "lindbergh.c:415-430, lindbergh.c:478, sdlInput.c:209-217"
+    source_ref: "src/lindbergh/lindbergh.c:415-430, src/lindbergh/lindbergh.c:478, src/lindbergh/sdlInput.c:209-217"
     note: >-
       Loaded from the path given by -d or --controllerdb, passed through the
       LINDBERGH_CONTROLS_DB_PATH environment variable. The built-in mappings in
