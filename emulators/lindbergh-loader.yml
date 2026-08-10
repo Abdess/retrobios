@@ -185,6 +185,9 @@ files:
     source_ref: "hook.c:718-730, hook.c:902-914"
     note: >-
       Read from the game directory only when DISABLE_BUILTIN_FONT is set.
+      The built-in is one shared 128x256 atlas (fontTGA) and one metrics
+      table (fontABC) answering all four font paths, so it substitutes for
+      the Sega originals rather than reproducing either of them.
       Otherwise the fontTGA array in resources/font.h answers the read.
 
   - name: SEGA_KakuGothic-DB-Roman_12.abc
@@ -196,6 +199,9 @@ files:
     source_ref: "hook.c:732-744, hook.c:916-928"
     note: >-
       Read from the game directory only when DISABLE_BUILTIN_FONT is set.
+      The built-in is one shared 128x256 atlas (fontTGA) and one metrics
+      table (fontABC) answering all four font paths, so it substitutes for
+      the Sega originals rather than reproducing either of them.
       Otherwise the fontABC array in resources/font.h answers the read, with
       ftell returning fontABClen.
 
@@ -208,6 +214,9 @@ files:
     source_ref: "hook.c:683-695"
     note: >-
       Read from the game directory only when DISABLE_BUILTIN_FONT is set.
+      The built-in is one shared 128x256 atlas (fontTGA) and one metrics
+      table (fontABC) answering all four font paths, so it substitutes for
+      the Sega originals rather than reproducing either of them.
       Otherwise the fontTGA array in resources/font.h answers the read.
 
   - name: LucidaConsole_12.abc
@@ -219,6 +228,9 @@ files:
     source_ref: "hook.c:697-709"
     note: >-
       Read from the game directory only when DISABLE_BUILTIN_FONT is set.
+      The built-in is one shared 128x256 atlas (fontTGA) and one metrics
+      table (fontABC) answering all four font paths, so it substitutes for
+      the Sega originals rather than reproducing either of them.
       Otherwise the fontABC array in resources/font.h answers the read.
 
   # -- Lindbergh runtime configuration --
