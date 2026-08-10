@@ -30,13 +30,13 @@ files:
     description: "Amiga 500 Kickstart v1.3 rev 34.005"
     required: false
     hle_fallback: true
-    source_ref: "libretro/core/libretro-core.cpp:83, 420 src/memory.cpp:2080-2180"
+    source_ref: "libretro/core/libretro-core.cpp:77, 828, src/memory.cpp:745-760"
 
   - name: "kick40063.A600"
     description: "Amiga 600 Kickstart v3.1 rev 40.063"
     required: false
     hle_fallback: true
-    source_ref: "libretro/core/libretro-core.cpp:74, libretro/core/libretro-core.cpp:396"
+    source_ref: "libretro/core/libretro-core.cpp:78, 784"
 
   - name: "kick40068.A1200"
     description: "Amiga 1200 Kickstart v3.1 rev 40.068"
@@ -47,19 +47,19 @@ files:
   - name: "kick34005.CDTV"
     description: "CDTV extended ROM v1.00 rev 34.005"
     required: false
-    source_ref: "src/memory.cpp:1931-1971 (EXTENDED_ROM_CDTV via romextfile)"
+    source_ref: "libretro/core/libretro-core.cpp:80, 829, src/memory.cpp:640-662"
 
   - name: "kick40060.CD32"
     description: "CD32 Kickstart v3.1 rev 40.060"
     required: false
-    source_ref: "src/memory.cpp:2080-2180 (loaded via romfile from .uae config)"
+    source_ref: "libretro/core/libretro-core.cpp:81, 851, src/memory.cpp:745-760"
 
   - name: "kick40060.CD32.ext"
     description: "CD32 extended ROM rev 40.060"
     required: false
-    source_ref: "src/memory.cpp:1931-1971 (EXTENDED_ROM_CD32 via romextfile)"
+    source_ref: "libretro/core/libretro-core.cpp:82, 852, src/memory.cpp:644-662"
 
   - name: "rom.key"
     description: "Cloanto Amiga Forever decryption key"
     required: false
-    source_ref: "src/memory.cpp:598-613,625-700 (addkeydir, load_keyring)"
+    source_ref: "src/memory.cpp:754 (addkeydir)"
