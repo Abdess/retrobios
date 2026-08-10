@@ -95,6 +95,9 @@ graph LR
 
 The pack combines platform baseline (layer 1) with core requirements (layer 3).
 Neither too much (no files from unused cores) nor too few (no missing files for active cores).
+A same-named local file that contradicts an explicit hash is recorded as an
+unsafe omission on hash-verifying platforms; existence platforms ship it and
+report the divergence, because their code never reads the bytes.
 
 The emulator's source code serves as ground truth for what files are needed,
 what names they use, and what validation the emulator performs. Platform YAML
@@ -148,7 +151,9 @@ RetroArch and Lakka share the same files and `base_destination` (`system/`),
 so they produce one combined pack (`RetroArch_Lakka_BIOS_Pack.zip`).
 RetroPie uses `BIOS/` as base path, so it gets a separate pack.
 With `--target`, the fingerprint includes target cores so platforms
-with different hardware filters get separate packs.
+with different hardware filters get separate packs. Emulator and system packs
+also retain system identity, `variant_group` and requested region; same-named
+regional files are never collapsed merely because their display label matches.
 
 ## Storage tiers
 
@@ -175,9 +180,24 @@ Files with `hle_fallback: true` are downgraded to INFO when missing
 When a file passes platform verification (MD5 match) but fails
 emulator-level validation (wrong CRC32, wrong size), a DISCREPANCY is reported.
 The pack generator searches the repo for a variant that satisfies both.
-If none exists, the platform version is kept.
+If none exists, the platform version is kept and the discrepancy stays
+reported. A filename or destination never overrides a declared content hash
+during resolution; whether a mismatch is packed is then decided by the
+platform's own verification mode.
 
 ## Security
+
+- install metadata is fetched from the same revision as the installer that
+  reads it, and validated before use;
+- destinations are normalized and contained below the selected BIOS root;
+- downloads are bounded by declared and global size limits, verified with
+  SHA256/SHA1, written to unique temporary siblings and atomically replaced;
+- ZIP extraction rejects traversal, absolute paths, duplicates, links, special
+  files, encryption, excessive expansion and suspicious compression ratios;
+- standalone-emulator copies require explicit `--standalone-copies` consent;
+- CI writes only what its job needs: `validate.yml` holds `pull-requests: write`
+  for the validation comment and labels, `deploy-site.yml` holds the Pages
+  deploy identity, and the release job stays disabled behind `if: false`.
 
 - `safe_extract_zip()` prevents zip-slip path traversal attacks
 - `deterministic_zip` rebuilds MAME ZIPs so same ROMs always produce the same hash
@@ -268,31 +288,27 @@ When a clone ZIP was deduplicated, `resolve_local_file` uses this map to find th
 ## Install manifests
 
 `generate_pack.py --manifest` produces JSON manifests in `install/` for each platform.
-These contain file lists with SHA1 hashes, platform detection config, and standalone copy
+These contain downloadable file lists with SHA256 and SHA1 hashes, explicit
+unsafe/unavailable omissions, platform detection config, and standalone copy
 instructions. `install/targets/` contains per-architecture core availability.
 The cross-platform installer (`install.py`) uses these manifests to auto-detect the
-user's platform, filter files by hardware target, and download with SHA1 verification.
+user's platform, filter files by hardware target, and download with SHA256/SHA1,
+size, path-containment and atomic-write checks.
 
 ## Tests
 
-14 test files, 664 tests total:
+The suite is discovered dynamically rather than maintained as a hand-counted
+subset:
 
-| File | Tests | Coverage |
-|------|-------|----------|
-| `test_e2e.py` | 218 | file resolution, verification, severity, cross-reference, aliases, inheritance, shared groups, data dirs, storage tiers, HLE, launchers, platform grouping, core resolution, target filtering, truth/diff, exporters |
-| `test_profile_sync.py` | 189 | ref anchoring, guarded profile writes, detection, triage |
-| `test_install.py` | 70 | `install.py` platform detection, config-file parsing, manifest handling |
-| `test_upstream.py` | 56 | forge URL parsing, cache, revision resolution, tree comparison |
-| `test_provenance.py` | 29 | Logiqx/Redump parsers, DAT pack import, provenance join, coverage report |
-| `test_mame_parser.py` | 25 | BIOS root set detection, ROM block parsing, macro expansion |
-| `test_hash_merge.py` | 17 | MAME/FBNeo YAML merge, diff detection, formatting preservation |
-| `test_fbneo_parser.py` | 16 | BIOS set detection, ROM info parsing |
-| `test_deterministic_zip.py` | 12 | streaming rebuild, metadata normalisation, entry ordering, source CRC |
-| `test_artifact_lock.py` | 10 | writer/writer and writer/reader exclusion, reader sharing, release on error |
-| `test_pack_integrity.py` | 8 | extract ZIP packs to disk, verify paths + hashes per platform's native mode |
-| `test_torrentzip.py` | 8 | TorrentZip builder against real MAME romsets |
-| `test_large_file_cache.py` | 5 | concurrent downloads, temporary file residue, hash rejection |
-| `test_no_case_collisions.py` | 1 | guard against case-colliding paths in `bios/` |
+| File | Coverage |
+|------|----------|
+| `test_e2e.py` | resolution, verification, packs, inheritance, targets, truth and exporters |
+| `test_profile_sync.py`, `test_upstream.py` | source anchoring, forge parsing, revisions, cache and guarded writes |
+| `test_install.py`, `test_audit_regressions.py` | automatic wrappers, manifest boundaries, pipeline exits, strong hashes and safe archives |
+| `test_region.py` | region vocabulary, ranking, per-system grouping and repository conformance |
+| `test_site_exports.py`, `test_site_validation.py` | versioned exports, SQLite, metadata, accessibility structure and complete local-link graph |
+| parser/provenance modules | MAME, FBNeo, DAT import, merge and provenance joins |
+| artifact modules | deterministic ZIPs, locking, large-file cache, pack integrity and portable paths |
 
 ```bash
 python -m unittest discover tests -v      # full suite
@@ -311,13 +327,14 @@ pattern and how to add a test.
 | Workflow | File | Trigger | Role |
 |----------|------|---------|------|
 | Build & Release | `build.yml` | push to main (bios/, platforms/) + manual | restore large files, build packs, create GitHub release |
-| Deploy Site | `deploy-site.yml` | push to main (platforms, emulators, wiki, scripts) + manual | generate site, build with MkDocs, deploy to GitHub Pages |
-| PR Validation | `validate.yml` | pull request on `bios/`/`platforms/` | validate BIOS hashes, schema check, run tests, auto-label PR |
+| Deploy Site | `deploy-site.yml` | push to main (platforms, emulators, wiki, scripts) + manual | validate contracts, generate site, build with MkDocs, validate rendered HTML, deploy to Pages |
+| PR Validation | `validate.yml` | pull request on bios/, platforms/, emulators/, schemas/, scripts/, tests/ | validate BIOS hashes, schema check, run the full test suite, auto-label PR |
 | Weekly Sync | `watch.yml` | cron (Monday 6 AM UTC) + manual | scrape upstream sources, detect changes, create update PR |
 
 Build workflow has a 7-day rate limit between releases and keeps the 3 most recent.
+The release job stays disabled (`if: false`) until pack generation is validated
+in production. See the [release process](release-process.md).
 
 ## License
 
 See `LICENSE` at repo root. Files are provided for personal backup and archival.
-

@@ -211,7 +211,8 @@ Problems with `install.py`, `install.sh`, or `download.sh`.
 
 **Network issues:**
 
-The installer downloads packs from GitHub releases. If the download fails:
+The installer fetches its manifest, then downloads only the repository or
+`large-files` release objects it needs. If a download fails:
 
 - Check your internet connection
 - Verify that `https://github.com` is reachable
@@ -238,7 +239,15 @@ python install.py --platform batocera --dest /userdata/bios/
 
 Use `python install.py --help` to see all available platforms and options.
 
-**Pack not found in release:**
+**Manifest or file not found:**
+
+The one-line bootstrap verifies the downloaded installer before running it, and
+the installer reads its manifests from the same revision. A 404 usually means
+the platform name is wrong; check `python install.py --list-platforms`.
+`RETROBIOS_REF` pins an installation to a published tag when a reproducible
+file set matters more than the newest one.
+
+**Manual pack not found in release:**
 
 If the installer reports that no pack exists for your platform, check available
 releases:

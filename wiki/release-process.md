@@ -72,7 +72,19 @@ The list is the set of inputs the site is generated from. Adding a new input to
    `mkdocs.yml`)
 5. Run `generate_readme.py` (rebuilds README.md and CONTRIBUTING.md)
 6. `mkdocs build --strict` to produce the static site
-7. Upload artifact, deploy to GitHub Pages
+7. Run `validate_site.py` on the rendered HTML (metadata, headings, image
+   alternatives, duplicate ids, local links and fragments)
+8. Require the committed README and CONTRIBUTING to match what the generator
+   just produced. `write_if_changed()` compares content with the timestamp line
+   stripped, so a run that only moves the clock leaves the files untouched and
+   the check stays meaningful
+9. Upload artifact, deploy to GitHub Pages
+
+Data contracts are validated with `scripts/validate_schemas.py` before the site
+is generated: `database.json`, the install and target manifests, the site API
+envelopes and the stats file, plus the semantic invariants those schemas cannot
+express (declared totals matching their lists, no destination both installed
+and omitted).
 
 The site is deployed via the `github-pages` environment using the official
 `actions/deploy-pages` action. Pages deployments are queued rather than
@@ -90,8 +102,8 @@ so a major theme release cannot change the site without a deliberate bump.
 
 ## validate.yml - PR Validation
 
-**Trigger.** Pull requests that modify `bios/**`, `platforms/**` or
-`emulators/**`.
+**Trigger.** Pull requests that modify `bios/**`, `platforms/**`,
+`emulators/**`, `schemas/**`, `scripts/**`, `tests/**` or `install.py`.
 
 **Concurrency.** Per-PR group, cancel in-progress.
 
@@ -101,13 +113,13 @@ Four parallel jobs:
 `validate_pr.py --markdown` on each, and posts the validation report as a PR
 comment (hash verification, database match status).
 
-**validate-configs.** Validates every platform YAML against
-`schemas/platform.schema.json` and every emulator profile against
-`schemas/emulator.schema.json`, using `jsonschema`. Fails if any file does not
-match. `*.old.yml` files are skipped: they are hash-scraper backups, not
-profiles.
+**validate-configs.** Runs `python scripts/validate_schemas.py --source-only`,
+which validates every platform YAML against `schemas/platform.schema.json` and
+every emulator profile against `schemas/emulator.schema.json`. Both schemas set
+`additionalProperties: false`, so a typo in a field name fails the job instead
+of being silently ignored.
 
-**run-tests.** Runs `python -m unittest tests.test_e2e -v`. Must pass before
+**run-tests.** Runs `python -m unittest discover tests -v`. Must pass before
 merge.
 
 **label-pr.** Auto-labels the PR based on changed paths:

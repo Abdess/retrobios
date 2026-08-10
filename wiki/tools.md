@@ -145,7 +145,7 @@ python scripts/generate_pack.py --all --verify-packs --output-dir dist/  # extra
 
 # Data refresh
 python scripts/generate_pack.py --all --refresh-data  # force re-download data dirs
-python scripts/generate_pack.py --all --offline       # skip the refresh entirely
+python scripts/generate_pack.py --all --offline       # cache-only; never open the network
 
 # Install manifests (consumed by install.py)
 python scripts/generate_pack.py --all --manifest --output-dir install/
@@ -156,6 +156,12 @@ Packs include platform baseline files plus files required by the platform's core
 When a file passes platform verification but fails emulator validation,
 the tool searches for a variant that satisfies both.
 If none exists, the platform version is kept and the discrepancy is reported.
+What happens when a declared hash and the local dump disagree follows the
+platform's own verification mode. A hash platform would reject the file, so it
+is omitted and recorded in the pack report and the installer manifest. An
+existence platform reads no bytes, so the file is packed and the divergence is
+reported instead: an upstream list error must not remove a file the frontend
+would have loaded.
 
 **Granular options:**
 
@@ -328,6 +334,9 @@ python scripts/refresh_data_dirs.py --registry path/to/_data_dirs.yml
 | `provenance_report.py` | Dump-catalog coverage and acquisition targets (see above) |
 | `generate_readme.py` | Generate README.md and CONTRIBUTING.md from database |
 | `generate_site.py` | Generate all MkDocs site pages (this documentation) |
+| `validate_site.py` | Validate rendered metadata, headings, image alternatives, JSON-LD, local resources, links and fragments |
+| `romset_recipes.py` | Identify which emulator version an arcade archive matches, and rebuild a pinned archive from ROMs already held |
+| `scraper/romset_dat_importer.py` | Fetch and import per-set recipes from MAME `-listxml` or FBNeo DATs into `recipes/` |
 | `deterministic_zip.py` | Rebuild MAME BIOS ZIPs deterministically (same ROMs = same hash) |
 | `torrentzip.py` | Build TorrentZip archives for MAME/FBNeo ROM sets (archive bytes depend only on contents) |
 | `crypto_verify.py` | 3DS RSA signature and AES crypto verification |
@@ -343,18 +352,69 @@ Cross-platform BIOS installer for end users:
 # Python installer (auto-detects platform)
 python install.py
 
-# Shell one-liner (Linux/macOS)
-bash scripts/download.sh retroarch ~/RetroArch/system/
-bash scripts/download.sh --list
+# One-line automatic install (Linux/macOS)
+curl -fsSL https://raw.githubusercontent.com/Abdess/retrobios/main/install.sh | sh
 
-# Or via install.sh wrapper (detects curl/wget, runs install.py)
-bash install.sh
+# One-line automatic install (Windows PowerShell)
+irm https://raw.githubusercontent.com/Abdess/retrobios/main/install.ps1 | iex
 ```
 
 `install.py` auto-detects the user's platform by checking config files,
-downloads the matching BIOS pack from GitHub releases with SHA1 verification,
-and extracts files to the correct directory. `install.ps1` provides
-equivalent functionality for Windows/PowerShell.
+downloads the missing files from an immutable release revision, verifies their
+SHA-256 and SHA-1, and replaces each destination atomically. The shell and
+Both one-liners verify the downloaded Python installer against the SHA-256
+embedded in their bootstrap before running it. Copies into standalone-emulator
+directories are opt-in through `--standalone-copies`. Manifest entries with no
+available payload are reported as safely omitted; they are never replaced by a
+same-named file.
+
+`scripts/download.sh` remains available for downloading a prebuilt platform
+ZIP when a manually reviewed pack release contains it; it is separate from the
+per-file automatic installer above.
+
+## Romset recipes
+
+A profile's `contents:` block lists the member names and CRC32s one emulator
+version expects inside an archive. TorrentZip makes archive bytes a function of
+that list alone, so a recipe plus the ROM bytes reproduces the archive exactly.
+
+```bash
+python scripts/romset_recipes.py --identify   # which version each archive is
+python scripts/romset_recipes.py --missing    # pinned archives we lack
+python scripts/romset_recipes.py --missing --write   # write what can be rebuilt
+```
+
+Recipes come from two places. Profiles document a few hundred sets by hand. A
+DAT documents every set of one emulator version at once, and both upstreams
+publish theirs without a browser: MAME ships its `-listxml` as a release asset,
+FBNeo keeps its DATs in the repository.
+
+```bash
+python -m scripts.scraper.romset_dat_importer --source mame --fetch mame0289
+python -m scripts.scraper.romset_dat_importer --source mame --fetch mame0250
+python -m scripts.scraper.romset_dat_importer --source fbneo --fetch
+```
+
+Snapshots land in `recipes/`, not `provenance/`: the latter holds dump catalogues
+and a recipe is not one. Versions accumulate rather than replace each other,
+because a platform pins the archive of whichever version its list was built
+against. Only sets a profile or platform references are kept, a `romof` parent's
+members are merged into the child, and members with no CRC32 are dropped: those
+are undumped and a real romset does not carry them.
+
+The store is compacted: 22 MAME versions produce 23,679 entries but only 1,726
+distinct recipes, since most sets do not change between releases. Each is kept
+once, `dats` listing every version that agrees and `dat` naming the earliest, so
+an identification reads as "unchanged since that version".
+
+`--identify` answers what an archive on disk actually is: with 22 MAME versions
+and the FBNeo DATs imported, 1,113 archives are reproduced byte for byte. `--missing` takes the container MD5s the platforms pin, keeps those the
+collection does not have, and tries every recipe whose ROMs are present.
+
+Reconstruction only works when the pinned archive is itself TorrentZip. An
+archive whose bytes carry metadata unrelated to its contents cannot be derived
+from ROMs by anyone; those are reported as unreproducible rather than guessed
+at. Writing is explicit: the pipeline only ever reports.
 
 ## Large files
 

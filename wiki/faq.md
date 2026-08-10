@@ -33,6 +33,13 @@ Two main reasons:
 
 Platforms that verify by MD5 accept specific hashes. If yours doesn't match any known hash, it may be a bad dump or an uncommon revision.
 
+A filename is never allowed to stand in for a declared hash. When a file entry
+carries a hash, resolution matches on content and reports `hash_mismatch` if the
+only same-named copy disagrees. What happens next depends on the platform: an
+MD5 or SHA1 platform would reject the file, so the pack omits it and says why;
+an existence platform only checks presence, so the file ships and the divergence
+is reported instead.
+
 ## Why are there files that aren't BIOS?
 
 A file earns its place when an emulator loads it from disk and does not bundle it. That covers actual BIOS ROMs, console firmware, arcade BIOS sets, and also game data like `prboom.wad` for the PrBoom core or soundfonts for EasyRPG.

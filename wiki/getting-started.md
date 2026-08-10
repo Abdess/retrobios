@@ -10,9 +10,10 @@ Three ways to get BIOS files in place, from easiest to most manual.
 
 ### Option 1: the installer (recommended)
 
-One command, nothing to clone. It fetches `install.py`, detects the platform
-and its BIOS directory, downloads only what is missing, and verifies SHA1
-checksums before writing anything.
+One command, nothing to clone. The bootstrap verifies `install.py` against the
+SHA-256 embedded in it, then the installer detects the platform and its BIOS
+directory, downloads only what is missing or incorrect, checks size and
+SHA-256/SHA-1 before writing, and installs each file atomically.
 
 ```bash
 # Linux / macOS / Steam Deck
@@ -39,7 +40,15 @@ python install.py --list-platforms     # supported platforms and what was detect
 python install.py --list-targets       # hardware targets for a platform
 python install.py --jobs 4             # parallel downloads (default 8)
 python install.py --verbose
+python install.py --standalone-copies  # opt in to extra standalone-emulator paths
 ```
+
+The default flow writes inside the detected platform tree only. Copies into
+separate standalone-emulator directories are opt-in, so discovery cannot cause
+unexpected writes elsewhere on the machine.
+Entries the collection cannot satisfy are reported as safely omitted and the
+run continues; the installer never substitutes a same-named file for one a
+hash-verifying platform would reject.
 
 Arguments pass through the one-liner too, which is how you target an SD card
 mounted on another machine:

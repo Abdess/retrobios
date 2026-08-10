@@ -219,27 +219,39 @@ actionable.
 ## File Resolution Chain
 
 Before verification, each file entry is resolved to a local path by `resolve_local_file()`.
-The function tries these steps in order, returning the first match:
+The function tries these steps in order, returning the first
+evidence-compatible match:
 
 | Step | Method | Returns | When it applies |
 |------|--------|---------|-----------------|
-| 0 | Path suffix exact | `exact` | `dest_hint` matches `by_path_suffix` index (regional variants with same filename, e.g., `GC/USA/IPL.bin` vs `GC/EUR/IPL.bin`) |
-| 1 | SHA1 exact | `exact` | SHA1 present in the file entry and found in database. A list-valued `sha1` from a profile is accepted |
-| 1b | SHA256 exact | `exact` | SHA256 present, for profiles read from sources that publish SHA256 (e.g. MesenCE) |
-| 1c | CRC32 + size exact | `exact` | Only when no stronger hash is declared (CRC-only profiles such as FBNeo and Clock Signal). CRC32 alone is weak, so the declared size has to confirm the match |
-| 2 | MD5 direct lookup | `md5_exact` | MD5 present, not a `zipped_file` entry. A full 32-char MD5 is trusted on its own; a truncated MD5 also has to match the name, which prevents cross-contamination from unrelated files sharing a prefix |
-| 3 | Name/alias existence | `exact` | No MD5 in entry; any file with matching name or alias exists. Prefers primary over `.variants/`, with a case-insensitive fallback for upstreams that disagree on casing |
-| 4 | Name + md5_composite/MD5 | `exact` or `hash_mismatch` | Name matches, checks md5_composite for ZIPs and direct MD5 per candidate. Falls back to hash_mismatch if name matches but no hash does |
-| 5 | ZIP contents index | `zip_exact` | `zipped_file` with MD5; searches inner ROM MD5 across all ZIPs when name-based resolution failed |
-| 6 | MAME clone fallback | `mame_clone` | File was deduped; resolves via canonical set name (up to 3 levels deep) |
-| 7 | Data directory scan | `data_dir` | Searches `data/` caches by exact path then case-insensitive basename walk |
-| 8 | Agnostic fallback | `agnostic_fallback` | File entry marked `agnostic: true`; matches any file under the system path prefix within the size constraints |
+| 1 | SHA1 | `sha1_exact` | A declared SHA1 identifies a database record; every other declared hash must agree with that same record |
+| 2 | SHA256 | `sha256_exact` | A declared SHA256 identifies a record, again requiring all declarations to agree |
+| 3 | CRC32 plus size | `crc32_exact` | Used only when no stronger hash is declared; size confirms the weaker checksum when available |
+| 4 | MD5 | `md5_exact` | Direct lookup; an explicitly supported truncated MD5 also needs a compatible name |
+| 5 | Path suffix | `path_exact` or a hash-exact status | Disambiguates regional paths. With any declared hash, the path is accepted only when the content matches it |
+| 6 | Name or alias | `name_exact` | Existence/size resolution only when no content hash is declared; prefers primary files and supports casefold matching |
+| 7 | Named candidate inspection | `md5_composite_exact`, `md5_exact`, or `hash_mismatch` | Checks composite ZIP MD5 or direct MD5. A matching name with wrong content is surfaced, never treated as exact |
+| 8 | ZIP contents index | `zip_exact` | `zipped_file` with MD5; searches the inner-ROM index only after name-based resolution fails |
+| 9 | MAME clone | `mame_clone` | Resolves a deduplicated clone to its canonical set only when no content hash was declared |
+| 10 | Data directory | `data_dir` or `data_dir_hash_exact` | Searches exact path then case-insensitive basename; computes every declared hash before accepting an unindexed candidate |
+| 11 | Agnostic fallback | `agnostic_fallback` | Size/path constrained lookup only when no content hash was declared |
 
 If no step matches, the result is `(None, "not_found")`.
 
-The `hash_mismatch` status at step 4 means a file with the right name exists but its hash
+The `hash_mismatch` status means a file with the right name or path exists but its hash
 does not match. This still resolves to a local path (the file is present), but verification
 will report it as UNTESTED with a reason string showing the expected vs actual hash prefix.
+
+A path or filename is never allowed to mask a declared strong hash: the
+identity steps run first, and a path or name is accepted only when no content
+hash was declared or when the content agrees with the one that was.
+
+What the pack does with a `hash_mismatch` follows the platform's own mode. An
+MD5 or SHA1 platform would reject those bytes, so the file is left out and
+counted as an unsafe exclusion, distinct from a file the collection does not
+have. An existence platform reads no bytes at all, so the file is packed and
+the divergence is printed as a discrepancy: an error in an upstream BIOS list
+must not remove a file the frontend would have loaded.
 
 
 ## Discrepancy Detection
@@ -261,8 +273,8 @@ both the platform MD5 requirement and emulator validation:
 
 The search covers files in `.variants/` (alternate hashes stored during deduplication).
 If a better variant is found, the pack uses it instead of the primary file. If no variant
-satisfies both constraints, the platform version is kept and the discrepancy is reported
-in the verification output.
+satisfies both independent contracts, the platform-verified baseline is retained but the
+emulator discrepancy remains explicit; it is never reported as source-compatible.
 
 ### Practical example
 
@@ -270,5 +282,5 @@ A `scph5501.bin` file passes Batocera MD5 verification (hash matches upstream de
 but fails the emulator profile's size check because the profile was verified against a
 different revision. `_find_best_variant` scans `.variants/scph5501.bin.*` for a file
 that matches both the Batocera MD5 and the emulator's size expectation. If found, the
-variant is used in the pack. If not, the Batocera-verified file is kept and the discrepancy
-is logged.
+variant is used in the pack. If not, the Batocera-verified baseline is retained and the
+emulator discrepancy stays visible in verification and gap reporting.

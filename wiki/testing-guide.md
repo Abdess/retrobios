@@ -2,9 +2,10 @@
 
 This page covers how to run, understand, and extend the test suite.
 
-10 modules, 400 tests. No network access anywhere. Most modules build synthetic
-fixtures in a temp directory; the three that read the working tree skip cleanly
-when the data they need is absent.
+The suite is discovered dynamically across focused modules, so its exact count
+is reported by the test runner instead of being hand-maintained here. Tests do
+not require network access. Most build synthetic fixtures under the repository's
+`tmp/`; modules that read real artifacts skip cleanly when those inputs are absent.
 
 ## Running tests
 
@@ -31,6 +32,10 @@ python -m unittest tests.test_large_file_cache -v
 python -m unittest tests.test_pack_integrity -v
 python -m unittest tests.test_torrentzip -v
 python -m unittest tests.test_no_case_collisions -v
+python -m unittest tests.test_region -v
+python -m unittest tests.test_audit_regressions -v
+python -m unittest tests.test_site_exports -v
+python -m unittest tests.test_site_validation -v
 ```
 
 The only dependency is `pyyaml`. No test framework beyond the standard
@@ -38,22 +43,26 @@ library `unittest` module.
 
 ## Modules at a glance
 
-| Module | Tests | Fixtures | What it covers |
-|--------|-------|----------|----------------|
-| `test_e2e.py` | 218 | synthetic | resolution, verification, packs, cross-reference, targets, truth |
-| `test_profile_sync.py` | 189 | synthetic | ref anchoring, guarded profile writes, detection, triage |
-| `test_install.py` | 70 | synthetic | `install.py` detection, config parsing, manifest handling |
-| `test_upstream.py` | 56 | synthetic | forge URL parsing, cache, revision resolution, tree comparison |
-| `test_provenance.py` | 29 | synthetic | Logiqx/Redump parsing, DAT import, provenance join, coverage report |
-| `test_mame_parser.py` | 25 | inline C | BIOS root sets, ROM blocks, macro expansion |
-| `test_hash_merge.py` | 17 | synthetic | YAML hash merge, diff, formatting preservation |
-| `test_fbneo_parser.py` | 16 | inline C | `BDF_BOARDROM` sets, ROM info parsing |
-| `test_deterministic_zip.py` | 12 | synthetic | streaming rebuild, metadata normalisation, entry ordering, source CRC |
-| `test_artifact_lock.py` | 10 | synthetic | writer/writer and writer/reader exclusion, reader sharing, release on error |
-| `test_pack_integrity.py` | 8 | real packs | extract each ZIP, verify paths and hashes |
-| `test_torrentzip.py` | 8 | real romsets | TorrentZip builder byte-for-byte |
-| `test_large_file_cache.py` | 5 | synthetic | concurrent downloads, temporary file residue, hash rejection |
-| `test_no_case_collisions.py` | 1 | real `bios/` | no case-colliding paths on Windows/macOS clones |
+| Module | Fixtures | What it covers |
+|--------|----------|----------------|
+| `test_e2e.py` | synthetic | resolution, verification, packs, cross-reference, targets, truth |
+| `test_profile_sync.py` | synthetic | ref anchoring, guarded profile writes, detection, triage |
+| `test_install.py` | synthetic | platform detection, manifests, downloads and both automatic wrappers |
+| `test_region.py` | synthetic + profiles | canonical vocabulary, ranking, grouping and repository conformance |
+| `test_audit_regressions.py` | synthetic | pipeline exits, strong hashes, safe archives, manifest trust boundaries |
+| `test_site_exports.py` | synthetic | source permalinks, API/catalog hashes, SQLite and page metadata |
+| `test_site_validation.py` | rendered HTML | links, fragments, headings, alternatives and duplicate search metadata |
+| `test_upstream.py` | synthetic | forge URL parsing, cache, revision resolution, tree comparison |
+| `test_provenance.py` | synthetic | Logiqx/Redump parsing, DAT import, provenance join, coverage report |
+| `test_mame_parser.py` | inline C | BIOS root sets, ROM blocks, macro expansion |
+| `test_hash_merge.py` | synthetic | YAML hash merge, diff, formatting preservation |
+| `test_fbneo_parser.py` | inline C | `BDF_BOARDROM` sets and ROM info parsing |
+| `test_deterministic_zip.py` | synthetic | streaming rebuild, metadata normalisation, ordering and source CRC |
+| `test_artifact_lock.py` | synthetic | writer/reader exclusion, sharing and lock release |
+| `test_large_file_cache.py` | synthetic | concurrent downloads, temporary residue and hash rejection |
+| `test_pack_integrity.py` | real packs | extract ZIPs and verify paths plus hashes |
+| `test_torrentzip.py` | real romsets | TorrentZip builder byte-for-byte |
+| `test_no_case_collisions.py` | real `bios/` | portable case-collision guard |
 
 ## Test architecture
 
@@ -207,8 +216,9 @@ in the platform YAML:
 Handles inner ZIP verification for MAME/FBNeo ROM sets (checkInsideZip,
 md5_composite, inner ROM MD5) and path collision deduplication.
 
-8 tests (one per active platform): RetroArch, Batocera, BizHawk, EmuDeck,
-Recalbox, RetroBat, RetroDECK, RomM.
+One test per distinct pack contract: RetroArch, Batocera, BizHawk, EmuDeck,
+Recalbox, RetroBat, RetroDECK, RomM. Inherited aliases such as Lakka reuse the
+same artifact and are not counted twice.
 
 ```bash
 python -m unittest tests.test_pack_integrity -v
@@ -228,6 +238,7 @@ The test suite is one layer of verification. The full quality gate is:
 3. No unexpected CRITICAL entries in the verify output
 4. Pack file counts match verification file counts (consistency check)
 5. Pack integrity passes (every declared file extractable with correct hash)
+6. `mkdocs build --strict` and `python scripts/validate_site.py` pass
 
 If a change passes tests but breaks the pipeline, it's worth investigating before merging. Similarly, new CRITICAL entries in the verify output after a change usually indicate something to look into. The pipeline is designed so that all steps agree: if verify reports N files for a platform, the pack should contain exactly N files.
 
@@ -235,18 +246,17 @@ Ideally, tests, code, and documentation ship together. When profiles and platfor
 
 ## CI integration
 
-The `validate.yml` workflow runs `test_e2e` on every pull request that touches
-`bios/` or `platforms/` files. The test job (`run-tests`) runs in parallel
-with BIOS validation, schema validation, and auto-labeling. `build.yml` runs
-the same module before building release packs.
+The `validate.yml` workflow runs `python -m unittest discover tests -v` on every
+pull request that touches `bios/`, `platforms/`, `emulators/`, `schemas/`,
+`scripts/`, `tests/` or `install.py`. The test job (`run-tests`) runs in parallel
+with BIOS validation, schema validation, and auto-labeling.
 
-CI runs `test_e2e` only, not the whole suite: the other modules either need
-build artifacts (`test_pack_integrity` needs packs in `dist/`) or duplicate
-work the workflow already does. Run `python -m unittest discover tests` locally
-before pushing.
+Modules that need real artifacts skip themselves when those artifacts are absent,
+so `test_pack_integrity` is a no-op in CI (no `dist/`) and a real check locally.
+Run `python -m unittest discover tests` before pushing.
 
 Tests must pass before merge. If a test fails in CI, reproduce locally with:
 
 ```bash
-python -m unittest tests.test_e2e -v 2>&1 | head -50
+python -m unittest discover tests -v
 ```
