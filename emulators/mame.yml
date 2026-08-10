@@ -3183,7 +3183,7 @@ files:
     required: true
     category: bios_zip
     system: casio-loopy
-    source_ref: "src/mame/casio/casloopy.cpp:2456-2462"
+    source_ref: "src/mame/casio/casloopy.cpp:2105-2462"
     contents:
       - name: hd6437021.lsi302
         description: SH-1 CPU internal mask ROM
@@ -4346,7 +4346,7 @@ files:
   - name: epitch.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2942"
+    source_ref: "src/mame/tvgames/xavix.cpp:3027"
     contents:
       - name: ekarajapan.bin
         size: 1048576
