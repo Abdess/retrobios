@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+import hashlib
 import tempfile
+import time
 import unittest
 import zipfile
 from pathlib import Path
@@ -150,6 +152,101 @@ class TestVerifyDeterminism(unittest.TestCase):
         ok, original, rebuilt = verify_zip_determinism(normalized)
         self.assertTrue(ok)
         self.assertEqual(original, rebuilt)
+
+
+class TestPackDeterminism(unittest.TestCase):
+    """A pack is a function of its inputs, not of the clock it was built on."""
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.tmp = Path(self._tmp.name)
+        self.bios = self.tmp / "bios"
+        self.platforms = self.tmp / "platforms"
+        self.bios.mkdir()
+        self.platforms.mkdir()
+
+        payload = b"DETERMINISM_PAYLOAD"
+        (self.bios / "boot.rom").write_bytes(payload)
+        sha1 = hashlib.sha1(payload).hexdigest()
+        self.db = {
+            "generated_at": "2026-01-02T03:04:05Z",
+            "files": {
+                sha1: {
+                    "path": str(self.bios / "boot.rom"),
+                    "name": "boot.rom",
+                    "size": len(payload),
+                    "sha1": sha1,
+                    "md5": hashlib.md5(payload).hexdigest(),
+                },
+            },
+            "indexes": {
+                "by_md5": {hashlib.md5(payload).hexdigest(): sha1},
+                "by_name": {"boot.rom": [sha1]},
+                "by_crc32": {},
+                "by_sha256": {},
+                "by_path_suffix": {},
+            },
+        }
+        (self.platforms / "detplat.yml").write_text(
+            "platform: DetPlat\n"
+            "verification_mode: existence\n"
+            "base_destination: system\n"
+            "systems:\n"
+            "  test-sys:\n"
+            "    files:\n"
+            "      - name: boot.rom\n"
+            "        destination: boot.rom\n"
+            "        required: true\n"
+        )
+
+    def tearDown(self):
+        self._tmp.cleanup()
+
+    def _build(self, out_name: str) -> Path:
+        from scripts.generate_pack import generate_pack
+
+        out = self.tmp / out_name
+        out.mkdir()
+        path = generate_pack(
+            "detplat", str(self.platforms), self.db, str(self.bios), str(out),
+            offline=True,
+        )
+        self.assertIsNotNone(path)
+        return Path(path)
+
+    def test_two_builds_are_byte_identical(self):
+        first = self._build("out1")
+        time.sleep(2.1)  # ZIP mtimes are 2s-granular: cross a whole tick
+        second = self._build("out2")
+        self.assertEqual(
+            hashlib.sha256(first.read_bytes()).hexdigest(),
+            hashlib.sha256(second.read_bytes()).hexdigest(),
+        )
+
+    def test_generated_members_carry_the_fixed_epoch(self):
+        pack = self._build("out1")
+        with zipfile.ZipFile(pack) as zf:
+            generated = [
+                i for i in zf.infolist()
+                if i.filename.rsplit("/", 1)[-1].startswith(
+                    ("README.txt", "INSTRUCTIONS_", "RENAMED_")
+                )
+            ]
+            self.assertTrue(generated, "pack should carry a generated README")
+            for info in generated:
+                self.assertEqual(info.date_time, _FIXED_DATE_TIME)
+
+    def test_injected_manifest_is_pinned_to_the_database(self):
+        from scripts.generate_pack import inject_manifest, verify_pack
+
+        pack = self._build("out1")
+        ok, manifest = verify_pack(str(pack), self.db)
+        self.assertTrue(ok, manifest.get("errors"))
+        self.assertEqual(manifest["generated"], self.db["generated_at"])
+        inject_manifest(str(pack), manifest)
+        with zipfile.ZipFile(pack) as zf:
+            info = zf.getinfo("manifest.json")
+        self.assertEqual(info.date_time, _FIXED_DATE_TIME)
 
 
 if __name__ == "__main__":

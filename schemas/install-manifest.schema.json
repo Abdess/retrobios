@@ -4,37 +4,136 @@
   "title": "RetroBIOS installer manifest",
   "type": "object",
   "additionalProperties": false,
-  "required": ["manifest_version", "source", "regions", "platform", "display_name", "version", "generated", "base_destination", "detect", "standalone_copies", "total_files", "total_size", "total_omitted", "omitted_files", "files"],
+  "required": [
+    "manifest_version",
+    "source",
+    "regions",
+    "platform",
+    "display_name",
+    "version",
+    "generated",
+    "base_destination",
+    "detect",
+    "standalone_copies",
+    "total_files",
+    "total_size",
+    "total_omitted",
+    "omitted_files",
+    "files"
+  ],
   "properties": {
-    "manifest_version": { "const": 2 },
-    "source": { "enum": ["full", "platform", "truth"] },
-    "regions": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
-    "platform": { "type": "string", "minLength": 1 },
-    "display_name": { "type": "string", "minLength": 1 },
-    "version": { "type": "string" },
-    "generated": { "type": "string", "format": "date-time" },
-    "base_destination": { "type": "string" },
-    "detect": { "type": "array", "items": { "type": "object" } },
-    "standalone_copies": { "type": "array", "items": { "type": "object" } },
-    "total_files": { "type": "integer", "minimum": 0 },
-    "total_size": { "type": "integer", "minimum": 0 },
-    "total_omitted": { "type": "integer", "minimum": 0 },
+    "manifest_version": {
+      "const": 2
+    },
+    "source": {
+      "enum": [
+        "full",
+        "platform",
+        "truth"
+      ]
+    },
+    "regions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "target": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Hardware target this manifest was filtered for; absent when unfiltered"
+    },
+    "platform": {
+      "type": "string",
+      "minLength": 1
+    },
+    "display_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "version": {
+      "type": "string"
+    },
+    "generated": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "base_destination": {
+      "type": "string"
+    },
+    "detect": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "standalone_copies": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "total_files": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "total_size": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "total_omitted": {
+      "type": "integer",
+      "minimum": 0
+    },
     "omitted_files": {
       "type": "array",
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["dest", "name", "system", "required", "reason", "cores"],
+        "required": [
+          "dest",
+          "name",
+          "system",
+          "required",
+          "reason",
+          "cores"
+        ],
         "properties": {
-          "dest": { "type": "string", "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$" },
-          "name": { "type": "string", "minLength": 1 },
-          "system": { "type": "string" },
-          "required": { "type": "boolean" },
-          "reason": { "enum": ["hash_mismatch", "not_found", "external", "user_provided"] },
+          "dest": {
+            "type": "string",
+            "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "system": {
+            "type": "string"
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "reason": {
+            "enum": [
+              "hash_mismatch",
+              "not_found",
+              "external",
+              "user_provided"
+            ]
+          },
           "cores": {
             "oneOf": [
-              { "type": "null" },
-              { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+              {
+                "type": "null"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "uniqueItems": true
+              }
             ]
           }
         }
@@ -45,27 +144,74 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["dest", "sha1", "sha256", "size", "repo_path", "cores"],
+        "required": [
+          "dest",
+          "sha1",
+          "sha256",
+          "size",
+          "repo_path",
+          "cores"
+        ],
         "properties": {
-          "dest": { "type": "string", "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$" },
-          "sha1": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
-          "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
-          "size": { "type": "integer", "minimum": 0 },
-          "repo_path": { "type": "string" },
+          "dest": {
+            "type": "string",
+            "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+          },
+          "sha1": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{40}$"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "size": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "repo_path": {
+            "type": "string"
+          },
           "cores": {
             "oneOf": [
-              { "type": "null" },
-              { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+              {
+                "type": "null"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "uniqueItems": true
+              }
             ]
           },
-          "storage": { "const": "release" },
-          "release_asset": { "type": "string", "pattern": "^[^/\\\\]+$" }
+          "storage": {
+            "const": "release"
+          },
+          "release_asset": {
+            "type": "string",
+            "pattern": "^[^/\\\\]+$"
+          }
         },
         "oneOf": [
-          { "required": ["release_asset"] },
           {
-            "properties": { "repo_path": { "type": "string", "pattern": "^bios/" } },
-            "not": { "required": ["release_asset"] }
+            "required": [
+              "release_asset"
+            ]
+          },
+          {
+            "properties": {
+              "repo_path": {
+                "type": "string",
+                "pattern": "^bios/"
+              }
+            },
+            "not": {
+              "required": [
+                "release_asset"
+              ]
+            }
           }
         ]
       }

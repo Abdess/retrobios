@@ -27,9 +27,8 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (
-    ArtifactLockBusy,
-    MANUFACTURER_PREFIXES,
     artifact_lock,
+    ArtifactLockBusy,
     build_target_cores_cache,
     build_zip_contents_index,
     check_inside_zip,
@@ -46,14 +45,17 @@ from common import (
     load_database,
     load_emulator_profiles,
     load_platform_config,
+    MANUFACTURER_PREFIXES,
     parse_md5_list,
     require_yaml,
     resolution_is_hash_exact,
     resolve_local_file,
     safe_extract_zip,
+    yaml_load,
 )
 import region as region_mod
-from deterministic_zip import rebuild_zip_deterministic
+from deterministic_zip import _FIXED_DATE_TIME, rebuild_zip_deterministic
+from nativemode import hash_mismatch_excludes_file
 from validation import (
     _build_validation_index,
     check_file_validation,
@@ -66,13 +68,41 @@ DEFAULT_PLATFORMS_DIR = "platforms"
 DEFAULT_DB_FILE = "database.json"
 DEFAULT_OUTPUT_DIR = "dist"
 DEFAULT_BIOS_DIR = "bios"
-MAX_ENTRY_SIZE = 512 * 1024 * 1024  # 512MB
 
 # CLI-wide network policy.  Public helpers can override it explicitly, while
 # every CLI mode inherits --offline (including large-file release fallback).
 _OFFLINE = False
 
 _HEX_RE = re.compile(r"\b([0-9a-fA-F]{8,40})\b")
+
+
+def _write_generated_member(zf: zipfile.ZipFile, arcname: str, text: str) -> None:
+    """Write a pack member the builder composes rather than copies.
+
+    READMEs, instruction notes and the manifest are produced at build time,
+    so writestr would stamp them with the wall clock and give the same pack
+    a different hash on every run. Pinning them to the epoch the archive
+    rebuilder already uses makes a pack a function of its inputs alone.
+    """
+    info = zipfile.ZipInfo(filename=arcname, date_time=_FIXED_DATE_TIME)
+    info.compress_type = zipfile.ZIP_DEFLATED
+    info.external_attr = 0o100644 << 16
+    zf.writestr(info, text)
+
+
+def _build_timestamp(db: dict | None = None) -> str:
+    """Timestamp for generated artifacts.
+
+    Reads the database snapshot the artifact was built from, so rebuilding
+    the same data twice yields the same value. Falls back to the clock only
+    when no database is at hand.
+    """
+    stamp = (db or {}).get("generated_at")
+    if isinstance(stamp, str) and stamp:
+        return stamp
+    from datetime import datetime, timezone
+
+    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 def _detect_hash_type(h: str) -> str:
@@ -220,6 +250,17 @@ def _find_candidate_satisfying_both(
         if reason is None:
             return path
     return None
+
+
+def _target_tag(target_name: str) -> str:
+    """Filename tag for a hardware target.
+
+    Without it a targeted pack takes the same name as the full one and
+    overwrites it.
+    """
+    return "".join(
+        part.title() for part in re.split(r"[-_\s]+", target_name.strip()) if part
+    )
 
 
 def _sanitize_path(raw: str) -> str:
@@ -1120,6 +1161,7 @@ def generate_pack(
     source: str = "full",
     flatten: bool = True,
     regions: list[str] | None = None,
+    target_name: str | None = None,
     offline: bool | None = None,
 ) -> str | None:
     """Generate a ZIP pack for a platform.
@@ -1139,6 +1181,7 @@ def generate_pack(
     req_tag = "_Required" if required_only else ""
     source_tag = {"platform": "_Platform", "truth": "_Truth"}.get(source, "")
     region_tag_str = f"_{region_mod.region_tag(regions)}" if regions else ""
+    target_tag = f"_{_target_tag(target_name)}" if target_name else ""
 
     sys_tag = ""
     if system_filter:
@@ -1153,7 +1196,7 @@ def generate_pack(
             display_parts.append("_".join(p.title() for p in parts if p))
         sys_tag = "_" + "_".join(display_parts)
 
-    zip_name = f"{platform_display.replace(' ', '_')}{version_tag}{source_tag}{region_tag_str}{req_tag}_BIOS_Pack{sys_tag}.zip"
+    zip_name = f"{platform_display.replace(' ', '_')}{version_tag}{source_tag}{region_tag_str}{target_tag}{req_tag}_BIOS_Pack{sys_tag}.zip"
     zip_path = os.path.join(output_dir, zip_name)
     os.makedirs(output_dir, exist_ok=True)
 
@@ -1364,7 +1407,8 @@ def generate_pack(
                     instr_path = (
                         f"{base_dest}/{instr_name}" if base_dest else instr_name
                     )
-                    zf.writestr(
+                    _write_generated_member(
+                        zf,
                         _flat(instr_path, base_dest, flatten),
                         f"File needed: {file_entry['name']}\n\n{instructions}\n",
                     )
@@ -1472,7 +1516,11 @@ def generate_pack(
                                 else readme_name
                             )
                             if readme_full not in seen_destinations:
-                                zf.writestr(_flat(readme_full, base_dest, flatten), readme_text)
+                                _write_generated_member(
+                                    zf,
+                                    _flat(readme_full, base_dest, flatten),
+                                    readme_text,
+                                )
                                 seen_destinations.add(readme_full)
                         status = "agnostic_fallback"
                         # Fall through to normal packing below
@@ -1749,7 +1797,7 @@ def generate_pack(
       _pack_registry: dict = {}
       if _registry_path.exists():
           with open(_registry_path) as _rf:
-              _pack_registry = (yaml.safe_load(_rf) or {}).get("platforms", {})
+              _pack_registry = (yaml_load(_rf) or {}).get("platforms", {})
       readme_text = _build_readme(
           platform_name, platform_display, base_dest, total_files, num_systems,
           source=source,
@@ -1757,7 +1805,7 @@ def generate_pack(
           regions=regions,
           fallback_systems=region_fallbacks,
       )
-      zf.writestr("README.txt", readme_text)
+      _write_generated_member(zf, "README.txt", readme_text)
 
     files_ok = sum(1 for s in file_status.values() if s == "ok")
     files_untested = sum(1 for s in file_status.values() if s == "untested")
@@ -2123,7 +2171,9 @@ def generate_emulator_pack(
                     seen_lower.add(dest.lower())
                     instr = fe.get("instructions", "Please provide this file manually.")
                     instr_name = f"INSTRUCTIONS_{fe['name']}.txt"
-                    zf.writestr(instr_name, f"File needed: {fe['name']}\n\n{instr}\n")
+                    _write_generated_member(
+                        zf, instr_name, f"File needed: {fe['name']}\n\n{instr}\n"
+                    )
                     total_files += 1
                     continue
 
@@ -2321,6 +2371,7 @@ def generate_split_packs(
     required_only: bool = False,
     source: str = "full",
     regions: list[str] | None = None,
+    target_name: str | None = None,
     offline: bool | None = None,
 ) -> list[str]:
     """Generate split packs (one ZIP per system or manufacturer)."""
@@ -2387,6 +2438,7 @@ def generate_split_packs(
             precomputed_extras=group_extras,
             source=source,
             regions=regions,
+            target_name=target_name,
             offline=offline,
         )
         if zip_path:
@@ -2394,8 +2446,9 @@ def generate_split_packs(
             ver_tag = f"_{version.replace(' ', '')}" if version else ""
             req_tag = "_Required" if required_only else ""
             rgn_tag = f"_{region_mod.region_tag(regions)}" if regions else ""
+            tgt_tag = f"_{_target_tag(target_name)}" if target_name else ""
             safe_group = group_name.replace(" ", "_")
-            new_name = f"{platform_display.replace(' ', '_')}{ver_tag}{source_tag}{rgn_tag}{req_tag}_{safe_group}_BIOS_Pack.zip"
+            new_name = f"{platform_display.replace(' ', '_')}{ver_tag}{source_tag}{rgn_tag}{tgt_tag}{req_tag}_{safe_group}_BIOS_Pack.zip"
             new_path = os.path.join(split_dir, new_name)
             if new_path != zip_path:
                 os.rename(zip_path, new_path)
@@ -2565,7 +2618,7 @@ def generate_target_manifests(targets_dir: str, output_dir: str) -> None:
         if yml_file.name.startswith("_"):
             continue
         with open(yml_file) as f:
-            data = yaml.safe_load(f) or {}
+            data = yaml_load(f) or {}
         targets = data.get("targets", {})
         if not isinstance(targets, dict):
             raise ValueError(f"{yml_file}: targets must be a mapping")
@@ -2679,7 +2732,7 @@ def _run_manifest_mode(
     registry: dict = {}
     if os.path.exists(registry_path):
         with open(registry_path) as _rf:
-            registry = yaml.safe_load(_rf) or {}
+            registry = yaml_load(_rf) or {}
 
     if args.all_variants:
         variants = [
@@ -2707,6 +2760,7 @@ def _run_manifest_mode(
                     target_cores=tc,
                     source=source,
                     regions=getattr(args, "regions", None),
+                    target_name=args.target,
                     offline=args.offline,
                 )
                 source_suffix = {"platform": "_platform", "truth": "_truth"}.get(source, "")
@@ -2715,10 +2769,13 @@ def _run_manifest_mode(
                 region_suffix = (
                     f"_{region_mod.region_tag(rgn).lower()}" if rgn else ""
                 )
+                target_suffix = (
+                    f"_{_target_tag(args.target).lower()}" if args.target else ""
+                )
                 out_path = os.path.join(
                     args.output_dir,
                     f"{representative}{source_suffix}{region_suffix}"
-                    f"{req_suffix}.json",
+                    f"{target_suffix}{req_suffix}.json",
                 )
                 _write_manifest_if_changed(out_path, manifest)
                 print(
@@ -2732,7 +2789,7 @@ def _run_manifest_mode(
                         alias_path = os.path.join(
                             args.output_dir,
                             f"{alias_plat}{source_suffix}{region_suffix}"
-                            f"{req_suffix}.json",
+                            f"{target_suffix}{req_suffix}.json",
                         )
                         alias_manifest = dict(manifest)
                         alias_manifest["platform"] = alias_plat
@@ -3056,6 +3113,7 @@ def _run_platform_packs(
                         required_only=required_only,
                         source=source,
                         regions=getattr(args, "regions", None),
+                        target_name=args.target,
                         offline=args.offline,
                     )
                     print(f"  Split into {len(zip_paths)} packs")
@@ -3076,6 +3134,7 @@ def _run_platform_packs(
                         system_filter=system_filter,
                         source=source,
                         regions=getattr(args, "regions", None),
+                        target_name=args.target,
                         offline=args.offline,
                     )
                 if not args.split and zip_path and aliases:
@@ -3363,8 +3422,13 @@ def main():
 
     # Platform mode
     if args.all:
+        # Install manifests cover every registered platform. "Archived" means
+        # upstream is no longer scraped on a schedule, not that the platform
+        # lost its users: its packs still ship, so the installer still needs
+        # its file list.
         platforms = list_registered_platforms(
-            args.platforms_dir, include_archived=args.include_archived
+            args.platforms_dir,
+            include_archived=args.include_archived or args.manifest,
         )
     elif args.platform:
         platforms = [args.platform]
@@ -3473,6 +3537,7 @@ def generate_manifest(
     target_cores: set[str] | None = None,
     source: str = "full",
     regions: list[str] | None = None,
+    target_name: str | None = None,
     offline: bool | None = None,
 ) -> dict:
     """Generate a JSON manifest for a platform (same resolution as generate_pack).
@@ -3495,7 +3560,7 @@ def generate_manifest(
     registry: dict = {}
     if os.path.exists(registry_path):
         with open(registry_path) as f:
-            registry = yaml.safe_load(f) or {}
+            registry = yaml_load(f) or {}
     plat_registry = registry.get("platforms", {}).get(platform_name, {})
     install_section = plat_registry.get("install", {})
     detect = install_section.get("detect", [])
@@ -3762,16 +3827,17 @@ def generate_manifest(
 
     # No phase 3 (data directories) -skipped for manifest
 
-    now = (
-        __import__("datetime")
-        .datetime.now(__import__("datetime").timezone.utc)
-        .strftime("%Y-%m-%dT%H:%M:%SZ")
-    )
+    now = _build_timestamp(db)
 
     result: dict = {
         "manifest_version": 2,
         "source": source,
         "regions": list(regions or []),
+        # A target-filtered manifest is only distinguishable from the full one
+        # by its filename, so it records the filter the way regions does.
+        # Absent on an unfiltered manifest rather than empty, to leave the
+        # twelve default files byte-identical.
+        **({"target": target_name} if target_name else {}),
         "platform": platform_name,
         "display_name": platform_display,
         "version": "1.0",
@@ -3825,9 +3891,7 @@ def verify_pack(
         "schema_version": 1,
         "version": 1,
         "generator": "retrobios generate_pack.py",
-        "generated": __import__("datetime")
-        .datetime.now(__import__("datetime").timezone.utc)
-        .strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "generated": _build_timestamp(db),
         "files": [],
     }
     errors = []
@@ -3996,7 +4060,7 @@ def inject_manifest(zip_path: str, manifest: dict) -> None:
         # which would leave the manifest uncompressed and give the same pack
         # two different byte layouts depending on the path taken here.
         with zipfile.ZipFile(zip_path, "a", zipfile.ZIP_DEFLATED) as zf:
-            zf.writestr("manifest.json", manifest_json)
+            _write_generated_member(zf, "manifest.json", manifest_json)
     else:
         # Rebuild to replace existing manifest
         import tempfile as _tempfile
@@ -4014,7 +4078,7 @@ def inject_manifest(zip_path: str, manifest: dict) -> None:
                     if item.filename == "manifest.json":
                         continue
                     dst.writestr(item, src.read(item.filename))
-                dst.writestr("manifest.json", manifest_json)
+                _write_generated_member(dst, "manifest.json", manifest_json)
             os.replace(tmp_path, zip_path)
         except (OSError, zipfile.BadZipFile):
             os.unlink(tmp_path)
@@ -4187,7 +4251,7 @@ def _intentional_hash_exclusion(
     external-download failure and a packable alternative stay conformance
     errors in both modes.
     """
-    if not entries or verification_mode == "existence":
+    if not entries or not hash_mismatch_excludes_file(verification_mode):
         return False
     archive_index = zip_contents if zip_contents is not None else {}
     for entry in entries:
