@@ -445,6 +445,18 @@ class TestExternalCitation(unittest.TestCase):
 
 
 class TestAnchorTokens(unittest.TestCase):
+    def test_archive_members_supply_the_content_values(self):
+        tokens = profile_sync._anchor_tokens(
+            {"name": "esh.zip", "contents": [{"crc32": "c14f36b3"}]}
+        )
+        self.assertEqual(tokens, ["c14f36b3"])
+
+    def test_a_hashless_archive_still_falls_back_to_its_stem(self):
+        tokens = profile_sync._anchor_tokens(
+            {"name": "esh.zip", "contents": [{"name": "rom.u1"}]}
+        )
+        self.assertIn("esh", tokens)
+
     def test_archive_stem_is_searched_too(self):
         tokens = profile_sync._anchor_tokens({"name": "stvbios.zip"})
         self.assertIn("stvbios.zip", tokens)

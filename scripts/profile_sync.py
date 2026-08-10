@@ -182,16 +182,36 @@ def _trim_prose(chunk: str) -> str:
     return chunk
 
 
+HASH_FIELDS = ("sha1", "md5", "crc32", "sha256", "known_hash_adler32")
+
+
+def entry_hashes(entry: dict) -> list[str]:
+    """Content values an entry declares, its own and its members'.
+
+    An archive entry carries no hash of its own: MAME and FBNeo hash the ROMs
+    inside the container, so `contents[]` is where its content values live.
+    Ignoring them leaves the archive stem as the only token, and a stem like
+    `esh` matches seventy lines of its own driver.
+    """
+    tokens: list[str] = []
+    contents = entry.get("contents")
+    members = contents if isinstance(contents, list) else []
+    for source in (entry, *members):
+        if not isinstance(source, dict):
+            continue
+        for field in HASH_FIELDS:
+            val = source.get(field)
+            vals = val if isinstance(val, list) else [val] if val else []
+            for v in vals:
+                v = str(v).lower().removeprefix("0x")
+                if v and v not in tokens:
+                    tokens.append(v)
+    return tokens
+
+
 def collect_tokens(entry: dict) -> list[str]:
     """Values declared by one file entry: hashes, then name as fallback."""
-    tokens: list[str] = []
-    for field in ("sha1", "md5", "crc32", "sha256", "known_hash_adler32"):
-        val = entry.get(field)
-        vals = val if isinstance(val, list) else [val] if val else []
-        for v in vals:
-            v = str(v).lower().removeprefix("0x")
-            if v:
-                tokens.append(v)
+    tokens = entry_hashes(entry)
     if not tokens:
         name = entry.get("name", "")
         if name:
@@ -220,6 +240,8 @@ def _anchor_tokens(entry: dict) -> list[str]:
     set name alone, so the stem is searched as well as the full name.
     """
     tokens = collect_tokens(entry)
+    if entry_hashes(entry):
+        return tokens
     name = os.path.basename(str(entry.get("name", ""))).lower()
     stem = name.rsplit(".", 1)[0]
     if stem and stem not in tokens and len(stem) > 2:
