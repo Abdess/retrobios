@@ -158,6 +158,7 @@ files:
     system: sega-lindbergh
     required: false
     hle_fallback: true
+    has_builtin: true
     description: "Lindbergh boot logo, read from /usr/lib/boot on the original system"
     source_ref: "hook.c:655-667, hook.c:888-900"
     note: >-
@@ -168,6 +169,7 @@ files:
     system: sega-lindbergh
     required: false
     hle_fallback: true
+    has_builtin: true
     description: "Lindbergh Red boot logo, read from /usr/lib/boot on the original system"
     source_ref: "hook.c:669-681, hook.c:874-886"
     note: >-
@@ -178,6 +180,7 @@ files:
     system: sega-lindbergh
     required: false
     hle_fallback: true
+    has_builtin: true
     description: "Sega Kaku Gothic console font texture"
     source_ref: "hook.c:718-730, hook.c:902-914"
     note: >-
@@ -188,6 +191,7 @@ files:
     system: sega-lindbergh
     required: false
     hle_fallback: true
+    has_builtin: true
     description: "Sega Kaku Gothic console font metrics"
     source_ref: "hook.c:732-744, hook.c:916-928"
     note: >-
@@ -199,6 +203,7 @@ files:
     system: sega-lindbergh
     required: false
     hle_fallback: true
+    has_builtin: true
     description: "Lucida Console font texture"
     source_ref: "hook.c:683-695"
     note: >-
@@ -209,6 +214,7 @@ files:
     system: sega-lindbergh
     required: false
     hle_fallback: true
+    has_builtin: true
     description: "Lucida Console font metrics"
     source_ref: "hook.c:697-709"
     note: >-
