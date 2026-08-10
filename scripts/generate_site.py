@@ -30,8 +30,8 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (
-    GAME_DATA_TOPS,
     compute_composition,
+    GAME_DATA_TOPS,
     list_registered_platforms,
     load_database,
     load_emulator_profiles,
@@ -40,6 +40,7 @@ from common import (
     require_yaml,
     unique_emulator_profiles,
     write_if_changed,
+    yaml_load,
 )
 
 yaml = require_yaml()
@@ -72,22 +73,47 @@ def _forge_sources(profile: dict, label: str = "") -> list[tuple[upstream.Repo, 
 
     for field in ("source", "upstream"):
         raw = profile.get(field, "")
-        values: list[str] = []
-        if isinstance(raw, dict):
-            if label and isinstance(raw.get(label), str):
-                values.append(raw[label])
-            values.extend(str(value) for value in raw.values() if value)
-        elif raw:
-            values.append(str(raw))
+        raw_pin = profile.get(f"{field}_commit") or ""
+        source_pin = profile.get("source_commit") or ""
 
-        for value in values:
+        # A profile whose builds live in separate repositories keys both the
+        # URL and the revision by build mode. The two have to be read as
+        # pairs: pinning a libretro fork to the standalone revision would
+        # produce a permalink into the wrong tree.
+        pairs: list[tuple[str, str]] = []
+        if isinstance(raw, dict):
+            ordered = ([label] if label and label in raw else []) + [
+                key for key in raw if key != label
+            ]
+            for key in ordered:
+                value = raw.get(key)
+                if not value:
+                    continue
+                pin = raw_pin.get(key, "") if isinstance(raw_pin, dict) else raw_pin
+                fallback = (
+                    source_pin.get(key, "")
+                    if isinstance(source_pin, dict)
+                    else source_pin
+                )
+                pairs.append((str(value), str(pin or ""), str(fallback or "")))
+        elif raw:
+            pin = raw_pin.get(label, "") if isinstance(raw_pin, dict) and label else (
+                "" if isinstance(raw_pin, dict) else raw_pin
+            )
+            fallback = (
+                source_pin.get(label, "")
+                if isinstance(source_pin, dict) and label
+                else ("" if isinstance(source_pin, dict) else source_pin)
+            )
+            pairs.append((str(raw), str(pin or ""), str(fallback or "")))
+
+        for value, pin, fallback in pairs:
             repo = upstream.parse_repo(value)
             if repo is None:
                 continue
             repo_key = (repo.host, repo.slug)
-            pin = str(profile.get(f"{field}_commit") or "")
             if field == "upstream" and not pin and repo_key in source_repos:
-                pin = str(profile.get("source_commit") or "")
+                pin = fallback
             if not pin:
                 continue
             key = (repo.host, repo.slug, pin)
@@ -453,14 +479,6 @@ def _pct(n: int, total: int) -> str:
     if total == 0:
         return "0%"
     return f"{n / total * 100:.1f}%"
-
-
-def _status_icon(pct: float) -> str:
-    if pct >= 100:
-        return "OK"
-    if pct >= 95:
-        return "~OK"
-    return "partial"
 
 
 # Home page
@@ -891,7 +909,7 @@ def _cross_reference_export_rows(coverages: dict, profiles: dict) -> list[dict]:
                         "type": profile.get("type", ""),
                         "source": _json_text(profile.get("source")),
                         "upstream": _json_text(profile.get("upstream")),
-                        "profiled_commit": profile.get("source_commit", ""),
+                        "profiled_commit": _json_text(profile.get("source_commit", "")),
                         "file_count": len(profile.get("files", []) or []),
                     })
     return rows
@@ -1018,7 +1036,11 @@ def _write_sqlite_export(
                     profile.get("core_classification", ""),
                     _json_text(profile.get("source")),
                     _json_text(profile.get("upstream")),
-                    profile.get("source_commit", ""), _json_text(profile),
+                    # source_commit is a string or, when the builds live in
+                    # separate repositories, an object keyed by build mode.
+                    # SQLite cannot bind the object form.
+                    _json_text(profile.get("source_commit", "")),
+                    _json_text(profile),
                 ),
             )
             for system in sorted(set(profile.get("systems", []) or [])):
@@ -1408,9 +1430,7 @@ def decorate_markdown_pages(docs: Path) -> None:
 
 
 def generate_platform_index(coverages: dict, registry: dict | None = None) -> str:
-    total_files = sum(c["total"] for c in coverages.values())
     total_present = sum(c["present"] for c in coverages.values())
-    total_verified = sum(c["verified"] for c in coverages.values())
 
     lines = [
         f"# Platforms - {SITE_NAME}",
@@ -1492,13 +1512,6 @@ def generate_platform_page(
     base_dest = config.get("base_destination", "")
 
     pct_val = cov["present"] / cov["total"] * 100 if cov["total"] else 0
-    coverage_badge = (
-        "rb-badge-success"
-        if pct_val >= 95
-        else "rb-badge-warning"
-        if pct_val >= 70
-        else "rb-badge-danger"
-    )
     mode_badge = (
         "rb-badge-success" if mode in ("md5", "sha1") else "rb-badge-info"
     )
@@ -3788,6 +3801,13 @@ def main():
         js_dest.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(js_src, js_dest)
 
+    # mkdocs writes sitemap.xml but no robots.txt, so nothing points a crawler
+    # at it. Everything published here is meant to be indexed.
+    write_if_changed(
+        str(docs / "robots.txt"),
+        "User-agent: *\nAllow: /\n\nSitemap: https://abdess.github.io/retrobios/sitemap.xml\n",
+    )
+
     # Copy branding assets
     images_dest = docs / "assets" / "images"
     images_dest.mkdir(parents=True, exist_ok=True)
@@ -3801,7 +3821,7 @@ def main():
     registry = {}
     if registry_path.exists():
         with open(registry_path) as f:
-            registry = (yaml.safe_load(f) or {}).get("platforms", {})
+            registry = (yaml_load(f) or {}).get("platforms", {})
 
     platform_names = list_registered_platforms(
         args.platforms_dir, include_archived=True

@@ -16,6 +16,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from generate_site import (  # noqa: E402
     _admonition_body,
     _browser_title,
+    _forge_sources,
     _source_ref_markdown,
     decorate_markdown_pages,
     generate_data_exports,
@@ -201,6 +202,59 @@ class SiteReferenceContracts(unittest.TestCase):
         self.assertEqual(content.count('type="application/ld+json"'), 1)
         self.assertIn("Current RetroBIOS verification gaps", content)
         self.assertIn('"@type":"TechArticle"', content)
+
+
+class PerModeSourcePins(unittest.TestCase):
+    """A profile whose builds live in separate repositories.
+
+    `source`, `upstream` and `source_commit` may each be keyed by build mode.
+    Reading the URL from one mode and the revision from another produces a
+    permalink into a tree that never held that line, and binding the object
+    form straight into SQLite fails outright.
+    """
+
+    PROFILE = {
+        "emulator": "twobuilds",
+        "source": {
+            "standalone": "https://github.com/vendor/emu",
+            "libretro": "https://github.com/porter/emu-libretro",
+        },
+        "upstream": "https://github.com/vendor/emu",
+        "source_commit": {"standalone": "a" * 40, "libretro": "b" * 40},
+    }
+
+    def test_each_repository_keeps_its_own_revision(self):
+        pairs = {
+            (repo.slug, pin) for repo, pin in _forge_sources(self.PROFILE)
+        }
+        self.assertIn(("vendor/emu", "a" * 40), pairs)
+        self.assertIn(("porter/emu-libretro", "b" * 40), pairs)
+        # The libretro fork must never be pinned to the standalone revision.
+        self.assertNotIn(("porter/emu-libretro", "a" * 40), pairs)
+        self.assertNotIn(("vendor/emu", "b" * 40), pairs)
+
+    def test_a_build_mode_label_is_resolved_first(self):
+        repo, pin = _forge_sources(self.PROFILE, "libretro")[0]
+        self.assertEqual((repo.slug, pin), ("porter/emu-libretro", "b" * 40))
+
+    def test_the_plain_string_form_is_unchanged(self):
+        profile = {
+            "source": "https://github.com/vendor/emu",
+            "source_commit": "c" * 40,
+        }
+        self.assertEqual(
+            [(repo.slug, pin) for repo, pin in _forge_sources(profile)],
+            [("vendor/emu", "c" * 40)],
+        )
+
+    def test_sqlite_export_accepts_a_per_mode_commit(self):
+        from generate_site import _json_text
+
+        self.assertEqual(
+            _json_text(self.PROFILE["source_commit"]),
+            '{"libretro": "' + "b" * 40 + '", "standalone": "' + "a" * 40 + '"}',
+        )
+        self.assertEqual(_json_text("c" * 40), "c" * 40)
 
 
 if __name__ == "__main__":
