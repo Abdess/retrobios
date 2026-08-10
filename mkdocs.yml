@@ -258,7 +258,8 @@ nav:
     - vitaQuakeII: emulators/vitaquake2.md
     - yabasanshiro: emulators/yabasanshiro.md
     - Yuzu: emulators/yuzu.md
-  - Community forks (118):
+  - Community forks (119):
+    - 2600.emu: emulators/2600-emu.md
     - EightyOne: emulators/81.md
     - a5200: emulators/a5200.md
     - ACE-DL: emulators/ace-dl.md
