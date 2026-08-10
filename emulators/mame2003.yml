@@ -72,7 +72,7 @@ files:
     path: "mame2003/mameinfo.dat"
     required: false
     category: game_data
-    source_ref: "src/datafile.c:327, src/datafile.c:623"
+    source_ref: "src/datafile.c:327, src/datafile.c:637-641"
     note: "game technical information database"
 
   # SNK Neo Geo MVS/AES

@@ -40,8 +40,8 @@ files:
   # -------------------------------------------------------
   # Master CPU ROMs (68000, Rev B)
   # -------------------------------------------------------
-  - name: "epr-10381a.132"
-    path: "cannonball/epr-10381a.132"
+  - name: "epr-10381b.132"
+    path: "cannonball/epr-10381b.132"
     system: sega-outrun
     category: game_data
     required: true
@@ -50,7 +50,7 @@ files:
     validation: [crc32]
     aliases: [epr-10381b.132]
     note: "Master 68K, high byte, upper bank"
-    source_ref: "src/main/roms.cpp:29"
+    source_ref: "src/main/roms.cpp:39"
 
   - name: "epr-10383b.117"
     path: "cannonball/epr-10383b.117"
@@ -61,7 +61,7 @@ files:
     crc32: "10a2014a"
     validation: [crc32]
     note: "Master 68K, low byte, upper bank"
-    source_ref: "src/main/roms.cpp:38"
+    source_ref: "src/main/roms.cpp:40"
 
   - name: "epr-10380b.133"
     path: "cannonball/epr-10380b.133"
@@ -329,7 +329,7 @@ files:
     crc32: "a10abaa9"
     validation: [crc32]
     note: "Z80 sound program"
-    source_ref: "src/main/roms.cpp:76"
+    source_ref: "src/main/roms.cpp:77"
 
   # -------------------------------------------------------
   # Sega PCM samples
@@ -343,7 +343,7 @@ files:
     crc32: "bcd10dde"
     validation: [crc32]
     note: "PCM sample bank 0"
-    source_ref: "src/main/roms.cpp:80"
+    source_ref: "src/main/roms.cpp:81"
 
   - name: "opr-10192.67"
     path: "cannonball/opr-10192.67"
@@ -365,7 +365,7 @@ files:
     crc32: "20a284ab"
     validation: [crc32]
     note: "PCM sample bank 2"
-    source_ref: "src/main/roms.cpp:82"
+    source_ref: "src/main/roms.cpp:83"
 
   - name: "opr-10190.69"
     path: "cannonball/opr-10190.69"
@@ -387,7 +387,7 @@ files:
     crc32: "01366b54"
     validation: [crc32]
     note: "PCM sample bank 4"
-    source_ref: "src/main/roms.cpp:84"
+    source_ref: "src/main/roms.cpp:85"
 
   - name: "opr-10188.71"
     path: "cannonball/opr-10188.71"
@@ -445,7 +445,7 @@ files:
     crc32: "e339e87a"
     validation: [crc32]
     note: "Master 68K Japan, high byte, lower bank"
-    source_ref: "src/main/roms.cpp:104"
+    source_ref: "src/main/roms.cpp:106"
 
   - name: "epr-10382.118"
     path: "cannonball/epr-10382.118"
@@ -456,7 +456,7 @@ files:
     crc32: "65248dd5"
     validation: [crc32]
     note: "Master 68K Japan, low byte, lower bank"
-    source_ref: "src/main/roms.cpp:105"
+    source_ref: "src/main/roms.cpp:107"
 
   - name: "epr-10381.132"
     path: "cannonball/epr-10381.132"
@@ -489,7 +489,7 @@ files:
     crc32: "da99d855"
     validation: [crc32]
     note: "Slave 68K Japan, high byte, lower bank"
-    source_ref: "src/main/roms.cpp:110"
+    source_ref: "src/main/roms.cpp:112"
 
   - name: "epr-10329.58"
     path: "cannonball/epr-10329.58"
@@ -500,7 +500,7 @@ files:
     crc32: "fe0fa5e2"
     validation: [crc32]
     note: "Slave 68K Japan, low byte, lower bank"
-    source_ref: "src/main/roms.cpp:111"
+    source_ref: "src/main/roms.cpp:113"
 
   - name: "epr-10328.75"
     path: "cannonball/epr-10328.75"

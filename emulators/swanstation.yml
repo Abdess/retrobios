@@ -78,5 +78,5 @@ files:
     size: [524288, 4194304, 4089584]
     validation: [size, md5]
     note: "Accepts PS1 (512KB), PS2 (4MB), and PS3 (0x3E66F0) sizes. Only first 512KB used."
-    source_ref: "src/core/bios.h:9, src/core/bios.cpp:71, src/core/bios.cpp:85"
+    source_ref: "src/core/bios.h:9, src/core/bios.cpp:69-70, src/core/bios.cpp:81-90"
     aliases: []
