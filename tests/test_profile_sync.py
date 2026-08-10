@@ -329,11 +329,23 @@ class TestVerifyAtPin(unittest.TestCase):
             "ANCHORED",
         )
 
-    def test_declared_value_absent(self):
+    def test_declared_value_absent_from_the_whole_file(self):
         part = RefPart("a.c", 1, 1, "a.c:1")
         result = profile_sync.verify_at_pin(part, self.LINES, ["cafebabe"])
+        self.assertEqual(result.status, "ANCHORED")
+
+    def test_declared_value_carried_by_another_line(self):
+        lines = ["load()", "", "", "", "", "", 'rom("cafebabe")']
+        part = RefPart("a.c", 1, 1, "a.c:1")
+        result = profile_sync.verify_at_pin(part, lines, ["cafebabe"])
         self.assertEqual(result.status, "CHANGED")
-        self.assertIn("pinned revision", result.reason)
+        self.assertEqual(result.start, 7)
+
+    def test_declared_value_on_several_lines_is_ambiguous(self):
+        lines = ["load()", "", "", "", 'a("cafebabe")', "", 'b("cafebabe")']
+        part = RefPart("a.c", 1, 1, "a.c:1")
+        result = profile_sync.verify_at_pin(part, lines, ["cafebabe"])
+        self.assertEqual(result.status, "AMBIGUOUS")
 
     def test_missing_file(self):
         part = RefPart("a.c", 1, 1, "a.c:1")
@@ -996,15 +1008,25 @@ class TestBuildReport(unittest.TestCase):
         return profile
 
     def test_a_pin_equal_to_head_is_checked_for_self_consistency(self):
-        # The cited line does not carry the declared value, which a comparison
-        # of a revision with itself could never reveal.
-        self.files[("pinsha", "a.c")] = ["x", "unrelated"]
-        self.files[("headsha", "a.c")] = ["x", "unrelated"]
+        # The value sits on another line, so the ref demonstrably points wrong.
+        self.files[("headsha", "a.c")] = [
+            "x", "unrelated", "", "", "", "", 'rom("deadbeef")',
+        ]
         profile = self._profile(["a.c:2"])
         profile["source_commit"] = "headsha"
         profile["files"][0]["crc32"] = "deadbeef"
         report = build_report("test", profile, self.dir)
         self.assertEqual(report.entries[0].status, "CHANGED")
+
+    def test_a_value_absent_from_the_whole_file_is_not_held_against_the_ref(self):
+        # A ref citing loading logic never spells the value out; its absence
+        # is not evidence that the ref is stale.
+        self.files[("headsha", "a.c")] = ["x", "load_bios(path);"]
+        profile = self._profile(["a.c:2"])
+        profile["source_commit"] = "headsha"
+        profile["files"][0]["crc32"] = "deadbeef"
+        report = build_report("test", profile, self.dir)
+        self.assertEqual(report.entries[0].status, "ANCHORED")
 
     def test_a_pin_equal_to_head_accepts_a_ref_on_its_value(self):
         self.files[("headsha", "a.c")] = ["x", 'rom("deadbeef")']

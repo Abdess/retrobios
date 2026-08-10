@@ -707,9 +707,27 @@ def verify_at_pin(part: RefPart, pin_lines, tokens) -> PartResult:
     window = "\n".join(pin_lines[lo:hi]).lower()
     if any(token in window for token in tokens):
         return PartResult(part, "ANCHORED", None, None, None, [])
+    # A ref that cites loading logic never spells the value out, so its absence
+    # here proves nothing. Only finding the value somewhere else in the file
+    # shows the ref points at the wrong place.
+    elsewhere = sorted(
+        {
+            index
+            for index, line in enumerate(pin_lines, 1)
+            for token in tokens
+            if token in line.lower()
+        }
+    )
+    if not elsewhere:
+        return PartResult(part, "ANCHORED", None, None, None, [])
+    if len(elsewhere) > 1:
+        return PartResult(
+            part, "AMBIGUOUS", None, None, None, elsewhere,
+            "declared value carried by several lines",
+        )
     return PartResult(
-        part, "CHANGED", None, None, None, [],
-        "declared value not found at the pinned revision",
+        part, "CHANGED", None, elsewhere[0], elsewhere[0], elsewhere,
+        "declared value carried by another line",
     )
 
 
