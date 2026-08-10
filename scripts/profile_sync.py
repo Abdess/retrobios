@@ -729,8 +729,11 @@ def verify_at_pin(part: RefPart, pin_lines, tokens) -> PartResult:
         )
     if not tokens:
         return PartResult(part, "ANCHORED", None, None, None, [])
+    # An archive ref cites the line declaring the set; its members follow, one
+    # per line, so the window reaches forward as far as the entry has members.
+    reach = SELF_CHECK_CONTEXT + len(tokens)
     lo = max(0, part.start - 1 - SELF_CHECK_CONTEXT)
-    hi = min(len(pin_lines), (part.end or part.start) + SELF_CHECK_CONTEXT)
+    hi = min(len(pin_lines), (part.end or part.start) + reach)
     window = "\n".join(pin_lines[lo:hi]).lower()
     if any(token in window for token in tokens):
         return PartResult(part, "ANCHORED", None, None, None, [])
