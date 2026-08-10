@@ -5369,6 +5369,7 @@ struct BurnDriver BurnDrvneogeo = {
             "rgncore": {
                 "emulator": "RegionCore",
                 "type": "libretro",
+                "cores": ["rgncore"],
                 "systems": ["region-console"],
                 "files": [
                     {"name": "rgn_us.bin", "region": ["north-america"]},
@@ -5511,6 +5512,31 @@ struct BurnDriver BurnDrvneogeo = {
             names = self._names_in(p)
             self.assertNotIn("rgn_jp.bin", names)
             self.assertNotIn("rgn_eu.bin", names)
+
+    def test_region_composes_with_split_and_target(self):
+        from generate_pack import generate_split_packs
+
+        self._create_region_fixtures()
+        paths = generate_split_packs(
+            "regionplat",
+            self.platforms_dir,
+            self.db,
+            self.bios_dir,
+            self.root,
+            emu_profiles=self._region_profiles(),
+            target_cores={"rgncore"},
+            regions=["north-america"],
+        )
+        self.assertTrue(paths)
+        for p in paths:
+            self.assertIn("NorthAmerica", os.path.basename(p))
+            names = self._names_in(p)
+            self.assertNotIn("rgn_jp.bin", names)
+            self.assertNotIn("rgn_eu.bin", names)
+        self.assertTrue(
+            any("rgn_us.bin" in self._names_in(p) for p in paths),
+            "target filtering removed the whole system",
+        )
 
     def test_region_composes_with_manifest(self):
         from generate_pack import generate_manifest
