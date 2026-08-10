@@ -94,36 +94,40 @@ The `--verbose` flag shows source references and expected values from the emulat
 
 ## Is this legal?
 
-The project believes so, in good faith and for the specific purposes it serves: preservation, personal backup, and interoperability with emulation software. That belief rests on case law and statutory exemptions across several jurisdictions, documented below so anyone can weigh the reasoning.
+Redistributing firmware is not settled law, and this page does not pretend otherwise. What follows is the reasoning the project acts on, with the strength of each argument stated plainly so anyone can weigh it. None of it is legal advice, and none of it has been tested in court.
 
 ### Emulation and BIOS redistribution
 
-- **Emulation is legal.** *Sony v. Connectix* (2000) and *Sega v. Accolade* (1992) established that creating emulators and reverse-engineering console firmware for interoperability is lawful. BIOS files are functional prerequisites for this legal activity.
-- **Fair use (US, 17 USC 107).** Non-commercial redistribution of firmware for personal emulation and archival is transformative use. The files serve a different purpose (interoperability) than the original (running proprietary hardware). No commercial market exists for standalone BIOS files.
-- **Fair dealing (EU, UK, Canada, Australia).** Equivalent doctrines protect research, private study, and interoperability. The EU Software Directive (2009/24/EC, Art. 5-6) explicitly permits decompilation and use for interoperability.
-- **Abandonware.** The vast majority of firmware here is for discontinued hardware no longer sold, supported, or distributed by the original manufacturer. No active commercial market is harmed.
+- **Writing an emulator is lawful.** *Sony v. Connectix* (2000) and *Sega v. Accolade* (1992) held that copying a work during reverse engineering, to reach the functional elements needed for interoperability, is fair use. Both concern the act of copying while developing, and *Connectix* specifically involved copying Sony's BIOS in the course of that work. Neither decision addresses distributing firmware to third parties, so they support the legality of emulation itself rather than of this collection.
+- **Fair use (US, 17 USC 107) is a defence, argued case by case.** The project's position is that non-commercial redistribution for personal backup and archival weighs favourably on purpose and on market effect, since these files are not sold separately. It weighs poorly on the amount used: each file is copied whole. Manufacturers do still monetise some of this firmware indirectly, through re-releases, subscription services and mini consoles, so the market factor is contestable rather than clear.
+- **Interoperability in the EU.** The Software Directive (2009/24/EC, Art. 5-6) permits decompilation and use to achieve interoperability, subject to conditions, and Art. 6 restricts passing the resulting information to others. It supports the emulation use case; it is not a general redistribution permission.
+- **Discontinued hardware.** Most firmware here is for hardware no longer sold or supported. This bears on the fair-use market factor and on the practical likelihood of complaint. "Abandonware" is not a legal doctrine in any jurisdiction, and nothing here rests on it.
 
 ### Encryption keys (Switch prod.keys, 3DS AES keys, Wii U keys)
 
-This is the most contested area. The legal position:
+This is the most contested area, and the weakest part of the project's position.
 
-- **Keys are not copyrightable.** Encryption keys are mathematical values, not creative expression. Copyright protects original works of authorship; a 256-bit number does not meet the threshold of originality. *Bernstein v. DOJ* (1996) established that code and algorithms are protected speech, and the mere publication of numeric values cannot be restricted under copyright.
-- **DMCA 1201(f) interoperability exemption.** The DMCA prohibits circumvention of technological protection measures, but Section 1201(f) explicitly permits circumvention for the purpose of achieving interoperability between programs. Emulators require these keys to decrypt and run legally purchased game software. The keys enable interoperability, not piracy.
-- **Library of Congress DMCA exemptions.** The triennial rulemaking process has granted and renewed exemptions for video game and software preservation. The exemptions at 37 CFR 201.40 let an eligible library, archive or museum circumvent access controls to preserve a lawfully acquired video game whose external server support has ended, and to preserve computer programs generally, with access limited to the institution's premises. The Ninth Triennial Proceeding (2024 cycle) renewed those exemptions but declined to extend them to off-premises remote access, so the direction of travel favors preservation without having settled it.
-- **Keys derived from consumer hardware.** These keys are extracted from retail hardware owned by consumers. Once a product is sold, the manufacturer cannot indefinitely control how the purchaser uses or examines their own property. *Chamberlain v. Skylink* (2004) held that using a product in a way the manufacturer dislikes is not automatically a DMCA violation.
-- **No trade secret protection.** For keys to qualify as trade secrets, the holder must take reasonable steps to maintain secrecy. Keys embedded in millions of consumer devices and widely published online do not meet this standard.
+- **Keys are unlikely to be copyrightable.** A bare numeric value has no author's creative expression, so copyright is a poor fit. This says nothing about the DMCA, which is the provision that actually applies.
+- **DMCA 1201(f) is narrow.** Section 1201(f) allows a person who has lawfully obtained the right to use a copy to circumvent for the sole purpose of achieving interoperability with an independently created program, and 1201(f)(3) allows the means to be made available to others only for that same purpose. Publishing keys openly is not obviously within that allowance, and the trafficking prohibitions in 1201(a)(2) and 1201(b) remain in play. This is the clearest legal risk the project carries.
+- **Library of Congress exemptions do not cover this repository.** The triennial exemptions at 37 CFR 201.40 let an eligible library, archive or museum circumvent access controls to preserve a lawfully acquired video game whose server support has ended, with access limited to the institution's premises. The Ninth Triennial Proceeding (2024 cycle) renewed them and declined to extend them to off-premises remote access. A public repository is neither an eligible institution nor an on-premises reading room, so these exemptions show which way preservation policy is moving without authorising what is done here.
+- **Keys come from consumer hardware.** They are extracted from retail devices their owners bought. *Chamberlain v. Skylink* (2004) held that a 1201 claim requires some nexus to copyright infringement, in a dispute over a garage-door opener; later cases have narrowed its reach, and it is a weak foundation for a general post-sale right.
+- **Trade secret is not a live issue.** Keys embedded in millions of shipped devices and widely republished are not kept secret by reasonable measures.
 
 ### Recent firmware (Switch 19.0.0, PS3UPDAT, PSVUPDAT)
 
-- **Firmware updates are freely distributed.** Nintendo, Sony, and other manufacturers distribute firmware updates via CDN without authentication or purchase requirements. Redistributing freely available data does not create new legal liability.
-- **Functional necessity.** Emulators require system firmware to function. Providing firmware is equivalent to providing the operating environment the software was designed to run in.
-- **Yuzu context.** The Yuzu settlement (2024) concerned the emulator itself and its facilitation of piracy, not the legality of firmware or key distribution. Yuzu settled without admitting liability and the case created no binding precedent against BIOS or key redistribution.
+- **Free download is not a licence.** Manufacturers publish these updates on open CDNs without authentication, which makes them easy to obtain but does not grant a right to redistribute them; PlayStation firmware ships under an end-user licence agreement. The practical argument is that mirroring a file the manufacturer already gives away for free causes no identifiable loss, not that doing so is expressly permitted.
+- **Functional necessity.** Emulators cannot run the software these systems were built for without this firmware. That is why the files are collected; it is a statement of purpose, not a legal defence in itself.
+- **Yuzu context.** The Yuzu settlement (2024) concerned the emulator and its alleged facilitation of piracy. Yuzu settled without admitting liability, so it set no precedent either way on firmware or key redistribution. It does show that rights holders in this space litigate.
 
 ### Summary
 
-This project preserves BIOS files, firmware, and the keys emulators require, for personal use, archival, and interoperability. That position rests on fair use, statutory interoperability exemptions, preservation precedent, and the functional nature of the files involved.
+This project preserves BIOS files, firmware and keys for personal use, archival and interoperability. The strongest ground is the older, discontinued firmware, where fair use and the absence of a market both point the same way. The weakest is the encryption keys, where DMCA 1201 applies and the interoperability exemption is narrower than the use made of it here. The project accepts that risk deliberately, in the belief that these files are worth preserving while they can still be obtained.
 
-This reflects the project's good-faith understanding, not legal advice. Anyone with a concern about a specific file, rights holders included, can open an issue and will receive a considered answer.
+This reflects the project's good-faith understanding, not legal advice.
+
+### Asking for a file to be removed
+
+A rights holder, or anyone acting for one, can [open an issue](https://github.com/Abdess/retrobios/issues) identifying the file by path or hash. A file whose removal is requested by its rights holder is removed from the repository and from the next release; no formal notice is required and none will be demanded. State the file and the basis of the claim. The same channel is open to anyone else with a concern about a specific file.
 
 ## Isn't the Switch or PS3 too recent for a retro project?
 

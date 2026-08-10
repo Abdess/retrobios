@@ -1,0 +1,41 @@
+RetroBIOS - status of the distributed files
+===========================================
+
+This repository holds two kinds of material with two different statuses.
+
+1. Tooling and metadata
+-----------------------
+
+Everything authored here - the Python scripts, JSON schemas, emulator
+profiles, platform configurations, documentation and the generated database -
+is released under the MIT License in LICENSE.
+
+2. BIOS, firmware, keys and ROM sets
+------------------------------------
+
+The files under bios/ and inside the release packs are third-party system
+software. They remain the property of their respective manufacturers, are not
+covered by the MIT License, and no licence to them is granted or implied by
+this repository.
+
+They are preserved and made available for personal backup, archival, and
+interoperability with emulation software. The reasoning the project relies on
+is set out in the FAQ:
+
+    https://abdess.github.io/retrobios/wiki/faq/#is-this-legal
+
+That reasoning is the project's good-faith position, not legal advice, and it
+has not been tested in court.
+
+Reporting a file
+----------------
+
+A rights holder, or anyone acting for one, who wants a specific file removed
+can open an issue at
+
+    https://github.com/Abdess/retrobios/issues
+
+identifying the file by path or hash. Requests are handled on receipt, and a
+file whose removal is requested by its rights holder is removed from the
+repository and from the next release without requiring a formal notice. State
+the file and the basis of the claim; no particular format is needed.

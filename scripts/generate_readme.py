@@ -261,9 +261,15 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
         "## Download BIOS packs",
         "",
         "Pick your platform, download the ZIP, extract to the BIOS path.",
+        "The size is what the files occupy once extracted; the ZIP itself"
+        " downloads smaller, and anything over 2 GB arrives split into"
+        " `.zip.001`, `.zip.002` volumes. Open the `.001` with 7-Zip or"
+        " PeaZip, or join them first"
+        " (`cat Pack.zip.0* > Pack.zip`, or"
+        " `copy /b Pack.zip.001+Pack.zip.002 Pack.zip` on Windows).",
         "",
-        "| Platform | Size | Extract to | Download |",
-        "|----------|------|-----------|----------|",
+        "| Platform | Extracted size | Extract to | Download |",
+        "|----------|---------------:|-----------|----------|",
     ]
 
     # Where the pack itself is extracted, which is not always the BIOS folder:
@@ -512,7 +518,8 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
             avatar = c.get("avatar_url", "")
             url = c.get("html_url", f"https://github.com/{login}")
             lines.append(
-                f'<a href="{url}"><img src="{avatar}" width="50" title="{login}"></a>'
+                f'<a href="{url}"><img src="{avatar}" width="50" alt="{login}"'
+                f' title="{login}"></a>'
             )
         lines.append("")
 
@@ -535,8 +542,11 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
             "The scripts and tooling are released under the [MIT License](LICENSE).",
             "The BIOS and firmware files are not covered by that license: they are"
             " third-party system software, preserved and provided for personal"
-            " backup, archival, and interoperability with emulation software.",
-            f"The legal reasoning is laid out in the [FAQ]({SITE_URL}wiki/faq/#is-this-legal).",
+            " backup, archival, and interoperability with emulation software."
+            " [NOTICE](NOTICE) sets out their status and how to ask for a file"
+            " to be removed.",
+            f"The reasoning, and where it is weakest, is in the"
+            f" [FAQ]({SITE_URL}wiki/faq/#is-this-legal).",
             "",
             f"*Auto-generated on {ts}*",
         ]

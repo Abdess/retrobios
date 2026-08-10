@@ -1,3 +1,17 @@
+Scope
+-----
+
+The MIT terms below cover the "Software": the scripts, tooling, schemas,
+documentation and metadata authored by this project.
+
+They do NOT cover the BIOS, firmware, key and ROM-set files distributed
+under bios/ or in the release packs. Those are third-party system software,
+owned by their respective manufacturers, redistributed here for personal
+backup, archival and interoperability with emulation software. No licence to
+them is granted, implied or transferred by this file. See NOTICE for their
+status.
+
+
 MIT License
 
 Copyright (c) 2020 Abdess
