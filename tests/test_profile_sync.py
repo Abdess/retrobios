@@ -995,6 +995,25 @@ class TestBuildReport(unittest.TestCase):
         profile["core_version"] = version
         return profile
 
+    def test_a_pin_equal_to_head_is_checked_for_self_consistency(self):
+        # The cited line does not carry the declared value, which a comparison
+        # of a revision with itself could never reveal.
+        self.files[("pinsha", "a.c")] = ["x", "unrelated"]
+        self.files[("headsha", "a.c")] = ["x", "unrelated"]
+        profile = self._profile(["a.c:2"])
+        profile["source_commit"] = "headsha"
+        profile["files"][0]["crc32"] = "deadbeef"
+        report = build_report("test", profile, self.dir)
+        self.assertEqual(report.entries[0].status, "CHANGED")
+
+    def test_a_pin_equal_to_head_accepts_a_ref_on_its_value(self):
+        self.files[("headsha", "a.c")] = ["x", 'rom("deadbeef")']
+        profile = self._profile(["a.c:2"])
+        profile["source_commit"] = "headsha"
+        profile["files"][0]["crc32"] = "deadbeef"
+        report = build_report("test", profile, self.dir)
+        self.assertEqual(report.entries[0].status, "ANCHORED")
+
     def test_pin_on_the_declared_version_tag_is_flagged(self):
         self.files[("pinsha", "a.c")] = ["x", "hit"]
         self.files[("headsha", "a.c")] = ["x", "hit"]

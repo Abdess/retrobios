@@ -880,7 +880,10 @@ def build_report(
         slug = view.repo.slug if view is not primary else None
         return slug, upstream.raw_url(view.repo, view.head, actual), actual
 
-    if report.pinned_tag:
+    # Comparing a revision with itself anchors every ref whatever it cites, so
+    # a profile already sitting on HEAD is judged on self-consistency instead.
+    self_check = bool(report.pinned_tag) or primary.pin == primary.head
+    if self_check:
         staged = [
             (entry_name, ref, [
                 verify_at_pin(part, fetch(PIN, part.path), tokens)
@@ -965,6 +968,8 @@ def format_report(report: ProfileReport, changed_only: bool = False) -> str:
             f"  pinned to tag {report.pinned_tag}: checked against its own "
             "revision, not against HEAD"
         )
+    elif report.pin and report.pin == report.head:
+        lines.append("  pin is HEAD: checked for self-consistency")
     if report.skipped:
         lines.append(f"  skipped: {report.skipped}")
         return "\n".join(lines)
