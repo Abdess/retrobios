@@ -687,6 +687,9 @@ def select_views(
     """
     views: list[RepoView] = []
     seen: set[tuple[str, str]] = set()
+    # A port living on a branch of a fork is absent from the default tip, so
+    # the branch it was read from is followed when the profile names one.
+    branch = str(profile.get("source_branch") or "") or None
     for field in ("source", "upstream"):
         repo = upstream.parse_repo(str(profile.get(field) or ""))
         if repo is None or (repo.host, repo.slug) in seen:
@@ -694,7 +697,9 @@ def select_views(
         pin, origin = resolve_pin(profile, repo, cache_dir, offline, field)
         if not pin:
             continue
-        head = upstream.resolve_head(repo, cache_dir, offline)
+        head = upstream.resolve_head(
+            repo, cache_dir, offline, branch if field == "source" else None
+        )
         if not head:
             continue
         seen.add((repo.host, repo.slug))

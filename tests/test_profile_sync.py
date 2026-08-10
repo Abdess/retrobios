@@ -1108,6 +1108,22 @@ class TestBuildReport(unittest.TestCase):
         report = build_report("mame", profile, self.dir)
         self.assertEqual(report.entries[0].status, "ANCHORED")
 
+    def test_a_declared_branch_is_followed_for_head(self):
+        seen = {}
+
+        def _head(repo, cache_dir, offline=False, branch=None):
+            seen[repo.slug] = branch
+            return "headsha"
+
+        profile_sync.upstream.resolve_head = _head
+        profile = self._profile(["a.c:1"])
+        profile["upstream"] = "https://github.com/o/up"
+        profile["source_branch"] = "libretro"
+        build_report("test", profile, self.dir)
+        # Only the port carries the branch; the upstream keeps its own tip.
+        self.assertEqual(seen["o/n"], "libretro")
+        self.assertIsNone(seen["o/up"])
+
     def test_pin_on_the_declared_version_tag_is_flagged(self):
         self.files[("pinsha", "a.c")] = ["x", "hit"]
         self.files[("headsha", "a.c")] = ["x", "hit"]

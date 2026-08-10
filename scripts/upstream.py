@@ -262,16 +262,22 @@ def _project(repo: Repo) -> str:
     return urllib.parse.quote(f"{repo.owner}/{repo.name}", safe="")
 
 
-def _commits_url(repo: Repo, date: str | None) -> str:
+def _commits_url(repo: Repo, date: str | None, branch: str | None = None) -> str:
     if repo.family == "github":
         base = f"{repo.api_base}/repos/{repo.slug}/commits?per_page=1"
+        if branch:
+            base += f"&sha={urllib.parse.quote(branch, safe='')}"
     elif repo.family == "gitlab":
         base = (
             f"{repo.api_base}/projects/{_project(repo)}"
             f"/repository/commits?per_page=1"
         )
+        if branch:
+            base += f"&ref_name={urllib.parse.quote(branch, safe='')}"
     else:
         base = f"{repo.api_base}/repos/{repo.slug}/commits?limit=1"
+        if branch:
+            base += f"&sha={urllib.parse.quote(branch, safe='')}"
     return f"{base}&until={date}T23:59:59Z" if date else base
 
 
@@ -283,16 +289,24 @@ def _first_sha(payload: object) -> str | None:
     return None
 
 
-def resolve_head(repo: Repo, cache_dir: str, offline: bool = False) -> str | None:
-    """Sha of the default branch tip."""
-    return _first_sha(_api(_commits_url(repo, None), cache_dir, offline))
+def resolve_head(
+    repo: Repo, cache_dir: str, offline: bool = False, branch: str | None = None
+) -> str | None:
+    """Sha of a branch tip, the default branch unless one is named.
+
+    A libretro port often lives on a branch of a fork rather than on the
+    default branch, so the code a profile documents can be absent from the
+    tip the forge serves by default.
+    """
+    return _first_sha(_api(_commits_url(repo, None, branch), cache_dir, offline))
 
 
 def resolve_commit_at(
-    repo: Repo, date: str, cache_dir: str, offline: bool = False
+    repo: Repo, date: str, cache_dir: str, offline: bool = False,
+    branch: str | None = None,
 ) -> str | None:
-    """Last default-branch commit on or before a date."""
-    return _first_sha(_api(_commits_url(repo, date), cache_dir, offline))
+    """Last commit on or before a date, on the default branch or a named one."""
+    return _first_sha(_api(_commits_url(repo, date, branch), cache_dir, offline))
 
 
 def _tags_url(repo: Repo) -> str:

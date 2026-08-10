@@ -2,7 +2,8 @@ emulator: mkxp-z
 type: libretro
 core_classification: game_engine
 source: "https://github.com/white-axe/mkxp-z"
-source_ref: "branch: libretro (PR #255 to mkxp-z/mkxp-z)"
+source_branch: libretro
+source_ref: "PR #255 to mkxp-z/mkxp-z"
 upstream: "https://github.com/mkxp-z/mkxp-z"
 profiled_date: "2026-03-24"
 source_commit: "f4bc5aacee7875526ac7053cb61c0dc2357cac17"

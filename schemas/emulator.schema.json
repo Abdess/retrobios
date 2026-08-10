@@ -4,21 +4,42 @@
   "description": "One YAML per emulator core or engine, documenting every external file the code loads. Field reference: https://abdess.github.io/retrobios/wiki/profiling/",
   "type": "object",
   "additionalProperties": false,
-  "required": ["emulator", "type"],
+  "required": [
+    "emulator",
+    "type"
+  ],
   "allOf": [
     {
       "comment": "An alias profile points at another profile and carries no files of its own.",
       "if": {
-        "properties": { "type": { "const": "alias" } },
-        "required": ["type"]
+        "properties": {
+          "type": {
+            "const": "alias"
+          }
+        },
+        "required": [
+          "type"
+        ]
       },
-      "then": { "required": ["alias_of"] },
-      "else": { "required": ["files"] }
+      "then": {
+        "required": [
+          "alias_of"
+        ]
+      },
+      "else": {
+        "required": [
+          "files"
+        ]
+      }
     }
   ],
   "properties": {
-    "emulator": { "type": "string" },
-    "display_name": { "type": "string" },
+    "emulator": {
+      "type": "string"
+    },
+    "display_name": {
+      "type": "string"
+    },
     "type": {
       "description": "Operational: resolve_platform_cores() filters on it. Not a classification.",
       "type": "string",
@@ -49,135 +70,384 @@
         "other"
       ]
     },
-    "source": { "type": ["string", "object"] },
-    "upstream": { "type": ["string", "object", "null"] },
-    "source_commit": { "type": "string" },
-    "upstream_commit": { "type": "string" },
+    "source": {
+      "type": [
+        "string",
+        "object"
+      ]
+    },
+    "upstream": {
+      "type": [
+        "string",
+        "object",
+        "null"
+      ]
+    },
+    "source_commit": {
+      "type": "string"
+    },
+    "upstream_commit": {
+      "type": "string"
+    },
     "profiled_date": {
       "description": "Quote it: an unquoted YAML date parses to a date object.",
-      "type": ["string", "object"]
+      "type": [
+        "string",
+        "object"
+      ]
     },
-    "core_version": { "type": ["string", "number", "object", "null"] },
-    "alias_of": { "type": "string" },
+    "core_version": {
+      "type": [
+        "string",
+        "number",
+        "object",
+        "null"
+      ]
+    },
+    "alias_of": {
+      "type": "string"
+    },
     "cores": {
       "description": "Upstream names the core is known by. A dict maps each name to per-variant metadata. Names are strings: an unquoted 81 or 2048 parses as a number and stops matching the buildbot name.",
       "oneOf": [
-        { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
-        { "type": "object", "propertyNames": { "minLength": 1 } }
+        {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        {
+          "type": "object",
+          "propertyNames": {
+            "minLength": 1
+          }
+        }
       ]
     },
-    "systems": { "type": "array", "items": { "type": "string" } },
-    "mode": { "type": "string", "enum": ["standalone", "libretro", "both"] },
-    "verification": { "type": "string", "enum": ["existence", "md5", "sha1", "crc32"] },
-    "exclusion_note": { "type": "string" },
-    "analysis": { "type": "object" },
-    "analysis_commit": { "type": "string" },
-    "analysis_date": { "type": "string" },
-    "archive_prefix": { "type": "string" },
-    "author": { "type": "string" },
-    "based_on": { "type": "string" },
-    "bios_directory": { "type": "string" },
-    "bios_identical_to": { "type": "string" },
-    "bios_mode": { "type": "string" },
-    "bios_size": { "type": "integer", "minimum": 0 },
-    "builtin_boot_roms": { "type": "object" },
-    "core": { "type": "string" },
-    "core_name": { "type": "string" },
+    "systems": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "mode": {
+      "type": "string",
+      "enum": [
+        "standalone",
+        "libretro",
+        "both"
+      ]
+    },
+    "verification": {
+      "type": "string",
+      "enum": [
+        "existence",
+        "md5",
+        "sha1",
+        "crc32"
+      ]
+    },
+    "exclusion_note": {
+      "type": "string"
+    },
+    "analysis": {
+      "type": "object"
+    },
+    "analysis_commit": {
+      "type": "string"
+    },
+    "analysis_date": {
+      "type": "string"
+    },
+    "archive_prefix": {
+      "type": "string"
+    },
+    "author": {
+      "type": "string"
+    },
+    "based_on": {
+      "type": "string"
+    },
+    "bios_directory": {
+      "type": "string"
+    },
+    "bios_identical_to": {
+      "type": "string"
+    },
+    "bios_mode": {
+      "type": "string"
+    },
+    "bios_size": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "builtin_boot_roms": {
+      "type": "object"
+    },
+    "core": {
+      "type": "string"
+    },
+    "core_name": {
+      "type": "string"
+    },
     "data_directories": {
       "type": "array",
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["ref"],
+        "required": [
+          "ref"
+        ],
         "properties": {
-          "ref": { "type": "string" },
-          "destination": { "type": "string" },
-          "source_ref": { "type": "string" }
+          "ref": {
+            "type": "string"
+          },
+          "destination": {
+            "type": "string"
+          },
+          "source_ref": {
+            "type": "string"
+          }
         }
       }
     },
-    "dev_flash": { "type": "object" },
-    "dev_flash2": { "type": "object" },
-    "dev_flash3": { "type": "object" },
-    "firmware_titles": { "type": "array", "items": { "type": "object" } },
-    "game_count": { "type": "integer", "minimum": 0 },
-    "logo": { "type": "string" },
-    "machine_directories": { "type": "object" },
-    "machine_properties": { "type": "object" },
-    "mame_version": { "type": "string" },
-    "memory_layout": { "type": "object" },
-    "mlc_structure": { "type": "array", "items": { "type": "string" } },
-    "model_kickstart_map": { "type": "object" },
-    "note": { "type": "string" },
-    "notes": { "type": ["string", "array", "object"] },
-    "pack_structure": { "type": "object" },
-    "platform_details": { "type": "object" },
-    "resources_directory": { "type": "string" },
-    "rom_path": { "type": "string" },
-    "source_ref": { "type": "string" },
-    "valid_bios_crc32": { "type": "object" },
-    "whdload_kickstarts": { "type": "array", "items": { "type": "string" } },
+    "dev_flash": {
+      "type": "object"
+    },
+    "dev_flash2": {
+      "type": "object"
+    },
+    "dev_flash3": {
+      "type": "object"
+    },
+    "firmware_titles": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "game_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "logo": {
+      "type": "string"
+    },
+    "machine_directories": {
+      "type": "object"
+    },
+    "machine_properties": {
+      "type": "object"
+    },
+    "mame_version": {
+      "type": "string"
+    },
+    "memory_layout": {
+      "type": "object"
+    },
+    "mlc_structure": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "model_kickstart_map": {
+      "type": "object"
+    },
+    "note": {
+      "type": "string"
+    },
+    "notes": {
+      "type": [
+        "string",
+        "array",
+        "object"
+      ]
+    },
+    "pack_structure": {
+      "type": "object"
+    },
+    "platform_details": {
+      "type": "object"
+    },
+    "resources_directory": {
+      "type": "string"
+    },
+    "rom_path": {
+      "type": "string"
+    },
+    "source_ref": {
+      "type": "string"
+    },
+    "valid_bios_crc32": {
+      "type": "object"
+    },
+    "whdload_kickstarts": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
     "files": {
       "type": "array",
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["name"],
+        "required": [
+          "name"
+        ],
         "properties": {
-          "name": { "type": "string" },
-          "required": { "type": "boolean" },
-          "system": { "type": "string" },
-          "path": { "type": ["string", "null"] },
-          "destination": { "type": "string" },
-          "aliases": { "type": "array", "items": { "type": "string" } },
+          "name": {
+            "type": "string"
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "system": {
+            "type": "string"
+          },
+          "path": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "destination": {
+            "type": "string"
+          },
+          "aliases": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
           "archive": {
             "description": "ROM set the file lives in, for arcade entries.",
             "type": "string"
           },
           "category": {
             "type": "string",
-            "enum": ["bios", "game_data", "bios_zip"]
+            "enum": [
+              "bios",
+              "game_data",
+              "bios_zip"
+            ]
           },
-          "mode": { "type": "string", "enum": ["standalone", "libretro", "both"] },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "standalone",
+              "libretro",
+              "both"
+            ]
+          },
           "storage": {
             "type": "string",
-            "enum": ["embedded", "external", "user_provided", "large_file", "release"]
+            "enum": [
+              "embedded",
+              "external",
+              "user_provided",
+              "large_file",
+              "release"
+            ]
           },
-          "hle_fallback": { "type": "boolean" },
-          "adler32_byteswap": { "type": "boolean" },
-          "agnostic": { "type": "boolean" },
-          "bundled": { "type": "boolean" },
-          "config_key": { "type": "string" },
-          "embedded": { "type": "boolean" },
-          "fast_boot": { "type": "string" },
-          "has_builtin": { "type": "boolean" },
-          "load_from": { "type": "string" },
-          "priority": { "type": "integer" },
-          "region_check": { "type": "boolean" },
-          "size_note": { "type": "string" },
-          "size_options": { "type": "array", "items": { "type": "integer" } },
-          "standalone_path": { "type": "string" },
-          "type": { "type": "string" },
-          "variant_group": { "type": "string", "minLength": 1 },
-          "size": { "type": ["integer", "array", "null"] },
-          "min_size": { "type": "integer" },
-          "max_size": { "type": "integer" },
+          "hle_fallback": {
+            "type": "boolean"
+          },
+          "adler32_byteswap": {
+            "type": "boolean"
+          },
+          "agnostic": {
+            "type": "boolean"
+          },
+          "bundled": {
+            "type": "boolean"
+          },
+          "config_key": {
+            "type": "string"
+          },
+          "embedded": {
+            "type": "boolean"
+          },
+          "fast_boot": {
+            "type": "string"
+          },
+          "has_builtin": {
+            "type": "boolean"
+          },
+          "load_from": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "integer"
+          },
+          "region_check": {
+            "type": "boolean"
+          },
+          "size_note": {
+            "type": "string"
+          },
+          "size_options": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "standalone_path": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "variant_group": {
+            "type": "string",
+            "minLength": 1
+          },
+          "size": {
+            "type": [
+              "integer",
+              "array",
+              "null"
+            ]
+          },
+          "min_size": {
+            "type": "integer"
+          },
+          "max_size": {
+            "type": "integer"
+          },
           "md5": {
             "oneOf": [
-              { "type": "null" },
-              { "type": "string", "pattern": "^[a-fA-F0-9]{32}$" },
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "pattern": "^[a-fA-F0-9]{32}$"
+              },
               {
                 "type": "array",
-                "items": { "type": "string", "pattern": "^[a-fA-F0-9]{32}$" }
+                "items": {
+                  "type": "string",
+                  "pattern": "^[a-fA-F0-9]{32}$"
+                }
               }
             ]
           },
           "sha1": {
             "oneOf": [
-              { "type": "string", "pattern": "^[a-fA-F0-9]{40}$" },
+              {
+                "type": "string",
+                "pattern": "^[a-fA-F0-9]{40}$"
+              },
               {
                 "type": "array",
-                "items": { "type": "string", "pattern": "^[a-fA-F0-9]{40}$" }
+                "items": {
+                  "type": "string",
+                  "pattern": "^[a-fA-F0-9]{40}$"
+                }
               }
             ]
           },
@@ -185,13 +455,28 @@
             "type": "string",
             "pattern": "^[a-fA-F0-9]{64}(,[a-fA-F0-9]{64})*$"
           },
-          "crc32": { "type": "string", "pattern": "^[a-fA-F0-9]{8}$" },
-          "known_hash_adler32": { "type": ["string", "integer"] },
+          "crc32": {
+            "type": "string",
+            "pattern": "^[a-fA-F0-9]{8}$"
+          },
+          "known_hash_adler32": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          },
           "validation": {
             "description": "Checks the code performs. A dict splits core from upstream when they diverge.",
             "oneOf": [
-              { "type": "array", "items": { "type": "string" } },
-              { "type": "object" }
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              {
+                "type": "object"
+              }
             ]
           },
           "region": {
@@ -200,14 +485,40 @@
             "items": {
               "enum": [
                 "world",
-                "north-america", "canada",
-                "latin-america", "brazil", "mexico", "argentina",
-                "europe", "uk", "france", "germany", "italy", "spain",
-                "netherlands", "portugal", "greece", "poland", "russia",
-                "sweden", "norway", "denmark", "finland",
-                "asia", "japan", "south-korea", "china", "taiwan",
-                "hong-kong", "singapore", "india", "asia-ntsc", "asia-pal",
-                "oceania", "australia", "new-zealand"
+                "north-america",
+                "canada",
+                "latin-america",
+                "brazil",
+                "mexico",
+                "argentina",
+                "europe",
+                "uk",
+                "france",
+                "germany",
+                "italy",
+                "spain",
+                "netherlands",
+                "portugal",
+                "greece",
+                "poland",
+                "russia",
+                "sweden",
+                "norway",
+                "denmark",
+                "finland",
+                "asia",
+                "japan",
+                "south-korea",
+                "china",
+                "taiwan",
+                "hong-kong",
+                "singapore",
+                "india",
+                "asia-ntsc",
+                "asia-pal",
+                "oceania",
+                "australia",
+                "new-zealand"
               ]
             }
           },
@@ -216,26 +527,58 @@
             "items": {
               "type": "object",
               "additionalProperties": false,
-              "required": ["name"],
+              "required": [
+                "name"
+              ],
               "properties": {
-                "name": { "type": "string", "minLength": 1 },
-                "size": { "type": "integer", "minimum": 0 },
-                "sha1": { "type": "string", "pattern": "^[a-fA-F0-9]{40}$" },
-                "crc32": { "type": "string", "pattern": "^[a-fA-F0-9]{8}$" },
-                "description": { "type": "string" },
-                "bad_dump": { "type": "boolean" }
+                "name": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "size": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "sha1": {
+                  "type": "string",
+                  "pattern": "^[a-fA-F0-9]{40}$"
+                },
+                "crc32": {
+                  "type": "string",
+                  "pattern": "^[a-fA-F0-9]{8}$"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "bad_dump": {
+                  "type": "boolean"
+                }
               }
             }
           },
           "source_ref": {
             "description": "A dict splits core from upstream when the two diverge.",
-            "type": ["string", "array", "object"]
+            "type": [
+              "string",
+              "array",
+              "object"
+            ]
           },
-          "description": { "type": "string" },
-          "note": { "type": "string" },
-          "unsourceable": { "type": "string" }
+          "description": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          },
+          "unsourceable": {
+            "type": "string"
+          }
         }
       }
+    },
+    "source_branch": {
+      "type": "string",
+      "description": "Branch the port was read from, when it is not the default one."
     }
   }
 }
