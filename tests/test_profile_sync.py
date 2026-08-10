@@ -338,7 +338,7 @@ class TestVerifyAtPin(unittest.TestCase):
         lines = ["load()", "", "", "", "", "", 'rom("cafebabe")']
         part = RefPart("a.c", 1, 1, "a.c:1")
         result = profile_sync.verify_at_pin(part, lines, ["cafebabe"])
-        self.assertEqual(result.status, "CHANGED")
+        self.assertEqual(result.status, "MOVED")
         self.assertEqual(result.start, 7)
 
     def test_declared_value_on_several_lines_is_ambiguous(self):
@@ -1016,7 +1016,7 @@ class TestBuildReport(unittest.TestCase):
         profile["source_commit"] = "headsha"
         profile["files"][0]["crc32"] = "deadbeef"
         report = build_report("test", profile, self.dir)
-        self.assertEqual(report.entries[0].status, "CHANGED")
+        self.assertEqual(report.entries[0].status, "MOVED")
 
     def test_a_value_absent_from_the_whole_file_is_not_held_against_the_ref(self):
         # A ref citing loading logic never spells the value out; its absence

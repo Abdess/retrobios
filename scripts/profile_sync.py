@@ -725,9 +725,11 @@ def verify_at_pin(part: RefPart, pin_lines, tokens) -> PartResult:
             part, "AMBIGUOUS", None, None, None, elsewhere,
             "declared value carried by several lines",
         )
+    # Content-level evidence, stronger than a line-shift heuristic: the value
+    # sits on exactly one line, so the recale target is not a guess.
     return PartResult(
-        part, "CHANGED", None, elsewhere[0], elsewhere[0], elsewhere,
-        "declared value carried by another line",
+        part, "MOVED", None, elsewhere[0], elsewhere[0], elsewhere,
+        "declared value occurs once at the pinned revision",
     )
 
 
