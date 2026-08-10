@@ -5,7 +5,7 @@
   "platform": "lakka",
   "display_name": "Lakka",
   "version": "1.0",
-  "generated": "2026-08-10T11:19:14Z",
+  "generated": "2026-08-10T23:10:26Z",
   "base_destination": "system",
   "detect": [
     {
@@ -5369,7 +5369,7 @@
       ]
     },
     {
-      "dest": "cannonball/epr-10381a.132",
+      "dest": "cannonball/epr-10381b.132",
       "sha1": "bf3ff05bbf81bdd44567f3b9bb4919ed4a499624",
       "sha256": "bfa129294604597f7c5145f7f0fe9bb0fe5d38fafc3a8f20b15b95f4649e7e45",
       "size": 65536,

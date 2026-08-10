@@ -5,7 +5,7 @@
   "platform": "retrodeck",
   "display_name": "RetroDECK",
   "version": "1.0",
-  "generated": "2026-08-10T11:19:37Z",
+  "generated": "2026-08-10T23:10:26Z",
   "base_destination": "",
   "detect": [
     {
@@ -237,8 +237,8 @@
       }
     }
   ],
-  "total_files": 3329,
-  "total_size": 4988772352,
+  "total_files": 3334,
+  "total_size": 5005707292,
   "total_omitted": 9,
   "omitted_files": [
     {
@@ -17120,7 +17120,7 @@
       ]
     },
     {
-      "dest": "bios/cannonball/epr-10381a.132",
+      "dest": "bios/cannonball/epr-10381b.132",
       "sha1": "bf3ff05bbf81bdd44567f3b9bb4919ed4a499624",
       "sha256": "bfa129294604597f7c5145f7f0fe9bb0fe5d38fafc3a8f20b15b95f4649e7e45",
       "size": 65536,
@@ -20247,6 +20247,46 @@
       "repo_path": "bios/VTech/CreatiVision/bioscv.rom",
       "cores": [
         "jollycv"
+      ]
+    },
+    {
+      "dest": "bios/voxatron/vox",
+      "sha1": "d57277c1676a688c1556bb61ebbd13470051e345",
+      "sha256": "045d95a428c10d7ee3e211293140e71d23f35d2626e487d660061c740d8dabab",
+      "size": 9607232,
+      "repo_path": "bios/Lexaloffle/Voxatron/vox",
+      "cores": [
+        "lexaloffle"
+      ]
+    },
+    {
+      "dest": "bios/voxatron/vox_dyn",
+      "sha1": "50252d56d69f9d99b207f4d6a6b76e361b8f7471",
+      "sha256": "3e20fa90c40abe2d564d9033ba8e865dab5b73de46ec510b871cfa8928f4b998",
+      "size": 1941744,
+      "repo_path": "bios/Lexaloffle/Voxatron/vox_dyn",
+      "cores": [
+        "lexaloffle"
+      ]
+    },
+    {
+      "dest": "bios/voxatron/vox.dat",
+      "sha1": "f30f29d0074f5db67128cf47fb9c0731ebca2b65",
+      "sha256": "97191dc1ad70aac3bcad9652c0a69a4759048db07fb871d34eaeadd6fd261996",
+      "size": 3866332,
+      "repo_path": "bios/Lexaloffle/Voxatron/vox.dat",
+      "cores": [
+        "lexaloffle"
+      ]
+    },
+    {
+      "dest": "bios/voxatron/libHoloPlayCore.so",
+      "sha1": "ecd7ce48fe0a80b8221ace4e55974d60cc3c7b48",
+      "sha256": "23b1ffff4789d156a2123b3921a7dbf05be5b747ba725f2ea58c7ff41a095ddf",
+      "size": 1515536,
+      "repo_path": "bios/Lexaloffle/Voxatron/libHoloPlayCore.so",
+      "cores": [
+        "lexaloffle"
       ]
     },
     {
@@ -26579,6 +26619,16 @@
       "sha256": "f5a76c2b154750074edc50c265afb05e1b672d9ed72d4a31f60c9da0d21fe10c",
       "size": 65536,
       "repo_path": "bios/Dragon/Dragon/sdbdos.rom",
+      "cores": [
+        "xroar"
+      ]
+    },
+    {
+      "dest": "bios/dragonfly-1.3.rom",
+      "sha1": "12cc90afc7eb1c0b0b720d4722f8d47e39932893",
+      "sha256": "f666855f5621909858bd9aa919fe6a333836428d558e90e6913948e939ccdbf3",
+      "size": 4096,
+      "repo_path": "bios/Dragon/Dragon/dragonfly-1.3.rom",
       "cores": [
         "xroar"
       ]

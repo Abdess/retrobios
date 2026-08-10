@@ -5,7 +5,7 @@
   "platform": "emudeck",
   "display_name": "EmuDeck",
   "version": "1.0",
-  "generated": "2026-08-10T08:11:35Z",
+  "generated": "2026-08-10T15:37:09Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -252,8 +252,129 @@
   ],
   "total_files": 532,
   "total_size": 1778193952,
-  "total_omitted": 0,
-  "omitted_files": [],
+  "total_omitted": 12,
+  "omitted_files": [
+    {
+      "dest": "shadps4/sys_modules/libSceAt9Enc.sprx",
+      "name": "libSceAt9Enc.sprx",
+      "system": "ps4",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "shadps4"
+      ]
+    },
+    {
+      "dest": "shadps4/sys_modules/libSceAudiodecCpu.sprx",
+      "name": "libSceAudiodecCpu.sprx",
+      "system": "ps4",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "shadps4"
+      ]
+    },
+    {
+      "dest": "shadps4/sys_modules/libSceAudiodecCpuDdp.sprx",
+      "name": "libSceAudiodecCpuDdp.sprx",
+      "system": "ps4",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "shadps4"
+      ]
+    },
+    {
+      "dest": "shadps4/sys_modules/libSceAudiodecCpuDtsHdLbr.sprx",
+      "name": "libSceAudiodecCpuDtsHdLbr.sprx",
+      "system": "ps4",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "shadps4"
+      ]
+    },
+    {
+      "dest": "shadps4/sys_modules/libSceAudiodecCpuHevag.sprx",
+      "name": "libSceAudiodecCpuHevag.sprx",
+      "system": "ps4",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "shadps4"
+      ]
+    },
+    {
+      "dest": "shadps4/sys_modules/libSceAudiodecCpuM4aac.sprx",
+      "name": "libSceAudiodecCpuM4aac.sprx",
+      "system": "ps4",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "shadps4"
+      ]
+    },
+    {
+      "dest": "shadps4/sys_modules/libSceFreeTypeOl.sprx",
+      "name": "libSceFreeTypeOl.sprx",
+      "system": "ps4",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "shadps4"
+      ]
+    },
+    {
+      "dest": "shadps4/sys_modules/libSceFreeTypeOptOl.sprx",
+      "name": "libSceFreeTypeOptOl.sprx",
+      "system": "ps4",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "shadps4"
+      ]
+    },
+    {
+      "dest": "shadps4/sys_modules/libSceRudp.sprx",
+      "name": "libSceRudp.sprx",
+      "system": "ps4",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "shadps4"
+      ]
+    },
+    {
+      "dest": "shadps4/sys_modules/libSceSystemGesture.sprx",
+      "name": "libSceSystemGesture.sprx",
+      "system": "ps4",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "shadps4"
+      ]
+    },
+    {
+      "dest": "shadps4/sys_modules/libSceWkFontConfig.sprx",
+      "name": "libSceWkFontConfig.sprx",
+      "system": "ps4",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "shadps4"
+      ]
+    },
+    {
+      "dest": "shadps4/sys_modules/libSceXml.sprx",
+      "name": "libSceXml.sprx",
+      "system": "ps4",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "shadps4"
+      ]
+    }
+  ],
   "files": [
     {
       "dest": "colecovision.rom",
@@ -4132,11 +4253,31 @@
       ]
     },
     {
+      "dest": "shadps4/sys_modules/libSceUlt.sprx",
+      "sha1": "e92bed221a75a5691346213125e762d02f8e17d5",
+      "sha256": "091005a21ac20d40436748315f3c7276b4f48277132a42b3774fa71b2b2b0d1f",
+      "size": 238808,
+      "repo_path": "bios/Sony/PlayStation 4/shadps4/sys_modules/libSceUlt.sprx",
+      "cores": [
+        "shadps4"
+      ]
+    },
+    {
       "dest": "shadps4/sys_modules/libSceRtc.sprx",
       "sha1": "747e65b1886ee1c9089c72bc0429749769647bac",
       "sha256": "b05340263cb01606c0bea76b2d1be53739a6dfca75fb51ba228d146450cb3e60",
       "size": 69832,
       "repo_path": "bios/Sony/PlayStation 4/shadps4/sys_modules/libSceRtc.sprx",
+      "cores": [
+        "shadps4"
+      ]
+    },
+    {
+      "dest": "shadps4/sys_modules/libSceJpegDec.sprx",
+      "sha1": "ced47e55936b43b7e11a30237f211416e8f294bb",
+      "sha256": "6a8dbae379bf1f034cdd87b147361a33163491cb508abaf37e6db6e2e56ef4bf",
+      "size": 83920,
+      "repo_path": "bios/Sony/PlayStation 4/shadps4/sys_modules/libSceJpegDec.sprx",
       "cores": [
         "shadps4"
       ]
@@ -4157,46 +4298,6 @@
       "sha256": "c58322d95c12e41e2d23826bcb943764e4515411dd7697ffb69f3a6ec02ec174",
       "size": 84256,
       "repo_path": "bios/Sony/PlayStation 4/shadps4/sys_modules/libScePngEnc.sprx",
-      "cores": [
-        "shadps4"
-      ]
-    },
-    {
-      "dest": "shadps4/sys_modules/libSceFont.sprx",
-      "sha1": "4af4dc12a8b0dfe6006a60d04ed7b89cd87ca14d",
-      "sha256": "2e57d191aa3a26aa6682cb8181c29adf3952b6f16ff2ca60124e4a890a49ca9d",
-      "size": 328640,
-      "repo_path": "bios/Sony/PlayStation 4/shadps4/sys_modules/libSceFont.sprx",
-      "cores": [
-        "shadps4"
-      ]
-    },
-    {
-      "dest": "shadps4/sys_modules/libSceFontFt.sprx",
-      "sha1": "4b000c67ae8baf024b6bff6fbf7aa947fd322b5e",
-      "sha256": "ad78707187be911df1559f4799fef2af3d6c4d098dd95b33d3e22854cca15e2b",
-      "size": 144248,
-      "repo_path": "bios/Sony/PlayStation 4/shadps4/sys_modules/libSceFontFt.sprx",
-      "cores": [
-        "shadps4"
-      ]
-    },
-    {
-      "dest": "shadps4/sys_modules/libSceUlt.sprx",
-      "sha1": "e92bed221a75a5691346213125e762d02f8e17d5",
-      "sha256": "091005a21ac20d40436748315f3c7276b4f48277132a42b3774fa71b2b2b0d1f",
-      "size": 238808,
-      "repo_path": "bios/Sony/PlayStation 4/shadps4/sys_modules/libSceUlt.sprx",
-      "cores": [
-        "shadps4"
-      ]
-    },
-    {
-      "dest": "shadps4/sys_modules/libSceJpegDec.sprx",
-      "sha1": "ced47e55936b43b7e11a30237f211416e8f294bb",
-      "sha256": "6a8dbae379bf1f034cdd87b147361a33163491cb508abaf37e6db6e2e56ef4bf",
-      "size": 83920,
-      "repo_path": "bios/Sony/PlayStation 4/shadps4/sys_modules/libSceJpegDec.sprx",
       "cores": [
         "shadps4"
       ]
@@ -4237,6 +4338,26 @@
       "sha256": "bc2806808a735dc18e71226a07374496914a2ee6c19e1a27c17cd17be345b2c7",
       "size": 68824,
       "repo_path": "bios/Sony/PlayStation 4/shadps4/sys_modules/libSceAudiodec.sprx",
+      "cores": [
+        "shadps4"
+      ]
+    },
+    {
+      "dest": "shadps4/sys_modules/libSceFont.sprx",
+      "sha1": "4af4dc12a8b0dfe6006a60d04ed7b89cd87ca14d",
+      "sha256": "2e57d191aa3a26aa6682cb8181c29adf3952b6f16ff2ca60124e4a890a49ca9d",
+      "size": 328640,
+      "repo_path": "bios/Sony/PlayStation 4/shadps4/sys_modules/libSceFont.sprx",
+      "cores": [
+        "shadps4"
+      ]
+    },
+    {
+      "dest": "shadps4/sys_modules/libSceFontFt.sprx",
+      "sha1": "4b000c67ae8baf024b6bff6fbf7aa947fd322b5e",
+      "sha256": "ad78707187be911df1559f4799fef2af3d6c4d098dd95b33d3e22854cca15e2b",
+      "size": 144248,
+      "repo_path": "bios/Sony/PlayStation 4/shadps4/sys_modules/libSceFontFt.sprx",
       "cores": [
         "shadps4"
       ]

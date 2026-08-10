@@ -5,7 +5,7 @@
   "platform": "recalbox",
   "display_name": "Recalbox",
   "version": "1.0",
-  "generated": "2026-08-10T08:11:50Z",
+  "generated": "2026-08-10T23:10:26Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -237,8 +237,8 @@
       }
     }
   ],
-  "total_files": 1189,
-  "total_size": 2501099096,
+  "total_files": 1190,
+  "total_size": 2501103192,
   "total_omitted": 5,
   "omitted_files": [
     {
@@ -3812,7 +3812,7 @@
       ]
     },
     {
-      "dest": "cannonball/epr-10381a.132",
+      "dest": "cannonball/epr-10381b.132",
       "sha1": "bf3ff05bbf81bdd44567f3b9bb4919ed4a499624",
       "sha256": "bfa129294604597f7c5145f7f0fe9bb0fe5d38fafc3a8f20b15b95f4649e7e45",
       "size": 65536,
@@ -9117,6 +9117,16 @@
       "sha256": "f5a76c2b154750074edc50c265afb05e1b672d9ed72d4a31f60c9da0d21fe10c",
       "size": 65536,
       "repo_path": "bios/Dragon/Dragon/sdbdos.rom",
+      "cores": [
+        "xroar"
+      ]
+    },
+    {
+      "dest": "dragonfly-1.3.rom",
+      "sha1": "12cc90afc7eb1c0b0b720d4722f8d47e39932893",
+      "sha256": "f666855f5621909858bd9aa919fe6a333836428d558e90e6913948e939ccdbf3",
+      "size": 4096,
+      "repo_path": "bios/Dragon/Dragon/dragonfly-1.3.rom",
       "cores": [
         "xroar"
       ]

@@ -258,7 +258,7 @@ nav:
     - vitaQuakeII: emulators/vitaquake2.md
     - yabasanshiro: emulators/yabasanshiro.md
     - Yuzu: emulators/yuzu.md
-  - Community forks (117):
+  - Community forks (118):
     - EightyOne: emulators/81.md
     - a5200: emulators/a5200.md
     - ACE-DL: emulators/ace-dl.md
@@ -374,6 +374,7 @@ nav:
     - X Millennium: emulators/x1.md
     - x64sdl: emulators/x64sdl.md
     - Xenia Canary: emulators/xenia.md
+    - Xenia Edge: emulators/xenia-edge.md
     - yabause: emulators/yabause.md
     - ymir: emulators/ymir.md
   - Pure libretro (42):
@@ -451,7 +452,7 @@ nav:
     - WASM-4: emulators/wasm4.md
     - XRick: emulators/xrick.md
     - Zelda Classic v2.10: emulators/zc210.md
-  - Enhanced forks (23):
+  - Enhanced forks (25):
     - A7800: emulators/a7800.md
     - AdvanceMAME: emulators/advancemame.md
     - bsnes-hd beta: emulators/bsnes_hd_beta.md
@@ -475,6 +476,8 @@ nav:
     - PrimeHack: emulators/primehack.md
     - SMS Plus GX: emulators/smsplus.md
     - Triforce: emulators/triforce.md
+    - xm6pro68k: emulators/xm6pro68k.md
+    - xm6typeg: emulators/xm6typeg.md
   - Frozen snapshots (33):
     - bnes: emulators/bnes.md
     - bsnes 2014: emulators/bsnes2014.md
@@ -518,7 +521,7 @@ nav:
   - Launchers (2):
     - Dolphin Launcher: emulators/dolphin_launcher.md
     - Parallel Launcher: emulators/parallel-launcher.md
-  - Other (36):
+  - Other (37):
     - ares: emulators/ares.md
     - Basilisk II: emulators/basiliskii.md
     - Beetle GBA (Mednafen): emulators/beetle_gba.md
@@ -555,6 +558,7 @@ nav:
     - x16emu: emulators/x16emu.md
     - Xemu: emulators/xemu.md
     - XRoar: emulators/xroar.md
+    - ZEsarUX: emulators/zesarux.md
 - Cross-reference: cross-reference.md
 - Gap Analysis: gaps.md
 - Dump provenance: provenance.md
