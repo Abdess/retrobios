@@ -17,7 +17,7 @@ notes: |
   Doom source port forked from PrBoom, with the software and OpenGL renderers
   in a single binary. FindIWADFile accepts doom2f, doom2, plutonia, tnt, doom,
   doom1, doomu, freedoom2, freedoom1, freedm, hacx, chex, rekkrsa, bfgdoom2
-  and bfgdoom (d_main.c:144-165). ES-DE runs it as "prboom-plus -iwad <file>",
+  and bfgdoom (prboom2/src/d_main.c:144-165). ES-DE runs it as "prboom-plus -iwad <file>",
   so the IWAD is content, not a system file.
 
   prboom-plus.wad holds the engine's own lumps: the palette, the water
@@ -26,9 +26,9 @@ notes: |
   sources, and the DEHACKED patches applied to Chex Quest, the BFG Edition
   and NERVE.WAD. M_LoadDefaults installs it as wad_files[0] and aborts with
   "PrBoom-Plus.wad not found. Can't continue." when I_FindFile returns
-  nothing (m_misc.c:1723-1724). It loads even under -noload, which caps the
-  autoload loop at that one entry (d_main.c:1877-1879). Lumps coming from it
-  are tagged LUMP_PRBOOM so a PWAD can override them (w_wad.c:185-196).
+  nothing (prboom2/src/m_misc.c:1723-1724). It loads even under -noload, which caps the
+  autoload loop at that one entry (prboom2/src/d_main.c:1877-1879). Lumps coming from it
+  are tagged LUMP_PRBOOM so a PWAD can override them (prboom2/src/w_wad.c:185-196).
 
   The tree ships the inputs, not the file: data/CMakeLists.txt builds it with
   the rdatawad tool from the raw palette, lumps, PPM graphics and WAV sounds
@@ -49,7 +49,7 @@ notes: |
   bundle resource path, and the bare name (MAC/i_system.m:57-59, 117-142).
 
   snd_midiplayer picks the MIDI backend and defaults to fluidsynth on Windows,
-  sdl elsewhere (m_misc.c:444-450). Only the sdl value leaves
+  sdl elsewhere (prboom2/src/m_misc.c:444-450). Only the sdl value leaves
   use_experimental_music clear and routes MIDI through SDL_mixer
   (SDL/i_sound.c:1662-1668, 1221-1225); every other value brings up the
   in-tree players. Their init results are recorded once at startup
@@ -68,10 +68,10 @@ files:
     md5: "1164ae723c9181698cc41dde6a341132"
     sha1: "8a799c6615702aac72016b784e30ea1abd3e197b"
     crc32: "a4626dfa"
-    source_ref: "m_misc.c:1723-1724 (I_FindFile then I_Error), d_main.c:1873-1895 (autoload), w_wad.c:185-196 (LUMP_PRBOOM tagging), CMakeLists.txt:41 (PACKAGE_TARNAME), CMakeLists.txt:234-235 (WAD_DATA), data/CMakeLists.txt:364-370 (rdatawad build and install)"
+    source_ref: "prboom2/src/m_misc.c:1723-1724 (I_FindFile then I_Error), prboom2/src/d_main.c:1873-1895 (autoload), prboom2/src/w_wad.c:185-196 (LUMP_PRBOOM tagging), prboom2/CMakeLists.txt:41 (PACKAGE_TARNAME), prboom2/CMakeLists.txt:234-235 (WAD_DATA), prboom2/prboom2/data/CMakeLists.txt:364-370 (rdatawad build and install)"
     note: >
       The code checks existence only, then rejects a file whose header is
-      neither IWAD nor PWAD (w_wad.c:216-218). Hashes are those of the file
+      neither IWAD nor PWAD (prboom2/src/w_wad.c:216-218). Hashes are those of the file
       rdatawad produces from the data/ assets at this revision, which matches
       the copy in the v2.6.66 release archive byte for byte. They identify the
       2.6.66 build; other versions carry different lumps.
@@ -81,7 +81,7 @@ files:
     description: "General MIDI soundfont for the fluidsynth MIDI player"
     required: false
     hle_fallback: true
-    source_ref: "m_misc.c:445-446 (_WIN32 defaults for snd_midiplayer and snd_soundfont), MUSIC/flplayer.c:193-202 (I_FindFile2 then fluid_synth_sfload)"
+    source_ref: "prboom2/src/m_misc.c:445-446 (_WIN32 defaults for snd_midiplayer and snd_soundfont), MUSIC/flplayer.c:193-202 (I_FindFile2 then fluid_synth_sfload)"
     note: >
       Named by the Windows default of snd_soundfont, where snd_midiplayer also
       defaults to fluidsynth, so a stock Windows configuration reads it. Any
@@ -95,7 +95,7 @@ files:
     description: "General MIDI soundfont named by the non-Windows soundfont default"
     required: false
     hle_fallback: true
-    source_ref: "m_misc.c:448-449 (non-_WIN32 defaults, /usr/share/sounds/sf3/default-GM.sf3), MUSIC/flplayer.c:193-202 (I_FindFile2 then fluid_synth_sfload)"
+    source_ref: "prboom2/src/m_misc.c:448-449 (non-_WIN32 defaults, /usr/share/sounds/sf3/default-GM.sf3), MUSIC/flplayer.c:193-202 (I_FindFile2 then fluid_synth_sfload)"
     note: >
       The default is an absolute path, which resolves through the unprefixed
       working directory entry of the search table. Reached once snd_midiplayer
@@ -143,7 +143,7 @@ analysis:
     note: "Written by the program itself, none is user-supplied"
     entries:
       - filename: "prboom-plus.cfg"
-        source_ref: "m_misc.c:1586-1600 (BOOM_CFG, path from I_DoomExeDir), m_misc.c:1606 (read)"
+        source_ref: "prboom2/src/m_misc.c:1586-1600 (BOOM_CFG, path from I_DoomExeDir), prboom2/src/m_misc.c:1606 (read)"
       - filename: "RGB2PAL.dat"
         source_ref: "gl_hires.c:938-953 (read), gl_hires.c:962-967 (opened wb and written)"
         note: >
@@ -156,38 +156,38 @@ analysis:
       - filename: "levelstat.txt"
         source_ref: "e6y.c:968"
       - filename: "levelinfo.txt"
-        source_ref: "d_main.c:1049-1060, behind GL_DOOM and PRBOOM_DEBUG"
+        source_ref: "prboom2/src/d_main.c:1049-1060, behind GL_DOOM and PRBOOM_DEBUG"
       - filename: "temp_a.nut, temp_v.nut"
-        source_ref: "m_misc.c:1065-1066 (cap_tempfile1, cap_tempfile2)"
+        source_ref: "prboom2/src/m_misc.c:1065-1066 (cap_tempfile1, cap_tempfile2)"
 
   user_supplied_paths:
     note: "Named on the command line or in the config, with no fixed filename"
     entries:
       - what: "IWAD, -iwad or autodetected from the standard names"
-        source_ref: "d_main.c:144-165 (standard_iwads), d_main.c:977-990 (FindIWADFile)"
+        source_ref: "prboom2/src/d_main.c:144-165 (standard_iwads), prboom2/src/d_main.c:977-990 (FindIWADFile)"
       - what: "PWADs, -file"
-        source_ref: "d_main.c:1906-1927"
+        source_ref: "prboom2/src/d_main.c:1906-1927"
       - what: "DEHACKED and BEX patches, -deh, plus the dehfile_1 and dehfile_2 config keys and the autoload directories"
-        source_ref: "d_main.c:2036-2055, d_main.c:2081-2099, m_misc.c:336-337"
+        source_ref: "prboom2/src/d_main.c:2036-2055, prboom2/src/d_main.c:2081-2099, prboom2/src/m_misc.c:336-337"
       - what: "extra autoloaded WADs, wadfile_1 and wadfile_2"
-        source_ref: "m_misc.c:334-335, d_main.c:1873-1895"
+        source_ref: "prboom2/src/m_misc.c:334-335, prboom2/src/d_main.c:1873-1895"
       - what: "autoload directories, <config dir>/autoload/doom-all and one per IWAD"
-        source_ref: "d_main.c:1400-1414 (GetAutoloadBaseDir), d_main.c:1500-1519 (D_AutoloadIWadDir)"
+        source_ref: "prboom2/src/d_main.c:1400-1414 (GetAutoloadBaseDir), prboom2/src/d_main.c:1500-1519 (D_AutoloadIWadDir)"
       - what: "demos, -playdemo, -fastdemo, -record"
         source_ref: "r_demo.c:89-119, g_game.c:2570, g_game.c:3150"
       - what: "external high resolution texture packs, under textures/, flats/ and patches/"
         source_ref: "gl_hires.c:467-631 (hires_paths), gl_hires.c:703-719 (gl_texture_hires_dir or I_DoomExeDir)"
       - what: "savegames, DOOMSAVEDIR or the config directory"
-        source_ref: "d_main.c:1019-1032, m_menu.c:957"
+        source_ref: "prboom2/src/d_main.c:1019-1032, m_menu.c:957"
       - what: "response files, @name"
-        source_ref: "d_main.c:1094-1112"
+        source_ref: "prboom2/src/d_main.c:1094-1112"
 
   external_programs:
     note: "Invoked as processes, not read as data files"
     entries:
       - what: "ffmpeg, video capture and muxing"
-        source_ref: "m_misc.c:1062-1064 (cap_soundcommand, cap_videocommand, cap_muxcommand)"
+        source_ref: "prboom2/src/m_misc.c:1062-1064 (cap_soundcommand, cap_videocommand, cap_muxcommand)"
       - what: "wget then unzip, fetching a WAD a game server asks for"
         source_ref: "d_client.c:236-257 (execlp), doc/prboom-plus.6:200-206"
       - what: "getwad_cmdline, run through system() when a needed WAD is missing"
-        source_ref: "r_demo.c:1641-1704 (D_TryGetWad), m_misc.c:1029 (default empty, so the path is inert until configured)"
+        source_ref: "r_demo.c:1641-1704 (D_TryGetWad), prboom2/src/m_misc.c:1029 (default empty, so the path is inert until configured)"

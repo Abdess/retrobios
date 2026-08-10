@@ -36,16 +36,16 @@ systems: [riscv]
 #   libretro binding:   src/bindings/libretro/libretro.c
 #   config parsing:     libretro.c:332-421 (retro_load_game)
 #   VM init + loading:  libretro.c:288-330 (vm_init)
-#   firmware loading:   rvvm.c:621-628 (rvvm_load_firmware)
-#   kernel loading:     rvvm.c:630-638 (rvvm_load_kernel)
-#   FDT loading:        rvvm.c:641-648 (rvvm_load_fdt, standalone only)
+#   firmware loading:   src/rvvm.c:621-628 (rvvm_load_firmware)
+#   kernel loading:     src/rvvm.c:630-638 (rvvm_load_kernel)
+#   FDT loading:        src/rvvm.c:641-648 (rvvm_load_fdt, standalone only)
 #   standalone CLI:     main.c:213-282 (rvvm_cli_configure)
 
 files:
   - name: "fw_payload.bin"
     path: "rvvm/fw_payload.bin"
     required: true
-    source_ref: "src/bindings/libretro/libretro.c:309-314, rvvm.c:621-628"
+    source_ref: "src/bindings/libretro/libretro.c:309-314, src/rvvm.c:621-628"
     note: >
       M-mode firmware loaded at 0x80000000. Typically OpenSBI with U-Boot
       payload (fw_payload.bin) or standalone (fw_jump.bin). Referenced by
@@ -54,7 +54,7 @@ files:
   - name: "Image"
     path: "rvvm/Image"
     required: false
-    source_ref: "src/bindings/libretro/libretro.c:316-318, rvvm.c:630-638"
+    source_ref: "src/bindings/libretro/libretro.c:316-318, src/rvvm.c:630-638"
     note: >
       S-mode kernel payload loaded at offset 0x200000 (rv64) or 0x400000
       (rv32) from RAM base. Only needed with fw_jump.bin as bootrom.
@@ -64,7 +64,7 @@ files:
     path: "rvvm/machine.dtb"
     required: false
     mode: standalone
-    source_ref: "src/main.c:222, rvvm.c:641-648"
+    source_ref: "src/main.c:222, src/rvvm.c:641-648"
     note: >
       Custom Flattened Device Tree. The core auto-generates a DTB based on
       machine configuration. The libretro binding does not parse a dtb= key
