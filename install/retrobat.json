@@ -5,7 +5,7 @@
   "platform": "retrobat",
   "display_name": "RetroBat",
   "version": "1.0",
-  "generated": "2026-08-10T12:23:31Z",
+  "generated": "2026-08-10T13:01:45Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -236,8 +236,8 @@
       }
     }
   ],
-  "total_files": 1319,
-  "total_size": 3321142613,
+  "total_files": 1323,
+  "total_size": 3321268505,
   "total_omitted": 3,
   "omitted_files": [
     {
@@ -6609,6 +6609,16 @@
       ]
     },
     {
+      "dest": "lgp.zip",
+      "sha1": "8cf0fa2ad1a9811c372d45c304cf55c161cf0c17",
+      "sha256": "b226d5933b31988a0739a272e07f177893fa50f43413f991aa252336663f72d2",
+      "size": 37609,
+      "repo_path": "bios/Arcade/Daphne/lgp.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
       "dest": "mach3.zip",
       "sha1": "5c5f106444ea96a2a324110b34f03f1302d93be5",
       "sha256": "82fbb1fa88f48967ff9765f14252224040032aa8d636855096fa727c19b1d262",
@@ -6664,6 +6674,16 @@
       "sha256": "13e6a0417ec986fc810ccd4cf9488cf470951359abcd618901af8c5626d0f725",
       "size": 10161,
       "repo_path": "bios/Arcade/Daphne/sdqshortalt.zip",
+      "cores": [
+        "hypseus-singe"
+      ]
+    },
+    {
+      "dest": "timetrav.zip",
+      "sha1": "17d04dce92ec59bc611fb815d41e531436956924",
+      "sha256": "3da3d7181ee333193d8bdecff8d145f86d000a71b653d434b97f40f5f5d59cee",
+      "size": 53103,
+      "repo_path": "bios/Arcade/Daphne/timetrav.zip",
       "cores": [
         "hypseus-singe"
       ]
@@ -6764,6 +6784,26 @@
       "sha256": "36ee0000f2468cb47c0d86afc1a1683bc054d6155b19044fe0a4571dc05f54be",
       "size": 649860,
       "repo_path": "bios/Sega/Lindbergh/libopenal.so.0",
+      "cores": [
+        "lindbergh-loader"
+      ]
+    },
+    {
+      "dest": "logo.tga",
+      "sha1": "c800e91a37344793df76d1f60c524cce2e6d64c5",
+      "sha256": "632722c032b7399da4fdd23f50836c3c4a2b94c2017c45352a7d36afa7d22bee",
+      "size": 17121,
+      "repo_path": "bios/Sega/Lindbergh/logo.tga",
+      "cores": [
+        "lindbergh-loader"
+      ]
+    },
+    {
+      "dest": "logo_red.tga",
+      "sha1": "9a888a49d05ec758760d8ece27010239202e64bf",
+      "sha256": "da79ed393eef68050e5b8ce0f6823ba59ebfdee373f66c9ebda3934b928f3000",
+      "size": 18059,
+      "repo_path": "bios/Sega/Lindbergh/logo_red.tga",
       "cores": [
         "lindbergh-loader"
       ]

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-10T12:06:39Z",
-  "total_files": 7847,
-  "total_size": 10364770662,
+  "generated_at": "2026-08-10T12:44:15Z",
+  "total_files": 7851,
+  "total_size": 10364896554,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -10013,6 +10013,16 @@
       "crc32": "6b041f9f",
       "adler32": "09af6105"
     },
+    "8cf0fa2ad1a9811c372d45c304cf55c161cf0c17": {
+      "path": "bios/Arcade/Daphne/lgp.zip",
+      "name": "lgp.zip",
+      "size": 37609,
+      "sha1": "8cf0fa2ad1a9811c372d45c304cf55c161cf0c17",
+      "md5": "2b1d7e6e4a5b434f1dcac8b37a8791f6",
+      "sha256": "b226d5933b31988a0739a272e07f177893fa50f43413f991aa252336663f72d2",
+      "crc32": "84381879",
+      "adler32": "9cae9f7b"
+    },
     "5c5f106444ea96a2a324110b34f03f1302d93be5": {
       "path": "bios/Arcade/Daphne/mach3.zip",
       "name": "mach3.zip",
@@ -10072,6 +10082,16 @@
       "sha256": "13e6a0417ec986fc810ccd4cf9488cf470951359abcd618901af8c5626d0f725",
       "crc32": "6b015608",
       "adler32": "9709d433"
+    },
+    "17d04dce92ec59bc611fb815d41e531436956924": {
+      "path": "bios/Arcade/Daphne/timetrav.zip",
+      "name": "timetrav.zip",
+      "size": 53103,
+      "sha1": "17d04dce92ec59bc611fb815d41e531436956924",
+      "md5": "6076b4d68094f22054689f131dc4b9d4",
+      "sha256": "3da3d7181ee333193d8bdecff8d145f86d000a71b653d434b97f40f5f5d59cee",
+      "crc32": "5e516f76",
+      "adler32": "20ca0bcd"
     },
     "3a2a274642f02ac0f9f2b0b877c11401613b224d": {
       "path": "bios/Arcade/Daphne/tq.zip",
@@ -75620,6 +75640,26 @@
       "crc32": "c0771cc6",
       "adler32": "213b114e"
     },
+    "c800e91a37344793df76d1f60c524cce2e6d64c5": {
+      "path": "bios/Sega/Lindbergh/logo.tga",
+      "name": "logo.tga",
+      "size": 17121,
+      "sha1": "c800e91a37344793df76d1f60c524cce2e6d64c5",
+      "md5": "e811f76577b721d6cdceeff0de68c61d",
+      "sha256": "632722c032b7399da4fdd23f50836c3c4a2b94c2017c45352a7d36afa7d22bee",
+      "crc32": "7d28f1a5",
+      "adler32": "da9d4405"
+    },
+    "9a888a49d05ec758760d8ece27010239202e64bf": {
+      "path": "bios/Sega/Lindbergh/logo_red.tga",
+      "name": "logo_red.tga",
+      "size": 18059,
+      "sha1": "9a888a49d05ec758760d8ece27010239202e64bf",
+      "md5": "3c7e0506ca431fbe28373630c270a89c",
+      "sha256": "da79ed393eef68050e5b8ce0f6823ba59ebfdee373f66c9ebda3934b928f3000",
+      "crc32": "1d119f38",
+      "adler32": "7df25ad1"
+    },
     "6aca0e3dffe461ba1cb11a86cd4caf5b97e1b8df": {
       "path": "bios/Sega/Master System/.variants/bios_E.sms.81c3476b",
       "name": "bios_E.sms",
@@ -84382,12 +84422,14 @@
       "46804a3f99acc7920bc2604996bee7b7": "0468026f5ffd4bf8cdd28107dfdd92224cb593fa",
       "8a360eeb52429ae11653b4b538da9d88": "73a156b7e995f4dfb4d975ff3759f78fe0e26f3c",
       "882670ab309cb1227ef7cdfc500e6cc2": "27b98ce21948d6bce218a9fc32d641129b45b88b",
+      "2b1d7e6e4a5b434f1dcac8b37a8791f6": "8cf0fa2ad1a9811c372d45c304cf55c161cf0c17",
       "00b0077d53b8b3e619a0620d82215ec1": "5c5f106444ea96a2a324110b34f03f1302d93be5",
       "fb3c4950b104ac4ca7b1736daf2e49cb": "77647116dd7ec8e0473f107938d83f527335e2ce",
       "e69a6d5f7d8656d842876bf98a292643": "533a2a55615f783fbc9eab437c312cdce0f1bd0e",
       "3f9f35038c865972e49d68068f130aa5": "ddf71fd109d3a3e7240ebc14b6cb22c7caa43201",
       "eb5401532f318a32a142c8d134c2a3ab": "fd488c44567183aa2f4af097f52b3073365e56ae",
       "cd26930e1278a285522729a4d7faef4e": "9de70c75c24f27595b4c5985f6ef83da9e18a41f",
+      "6076b4d68094f22054689f131dc4b9d4": "17d04dce92ec59bc611fb815d41e531436956924",
       "23f19f8465758ab58d9f3aaf4de59630": "3a2a274642f02ac0f9f2b0b877c11401613b224d",
       "cec002ace50f3a048a3f6c096b85e6da": "adbc01de2b85148080add3123cf1d78599dae8ea",
       "9e7ec19b80ea4ac41953c6384850f148": "d7769bbda95fef35866ab00248628603595d4dce",
@@ -90696,6 +90738,8 @@
       "f1e7e92165b4e376541797be3722bf67": "0ee8ed2a8fb49926b96f1e5237f573dcfb8ed67e",
       "bb5c07c9b9a901a6d3c3607099419d52": "91d69bba438f321d6e3ebb60b3e89b1edd63de17",
       "9f96d55a376a74a8e605a06dedd53143": "60c2838da6cd97810ff11c5c7e7fdc203a4c2762",
+      "e811f76577b721d6cdceeff0de68c61d": "c800e91a37344793df76d1f60c524cce2e6d64c5",
+      "3c7e0506ca431fbe28373630c270a89c": "9a888a49d05ec758760d8ece27010239202e64bf",
       "4187d96beaf36385e681a3cf3bd1663d": "6aca0e3dffe461ba1cb11a86cd4caf5b97e1b8df",
       "5cd8f62cd8786af0226e6d2248279338": "51fd6d7990f62cd9d18c9ecfc62ed7936169107e",
       "02cbb2e348945c9ac41e37502a58ca76": "9e179392cd416af14024d8f31c981d9ee9a64517",
@@ -94324,6 +94368,9 @@
       "laireuro.zip": [
         "27b98ce21948d6bce218a9fc32d641129b45b88b"
       ],
+      "lgp.zip": [
+        "8cf0fa2ad1a9811c372d45c304cf55c161cf0c17"
+      ],
       "mach3.zip": [
         "5c5f106444ea96a2a324110b34f03f1302d93be5"
       ],
@@ -94341,6 +94388,9 @@
       ],
       "sdqshortalt.zip": [
         "9de70c75c24f27595b4c5985f6ef83da9e18a41f"
+      ],
+      "timetrav.zip": [
+        "17d04dce92ec59bc611fb815d41e531436956924"
       ],
       "tq.zip": [
         "3a2a274642f02ac0f9f2b0b877c11401613b224d"
@@ -111530,6 +111580,12 @@
       "libssl.so.0.9.7": [
         "60c2838da6cd97810ff11c5c7e7fdc203a4c2762"
       ],
+      "logo.tga": [
+        "c800e91a37344793df76d1f60c524cce2e6d64c5"
+      ],
+      "logo_red.tga": [
+        "9a888a49d05ec758760d8ece27010239202e64bf"
+      ],
       "bios_E.sms": [
         "6aca0e3dffe461ba1cb11a86cd4caf5b97e1b8df",
         "51fd6d7990f62cd9d18c9ecfc62ed7936169107e",
@@ -117778,12 +117834,14 @@
       "e0639664": "0468026f5ffd4bf8cdd28107dfdd92224cb593fa",
       "cf6ef00d": "73a156b7e995f4dfb4d975ff3759f78fe0e26f3c",
       "6b041f9f": "27b98ce21948d6bce218a9fc32d641129b45b88b",
+      "84381879": "8cf0fa2ad1a9811c372d45c304cf55c161cf0c17",
       "ef8af43b": "5c5f106444ea96a2a324110b34f03f1302d93be5",
       "cab5e75c": "77647116dd7ec8e0473f107938d83f527335e2ce",
       "3241f717": "533a2a55615f783fbc9eab437c312cdce0f1bd0e",
       "62656b8e": "ddf71fd109d3a3e7240ebc14b6cb22c7caa43201",
       "b6ab3d06": "fd488c44567183aa2f4af097f52b3073365e56ae",
       "6b015608": "9de70c75c24f27595b4c5985f6ef83da9e18a41f",
+      "5e516f76": "17d04dce92ec59bc611fb815d41e531436956924",
       "5f267bf6": "3a2a274642f02ac0f9f2b0b877c11401613b224d",
       "c7052ca4": "adbc01de2b85148080add3123cf1d78599dae8ea",
       "04600953": "d7769bbda95fef35866ab00248628603595d4dce",
@@ -124092,6 +124150,8 @@
       "2e165da3": "0ee8ed2a8fb49926b96f1e5237f573dcfb8ed67e",
       "e130af68": "91d69bba438f321d6e3ebb60b3e89b1edd63de17",
       "c0771cc6": "60c2838da6cd97810ff11c5c7e7fdc203a4c2762",
+      "7d28f1a5": "c800e91a37344793df76d1f60c524cce2e6d64c5",
+      "1d119f38": "9a888a49d05ec758760d8ece27010239202e64bf",
       "81c3476b": "6aca0e3dffe461ba1cb11a86cd4caf5b97e1b8df",
       "8edf7ac6": "51fd6d7990f62cd9d18c9ecfc62ed7936169107e",
       "91e93385": "9e179392cd416af14024d8f31c981d9ee9a64517",
@@ -125627,12 +125687,14 @@
       "67c4708641728ebbb22906b98ddb36b74d7f0569254230abc72a3c430b7fc7d3": "0468026f5ffd4bf8cdd28107dfdd92224cb593fa",
       "0b28858dc1edb7979e2a9e3217c0d783aff2805f8d5689d6f66a84e3d680e224": "73a156b7e995f4dfb4d975ff3759f78fe0e26f3c",
       "a87ac89567eb0d6cb63c4277b275017771c567ea4260fa977e78c9f2c65eb875": "27b98ce21948d6bce218a9fc32d641129b45b88b",
+      "b226d5933b31988a0739a272e07f177893fa50f43413f991aa252336663f72d2": "8cf0fa2ad1a9811c372d45c304cf55c161cf0c17",
       "82fbb1fa88f48967ff9765f14252224040032aa8d636855096fa727c19b1d262": "5c5f106444ea96a2a324110b34f03f1302d93be5",
       "cbaea6df93e0ddbabcf83568f56ccd3e9612d57311eb178a205080a01daea69b": "77647116dd7ec8e0473f107938d83f527335e2ce",
       "06ec6b633dc8f6e953eea3ca691403d0d5a7615c719c74ef185cd26fd993ec45": "533a2a55615f783fbc9eab437c312cdce0f1bd0e",
       "f78e412a9ad52db0984387ae9f46807a967643d43f7d487c6420b9ce71e900f2": "ddf71fd109d3a3e7240ebc14b6cb22c7caa43201",
       "aeec9b3feb93bf8aa7cbfd417e723475942239e56d70d7405a4997c87979736a": "fd488c44567183aa2f4af097f52b3073365e56ae",
       "13e6a0417ec986fc810ccd4cf9488cf470951359abcd618901af8c5626d0f725": "9de70c75c24f27595b4c5985f6ef83da9e18a41f",
+      "3da3d7181ee333193d8bdecff8d145f86d000a71b653d434b97f40f5f5d59cee": "17d04dce92ec59bc611fb815d41e531436956924",
       "5596560e42579a0c6b9898e66cffd95db98a5f0b8cdb95cbe5cfe2fe4723e6b1": "3a2a274642f02ac0f9f2b0b877c11401613b224d",
       "994d0a53357ca1f0a8712aa4ba37fc12b29222502befd8ffd943fcc73b303825": "adbc01de2b85148080add3123cf1d78599dae8ea",
       "a4e5a732be1663eec6affbf19bec6509f4eec517e1660c4cb38fa5ae27611008": "d7769bbda95fef35866ab00248628603595d4dce",
@@ -131941,6 +132003,8 @@
       "97e3cd16cf9558849c62a8d2454c11c02e3c2bea7597cbdb22a6ced875e55cd8": "0ee8ed2a8fb49926b96f1e5237f573dcfb8ed67e",
       "36ee0000f2468cb47c0d86afc1a1683bc054d6155b19044fe0a4571dc05f54be": "91d69bba438f321d6e3ebb60b3e89b1edd63de17",
       "19c1bfab9bd971d4c0b11bd2bd393db8104f3b358528609349f0d4fb8f6098d3": "60c2838da6cd97810ff11c5c7e7fdc203a4c2762",
+      "632722c032b7399da4fdd23f50836c3c4a2b94c2017c45352a7d36afa7d22bee": "c800e91a37344793df76d1f60c524cce2e6d64c5",
+      "da79ed393eef68050e5b8ce0f6823ba59ebfdee373f66c9ebda3934b928f3000": "9a888a49d05ec758760d8ece27010239202e64bf",
       "c51ec80b7a609c5ee3d203ceee2b602ae4dfb4479caf15dc1d030c40c0364e93": "6aca0e3dffe461ba1cb11a86cd4caf5b97e1b8df",
       "1a73bc6e1a9973b98432774a1480b3ac1259027a97590d5e67d52745159abbbc": "51fd6d7990f62cd9d18c9ecfc62ed7936169107e",
       "e9eb04ec80ded8658f765c4eca75cdbe23cbc7d8fed73f9c3db7a868dbf649ff": "9e179392cd416af14024d8f31c981d9ee9a64517",
