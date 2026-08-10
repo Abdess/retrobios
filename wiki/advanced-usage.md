@@ -99,12 +99,25 @@ reports every dropped file as missing.
 
 ```bash
 python scripts/generate_pack.py --platform recalbox --region us --verify-packs
+python scripts/verify.py --platform recalbox --region us
+python scripts/verify.py --emulator duckstation --region us
+python scripts/verify.py --system sony-playstation --region us
 ```
+
+`verify.py --region` narrows the coverage report to the same file set, through the
+same selection function, so the two never disagree: `--emulator duckstation`
+reports 105 files, `--emulator duckstation --region us` reports 34, and a pack
+built with the same flags carries exactly those 34.
 
 `--region` composes with `--split`, `--target`, `--required-only`, `--source`,
 `--emulator` and `--system`. It is mutually exclusive with `--from-md5`, which
 selects by hash. `pipeline.py` never passes it, so the released packs stay
 complete.
+
+Region and target both appear in the output filename
+(`RetroArch_v1.22.2_NorthAmerica_Switch_BIOS_Pack.zip`,
+`install/retroarch_northamerica_switch.json`), so a filtered build can never
+overwrite the full one.
 
 
 ## Pack Source Variants

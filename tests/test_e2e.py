@@ -5605,6 +5605,82 @@ struct BurnDriver BurnDrvneogeo = {
         self.assertIn("rgn_us.bin", names)
         self.assertNotIn("rgn_jp.bin", names)
 
+    def test_verify_platform_region_matches_the_pack(self):
+        from common import load_platform_config
+        from verify import verify_platform
+
+        self._create_region_fixtures()
+        profiles = self._region_profiles()
+        config = load_platform_config("regionplat", self.platforms_dir)
+
+        full = verify_platform(config, self.db, self.emulators_dir, profiles)
+        filtered = verify_platform(
+            config,
+            self.db,
+            self.emulators_dir,
+            profiles,
+            regions=["north-america"],
+        )
+        checked = {d["name"] for d in filtered["details"]}
+        self.assertIn("rgn_us.bin", checked)
+        self.assertNotIn("rgn_jp.bin", checked)
+        self.assertNotIn("rgn_eu.bin", checked)
+        self.assertLess(len(filtered["details"]), len(full["details"]))
+
+        packed = self._names_in(self._region_pack(regions=["north-america"]))
+        self.assertTrue(checked.issubset(packed), checked - packed)
+
+    def test_verify_emulator_region_matches_the_pack(self):
+        from generate_pack import generate_emulator_pack
+        from verify import verify_emulator
+
+        self._create_region_fixtures()
+        with open(
+            os.path.join(self.emulators_dir, "rgncore.yml"), "w", encoding="utf-8"
+        ) as fh:
+            yaml.safe_dump(self._region_profiles()["rgncore"], fh)
+
+        full = verify_emulator(["rgncore"], self.emulators_dir, self.db)
+        filtered = verify_emulator(
+            ["rgncore"], self.emulators_dir, self.db, regions=["north-america"]
+        )
+        checked = {d["name"] for d in filtered["details"]}
+        self.assertIn("rgn_us.bin", checked)
+        self.assertNotIn("rgn_jp.bin", checked)
+        self.assertLess(len(filtered["details"]), len(full["details"]))
+
+        out = generate_emulator_pack(
+            ["rgncore"],
+            self.emulators_dir,
+            self.db,
+            self.bios_dir,
+            self.root,
+            regions=["north-america"],
+        )
+        self.assertTrue(checked.issubset(self._names_in(out)))
+
+    def test_target_tag_formats_hardware_names(self):
+        from generate_pack import _target_tag
+
+        self.assertEqual(_target_tag("switch"), "Switch")
+        self.assertEqual(_target_tag("rpi4"), "Rpi4")
+        self.assertEqual(_target_tag("x86_64"), "X86 64".replace(" ", ""))
+
+    def test_targeted_pack_does_not_overwrite_the_full_one(self):
+        names = {
+            os.path.basename(self._region_pack()),
+            os.path.basename(self._region_pack(target_name="switch")),
+        }
+        self.assertEqual(len(names), 2, names)
+        self.assertTrue(any("Switch" in n for n in names))
+
+    def test_target_and_region_tags_compose_in_the_name(self):
+        name = os.path.basename(
+            self._region_pack(regions=["north-america"], target_name="switch")
+        )
+        self.assertIn("NorthAmerica", name)
+        self.assertIn("Switch", name)
+
     def test_readme_region_section_lists_fallback_systems(self):
         from generate_pack import _build_readme
 
