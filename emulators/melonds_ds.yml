@@ -80,5 +80,5 @@ files:
     system: nintendo-dsi
     description: "DSi NAND dump"
     required: true
-    source_ref: "src/libretro/config/console.cpp:378"
+    source_ref: "src/libretro/config/console.cpp:378, src/libretro/config/console.cpp:1172-1179"
     note: "Filename configurable via core options; 240MB or 245.5MB with optional no$cash footer"
