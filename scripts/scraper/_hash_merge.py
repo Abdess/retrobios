@@ -507,7 +507,7 @@ def _append_new_entries(text: str, files: list[dict], original: str) -> str:
 
     lines = []
     for fe in new_entries:
-        lines.append(f"\n  - name: {fe['name']}")
+        lines.append(f"\n  - name: {_yaml_scalar(fe['name'])}")
         lines.append(f"    required: {str(fe['required']).lower()}")
         lines.append("    category: bios_zip")
         if fe.get("source_ref"):
@@ -521,13 +521,22 @@ def _append_new_entries(text: str, files: list[dict], original: str) -> str:
     return text
 
 
+def _yaml_scalar(value) -> str:
+    """Quote a scalar so YAML reads back exactly what the source said.
+
+    A MAME ROM named ``01`` written bare re-parses as the integer 1, and the
+    set stops naming the file the driver loads. Quoting is not cosmetic here.
+    """
+    return json.dumps(str(value), ensure_ascii=False)
+
+
 def _format_contents(contents: list[dict]) -> str:
     """Format a contents list as YAML text."""
     lines = ["    contents:"]
     for rom in contents:
-        lines.append(f"      - name: {rom['name']}")
+        lines.append(f"      - name: {_yaml_scalar(rom['name'])}")
         if rom.get("description"):
-            lines.append(f"        description: {rom['description']}")
+            lines.append(f"        description: {_yaml_scalar(rom['description'])}")
         if rom.get("size"):
             lines.append(f"        size: {rom['size']}")
         if rom.get("crc32"):
@@ -569,8 +578,8 @@ def _backup_and_write_fbneo(path: str, data: dict, hashes: dict) -> None:
     if new_roms:
         lines = []
         for fe in new_roms:
-            lines.append(f'  - name: "{fe["name"]}"')
-            lines.append(f"    archive: {fe['archive']}")
+            lines.append(f"  - name: {_yaml_scalar(fe['name'])}")
+            lines.append(f"    archive: {_yaml_scalar(fe['archive'])}")
             lines.append(f"    required: {str(fe.get('required', True)).lower()}")
             if fe.get("size"):
                 lines.append(f"    size: {fe['size']}")

@@ -196,6 +196,52 @@ class TestMameMerge(unittest.TestCase):
             self.assertTrue(pgm["required"])
             self.assertEqual(pgm["category"], "bios_zip")
 
+    def test_numeric_looking_rom_name_survives_the_write(self) -> None:
+        """MAME ships ROMs named 01 and 23. Bare YAML turns them into numbers.
+
+        The manager set loads "01"; written unquoted it re-parses as the
+        integer 1 and the profile stops naming the file the driver opens.
+        """
+        from scripts.scraper._hash_merge import (
+            _append_new_entries,
+            _format_contents,
+        )
+
+        contents = [
+            {"name": "01", "description": "ROM bank 0-1", "size": 8192,
+             "crc32": "702f4cf5"},
+            {"name": "23", "description": "ROM bank 2-3", "size": 8192,
+             "crc32": "46489d88"},
+        ]
+        document = yaml.safe_load(
+            "files:\n  - name: manager.zip\n" + _format_contents(contents)
+        )
+        names = [rom["name"] for rom in document["files"][0]["contents"]]
+        self.assertEqual(names, ["01", "23"])
+        for name in names:
+            self.assertIsInstance(name, str)
+
+        original = "emulator: MAME\nfiles:\n  - name: neogeo.zip\n"
+        appended = _append_new_entries(
+            original,
+            [{
+                "name": "manager.zip",
+                "required": False,
+                "category": "bios_zip",
+                "source_ref": "src/mame/vtech/crvision.cpp:955-959",
+                "contents": contents,
+            }],
+            original,
+        )
+        entry = next(
+            f
+            for f in yaml.safe_load(appended)["files"]
+            if f["name"] == "manager.zip"
+        )
+        self.assertEqual(
+            [rom["name"] for rom in entry["contents"]], ["01", "23"]
+        )
+
     def test_merge_preserves_non_bios_files(self) -> None:
         profile = _make_mame_profile()
         profile["files"].append({"name": "hiscore.dat", "required": False})

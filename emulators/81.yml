@@ -7,7 +7,7 @@ profiled_date: "2026-03-22"
 source_commit: "fa7094910d040baa5fd8b11dbf6a1a618330ecd9"
 core_version: "1.0a"
 display_name: "Sinclair - ZX 81 (EightyOne)"
-cores: [81]
+cores: ["81"]
 systems:
   - sinclair-zx81
   - sinclair-zx80

@@ -3543,11 +3543,11 @@ files:
     source_ref: "src/mame/vtech/crvision.cpp:955-959"
     note: "Salora Manager (Finnish variant)"
     contents:
-      - name: 01
+      - name: "01"
         description: ROM bank 0-1
         size: 8192
         crc32: "702f4cf5"
-      - name: 23
+      - name: "23"
         description: ROM bank 2-3
         size: 8192
         crc32: "46489d88"

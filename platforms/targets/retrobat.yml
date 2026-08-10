@@ -4,7 +4,7 @@ scraped_at: "2026-03-26T00:00:00Z"
 targets:
   windows:
     architecture: x86_64
-    cores: [81, a5200, abuse, arduous, atari800, azahar, bennugd, bk, bluemsx, bsnes,
+    cores: ['81', a5200, abuse, arduous, atari800, azahar, bennugd, bk, bluemsx, bsnes,
       bstone, cannonball, cap32, catacombgl, cdogs, cemu, cgenius, citron, clk, corsixth,
       demul, devilutionx, dhewm3, dice, dolphin, dosbox_pure, dxx-rebirth, easyrpg,
       ecwolf, eduke32, eka2l1, emuscv, etlegacy, fake08, fallout1-ce, fallout2-ce,
