@@ -107,13 +107,13 @@ files:
     system: sega-megadrive
     required: false
     note: "Game Genie ROM. Loaded when Game Genie lock-on is enabled."
-    source_ref: "core/cart_hw/ggenie.c:64"
+    source_ref: "core/cart_hw/ggenie.c:64, libretro/libretro.c:3516"
 
   - name: areplay.bin
     system: sega-megadrive
     required: false
     note: "Action Replay (Pro) ROM. Loaded when Action Replay lock-on is enabled."
-    source_ref: "core/cart_hw/areplay.c:64"
+    source_ref: "core/cart_hw/areplay.c:64, libretro/libretro.c:3517"
 
   - name: sk.bin
     system: sega-megadrive

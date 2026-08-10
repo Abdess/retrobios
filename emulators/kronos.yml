@@ -243,7 +243,7 @@ files:
     size: 2097152
     validation: [size]
     note: "ROM cartridge for The King of Fighters '95. Auto-detected via game DB."
-    source_ref: "utils/src/db.c:43-44, sys/memory/src/cs0.c:1526-1544"
+    source_ref: "utils/src/db.c:43-44, yabause/src/cs0.c:1207-1216"
 
   - name: "mpr-19367-mx.ic1"
     system: sega-saturn
@@ -251,4 +251,4 @@ files:
     size: 2097152
     validation: [size]
     note: "ROM cartridge for Ultraman: Hikari no Kyojin Densetsu. Auto-detected via game DB."
-    source_ref: "utils/src/db.c:45, sys/memory/src/cs0.c:1526-1544"
+    source_ref: "utils/src/db.c:45, yabause/src/cs0.c:1207-1216"

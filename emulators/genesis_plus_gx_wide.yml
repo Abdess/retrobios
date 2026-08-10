@@ -79,13 +79,13 @@ files:
     system: sega-megadrive
     required: false
     size: 32768
-    source_ref: "core/cart_hw/ggenie.c:64"
+    source_ref: "core/cart_hw/ggenie.c:64, libretro/libretro.c:3803"
 
   - name: areplay.bin
     system: sega-megadrive
     required: false
     size: 65536
-    source_ref: "core/cart_hw/areplay.c:64"
+    source_ref: "core/cart_hw/areplay.c:64, libretro/libretro.c:3804"
 
   - name: sk.bin
     system: sega-megadrive
