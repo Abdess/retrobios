@@ -9,6 +9,7 @@ core_version: "2.1.4"
 display_name: "Nintendo - Game Boy Advance (VBA-M)"
 cores:
   - vbam
+  - vba-m
 systems:
   - nintendo-gba
   - nintendo-gb

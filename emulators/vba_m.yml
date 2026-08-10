@@ -1,32 +1,5 @@
-# VBA-M — Game Boy / Game Boy Color / Game Boy Advance (libretro)
-# ref: visualboyadvance-m/src/libretro, docs.libretro.com/library/vba_m
-# Same BIOS as mGBA. Requires core option "Use BIOS file if found" = On.
-#
-# doc vs source: docs list gba_bios.bin md5 a860e8c0b6d573d191e4ec7db1b1e4f6
-# which is the standard GBA BIOS dump. Also accepts gb_bios.bin and gbc_bios.bin
-# for GB/GBC mode (not listed in mgba profile).
 emulator: VBA-M
-type: libretro
-cores: [vbam, vba-m]
-source: "https://github.com/visualboyadvance-m/visualboyadvance-m"
-systems:
-  - nintendo-gb
-  - nintendo-gbc
-  - nintendo-gba
-files:
-  - name: gba_bios.bin
-    system: nintendo-gba
-    required: false
-    hle_fallback: true
-    md5: a860e8c0b6d573d191e4ec7db1b1e4f6
-    note: "optional, core option vbam_usebios must be On"
-  - name: gb_bios.bin
-    system: nintendo-gb
-    required: false
-    hle_fallback: true
-    md5: 32fbbd84168d3482956eb3c5051637f5
-  - name: gbc_bios.bin
-    system: nintendo-gbc
-    required: false
-    hle_fallback: true
-    md5: dbfce9db9deaa2567f6a84fde55f9680
+type: alias
+alias_of: vbam
+note: Legacy profile key retained for platform and buildbot compatibility.
+files: []
