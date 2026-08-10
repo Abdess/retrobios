@@ -347,6 +347,45 @@ class TestVerifyAtPin(unittest.TestCase):
         result = profile_sync.verify_at_pin(part, lines, ["cafebabe"])
         self.assertEqual(result.status, "AMBIGUOUS")
 
+    def test_one_anchored_part_settles_the_others(self):
+        parts = [
+            profile_sync.PartResult(
+                RefPart("a.c", 1, 1, "a.c:1"), "ANCHORED", None, None, None, []
+            ),
+            profile_sync.PartResult(
+                RefPart("a.c", 9, 9, "a.c:9"), "AMBIGUOUS", None, None, None, [1, 2]
+            ),
+        ]
+        settled = profile_sync.reconcile_self_check(parts)
+        self.assertEqual([p.status for p in settled], ["ANCHORED", "ANCHORED"])
+
+    def test_an_absent_part_survives_reconciliation(self):
+        parts = [
+            profile_sync.PartResult(
+                RefPart("a.c", 1, 1, "a.c:1"), "ANCHORED", None, None, None, []
+            ),
+            profile_sync.PartResult(
+                RefPart("b.c", 9, 9, "b.c:9"), "GONE", None, None, None, []
+            ),
+        ]
+        settled = profile_sync.reconcile_self_check(parts)
+        self.assertEqual([p.status for p in settled], ["ANCHORED", "GONE"])
+
+    def test_nothing_anchored_leaves_the_verdicts_alone(self):
+        parts = [
+            profile_sync.PartResult(
+                RefPart("a.c", 1, 1, "a.c:1"), "MOVED", None, 5, 5, [5]
+            ),
+        ]
+        self.assertEqual(
+            [p.status for p in profile_sync.reconcile_self_check(parts)], ["MOVED"]
+        )
+
+    def test_external_citation_is_out_of_reach_at_the_pin_too(self):
+        part = RefPart("munt ROMInfo.cpp", 1, 1, "munt ROMInfo.cpp:1")
+        result = profile_sync.verify_at_pin(part, None, ["cafebabe"])
+        self.assertEqual(result.status, "EXTERNAL")
+
     def test_missing_file(self):
         part = RefPart("a.c", 1, 1, "a.c:1")
         self.assertEqual(

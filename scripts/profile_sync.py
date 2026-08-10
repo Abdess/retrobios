@@ -690,6 +690,11 @@ def verify_at_pin(part: RefPart, pin_lines, tokens) -> PartResult:
     contains, so comparing the two says nothing. What can still be checked is
     self-consistency: does the cited range carry the value the entry declares?
     """
+    if is_external_citation(part.path):
+        return PartResult(
+            part, "EXTERNAL", None, None, None, [],
+            "names a project the profile does not declare",
+        )
     if pin_lines is None:
         return PartResult(
             part, "GONE", None, None, None, [], "absent at the pinned revision"
@@ -731,6 +736,25 @@ def verify_at_pin(part: RefPart, pin_lines, tokens) -> PartResult:
         part, "MOVED", None, elsewhere[0], elsewhere[0], elsewhere,
         "declared value occurs once at the pinned revision",
     )
+
+
+def reconcile_self_check(parts: list[PartResult]) -> list[PartResult]:
+    """Judge a self-checked entry whole rather than part by part.
+
+    A ref often cites both the table carrying the value and the code that
+    loads the file. Once one part anchors on the value, the others describe
+    behaviour and cannot be judged by value: the checker would only rediscover
+    the value where the first part already points. A structurally absent part
+    still counts, since that verdict does not rest on the value.
+    """
+    if not any(part.status == "ANCHORED" for part in parts):
+        return parts
+    kept = ("ANCHORED", "GONE", "EXTERNAL")
+    return [
+        part if part.status in kept
+        else PartResult(part.part, "ANCHORED", None, None, None, [])
+        for part in parts
+    ]
 
 
 def version_tag_candidates(core_version: str) -> list[str]:
@@ -905,10 +929,10 @@ def build_report(
     self_check = bool(report.pinned_tag) or primary.pin == primary.head
     if self_check:
         staged = [
-            (entry_name, ref, [
+            (entry_name, ref, reconcile_self_check([
                 verify_at_pin(part, fetch(PIN, part.path), tokens)
                 for part in split_source_ref(ref)
-            ])
+            ]))
             for entry_name, ref, tokens in refs
         ]
     else:
