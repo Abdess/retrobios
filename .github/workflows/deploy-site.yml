@@ -52,6 +52,20 @@ jobs:
       - name: Validate data contracts
         run: python scripts/validate_schemas.py
 
+      # Coverage is resolved against the disk, so a checkout without the
+      # release assets and the data caches reports files as missing and the
+      # generated README stops matching the committed one.
+      - name: Restore large files from release
+        run: |
+          mkdir -p .cache/large
+          gh release download large-files -D .cache/large/ 2>/dev/null || true
+          python scripts/restore_large_files.py
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Refresh data directories
+        run: python scripts/refresh_data_dirs.py
+
       - name: Generate site
         run: |
           python scripts/generate_site.py

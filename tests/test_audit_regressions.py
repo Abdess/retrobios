@@ -700,5 +700,84 @@ class TargetManifestRegressions(unittest.TestCase):
                 generate_target_manifests(str(source), str(output))
 
 
+class CheckoutCompletenessRegressions(unittest.TestCase):
+    """Coverage is resolved against the disk, so the checkout must be whole.
+
+    Files over 50 MB and the data directory caches are gitignored. A job that
+    regenerates the README or the site without restoring them counts those
+    files as missing and publishes a coverage the collection does not have.
+    """
+
+    def _steps(self, workflow: str, job: str) -> list[dict]:
+        data = yaml.safe_load((ROOT / ".github" / "workflows" / workflow).read_text())
+        return data["jobs"][job]["steps"]
+
+    def _index(self, steps: list[dict], needle: str) -> int:
+        for position, step in enumerate(steps):
+            if needle in step.get("name", "") or needle in str(step.get("run", "")):
+                return position
+        self.fail(f"no step matching {needle!r}")
+
+    def test_site_deploy_completes_the_checkout_before_generating(self):
+        steps = self._steps("deploy-site.yml", "build")
+        generate = self._index(steps, "Generate site")
+        self.assertLess(self._index(steps, "restore_large_files.py"), generate)
+        self.assertLess(self._index(steps, "refresh_data_dirs.py"), generate)
+
+    def test_pack_build_completes_the_checkout_before_building(self):
+        steps = self._steps("build.yml", "release")
+        build = self._index(steps, "Build packs")
+        self.assertLess(self._index(steps, "restore_large_files.py"), build)
+        self.assertLess(self._index(steps, "refresh_data_dirs.py"), build)
+
+    def test_restore_matches_assets_by_content_not_by_name(self):
+        from scripts.restore_large_files import restore
+
+        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+            root = Path(directory)
+            cache = root / "cache"
+            cache.mkdir()
+            payload = b"firmware bytes"
+            (cache / "renamed-asset.bin").write_bytes(payload)
+            sha1 = hashlib.sha1(payload).hexdigest()
+            (root / ".gitignore").write_text("bios/Sony/big.pup\n", encoding="utf-8")
+            (root / "database.json").write_text(
+                json.dumps({"files": {sha1: {"path": "bios/Sony/big.pup"}}}),
+                encoding="utf-8",
+            )
+            cwd = os.getcwd()
+            os.chdir(root)
+            try:
+                self.assertEqual(restore(str(cache), "database.json", ".gitignore"), 1)
+                self.assertEqual((root / "bios/Sony/big.pup").read_bytes(), payload)
+                # A path already in the checkout is never overwritten.
+                self.assertEqual(restore(str(cache), "database.json", ".gitignore"), 0)
+            finally:
+                os.chdir(cwd)
+
+    def test_restore_leaves_tracked_paths_alone(self):
+        from scripts.restore_large_files import restore
+
+        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+            root = Path(directory)
+            cache = root / "cache"
+            cache.mkdir()
+            payload = b"tracked bytes"
+            (cache / "asset.bin").write_bytes(payload)
+            sha1 = hashlib.sha1(payload).hexdigest()
+            (root / ".gitignore").write_text("bios/other.bin\n", encoding="utf-8")
+            (root / "database.json").write_text(
+                json.dumps({"files": {sha1: {"path": "bios/tracked.bin"}}}),
+                encoding="utf-8",
+            )
+            cwd = os.getcwd()
+            os.chdir(root)
+            try:
+                self.assertEqual(restore(str(cache), "database.json", ".gitignore"), 0)
+                self.assertFalse((root / "bios/tracked.bin").exists())
+            finally:
+                os.chdir(cwd)
+
+
 if __name__ == "__main__":
     unittest.main()
