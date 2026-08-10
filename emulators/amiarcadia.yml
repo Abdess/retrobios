@@ -9,6 +9,7 @@ core_version: "4.42"
 display_name: "Arcadia 2001 / Interton VC 4000 (AmiArcadia)"
 cores:
   - amiarcadia
+  - winarcadia
 systems:
   - emerson-arcadia-2001
   - interton-vc4000

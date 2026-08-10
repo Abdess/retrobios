@@ -9,6 +9,7 @@ core_version: "Git"
 display_name: "Sony - PlayStation 2 (Play!)"
 cores:
   - play
+  - "play!"
 systems:
   - sony-playstation-2
 

@@ -8,6 +8,7 @@ core_version: "pre-release 2026-08-08"
 display_name: "shadPS4 (PlayStation 4)"
 cores:
   - shadps4
+  - "shadps4-gui"
 systems:
   - ps4
 mode: standalone

@@ -9,6 +9,7 @@ core_version: "v2.6.8"
 display_name: "Sega - Saturn (YabaSanshiro)"
 cores:
   - yabasanshiro
+  - "yabasanshiro-2"
 systems:
   - sega-saturn
 

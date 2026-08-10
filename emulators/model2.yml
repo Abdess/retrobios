@@ -8,6 +8,7 @@ display_name: "Model 2 Emulator (Sega Model 2)"
 cores:
   - model2
   - model2emu
+  - m2emulator
 systems:
   - sega-model2
 mode: standalone

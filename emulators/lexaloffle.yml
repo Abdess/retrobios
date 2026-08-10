@@ -5,6 +5,7 @@ profiled_date: "2026-03-26"
 display_name: "Lexaloffle - PICO-8 / Voxatron"
 cores:
   - lexaloffle
+  - "pico-8"
 systems:
   - pico8
   - voxatron
