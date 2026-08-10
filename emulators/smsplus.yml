@@ -62,7 +62,7 @@ files:
     required: false
     size: 8192
     mode: standalone
-    source_ref: "ports/sdl/smsplus.c:321-329"
+    source_ref: "source/ports/sdl/smsplus.c:321-329"
     note: |
       Read as 0x2000 (8192) bytes into coleco.rom (shared buffer). Only
       in standalone builds (SORDM5_EMU define). Not compiled in libretro.
