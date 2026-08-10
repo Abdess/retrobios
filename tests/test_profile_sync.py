@@ -449,7 +449,9 @@ class TestAnchorTokens(unittest.TestCase):
         tokens = profile_sync._anchor_tokens(
             {"name": "esh.zip", "contents": [{"crc32": "c14f36b3"}]}
         )
-        self.assertEqual(tokens, ["c14f36b3"])
+        # The set name stays: a MAME ref cites the machine declaration, which
+        # carries the name and no hash.
+        self.assertEqual(tokens, ["c14f36b3", "esh"])
 
     def test_a_hashless_archive_still_falls_back_to_its_stem(self):
         tokens = profile_sync._anchor_tokens(

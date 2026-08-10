@@ -236,12 +236,12 @@ def is_external_citation(path: str) -> bool:
 def _anchor_tokens(entry: dict) -> list[str]:
     """Values worth searching for when a cited line misses its subject.
 
-    Archive entries are named `stvbios.zip` while the driver source writes the
-    set name alone, so the stem is searched as well as the full name.
+    Both the content values and the set name are searched, because profiles
+    cite two different shapes. FBNeo and Hypseus refs point at the ROM table,
+    where the CRC32s are; MAME refs point at the machine declaration, which
+    carries the set name and no hash at all.
     """
     tokens = collect_tokens(entry)
-    if entry_hashes(entry):
-        return tokens
     name = os.path.basename(str(entry.get("name", ""))).lower()
     stem = name.rsplit(".", 1)[0]
     if stem and stem not in tokens and len(stem) > 2:
@@ -782,17 +782,25 @@ def reconcile_self_check(parts: list[PartResult]) -> list[PartResult]:
     ]
 
 
-def version_tag_candidates(core_version: str) -> list[str]:
-    """Tag spellings a declared core_version might use."""
+def version_tag_candidates(core_version: str, repo_name: str = "") -> list[str]:
+    """Tag spellings a declared core_version might use.
+
+    Some projects prefix their own name and drop the separators, the way
+    mamedev/mame publishes 0.289 as `mame0289`, so that spelling is derived
+    from the repository name rather than listed per project.
+    """
     version = str(core_version or "").strip()
     if not version or " " in version:
         return []
     bare = version.lstrip("vV")
-    return list(dict.fromkeys([version, f"v{bare}", bare]))
+    spellings = [version, f"v{bare}", bare]
+    if repo_name:
+        spellings.append(f"{repo_name}{bare.replace('.', '')}")
+    return list(dict.fromkeys(spellings))
 
 
 def detect_pinned_tag(
-    profile: dict, repo, pin: str, head: str, cache_dir: str, offline: bool
+    profile: dict, views, cache_dir: str, offline: bool
 ) -> str | None:
     """Tag the profile is pinned to, when the repository has moved past it.
 
@@ -806,11 +814,14 @@ def detect_pinned_tag(
     that a repository publishing nightly tags cannot hide an old release behind
     pagination.
     """
-    if pin == head:
-        return None
-    for tag in version_tag_candidates(profile.get("core_version")):
-        if upstream.tag_commit(repo, tag, cache_dir, offline) == pin:
-            return tag
+    for view in views:
+        if view.pin == view.head:
+            continue
+        for tag in version_tag_candidates(
+            profile.get("core_version"), view.repo.name
+        ):
+            if upstream.tag_commit(view.repo, tag, cache_dir, offline) == view.pin:
+                return tag
     return None
 
 
@@ -848,9 +859,7 @@ def build_report(
     report.repos = [v.repo.slug for v in views]
     report.pin, report.pin_origin = primary.pin, primary.origin
     report.head = primary.head
-    report.pinned_tag = detect_pinned_tag(
-        profile, primary.repo, primary.pin, primary.head, cache_dir, offline
-    )
+    report.pinned_tag = detect_pinned_tag(profile, views, cache_dir, offline)
 
     # A profile carrying no source_ref still has a pin worth writing and a
     # version worth checking, so the revisions above are resolved first.

@@ -5,6 +5,7 @@ source: "https://github.com/libretro/mame"
 upstream: "https://github.com/mamedev/mame"
 profiled_date: "2026-03-24"
 source_commit: "c1ff660dbddd5b134f549b4881499699cee1ebb6"
+upstream_commit: "e2bff5f80bd92631d2200cf57703ffa890003709"
 core_version: "0.287"
 display_name: "Arcade (MAME/Arcade)"
 
