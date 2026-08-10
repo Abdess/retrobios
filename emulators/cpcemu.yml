@@ -169,6 +169,7 @@ files:
   - name: CPC6128.ROM.UK
     path: "ROM/National/CPC6128.ROM.UK"
     system: amstrad-cpc
+    region: [uk]
     required: false
     min_size: 32768
     validation: [size, signature]
@@ -182,6 +183,7 @@ files:
   - name: CPC6128.ROM.FR
     path: "ROM/National/CPC6128.ROM.FR"
     system: amstrad-cpc
+    region: [france]
     required: false
     min_size: 32768
     validation: [size, signature]
@@ -193,6 +195,7 @@ files:
   - name: CPC6128.ROM.ES
     path: "ROM/National/CPC6128.ROM.ES"
     system: amstrad-cpc
+    region: [spain]
     required: false
     min_size: 32768
     validation: [size, signature]
@@ -204,6 +207,7 @@ files:
   - name: CPC6128.ROM.DK
     path: "ROM/National/CPC6128.ROM.DK"
     system: amstrad-cpc
+    region: [denmark]
     required: false
     min_size: 32768
     validation: [size, signature]
@@ -215,6 +219,7 @@ files:
   - name: CPC6128.ROM.SE
     path: "ROM/National/CPC6128.ROM.SE"
     system: amstrad-cpc
+    region: [sweden]
     required: false
     min_size: 32768
     validation: [size, signature]

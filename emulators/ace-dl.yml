@@ -88,6 +88,7 @@ files:
   - name: OS6128_UK.rom
     path: "private/firmware/OS6128_UK.rom"
     system: amstrad-cpc
+    region: [uk]
     required: true
     min_size: 32768
     validation: [size]
@@ -101,6 +102,7 @@ files:
   - name: OS6128_FR.rom
     path: "private/firmware/OS6128_FR.rom"
     system: amstrad-cpc
+    region: [france]
     required: false
     min_size: 32768
     validation: [size]
@@ -112,6 +114,7 @@ files:
   - name: OS6128_S.rom
     path: "private/firmware/OS6128_S.rom"
     system: amstrad-cpc
+    region: [spain]
     required: false
     min_size: 32768
     validation: [size]
@@ -123,6 +126,7 @@ files:
   - name: OS6128_DK.rom
     path: "private/firmware/OS6128_DK.rom"
     system: amstrad-cpc
+    region: [denmark]
     required: false
     min_size: 32768
     validation: [size]
@@ -134,6 +138,7 @@ files:
   - name: OS464_UK.rom
     path: "private/firmware/OS464_UK.rom"
     system: amstrad-cpc
+    region: [uk]
     required: false
     min_size: 32768
     validation: [size]
@@ -145,6 +150,7 @@ files:
   - name: OS464_FR.rom
     path: "private/firmware/OS464_FR.rom"
     system: amstrad-cpc
+    region: [france]
     required: false
     min_size: 32768
     validation: [size]
@@ -158,6 +164,7 @@ files:
   - name: OS664_UK.rom
     path: "private/firmware/OS664_UK.rom"
     system: amstrad-cpc
+    region: [uk]
     required: false
     min_size: 32768
     validation: [size]
@@ -169,6 +176,7 @@ files:
   - name: XMEM_FW_3_15_UK.rom
     path: "private/firmware/XMEM_FW_3_15_UK.rom"
     system: amstrad-cpc
+    region: [uk]
     required: false
     min_size: 32768
     validation: [size]
@@ -180,6 +188,7 @@ files:
   - name: XMEM_FW_3_15_FR.rom
     path: "private/firmware/XMEM_FW_3_15_FR.rom"
     system: amstrad-cpc
+    region: [france]
     required: false
     min_size: 32768
     validation: [size]
@@ -215,6 +224,7 @@ files:
   - name: Amstrad_f4.cpr
     path: "private/firmware/Amstrad_f4.cpr"
     system: amstrad-cpc
+    region: [france]
     required: false
     size: 131156
     md5: e7159fd674022ba05f9b347ae3cdafc6
@@ -225,6 +235,7 @@ files:
   - name: Amstrad_s4.cpr
     path: "private/firmware/Amstrad_s4.cpr"
     system: amstrad-cpc
+    region: [spain]
     required: false
     size: 131156
     md5: 6eeed3fdd4abc98a2a932da810410128
@@ -246,6 +257,7 @@ files:
   - name: hackit400uk.rom
     path: "private/hacker/hackit400uk.rom"
     system: amstrad-cpc
+    region: [uk]
     required: false
     size: 16384
     md5: 9a293eaaebca601f671070ad56cb81b6
@@ -257,6 +269,7 @@ files:
   - name: hacker481fr.rom
     path: "private/hacker/hacker481fr.rom"
     system: amstrad-cpc
+    region: [france]
     required: false
     size: 16384
     md5: dfdd9924295f491d54f30569874287f8

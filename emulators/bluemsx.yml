@@ -80,6 +80,7 @@ files:
 
   - name: MSXJ.rom
     path: "Machines/Shared Roms/MSXJ.rom"
+    region: [japan]
     size: 32768
     required: false
     system: msx
@@ -88,6 +89,7 @@ files:
 
   - name: MSXBR.rom
     path: "Machines/Shared Roms/MSXBR.rom"
+    region: [brazil]
     size: 32768
     required: false
     system: msx
@@ -95,6 +97,7 @@ files:
 
   - name: MSXFR.rom
     path: "Machines/Shared Roms/MSXFR.rom"
+    region: [france]
     size: 32768
     required: false
     system: msx
@@ -102,6 +105,7 @@ files:
 
   - name: MSXG.rom
     path: "Machines/Shared Roms/MSXG.rom"
+    region: [germany]
     size: 32768
     required: false
     system: msx
@@ -109,6 +113,7 @@ files:
 
   - name: MSXKR.rom
     path: "Machines/Shared Roms/MSXKR.rom"
+    region: [south-korea]
     size: 32768
     required: false
     system: msx
@@ -116,6 +121,7 @@ files:
 
   - name: MSXR.rom
     path: "Machines/Shared Roms/MSXR.rom"
+    region: [russia]
     size: 32768
     required: false
     system: msx
@@ -123,6 +129,7 @@ files:
 
   - name: MSXSE.ROM
     path: "Machines/Shared Roms/MSXSE.ROM"
+    region: [sweden]
     size: 32768
     required: false
     system: msx
@@ -130,6 +137,7 @@ files:
 
   - name: MSXSP.rom
     path: "Machines/Shared Roms/MSXSP.rom"
+    region: [spain]
     size: 32768
     required: false
     system: msx
@@ -144,6 +152,7 @@ files:
 
   - name: MSXR2.ROM
     path: "Machines/Shared Roms/MSXR2.ROM"
+    region: [russia]
     size: 32768
     required: false
     system: msx
@@ -151,6 +160,7 @@ files:
 
   - name: MSXHAN.rom
     path: "Machines/Shared Roms/MSXHAN.rom"
+    region: [south-korea]
     size: 8192
     required: false
     system: msx
@@ -176,6 +186,7 @@ files:
 
   - name: MSX2J.rom
     path: "Machines/Shared Roms/MSX2J.rom"
+    region: [japan]
     size: 32768
     required: false
     system: msx2
@@ -183,6 +194,7 @@ files:
 
   - name: MSX2JEXT.rom
     path: "Machines/Shared Roms/MSX2JEXT.rom"
+    region: [japan]
     size: 16384
     required: false
     system: msx2
@@ -190,6 +202,7 @@ files:
 
   - name: MSX2BR.rom
     path: "Machines/Shared Roms/MSX2BR.rom"
+    region: [brazil]
     size: 32768
     required: false
     system: msx2
@@ -197,6 +210,7 @@ files:
 
   - name: MSX2BREXT.rom
     path: "Machines/Shared Roms/MSX2BREXT.rom"
+    region: [brazil]
     size: 16384
     required: false
     system: msx2
@@ -204,6 +218,7 @@ files:
 
   - name: MSX2FR.rom
     path: "Machines/Shared Roms/MSX2FR.rom"
+    region: [france]
     size: 32768
     required: false
     system: msx2
@@ -211,6 +226,7 @@ files:
 
   - name: MSX2FREXT.rom
     path: "Machines/Shared Roms/MSX2FREXT.rom"
+    region: [france]
     size: 16384
     required: false
     system: msx2
@@ -218,6 +234,7 @@ files:
 
   - name: MSX2G.rom
     path: "Machines/Shared Roms/MSX2G.rom"
+    region: [germany]
     size: 32768
     required: false
     system: msx2
@@ -225,6 +242,7 @@ files:
 
   - name: MSX2GEXT.rom
     path: "Machines/Shared Roms/MSX2GEXT.rom"
+    region: [germany]
     size: 16384
     required: false
     system: msx2
@@ -232,6 +250,7 @@ files:
 
   - name: MSX2KR.rom
     path: "Machines/Shared Roms/MSX2KR.rom"
+    region: [south-korea]
     size: 32768
     required: false
     system: msx2
@@ -239,6 +258,7 @@ files:
 
   - name: MSX2KREXT.rom
     path: "Machines/Shared Roms/MSX2KREXT.rom"
+    region: [south-korea]
     size: 32768
     required: false
     system: msx2
@@ -246,6 +266,7 @@ files:
 
   - name: MSX2R.rom
     path: "Machines/Shared Roms/MSX2R.rom"
+    region: [russia]
     size: 32768
     required: false
     system: msx2
@@ -253,6 +274,7 @@ files:
 
   - name: MSX2REXT.rom
     path: "Machines/Shared Roms/MSX2REXT.rom"
+    region: [russia]
     size: 16384
     required: false
     system: msx2
@@ -260,6 +282,7 @@ files:
 
   - name: MSX2R2.ROM
     path: "Machines/Shared Roms/MSX2R2.ROM"
+    region: [russia]
     size: 32768
     required: false
     system: msx2
@@ -267,6 +290,7 @@ files:
 
   - name: MSX2SE.rom
     path: "Machines/Shared Roms/MSX2SE.rom"
+    region: [sweden]
     size: 32768
     required: false
     system: msx2
@@ -274,6 +298,7 @@ files:
 
   - name: MSX2SP.rom
     path: "Machines/Shared Roms/MSX2SP.rom"
+    region: [spain]
     size: 32768
     required: false
     system: msx2
@@ -281,6 +306,7 @@ files:
 
   - name: MSX2SPEXT.rom
     path: "Machines/Shared Roms/MSX2SPEXT.rom"
+    region: [spain]
     size: 16384
     required: false
     system: msx2
@@ -302,6 +328,7 @@ files:
 
   - name: MSX2HAN.rom
     path: "Machines/Shared Roms/MSX2HAN.rom"
+    region: [south-korea]
     size: 32768
     required: false
     system: msx2
@@ -379,6 +406,7 @@ files:
 
   - name: KANJI.rom
     path: "Machines/Shared Roms/KANJI.rom"
+    region: [japan]
     size: 262144
     required: false
     note: "Kanji font ROM (256 KB). Used by MSX2+, turboR, and Japanese MSX2 machines."
@@ -386,6 +414,7 @@ files:
 
   - name: MSXKANJI.rom
     path: "Machines/Shared Roms/MSXKANJI.rom"
+    region: [japan]
     size: 32768
     required: false
     note: "MSX-Kanji driver ROM. Used by MSX2+, turboR, and Japanese MSX2 for kanji display."
@@ -408,6 +437,7 @@ files:
 
   - name: PAINT.rom
     path: "Machines/Shared Roms/PAINT.rom"
+    region: [japan]
     size: 65536
     required: false
     note: "Paint utility ROM. Used by some MSX2 Japanese machine configs."
@@ -426,6 +456,7 @@ files:
 
   - name: HANGUL.rom
     path: "Machines/Shared Roms/HANGUL.rom"
+    region: [south-korea]
     size: 131072
     required: false
     note: "Korean Hangul font ROM (128 KB)."

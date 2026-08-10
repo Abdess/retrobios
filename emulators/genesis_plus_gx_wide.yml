@@ -27,34 +27,40 @@ notes: |
 files:
   - name: bios_CD_U.bin
     system: sega-megacd
+    region: [north-america]
     required: true
     size: 131072
     source_ref: "core/loadrom.c:408"
 
   - name: bios_CD_E.bin
     system: sega-megacd
+    region: [europe]
     required: true
     size: 131072
     source_ref: "core/loadrom.c:411"
 
   - name: bios_CD_J.bin
     system: sega-megacd
+    region: [japan]
     required: true
     size: 131072
     source_ref: "core/loadrom.c:414"
 
   - name: bios_U.sms
     system: sega-mastersystem
+    region: [north-america]
     required: false
     source_ref: "core/loadrom.c:512"
 
   - name: bios_E.sms
     system: sega-mastersystem
+    region: [europe]
     required: false
     source_ref: "core/loadrom.c:515"
 
   - name: bios_J.sms
     system: sega-mastersystem
+    region: [japan]
     required: false
     source_ref: "core/loadrom.c:518"
 

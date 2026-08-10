@@ -39,18 +39,21 @@ files:
   # -------------------------------------------------------
   - name: bios_CD_U.bin
     system: sega-megacd
+    region: [north-america]
     required: true
     note: "Sega CD (NTSC-U) boot ROM. Loaded for REGION_USA."
     source_ref: "core/loadrom.c:409"
 
   - name: bios_CD_E.bin
     system: sega-megacd
+    region: [europe]
     required: true
     note: "Mega CD (PAL) boot ROM. Loaded for REGION_EUROPE."
     source_ref: "core/loadrom.c:412"
 
   - name: bios_CD_J.bin
     system: sega-megacd
+    region: [japan]
     required: true
     note: "Mega CD (NTSC-J) boot ROM. Loaded for default/Japan region."
     source_ref: "core/loadrom.c:415"
@@ -60,18 +63,21 @@ files:
   # -------------------------------------------------------
   - name: bios_U.sms
     system: sega-mastersystem
+    region: [north-america]
     required: false
     note: "Master System (NTSC-U) boot ROM. Snail maze game built in."
     source_ref: "core/loadrom.c:511"
 
   - name: bios_E.sms
     system: sega-mastersystem
+    region: [europe]
     required: false
     note: "Master System (PAL) boot ROM. Snail maze / Sonic built in."
     source_ref: "core/loadrom.c:514"
 
   - name: bios_J.sms
     system: sega-mastersystem
+    region: [japan]
     required: false
     note: "Master System (NTSC-J) boot ROM."
     source_ref: "core/loadrom.c:517"

@@ -51,6 +51,7 @@ files:
 
   - name: "jpkernal"
     description: "Japanese C64 Kernal ROM"
+    region: [japan]
     required: false
     size: 8192
     path: "data/C64/jpkernal"
@@ -59,6 +60,7 @@ files:
 
   - name: "jpchrgen"
     description: "Japanese C64 character generator ROM"
+    region: [japan]
     required: false
     size: 4096
     path: "data/C64/jpchrgen"

@@ -427,6 +427,7 @@ files:
     source_ref: "Source/zx81config.cpp:261-263, Source/HW_.cpp:2800-2807"
   - name: spectrum48.spanish.rom
     system: sinclair-zx-spectrum
+    region: [spain]
     required: false
     mode: standalone
     size: 16384
@@ -470,6 +471,7 @@ files:
     source_ref: "Source/zx81config.cpp:264, Source/HW_.cpp:2817-2821"
   - name: spectrum128.spanish.rom
     system: sinclair-zx-spectrum
+    region: [spain]
     required: false
     mode: standalone
     size: 32768
@@ -485,6 +487,7 @@ files:
     source_ref: "Source/zx81config.cpp:266, Source/HW_.cpp:2824-2829"
   - name: spectrum+2.french.rom
     system: sinclair-zx-spectrum
+    region: [france]
     required: false
     mode: standalone
     size: 32768
@@ -492,6 +495,7 @@ files:
     source_ref: "Source/HW_.cpp:2826"
   - name: spectrum+2.spanish.rom
     system: sinclair-zx-spectrum
+    region: [spain]
     required: false
     mode: standalone
     size: 32768
@@ -507,6 +511,7 @@ files:
     source_ref: "Source/HW_.cpp:2833, Source/HW_.cpp:2854"
   - name: spectrum+3.version4-0.spanish.rom
     system: sinclair-zx-spectrum
+    region: [spain]
     required: false
     mode: standalone
     size: 65536
@@ -522,6 +527,7 @@ files:
     source_ref: "Source/zx81config.cpp:267-268, Source/HW_.cpp:2834, Source/HW_.cpp:2855"
   - name: spectrum+3.version4-1.spanish.rom
     system: sinclair-zx-spectrum
+    region: [spain]
     required: false
     mode: standalone
     size: 65536

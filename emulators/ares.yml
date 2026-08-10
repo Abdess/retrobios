@@ -132,6 +132,7 @@ files:
   # --- Master System ---
   - name: bios_U.sms
     system: master-system
+    region: [north-america]
     required: false
     mode: standalone
     sha256: "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50"
@@ -141,6 +142,7 @@ files:
 
   - name: bios_J.sms
     system: master-system
+    region: [japan]
     required: false
     mode: standalone
     sha256: "67846e26764bd862f19179294347f7353a4166b62ac4198a5ec32933b7da486e"
@@ -150,6 +152,7 @@ files:
 
   - name: bios_E.sms
     system: master-system
+    region: [europe]
     required: false
     mode: standalone
     sha256: "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50"
@@ -161,6 +164,7 @@ files:
   # Also used by Mega CD 32X (desktop-ui/emulator/mega-cd-32x.cpp)
   - name: bios_CD_U.bin
     system: mega-cd
+    region: [north-america]
     required: true
     mode: standalone
     sha256: "fb477cdbf94c84424c2feca4fe40656d85393fe7b7b401911b45ad2eb991258c"
@@ -170,6 +174,7 @@ files:
 
   - name: bios_CD_J.bin
     system: mega-cd
+    region: [japan]
     required: true
     mode: standalone
     sha256: "7133fc2dd2fe5b7d0acd53a5f10f3d00b5d31270239ad20d74ef32393e24af88"
@@ -179,6 +184,7 @@ files:
 
   - name: bios_CD_E.bin
     system: mega-cd
+    region: [europe]
     required: true
     mode: standalone
     sha256: "fe608a2a07676a23ab5fd5eee2f53c9e2526d69a28aa16ccd85c0ec42e6933cb"
@@ -189,6 +195,7 @@ files:
   # --- Mega LD (LaserActive SEGA PAC) ---
   - name: mega_ld_bios_U.bin
     system: mega-ld
+    region: [north-america]
     required: true
     mode: standalone
     sha256: "e89b5a319f66406611ec82fe5c4aa6827c175a05135bd7bd177366cba0465021"
@@ -198,6 +205,7 @@ files:
 
   - name: mega_ld_bios_J.bin
     system: mega-ld
+    region: [japan]
     required: true
     mode: standalone
     sha256: "dca942d977217f703d8d1c6eb1aeb6b32c78ecc421486bbb46c459d385161c94"
@@ -273,6 +281,7 @@ files:
   # --- Nintendo 64DD ---
   - name: 64dd_ipl_J.bin
     system: nintendo-64dd
+    region: [japan]
     required: true
     mode: standalone
     sha256: "806400ec0df94b0755de6c5b8249d6b6a9866124c5ddbdac198bde22499bfb8b"
@@ -282,6 +291,7 @@ files:
 
   - name: 64dd_ipl_U.bin
     system: nintendo-64dd
+    region: [north-america]
     required: true
     mode: standalone
     sha256: "e9fec87a45fba02399e88064b9e2f8cf0f2106e351c58279a87f05da5bc984ad"
@@ -394,6 +404,7 @@ files:
   # --- Saturn ---
   - name: saturn_bios_U.bin
     system: saturn
+    region: [north-america]
     required: true
     mode: standalone
     description: "Sega Saturn BIOS (US)"
@@ -401,6 +412,7 @@ files:
 
   - name: saturn_bios_J.bin
     system: saturn
+    region: [japan]
     required: true
     mode: standalone
     description: "Sega Saturn BIOS (Japan)"
@@ -408,6 +420,7 @@ files:
 
   - name: saturn_bios_E.bin
     system: saturn
+    region: [europe]
     required: true
     mode: standalone
     description: "Sega Saturn BIOS (Europe)"

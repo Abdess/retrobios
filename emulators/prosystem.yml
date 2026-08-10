@@ -34,6 +34,7 @@ notes: |
 files:
   - name: "7800 BIOS (U).rom"
     system: atari-7800
+    region: [north-america]
     required: false
     hle_fallback: true
     size: 4096
@@ -42,6 +43,7 @@ files:
 
   - name: "7800 BIOS (E).rom"
     system: atari-7800
+    region: [europe]
     required: false
     hle_fallback: true
     size: 16384

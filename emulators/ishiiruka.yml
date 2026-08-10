@@ -31,6 +31,7 @@ files:
   # Checked in User/GC/<region>/ then Sys/GC/<region>/
   - name: "IPL.bin"
     path: "GC/USA/IPL.bin"
+    region: [north-america]
     size: 2097152
     required: false
     hle_fallback: true
@@ -39,6 +40,7 @@ files:
 
   - name: "IPL.bin"
     path: "GC/EUR/IPL.bin"
+    region: [europe]
     size: 2097152
     required: false
     hle_fallback: true
@@ -47,6 +49,7 @@ files:
 
   - name: "IPL.bin"
     path: "GC/JAP/IPL.bin"
+    region: [japan]
     size: 2097152
     required: false
     hle_fallback: true

@@ -107,6 +107,7 @@ files:
   - name: "64DD_IPL_JP.n64"
     aliases: ["64DD_IPL_v12_JPN.bin", "64DD_IPL.bin"]
     system: nintendo-64dd
+    region: [japan]
     required: true
     description: "64DD IPL ROM (Japanese retail)"
     note: >
@@ -121,6 +122,7 @@ files:
   - name: "64DD_IPL_US.n64"
     aliases: ["64DD_IPL_USA.bin", "IPL_USA.n64"]
     system: nintendo-64dd
+    region: [north-america]
     required: true
     description: "64DD IPL ROM (American retail)"
     note: >

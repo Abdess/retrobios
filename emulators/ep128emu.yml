@@ -197,6 +197,7 @@ files:
 
   - name: brd.rom
     path: ep128emu/roms/brd.rom
+    region: [germany]
     md5: 6af0402906944fd134004b85097c8524
     required: false
     hle_fallback: true

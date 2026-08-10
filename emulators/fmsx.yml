@@ -221,6 +221,7 @@ files:
     source_ref: "fMSX/ROMs/CYRILLIC.FNT, libretro.c:1546"
 
   - name: KOREAN.FNT
+    region: [south-korea]
     required: false
     bundled: true
     md5: 73291e76638a2f5aa2eceb843df468f4
@@ -228,6 +229,7 @@ files:
     source_ref: "fMSX/ROMs/KOREAN.FNT, libretro.c:1546"
 
   - name: JAPANESE.FNT
+    region: [japan]
     required: false
     bundled: true
     md5: aa28f0703b951a6be8df3e28e20d263d

@@ -101,6 +101,7 @@ files:
   - name: brd.rom
     description: Enterprise 128 German language extension
     path: ep128emu/roms/brd.rom
+    region: [germany]
     required: false
     source_ref: "core/core.cpp:261, roms/roms.hpp:42409-43777"
 

@@ -167,6 +167,7 @@ files:
 
   - name: "vice/C64/kernal-906145-02.bin"
     system: commodore-c64
+    region: [japan]
     required: false
     hle_fallback: true
     embedded: true
@@ -191,6 +192,7 @@ files:
 
   - name: "vice/C64/chargen-906143-02.bin"
     system: commodore-c64
+    region: [japan]
     required: false
     hle_fallback: true
     embedded: true
@@ -219,6 +221,7 @@ files:
 
   - name: "vice/C128/kernal-315078-03.bin"
     system: commodore-c128
+    region: [germany]
     required: false
     hle_fallback: true
     embedded: true
@@ -243,6 +246,7 @@ files:
 
   - name: "vice/C128/kernal-318034-01.bin"
     system: commodore-c128
+    region: [sweden]
     required: false
     hle_fallback: true
     embedded: true
@@ -267,6 +271,7 @@ files:
 
   - name: "vice/C128/kernalfr"
     system: commodore-c128
+    region: [france]
     required: false
     hle_fallback: true
     embedded: true
@@ -279,6 +284,7 @@ files:
 
   - name: "vice/C128/kernalit"
     system: commodore-c128
+    region: [italy]
     required: false
     hle_fallback: true
     embedded: true
@@ -357,6 +363,7 @@ files:
 
   - name: "vice/C128/kernal64-325182-01.bin"
     system: commodore-c128
+    region: [sweden]
     required: false
     hle_fallback: true
     embedded: true
@@ -381,6 +388,7 @@ files:
 
   - name: "vice/C128/chargen-315079-01.bin"
     system: commodore-c128
+    region: [germany]
     required: false
     hle_fallback: true
     embedded: true
@@ -393,6 +401,7 @@ files:
 
   - name: "vice/C128/chargen-325167-02.bin"
     system: commodore-c128
+    region: [italy, france]
     required: false
     hle_fallback: true
     embedded: true
@@ -429,6 +438,7 @@ files:
 
   - name: "vice/C128/chargen-325181-01.bin"
     system: commodore-c128
+    region: [finland, sweden]
     required: false
     hle_fallback: true
     embedded: true
@@ -533,6 +543,7 @@ files:
 
   - name: "vice/VIC20/kernal.901486-02.bin"
     system: commodore-vic20
+    region: [japan]
     required: false
     hle_fallback: true
     embedded: true
@@ -557,6 +568,7 @@ files:
 
   - name: "vice/VIC20/chargen-901460-02.bin"
     system: commodore-vic20
+    region: [japan]
     required: false
     hle_fallback: true
     embedded: true
@@ -1053,6 +1065,7 @@ files:
 
   - name: "vice/SCPU64/chargen-906143-02.bin"
     system: commodore-c64
+    region: [japan]
     required: false
     hle_fallback: true
     embedded: true
