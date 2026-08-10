@@ -52,6 +52,7 @@ from common import (
 )
 
 yaml = require_yaml()
+from nativemode import reads_file_contents
 from validation import (
     _build_validation_index,
     _parse_validation,
@@ -261,7 +262,7 @@ def compute_severity(
     if hle_fallback and status == Status.MISSING:
         return Severity.INFO
 
-    if mode == "existence":
+    if not reads_file_contents(mode):
         if status == Status.MISSING:
             return Severity.WARNING if required else Severity.INFO
         return Severity.OK
@@ -735,8 +736,13 @@ def verify_platform(
     target_cores: set[str] | None = None,
     data_dir_registry: dict | None = None,
     supplemental_names: set[str] | None = None,
+    regions: list[str] | None = None,
 ) -> dict:
-    """Verify all BIOS files for a platform, including cross-reference gaps."""
+    """Verify all BIOS files for a platform, including cross-reference gaps.
+
+    A region priority list narrows the report to the files a pack built with the
+    same list would carry, using the same selection function as the builder.
+    """
     mode = config.get("verification_mode", "existence")
     platform = config.get("platform", "unknown")
 
@@ -776,8 +782,28 @@ def verify_platform(
     file_required: dict[str, bool] = {}
     file_severity: dict[str, str] = {}
 
+    region_drops: set[str] = set()
+    if regions:
+        import region as region_mod
+
+        region_groups: dict[str, list[tuple[str, str]]] = {}
+        for sys_id, system in verify_systems.items():
+            members = region_groups.setdefault(sys_id, [])
+            for fe in system.get("files", []):
+                dest = fe.get("destination", fe.get("name", ""))
+                if dest:
+                    members.append((dest, fe.get("name", "")))
+        region_drops = region_mod.resolve_region_drops(
+            region_groups, region_mod.build_region_index(profiles), regions
+        )
+
     for sys_id, system in verify_systems.items():
         for file_entry in system.get("files", []):
+            if region_drops and (
+                file_entry.get("destination", file_entry.get("name", ""))
+                in region_drops
+            ):
+                continue
             local_path, resolve_status = resolve_local_file(
                 file_entry,
                 db,
@@ -1163,8 +1189,13 @@ def verify_emulator(
     emulators_dir: str,
     db: dict,
     standalone: bool = False,
+    regions: list[str] | None = None,
 ) -> dict:
-    """Verify files for specific emulator profiles."""
+    """Verify files for specific emulator profiles.
+
+    A region priority list narrows the report the same way a pack built with the
+    same list would be narrowed. One group per profile, as in generate_pack.
+    """
     load_emulator_profiles(emulators_dir)
     zip_contents = build_zip_contents_index(db)
 
@@ -1220,8 +1251,31 @@ def verify_emulator(
     dest_to_name: dict[str, str] = {}
     data_dir_notices: list[str] = []
 
+    region_drops: set[str] = set()
+    if regions:
+        import region as region_mod
+
+        region_index = region_mod.build_region_index(dict(selected))
+        region_groups: dict[str, list[tuple[str, str]]] = {}
+        for emu_name, profile in selected:
+            members = region_groups.setdefault(emu_name, [])
+            for fe in filter_files_by_mode(profile.get("files", []), standalone):
+                nm = fe.get("name", "")
+                key = fe.get("path") or nm
+                if key:
+                    members.append((key, nm))
+        region_drops = region_mod.resolve_region_drops(
+            region_groups, region_index, regions
+        )
+
     for emu_name, profile in selected:
         files = filter_files_by_mode(profile.get("files", []), standalone)
+        if region_drops:
+            files = [
+                fe
+                for fe in files
+                if (fe.get("path") or fe.get("name", "")) not in region_drops
+            ]
 
         # Check data directories (only notice if not cached)
         for dd in profile.get("data_directories", []):
@@ -1415,6 +1469,7 @@ def verify_system(
     emulators_dir: str,
     db: dict,
     standalone: bool = False,
+    regions: list[str] | None = None,
 ) -> dict:
     """Verify files for all emulators supporting given system IDs."""
     profiles = load_emulator_profiles(emulators_dir)
@@ -1449,7 +1504,7 @@ def verify_system(
         )
         sys.exit(1)
 
-    return verify_emulator(matching, emulators_dir, db, standalone)
+    return verify_emulator(matching, emulators_dir, db, standalone, regions=regions)
 
 
 def print_emulator_result(result: dict, verbose: bool = False) -> None:
@@ -1555,6 +1610,9 @@ def main():
     parser.add_argument("--include-archived", action="store_true")
     parser.add_argument("--target", "-t", help="Hardware target (e.g., switch, rpi4)")
     parser.add_argument(
+        "--region", help="Region priority list, best first (e.g. us,eu,jp)"
+    )
+    parser.add_argument(
         "--list-targets",
         action="store_true",
         help="List available targets for the platform",
@@ -1570,6 +1628,15 @@ def main():
     )
     parser.add_argument("--json", action="store_true", help="JSON output")
     args = parser.parse_args()
+
+    requested_regions: list[str] = []
+    if getattr(args, "region", None):
+        import region as region_mod
+
+        try:
+            requested_regions = region_mod.parse_requested(args.region)
+        except ValueError as exc:
+            parser.error(str(exc))
 
     if args.list_emulators:
         list_emulator_profiles(args.emulators_dir)
@@ -1615,7 +1682,10 @@ def main():
     # Emulator mode
     if args.emulator:
         names = [n.strip() for n in args.emulator.split(",") if n.strip()]
-        result = verify_emulator(names, args.emulators_dir, db, args.standalone)
+        result = verify_emulator(
+            names, args.emulators_dir, db, args.standalone,
+            regions=requested_regions,
+        )
         if args.json:
             result["details"] = [
                 d for d in result["details"] if d["status"] != Status.OK
@@ -1628,7 +1698,10 @@ def main():
     # System mode
     if args.system:
         system_ids = [s.strip() for s in args.system.split(",") if s.strip()]
-        result = verify_system(system_ids, args.emulators_dir, db, args.standalone)
+        result = verify_system(
+            system_ids, args.emulators_dir, db, args.standalone,
+            regions=requested_regions,
+        )
         if args.json:
             result["details"] = [
                 d for d in result["details"] if d["status"] != Status.OK
@@ -1687,6 +1760,7 @@ def main():
             target_cores=tc,
             data_dir_registry=data_registry,
             supplemental_names=suppl_names,
+            regions=requested_regions,
         )
         names = [
             load_platform_config(p, args.platforms_dir).get("platform", p)
