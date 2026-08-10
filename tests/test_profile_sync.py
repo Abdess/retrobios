@@ -283,13 +283,21 @@ class TestAnchorBlock(unittest.TestCase):
         result = anchor_block(["a", "", "b"], ["a", "", "b"], 2, 2)
         self.assertEqual(result.status, "CHANGED")
 
-    def test_large_file_skips_mapping_with_reason(self):
-        pin = [f"line {i}" for i in range(25000)]
-        head = [f"other {i}" for i in range(25000)]
+    def test_a_file_past_the_cap_skips_mapping_with_reason(self):
+        size = profile_sync.MAX_MATCH_LINES + 1
+        pin = [f"line {i}" for i in range(size)]
+        head = [f"other {i}" for i in range(size)]
         result = anchor_block(pin, head, 10, 10)
         self.assertEqual(result.status, "CHANGED")
-        self.assertIsNotNone(result.reason)
+        self.assertIn(str(profile_sync.MAX_MATCH_LINES), result.reason)
         self.assertIsNone(result.start)
+
+    def test_a_thirty_thousand_line_file_is_still_mapped(self):
+        pin = [f"line {i}" for i in range(30000)]
+        head = ["pad"] + pin[:-1]
+        result = anchor_block(pin, head, 10, 10)
+        self.assertEqual(result.status, "SHIFTED")
+        self.assertEqual(result.start, 11)
 
 
 def _part(path, old, new, status):

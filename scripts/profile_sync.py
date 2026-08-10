@@ -40,7 +40,10 @@ REVIEW_STATUSES = ("CHANGED", "GONE", "AMBIGUOUS")
 REBASE_STATUSES = ("SHIFTED", "RENAMED", "MOVED")
 
 WIDEN_STEPS = (0, 3, 6, 12, 25, 50)
-MAX_MATCH_LINES = 20000
+# A 30k-line driver diffs in about five seconds, and the biggest files the
+# corpus cites sit just above that. The cap stays as a guard against
+# pathological inputs, not as a limit on real source files.
+MAX_MATCH_LINES = 40000
 
 PIN = "pin"
 HEAD = "head"
@@ -257,14 +260,32 @@ def _map_index(opcodes, index: int) -> int | None:
     return None
 
 
+_OPCODE_CACHE: dict[tuple[int, int], list] = {}
+
+
+def _opcodes(pin: list[str], head: list[str]) -> list:
+    """Opcodes for one pair of revisions, computed once per run.
+
+    Every ref citing the same file would otherwise redo the same diff, and a
+    driver of thirty thousand lines takes seconds each time.
+    """
+    key = (id(pin), id(head))
+    cached = _OPCODE_CACHE.get(key)
+    if cached is None:
+        cached = difflib.SequenceMatcher(
+            None, pin, head, autojunk=False
+        ).get_opcodes()
+        _OPCODE_CACHE[key] = cached
+    return cached
+
+
 def _map_changed(pin: list[str], head: list[str], lo: int, hi: int) -> AnchorResult:
     """Map a pinned range onto HEAD once exact anchoring has failed."""
     if len(pin) > MAX_MATCH_LINES or len(head) > MAX_MATCH_LINES:
         return AnchorResult(
             "CHANGED", None, None, [], f"file over {MAX_MATCH_LINES} lines"
         )
-    matcher = difflib.SequenceMatcher(None, pin, head, autojunk=False)
-    opcodes = matcher.get_opcodes()
+    opcodes = _opcodes(pin, head)
     if not any(tag == "equal" for tag, *_ in opcodes):
         return AnchorResult("GONE", None, None, [])
     new_lo = _map_index(opcodes, lo)
@@ -837,10 +858,22 @@ def build_report(
                 candidates = near
         return None, candidates
 
+    lines_cache: dict[tuple[str, str], list[str] | None] = {}
+
     def fetch(which: str, path: str):
-        view, actual = resolve_path(path)
-        sha = view.pin if which == PIN else view.head
-        return upstream.fetch_file(view.repo, sha, actual, cache_dir, offline)
+        """Lines for one path at one revision, read once per run.
+
+        The same object is handed back every time so the opcode cache can key
+        on identity.
+        """
+        key = (which, path)
+        if key not in lines_cache:
+            view, actual = resolve_path(path)
+            sha = view.pin if which == PIN else view.head
+            lines_cache[key] = upstream.fetch_file(
+                view.repo, sha, actual, cache_dir, offline
+            )
+        return lines_cache[key]
 
     def describe(path: str) -> tuple[str | None, str | None, str]:
         view, actual = resolve_path(path)
