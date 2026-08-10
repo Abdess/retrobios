@@ -69,4 +69,4 @@ files:
     max_size: 1048576
     validation: [size]
     description: "Macintosh ROM image, 512 KB SE/Classic or 512 KB / 1 MB 32-bit clean Mac II"
-    source_ref: "src/Unix/main_unix.cpp:109,685,692, src/rom_patches.cpp:830-842, src/main.cpp:67"
+    source_ref: "BasiliskII/src/Unix/main_unix.cpp:109,685,692, BasiliskII/src/rom_patches.cpp:830-842, BasiliskII/src/main.cpp:67"

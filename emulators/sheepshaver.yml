@@ -75,7 +75,7 @@ files:
     required: true
     validation: [signature]
     description: "PowerPC Macintosh ROM, 4 MB PCI PowerMac image or CHRP-BOOT Mac OS ROM"
-    source_ref: "src/Unix/main_unix.cpp:162-163,585-593,987, src/Windows/main_windows.cpp:58-59,330-344, src/rom_patches.cpp:148-200,671-695, src/main.cpp:161"
+    source_ref: "SheepShaver/src/Unix/main_unix.cpp:162-163,585-593,987, SheepShaver/src/Windows/main_windows.cpp:58-59,330-344, SheepShaver/src/rom_patches.cpp:148-200,671-695, SheepShaver/src/main.cpp:161"
     note: >
       No size is enforced on its own: DecodeROM takes a 4 MB read as a plain
       image and any other length only through the <CHRP-BOOT> header. The check

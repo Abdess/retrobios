@@ -26,7 +26,7 @@ files:
     required: true
     size: 524288
     description: "Commander X16 system ROM (KERNAL, BASIC, DOS, charset)"
-    source_ref: "src/main.c:602, 1158-1165; glue.h:19, 1158-1165; glue.h:24"
+    source_ref: "src/main.c:602, 626, 1163, src/glue.h:24"
     note: >
       Default filename "rom.bin", loaded from executable directory or via -rom flag.
       ROM_SIZE = NUM_ROM_BANKS(32) * 16384 = 524288 bytes. exit(1) if file not found.

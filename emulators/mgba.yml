@@ -68,7 +68,7 @@ files:
     size: 256  # 256 B (0x100)
     validation: [crc32]
     note: "DMG/MGB boot ROM. Scrolling Nintendo logo. Skipped if absent."
-    source_ref: "src/platform/libretro/libretro.c:2134"
+    source_ref: "src/platform/libretro/libretro.c:971"
 
   # -------------------------------------------------------
   # Game Boy Color - boot ROM (optional, skip fallback)

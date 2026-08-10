@@ -44,7 +44,7 @@ files:
     size: 16384
     description: "Official GBA BIOS"
     note: "Built-in open-source BIOS used as fallback. Real BIOS needed for full SWI accuracy and boot animation."
-    source_ref: "libretro/libretro.c:1111, gba_memory.c:3011-3022"
+    source_ref: "libretro/libretro.c:1111, gba_memory.c:2568-2580"
 
 platform_details:
   gba:

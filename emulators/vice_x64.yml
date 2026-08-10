@@ -65,5 +65,5 @@ files:
     required: false
     size: 8192
     validation: [size]
-    source_ref: "vice/src/c64/c64-resources.c:254, vice/src/c64/c64model.c:117"
+    source_ref: "vice/src/c64/c64-resources.c:254, vice/src/c64/c64rom.h:51"
     note: "Not embedded. Loaded via sysfile from system/vice/C64/ when C64 OLD PAL model selected."
