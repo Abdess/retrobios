@@ -556,6 +556,134 @@ class TestStandaloneCopiesExtraDirs(unittest.TestCase):
         )
 
 
+class TestBaseUrlScheme(unittest.TestCase):
+    """The bootstraps insist on HTTPS; the installer must not be laxer."""
+
+    def test_https_is_accepted(self):
+        self.assertEqual(
+            install._checked_base_url("https://example.test/repo"),
+            "https://example.test/repo",
+        )
+
+    def test_plain_http_is_refused(self):
+        with self.assertRaises(SystemExit):
+            install._checked_base_url("http://example.test/repo")
+
+    def test_local_file_scheme_is_refused(self):
+        with self.assertRaises(SystemExit):
+            install._checked_base_url("file:///etc")
+
+    def test_loopback_http_is_allowed_for_end_to_end_runs(self):
+        for url in (
+            "http://127.0.0.1:8080/repo",
+            "http://localhost:8080/repo",
+            "http://[::1]:8080/repo",
+        ):
+            self.assertEqual(install._checked_base_url(url), url)
+
+
+class TestLocalCheckHashing(unittest.TestCase):
+    """A file is read once, not once per declared digest."""
+
+    def test_both_digests_come_from_one_read(self):
+        tmp = Path(tempfile.mkdtemp())
+        payload = b"BIOS PAYLOAD"
+        (tmp / "boot.bin").write_bytes(payload)
+        entry = {
+            "dest": "boot.bin",
+            "size": len(payload),
+            "sha1": hashlib.sha1(payload).hexdigest(),
+            "sha256": hashlib.sha256(payload).hexdigest(),
+        }
+        calls = []
+        real_digest = install._digest_file
+
+        def recording(path, algorithms):
+            calls.append(tuple(sorted(algorithms)))
+            return real_digest(path, algorithms)
+
+        install._digest_file = recording
+        try:
+            to_download, up_to_date, mismatched = install.check_local([entry], tmp)
+        finally:
+            install._digest_file = real_digest
+        self.assertEqual((len(to_download), len(up_to_date), len(mismatched)), (0, 1, 0))
+        self.assertEqual(calls, [("sha1", "sha256")], "file must be read once")
+
+    def test_a_wrong_digest_still_lands_in_mismatched(self):
+        tmp = Path(tempfile.mkdtemp())
+        (tmp / "boot.bin").write_bytes(b"BIOS PAYLOAD")
+        entry = {
+            "dest": "boot.bin",
+            "size": 12,
+            "sha1": "0" * 40,
+            "sha256": hashlib.sha256(b"BIOS PAYLOAD").hexdigest(),
+        }
+        _, up_to_date, mismatched = install.check_local([entry], tmp)
+        self.assertEqual((len(up_to_date), len(mismatched)), (0, 1))
+
+
+class TestStandaloneCopyTargetsAreUntrusted(unittest.TestCase):
+    """The manifest names these directories, so it does not get to escape them."""
+
+    def _manifest(self, target: str) -> dict:
+        return {
+            "standalone_copies": [
+                {"file": "boot.bin", "targets": {"linux": [target]}}
+            ]
+        }
+
+    def test_traversal_in_a_target_is_refused_by_validation(self):
+        manifest = {
+            "manifest_version": 2,
+            "platform": "retroarch",
+            "files": [],
+            "standalone_copies": [
+                {"file": "boot.bin", "targets": {"linux": ["~/emu/../../../etc"]}}
+            ],
+        }
+        with self.assertRaises(ValueError):
+            install._validate_manifest(manifest, "retroarch")
+
+    def test_nul_in_a_target_is_refused_by_validation(self):
+        manifest = {
+            "manifest_version": 2,
+            "platform": "retroarch",
+            "files": [],
+            "standalone_copies": [
+                {"file": "boot.bin", "targets": {"linux": ["/tmp/a\x00b"]}}
+            ],
+        }
+        with self.assertRaises(ValueError):
+            install._validate_manifest(manifest, "retroarch")
+
+    def test_plain_absolute_target_still_works(self):
+        manifest = {
+            "manifest_version": 2,
+            "platform": "retroarch",
+            "files": [],
+            "standalone_copies": [
+                {"file": "boot.bin", "targets": {"linux": ["~/.config/emu/bios"]}}
+            ],
+        }
+        self.assertIsInstance(install._validate_manifest(manifest, "retroarch"), dict)
+
+    def test_symlinked_destination_is_not_written_through(self):
+        bios = Path(tempfile.mkdtemp())
+        (bios / "boot.bin").write_text("rom")
+        target = Path(tempfile.mkdtemp())
+        outside = Path(tempfile.mkdtemp()) / "secret"
+        outside.write_text("untouched")
+        (target / "boot.bin").symlink_to(outside)
+
+        copied, skipped = install.do_standalone_copies(
+            self._manifest(str(target)), bios, "linux"
+        )
+        self.assertEqual(copied, 0)
+        self.assertEqual(skipped, 1)
+        self.assertEqual(outside.read_text(), "untouched")
+
+
 @unittest.skipUnless(shutil.which("pwsh"), "pwsh not available")
 class TestLaunchboxDetectionPowershell(unittest.TestCase):
     """install.ps1 must resolve LaunchBox's portable RetroArch on its own."""
@@ -749,6 +877,21 @@ class TestAvailablePlatforms(unittest.TestCase):
     def test_matches_install_manifests(self):
         manifests = {p.stem for p in (REPO_ROOT / "install").glob("*.json")}
         self.assertEqual(set(install.AVAILABLE_PLATFORMS), manifests)
+
+    def test_every_registered_platform_is_installable(self):
+        """Archived platforms still ship packs, so they still need a manifest."""
+        import sys as _sys
+
+        _sys.path.insert(0, str(REPO_ROOT / "scripts"))
+        from common import list_registered_platforms
+
+        registered = set(
+            list_registered_platforms(
+                str(REPO_ROOT / "platforms"), include_archived=True
+            )
+        )
+        missing = registered - set(install.AVAILABLE_PLATFORMS)
+        self.assertEqual(missing, set(), f"no install manifest for {sorted(missing)}")
 
     def test_powershell_wrapper_pins_installer_hash(self):
         content = (REPO_ROOT / "install.ps1").read_text()

@@ -8,7 +8,7 @@ param(
 
 $ErrorActionPreference = "Stop"
 $defaultInstallUrl = "https://raw.githubusercontent.com/Abdess/retrobios/main/install.py"
-$defaultInstallSha256 = "79630030c1b7445e2df02bcf0272c4530d24827b2589780b214489ab036d2e8c"
+$defaultInstallSha256 = "b83e7422b8516d666017964cf18fc9ef8c4f8bbdb6a594ed9da0c04158eff870"
 $maximumInstallerBytes = 2MB
 $installer = if ($PSScriptRoot) { Join-Path $PSScriptRoot "install.py" } else { $null }
 $temporary = $null
@@ -23,6 +23,13 @@ try {
         }
         if ($expected -notmatch '^[0-9a-fA-F]{64}$') {
             throw "Installer SHA-256 must contain exactly 64 hexadecimal characters."
+        }
+        # Windows PowerShell 5.1 still negotiates SSL 3.0 / TLS 1.0 by default
+        # and GitHub refuses both, so the download fails before any hash is
+        # checked. install.sh pins the same floor with curl --tlsv1.2.
+        if ($PSVersionTable.PSEdition -ne "Core") {
+            [Net.ServicePointManager]::SecurityProtocol = `
+                [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
         }
         $temporary = Join-Path ([IO.Path]::GetTempPath()) ("retrobios-install-{0}.py" -f [Guid]::NewGuid())
         Invoke-WebRequest -Uri $uri -OutFile $temporary -UseBasicParsing

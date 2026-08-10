@@ -34,11 +34,40 @@ from pathlib import Path, PurePosixPath
 # RETROBIOS_REF pins an installation to a tag when reproducibility matters.
 DEFAULT_RELEASE_REF = "main"
 RELEASE_REF = os.environ.get("RETROBIOS_REF", DEFAULT_RELEASE_REF)
-BASE_URL = os.environ.get(
-    "RETROBIOS_BASE_URL",
+DEFAULT_BASE_URL = (
     "https://raw.githubusercontent.com/Abdess/retrobios/"
-    + urllib.parse.quote(RELEASE_REF, safe=""),
+    + urllib.parse.quote(RELEASE_REF, safe="")
 )
+
+
+_LOOPBACK_HOSTS = ("localhost", "127.0.0.1", "::1")
+
+
+def _checked_base_url(value: str) -> str:
+    """Refuse a base URL that is neither HTTPS nor loopback.
+
+    This base serves the manifest and the files it declares, so whoever
+    controls it controls the expected hashes too and verification stops
+    proving anything. install.sh and install.ps1 make the same check on the
+    URL they fetch the installer from.
+
+    Plain HTTP to loopback stays allowed: nothing sits between the two ends
+    to intercept it, and it is how the installer is exercised end to end.
+    """
+    parsed = urllib.parse.urlparse(value)
+    if parsed.scheme == "https":
+        return value
+    host = (parsed.hostname or "").lower()
+    if parsed.scheme == "http" and host in _LOOPBACK_HOSTS:
+        return value
+    print(
+        f"Error: RETROBIOS_BASE_URL must use HTTPS, got {value!r}",
+        file=sys.stderr,
+    )
+    sys.exit(1)
+
+
+BASE_URL = _checked_base_url(os.environ.get("RETROBIOS_BASE_URL", DEFAULT_BASE_URL))
 MANIFEST_URL = f"{BASE_URL}/install/{{platform}}.json"
 TARGETS_URL = f"{BASE_URL}/install/targets/{{platform}}.json"
 RAW_FILE_URL = f"{BASE_URL}/{{path}}"
@@ -59,6 +88,7 @@ _SHA256_RE = re.compile(r"^[0-9a-fA-F]{64}$")
 AVAILABLE_PLATFORMS = (
     "retroarch", "batocera", "recalbox", "retrobat", "emudeck",
     "lakka", "retrodeck", "rocknix", "romm", "bizhawk", "misterfpga",
+    "retropie",
 )
 
 # Fallback BIOS destination per platform when --platform is forced
@@ -71,6 +101,7 @@ DEFAULT_DESTS = {
     "emudeck": Path.home() / "Emulation" / "bios",
     "rocknix": Path("/storage/roms/bios"),
     "misterfpga": Path("/media/fat/games"),
+    "retropie": Path.home() / "RetroPie" / "BIOS",
 }
 
 
@@ -617,6 +648,33 @@ def _safe_relative_path(value: object, field: str) -> PurePosixPath:
     return path
 
 
+def _within(candidate: Path, root: Path) -> bool:
+    """Whether *candidate* stays under *root* once both are resolved."""
+    try:
+        (root / candidate.name).resolve().relative_to(root)
+    except (OSError, ValueError):
+        return False
+    return True
+
+
+def _safe_target_dir(value: object, field: str) -> str:
+    """Validate a manifest-controlled standalone-copy directory.
+
+    These name emulator install directories, so unlike a BIOS destination they
+    are legitimately absolute and outside the BIOS tree. What they must never
+    do is climb: a '..' anywhere turns "copy next to the emulator" into "write
+    wherever the manifest likes".
+    """
+    if not isinstance(value, str) or not value or len(value) > 2048:
+        raise ValueError(f"invalid {field}")
+    if "\x00" in value:
+        raise ValueError(f"unsafe {field}: {value!r}")
+    parts = re.split(r"[\\/]", value)
+    if any(part == ".." for part in parts):
+        raise ValueError(f"unsafe {field}: {value!r}")
+    return value
+
+
 def _destination_path(root: Path, value: object) -> Path:
     """Resolve a manifest destination and prove it remains below *root*."""
     relative = _safe_relative_path(value, "dest")
@@ -756,19 +814,13 @@ def _validate_manifest(data: object, plat: str) -> dict:
             ):
                 raise ValueError(f"invalid standalone copy pattern: {pattern!r}")
         targets = entry.get("targets", {})
-        if targets and (
-            not isinstance(targets, dict)
-            or any(
-                not isinstance(values, list)
-                or len(values) > 100
-                or not all(
-                    isinstance(value, str) and len(value) <= 2048
-                    for value in values
-                )
-                for values in targets.values()
-            )
-        ):
+        if targets and not isinstance(targets, dict):
             raise ValueError(f"invalid standalone copy targets at index {index}")
+        for values in (targets or {}).values():
+            if not isinstance(values, list) or len(values) > 100:
+                raise ValueError(f"invalid standalone copy targets at index {index}")
+            for value in values:
+                _safe_target_dir(value, f"standalone_copies[{index}].targets")
     return data
 
 
@@ -843,57 +895,75 @@ def _filter_by_target(
     return result
 
 
+def _digest_file(path: Path, algorithms: tuple[str, ...]) -> dict[str, str]:
+    """Compute several digests of a file in a single read.
+
+    Checking a 3 GB collection against both a SHA-1 and a SHA-256 used to walk
+    every file twice, single threaded. Hashing is cheap next to the I/O, so
+    the read is what has to happen once.
+    """
+    hashers = {name: hashlib.new(name) for name in algorithms}
+    with open(path, "rb") as fh:
+        for chunk in iter(lambda: fh.read(1024 * 1024), b""):
+            for hasher in hashers.values():
+                hasher.update(chunk)
+    return {name: hasher.hexdigest() for name, hasher in hashers.items()}
+
+
 def _sha1_file(path: Path) -> str:
     """Compute SHA1 of a file."""
-    h = hashlib.sha1()
-    with open(path, "rb") as fh:
-        while True:
-            chunk = fh.read(65536)
-            if not chunk:
-                break
-            h.update(chunk)
-    return h.hexdigest()
+    return _digest_file(path, ("sha1",))["sha1"]
 
 
 def _sha256_file(path: Path) -> str:
     """Compute SHA256 of a file."""
-    h = hashlib.sha256()
-    with open(path, "rb") as fh:
-        for chunk in iter(lambda: fh.read(65536), b""):
-            h.update(chunk)
-    return h.hexdigest()
+    return _digest_file(path, ("sha256",))["sha256"]
+
+
+def _classify_local(entry: dict, dest: Path) -> str:
+    """Return 'up_to_date' or 'mismatched' for a file already on disk."""
+    expected = {
+        name: entry.get(name, "").lower()
+        for name in ("sha256", "sha1")
+        if entry.get(name)
+    }
+    if not expected:
+        return "up_to_date"
+    actual = _digest_file(dest, tuple(expected))
+    if all(actual[name] == value for name, value in expected.items()):
+        return "up_to_date"
+    return "mismatched"
 
 
 def check_local(
-    files: list[dict], bios_path: Path
+    files: list[dict], bios_path: Path, jobs: int = 8
 ) -> tuple[list[dict], list[dict], list[dict]]:
     """Check which files exist locally and have correct hashes.
 
     Returns (to_download, up_to_date, mismatched).
     """
     to_download: list[dict] = []
-    up_to_date: list[dict] = []
-    mismatched: list[dict] = []
+    present: list[tuple[dict, Path]] = []
 
     for f in files:
         dest = _destination_path(bios_path, f["dest"])
-        if not dest.exists():
-            to_download.append(f)
-            continue
-        expected_sha256 = f.get("sha256", "")
-        expected_sha1 = f.get("sha1", "")
-        if not expected_sha256 and not expected_sha1:
-            up_to_date.append(f)
-            continue
-        verified = True
-        if expected_sha256:
-            verified = _sha256_file(dest) == expected_sha256.lower()
-        if verified and expected_sha1:
-            verified = _sha1_file(dest) == expected_sha1.lower()
-        if verified:
-            up_to_date.append(f)
+        if dest.exists():
+            present.append((f, dest))
         else:
-            mismatched.append(f)
+            to_download.append(f)
+
+    up_to_date: list[dict] = []
+    mismatched: list[dict] = []
+    if present:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=jobs) as pool:
+            verdicts = pool.map(
+                lambda item: (item[0], _classify_local(item[0], item[1])), present
+            )
+            for entry, verdict in verdicts:
+                if verdict == "up_to_date":
+                    up_to_date.append(entry)
+                else:
+                    mismatched.append(entry)
 
     return to_download, up_to_date, mismatched
 
@@ -1073,8 +1143,15 @@ def do_standalone_copies(
             if not target_dir.is_dir():
                 skipped += len(sources)
                 continue
+            resolved_dir = target_dir.resolve()
             for src in sources:
                 dest = target_dir / src.name
+                # A symlink already sitting at the destination would redirect
+                # the write outside the directory the user opted into, and a
+                # crafted source name would climb out of it.
+                if dest.is_symlink() or not _within(dest, resolved_dir):
+                    skipped += 1
+                    continue
                 try:
                     shutil.copy2(src, dest)
                     copied += 1
@@ -1122,8 +1199,6 @@ def _prompt_platform_choice(
             return [platforms[idx - 1]]
         if idx == len(platforms) + 1 and len(platforms) > 1:
             return platforms
-
-    return platforms
 
 
 def main() -> None:
@@ -1295,7 +1370,9 @@ def main() -> None:
             total_omitted += len(omitted_files)
 
         print("\nChecking existing files...")
-        to_download, up_to_date, mismatched = check_local(files, bios_path)
+        to_download, up_to_date, mismatched = check_local(
+            files, bios_path, jobs=args.jobs
+        )
         present = len(up_to_date) + len(mismatched)
         print(
             f"  {present}/{len(files)} present "
