@@ -309,6 +309,17 @@ class TestCache(unittest.TestCase):
         self.assertEqual([p.name for p in siblings], ["f.txt"])
 
 
+class TestCacheCollision(unittest.TestCase):
+    def test_a_file_where_a_directory_is_needed_skips_the_write(self):
+        # A profile citing both a directory and files inside it caches the
+        # directory as a file first; that must not break the files.
+        with tempfile.TemporaryDirectory() as root:
+            base = Path(root)
+            (base / "C64DTV").write_text("", encoding="utf-8")
+            upstream.write_cache(base / "C64DTV" / "basic.bin", "data")
+            self.assertTrue((base / "C64DTV").is_file())
+
+
 class TestRevisions(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()

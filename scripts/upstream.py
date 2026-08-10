@@ -213,8 +213,17 @@ def cache_path(cache_dir: str, repo: Repo, sha: str, path: str) -> Path:
 
 
 def write_cache(target: Path, text: str) -> None:
-    """Atomic write: unique scratch in the target directory, then replace."""
-    target.parent.mkdir(parents=True, exist_ok=True)
+    """Atomic write: unique scratch in the target directory, then replace.
+
+    A profile can cite both a directory and files inside it, and the first
+    citation caches `vice/data/C64DTV` as a file, which then blocks the
+    directory the second one needs. The cache is derived data, so a collision
+    skips the write rather than failing the read.
+    """
+    try:
+        target.parent.mkdir(parents=True, exist_ok=True)
+    except (FileExistsError, NotADirectoryError):
+        return
     fd, scratch = tempfile.mkstemp(dir=str(target.parent), suffix=".part")
     try:
         with os.fdopen(fd, "w", encoding="utf-8") as fh:
