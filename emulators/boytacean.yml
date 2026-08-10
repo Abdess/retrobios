@@ -36,7 +36,7 @@ files:
     mode: standalone
     size: 256
     note: "Original Nintendo DMG boot ROM"
-    source_ref: "src/gb.rs:1400, data.rs:14"
+    source_ref: "src/gb.rs:1400, src/data.rs:14"
 
   - name: sgb_boot.bin
     system: nintendo-gb
@@ -45,7 +45,7 @@ files:
     mode: standalone
     size: 256
     note: "Super Game Boy boot ROM"
-    source_ref: "src/gb.rs:1401, data.rs:29"
+    source_ref: "src/gb.rs:1401, src/data.rs:29"
 
   - name: dmg_bootix.bin
     system: nintendo-gb
@@ -54,7 +54,7 @@ files:
     mode: standalone
     size: 256
     note: "Open-source DMG boot ROM from Bootix (default DMG)"
-    source_ref: "src/gb.rs:1402, data.rs:44"
+    source_ref: "src/gb.rs:1402, src/data.rs:44"
 
   - name: mgb_bootix.bin
     system: nintendo-gb
@@ -63,7 +63,7 @@ files:
     mode: standalone
     size: 256
     note: "Open-source MGB (Pocket) boot ROM from Bootix"
-    source_ref: "src/gb.rs:1403, data.rs:59"
+    source_ref: "src/gb.rs:1403, src/data.rs:59"
 
   - name: cgb_boot.bin
     system: nintendo-gbc
@@ -72,7 +72,7 @@ files:
     mode: standalone
     size: 2304
     note: "Original Nintendo CGB boot ROM"
-    source_ref: "src/gb.rs:1404, data.rs:74"
+    source_ref: "src/gb.rs:1404, src/data.rs:74"
 
   - name: cgb_boytacean.bin
     system: nintendo-gbc
@@ -81,4 +81,4 @@ files:
     mode: standalone
     size: 2304
     note: "Custom open-source CGB boot ROM (default CGB)"
-    source_ref: "src/gb.rs:1405, data.rs:177"
+    source_ref: "src/gb.rs:1405, src/data.rs:177"
