@@ -140,17 +140,23 @@ files:
   - name: segaboot
     system: sega-lindbergh
     required: false
-    crc32: "38d56318"
-    validation: [crc32]
     description: "Sega Lindbergh boot and hardware check program, version 2.4"
-    source_ref: "lindbergh.c:696-698, lindbergh.c:892-895, config.h:57-58, gameData.c:51-52"
+    source_ref: "lindbergh.c:696-698, lindbergh.c:892-895, hook.c:1625-1632, config.h:57-58, gameData.c:51-52"
+    unsourceable: >-
+      Lives at /usr/sbin/segaboot on the board's hard disk, which no dump
+      project covers. The /usr partition images that circulate are encrypted
+      and no key is public.
     note: >-
-      Run as "segaboot -t" under -s or --segaboot. detectGame() matches the
-      ELF CRC32 against the table, where 0x38d56318 is Segaboot 2.4 and
-      0xa518b18b the build carrying symbols. The comparison drives
-      identification only: an unknown CRC logs a warning and startup continues.
-      SEGABOOT 0x0027 and SEGABOOT_2_6 0x0030 in config.h are placeholders, not
-      checksums, and no table entry uses them.
+      Run as "segaboot -t" under -s or --segaboot. A 32-bit x86 Linux ELF.
+      0x38d56318 identifies Segaboot 2.4 and 0xa518b18b the build carrying
+      symbols, but neither is a whole-file checksum and neither belongs in a
+      hash field: hook.c computes them as CRC-32 over 0x4000 bytes starting
+      10 bytes into program header index 2, guarded by p_type == PT_LOAD and
+      p_flags == 5. Declaring one as crc32 gives verify.py a value it can
+      never reproduce. The comparison drives identification only: an unknown
+      CRC logs a warning and startup continues. SEGABOOT 0x0027 and
+      SEGABOOT_2_6 0x0030 in config.h are placeholders, not checksums, and no
+      table entry uses them.
 
   # -- Lindbergh boot assets, replaced by built-in copies since 2.0.1 --
 
@@ -188,6 +194,18 @@ files:
       The built-in is one shared 128x256 atlas (fontTGA) and one metrics
       table (fontABC) answering all four font paths, so it substitutes for
       the Sega originals rather than reproducing either of them.
+      The .abc is the metrics sidecar of the .tga atlas, named for the GDI
+      ABC width triple. Header of 28 bytes: renderOffset, renderHeight,
+      atlas width, atlas height, lineHeight, then firstSymbol and lastSymbol
+      as uint16 and a uint32 symbol count; then one 24-byte record per glyph,
+      four float32 giving the normalised UV rectangle followed by leftMargin,
+      width, rightMargin and a pad as uint16. Field names come from
+      JayFoxRox/lindbergh-tools Utilities/src/font.c, written against a real
+      LucidaConsole_12.abc rather than against this substitute.
+      The built-in itself is Liberation Mono Bold rasterised at 18 px: 95 of
+      its 96 glyphs are byte-identical to that rendering, cropped at the UV
+      rectangles its own metrics declare. Liberation carries a 2010 and 2012
+      digitisation copyright, so it cannot be a 2005 Sega asset.
       Otherwise the fontTGA array in resources/font.h answers the read.
 
   - name: SEGA_KakuGothic-DB-Roman_12.abc
@@ -202,6 +220,18 @@ files:
       The built-in is one shared 128x256 atlas (fontTGA) and one metrics
       table (fontABC) answering all four font paths, so it substitutes for
       the Sega originals rather than reproducing either of them.
+      The .abc is the metrics sidecar of the .tga atlas, named for the GDI
+      ABC width triple. Header of 28 bytes: renderOffset, renderHeight,
+      atlas width, atlas height, lineHeight, then firstSymbol and lastSymbol
+      as uint16 and a uint32 symbol count; then one 24-byte record per glyph,
+      four float32 giving the normalised UV rectangle followed by leftMargin,
+      width, rightMargin and a pad as uint16. Field names come from
+      JayFoxRox/lindbergh-tools Utilities/src/font.c, written against a real
+      LucidaConsole_12.abc rather than against this substitute.
+      The built-in itself is Liberation Mono Bold rasterised at 18 px: 95 of
+      its 96 glyphs are byte-identical to that rendering, cropped at the UV
+      rectangles its own metrics declare. Liberation carries a 2010 and 2012
+      digitisation copyright, so it cannot be a 2005 Sega asset.
       Otherwise the fontABC array in resources/font.h answers the read, with
       ftell returning fontABClen.
 
@@ -217,6 +247,18 @@ files:
       The built-in is one shared 128x256 atlas (fontTGA) and one metrics
       table (fontABC) answering all four font paths, so it substitutes for
       the Sega originals rather than reproducing either of them.
+      The .abc is the metrics sidecar of the .tga atlas, named for the GDI
+      ABC width triple. Header of 28 bytes: renderOffset, renderHeight,
+      atlas width, atlas height, lineHeight, then firstSymbol and lastSymbol
+      as uint16 and a uint32 symbol count; then one 24-byte record per glyph,
+      four float32 giving the normalised UV rectangle followed by leftMargin,
+      width, rightMargin and a pad as uint16. Field names come from
+      JayFoxRox/lindbergh-tools Utilities/src/font.c, written against a real
+      LucidaConsole_12.abc rather than against this substitute.
+      The built-in itself is Liberation Mono Bold rasterised at 18 px: 95 of
+      its 96 glyphs are byte-identical to that rendering, cropped at the UV
+      rectangles its own metrics declare. Liberation carries a 2010 and 2012
+      digitisation copyright, so it cannot be a 2005 Sega asset.
       Otherwise the fontTGA array in resources/font.h answers the read.
 
   - name: LucidaConsole_12.abc
@@ -231,6 +273,18 @@ files:
       The built-in is one shared 128x256 atlas (fontTGA) and one metrics
       table (fontABC) answering all four font paths, so it substitutes for
       the Sega originals rather than reproducing either of them.
+      The .abc is the metrics sidecar of the .tga atlas, named for the GDI
+      ABC width triple. Header of 28 bytes: renderOffset, renderHeight,
+      atlas width, atlas height, lineHeight, then firstSymbol and lastSymbol
+      as uint16 and a uint32 symbol count; then one 24-byte record per glyph,
+      four float32 giving the normalised UV rectangle followed by leftMargin,
+      width, rightMargin and a pad as uint16. Field names come from
+      JayFoxRox/lindbergh-tools Utilities/src/font.c, written against a real
+      LucidaConsole_12.abc rather than against this substitute.
+      The built-in itself is Liberation Mono Bold rasterised at 18 px: 95 of
+      its 96 glyphs are byte-identical to that rendering, cropped at the UV
+      rectangles its own metrics declare. Liberation carries a 2010 and 2012
+      digitisation copyright, so it cannot be a 2005 Sega asset.
       Otherwise the fontABC array in resources/font.h answers the read.
 
   # -- Lindbergh runtime configuration --
@@ -238,11 +292,20 @@ files:
   - name: lindbergrc
     system: sega-lindbergh
     required: false
-    description: "Lindbergh runtime configuration read by the games from /root"
+    description: "Lindbergh site configuration read by Sega's lxmaster boot supervisor"
     source_ref: "hook.c:650-653"
+    unsourceable: >-
+      /root is a symlink to /usr/local/root, so the file sits on the same
+      unpreserved hard-disk partition as segaboot. Nothing canonical exists to
+      reproduce either: every key is a site or unit specific development
+      setting, and a stock production machine ships no lindbergrc at all.
     note: >-
-      The fopen hook rewrites /root/lindbergrc to lindbergrc in the game
-      directory. The loader neither creates the file nor substitutes for it.
+      An INI file, sections [develop], [terminal], [segaboot] and [keychip].
+      It is read by Sega's lxmaster boot supervisor, not by the games; the
+      per-title <id>rc files that do ship in game dumps are xinit client
+      scripts, a different thing. The fopen hook rewrites /root/lindbergrc to
+      lindbergrc in the game directory, and the loader neither creates the file
+      nor substitutes for it.
 
   - name: gamecontrollerdb.txt
     system: sega-lindbergh

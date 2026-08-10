@@ -4,7 +4,7 @@ core_classification: game_engine
 source: "https://gitlab.com/solarus-games/solarus"
 upstream: "https://gitlab.com/solarus-games/solarus"
 profiled_date: "2026-08-08"
-source_commit: "bc2707d1fba2ec1e6529857f87202a20998bff13"
+source_commit: "c817554d21e4fcbf726e74b0e402f34d95286a9e"
 core_version: "2.2.0"
 display_name: "Solarus Game Engine"
 cores:

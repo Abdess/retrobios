@@ -4,7 +4,7 @@ core_classification: community_fork
 source: "https://gitlab.com/jengun/sdltrs"
 upstream: "http://sdltrs.sourceforge.net"
 profiled_date: "2026-08-08"
-source_commit: "a9b30ff3cfe2b44ccff094fcd5d3c5b60e78b8a2"
+source_commit: "4ba6cd076fd0c966c0dcb384663211cf691d6649"
 core_version: "1.2.35"
 display_name: "Tandy - TRS-80 (SDL2TRS)"
 cores:
@@ -63,7 +63,7 @@ files:
     description: "TRS-80 Model I ROM"
     required: true
     max_size: 18432
-    source_ref: "src/trs_options.c:81 (romfile1), src/trs_options.c:900 (default name), src/trs_cmd_rom.c:871-884 (trs_model 1)"
+    source_ref: "src/trs_options.c:81 (romfile1), src/trs_options.c:896 (default name), src/trs_cmd_rom.c:871-884 (trs_model 1)"
     note: >
       Model I is the model a stock configuration selects (trs_options.c:927), so
       this is the slot an unconfigured run reads. Without it the machine runs the
@@ -75,7 +75,7 @@ files:
     description: "TRS-80 Model III and Model 4 ROM"
     required: true
     max_size: 18432
-    source_ref: "src/trs_options.c:82 (romfile3), src/trs_options.c:901 (default name), src/trs_cmd_rom.c:885-889 (trs_model 3 and 4)"
+    source_ref: "src/trs_options.c:82 (romfile3), src/trs_options.c:897 (default name), src/trs_cmd_rom.c:885-889 (trs_model 3 and 4)"
     note: >
       Serves Model III and Model 4 alike; the stub text spells out that Model 4
       mode needs a Model 3 image (trs_cmd_rom.c:110-115). This is the one slot
@@ -87,7 +87,7 @@ files:
     description: "TRS-80 Model 4P boot ROM"
     required: false
     max_size: 18432
-    source_ref: "src/trs_options.c:83 (romfile4p), src/trs_options.c:902 (default name), src/trs_cmd_rom.c:890-893 (trs_model 5)"
+    source_ref: "src/trs_options.c:83 (romfile4p), src/trs_options.c:898 (default name), src/trs_cmd_rom.c:890-893 (trs_model 5)"
     note: >
       Optional because the compiled-in replacement is a working boot ROM rather
       than a stub. html/index.html states the free ROM boots only Model 4
