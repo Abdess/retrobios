@@ -4,7 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/gpsp"
 upstream: "https://github.com/davidgfnet/gpsp"
 profiled_date: "2026-03-23"
-source_commit: "602512d7c687acb84cd56265cbcf2d7b7c75fb37"
+source_commit: "5b6e751f4abf368509146cd143c949c1946ac1ae"
 core_version: "Git"
 display_name: "Nintendo - Game Boy Advance (gpSP)"
 cores:
@@ -44,7 +44,7 @@ files:
     size: 16384
     description: "Official GBA BIOS"
     note: "Built-in open-source BIOS used as fallback. Real BIOS needed for full SWI accuracy and boot animation."
-    source_ref: "libretro/libretro.c:1111, gba_memory.c:2568-2580"
+    source_ref: "libretro/libretro.c:1214, gba_memory.c:2568-2580"
 
 platform_details:
   gba:
