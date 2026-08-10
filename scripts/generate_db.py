@@ -35,9 +35,11 @@ DEFAULT_OUTPUT = "database.json"
 
 SKIP_PATTERNS = {".git", ".github", "__pycache__", ".cache", ".DS_Store", "desktop.ini"}
 
-# Every digest database.json publishes per file. The schema requires all five,
-# so a cache entry missing any of them cannot serve a database entry.
-CACHED_HASHES = frozenset({"sha1", "md5", "sha256", "crc32", "adler32"})
+# Every digest database.json publishes per file, in the order compute_hashes
+# returns them. The schema requires all five, so a cache entry missing any of
+# them cannot serve a database entry, and the order is fixed here so a warm
+# cache serialises an entry exactly like a fresh hash does.
+CACHED_HASHES = ("sha1", "md5", "sha256", "crc32", "adler32")
 
 
 def should_skip(path: Path) -> bool:
@@ -91,7 +93,7 @@ def scan_bios_dir(bios_dir: Path, cache: dict, force: bool) -> tuple[dict, dict,
             # without it, so the loss survived every later run. Requiring the
             # full set instead turns a partial cache entry into a miss, which
             # heals it.
-            if fresh and CACHED_HASHES.issubset(cached):
+            if fresh and all(name in cached for name in CACHED_HASHES):
                 hashes = {name: cached[name] for name in CACHED_HASHES}
                 sha1 = hashes["sha1"]
                 is_variant = "/.variants/" in rel_path or "\\.variants\\" in rel_path

@@ -181,21 +181,38 @@ class HashCacheKeepsEveryDigest(unittest.TestCase):
     def test_cache_hit_serves_the_full_digest_set(self):
         files, _, cache = self.generate_db.scan_bios_dir(self.bios, {}, force=False)
         entry = next(iter(files.values()))
-        self.assertTrue(self.generate_db.CACHED_HASHES.issubset(entry))
+        self.assertTrue(set(self.generate_db.CACHED_HASHES).issubset(entry))
 
         # Second pass, this time served entirely from the cache.
         again, _, cache2 = self.generate_db.scan_bios_dir(self.bios, cache, force=False)
         entry2 = next(iter(again.values()))
         self.assertTrue(
-            self.generate_db.CACHED_HASHES.issubset(entry2),
-            f"cache hit lost {self.generate_db.CACHED_HASHES - set(entry2)}",
+            set(self.generate_db.CACHED_HASHES).issubset(entry2),
+            f"cache hit lost {set(self.generate_db.CACHED_HASHES) - set(entry2)}",
         )
         self.assertEqual(
             {k: entry[k] for k in self.generate_db.CACHED_HASHES},
             {k: entry2[k] for k in self.generate_db.CACHED_HASHES},
         )
         self.assertTrue(
-            self.generate_db.CACHED_HASHES.issubset(next(iter(cache2.values())))
+            set(self.generate_db.CACHED_HASHES).issubset(next(iter(cache2.values())))
+        )
+
+    def test_a_warm_cache_serialises_exactly_like_a_fresh_hash(self):
+        """Key order must not depend on whether the cache was warm.
+
+        Rebuilding the dict by iterating a set made the order follow set
+        hashing, so a run with a warm cache rewrote all 7,850 entries with
+        their digests in a different order and no content change.
+        """
+        fresh, _, cache = self.generate_db.scan_bios_dir(self.bios, {}, force=True)
+        warm, _, _ = self.generate_db.scan_bios_dir(self.bios, cache, force=False)
+        self.assertEqual(
+            [list(entry) for entry in fresh.values()],
+            [list(entry) for entry in warm.values()],
+        )
+        self.assertEqual(
+            json.dumps(fresh, indent=2), json.dumps(warm, indent=2)
         )
 
     def test_a_partial_cache_entry_is_rehashed_instead_of_trusted(self):
@@ -204,8 +221,8 @@ class HashCacheKeepsEveryDigest(unittest.TestCase):
         cache[key].pop("adler32")
         files, _, healed = self.generate_db.scan_bios_dir(self.bios, cache, force=False)
         entry = next(iter(files.values()))
-        self.assertTrue(self.generate_db.CACHED_HASHES.issubset(entry))
-        self.assertTrue(self.generate_db.CACHED_HASHES.issubset(healed[key]))
+        self.assertTrue(set(self.generate_db.CACHED_HASHES).issubset(entry))
+        self.assertTrue(set(self.generate_db.CACHED_HASHES).issubset(healed[key]))
 
 
 class PreservedLargeFileEntries(unittest.TestCase):
