@@ -25,21 +25,21 @@ files:
     path: "switch/"
     mode: standalone
     note: "Production keys for NCA decryption (master, key area, header, titlekek)"
-    source_ref: "src/core/crypto/key_manager.cpp:652-653"
+    source_ref: "src/core/crypto/key_manager.cpp:574-575, 853"
 
   - name: "title.keys"
     required: false
     path: "switch/"
     mode: standalone
     note: "Per-title encryption keys (rights_id to titlekey mappings)"
-    source_ref: "src/core/crypto/key_manager.cpp:655-656"
+    source_ref: "src/core/crypto/key_manager.cpp:577-578, 850"
 
   - name: "console.keys"
     required: false
     path: "switch/"
     mode: standalone
     note: "Console-specific keys (BIS, SD seed)"
-    source_ref: "src/core/crypto/key_manager.cpp:657-658"
+    source_ref: "src/core/crypto/key_manager.cpp:579-580"
 
   - name: "key_retail.bin"
     required: false

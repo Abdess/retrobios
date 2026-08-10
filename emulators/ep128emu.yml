@@ -267,7 +267,7 @@ files:
     system: amstrad-cpc
     has_builtin: true
     note: "CPC 464 combined ROM (OS + BASIC). 32K loaded at segments 0x10 (OS) and 0x00 (BASIC) with offset."
-    source_ref: "core/core.cpp:389-392"
+    source_ref: "core/core.cpp:353-356"
 
   - name: cpc664.rom
     path: ep128emu/roms/cpc664.rom
@@ -277,7 +277,7 @@ files:
     system: amstrad-cpc
     has_builtin: true
     note: "CPC 664 combined ROM (OS + BASIC). Used for CPC_664_DISK mode."
-    source_ref: "core/core.cpp:397-400"
+    source_ref: "core/core.cpp:361-364"
 
   - name: cpc6128.rom
     path: ep128emu/roms/cpc6128.rom
@@ -287,7 +287,7 @@ files:
     system: amstrad-cpc
     has_builtin: true
     note: "CPC 6128 combined ROM (OS + BASIC). Default CPC machine when no specific model requested."
-    source_ref: "core/core.cpp:406-409"
+    source_ref: "core/core.cpp:370-373"
 
   - name: cpc_amsdos.rom
     path: ep128emu/roms/cpc_amsdos.rom
@@ -297,7 +297,7 @@ files:
     system: amstrad-cpc
     has_builtin: true
     note: "AMSDOS disk controller ROM. Loaded for CPC_DISK and CPC_664_DISK modes."
-    source_ref: "core/core.cpp:413-414"
+    source_ref: "core/core.cpp:377"
 
   # ============================================================
   # ZX Spectrum
@@ -311,7 +311,7 @@ files:
     system: zx-spectrum
     has_builtin: true
     note: "ZX Spectrum 128K ROM. 32K loaded at segments 0x00-0x01."
-    source_ref: "core/core.cpp:436-439"
+    source_ref: "core/core.cpp:400-403"
 
   - name: zx48.rom
     path: ep128emu/roms/zx48.rom
@@ -321,4 +321,4 @@ files:
     system: zx-spectrum
     has_builtin: true
     note: "ZX Spectrum 48K ROM. Used for ZX16 and ZX48 modes."
-    source_ref: "core/core.cpp:443-444"
+    source_ref: "core/core.cpp:407-408"
