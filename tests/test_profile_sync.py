@@ -562,7 +562,9 @@ HEAD = profile_sync.HEAD
 
 
 def make_fetch(files: dict[tuple[str, str], list[str]]):
-    return lambda sha, path: files.get((sha, path))
+    # The real fetch takes the cited line too, so that a path carried by two
+    # repositories is attributed to the one whose revision is not blank there.
+    return lambda sha, path, start=None: files.get((sha, path))
 
 
 def renamer(result: CompareResult, head_paths=()):
@@ -1087,6 +1089,23 @@ class TestBuildReport(unittest.TestCase):
         profile["source_commit"] = "headsha"
         profile["files"][0]["crc32"] = "deadbeef"
         report = build_report("test", profile, self.dir)
+        self.assertEqual(report.entries[0].status, "ANCHORED")
+
+    def test_the_repository_with_a_subject_owns_a_shared_path(self):
+        # A port and its upstream can both carry a path; only one holds the
+        # cited subject, and a blank line is never a citation.
+        self.files[("portpin", "src/a.cpp")] = ["x", "", "y"]
+        self.files[("uppin", "src/a.cpp")] = ["x", "GAME(1985, bubsys", "y"]
+        self.files[("headsha", "src/a.cpp")] = ["x", "GAME(1985, bubsys", "y"]
+        profile = {
+            "emulator": "MAME",
+            "source": "https://github.com/libretro/mame",
+            "upstream": "https://github.com/mamedev/mame",
+            "source_commit": "portpin",
+            "upstream_commit": "uppin",
+            "files": [{"name": "bubsys.zip", "source_ref": "src/a.cpp:2"}],
+        }
+        report = build_report("mame", profile, self.dir)
         self.assertEqual(report.entries[0].status, "ANCHORED")
 
     def test_pin_on_the_declared_version_tag_is_flagged(self):

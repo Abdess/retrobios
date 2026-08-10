@@ -482,7 +482,7 @@ def anchor_part(
     slug, url, actual = (
         describe(part.path) if describe else (None, None, part.path)
     )
-    head_lines = fetch(HEAD, part.path)
+    head_lines = fetch(HEAD, part.path, part.start)
     path = actual
     renamed = actual != part.path
 
@@ -513,7 +513,7 @@ def anchor_part(
                 url,
             )
         path = moved
-        head_lines = fetch(HEAD, path)
+        head_lines = fetch(HEAD, path, part.start)
         if head_lines is None:
             return PartResult(
                 part, "GONE", None, None, None, [], None, slug, url
@@ -528,12 +528,12 @@ def anchor_part(
             part, status, path if renamed else None, None, None, [], None, slug, url
         )
 
-    pin_lines = fetch(PIN, part.path)
+    pin_lines = fetch(PIN, part.path, part.start)
     if pin_lines is None and path != part.path:
         # A ref may cite a bare filename the tree search resolved at HEAD; the
         # same resolved path usually holds at the pin. A genuine rename keeps
         # the old path at the pin, which is why that one is tried first.
-        pin_lines = fetch(PIN, path)
+        pin_lines = fetch(PIN, path, part.start)
     if pin_lines is None:
         return PartResult(
             part, "GONE", None, None, None, [], "pin revision missing", slug, url
@@ -867,35 +867,58 @@ def build_report(
         report.skipped = "no source_ref"
         return report
 
-    owners: dict[str, RepoView] = {}
+    owners: dict[tuple[str, int | None], tuple[RepoView, str]] = {}
     context: dict[str, object] = {}
 
-    def _locate(path: str) -> tuple[RepoView, str]:
+    def _locate(path: str, start: int | None = None) -> tuple[RepoView, str]:
         """Repository and real path carrying a cited path, HEAD before pin.
 
         A ref may prefix the path with the repository directory name, as it
         appears in a parent folder holding both clones: 270 parts across 21
         profiles do. That prefix is stripped only as a last resort, once the
         path as written has failed against every repository and revision.
+
+        The pin comes before HEAD because that is the revision the ref was
+        written against. `mame` cites files that both mamedev/mame and the
+        libretro fork carry today, but only the upstream pin holds them; the
+        fork's pin is an older tree where they lived elsewhere.
         """
         candidates = [path]
         head, _, tail = path.partition("/")
         if tail and any(head == v.repo.name for v in views):
             candidates.append(tail)
+
+        def carries_subject(lines) -> bool:
+            """A citation never points at a blank line.
+
+            Two repositories can hold the same path with different contents:
+            `mame` cites files that both mamedev/mame and its libretro fork
+            carry. Where the cited line is empty, that repository is not the
+            one the ref was written against.
+            """
+            if start is None:
+                return True
+            return start <= len(lines) and bool(lines[start - 1].strip())
+
+        fallback = None
         for candidate in candidates:
-            for sha_of in (lambda v: v.head, lambda v: v.pin):
+            for sha_of in (lambda v: v.pin, lambda v: v.head):
                 for view in views:
                     found = upstream.fetch_file(
                         view.repo, sha_of(view), candidate, cache_dir, offline
                     )
-                    if found is not None:
+                    if found is None:
+                        continue
+                    if carries_subject(found):
                         return view, candidate
-        return primary, path
+                    fallback = fallback or (view, candidate)
+        return fallback or (primary, path)
 
-    def resolve_path(path: str) -> tuple[RepoView, str]:
-        if path not in owners:
-            owners[path] = _locate(path)
-        return owners[path]
+    def resolve_path(path: str, start: int | None = None) -> tuple[RepoView, str]:
+        key = (path, start)
+        if key not in owners:
+            owners[key] = _locate(path, start)
+        return owners[key]
 
     def _context_for(view: RepoView):
         key = view.repo.slug
@@ -936,17 +959,17 @@ def build_report(
                 candidates = near
         return None, candidates
 
-    lines_cache: dict[tuple[str, str], list[str] | None] = {}
+    lines_cache: dict[tuple[str, str, int | None], list[str] | None] = {}
 
-    def fetch(which: str, path: str):
+    def fetch(which: str, path: str, start: int | None = None):
         """Lines for one path at one revision, read once per run.
 
         The same object is handed back every time so the opcode cache can key
         on identity.
         """
-        key = (which, path)
+        key = (which, path, start)
         if key not in lines_cache:
-            view, actual = resolve_path(path)
+            view, actual = resolve_path(path, start)
             sha = view.pin if which == PIN else view.head
             lines_cache[key] = upstream.fetch_file(
                 view.repo, sha, actual, cache_dir, offline
@@ -964,7 +987,7 @@ def build_report(
     if self_check:
         staged = [
             (entry_name, ref, reconcile_self_check([
-                verify_at_pin(part, fetch(PIN, part.path), tokens)
+                verify_at_pin(part, fetch(PIN, part.path, part.start), tokens)
                 for part in split_source_ref(ref)
             ]))
             for entry_name, ref, tokens in refs
