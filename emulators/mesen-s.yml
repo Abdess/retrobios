@@ -143,7 +143,7 @@ files:
     aliases: [gb_bios.bin]
     validation: [size]
     note: "Game Boy (DMG) boot ROM. Falls back to embedded SameBoy open-source boot ROM"
-    source_ref: "Core/FirmwareHelper.h:148, Core/Gameboy.cpp:108-114, Core/GbBootRom.h:6"
+    source_ref: "Core/FirmwareHelper.h:148, Core/Gameboy.cpp:108-114, Core/GbBootRom.h:7"
 
   - name: "cgb_boot.bin"
     size: 2304
@@ -152,7 +152,7 @@ files:
     aliases: [gbc_bios.bin]
     validation: [size]
     note: "Game Boy Color boot ROM. Falls back to embedded SameBoy open-source boot ROM"
-    source_ref: "Core/FirmwareHelper.h:149, Core/Gameboy.cpp:108-119, Core/GbBootRom.h:6"
+    source_ref: "Core/FirmwareHelper.h:149, Core/Gameboy.cpp:108-119, Core/GbBootRom.h:83"
 
   - name: "sgb_boot.bin"
     size: 256
@@ -161,7 +161,7 @@ files:
     aliases: [sgb_bios.bin]
     validation: [size]
     note: "Super Game Boy boot ROM for GB CPU. Falls back to embedded SameBoy open-source boot ROM"
-    source_ref: "Core/FirmwareHelper.h:150, Core/Gameboy.cpp:108-127, Core/GbBootRom.h:6"
+    source_ref: "Core/FirmwareHelper.h:150, Core/Gameboy.cpp:108-127, Core/GbBootRom.h:32"
 
   - name: "sgb2_boot.bin"
     size: 256
@@ -170,7 +170,7 @@ files:
     aliases: [sgb_bios.bin]
     validation: [size]
     note: "Super Game Boy 2 boot ROM for GB CPU. Falls back to embedded SameBoy open-source boot ROM"
-    source_ref: "Core/FirmwareHelper.h:151, Core/Gameboy.cpp:108-127, Core/GbBootRom.h:6"
+    source_ref: "Core/FirmwareHelper.h:151, Core/Gameboy.cpp:108-127, Core/GbBootRom.h:57"
 
   # -- Super Game Boy cartridge ROMs --
 
