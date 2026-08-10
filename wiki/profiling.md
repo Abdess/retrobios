@@ -113,6 +113,48 @@ are marked with `hle_fallback: true` and `required: false`. The file
 still ships in packs (better experience for the user), but its absence
 does not raise alarms during verification.
 
+### 3b. Decide whether the file carries a region
+
+Set `region:` only when the **code branches on a territory to select the
+file**. It documents the region the emulator picks the file *for*, never the
+region the dump came from. The two usually agree, and when they do not, the
+code wins: `psxonpsp660.bin` is a Japanese PSP dump that DuckStation uses as a
+region-free override for all three regions, so it is `[world]`.
+
+What qualifies:
+
+```c
+switch (region_code) {                 // Genesis Plus GX, core/loadrom.c
+  case REGION_USA:    load(CD_BIOS_US); break;
+  case REGION_EUROPE: load(CD_BIOS_EU); break;
+  default:            load(CD_BIOS_JP); break;
+}
+```
+
+What does not, and why each trap is easy to fall into:
+
+- **A user option on a non-territorial axis.** Geargrafx picks
+  `syscard1/2/3.pce` by `cdrom_bios`, a card *generation*, and its `game_db.h`
+  accepts the Japanese and the American CRC32 under the same filename.
+  Tagging it `[japan]` would delete the PC Engine BIOS from a `--region us`
+  pack.
+- **A model enum.** SameBoy maps `SGB2 -> GB_BOOT_ROM_SGB2 -> sgb2_boot.bin`.
+  That the SGB2 shipped only in Japan is hardware history, not a code branch.
+- **A configured path.** PCSX2 accepts any 4-8 MB file with a valid romdir.
+  Mednafen reads whatever `md.cdbios` points at.
+- **A television standard.** Gopher2600 branches on
+  `env.Loader.ReqSpec == "PAL"`, a video specification, and the Atari 2600 has
+  no region lock. There is no signal field: drop `region:` rather than map it.
+  The exception is hardware that fuses both axes in one register, such as the
+  Saturn SMPC area codes behind `asia-ntsc` and `asia-pal`.
+- **A single-region system.** When every file of a system shares one region,
+  the pack filter keeps them all anyway; annotating adds nothing.
+- **A language without a territory.** Arabic MSX variants, CJK fonts. The
+  vocabulary is territorial by design and inventing a slug would break it.
+
+One naming trap: in `ORIC.PAL-PROM-TBP24S10-1ab9b572.bin`, PAL is a
+Programmable Array Logic, not the television standard.
+
 ### 4. Document divergences
 
 When the libretro port differs from the upstream:
@@ -159,7 +201,7 @@ files:
     size: 2097152
     validation: [size, adler32]
     known_hash_adler32: 0x4f1f6f5c
-    region: north-america
+    region: [north-america]
     source_ref: Source/Core/Core/Boot/Boot_BS2Emu.cpp:42
 ```
 
@@ -316,7 +358,7 @@ which CI validates every profile against.
 | `mode` | `libretro`, `standalone`, or `both` |
 | `hle_fallback` | true if a high-level emulation path exists |
 | `category` | `bios` (default), `game_data`, `bios_zip` |
-| `region` | geographic region (e.g. `north-america`, `japan`); a list when one file covers several |
+| `region` | always a list of territory slugs from the schema enum (`[north-america]`, `[japan, asia-ntsc]`). The region the code selects the file **for**, never the region of the dump. See step 3b |
 | `region_check` | true if the core refuses to boot a game whose region does not match the BIOS |
 | `fast_boot` | BIOS generation label the core uses to decide whether fast boot is available |
 | `priority` | tie-breaker when several BIOS files satisfy the same slot, higher wins |

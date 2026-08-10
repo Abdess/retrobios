@@ -22,6 +22,7 @@ notes: >
 files:
   - name: "kernal.901486-02.bin"
     description: "VIC-1001 Kernal Rev 2 (Japanese NTSC)"
+    region: [japan]
     required: false
     size: 8192
     validation: [size]
@@ -30,6 +31,7 @@ files:
 
   - name: "chargen-901460-02.bin"
     description: "VIC-1001 Character ROM (Japanese)"
+    region: [japan]
     required: false
     size: 4096
     validation: [size]
