@@ -72,6 +72,7 @@ files:
   - name: "d200e_1.rom"
     system: dragon64
     description: "Dragon 200-E BASIC IC18 (Spanish)"
+    region: [spain]
     required: true
     size: 16384
     crc32: "95af0a0a"
@@ -83,6 +84,7 @@ files:
   - name: "d200e_2.rom"
     system: dragon64
     description: "Dragon 200-E BASIC IC17 (Spanish)"
+    region: [spain]
     required: false
     size: 16384
     aliases: [d200e_rom2, ic17_v1.4e.ic37]
@@ -92,6 +94,7 @@ files:
   - name: "d200e_26.rom"
     system: dragon64
     description: "Dragon 200-E external character generator ROM"
+    region: [spain]
     required: false
     size: 4096
     aliases: [rom26.ic1]
@@ -104,19 +107,38 @@ files:
     system: dragon64
     description: "Dragon Professional (Alpha) boot ROM v1.0"
     required: true
-    crc32: "d6172b56"
+    size: 8192
+    crc32: "c3dab585"
     validation: [crc32]
     aliases: [alpha_bt_10, "Dragon Data Ltd - Dragon Alpha Boot v1.0 150584"]
-    source_ref: "xroar.c:654 (romlist dragonpro_boot), xroar.c:741 (crclist), dragonpro.c:231-234 (load)"
-    note: "Required for Dragon Professional machine. Loaded as extbas_rom (boot ROM)."
+    source_ref: "xroar.c:654 (romlist dragonpro_boot), xroar.c:741 (crclist), dragonpro.c:226 (BOOT bank 8192), dragonpro.c:231-234 (load), dragonpro.c:249 (0xc3dab585 = Dragon Pro BOOT 1.0)"
+    note: >-
+      Required for Dragon Professional machine. Loaded as extbas_rom into the
+      BOOT bank. rombank_verify_crc accepts any member of @dragonpro_boot,
+      which also holds 0xd6172b56 for the v0.4 slot.
+
+  - name: "alpha-boot-v0.4.rom"
+    system: dragon64
+    description: "Dragon Professional (Alpha) boot ROM v0.4"
+    required: false
+    size: 8192
+    aliases: [alpha_bt_04]
+    source_ref: "xroar.c:654 (romlist dragonpro_boot), xroar.c:741 (crclist), dragonpro.c:226 (BOOT bank 8192)"
+    note: >-
+      Fourth and fifth candidates of the dragonpro_boot romlist, tried when no
+      v1.0 image is found. The crclist carries 0xd6172b56 next to the v1.0
+      value, but the source labels only the latter, so no crc32 is declared here.
 
   - name: "alpha-basic.rom"
     system: dragon64
     description: "Dragon Professional (Alpha) BASIC ROM"
     required: true
+    size: 16384
+    crc32: "84f68bf9"
+    validation: [crc32]
     aliases: [alpha_ba, "Dragon Data Ltd - Dragon Alpga Basic"]
-    source_ref: "xroar.c:655 (romlist dragonpro_basic), dragonpro.c:240-243 (load)"
-    note: "Loaded as altbas_rom. Falls back to d64_1 if not found."
+    source_ref: "xroar.c:655 (romlist dragonpro_basic), xroar.c:742 (crclist = @d64_1), dragonpro.c:227 (ROM0 bank 16384), dragonpro.c:240-243 (load), dragonpro.c:254 (0x84f68bf9 = Dragon 64 32K mode BASIC)"
+    note: "Loaded as altbas_rom into the 32K BASIC bank. Falls back to d64_1 if not found."
 
   # ---- Tandy CoCo (Colour BASIC) ----
 
@@ -218,6 +240,7 @@ files:
   - name: "alice.rom"
     system: mc10
     description: "Matra & Hachette Alice Microcolour BASIC"
+    region: [france]
     required: true
     size: 8192
     crc32: "f876abe9"
@@ -399,4 +422,15 @@ files:
     required: false
     unsourceable: "not yet dumped, only v1.3 publicly available, XRoar support is experimental (#ifdef WANT_EXPERIMENTAL)"
     source_ref: "xroar.c:715 (romlist ikon), ikon.c:151 (default @ikon)"
-    note: "Experimental. Ikon Ultra Drive storage interface. Older version: dragonfly-1.3."
+    note: "Experimental. Ikon Ultra Drive storage interface. First candidate of the ikon romlist."
+
+  - name: "dragonfly-1.3.rom"
+    system: dragon64
+    description: "Ikon Ultra Drive Dragonfly ROM 1.3"
+    required: false
+    source_ref: "xroar.c:715 (romlist ikon), ikon.c:151 (default @ikon), romlist.c:46-48 (extensions tried)"
+    note: >-
+      Experimental. Second candidate of the ikon romlist, loaded when
+      dragonfly-2.3 is absent. romlist_find appends the extensions "",
+      .rom, .ROM, .dgn, .DGN in that order. ikon.c loads the bank through
+      cart_rom_init and checks nothing: no crclist entry names this ROM.
