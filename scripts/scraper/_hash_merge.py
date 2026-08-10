@@ -266,6 +266,11 @@ def _diff_fbneo(
                 continue
 
             old = existing_by_key[key]
+            # source_ref is deliberately not compared here. The scraper knows
+            # one line per driver, the struct, while a curated entry cites the
+            # RomDesc line of its own ROM. Treating the difference as drift
+            # would replace per-ROM precision with a single driver line, which
+            # the profiling rules call the signature of a faulty entry.
             if old.get("crc32") != rom.get("crc32") or old.get("size") != rom.get(
                 "size"
             ):

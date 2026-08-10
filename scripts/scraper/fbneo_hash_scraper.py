@@ -279,9 +279,15 @@ def run(
         diff = compute_diff(str(path), str(CACHE_PATH), mode="fbneo")
         print(_format_diff(path.stem, diff, show_added=is_main))
 
-        effective_added = diff["added"] if is_main else []
-        if not dry_run and (effective_added or diff["updated"]):
-            merge_fbneo_profile(str(path), str(CACHE_PATH), write=True, add_new=is_main)
+        # New entries are never written. A non-arcade FBNeo driver opens an
+        # archive whose name has the system prefix stripped by its own
+        # GetZipName (cv_coleco -> coleco.zip, gba_gba -> gba.zip), and the
+        # parser reads the driver struct name instead. Adding those would
+        # create phantom archives the core never opens, next to the correctly
+        # named entries already curated. Refreshing existing entries is safe:
+        # they are keyed by the archive name the profile already declares.
+        if not dry_run and diff["updated"]:
+            merge_fbneo_profile(str(path), str(CACHE_PATH), write=True, add_new=False)
             log.info("merged changes into %s", path.name)
 
     return 0

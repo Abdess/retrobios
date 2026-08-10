@@ -5,7 +5,7 @@ source: "https://github.com/libretro/FBNeo"
 upstream: "https://github.com/finalburnneo/FBNeo"
 profiled_date: "2026-03-23"
 source_commit: "b267b79504366def21cefb08215e68df93310dba"
-core_version: "v1.0.0.03"
+core_version: "v1.0.0.2"
 display_name: "Arcade (FinalBurn Neo) (Neo-Geo)"
 cores:
   - fbneo_neogeo

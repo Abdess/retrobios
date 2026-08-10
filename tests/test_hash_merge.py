@@ -469,6 +469,21 @@ class TestDiff(unittest.TestCase):
             self.assertEqual(len(diff["added"]), 0)
             self.assertEqual(len(diff["updated"]), 0)
 
+    def test_diff_fbneo_keeps_a_per_rom_ref(self) -> None:
+        """The scraper knows the driver line; a curated ref knows its ROM."""
+        profile = _make_fbneo_profile()
+        profile["files"][0]["crc32"] = "9036d879"
+        profile["files"][0]["size"] = 131072
+        profile["files"][0]["source_ref"] = "src/burn/drv/neogeo/d_neogeo.cpp:1615"
+
+        with tempfile.TemporaryDirectory() as td:
+            p = Path(td)
+            profile_path = _write_yaml(p / "fbneo.yml", profile)
+            hashes_path = _write_json(p / "hashes.json", _make_fbneo_hashes())
+            diff = compute_diff(profile_path, hashes_path, mode="fbneo")
+            self.assertEqual(len(diff["updated"]), 0)
+            self.assertEqual(diff["unchanged"], 1)
+
 
 if __name__ == "__main__":
     unittest.main()
