@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Abdess/retrobios/schemas/pack-manifest.schema.json",
+  "title": "RetroBIOS pack integrity manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "version", "generator", "generated", "files", "summary", "errors"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "version": { "const": 1 },
+    "generator": { "const": "retrobios generate_pack.py" },
+    "generated": { "type": "string", "format": "date-time" },
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "sha1", "md5", "size", "status", "name"],
+        "properties": {
+          "path": { "type": "string", "minLength": 1 },
+          "sha1": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+          "md5": { "type": "string", "pattern": "^[a-f0-9]{32}$" },
+          "size": { "type": "integer", "minimum": 0 },
+          "status": { "enum": ["verified", "verified_md5", "verified_rebuild", "verified_data", "untracked"] },
+          "name": { "type": "string" }
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["total_files", "verified", "untracked", "errors"],
+      "properties": {
+        "total_files": { "type": "integer", "minimum": 0 },
+        "verified": { "type": "integer", "minimum": 0 },
+        "untracked": { "type": "integer", "minimum": 0 },
+        "errors": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "errors": { "type": "array", "items": { "type": "string" } }
+  }
+}

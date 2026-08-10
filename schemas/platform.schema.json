@@ -4,6 +4,7 @@
   "title": "Platform Configuration",
   "description": "Schema for retrogaming platform BIOS configuration files",
   "type": "object",
+  "additionalProperties": false,
   "required": ["platform"],
   "properties": {
     "inherits": {
@@ -17,6 +18,18 @@
     "version": {
       "type": "string",
       "description": "Platform version"
+    },
+    "dat_version": { "type": "string" },
+    "cores": {
+      "oneOf": [
+        { "type": "string" },
+        { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+      ]
+    },
+    "standalone_cores": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true
     },
     "homepage": {
       "type": "string",
@@ -51,6 +64,7 @@
     },
     "overrides": {
       "type": "object",
+      "additionalProperties": false,
       "description": "Override inherited system configs",
       "properties": {
         "systems": {
@@ -65,6 +79,7 @@
   "$defs": {
     "system": {
       "type": "object",
+      "additionalProperties": false,
       "properties": {
         "core": {
           "type": "string",
@@ -74,6 +89,8 @@
           "type": "string",
           "description": "Hardware manufacturer"
         },
+        "name": { "type": "string" },
+        "native_id": { "type": "string" },
         "dat_version": {
           "type": "string",
           "description": "Version of the DAT file used as source for BIOS hashes"
@@ -98,6 +115,18 @@
           "items": { "type": "string" },
           "description": "Shared BIOS groups to include (from _shared.yml)"
         },
+        "data_directories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["ref"],
+            "properties": {
+              "ref": { "type": "string" },
+              "destination": { "type": "string" }
+            }
+          }
+        },
         "files": {
           "type": "array",
           "items": {
@@ -109,6 +138,7 @@
     },
     "bios_file": {
       "type": "object",
+      "additionalProperties": false,
       "required": ["name", "destination"],
       "properties": {
         "name": {
@@ -156,7 +186,7 @@
         },
         "storage": {
           "type": "string",
-          "enum": ["embedded", "external", "user_provided"],
+          "enum": ["embedded", "external", "user_provided", "large_file", "release"],
           "default": "embedded",
           "description": "Storage tier: embedded (in repo), external (download at build), user_provided (manual)"
         },

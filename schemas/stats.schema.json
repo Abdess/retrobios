@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Abdess/retrobios/schemas/stats.schema.json",
+  "title": "RetroBIOS public statistics",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "generated_at", "files", "size_bytes", "platforms", "emulators", "systems", "catalog_matched", "source", "downloads", "composition"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "files": { "type": "integer", "minimum": 0 },
+    "size_bytes": { "type": "integer", "minimum": 0 },
+    "platforms": { "type": "integer", "minimum": 0 },
+    "emulators": { "type": "integer", "minimum": 0 },
+    "systems": { "type": "integer", "minimum": 0 },
+    "catalog_matched": { "type": "integer", "minimum": 0 },
+    "source": { "type": "string", "format": "uri" },
+    "downloads": { "type": "string", "format": "uri" },
+    "composition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["systems", "arcade", "game_data"],
+      "properties": {
+        "systems": { "$ref": "#/$defs/composition" },
+        "arcade": { "$ref": "#/$defs/composition" },
+        "game_data": { "$ref": "#/$defs/composition" }
+      }
+    }
+  },
+  "$defs": {
+    "composition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["files", "size_bytes"],
+      "properties": {
+        "files": { "type": "integer", "minimum": 0 },
+        "size_bytes": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}

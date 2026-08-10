@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Abdess/retrobios/schemas/site-api-envelope.schema.json",
+  "title": "RetroBIOS static API v1 envelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "generated_at", "kind", "count", "items"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "catalog",
+        "platforms",
+        "emulators",
+        "verification-and-coverage-gaps"
+      ]
+    },
+    "count": { "type": "integer", "minimum": 0 },
+    "items": {
+      "type": "array",
+      "items": { "type": "object" }
+    }
+  }
+}

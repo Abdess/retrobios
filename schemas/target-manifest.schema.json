@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Abdess/retrobios/schemas/target-manifest.schema.json",
+  "title": "RetroBIOS hardware target manifest",
+  "description": "Per-target core availability. A null core list means the target publishes no inventory: a known target with no filter, not an absent one.",
+  "type": "object",
+  "additionalProperties": {
+    "oneOf": [
+      { "type": "null" },
+      { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+      {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["cores"],
+        "properties": {
+          "cores": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true }
+        }
+      }
+    ]
+  }
+}

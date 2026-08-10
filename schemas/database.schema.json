@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Abdess/retrobios/schemas/database.schema.json",
+  "title": "RetroBIOS content database",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "generated_at", "total_files", "total_size", "files", "indexes"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "total_files": { "type": "integer", "minimum": 0 },
+    "total_size": { "type": "integer", "minimum": 0 },
+    "files": {
+      "type": "object",
+      "propertyNames": { "pattern": "^[a-f0-9]{40}$" },
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "name", "size", "sha1", "md5", "sha256", "crc32", "adler32"],
+        "properties": {
+          "path": { "type": "string", "minLength": 1 },
+          "name": { "type": "string", "minLength": 1 },
+          "size": { "type": "integer", "minimum": 0 },
+          "sha1": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+          "md5": { "type": "string", "pattern": "^[a-f0-9]{32}$" },
+          "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+          "crc32": { "type": "string", "pattern": "^[a-f0-9]{8}$" },
+          "adler32": { "type": "string", "pattern": "^[a-f0-9]{8}$" },
+          "provenance": { "type": "object" }
+        }
+      }
+    },
+    "indexes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["by_md5", "by_name", "by_crc32", "by_sha256", "by_path_suffix"],
+      "properties": {
+        "by_md5": { "$ref": "#/$defs/hashIndex" },
+        "by_crc32": { "$ref": "#/$defs/hashIndex" },
+        "by_sha256": { "$ref": "#/$defs/hashIndex" },
+        "by_name": { "$ref": "#/$defs/listIndex" },
+        "by_path_suffix": { "$ref": "#/$defs/listIndex" }
+      }
+    }
+  },
+  "$defs": {
+    "hashIndex": {
+      "type": "object",
+      "additionalProperties": { "type": "string", "pattern": "^[a-f0-9]{40}$" }
+    },
+    "listIndex": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+        "minItems": 1,
+        "uniqueItems": true
+      }
+    }
+  }
+}
