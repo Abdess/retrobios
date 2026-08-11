@@ -157,6 +157,14 @@ overwrites the full one, and the pack README says the pack was narrowed.
 selects by hash. `pipeline.py` never passes it, so the released packs stay
 complete.
 
+Every dimension that removes files appears in the output filename and in the
+pack README, because both are built from the same list (`_narrowings` in
+`generate_pack.py`). A pack narrowed three ways is called
+`Recalbox_10.0.8_NorthAmerica_OnePerSlot_Required_BIOS_Pack.zip` and opens with
+a `PACK TYPE: Narrowed` block listing the three. Adding a new way to narrow a
+pack means adding it to that list, so it cannot reach users nameless or
+unannounced.
+
 Region and target both appear in the output filename
 (`RetroArch_v1.22.2_NorthAmerica_Switch_BIOS_Pack.zip`,
 `install/retroarch_northamerica_switch.json`), so a filtered build can never

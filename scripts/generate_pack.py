@@ -310,6 +310,43 @@ def _pack_member_groups(
     return groups
 
 
+def _narrowings(
+    source: str,
+    regions: list[str] | None,
+    target_name: str | None,
+    one_per_slot: bool,
+    required_only: bool,
+) -> list[tuple[str, str]]:
+    """Every dimension that narrows a pack, as (filename tag, plain label).
+
+    The pack name and the pack README are both built from this list, so a new
+    way of narrowing a pack cannot reach users nameless or unannounced. Order
+    is the filename order and must not change: it is what existing archives
+    are called.
+    """
+    applied: list[tuple[str, str]] = []
+    if source == "platform":
+        applied.append(("_Platform", "only what the platform declares"))
+    elif source == "truth":
+        applied.append(("_Truth", "only what emulator profiles require"))
+    if regions:
+        pretty = ", ".join(
+            " ".join(w.title() for w in slug.split("-")) for slug in regions
+        )
+        applied.append(
+            (f"_{region_mod.region_tag(regions)}", f"region priority {pretty}")
+        )
+    if target_name:
+        applied.append(
+            (f"_{_target_tag(target_name)}", f"cores available on {target_name}")
+        )
+    if one_per_slot:
+        applied.append(("_OnePerSlot", "one BIOS per system and region"))
+    if required_only:
+        applied.append(("_Required", "required files only"))
+    return applied
+
+
 def _target_tag(target_name: str) -> str:
     """Filename tag for a hardware target.
 
@@ -935,8 +972,11 @@ def _build_readme(
     fallback_systems: list[str] | None = None,
     one_per_slot: bool = False,
     undecidable_slots: list[str] | None = None,
+    narrowings: list[tuple[str, str]] | None = None,
+    system_filter: list[str] | None = None,
 ) -> str:
     """Build a personalized step-by-step README for each platform pack."""
+    narrowings = narrowings or []
     sep = "=" * 50
     header = (
         f"{sep}\n"
@@ -1175,15 +1215,28 @@ def _build_readme(
     slot_info = ""
     if one_per_slot:
         slot_info = (
-            "PACK TYPE: One File Per Slot\n\n"
             "  Where a core declares which BIOS it prefers, only that one was\n"
             "  kept for each system and region. Systems whose cores declare no\n"
-            "  order keep all of theirs.\n\n"
+            "  order keep all of theirs.\n"
         )
         if undecidable_slots:
             slot_info += (
-                f"  {len(undecidable_slots)} slot(s) had no declared order.\n\n"
+                f"  {len(undecidable_slots)} slot(s) had no declared order.\n"
             )
+        slot_info += "\n"
+
+    narrowed = ""
+    labels = [label for _tag, label in narrowings]
+    if system_filter:
+        labels.append(f"systems {', '.join(system_filter)}")
+    if labels:
+        listed = "".join(f"    {label}\n" for label in labels)
+        narrowed = (
+            "PACK TYPE: Narrowed\n\n"
+            "  This pack holds fewer files than the full one:\n"
+            f"{listed}"
+            "\n  The unfiltered pack is the one to use when in doubt.\n\n"
+        )
 
     credits = ""
     if contributors:
@@ -1194,7 +1247,8 @@ def _build_readme(
         credits += "\n"
 
     return (
-        header + source_info + region_info + slot_info + guide + credits + footer
+        header + narrowed + source_info + region_info + slot_info
+        + guide + credits + footer
     )
 
 
@@ -1254,11 +1308,10 @@ def generate_pack(
 
     version = config.get("version", config.get("dat_version", ""))
     version_tag = f"_{version.replace(' ', '')}" if version else ""
-    req_tag = "_Required" if required_only else ""
-    source_tag = {"platform": "_Platform", "truth": "_Truth"}.get(source, "")
-    region_tag_str = f"_{region_mod.region_tag(regions)}" if regions else ""
-    target_tag = f"_{_target_tag(target_name)}" if target_name else ""
-    slot_tag = "_OnePerSlot" if one_per_slot else ""
+    narrowings = _narrowings(
+        source, regions, target_name, one_per_slot, required_only
+    )
+    narrow_tags = "".join(tag for tag, _label in narrowings)
 
     sys_tag = ""
     if system_filter:
@@ -1273,7 +1326,7 @@ def generate_pack(
             display_parts.append("_".join(p.title() for p in parts if p))
         sys_tag = "_" + "_".join(display_parts)
 
-    zip_name = f"{platform_display.replace(' ', '_')}{version_tag}{source_tag}{region_tag_str}{target_tag}{slot_tag}{req_tag}_BIOS_Pack{sys_tag}.zip"
+    zip_name = f"{platform_display.replace(' ', '_')}{version_tag}{narrow_tags}_BIOS_Pack{sys_tag}.zip"
     zip_path = os.path.join(output_dir, zip_name)
     os.makedirs(output_dir, exist_ok=True)
 
@@ -1903,6 +1956,8 @@ def generate_pack(
           fallback_systems=region_fallbacks,
           one_per_slot=one_per_slot,
           undecidable_slots=slot_undecidable,
+          narrowings=narrowings,
+          system_filter=system_filter,
       )
       _write_generated_member(zf, "README.txt", readme_text)
 
@@ -2545,11 +2600,14 @@ def generate_split_packs(
         if zip_path:
             version = config.get("version", config.get("dat_version", ""))
             ver_tag = f"_{version.replace(' ', '')}" if version else ""
-            req_tag = "_Required" if required_only else ""
-            rgn_tag = f"_{region_mod.region_tag(regions)}" if regions else ""
-            tgt_tag = f"_{_target_tag(target_name)}" if target_name else ""
+            narrow_tags = "".join(
+                tag
+                for tag, _label in _narrowings(
+                    source, regions, target_name, one_per_slot, required_only
+                )
+            )
             safe_group = group_name.replace(" ", "_")
-            new_name = f"{platform_display.replace(' ', '_')}{ver_tag}{source_tag}{rgn_tag}{tgt_tag}{req_tag}_{safe_group}_BIOS_Pack.zip"
+            new_name = f"{platform_display.replace(' ', '_')}{ver_tag}{narrow_tags}_{safe_group}_BIOS_Pack.zip"
             new_path = os.path.join(split_dir, new_name)
             if new_path != zip_path:
                 os.rename(zip_path, new_path)

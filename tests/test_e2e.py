@@ -5685,6 +5685,52 @@ struct BurnDriver BurnDrvneogeo = {
         )
         self.assertTrue(checked.issubset(self._names_in(out)))
 
+    def test_every_narrowing_names_itself_and_says_so(self):
+        """A dimension that removes files must show in the pack name and in the
+        README. Both are built from _narrowings, so this holds for any new one."""
+        from generate_pack import _build_readme, _narrowings
+
+        dimensions = [
+            {"source": "platform"},
+            {"source": "truth"},
+            {"regions": ["north-america"]},
+            {"target_name": "switch"},
+            {"one_per_slot": True},
+            {"required_only": True},
+        ]
+        for kwargs in dimensions:
+            applied = _narrowings(
+                kwargs.get("source", "full"),
+                kwargs.get("regions"),
+                kwargs.get("target_name"),
+                kwargs.get("one_per_slot", False),
+                kwargs.get("required_only", False),
+            )
+            self.assertEqual(len(applied), 1, kwargs)
+            tag, label = applied[0]
+            self.assertTrue(tag.startswith("_") and len(tag) > 1, kwargs)
+            self.assertTrue(label.strip(), kwargs)
+            readme = _build_readme("p", "P", "", 1, 1, narrowings=applied)
+            self.assertIn("PACK TYPE: Narrowed", readme)
+            self.assertIn(label, readme)
+
+    def test_a_full_pack_is_not_announced_as_narrowed(self):
+        from generate_pack import _build_readme, _narrowings
+
+        self.assertEqual(_narrowings("full", None, None, False, False), [])
+        self.assertNotIn(
+            "PACK TYPE: Narrowed", _build_readme("p", "P", "", 1, 1)
+        )
+
+    def test_system_filter_is_announced_too(self):
+        from generate_pack import _build_readme
+
+        readme = _build_readme(
+            "p", "P", "", 1, 1, system_filter=["sony-playstation"]
+        )
+        self.assertIn("PACK TYPE: Narrowed", readme)
+        self.assertIn("sony-playstation", readme)
+
     def test_extras_group_under_their_system_not_a_shared_bucket(self):
         """find_undeclared_files reports the display name, the profiles are
         keyed by slug; a key-only lookup put nearly every core extra in one
