@@ -1,0 +1,205 @@
+emulator: Infinity
+type: standalone
+core_classification: community_fork
+based_on: "fake-08 by jtothebell"
+source: "https://play.google.com/store/apps/details?id=me.dt2dev.infinity"
+upstream: closed-source
+author: "GuoPing He"
+profiled_date: "2026-08-11"
+core_version: "5"
+display_name: "PICO-8 (Infinity)"
+cores:
+  - infinity
+systems:
+  - pico8
+mode: standalone
+
+notes: |
+  Android package me.dt2dev.infinity, closed source, free with ads on Google Play.
+  Two builds are read here, versionCode 501 (versionName 5, minSdk 32, targetSdk 37,
+  xapk sha256 d0040583814a634c9aa2ff56b8245f1eb94f33ee0785c264bccfa5188cd3a273) and
+  versionCode 404 (minSdk 30), both carrying lib/arm64-v8a, the Play app signing
+  certificate sha256
+  eb7b3dd469cf44ab614abda7a367c20de540014a37bb2b915dffecf5f3268da2 and the Play
+  distribution source stamp.
+
+  The engine is fake-08 compiled into libinfinity.so and driven through a nine
+  method JNI bridge. Its Lua blobs are upstream: the settings cart is byte identical
+  to fake-08 814991a and the default cart differs only where VER_STR is spliced, the
+  Android build leaving that macro undefined so the boot cart reports v0.0.0.0. The
+  global Lua glue is patched in five places, all in the pause menu, where "exit to
+  menu" and "exit to settings" give way to a single "quit game" calling the native
+  __quitgame, navigation wraps around and the menu holds eight items instead of
+  nine. No menu entry reaches the cart browser or the settings cart any more, the
+  Compose interface listing the library instead.
+  ref: Fake8.java:27-44, 60, 95,
+       libinfinity.so arm64 .rodata DefaultCart / FakoSettings / p8GlobalLuaFunctions
+       blobs, symbol __quitgame
+
+  A cart never reaches the engine as a path. Java reads the bytes into a direct
+  ByteBuffer, from the application assets for a built-in cart or through the content
+  resolver for anything else, then hands the buffer to nativeStart with the save
+  state name <cart>.ss and the application's internal files directory, where a cdata
+  subdirectory holds the <id>.p8d.txt cart data files. No storage permission is
+  declared: the cart library is a directory tree granted through the storage access
+  framework, and the only write outside internal storage is the .nomedia file that
+  the "Show Carts in Photos" switch creates or deletes there.
+  ref: pg0.java:50-92, ok0.java:139-146, yk0.java:54-63,
+       libinfinity.so arm64 .rodata ".p8d.txt"
+
+  ES-DE targets me.dt2dev.infinity/.SchemeActivity with a VIEW intent on its own
+  content provider. The activity reads the display name from the provider, accepts
+  it only when it ends in .p8 or .p8.png, strips that extension and forwards
+  infinity://game with cart_uri, filename, save_state=false and assets=false to
+  MainActivity. The manifest filter announces the content scheme with the image/png
+  type, which an explicit component bypasses.
+  ref: SchemeActivity.java:25-84, AndroidManifest.xml activity me.dt2dev.infinity.SchemeActivity
+
+  Two graphics backends. OpenGL ES is the default and carries its three fragment
+  programs as GLSL string literals inside the library. Vulkan, offered as beta,
+  reads SPIR-V modules from the application assets instead, one vertex module plus
+  one fragment module chosen by the display filter. Version 501 ships no shader
+  asset at all, version 404 ships the four listed below, and both libraries name
+  them; the loader takes no null check between AAssetManager_open and
+  AAsset_getLength. The manifest requires only abi and density splits, so no asset
+  pack can deliver them separately.
+  ref: vh.java:381 graphics_backend default 0, vh.java:297 display_filter default 0,
+       libinfinity.so arm64 0xa6ee0-0xa7098, 0x9c72c-0x9c828
+
+files:
+  - name: common.vert.spv
+    path: "assets/shaders/common.vert.spv"
+    system: pico8
+    required: false
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    size: 748
+    md5: 541e16aa5651699bb085c954ec1b043e
+    sha1: 20815dcbfaff559ec0faf0f890ad473a3b784ed0
+    description: "Vulkan vertex shader module"
+    note: "Opened first whenever the Vulkan backend starts, whatever the display filter. Bytes from versionCode 404."
+    source_ref: "libinfinity.so arm64 0xa7078, 0x9c780-0x9c78c"
+
+  - name: none.frag.spv
+    path: "assets/shaders/none.frag.spv"
+    system: pico8
+    required: false
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    size: 580
+    md5: 8437c4e750da7183dffc7b98f9938377
+    sha1: f3aae57c3f776d35ddf2690679221c05745dcc8b
+    description: "Vulkan fragment shader module, unfiltered output"
+    note: "Chosen for any display filter value other than 1 and 2, the stored default being 0. Bytes from versionCode 404."
+    source_ref: "libinfinity.so arm64 0xa6f04-0xa6f40, 0xa7090-0xa7098, 0x9c7ec-0x9c828"
+
+  - name: crt.frag.spv
+    path: "assets/shaders/crt.frag.spv"
+    system: pico8
+    required: false
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    size: 1864
+    md5: c4878a2aaee2e3c26d3d4aeeeaa3ac25
+    sha1: 92822c268c59f60fe9a4098768be599006f7f1ab
+    description: "Vulkan fragment shader module, CRT filter"
+    note: "Chosen when the display filter is 1. Bytes from versionCode 404."
+    source_ref: "libinfinity.so arm64 0xa6f34-0xa6f40, 0xa7090-0xa7098, 0x9c7ec-0x9c828"
+
+  - name: lcd.frag.spv
+    path: "assets/shaders/lcd.frag.spv"
+    system: pico8
+    required: false
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    size: 1700
+    md5: 76f36cbe69708d631ae356bcd49274b2
+    sha1: 1a3c0aa0b93cc1ee4690b2c0d593497d003b6165
+    description: "Vulkan fragment shader module, LCD filter"
+    note: "Chosen when the display filter is 2. Bytes from versionCode 404."
+    source_ref: "libinfinity.so arm64 0xa6f10-0xa6f30, 0xa7090-0xa7098, 0x9c7ec-0x9c828"
+
+  - name: 7x7demake.p8.png
+    path: "assets/7x7demake.p8.png"
+    system: pico8
+    required: false
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    size: 7443
+    md5: 1d6416a591c99b03c58b41f0dd5537b0
+    sha1: 35ec298b803b29b6bee6d89f46507c50a3461b35
+    description: "Built-in cart, 7x7 Demake"
+    note: "Held as a file:///android_asset URI and prepended to the library when the built-in carts switch is on, the loader taking the path after the scheme and reading it from the assets."
+    source_ref: "qd.java:15-17, pg0.java:50, ok0.java:139-142"
+
+  - name: tictactoe.p8.png
+    path: "assets/tictactoe.p8.png"
+    system: pico8
+    required: false
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    size: 7537
+    md5: 4f508068de9190c06775bfb4e47e2654
+    sha1: 5a7d0bd289e971a4ea6dfb09704b56252b85fe01
+    description: "Built-in cart, Infinity Tic Tac Toe"
+    note: "Second entry of the same table, loaded the same way."
+    source_ref: "qd.java:18-20, pg0.java:50, ok0.java:139-142"
+
+  - name: fake-08.md
+    path: "assets/fake-08.md"
+    system: pico8
+    required: false
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    size: 5543
+    md5: a382a7e446335d3ea20f85a21a5846ec
+    sha1: 6d7e23241be0a110bc59110773963f678e199c32
+    description: "Licence text shown for fake-08"
+    note: "First of four names paired with the library names fake-08, coil, okio and DocumentFileCompat, each read from the assets when its entry is opened."
+    source_ref: "ry0.java:14-15, yq0.java:125"
+
+  - name: coil.txt
+    path: "assets/coil.txt"
+    system: pico8
+    required: false
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    size: 11347
+    md5: 06f4dfd96b1e7f0b6d5cc7f7163c7904
+    sha1: 14d28015d8a8c902d219b6a24d2241aa061dda09
+    description: "Licence text shown for coil"
+    source_ref: "ry0.java:14-15, yq0.java:125"
+
+  - name: okio.txt
+    path: "assets/okio.txt"
+    system: pico8
+    required: false
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    size: 11358
+    md5: 3b83ef96387f14655fc854ddc3c6bd57
+    sha1: 2b8b815229aa8a61e483fb4ba0588b8b6c491890
+    description: "Licence text shown for okio"
+    source_ref: "ry0.java:14-15, yq0.java:125"
+
+  - name: dfc.txt
+    path: "assets/dfc.txt"
+    system: pico8
+    required: false
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    size: 11357
+    md5: 86d3f3a95c324c9479bd8986968f4327
+    sha1: 7df059597099bb7dcf25d2a9aedfaf4465f72d8d
+    description: "Licence text shown for DocumentFileCompat"
+    source_ref: "ry0.java:14-15, yq0.java:125"

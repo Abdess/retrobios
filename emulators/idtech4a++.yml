@@ -1,0 +1,618 @@
+emulator: idTech4A++
+type: standalone
+core_classification: game_engine
+source: "https://github.com/glKarin/com.n0n3m4.diii4a"
+upstream: "https://github.com/glKarin/com.n0n3m4.diii4a"
+author: "glKarin"
+profiled_date: "2026-08-11"
+source_commit: "683afc7aa181ec4b7ee69424ce9fdb1a8fac5ba9"
+core_version: "1.1.0harmattan72"
+display_name: "id Tech engine collection (idTech4A++)"
+cores:
+  - "idtech4a++"
+  - idtech4amm
+  - diii4a
+systems:
+  - doom
+  - doom3
+  - doom3-bfg
+  - quake
+  - quake2
+  - quake3
+  - quake4
+  - prey
+  - wolfenstein3d
+  - return-to-castle-wolfenstein
+  - wolfenstein-enemy-territory
+  - realrtcw
+  - the-dark-mod
+  - jedi-academy
+  - jedi-outcast
+  - medal-of-honor-allied-assault
+  - urban-terror
+  - enemy-territory-quake-wars
+  - skin-deep
+  - quadrilateral-cowboy
+  - icarus-starship-command-simulator
+  - hexen2
+  - half-life
+  - half-life-2
+  - serious-sam
+mode: standalone
+
+notes: |
+  Android package com.karin.idTech4Amm, arm64-v8a and armeabi-v7a, Android 4.4+,
+  GPLv3, forked from n0n3m4's DIII4A. A Java launcher picks a game and a command
+  line, then loads one of twenty-six engine libraries into the Q3E frontend,
+  which owns the GL surface, the on-screen controls and the audio path. Another
+  application starts a game directly through com.n0n3m4.q3e.Q3EMain with a `game`
+  extra carrying the game token and a `command` extra carrying an argument vector
+  that begins with `game.arm`.
+  ref: README.md:13-26, 237-251,
+       Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameConstants.java:8-33, 91-116, 303,
+       Q3E/src/main/java/com/n0n3m4/q3e/Q3EGlobals.java:9,
+       idTech4Amm/build.gradle:13-14, 23
+
+  Game data lives under a working directory, `/sdcard/diii4a` unless the
+  preference names another, and each game reads a base folder inside it. With the
+  standalone-directory preference on, which is the default, the base folder sits
+  under a per-game subdirectory; with it off, games that are not marked always
+  standalone read the base folder directly under the working directory. The Dark
+  Mod, UZDOOM, FTEQW, ECWolf, Xash3D, Source and both Serious Sam entries are
+  always standalone and keep their subdirectory either way.
+  ref: Q3E/src/main/java/com/n0n3m4/q3e/Q3EInterface.java:89, 106, 233-254,
+       Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameConstants.java:147-202, 421,
+       443-461
+
+  Engine, standalone directory and base folder per game, in registration order:
+  DOOM 3 (dante, doom3/base), Quake 4 (dante, quake4/q4base), Prey 2006 (dante,
+  prey/preybase), Enemy Territory: QUAKE Wars (Splash Damage idTech4,
+  etqw/etqwbase), DOOM 3 BFG (RBDOOM-3-BFG 1.4.0, doom3bfg/base), The Dark Mod
+  2.14 (darkmod), Skin Deep 1.0.4 (skindeep/base), Quadrilateral Cowboy
+  1.0.2602252 (qc/base), Icarus Starship Command Simulator 1.0.9 (icarus/base),
+  Quake III Arena (ioquake3 1.36, quake3/baseq3), Return to Castle Wolfenstein
+  (iortcw 1.51d, rtcw/main), Wolfenstein: Enemy Territory (ET: Legacy 2.83.2,
+  etw/etmain), Jedi Academy (OpenJK 1.0.1.1, openja/base), Jedi Outcast (OpenJK
+  1.0.1.1, openjo/base), Medal of Honor: Allied Assault (OpenMOHAA 0.82.1,
+  openmohaa/main), Urban Terror (Q3-UT4 4.3.4, urt/q3ut4), RealRTCW 5.43
+  (realrtcw/Main), Quake II (Yamagi 8.60, quake2/baseq2), Quake (Darkplaces,
+  quake1/darkplaces/id1), UZDOOM 4.14.3 (uzdoom), Wolfenstein 3D (ECWolf 1.4.2,
+  ecwolf), FTEQW 1.05 (fteqw), Xash3D 0.21 (xash/valve), Source Engine 1.16
+  (srceng/hl2), Serious Sam TFE 1.10.7 (serioussamtfe) and Serious Sam TSE 1.10.7
+  (serioussamtse). Every one is built in this configuration; the F-Droid flavour
+  leaves out Xash3D and Source, and the idtech flavour leaves out those two and
+  Serious Sam. DOOM 3 BFG carries a second library for its Vulkan renderer.
+  ref: Q3E/src/main/java/com/n0n3m4/q3e/Q3EGame.java:17-291,
+       Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameConstants.java:204-230,
+       Q3E/src/main/jni/CMakeLists.txt:33-60, 137-266
+
+  The retail data is what the user brings, and no engine here names its archives
+  one by one. The idTech 4 lineage lists `.pk4` in the game directory, DOOM 3 BFG
+  lists `.resources`, Yamagi walks `pak0` through `pak99` for each of its four
+  container suffixes and then globs the rest, and Serious Sam globs `*.gro`. What
+  every id-derived engine does gate on is `default.cfg` inside those archives: an
+  empty read is a fatal error, and only the Splash Damage build is compiled past
+  the check. UZDOOM ends with "Cannot find a game IWAD" when no known IWAD is
+  present, and ECWolf with "Can not find base game data. (*.wl6, *.wl1, *.sdm,
+  *.sod, *.n3d)". The launcher carries a store or homepage link per game and mod
+  so the data can be bought or downloaded.
+  ref: doom3/neo/framework/FileSystem.cpp:2052, 2503, 3392-3400,
+       Q3E/src/main/jni/doom3bfg/neo/framework/FileSystem.cpp:3001, 3173,
+       Q3E/src/main/jni/darkmod/framework/FileSystem.cpp:2650-2657,
+       Q3E/src/main/jni/quake3/code/qcommon/files.c:4161-4165,
+       Q3E/src/main/jni/rtcw/SP/code/qcommon/files.c:4340-4344,
+       Q3E/src/main/jni/jk/code/qcommon/files.cpp:3020,
+       Q3E/src/main/jni/openmohaa/code/qcommon/files.cpp:4011,
+       Q3E/src/main/jni/quake2/yquake2/src/common/filesystem.c:1801-1850,
+       Q3E/src/main/jni/zdoom/src/d_iwad.cpp:738,
+       Q3E/src/main/jni/ecwolf/src/wl_iwad.cpp:766,
+       idTech4Amm/src/main/java/com/karin/idTech4Amm/sys/GameResourceUrl.java:14-118
+
+  The Quake III lineage keeps id's release checksums for `baseq3` pak0 through
+  pak8 and `missionpack` pak0 through pak3, and an archive whose value disagrees
+  only draws a console warning telling the user to re-copy from the CD or
+  re-install the point release. Those numbers are a block checksum over the CRCs
+  of the archive members, not a hash of the file, so they identify a release
+  rather than validate a download.
+  ref: Q3E/src/main/jni/quake3/code/qcommon/files.c:178-197, 3572-3690,
+       Q3E/src/main/jni/quake3/code/qcommon/qcommon.h:592-593
+
+  UZDOOM reads the IWAD names it will accept from `iwadinfo.txt` inside
+  `game_support.pk3`: the DOOM, DOOM II, Final DOOM, BFG and KEX re-releases,
+  Freedoom, Heretic, Hexen, Strife, Blasphemer, Chex Quest, Action Doom 2, HacX,
+  Harmony, Square, Delaweare and Return of the Triad, forty-nine names. The
+  launcher itself names four of them as selectable data files, DOOM.WAD,
+  DOOM2.WAD, freedoom1.wad and freedoom2.wad, because UZDOOM and ECWolf are the
+  two games whose data is a file rather than a folder.
+  ref: Q3E/src/main/jni/zdoom/src/d_iwad.cpp:287-297, 321-342,
+       Q3E/src/main/jni/zdoom/src/version.h:100-102,
+       idTech4Amm/src/main/java/com/karin/idTech4Amm/sys/Game.java:69-72,
+       Q3E/src/main/java/com/n0n3m4/q3e/Q3EInterface.java:710-713
+
+  Starting a game extracts that game's bundled resources first. A text file named
+  `idtech4amm.version` is written beside them and compared on the next run, so an
+  engine update replaces the copy and a user edit survives otherwise. The Dark
+  Mod, DOOM 3 BFG, UZDOOM, Xash3D, Source, Enemy Territory, ECWolf, Skin Deep and
+  ETQW are covered by this path; the bot, Rivensin and translation archives are
+  extracted on request from the launcher instead.
+  ref: Q3E/src/main/java/com/n0n3m4/q3e/Q3EMain.java:167,
+       Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:624-703, 921-940,
+       Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResource.java:12-47,
+       Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:32-218
+
+  On-screen button images are read through a search path built from the working
+  directory, the external files directory of the package, its internal data
+  directory and the assets of the apk, plus every `.zipak` archive found in the
+  first three. A file of the same name in any of them replaces the built-in
+  image, and a folder under `controls_theme/` becomes a named theme in the
+  chooser, described by a `description.txt` that may be suffixed with a language
+  tag.
+  ref: Q3E/src/main/java/com/n0n3m4/q3e/karin/KFDManager.java:66-96,
+       Q3E/src/main/java/com/n0n3m4/q3e/Q3EContextUtils.java:236-241, 305-345,
+       Q3E/src/main/java/com/n0n3m4/q3e/Q3EGlobals.java:230,
+       idTech4Amm/src/main/java/com/n0n3m4/DIII4A/launcher/SetupControlsThemeFunc.java:149-179
+
+files:
+  - name: uzdoom.pk3
+    required: true
+    bundled: true
+    unsourceable: "arrives with the application package, not sourced separately"
+    category: game_data
+    path: "uzdoom/uzdoom.pk3"
+    size: 3007398
+    md5: d3f231863ee2973dbc9291e853d1eb4a
+    sha1: dd2364da2cc8b49e32330ba9abff80727b4ea0a0
+    description: "UZDOOM engine resource archive"
+    note: >-
+      Named by BASEWAD and searched before anything else; a miss ends the process
+      with "Cannot find uzdoom.pk3". Carries the hex font, the widget resources
+      and the script definitions the engine needs before a game is chosen. Copied
+      out of the apk with the rest of the UZDOOM resource directory.
+    source_ref: "Q3E/src/main/jni/zdoom/src/version.h:100, Q3E/src/main/jni/zdoom/src/d_main.cpp:3707-3713, Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:94-103"
+
+  - name: game_support.pk3
+    required: true
+    bundled: true
+    unsourceable: "arrives with the application package, not sourced separately"
+    category: game_data
+    path: "uzdoom/game_support.pk3"
+    size: 2382047
+    md5: 64d976172bae64edb10e542f14f2de9f
+    sha1: cccab57d1d1b84601fa0c52a74f55bf7b36f4e1c
+    description: "UZDOOM IWAD definitions and per-game filters"
+    note: >-
+      Named by OPTIONALWAD and opened as the second file of the IWAD manager. It
+      holds the IWADINFO lump, so without it no IWAD is recognised and startup
+      ends on "Cannot find a game IWAD" even when the WAD is in place. Also
+      carries the per-game filter trees keyed by IWAD identity.
+    source_ref: "Q3E/src/main/jni/zdoom/src/version.h:102, Q3E/src/main/jni/zdoom/src/d_main.cpp:3744-3746, Q3E/src/main/jni/zdoom/src/d_iwad.cpp:321-342, 738"
+
+  - name: game_widescreen_gfx.pk3
+    required: false
+    bundled: true
+    unsourceable: "arrives with the application package, not sourced separately"
+    category: game_data
+    path: "uzdoom/game_widescreen_gfx.pk3"
+    size: 5565936
+    md5: 8ebf4d4a7b950f156c6c277ed9244aac
+    sha1: 9ff11fca19550b189cc8e7d4cafc9897d57cd472
+    description: "Widescreen replacements for the stock graphics"
+    note: >-
+      Searched by name and loaded only when the startup dialog leaves widescreen
+      graphics enabled.
+    source_ref: "Q3E/src/main/jni/zdoom/src/d_main.cpp:2083"
+
+  - name: lights.pk3
+    required: false
+    bundled: true
+    unsourceable: "arrives with the application package, not sourced separately"
+    category: game_data
+    path: "uzdoom/lights.pk3"
+    size: 24030
+    md5: 5e5977e018d3ef2dfda2607b0b3e57ae
+    sha1: 19ad73cae23b5d9f3890ae29542a2d3e611bda00
+    description: "Dynamic light definitions"
+    note: >-
+      Searched by name on the user choice recorded at first start, and offered a
+      second time as a launcher switch that appends it to the file list.
+    source_ref: "Q3E/src/main/jni/zdoom/src/d_main.cpp:2066-2075, Q3E/src/main/java/com/n0n3m4/q3e/Q3EInterface.java:1138, idTech4Amm/src/main/java/com/n0n3m4/DIII4A/GameLauncher.java:558"
+
+  - name: brightmaps.pk3
+    required: false
+    bundled: true
+    unsourceable: "arrives with the application package, not sourced separately"
+    category: game_data
+    path: "uzdoom/brightmaps.pk3"
+    size: 246181
+    md5: 302fd7cffd2b197c5c68778f877d3086
+    sha1: ccb1fb093dc128da46a5060ba319c5bd5790e074
+    description: "Brightmap definitions"
+    note: >-
+      Loaded on the same choice and the same launcher switch as the light
+      definitions.
+    source_ref: "Q3E/src/main/jni/zdoom/src/d_main.cpp:2066-2081, Q3E/src/main/java/com/n0n3m4/q3e/Q3EInterface.java:1140, idTech4Amm/src/main/java/com/n0n3m4/DIII4A/GameLauncher.java:565"
+
+  - name: uzdoom.sf2
+    required: false
+    bundled: true
+    unsourceable: "arrives with the application package, not sourced separately"
+    category: game_data
+    path: "uzdoom/soundfonts/uzdoom.sf2"
+    size: 3299098
+    md5: f306ebc541a428d296cd3b7ee996d872
+    sha1: 4394193fb95c1e59916efe9ac3a47952ab5002f5
+    description: "SoundFont for the MIDI devices"
+    note: >-
+      Collected by scanning a `soundfonts` directory added to the search paths of
+      the config file; every .sf2 and zipped GUS patch set found there becomes a
+      menu entry.
+    source_ref: "Q3E/src/main/jni/zdoom/src/gameconfigfile.cpp:220, 258, Q3E/src/main/jni/zdoom/src/common/audio/music/i_soundfont.cpp:335-370"
+
+  - name: GENMIDI.GS.wopl
+    required: false
+    bundled: true
+    unsourceable: "arrives with the application package, not sourced separately"
+    category: game_data
+    path: "uzdoom/fm_banks/GENMIDI.GS.wopl"
+    size: 118767
+    md5: 29570afc6ccea3d9ef7d2734f02e6cab
+    sha1: 538d220d87b86b997f539265eb12a6c319e17a1c
+    description: "OPL3 instrument bank"
+    note: >-
+      Collected from an `fm_banks` directory added to the search paths beside the
+      soundfont directory, for the OPL synthesiser.
+    source_ref: "Q3E/src/main/jni/zdoom/src/gameconfigfile.cpp:221, 259"
+
+  - name: gs-by-papiezak-and-sneakernets.wopn
+    required: false
+    bundled: true
+    unsourceable: "arrives with the application package, not sourced separately"
+    category: game_data
+    path: "uzdoom/fm_banks/gs-by-papiezak-and-sneakernets.wopn"
+    size: 274864
+    md5: 4978fd39a6d78de1cf1021e24424f822
+    sha1: eaca5d7a9fe1db6094990be0d8916b7f97920db1
+    description: "OPN2 instrument bank"
+    note: >-
+      Collected from the same `fm_banks` directory, for the OPN2 synthesiser.
+    source_ref: "Q3E/src/main/jni/zdoom/src/gameconfigfile.cpp:221, 259"
+
+  - name: ecwolf.pk3
+    required: true
+    bundled: true
+    unsourceable: "arrives with the application package, not sourced separately"
+    category: game_data
+    path: "ecwolf/ecwolf.pk3"
+    size: 185013
+    md5: d9dcd91db4a0bc45ba12a01ad1828be8
+    sha1: d327b48f83d9b95c5a49597145d96be80be3eade
+    description: "ECWolf engine resource archive"
+    note: >-
+      Named by MAIN_PK3 and passed to the game selector with the program
+      directory; failing to open it ends the process with "Could not open
+      ecwolf.pk3!". It holds the IWADINFO rules that identify which Wolfenstein
+      data set is present, the palettes and the actor definitions. This build
+      reads it from disk after extraction, unlike the libretro core which
+      compiles it in.
+    source_ref: "Q3E/src/main/jni/ecwolf/src/version.h:12, Q3E/src/main/jni/ecwolf/src/wl_iwad.cpp:604, Q3E/src/main/jni/ecwolf/src/wl_main.cpp:1294-1307, Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:186-195"
+
+  - name: glprogs.pk4
+    required: true
+    bundled: true
+    unsourceable: "arrives with the application package, not sourced separately"
+    category: game_data
+    size: 98396
+    md5: 3155df291027d253e2596db3fca1ac4a
+    sha1: 2651f1eff1785999918c08600f079e1ad4a206e7
+    description: "The Dark Mod GLSL shader set rewritten for OpenGL ES"
+    note: >-
+      Unpacked into the standalone directory as `glslprogs/`, the tree the
+      renderer compiles its programs from. Version-stamped with the engine
+      release so a Dark Mod update replaces it.
+    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:83-92, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:705-722, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameConstants.java:391"
+
+  - name: renderprogs.pk4
+    required: true
+    bundled: true
+    unsourceable: "arrives with the application package, not sourced separately"
+    category: game_data
+    size: 223453
+    md5: 7edee35e1e53475d9557c1026877ae7c
+    sha1: ab89141b5772de1df43831e64c53aece28c2e6f6
+    description: "DOOM 3 BFG shader set rewritten for OpenGL ES"
+    note: >-
+      Unpacked into `base/renderprogs/` beside the game resources. The shipped
+      BFG data carries the desktop HLSL set, which this build cannot use.
+    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:72-81, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:768-787, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameConstants.java:393"
+
+  - name: glsl.pk4
+    required: true
+    bundled: true
+    unsourceable: "arrives with the application package, not sourced separately"
+    category: game_data
+    size: 51642
+    md5: b94d15df5bf72a4c4510c834ef404ebb
+    sha1: 87f0f5ec3db3855c4453a9031ce695d39d0eaa44
+    description: "Skin Deep shader set rewritten for OpenGL ES"
+    note: >-
+      Unpacked into `base/glsl/` and stamped with the game version.
+    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:197-206, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:726-745, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameConstants.java:399"
+
+  - name: zzz_etqwbase.pk4
+    required: true
+    bundled: true
+    unsourceable: "arrives with the application package, not sourced separately"
+    category: game_data
+    size: 136061
+    md5: 2f5c49dca4993da5911d632d3962c1f3
+    sha1: 0d4dee46085ced0fd117030a13533d903265301c
+    description: "ETQW shader set and megatexture patches"
+    note: >-
+      Unpacked into the ETQW base folder. The name sorts last so the entries
+      override the ones the retail archives carry.
+    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:208-217, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:747-766, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameConstants.java:400"
+
+  - name: legacy_v2.83.2.pk3
+    required: true
+    bundled: true
+    unsourceable: "arrives with the application package, not sourced separately"
+    category: game_data
+    path: "etw/legacy/legacy_v2.83.2.pk3"
+    size: 30993701
+    md5: ea838df0911a68b5f22f5010d37867f5
+    sha1: f156945f70545e37fb5ee33a95ee97204a7f60b7
+    description: "ET: Legacy mod archive matching the built engine"
+    note: >-
+      Copied into the `legacy` folder, the mod the engine runs by default; the
+      retail Enemy Territory data in `etmain` stays the user's to supply. The
+      file name is built from the engine version, so a Legacy update lands under
+      a new name.
+    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:175-184, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:845-868, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameConstants.java:397"
+
+  - name: extras.pk3
+    required: true
+    bundled: true
+    unsourceable: "arrives with the application package, not sourced separately"
+    category: game_data
+    path: "xash/extras.pk3"
+    size: 1491748
+    md5: 1a65bf279b969c017a34497d183e5544
+    sha1: 971249b94cb62fbca2f42c8ab7a7d29d30e5b368
+    description: "Xash3D touch controls, fonts and controller database"
+    note: >-
+      Mounted ahead of every game directory from the path in
+      XASH3D_EXTRAS_PAK1. It carries the touch-control textures the mobile build
+      draws and the gamecontrollerdb.txt the SDL joystick layer reads through the
+      virtual filesystem.
+    source_ref: "Q3E/src/main/jni/xash3d/xash3d-fwgs/filesystem/filesystem.c:1376-1378, Q3E/src/main/jni/xash3d/xash3d-fwgs/engine/platform/sdl2/joy_sdl2.c:346, Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:142-151"
+
+  - name: cs16client-extras.pk3
+    required: false
+    bundled: true
+    unsourceable: "arrives with the application package, not sourced separately"
+    category: game_data
+    path: "xash/cs16client-extras.pk3"
+    size: 12976942
+    md5: 15bf94e95c94c301f92270b6775b9a3d
+    sha1: ab0c9f66e9e9be4af96c20d5ce3a9d684eeff2c2
+    description: "Counter-Strike 1.6 client resources for Xash3D"
+    note: >-
+      Extracted right after the base extras and mounted the same way, for the
+      cs16 and cs16_yapb server classes the launcher offers.
+    source_ref: "Q3E/src/main/jni/xash3d/xash3d-fwgs/filesystem/filesystem.c:1380-1382, Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:153-162, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:815-843, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameConstants.java:412"
+
+  - name: extras.zip
+    required: true
+    bundled: true
+    unsourceable: "arrives with the application package, not sourced separately"
+    category: game_data
+    size: 15081926
+    md5: 15944b9068602a6d36905be035e9e547
+    sha1: 388bfce5ba834f5ed329a0fa9864b0b75840e951
+    description: "Source engine fonts and platform archive"
+    note: >-
+      Unpacked into `files/` under the Source standalone directory. It carries
+      the DejaVu, Droid Sans Fallback, Itim and Liberation faces the engine
+      substitutes for the Windows fonts, and extras_dir.vpk.
+    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:164-173, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:895-919, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameConstants.java:396"
+
+  - name: d3_sabot_a7.pk4
+    required: false
+    bundled: true
+    unsourceable: "arrives with the application package, not sourced separately"
+    category: game_data
+    path: "doom3/base/zzz_idTech4Amm_d3_sabot_a7.pk4"
+    size: 2399406
+    md5: 494bd9601fc82752cc6c6d14cf684d8e
+    sha1: 8179522bcd5abc4c5a3194bf49f6821738644500
+    description: "Stupid Angry Bot definitions for DOOM 3 multiplayer"
+    note: >-
+      Extracted on request into the current mod folder under a name prefixed to
+      sort last. It holds the defs, scripts and multiplayer AAS files the bot
+      commands need. A second entry repacks only the `maps/` tree into
+      zzz_idTech4Amm_d3_sabot_a7_aas.pk4 for users who already have the mod.
+    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:48-58, 129-140, README.md:256-259"
+
+  - name: q4_sabot_a9.pk4
+    required: false
+    bundled: true
+    unsourceable: "arrives with the application package, not sourced separately"
+    category: game_data
+    path: "quake4/q4base/zzz_idTech4Amm_q4_sabot_a9.pk4"
+    size: 21143072
+    md5: 710997decddd8ace044d028fe79b52e9
+    sha1: a3af9251c6a2b4b8d02108bd7b91919aace929dd
+    description: "Stupid Angry Bot definitions for Quake 4 multiplayer"
+    note: >-
+      The Quake 4 counterpart, extracted the same way, with the same
+      maps-only variant written as zzz_idTech4Amm_q4_sabot_a9_aas.pk4.
+    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:36-46, 116-127, README.md:256-259"
+
+  - name: play_original_doom3_level.pk4
+    required: false
+    bundled: true
+    unsourceable: "arrives with the application package, not sourced separately"
+    category: game_data
+    path: "doom3/rivensin/zzz_idTech4Amm_play_original_doom3_level.pk4"
+    size: 16866
+    md5: 214e3daebf5d11e40cd06ca5e1b02971
+    sha1: de368e97ca86f489c1f10ea148e0812913c25c7d
+    description: "Rivensin patch restoring the original DOOM 3 levels"
+    note: >-
+      Extracted on request into the `rivensin` mod folder, the one patch tied to
+      a named mod rather than to whichever mod is selected.
+    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:60-70"
+
+  - name: doom3_chinese_translation_doom3bfg.pk4
+    required: false
+    bundled: true
+    unsourceable: "arrives with the application package, not sourced separately"
+    category: game_data
+    path: "doom3/base/doom3_chinese_translation_doom3bfg.pk4"
+    size: 5138117
+    md5: 4fa638d0accdd696149d83f3579d185e
+    sha1: 8c06159ab1012b271d39d624b45c55c2360dc443
+    description: "Chinese text and fonts for DOOM 3, taken from the BFG release"
+    note: >-
+      Copied into the DOOM 3 base folder on request. It pairs with the
+      wide-character language and BFG font support compiled into the engine.
+    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:105-114, README.md:37, 168-169"
+
+  - name: controls_theme.zipak
+    required: false
+    bundled: true
+    unsourceable: "arrives with the application package, not sourced separately"
+    size: 3133490
+    md5: 9f6f5073fda93251f7a48a91a6d4c5d1
+    sha1: 5be92df9e74843bc6071e3627f4fd876d499a490
+    description: "Button image themes carried in the apk"
+    note: >-
+      Read in place from the assets, never extracted. Archives with this suffix
+      are folded into the search path wherever they are found, and the
+      `controls_theme/` folders inside become named entries in the theme chooser;
+      this one carries the cs16-client and source-engine sets.
+    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EGlobals.java:230, Q3E/src/main/java/com/n0n3m4/q3e/karin/KFDManager.java:44, 102, 113-129, Q3E/src/main/java/com/n0n3m4/q3e/karin/KFileDescriptor.java:56, 102"
+
+  - name: btn_jump.png
+    required: false
+    bundled: true
+    unsourceable: "arrives with the application package, not sourced separately"
+    description: "Default on-screen button images, 52 files"
+    note: >-
+      Read from the assets root when the theme is the built-in one. The set
+      covers the alphabet, the digits and the named actions the games bind, and
+      any of the 52 names can be replaced by putting a file of the same name in
+      one of the external search paths.
+    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EContextUtils.java:348-370, idTech4Amm/src/main/java/com/n0n3m4/DIII4A/launcher/SetupControlsThemeFunc.java:167-177"
+
+  - name: generic.json
+    required: false
+    bundled: true
+    unsourceable: "arrives with the application package, not sourced separately"
+    path: "keyboard/generic.json"
+    size: 10278
+    md5: ef9b27699a627334930f6d4252b644d5
+    sha1: 839c05a60c231d409f90b477bf2001c28f10b1bb
+    description: "Virtual keyboard layout"
+    note: >-
+      Read straight from the assets when the on-screen keyboard is built, without
+      going through the external search path, so nothing outside the archive
+      replaces it.
+    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EKeyboard.java:74"
+
+  - name: autoexec.cfg
+    required: false
+    unsourceable: "console commands written by the user for one install"
+    description: "Console script the engine runs at startup"
+    note: >-
+      Executed by the id-derived engines from the mod folder and from the base
+      folder. The launcher lists both positions next to the config file each game
+      writes for itself, DoomConfig.cfg, Quake4Config.cfg, preyconfig.cfg,
+      q3config.cfg, wolfconfig.cfg, Darkmod.cfg, uzdoom.ini and the rest, and
+      opens any of them in its editor. The config files are written by the
+      engines; this one only ever comes from the user.
+    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EInterface.java:722-836, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameConstants.java:63-88, idTech4Amm/src/main/java/com/karin/idTech4Amm/ConfigEditorActivity.java:103"
+
+  - name: description.txt
+    required: false
+    unsourceable: "text written by whoever assembled the mod folder"
+    description: "Blurb shown for a mod in the chooser"
+    note: >-
+      Read from the root of a mod folder when the mod list is built and shown
+      under the folder name with its size. The control theme chooser reads a file
+      of the same name from a theme folder, there with an optional language
+      suffix.
+    source_ref: "idTech4Amm/src/main/java/com/n0n3m4/DIII4A/launcher/ChooseGameModFunc.java:242-251, Q3E/src/main/java/com/n0n3m4/q3e/Q3EContextUtils.java:330-341"
+
+  - name: controller_map.txt
+    required: false
+    load_from: internal_storage
+    description: "Extra SDL controller mappings"
+    note: >-
+      SDL builds this path from the internal storage directory of the package
+      when SDL_GAMECONTROLLERCONFIG_FILE is unset, which it is here, and reads it
+      while the game controller subsystem starts, after the compiled-in mappings
+      and before the ones the environment carries. It reaches the six games the
+      app runs on SDL, Xash3D, Source, ECWolf, Skin Deep, Quadrilateral Cowboy
+      and Icarus; the other engines take input from the Q3E frontend instead. The
+      SDL2 tree under deplibs is what the build compiles, version 2.32.5.
+    source_ref: "Q3E/src/main/jni/deplibs/SDL2/src/joystick/SDL_gamecontroller.c:1873-1884, 1890-1916, Q3E/src/main/jni/deplibs/SDL2/include/SDL_version.h:59-61, Q3E/src/main/jni/CMakeLists.txt:90-102, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameConstants.java:430, 454-461"
+
+  - name: "controls_theme/<name>/btn_jump.png"
+    required: false
+    unsourceable: "button artwork authored per theme, with no released set to collect"
+    description: "Button images of a user theme"
+    note: >-
+      A folder under `controls_theme/` in any search path, or inside a `.zipak`
+      there, appears in the chooser under its own name and its images replace the
+      built-in ones. A `description.txt` beside them, optionally suffixed with a
+      language tag, supplies the name, author and description the chooser shows.
+    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EContextUtils.java:305-345, idTech4Amm/src/main/java/com/n0n3m4/DIII4A/launcher/SetupControlsThemeFunc.java:136-179"
+
+  - name: gameaarch64.so
+    required: false
+    aliases: [gamearm.so]
+    unsourceable: "compiled per mod against the published SDK, with no released binary to collect"
+    description: "External idTech 4 mod game library"
+    note: >-
+      Looked for in the mod folder of DOOM 3, Quake 4, Prey or ETQW when the
+      external-library preference is on, copied to a private cache and named to
+      the engine through harm_fs_gameLibPath. The suffix follows the running
+      architecture, gameaarch64.so on arm64 and gamearm.so on armv7. Without it
+      the engine keeps the game code built into the apk. The launcher also
+      accepts a full path to any libxxxxx.so instead.
+    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:342-372, 429-434, idTech4Amm/src/main/java/com/n0n3m4/DIII4A/launcher/AddExternalLibraryFunc.java:71-86, README.md:229-233, 241-251"
+
+  - name: server.so
+    required: false
+    aliases: [client.so, menu.so]
+    unsourceable: "compiled per mod from hlsdk-portable, with no released binary to collect"
+    description: "External Xash3D game libraries"
+    note: >-
+      Read from `lib/<arch>/` inside the Xash3D mod folder when the
+      external-library preference is on, copied to the private cache and passed
+      as the dll, clientlib and menulib parameters with gamelibdir pointing at
+      the cache. The three default names are used unless the command line names
+      others, and any further libraries in the folder are copied alongside.
+    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:373-414, 445-475"
+
+exclusion_note: >
+  The retail game data is not listed. Every engine here loads it by globbing the
+  base folder rather than by name, `.pk4` for the idTech 4 lineage, `.resources`
+  for DOOM 3 BFG, the four container suffixes for Yamagi, `*.gro` for Serious
+  Sam, and what it gates on is a `default.cfg` that lives inside those archives
+  rather than beside them. The names that do appear in the code are the forty-nine
+  the DOOM engine accepts as an IWAD, read from `iwadinfo.txt` in
+  `game_support.pk3`, the four the launcher offers as selectable UZDOOM data
+  files, and the five extensions ECWolf reports when no Wolfenstein data is
+  found; all of them are game content, held here the same way the PrBoom and
+  boom3 profiles hold theirs, in the notes. `stdout.txt` and `stderr.txt` are
+  opened for writing by the engine and read back only to show the last run log,
+  and an `idtech4amm.version` stamp is written beside each extracted resource.
+  ref: doom3/neo/framework/FileSystem.cpp:2052, 3397-3399,
+       Q3E/src/main/jni/quake2/yquake2/src/common/filesystem.c:1801-1850,
+       Q3E/src/main/jni/serioussam/SamTFE/Sources/Engine/Base/Stream.cpp:212-247,
+       Q3E/src/main/jni/ecwolf/src/wl_iwad.cpp:766,
+       Q3E/src/main/jni/q3e/q3emisc.c:23-25,
+       idTech4Amm/src/main/java/com/n0n3m4/DIII4A/GameLauncher.java:2899, 2916,
+       Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:697-703

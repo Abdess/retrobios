@@ -1,0 +1,177 @@
+emulator: iNES
+type: standalone
+core_classification: other
+source: "https://fms.komkon.org/iNES/iNES-Android-6104.apk"
+upstream: closed-source
+author: "Marat Fayzullin (Garage Research)"
+profiled_date: "2026-08-11"
+core_version: "6.1.4"
+display_name: "Nintendo - NES / Famicom (iNES)"
+cores:
+  - ines
+systems:
+  - nintendo-nes
+  - nintendo-fds
+mode: standalone
+
+notes: |
+  NES and Famicom emulator by Marat Fayzullin, covering cartridges, the Famicom
+  Disk System and the VS System. The build read here is the free Android APK the
+  author publishes himself, package com.fms.ines versionName 6.1.4 versionCode
+  6104, apk md5 d0e1b93b09d4b58294efd4e1509e25ca, signed CN=Marat Fayzullin
+  O=Garage Research issued 2011, sha256
+  d09469e9b550cbc9005d3bd089f3df5f0ba89cba71cdd3b33736a0382d6f9848; the two
+  download paths on that site serve the same bytes. Google Play carries the
+  emulator as com.fms.ines.free, the package ES-DE launches, and inside VGBAnext
+  as com.fms.ng, the author recording that Play removed the original com.fms.ines
+  listing over its built-in cheats. The native libraries keep their symbol
+  tables, so the readings below cite libmain.so offsets in the x86_64 slice; the
+  arm64-v8a, armeabi-v7a, armeabi and x86 slices carry the same filename set. The
+  free iNES 6.1 builds for Windows and Ubuntu were read beside it and open the
+  same files under the same names. No source has ever been published: the author
+  releases ColEm and fMSX as source archives, while every iNES download on the
+  same site, from 0.7 for AIX and SunOS through 6.1, is a binary package.
+  ref: iNES-Android-6104.apk META-INF/CERT.RSA, https://fms.komkon.org/iNES/,
+       iNES61-Windows-bin.zip, iNES61-Ubuntu-x86-bin.tgz
+
+  One directory holds everything the emulator reads. MainActivity hands
+  EMULib.k() to jniStart, which copies it into the buffer GetHomeDir returns and
+  passes that same buffer to SetPrivateDir. Every open goes through mopen, which
+  calls OpenRealFile: the name is tried as given and again as
+  <PrivateDir>/<basename>, and when both open the larger of the two is kept. That
+  directory is <ExternalStorage> joined with the application label up to its first
+  space, so iNES, falling back to getExternalFilesDirs(null) when the path is not
+  a writable directory. mopen layers gzdopen over the result, so any of these
+  files also opens gzipped, and a content:// name is routed to the Android storage
+  framework instead.
+  ref: MainActivity.java:2257, EMULib.java:1328, EMULib.java:408,
+       EMULib.java:474-505, EMULib.java:682, libmain.so 0x1212a-0x1218c,
+       libmain.so OpenRealFile 0x32070-0x32285, libmain.so mopen 0x322b0-0x323f2
+
+  DISKSYS.ROM is the only filename compiled into the emulator. LoadFDS reads the
+  disk image first, taking a bare *NINTENDO-HVC* header or the 16 byte FDS wrapper
+  ahead of it, then opens DISKSYS.ROM and reads 0x2000 bytes into RAM at 0xE000. A
+  failed open leaves the status at NOT FOUND and a short read at FAILED, and
+  either makes LoadFDS return zero, so the disk never starts. Nothing about the
+  image is checked past the length of that read. Cartridge titles never reach this
+  path.
+  ref: libmain.so LoadFDS 0x3bdd0-0x3c245, open 0x3bf97, read 0x3bfc5-0x3bff7,
+       iNES61-Ubuntu-x86-bin ines 0x38165-0x381a9
+
+  The startup palette is <HomeDir>/iNES.pal, assembled in Application from
+  GetHomeDir and held in PalName, which StartNES loads when it is set. LoadPAL
+  reads the first 256 bytes: exactly 192 is taken as 64 RGB triples fed to
+  SetColor one at a time, anything else is parsed as text. A missing file leaves
+  the built-in palette in place. The desktop distribution ships twenty candidates
+  under Palettes/ to copy into that single name, the Android package none.
+  ref: libmain.so Application 0x39739-0x39795, StartNES 0x3a685-0x3a694,
+       LoadPAL 0x3a870-0x3a930, iNES61-Windows-bin.zip Palettes/
+
+  LoadNES derives five companion names from the ROM path through MakeFileName:
+  .sav, .ips, .cht, .pal and .sta. Started with no ROM name at all, Application
+  substitutes CART.NES.
+  ref: libmain.so LoadNES 0x3bb49, 0x3bc43, 0x3bcdc, 0x3bd2b, 0x3bd52,
+       libmain.so Application 0x39887-0x3989c
+
+  Three package resources are read at runtime. assets/memfs.mp3 is passed whole to
+  jniStart and mounted as an in-memory filesystem carrying one entry, CART.NES.
+  assets/names.dat fills the title lookup and is then extended by
+  <HomeDir>/names.dat, whose entries win on collision. assets/ROOT.chts opens the
+  cheat browser, its Include lines pulling further sets through the same lookup,
+  which falls back to <HomeDir>/Cheats and to the home directory itself.
+  ref: MainActivity.java:2246-2257, libmain.so 0x11ca6-0x11ccc,
+       FileInfo.java:260-295, Cheatopedia.java:339, 448, 505-520,
+       CheatHelper.java:14-24
+
+files:
+  - name: DISKSYS.ROM
+    system: nintendo-fds
+    required: true
+    min_size: 8192
+    validation: [size]
+    description: "Famicom Disk System BIOS"
+    note: "Opened by bare name, so it resolves against the working directory and then against the home directory. Read as 0x2000 bytes into RAM at 0xE000; a missing file reports NOT FOUND and a short read FAILED, and either aborts the disk load. Only the length of that read is checked, so a longer file passes on its first 8192 bytes and no hash is compared. The open is gzip transparent, so a compressed copy answers too."
+    source_ref: "libmain.so LoadFDS 0x3bdd0-0x3c245 (open 0x3bf97, read 0x3bfc5-0x3bff7), iNES61-Ubuntu-x86-bin ines 0x38165-0x381a9"
+
+  - name: iNES.pal
+    system: nintendo-nes
+    required: false
+    unsourceable: "any 64 colour palette the user picks, under the one name the code builds"
+    description: "startup colour palette"
+    note: "Built as <HomeDir>/iNES.pal and loaded at startup when present, otherwise the built-in palette stands. Exactly 192 bytes is read as 64 RGB triples, any other length as text. No single file answers to this name: the desktop distribution ships twenty palettes under other names for the user to copy over."
+    source_ref: "libmain.so Application 0x39739-0x39795, StartNES 0x3a685-0x3a694, LoadPAL 0x3a870-0x3a930"
+
+  - name: CART.NES
+    system: nintendo-nes
+    required: false
+    bundled: true
+    unsourceable: "arrives with the application package, not sourced separately"
+    category: game_data
+    size: 24592
+    md5: c1db31a2aa8a12432705fc8bd3c1156a
+    sha1: 486eede1bb748d95efc8a2a3d46ef1a530100559
+    crc32: "2e03cb7f"
+    description: "sample ROM image started when no game is given"
+    note: "The only entry in assets/memfs.mp3, which MainActivity reads whole and jniStart mounts as an in-memory filesystem. A 16 byte header plus one 16 KB PRG bank and one 8 KB CHR bank. Application passes this name to StartNES when it is invoked without a ROM, so launching through ES-DE never reaches it."
+    source_ref: "MainActivity.java:2246-2257, libmain.so 0x11ca6-0x11ccc, libmain.so Application 0x39887-0x3989c"
+
+  - name: names.dat
+    required: false
+    bundled: true
+    unsourceable: "arrives with the application package, not sourced separately"
+    category: game_data
+    size: 21390
+    description: "title database keyed by system and CRC32"
+    note: "Parsed from assets as lines of key colon title, keys reading NES-4C629A95. The copy at <HomeDir>/names.dat is read straight afterwards into the same map, so user entries extend and override the packaged ones."
+    source_ref: "FileInfo.java:260-295"
+
+  - name: ROOT.chts
+    required: false
+    bundled: true
+    unsourceable: "arrives with the application package, not sourced separately"
+    category: game_data
+    size: 27447
+    description: "cheat database read by the Cheatopedia browser"
+    note: "Looked up in the package assets first, then through the home directory, its subdirectories and Downloads, with <HomeDir>/Cheats as the default cheat directory. Include lines pull further sets through the same lookup; the package carries seven of them, battle-toads, dragon-warrior, dragon-warrior-2, fceu, final-fantasy-2, final-fantasy-3 and super-mario-brothers."
+    source_ref: "Cheatopedia.java:339, 448, 505-520, CheatHelper.java:14-24"
+
+  - name: "<game>.ips"
+    required: false
+    unsourceable: "a patch the user supplies for one title"
+    category: game_data
+    description: "IPS patch applied to the loaded ROM"
+    note: "Named from the ROM path by MakeFileName and applied by ApplyIPS when present. A patch chosen by hand goes through the same call in LoadFile."
+    source_ref: "libmain.so LoadNES 0x3bc43 (ApplyIPS 0x3bc93), LoadFile 0x3acf8"
+
+  - name: "<game>.cht"
+    required: false
+    unsourceable: "cheat codes the user writes or collects per title"
+    category: game_data
+    description: "cheat codes for one title"
+    note: "Named from the ROM path by MakeFileName and read by LoadCHT when present. Distinct from the .chts sets of the Cheatopedia browser. The menu handler reaches the same loader for a file picked by hand."
+    source_ref: "libmain.so LoadNES 0x3bcdc (LoadCHT 0x3bcec), Joystick 0x39e7f"
+
+  - name: "<game>.pal"
+    required: false
+    unsourceable: "any 64 colour palette the user picks for one title"
+    category: game_data
+    description: "colour palette for one title"
+    note: "Named from the ROM path by MakeFileName and read by LoadPAL when present, taking precedence over the startup palette for that game."
+    source_ref: "libmain.so LoadNES 0x3bd2b"
+
+exclusion_note: >
+  Left out are the files iNES writes and reads back itself, which are emulator
+  state rather than anything a user obtains: <game>.sav holding battery backed
+  cartridge RAM, <game>.sta and the desktop builds' DEFAULT.STA holding saved
+  emulation state, and LOG.MID, the soundtrack the emulator records when the MIDI
+  log is toggled on. libOpenSLES.so is left out as the Android audio library the
+  system provides, dlopen'd by name from InitAudio and the only other literal
+  filename in the binary. The twenty palettes under Palettes/ in the Windows and
+  Ubuntu distributions are left out as the shipped candidates for iNES.pal, which
+  the emulator never opens under those names; four of them are the VS System
+  chip palettes, RP2C04-001, RP2C04-002, RP2C04-003 and RP2C05-004, and they
+  reach the emulator through the palette entries above rather than a path of
+  their own. Neither the VS System nor the FamilyBASIC keyboards need a file:
+  DISKSYS.ROM is the only image the binary names.
+  ref: libmain.so LoadNES 0x3bb49, 0x3bd52, libmain.so InitAudio 0x12cfc,
+       iNES61-Ubuntu-x86-bin ines DEFAULT.STA, iNES61-Windows-bin.zip Palettes/
