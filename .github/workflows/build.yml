@@ -1,11 +1,10 @@
 name: Build & Release
 
+# Releasing is a deliberate act, not a consequence of pushing. Cutting one is
+# a manual dispatch: someone decides the collection is in a state worth
+# publishing, and the rate limit below still guards against doing it twice by
+# accident.
 on:
-  push:
-    branches: [main]
-    # A pack is the platform baseline plus what its cores need, so a profile
-    # change alters pack contents just as a platform list does.
-    paths: ["bios/**", "platforms/**", "emulators/**"]
   workflow_dispatch:
     inputs:
       force_release:
@@ -17,11 +16,10 @@ permissions: {}
 
 concurrency:
   group: build
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   release:
-    if: false  # disabled until pack generation is validated in production
     runs-on: ubuntu-latest
     permissions:
       contents: write

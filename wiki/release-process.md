@@ -13,20 +13,21 @@ Budget target: ~175 minutes/month on the GitHub free tier.
 
 | Workflow | File | Trigger |
 |----------|------|---------|
-| Build & Release | `build.yml` | Push to `bios/**` or `platforms/**`, manual dispatch |
+| Build & Release | `build.yml` | Manual dispatch only |
 | Deploy Site | `deploy-site.yml` | Push to main (platforms, emulators, provenance, wiki, scripts, database.json, mkdocs.yml), manual |
 | PR Validation | `validate.yml` | PR touching `bios/**`, `platforms/**` or `emulators/**` |
 | Weekly Sync | `watch.yml` | Cron Monday 06:00 UTC, manual dispatch |
 
 ## build.yml - Build & Release
 
-Currently disabled (`if: false` on the release job) until pack generation is
-validated in production.
+Releasing is deliberate. Pushing never cuts one: somebody decides the
+collection is worth publishing and dispatches the workflow.
 
-**Trigger.** Push to `main` on `bios/**` or `platforms/**` paths, or manual
-`workflow_dispatch` with optional `force_release` flag to bypass rate limiting.
+**Trigger.** `workflow_dispatch` only, with an optional `force_release` flag to
+bypass the rate limit.
 
-**Concurrency.** Group `build`, cancel in-progress.
+**Concurrency.** Group `build`, queued rather than cancelled: a run that is
+already uploading assets must finish.
 
 **Steps:**
 
@@ -213,5 +214,15 @@ Run the pipeline online for a release: `--offline` skips the data directory
 refresh and the MAME/FBNeo hash refresh, so the packs would ship stale data
 directories.
 
-To re-enable automated releases, remove the `if: false` guard from the
-`release` job in `build.yml`.
+The workflow carries no push trigger, so there is nothing to disable and no
+guard to remove. Cutting a release means dispatching `build.yml` from the
+Actions tab, or:
+
+```bash
+gh workflow run build.yml
+gh workflow run build.yml -f force_release=true   # within 7 days of the last
+```
+
+The rate limit refuses a second release inside seven days unless
+`force_release` is set, which is what keeps a stray dispatch from publishing
+twice in a day.

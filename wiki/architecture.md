@@ -197,7 +197,8 @@ platform's own verification mode.
 - standalone-emulator copies require explicit `--standalone-copies` consent;
 - CI writes only what its job needs: `validate.yml` holds `pull-requests: write`
   for the validation comment and labels, `deploy-site.yml` holds the Pages
-  deploy identity, and the release job stays disabled behind `if: false`.
+  deploy identity, and the release job holds `contents: write` but runs only
+  when someone dispatches it.
 
 - `safe_extract_zip()` prevents zip-slip path traversal attacks
 - `deterministic_zip` rebuilds MAME ZIPs so same ROMs always produce the same hash
@@ -326,14 +327,14 @@ pattern and how to add a test.
 
 | Workflow | File | Trigger | Role |
 |----------|------|---------|------|
-| Build & Release | `build.yml` | push to main (bios/, platforms/) + manual | restore large files, build packs, create GitHub release |
+| Build & Release | `build.yml` | manual dispatch only | restore large files, build packs, create GitHub release |
 | Deploy Site | `deploy-site.yml` | push to main (platforms, emulators, wiki, scripts) + manual | validate contracts, generate site, build with MkDocs, validate rendered HTML, deploy to Pages |
 | PR Validation | `validate.yml` | pull request on bios/, platforms/, emulators/, schemas/, scripts/, tests/ | validate BIOS hashes, schema check, run the full test suite, auto-label PR |
 | Weekly Sync | `watch.yml` | cron (Monday 6 AM UTC) + manual | scrape upstream sources, detect changes, create update PR |
 
-Build workflow has a 7-day rate limit between releases and keeps the 3 most recent.
-The release job stays disabled (`if: false`) until pack generation is validated
-in production. See the [release process](release-process.md).
+The build workflow has no push trigger: a release is dispatched by hand. It
+keeps a 7-day rate limit between releases and the 3 most recent tags. See the
+[release process](release-process.md).
 
 ## License
 
