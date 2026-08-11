@@ -1,0 +1,1161 @@
+[ROOT]
+Menu=(Custom Cheats)
+Menu=1942
+Menu=1943
+Menu=3D Worldrunner
+Menu=634 Sword
+Menu=720 Degrees
+Menu=8 Eyes
+Menu=Abadox
+Menu=Advanced Dungeons & Dragons Games
+Menu=Addams Family
+Menu=Adventure Island
+Menu=Adventure Island (Japan)
+Menu=Adventures Of Dino-Riki
+Menu=Adventures Of Lolo
+Menu=Adventures Of Lolo 2
+Menu=Adventures Of Lolo 3
+Menu=Air Fortress
+Menu=Airwolf
+Menu=Arabian
+Menu=Arkanoid
+Menu=Arkanoid '98
+Menu=Attack Of The Killer Tomatoes
+Menu=Balloon Fight
+Menu=Bart vs Space Mutants
+Menu=Batman Games
+Menu=Battle City
+Menu=Battletoads
+Menu=Battletoads And Double Dragon
+Menu=Bayou Billy
+Menu=Binary Land
+Menu=Bionic Commando
+Menu=Blaster Master
+Menu=Bomberman
+Menu=Boulder Dash
+Menu=Boy And His Blob
+Menu=Bugs Bunny Blowout
+Menu=Bump & Jump
+Menu=Burger Time
+Menu=B Wings
+Menu=Castlevania
+Menu=Castlevania 2
+Menu=Castlevania 3
+Menu=Chip & Dale Rescue Rangers
+Menu=City Connection
+Menu=Cobra Triangle
+Menu=Dig Dug
+Menu=Dig Dug 2
+Menu=Donkey Kong Classics
+Menu=Double Dragon 2
+Menu=Dragon Warrior
+Menu=Dragon Warrior 2
+Menu=Duck Hunt
+Menu=Duck Tales
+Menu=Faxanadu
+Menu=Final Fantasy 2 (Japanese)
+Menu=Final Fantasy 3 (Japanese)
+Menu=Flintstones
+Menu=Frontline
+Menu=Galaxian
+Menu=Gauntlet
+Menu=Ghostbusters 2
+Menu=Ghosts And Goblins
+Menu=Godzilla
+Menu=Goonies (Japan)
+Menu=Goonies 2
+Menu=Gradius (Europe)
+Menu=Gradius (US)
+Menu=Gremlins 2
+Menu=Guardian Legend
+Menu=Gyrodine
+Menu=Heavy Barrel
+Menu=Hook
+Menu=Journey To Silius
+Menu=Legend Of Zelda
+Menu=Low G Man
+Menu=Mappy
+Menu=Mappyland
+Menu=McDonald Land
+Menu=Megaman
+Menu=Megaman 2
+Menu=Megaman 3
+Menu=Milon's Secret Castle
+Menu=Micromachines
+Menu=Monsters In My Pocket
+Menu=Mystery Quest
+Menu=Nightmare On Elm Street
+Menu=Ninja 2
+Menu=Ninja 3
+Menu=Nuts & Milk
+Menu=Operation Wolf
+Menu=Pacman Tengen (US)
+Menu=Probotector
+Menu=QBert
+Menu=Rad Gravity
+Menu=Rad Racer
+Menu=Rush And Attack
+Menu=RC Pro Am
+Menu=RC Pro Am 2
+Menu=Rush & Attack
+Menu=Rygar
+Menu=Section Z
+Menu=Smash TV
+Menu=Space Frog
+Menu=Spider & Penguin
+Menu=Spy Hunter
+Menu=Star Force
+Menu=Star Force 2.1
+Menu=Star Soldier
+Menu=Star Trek
+Menu=Star Wars
+Menu=Super Mario Brothers
+Menu=Super Mario Brothers 2
+Menu=Super Mario Brothers 3
+Menu=Super Pacman (Europe)
+Menu=Super Pitfall
+Menu=Super Sprint
+Menu=Teenage Mutant Ninja Turtles
+Menu=Terminator 2
+Menu=Time Lord
+Menu=To The Earth
+Menu=Top Gun
+Menu=Top Gun 2
+Menu=Twinbee
+Menu=Warpman
+Menu=Wrath Of The Black Manta
+Menu=Wrestlemania
+Menu=Wrestlemania Challenge
+Menu=Xevious
+Menu=Zanac
+Menu=Zelda 2: Adventure of Link
+
+[(Custom Cheats)]
+File=/sdcard/iNES/custom.chts
+Note=Place your own cheats into /sdcard/iNES/custom.chts.
+
+[Abadox]
+ID=NES-DB9E07F8
+Code=XXXTTP : Start with 5-way fire and always keep it
+
+[Zelda 2: Adventure of Link]
+ID=NES-6DA35D5D
+Code=VZSSTT : Remove all indoor enemies
+Code=SSSSSS : Power up all attributes in the sub screen
+Code=NPKOXN : Power up to the max with the P bottle
+Code=ISZKKG : Life goes up every time you touch an enemy
+Menu=Remove all outdoor enemies
+
+[Remove all outdoor enemies]
+Note=Causes a glitch in the town of Naboro. Briefly turn this code off when you get to Naboro.
+YXOEPZ
+
+[Adventure Island]
+ID=NES-85D0B4B9
+Code=NNUAAA : Start with firepower and keep it
+Code=SPOATV : Always ride a skateboard
+Code=NOAAGA : Almost infinite lives
+Code=PIXPAZ : Most enemies are toasted
+Code=PEEEPALA : Start with 1 life
+Code=TEEEPALA : Start with 6 lives
+Code=PEEEPALE : Start with 9 lives
+Code=SZOEGPVG : Start with infinite lives
+Code=SXKKIAVG : Stop energy bar counting down
+Code=GXNGLAKA : Become immune to rocks
+Code=GZXEAPSA : Keep weapons
+Code=SPEEIIEG : Can mega jump while at rest
+Code=SPEETSOZ : Can mega jump while running
+Menu=Mostly invincible
+Menu=Multiple moonjumps
+Menu=Hudson can moonwalk
+
+[Multiple moonjumps / Adventure Island]
+AAEAYIPA
+AEVEZGPZ
+
+[Hudson can moonwalk / Adventure Island]
+AEKAPIPA
+PEEEZIAA
+
+[Mostly invincible / Adventure Island]
+YIXPAX
+ASTLUY
+
+[Adventure Island (Japan)]
+ID=NES-A09579D2
+Note=Only work with the Japanese version of Adventure Island.
+Code=AZNAGA : Start at level 2-1
+Code=OTNAGA : Start at level 3-1
+Code=ZTNAGA : Start at level 4-1
+Code=UANAGA : Start at level 5-1
+Code=KZNAGA : Start at level 6-1
+Code=STNAGA : Start at level 7-1
+Code=TGNAGA : Start at level 8-1
+Code=ASNLNY : Enemies bump you instead of killing you
+
+[Adventures Of Dino-Riki]
+ID=NES-C6C60D82
+Code=SZEETTVG : Start with infinite lives
+Code=AESEPGZA : Start with 1 life
+Code=IESEPGZA : Start with 6 lives
+Code=AESEPGZE : Start with 9 lives
+Code=SZUENZVG : Start with infinite life hearts
+Code=GESEIGZA : Start with 4 life hearts
+Code=AESEIGZE : Start with 8 life hearts
+Code=VKEAPISA : Start Macho and stay Macho
+Code=VVEAPISA : Start as Macho-Riki
+Code=IEVASPIG : Once Macho always stay Macho
+Menu=Start on stage 2-1
+Menu=Start on stage 3-1
+Menu=Start on stage 4-1
+Menu=Start on stage 4-2
+Menu=Start on stage 4-3
+Menu=Start on stage 4-4
+
+[Start on stage 2-1 / Adventures Of Dino-Riki]
+TKSAAGSA
+ZEKEIGAA
+
+[Start on stage 3-1 / Adventures Of Dino-Riki]
+TKSAAGSA
+GEKEIGAA
+
+[Start on stage 4-1 / Adventures Of Dino-Riki]
+TKSAAGSA
+TEKEIGAA
+
+[Start on stage 4-2 / Adventures Of Dino-Riki]
+TKSAAGSA
+AEKEIGAE
+
+[Start on stage 4-3 / Adventures Of Dino-Riki]
+TKSAAGSA 
+ZEKEIGAE
+
+[Start on stage 4-4 / Adventures Of Dino-Riki]
+TKSAAGSA
+GEKEIGAE
+
+[Arkanoid]
+ID=NES-04EC5E50
+Code=VLSOYK : Infinite lives
+
+[Battle City]
+ID=NES-1D6C9D8C
+Code=NZVVZO : Invincibility
+
+[Balloon Fight]
+ID=NES-1B7C2CEE
+Code=AUNTSU : Enemies do not move
+
+[Blaster Master]
+ID=NES-C55EBF00
+Menu=Die and see the ending
+
+[Die and see the ending]
+AKISOT
+SSKKSZ
+
+[Bomberman]
+ID=NES-D7E1BC19
+Menu=Invincible Bomberman
+
+[Invincible Bomberman]
+Note=Does not work with the US version of Bomberman.
+NLYSTA
+OXVGITSX
+
+[Bump & Jump]
+ID=NES-3FCFF359
+Code=OVLLZK : Invincible against all other cars and trucks
+Code=XSEEGG : Start with 32 lives
+
+[Burger Time]
+ID=NES-1B93E911
+Code=NZOSEG : Invincibility + frozen enemies
+
+[Chip & Dale Rescue Rangers]
+ID=NES-F30AD749
+Code=0005B682 : Infinite Lives
+Code=00021018 : Invincibility
+Code=EESTXL : Many 1-ups
+Menu=Invincible Rescue Rangers
+
+[Invincible Rescue Rangers]
+TOOIEE
+PAKAYEPA
+
+[Dig Dug]
+ID=NES-C3D3F019
+Code=NINIXK : Enemies do not move
+
+[Dig Dug 2]
+ID=NES-6F9CFC7E
+Code=VOPSPE : Invincible against anything except fygars
+Code=XXOSPE : Simplified
+
+[Flintstones]
+ID=NES-68445206
+Code=00030803 : Infinite Energy For Fred
+Code=00030502 : Infinite Lives For Fred
+Code=00030BFF : Infinite Coins For Fred
+Menu=Start with special weapons and infinite flying abilities
+
+[Start with special weapons and infinite flying abilities]
+SXOPZOVK
+NESTZZIE
+ETVNLO
+
+[Frontline]
+ID=NES-6AF2F070
+Code=NLYSTA : Invincible but cannot use machine gun
+
+[Galaxian]
+ID=NES-77B9517D
+Code=YXTNUP : Racks don't move
+Code=OIGVUO : Enemies do not descend
+Code=TENVNI : Descending enemies only fire once
+Code=OASTXK : Enemies simply do not fire
+Menu=Invincible Galaxian
+
+[Invincible Galaxian]
+PXPTOG
+IKATEG
+
+[Gauntlet]
+ID=NES-C3C21572
+Code=OTZOVO : Most enemies disappear, others become harmless
+
+[Goonies (Japan)]
+ID=ID=NES-892A26BC
+Note=These cheats are for the Japanese-only Goonies (not Goonies 2).
+Code=GTNLPY : All doors can be opened without keys
+Code=PUUXSG : Invincible but cannot obtain certain powers
+Code=VLOPVX : Infinite time
+Code=EXLLVV : Infinite energy
+Code=PGTGEP : All keys and potions exposed
+
+[Gradius (US)]
+ID=NES-546418A2
+Note=These cheats only work with the US version of Gradius.
+Menu=Remove all enemies in Gradius
+
+[Remove all enemies in Gradius]
+Note=Do not touch end bosses, they will let you go after 10 seconds.
+POVLUN
+
+[Gradius (Europe)]
+ID=NES-D3143106
+Code=IGUGTO : Invincible against all enemies and backgrounds
+Code=XEKZPZ : All enemies disappear
+
+[Guardian Legend]
+ID=NES-1EC6AC44
+Code=KEOVEO : Remove all enemies except end bosses
+
+[Gyrodine]
+ID=NES-EFE331D8
+Code=PLUUYT : Invincibility
+
+[Heavy Barrel]
+ID=NES-C5D2F8F3
+Menu=Invincible in Heavy Barrel
+
+[Invincible in Heavy Barrel]
+Note=Wait until game begins before enabling. Disable at the end of each level.
+NYNLNL
+
+[Journey To Silius]
+ID=NES-75EB248B
+Code=SZOAPAVG : Invincibility
+Code=IAIAIP : see the ending
+
+[Mappy]
+ID=NES-EAECEDDF
+Code=GSSTZE : Invincibility
+Code=VVSSEZ : Invincibility (type 2)
+Menu=Extra Mappy lives
+
+[Extra Mappy lives]
+PLVGOA
+KOSGSA
+
+[Mappyland]
+ID=NES-83CC26DD
+Code=SSXNLA : Remove all enemies
+Code=ISXZIK : Remove all enemies except the big dog
+
+[Megaman 2]
+ID=NES-E7B769F3
+Code=0006C01C : Unlimited Energy
+Code=0000A806 : Infinite Lives
+Code=AVXTPI : Invincibility
+
+[Megaman 3]
+ID=NES-A9D6F08E
+Code=0000AE03 : Infinite Lives
+Code=SXPEZA : Invincibility
+Code=SUTKGA : Infinite weapons
+Code=SXTKGE : Start with Rush Jet and infinite supply
+
+[Milon's Secret Castle]
+ID=NES-99217E13
+Code=IOTGOV : No enemies
+Code=KENOSZ : Multi-maxi-mega-moon jumps
+
+[Mystery Quest]
+ID=NES-D59949CB
+Code=KATSEI : Access to the entire underworld via the big tunnel
+Code=ESSOZX : No enemies
+Code=YVVZZX : Enemies run away
+
+[Nuts & Milk]
+ID=NES-3119CF0B
+Code=NZTSPV : Invincibility
+Code=GNOKES : The princess is always there
+
+[Pacman Tengen (US)]
+ID=NES-75251C4D
+Code=VANINY : Reuse invincible tablets over and over
+Code=GUASIY : Ghosts never recover after you eat them
+Menu=Remove ghosts
+
+[Remove ghosts]
+Note=Inky, Blinky, and Clyde are out of the game.
+KETSPT
+EKEISA
+
+[Super Pacman (Europe)]
+Code=STZIZZ : Invincible, go through enemies
+Code=SZNIZZ : Invincible, gobble enemies
+
+[QBert]
+ID=NES-472291D0
+Code=GKLLTZ : Curly dude does not move
+Menu=No enemies in QBert
+
+[No enemies in QBert]
+NNLXSP
+NNUXNP
+
+[Rad Racer]
+Code=NIIKKA : Infinite time
+Code=KIGKIY : Tracks are twice as short
+
+[RC Pro Am]
+ID=NES-30CC0520
+Code=NNNUVS : Always take 1st or 2nd place
+Code=NNNUVV : Souped up car
+Code=KKKGGA : Drive backwards
+Code=EXOUVV : Overheat breakneck speed
+
+[RC Pro Am 2]
+Code=NNNNNA : Infinite time in most areas
+
+[Road Fighter]
+ID=NES-847F96D9
+Code=KXYVIL : Infinite time on the clock
+Code=AETSNV : The road is four times wider
+
+[Rygar]
+ID=NES-D0441987
+Code=XXZZSS : Invincibility
+
+[Section Z]
+ID=NES-577B6C5C
+Code=ANNYNPSN : Infinite energy
+Code=PTYYTS : All rooms are empty
+Code=AOOYNL : Forgotten effect
+
+[Spy Hunter]
+ID=NES-5463F231
+Menu=Remove all enemies in Spy Hunter
+
+[Remove all enemies in Spy Hunter]
+UZOPKG
+UZOPNG
+
+[Star Force]
+ID=NES-72416D31
+Note=These cheats only work with the US version of Star Force.
+Code=PSOAXS : Start at level 9
+Menu=Remove all enemies in Star Force
+
+[Remove all enemies in Star Force]
+Note=The game will freeze if the first end boss kills you.
+KOTLYT
+
+[Star Force 2.1]
+Code=PXPSEV : Invincible
+Code=OXPSET : Invincible (type 2)
+Code=LXPSEV : Enemies bump you instead of killing you
+
+[Star Soldier]
+ID=NES-76ED960B
+Code=PYLAAT : Invincibility + brain never escapes
+Code=AALAAT : Pick up where you last died
+Code=SZOEPP : Infinite lives
+
+[Super Mario Brothers]
+ID=NES-3E5C9B81
+File=super-mario-brothers.chts
+
+[Super Mario Brothers 3]
+ID=NES-83E97A3F
+Code=00073605 : Infinite Lives
+Code=0005F005 : Infinite Time
+Code=0000ED01 : Super Mario
+Code=0000ED02 : Raccoon Mario
+Code=0000ED03 : Fire Mario
+Code=0000ED04 : Frog Mario
+Code=0000ED05 : Tanooki Mario
+Code=0000ED06 : Hammer Mario
+Code=OEPZXZ : Plenty of 1-ups
+
+[Super Pitfall]
+ID=NES-8ACE3629
+Code=ITIEGX : Invincible, walk through enemies
+Code=AATEGX : Invincible, kill enemies
+Menu=No enemies in Super Pitfall
+
+[No enemies in Super Pitfall]
+NPZVTA
+APNVTI
+
+[Super Sprint]
+ID=NES-8BC9A391
+Code=LOSIEE : Enemy cars do not move
+
+[Twinbee]
+ID=NES-E13741CC
+Code=ALUULT : Invincible (but cannot pick up double shot)
+Code=EEPTXX : Invinicble against enemies but not bullets
+Code=SEVKGT : Super firepower
+Code=PONALG : 24 lives
+Code=PINOSA : Fast scrolling screen
+
+[Xevious]
+ID=NES-E4845BEB
+Code=NOPIPE : Enemies do not fire
+
+[Zanac]
+ID=NES-69FE6A49
+Code=KEAKUL : Start with 255 ships
+
+[Donkey Kong Classics]
+ID=NES-3715D91D
+Menu=Ghosts do not move and barrels more friendly
+
+[Ghosts do not move and barrels more friendly]
+NNXXZP
+GONONN
+
+[Rush & Attack]
+ID=NES-6811525F
+Code=OOSIAG : Mega float
+
+[Spider & Penguin]
+Note=Also known as Binary Land.
+Code=NNNKOL : Infinite time
+Code=NTAILT : Spiders do not move
+Code=VZTVLS : No webs
+Code=YPEKLI : No spiders
+
+[Binary Land]
+Note=Also known as Spider & Penguin.
+Code=NNNKOL : Infinite time
+Code=NTAILT : Spiders do not move
+Code=VZTVLS : No webs
+Code=YPEKLI : No spiders
+
+[City Connection]
+ID=NES-5D8B4A91
+Code=YTSPEZ : Infinite lives
+Code=VGZPUU : No enemies except cat
+Code=VSGOYG : Invincibility when not jumping
+
+[634 Sword]
+Code=SSZUEY : Invincibility
+Code=XYPZEN : Warp to final scene
+
+[Arabian]
+ID=NES-C1804B69
+Code=AYKPVS : Invincibility
+
+[Space Frog]
+Note=Also known as Warpman
+Code=LNGGUS : Infinite lives
+
+[Warpman]
+ID=NES-00DD399C
+Note=Also known as Space Frog.
+Code=LNGGUS : Infinite lives
+
+[B Wings]
+ID=NES-62D8EE31
+Code=NTOXPK : Invincibility
+
+[Ninja 2]
+ID=NES-45A2CB7B
+Code=AAAALP : Infinite continues
+
+[Ninja 3]
+Code=GATPPS : Mega float
+Code=SYUXEL : No enemies
+
+[Addams Family]
+Code=016365C0 : 99 Lives
+
+[Bart vs Space Mutants]
+Code=00066403 : Infinite Lives
+Code=0004B202 : Invincibility
+
+[Bayou Billy]
+ID=NES-2845CE0D
+Code=0007C507 : Infinite Lives
+
+[Bionic Commando]
+ID=NES-D8875E0E
+Code=00004A02 : Infinite Lives
+
+[Boy And His Blob]
+ID=NES-E5ADC520
+Code=AAULNGIA : 1 life only
+Code=ZAULNGIE : Double lives
+Code=GXXEOPVG : Infinite lives
+Code=AAVKIPPA : Infinite Jellybeans
+Code=0002BF72 : Infinite Liquorice Beans
+Code=0002C115 : Infinite Strawberry Beans
+Code=0002C306 : Infinite Coconut Beans
+Code=0002C518 : Infinite Cola Beans
+Code=SXEEZAAX : Fast play
+Code=AVOGAEOZ : Invincible
+Code=AVOPVGEI : Never take damage from enemies
+Code=APEUUIAA : 10 Orange Jellybeans
+Code=AONUSGAA : 10 Lime Jellybeans
+Code=OONLOGZN : 99 Licorice Jellybeans
+Code=AUNLUGIP : Double Strawberry Jellybeans
+Code=TUNLNKAP : Double Cola Jellybeans
+Code=AKNUOGGX : Double Cinnamon Jellybeans
+Code=GXNUUGZP : Double Apple Jellybeans
+Code=AVNUNGAL : Double Vanilla Jellybeans
+Code=ZPELNITA : Double Ketchup Jellybeans
+Code=AONLSGTE : Triple Coconut Jellybeans
+Code=APELUITE : Triple Root Beer Jellybeans
+Code=APEUSIAA : 10 Vitamin A for Vita-Blaster
+Code=APEUNIAA : 10 Vitamin B for Vita-Blaster
+Code=APOLOIAA : 10 Vitamin C for Vita-Blaster
+Menu=Gives 101 of all starting Jellybeans
+
+[Gives 101 of all starting Jellybeans / Boy And His Blob]
+SZXLXKSU
+YYXLUGEY
+
+[Bugs Bunny Blowout]
+ID=NES-24DE8BE8
+Code=00042903 : Infinite Lives
+Code=0004280C : Infinite Energy
+Code=00042AFF : Always Have 99 Carrots
+
+[Castlevania 2]
+ID=NES-E3B489DF
+Code=00003103 : Infinite Lives
+Code=00008030 : Infinite Energy
+Code=00004999 : Have 9950 Credits
+
+[Cobra Triangle]
+ID=NES-6F2EE118
+Code=00073802 : Infinite Lives
+Code=0005F50C : Infinite Energy
+
+[Double Dragon 2]
+ID=NES-8CB4DB5C
+Code=00043203 : Infinite Lives
+
+[Duck Hunt]
+ID=NES-6FB3A96C
+Code=0000BA03 : Infinite Shots
+
+[Duck Tales]
+ID=NES-DD2CFF22
+Code=00036102 : Infinite Lives
+Code=00015905 : Infinite Time
+
+[Faxanadu]
+ID=NES-C3281EA7
+Code=00043110 : Infinite Energy
+
+[Ghostbusters 2]
+ID=NES-ACBE29DB
+Code=00053B05 : Infinite Lives
+
+[Ghosts And Goblins]
+ID=NES-474CC284
+Code=00071503 : Infinite Lives
+
+[Godzilla]
+ID=NES-D6EE8E3C
+Code=00018C30 : Infinite Life Energy
+Code=00017830 : Infinite Power
+
+[Goonies 2]
+ID=NES-CCEDED07
+Code=00000005 : Infinite Energy
+Code=00002203 : Infinite Lives
+
+[Gremlins 2]
+ID=NES-C2C68B67
+Code=0000AD06 : Infinite Energy
+Code=00050C01 : Infinite Balloons
+Code=00056CFF : 225 Crystal Balls
+
+[Hook]
+Code=00037F02 : Infinite Lives
+Code=00037D4F : Infinite Energy
+
+[Legend Of Zelda]
+ID=NES-D2A2CC06
+Code=00065809 : Infinite Bombs
+Code=000670FF : Less Damage
+
+[Low G Man]
+ID=NES-FDBC0695
+Code=0006F803 : Infinite Lives
+Code=00065B08 : Infinite Energy
+Code=0000066E : Infinite Fuel
+
+[McDonald Land]
+Code=00058002 : Infinite Energy
+Code=00057F03 : Infinite Lives
+
+[Megaman]
+ID=NES-2A2BF3BE
+Code=0006C01C : Infinite Energy
+Code=0000A803 : Infinite Lives
+
+[Micromachines]
+Code=00032103 : Infinite Lives
+
+[Monsters In My Pocket]
+ID=NES-61CE0AE0
+Code=00071605 : Infinite Energy for Player 1
+Code=00074204 : Infinite Lives for Player 1
+Code=00071705 : Infinite Energy for Player 2
+Code=00074304 : Infinite Lives for Player 2
+Menu=Select Level
+
+[Select Level / Monsters In My Pocket]
+Code=00004C00 : Level 1
+Code=00004C01 : Level 2
+Code=00004C02 : Level 3
+Code=00004C03 : Level 4
+Code=00004C04 : Level 5
+Code=00004C05 : Level 6
+
+[Operation Wolf]
+ID=NES-6DF55604
+Code=00005009 : Infinite Bullets
+Code=00005304 : Infinite Grenades
+
+[Probotector]
+Code=00003203 : Infinite Lives for Player 1
+Code=00003303 : Infinite Lives for Player 2
+
+[Rad Gravity]
+ID=NES-23C055C7
+Code=0007900F : Infinite Energy
+Code=00000509 : Have Gun
+
+[Rush And Attack]
+ID=NES-6811525F
+Code=00002205 : Infinite Lives for Player 1
+Code=00002305 : Infinite Lives for Player 2
+
+[Smash TV]
+ID=NES-52406461
+Code=0001CA05 : Infinite Lives for Player 1
+Code=0001CB05 : Infinite Lives for Player 2
+
+[Star Trek]
+ID=NES-5656D155
+Code=00079007 : Infinite Energy
+
+[Star Wars]
+ID=NES-18D0F288
+Code=00072938 : Invincible to Bullets and Spikes
+Code=00075208 : Infinite Continues
+
+[Super Mario Brothers 2]
+ID=NES-865FE1B2
+Code=0004ED03 : Infinite Lives
+
+[Teenage Mutant Ninja Turtles]
+ID=NES-F58DDC76
+Code=000077C8 : Infinite Energy for Leonardo
+Code=00007880 : Infinite Energy for Raphael
+Code=00007980 : Infinite Energy for Michaelangelo
+Code=00007A80 : Infinite Energy for Donatello
+Code=0000A809 : Unlimited Weapon for Leonardo
+Code=0000A909 : Unlimited Weapon for Raphael
+Code=0000AA09 : Unlimited Weapon for Michaelangelo
+Code=0000AB09 : Unlimited Weapon for Donatello
+
+[Terminator 2]
+ID=NES-8AF908CC
+Code=00071C38 : Infinite Energy
+Code=00071D04 : Infinite Lives
+
+[Time Lord]
+Code=00061503 : Infinite Lives
+
+[To The Earth]
+ID=NES-CBC19619
+Code=00015FD0 : Infinite Fuel
+
+[Top Gun]
+ID=NES-6BCBF74D
+Code=00003C28 : Infinite Missiles
+
+[Top Gun 2]
+ID=NES-964A4B26
+Code=0005702F : Invincible to Bullets
+Code=0000683C : Infinite Missiles
+
+[Wrath Of The Black Manta]
+Code=00054903 : Infinite Lives
+
+[Wrestlemania]
+Code=000077CA : Infinite Energy
+
+[Wrestlemania Challenge]
+ID=NES-A4C0718E
+Code=0003D0FF : Infinite Energy
+
+[Dragon Warrior]
+ID=NES-74417E88
+File=dragon-warrior.chts
+
+[Dragon Warrior 2]
+ID=NES-E64752EA
+File=dragon-warrior-2.chts
+
+[Final Fantasy 2 (Japanese)]
+ID=NES-C0577BA0
+File=final-fantasy-2.chts
+
+[Final Fantasy 3 (Japanese)]
+ID=NES-1213DAAC
+File=final-fantasy-3.chts
+
+[Adventures Of Lolo]
+ID=NES-FCE97033
+File=fceu.chts
+
+[Adventures Of Lolo 2]
+ID=NES-0FF6333D
+File=fceu.chts
+
+[Adventures Of Lolo 3]
+File=fceu.chts
+
+[Air Fortress]
+ID=NES-B107B2D0
+File=fceu.chts
+
+[Airwolf]
+ID=NES-B51C2FDD
+File=fceu.chts
+
+[Arkanoid '98]
+File=fceu.chts
+
+[Attack Of The Killer Tomatoes]
+ID=NES-997707D9
+File=fceu.chts
+
+[Battletoads]
+ID=NES-62681240
+File=battle-toads.chts
+
+[Battletoads And Double Dragon]
+File=battle-toads.chts
+
+[Boulder Dash]
+ID=NES-9ED07121
+File=fceu.chts
+
+[Castlevania]
+ID=NES-B1E09A4A
+File=fceu.chts
+
+[Castlevania 3]
+ID=NES-09F0C80D
+File=fceu.chts
+
+[1942]
+ID=NES-F060F1CF
+Code=PASIOALE : Both players start with 9 rolls.
+Code=IESUTYZA : Start with 6 lives for 1-player game only.
+Code=AESUTYZE : Start with 9 lives for 1-player game only.
+Code=IAKUUAZA : After a continue, player 1 has 6 lives in 2-player game.
+Code=AAKUUAZE : After a continue, player 1 has 9 lives in 2-player game.
+Code=IASUOAZA : Player 2 has 6 lives in 2-player game.
+Code=AASUOAZE : Player 2 has 9 lives in 2-player game.
+
+[1943]
+ID=NES-6E5D9A69
+Code=ZESNLLLE : 10 power points
+Code=GOSNLLLA : 20 power points
+Code=TOSNLLLE : 30 power points
+Code=AEVYZLAE : Start on mission 5
+Code=ZOVYZLAA : Start on mission 10
+Code=GOVYZLAE : Start on mission 15
+Code=TXVYZLAA : Start on mission 20
+
+[3D Worldrunner]
+ID=NES-6788134D
+Code=SXUPZGVG : Freeze the Timer
+Code=NNXOYGEK : Slower the Timer
+Code=AVXOYGEG : Faster the Timer
+Code=AEUOVIGA : Start with and keep Laser Missiles
+Code=OXUONISX : Autofire
+Code=AEUOLTPA : Infinite Lives
+Menu=Start with 1 Life
+Menu=Start with 6 Lives
+Menu=Start with 9 Lives
+Menu=Start on World 2
+Menu=Start on World 3
+Menu=Start on World 4
+Menu=Start on World 5
+Menu=Start on World 6
+Menu=Start on World 7
+
+[Start with 1 Life / 3D Worldrunner]
+PEUPPTLA 
+PLVOLTLL
+
+[Start with 6 Lives / 3D Worldrunner]
+TEUPPTLA
+TLVOLTLL
+
+[Start with 9 Lives / 3D Worldrunner]
+PEUPPTLE
+PLVOLTLU
+
+[Start on World 2 / 3D Worldrunner]
+XZEAUOOZ
+PAEAKPAA
+VAEASPSA
+
+[Start on World 3 / 3D Worldrunner]
+XZEAUOOZ
+ZAEAKPAA
+VAEASPSA
+
+[Start on World 4 / 3D Worldrunner]
+XZEAUOOZ
+LAEAKPAA
+VAEASPSA
+
+[Start on World 5 / 3D Worldrunner]
+XZEAUOOZ
+GAEAKPAA
+VAEASPSA
+
+[Start on World 6 / 3D Worldrunner]
+XZEAUOOZ
+IAEAKPAA
+VAEASPSA
+
+[Start on World 7 / 3D Worldrunner]
+XZEAUOOZ
+TAEAKPAA
+VAEASPSA
+
+[720 Degrees]
+ID=NES-DE8F9169
+Code=SZUYASVK : Infinite continues
+Code=PEXKLZLE : 9 continues
+Code=TEXKLZLA : 6 continues
+Code=PEXKLZLA : Start with no continues
+Code=GEKKYZAA : Start with all equipment
+Code=ZEKKYZAA : Start with half equipment
+Menu=Start on Level 2
+Menu=Start on Level 3
+Menu=Start on Level 4
+
+[Start on Level 2 / 720 Degrees]
+XVXGGXSX
+OXXGIXTE
+ZEXGTZZA
+
+[Start on Level 3 / 720 Degrees]
+XVXGGXSX
+OXXGIXTE
+LEXGTZZA
+
+[Start on Level 4 / 720 Degrees]
+XVXGGXSX
+OXXGIXTE
+GEXGTZZA
+
+[8 Eyes]
+ID=NES-E7E06BA9
+Code=GXOUSUSE : Most attacks will not damage Orin
+Code=GXNGNOSE : Most attacks will not damage Cutrus
+Code=AGVXGXYZ : Start with more energy as Orin
+Code=AGVXIXYZ : Start with more energy as Cutrus
+Code=YZVXTZAE : Start game with some item power
+Code=GXSLKVSE : Never lose item power once gained
+Code=VTOVNTVA : Start game with dagger
+
+[Nightmare On Elm Street]
+Code=SUELSUVS : Infinite lives
+Code=PAUVEZLA : 1 continue
+Code=TAUVEZLA : 6 continues
+Code=PAUVEZLE : 9 continues
+Code=AESSLAEA : Do not lose “zzz” when hit
+Code=AAXOLAPA : Do not lose “zzz” when standing still
+Code=ZAXOLAPA : Lose “zzz” quicker
+Code=IEULIGLA : Mega jumping teenagers
+
+[Advanced Dungeons & Dragons Games]
+Menu=AD&D: Dragon Strike
+Menu=AD&D: Heroes Of The Lance
+Menu=AD&D: Hillsfar
+Menu=AD&D: Pool Of Radiance
+
+[AD&D: Dragon Strike]
+ID=NES-9380477B
+Code=GPKZGEAZ : Less energy for bronze dragon
+Code=AIKZGEAZ : More energy for bronze dragon
+Code=TPKZIEGU : Less energy for silver dragon
+Code=AIKZIEGL : More energy for silver dragon
+Code=ZZKZTAAS : Less energy for gold dragon
+Code=ITKZTAAI : More energy for gold dragon
+Code=OTKGSYSV : Infinite energy
+Code=GZKKNNSE : Weapon power does not weaken with energy
+Code=TTXGIALT : Gold dragon has excellent armor class
+Code=YGXKAAPG : Gold dragon flies faster
+Code=ATXGYAGV : Silver dragon flies faster
+Code=YIXGTALI : Bronze dragon flies faster
+
+[AD&D: Hillsfar]
+Code=AOULILAZ : Faster timer when you are lock-picking
+Code=ASULILAZ : Slower timer when you are lock-picking
+Code=ENULILAZ : Very slow timer when you are lock-picking
+Code=IEVANKZA : Start new character with 50% less gold
+Code=YEVANKZE : Start new character with 50% more gold
+Code=GOVANKZA : Start character with 100% more gold
+Menu=Infinite Knock Rings
+
+[Infinite Knock Rings / AD&D: Hillsfar]
+SXKUTSVK
+AEKUISAI
+
+[AD&D: Heroes Of The Lance]
+ID=NES-375D80A0
+Code=SUOAZGSP : Infinite HP in battle
+
+[AD&D: Pool Of Radiance]
+Code=SOLAUN : Create super characters
+Code=Cloaks : Unlimited Cloaks of Displacement to sell
+Code=Points : Extra experience
+Code=Battle : One hit ends battle with no gold or experience
+Menu=Duplicate Item
+
+[Duplicate Item / AD&D: Pool Of Radiance]
+Note=Trade item to another character, then turn codes off. You might need to save and reset. 
+GGLAUP
+Code=ZALAUN : Dagger +1
+Code=IPLAUN : Shield +1
+Code=Handed : Two Handed Sword +1, +3 vs Undead
+Code=GZLAUN : Longsword +5
+Code=IZLAUN : Dart +2
+Code=PGLAUY : Battle Axe +1
+Code=TILAUY : Shortsword +2
+Code=GILAUN : Dart +1
+Code=TILAUN : Hammer +1
+Code=YTLAUN : Splinted Mail +3
+Code=GTLAUN : Hammer +3
+Code=ITLAUN : Ring of Invisibility
+Code=LYLAUL : Leather Armor +4
+Code=TYLAUY : Dagger +3
+Code=PYLAUN : Shortsword +3
+Code=YYLAUN : Spear +1
+Code=SALAUN : Broadsword +2
+Code=GYLAUN : Broadsword +3
+Code=TGLAUN : Banded Mail
+Code=ZLLAUN : BattleAxe +2
+Code=XGLAUN : Girdle Of Giant Strength (must be "USED")
+
+[Batman Games]
+Menu=Batman
+Menu=Batman: Return Of The Joker
+Menu=Batman Returns
+
+[Batman]
+ID=NES-7B68B60B
+Code=SKGGTT : Infinite Lives (1)
+Code=SZUGGTVG : Infinite Lives (2)
+Code=PPOPEZVG : Infinite Lives (3)
+Code=AEESKGZA : Start With 1 Life
+Code=IEESKGZA : Start With 6 Lives
+Code=AEESKGZE : Start With 9 Lives
+Code=GEEPOTPA : Extra Energy on Heart Pickup
+Code=GZNOUGST : Infinite Pellets After Pickup
+Code=GPSPXVZA : Double Usual Pellets on Pickup
+Code=IASPXVZA : Half Usual Pellets on Pickup
+Code=SZOPEZVK : Walk Through Enemies
+Code=SZOPKZSE : Take x4 The Damage
+Code=NZUOAUPA : Mega Jump
+Code=OXOESGSK : Few Enemies
+Code=SZKPNUGK : One Punch to Kill All Enemies
+Code=NUXGLTSP : Infinite Health
+Code=SKGGGT : Life Regeneration
+Code=LATESO : Changes Color of Cinema Screens, Pause Music
+Code=OISOSK : Ghostly Batman
+Code=VALKIN : Epileptic Batman
+Menu=Batman Wears Black Outfit
+
+[Batman Wears Black Outfit / Batman]
+AAVKVPLP
+APNGEPZZ
+
+[Batman Returns]
+ID=NES-D10AD8F1
+Code=SXSKGKVK : Infinite Batarangs
+Code=PAXELAIE : Start With 9 Batarangs
+Code=YLOALEAX : Start With Full Energy
+Code=APOALEAZ : Start With Less Energy
+Code=AAVASZZA : Do Not Lose Energy From Spin Attack
+Code=GZEGLVSE : Almost Infinite Lives and Energy
+Code=AUSAPPAP : More Energy From Small Hearts
+Code=YAKZTIZE : Power Punch
+Code=YAKXLIIE : Power Slide Attack
+Code=ZPKXZIIE : Power Jump Kick
+
+[Batman: Return Of The Joker]
+Code=SZXZONSE : Protection From Enemy Bullets
+Code=SZSZKXSE : Protection From Collisions
+Code=SXSATXSE : Protection From Electric Grids
+Code=AEXILGZA : Start With 1 Life
+Code=GVXILGZA : Start With 100 Lives
+Code=GAVXVLZA : Each Energy Capsule Counts as Two
+Code=AAVXVLZE : Each Energy Capsule Counts as Four
+Code=AAKOPIZA : Invincibility Lasts Until Next Stage
+Code=Backpack : Start With 7 Energy Capsules
+Code=GEOSTKTA : Start With 3 Life Increments
+Code=GASOTOTA : Continue With 3 Life Increments
+Code=SZXSZSVK : Infinite Lives
+Code=GXEUIOSE : Do Not Get Stunned When Hit
+Code=YEXILGZE : Start With 9 Lives
+Code=Missiles : No Damage From Bullets or Missiles
+Code=GZSZKXSE : No Damage From Objects or Enemies
+Code=SZVUIASE : Invincible in Boss Fights
+Code=SXEUIOSE : Transparent to Enemies After Being Hit Once
+Menu=Stand Your Ground
+
+[Stand Your Ground / Batman: Return Of The Joker]
+AEUUAPGA
+GXKLAOKE
