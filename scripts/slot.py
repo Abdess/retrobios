@@ -19,8 +19,10 @@ exactly the file the core may load. Where the order is not declared the group
 is reported undecidable and every candidate is kept: picking one would be the
 arbitrary selection this exists to remove.
 
-The scale is only meaningful inside one system's candidate set. Profiles that
-cover the same system must rank on the same scale.
+The scale is only meaningful inside one emulator's candidate set. When two
+profiles rank the same file differently -- pcsx1 walks scph1001 first while
+DuckStation prefers scph5501 -- the pack serves both cores, so neither order
+may win: the file is marked conflicting and its group stays undecidable.
 """
 
 from __future__ import annotations
@@ -43,12 +45,16 @@ def build_slot_index(profiles: dict) -> dict[str, dict]:
             path = f.get("path") or ""
             for key in {path, name} - {""}:
                 entry = index.setdefault(
-                    key, {"rank": None, "regions": set(), "emulators": []}
+                    key,
+                    {"rank": None, "conflict": False, "regions": set(),
+                     "emulators": []},
                 )
                 entry["regions"] |= {str(r) for r in (f.get("region") or [])}
                 rank = f.get("priority")
                 if rank is not None:
                     current = entry["rank"]
+                    if current is not None and current != rank:
+                        entry["conflict"] = True
                     entry["rank"] = (
                         rank if current is None else min(current, rank)
                     )
@@ -96,9 +102,8 @@ def resolve_slot_drops(
                 keep.add(destination)
                 continue
             tier = tuple(sorted(entry["regions"]))
-            tiers.setdefault((group_id, tier), []).append(
-                (destination, entry["rank"])
-            )
+            rank = None if entry.get("conflict") else entry["rank"]
+            tiers.setdefault((group_id, tier), []).append((destination, rank))
 
     for (group_id, tier), candidates in tiers.items():
         if len(candidates) < 2:

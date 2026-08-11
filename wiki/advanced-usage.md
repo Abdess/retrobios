@@ -136,6 +136,15 @@ Where no such list is declared, the group is left untouched and counted:
   63 slot(s) with no declared order: every candidate kept
 ```
 
+Two rules keep a declared order from overreaching:
+
+- **Cores that disagree cancel out.** pcsx1 walks `scph1001` first while
+  DuckStation prefers `scph5501`; the pack serves both cores, so neither order
+  wins and both files stay.
+- **A slot mixing unrelated roles stays open.** px68k's IPL ROMs are ranked,
+  but its character ROM shares the same system and carries no rank, so the
+  whole group is kept. Ordering an IPL against a font would be meaningless.
+
 That number is the remaining work, not a failure. Picking a file without a
 declared order would be the arbitrary selection this exists to remove, and it
 could drop the one the core would have loaded.

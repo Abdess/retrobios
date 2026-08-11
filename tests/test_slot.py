@@ -173,8 +173,12 @@ class TestRepoProfiles(unittest.TestCase):
 
     def test_lowest_priority_picks_the_reference_playstation_bios(self):
         """DuckStation ranks scph5501 at 5 and de-prioritizes by raising the
-        number, so the US slot must resolve to it and not to a PS2 image."""
-        index = slot.build_slot_index(self.profiles)
+        number, so on its own scale the US slot resolves to it. The merged
+        index is a different story: pcsx1 disagrees, and the conflict test
+        below asserts that neither order wins there."""
+        index = slot.build_slot_index(
+            {"duckstation": self.profiles["duckstation"]}
+        )
         ds = self.profiles.get("duckstation")
         if not ds:
             self.skipTest("duckstation profile not present")
@@ -191,6 +195,34 @@ class TestRepoProfiles(unittest.TestCase):
         self.assertEqual(undecidable, [])
         kept = {n for n, _ in members} - drops
         self.assertEqual(kept, {"scph5501.bin"})
+
+    def test_conflicting_cross_profile_orders_decide_nothing(self):
+        """pcsx1 walks scph1001 first; DuckStation prefers scph5501. The pack
+        serves both cores, so neither order may drop the other's first pick."""
+        index = slot.build_slot_index(self.profiles)
+        for name in ("scph1001.bin", "scph5501.bin"):
+            entry = index.get(name)
+            if entry is None:
+                self.skipTest(f"{name} not in any profile")
+        if not index["scph1001.bin"].get("conflict"):
+            self.skipTest("no conflicting ranks declared yet")
+        drops, _u = slot.resolve_slot_drops(
+            {"psx": _pairs("scph1001.bin", "scph5501.bin", "scph7001.bin")},
+            index,
+        )
+        self.assertEqual(drops & {"scph1001.bin", "scph5501.bin"}, set())
+
+    def test_numero_search_order_decides_its_slot(self):
+        """numero is alone on ti-83 and ranks all three ROMs, so this is the
+        one slot the repo can currently decide end to end."""
+        index = slot.build_slot_index(self.profiles)
+        if "ti83se.rom" not in index:
+            self.skipTest("numero profile not present")
+        drops, undecidable = slot.resolve_slot_drops(
+            {"ti-83": _pairs("ti83se.rom", "ti83plus.rom", "ti83.rom")}, index
+        )
+        self.assertEqual(drops, {"ti83plus.rom", "ti83.rom"})
+        self.assertEqual(undecidable, [])
 
     def test_ties_leave_the_group_untouched(self):
         """Japanese PlayStation ties at 5, so nothing may be dropped there."""
