@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-11T23:10:43Z",
-  "total_files": 8745,
-  "total_size": 12012755555,
+  "generated_at": "2026-08-11T23:12:10Z",
+  "total_files": 8775,
+  "total_size": 12013510384,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -52634,6 +52634,306 @@
       "crc32": "2c4b2ed4",
       "adler32": "9d8e8fcd"
     },
+    "496a0bd1af463fce81b362da9e4757a993e355d5": {
+      "path": "bios/Other/mariani/A2_BASIC.SYM",
+      "name": "A2_BASIC.SYM",
+      "size": 15378,
+      "sha1": "496a0bd1af463fce81b362da9e4757a993e355d5",
+      "md5": "7253a9ba7d7ca807016f5adc0207dd7b",
+      "sha256": "4d8725393e8e374d8f6b1079a0ceac857c8921cfa1867f86b235b546318c7059",
+      "crc32": "dddf12db",
+      "adler32": "659d13f3"
+    },
+    "51cc84e2cbd9bd61d50a0931cdae0a2ef0a57d6c": {
+      "path": "bios/Other/mariani/A2_DOS33.SYM2",
+      "name": "A2_DOS33.SYM2",
+      "size": 2380,
+      "sha1": "51cc84e2cbd9bd61d50a0931cdae0a2ef0a57d6c",
+      "md5": "88bd69906b4b3109b3f31472fb4b47f4",
+      "sha256": "962887daa1168cceb655e9252d31096fac29fdf2cd8e96c10a825033b0b8b8a5",
+      "crc32": "d7fce7b9",
+      "adler32": "90a5290e"
+    },
+    "09288be705464b608ff190519ab008d3dfcd1b05": {
+      "path": "bios/Other/mariani/Apple2.rom",
+      "name": "Apple2.rom",
+      "size": 12288,
+      "sha1": "09288be705464b608ff190519ab008d3dfcd1b05",
+      "md5": "3c406514b9806a7c57ee65fb0b0c39b4",
+      "sha256": "f34e573b9de203203ac4a8c6cab7ab0f974facf13c40bf6e362fbb92197199f9",
+      "crc32": "2af3a6c1",
+      "adler32": "5c8d7ac4"
+    },
+    "ad200b3263d08e7235d0871c8595963a07adc905": {
+      "path": "bios/Other/mariani/Apple2_JPlus.rom",
+      "name": "Apple2_JPlus.rom",
+      "size": 12288,
+      "sha1": "ad200b3263d08e7235d0871c8595963a07adc905",
+      "md5": "f3e8237eca3809bec2a42b984a1332a8",
+      "sha256": "076136209353b8cec4fc7dca955998b28e0202d019b1defbd1c6b8ea2f8e030d",
+      "crc32": "74387fee",
+      "adler32": "9d8ce942"
+    },
+    "0a382be58db5215c4a3de53b19a72fab660d5da2": {
+      "path": "bios/Other/mariani/Apple2_JPlus_Video.rom",
+      "name": "Apple2_JPlus_Video.rom",
+      "size": 2048,
+      "sha1": "0a382be58db5215c4a3de53b19a72fab660d5da2",
+      "md5": "271e2c9bf928b95e7baeff391db45495",
+      "sha256": "c5443831794aedd9790037d274f190e2c577a0c0e65c33fe3db46e73da386052",
+      "crc32": "487104b5",
+      "adler32": "19265bf5"
+    },
+    "61fa9254628e5bb7236fb474006116d67684d747": {
+      "path": "bios/Other/mariani/Apple2e.rom",
+      "name": "Apple2e.rom",
+      "size": 16384,
+      "sha1": "61fa9254628e5bb7236fb474006116d67684d747",
+      "md5": "346bc782c6a08a531c460e33bc03daf4",
+      "sha256": "1fb812584c6633fa16b77b20915986ed1178d1e6fc07a647f7ee8d4e6ab9d40b",
+      "crc32": "281592e5",
+      "adler32": "4fbe8be9"
+    },
+    "f1c779af480b5bda2bdd03950c1201a5c5143bea": {
+      "path": "bios/Other/mariani/Base64A.rom",
+      "name": "Base64A.rom",
+      "size": 49152,
+      "sha1": "f1c779af480b5bda2bdd03950c1201a5c5143bea",
+      "md5": "352fdbcae14c6a8c0398822c7a273309",
+      "sha256": "74915101a636d92a1505ba6d61ecd9e6226c03577cd61f5ba194cc9cd559016f",
+      "crc32": "40ad9664",
+      "adler32": "d75d77cc"
+    },
+    "87ca8135f7526ddf829f9c2c4f7dbe4d568818fc": {
+      "path": "bios/Other/mariani/Base64A_German_Video.rom",
+      "name": "Base64A_German_Video.rom",
+      "size": 4096,
+      "sha1": "87ca8135f7526ddf829f9c2c4f7dbe4d568818fc",
+      "md5": "4b45852b369e2afd864a02d0d91f70dc",
+      "sha256": "c88067160e13150f5217e27e17a2a98900a33e53799c2a3afe8073cd4b8999eb",
+      "crc32": "a3a51de9",
+      "adler32": "e95632ec"
+    },
+    "34718c242ccc539c54b456eca84286421ad24166": {
+      "path": "bios/Other/mariani/CHARSET82.bmp",
+      "name": "CHARSET82.bmp",
+      "size": 8254,
+      "sha1": "34718c242ccc539c54b456eca84286421ad24166",
+      "md5": "5b4866713477fdb08bb2a78d2d86ceb0",
+      "sha256": "371424a8030c7f8078b80f5004dc1f58135a3f7fbcbf4eec0f07a5c3d4f3a77c",
+      "crc32": "33f1d263",
+      "adler32": "a1d44d2c"
+    },
+    "0ec9ebe6542ca8f89ed4a7c417716b287a75b48e": {
+      "path": "bios/Other/mariani/CHARSET8C.bmp",
+      "name": "CHARSET8C.bmp",
+      "size": 16446,
+      "sha1": "0ec9ebe6542ca8f89ed4a7c417716b287a75b48e",
+      "md5": "9248c1f19f3d3277a031f46a19b2e350",
+      "sha256": "240c8324dae5476b7f0a4905dc09717d24cf877718222ed3931ef5e6a0d58ec4",
+      "crc32": "a41a9c96",
+      "adler32": "2eeceb81"
+    },
+    "cfbdbc1d76542f2a60dbbbdf9deb218ee197351e": {
+      "path": "bios/Other/mariani/CHARSET8M.bmp",
+      "name": "CHARSET8M.bmp",
+      "size": 8254,
+      "sha1": "cfbdbc1d76542f2a60dbbbdf9deb218ee197351e",
+      "md5": "f2720f70859026c76e07fc598fbe435f",
+      "sha256": "1cb2bbd39c7ca9c4ff19187643e9655abb013a25cb211e6321f2a75d141f0a75",
+      "crc32": "9abb0337",
+      "adler32": "596f53ee"
+    },
+    "3180be6b555ee9ef1f59c4fc3f25c5aab8c39c81": {
+      "path": "bios/Other/mariani/Freezes_Non-autostart_F8_Rom.rom",
+      "name": "Freezes_Non-autostart_F8_Rom.rom",
+      "size": 2048,
+      "sha1": "3180be6b555ee9ef1f59c4fc3f25c5aab8c39c81",
+      "md5": "d0a61e95ed1e1dc37c8e4801326aa79e",
+      "sha256": "20406b241dae58bb8c830d052f8a9af32acdb6a2e42b84d20999968af1b80b2d",
+      "crc32": "e47e2259",
+      "adler32": "1efbc9a7"
+    },
+    "fd557998fd5823ad69a42ad1282e4fe47db02dca": {
+      "path": "bios/Other/mariani/HDC-SmartPort.bin",
+      "name": "HDC-SmartPort.bin",
+      "size": 256,
+      "sha1": "fd557998fd5823ad69a42ad1282e4fe47db02dca",
+      "md5": "2592efa1d34ade55d490a1b39911c9b2",
+      "sha256": "f7d8f6da8f2a7a09c51b7f3d55e624a6b0272055d8b74b0eab552b174579b9c7",
+      "crc32": "d9858b1a",
+      "adler32": "c98566fb"
+    },
+    "06115eebb4d58221b5c062a42bf3e41e137447ed": {
+      "path": "bios/Other/mariani/Hddrvr-v2.bin",
+      "name": "Hddrvr-v2.bin",
+      "size": 256,
+      "sha1": "06115eebb4d58221b5c062a42bf3e41e137447ed",
+      "md5": "a49e45e7a6d4de23e0845a59c7e31e0c",
+      "sha256": "0a04ea1a60c6d5400700ea5c274d230921bd7b21882806053ac27f364827d2a7",
+      "crc32": "6a051d2b",
+      "adler32": "6b536838"
+    },
+    "69667800c54da1d4466e7b2168c0e418a4cf586c": {
+      "path": "bios/Other/mariani/Hddrvr.bin",
+      "name": "Hddrvr.bin",
+      "size": 256,
+      "sha1": "69667800c54da1d4466e7b2168c0e418a4cf586c",
+      "md5": "e0a40e9166af27b16f60beb83c9233f0",
+      "sha256": "9e3b9004f734938b9f6ba7cee251ddbbc9514942b5f9be1b99613b7db5a3cf59",
+      "crc32": "81cc8d30",
+      "adler32": "89696219"
+    },
+    "3a9d881a8a8d30f55b9719aceebbcf717f829d6f": {
+      "path": "bios/Other/mariani/MouseInterface.rom",
+      "name": "MouseInterface.rom",
+      "size": 2048,
+      "sha1": "3a9d881a8a8d30f55b9719aceebbcf717f829d6f",
+      "md5": "22563ab338024dac7b03510371d49c57",
+      "sha256": "7f8e50c0e8a409991264201f9300f109b872b68e09c43f3e6c26af35fd8b89af",
+      "crc32": "0bcd1e8e",
+      "adler32": "752b5907"
+    },
+    "8bd7ced83e209a15e9b19a05a5ef4b8e996dc1a5": {
+      "path": "bios/Other/mariani/PRAVETS82.ROM",
+      "name": "PRAVETS82.ROM",
+      "size": 12288,
+      "sha1": "8bd7ced83e209a15e9b19a05a5ef4b8e996dc1a5",
+      "md5": "c619b7edfcf021f3b8fd20d9386676ba",
+      "sha256": "2c2432f271869826e098c93bb271f9f7a8c37df2a34e5e8893175e881a6c126e",
+      "crc32": "85da8337",
+      "adler32": "18a2ed98"
+    },
+    "c976fe56e57706c161f513a82ba3e0d8cda83904": {
+      "path": "bios/Other/mariani/PRAVETS8C.ROM",
+      "name": "PRAVETS8C.ROM",
+      "size": 16384,
+      "sha1": "c976fe56e57706c161f513a82ba3e0d8cda83904",
+      "md5": "1896d7b98dd940c89f7c8ea899b71006",
+      "sha256": "54ab29eeac5845aac173c5fd424d4177d79e560f8ec0076dcae34a11bd85b501",
+      "crc32": "59b1fa01",
+      "adler32": "017f2a2f"
+    },
+    "f1b4ff018acf95f3355f0d575b66a188d728b687": {
+      "path": "bios/Other/mariani/PRAVETS8M.ROM",
+      "name": "PRAVETS8M.ROM",
+      "size": 12288,
+      "sha1": "f1b4ff018acf95f3355f0d575b66a188d728b687",
+      "md5": "76c79535f7cf77973e2c711aa977a124",
+      "sha256": "ec5af0fa211e2f6c417ceab8752bd23509d067b9dca75433e2bd975b66277120",
+      "crc32": "caf613ef",
+      "adler32": "1700f019"
+    },
+    "c75c751589cbcc1ad4ab4f63676af7abadd86f5b": {
+      "path": "bios/Other/mariani/Parallel.rom",
+      "name": "Parallel.rom",
+      "size": 256,
+      "sha1": "c75c751589cbcc1ad4ab4f63676af7abadd86f5b",
+      "md5": "5902996f16dc78fc013f6e1db14805b3",
+      "sha256": "e1b91e0156cabc879663f4c3936b3866bda74182fb0506667cd2d01e19d9e471",
+      "crc32": "2813909e",
+      "adler32": "a05d6743"
+    },
+    "c66c1955dac84a253a661720a7947150c109f315": {
+      "path": "bios/Other/mariani/PrintChar21.ttf",
+      "name": "PrintChar21.ttf",
+      "size": 501992,
+      "sha1": "c66c1955dac84a253a661720a7947150c109f315",
+      "md5": "972ce55fa7b905a494de16a7e8ec1949",
+      "sha256": "c199b39eeae2a817c4f44bd1bdbcbead974e87dc4c7401193db831be2f2470e1",
+      "crc32": "92d96062",
+      "adler32": "cbdf468f"
+    },
+    "6dab633470c6bc4cb3e81d09fda46597caf8ee57": {
+      "path": "bios/Other/mariani/SSC.rom",
+      "name": "SSC.rom",
+      "size": 2048,
+      "sha1": "6dab633470c6bc4cb3e81d09fda46597caf8ee57",
+      "md5": "67c0d61ab0911183faf05270f881a97e",
+      "sha256": "4fa1323ba31f4bd562486838397b7744257c126806766e360876720daca6e2aa",
+      "crc32": "b7539d4c",
+      "adler32": "10a98174"
+    },
+    "f163e5753c18ff0e812a448e8da406f102600edf": {
+      "path": "bios/Other/mariani/TK3000e.rom",
+      "name": "TK3000e.rom",
+      "size": 16384,
+      "sha1": "f163e5753c18ff0e812a448e8da406f102600edf",
+      "md5": "8d84b614b545d4eec8799d3f325332cb",
+      "sha256": "7dbf16b53fd9ce0efc42caa02f0fb4fc14031bb8e228c429269f1df7abbb3492",
+      "crc32": "5b1e8ab2",
+      "adler32": "69a984e4"
+    },
+    "6ba0571dee8da75f5c1736854e206eb9d2601fac": {
+      "path": "bios/Other/mariani/basic17.system.bin",
+      "name": "basic17.system.bin",
+      "size": 10240,
+      "sha1": "6ba0571dee8da75f5c1736854e206eb9d2601fac",
+      "md5": "a8d8c08f5cb4a9480389477c6c2f2834",
+      "sha256": "eddd5e529fcb0def3b667b8311072b29338b584b5b07beca200a1fbeaf91cc52",
+      "crc32": "93ebe0b4",
+      "adler32": "09c48d9e"
+    },
+    "474c2b0c666239c76fce07e1c96471650431a2d6": {
+      "path": "bios/Other/mariani/bitsy.boot.bin",
+      "name": "bitsy.boot.bin",
+      "size": 365,
+      "sha1": "474c2b0c666239c76fce07e1c96471650431a2d6",
+      "md5": "e6e8f7edc3ae48f827a97090cdca741c",
+      "sha256": "99925c65c95bcd09f08ca4f01b9803a912a5dbb9300f633f39956b9d6a86f381",
+      "crc32": "52fa15be",
+      "adler32": "1cb9c583"
+    },
+    "3b0d57ff9abb3302cc949f7e0cc71d38ea5a89ce": {
+      "path": "bios/Other/mariani/bootsector.bin",
+      "name": "bootsector.bin",
+      "size": 256,
+      "sha1": "3b0d57ff9abb3302cc949f7e0cc71d38ea5a89ce",
+      "md5": "6ab4d0a20071dad38154a7c0278beee6",
+      "sha256": "b47c49ba05e56ecb0e3710edda060b5deebb24cf79081b4423838cc3162c79a1",
+      "crc32": "dde89fae",
+      "adler32": "ef37951c"
+    },
+    "e2f1b6342efff3a39fafd239f200707bc7494592": {
+      "path": "bios/Other/mariani/bootsector_prodos243.bin",
+      "name": "bootsector_prodos243.bin",
+      "size": 1024,
+      "sha1": "e2f1b6342efff3a39fafd239f200707bc7494592",
+      "md5": "2695dc5458076eb747b9f245dd1a7ed9",
+      "sha256": "41cdf6bd85fff5d88445d214384f3f5a2bd1d1c7a8b69ca33eb05130ed9c03a3",
+      "crc32": "c720393f",
+      "adler32": "85e4dcac"
+    },
+    "52d1bbeed17f2a2240cb38249dba3663ad0b8a1f": {
+      "path": "bios/Other/mariani/dos33c.bin",
+      "name": "dos33c.bin",
+      "size": 12288,
+      "sha1": "52d1bbeed17f2a2240cb38249dba3663ad0b8a1f",
+      "md5": "46a02fc4775b3d959f3f949a70eaa616",
+      "sha256": "331f64cf5d1bd1bafd28aa527f753bd20bb42c0d7692c335ac5498c296aeb4c2",
+      "crc32": "00bac1b9",
+      "adler32": "e4c1a8ff"
+    },
+    "17c354249ddbfaf20b570d3c5e33b693e36646aa": {
+      "path": "bios/Other/mariani/prodos243.bin",
+      "name": "prodos243.bin",
+      "size": 17128,
+      "sha1": "17c354249ddbfaf20b570d3c5e33b693e36646aa",
+      "md5": "90644bd658fd0922d28eccb7cfb7cb76",
+      "sha256": "df45f0e82a2a96a8bddb6af408284f6d38160aaa100895e722e9f4bbe32f9e5b",
+      "crc32": "e0219738",
+      "adler32": "5387adb9"
+    },
+    "dbda9a9fd882af929b17cd2de1a975e7f1b93361": {
+      "path": "bios/Other/mariani/quit.system.bin",
+      "name": "quit.system.bin",
+      "size": 56,
+      "sha1": "dbda9a9fd882af929b17cd2de1a975e7f1b93361",
+      "md5": "6a32c39d8ac24bd56a03d79299b0a8f1",
+      "sha256": "2010e843a290cd70d0936baa2e647d93a455f2c016dfa49d3a806b1d450b71cb",
+      "crc32": "d15052ad",
+      "adler32": "64011de4"
+    },
     "8e14e85c645187504ec9d162b3ea614a0c421d32": {
       "path": "bios/Other/mednafen/apple2e-enh-kb.rom",
       "name": "apple2e-enh-kb.rom",
@@ -97480,6 +97780,36 @@
       "7fa9ea60a5745891d712df3d860d82d9": "19a26e9ca77bab990337c639cb2e3ede4b272bcb",
       "01fd7e0102b2ffdbe2d781eca0162a78": "d11a9f5eb62ac9382faeabb53926c0b10788cefd",
       "111ccf43b36893fcf4e456ea7de72f3a": "33991a884bdf2131475058cddf535a457ce50233",
+      "7253a9ba7d7ca807016f5adc0207dd7b": "496a0bd1af463fce81b362da9e4757a993e355d5",
+      "88bd69906b4b3109b3f31472fb4b47f4": "51cc84e2cbd9bd61d50a0931cdae0a2ef0a57d6c",
+      "3c406514b9806a7c57ee65fb0b0c39b4": "09288be705464b608ff190519ab008d3dfcd1b05",
+      "f3e8237eca3809bec2a42b984a1332a8": "ad200b3263d08e7235d0871c8595963a07adc905",
+      "271e2c9bf928b95e7baeff391db45495": "0a382be58db5215c4a3de53b19a72fab660d5da2",
+      "346bc782c6a08a531c460e33bc03daf4": "61fa9254628e5bb7236fb474006116d67684d747",
+      "352fdbcae14c6a8c0398822c7a273309": "f1c779af480b5bda2bdd03950c1201a5c5143bea",
+      "4b45852b369e2afd864a02d0d91f70dc": "87ca8135f7526ddf829f9c2c4f7dbe4d568818fc",
+      "5b4866713477fdb08bb2a78d2d86ceb0": "34718c242ccc539c54b456eca84286421ad24166",
+      "9248c1f19f3d3277a031f46a19b2e350": "0ec9ebe6542ca8f89ed4a7c417716b287a75b48e",
+      "f2720f70859026c76e07fc598fbe435f": "cfbdbc1d76542f2a60dbbbdf9deb218ee197351e",
+      "d0a61e95ed1e1dc37c8e4801326aa79e": "3180be6b555ee9ef1f59c4fc3f25c5aab8c39c81",
+      "2592efa1d34ade55d490a1b39911c9b2": "fd557998fd5823ad69a42ad1282e4fe47db02dca",
+      "a49e45e7a6d4de23e0845a59c7e31e0c": "06115eebb4d58221b5c062a42bf3e41e137447ed",
+      "e0a40e9166af27b16f60beb83c9233f0": "69667800c54da1d4466e7b2168c0e418a4cf586c",
+      "22563ab338024dac7b03510371d49c57": "3a9d881a8a8d30f55b9719aceebbcf717f829d6f",
+      "c619b7edfcf021f3b8fd20d9386676ba": "8bd7ced83e209a15e9b19a05a5ef4b8e996dc1a5",
+      "1896d7b98dd940c89f7c8ea899b71006": "c976fe56e57706c161f513a82ba3e0d8cda83904",
+      "76c79535f7cf77973e2c711aa977a124": "f1b4ff018acf95f3355f0d575b66a188d728b687",
+      "5902996f16dc78fc013f6e1db14805b3": "c75c751589cbcc1ad4ab4f63676af7abadd86f5b",
+      "972ce55fa7b905a494de16a7e8ec1949": "c66c1955dac84a253a661720a7947150c109f315",
+      "67c0d61ab0911183faf05270f881a97e": "6dab633470c6bc4cb3e81d09fda46597caf8ee57",
+      "8d84b614b545d4eec8799d3f325332cb": "f163e5753c18ff0e812a448e8da406f102600edf",
+      "a8d8c08f5cb4a9480389477c6c2f2834": "6ba0571dee8da75f5c1736854e206eb9d2601fac",
+      "e6e8f7edc3ae48f827a97090cdca741c": "474c2b0c666239c76fce07e1c96471650431a2d6",
+      "6ab4d0a20071dad38154a7c0278beee6": "3b0d57ff9abb3302cc949f7e0cc71d38ea5a89ce",
+      "2695dc5458076eb747b9f245dd1a7ed9": "e2f1b6342efff3a39fafd239f200707bc7494592",
+      "46a02fc4775b3d959f3f949a70eaa616": "52d1bbeed17f2a2240cb38249dba3663ad0b8a1f",
+      "90644bd658fd0922d28eccb7cfb7cb76": "17c354249ddbfaf20b570d3c5e33b693e36646aa",
+      "6a32c39d8ac24bd56a03d79299b0a8f1": "dbda9a9fd882af929b17cd2de1a975e7f1b93361",
       "b956c537e7b6b85ffa5c3493b1490d8a": "8e14e85c645187504ec9d162b3ea614a0c421d32",
       "4431aea380185e3f509285540d7cb418": "12a2e718f5f4acd69b6c33a45a4a940b1440a481",
       "f29d49006080c3080baab7b851e1cf68": "16e3c6698a10547c228b8ab474b817ff1d64c216",
@@ -115336,7 +115666,8 @@
         "f077ba595d9a01218ef1d4fa6730d1cb6edf61ae"
       ],
       "A2_BASIC.SYM": [
-        "f72ebcb3ad771321e36cacb49779dca6f2b4db9e"
+        "f72ebcb3ad771321e36cacb49779dca6f2b4db9e",
+        "496a0bd1af463fce81b362da9e4757a993e355d5"
       ],
       "APPLE2E.SYM": [
         "fcfbbb25e06f58d13e762b02bfd468c834d98fc8"
@@ -115358,6 +115689,93 @@
       ],
       "unifont.bdf": [
         "33991a884bdf2131475058cddf535a457ce50233"
+      ],
+      "A2_DOS33.SYM2": [
+        "51cc84e2cbd9bd61d50a0931cdae0a2ef0a57d6c"
+      ],
+      "Apple2.rom": [
+        "09288be705464b608ff190519ab008d3dfcd1b05"
+      ],
+      "Apple2_JPlus.rom": [
+        "ad200b3263d08e7235d0871c8595963a07adc905"
+      ],
+      "Apple2_JPlus_Video.rom": [
+        "0a382be58db5215c4a3de53b19a72fab660d5da2"
+      ],
+      "Apple2e.rom": [
+        "61fa9254628e5bb7236fb474006116d67684d747"
+      ],
+      "Base64A.rom": [
+        "f1c779af480b5bda2bdd03950c1201a5c5143bea"
+      ],
+      "Base64A_German_Video.rom": [
+        "87ca8135f7526ddf829f9c2c4f7dbe4d568818fc"
+      ],
+      "CHARSET82.bmp": [
+        "34718c242ccc539c54b456eca84286421ad24166"
+      ],
+      "CHARSET8C.bmp": [
+        "0ec9ebe6542ca8f89ed4a7c417716b287a75b48e"
+      ],
+      "CHARSET8M.bmp": [
+        "cfbdbc1d76542f2a60dbbbdf9deb218ee197351e"
+      ],
+      "Freezes_Non-autostart_F8_Rom.rom": [
+        "3180be6b555ee9ef1f59c4fc3f25c5aab8c39c81"
+      ],
+      "HDC-SmartPort.bin": [
+        "fd557998fd5823ad69a42ad1282e4fe47db02dca"
+      ],
+      "Hddrvr-v2.bin": [
+        "06115eebb4d58221b5c062a42bf3e41e137447ed"
+      ],
+      "Hddrvr.bin": [
+        "69667800c54da1d4466e7b2168c0e418a4cf586c"
+      ],
+      "MouseInterface.rom": [
+        "3a9d881a8a8d30f55b9719aceebbcf717f829d6f"
+      ],
+      "PRAVETS82.ROM": [
+        "8bd7ced83e209a15e9b19a05a5ef4b8e996dc1a5"
+      ],
+      "PRAVETS8C.ROM": [
+        "c976fe56e57706c161f513a82ba3e0d8cda83904"
+      ],
+      "PRAVETS8M.ROM": [
+        "f1b4ff018acf95f3355f0d575b66a188d728b687"
+      ],
+      "Parallel.rom": [
+        "c75c751589cbcc1ad4ab4f63676af7abadd86f5b"
+      ],
+      "PrintChar21.ttf": [
+        "c66c1955dac84a253a661720a7947150c109f315"
+      ],
+      "SSC.rom": [
+        "6dab633470c6bc4cb3e81d09fda46597caf8ee57"
+      ],
+      "TK3000e.rom": [
+        "f163e5753c18ff0e812a448e8da406f102600edf"
+      ],
+      "basic17.system.bin": [
+        "6ba0571dee8da75f5c1736854e206eb9d2601fac"
+      ],
+      "bitsy.boot.bin": [
+        "474c2b0c666239c76fce07e1c96471650431a2d6"
+      ],
+      "bootsector.bin": [
+        "3b0d57ff9abb3302cc949f7e0cc71d38ea5a89ce"
+      ],
+      "bootsector_prodos243.bin": [
+        "e2f1b6342efff3a39fafd239f200707bc7494592"
+      ],
+      "dos33c.bin": [
+        "52d1bbeed17f2a2240cb38249dba3663ad0b8a1f"
+      ],
+      "prodos243.bin": [
+        "17c354249ddbfaf20b570d3c5e33b693e36646aa"
+      ],
+      "quit.system.bin": [
+        "dbda9a9fd882af929b17cd2de1a975e7f1b93361"
       ],
       "apple2e-enh-kb.rom": [
         "8e14e85c645187504ec9d162b3ea614a0c421d32"
@@ -134353,6 +134771,36 @@
       "750c5ab5": "19a26e9ca77bab990337c639cb2e3ede4b272bcb",
       "ef56ccf2": "d11a9f5eb62ac9382faeabb53926c0b10788cefd",
       "2c4b2ed4": "33991a884bdf2131475058cddf535a457ce50233",
+      "dddf12db": "496a0bd1af463fce81b362da9e4757a993e355d5",
+      "d7fce7b9": "51cc84e2cbd9bd61d50a0931cdae0a2ef0a57d6c",
+      "2af3a6c1": "09288be705464b608ff190519ab008d3dfcd1b05",
+      "74387fee": "ad200b3263d08e7235d0871c8595963a07adc905",
+      "487104b5": "0a382be58db5215c4a3de53b19a72fab660d5da2",
+      "281592e5": "61fa9254628e5bb7236fb474006116d67684d747",
+      "40ad9664": "f1c779af480b5bda2bdd03950c1201a5c5143bea",
+      "a3a51de9": "87ca8135f7526ddf829f9c2c4f7dbe4d568818fc",
+      "33f1d263": "34718c242ccc539c54b456eca84286421ad24166",
+      "a41a9c96": "0ec9ebe6542ca8f89ed4a7c417716b287a75b48e",
+      "9abb0337": "cfbdbc1d76542f2a60dbbbdf9deb218ee197351e",
+      "e47e2259": "3180be6b555ee9ef1f59c4fc3f25c5aab8c39c81",
+      "d9858b1a": "fd557998fd5823ad69a42ad1282e4fe47db02dca",
+      "6a051d2b": "06115eebb4d58221b5c062a42bf3e41e137447ed",
+      "81cc8d30": "69667800c54da1d4466e7b2168c0e418a4cf586c",
+      "0bcd1e8e": "3a9d881a8a8d30f55b9719aceebbcf717f829d6f",
+      "85da8337": "8bd7ced83e209a15e9b19a05a5ef4b8e996dc1a5",
+      "59b1fa01": "c976fe56e57706c161f513a82ba3e0d8cda83904",
+      "caf613ef": "f1b4ff018acf95f3355f0d575b66a188d728b687",
+      "2813909e": "c75c751589cbcc1ad4ab4f63676af7abadd86f5b",
+      "92d96062": "c66c1955dac84a253a661720a7947150c109f315",
+      "b7539d4c": "6dab633470c6bc4cb3e81d09fda46597caf8ee57",
+      "5b1e8ab2": "f163e5753c18ff0e812a448e8da406f102600edf",
+      "93ebe0b4": "6ba0571dee8da75f5c1736854e206eb9d2601fac",
+      "52fa15be": "474c2b0c666239c76fce07e1c96471650431a2d6",
+      "dde89fae": "3b0d57ff9abb3302cc949f7e0cc71d38ea5a89ce",
+      "c720393f": "e2f1b6342efff3a39fafd239f200707bc7494592",
+      "00bac1b9": "52d1bbeed17f2a2240cb38249dba3663ad0b8a1f",
+      "e0219738": "17c354249ddbfaf20b570d3c5e33b693e36646aa",
+      "d15052ad": "dbda9a9fd882af929b17cd2de1a975e7f1b93361",
       "c506efb9": "8e14e85c645187504ec9d162b3ea614a0c421d32",
       "e47045f4": "12a2e718f5f4acd69b6c33a45a4a940b1440a481",
       "094ecf8e": "16e3c6698a10547c228b8ab474b817ff1d64c216",
@@ -143100,6 +143548,36 @@
       "c1d5cefa6fecdb77c239d008ec08b57ddfbcc97e3194fac689c3ea0fbbecf565": "19a26e9ca77bab990337c639cb2e3ede4b272bcb",
       "ef94fa078d9a451ede98565ed953d3dd6e43a4135b9ca1abcd95172070c85dc4": "d11a9f5eb62ac9382faeabb53926c0b10788cefd",
       "367d8ed92cab8ceba681077eb497497dd7efe0ce451b56dfc7f277c6e120d8bc": "33991a884bdf2131475058cddf535a457ce50233",
+      "4d8725393e8e374d8f6b1079a0ceac857c8921cfa1867f86b235b546318c7059": "496a0bd1af463fce81b362da9e4757a993e355d5",
+      "962887daa1168cceb655e9252d31096fac29fdf2cd8e96c10a825033b0b8b8a5": "51cc84e2cbd9bd61d50a0931cdae0a2ef0a57d6c",
+      "f34e573b9de203203ac4a8c6cab7ab0f974facf13c40bf6e362fbb92197199f9": "09288be705464b608ff190519ab008d3dfcd1b05",
+      "076136209353b8cec4fc7dca955998b28e0202d019b1defbd1c6b8ea2f8e030d": "ad200b3263d08e7235d0871c8595963a07adc905",
+      "c5443831794aedd9790037d274f190e2c577a0c0e65c33fe3db46e73da386052": "0a382be58db5215c4a3de53b19a72fab660d5da2",
+      "1fb812584c6633fa16b77b20915986ed1178d1e6fc07a647f7ee8d4e6ab9d40b": "61fa9254628e5bb7236fb474006116d67684d747",
+      "74915101a636d92a1505ba6d61ecd9e6226c03577cd61f5ba194cc9cd559016f": "f1c779af480b5bda2bdd03950c1201a5c5143bea",
+      "c88067160e13150f5217e27e17a2a98900a33e53799c2a3afe8073cd4b8999eb": "87ca8135f7526ddf829f9c2c4f7dbe4d568818fc",
+      "371424a8030c7f8078b80f5004dc1f58135a3f7fbcbf4eec0f07a5c3d4f3a77c": "34718c242ccc539c54b456eca84286421ad24166",
+      "240c8324dae5476b7f0a4905dc09717d24cf877718222ed3931ef5e6a0d58ec4": "0ec9ebe6542ca8f89ed4a7c417716b287a75b48e",
+      "1cb2bbd39c7ca9c4ff19187643e9655abb013a25cb211e6321f2a75d141f0a75": "cfbdbc1d76542f2a60dbbbdf9deb218ee197351e",
+      "20406b241dae58bb8c830d052f8a9af32acdb6a2e42b84d20999968af1b80b2d": "3180be6b555ee9ef1f59c4fc3f25c5aab8c39c81",
+      "f7d8f6da8f2a7a09c51b7f3d55e624a6b0272055d8b74b0eab552b174579b9c7": "fd557998fd5823ad69a42ad1282e4fe47db02dca",
+      "0a04ea1a60c6d5400700ea5c274d230921bd7b21882806053ac27f364827d2a7": "06115eebb4d58221b5c062a42bf3e41e137447ed",
+      "9e3b9004f734938b9f6ba7cee251ddbbc9514942b5f9be1b99613b7db5a3cf59": "69667800c54da1d4466e7b2168c0e418a4cf586c",
+      "7f8e50c0e8a409991264201f9300f109b872b68e09c43f3e6c26af35fd8b89af": "3a9d881a8a8d30f55b9719aceebbcf717f829d6f",
+      "2c2432f271869826e098c93bb271f9f7a8c37df2a34e5e8893175e881a6c126e": "8bd7ced83e209a15e9b19a05a5ef4b8e996dc1a5",
+      "54ab29eeac5845aac173c5fd424d4177d79e560f8ec0076dcae34a11bd85b501": "c976fe56e57706c161f513a82ba3e0d8cda83904",
+      "ec5af0fa211e2f6c417ceab8752bd23509d067b9dca75433e2bd975b66277120": "f1b4ff018acf95f3355f0d575b66a188d728b687",
+      "e1b91e0156cabc879663f4c3936b3866bda74182fb0506667cd2d01e19d9e471": "c75c751589cbcc1ad4ab4f63676af7abadd86f5b",
+      "c199b39eeae2a817c4f44bd1bdbcbead974e87dc4c7401193db831be2f2470e1": "c66c1955dac84a253a661720a7947150c109f315",
+      "4fa1323ba31f4bd562486838397b7744257c126806766e360876720daca6e2aa": "6dab633470c6bc4cb3e81d09fda46597caf8ee57",
+      "7dbf16b53fd9ce0efc42caa02f0fb4fc14031bb8e228c429269f1df7abbb3492": "f163e5753c18ff0e812a448e8da406f102600edf",
+      "eddd5e529fcb0def3b667b8311072b29338b584b5b07beca200a1fbeaf91cc52": "6ba0571dee8da75f5c1736854e206eb9d2601fac",
+      "99925c65c95bcd09f08ca4f01b9803a912a5dbb9300f633f39956b9d6a86f381": "474c2b0c666239c76fce07e1c96471650431a2d6",
+      "b47c49ba05e56ecb0e3710edda060b5deebb24cf79081b4423838cc3162c79a1": "3b0d57ff9abb3302cc949f7e0cc71d38ea5a89ce",
+      "41cdf6bd85fff5d88445d214384f3f5a2bd1d1c7a8b69ca33eb05130ed9c03a3": "e2f1b6342efff3a39fafd239f200707bc7494592",
+      "331f64cf5d1bd1bafd28aa527f753bd20bb42c0d7692c335ac5498c296aeb4c2": "52d1bbeed17f2a2240cb38249dba3663ad0b8a1f",
+      "df45f0e82a2a96a8bddb6af408284f6d38160aaa100895e722e9f4bbe32f9e5b": "17c354249ddbfaf20b570d3c5e33b693e36646aa",
+      "2010e843a290cd70d0936baa2e647d93a455f2c016dfa49d3a806b1d450b71cb": "dbda9a9fd882af929b17cd2de1a975e7f1b93361",
       "a1989da84ea4381d309e7e08783771f884e913236b9bcc71c3d649aacf76537a": "8e14e85c645187504ec9d162b3ea614a0c421d32",
       "fbb9620e01f4f728e5a8ba86544900978d7803f6a7d577d384e288dfed9a4907": "12a2e718f5f4acd69b6c33a45a4a940b1440a481",
       "68db230ab6261f452de8d59fb48110d5d012f5a448cbc77afc1ed487c9b039ce": "16e3c6698a10547c228b8ab474b817ff1d64c216",

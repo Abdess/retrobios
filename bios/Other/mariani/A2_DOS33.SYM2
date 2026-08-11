@@ -1,0 +1,93 @@
+// DOS 3.3 Symbols for AppleWin
+// Min debugger version 2.9.2.4
+
+// = Functions =
+symdos33 DOS.COS0    = 9EEB
+symdos33 DOS.COS1    = 9F12
+symdos33 DOS.SCANCMD = 9FCD
+symdos33 DOS.ORTN    = 9FB3
+symdos33 DOS.MVCSW   = A851
+symdos33 DOS.EBLD    = A35D
+symdos33 DOS.EBLD1   = A382
+symdos33 DOS.EBLD2   = A360
+symdos33 DOS.EBLD3   = A36C
+symdos33 DOS.EBSV    = A331
+symdos33 DOS.EBRUN   = A38E
+symdos33 DOS.LD3     = A471
+symdos33 DOS.GNBC    = A1A4
+
+// = Data =
+dw DOS.CFTABA        = AA4F
+db DOS.ISTATE        = AA51
+db DOS.OSTATE        = AA52
+dw DOS.SVOUTS        = AA53
+dw DOS.SVINS         = AA55
+db DOS.CNFTBS        = AA57
+db DOS.DFNFB         = AA58
+db DOS.SVSTK         = AA59
+db DOS.SVX           = AA5A
+db DOS.SVY           = AA5B
+db DOS.SVA           = AA5C
+db DOS.LBUFD         = AA5D
+db DOS.MONMOD        = AA5E
+db DOS.CMDNO         = AA5F
+dw DOS.SVBL          = AA60
+db DOS.SVCMD         = AA62
+db DOS.TEMP1A        = AA63
+db DOS.TEMP2A        = AA64
+db DOS.INOPTS        = AA65
+dw DOS.CV            = AA66
+dw DOS.CD            = AA68
+dw DOS.CS            = AA6A
+dw DOS.CL            = AA6C
+dw DOS.CR            = AA6E
+dw DOS.CB            = AA70
+dw DOS.CA            = AA72
+
+db DOS.PAD_B7DF      = B7DF
+db DOS.NDPGS         = B7E0
+db DOS.BRWCNT        = B7E1
+db DOS.PAD_B7E2      = B7E2
+db DOS.PAD_B7E3      = B7E3
+da DOS.BAOB          = B7E4
+da DOS.ADOSLD        = B7E6
+db DOS.IBTYPE        = B7E8
+db DOS.IBSLOT        = B7E9
+db DOS.IBDRVN        = B7EA
+db DOS.IBVOL         = B7EB
+db DOS.IBTRK         = B7EC
+db DOS.IBSECT        = B7ED
+da DOS.IBDCTP        = B7EE
+da DOS.IBBUFP        = B7F0
+dw DOS.IBDLEN        = B7F2
+db DOS.IBCMD         = B7F4
+
+// = Strings =
+asc T_INIT     A884:A887
+asc T_LOAD     A888:A88B
+asc T_SAVE     A88C:A88F
+asc T_RUN      A890:A892
+asc T_CHAIN    A893:A897
+asc T_DELETE   A898:A89D
+asc T_LOCK     A89E:A8A1
+asc T_UNLOCK   A8A2:A8A7
+asc T_CLOSE    A8A8:A8AC
+asc T_READ     A8AD:A8B0
+asc T_EXEC     A8B1:A8B4
+asc T_WRITE    A8B5:A8B9
+asc T_POSITION A8BA:A8C1
+asc T_OPEN     A8C2:A8C5
+asc T_APPEND   A8C6:A8CB
+asc T_RENAME   A8CC:A8D1
+asc T_CATALOG  A8D2:A8D8
+asc T_MON      A8D9:A8DB
+asc T_NOMON    A8DC:A8E0
+asc T_PR_NUM   A8E1:A8E3
+asc T_IN_NUM   A8E4:A8E6
+asc T_MAXFILES A8E7:A8EE
+asc T_FP       A8EF:A8F0
+asc T_INT      A8F1:A8F3
+asc T_BSAVE    A8F4:A8F8
+asc T_BLOAD    A8F9:A8FD
+asc T_BRUN     A8FE:A901
+asc T_VERIFY   A902:A907
