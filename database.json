@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-11T16:57:08Z",
-  "total_files": 8644,
-  "total_size": 11131626001,
+  "generated_at": "2026-08-11T17:02:52Z",
+  "total_files": 8645,
+  "total_size": 11131628049,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -50817,6 +50817,16 @@
       "crc32": "7df99cca",
       "adler32": "059d2653"
     },
+    "704e726eeda2dd06afa99135e76393b926187bc9": {
+      "path": "bios/Other/gopher2600/Schweber OQ.bin",
+      "name": "Schweber OQ.bin",
+      "size": 2048,
+      "sha1": "704e726eeda2dd06afa99135e76393b926187bc9",
+      "md5": "0a98bc3d53a0965de87fc77377b5a0db",
+      "sha256": "d9952fd04096283a2ae5b2f497442f02be5cc6e3a1d1bd5339100b8e9aa4b6cc",
+      "crc32": "64e50e23",
+      "adler32": "21a9f9a8"
+    },
     "35a45bf943ca65d7c9e4d024b50db200d8e5c9c1": {
       "path": "bios/Other/gopher2600/Starpath Demonstration Unit 1P.bin",
       "name": "Starpath Demonstration Unit 1P.bin",
@@ -96282,6 +96292,7 @@
       "ae0003e622bd21052e3a3f38e1c3d67a": "e4ad22c907042aba3162848b86f43ffec16d5c2d",
       "959b9991f457b14ab74731ac62179d7d": "0550881f67d5e8b56c1a36206a8b7a5d3dd87ddd",
       "5d68c02b3c93088f64cf6a1f0a98abbd": "d87747718c1aa06a9ddd8504b2581eb0034b754a",
+      "0a98bc3d53a0965de87fc77377b5a0db": "704e726eeda2dd06afa99135e76393b926187bc9",
       "27b6d688c56f2e92f0184381efc46fb7": "35a45bf943ca65d7c9e4d024b50db200d8e5c9c1",
       "64c3753a892bcfc3c3a27c1caec83108": "102172fced0f62a586089a8e94460262c76cfca4",
       "0fb104379129b52ca53361c9b0e4465e": "245391741a27e610759cbfb894d1f433b9f1e08b",
@@ -113776,6 +113787,9 @@
       ],
       "Motocross Challenge.7z": [
         "d87747718c1aa06a9ddd8504b2581eb0034b754a"
+      ],
+      "Schweber OQ.bin": [
+        "704e726eeda2dd06afa99135e76393b926187bc9"
       ],
       "Starpath Demonstration Unit 1P.bin": [
         "35a45bf943ca65d7c9e4d024b50db200d8e5c9c1"
@@ -132771,6 +132785,7 @@
       "84fa42db": "e4ad22c907042aba3162848b86f43ffec16d5c2d",
       "77f0f051": "0550881f67d5e8b56c1a36206a8b7a5d3dd87ddd",
       "7df99cca": "d87747718c1aa06a9ddd8504b2581eb0034b754a",
+      "64e50e23": "704e726eeda2dd06afa99135e76393b926187bc9",
       "7a4730c7": "35a45bf943ca65d7c9e4d024b50db200d8e5c9c1",
       "1c4e754e": "102172fced0f62a586089a8e94460262c76cfca4",
       "30260200": "245391741a27e610759cbfb894d1f433b9f1e08b",
@@ -141417,6 +141432,7 @@
       "17c0738ca06b9b6a7450a27c1d77df52843de3691097ad1849af372b48efdb58": "e4ad22c907042aba3162848b86f43ffec16d5c2d",
       "c8f5854966bc69820a249b42a82e5af6532a0d6cfaece27cc1d141e3ed8c87c9": "0550881f67d5e8b56c1a36206a8b7a5d3dd87ddd",
       "813ed20449c14827ecef55a147098603ab45854312ac9eaad34383030c3e0048": "d87747718c1aa06a9ddd8504b2581eb0034b754a",
+      "d9952fd04096283a2ae5b2f497442f02be5cc6e3a1d1bd5339100b8e9aa4b6cc": "704e726eeda2dd06afa99135e76393b926187bc9",
       "300898dedc7e1a506d2ba92dd4e8415b4fcff42b75190aede186ce3bc1628f0e": "35a45bf943ca65d7c9e4d024b50db200d8e5c9c1",
       "00f24ee0ae66f9b3de4983a3169baa357c50220e8a15fee2a315cac00b62ecd8": "102172fced0f62a586089a8e94460262c76cfca4",
       "1cda3d3f11cd71bce5854202e3871f4110abe4dbdcd089e103b77391d0f92cd6": "245391741a27e610759cbfb894d1f433b9f1e08b",
