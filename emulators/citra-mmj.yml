@@ -35,7 +35,8 @@ notes: |
   0x00014102, 0x00014202 and 0x00014302, depend on a file. Region defaults to
   the code the ROM declares.
   ref: src/core/hle/service/apt/apt.cpp:143, src/core/hle/service/apt/apt.cpp:256-272,
-       src/core/file_sys/archive_ncch.cpp:143-148, src/core/hle/service/cfg/cfg.cpp:176-181
+       src/core/file_sys/archive_ncch.cpp:143-148, src/core/hle/service/cfg/cfg.cpp:176-181,
+       src/core/loader/ncch.cpp:179, src/android/jni/config/main_settings.cpp:12
 
   Loading the four regional fonts from sysdata is specific to this fork.
   ref: src/core/hle/service/apt/apt.cpp:184-228
@@ -57,6 +58,13 @@ notes: |
   ClCertA is read from NAND title 0x0004001b00010002 and decrypted with the
   keyslot 0x0D normal key. HTTPS client authentication stays off without both.
   ref: src/core/hle/service/http_c.cpp:810-884
+
+  The published tree does not build as it stands: CitraDirectory.java:349 calls
+  a NativeLibrary.SetBackgroundGLSL that no file declares, and GetBuildDate and
+  GetDeviceIinfo are declared native with no JNI counterpart. Nothing compiled
+  here reads the post-processing shaders the settings screen lists.
+  ref: src/android/app/src/main/java/org/citra/emu/NativeLibrary.java:341-342,
+       src/android/app/src/main/java/org/citra/emu/settings/SettingsFragment.java:397-401
 
   Amiibo dumps are read as .bin files from amiibo/, cheat codes from
   cheats/<title id>.txt, texture packs and mods from load/.
@@ -101,6 +109,43 @@ files:
     note: "Seed-encrypted titles from firmware 9.6 onwards. An empty database is written when the file is absent."
     source_ref: "src/core/file_sys/seed_db.cpp:12-57"
 
+  - name: "00000000.app.romfs"
+    path: nand/00000000000000000000000000000000/title/0004009b/00014002/content/00000000.app.romfs
+    system: nintendo-3ds
+    required: false
+    hle_fallback: true
+    region: [japan, north-america, europe, australia]
+    description: "shared font system archive, title 0x0004009b00014002"
+    note: "First step of the shared font chain, holding cbf_std.bcfnt.lz in its RomFS. This title low ID is the one the embedded open-source font answers."
+    source_ref: "src/core/hle/service/apt/apt.cpp:124-182, src/core/file_sys/archive_ncch.cpp:143-148"
+
+  - name: "00000000.app.romfs"
+    path: nand/00000000000000000000000000000000/title/0004009b/00014102/content/00000000.app.romfs
+    system: nintendo-3ds
+    required: false
+    region: [china]
+    description: "shared font system archive for CHN, title 0x0004009b00014102"
+    note: "Holds cbf_zh-Hans-CN.bcfnt.lz. No embedded replacement answers this title low ID."
+    source_ref: "src/core/hle/service/apt/apt.cpp:124-182, src/core/file_sys/archive_ncch.cpp:132-158"
+
+  - name: "00000000.app.romfs"
+    path: nand/00000000000000000000000000000000/title/0004009b/00014202/content/00000000.app.romfs
+    system: nintendo-3ds
+    required: false
+    region: [south-korea]
+    description: "shared font system archive for KOR, title 0x0004009b00014202"
+    note: "Holds cbf_ko-Hang-KR.bcfnt.lz. No embedded replacement answers this title low ID."
+    source_ref: "src/core/hle/service/apt/apt.cpp:124-182, src/core/file_sys/archive_ncch.cpp:132-158"
+
+  - name: "00000000.app.romfs"
+    path: nand/00000000000000000000000000000000/title/0004009b/00014302/content/00000000.app.romfs
+    system: nintendo-3ds
+    required: false
+    region: [taiwan]
+    description: "shared font system archive for TWN, title 0x0004009b00014302"
+    note: "Holds cbf_zh-Hant-TW.bcfnt.lz. No embedded replacement answers this title low ID."
+    source_ref: "src/core/hle/service/apt/apt.cpp:124-182, src/core/file_sys/archive_ncch.cpp:132-158"
+
   - name: shared_font.bin
     path: sysdata/shared_font.bin
     system: nintendo-3ds
@@ -118,7 +163,7 @@ files:
     hle_fallback: true
     region: [japan, north-america, europe, australia]
     description: "shared font for JPN, USA, EUR and AUS"
-    note: "Read to offset 0x80 of the shared memory block, so the file is a bare uncompressed BCFNT. Selected for every CFG region other than CHN, KOR and TWN, where the embedded open-source font already answers the archive request."
+    note: "Read to offset 0x80 of the shared memory block, so the file is a bare uncompressed BCFNT. Selected for every CFG region other than CHN, KOR and TWN. The embedded open-source font answers the archive request first, so this file is only reached when that archive path is taken out."
     source_ref: "src/core/hle/service/apt/apt.cpp:184-228, src/core/file_sys/archive_ncch.cpp:143-148"
 
   - name: cbf_zh-Hans-CN.bcfnt
@@ -189,7 +234,7 @@ files:
     hle_fallback: true
     description: "title metadata of the DLP module, title 0x0004013000002802"
     note: "Read to resolve the content ID of index 0, which the shipped metadata gives as 0x1f. Without it the path falls back to content ID 0 and the module is not found."
-    source_ref: "src/core/hle/service/am/am.cpp:466-501"
+    source_ref: "src/core/hle/service/am/am.cpp:428-464, src/core/hle/service/am/am.cpp:466-501, src/core/file_sys/title_metadata.cpp:19-34"
 
   - name: "0000001f.app"
     path: nand/00000000000000000000000000000000/title/00040130/00002802/content/0000001f.app

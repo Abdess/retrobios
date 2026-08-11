@@ -263,7 +263,7 @@ nav:
     - vitaQuakeII: emulators/vitaquake2.md
     - yabasanshiro: emulators/yabasanshiro.md
     - Yuzu: emulators/yuzu.md
-  - Community forks (125):
+  - Community forks (126):
     - 2600.emu: emulators/2600-emu.md
     - EightyOne: emulators/81.md
     - a5200: emulators/a5200.md
@@ -293,6 +293,7 @@ nav:
     - Caprice32: emulators/cap32.md
     - ChimeraSNES: emulators/chimerasnes.md
     - Citra: emulators/citra.md
+    - Citra MMJ: emulators/citra-mmj.md
     - Citra Canary: emulators/citra_canary.md
     - Citron: emulators/citron.md
     - Daphne: emulators/daphne.md

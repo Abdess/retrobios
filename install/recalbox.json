@@ -5,7 +5,7 @@
   "platform": "recalbox",
   "display_name": "Recalbox",
   "version": "1.0",
-  "generated": "2026-08-10T23:10:26Z",
+  "generated": "2026-08-11T03:21:35Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -237,10 +237,30 @@
       }
     }
   ],
-  "total_files": 1190,
-  "total_size": 2501103192,
-  "total_omitted": 5,
+  "total_files": 1196,
+  "total_size": 2500541517,
+  "total_omitted": 7,
   "omitted_files": [
+    {
+      "dest": "BeebFile/BIOS.rom",
+      "name": "BIOS.rom",
+      "system": "bbc-master-128",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "beebem"
+      ]
+    },
+    {
+      "dest": "BeebFile/M128/ADFS.rom",
+      "name": "ADFS.rom",
+      "system": "bbc-master-128",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "beebem"
+      ]
+    },
     {
       "dest": "Machines/MSX2+ - European/Msx2pe.rom",
       "name": "Msx2pe.rom",
@@ -587,10 +607,10 @@
     },
     {
       "dest": "cdi/cdimono1.zip",
-      "sha1": "5d0b1b55b0d0958a5c9069c3219d4da5a87a6b93",
-      "sha256": "315306e1cbb232fa1cb35219a43e3f4ebe997f6da9627b56ad680a708db52f9a",
-      "size": 660996,
-      "repo_path": "bios/Arcade/Arcade/cdimono1.zip",
+      "sha1": "e6714b3d5fdc7023348435a77a016b763e0992b1",
+      "sha256": "f90df890fefbd57d9ba9e184ec6763ff5732a8873ff415437569d0cb50bb0b57",
+      "size": 468660,
+      "repo_path": "bios/Philips/CD-i/.variants/cdimono1.zip.e6714b3d",
       "cores": null
     },
     {
@@ -598,7 +618,7 @@
       "sha1": "16072afaa65d1b059346616ac5b5a600c63ff1d1",
       "sha256": "b53d206ae81607bf6866411b720ad82ce75122423058ce08c6df84cdc1ca3496",
       "size": 472798,
-      "repo_path": "bios/Arcade/Arcade/cdibios.zip",
+      "repo_path": "bios/Philips/CD-i/cdibios.zip",
       "cores": null
     },
     {
@@ -2574,7 +2594,7 @@
       "sha1": "23c66caa80b93199914fae246a5ea6e84db1be29",
       "sha256": "1d39368f8dd5c2c65be1b872e749f7e20fe5707f9897deefe54a82d11d4748c7",
       "size": 850311,
-      "repo_path": "bios/Arcade/Arcade/aes.zip",
+      "repo_path": "bios/SNK/Neo Geo/aes.zip",
       "cores": null
     },
     {
@@ -3306,7 +3326,7 @@
       "sha1": "5024b3bfd04ccd2061eb60d2eca254e8faf44f5c",
       "sha256": "29e05af157d01d146c7ec501e99b7931d78920beccf9b66c9b310c860941e37f",
       "size": 3753,
-      "repo_path": "bios/Arcade/Arcade/bctvidbs.zip",
+      "repo_path": "bios/Arcade/Arcade/v4bios.zip",
       "cores": [
         "advancemame"
       ]
@@ -3529,6 +3549,76 @@
       "repo_path": "bios/Atari/400-800/XEGAME.ROM",
       "cores": [
         "atari800"
+      ]
+    },
+    {
+      "dest": "BeebFile/BBC/OS12.rom",
+      "sha1": "0d9bcaf6a393c9ce2359ed700ddb53c232c2c45d",
+      "sha256": "2d9fea69017864f6962704481829f95fee08446c8c3a13826d5d4e44000ac9de",
+      "size": 16384,
+      "repo_path": "bios/Acorn/BBC Micro/os12.rom",
+      "cores": [
+        "beebem"
+      ]
+    },
+    {
+      "dest": "BeebFile/BBC/BASIC2.rom",
+      "sha1": "4a7393f3a45ea309f744441c16723e2ef447a281",
+      "sha256": "45bd55dc0f6f0f8f1fe9e2481de7def206565eec8f600ba3068b849ca4132079",
+      "size": 16384,
+      "repo_path": "bios/Acorn/BBC Micro/basic2.rom",
+      "cores": [
+        "beebem"
+      ]
+    },
+    {
+      "dest": "BeebFile/BBCINT/OS12.rom",
+      "sha1": "0d9bcaf6a393c9ce2359ed700ddb53c232c2c45d",
+      "sha256": "2d9fea69017864f6962704481829f95fee08446c8c3a13826d5d4e44000ac9de",
+      "size": 16384,
+      "repo_path": "bios/Acorn/BBC Micro/os12.rom",
+      "cores": [
+        "beebem"
+      ]
+    },
+    {
+      "dest": "BeebFile/BBCINT/BASIC2.rom",
+      "sha1": "4a7393f3a45ea309f744441c16723e2ef447a281",
+      "sha256": "45bd55dc0f6f0f8f1fe9e2481de7def206565eec8f600ba3068b849ca4132079",
+      "size": 16384,
+      "repo_path": "bios/Acorn/BBC Micro/basic2.rom",
+      "cores": [
+        "beebem"
+      ]
+    },
+    {
+      "dest": "BeebFile/BPLUS/BASIC2.rom",
+      "sha1": "4a7393f3a45ea309f744441c16723e2ef447a281",
+      "sha256": "45bd55dc0f6f0f8f1fe9e2481de7def206565eec8f600ba3068b849ca4132079",
+      "size": 16384,
+      "repo_path": "bios/Acorn/BBC Micro/basic2.rom",
+      "cores": [
+        "beebem"
+      ]
+    },
+    {
+      "dest": "BeebFile/BPLUS/DFS-2.26.rom",
+      "sha1": "cf2ebc422a8d24ec6f1a0320520c38a0e704109a",
+      "sha256": "83d97c7170b35c26597896a2c0c202d65c98671207250255620a8003d2784e1d",
+      "size": 16384,
+      "repo_path": "bios/Acorn/BBC Micro/dfs-2.26.rom",
+      "cores": [
+        "beebem"
+      ]
+    },
+    {
+      "dest": "BeebFile/BPLUS/ADFS-1.30.rom",
+      "sha1": "301fd05c475a629c4bec70510d4507256a5b00d8",
+      "sha256": "4f785bb4572bde31a93f12687dec501c9005b6a0decc6ac943c657447095a563",
+      "size": 16384,
+      "repo_path": "bios/Other/Clock Signal/BBCMicro/adfs-1.30.rom",
+      "cores": [
+        "beebem"
       ]
     },
     {
@@ -6493,10 +6583,10 @@
     },
     {
       "dest": "v4bios.zip",
-      "sha1": "9964f68aadd3eef4daa4c0d946422821b4352208",
-      "sha256": "cf23bfd8a445d0888afbc198ca5edce049a70ce9f5f02a1561ee4bc29efdd1d9",
-      "size": 3775,
-      "repo_path": "bios/Arcade/MAME/v4bios.zip",
+      "sha1": "5024b3bfd04ccd2061eb60d2eca254e8faf44f5c",
+      "sha256": "29e05af157d01d146c7ec501e99b7931d78920beccf9b66c9b310c860941e37f",
+      "size": 3753,
+      "repo_path": "bios/Arcade/Arcade/v4bios.zip",
       "cores": [
         "mame"
       ]
@@ -6596,7 +6686,7 @@
       "sha1": "cd99eb61f44641ade747aaec9f5095c12a8d3c0c",
       "sha256": "4b3327d2d11453ae0440085cc7884c721f471139b16a2fc35a7d6a323a3607b1",
       "size": 1758,
-      "repo_path": "bios/Arcade/Arcade/adam_kb.zip",
+      "repo_path": "bios/Coleco/Adam/adam_kb.zip",
       "cores": [
         "mame"
       ]
@@ -6606,7 +6696,7 @@
       "sha1": "09e495756b8bdb80eafe67791713ef50a2b72361",
       "sha256": "dc80720e806b17bfb554c008c4c88000fc10d53572e9ec9cb550c46b54eeba16",
       "size": 1644,
-      "repo_path": "bios/Arcade/Arcade/adam_prn.zip",
+      "repo_path": "bios/Coleco/Adam/adam_prn.zip",
       "cores": [
         "mame"
       ]
@@ -6616,17 +6706,17 @@
       "sha1": "69428318b280ba60d7eb0e31aa5ec829aadcbce2",
       "sha256": "d5403cc6c5a38775701bcb4ef9f828cf5ffbbbb921bd1f7973e18c905a30e663",
       "size": 1595,
-      "repo_path": "bios/Arcade/Arcade/adam_ddp.zip",
+      "repo_path": "bios/Coleco/Adam/adam_ddp.zip",
       "cores": [
         "mame"
       ]
     },
     {
       "dest": "adam_fdc.zip",
-      "sha1": "1b5bb40a77cf6768975c6b48af1e174a0205d843",
-      "sha256": "6b5fac130ed82aed41b7c93856a2778b448c65f622ddcc0f9c0e3f53d0c16a9b",
-      "size": 12794,
-      "repo_path": "bios/Arcade/Arcade/adam_fdc.zip",
+      "sha1": "8bc454bdf61b99880a45d4aa28d324784ebe260c",
+      "sha256": "b87c7d89ef2cd7478243dbb413d1173c9aadbddd50608895eaf177f1d1c90fce",
+      "size": 1609,
+      "repo_path": "bios/Arcade/MAME/adam_fdc.zip",
       "cores": [
         "mame"
       ]
@@ -7543,10 +7633,10 @@
     },
     {
       "dest": "gts1s.zip",
-      "sha1": "d0a347bbf8d3d6996a025054fe84f16719cc871f",
-      "sha256": "2054f0619231def0b5dca29e0e2662bb63e7365f66d6dd0b143bc6fa153ffa4a",
-      "size": 3756,
-      "repo_path": "bios/Arcade/Arcade/gts1s.zip",
+      "sha1": "346cbf24af08f5bfd96e6a77abf27595477aace8",
+      "sha256": "2c8d682fecf646a5526aa788a6bd5fffb12e005572eb6eab8155a035df2af079",
+      "size": 3734,
+      "repo_path": "bios/Arcade/Arcade/gts1.zip",
       "cores": [
         "mame2015"
       ]
@@ -7776,7 +7866,7 @@
       "sha1": "82aeaace3231022fc158e96c9042745f6482aa93",
       "sha256": "380728b50f1634c44990c12b08d88b336cf691e0b352b76824185eefffdb5a85",
       "size": 2019,
-      "repo_path": "bios/Arcade/Arcade/einstein_speech.zip",
+      "repo_path": "bios/Arcade/MAME/voicebox.zip",
       "cores": [
         "mamemess"
       ]
@@ -8586,7 +8676,7 @@
       "sha1": "b64381aa271ab5cd83b47a83fefab018f39ed11b",
       "sha256": "8a7ab8ce6969f35937973a5c1e413daee31d0fe61197b8bbc837406bb8188a61",
       "size": 487572,
-      "repo_path": "bios/Arcade/Arcade/cdi910.zip",
+      "repo_path": "bios/Philips/CD-i/cdi910.zip",
       "cores": [
         "same_cdi"
       ]
@@ -9686,7 +9776,7 @@
       "sha1": "5d0b1b55b0d0958a5c9069c3219d4da5a87a6b93",
       "sha256": "315306e1cbb232fa1cb35219a43e3f4ebe997f6da9627b56ad680a708db52f9a",
       "size": 660996,
-      "repo_path": "bios/Arcade/Arcade/cdimono1.zip",
+      "repo_path": "bios/Philips/CD-i/cdimono1.zip",
       "cores": [
         "same_cdi"
       ]
@@ -9697,16 +9787,6 @@
       "sha256": "2302aaeab1f6b74523f43a4d00983b4fea9ff1692a9b27ccf17e6ac7e6e66b32",
       "size": 244291,
       "repo_path": "bios/Philips/CD-i/cdimono2.zip",
-      "cores": [
-        "same_cdi"
-      ]
-    },
-    {
-      "dest": "same_cdi/bios/cdibios.zip",
-      "sha1": "16072afaa65d1b059346616ac5b5a600c63ff1d1",
-      "sha256": "b53d206ae81607bf6866411b720ad82ce75122423058ce08c6df84cdc1ca3496",
-      "size": 472798,
-      "repo_path": "bios/Arcade/Arcade/cdibios.zip",
       "cores": [
         "same_cdi"
       ]

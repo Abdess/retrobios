@@ -5,7 +5,7 @@
   "platform": "retrobat",
   "display_name": "RetroBat",
   "version": "1.0",
-  "generated": "2026-08-10T23:10:26Z",
+  "generated": "2026-08-11T03:21:35Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -237,7 +237,7 @@
     }
   ],
   "total_files": 1324,
-  "total_size": 3321272601,
+  "total_size": 3321261394,
   "total_omitted": 15,
   "omitted_files": [
     {
@@ -429,15 +429,15 @@
       "sha1": "69428318b280ba60d7eb0e31aa5ec829aadcbce2",
       "sha256": "d5403cc6c5a38775701bcb4ef9f828cf5ffbbbb921bd1f7973e18c905a30e663",
       "size": 1595,
-      "repo_path": "bios/Arcade/Arcade/adam_ddp.zip",
+      "repo_path": "bios/Coleco/Adam/adam_ddp.zip",
       "cores": null
     },
     {
       "dest": "adam_fdc.zip",
-      "sha1": "1b5bb40a77cf6768975c6b48af1e174a0205d843",
-      "sha256": "6b5fac130ed82aed41b7c93856a2778b448c65f622ddcc0f9c0e3f53d0c16a9b",
-      "size": 12794,
-      "repo_path": "bios/Arcade/Arcade/adam_fdc.zip",
+      "sha1": "8bc454bdf61b99880a45d4aa28d324784ebe260c",
+      "sha256": "b87c7d89ef2cd7478243dbb413d1173c9aadbddd50608895eaf177f1d1c90fce",
+      "size": 1609,
+      "repo_path": "bios/Arcade/MAME/adam_fdc.zip",
       "cores": null
     },
     {
@@ -445,7 +445,7 @@
       "sha1": "cd99eb61f44641ade747aaec9f5095c12a8d3c0c",
       "sha256": "4b3327d2d11453ae0440085cc7884c721f471139b16a2fc35a7d6a323a3607b1",
       "size": 1758,
-      "repo_path": "bios/Arcade/Arcade/adam_kb.zip",
+      "repo_path": "bios/Coleco/Adam/adam_kb.zip",
       "cores": null
     },
     {
@@ -453,7 +453,7 @@
       "sha1": "09e495756b8bdb80eafe67791713ef50a2b72361",
       "sha256": "dc80720e806b17bfb554c008c4c88000fc10d53572e9ec9cb550c46b54eeba16",
       "size": 1644,
-      "repo_path": "bios/Arcade/Arcade/adam_prn.zip",
+      "repo_path": "bios/Coleco/Adam/adam_prn.zip",
       "cores": null
     },
     {
@@ -1373,7 +1373,7 @@
       "sha1": "16072afaa65d1b059346616ac5b5a600c63ff1d1",
       "sha256": "b53d206ae81607bf6866411b720ad82ce75122423058ce08c6df84cdc1ca3496",
       "size": 472798,
-      "repo_path": "bios/Arcade/Arcade/cdibios.zip",
+      "repo_path": "bios/Philips/CD-i/cdibios.zip",
       "cores": null
     },
     {
@@ -1381,7 +1381,7 @@
       "sha1": "5d0b1b55b0d0958a5c9069c3219d4da5a87a6b93",
       "sha256": "315306e1cbb232fa1cb35219a43e3f4ebe997f6da9627b56ad680a708db52f9a",
       "size": 660996,
-      "repo_path": "bios/Arcade/Arcade/cdimono1.zip",
+      "repo_path": "bios/Philips/CD-i/cdimono1.zip",
       "cores": null
     },
     {
@@ -1405,7 +1405,7 @@
       "sha1": "16072afaa65d1b059346616ac5b5a600c63ff1d1",
       "sha256": "b53d206ae81607bf6866411b720ad82ce75122423058ce08c6df84cdc1ca3496",
       "size": 472798,
-      "repo_path": "bios/Arcade/Arcade/cdibios.zip",
+      "repo_path": "bios/Philips/CD-i/cdibios.zip",
       "cores": null
     },
     {
@@ -1413,7 +1413,7 @@
       "sha1": "5d0b1b55b0d0958a5c9069c3219d4da5a87a6b93",
       "sha256": "315306e1cbb232fa1cb35219a43e3f4ebe997f6da9627b56ad680a708db52f9a",
       "size": 660996,
-      "repo_path": "bios/Arcade/Arcade/cdimono1.zip",
+      "repo_path": "bios/Philips/CD-i/cdimono1.zip",
       "cores": null
     },
     {
@@ -7560,10 +7560,10 @@
     },
     {
       "dest": "v4bios.zip",
-      "sha1": "9964f68aadd3eef4daa4c0d946422821b4352208",
-      "sha256": "cf23bfd8a445d0888afbc198ca5edce049a70ce9f5f02a1561ee4bc29efdd1d9",
-      "size": 3775,
-      "repo_path": "bios/Arcade/MAME/v4bios.zip",
+      "sha1": "5024b3bfd04ccd2061eb60d2eca254e8faf44f5c",
+      "sha256": "29e05af157d01d146c7ec501e99b7931d78920beccf9b66c9b310c860941e37f",
+      "size": 3753,
+      "repo_path": "bios/Arcade/Arcade/v4bios.zip",
       "cores": [
         "mame"
       ]
@@ -8343,7 +8343,7 @@
       "sha1": "82aeaace3231022fc158e96c9042745f6482aa93",
       "sha256": "380728b50f1634c44990c12b08d88b336cf691e0b352b76824185eefffdb5a85",
       "size": 2019,
-      "repo_path": "bios/Arcade/Arcade/einstein_speech.zip",
+      "repo_path": "bios/Arcade/MAME/voicebox.zip",
       "cores": [
         "mamemess"
       ]
