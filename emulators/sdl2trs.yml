@@ -81,7 +81,9 @@ files:
       mode needs a Model 3 image (trs_cmd_rom.c:110-115). This is the one slot
       that also accepts a MODELA/III CMD file, which html/index.html presents as
       the substitute for a real Model III ROM. Same truncating ceiling as the
-      Model I slot.
+      Model I slot. The image is the Model III memory map: ROM A 8041364.u104
+      at 0, ROM B 8040332.u105 at 0x2000 and ROM C 8040316c.u106 at 0x3000, the
+      layout MAME declares for the 0x3800 region.
 
   - name: model4p.rom
     description: "TRS-80 Model 4P boot ROM"
@@ -94,7 +96,9 @@ files:
       operating systems, not Model III, and only from floppy, so the original
       image is what restores Model III mode and hard-drive booting. Hard drive
       unit 0 is tried before floppy by the Radio Shack ROM, and F2 held at boot
-      forces floppy (html/Features.html).
+      forces floppy (html/Features.html). The image is the 4 KB gate-array boot
+      ROM 8075332.u69, the only ROM the machine carries; the Model III code
+      comes from a boot disk.
 
 analysis:
   embedded_roms:

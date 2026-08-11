@@ -350,7 +350,6 @@ files:
     category: game_data
     size: 120000
     validation: [size]
-    unsourceable: "splash image of the Linux build, not carried by any distributed package"
     description: "boot splash, first of two"
     note: "Read from the root of the data directory in one 120000 byte request, so a shorter file is rejected. One of the two indices is picked at random and a missing file skips the splash."
     source_ref: "drastic r2.5.2.2 load_logo 0x7fad0-0x7fb78"
@@ -361,7 +360,6 @@ files:
     category: game_data
     size: 120000
     validation: [size]
-    unsourceable: "splash image of the Linux build, not carried by any distributed package"
     description: "boot splash, second of two"
     note: "Same read as index 0."
     source_ref: "drastic r2.5.2.2 load_logo 0x7fad0-0x7fb78"

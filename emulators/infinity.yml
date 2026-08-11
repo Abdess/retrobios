@@ -72,7 +72,6 @@ files:
     system: pico8
     required: false
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     size: 748
     md5: 541e16aa5651699bb085c954ec1b043e
@@ -86,7 +85,6 @@ files:
     system: pico8
     required: false
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     size: 580
     md5: 8437c4e750da7183dffc7b98f9938377
@@ -100,7 +98,6 @@ files:
     system: pico8
     required: false
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     size: 1864
     md5: c4878a2aaee2e3c26d3d4aeeeaa3ac25
@@ -114,7 +111,6 @@ files:
     system: pico8
     required: false
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     size: 1700
     md5: 76f36cbe69708d631ae356bcd49274b2
@@ -128,7 +124,6 @@ files:
     system: pico8
     required: false
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     size: 7443
     md5: 1d6416a591c99b03c58b41f0dd5537b0
@@ -142,7 +137,6 @@ files:
     system: pico8
     required: false
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     size: 7537
     md5: 4f508068de9190c06775bfb4e47e2654
@@ -156,7 +150,6 @@ files:
     system: pico8
     required: false
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     size: 5543
     md5: a382a7e446335d3ea20f85a21a5846ec
@@ -170,7 +163,6 @@ files:
     system: pico8
     required: false
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     size: 11347
     md5: 06f4dfd96b1e7f0b6d5cc7f7163c7904
@@ -183,7 +175,6 @@ files:
     system: pico8
     required: false
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     size: 11358
     md5: 3b83ef96387f14655fc854ddc3c6bd57
@@ -196,7 +187,6 @@ files:
     system: pico8
     required: false
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     size: 11357
     md5: 86d3f3a95c324c9479bd8986968f4327

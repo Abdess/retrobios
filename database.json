@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-11T17:29:29Z",
-  "total_files": 8701,
-  "total_size": 11156245820,
+  "generated_at": "2026-08-11T17:32:11Z",
+  "total_files": 8703,
+  "total_size": 11156264252,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -53597,6 +53597,26 @@
       "crc32": "79b7fdc4",
       "adler32": "a64e0f20"
     },
+    "321262242e15dff4bc1f843011ac370e6943d6e3": {
+      "path": "bios/Other/sdl2trs/model3.rom",
+      "name": "model3.rom",
+      "size": 14336,
+      "sha1": "321262242e15dff4bc1f843011ac370e6943d6e3",
+      "md5": "76a2309db9eef5b633c6ebc0243c6a23",
+      "sha256": "010fd04e1a7b48583685a5554f12ecff8db681c926caa1814f148d552ca53708",
+      "crc32": "df8ab696",
+      "adler32": "348b08f6"
+    },
+    "6393396eaa10a84b9e9f0cf5930aba73defc5c52": {
+      "path": "bios/Other/sdl2trs/model4p.rom",
+      "name": "model4p.rom",
+      "size": 4096,
+      "sha1": "6393396eaa10a84b9e9f0cf5930aba73defc5c52",
+      "md5": "2f1bdc689878416c12190513ef4ff64f",
+      "sha256": "6c1e5d5ccd280ee01d9f852b60ddec07e719a45699a6220eabd50df9999632c6",
+      "crc32": "3a738aa9",
+      "adler32": "756cc346"
+    },
     "35fbefcb73b4f2611fb2c7fba03512123d768964": {
       "path": "bios/Other/sdlpal/sdlpal/1.avi",
       "name": "1.avi",
@@ -97130,6 +97150,8 @@
       "1164ae723c9181698cc41dde6a341132": "8a799c6615702aac72016b784e30ea1abd3e197b",
       "05e1d1a0c8ecd45537a1d52ab925d110": "0f25848f73705328ca03b02905e95e3a5d087d8c",
       "18207ca5b15ba7d05742dca8399d30c6": "8ed9fb83d8e4d73217d347e3b7965cb640cb8395",
+      "76a2309db9eef5b633c6ebc0243c6a23": "321262242e15dff4bc1f843011ac370e6943d6e3",
+      "2f1bdc689878416c12190513ef4ff64f": "6393396eaa10a84b9e9f0cf5930aba73defc5c52",
       "0c6ba406f6d22ca32214709c714d27ee": "35fbefcb73b4f2611fb2c7fba03512123d768964",
       "ba5c008229ec5f615529c2a79707eb90": "929b428407c2800615db87281587679ecc16e44e",
       "72c09c8e371108ff023d7e3a10cbf15c": "15844682678b258957dd59c28b17146609cb8d0c",
@@ -115133,6 +115155,12 @@
       ],
       "nes20db.xml": [
         "8ed9fb83d8e4d73217d347e3b7965cb640cb8395"
+      ],
+      "model3.rom": [
+        "321262242e15dff4bc1f843011ac370e6943d6e3"
+      ],
+      "model4p.rom": [
+        "6393396eaa10a84b9e9f0cf5930aba73defc5c52"
       ],
       "1.avi": [
         "35fbefcb73b4f2611fb2c7fba03512123d768964"
@@ -133816,6 +133844,8 @@
       "a4626dfa": "8a799c6615702aac72016b784e30ea1abd3e197b",
       "84f47dc9": "0f25848f73705328ca03b02905e95e3a5d087d8c",
       "79b7fdc4": "8ed9fb83d8e4d73217d347e3b7965cb640cb8395",
+      "df8ab696": "321262242e15dff4bc1f843011ac370e6943d6e3",
+      "3a738aa9": "6393396eaa10a84b9e9f0cf5930aba73defc5c52",
       "7692f3fb": "35fbefcb73b4f2611fb2c7fba03512123d768964",
       "fbb214cc": "929b428407c2800615db87281587679ecc16e44e",
       "c2379948": "15844682678b258957dd59c28b17146609cb8d0c",
@@ -142519,6 +142549,8 @@
       "29e6e18023cf39319f9984107f5f0f796b2593b1c3a55fc79adf3ae12498a6ce": "8a799c6615702aac72016b784e30ea1abd3e197b",
       "0406c436e54064b938ffe855e1ad0abb362d67f009781a5dce79b044bcd68115": "0f25848f73705328ca03b02905e95e3a5d087d8c",
       "a60757b92f2f3df9447aa50e004aabe9f4cb0845bb037afca118ff89b5913ae3": "8ed9fb83d8e4d73217d347e3b7965cb640cb8395",
+      "010fd04e1a7b48583685a5554f12ecff8db681c926caa1814f148d552ca53708": "321262242e15dff4bc1f843011ac370e6943d6e3",
+      "6c1e5d5ccd280ee01d9f852b60ddec07e719a45699a6220eabd50df9999632c6": "6393396eaa10a84b9e9f0cf5930aba73defc5c52",
       "c9e68039ab02bebadb36cdce2308502db42b457bd821114ee487cfbe092f76da": "35fbefcb73b4f2611fb2c7fba03512123d768964",
       "51f60a923bf1199910b12db84e1b58d63b4f45c1f653a447153ef26cbda3720d": "929b428407c2800615db87281587679ecc16e44e",
       "28a97b9f3812ffa32185dea996e2928c1090e9786953f9d7cc9107ad54fc3cc0": "15844682678b258957dd59c28b17146609cb8d0c",

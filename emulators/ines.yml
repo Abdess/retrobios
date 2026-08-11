@@ -105,7 +105,6 @@ files:
     system: nintendo-nes
     required: false
     bundled: true
-    unsourceable: "arrives with the application package, not sourced separately"
     category: game_data
     size: 24592
     md5: c1db31a2aa8a12432705fc8bd3c1156a
@@ -118,7 +117,6 @@ files:
   - name: names.dat
     required: false
     bundled: true
-    unsourceable: "arrives with the application package, not sourced separately"
     category: game_data
     size: 21390
     description: "title database keyed by system and CRC32"
@@ -128,7 +126,6 @@ files:
   - name: ROOT.chts
     required: false
     bundled: true
-    unsourceable: "arrives with the application package, not sourced separately"
     category: game_data
     size: 27447
     description: "cheat database read by the Cheatopedia browser"
