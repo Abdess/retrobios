@@ -228,6 +228,21 @@ def deduplicate(bios_dir: str, dry_run: bool = False) -> dict:
     # Write MAME clone mapping
     if mame_clones:
         clone_path = "_mame_clones.json"
+        # A group is only visible while both copies are on disk, and this run
+        # has just deleted the clone. Writing only what was seen this time
+        # therefore erases every mapping an earlier run recorded, and the
+        # canonical zip stops answering to the names it stands in for. The
+        # older entries stay valid: their canonical file is still here.
+        if not dry_run:
+            try:
+                with open(clone_path) as f:
+                    previous = json.load(f)
+            except (FileNotFoundError, json.JSONDecodeError):
+                previous = {}
+            if isinstance(previous, dict):
+                merged = dict(previous)
+                merged.update(mame_clones)
+                mame_clones = merged
         if dry_run:
             print(f"\nWould write MAME clone map: {clone_path}")
             print(

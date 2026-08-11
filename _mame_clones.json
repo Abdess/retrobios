@@ -173,6 +173,20 @@
     "sha1": "2d7d999e2acb4da55c26d1517934d39e7d0a0c86",
     "total_copies": 1
   },
+  "bbb.zip": {
+    "clones": [
+      "aaa_long_name.zip"
+    ],
+    "sha1": "0ebda75e11e0fdce192562b5bb65a00e3e3bf240",
+    "total_copies": 1
+  },
+  "bbc_m87.zip": {
+    "clones": [
+      "bbc_24bbc.zip"
+    ],
+    "sha1": "0ebda75e11e0fdce192562b5bb65a00e3e3bf240",
+    "total_copies": 1
+  },
   "beebsid.zip": {
     "clones": [
       "bbc_opus3.zip"

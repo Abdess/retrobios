@@ -178,6 +178,64 @@ class EmptyVariantCleanup(_Bios):
         self.assertTrue((self.bios / "Sony" / "PS" / ".variants").is_dir())
 
 
+class CloneMapSurvivesASecondRun(_Bios):
+    """The clone map must not be destroyed by running dedup again.
+
+    A clone group is only discovered while both copies are on disk, and the
+    run then deletes the clone. Rewriting the file with just what this run saw
+    therefore drops every mapping an earlier run recorded, and the canonical
+    zip stops answering to the names it was standing in for. One real run took
+    the map from 69 entries to 1.
+    """
+
+    def setUp(self):
+        super().setUp()
+        self._cwd = os.getcwd()
+        os.chdir(self._tmp.name)
+
+    def tearDown(self):
+        os.chdir(self._cwd)
+        super().tearDown()
+
+    def _map(self) -> dict:
+        import json
+
+        path = Path(self._tmp.name) / "_mame_clones.json"
+        return json.loads(path.read_text()) if path.exists() else {}
+
+    def test_a_recorded_mapping_survives_a_later_run(self):
+        self.write("Arcade/MAME/bbc_m87.zip")
+        self.write("Arcade/MAME/bbc_24bbc.zip")
+        self.run_dedup()
+        first = self._map()
+        self.assertTrue(first, "first run recorded no clone map")
+
+        # Second run: the clones are gone, so nothing new is found.
+        self.write("Arcade/MAME/other_a.zip", b"OTHER CONTENT")
+        self.write("Arcade/MAME/other_b.zip", b"OTHER CONTENT")
+        self.run_dedup()
+        second = self._map()
+        for canonical, entry in first.items():
+            self.assertIn(canonical, second, f"{canonical} was dropped")
+            self.assertEqual(entry["clones"], second[canonical]["clones"])
+
+    def test_a_new_group_is_added_beside_the_existing_ones(self):
+        self.write("Arcade/MAME/bbc_m87.zip")
+        self.write("Arcade/MAME/bbc_24bbc.zip")
+        self.run_dedup()
+        before = set(self._map())
+        self.write("Arcade/MAME/new_a.zip", b"NEW CONTENT")
+        self.write("Arcade/MAME/new_b.zip", b"NEW CONTENT")
+        self.run_dedup()
+        self.assertTrue(set(self._map()) > before, "the new group was not added")
+
+    def test_a_dry_run_never_writes_the_map(self):
+        self.write("Arcade/MAME/bbc_m87.zip")
+        self.write("Arcade/MAME/bbc_24bbc.zip")
+        self.run_dedup(dry_run=True)
+        self.assertEqual(self._map(), {})
+
+
 class PathPriority(unittest.TestCase):
     def test_shorter_paths_sort_first(self):
         short = dedup.path_priority("bios/Sony/PS/a.bin")
