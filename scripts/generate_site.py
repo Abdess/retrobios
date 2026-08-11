@@ -1498,6 +1498,88 @@ def generate_platform_index(coverages: dict, registry: dict | None = None) -> st
     return "\n".join(lines) + "\n"
 
 
+def _render_platform_systems(
+    by_system: dict, config_files: dict, emulator_files: dict
+) -> list[str]:
+    """One collapsible block per system, listing every file it needs.
+
+    Split out of generate_platform_page: the block is most of that
+    function's branching, since each file renders a different set of
+    hashes, sizes and provenance depending on what the platform declares.
+    """
+    lines: list[str] = []
+    # Per-system detail sections (collapsible for large platforms)
+    use_collapsible = len(by_system) > 10
+
+    for sys_id, files in sorted(by_system.items()):
+        ok_count = sum(1 for f in files if f["status"] == "ok")
+        total = len(files)
+
+        sys_emus = []
+        if emulator_files:
+            for emu_name, emu_data in emulator_files.items():
+                if sys_id in emu_data.get("systems", set()):
+                    sys_emus.append(emu_name)
+
+        sys_link = _system_link(sys_id, "../")
+
+        anchor = sys_id.replace(" ", "-")
+        if use_collapsible:
+            status_tag = "OK" if ok_count == total else f"{total - ok_count} issues"
+            lines.append(f'<a id="{anchor}"></a>')
+            lines.append(f'??? note "{sys_id} ({ok_count}/{total} - {status_tag})"')
+            lines.append("")
+            pad = "    "
+        else:
+            lines.append(f"## {sys_link}")
+            lines.append("")
+            pad = ""
+
+        lines.append(f"{pad}{ok_count}/{total} files verified")
+        if sys_emus:
+            emu_links = ", ".join(_emulator_link(e, "../") for e in sorted(sys_emus))
+            lines.append(f"{pad}Emulators: {emu_links}")
+        lines.append("")
+
+        # File listing
+        for f in sorted(files, key=lambda x: x["name"]):
+            status = f["status"]
+            fname = f["name"]
+            cfg_entry = config_files.get(fname, {})
+            sha1 = cfg_entry.get("sha1", f.get("sha1", ""))
+            md5 = cfg_entry.get("md5", f.get("expected_md5", ""))
+            size = cfg_entry.get("size", f.get("size", 0))
+
+            if status == "ok":
+                status_display = "OK"
+            elif status == "untested":
+                reason = f.get("reason", "")
+                status_display = f"untested: {reason}" if reason else "untested"
+            elif status == "missing":
+                status_display = "**missing**"
+            else:
+                status_display = status
+
+            size_str = _fmt_size(size) if size else ""
+            details = [status_display]
+            if size_str:
+                details.append(size_str)
+
+            lines.append(f"{pad}- `{fname}` - {', '.join(details)}")
+            # Show full hashes on a sub-line (useful for copy-paste)
+            if sha1 or md5:
+                hash_parts = []
+                if sha1:
+                    hash_parts.append(f"SHA1: `{sha1}`")
+                if md5:
+                    hash_parts.append(f"MD5: `{md5}`")
+                lines.append(f"{pad}    {' | '.join(hash_parts)}")
+
+        lines.append("")
+
+    return lines
+
+
 def generate_platform_page(
     name: str,
     cov: dict,
@@ -1650,74 +1732,9 @@ def generate_platform_page(
         )
     lines.append("")
 
-    # Per-system detail sections (collapsible for large platforms)
-    use_collapsible = len(by_system) > 10
-
-    for sys_id, files in sorted(by_system.items()):
-        ok_count = sum(1 for f in files if f["status"] == "ok")
-        total = len(files)
-
-        sys_emus = []
-        if emulator_files:
-            for emu_name, emu_data in emulator_files.items():
-                if sys_id in emu_data.get("systems", set()):
-                    sys_emus.append(emu_name)
-
-        sys_link = _system_link(sys_id, "../")
-
-        anchor = sys_id.replace(" ", "-")
-        if use_collapsible:
-            status_tag = "OK" if ok_count == total else f"{total - ok_count} issues"
-            lines.append(f'<a id="{anchor}"></a>')
-            lines.append(f'??? note "{sys_id} ({ok_count}/{total} - {status_tag})"')
-            lines.append("")
-            pad = "    "
-        else:
-            lines.append(f"## {sys_link}")
-            lines.append("")
-            pad = ""
-
-        lines.append(f"{pad}{ok_count}/{total} files verified")
-        if sys_emus:
-            emu_links = ", ".join(_emulator_link(e, "../") for e in sorted(sys_emus))
-            lines.append(f"{pad}Emulators: {emu_links}")
-        lines.append("")
-
-        # File listing
-        for f in sorted(files, key=lambda x: x["name"]):
-            status = f["status"]
-            fname = f["name"]
-            cfg_entry = config_files.get(fname, {})
-            sha1 = cfg_entry.get("sha1", f.get("sha1", ""))
-            md5 = cfg_entry.get("md5", f.get("expected_md5", ""))
-            size = cfg_entry.get("size", f.get("size", 0))
-
-            if status == "ok":
-                status_display = "OK"
-            elif status == "untested":
-                reason = f.get("reason", "")
-                status_display = f"untested: {reason}" if reason else "untested"
-            elif status == "missing":
-                status_display = "**missing**"
-            else:
-                status_display = status
-
-            size_str = _fmt_size(size) if size else ""
-            details = [status_display]
-            if size_str:
-                details.append(size_str)
-
-            lines.append(f"{pad}- `{fname}` - {', '.join(details)}")
-            # Show full hashes on a sub-line (useful for copy-paste)
-            if sha1 or md5:
-                hash_parts = []
-                if sha1:
-                    hash_parts.append(f"SHA1: `{sha1}`")
-                if md5:
-                    hash_parts.append(f"MD5: `{md5}`")
-                lines.append(f"{pad}    {' | '.join(hash_parts)}")
-
-        lines.append("")
+    lines.extend(
+        _render_platform_systems(by_system, config_files, emulator_files)
+    )
 
     lines.append(f"*Generated on {_timestamp()}*")
     return "\n".join(lines) + "\n"
