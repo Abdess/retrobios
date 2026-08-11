@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-11T22:35:06Z",
-  "total_files": 8720,
-  "total_size": 11315550971,
+  "generated_at": "2026-08-11T22:48:56Z",
+  "total_files": 8723,
+  "total_size": 11316750966,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -49387,6 +49387,23 @@
       "crc32": "bb56de24",
       "adler32": "28b01f1d"
     },
+    "bbdbb49a917d14f7a997d327ba40d40c39e606ce": {
+      "path": "bios/Other/citron/switch/key_retail.bin",
+      "name": "key_retail.bin",
+      "size": 160,
+      "sha1": "bbdbb49a917d14f7a997d327ba40d40c39e606ce",
+      "md5": "45fd53569f5765eef9c337bd5172f937",
+      "sha256": "7f9283654ec1097fbdff31de946651ae60c2854afb544abe8963d389639c710e",
+      "crc32": "c6408c16",
+      "adler32": "b32244e3",
+      "provenance": {
+        "no-intro": {
+          "dat": "Nintendo - Misc",
+          "name": "key_retail.bin",
+          "description": "[BIOS] Amiibo - Data and Tag Master Keys (World)"
+        }
+      }
+    },
     "28c7616cd02e4286f9b4c1c4a8b8850832b49fcb": {
       "path": "bios/Other/colem/EOS.ROM",
       "name": "EOS.ROM",
@@ -49546,6 +49563,16 @@
       "sha256": "82e02a1c48ef74e449b75081d3d118bd935b81d52634dd7c6a8c95686fd83fd1",
       "crc32": "a4fcab0b",
       "adler32": "b3040708"
+    },
+    "f6b64d7b039a90af956c2c0873b30f6639a59878": {
+      "path": "bios/Other/cxbx-reloaded/dokan2.dll",
+      "name": "dokan2.dll",
+      "size": 559728,
+      "sha1": "f6b64d7b039a90af956c2c0873b30f6639a59878",
+      "md5": "3ab3f9386a280de051e82c0f147385ce",
+      "sha256": "75600aba867acbdfdb85fcd142b524da769bdc611b855a760aeb0c6e2eaae17a",
+      "crc32": "dcbd4121",
+      "adler32": "a209b5ff"
     },
     "e6c0050b3c67ee26198488fbbe4a5d019c15b628": {
       "path": "bios/Other/dolphin/codehandler.bin",
@@ -51568,8 +51595,8 @@
       "adler32": "567096cb"
     },
     "231b29ef9d6314930eb18e57240e27ae81a6e88f": {
-      "path": "bios/Other/hypseus-singe/gamecontrollerdb.txt",
-      "name": "gamecontrollerdb.txt",
+      "path": "bios/Other/hakux/controller_map.txt",
+      "name": "controller_map.txt",
       "size": 603323,
       "sha1": "231b29ef9d6314930eb18e57240e27ae81a6e88f",
       "md5": "41eed0bf6aad777e6583ecb2ff0907b8",
@@ -54376,6 +54403,16 @@
       "sha256": "feb57253eff0a622561e29b44cedbe86b89fc9a5bc8dc00fa2f98fafd712c2d8",
       "crc32": "3f63f47b",
       "adler32": "edf099ae"
+    },
+    "35c9459a965058e5fa40b07f9a97eb41599cff8d": {
+      "path": "bios/Other/xenia-edge/Vulkan/vulkan-1.dll",
+      "name": "vulkan-1.dll",
+      "size": 640107,
+      "sha1": "35c9459a965058e5fa40b07f9a97eb41599cff8d",
+      "md5": "75f5ffca6776b2178d7e4f576f9eb532",
+      "sha256": "f8e46f007c29130496c6a8b34e4066c62f771ea86b2318d72b116b7365a995fb",
+      "crc32": "841c0cee",
+      "adler32": "f81886cf"
     },
     "21ce0ee54bff57f69fafa741025bf2f15b356405": {
       "path": "bios/Other/xenia-edge/vc_redist.x64.exe",
@@ -96899,6 +96936,7 @@
       "8b85ec04bbc2ecb403e2bca380dbbb08": "c6578caffb1a57f6c18979dc596f3fb9cb986706",
       "acb87b8d453644b45c7fc8c8247744f5": "1fbd073bbd6cb906a0c0678767fab81feb552173",
       "b15266f06fa290f3f444302a74890d9b": "62a877bfffb3e690044520f52120c5cd48b97545",
+      "45fd53569f5765eef9c337bd5172f937": "bbdbb49a917d14f7a997d327ba40d40c39e606ce",
       "cf10b154f2e006a9740d7653cfc47cab": "28c7616cd02e4286f9b4c1c4a8b8850832b49fcb",
       "4fe4f6800076ea3d897d4285653447bd": "d4aec4efe1431e56fe52d83baf9118542c525255",
       "e9c4288eab8885a1e6ae7504a4736115": "15d52de01320d9b954e03b4c2e71ec75fd301bbb",
@@ -96915,6 +96953,7 @@
       "2b51c63d9caec283a61a4b90a2ac7c0c": "cc03a0650bfac4bf6cb66e414bbef121cba53efe",
       "bf1cf24f8549137c0b1ad0fa61473c7e": "82dad6e2a75bab4a4840dc6939462f1fb9b95101",
       "afacfb61877401f1611998d2b590dffd": "a13cf9c5cdfe8605d82150b7573652f419b30197",
+      "3ab3f9386a280de051e82c0f147385ce": "f6b64d7b039a90af956c2c0873b30f6639a59878",
       "1f118b8735fcf40c20b38c3184eebfd9": "e6c0050b3c67ee26198488fbbe4a5d019c15b628",
       "a1d3c0e5a40f163f4fb00a5e0774c63c": "7fbbedcc7a1ae00414a4e9e967109cc78be1fe3b",
       "9bef639b7426ef6948602a12b33522a8": "483a17ff25b68a8f18cae691da99f16beefbe370",
@@ -97398,6 +97437,7 @@
       "d3d5beb92a7b1c711dbdc83a92639099": "c6efd59349c430969f68fbeb86fa5328e96dc08b",
       "46075cd0c8c4a477081d2b302d42a257": "284743af8343e7b512b2c442c3d32b23e5112ee0",
       "8208d493370451238dcf187a5ad9e633": "e5b4d84841f54ee9517ae390b9dd6b28892f0387",
+      "75f5ffca6776b2178d7e4f576f9eb532": "35c9459a965058e5fa40b07f9a97eb41599cff8d",
       "486f81facf798678c3244c7cf35a557f": "21ce0ee54bff57f69fafa741025bf2f15b356405",
       "f4b552eb3044399c4ff98d7a5d143c34": "8337c8056455aa25a4c2f14e53ae7e5e704d4f16",
       "f373003710ab4322642f527f567e020a": "239e9124568c862c31d9ec0605e32373ea74b86a",
@@ -114234,6 +114274,9 @@
       "cbf_zh-Hant-TW.bcfnt": [
         "62a877bfffb3e690044520f52120c5cd48b97545"
       ],
+      "key_retail.bin": [
+        "bbdbb49a917d14f7a997d327ba40d40c39e606ce"
+      ],
       "EOS.ROM": [
         "28c7616cd02e4286f9b4c1c4a8b8850832b49fcb"
       ],
@@ -114281,6 +114324,9 @@
       ],
       "fpr21042_m29w160et.bin": [
         "a13cf9c5cdfe8605d82150b7573652f419b30197"
+      ],
+      "dokan2.dll": [
+        "f6b64d7b039a90af956c2c0873b30f6639a59878"
       ],
       "codehandler.bin": [
         "e6c0050b3c67ee26198488fbbe4a5d019c15b628",
@@ -114793,7 +114839,7 @@
       "X1_Covers.txt": [
         "2e8d9f0a8ff08896674badeba8aa3ac5245304c3"
       ],
-      "gamecontrollerdb.txt": [
+      "controller_map.txt": [
         "231b29ef9d6314930eb18e57240e27ae81a6e88f"
       ],
       "autoexec.cfg": [
@@ -115574,6 +115620,9 @@
       ],
       "dxil.dll": [
         "e5b4d84841f54ee9517ae390b9dd6b28892f0387"
+      ],
+      "vulkan-1.dll": [
+        "35c9459a965058e5fa40b07f9a97eb41599cff8d"
       ],
       "vc_redist.x64.exe": [
         "21ce0ee54bff57f69fafa741025bf2f15b356405"
@@ -125761,6 +125810,9 @@
       "136032.107.b2": [
         "72ba464da01bd6d3a91b8d9997d5ac14b6f47aad"
       ],
+      "gamecontrollerdb.txt": [
+        "231b29ef9d6314930eb18e57240e27ae81a6e88f"
+      ],
       "SDL_GameControllerDB.txt": [
         "231b29ef9d6314930eb18e57240e27ae81a6e88f"
       ],
@@ -133662,6 +133714,7 @@
       "d60e70f2": "c6578caffb1a57f6c18979dc596f3fb9cb986706",
       "90386ab3": "1fbd073bbd6cb906a0c0678767fab81feb552173",
       "bb56de24": "62a877bfffb3e690044520f52120c5cd48b97545",
+      "c6408c16": "bbdbb49a917d14f7a997d327ba40d40c39e606ce",
       "ef6403c5": "28c7616cd02e4286f9b4c1c4a8b8850832b49fcb",
       "58d86a2a": "d4aec4efe1431e56fe52d83baf9118542c525255",
       "fc7f544e": "15d52de01320d9b954e03b4c2e71ec75fd301bbb",
@@ -133678,6 +133731,7 @@
       "8dc8374e": "cc03a0650bfac4bf6cb66e414bbef121cba53efe",
       "7742ab62": "82dad6e2a75bab4a4840dc6939462f1fb9b95101",
       "a4fcab0b": "a13cf9c5cdfe8605d82150b7573652f419b30197",
+      "dcbd4121": "f6b64d7b039a90af956c2c0873b30f6639a59878",
       "ba8dfa56": "e6c0050b3c67ee26198488fbbe4a5d019c15b628",
       "9ac7f0c7": "7fbbedcc7a1ae00414a4e9e967109cc78be1fe3b",
       "6fe1f772": "483a17ff25b68a8f18cae691da99f16beefbe370",
@@ -134161,6 +134215,7 @@
       "d456be19": "c6efd59349c430969f68fbeb86fa5328e96dc08b",
       "56729550": "284743af8343e7b512b2c442c3d32b23e5112ee0",
       "3f63f47b": "e5b4d84841f54ee9517ae390b9dd6b28892f0387",
+      "841c0cee": "35c9459a965058e5fa40b07f9a97eb41599cff8d",
       "617a44b1": "21ce0ee54bff57f69fafa741025bf2f15b356405",
       "9b897adc": "8337c8056455aa25a4c2f14e53ae7e5e704d4f16",
       "e8f8fdad": "239e9124568c862c31d9ec0605e32373ea74b86a",
@@ -142384,6 +142439,7 @@
       "5e39d040be8e40554009b4ff29194f7d70c468a7c9c445c0be06320539851125": "c6578caffb1a57f6c18979dc596f3fb9cb986706",
       "5d786f4ef7e59e4ee20c73803753e455ebf812046a930f5ad1437839329e8aca": "1fbd073bbd6cb906a0c0678767fab81feb552173",
       "dbefcc65df7e7e301af3fead2282626574b67bc7d838f45a6c618b74793ac7bc": "62a877bfffb3e690044520f52120c5cd48b97545",
+      "7f9283654ec1097fbdff31de946651ae60c2854afb544abe8963d389639c710e": "bbdbb49a917d14f7a997d327ba40d40c39e606ce",
       "a49928fbac56380917134b54961ece2e90073022f3e04a6023d26cdbbd9c3356": "28c7616cd02e4286f9b4c1c4a8b8850832b49fcb",
       "3b17255d2679d11f79e6cacda86de5f6bc9bb5cddf78cbddc651af03b237317d": "d4aec4efe1431e56fe52d83baf9118542c525255",
       "f68b6a88c51d63e77893d102453df550da96227eb192dd1b970ca3c3abc23b0c": "15d52de01320d9b954e03b4c2e71ec75fd301bbb",
@@ -142400,6 +142456,7 @@
       "11dfa28d710a347313c7894d25e5ffb2f585d607c7f782b2a9970025c2bf0b7f": "cc03a0650bfac4bf6cb66e414bbef121cba53efe",
       "be03d198e95f4359833056f387261b904a6f16d21032fda74407d1747aa32d60": "82dad6e2a75bab4a4840dc6939462f1fb9b95101",
       "82e02a1c48ef74e449b75081d3d118bd935b81d52634dd7c6a8c95686fd83fd1": "a13cf9c5cdfe8605d82150b7573652f419b30197",
+      "75600aba867acbdfdb85fcd142b524da769bdc611b855a760aeb0c6e2eaae17a": "f6b64d7b039a90af956c2c0873b30f6639a59878",
       "2b2ff0716aeb9b806cc61181e559041312957f25f04c435bd7da80a78917b33b": "e6c0050b3c67ee26198488fbbe4a5d019c15b628",
       "38f9f59d505bc4e2d86b0196706195f33ad72b7fe9d029cf263072cde19d044f": "7fbbedcc7a1ae00414a4e9e967109cc78be1fe3b",
       "4ad991be2b0aa305f09b90a79fc50f57833b30b008890b5ef1336cc3d9d0bae0": "483a17ff25b68a8f18cae691da99f16beefbe370",
@@ -142883,6 +142940,7 @@
       "0840ff2fbb677fc0019200d85eaf4bfe401b37b151e38311090f8dda47ea9173": "c6efd59349c430969f68fbeb86fa5328e96dc08b",
       "9a5100511e127c6a2fc78edf984f95074a76d35b90c90c4d342430a5ae160e9b": "284743af8343e7b512b2c442c3d32b23e5112ee0",
       "feb57253eff0a622561e29b44cedbe86b89fc9a5bc8dc00fa2f98fafd712c2d8": "e5b4d84841f54ee9517ae390b9dd6b28892f0387",
+      "f8e46f007c29130496c6a8b34e4066c62f771ea86b2318d72b116b7365a995fb": "35c9459a965058e5fa40b07f9a97eb41599cff8d",
       "cc0ff0eb1dc3f5188ae6300faef32bf5beeba4bdd6e8e445a9184072096b713b": "21ce0ee54bff57f69fafa741025bf2f15b356405",
       "afffcf0732bf096aee18d2ab6363df21f53ebc053412747d64bdb6ff8e56ecf0": "8337c8056455aa25a4c2f14e53ae7e5e704d4f16",
       "bdba942ab9c633a3172fbf1a8579849df52c0eeb0da8a3411402f4564d035a27": "239e9124568c862c31d9ec0605e32373ea74b86a",
@@ -152505,6 +152563,9 @@
       "res/tilepatch.bin": [
         "fa950979aaa1d4c947473f158f770f3f3c8c45da"
       ],
+      "switch/key_retail.bin": [
+        "bbdbb49a917d14f7a997d327ba40d40c39e606ce"
+      ],
       "ROM/COPYMATE.ROM": [
         "15d52de01320d9b954e03b4c2e71ec75fd301bbb"
       ],
@@ -153286,6 +153347,9 @@
       ],
       "D3D12/dxil.dll": [
         "e5b4d84841f54ee9517ae390b9dd6b28892f0387"
+      ],
+      "Vulkan/vulkan-1.dll": [
+        "35c9459a965058e5fa40b07f9a97eb41599cff8d"
       ],
       "nvr/adgold.bin": [
         "e3b28842515140c82e2e897a53ad39333ed9512c"
@@ -162108,6 +162172,9 @@
       ],
       "SCPU64/pepto-pal.vpl": [
         "88a2209694f64f7167f239646aedcd0d09dc51bb"
+      ],
+      "system/key_retail.bin": [
+        "bbdbb49a917d14f7a997d327ba40d40c39e606ce"
       ],
       "resources/shaders/vulkan/cas.glsl": [
         "005cecf1a5e20b05407d55d0aad22cf81ad66c31"
