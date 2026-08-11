@@ -956,6 +956,7 @@ files:
 
   - name: kmkjz-ide2-sdx.rom
     description: "KMK/JZ IDE 2 (IDEPlus) SpartaDOS X firmware"
+    note: "Two revisions circulate, SDX 4.45 and 4.47; the collection carries 4.47."
     system: atari-400-800
     required: false
     max_size: 524288
