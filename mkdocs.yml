@@ -263,7 +263,7 @@ nav:
     - vitaQuakeII: emulators/vitaquake2.md
     - yabasanshiro: emulators/yabasanshiro.md
     - Yuzu: emulators/yuzu.md
-  - Community forks (134):
+  - Community forks (136):
     - 2600.emu: emulators/2600-emu.md
     - EightyOne: emulators/81.md
     - a5200: emulators/a5200.md
@@ -326,6 +326,8 @@ nav:
     - Handy: emulators/handy.md
     - higan (SFC Accuracy): emulators/higan_sfc.md
     - Infinity: emulators/infinity.md
+    - J2ME Loader: emulators/j2me-loader.md
+    - JL-Mod: emulators/jl-mod.md
     - Lime3DS: emulators/lime3ds.md
     - LinApple: emulators/linapple.md
     - LRPS2: emulators/lrps2.md
@@ -549,7 +551,7 @@ nav:
     - ArcadeFlashWeb: emulators/arcadeflashweb.md
     - Dolphin Launcher: emulators/dolphin_launcher.md
     - Parallel Launcher: emulators/parallel-launcher.md
-  - Other (45):
+  - Other (46):
     - ares: emulators/ares.md
     - Basilisk II: emulators/basiliskii.md
     - beebem: emulators/beebem.md
@@ -572,6 +574,7 @@ nav:
     - Gopher2600: emulators/gopher2600.md
     - gopher64: emulators/gopher64.md
     - iNES: emulators/ines.md
+    - IrataJaguar: emulators/iratajaguar.md
     - jgenesis: emulators/jgenesis.md
     - KEGS: emulators/kegs.md
     - Lexaloffle: emulators/lexaloffle.md
