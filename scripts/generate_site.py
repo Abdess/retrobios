@@ -3174,44 +3174,11 @@ def generate_gap_analysis(
 
 
 
-def generate_cross_reference(
-    coverages: dict,
-    profiles: dict,
-) -> str:
-    """Generate cross-reference: Platform -> Core -> Systems -> Upstream."""
-    unique = {
-        k: v for k, v in profiles.items() if v.get("type") not in ("alias", "test")
-    }
-
-    # Build core -> profile lookup by core name
-    core_to_profile: dict[str, str] = {}
-    for pname, p in unique.items():
-        for core in p.get("cores", [pname]):
-            core_to_profile[str(core)] = pname
-
-    total_cores = len(unique)
-    total_upstreams = len({
-        p.get("upstream", p.get("source", ""))
-        for p in unique.values()
-        if p.get("upstream") or p.get("source")
-    })
-
-    lines = [
-        f"# Cross-reference - {SITE_NAME}",
-        "",
-        f"Platform > Core > Systems > Upstream emulator. "
-        f"{total_cores} cores across {len(coverages)} platforms, "
-        f"tracing back to {total_upstreams} upstream projects.",
-        "",
-        "The libretro core is a port of the upstream emulator. "
-        "Files, features, and validation may differ between the two.",
-        "",
-        "[Download cross-reference CSV](downloads/cross-reference.csv){ .md-button } "
-        "[Open emulator API](api/v1/emulators.json){ .md-button } "
-        "[All data exports](data.md){ .md-button }",
-        "",
-    ]
-
+def _render_xref_by_platform(
+    coverages: dict, unique: dict, core_to_profile: dict
+) -> list[str]:
+    """Which cores each platform pulls in, and what they need."""
+    lines: list[str] = []
     # Per platform
     for pname in sorted(coverages.keys(), key=lambda x: coverages[x]["platform"]):
         cov = coverages[pname]
@@ -3306,6 +3273,14 @@ def generate_cross_reference(
 
         lines.append("")
 
+    return lines
+
+
+def _render_xref_by_upstream(
+    coverages: dict, unique: dict, core_to_profile: dict
+) -> list[str]:
+    """The same relation read the other way: one row per upstream."""
+    lines: list[str] = []
     # Reverse view: by upstream emulator
     lines.extend(
         [
@@ -3364,6 +3339,50 @@ def generate_cross_reference(
             f"| {upstream_cell} | {core_links} | "
             f"{cls_str} | {plat_str} |"
         )
+
+    return lines
+
+
+def generate_cross_reference(
+    coverages: dict,
+    profiles: dict,
+) -> str:
+    """Generate cross-reference: Platform -> Core -> Systems -> Upstream."""
+    unique = {
+        k: v for k, v in profiles.items() if v.get("type") not in ("alias", "test")
+    }
+
+    # Build core -> profile lookup by core name
+    core_to_profile: dict[str, str] = {}
+    for pname, p in unique.items():
+        for core in p.get("cores", [pname]):
+            core_to_profile[str(core)] = pname
+
+    total_cores = len(unique)
+    total_upstreams = len({
+        p.get("upstream", p.get("source", ""))
+        for p in unique.values()
+        if p.get("upstream") or p.get("source")
+    })
+
+    lines = [
+        f"# Cross-reference - {SITE_NAME}",
+        "",
+        f"Platform > Core > Systems > Upstream emulator. "
+        f"{total_cores} cores across {len(coverages)} platforms, "
+        f"tracing back to {total_upstreams} upstream projects.",
+        "",
+        "The libretro core is a port of the upstream emulator. "
+        "Files, features, and validation may differ between the two.",
+        "",
+        "[Download cross-reference CSV](downloads/cross-reference.csv){ .md-button } "
+        "[Open emulator API](api/v1/emulators.json){ .md-button } "
+        "[All data exports](data.md){ .md-button }",
+        "",
+    ]
+
+    lines.extend(_render_xref_by_platform(coverages, unique, core_to_profile))
+    lines.extend(_render_xref_by_upstream(coverages, unique, core_to_profile))
 
     lines.extend(["", f"*Generated on {_timestamp()}*"])
     return "\n".join(lines) + "\n"
