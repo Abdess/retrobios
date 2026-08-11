@@ -316,6 +316,7 @@ def _narrowings(
     target_name: str | None,
     one_per_slot: bool,
     required_only: bool,
+    standalone: bool = False,
 ) -> list[tuple[str, str]]:
     """Every dimension that narrows a pack, as (filename tag, plain label).
 
@@ -342,6 +343,8 @@ def _narrowings(
         )
     if one_per_slot:
         applied.append(("_OnePerSlot", "one BIOS per system and region"))
+    if standalone:
+        applied.append(("_Standalone", "standalone mode files only"))
     if required_only:
         applied.append(("_Required", "required files only"))
     return applied
@@ -2168,8 +2171,13 @@ def generate_emulator_pack(
 
     # ZIP naming
     display_names = [p.get("emulator", n).replace(" ", "") for n, p in selected]
-    region_tag_str = f"_{region_mod.region_tag(regions)}" if regions else ""
-    zip_name = "_".join(display_names) + f"{region_tag_str}_BIOS_Pack.zip"
+    narrow_tags = "".join(
+        tag
+        for tag, _label in _narrowings(
+            "full", regions, None, False, required_only, standalone
+        )
+    )
+    zip_name = "_".join(display_names) + f"{narrow_tags}_BIOS_Pack.zip"
     zip_path = os.path.join(output_dir, zip_name)
     os.makedirs(output_dir, exist_ok=True)
 
@@ -2532,8 +2540,17 @@ def generate_split_packs(
     """Generate split packs (one ZIP per system or manufacturer)."""
     config = load_platform_config(platform_name, platforms_dir)
     platform_display = config.get("platform", platform_name)
-    source_tag = {"platform": "_Platform", "truth": "_Truth"}.get(source, "")
-    split_dir = os.path.join(output_dir, f"{platform_display.replace(' ', '_')}{source_tag}_Split")
+    # The split directory carries the same tags as the packs inside it, or two
+    # differently narrowed runs write into one another.
+    split_tags = "".join(
+        tag
+        for tag, _label in _narrowings(
+            source, regions, target_name, one_per_slot, required_only
+        )
+    )
+    split_dir = os.path.join(
+        output_dir, f"{platform_display.replace(' ', '_')}{split_tags}_Split"
+    )
     os.makedirs(split_dir, exist_ok=True)
 
     systems = config.get("systems", {})
@@ -2929,19 +2946,19 @@ def _run_manifest_mode(
                     target_name=args.target,
                     offline=args.offline,
                 )
-                source_suffix = {"platform": "_platform", "truth": "_truth"}.get(source, "")
-                req_suffix = "_required" if required_only else ""
-                rgn = getattr(args, "regions", None)
-                region_suffix = (
-                    f"_{region_mod.region_tag(rgn).lower()}" if rgn else ""
-                )
-                target_suffix = (
-                    f"_{_target_tag(args.target).lower()}" if args.target else ""
+                narrow_suffix = "".join(
+                    tag.lower()
+                    for tag, _label in _narrowings(
+                        source,
+                        getattr(args, "regions", None),
+                        args.target,
+                        False,
+                        required_only,
+                    )
                 )
                 out_path = os.path.join(
                     args.output_dir,
-                    f"{representative}{source_suffix}{region_suffix}"
-                    f"{target_suffix}{req_suffix}.json",
+                    f"{representative}{narrow_suffix}.json",
                 )
                 _write_manifest_if_changed(out_path, manifest)
                 print(
@@ -2954,8 +2971,7 @@ def _run_manifest_mode(
                     if alias_plat != representative:
                         alias_path = os.path.join(
                             args.output_dir,
-                            f"{alias_plat}{source_suffix}{region_suffix}"
-                            f"{target_suffix}{req_suffix}.json",
+                            f"{alias_plat}{narrow_suffix}.json",
                         )
                         alias_manifest = dict(manifest)
                         alias_manifest["platform"] = alias_plat
@@ -3141,17 +3157,19 @@ def _run_platform_packs(
                         load_platform_config(p, args.platforms_dir).get("platform", p)
                         for p in group_platforms
                     ]
-                    source_tag = {"platform": "_Platform", "truth": "_Truth"}.get(source, "")
-                    region_values = getattr(args, "regions", None)
-                    rgn_tag = (
-                        f"_{region_mod.region_tag(region_values)}"
-                        if region_values
-                        else ""
+                    narrow_tags = "".join(
+                        tag
+                        for tag, _label in _narrowings(
+                            source,
+                            getattr(args, "regions", None),
+                            args.target,
+                            args.one_per_slot,
+                            required_only,
+                        )
                     )
-                    req_tag = "_Required" if required_only else ""
                     combined = (
                         "_".join(n.replace(" ", "") for n in all_names)
-                        + f"{ver_tag}{source_tag}{rgn_tag}{req_tag}_BIOS_Pack.zip"
+                        + f"{ver_tag}{narrow_tags}_BIOS_Pack.zip"
                     )
                     new_path = os.path.join(os.path.dirname(zip_path), combined)
                     if new_path != zip_path:
@@ -3301,6 +3319,8 @@ def main():
             parser.error(str(exc))
         if args.manifest_targets:
             parser.error("--region is incompatible with --manifest-targets")
+    if args.one_per_slot and args.manifest_targets:
+        parser.error("--one-per-slot is incompatible with --manifest-targets")
 
     # Quick-exit modes: --verify-packs alone = verify existing packs only
     # Combined with --all-variants, generation runs first then verify

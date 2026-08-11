@@ -5714,6 +5714,66 @@ struct BurnDriver BurnDrvneogeo = {
             self.assertIn("PACK TYPE: Narrowed", readme)
             self.assertIn(label, readme)
 
+    def test_no_mode_swallows_a_narrowing_flag(self):
+        """Every mode either honours a narrowing flag or refuses it.
+
+        Silently ignoring one is how --manifest-targets accepted --region and
+        wrote seven unfiltered manifests, and how --manifest accepted
+        --one-per-slot. A mode that cannot apply a flag must say so.
+        """
+        import subprocess
+
+        repo = os.path.join(os.path.dirname(__file__), "..")
+        matrix = [
+            (["--manifest-targets"], ["--region", "us"], "refuse"),
+            (["--manifest-targets"], ["--one-per-slot"], "refuse"),
+            (["--platform", "retroarch", "--manifest"], ["--one-per-slot"], "refuse"),
+            (["--emulator", "duckstation"], ["--one-per-slot"], "refuse"),
+            (["--system", "sony-playstation"], ["--one-per-slot"], "refuse"),
+            (["--platform", "retroarch", "--from-md5", "d8f1"], ["--region", "us"],
+             "refuse"),
+            (["--platform", "retroarch", "--from-md5", "d8f1"], ["--one-per-slot"],
+             "refuse"),
+        ]
+        for mode, flag, expected in matrix:
+            with self.subTest(mode=mode, flag=flag):
+                result = subprocess.run(
+                    [sys.executable, "scripts/generate_pack.py", *mode, *flag,
+                     "--output-dir", os.path.join(self.root, "modecheck")],
+                    capture_output=True, text=True, cwd=repo, timeout=120,
+                )
+                combined = result.stdout + result.stderr
+                self.assertNotEqual(
+                    result.returncode, 0,
+                    f"{' '.join(mode + flag)} was accepted and ignored:\n{combined}",
+                )
+                self.assertIn("error:", combined)
+
+    def test_standalone_mode_names_itself(self):
+        """--emulator --standalone ships a different file set; without a tag it
+        overwrote the pack built without it."""
+        from generate_pack import _narrowings
+
+        applied = _narrowings("full", None, None, False, False, standalone=True)
+        self.assertEqual([tag for tag, _l in applied], ["_Standalone"])
+
+    def test_every_name_builder_uses_the_same_list(self):
+        """Four places name a pack or a manifest. None may assemble tags by
+        hand: that is how --one-per-slot reached --split unnamed."""
+        import inspect
+
+        import generate_pack
+
+        source = inspect.getsource(generate_pack)
+        for hand_rolled in (
+            'req_tag = "_Required"',
+            'source_tag = {"platform": "_Platform"',
+            'req_suffix = "_required"',
+            'slot_tag = "_OnePerSlot"',
+        ):
+            self.assertNotIn(hand_rolled, source, hand_rolled)
+        self.assertGreaterEqual(source.count("_narrowings("), 5)
+
     def test_a_full_pack_is_not_announced_as_narrowed(self):
         from generate_pack import _build_readme, _narrowings
 

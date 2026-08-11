@@ -419,5 +419,36 @@ class TestSchemaMatchesModule(unittest.TestCase):
         self.assertEqual(set(node["items"]["enum"]), set(region.REGIONS))
 
 
+class TestVerifyModesHonourRegion(unittest.TestCase):
+    """verify.py must apply --region in every mode, or refuse it.
+
+    It silently ignored the flag in --emulator and --system mode: the report
+    was identical with and without, so a filtered pack could not be checked.
+    """
+
+    def _run(self, *args: str) -> str:
+        import subprocess
+
+        repo = os.path.join(os.path.dirname(__file__), "..")
+        return subprocess.run(
+            [sys.executable, "scripts/verify.py", *args],
+            capture_output=True, text=True, cwd=repo, timeout=900,
+        ).stdout
+
+    def test_emulator_mode_narrows(self):
+        plain = self._run("--emulator", "duckstation")
+        filtered = self._run("--emulator", "duckstation", "--region", "us")
+        if "duckstation" not in plain:
+            self.skipTest("duckstation profile not present")
+        self.assertNotEqual(plain, filtered)
+
+    def test_system_mode_narrows(self):
+        plain = self._run("--system", "sony-playstation")
+        filtered = self._run("--system", "sony-playstation", "--region", "us")
+        if not plain.strip():
+            self.skipTest("system not present")
+        self.assertNotEqual(plain, filtered)
+
+
 if __name__ == "__main__":
     unittest.main()
