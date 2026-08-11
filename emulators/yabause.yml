@@ -34,6 +34,7 @@ notes: |
 files:
   - name: "saturn_bios.bin"
     system: sega-saturn
+    priority: 1
     required: true
     hle_fallback: true
     max_size: 524288
@@ -44,6 +45,7 @@ files:
   - name: "sega_101.bin"
     system: sega-saturn
     region: [japan]
+    priority: 2
     required: false
     hle_fallback: true
     max_size: 524288
@@ -54,6 +56,7 @@ files:
   - name: "mpr-17933.bin"
     system: sega-saturn
     region: [north-america, europe]
+    priority: 3
     required: false
     hle_fallback: true
     max_size: 524288

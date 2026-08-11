@@ -1,0 +1,105 @@
+emulator: "Lynx.emu"
+type: standalone
+core_classification: community_fork
+source: "https://github.com/Rakashazi/emu-ex-plus-alpha"
+upstream: "https://mednafen.github.io/"
+profiled_date: "2026-08-11"
+source_commit: "1c12fac5ce49badaadff2e2f210dcc30b89f4943"
+core_version: "1.5.85"
+display_name: "Atari - Lynx (Lynx.emu)"
+mode: standalone
+cores:
+  - "lynx-emu"
+  - "Lynx.emu"
+  - "LYNX-EMU"
+systems:
+  - atari-lynx
+
+notes: |
+  Member of the EX Emulator series by Robert Broglia, which targets Android and
+  Linux (README.md:3-4,12-13) and keeps iOS and Pandora build shortcuts in the
+  tree (Lynx.emu/ios.mk, Lynx.emu/pandora.mk). Published as
+  com.explusalpha.LynxEmu (Lynx.emu/metadata/conf.mk:2,6,7) and reached by ES-DE
+  through its LYNX-EMU find rule. Mednafen's Lynx module, itself derived from
+  Handy by K. Wilkins, is vendored under Lynx.emu/src/lynx
+  (Lynx.emu/metadata/conf.mk:8, Lynx.emu/src/main/AppMeta.cc:26) and driven by
+  the app's own video, audio and input layers. The vendored copy declares
+  Mednafen 1.32.0-UNSTABLE
+  (EmuFramework/include/shared/mednafen/mednafen-config.h:167); the upstream
+  comparisons below are against the 1.32.1 release. Content is read from .lnx,
+  .lyx and .o files (Lynx.emu/metadata/conf.mk:5,
+  Lynx.emu/src/main/AppMeta.cc:30), and the module also takes a headerless image
+  of 128, 256 or 512 KB, a filetype upstream rejects
+  (Lynx.emu/src/lynx/system.cpp:90-91,112; mednafen src/lynx/system.cpp:86-93).
+
+  The boot ROM is the one file the user supplies and it carries no name of its
+  own. The picker takes any name ending in .img and stores the chosen URI in
+  biosPath (Lynx.emu/src/main/EmuMenuViews.cc:32-50,
+  Lynx.emu/src/main/system.ccm:70, Lynx.emu/src/main/options.cc:33,55).
+  MDFN_MakeFName returns that URI for MDFNMKF_FIRMWARE and drops the
+  lynxboot.img name the module hands it, the name upstream resolves in its
+  firmware directory (Lynx.emu/src/main/options.cc:150-154,
+  Lynx.emu/src/lynx/system.cpp:103; mednafen src/lynx/system.cpp:101). CRom
+  opens the file only when the path is not empty and throws unless it is exactly
+  512 bytes (Lynx.emu/src/lynx/rom.cpp:75-95). Upstream has neither test: it
+  opens whatever the firmware directory yields and takes 512 bytes or more
+  (mednafen src/lynx/rom.cpp:55-74). A path that is set but cannot be opened, or
+  that is the wrong length, aborts the content load rather than falling back
+  (EmuFramework/src/shared/mednafen-emuex/StreamImpl.cc:53-63,
+  Lynx.emu/src/lynx/system.cpp:337-342).
+
+  With no path mValid stays false (Lynx.emu/src/lynx/rom.h:77) and Reset builds a
+  stub boot ROM in place: 512 bytes of 0x88, the reset vectors, and STA $FD97 at
+  $FE00, $FE19, $FE4A and $FF80 (Lynx.emu/src/lynx/rom.cpp:55-72,
+  Lynx.emu/src/lynx/rom.h:50, Lynx.emu/src/lynx/system.cpp:241-263). A write to
+  that register from inside the ROM window dispatches to the four HLE routines
+  (Lynx.emu/src/lynx/mikie.cpp:1033-1053), which clear RAM, pull the encrypted
+  loader blocks off the cartridge shifter, run them through lynx_decrypt and jump
+  to $0200 (Lynx.emu/src/lynx/system.cpp:150-208,
+  Lynx.emu/src/lynx/lynxdec.cpp:265). Neither the stub nor lynxdec.cpp exists
+  upstream, where the constructor reaches the throw and Reset carries the
+  homebrew branch alone (mednafen src/lynx/system.cpp:169-177).
+
+  No hash is checked. The module holds no crc32 table, and its only md5 use is
+  the content hash that names saves and states (Lynx.emu/src/lynx/cart.cpp:
+  245-264, Lynx.emu/src/lynx/system.cpp:313,319). The custom palette entry
+  survives in the module table and reaches nothing: Lynx_SetPixelFormat passes an
+  empty span where upstream Emulate passes espec->CustomPalette
+  (Lynx.emu/src/lynx/system.cpp:352,555,583; mednafen src/lynx/system.cpp:
+  267,298), the app calls MDFNGI::Load directly instead of going through the
+  Mednafen frontend that reads .pal files
+  (EmuFramework/src/shared/mednafen-emuex/MDFNUtils.hh:133-145,
+  Lynx.emu/src/main/Main.cc:62-65), and the frame spec is value-initialised so
+  CustomPalette stays null
+  (EmuFramework/src/shared/mednafen-emuex/MDFNUtils.hh:153,
+  EmuFramework/src/shared/mednafen/git.h:399). Cheats answer false against
+  CheatInfo_Empty (Lynx.emu/src/main/options.cc:126-127,
+  Lynx.emu/src/lynx/system.cpp:586), no Cheats.cc is in the build
+  (Lynx.emu/src/CMakeLists.txt:6-21), and the app declares no bundled content,
+  the framework definition defaulting to an empty span
+  (EmuFramework/src/AppMeta.cc:40,
+  EmuFramework/include/emuframework/AppMeta.hh:66-68).
+
+  MDFN_MakeFName is called once and only for the firmware, so the module asks for
+  no save file (Lynx.emu/src/lynx/system.cpp:103). What the app writes is .mca
+  states (Lynx.emu/src/main/system.ccm:86, Lynx.emu/src/main/Main.cc:47-54) and
+  LynxEmu.config (Lynx.emu/src/main/AppMeta.cc:27). ui.png, gpOverlay.png and the
+  shader sources are drawn by the framework from the application bundle
+  (EmuFramework/include/emuframework/AssetManager.hh:61-65,
+  EmuFramework/src/AssetManager.cc:58-65,
+  EmuFramework/src/VideoImageEffect.cc:164-172).
+
+files:
+  - name: lynxboot.img
+    system: atari-lynx
+    required: false
+    hle_fallback: true
+    has_builtin: true
+    size: 512
+    validation: [size]
+    description: "Atari Lynx boot ROM"
+    note: >-
+      Picked by the user from any path, under any name ending in .img. The length
+      is the only test and a file of another length aborts the load rather than
+      falling back.
+    source_ref: "Lynx.emu/src/lynx/system.cpp:103 (firmware request), Lynx.emu/src/main/options.cc:150-154 (path comes from the picker), Lynx.emu/src/lynx/rom.cpp:75-95 (open and size test), Lynx.emu/src/main/EmuMenuViews.cc:32-50 (picker and extension filter), Lynx.emu/src/lynx/system.cpp:241-263 (stub boot ROM when absent)"

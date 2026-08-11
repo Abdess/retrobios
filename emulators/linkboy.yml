@@ -1,0 +1,98 @@
+emulator: Linkboy
+type: standalone
+core_classification: embedded_hle
+source: "https://play.google.com/store/apps/details?id=com.pixelrespawn.linkboy"
+upstream: closed-source
+author: "Pixel Respawn LLC"
+profiled_date: "2026-08-11"
+core_version: "3.11.0"
+display_name: "Nintendo - Game Boy / Color / Advance (Linkboy)"
+mode: standalone
+cores:
+  - "linkboy"
+  - "Linkboy"
+  - "LINKBOY"
+systems:
+  - nintendo-gb
+  - nintendo-gbc
+  - nintendo-gba
+  - nintendo-sgb
+
+notes: |
+  Android package com.pixelrespawn.linkboy, closed source, free on Google Play with a
+  paid unlock, reached by ES-DE through its LINKBOY find rule. Two Play distribution
+  builds are read here, 3.11.0 (versionCode 86, minSdk 26, targetSdk 36, xapk sha256
+  83b92276d28d71e491ebcbec3fa85cef42ef49d8ee0c6fd1bbe0045bc118f866) and 1.4.2
+  (versionCode 12), both carrying the app signing certificate sha256
+  feb643cfdd9c49f58eb325fde3d869cefcf59e45dfadb8e540beca35a7b1c28e and the Play
+  distribution source stamp. Emulation lives in liblinkboy.so behind a JNI bridge;
+  addresses below are armeabi-v7a of 3.11.0 and class names are those of its
+  obfuscated dex.
+
+  Four subsystems are declared: GBA, GBC, GB and SGB (ve0.java:16-21). An SGB
+  cartridge runs in GB mode when prefer-sgb is off (wo0.java:62, c51.java:183-185).
+
+  The three firmware images are the only files the emulator reads that it does not
+  write itself. One table holds their names, sizes and md5 sums (cr.java:8), and the
+  firmware screen reports each as present, mismatched or absent by comparing the
+  size and then the md5 of the whole file (br.java:24-88, yz1.java:39, hr1.java:110).
+  Saves, cheats, thumbnails, keymaps and the ips, ups and bps patches picked up next
+  to a ROM are written or supplied per game, not fixed files.
+
+  An image is read only while the use-bios preference is on, which is off until set
+  (wo0.java:63, a75.java:165-173, c51.java:186,268, w41.java:243). The loader appends
+  firmware/ and the name to the directory handed to setDataDir, the app's external
+  files directory (c51.java:69, hg3.java:32-38), and opens the result with fopen "rb".
+  A file whose length is not exactly the expected size is closed and treated as
+  absent, as is a short read; on success the loader returns the crc32 of the bytes
+  (liblinkboy.so 0x1c870-0x1ca10, crc32 at 0x1c4cc).
+
+  A missing image stops nothing. The GBA path copies a replacement bios compiled into
+  the library over the 16 KB region and zero fills the remainder (0x109de8-0x109e64).
+  The GB and GBC path hands the reset routine a boot rom present flag, false when no
+  image was loaded, and the machine starts from its post boot state
+  (0x14f534-0x14f5b8, 0x14f638-0x14f654).
+
+  Save states record the crc32 of the image they were made under. Loading a state
+  whose value differs from the running machine re-reads the file and refuses the state
+  when the crc32 still disagrees (0x10aa40-0x10aa98, 0x14fe00-0x14fe64).
+
+files:
+  - name: gba_bios.bin
+    path: firmware/gba_bios.bin
+    system: nintendo-gba
+    required: false
+    hle_fallback: true
+    size: 16384
+    md5: a860e8c0b6d573d191e4ec7db1b1e4f6
+    validation: [size, md5]
+    config_key: "use-bios"
+    description: "Game Boy Advance BIOS"
+    note: "Read into the 16 KB bios region when use-bios is on. Absent, mismatched in size or short, the region is filled with a replacement bios compiled into the library and zero padded."
+    source_ref: "Linkboy 3.11.0 cr.java:8, br.java:24-88, liblinkboy.so 0x109de8-0x109e64 (size argument 0x4000), loader 0x1c870-0x1ca10"
+
+  - name: gbc_bios.bin
+    path: firmware/gbc_bios.bin
+    system: nintendo-gbc
+    required: false
+    hle_fallback: true
+    size: 2304
+    md5: dbfce9db9deaa2567f6a84fde55f9680
+    validation: [size, md5]
+    config_key: "use-bios"
+    description: "Game Boy Color boot ROM"
+    note: "Read when use-bios is on and the machine is a Game Boy Color. Without it the reset routine receives a false boot rom flag and the machine starts from its post boot state."
+    source_ref: "Linkboy 3.11.0 cr.java:8, br.java:24-88, liblinkboy.so 0x14f5a0-0x14f5b0 (size argument 0x900), 0x14f638-0x14f654, loader 0x1c870-0x1ca10"
+
+  - name: gb_bios.bin
+    path: firmware/gb_bios.bin
+    system: nintendo-gb
+    required: false
+    hle_fallback: true
+    size: 256
+    md5: 32fbbd84168d3482956eb3c5051637f5
+    validation: [size, md5]
+    config_key: "use-bios"
+    description: "Game Boy boot ROM"
+    note: "Read when use-bios is on and the machine is a Game Boy. Without it the reset routine receives a false boot rom flag and the machine starts from its post boot state."
+    source_ref: "Linkboy 3.11.0 cr.java:8, br.java:24-88, liblinkboy.so 0x14f58c-0x14f59c (size argument 0x100), 0x14f638-0x14f654, loader 0x1c870-0x1ca10"

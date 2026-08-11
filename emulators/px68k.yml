@@ -43,6 +43,7 @@ files:
 
   - name: "iplrom.dat"
     path: "keropi/iplrom.dat"
+    priority: 1
     size: 131072
     required: true
     note: >
@@ -53,6 +54,7 @@ files:
 
   - name: "iplrom30.dat"
     path: "keropi/iplrom30.dat"
+    priority: 2
     size: 131072
     required: false
     note: >
@@ -62,6 +64,7 @@ files:
 
   - name: "iplromco.dat"
     path: "keropi/iplromco.dat"
+    priority: 3
     size: 131072
     required: false
     note: >
@@ -71,6 +74,7 @@ files:
 
   - name: "iplromxv.dat"
     path: "keropi/iplromxv.dat"
+    priority: 4
     size: 131072
     required: false
     note: >

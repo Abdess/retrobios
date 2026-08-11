@@ -36,6 +36,7 @@ notes: |
 files:
   - name: "sl31253.bin"
     system: fairchild-channelf
+    priority: 2
     required: false
     hle_fallback: true
     note: "Channel F PSU1 ROM (original). Fallback if sl90025.bin is missing."
@@ -50,6 +51,7 @@ files:
 
   - name: "sl90025.bin"
     system: fairchild-channelf
+    priority: 1
     required: false
     hle_fallback: true
     note: "Channel F II PSU1 ROM. Tried first, preferred over sl31253.bin."

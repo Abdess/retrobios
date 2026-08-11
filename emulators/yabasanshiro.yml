@@ -35,6 +35,7 @@ notes: |
 files:
   - name: "saturn_bios.bin"
     system: sega-saturn
+    priority: 1
     required: true
     hle_fallback: true
     note: "Primary Saturn BIOS. Any region accepted."
@@ -43,6 +44,7 @@ files:
   - name: "sega_101.bin"
     system: sega-saturn
     region: [japan]
+    priority: 2
     required: false
     hle_fallback: true
     note: "Saturn BIOS v1.01 (Japan). Fallback if saturn_bios.bin missing."
@@ -51,6 +53,7 @@ files:
   - name: "mpr-17933.bin"
     system: sega-saturn
     region: [north-america, europe]
+    priority: 3
     required: false
     hle_fallback: true
     note: "Saturn BIOS v1.003 (NA/EU). Last fallback."

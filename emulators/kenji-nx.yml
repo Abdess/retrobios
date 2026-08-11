@@ -1,0 +1,272 @@
+emulator: Kenji-NX
+type: standalone
+core_classification: community_fork
+source: "https://git.ryujinx.app/projects/Kenji-NX"
+source_branch: libryujinx_bionic
+upstream: "https://git.ryujinx.app/projects/Ryubing"
+profiled_date: "2026-08-11"
+source_commit: "8d7d8f344cb01257c5bc59bb02a74bb89ab9bb5f"
+core_version: "2.1.0-pr.2"
+display_name: "Nintendo - Switch (Kenji-NX)"
+cores:
+  - kenji-nx
+  - kenjinx
+  - "KENJI-NX"
+systems:
+  - nintendo-switch
+mode: standalone
+
+notes: |
+  Nintendo Switch emulator in C#, a fork of the Ryujinx line maintained by
+  KeatonTheBot. Two builds come out of one repository: the desktop Avalonia
+  front end on master, and the Android app on libryujinx_bionic, which carries
+  the whole desktop tree plus src/KenjinxAndroid and src/LibKenjinx. That branch
+  is the one read here, since master has no Android code at all. The Android
+  package is org.kenjinx.android and ES-DE launches it with the action
+  org.kenjinx.android.LAUNCH_GAME and the ROM in EXTRA_bootPath.
+  ref: README.md:15-24, src/KenjinxAndroid/app/build.gradle:11-15,
+       src/KenjinxAndroid/app/src/main/AndroidManifest.xml:8,69
+
+  Every external file hangs off one data root. AppDataManager.Initialize takes a
+  base path, keeps a portable directory next to the binary when one exists and
+  otherwise falls back to %APPDATA%/Ryujinx, the default directory name being
+  still Ryujinx. Android hands it getExternalFilesDir(null), which differs from
+  the user profile path and already exists, so the launch mode is Custom and the
+  ~/.switch fallback that ReloadKeySet consults in UserProfile mode never fires
+  there. games, profiles and system are created under the root on every start.
+  ref: src/Ryujinx.Common/Configuration/AppDataManager.cs:11-17,47,50-104,223-230,
+       src/LibKenjinx/LibKenjinx.cs:54-95,
+       src/KenjinxAndroid/app/src/main/java/org/kenjinx/android/MainActivity.kt:264-298
+
+  Firmware is installed rather than placed. ContentManager takes a directory, a
+  zip or an xci with an update partition, verifies each NCA against the key set
+  and refuses a package carrying unrelated archives, then registers the contents
+  under bis/system/Contents/registered. Android passes a file descriptor instead
+  of a path but reaches the same two methods. Nothing gates the launch on it:
+  homebrew NRO goes through ProcessLoader without touching the key set, and the
+  failure is deferred to the first service that needs a system archive.
+  ref: src/Ryujinx.HLE/FileSystem/ContentManager.cs:431-498,675-749,893-903,
+       src/LibKenjinx/Android/JniExportedMethods.cs:459-495,
+       src/Ryujinx.HLE/Loaders/Processes/ProcessLoader.cs:189-205
+
+  Two read paths belong to the desktop build alone, because the Android build
+  drops LibKenjinx.Native.cs and wires those subsystems differently.
+  SDL_GameControllerDB.txt is read by SDL3Driver, whose only callers are the
+  SDL3 audio, gamepad and keyboard drivers; on Android JnaDeviceInitialize
+  builds an OpenALHardwareDeviceDriver and InitializeInput builds a
+  VirtualGamepadDriver, so SDL3 never initialises. Amiibo diverge the same way:
+  the desktop scan decrypts a dump through AmiiboBinReader and therefore needs
+  key_retail.bin, while the Android entry buffers the raw tag in
+  KenjinxAmiiboShim and INfp reads the figure id straight out of offset 0x1DC.
+  ref: src/LibKenjinx/LibKenjinx.csproj:11-13,
+       src/LibKenjinx/Android/JniExportedMethods.cs:347-348,1046-1060,
+       src/LibKenjinx/LibKenjinx.Input.cs:28-39,
+       src/Ryujinx.HLE/Kenjinx/AmiiboBridge.cs:10-44,
+       src/Ryujinx.HLE/HOS/Services/Nfc/Nfp/NfpManager/KenjinxAmiiboShim.cs:15-41,
+       src/Ryujinx.HLE/HOS/Services/Nfc/Nfp/NfpManager/INfp.cs:149-166,257-279
+
+  Config.json, Profiles.json, updates.json, dlc.json, mods.json, metadata.json
+  and system/amiibo/<amiibo id>.json are written by the emulator itself, and
+  system/amiibo/Amiibo.json is a catalogue the desktop window downloads from
+  AmiiboAPI and rewrites. None of them is user supplied. The Android app keeps
+  its own settings in Android shared preferences.
+  ref: src/Ryujinx.HLE/HOS/Services/Nfc/Nfp/VirtualAmiibo.cs:198-243,
+       src/Ryujinx/UI/ViewModels/AmiiboWindowViewModel.cs:61-63,
+       src/Ryujinx.Common/ReleaseInformation.cs:14-19,
+       src/KenjinxAndroid/app/src/main/java/org/kenjinx/android/viewmodels/QuickSettings.kt:92
+
+  Distribution moved off GitHub: Kenji-NX/Android-Releases returns HTTP 451
+  under the Nintendo notice of 2026-02-12, and both the source and the builds
+  are served by the Forgejo instance, which is where ES-DE points as well.
+  ref: https://github.com/github/dmca/blob/master/2026/02/2026-02-12-nintendo.md,
+       tmp/es-de/ANDROID.md:470-474
+
+files:
+  - name: prod.keys
+    required: true
+    path: system/prod.keys
+    description: "Production key set for NCA decryption"
+    note: >-
+      Read from the system directory under the data root, and additionally from
+      ~/.switch when the launch mode is UserProfile, which Android never is. The
+      four key files are looked up independently, so each is optional to the
+      reader, but an empty header key stops NCA header decryption outright and
+      no encrypted content loads. The desktop importer accepts a .keys file or a
+      zip of them and rejects any line that is not "name = value" in lowercase
+      hexadecimal; the Android importer accepts the name prod.keys only and
+      copies it straight into the system directory.
+    source_ref: "src/Ryujinx.HLE/FileSystem/VirtualFileSystem.cs:231-266, src/Ryujinx.HLE/FileSystem/ContentManager.cs:500-537,681-684,1082-1118, src/KenjinxAndroid/app/src/main/java/org/kenjinx/android/viewmodels/SettingsViewModel.kt:254-301"
+
+  - name: title.keys
+    required: false
+    path: system/title.keys
+    description: "Per-title key set mapping rights id to title key"
+    note: >-
+      Read beside prod.keys and passed to the same key file reader. Tickets
+      found in a container are imported into the key set at load time, so a
+      title shipping its own ticket does not need an entry here. The importer
+      validates each line as two 32-character hexadecimal fields.
+    source_ref: "src/Ryujinx.HLE/FileSystem/VirtualFileSystem.cs:241,250-253,266,269-297, src/Ryujinx.HLE/FileSystem/ContentManager.cs:1086,1100-1102"
+
+  - name: console.keys
+    required: false
+    path: system/console.keys
+    description: "Console-unique key set"
+    note: >-
+      Read beside prod.keys and passed to the same key file reader as the
+      console-specific set. Validated as "name = value" lines like prod.keys.
+    source_ref: "src/Ryujinx.HLE/FileSystem/VirtualFileSystem.cs:242,255-258,266, src/Ryujinx.HLE/FileSystem/ContentManager.cs:1103-1105"
+
+  - name: dev.keys
+    required: false
+    path: system/dev.keys
+    description: "Development-unit key set"
+    note: >-
+      Read beside prod.keys and handed to the key file reader as the development
+      set, alongside the production one rather than instead of it. Validated as
+      "name = value" lines.
+    source_ref: "src/Ryujinx.HLE/FileSystem/VirtualFileSystem.cs:243,260-263,266, src/Ryujinx.HLE/FileSystem/ContentManager.cs:1104-1105"
+
+  - name: "<firmware>.zip"
+    aliases: ["<firmware>.xci"]
+    required: false
+    storage: large_file
+    description: "Switch system firmware package"
+    note: >-
+      Chosen through a file picker and read whole at install time, by path on
+      desktop and by file descriptor on Android. A zip is walked entry by entry
+      and an xci is opened at its update partition; a directory of NCAs is also
+      accepted on desktop. Each NCA is decrypted with the key set to read its
+      title id and content type, the package is rejected when it carries
+      archives that belong to no system title, and the version string comes out
+      of title 0100000000000809. The NCAs are then registered under
+      bis/system/Contents/registered and read from there, never as loose files.
+      No digest of the package itself is compared against anything.
+    source_ref: "src/Ryujinx.HLE/FileSystem/ContentManager.cs:431-498,675-749,751-1045, src/LibKenjinx/Android/JniExportedMethods.cs:459-495, src/KenjinxAndroid/app/src/main/java/org/kenjinx/android/viewmodels/SettingsViewModel.kt:308-364"
+
+  - name: key_retail.bin
+    required: false
+    path: system/key_retail.bin
+    size: 160
+    validation: [size]
+    description: "Amiibo master keys used to decrypt tag dumps"
+    note: >-
+      Read from the system directory under the data root and split into two
+      80-byte master keys, the data key then the tag key, each being a 16-byte
+      HMAC key, a 14-byte type string, a reserved byte, a magic size byte, 16
+      magic bytes and a 32-byte XOR pad. Any total other than 160 bytes throws
+      and the scan fails. The desktop window hides its amiibo-from-dump entry
+      when the file is absent. Only the desktop scan path decrypts a dump; the
+      Android slots hand the raw bytes to the tag buffer instead.
+    source_ref: "src/Ryujinx.HLE/HOS/Services/Nfc/AmiiboDecryption/AmiiboBinReader.cs:22-44,331-336, src/Ryujinx.HLE/HOS/Services/Nfc/AmiiboDecryption/AmiiboDecryptor.cs:10-16, src/Ryujinx.HLE/HOS/Services/Nfc/AmiiboDecryption/AmiiboMasterKey.cs:15-39, src/Ryujinx/UI/ViewModels/MainWindowViewModel.cs:385,2243"
+
+  - name: SDL_GameControllerDB.txt
+    required: false
+    path: SDL_GameControllerDB.txt
+    category: game_data
+    description: "SDL gamepad mapping database"
+    note: >-
+      Read from the data root and handed to SDL_AddGamepadMappingsFromFile when
+      the SDL3 driver starts, which happens on the desktop build only. Guarded
+      by an existence test, and SDL carries its own built-in mappings, so a
+      missing file costs only the extra pad definitions.
+    source_ref: "src/Ryujinx.SDL3.Common/SDL3Driver.cs:100-105, src/Ryujinx.Input.SDL3/SDL3GamepadDriver.cs:53, src/Ryujinx.Audio.Backends.SDL3/SDL3HardwareDeviceDriver.cs:36, src/Ryujinx/UI/Windows/MainWindow.axaml.cs:110"
+
+  - name: "<amiibo>.bin"
+    required: false
+    unsourceable: "dump of one physical amiibo figure, tied to the tag it was read from and never distributed generically"
+    description: "Amiibo tag dump"
+    note: >-
+      Read whole from wherever the picker points. The desktop path decrypts it
+      with key_retail.bin, accepts 532 bytes by padding to the 540 of 135 pages
+      of 4, and writes the tag back when a game edits its application area. The
+      Android slots read the bytes through the content resolver and buffer them
+      for the NFP service, which takes the figure id from offset 0x1DC without
+      decrypting anything.
+    source_ref: "src/Ryujinx.HLE/HOS/Horizon.cs:355-363, src/Ryujinx.HLE/HOS/Services/Nfc/AmiiboDecryption/AmiiboBinReader.cs:22-44,151-283, src/LibKenjinx/LibKenjinx.cs:700-729, src/KenjinxAndroid/app/src/main/java/org/kenjinx/android/views/GameViews.kt:328-349"
+
+  - name: "<CaCertificateId>.der"
+    required: false
+    path: system/ssl/
+    unsourceable: "replacement certificate the user picks for one certificate authority, with no canonical artefact behind the name"
+    description: "Override for one built-in root certificate"
+    note: >-
+      Looked up under system/ssl by the enumeration name of the certificate
+      being read out of the firmware certificate store, and substituted for the
+      store entry when the file exists. The store itself comes from title
+      0100000000000800, so the absence of an override changes nothing.
+    source_ref: "src/Ryujinx.HLE/HOS/Services/Ssl/BuiltInCertificateManager.cs:25,91-112,114-180"
+
+  - name: "<driver>.zip"
+    required: false
+    path: drivers/
+    unsourceable: "third-party Vulkan driver built for one GPU family, not an emulator artefact"
+    description: "Replacement Vulkan driver for the Android build"
+    note: >-
+      Imported through a picker filtered on application/zip and unpacked into a
+      folder named after the archive under drivers in the data root. A folder is
+      offered only when it holds a meta.json naming a libraryName that resolves
+      to a file present beside it; the chosen path is remembered in a file named
+      selected. At renderer start the folder is copied into internal storage,
+      because the external filesystem cannot carry an executable mapping, loaded
+      through the rootless Adreno driver loader, and the resulting handle is
+      passed to the Vulkan loader. An empty selection uses the system loader.
+    source_ref: "src/KenjinxAndroid/app/src/main/java/org/kenjinx/android/viewmodels/VulkanDriverViewModel.kt:13-167, src/KenjinxAndroid/app/src/main/java/org/kenjinx/android/viewmodels/MainViewModel.kt:202-243, src/LibKenjinx/Android/JniExportedMethods.cs:532-555, src/LibKenjinx/VulkanLoader.cs:27-29"
+
+# System archives read out of the installed firmware, never as loose files.
+firmware_titles:
+  - id: "0100000000000809"
+    name: "System version"
+    content: ["file"]
+    required: false
+    note: "Version string reported for the installed firmware, and the value the installer returns after verifying a package."
+    source_ref: "src/Ryujinx.HLE/FileSystem/ContentManager.cs:32,1047-1080"
+
+  - id: "010000000000080E"
+    name: "TimeZoneBinary"
+    content: ["binaryList.txt", "zoneinfo/"]
+    required: false
+    note: "Location list and zone rules. Without it the location cache holds UTC alone and the time zone manager is marked initialised without rules."
+    source_ref: "src/Ryujinx.HLE/HOS/Services/Time/TimeZone/TimeZoneContentManager.cs:24,62-86,88-119"
+
+  - id: "0100000000000810"
+    name: "FontNintendoExtended"
+    content: ["nintendo_ext_003.bfttf"]
+    required: false
+    note: "Shared font, XOR-decoded from BFTTF into the shared memory the pl:u service exposes."
+    source_ref: "src/Ryujinx.HLE/FileSystem/ContentManager.cs:73,93, src/Ryujinx.HLE/HOS/Services/Sdb/Pl/SharedFontManager.cs:63-125,159-180"
+
+  - id: "0100000000000811"
+    name: "FontStandard"
+    content: ["nintendo_udsg-r_std_003.bfttf"]
+    required: false
+    note: "Shared font. A missing font title throws InvalidSystemResourceException, so a title that asks for shared fonts stops there."
+    source_ref: "src/Ryujinx.HLE/FileSystem/ContentManager.cs:68,88, src/Ryujinx.HLE/HOS/Services/Sdb/Pl/SharedFontManager.cs:63-125"
+
+  - id: "0100000000000812"
+    name: "FontKorean"
+    content: ["nintendo_udsg-r_ko_003.bfttf"]
+    required: false
+    note: "Shared font."
+    source_ref: "src/Ryujinx.HLE/FileSystem/ContentManager.cs:71,91"
+
+  - id: "0100000000000813"
+    name: "FontChineseTraditional"
+    content: ["nintendo_udjxh-db_zh-tw_003.bfttf"]
+    required: false
+    note: "Shared font."
+    source_ref: "src/Ryujinx.HLE/FileSystem/ContentManager.cs:70,92"
+
+  - id: "0100000000000814"
+    name: "FontChineseSimplified"
+    content: ["nintendo_udsg-r_org_zh-cn_003.bfttf", "nintendo_udsg-r_ext_zh-cn_003.bfttf"]
+    required: false
+    note: "Shared fonts. One title carries both the base and the extended simplified faces."
+    source_ref: "src/Ryujinx.HLE/FileSystem/ContentManager.cs:69-70,89-90"
+
+  - id: "0100000000000800"
+    name: "Certificate store"
+    content: ["ssl_TrustedCerts.bdf", "ssl_TrustedCerts.tcf"]
+    required: false
+    note: "Trusted root certificates for the ssl service, the .tcf name being the one used up to firmware 2.3.0. Absent, the service logs and serves nothing."
+    source_ref: "src/Ryujinx.HLE/HOS/Services/Ssl/BuiltInCertificateManager.cs:25,114-180"

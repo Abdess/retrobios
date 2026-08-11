@@ -1,0 +1,203 @@
+emulator: KEmulator nnmod
+type: standalone
+core_classification: community_fork
+source: "https://github.com/shinovon/KEmulator"
+upstream: "https://github.com/shinovon/KEmulator"
+author: "shinovon"
+profiled_date: "2026-08-11"
+source_commit: "4230a6af24e8e5d60e00e760750cfd9f195f0bd5"
+core_version: "2.21.5"
+display_name: "Mobile - J2ME (KEmulator nnmod)"
+cores:
+  - kemulator
+  - KEMULATOR
+systems:
+  - j2me
+mode: standalone
+verification: existence
+
+notes: |
+  MIDP/CLDC runtime running on the host JVM, developed from decompiled KEmulator
+  1.0.3. MIDlet bytecode executes against the javax.microedition classes compiled
+  into the application, so no device firmware is read.
+
+  Yamaha SMAF audio is the one thing the user supplies. MMFPlayer.initialize()
+  probes the directory holding the executable for a hardware emulator library in
+  a fixed order, MA-7 then MA-5 then MA-3, and keeps the first complete set. MA-3
+  ships with the emulator, so .mmf playback works on a stock install and the MA-5
+  and MA-7 libraries raise the chip generation: MA-5 adds 32 PCM channels, MA-7
+  adds DSP effects and is the only mode where supportsAudioTracks() is true,
+  which the MEXA phrase audio track API reads to size its track array.
+  ref: src/media/emulator/media/mmf/MMFPlayer.java:11-40,
+       src/media/emulator/media/mmf/MaDll.java:862-864,
+       src/media/emulator/media/mmf/PhrasePlayerImpl.java:20-26
+
+  The probe is 32-bit Windows only. isX64() returns before any file is touched,
+  so the x64 build loads none of these. The MIDI-through-MA path passes
+  notMmf=true, which skips the MA-7 branch and leaves MA-5 or MA-3.
+  ref: src/media/emulator/media/mmf/MMFPlayer.java:15-17,
+       src/media/javax/microedition/media/PlayerImpl.java:206-211,
+       win/src/main/emulator/EmulatorPlatform.java:9-11,
+       x64/src/main/emulator/EmulatorPlatform.java:9-11
+
+  Every caller degrades when the probe fails. PlayerImpl.midi() breaks out of the
+  ma block and falls back to MidiSystem; PlayerImpl.mmf(), SmafPlayer, AudioClip
+  and PhrasePlayerImpl each throw and lose SMAF audio alone. Only the file's
+  existence is tested, then the path goes to Native.load, so the code reads no
+  size and no hash.
+  ref: src/media/javax/microedition/media/PlayerImpl.java:212-249,
+       src/oem/com/jblend/media/smaf/SmafPlayer.java:91,
+       src/oem/com/samsung/util/AudioClip.java:61,
+       src/media/emulator/media/mmf/MaDll.java:181-190
+
+  The 3D and Mascot Capsule backends default to their OpenGL implementations, so
+  the two shipped native libraries below load only when the user selects the
+  SWERVE M3G engine or the Mascot Capsule DLL engine.
+  ref: src/main/emulator/Settings.java:20-21,
+       win/src/main/emulator/EmulatorPlatform.java:41-80
+
+  Two settings hold user-chosen paths with no fixed filename. SoundfontPath takes
+  any .sf2 or .dls and is empty by default, leaving useCustomSoundfont() false and
+  the JVM default soundbank in place. VlcDir points at a VLC installation that
+  vlcj scans for libvlc.
+  ref: src/media/emulator/media/EmulatorMIDI.java:26-36,
+       src/main/emulator/ui/swt/Property.java:1864-1905
+
+files:
+  - name: M7_EmuSmw7.dll
+    system: j2me
+    required: false
+    validation: [existence]
+    description: "Yamaha MA-7 SMAF sequencer library"
+    note: "First branch of the MMFPlayer probe, taken only when M7_EmuHw.dll sits beside it and the caller did not pass notMmf. Selects MODE_MA7, the only mode carrying phrase audio tracks. Distributed with the SoftBank MEXA emulator."
+    source_ref: "src/media/emulator/media/mmf/MMFPlayer.java:19-23, src/media/emulator/media/mmf/MaDll.java:186"
+
+  - name: M7_EmuHw.dll
+    system: j2me
+    required: false
+    validation: [existence]
+    description: "Yamaha MA-7 SMAF hardware layer"
+    note: "Tested for existence next to M7_EmuSmw7.dll; the MA-7 branch is skipped unless both are present. Loaded by the Windows loader as a dependency of the sequencer library, which is the path handed to Native.load."
+    source_ref: "src/media/emulator/media/mmf/MMFPlayer.java:21"
+
+  - name: M5_EmuSmw5.dll
+    system: j2me
+    required: false
+    validation: [existence]
+    description: "Yamaha MA-5 SMAF sequencer library"
+    note: "Second branch of the probe, taken when the MA-7 pair is absent or the caller passed notMmf and M5_EmuHw.dll sits beside it. Selects MODE_MA5, whose init walks a 1024-byte allocation to an address ending in 0x81 before calling MaSound_EmuInitialize."
+    source_ref: "src/media/emulator/media/mmf/MMFPlayer.java:24-27, src/media/emulator/media/mmf/MaDll.java:184, src/media/emulator/media/mmf/MaDll.java:231-241"
+
+  - name: M5_EmuHw.dll
+    system: j2me
+    required: false
+    validation: [existence]
+    description: "Yamaha MA-5 SMAF hardware layer"
+    note: "Tested for existence next to M5_EmuSmw5.dll; the MA-5 branch is skipped unless both are present."
+    source_ref: "src/media/emulator/media/mmf/MMFPlayer.java:25"
+
+  - name: ma3smwemu.dll
+    system: j2me
+    required: false
+    bundled: true
+    size: 724992
+    md5: c1625f6c2fbf66e2e838c6bc74ffe641
+    sha1: b566d111ccd3e303d21ab5c4cd1519dc238a4fce
+    validation: [existence]
+    description: "Yamaha MA-3 SMAF emulator"
+    note: "Last branch of the probe and the only one satisfied by a single file. Selects MODE_MA3, whose init calls MaSound_Initialize directly. Present in a stock install, so .mmf playback needs nothing from the user on the 32-bit Windows build."
+    source_ref: "src/media/emulator/media/mmf/MMFPlayer.java:28-30, src/media/emulator/media/mmf/MaDll.java:182, src/media/emulator/media/mmf/MaDll.java:227-230"
+
+  - name: jsr184client.dll
+    system: j2me
+    required: false
+    bundled: true
+    size: 405504
+    md5: 9fcb2bd1f36d1e8d94f8e4e2650914c9
+    sha1: ed9a60d56ddcc91514b033c16f2062638c3e6eeb
+    validation: [existence]
+    description: "SWERVE M3G native engine"
+    note: "Loaded from the executable's directory by the static initializers of the SWERVE javax.microedition.m3g classes, with a System.loadLibrary fallback on the library path. Reached only when the 3D engine setting is SWERVE, the LWJGL engine being the default."
+    source_ref: "m3g_swerve/src/javax/microedition/m3g/Graphics3D.java:275, m3g_swerve/src/javax/microedition/m3g/Loader.java:378, src/main/emulator/i.java:6-14"
+
+  - name: java_micro3d_v3_32.dll
+    system: j2me
+    required: false
+    bundled: true
+    size: 27648
+    md5: 60045cd91e30880c731c9fea8c712093
+    sha1: b1d6aef4559bb46af27eebda50fe06e0de659966
+    validation: [existence]
+    description: "Mascot Capsule V3 JNI bridge"
+    note: "System.loadLibrary from the static initializers of the com.mascotcapsule.micro3d.v3 classes, reached only when the Mascot Capsule engine setting is DLL. Its import table names micro3d_v3_32.dll."
+    source_ref: "micro3d_dll/src/com/mascotcapsule/micro3d/v3/Figure.java:162-165, micro3d_dll/src/com/mascotcapsule/micro3d/v3/Graphics3D.java:279"
+
+  - name: micro3d_v3_32.dll
+    system: j2me
+    required: false
+    bundled: true
+    size: 475136
+    md5: d5ab04740801208b92fa3de7252a75d8
+    sha1: f59e0d445aafe2503c6e5249ca07df4b89626f8f
+    validation: [existence]
+    description: "Mascot Capsule V3 renderer"
+    note: "Pulled in by the Windows loader when java_micro3d_v3_32.dll loads; no Java code names it."
+    source_ref: "micro3d_dll/src/com/mascotcapsule/micro3d/v3/Figure.java:163"
+
+  - name: amrdecoder.dll
+    aliases:
+      - amrdecoder_64.dll
+      - amrdecoder_arm64.dll
+      - libamrdecoder.so
+      - libamrdecoder_64.so
+      - libamrdecoder_arm32.so
+      - libamrdecoder_arm64.so
+      - libamrdecoder.dylib
+      - libamrdecoder_arm64.dylib
+    system: j2me
+    required: false
+    bundled: true
+    validation: [existence]
+    description: "opencore-amr decoder for AMR audio"
+    note: "System.load on a name composed from os.name and os.arch, resolved against the executable's directory. The 32-bit Windows build asks for amrdecoder.dll unconditionally. A load failure is printed and swallowed."
+    source_ref: "win/src/main/emulator/EmulatorPlatform.java:91-97, x64/src/main/emulator/EmulatorPlatform.java:173-212"
+
+  - name: s60snr.ttf
+    system: j2me
+    required: false
+    bundled: true
+    category: game_data
+    validation: [existence]
+    description: "Series 60 typeface"
+    note: "Read from /res inside the jar the first time a FontAWT is built for the Series 60 face, then cached and derived per style and size."
+    source_ref: "src/main/emulator/graphics2D/awt/FontAWT.java:20-28"
+
+  - name: Nokia.ttf
+    system: j2me
+    required: false
+    bundled: true
+    category: game_data
+    validation: [existence]
+    description: "Nokia typeface"
+    note: "Read from /res inside the jar the first time a FontAWT is built for the Nokia face."
+    source_ref: "src/main/emulator/graphics2D/awt/FontAWT.java:29-37"
+
+  - name: presets.xml
+    system: j2me
+    required: false
+    bundled: true
+    category: game_data
+    validation: [existence]
+    description: "Device presets: screen sizes, key maps, platform identities"
+    note: "Devices.load reads the PresetsPath setting, /res/presets.xml by default, as a jar resource and falls back to a disk read when the resource is absent, which is how a user-supplied preset file is picked up."
+    source_ref: "src/main/emulator/Settings.java:133, src/main/emulator/Devices.java:25-50, src/main/emulator/Emulator.java:641"
+
+  - name: en.txt
+    system: j2me
+    required: false
+    bundled: true
+    category: game_data
+    validation: [existence]
+    description: "UI strings, English"
+    note: "Read from the lang directory next to the executable at startup and kept as the fallback bundle; the language setting names a sibling in the same directory. Every lookup that misses both bundles falls back to the string built into the call site."
+    source_ref: "src/main/emulator/UILocale.java:11-48"

@@ -20,6 +20,7 @@ notes: >
 files:
   - name: "scph1001.bin"
     description: "SCPH-1001 (v2.2 12-04-95 A)"
+    priority: 1
     required: false
     hle_fallback: true
     size: 524288
@@ -28,6 +29,7 @@ files:
 
   - name: "scph5501.bin"
     description: "SCPH-5501 (v3.0 11-18-96 A)"
+    priority: 2
     required: false
     hle_fallback: true
     size: 524288
@@ -36,6 +38,7 @@ files:
 
   - name: "scph7001.bin"
     description: "SCPH-7001 (v4.1 12-16-97 A)"
+    priority: 3
     required: false
     hle_fallback: true
     size: 524288

@@ -48,6 +48,7 @@ files:
   - name: "saturn_bios.bin"
     path: "kronos/saturn_bios.bin"
     system: sega-saturn
+    priority: 1
     required: true
     size: 524288
     validation: [size]
@@ -60,6 +61,7 @@ files:
   - name: "sega_101.bin"
     system: sega-saturn
     region: [japan]
+    priority: 2
     required: false
     size: 524288
     validation: [size]
@@ -72,6 +74,7 @@ files:
   - name: "mpr-17933.bin"
     system: sega-saturn
     region: [north-america, europe]
+    priority: 3
     required: false
     size: 524288
     validation: [size]
