@@ -1,0 +1,16 @@
+{
+    "name": "light",
+    "window": "#ffffff",
+    "border": "#000000",
+    "caret": "#000000",
+    "link": "#000060",
+    "more": "#006000",
+    "scrollbar": {"fg": "#808080", "bg": "#b0b0b0"},
+    "text_buffer": {
+        "default": {"fg": "#000000", "bg": "#ffffff"},
+        "input": {"fg": "#006000", "bg": "#ffffff"}
+    },
+    "text_grid": {
+        "default": {"fg": "#606060", "bg": "#ffffff"}
+    }
+}

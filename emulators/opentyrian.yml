@@ -240,12 +240,13 @@ files:
   # Level tileset shapes (loaded per-level from .lvl data)
   # The level file specifies a character via fgetc() at tyrian2.c:3039,
   # which maps to shapes{char}.dat at tyrian2.c:3079.
-  # Episode 4 uses Z, W, X and } (lvlmast.c:128-131).
+  # The shipped set is ), W, X, Y, Z; lvlmast.c:128-131 writes } for the
+  # Episode 4 tileset, which no distributed file matches.
   # Note: shapeFile[34] in lvlmast.c is a DIFFERENT mechanism —
   # it maps indices to characters for newsh?.shp (enemy sprites),
   # NOT for shapes?.dat (level tilesets).
   # -----------------------------------------------------------
-  - name: "shapes}.dat"
+  - name: "shapes).dat"
     category: game_data
     system: tyrian
     required: true

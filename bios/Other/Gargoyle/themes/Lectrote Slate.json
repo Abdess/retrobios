@@ -1,0 +1,17 @@
+{
+    "name": "Lectrote Slate",
+    "window": "#4d4d4f",
+    "border": "#000000",
+    "caret": "#ddffdd",
+    "link": "#bbbbff",
+    "more": "#ffddaa",
+    "scrollbar": {"fg": "#585868", "bg": "#4d4d4f"},
+    "text_buffer": {
+        "default": {"fg": "#ffffff", "bg": "#4d4d4f"},
+        "input": {"fg": "#ddffdd", "bg": "#4d4d4f"}
+    },
+    "text_grid": {
+        "default": {"fg": "#333333", "bg": "#ffffff"},
+        "input": {"fg": "#ddffdd", "bg": "#333333"}
+    }
+}

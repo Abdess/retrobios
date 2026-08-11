@@ -1,0 +1,56 @@
+#
+# VICE Palette file
+#
+# Syntax:
+# Red Green Blue
+#
+# NAME:VDC (RGB with brown)
+# TYPE:VDC
+
+# Black
+00 00 00
+
+# Medium Gray
+55 55 55
+
+# Blue
+00 00 AA
+
+# Light Blue
+55 55 FF
+
+# Green
+00 AA 00
+
+# Light Green
+55 FF 55
+
+# Dark Cyan
+00 AA AA
+
+# Light Cyan
+55 FF FF
+
+# Dark Red
+AA 00 00
+
+# Light Red
+FF 55 55
+
+# Dark Purple
+AA 00 AA
+
+# Light Purple
+FF 55 FF
+
+# Brown
+AA 55 00
+
+# Yellow
+FF FF 55
+
+# Light Gray
+AA AA AA
+
+# White
+FF FF FF

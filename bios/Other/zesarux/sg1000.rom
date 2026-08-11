@@ -1,0 +1,1 @@
+Sega SG-1000 doesn't have any rom to load, this file is needed to avoid errors on ZEsarUX on start, as it tries to load a rom on every machine (even this)

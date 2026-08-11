@@ -1,0 +1,32 @@
+|===============================================================|
+| AUN map file for !Internet V5.00 (3rd May 1996)               |
+|                                                               |
+| This file is used if you are running AUN protocols, but have  |
+| enabled the full TCP/IP Protocol Suite.                       |
+|                                                               |
+| It allows the software to map between the IP addresses (which |
+| take the form of a 4 number sequence) to the Net and Station  |
+| number style addresses used by Level4 type systems.           |
+|                                                               |
+| An entry like 'AddMap 1.0.128.0 128' will tell the software   |
+| that the IP address 1.0.128.x maps to the AUN address 128.x   |
+|                                                               |
+| If you have no AUN Gateways on your system, you will need the |
+| default line shown after this note.                           |
+|                                                               |
+|      If you have one or more gateways, then you need a line   |
+|      to tell the software about each network, and also        |
+|      suitable routes must have been set up by !Internet.      |
+|      eg:                                                      |
+|                                                               |
+|AddMap 1.2.129.0 129                                           |
+|AddMap 1.3.130.0 130                                           |
+|                                                               |
+|                                                               |
+|===============================================================|
+
+|AddMap 1.0.128.0 128
+ 
+AddMap 192.168.0.0 128
+AddMap 192.168.12.0 132
+AddMap 192.168.13.0 133

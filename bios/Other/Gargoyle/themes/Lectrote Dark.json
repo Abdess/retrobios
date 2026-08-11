@@ -1,0 +1,17 @@
+{
+    "name": "Lectrote Dark",
+    "window": "#000000",
+    "border": "#000000",
+    "caret": "#ccffcc",
+    "link": "#aaaaff",
+    "more": "#ffddaa",
+    "scrollbar": {"fg": "#303010", "bg": "#000000"},
+    "text_buffer": {
+        "default": {"fg": "#fff4ee", "bg": "#000000"},
+        "input": {"fg": "#ccffcc", "bg": "#000000"}
+    },
+    "text_grid": {
+        "default": {"fg": "#443322", "bg": "#dddacc"},
+        "input": {"fg": "#ccffcc", "bg": "#443322" }
+    }
+}

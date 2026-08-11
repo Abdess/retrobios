@@ -1,0 +1,258 @@
+*** BeebEm Keymap ***
+
+-9 0 0 -9 0 1 # 0x00
+-9 0 0 -9 0 1 # 0x01 VK_LBUTTON
+-9 0 0 -9 0 1 # 0x02 VK_RBUTTON
+-9 0 0 -9 0 1 # 0x03 VK_CANCEL
+-9 0 0 -9 0 1 # 0x04 VK_MBUTTON
+-9 0 0 -9 0 1 # 0x05 VK_XBUTTON1
+-9 0 0 -9 0 1 # 0x06 VK_XBUTTON2
+-9 0 0 -9 0 1 # 0x07
+5 9 0 5 9 1 # 0x08 VK_BACK
+6 0 0 6 0 1 # 0x09 VK_TAB
+-9 0 0 -9 0 1 # 0x0A
+-9 0 0 -9 0 1 # 0x0B
+-9 0 0 -9 0 1 # 0x0C VK_CLEAR
+4 9 0 4 9 1 # 0x0D VK_RETURN
+-9 0 0 -9 0 1 # 0x0E
+-9 0 0 -9 0 1 # 0x0F
+0 0 0 0 0 1 # 0x10 VK_SHIFT
+0 1 0 0 1 1 # 0x11 VK_CONTROL
+-9 0 0 -9 0 1 # 0x12 VK_MENU
+-2 -2 0 -2 -2 1 # 0x13 VK_PAUSE
+4 0 0 4 0 1 # 0x14 VK_CAPITAL
+-9 0 0 -9 0 1 # 0x15 VK_KANA
+-9 0 0 -9 0 1 # 0x16
+-9 0 0 -9 0 1 # 0x17 VK_JUNJA
+-9 0 0 -9 0 1 # 0x18 VK_FINAL
+-9 0 0 -9 0 1 # 0x19 VK_HANJA
+-9 0 0 -9 0 1 # 0x1A
+7 0 0 7 0 1 # 0x1B VK_ESCAPE
+-9 0 0 -9 0 1 # 0x1C VK_CONVERT
+-9 0 0 -9 0 1 # 0x1D VK_NONCONVERT
+-9 0 0 -9 0 1 # 0x1E VK_ACCEPT
+-9 0 0 -9 0 1 # 0x1F VK_MODECHANGE
+6 2 0 6 2 1 # 0x20 VK_SPACE
+-3 -3 0 -3 -3 1 # 0x21 VK_PRIOR
+-3 -4 0 -3 -4 1 # 0x22 VK_NEXT
+6 9 0 6 9 1 # 0x23 VK_END
+-9 0 0 -9 0 1 # 0x24 VK_HOME
+1 9 0 1 9 1 # 0x25 VK_LEFT
+3 9 0 3 9 1 # 0x26 VK_UP
+7 9 0 7 9 1 # 0x27 VK_RIGHT
+2 9 0 2 9 1 # 0x28 VK_DOWN
+-9 0 0 -9 0 1 # 0x29 VK_SELECT
+-9 0 0 -9 0 1 # 0x2A VK_PRINT
+-9 0 0 -9 0 1 # 0x2B VK_EXECUTE
+-9 0 0 -9 0 1 # 0x2C VK_SNAPSHOT
+-9 0 0 -9 0 1 # 0x2D VK_INSERT
+5 9 0 5 9 1 # 0x2E VK_DELETE
+-9 0 0 -9 0 1 # 0x2F VK_HELP
+2 7 0 2 6 1 # 0x30 0
+3 0 0 3 0 1 # 0x31 1
+3 1 0 3 1 1 # 0x32 2
+1 1 0 2 8 1 # 0x33 3
+1 2 0 1 2 1 # 0x34 4
+1 3 0 1 3 1 # 0x35 5
+3 4 0 1 8 0 # 0x36 6
+2 4 0 3 4 1 # 0x37 7
+1 5 0 4 8 1 # 0x38 8
+2 6 0 1 5 1 # 0x39 9
+-9 0 0 -9 0 1 # 0x3A
+-9 0 0 -9 0 1 # 0x3B
+-9 0 0 -9 0 1 # 0x3C
+-9 0 0 -9 0 1 # 0x3D
+-9 0 0 -9 0 1 # 0x3E
+-9 0 0 -9 0 1 # 0x3F
+-9 0 0 -9 0 1 # 0x40
+4 1 0 4 1 1 # 0x41 A
+6 4 0 6 4 1 # 0x42 B
+5 2 0 5 2 1 # 0x43 C
+3 2 0 3 2 1 # 0x44 D
+2 2 0 2 2 1 # 0x45 E
+4 3 0 4 3 1 # 0x46 F
+5 3 0 5 3 1 # 0x47 G
+5 4 0 5 4 1 # 0x48 H
+2 5 0 2 5 1 # 0x49 I
+4 5 0 4 5 1 # 0x4A J
+4 6 0 4 6 1 # 0x4B K
+5 6 0 5 6 1 # 0x4C L
+6 5 0 6 5 1 # 0x4D M
+5 5 0 5 5 1 # 0x4E N
+3 6 0 3 6 1 # 0x4F O
+3 7 0 3 7 1 # 0x50 P
+1 0 0 1 0 1 # 0x51 Q
+3 3 0 3 3 1 # 0x52 R
+5 1 0 5 1 1 # 0x53 S
+2 3 0 2 3 1 # 0x54 T
+3 5 0 3 5 1 # 0x55 U
+6 3 0 6 3 1 # 0x56 V
+2 1 0 2 1 1 # 0x57 W
+4 2 0 4 2 1 # 0x58 X
+4 4 0 4 4 1 # 0x59 Y
+6 1 0 6 1 1 # 0x5A Z
+-9 0 0 -9 0 1 # 0x5B VK_LWIN
+-9 0 0 -9 0 1 # 0x5C VK_RWIN
+6 2 0 6 2 1 # 0x5D VK_APPS
+-9 0 0 -9 0 1 # 0x5E
+-9 0 0 -9 0 1 # 0x5F VK_SLEEP
+6 10 0 6 10 1 # 0x60 VK_NUMPAD0
+6 11 0 6 11 1 # 0x61 VK_NUMPAD1
+7 12 0 7 12 1 # 0x62 VK_NUMPAD2
+6 12 0 6 12 1 # 0x63 VK_NUMPAD3
+7 10 0 7 10 1 # 0x64 VK_NUMPAD4
+7 11 0 7 11 1 # 0x65 VK_NUMPAD5
+1 10 0 1 10 1 # 0x66 VK_NUMPAD6
+1 11 0 1 11 1 # 0x67 VK_NUMPAD7
+2 10 0 2 10 1 # 0x68 VK_NUMPAD8
+2 11 0 2 11 1 # 0x69 VK_NUMPAD9
+5 11 0 5 11 1 # 0x6A VK_MULTIPLY
+3 10 0 3 10 1 # 0x6B VK_ADD
+-9 0 0 -9 0 1 # 0x6C VK_SEPARATOR
+3 11 0 3 11 1 # 0x6D VK_SUBTRACT
+4 12 0 4 12 1 # 0x6E VK_DECIMAL
+4 10 0 4 10 1 # 0x6F VK_DIVIDE
+7 1 0 7 1 1 # 0x70 VK_F1
+7 2 0 7 2 1 # 0x71 VK_F2
+7 3 0 7 3 1 # 0x72 VK_F3
+1 4 0 1 4 1 # 0x73 VK_F4
+7 4 0 7 4 1 # 0x74 VK_F5
+7 5 0 7 5 1 # 0x75 VK_F6
+1 6 0 1 6 1 # 0x76 VK_F7
+7 6 0 7 6 1 # 0x77 VK_F8
+7 7 0 7 7 1 # 0x78 VK_F9
+2 0 0 2 0 1 # 0x79 VK_F10
+5 0 0 5 0 1 # 0x7A VK_F11
+-2 -2 0 -2 -2 1 # 0x7B VK_F12
+-9 0 0 -9 0 1 # 0x7C VK_F13
+-9 0 0 -9 0 1 # 0x7D VK_F14
+-9 0 0 -9 0 1 # 0x7E VK_F15
+-9 0 0 -9 0 1 # 0x7F VK_F16
+-9 0 0 -9 0 1 # 0x80 VK_F17
+-9 0 0 -9 0 1 # 0x81 VK_F18
+-9 0 0 -9 0 1 # 0x82 VK_F19
+-9 0 0 -9 0 1 # 0x83 VK_F20
+-9 0 0 -9 0 1 # 0x84 VK_F21
+-9 0 0 -9 0 1 # 0x85 VK_F22
+-9 0 0 -9 0 1 # 0x86 VK_F23
+-9 0 0 -9 0 1 # 0x87 VK_F24
+-9 0 0 -9 0 1 # 0x88
+-9 0 0 -9 0 1 # 0x89
+-9 0 0 -9 0 1 # 0x8A
+-9 0 0 -9 0 1 # 0x8B
+-9 0 0 -9 0 1 # 0x8C
+-9 0 0 -9 0 1 # 0x8D
+-9 0 0 -9 0 1 # 0x8E
+-9 0 0 -9 0 1 # 0x8F
+-9 0 0 -9 0 1 # 0x90 VK_NUMLOCK
+-9 0 0 -9 0 1 # 0x91 VK_SCROLL
+-9 0 0 -9 0 1 # 0x92
+-9 0 0 -9 0 1 # 0x93
+-9 0 0 -9 0 1 # 0x94
+-9 0 0 -9 0 1 # 0x95
+-9 0 0 -9 0 1 # 0x96
+-9 0 0 -9 0 1 # 0x97
+-9 0 0 -9 0 1 # 0x98
+-9 0 0 -9 0 1 # 0x99
+-9 0 0 -9 0 1 # 0x9A
+-9 0 0 -9 0 1 # 0x9B
+-9 0 0 -9 0 1 # 0x9C
+-9 0 0 -9 0 1 # 0x9D
+-9 0 0 -9 0 1 # 0x9E
+-9 0 0 -9 0 1 # 0x9F
+-9 0 0 -9 0 1 # 0xA0 VK_LSHIFT
+-9 0 0 -9 0 1 # 0xA1 VK_RSHIFT
+-9 0 0 -9 0 1 # 0xA2 VK_LCONTROL
+-9 0 0 -9 0 1 # 0xA3 VK_RCONTROL
+-9 0 0 -9 0 1 # 0xA4 VK_LMENU
+-9 0 0 -9 0 1 # 0xA5 VK_RMENU
+-9 0 0 -9 0 1 # 0xA6 VK_BROWSER_BACK
+-9 0 0 -9 0 1 # 0xA7 VK_BROWSER_FORWARD
+-9 0 0 -9 0 1 # 0xA8 VK_BROWSER_REFRESH
+-9 0 0 -9 0 1 # 0xA9 VK_BROWSER_STOP
+-9 0 0 -9 0 1 # 0xAA VK_BROWSER_SEARCH
+-9 0 0 -9 0 1 # 0xAB VK_BROWSER_FAVORITES
+-9 0 0 -9 0 1 # 0xAC VK_BROWSER_HOME
+-9 0 0 -9 0 1 # 0xAD VK_VOLUME_MUTE
+-9 0 0 -9 0 1 # 0xAE VK_VOLUME_DOWN
+-9 0 0 -9 0 1 # 0xAF VK_VOLUME_UP
+-9 0 0 -9 0 1 # 0xB0 VK_MEDIA_NEXT_TRACK
+-9 0 0 -9 0 1 # 0xB1 VK_MEDIA_PREV_TRACK
+-9 0 0 -9 0 1 # 0xB2 VK_MEDIA_STOP
+-9 0 0 -9 0 1 # 0xB3 VK_MEDIA_PLAY_PAUSE
+-9 0 0 -9 0 1 # 0xB4 VK_LAUNCH_MAIL
+-9 0 0 -9 0 1 # 0xB5 VK_LAUNCH_MEDIA_SELECT
+-9 0 0 -9 0 1 # 0xB6 VK_LAUNCH_APP1
+-9 0 0 -9 0 1 # 0xB7 VK_LAUNCH_APP2
+-9 0 0 -9 0 1 # 0xB8
+-9 0 0 -9 0 1 # 0xB9
+5 7 0 4 8 0 # 0xBA VK_OEM_1
+1 7 1 5 7 1 # 0xBB VK_OEM_PLUS
+6 6 0 6 6 1 # 0xBC VK_OEM_COMMA
+1 7 0 2 8 0 # 0xBD VK_OEM_MINUS
+6 7 0 6 7 1 # 0xBE VK_OEM_PERIOD
+6 8 0 6 8 1 # 0xBF VK_OEM_2
+2 4 1 4 7 1 # 0xC0 VK_OEM_3
+-9 0 0 -9 0 1 # 0xC1
+-9 0 0 -9 0 1 # 0xC2
+-9 0 0 -9 0 1 # 0xC3
+-9 0 0 -9 0 1 # 0xC4
+-9 0 0 -9 0 1 # 0xC5
+-9 0 0 -9 0 1 # 0xC6
+-9 0 0 -9 0 1 # 0xC7
+-9 0 0 -9 0 1 # 0xC8
+-9 0 0 -9 0 1 # 0xC9
+-9 0 0 -9 0 1 # 0xCA
+-9 0 0 -9 0 1 # 0xCB
+-9 0 0 -9 0 1 # 0xCC
+-9 0 0 -9 0 1 # 0xCD
+-9 0 0 -9 0 1 # 0xCE
+-9 0 0 -9 0 1 # 0xCF
+-9 0 0 -9 0 1 # 0xD0
+-9 0 0 -9 0 1 # 0xD1
+-9 0 0 -9 0 1 # 0xD2
+-9 0 0 -9 0 1 # 0xD3
+-9 0 0 -9 0 1 # 0xD4
+-9 0 0 -9 0 1 # 0xD5
+-9 0 0 -9 0 1 # 0xD6
+-9 0 0 -9 0 1 # 0xD7
+-9 0 0 -9 0 1 # 0xD8
+-9 0 0 -9 0 1 # 0xD9
+-9 0 0 -9 0 1 # 0xDA
+3 8 0 3 8 1 # 0xDB VK_OEM_4
+7 8 0 7 8 1 # 0xDC VK_OEM_5
+5 8 0 5 8 1 # 0xDD VK_OEM_6
+1 1 1 1 8 1 # 0xDE VK_OEM_7
+4 7 0 4 7 1 # 0xDF VK_OEM_8
+-9 0 0 -9 0 1 # 0xE0
+-9 0 0 -9 0 1 # 0xE1
+-9 0 0 -9 0 1 # 0xE2 VK_OEM_102
+-9 0 0 -9 0 1 # 0xE3
+-9 0 0 -9 0 1 # 0xE4
+-9 0 0 -9 0 1 # 0xE5 VK_PROCESSKEY
+-9 0 0 -9 0 1 # 0xE6
+-9 0 0 -9 0 1 # 0xE7 VK_PACKET
+-9 0 0 -9 0 1 # 0xE8
+-9 0 0 -9 0 1 # 0xE9
+-9 0 0 -9 0 1 # 0xEA
+-9 0 0 -9 0 1 # 0xEB
+-9 0 0 -9 0 1 # 0xEC
+-9 0 0 -9 0 1 # 0xED
+-9 0 0 -9 0 1 # 0xEE
+-9 0 0 -9 0 1 # 0xEF
+-9 0 0 -9 0 1 # 0xF0
+-9 0 0 -9 0 1 # 0xF1
+-9 0 0 -9 0 1 # 0xF2
+-9 0 0 -9 0 1 # 0xF3
+-9 0 0 -9 0 1 # 0xF4
+-9 0 0 -9 0 1 # 0xF5
+-9 0 0 -9 0 1 # 0xF6 VK_ATTN
+-9 0 0 -9 0 1 # 0xF7 VK_CRSEL
+-9 0 0 -9 0 1 # 0xF8 VK_EXSEL
+-9 0 0 -9 0 1 # 0xF9 VK_EREOF
+-9 0 0 -9 0 1 # 0xFA VK_PLAY
+-9 0 0 -9 0 1 # 0xFB VK_ZOOM
+-9 0 0 -9 0 1 # 0xFC VK_NONAME
+-9 0 0 -9 0 1 # 0xFD VK_PA1
+-9 0 0 -9 0 1 # 0xFE VK_OEM_CLEAR
+-9 0 0 -9 0 1 # 0xFF

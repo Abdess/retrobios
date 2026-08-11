@@ -1,0 +1,15 @@
+{
+    "name": "Zoom",
+    "window": "#ffffcc",
+    "border": "#000000",
+    "caret": "#000000",
+    "link": "#0000ee",
+    "more": "#000000",
+    "scrollbar": {"fg": "#0099ee", "bg": "#dbdbdb"},
+    "text_buffer": {
+        "default": {"fg": "#000000", "bg": "#ffffcc"}
+    },
+    "text_grid": {
+        "default": {"fg": "#000000", "bg": "#ffffcc"}
+    }
+}

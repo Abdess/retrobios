@@ -1,0 +1,15 @@
+{
+    "name": "Pencil",
+    "window": "#ffffef",
+    "border": "#000000",
+    "caret": "#505050",
+    "link": "#0000ee",
+    "more": "#505050",
+    "scrollbar": {"fg": "#505050", "bg": "#ffffef"},
+    "text_buffer": {
+        "default": {"fg": "#505050", "bg": "#ffffef"}
+    },
+    "text_grid": {
+        "default": {"fg": "#505050", "bg": "#ffffef"}
+    }
+}
