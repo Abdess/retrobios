@@ -140,10 +140,7 @@ class Scraper(BaseScraper):
             for bios_elem in system_elem.findall("bios"):
                 paths_str = bios_elem.get("path", "")
                 md5_str = bios_elem.get("md5", "")
-                bios_elem.get("core", "")
                 mandatory = bios_elem.get("mandatory", "true") != "false"
-                bios_elem.get("hashMatchMandatory", "true") != "false"
-                bios_elem.get("note", "")
 
                 paths = [p.strip() for p in paths_str.split("|") if p.strip()]
                 if not paths:

@@ -16,7 +16,6 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
-import yaml
 
 from common import yaml_load
 

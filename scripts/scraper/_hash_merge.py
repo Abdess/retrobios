@@ -13,7 +13,6 @@ import shutil
 from pathlib import Path
 from typing import Any
 
-import yaml
 
 from common import yaml_load
 
