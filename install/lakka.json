@@ -5,7 +5,7 @@
   "platform": "lakka",
   "display_name": "Lakka",
   "version": "1.0",
-  "generated": "2026-08-11T03:21:35Z",
+  "generated": "2026-08-11T12:10:33Z",
   "base_destination": "system",
   "detect": [
     {
@@ -16,42 +16,10 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 1687,
-  "total_size": 4209638697,
-  "total_omitted": 52,
+  "total_files": 1867,
+  "total_size": 4147601292,
+  "total_omitted": 9,
   "omitted_files": [
-    {
-      "dest": "Databases/msxromdb.xml",
-      "name": "msxromdb.xml",
-      "system": "microsoft-msx",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "dolphin-emu/Sys/GC/font_japanese.bin",
-      "name": "font_japanese.bin",
-      "system": "nintendo-gamecube",
-      "required": false,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "dolphin-emu/Sys/GC/font_western.bin",
-      "name": "font_western.bin",
-      "system": "nintendo-gamecube",
-      "required": false,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "dolphin-emu/Sys/codehandler.bin",
-      "name": "codehandler.bin",
-      "system": "nintendo-gamecube",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
     {
       "dest": "mkxp-z/Fonts/Fonts",
       "name": "Fonts",
@@ -141,318 +109,6 @@
       "cores": [
         "easyrpg"
       ]
-    },
-    {
-      "dest": "scummvm/extra/Roland_SC-55.sf2",
-      "name": "Roland_SC-55.sf2",
-      "system": "scummvm",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "scummvm/extra/access.dat",
-      "name": "access.dat",
-      "system": "scummvm",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "scummvm/extra/achievements.dat",
-      "name": "achievements.dat",
-      "system": "scummvm",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "scummvm/extra/cryo.dat",
-      "name": "cryo.dat",
-      "system": "scummvm",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "scummvm/extra/cryomni3d.dat",
-      "name": "cryomni3d.dat",
-      "system": "scummvm",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "scummvm/extra/drascula.dat",
-      "name": "drascula.dat",
-      "system": "scummvm",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "scummvm/extra/encoding.dat",
-      "name": "encoding.dat",
-      "system": "scummvm",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "scummvm/extra/fonts.dat",
-      "name": "fonts.dat",
-      "system": "scummvm",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "scummvm/extra/freescape.dat",
-      "name": "freescape.dat",
-      "system": "scummvm",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "scummvm/extra/grim-patch.lab",
-      "name": "grim-patch.lab",
-      "system": "scummvm",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "scummvm/extra/hadesch_translations.dat",
-      "name": "hadesch_translations.dat",
-      "system": "scummvm",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "scummvm/extra/hugo.dat",
-      "name": "hugo.dat",
-      "system": "scummvm",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "scummvm/extra/kyra.dat",
-      "name": "kyra.dat",
-      "system": "scummvm",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "scummvm/extra/lure.dat",
-      "name": "lure.dat",
-      "system": "scummvm",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "scummvm/extra/macgui.dat",
-      "name": "macgui.dat",
-      "system": "scummvm",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "scummvm/extra/macventure.dat",
-      "name": "macventure.dat",
-      "system": "scummvm",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "scummvm/extra/mm.dat",
-      "name": "mm.dat",
-      "system": "scummvm",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "scummvm/extra/monkey4-patch.m4b",
-      "name": "monkey4-patch.m4b",
-      "system": "scummvm",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "scummvm/extra/mort.dat",
-      "name": "mort.dat",
-      "system": "scummvm",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "scummvm/extra/myst3.dat",
-      "name": "myst3.dat",
-      "system": "scummvm",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "scummvm/extra/nancy.dat",
-      "name": "nancy.dat",
-      "system": "scummvm",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "scummvm/extra/neverhood.dat",
-      "name": "neverhood.dat",
-      "system": "scummvm",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "scummvm/extra/queen.tbl",
-      "name": "queen.tbl",
-      "system": "scummvm",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "scummvm/extra/sky.cpt",
-      "name": "sky.cpt",
-      "system": "scummvm",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "scummvm/extra/supernova.dat",
-      "name": "supernova.dat",
-      "system": "scummvm",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "scummvm/extra/teenagent.dat",
-      "name": "teenagent.dat",
-      "system": "scummvm",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "scummvm/extra/titanic.dat",
-      "name": "titanic.dat",
-      "system": "scummvm",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "scummvm/extra/tony.dat",
-      "name": "tony.dat",
-      "system": "scummvm",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "scummvm/extra/toon.dat",
-      "name": "toon.dat",
-      "system": "scummvm",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "scummvm/extra/ultima.dat",
-      "name": "ultima.dat",
-      "system": "scummvm",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "scummvm/extra/vkeybd_default.zip",
-      "name": "vkeybd_default.zip",
-      "system": "scummvm",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "scummvm/extra/wintermute.zip",
-      "name": "wintermute.zip",
-      "system": "scummvm",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "scummvm/theme/gui-icons.dat",
-      "name": "gui-icons.dat",
-      "system": "scummvm",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "scummvm/theme/residualvm.zip",
-      "name": "residualvm.zip",
-      "system": "scummvm",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "scummvm/theme/scummclassic.zip",
-      "name": "scummclassic.zip",
-      "system": "scummvm",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "scummvm/theme/scummmodern.zip",
-      "name": "scummmodern.zip",
-      "system": "scummvm",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "scummvm/theme/scummremastered.zip",
-      "name": "scummremastered.zip",
-      "system": "scummvm",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "scummvm/theme/shaders.dat",
-      "name": "shaders.dat",
-      "system": "scummvm",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "scummvm/theme/translations.dat",
-      "name": "translations.dat",
-      "system": "scummvm",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
     }
   ],
   "files": [
@@ -1657,6 +1313,14 @@
       "cores": null
     },
     {
+      "dest": "Databases/msxromdb.xml",
+      "sha1": "573aa830b7bef4452808b40df883469907db2fed",
+      "sha256": "e78ad4b290fa26705605dfd1d8245cc81beede9cb3e74b9cded15948fe70d5d6",
+      "size": 930986,
+      "repo_path": "bios/Other/bluemsx/msxromdb.xml",
+      "cores": null
+    },
+    {
       "dest": "Machines/Shared Roms/MSX.rom",
       "sha1": "e998f0c441f4f1800ef44e42cd1659150206cf79",
       "sha256": "1c85dac5536fa3ba6f2cb70deba02ff680b34ac6cc787d2977258bd663a99555",
@@ -2179,6 +1843,14 @@
       "cores": null
     },
     {
+      "dest": "dolphin-emu/Sys/codehandler.bin",
+      "sha1": "e6c0050b3c67ee26198488fbbe4a5d019c15b628",
+      "sha256": "2b2ff0716aeb9b806cc61181e559041312957f25f04c435bd7da80a78917b33b",
+      "size": 2880,
+      "repo_path": "bios/Other/dolphin/codehandler.bin",
+      "cores": null
+    },
+    {
       "dest": "dolphin-emu/Sys/GC/dsp_coef.bin",
       "sha1": "c116d867ba001dcd6bf6d399ff4bf38d340f556c",
       "sha256": "a1e269cfdc6b82d5a55baab5a0bbbb3b9f953ad92729e0d5ec50dbc2746a2c47",
@@ -2192,6 +1864,22 @@
       "sha256": "7f33e6600722791ccee5fd15d4330af8d8f74165f7d1ded6738684c0294aaffe",
       "size": 8192,
       "repo_path": "bios/Nintendo/GameCube/Sys/GC/dsp_rom.bin",
+      "cores": null
+    },
+    {
+      "dest": "dolphin-emu/Sys/GC/font_western.bin",
+      "sha1": "483a17ff25b68a8f18cae691da99f16beefbe370",
+      "sha256": "4ad991be2b0aa305f09b90a79fc50f57833b30b008890b5ef1336cc3d9d0bae0",
+      "size": 6478,
+      "repo_path": "bios/Other/dolphin/font_western.bin",
+      "cores": null
+    },
+    {
+      "dest": "dolphin-emu/Sys/GC/font_japanese.bin",
+      "sha1": "7fbbedcc7a1ae00414a4e9e967109cc78be1fe3b",
+      "sha256": "38f9f59d505bc4e2d86b0196706195f33ad72b7fe9d029cf263072cde19d044f",
+      "size": 259626,
+      "repo_path": "bios/Other/dolphin/font_japanese.bin",
       "cores": null
     },
     {
@@ -2587,6 +2275,318 @@
       "cores": null
     },
     {
+      "dest": "scummvm/extra/Roland_SC-55.sf2",
+      "sha1": "9dba9212f2e34446ab034595665809f09f303d63",
+      "sha256": "fca3e514b635a21789d4224e84865d2954a2a914d46b64aa8219ddb565c44869",
+      "size": 3283278,
+      "repo_path": "bios/Other/ScummVM/Roland_SC-55.sf2",
+      "cores": null
+    },
+    {
+      "dest": "scummvm/extra/access.dat",
+      "sha1": "775b12b7e787bbaaeb73aa45b1ad3bb383e041ef",
+      "sha256": "c108b691e81f8b9ac54feac3538ad7f26ab32b49777a34b47ee477aa464f0b30",
+      "size": 520352,
+      "repo_path": "bios/Other/ScummVM/access.dat",
+      "cores": null
+    },
+    {
+      "dest": "scummvm/extra/achievements.dat",
+      "sha1": "379f9def6d0de4b4bad18b0177df81783a51f17b",
+      "sha256": "6f5394edee3a2ed9165d1ac0611a5e02aabe40e7ceca9e51926d01b23f157493",
+      "size": 249239,
+      "repo_path": "bios/Other/ScummVM/achievements.dat",
+      "cores": null
+    },
+    {
+      "dest": "scummvm/extra/cryo.dat",
+      "sha1": "220c2fe52d26b8607abeb2ad4a8ea4324daea5ba",
+      "sha256": "71b5e3d68848e67ae3d17eb63ed168d2fce788d3e408b79f025107eab082aa43",
+      "size": 12499,
+      "repo_path": "bios/Other/ScummVM/cryo.dat",
+      "cores": null
+    },
+    {
+      "dest": "scummvm/extra/cryomni3d.dat",
+      "sha1": "3971847e26be0abad8196caf03e5852a81ddbdea",
+      "sha256": "d9fe2368aa9d5ecb4d3ddf1868ea71c7bfeb64f15422156051c449558ba561ae",
+      "size": 70416,
+      "repo_path": "bios/Other/ScummVM/cryomni3d.dat",
+      "cores": null
+    },
+    {
+      "dest": "scummvm/extra/drascula.dat",
+      "sha1": "05c97e92439b67aea8f6eb7fc96db023edf62124",
+      "sha256": "6da45e0e6d8eb04f5f826836f0ddf85c7e41ed32c64c587cea985974b2f76975",
+      "size": 259625,
+      "repo_path": "bios/Other/ScummVM/drascula.dat",
+      "cores": null
+    },
+    {
+      "dest": "scummvm/extra/encoding.dat",
+      "sha1": "11d3873337827195bc16c3d3175ad00f1777ed95",
+      "sha256": "175689478e2acfe66a106e2df53c5707c49271183cfc7b5e65cd05c6b65c57f8",
+      "size": 179670,
+      "repo_path": "bios/Other/ScummVM/encoding.dat",
+      "cores": null
+    },
+    {
+      "dest": "scummvm/extra/fonts.dat",
+      "sha1": "1eaef39122559500fbbc705c9425500311d23e03",
+      "sha256": "b25946aa6ff9c7bbef9d6e5a8fa7b33cf1230fbddfaa5262e19288387c493b95",
+      "size": 6449829,
+      "repo_path": "bios/Other/ScummVM/fonts.dat",
+      "cores": null
+    },
+    {
+      "dest": "scummvm/extra/freescape.dat",
+      "sha1": "c6b3d3152e4e2ff4c9bf55e103bb39ed7faca2bd",
+      "sha256": "5bd36bf848d73be0810f03adebfee105ef1c992fb8689618ef0aec882a6046f9",
+      "size": 30124,
+      "repo_path": "bios/Other/ScummVM/freescape.dat",
+      "cores": null
+    },
+    {
+      "dest": "scummvm/extra/grim-patch.lab",
+      "sha1": "3c43b7a0125f88a9f83ae4307dca57867ffd637c",
+      "sha256": "7928ca5d5bd7d27cf4a386c696d78c01fc92bed7156ac9d381a42648fdd66710",
+      "size": 9341,
+      "repo_path": "bios/Other/ScummVM/grim-patch.lab",
+      "cores": null
+    },
+    {
+      "dest": "scummvm/extra/hadesch_translations.dat",
+      "sha1": "17aae444b3010e72e092635d25d3b93c104b0ad2",
+      "sha256": "55f7bd06cbe7b6503fee3ec3243887450e804deaa9e5a026ff9821496624e630",
+      "size": 431,
+      "repo_path": "bios/Other/ScummVM/hadesch_translations.dat",
+      "cores": null
+    },
+    {
+      "dest": "scummvm/extra/hugo.dat",
+      "sha1": "74a5fa172f5327fedc145cb9eccc8fd050b9cfb9",
+      "sha256": "228dd029399ce7318a60aebed762ee628b9092ece36a824cb005a55534b9995f",
+      "size": 186866,
+      "repo_path": "bios/Other/ScummVM/hugo.dat",
+      "cores": null
+    },
+    {
+      "dest": "scummvm/extra/kyra.dat",
+      "sha1": "31b0b9418af2f9dd4e4094aada05d48eb355975b",
+      "sha256": "6b2cc168d3201305039e78bc067f3cd10c1267d3c12a8aad12ab0656920318a8",
+      "size": 2028520,
+      "repo_path": "bios/Other/ScummVM/kyra.dat",
+      "cores": null
+    },
+    {
+      "dest": "scummvm/extra/lure.dat",
+      "sha1": "516347ec0ec2a397265d1b2fb053aa3758382e09",
+      "sha256": "9c17cfb5349c4bd13e56b0652f81fd2bdec849de7bd875bfedf654a08916b568",
+      "size": 768832,
+      "repo_path": "bios/Other/ScummVM/lure.dat",
+      "cores": null
+    },
+    {
+      "dest": "scummvm/extra/macgui.dat",
+      "sha1": "1eed577281b8819367d1ee99b1a76ff3e1920735",
+      "sha256": "5e55c29903809bf5297a28fee22e203b6dc6f56240900036b9bd8036c0a67660",
+      "size": 65656,
+      "repo_path": "bios/Other/ScummVM/macgui.dat",
+      "cores": null
+    },
+    {
+      "dest": "scummvm/extra/macventure.dat",
+      "sha1": "e431e718e3c784532422ea2654d5fc6042a95c09",
+      "sha256": "21d3194c3f43061055f7ac8f5e1ffbf09ee4aaba0ab22eff1780a45b46eb794d",
+      "size": 4146,
+      "repo_path": "bios/Other/ScummVM/macventure.dat",
+      "cores": null
+    },
+    {
+      "dest": "scummvm/extra/mm.dat",
+      "sha1": "0816fe29b57911b28cbf774348f5492062326a85",
+      "sha256": "76cee02268017112ec6794c18394541ae8241ac4593abf904294daba43c3e78b",
+      "size": 280803,
+      "repo_path": "bios/Other/ScummVM/mm.dat",
+      "cores": null
+    },
+    {
+      "dest": "scummvm/extra/monkey4-patch.m4b",
+      "sha1": "49fc530e77b61f326f6e1d5a5147daa2fd67d1e2",
+      "sha256": "6d0141a132bf34eb4c81d7db958fc4bbff65ee972056e5bf01ce0105c09bdb95",
+      "size": 2990,
+      "repo_path": "bios/Other/ScummVM/monkey4-patch.m4b",
+      "cores": null
+    },
+    {
+      "dest": "scummvm/extra/mort.dat",
+      "sha1": "0b9d0fa2a18eadf61aeddc19128ef90898ab7206",
+      "sha256": "ed4f797fd4aff885000ebe589bbac9faa3dd09dd2bee1dee7b20c0d82636f4c1",
+      "size": 76302,
+      "repo_path": "bios/Other/ScummVM/mort.dat",
+      "cores": null
+    },
+    {
+      "dest": "scummvm/extra/myst3.dat",
+      "sha1": "5fbf7b1a596219f0daab60a8ceb2f1e59e042243",
+      "sha256": "a02b766efef65d403577c4aa06f2679d911e05e0da807dcfa195833b55419b1e",
+      "size": 358287,
+      "repo_path": "bios/Other/ScummVM/myst3.dat",
+      "cores": null
+    },
+    {
+      "dest": "scummvm/extra/nancy.dat",
+      "sha1": "6a49b675c8fe03c281bda22ad3070f0a78699284",
+      "sha256": "af54fdf290d7218026b2f7a82c733192e9e9df4a894c10647d5d207c4686035d",
+      "size": 254116,
+      "repo_path": "bios/Other/ScummVM/nancy.dat",
+      "cores": null
+    },
+    {
+      "dest": "scummvm/extra/neverhood.dat",
+      "sha1": "490012c996ba0c56dd8d077e1418ee53b1e96397",
+      "sha256": "b86cb788237ace2988f7a8b7b02fddd213f29e2cac4e19764e6e3b29342894c6",
+      "size": 23804,
+      "repo_path": "bios/Other/ScummVM/neverhood.dat",
+      "cores": null
+    },
+    {
+      "dest": "scummvm/extra/queen.tbl",
+      "sha1": "7bafa28dfd9b3be17430d467d8787d8204437ba0",
+      "sha256": "b104d1a01e3ea552b63d98da9365f6beaba40864baa74b5b53159f17fc8f1149",
+      "size": 1100505,
+      "repo_path": "bios/Other/ScummVM/queen.tbl",
+      "cores": null
+    },
+    {
+      "dest": "scummvm/extra/sky.cpt",
+      "sha1": "fa03ede717223eaf011491d2066e37eb112e735b",
+      "sha256": "4c457373415325ea039d7a3d4f1211f7bbedd83d5bf85b94afd14cb4bdd263d2",
+      "size": 419427,
+      "repo_path": "bios/Other/ScummVM/sky.cpt",
+      "cores": null
+    },
+    {
+      "dest": "scummvm/extra/supernova.dat",
+      "sha1": "8a571cfc431b5fe794f0262f0e55f72927ab27b4",
+      "sha256": "f778cb20eca2451220dd7dddf4b96f267e66f378f068f81d9c3f4962dbb1791f",
+      "size": 523211,
+      "repo_path": "bios/Other/ScummVM/supernova.dat",
+      "cores": null
+    },
+    {
+      "dest": "scummvm/extra/teenagent.dat",
+      "sha1": "0d488164930332bae3aa1ad38cef44abbe3d00a6",
+      "sha256": "1c60a898b61bc39b38fa4e5ec5c3d78de666c10d1af7a3ffd36e9bbc234488ab",
+      "size": 403315,
+      "repo_path": "bios/Other/ScummVM/teenagent.dat",
+      "cores": null
+    },
+    {
+      "dest": "scummvm/extra/titanic.dat",
+      "sha1": "15f51828f08fdbe01b56123e96312b5859a968c0",
+      "sha256": "463c1d1460993a1a404f6cece6f8f50706814b97f2b5ee5d2c3b32f480abacd8",
+      "size": 3197968,
+      "repo_path": "bios/Other/ScummVM/titanic.dat",
+      "cores": null
+    },
+    {
+      "dest": "scummvm/extra/tony.dat",
+      "sha1": "a5e19f364bda6a0d2330495114c9ad665bb79ad0",
+      "sha256": "5537b209e5243f0a1c5e7f1e5024585caa9a63c959339dbdb2402038bcedf58c",
+      "size": 24584,
+      "repo_path": "bios/Other/ScummVM/tony.dat",
+      "cores": null
+    },
+    {
+      "dest": "scummvm/extra/toon.dat",
+      "sha1": "85bb688125d66f2797a41f153ce1fa177027a83f",
+      "sha256": "eb7d5855ea3f69f0d1f618baf8e6c8e580c019b6f2fd2c0937dc664740baa252",
+      "size": 20996,
+      "repo_path": "bios/Other/ScummVM/toon.dat",
+      "cores": null
+    },
+    {
+      "dest": "scummvm/extra/ultima.dat",
+      "sha1": "e049932518390257f4d49b1691cad229e6060079",
+      "sha256": "e52cb8c261d747ac4203a0d929bd5cb8f44e80e61a97ee2957b2508824f01358",
+      "size": 15981464,
+      "repo_path": "bios/Other/ScummVM/ultima.dat",
+      "cores": null
+    },
+    {
+      "dest": "scummvm/extra/vkeybd_default.zip",
+      "sha1": "4d787bd5a071c729c4f374e6e7c7d7b06d7f9f63",
+      "sha256": "2704048b87cc4a0915cdbffa98cd7b4ba7a195a96a76c57d5912fbcc24cc2cd2",
+      "size": 184946,
+      "repo_path": "bios/Other/ScummVM/vkeybd_default.zip",
+      "cores": null
+    },
+    {
+      "dest": "scummvm/extra/wintermute.zip",
+      "sha1": "5302f543384b21fb55466118a6966e5ef46b85f6",
+      "sha256": "7559d45435dee4b49c339a892b73078a3123b33632567b02282847bed0e70060",
+      "size": 4520,
+      "repo_path": "bios/Other/ScummVM/wintermute.zip",
+      "cores": null
+    },
+    {
+      "dest": "scummvm/theme/gui-icons.dat",
+      "sha1": "38e74e6994924781487a0d39cc53dc4708a90c1c",
+      "sha256": "e772a8bb64ad3d7a807e859ad55c6b41269e66e32dfc78cdb4e583e183b5d828",
+      "size": 3315855,
+      "repo_path": "bios/Other/ScummVM/gui-icons.dat",
+      "cores": null
+    },
+    {
+      "dest": "scummvm/theme/residualvm.zip",
+      "sha1": "2b28052b63a2cec188412c1af5110095be6e27db",
+      "sha256": "8053b379ad41350ea18d0780ff5b44f4714d147125c31d985d90b5411ec3e5b0",
+      "size": 94540,
+      "repo_path": "bios/Other/ScummVM/residualvm.zip",
+      "cores": null
+    },
+    {
+      "dest": "scummvm/theme/scummclassic.zip",
+      "sha1": "69836fb392710f2182df07bab8960e8a2d92c1a9",
+      "sha256": "39b823b709213006b00246e2d0c5c49f5475dc2257434fb2e860b442892e2fe1",
+      "size": 16488,
+      "repo_path": "bios/Other/ScummVM/scummclassic.zip",
+      "cores": null
+    },
+    {
+      "dest": "scummvm/theme/scummmodern.zip",
+      "sha1": "979586143f0f35dddd0d0d5144e1eccf1fe0516f",
+      "sha256": "1cfc3201505b9fb19f604a161926ead074d7eb2e2f53cd74a515d2156eb33dc0",
+      "size": 68072,
+      "repo_path": "bios/Other/ScummVM/scummmodern.zip",
+      "cores": null
+    },
+    {
+      "dest": "scummvm/theme/scummremastered.zip",
+      "sha1": "a5506cf1fa968b8e4deaea0ef36014704a3d26bb",
+      "sha256": "0f57913915873209926da402138ca88f5b27b02c9527afdfb7db03bb99a1090d",
+      "size": 93886,
+      "repo_path": "bios/Other/ScummVM/scummremastered.zip",
+      "cores": null
+    },
+    {
+      "dest": "scummvm/theme/shaders.dat",
+      "sha1": "c67ec35c3f6e2ba7f09b8f61a78df7f713ff040c",
+      "sha256": "1e7839515c92b0e55198a6c96666dcd369ac3d4efab0190a265d244fda65f9e9",
+      "size": 657234,
+      "repo_path": "bios/Other/ScummVM/shaders.dat",
+      "cores": null
+    },
+    {
+      "dest": "scummvm/theme/translations.dat",
+      "sha1": "e5b6f6d6473e2d6aa0a250fd9983b573ebf6fbe4",
+      "sha256": "88e4a57aa5d58b213f6a066518eb8a1cb1046132770987cc7dd8b06ce80e0156",
+      "size": 3693914,
+      "repo_path": "bios/Other/ScummVM/translations.dat",
+      "cores": null
+    },
+    {
       "dest": "dc/dc_boot.bin",
       "sha1": "8951d1bb219ab2ff8583033d2119c899cc81f18c",
       "sha256": "88d6a666495ad14ab5988d8cb730533cfc94ec2cfd53a7eeda14642ab0d4abf9",
@@ -2687,7 +2687,7 @@
       "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
       "sha256": "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50",
       "size": 8192,
-      "repo_path": "bios/Sega/Master System/SMS_us_1.3.sms",
+      "repo_path": "bios/Other/zesarux/sms.rom",
       "cores": null
     },
     {
@@ -2695,7 +2695,7 @@
       "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
       "sha256": "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50",
       "size": 8192,
-      "repo_path": "bios/Sega/Master System/SMS_us_1.3.sms",
+      "repo_path": "bios/Other/zesarux/sms.rom",
       "cores": null
     },
     {
@@ -2711,7 +2711,7 @@
       "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
       "sha256": "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50",
       "size": 8192,
-      "repo_path": "bios/Sega/Master System/SMS_us_1.3.sms",
+      "repo_path": "bios/Other/zesarux/sms.rom",
       "cores": null
     },
     {
@@ -2943,7 +2943,7 @@
       "sha1": "239e9124568c862c31d9ec0605e32373ea74b86a",
       "sha256": "bdba942ab9c633a3172fbf1a8579849df52c0eeb0da8a3411402f4564d035a27",
       "size": 131072,
-      "repo_path": "bios/Sharp/X68000/iplrom30.dat",
+      "repo_path": "bios/Other/xm6pro68k/ROM30.DAT",
       "cores": null
     },
     {
@@ -3007,7 +3007,7 @@
       "sha1": "4ffd9ed9c00cdc6f92ce69fdd8b618ef1203f48e",
       "sha256": "6bb2eb282723e539f627a33002c2c31b633b4d3b712755f28696f0c4e49470f2",
       "size": 8192,
-      "repo_path": "bios/Sinclair/ZX Spectrum/if1-1.rom",
+      "repo_path": "bios/Other/zesarux/if1-v1.rom",
       "cores": null
     },
     {
@@ -3015,7 +3015,7 @@
       "sha1": "5cfb6bca4177c45fefd571734576b55e3a127c08",
       "sha256": "ad392df2bd366a3412f186240a40dd6fd2750c96a1779ffae77cf10aa1faf7ee",
       "size": 8192,
-      "repo_path": "bios/Sinclair/ZX Spectrum/if1-2.rom",
+      "repo_path": "bios/Other/zesarux/if1-v2.rom",
       "cores": null
     },
     {
@@ -5689,6 +5689,26 @@
       ]
     },
     {
+      "dest": "cannonball/res/tilemap.bin",
+      "sha1": "9c294250f54b4e3f60e3d13f73ee80325e683b04",
+      "sha256": "0c6a49015770266861e87f4562453deef0cb14a5cc917e1e18df6685ff584008",
+      "size": 2804,
+      "repo_path": "bios/Other/cannonball/res/tilemap.bin",
+      "cores": [
+        "cannonball"
+      ]
+    },
+    {
+      "dest": "cannonball/res/tilepatch.bin",
+      "sha1": "fa950979aaa1d4c947473f158f770f3f3c8c45da",
+      "sha256": "211c5443b21a51b7952c16097b54ff531ed923f371fcb89abf09d4fada4225a8",
+      "size": 1870,
+      "repo_path": "bios/Other/cannonball/res/tilepatch.bin",
+      "cores": [
+        "cannonball"
+      ]
+    },
+    {
       "dest": "cannonball/epr-10380.133",
       "sha1": "ac319cdafb156adcf6be29ae1b82d46d3048022e",
       "sha256": "79048290af606e3233cbfa7a5b78b2afeafb0deda38d6ae530e4f0341e4a9a33",
@@ -6972,15 +6992,13 @@
     },
     {
       "dest": "fbneo/samples/donpachi.zip",
-      "sha1": "d380fb29287eb7fc9ff901a7653ad40785f7deb1",
-      "sha256": "78a237f1e2774eb396e2f14999f1270597e0767a392729e7a4539455888b6fe0",
-      "size": 208549253,
-      "repo_path": "",
+      "sha1": "c0c0b5db93a61276a6fe6842049cb53e564b8413",
+      "sha256": "a686ebf893d511b5b7667176cd6844593e914595a8bb9ab656b2c66969013b5c",
+      "size": 5641310,
+      "repo_path": "bios/Other/fbneo/donpachi.zip",
       "cores": [
         "fbneo"
-      ],
-      "storage": "release",
-      "release_asset": "donpachi.zip"
+      ]
     },
     {
       "dest": "fbneo/samples/sfz3mix.zip",
@@ -7451,7 +7469,7 @@
       "sha1": "5cfb6bca4177c45fefd571734576b55e3a127c08",
       "sha256": "ad392df2bd366a3412f186240a40dd6fd2750c96a1779ffae77cf10aa1faf7ee",
       "size": 8192,
-      "repo_path": "bios/Sinclair/ZX Spectrum/if1-2.rom",
+      "repo_path": "bios/Other/zesarux/if1-v2.rom",
       "cores": [
         "fuse"
       ]
@@ -10079,6 +10097,16 @@
       ]
     },
     {
+      "dest": "nxengine/data/npc.tbl",
+      "sha1": "19555d2f5f72a66d6beddb4acc5ca00d634ac9c4",
+      "sha256": "75b38bb4ab57b50bfc6c3ba77fe670a2eb67301f425aefe96bb1ed87c2b9e2db",
+      "size": 8664,
+      "repo_path": "bios/Other/NXEngine/nxengine/data/npc.tbl",
+      "cores": [
+        "nxengine"
+      ]
+    },
+    {
       "dest": "nxengine/data/sprites.sif",
       "sha1": "73acccee601b56a2b7f624b0227fa7e1d662ef4b",
       "sha256": "e80d72041dc20ddffb3fa7e22e4c51acb06d95e81058d5eeb888b5bf308424ea",
@@ -10099,6 +10127,416 @@
       ]
     },
     {
+      "dest": "tyrian.shp",
+      "sha1": "9978439cd9a52fde3d65c3b223dfe96ca437fef8",
+      "sha256": "b9602b6dd42c1bf4716bdccbe5ab40495fcd064fcc55fd0f8d4436d640c4b450",
+      "size": 443871,
+      "repo_path": "bios/Other/opentyrian/tyrian.shp",
+      "cores": [
+        "opentyrian"
+      ]
+    },
+    {
+      "dest": "palette.dat",
+      "sha1": "29af4cd642e0b29dc8120b5d92f130eaf4e860c9",
+      "sha256": "6f0be74cb1b0026e46029d98d9ade41b8283bad849208543330b717fe5c365fc",
+      "size": 17664,
+      "repo_path": "bios/Other/opentyrian/palette.dat",
+      "cores": [
+        "opentyrian"
+      ]
+    },
+    {
+      "dest": "tyrian.hdt",
+      "sha1": "f935e494b090b8bd2e86be06624a84946a5a947d",
+      "sha256": "c816055863eb91d28ac10b4acc1e312f433deff553f08926e698c9a9ba68daa7",
+      "size": 153657,
+      "repo_path": "bios/Other/opentyrian/tyrian.hdt",
+      "cores": [
+        "opentyrian"
+      ]
+    },
+    {
+      "dest": "tyrian.pic",
+      "sha1": "0b216d9712f23e8faec041880b81773d93f646a2",
+      "sha256": "5bda2ba46511f835e402188f1608b4398ae36303edfaef14304ad08b55bb5684",
+      "size": 365969,
+      "repo_path": "bios/Other/opentyrian/tyrian.pic",
+      "cores": [
+        "opentyrian"
+      ]
+    },
+    {
+      "dest": "tyrian.cdt",
+      "sha1": "bd63566da5c24d1f50ffdcba99c654463f129d5c",
+      "sha256": "deb2c35297d89a1b2801ae21132d242121d9dee2a794a84b58dbd212f11f04fe",
+      "size": 1125,
+      "repo_path": "bios/Other/opentyrian/tyrian.cdt",
+      "cores": [
+        "opentyrian"
+      ]
+    },
+    {
+      "dest": "tyrian.snd",
+      "sha1": "af896c25e6efeeb6dfd4cc7345362b4b29a85324",
+      "sha256": "0f5c37f97f0992026f1736f178bccc64746bc931daf23adbdc82553c140c80b8",
+      "size": 264512,
+      "repo_path": "bios/Other/opentyrian/tyrian.snd",
+      "cores": [
+        "opentyrian"
+      ]
+    },
+    {
+      "dest": "voices.snd",
+      "sha1": "63ff6b55caeda529f69983a342618c84cba5addf",
+      "sha256": "c709ca1e74be6bd4b7917d258d81824d33c38a1a9a0287ec693b6459f58fc27a",
+      "size": 132767,
+      "repo_path": "bios/Other/opentyrian/voices.snd",
+      "cores": [
+        "opentyrian"
+      ]
+    },
+    {
+      "dest": "music.mus",
+      "sha1": "b77313a9f92bc67f5c577699dcb95ca613e6948f",
+      "sha256": "b06a509bd8576f63c61859e3a2c59482c4035d79f21725f9ec10479377044a74",
+      "size": 153482,
+      "repo_path": "bios/Other/opentyrian/music.mus",
+      "cores": [
+        "opentyrian"
+      ]
+    },
+    {
+      "dest": "tyrian1.lvl",
+      "sha1": "39825b5d69a07232d91886da68d217465a74695c",
+      "sha256": "b41e532214fa8cea36e37fed6512b357c6ac9c8c3267899ceb4a258fcb1bf0b9",
+      "size": 538262,
+      "repo_path": "bios/Other/opentyrian/tyrian1.lvl",
+      "cores": [
+        "opentyrian"
+      ]
+    },
+    {
+      "dest": "levels1.dat",
+      "sha1": "e2b158dbf0c1a547e05f6e087f0ecc573a6c4f9a",
+      "sha256": "e82164c96abb994450d416a3ab0e5fe6479fd4db831cd0f203a60dfe4aa78dcb",
+      "size": 9359,
+      "repo_path": "bios/Other/opentyrian/levels1.dat",
+      "cores": [
+        "opentyrian"
+      ]
+    },
+    {
+      "dest": "cubetxt1.dat",
+      "sha1": "58807f32c413a0c9db6deb0365f2fac9518e7c86",
+      "sha256": "2a0bc26ac4a8cdcbe7a145c9b1868a87ecb4335e9787f2f1e5713c965372df2b",
+      "size": 36169,
+      "repo_path": "bios/Other/opentyrian/cubetxt1.dat",
+      "cores": [
+        "opentyrian"
+      ]
+    },
+    {
+      "dest": "tyrian2.lvl",
+      "sha1": "54267181a913ea074e61db6d1528690c7337f793",
+      "sha256": "3e18b124cd4ff5f766e5bf2e833eb79d3118010a253a30dc4c0ae6f483ae50e9",
+      "size": 381242,
+      "repo_path": "bios/Other/opentyrian/tyrian2.lvl",
+      "cores": [
+        "opentyrian"
+      ]
+    },
+    {
+      "dest": "levels2.dat",
+      "sha1": "fb0a4427b19d669c6b3783a7589ac22bb29dd5e2",
+      "sha256": "9aa94b70aae2b24b16c295ed86e392ac16873306012bdd89e0cf995d605178ea",
+      "size": 5534,
+      "repo_path": "bios/Other/opentyrian/levels2.dat",
+      "cores": [
+        "opentyrian"
+      ]
+    },
+    {
+      "dest": "cubetxt2.dat",
+      "sha1": "ee7dc2eb87e5a75564382efcd95d13554d3835ba",
+      "sha256": "6604a1dcc264e8b8e98f036a8bc35579e9b90b92eccbc4d7c1effee9785d1580",
+      "size": 8108,
+      "repo_path": "bios/Other/opentyrian/cubetxt2.dat",
+      "cores": [
+        "opentyrian"
+      ]
+    },
+    {
+      "dest": "tyrian3.lvl",
+      "sha1": "dcde93152fc724213cd4b32da7b7dadf50da774b",
+      "sha256": "0995c7e2279995485576e02b21ac8599b4924c35af5afffdede69c01994b9937",
+      "size": 393398,
+      "repo_path": "bios/Other/opentyrian/tyrian3.lvl",
+      "cores": [
+        "opentyrian"
+      ]
+    },
+    {
+      "dest": "levels3.dat",
+      "sha1": "dd6c6c74a7e8c3aa0f3943ba77f764ccd981e3d6",
+      "sha256": "0d935cd7bb3c84451d9f57dbcd31a8d515205b18fb050070a416e9b7411dfbd3",
+      "size": 6052,
+      "repo_path": "bios/Other/opentyrian/levels3.dat",
+      "cores": [
+        "opentyrian"
+      ]
+    },
+    {
+      "dest": "cubetxt3.dat",
+      "sha1": "1ee93623406dc61b50ccb41a97bae769ea15cef2",
+      "sha256": "fcfc9762cd4cfad42feb12d975929de86851b216d4491252c701527e22b55539",
+      "size": 12294,
+      "repo_path": "bios/Other/opentyrian/cubetxt3.dat",
+      "cores": [
+        "opentyrian"
+      ]
+    },
+    {
+      "dest": "tyrian4.lvl",
+      "sha1": "d72726741665181786cbd3d9c635946905fb983d",
+      "sha256": "181fde04387ba47e6b49a7f27010ac92fe00566a5f9fef075d74e4c4b2ebef75",
+      "size": 800006,
+      "repo_path": "bios/Other/opentyrian/tyrian4.lvl",
+      "cores": [
+        "opentyrian"
+      ]
+    },
+    {
+      "dest": "levels4.dat",
+      "sha1": "5a7112e1c579bdcc935fe747e159a62a1a516943",
+      "sha256": "891b9ecbdd223df291077fd95626f37ac03b527ca6fd50f76198067a5edebdb4",
+      "size": 11103,
+      "repo_path": "bios/Other/opentyrian/levels4.dat",
+      "cores": [
+        "opentyrian"
+      ]
+    },
+    {
+      "dest": "cubetxt4.dat",
+      "sha1": "9288839cca5440d370aff5525edc37022144d8a9",
+      "sha256": "f77ac5509d7d644515bccb8e3733d5ea047e22bd03465c75526fb199e91b1b46",
+      "size": 62424,
+      "repo_path": "bios/Other/opentyrian/cubetxt4.dat",
+      "cores": [
+        "opentyrian"
+      ]
+    },
+    {
+      "dest": "tyrian5.lvl",
+      "sha1": "1a44e122bb60f6911144000e220daf25345ac6ad",
+      "sha256": "275b5aaf55caecee8dc95e26f7cf118a9ee265f095ce61945b9ece56a4523323",
+      "size": 521137,
+      "repo_path": "bios/Other/opentyrian/tyrian5.lvl",
+      "cores": [
+        "opentyrian"
+      ]
+    },
+    {
+      "dest": "levels5.dat",
+      "sha1": "050c0c5a9b1a1b1174142c9408e7c6b2eb9c1325",
+      "sha256": "788710b2321fc58b8fbe43da960be8bb8370ef5595f63c62e5ed3a17e008797f",
+      "size": 4257,
+      "repo_path": "bios/Other/opentyrian/levels5.dat",
+      "cores": [
+        "opentyrian"
+      ]
+    },
+    {
+      "dest": "cubetxt5.dat",
+      "sha1": "99a8e550c7c0e3ea8f8f0d2af1c83e18ed1d5005",
+      "sha256": "53d24e32781de67f85c9fa411dae7bdcee3a31ec8d4734ca9c8f3cdd1c52a898",
+      "size": 7024,
+      "repo_path": "bios/Other/opentyrian/cubetxt5.dat",
+      "cores": [
+        "opentyrian"
+      ]
+    },
+    {
+      "dest": "shapes).dat",
+      "sha1": "861552d4f7fcad129bc919136c413263154499aa",
+      "sha256": "36173a95248ed1f60c499122b4b17450af2bc9ddcb958215ed9c400429ae37eb",
+      "size": 118720,
+      "repo_path": "bios/Other/opentyrian/shapes).dat",
+      "cores": [
+        "opentyrian"
+      ]
+    },
+    {
+      "dest": "shapesw.dat",
+      "sha1": "2852644fac807eceddaf609ad5f5763499991feb",
+      "sha256": "d06514348982ad364c4b77c4ed4f2f3dbccd8a390e180435a82484bdca5d9c7a",
+      "size": 172480,
+      "repo_path": "bios/Other/opentyrian/shapesw.dat",
+      "cores": [
+        "opentyrian"
+      ]
+    },
+    {
+      "dest": "shapesx.dat",
+      "sha1": "4a0b3f475dcd3c2e9fc2dbb108a0b8fd763b1f95",
+      "sha256": "53530149c27573244fead5f8325f5a4c9f5108c95a666998140656436aaa8f2a",
+      "size": 217504,
+      "repo_path": "bios/Other/opentyrian/shapesx.dat",
+      "cores": [
+        "opentyrian"
+      ]
+    },
+    {
+      "dest": "shapesy.dat",
+      "sha1": "0a95f692ce57c4e338cf48016953c10bc1a2f697",
+      "sha256": "cff7f670d85ea73594092966b23b9ec697500ece148cbf65a8131e4e92412990",
+      "size": 152992,
+      "repo_path": "bios/Other/opentyrian/shapesy.dat",
+      "cores": [
+        "opentyrian"
+      ]
+    },
+    {
+      "dest": "shapesz.dat",
+      "sha1": "5d809fc471f638c697de937f84a5c216b8a79424",
+      "sha256": "26aa6ab954391714255f368368261d991025e97d852a7403289bab6ded47da4d",
+      "size": 243712,
+      "repo_path": "bios/Other/opentyrian/shapesz.dat",
+      "cores": [
+        "opentyrian"
+      ]
+    },
+    {
+      "dest": "newsh1.shp",
+      "sha1": "2c858ec1c02d65df0a00bea02474bb9ad365b202",
+      "sha256": "77827c137462ebaa53ad9c6d190224a6e0e1d00bf36cff2c7c66f82b00b7026a",
+      "size": 29941,
+      "repo_path": "bios/Other/opentyrian/newsh1.shp",
+      "cores": [
+        "opentyrian"
+      ]
+    },
+    {
+      "dest": "newsh6.shp",
+      "sha1": "be7ff3250f8712848c550b913731b60b8c945f6a",
+      "sha256": "79098b156a9a1cc1af16a3a03156d58cf45b9a830217d362c3c9935798afe62d",
+      "size": 17578,
+      "repo_path": "bios/Other/opentyrian/newsh6.shp",
+      "cores": [
+        "opentyrian"
+      ]
+    },
+    {
+      "dest": "newsh~.shp",
+      "sha1": "34557bb003bacb454d98533a1b91fb7119774e09",
+      "sha256": "17519efb2aec555a83f0c1406e7d513641440e0b1c12e0832ad4c70ee54023f0",
+      "size": 16219,
+      "repo_path": "bios/Other/opentyrian/newsh~.shp",
+      "cores": [
+        "opentyrian"
+      ]
+    },
+    {
+      "dest": "tyrianc.shp",
+      "sha1": "a5655b805e7fc13c6d1bb0a4f66f00ef93466ca9",
+      "sha256": "7c1666a748f7b8f7662eff342529c453253cce5c11cbd667de912a9f41bbc02b",
+      "size": 444862,
+      "repo_path": "bios/Other/opentyrian/tyrianc.shp",
+      "cores": [
+        "opentyrian"
+      ]
+    },
+    {
+      "dest": "voicesc.snd",
+      "sha1": "a2d5730a7ddf4da0a0b8338efd65a28fa482c731",
+      "sha256": "949d2a2131d230c345397d8f1f6953115166271aeeccb28d8c6009c81a744dbe",
+      "size": 188275,
+      "repo_path": "bios/Other/opentyrian/voicesc.snd",
+      "cores": [
+        "opentyrian"
+      ]
+    },
+    {
+      "dest": "tyrend.anm",
+      "sha1": "88bb0176e7b7125714c2bad72d18b93ca5882c1c",
+      "sha256": "0477bb711d2373c3889da0a792505fff158a0fb9817932c3fb78976424a1c752",
+      "size": 3315848,
+      "repo_path": "bios/Other/opentyrian/tyrend.anm",
+      "cores": [
+        "opentyrian"
+      ]
+    },
+    {
+      "dest": "tshp2.pcx",
+      "sha1": "04cc3cdc73ec23d092cfd7618d9ae5e34e82b791",
+      "sha256": "1a7b841ce799fac196e136c8dd90e6a0e9184bfdd05fa036cbb5e97d651e6327",
+      "size": 62168,
+      "repo_path": "bios/Other/opentyrian/tshp2.pcx",
+      "cores": [
+        "opentyrian"
+      ]
+    },
+    {
+      "dest": "estsc.shp",
+      "sha1": "ddbb3d3eef0c199093dd297fbccda8f3d856288c",
+      "sha256": "d4368490c9191442c1255b4feb447bc0265236126bed11c9442cef5338a146df",
+      "size": 115338,
+      "repo_path": "bios/Other/opentyrian/estsc.shp",
+      "cores": [
+        "opentyrian"
+      ]
+    },
+    {
+      "dest": "demo.1",
+      "sha1": "6ca76f8205c990e33339c5b5953e925c5cd18973",
+      "sha256": "9128c9276325191acd617d7ff9c520524fb55a286cb25a1c39c78bb6cadc5ecf",
+      "size": 2745,
+      "repo_path": "bios/Other/opentyrian/demo.1",
+      "cores": [
+        "opentyrian"
+      ]
+    },
+    {
+      "dest": "demo.2",
+      "sha1": "af2ac371b00529fe9b13ecd9c005649918103682",
+      "sha256": "516be02853d416e8719f7a895343c055ea079f793fcc97e4d678975dce616f7d",
+      "size": 2193,
+      "repo_path": "bios/Other/opentyrian/demo.2",
+      "cores": [
+        "opentyrian"
+      ]
+    },
+    {
+      "dest": "demo.3",
+      "sha1": "499c50accd42898ad2e5bbd8de00661f608d6499",
+      "sha256": "b742a1acf9b64d9d55ee824cf94a335d62495ee4b0a1dafbe5adcadce5c40f29",
+      "size": 1974,
+      "repo_path": "bios/Other/opentyrian/demo.3",
+      "cores": [
+        "opentyrian"
+      ]
+    },
+    {
+      "dest": "demo.4",
+      "sha1": "e37f3a32e6d6128dcc1a13d575cfb9aa8288574a",
+      "sha256": "68acfd9f1078cbc5798472ce5168b111cca1b5a8384f0386c572ca878e402aa2",
+      "size": 699,
+      "repo_path": "bios/Other/opentyrian/demo.4",
+      "cores": [
+        "opentyrian"
+      ]
+    },
+    {
+      "dest": "demo.5",
+      "sha1": "cb8c542e9d9bffc6b07dc1e48833dde33a3b91e4",
+      "sha256": "0c708cc80abdf8bd0a62bf1d41e3e96af29e79458be4426c259b84c0b6000f5d",
+      "size": 1122,
+      "repo_path": "bios/Other/opentyrian/demo.5",
+      "cores": [
+        "opentyrian"
+      ]
+    },
+    {
       "dest": "mda.rom",
       "sha1": "c2a8b10808bf51a3c123ba3eb1e9dd608231916f",
       "sha256": "37527f661580e5a09710051cec67422abfadf31c61b841537a91e7f27be19304",
@@ -10110,30 +10548,30 @@
     },
     {
       "dest": "roms/ide_xt.bin",
-      "sha1": "509504c1c54842bcd24cdd318bcf6fb0ece09c33",
-      "sha256": "34d67170e0bbe32d986589e37f37d31d33a5342a3803d6ea320773e53d00b054",
+      "sha1": "f7cc6fea4a310666d40e2098d48795208fccc269",
+      "sha256": "fd8be2d46b0d46913dd96c37d8872287cbe0a3982592161f4958bc8eb0c62922",
       "size": 8192,
-      "repo_path": "bios/PC/PCem/roms/ide_xt.bin",
+      "repo_path": "bios/Other/pcem/roms/ide_xt.bin",
       "cores": [
         "pcem"
       ]
     },
     {
       "dest": "roms/ide_at.bin",
-      "sha1": "c0053710ebac15284e740889967d73a6657734c7",
-      "sha256": "77df297e983f09ff09bfe0c74eec90affd65c04de366f5a750fb15b9d551883e",
+      "sha1": "188b30c58c879785e0737718e40af5f989604f06",
+      "sha256": "a8d2b0fd8ac2ca859f31cc4cebbb7013041d11e85b89f5539869fa1c005337ef",
       "size": 8192,
-      "repo_path": "bios/PC/PCem/roms/ide_at.bin",
+      "repo_path": "bios/Other/pcem/roms/ide_at.bin",
       "cores": [
         "pcem"
       ]
     },
     {
       "dest": "roms/ide_at_1_1_5.bin",
-      "sha1": "3fc07d174924e7c48b4758a7ba76ecd5362bd75b",
-      "sha256": "b8461919036be0fdfeafdb9e6014880f4caf5c49087c68293cc5cba521301d47",
+      "sha1": "015559814f92e0740d4d7c4f4a08f79cf5170da0",
+      "sha256": "5d576fefc7e65e1398317035674bd8ee1742ac39762b79613f23b9cc9b6b19c4",
       "size": 8192,
-      "repo_path": "bios/IBM/PC/ide_at_1_1_5.bin",
+      "repo_path": "bios/Other/pcem/roms/ide_at_1_1_5.bin",
       "cores": [
         "pcem"
       ]
@@ -10203,7 +10641,7 @@
       "sha1": "2aa781a698a21c332398d9bc8503d4f580df0a05",
       "sha256": "1904ef4c9faa845711bf7f4c6417a2391b109cd6082d91659fdfd4ba76c6e8e9",
       "size": 32768,
-      "repo_path": "bios/PC/PCem/roms/ibmxt/5000027.u19",
+      "repo_path": "bios/Other/pcem/roms/ibmxt/5000027.u19",
       "cores": [
         "pcem"
       ]
@@ -10213,7 +10651,7 @@
       "sha1": "6bac726d8d033491d52507278aa388ec04cf8b7e",
       "sha256": "545aeea288235c36be53f23422efb32e9230dadce4b19d4b21682b36c3e86fb2",
       "size": 32768,
-      "repo_path": "bios/PC/PCem/roms/ibmxt/1501512.u18",
+      "repo_path": "bios/Other/pcem/roms/ibmxt/1501512.u18",
       "cores": [
         "pcem"
       ]
@@ -10233,7 +10671,7 @@
       "sha1": "ff9373c1a1f34a32fb6acdabc189c61b01acf9aa",
       "sha256": "096ce496a06002eb68a5bc5db128a38dd7f27a4eda16ad7342c8076f1fc40683",
       "size": 32768,
-      "repo_path": "bios/PC/PCem/roms/ibmat/62x0820.u27",
+      "repo_path": "bios/Other/pcem/roms/ibmat/62x0820.u27",
       "cores": [
         "pcem"
       ]
@@ -10243,17 +10681,17 @@
       "sha1": "2a1aeb9ae3cd7e60fc4c383ca026208b82156810",
       "sha256": "4e4692031297e74053e37c8632dc73706de97d847d8f0e12995b4f009e5c71fe",
       "size": 32768,
-      "repo_path": "bios/PC/PCem/roms/ibmat/62x0821.u47",
+      "repo_path": "bios/Other/pcem/roms/ibmat/62x0821.u47",
       "cores": [
         "pcem"
       ]
     },
     {
       "dest": "roms/ibmps1es/f80000.bin",
-      "sha1": "20292744ef6477d2c44194858ac9ed9cba21dc6a",
-      "sha256": "eced24908c8a1db11e2991bd3a16f1d0465f7da4d8b635fb630827b471a949e4",
+      "sha1": "76f1cc3795d35cc59b6b813b93d5583d83b44d8a",
+      "sha256": "afdc9022cee81011f28a6a4a7ca8b3e39d45ef8bd8a5e71997bc992545fe437d",
       "size": 524288,
-      "repo_path": "bios/PC/PCem/roms/ibmps1es/f80000.bin",
+      "repo_path": "bios/Other/pcem/roms/ibmps1es/f80000.bin",
       "cores": [
         "pcem"
       ]
@@ -10263,7 +10701,7 @@
       "sha1": "2f5ac8921b7cba56b02122ef772f5f11bbf6d8a2",
       "sha256": "f68a569f71fc090cec61bc5f699d0553dca7c5d012166709e74fc6c72568fdc2",
       "size": 65536,
-      "repo_path": "bios/PC/PCem/roms/tandy/tandy1t1.020",
+      "repo_path": "bios/Other/pcem/roms/tandy/tandy1t1.020",
       "cores": [
         "pcem"
       ]
@@ -10330,20 +10768,20 @@
     },
     {
       "dest": "roms/pc1640/40044.v3",
-      "sha1": "a055ea7e933d137623c22fe24004e870653c7952",
-      "sha256": "34de53f2180c49ebe51b34325bdb8df77c22d27d873fce0e4429a7dc8796641c",
-      "size": 8192,
-      "repo_path": "bios/PC/PCem/roms/pc1640/40044.v3",
+      "sha1": "2520df5d4c3413a0e359e144e7eb43fd8343c860",
+      "sha256": "e7930e9ed11292dca3467b15b4f727d86cfc0b04e8e53f66ec52d32e3c82b023",
+      "size": 16384,
+      "repo_path": "bios/Other/pcem/roms/pc1640/40044.v3",
       "cores": [
         "pcem"
       ]
     },
     {
       "dest": "roms/pc1640/40043.v3",
-      "sha1": "447eff2057e682e51b1c7593cb6fad0e53879fa8",
-      "sha256": "2b1c7592f01c315dc30f37a0f1e1f6a33cf45f0ba27430cd9e2d94375f3e5b42",
-      "size": 8192,
-      "repo_path": "bios/PC/PCem/roms/pc1640/40043.v3",
+      "sha1": "fa3ef718d1105d8943fd073b86f13e7f37d892fa",
+      "sha256": "be5fe6f5192da4c5f542e22f8a9c7d511c2ebba6180c2180318c62afe8be0e52",
+      "size": 16384,
+      "repo_path": "bios/Other/pcem/roms/pc1640/40043.v3",
       "cores": [
         "pcem"
       ]
@@ -10493,7 +10931,7 @@
       "sha1": "a527403c92b6bf4fd876f516c18ca499cb7d4b13",
       "sha256": "e648aef04514b1619939a5ffd74276fa189e9217d140d630f55c72d4bf3f6923",
       "size": 8192,
-      "repo_path": "bios/PC/PCem/roms/pxxt/000p001.bin",
+      "repo_path": "bios/Other/pcem/roms/pxxt/000p001.bin",
       "cores": [
         "pcem"
       ]
@@ -10560,10 +10998,10 @@
     },
     {
       "dest": "roms/ami286/amic206.bin",
-      "sha1": "91e9d8cdc2f1b40a601a23ceaff2189fd1245f3b",
-      "sha256": "754df5fa521aa73bf39988e49e08b1ddeaa1ad6d23a982954aa0024dfe327013",
+      "sha1": "44db8227d35a09e39b93ed944f85dcddb0dd0d39",
+      "sha256": "fc1984f5677c7cef468548e1e16b872d48174eb4a8d9e1a04fb80567e775925f",
       "size": 65536,
-      "repo_path": "bios/PC/PCem/roms/ami286/amic206.bin",
+      "repo_path": "bios/Other/pcem/roms/ami286/amic206.bin",
       "cores": [
         "pcem"
       ]
@@ -10610,20 +11048,20 @@
     },
     {
       "dest": "roms/acer386/acer386.bin",
-      "sha1": "9be25b1af080aee863441cf0d25d0f984accb086",
-      "sha256": "7f7908df5337e6d14713d5f90980bc417a9d978192812caee635d6c7c9187c0f",
+      "sha1": "f9a83850ad01899f028dbdd69ebe73d12f214f1b",
+      "sha256": "55456d11952e0e0728e5f73a71f2f9de16b6cdeb046c81e9cbbd30dba3ab72b7",
       "size": 65536,
-      "repo_path": "bios/IBM/PC/acer386/acer386.bin",
+      "repo_path": "bios/Other/pcem/roms/acer386/acer386.bin",
       "cores": [
         "pcem"
       ]
     },
     {
       "dest": "roms/acer386/oti067.bin",
-      "sha1": "bfb5aced04516eb86087963dbab6b617380aa9c4",
-      "sha256": "e7be469a85fb68d17184d82aea668289486989aa7829f3a13351c85dfda297e9",
+      "sha1": "5411f90471637d46a13324bf0b10f32412163fa4",
+      "sha256": "56153645da6cc14869e5ae8b7a8a305b4aebc7ff03e97ae0b504ad647b3ce55a",
       "size": 32768,
-      "repo_path": "bios/PC/PCem/roms/acer386/oti067.bin",
+      "repo_path": "bios/Other/pcem/roms/acer386/oti067.bin",
       "cores": [
         "pcem"
       ]
@@ -10723,7 +11161,7 @@
       "sha1": "153b38f6815a8a3d6723eb17df7ffc37054b3194",
       "sha256": "d9c04d1f345d071bbeca922b78f90bd134299851b9f746dddcc9266d5956313d",
       "size": 65536,
-      "repo_path": "bios/PC/PCem/roms/dtk486/4siw005.bin",
+      "repo_path": "bios/Other/pcem/roms/dtk486/4siw005.bin",
       "cores": [
         "pcem"
       ]
@@ -10743,7 +11181,7 @@
       "sha1": "0572593b67aad6bb1639afba4f303f221261246f",
       "sha256": "1c85b8f1d13b37ab157b6f4b256c687c83a12c0dc5fe7f13fb562ed73c3aec45",
       "size": 131072,
-      "repo_path": "bios/PC/PCem/roms/r418/r418i.bin",
+      "repo_path": "bios/Other/pcem/roms/r418/r418i.bin",
       "cores": [
         "pcem"
       ]
@@ -10773,7 +11211,7 @@
       "sha1": "8a302f5d5d7de8e85415dcfa8409367cf9107997",
       "sha256": "e92e87a0ad95ae72c1f8a62e648adaa19196b764e0192f545f9865d2b28ea4b6",
       "size": 65664,
-      "repo_path": "bios/PC/PCem/roms/plato/1016AX1_.BIO",
+      "repo_path": "bios/Other/pcem/roms/plato/1016AX1_.BIO",
       "cores": [
         "pcem"
       ]
@@ -10783,7 +11221,7 @@
       "sha1": "d4f11aff588acd8ccd2999d818715b1fc6aab287",
       "sha256": "6b367e784f9f3243a18ba7e386a0bb505edf25ea1ad0f91e35b568b08eb0e705",
       "size": 53376,
-      "repo_path": "bios/PC/PCem/roms/plato/1016AX1_.BI1",
+      "repo_path": "bios/Other/pcem/roms/plato/1016AX1_.BI1",
       "cores": [
         "pcem"
       ]
@@ -10813,7 +11251,7 @@
       "sha1": "b9d2007499bd579a4a361dfdd926bed547e2d884",
       "sha256": "5c24379fab7223ada8e75f70f9b0c29ba207f502106cb71bac0c20fb4a244174",
       "size": 131072,
-      "repo_path": "bios/PC/PCem/roms/mb500n/031396S.BIN",
+      "repo_path": "bios/Other/pcem/roms/mb500n/031396S.BIN",
       "cores": [
         "pcem"
       ]
@@ -10823,7 +11261,7 @@
       "sha1": "2e73ac4c089e665e0d6873580c003d9e119169f6",
       "sha256": "08eeeabb6fccd1e50b2772e5de212e73512ffc58e1349b082263394601f4ce67",
       "size": 131072,
-      "repo_path": "bios/PC/PCem/roms/p54tp4xe/T15I0302.AWD",
+      "repo_path": "bios/Other/pcem/roms/p54tp4xe/T15I0302.AWD",
       "cores": [
         "pcem"
       ]
@@ -10833,7 +11271,7 @@
       "sha1": "ba7f23d52f3f219cc20612fd3dc545fd193b509c",
       "sha256": "6eec87fc2155ca24717106096cb4143967095556de80b368b9d5be7a02279466",
       "size": 131072,
-      "repo_path": "bios/PC/PCem/roms/acerm3a/r01-b3.bin",
+      "repo_path": "bios/Other/pcem/roms/acerm3a/r01-b3.bin",
       "cores": [
         "pcem"
       ]
@@ -10843,7 +11281,7 @@
       "sha1": "bf3a65ee9a4e0b2215c1b9443b07d0deb3293b81",
       "sha256": "db441053bda386cef5431f996e292465e69c8a4824830e540b08c10af5fd7806",
       "size": 131072,
-      "repo_path": "bios/PC/PCem/roms/acerv35n/V35ND1S1.BIN",
+      "repo_path": "bios/Other/pcem/roms/acerv35n/V35ND1S1.BIN",
       "cores": [
         "pcem"
       ]
@@ -10880,10 +11318,10 @@
     },
     {
       "dest": "roms/ibm_6277356_ega_card_u44_27128.bin",
-      "sha1": "dc0794499b3e499c5777b3aa39554bbf0f2cc19b",
-      "sha256": "b26fea4da9a3ba4af8eda55a32cfc5a67d62e24be5960c1bbac857e8ef0fb5b2",
+      "sha1": "3af56105530366669a8905c14439619bf6b76b25",
+      "sha256": "bf1583dd387d6e078ab3f5039bcb3f7020a66a63d5f0e57039883c5081dbbf9c",
       "size": 16384,
-      "repo_path": "bios/IBM/PC/ibm_6277356_ega_card_u44_27128.bin",
+      "repo_path": "bios/Other/pcem/roms/ibm_6277356_ega_card_u44_27128.bin",
       "cores": [
         "pcem"
       ]
@@ -10893,7 +11331,7 @@
       "sha1": "d108bb99cb1a05d808e6e25cc720da24faee9e7c",
       "sha256": "e3ce21b0b6c23e519d11568710ea59d669ab7167f75ece0dd68157e4508bb0d7",
       "size": 16384,
-      "repo_path": "bios/PC/PCem/roms/108281-001.bin",
+      "repo_path": "bios/Other/pcem/roms/108281-001.bin",
       "cores": [
         "pcem"
       ]
@@ -10903,7 +11341,7 @@
       "sha1": "d00aa2e821c5f0b1bd27c576fa822247bbfac98e",
       "sha256": "d09a57614e7fc40d12c3281089bad2fa0bea59e4058d757cbb12bf6bae360859",
       "size": 32768,
-      "repo_path": "bios/PC/PCem/roms/lega.vbi",
+      "repo_path": "bios/Other/pcem/roms/lega.vbi",
       "cores": [
         "pcem"
       ]
@@ -10963,7 +11401,7 @@
       "sha1": "5abf95fb59c6e3345d08cbb1614757d8954a77b9",
       "sha256": "4426774eaed561082ba327a39e5c56a3e3b4abd1877940d690ea9ef6ed04f9bc",
       "size": 32768,
-      "repo_path": "bios/PC/PCem/roms/TRIDENT.BIN",
+      "repo_path": "bios/Other/pcem/roms/TRIDENT.BIN",
       "cores": [
         "pcem"
       ]
@@ -10973,17 +11411,17 @@
       "sha1": "945d405b0fb4b8f26830d495881f8587d90e5ef9",
       "sha256": "d8b09dd8dbd350524cfff8baf9a950dd442924c03362d8feed5d1f18bb0be4dd",
       "size": 32768,
-      "repo_path": "bios/PC/PCem/roms/et4000.BIN",
+      "repo_path": "bios/Other/pcem/roms/et4000.BIN",
       "cores": [
         "pcem"
       ]
     },
     {
       "dest": "roms/et4000w32.bin",
-      "sha1": "2df6bf7b4529057aa171f0eb200331dec3d04b31",
-      "sha256": "3d1f4b605a0538bb523e003c9e6d42e68ff982710a215cae5539ece09ea7676a",
-      "size": 32768,
-      "repo_path": "bios/PC/PCem/roms/et4000w32.bin",
+      "sha1": "4e546b769634c5bd44bcf0aac179666016e68516",
+      "sha256": "df7b734faece3f0426e45375702b099414116649ee50eef70d9fcc3f20a1de1b",
+      "size": 65536,
+      "repo_path": "bios/Other/pcem/roms/et4000w32.bin",
       "cores": [
         "pcem"
       ]
@@ -11113,7 +11551,7 @@
       "sha1": "579d3b402f27189ccb4965082e8e5de097513a81",
       "sha256": "cac33fe9739f97e1fcb7af00494ebfb83d5bbc200cc065f32012fc16f0b5fbdc",
       "size": 32768,
-      "repo_path": "bios/PC/PCem/roms/rtl8029as.rom",
+      "repo_path": "bios/Other/pcem/roms/rtl8029as.rom",
       "cores": [
         "pcem"
       ]
@@ -11123,7 +11561,7 @@
       "sha1": "7d8dbe95a5712926615fc9614a7afefda502e863",
       "sha256": "c5ab8f6af709eaa0f550e94607c1f75477de9d61b0d58a31d2c9fb034954d120",
       "size": 64000,
-      "repo_path": "bios/PC/PCem/roms/ne2000.rom",
+      "repo_path": "bios/Other/pcem/roms/ne2000.rom",
       "cores": [
         "pcem"
       ]
@@ -11606,6 +12044,16 @@
       "repo_path": "bios/Sega/32X/32X_S_BIOS.BIN",
       "cores": [
         "picodrive"
+      ]
+    },
+    {
+      "dest": "PPSSPP/ppge_atlas.meta",
+      "sha1": "f99a13464a4dae347628f0ebb320e767e48e3a96",
+      "sha256": "e3e8ab044b973137c9864f473f345849ecb4c0a9a3234eaba399dfa16c5f06f0",
+      "size": 1119232,
+      "repo_path": "bios/Other/ppsspp/PPSSPP/ppge_atlas.meta",
+      "cores": [
+        "ppsspp"
       ]
     },
     {
@@ -12585,6 +13033,116 @@
       ]
     },
     {
+      "dest": "scummvm/extra/classicmacfonts.dat",
+      "sha1": "768b6231c6068e3d9b4f2cc6b1b1e5485578fde1",
+      "sha256": "d33aa56fbbe119a1567a843df9bb759cb6589f236926b93a78dc033b2f4221d1",
+      "size": 626103,
+      "repo_path": "bios/Other/ScummVM/classicmacfonts.dat",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/helpdialog.zip",
+      "sha1": "386d8a89e180f8abab53e5d5926b6a81ee4b31dd",
+      "sha256": "9ff3c7964a63b18ffa0e9cfcf60d4d8b4a77d7a583b2e66173716a825c777f81",
+      "size": 207764,
+      "repo_path": "bios/Other/ScummVM/helpdialog.zip",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/bagel.dat",
+      "sha1": "f83084c72b1ff8e16f9c013e5ef7cfbb5f3cc835",
+      "sha256": "cdab7aae2ef073f074bb4a1da691ad6895dd8de5c7a719a5d10d654abee8295c",
+      "size": 20584,
+      "repo_path": "bios/Other/ScummVM/bagel.dat",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/darkseed.dat",
+      "sha1": "343172f1bfff8cb8c4abefa95e211379f39583b7",
+      "sha256": "e4462b43eb16bb5c687fbe21cf8a09943b9be1ddcda508ebf3de6bfff434dd0e",
+      "size": 37183,
+      "repo_path": "bios/Other/ScummVM/darkseed.dat",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/got.aud",
+      "sha1": "209ab6d86a7c44f241689c5511b2027f7ad2c7c4",
+      "sha256": "9b253aedf06bd49159e4241b22d1047aadb1453d125dd961a8d0c458ae3c889a",
+      "size": 11313,
+      "repo_path": "bios/Other/ScummVM/got.aud",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/got.gfx",
+      "sha1": "0c9603da78b980bcf391bbf5f9103a5a642c4ee8",
+      "sha256": "83f5d7681e92daaad63370505ff24d9bea468cbd898fc9628c62b299e707e768",
+      "size": 288199,
+      "repo_path": "bios/Other/ScummVM/got.gfx",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/prince_translation.dat",
+      "sha1": "57403a286c4d251384442a507d285b2dc5ce330e",
+      "sha256": "e9e0647b4d364ed05fce3e9b7a640edc3a59fac72c2e92d9725111ab5c33a543",
+      "size": 168060,
+      "repo_path": "bios/Other/ScummVM/prince_translation.dat",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/ultima8.dat",
+      "sha1": "6319d3a245297697c1e4def78dc231a3f30708bb",
+      "sha256": "eb00526c19ff1d878754f27632c29bfecdb9c906764fc4328d76bb708146f4fc",
+      "size": 238149,
+      "repo_path": "bios/Other/ScummVM/ultima8.dat",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/fonts-cjk.dat",
+      "sha1": "b46f5a744387d1991d66a06292811f217ae063e2",
+      "sha256": "96900e574f5f7b100b63b538f74ac7c8a6ae0f56b5a2fc4131fb070a4d914a7e",
+      "size": 38277312,
+      "repo_path": "bios/Other/ScummVM/fonts-cjk.dat",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/fonts-imgui.dat",
+      "sha1": "659a025dfa39a8caada7dac6e69b4d7c88217b3f",
+      "sha256": "f38eca5a71b33c267cfd909ddda2a859e0e5d4a70976e2cbba03cf9fcb0509d2",
+      "size": 4000965,
+      "repo_path": "bios/Other/ScummVM/fonts-imgui.dat",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/pred.dic",
+      "sha1": "20f9a6a9838e3189774ea7ac6b8e62d6720dc683",
+      "sha256": "cd367e0ef51fe79dae4b90cef9c7bf1566e092419ebec6a625d7a666d7b97287",
+      "size": 126481,
+      "repo_path": "bios/Other/ScummVM/pred.dic",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
       "dest": "sdlpal/desc.dat",
       "sha1": "8c20ff26ebfefbf9b050b67af8083704003595ba",
       "sha256": "0d6487d6832488130bc94b1ec5ee71766717b929c249693327089e461460ae40",
@@ -12685,6 +13243,176 @@
       ]
     },
     {
+      "dest": "SyobonAction/res/player.PNG",
+      "sha1": "d328e672fc142649697546e2e04e6a794e514cbe",
+      "sha256": "28a048dddc99d43e802ad84e1bd0b93fa0983921e72b327f83c530afa4c6cb3e",
+      "size": 1151,
+      "repo_path": "bios/Other/syobonaction/player.PNG",
+      "cores": [
+        "syobonaction"
+      ]
+    },
+    {
+      "dest": "SyobonAction/res/brock.PNG",
+      "sha1": "a5d95e938794998948ab53a365fa8d97ff1210f8",
+      "sha256": "d3280bc914dd4f6901c1b2f62979f2f2d2d265bb29dd97eec89367dd291b6858",
+      "size": 2621,
+      "repo_path": "bios/Other/syobonaction/brock.PNG",
+      "cores": [
+        "syobonaction"
+      ]
+    },
+    {
+      "dest": "SyobonAction/res/item.PNG",
+      "sha1": "9b243982afb41b66f0c5f4561e2e8111bc156eee",
+      "sha256": "e079603f7ba0636c1d9bf0c1ba03de88a0d34719c1339c0c959e8a3e08735fd0",
+      "size": 3225,
+      "repo_path": "bios/Other/syobonaction/item.PNG",
+      "cores": [
+        "syobonaction"
+      ]
+    },
+    {
+      "dest": "SyobonAction/res/teki.PNG",
+      "sha1": "aa56e03c13ff0bd4f6404106c9f1488b33bf4cd9",
+      "sha256": "7c3a60277701decff36f4e88bc0ecc9dbe06cf8bf0c4408e56d43a1beb81bb55",
+      "size": 2516,
+      "repo_path": "bios/Other/syobonaction/teki.PNG",
+      "cores": [
+        "syobonaction"
+      ]
+    },
+    {
+      "dest": "SyobonAction/res/haikei.PNG",
+      "sha1": "88a26ae65da6ddb3aad7c50838dd5ac63ffd488b",
+      "sha256": "5810a449fddcce1bf7046ae1cdfd3e46b109b7f443d4f574509031fc86915fde",
+      "size": 4106,
+      "repo_path": "bios/Other/syobonaction/haikei.PNG",
+      "cores": [
+        "syobonaction"
+      ]
+    },
+    {
+      "dest": "SyobonAction/res/brock2.PNG",
+      "sha1": "65df5b8b96741e2341ca90482d2a8ec30357632d",
+      "sha256": "550f62723b43e070b3b67f5c39d31b8e0bb6a0db32b576ffada41bac58e60a28",
+      "size": 2419,
+      "repo_path": "bios/Other/syobonaction/brock2.PNG",
+      "cores": [
+        "syobonaction"
+      ]
+    },
+    {
+      "dest": "SyobonAction/res/omake.PNG",
+      "sha1": "cfb65aab6731bd97f926de6d06250107778deda9",
+      "sha256": "d24c7c4f0340e9475566068ad88cd4a91c91927429e97186cfe039c84eff1fa5",
+      "size": 4314,
+      "repo_path": "bios/Other/syobonaction/omake.PNG",
+      "cores": [
+        "syobonaction"
+      ]
+    },
+    {
+      "dest": "SyobonAction/res/omake2.PNG",
+      "sha1": "12353cc6843e6bb16fd94018a00b77d9ca1a3293",
+      "sha256": "3114ebdd481e53397290bab38d83c15e3301a2c1f09e18200762ec2716b28a57",
+      "size": 4012,
+      "repo_path": "bios/Other/syobonaction/omake2.PNG",
+      "cores": [
+        "syobonaction"
+      ]
+    },
+    {
+      "dest": "SyobonAction/res/syobon3.PNG",
+      "sha1": "09de0c832fdf8ad2db9a62c0c2c4bb5b2a746fda",
+      "sha256": "166c50315fce00360976be3b4963ae5db9d232ba18ab660b4fed9eca15d60bec",
+      "size": 15445,
+      "repo_path": "bios/Other/syobonaction/syobon3.PNG",
+      "cores": [
+        "syobonaction"
+      ]
+    },
+    {
+      "dest": "SyobonAction/res/sazanami-gothic.ttf",
+      "sha1": "935275fd387dd0331210e41b04009e72232141df",
+      "sha256": "b239530577251822deae173faa3eadb09716d3bd99360add116f942b55fe02f0",
+      "size": 7690324,
+      "repo_path": "bios/Other/syobonaction/sazanami-gothic.ttf",
+      "cores": [
+        "syobonaction"
+      ]
+    },
+    {
+      "dest": "SyobonAction/BGM/field.ogg",
+      "sha1": "9b684960f79df1ff29573fde36288aa21191e362",
+      "sha256": "0c0dc8ade9703bd900e1ca08648e0505925ddf8f3b9a3a0ca93aa3fc787b3654",
+      "size": 454725,
+      "repo_path": "bios/Other/syobonaction/field.ogg",
+      "cores": [
+        "syobonaction"
+      ]
+    },
+    {
+      "dest": "SyobonAction/BGM/dungeon.ogg",
+      "sha1": "ef1fa0814e80c0ab02be6c83c0470ee3cce2f6b5",
+      "sha256": "05527b0deadde3d7cebda87c909788eadd77beb1a0240d70544fcb39fc27686c",
+      "size": 522030,
+      "repo_path": "bios/Other/syobonaction/dungeon.ogg",
+      "cores": [
+        "syobonaction"
+      ]
+    },
+    {
+      "dest": "SyobonAction/BGM/star4.ogg",
+      "sha1": "d759954ee3dbb4f6c0364d1e8a6d02e60fbb476d",
+      "sha256": "8507d741cc610e509b964de543c79294e927338c28575311fb5756400de1554c",
+      "size": 17978,
+      "repo_path": "bios/Other/syobonaction/star4.ogg",
+      "cores": [
+        "syobonaction"
+      ]
+    },
+    {
+      "dest": "SyobonAction/BGM/castle.ogg",
+      "sha1": "603de859d68e2723103e8e6c4e87a7cb1846970f",
+      "sha256": "9d398451cb618112bc6915eee0474c2deb4d862209ea2d9d327bad9a0c3535e6",
+      "size": 264273,
+      "repo_path": "bios/Other/syobonaction/castle.ogg",
+      "cores": [
+        "syobonaction"
+      ]
+    },
+    {
+      "dest": "SyobonAction/BGM/puyo.ogg",
+      "sha1": "509af7af30beba1894b69c9c299e005a88ceadb0",
+      "sha256": "ec5d09d79b52f66dc9c1db6038dba5544ed4968188c47b04a280b077f374e80e",
+      "size": 212844,
+      "repo_path": "bios/Other/syobonaction/puyo.ogg",
+      "cores": [
+        "syobonaction"
+      ]
+    },
+    {
+      "dest": "SyobonAction/SE/jump.ogg",
+      "sha1": "3986b8440e065eee3a18d45251e0ed25d6324c83",
+      "sha256": "da4289605953eadb4fc04e5314029fe572c7039ebc590318e1e8e0a75753fb6f",
+      "size": 6317,
+      "repo_path": "bios/Other/syobonaction/jump.ogg",
+      "cores": [
+        "syobonaction"
+      ]
+    },
+    {
+      "dest": "SyobonAction/SE/brockbreak.ogg",
+      "sha1": "5d8b977726fbc8fbdceaacf3ed9939cfd0e9d2a0",
+      "sha256": "509c346387b73fb15f8b5ba5b69a26d11dd635e6122e75174b12a0cd73ce0c61",
+      "size": 6800,
+      "repo_path": "bios/Other/syobonaction/brockbreak.ogg",
+      "cores": [
+        "syobonaction"
+      ]
+    },
+    {
       "dest": "SyobonAction/SE/coin.ogg",
       "sha1": "72d99e65ce76663966eb11b894afb2ea71a3d013",
       "sha256": "49483f85aa69ea7fcec0d87b5042a205b89de6605cd80ba1599d74bed1def095",
@@ -12695,11 +13423,141 @@
       ]
     },
     {
+      "dest": "SyobonAction/SE/humi.ogg",
+      "sha1": "ea8ae7029efc2c5ccc1b015808a95b10ff13cee3",
+      "sha256": "0990280827680ade0d66cbba77b62bc24cc3add53758247d6316942def213101",
+      "size": 5238,
+      "repo_path": "bios/Other/syobonaction/humi.ogg",
+      "cores": [
+        "syobonaction"
+      ]
+    },
+    {
+      "dest": "SyobonAction/SE/koura.ogg",
+      "sha1": "360aab3b3a621bc0dd49d744a58347aa25944d98",
+      "sha256": "b5af651a53bdb938b479fd70c94c4132167c87ca8123bc73290f0901bcc39dfb",
+      "size": 5100,
+      "repo_path": "bios/Other/syobonaction/koura.ogg",
+      "cores": [
+        "syobonaction"
+      ]
+    },
+    {
+      "dest": "SyobonAction/SE/dokan.ogg",
+      "sha1": "25a9937e6a1a5e5693aa45d254da0fb35f8e5c1a",
+      "sha256": "a883115b6e577a66b91ebc0e58e9863247aac0e3585294a31988bea7b394cca5",
+      "size": 7594,
+      "repo_path": "bios/Other/syobonaction/dokan.ogg",
+      "cores": [
+        "syobonaction"
+      ]
+    },
+    {
+      "dest": "SyobonAction/SE/brockkinoko.ogg",
+      "sha1": "305e41e752b5585c4cd2db85daa19b8a3fa15768",
+      "sha256": "498b65aad4ac7953e2c1d93b65f010ffbecb5202f2927f0fd46bf70e207ad635",
+      "size": 7188,
+      "repo_path": "bios/Other/syobonaction/brockkinoko.ogg",
+      "cores": [
+        "syobonaction"
+      ]
+    },
+    {
       "dest": "SyobonAction/SE/powerup.ogg",
       "sha1": "65f2a6e1ec0445623c6fac7221a0342a5672aabc",
       "sha256": "b5ba18c5629f86bbe5f27c461edeba5c34ffdc6e1608925b65851dc94e7206c2",
       "size": 16384,
       "repo_path": "bios/RPG Maker/mkxp-z/RTP/RPGVXAce/Audio/SE/Powerup.ogg",
+      "cores": [
+        "syobonaction"
+      ]
+    },
+    {
+      "dest": "SyobonAction/SE/kirra.ogg",
+      "sha1": "8a2f47063b0f140a720cbd7adb43b0a16d278f6a",
+      "sha256": "488d5376ed22628a72498a0cbf4b1b450081814dfda35848e3ba3e65fadb1cfb",
+      "size": 6022,
+      "repo_path": "bios/Other/syobonaction/kirra.ogg",
+      "cores": [
+        "syobonaction"
+      ]
+    },
+    {
+      "dest": "SyobonAction/SE/goal.ogg",
+      "sha1": "12a389105be68eeabaaf8e0537ea5391223aab2b",
+      "sha256": "d8f6a60368f523292f3f7c6e94a815e82826ff5fdc51d6aef8d07074f0d56c98",
+      "size": 29348,
+      "repo_path": "bios/Other/syobonaction/goal.ogg",
+      "cores": [
+        "syobonaction"
+      ]
+    },
+    {
+      "dest": "SyobonAction/SE/death.ogg",
+      "sha1": "425a63ab6dfe47f1dabc7f36710f2fdc266759c9",
+      "sha256": "cffba0cb761970128e621e3361758f5a2b437bf273c43dbe08e2b0bdc32db4a4",
+      "size": 20380,
+      "repo_path": "bios/Other/syobonaction/death.ogg",
+      "cores": [
+        "syobonaction"
+      ]
+    },
+    {
+      "dest": "SyobonAction/SE/Pswitch.ogg",
+      "sha1": "df6c0e2d1c8116c924fc266211f6ab4c840cb245",
+      "sha256": "f9bc12d2f50e8ed898524078df4e69be9cace639f62d218f06987ca0696cb83d",
+      "size": 6487,
+      "repo_path": "bios/Other/syobonaction/Pswitch.ogg",
+      "cores": [
+        "syobonaction"
+      ]
+    },
+    {
+      "dest": "SyobonAction/SE/jumpBlock.ogg",
+      "sha1": "d6091b629e4f7dbfc11f34f397e2508f03bac1c6",
+      "sha256": "b5168d8524c7c663089c6dffebd0fe91742654456c455faed3236b982625936f",
+      "size": 4743,
+      "repo_path": "bios/Other/syobonaction/jumpBlock.ogg",
+      "cores": [
+        "syobonaction"
+      ]
+    },
+    {
+      "dest": "SyobonAction/SE/hintBlock.ogg",
+      "sha1": "4f06bc560a3b67305efb7bbc9090db50bd1f6c48",
+      "sha256": "0cccc013b0681a6d348c8dbae80c70efd86cb43e195ce40e8b6d7aae357f3248",
+      "size": 8364,
+      "repo_path": "bios/Other/syobonaction/hintBlock.ogg",
+      "cores": [
+        "syobonaction"
+      ]
+    },
+    {
+      "dest": "SyobonAction/SE/4-clear.ogg",
+      "sha1": "5109af30336443dd3107190b08dfbe8de623445b",
+      "sha256": "3aa539a472b4a7ffbf4329356d0e3c0b17893cedc6044408ca22988d7930ecc4",
+      "size": 28604,
+      "repo_path": "bios/Other/syobonaction/4-clear.ogg",
+      "cores": [
+        "syobonaction"
+      ]
+    },
+    {
+      "dest": "SyobonAction/SE/allclear.ogg",
+      "sha1": "a96f0daf7da14225eb615f4561bc1d6d4a168601",
+      "sha256": "93f02ae92ff2d0e6773f12d3cc4f2ec74f230c69aeedc660b3e821a008187ba9",
+      "size": 29295,
+      "repo_path": "bios/Other/syobonaction/allclear.ogg",
+      "cores": [
+        "syobonaction"
+      ]
+    },
+    {
+      "dest": "SyobonAction/SE/tekifire.ogg",
+      "sha1": "b623379d6059cd877c6734fb289f59493b99fbea",
+      "sha256": "ce50cb5d5624244d1c4c3e2b8c696bc42dd21772979f7d284608a308f1e2b8a4",
+      "size": 8508,
+      "repo_path": "bios/Other/syobonaction/tekifire.ogg",
       "cores": [
         "syobonaction"
       ]
@@ -14645,6 +15503,26 @@
       ]
     },
     {
+      "dest": "GC/font_western.bin",
+      "sha1": "483a17ff25b68a8f18cae691da99f16beefbe370",
+      "sha256": "4ad991be2b0aa305f09b90a79fc50f57833b30b008890b5ef1336cc3d9d0bae0",
+      "size": 6478,
+      "repo_path": "bios/Other/dolphin/font_western.bin",
+      "cores": [
+        "dolphin"
+      ]
+    },
+    {
+      "dest": "GC/font_japanese.bin",
+      "sha1": "7fbbedcc7a1ae00414a4e9e967109cc78be1fe3b",
+      "sha256": "38f9f59d505bc4e2d86b0196706195f33ad72b7fe9d029cf263072cde19d044f",
+      "size": 259626,
+      "repo_path": "bios/Other/dolphin/font_japanese.bin",
+      "cores": [
+        "dolphin"
+      ]
+    },
+    {
       "dest": "GBA/gba_bios.bin",
       "sha1": "300c20df6731a33952ded8c436f7f186d25d3492",
       "sha256": "fd2547724b505f487e6dcb29ec2ecff3af35a841a77ab2e85fd87350abd36570",
@@ -16390,6 +17268,496 @@
       "sha256": "c4527ec1c2a3aafc6a6b31d3c455d352f28a21ea905ba7df7d7247c9cb4b9e9b",
       "size": 1024,
       "repo_path": "bios/Sony/PlayStation 2/scph39001.nvm",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "AppBanner.svg",
+      "sha1": "cf42e9d792747ccb06ff243672ed37b30db23def",
+      "sha256": "4bb22e528622898ca5afdb01e2d9190449f1ed0c7b82d56c6e5074553ed4fa27",
+      "size": 2649,
+      "repo_path": "bios/Other/armsx2/AppBanner.svg",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "AppIconLarge.ico",
+      "sha1": "0f37f2795ca071eb712d5243247675f140897c50",
+      "sha256": "dedbaf271c3257db2a02493a53616d1da78302c678575c9b0f4d254cdb1e4293",
+      "size": 372526,
+      "repo_path": "bios/Other/armsx2/AppIconLarge.ico",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "AppIconLarge.png",
+      "sha1": "bd9262879f8a72ec610a9554b503d747194a0f49",
+      "sha256": "c217cc125856b0ee9776208b8e0bf5f1a4f04561ff2fa644f690518f87f55942",
+      "size": 211499,
+      "repo_path": "bios/Other/armsx2/AppIconLarge.png",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "NotoColorEmoji-Regular.ttf",
+      "sha1": "343f90558952049a0232faf6cf136fc2b8d4be84",
+      "sha256": "1ca0775b9dc92d8d959cd06dd773e2d4dacc97301ad81e6b5aa02cd5e7233a27",
+      "size": 24274080,
+      "repo_path": "bios/Other/armsx2/NotoColorEmoji-Regular.ttf",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "RedumpDatabase.yaml",
+      "sha1": "dceb4536fba7fb89452864fc512a4d071a19eae0",
+      "sha256": "755962450efd5effd2f3fe2f9a60c73d6cb3f9b4acea964abf5bb25a86ee25bc",
+      "size": 1906463,
+      "repo_path": "bios/Other/armsx2/RedumpDatabase.yaml",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "Roboto-Regular.ttf",
+      "sha1": "00d62fbdc8d5dec4c659005e116d0ba2ee63b547",
+      "sha256": "797e35f7f5d6020a5c6ea13b42ecd668bcfb3bbc4baa0e74773527e5b6cb3174",
+      "size": 305608,
+      "repo_path": "bios/Other/armsx2/Roboto-Regular.ttf",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "RobotoMono-Medium.ttf",
+      "sha1": "9056e59b69c6f1160fdfb92a0773f17f6307f3ad",
+      "sha256": "4d901b560f20f455b3c82c6616b17b72360956747cb35c3808aa370052fe8e32",
+      "size": 86820,
+      "repo_path": "bios/Other/armsx2/RobotoMono-Medium.ttf",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "Twemoji.Mozilla.ttf",
+      "sha1": "660c7fe74de23ee604bea47673f84710bd34f075",
+      "sha256": "c4541eefde3f31e4216559ada91f52d1b7ec95b849f7e9afc7a05613a56c8bf2",
+      "size": 1574620,
+      "repo_path": "bios/Other/armsx2/Twemoji.Mozilla.ttf",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "applications-system.svg",
+      "sha1": "280834f689b9ab157d29026caed47fcc5da9fe40",
+      "sha256": "3456c17385c637e5359b815f497c1341d95a7d2b072e5628aab03dba2527fec1",
+      "size": 3797,
+      "repo_path": "bios/Other/armsx2/applications-system.svg",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "armsx2_overrides.yaml",
+      "sha1": "38508688fa25cdfe878c617078318f8d91c87f4f",
+      "sha256": "a2178512d238da25ba16a7fc592ec096a5eb08dab82cb698c5e406452477cc6f",
+      "size": 40953,
+      "repo_path": "bios/Other/armsx2/armsx2_overrides.yaml",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "back-icon.svg",
+      "sha1": "9b754fe9c868225a922dd3e6fc2f9d447ff5442c",
+      "sha256": "2930e4849159a1bbeee650c469989b8ab8fb6d14d2c19b36d3f5c28a519dda62",
+      "size": 1364,
+      "repo_path": "bios/Other/armsx2/back-icon.svg",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "cas.hlsl",
+      "sha1": "a15cc4dce1edcd3db4c4e022d2a3b78e11c18a8c",
+      "sha256": "74cfcdc60c5f7d5fdeccbd4650911a377b5532ac60633aa265969dbf961c2a63",
+      "size": 2597,
+      "repo_path": "bios/Other/armsx2/cas.hlsl",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "convert.fx",
+      "sha1": "773e6b9177ac20ec4f80181c2ebdcaa33d71c91a",
+      "sha256": "dce5359c78027b87a7de800ea619d734eac613bd31486de412d336c988eb652f",
+      "size": 15850,
+      "repo_path": "bios/Other/armsx2/convert.fx",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "cover-placeholder.png",
+      "sha1": "620b40ff921876175550bb976f0428274853fe27",
+      "sha256": "1f00d0eba7f55dfa696950eda6ed635b433f28913b37545b61c4674d6454fa03",
+      "size": 56075,
+      "repo_path": "bios/Other/armsx2/cover-placeholder.png",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "desktop-mode.svg",
+      "sha1": "513d784434cd934048e16b2a333b4d65da099e8b",
+      "sha256": "0cd9e13beb9965bdb6ba355a6bdb89a4c94a6fb799a3707c75b3ba0371bd0a85",
+      "size": 1269,
+      "repo_path": "bios/Other/armsx2/desktop-mode.svg",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "drive-cdrom.svg",
+      "sha1": "6ff7f132ca2483d7e24a52eead4d3b807eb9addf",
+      "sha256": "2e6210f4d43dcadb9ba97984c7991fd83e76ee85b3192365f26e87d8adcc9dbb",
+      "size": 1037,
+      "repo_path": "bios/Other/armsx2/drive-cdrom.svg",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "exit.svg",
+      "sha1": "8452aac0ea8adf96f52c6fc87b7bc9c038249c97",
+      "sha256": "9dacf195fc9c6f183093fdcd045a44bafb28efe19dc672f1d2c4efa1d4ad4355",
+      "size": 4042,
+      "repo_path": "bios/Other/armsx2/exit.svg",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "fa-solid-900.ttf",
+      "sha1": "7f0f721265c228f2484e4924bace5a80b7826fbe",
+      "sha256": "8a2db53f7927abee48e52262090d99ced56a22d46752fba13c8f8782ce632d73",
+      "size": 414664,
+      "repo_path": "bios/Other/armsx2/fa-solid-900.ttf",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "ffx_a.h",
+      "sha1": "726370c10154ad092c15c251b98c79185e980c7c",
+      "sha256": "a77e8b8cb03eefc7259cce808fb0c7ed37a97c9d2424a7e6c263bae96871ea68",
+      "size": 161481,
+      "repo_path": "bios/Other/armsx2/ffx_a.h",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "ffx_cas.h",
+      "sha1": "a1d1a687577f7a607fda35bc88950f57c2129ca5",
+      "sha256": "58e3eec49d30207287c9a6d692111bf5395f11a181bb40da5a81514f8c4c5a84",
+      "size": 63512,
+      "repo_path": "bios/Other/armsx2/ffx_cas.h",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "fxaa.fx",
+      "sha1": "9d7012f8bb7bb4599ed2518f12ed540655cdd8d8",
+      "sha256": "c769d784c3cd47760ed7bf85b867cda545237d4d52feac7290a059d3ff5848fb",
+      "size": 17432,
+      "repo_path": "bios/Other/armsx2/fxaa.fx",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "game_controller_db.txt",
+      "sha1": "042ce2001fb438a0a34e0c5d0001a9d95d5516df",
+      "sha256": "9e7fb1335e56027f150b7ff9b7b6cddd9c0844af19be6dbc17347e1882022038",
+      "size": 163503,
+      "repo_path": "bios/Other/aethersx2/game_controller_db.txt",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "imgui.fx",
+      "sha1": "47491eaf3ba082383305b3d958794409cb0f5476",
+      "sha256": "549ec23dea1cc5e036013ced7099c038c880fcdc2aac8e36c53a9a61fe7d58c6",
+      "size": 736,
+      "repo_path": "bios/Other/armsx2/imgui.fx",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "interlace.fx",
+      "sha1": "f3d1e30101e58143282085bc6330db33a0f77a85",
+      "sha256": "36eee253a1428098ca12f0ac5f90aa257a763eda2747c80df8c95c83645b2ada",
+      "size": 7205,
+      "repo_path": "bios/Other/armsx2/interlace.fx",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "lbsubmit.wav",
+      "sha1": "5ad1e110dcf0ffd26405981398892a82e4f3bad1",
+      "sha256": "08ca1285218bf04048d2064a20f79e6bf72267fc98d555430502c245d75b42ab",
+      "size": 82096,
+      "repo_path": "bios/Other/armsx2/lbsubmit.wav",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "media-cdrom.svg",
+      "sha1": "36cc8f46014a321b7602e52c062ab23d7c256ccc",
+      "sha256": "022c8b05d8f3e7e6046077a2d6ad2d3da1e7fa0e69c8321f3c556b9963be2477",
+      "size": 3318,
+      "repo_path": "bios/Other/armsx2/media-cdrom.svg",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "merge.fx",
+      "sha1": "8dba66121f3bbc4b2bdf67722ef4c2b6b6b23ee6",
+      "sha256": "c749cd9513bd345b9f12ff46eac0ffbf4e54c0b0884921df97ca8297396e3fea",
+      "size": 538,
+      "repo_path": "bios/Other/armsx2/merge.fx",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "message.wav",
+      "sha1": "c54f04b63ac6f04e0a0944ef260b5497e4494dbd",
+      "sha256": "dfd8035387a463722ad07af3c91934e0a685f2afa57e31d305f0602656d1edb1",
+      "size": 15696,
+      "repo_path": "bios/Other/armsx2/message.wav",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "no-save.png",
+      "sha1": "7b0bb79d38c573648de218645c6fb16449e156e0",
+      "sha256": "ab829598e15b771112130cbafbd982736400690c11e3d7c81e3fc8c582c24f47",
+      "size": 9655,
+      "repo_path": "bios/Other/armsx2/no-save.png",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "cas.glsl",
+      "sha1": "b478ce9d1343b8dd201c045f010bd1b64ba158ae",
+      "sha256": "3d5b9cef750ea8bedceef43c4c52215e8280abb81b5b8fa002007bb3f97f0506",
+      "size": 2413,
+      "repo_path": "bios/Other/armsx2/pcsx2/resources/shaders/opengl/cas.glsl",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "convert.glsl",
+      "sha1": "32777e258030ad9559864d9f4273d515d65f728f",
+      "sha256": "4ac385f0e38ee2c3a3f7014db86bd59927a5d4e4f76f24df9b8f8b3d97142390",
+      "size": 15093,
+      "repo_path": "bios/Other/armsx2/pcsx2/resources/shaders/opengl/convert.glsl",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "imgui.glsl",
+      "sha1": "04bfcabf518320593dcda8198475c7f39295ef1f",
+      "sha256": "25978439553bbd959fe4eb5d03b739a3d697348458a7bac3df48556148f48027",
+      "size": 637,
+      "repo_path": "bios/Other/armsx2/pcsx2/resources/shaders/opengl/imgui.glsl",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "interlace.glsl",
+      "sha1": "d6209a8b3c4681823b1f0b7d0648c819ec72e2ad",
+      "sha256": "ff7e27fa41f33ec5d4a86b2a48a622dbcd8dd0ae37f8afe306fdd182a7aa8ec1",
+      "size": 6946,
+      "repo_path": "bios/Other/armsx2/pcsx2/resources/shaders/opengl/interlace.glsl",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "merge.glsl",
+      "sha1": "7f476bffdc19d7ba2806eef40c2e8e40bdf0896c",
+      "sha256": "6cd2bc21890426b5430d44b28a89289bcc6fc9ecd632bb3a8eafb6c8b818499c",
+      "size": 579,
+      "repo_path": "bios/Other/armsx2/pcsx2/resources/shaders/opengl/merge.glsl",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "present.glsl",
+      "sha1": "ca7a974714111895bbf03360078ea1008694c52e",
+      "sha256": "27ffa5fdf1634f7be2734d2eff2d9dce0cca71c2832685e0a682388731dc5c60",
+      "size": 11730,
+      "repo_path": "bios/Other/armsx2/pcsx2/resources/shaders/opengl/present.glsl",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "shadeboost.glsl",
+      "sha1": "511dc6bb2f81d0ad61fe46c6e91dce8b344fd934",
+      "sha256": "e7297a2e333bb1882bcf82d2a109a2ab033715cce1bba4934f42ec68370f0077",
+      "size": 1623,
+      "repo_path": "bios/Other/armsx2/pcsx2/resources/shaders/opengl/shadeboost.glsl",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "placeholder.png",
+      "sha1": "25e41433147face77af96fecac4519ed11ae8072",
+      "sha256": "0a42ffa04c5895647026f4cbbd30cae3e1455bd6e36d069ae83142e0c229c74b",
+      "size": 2668,
+      "repo_path": "bios/Other/armsx2/placeholder.png",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "present.fx",
+      "sha1": "84b000485929698392676e8e7915bfcce15291ee",
+      "sha256": "e740b08eb0f7bd074a0a7e6033f5ab9292fb601157e64aacbd9fec6174020d42",
+      "size": 10945,
+      "repo_path": "bios/Other/armsx2/present.fx",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "promptfont.otf",
+      "sha1": "374ee91aeabee48013d2f090571752ec5081356f",
+      "sha256": "92848f15d5eeea9fdfe87e272e4c9ea32f876b3665f5b27ef059711b7c757502",
+      "size": 263548,
+      "repo_path": "bios/Other/armsx2/promptfont.otf",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "ra-icon.svg",
+      "sha1": "7d21ec2d411d63137e5352544aa74e0b8bb04199",
+      "sha256": "0d30848f6a4eb24e64cc430c2d84c1509bfcfcd0923b90a84fb8fe14e2a93700",
+      "size": 2092,
+      "repo_path": "bios/Other/armsx2/ra-icon.svg",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "shadeboost.fx",
+      "sha1": "568f01644e02944fe3d48cfb751e71ebe504c0be",
+      "sha256": "432c5a34e7b14e294211bf209d0cf242f4f13f51876b84a8b0a3a80b98d05fd6",
+      "size": 1311,
+      "repo_path": "bios/Other/armsx2/shadeboost.fx",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "start-bios.svg",
+      "sha1": "061f35078713d8bb386d595964da7366781f98ef",
+      "sha256": "c0a9204f361b449bd75465c22aaf3257fcf9a6554c3c34fbd164bd3654f3fea6",
+      "size": 1295,
+      "repo_path": "bios/Other/armsx2/start-bios.svg",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "start-file.svg",
+      "sha1": "47bd0895af12344dd80d7dc1133c26d2b5081110",
+      "sha256": "c0ca66cdb8081b7d9caa450d8e606f9fd3f9046180bef441e28013e65e11340e",
+      "size": 1120,
+      "repo_path": "bios/Other/armsx2/start-file.svg",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "start-game.svg",
+      "sha1": "dd8e7a8bebe509a38b803105abaf37b275f4cbb3",
+      "sha256": "51e2ce4df2f9a756e74d9a4a0811fac1e8767492bbbb7f7d3feff8a73938c749",
+      "size": 2839,
+      "repo_path": "bios/Other/armsx2/start-game.svg",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "tfx.fx",
+      "sha1": "d061eb8ad3d56a5dc6ab653236b2a0c9324fb595",
+      "sha256": "84e3cc198ad5958218633ae1c8351c8b2d43788fd05e146859d1e65f134828fd",
+      "size": 52018,
+      "repo_path": "bios/Other/armsx2/tfx.fx",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "tfx.glsl",
+      "sha1": "229d91d96b6dc338421e696fe8cdcfcaa093f40d",
+      "sha256": "88ac3fa98f1d87e9813d4042aeab5f4e95aeb5d7ad5277551940c0200c415f0a",
+      "size": 53738,
+      "repo_path": "bios/Other/armsx2/tfx.glsl",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "tfx_fs.glsl",
+      "sha1": "d67bfc4ab5c7e550ea41a0491f45b95f395bacac",
+      "sha256": "2eccacf959f0800afd4f55cc78442e8bf745e07ff712e82a8e197158d9c98bf9",
+      "size": 39547,
+      "repo_path": "bios/Other/armsx2/tfx_fs.glsl",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "tfx_vgs.glsl",
+      "sha1": "f8200a0f4bd284670f0f0191fa9340684e94f66d",
+      "sha256": "e4cbe52fae4f8bd59c0b616907fcf06cd10c8ce8f681cac8664af6f323795679",
+      "size": 14892,
+      "repo_path": "bios/Other/armsx2/tfx_vgs.glsl",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "unlock.wav",
+      "sha1": "da328a0a3074ec86fee2d6741bfc2e5a1f68d063",
+      "sha256": "d9b8d3b5e4ae0a6ed336e769301546735ff34f29c14be6e1232da6b7096c0988",
+      "size": 202702,
+      "repo_path": "bios/Other/armsx2/unlock.wav",
       "cores": [
         "armsx2"
       ]

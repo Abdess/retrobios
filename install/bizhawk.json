@@ -5,7 +5,7 @@
   "platform": "bizhawk",
   "display_name": "BizHawk",
   "version": "1.0",
-  "generated": "2026-08-11T03:21:35Z",
+  "generated": "2026-08-11T08:43:51Z",
   "base_destination": "Firmware",
   "detect": [
     {
@@ -20,8 +20,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 539,
-  "total_size": 2550269152,
+  "total_files": 540,
+  "total_size": 2348480441,
   "total_omitted": 0,
   "omitted_files": [],
   "files": [
@@ -842,7 +842,7 @@
       "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
       "sha256": "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50",
       "size": 8192,
-      "repo_path": "bios/Sega/Master System/SMS_us_1.3.sms",
+      "repo_path": "bios/Other/zesarux/sms.rom",
       "cores": null
     },
     {
@@ -954,7 +954,7 @@
       "sha1": "a584272f21dc82c14b7d4f1ed440e23a976e71f0",
       "sha256": "7b88abff5964f0cf38481ac51bf035be2c01b8827569876b3d15eb3ac340fef3",
       "size": 32768,
-      "repo_path": "bios/Sinclair/ZX Spectrum/ZX_pentagon.rom",
+      "repo_path": "bios/Other/zesarux/pentagon.rom",
       "cores": null
     },
     {
@@ -1463,15 +1463,13 @@
     },
     {
       "dest": "fbneo/samples/donpachi.zip",
-      "sha1": "d380fb29287eb7fc9ff901a7653ad40785f7deb1",
-      "sha256": "78a237f1e2774eb396e2f14999f1270597e0767a392729e7a4539455888b6fe0",
-      "size": 208549253,
-      "repo_path": "",
+      "sha1": "c0c0b5db93a61276a6fe6842049cb53e564b8413",
+      "sha256": "a686ebf893d511b5b7667176cd6844593e914595a8bb9ab656b2c66969013b5c",
+      "size": 5641310,
+      "repo_path": "bios/Other/fbneo/donpachi.zip",
       "cores": [
         "fbneo"
-      ],
-      "storage": "release",
-      "release_asset": "donpachi.zip"
+      ]
     },
     {
       "dest": "fbneo/samples/sfz3mix.zip",
@@ -3653,6 +3651,16 @@
       "sha256": "3ab7fcf6956d0281ada94d501fc6d1cfa8fc034f139e25fed6c829f723d92a95",
       "size": 666530,
       "repo_path": "bios/Sony/PlayStation Portable/ppge_atlas.zim",
+      "cores": [
+        "ppsspp"
+      ]
+    },
+    {
+      "dest": "PPSSPP/ppge_atlas.meta",
+      "sha1": "f99a13464a4dae347628f0ebb320e767e48e3a96",
+      "sha256": "e3e8ab044b973137c9864f473f345849ecb4c0a9a3234eaba399dfa16c5f06f0",
+      "size": 1119232,
+      "repo_path": "bios/Other/ppsspp/PPSSPP/ppge_atlas.meta",
       "cores": [
         "ppsspp"
       ]

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-11T08:43:51Z",
-  "total_files": 8370,
-  "total_size": 10494831731,
+  "generated_at": "2026-08-11T12:10:33Z",
+  "total_files": 8372,
+  "total_size": 10496151265,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -49757,6 +49757,26 @@
       "crc32": "1294ff68",
       "adler32": "27661d30"
     },
+    "a71637b53251d4a14f80b53f4af4966114cde6e7": {
+      "path": "bios/Other/fpse-ng/vrback.raw",
+      "name": "vrback.raw",
+      "size": 655364,
+      "sha1": "a71637b53251d4a14f80b53f4af4966114cde6e7",
+      "md5": "8f7c31b1e7bf7500f5a90da1dcc72967",
+      "sha256": "93cd6f10749171deab6b1f4170743a759d646e7ecf449dcd2ce100fa292d5cc7",
+      "crc32": "d9c5a979",
+      "adler32": "cc76d7bb"
+    },
+    "d87747718c1aa06a9ddd8504b2581eb0034b754a": {
+      "path": "bios/Other/gba-emu/Motocross Challenge.7z",
+      "name": "Motocross Challenge.7z",
+      "size": 664170,
+      "sha1": "d87747718c1aa06a9ddd8504b2581eb0034b754a",
+      "md5": "5d68c02b3c93088f64cf6a1f0a98abbd",
+      "sha256": "813ed20449c14827ecef55a147098603ab45854312ac9eaad34383030c3e0048",
+      "crc32": "7df99cca",
+      "adler32": "059d2653"
+    },
     "0c3f34ab93bc9a210db159cd68c9343930540f7b": {
       "path": "bios/Other/gopher2600/stella.pro",
       "name": "stella.pro",
@@ -93436,6 +93456,8 @@
       "0eb6b12f36508b24f285ffd793438ef3": "d124045eccc562ff0423b23a240e27ad740fa0c9",
       "c78ac640fcf02eb866b79718f5ed15fa": "20fdca7131478e1ee12691bdafd2d5bb74cbd16f",
       "5bcfc3374fc9b0c16070f1ac42f3dc63": "c0c0b5db93a61276a6fe6842049cb53e564b8413",
+      "8f7c31b1e7bf7500f5a90da1dcc72967": "a71637b53251d4a14f80b53f4af4966114cde6e7",
+      "5d68c02b3c93088f64cf6a1f0a98abbd": "d87747718c1aa06a9ddd8504b2581eb0034b754a",
       "397250dd0d1e19b14816114979b05ad9": "0c3f34ab93bc9a210db159cd68c9343930540f7b",
       "f303fd8288e0bf926d7da30644ab4988": "22b36583a956fb4c0feb1eb47e01de6efdb89a6b",
       "8171099f59d99b7a6dd0809d952075ec": "2e100cdd8b2d5492ff4ef8f1ba487364aabc687f",
@@ -110449,6 +110471,12 @@
       "donpachi.zip": [
         "c0c0b5db93a61276a6fe6842049cb53e564b8413"
       ],
+      "vrback.raw": [
+        "a71637b53251d4a14f80b53f4af4966114cde6e7"
+      ],
+      "Motocross Challenge.7z": [
+        "d87747718c1aa06a9ddd8504b2581eb0034b754a"
+      ],
       "stella.pro": [
         "0c3f34ab93bc9a210db159cd68c9343930540f7b"
       ],
@@ -123967,6 +123995,9 @@
       "EX-DOS EPROM (198x)(Enterprise).bin": [
         "05ba161aa8796c04f227eb2d52496943ada814f2"
       ],
+      "MotocrossChallenge.7z": [
+        "d87747718c1aa06a9ddd8504b2581eb0034b754a"
+      ],
       "arm6.program.rom": [
         "388e3721b94cd074d6ba0eca8616523d2118a6c3"
       ],
@@ -128754,6 +128785,8 @@
       "88d0be26": "d124045eccc562ff0423b23a240e27ad740fa0c9",
       "3c79ef05": "20fdca7131478e1ee12691bdafd2d5bb74cbd16f",
       "1294ff68": "c0c0b5db93a61276a6fe6842049cb53e564b8413",
+      "d9c5a979": "a71637b53251d4a14f80b53f4af4966114cde6e7",
+      "7df99cca": "d87747718c1aa06a9ddd8504b2581eb0034b754a",
       "080d3448": "0c3f34ab93bc9a210db159cd68c9343930540f7b",
       "9dac1097": "22b36583a956fb4c0feb1eb47e01de6efdb89a6b",
       "25cfd813": "2e100cdd8b2d5492ff4ef8f1ba487364aabc687f",
@@ -137126,6 +137159,8 @@
       "f76b62e73e7410ab63813b9db36839be12213e4adfd3ee513eb382b7bc3a4a39": "d124045eccc562ff0423b23a240e27ad740fa0c9",
       "6597f75e97e5337198736b42a4d1ea66d4fdf01d685772482811a55e1eddf8f1": "20fdca7131478e1ee12691bdafd2d5bb74cbd16f",
       "a686ebf893d511b5b7667176cd6844593e914595a8bb9ab656b2c66969013b5c": "c0c0b5db93a61276a6fe6842049cb53e564b8413",
+      "93cd6f10749171deab6b1f4170743a759d646e7ecf449dcd2ce100fa292d5cc7": "a71637b53251d4a14f80b53f4af4966114cde6e7",
+      "813ed20449c14827ecef55a147098603ab45854312ac9eaad34383030c3e0048": "d87747718c1aa06a9ddd8504b2581eb0034b754a",
       "647b18305a8fcc7a370195da1b3599a62d56e9588f386b71083a56740560cc4a": "0c3f34ab93bc9a210db159cd68c9343930540f7b",
       "9dae63bb97fc2ced1135020c611293b731ce1a73ce62f7d2c5bb959fec591efa": "22b36583a956fb4c0feb1eb47e01de6efdb89a6b",
       "208176552a7d6703be6cd2539c96d2136d37bfc9c1b21a93b4a81a032339faf4": "2e100cdd8b2d5492ff4ef8f1ba487364aabc687f",
@@ -155686,6 +155721,7 @@
         "c6241e1c248193108ce38b9a8e9dd33972cf47ba",
         "08da5017cb95c9f5edf07a66903eef414621cd7d",
         "05ba161aa8796c04f227eb2d52496943ada814f2",
+        "d87747718c1aa06a9ddd8504b2581eb0034b754a",
         "388e3721b94cd074d6ba0eca8616523d2118a6c3",
         "55315b20fecb4441a07ee4bc5dc7153f396e0a2e",
         "cb43ab3676b93c279f1ed8ffcb0d4dcd4b34e631",

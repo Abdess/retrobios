@@ -5,7 +5,7 @@
   "platform": "emudeck",
   "display_name": "EmuDeck",
   "version": "1.0",
-  "generated": "2026-08-11T03:21:35Z",
+  "generated": "2026-08-11T08:43:51Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -250,8 +250,8 @@
       }
     }
   ],
-  "total_files": 532,
-  "total_size": 1778182745,
+  "total_files": 585,
+  "total_size": 1868486245,
   "total_omitted": 12,
   "omitted_files": [
     {
@@ -1294,6 +1294,26 @@
       "sha256": "a1e269cfdc6b82d5a55baab5a0bbbb3b9f953ad92729e0d5ec50dbc2746a2c47",
       "size": 4096,
       "repo_path": "bios/Nintendo/GameCube/.variants/dsp_coef.bin.c116d867",
+      "cores": [
+        "dolphin"
+      ]
+    },
+    {
+      "dest": "GC/font_western.bin",
+      "sha1": "483a17ff25b68a8f18cae691da99f16beefbe370",
+      "sha256": "4ad991be2b0aa305f09b90a79fc50f57833b30b008890b5ef1336cc3d9d0bae0",
+      "size": 6478,
+      "repo_path": "bios/Other/dolphin/font_western.bin",
+      "cores": [
+        "dolphin"
+      ]
+    },
+    {
+      "dest": "GC/font_japanese.bin",
+      "sha1": "7fbbedcc7a1ae00414a4e9e967109cc78be1fe3b",
+      "sha256": "38f9f59d505bc4e2d86b0196706195f33ad72b7fe9d029cf263072cde19d044f",
+      "size": 259626,
+      "repo_path": "bios/Other/dolphin/font_japanese.bin",
       "cores": [
         "dolphin"
       ]
@@ -4181,6 +4201,16 @@
       ]
     },
     {
+      "dest": "PPSSPP/ppge_atlas.meta",
+      "sha1": "f99a13464a4dae347628f0ebb320e767e48e3a96",
+      "sha256": "e3e8ab044b973137c9864f473f345849ecb4c0a9a3234eaba399dfa16c5f06f0",
+      "size": 1119232,
+      "repo_path": "bios/Other/ppsspp/PPSSPP/ppge_atlas.meta",
+      "cores": [
+        "ppsspp"
+      ]
+    },
+    {
       "dest": "PS3UPDAT.PUP",
       "sha1": "093f8698b54b78dcb701de2043f82639de51d63b",
       "sha256": "69070a95780f59fc9e0d82bcf53eb9b28fd4ed4a7d54d0a40045f80422fd98d6",
@@ -4228,6 +4258,506 @@
       "sha256": "0dc50190bb7ea3fb212c970346b771a511772b528801e7eda6d27efda8c40698",
       "size": 1048576,
       "repo_path": "bios/Commodore/Amiga/mt32-roms/pcm_cm32l.rom",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/Roland_SC-55.sf2",
+      "sha1": "9dba9212f2e34446ab034595665809f09f303d63",
+      "sha256": "fca3e514b635a21789d4224e84865d2954a2a914d46b64aa8219ddb565c44869",
+      "size": 3283278,
+      "repo_path": "bios/Other/ScummVM/Roland_SC-55.sf2",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/theme/scummmodern.zip",
+      "sha1": "979586143f0f35dddd0d0d5144e1eccf1fe0516f",
+      "sha256": "1cfc3201505b9fb19f604a161926ead074d7eb2e2f53cd74a515d2156eb33dc0",
+      "size": 68072,
+      "repo_path": "bios/Other/ScummVM/scummmodern.zip",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/theme/scummclassic.zip",
+      "sha1": "69836fb392710f2182df07bab8960e8a2d92c1a9",
+      "sha256": "39b823b709213006b00246e2d0c5c49f5475dc2257434fb2e860b442892e2fe1",
+      "size": 16488,
+      "repo_path": "bios/Other/ScummVM/scummclassic.zip",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/theme/scummremastered.zip",
+      "sha1": "a5506cf1fa968b8e4deaea0ef36014704a3d26bb",
+      "sha256": "0f57913915873209926da402138ca88f5b27b02c9527afdfb7db03bb99a1090d",
+      "size": 93886,
+      "repo_path": "bios/Other/ScummVM/scummremastered.zip",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/theme/residualvm.zip",
+      "sha1": "2b28052b63a2cec188412c1af5110095be6e27db",
+      "sha256": "8053b379ad41350ea18d0780ff5b44f4714d147125c31d985d90b5411ec3e5b0",
+      "size": 94540,
+      "repo_path": "bios/Other/ScummVM/residualvm.zip",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/theme/gui-icons.dat",
+      "sha1": "38e74e6994924781487a0d39cc53dc4708a90c1c",
+      "sha256": "e772a8bb64ad3d7a807e859ad55c6b41269e66e32dfc78cdb4e583e183b5d828",
+      "size": 3315855,
+      "repo_path": "bios/Other/ScummVM/gui-icons.dat",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/theme/shaders.dat",
+      "sha1": "c67ec35c3f6e2ba7f09b8f61a78df7f713ff040c",
+      "sha256": "1e7839515c92b0e55198a6c96666dcd369ac3d4efab0190a265d244fda65f9e9",
+      "size": 657234,
+      "repo_path": "bios/Other/ScummVM/shaders.dat",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/theme/translations.dat",
+      "sha1": "e5b6f6d6473e2d6aa0a250fd9983b573ebf6fbe4",
+      "sha256": "88e4a57aa5d58b213f6a066518eb8a1cb1046132770987cc7dd8b06ce80e0156",
+      "size": 3693914,
+      "repo_path": "bios/Other/ScummVM/translations.dat",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/achievements.dat",
+      "sha1": "379f9def6d0de4b4bad18b0177df81783a51f17b",
+      "sha256": "6f5394edee3a2ed9165d1ac0611a5e02aabe40e7ceca9e51926d01b23f157493",
+      "size": 249239,
+      "repo_path": "bios/Other/ScummVM/achievements.dat",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/classicmacfonts.dat",
+      "sha1": "768b6231c6068e3d9b4f2cc6b1b1e5485578fde1",
+      "sha256": "d33aa56fbbe119a1567a843df9bb759cb6589f236926b93a78dc033b2f4221d1",
+      "size": 626103,
+      "repo_path": "bios/Other/ScummVM/classicmacfonts.dat",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/encoding.dat",
+      "sha1": "11d3873337827195bc16c3d3175ad00f1777ed95",
+      "sha256": "175689478e2acfe66a106e2df53c5707c49271183cfc7b5e65cd05c6b65c57f8",
+      "size": 179670,
+      "repo_path": "bios/Other/ScummVM/encoding.dat",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/helpdialog.zip",
+      "sha1": "386d8a89e180f8abab53e5d5926b6a81ee4b31dd",
+      "sha256": "9ff3c7964a63b18ffa0e9cfcf60d4d8b4a77d7a583b2e66173716a825c777f81",
+      "size": 207764,
+      "repo_path": "bios/Other/ScummVM/helpdialog.zip",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/macgui.dat",
+      "sha1": "1eed577281b8819367d1ee99b1a76ff3e1920735",
+      "sha256": "5e55c29903809bf5297a28fee22e203b6dc6f56240900036b9bd8036c0a67660",
+      "size": 65656,
+      "repo_path": "bios/Other/ScummVM/macgui.dat",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/access.dat",
+      "sha1": "775b12b7e787bbaaeb73aa45b1ad3bb383e041ef",
+      "sha256": "c108b691e81f8b9ac54feac3538ad7f26ab32b49777a34b47ee477aa464f0b30",
+      "size": 520352,
+      "repo_path": "bios/Other/ScummVM/access.dat",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/bagel.dat",
+      "sha1": "f83084c72b1ff8e16f9c013e5ef7cfbb5f3cc835",
+      "sha256": "cdab7aae2ef073f074bb4a1da691ad6895dd8de5c7a719a5d10d654abee8295c",
+      "size": 20584,
+      "repo_path": "bios/Other/ScummVM/bagel.dat",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/cryo.dat",
+      "sha1": "220c2fe52d26b8607abeb2ad4a8ea4324daea5ba",
+      "sha256": "71b5e3d68848e67ae3d17eb63ed168d2fce788d3e408b79f025107eab082aa43",
+      "size": 12499,
+      "repo_path": "bios/Other/ScummVM/cryo.dat",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/cryomni3d.dat",
+      "sha1": "3971847e26be0abad8196caf03e5852a81ddbdea",
+      "sha256": "d9fe2368aa9d5ecb4d3ddf1868ea71c7bfeb64f15422156051c449558ba561ae",
+      "size": 70416,
+      "repo_path": "bios/Other/ScummVM/cryomni3d.dat",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/darkseed.dat",
+      "sha1": "343172f1bfff8cb8c4abefa95e211379f39583b7",
+      "sha256": "e4462b43eb16bb5c687fbe21cf8a09943b9be1ddcda508ebf3de6bfff434dd0e",
+      "size": 37183,
+      "repo_path": "bios/Other/ScummVM/darkseed.dat",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/drascula.dat",
+      "sha1": "05c97e92439b67aea8f6eb7fc96db023edf62124",
+      "sha256": "6da45e0e6d8eb04f5f826836f0ddf85c7e41ed32c64c587cea985974b2f76975",
+      "size": 259625,
+      "repo_path": "bios/Other/ScummVM/drascula.dat",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/freescape.dat",
+      "sha1": "c6b3d3152e4e2ff4c9bf55e103bb39ed7faca2bd",
+      "sha256": "5bd36bf848d73be0810f03adebfee105ef1c992fb8689618ef0aec882a6046f9",
+      "size": 30124,
+      "repo_path": "bios/Other/ScummVM/freescape.dat",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/got.aud",
+      "sha1": "209ab6d86a7c44f241689c5511b2027f7ad2c7c4",
+      "sha256": "9b253aedf06bd49159e4241b22d1047aadb1453d125dd961a8d0c458ae3c889a",
+      "size": 11313,
+      "repo_path": "bios/Other/ScummVM/got.aud",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/got.gfx",
+      "sha1": "0c9603da78b980bcf391bbf5f9103a5a642c4ee8",
+      "sha256": "83f5d7681e92daaad63370505ff24d9bea468cbd898fc9628c62b299e707e768",
+      "size": 288199,
+      "repo_path": "bios/Other/ScummVM/got.gfx",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/hadesch_translations.dat",
+      "sha1": "17aae444b3010e72e092635d25d3b93c104b0ad2",
+      "sha256": "55f7bd06cbe7b6503fee3ec3243887450e804deaa9e5a026ff9821496624e630",
+      "size": 431,
+      "repo_path": "bios/Other/ScummVM/hadesch_translations.dat",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/hugo.dat",
+      "sha1": "74a5fa172f5327fedc145cb9eccc8fd050b9cfb9",
+      "sha256": "228dd029399ce7318a60aebed762ee628b9092ece36a824cb005a55534b9995f",
+      "size": 186866,
+      "repo_path": "bios/Other/ScummVM/hugo.dat",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/kyra.dat",
+      "sha1": "31b0b9418af2f9dd4e4094aada05d48eb355975b",
+      "sha256": "6b2cc168d3201305039e78bc067f3cd10c1267d3c12a8aad12ab0656920318a8",
+      "size": 2028520,
+      "repo_path": "bios/Other/ScummVM/kyra.dat",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/lure.dat",
+      "sha1": "516347ec0ec2a397265d1b2fb053aa3758382e09",
+      "sha256": "9c17cfb5349c4bd13e56b0652f81fd2bdec849de7bd875bfedf654a08916b568",
+      "size": 768832,
+      "repo_path": "bios/Other/ScummVM/lure.dat",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/macventure.dat",
+      "sha1": "e431e718e3c784532422ea2654d5fc6042a95c09",
+      "sha256": "21d3194c3f43061055f7ac8f5e1ffbf09ee4aaba0ab22eff1780a45b46eb794d",
+      "size": 4146,
+      "repo_path": "bios/Other/ScummVM/macventure.dat",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/mm.dat",
+      "sha1": "0816fe29b57911b28cbf774348f5492062326a85",
+      "sha256": "76cee02268017112ec6794c18394541ae8241ac4593abf904294daba43c3e78b",
+      "size": 280803,
+      "repo_path": "bios/Other/ScummVM/mm.dat",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/mort.dat",
+      "sha1": "0b9d0fa2a18eadf61aeddc19128ef90898ab7206",
+      "sha256": "ed4f797fd4aff885000ebe589bbac9faa3dd09dd2bee1dee7b20c0d82636f4c1",
+      "size": 76302,
+      "repo_path": "bios/Other/ScummVM/mort.dat",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/myst3.dat",
+      "sha1": "5fbf7b1a596219f0daab60a8ceb2f1e59e042243",
+      "sha256": "a02b766efef65d403577c4aa06f2679d911e05e0da807dcfa195833b55419b1e",
+      "size": 358287,
+      "repo_path": "bios/Other/ScummVM/myst3.dat",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/nancy.dat",
+      "sha1": "6a49b675c8fe03c281bda22ad3070f0a78699284",
+      "sha256": "af54fdf290d7218026b2f7a82c733192e9e9df4a894c10647d5d207c4686035d",
+      "size": 254116,
+      "repo_path": "bios/Other/ScummVM/nancy.dat",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/neverhood.dat",
+      "sha1": "490012c996ba0c56dd8d077e1418ee53b1e96397",
+      "sha256": "b86cb788237ace2988f7a8b7b02fddd213f29e2cac4e19764e6e3b29342894c6",
+      "size": 23804,
+      "repo_path": "bios/Other/ScummVM/neverhood.dat",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/prince_translation.dat",
+      "sha1": "57403a286c4d251384442a507d285b2dc5ce330e",
+      "sha256": "e9e0647b4d364ed05fce3e9b7a640edc3a59fac72c2e92d9725111ab5c33a543",
+      "size": 168060,
+      "repo_path": "bios/Other/ScummVM/prince_translation.dat",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/queen.tbl",
+      "sha1": "7bafa28dfd9b3be17430d467d8787d8204437ba0",
+      "sha256": "b104d1a01e3ea552b63d98da9365f6beaba40864baa74b5b53159f17fc8f1149",
+      "size": 1100505,
+      "repo_path": "bios/Other/ScummVM/queen.tbl",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/sky.cpt",
+      "sha1": "fa03ede717223eaf011491d2066e37eb112e735b",
+      "sha256": "4c457373415325ea039d7a3d4f1211f7bbedd83d5bf85b94afd14cb4bdd263d2",
+      "size": 419427,
+      "repo_path": "bios/Other/ScummVM/sky.cpt",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/supernova.dat",
+      "sha1": "8a571cfc431b5fe794f0262f0e55f72927ab27b4",
+      "sha256": "f778cb20eca2451220dd7dddf4b96f267e66f378f068f81d9c3f4962dbb1791f",
+      "size": 523211,
+      "repo_path": "bios/Other/ScummVM/supernova.dat",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/teenagent.dat",
+      "sha1": "0d488164930332bae3aa1ad38cef44abbe3d00a6",
+      "sha256": "1c60a898b61bc39b38fa4e5ec5c3d78de666c10d1af7a3ffd36e9bbc234488ab",
+      "size": 403315,
+      "repo_path": "bios/Other/ScummVM/teenagent.dat",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/titanic.dat",
+      "sha1": "15f51828f08fdbe01b56123e96312b5859a968c0",
+      "sha256": "463c1d1460993a1a404f6cece6f8f50706814b97f2b5ee5d2c3b32f480abacd8",
+      "size": 3197968,
+      "repo_path": "bios/Other/ScummVM/titanic.dat",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/tony.dat",
+      "sha1": "a5e19f364bda6a0d2330495114c9ad665bb79ad0",
+      "sha256": "5537b209e5243f0a1c5e7f1e5024585caa9a63c959339dbdb2402038bcedf58c",
+      "size": 24584,
+      "repo_path": "bios/Other/ScummVM/tony.dat",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/toon.dat",
+      "sha1": "85bb688125d66f2797a41f153ce1fa177027a83f",
+      "sha256": "eb7d5855ea3f69f0d1f618baf8e6c8e580c019b6f2fd2c0937dc664740baa252",
+      "size": 20996,
+      "repo_path": "bios/Other/ScummVM/toon.dat",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/ultima.dat",
+      "sha1": "e049932518390257f4d49b1691cad229e6060079",
+      "sha256": "e52cb8c261d747ac4203a0d929bd5cb8f44e80e61a97ee2957b2508824f01358",
+      "size": 15981464,
+      "repo_path": "bios/Other/ScummVM/ultima.dat",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/ultima8.dat",
+      "sha1": "6319d3a245297697c1e4def78dc231a3f30708bb",
+      "sha256": "eb00526c19ff1d878754f27632c29bfecdb9c906764fc4328d76bb708146f4fc",
+      "size": 238149,
+      "repo_path": "bios/Other/ScummVM/ultima8.dat",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/wintermute.zip",
+      "sha1": "5302f543384b21fb55466118a6966e5ef46b85f6",
+      "sha256": "7559d45435dee4b49c339a892b73078a3123b33632567b02282847bed0e70060",
+      "size": 4520,
+      "repo_path": "bios/Other/ScummVM/wintermute.zip",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/fonts.dat",
+      "sha1": "1eaef39122559500fbbc705c9425500311d23e03",
+      "sha256": "b25946aa6ff9c7bbef9d6e5a8fa7b33cf1230fbddfaa5262e19288387c493b95",
+      "size": 6449829,
+      "repo_path": "bios/Other/ScummVM/fonts.dat",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/fonts-cjk.dat",
+      "sha1": "b46f5a744387d1991d66a06292811f217ae063e2",
+      "sha256": "96900e574f5f7b100b63b538f74ac7c8a6ae0f56b5a2fc4131fb070a4d914a7e",
+      "size": 38277312,
+      "repo_path": "bios/Other/ScummVM/fonts-cjk.dat",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/fonts-imgui.dat",
+      "sha1": "659a025dfa39a8caada7dac6e69b4d7c88217b3f",
+      "sha256": "f38eca5a71b33c267cfd909ddda2a859e0e5d4a70976e2cbba03cf9fcb0509d2",
+      "size": 4000965,
+      "repo_path": "bios/Other/ScummVM/fonts-imgui.dat",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/grim-patch.lab",
+      "sha1": "3c43b7a0125f88a9f83ae4307dca57867ffd637c",
+      "sha256": "7928ca5d5bd7d27cf4a386c696d78c01fc92bed7156ac9d381a42648fdd66710",
+      "size": 9341,
+      "repo_path": "bios/Other/ScummVM/grim-patch.lab",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/monkey4-patch.m4b",
+      "sha1": "49fc530e77b61f326f6e1d5a5147daa2fd67d1e2",
+      "sha256": "6d0141a132bf34eb4c81d7db958fc4bbff65ee972056e5bf01ce0105c09bdb95",
+      "size": 2990,
+      "repo_path": "bios/Other/ScummVM/monkey4-patch.m4b",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/pred.dic",
+      "sha1": "20f9a6a9838e3189774ea7ac6b8e62d6720dc683",
+      "sha256": "cd367e0ef51fe79dae4b90cef9c7bf1566e092419ebec6a625d7a666d7b97287",
+      "size": 126481,
+      "repo_path": "bios/Other/ScummVM/pred.dic",
+      "cores": [
+        "scummvm"
+      ]
+    },
+    {
+      "dest": "scummvm/extra/vkeybd_default.zip",
+      "sha1": "4d787bd5a071c729c4f374e6e7c7d7b06d7f9f63",
+      "sha256": "2704048b87cc4a0915cdbffa98cd7b4ba7a195a96a76c57d5912fbcc24cc2cd2",
+      "size": 184946,
+      "repo_path": "bios/Other/ScummVM/vkeybd_default.zip",
       "cores": [
         "scummvm"
       ]
