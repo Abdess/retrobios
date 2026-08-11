@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-11T03:50:34Z",
-  "total_files": 7853,
-  "total_size": 10158903374,
+  "generated_at": "2026-08-11T04:09:02Z",
+  "total_files": 7854,
+  "total_size": 10158968910,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -46177,6 +46177,16 @@
       "crc32": "f62d2f3a",
       "adler32": "c98e06e4"
     },
+    "3e5039120ae64fc71511bd5ab72b7ba83d8fb8f0": {
+      "path": "bios/Other/Clock Signal/Thomson/mo6-v1.rom",
+      "name": "mo6-v1.rom",
+      "size": 65536,
+      "sha1": "3e5039120ae64fc71511bd5ab72b7ba83d8fb8f0",
+      "md5": "316080020ecfc40e20663449951101b9",
+      "sha256": "0260b41a21339eec156a941f6b24826891060c8b6402fcb66a4004d49138d8db",
+      "crc32": "45e859c6",
+      "adler32": "ff631637"
+    },
     "a4596712f2b7919820f6c0e43cd522156d051152": {
       "path": "bios/Other/Clock Signal/Thomson/mo6-v3.rom",
       "name": "mo6-v3.rom",
@@ -87831,6 +87841,7 @@
       "6e57aa757040d9d053282a7911db6aba": "6a62e3cacafa0fc9bf946522d67636d0f077e654",
       "e5b609dd90b26c9974a46cd54eab4216": "5c72566c22d8160ef0c75959e1863a1309bbbe49",
       "cb15b8d3423acc09edc2b2a08fda3824": "9d25947e3334b367789b20196c56338573d4efc6",
+      "316080020ecfc40e20663449951101b9": "3e5039120ae64fc71511bd5ab72b7ba83d8fb8f0",
       "e12e8ea392fabfbf75f04b9f6535e68c": "a4596712f2b7919820f6c0e43cd522156d051152",
       "fd81c9a018e66c5ee8be9e98018a318c": "d9161b4eaf6f5b04f461fa0270e2fba0ce541352",
       "f20bb7bc1b97453161e63964f24a2785": "91d75a87872cbb88964bead92e0cbf8b72e836b6",
@@ -103654,6 +103665,9 @@
       ],
       "mo5-v1.0.rom": [
         "9d25947e3334b367789b20196c56338573d4efc6"
+      ],
+      "mo6-v1.rom": [
+        "3e5039120ae64fc71511bd5ab72b7ba83d8fb8f0"
       ],
       "mo6-v3.rom": [
         "a4596712f2b7919820f6c0e43cd522156d051152"
@@ -121097,6 +121111,7 @@
       "1576a69b": "6a62e3cacafa0fc9bf946522d67636d0f077e654",
       "5114c0a5": "5c72566c22d8160ef0c75959e1863a1309bbbe49",
       "f62d2f3a": "9d25947e3334b367789b20196c56338573d4efc6",
+      "45e859c6": "3e5039120ae64fc71511bd5ab72b7ba83d8fb8f0",
       "7a012322": "a4596712f2b7919820f6c0e43cd522156d051152",
       "fc173504": "d9161b4eaf6f5b04f461fa0270e2fba0ce541352",
       "0c0644ba": "91d75a87872cbb88964bead92e0cbf8b72e836b6",
@@ -128952,6 +128967,7 @@
       "309f10b6e1fcd1b4d9e5704521664e1b4c6d7a475830a4b0211d068e01f3121a": "6a62e3cacafa0fc9bf946522d67636d0f077e654",
       "742cf0541e5caf683a8cc8609632b1fd1b2db58c55998b02f165c374447a3e2b": "5c72566c22d8160ef0c75959e1863a1309bbbe49",
       "0e728918b829283134df88dc3a5b78ba8f575b8230d1f8dd55e6b389cfd0d9cf": "9d25947e3334b367789b20196c56338573d4efc6",
+      "0260b41a21339eec156a941f6b24826891060c8b6402fcb66a4004d49138d8db": "3e5039120ae64fc71511bd5ab72b7ba83d8fb8f0",
       "357135a8804f97148fcf30e6ea96c800005570bb0c6906b40d15ca9e30e4fc9b": "a4596712f2b7919820f6c0e43cd522156d051152",
       "73bd613fe171d6486a1a0ae50d526a643c0201a904081d215cd4646876a0e038": "d9161b4eaf6f5b04f461fa0270e2fba0ce541352",
       "8a7a63b24bb21557fb597697bdf09248c1ab7e3298cacfa1166d764dd81e7fc3": "91d75a87872cbb88964bead92e0cbf8b72e836b6",
@@ -138226,6 +138242,9 @@
       ],
       "Thomson/mo5-v1.0.rom": [
         "9d25947e3334b367789b20196c56338573d4efc6"
+      ],
+      "Thomson/mo6-v1.rom": [
+        "3e5039120ae64fc71511bd5ab72b7ba83d8fb8f0"
       ],
       "Thomson/mo6-v3.rom": [
         "a4596712f2b7919820f6c0e43cd522156d051152"
