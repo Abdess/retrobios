@@ -180,6 +180,229 @@ def _resolve_archive_source(
     return result if result is not None else "missing"
 
 
+def _cross_reference_profile(
+    emu_name: str,
+    profile: dict,
+    declared: dict[str, set[str]],
+    report: dict,
+    index: dict,
+) -> None:
+    """Compare one emulator profile against what the platforms declare.
+
+    Split out of cross_reference, where it was a 200-line loop body that
+    carried the whole function's branching: every file is resolved by name,
+    by path, by hash and by archive membership before it can be called a
+    gap. *index* carries the database lookups those steps share.
+    """
+    by_name = index["by_name"]
+    by_name_lower = index["by_name_lower"]
+    by_md5 = index["by_md5"]
+    by_crc32 = index["by_crc32"]
+    by_path_suffix = index["by_path_suffix"]
+    db_files = index["db_files"]
+    data_names = index["data_names"]
+    all_declared = index["all_declared"]
+    emu_files = profile.get("files", [])
+    systems = profile.get("systems", [])
+
+    # Skip filename-agnostic profiles (BIOS detected without fixed names)
+    if profile.get("bios_mode") == "agnostic":
+        return
+
+    if all_declared is not None:
+        platform_names = all_declared
+    else:
+        platform_names = set()
+        for sys_id in systems:
+            platform_names.update(declared.get(sys_id, set()))
+
+    gaps = []
+    covered = []
+    unsourceable_list: list[dict] = []
+    archive_gaps: dict[tuple, dict] = {}
+    seen_files: set[tuple] = set()
+    for f in emu_files:
+        fname = f.get("name", "")
+        effective_path = f.get("path") or fname
+        seen_key = (
+            fname,
+            f.get("archive"),
+            effective_path,
+            f.get("system"),
+            f.get("variant_group"),
+            f.get("mode", "both"),
+        )
+        if not fname or seen_key in seen_files:
+            continue
+
+        # Collect unsourceable files separately (documented, not a gap)
+        unsourceable_reason = f.get("unsourceable", "")
+        if unsourceable_reason:
+            seen_files.add(seen_key)
+            unsourceable_list.append({
+                "name": fname,
+                "required": f.get("required", False),
+                "reason": unsourceable_reason,
+                "source_ref": f.get("source_ref", ""),
+            })
+            continue
+
+        # Skip pattern placeholders (e.g., <bios>.bin, <user-selected>.bin)
+        if "<" in fname or ">" in fname or "*" in fname:
+            continue
+
+        # Skip UI-imported files with explicit path: null (not resolvable by pack)
+        if "path" in f and f["path"] is None:
+            continue
+
+        # Skip standalone-only files
+        file_mode = f.get("mode", "both")
+        if file_mode == "standalone":
+            continue
+
+        # Skip files loaded from non-system directories (save_dir, content_dir)
+        load_from = f.get("load_from", "")
+        if load_from and load_from != "system_dir":
+            continue
+
+        # Skip filename-agnostic files (handled by agnostic scan)
+        if f.get("agnostic"):
+            continue
+
+        archive = f.get("archive")
+
+        # Check platform declaration (by name or archive)
+        in_platform = fname in platform_names
+        if not in_platform and archive:
+            in_platform = archive in platform_names
+
+        if in_platform:
+            seen_files.add(seen_key)
+            covered.append({
+                "name": fname,
+                "path": effective_path,
+                "required": f.get("required", False),
+                "in_platform": True,
+            })
+            continue
+
+        seen_files.add(seen_key)
+
+        # Group archived files by archive name
+        if archive:
+            archive_key = (
+                archive,
+                f.get("system"),
+                f.get("variant_group"),
+                f.get("mode", "both"),
+            )
+            if archive_key not in archive_gaps:
+                source = _resolve_archive_source(
+                    archive, by_name, by_name_lower, data_names,
+                    by_path_suffix,
+                )
+                archive_gaps[archive_key] = {
+                    "name": archive,
+                    "path": archive,
+                    "required": False,
+                    "note": "",
+                    "source_ref": "",
+                    "in_platform": False,
+                    "in_repo": source != "missing",
+                    "source": source,
+                    "archive": archive,
+                    "archive_file_count": 0,
+                    "archive_required_count": 0,
+                }
+            entry = archive_gaps[archive_key]
+            entry["archive_file_count"] += 1
+            if f.get("required", False):
+                entry["archive_required_count"] += 1
+                entry["required"] = True
+            if not entry["source_ref"] and f.get("source_ref"):
+                entry["source_ref"] = f["source_ref"]
+            continue
+
+        # --- resolve source provenance ---
+        storage = f.get("storage", "")
+        if storage in ("release", "large_file"):
+            source = "large_file"
+        else:
+            source = _resolve_source(
+                fname, by_name, by_name_lower, data_names, by_path_suffix,
+                f, db_files,
+            )
+            if source is None:
+                path_field = f.get("path", "")
+                if path_field and path_field != fname:
+                    source = _resolve_source(
+                        path_field, by_name, by_name_lower,
+                        data_names, by_path_suffix, f, db_files,
+                    )
+            # Try the alternate names the emulator accepts, like
+            # resolve_local_file does
+            if source is None:
+                for alias in f.get("aliases") or []:
+                    source = _resolve_source(
+                        alias, by_name, by_name_lower,
+                        data_names, by_path_suffix, f, db_files,
+                    )
+                    if source is not None:
+                        break
+            # Try MD5 hash match
+            if source is None:
+                for md5_val in parse_md5_list(f.get("md5")):
+                    if by_md5.get(md5_val):
+                        source = "bios"
+                        break
+            # Try SHA1 hash match
+            if source is None:
+                raw_sha1 = f.get("sha1", "")
+                sha1_values = raw_sha1 if isinstance(raw_sha1, list) else [raw_sha1]
+                if any(value and value in db_files for value in sha1_values):
+                    source = "bios"
+            # Try CRC32 hash match
+            if source is None:
+                crc32 = str(f.get("crc32", "")).lower()
+                if crc32 and by_crc32.get(crc32):
+                    source = "bios"
+            if source is None:
+                source = "missing"
+
+        in_repo = source != "missing"
+
+        entry = {
+            "name": fname,
+            "path": effective_path,
+            "required": f.get("required", False),
+            "note": f.get("note", ""),
+            "source_ref": f.get("source_ref", ""),
+            "in_platform": False,
+            "in_repo": in_repo,
+            "source": source,
+        }
+        gaps.append(entry)
+
+    # Append grouped archive gaps
+    for ag in sorted(archive_gaps.values(), key=lambda e: e["name"]):
+        gaps.append(ag)
+
+    report[emu_name] = {
+        "emulator": profile.get("emulator", emu_name),
+        "systems": systems,
+        "total_files": len(emu_files),
+        "platform_covered": len(covered),
+        "gaps": len(gaps),
+        "gap_in_repo": sum(1 for g in gaps if g["in_repo"]),
+        "gap_missing": sum(1 for g in gaps if g["source"] == "missing"),
+        "gap_bios": sum(1 for g in gaps if g["source"] == "bios"),
+        "gap_data": sum(1 for g in gaps if g["source"] == "data"),
+        "gap_large_file": sum(1 for g in gaps if g["source"] == "large_file"),
+        "gap_details": gaps,
+        "unsourceable": unsourceable_list,
+    }
+
+
 def cross_reference(
     profiles: dict[str, dict],
     declared: dict[str, set[str]],
@@ -212,206 +435,20 @@ def cross_reference(
     db_files = db.get("files", {})
     report = {}
 
+    index = {
+        "by_name": by_name,
+        "by_name_lower": by_name_lower,
+        "by_md5": by_md5,
+        "by_crc32": by_crc32,
+        "by_path_suffix": by_path_suffix,
+        "db_files": db_files,
+        "data_names": data_names,
+        "all_declared": all_declared,
+    }
     for emu_name, profile in profiles.items():
-        emu_files = profile.get("files", [])
-        systems = profile.get("systems", [])
-
-        # Skip filename-agnostic profiles (BIOS detected without fixed names)
-        if profile.get("bios_mode") == "agnostic":
-            continue
-
-        if all_declared is not None:
-            platform_names = all_declared
-        else:
-            platform_names = set()
-            for sys_id in systems:
-                platform_names.update(declared.get(sys_id, set()))
-
-        gaps = []
-        covered = []
-        unsourceable_list: list[dict] = []
-        archive_gaps: dict[tuple, dict] = {}
-        seen_files: set[tuple] = set()
-        for f in emu_files:
-            fname = f.get("name", "")
-            effective_path = f.get("path") or fname
-            seen_key = (
-                fname,
-                f.get("archive"),
-                effective_path,
-                f.get("system"),
-                f.get("variant_group"),
-                f.get("mode", "both"),
-            )
-            if not fname or seen_key in seen_files:
-                continue
-
-            # Collect unsourceable files separately (documented, not a gap)
-            unsourceable_reason = f.get("unsourceable", "")
-            if unsourceable_reason:
-                seen_files.add(seen_key)
-                unsourceable_list.append({
-                    "name": fname,
-                    "required": f.get("required", False),
-                    "reason": unsourceable_reason,
-                    "source_ref": f.get("source_ref", ""),
-                })
-                continue
-
-            # Skip pattern placeholders (e.g., <bios>.bin, <user-selected>.bin)
-            if "<" in fname or ">" in fname or "*" in fname:
-                continue
-
-            # Skip UI-imported files with explicit path: null (not resolvable by pack)
-            if "path" in f and f["path"] is None:
-                continue
-
-            # Skip standalone-only files
-            file_mode = f.get("mode", "both")
-            if file_mode == "standalone":
-                continue
-
-            # Skip files loaded from non-system directories (save_dir, content_dir)
-            load_from = f.get("load_from", "")
-            if load_from and load_from != "system_dir":
-                continue
-
-            # Skip filename-agnostic files (handled by agnostic scan)
-            if f.get("agnostic"):
-                continue
-
-            archive = f.get("archive")
-
-            # Check platform declaration (by name or archive)
-            in_platform = fname in platform_names
-            if not in_platform and archive:
-                in_platform = archive in platform_names
-
-            if in_platform:
-                seen_files.add(seen_key)
-                covered.append({
-                    "name": fname,
-                    "path": effective_path,
-                    "required": f.get("required", False),
-                    "in_platform": True,
-                })
-                continue
-
-            seen_files.add(seen_key)
-
-            # Group archived files by archive name
-            if archive:
-                archive_key = (
-                    archive,
-                    f.get("system"),
-                    f.get("variant_group"),
-                    f.get("mode", "both"),
-                )
-                if archive_key not in archive_gaps:
-                    source = _resolve_archive_source(
-                        archive, by_name, by_name_lower, data_names,
-                        by_path_suffix,
-                    )
-                    archive_gaps[archive_key] = {
-                        "name": archive,
-                        "path": archive,
-                        "required": False,
-                        "note": "",
-                        "source_ref": "",
-                        "in_platform": False,
-                        "in_repo": source != "missing",
-                        "source": source,
-                        "archive": archive,
-                        "archive_file_count": 0,
-                        "archive_required_count": 0,
-                    }
-                entry = archive_gaps[archive_key]
-                entry["archive_file_count"] += 1
-                if f.get("required", False):
-                    entry["archive_required_count"] += 1
-                    entry["required"] = True
-                if not entry["source_ref"] and f.get("source_ref"):
-                    entry["source_ref"] = f["source_ref"]
-                continue
-
-            # --- resolve source provenance ---
-            storage = f.get("storage", "")
-            if storage in ("release", "large_file"):
-                source = "large_file"
-            else:
-                source = _resolve_source(
-                    fname, by_name, by_name_lower, data_names, by_path_suffix,
-                    f, db_files,
-                )
-                if source is None:
-                    path_field = f.get("path", "")
-                    if path_field and path_field != fname:
-                        source = _resolve_source(
-                            path_field, by_name, by_name_lower,
-                            data_names, by_path_suffix, f, db_files,
-                        )
-                # Try the alternate names the emulator accepts, like
-                # resolve_local_file does
-                if source is None:
-                    for alias in f.get("aliases") or []:
-                        source = _resolve_source(
-                            alias, by_name, by_name_lower,
-                            data_names, by_path_suffix, f, db_files,
-                        )
-                        if source is not None:
-                            break
-                # Try MD5 hash match
-                if source is None:
-                    for md5_val in parse_md5_list(f.get("md5")):
-                        if by_md5.get(md5_val):
-                            source = "bios"
-                            break
-                # Try SHA1 hash match
-                if source is None:
-                    raw_sha1 = f.get("sha1", "")
-                    sha1_values = raw_sha1 if isinstance(raw_sha1, list) else [raw_sha1]
-                    if any(value and value in db_files for value in sha1_values):
-                        source = "bios"
-                # Try CRC32 hash match
-                if source is None:
-                    crc32 = str(f.get("crc32", "")).lower()
-                    if crc32 and by_crc32.get(crc32):
-                        source = "bios"
-                if source is None:
-                    source = "missing"
-
-            in_repo = source != "missing"
-
-            entry = {
-                "name": fname,
-                "path": effective_path,
-                "required": f.get("required", False),
-                "note": f.get("note", ""),
-                "source_ref": f.get("source_ref", ""),
-                "in_platform": False,
-                "in_repo": in_repo,
-                "source": source,
-            }
-            gaps.append(entry)
-
-        # Append grouped archive gaps
-        for ag in sorted(archive_gaps.values(), key=lambda e: e["name"]):
-            gaps.append(ag)
-
-        report[emu_name] = {
-            "emulator": profile.get("emulator", emu_name),
-            "systems": systems,
-            "total_files": len(emu_files),
-            "platform_covered": len(covered),
-            "gaps": len(gaps),
-            "gap_in_repo": sum(1 for g in gaps if g["in_repo"]),
-            "gap_missing": sum(1 for g in gaps if g["source"] == "missing"),
-            "gap_bios": sum(1 for g in gaps if g["source"] == "bios"),
-            "gap_data": sum(1 for g in gaps if g["source"] == "data"),
-            "gap_large_file": sum(1 for g in gaps if g["source"] == "large_file"),
-            "gap_details": gaps,
-            "unsourceable": unsourceable_list,
-        }
+        _cross_reference_profile(
+            emu_name, profile, declared, report, index
+        )
 
     return report
 
