@@ -779,6 +779,41 @@ class CheckoutCompletenessRegressions(unittest.TestCase):
                 os.chdir(cwd)
 
 
+class EveryManifestEntryIsFetchable(unittest.TestCase):
+    """An install manifest may not list a file the installer cannot get.
+
+    install.py fetches a file either from its repo_path or from a release
+    asset. An entry carrying neither is a line in the download list that can
+    only ever fail. It happened when resolution landed on a file the database
+    does not index, so the hash was computed but the repo lookup came back
+    empty and the entry shipped anyway.
+    """
+
+    def test_committed_manifests_all_have_a_source(self):
+        manifests = sorted((ROOT / "install").glob("*.json"))
+        self.assertTrue(manifests, "no install manifests to check")
+        for path in manifests:
+            with self.subTest(manifest=path.name):
+                data = json.loads(path.read_text())
+                orphans = [
+                    entry["dest"]
+                    for entry in data.get("files", [])
+                    if not entry.get("repo_path") and not entry.get("release_asset")
+                ]
+                self.assertEqual(
+                    orphans, [], f"{path.name} lists unfetchable files: {orphans[:3]}"
+                )
+
+    def test_an_unresolvable_file_is_recorded_as_omitted(self):
+        """The reason must be one install.py knows how to report."""
+        allowed = {"hash_mismatch", "not_found", "external", "user_provided"}
+        for path in sorted((ROOT / "install").glob("*.json")):
+            with self.subTest(manifest=path.name):
+                data = json.loads(path.read_text())
+                for entry in data.get("omitted_files", []):
+                    self.assertIn(entry.get("reason"), allowed)
+
+
 class FreshnessGuardMechanics(unittest.TestCase):
     """write_if_changed is what makes `git diff --exit-code` a real check.
 

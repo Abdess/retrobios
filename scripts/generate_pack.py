@@ -1393,18 +1393,14 @@ def generate_pack(
 
     slot_undecidable: list[str] = []
     if one_per_slot:
-        idx = region_mod.build_region_index(emu_profiles or {})
         members_by_system = _pack_member_groups(
             config, pack_systems, emulators_dir, db, base_dest,
             emu_profiles, target_cores, source,
         )
-        slot_groups: dict[str, list[tuple[str, str]]] = {}
-        for sys_id, members in members_by_system.items():
-            for dest, name in members:
-                if dest in region_drops:
-                    continue
-                tier = ",".join(sorted(region_mod.lookup_regions(idx, dest, name)))
-                slot_groups.setdefault(f"{sys_id}|{tier}", []).append((dest, name))
+        slot_groups = {
+            sys_id: [(d, n) for d, n in members if d not in region_drops]
+            for sys_id, members in members_by_system.items()
+        }
         slot_drops, slot_undecidable = slot_mod.resolve_slot_drops(
             slot_groups, slot_mod.build_slot_index(emu_profiles or {})
         )
@@ -3613,6 +3609,18 @@ def generate_manifest(
                     sha256 = hashes["sha256"]
 
                 repo_path = _get_repo_path(sha1, db) if sha1 else ""
+                is_release_asset = _is_large_file(local_path or "", repo_root)
+
+                # An entry needs somewhere to be fetched from. Resolution can
+                # land on a file the database does not index -- a data
+                # directory, or a copy added since the last scan -- and then
+                # neither a repo path nor a release asset exists, so the
+                # installer would list a file it can never download. Recording
+                # it as omitted keeps that visible instead of shipping a dead
+                # entry.
+                if not repo_path and not is_release_asset:
+                    record_omission(full_dest, file_entry, sys_id, "not_found", None)
+                    continue
 
                 entry: dict = {
                     "dest": dest,
@@ -3623,7 +3631,7 @@ def generate_manifest(
                     "cores": None,
                 }
 
-                if _is_large_file(local_path or "", repo_root):
+                if is_release_asset:
                     entry["storage"] = "release"
                     entry["release_asset"] = (
                         os.path.basename(local_path) if local_path else file_entry["name"]

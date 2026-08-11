@@ -77,9 +77,30 @@ def _validate_pack_manifests(dist: Path) -> list[str]:
     generate_pack.py writes manifest.json inside the archive, not beside it,
     so a filesystem glob over dist/ matches nothing and silently validates
     zero documents.
+
+    Reading a pack while a build is writing it reports "File is not a zip
+    file" about an archive that is merely half-written, so this takes the same
+    shared lock --verify-packs does. A build holding the exclusive lock means
+    the packs on disk are mid-flight and there is nothing stable to validate.
     """
     if not dist.is_dir():
         return []
+
+    sys.path.insert(0, str(ROOT / "scripts"))
+    from common import ArtifactLockBusy, artifact_lock
+
+    try:
+        with artifact_lock(str(dist), exclusive=False):
+            return _scan_pack_manifests(dist)
+    except ArtifactLockBusy:
+        print(
+            f"note: {dist.name} is being written; skipping pack manifests",
+            file=sys.stderr,
+        )
+        return []
+
+
+def _scan_pack_manifests(dist: Path) -> list[str]:
     validator = _validator("pack-manifest.schema.json")
 
     def _label(path: Path) -> str:
