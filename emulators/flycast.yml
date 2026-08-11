@@ -35,7 +35,7 @@ notes: |
   - NAOMI flat boot ROM search includes epr-21576d.bin fallback not in upstream.
 
   BIOS file search uses prefix + name pattern. The libretro port appends "dc/"
-  to the system directory (libretro.cpp:1866). All files below are relative
+  to the system directory (libretro.cpp:1972). All files below are relative
   to system_dir/dc/.
 
   The prefix is determined by platform (sb_mem.cpp:32-49):
@@ -53,7 +53,7 @@ notes: |
   BIOS[] also declares airlbios and naomigd. No entry of Games[] carries
   either name in its bios field and naomi_LoadBios is only ever called with
   that field or the literal naomi, so neither archive is opened.
-  ref: naomi_cart.cpp:78,228-239,475-478, naomi_roms.h:79,191
+  ref: naomi_cart.cpp:79,229-240,476-479, naomi_roms.h:79,191
 
 files:
   # -------------------------------------------------------

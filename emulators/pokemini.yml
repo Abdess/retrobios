@@ -31,7 +31,7 @@ notes: |
   3. PokeMini_Reset() checks forcefreebios (hardcoded to 0 in the
      libretro port, libretro.c:499). Since FreeBIOS is currently loaded
      and forcefreebios is 0, it enters the real-BIOS path
-     (source/PokeMini.c:518-523):
+     (source/PokeMini.c:503-508):
        - Reloads FreeBIOS as a safety fallback
        - Checks if CommandLine.bios_file exists on disk
        - If found, overwrites PM_BIOS with the real BIOS via

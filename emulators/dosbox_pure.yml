@@ -16,7 +16,7 @@ notes: |
 
   ROM scanning (both modes):
     Recursive scan of system directory for *_CONTROL.ROM and *.SF2/*.SF3.
-    ref: dosbox_pure_libretro.cpp:1367-1378
+    ref: dosbox_pure_libretro.cpp:1399-1410
     MT-32 requires matched pair: *_CONTROL.ROM + *_PCM.ROM (PCM name derived
     from CONTROL name by replacing CONTROL with PCM, preserving case).
     ref: midi_mt32.h:189-199
@@ -24,9 +24,9 @@ notes: |
     control, 524288/1048576 = PCM), not by name.
     ref: midi_mt32.h:160-166
     Files can also be on mounted C: drive (DOSBOX.SF2, MT32_CONTROL.ROM).
-    ref: dosbox_pure_libretro.cpp:2760-2762
+    ref: dosbox_pure_libretro.cpp:2803-2805
     Cache file DOSBoxPureMidiCache.txt written when scan >2s.
-    ref: dosbox_pure_libretro.cpp:1393-1413
+    ref: dosbox_pure_libretro.cpp:1425-1445
 
   Bundled MUNT (header-only mt32emu.h) for MT-32 emulation.
   SHA1+size validation at load: unrecognized ROMs rejected (Synth::open fails).
@@ -36,7 +36,7 @@ notes: |
   No firmware entries in .info file — all MIDI files optional.
 
   DBP_STANDALONE build mode exists (same MIDI logic, different I/O layer).
-  ref: dosbox_pure_libretro.cpp:81,1558,2270
+  ref: dosbox_pure_libretro.cpp:81,1590,2302
 
 files:
   # -- MT-32 Control ROMs (64 KB) --

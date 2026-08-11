@@ -33,7 +33,7 @@ notes: |
   4. Parent folders of WAD directory (recursive, if enabled)
 
   The core accepts .wad, .iwad, .pwad, and .lmp extensions. Game IWADs
-  it recognizes (d_main.c:133-145): doom2f.wad, doom2.wad, plutonia.wad,
+  it recognizes (d_main.c:140-152): doom2f.wad, doom2.wad, plutonia.wad,
   tnt.wad, freedoom2.wad, doom.wad, doomu.wad, freedoom1.wad,
   freedoom.wad, doom1.wad.
 

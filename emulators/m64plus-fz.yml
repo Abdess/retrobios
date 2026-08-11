@@ -20,10 +20,11 @@ systems:
 mode: standalone
 
 notes: |
-  Android application forked from Paul Lamb's Mupen64Plus AE and published under
-  three package ids built from one code line: org.mupen64plusae.v3.fzurita, the
-  paid .pro and the Amazon .amazon. Those flags gate advertising and Google
-  Drive backup and nothing else (AppData.java:334-337,
+  Android fork of Mupen64Plus AE, whose paulscode.android.mupen64plusae
+  namespace it keeps, published under three package ids built from one code
+  line: org.mupen64plusae.v3.fzurita, the paid .pro and the Amazon .amazon.
+  Those flags gate advertising and Google Drive backup and nothing else
+  (AppData.java:334-337,
   DataPrefsActivity.java:173-182, GamePrefsActivity.java:288-296), so the three
   packages want the same files. The repository default branch is a 2017 snapshot
   of the parent project; the application is built from fz-master, which carries
@@ -62,7 +63,7 @@ notes: |
 
   Transfer Pak carts come from four per player path settings copied into the
   working directory as playerN_gb_rom.gb and playerN_gb_ram.gb
-  (CoreService.java:558-568, CoreInterface.java:196-210,430-452). The core
+  (CoreService.java:558-568, CoreInterface.java:173-188,219-220,416-453). The core
   rejects a cart under 32 KiB and an unknown type byte at 0x147
   (device/gb/gb_cart.c:994-1008) and fixes no name, size or hash, so neither the
   cart nor its save carries an entry here.
@@ -80,7 +81,7 @@ notes: |
   after /system/fonts/DroidSans.ttf fails, which it does on current Android
   (TextDrawer.cpp:201-233,235-241, NativeConfigFiles.java:292); the core's OSD,
   the other upstream reader of that name, is absent from the Android source list
-  (mupen64plus-core.mk:24-105). RiceVideoLinux.ini holds rice's per ROM settings
+  (mupen64plus-core.mk:24-101). RiceVideoLinux.ini holds rice's per ROM settings
   (rice Config.cpp:38,933-951), Glide64mk2.ini glide64mk2's
   (glide64mk2 Main.cpp:1581-1590), and gln64.conf with gln64rom.conf gln64's
   global and per ROM settings (gln64 Config.cpp:245-252,296-300).
@@ -106,16 +107,18 @@ notes: |
   (angrylion-plus output/vdac.c:119-165,245-247).
 
   Written rather than obtained: mupen64plus.cfg and the plugin sections in it,
-  the mempak, eeprom, flashram and sram saves and 64DD disk saves opened with
-  default content when absent, savestates, screenshots, the texture dump and
-  cache directories, the GLideN64 shader cache and romInfoCache.cfg
-  (GlobalPrefs.java:466-484, NativeConfigFiles.java:109-112,276,289).
+  the mempak, eeprom, flashram and sram saves given default content when absent
+  (main/main.c:1015-1078,1619-1622) and the 64DD disk save in whichever of the
+  two formats SaveDiskFormat selects (main/main.c:365,1176-1235), savestates,
+  screenshots, the texture dump and cache directories, the GLideN64 shader cache
+  and romInfoCache.cfg (GlobalPrefs.java:466-484,
+  NativeConfigFiles.java:109-112,276,289).
 
   One file in the tree this build never reads: cxd4's rsp_conf.bin. Its reader
   is the zilmar variant of update_conf behind #if !defined(M64P_PLUGIN_API); the
   build defines that macro (mupen64plus-rsp-cxd4.mk:8), so the variant compiled
   takes its settings from the core config API and ignores the filename it is
-  handed (mupen64plus-rsp-cxd4 module.c:83-93,239,636-657).
+  handed (mupen64plus-rsp-cxd4 module.c:83-93,239,637-659).
 
 files:
   - name: "64DD_IPL_JP.n64"
@@ -132,7 +135,7 @@ files:
       byteswaps after identifying the first word as one of 0x80270740 (z64),
       0x40072780 (n64) or 0x27804007 (v64); any other value logs an invalid IPL
       and disables 64DD. Size is not checked and no hash is computed.
-    source_ref: "app/src/main/java/paulscode/android/mupen64plusae/jni/CoreService.java:599-612,622-624, app/src/main/java/paulscode/android/mupen64plusae/jni/CoreInterface.java:455-484, app/src/main/java/paulscode/android/mupen64plusae/persistent/GlobalPrefs.java:417,715, mupen64plus-core/upstream/src/main/main.c:1080-1145"
+    source_ref: "app/src/main/java/paulscode/android/mupen64plusae/jni/CoreService.java:599-612,621-623, app/src/main/java/paulscode/android/mupen64plusae/jni/CoreInterface.java:455-484, app/src/main/java/paulscode/android/mupen64plusae/persistent/GlobalPrefs.java:417,715, mupen64plus-core/upstream/src/main/main.c:1080-1145"
 
   - name: "64DD_IPL_US.n64"
     aliases: ["64DD_IPL_USA.bin", "IPL_USA.n64"]

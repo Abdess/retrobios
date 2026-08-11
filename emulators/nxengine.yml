@@ -17,8 +17,8 @@ notes: |
 
   The core requires the freeware Cave Story distribution placed in
   {system_dir}/nxengine/. When launched without content, it looks for
-  Doukutsu.exe there (libretro.cpp:254-259). When launched with a .exe
-  content file, it uses the parent directory of that file (libretro.cpp:237).
+  Doukutsu.exe there (libretro.cpp:257-262). When launched with a .exe
+  content file, it uses the parent directory of that file (libretro.cpp:240).
 
   At startup (main.cpp:75-90), the core opens Doukutsu.exe and extracts:
   ORG music (extractorg.c), PXT sound effects (extractpxt.c), stage tile
@@ -33,7 +33,7 @@ notes: |
   The font is compiled-in (bitmap_font.h). The upstream standalone version
   uses font.ttf via SDL_ttf.
 
-  Valid content extension: .exe (libretro.cpp:109).
+  Valid content extension: .exe (libretro.cpp:112).
 
 files:
   - name: "Doukutsu.exe"

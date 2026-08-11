@@ -61,5 +61,5 @@ platform_details:
   sg1000:
     bios_filename: null
     note: |
-      No BIOS support. Memory.cpp:291 returns false from IsBootromEnabled()
+      No BIOS support. Memory.cpp:379 returns false from IsBootromEnabled()
       when IsSG1000() or IsGameGearInSMSMode() is true.

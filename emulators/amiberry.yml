@@ -21,7 +21,7 @@ notes: |
   Libretro core option "amiberry_kickstart" overrides ROM selection: auto,
   kick.rom, kick13.rom, kick20.rom, kick31.rom, kick205.rom, kick40068.A1200,
   kick40068.A4000, cd32.rom, cdtv.rom. "auto" selects per model.
-  ref: libretro/libretro.cpp:558,621-640
+  ref: libretro/libretro.cpp:679,745-764
 
   Libretro ROM search directories (in order): save_dir/Kickstarts,
   system_dir/Kickstarts, system_dir/save-data/Kickstarts, system_dir.
@@ -31,7 +31,7 @@ notes: |
   Batocera sets this to /userdata/bios/amiga/. Fallback search order:
   {home_dir}/roms/kick.rom, {home_dir}/kick.rom, ../shared/rom/kick.rom,
   ../System/rom/kick.rom, then ROM database guess.
-  ref: src/memory.cpp:2030-2072
+  ref: src/memory.cpp:2104-2146
 
   ROM identification uses SHA1 against WinUAE database (340+ entries) but does
   not reject unknown ROMs. Cloanto encrypted ROMs supported with rom.key.

@@ -35,7 +35,7 @@ notes: |
   Neo Geo CDZ uses neocdz.zip with parent "neogeo". CD/CDZ BIOS plus
   zoom table.
 
-  hiscore.dat loaded from system_dir/fbneo/ (hiscore.cpp:406).
+  hiscore.dat loaded from system_dir/fbneo/ (hiscore.cpp:407).
 
   need_fullpath=false, extensions=zip|7z|cue|ccd, savestate=deterministic.
 

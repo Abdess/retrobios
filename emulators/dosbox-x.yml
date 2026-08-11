@@ -83,13 +83,13 @@ notes: |
   128 KB, or 96 KB on PC-98 where it also looks for <image>.itf.rom, <image>.ITF.ROM,
   itf.rom and ITF.ROM to serve the bank switched Initial Firmware Test region
   through port 43Dh.
-  ref: dos_programs.cpp:2243-2331
+  ref: dos_programs.cpp:2244-2332
 
   BIOSTEST.COM loads an image of up to 64 KB at F000:0 and restarts the CPU at
   the reset vector; it is compiled only when the debugger is enabled. The
   settings call binary on reset and call binary on boot load blobs of up to
   128 KB into the ROM BIOS area for CPU testing.
-  ref: dos_programs.cpp:3578-3637, bios.cpp:13072-13145
+  ref: dos_programs.cpp:3581-3640, bios.cpp:13142-13215
 
   Glide passthrough loads glide2x.dll, libglide2x.so or libglide2x.dylib.
   ref: glide.cpp:353-359, dosbox.cpp:3471-3473
@@ -109,7 +109,7 @@ notes: |
   the customcodepage translation table, .kl layout files and the KEYBOARD.SYS
   to KEYBRD4.SYS libraries read from a mounted drive, the glshaders directory
   and the .lng translations.
-  ref: bios.cpp:11321-11330, sdlmain.cpp:7001-7008,
+  ref: bios.cpp:11389-11398, sdlmain.cpp:7001-7008,
        dos.cpp:4397-4420, dos_keyboard_layout.cpp:300-340,
        render.cpp:1538-1545, messages.cpp:294-320
 

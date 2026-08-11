@@ -24,7 +24,7 @@ notes: |
   No hash check is performed.
 
   On reset, BIOS byte at offset 0x69 is patched for region selection:
-  0x3C for NTSC, 0x32 for PAL (Memory.cpp:184-187).
+  0x3C for NTSC, 0x32 for PAL (Memory.cpp:178-181).
 
   SGM (Super Game Module) expanded RAM requires no additional BIOS files.
 

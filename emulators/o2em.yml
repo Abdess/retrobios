@@ -29,7 +29,7 @@ notes: |
 
   BIOS loading: libretro.c load_bios() lines 145-212.
   BIOS selection: libretro_core_options.h lines 52-64.
-  Voice loading: voice.c init_voice() lines 38-79, called from libretro.c:1025-1032.
+  Voice loading: voice.c init_voice() lines 38-79, called from libretro.c:1060-1067.
 
 files:
   - name: "o2rom.bin"

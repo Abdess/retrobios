@@ -14,13 +14,13 @@ systems:
 
 notes: |
   Complete rewrite of NeoCD in C++11. Scans {system_dir}/neocd/ for any .rom
-  or .bin file, also inside .zip archives (src/libretro_bios.cpp:69-105,
+  or .bin file, also inside .zip archives (src/libretro_bios.cpp:70-106,
   src/path.cpp:6 NEOCD_SYSTEM_SUBDIR = "neocd").
 
   BIOS identified by binary pattern matching at fixed ROM addresses, not by
   filename (src/bios.cpp:167-206). Files are auto byte-swapped if needed
   (src/bios.cpp:148-160). Files smaller than 524288 bytes are skipped
-  (src/libretro_bios.cpp:42).
+  (src/libretro_bios.cpp:43).
 
   Three hardware families detected: Front Loader, Top Loader, CDZ. Modified
   variants recognized: SMKDan 0.07, SMKDan 0.07b, Universe BIOS 3.2,

@@ -16,12 +16,12 @@ notes: |
   retro_load_game time (libretro.cpp:105-129, function load_bootroms).
   Path is built as: system_directory + "/lynxboot.img", no subdirectory.
 
-  LoadBios in media.cpp:274 reads exactly 512 bytes (GLYNX_BIOS_SIZE
+  LoadBios in media.cpp:504 reads exactly 512 bytes (GLYNX_BIOS_SIZE
   = 0x200, defines.h:52). If the file size is not 0x200, the load is
   rejected with BIOS_LOAD_INVALID_SIZE. After loading, bytes at offset
   0x1F8 and 0x1F9 are patched (RAM/MAPCTL registers), then CRC32 is
   computed and compared against GLYNX_DB_BIOS_CRC (0x0D973C9D,
-  game_db.h:38). An invalid CRC triggers a warning log but the BIOS
+  game_db.h:47). An invalid CRC triggers a warning log but the BIOS
   is still marked as loaded (m_is_bios_loaded = true).
 
   No HLE fallback. If the BIOS is not loaded (IsBiosLoaded() returns
