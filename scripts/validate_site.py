@@ -147,20 +147,17 @@ def _local_target(
     return candidates, unquote(parsed.fragment)
 
 
-def validate_site(site: Path, config_path: Path) -> list[str]:
-    site = site.resolve()
-    if not site.is_dir():
-        return [f"site directory does not exist: {site}"]
+def _check_pages(
+    pages: dict, site: Path, titles: dict, descriptions: dict
+) -> list[str]:
+    """Every per-page check: title, description, links, JSON-LD.
 
-    base_path = _base_path(config_path)
-    html_paths = sorted(site.rglob("*.html"))
-    if not html_paths:
-        return [f"no HTML pages found in {site}"]
-
-    pages = {path.resolve(): _parse_page(path) for path in html_paths}
+    Split out of validate_site, which reached complexity 43. The
+    cross-page duplicate check stays with the caller, since it can only
+    run once every page has been seen. *titles* and *descriptions* are
+    filled here for it.
+    """
     issues: list[str] = []
-    titles: dict[str, list[Path]] = defaultdict(list)
-    descriptions: dict[str, list[Path]] = defaultdict(list)
 
     def report(path: Path, message: str) -> None:
         issues.append(f"{path.relative_to(site)}: {message}")
@@ -207,11 +204,15 @@ def validate_site(site: Path, config_path: Path) -> list[str]:
             if not isinstance(payload, dict) or payload.get("@context") != "https://schema.org":
                 report(path, "JSON-LD is not a schema.org object")
 
-    for label, values in (("title", titles), ("description", descriptions)):
-        for value, paths in values.items():
-            if len(paths) > 1:
-                rendered = ", ".join(str(path.relative_to(site)) for path in paths[:5])
-                issues.append(f"duplicate {label} {value!r}: {rendered}")
+    return issues
+
+
+def _check_links(pages: dict, site: Path, base_path: str) -> list[str]:
+    """Every local link and fragment resolves to something on disk."""
+    issues: list[str] = []
+
+    def report(path: Path, message: str) -> None:
+        issues.append(f"{path.relative_to(site)}: {message}")
 
     for path, page in pages.items():
         for href in page.links:
@@ -230,6 +231,34 @@ def validate_site(site: Path, config_path: Path) -> list[str]:
                 target_page = pages.get(existing.resolve())
                 if target_page is not None and fragment not in target_page.ids:
                     report(path, f"missing fragment in {href}")
+
+    return issues
+
+
+def validate_site(site: Path, config_path: Path) -> list[str]:
+    site = site.resolve()
+    if not site.is_dir():
+        return [f"site directory does not exist: {site}"]
+
+    base_path = _base_path(config_path)
+    html_paths = sorted(site.rglob("*.html"))
+    if not html_paths:
+        return [f"no HTML pages found in {site}"]
+
+    pages = {path.resolve(): _parse_page(path) for path in html_paths}
+    issues: list[str] = []
+    titles: dict[str, list[Path]] = defaultdict(list)
+    descriptions: dict[str, list[Path]] = defaultdict(list)
+
+    issues.extend(_check_pages(pages, site, titles, descriptions))
+
+    for label, values in (("title", titles), ("description", descriptions)):
+        for value, paths in values.items():
+            if len(paths) > 1:
+                rendered = ", ".join(str(path.relative_to(site)) for path in paths[:5])
+                issues.append(f"duplicate {label} {value!r}: {rendered}")
+
+    issues.extend(_check_links(pages, site, base_path))
 
     return issues
 
