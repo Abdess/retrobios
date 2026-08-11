@@ -3298,6 +3298,8 @@ def main():
             args.regions = region_mod.parse_requested(args.region)
         except ValueError as exc:
             parser.error(str(exc))
+        if args.manifest_targets:
+            parser.error("--region is incompatible with --manifest-targets")
 
     # Quick-exit modes: --verify-packs alone = verify existing packs only
     # Combined with --all-variants, generation runs first then verify
@@ -4543,6 +4545,16 @@ def verify_pack_against_platform(
     )
 
 
+def _narrows_contents(pack_name: str) -> bool:
+    """True when a pack holds fewer files than the platform declares.
+
+    A source-restricted or required-only build is narrower by design, so the
+    full platform expectation does not apply to it and conformance is skipped.
+    Region is not listed: the region filter is passed to the check itself.
+    """
+    return any(tag in pack_name for tag in ("_Platform_", "_Truth_", "_Required"))
+
+
 def verify_and_finalize_packs(
     output_dir: str,
     db: dict,
@@ -4595,8 +4607,7 @@ def verify_and_finalize_packs(
         # Skipped for filtered/split/custom packs (intentionally partial)
         if skip_conformance:
             continue
-        # Skip conformance for non-full source variants
-        if "_Platform_" in name or "_Truth_" in name:
+        if _narrows_contents(name):
             continue
         platforms = pack_to_platform.get(name, [])
         for pname in platforms:

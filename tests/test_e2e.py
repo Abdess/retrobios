@@ -5659,6 +5659,24 @@ struct BurnDriver BurnDrvneogeo = {
         )
         self.assertTrue(checked.issubset(self._names_in(out)))
 
+    def test_narrowed_variants_skip_conformance(self):
+        from generate_pack import _narrows_contents
+
+        for narrowed in (
+            "EmuDeck_2.3.8_Required_BIOS_Pack.zip",
+            "EmuDeck_2.3.8_Platform_BIOS_Pack.zip",
+            "EmuDeck_2.3.8_Truth_Required_BIOS_Pack.zip",
+            "EmuDeck_2.3.8_NorthAmerica_Required_BIOS_Pack.zip",
+        ):
+            self.assertTrue(_narrows_contents(narrowed), narrowed)
+
+        for full in (
+            "EmuDeck_2.3.8_BIOS_Pack.zip",
+            "EmuDeck_2.3.8_NorthAmerica_BIOS_Pack.zip",
+            "RetroArch_v1.22.2_Switch_BIOS_Pack.zip",
+        ):
+            self.assertFalse(_narrows_contents(full), full)
+
     def test_target_tag_formats_hardware_names(self):
         from generate_pack import _target_tag
 
