@@ -1,0 +1,360 @@
+# VICE keyboard mapping file
+#
+# A Keyboard map is read in as patch to the current map.
+#
+# File format:
+# - comment lines start with '#'
+# - keyword lines start with '!keyword'
+# - normal lines have 'keysym/scancode row column shiftflag'
+#
+# Keywords and their lines are:
+# '!CLEAR'               clear whole table
+# '!INCLUDE filename'    read file as mapping file
+# '!LSHIFT row col'      left shift keyboard row/column
+# '!RSHIFT row col'      right shift keyboard row/column
+# '!VSHIFT shiftkey'     virtual shift key (RSHIFT or LSHIFT)
+# '!SHIFTL shiftkey'     shift lock key (RSHIFT or LSHIFT)
+#  for emulated keyboards that have only one shift key, set both LSHIFT
+#  and RSHIFT to the same row/col and use RSHIFT for VSHIFT and SHIFTL.
+# '!LCTRL row col'       left control keyboard row/column
+# '!VCTRL ctrlkey'       virtual control key (LCTRL)
+# '!LCBM row col'        left CBM keyboard row/column
+# '!VCBM cbmkey'         virtual CBM key (LCBM)
+# '!UNDEF keysym'        remove keysym from table
+#
+# Shiftflag can have these values, flags can be ORed to combine them:
+# 0x0000      0  key is not shifted for this keysym/scancode
+# 0x0001      1  key is combined with shift for this keysym/scancode
+# 0x0002      2  key is left shift on emulated machine
+# 0x0004      4  key is right shift on emulated machine (use only this one
+#                for emulated keyboards that have only one shift key)
+# 0x0008      8  key can be shifted or not with this keysym/scancode
+# 0x0010     16  deshift key for this keysym/scancode
+# 0x0020     32  another definition for this keysym/scancode follows
+# 0x0040     64  key is shift-lock on emulated machine
+# 0x0080    128  shift modifier required on host
+# 0x0100    256  key is used for an alternative keyboard mapping, e.g. C64 mode in x128
+# 0x0200    512  alt-r (alt-gr) modifier required on host
+# 0x0400   1024  ctrl modifier required on host
+# 0x0800   2048  key is combined with cbm for this keysym/scancode
+# 0x1000   4096  key is combined with ctrl for this keysym/scancode
+# 0x2000   8192  key is (left) cbm on emulated machine
+# 0x4000  16384  key is (left) ctrl on emulated machine
+#
+# Negative row values:
+# 'keysym -1 n' joystick keymap A, direction n
+# 'keysym -2 n' joystick keymap B, direction n
+# 'keysym -3 0' first RESTORE key
+# 'keysym -3 1' second RESTORE key
+# 'keysym -4 0' 40/80 column key (x128)
+# 'keysym -4 1' CAPS (ASCII/DIN) key (x128)
+# 'keysym -5 n' joyport keypad, key n (not supported in x128)
+#
+# Joystick direction values:
+# 0      Fire
+# 1      South/West
+# 2      South
+# 3      South/East
+# 4      West
+# 5      East
+# 6      North/West
+# 7      North
+# 8      North/East
+#
+# Joyport keypad key layout:
+# --------------------------
+# |  0 |  1 |  2 |  3 |  4 |
+# --------------------------
+# |  5 |  6 |  7 |  8 |  9 |
+# --------------------------
+# | 10 | 11 | 12 | 13 | 14 |
+# --------------------------
+# | 15 | 16 | 17 | 18 | 19 |
+# --------------------------
+#
+# When a bigger spaced key is used,
+# it uses the upper left most key value.
+
+# this is a PET business (uk) keyboard mapping (Symbolic, US Layout, PET, GTK)
+
+# 2001, 3032 and 4032 use graphics keyboard
+# 4032B, 8032 and up use business keyboard
+#
+# http://www.6502.org/users/andre/petindex/keyboards.html
+
+# Business (UK) keyboard matrix:
+#
+# Keys starting with 'KP' are on the number pad.
+#
+#       0        1        2        3        4        5        6        7
+#   +--------+--------+--------+--------+--------+--------+--------+--------+
+# 0 |   2 "  |   5 %  |   8 (  |   - =  |  KP8   |crsr rgt|  ^N    |--------|
+#   +--------+--------+--------+--------+--------+--------+--------+--------+
+# 1 |   1 !  |   4 $  |   7 '  |   0    |  KP7   |   ^    |--------|  KP9   |
+#   +--------+--------+--------+--------+--------+--------+--------+--------+
+# 2 | escape |   s    |   f    |   h    |   ]    |   k    |   ; +  |  KP5   |
+#   +--------+--------+--------+--------+--------+--------+--------+--------+
+# 3 |   a    |   d    |   g    |   j    | return |   l    |   @    |  KP6   |
+#   +--------+--------+--------+--------+--------+--------+--------+--------+
+# 4 |  tab   |   w    |   r    |   y    |   \    |   i    |   p    |  del   |
+#   +--------+--------+--------+--------+--------+--------+--------+--------+
+# 5 |   q    |   e    |   t    |   u    |crsr dwn|   o    |   [    |  KP4   |
+#   +--------+--------+--------+--------+--------+--------+--------+--------+
+# 6 |l shift |   c    |   b    |   . >  |  KP.   |  ^Y    |r shift |  KP3   |
+#   +--------+--------+--------+--------+--------+--------+--------+--------+
+# 7 |   z    |   v    |   n    |   , <  |  KP0   |  ^O    | repeat |  KP2   |
+#   +--------+--------+--------+--------+--------+--------+--------+--------+
+# 8 |  RVS   |   x    | space  |   m    | home   |  ^U    |   / ?  |  KP1   |
+#   +--------+--------+--------+--------+--------+--------+--------+--------+
+# 9 |  <--   |   3 #  |   6 &  |   9 )  |runstop |   : *  |--------|  ^V    |
+#   +--------+--------+--------+--------+--------+--------+--------+--------+
+#
+#   ^N = both shifts + 2
+#   ^Y = left shift + TAB + I
+#   ^O = Z + A + L
+#   ^U = RVS + A + L
+#   ^V = TAB + <- + DEL
+#
+# Business (US) matrix (differences to UK)
+#   +--------+--------+--------+--------+--------+--------+--------+--------+
+# 2 |        |        |        |        |   ; +  |        |   \    |        |
+#   +--------+--------+--------+--------+--------+--------+--------+--------+
+# 3 |        |        |        |        |        |        |   [    |        |
+#   +--------+--------+--------+--------+--------+--------+--------+--------+
+# 4 |        |        |        |        |   @    |        |        |        |
+#   +--------+--------+--------+--------+--------+--------+--------+--------+
+# 5 |        |        |        |        |        |        |   ]    |        |
+#   +--------+--------+--------+--------+--------+--------+--------+--------+
+#
+#   uk  ->  us
+#   ]       ;
+#   [       ]
+#   \       @
+#   ;       \
+#   @       [
+#
+#   uk business layout:
+#
+#   aleft   1!  2"  3#  4$  5%  6&  7'  8(  9)  0   :*  -=  ^   l/r r/s     7   8   9
+#       tab   q   w   e   r   t   y   u   i   o   p   [   \   u/d del       4   5   6
+#   esc SL      a   s   d   f   g   h   j   k   l   ;+  @   ]   return      1   2   3
+#   rvs LS        z   x   c   v   b   n   m   ,<  .>  /?  RS rpt  clr       0       .
+#
+#   us business layout:
+#
+#   aleft   1!  2"  3#  4$  5%  6&  7'  8(  9)  0   :*  -=  ^   l/r r/s     7   8   9
+#       tab   q   w   e   r   t   y   u   i   o   p   ]   @   u/d del       4   5   6
+#   esc SL      a   s   d   f   g   h   j   k   l   \   [   ;+  return      1   2   3
+#   rvs LS        z   x   c   v   b   n   m   ,<  .>  /?  RS rpt  clr       0       .
+
+!CLEAR
+!LSHIFT 6 0
+!RSHIFT 6 6
+!VSHIFT LSHIFT
+!SHIFTL LSHIFT
+#!LCBM 0 0
+#!VCBM LCBM
+#!LCTRL 0 0
+#!VCTRL LCTRL
+
+# left shift
+# key is left shift
+Shift_L          6 0 2
+# shift lock
+# key is (left) shift-lock
+Caps_Lock        6 0 64
+Shift_R     6 6 4
+Control_L   9 4 8
+
+# shift lock
+# key is (left) shift-lock
+Caps_Lock   6 0 64
+
+0 1 3 0
+1 1 0 0
+2 0 0 0
+3 9 1 0
+4 1 1 0
+5 0 1 0
+6 9 2 0
+7 1 2 0
+8 0 2 0
+9 9 3 0
+
+a 3 0 0
+b 6 2 0
+c 6 1 0
+d 3 1 0
+e 5 1 0
+f 2 2 0
+g 3 2 0
+h 2 3 0
+i 4 5 0
+j 3 3 0
+k 2 5 0
+l 3 5 0
+m 8 3 0
+n 7 2 0
+o 5 5 0
+p 4 6 0
+q 5 0 0
+r 4 2 0
+s 2 1 0
+t 5 2 0
+u 5 3 0
+v 7 1 0
+w 4 1 0
+x 8 1 0
+y 4 3 0
+z 7 0 0
+
+A 3 0 1
+B 6 2 1
+C 6 1 1
+D 3 1 1
+E 5 1 1
+F 2 2 1
+G 3 2 1
+H 2 3 1
+I 4 5 1
+J 3 3 1
+K 2 5 1
+L 3 5 1
+M 8 3 1
+N 7 2 1
+O 5 5 1
+P 4 6 1
+Q 5 0 1
+R 4 2 1
+S 2 1 1
+T 5 2 1
+U 5 3 1
+V 7 1 1
+W 4 1 1
+X 8 1 1
+Y 4 3 1
+Z 7 0 1
+
+space           8 2 8
+Return          3 4 8
+
+#Escape              2 0 8       # ESC
+Escape          9 4 8       # run/stop
+
+F1              2 0 8   # ESC
+F2              8 0 8   # revers off
+
+# first row
+
+grave           1 2 1   # '
+asciitilde      9 0 16  # arrow left
+
+exclam          1 0 1   # 1 !
+at              3 6 0   # 2 @
+numbersign      9 1 1   # 3 #
+dollar          1 1 1   # 4 $
+percent         0 1 1   # 5 %
+asciicircum     1 5 0   # 6 ^
+ampersand       9 2 1   # 7 &
+asterisk        9 5 1   # 8 *
+parenleft       0 2 1   # 9 (
+parenright      9 3 1   # 0 )
+
+minus           0 3 0   # -
+underscore      3 6 1   # shift+@
+
+equal           0 3 1   # = (shift+-)
+plus            2 6 1   # + (shift+;)
+
+BackSpace       4 7 8
+
+# second row
+Tab             4 0 8
+ISO_Left_Tab    4 0 1
+
+bracketleft     5 6 0   # [
+braceleft       5 6 1   # shift [, { for SuperPET
+
+bracketright    2 4 0   # ]
+braceright      2 4 1   # shift ], } for SuperPET
+
+backslash       4 4 0
+bar             4 4 1   # shift \ for SuperPET
+
+# third row
+
+colon           9 5 16
+semicolon       2 6 0
+
+quotedbl        0 0 1
+apostrophe      1 2 1
+
+# fourth row
+
+comma           7 3 0
+less            7 3 1
+
+period          6 3 0
+greater         6 3 1
+
+slash           8 6 0
+question        8 6 1
+
+# Dead keys support for those using US-International keyboard layout.
+dead_grave       1 2 1   # '
+dead_perispomeni 9 0 16  # arrow left
+dead_tilde       9 0 16  # arrow left
+dead_circumflex  1 5 0   # ^
+dead_diaeresis   0 0 1   # "
+dead_acute       1 2 1
+
+Delete          4 7 0
+Insert          4 7 1
+Home            8 4 8
+#End
+Page_Up         8 0 8   # revers off
+Page_Down       7 6 8   # repeat
+
+# cursor keys
+
+Left    0 5 1
+Right   0 5 8
+Up      5 4 1
+Down    5 4 8
+
+# keypad
+
+KP_0            7 4 8
+KP_1            8 7 8
+KP_2            7 7 8
+KP_3            6 7 8
+KP_4            5 7 8
+KP_5            2 7 8
+KP_6            3 7 8
+KP_7            1 4 8
+KP_8            0 4 8
+KP_9            1 7 8
+KP_Separator    7 3 0
+KP_Multiply     9 5 1
+KP_Divide       8 6 0
+KP_Add          2 6 1
+KP_Subtract     0 3 0
+KP_Enter        3 4 8
+KP_Decimal      6 4 0
+
+#
+# Joystick 2
+#
+# Commented out: due to the keymap loading *after* vicerc any keyset settings
+#                in vicerc are overruled by this.
+#                see https://sourceforge.net/p/vice-emu/bugs/1797/
+#
+# w -2 6
+# e -2 7
+# r -2 8
+# s -2 4
+# f -2 5
+# x -2 1
+# c -2 2
+# v -2 3
+# space -2 0

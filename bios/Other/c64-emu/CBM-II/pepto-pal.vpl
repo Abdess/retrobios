@@ -1,0 +1,58 @@
+#
+# VICE Palette file
+#
+# Syntax:
+# Red Green Blue
+#
+# TYPE:VICII
+# NAME:Pepto (PAL)
+
+# this palette was calculated for PAL according to http://www.pepto.de/projects/colorvic/
+
+# Black
+00 00 00
+
+# White
+FF FF FF
+
+# Red
+68 37 2b
+
+# Cyan
+70 a4 b2
+
+# Purple
+6f 3d 86
+
+# Green
+58 8d 43
+
+# Blue
+35 28 79
+
+# Yellow
+b8 c7 6f
+
+# Orange
+6f 4f 25
+
+# Brown
+43 39 00
+
+# Light Red
+9a 67 59
+
+# Dark Gray
+44 44 44
+
+# Medium Gray
+6c 6c 6c
+
+# Light Green
+9a d2 84
+
+# Light Blue
+6c 5e b5
+
+# Light Gray
+95 95 95

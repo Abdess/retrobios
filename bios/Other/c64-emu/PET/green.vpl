@@ -1,0 +1,16 @@
+#
+# VICE Palette file
+#
+# Syntax:
+# Red Green Blue
+#
+# NAME:Green
+# TYPE:Crtc
+
+# green screens use P1 phosphor (528nm)
+
+# Background
+00 00 00
+
+# Foreground
+41 FF 00

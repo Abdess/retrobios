@@ -1,0 +1,14 @@
+#
+# VICE Palette file
+#
+# Syntax:
+# Red Green Blue
+#
+# NAME:Green
+# TYPE:Crtc
+
+# Background
+00 00 00
+
+# Foreground
+00 FF 00
