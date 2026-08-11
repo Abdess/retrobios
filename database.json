@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-11T15:46:20Z",
-  "total_files": 8545,
-  "total_size": 11053683245,
+  "generated_at": "2026-08-11T15:51:58Z",
+  "total_files": 8587,
+  "total_size": 11057204413,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -51287,6 +51287,426 @@
       "crc32": "c506efb9",
       "adler32": "87aaa299"
     },
+    "16e3c6698a10547c228b8ab474b817ff1d64c216": {
+      "path": "bios/Other/mfme/DefaultMasks/ReelGradientMask.bmp",
+      "name": "ReelGradientMask.bmp",
+      "size": 522214,
+      "sha1": "16e3c6698a10547c228b8ab474b817ff1d64c216",
+      "md5": "f29d49006080c3080baab7b851e1cf68",
+      "sha256": "68db230ab6261f452de8d59fb48110d5d012f5a448cbc77afc1ed487c9b039ce",
+      "crc32": "094ecf8e",
+      "adler32": "ba5e55aa"
+    },
+    "e3df9d90adb0d44c43cb70b4fd3887c7ddbef1cf": {
+      "path": "bios/Other/mfme/DefaultMasks/ReelLampMask.bmp",
+      "name": "ReelLampMask.bmp",
+      "size": 108734,
+      "sha1": "e3df9d90adb0d44c43cb70b4fd3887c7ddbef1cf",
+      "md5": "7786f30131c98baca83ec313281cfa6a",
+      "sha256": "ba0cd5ef1ceddcab1498a62935106e59a9682b4aea996106b2f3295fbd6fd1cd",
+      "crc32": "752ae60e",
+      "adler32": "5a3c1651"
+    },
+    "f92d854f017d154c9ae0a2351629876515ba48d7": {
+      "path": "bios/Other/mfme/DefaultSounds/10pSlide.wav",
+      "name": "10pSlide.wav",
+      "size": 60834,
+      "sha1": "f92d854f017d154c9ae0a2351629876515ba48d7",
+      "md5": "b4c8c434df1f038c76e5221cc6adca0c",
+      "sha256": "a2b5477bddbdf966c5c72f46a0ad2d54ac27147a4c47acfdf18b6941332e385a",
+      "crc32": "96c57522",
+      "adler32": "1340329c"
+    },
+    "f26a91c46089635aa214f152330b75892bdebb18": {
+      "path": "bios/Other/mfme/DefaultSounds/BellOff.wav",
+      "name": "BellOff.wav",
+      "size": 13702,
+      "sha1": "f26a91c46089635aa214f152330b75892bdebb18",
+      "md5": "e12511e05e4cc311f011657e7f637f12",
+      "sha256": "a9b1f528332ec29a14a9db5ffdce261214a6a1773a5161f7208bccba8ff024a3",
+      "crc32": "c2a0ace7",
+      "adler32": "43f25ad0"
+    },
+    "a4af119db1fdf63cf410ef27db13f5c022761823": {
+      "path": "bios/Other/mfme/DefaultSounds/BellOn.wav",
+      "name": "BellOn.wav",
+      "size": 97512,
+      "sha1": "a4af119db1fdf63cf410ef27db13f5c022761823",
+      "md5": "0a020be8f0e0db5c4d9a8006b62d6951",
+      "sha256": "efffd6cf614813bbf70885fb9a2c1c455dfb850aad51fdd054a304133d0d9188",
+      "crc32": "d9088cd0",
+      "adler32": "d3fa4574"
+    },
+    "cdb40079f4c0ce29793dd2a16fb53bec421ba1fd": {
+      "path": "bios/Other/mfme/DefaultSounds/ButtonDown.wav",
+      "name": "ButtonDown.wav",
+      "size": 3264,
+      "sha1": "cdb40079f4c0ce29793dd2a16fb53bec421ba1fd",
+      "md5": "2b015a43a42e90dc4e1b81c86d8245a9",
+      "sha256": "64dd254df6f5e1e21039c7e30f9b9513348331b3b10d4eadfd3bbe4482b2ba85",
+      "crc32": "c4f21ed3",
+      "adler32": "ffcf0694"
+    },
+    "ae019c3258f01fdc847a4902bf550432c67aeb48": {
+      "path": "bios/Other/mfme/DefaultSounds/ButtonUp.wav",
+      "name": "ButtonUp.wav",
+      "size": 2638,
+      "sha1": "ae019c3258f01fdc847a4902bf550432c67aeb48",
+      "md5": "e1869cbb8ffe4f495fe4505f75cdf8d3",
+      "sha256": "7c08891fd8878b52c538740eecaa3b16c50a8d3a0f650589748a74e31a7bf678",
+      "crc32": "d893a1f9",
+      "adler32": "ab9f5fa9"
+    },
+    "4a65cd52f4ba634c3fa419ce7707337cc9da7dcc": {
+      "path": "bios/Other/mfme/DefaultSounds/Buzzer.wav",
+      "name": "Buzzer.wav",
+      "size": 9082,
+      "sha1": "4a65cd52f4ba634c3fa419ce7707337cc9da7dcc",
+      "md5": "02de5a8364473459cdc343629eec054f",
+      "sha256": "c1c980c74a150a97efb26480431799580db205af01a88a0e3152b81a6b3c4595",
+      "crc32": "fdf63f49",
+      "adler32": "64fa707b"
+    },
+    "3f356d3508ac2d2cd2c8293d8e40034f78b92646": {
+      "path": "bios/Other/mfme/DefaultSounds/CoinDropReject.wav",
+      "name": "CoinDropReject.wav",
+      "size": 12018,
+      "sha1": "3f356d3508ac2d2cd2c8293d8e40034f78b92646",
+      "md5": "d1217c12edc5e5d53739d8be2ddfdce7",
+      "sha256": "053784d351f6e57d69c5cf52ae45df0cc4d7f73c17641ff97e3509d5d12822c6",
+      "crc32": "719c31a5",
+      "adler32": "e9484fdc"
+    },
+    "224464d31a8bd2fe2b1b53a59660c6f03cb9c2a5": {
+      "path": "bios/Other/mfme/DefaultSounds/CoinIn.wav",
+      "name": "CoinIn.wav",
+      "size": 60816,
+      "sha1": "224464d31a8bd2fe2b1b53a59660c6f03cb9c2a5",
+      "md5": "0b78a5b68653a32f52e0c14512d49a9c",
+      "sha256": "7d82289393b9483fab94477e48d0b40d299226dbd66d735c10686e44490b1d02",
+      "crc32": "266594be",
+      "adler32": "e6aa12a4"
+    },
+    "ffde5b0a714785c772c8062d56ebae304f9c4ac3": {
+      "path": "bios/Other/mfme/DefaultSounds/CoinInDrop.wav",
+      "name": "CoinInDrop.wav",
+      "size": 21286,
+      "sha1": "ffde5b0a714785c772c8062d56ebae304f9c4ac3",
+      "md5": "2052f62fd701ef96c71410b3fa83d942",
+      "sha256": "4e59d2f716e1a9c167bef45e9b907979be7f06336f29872da241537f3171a737",
+      "crc32": "4b9bef49",
+      "adler32": "c7858172"
+    },
+    "37f8acd9778cbc81f11c08f129f3f726cc9964f4": {
+      "path": "bios/Other/mfme/DefaultSounds/CoinInRejected.wav",
+      "name": "CoinInRejected.wav",
+      "size": 88144,
+      "sha1": "37f8acd9778cbc81f11c08f129f3f726cc9964f4",
+      "md5": "be1cacfae1dbe0f5e77a7fed4ba6a83d",
+      "sha256": "51e9cdde1ba84a5a7c487875afb97b71705c7a58f2acc7739ed53f61fcbcf3d5",
+      "crc32": "35c2d964",
+      "adler32": "ddb87c20"
+    },
+    "540c94981d0ad7cb1fdcc2368ec84bb2f433cbab": {
+      "path": "bios/Other/mfme/DefaultSounds/CoinInS10Rejected.wav",
+      "name": "CoinInS10Rejected.wav",
+      "size": 80834,
+      "sha1": "540c94981d0ad7cb1fdcc2368ec84bb2f433cbab",
+      "md5": "53f7599afca8456ebeaa112a9a783048",
+      "sha256": "3bbdae645b9e257de76281acc2f8f2082e68243495938c67773f9b2e31172e25",
+      "crc32": "485fce40",
+      "adler32": "d1f9e6b4"
+    },
+    "0646e2157ea1d6996909b26e560b5193eff8da32": {
+      "path": "bios/Other/mfme/DefaultSounds/CoinInS10Switch.wav",
+      "name": "CoinInS10Switch.wav",
+      "size": 33008,
+      "sha1": "0646e2157ea1d6996909b26e560b5193eff8da32",
+      "md5": "5cbb3e2c91c91fc5a67e2860430a6956",
+      "sha256": "ba44911713f21ac84334a54c52369fa4a3fe97cc23b43908b795c324ba9c83fa",
+      "crc32": "f892026e",
+      "adler32": "fe34c5d6"
+    },
+    "949c411f569a7f697f6a1062198740361a1fc37b": {
+      "path": "bios/Other/mfme/DefaultSounds/CoinInS10TokenRejected.wav",
+      "name": "CoinInS10TokenRejected.wav",
+      "size": 80834,
+      "sha1": "949c411f569a7f697f6a1062198740361a1fc37b",
+      "md5": "9ce852e774410dfac7d1fb8bbbc40e2c",
+      "sha256": "dd5da609f9b76f009fbcd3db0ba279158336eb0bf5f34dd6cf4e866007a33846",
+      "crc32": "55d2dc51",
+      "adler32": "0719baca"
+    },
+    "2b6785096da1b9139140a9286e56e208be5d9c28": {
+      "path": "bios/Other/mfme/DefaultSounds/HopperCoin1.wav",
+      "name": "HopperCoin1.wav",
+      "size": 25936,
+      "sha1": "2b6785096da1b9139140a9286e56e208be5d9c28",
+      "md5": "e9c7c683b136c1ce7a9db93b8a2faa61",
+      "sha256": "20639b47f6ecfe68a7f4002214cdf65c51fd4463f4acc5155a5ea5a94698a36b",
+      "crc32": "5e6a8196",
+      "adler32": "dbf75b35"
+    },
+    "20d2187d4ae844dd8726eb6f723b5118c4c46738": {
+      "path": "bios/Other/mfme/DefaultSounds/HopperCoin2.wav",
+      "name": "HopperCoin2.wav",
+      "size": 24290,
+      "sha1": "20d2187d4ae844dd8726eb6f723b5118c4c46738",
+      "md5": "8d26ac7d2b3ddaf0edbc301ff1eb927f",
+      "sha256": "cefd56a96242881d9008dc1581fad254005bdb93794ca687e884fb9f0ab6fd79",
+      "crc32": "389f4552",
+      "adler32": "cad65878"
+    },
+    "d826ef5ce08a1cf8ca69523416fdfd6829ac985e": {
+      "path": "bios/Other/mfme/DefaultSounds/HopperMotor1.wav",
+      "name": "HopperMotor1.wav",
+      "size": 86884,
+      "sha1": "d826ef5ce08a1cf8ca69523416fdfd6829ac985e",
+      "md5": "8e621f57837c14cb2e273c1ca9be0caf",
+      "sha256": "47dad6677c0c3d12ae760c4aed39aa7ea2e0d7c6690c48aac2c2413fe6116a39",
+      "crc32": "2b181654",
+      "adler32": "71968191"
+    },
+    "97bb2ddd2186b410dc7848ebdc4a6748c0b2c9cc": {
+      "path": "bios/Other/mfme/DefaultSounds/LockoutOff.wav",
+      "name": "LockoutOff.wav",
+      "size": 9204,
+      "sha1": "97bb2ddd2186b410dc7848ebdc4a6748c0b2c9cc",
+      "md5": "05aab439a550b8188517d414bd8e32f9",
+      "sha256": "ff2ae0532e91183a20f6a86b09926c3c7efc9a2f14ef70583abbd80ec8bb7986",
+      "crc32": "91662bf3",
+      "adler32": "0e4236cc"
+    },
+    "dddd90b8fb4091420a4b98b97d869d561ae922f2": {
+      "path": "bios/Other/mfme/DefaultSounds/LockoutOn.wav",
+      "name": "LockoutOn.wav",
+      "size": 11994,
+      "sha1": "dddd90b8fb4091420a4b98b97d869d561ae922f2",
+      "md5": "b8845232232450d83c82973d9c8a4919",
+      "sha256": "18e639143603060f988565bccba635bb5d519a5736c2ece8cc50883b5ee92101",
+      "crc32": "1aeb8e51",
+      "adler32": "8feacbde"
+    },
+    "4dee3153c5a4cdf9d286387232fa89fbf381fa28": {
+      "path": "bios/Other/mfme/DefaultSounds/MiscSlide.wav",
+      "name": "MiscSlide.wav",
+      "size": 63898,
+      "sha1": "4dee3153c5a4cdf9d286387232fa89fbf381fa28",
+      "md5": "c84bb9236a1920fa1e9656af78f0523a",
+      "sha256": "ca1c17fc0e538e8585d9df7b08d0ca26de858c342e443a715aeee847be1b02f9",
+      "crc32": "067ab1da",
+      "adler32": "d52cf1e7"
+    },
+    "d1bdf707afe393153e48301694e573d44a2ce5c1": {
+      "path": "bios/Other/mfme/DefaultSounds/MotorOn.wav",
+      "name": "MotorOn.wav",
+      "size": 481324,
+      "sha1": "d1bdf707afe393153e48301694e573d44a2ce5c1",
+      "md5": "0121b13d6ce7f9452df0de85d5832772",
+      "sha256": "a41fdd5a11c8921bbbb911cf3e5d386405133bd1e8693a98966f32112555c4ba",
+      "crc32": "73b8c20e",
+      "adler32": "f3416c9e"
+    },
+    "19d18a2b547885a4f01a2c47f611ed36236d83f0": {
+      "path": "bios/Other/mfme/DefaultSounds/NoteIn.wav",
+      "name": "NoteIn.wav",
+      "size": 156204,
+      "sha1": "19d18a2b547885a4f01a2c47f611ed36236d83f0",
+      "md5": "b26f57563ed8ffaa58e5f9bd9b264aeb",
+      "sha256": "bf5a56bef482e7569a839c9fff7b0a25fe4b50f7f3e4e27563854fd334de4e02",
+      "crc32": "7b842236",
+      "adler32": "6436b82a"
+    },
+    "703d6187f35a1b1c044534c0a826d91afd1dd4e1": {
+      "path": "bios/Other/mfme/DefaultSounds/NoteInReject.wav",
+      "name": "NoteInReject.wav",
+      "size": 96688,
+      "sha1": "703d6187f35a1b1c044534c0a826d91afd1dd4e1",
+      "md5": "6e1628a6bfb5fe148e176bd89544cebb",
+      "sha256": "7932e0dfc898f90f1e1dfb3f8b70a7d78835aa17175269329be0316a5b884fcd",
+      "crc32": "a69a599f",
+      "adler32": "182808b1"
+    },
+    "abe07a5cf9eaea9e190374af381d8d1d97d122cd": {
+      "path": "bios/Other/mfme/DefaultSounds/NoteInStack.wav",
+      "name": "NoteInStack.wav",
+      "size": 254880,
+      "sha1": "abe07a5cf9eaea9e190374af381d8d1d97d122cd",
+      "md5": "3b2cc0ba990963ad3c75761b217d21da",
+      "sha256": "452e293866a8ef33d8d00e89575cf4fd67a7138158974bc86ebf652b4bc21b09",
+      "crc32": "615eda1d",
+      "adler32": "127c817e"
+    },
+    "164582df699f64554f1c8cea6e295c1f6da9a5bb": {
+      "path": "bios/Other/mfme/DefaultSounds/PrizeMotor.wav",
+      "name": "PrizeMotor.wav",
+      "size": 41076,
+      "sha1": "164582df699f64554f1c8cea6e295c1f6da9a5bb",
+      "md5": "8684600c434a62302813df4b9da0a712",
+      "sha256": "4eb0c7dc354991806260516920aa8b2e5b3e4679bf335bae325230a59cf9dd02",
+      "crc32": "508b2259",
+      "adler32": "88658aa2"
+    },
+    "3eeb7861d1ad0b4305864490573aebf592306db1": {
+      "path": "bios/Other/mfme/DefaultSounds/PrizeVend.wav",
+      "name": "PrizeVend.wav",
+      "size": 62288,
+      "sha1": "3eeb7861d1ad0b4305864490573aebf592306db1",
+      "md5": "16b873ed923bc9d7c66e7037053b68db",
+      "sha256": "db00146b8d9203e65f4a3b0803c97cbd2fa052355797dd7367623c412ec93b2c",
+      "crc32": "93af34da",
+      "adler32": "2e82ed83"
+    },
+    "83a39aa65dbc6986f36a4a544d05122dffd82ee9": {
+      "path": "bios/Other/mfme/DefaultSounds/PullHandleFast.wav",
+      "name": "PullHandleFast.wav",
+      "size": 30252,
+      "sha1": "83a39aa65dbc6986f36a4a544d05122dffd82ee9",
+      "md5": "eba151e2ba37330f8398548ee93c5641",
+      "sha256": "3f96b441da1129d08ca488206f6534115efc4bc69ee60b998d957f1f78a12378",
+      "crc32": "b681d2a9",
+      "adler32": "16ead100"
+    },
+    "7d0601cb6668cbf6e28dd04fd2595d73aed2a431": {
+      "path": "bios/Other/mfme/DefaultSounds/PullHandleNormal.wav",
+      "name": "PullHandleNormal.wav",
+      "size": 70700,
+      "sha1": "7d0601cb6668cbf6e28dd04fd2595d73aed2a431",
+      "md5": "6f8533fa7abe213015f7e0c8bf5f9a2c",
+      "sha256": "12aaa5579f6e433e72cf998e02b9433cb16ed2e4678ee58318e8401ac107bd32",
+      "crc32": "d1573706",
+      "adler32": "0242c205"
+    },
+    "340f9aee4133f9885f1b722b80881f10a55bbab2": {
+      "path": "bios/Other/mfme/DefaultSounds/PullHandleRelease.wav",
+      "name": "PullHandleRelease.wav",
+      "size": 43372,
+      "sha1": "340f9aee4133f9885f1b722b80881f10a55bbab2",
+      "md5": "9255f2e7dae499c7eade3b0f9cdd9a58",
+      "sha256": "73d35b2ed3cd644701864e121cbd40c269a4d2769ab1dbc14fbc420da8a49b10",
+      "crc32": "d5f069e4",
+      "adler32": "be2ddd20"
+    },
+    "85c2523977bc191f33d38af7121bac676cfdffa0": {
+      "path": "bios/Other/mfme/DefaultSounds/PullHandleSlow.wav",
+      "name": "PullHandleSlow.wav",
+      "size": 159972,
+      "sha1": "85c2523977bc191f33d38af7121bac676cfdffa0",
+      "md5": "0d31a64e78ce13fe5a5febf3d4481b88",
+      "sha256": "eae83d312acf5a31cd53d00038aa5c678b724b23eacd204e8de66de5163ebc26",
+      "crc32": "b220bd92",
+      "adler32": "e42dc3eb"
+    },
+    "9384d9503e201c417fb6907b30935511b4875476": {
+      "path": "bios/Other/mfme/DefaultSounds/S1Locked.wav",
+      "name": "S1Locked.wav",
+      "size": 7596,
+      "sha1": "9384d9503e201c417fb6907b30935511b4875476",
+      "md5": "2d5958039d479c24fae9bc69d76baa4a",
+      "sha256": "280d7ea1e5758426edbab6aa4359672c18ad61ba15b7cc6c82a654dfa69f6b9d",
+      "crc32": "3ef4b3b8",
+      "adler32": "013946bf"
+    },
+    "cc9840193bc6e21337dcbdcdeb52ad57090a4db6": {
+      "path": "bios/Other/mfme/DefaultSounds/SolenoidOff.wav",
+      "name": "SolenoidOff.wav",
+      "size": 17766,
+      "sha1": "cc9840193bc6e21337dcbdcdeb52ad57090a4db6",
+      "md5": "d3b97c9331687da61ddc2cc671f498bf",
+      "sha256": "fd8962248e7b4a45592e548732e1dc396db96941a688f53942bf06865457c31e",
+      "crc32": "ff3171a1",
+      "adler32": "642e3970"
+    },
+    "d7e478cede532a4468e3158a3e974d4209437cfd": {
+      "path": "bios/Other/mfme/DefaultSounds/SolenoidOn.wav",
+      "name": "SolenoidOn.wav",
+      "size": 5450,
+      "sha1": "d7e478cede532a4468e3158a3e974d4209437cfd",
+      "md5": "bb7873a4fbf2fc5a7b76445147490a8a",
+      "sha256": "169bc4bc38a446925f688e10f7b1fb050b954af7708a08ca5a011eea1776619b",
+      "crc32": "2c0c13d8",
+      "adler32": "2c6560d9"
+    },
+    "e4e9759e806b6c76bad758c93378b71571217ca0": {
+      "path": "bios/Other/mfme/DefaultSounds/Stepper.wav",
+      "name": "Stepper.wav",
+      "size": 18250,
+      "sha1": "e4e9759e806b6c76bad758c93378b71571217ca0",
+      "md5": "87c36e83f7080f37137ff50725b2f8fb",
+      "sha256": "320e1f825339462af40eba76c7e1a6e933c34a5634bc45126e7110bfb5e3ac50",
+      "crc32": "a3fd6dc2",
+      "adler32": "1d106f1d"
+    },
+    "cd6d260ae5083ec6d4b9f5dc51253e275d6defff": {
+      "path": "bios/Other/mfme/DefaultSounds/TokenSlide.wav",
+      "name": "TokenSlide.wav",
+      "size": 84928,
+      "sha1": "cd6d260ae5083ec6d4b9f5dc51253e275d6defff",
+      "md5": "ce143fa9eb8b2d28580d23d31f763925",
+      "sha256": "096abcbf6ce69c0828923157dfe9752d88c97ef605174abafb27a8c101e556dd",
+      "crc32": "9dad2fb2",
+      "adler32": "8fb88c3b"
+    },
+    "a5f677b33e306810b76dbe83464e71d21d8e8fee": {
+      "path": "bios/Other/mfme/DefaultSounds/Wiper.wav",
+      "name": "Wiper.wav",
+      "size": 117804,
+      "sha1": "a5f677b33e306810b76dbe83464e71d21d8e8fee",
+      "md5": "f93c287805fde91e4224ad1ebb840819",
+      "sha256": "abd23077a180c2c83eae9782a59b20fce85faa1697e04217e21755df20d5c006",
+      "crc32": "99ac538b",
+      "adler32": "b243400d"
+    },
+    "d4c70ecc12d3be10d5a07784b6d07e9e3880e39a": {
+      "path": "bios/Other/mfme/DefaultSounds/meter.wav",
+      "name": "meter.wav",
+      "size": 9260,
+      "sha1": "d4c70ecc12d3be10d5a07784b6d07e9e3880e39a",
+      "md5": "7ce7ab3d3cd68d70f1f6594ded05660e",
+      "sha256": "dc0105791cb7284500f9c24ed8113a2851d322f06810c1cd3defafbc90e56d6d",
+      "crc32": "825ed27e",
+      "adler32": "65436198"
+    },
+    "82f91b0c82ee8ea289f729625961ad5ebdc51758": {
+      "path": "bios/Other/mfme/Fonts/LITHOGRB.TTF",
+      "name": "LITHOGRB.TTF",
+      "size": 49152,
+      "sha1": "82f91b0c82ee8ea289f729625961ad5ebdc51758",
+      "md5": "d499249cdcb31960e6ba1cd9d6eea088",
+      "sha256": "ca6bf5f4a82e0886e4209b2fea3cb723bfbcfe09b18d5a0814edd15df3bde9da",
+      "crc32": "763826be",
+      "adler32": "8382c780"
+    },
+    "5d9d28246d2976cdd75adc66524ce9de5e623af0": {
+      "path": "bios/Other/mfme/Fonts/LITHOGRL.TTF",
+      "name": "LITHOGRL.TTF",
+      "size": 61484,
+      "sha1": "5d9d28246d2976cdd75adc66524ce9de5e623af0",
+      "md5": "7f76ed35d335c18e10db1adebc831553",
+      "sha256": "8664b3513f232f1d82dd90f3f99a32cfb8e71549a36961ad7e278866ab3ec2dc",
+      "crc32": "5d319e61",
+      "adler32": "ebb476de"
+    },
+    "646068483c6f5c7d0eb2f76038b9e5dd25f0f01d": {
+      "path": "bios/Other/mfme/Fonts/MFME.ttf",
+      "name": "MFME.ttf",
+      "size": 264428,
+      "sha1": "646068483c6f5c7d0eb2f76038b9e5dd25f0f01d",
+      "md5": "baf8b7f2e61c241d19a27661f1090b5f",
+      "sha256": "c52b3d221cf24124c5c2ae54f849461a38f909f3fa65529d6c110b56d357f649",
+      "crc32": "d1fa3b4a",
+      "adler32": "22abdaad"
+    },
+    "f77e7836ee114947f38bfd854843c0b987399f0e": {
+      "path": "bios/Other/mfme/PacDrive32.dll",
+      "name": "PacDrive32.dll",
+      "size": 71168,
+      "sha1": "f77e7836ee114947f38bfd854843c0b987399f0e",
+      "md5": "07e1aa1f8d6b3be4610c7becda511ca7",
+      "sha256": "91dc5f78122114e84e7ed723cdcdba7d161ff98befe895655fe815bb334b0ebf",
+      "crc32": "acf4963d",
+      "adler32": "09891f9e"
+    },
     "58807f32c413a0c9db6deb0365f2fac9518e7c86": {
       "path": "bios/Other/opentyrian/cubetxt1.dat",
       "name": "cubetxt1.dat",
@@ -95339,6 +95759,48 @@
       "034527d42a96d0f39977cb85c6a8f2d8": "fcfbbb25e06f58d13e762b02bfd468c834d98fc8",
       "ee44560f34033efa3bb47b3e0aac1772": "7b03befac4fbcef8c649048fa3ff5d095fd48dd3",
       "b956c537e7b6b85ffa5c3493b1490d8a": "8e14e85c645187504ec9d162b3ea614a0c421d32",
+      "f29d49006080c3080baab7b851e1cf68": "16e3c6698a10547c228b8ab474b817ff1d64c216",
+      "7786f30131c98baca83ec313281cfa6a": "e3df9d90adb0d44c43cb70b4fd3887c7ddbef1cf",
+      "b4c8c434df1f038c76e5221cc6adca0c": "f92d854f017d154c9ae0a2351629876515ba48d7",
+      "e12511e05e4cc311f011657e7f637f12": "f26a91c46089635aa214f152330b75892bdebb18",
+      "0a020be8f0e0db5c4d9a8006b62d6951": "a4af119db1fdf63cf410ef27db13f5c022761823",
+      "2b015a43a42e90dc4e1b81c86d8245a9": "cdb40079f4c0ce29793dd2a16fb53bec421ba1fd",
+      "e1869cbb8ffe4f495fe4505f75cdf8d3": "ae019c3258f01fdc847a4902bf550432c67aeb48",
+      "02de5a8364473459cdc343629eec054f": "4a65cd52f4ba634c3fa419ce7707337cc9da7dcc",
+      "d1217c12edc5e5d53739d8be2ddfdce7": "3f356d3508ac2d2cd2c8293d8e40034f78b92646",
+      "0b78a5b68653a32f52e0c14512d49a9c": "224464d31a8bd2fe2b1b53a59660c6f03cb9c2a5",
+      "2052f62fd701ef96c71410b3fa83d942": "ffde5b0a714785c772c8062d56ebae304f9c4ac3",
+      "be1cacfae1dbe0f5e77a7fed4ba6a83d": "37f8acd9778cbc81f11c08f129f3f726cc9964f4",
+      "53f7599afca8456ebeaa112a9a783048": "540c94981d0ad7cb1fdcc2368ec84bb2f433cbab",
+      "5cbb3e2c91c91fc5a67e2860430a6956": "0646e2157ea1d6996909b26e560b5193eff8da32",
+      "9ce852e774410dfac7d1fb8bbbc40e2c": "949c411f569a7f697f6a1062198740361a1fc37b",
+      "e9c7c683b136c1ce7a9db93b8a2faa61": "2b6785096da1b9139140a9286e56e208be5d9c28",
+      "8d26ac7d2b3ddaf0edbc301ff1eb927f": "20d2187d4ae844dd8726eb6f723b5118c4c46738",
+      "8e621f57837c14cb2e273c1ca9be0caf": "d826ef5ce08a1cf8ca69523416fdfd6829ac985e",
+      "05aab439a550b8188517d414bd8e32f9": "97bb2ddd2186b410dc7848ebdc4a6748c0b2c9cc",
+      "b8845232232450d83c82973d9c8a4919": "dddd90b8fb4091420a4b98b97d869d561ae922f2",
+      "c84bb9236a1920fa1e9656af78f0523a": "4dee3153c5a4cdf9d286387232fa89fbf381fa28",
+      "0121b13d6ce7f9452df0de85d5832772": "d1bdf707afe393153e48301694e573d44a2ce5c1",
+      "b26f57563ed8ffaa58e5f9bd9b264aeb": "19d18a2b547885a4f01a2c47f611ed36236d83f0",
+      "6e1628a6bfb5fe148e176bd89544cebb": "703d6187f35a1b1c044534c0a826d91afd1dd4e1",
+      "3b2cc0ba990963ad3c75761b217d21da": "abe07a5cf9eaea9e190374af381d8d1d97d122cd",
+      "8684600c434a62302813df4b9da0a712": "164582df699f64554f1c8cea6e295c1f6da9a5bb",
+      "16b873ed923bc9d7c66e7037053b68db": "3eeb7861d1ad0b4305864490573aebf592306db1",
+      "eba151e2ba37330f8398548ee93c5641": "83a39aa65dbc6986f36a4a544d05122dffd82ee9",
+      "6f8533fa7abe213015f7e0c8bf5f9a2c": "7d0601cb6668cbf6e28dd04fd2595d73aed2a431",
+      "9255f2e7dae499c7eade3b0f9cdd9a58": "340f9aee4133f9885f1b722b80881f10a55bbab2",
+      "0d31a64e78ce13fe5a5febf3d4481b88": "85c2523977bc191f33d38af7121bac676cfdffa0",
+      "2d5958039d479c24fae9bc69d76baa4a": "9384d9503e201c417fb6907b30935511b4875476",
+      "d3b97c9331687da61ddc2cc671f498bf": "cc9840193bc6e21337dcbdcdeb52ad57090a4db6",
+      "bb7873a4fbf2fc5a7b76445147490a8a": "d7e478cede532a4468e3158a3e974d4209437cfd",
+      "87c36e83f7080f37137ff50725b2f8fb": "e4e9759e806b6c76bad758c93378b71571217ca0",
+      "ce143fa9eb8b2d28580d23d31f763925": "cd6d260ae5083ec6d4b9f5dc51253e275d6defff",
+      "f93c287805fde91e4224ad1ebb840819": "a5f677b33e306810b76dbe83464e71d21d8e8fee",
+      "7ce7ab3d3cd68d70f1f6594ded05660e": "d4c70ecc12d3be10d5a07784b6d07e9e3880e39a",
+      "d499249cdcb31960e6ba1cd9d6eea088": "82f91b0c82ee8ea289f729625961ad5ebdc51758",
+      "7f76ed35d335c18e10db1adebc831553": "5d9d28246d2976cdd75adc66524ce9de5e623af0",
+      "baf8b7f2e61c241d19a27661f1090b5f": "646068483c6f5c7d0eb2f76038b9e5dd25f0f01d",
+      "07e1aa1f8d6b3be4610c7becda511ca7": "f77e7836ee114947f38bfd854843c0b987399f0e",
       "3f2476d9ff29a06cf9fb85d52302222a": "58807f32c413a0c9db6deb0365f2fac9518e7c86",
       "2b199deeccab1042fb02b46c47c2a8d0": "ee7dc2eb87e5a75564382efcd95d13554d3835ba",
       "4229d5532a206aabe7e1fa11a7d8447e": "1ee93623406dc61b50ccb41a97bae769ea15cef2",
@@ -112804,6 +113266,132 @@
       "apple2e-enh-kb.rom": [
         "8e14e85c645187504ec9d162b3ea614a0c421d32"
       ],
+      "ReelGradientMask.bmp": [
+        "16e3c6698a10547c228b8ab474b817ff1d64c216"
+      ],
+      "ReelLampMask.bmp": [
+        "e3df9d90adb0d44c43cb70b4fd3887c7ddbef1cf"
+      ],
+      "10pSlide.wav": [
+        "f92d854f017d154c9ae0a2351629876515ba48d7"
+      ],
+      "BellOff.wav": [
+        "f26a91c46089635aa214f152330b75892bdebb18"
+      ],
+      "BellOn.wav": [
+        "a4af119db1fdf63cf410ef27db13f5c022761823"
+      ],
+      "ButtonDown.wav": [
+        "cdb40079f4c0ce29793dd2a16fb53bec421ba1fd"
+      ],
+      "ButtonUp.wav": [
+        "ae019c3258f01fdc847a4902bf550432c67aeb48"
+      ],
+      "Buzzer.wav": [
+        "4a65cd52f4ba634c3fa419ce7707337cc9da7dcc"
+      ],
+      "CoinDropReject.wav": [
+        "3f356d3508ac2d2cd2c8293d8e40034f78b92646"
+      ],
+      "CoinIn.wav": [
+        "224464d31a8bd2fe2b1b53a59660c6f03cb9c2a5"
+      ],
+      "CoinInDrop.wav": [
+        "ffde5b0a714785c772c8062d56ebae304f9c4ac3"
+      ],
+      "CoinInRejected.wav": [
+        "37f8acd9778cbc81f11c08f129f3f726cc9964f4"
+      ],
+      "CoinInS10Rejected.wav": [
+        "540c94981d0ad7cb1fdcc2368ec84bb2f433cbab"
+      ],
+      "CoinInS10Switch.wav": [
+        "0646e2157ea1d6996909b26e560b5193eff8da32"
+      ],
+      "CoinInS10TokenRejected.wav": [
+        "949c411f569a7f697f6a1062198740361a1fc37b"
+      ],
+      "HopperCoin1.wav": [
+        "2b6785096da1b9139140a9286e56e208be5d9c28"
+      ],
+      "HopperCoin2.wav": [
+        "20d2187d4ae844dd8726eb6f723b5118c4c46738"
+      ],
+      "HopperMotor1.wav": [
+        "d826ef5ce08a1cf8ca69523416fdfd6829ac985e"
+      ],
+      "LockoutOff.wav": [
+        "97bb2ddd2186b410dc7848ebdc4a6748c0b2c9cc"
+      ],
+      "LockoutOn.wav": [
+        "dddd90b8fb4091420a4b98b97d869d561ae922f2"
+      ],
+      "MiscSlide.wav": [
+        "4dee3153c5a4cdf9d286387232fa89fbf381fa28"
+      ],
+      "MotorOn.wav": [
+        "d1bdf707afe393153e48301694e573d44a2ce5c1"
+      ],
+      "NoteIn.wav": [
+        "19d18a2b547885a4f01a2c47f611ed36236d83f0"
+      ],
+      "NoteInReject.wav": [
+        "703d6187f35a1b1c044534c0a826d91afd1dd4e1"
+      ],
+      "NoteInStack.wav": [
+        "abe07a5cf9eaea9e190374af381d8d1d97d122cd"
+      ],
+      "PrizeMotor.wav": [
+        "164582df699f64554f1c8cea6e295c1f6da9a5bb"
+      ],
+      "PrizeVend.wav": [
+        "3eeb7861d1ad0b4305864490573aebf592306db1"
+      ],
+      "PullHandleFast.wav": [
+        "83a39aa65dbc6986f36a4a544d05122dffd82ee9"
+      ],
+      "PullHandleNormal.wav": [
+        "7d0601cb6668cbf6e28dd04fd2595d73aed2a431"
+      ],
+      "PullHandleRelease.wav": [
+        "340f9aee4133f9885f1b722b80881f10a55bbab2"
+      ],
+      "PullHandleSlow.wav": [
+        "85c2523977bc191f33d38af7121bac676cfdffa0"
+      ],
+      "S1Locked.wav": [
+        "9384d9503e201c417fb6907b30935511b4875476"
+      ],
+      "SolenoidOff.wav": [
+        "cc9840193bc6e21337dcbdcdeb52ad57090a4db6"
+      ],
+      "SolenoidOn.wav": [
+        "d7e478cede532a4468e3158a3e974d4209437cfd"
+      ],
+      "Stepper.wav": [
+        "e4e9759e806b6c76bad758c93378b71571217ca0"
+      ],
+      "TokenSlide.wav": [
+        "cd6d260ae5083ec6d4b9f5dc51253e275d6defff"
+      ],
+      "Wiper.wav": [
+        "a5f677b33e306810b76dbe83464e71d21d8e8fee"
+      ],
+      "meter.wav": [
+        "d4c70ecc12d3be10d5a07784b6d07e9e3880e39a"
+      ],
+      "LITHOGRB.TTF": [
+        "82f91b0c82ee8ea289f729625961ad5ebdc51758"
+      ],
+      "LITHOGRL.TTF": [
+        "5d9d28246d2976cdd75adc66524ce9de5e623af0"
+      ],
+      "MFME.ttf": [
+        "646068483c6f5c7d0eb2f76038b9e5dd25f0f01d"
+      ],
+      "PacDrive32.dll": [
+        "f77e7836ee114947f38bfd854843c0b987399f0e"
+      ],
       "cubetxt1.dat": [
         "58807f32c413a0c9db6deb0365f2fac9518e7c86"
       ],
@@ -123360,6 +123948,54 @@
       "apple2e-video.rom": [
         "7060de104046736529c1e8a687a0dd7b84f8c51b"
       ],
+      "20pSlide.wav": [
+        "f92d854f017d154c9ae0a2351629876515ba48d7"
+      ],
+      "2pSlide.wav": [
+        "f92d854f017d154c9ae0a2351629876515ba48d7"
+      ],
+      "50pSlide.wav": [
+        "f92d854f017d154c9ae0a2351629876515ba48d7"
+      ],
+      "PoundSlide.wav": [
+        "f92d854f017d154c9ae0a2351629876515ba48d7"
+      ],
+      "CoinInS1.wav": [
+        "224464d31a8bd2fe2b1b53a59660c6f03cb9c2a5"
+      ],
+      "CoinInS10.wav": [
+        "224464d31a8bd2fe2b1b53a59660c6f03cb9c2a5"
+      ],
+      "CoinInS10Token.wav": [
+        "224464d31a8bd2fe2b1b53a59660c6f03cb9c2a5"
+      ],
+      "CoinInS1Token.wav": [
+        "224464d31a8bd2fe2b1b53a59660c6f03cb9c2a5"
+      ],
+      "TokenIn.wav": [
+        "224464d31a8bd2fe2b1b53a59660c6f03cb9c2a5"
+      ],
+      "CoinInS10TokenSwitch.wav": [
+        "0646e2157ea1d6996909b26e560b5193eff8da32"
+      ],
+      "CoinInS1Switch.wav": [
+        "0646e2157ea1d6996909b26e560b5193eff8da32"
+      ],
+      "CoinInS1TokenSwitch.wav": [
+        "0646e2157ea1d6996909b26e560b5193eff8da32"
+      ],
+      "CoinInSwitch.wav": [
+        "0646e2157ea1d6996909b26e560b5193eff8da32"
+      ],
+      "TokenInSwitch.wav": [
+        "0646e2157ea1d6996909b26e560b5193eff8da32"
+      ],
+      "HopperMotor2.wav": [
+        "d826ef5ce08a1cf8ca69523416fdfd6829ac985e"
+      ],
+      "TokenInRejected.wav": [
+        "37f8acd9778cbc81f11c08f129f3f726cc9964f4"
+      ],
       "iplrom30.dat": [
         "239e9124568c862c31d9ec0605e32373ea74b86a"
       ],
@@ -131373,6 +132009,48 @@
       "8031ff02": "fcfbbb25e06f58d13e762b02bfd468c834d98fc8",
       "18c0ff3e": "7b03befac4fbcef8c649048fa3ff5d095fd48dd3",
       "c506efb9": "8e14e85c645187504ec9d162b3ea614a0c421d32",
+      "094ecf8e": "16e3c6698a10547c228b8ab474b817ff1d64c216",
+      "752ae60e": "e3df9d90adb0d44c43cb70b4fd3887c7ddbef1cf",
+      "96c57522": "f92d854f017d154c9ae0a2351629876515ba48d7",
+      "c2a0ace7": "f26a91c46089635aa214f152330b75892bdebb18",
+      "d9088cd0": "a4af119db1fdf63cf410ef27db13f5c022761823",
+      "c4f21ed3": "cdb40079f4c0ce29793dd2a16fb53bec421ba1fd",
+      "d893a1f9": "ae019c3258f01fdc847a4902bf550432c67aeb48",
+      "fdf63f49": "4a65cd52f4ba634c3fa419ce7707337cc9da7dcc",
+      "719c31a5": "3f356d3508ac2d2cd2c8293d8e40034f78b92646",
+      "266594be": "224464d31a8bd2fe2b1b53a59660c6f03cb9c2a5",
+      "4b9bef49": "ffde5b0a714785c772c8062d56ebae304f9c4ac3",
+      "35c2d964": "37f8acd9778cbc81f11c08f129f3f726cc9964f4",
+      "485fce40": "540c94981d0ad7cb1fdcc2368ec84bb2f433cbab",
+      "f892026e": "0646e2157ea1d6996909b26e560b5193eff8da32",
+      "55d2dc51": "949c411f569a7f697f6a1062198740361a1fc37b",
+      "5e6a8196": "2b6785096da1b9139140a9286e56e208be5d9c28",
+      "389f4552": "20d2187d4ae844dd8726eb6f723b5118c4c46738",
+      "2b181654": "d826ef5ce08a1cf8ca69523416fdfd6829ac985e",
+      "91662bf3": "97bb2ddd2186b410dc7848ebdc4a6748c0b2c9cc",
+      "1aeb8e51": "dddd90b8fb4091420a4b98b97d869d561ae922f2",
+      "067ab1da": "4dee3153c5a4cdf9d286387232fa89fbf381fa28",
+      "73b8c20e": "d1bdf707afe393153e48301694e573d44a2ce5c1",
+      "7b842236": "19d18a2b547885a4f01a2c47f611ed36236d83f0",
+      "a69a599f": "703d6187f35a1b1c044534c0a826d91afd1dd4e1",
+      "615eda1d": "abe07a5cf9eaea9e190374af381d8d1d97d122cd",
+      "508b2259": "164582df699f64554f1c8cea6e295c1f6da9a5bb",
+      "93af34da": "3eeb7861d1ad0b4305864490573aebf592306db1",
+      "b681d2a9": "83a39aa65dbc6986f36a4a544d05122dffd82ee9",
+      "d1573706": "7d0601cb6668cbf6e28dd04fd2595d73aed2a431",
+      "d5f069e4": "340f9aee4133f9885f1b722b80881f10a55bbab2",
+      "b220bd92": "85c2523977bc191f33d38af7121bac676cfdffa0",
+      "3ef4b3b8": "9384d9503e201c417fb6907b30935511b4875476",
+      "ff3171a1": "cc9840193bc6e21337dcbdcdeb52ad57090a4db6",
+      "2c0c13d8": "d7e478cede532a4468e3158a3e974d4209437cfd",
+      "a3fd6dc2": "e4e9759e806b6c76bad758c93378b71571217ca0",
+      "9dad2fb2": "cd6d260ae5083ec6d4b9f5dc51253e275d6defff",
+      "99ac538b": "a5f677b33e306810b76dbe83464e71d21d8e8fee",
+      "825ed27e": "d4c70ecc12d3be10d5a07784b6d07e9e3880e39a",
+      "763826be": "82f91b0c82ee8ea289f729625961ad5ebdc51758",
+      "5d319e61": "5d9d28246d2976cdd75adc66524ce9de5e623af0",
+      "d1fa3b4a": "646068483c6f5c7d0eb2f76038b9e5dd25f0f01d",
+      "acf4963d": "f77e7836ee114947f38bfd854843c0b987399f0e",
       "84e948df": "58807f32c413a0c9db6deb0365f2fac9518e7c86",
       "bf8e13c9": "ee7dc2eb87e5a75564382efcd95d13554d3835ba",
       "7b91c5d2": "1ee93623406dc61b50ccb41a97bae769ea15cef2",
@@ -139920,6 +140598,48 @@
       "fcf442b26c492253dfb8d2146e215b7b84b3ba87443face9c94a1e9474aa3ca4": "fcfbbb25e06f58d13e762b02bfd468c834d98fc8",
       "0add32bcbd0e5b350437fa9d138b3c232368e36d8009852479fdb09d9db31113": "7b03befac4fbcef8c649048fa3ff5d095fd48dd3",
       "a1989da84ea4381d309e7e08783771f884e913236b9bcc71c3d649aacf76537a": "8e14e85c645187504ec9d162b3ea614a0c421d32",
+      "68db230ab6261f452de8d59fb48110d5d012f5a448cbc77afc1ed487c9b039ce": "16e3c6698a10547c228b8ab474b817ff1d64c216",
+      "ba0cd5ef1ceddcab1498a62935106e59a9682b4aea996106b2f3295fbd6fd1cd": "e3df9d90adb0d44c43cb70b4fd3887c7ddbef1cf",
+      "a2b5477bddbdf966c5c72f46a0ad2d54ac27147a4c47acfdf18b6941332e385a": "f92d854f017d154c9ae0a2351629876515ba48d7",
+      "a9b1f528332ec29a14a9db5ffdce261214a6a1773a5161f7208bccba8ff024a3": "f26a91c46089635aa214f152330b75892bdebb18",
+      "efffd6cf614813bbf70885fb9a2c1c455dfb850aad51fdd054a304133d0d9188": "a4af119db1fdf63cf410ef27db13f5c022761823",
+      "64dd254df6f5e1e21039c7e30f9b9513348331b3b10d4eadfd3bbe4482b2ba85": "cdb40079f4c0ce29793dd2a16fb53bec421ba1fd",
+      "7c08891fd8878b52c538740eecaa3b16c50a8d3a0f650589748a74e31a7bf678": "ae019c3258f01fdc847a4902bf550432c67aeb48",
+      "c1c980c74a150a97efb26480431799580db205af01a88a0e3152b81a6b3c4595": "4a65cd52f4ba634c3fa419ce7707337cc9da7dcc",
+      "053784d351f6e57d69c5cf52ae45df0cc4d7f73c17641ff97e3509d5d12822c6": "3f356d3508ac2d2cd2c8293d8e40034f78b92646",
+      "7d82289393b9483fab94477e48d0b40d299226dbd66d735c10686e44490b1d02": "224464d31a8bd2fe2b1b53a59660c6f03cb9c2a5",
+      "4e59d2f716e1a9c167bef45e9b907979be7f06336f29872da241537f3171a737": "ffde5b0a714785c772c8062d56ebae304f9c4ac3",
+      "51e9cdde1ba84a5a7c487875afb97b71705c7a58f2acc7739ed53f61fcbcf3d5": "37f8acd9778cbc81f11c08f129f3f726cc9964f4",
+      "3bbdae645b9e257de76281acc2f8f2082e68243495938c67773f9b2e31172e25": "540c94981d0ad7cb1fdcc2368ec84bb2f433cbab",
+      "ba44911713f21ac84334a54c52369fa4a3fe97cc23b43908b795c324ba9c83fa": "0646e2157ea1d6996909b26e560b5193eff8da32",
+      "dd5da609f9b76f009fbcd3db0ba279158336eb0bf5f34dd6cf4e866007a33846": "949c411f569a7f697f6a1062198740361a1fc37b",
+      "20639b47f6ecfe68a7f4002214cdf65c51fd4463f4acc5155a5ea5a94698a36b": "2b6785096da1b9139140a9286e56e208be5d9c28",
+      "cefd56a96242881d9008dc1581fad254005bdb93794ca687e884fb9f0ab6fd79": "20d2187d4ae844dd8726eb6f723b5118c4c46738",
+      "47dad6677c0c3d12ae760c4aed39aa7ea2e0d7c6690c48aac2c2413fe6116a39": "d826ef5ce08a1cf8ca69523416fdfd6829ac985e",
+      "ff2ae0532e91183a20f6a86b09926c3c7efc9a2f14ef70583abbd80ec8bb7986": "97bb2ddd2186b410dc7848ebdc4a6748c0b2c9cc",
+      "18e639143603060f988565bccba635bb5d519a5736c2ece8cc50883b5ee92101": "dddd90b8fb4091420a4b98b97d869d561ae922f2",
+      "ca1c17fc0e538e8585d9df7b08d0ca26de858c342e443a715aeee847be1b02f9": "4dee3153c5a4cdf9d286387232fa89fbf381fa28",
+      "a41fdd5a11c8921bbbb911cf3e5d386405133bd1e8693a98966f32112555c4ba": "d1bdf707afe393153e48301694e573d44a2ce5c1",
+      "bf5a56bef482e7569a839c9fff7b0a25fe4b50f7f3e4e27563854fd334de4e02": "19d18a2b547885a4f01a2c47f611ed36236d83f0",
+      "7932e0dfc898f90f1e1dfb3f8b70a7d78835aa17175269329be0316a5b884fcd": "703d6187f35a1b1c044534c0a826d91afd1dd4e1",
+      "452e293866a8ef33d8d00e89575cf4fd67a7138158974bc86ebf652b4bc21b09": "abe07a5cf9eaea9e190374af381d8d1d97d122cd",
+      "4eb0c7dc354991806260516920aa8b2e5b3e4679bf335bae325230a59cf9dd02": "164582df699f64554f1c8cea6e295c1f6da9a5bb",
+      "db00146b8d9203e65f4a3b0803c97cbd2fa052355797dd7367623c412ec93b2c": "3eeb7861d1ad0b4305864490573aebf592306db1",
+      "3f96b441da1129d08ca488206f6534115efc4bc69ee60b998d957f1f78a12378": "83a39aa65dbc6986f36a4a544d05122dffd82ee9",
+      "12aaa5579f6e433e72cf998e02b9433cb16ed2e4678ee58318e8401ac107bd32": "7d0601cb6668cbf6e28dd04fd2595d73aed2a431",
+      "73d35b2ed3cd644701864e121cbd40c269a4d2769ab1dbc14fbc420da8a49b10": "340f9aee4133f9885f1b722b80881f10a55bbab2",
+      "eae83d312acf5a31cd53d00038aa5c678b724b23eacd204e8de66de5163ebc26": "85c2523977bc191f33d38af7121bac676cfdffa0",
+      "280d7ea1e5758426edbab6aa4359672c18ad61ba15b7cc6c82a654dfa69f6b9d": "9384d9503e201c417fb6907b30935511b4875476",
+      "fd8962248e7b4a45592e548732e1dc396db96941a688f53942bf06865457c31e": "cc9840193bc6e21337dcbdcdeb52ad57090a4db6",
+      "169bc4bc38a446925f688e10f7b1fb050b954af7708a08ca5a011eea1776619b": "d7e478cede532a4468e3158a3e974d4209437cfd",
+      "320e1f825339462af40eba76c7e1a6e933c34a5634bc45126e7110bfb5e3ac50": "e4e9759e806b6c76bad758c93378b71571217ca0",
+      "096abcbf6ce69c0828923157dfe9752d88c97ef605174abafb27a8c101e556dd": "cd6d260ae5083ec6d4b9f5dc51253e275d6defff",
+      "abd23077a180c2c83eae9782a59b20fce85faa1697e04217e21755df20d5c006": "a5f677b33e306810b76dbe83464e71d21d8e8fee",
+      "dc0105791cb7284500f9c24ed8113a2851d322f06810c1cd3defafbc90e56d6d": "d4c70ecc12d3be10d5a07784b6d07e9e3880e39a",
+      "ca6bf5f4a82e0886e4209b2fea3cb723bfbcfe09b18d5a0814edd15df3bde9da": "82f91b0c82ee8ea289f729625961ad5ebdc51758",
+      "8664b3513f232f1d82dd90f3f99a32cfb8e71549a36961ad7e278866ab3ec2dc": "5d9d28246d2976cdd75adc66524ce9de5e623af0",
+      "c52b3d221cf24124c5c2ae54f849461a38f909f3fa65529d6c110b56d357f649": "646068483c6f5c7d0eb2f76038b9e5dd25f0f01d",
+      "91dc5f78122114e84e7ed723cdcdba7d161ff98befe895655fe815bb334b0ebf": "f77e7836ee114947f38bfd854843c0b987399f0e",
       "2a0bc26ac4a8cdcbe7a145c9b1868a87ecb4335e9787f2f1e5713c965372df2b": "58807f32c413a0c9db6deb0365f2fac9518e7c86",
       "6604a1dcc264e8b8e98f036a8bc35579e9b90b92eccbc4d7c1effee9785d1580": "ee7dc2eb87e5a75564382efcd95d13554d3835ba",
       "fcfc9762cd4cfad42feb12d975929de86851b216d4491252c701527e22b55539": "1ee93623406dc61b50ccb41a97bae769ea15cef2",
@@ -149952,6 +150672,129 @@
       "xash/extras.pk3": [
         "971249b94cb62fbca2f42c8ab7a7d29d30e5b368"
       ],
+      "DefaultMasks/ReelGradientMask.bmp": [
+        "16e3c6698a10547c228b8ab474b817ff1d64c216"
+      ],
+      "DefaultMasks/ReelLampMask.bmp": [
+        "e3df9d90adb0d44c43cb70b4fd3887c7ddbef1cf"
+      ],
+      "DefaultSounds/10pSlide.wav": [
+        "f92d854f017d154c9ae0a2351629876515ba48d7"
+      ],
+      "DefaultSounds/BellOff.wav": [
+        "f26a91c46089635aa214f152330b75892bdebb18"
+      ],
+      "DefaultSounds/BellOn.wav": [
+        "a4af119db1fdf63cf410ef27db13f5c022761823"
+      ],
+      "DefaultSounds/ButtonDown.wav": [
+        "cdb40079f4c0ce29793dd2a16fb53bec421ba1fd"
+      ],
+      "DefaultSounds/ButtonUp.wav": [
+        "ae019c3258f01fdc847a4902bf550432c67aeb48"
+      ],
+      "DefaultSounds/Buzzer.wav": [
+        "4a65cd52f4ba634c3fa419ce7707337cc9da7dcc"
+      ],
+      "DefaultSounds/CoinDropReject.wav": [
+        "3f356d3508ac2d2cd2c8293d8e40034f78b92646"
+      ],
+      "DefaultSounds/CoinIn.wav": [
+        "224464d31a8bd2fe2b1b53a59660c6f03cb9c2a5"
+      ],
+      "DefaultSounds/CoinInDrop.wav": [
+        "ffde5b0a714785c772c8062d56ebae304f9c4ac3"
+      ],
+      "DefaultSounds/CoinInRejected.wav": [
+        "37f8acd9778cbc81f11c08f129f3f726cc9964f4"
+      ],
+      "DefaultSounds/CoinInS10Rejected.wav": [
+        "540c94981d0ad7cb1fdcc2368ec84bb2f433cbab"
+      ],
+      "DefaultSounds/CoinInS10Switch.wav": [
+        "0646e2157ea1d6996909b26e560b5193eff8da32"
+      ],
+      "DefaultSounds/CoinInS10TokenRejected.wav": [
+        "949c411f569a7f697f6a1062198740361a1fc37b"
+      ],
+      "DefaultSounds/HopperCoin1.wav": [
+        "2b6785096da1b9139140a9286e56e208be5d9c28"
+      ],
+      "DefaultSounds/HopperCoin2.wav": [
+        "20d2187d4ae844dd8726eb6f723b5118c4c46738"
+      ],
+      "DefaultSounds/HopperMotor1.wav": [
+        "d826ef5ce08a1cf8ca69523416fdfd6829ac985e"
+      ],
+      "DefaultSounds/LockoutOff.wav": [
+        "97bb2ddd2186b410dc7848ebdc4a6748c0b2c9cc"
+      ],
+      "DefaultSounds/LockoutOn.wav": [
+        "dddd90b8fb4091420a4b98b97d869d561ae922f2"
+      ],
+      "DefaultSounds/MiscSlide.wav": [
+        "4dee3153c5a4cdf9d286387232fa89fbf381fa28"
+      ],
+      "DefaultSounds/MotorOn.wav": [
+        "d1bdf707afe393153e48301694e573d44a2ce5c1"
+      ],
+      "DefaultSounds/NoteIn.wav": [
+        "19d18a2b547885a4f01a2c47f611ed36236d83f0"
+      ],
+      "DefaultSounds/NoteInReject.wav": [
+        "703d6187f35a1b1c044534c0a826d91afd1dd4e1"
+      ],
+      "DefaultSounds/NoteInStack.wav": [
+        "abe07a5cf9eaea9e190374af381d8d1d97d122cd"
+      ],
+      "DefaultSounds/PrizeMotor.wav": [
+        "164582df699f64554f1c8cea6e295c1f6da9a5bb"
+      ],
+      "DefaultSounds/PrizeVend.wav": [
+        "3eeb7861d1ad0b4305864490573aebf592306db1"
+      ],
+      "DefaultSounds/PullHandleFast.wav": [
+        "83a39aa65dbc6986f36a4a544d05122dffd82ee9"
+      ],
+      "DefaultSounds/PullHandleNormal.wav": [
+        "7d0601cb6668cbf6e28dd04fd2595d73aed2a431"
+      ],
+      "DefaultSounds/PullHandleRelease.wav": [
+        "340f9aee4133f9885f1b722b80881f10a55bbab2"
+      ],
+      "DefaultSounds/PullHandleSlow.wav": [
+        "85c2523977bc191f33d38af7121bac676cfdffa0"
+      ],
+      "DefaultSounds/S1Locked.wav": [
+        "9384d9503e201c417fb6907b30935511b4875476"
+      ],
+      "DefaultSounds/SolenoidOff.wav": [
+        "cc9840193bc6e21337dcbdcdeb52ad57090a4db6"
+      ],
+      "DefaultSounds/SolenoidOn.wav": [
+        "d7e478cede532a4468e3158a3e974d4209437cfd"
+      ],
+      "DefaultSounds/Stepper.wav": [
+        "e4e9759e806b6c76bad758c93378b71571217ca0"
+      ],
+      "DefaultSounds/TokenSlide.wav": [
+        "cd6d260ae5083ec6d4b9f5dc51253e275d6defff"
+      ],
+      "DefaultSounds/Wiper.wav": [
+        "a5f677b33e306810b76dbe83464e71d21d8e8fee"
+      ],
+      "DefaultSounds/meter.wav": [
+        "d4c70ecc12d3be10d5a07784b6d07e9e3880e39a"
+      ],
+      "Fonts/LITHOGRB.TTF": [
+        "82f91b0c82ee8ea289f729625961ad5ebdc51758"
+      ],
+      "Fonts/LITHOGRL.TTF": [
+        "5d9d28246d2976cdd75adc66524ce9de5e623af0"
+      ],
+      "Fonts/MFME.ttf": [
+        "646068483c6f5c7d0eb2f76038b9e5dd25f0f01d"
+      ],
       "roms/108281-001.bin": [
         "d108bb99cb1a05d808e6e25cc720da24faee9e7c"
       ],
@@ -158968,6 +159811,54 @@
       ],
       "resources/shaders/vulkan/cas.glsl": [
         "005cecf1a5e20b05407d55d0aad22cf81ad66c31"
+      ],
+      "DefaultSounds/20pSlide.wav": [
+        "f92d854f017d154c9ae0a2351629876515ba48d7"
+      ],
+      "DefaultSounds/2pSlide.wav": [
+        "f92d854f017d154c9ae0a2351629876515ba48d7"
+      ],
+      "DefaultSounds/50pSlide.wav": [
+        "f92d854f017d154c9ae0a2351629876515ba48d7"
+      ],
+      "DefaultSounds/PoundSlide.wav": [
+        "f92d854f017d154c9ae0a2351629876515ba48d7"
+      ],
+      "DefaultSounds/CoinInS1.wav": [
+        "224464d31a8bd2fe2b1b53a59660c6f03cb9c2a5"
+      ],
+      "DefaultSounds/CoinInS10.wav": [
+        "224464d31a8bd2fe2b1b53a59660c6f03cb9c2a5"
+      ],
+      "DefaultSounds/CoinInS10Token.wav": [
+        "224464d31a8bd2fe2b1b53a59660c6f03cb9c2a5"
+      ],
+      "DefaultSounds/CoinInS1Token.wav": [
+        "224464d31a8bd2fe2b1b53a59660c6f03cb9c2a5"
+      ],
+      "DefaultSounds/TokenIn.wav": [
+        "224464d31a8bd2fe2b1b53a59660c6f03cb9c2a5"
+      ],
+      "DefaultSounds/CoinInS10TokenSwitch.wav": [
+        "0646e2157ea1d6996909b26e560b5193eff8da32"
+      ],
+      "DefaultSounds/CoinInS1Switch.wav": [
+        "0646e2157ea1d6996909b26e560b5193eff8da32"
+      ],
+      "DefaultSounds/CoinInS1TokenSwitch.wav": [
+        "0646e2157ea1d6996909b26e560b5193eff8da32"
+      ],
+      "DefaultSounds/CoinInSwitch.wav": [
+        "0646e2157ea1d6996909b26e560b5193eff8da32"
+      ],
+      "DefaultSounds/TokenInSwitch.wav": [
+        "0646e2157ea1d6996909b26e560b5193eff8da32"
+      ],
+      "DefaultSounds/HopperMotor2.wav": [
+        "d826ef5ce08a1cf8ca69523416fdfd6829ac985e"
+      ],
+      "DefaultSounds/TokenInRejected.wav": [
+        "37f8acd9778cbc81f11c08f129f3f726cc9964f4"
       ],
       "roms/5429.vbi": [
         "8060cd4b49052572bb5ec929f8ad21e2addce237"
