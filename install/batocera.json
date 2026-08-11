@@ -5,7 +5,7 @@
   "platform": "batocera",
   "display_name": "Batocera",
   "version": "1.0",
-  "generated": "2026-08-11T03:21:35Z",
+  "generated": "2026-08-11T03:50:34Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -237,8 +237,8 @@
       }
     }
   ],
-  "total_files": 1689,
-  "total_size": 2906973120,
+  "total_files": 1692,
+  "total_size": 2907106176,
   "total_omitted": 23,
   "omitted_files": [
     {
@@ -6461,6 +6461,36 @@
       "sha256": "c15d3d6732399a879bb6de5ae2fcb9aadfd64da86d95652ced9ad96a2ae8e692",
       "size": 16384,
       "repo_path": "bios/Thomson/MO5/mo5-v1.1.rom",
+      "cores": [
+        "clk"
+      ]
+    },
+    {
+      "dest": "Thomson/mo6-v3.rom",
+      "sha1": "a4596712f2b7919820f6c0e43cd522156d051152",
+      "sha256": "357135a8804f97148fcf30e6ea96c800005570bb0c6906b40d15ca9e30e4fc9b",
+      "size": 65536,
+      "repo_path": "bios/Other/Clock Signal/Thomson/mo6-v3.rom",
+      "cores": [
+        "clk"
+      ]
+    },
+    {
+      "dest": "Thomson/pc128.rom",
+      "sha1": "d9161b4eaf6f5b04f461fa0270e2fba0ce541352",
+      "sha256": "73bd613fe171d6486a1a0ae50d526a643c0201a904081d215cd4646876a0e038",
+      "size": 65536,
+      "repo_path": "bios/Other/Clock Signal/Thomson/pc128.rom",
+      "cores": [
+        "clk"
+      ]
+    },
+    {
+      "dest": "Thomson/cd90-640.rom",
+      "sha1": "5c72566c22d8160ef0c75959e1863a1309bbbe49",
+      "sha256": "742cf0541e5caf683a8cc8609632b1fd1b2db58c55998b02f165c374447a3e2b",
+      "size": 1984,
+      "repo_path": "bios/Other/Clock Signal/Thomson/cd90-640.rom",
       "cores": [
         "clk"
       ]

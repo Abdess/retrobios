@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-11T03:21:35Z",
-  "total_files": 7850,
-  "total_size": 10158770318,
+  "generated_at": "2026-08-11T03:50:34Z",
+  "total_files": 7853,
+  "total_size": 10158903374,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -46157,6 +46157,16 @@
       "crc32": "1576a69b",
       "adler32": "a1390b8d"
     },
+    "5c72566c22d8160ef0c75959e1863a1309bbbe49": {
+      "path": "bios/Other/Clock Signal/Thomson/cd90-640.rom",
+      "name": "cd90-640.rom",
+      "size": 1984,
+      "sha1": "5c72566c22d8160ef0c75959e1863a1309bbbe49",
+      "md5": "e5b609dd90b26c9974a46cd54eab4216",
+      "sha256": "742cf0541e5caf683a8cc8609632b1fd1b2db58c55998b02f165c374447a3e2b",
+      "crc32": "5114c0a5",
+      "adler32": "74757088"
+    },
     "9d25947e3334b367789b20196c56338573d4efc6": {
       "path": "bios/Other/Clock Signal/Thomson/mo5-v1.0.rom",
       "name": "mo5-v1.0.rom",
@@ -46166,6 +46176,26 @@
       "sha256": "0e728918b829283134df88dc3a5b78ba8f575b8230d1f8dd55e6b389cfd0d9cf",
       "crc32": "f62d2f3a",
       "adler32": "c98e06e4"
+    },
+    "a4596712f2b7919820f6c0e43cd522156d051152": {
+      "path": "bios/Other/Clock Signal/Thomson/mo6-v3.rom",
+      "name": "mo6-v3.rom",
+      "size": 65536,
+      "sha1": "a4596712f2b7919820f6c0e43cd522156d051152",
+      "md5": "e12e8ea392fabfbf75f04b9f6535e68c",
+      "sha256": "357135a8804f97148fcf30e6ea96c800005570bb0c6906b40d15ca9e30e4fc9b",
+      "crc32": "7a012322",
+      "adler32": "d44f1671"
+    },
+    "d9161b4eaf6f5b04f461fa0270e2fba0ce541352": {
+      "path": "bios/Other/Clock Signal/Thomson/pc128.rom",
+      "name": "pc128.rom",
+      "size": 65536,
+      "sha1": "d9161b4eaf6f5b04f461fa0270e2fba0ce541352",
+      "md5": "fd81c9a018e66c5ee8be9e98018a318c",
+      "sha256": "73bd613fe171d6486a1a0ae50d526a643c0201a904081d215cd4646876a0e038",
+      "crc32": "fc173504",
+      "adler32": "f65a19a6"
     },
     "91d75a87872cbb88964bead92e0cbf8b72e836b6": {
       "path": "bios/Other/NXEngine/Doukutsu.exe",
@@ -87799,7 +87829,10 @@
       "4a1ff5f8719d67dafcf85ac61959cdb6": "8aa28471c04d4e249c7da94ab6b54482d3fff2ed",
       "8403b24d7f859c86de31923023429774": "7459a97e38a2f149b6ad5ff93d807f56d4638a36",
       "6e57aa757040d9d053282a7911db6aba": "6a62e3cacafa0fc9bf946522d67636d0f077e654",
+      "e5b609dd90b26c9974a46cd54eab4216": "5c72566c22d8160ef0c75959e1863a1309bbbe49",
       "cb15b8d3423acc09edc2b2a08fda3824": "9d25947e3334b367789b20196c56338573d4efc6",
+      "e12e8ea392fabfbf75f04b9f6535e68c": "a4596712f2b7919820f6c0e43cd522156d051152",
+      "fd81c9a018e66c5ee8be9e98018a318c": "d9161b4eaf6f5b04f461fa0270e2fba0ce541352",
       "f20bb7bc1b97453161e63964f24a2785": "91d75a87872cbb88964bead92e0cbf8b72e836b6",
       "ebc011b876b9a4755fe44fa45d366996": "73acccee601b56a2b7f624b0227fa7e1d662ef4b",
       "d74d5681ad8d825f5c229db1ee931bbb": "74c14b15dbc2f36c81d2ad9cb65e2893298415da",
@@ -103616,8 +103649,17 @@
       "PRAVETZ-8D.PAL-PROM-82S129-1576a69b.bin": [
         "6a62e3cacafa0fc9bf946522d67636d0f077e654"
       ],
+      "cd90-640.rom": [
+        "5c72566c22d8160ef0c75959e1863a1309bbbe49"
+      ],
       "mo5-v1.0.rom": [
         "9d25947e3334b367789b20196c56338573d4efc6"
+      ],
+      "mo6-v3.rom": [
+        "a4596712f2b7919820f6c0e43cd522156d051152"
+      ],
+      "pc128.rom": [
+        "d9161b4eaf6f5b04f461fa0270e2fba0ce541352"
       ],
       "Doukutsu.exe": [
         "91d75a87872cbb88964bead92e0cbf8b72e836b6"
@@ -121053,7 +121095,10 @@
       "49a74c06": "8aa28471c04d4e249c7da94ab6b54482d3fff2ed",
       "1ab9b572": "7459a97e38a2f149b6ad5ff93d807f56d4638a36",
       "1576a69b": "6a62e3cacafa0fc9bf946522d67636d0f077e654",
+      "5114c0a5": "5c72566c22d8160ef0c75959e1863a1309bbbe49",
       "f62d2f3a": "9d25947e3334b367789b20196c56338573d4efc6",
+      "7a012322": "a4596712f2b7919820f6c0e43cd522156d051152",
+      "fc173504": "d9161b4eaf6f5b04f461fa0270e2fba0ce541352",
       "0c0644ba": "91d75a87872cbb88964bead92e0cbf8b72e836b6",
       "4e42c240": "73acccee601b56a2b7f624b0227fa7e1d662ef4b",
       "57841d84": "74c14b15dbc2f36c81d2ad9cb65e2893298415da",
@@ -128905,7 +128950,10 @@
       "eac8a94f39c60408dcca0e02b996de1b58d8373c113c4c547739af1de00b957a": "8aa28471c04d4e249c7da94ab6b54482d3fff2ed",
       "6759fa07143613ca36ccaaf0dad69ddabe10244196d672fbbfc69518b5a7bc7d": "7459a97e38a2f149b6ad5ff93d807f56d4638a36",
       "309f10b6e1fcd1b4d9e5704521664e1b4c6d7a475830a4b0211d068e01f3121a": "6a62e3cacafa0fc9bf946522d67636d0f077e654",
+      "742cf0541e5caf683a8cc8609632b1fd1b2db58c55998b02f165c374447a3e2b": "5c72566c22d8160ef0c75959e1863a1309bbbe49",
       "0e728918b829283134df88dc3a5b78ba8f575b8230d1f8dd55e6b389cfd0d9cf": "9d25947e3334b367789b20196c56338573d4efc6",
+      "357135a8804f97148fcf30e6ea96c800005570bb0c6906b40d15ca9e30e4fc9b": "a4596712f2b7919820f6c0e43cd522156d051152",
+      "73bd613fe171d6486a1a0ae50d526a643c0201a904081d215cd4646876a0e038": "d9161b4eaf6f5b04f461fa0270e2fba0ce541352",
       "8a7a63b24bb21557fb597697bdf09248c1ab7e3298cacfa1166d764dd81e7fc3": "91d75a87872cbb88964bead92e0cbf8b72e836b6",
       "e80d72041dc20ddffb3fa7e22e4c51acb06d95e81058d5eeb888b5bf308424ea": "73acccee601b56a2b7f624b0227fa7e1d662ef4b",
       "e84df7374f8eff014458c6d8611c44f03b39b8d1a7abf30a2347dbb085b55232": "74c14b15dbc2f36c81d2ad9cb65e2893298415da",
@@ -138173,8 +138221,17 @@
       "Oric/PRAVETZ-8D.PAL-PROM-82S129-1576a69b.bin": [
         "6a62e3cacafa0fc9bf946522d67636d0f077e654"
       ],
+      "Thomson/cd90-640.rom": [
+        "5c72566c22d8160ef0c75959e1863a1309bbbe49"
+      ],
       "Thomson/mo5-v1.0.rom": [
         "9d25947e3334b367789b20196c56338573d4efc6"
+      ],
+      "Thomson/mo6-v3.rom": [
+        "a4596712f2b7919820f6c0e43cd522156d051152"
+      ],
+      "Thomson/pc128.rom": [
+        "d9161b4eaf6f5b04f461fa0270e2fba0ce541352"
       ],
       "nxengine/data/sprites.sif": [
         "73acccee601b56a2b7f624b0227fa7e1d662ef4b"
