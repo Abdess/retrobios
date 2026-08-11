@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-11T15:51:58Z",
-  "total_files": 8587,
-  "total_size": 11057204413,
+  "generated_at": "2026-08-11T16:09:15Z",
+  "total_files": 8601,
+  "total_size": 11073730518,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -50947,35 +50947,55 @@
       "crc32": "d17f6632",
       "adler32": "f9a32109"
     },
-    "cf0f6f3f2afe3b71380dba621114686e0be20bbc": {
+    "25e763785ea82144aa95aaa627e7e7f0159b108b": {
       "path": "bios/Other/j2me-loader/color.fsh",
       "name": "color.fsh",
-      "size": 886,
-      "sha1": "cf0f6f3f2afe3b71380dba621114686e0be20bbc",
-      "md5": "716e66118f844120d84dd260cf7fa6a8",
-      "sha256": "c0adf7c01912f053ebb094e543fca2c57455ba6a77451d8773eb66c244da5ea1",
-      "crc32": "31e7b73f",
-      "adler32": "73bc1f40"
+      "size": 912,
+      "sha1": "25e763785ea82144aa95aaa627e7e7f0159b108b",
+      "md5": "284439315f472b16da8b6d3abf634672",
+      "sha256": "7b68b993b69878b142488f7cd46b74a5aea7a138904338f861b4a0157fa68f9a",
+      "crc32": "954bf65a",
+      "adler32": "7ed42092"
     },
-    "a32e0ab0e772ab7c8132979ceaddf8071ca4981b": {
+    "2235e92f5eec0ef44b0927ad2f5e652898331856": {
       "path": "bios/Other/j2me-loader/color.vsh",
       "name": "color.vsh",
-      "size": 791,
-      "sha1": "a32e0ab0e772ab7c8132979ceaddf8071ca4981b",
-      "md5": "824b525fe683323fa8a2bd8b6507a7af",
-      "sha256": "8c923fe92e7a78329b8de0bcb60dc1ab2e6c6c3f591abb80a10ca84152c21ab9",
-      "crc32": "9521c3f3",
-      "adler32": "5902fd0c"
+      "size": 818,
+      "sha1": "2235e92f5eec0ef44b0927ad2f5e652898331856",
+      "md5": "55bb0f9a321832899fab0bd630ccabaf",
+      "sha256": "bf3d47b97b0943c1b21eaedcf92ddb6d5eb07958e224b7e144d00dc50ef938b6",
+      "crc32": "0e8c64fa",
+      "adler32": "fc17fe6b"
     },
-    "685b990806d45047fe026edef461de33ad38eec2": {
+    "37b47d438c3a9584e2d93f4f52860e786381750e": {
+      "path": "bios/Other/j2me-loader/libjavam3g.so",
+      "name": "libjavam3g.so",
+      "size": 425728,
+      "sha1": "37b47d438c3a9584e2d93f4f52860e786381750e",
+      "md5": "60b36381565b8466518d16110aa83f8f",
+      "sha256": "68f9609b694ee503f2b0e27db8e993c6489b315dd22b98e570a47afc21991e88",
+      "crc32": "967674ee",
+      "adler32": "38a1712b"
+    },
+    "65503f327f7d4797234624cad1e3e519670d2862": {
+      "path": "bios/Other/j2me-loader/libmicro3d.so",
+      "name": "libmicro3d.so",
+      "size": 8176,
+      "sha1": "65503f327f7d4797234624cad1e3e519670d2862",
+      "md5": "3b68183f44e6e45b30f1ddf00830c5b4",
+      "sha256": "b8612fc79af7f097a592d8ce76fe1c02298f3a9a3b40fa3730be693a9f66eff9",
+      "crc32": "2ebfe760",
+      "adler32": "3173d280"
+    },
+    "8a843225cab3278d891911dcecdbb39c836f7aee": {
       "path": "bios/Other/j2me-loader/licenses.html",
       "name": "licenses.html",
-      "size": 2205,
-      "sha1": "685b990806d45047fe026edef461de33ad38eec2",
-      "md5": "5d9ece013cabddabcbdc6d3ad798c226",
-      "sha256": "e5bfffcfab30d5223fed97d67dd2a41231c6726eff9bdaac62ce7f2c99214ecc",
-      "crc32": "b98c92bc",
-      "adler32": "e91aaf04"
+      "size": 2281,
+      "sha1": "8a843225cab3278d891911dcecdbb39c836f7aee",
+      "md5": "fd9120bab119d47e74504c4ab216052e",
+      "sha256": "65f7e7d79344809d644343ea8838f796a4345ef0dc2baaf2df03a3b02f412db0",
+      "crc32": "6264ab5d",
+      "adler32": "723bb2e0"
     },
     "c6569e0e83d244224a829ce13699bc91ff01bfaf": {
       "path": "bios/Other/j2me-loader/simple.fsh",
@@ -50997,55 +51017,55 @@
       "crc32": "b6b2242b",
       "adler32": "4f653673"
     },
-    "f4d9ad89abaf7bb34a77783656a2aa0d2a658ed6": {
+    "bf1a707167861bbdc941b07be094bda4e8cc699c": {
       "path": "bios/Other/j2me-loader/sprite.fsh",
       "name": "sprite.fsh",
-      "size": 525,
-      "sha1": "f4d9ad89abaf7bb34a77783656a2aa0d2a658ed6",
-      "md5": "1d5b8ade0242704e53ad6b7694772666",
-      "sha256": "44132aae2e21392a8e0fd817179734bd6645913bf41db90134d2bf98b7a47d37",
-      "crc32": "fc2843c2",
-      "adler32": "85a3a886"
+      "size": 543,
+      "sha1": "bf1a707167861bbdc941b07be094bda4e8cc699c",
+      "md5": "890287766c5680b47975045f79791596",
+      "sha256": "cf0266cb98cf446ac2a7a1bffe9055a16aad27f646af84fceb54db68710a8937",
+      "crc32": "822b204c",
+      "adler32": "421ca970"
     },
-    "5d04cf61ac98bab639729ec171eaba947c005fe4": {
+    "9cb8a2ea60dfcf355403d4d79fe2c7c24d92a720": {
       "path": "bios/Other/j2me-loader/sprite.vsh",
       "name": "sprite.vsh",
-      "size": 208,
-      "sha1": "5d04cf61ac98bab639729ec171eaba947c005fe4",
-      "md5": "5644cace1df7e18acb9be5c970c664c4",
-      "sha256": "2919e72f27ef65761c15f3a17ec5b9295aeb7f22870cef4b66fda8f20bff768a",
-      "crc32": "1e54b0a8",
-      "adler32": "ecbc4412"
+      "size": 219,
+      "sha1": "9cb8a2ea60dfcf355403d4d79fe2c7c24d92a720",
+      "md5": "0b346c9f46621546be5eb2edaf89a234",
+      "sha256": "d8360d18c788599e8728991de549a0b1065fc1ae5326d8fc00a7b40fe09b6fb0",
+      "crc32": "62b8640b",
+      "adler32": "e0d244a1"
     },
-    "6e06f1852ac55c06b918f01ffe2593a3cbf450be": {
+    "2be31f6b1efcf963a7bea8d0942f2330066c9c54": {
       "path": "bios/Other/j2me-loader/system.props",
       "name": "system.props",
-      "size": 949,
-      "sha1": "6e06f1852ac55c06b918f01ffe2593a3cbf450be",
-      "md5": "b9c7cccce88a114f9d606a5234061aad",
-      "sha256": "a018d8c5512721504be0a246bf3873748c1d65364bf273033eebb86a65ba6d92",
-      "crc32": "5d126587",
-      "adler32": "4fb04b11"
+      "size": 933,
+      "sha1": "2be31f6b1efcf963a7bea8d0942f2330066c9c54",
+      "md5": "6082b4ae086d609cdcf686c3a555468f",
+      "sha256": "13e5697746758b2ac0f7e0ac10f7f71374b012a573187792f16d7974d1ed4377",
+      "crc32": "06db494d",
+      "adler32": "3c923d41"
     },
-    "8823ce1f21554627b7460c8f8a0e53a1559128f6": {
+    "6f5cf11dcbca6c8e9ea55754eab6da5b8f6a2526": {
       "path": "bios/Other/j2me-loader/tex.fsh",
       "name": "tex.fsh",
-      "size": 1333,
-      "sha1": "8823ce1f21554627b7460c8f8a0e53a1559128f6",
-      "md5": "23e5e18f7c6e275f900058eb9ea3da87",
-      "sha256": "cea7c89149be3a3ef3b37e4980b3680dc0c3fde74dc39d49d648c31ef89836fd",
-      "crc32": "f9ecb3f4",
-      "adler32": "0b13aed8"
+      "size": 1372,
+      "sha1": "6f5cf11dcbca6c8e9ea55754eab6da5b8f6a2526",
+      "md5": "d60b1d49e277f6cdb69a90ce7606cd6f",
+      "sha256": "b1f377532c24c711ea48183d4a36771da9155a4a59a2e2144ccf98052085c2a9",
+      "crc32": "24e8d113",
+      "adler32": "1670b0d3"
     },
-    "eae490cb5c934b2541d0eddf716e1b4f7e73b6e1": {
+    "cdd59404d3050097e725b82ca66b4541f8567def": {
       "path": "bios/Other/j2me-loader/tex.vsh",
       "name": "tex.vsh",
-      "size": 854,
-      "sha1": "eae490cb5c934b2541d0eddf716e1b4f7e73b6e1",
-      "md5": "1faeb8e3230e74530a89aa38533d3fa1",
-      "sha256": "6244c7a60f707555116eaa2a7e5af8f97792f7c9891dd895ddf87ef93881b2bd",
-      "crc32": "30f34d46",
-      "adler32": "581717b2"
+      "size": 886,
+      "sha1": "cdd59404d3050097e725b82ca66b4541f8567def",
+      "md5": "e90896e8b910894707d8566a9adaeef8",
+      "sha256": "21b53774ff63e5aa9c3837ccc54393f6641ac9d0c4e5a49262dd191ee8191445",
+      "crc32": "ff93e165",
+      "adler32": "0e971952"
     },
     "8cac05782651c5b9e56577d7f33486a32c00480f": {
       "path": "bios/Other/jl-mod/color.fsh",
@@ -51066,6 +51086,86 @@
       "sha256": "9b96860e1af277bcd5055197155a9fde4188570626825b8761fa7884632c38c0",
       "crc32": "b52d6dcb",
       "adler32": "2ef7a8b1"
+    },
+    "f2e861b1229d5d520ce2fc0dc70deb11eeb7cfe2": {
+      "path": "bios/Other/jl-mod/libc++_shared.so",
+      "name": "libc++_shared.so",
+      "size": 1039112,
+      "sha1": "f2e861b1229d5d520ce2fc0dc70deb11eeb7cfe2",
+      "md5": "250c3ed4eaa37fa9a5fe8550f80d60ee",
+      "sha256": "4061e37d076ca6b6781d2ee96de17df3352038f1cb500b941550ba6389b931ce",
+      "crc32": "eb430da7",
+      "adler32": "cc9b4857"
+    },
+    "b5e287339fbdfbb44751abb76dfbf485419c06f4": {
+      "path": "bios/Other/jl-mod/libgles_utils.so",
+      "name": "libgles_utils.so",
+      "size": 8600,
+      "sha1": "b5e287339fbdfbb44751abb76dfbf485419c06f4",
+      "md5": "fcabd0c23423526c547290d8dd50cbcb",
+      "sha256": "571fd53f3406f408b282b474cb62e33e1decfab8ac5d57ffd5b5e89409123506",
+      "crc32": "661b244b",
+      "adler32": "575d8269"
+    },
+    "440745ef16d14f15cb2047956d217526a51440f2": {
+      "path": "bios/Other/jl-mod/libjavam3g.so",
+      "name": "libjavam3g.so",
+      "size": 427240,
+      "sha1": "440745ef16d14f15cb2047956d217526a51440f2",
+      "md5": "0a917db2f311ee62dbd27bcbbc6274d9",
+      "sha256": "d52b449f063e1a19e4a219605aa2b3458c130e472e11c22a6ce2e3d267a112c6",
+      "crc32": "b6e3d43a",
+      "adler32": "aca9ff39"
+    },
+    "cd68cd2124ca9d7921be018d1e55d4db830e10d9": {
+      "path": "bios/Other/jl-mod/libmicro3d.so",
+      "name": "libmicro3d.so",
+      "size": 8808,
+      "sha1": "cd68cd2124ca9d7921be018d1e55d4db830e10d9",
+      "md5": "91881663f466583df2007862360b6072",
+      "sha256": "7d376edf3e13a0cbdcdb3b71c026f37da5d5b8bc3072503d34f60e600e6dc052",
+      "crc32": "caf67591",
+      "adler32": "95c5978e"
+    },
+    "63624552130454ee4ca0c7c7aadb7b5b6bc0ebca": {
+      "path": "bios/Other/jl-mod/libmmapi_common.so",
+      "name": "libmmapi_common.so",
+      "size": 16488,
+      "sha1": "63624552130454ee4ca0c7c7aadb7b5b6bc0ebca",
+      "md5": "41d99c22fec10fcb75cb0eb2d973ab4c",
+      "sha256": "935f1a664175479ec653b97cca975f7a03b395890716f27de837ac83d13f6559",
+      "crc32": "53d9c2fe",
+      "adler32": "743623d4"
+    },
+    "52ca5b835fdc54ea0bcb5b214ad45a246c01f101": {
+      "path": "bios/Other/jl-mod/libmmapi_eas.so",
+      "name": "libmmapi_eas.so",
+      "size": 611768,
+      "sha1": "52ca5b835fdc54ea0bcb5b214ad45a246c01f101",
+      "md5": "8bb44e79650002440f858258d06a012f",
+      "sha256": "7ccaa1c53ff355d30cb01ffc9da3943e1f656507326083aa0e7e6fe7a503207f",
+      "crc32": "97e96177",
+      "adler32": "5de3a741"
+    },
+    "9e675c073cc065cd89359410717a94ffaf8515cb": {
+      "path": "bios/Other/jl-mod/libmmapi_tsf.so",
+      "name": "libmmapi_tsf.so",
+      "size": 61392,
+      "sha1": "9e675c073cc065cd89359410717a94ffaf8515cb",
+      "md5": "42dd0ea532c7d37f396fce7173e305c5",
+      "sha256": "a7188ea1f6153615fd9eb1d1e870082b48ba1a48005c0877a483da92f614f870",
+      "crc32": "55742b1d",
+      "adler32": "df8572e9"
+    },
+    "6d58884ad4a8cf37087ee2e24e6c12383325090a": {
+      "path": "bios/Other/jl-mod/liboboe.so",
+      "name": "liboboe.so",
+      "size": 278376,
+      "sha1": "6d58884ad4a8cf37087ee2e24e6c12383325090a",
+      "md5": "60108e056df67326ff072ef262803026",
+      "sha256": "7fe320a5aea9ad0149896805da4103675c6c5aba625ffe4ba882087f1c9e609e",
+      "crc32": "aae5d9dc",
+      "adler32": "1a640d1b"
     },
     "87db7f2faca0bbc79c8b4acbca878eef521bfce9": {
       "path": "bios/Other/jl-mod/licenses.html",
@@ -51157,6 +51257,46 @@
       "crc32": "c30b9a6b",
       "adler32": "2703e3c5"
     },
+    "fbc10ff56b64b3a9e3a9c99039f34cbbe2e0130f": {
+      "path": "bios/Other/kemulator/M5_EmuHw.dll",
+      "name": "M5_EmuHw.dll",
+      "size": 1019904,
+      "sha1": "fbc10ff56b64b3a9e3a9c99039f34cbbe2e0130f",
+      "md5": "bebbe70c2948398c3a7e9ecd49b5f01e",
+      "sha256": "953a01844c11b092e40f453886be857259266e231123eb87a3dfc49267ebff51",
+      "crc32": "ce175e93",
+      "adler32": "00f139f0"
+    },
+    "4f5efaa816e05b8c1c59b9f594ac7693687e09f4": {
+      "path": "bios/Other/kemulator/M5_EmuSmw5.dll",
+      "name": "M5_EmuSmw5.dll",
+      "size": 2027520,
+      "sha1": "4f5efaa816e05b8c1c59b9f594ac7693687e09f4",
+      "md5": "fc414a24ddc94df00e299d486dd6e5b6",
+      "sha256": "76630ad519f0e357c7ce39254feb0e2342bc7995b9f5727220d4e024fbd6d299",
+      "crc32": "88835af1",
+      "adler32": "fe75a6b2"
+    },
+    "3a2aadcdcf34d44899738c3e5657612c3639edf4": {
+      "path": "bios/Other/kemulator/M7_EmuHw.dll",
+      "name": "M7_EmuHw.dll",
+      "size": 2260992,
+      "sha1": "3a2aadcdcf34d44899738c3e5657612c3639edf4",
+      "md5": "2814d76f1a7d0e8925a7c00ab850179e",
+      "sha256": "d1aec3bbc9bbb0ec78982ea7ea4ed8682f9a99de9eb7d48e5a1dc7ca47820165",
+      "crc32": "0fe10ab2",
+      "adler32": "f8983363"
+    },
+    "344e2dedc68f3ea953d2f9ddff3c12706a64b9b7": {
+      "path": "bios/Other/kemulator/M7_EmuSmw7.dll",
+      "name": "M7_EmuSmw7.dll",
+      "size": 8331264,
+      "sha1": "344e2dedc68f3ea953d2f9ddff3c12706a64b9b7",
+      "md5": "527ab4394b8e1def49f872c919901b0a",
+      "sha256": "cf5d9a8fd7d9aca95ad1960255101ec228569b3284de8dcfd9b838538e063fd4",
+      "crc32": "e7cce6ce",
+      "adler32": "b13d768d"
+    },
     "d808da42aa5ba6a9b5333703e48bd0ec03fbcd90": {
       "path": "bios/Other/kemulator/Nokia.ttf",
       "name": "Nokia.ttf",
@@ -51177,15 +51317,15 @@
       "crc32": "3ece422d",
       "adler32": "920ddde6"
     },
-    "079952bdeb97219b38417ebe0511ed30c2637009": {
+    "e62cb71098c6c255064b439b95242df5bb2b0001": {
       "path": "bios/Other/kemulator/en.txt",
       "name": "en.txt",
-      "size": 12145,
-      "sha1": "079952bdeb97219b38417ebe0511ed30c2637009",
-      "md5": "da9053f65288262ab06041cc3dac896b",
-      "sha256": "2ca3acdb7d780d45f21ee1d6c3d3a3d00006d51d0500e85745721ddd30602234",
-      "crc32": "bc4416d5",
-      "adler32": "12161a0e"
+      "size": 12394,
+      "sha1": "e62cb71098c6c255064b439b95242df5bb2b0001",
+      "md5": "eacba25986934618e1b8b9b9ed90f03c",
+      "sha256": "17ccddced1dff9029a3549e6e7b9dae646df82e8fdd1366c8c4951776b53a5e5",
+      "crc32": "0410f3e2",
+      "adler32": "dd1df981"
     },
     "b1d6aef4559bb46af27eebda50fe06e0de659966": {
       "path": "bios/Other/kemulator/java_micro3d_v3_32.dll",
@@ -51227,15 +51367,15 @@
       "crc32": "0c6b8b57",
       "adler32": "e2bcd645"
     },
-    "1066d152c3391aaaab650e5f78e19a39ec4e623f": {
+    "88b2affba2dfef410dc7e460a249f1cb0c34d3fb": {
       "path": "bios/Other/kemulator/presets.xml",
       "name": "presets.xml",
-      "size": 19663,
-      "sha1": "1066d152c3391aaaab650e5f78e19a39ec4e623f",
-      "md5": "4e05674d869db9307c4c86ae8cb61d8e",
-      "sha256": "675a7f6ef68ab5741d319df0580455324cc7eb1b537648ed9fa85cfc73502c96",
-      "crc32": "6f7784aa",
-      "adler32": "19e519fe"
+      "size": 19938,
+      "sha1": "88b2affba2dfef410dc7e460a249f1cb0c34d3fb",
+      "md5": "344ed7cef18202dc473a0ff940f33c6d",
+      "sha256": "797c22dceced5e1ec624d17d0cd63640f43e068eb886d1050491a302e7d1b6c3",
+      "crc32": "5f38a7b9",
+      "adler32": "c682f1b1"
     },
     "f077ba595d9a01218ef1d4fa6730d1cb6edf61ae": {
       "path": "bios/Other/kemulator/s60snr.ttf",
@@ -95725,18 +95865,28 @@
       "f9fac1173f3a772d94e8e0750c1e9dfd": "a681437a28d02a978f70646716978bcc446108ea",
       "bff5a23de5917c16288d7076ad684c1b": "d0860202be85147f3ce96d71aa88541d939a1aea",
       "d43cb2b6ca20d16dc03c77296c4bc389": "1fb7f452e4d273b2a66d4e0644b33b7c338a3a33",
-      "716e66118f844120d84dd260cf7fa6a8": "cf0f6f3f2afe3b71380dba621114686e0be20bbc",
-      "824b525fe683323fa8a2bd8b6507a7af": "a32e0ab0e772ab7c8132979ceaddf8071ca4981b",
-      "5d9ece013cabddabcbdc6d3ad798c226": "685b990806d45047fe026edef461de33ad38eec2",
+      "284439315f472b16da8b6d3abf634672": "25e763785ea82144aa95aaa627e7e7f0159b108b",
+      "55bb0f9a321832899fab0bd630ccabaf": "2235e92f5eec0ef44b0927ad2f5e652898331856",
+      "60b36381565b8466518d16110aa83f8f": "37b47d438c3a9584e2d93f4f52860e786381750e",
+      "3b68183f44e6e45b30f1ddf00830c5b4": "65503f327f7d4797234624cad1e3e519670d2862",
+      "fd9120bab119d47e74504c4ab216052e": "8a843225cab3278d891911dcecdbb39c836f7aee",
       "9f801bc9b0b148ae6d0368c27281d1bc": "c6569e0e83d244224a829ce13699bc91ff01bfaf",
       "924e08886710123aaa0fa990da0f2be2": "475e25d9bf8422d1faeae206488507d59bf7b716",
-      "1d5b8ade0242704e53ad6b7694772666": "f4d9ad89abaf7bb34a77783656a2aa0d2a658ed6",
-      "5644cace1df7e18acb9be5c970c664c4": "5d04cf61ac98bab639729ec171eaba947c005fe4",
-      "b9c7cccce88a114f9d606a5234061aad": "6e06f1852ac55c06b918f01ffe2593a3cbf450be",
-      "23e5e18f7c6e275f900058eb9ea3da87": "8823ce1f21554627b7460c8f8a0e53a1559128f6",
-      "1faeb8e3230e74530a89aa38533d3fa1": "eae490cb5c934b2541d0eddf716e1b4f7e73b6e1",
+      "890287766c5680b47975045f79791596": "bf1a707167861bbdc941b07be094bda4e8cc699c",
+      "0b346c9f46621546be5eb2edaf89a234": "9cb8a2ea60dfcf355403d4d79fe2c7c24d92a720",
+      "6082b4ae086d609cdcf686c3a555468f": "2be31f6b1efcf963a7bea8d0942f2330066c9c54",
+      "d60b1d49e277f6cdb69a90ce7606cd6f": "6f5cf11dcbca6c8e9ea55754eab6da5b8f6a2526",
+      "e90896e8b910894707d8566a9adaeef8": "cdd59404d3050097e725b82ca66b4541f8567def",
       "d07e54d4dd63209596eaf080cf8c35e3": "8cac05782651c5b9e56577d7f33486a32c00480f",
       "efde617a923308f2d02ddc1bc18ecc87": "96e1d0b91b0cf3b61a1c6a9782dd087e06286c36",
+      "250c3ed4eaa37fa9a5fe8550f80d60ee": "f2e861b1229d5d520ce2fc0dc70deb11eeb7cfe2",
+      "fcabd0c23423526c547290d8dd50cbcb": "b5e287339fbdfbb44751abb76dfbf485419c06f4",
+      "0a917db2f311ee62dbd27bcbbc6274d9": "440745ef16d14f15cb2047956d217526a51440f2",
+      "91881663f466583df2007862360b6072": "cd68cd2124ca9d7921be018d1e55d4db830e10d9",
+      "41d99c22fec10fcb75cb0eb2d973ab4c": "63624552130454ee4ca0c7c7aadb7b5b6bc0ebca",
+      "8bb44e79650002440f858258d06a012f": "52ca5b835fdc54ea0bcb5b214ad45a246c01f101",
+      "42dd0ea532c7d37f396fce7173e305c5": "9e675c073cc065cd89359410717a94ffaf8515cb",
+      "60108e056df67326ff072ef262803026": "6d58884ad4a8cf37087ee2e24e6c12383325090a",
       "30a0dccda85223a9cbec3f28874b4066": "87db7f2faca0bbc79c8b4acbca878eef521bfce9",
       "3520872ade9dd04b4f8ec90dc2726bd8": "fd91f8c1337962197f5058dc9fbea5da2bac5ae6",
       "66a794ea1d441fabb7bc782835950f1f": "51d4ddc7cd594b20a9019abf9c23904b64819498",
@@ -95746,14 +95896,18 @@
       "5077eccf978dc046994f5acfac7cde60": "4b371578278811a84fd717cb726c58e3e258baaf",
       "c00b8b73be298d613fbc33867eef97ad": "eecb9e9f71079b1b8ab37210f58ec19d1c0f515a",
       "c6c3e762a7e1357e6769233faf240981": "e8ad127bb080a8d61899aebf224e745bcc5eab44",
+      "bebbe70c2948398c3a7e9ecd49b5f01e": "fbc10ff56b64b3a9e3a9c99039f34cbbe2e0130f",
+      "fc414a24ddc94df00e299d486dd6e5b6": "4f5efaa816e05b8c1c59b9f594ac7693687e09f4",
+      "2814d76f1a7d0e8925a7c00ab850179e": "3a2aadcdcf34d44899738c3e5657612c3639edf4",
+      "527ab4394b8e1def49f872c919901b0a": "344e2dedc68f3ea953d2f9ddff3c12706a64b9b7",
       "8d4b76454f4bac6f289dd7e64c5d71d0": "d808da42aa5ba6a9b5333703e48bd0ec03fbcd90",
       "311d797c3cdce0e213a4209acb32d343": "aedd333c565ccf05fb062289e5fab4722883712c",
-      "da9053f65288262ab06041cc3dac896b": "079952bdeb97219b38417ebe0511ed30c2637009",
+      "eacba25986934618e1b8b9b9ed90f03c": "e62cb71098c6c255064b439b95242df5bb2b0001",
       "60045cd91e30880c731c9fea8c712093": "b1d6aef4559bb46af27eebda50fe06e0de659966",
       "9fcb2bd1f36d1e8d94f8e4e2650914c9": "ed9a60d56ddcc91514b033c16f2062638c3e6eeb",
       "c1625f6c2fbf66e2e838c6bc74ffe641": "b566d111ccd3e303d21ab5c4cd1519dc238a4fce",
       "d5ab04740801208b92fa3de7252a75d8": "f59e0d445aafe2503c6e5249ca07df4b89626f8f",
-      "4e05674d869db9307c4c86ae8cb61d8e": "1066d152c3391aaaab650e5f78e19a39ec4e623f",
+      "344ed7cef18202dc473a0ff940f33c6d": "88b2affba2dfef410dc7e460a249f1cb0c34d3fb",
       "ab43c1238b2f212c08537718cfdff5d9": "f077ba595d9a01218ef1d4fa6730d1cb6edf61ae",
       "cd43b9f8ec8c742fca150f9666da47a0": "f72ebcb3ad771321e36cacb49779dca6f2b4db9e",
       "034527d42a96d0f39977cb85c6a8f2d8": "fcfbbb25e06f58d13e762b02bfd468c834d98fc8",
@@ -113181,15 +113335,23 @@
         "1fb7f452e4d273b2a66d4e0644b33b7c338a3a33"
       ],
       "color.fsh": [
-        "cf0f6f3f2afe3b71380dba621114686e0be20bbc",
+        "25e763785ea82144aa95aaa627e7e7f0159b108b",
         "8cac05782651c5b9e56577d7f33486a32c00480f"
       ],
       "color.vsh": [
-        "a32e0ab0e772ab7c8132979ceaddf8071ca4981b",
+        "2235e92f5eec0ef44b0927ad2f5e652898331856",
         "96e1d0b91b0cf3b61a1c6a9782dd087e06286c36"
       ],
+      "libjavam3g.so": [
+        "37b47d438c3a9584e2d93f4f52860e786381750e",
+        "440745ef16d14f15cb2047956d217526a51440f2"
+      ],
+      "libmicro3d.so": [
+        "65503f327f7d4797234624cad1e3e519670d2862",
+        "cd68cd2124ca9d7921be018d1e55d4db830e10d9"
+      ],
       "licenses.html": [
-        "685b990806d45047fe026edef461de33ad38eec2",
+        "8a843225cab3278d891911dcecdbb39c836f7aee",
         "87db7f2faca0bbc79c8b4acbca878eef521bfce9"
       ],
       "simple.fsh": [
@@ -113199,24 +113361,42 @@
         "475e25d9bf8422d1faeae206488507d59bf7b716"
       ],
       "sprite.fsh": [
-        "f4d9ad89abaf7bb34a77783656a2aa0d2a658ed6",
+        "bf1a707167861bbdc941b07be094bda4e8cc699c",
         "94c1d85c818c14489f4e2aa10c4c33c14a395077"
       ],
       "sprite.vsh": [
-        "5d04cf61ac98bab639729ec171eaba947c005fe4",
+        "9cb8a2ea60dfcf355403d4d79fe2c7c24d92a720",
         "8bff9b5dce3c825669278ea1e744d0644a57e7cb"
       ],
       "system.props": [
-        "6e06f1852ac55c06b918f01ffe2593a3cbf450be",
+        "2be31f6b1efcf963a7bea8d0942f2330066c9c54",
         "4b371578278811a84fd717cb726c58e3e258baaf"
       ],
       "tex.fsh": [
-        "8823ce1f21554627b7460c8f8a0e53a1559128f6",
+        "6f5cf11dcbca6c8e9ea55754eab6da5b8f6a2526",
         "eecb9e9f71079b1b8ab37210f58ec19d1c0f515a"
       ],
       "tex.vsh": [
-        "eae490cb5c934b2541d0eddf716e1b4f7e73b6e1",
+        "cdd59404d3050097e725b82ca66b4541f8567def",
         "e8ad127bb080a8d61899aebf224e745bcc5eab44"
+      ],
+      "libc++_shared.so": [
+        "f2e861b1229d5d520ce2fc0dc70deb11eeb7cfe2"
+      ],
+      "libgles_utils.so": [
+        "b5e287339fbdfbb44751abb76dfbf485419c06f4"
+      ],
+      "libmmapi_common.so": [
+        "63624552130454ee4ca0c7c7aadb7b5b6bc0ebca"
+      ],
+      "libmmapi_eas.so": [
+        "52ca5b835fdc54ea0bcb5b214ad45a246c01f101"
+      ],
+      "libmmapi_tsf.so": [
+        "9e675c073cc065cd89359410717a94ffaf8515cb"
+      ],
+      "liboboe.so": [
+        "6d58884ad4a8cf37087ee2e24e6c12383325090a"
       ],
       "m3d.fsh": [
         "fd91f8c1337962197f5058dc9fbea5da2bac5ae6"
@@ -113227,6 +113407,18 @@
       "patches.bin": [
         "3bdf93cd0ea795e98f4195c5898d3ab0f9b918cf"
       ],
+      "M5_EmuHw.dll": [
+        "fbc10ff56b64b3a9e3a9c99039f34cbbe2e0130f"
+      ],
+      "M5_EmuSmw5.dll": [
+        "4f5efaa816e05b8c1c59b9f594ac7693687e09f4"
+      ],
+      "M7_EmuHw.dll": [
+        "3a2aadcdcf34d44899738c3e5657612c3639edf4"
+      ],
+      "M7_EmuSmw7.dll": [
+        "344e2dedc68f3ea953d2f9ddff3c12706a64b9b7"
+      ],
       "Nokia.ttf": [
         "d808da42aa5ba6a9b5333703e48bd0ec03fbcd90"
       ],
@@ -113234,7 +113426,7 @@
         "aedd333c565ccf05fb062289e5fab4722883712c"
       ],
       "en.txt": [
-        "079952bdeb97219b38417ebe0511ed30c2637009"
+        "e62cb71098c6c255064b439b95242df5bb2b0001"
       ],
       "java_micro3d_v3_32.dll": [
         "b1d6aef4559bb46af27eebda50fe06e0de659966"
@@ -113249,7 +113441,7 @@
         "f59e0d445aafe2503c6e5249ca07df4b89626f8f"
       ],
       "presets.xml": [
-        "1066d152c3391aaaab650e5f78e19a39ec4e623f"
+        "88b2affba2dfef410dc7e460a249f1cb0c34d3fb"
       ],
       "s60snr.ttf": [
         "f077ba595d9a01218ef1d4fa6730d1cb6edf61ae"
@@ -131975,18 +132167,28 @@
       "d524ae3e": "a681437a28d02a978f70646716978bcc446108ea",
       "512b4d28": "d0860202be85147f3ce96d71aa88541d939a1aea",
       "d17f6632": "1fb7f452e4d273b2a66d4e0644b33b7c338a3a33",
-      "31e7b73f": "cf0f6f3f2afe3b71380dba621114686e0be20bbc",
-      "9521c3f3": "a32e0ab0e772ab7c8132979ceaddf8071ca4981b",
-      "b98c92bc": "685b990806d45047fe026edef461de33ad38eec2",
+      "954bf65a": "25e763785ea82144aa95aaa627e7e7f0159b108b",
+      "0e8c64fa": "2235e92f5eec0ef44b0927ad2f5e652898331856",
+      "967674ee": "37b47d438c3a9584e2d93f4f52860e786381750e",
+      "2ebfe760": "65503f327f7d4797234624cad1e3e519670d2862",
+      "6264ab5d": "8a843225cab3278d891911dcecdbb39c836f7aee",
       "371db629": "c6569e0e83d244224a829ce13699bc91ff01bfaf",
       "b6b2242b": "475e25d9bf8422d1faeae206488507d59bf7b716",
-      "fc2843c2": "f4d9ad89abaf7bb34a77783656a2aa0d2a658ed6",
-      "1e54b0a8": "5d04cf61ac98bab639729ec171eaba947c005fe4",
-      "5d126587": "6e06f1852ac55c06b918f01ffe2593a3cbf450be",
-      "f9ecb3f4": "8823ce1f21554627b7460c8f8a0e53a1559128f6",
-      "30f34d46": "eae490cb5c934b2541d0eddf716e1b4f7e73b6e1",
+      "822b204c": "bf1a707167861bbdc941b07be094bda4e8cc699c",
+      "62b8640b": "9cb8a2ea60dfcf355403d4d79fe2c7c24d92a720",
+      "06db494d": "2be31f6b1efcf963a7bea8d0942f2330066c9c54",
+      "24e8d113": "6f5cf11dcbca6c8e9ea55754eab6da5b8f6a2526",
+      "ff93e165": "cdd59404d3050097e725b82ca66b4541f8567def",
       "f20d50f4": "8cac05782651c5b9e56577d7f33486a32c00480f",
       "b52d6dcb": "96e1d0b91b0cf3b61a1c6a9782dd087e06286c36",
+      "eb430da7": "f2e861b1229d5d520ce2fc0dc70deb11eeb7cfe2",
+      "661b244b": "b5e287339fbdfbb44751abb76dfbf485419c06f4",
+      "b6e3d43a": "440745ef16d14f15cb2047956d217526a51440f2",
+      "caf67591": "cd68cd2124ca9d7921be018d1e55d4db830e10d9",
+      "53d9c2fe": "63624552130454ee4ca0c7c7aadb7b5b6bc0ebca",
+      "97e96177": "52ca5b835fdc54ea0bcb5b214ad45a246c01f101",
+      "55742b1d": "9e675c073cc065cd89359410717a94ffaf8515cb",
+      "aae5d9dc": "6d58884ad4a8cf37087ee2e24e6c12383325090a",
       "c91dd9fb": "87db7f2faca0bbc79c8b4acbca878eef521bfce9",
       "073b5596": "fd91f8c1337962197f5058dc9fbea5da2bac5ae6",
       "b99b542c": "51d4ddc7cd594b20a9019abf9c23904b64819498",
@@ -131996,14 +132198,18 @@
       "c2a2b807": "4b371578278811a84fd717cb726c58e3e258baaf",
       "ce34fca0": "eecb9e9f71079b1b8ab37210f58ec19d1c0f515a",
       "c30b9a6b": "e8ad127bb080a8d61899aebf224e745bcc5eab44",
+      "ce175e93": "fbc10ff56b64b3a9e3a9c99039f34cbbe2e0130f",
+      "88835af1": "4f5efaa816e05b8c1c59b9f594ac7693687e09f4",
+      "0fe10ab2": "3a2aadcdcf34d44899738c3e5657612c3639edf4",
+      "e7cce6ce": "344e2dedc68f3ea953d2f9ddff3c12706a64b9b7",
       "74b78a2a": "d808da42aa5ba6a9b5333703e48bd0ec03fbcd90",
       "3ece422d": "aedd333c565ccf05fb062289e5fab4722883712c",
-      "bc4416d5": "079952bdeb97219b38417ebe0511ed30c2637009",
+      "0410f3e2": "e62cb71098c6c255064b439b95242df5bb2b0001",
       "f22c0e27": "b1d6aef4559bb46af27eebda50fe06e0de659966",
       "ba5831cb": "ed9a60d56ddcc91514b033c16f2062638c3e6eeb",
       "83b24e44": "b566d111ccd3e303d21ab5c4cd1519dc238a4fce",
       "0c6b8b57": "f59e0d445aafe2503c6e5249ca07df4b89626f8f",
-      "6f7784aa": "1066d152c3391aaaab650e5f78e19a39ec4e623f",
+      "5f38a7b9": "88b2affba2dfef410dc7e460a249f1cb0c34d3fb",
       "544958c1": "f077ba595d9a01218ef1d4fa6730d1cb6edf61ae",
       "066d1348": "f72ebcb3ad771321e36cacb49779dca6f2b4db9e",
       "8031ff02": "fcfbbb25e06f58d13e762b02bfd468c834d98fc8",
@@ -140564,18 +140770,28 @@
       "3b8dc89a9ef34763b38647a4863b93f77715c03640312f151a8f5a0567ae6d5d": "a681437a28d02a978f70646716978bcc446108ea",
       "a2d469fde479baabafe97537270cc5e81b7c143806d12b0692ce6ac7a2c3a174": "d0860202be85147f3ce96d71aa88541d939a1aea",
       "79ca456195491cd777349e345889b707e14b13f2a4a215fd9af9d2d6f5f4779f": "1fb7f452e4d273b2a66d4e0644b33b7c338a3a33",
-      "c0adf7c01912f053ebb094e543fca2c57455ba6a77451d8773eb66c244da5ea1": "cf0f6f3f2afe3b71380dba621114686e0be20bbc",
-      "8c923fe92e7a78329b8de0bcb60dc1ab2e6c6c3f591abb80a10ca84152c21ab9": "a32e0ab0e772ab7c8132979ceaddf8071ca4981b",
-      "e5bfffcfab30d5223fed97d67dd2a41231c6726eff9bdaac62ce7f2c99214ecc": "685b990806d45047fe026edef461de33ad38eec2",
+      "7b68b993b69878b142488f7cd46b74a5aea7a138904338f861b4a0157fa68f9a": "25e763785ea82144aa95aaa627e7e7f0159b108b",
+      "bf3d47b97b0943c1b21eaedcf92ddb6d5eb07958e224b7e144d00dc50ef938b6": "2235e92f5eec0ef44b0927ad2f5e652898331856",
+      "68f9609b694ee503f2b0e27db8e993c6489b315dd22b98e570a47afc21991e88": "37b47d438c3a9584e2d93f4f52860e786381750e",
+      "b8612fc79af7f097a592d8ce76fe1c02298f3a9a3b40fa3730be693a9f66eff9": "65503f327f7d4797234624cad1e3e519670d2862",
+      "65f7e7d79344809d644343ea8838f796a4345ef0dc2baaf2df03a3b02f412db0": "8a843225cab3278d891911dcecdbb39c836f7aee",
       "b22148f210a5853c420f0e892b170b32b74302e4be3bd0ffa8377eb2a0fae1dd": "c6569e0e83d244224a829ce13699bc91ff01bfaf",
       "3b1ad06d0ab1ee01be2234ad01e1ee4ac7e25c3a7ab7d2336d059240e50b9bf1": "475e25d9bf8422d1faeae206488507d59bf7b716",
-      "44132aae2e21392a8e0fd817179734bd6645913bf41db90134d2bf98b7a47d37": "f4d9ad89abaf7bb34a77783656a2aa0d2a658ed6",
-      "2919e72f27ef65761c15f3a17ec5b9295aeb7f22870cef4b66fda8f20bff768a": "5d04cf61ac98bab639729ec171eaba947c005fe4",
-      "a018d8c5512721504be0a246bf3873748c1d65364bf273033eebb86a65ba6d92": "6e06f1852ac55c06b918f01ffe2593a3cbf450be",
-      "cea7c89149be3a3ef3b37e4980b3680dc0c3fde74dc39d49d648c31ef89836fd": "8823ce1f21554627b7460c8f8a0e53a1559128f6",
-      "6244c7a60f707555116eaa2a7e5af8f97792f7c9891dd895ddf87ef93881b2bd": "eae490cb5c934b2541d0eddf716e1b4f7e73b6e1",
+      "cf0266cb98cf446ac2a7a1bffe9055a16aad27f646af84fceb54db68710a8937": "bf1a707167861bbdc941b07be094bda4e8cc699c",
+      "d8360d18c788599e8728991de549a0b1065fc1ae5326d8fc00a7b40fe09b6fb0": "9cb8a2ea60dfcf355403d4d79fe2c7c24d92a720",
+      "13e5697746758b2ac0f7e0ac10f7f71374b012a573187792f16d7974d1ed4377": "2be31f6b1efcf963a7bea8d0942f2330066c9c54",
+      "b1f377532c24c711ea48183d4a36771da9155a4a59a2e2144ccf98052085c2a9": "6f5cf11dcbca6c8e9ea55754eab6da5b8f6a2526",
+      "21b53774ff63e5aa9c3837ccc54393f6641ac9d0c4e5a49262dd191ee8191445": "cdd59404d3050097e725b82ca66b4541f8567def",
       "e8db921de586a6b6e2d4ab0e5454d4a850b6d2a88758228f09c44e65b392857f": "8cac05782651c5b9e56577d7f33486a32c00480f",
       "9b96860e1af277bcd5055197155a9fde4188570626825b8761fa7884632c38c0": "96e1d0b91b0cf3b61a1c6a9782dd087e06286c36",
+      "4061e37d076ca6b6781d2ee96de17df3352038f1cb500b941550ba6389b931ce": "f2e861b1229d5d520ce2fc0dc70deb11eeb7cfe2",
+      "571fd53f3406f408b282b474cb62e33e1decfab8ac5d57ffd5b5e89409123506": "b5e287339fbdfbb44751abb76dfbf485419c06f4",
+      "d52b449f063e1a19e4a219605aa2b3458c130e472e11c22a6ce2e3d267a112c6": "440745ef16d14f15cb2047956d217526a51440f2",
+      "7d376edf3e13a0cbdcdb3b71c026f37da5d5b8bc3072503d34f60e600e6dc052": "cd68cd2124ca9d7921be018d1e55d4db830e10d9",
+      "935f1a664175479ec653b97cca975f7a03b395890716f27de837ac83d13f6559": "63624552130454ee4ca0c7c7aadb7b5b6bc0ebca",
+      "7ccaa1c53ff355d30cb01ffc9da3943e1f656507326083aa0e7e6fe7a503207f": "52ca5b835fdc54ea0bcb5b214ad45a246c01f101",
+      "a7188ea1f6153615fd9eb1d1e870082b48ba1a48005c0877a483da92f614f870": "9e675c073cc065cd89359410717a94ffaf8515cb",
+      "7fe320a5aea9ad0149896805da4103675c6c5aba625ffe4ba882087f1c9e609e": "6d58884ad4a8cf37087ee2e24e6c12383325090a",
       "ef3455c2589fa30eb2c2c274472c873995622ae97567a9ca1c86b3f2fc515ae1": "87db7f2faca0bbc79c8b4acbca878eef521bfce9",
       "205f46d118070601f4bb4d43756dc3e20de4309716c0bcc42b058a5aba471d71": "fd91f8c1337962197f5058dc9fbea5da2bac5ae6",
       "2275747871763a8b2232394a24e647308efd4084b6954f33ece287bb0b9cd607": "51d4ddc7cd594b20a9019abf9c23904b64819498",
@@ -140585,14 +140801,18 @@
       "eb20451f2cc4ca2e38071740b7035dbeca74cab3d1c2ce7ada5c084fa17da137": "4b371578278811a84fd717cb726c58e3e258baaf",
       "b9993b7c88491081acca47f77fe9ecb16f7e974939af13a7a2d6c663e5aa2bb8": "eecb9e9f71079b1b8ab37210f58ec19d1c0f515a",
       "01f80dadcb8067879c98a046b17db48b687a936bb03e8b199c7d6c14133d6fa2": "e8ad127bb080a8d61899aebf224e745bcc5eab44",
+      "953a01844c11b092e40f453886be857259266e231123eb87a3dfc49267ebff51": "fbc10ff56b64b3a9e3a9c99039f34cbbe2e0130f",
+      "76630ad519f0e357c7ce39254feb0e2342bc7995b9f5727220d4e024fbd6d299": "4f5efaa816e05b8c1c59b9f594ac7693687e09f4",
+      "d1aec3bbc9bbb0ec78982ea7ea4ed8682f9a99de9eb7d48e5a1dc7ca47820165": "3a2aadcdcf34d44899738c3e5657612c3639edf4",
+      "cf5d9a8fd7d9aca95ad1960255101ec228569b3284de8dcfd9b838538e063fd4": "344e2dedc68f3ea953d2f9ddff3c12706a64b9b7",
       "5ed84ef4aab265cfc43dfe3625712b5e73d477b48cbeba5bb8746bef9ad42b4c": "d808da42aa5ba6a9b5333703e48bd0ec03fbcd90",
       "5792170bd61ddc2ad711806f18470c996e9fdc3eece61980f0724b4439a23d4d": "aedd333c565ccf05fb062289e5fab4722883712c",
-      "2ca3acdb7d780d45f21ee1d6c3d3a3d00006d51d0500e85745721ddd30602234": "079952bdeb97219b38417ebe0511ed30c2637009",
+      "17ccddced1dff9029a3549e6e7b9dae646df82e8fdd1366c8c4951776b53a5e5": "e62cb71098c6c255064b439b95242df5bb2b0001",
       "817b2a782addf510d3dd27e61bc4ff25cc71bca1542f9f63064200884e3db39a": "b1d6aef4559bb46af27eebda50fe06e0de659966",
       "9d8fdab0f4ea3e74462cfdc1b3034e2e77d67b46af73754e4f15a22e40ebcd9a": "ed9a60d56ddcc91514b033c16f2062638c3e6eeb",
       "fe23024433abc95e0d94c9df6ec95f093447d30ec47150f3042259b261c779a5": "b566d111ccd3e303d21ab5c4cd1519dc238a4fce",
       "a5dcffeb838a0ee3c9eb73b2ca61a4461880b4939ad12ffb0f0f1a19962fc07a": "f59e0d445aafe2503c6e5249ca07df4b89626f8f",
-      "675a7f6ef68ab5741d319df0580455324cc7eb1b537648ed9fa85cfc73502c96": "1066d152c3391aaaab650e5f78e19a39ec4e623f",
+      "797c22dceced5e1ec624d17d0cd63640f43e068eb886d1050491a302e7d1b6c3": "88b2affba2dfef410dc7e460a249f1cb0c34d3fb",
       "dcc1b0e836a5e7e6b06fac165174b283dcc6052742168ede12b0bb931e23331c": "f077ba595d9a01218ef1d4fa6730d1cb6edf61ae",
       "c72a36bbd471daf5d12df9f7b85773771583ec960ff9ca17e66d2f7b22e5c8c3": "f72ebcb3ad771321e36cacb49779dca6f2b4db9e",
       "fcf442b26c492253dfb8d2146e215b7b84b3ba87443face9c94a1e9474aa3ca4": "fcfbbb25e06f58d13e762b02bfd468c834d98fc8",
