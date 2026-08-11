@@ -6,7 +6,7 @@ upstream: "https://github.com/mamedev/mame"
 logo: "https://raw.githubusercontent.com/mamedev/mame/master/docs/source/images/MAMElogo.svg"
 profiled_date: "2026-03-29"
 source_commit: "c4127c164af8fcf0aea781cc039aaf9b8044696d"
-upstream_commit: "e2bff5f80bd92631d2200cf57703ffa890003709"
+upstream_commit: "728d957663041fbc943806bf151584acd03e2160"
 core_version: "0.289"
 display_name: "Arcade (MAME)"
 

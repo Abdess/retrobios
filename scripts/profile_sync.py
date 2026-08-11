@@ -480,9 +480,10 @@ def anchor_part(
             "names a project the profile does not declare",
         )
     slug, url, actual = (
-        describe(part.path) if describe else (None, None, part.path)
+        describe(part.path, part.start, tokens) if describe
+        else (None, None, part.path)
     )
-    head_lines = fetch(HEAD, part.path, part.start)
+    head_lines = fetch(HEAD, part.path, part.start, tokens)
     path = actual
     renamed = actual != part.path
 
@@ -513,7 +514,7 @@ def anchor_part(
                 url,
             )
         path = moved
-        head_lines = fetch(HEAD, path, part.start)
+        head_lines = fetch(HEAD, path, part.start, tokens)
         if head_lines is None:
             return PartResult(
                 part, "GONE", None, None, None, [], None, slug, url
@@ -528,12 +529,12 @@ def anchor_part(
             part, status, path if renamed else None, None, None, [], None, slug, url
         )
 
-    pin_lines = fetch(PIN, part.path, part.start)
+    pin_lines = fetch(PIN, part.path, part.start, tokens)
     if pin_lines is None and path != part.path:
         # A ref may cite a bare filename the tree search resolved at HEAD; the
         # same resolved path usually holds at the pin. A genuine rename keeps
         # the old path at the pin, which is why that one is tried first.
-        pin_lines = fetch(PIN, path, part.start)
+        pin_lines = fetch(PIN, path, part.start, tokens)
     if pin_lines is None:
         return PartResult(
             part, "GONE", None, None, None, [], "pin revision missing", slug, url
@@ -917,7 +918,9 @@ def build_report(
     owners: dict[tuple[str, int | None], tuple[RepoView, str]] = {}
     context: dict[str, object] = {}
 
-    def _locate(path: str, start: int | None = None) -> tuple[RepoView, str]:
+    def _locate(
+        path: str, start: int | None = None, tokens: tuple = ()
+    ) -> tuple[RepoView, str]:
         """Repository and real path carrying a cited path, HEAD before pin.
 
         A ref may prefix the path with the repository directory name, as it
@@ -935,19 +938,32 @@ def build_report(
         if tail and any(head == v.repo.name for v in views):
             candidates.append(tail)
 
-        def carries_subject(lines) -> bool:
-            """A citation never points at a blank line.
+        def score(lines) -> int:
+            """How well a repository's cited line matches what the ref means.
 
             Two repositories can hold the same path with different contents:
             `mame` cites files that both mamedev/mame and its libretro fork
-            carry. Where the cited line is empty, that repository is not the
-            one the ref was written against.
+            carry, and the fork's tree is offset, so its line 5545 is a real
+            but unrelated statement. A line carrying the entry's own subject
+            beats a merely non-empty one, which in turn beats a blank.
             """
             if start is None:
-                return True
-            return start <= len(lines) and bool(lines[start - 1].strip())
+                return 2
+            if start > len(lines):
+                return 0
+            line = lines[start - 1].lower()
+            # A set name sits between delimiters in a MAME declaration, so
+            # `pgm` matches `GAME( 1997, pgm,` but not `pgm_012_025_drgw2`,
+            # which is what tells the two repositories apart.
+            if tokens and any(
+                re.search(rf"\b{re.escape(tok)}\b", line) for tok in tokens
+            ):
+                return 3
+            if tokens and any(tok in line for tok in tokens):
+                return 2
+            return 1 if line.strip() else 0
 
-        fallback = None
+        best = None
         for candidate in candidates:
             for sha_of in (lambda v: v.pin, lambda v: v.head):
                 for view in views:
@@ -956,15 +972,19 @@ def build_report(
                     )
                     if found is None:
                         continue
-                    if carries_subject(found):
+                    rank = score(found)
+                    if rank == 3:
                         return view, candidate
-                    fallback = fallback or (view, candidate)
-        return fallback or (primary, path)
+                    if best is None or rank > best[0]:
+                        best = (rank, view, candidate)
+        return (best[1], best[2]) if best else (primary, path)
 
-    def resolve_path(path: str, start: int | None = None) -> tuple[RepoView, str]:
-        key = (path, start)
+    def resolve_path(
+        path: str, start: int | None = None, tokens: tuple = ()
+    ) -> tuple[RepoView, str]:
+        key = (path, start, tokens)
         if key not in owners:
-            owners[key] = _locate(path, start)
+            owners[key] = _locate(path, start, tokens)
         return owners[key]
 
     def _context_for(view: RepoView):
@@ -1008,23 +1028,24 @@ def build_report(
 
     lines_cache: dict[tuple[str, str, int | None], list[str] | None] = {}
 
-    def fetch(which: str, path: str, start: int | None = None):
+    def fetch(which: str, path: str, start: int | None = None, tokens=()):
         """Lines for one path at one revision, read once per run.
 
         The same object is handed back every time so the opcode cache can key
         on identity.
         """
-        key = (which, path, start)
+        tokens = tuple(tokens)
+        key = (which, path, start, tokens)
         if key not in lines_cache:
-            view, actual = resolve_path(path, start)
+            view, actual = resolve_path(path, start, tokens)
             sha = view.pin if which == PIN else view.head
             lines_cache[key] = upstream.fetch_file(
                 view.repo, sha, actual, cache_dir, offline
             )
         return lines_cache[key]
 
-    def describe(path: str) -> tuple[str | None, str | None, str]:
-        view, actual = resolve_path(path)
+    def describe(path: str, start=None, tokens=()) -> tuple[str | None, str | None, str]:
+        view, actual = resolve_path(path, start, tuple(tokens))
         slug = view.repo.slug if view is not primary else None
         return slug, upstream.raw_url(view.repo, view.head, actual), actual
 
@@ -1035,7 +1056,7 @@ def build_report(
         staged = [
             (entry_name, ref, reconcile_self_check([
                 verify_at_pin(
-                    part, fetch(PIN, part.path, part.start), tokens, hashes
+                    part, fetch(PIN, part.path, part.start, tokens), tokens, hashes
                 )
                 for part in split_source_ref(ref)
             ]))
