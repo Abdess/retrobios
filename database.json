@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-11T06:49:41Z",
+  "generated_at": "2026-08-11T07:08:50Z",
   "total_files": 8206,
   "total_size": 10441070150,
   "files": {
@@ -46417,6 +46417,16 @@
       "crc32": "0c0644ba",
       "adler32": "c7b3f901"
     },
+    "19555d2f5f72a66d6beddb4acc5ca00d634ac9c4": {
+      "path": "bios/Other/NXEngine/nxengine/data/npc.tbl",
+      "name": "npc.tbl",
+      "size": 8664,
+      "sha1": "19555d2f5f72a66d6beddb4acc5ca00d634ac9c4",
+      "md5": "2c8dff849954bbca9c4a54087a5c06a9",
+      "sha256": "75b38bb4ab57b50bfc6c3ba77fe670a2eb67301f425aefe96bb1ed87c2b9e2db",
+      "crc32": "16b45e6c",
+      "adler32": "28d63b16"
+    },
     "73acccee601b56a2b7f624b0227fa7e1d662ef4b": {
       "path": "bios/Other/NXEngine/nxengine/data/sprites.sif",
       "name": "sprites.sif",
@@ -48266,16 +48276,6 @@
       "sha256": "0add32bcbd0e5b350437fa9d138b3c232368e36d8009852479fdb09d9db31113",
       "crc32": "18c0ff3e",
       "adler32": "7e6df93f"
-    },
-    "19555d2f5f72a66d6beddb4acc5ca00d634ac9c4": {
-      "path": "bios/Other/nxengine/data/npc.tbl",
-      "name": "npc.tbl",
-      "size": 8664,
-      "sha1": "19555d2f5f72a66d6beddb4acc5ca00d634ac9c4",
-      "md5": "2c8dff849954bbca9c4a54087a5c06a9",
-      "sha256": "75b38bb4ab57b50bfc6c3ba77fe670a2eb67301f425aefe96bb1ed87c2b9e2db",
-      "crc32": "16b45e6c",
-      "adler32": "28d63b16"
     },
     "58807f32c413a0c9db6deb0365f2fac9518e7c86": {
       "path": "bios/Other/opentyrian/cubetxt1.dat",
@@ -91455,6 +91455,7 @@
       "2614becc041fc813cf87397aa47e8210": "3757750cd3052b8d23f379aba22d7ee3d9353bc9",
       "37c78cb6e0105b946627038dcbfc8c64": "049412d56a41865539faadcd86408d5107a1dbef",
       "f20bb7bc1b97453161e63964f24a2785": "91d75a87872cbb88964bead92e0cbf8b72e836b6",
+      "2c8dff849954bbca9c4a54087a5c06a9": "19555d2f5f72a66d6beddb4acc5ca00d634ac9c4",
       "ebc011b876b9a4755fe44fa45d366996": "73acccee601b56a2b7f624b0227fa7e1d662ef4b",
       "d74d5681ad8d825f5c229db1ee931bbb": "74c14b15dbc2f36c81d2ad9cb65e2893298415da",
       "e8dcffae189b20fbe2722b857faa487c": "2d539603665b8194c671ef5189c5a2b6db3ac645",
@@ -91640,7 +91641,6 @@
       "cd43b9f8ec8c742fca150f9666da47a0": "f72ebcb3ad771321e36cacb49779dca6f2b4db9e",
       "034527d42a96d0f39977cb85c6a8f2d8": "fcfbbb25e06f58d13e762b02bfd468c834d98fc8",
       "ee44560f34033efa3bb47b3e0aac1772": "7b03befac4fbcef8c649048fa3ff5d095fd48dd3",
-      "2c8dff849954bbca9c4a54087a5c06a9": "19555d2f5f72a66d6beddb4acc5ca00d634ac9c4",
       "3f2476d9ff29a06cf9fb85d52302222a": "58807f32c413a0c9db6deb0365f2fac9518e7c86",
       "2b199deeccab1042fb02b46c47c2a8d0": "ee7dc2eb87e5a75564382efcd95d13554d3835ba",
       "4229d5532a206aabe7e1fa11a7d8447e": "1ee93623406dc61b50ccb41a97bae769ea15cef2",
@@ -107687,6 +107687,9 @@
       "Doukutsu.exe": [
         "91d75a87872cbb88964bead92e0cbf8b72e836b6"
       ],
+      "npc.tbl": [
+        "19555d2f5f72a66d6beddb4acc5ca00d634ac9c4"
+      ],
       "sprites.sif": [
         "73acccee601b56a2b7f624b0227fa7e1d662ef4b"
       ],
@@ -108243,9 +108246,6 @@
       ],
       "Master.dsk": [
         "7b03befac4fbcef8c649048fa3ff5d095fd48dd3"
-      ],
-      "npc.tbl": [
-        "19555d2f5f72a66d6beddb4acc5ca00d634ac9c4"
       ],
       "cubetxt1.dat": [
         "58807f32c413a0c9db6deb0365f2fac9518e7c86"
@@ -126166,6 +126166,7 @@
       "92e6bfdb": "3757750cd3052b8d23f379aba22d7ee3d9353bc9",
       "da6f5f8d": "049412d56a41865539faadcd86408d5107a1dbef",
       "0c0644ba": "91d75a87872cbb88964bead92e0cbf8b72e836b6",
+      "16b45e6c": "19555d2f5f72a66d6beddb4acc5ca00d634ac9c4",
       "4e42c240": "73acccee601b56a2b7f624b0227fa7e1d662ef4b",
       "57841d84": "74c14b15dbc2f36c81d2ad9cb65e2893298415da",
       "7db5c908": "2d539603665b8194c671ef5189c5a2b6db3ac645",
@@ -126351,7 +126352,6 @@
       "066d1348": "f72ebcb3ad771321e36cacb49779dca6f2b4db9e",
       "8031ff02": "fcfbbb25e06f58d13e762b02bfd468c834d98fc8",
       "18c0ff3e": "7b03befac4fbcef8c649048fa3ff5d095fd48dd3",
-      "16b45e6c": "19555d2f5f72a66d6beddb4acc5ca00d634ac9c4",
       "84e948df": "58807f32c413a0c9db6deb0365f2fac9518e7c86",
       "bf8e13c9": "ee7dc2eb87e5a75564382efcd95d13554d3835ba",
       "7b91c5d2": "1ee93623406dc61b50ccb41a97bae769ea15cef2",
@@ -134374,6 +134374,7 @@
       "5c06c6d9d398729bfab847d15b07a1fc79d323ebe6e05d233fcd652e9aa70759": "3757750cd3052b8d23f379aba22d7ee3d9353bc9",
       "fec02240005667f64905ee5982206abe45f9cd1bee67ee885815d453a6a5c484": "049412d56a41865539faadcd86408d5107a1dbef",
       "8a7a63b24bb21557fb597697bdf09248c1ab7e3298cacfa1166d764dd81e7fc3": "91d75a87872cbb88964bead92e0cbf8b72e836b6",
+      "75b38bb4ab57b50bfc6c3ba77fe670a2eb67301f425aefe96bb1ed87c2b9e2db": "19555d2f5f72a66d6beddb4acc5ca00d634ac9c4",
       "e80d72041dc20ddffb3fa7e22e4c51acb06d95e81058d5eeb888b5bf308424ea": "73acccee601b56a2b7f624b0227fa7e1d662ef4b",
       "e84df7374f8eff014458c6d8611c44f03b39b8d1a7abf30a2347dbb085b55232": "74c14b15dbc2f36c81d2ad9cb65e2893298415da",
       "ae6f6aa973aaccc143f57aa960fb035fd9de4daee4ad0cd713322f8c259e7650": "2d539603665b8194c671ef5189c5a2b6db3ac645",
@@ -134559,7 +134560,6 @@
       "c72a36bbd471daf5d12df9f7b85773771583ec960ff9ca17e66d2f7b22e5c8c3": "f72ebcb3ad771321e36cacb49779dca6f2b4db9e",
       "fcf442b26c492253dfb8d2146e215b7b84b3ba87443face9c94a1e9474aa3ca4": "fcfbbb25e06f58d13e762b02bfd468c834d98fc8",
       "0add32bcbd0e5b350437fa9d138b3c232368e36d8009852479fdb09d9db31113": "7b03befac4fbcef8c649048fa3ff5d095fd48dd3",
-      "75b38bb4ab57b50bfc6c3ba77fe670a2eb67301f425aefe96bb1ed87c2b9e2db": "19555d2f5f72a66d6beddb4acc5ca00d634ac9c4",
       "2a0bc26ac4a8cdcbe7a145c9b1868a87ecb4335e9787f2f1e5713c965372df2b": "58807f32c413a0c9db6deb0365f2fac9518e7c86",
       "6604a1dcc264e8b8e98f036a8bc35579e9b90b92eccbc4d7c1effee9785d1580": "ee7dc2eb87e5a75564382efcd95d13554d3835ba",
       "fcfc9762cd4cfad42feb12d975929de86851b216d4491252c701527e22b55539": "1ee93623406dc61b50ccb41a97bae769ea15cef2",
@@ -144047,6 +144047,9 @@
       "themes/light.json": [
         "049412d56a41865539faadcd86408d5107a1dbef"
       ],
+      "nxengine/data/npc.tbl": [
+        "19555d2f5f72a66d6beddb4acc5ca00d634ac9c4"
+      ],
       "nxengine/data/sprites.sif": [
         "73acccee601b56a2b7f624b0227fa7e1d662ef4b"
       ],
@@ -144058,9 +144061,6 @@
       ],
       "res/tilepatch.bin": [
         "fa950979aaa1d4c947473f158f770f3f3c8c45da"
-      ],
-      "data/npc.tbl": [
-        "19555d2f5f72a66d6beddb4acc5ca00d634ac9c4"
       ],
       "roms/108281-001.bin": [
         "d108bb99cb1a05d808e6e25cc720da24faee9e7c"
