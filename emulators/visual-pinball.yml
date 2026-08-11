@@ -41,36 +41,36 @@ notes: |
   by name, core.vbs and controller.vbs beside the per-manufacturer machine
   scripts (WPC.vbs, sam.vbs, s11.vbs, zac.vbs and the rest), and the editor's
   completion parser reads core.vbs over the same search order
-  (codeview.cpp:3233-3247, standalone/cmake/CMakeLists_gl-linux-x64.txt:698).
+  (codeview.cpp:3233-3247, CMakeLists.txt:948).
   The same four roots are handed to table scripts as the UserDirectory,
   TablesDirectory, MusicDirectory and ScriptsDirectory properties, each falling
   back from the install directory to the table folder to the preferences path
   (src/parts/pintable.cpp:484-560).
 
   The rest of the install tree is read the same way and ships with the binary:
-  assets/ holds BallEnv.exr, AODither.webp and EnvMap.webp (pin3d.cpp:475-477),
-  the bumper and kicker textures (src/parts/bumper.cpp:246-290,
-  src/parts/kicker.cpp:273-319), TableSizes.csv, which the live UI reads to
+  assets/ holds BallEnv.exr, AODither.webp and EnvMap.webp (src/renderer/Renderer.cpp:204),
+  the bumper and kicker textures (src/parts/bumper.cpp:244,
+  src/parts/kicker.cpp:274), TableSizes.csv, which the live UI reads to
   guess the glass position of a table that does not declare one
-  (src/core/TableDB.cpp:11-14, LiveUI.cpp:1705-1706), vpx.html for the built-in
-  web server (standalone/inc/webserver/WebServer.cpp:32) and
+  (src/core/TableDB.cpp:16, LiveUI.cpp:1705-1706), vpx.html for the built-in
+  web server (lib/src/WebServer.cpp:94) and
   Default_gamecontrollerdb.txt; shader10.8.0/ holds the .glfx and .fxh sources
   compiled at runtime (src/renderer/Shader.cpp:1419); flexdmd/ holds the bitmap
   fonts UltraDMD asks for by resource name, the FlexDMD.Resources. prefix being
-  stripped before the lookup (standalone/inc/flexdmd/UltraDMD.cpp:31-40,
-  standalone/inc/flexdmd/AssetManager.cpp:84-90,232).
+  stripped before the lookup (plugins/flexdmd/UltraDMD.cpp:32,
+  plugins/flexdmd/UltraDMD.cpp:20-22).
 
   Two parts of that tree ship without a reader on this target. The four starter
   tables in assets/, blankTable.vpx, exampleTable.vpx, lightSeqTable.vpx and
   strippedTable.vpx, are loaded only by InitBuiltinTable, whose body is one
-  `#ifndef __STANDALONE__` block (src/parts/pintable.cpp:1641-1663), and
+  `#ifndef __STANDALONE__` block (src/ui/win/WinEditor.cpp:2240), and
   docs/Changelog.txt is read by dialogs/AboutDialog.cpp:27-31, which is not in
   the standalone source list at all.
 
   PinMAME is where the emulation happens. Tables that recreate a real solid
   state machine hand a ROM name to the controller, which resolves its root as
   the pinmame folder beside the table, else the PinMAMEPath setting, else
-  $HOME/.pinmame (standalone/inc/vpinmame/VPinMAMEController.cpp:165-180). libpinmame then hangs roms,
+  $HOME/.pinmame (plugins/pinmame/PinMAMEPlugin.cpp:448-451). libpinmame then hangs roms,
   nvram, samples, cfg, hi, inp, memcard and sta off that root
   (pinmame src/libpinmame/libpinmame.cpp:816-823). Every ROM set is a game, one
   zip per machine; PinMAME declares no BIOS root set anywhere in its tree, and
@@ -92,7 +92,7 @@ notes: |
   (pinmame src/usrintrf.c:2846-2851), and by the listing path in
   pinmame src/info.c:820 which libpinmame never calls; VPX passes NULL for
   fn_IsKeyPressed, the thirteenth member of PinmameConfig
-  (standalone/inc/vpinmame/VPinMAMEController.cpp:145-160, pinmame src/libpinmame/libpinmame.h:418-433),
+  (plugins/pinmame/Controller.cpp:73, pinmame src/libpinmame/libpinmame.h:418-433),
   so osd_is_key_pressed always answers 0
   (pinmame src/libpinmame/libpinmame.cpp:355-361) and the menu cannot be opened.
 
@@ -135,16 +135,16 @@ analysis:
       Copied into the build output next to the executable and installed as one
       unit by every distribution, so they arrive with the emulator rather than
       being sourced separately.
-    source_ref: "standalone/cmake/CMakeLists_gl-linux-x64.txt:695-720"
+    source_ref: "CMakeLists.txt:948"
     entries:
       - what: "scripts/, the .vbs library tables include"
         source_ref: "src/parts/pintable.cpp:470-480, main.h:118-119, main.cpp:890-892, codeview.cpp:3233-3247"
       - what: "assets/, textures, TableSizes.csv, vpx.html, the two defaults"
-        source_ref: "pin3d.cpp:475-477, src/parts/bumper.cpp:246-290, src/parts/kicker.cpp:273-319, src/core/TableDB.cpp:11-14, LiveUI.cpp:1705-1706, standalone/inc/webserver/WebServer.cpp:32"
+        source_ref: "src/renderer/Renderer.cpp:204, src/parts/bumper.cpp:244, src/parts/kicker.cpp:274, src/core/TableDB.cpp:16, LiveUI.cpp:1705-1706, lib/src/WebServer.cpp:94"
       - what: "shader10.8.0/, .glfx and .fxh compiled at runtime"
         source_ref: "src/renderer/Shader.cpp:1419"
       - what: "flexdmd/, the bitmap fonts UltraDMD names as FlexDMD.Resources.*"
-        source_ref: "standalone/inc/flexdmd/UltraDMD.cpp:31-40, standalone/inc/flexdmd/AssetManager.cpp:84-90,232"
+        source_ref: "plugins/flexdmd/UltraDMD.cpp:32, plugins/flexdmd/UltraDMD.cpp:20-22"
       - what: "user/ and tables/, the two roots exposed to table scripts as directory properties"
         source_ref: "src/parts/pintable.cpp:484-521"
 
@@ -152,45 +152,45 @@ analysis:
     note: "Copied into the build output but unreachable in the standalone binary"
     entries:
       - what: "assets/blankTable.vpx, exampleTable.vpx, lightSeqTable.vpx, strippedTable.vpx"
-        source_ref: "src/parts/pintable.cpp:1641-1663"
+        source_ref: "src/ui/win/WinEditor.cpp:2240"
         note: "InitBuiltinTable is one #ifndef __STANDALONE__ block; the editor's New Table entries are the only callers."
       - what: "docs/Changelog.txt"
-        source_ref: "dialogs/AboutDialog.cpp:27-31, standalone/cmake/CMakeLists_gl-linux-x64.txt:52-693"
+        source_ref: "dialogs/AboutDialog.cpp:27-31, CMakeLists.txt:949"
         note: "The About dialog is not in the standalone source list."
 
   user_supplied_paths:
     note: "Per table, keyed on the table folder or the ROM name, with no fixed filename"
     entries:
       - what: "PinMAME ROM sets, <pinmame root>/roms/<romname>.zip"
-        source_ref: "standalone/inc/vpinmame/VPinMAMEController.cpp:165-180, pinmame src/libpinmame/libpinmame.cpp:816"
+        source_ref: "plugins/pinmame/PinMAMEPlugin.cpp:448-451, pinmame src/libpinmame/libpinmame.cpp:816"
         note: >-
           One zip per machine. The root is the pinmame folder beside the table
           when present, else the PinMAMEPath setting, else $HOME/.pinmame;
           Batocera patches that last fallback to <prefpath>/pinmame.
       - what: "backglass, <table basename>.directb2s"
-        source_ref: "standalone/inc/b2s/forms/FormBackglass.cpp:372-415"
+        source_ref: "plugins/b2slegacy/forms/FormBackglass.cpp:370"
         note: "Version-checked against the B2S server on load; absence only warns."
-      - what: "Serum colorizations, <pinmame root>/AltColor/"
-        source_ref: "standalone/inc/vpinmame/VPinMAMEController.cpp:55-59"
+      - what: "Serum colorizations, the folder named by the SerumPath setting"
+        source_ref: "plugins/serum/serum.cpp:60"
         note: "Handed to libdmdutil as a path when the AltColor setting is on and the directory exists."
       - what: "alternative sound packages, under the PinMAME root by ROM name"
-        source_ref: "standalone/inc/vpinmame/VPinMAMEController.cpp:336-338"
+        source_ref: "plugins/altsound/AltSoundPlugin.cpp:189-193"
       - what: "PUP video packs, <table folder>/pupvideos"
-        source_ref: "standalone/inc/pup/PUPManager.cpp:12, standalone/inc/vpinmame/VPinMAMEController.cpp:61-65"
+        source_ref: "plugins/pup/PUPManager.cpp:125, plugins/pup/PUPPlugin.cpp:288"
       - what: "table music, music/ beside the install, the table or the preferences path"
-        source_ref: "src/audio/audioplayer.cpp:75-77, src/parts/pintable.cpp:524-545"
+        source_ref: "src/audio/AudioPlayer.cpp:75-77, src/parts/pintable.cpp:524-545"
       - what: "table sidecars, the .vbs script override and the per-table .ini"
         source_ref: "src/parts/pintable.cpp:704,794"
 
   generated_files:
     - what: "VPinballX.ini, the settings file"
-      source_ref: "main.cpp:901-914"
+      source_ref: "lib/src/VPinballLib.cpp:192"
       note: >-
         Created on first run under the preferences path, or read from beside the
         binary when one is there. Batocera seeds it from
         assets/Default_VPinballX.ini and rewrites it before every launch.
     - what: "VPReg.ini, per-table settings; vpinball.log"
-      source_ref: "Logger.cpp:58, standalone/README.md:512-534"
+      source_ref: "src/utils/Logger.cpp:167, standalone/README.md:512-534"
     - what: "PinMAME state: nvram/, cfg/, hi/, inp/, memcard/, sta/ and ini/"
-      source_ref: "pinmame src/libpinmame/libpinmame.cpp:817-823, standalone/inc/vpinmame/VPinMAMEController.cpp:186-198"
+      source_ref: "pinmame src/libpinmame/libpinmame.cpp:817-823, plugins/pinmame/Controller.cpp:166-171"
       note: "The ini directory is created when missing; the others are written by PinMAME as the machine runs."
