@@ -30,7 +30,7 @@ notes: |
   image.
   ref: CSpect.exe 3.3.1.0 a.H::A(bool) IL_01fe-IL_023c, A.h::A(string[])
        IL_012b-IL_0197, A.h::A(string[]) IL_0697-IL_070e, A.h::a(string[])
-       IL_0136-IL_0165
+       IL_0131-IL_0150
 
   The ROMs live inside the SD card image, not beside the executable. e() opens
   the image through SDCardAccess.SDCard.Open and pulls each ROM out with
@@ -45,7 +45,7 @@ notes: |
   .nex file runs against the zero filled banks while the bundled esxDOS plugin
   answers RST $08 out of that directory.
   ref: es_systems.xml zxnext, A.h::A(string[]) IL_0697-IL_06f7, esxDOS.dll
-       CRST8.cs:940-1020
+       CRST8.cs:286-302
 
   A positional argument that ends in none of nex, sna, snx, rom or fw and does
   not open as a FAT image is taken for a missing card: CSpect offers to fetch
@@ -53,8 +53,8 @@ notes: |
   and copies the single .img inside to the requested path. A .rom argument is
   read into a 128 KB buffer entered at 0x6000 instead, and a .fw argument is
   unpacked through the TBBLUE.FW header.
-  ref: A.h::a(string[]) IL_0104-IL_0165, A.h::b(string), A.h::B(string, string),
-       a.d::C(string)
+  ref: A.h::a(string[]) IL_00a6-IL_012c, A.h::b(string), A.h::B(string, string),
+       a.d::C(string) IL_0086-IL_01db
 
   What CSpect writes rather than reads: cspect_win.dat under -r for the window
   placement, cspect.log for the session log, the F5 screenshots, and the -wad=
@@ -63,8 +63,8 @@ notes: |
   -z88dk and -pasta80 name, all of them output of the user's own assembler. The
   Windows build probes its audio runtime with LoadLibrary("openal32.dll") and
   offers to run the bundled oalinst.exe when that answers zero.
-  ref: B.E::e(), B.E::E(), a.V::.ctor(string), A.Y::A(), A.g::A(),
-       A.h::a(string[]) IL_02e6-IL_0330
+  ref: B.E::e(), B.E::E(), a.V::.ctor(string), A.y::A(), A.y::A(bool, bool),
+       A.g::A(), A.h::a(string[]) IL_02dc-IL_034f
 
 files:
   - name: enNextZX.rom
@@ -131,4 +131,4 @@ files:
       sector, which is also the test that decides whether a positional argument
       is a card or a game, and the DivMMC opens the same path read write as its
       card. A second image mounts on the second slot through -sd2=.
-    source_ref: "CSpect.exe 3.3.1.0 a.H::e() IL_000b-IL_0015, A.h::A(string) IL_0000-IL_0074, A.h::A(string[]) IL_0697-IL_0778, B.R::.ctor(string), SDCardAccess.dll SDCard.cs:600-635"
+    source_ref: "CSpect.exe 3.3.1.0 a.H::e() IL_000b-IL_0015, A.h::A(string) IL_0000-IL_00b6, A.h::A(string[]) IL_0697-IL_0773, B.R::.ctor(string), SDCardAccess.dll SDCard.cs:600-635"
