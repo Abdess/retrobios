@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-11T22:54:31Z",
-  "total_files": 8728,
-  "total_size": 11338353054,
+  "generated_at": "2026-08-11T23:07:43Z",
+  "total_files": 8744,
+  "total_size": 11459106403,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -52574,15 +52574,55 @@
       "crc32": "c1c73f18",
       "adler32": "9806aeba"
     },
-    "c686635c5470e4711dbf817e8196dcb169fdc68d": {
-      "path": "bios/Other/mame4droid/hiscore.dat",
-      "name": "hiscore.dat",
-      "size": 219154,
-      "sha1": "c686635c5470e4711dbf817e8196dcb169fdc68d",
-      "md5": "546be126043049081b6cbec4e896586c",
-      "sha256": "45e20982739bf9dff6147c998db9d6e56ba961671cda3deef4ad388ce29ca4fd",
-      "crc32": "ac855cd2",
-      "adler32": "cc2f4ea3"
+    "8d5a5e5b6b179f5c27f0d9379aea1c4fd36b51f9": {
+      "path": "bios/Other/mame4droid-2024/cheat.7z",
+      "name": "cheat.7z",
+      "size": 3931509,
+      "sha1": "8d5a5e5b6b179f5c27f0d9379aea1c4fd36b51f9",
+      "md5": "187a81ab0ca881fe44806c041e22646b",
+      "sha256": "fa979a25c0c9db737a75b60f4ee2ab698bf8d8c2bc1fc44a7362467ed941e7df",
+      "crc32": "ef00c82b",
+      "adler32": "36da8d27"
+    },
+    "461eb3301dcc796362094fac901a307b29e7024b": {
+      "path": "bios/Other/mame4droid-2024/data/history.db",
+      "name": "history.db",
+      "size": 104738816,
+      "sha1": "461eb3301dcc796362094fac901a307b29e7024b",
+      "md5": "615619e89122a6374a794d324d012b12",
+      "sha256": "9026af08979a8a1e40390f61d91267d0a3dc9676fe86765ccd2060be0d3d146f",
+      "crc32": "94687e89",
+      "adler32": "56251282"
+    },
+    "19a26e9ca77bab990337c639cb2e3ede4b272bcb": {
+      "path": "bios/Other/mame4droid-2024/shaders.cfg",
+      "name": "shaders.cfg",
+      "size": 2236,
+      "sha1": "19a26e9ca77bab990337c639cb2e3ede4b272bcb",
+      "md5": "7fa9ea60a5745891d712df3d860d82d9",
+      "sha256": "c1d5cefa6fecdb77c239d008ec08b57ddfbcc97e3194fac689c3ea0fbbecf565",
+      "crc32": "750c5ab5",
+      "adler32": "97681770"
+    },
+    "d11a9f5eb62ac9382faeabb53926c0b10788cefd": {
+      "path": "bios/Other/mame4droid-2024/uismall.bdf",
+      "name": "uismall.bdf",
+      "size": 127585,
+      "sha1": "d11a9f5eb62ac9382faeabb53926c0b10788cefd",
+      "md5": "01fd7e0102b2ffdbe2d781eca0162a78",
+      "sha256": "ef94fa078d9a451ede98565ed953d3dd6e43a4135b9ca1abcd95172070c85dc4",
+      "crc32": "ef56ccf2",
+      "adler32": "064d38b1"
+    },
+    "33991a884bdf2131475058cddf535a457ce50233": {
+      "path": "bios/Other/mame4droid-2024/unifont.bdf",
+      "name": "unifont.bdf",
+      "size": 9384069,
+      "sha1": "33991a884bdf2131475058cddf535a457ce50233",
+      "md5": "111ccf43b36893fcf4e456ea7de72f3a",
+      "sha256": "367d8ed92cab8ceba681077eb497497dd7efe0ce451b56dfc7f277c6e120d8bc",
+      "crc32": "2c4b2ed4",
+      "adler32": "9d8e8fcd"
     },
     "8e14e85c645187504ec9d162b3ea614a0c421d32": {
       "path": "bios/Other/mednafen/apple2e-enh-kb.rom",
@@ -54113,6 +54153,126 @@
       "sha256": "be56e77c7ecd61306133913a1987b1dddf656528ae870c2de1ee8ccda7ff3ebf",
       "crc32": "69e4e716",
       "adler32": "464c6991"
+    },
+    "2a6fbc6cd4ffb69045863224a76085b9921fc67b": {
+      "path": "bios/Other/shadps4/shadps4/sys_modules/libSceAt9Enc.sprx",
+      "name": "libSceAt9Enc.sprx",
+      "size": 157424,
+      "sha1": "2a6fbc6cd4ffb69045863224a76085b9921fc67b",
+      "md5": "6d8f210b4ce85244cd0964b3e677dfa8",
+      "sha256": "d1c8817dd1a1896c950afcec46d3d78a584d7fefc1452b1c42a0343b423737a7",
+      "crc32": "d360a73c",
+      "adler32": "51b73669"
+    },
+    "ea1f3890cab882e58080eb4c9c926c777a13e014": {
+      "path": "bios/Other/shadps4/shadps4/sys_modules/libSceAudiodecCpu.sprx",
+      "name": "libSceAudiodecCpu.sprx",
+      "size": 52624,
+      "sha1": "ea1f3890cab882e58080eb4c9c926c777a13e014",
+      "md5": "3cf4a55e808b461d99369f81dec5b8ce",
+      "sha256": "ad89da76518bc80073e996aad4c50acd1266dffcbe7adc8a7365e66e0324a612",
+      "crc32": "0cedc6c2",
+      "adler32": "ede5a318"
+    },
+    "0f41ea820d8a74a5b1a59dc6c8e151dde40a7eac": {
+      "path": "bios/Other/shadps4/shadps4/sys_modules/libSceAudiodecCpuDdp.sprx",
+      "name": "libSceAudiodecCpuDdp.sprx",
+      "size": 609088,
+      "sha1": "0f41ea820d8a74a5b1a59dc6c8e151dde40a7eac",
+      "md5": "7ed965ea088a9d6853bb5f8fae334340",
+      "sha256": "5879f1af2ba45e3c6058baeb9d3df8c4a916bc125f91eec794eee8b8da4a1aca",
+      "crc32": "8c7a77bd",
+      "adler32": "afd4214d"
+    },
+    "4cc1bdb8182853506a21590a7bf31a8648113156": {
+      "path": "bios/Other/shadps4/shadps4/sys_modules/libSceAudiodecCpuDtsHdLbr.sprx",
+      "name": "libSceAudiodecCpuDtsHdLbr.sprx",
+      "size": 277200,
+      "sha1": "4cc1bdb8182853506a21590a7bf31a8648113156",
+      "md5": "202df64d39b426815e3aac7eaf613d53",
+      "sha256": "8da6f186c16ed11a97afb96c9f0d51b3478168a4c76785efea5f9774953046ea",
+      "crc32": "3be6a0fa",
+      "adler32": "a0165e22"
+    },
+    "20df853712b4d1a95a8e765b3dc85ba96ba19df0": {
+      "path": "bios/Other/shadps4/shadps4/sys_modules/libSceAudiodecCpuHevag.sprx",
+      "name": "libSceAudiodecCpuHevag.sprx",
+      "size": 67304,
+      "sha1": "20df853712b4d1a95a8e765b3dc85ba96ba19df0",
+      "md5": "e3321ad61e00b63c49af54cecda5837d",
+      "sha256": "4328be624627ee0e9d41d0b5727950a1118714be34dda659996ebc3e69d4a92b",
+      "crc32": "0cdde52b",
+      "adler32": "c7b3f5c4"
+    },
+    "72dc23f5d32b90561272daa59903c6b63cc2b5c4": {
+      "path": "bios/Other/shadps4/shadps4/sys_modules/libSceAudiodecCpuM4aac.sprx",
+      "name": "libSceAudiodecCpuM4aac.sprx",
+      "size": 372376,
+      "sha1": "72dc23f5d32b90561272daa59903c6b63cc2b5c4",
+      "md5": "e5672303437c03397264b13fafcc87a5",
+      "sha256": "72fa07d041df1ee6d58f193b37bda217af9c576f8e789a2e1c2a8334d3aa7448",
+      "crc32": "2755ce9e",
+      "adler32": "505f907d"
+    },
+    "7b1887e6e7503e9e57871113c44ac88d7ae57dc3": {
+      "path": "bios/Other/shadps4/shadps4/sys_modules/libSceFreeTypeOl.sprx",
+      "name": "libSceFreeTypeOl.sprx",
+      "size": 579224,
+      "sha1": "7b1887e6e7503e9e57871113c44ac88d7ae57dc3",
+      "md5": "4489a426d52c5c024debe588d307a2cf",
+      "sha256": "f77b0d52eb81340c9baa71c975a09c9e10069b46d9325a0dd693bb14055f259f",
+      "crc32": "c02cf2bd",
+      "adler32": "4a36e70c"
+    },
+    "99aa168e4c756bc7647d3ca936c35eca892fd935": {
+      "path": "bios/Other/shadps4/shadps4/sys_modules/libSceFreeTypeOptOl.sprx",
+      "name": "libSceFreeTypeOptOl.sprx",
+      "size": 163896,
+      "sha1": "99aa168e4c756bc7647d3ca936c35eca892fd935",
+      "md5": "dbaf4d30f4459549c3a4e72cbcf23795",
+      "sha256": "97a4df9eed9b5e6ea4f4c5017a29696d5ad4ca2cddb8ba05f0014062d435fd73",
+      "crc32": "220bc276",
+      "adler32": "8753136f"
+    },
+    "9d1cba7c66e2a582b065f14cc36d812d4c1c3906": {
+      "path": "bios/Other/shadps4/shadps4/sys_modules/libSceRudp.sprx",
+      "name": "libSceRudp.sprx",
+      "size": 210288,
+      "sha1": "9d1cba7c66e2a582b065f14cc36d812d4c1c3906",
+      "md5": "7fe1af92edfc5f9cb7f01d5a3ea0aead",
+      "sha256": "6b0243801bd81b5d4fdb3c8010dd4ae101cd31e0e4c2dc8be63ac88aa3bb8a21",
+      "crc32": "11eb9b4d",
+      "adler32": "8853468a"
+    },
+    "199869b8a5020fe59861a507a48078665b57d8dc": {
+      "path": "bios/Other/shadps4/shadps4/sys_modules/libSceSystemGesture.sprx",
+      "name": "libSceSystemGesture.sprx",
+      "size": 68768,
+      "sha1": "199869b8a5020fe59861a507a48078665b57d8dc",
+      "md5": "23b2df744d757d7d9ca56eb57e9be9d8",
+      "sha256": "98425066e5c44346fc849931f62e369cad70e358e89ccadfa75eca2c5b1425f8",
+      "crc32": "f4f94da8",
+      "adler32": "05fe00a8"
+    },
+    "f99295c62a62b2e8ed0a22c9d7360fbbb305d1a0": {
+      "path": "bios/Other/shadps4/shadps4/sys_modules/libSceWkFontConfig.sprx",
+      "name": "libSceWkFontConfig.sprx",
+      "size": 52688,
+      "sha1": "f99295c62a62b2e8ed0a22c9d7360fbbb305d1a0",
+      "md5": "3ac30c6220f06a0ef2d179c52e11da75",
+      "sha256": "013ffcc6e71d8a3d67c31bc4f157161fa4781bdb1a3a2437b683fb1050f93675",
+      "crc32": "7bc5ea5c",
+      "adler32": "e211ca5b"
+    },
+    "c86a4a54d8d06190d937d3906703067e93d24482": {
+      "path": "bios/Other/shadps4/shadps4/sys_modules/libSceXml.sprx",
+      "name": "libSceXml.sprx",
+      "size": 177408,
+      "sha1": "c86a4a54d8d06190d937d3906703067e93d24482",
+      "md5": "9d9e23b481a9ad6e2ce15ace32344ef1",
+      "sha256": "d6ca22d54e21315b8a62780bba4029f6cac78cf2de7c07868adf84a2c00b26bf",
+      "crc32": "f6be5e6f",
+      "adler32": "b04582b9"
     },
     "5109af30336443dd3107190b08dfbe8de623445b": {
       "path": "bios/Other/syobonaction/4-clear.ogg",
@@ -97304,7 +97464,11 @@
       "034527d42a96d0f39977cb85c6a8f2d8": "fcfbbb25e06f58d13e762b02bfd468c834d98fc8",
       "ee44560f34033efa3bb47b3e0aac1772": "7b03befac4fbcef8c649048fa3ff5d095fd48dd3",
       "c0b17e87b2e1f239fd32545301f7e9cf": "75d31d949614b7d4e79de676c8a4b1c68b571f0a",
-      "546be126043049081b6cbec4e896586c": "c686635c5470e4711dbf817e8196dcb169fdc68d",
+      "187a81ab0ca881fe44806c041e22646b": "8d5a5e5b6b179f5c27f0d9379aea1c4fd36b51f9",
+      "615619e89122a6374a794d324d012b12": "461eb3301dcc796362094fac901a307b29e7024b",
+      "7fa9ea60a5745891d712df3d860d82d9": "19a26e9ca77bab990337c639cb2e3ede4b272bcb",
+      "01fd7e0102b2ffdbe2d781eca0162a78": "d11a9f5eb62ac9382faeabb53926c0b10788cefd",
+      "111ccf43b36893fcf4e456ea7de72f3a": "33991a884bdf2131475058cddf535a457ce50233",
       "b956c537e7b6b85ffa5c3493b1490d8a": "8e14e85c645187504ec9d162b3ea614a0c421d32",
       "4431aea380185e3f509285540d7cb418": "12a2e718f5f4acd69b6c33a45a4a940b1440a481",
       "f29d49006080c3080baab7b851e1cf68": "16e3c6698a10547c228b8ab474b817ff1d64c216",
@@ -97458,6 +97622,18 @@
       "eadefc3109fa673817488dfee9d2ca2b": "c5d57da07dca7659159fd7a777cbd9b94492c0ea",
       "b6559ba14ee2e26a177de03853bdf68c": "20008f4bc271adbf80cd30a6c6aae16844ea8ecc",
       "ed42522c6b431d1b2b5f9a265667b3b6": "daf8a250f813a6a43a71b86553c2e82d62429b21",
+      "6d8f210b4ce85244cd0964b3e677dfa8": "2a6fbc6cd4ffb69045863224a76085b9921fc67b",
+      "3cf4a55e808b461d99369f81dec5b8ce": "ea1f3890cab882e58080eb4c9c926c777a13e014",
+      "7ed965ea088a9d6853bb5f8fae334340": "0f41ea820d8a74a5b1a59dc6c8e151dde40a7eac",
+      "202df64d39b426815e3aac7eaf613d53": "4cc1bdb8182853506a21590a7bf31a8648113156",
+      "e3321ad61e00b63c49af54cecda5837d": "20df853712b4d1a95a8e765b3dc85ba96ba19df0",
+      "e5672303437c03397264b13fafcc87a5": "72dc23f5d32b90561272daa59903c6b63cc2b5c4",
+      "4489a426d52c5c024debe588d307a2cf": "7b1887e6e7503e9e57871113c44ac88d7ae57dc3",
+      "dbaf4d30f4459549c3a4e72cbcf23795": "99aa168e4c756bc7647d3ca936c35eca892fd935",
+      "7fe1af92edfc5f9cb7f01d5a3ea0aead": "9d1cba7c66e2a582b065f14cc36d812d4c1c3906",
+      "23b2df744d757d7d9ca56eb57e9be9d8": "199869b8a5020fe59861a507a48078665b57d8dc",
+      "3ac30c6220f06a0ef2d179c52e11da75": "f99295c62a62b2e8ed0a22c9d7360fbbb305d1a0",
+      "9d9e23b481a9ad6e2ce15ace32344ef1": "c86a4a54d8d06190d937d3906703067e93d24482",
       "df976d4c51ac403796e2f51643617f92": "5109af30336443dd3107190b08dfbe8de623445b",
       "f7d49d1962bc856bdd3bdc183a9d8ad1": "df6c0e2d1c8116c924fc266211f6ab4c840cb245",
       "6ad5f8890062aa94abb68bdd41039b35": "a96f0daf7da14225eb615f4561bc1d6d4a168601",
@@ -101448,8 +101624,7 @@
         "7381472bf046126257e51a0124e4553282f020e5",
         "ae3329abbcb7b445d979321a1f67733aa3f023d0",
         "1a2b8740f4672fd9668bfa6f648bb34f4339afb6",
-        "d38572d22721eb5972f671cde54201d752dffe6b",
-        "c686635c5470e4711dbf817e8196dcb169fdc68d"
+        "d38572d22721eb5972f671cde54201d752dffe6b"
       ],
       "hod2bios.zip": [
         "782c303cbdfab1027b04db74a63e27bdad5e0c53",
@@ -104470,7 +104645,8 @@
       ],
       "cheat.7z": [
         "7227b18e2c3e659abf74d9988e32150df64f60e9",
-        "ea1faf0f32a10d35e854d29e79b2324a6f8d081f"
+        "ea1faf0f32a10d35e854d29e79b2324a6f8d081f",
+        "8d5a5e5b6b179f5c27f0d9379aea1c4fd36b51f9"
       ],
       "cheat.dat": [
         "5d1bc24ced608591a7fdced4088004678792dafd",
@@ -115157,6 +115333,18 @@
       "Category.ini": [
         "75d31d949614b7d4e79de676c8a4b1c68b571f0a"
       ],
+      "history.db": [
+        "461eb3301dcc796362094fac901a307b29e7024b"
+      ],
+      "shaders.cfg": [
+        "19a26e9ca77bab990337c639cb2e3ede4b272bcb"
+      ],
+      "uismall.bdf": [
+        "d11a9f5eb62ac9382faeabb53926c0b10788cefd"
+      ],
+      "unifont.bdf": [
+        "33991a884bdf2131475058cddf535a457ce50233"
+      ],
       "apple2e-enh-kb.rom": [
         "8e14e85c645187504ec9d162b3ea614a0c421d32"
       ],
@@ -115586,6 +115774,42 @@
       ],
       "word.dat": [
         "daf8a250f813a6a43a71b86553c2e82d62429b21"
+      ],
+      "libSceAt9Enc.sprx": [
+        "2a6fbc6cd4ffb69045863224a76085b9921fc67b"
+      ],
+      "libSceAudiodecCpu.sprx": [
+        "ea1f3890cab882e58080eb4c9c926c777a13e014"
+      ],
+      "libSceAudiodecCpuDdp.sprx": [
+        "0f41ea820d8a74a5b1a59dc6c8e151dde40a7eac"
+      ],
+      "libSceAudiodecCpuDtsHdLbr.sprx": [
+        "4cc1bdb8182853506a21590a7bf31a8648113156"
+      ],
+      "libSceAudiodecCpuHevag.sprx": [
+        "20df853712b4d1a95a8e765b3dc85ba96ba19df0"
+      ],
+      "libSceAudiodecCpuM4aac.sprx": [
+        "72dc23f5d32b90561272daa59903c6b63cc2b5c4"
+      ],
+      "libSceFreeTypeOl.sprx": [
+        "7b1887e6e7503e9e57871113c44ac88d7ae57dc3"
+      ],
+      "libSceFreeTypeOptOl.sprx": [
+        "99aa168e4c756bc7647d3ca936c35eca892fd935"
+      ],
+      "libSceRudp.sprx": [
+        "9d1cba7c66e2a582b065f14cc36d812d4c1c3906"
+      ],
+      "libSceSystemGesture.sprx": [
+        "199869b8a5020fe59861a507a48078665b57d8dc"
+      ],
+      "libSceWkFontConfig.sprx": [
+        "f99295c62a62b2e8ed0a22c9d7360fbbb305d1a0"
+      ],
+      "libSceXml.sprx": [
+        "c86a4a54d8d06190d937d3906703067e93d24482"
       ],
       "4-clear.ogg": [
         "5109af30336443dd3107190b08dfbe8de623445b"
@@ -134109,7 +134333,11 @@
       "8031ff02": "fcfbbb25e06f58d13e762b02bfd468c834d98fc8",
       "18c0ff3e": "7b03befac4fbcef8c649048fa3ff5d095fd48dd3",
       "c1c73f18": "75d31d949614b7d4e79de676c8a4b1c68b571f0a",
-      "ac855cd2": "c686635c5470e4711dbf817e8196dcb169fdc68d",
+      "ef00c82b": "8d5a5e5b6b179f5c27f0d9379aea1c4fd36b51f9",
+      "94687e89": "461eb3301dcc796362094fac901a307b29e7024b",
+      "750c5ab5": "19a26e9ca77bab990337c639cb2e3ede4b272bcb",
+      "ef56ccf2": "d11a9f5eb62ac9382faeabb53926c0b10788cefd",
+      "2c4b2ed4": "33991a884bdf2131475058cddf535a457ce50233",
       "c506efb9": "8e14e85c645187504ec9d162b3ea614a0c421d32",
       "e47045f4": "12a2e718f5f4acd69b6c33a45a4a940b1440a481",
       "094ecf8e": "16e3c6698a10547c228b8ab474b817ff1d64c216",
@@ -134263,6 +134491,18 @@
       "b82cf820": "c5d57da07dca7659159fd7a777cbd9b94492c0ea",
       "305d59ff": "20008f4bc271adbf80cd30a6c6aae16844ea8ecc",
       "69e4e716": "daf8a250f813a6a43a71b86553c2e82d62429b21",
+      "d360a73c": "2a6fbc6cd4ffb69045863224a76085b9921fc67b",
+      "0cedc6c2": "ea1f3890cab882e58080eb4c9c926c777a13e014",
+      "8c7a77bd": "0f41ea820d8a74a5b1a59dc6c8e151dde40a7eac",
+      "3be6a0fa": "4cc1bdb8182853506a21590a7bf31a8648113156",
+      "0cdde52b": "20df853712b4d1a95a8e765b3dc85ba96ba19df0",
+      "2755ce9e": "72dc23f5d32b90561272daa59903c6b63cc2b5c4",
+      "c02cf2bd": "7b1887e6e7503e9e57871113c44ac88d7ae57dc3",
+      "220bc276": "99aa168e4c756bc7647d3ca936c35eca892fd935",
+      "11eb9b4d": "9d1cba7c66e2a582b065f14cc36d812d4c1c3906",
+      "f4f94da8": "199869b8a5020fe59861a507a48078665b57d8dc",
+      "7bc5ea5c": "f99295c62a62b2e8ed0a22c9d7360fbbb305d1a0",
+      "f6be5e6f": "c86a4a54d8d06190d937d3906703067e93d24482",
       "be691779": "5109af30336443dd3107190b08dfbe8de623445b",
       "05784ce0": "df6c0e2d1c8116c924fc266211f6ab4c840cb245",
       "d5a7498a": "a96f0daf7da14225eb615f4561bc1d6d4a168601",
@@ -142839,7 +143079,11 @@
       "fcf442b26c492253dfb8d2146e215b7b84b3ba87443face9c94a1e9474aa3ca4": "fcfbbb25e06f58d13e762b02bfd468c834d98fc8",
       "0add32bcbd0e5b350437fa9d138b3c232368e36d8009852479fdb09d9db31113": "7b03befac4fbcef8c649048fa3ff5d095fd48dd3",
       "6e25b5a9021c18b738fbb0465446b4055bb2eff225a27a5827710ad464129631": "75d31d949614b7d4e79de676c8a4b1c68b571f0a",
-      "45e20982739bf9dff6147c998db9d6e56ba961671cda3deef4ad388ce29ca4fd": "c686635c5470e4711dbf817e8196dcb169fdc68d",
+      "fa979a25c0c9db737a75b60f4ee2ab698bf8d8c2bc1fc44a7362467ed941e7df": "8d5a5e5b6b179f5c27f0d9379aea1c4fd36b51f9",
+      "9026af08979a8a1e40390f61d91267d0a3dc9676fe86765ccd2060be0d3d146f": "461eb3301dcc796362094fac901a307b29e7024b",
+      "c1d5cefa6fecdb77c239d008ec08b57ddfbcc97e3194fac689c3ea0fbbecf565": "19a26e9ca77bab990337c639cb2e3ede4b272bcb",
+      "ef94fa078d9a451ede98565ed953d3dd6e43a4135b9ca1abcd95172070c85dc4": "d11a9f5eb62ac9382faeabb53926c0b10788cefd",
+      "367d8ed92cab8ceba681077eb497497dd7efe0ce451b56dfc7f277c6e120d8bc": "33991a884bdf2131475058cddf535a457ce50233",
       "a1989da84ea4381d309e7e08783771f884e913236b9bcc71c3d649aacf76537a": "8e14e85c645187504ec9d162b3ea614a0c421d32",
       "fbb9620e01f4f728e5a8ba86544900978d7803f6a7d577d384e288dfed9a4907": "12a2e718f5f4acd69b6c33a45a4a940b1440a481",
       "68db230ab6261f452de8d59fb48110d5d012f5a448cbc77afc1ed487c9b039ce": "16e3c6698a10547c228b8ab474b817ff1d64c216",
@@ -142993,6 +143237,18 @@
       "d28985aee96b96981be1542172f6f32509541dec325163e857cd677f56dad8f9": "c5d57da07dca7659159fd7a777cbd9b94492c0ea",
       "2631bfa2b70333ad85d6e32edf7dedb5e888a3d34ee31f0f2da3f7d8599cd5e3": "20008f4bc271adbf80cd30a6c6aae16844ea8ecc",
       "be56e77c7ecd61306133913a1987b1dddf656528ae870c2de1ee8ccda7ff3ebf": "daf8a250f813a6a43a71b86553c2e82d62429b21",
+      "d1c8817dd1a1896c950afcec46d3d78a584d7fefc1452b1c42a0343b423737a7": "2a6fbc6cd4ffb69045863224a76085b9921fc67b",
+      "ad89da76518bc80073e996aad4c50acd1266dffcbe7adc8a7365e66e0324a612": "ea1f3890cab882e58080eb4c9c926c777a13e014",
+      "5879f1af2ba45e3c6058baeb9d3df8c4a916bc125f91eec794eee8b8da4a1aca": "0f41ea820d8a74a5b1a59dc6c8e151dde40a7eac",
+      "8da6f186c16ed11a97afb96c9f0d51b3478168a4c76785efea5f9774953046ea": "4cc1bdb8182853506a21590a7bf31a8648113156",
+      "4328be624627ee0e9d41d0b5727950a1118714be34dda659996ebc3e69d4a92b": "20df853712b4d1a95a8e765b3dc85ba96ba19df0",
+      "72fa07d041df1ee6d58f193b37bda217af9c576f8e789a2e1c2a8334d3aa7448": "72dc23f5d32b90561272daa59903c6b63cc2b5c4",
+      "f77b0d52eb81340c9baa71c975a09c9e10069b46d9325a0dd693bb14055f259f": "7b1887e6e7503e9e57871113c44ac88d7ae57dc3",
+      "97a4df9eed9b5e6ea4f4c5017a29696d5ad4ca2cddb8ba05f0014062d435fd73": "99aa168e4c756bc7647d3ca936c35eca892fd935",
+      "6b0243801bd81b5d4fdb3c8010dd4ae101cd31e0e4c2dc8be63ac88aa3bb8a21": "9d1cba7c66e2a582b065f14cc36d812d4c1c3906",
+      "98425066e5c44346fc849931f62e369cad70e358e89ccadfa75eca2c5b1425f8": "199869b8a5020fe59861a507a48078665b57d8dc",
+      "013ffcc6e71d8a3d67c31bc4f157161fa4781bdb1a3a2437b683fb1050f93675": "f99295c62a62b2e8ed0a22c9d7360fbbb305d1a0",
+      "d6ca22d54e21315b8a62780bba4029f6cac78cf2de7c07868adf84a2c00b26bf": "c86a4a54d8d06190d937d3906703067e93d24482",
       "3aa539a472b4a7ffbf4329356d0e3c0b17893cedc6044408ca22988d7930ecc4": "5109af30336443dd3107190b08dfbe8de623445b",
       "f9bc12d2f50e8ed898524078df4e69be9cace639f62d218f06987ca0696cb83d": "df6c0e2d1c8116c924fc266211f6ab4c840cb245",
       "93f02ae92ff2d0e6773f12d3cc4f2ec74f230c69aeedc660b3e821a008187ba9": "a96f0daf7da14225eb615f4561bc1d6d4a168601",
@@ -153130,6 +153386,9 @@
       "assets/tictactoe.p8.png": [
         "5a7d0bd289e971a4ea6dfb09704b56252b85fe01"
       ],
+      "data/history.db": [
+        "461eb3301dcc796362094fac901a307b29e7024b"
+      ],
       "DefaultMasks/ReelGradientMask.bmp": [
         "16e3c6698a10547c228b8ab474b817ff1d64c216"
       ],
@@ -153437,6 +153696,42 @@
       ],
       "sdlpal/word.dat": [
         "daf8a250f813a6a43a71b86553c2e82d62429b21"
+      ],
+      "shadps4/sys_modules/libSceAt9Enc.sprx": [
+        "2a6fbc6cd4ffb69045863224a76085b9921fc67b"
+      ],
+      "shadps4/sys_modules/libSceAudiodecCpu.sprx": [
+        "ea1f3890cab882e58080eb4c9c926c777a13e014"
+      ],
+      "shadps4/sys_modules/libSceAudiodecCpuDdp.sprx": [
+        "0f41ea820d8a74a5b1a59dc6c8e151dde40a7eac"
+      ],
+      "shadps4/sys_modules/libSceAudiodecCpuDtsHdLbr.sprx": [
+        "4cc1bdb8182853506a21590a7bf31a8648113156"
+      ],
+      "shadps4/sys_modules/libSceAudiodecCpuHevag.sprx": [
+        "20df853712b4d1a95a8e765b3dc85ba96ba19df0"
+      ],
+      "shadps4/sys_modules/libSceAudiodecCpuM4aac.sprx": [
+        "72dc23f5d32b90561272daa59903c6b63cc2b5c4"
+      ],
+      "shadps4/sys_modules/libSceFreeTypeOl.sprx": [
+        "7b1887e6e7503e9e57871113c44ac88d7ae57dc3"
+      ],
+      "shadps4/sys_modules/libSceFreeTypeOptOl.sprx": [
+        "99aa168e4c756bc7647d3ca936c35eca892fd935"
+      ],
+      "shadps4/sys_modules/libSceRudp.sprx": [
+        "9d1cba7c66e2a582b065f14cc36d812d4c1c3906"
+      ],
+      "shadps4/sys_modules/libSceSystemGesture.sprx": [
+        "199869b8a5020fe59861a507a48078665b57d8dc"
+      ],
+      "shadps4/sys_modules/libSceWkFontConfig.sprx": [
+        "f99295c62a62b2e8ed0a22c9d7360fbbb305d1a0"
+      ],
+      "shadps4/sys_modules/libSceXml.sprx": [
+        "c86a4a54d8d06190d937d3906703067e93d24482"
       ],
       "D3D12/D3D12Core.dll": [
         "a5e152373fa6cc91fa6953dee562ebce6868eb94"
@@ -162301,6 +162596,9 @@
       ],
       "C/msdash.xbe": [
         "4d8d6b1d3f7ace05cbaf03565382b0e6e40c706c"
+      ],
+      "plugins/hiscore/hiscore.dat": [
+        "d38572d22721eb5972f671cde54201d752dffe6b"
       ],
       "DefaultSounds/20pSlide.wav": [
         "f92d854f017d154c9ae0a2351629876515ba48d7"
