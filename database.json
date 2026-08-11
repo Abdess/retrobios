@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-11T17:32:11Z",
-  "total_files": 8703,
-  "total_size": 11156264252,
+  "generated_at": "2026-08-11T17:38:39Z",
+  "total_files": 8712,
+  "total_size": 11156963773,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -47057,6 +47057,76 @@
       "crc32": "4c1a221a",
       "adler32": "07976f31"
     },
+    "e5aa80c501cfb435e2cba35ad92e427240394164": {
+      "path": "bios/Other/ace-dl/private/firmware/Amstrad_f4.cpr",
+      "name": "Amstrad_f4.cpr",
+      "size": 131156,
+      "sha1": "e5aa80c501cfb435e2cba35ad92e427240394164",
+      "md5": "e7159fd674022ba05f9b347ae3cdafc6",
+      "sha256": "f15989db62749b66c9435d0371a272e7fe38efab9b0b54f3e439ec1a0cf76c3e",
+      "crc32": "9ced247b",
+      "adler32": "af48635c"
+    },
+    "05fb14df24b2b504a3ae463a086f02f0adcc07b9": {
+      "path": "bios/Other/ace-dl/private/firmware/Amstrad_s4.cpr",
+      "name": "Amstrad_s4.cpr",
+      "size": 131156,
+      "sha1": "05fb14df24b2b504a3ae463a086f02f0adcc07b9",
+      "md5": "6eeed3fdd4abc98a2a932da810410128",
+      "sha256": "7ccafa0cf780ce50b0438edd6da982fa95cfff2a54f4a7a9aeb792ae44cccab9",
+      "crc32": "425882e2",
+      "adler32": "eca6685c"
+    },
+    "c68d84f37ab9defbb19200598c24948c97c9a644": {
+      "path": "bios/Other/ace-dl/private/firmware/OS464_FR.rom",
+      "name": "OS464_FR.rom",
+      "size": 32768,
+      "sha1": "c68d84f37ab9defbb19200598c24948c97c9a644",
+      "md5": "a588b7c9e1c142b5d8ebec65ac7713d8",
+      "sha256": "786726f30be4d8044ee591bbac35b67735dbde20c1755a75ff278fa2e5522df4",
+      "crc32": "059e60d2",
+      "adler32": "3cf5f8a3"
+    },
+    "faa49a3aeb1d7e972437f6b77515455d14e2d680": {
+      "path": "bios/Other/ace-dl/private/firmware/XMEM_FW_3_15_FR.rom",
+      "name": "XMEM_FW_3_15_FR.rom",
+      "size": 32768,
+      "sha1": "faa49a3aeb1d7e972437f6b77515455d14e2d680",
+      "md5": "046fa182f7574bde3ab97ee873f6e736",
+      "sha256": "e0c96b090aca3f13e9792445a1aac00c95daa46150ad9539971cf486222c9d86",
+      "crc32": "8708452c",
+      "adler32": "e366a34f"
+    },
+    "c7d7e5116665e4f21ae3b9bcdca2ce3685f00293": {
+      "path": "bios/Other/ace-dl/private/firmware/XMEM_FW_3_15_UK.rom",
+      "name": "XMEM_FW_3_15_UK.rom",
+      "size": 32768,
+      "sha1": "c7d7e5116665e4f21ae3b9bcdca2ce3685f00293",
+      "md5": "85accc17e98c79dbbdde826cbfaf4692",
+      "sha256": "bbe19179c4ff5b1ed0e2783e110d5b20be3b06cd3bc9bc4c5c47e76fafea8153",
+      "crc32": "e60da06a",
+      "adler32": "59889eca"
+    },
+    "0c15d6753cf0ae2a1737b6e857e8e82ee135a697": {
+      "path": "bios/Other/ace-dl/private/hacker/hacker481fr.rom",
+      "name": "hacker481fr.rom",
+      "size": 16384,
+      "sha1": "0c15d6753cf0ae2a1737b6e857e8e82ee135a697",
+      "md5": "dfdd9924295f491d54f30569874287f8",
+      "sha256": "68757d34c21e28cce68c38ec1cc0de37b9fb046eed0716036ba4f1d0df3bcc5e",
+      "crc32": "feeddf41",
+      "adler32": "75753068"
+    },
+    "56306e7234bcffd14b4f977d42d237c4ad9c12d5": {
+      "path": "bios/Other/ace-dl/private/hacker/hackit400uk.rom",
+      "name": "hackit400uk.rom",
+      "size": 16384,
+      "sha1": "56306e7234bcffd14b4f977d42d237c4ad9c12d5",
+      "md5": "9a293eaaebca601f671070ad56cb81b6",
+      "sha256": "2a5448dd69dcd13c48c7b256e51907aa43bdc2ce2dde618a039c0b7cc009a57d",
+      "crc32": "2b3e5a61",
+      "adler32": "8ebf58e9"
+    },
     "042ce2001fb438a0a34e0c5d0001a9d95d5516df": {
       "path": "bios/Other/aethersx2/game_controller_db.txt",
       "name": "game_controller_db.txt",
@@ -52386,6 +52456,26 @@
       "sha256": "0add32bcbd0e5b350437fa9d138b3c232368e36d8009852479fdb09d9db31113",
       "crc32": "18c0ff3e",
       "adler32": "7e6df93f"
+    },
+    "75d31d949614b7d4e79de676c8a4b1c68b571f0a": {
+      "path": "bios/Other/mame4droid/Category.ini",
+      "name": "Category.ini",
+      "size": 86983,
+      "sha1": "75d31d949614b7d4e79de676c8a4b1c68b571f0a",
+      "md5": "c0b17e87b2e1f239fd32545301f7e9cf",
+      "sha256": "6e25b5a9021c18b738fbb0465446b4055bb2eff225a27a5827710ad464129631",
+      "crc32": "c1c73f18",
+      "adler32": "9806aeba"
+    },
+    "c686635c5470e4711dbf817e8196dcb169fdc68d": {
+      "path": "bios/Other/mame4droid/hiscore.dat",
+      "name": "hiscore.dat",
+      "size": 219154,
+      "sha1": "c686635c5470e4711dbf817e8196dcb169fdc68d",
+      "md5": "546be126043049081b6cbec4e896586c",
+      "sha256": "45e20982739bf9dff6147c998db9d6e56ba961671cda3deef4ad388ce29ca4fd",
+      "crc32": "ac855cd2",
+      "adler32": "cc2f4ea3"
     },
     "8e14e85c645187504ec9d162b3ea614a0c421d32": {
       "path": "bios/Other/mednafen/apple2e-enh-kb.rom",
@@ -96496,6 +96586,13 @@
       "87a92ab27bdb864242c8c1acbab6d673": "3a23de6999b94fc088bdd9c9e4a73781a1d42233",
       "37765fcd9467dccec10a9068db57b7fd": "ac0173e7e11e8f657ac36a1036c2024475c9d784",
       "2cdb0227d85efb15d86d8311003377a9": "bf84d9fb5d23b679460dbdd3b6992a90fd432fd2",
+      "e7159fd674022ba05f9b347ae3cdafc6": "e5aa80c501cfb435e2cba35ad92e427240394164",
+      "6eeed3fdd4abc98a2a932da810410128": "05fb14df24b2b504a3ae463a086f02f0adcc07b9",
+      "a588b7c9e1c142b5d8ebec65ac7713d8": "c68d84f37ab9defbb19200598c24948c97c9a644",
+      "046fa182f7574bde3ab97ee873f6e736": "faa49a3aeb1d7e972437f6b77515455d14e2d680",
+      "85accc17e98c79dbbdde826cbfaf4692": "c7d7e5116665e4f21ae3b9bcdca2ce3685f00293",
+      "dfdd9924295f491d54f30569874287f8": "0c15d6753cf0ae2a1737b6e857e8e82ee135a697",
+      "9a293eaaebca601f671070ad56cb81b6": "56306e7234bcffd14b4f977d42d237c4ad9c12d5",
       "b494140c6250b2faa8a801e0efef08d5": "042ce2001fb438a0a34e0c5d0001a9d95d5516df",
       "5bac80439b16ee31feb5b45489a1a5da": "ad28302b3bdd8aef667969fceb073f0845942017",
       "888b281fa986de2eaccb0f9c8b591395": "7fad1628fd7da3b7a4bad6a7040f9fb4ed945d3a",
@@ -97029,6 +97126,8 @@
       "cd43b9f8ec8c742fca150f9666da47a0": "f72ebcb3ad771321e36cacb49779dca6f2b4db9e",
       "034527d42a96d0f39977cb85c6a8f2d8": "fcfbbb25e06f58d13e762b02bfd468c834d98fc8",
       "ee44560f34033efa3bb47b3e0aac1772": "7b03befac4fbcef8c649048fa3ff5d095fd48dd3",
+      "c0b17e87b2e1f239fd32545301f7e9cf": "75d31d949614b7d4e79de676c8a4b1c68b571f0a",
+      "546be126043049081b6cbec4e896586c": "c686635c5470e4711dbf817e8196dcb169fdc68d",
       "b956c537e7b6b85ffa5c3493b1490d8a": "8e14e85c645187504ec9d162b3ea614a0c421d32",
       "4431aea380185e3f509285540d7cb418": "12a2e718f5f4acd69b6c33a45a4a940b1440a481",
       "f29d49006080c3080baab7b851e1cf68": "16e3c6698a10547c228b8ab474b817ff1d64c216",
@@ -101166,7 +101265,8 @@
         "7381472bf046126257e51a0124e4553282f020e5",
         "ae3329abbcb7b445d979321a1f67733aa3f023d0",
         "1a2b8740f4672fd9668bfa6f648bb34f4339afb6",
-        "d38572d22721eb5972f671cde54201d752dffe6b"
+        "d38572d22721eb5972f671cde54201d752dffe6b",
+        "c686635c5470e4711dbf817e8196dcb169fdc68d"
       ],
       "hod2bios.zip": [
         "782c303cbdfab1027b04db74a63e27bdad5e0c53",
@@ -113361,6 +113461,27 @@
       "hiscore.zip": [
         "bf84d9fb5d23b679460dbdd3b6992a90fd432fd2"
       ],
+      "Amstrad_f4.cpr": [
+        "e5aa80c501cfb435e2cba35ad92e427240394164"
+      ],
+      "Amstrad_s4.cpr": [
+        "05fb14df24b2b504a3ae463a086f02f0adcc07b9"
+      ],
+      "OS464_FR.rom": [
+        "c68d84f37ab9defbb19200598c24948c97c9a644"
+      ],
+      "XMEM_FW_3_15_FR.rom": [
+        "faa49a3aeb1d7e972437f6b77515455d14e2d680"
+      ],
+      "XMEM_FW_3_15_UK.rom": [
+        "c7d7e5116665e4f21ae3b9bcdca2ce3685f00293"
+      ],
+      "hacker481fr.rom": [
+        "0c15d6753cf0ae2a1737b6e857e8e82ee135a697"
+      ],
+      "hackit400uk.rom": [
+        "56306e7234bcffd14b4f977d42d237c4ad9c12d5"
+      ],
       "game_controller_db.txt": [
         "042ce2001fb438a0a34e0c5d0001a9d95d5516df",
         "5c0b3ecf27cd6dff60b5e038adf1c923386a2cba",
@@ -114821,6 +114942,9 @@
       ],
       "Master.dsk": [
         "7b03befac4fbcef8c649048fa3ff5d095fd48dd3"
+      ],
+      "Category.ini": [
+        "75d31d949614b7d4e79de676c8a4b1c68b571f0a"
       ],
       "apple2e-enh-kb.rom": [
         "8e14e85c645187504ec9d162b3ea614a0c421d32"
@@ -133190,6 +133314,13 @@
       "663bfce2": "3a23de6999b94fc088bdd9c9e4a73781a1d42233",
       "9bc29727": "ac0173e7e11e8f657ac36a1036c2024475c9d784",
       "4c1a221a": "bf84d9fb5d23b679460dbdd3b6992a90fd432fd2",
+      "9ced247b": "e5aa80c501cfb435e2cba35ad92e427240394164",
+      "425882e2": "05fb14df24b2b504a3ae463a086f02f0adcc07b9",
+      "059e60d2": "c68d84f37ab9defbb19200598c24948c97c9a644",
+      "8708452c": "faa49a3aeb1d7e972437f6b77515455d14e2d680",
+      "e60da06a": "c7d7e5116665e4f21ae3b9bcdca2ce3685f00293",
+      "feeddf41": "0c15d6753cf0ae2a1737b6e857e8e82ee135a697",
+      "2b3e5a61": "56306e7234bcffd14b4f977d42d237c4ad9c12d5",
       "6b7152b1": "042ce2001fb438a0a34e0c5d0001a9d95d5516df",
       "196eed02": "ad28302b3bdd8aef667969fceb073f0845942017",
       "55dfc9ac": "7fad1628fd7da3b7a4bad6a7040f9fb4ed945d3a",
@@ -133723,6 +133854,8 @@
       "066d1348": "f72ebcb3ad771321e36cacb49779dca6f2b4db9e",
       "8031ff02": "fcfbbb25e06f58d13e762b02bfd468c834d98fc8",
       "18c0ff3e": "7b03befac4fbcef8c649048fa3ff5d095fd48dd3",
+      "c1c73f18": "75d31d949614b7d4e79de676c8a4b1c68b571f0a",
+      "ac855cd2": "c686635c5470e4711dbf817e8196dcb169fdc68d",
       "c506efb9": "8e14e85c645187504ec9d162b3ea614a0c421d32",
       "e47045f4": "12a2e718f5f4acd69b6c33a45a4a940b1440a481",
       "094ecf8e": "16e3c6698a10547c228b8ab474b817ff1d64c216",
@@ -141895,6 +142028,13 @@
       "433aea9d2f418dc1ac7e8e9f7181ff37fb502822438898d09a12998deb2e152a": "3a23de6999b94fc088bdd9c9e4a73781a1d42233",
       "d4ba4fc4942892b87fe14c22c0cf2b28fbe02b947d52156316762a82dfd73ed4": "ac0173e7e11e8f657ac36a1036c2024475c9d784",
       "37f8367c296b5ccfc8c95f026bd6679442261a74039846ccf4f2964d4983681f": "bf84d9fb5d23b679460dbdd3b6992a90fd432fd2",
+      "f15989db62749b66c9435d0371a272e7fe38efab9b0b54f3e439ec1a0cf76c3e": "e5aa80c501cfb435e2cba35ad92e427240394164",
+      "7ccafa0cf780ce50b0438edd6da982fa95cfff2a54f4a7a9aeb792ae44cccab9": "05fb14df24b2b504a3ae463a086f02f0adcc07b9",
+      "786726f30be4d8044ee591bbac35b67735dbde20c1755a75ff278fa2e5522df4": "c68d84f37ab9defbb19200598c24948c97c9a644",
+      "e0c96b090aca3f13e9792445a1aac00c95daa46150ad9539971cf486222c9d86": "faa49a3aeb1d7e972437f6b77515455d14e2d680",
+      "bbe19179c4ff5b1ed0e2783e110d5b20be3b06cd3bc9bc4c5c47e76fafea8153": "c7d7e5116665e4f21ae3b9bcdca2ce3685f00293",
+      "68757d34c21e28cce68c38ec1cc0de37b9fb046eed0716036ba4f1d0df3bcc5e": "0c15d6753cf0ae2a1737b6e857e8e82ee135a697",
+      "2a5448dd69dcd13c48c7b256e51907aa43bdc2ce2dde618a039c0b7cc009a57d": "56306e7234bcffd14b4f977d42d237c4ad9c12d5",
       "9e7fb1335e56027f150b7ff9b7b6cddd9c0844af19be6dbc17347e1882022038": "042ce2001fb438a0a34e0c5d0001a9d95d5516df",
       "5160ac22a55d6c82ee2304046b2b6eac13d153c0d0b1164bd693e93acc053623": "ad28302b3bdd8aef667969fceb073f0845942017",
       "acb8f9c481ffe762021f980c0cee42bd1a512ccd210686e6e0ac7d6e34f5a374": "7fad1628fd7da3b7a4bad6a7040f9fb4ed945d3a",
@@ -142428,6 +142568,8 @@
       "c72a36bbd471daf5d12df9f7b85773771583ec960ff9ca17e66d2f7b22e5c8c3": "f72ebcb3ad771321e36cacb49779dca6f2b4db9e",
       "fcf442b26c492253dfb8d2146e215b7b84b3ba87443face9c94a1e9474aa3ca4": "fcfbbb25e06f58d13e762b02bfd468c834d98fc8",
       "0add32bcbd0e5b350437fa9d138b3c232368e36d8009852479fdb09d9db31113": "7b03befac4fbcef8c649048fa3ff5d095fd48dd3",
+      "6e25b5a9021c18b738fbb0465446b4055bb2eff225a27a5827710ad464129631": "75d31d949614b7d4e79de676c8a4b1c68b571f0a",
+      "45e20982739bf9dff6147c998db9d6e56ba961671cda3deef4ad388ce29ca4fd": "c686635c5470e4711dbf817e8196dcb169fdc68d",
       "a1989da84ea4381d309e7e08783771f884e913236b9bcc71c3d649aacf76537a": "8e14e85c645187504ec9d162b3ea614a0c421d32",
       "fbb9620e01f4f728e5a8ba86544900978d7803f6a7d577d384e288dfed9a4907": "12a2e718f5f4acd69b6c33a45a4a940b1440a481",
       "68db230ab6261f452de8d59fb48110d5d012f5a448cbc77afc1ed487c9b039ce": "16e3c6698a10547c228b8ab474b817ff1d64c216",
@@ -152009,6 +152151,27 @@
       ],
       "nxengine/tilekey.dat": [
         "74c14b15dbc2f36c81d2ad9cb65e2893298415da"
+      ],
+      "private/firmware/Amstrad_f4.cpr": [
+        "e5aa80c501cfb435e2cba35ad92e427240394164"
+      ],
+      "private/firmware/Amstrad_s4.cpr": [
+        "05fb14df24b2b504a3ae463a086f02f0adcc07b9"
+      ],
+      "private/firmware/OS464_FR.rom": [
+        "c68d84f37ab9defbb19200598c24948c97c9a644"
+      ],
+      "private/firmware/XMEM_FW_3_15_FR.rom": [
+        "faa49a3aeb1d7e972437f6b77515455d14e2d680"
+      ],
+      "private/firmware/XMEM_FW_3_15_UK.rom": [
+        "c7d7e5116665e4f21ae3b9bcdca2ce3685f00293"
+      ],
+      "private/hacker/hacker481fr.rom": [
+        "0c15d6753cf0ae2a1737b6e857e8e82ee135a697"
+      ],
+      "private/hacker/hackit400uk.rom": [
+        "56306e7234bcffd14b4f977d42d237c4ad9c12d5"
       ],
       "antimicro/antimicro.exe": [
         "51c6beb0bf32da2fd79f0970d7752b12dcd8fac0"
