@@ -156,7 +156,6 @@ files:
     bundled: true
     size: 9382502
     sha1: "d16938569bb1b572f1e3f55bd17381dc28235d62"
-    unsourceable: "font the app installs from its own asset bundle"
     category: game_data
     description: "GNU Unifont, the UI font used for CJK and for the low-resolution OSD"
     note: "Passed as -uifont when the language is Chinese, Japanese or Korean on the low-resolution OSD, or when the unifont setting is on. render_font opens it from fontpath, which defaults to the installation root; a miss falls back to the font compiled into the binary. Seeded from the package assets on first run; the hash identifies that drop, the loader checks nothing."

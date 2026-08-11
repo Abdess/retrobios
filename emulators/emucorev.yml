@@ -225,7 +225,6 @@ files:
     system: sony-playstation-vita
     required: false
     category: game_data
-    unsourceable: "collected patch list, authored rather than dumped"
     description: "shared binary patch list"
     note: >-
       Read alongside the per-title files whatever the running title is, the name
