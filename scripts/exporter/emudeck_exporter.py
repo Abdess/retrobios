@@ -181,11 +181,16 @@ class Exporter(BaseExporter):
             if not sys_data:
                 continue
             for fe in sys_data.get("files", []):
+                # export skips placeholders and private entries, so looking
+                # for them here makes the exporter reject its own output.
+                name = fe.get("name", "")
+                if self._is_pattern(name) or name.startswith("_"):
+                    continue
                 md5 = fe.get("md5", "")
                 if isinstance(md5, list):
                     md5 = md5[0] if md5 else ""
                 if md5 and re.fullmatch(r"[a-f0-9]{32}", md5) and md5 not in content:
-                    issues.append(f"missing md5: {md5} ({fe.get('name', '')})")
+                    issues.append(f"missing md5: {md5} ({name})")
 
         for sys_id, cfg in _SYSTEM_CONFIG.items():
             func = cfg["func"]
