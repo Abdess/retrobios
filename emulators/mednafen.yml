@@ -226,7 +226,7 @@ files:
     required: false
     min_size: 4352
     source_ref: "nes/cart.cpp:570-597, nes/nes.cpp:298-299, nes/nes.cpp:454-455"
-    note: "Loaded only when nes.gg is enabled; that setting defaults to 0. Path comes from nes.ggrom. A raw image is read as 4352 contiguous bytes. An iNES image takes 4096 bytes of PRG after the 16-byte header, then 256 bytes of CHR at offset 16400, so it needs at least 16656 bytes."
+    note: "Loaded only when nes.gg is enabled; that setting defaults to 0. Path comes from nes.ggrom. A raw image is read as 4352 contiguous bytes. An iNES image takes 4096 bytes of PRG after the 16-byte header, then 256 bytes of CHR at offset 16400, so it needs at least 16656 bytes. The image here is the raw form: the 4096 byte Game Genie PRG, crc 1a3a22a1, followed by the first 256 bytes of its CHR, both from the MAME ggenie set."
 
   # --- pce and pce_fast ---
 

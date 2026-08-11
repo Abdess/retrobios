@@ -1,0 +1,195 @@
+emulator: MasterGear
+type: standalone
+core_classification: other
+source: "https://fms.komkon.org/MG/"
+upstream: closed-source
+author: "Marat Fayzullin (Garage Research)"
+profiled_date: "2026-08-12"
+core_version: "4.9"
+display_name: "Sega - Master System / Game Gear (MasterGear)"
+cores:
+  - mastergear
+  - MASTERGEAR
+  - com.fms.mg
+systems:
+  - sega-mastersystem
+  - sega-gamegear
+  - sega-sg1000
+  - sega-sc3000
+  - sega-sf7000
+mode: standalone
+
+notes: |
+  Sega 8bit emulator by Marat Fayzullin, covering Mark3, MasterSystem,
+  MasterSystem 2, GameGear, SG1000, the keyboard-equipped SC3000 and the
+  disk-based SF7000. Two builds of version 4.9 were read. The Android package
+  com.fms.mg is sold on Google Play and not carried on the author's site, so it
+  came from a mirror; that copy has versionName 4.9, versionCode 4900, sha256
+  11c3f3331d6774739c11dfd604f74f545a17ceba3feb7fb294f02bd80943af35, md5
+  2cb4df11254f8525e0a2253677450555, and is accepted because its v1 certificate
+  is the author's own key, CN=Marat Fayzullin O=Garage Research issued 2011,
+  fingerprint d09469e9b550cbc9005d3bd089f3df5f0ba89cba71cdd3b33736a0382d6f9848,
+  beside a Play distribution source stamp in the signing block. The free MG 4.9
+  builds for Windows and Ubuntu, published by the author, were read next to it
+  and open the same files. The native libraries keep their symbol tables, so
+  the Android readings below cite libmain.so offsets in the x86_64 slice; the
+  arm64-v8a, armeabi-v7a, armeabi and x86 slices carry the same filename set.
+  No source has ever been published: the site states the code is not available
+  to the general public and the documentation repeats it, while ColEm and fMSX
+  on the same site ship source archives.
+  ref: MG-Android-4900.apk META-INF/CERT.RSA, https://fms.komkon.org/MG/,
+       MG.html "There is no version of MG for my Unix!",
+       MG49-Windows-bin.zip, MG49-Ubuntu-x86-bin.tgz
+
+  SF7000.ROM is the only system ROM either binary names, and it is read through
+  the cartridge loader. ResetSMS loads it whenever the requested hardware
+  becomes SF7000; LoadROM returning zero makes ResetSMS clear the SF7000 bits
+  and restore the previous hardware, so LoadDSK finds the machine still is not
+  an SF7000, ejects the image and fails, logging "Failed switching into SF7000
+  mode." when verbose output is on. Nothing about the file is checked: the size
+  comes from a seek to the end, is rounded up to the first power of two of at
+  least 16kB, and the buffer is filled with FFh before the read, so a short
+  image is padded rather than refused. When bit 15 of the mode word is set, a
+  successful load is followed by patching the image at eight fixed addresses,
+  0008h, 0010h, 0018h, 0020h, 0028h, 0030h, 107Ch and 10F8h, with an EDh FEh
+  C9h trap and a checksum byte.
+  ref: libmain.so ResetSMS 0x435a0-0x43b0d (LoadROM 0x43604, revert 0x4367d,
+       patch loop 0x43619-0x4367b), LoadROM 0x43c80-0x4451a (open 0x43db3,
+       size 0x43dfa-0x43f1a, read 0x43f4f), LoadDSK 0x46db0-0x46ecb,
+       MG49-Ubuntu-x86-bin mg 0x3d0fd-0x3d124, 0x3c330 (0x3ca58)
+
+  The other machines need no file. SEGA consoles boot from a small ROM that
+  switches itself off and hands the hardware to the cartridge, which MG does
+  not emulate, so MasterSystem, GameGear, SG1000 and SC3000 start straight into
+  the cartridge. SC3000 mode adds the keyboard and 32kB of RAM, and its BASIC
+  arrives as a cartridge like any other program: the packaged title database
+  keys Basic 2.10 and Basic 3.10 by cartridge CRC32 under the SC3000 heading.
+  ref: MG.html "What are MasterSystem and GameGear?", "How do I use SC3000
+       keyboard?", assets/names.dat
+
+  On Android one directory holds everything. MainActivity hands EMULib.k() to
+  jniStart, which copies it into the buffer GetHomeDir returns and passes that
+  same buffer to SetPrivateDir. Every open goes through mopen, then
+  OpenRealFile, which tries the name as given and again as
+  <PrivateDir>/<basename>, keeping the larger of the two when both open. That
+  directory is external storage joined with the application label up to its
+  first space, so /sdcard/MasterGear, falling back to getExternalFilesDirs(null)
+  when it is not a writable directory; the author's own cheat file writes the
+  same path out in full. The desktop builds have no such directory and open
+  every name where they stand, which the documentation states as the current
+  directory. Every one of these opens ends in zlib, mopen handing the
+  descriptor OpenRealFile returned to gzdopen while the disk loader and the
+  desktop builds call gzopen straight, so each file also opens gzipped, and on
+  Android a content:// name is routed to the Android storage framework instead.
+  ref: MainActivity.java:2265-2276, EMULib.java:456, 494-553, 688-698,
+       libmain.so jniStart 0x18bb0-0x193e1 (0x1921c, 0x1926c),
+       SetPrivateDir 0x38f80, OpenRealFile 0x39190-0x393c3,
+       mopen 0x393d0-0x3959d, LoadFDI 0x558f7,
+       MG.html "How do I use SF7000 disk images?",
+       EmuAndroid "System ROMs", MasterGear-Cheats.zip ROOT.chts
+
+files:
+  - name: SF7000.ROM
+    system: sega-sf7000
+    required: true
+    size: 8192
+    description: "SF7000 IPL, read into the cartridge window before the machine starts"
+    note: "Loaded whenever the hardware becomes SF7000, and the only fixed ROM name in the binary. A failed open drops the emulator back to the previous hardware, which makes every disk image refuse to mount. The loader checks neither length nor contents, so the documented 8kB image is padded to 16kB with FFh and no hash is compared. Opened by bare name, so it resolves against the working directory and, on Android, against the home directory as well, and a gzipped copy answers too."
+    source_ref: "libmain.so ResetSMS 0x435a0-0x43b0d (LoadROM 0x43604), LoadROM 0x43c80-0x4451a, LoadDSK 0x46db0-0x46ecb, MG49-Ubuntu-x86-bin mg 0x3d0fd-0x3d124, MG.html \"How do I use SF7000 disk images?\""
+
+  - name: MasterGear-Cheats.zip
+    required: false
+    category: game_data
+    description: "cheat database read by the Cheatopedia browser"
+    note: "The Android build ships no cheat set. Cheatopedia looks for ROOT.chts in the package assets, then in the home directory and its subdirectories, and takes it from this archive in the Downloads directory, unpacking it into <HomeDir>/Cheats when it is newer. The author publishes it at fms.komkon.org/EmuAndroid/ and the copy read here carries ROOT.chts plus crystal-warriors-gg, dragon-crystal, gamegear, phantasy-star and ultima. No hash is recorded because the archive is refreshed in place at that address."
+    source_ref: "Cheatopedia.java:340-391, 414, 565-584"
+
+  - name: custom.chts
+    required: false
+    category: game_data
+    unsourceable: "cheat codes the user writes, in the format the documentation prints"
+    description: "user cheat sets added to the Cheatopedia menu"
+    note: "Pulled in by the File= directive that ROOT.chts carries, written out as /sdcard/MasterGear/custom.chts, and reached through the same lookup as any other set: package assets, then an absolute path, then the cheat directory."
+    source_ref: "Cheatopedia.java:504-508, 565-584, MasterGear-Cheats.zip ROOT.chts, EmuAndroid \"I want to add my own cheats to the Cheatopedia\""
+
+  - name: names.dat
+    required: false
+    bundled: true
+    unsourceable: "ships inside the paid application package"
+    category: game_data
+    size: 21161
+    description: "title database keyed by system and CRC32"
+    note: "Parsed from the package assets as lines of key colon title, keys reading SMS-0274179A. The copy at <HomeDir>/names.dat is read straight afterwards into the same map, so user entries extend and override the packaged ones."
+    source_ref: "FileInfo.java:260-308"
+
+  - name: changelog.html
+    required: false
+    bundled: true
+    unsourceable: "ships inside the paid application package"
+    category: game_data
+    size: 68201
+    description: "release history shown from the Android menu"
+    note: "Read whole from the package assets, and shown again through file:///android_asset/. No copy outside the package is consulted."
+    source_ref: "EMULib.java:1075, 1104"
+
+  - name: Controls.png
+    required: false
+    category: game_data
+    description: "virtual joystick skin"
+    note: "Read as <HomeDir>/Controls.png when the joystick shape is set to Custom Skin, and by the layout editor. The author publishes a 320x276 template at fms.komkon.org/EmuAndroid/Controls.png to draw over."
+    source_ref: "MainActivity.java:1809, LayoutEditor.java:99, EmuAndroid \"Can I set my own virtual joystick images?\""
+
+  - name: Backdrop.png
+    required: false
+    category: game_data
+    unsourceable: "any picture the user places behind the emulated screen"
+    description: "backdrop drawn around the emulated screen"
+    note: "Read as <HomeDir>/Backdrop.png while the decorum option is on. A built-in drawable stands in when the file is absent."
+    source_ref: "MainActivity.java:1047-1051"
+
+  - name: "<game>.back.png"
+    required: false
+    category: game_data
+    unsourceable: "any picture the user places behind one title"
+    description: "backdrop for one title"
+    note: "Named from the loaded ROM path and preferred over the shared backdrop for that game."
+    source_ref: "MainActivity.java:1047-1049"
+
+  - name: "<game>.ips"
+    required: false
+    category: game_data
+    unsourceable: "a patch the user supplies for one title"
+    description: "IPS patch applied to the loaded cartridge"
+    note: "Named from the ROM path by MakeFileName and applied by LoadIPS when present. A patch opened by hand reaches the same loader through LoadFile."
+    source_ref: "libmain.so LoadROM 0x444bf-0x444e1, LoadFile 0x43b10-0x43b9f, LoadIPS 0x467e0, ApplyIPS 0x5b1e0"
+
+  - name: "<name>.cht"
+    required: false
+    category: game_data
+    unsourceable: "cheat codes the user writes or collects"
+    description: "cheat codes loaded from the file selector"
+    note: "LoadFile compares the tail of the name against .CHT through a case folding compare and sends a match to LoadCHT, so the name is the one the user picked rather than one derived from the ROM path. The built-in menu writes edited cheats back under the same extension."
+    source_ref: "libmain.so LoadFile 0x43b10-0x43b2f, suffix compare 0x46a40-0x46b8f, LoadCHT 0x46b90-0x46c9b, MenuSMS 0x48bf1"
+
+exclusion_note: >
+  Left out are the files MG writes and reads back itself, which are emulator
+  state rather than anything a user obtains: <game>.sav holding cartridge SRAM,
+  which LoadROM writes out before loading the next cartridge and reads back
+  after it, <game>.sta and the desktop DEFAULT.STA fallback holding saved
+  emulation state, the replay files of the instant replay recorder, LOG.MID
+  holding the recorded MIDI soundtrack, the printer stream appended to by the
+  Z80 output port, and the <game>.png screenshots the Android build saves for
+  State Exchange. Cartridges and disk images are the user's own game content:
+  .sms, .gg, .sg, .sc and .sf images reach LoadROM, .dsk, .SF and .FDI images
+  reach LoadDSK and LoadFDI, and CART.SMS on Android and CART.ROM on the desktop
+  are only the names used when the emulator is started with no game at all.
+  SF7000.DSK is left out as a compiled-in default disk name that no code path in
+  either shipped build opens. assets/memfs.mp3 is left out as well: the in-memory
+  filesystem jniStart mounts carries one entry, dummy.txt, holding the text
+  "This is a dummy file.", and no name in the binary reaches it. The Android
+  audio and graphics libraries the loader opens by name are provided by the
+  system.
+  ref: libmain.so LoadROM 0x43cec, 0x44417, MIDILogging 0x2e4f0 (0x2e7f5),
+       OutZ80 0x44eb0 (0x450a8), LoadRPL 0x58b40-0x58d57,
+       SaveRPL 0x58920-0x58b3b, Application 0x41b70 (0x41da7), DSKName,
+       MG49-Ubuntu-x86-bin mg 0x4046f, 0x40497, MainActivity.java:1585

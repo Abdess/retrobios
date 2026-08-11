@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-11T23:38:25Z",
-  "total_files": 8795,
-  "total_size": 12036698851,
+  "generated_at": "2026-08-11T23:42:04Z",
+  "total_files": 8798,
+  "total_size": 12036729886,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -53031,6 +53031,16 @@
       "crc32": "d15052ad",
       "adler32": "64011de4"
     },
+    "14c4ab8ccc8ecb81ebf99fec336a3e872c13aabc": {
+      "path": "bios/Other/mastergear/Controls.png",
+      "name": "Controls.png",
+      "size": 22587,
+      "sha1": "14c4ab8ccc8ecb81ebf99fec336a3e872c13aabc",
+      "md5": "d10635cb6f101ed733f3d1133bc78f61",
+      "sha256": "aa6d2236eaeb23bde1f1d99178ddefe9420251597a4096edb8d2153b84e818ad",
+      "crc32": "dc9da322",
+      "adler32": "4690d043"
+    },
     "b2fc3bb96c0c4d315926eb7bd705441c75d84ec2": {
       "path": "bios/Other/mastergear/MasterGear-Cheats.zip",
       "name": "MasterGear-Cheats.zip",
@@ -53060,6 +53070,16 @@
       "sha256": "fbb9620e01f4f728e5a8ba86544900978d7803f6a7d577d384e288dfed9a4907",
       "crc32": "e47045f4",
       "adler32": "bf1f64bf"
+    },
+    "e7d3caf9691a6c82859903f54232d17474d7b0e7": {
+      "path": "bios/Other/mednafen/gg.rom",
+      "name": "gg.rom",
+      "size": 4352,
+      "sha1": "e7d3caf9691a6c82859903f54232d17474d7b0e7",
+      "md5": "1179939a20ffa397b9c45b9e7eb9ae3a",
+      "sha256": "c8bfbb36b2bd14b9fcd6de180f9b240c1e219f7970262c162adcc2d0510fa47c",
+      "crc32": "2561948a",
+      "adler32": "02a42a2d"
     },
     "16e3c6698a10547c228b8ab474b817ff1d64c216": {
       "path": "bios/Other/mfme/DefaultMasks/ReelGradientMask.bmp",
@@ -54270,6 +54290,23 @@
       "sha256": "0406c436e54064b938ffe855e1ad0abb362d67f009781a5dce79b044bcd68115",
       "crc32": "84f47dc9",
       "adler32": "8626217c"
+    },
+    "aaa9833c3de2213f2b0326769b715651fd13fd84": {
+      "path": "bios/Other/punes/gamegenie.rom",
+      "name": "gamegenie.rom",
+      "size": 4096,
+      "sha1": "aaa9833c3de2213f2b0326769b715651fd13fd84",
+      "md5": "8d699c97d164d406c2912aece164cd32",
+      "sha256": "503ed886914c5ae1ec0b256515a6b0248f4b27cf78cb7b86fc438410420cdb87",
+      "crc32": "1a3a22a1",
+      "adler32": "e3b5aa9e",
+      "provenance": {
+        "no-intro": {
+          "dat": "Nintendo - Nintendo Entertainment System (Headerless)",
+          "name": "[BIOS] Game Genie (USA, Europe) (Unl).unh",
+          "description": "[BIOS] Game Genie (USA, Europe) (Unl)"
+        }
+      }
     },
     "8ed9fb83d8e4d73217d347e3b7965cb640cb8395": {
       "path": "bios/Other/punes/nes20db.xml",
@@ -98047,9 +98084,11 @@
       "46a02fc4775b3d959f3f949a70eaa616": "52d1bbeed17f2a2240cb38249dba3663ad0b8a1f",
       "90644bd658fd0922d28eccb7cfb7cb76": "17c354249ddbfaf20b570d3c5e33b693e36646aa",
       "6a32c39d8ac24bd56a03d79299b0a8f1": "dbda9a9fd882af929b17cd2de1a975e7f1b93361",
+      "d10635cb6f101ed733f3d1133bc78f61": "14c4ab8ccc8ecb81ebf99fec336a3e872c13aabc",
       "8ae8c9470f399d125360a47e9968335e": "b2fc3bb96c0c4d315926eb7bd705441c75d84ec2",
       "b956c537e7b6b85ffa5c3493b1490d8a": "8e14e85c645187504ec9d162b3ea614a0c421d32",
       "4431aea380185e3f509285540d7cb418": "12a2e718f5f4acd69b6c33a45a4a940b1440a481",
+      "1179939a20ffa397b9c45b9e7eb9ae3a": "e7d3caf9691a6c82859903f54232d17474d7b0e7",
       "f29d49006080c3080baab7b851e1cf68": "16e3c6698a10547c228b8ab474b817ff1d64c216",
       "7786f30131c98baca83ec313281cfa6a": "e3df9d90adb0d44c43cb70b4fd3887c7ddbef1cf",
       "b4c8c434df1f038c76e5221cc6adca0c": "f92d854f017d154c9ae0a2351629876515ba48d7",
@@ -98171,6 +98210,7 @@
       "3dff921882350953a32fee6af5611668": "1727e16cb9a6a59c01e18f6694ef70dee87e3a7b",
       "1164ae723c9181698cc41dde6a341132": "8a799c6615702aac72016b784e30ea1abd3e197b",
       "05e1d1a0c8ecd45537a1d52ab925d110": "0f25848f73705328ca03b02905e95e3a5d087d8c",
+      "8d699c97d164d406c2912aece164cd32": "aaa9833c3de2213f2b0326769b715651fd13fd84",
       "18207ca5b15ba7d05742dca8399d30c6": "8ed9fb83d8e4d73217d347e3b7965cb640cb8395",
       "76a2309db9eef5b633c6ebc0243c6a23": "321262242e15dff4bc1f843011ac370e6943d6e3",
       "2f1bdc689878416c12190513ef4ff64f": "6393396eaa10a84b9e9f0cf5930aba73defc5c52",
@@ -116052,6 +116092,9 @@
       "quit.system.bin": [
         "dbda9a9fd882af929b17cd2de1a975e7f1b93361"
       ],
+      "Controls.png": [
+        "14c4ab8ccc8ecb81ebf99fec336a3e872c13aabc"
+      ],
       "MasterGear-Cheats.zip": [
         "b2fc3bb96c0c4d315926eb7bd705441c75d84ec2"
       ],
@@ -116060,6 +116103,9 @@
       ],
       "apple2e-kb.rom": [
         "12a2e718f5f4acd69b6c33a45a4a940b1440a481"
+      ],
+      "gg.rom": [
+        "e7d3caf9691a6c82859903f54232d17474d7b0e7"
       ],
       "ReelGradientMask.bmp": [
         "16e3c6698a10547c228b8ab474b817ff1d64c216"
@@ -116394,6 +116440,9 @@
       ],
       "dip.cfg": [
         "0f25848f73705328ca03b02905e95e3a5d087d8c"
+      ],
+      "gamegenie.rom": [
+        "aaa9833c3de2213f2b0326769b715651fd13fd84"
       ],
       "nes20db.xml": [
         "8ed9fb83d8e4d73217d347e3b7965cb640cb8395"
@@ -135124,9 +135173,11 @@
       "00bac1b9": "52d1bbeed17f2a2240cb38249dba3663ad0b8a1f",
       "e0219738": "17c354249ddbfaf20b570d3c5e33b693e36646aa",
       "d15052ad": "dbda9a9fd882af929b17cd2de1a975e7f1b93361",
+      "dc9da322": "14c4ab8ccc8ecb81ebf99fec336a3e872c13aabc",
       "23f6d752": "b2fc3bb96c0c4d315926eb7bd705441c75d84ec2",
       "c506efb9": "8e14e85c645187504ec9d162b3ea614a0c421d32",
       "e47045f4": "12a2e718f5f4acd69b6c33a45a4a940b1440a481",
+      "2561948a": "e7d3caf9691a6c82859903f54232d17474d7b0e7",
       "094ecf8e": "16e3c6698a10547c228b8ab474b817ff1d64c216",
       "752ae60e": "e3df9d90adb0d44c43cb70b4fd3887c7ddbef1cf",
       "96c57522": "f92d854f017d154c9ae0a2351629876515ba48d7",
@@ -135248,6 +135299,7 @@
       "d08a4694": "1727e16cb9a6a59c01e18f6694ef70dee87e3a7b",
       "a4626dfa": "8a799c6615702aac72016b784e30ea1abd3e197b",
       "84f47dc9": "0f25848f73705328ca03b02905e95e3a5d087d8c",
+      "1a3a22a1": "aaa9833c3de2213f2b0326769b715651fd13fd84",
       "79b7fdc4": "8ed9fb83d8e4d73217d347e3b7965cb640cb8395",
       "df8ab696": "321262242e15dff4bc1f843011ac370e6943d6e3",
       "3a738aa9": "6393396eaa10a84b9e9f0cf5930aba73defc5c52",
@@ -143921,9 +143973,11 @@
       "331f64cf5d1bd1bafd28aa527f753bd20bb42c0d7692c335ac5498c296aeb4c2": "52d1bbeed17f2a2240cb38249dba3663ad0b8a1f",
       "df45f0e82a2a96a8bddb6af408284f6d38160aaa100895e722e9f4bbe32f9e5b": "17c354249ddbfaf20b570d3c5e33b693e36646aa",
       "2010e843a290cd70d0936baa2e647d93a455f2c016dfa49d3a806b1d450b71cb": "dbda9a9fd882af929b17cd2de1a975e7f1b93361",
+      "aa6d2236eaeb23bde1f1d99178ddefe9420251597a4096edb8d2153b84e818ad": "14c4ab8ccc8ecb81ebf99fec336a3e872c13aabc",
       "7abf93ecf0fc325865e6564c9795b6d1effb8d5814b09739b81820ca771477f9": "b2fc3bb96c0c4d315926eb7bd705441c75d84ec2",
       "a1989da84ea4381d309e7e08783771f884e913236b9bcc71c3d649aacf76537a": "8e14e85c645187504ec9d162b3ea614a0c421d32",
       "fbb9620e01f4f728e5a8ba86544900978d7803f6a7d577d384e288dfed9a4907": "12a2e718f5f4acd69b6c33a45a4a940b1440a481",
+      "c8bfbb36b2bd14b9fcd6de180f9b240c1e219f7970262c162adcc2d0510fa47c": "e7d3caf9691a6c82859903f54232d17474d7b0e7",
       "68db230ab6261f452de8d59fb48110d5d012f5a448cbc77afc1ed487c9b039ce": "16e3c6698a10547c228b8ab474b817ff1d64c216",
       "ba0cd5ef1ceddcab1498a62935106e59a9682b4aea996106b2f3295fbd6fd1cd": "e3df9d90adb0d44c43cb70b4fd3887c7ddbef1cf",
       "a2b5477bddbdf966c5c72f46a0ad2d54ac27147a4c47acfdf18b6941332e385a": "f92d854f017d154c9ae0a2351629876515ba48d7",
@@ -144045,6 +144099,7 @@
       "f9a37b36655f23e167c66ec91bef6097c8e99be29286219a54062919eb41aeae": "1727e16cb9a6a59c01e18f6694ef70dee87e3a7b",
       "29e6e18023cf39319f9984107f5f0f796b2593b1c3a55fc79adf3ae12498a6ce": "8a799c6615702aac72016b784e30ea1abd3e197b",
       "0406c436e54064b938ffe855e1ad0abb362d67f009781a5dce79b044bcd68115": "0f25848f73705328ca03b02905e95e3a5d087d8c",
+      "503ed886914c5ae1ec0b256515a6b0248f4b27cf78cb7b86fc438410420cdb87": "aaa9833c3de2213f2b0326769b715651fd13fd84",
       "a60757b92f2f3df9447aa50e004aabe9f4cb0845bb037afca118ff89b5913ae3": "8ed9fb83d8e4d73217d347e3b7965cb640cb8395",
       "010fd04e1a7b48583685a5554f12ecff8db681c926caa1814f148d552ca53708": "321262242e15dff4bc1f843011ac370e6943d6e3",
       "6c1e5d5ccd280ee01d9f852b60ddec07e719a45699a6220eabd50df9999632c6": "6393396eaa10a84b9e9f0cf5930aba73defc5c52",
