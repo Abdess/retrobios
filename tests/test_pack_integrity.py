@@ -74,6 +74,12 @@ class PackIntegrityTest(unittest.TestCase):
         )
         if result.returncode == 0:
             return
+        # A build holding the exclusive lock means the packs on disk are
+        # half-written. Failing then reports a corrupt archive when the only
+        # fact established is that somebody else is building, and which test
+        # goes red depends on how far along that build is.
+        if "is in use by another run" in (result.stdout + result.stderr):
+            self.skipTest(f"dist/ is being written; {platform_name} not verifiable")
         newer = _profiles_newer_than(pack)
         if newer:
             self.skipTest(
