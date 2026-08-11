@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-11T07:56:05Z",
-  "total_files": 8357,
-  "total_size": 10466186980,
+  "generated_at": "2026-08-11T07:59:31Z",
+  "total_files": 8364,
+  "total_size": 10492185587,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -49707,6 +49707,76 @@
       "crc32": "3c79ef05",
       "adler32": "884f690d"
     },
+    "c0c0b5db93a61276a6fe6842049cb53e564b8413": {
+      "path": "bios/Other/fbneo/donpachi.zip",
+      "name": "donpachi.zip",
+      "size": 5641310,
+      "sha1": "c0c0b5db93a61276a6fe6842049cb53e564b8413",
+      "md5": "5bcfc3374fc9b0c16070f1ac42f3dc63",
+      "sha256": "a686ebf893d511b5b7667176cd6844593e914595a8bb9ab656b2c66969013b5c",
+      "crc32": "1294ff68",
+      "adler32": "27661d30"
+    },
+    "0c3f34ab93bc9a210db159cd68c9343930540f7b": {
+      "path": "bios/Other/gopher2600/stella.pro",
+      "name": "stella.pro",
+      "size": 823854,
+      "sha1": "0c3f34ab93bc9a210db159cd68c9343930540f7b",
+      "md5": "397250dd0d1e19b14816114979b05ad9",
+      "sha256": "647b18305a8fcc7a370195da1b3599a62d56e9588f386b71083a56740560cc4a",
+      "crc32": "080d3448",
+      "adler32": "8aededca"
+    },
+    "22b36583a956fb4c0feb1eb47e01de6efdb89a6b": {
+      "path": "bios/Other/groovymame/history/command.dat",
+      "name": "command.dat",
+      "size": 6614742,
+      "sha1": "22b36583a956fb4c0feb1eb47e01de6efdb89a6b",
+      "md5": "f303fd8288e0bf926d7da30644ab4988",
+      "sha256": "9dae63bb97fc2ced1135020c611293b731ce1a73ce62f7d2c5bb959fec591efa",
+      "crc32": "9dac1097",
+      "adler32": "27f7cceb"
+    },
+    "2e100cdd8b2d5492ff4ef8f1ba487364aabc687f": {
+      "path": "bios/Other/groovymame/history/gameinit.dat",
+      "name": "gameinit.dat",
+      "size": 403157,
+      "sha1": "2e100cdd8b2d5492ff4ef8f1ba487364aabc687f",
+      "md5": "8171099f59d99b7a6dd0809d952075ec",
+      "sha256": "208176552a7d6703be6cd2539c96d2136d37bfc9c1b21a93b4a81a032339faf4",
+      "crc32": "25cfd813",
+      "adler32": "c747094f"
+    },
+    "02f515deea7f3fc513496b9218244186e5cc9a61": {
+      "path": "bios/Other/groovymame/history/messinfo.dat",
+      "name": "messinfo.dat",
+      "size": 10102837,
+      "sha1": "02f515deea7f3fc513496b9218244186e5cc9a61",
+      "md5": "ac347847f656ec26a554fd6f86dd10ea",
+      "sha256": "9a5d4085d177910f48850672bc2bc8436c5558171eb9e06c711fabed39e485c0",
+      "crc32": "c4207191",
+      "adler32": "66495e5f"
+    },
+    "8881159097cd92f67bfec5250bc061626d87cf04": {
+      "path": "bios/Other/groovymame/history/sysinfo.dat",
+      "name": "sysinfo.dat",
+      "size": 1809384,
+      "sha1": "8881159097cd92f67bfec5250bc061626d87cf04",
+      "md5": "2f355f03254e572dd32e6fe7232f5ccc",
+      "sha256": "cd260d1c420dec2ad2d9511b522d88a72f820d2ca2ff63ded2cd95854d4748dd",
+      "crc32": "b8f57432",
+      "adler32": "fbd6dfd5"
+    },
+    "231b29ef9d6314930eb18e57240e27ae81a6e88f": {
+      "path": "bios/Other/hypseus-singe/gamecontrollerdb.txt",
+      "name": "gamecontrollerdb.txt",
+      "size": 603323,
+      "sha1": "231b29ef9d6314930eb18e57240e27ae81a6e88f",
+      "md5": "41eed0bf6aad777e6583ecb2ff0907b8",
+      "sha256": "c8dd1e361ab3219a956b9b7879a17658b10273cc3569bf23cb9ffb23f55e5152",
+      "crc32": "bef6e55c",
+      "adler32": "0440ff9c"
+    },
     "a681437a28d02a978f70646716978bcc446108ea": {
       "path": "bios/Other/ishiiruka/codehandler.bin",
       "name": "codehandler.bin",
@@ -93294,6 +93364,13 @@
       "7eee267dfdcd966a76d4555e57762a58": "0896ab37ea832a1335046353612c1b4c86d8d040",
       "0eb6b12f36508b24f285ffd793438ef3": "d124045eccc562ff0423b23a240e27ad740fa0c9",
       "c78ac640fcf02eb866b79718f5ed15fa": "20fdca7131478e1ee12691bdafd2d5bb74cbd16f",
+      "5bcfc3374fc9b0c16070f1ac42f3dc63": "c0c0b5db93a61276a6fe6842049cb53e564b8413",
+      "397250dd0d1e19b14816114979b05ad9": "0c3f34ab93bc9a210db159cd68c9343930540f7b",
+      "f303fd8288e0bf926d7da30644ab4988": "22b36583a956fb4c0feb1eb47e01de6efdb89a6b",
+      "8171099f59d99b7a6dd0809d952075ec": "2e100cdd8b2d5492ff4ef8f1ba487364aabc687f",
+      "ac347847f656ec26a554fd6f86dd10ea": "02f515deea7f3fc513496b9218244186e5cc9a61",
+      "2f355f03254e572dd32e6fe7232f5ccc": "8881159097cd92f67bfec5250bc061626d87cf04",
+      "41eed0bf6aad777e6583ecb2ff0907b8": "231b29ef9d6314930eb18e57240e27ae81a6e88f",
       "f9fac1173f3a772d94e8e0750c1e9dfd": "a681437a28d02a978f70646716978bcc446108ea",
       "cd43b9f8ec8c742fca150f9666da47a0": "f72ebcb3ad771321e36cacb49779dca6f2b4db9e",
       "034527d42a96d0f39977cb85c6a8f2d8": "fcfbbb25e06f58d13e762b02bfd468c834d98fc8",
@@ -110283,6 +110360,27 @@
       ],
       "136032.206.l12": [
         "20fdca7131478e1ee12691bdafd2d5bb74cbd16f"
+      ],
+      "donpachi.zip": [
+        "c0c0b5db93a61276a6fe6842049cb53e564b8413"
+      ],
+      "stella.pro": [
+        "0c3f34ab93bc9a210db159cd68c9343930540f7b"
+      ],
+      "command.dat": [
+        "22b36583a956fb4c0feb1eb47e01de6efdb89a6b"
+      ],
+      "gameinit.dat": [
+        "2e100cdd8b2d5492ff4ef8f1ba487364aabc687f"
+      ],
+      "messinfo.dat": [
+        "02f515deea7f3fc513496b9218244186e5cc9a61"
+      ],
+      "sysinfo.dat": [
+        "8881159097cd92f67bfec5250bc061626d87cf04"
+      ],
+      "gamecontrollerdb.txt": [
+        "231b29ef9d6314930eb18e57240e27ae81a6e88f"
       ],
       "A2_BASIC.SYM": [
         "f72ebcb3ad771321e36cacb49779dca6f2b4db9e"
@@ -128559,6 +128657,13 @@
       "7275b4dc": "0896ab37ea832a1335046353612c1b4c86d8d040",
       "88d0be26": "d124045eccc562ff0423b23a240e27ad740fa0c9",
       "3c79ef05": "20fdca7131478e1ee12691bdafd2d5bb74cbd16f",
+      "1294ff68": "c0c0b5db93a61276a6fe6842049cb53e564b8413",
+      "080d3448": "0c3f34ab93bc9a210db159cd68c9343930540f7b",
+      "9dac1097": "22b36583a956fb4c0feb1eb47e01de6efdb89a6b",
+      "25cfd813": "2e100cdd8b2d5492ff4ef8f1ba487364aabc687f",
+      "c4207191": "02f515deea7f3fc513496b9218244186e5cc9a61",
+      "b8f57432": "8881159097cd92f67bfec5250bc061626d87cf04",
+      "bef6e55c": "231b29ef9d6314930eb18e57240e27ae81a6e88f",
       "d524ae3e": "a681437a28d02a978f70646716978bcc446108ea",
       "066d1348": "f72ebcb3ad771321e36cacb49779dca6f2b4db9e",
       "8031ff02": "fcfbbb25e06f58d13e762b02bfd468c834d98fc8",
@@ -136918,6 +137023,13 @@
       "1ed4b8b82cf8972139d4eaddf789dc31977240657e6c005da2a8278d96725555": "0896ab37ea832a1335046353612c1b4c86d8d040",
       "f76b62e73e7410ab63813b9db36839be12213e4adfd3ee513eb382b7bc3a4a39": "d124045eccc562ff0423b23a240e27ad740fa0c9",
       "6597f75e97e5337198736b42a4d1ea66d4fdf01d685772482811a55e1eddf8f1": "20fdca7131478e1ee12691bdafd2d5bb74cbd16f",
+      "a686ebf893d511b5b7667176cd6844593e914595a8bb9ab656b2c66969013b5c": "c0c0b5db93a61276a6fe6842049cb53e564b8413",
+      "647b18305a8fcc7a370195da1b3599a62d56e9588f386b71083a56740560cc4a": "0c3f34ab93bc9a210db159cd68c9343930540f7b",
+      "9dae63bb97fc2ced1135020c611293b731ce1a73ce62f7d2c5bb959fec591efa": "22b36583a956fb4c0feb1eb47e01de6efdb89a6b",
+      "208176552a7d6703be6cd2539c96d2136d37bfc9c1b21a93b4a81a032339faf4": "2e100cdd8b2d5492ff4ef8f1ba487364aabc687f",
+      "9a5d4085d177910f48850672bc2bc8436c5558171eb9e06c711fabed39e485c0": "02f515deea7f3fc513496b9218244186e5cc9a61",
+      "cd260d1c420dec2ad2d9511b522d88a72f820d2ca2ff63ded2cd95854d4748dd": "8881159097cd92f67bfec5250bc061626d87cf04",
+      "c8dd1e361ab3219a956b9b7879a17658b10273cc3569bf23cb9ffb23f55e5152": "231b29ef9d6314930eb18e57240e27ae81a6e88f",
       "3b8dc89a9ef34763b38647a4863b93f77715c03640312f151a8f5a0567ae6d5d": "a681437a28d02a978f70646716978bcc446108ea",
       "c72a36bbd471daf5d12df9f7b85773771583ec960ff9ca17e66d2f7b22e5c8c3": "f72ebcb3ad771321e36cacb49779dca6f2b4db9e",
       "fcf442b26c492253dfb8d2146e215b7b84b3ba87443face9c94a1e9474aa3ca4": "fcfbbb25e06f58d13e762b02bfd468c834d98fc8",
@@ -146649,6 +146761,18 @@
       ],
       "resources/shaders/vulkan/shadeboost.glsl": [
         "9b2704655a893ff1675d28df4bd9ffc9e15d3dd5"
+      ],
+      "history/command.dat": [
+        "22b36583a956fb4c0feb1eb47e01de6efdb89a6b"
+      ],
+      "history/gameinit.dat": [
+        "2e100cdd8b2d5492ff4ef8f1ba487364aabc687f"
+      ],
+      "history/messinfo.dat": [
+        "02f515deea7f3fc513496b9218244186e5cc9a61"
+      ],
+      "history/sysinfo.dat": [
+        "8881159097cd92f67bfec5250bc061626d87cf04"
       ],
       "roms/108281-001.bin": [
         "d108bb99cb1a05d808e6e25cc720da24faee9e7c"
