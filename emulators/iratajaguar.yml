@@ -1,0 +1,113 @@
+emulator: IrataJaguar
+type: standalone
+core_classification: other
+source: "http://www.arts-union.ru/node/23"
+upstream: closed-source
+author: "Maxim Grishin (Altmer)"
+profiled_date: "2026-08-11"
+core_version: "1.0.7"
+display_name: "Atari - Jaguar (IrataJaguar)"
+cores:
+  - iratajaguar
+systems:
+  - atari-jaguar
+mode: standalone
+
+notes: |
+  Atari Jaguar emulator for Android, the Android build of Maxim Grishin's Phoenix
+  Emu Project. The native library is libphoenixcore.so and reports
+  PhoenixEmuProject core 2.8.21; the same core carries the author's desktop builds
+  and his three other Android emulators, Real3DOPlayer, NumPadPlayer and
+  GearMasterPlayer. The build read here is the free package the author publishes
+  himself, IrataJaguar_free_1.0.7.zip holding app-release.apk md5
+  a3e019d32203908d49e8220a79d8b570, package ru.vastness.altmer.iratajaguar
+  versionName 1.0.7, minSdk and targetSdk 23, signed CN=MAXIM GRISHIN
+  O=AltmerSoft L=Tula C=RU issued 2017-06-12, sha256
+  f268dda6844e4f6013731f7ec7adbbb89a22cf06c9753e85c184b889dc81a758. No source has
+  been published. The Android slices are stripped, so the readings below were
+  taken against the desktop 2.8.JAG build from the same site, which keeps its
+  symbol table, and each was confirmed against the Android x86_64 slice; the
+  arm64-v8a, armeabi-v7a and x86 slices carry the same signature bytes at 0x9f7e8,
+  0x83988 and 0xba848.
+  ref: app-release.apk META-INF/CERT.RSA, AndroidManifest.xml,
+       http://www.arts-union.ru/node/23, ph28jag-lin-x64.zip PhoenixEmuProject
+
+  One directory holds the cartridges and the BIOS together. MainActivity walks the
+  external storage roots for a subdirectory named jaguar and offers the first one
+  it finds, the settings tab lets the user pick another, and the choice is kept in
+  the preference dumps. countGames scans that directory for the extensions bin,
+  rom, jag, cof and j64 and hands every candidate to the library, which caches what
+  it found in configs.xml under the private storage path as Library/CARTRIDGE and
+  Library/BIOS entries carrying path, size, fast-md5, md5 and sh1. Those hashes are
+  the cache key; nothing compares them against a known value. nameOfBios returns
+  the single BIOS the library holds and the game list shows it as its first row,
+  shifting the game indices by one.
+  ref: MainActivity.java:257-273, 382-392, 447, 517, 99-100, 557-561,
+       libphoenixcore.so countGames 0x8a1e0-0x8a5e6 (extensions 0x8a2ed-0x8a4b5),
+       libphoenixcore.so 0xa4600-0xa4d4f (BIOS branch 0xa478f, entry write 0xa483e)
+
+  The BIOS is recognised by content, not by name. platformJaguar::getConfig
+  declares two data elements, CARTRIDGE taking jag, cof and j64 and BIOS taking
+  j64, and createDumpAdapter builds dumpAdapterJaguarROM with its bios flag set for
+  everything that is not the CARTRIDGE element. That constructor reads the first
+  0x2000 bytes and compares the first twelve against bios_sign, 00 00 00 00 00 E0
+  00 08 41 F9 00 F0, the 68000 reset vector a Jaguar boot ROM opens with: stack
+  pointer zero, program counter 00E00008, then the LEA that follows it. Every
+  candidate is tried as BIOS before cartridge. Nothing past those twelve bytes is
+  examined, so no length and no hash gates the file.
+  ref: platformJaguar::getConfig 0x8ce080 (CARTRIDGE 0x8ce082, extensions
+       0x8ce115-0x8ce147, BIOS 0x8ce197, extension 0x8ce1f2),
+       dumpLibrary::createDumpAdapter 0x4f9600 (0x4fa37e-0x4fa402 cartridge,
+       0x4fa4e7-0x4fa4fc bios flag set), dumpAdapterJaguarROM::dumpAdapterJaguarROM
+       0x8d3c20 (read 0x8d3c88, memcmp 0x8d4259-0x8d426f), bios_sign 0x99d7a0,
+       libphoenixcore.so 0x48162-0x482c3
+
+  A cartridge does not boot without it. The platform constructor gives the BIOS
+  1 MB at 0xE00000 and the cartridge 8 MB at 0x800000, zeroes both, then pulls each
+  through the frontend by data element index, 0 for the cartridge and 1 for the
+  BIOS, byte swapping what comes back. When the BIOS read returns bytes and the
+  cartridge is not an executable image, the first eight bytes of the BIOS are
+  copied over DRAM 0, which is where cpu68K::Reset fetches the supervisor stack
+  pointer and the program counter. Without a BIOS those eight bytes stay zero and
+  the 68000 starts at 0 in cleared DRAM. The two images that skip it carry their
+  own entry point: a JAGR header at offset 0x1c, whose body the constructor copies
+  into DRAM itself, and a COFF image whose first word is 0x0150, the cof extension
+  the config declares. Neither is a cartridge dump. There is no HLE path, and
+  platform3DO::noBios has no platformJaguar counterpart in the same binary.
+  ref: platformJaguar::platformJaguar 0x8d03d0 (buffers zeroed 0x8d0a35-0x8d0a8b,
+       cartridge 0x8d0aa7, BIOS 0x8d0bc7-0x8d0be1, reset vector copy
+       0x8d0c0b-0x8d0c2e, JAGR 0x8d0aec-0x8d0b74, COFF 0x8d0b98 and 0x8d16b9),
+       cpu68K::Reset 0x8c9e90, platformJaguar::read32_cpu 0x8cc1a0
+       (BIOS window 0x8cc1d4-0x8cc286), platformJaguar::read16 0x8cbdc0
+
+  A launcher can bypass the scan. MainActivity reads the intent extras rom and bios
+  and passes them to the core as ext-rom and ext-bios, the paths used in place of
+  the library, and switches to the reduced layout when either is present.
+  EmulatorActivity, the activity registered for android.intent.action.VIEW, takes
+  only lunchMode and lockOrient and replays whatever the library already holds.
+  ref: MainActivity.java:480-481, 421-424, EmulatorActivity.java:33-35, 45,
+       AndroidManifest.xml, libphoenixcore.so nativeOnCreate 0x8b2a2-0x8b562
+
+files:
+  - name: "[BIOS] Atari Jaguar (World).j64"
+    system: atari-jaguar
+    required: true
+    validation: [signature]
+    description: "Atari Jaguar boot ROM"
+    note: "The emulator spells no filename for it. Any file the directory scan reaches whose first twelve bytes are 00 00 00 00 00 E0 00 08 41 F9 00 F0 is taken as the BIOS, so more than one boot ROM revision answers; the name carried here is the catalogue name of the retail dump, crc32 FB731AAA, under the extension the BIOS data element declares. Read into a 1 MB window at 0xE00000 and byte swapped, and its first eight bytes are copied over DRAM 0 to give the 68000 its reset vector. A longer file is read up to that bound rather than rejected."
+    source_ref: "dumpAdapterJaguarROM::dumpAdapterJaguarROM 0x8d3c20 (memcmp 0x8d4259-0x8d426f), bios_sign 0x99d7a0, platformJaguar::getConfig 0x8ce197-0x8ce209, platformJaguar::platformJaguar 0x8d0bc7-0x8d0c2e"
+
+exclusion_note: >
+  Left out are the files the emulator writes and reads back itself, which are
+  state rather than anything a user obtains: configs.xml, the dump library holding
+  the scanned paths with their sizes and hashes, settings.ini, the savestates under
+  .states that the game list offers as Continue and Auto entries, the NM93 EEPROM
+  image behind the cartridge save, and test.txt, written and deleted to decide
+  whether a chosen directory is writable. The on-screen control graphics are APK
+  raw resources handed to the core through setImageRes as pixel buffers, not files
+  opened from storage, and the character glyphs are compiled into the library. No
+  CD image or CD BIOS applies: platformJaguar declares only the CARTRIDGE and BIOS
+  elements and no CD extension, and the only CD adapter in the core belongs to the
+  3DO platform, so Atari Jaguar CD is out of scope for this emulator.
+  ref: libphoenixcore.so 0xb5663-0xb5774, MainActivity.java:189-199, 218-237,
+       607-610, platformJaguar::getConfig 0x8ce080, dumpAdapter3DOcd 0x52b550

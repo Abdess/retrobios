@@ -1,0 +1,211 @@
+emulator: J2ME Loader
+type: standalone
+core_classification: community_fork
+source: "https://github.com/nikita36078/J2ME-Loader"
+upstream: "https://github.com/nikita36078/J2ME-Loader"
+author: "Nikita Shakarun"
+profiled_date: "2026-08-11"
+source_commit: "9b0fa48a0a0d1e61376c0b9af28b3d2caec0a4cc"
+core_version: "1.8.2"
+display_name: "Mobile - J2ME (J2ME Loader)"
+cores:
+  - j2me-loader
+  - "J2ME-LOADER"
+systems:
+  - j2me
+mode: standalone
+
+notes: |
+  MIDP/CLDC runtime for Android, package ru.playsoftware.j2meloader. A MIDlet is
+  converted to Dalvik bytecode on import and runs against the javax.microedition
+  classes compiled into the app, so no device firmware is read. The vendor
+  extension trees (Nokia, Siemens, Samsung, Motorola, Sony Ericsson, Sprint,
+  Vodafone, KDDI, JBlend, Mascot Capsule) are Java sources in the same package.
+  A fork of NaikSoftware/J2meLoader with an independent history: the 2016
+  ancestor carries no assets directory and none of the loading code cited below.
+  ref: app/src/main/java/ru/woesss/j2me/installer/AppInstaller.java:292,
+       app/src/main/java/javax/microedition/shell/AppClassLoader.java:38
+
+  The working directory holds converted/, configs/, templates/, data/, fs/c and
+  fs/e, all written by the app. fs/c and fs/e are the JSR-75 drives, data/ is RMS
+  storage, converted/ holds converted.dex and res.jar per MIDlet. Nothing there
+  is user-supplied.
+  ref: app/src/main/java/ru/playsoftware/j2meloader/config/Config.java:41-53,
+       app/src/main/java/ru/playsoftware/j2meloader/config/Config.java:146-152
+
+  The shader and property assets are read through ContextHolder.getAssetAsString,
+  which rethrows an IOException as RuntimeException instead of degrading, so an
+  absent asset ends the code path that reads it. Roboto-Regular.ttf goes through
+  Typeface.createFromAsset and appcenter.cer through the asset manager directly.
+  ref: app/src/main/java/javax/microedition/util/ContextHolder.java:179-193
+
+files:
+  - name: Roboto-Regular.ttf
+    system: j2me
+    required: true
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    description: "Typeface for the virtual keyboard and overlays"
+    note: "Built into a Typeface at CanvasWrapper construction, which is a field initializer of Canvas and therefore runs for every MIDlet that opens one. Drives the key captions, the soft bar and the FPS counter."
+    source_ref: "app/src/main/java/javax/microedition/lcdui/graphics/CanvasWrapper.java:36, app/src/main/java/javax/microedition/lcdui/Canvas.java:141, app/src/main/java/javax/microedition/lcdui/keyboard/VirtualKeyboard.java:908, app/src/main/java/javax/microedition/lcdui/overlay/FpsCounter.java:48"
+
+  - name: system.props
+    system: j2me
+    required: true
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    description: "Default microedition system properties"
+    note: "Read from assets/defaults when a profile is created and again when the config screen or updateSystemProperties fills the field. Each line becomes a System.setProperty pair at MIDlet startup, carrying microedition.configuration, microedition.platform, the JSR version strings and the vendor identity values."
+    source_ref: "app/src/main/java/ru/playsoftware/j2meloader/config/ProfileModel.java:198, app/src/main/java/ru/playsoftware/j2meloader/config/ProfilesManager.java:185, app/src/main/java/ru/playsoftware/j2meloader/config/ConfigActivity.java:609, app/src/main/java/javax/microedition/shell/MicroLoader.java:247-252"
+
+  - name: simple.vsh
+    system: j2me
+    required: true
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    description: "Vertex shader for the screen blitter"
+    note: "Compiled when the GL surface is created and no user shader is selected. Graphics mode 1 is the default, so this is the standard display path. Also compiled as the Simple program of the Mascot Capsule renderer."
+    source_ref: "app/src/main/java/javax/microedition/lcdui/graphics/ShaderProgram.java:35, app/src/main/java/javax/microedition/lcdui/graphics/ShaderProgram.java:61, app/src/main/java/javax/microedition/lcdui/Canvas.java:782, app/src/main/java/ru/playsoftware/j2meloader/config/ProfileModel.java:180, app/src/main/java/com/mascotcapsule/micro3d/v3/Program.java:212"
+
+  - name: simple.fsh
+    system: j2me
+    required: true
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    description: "Fragment shader for the screen blitter"
+    note: "Paired with simple.vsh. createProgram returning -1 raises RuntimeException at surface creation."
+    source_ref: "app/src/main/java/javax/microedition/lcdui/graphics/ShaderProgram.java:36, app/src/main/java/javax/microedition/lcdui/graphics/ShaderProgram.java:62-66, app/src/main/java/com/mascotcapsule/micro3d/v3/Program.java:213"
+
+  - name: color.vsh
+    system: j2me
+    required: true
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    description: "Vertex shader for untextured Mascot Capsule geometry"
+    note: "Program.create builds the tex, color, simple and sprite programs together the first time the Mascot Capsule renderer initializes, so all four pairs are read on the first micro3d frame."
+    source_ref: "app/src/main/java/com/mascotcapsule/micro3d/v3/Program.java:153, app/src/main/java/com/mascotcapsule/micro3d/v3/Program.java:53-58"
+
+  - name: color.fsh
+    system: j2me
+    required: true
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    description: "Fragment shader for untextured Mascot Capsule geometry"
+    note: "Carries the sphere map, toon threshold and primitive colour uniforms of the Color program."
+    source_ref: "app/src/main/java/com/mascotcapsule/micro3d/v3/Program.java:154, app/src/main/java/com/mascotcapsule/micro3d/v3/Program.java:155-161"
+
+  - name: tex.vsh
+    system: j2me
+    required: true
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    description: "Vertex shader for textured Mascot Capsule geometry"
+    note: "Built by Program.create alongside the other three pairs."
+    source_ref: "app/src/main/java/com/mascotcapsule/micro3d/v3/Program.java:229, app/src/main/java/com/mascotcapsule/micro3d/v3/Program.java:53-58"
+
+  - name: tex.fsh
+    system: j2me
+    required: true
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    description: "Fragment shader for textured Mascot Capsule geometry"
+    note: "Carries the texture size, transparency and sphere map uniforms of the Tex program."
+    source_ref: "app/src/main/java/com/mascotcapsule/micro3d/v3/Program.java:230, app/src/main/java/com/mascotcapsule/micro3d/v3/Program.java:231-235"
+
+  - name: sprite.vsh
+    system: j2me
+    required: true
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    description: "Vertex shader for Mascot Capsule sprites"
+    note: "Built by Program.create alongside the other three pairs."
+    source_ref: "app/src/main/java/com/mascotcapsule/micro3d/v3/Program.java:310, app/src/main/java/com/mascotcapsule/micro3d/v3/Program.java:53-58"
+
+  - name: sprite.fsh
+    system: j2me
+    required: true
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    description: "Fragment shader for Mascot Capsule sprites"
+    note: "Carries the texture size, transparency and colour key uniforms of the Sprite program."
+    source_ref: "app/src/main/java/com/mascotcapsule/micro3d/v3/Program.java:311, app/src/main/java/com/mascotcapsule/micro3d/v3/Program.java:312-315"
+
+  - name: libjavam3g.so
+    system: j2me
+    required: true
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    description: "JSR-184 M3G engine"
+    note: "Named by System.loadLibrary(\"javam3g\") outside any catch, the first time the toolkit reports the UI thread available. Built by ndkBuild from the m3g sources against GLES 1.1."
+    source_ref: "app/src/main/java/javax/microedition/m3g/Platform.java:66-72, app/src/main/cpp/Android.mk:3-15"
+
+  - name: libmicro3d.so
+    system: j2me
+    required: true
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    description: "Mascot Capsule vertex and buffer routines"
+    note: "Loaded from the static initializer of Utils, so the first Mascot Capsule call brings it in. Holds fillBuffer, glReadPixels and the bone transform."
+    source_ref: "app/src/main/java/com/mascotcapsule/micro3d/v3/Utils.java:149-159, app/src/main/cpp/Android.mk:28-34"
+
+  - name: appcenter.cer
+    system: j2me
+    required: false
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    description: "X.509 certificate for the crash report endpoint"
+    note: "Read into a trust store only when a crash report is sent from Android 4.1 through 4.4, where TLSv1.2 is forced. A read or certificate failure falls back to the default socket factory."
+    source_ref: "app/src/main/java/ru/playsoftware/j2meloader/crashes/TLSSocketFactory.java:41-63, app/src/main/java/ru/playsoftware/j2meloader/crashes/AppCenterSender.java:56-60"
+
+  - name: licenses.html
+    system: j2me
+    required: false
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    description: "Third party licence text of the about screen"
+    note: "Read when the licences dialog is opened and shown as HTML. Emulation never touches it."
+    source_ref: "app/src/main/java/ru/playsoftware/j2meloader/info/LicensesDialogFragment.java:35"
+
+  - name: "<shader>.ini"
+    path: "shaders/<shader>.ini"
+    system: j2me
+    required: false
+    unsourceable: "user authored, no canonical file"
+    category: game_data
+    description: "Shader descriptor read from the emulator directory"
+    note: "The config screen creates the shaders directory, lists every file ending in .ini and parses it as sections opened by a bracketed name, keeping the entries that name both a Vertex and a Fragment file. Name, Author, OutputResolution, Upscaling and four SettingName/SettingDefaultValue/SettingMinValue/SettingMaxValue groups are also read, which is the PPSSPP post-processing descriptor format."
+    source_ref: "app/src/main/java/ru/playsoftware/j2meloader/config/ConfigActivity.java:336-367, app/src/main/java/ru/playsoftware/j2meloader/config/ShaderInfo.java:101-207, app/src/main/java/ru/playsoftware/j2meloader/util/FileUtils.java:207-212"
+
+  - name: "<shader>.vsh"
+    path: "shaders/<shader>.vsh"
+    system: j2me
+    required: false
+    unsourceable: "user authored, no canonical file"
+    category: game_data
+    description: "Vertex shader named by a descriptor"
+    note: "Read whole from the shaders directory when the selected filter names it, then compiled in place of the built-in blitter. An unreadable file yields an empty string, the program fails to build and the bundled default is used after a toast."
+    source_ref: "app/src/main/java/javax/microedition/lcdui/graphics/ShaderProgram.java:45-58, app/src/main/java/javax/microedition/shell/MicroLoader.java:270-273, app/src/main/java/ru/playsoftware/j2meloader/util/FileUtils.java:196-205"
+
+  - name: "<shader>.fsh"
+    path: "shaders/<shader>.fsh"
+    system: j2me
+    required: false
+    unsourceable: "user authored, no canonical file"
+    category: game_data
+    description: "Fragment shader named by a descriptor"
+    note: "Paired with the vertex file of the same descriptor. Four float uniforms from the descriptor settings are pushed to it at surface creation."
+    source_ref: "app/src/main/java/javax/microedition/lcdui/graphics/ShaderProgram.java:45-58, app/src/main/java/javax/microedition/lcdui/Canvas.java:791-793"

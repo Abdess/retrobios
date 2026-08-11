@@ -1,0 +1,330 @@
+emulator: JL-Mod
+type: standalone
+core_classification: community_fork
+source: "https://github.com/woesss/JL-Mod"
+upstream: "https://github.com/nikita36078/J2ME-Loader"
+author: "Yury Kharchenko"
+profiled_date: "2026-08-11"
+source_commit: "f723a190c0bdb44b31c3bc0ead6f8665c7ea517d"
+core_version: "0.87.1"
+display_name: "Mobile - J2ME (JL-Mod)"
+cores:
+  - jl-mod
+  - "JL-MOD"
+systems:
+  - j2me
+mode: standalone
+
+notes: |
+  MIDP/CLDC runtime for Android, package ru.woesss.j2meloader. A .jar, .jad or
+  .kjx is instrumented and converted to Dalvik bytecode at install time, then
+  runs against the javax.microedition classes compiled into the app, so no
+  device firmware is read. Two build flavors share the sources: emulator, the
+  published application, and midlet, which packs a single ported J2ME
+  application and is the only one reading MIDLET-META-INF/MANIFEST.MF.
+  ref: app/src/main/java/ru/woesss/j2me/installer/AppInstaller.java:127-146,
+       app/build.gradle.kts:67-93,
+       app/src/main/java/javax/microedition/shell/MicroLoader.java:127-146
+
+  Three 3D stacks are compiled in, each with its own shaders and native code:
+  JSR-184 M3G on GLES 1.1 (libjavam3g.so), Mascot Capsule v3 (libmicro3d.so with
+  the tex, color, simple and sprite programs) and Nokia M3D (libgles_utils.so
+  with the m3d pair). MIDI playback goes to the Android synthesizer unless a
+  sound bank is selected, which routes it to Sonivox EAS or TinySoundFont, both
+  driven by Oboe.
+  ref: app/src/main/cpp/Android.mk:1,
+       app/src/main/java/ru/woesss/j2me/mmapi/synth/SynthPluginFactory.java:34-52
+
+  Assets are read through ContextHolder.getAssetAsString, which rethrows an
+  IOException as RuntimeException instead of degrading, so an absent asset ends
+  the code path that reads it.
+  ref: app/src/main/java/javax/microedition/util/ContextHolder.java:178-192
+
+  The working directory holds converted/, configs/, templates/ and data/, all
+  written by the app, plus shaders/, soundbanks/ and skins/, created empty at
+  first run and read from. data/ carries the RMS record stores and backs the
+  JSR-75 c: drive.
+  ref: app/src/main/java/ru/playsoftware/j2meloader/config/Config.java:41-58,
+       app/src/main/java/ru/playsoftware/j2meloader/util/FileUtils.java:162-171,
+       app/src/main/java/javax/microedition/shell/MicroLoader.java:221-227
+
+files:
+  - name: system.props
+    system: j2me
+    required: true
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    description: "Default microedition system properties"
+    note: "Read from assets/defaults when a profile is created, when the config screen has no stored value and when updateSystemProperties fills the field. Each line becomes a System.setProperty and MidletSystem.setProperty pair at MIDlet startup, carrying microedition.configuration, microedition.platform, the JSR version strings and the vendor identity values."
+    source_ref: "app/src/main/java/ru/playsoftware/j2meloader/config/ProfileModel.java:211, app/src/main/java/ru/playsoftware/j2meloader/config/ConfigActivity.java:644, app/src/main/java/ru/playsoftware/j2meloader/config/ProfilesManager.java:189, app/src/main/java/javax/microedition/shell/MicroLoader.java:246-252"
+
+  - name: simple.vsh
+    system: j2me
+    required: true
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    description: "Vertex shader for the screen blitter"
+    note: "Compiled when the GL surface is created and no user shader is selected. Graphics mode 1 is the default, so this is the standard display path. Also compiled as the Simple program of the Mascot Capsule renderer."
+    source_ref: "app/src/main/java/javax/microedition/lcdui/graphics/ShaderProgram.java:34, app/src/main/java/javax/microedition/lcdui/graphics/ShaderProgram.java:58, app/src/main/java/javax/microedition/lcdui/Canvas.java:744, app/src/main/java/ru/playsoftware/j2meloader/config/ProfileModel.java:193, app/src/main/java/ru/woesss/j2me/micro3d/Program.java:216"
+
+  - name: simple.fsh
+    system: j2me
+    required: true
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    description: "Fragment shader for the screen blitter"
+    note: "Paired with simple.vsh. createProgram returning -1 raises RuntimeException at surface creation."
+    source_ref: "app/src/main/java/javax/microedition/lcdui/graphics/ShaderProgram.java:35, app/src/main/java/javax/microedition/lcdui/graphics/ShaderProgram.java:59-63, app/src/main/java/ru/woesss/j2me/micro3d/Program.java:217"
+
+  - name: color.vsh
+    system: j2me
+    required: true
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    description: "Vertex shader for untextured Mascot Capsule geometry"
+    note: "Program.create builds the tex, color, simple and sprite programs together the first time the Mascot Capsule renderer draws, so all four pairs are read on the first micro3d frame."
+    source_ref: "app/src/main/java/ru/woesss/j2me/micro3d/Program.java:150, app/src/main/java/ru/woesss/j2me/micro3d/Program.java:53-58, app/src/main/java/ru/woesss/j2me/micro3d/Render.java:156"
+
+  - name: color.fsh
+    system: j2me
+    required: true
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    description: "Fragment shader for untextured Mascot Capsule geometry"
+    note: "Carries the sphere map, toon threshold and primitive colour uniforms of the Color program."
+    source_ref: "app/src/main/java/ru/woesss/j2me/micro3d/Program.java:151, app/src/main/java/ru/woesss/j2me/micro3d/Program.java:162-178"
+
+  - name: tex.vsh
+    system: j2me
+    required: true
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    description: "Vertex shader for textured Mascot Capsule geometry"
+    note: "Built by Program.create alongside the other three pairs."
+    source_ref: "app/src/main/java/ru/woesss/j2me/micro3d/Program.java:233, app/src/main/java/ru/woesss/j2me/micro3d/Program.java:53-58"
+
+  - name: tex.fsh
+    system: j2me
+    required: true
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    description: "Fragment shader for textured Mascot Capsule geometry"
+    note: "Carries the texture size, sphere map and toon uniforms of the Tex program."
+    source_ref: "app/src/main/java/ru/woesss/j2me/micro3d/Program.java:234, app/src/main/java/ru/woesss/j2me/micro3d/Program.java:253-271"
+
+  - name: sprite.vsh
+    system: j2me
+    required: true
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    description: "Vertex shader for Mascot Capsule sprites"
+    note: "Built by Program.create alongside the other three pairs."
+    source_ref: "app/src/main/java/ru/woesss/j2me/micro3d/Program.java:313, app/src/main/java/ru/woesss/j2me/micro3d/Program.java:53-58"
+
+  - name: sprite.fsh
+    system: j2me
+    required: true
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    description: "Fragment shader for Mascot Capsule sprites"
+    note: "Carries the texture size and colour key uniforms of the Sprite program."
+    source_ref: "app/src/main/java/ru/woesss/j2me/micro3d/Program.java:314, app/src/main/java/ru/woesss/j2me/micro3d/Program.java:330-337"
+
+  - name: m3d.vsh
+    system: j2me
+    required: true
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    description: "Vertex shader for the Nokia M3D renderer"
+    note: "Compiled when a MIDlet first binds a com.nokia.mid.m3d context. Carries the position, texture coordinate and matrix inputs."
+    source_ref: "app/src/main/java/com/nokia/mid/m3d/ShaderProgram.java:28, app/src/main/java/com/nokia/mid/m3d/ShaderProgram.java:38, app/src/main/java/com/nokia/mid/m3d/M3D.java:132"
+
+  - name: m3d.fsh
+    system: j2me
+    required: true
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    description: "Fragment shader for the Nokia M3D renderer"
+    note: "Paired with m3d.vsh. A link failure raises RuntimeException in the constructor."
+    source_ref: "app/src/main/java/com/nokia/mid/m3d/ShaderProgram.java:29, app/src/main/java/com/nokia/mid/m3d/ShaderProgram.java:39-76"
+
+  - name: patches.bin
+    system: j2me
+    required: true
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    description: "Binary class patches applied during MIDlet conversion"
+    note: "Index of class CRC32 to patch offset, read by the static field initializer of AndroidProducer and again for each matching class the dexer instruments. A read failure outside end of file is rethrown as RuntimeException, which breaks class initialization and therefore every conversion. Patch entries are applied by the SRC/EXT/FWD/BWD opcode stream of BinaryPatcher."
+    source_ref: "dexlib/src/main/java/org/microemu/android/asm/AndroidProducer.java:41, dexlib/src/main/java/org/microemu/android/asm/AndroidProducer.java:62-90, dexlib/src/main/java/com/android/dx/command/dexer/Main.java:468, dexlib/src/main/java/org/microemu/android/asm/BinaryPatcher.java:49-71"
+
+  - name: licenses.html
+    system: j2me
+    required: false
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    description: "Third party licence text of the about screen"
+    note: "Read when the licences dialog is opened and shown as HTML. Emulation never touches it."
+    source_ref: "app/src/main/java/ru/playsoftware/j2meloader/info/LicensesDialogFragment.java:35"
+
+  - name: appcenter.cer
+    system: j2me
+    required: false
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    description: "X.509 certificate for the crash report endpoint"
+    note: "Named as an ACRA certificate path only when the crash sender is configured on Android 4.1 through 4.4, where TLSv1.2 is forced. Every other release uses the default socket factory."
+    source_ref: "app/src/main/java/ru/playsoftware/j2meloader/crashes/AppCenterSender.java:68-75"
+
+  - name: libc++_shared.so
+    system: j2me
+    required: true
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    description: "NDK C++ runtime for the native modules"
+    note: "Named ahead of every other native library, in the static initializers of GLESUtils and micro3d Utils, in the M3G toolkit init and in both synthesizer classes."
+    source_ref: "app/src/main/java/ru/woesss/gles/GLESUtils.java:31, app/src/main/java/ru/woesss/j2me/micro3d/Utils.java:103, app/src/main/java/javax/microedition/m3g/Platform.java:86, app/src/main/java/ru/woesss/j2me/mmapi/synth/eas/LibEAS.java:70, app/src/main/java/ru/woesss/j2me/mmapi/synth/tsf/LibTSF.java:70"
+
+  - name: libgles_utils.so
+    system: j2me
+    required: true
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    description: "GLES blit routines for the Nokia M3D and Mexa OpenGL surfaces"
+    note: "Loaded from the static initializer of GLESUtils, so the first blit brings it in. Holds the GLES1 and GLES2 bitmap blits."
+    source_ref: "app/src/main/java/ru/woesss/gles/GLESUtils.java:30-33, app/src/main/java/com/nokia/mid/m3d/M3D.java:323, app/src/main/java/com/mexa/opgl/OpglGraphics.java:493, app/src/main/cpp/gles_utils/Android.mk:5-11"
+
+  - name: libjavam3g.so
+    system: j2me
+    required: true
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    description: "JSR-184 M3G engine"
+    note: "Named by System.loadLibrary outside any catch, the first time the toolkit reports the UI thread available. Built by ndkBuild from the m3g sources against GLES 1.1."
+    source_ref: "app/src/main/java/javax/microedition/m3g/Platform.java:85-89, app/src/main/java/javax/microedition/m3g/Interface.java:314, app/src/main/cpp/m3g/Android.mk:5-15"
+
+  - name: libmicro3d.so
+    system: j2me
+    required: true
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    description: "Mascot Capsule vertex and buffer routines"
+    note: "Loaded from the static initializer of Utils, so the first Mascot Capsule call brings it in. Holds fillBuffer, glReadPixels and the bone transform."
+    source_ref: "app/src/main/java/ru/woesss/j2me/micro3d/Utils.java:97-105, app/src/main/cpp/micro3d/Android.mk:5-10"
+
+  - name: liboboe.so
+    system: j2me
+    required: false
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    description: "Audio output stream of the sound bank synthesizers"
+    note: "Named by both synthesizer classes ahead of their own libraries. Reached only when a sound bank is selected, and SynthPluginFactory catches the load failure and falls back to the Android synthesizer."
+    source_ref: "app/src/main/java/ru/woesss/j2me/mmapi/synth/eas/LibEAS.java:71, app/src/main/java/ru/woesss/j2me/mmapi/synth/tsf/LibTSF.java:71, app/src/main/java/ru/woesss/j2me/mmapi/synth/SynthPluginFactory.java:40-53"
+
+  - name: libmmapi_common.so
+    system: j2me
+    required: false
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    description: "Shared player and listener code of the synthesizer plugins"
+    note: "Named by both synthesizer classes ahead of their own libraries. Same fallback as liboboe.so."
+    source_ref: "app/src/main/java/ru/woesss/j2me/mmapi/synth/eas/LibEAS.java:72, app/src/main/java/ru/woesss/j2me/mmapi/synth/tsf/LibTSF.java:72, app/src/main/cpp/mmapi_common/Android.mk:5-12"
+
+  - name: libmmapi_eas.so
+    system: j2me
+    required: false
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    description: "Sonivox EAS synthesizer"
+    note: "Loaded from the static initializer of LibEAS when a sound bank is selected. Links the sonivox wavetable engine statically and reads the bank as a DLS collection. A failure leaves the TinySoundFont plugin or the Android synthesizer."
+    source_ref: "app/src/main/java/ru/woesss/j2me/mmapi/synth/eas/LibEAS.java:69-74, app/src/main/cpp/mmapi_eas/Android.mk:5-22, app/src/main/cpp/sonivox/Android.mk:134"
+
+  - name: libmmapi_tsf.so
+    system: j2me
+    required: false
+    bundled: true
+    unsourceable: "ships inside the application package"
+    category: game_data
+    description: "TinySoundFont synthesizer"
+    note: "Loaded from the static initializer of LibTSF when a sound bank is selected. Reads the bank as a SoundFont and plays standard MIDI files. A failure leaves the EAS plugin or the Android synthesizer."
+    source_ref: "app/src/main/java/ru/woesss/j2me/mmapi/synth/tsf/LibTSF.java:69-74, app/src/main/cpp/mmapi_tsf/Android.mk:5-11"
+
+  - name: "<soundbank>.dls"
+    path: "soundbanks/<soundbank>.dls"
+    system: j2me
+    required: false
+    unsourceable: "user supplied, no canonical file"
+    category: game_data
+    description: "DLS sound bank for MIDI playback"
+    note: "The config screen lists every regular file in the sound banks directory with no extension filter, and the selected name is kept as a path when the file exists. EAS_LoadDLSCollection reads it with the header search flag off; a rejected file throws and the plugin is skipped."
+    source_ref: "app/src/main/java/ru/playsoftware/j2meloader/config/ConfigActivity.java:318-337, app/src/main/java/javax/microedition/shell/MicroLoader.java:272-274, app/src/main/cpp/mmapi_eas/eas_player.cpp:112-126"
+
+  - name: "<soundbank>.sf2"
+    path: "soundbanks/<soundbank>.sf2"
+    system: j2me
+    required: false
+    unsourceable: "user supplied, no canonical file"
+    category: game_data
+    description: "SoundFont sound bank for MIDI playback"
+    note: "Same selection path as the DLS bank. tsf_load_filename parses it, and a null result throws IllegalArgumentException so the plugin is skipped. Only standard MIDI files are played through this synthesizer."
+    source_ref: "app/src/main/java/ru/playsoftware/j2meloader/config/ConfigActivity.java:318-337, app/src/main/cpp/mmapi_tsf/tsf_player.cpp:87-94, app/src/main/cpp/mmapi_tsf/tsf_player_jni.cpp:15-27"
+
+  - name: "<skin>"
+    path: "skins/<skin>"
+    system: j2me
+    required: false
+    unsourceable: "user supplied, no canonical file"
+    category: game_data
+    description: "Background image drawn behind the virtual screen"
+    note: "Any image format Android can decode. Decoded twice, once for bounds and once downsampled to the display, and an undecodable file leaves the layer unset. A rectangular area filled with transparent black is taken as the screen placement."
+    source_ref: "app/src/main/java/ru/playsoftware/j2meloader/config/ConfigActivity.java:297-316, app/src/main/java/javax/microedition/lcdui/skin/SkinLayer.java:81-111, app/src/main/java/javax/microedition/shell/MicroLoader.java:276-278"
+
+  - name: "<shader>.ini"
+    path: "shaders/<shader>.ini"
+    system: j2me
+    required: false
+    unsourceable: "user supplied, no canonical file"
+    category: game_data
+    description: "Shader descriptor read from the emulator directory"
+    note: "The config screen creates the shaders directory, keeps every file ending in .ini and parses it as sections opened by a bracketed name, retaining the entries that name both a Vertex and a Fragment file. Name, Author, OutputResolution, Upscaling and four SettingName/SettingDefaultValue/SettingMinValue/SettingStep groups are also read, which is the PPSSPP post-processing descriptor format."
+    source_ref: "app/src/main/java/ru/playsoftware/j2meloader/config/ConfigActivity.java:403-464, app/src/main/java/ru/playsoftware/j2meloader/config/ShaderInfo.java:101-207"
+
+  - name: "<shader>.vsh"
+    path: "shaders/<shader>.vsh"
+    system: j2me
+    required: false
+    unsourceable: "user supplied, no canonical file"
+    category: game_data
+    description: "Vertex shader named by a descriptor"
+    note: "Read whole from the shaders directory when the selected filter names it, then compiled in place of the built-in blitter. An unreadable file yields an empty string, the program fails to build and the bundled default is used after a toast."
+    source_ref: "app/src/main/java/javax/microedition/lcdui/graphics/ShaderProgram.java:44-56, app/src/main/java/javax/microedition/shell/MicroLoader.java:263-266, app/src/main/java/ru/playsoftware/j2meloader/util/FileUtils.java:152-160"
+
+  - name: "<shader>.fsh"
+    path: "shaders/<shader>.fsh"
+    system: j2me
+    required: false
+    unsourceable: "user supplied, no canonical file"
+    category: game_data
+    description: "Fragment shader named by a descriptor"
+    note: "Paired with the vertex file of the same descriptor. Four float uniforms from the descriptor settings are pushed to it at surface creation."
+    source_ref: "app/src/main/java/javax/microedition/lcdui/graphics/ShaderProgram.java:44-56, app/src/main/java/javax/microedition/lcdui/Canvas.java:753-754"
