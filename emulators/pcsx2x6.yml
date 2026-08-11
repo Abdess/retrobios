@@ -81,7 +81,16 @@ files:
     max_size: 8388608
     validation: [size]
     description: "COH-H arcade board BIOS"
-    note: "Any image whose romdir holds RESET and ROMVER is accepted, whatever its name. The 4 to 8 MB range gates the folder scan; a manually selected image skips it. Named after the board model by the dumper, extension rom0."
+    aliases:
+      - COH-H31000.BIN
+      - 246C.bin
+      - 256.BIN
+    note: >-
+      Any image whose romdir holds RESET and ROMVER is accepted, whatever its
+      name. The 4 to 8 MB range gates the folder scan; a manually selected image
+      skips it. Named after the board model by the dumper, extension rom0. The
+      aliases are the three board dumps held here, COH-H31000, System 246C and
+      System 256; each carries its romdir at 0x2740 and answers the same test.
     source_ref: "pcsx2/ps2/BiosTools.cpp:268-292, pcsx2/ps2/BiosTools.cpp:80-207, pcsx2/ps2/BiosTools.cpp:327-379"
 
   - name: COH-H31100.rom1
@@ -101,6 +110,10 @@ files:
     source_ref: "pcsx2/ps2/BiosTools.cpp:224-251, pcsx2/ps2/BiosTools.cpp:377, pcsx2/MemoryTypes.h:15"
 
   - name: COH-H31100.nvm
+    aliases:
+      - COH-H31000.NVM
+      - 246C.nvm
+      - 256.NVM
     system: namco-system246
     required: false
     hle_fallback: true
@@ -110,6 +123,10 @@ files:
     source_ref: "pcsx2/CDVD/CDVD.cpp:47, pcsx2/CDVD/CDVD.cpp:140-178, pcsx2/CDVD/CDVD.cpp:2608"
 
   - name: COH-H31100.mec
+    aliases:
+      - COH-H31000.MEC
+      - 246C.mec
+      - 256.MEC
     system: namco-system246
     required: false
     hle_fallback: true

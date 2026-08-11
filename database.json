@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-11T23:16:05Z",
-  "total_files": 8776,
-  "total_size": 12013574593,
+  "generated_at": "2026-08-11T23:32:01Z",
+  "total_files": 8784,
+  "total_size": 12024094435,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -29490,6 +29490,83 @@
       "crc32": "ce442cd2",
       "adler32": "48af352c"
     },
+    "f0a74bbcaf801f3fd0b7002ebd0118564aae3528": {
+      "path": "bios/Arcade/Namco System 246/246C.bin",
+      "name": "246C.bin",
+      "size": 2097152,
+      "sha1": "f0a74bbcaf801f3fd0b7002ebd0118564aae3528",
+      "md5": "52cca0058626569c7a9699838baab2d8",
+      "sha256": "8eb8f4d963dde4659de4fbb6eca870077f9af59a9100e8eecd59ec836ff79fae",
+      "crc32": "2b2e41a2",
+      "adler32": "02e99415",
+      "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-arcade-0100tz-20021119-163841.bin",
+          "description": "Namco System 246 Rack C (Version 5.0 03/06/00 T)"
+        }
+      }
+    },
+    "decbccbf862a0f94735ea7b8b31181f0c8b3f01c": {
+      "path": "bios/Arcade/Namco System 246/246C.mec",
+      "name": "246C.mec",
+      "size": 4,
+      "sha1": "decbccbf862a0f94735ea7b8b31181f0c8b3f01c",
+      "md5": "61fb9be0017fb188a7b7f1d930d7c057",
+      "sha256": "90621a07054cd538993a99ddc74bed526bec4af427960a5db921f5ee98deec20",
+      "crc32": "5e161e84",
+      "adler32": "003b0012"
+    },
+    "0c62c813e7e5ce61b82c84ad7ef6a94aa5fb8cf2": {
+      "path": "bios/Arcade/Namco System 246/246C.nvm",
+      "name": "246C.nvm",
+      "size": 1024,
+      "sha1": "0c62c813e7e5ce61b82c84ad7ef6a94aa5fb8cf2",
+      "md5": "ec88ea514d0a0306453173e5e0c4ea94",
+      "sha256": "cc122457d39ae2d0902eb89753bf01ddf2ebbf70b6ec077f43afbffdaa922175",
+      "crc32": "5bcb7036",
+      "adler32": "b17fdfd0"
+    },
+    "b0bdc34d953d93d3d154bc34fd854c635a8c5fee": {
+      "path": "bios/Arcade/Namco System 246/256.BIN",
+      "name": "256.BIN",
+      "size": 4194304,
+      "sha1": "b0bdc34d953d93d3d154bc34fd854c635a8c5fee",
+      "md5": "dbd0b88d55f4a3a106821c27b4c1259f",
+      "sha256": "a7ff8f570c94382a19ef2a292d251ae0feff31bf239ade93ed8b866b7d76c917",
+      "crc32": "29fe9792",
+      "adler32": "d73a85c7"
+    },
+    "ec455aae9ba7bfc7d37440f13cb7265c98fa8c3e": {
+      "path": "bios/Arcade/Namco System 246/256.NVM",
+      "name": "256.NVM",
+      "size": 1024,
+      "sha1": "ec455aae9ba7bfc7d37440f13cb7265c98fa8c3e",
+      "md5": "0c2e7763301e5c4e93155c7f88019ac4",
+      "sha256": "67af747383bd7690789930c9327fdfca0f71680a8c7be97291b0f811e37f5f77",
+      "crc32": "41c585b0",
+      "adler32": "90a4f918"
+    },
+    "9a67e2d344b1132a183881c267463078b220ed21": {
+      "path": "bios/Arcade/Namco System 246/COH-H31000.BIN",
+      "name": "COH-H31000.BIN",
+      "size": 4194304,
+      "sha1": "9a67e2d344b1132a183881c267463078b220ed21",
+      "md5": "a925e84ac0ed2711af36e28772793be2",
+      "sha256": "f0c54c703b1084db2150fac6999b0fa2936ecc5ffc8cdc047efbf52aff963f4d",
+      "crc32": "d550a6ff",
+      "adler32": "ec023f8b"
+    },
+    "a3c1e966943acbb70dd3071015e1390a334baf6d": {
+      "path": "bios/Arcade/Namco System 246/COH-H31000.NVM",
+      "name": "COH-H31000.NVM",
+      "size": 1024,
+      "sha1": "a3c1e966943acbb70dd3071015e1390a334baf6d",
+      "md5": "4e3589dc0dbc69019d60e5f54e48f5b5",
+      "sha256": "196ec687814c32bbc16ebbb0ffe4717aa8ce16e764eec0788339b0319b8d42a4",
+      "crc32": "dc16a5fe",
+      "adler32": "13a252eb"
+    },
     "cdb09d3ffaa867ff9e7387cf1934e9011565d546": {
       "path": "bios/Arcade/fba2012/samples/fireshrk.zip",
       "name": "fireshrk.zip",
@@ -52943,6 +53020,16 @@
       "sha256": "2010e843a290cd70d0936baa2e647d93a455f2c016dfa49d3a806b1d450b71cb",
       "crc32": "d15052ad",
       "adler32": "64011de4"
+    },
+    "b2fc3bb96c0c4d315926eb7bd705441c75d84ec2": {
+      "path": "bios/Other/mastergear/MasterGear-Cheats.zip",
+      "name": "MasterGear-Cheats.zip",
+      "size": 31006,
+      "sha1": "b2fc3bb96c0c4d315926eb7bd705441c75d84ec2",
+      "md5": "8ae8c9470f399d125360a47e9968335e",
+      "sha256": "7abf93ecf0fc325865e6564c9795b6d1effb8d5814b09739b81820ca771477f9",
+      "crc32": "23f6d752",
+      "adler32": "175a03a3"
     },
     "8e14e85c645187504ec9d162b3ea614a0c421d32": {
       "path": "bios/Other/mednafen/apple2e-enh-kb.rom",
@@ -95694,6 +95781,13 @@
       "03faaf4574644341878ca66cd2c7e096": "49368b3cc7d3b4990829c5e25bb9bfe6365f0566",
       "71aa621249f7499f29f7cb397191f79c": "aff37ceea8cc3a9d5e383f4c7fa564d246d06ff8",
       "4cc9472dc550691a28ee975ffcd8d047": "0ec20ebf1e7f2b3aebb9853036e17ca4595214c8",
+      "52cca0058626569c7a9699838baab2d8": "f0a74bbcaf801f3fd0b7002ebd0118564aae3528",
+      "61fb9be0017fb188a7b7f1d930d7c057": "decbccbf862a0f94735ea7b8b31181f0c8b3f01c",
+      "ec88ea514d0a0306453173e5e0c4ea94": "0c62c813e7e5ce61b82c84ad7ef6a94aa5fb8cf2",
+      "dbd0b88d55f4a3a106821c27b4c1259f": "b0bdc34d953d93d3d154bc34fd854c635a8c5fee",
+      "0c2e7763301e5c4e93155c7f88019ac4": "ec455aae9ba7bfc7d37440f13cb7265c98fa8c3e",
+      "a925e84ac0ed2711af36e28772793be2": "9a67e2d344b1132a183881c267463078b220ed21",
+      "4e3589dc0dbc69019d60e5f54e48f5b5": "a3c1e966943acbb70dd3071015e1390a334baf6d",
       "1ea651a4211f738077eb29cfb6c26ca1": "cdb09d3ffaa867ff9e7387cf1934e9011565d546",
       "c53298b7736577e0cd9f57d4fcbfdf4c": "11ab10d51b27594f71336dd6d83ef30cd2742e6e",
       "9d8d873d6646b799d003433d06156d5c": "17997863696749e6ff07e0f4659631e3c9e0ef2f",
@@ -97821,6 +97915,7 @@
       "46a02fc4775b3d959f3f949a70eaa616": "52d1bbeed17f2a2240cb38249dba3663ad0b8a1f",
       "90644bd658fd0922d28eccb7cfb7cb76": "17c354249ddbfaf20b570d3c5e33b693e36646aa",
       "6a32c39d8ac24bd56a03d79299b0a8f1": "dbda9a9fd882af929b17cd2de1a975e7f1b93361",
+      "8ae8c9470f399d125360a47e9968335e": "b2fc3bb96c0c4d315926eb7bd705441c75d84ec2",
       "b956c537e7b6b85ffa5c3493b1490d8a": "8e14e85c645187504ec9d162b3ea614a0c421d32",
       "4431aea380185e3f509285540d7cb418": "12a2e718f5f4acd69b6c33a45a4a940b1440a481",
       "f29d49006080c3080baab7b851e1cf68": "16e3c6698a10547c228b8ab474b817ff1d64c216",
@@ -109867,6 +109962,27 @@
       "zxbus_neogs.zip": [
         "0ec20ebf1e7f2b3aebb9853036e17ca4595214c8"
       ],
+      "246C.bin": [
+        "f0a74bbcaf801f3fd0b7002ebd0118564aae3528"
+      ],
+      "246C.mec": [
+        "decbccbf862a0f94735ea7b8b31181f0c8b3f01c"
+      ],
+      "246C.nvm": [
+        "0c62c813e7e5ce61b82c84ad7ef6a94aa5fb8cf2"
+      ],
+      "256.BIN": [
+        "b0bdc34d953d93d3d154bc34fd854c635a8c5fee"
+      ],
+      "256.NVM": [
+        "ec455aae9ba7bfc7d37440f13cb7265c98fa8c3e"
+      ],
+      "COH-H31000.BIN": [
+        "9a67e2d344b1132a183881c267463078b220ed21"
+      ],
+      "COH-H31000.NVM": [
+        "a3c1e966943acbb70dd3071015e1390a334baf6d"
+      ],
       "fireshrk.zip": [
         "cdb09d3ffaa867ff9e7387cf1934e9011565d546"
       ],
@@ -115790,6 +115906,9 @@
       ],
       "quit.system.bin": [
         "dbda9a9fd882af929b17cd2de1a975e7f1b93361"
+      ],
+      "MasterGear-Cheats.zip": [
+        "b2fc3bb96c0c4d315926eb7bd705441c75d84ec2"
       ],
       "apple2e-enh-kb.rom": [
         "8e14e85c645187504ec9d162b3ea614a0c421d32"
@@ -125970,6 +126089,12 @@
       "nb_824gc.zip": [
         "734efa75815502d58898599359cf55f8003a03a5"
       ],
+      "256.MEC": [
+        "decbccbf862a0f94735ea7b8b31181f0c8b3f01c"
+      ],
+      "COH-H31000.MEC": [
+        "decbccbf862a0f94735ea7b8b31181f0c8b3f01c"
+      ],
       "atari_osb.rom": [
         "db1031585968cfc6ec2ecda5c9a5a52f61444a3b"
       ],
@@ -132689,6 +132814,13 @@
       "79c3a56a": "49368b3cc7d3b4990829c5e25bb9bfe6365f0566",
       "8af99219": "aff37ceea8cc3a9d5e383f4c7fa564d246d06ff8",
       "ce442cd2": "0ec20ebf1e7f2b3aebb9853036e17ca4595214c8",
+      "2b2e41a2": "f0a74bbcaf801f3fd0b7002ebd0118564aae3528",
+      "5e161e84": "decbccbf862a0f94735ea7b8b31181f0c8b3f01c",
+      "5bcb7036": "0c62c813e7e5ce61b82c84ad7ef6a94aa5fb8cf2",
+      "29fe9792": "b0bdc34d953d93d3d154bc34fd854c635a8c5fee",
+      "41c585b0": "ec455aae9ba7bfc7d37440f13cb7265c98fa8c3e",
+      "d550a6ff": "9a67e2d344b1132a183881c267463078b220ed21",
+      "dc16a5fe": "a3c1e966943acbb70dd3071015e1390a334baf6d",
       "37c6b3d0": "cdb09d3ffaa867ff9e7387cf1934e9011565d546",
       "23974c8e": "11ab10d51b27594f71336dd6d83ef30cd2742e6e",
       "59a8ab28": "17997863696749e6ff07e0f4659631e3c9e0ef2f",
@@ -134816,6 +134948,7 @@
       "00bac1b9": "52d1bbeed17f2a2240cb38249dba3663ad0b8a1f",
       "e0219738": "17c354249ddbfaf20b570d3c5e33b693e36646aa",
       "d15052ad": "dbda9a9fd882af929b17cd2de1a975e7f1b93361",
+      "23f6d752": "b2fc3bb96c0c4d315926eb7bd705441c75d84ec2",
       "c506efb9": "8e14e85c645187504ec9d162b3ea614a0c421d32",
       "e47045f4": "12a2e718f5f4acd69b6c33a45a4a940b1440a481",
       "094ecf8e": "16e3c6698a10547c228b8ab474b817ff1d64c216",
@@ -141467,6 +141600,13 @@
       "a6bbc4bbc4fe51c1bb1674c8afdd1cd91088faade0c1067dc0650916a765f6c3": "49368b3cc7d3b4990829c5e25bb9bfe6365f0566",
       "1317368762c16157688e02a612b67842fd29ca01c0c07ed752f74a6443b69354": "aff37ceea8cc3a9d5e383f4c7fa564d246d06ff8",
       "d3b8954c5ae3ebae05fbcf1ea65b1491f26ca952205c024a6d9dde78fabd9ec8": "0ec20ebf1e7f2b3aebb9853036e17ca4595214c8",
+      "8eb8f4d963dde4659de4fbb6eca870077f9af59a9100e8eecd59ec836ff79fae": "f0a74bbcaf801f3fd0b7002ebd0118564aae3528",
+      "90621a07054cd538993a99ddc74bed526bec4af427960a5db921f5ee98deec20": "decbccbf862a0f94735ea7b8b31181f0c8b3f01c",
+      "cc122457d39ae2d0902eb89753bf01ddf2ebbf70b6ec077f43afbffdaa922175": "0c62c813e7e5ce61b82c84ad7ef6a94aa5fb8cf2",
+      "a7ff8f570c94382a19ef2a292d251ae0feff31bf239ade93ed8b866b7d76c917": "b0bdc34d953d93d3d154bc34fd854c635a8c5fee",
+      "67af747383bd7690789930c9327fdfca0f71680a8c7be97291b0f811e37f5f77": "ec455aae9ba7bfc7d37440f13cb7265c98fa8c3e",
+      "f0c54c703b1084db2150fac6999b0fa2936ecc5ffc8cdc047efbf52aff963f4d": "9a67e2d344b1132a183881c267463078b220ed21",
+      "196ec687814c32bbc16ebbb0ffe4717aa8ce16e764eec0788339b0319b8d42a4": "a3c1e966943acbb70dd3071015e1390a334baf6d",
       "6588d252edde50d4e997227995a85f377d773536aafe33eba1be294ecc013789": "cdb09d3ffaa867ff9e7387cf1934e9011565d546",
       "999eb2dd6f45fd6a208758eb2891937f74eddaf2d30dcc95340bd69e86390da8": "11ab10d51b27594f71336dd6d83ef30cd2742e6e",
       "1cd58a73f74f220aae72a6db9dd6956bd14c8fe08154745ebc7b08e9e5e0705b": "17997863696749e6ff07e0f4659631e3c9e0ef2f",
@@ -143594,6 +143734,7 @@
       "331f64cf5d1bd1bafd28aa527f753bd20bb42c0d7692c335ac5498c296aeb4c2": "52d1bbeed17f2a2240cb38249dba3663ad0b8a1f",
       "df45f0e82a2a96a8bddb6af408284f6d38160aaa100895e722e9f4bbe32f9e5b": "17c354249ddbfaf20b570d3c5e33b693e36646aa",
       "2010e843a290cd70d0936baa2e647d93a455f2c016dfa49d3a806b1d450b71cb": "dbda9a9fd882af929b17cd2de1a975e7f1b93361",
+      "7abf93ecf0fc325865e6564c9795b6d1effb8d5814b09739b81820ca771477f9": "b2fc3bb96c0c4d315926eb7bd705441c75d84ec2",
       "a1989da84ea4381d309e7e08783771f884e913236b9bcc71c3d649aacf76537a": "8e14e85c645187504ec9d162b3ea614a0c421d32",
       "fbb9620e01f4f728e5a8ba86544900978d7803f6a7d577d384e288dfed9a4907": "12a2e718f5f4acd69b6c33a45a4a940b1440a481",
       "68db230ab6261f452de8d59fb48110d5d012f5a448cbc77afc1ed487c9b039ce": "16e3c6698a10547c228b8ab474b817ff1d64c216",
