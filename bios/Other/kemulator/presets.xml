@@ -155,12 +155,6 @@
         <define name="FORCE_FULLSCREEN" value="false"/>
     </preset>
 
-    <preset name="320x480 (COMMON - full screen)" layout="Nokia">
-        <define name="SCREEN_WIDTH" value="320"/>
-        <define name="SCREEN_HEIGHT" value="480"/>
-        <define name="FORCE_FULLSCREEN" value="false"/>
-    </preset>
-
     <!-- Nokia N97 -->
     <preset name="360x640 (COMMON - full screen)" layout="Nokia">
         <define name="SCREEN_WIDTH" value="360"/>

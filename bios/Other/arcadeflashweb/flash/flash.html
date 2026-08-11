@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<!-- By Yohan DAUPHIN - AureyoBoss -->
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>ArcadeFlashWeb</title>
+		
+<style type="text/css" media="screen, print">
+	#bg {
+		position: fixed; 
+		top: -50%; 
+		left: -50%; 
+		width: 200%; 
+		height: 200%;
+		z-index: -100
+	}
+	
+	#bg img {
+		position: absolute; 
+		top: 0; 
+		left: 0; 
+		right: 0; 
+		bottom: 0; 
+		margin: auto; 
+		min-width: 50%;
+		min-height: 50%;
+	}
+
+	#games {
+		margin: auto;
+		display: block;
+	}
+</style>
+
+<script type="text/javascript" src="swfobject/swfobject.js"></script>
+
+<script type="text/javascript">
+
+	window.alert = function() {};
+	
+	var a = window.location.toString();
+	var lesVariablesDuJeu = a.split('=');
+
+	var jeu = lesVariablesDuJeu[1]; //Adresse du jeu
+
+	var wEcran = window.innerWidth - 90;//- 40;
+	var hEcran = window.innerHeight - 90;//- 40;
+	
+	var widthJeu;
+	var heightJeu;
+	
+	if (lesVariablesDuJeu[2] == undefined || lesVariablesDuJeu[3] == undefined || lesVariablesDuJeu[2].length === 0 || lesVariablesDuJeu[3].length === 0) {
+		widthJeu = "";
+		heightJeu = "";
+	} else {
+		widthJeu = lesVariablesDuJeu[2];
+		heightJeu = lesVariablesDuJeu[3];
+	}
+	
+	var ratioJeu;
+	var ratioEcranDispo = wEcran / hEcran;
+	var ratioACorriger;
+
+	if (widthJeu.length > 0 && heightJeu.length > 0) {
+		ratioJeu = lesVariablesDuJeu[2]/lesVariablesDuJeu[3];
+	}
+
+	var widthPlay;
+	var heightPlay;
+
+	if (widthJeu.length > 0 && heightJeu.length > 0) {
+		if (ratioJeu > ratioEcranDispo) {
+			ratioACorriger = wEcran / ratioJeu;
+			
+			widthPlay = ratioACorriger * ratioJeu;
+			heightPlay = ratioACorriger;
+		} else {
+			widthPlay = hEcran * ratioJeu;
+			heightPlay = hEcran;
+		}
+	
+	} else {
+		widthPlay = hEcran;
+		heightPlay = hEcran;
+	}
+	
+	console.log("ENVOYER DONNEES VERS QTQUICK");
+
+	var params = {
+		scale: "exactfit",
+		wmode: "direct",
+		quality: "high",
+		allowfullscreen: "true",
+		allowscriptaccess: "never",
+		swliveconnect: "true",
+		menu: "true"
+	};
+
+	swfobject.embedSWF(jeu, "games", widthPlay, heightPlay, "32.0.0", false, false, params);
+	
+</script>
+
+</head>
+
+<body bgcolor="#000000">
+
+<div id="bg"><img src="images/background.jpg" alt=""></div>
+
+<div style = "display:flex; position:absolute; top:0; bottom:0; right:0; left:0;">
+	<div id="games"></div>
+</div>
+
+</body>
+</html>
