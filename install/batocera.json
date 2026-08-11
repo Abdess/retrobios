@@ -5,7 +5,7 @@
   "platform": "batocera",
   "display_name": "Batocera",
   "version": "1.0",
-  "generated": "2026-08-11T03:50:34Z",
+  "generated": "2026-08-11T04:09:02Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -237,8 +237,8 @@
       }
     }
   ],
-  "total_files": 1692,
-  "total_size": 2907106176,
+  "total_files": 1693,
+  "total_size": 2907171712,
   "total_omitted": 23,
   "omitted_files": [
     {
@@ -6461,6 +6461,16 @@
       "sha256": "c15d3d6732399a879bb6de5ae2fcb9aadfd64da86d95652ced9ad96a2ae8e692",
       "size": 16384,
       "repo_path": "bios/Thomson/MO5/mo5-v1.1.rom",
+      "cores": [
+        "clk"
+      ]
+    },
+    {
+      "dest": "Thomson/mo6-v1.rom",
+      "sha1": "3e5039120ae64fc71511bd5ab72b7ba83d8fb8f0",
+      "sha256": "0260b41a21339eec156a941f6b24826891060c8b6402fcb66a4004d49138d8db",
+      "size": 65536,
+      "repo_path": "bios/Other/Clock Signal/Thomson/mo6-v1.rom",
       "cores": [
         "clk"
       ]

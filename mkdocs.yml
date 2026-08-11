@@ -536,7 +536,7 @@ nav:
     - ArcadeFlashWeb: emulators/arcadeflashweb.md
     - Dolphin Launcher: emulators/dolphin_launcher.md
     - Parallel Launcher: emulators/parallel-launcher.md
-  - Other (38):
+  - Other (39):
     - ares: emulators/ares.md
     - Basilisk II: emulators/basiliskii.md
     - beebem: emulators/beebem.md
@@ -546,6 +546,7 @@ nav:
     - Clock Signal (CLK): emulators/clk.md
     - ColEm: emulators/colem.md
     - CPCemu: emulators/cpcemu.md
+    - CSpect: emulators/cspect.md
     - Demul: emulators/demul.md
     - DREAMM: emulators/dreamm.md
     - eka2l1: emulators/eka2l1.md
