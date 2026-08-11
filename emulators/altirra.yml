@@ -374,6 +374,36 @@ files:
     validation: [size, crc32]
     source_ref: "src/Altirra/source/firmwaredetect.cpp:61, src/Altirra/source/diskdrivefull.cpp:1165-1213"
 
+  - name: happy-810-prev7-4k.rom
+    description: "Happy 810 pre-v7 firmware, 4K original (serial $4490)"
+    system: atari-400-800
+    required: false
+    size: 4096
+    crc32: "942ec3d5"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/uifirmware.cpp:528"
+
+  - name: happy-810-prev7-4k-nonoriginal.rom
+    description: "Happy 810 pre-v7 firmware, 4K non-original (serial $1704)"
+    system: atari-400-800
+    required: false
+    size: 4096
+    crc32: "143b8538"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/uifirmware.cpp:528"
+
+  - name: happy-810-prev7-3k.rom
+    description: "Happy 810 pre-v7 firmware, functional 3K inside a 6K image (serial $4B9B)"
+    note: >
+      The image is 6144 bytes; Altirra identifies it by a checksum taken over
+      the functional 3K, which its firmware list reports as the size.
+    system: atari-400-800
+    required: false
+    size: 6144
+    crc32: "f81b69cb"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/uifirmware.cpp:528"
+
   - name: happy-810-v7-6k-modified.rom
     description: "Happy 810 firmware (v7, 6K functional ROM, modified)"
     system: atari-400-800

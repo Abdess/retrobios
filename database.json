@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-11T07:34:40Z",
-  "total_files": 8318,
-  "total_size": 10455706007,
+  "generated_at": "2026-08-11T07:40:19Z",
+  "total_files": 8321,
+  "total_size": 10455720343,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -47157,16 +47157,6 @@
       "crc32": "03930886",
       "adler32": "f470cb46"
     },
-    "5511027c61929346f944a0ea617d6f8499c26abf": {
-      "path": "bios/Other/altirra/810-archiver.rom",
-      "name": "810-archiver.rom",
-      "size": 4096,
-      "sha1": "5511027c61929346f944a0ea617d6f8499c26abf",
-      "md5": "db4c5412377190893630aa792b1165f0",
-      "sha256": "38cd1eee441d1ef6012b1ee03d12bedda81c65535609bc14d66fe0f5e03819d3",
-      "crc32": "7e53befa",
-      "adler32": "439478fd"
-    },
     "9e50acd10f164ee43d9eb3435fea1427f5cd773f": {
       "path": "bios/Other/altirra/810-turbo-1.2.rom",
       "name": "810-turbo-1.2.rom",
@@ -47248,8 +47238,8 @@
       "adler32": "46752076"
     },
     "a12c9e5e8702d34f09aba4af7840d24596efc279": {
-      "path": "bios/Other/altirra/atari-1030-download.rom",
-      "name": "atari-1030-download.rom",
+      "path": "bios/Other/altirra/atari-1030-external.rom",
+      "name": "atari-1030-external.rom",
       "size": 8192,
       "sha1": "a12c9e5e8702d34f09aba4af7840d24596efc279",
       "md5": "3d1189523b424f2e6862bea956f5dd7d",
@@ -47526,6 +47516,36 @@
       "sha256": "3f1ee820394765099096fd2d966df75ea598e7df8a42c40af2eb70e6b4fdf365",
       "crc32": "f76eae16",
       "adler32": "3aa2bd70"
+    },
+    "bbc107af2327142b80412e644339c4ad8fe00281": {
+      "path": "bios/Other/altirra/happy-810-prev7-3k.rom",
+      "name": "happy-810-prev7-3k.rom",
+      "size": 6144,
+      "sha1": "bbc107af2327142b80412e644339c4ad8fe00281",
+      "md5": "a1bbfca94e570660b1290e874544d7ac",
+      "sha256": "876e46f0159daa0bca3ca83ce9952ec22ad7961b6578542ea8656b5c8fd24aef",
+      "crc32": "f81b69cb",
+      "adler32": "1692c178"
+    },
+    "247b937eb81b333b5c2e74a6ebbc656b5feb5680": {
+      "path": "bios/Other/altirra/happy-810-prev7-4k-nonoriginal.rom",
+      "name": "happy-810-prev7-4k-nonoriginal.rom",
+      "size": 4096,
+      "sha1": "247b937eb81b333b5c2e74a6ebbc656b5feb5680",
+      "md5": "e484ce014eb48121929f68360c1ecb1d",
+      "sha256": "bba1db97c5ac02b1405c2e0ad86588fd4feacc1f933e3bc315624970d645a5fb",
+      "crc32": "143b8538",
+      "adler32": "31b8f903"
+    },
+    "9b93b771f5e0ca8c2632c5d6a46d2ec22047f47f": {
+      "path": "bios/Other/altirra/happy-810-prev7-4k.rom",
+      "name": "happy-810-prev7-4k.rom",
+      "size": 4096,
+      "sha1": "9b93b771f5e0ca8c2632c5d6a46d2ec22047f47f",
+      "md5": "eda4069bf4f8e9ac0ed4fd5e2dad2d2e",
+      "sha256": "0066c4f1a61aa3fb0ebcc983ca53b1fa3c1dc03011ae01ac4a087e1244a0921a",
+      "crc32": "942ec3d5",
+      "adler32": "a8070ca4"
     },
     "7eec7ab2ba1520c927fa36a114b6eed7e39b0c90": {
       "path": "bios/Other/altirra/happy-810-v7-6k-modified.rom",
@@ -47836,6 +47856,16 @@
       "sha256": "a695a234ffa63ab3efaf97b2ea203f22c5e3a06ec7fe0065b0b21476090be0aa",
       "crc32": "554a9067",
       "adler32": "0b494246"
+    },
+    "5511027c61929346f944a0ea617d6f8499c26abf": {
+      "path": "bios/Other/altirra/super-archiver.rom",
+      "name": "super-archiver.rom",
+      "size": 4096,
+      "sha1": "5511027c61929346f944a0ea617d6f8499c26abf",
+      "md5": "db4c5412377190893630aa792b1165f0",
+      "sha256": "38cd1eee441d1ef6012b1ee03d12bedda81c65535609bc14d66fe0f5e03819d3",
+      "crc32": "7e53befa",
+      "adler32": "439478fd"
     },
     "e0800bbd1ca917ade86c880fc6444a17ce84255e": {
       "path": "bios/Other/altirra/toms-1050.rom",
@@ -92649,7 +92679,6 @@
       "267b03813bee0472f3a54b7ab3910b5e": "2034dc5e09f4adce600bd2c0de0bf539855fbf39",
       "154a9e2f41df9252e4a7c5f3a576fe86": "9d180ddd5273764033b3c6822b00753d1f8b093b",
       "73b8aadcd094f455612257ac4ef2e0ae": "f4dd091a2e6ec46d986a28090024aa698afa20bc",
-      "db4c5412377190893630aa792b1165f0": "5511027c61929346f944a0ea617d6f8499c26abf",
       "0258c5ef008195ceca59b18a6dfd8f07": "9e50acd10f164ee43d9eb3435fea1427f5cd773f",
       "15b3303e22c3460e8e23c55524ec85f6": "9ac3be202a83af0a75285a576951d2eef7e02037",
       "0d35d49b1de81ad096d9c79334138f35": "b90150f34a3a1b70e69388d2060afe75a95aeba9",
@@ -92686,6 +92715,9 @@
       "c04830006203beaa1a8f2feb97394ae0": "6a3be13b82ce55c0415d5375a43351160e30d282",
       "0cc5e137f9e5bca81de6d15f34777325": "b1a3c80ad579d37e68a04e90a7a41fa0ffffb272",
       "85acbb5bcfb3f4cbad765373df5eeb1e": "79fa01001d8367c83d9d10ceb762dba23775f5b3",
+      "a1bbfca94e570660b1290e874544d7ac": "bbc107af2327142b80412e644339c4ad8fe00281",
+      "e484ce014eb48121929f68360c1ecb1d": "247b937eb81b333b5c2e74a6ebbc656b5feb5680",
+      "eda4069bf4f8e9ac0ed4fd5e2dad2d2e": "9b93b771f5e0ca8c2632c5d6a46d2ec22047f47f",
       "4255eceaaa4e51a5ecf5ec078ae213e7": "7eec7ab2ba1520c927fa36a114b6eed7e39b0c90",
       "fd7edc1f7070d7664bffb4c0211ede17": "44161e98af1c782d3ae8d8d504fd3693bb83226d",
       "552e91f6595dcaa91afd69f6bbf1db9c": "d9460db6fad702bb72804391aee8c344df852954",
@@ -92717,6 +92749,7 @@
       "b8bda5b6272b138476aad5cc6c4b8a08": "b5f3da13a71e811f46c979ecac8b98fd470478d6",
       "7c4cc9682b070896cfac1c606886fa27": "de94f93478c19ee1ef900325a9152f5c420aa2a3",
       "94b62feb3fb7b3bbc0b9da88b28849eb": "f71a256850d9b511ca80fe753aee377505b01c34",
+      "db4c5412377190893630aa792b1165f0": "5511027c61929346f944a0ea617d6f8499c26abf",
       "b656ed64424c9fdee3e4bba28d966055": "e0800bbd1ca917ade86c880fc6444a17ce84255e",
       "1b1dc107383174fc08efe7dd1b818435": "2172c75384153d2cffe52597ea7c1d89f57f0d28",
       "5a56c5737c19fe768e83dc4647c5cb84": "3c08a1ba8e3525337b6971a9bbcf4b56d1f2e804",
@@ -109150,9 +109183,6 @@
       "1450xld-tong-disk-controller.rom": [
         "f4dd091a2e6ec46d986a28090024aa698afa20bc"
       ],
-      "810-archiver.rom": [
-        "5511027c61929346f944a0ea617d6f8499c26abf"
-      ],
       "810-turbo-1.2.rom": [
         "9e50acd10f164ee43d9eb3435fea1427f5cd773f"
       ],
@@ -109177,7 +109207,7 @@
       "atari-1029-english.rom": [
         "fea52afd6d832232c8733de3ad6f8209f27d1bb1"
       ],
-      "atari-1030-download.rom": [
+      "atari-1030-external.rom": [
         "a12c9e5e8702d34f09aba4af7840d24596efc279"
       ],
       "atari-1030-internal.rom": [
@@ -109260,6 +109290,15 @@
       ],
       "happy-1050-rev-2.rom": [
         "79fa01001d8367c83d9d10ceb762dba23775f5b3"
+      ],
+      "happy-810-prev7-3k.rom": [
+        "bbc107af2327142b80412e644339c4ad8fe00281"
+      ],
+      "happy-810-prev7-4k-nonoriginal.rom": [
+        "247b937eb81b333b5c2e74a6ebbc656b5feb5680"
+      ],
+      "happy-810-prev7-4k.rom": [
+        "9b93b771f5e0ca8c2632c5d6a46d2ec22047f47f"
       ],
       "happy-810-v7-6k-modified.rom": [
         "7eec7ab2ba1520c927fa36a114b6eed7e39b0c90"
@@ -109353,6 +109392,9 @@
       ],
       "speedy-xf-1.8.rom": [
         "f71a256850d9b511ca80fe753aee377505b01c34"
+      ],
+      "super-archiver.rom": [
+        "5511027c61929346f944a0ea617d6f8499c26abf"
       ],
       "toms-1050.rom": [
         "e0800bbd1ca917ade86c880fc6444a17ce84255e"
@@ -120225,12 +120267,6 @@
       "squirreljme-0.3.0-test.jar": [
         "600cf0440594b0c69339ba4b626a47288b342d77"
       ],
-      "atari-1030-external.rom": [
-        "a12c9e5e8702d34f09aba4af7840d24596efc279"
-      ],
-      "super-archiver.rom": [
-        "5511027c61929346f944a0ea617d6f8499c26abf"
-      ],
       "ANFS425.rom": [
         "14f75d36ffe9af14aaac42df55b4fe3729ba75cf"
       ],
@@ -127801,7 +127837,6 @@
       "e8f9c8a7": "2034dc5e09f4adce600bd2c0de0bf539855fbf39",
       "4bb7fa3a": "9d180ddd5273764033b3c6822b00753d1f8b093b",
       "03930886": "f4dd091a2e6ec46d986a28090024aa698afa20bc",
-      "7e53befa": "5511027c61929346f944a0ea617d6f8499c26abf",
       "0126a511": "9e50acd10f164ee43d9eb3435fea1427f5cd773f",
       "7a302825": "9ac3be202a83af0a75285a576951d2eef7e02037",
       "a78d7e0a": "b90150f34a3a1b70e69388d2060afe75a95aeba9",
@@ -127838,6 +127873,9 @@
       "769cc316": "6a3be13b82ce55c0415d5375a43351160e30d282",
       "19b6bfe5": "b1a3c80ad579d37e68a04e90a7a41fa0ffffb272",
       "f76eae16": "79fa01001d8367c83d9d10ceb762dba23775f5b3",
+      "f81b69cb": "bbc107af2327142b80412e644339c4ad8fe00281",
+      "143b8538": "247b937eb81b333b5c2e74a6ebbc656b5feb5680",
+      "942ec3d5": "9b93b771f5e0ca8c2632c5d6a46d2ec22047f47f",
       "371f6973": "7eec7ab2ba1520c927fa36a114b6eed7e39b0c90",
       "9cc7a207": "44161e98af1c782d3ae8d8d504fd3693bb83226d",
       "982d825d": "d9460db6fad702bb72804391aee8c344df852954",
@@ -127869,6 +127907,7 @@
       "6cb4457d": "b5f3da13a71e811f46c979ecac8b98fd470478d6",
       "597eb2e4": "de94f93478c19ee1ef900325a9152f5c420aa2a3",
       "554a9067": "f71a256850d9b511ca80fe753aee377505b01c34",
+      "7e53befa": "5511027c61929346f944a0ea617d6f8499c26abf",
       "39de3211": "e0800bbd1ca917ade86c880fc6444a17ce84255e",
       "3f2be0df": "2172c75384153d2cffe52597ea7c1d89f57f0d28",
       "f097da31": "3c08a1ba8e3525337b6971a9bbcf4b56d1f2e804",
@@ -136121,7 +136160,6 @@
       "35321bbfeb41bd42b57d2543f6f3656376a5db0352743b14a52b99f3b1445e3d": "2034dc5e09f4adce600bd2c0de0bf539855fbf39",
       "dce4487bef4e573168f72d4f91d0b1fbbe9b30ff50e561378ff07a7167fca709": "9d180ddd5273764033b3c6822b00753d1f8b093b",
       "d35d5dc749c5c2e3fec7c64451590290cfd239408b3110035b960c7ea1b99ee4": "f4dd091a2e6ec46d986a28090024aa698afa20bc",
-      "38cd1eee441d1ef6012b1ee03d12bedda81c65535609bc14d66fe0f5e03819d3": "5511027c61929346f944a0ea617d6f8499c26abf",
       "960f5ce6391ae36fd3eabe741f6d2d3dabfe381ed3e0e572706accba7ea02d02": "9e50acd10f164ee43d9eb3435fea1427f5cd773f",
       "1c18ca35dc4faffd30e26e42a209c62bbcf976123fafafa8b163aa819763ce45": "9ac3be202a83af0a75285a576951d2eef7e02037",
       "718ba89eb1dfba058e782229433cc149dcc12d3b6f0afca2f5b4dc3f176ed9c6": "b90150f34a3a1b70e69388d2060afe75a95aeba9",
@@ -136158,6 +136196,9 @@
       "7c855bb453264d96ecf9cdc7391d4a5045f480530ed1e66719797e04e039b5f6": "6a3be13b82ce55c0415d5375a43351160e30d282",
       "30cc689b34e547919bcc3fdc5742779f87a78ad813fc1873b806491492669e0b": "b1a3c80ad579d37e68a04e90a7a41fa0ffffb272",
       "3f1ee820394765099096fd2d966df75ea598e7df8a42c40af2eb70e6b4fdf365": "79fa01001d8367c83d9d10ceb762dba23775f5b3",
+      "876e46f0159daa0bca3ca83ce9952ec22ad7961b6578542ea8656b5c8fd24aef": "bbc107af2327142b80412e644339c4ad8fe00281",
+      "bba1db97c5ac02b1405c2e0ad86588fd4feacc1f933e3bc315624970d645a5fb": "247b937eb81b333b5c2e74a6ebbc656b5feb5680",
+      "0066c4f1a61aa3fb0ebcc983ca53b1fa3c1dc03011ae01ac4a087e1244a0921a": "9b93b771f5e0ca8c2632c5d6a46d2ec22047f47f",
       "a23c218c0b6d2a17681b593e756448809e054d902cf6071ddebd525ec98b9354": "7eec7ab2ba1520c927fa36a114b6eed7e39b0c90",
       "d5ee6485273daa814ff725500acf1a27b849ee883fbbbf3530875d977afd94f4": "44161e98af1c782d3ae8d8d504fd3693bb83226d",
       "8da74d2b4f7024d5d09335693e4f266266145aff58a7cb9fd7bc4766dde803d3": "d9460db6fad702bb72804391aee8c344df852954",
@@ -136189,6 +136230,7 @@
       "8d50c85ea28717423b3b1863dec01a2bb1e13363dd6b7522da4e3c4f66fe519c": "b5f3da13a71e811f46c979ecac8b98fd470478d6",
       "d605cbb88be18d97b9056a9a30a617f2e40f4c1fb1b867f591d382a3b35ce6e8": "de94f93478c19ee1ef900325a9152f5c420aa2a3",
       "a695a234ffa63ab3efaf97b2ea203f22c5e3a06ec7fe0065b0b21476090be0aa": "f71a256850d9b511ca80fe753aee377505b01c34",
+      "38cd1eee441d1ef6012b1ee03d12bedda81c65535609bc14d66fe0f5e03819d3": "5511027c61929346f944a0ea617d6f8499c26abf",
       "b4abd991045cf13ffd3f45bfef1466405c5811779ba606ba015c0e871fc186c9": "e0800bbd1ca917ade86c880fc6444a17ce84255e",
       "784c2da11821a06c460de7d8d4776c996dd66399da98c3bbce247c1df391bad8": "2172c75384153d2cffe52597ea7c1d89f57f0d28",
       "294ddc1321c0c5c1fa4bc5074f70d021a7e6ac8714f7441aa485cb61e31224b6": "3c08a1ba8e3525337b6971a9bbcf4b56d1f2e804",
