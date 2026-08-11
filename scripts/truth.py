@@ -422,6 +422,49 @@ def generate_platform_truth(
 # Platform truth diffing
 
 
+def _match_renames(
+    unmatched_truth: list[dict], unmatched_scraped: dict
+) -> tuple[set[str], set[str]]:
+    """Pair files a platform renamed with the truth entry they came from.
+
+    A platform is free to call a file whatever it likes -- Batocera ships
+    the same ROM as ROM1 -- so a name that matches nothing is not yet a
+    gap. When an unmatched file on either side carries the same hash, it
+    is one file under two names, and counting it as both missing and extra
+    would report a gap that does not exist.
+
+    Returns the truth names and scraped keys that pair up.
+    """
+    # Hash-based fallback: detect platform renames (e.g. Batocera ROM → ROM1)
+    # If an unmatched scraped file shares a hash with an unmatched truth file,
+    # it's the same file under a different name — a platform rename, not a gap.
+    rename_matched_truth: set[str] = set()
+    rename_matched_scraped: set[str] = set()
+
+    if unmatched_truth and unmatched_scraped:
+        # Build hash → truth file index for unmatched truth files
+        truth_hash_index: dict[str, dict] = {}
+        for fe in unmatched_truth:
+            for h in ("sha1", "md5", "crc32"):
+                val = fe.get(h)
+                if val and isinstance(val, str):
+                    truth_hash_index[val.lower()] = fe
+
+        for s_key, s_entry in unmatched_scraped.items():
+            for h in ("sha1", "md5", "crc32"):
+                s_val = s_entry.get(h)
+                if not s_val or not isinstance(s_val, str):
+                    continue
+                t_entry = truth_hash_index.get(s_val.lower())
+                if t_entry is not None:
+                    # Rename detected — count as matched
+                    rename_matched_truth.add(t_entry["name"].lower())
+                    rename_matched_scraped.add(s_key)
+                    break
+
+    return rename_matched_truth, rename_matched_scraped
+
+
 def _diff_system(truth_sys: dict, scraped_sys: dict) -> dict:
     """Compare files between truth and scraped for a single system."""
     # Build truth index: name.lower() -> entry, alias.lower() -> entry
@@ -498,32 +541,9 @@ def _diff_system(truth_sys: dict, scraped_sys: dict) -> dict:
         if s_key not in truth_index
     }
 
-    # Hash-based fallback: detect platform renames (e.g. Batocera ROM → ROM1)
-    # If an unmatched scraped file shares a hash with an unmatched truth file,
-    # it's the same file under a different name — a platform rename, not a gap.
-    rename_matched_truth: set[str] = set()
-    rename_matched_scraped: set[str] = set()
-
-    if unmatched_truth and unmatched_scraped:
-        # Build hash → truth file index for unmatched truth files
-        truth_hash_index: dict[str, dict] = {}
-        for fe in unmatched_truth:
-            for h in ("sha1", "md5", "crc32"):
-                val = fe.get(h)
-                if val and isinstance(val, str):
-                    truth_hash_index[val.lower()] = fe
-
-        for s_key, s_entry in unmatched_scraped.items():
-            for h in ("sha1", "md5", "crc32"):
-                s_val = s_entry.get(h)
-                if not s_val or not isinstance(s_val, str):
-                    continue
-                t_entry = truth_hash_index.get(s_val.lower())
-                if t_entry is not None:
-                    # Rename detected — count as matched
-                    rename_matched_truth.add(t_entry["name"].lower())
-                    rename_matched_scraped.add(s_key)
-                    break
+    rename_matched_truth, rename_matched_scraped = _match_renames(
+        unmatched_truth, unmatched_scraped
+    )
 
     # Truth files not matched (by name, alias, or hash) -> missing
     for fe in unmatched_truth:
