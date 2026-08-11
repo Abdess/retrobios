@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-11T17:10:25Z",
-  "total_files": 8647,
-  "total_size": 11131653421,
+  "generated_at": "2026-08-11T17:14:33Z",
+  "total_files": 8655,
+  "total_size": 11147355425,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -49657,6 +49657,86 @@
       "crc32": "35ee85c3",
       "adler32": "fa9adec5"
     },
+    "9a0f96436ad7f0d6f3ee8338b5eb7cef23d0a46a": {
+      "path": "bios/Other/drastic/config/LC_default.dat",
+      "name": "LC_default.dat",
+      "size": 76,
+      "sha1": "9a0f96436ad7f0d6f3ee8338b5eb7cef23d0a46a",
+      "md5": "59df71b702a2caeb36cec44bccf7c8ed",
+      "sha256": "785fba30ffc75a305f846f39f088c116f6874ced1f83a57b20df16209da4dad9",
+      "crc32": "a93633b9",
+      "adler32": "aae60be7"
+    },
+    "bb2e4f588db69ec6d6ccf4fd6fe20a5fbbe9c5b0": {
+      "path": "bios/Other/drastic/drastic_bios.zip",
+      "name": "drastic_bios.zip",
+      "size": 15583,
+      "sha1": "bb2e4f588db69ec6d6ccf4fd6fe20a5fbbe9c5b0",
+      "md5": "23f62c2d4559862d77fe933ef45b8b64",
+      "sha256": "275c66cb423c06a9702dd403c6cd1abb32897934c1f171b65b144d7f626a5d91",
+      "crc32": "f2c14f44",
+      "adler32": "c4f240f5"
+    },
+    "13c0866a8fb945e3ff8db1bb06f7f923356f7c86": {
+      "path": "bios/Other/drastic/drastic_logo_0.raw",
+      "name": "drastic_logo_0.raw",
+      "size": 120000,
+      "sha1": "13c0866a8fb945e3ff8db1bb06f7f923356f7c86",
+      "md5": "4986e446825453695d2e0b22dca6affe",
+      "sha256": "b0dd0be2ae50cae4d2940d6bbdd4efdcf973c91a7bc1943970bb5ff6b860e2eb",
+      "crc32": "f8a6b1ab",
+      "adler32": "c1441fa8"
+    },
+    "a5e63c52cda737f224e2772dcd91dfe5c06e9742": {
+      "path": "bios/Other/drastic/drastic_logo_1.raw",
+      "name": "drastic_logo_1.raw",
+      "size": 120000,
+      "sha1": "a5e63c52cda737f224e2772dcd91dfe5c06e9742",
+      "md5": "f590deaba5027125ff1fcfd8f0922503",
+      "sha256": "3dfe0b34d12199fa7893587bf2a1a675e1f545b5d8ca040d13c4bc452e4492c7",
+      "crc32": "dc122103",
+      "adler32": "e25158e8"
+    },
+    "b0ae5480c61bdb701b9a444a1a81c4970db06d77": {
+      "path": "bios/Other/drastic/game_database.xml",
+      "name": "game_database.xml",
+      "size": 1686069,
+      "sha1": "b0ae5480c61bdb701b9a444a1a81c4970db06d77",
+      "md5": "95b049b47087ae40c4ee8ef5d726c3da",
+      "sha256": "73b3337de02666035cf88e5d2021341c460110cd61686b126fd0ae6ad0def658",
+      "crc32": "ae7c6d9f",
+      "adler32": "c7818a54"
+    },
+    "31ae916c85d012582c7cdf47de6943ac6778253b": {
+      "path": "bios/Other/drastic/system/drastic_bios_arm7.bin",
+      "name": "drastic_bios_arm7.bin",
+      "size": 16384,
+      "sha1": "31ae916c85d012582c7cdf47de6943ac6778253b",
+      "md5": "c259d5dd2d1a8e1f58eaa26c08efae45",
+      "sha256": "6ad5072c3920fd6c8eba2c49d2dd058c296564a11d6013807124a919cf0d66e6",
+      "crc32": "cd63893f",
+      "adler32": "5d402910"
+    },
+    "4dc29a1560e1cbd7afef1998f7a6c25c5db1cc3a": {
+      "path": "bios/Other/drastic/system/drastic_bios_arm9.bin",
+      "name": "drastic_bios_arm9.bin",
+      "size": 4096,
+      "sha1": "4dc29a1560e1cbd7afef1998f7a6c25c5db1cc3a",
+      "md5": "5f34f9f6108f8d57fc26789b7a7ecf82",
+      "sha256": "0a4e88c5dfd20ce669b8df45d009974f23fe7cb9b1f2148dbf30b6445eca9bc5",
+      "crc32": "f307d77a",
+      "adler32": "456aeaf5"
+    },
+    "bcc9fd3be24170eace44f3816ed52f128cb2248c": {
+      "path": "bios/Other/drastic/usrcheat.dat",
+      "name": "usrcheat.dat",
+      "size": 13739796,
+      "sha1": "bcc9fd3be24170eace44f3816ed52f128cb2248c",
+      "md5": "bae4cb62265d0212911e1c6fcd23de78",
+      "sha256": "a69264226312f584caf43343d27f0d38213d4fb01758ca01880f509c98fbeb29",
+      "crc32": "e9021e6f",
+      "adler32": "79add7e8"
+    },
     "3c6b523e5432a892a0c284d9ba2593919b0173b7": {
       "path": "bios/Other/emucorev/psvita_games.db",
       "name": "psvita_games.db",
@@ -96196,6 +96276,14 @@
       "5b5dd2bc68764c7204dc4fe69118f2a4": "2a15dfa682df1ff841e2092348aa6a2460e40810",
       "4e10a27e6b3ceac0b3e2df4fadc48bb4": "723b0c61428321b0aca4c43fcd91406807d4f815",
       "77b5b2d0c1c3a4200a9cda047f74f957": "fefcb49cb13ea191d2c87b406c141a957020432c",
+      "59df71b702a2caeb36cec44bccf7c8ed": "9a0f96436ad7f0d6f3ee8338b5eb7cef23d0a46a",
+      "23f62c2d4559862d77fe933ef45b8b64": "bb2e4f588db69ec6d6ccf4fd6fe20a5fbbe9c5b0",
+      "4986e446825453695d2e0b22dca6affe": "13c0866a8fb945e3ff8db1bb06f7f923356f7c86",
+      "f590deaba5027125ff1fcfd8f0922503": "a5e63c52cda737f224e2772dcd91dfe5c06e9742",
+      "95b049b47087ae40c4ee8ef5d726c3da": "b0ae5480c61bdb701b9a444a1a81c4970db06d77",
+      "c259d5dd2d1a8e1f58eaa26c08efae45": "31ae916c85d012582c7cdf47de6943ac6778253b",
+      "5f34f9f6108f8d57fc26789b7a7ecf82": "4dc29a1560e1cbd7afef1998f7a6c25c5db1cc3a",
+      "bae4cb62265d0212911e1c6fcd23de78": "bcc9fd3be24170eace44f3816ed52f128cb2248c",
       "229cf38617d6669286b5d1a48906aa53": "3c6b523e5432a892a0c284d9ba2593919b0173b7",
       "4b945ee2b52c49c397d368dc21fa42dc": "0e2ee74d1f9ebc3a6faf9dbaebbacc2ff053f4df",
       "22e156b807f3147bb7dcafadc52ab721": "4d0f8dfc5980195ee905fa39e125cd418b8a9599",
@@ -113509,6 +113597,30 @@
       ],
       "wqy_12pt.bdf": [
         "fefcb49cb13ea191d2c87b406c141a957020432c"
+      ],
+      "LC_default.dat": [
+        "9a0f96436ad7f0d6f3ee8338b5eb7cef23d0a46a"
+      ],
+      "drastic_bios.zip": [
+        "bb2e4f588db69ec6d6ccf4fd6fe20a5fbbe9c5b0"
+      ],
+      "drastic_logo_0.raw": [
+        "13c0866a8fb945e3ff8db1bb06f7f923356f7c86"
+      ],
+      "drastic_logo_1.raw": [
+        "a5e63c52cda737f224e2772dcd91dfe5c06e9742"
+      ],
+      "game_database.xml": [
+        "b0ae5480c61bdb701b9a444a1a81c4970db06d77"
+      ],
+      "drastic_bios_arm7.bin": [
+        "31ae916c85d012582c7cdf47de6943ac6778253b"
+      ],
+      "drastic_bios_arm9.bin": [
+        "4dc29a1560e1cbd7afef1998f7a6c25c5db1cc3a"
+      ],
+      "usrcheat.dat": [
+        "bcc9fd3be24170eace44f3816ed52f128cb2248c"
       ],
       "psvita_games.db": [
         "3c6b523e5432a892a0c284d9ba2593919b0173b7"
@@ -132700,6 +132812,14 @@
       "b7b59533": "2a15dfa682df1ff841e2092348aa6a2460e40810",
       "0a6dccec": "723b0c61428321b0aca4c43fcd91406807d4f815",
       "35ee85c3": "fefcb49cb13ea191d2c87b406c141a957020432c",
+      "a93633b9": "9a0f96436ad7f0d6f3ee8338b5eb7cef23d0a46a",
+      "f2c14f44": "bb2e4f588db69ec6d6ccf4fd6fe20a5fbbe9c5b0",
+      "f8a6b1ab": "13c0866a8fb945e3ff8db1bb06f7f923356f7c86",
+      "dc122103": "a5e63c52cda737f224e2772dcd91dfe5c06e9742",
+      "ae7c6d9f": "b0ae5480c61bdb701b9a444a1a81c4970db06d77",
+      "cd63893f": "31ae916c85d012582c7cdf47de6943ac6778253b",
+      "f307d77a": "4dc29a1560e1cbd7afef1998f7a6c25c5db1cc3a",
+      "e9021e6f": "bcc9fd3be24170eace44f3816ed52f128cb2248c",
       "69787db6": "3c6b523e5432a892a0c284d9ba2593919b0173b7",
       "c9a52a37": "0e2ee74d1f9ebc3a6faf9dbaebbacc2ff053f4df",
       "bf24835a": "4d0f8dfc5980195ee905fa39e125cd418b8a9599",
@@ -141349,6 +141469,14 @@
       "890991d60c3aeea43058d0c29dc72fcc428d2670e38c1d94d5d1bfae03437a8f": "2a15dfa682df1ff841e2092348aa6a2460e40810",
       "af64766bf3df3336c76b04f2d07749812373790b9f20ed59c0faf7cc8a5241ad": "723b0c61428321b0aca4c43fcd91406807d4f815",
       "ead9acd03c8d749ddde899afed49ba4b50e6ca14585a3091bc23a7074902cfe0": "fefcb49cb13ea191d2c87b406c141a957020432c",
+      "785fba30ffc75a305f846f39f088c116f6874ced1f83a57b20df16209da4dad9": "9a0f96436ad7f0d6f3ee8338b5eb7cef23d0a46a",
+      "275c66cb423c06a9702dd403c6cd1abb32897934c1f171b65b144d7f626a5d91": "bb2e4f588db69ec6d6ccf4fd6fe20a5fbbe9c5b0",
+      "b0dd0be2ae50cae4d2940d6bbdd4efdcf973c91a7bc1943970bb5ff6b860e2eb": "13c0866a8fb945e3ff8db1bb06f7f923356f7c86",
+      "3dfe0b34d12199fa7893587bf2a1a675e1f545b5d8ca040d13c4bc452e4492c7": "a5e63c52cda737f224e2772dcd91dfe5c06e9742",
+      "73b3337de02666035cf88e5d2021341c460110cd61686b126fd0ae6ad0def658": "b0ae5480c61bdb701b9a444a1a81c4970db06d77",
+      "6ad5072c3920fd6c8eba2c49d2dd058c296564a11d6013807124a919cf0d66e6": "31ae916c85d012582c7cdf47de6943ac6778253b",
+      "0a4e88c5dfd20ce669b8df45d009974f23fe7cb9b1f2148dbf30b6445eca9bc5": "4dc29a1560e1cbd7afef1998f7a6c25c5db1cc3a",
+      "a69264226312f584caf43343d27f0d38213d4fb01758ca01880f509c98fbeb29": "bcc9fd3be24170eace44f3816ed52f128cb2248c",
       "ca56a424e87cf4c257dcd3810567e62cb10767096b6a2378e69b07040c5fbc13": "3c6b523e5432a892a0c284d9ba2593919b0173b7",
       "86883a0199a129b900f4a5c7ade6245b7e9d1399ec3c08d1fbf1838c01722e8e": "0e2ee74d1f9ebc3a6faf9dbaebbacc2ff053f4df",
       "bdff3e5659d67e67def05b33f749683b9376ae819d65d3dd62ac4640b3aaef48": "4d0f8dfc5980195ee905fa39e125cd418b8a9599",
@@ -151384,6 +151512,15 @@
       ],
       "EmuMediaBoard/fpr21042_m29w160et.bin": [
         "a13cf9c5cdfe8605d82150b7573652f419b30197"
+      ],
+      "config/LC_default.dat": [
+        "9a0f96436ad7f0d6f3ee8338b5eb7cef23d0a46a"
+      ],
+      "system/drastic_bios_arm7.bin": [
+        "31ae916c85d012582c7cdf47de6943ac6778253b"
+      ],
+      "system/drastic_bios_arm9.bin": [
+        "4dc29a1560e1cbd7afef1998f7a6c25c5db1cc3a"
       ],
       "resources/shaders/opengl/cas.glsl": [
         "cb0d4276f9947762af0841a8af75efa6cbe9109c"
