@@ -396,13 +396,10 @@
           "load_from": {
             "type": "string"
           },
-          "search_rank": {
-            "description": "Position in an ordered search list the code walks, 1 = tried first. Only set it when the source declares such a list.",
-            "type": "integer",
-            "minimum": 1
-          },
           "priority": {
-            "type": "integer"
+            "description": "Preference order among the BIOS a system accepts, lowest first. DuckStation's FindBIOSImageInDirectory keeps the image whose priority is lower; a search list the code walks in order maps onto it as 1, 2, 3.",
+            "type": "integer",
+            "minimum": 0
           },
           "region_check": {
             "type": "boolean"

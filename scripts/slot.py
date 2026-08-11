@@ -5,20 +5,22 @@ filtering narrows a pack to one territory; a system can still ship three US
 PlayStation BIOS that differ only by revision, which is what leaves the choice
 open in the frontend.
 
-The winner is only ever taken from an ordered search list the core's code
-actually walks, recorded as `search_rank:` on the file entry: rank 1 is tried
-first, and the first file found wins. PicoDrive's biosfiles_us/eu/jp arrays are
-the shape this describes.
+The winner is only ever taken from the preference order the core's own code
+applies, recorded as `priority:` on the file entry, lowest first. DuckStation
+keeps the image whose priority is lower (bios.cpp, FindBIOSImageInDirectory)
+and its table de-prioritizes by raising the number: the buggy launch console
+sits at 50 and PS2 images at 100, while scph5501 sits at 5. A core that walks
+an ordered search list, as PicoDrive does with biosfiles_us/eu/jp, maps onto
+the same field as 1, 2, 3.
 
-`priority:` is deliberately not read. Its meaning is disputed: the field
-reference calls it a tie-breaker where higher wins, while DuckStation's own
-selection compares the numbers the other way, and its values rank PS2 images
-above the plain PlayStation BIOS. Selecting on it dropped scph5501, the very
-file most US setups load.
+Every candidate of a group must carry one. A set where some members are
+unranked cannot be ordered, and dropping the unranked ones would discard
+exactly the file the core may load. Where the order is not declared the group
+is reported undecidable and every candidate is kept: picking one would be the
+arbitrary selection this exists to remove.
 
-Where no ordered list is declared, the group is reported undecidable and every
-candidate is kept: picking one would be the arbitrary selection this exists to
-remove, and it could discard the file the core would have loaded.
+The scale is only meaningful inside one system's candidate set. Profiles that
+cover the same system must rank on the same scale.
 """
 
 from __future__ import annotations
@@ -41,9 +43,10 @@ def build_slot_index(profiles: dict) -> dict[str, dict]:
             path = f.get("path") or ""
             for key in {path, name} - {""}:
                 entry = index.setdefault(
-                    key, {"rank": None, "emulators": []}
+                    key, {"rank": None, "regions": set(), "emulators": []}
                 )
-                rank = f.get("search_rank")
+                entry["regions"] |= {str(r) for r in (f.get("region") or [])}
+                rank = f.get("priority")
                 if rank is not None:
                     current = entry["rank"]
                     entry["rank"] = (
@@ -75,22 +78,29 @@ def resolve_slot_drops(
     """Destinations to skip, and the groups no declared order can decide.
 
     Returns (drops, undecidable). A group is decided only when every candidate
-    declares a search rank and exactly one holds the first rank; anything else
-    keeps every candidate.
+    declares a priority and exactly one holds the lowest; anything else keeps
+    every candidate.
     """
     keep: set[str] = set()
     drop: set[str] = set()
     undecidable: list[str] = []
 
+    # A slot is a system AND a declared region: the Japanese and American
+    # PlayStation BIOS are not alternatives to each other, and comparing their
+    # ranks across regions would pick one territory's file for another's.
+    tiers: dict[tuple[str, tuple[str, ...]], list[tuple[str, int | None]]] = {}
     for group_id, members in groups.items():
-        candidates: list[tuple[str, int | None]] = []
         for destination, name in members:
             entry = lookup_slot(index, destination, name)
             if entry is None:
                 keep.add(destination)
                 continue
-            candidates.append((destination, entry["rank"]))
+            tier = tuple(sorted(entry["regions"]))
+            tiers.setdefault((group_id, tier), []).append(
+                (destination, entry["rank"])
+            )
 
+    for (group_id, tier), candidates in tiers.items():
         if len(candidates) < 2:
             keep.update(dest for dest, _p in candidates)
             continue
@@ -99,14 +109,14 @@ def resolve_slot_drops(
         # unranked cannot be ordered, and dropping the unranked ones would
         # discard exactly the file the core may load.
         if any(p is None for _d, p in candidates):
-            undecidable.append(group_id)
+            undecidable.append(f"{group_id}|{','.join(tier)}" if tier else group_id)
             keep.update(dest for dest, _p in candidates)
             continue
 
         best = min(p for _d, p in candidates)
         winners = [dest for dest, p in candidates if p == best]
         if len(winners) != 1:
-            undecidable.append(group_id)
+            undecidable.append(f"{group_id}|{','.join(tier)}" if tier else group_id)
             keep.update(dest for dest, _p in candidates)
             continue
 

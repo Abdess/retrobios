@@ -361,7 +361,7 @@ which CI validates every profile against.
 | `region` | always a list of territory slugs from the schema enum (`[north-america]`, `[japan, asia-ntsc]`). The region the code selects the file **for**, never the region of the dump. See step 3b |
 | `region_check` | true if the core refuses to boot a game whose region does not match the BIOS |
 | `fast_boot` | BIOS generation label the core uses to decide whether fast boot is available |
-| `priority` | tie-breaker when several BIOS files satisfy the same slot, higher wins |
+| `priority` | preference order when several BIOS satisfy the same slot, **lowest wins**. DuckStation's `FindBIOSImageInDirectory` keeps the image whose priority is lower, and its table de-prioritizes by raising the number: the buggy launch console sits at 50 and PS2 images at 100, while `scph5501` sits at 5. A core that walks an ordered search list, as PicoDrive does with `biosfiles_us/eu/jp`, maps onto the same field as 1, 2, 3. Only set it from the source; `--one-per-slot` reads it |
 | `embedded` | true if the data is compiled into the binary and the external file is optional |
 | `bundled` | true if the file ships with the emulator rather than being user-provided |
 | `has_builtin` | true if the core falls back to a built-in copy when the file is absent |

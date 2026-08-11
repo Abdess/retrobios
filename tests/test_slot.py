@@ -21,10 +21,10 @@ class TestSlotIndex(unittest.TestCase):
             {
                 "picodrive": {
                     "files": [
-                        {"name": "us_scd2_9306.bin", "search_rank": 1},
-                        {"name": "SegaCDBIOS9303.bin", "search_rank": 2},
-                        {"name": "us_scd1_9210.bin", "search_rank": 3},
-                        {"name": "bios_CD_U.bin", "search_rank": 4},
+                        {"name": "us_scd2_9306.bin", "priority": 1},
+                        {"name": "SegaCDBIOS9303.bin", "priority": 2},
+                        {"name": "us_scd1_9210.bin", "priority": 3},
+                        {"name": "bios_CD_U.bin", "priority": 4},
                     ]
                 },
                 "duckstation": {
@@ -35,22 +35,22 @@ class TestSlotIndex(unittest.TestCase):
                 },
                 "launcher_profile": {
                     "type": "launcher",
-                    "files": [{"name": "ignored.bin", "search_rank": 1}],
+                    "files": [{"name": "ignored.bin", "priority": 1}],
                 },
                 "engine": {
                     "files": [
                         {"name": "assets.pk3", "category": "game_data",
-                         "search_rank": 1},
+                         "priority": 1},
                     ]
                 },
             }
         )
 
-    def test_search_rank_is_indexed(self):
+    def test_priority_is_indexed(self):
         self.assertEqual(self.index["us_scd2_9306.bin"]["rank"], 1)
 
-    def test_priority_is_not_read(self):
-        self.assertIsNone(self.index["scph5501.bin"]["rank"])
+    def test_duckstation_priorities_are_read(self):
+        self.assertEqual(self.index["scph5501.bin"]["rank"], 5)
 
     def test_launcher_profiles_are_skipped(self):
         self.assertNotIn("ignored.bin", self.index)
@@ -72,17 +72,17 @@ class TestResolveSlotDrops(unittest.TestCase):
             {
                 "picodrive": {
                     "files": [
-                        {"name": "a.bin", "search_rank": 1},
-                        {"name": "b.bin", "search_rank": 2},
-                        {"name": "c.bin", "search_rank": 3},
+                        {"name": "a.bin", "priority": 1},
+                        {"name": "b.bin", "priority": 2},
+                        {"name": "c.bin", "priority": 3},
                     ]
                 },
                 "other": {
                     "files": [
                         {"name": "x.bin"},
                         {"name": "y.bin"},
-                        {"name": "tie1.bin", "search_rank": 1},
-                        {"name": "tie2.bin", "search_rank": 1},
+                        {"name": "tie1.bin", "priority": 1},
+                        {"name": "tie2.bin", "priority": 1},
                     ]
                 },
             }
@@ -141,39 +141,73 @@ class TestResolveSlotDrops(unittest.TestCase):
 
 
 class TestRepoProfiles(unittest.TestCase):
-    def test_declared_ranks_are_positive_and_unique_per_group(self):
-        import collections
+    """Guards on the real profiles, not on synthetic fixtures."""
+
+    def setUp(self):
         import glob
 
         import yaml
 
-        paths = sorted(
+        self.paths = sorted(
             glob.glob(
                 os.path.join(os.path.dirname(__file__), "..", "emulators", "*.yml")
             )
         )
-        if not paths:
+        if not self.paths:
             self.skipTest("emulators/ not present")
-        offenders: list[str] = []
-        for path in paths:
+        self.profiles = {}
+        for path in self.paths:
             with open(path, encoding="utf-8") as fh:
-                profile = yaml.safe_load(fh) or {}
-            groups: dict[tuple, list[int]] = collections.defaultdict(list)
-            for f in profile.get("files") or []:
-                if not isinstance(f, dict) or f.get("search_rank") is None:
-                    continue
-                rank = f["search_rank"]
-                if not isinstance(rank, int) or rank < 1:
-                    offenders.append(f"{os.path.basename(path)}: {f.get('name')}")
-                    continue
-                key = (f.get("system", ""), tuple(f.get("region") or []))
-                groups[key].append(rank)
-            for key, ranks in groups.items():
-                if len(ranks) != len(set(ranks)):
-                    offenders.append(
-                        f"{os.path.basename(path)}: duplicate rank in {key}"
-                    )
+                self.profiles[os.path.basename(path)[:-4]] = yaml.safe_load(fh) or {}
+
+    def test_declared_priorities_are_non_negative_integers(self):
+        offenders = [
+            f"{name}: {f.get('name')} -> {f['priority']!r}"
+            for name, profile in self.profiles.items()
+            for f in (profile.get("files") or [])
+            if isinstance(f, dict)
+            and f.get("priority") is not None
+            and (not isinstance(f["priority"], int) or f["priority"] < 0)
+        ]
         self.assertEqual(offenders, [], "\n".join(offenders))
+
+    def test_lowest_priority_picks_the_reference_playstation_bios(self):
+        """DuckStation ranks scph5501 at 5 and de-prioritizes by raising the
+        number, so the US slot must resolve to it and not to a PS2 image."""
+        index = slot.build_slot_index(self.profiles)
+        ds = self.profiles.get("duckstation")
+        if not ds:
+            self.skipTest("duckstation profile not present")
+        members = [
+            (f["name"], f["name"])
+            for f in ds["files"]
+            if f.get("region") == ["north-america"] and f.get("priority") is not None
+        ]
+        if len(members) < 2:
+            self.skipTest("no US candidate set to decide")
+        drops, undecidable = slot.resolve_slot_drops(
+            {"sony-playstation": members}, index
+        )
+        self.assertEqual(undecidable, [])
+        kept = {n for n, _ in members} - drops
+        self.assertEqual(kept, {"scph5501.bin"})
+
+    def test_ties_leave_the_group_untouched(self):
+        """Japanese PlayStation ties at 5, so nothing may be dropped there."""
+        index = slot.build_slot_index(self.profiles)
+        ds = self.profiles.get("duckstation")
+        if not ds:
+            self.skipTest("duckstation profile not present")
+        members = [
+            (f["name"], f["name"])
+            for f in ds["files"]
+            if f.get("region") == ["japan"] and f.get("priority") is not None
+        ]
+        drops, undecidable = slot.resolve_slot_drops(
+            {"sony-playstation": members}, index
+        )
+        self.assertEqual(drops, set())
+        self.assertEqual(undecidable, ["sony-playstation|japan"])
 
 
 if __name__ == "__main__":

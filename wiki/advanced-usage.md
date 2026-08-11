@@ -119,11 +119,16 @@ American. `--one-per-slot` keeps a single one per system and region:
 python scripts/generate_pack.py --platform retroarch --region us --one-per-slot
 ```
 
-It only acts on evidence. The winner comes from an ordered search list the
-core's code actually walks, recorded as `search_rank:` on the file entry, rank
-1 being tried first. PicoDrive declares three such lists, one per region
-(`biosfiles_us/eu/jp` in `platform/libretro/libretro.c`), and the pack keeps
-`us_scd2_9306.bin` over the three later candidates.
+It only acts on evidence. The winner comes from `priority:`, the preference
+order the core's own code applies, lowest first. DuckStation keeps the image
+whose priority is lower and de-prioritizes by raising the number, so its
+European slot resolves to `scph5502.bin` at 5 over `scph7002.bin` at 10.
+PicoDrive walks three ordered search lists instead (`biosfiles_us/eu/jp`), and
+those map onto the same field as 1, 2, 3.
+
+A slot is a system **and** a declared region: the Japanese and American
+PlayStation BIOS are not alternatives to each other, so their ranks are never
+compared.
 
 Where no such list is declared, the group is left untouched and counted:
 
@@ -133,10 +138,12 @@ Where no such list is declared, the group is left untouched and counted:
 
 That number is the remaining work, not a failure. Picking a file without a
 declared order would be the arbitrary selection this exists to remove, and it
-could drop the one the core would have loaded. `priority:` is deliberately not
-used for this: its meaning is disputed between the field reference and
-DuckStation's own comparison, and its values rank PS2 images above the plain
-PlayStation BIOS.
+could drop the one the core would have loaded.
+
+Every candidate of a slot must carry a rank. A set where one member is unranked
+cannot be ordered, so the whole slot is left alone: the North American
+PlayStation slot stays open because `scph101.bin` carries no priority, even
+though `scph5501.bin` would otherwise win at 5.
 
 `--one-per-slot` requires `--platform` or `--all`, and is refused with
 `--manifest`, `--emulator`, `--system` and `--from-md5` rather than silently
