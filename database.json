@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-11T22:48:56Z",
-  "total_files": 8723,
-  "total_size": 11316750966,
+  "generated_at": "2026-08-11T22:54:31Z",
+  "total_files": 8728,
+  "total_size": 11338353054,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -49524,6 +49524,16 @@
       "crc32": "5a443736",
       "adler32": "865d3c5e"
     },
+    "4d8d6b1d3f7ace05cbaf03565382b0e6e40c706c": {
+      "path": "bios/Other/cxbx-reloaded/EmuDisk/Partition2/xboxdash.xbe",
+      "name": "xboxdash.xbe",
+      "size": 1961984,
+      "sha1": "4d8d6b1d3f7ace05cbaf03565382b0e6e40c706c",
+      "md5": "08d3a6f99184679aa13008d6397bacce",
+      "sha256": "832862490c762a723856350142f49ded92b7ad966741eeb5b89e683006b16a0d",
+      "crc32": "36b7043b",
+      "adler32": "f487c007"
+    },
     "3ababd4334d8d57abb22dd98bd2d347df39648d9": {
       "path": "bios/Other/cxbx-reloaded/EmuMediaBoard/Chihiro/ic10_g24lc64.bin",
       "name": "ic10_g24lc64.bin",
@@ -49553,6 +49563,26 @@
       "sha256": "be03d198e95f4359833056f387261b904a6f16d21032fda74407d1747aa32d60",
       "crc32": "7742ab62",
       "adler32": "6e59f403"
+    },
+    "2f7ac75e738e2e4f83ffb0cbc06127195a7e8336": {
+      "path": "bios/Other/cxbx-reloaded/EmuMediaBoard/Partition2.bin",
+      "name": "Partition2.bin",
+      "size": 1048576,
+      "sha1": "2f7ac75e738e2e4f83ffb0cbc06127195a7e8336",
+      "md5": "853d40e7a80d659613885d93abbec463",
+      "sha256": "225e212b768558bbc08201563794e398268af734e67cdc7d79527bf381b5a1b7",
+      "crc32": "4996b5e6",
+      "adler32": "3b5d05eb"
+    },
+    "a79d03ac83cb94636ca3582df0786f8082162f04": {
+      "path": "bios/Other/cxbx-reloaded/EmuMediaBoard/Partition3.bin",
+      "name": "Partition3.bin",
+      "size": 1048576,
+      "sha1": "a79d03ac83cb94636ca3582df0786f8082162f04",
+      "md5": "b442924d110414a6cd8636551a9377a9",
+      "sha256": "7ee7a8028e33d530ff8bf82018f489932c73711778ce56ce41e5108fcdc868db",
+      "crc32": "1d745622",
+      "adler32": "ebed011e"
     },
     "a13cf9c5cdfe8605d82150b7573652f419b30197": {
       "path": "bios/Other/cxbx-reloaded/EmuMediaBoard/fpr21042_m29w160et.bin",
@@ -51583,6 +51613,26 @@
       "sha256": "cd260d1c420dec2ad2d9511b522d88a72f820d2ca2ff63ded2cd95854d4748dd",
       "crc32": "b8f57432",
       "adler32": "fbd6dfd5"
+    },
+    "f957c9aedd8ea478dafd98babe41faec7f339d8a": {
+      "path": "bios/Other/hakux/C/xbox.xtf",
+      "name": "xbox.xtf",
+      "size": 15613736,
+      "sha1": "f957c9aedd8ea478dafd98babe41faec7f339d8a",
+      "md5": "0466dd6c19ec9c1785e8aadfc8c5269e",
+      "sha256": "21c6207d02009a78767783679b6e74da3d4ca6e077c4808007f79dfe083d7489",
+      "crc32": "b12ee192",
+      "adler32": "ae7294e0"
+    },
+    "8b6e63f86dfd31821df210f5da73f8428b4fff15": {
+      "path": "bios/Other/hakux/C/xboxdash.xbe",
+      "name": "xboxdash.xbe",
+      "size": 1929216,
+      "sha1": "8b6e63f86dfd31821df210f5da73f8428b4fff15",
+      "md5": "8da4d816604e9b9d5aa69d1fd395a48e",
+      "sha256": "3ae2f3eae3917e0130d1e1a5c8e1c5df207ea31703646a174d98f7be9a769495",
+      "crc32": "4e78e0ae",
+      "adler32": "fed648f4"
     },
     "2e8d9f0a8ff08896674badeba8aa3ac5245304c3": {
       "path": "bios/Other/hakux/X1_Covers.txt",
@@ -96949,9 +96999,12 @@
       "8ca256a832e83c875f5432b3dee8a36f": "6765a91a42fed68a807325bf62a728e5ac5d622f",
       "8535c40c6cce978623a3e06a38e3a0fd": "72ecfde5f58c5993765a6ef5b8866c4777cc4ade",
       "907a03706a196b0da832ddab204264f2": "4f05efec7af0829f43aa3cac18a30ae2a33ded88",
+      "08d3a6f99184679aa13008d6397bacce": "4d8d6b1d3f7ace05cbaf03565382b0e6e40c706c",
       "0d6ba29a5005639ac7f4d77b7e58b918": "3ababd4334d8d57abb22dd98bd2d347df39648d9",
       "2b51c63d9caec283a61a4b90a2ac7c0c": "cc03a0650bfac4bf6cb66e414bbef121cba53efe",
       "bf1cf24f8549137c0b1ad0fa61473c7e": "82dad6e2a75bab4a4840dc6939462f1fb9b95101",
+      "853d40e7a80d659613885d93abbec463": "2f7ac75e738e2e4f83ffb0cbc06127195a7e8336",
+      "b442924d110414a6cd8636551a9377a9": "a79d03ac83cb94636ca3582df0786f8082162f04",
       "afacfb61877401f1611998d2b590dffd": "a13cf9c5cdfe8605d82150b7573652f419b30197",
       "3ab3f9386a280de051e82c0f147385ce": "f6b64d7b039a90af956c2c0873b30f6639a59878",
       "1f118b8735fcf40c20b38c3184eebfd9": "e6c0050b3c67ee26198488fbbe4a5d019c15b628",
@@ -97155,6 +97208,8 @@
       "c1ba1cb2b6b2662f214ef078f7c0eec2": "633c7a594686935dc2ae70632336f15c73ddbafa",
       "ac347847f656ec26a554fd6f86dd10ea": "02f515deea7f3fc513496b9218244186e5cc9a61",
       "2f355f03254e572dd32e6fe7232f5ccc": "8881159097cd92f67bfec5250bc061626d87cf04",
+      "0466dd6c19ec9c1785e8aadfc8c5269e": "f957c9aedd8ea478dafd98babe41faec7f339d8a",
+      "8da4d816604e9b9d5aa69d1fd395a48e": "8b6e63f86dfd31821df210f5da73f8428b4fff15",
       "eac8ae47e95f77cc1c5328a48ff5ed50": "2e8d9f0a8ff08896674badeba8aa3ac5245304c3",
       "41eed0bf6aad777e6583ecb2ff0907b8": "231b29ef9d6314930eb18e57240e27ae81a6e88f",
       "a5ab2ada57d1df5e51097e8c974fa078": "2c6cd92cfa97becc7e729c6469a441c7e7b851c7",
@@ -114313,6 +114368,10 @@
       "enNxtmmc.rom": [
         "4f05efec7af0829f43aa3cac18a30ae2a33ded88"
       ],
+      "xboxdash.xbe": [
+        "4d8d6b1d3f7ace05cbaf03565382b0e6e40c706c",
+        "8b6e63f86dfd31821df210f5da73f8428b4fff15"
+      ],
       "ic10_g24lc64.bin": [
         "3ababd4334d8d57abb22dd98bd2d347df39648d9"
       ],
@@ -114321,6 +114380,12 @@
       ],
       "pc20_g24lc64.bin": [
         "82dad6e2a75bab4a4840dc6939462f1fb9b95101"
+      ],
+      "Partition2.bin": [
+        "2f7ac75e738e2e4f83ffb0cbc06127195a7e8336"
+      ],
+      "Partition3.bin": [
+        "a79d03ac83cb94636ca3582df0786f8082162f04"
       ],
       "fpr21042_m29w160et.bin": [
         "a13cf9c5cdfe8605d82150b7573652f419b30197"
@@ -114835,6 +114900,9 @@
       ],
       "sysinfo.dat": [
         "8881159097cd92f67bfec5250bc061626d87cf04"
+      ],
+      "xbox.xtf": [
+        "f957c9aedd8ea478dafd98babe41faec7f339d8a"
       ],
       "X1_Covers.txt": [
         "2e8d9f0a8ff08896674badeba8aa3ac5245304c3"
@@ -125798,6 +125866,12 @@
       "DefaultUser.kmap": [
         "63c72e11f6ce8cd9dc5ebb96b4938010f4b2e4f0"
       ],
+      "EEPROM.bin": [
+        "ff3e7eaf715fe5612e46fc984d686ed3b115baef"
+      ],
+      "eeprom.bin": [
+        "ff3e7eaf715fe5612e46fc984d686ed3b115baef"
+      ],
       "titles.txt": [
         "f6a0cbfda6838065065e830ff40f322e6a3b6b00"
       ],
@@ -125809,6 +125883,9 @@
       ],
       "136032.107.b2": [
         "72ba464da01bd6d3a91b8d9997d5ac14b6f47aad"
+      ],
+      "msdash.xbe": [
+        "4d8d6b1d3f7ace05cbaf03565382b0e6e40c706c"
       ],
       "gamecontrollerdb.txt": [
         "231b29ef9d6314930eb18e57240e27ae81a6e88f"
@@ -133727,9 +133804,12 @@
       "588b5540": "6765a91a42fed68a807325bf62a728e5ac5d622f",
       "6d9951f0": "72ecfde5f58c5993765a6ef5b8866c4777cc4ade",
       "5a443736": "4f05efec7af0829f43aa3cac18a30ae2a33ded88",
+      "36b7043b": "4d8d6b1d3f7ace05cbaf03565382b0e6e40c706c",
       "cfc5e06f": "3ababd4334d8d57abb22dd98bd2d347df39648d9",
       "8dc8374e": "cc03a0650bfac4bf6cb66e414bbef121cba53efe",
       "7742ab62": "82dad6e2a75bab4a4840dc6939462f1fb9b95101",
+      "4996b5e6": "2f7ac75e738e2e4f83ffb0cbc06127195a7e8336",
+      "1d745622": "a79d03ac83cb94636ca3582df0786f8082162f04",
       "a4fcab0b": "a13cf9c5cdfe8605d82150b7573652f419b30197",
       "dcbd4121": "f6b64d7b039a90af956c2c0873b30f6639a59878",
       "ba8dfa56": "e6c0050b3c67ee26198488fbbe4a5d019c15b628",
@@ -133933,6 +134013,8 @@
       "f70f6180": "633c7a594686935dc2ae70632336f15c73ddbafa",
       "c4207191": "02f515deea7f3fc513496b9218244186e5cc9a61",
       "b8f57432": "8881159097cd92f67bfec5250bc061626d87cf04",
+      "b12ee192": "f957c9aedd8ea478dafd98babe41faec7f339d8a",
+      "4e78e0ae": "8b6e63f86dfd31821df210f5da73f8428b4fff15",
       "58c1f5e0": "2e8d9f0a8ff08896674badeba8aa3ac5245304c3",
       "bef6e55c": "231b29ef9d6314930eb18e57240e27ae81a6e88f",
       "96847af2": "2c6cd92cfa97becc7e729c6469a441c7e7b851c7",
@@ -142452,9 +142534,12 @@
       "456ced147bf5a3a11fe70971f56c1a215e85808fa86dd7d8610a73b3e9b6148e": "6765a91a42fed68a807325bf62a728e5ac5d622f",
       "dd901acd306794ad34f3131ad1df54b6f4de5527ad1b2aa42f82e417f93f17a5": "72ecfde5f58c5993765a6ef5b8866c4777cc4ade",
       "ded2038d78f57b4fd7e05df0330064f661c221f7b06d8cd2bddee1ff6062f019": "4f05efec7af0829f43aa3cac18a30ae2a33ded88",
+      "832862490c762a723856350142f49ded92b7ad966741eeb5b89e683006b16a0d": "4d8d6b1d3f7ace05cbaf03565382b0e6e40c706c",
       "df9c57cc2ad43c4563609b75d3a3be40dd844fcc69e8b3a368616b9811dc776f": "3ababd4334d8d57abb22dd98bd2d347df39648d9",
       "11dfa28d710a347313c7894d25e5ffb2f585d607c7f782b2a9970025c2bf0b7f": "cc03a0650bfac4bf6cb66e414bbef121cba53efe",
       "be03d198e95f4359833056f387261b904a6f16d21032fda74407d1747aa32d60": "82dad6e2a75bab4a4840dc6939462f1fb9b95101",
+      "225e212b768558bbc08201563794e398268af734e67cdc7d79527bf381b5a1b7": "2f7ac75e738e2e4f83ffb0cbc06127195a7e8336",
+      "7ee7a8028e33d530ff8bf82018f489932c73711778ce56ce41e5108fcdc868db": "a79d03ac83cb94636ca3582df0786f8082162f04",
       "82e02a1c48ef74e449b75081d3d118bd935b81d52634dd7c6a8c95686fd83fd1": "a13cf9c5cdfe8605d82150b7573652f419b30197",
       "75600aba867acbdfdb85fcd142b524da769bdc611b855a760aeb0c6e2eaae17a": "f6b64d7b039a90af956c2c0873b30f6639a59878",
       "2b2ff0716aeb9b806cc61181e559041312957f25f04c435bd7da80a78917b33b": "e6c0050b3c67ee26198488fbbe4a5d019c15b628",
@@ -142658,6 +142743,8 @@
       "9f3d415c99c2230fd4cc2c3771d0fcb33196e1ed9435556c9fa327c42983ab35": "633c7a594686935dc2ae70632336f15c73ddbafa",
       "9a5d4085d177910f48850672bc2bc8436c5558171eb9e06c711fabed39e485c0": "02f515deea7f3fc513496b9218244186e5cc9a61",
       "cd260d1c420dec2ad2d9511b522d88a72f820d2ca2ff63ded2cd95854d4748dd": "8881159097cd92f67bfec5250bc061626d87cf04",
+      "21c6207d02009a78767783679b6e74da3d4ca6e077c4808007f79dfe083d7489": "f957c9aedd8ea478dafd98babe41faec7f339d8a",
+      "3ae2f3eae3917e0130d1e1a5c8e1c5df207ea31703646a174d98f7be9a769495": "8b6e63f86dfd31821df210f5da73f8428b4fff15",
       "7f7325b9d5681abda6b26d641f13bf059d25af97c7b4ddeabc7ce7071c60d84e": "2e8d9f0a8ff08896674badeba8aa3ac5245304c3",
       "c8dd1e361ab3219a956b9b7879a17658b10273cc3569bf23cb9ffb23f55e5152": "231b29ef9d6314930eb18e57240e27ae81a6e88f",
       "33767ae63d7e16f5b6786eeb0fdfe53e7af7d7abd3b544fcd91936c9483661aa": "2c6cd92cfa97becc7e729c6469a441c7e7b851c7",
@@ -152590,6 +152677,9 @@
       "ROM/National/CPC6128.ROM.SE": [
         "6765a91a42fed68a807325bf62a728e5ac5d622f"
       ],
+      "EmuDisk/Partition2/xboxdash.xbe": [
+        "4d8d6b1d3f7ace05cbaf03565382b0e6e40c706c"
+      ],
       "EmuMediaBoard/Chihiro/ic10_g24lc64.bin": [
         "3ababd4334d8d57abb22dd98bd2d347df39648d9"
       ],
@@ -152598,6 +152688,12 @@
       ],
       "EmuMediaBoard/Chihiro/pc20_g24lc64.bin": [
         "82dad6e2a75bab4a4840dc6939462f1fb9b95101"
+      ],
+      "EmuMediaBoard/Partition2.bin": [
+        "2f7ac75e738e2e4f83ffb0cbc06127195a7e8336"
+      ],
+      "EmuMediaBoard/Partition3.bin": [
+        "a79d03ac83cb94636ca3582df0786f8082162f04"
       ],
       "EmuMediaBoard/fpr21042_m29w160et.bin": [
         "a13cf9c5cdfe8605d82150b7573652f419b30197"
@@ -152946,6 +153042,12 @@
       ],
       "history/sysinfo.dat": [
         "8881159097cd92f67bfec5250bc061626d87cf04"
+      ],
+      "C/xbox.xtf": [
+        "f957c9aedd8ea478dafd98babe41faec7f339d8a"
+      ],
+      "C/xboxdash.xbe": [
+        "8b6e63f86dfd31821df210f5da73f8428b4fff15"
       ],
       "doom3/base/doom3_chinese_translation_doom3bfg.pk4": [
         "8c06159ab1012b271d39d624b45c55c2360dc443"
@@ -162173,6 +162275,9 @@
       "SCPU64/pepto-pal.vpl": [
         "88a2209694f64f7167f239646aedcd0d09dc51bb"
       ],
+      "x1box/eeprom.bin": [
+        "ff3e7eaf715fe5612e46fc984d686ed3b115baef"
+      ],
       "system/key_retail.bin": [
         "bbdbb49a917d14f7a997d327ba40d40c39e606ce"
       ],
@@ -162193,6 +162298,9 @@
       ],
       "shaders/CRT-Hyllian-3D/gpuCore.slv": [
         "cda44c87be8b01c7ba23e2ad09a516d1747dee9b"
+      ],
+      "C/msdash.xbe": [
+        "4d8d6b1d3f7ace05cbaf03565382b0e6e40c706c"
       ],
       "DefaultSounds/20pSlide.wav": [
         "f92d854f017d154c9ae0a2351629876515ba48d7"

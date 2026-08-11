@@ -141,7 +141,6 @@ files:
     path: "EmuMediaBoard/Partition2.bin"
     system: sega-chihiro
     required: false
-    unsourceable: "first megabyte of the media board ROM, written by the emulator, with no distributed form of its own"
     description: "SEGABOOT, old revision"
     note: >-
       Written by the emulator from the first megabyte of fpr21042_m29w160et.bin
@@ -154,7 +153,6 @@ files:
     path: "EmuMediaBoard/Partition3.bin"
     system: sega-chihiro
     required: false
-    unsourceable: "second megabyte of the media board ROM, written by the emulator, with no distributed form of its own"
     description: "SEGABOOT, current revision"
     note: >-
       Written from the second megabyte of fpr21042_m29w160et.bin under the same
@@ -211,7 +209,6 @@ files:
 
   - name: dokan2.dll
     required: false
-    unsourceable: "signed kernel mode driver package installed by the Dokany runtime installer, not a file placed in a data folder"
     description: "Dokany user mode library"
     note: >-
       Loaded by name with every entry point resolved individually, and the
