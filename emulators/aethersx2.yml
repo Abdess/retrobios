@@ -1,0 +1,173 @@
+emulator: AetherSX2
+type: standalone
+core_classification: community_fork
+bios_mode: agnostic
+source: "https://github.com/Trixarian/AetherSX2"
+upstream: "https://github.com/PCSX2/pcsx2"
+profiled_date: "2026-08-11"
+source_commit: "1d1f795dfc70e38da67724c7298779260f513889"
+core_version: "1.5-3939"
+display_name: "Sony - PlayStation 2 (AetherSX2)"
+cores:
+  - aethersx2
+  - aethersx2-sa
+systems:
+  - sony-playstation-2
+
+bios_directory: "bios/"
+resources_directory: "resources/"
+
+notes: |
+  PlayStation 2 emulator for ARM, built on PCSX2 and carrying its own AArch64
+  recompilers. The application itself is closed source; the PCSX2-derived files
+  were released separately as an LGPL tarball in which pcsx2/libAetherSX2.a
+  holds the parts that stayed closed, and that drop sits on an earlier code line
+  than any released build, with no Vulkan renderer in its GS tree and the older
+  asset set. Every name, path and size below was read from
+  the three builds that were distributed: v1.5-3939 for Apple Silicon macOS,
+  v1.5-3668 for Android, and v1.5-3606 for AArch64 Linux, which ROCKNIX
+  repackages as aethersx2-sa. The three agree throughout.
+  ref: aethersx2/pcsx2/CMakeLists.txt:1585, aethersx2/pcsx2/Mdec.cpp:1
+
+  A BIOS image is required and boot stops without one. It belongs in the bios
+  folder of the data directory, Library/Application Support/AetherSX2 on macOS
+  and Android/data/xyz.aethersx2.android on Android, and the Folders section of
+  PCSX2.ini names another path when set.
+  ref: aethersx2 v1.5-3939 MacOS/AetherSX2, aethersx2 archive/desktop/mac/README.md
+
+  Detection is by content. The scan lists the BIOS folder with a *.* mask, keeps
+  files between 4 and 8 MB, and accepts an image whose romdir carries a RESET
+  entry followed by a readable ROMVER; the fifth ROMVER character gives the
+  zone among T10K, Test, Japan, USA, Europe, HK, Free and China. An image named
+  in the configuration is opened at its own path, without the size filter and
+  without the romdir test. No name and no hash is matched anywhere. The image is
+  read into the 4 MB ROM region and truncated to it, and one shorter than
+  2465792 bytes turns off the OSDSys parameter HLE.
+  ref: aethersx2/pcsx2/ps2/BiosTools.cpp:27-28,
+       aethersx2/pcsx2/ps2/BiosTools.cpp:62-175,
+       aethersx2/pcsx2/ps2/BiosTools.cpp:235-260,
+       aethersx2/pcsx2/ps2/BiosTools.cpp:272-316,
+       aethersx2 v1.5-3606 usr/share/aethersx2 0xa45ffc,
+       aethersx2 v1.5-3939 MacOS/AetherSX2 0x1006e7650
+
+  Companions derive from the selected image. rom1 and rom2 are appended to the
+  full name first, then substituted for the existing extension, so an image at
+  ps2-0230a-20080220.bin is followed by ps2-0230a-20080220.bin.rom1 then
+  ps2-0230a-20080220.rom1. The nvm and the mec are read at the substituted
+  extension only, and both are written with defaults when they are absent or
+  too short.
+  ref: aethersx2/pcsx2/ps2/BiosTools.cpp:192-218,
+       aethersx2/pcsx2/CDVD/CDVD.cpp:120-144,
+       aethersx2/pcsx2/CDVD/CDVD.cpp:158-197
+
+  The network adapter opens eeprom.dat and flash.dat from the working directory,
+  standing in a compiled-in image for the first and a blank card for the second.
+  DEV9hdd.raw is the default name of the empty disk image its settings page
+  writes.
+  ref: aethersx2/pcsx2/DEV9/DEV9.cpp:109-161,
+       aethersx2/pcsx2/DEV9/flash.cpp:76-104
+
+  An IRX named in the configuration is read into the ROM region at 0x3C0000 at
+  boot. The field is empty by default and names no file of its own.
+  ref: aethersx2/pcsx2/ps2/BiosTools.cpp:220-233,
+       aethersx2/pcsx2/ps2/BiosTools.cpp:327-328
+
+  Read from the build's own resources folder and versioned with it: the shader
+  sources each GS backend compiles at startup, the OSD and fullscreen interface
+  fonts, the flag and placeholder textures, and the achievement notification
+  sounds. The macOS build keeps the folder at AetherSX2.app/Contents/Resources
+  and adds its Metal libraries; the Android build carries the shaders, fonts,
+  icons and sounds as APK assets and draws its own interface.
+  ref: aethersx2 v1.5-3939 AetherSX2.app/Contents/Resources,
+       aethersx2 v1.5-3668 xyz.aethersx2.android assets
+
+files:
+  - name: ps2-0230a-20080220.bin
+    path: bios/ps2-0230a-20080220.bin
+    required: true
+    min_size: 4194304
+    max_size: 8388608
+    validation: [size]
+    description: "PS2 BIOS image"
+    note: "Any image whose romdir holds RESET and ROMVER is accepted, whatever its name. The 4 to 8 MB range gates the folder scan; an image named in the configuration skips both that range and the romdir test."
+    source_ref: "aethersx2/pcsx2/ps2/BiosTools.cpp:27-28, aethersx2/pcsx2/ps2/BiosTools.cpp:235-260, aethersx2/pcsx2/ps2/BiosTools.cpp:272-316, aethersx2 v1.5-3606 usr/share/aethersx2 0xa45ffc"
+
+  - name: ps2-0230a-20080220.rom1
+    path: bios/ps2-0230a-20080220.rom1
+    required: false
+    max_size: 4194304
+    description: "DVD player ROM"
+    note: "Tried as {bios}.rom1 then {biosbase}.rom1. Read at 0x2404000 of the EE memory block and truncated to 4 MB. Logged and skipped when absent."
+    source_ref: "aethersx2/pcsx2/ps2/BiosTools.cpp:192-218, aethersx2 v1.5-3606 usr/share/aethersx2 0xa45b44, aethersx2 v1.5-3939 MacOS/AetherSX2 0x1006e7184"
+
+  - name: ps2-0230a-20080220.rom2
+    path: bios/ps2-0230a-20080220.rom2
+    required: false
+    max_size: 524288
+    description: "Chinese ROM extension"
+    note: "Same two-step naming as rom1. Read at 0x2804000 of the EE memory block and truncated to 512 KB. Only present on Chinese region consoles."
+    source_ref: "aethersx2/pcsx2/ps2/BiosTools.cpp:192-218, aethersx2 v1.5-3606 usr/share/aethersx2 0xa45d50, aethersx2 v1.5-3939 MacOS/AetherSX2 0x1006e7338"
+
+  - name: ps2-0230a-20080220.nvm
+    path: bios/ps2-0230a-20080220.nvm
+    required: false
+    hle_fallback: true
+    size: 1024
+    description: "Console NVRAM"
+    note: "Read at the BIOS path with the extension replaced by nvm. Carries the console id, the iLink id, the language and the OSD configuration. A 1024 byte image is written when the file is missing or shorter, zeroed except for a fixed iLink id and the language defaults of the BIOS region."
+    source_ref: "aethersx2/pcsx2/CDVD/CDVD.cpp:158-197, aethersx2 v1.5-3606 usr/share/aethersx2 0x95d8e0"
+
+  - name: ps2-0230a-20080220.mec
+    path: bios/ps2-0230a-20080220.mec
+    required: false
+    hle_fallback: true
+    size: 4
+    description: "Mechacon version"
+    note: "Read at the BIOS path with the extension replaced by mec. Written as 03 06 02 00 when the file is missing or shorter than 4 bytes."
+    source_ref: "aethersx2/pcsx2/CDVD/CDVD.cpp:120-144, aethersx2 v1.5-3606 usr/share/aethersx2 0x95e7fc"
+
+  - name: eeprom.dat
+    required: false
+    hle_fallback: true
+    size: 64
+    description: "DEV9 EEPROM"
+    note: "Opened from the working directory when the network adapter starts and mapped over 64 bytes. A compiled-in image stands in when the file is missing or cannot be mapped."
+    source_ref: "aethersx2/pcsx2/DEV9/DEV9.cpp:146-161, aethersx2 v1.5-3606 usr/share/aethersx2 0x97ac90"
+
+  - name: flash.dat
+    required: false
+    hle_fallback: true
+    max_size: 8650752
+    description: "DEV9 SmartMedia flash image"
+    note: "Opened from the working directory at network adapter init and read as 1024 blocks of 16 pages of 512 bytes plus 16 ECC bytes. The card is filled with 0xFF when the file is absent, and a short read is logged."
+    source_ref: "aethersx2/pcsx2/DEV9/flash.cpp:76-104, aethersx2 v1.5-3606 usr/share/aethersx2 0x97ac40"
+
+  - name: GameIndex.yaml
+    path: resources/GameIndex.yaml
+    required: false
+    bundled: true
+    description: "Game database"
+    note: "Read from the resources folder, keyed by serial, and carrying the per-game fixes, patches and settings overrides. Parsed into gamedb.cache in the cache folder and reparsed whenever the modification time moves."
+    source_ref: "aethersx2/pcsx2/GameDatabase.cpp:35-36, aethersx2/pcsx2/GameDatabase.cpp:348-352, aethersx2/pcsx2/GameDatabase.cpp:523-535"
+
+  - name: cheats_ws.zip
+    path: resources/cheats_ws.zip
+    required: false
+    description: "Widescreen patch archive"
+    note: "Per-game pnach entries matched on the disc CRC, loaded when widescreen patches are enabled. The cheats_ws folder takes precedence and the archive is skipped when it holds a match. Shipped by the Linux and Android builds; the macOS build looks for it without carrying one."
+    source_ref: "aethersx2/pcsx2/Patch.cpp:202-231, aethersx2 v1.5-3939 MacOS/AetherSX2"
+
+  - name: cheats_ni.zip
+    path: resources/cheats_ni.zip
+    required: false
+    description: "No-interlacing patch archive"
+    note: "Same form as cheats_ws.zip, loaded when no-interlacing patches are enabled, with the cheats_ni folder taking precedence. Shipped by the Linux and Android builds; the macOS build looks for it without carrying one."
+    source_ref: "aethersx2/pcsx2/Patch.cpp:202-231, aethersx2 v1.5-3939 MacOS/AetherSX2"
+
+  - name: game_controller_db.txt
+    path: resources/game_controller_db.txt
+    required: false
+    bundled: true
+    description: "SDL controller mapping database"
+    note: "Read from the resources folder and fed to SDL at input init. SDL falls back to its built-in mappings when the file cannot be read."
+    source_ref: "aethersx2/pcsx2/PAD/Host/SDLJoystick.cpp:46, aethersx2 v1.5-3939 AetherSX2.app/Contents/Resources"

@@ -1,0 +1,1151 @@
+emulator: "C64.emu"
+type: standalone
+core_classification: community_fork
+source: "https://github.com/Rakashazi/emu-ex-plus-alpha"
+upstream: "https://github.com/VICE-Team/svn-mirror"
+profiled_date: "2026-08-11"
+source_commit: "1c12fac5ce49badaadff2e2f210dcc30b89f4943"
+core_version: "1.5.85"
+display_name: "Commodore - C64 (C64.emu)"
+mode: standalone
+cores:
+  - "c64-emu"
+  - "C64.emu"
+  - "C64-EMU"
+systems:
+  - commodore-c64
+  - commodore-c64-supercpu
+  - commodore-c64dtv
+  - commodore-c128
+  - commodore-vic20
+  - commodore-plus4
+  - commodore-pet
+  - commodore-cbm-ii
+
+notes: |
+  Android and Linux member of the EX Emulator series by Robert Broglia,
+  published as com.explusalpha.C64Emu (C64.emu/metadata/conf.mk:2,6,7) and
+  reached by ES-DE through its C64-EMU find rule. VICE 3.10 is vendored under
+  C64.emu/src/vice (C64.emu/src/config/vice-config.h:699,795) and driven by the
+  app's own sysfile, video, sound and zfile layers.
+
+  Ten machines are built as separate shared libraries
+  (C64.emu/src/CMakeLists.txt:535-683): c64, c64sc, scpu64, c64dtv, c128, vic,
+  pet, plus4, cbm2, cbm5x0. Each opens its files under the VICE machine
+  directory named by its own machine_name (c64/c64.c:179, c128/c128.c:240,
+  vic20/vic20.c:144, plus4/plus4.c:131, pet/pet.c:128, cbm2/cbm2.c:131,
+  cbm2/cbm5x0.c:122, scpu64/scpu64.c:157, c64dtv/c64dtv.c:129), so c64 and c64sc
+  share C64/ and cbm2 and cbm5x0 share CBM-II/. Drive ROMs live in DRIVES/
+  (drive/driverom.c:104,174).
+
+  Nothing is embedded. The app implements sysfile_open, sysfile_locate and
+  sysfile_load itself (C64.emu/src/main/sysfile.cc:218-355) over a user-set
+  path that may be a directory or a ZIP archive, and that path is rejected
+  unless it carries a DRIVES folder (C64.emu/src/main/sysfile.cc:140-151). On
+  Linux two fallbacks follow it, ~/.local/share/C64.emu and
+  /usr/share/games/vice (C64.emu/src/main/Main.cc:91-95). A last fallback reads
+  the application bundle (C64.emu/src/main/sysfile.cc:107-119,252-259), which
+  supplies only the eight keymaps below (C64.emu/res/android/assets symlinks
+  C64.emu/res/vice, and each machine directory there holds one file).
+
+  Missing ROMs stop the app rather than degrading it: initC64 throws when the
+  path is unset, and again with the name of the first file that failed once
+  plugin.init_main() returns -1 (C64.emu/src/main/Main.cc:301-311), which is
+  what machine_init does when mem_load cannot find a ROM.
+
+  All fourteen C64 models are offered (C64.emu/src/main/VicePlugin.cc:66-79), so
+  every kernal revision and both chargens are reachable. The MAX Machine model
+  loads nothing: c64rom.c:222-224 matches the kernal-none.bin name and zeroes
+  the ROM area instead of calling sysfile_load.
+
+  C128 is the one machine that needs its whole language set present. mem_load
+  runs c128rom_check_res_file over both BASIC halves, all eight kernal
+  resources, all eight chargen resources, Kernal64 and Basic64, and returns -1
+  if any one of them cannot be located (c128/c128rom.c:762-806). Only the
+  selected variant is then read. MachineType stays at C128_MACHINE_INT
+  (c128/c128-resources.c:684) because no reachable code writes it, so the
+  Danish, Norwegian and Swedish kernal64 variants of c128rom.h:111-113 are never
+  named.
+
+  Drive ROMs are optional in the strict sense: iec_drive_rom_load,
+  ieee_drive_rom_load, tcbm_drive_rom_load and iec128dcr_drive_rom_load return
+  void, and driverom_load logs the miss and disables the units of that type
+  (drive/driverom.c:186-196,131-144). Default unit 8 is a 1541-II on C64, SCPU64
+  and DTV (c64/c64drive.c:43), a 1571CR on C128 (c128/c128drive.c:56), a 1540 on
+  VIC-20 (vic20/vic20drive.c:44), a 1551 on Plus/4 (plus4/plus4drive.c:46) and a
+  2031 on PET and CBM-II (pet/petdrive.c:42, cbm2/cbm2drive.c:42).
+
+  Sizes come from the min and max arguments of each sysfile_load call. The
+  loader accepts a file two bytes over its maximum by dropping the leading load
+  address, pads a short file to the top of the buffer, and truncates anything
+  longer with a warning (C64.emu/src/main/sysfile.cc:30-71).
+
+  SHA-1s are those hardcoded in c64/c64rom.h:88-96. c64rom.c:120-131 hashes the
+  loaded kernal and matches that table to identify the revision; an unmatched
+  image is reported and accepted. VICE distributes C128/kernal64-901227-03.bin
+  and C128/basic64-901226-01.bin with the same bytes as the C64 Rev 3 kernal and
+  BASIC, so those two entries carry the same hashes.
+
+  Palettes are read only after the user enables an external palette: the
+  ${CHIP}ExternalPalette resource is registered with factory value 0 and
+  ${CHIP}PaletteFile with the chip's default name
+  (video/video-resources.c:393-398,916-923). The app lists every .vpl in the
+  machine directory and sets both resources
+  (C64.emu/src/main/EmuMenuViews.cc:186,1058,1074-1083,
+  C64.emu/src/main/options.cc:38-51). Only the code-named default of each chip
+  is listed here; palette_load appends the .vpl extension itself
+  (palette.c:228-248).
+
+  Keymaps are named from KBD_PORT_PREFIX, which the app sets to gtk3
+  (C64.emu/src/config/kbd.h:7). keymap_init runs inside init_main and the lookup
+  falls back to <prefix>_sym.vkm (keymap.c:1249-1270,1386-1392), the file the
+  app bundles for each machine directory. Host-layout and keyboard-type variants
+  extend the name and are not enumerated here.
+
+  Four subsystems are compiled but cannot reach their files. Printer ROMs and
+  the PRINTER/ palettes load from drv_mps803_open and drv_nl10_open, which
+  require Printer4, Printer5 or Printer6 to leave PRINTER_DEVICE_NONE
+  (printerdrv/interface-serial.c:145-149); the app writes no printer resource,
+  and neither main.c nor initcmdline.c is compiled, so the resource file and the
+  command line that would set one do not exist. Romset .vrs files, the monitor
+  command file and joystick .vjm maps have no default name at all
+  (joyport/joystick.c:2212) and no menu that supplies one. vice/arch is outside
+  the build, so the CBM font, icon and hotkey lookups of archdep_cbmfont.c,
+  archdep_icon_path.c and hotkeys/parser.c are never linked.
+
+files:
+  # ---------------------------------------------------------------- C64/
+  - name: "kernal-901227-03.bin"
+    path: "C64/kernal-901227-03.bin"
+    system: commodore-c64
+    required: true
+    size: 8192
+    sha1: "1d503e56df85a62fee696e7618dc5b4e781df1bb"
+    validation: [size, sha1]
+    description: "C64 kernal Rev 3, default kernal and default model"
+    source_ref: "C64.emu/src/vice/c64/c64rom.h:52,93 (name, hash), C64.emu/src/vice/c64/c64-resources.c:378,245, C64.emu/src/vice/c64/c64rom.c:226"
+
+  - name: "kernal-901227-02.bin"
+    path: "C64/kernal-901227-02.bin"
+    system: commodore-c64
+    required: false
+    size: 8192
+    sha1: "0e2e4ee3f2d41f00bed72f9ab588b83e306fdb13"
+    validation: [size, sha1]
+    description: "C64 kernal Rev 2, C64 old PAL model"
+    source_ref: "C64.emu/src/vice/c64/c64rom.h:51,92, C64.emu/src/vice/c64/c64model.c:113-116, C64.emu/src/vice/c64/c64-resources.c:244"
+
+  - name: "kernal-901227-01.bin"
+    path: "C64/kernal-901227-01.bin"
+    system: commodore-c64
+    required: false
+    size: 8192
+    sha1: "87cc04d61fc748b82df09856847bb5c2754a2033"
+    validation: [size, sha1]
+    description: "C64 kernal Rev 1, C64 old NTSC model"
+    source_ref: "C64.emu/src/vice/c64/c64rom.h:50,91, C64.emu/src/vice/c64/c64model.c:128-131, C64.emu/src/vice/c64/c64-resources.c:243"
+
+  - name: "kernal-251104-04.bin"
+    path: "C64/kernal-251104-04.bin"
+    system: commodore-c64
+    required: false
+    size: 8192
+    sha1: "aa136e91ecf3c5ac64f696b3dbcbfc5ba0871c98"
+    validation: [size, sha1]
+    description: "SX-64 kernal, C64 SX PAL and NTSC models"
+    source_ref: "C64.emu/src/vice/c64/c64rom.h:54,95, C64.emu/src/vice/c64/c64model.c:138-146, C64.emu/src/vice/c64/c64-resources.c:247"
+
+  - name: "kernal-906145-02.bin"
+    path: "C64/kernal-906145-02.bin"
+    system: commodore-c64
+    required: false
+    size: 8192
+    sha1: "4ff0f11e80f4b57430d8f0c3799ed0f0e0f4565d"
+    validation: [size, sha1]
+    region: [japan]
+    description: "Japanese C64 kernal"
+    source_ref: "C64.emu/src/vice/c64/c64rom.h:49,90, C64.emu/src/vice/c64/c64model.c:148-151, C64.emu/src/vice/c64/c64-resources.c:246"
+
+  - name: "kernal-390852-01.bin"
+    path: "C64/kernal-390852-01.bin"
+    system: commodore-c64
+    required: false
+    size: 8192
+    sha1: "3ad6cc1837c679a11f551ad1cf1a32dd84ace719"
+    validation: [size, sha1]
+    description: "C64 GS kernal"
+    source_ref: "C64.emu/src/vice/c64/c64rom.h:53,94, C64.emu/src/vice/c64/c64model.c:153-156, C64.emu/src/vice/c64/c64-resources.c:248"
+
+  - name: "kernal-901246-01.bin"
+    path: "C64/kernal-901246-01.bin"
+    system: commodore-c64
+    required: false
+    size: 8192
+    sha1: "6c4fa9465f6091b174df27dfe679499df447503c"
+    validation: [size, sha1]
+    description: "Educator 64 kernal, PET64 PAL and NTSC models"
+    source_ref: "C64.emu/src/vice/c64/c64rom.h:55,96, C64.emu/src/vice/c64/c64model.c:158-166, C64.emu/src/vice/c64/c64-resources.c:249"
+
+  - name: "basic-901226-01.bin"
+    path: "C64/basic-901226-01.bin"
+    system: commodore-c64
+    required: true
+    size: 8192
+    sha1: "79015323128650c742a3694c9429aa91f355905e"
+    validation: [size]
+    description: "C64 BASIC"
+    source_ref: "C64.emu/src/vice/c64/c64rom.h:31,88, C64.emu/src/vice/c64/c64-resources.c:381, C64.emu/src/vice/c64/c64rom.c:279"
+
+  - name: "chargen-901225-01.bin"
+    path: "C64/chargen-901225-01.bin"
+    system: commodore-c64
+    required: true
+    size: 4096
+    validation: [size]
+    description: "C64 character generator"
+    source_ref: "C64.emu/src/vice/c64/c64rom.h:60, C64.emu/src/vice/c64/c64-resources.c:375, C64.emu/src/vice/c64/c64rom.c:295"
+
+  - name: "chargen-906143-02.bin"
+    path: "C64/chargen-906143-02.bin"
+    system: commodore-c64
+    required: false
+    size: 4096
+    validation: [size]
+    region: [japan]
+    description: "Japanese C64 character generator"
+    source_ref: "C64.emu/src/vice/c64/c64rom.h:61, C64.emu/src/vice/c64/c64model.c:148-151,323"
+
+  - name: "gtk3_sym.vkm"
+    path: "C64/gtk3_sym.vkm"
+    system: commodore-c64
+    required: false
+    bundled: true
+    category: game_data
+    description: "C64 symbolic keymap, US layout"
+    source_ref: "C64.emu/src/config/kbd.h:7, C64.emu/src/vice/keymap.c:1263,704,1386-1392"
+
+  - name: "pepto-pal.vpl"
+    path: "C64/pepto-pal.vpl"
+    system: commodore-c64
+    required: false
+    category: game_data
+    description: "VIC-II default external palette"
+    source_ref: "C64.emu/src/vice/vicii/vicii-resources.c:170, C64.emu/src/vice/viciisc/vicii-resources.c:186, C64.emu/src/vice/video/video-resources.c:916-923"
+
+  # ---------------------------------------------------------------- SCPU64/
+  - name: "scpu64"
+    path: "SCPU64/scpu64"
+    system: commodore-c64-supercpu
+    required: true
+    min_size: 65536
+    max_size: 524288
+    validation: [size]
+    description: "SuperCPU64 firmware"
+    source_ref: "C64.emu/src/vice/scpu64/scpu64-resources.c:234, C64.emu/src/vice/scpu64/scpu64rom.c:80, C64.emu/src/vice/scpu64/scpu64mem.h:39-40"
+
+  - name: "chargen-901225-01.bin"
+    path: "SCPU64/chargen-901225-01.bin"
+    system: commodore-c64-supercpu
+    required: true
+    size: 4096
+    validation: [size]
+    description: "Character generator for the SuperCPU machine"
+    source_ref: "C64.emu/src/vice/scpu64/scpu64-resources.c:231, C64.emu/src/vice/scpu64/scpu64rom.c:63, C64.emu/src/vice/scpu64/scpu64mem.h:38"
+
+  - name: "chargen-906143-02.bin"
+    path: "SCPU64/chargen-906143-02.bin"
+    system: commodore-c64-supercpu
+    required: false
+    size: 4096
+    validation: [size]
+    region: [japan]
+    description: "Japanese character generator, Japanese SuperCPU model"
+    source_ref: "C64.emu/src/vice/scpu64/scpu64model.c:303, C64.emu/src/vice/c64/c64rom.h:61"
+
+  - name: "gtk3_sym.vkm"
+    path: "SCPU64/gtk3_sym.vkm"
+    system: commodore-c64-supercpu
+    required: false
+    bundled: true
+    category: game_data
+    description: "SuperCPU symbolic keymap, US layout"
+    source_ref: "C64.emu/src/config/kbd.h:7, C64.emu/src/vice/keymap.c:1263,704"
+
+  - name: "pepto-pal.vpl"
+    path: "SCPU64/pepto-pal.vpl"
+    system: commodore-c64-supercpu
+    required: false
+    category: game_data
+    description: "VIC-II default external palette"
+    source_ref: "C64.emu/src/vice/viciisc/vicii-resources.c:186, C64.emu/src/vice/video/video-resources.c:916-923"
+
+  # ---------------------------------------------------------------- C64DTV/
+  - name: "kernal-901227-03.bin"
+    path: "C64DTV/kernal-901227-03.bin"
+    system: commodore-c64dtv
+    required: true
+    size: 8192
+    sha1: "1d503e56df85a62fee696e7618dc5b4e781df1bb"
+    validation: [size, sha1]
+    description: "C64 kernal Rev 3 for the DTV machine"
+    source_ref: "C64.emu/src/vice/c64dtv/c64dtv-resources.c:154, C64.emu/src/vice/c64/c64rom.h:52,93, C64.emu/src/vice/c64/c64rom.c:226"
+
+  - name: "basic-901226-01.bin"
+    path: "C64DTV/basic-901226-01.bin"
+    system: commodore-c64dtv
+    required: true
+    size: 8192
+    sha1: "79015323128650c742a3694c9429aa91f355905e"
+    validation: [size]
+    description: "C64 BASIC for the DTV machine"
+    source_ref: "C64.emu/src/vice/c64dtv/c64dtv-resources.c:157, C64.emu/src/vice/c64/c64rom.h:31,88, C64.emu/src/vice/c64/c64rom.c:279"
+
+  - name: "chargen-901225-01.bin"
+    path: "C64DTV/chargen-901225-01.bin"
+    system: commodore-c64dtv
+    required: true
+    size: 4096
+    validation: [size]
+    description: "Character generator for the DTV machine"
+    source_ref: "C64.emu/src/vice/c64dtv/c64dtv-resources.c:151, C64.emu/src/vice/c64/c64rom.c:295"
+
+  - name: "dtvrom.bin"
+    path: "C64DTV/dtvrom.bin"
+    system: commodore-c64dtv
+    required: false
+    max_size: 2097152
+    validation: [size]
+    description: "DTV flash image, all six DTV model resources default to this name"
+    note: >-
+      Read into the 2 MB flash. When the file is absent the emulator builds the
+      flash from the loaded kernal, BASIC and chargen instead.
+    source_ref: "C64.emu/src/vice/c64dtv/c64dtvflash.c:59-64,643-656,471,486-500"
+
+  - name: "gtk3_sym.vkm"
+    path: "C64DTV/gtk3_sym.vkm"
+    system: commodore-c64dtv
+    required: false
+    bundled: true
+    category: game_data
+    description: "DTV symbolic keymap, US layout"
+    source_ref: "C64.emu/src/config/kbd.h:7, C64.emu/src/vice/keymap.c:1263,704"
+
+  - name: "spiff.vpl"
+    path: "C64DTV/spiff.vpl"
+    system: commodore-c64dtv
+    required: false
+    category: game_data
+    description: "VIC-II default external palette on the DTV machine"
+    source_ref: "C64.emu/src/vice/vicii/vicii-resources.c:167-168, C64.emu/src/vice/video/video-resources.c:916-923"
+
+  # ---------------------------------------------------------------- C128/
+  - name: "kernal-318020-05.bin"
+    path: "C128/kernal-318020-05.bin"
+    system: commodore-c128
+    required: true
+    size: 16384
+    validation: [size]
+    description: "C128 international kernal, editor and Z80 BIOS"
+    source_ref: "C64.emu/src/vice/c128/c128rom.h:93, C64.emu/src/vice/c128/c128-resources.c:658, C64.emu/src/vice/c128/c128rom.c:343,770"
+
+  - name: "kernal-315078-03.bin"
+    path: "C128/kernal-315078-03.bin"
+    system: commodore-c128
+    required: true
+    size: 16384
+    validation: [size]
+    description: "C128 German kernal"
+    source_ref: "C64.emu/src/vice/c128/c128rom.h:95, C64.emu/src/vice/c128/c128-resources.c:662, C64.emu/src/vice/c128/c128rom.c:771"
+
+  - name: "kernal-325172-01.bin"
+    path: "C128/kernal-325172-01.bin"
+    system: commodore-c128
+    required: true
+    size: 16384
+    validation: [size]
+    description: "C128 Swiss kernal"
+    source_ref: "C64.emu/src/vice/c128/c128rom.h:94, C64.emu/src/vice/c128/c128-resources.c:660, C64.emu/src/vice/c128/c128rom.c:777"
+
+  - name: "kernal-318034-01.bin"
+    path: "C128/kernal-318034-01.bin"
+    system: commodore-c128
+    required: true
+    size: 16384
+    validation: [size]
+    description: "C128 Swedish kernal"
+    source_ref: "C64.emu/src/vice/c128/c128rom.h:100, C64.emu/src/vice/c128/c128-resources.c:672, C64.emu/src/vice/c128/c128rom.c:776"
+
+  - name: "kernalfi"
+    path: "C128/kernalfi"
+    system: commodore-c128
+    required: true
+    size: 16384
+    validation: [size]
+    description: "C128 Finnish kernal"
+    source_ref: "C64.emu/src/vice/c128/c128rom.h:96, C64.emu/src/vice/c128/c128-resources.c:664, C64.emu/src/vice/c128/c128rom.c:772"
+
+  - name: "kernalfr"
+    path: "C128/kernalfr"
+    system: commodore-c128
+    required: true
+    size: 16384
+    validation: [size]
+    description: "C128 French kernal"
+    source_ref: "C64.emu/src/vice/c128/c128rom.h:97, C64.emu/src/vice/c128/c128-resources.c:666, C64.emu/src/vice/c128/c128rom.c:773"
+
+  - name: "kernalit"
+    path: "C128/kernalit"
+    system: commodore-c128
+    required: true
+    size: 16384
+    validation: [size]
+    description: "C128 Italian kernal"
+    source_ref: "C64.emu/src/vice/c128/c128rom.h:98, C64.emu/src/vice/c128/c128-resources.c:668, C64.emu/src/vice/c128/c128rom.c:774"
+
+  - name: "kernalno"
+    path: "C128/kernalno"
+    system: commodore-c128
+    required: true
+    size: 16384
+    validation: [size]
+    description: "C128 Norwegian kernal"
+    source_ref: "C64.emu/src/vice/c128/c128rom.h:99, C64.emu/src/vice/c128/c128-resources.c:670, C64.emu/src/vice/c128/c128rom.c:775"
+
+  - name: "basiclo-318018-04.bin"
+    path: "C128/basiclo-318018-04.bin"
+    system: commodore-c128
+    required: true
+    size: 16384
+    validation: [size]
+    description: "C128 BASIC low half"
+    source_ref: "C64.emu/src/vice/c128/c128rom.h:103, C64.emu/src/vice/c128/c128-resources.c:650, C64.emu/src/vice/c128/c128rom.c:434,763"
+
+  - name: "basichi-318019-04.bin"
+    path: "C128/basichi-318019-04.bin"
+    system: commodore-c128
+    required: true
+    size: 16384
+    validation: [size]
+    description: "C128 BASIC high half, holds the editor"
+    source_ref: "C64.emu/src/vice/c128/c128rom.h:104, C64.emu/src/vice/c128/c128-resources.c:652, C64.emu/src/vice/c128/c128rom.c:443,764"
+
+  - name: "chargen-390059-01.bin"
+    path: "C128/chargen-390059-01.bin"
+    system: commodore-c128
+    required: true
+    size: 8192
+    validation: [size]
+    description: "C128 international character generator"
+    source_ref: "C64.emu/src/vice/c128/c128rom.h:82, C64.emu/src/vice/c128/c128-resources.c:634, C64.emu/src/vice/c128/c128rom.c:529,783"
+
+  - name: "chargen-315079-01.bin"
+    path: "C128/chargen-315079-01.bin"
+    system: commodore-c128
+    required: true
+    size: 8192
+    validation: [size]
+    description: "C128 German character generator"
+    source_ref: "C64.emu/src/vice/c128/c128rom.h:85, C64.emu/src/vice/c128/c128-resources.c:638, C64.emu/src/vice/c128/c128rom.c:784"
+
+  - name: "chargen-325167-02.bin"
+    path: "C128/chargen-325167-02.bin"
+    system: commodore-c128
+    required: true
+    size: 8192
+    validation: [size]
+    description: "C128 Italian, French and Belgian character generator"
+    source_ref: "C64.emu/src/vice/c128/c128rom.h:87-88, C64.emu/src/vice/c128/c128-resources.c:642,644, C64.emu/src/vice/c128/c128rom.c:785,790"
+
+  - name: "chargen-325181-01.bin"
+    path: "C128/chargen-325181-01.bin"
+    system: commodore-c128
+    required: true
+    size: 8192
+    validation: [size]
+    description: "C128 Swedish and Finnish character generator"
+    source_ref: "C64.emu/src/vice/c128/c128rom.h:86,90, C64.emu/src/vice/c128/c128-resources.c:640,648, C64.emu/src/vice/c128/c128rom.c:786,789"
+
+  - name: "chargen-325173-01D.bin"
+    path: "C128/chargen-325173-01D.bin"
+    system: commodore-c128
+    required: true
+    size: 8192
+    validation: [size]
+    description: "C128 Swiss character generator"
+    source_ref: "C64.emu/src/vice/c128/c128rom.h:84, C64.emu/src/vice/c128/c128-resources.c:636, C64.emu/src/vice/c128/c128rom.c:787"
+
+  - name: "chargen-325078-02.bin"
+    path: "C128/chargen-325078-02.bin"
+    system: commodore-c128
+    required: true
+    size: 8192
+    validation: [size]
+    description: "C128 Norwegian character generator"
+    source_ref: "C64.emu/src/vice/c128/c128rom.h:89, C64.emu/src/vice/c128/c128-resources.c:646, C64.emu/src/vice/c128/c128rom.c:788"
+
+  - name: "kernal64-901227-03.bin"
+    path: "C128/kernal64-901227-03.bin"
+    system: commodore-c128
+    required: true
+    size: 8192
+    sha1: "1d503e56df85a62fee696e7618dc5b4e781df1bb"
+    validation: [size]
+    description: "C64 mode kernal"
+    source_ref: "C64.emu/src/vice/c128/c128rom.h:110, C64.emu/src/vice/c128/c128-resources.c:654, C64.emu/src/vice/c128/c128rom.c:672,796, C64.emu/src/vice/c64/c64rom.h:93"
+
+  - name: "basic64-901226-01.bin"
+    path: "C128/basic64-901226-01.bin"
+    system: commodore-c128
+    required: true
+    size: 8192
+    sha1: "79015323128650c742a3694c9429aa91f355905e"
+    validation: [size]
+    description: "C64 mode BASIC"
+    source_ref: "C64.emu/src/vice/c128/c128rom.h:107, C64.emu/src/vice/c128/c128-resources.c:656, C64.emu/src/vice/c128/c128rom.c:710,801, C64.emu/src/vice/c64/c64rom.h:88"
+
+  - name: "gtk3_sym.vkm"
+    path: "C128/gtk3_sym.vkm"
+    system: commodore-c128
+    required: false
+    bundled: true
+    category: game_data
+    description: "C128 symbolic keymap, US layout"
+    source_ref: "C64.emu/src/config/kbd.h:7, C64.emu/src/vice/keymap.c:1263,704"
+
+  - name: "pepto-pal.vpl"
+    path: "C128/pepto-pal.vpl"
+    system: commodore-c128
+    required: false
+    category: game_data
+    description: "VIC-II default external palette"
+    source_ref: "C64.emu/src/vice/vicii/vicii-resources.c:170, C64.emu/src/vice/video/video-resources.c:916-923"
+
+  - name: "vdc_deft.vpl"
+    path: "C128/vdc_deft.vpl"
+    system: commodore-c128
+    required: false
+    category: game_data
+    description: "VDC default external palette"
+    source_ref: "C64.emu/src/vice/vdc/vdc-resources.c:127, C64.emu/src/vice/video/video-resources.c:916-923"
+
+  # ---------------------------------------------------------------- VIC20/
+  - name: "kernal.901486-07.bin"
+    path: "VIC20/kernal.901486-07.bin"
+    system: commodore-vic20
+    required: true
+    size: 8192
+    validation: [size]
+    description: "VIC-20 PAL kernal, default kernal resource"
+    source_ref: "C64.emu/src/vice/vic20/vic20rom.h:53, C64.emu/src/vice/vic20/vic20-resources.c:183, C64.emu/src/vice/vic20/vic20rom.c:112"
+
+  - name: "kernal.901486-06.bin"
+    path: "VIC20/kernal.901486-06.bin"
+    system: commodore-vic20
+    required: true
+    size: 8192
+    validation: [size]
+    description: "VIC-20 NTSC kernal, default model and VIC-21"
+    source_ref: "C64.emu/src/vice/vic20/vic20rom.h:52, C64.emu/src/vice/vic20/vic20model.c:58-59,140"
+
+  - name: "kernal.901486-02.bin"
+    path: "VIC20/kernal.901486-02.bin"
+    system: commodore-vic20
+    required: false
+    size: 8192
+    validation: [size]
+    region: [japan]
+    description: "VIC-1001 kernal"
+    source_ref: "C64.emu/src/vice/vic20/vic20rom.h:51, C64.emu/src/vice/vic20/vic20model.c:60,140"
+
+  - name: "basic-901486-01.bin"
+    path: "VIC20/basic-901486-01.bin"
+    system: commodore-vic20
+    required: true
+    size: 8192
+    validation: [size]
+    description: "VIC-20 BASIC"
+    source_ref: "C64.emu/src/vice/vic20/vic20rom.h:43, C64.emu/src/vice/vic20/vic20-resources.c:185, C64.emu/src/vice/vic20/vic20rom.c:156"
+
+  - name: "chargen-901460-03.bin"
+    path: "VIC20/chargen-901460-03.bin"
+    system: commodore-vic20
+    required: true
+    size: 4096
+    validation: [size]
+    description: "VIC-20 character generator"
+    source_ref: "C64.emu/src/vice/vic20/vic20rom.h:56, C64.emu/src/vice/vic20/vic20-resources.c:181, C64.emu/src/vice/vic20/vic20rom.c:175"
+
+  - name: "chargen-901460-02.bin"
+    path: "VIC20/chargen-901460-02.bin"
+    system: commodore-vic20
+    required: false
+    size: 4096
+    validation: [size]
+    region: [japan]
+    description: "VIC-1001 character generator"
+    source_ref: "C64.emu/src/vice/vic20/vic20rom.h:57, C64.emu/src/vice/vic20/vic20model.c:60,139"
+
+  - name: "gtk3_sym.vkm"
+    path: "VIC20/gtk3_sym.vkm"
+    system: commodore-vic20
+    required: false
+    bundled: true
+    category: game_data
+    description: "VIC-20 symbolic keymap, US layout"
+    source_ref: "C64.emu/src/config/kbd.h:7, C64.emu/src/vice/keymap.c:1263,704"
+
+  - name: "mike-pal.vpl"
+    path: "VIC20/mike-pal.vpl"
+    system: commodore-vic20
+    required: false
+    category: game_data
+    description: "VIC default external palette"
+    source_ref: "C64.emu/src/vice/vic20/vic-resources.c:90, C64.emu/src/vice/video/video-resources.c:916-923"
+
+  # ---------------------------------------------------------------- PLUS4/
+  - name: "kernal-318005-05.bin"
+    path: "PLUS4/kernal-318005-05.bin"
+    system: commodore-plus4
+    required: true
+    size: 16384
+    validation: [size]
+    description: "Plus/4 NTSC kernal, default model"
+    source_ref: "C64.emu/src/vice/plus4/plus4rom.h:37, C64.emu/src/vice/plus4/plus4model.c:67,69,153, C64.emu/src/vice/plus4/plus4rom.c:89"
+
+  - name: "kernal-318004-05.bin"
+    path: "PLUS4/kernal-318004-05.bin"
+    system: commodore-plus4
+    required: true
+    size: 16384
+    validation: [size]
+    description: "Plus/4 PAL kernal, default kernal resource"
+    source_ref: "C64.emu/src/vice/plus4/plus4rom.h:36, C64.emu/src/vice/plus4/plus4-resources.c:186, C64.emu/src/vice/plus4/plus4model.c:66,68"
+
+  - name: "kernal-318004-01.bin"
+    path: "PLUS4/kernal-318004-01.bin"
+    system: commodore-plus4
+    required: false
+    size: 16384
+    validation: [size]
+    description: "C232 prototype kernal"
+    source_ref: "C64.emu/src/vice/plus4/plus4rom.h:35, C64.emu/src/vice/plus4/plus4model.c:71,153"
+
+  - name: "kernal-364.bin"
+    path: "PLUS4/kernal-364.bin"
+    system: commodore-plus4
+    required: false
+    size: 16384
+    validation: [size]
+    description: "V364 prototype kernal"
+    source_ref: "C64.emu/src/vice/plus4/plus4rom.h:38, C64.emu/src/vice/plus4/plus4model.c:70,153"
+
+  - name: "basic-318006-01.bin"
+    path: "PLUS4/basic-318006-01.bin"
+    system: commodore-plus4
+    required: true
+    size: 16384
+    validation: [size]
+    description: "Plus/4 BASIC"
+    source_ref: "C64.emu/src/vice/plus4/plus4rom.h:33, C64.emu/src/vice/plus4/plus4-resources.c:188, C64.emu/src/vice/plus4/plus4rom.c:111"
+
+  - name: "3plus1-317053-01.bin"
+    path: "PLUS4/3plus1-317053-01.bin"
+    system: commodore-plus4
+    required: true
+    size: 16384
+    validation: [size]
+    description: "3-plus-1 low function ROM, Plus/4 and V364 models"
+    source_ref: "C64.emu/src/vice/plus4/plus4rom.h:40, C64.emu/src/vice/plus4/plus4-resources.c:190, C64.emu/src/vice/plus4/plus4memrom.c:146"
+
+  - name: "3plus1-317054-01.bin"
+    path: "PLUS4/3plus1-317054-01.bin"
+    system: commodore-plus4
+    required: true
+    size: 16384
+    validation: [size]
+    description: "3-plus-1 high function ROM, Plus/4 and V364 models"
+    source_ref: "C64.emu/src/vice/plus4/plus4rom.h:41, C64.emu/src/vice/plus4/plus4-resources.c:192, C64.emu/src/vice/plus4/plus4memrom.c:166"
+
+  - name: "c2lo-364.bin"
+    path: "PLUS4/c2lo-364.bin"
+    system: commodore-plus4
+    required: false
+    size: 16384
+    validation: [size]
+    description: "V364 speech ROM"
+    source_ref: "C64.emu/src/vice/plus4/plus4rom.h:43, C64.emu/src/vice/plus4/plus4model.c:70,161, C64.emu/src/vice/plus4/plus4memrom.c:187"
+
+  - name: "gtk3_sym.vkm"
+    path: "PLUS4/gtk3_sym.vkm"
+    system: commodore-plus4
+    required: false
+    bundled: true
+    category: game_data
+    description: "Plus/4 symbolic keymap, US layout"
+    source_ref: "C64.emu/src/config/kbd.h:7, C64.emu/src/vice/keymap.c:1263,704"
+
+  - name: "yape-pal.vpl"
+    path: "PLUS4/yape-pal.vpl"
+    system: commodore-plus4
+    required: false
+    category: game_data
+    description: "TED default external palette"
+    source_ref: "C64.emu/src/vice/plus4/ted-resources.c:90, C64.emu/src/vice/video/video-resources.c:916-923"
+
+  # ---------------------------------------------------------------- PET/
+  - name: "kernal-4.901465-22.bin"
+    path: "PET/kernal-4.901465-22.bin"
+    system: commodore-pet
+    required: true
+    size: 4096
+    validation: [size]
+    description: "BASIC 4 kernal, default model PET 8032"
+    source_ref: "C64.emu/src/vice/pet/petrom.h:53, C64.emu/src/vice/pet/pet-resources.c:406, C64.emu/src/vice/pet/petrom.c:581"
+
+  - name: "kernal-2.901465-03.bin"
+    path: "PET/kernal-2.901465-03.bin"
+    system: commodore-pet
+    required: false
+    size: 4096
+    validation: [size]
+    description: "BASIC 2 kernal, PET 3008 to 3032B models"
+    source_ref: "C64.emu/src/vice/pet/petrom.h:52, C64.emu/src/vice/pet/petmodel.c:108,371"
+
+  - name: "kernal-1.901439-04-07.bin"
+    path: "PET/kernal-1.901439-04-07.bin"
+    system: commodore-pet
+    required: false
+    size: 4096
+    validation: [size]
+    description: "BASIC 1 kernal, PET 2001-8N model"
+    source_ref: "C64.emu/src/vice/pet/petrom.h:51, C64.emu/src/vice/pet/petmodel.c:89,371"
+
+  - name: "basic-4.901465-23-20-21.bin"
+    path: "PET/basic-4.901465-23-20-21.bin"
+    system: commodore-pet
+    required: true
+    min_size: 8192
+    max_size: 12288
+    validation: [size]
+    description: "BASIC 4, default model PET 8032"
+    source_ref: "C64.emu/src/vice/pet/petrom.h:57, C64.emu/src/vice/pet/pet-resources.c:410, C64.emu/src/vice/pet/petrom.c:534"
+
+  - name: "basic-2.901465-01-02.bin"
+    path: "PET/basic-2.901465-01-02.bin"
+    system: commodore-pet
+    required: false
+    min_size: 8192
+    max_size: 12288
+    validation: [size]
+    description: "BASIC 2, PET 3008 to 3032B models"
+    source_ref: "C64.emu/src/vice/pet/petrom.h:56, C64.emu/src/vice/pet/petmodel.c:110,372"
+
+  - name: "basic-1.901439-09-05-02-06.bin"
+    path: "PET/basic-1.901439-09-05-02-06.bin"
+    system: commodore-pet
+    required: false
+    min_size: 8192
+    max_size: 12288
+    validation: [size]
+    description: "BASIC 1, PET 2001-8N model"
+    source_ref: "C64.emu/src/vice/pet/petrom.h:55, C64.emu/src/vice/pet/petmodel.c:91,372"
+
+  - name: "edit-4-80-b-50Hz.901474-04_.bin"
+    path: "PET/edit-4-80-b-50Hz.901474-04_.bin"
+    system: commodore-pet
+    required: true
+    min_size: 2048
+    max_size: 4096
+    validation: [size]
+    description: "BASIC 4 business 80 column editor, default model PET 8032"
+    source_ref: "C64.emu/src/vice/pet/petrom.h:63, C64.emu/src/vice/pet/pet-resources.c:408, C64.emu/src/vice/pet/petrom.c:612"
+
+  - name: "edit-4-40-n-50Hz.901498-01.bin"
+    path: "PET/edit-4-40-n-50Hz.901498-01.bin"
+    system: commodore-pet
+    required: false
+    min_size: 2048
+    max_size: 4096
+    validation: [size]
+    description: "BASIC 4 graphics 40 column editor, PET 4016 and 4032 models"
+    source_ref: "C64.emu/src/vice/pet/petrom.h:62, C64.emu/src/vice/pet/petmodel.c:373"
+
+  - name: "edit-4-40-b-50Hz.ts.bin"
+    path: "PET/edit-4-40-b-50Hz.ts.bin"
+    system: commodore-pet
+    required: false
+    min_size: 2048
+    max_size: 4096
+    validation: [size]
+    description: "BASIC 4 business 40 column editor, PET 4032B model"
+    source_ref: "C64.emu/src/vice/pet/petrom.h:65, C64.emu/src/vice/pet/petmodel.c:373"
+
+  - name: "edit-2-n.901447-24.bin"
+    path: "PET/edit-2-n.901447-24.bin"
+    system: commodore-pet
+    required: false
+    min_size: 2048
+    max_size: 4096
+    validation: [size]
+    description: "BASIC 2 graphics 40 column editor, PET 3008 to 3032 models"
+    source_ref: "C64.emu/src/vice/pet/petrom.h:60, C64.emu/src/vice/pet/petmodel.c:109,373"
+
+  - name: "edit-2-b.901474-01.bin"
+    path: "PET/edit-2-b.901474-01.bin"
+    system: commodore-pet
+    required: false
+    min_size: 2048
+    max_size: 4096
+    validation: [size]
+    description: "BASIC 2 business editor, PET 3032B model"
+    source_ref: "C64.emu/src/vice/pet/petrom.h:61, C64.emu/src/vice/pet/petmodel.c:373"
+
+  - name: "edit-1-n.901439-03.bin"
+    path: "PET/edit-1-n.901439-03.bin"
+    system: commodore-pet
+    required: false
+    min_size: 2048
+    max_size: 4096
+    validation: [size]
+    description: "BASIC 1 graphics 40 column editor, PET 2001-8N model"
+    source_ref: "C64.emu/src/vice/pet/petrom.h:59, C64.emu/src/vice/pet/petmodel.c:90,373"
+
+  - name: "characters-2.901447-10.bin"
+    path: "PET/characters-2.901447-10.bin"
+    system: commodore-pet
+    required: true
+    min_size: 2048
+    max_size: 4096
+    validation: [size]
+    description: "Second generation character generator, default model PET 8032"
+    source_ref: "C64.emu/src/vice/pet/petrom.h:47, C64.emu/src/vice/pet/pet-resources.c:404, C64.emu/src/vice/pet/petrom.c:506"
+
+  - name: "characters-1.901447-08.bin"
+    path: "PET/characters-1.901447-08.bin"
+    system: commodore-pet
+    required: false
+    min_size: 2048
+    max_size: 4096
+    validation: [size]
+    description: "First generation character generator, PET 2001-8N model"
+    source_ref: "C64.emu/src/vice/pet/petrom.h:46, C64.emu/src/vice/pet/petmodel.c:88,370"
+
+  - name: "characters.901640-01.bin"
+    path: "PET/characters.901640-01.bin"
+    system: commodore-pet
+    required: false
+    min_size: 2048
+    max_size: 4096
+    validation: [size]
+    description: "SuperPET character generator"
+    source_ref: "C64.emu/src/vice/pet/petrom.h:48, C64.emu/src/vice/pet/petmodel.c:370"
+
+  - name: "waterloo-a000.901898-01.bin"
+    path: "PET/waterloo-a000.901898-01.bin"
+    system: commodore-pet
+    required: false
+    size: 4096
+    validation: [size]
+    description: "SuperPET 6809 ROM at a000"
+    source_ref: "C64.emu/src/vice/pet/petrom.h:75, C64.emu/src/vice/pet/petmodel.c:305, C64.emu/src/vice/pet/petrom.c:747"
+
+  - name: "waterloo-b000.901898-02.bin"
+    path: "PET/waterloo-b000.901898-02.bin"
+    system: commodore-pet
+    required: false
+    size: 4096
+    validation: [size]
+    description: "SuperPET 6809 ROM at b000"
+    source_ref: "C64.emu/src/vice/pet/petrom.h:76, C64.emu/src/vice/pet/petmodel.c:306, C64.emu/src/vice/pet/petrom.c:747"
+
+  - name: "waterloo-c000.901898-03.bin"
+    path: "PET/waterloo-c000.901898-03.bin"
+    system: commodore-pet
+    required: false
+    size: 4096
+    validation: [size]
+    description: "SuperPET 6809 ROM at c000"
+    source_ref: "C64.emu/src/vice/pet/petrom.h:77, C64.emu/src/vice/pet/petmodel.c:307, C64.emu/src/vice/pet/petrom.c:747"
+
+  - name: "waterloo-d000.901898-04.bin"
+    path: "PET/waterloo-d000.901898-04.bin"
+    system: commodore-pet
+    required: false
+    size: 4096
+    validation: [size]
+    description: "SuperPET 6809 ROM at d000"
+    source_ref: "C64.emu/src/vice/pet/petrom.h:78, C64.emu/src/vice/pet/petmodel.c:308, C64.emu/src/vice/pet/petrom.c:747"
+
+  - name: "waterloo-e000.901897-01.bin"
+    path: "PET/waterloo-e000.901897-01.bin"
+    system: commodore-pet
+    required: false
+    min_size: 2048
+    max_size: 8192
+    validation: [size]
+    description: "SuperPET 6809 ROM at e000, the one slot the loader accepts at 2 KB"
+    source_ref: "C64.emu/src/vice/pet/petrom.h:79, C64.emu/src/vice/pet/petmodel.c:309, C64.emu/src/vice/pet/petrom.c:745,747"
+
+  - name: "waterloo-f000.901898-05.bin"
+    path: "PET/waterloo-f000.901898-05.bin"
+    system: commodore-pet
+    required: false
+    size: 4096
+    validation: [size]
+    description: "SuperPET 6809 ROM at f000"
+    source_ref: "C64.emu/src/vice/pet/petrom.h:80, C64.emu/src/vice/pet/petmodel.c:310, C64.emu/src/vice/pet/petrom.c:747"
+
+  - name: "gtk3_sym.vkm"
+    path: "PET/gtk3_sym.vkm"
+    system: commodore-pet
+    required: false
+    bundled: true
+    category: game_data
+    description: "PET symbolic keymap, US layout and the fallback for every keyboard type"
+    source_ref: "C64.emu/src/config/kbd.h:7, C64.emu/src/vice/keymap.c:1263-1269,1386-1392, C64.emu/src/vice/pet/pet.c:169-176"
+
+  - name: "green.vpl"
+    path: "PET/green.vpl"
+    system: commodore-pet
+    required: false
+    category: game_data
+    description: "CRTC default external palette"
+    source_ref: "C64.emu/src/vice/crtc/crtc-resources.c:102, C64.emu/src/vice/video/video-resources.c:916-923"
+
+  # ---------------------------------------------------------------- CBM-II/
+  - name: "kernal-901244-04a.bin"
+    path: "CBM-II/kernal-901244-04a.bin"
+    system: commodore-cbm-ii
+    required: true
+    size: 8192
+    validation: [size]
+    description: "CBM-II 6x0 and 7x0 kernal, default model CBM 610"
+    source_ref: "C64.emu/src/vice/cbm2/cbm2rom.h:45, C64.emu/src/vice/cbm2/cbm2model.c:66-74,160, C64.emu/src/vice/cbm2/cbm2rom.c:155"
+
+  - name: "kernal-901234-02.bin"
+    path: "CBM-II/kernal-901234-02.bin"
+    system: commodore-cbm-ii
+    required: true
+    size: 8192
+    validation: [size]
+    description: "CBM 510 kernal, default model of the cbm5x0 plugin"
+    source_ref: "C64.emu/src/vice/cbm2/cbm2rom.h:46, C64.emu/src/vice/cbm2/cbm2model.c:64-65,160, C64.emu/src/vice/cbm2/cbm5x0rom.c:125"
+
+  - name: "basic-901242+3-04a.bin"
+    path: "CBM-II/basic-901242+3-04a.bin"
+    system: commodore-cbm-ii
+    required: true
+    size: 16384
+    validation: [size]
+    description: "CBM-II 128 KB BASIC, CBM 610 and 710 models"
+    source_ref: "C64.emu/src/vice/cbm2/cbm2rom.h:41, C64.emu/src/vice/cbm2/cbm2model.c:66-67,72,161, C64.emu/src/vice/cbm2/cbm2rom.c:171"
+
+  - name: "basic-901240+1-03.bin"
+    path: "CBM-II/basic-901240+1-03.bin"
+    system: commodore-cbm-ii
+    required: false
+    size: 16384
+    validation: [size]
+    description: "CBM-II 256 KB BASIC, CBM 620, 620+, 720 and 720+ models"
+    source_ref: "C64.emu/src/vice/cbm2/cbm2rom.h:42, C64.emu/src/vice/cbm2/cbm2model.c:68-71,73-74,161"
+
+  - name: "basic-901235+6-02.bin"
+    path: "CBM-II/basic-901235+6-02.bin"
+    system: commodore-cbm-ii
+    required: true
+    size: 16384
+    validation: [size]
+    description: "CBM 510 BASIC"
+    source_ref: "C64.emu/src/vice/cbm2/cbm2rom.h:43, C64.emu/src/vice/cbm2/cbm2model.c:64-65,161, C64.emu/src/vice/cbm2/cbm5x0rom.c:141"
+
+  - name: "chargen-901237-01.bin"
+    path: "CBM-II/chargen-901237-01.bin"
+    system: commodore-cbm-ii
+    required: true
+    size: 4096
+    validation: [size]
+    description: "CBM-II 600 series character generator, default model CBM 610"
+    source_ref: "C64.emu/src/vice/cbm2/cbm2rom.h:38, C64.emu/src/vice/cbm2/cbm2model.c:66-71,162, C64.emu/src/vice/cbm2/cbm2rom.c:100-101"
+
+  - name: "chargen-901232-01.bin"
+    path: "CBM-II/chargen-901232-01.bin"
+    system: commodore-cbm-ii
+    required: false
+    size: 4096
+    validation: [size]
+    description: "CBM-II 700 series character generator"
+    source_ref: "C64.emu/src/vice/cbm2/cbm2rom.h:39, C64.emu/src/vice/cbm2/cbm2model.c:72-74,162"
+
+  - name: "chargen-901225-01.bin"
+    path: "CBM-II/chargen-901225-01.bin"
+    system: commodore-cbm-ii
+    required: true
+    size: 4096
+    validation: [size]
+    description: "CBM 510 character generator"
+    source_ref: "C64.emu/src/vice/cbm2/cbm2rom.h:37, C64.emu/src/vice/cbm2/cbm2model.c:64-65,162, C64.emu/src/vice/cbm2/cbm5x0rom.c:83"
+
+  - name: "gtk3_sym.vkm"
+    path: "CBM-II/gtk3_sym.vkm"
+    system: commodore-cbm-ii
+    required: false
+    bundled: true
+    category: game_data
+    description: "CBM-II symbolic keymap, US layout"
+    source_ref: "C64.emu/src/config/kbd.h:7, C64.emu/src/vice/keymap.c:1263,704"
+
+  - name: "green.vpl"
+    path: "CBM-II/green.vpl"
+    system: commodore-cbm-ii
+    required: false
+    category: game_data
+    description: "CRTC default external palette, 6x0 and 7x0 models"
+    source_ref: "C64.emu/src/vice/crtc/crtc-resources.c:102, C64.emu/src/vice/video/video-resources.c:916-923"
+
+  - name: "pepto-pal.vpl"
+    path: "CBM-II/pepto-pal.vpl"
+    system: commodore-cbm-ii
+    required: false
+    category: game_data
+    description: "VIC-II default external palette, 5x0 models"
+    source_ref: "C64.emu/src/vice/vicii/vicii-resources.c:170, C64.emu/src/vice/video/video-resources.c:916-923"
+
+  # ---------------------------------------------------------------- DRIVES/
+  - name: "dos1541ii-251968-03.bin"
+    path: "DRIVES/dos1541ii-251968-03.bin"
+    required: false
+    min_size: 16384
+    max_size: 32768
+    validation: [size]
+    description: "1541-II DOS, default unit 8 on C64, SuperCPU and DTV"
+    source_ref: "C64.emu/src/vice/drive/driverom.h:40-41,90, C64.emu/src/vice/drive/iec/iecrom.c:107,182, C64.emu/src/vice/c64/c64drive.c:43"
+
+  - name: "dos1541-325302-01+901229-05.bin"
+    path: "DRIVES/dos1541-325302-01+901229-05.bin"
+    required: false
+    min_size: 16384
+    max_size: 32768
+    validation: [size]
+    description: "1541 DOS"
+    source_ref: "C64.emu/src/vice/drive/driverom.h:38-39,89, C64.emu/src/vice/drive/iec/iecrom.c:100,172"
+
+  - name: "dos1540-325302+3-01.bin"
+    path: "DRIVES/dos1540-325302+3-01.bin"
+    required: false
+    min_size: 16384
+    max_size: 32768
+    validation: [size]
+    description: "1540 DOS, default unit 8 on VIC-20"
+    source_ref: "C64.emu/src/vice/drive/driverom.h:36-37,88, C64.emu/src/vice/drive/iec/iecrom.c:93,162, C64.emu/src/vice/vic20/vic20drive.c:44"
+
+  - name: "dos1570-315090-01.bin"
+    path: "DRIVES/dos1570-315090-01.bin"
+    required: false
+    size: 32768
+    validation: [size]
+    description: "1570 DOS"
+    source_ref: "C64.emu/src/vice/drive/driverom.h:43,93, C64.emu/src/vice/drive/iec/iecrom.c:115,193"
+
+  - name: "dos1571-310654-05.bin"
+    path: "DRIVES/dos1571-310654-05.bin"
+    required: false
+    size: 32768
+    validation: [size]
+    description: "1571 DOS"
+    source_ref: "C64.emu/src/vice/drive/driverom.h:44,94, C64.emu/src/vice/drive/iec/iecrom.c:121,198"
+
+  - name: "dos1571cr-318047-01.bin"
+    path: "DRIVES/dos1571cr-318047-01.bin"
+    required: false
+    size: 32768
+    validation: [size]
+    description: "1571CR DOS, default unit 8 on C128"
+    source_ref: "C64.emu/src/vice/drive/driverom.h:45,95, C64.emu/src/vice/drive/iec128dcr/iec128dcrrom.c:51,68, C64.emu/src/vice/c128/c128drive.c:56"
+
+  - name: "dos1581-318045-02.bin"
+    path: "DRIVES/dos1581-318045-02.bin"
+    required: false
+    size: 32768
+    validation: [size]
+    description: "1581 DOS"
+    source_ref: "C64.emu/src/vice/drive/driverom.h:46,96, C64.emu/src/vice/drive/iec/iecrom.c:127,203"
+
+  - name: "dos1551-318008-01.bin"
+    path: "DRIVES/dos1551-318008-01.bin"
+    required: false
+    size: 16384
+    validation: [size]
+    description: "1551 DOS, default unit 8 on Plus/4"
+    source_ref: "C64.emu/src/vice/drive/driverom.h:42,92, C64.emu/src/vice/drive/tcbm/tcbmrom.c:50,66, C64.emu/src/vice/plus4/plus4drive.c:46"
+
+  - name: "dos2000-cs-33cc6f.bin"
+    path: "DRIVES/dos2000-cs-33cc6f.bin"
+    required: false
+    size: 32768
+    validation: [size]
+    description: "CMD FD-2000 DOS"
+    source_ref: "C64.emu/src/vice/drive/driverom.h:47,98, C64.emu/src/vice/drive/iec/iecrom.c:133,208"
+
+  - name: "dos4000-fd-350022.bin"
+    path: "DRIVES/dos4000-fd-350022.bin"
+    required: false
+    size: 32768
+    validation: [size]
+    description: "CMD FD-4000 DOS"
+    source_ref: "C64.emu/src/vice/drive/driverom.h:48,99, C64.emu/src/vice/drive/iec/iecrom.c:139,213"
+
+  - name: "bootromCMDHD-v2-80.bin"
+    path: "DRIVES/bootromCMDHD-v2-80.bin"
+    required: false
+    size: 16384
+    validation: [size]
+    description: "CMD HD boot ROM"
+    source_ref: "C64.emu/src/vice/drive/driverom.h:49,100, C64.emu/src/vice/drive/iec/iecrom.c:145,218"
+
+  - name: "dos2031-901484-03+05.bin"
+    path: "DRIVES/dos2031-901484-03+05.bin"
+    required: false
+    size: 16384
+    validation: [size]
+    description: "2031 DOS, default unit 8 on PET and CBM-II"
+    source_ref: "C64.emu/src/vice/drive/driverom.h:50,73, C64.emu/src/vice/drive/ieee/ieeerom.c:56,107, C64.emu/src/vice/pet/petdrive.c:42"
+
+  - name: "dos2040-901468-06+07.bin"
+    path: "DRIVES/dos2040-901468-06+07.bin"
+    required: false
+    size: 8192
+    validation: [size]
+    description: "2040 DOS"
+    source_ref: "C64.emu/src/vice/drive/driverom.h:53,76, C64.emu/src/vice/drive/ieee/ieeerom.c:63,115"
+
+  - name: "dos3040-901468-11-13.bin"
+    path: "DRIVES/dos3040-901468-11-13.bin"
+    required: false
+    size: 12288
+    validation: [size]
+    description: "3040 DOS"
+    source_ref: "C64.emu/src/vice/drive/driverom.h:54,79, C64.emu/src/vice/drive/ieee/ieeerom.c:70,123"
+
+  - name: "dos4040-901468-14-16.bin"
+    path: "DRIVES/dos4040-901468-14-16.bin"
+    required: false
+    size: 12288
+    validation: [size]
+    description: "4040 DOS"
+    source_ref: "C64.emu/src/vice/drive/driverom.h:55,82, C64.emu/src/vice/drive/ieee/ieeerom.c:77,131"
+
+  - name: "dos1001-901887+8-01.bin"
+    path: "DRIVES/dos1001-901887+8-01.bin"
+    required: false
+    size: 16384
+    validation: [size]
+    description: "1001, 8050 and 8250 DOS"
+    source_ref: "C64.emu/src/vice/drive/driverom.h:51,70, C64.emu/src/vice/drive/ieee/ieeerom.c:84,141"
+
+  - name: "dos9000-300516+7-revC.bin"
+    path: "DRIVES/dos9000-300516+7-revC.bin"
+    required: false
+    size: 16384
+    validation: [size]
+    description: "D9090 and D9060 DOS"
+    source_ref: "C64.emu/src/vice/drive/driverom.h:52,85, C64.emu/src/vice/drive/ieee/ieeerom.c:91,149"

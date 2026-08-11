@@ -1,0 +1,202 @@
+emulator: Citra MMJ
+type: standalone
+core_classification: community_fork
+source: "https://github.com/weihuoya/citra"
+upstream: "https://github.com/weihuoya/citra"
+profiled_date: "2026-08-11"
+source_commit: "302b0c3bc4312bc96489c11584a97664894b343f"
+core_version: "20251112"
+display_name: "Nintendo - 3DS (Citra MMJ)"
+cores:
+  - citra-mmj
+systems:
+  - nintendo-3ds
+mode: standalone
+
+notes: |
+  Citra fork for Android, shipped as four APKs of the same build per release:
+  the org.citra.emu package, a com.antutu.ABenchMark package, and a
+  StorageAccess variant of each. The user directory is citra-emu at the root of
+  external storage, and Android/data/org.citra.emu/files/citra-emu for the
+  StorageAccess builds. External files live in sysdata/ and nand/ below it.
+  ref: src/android/app/src/main/java/org/citra/emu/utils/CitraDirectory.java:61-94,
+       src/common/common_paths.h:23-29, src/common/file_util.cpp:398-430
+
+  InitKeys reads boot9.bin, then the native firm titles in the NAND tree, then
+  sector0x96.bin for the New 3DS firm, then aes_keys.txt. Content left
+  encrypted stops loading with ErrorEncrypted, shown as "ROM Encrypted".
+  ref: src/core/hw/aes/key.cpp:497-508, src/core/file_sys/ncch_container.cpp:348-351,
+       src/android/jni/main_android.cpp:88-90
+
+  GetSharedFont tries the shared font system archive, then shared_font.bin,
+  then the regional BCFNT for the CFG region, and ends the session with
+  ErrorSystemFiles when the three fail. The embedded open-source font answers
+  title low ID 0x00014002 only, so CHN, KOR and TWN, which resolve to
+  0x00014102, 0x00014202 and 0x00014302, depend on a file. Region defaults to
+  the code the ROM declares.
+  ref: src/core/hle/service/apt/apt.cpp:143, src/core/hle/service/apt/apt.cpp:256-272,
+       src/core/file_sys/archive_ncch.cpp:143-148, src/core/hle/service/cfg/cfg.cpp:176-181
+
+  Loading the four regional fonts from sysdata is specific to this fork.
+  ref: src/core/hle/service/apt/apt.cpp:184-228
+
+  The APK assets carry those fonts, three system archives, the DLP module and a
+  seeded CFG savegame, and the first run copies them into the user directory
+  without overwriting what is already there. System archives ship as split-off
+  RomFS, picked up beside the .app path the title tree resolves to.
+  ref: src/android/app/src/main/java/org/citra/emu/utils/CitraDirectory.java:192-207,
+       src/android/app/src/main/java/org/citra/emu/utils/CitraDirectory.java:368-399,
+       src/core/file_sys/ncch_container.cpp:726-741
+
+  LLE is opt-in per service module and reads the module from the NAND title
+  tree, falling back to HLE when it is absent. There is no title downloader:
+  system titles come from CIA files the user installs.
+  ref: src/core/hle/service/service.cpp:60-107, src/core/hle/service/service.cpp:197-213,
+       src/android/jni/main_android.cpp:278-289
+
+  ClCertA is read from NAND title 0x0004001b00010002 and decrypted with the
+  keyslot 0x0D normal key. HTTPS client authentication stays off without both.
+  ref: src/core/hle/service/http_c.cpp:810-884
+
+  Amiibo dumps are read as .bin files from amiibo/, cheat codes from
+  cheats/<title id>.txt, texture packs and mods from load/.
+  ref: src/android/app/src/main/java/org/citra/emu/ui/AmiiboDialog.java:57-64,
+       src/core/cheats/cheats.cpp:93-110, src/core/custom_tex_cache.cpp:67,
+       src/core/file_sys/ncch_container.cpp:359-365
+
+files:
+  - name: boot9.bin
+    path: sysdata/boot9.bin
+    system: nintendo-3ds
+    required: false
+    size: 65536
+    validation: [size]
+    description: "ARM9 bootrom"
+    note: "AES key section read at offset 55760, RSA modulus and exponent at 0xB3E0 and 0xB4E0. Both readers bail on any other size."
+    source_ref: "src/core/hw/aes/key.cpp:135-205, src/core/hw/rsa/rsa.cpp:49-80"
+
+  - name: aes_keys.txt
+    path: sysdata/aes_keys.txt
+    system: nintendo-3ds
+    required: false
+    description: "AES key slots"
+    note: "One name=hex pair per line, slot0x<NN>Key<X|Y|N> and common<N>. Read last, so it overrides what boot9.bin and the native firm titles set."
+    source_ref: "src/core/hw/aes/key.cpp:428-493, src/core/hw/aes/key.cpp:497-508"
+
+  - name: sector0x96.bin
+    path: sysdata/sector0x96.bin
+    system: nintendo-3ds
+    required: false
+    min_size: 17
+    validation: [size]
+    description: "New 3DS NAND secret sector"
+    note: "First 16 bytes decrypt the slot 0x15 KeyX of the New 3DS safe mode native firm, title 0x0004013820000003. A file of 16 bytes or less trips a live assert: Android compiles out ASSERT_MSG, not ASSERT."
+    source_ref: "src/core/hw/aes/key.cpp:309-345, src/core/hw/aes/key.cpp:380-386, src/common/assert.h:30-35, src/common/assert.h:59-62"
+
+  - name: seeddb.bin
+    path: sysdata/seeddb.bin
+    system: nintendo-3ds
+    required: false
+    description: "game seed database"
+    note: "Seed-encrypted titles from firmware 9.6 onwards. An empty database is written when the file is absent."
+    source_ref: "src/core/file_sys/seed_db.cpp:12-57"
+
+  - name: shared_font.bin
+    path: sysdata/shared_font.bin
+    system: nintendo-3ds
+    required: false
+    hle_fallback: true
+    description: "system shared font, legacy dump"
+    note: "Copied whole into the shared memory block, so the file carries the 0x80 byte APT header. Tried after the system archive and before the regional BCFNT files."
+    source_ref: "src/core/hle/service/apt/apt.cpp:230-246, src/core/hle/service/apt/apt.cpp:256-272"
+
+  - name: cbf_std.bcfnt
+    path: sysdata/cbf_std.bcfnt
+    system: nintendo-3ds
+    required: false
+    bundled: true
+    hle_fallback: true
+    region: [japan, north-america, europe, australia]
+    description: "shared font for JPN, USA, EUR and AUS"
+    note: "Read to offset 0x80 of the shared memory block, so the file is a bare uncompressed BCFNT. Selected for every CFG region other than CHN, KOR and TWN, where the embedded open-source font already answers the archive request."
+    source_ref: "src/core/hle/service/apt/apt.cpp:184-228, src/core/file_sys/archive_ncch.cpp:143-148"
+
+  - name: cbf_zh-Hans-CN.bcfnt
+    path: sysdata/cbf_zh-Hans-CN.bcfnt
+    system: nintendo-3ds
+    required: false
+    bundled: true
+    region: [china]
+    description: "shared font for CHN"
+    note: "Selected when the CFG region is CHN. The embedded font does not cover archive 0x00014102, so the session ends with ErrorSystemFiles without this file or shared_font.bin."
+    source_ref: "src/core/hle/service/apt/apt.cpp:184-228, src/core/hle/service/apt/apt.cpp:256-272"
+
+  - name: cbf_ko-Hang-KR.bcfnt
+    path: sysdata/cbf_ko-Hang-KR.bcfnt
+    system: nintendo-3ds
+    required: false
+    bundled: true
+    region: [south-korea]
+    description: "shared font for KOR"
+    note: "Selected when the CFG region is KOR. The embedded font does not cover archive 0x00014202, so the session ends with ErrorSystemFiles without this file or shared_font.bin."
+    source_ref: "src/core/hle/service/apt/apt.cpp:184-228, src/core/hle/service/apt/apt.cpp:256-272"
+
+  - name: cbf_zh-Hant-TW.bcfnt
+    path: sysdata/cbf_zh-Hant-TW.bcfnt
+    system: nintendo-3ds
+    required: false
+    bundled: true
+    region: [taiwan]
+    description: "shared font for TWN"
+    note: "Selected when the CFG region is TWN. The embedded font does not cover archive 0x00014302, so the session ends with ErrorSystemFiles without this file or shared_font.bin."
+    source_ref: "src/core/hle/service/apt/apt.cpp:184-228, src/core/hle/service/apt/apt.cpp:256-272"
+
+  - name: "00000000.app.romfs"
+    path: nand/00000000000000000000000000000000/title/0004009b/00010202/content/00000000.app.romfs
+    system: nintendo-3ds
+    required: false
+    bundled: true
+    hle_fallback: true
+    description: "Mii data system archive, title 0x0004009b00010202"
+    note: "Split-off RomFS served in place of the NCCH the title tree resolves to. An open-source replacement is built into the binary."
+    source_ref: "src/core/file_sys/ncch_container.cpp:726-741, src/core/file_sys/archive_ncch.cpp:132-136"
+
+  - name: "00000000.app.romfs"
+    path: nand/00000000000000000000000000000000/title/0004009b/00010402/content/00000000.app.romfs
+    system: nintendo-3ds
+    required: false
+    bundled: true
+    hle_fallback: true
+    description: "country list system archive, title 0x0004009b00010402"
+    note: "Split-off RomFS served in place of the NCCH the title tree resolves to. An open-source replacement is built into the binary."
+    source_ref: "src/core/file_sys/ncch_container.cpp:726-741, src/core/file_sys/archive_ncch.cpp:137-142"
+
+  - name: "00000000.app.romfs"
+    path: nand/00000000000000000000000000000000/title/000400db/00010302/content/00000000.app.romfs
+    system: nintendo-3ds
+    required: false
+    bundled: true
+    hle_fallback: true
+    description: "bad word list system archive, title 0x000400db00010302"
+    note: "Split-off RomFS served in place of the NCCH the title tree resolves to. An open-source replacement is built into the binary."
+    source_ref: "src/core/file_sys/ncch_container.cpp:726-741, src/core/file_sys/archive_ncch.cpp:150-157"
+
+  - name: "00000000.tmd"
+    path: nand/00000000000000000000000000000000/title/00040130/00002802/content/00000000.tmd
+    system: nintendo-3ds
+    required: false
+    bundled: true
+    hle_fallback: true
+    description: "title metadata of the DLP module, title 0x0004013000002802"
+    note: "Read to resolve the content ID of index 0, which the shipped metadata gives as 0x1f. Without it the path falls back to content ID 0 and the module is not found."
+    source_ref: "src/core/hle/service/am/am.cpp:466-501"
+
+  - name: "0000001f.app"
+    path: nand/00000000000000000000000000000000/title/00040130/00002802/content/0000001f.app
+    system: nintendo-3ds
+    required: false
+    bundled: true
+    hle_fallback: true
+    description: "DLP system module, title 0x0004013000002802"
+    note: "Loaded as a process when LLE is enabled for DLP, otherwise the HLE service is installed."
+    source_ref: "src/core/hle/service/service.cpp:78, src/core/hle/service/service.cpp:197-213"

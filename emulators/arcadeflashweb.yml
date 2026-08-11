@@ -1,0 +1,168 @@
+emulator: ArcadeFlashWeb
+type: standalone
+core_classification: launcher
+source: "https://github.com/aureyoboss/ArcadeFlashWeb"
+upstream: "https://github.com/aureyoboss/ArcadeFlashWeb"
+profiled_date: "2026-08-11"
+source_commit: "5de66e0cd69b48721a094887a28d042f71ddad08"
+core_version: "1.0.2"
+display_name: "Adobe Flash (ArcadeFlashWeb)"
+cores:
+  - arcadeflashweb
+systems:
+  - flash
+
+notes: |
+  Qt 5.13 application that plays SWF files by hosting Adobe's Pepper Flash
+  runtime inside a QtWebEngine view. Windows only. ES-DE runs
+  ArcadeFlashWeb.exe -fullscreen -source:<rom>, RetroBat adds -nodatetime,
+  -savedataflash: and -picturesfolder: and sets the working directory to the
+  program folder. The repository carries the Qt and QML sources and the
+  releases; arcadeflashweb.com no longer resolves and holds no archived
+  capture. Every string quoted below was also read back from the shipped
+  v1.0.2 executable, which matches the sources.
+  ref: src/ArcadeFlashWeb.pro:1-5, src/main.qml:34-35
+
+  The runtime is registered from the command line. main sets
+  QTWEBENGINE_CHROMIUM_FLAGS to "--enable-pepper-testing
+  --ppapi-flash-path=./pepflashplayer.dll" before QtWebEngine::initialize, so
+  Chromium takes the plugin from that path. It is the one file resolved
+  against the process working directory; everything else below hangs off
+  applicationDirPath. No --ppapi-flash-version accompanies it, and nothing
+  reads the manifest.json sitting beside the library: QtWebEngine builds the
+  plugin entry from the two switches alone and the library never names that
+  file. The manifest is still what identifies the build, Pepper Flash
+  32.0.0.371 for win/ia32.
+  ref: src/main.cpp:37-44, ArcadeFlashWeb v1.0.2 manifest.json:2-7,
+       qtwebengine 5.13 src/core/content_client_qt.cpp AddPepperFlashFromCommandLine
+
+  A local movie is not handed to the view. The url becomes
+  file:///<appdir>/flash/flash.html?jeu=<rom>=<width>=<height>, and that page
+  splits the query on the equals signs, fits the movie to the window and calls
+  swfobject.embedSWF with scale exactfit and wmode direct. The version it asks
+  for is 32.0.0, so SWFObject creates the object only when the registered
+  plugin reports at least that. A -source: containing "http" loads in the view
+  unchanged and uses none of this.
+  ref: src/main.qml:317-347, src/Navigateur.qml:144-155,
+       ArcadeFlashWeb v1.0.2 flash/flash.html:38-104
+
+  Natural dimensions come from swfdump. When -swfwidth: and -swfheight: are
+  not both given, which is the case for both ES-DE and RetroBat, the program
+  runs cmd /C <appdir>/swfdump.exe -X -Y <rom> redirected to swf.txt in the
+  data directory and reads the second and fourth whitespace fields back.
+  ref: src/main.qml:109-128, src/main.qml:321-335, src/Navigateur.qml:147-148
+
+  -profilantimicro: starts AntiMicro hidden with a profile from
+  antimicro/profiles before the movie loads. Adding -controleurantimicro:
+  replaces that argument with --profile-controller, and the profile file is
+  then not passed at all.
+  ref: src/main.qml:305-314
+
+  Written rather than expected: swf.txt, the QML LocalStorage database holding
+  the last browser path with the bezel, screen mode and clock flags, the
+  QtWebEngine cache and persistent storage under -savedataflash:, and the JPEG
+  screenshots. The interface icons, the bezel, the CRT and scanline overlays
+  and the wallpaper are compiled in through qml.qrc, so of the images only the
+  copy under flash/images is read from disk, and it is byte for byte the
+  compiled one. Two files ship unread: flash/swfobject/expressInstall.swf,
+  which flash.html disables by passing false for the express install url, and
+  flash/swfobject/test.swf, which nothing names.
+  ref: src/qml.qrc:1-33, src/Sauvegarde.js:1-30, src/main.qml:132-159,
+       ArcadeFlashWeb v1.0.2 flash/flash.html:102
+
+  The remainder of the release is the Qt 5.13.2 deployment of the program
+  itself. VCRUNTIME140.dll and the UCRT stubs sit in the executable's import
+  directory, so the Visual C++ 2017 x86 redistributable has to be installed,
+  and the release carries its installer.
+  ref: README.md:59, ArcadeFlashWeb v1.0.2 ArcadeFlashWeb.exe import directory
+
+files:
+  - name: pepflashplayer.dll
+    required: true
+    bundled: true
+    description: "Adobe Pepper Flash Player runtime"
+    note: >-
+      Handed to Chromium as --ppapi-flash-path and resolved against the process
+      working directory. Without it no plugin is registered, SWFObject finds no
+      player and the movie is never embedded. The page asks for a reported
+      version of at least 32.0.0; the build that ships is the 32-bit 32.0.0.371.
+    source_ref: "src/main.cpp:40, ArcadeFlashWeb v1.0.2 flash/flash.html:102"
+
+  - name: flash.html
+    path: flash/flash.html
+    required: true
+    bundled: true
+    description: "Page that embeds the movie"
+    note: >-
+      Every local SWF goes through it, carrying the path and the two dimensions
+      in the query string. Absent, the view is pointed at a file that does not
+      exist and nothing plays.
+    source_ref: "src/main.qml:327,334, src/Navigateur.qml:150"
+
+  - name: swfobject.js
+    path: flash/swfobject/swfobject.js
+    required: true
+    bundled: true
+    description: "SWFObject 2.2 embed library"
+    note: >-
+      The only definition of swfobject, included by flash.html before the script
+      that calls embedSWF. It reads the player version from the Shockwave Flash
+      plugin description, refines it from a probe object's $version, and refuses
+      to embed below the version the page asks for.
+    source_ref: "ArcadeFlashWeb v1.0.2 flash/flash.html:38, ArcadeFlashWeb v1.0.2 flash/swfobject/swfobject.js:1-4"
+
+  - name: background.jpg
+    path: flash/images/background.jpg
+    required: false
+    bundled: true
+    description: "Backdrop of the player page"
+    note: >-
+      Drawn behind the movie by the page's bg div. The same image is compiled
+      into the binary for the QML side, so only this copy is read from disk.
+    source_ref: "ArcadeFlashWeb v1.0.2 flash/flash.html:110, src/qml.qrc:23"
+
+  - name: swfdump.exe
+    required: false
+    bundled: true
+    description: "SWFTools swfdump, reads the movie's natural size"
+    note: >-
+      Run through cmd /C with -X -Y and the output redirected to swf.txt, then
+      parsed as the second and fourth whitespace fields. Skipped when both
+      -swfwidth: and -swfheight: are given. Absent, the redirection still
+      creates an empty file, both fields parse to NaN and the page sizes the
+      object from that.
+    source_ref: "src/main.qml:324-325, src/Navigateur.qml:147-148"
+
+  - name: antimicro.exe
+    path: antimicro/antimicro.exe
+    required: false
+    bundled: true
+    description: "AntiMicro gamepad to keyboard mapper"
+    note: >-
+      Started hidden before the movie loads, only when -profilantimicro: is
+      given. The copy that ships is a 2016 build carrying its own Qt 5 runtime
+      in the same folder.
+    source_ref: "src/main.qml:309,311"
+
+  - name: arcadeflashweb.gamecontroller.amgp
+    path: antimicro/profiles/arcadeflashweb.gamecontroller.amgp
+    required: false
+    bundled: true
+    description: "AntiMicro mapping profile"
+    note: >-
+      Passed to AntiMicro as --profile under the name -profilantimicro: gives;
+      the name that ships is the one the built-in help quotes. With
+      -controleurantimicro: also set the call carries --profile-controller
+      instead and no profile file is read.
+    source_ref: "src/main.qml:309-312"
+
+  - name: pepper.vch
+    required: false
+    bundled: true
+    description: "Adobe Flash Access blob shipped with the runtime"
+    note: >-
+      Named in the Flash library's own string table next to PepperFlashPlayer.
+      PKCS#7 over 446144 opaque bytes, signed through the Adobe Flash Access
+      chain under subject CN AdobeIV-202002031156. It carries DRM material and
+      no plain SWF needs it.
+    source_ref: "ArcadeFlashWeb v1.0.2 pepflashplayer.dll string table"

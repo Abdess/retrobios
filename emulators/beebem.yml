@@ -1,0 +1,735 @@
+emulator: beebem
+type: standalone
+core_classification: other
+source: "https://github.com/stardot/beebem-windows"
+upstream: "https://github.com/stardot/beebem-windows"
+profiled_date: "2026-08-11"
+source_commit: "a982ba6a74af09e801c296b29d514dbd4da09b94"
+core_version: "4.19"
+display_name: "Acorn - BBC Micro (BeebEm)"
+cores: [beebem]
+systems:
+  - bbc-micro-b
+  - bbc-micro-bplus
+  - bbc-master-128
+  - bbc-master-et
+
+notes: |
+  BBC Micro and Master Series emulator for Windows. Started by Dave Gilbert on
+  Unix in 1994, ported to Windows. Five machine models: Model B, Model B with
+  Integra-B board, Model B Plus, Master 128, Master ET.
+  ref: Src/Model.h:24-32
+
+  Two file roots. GetUserDataPath() defaults to <Documents>\BeebEm and falls back
+  to <app>\UserData; it holds BeebFile/ and the .cfg and .kmap files. GetAppPath()
+  is the program directory and holds Teletext.fnt and the sound samples.
+  ref: Src/BeebWin.cpp:5813-5851
+
+  ROM slots are read from Roms.cfg: one OS ROM plus 16 paged banks per model,
+  each line naming a file under BeebFile/, or EMPTY, or RAM. Paths in the profile
+  are the shipped default configuration, which matches the DefaultRoms table
+  compiled into the binary.
+  ref: Src/RomConfigFile.cpp:39-141
+  ref: Src/BeebMem.cpp:1277-1356
+
+  A missing Roms.cfg is not covered by DefaultRoms: Load() returns at the open
+  failure, before the backfill loop, and RomConfigFile has no constructor and no
+  Reset() caller, so every slot stays an empty string and no ROM loads.
+  ref: Src/RomConfigFile.cpp:158-219
+
+  Roms_Torch.cfg is the alternate configuration for the Torch Z80 co-processor,
+  selected with `BeebEm.exe -Roms Roms_Torch.cfg` by the shipped BeebEmTorch.vbs.
+  It adds the MCP host-tube ROMs and swaps the Integra-B slots.
+  ref: UserData/Roms_Torch.cfg, BeebEmTorch.vbs:3
+
+  ReadRom derives a .map path from every ROM file name and hands it to the
+  debugger symbol loader. Only BBC/OS12.map ships.
+  ref: Src/BeebMem.cpp:1252-1254, 1311-1313
+
+  No hash is verified anywhere. The code checks sizes only, per entry below.
+  Hashes here identify the dumps the emulator ships.
+
+  BeebFile/ also carries an application ROM library (word processors, drawing
+  packages, language ROMs) and DiscIms/ carries the disc images supplied with the
+  Master 512, ARM and Z80 co-processors. No code path names them; they load only
+  through the file browser in Edit ROM Configuration, the same way a disc image
+  does.
+  ref: Src/RomConfigDialog.cpp:179-215
+
+  Alternate dumps ship under their own names for slots already listed here:
+  BeebFile/M128-MOS3.5/ holds the MOS 3.50 set for the M128 slots, and
+  BeebFile/Z80-1.20.rom is the Acorn v1.20 Z80 ROM. Both are used by renaming
+  them onto the listed paths, so they are variants of those entries.
+  ref: Help/roms.html, Help/z80copro.html
+
+exclusion_note: >
+  The TMS5220 speech generator is compiled out. Speech.cpp:57-1621 wraps the whole
+  implementation, including the SpeechInit() that reads Phroms.cfg and the PHROM
+  files, in #if ENABLE_SPEECH, and all four build configurations in
+  Src/BeebEm.vcxproj define ENABLE_SPEECH=0. Every call site is guarded the same
+  way. UserData/Phroms.cfg and the seven files in UserData/Phroms/ (PHROMA,
+  PHROMUS, VM61002-5.bin, VM71003A.bin) ship but no released binary opens them.
+  ref: Src/BeebEm.vcxproj:98,117,134,157 - Src/Speech.cpp:57,1621 - Help/speech.html
+
+files:
+
+  # -- BBC Model B --
+
+  - name: OS12.rom
+    path: BeebFile/BBC/OS12.rom
+    description: "BBC Micro OS 1.20"
+    system: bbc-micro-b
+    required: true
+    bundled: true
+    size: 16384
+    md5: 0a59a5ba15fe8557b5f7fee32bbd393a
+    sha1: 0d9bcaf6a393c9ce2359ed700ddb53c232c2c45d
+    validation: [size]
+    note: "OS ROM slot. Read into 0xc000; an error is reported unless 16384 bytes are read."
+    source_ref: "Src/BeebMem.cpp:1291-1308, Src/RomConfigFile.cpp:43"
+
+  - name: BASIC2.rom
+    path: BeebFile/BBC/BASIC2.rom
+    description: "BBC BASIC II"
+    system: bbc-micro-b
+    required: true
+    bundled: true
+    size: 16384
+    md5: 2cc67be4624df4dc66617742571a8e3d
+    sha1: 4a7393f3a45ea309f744441c16723e2ef447a281
+    max_size: 131072
+    source_ref: "Src/RomConfigFile.cpp:44, Src/BeebMem.cpp:1322-1356"
+
+  - name: DNFS.rom
+    path: BeebFile/BBC/DNFS.rom
+    description: "Acorn DFS 1.20 and NFS 3.34 combined"
+    system: bbc-micro-b
+    required: true
+    bundled: true
+    size: 16384
+    md5: 5daed103918277e2065dd7e8d23e57a5
+    sha1: 7e3c536baeae84d6498a14e8405319e01ee78232
+    max_size: 131072
+    source_ref: "Src/RomConfigFile.cpp:45, Src/BeebMem.cpp:1322-1356"
+
+  - name: OS12.map
+    path: BeebFile/BBC/OS12.map
+    description: "Debugger symbol map for OS 1.20"
+    system: bbc-micro-b
+    required: false
+    bundled: true
+    size: 19711
+    md5: c335bb52e811d79fd3cc9b4807f98cfd
+    sha1: 3fb4f63479a7bedec968ec47627b17752d5889e1
+    note: "Path derived from the ROM file name by ReplaceFileExt. Absence is silent."
+    source_ref: "Src/BeebMem.cpp:1311-1313"
+
+  # -- BBC Model B with Integra-B board --
+
+  - name: OS12.rom
+    path: BeebFile/BBCINT/OS12.rom
+    description: "BBC Micro OS 1.20, Integra-B configuration"
+    system: bbc-micro-b
+    required: true
+    bundled: true
+    size: 16384
+    md5: 0a59a5ba15fe8557b5f7fee32bbd393a
+    sha1: 0d9bcaf6a393c9ce2359ed700ddb53c232c2c45d
+    validation: [size]
+    note: "OS ROM slot for Model::IntegraB. Same dump as BeebFile/BBC/OS12.rom."
+    source_ref: "Src/RomConfigFile.cpp:63, Src/BeebMem.cpp:1291-1308"
+
+  - name: IBOS126.rom
+    path: BeebFile/BBCINT/IBOS126.rom
+    description: "Integra-B IBOS 1.26"
+    system: bbc-micro-b
+    required: true
+    bundled: true
+    size: 16384
+    md5: 1b57c2ba920a00d5b4ef89be68aedc43
+    sha1: d0153203802c8ec3e3270443be809e23d574280b
+    max_size: 131072
+    source_ref: "Src/RomConfigFile.cpp:64"
+
+  - name: BASIC2.rom
+    path: BeebFile/BBCINT/BASIC2.rom
+    description: "BBC BASIC II"
+    system: bbc-micro-b
+    required: true
+    bundled: true
+    size: 16384
+    md5: 2cc67be4624df4dc66617742571a8e3d
+    sha1: 4a7393f3a45ea309f744441c16723e2ef447a281
+    max_size: 131072
+    source_ref: "Src/RomConfigFile.cpp:65"
+
+  - name: DNFS.rom
+    path: BeebFile/BBCINT/DNFS.rom
+    description: "Acorn DFS 1.20 and NFS 3.34 combined"
+    system: bbc-micro-b
+    required: true
+    bundled: true
+    size: 16384
+    md5: 5daed103918277e2065dd7e8d23e57a5
+    sha1: 7e3c536baeae84d6498a14e8405319e01ee78232
+    max_size: 131072
+    source_ref: "Src/RomConfigFile.cpp:66"
+
+  - name: IBOS.rom
+    path: BeebFile/BBCINT/IBOS.rom
+    description: "Integra-B IBOS 1.20"
+    system: bbc-micro-b
+    required: false
+    bundled: true
+    size: 16384
+    md5: 8882e50d5d98851a04f541c71bd25f31
+    sha1: 0f5b2a5bee23808b34eab2f027f7c1e77395c782
+    max_size: 131072
+    note: "Integra-B slot under the Torch configuration."
+    source_ref: "UserData/Roms_Torch.cfg:24"
+
+  - name: WDFS.rom
+    path: BeebFile/BBCINT/WDFS.rom
+    description: "Watford DFS 1.44"
+    system: bbc-micro-b
+    required: false
+    bundled: true
+    size: 16384
+    md5: 1d250b0242e447e9106e8bfd1f27ea84
+    sha1: 387d2468c6e1360f5b531784ce95d5f71a50c2b5
+    max_size: 131072
+    note: "Filing system slot under the Torch configuration."
+    source_ref: "UserData/Roms_Torch.cfg:26"
+
+  - name: MCP120-CBL.rom
+    path: BeebFile/BBC/MCP120-CBL.rom
+    description: "Torch MCP 1.20 host tube ROM, 8271 FDC"
+    system: bbc-micro-b
+    required: false
+    bundled: true
+    size: 16384
+    md5: 42f92cb02602e903d7bdabb33bf30966
+    sha1: 0edb0db70c9571540793e321f527e68188b6e4cd
+    max_size: 131072
+    note: "Host tube support for the Torch Z80 co-processor on a Model B."
+    source_ref: "UserData/Roms_Torch.cfg:5, Help/z80torch.html"
+
+  # -- BBC Model B Plus --
+
+  - name: B+MOS.rom
+    path: BeebFile/BPLUS/B+MOS.rom
+    description: "BBC Model B Plus MOS 2.00"
+    system: bbc-micro-bplus
+    required: true
+    bundled: true
+    size: 16384
+    md5: 978370cc7ab8589a137ada34388a6e32
+    sha1: d9426dd7454ca199cdef9435daa332cdf405c965
+    validation: [size]
+    note: "OS ROM slot for Model::BPlus."
+    source_ref: "Src/RomConfigFile.cpp:83, Src/BeebMem.cpp:1291-1308"
+
+  - name: BASIC2.rom
+    path: BeebFile/BPLUS/BASIC2.rom
+    description: "BBC BASIC II"
+    system: bbc-micro-bplus
+    required: true
+    bundled: true
+    size: 16384
+    md5: 2cc67be4624df4dc66617742571a8e3d
+    sha1: 4a7393f3a45ea309f744441c16723e2ef447a281
+    max_size: 131072
+    source_ref: "Src/RomConfigFile.cpp:84"
+
+  - name: DFS-2.26.rom
+    path: BeebFile/BPLUS/DFS-2.26.rom
+    description: "Acorn 1770 DFS 2.26"
+    system: bbc-micro-bplus
+    required: true
+    bundled: true
+    size: 16384
+    md5: f083f49d6fe66344c650d7e74249cb96
+    sha1: cf2ebc422a8d24ec6f1a0320520c38a0e704109a
+    max_size: 131072
+    source_ref: "Src/RomConfigFile.cpp:85"
+
+  - name: ADFS-1.30.rom
+    path: BeebFile/BPLUS/ADFS-1.30.rom
+    description: "Acorn ADFS 1.30"
+    system: bbc-micro-bplus
+    required: false
+    bundled: true
+    size: 16384
+    md5: 831ee90ac5d49ba5507252faf0c12536
+    sha1: 301fd05c475a629c4bec70510d4507256a5b00d8
+    max_size: 131072
+    source_ref: "Src/RomConfigFile.cpp:86"
+
+  - name: WDFS.rom
+    path: BeebFile/BPLUS/WDFS.rom
+    description: "Watford DFS 1.44"
+    system: bbc-micro-bplus
+    required: false
+    bundled: true
+    size: 16384
+    md5: 1d250b0242e447e9106e8bfd1f27ea84
+    sha1: 387d2468c6e1360f5b531784ce95d5f71a50c2b5
+    max_size: 131072
+    note: >
+      Named as a Model B Plus essential ROM by the emulator help, which predates
+      the current default configuration: the DefaultRoms table and the shipped
+      Roms.cfg fill the filing system slots with DFS-2.26.rom and ADFS-1.30.rom.
+    source_ref: "Help/roms.html, Src/RomConfigFile.cpp:83-99"
+
+  # -- BBC Master 128 --
+
+  - name: MOS.rom
+    path: BeebFile/M128/MOS.rom
+    description: "BBC Master 128 MOS 3.20"
+    system: bbc-master-128
+    required: true
+    bundled: true
+    size: 16384
+    md5: 9087f772447038a00178488b3591347b
+    sha1: 04d5876999f93fc61a18f172b1fbb3b75db733ac
+    validation: [size]
+    note: "OS ROM slot for Model::Master128."
+    source_ref: "Src/RomConfigFile.cpp:103, Src/BeebMem.cpp:1291-1308"
+
+  - name: Terminal.rom
+    path: BeebFile/M128/Terminal.rom
+    description: "Master 128 Terminal emulator ROM"
+    system: bbc-master-128
+    required: true
+    bundled: true
+    size: 16384
+    md5: 7e053353b78b4631c274280931d96f02
+    sha1: d990f41a3a0605127083a3cf7a3a676dd30423ef
+    max_size: 131072
+    note: "A different dump from the Master ET Terminal.rom of the same name."
+    source_ref: "Src/RomConfigFile.cpp:104"
+
+  - name: BASIC4.rom
+    path: BeebFile/M128/BASIC4.rom
+    description: "BBC BASIC IV"
+    system: bbc-master-128
+    required: true
+    bundled: true
+    size: 16384
+    md5: 63a6f43cbf491533cb03ceca2d2728d4
+    sha1: c45fd3c0abdcd32b78d2288addd2a777b19e9a1d
+    max_size: 131072
+    source_ref: "Src/RomConfigFile.cpp:107"
+
+  - name: DFS.rom
+    path: BeebFile/M128/DFS.rom
+    description: "Master 128 DFS 2.24"
+    system: bbc-master-128
+    required: true
+    bundled: true
+    size: 16384
+    md5: 865a0f7a5d6f10f48798801bf514d761
+    sha1: cff80460954b3b9f75c83bd6a301c45d24d118a6
+    max_size: 131072
+    source_ref: "Src/RomConfigFile.cpp:110"
+
+  - name: ADFS.rom
+    path: BeebFile/M128/ADFS.rom
+    description: "Master 128 ADFS 2.03"
+    system: bbc-master-128
+    required: false
+    bundled: true
+    size: 16384
+    md5: 10f08b255d6a6e3e888631946b628f1a
+    sha1: 7557e99be10d81c0395df2dc6c2f8e2f95896c29
+    max_size: 131072
+    source_ref: "Src/RomConfigFile.cpp:106"
+
+  - name: View.rom
+    path: BeebFile/M128/View.rom
+    description: "Acorn View word processor"
+    system: bbc-master-128
+    required: false
+    bundled: true
+    size: 16384
+    md5: 178d09285727d596f8863f94a2fc8dad
+    sha1: 14820174e8ea802f1ae95186285a4592fd519699
+    max_size: 131072
+    source_ref: "Src/RomConfigFile.cpp:105"
+
+  - name: Edit.rom
+    path: BeebFile/M128/Edit.rom
+    description: "Acorn Edit text editor"
+    system: bbc-master-128
+    required: false
+    bundled: true
+    size: 16384
+    md5: cb3d762eaab6130d1360e1ac575589de
+    sha1: 96d209441f4cabacf3d4e8e9da68cce918ea923e
+    max_size: 131072
+    source_ref: "Src/RomConfigFile.cpp:108"
+
+  - name: ViewSheet.rom
+    path: BeebFile/M128/ViewSheet.rom
+    description: "Acorn ViewSheet spreadsheet"
+    system: bbc-master-128
+    required: false
+    bundled: true
+    size: 16384
+    md5: 7d5a80a8ce929d0a0f6ca8626cb9f436
+    sha1: b7e85a55f517959912422b02248a03a4d32f6998
+    max_size: 131072
+    source_ref: "Src/RomConfigFile.cpp:109"
+
+  - name: ANFS-4.25-2201351.rom
+    path: BeebFile/M128/ANFS-4.25-2201351.rom
+    description: "Acorn Advanced NFS 4.25"
+    system: bbc-master-128
+    required: false
+    bundled: true
+    size: 16384
+    md5: 306cb8ff6622dbfc79dc487ac4e407e1
+    sha1: 14f75d36ffe9af14aaac42df55b4fe3729ba75cf
+    max_size: 131072
+    source_ref: "Src/RomConfigFile.cpp:111"
+
+  - name: MCP122-ABM.rom
+    path: BeebFile/M128/MCP122-ABM.rom
+    description: "Torch MCP 1.22 host tube ROM, Master"
+    system: bbc-master-128
+    required: false
+    bundled: true
+    size: 16384
+    md5: bf3d2b0a61ba36bd08d02f30e632e5ce
+    sha1: 35843ace281494ab40463a69a263244d0cb0ecd6
+    max_size: 131072
+    note: "Host tube support for the Torch Z80 co-processor on a Master."
+    source_ref: "UserData/Roms_Torch.cfg:79, Help/z80torch.html"
+
+  # -- BBC Master ET --
+
+  - name: MOS400.rom
+    path: BeebFile/Master ET/MOS400.rom
+    description: "BBC Master ET MOS 4.00"
+    system: bbc-master-et
+    required: true
+    bundled: true
+    size: 16384
+    md5: 4d4afbf220abaa702026f42f98eb5807
+    sha1: c9483ef3ebd66930e635674a3776d171785ae959
+    validation: [size]
+    note: "OS ROM slot for Model::MasterET."
+    source_ref: "Src/RomConfigFile.cpp:123, Src/BeebMem.cpp:1291-1308"
+
+  - name: Terminal.rom
+    path: BeebFile/Master ET/Terminal.rom
+    description: "Master ET Terminal emulator ROM"
+    system: bbc-master-et
+    required: true
+    bundled: true
+    size: 16384
+    md5: 456cb9035fd3d6c9d4d98adcd65882d8
+    sha1: 0b4425149ca93dddf8d03da3767635dc3f1eecb8
+    max_size: 131072
+    note: "A different dump from the Master 128 Terminal.rom of the same name."
+    source_ref: "Src/RomConfigFile.cpp:124"
+
+  - name: ANFS425.rom
+    path: BeebFile/Master ET/ANFS425.rom
+    description: "Acorn Advanced NFS 4.25"
+    system: bbc-master-et
+    required: true
+    bundled: true
+    size: 16384
+    md5: 306cb8ff6622dbfc79dc487ac4e407e1
+    sha1: 14f75d36ffe9af14aaac42df55b4fe3729ba75cf
+    max_size: 131072
+    note: "Filing system of the Econet terminal, which has no disc filing system."
+    source_ref: "Src/RomConfigFile.cpp:125"
+
+  - name: BASIC4.rom
+    path: BeebFile/Master ET/BASIC4.rom
+    description: "BBC BASIC IV"
+    system: bbc-master-et
+    required: true
+    bundled: true
+    size: 16384
+    md5: 63a6f43cbf491533cb03ceca2d2728d4
+    sha1: c45fd3c0abdcd32b78d2288addd2a777b19e9a1d
+    max_size: 131072
+    source_ref: "Src/RomConfigFile.cpp:126"
+
+  # -- Second processor ROMs --
+
+  - name: 6502Tube.rom
+    path: BeebFile/6502Tube.rom
+    description: "Acorn 6502 second processor Tube OS 1.10"
+    system: bbc-micro-b
+    required: false
+    bundled: true
+    size: 2048
+    md5: cd6ba85e22adec70b6d863de4c053db7
+    sha1: 05980c296e1a7800c4aa21d6bed16323b6d859d5
+    validation: [size]
+    note: >
+      Copied into tube RAM at 0xf800 on every 65C02 reset. An error is reported
+      unless 2048 bytes are read.
+    source_ref: "Src/Tube.cpp:1534-1559"
+
+  - name: Z80.rom
+    path: BeebFile/Z80.rom
+    description: "Acorn Z80 second processor ROM 1.21"
+    system: bbc-micro-b
+    required: false
+    bundled: true
+    size: 4096
+    md5: c4c72ceb73300253dc69c865af32f5ac
+    sha1: d05de861922fed73041cc8ac2666886d95bae15b
+    validation: [size]
+    note: >
+      Loaded for TubeDevice::AcornZ80. An error is reported unless 4096 bytes are
+      read. Jonathan Harston's v1.21; the Acorn v1.20 ships as Z80-1.20.rom and is
+      used by renaming it onto this path.
+    source_ref: "Src/Z80Support.cpp:243-267, Help/z80copro.html"
+
+  - name: CCPN102.rom
+    path: BeebFile/CCPN102.rom
+    description: "Torch Z80 CCPN 1.02 second processor ROM"
+    system: bbc-micro-b
+    required: false
+    bundled: true
+    size: 8192
+    md5: f786d0647f9732fa065695d569d261ab
+    sha1: e6ee738e5f2f8556002b79d18caa8ef21f14e08d
+    size_options: [2048, 4096, 8192]
+    note: >
+      Loaded for TubeDevice::TorchZ80. Up to 8192 bytes are read and a short image
+      is mirrored to fill the 8 KB window: a 2 KB image is repeated four times, a
+      4 KB image twice. No size is rejected.
+    source_ref: "Src/Z80Support.cpp:268-299"
+
+  - name: BIOS.rom
+    path: BeebFile/BIOS.rom
+    description: "Master 512 80186 co-processor BIOS"
+    system: bbc-master-128
+    required: false
+    bundled: true
+    size: 16384
+    md5: de72efe184f74f1cb98f92b1fbf532bb
+    sha1: eb2a043d139ae0f3d512b4f1afa32286510c886c
+    validation: [size]
+    note: >
+      Loaded at 0xf0000 and mirrored three times to fill the top of the 1 MB space.
+      An error is reported unless 0x4000 bytes are read.
+    source_ref: "Src/Master512CoPro.cpp:3768-3797"
+
+  - name: ARMeval_100.rom
+    path: BeebFile/ARMeval_100.rom
+    description: "Acorn ARM Evaluation System ROM 1.00"
+    system: bbc-master-128
+    required: false
+    bundled: true
+    size: 16384
+    md5: 751f615ccbefa312915d1be8aa5617f5
+    sha1: ba33eaf1a23cfef6fc1b88aa516ca2b3693e69d9
+    validation: [size]
+    note: >
+      Rejected as InvalidROM unless the file is exactly ROM_SIZE, which Arm.h
+      defines as 0x4000. The dialog text at BeebWin.cpp:1043 says 4096 bytes and
+      does not match the constant it reports on.
+    source_ref: "Src/Arm.cpp:100-129, Src/Arm.h:254, Src/BeebWin.cpp:1017-1047"
+
+  - name: Sprow.rom
+    path: BeebFile/Sprow.rom
+    description: "Sprow ARM7TDMI co-processor system software 0.40"
+    system: bbc-master-128
+    required: false
+    bundled: true
+    size: 524288
+    md5: 4da45778c15098755294b8b78e32839b
+    sha1: babfb5bdb8265cf3ac7feff254146cb2d2773da1
+    validation: [size]
+    note: >
+      512 KB on-board flash carrying the system software and BASIC. Rejected as
+      InvalidROM unless the file is exactly 0x80000 bytes.
+    source_ref: "Src/SprowCoPro.cpp:51-90, Src/SprowCoPro.h:49, Src/BeebWin.cpp:1058-1088"
+
+  # -- Program directory files --
+
+  - name: Teletext.fnt
+    description: "Mode 7 SAA5050 teletext character set"
+    system: bbc-micro-b
+    required: true
+    bundled: true
+    size: 3456
+    md5: 007ba0c023740666e56f879f5d0d4461
+    sha1: 7d1d2a7321b21a237ad2c52afb21a432ce674967
+    note: >
+      Read from the program directory. The only file whose absence stops the
+      emulator: BuildMode7Font failure makes Initialise return false and Main.cpp
+      then exits with status 1.
+    source_ref: "Src/BeebWin.cpp:491-502, Src/Main.cpp:62-66"
+
+  - name: RelayOn.snd
+    description: "Cassette relay engage sample"
+    system: bbc-micro-b
+    required: false
+    bundled: true
+    size: 297
+    md5: 6e7137fbd3545f8303b6d1594c3b2ccb
+    sha1: b6e7c8a33117f4f8a49c5fd4326f948d1763f1e1
+    note: "Read from the program directory. Missing samples are reported and playback is skipped."
+    source_ref: "Src/Sound.cpp:65, 538-570, 805"
+
+  - name: RelayOff.snd
+    description: "Cassette relay release sample"
+    system: bbc-micro-b
+    required: false
+    bundled: true
+    size: 400
+    md5: 0699cec768a8f84827fef594f4f73c22
+    sha1: 9c9a3d5ebf0e4b4c183e74b9c2ec79f280cc1556
+    source_ref: "Src/Sound.cpp:66, 538-570"
+
+  - name: DriveMotor.snd
+    description: "Disc drive motor sample"
+    system: bbc-micro-b
+    required: false
+    bundled: true
+    size: 44127
+    md5: a681147ce93e1b5a9e22bb00b701e1cf
+    sha1: cf496c677d345bb65feccf8cf2269a4cd7053645
+    source_ref: "Src/Sound.cpp:67, 538-570"
+
+  - name: HeadLoad.snd
+    description: "Disc drive head load sample"
+    system: bbc-micro-b
+    required: false
+    bundled: true
+    size: 8837
+    md5: cf30cf2585f9edff7a3d166e6a07b40a
+    sha1: 2f7204df95363ce56c486696a878ed113bedb23b
+    source_ref: "Src/Sound.cpp:68, 538-570"
+
+  - name: HeadUnload.snd
+    description: "Disc drive head unload sample"
+    system: bbc-micro-b
+    required: false
+    bundled: true
+    size: 4446
+    md5: d9b352abee95ee2873c1753fb0d6ad11
+    sha1: 781692c24e737d60045b10eb0b8434eccdd1ea82
+    source_ref: "Src/Sound.cpp:69, 538-570"
+
+  - name: HeadSeek.snd
+    description: "Disc drive head seek sample"
+    system: bbc-micro-b
+    required: false
+    bundled: true
+    size: 31969
+    md5: 2672a78593558045736c62cf9e0252bc
+    sha1: 759d62a94e1571810fe2edc10e14b07b5dd4b2b5
+    source_ref: "Src/Sound.cpp:70, 538-570"
+
+  - name: HeadStep.snd
+    description: "Disc drive head step sample"
+    system: bbc-micro-b
+    required: false
+    bundled: true
+    size: 2251
+    md5: 46c4fdb65f67ac2cdc97fb42455d3b11
+    sha1: 5e07a972059751d094fc96610734bb6d659348fe
+    source_ref: "Src/Sound.cpp:71, 538-570"
+
+  # -- User data directory files --
+
+  - name: Roms.cfg
+    description: "ROM slot table, one OS ROM plus 16 paged banks per model"
+    system: bbc-micro-b
+    required: true
+    bundled: true
+    size: 840
+    md5: 33c5208252f32334618a3fd9294acdf4
+    sha1: a538968ecb96e520546a99008cdfc2af98a92a81
+    note: >
+      Without it Load returns before the DefaultRoms backfill, every slot stays an
+      empty string and no ROM is loaded. Overridable with -Roms.
+    source_ref: "Src/BeebWin.cpp:334, 473, Src/RomConfigFile.cpp:158-219"
+
+  - name: Roms_Torch.cfg
+    description: "ROM slot table for the Torch Z80 co-processor"
+    system: bbc-micro-b
+    required: false
+    bundled: true
+    size: 817
+    md5: 4a3789eb3c7949871cdbfd856d21625d
+    sha1: 7b0827bd0fd9425c2e1b4f59313701b78f6d83e0
+    note: "Selected by the shipped BeebEmTorch.vbs as `BeebEm.exe -Roms Roms_Torch.cfg`."
+    source_ref: "BeebEmTorch.vbs:3, Help/z80torch.html"
+
+  - name: Preferences.cfg
+    description: "Emulator preferences"
+    system: bbc-micro-b
+    required: false
+    bundled: true
+    size: 2047
+    md5: 0108b1eb683308408ad109ce6e4d2839
+    sha1: 31291e6f9e2f0b20ccb80bf3ef5e2fe8a5dc712c
+    note: "Absence is reported and built-in defaults are used. Rewritten on save."
+    source_ref: "Src/BeebWin.cpp:296, Src/BeebWinPrefs.cpp:282-298, Src/Preferences.cpp:59-66"
+
+  - name: Logical.kmap
+    description: "Logical keyboard mapping"
+    system: bbc-micro-b
+    required: false
+    bundled: true
+    size: 6716
+    md5: 07b0e1d4cb329185a8a52c48db00bcf9
+    sha1: 5817277bcb110b747432b8716a0ffbe0c1e13de2
+    note: "Read at ApplyPreferences. The return value is ignored, leaving the built-in map."
+    source_ref: "Src/BeebWin.cpp:560-563, Src/KeyMap.cpp:65-78"
+
+  - name: Default.kmap
+    description: "Default keyboard mapping"
+    system: bbc-micro-b
+    required: false
+    bundled: true
+    size: 6716
+    md5: 199de64bdb59a176d102f03cca4eadf9
+    sha1: 63c72e11f6ce8cd9dc5ebb96b4938010f4b2e4f0
+    source_ref: "Src/BeebWin.cpp:565-567, Src/KeyMap.cpp:65-78"
+
+  - name: DefaultUser.kmap
+    description: "Fallback user keyboard mapping"
+    system: bbc-micro-b
+    required: false
+    bundled: true
+    size: 6716
+    md5: 199de64bdb59a176d102f03cca4eadf9
+    sha1: 63c72e11f6ce8cd9dc5ebb96b4938010f4b2e4f0
+    note: "Read only when the user key map preference is unset or fails to load."
+    source_ref: "Src/BeebWinPrefs.cpp:934-957"
+
+  - name: Econet.cfg
+    description: "Econet station to address map"
+    system: bbc-micro-b
+    required: false
+    bundled: true
+    size: 5704
+    md5: 7cb22b998d2de0f85a638485b9f8db6e
+    sha1: faf55cd1eafaa3499695fe8179e43ffe6f86daaa
+    note: >
+      Read when Econet is enabled, which is off by default. A read failure makes
+      EconetReset return false and Econet stays off. Overridable with -EconetCfg.
+    source_ref: "Src/BeebWin.cpp:526-537, Src/Econet.cpp:784-792, 1039-1042"
+
+  - name: AUNMap
+    description: "Econet network to IP subnet map"
+    system: bbc-micro-b
+    required: false
+    bundled: true
+    size: 1812
+    md5: d2e4b22f9433cf16a3dcb320dc2cf1a2
+    sha1: efd505f459448c5741a8ca249089f068b72cb751
+    note: "Read only when AUN mode is on. Overridable with -AUNMap."
+    source_ref: "Src/BeebWin.cpp:539-550, Src/Econet.cpp:931-938, 1059-1061"

@@ -1,0 +1,109 @@
+emulator: ARMSX1
+type: standalone
+core_classification: community_fork
+source: "https://github.com/ARMSX2/ARMSX1"
+source_branch: "android-compose"
+upstream: "https://github.com/allkern/psxe"
+profiled_date: "2026-08-11"
+source_commit: "fadd20b6587a291e59b49378a2428358c6663b8c"
+core_version: "0.1.3"
+display_name: "Sony - PlayStation (ARMSX1)"
+verification: existence
+bios_size: 524288
+bios_directory: "bios/"
+cores:
+  - armsx1
+systems:
+  - sony-playstation
+
+notes: |
+  PlayStation emulator forked from psxe, rebuilt around SDL2 frontends and a
+  Dear ImGui fullscreen shell. Desktop, Android, iOS, UWP, WebAssembly and
+  PSVita builds come out of one tree. The Android application is
+  com.nanodata.armsx with the activity com.armsx2.Main, and its Compose
+  launcher hosts the same core in process.
+  ref: README.md:1-2, android/app/build.gradle:71-79,
+       android/app/src/main/AndroidManifest.xml:78-92
+
+  A BIOS image is required. Boot stops before a session exists when no path
+  resolves, and again when the file cannot be read. Skip BIOS does not change
+  that: the image runs from reset and the hook only takes over at the shell
+  entry point, once the kernel is built.
+  ref: frontend/main.cpp:2529-2549, psx/psx.c:249-252, psx/fastboot.h:45,
+       psx/fastboot.c:225-239
+
+  psxe_cfg_get_bios_path answers in three steps: the override file when it
+  exists, then a scan of the search folder, then the override path unchanged.
+  The override is [bios].override_file or -b and defaults to bios.bin under the
+  preference path SDL_GetPrefPath("nanodata", "armsx"); the search folder is
+  [bios].search_path or -B and defaults to the relative path bios.
+  ref: frontend/config.c:1540-1559, frontend/config.c:1385-1404,
+       frontend/config.c:677-683, frontend/config.c:54-57
+
+  The scan reads that folder once, keeps .bin and .rom, and returns the entry
+  named bios.bin. Its other branch compares [bios].preferred_model against each
+  filename through a normaliser that drops every non-alphanumeric character and
+  lowercases the rest, applied to the name including its extension, so
+  scph1001.bin normalises to scph1001bin and no model value equals it. A name
+  carrying no extension, which would, is dropped by the extension filter first.
+  ref: frontend/config.c:292-357, frontend/config.c:226-247,
+       frontend/config.c:249-260
+
+  Nothing identifies the image beyond that. No name table, no size test, no
+  hash. The loader takes the file's own length, allocates it, and the bus maps
+  the device from 0x1fc00000 over that same length, which is how the 1 MB
+  SCPH-5903 image stays addressable in full.
+  ref: psx/dev/bios.c:21-54, psx/bus.c:50-54, psx/dev/bios.h:8-10
+
+  preferred_model carries 22 values, SCPH-1000 through SCPH-102C, printed by
+  --help-model and mirrored by the Android model picker.
+  ref: frontend/config.c:177-200,
+       android/app/src/main/java/com/armsx2/config/Ps1Settings.kt:416-423
+
+  On Android the preference path is the application files directory, so
+  settings.toml and the default bios.bin sit there. The BIOS picker copies the
+  chosen dump to user_bios.bin and writes its absolute path into
+  [bios].override_file. EmulatorActivity passes --bios <files>/bios.bin when
+  the package carries an assets/bios.bin, and the in-process launcher repeats
+  that check with stat; release 0.1.3 ships no such asset.
+  ref: android/app/src/main/java/com/armsx2/core/Ps1Config.kt:20-41,
+       android/app/src/main/java/com/armsx2/ui/settings/Ps1BiosTab.kt:38-48,
+       android/app/src/main/java/com/nanodata/armsx/EmulatorActivity.java:58-61,
+       android/app/src/main/java/com/nanodata/armsx/EmulatorActivity.java:95-99,
+       frontend/android_jni.cpp:1708-1743, ARMSX1-0.1.3-release.apk assets
+
+  The remaining paths the core opens are per game, and are written by the
+  emulator or picked by the user: memory cards, created blank at first use;
+  save states, rewind snapshots and screenshots; a GameShark .cht catalogue
+  named by [cheats].cheats_file; and content-addressed PNG packs under the
+  replacements folder of [video].texture_dir.
+  ref: psx/dev/mcd.c:139-154, psx/cheats.c:346-390, psx/texrep.c:846-848
+
+files:
+  - name: scph1001.bin
+    agnostic: true
+    required: true
+    min_size: 524288
+    max_size: 1048576
+    description: "PlayStation BIOS image"
+    note: >-
+      Any image is accepted, whatever its name and length: the file is read
+      whole and mapped at its own size. 524288 is the region psx_bios_init
+      declares before the load, and 1048576 the SCPH-5903 image the loader
+      names as the exception. The folder scan reaches an image only under the
+      name bios.bin; [bios].override_file, -b and the Android picker open a
+      path directly.
+    source_ref: "psx/dev/bios.c:21-54, psx/dev/bios.h:8-10, frontend/config.c:292-357, frontend/config.c:1540-1559, frontend/main.cpp:2529-2535"
+
+  - name: "<expansion>.rom"
+    required: false
+    config_key: "paths.expansion_rom"
+    max_size: 524288
+    unsourceable: "any expansion port ROM the user points at, under no name and no version the code expects"
+    description: "Expansion port ROM image"
+    note: >-
+      Read into the 512 KB region at 0x1f000000, which is filled with 0xff when
+      no path is set. Named by [paths].expansion_rom, -e, or the Advanced tab of
+      the Android settings. A path that is set and cannot be opened fails
+      psx_init and stops the boot.
+    source_ref: "psx/dev/exp1.c:12-44, psx/dev/exp1.h:8-10, psx/psx.c:260-261, frontend/config.c:681, frontend/main.cpp:1906, android/app/src/main/java/com/armsx2/ui/settings/Ps1AdvancedTab.kt:96-100"

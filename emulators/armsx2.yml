@@ -1,0 +1,844 @@
+emulator: ARMSX2
+type: standalone + libretro
+core_classification: community_fork
+bios_mode: agnostic
+source: "https://github.com/ARMSX2/ARMSX2"
+upstream: "https://github.com/PCSX2/pcsx2"
+profiled_date: "2026-08-11"
+source_commit: "e509b17e7a8f741f89c1e2a36539c32122467d34"
+core_version: "2.6.6.5"
+display_name: "Sony - PlayStation 2 (ARMSX2)"
+cores:
+  - armsx2
+  - armsx2_libretro
+systems:
+  - sony-playstation-2
+
+bios_directory: "bios/"
+resources_directory: "resources/"
+
+notes: |
+  PlayStation 2 emulator, a GPL-3.0 fork of PCSX2 that replaces the x86-64 only
+  EE, IOP, VU and vtlb fast memory recompilers with native AArch64 ones. One tree
+  builds the Android application com.armsx2, an iOS package, macOS, Windows and
+  Linux on arm64, an SDL handheld frontend, and a libretro core.
+  ref: README.md:1-24, platforms/android/app/build.gradle.kts:17-74,
+       .github/workflows/build-all.yml:79-85
+
+  A BIOS image is required and boot stops without one: LoadBIOS returning false
+  makes VMManager report that a PlayStation 2 BIOS is needed and return a startup
+  failure. Only a GS dump replay skips the load. The folder is Bios under the data
+  directory, bios by default, and on Android the setup wizard keeps it in
+  app-private storage because the native file APIs cannot reliably open a dump off
+  a SAF volume.
+  ref: pcsx2/ps2/BiosTools.cpp:332-348, pcsx2/VMManager.cpp:1592-1607,
+       pcsx2/Pcsx2Config.cpp:2498,
+       platforms/android/app/src/main/java/kr/co/iefriends/pcsx2/NativeApp.java:82-93
+
+  Detection is by content. The scan lists the BIOS folder, keeps files between 4
+  and 8 MB, and accepts an image whose romdir carries a RESET entry followed by a
+  readable ROMVER; the fifth ROMVER character gives the zone among Japan, USA,
+  Europe, Asia, China, T10K, COH-H, Test and Free, and an EXTINFO entry supplies
+  the serial. An image named in the configuration is opened at its own path,
+  without the size filter. No name and no hash is matched anywhere. The image is
+  read into the 4 MB ROM region and truncated to it, and one shorter than 2465792
+  bytes turns off the OSDSys parameter HLE. IsBIOSFromFd runs the same romdir test
+  on a file descriptor, which is how the Android picker identifies a dump handed
+  over by the storage framework.
+  ref: pcsx2/ps2/BiosTools.cpp:16-17, pcsx2/ps2/BiosTools.cpp:80-197,
+       pcsx2/ps2/BiosTools.cpp:258-309, pcsx2/ps2/BiosTools.cpp:350-373
+
+  Companions derive from the selected image. rom1 and rom2 are appended to the
+  full name first, then substituted for the existing extension, so an image at
+  ps2-0230a-20080220.bin is followed by ps2-0230a-20080220.bin.rom1 then
+  ps2-0230a-20080220.rom1, and the open retries case-insensitively. Both regions
+  are 4 MB here. The nvm and the mec are read at the substituted extension only;
+  the nvm is rebuilt in memory with region and language defaults when it is
+  missing or its config block is blank, and the mec is written back to disk as
+  0x00020603 when it cannot be read.
+  ref: pcsx2/ps2/BiosTools.cpp:214-241, pcsx2/ps2/BiosTools.cpp:381-397,
+       pcsx2/MemoryTypes.h:12-14, pcsx2/CDVD/CDVD.cpp:46-60,
+       pcsx2/CDVD/CDVD.cpp:147-214
+
+  The network adapter opens eeprom.dat and flash.dat from the working directory,
+  standing in a compiled-in image for the first and a card filled with 0xFF for
+  the second. DEV9hdd.raw is the default name of the empty disk image the settings
+  page writes, and memory cards, save states and screenshots are likewise produced
+  by the emulator rather than read from a distribution.
+  ref: pcsx2/DEV9/DEV9.cpp:109-160, pcsx2/DEV9/flash.cpp:8-16,
+       pcsx2/DEV9/flash.cpp:62-86, pcsx2/DEV9/DEV9.h:31-33
+
+  An IRX named in the configuration is read into the ROM region at 0x3C0000 once
+  the IOP reaches 0x1630. The field is empty by default and names no file of its
+  own.
+  ref: pcsx2/ps2/BiosTools.cpp:243-256, pcsx2/ps2/BiosTools.cpp:399-400,
+       pcsx2/R3000AInterpreter.cpp:220
+
+  Everything under the resources folder is read at its own name from
+  EmuFolders::Resources, and GetOverridableResourcePath lets a copy in
+  UserResources take precedence. The standalone builds carry the folder with them,
+  the Android application unpacks it from its assets and force-refreshes the
+  shaders and the two game databases on update because a stale copy no longer
+  matches the binary. The libretro core ships as a bare shared object and reads
+  the same tree from <system>/pcsx2/resources, with the BIOS folder at
+  <system>/pcsx2/bios, so a libretro user supplies both.
+  ref: pcsx2/Pcsx2Config.cpp:2348-2357, pcsx2/Pcsx2Config.cpp:2507,
+       pcsx2/Pcsx2Config.cpp:2584-2598, pcsx2-libretro/Main.cpp:157-158,
+       pcsx2-libretro/Main.cpp:1000,
+       platforms/android/app/src/main/java/kr/co/iefriends/pcsx2/MainActivity.java:60-61,
+       platforms/android/app/src/main/java/kr/co/iefriends/pcsx2/MainActivity.java:355-372
+
+  Missing resources are not uniformly survivable. A font that cannot be read fails
+  LoadFontData, which fails ImGuiManager::Initialize and tears the GS device down,
+  whichever renderer is running. A shader source that cannot be read fails the
+  pipeline compile and the device with it, but only for the backend that reads it,
+  and the renderer setting picks among OpenGL, Vulkan and, on Windows, Direct3D 11
+  and 12. Vulkan is the only backend the Android, iOS and libretro builds have, so
+  its sources are the ones no session can do without. The single caught failure is
+  the Vulkan sharpening pipeline, which turns itself off. The databases, the patch
+  archive, the controller mappings, the sounds and the interface artwork degrade
+  instead.
+  ref: pcsx2/ImGui/ImGuiManager.cpp:155-160, pcsx2/ImGui/ImGuiManager.cpp:501-575,
+       pcsx2/GS/GS.cpp:88-110, pcsx2/GS/GS.cpp:160-179,
+       pcsx2/GS/Renderers/Vulkan/GSDeviceVK.cpp:2593-2612
+
+  The Qt builds resolve a per-script interface font by filename, first under
+  UserResources then under the resources folder, and download the first entry of
+  the script table into UserResources/fonts when neither holds it. Only the Latin
+  and emoji entries are shipped.
+  ref: pcsx2-qt/Translations.cpp:312-370, pcsx2-qt/Translations.cpp:407-424,
+       pcsx2-qt/Translations.cpp:541-549
+
+files:
+  - name: ps2-0230a-20080220.bin
+    path: pcsx2/bios/ps2-0230a-20080220.bin
+    standalone_path: bios/ps2-0230a-20080220.bin
+    agnostic: true
+    required: true
+    min_size: 4194304
+    max_size: 8388608
+    validation: [size]
+    description: "PS2 BIOS image"
+    note: >-
+      Any image whose romdir holds RESET and ROMVER is accepted, whatever its
+      name. The 4 to 8 MB range gates the folder scan; an image named in the
+      configuration skips that range. Read into the 4 MB ROM region and truncated
+      to it. Shorter than 2465792 bytes disables the OSDSys parameter HLE.
+    source_ref: "pcsx2/ps2/BiosTools.cpp:16-17, pcsx2/ps2/BiosTools.cpp:80-197, pcsx2/ps2/BiosTools.cpp:258-294, pcsx2/ps2/BiosTools.cpp:332-373"
+
+  - name: ps2-0230a-20080220.rom1
+    path: pcsx2/bios/ps2-0230a-20080220.rom1
+    standalone_path: bios/ps2-0230a-20080220.rom1
+    required: false
+    max_size: 4194304
+    description: "DVD player ROM"
+    note: >-
+      Tried as {bios}.rom1 then {biosbase}.rom1, with a case-insensitive retry on
+      the open. Copied to the ROM1 region and truncated to 4 MB. Logged and
+      skipped when absent.
+    source_ref: "pcsx2/ps2/BiosTools.cpp:214-241, pcsx2/ps2/BiosTools.cpp:381, pcsx2/ps2/BiosTools.cpp:386-397, pcsx2/MemoryTypes.h:13"
+
+  - name: ps2-0230a-20080220.rom2
+    path: pcsx2/bios/ps2-0230a-20080220.rom2
+    standalone_path: bios/ps2-0230a-20080220.rom2
+    required: false
+    max_size: 4194304
+    description: "Chinese ROM extension"
+    note: >-
+      Same two-step naming as rom1. Copied to the ROM2 region, which is 4 MB in
+      this tree. Only present on Chinese region consoles.
+    source_ref: "pcsx2/ps2/BiosTools.cpp:214-241, pcsx2/ps2/BiosTools.cpp:382, pcsx2/ps2/BiosTools.cpp:386-397, pcsx2/MemoryTypes.h:14"
+
+  - name: ps2-0230a-20080220.nvm
+    path: pcsx2/bios/ps2-0230a-20080220.nvm
+    standalone_path: bios/ps2-0230a-20080220.nvm
+    required: false
+    hle_fallback: true
+    size: 1024
+    description: "Console NVRAM"
+    note: >-
+      Read at the BIOS path with the extension replaced by nvm. Carries the
+      console id, the iLink id, the MAC, the model number and the OSD
+      configuration. A 1024 byte image is built in memory when the file is absent,
+      short, or carries a blank config block, zeroed except for a fixed iLink id
+      and the language and region defaults of the BIOS region.
+    source_ref: "pcsx2/CDVD/CDVD.cpp:46-47, pcsx2/CDVD/CDVD.cpp:147-200"
+
+  - name: ps2-0230a-20080220.mec
+    path: pcsx2/bios/ps2-0230a-20080220.mec
+    standalone_path: bios/ps2-0230a-20080220.mec
+    required: false
+    hle_fallback: true
+    size: 4
+    description: "Mechacon version"
+    note: >-
+      Read at the BIOS path with the extension replaced by mec. Defaults to
+      0x00020603 and is written back at that path when it cannot be read.
+    source_ref: "pcsx2/CDVD/CDVD.cpp:60, pcsx2/CDVD/CDVD.cpp:201-214"
+
+  - name: eeprom.dat
+    required: false
+    hle_fallback: true
+    size: 64
+    description: "DEV9 EEPROM"
+    note: >-
+      Opened from the working directory when the network adapter starts and mapped
+      over 64 bytes. A compiled-in image stands in when the file is missing or
+      cannot be mapped.
+    source_ref: "pcsx2/DEV9/DEV9.cpp:60, pcsx2/DEV9/DEV9.cpp:109-160"
+
+  - name: flash.dat
+    required: false
+    hle_fallback: true
+    max_size: 8650752
+    description: "DEV9 SmartMedia flash image"
+    note: >-
+      Opened from the working directory at network adapter init and read as 1024
+      blocks of 16 pages of 512 bytes plus 16 ECC bytes. The card is filled with
+      0xFF when the file is absent, and a short read is logged.
+    source_ref: "pcsx2/DEV9/flash.cpp:8-16, pcsx2/DEV9/flash.cpp:62-86"
+
+  - name: "<module>.irx"
+    required: false
+    config_key: "EmuCore/CurrentIRX"
+    unsourceable: "any IOP module the user points at, under no name and no version the code expects"
+    description: "IOP module injected at boot"
+    note: >-
+      Read into the ROM region at 0x3C0000 when the IOP program counter reaches
+      0x1630 and the setting is longer than three characters. Empty by default.
+    source_ref: "pcsx2/ps2/BiosTools.cpp:243-256, pcsx2/ps2/BiosTools.cpp:399-400, pcsx2/R3000AInterpreter.cpp:220, pcsx2/Config.h:1601"
+
+  - name: GameIndex.yaml
+    path: pcsx2/resources/GameIndex.yaml
+    standalone_path: resources/GameIndex.yaml
+    required: false
+    bundled: true
+    description: "Game database"
+    note: >-
+      Read from the resources folder, keyed by serial, carrying the per-game
+      fixes, patches and settings overrides. Parsed once on first lookup.
+    source_ref: "pcsx2/GameDatabase.cpp:43, pcsx2/GameDatabase.cpp:1205-1210"
+
+  - name: armsx2_overrides.yaml
+    path: pcsx2/resources/armsx2_overrides.yaml
+    standalone_path: resources/armsx2_overrides.yaml
+    required: false
+    bundled: true
+    description: "Mobile GPU game database overlay"
+    note: >-
+      Second pass over the game database, merged onto the entries GameIndex.yaml
+      declares. Carries GS and JIT tuning correct on tiler GPUs. Kept outside the
+      shipped resources folder and copied in only for arm64 Linux, Android and
+      iOS; the loader no-ops where it is absent.
+    source_ref: "pcsx2/GameDatabase.cpp:50, pcsx2/GameDatabase.cpp:1211-1214, cmake/BuildParameters.cmake:186-200, pcsx2/CMakeLists.txt:1441-1451, platforms/android/app/build.gradle.kts:40-48"
+
+  - name: RedumpDatabase.yaml
+    path: pcsx2/resources/RedumpDatabase.yaml
+    standalone_path: resources/RedumpDatabase.yaml
+    required: false
+    bundled: true
+    description: "Disc track hash database"
+    note: >-
+      Loaded on the first hash lookup and used to tell the user whether a dump
+      matches a known good one. Read by the Qt game summary page.
+    source_ref: "pcsx2/GameDatabase.cpp:1278, pcsx2/GameDatabase.cpp:1328-1345, pcsx2-qt/Settings/GameSummaryWidget.cpp:322"
+
+  - name: patches.zip
+    path: pcsx2/resources/patches.zip
+    standalone_path: resources/patches.zip
+    required: false
+    bundled: true
+    description: "Game patch archive"
+    note: >-
+      Per-game pnach entries matched on serial and disc CRC. The patches and
+      cheats folders take precedence over the archive. Fetched from the
+      pcsx2_patches releases at build time for the desktop builds and committed
+      for Android and iOS.
+    source_ref: "pcsx2/Patch.cpp:118, pcsx2/Patch.cpp:290-318, pcsx2/Patch.cpp:425-435, .github/workflows/linux_build_qt.yml:33"
+
+  - name: game_controller_db.txt
+    path: pcsx2/resources/game_controller_db.txt
+    standalone_path: resources/game_controller_db.txt
+    required: false
+    bundled: true
+    description: "SDL controller mapping database"
+    note: >-
+      A copy in the data root wins, then the resources folder, and the path is
+      handed to SDL as a hint. SDL falls back to its built-in mappings when
+      neither exists.
+    source_ref: "pcsx2/Input/SDLInputSource.cpp:24, pcsx2/Input/SDLInputSource.cpp:614-627"
+
+  - name: Roboto-Regular.ttf
+    path: pcsx2/resources/fonts/Roboto-Regular.ttf
+    standalone_path: resources/fonts/Roboto-Regular.ttf
+    required: true
+    bundled: true
+    description: "Interface font"
+    note: >-
+      Seeded as the standard font when no language layer supplied one, which is
+      always the case on Android. LoadFontData fails without it and the GS device
+      is torn down.
+    source_ref: "pcsx2/ImGui/ImGuiManager.cpp:501-523, pcsx2/ImGui/ImGuiManager.cpp:155-160, pcsx2/GS/GS.cpp:160-179"
+
+  - name: RobotoMono-Medium.ttf
+    path: pcsx2/resources/fonts/RobotoMono-Medium.ttf
+    standalone_path: resources/fonts/RobotoMono-Medium.ttf
+    required: true
+    bundled: true
+    description: "Fixed-width interface font"
+    note: >-
+      Read for the fixed-width font. LoadFontData fails without it. Also the
+      initial path the fullscreen interface offers when picking a custom OSD font.
+    source_ref: "pcsx2/ImGui/ImGuiManager.cpp:544-552, pcsx2/ImGui/FullscreenUI_Settings.cpp:3417"
+
+  - name: fa-solid-900.ttf
+    path: pcsx2/resources/fonts/fa-solid-900.ttf
+    standalone_path: resources/fonts/fa-solid-900.ttf
+    required: true
+    bundled: true
+    description: "Font Awesome icon font"
+    note: "Read for the interface icon glyphs. LoadFontData fails without it."
+    source_ref: "pcsx2/ImGui/ImGuiManager.cpp:554-562"
+
+  - name: promptfont.otf
+    path: pcsx2/resources/fonts/promptfont.otf
+    standalone_path: resources/fonts/promptfont.otf
+    required: true
+    bundled: true
+    description: "Controller prompt font"
+    note: "Read for the controller button glyphs. LoadFontData fails without it."
+    source_ref: "pcsx2/ImGui/ImGuiManager.cpp:564-572"
+
+  - name: Twemoji.Mozilla.ttf
+    path: pcsx2/resources/fonts/Twemoji.Mozilla.ttf
+    standalone_path: resources/fonts/Twemoji.Mozilla.ttf
+    required: false
+    bundled: true
+    description: "Emoji font"
+    note: >-
+      First entry of the emoji script table, resolved under UserResources then the
+      resources folder and downloaded into UserResources/fonts when neither holds
+      it.
+    source_ref: "pcsx2-qt/Translations.cpp:340-347, pcsx2-qt/Translations.cpp:407-424, pcsx2-qt/Translations.cpp:541-549"
+
+  - name: NotoColorEmoji-Regular.ttf
+    path: pcsx2/resources/fonts/NotoColorEmoji-Regular.ttf
+    standalone_path: resources/fonts/NotoColorEmoji-Regular.ttf
+    required: false
+    bundled: true
+    description: "Android emoji font"
+    note: >-
+      Committed under the Android asset tree and unpacked with the rest of the
+      resources folder. Rendered by the Compose interface.
+    source_ref: "platforms/android/app/src/main/assets/resources/fonts/NotoColorEmoji-Regular.ttf, platforms/android/app/src/main/java/com/armsx2/ui/emulation/EmulationMenuScreen.kt:507"
+
+  - name: NotoSansJP-Regular.ttf
+    path: pcsx2/resources/fonts/NotoSansJP-Regular.ttf
+    standalone_path: resources/fonts/NotoSansJP-Regular.ttf
+    required: false
+    description: "Japanese interface font"
+    note: >-
+      First entry of the Japanese script table. Resolved under UserResources then
+      the resources folder, and downloaded into UserResources/fonts when the
+      interface language needs it and neither holds it. Not shipped.
+    source_ref: "pcsx2-qt/Translations.cpp:354-360, pcsx2-qt/Translations.cpp:407-424, pcsx2-qt/Translations.cpp:541-549"
+
+  - name: NotoSansKR-Regular.ttf
+    path: pcsx2/resources/fonts/NotoSansKR-Regular.ttf
+    standalone_path: resources/fonts/NotoSansKR-Regular.ttf
+    required: false
+    description: "Korean interface font"
+    note: "Same resolution and download path as the Japanese font. Not shipped."
+    source_ref: "pcsx2-qt/Translations.cpp:361-367, pcsx2-qt/Translations.cpp:407-424, pcsx2-qt/Translations.cpp:541-549"
+
+  - name: NotoSansSC-Regular.ttf
+    path: pcsx2/resources/fonts/NotoSansSC-Regular.ttf
+    standalone_path: resources/fonts/NotoSansSC-Regular.ttf
+    required: false
+    description: "Simplified Chinese interface font"
+    note: "Same resolution and download path as the Japanese font. Not shipped."
+    source_ref: "pcsx2-qt/Translations.cpp:320-326, pcsx2-qt/Translations.cpp:407-424, pcsx2-qt/Translations.cpp:541-549"
+
+  - name: NotoSansTC-Regular.ttf
+    path: pcsx2/resources/fonts/NotoSansTC-Regular.ttf
+    standalone_path: resources/fonts/NotoSansTC-Regular.ttf
+    required: false
+    description: "Traditional Chinese interface font"
+    note: "Same resolution and download path as the Japanese font. Not shipped."
+    source_ref: "pcsx2-qt/Translations.cpp:327-333, pcsx2-qt/Translations.cpp:407-424, pcsx2-qt/Translations.cpp:541-549"
+
+  - name: NotoSansArabic-Regular.ttf
+    path: pcsx2/resources/fonts/NotoSansArabic-Regular.ttf
+    standalone_path: resources/fonts/NotoSansArabic-Regular.ttf
+    required: false
+    description: "Arabic interface font"
+    note: "Same resolution and download path as the Japanese font. Not shipped."
+    source_ref: "pcsx2-qt/Translations.cpp:314-319, pcsx2-qt/Translations.cpp:407-424, pcsx2-qt/Translations.cpp:541-549"
+
+  - name: NotoSansHebrew-Regular.ttf
+    path: pcsx2/resources/fonts/NotoSansHebrew-Regular.ttf
+    standalone_path: resources/fonts/NotoSansHebrew-Regular.ttf
+    required: false
+    description: "Hebrew interface font"
+    note: "Same resolution and download path as the Japanese font. Not shipped."
+    source_ref: "pcsx2-qt/Translations.cpp:348-353, pcsx2-qt/Translations.cpp:407-424, pcsx2-qt/Translations.cpp:541-549"
+
+  - name: NotoSansDevanagari-Regular.ttf
+    path: pcsx2/resources/fonts/NotoSansDevanagari-Regular.ttf
+    standalone_path: resources/fonts/NotoSansDevanagari-Regular.ttf
+    required: false
+    description: "Devanagari interface font"
+    note: "Same resolution and download path as the Japanese font. Not shipped."
+    source_ref: "pcsx2-qt/Translations.cpp:334-339, pcsx2-qt/Translations.cpp:407-424, pcsx2-qt/Translations.cpp:541-549"
+
+  - name: tfx.glsl
+    path: pcsx2/resources/shaders/vulkan/tfx.glsl
+    standalone_path: resources/shaders/vulkan/tfx.glsl
+    required: true
+    bundled: true
+    description: "Vulkan texture function shader"
+    note: >-
+      Compiled at device creation. The Vulkan backend is the only one the Android,
+      iOS and libretro builds use, and a source that cannot be read fails the
+      pipeline compile and the device with it.
+    source_ref: "pcsx2/GS/Renderers/Vulkan/GSDeviceVK.cpp:2568, pcsx2/GS/Renderers/Common/GSDevice.cpp:422-425"
+
+  - name: convert.glsl
+    path: pcsx2/resources/shaders/vulkan/convert.glsl
+    standalone_path: resources/shaders/vulkan/convert.glsl
+    required: true
+    bundled: true
+    description: "Vulkan conversion shader"
+    source_ref: "pcsx2/GS/Renderers/Vulkan/GSDeviceVK.cpp:5521-5527, pcsx2/GS/Renderers/Vulkan/GSDeviceVK.cpp:5877"
+
+  - name: present.glsl
+    path: pcsx2/resources/shaders/vulkan/present.glsl
+    standalone_path: resources/shaders/vulkan/present.glsl
+    required: true
+    bundled: true
+    description: "Vulkan presentation shader"
+    source_ref: "pcsx2/GS/Renderers/Vulkan/GSDeviceVK.cpp:5706"
+
+  - name: merge.glsl
+    path: pcsx2/resources/shaders/vulkan/merge.glsl
+    standalone_path: resources/shaders/vulkan/merge.glsl
+    required: true
+    bundled: true
+    description: "Vulkan merge shader"
+    source_ref: "pcsx2/GS/Renderers/Vulkan/GSDeviceVK.cpp:5807"
+
+  - name: interlace.glsl
+    path: pcsx2/resources/shaders/vulkan/interlace.glsl
+    standalone_path: resources/shaders/vulkan/interlace.glsl
+    required: true
+    bundled: true
+    description: "Vulkan interlace shader"
+    source_ref: "pcsx2/GS/Renderers/Vulkan/GSDeviceVK.cpp:5756"
+
+  - name: shadeboost.glsl
+    path: pcsx2/resources/shaders/vulkan/shadeboost.glsl
+    standalone_path: resources/shaders/vulkan/shadeboost.glsl
+    required: true
+    bundled: true
+    description: "Vulkan shade boost shader"
+    note: >-
+      Compiled by the post-processing pass, which runs unconditionally in the
+      device creation chain, so a source that cannot be read fails the device.
+    source_ref: "pcsx2/GS/Renderers/Vulkan/GSDeviceVK.cpp:5857, pcsx2/GS/Renderers/Vulkan/GSDeviceVK.cpp:5911-5917, pcsx2/GS/Renderers/Vulkan/GSDeviceVK.cpp:2593-2598"
+
+  - name: cas.glsl
+    path: pcsx2/resources/shaders/vulkan/cas.glsl
+    standalone_path: resources/shaders/vulkan/cas.glsl
+    required: false
+    bundled: true
+    description: "Vulkan contrast adaptive sharpening shader"
+    note: >-
+      Includes ffx_a.h and ffx_cas.h. The only shader whose compile failure is
+      caught: sharpening is turned off and device creation carries on, because
+      older Adreno compilers reject the compute pipeline.
+    source_ref: "pcsx2/GS/Renderers/Vulkan/GSDeviceVK.cpp:5963, pcsx2/GS/Renderers/Vulkan/GSDeviceVK.cpp:2606-2612"
+
+  - name: imgui.glsl
+    path: pcsx2/resources/shaders/vulkan/imgui.glsl
+    standalone_path: resources/shaders/vulkan/imgui.glsl
+    required: true
+    bundled: true
+    description: "Vulkan interface shader"
+    source_ref: "pcsx2/GS/Renderers/Vulkan/GSDeviceVK.cpp:5989"
+
+  - name: fxaa.fx
+    path: pcsx2/resources/shaders/common/fxaa.fx
+    standalone_path: resources/shaders/common/fxaa.fx
+    required: true
+    bundled: true
+    description: "FXAA shader, shared by every backend"
+    note: >-
+      Compiled by the Vulkan and OpenGL post-processing passes as part of device
+      creation, so the device fails without it. The Direct3D backends compile it
+      lazily on first use and only lose the effect.
+    source_ref: "pcsx2/GS/Renderers/Vulkan/GSDeviceVK.cpp:5884, pcsx2/GS/Renderers/OpenGL/GSDeviceOGL.cpp:607, pcsx2/GS/Renderers/OpenGL/GSDeviceOGL.cpp:2805-2813, pcsx2/GS/Renderers/DX11/GSDevice11.cpp:1933-1940"
+
+  - name: ffx_a.h
+    path: pcsx2/resources/shaders/common/ffx_a.h
+    standalone_path: resources/shaders/common/ffx_a.h
+    required: false
+    bundled: true
+    description: "FidelityFX helper header"
+    note: >-
+      Read as a source file and substituted for the include line of the sharpening
+      shader before compilation.
+    source_ref: "pcsx2/GS/Renderers/Common/GSDevice.cpp:1481-1488"
+
+  - name: ffx_cas.h
+    path: pcsx2/resources/shaders/common/ffx_cas.h
+    standalone_path: resources/shaders/common/ffx_cas.h
+    required: false
+    bundled: true
+    description: "FidelityFX CAS header"
+    note: "Substituted the same way as ffx_a.h."
+    source_ref: "pcsx2/GS/Renderers/Common/GSDevice.cpp:1481-1488"
+
+  - name: tfx_vgs.glsl
+    path: pcsx2/resources/shaders/opengl/tfx_vgs.glsl
+    standalone_path: resources/shaders/opengl/tfx_vgs.glsl
+    required: false
+    bundled: true
+    description: "OpenGL texture function vertex and geometry shader"
+    note: >-
+      The OpenGL backend is one of three the renderer setting selects, and it is
+      what an Android device falls back to when Vulkan is not chosen. Its device
+      creation fails without this source; a Vulkan session is unaffected.
+    source_ref: "pcsx2/GS/Renderers/OpenGL/GSDeviceOGL.cpp:749-753, pcsx2/GS/GS.cpp:88-110"
+
+  - name: tfx_fs.glsl
+    path: pcsx2/resources/shaders/opengl/tfx_fs.glsl
+    standalone_path: resources/shaders/opengl/tfx_fs.glsl
+    required: false
+    bundled: true
+    description: "OpenGL texture function fragment shader"
+    note: "Read with tfx_vgs.glsl; the OpenGL device fails without it."
+    source_ref: "pcsx2/GS/Renderers/OpenGL/GSDeviceOGL.cpp:749-753"
+
+  - name: convert.glsl
+    path: pcsx2/resources/shaders/opengl/convert.glsl
+    standalone_path: resources/shaders/opengl/convert.glsl
+    required: false
+    bundled: true
+    description: "OpenGL conversion shader"
+    note: "The OpenGL device fails without it."
+    source_ref: "pcsx2/GS/Renderers/OpenGL/GSDeviceOGL.cpp:441-447"
+
+  - name: present.glsl
+    path: pcsx2/resources/shaders/opengl/present.glsl
+    standalone_path: resources/shaders/opengl/present.glsl
+    required: false
+    bundled: true
+    description: "OpenGL presentation shader"
+    note: "The OpenGL device fails without it."
+    source_ref: "pcsx2/GS/Renderers/OpenGL/GSDeviceOGL.cpp:527-532"
+
+  - name: merge.glsl
+    path: pcsx2/resources/shaders/opengl/merge.glsl
+    standalone_path: resources/shaders/opengl/merge.glsl
+    required: false
+    bundled: true
+    description: "OpenGL merge shader"
+    note: "The OpenGL device fails without it."
+    source_ref: "pcsx2/GS/Renderers/OpenGL/GSDeviceOGL.cpp:563-568"
+
+  - name: interlace.glsl
+    path: pcsx2/resources/shaders/opengl/interlace.glsl
+    standalone_path: resources/shaders/opengl/interlace.glsl
+    required: false
+    bundled: true
+    description: "OpenGL interlace shader"
+    note: "The OpenGL device fails without it."
+    source_ref: "pcsx2/GS/Renderers/OpenGL/GSDeviceOGL.cpp:586-591"
+
+  - name: shadeboost.glsl
+    path: pcsx2/resources/shaders/opengl/shadeboost.glsl
+    standalone_path: resources/shaders/opengl/shadeboost.glsl
+    required: false
+    bundled: true
+    description: "OpenGL shade boost shader"
+    note: >-
+      Compiled with the FXAA program in the OpenGL device creation chain, so that
+      device fails without it.
+    source_ref: "pcsx2/GS/Renderers/OpenGL/GSDeviceOGL.cpp:607-608, pcsx2/GS/Renderers/OpenGL/GSDeviceOGL.cpp:3060-3066"
+
+  - name: cas.glsl
+    path: pcsx2/resources/shaders/opengl/cas.glsl
+    standalone_path: resources/shaders/opengl/cas.glsl
+    required: false
+    bundled: true
+    description: "OpenGL contrast adaptive sharpening shader"
+    note: >-
+      A desktop GL compute shader, gated away from GL ES contexts because feeding
+      it to an ES compiler crashes some drivers.
+    source_ref: "pcsx2/GS/Renderers/OpenGL/GSDeviceOGL.cpp:3251, pcsx2/GS/Renderers/OpenGL/GSDeviceOGL.cpp:610-615"
+
+  - name: imgui.glsl
+    path: pcsx2/resources/shaders/opengl/imgui.glsl
+    standalone_path: resources/shaders/opengl/imgui.glsl
+    required: false
+    bundled: true
+    description: "OpenGL interface shader"
+    note: "The OpenGL device fails without it."
+    source_ref: "pcsx2/GS/Renderers/OpenGL/GSDeviceOGL.cpp:709-710, pcsx2/GS/Renderers/OpenGL/GSDeviceOGL.cpp:3309-3316"
+
+  - name: tfx.fx
+    path: pcsx2/resources/shaders/dx11/tfx.fx
+    standalone_path: resources/shaders/dx11/tfx.fx
+    required: false
+    bundled: true
+    description: "Direct3D texture function shader"
+    note: >-
+      Read by the Direct3D 11 and Direct3D 12 backends of the Windows on arm64
+      build, whose devices fail without it. The Android asset step drops the dx11
+      folder because the mobile backends never compile it.
+    source_ref: "pcsx2/GS/Renderers/DX11/GSDevice11.cpp:215-218, pcsx2/GS/Renderers/DX12/GSDevice12.cpp:967, platforms/android/app/build.gradle.kts:40-47"
+
+  - name: convert.fx
+    path: pcsx2/resources/shaders/dx11/convert.fx
+    standalone_path: resources/shaders/dx11/convert.fx
+    required: false
+    bundled: true
+    description: "Direct3D conversion shader"
+    note: "The Direct3D devices fail without it."
+    source_ref: "pcsx2/GS/Renderers/DX11/GSDevice11.cpp:229-231, pcsx2/GS/Renderers/DX12/GSDevice12.cpp:2827"
+
+  - name: present.fx
+    path: pcsx2/resources/shaders/dx11/present.fx
+    standalone_path: resources/shaders/dx11/present.fx
+    required: false
+    bundled: true
+    description: "Direct3D presentation shader"
+    note: "The Direct3D devices fail without it."
+    source_ref: "pcsx2/GS/Renderers/DX11/GSDevice11.cpp:265, pcsx2/GS/Renderers/DX12/GSDevice12.cpp:2971"
+
+  - name: merge.fx
+    path: pcsx2/resources/shaders/dx11/merge.fx
+    standalone_path: resources/shaders/dx11/merge.fx
+    required: false
+    bundled: true
+    description: "Direct3D merge shader"
+    note: "The Direct3D devices fail without it."
+    source_ref: "pcsx2/GS/Renderers/DX11/GSDevice11.cpp:317, pcsx2/GS/Renderers/DX12/GSDevice12.cpp:3050"
+
+  - name: interlace.fx
+    path: pcsx2/resources/shaders/dx11/interlace.fx
+    standalone_path: resources/shaders/dx11/interlace.fx
+    required: false
+    bundled: true
+    description: "Direct3D interlace shader"
+    note: "The Direct3D devices fail without it."
+    source_ref: "pcsx2/GS/Renderers/DX11/GSDevice11.cpp:352, pcsx2/GS/Renderers/DX12/GSDevice12.cpp:3014"
+
+  - name: shadeboost.fx
+    path: pcsx2/resources/shaders/dx11/shadeboost.fx
+    standalone_path: resources/shaders/dx11/shadeboost.fx
+    required: false
+    bundled: true
+    description: "Direct3D shade boost shader"
+    source_ref: "pcsx2/GS/Renderers/DX11/GSDevice11.cpp:372, pcsx2/GS/Renderers/DX12/GSDevice12.cpp:3120"
+
+  - name: cas.hlsl
+    path: pcsx2/resources/shaders/dx11/cas.hlsl
+    standalone_path: resources/shaders/dx11/cas.hlsl
+    required: false
+    bundled: true
+    description: "Direct3D contrast adaptive sharpening shader"
+    note: "Includes ffx_a.h and ffx_cas.h."
+    source_ref: "pcsx2/GS/Renderers/DX11/GSDevice11.cpp:2259, pcsx2/GS/Renderers/DX12/GSDevice12.cpp:2299"
+
+  - name: imgui.fx
+    path: pcsx2/resources/shaders/dx11/imgui.fx
+    standalone_path: resources/shaders/dx11/imgui.fx
+    required: false
+    bundled: true
+    description: "Direct3D interface shader"
+    note: "The Direct3D devices fail without it."
+    source_ref: "pcsx2/GS/Renderers/DX11/GSDevice11.cpp:2309-2313, pcsx2/GS/Renderers/DX12/GSDevice12.cpp:2327"
+
+  - name: message.wav
+    path: pcsx2/resources/sounds/achievements/message.wav
+    standalone_path: resources/sounds/achievements/message.wav
+    required: false
+    bundled: true
+    description: "Achievement notification sound"
+    note: >-
+      Played from the resources folder when the achievement information sound is
+      enabled and no custom sound is set.
+    source_ref: "pcsx2/Achievements.cpp:68, pcsx2/Achievements.cpp:1275-1281, pcsx2/Achievements.cpp:1525"
+
+  - name: unlock.wav
+    path: pcsx2/resources/sounds/achievements/unlock.wav
+    standalone_path: resources/sounds/achievements/unlock.wav
+    required: false
+    bundled: true
+    description: "Achievement unlock sound"
+    source_ref: "pcsx2/Achievements.cpp:69, pcsx2/Achievements.cpp:1275-1281, pcsx2/Achievements.cpp:1578"
+
+  - name: lbsubmit.wav
+    path: pcsx2/resources/sounds/achievements/lbsubmit.wav
+    standalone_path: resources/sounds/achievements/lbsubmit.wav
+    required: false
+    bundled: true
+    description: "Leaderboard submission sound"
+    source_ref: "pcsx2/Achievements.cpp:70, pcsx2/Achievements.cpp:1275-1281, pcsx2/Achievements.cpp:1672"
+
+  - name: placeholder.png
+    path: pcsx2/resources/fullscreenui/placeholder.png
+    standalone_path: resources/fullscreenui/placeholder.png
+    required: false
+    bundled: true
+    description: "Fullscreen interface placeholder texture"
+    note: >-
+      Named as the placeholder texture when the fullscreen interface initialises.
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:335"
+
+  - name: no-save.png
+    path: pcsx2/resources/fullscreenui/no-save.png
+    standalone_path: resources/fullscreenui/no-save.png
+    required: false
+    bundled: true
+    description: "Empty save slot texture"
+    source_ref: "pcsx2/ImGui/ImGuiOverlays.cpp:1664"
+
+  - name: media-cdrom.svg
+    path: pcsx2/resources/fullscreenui/media-cdrom.svg
+    standalone_path: resources/fullscreenui/media-cdrom.svg
+    required: false
+    bundled: true
+    description: "Game list menu icon"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:1367, pcsx2/ImGui/FullscreenUI.cpp:3483"
+
+  - name: start-game.svg
+    path: pcsx2/resources/fullscreenui/start-game.svg
+    standalone_path: resources/fullscreenui/start-game.svg
+    required: false
+    bundled: true
+    description: "Start game menu icon"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:1373"
+
+  - name: applications-system.svg
+    path: pcsx2/resources/fullscreenui/applications-system.svg
+    standalone_path: resources/fullscreenui/applications-system.svg
+    required: false
+    bundled: true
+    description: "Settings menu icon"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:1380, pcsx2/ImGui/FullscreenUI.cpp:3478"
+
+  - name: exit.svg
+    path: pcsx2/resources/fullscreenui/exit.svg
+    standalone_path: resources/fullscreenui/exit.svg
+    required: false
+    bundled: true
+    description: "Exit menu icon"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:1386, pcsx2/ImGui/FullscreenUI.cpp:1519"
+
+  - name: start-file.svg
+    path: pcsx2/resources/fullscreenui/start-file.svg
+    standalone_path: resources/fullscreenui/start-file.svg
+    required: false
+    bundled: true
+    description: "Start file menu icon"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:1443"
+
+  - name: drive-cdrom.svg
+    path: pcsx2/resources/fullscreenui/drive-cdrom.svg
+    standalone_path: resources/fullscreenui/drive-cdrom.svg
+    required: false
+    bundled: true
+    description: "Start disc menu icon"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:1449"
+
+  - name: start-bios.svg
+    path: pcsx2/resources/fullscreenui/start-bios.svg
+    standalone_path: resources/fullscreenui/start-bios.svg
+    required: false
+    bundled: true
+    description: "Start BIOS menu icon"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:1455"
+
+  - name: back-icon.svg
+    path: pcsx2/resources/fullscreenui/back-icon.svg
+    standalone_path: resources/fullscreenui/back-icon.svg
+    required: false
+    bundled: true
+    description: "Back menu icon"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:1461, pcsx2/ImGui/FullscreenUI.cpp:1511"
+
+  - name: desktop-mode.svg
+    path: pcsx2/resources/fullscreenui/desktop-mode.svg
+    standalone_path: resources/fullscreenui/desktop-mode.svg
+    required: false
+    bundled: true
+    description: "Desktop mode menu icon"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:1527"
+
+  - name: AppBanner.svg
+    path: pcsx2/resources/icons/AppBanner.svg
+    standalone_path: resources/icons/AppBanner.svg
+    required: false
+    bundled: true
+    description: "Application banner"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:762"
+
+  - name: AppIconLarge.png
+    path: pcsx2/resources/icons/AppIconLarge.png
+    standalone_path: resources/icons/AppIconLarge.png
+    required: false
+    bundled: true
+    description: "Application icon"
+    note: >-
+      Drawn by the fullscreen interface, shown by the Qt setup wizard, and copied
+      out when a desktop entry is written.
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:1291, pcsx2-qt/SetupWizardDialog.cpp:165, pcsx2-qt/QtUtils.cpp:843"
+
+  - name: AppIconLarge.ico
+    path: pcsx2/resources/icons/AppIconLarge.ico
+    standalone_path: resources/icons/AppIconLarge.ico
+    required: false
+    bundled: true
+    description: "Windows application icon"
+    note: "Read next to the program when a shortcut is written."
+    source_ref: "pcsx2-qt/QtUtils.cpp:755"
+
+  - name: ra-icon.svg
+    path: pcsx2/resources/icons/ra-icon.svg
+    standalone_path: resources/icons/ra-icon.svg
+    required: false
+    bundled: true
+    description: "RetroAchievements icon"
+    source_ref: "pcsx2/ImGui/FullscreenUI_Settings.cpp:4388, pcsx2-qt/SetupWizardDialog.cpp:428, pcsx2-qt/Settings/AchievementLoginDialog.cpp:21"
+
+  - name: "star-<rating>.svg"
+    path: pcsx2/resources/icons/
+    standalone_path: resources/icons/
+    required: false
+    bundled: true
+    description: "Compatibility rating icons"
+    note: >-
+      Six files, star-0.svg through star-5.svg, named from the compatibility
+      rating of the entry.
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:767, pcsx2-qt/GameList/GameListModel.cpp:529"
+
+  - name: "<region>.svg"
+    path: pcsx2/resources/icons/flags/
+    standalone_path: resources/icons/flags/
+    required: false
+    bundled: true
+    description: "Region flag icons"
+    note: >-
+      Forty-eight files, named from the region of the entry through
+      RegionToFlagFilename.
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:2842"
+
+  - name: cover-placeholder.png
+    path: pcsx2/resources/cover-placeholder.png
+    standalone_path: resources/cover-placeholder.png
+    required: false
+    bundled: true
+    description: "Game list cover placeholder"
+    source_ref: "pcsx2-qt/GameList/GameListModel.cpp:531"

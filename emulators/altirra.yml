@@ -1,0 +1,1018 @@
+emulator: Altirra
+type: standalone
+core_classification: embedded_hle
+source: "https://www.virtualdub.org/altirra.html"
+upstream: "https://www.virtualdub.org/altirra.html"
+profiled_date: "2026-08-11"
+core_version: "4.40"
+display_name: "Atari - 400/800/1200XL/XL/XE/XEGS/5200 (Altirra)"
+cores: [altirra]
+systems: [atari-400-800, xegs, atari-5200]
+
+# Altirra emulates the Atari 400/800, 1200XL, 600XL/800XL, 130XE, XEGS and 5200.
+# Windows only; ES-DE launches Altirra64.exe or Altirra.exe.
+#
+# Firmware is identified by content, never by filename. ATUIScanForFirmware
+# (uifirmwarescan.cpp:29-113) walks a folder the user picks, keeps every file whose
+# size is one of 1024, 2048, 4096, 6144, 8192, 10240, 16384, 32768 or 65536
+# (ATFirmwareAutodetectCheckSize, firmwaredetect.cpp:130-150), then matches CRC32
+# against kATKnownFirmwares (firmwaredetect.cpp:24-121). A recognised image is
+# registered by path under Firmware\Available (ATFirmwareManager::AddFirmware,
+# firmwaremanager.cpp:765-781) and read back from that path afterwards. Images the
+# table does not know are added by hand with an explicit type from the menu in
+# uifirmware.cpp:498-585. No code path opens a firmware file by name, so no entry
+# below carries aliases.
+#
+# Every external image is optional. Altirra links replacement ROMs into the binary
+# as resources (ATLoadInternalFirmware, firmwaremanager.cpp:189-295; res/Altirra.rc:4260-4292)
+# and GetCompatibleFirmware selects them when nothing is registered
+# (firmwaremanager.cpp:502-549). The setup wizard states it: "Altirra has internal
+# replacements for all standard ROMs" (uisetupwizard.cpp:134-138). The internal set
+# covers the 400/800, XL/XE, 65C816 and 5200 kernels, BASIC, the Ultimate1MB recovery
+# BIOS, the Rapidus bootstrap, the 1030 download image and the 1090 charset. NoKernel,
+# No5200, NoMIO, NoBlackBox and NoGame are empty placeholders the loader reports as
+# unusable (firmwaremanager.cpp:218-233), so those types have no fallback.
+#
+# Images the detect table does not cover carry max_size rather than size: LoadFirmware
+# reads at most the buffer length and leaves the remainder at its fill value
+# (firmwaremanager.cpp:674-763), so a shorter dump is accepted.
+#
+# The 850 relocator and handler load only from internal resources (rs232.cpp:995-996);
+# kATFirmwareType_MyIDE and kATFirmwareType_5200Cartridge have no consumer anywhere in
+# the tree. None of the three is a user-supplied file.
+
+files:
+  # -- Images Altirra recognises by size + CRC32 (firmwaredetect.cpp:24-121) --
+
+  - name: atari-5200-os-4port.rom
+    description: "Atari 5200 OS (4-port)"
+    system: atari-5200
+    required: false
+    hle_fallback: true
+    size: 2048
+    crc32: "4248d3e3"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:25, src/Altirra/source/simulator.cpp:4800"
+
+  - name: atari-5200-os-2port.rom
+    description: "Atari 5200 OS (2-port)"
+    system: atari-5200
+    required: false
+    hle_fallback: true
+    size: 2048
+    crc32: "c2ba2613"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:26, src/Altirra/source/simulator.cpp:4800"
+
+  - name: atari-basic-rev-a.rom
+    description: "Atari BASIC rev. A"
+    system: atari-400-800
+    required: false
+    hle_fallback: true
+    size: 8192
+    crc32: "4bec4de2"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:27, src/Altirra/source/simulator.cpp:4903-4912"
+
+  - name: atari-basic-rev-b.rom
+    description: "Atari BASIC rev. B"
+    system: atari-400-800
+    required: false
+    hle_fallback: true
+    size: 8192
+    crc32: "f0202fb3"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:28, src/Altirra/source/simulator.cpp:4903-4912"
+
+  - name: atari-basic-rev-c.rom
+    description: "Atari BASIC rev. C"
+    system: atari-400-800
+    required: false
+    hle_fallback: true
+    size: 8192
+    crc32: "7d684184"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:29, src/Altirra/source/simulator.cpp:4903-4912"
+
+  - name: atari-800-os-a-ntsc.rom
+    description: "Atari 400/800 OS-A NTSC"
+    system: atari-400-800
+    required: false
+    hle_fallback: true
+    size: 10240
+    crc32: "c1b3bb02"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:30, src/Altirra/source/simulator.cpp:4796"
+
+  - name: atari-800-os-a-pal.rom
+    description: "Atari 400/800 OS-A PAL"
+    system: atari-400-800
+    required: false
+    hle_fallback: true
+    size: 10240
+    crc32: "72b3fed4"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:31, src/Altirra/source/simulator.cpp:4796"
+
+  - name: atari-800-os-b-ntsc.rom
+    description: "Atari 400/800 OS-B NTSC"
+    system: atari-400-800
+    required: false
+    hle_fallback: true
+    size: 10240
+    crc32: "0e86d61d"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:32, src/Altirra/source/simulator.cpp:4796"
+
+  - name: atari-800-os-b-ntsc-xformer.rom
+    description: "Atari 400/800 OS-B NTSC (Xformer patched)"
+    system: atari-400-800
+    required: false
+    hle_fallback: true
+    size: 10240
+    crc32: "3e28a1fe"
+    validation: [size, crc32]
+    note: "OS-B patched by Xformer, reported as the OS-B specific firmware. Usually distributed as ATARIOSB.ROM (ATHelpFile/source/options-firmware.xml)."
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:33, src/Altirra/source/simulator.cpp:4796"
+
+  - name: atari-800-os-b-pal.rom
+    description: "Atari 400/800 OS-B PAL"
+    system: atari-400-800
+    required: false
+    hle_fallback: true
+    size: 10240
+    crc32: "0c913dfc"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:34, src/Altirra/source/simulator.cpp:4796"
+
+  - name: atari-1200xl-os-rev-10.rom
+    description: "Atari 1200XL OS rev. 10"
+    system: atari-400-800
+    required: false
+    hle_fallback: true
+    size: 16384
+    crc32: "c5c11546"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:35, src/Altirra/source/simulator.cpp:4804"
+
+  - name: atari-1200xl-os-rev-11.rom
+    description: "Atari 1200XL OS rev. 11"
+    system: atari-400-800
+    required: false
+    hle_fallback: true
+    size: 16384
+    crc32: "1a1d7b1b"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:36, src/Altirra/source/simulator.cpp:4804"
+
+  - name: atari-xl-os-ver-1.rom
+    description: "Atari XL/XE OS ver.1"
+    system: atari-400-800
+    required: false
+    hle_fallback: true
+    size: 16384
+    crc32: "643bcc98"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:37, src/Altirra/source/simulator.cpp:4810"
+
+  - name: atari-xl-os-ver-2.rom
+    description: "Atari XL/XE OS ver.2"
+    system: atari-400-800
+    required: false
+    hle_fallback: true
+    size: 16384
+    crc32: "1f9cd270"
+    validation: [size, crc32]
+    note: "The common XL/XE OS, usually distributed as ATARIXL.ROM (ATHelpFile/source/options-firmware.xml)."
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:38, src/Altirra/source/simulator.cpp:4810"
+
+  - name: atari-xl-os-ver-3.rom
+    description: "Atari XL/XE OS ver.3"
+    system: atari-400-800
+    required: false
+    hle_fallback: true
+    size: 16384
+    crc32: "29f133f7"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:39, src/Altirra/source/simulator.cpp:4810"
+
+  - name: atari-xegs-os-ver-4.rom
+    description: "Atari XL/XE/XEGS OS ver.4"
+    system: xegs
+    required: false
+    hle_fallback: true
+    size: 16384
+    crc32: "1eaf4002"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:40, src/Altirra/source/simulator.cpp:4814"
+
+  - name: atari-xegs-missile-command.rom
+    description: "Atari XEGS Missile Command"
+    system: xegs
+    required: false
+    size: 8192
+    crc32: "bdca01fb"
+    validation: [size, crc32]
+    note: "XEGS built-in game ROM."
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:41, src/Altirra/source/simulator.cpp:4921"
+
+  - name: blackbox-1.34.rom
+    description: "Black Box ver. 1.34"
+    system: atari-400-800
+    required: false
+    size: 16384
+    crc32: "a8953874"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:43, src/Altirra/source/blackbox.cpp:352"
+
+  - name: blackbox-1.41.rom
+    description: "Black Box ver. 1.41"
+    system: atari-400-800
+    required: false
+    size: 16384
+    crc32: "91175314"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:44, src/Altirra/source/blackbox.cpp:352"
+
+  - name: blackbox-2.16.rom
+    description: "Black Box ver. 2.16"
+    system: atari-400-800
+    required: false
+    size: 65536
+    crc32: "7cafd9a8"
+    validation: [size, crc32]
+    note: "64K image. 16K images are accepted and bank-rotated (blackbox.cpp:355)."
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:45, src/Altirra/source/blackbox.cpp:352"
+
+  - name: blackbox-floppy-board-1.5.rom
+    description: "Black Box Floppy Board v1.5"
+    system: atari-400-800
+    required: false
+    size: 4096
+    crc32: "769cc316"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:47, src/Altirra/source/blackboxfloppy.cpp:289"
+
+  - name: mio-1.1k-128kbit.rom
+    description: "MIO ver. 1.1k (128Kbit)"
+    system: atari-400-800
+    required: false
+    size: 16384
+    crc32: "7d68f07b"
+    validation: [size, crc32]
+    note: "Oversized EPROM dump: the loader takes the second 8K when the first 8K is blank (mio.cpp:277-292)."
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:49, src/Altirra/source/mio.cpp:275"
+
+  - name: mio-1.1m-128kbit.rom
+    description: "MIO ver. 1.1m (128Kbit)"
+    system: atari-400-800
+    required: false
+    size: 16384
+    crc32: "00694a74"
+    validation: [size, crc32]
+    note: "Oversized EPROM dump: the loader takes the second 8K when the first 8K is blank (mio.cpp:277-292)."
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:50, src/Altirra/source/mio.cpp:275"
+
+  - name: mio-1.41-64kbit.rom
+    description: "MIO ver. 1.41 (64Kbit)"
+    system: atari-400-800
+    required: false
+    size: 8192
+    crc32: "a6a9e3d6"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:51, src/Altirra/source/mio.cpp:275"
+
+  - name: mio-1.41-128kbit.rom
+    description: "MIO ver. 1.41 (128Kbit)"
+    system: atari-400-800
+    required: false
+    size: 16384
+    crc32: "1d400131"
+    validation: [size, crc32]
+    note: "Oversized EPROM dump: the loader takes the second 8K when the first 8K is blank (mio.cpp:277-292)."
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:52, src/Altirra/source/mio.cpp:275"
+
+  - name: mio-1.41-256kbit.rom
+    description: "MIO ver. 1.41 (256Kbit)"
+    system: atari-400-800
+    required: false
+    size: 32768
+    crc32: "e2f4b3a8"
+    validation: [size, crc32]
+    note: "Oversized EPROM dump: the loader takes the second 8K when the first 8K is blank (mio.cpp:277-292)."
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:53, src/Altirra/source/mio.cpp:275"
+
+  - name: atari-810-rev-b.rom
+    description: "Atari 810 firmware rev. B"
+    system: atari-400-800
+    required: false
+    size: 2048
+    crc32: "19227d33"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:54, src/Altirra/source/diskdrivefull.cpp:1165-1213"
+
+  - name: atari-810-rev-c.rom
+    description: "Atari 810 firmware rev. C"
+    system: atari-400-800
+    required: false
+    size: 2048
+    crc32: "0896f03d"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:55, src/Altirra/source/diskdrivefull.cpp:1165-1213"
+
+  - name: atari-810-rev-e.rom
+    description: "Atari 810 firmware rev. E"
+    system: atari-400-800
+    required: false
+    size: 2048
+    crc32: "aad220f4"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:56, src/Altirra/source/diskdrivefull.cpp:1165-1213"
+
+  - name: atari-1050-rev-e.rom
+    description: "Atari 1050 firmware rev. E"
+    system: atari-400-800
+    required: false
+    size: 4096
+    crc32: "f9a7afb2"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:57, src/Altirra/source/diskdrivefull.cpp:1165-1213"
+
+  - name: atari-1050-rev-h.rom
+    description: "Atari 1050 firmware rev. H"
+    system: atari-400-800
+    required: false
+    size: 4096
+    crc32: "6d9d589b"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:58, src/Altirra/source/diskdrivefull.cpp:1165-1213"
+
+  - name: atari-1050-rev-j.rom
+    description: "Atari 1050 firmware rev. J"
+    system: atari-400-800
+    required: false
+    size: 4096
+    crc32: "91ba303d"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:59, src/Altirra/source/diskdrivefull.cpp:1165-1213"
+
+  - name: atari-1050-rev-k.rom
+    description: "Atari 1050 firmware rev. K"
+    system: atari-400-800
+    required: false
+    size: 4096
+    crc32: "3abe7ef4"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:60, src/Altirra/source/diskdrivefull.cpp:1165-1213"
+
+  - name: atari-1050-rev-l.rom
+    description: "Atari 1050 firmware rev. L"
+    system: atari-400-800
+    required: false
+    size: 4096
+    crc32: "fb4b8757"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:61, src/Altirra/source/diskdrivefull.cpp:1165-1213"
+
+  - name: happy-810-v7-6k-modified.rom
+    description: "Happy 810 firmware (v7, 6K functional ROM, modified)"
+    system: atari-400-800
+    required: false
+    size: 6144
+    crc32: "371f6973"
+    validation: [size, crc32]
+    note: "Modified variant of the 6K functional dump."
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:62, src/Altirra/source/diskdrivefull.cpp:1165-1234"
+
+  - name: happy-810-v7-6k.rom
+    description: "Happy 810 firmware (v7, 6K functional ROM)"
+    system: atari-400-800
+    required: false
+    size: 6144
+    crc32: "9cc7a207"
+    validation: [size, crc32]
+    note: "Functional 6K region only; the loader also accepts 3K, 4K and 8K dumps."
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:63, src/Altirra/source/diskdrivefull.cpp:1165-1234"
+
+  - name: happy-810-v7-8k.rom
+    description: "Happy 810 firmware (v7, 8K full ROM)"
+    system: atari-400-800
+    required: false
+    size: 8192
+    crc32: "982d825d"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:64, src/Altirra/source/diskdrivefull.cpp:1165-1234"
+
+  - name: happy-1050-rev-1.rom
+    description: "Happy 1050 firmware rev. 1"
+    system: atari-400-800
+    required: false
+    size: 8192
+    crc32: "19b6bfe5"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:65, src/Altirra/source/diskdrivefull.cpp:1165-1213"
+
+  - name: happy-1050-rev-2.rom
+    description: "Happy 1050 firmware rev. 2"
+    system: atari-400-800
+    required: false
+    size: 8192
+    crc32: "f76eae16"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:66, src/Altirra/source/diskdrivefull.cpp:1165-1213"
+
+  - name: atr8000-3.02.rom
+    description: "ATR8000 firmware ver 3.02"
+    system: atari-400-800
+    required: false
+    size: 4096
+    crc32: "739bab74"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:67, src/Altirra/source/diskdriveatr8000.cpp:450"
+
+  - name: indus-gt-1.1.rom
+    description: "Indus GT firmware ver. 1.1"
+    system: atari-400-800
+    required: false
+    size: 4096
+    crc32: "d125caad"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:68, src/Altirra/source/diskdriveindusgt.cpp:52"
+
+  - name: indus-gt-1.2.rom
+    description: "Indus GT firmware ver. 1.2"
+    system: atari-400-800
+    required: false
+    size: 4096
+    crc32: "d8504b4a"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:69, src/Altirra/source/diskdriveindusgt.cpp:52"
+
+  - name: us-doubler-rev-l.rom
+    description: "US Doubler firmware rev. L"
+    system: atari-400-800
+    required: false
+    size: 4096
+    crc32: "605b7153"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:70, src/Altirra/source/diskdrivefull.cpp:1165-1213"
+
+  - name: 810-turbo-1.2.rom
+    description: "810 Turbo firmware V1.2"
+    system: atari-400-800
+    required: false
+    size: 2048
+    crc32: "0126a511"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:71, src/Altirra/source/diskdrivefull.cpp:1165-1213"
+
+  - name: percom-rfd-1.00.rom
+    description: "Percom RFD V1.00"
+    system: atari-400-800
+    required: false
+    size: 2048
+    crc32: "5a396459"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:72, src/Altirra/source/diskdrivepercom.cpp:88-92"
+
+  - name: percom-rfd-1.10.rom
+    description: "Percom RFD V1.10"
+    system: atari-400-800
+    required: false
+    size: 2048
+    crc32: "e2d4a05c"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:73, src/Altirra/source/diskdrivepercom.cpp:88-92"
+
+  - name: percom-rfd-1.20.rom
+    description: "Percom RFD V1.20"
+    system: atari-400-800
+    required: false
+    size: 2048
+    crc32: "c6c73d23"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:74, src/Altirra/source/diskdrivepercom.cpp:88-92"
+
+  - name: percom-rfd-2.10.rom
+    description: "Percom RFD V2.10"
+    system: atari-400-800
+    required: false
+    size: 2048
+    crc32: "ac141045"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:75, src/Altirra/source/diskdrivepercom.cpp:88-92"
+
+  - name: astra-1001-1620.rom
+    description: "Astra 1001/1620 (based on Percom RFD V1.10)"
+    system: atari-400-800
+    required: false
+    size: 2048
+    crc32: "2ab65122"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:76, src/Altirra/source/diskdrivepercom.cpp:88-92"
+
+  - name: percom-at-88-1.2.rom
+    description: "Percom AT-88 V1.2 (460-0066-001)"
+    system: atari-400-800
+    required: false
+    size: 2048
+    crc32: "2372fae6"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:77, src/Altirra/source/diskdrivepercom.cpp:88-92"
+
+  - name: percom-at-88-1.2-damaged.rom
+    description: "Percom AT-88 V1.2 (damaged) (460-0066-001)"
+    system: atari-400-800
+    required: false
+    size: 2048
+    crc32: "fd13a674"
+    validation: [size, crc32]
+    note: "Damaged dump of the same EPROM as percom-at-88-1.2.rom."
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:78, src/Altirra/source/diskdrivepercom.cpp:88-92"
+
+  - name: percom-at88-spd-1.01.rom
+    description: "Percom AT88-SPD V1.01 (0073)"
+    system: atari-400-800
+    required: false
+    size: 4096
+    crc32: "518900e6"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:79, src/Altirra/source/diskdrivepercom.cpp:88-92"
+
+  - name: percom-at88-spd-1.11.rom
+    description: "Percom AT88-SPD V1.11 (1-9-84)"
+    system: atari-400-800
+    required: false
+    size: 4096
+    crc32: "87a0d7e7"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:80, src/Altirra/source/diskdrivepercom.cpp:88-92"
+
+  - name: percom-at88-spd-1.21.rom
+    description: "Percom AT88-SPD V1.21 (5-4-84)"
+    system: atari-400-800
+    required: false
+    size: 4096
+    crc32: "fc6675f2"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:81, src/Altirra/source/diskdrivepercom.cpp:88-92"
+
+  - name: 1050-turbo-ii-3.4.rom
+    description: "1050 Turbo II V3.4"
+    system: atari-400-800
+    required: false
+    size: 8192
+    crc32: "55dfc9ac"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:82, src/Altirra/source/diskdrivefull.cpp:1165-1213"
+
+  - name: 1050-turbo-ii-3.5.rom
+    description: "1050 Turbo II V3.5"
+    system: atari-400-800
+    required: false
+    size: 8192
+    crc32: "4a69312b"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:83, src/Altirra/source/diskdrivefull.cpp:1165-1213"
+
+  - name: atari-815.rom
+    description: "Atari 815 firmware"
+    system: atari-400-800
+    required: false
+    size: 4096
+    crc32: "1527d542"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:84, src/Altirra/source/diskdrive815.cpp:352"
+
+  - name: atari-1090-firmware-rev-9.rom
+    description: "Atari 1090 80-column firmware rev. 9"
+    system: atari-400-800
+    required: false
+    size: 2048
+    crc32: "87809326"
+    validation: [size, crc32]
+    note: "The predefined internal 1090 firmware resolves to no resource, so this image has no fallback (firmwaremanager.cpp:190-211)."
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:85, src/Altirra/source/1090.cpp:172"
+
+  - name: atari-1090-charset.rom
+    description: "Atari 1090 80-column charset"
+    system: atari-400-800
+    required: false
+    hle_fallback: true
+    size: 2048
+    crc32: "8f07d9a0"
+    validation: [size, crc32]
+    note: "Character generator. Synthesised from the internal XL kernel charset when absent (firmwaremanager.cpp:258-268)."
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:86, src/Altirra/source/1090.cpp:179"
+
+  - name: bit3-full-view-80-firmware.rom
+    description: "Bit 3 Full-View 80 firmware"
+    system: atari-400-800
+    required: false
+    size: 4096
+    crc32: "b9d576da"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:87, src/Altirra/source/bit3.cpp:173"
+
+  - name: bit3-full-view-80-charset.rom
+    description: "Bit 3 Full-View 80 charset"
+    system: atari-400-800
+    required: false
+    size: 2048
+    crc32: "738c6ac1"
+    validation: [size, crc32]
+    note: "Character generator."
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:88, src/Altirra/source/bit3.cpp:180"
+
+  - name: bit3-full-view-80-charset-4k.rom
+    description: "Bit 3 Full-View 80 charset (4K overdump)"
+    system: atari-400-800
+    required: false
+    size: 4096
+    crc32: "a4534cea"
+    validation: [size, crc32]
+    note: "4K overdump carrying 2K of unique data (firmwaredetect.cpp:90)."
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:91, src/Altirra/source/bit3.cpp:180"
+
+  - name: xf551-7.4.rom
+    description: "XF551 rev. 7.4"
+    system: atari-400-800
+    required: false
+    size: 8192
+    crc32: "fc02766b"
+    validation: [size, crc32]
+    note: "8K image; the loader reads the first 4K and splits it into two 2K banks."
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:93, src/Altirra/source/diskdrivexf551.cpp:269-276"
+
+  - name: xf551-7.7.rom
+    description: "XF551 rev. 7.7"
+    system: atari-400-800
+    required: false
+    size: 8192
+    crc32: "38b97ae3"
+    validation: [size, crc32]
+    note: "8K image; the loader reads the first 4K and splits it into two 2K banks."
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:94, src/Altirra/source/diskdrivexf551.cpp:269-276"
+
+  - name: xf551-7.7-density-hack.rom
+    description: "XF551 rev. 7.7 (w/broken density hack)"
+    system: atari-400-800
+    required: false
+    size: 4096
+    crc32: "37dda8b1"
+    validation: [size, crc32]
+    note: "Half-size dump with the density hack broken."
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:95, src/Altirra/source/diskdrivexf551.cpp:269-276"
+
+  - name: xf551-7.7-720k.rom
+    description: 'XF551 rev. 7.7 (modified for 720K 3.5")'
+    system: atari-400-800
+    required: false
+    size: 8192
+    crc32: "0e117428"
+    validation: [size, crc32]
+    note: 'Modified for 720K 3.5" drives. 8K image; the loader reads the first 4K and splits it into two 2K banks.'
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:96, src/Altirra/source/diskdrivexf551.cpp:269-276"
+
+  - name: 1400xl-handler-v1.rom
+    description: "1400XL V:/T: handler firmware (unknown v1)"
+    system: atari-400-800
+    required: false
+    size: 4096
+    crc32: "2ba701df"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:98, src/Altirra/source/1400xl.cpp:551-555"
+
+  - name: 1400xl-handler-v2.rom
+    description: "1400XL V:/T: handler firmware (unknown v2)"
+    system: atari-400-800
+    required: false
+    size: 4096
+    crc32: "5ec3ec7d"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:99, src/Altirra/source/1400xl.cpp:551-555"
+
+  - name: 1450xld-disk-controller.rom
+    description: "1450XLD disk controller firmware"
+    system: atari-400-800
+    required: false
+    size: 4096
+    crc32: "7773b7dd"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:101, src/Altirra/source/1450xld.cpp:753-758"
+
+  - name: 1450xld-tong-disk-controller.rom
+    description: '1450XLD "TONG" disk controller firmware'
+    system: atari-400-800
+    required: false
+    size: 4096
+    crc32: "03930886"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:102, src/Altirra/source/1450xld.cpp:753-758"
+
+  - name: 1450xld-disk-handler-rev-e.rom
+    description: "1450XLD disk handler firmware (rev. E)"
+    system: atari-400-800
+    required: false
+    size: 4096
+    crc32: "e8f9c8a7"
+    validation: [size, crc32]
+    note: "The image is 4K; the loader reads its first 2K into mFirmware (1450xld.h:179)."
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:103, src/Altirra/source/1450xld.cpp:738-742"
+
+  - name: 1450xld-disk-handler-rev-f.rom
+    description: "1450XLD disk handler firmware (rev. F)"
+    system: atari-400-800
+    required: false
+    size: 4096
+    crc32: "4bb7fa3a"
+    validation: [size, crc32]
+    note: "The image is 4K; the loader reads its first 2K into mFirmware (1450xld.h:179)."
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:104, src/Altirra/source/1450xld.cpp:738-742"
+
+  - name: 1450xld-disk-handler-post-rev-f.rom
+    description: "1450XLD disk handler firmware (post rev. F)"
+    system: atari-400-800
+    required: false
+    size: 4096
+    crc32: "29359910"
+    validation: [size, crc32]
+    note: "The image is 4K; the loader reads its first 2K into mFirmware (1450xld.h:179)."
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:105, src/Altirra/source/1450xld.cpp:738-742"
+
+  - name: atari-835-internal.rom
+    description: "Atari 835 internal 8048 firmware"
+    system: atari-400-800
+    required: false
+    size: 1024
+    crc32: "d6dd4f41"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:107, src/Altirra/source/1030full.cpp:282"
+
+  - name: atari-1030-internal.rom
+    description: "Atari 1030 internal 8050 firmware"
+    system: atari-400-800
+    required: false
+    size: 4096
+    crc32: "329b1d5b"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:109, src/Altirra/source/1030full.cpp:300"
+
+  - name: atari-1030-external.rom
+    description: "Atari 1030 external ROM firmware"
+    system: atari-400-800
+    required: false
+    size: 8192
+    crc32: "7abdb8e7"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:110, src/Altirra/source/1030full.cpp:301"
+
+  - name: atari-820.rom
+    description: "Atari 820 firmware"
+    system: atari-400-800
+    required: false
+    size: 2048
+    crc32: "79e0fea4"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:112, src/Altirra/source/820full.cpp:206"
+
+  - name: atari-1025.rom
+    description: "Atari 1025 firmware"
+    system: atari-400-800
+    required: false
+    size: 4096
+    crc32: "46d194b4"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:113, src/Altirra/source/1025full.cpp:227"
+
+  - name: atari-1029-english.rom
+    description: "Atari 1029 firmware (English)"
+    system: atari-400-800
+    required: false
+    size: 4096
+    crc32: "19c4f811"
+    validation: [size, crc32]
+    note: "English character set variant."
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:114, src/Altirra/source/1029full.cpp:233"
+
+  - name: atari-850.rom
+    description: "Atari 850 firmware"
+    system: atari-400-800
+    required: false
+    size: 4096
+    crc32: "2cf990b9"
+    validation: [size, crc32]
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:116, src/Altirra/source/850full.cpp:316"
+
+  - name: atari-850-early.rom
+    description: "Atari 850 firmware (early revision)"
+    system: atari-400-800
+    required: false
+    size: 4096
+    crc32: "9201359a"
+    validation: [size, crc32]
+    note: "Early 850 revision."
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:117, src/Altirra/source/850full.cpp:316"
+
+  - name: speedy-xf-1.7.rom
+    description: "Speedy XF v1.7"
+    system: atari-400-800
+    required: false
+    size: 32768
+    crc32: "597eb2e4"
+    validation: [size, crc32]
+    note: "32K image, cloned to 64K by the loader (diskdrivespeedyxf.cpp:363-364)."
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:119, src/Altirra/source/diskdrivespeedyxf.cpp:353-364"
+
+  - name: speedy-xf-1.8.rom
+    description: "Speedy XF v1.8"
+    system: atari-400-800
+    required: false
+    size: 32768
+    crc32: "554a9067"
+    validation: [size, crc32]
+    note: "32K image, cloned to 64K by the loader (diskdrivespeedyxf.cpp:363-364)."
+    source_ref: "src/Altirra/source/firmwaredetect.cpp:120, src/Altirra/source/diskdrivespeedyxf.cpp:353-364"
+
+  # -- Types with no row in the detect table. Registered by hand with an explicit
+  #    type from the menu in uifirmware.cpp:498-585; max_size is the read length
+  #    at the load site. --
+
+  - name: 810-archiver.rom
+    description: "810 Archiver disk drive firmware"
+    system: atari-400-800
+    required: false
+    max_size: 4096
+    source_ref: "src/Altirra/source/uifirmware.cpp:528, src/Altirra/source/diskdrivefull.cpp:1165-1213"
+
+  - name: 1050-duplicator.rom
+    description: "1050 Duplicator disk drive firmware"
+    system: atari-400-800
+    required: false
+    max_size: 8192
+    source_ref: "src/Altirra/source/uifirmware.cpp:532, src/Altirra/source/diskdrivefull.cpp:1165-1213"
+
+  - name: speedy-1050.rom
+    description: "Speedy 1050 disk drive firmware"
+    system: atari-400-800
+    required: false
+    max_size: 16384
+    source_ref: "src/Altirra/source/uifirmware.cpp:534, src/Altirra/source/diskdrivefull.cpp:1165-1213"
+
+  - name: super-archiver.rom
+    description: "Super Archiver disk drive firmware"
+    system: atari-400-800
+    required: false
+    max_size: 4096
+    note: "Shared by the Super Archiver and Super Archiver with BitWriter device types (diskdrivefull.cpp:1173-1174)."
+    source_ref: "src/Altirra/source/uifirmware.cpp:536, src/Altirra/source/diskdrivefull.cpp:1165-1213"
+
+  - name: toms-1050.rom
+    description: "TOMS 1050 disk drive firmware"
+    system: atari-400-800
+    required: false
+    max_size: 8192
+    source_ref: "src/Altirra/source/uifirmware.cpp:537, src/Altirra/source/diskdrivefull.cpp:1165-1213"
+
+  - name: tygrys-1050.rom
+    description: "Tygrys 1050 disk drive firmware"
+    system: atari-400-800
+    required: false
+    max_size: 4096
+    source_ref: "src/Altirra/source/uifirmware.cpp:538, src/Altirra/source/diskdrivefull.cpp:1165-1213"
+
+  - name: 1050-turbo.rom
+    description: "1050 Turbo disk drive firmware"
+    system: atari-400-800
+    required: false
+    max_size: 16384
+    source_ref: "src/Altirra/source/uifirmware.cpp:540, src/Altirra/source/diskdrivefull.cpp:1165-1213"
+
+  - name: is-plate.rom
+    description: "I.S. Plate disk drive firmware"
+    system: atari-400-800
+    required: false
+    max_size: 4096
+    source_ref: "src/Altirra/source/uifirmware.cpp:542, src/Altirra/source/diskdrivefull.cpp:1165-1213"
+
+  - name: amdek-amdc.rom
+    description: "Amdek AMDC-I/II disk drive firmware"
+    system: atari-400-800
+    required: false
+    max_size: 4096
+    source_ref: "src/Altirra/source/uifirmware.cpp:548, src/Altirra/source/diskdriveamdc.cpp:88"
+
+  - name: ultimate1mb.rom
+    description: "Ultimate1MB firmware"
+    system: atari-400-800
+    required: false
+    hle_fallback: true
+    max_size: 524288
+    note: "Altirra U1MB Recovery OS is used when no image is registered."
+    source_ref: "src/Altirra/source/uifirmware.cpp:555, src/Altirra/source/simulator.cpp:4985-4996, src/Altirra/source/ultimate1mb.cpp:237-242"
+
+  - name: myide2.rom
+    description: "MyIDE-II cartridge firmware"
+    system: atari-400-800
+    required: false
+    max_size: 524288
+    source_ref: "src/Altirra/source/uifirmware.cpp:556, src/Altirra/source/myide.cpp:304-315"
+
+  - name: side.rom
+    description: "SIDE cartridge firmware"
+    system: atari-400-800
+    required: false
+    max_size: 524288
+    source_ref: "src/Altirra/source/uifirmware.cpp:557, src/Altirra/source/side.cpp:283-294"
+
+  - name: side2.rom
+    description: "SIDE 2 cartridge firmware"
+    system: atari-400-800
+    required: false
+    max_size: 524288
+    source_ref: "src/Altirra/source/uifirmware.cpp:558, src/Altirra/source/side.cpp:283-294"
+
+  - name: side3.rom
+    description: "SIDE 3 cartridge firmware"
+    system: atari-400-800
+    required: false
+    max_size: 8388608
+    source_ref: "src/Altirra/source/uifirmware.cpp:559, src/Altirra/source/side3.cpp:448-460"
+
+  - name: kmkjz-ide.rom
+    description: "KMK/JZ IDE BIOS"
+    system: atari-400-800
+    required: false
+    max_size: 3072
+    note: "The v1 device exposes 0xC00 of its flash, so the loader reads only that much."
+    source_ref: "src/Altirra/source/uifirmware.cpp:560, src/Altirra/source/kmkjzide.cpp:357-394"
+
+  - name: kmkjz-ide2-main.rom
+    description: "KMK/JZ IDE 2 (IDEPlus) main firmware"
+    system: atari-400-800
+    required: false
+    max_size: 131072
+    source_ref: "src/Altirra/source/uifirmware.cpp:561, src/Altirra/source/kmkjzide.cpp:357-394"
+
+  - name: kmkjz-ide2-sdx.rom
+    description: "KMK/JZ IDE 2 (IDEPlus) SpartaDOS X firmware"
+    system: atari-400-800
+    required: false
+    max_size: 524288
+    source_ref: "src/Altirra/source/uifirmware.cpp:562, src/Altirra/source/kmkjzide.cpp:357-394"
+
+  - name: atari-1030-download.rom
+    description: "Atari 1030 modem download image"
+    system: atari-400-800
+    required: false
+    hle_fallback: true
+    max_size: 10368
+    note: "Altirra builds its own download image from src/Kernel/source/1030/firmware.s when none is registered."
+    source_ref: "src/Altirra/source/uifirmware.cpp:568, src/Altirra/source/1030.cpp:1162"
+
+  - name: rapidus-flash.rom
+    description: "Rapidus accelerator flash firmware"
+    system: atari-400-800
+    required: false
+    hle_fallback: true
+    max_size: 524288
+    note: "Altirra Rapidus Bootstrap Flash is used when no image is registered."
+    source_ref: "src/Altirra/source/uifirmware.cpp:571, src/Altirra/source/rapidus.cpp:338"
+
+  - name: rapidus-core-pbi.rom
+    description: "Rapidus 65C816 core PBI firmware"
+    system: atari-400-800
+    required: false
+    hle_fallback: true
+    max_size: 2048
+    note: "Altirra Rapidus Bootstrap 65816 PBI Firmware is used when no image is registered."
+    source_ref: "src/Altirra/source/uifirmware.cpp:572, src/Altirra/source/rapidus.cpp:339"
+
+  - name: ape-warp-os.rom
+    description: "APE Warp+ OS 32-in-1 firmware"
+    system: atari-400-800
+    required: false
+    max_size: 524288
+    source_ref: "src/Altirra/source/uifirmware.cpp:573, src/Altirra/source/warpos.cpp:115"
+
+  # -- Files shipped inside the Altirra archive --
+
+  - name: Altirra.chm
+    description: "Altirra help file"
+    system: atari-400-800
+    required: false
+    bundled: true
+    note: "Opened from the program directory when help is requested."
+    source_ref: "src/Altirra/source/oshelper.cpp:509-529"
+
+  - name: Additions.atr
+    description: "Altirra Additions disk"
+    system: atari-400-800
+    required: false
+    bundled: true
+    note: >
+      Disk image carrying the handler software several emulated devices need:
+      ALTXEP80.SYS for the XEP80, BOOT850.COM for the 850 interface, BOOT1030.COM
+      for the 1030 modem, ATDEBUGX.SYS for the debug link. The user mounts it as an
+      ordinary disk image.
+    source_ref: "src/ATHelpFile/source/additions.xml:3-10, src/Altirra/source/uidevices.cpp:252, src/Altirra/source/uidevices.cpp:486"
