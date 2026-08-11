@@ -1,0 +1,134 @@
+emulator: CSpect
+type: standalone
+core_classification: other
+source: "https://mdf200.itch.io/cspect"
+upstream: "https://mdf200.itch.io/cspect"
+profiled_date: "2026-08-11"
+core_version: "3.3.1.0"
+display_name: "Sinclair - ZX Spectrum Next (#CSpect)"
+verification: existence
+cores: [cspect]
+
+systems:
+  - sinclair-zx-spectrum-next
+  - sinclair-zx-spectrum
+
+notes: |
+  ZX Spectrum Next emulator, assembler and debugger for Windows, macOS and
+  Linux, written in C# against .NET Framework 4.8 and run under Mono elsewhere.
+  It is closed source and shipped as a zip from its itch.io page, so every
+  reference below names a method and an IL offset in the CSpect.exe of 3.3.1.0.
+  Type and member names in that build are obfuscated and the string literals sit
+  XOR encoded in one 18146 byte blob, decoded at class load by b[i] ^ i ^ 0xAA.
+  ref: CSpect.exe 3.3.1.0, ReadMe.txt:9-12
+
+  The machine carries no built-in ROM. A cold reset either loads the Next ROMs
+  or allocates them zero filled, 65536 bytes for the ROM banks and 8192 each for
+  the DivMMC and Multiface ROMs. The loading branch runs when the Next ROM flag
+  is set, which -nextrom and -fw do, which -mmc= does when its argument is an
+  existing file, and which a positional argument does when it opens as a FAT
+  image.
+  ref: CSpect.exe 3.3.1.0 a.H::A(bool) IL_01fe-IL_023c, A.h::A(string[])
+       IL_012b-IL_0197, A.h::A(string[]) IL_0697-IL_070e, A.h::a(string[])
+       IL_0136-IL_0165
+
+  The ROMs live inside the SD card image, not beside the executable. e() opens
+  the image through SDCardAccess.SDCard.Open and pulls each ROM out with
+  SDCard.LoadFile, whose directory walk lowercases both sides of the comparison,
+  so the spelling of these paths carries no weight. Memory pages enNextZX.rom as
+  four 16K banks and the other two as their first 8192 bytes.
+  ref: CSpect.exe 3.3.1.0 a.H::e() IL_000b-IL_00f7, a.H::N(int32)
+       IL_0051-IL_00b1, SDCardAccess.dll SDCard.cs:457-490, SDCard.cs:624-635
+
+  ES-DE launches it as mono CSpect.exe -zxnext -mmc=./ <rom> from the game
+  folder. An -mmc= naming a directory leaves the Next ROM flag clear, so the
+  .nex file runs against the zero filled banks while the bundled esxDOS plugin
+  answers RST $08 out of that directory.
+  ref: es_systems.xml zxnext, A.h::A(string[]) IL_0697-IL_06f7, esxDOS.dll
+       CRST8.cs:940-1020
+
+  A positional argument that ends in none of nex, sna, snx, rom or fw and does
+  not open as a FAT image is taken for a missing card: CSpect offers to fetch
+  one, reads https://zxnext.uk/hosted/ for the first href holding 8gb, unzips it
+  and copies the single .img inside to the requested path. A .rom argument is
+  read into a 128 KB buffer entered at 0x6000 instead, and a .fw argument is
+  unpacked through the TBBLUE.FW header.
+  ref: A.h::a(string[]) IL_0104-IL_0165, A.h::b(string), A.h::B(string, string),
+       a.d::C(string)
+
+  What CSpect writes rather than reads: cspect_win.dat under -r for the window
+  placement, cspect.log for the session log, the F5 screenshots, and the -wad=
+  container under LocalApplicationData/CSpect, which is created when it does not
+  exist. The debugger reads the symbol and map files that -map=, -zmap=, -clst=,
+  -z88dk and -pasta80 name, all of them output of the user's own assembler. The
+  Windows build probes its audio runtime with LoadLibrary("openal32.dll") and
+  offers to run the bundled oalinst.exe when that answers zero.
+  ref: B.E::e(), B.E::E(), a.V::.ctor(string), A.Y::A(), A.g::A(),
+       A.h::a(string[]) IL_02e6-IL_0330
+
+files:
+  - name: enNextZX.rom
+    path: "machines/next/enNextZX.rom"
+    system: sinclair-zx-spectrum-next
+    required: true
+    min_size: 65536
+    description: "NextZXOS and BASIC ROM"
+    note: >-
+      Paged as four 16K banks, so anything shorter than 65536 bytes leaves the
+      top bank unreadable. The image failing to hold it ends the process through
+      Environment.FailFast. Bytes 6 and 7 carry the NextZXOS version as
+      b[6] + ((b[7] & 0x0f) << 8), and a value of 518 or less clears the flag
+      that arms a per instruction hook.
+    source_ref: "CSpect.exe 3.3.1.0 a.H::e() IL_00bd-IL_00c9, a.H::e() IL_0102-IL_0149, a.H::N(int32) IL_0051-IL_0086, A.h::a(string[]) IL_0637-IL_0644"
+
+  - name: enNxtmmc.rom
+    path: "machines/next/enNxtmmc.rom"
+    system: sinclair-zx-spectrum-next
+    required: true
+    min_size: 8192
+    description: "DivMMC ROM, the esxDOS layer over the SD card"
+    note: >-
+      Read into the 8K DivMMC bank. Its absence ends the process through the
+      same Environment.FailFast as enNextZX.rom, except under -fw, where the
+      test is skipped because TBBLUE.FW replaces both reads.
+    source_ref: "CSpect.exe 3.3.1.0 a.H::e() IL_00da-IL_00e6, a.H::e() IL_010a-IL_012e, a.H::N(int32) IL_0087-IL_0097"
+
+  - name: enNextMf.rom
+    path: "machines/next/enNextMf.rom"
+    system: sinclair-zx-spectrum-next
+    required: false
+    min_size: 8192
+    aliases: ["enNextMF.rom"]
+    description: "Multiface ROM"
+    note: >-
+      Read into the 8K Multiface bank with no test of any kind, so a card
+      without it boots and runs. The bank read indexes the array directly,
+      which faults the moment the Multiface is paged in.
+    source_ref: "CSpect.exe 3.3.1.0 a.H::e() IL_00eb-IL_00f7, a.H::N(int32) IL_00a1-IL_00b1"
+
+  - name: TBBLUE.FW
+    path: "TBBLUE.FW"
+    system: sinclair-zx-spectrum-next
+    required: false
+    description: "FPGA core firmware"
+    note: >-
+      Read from the root of the card under -fw only, in place of the three ROMs.
+      Word 0 of its header gives the payload offset as (n + 1) * 512 and word 1
+      the payload length as n * 512, and those bytes are written to memory from
+      0x6000. A .fw file named on the command line takes the same route.
+    source_ref: "CSpect.exe 3.3.1.0 a.H::e() IL_0016-IL_00bb, A.h::A(string[]) IL_0164-IL_0197, a.d::C(string)"
+
+  - name: "<sdcard>.img"
+    system: sinclair-zx-spectrum-next
+    required: true
+    description: "ZX Spectrum Next SD card image"
+    unsourceable: >-
+      A FAT image the user builds or downloads, under whatever name is passed to
+      -mmc= or given as the positional argument. CSpect fetches the current one
+      from https://zxnext.uk/hosted/ on demand, and the machine writes to it.
+    note: >-
+      The only route to the ROMs above. SDCard.Open reads its MBR and boot
+      sector, which is also the test that decides whether a positional argument
+      is a card or a game, and the DivMMC opens the same path read write as its
+      card. A second image mounts on the second slot through -sd2=.
+    source_ref: "CSpect.exe 3.3.1.0 a.H::e() IL_000b-IL_0015, A.h::A(string) IL_0000-IL_0074, A.h::A(string[]) IL_0697-IL_0778, B.R::.ctor(string), SDCardAccess.dll SDCard.cs:600-635"
