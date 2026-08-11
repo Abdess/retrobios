@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-11T07:40:19Z",
-  "total_files": 8321,
-  "total_size": 10455720343,
+  "generated_at": "2026-08-11T07:56:05Z",
+  "total_files": 8357,
+  "total_size": 10466186980,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -48247,6 +48247,146 @@
       "crc32": "6e8b2b47",
       "adler32": "f5bc538e"
     },
+    "b478ce9d1343b8dd201c045f010bd1b64ba158ae": {
+      "path": "bios/Other/armsx2/pcsx2/resources/shaders/opengl/cas.glsl",
+      "name": "cas.glsl",
+      "size": 2413,
+      "sha1": "b478ce9d1343b8dd201c045f010bd1b64ba158ae",
+      "md5": "2c928cbd0410a7e7edae6b2808a1f566",
+      "sha256": "3d5b9cef750ea8bedceef43c4c52215e8280abb81b5b8fa002007bb3f97f0506",
+      "crc32": "ce9e57e4",
+      "adler32": "6031f981"
+    },
+    "32777e258030ad9559864d9f4273d515d65f728f": {
+      "path": "bios/Other/armsx2/pcsx2/resources/shaders/opengl/convert.glsl",
+      "name": "convert.glsl",
+      "size": 15093,
+      "sha1": "32777e258030ad9559864d9f4273d515d65f728f",
+      "md5": "4791fe606bfd87d5afe710c5b4c7bbfb",
+      "sha256": "4ac385f0e38ee2c3a3f7014db86bd59927a5d4e4f76f24df9b8f8b3d97142390",
+      "crc32": "38998f1a",
+      "adler32": "1c0d032f"
+    },
+    "04bfcabf518320593dcda8198475c7f39295ef1f": {
+      "path": "bios/Other/armsx2/pcsx2/resources/shaders/opengl/imgui.glsl",
+      "name": "imgui.glsl",
+      "size": 637,
+      "sha1": "04bfcabf518320593dcda8198475c7f39295ef1f",
+      "md5": "fff1d8c84afbf21c47baaa919e1eef95",
+      "sha256": "25978439553bbd959fe4eb5d03b739a3d697348458a7bac3df48556148f48027",
+      "crc32": "b9848dc2",
+      "adler32": "a7d8c97b"
+    },
+    "d6209a8b3c4681823b1f0b7d0648c819ec72e2ad": {
+      "path": "bios/Other/armsx2/pcsx2/resources/shaders/opengl/interlace.glsl",
+      "name": "interlace.glsl",
+      "size": 6946,
+      "sha1": "d6209a8b3c4681823b1f0b7d0648c819ec72e2ad",
+      "md5": "bd4ca766cc7abf55f37336234248a6fb",
+      "sha256": "ff7e27fa41f33ec5d4a86b2a48a622dbcd8dd0ae37f8afe306fdd182a7aa8ec1",
+      "crc32": "43dd2e9e",
+      "adler32": "e2a83de3"
+    },
+    "7f476bffdc19d7ba2806eef40c2e8e40bdf0896c": {
+      "path": "bios/Other/armsx2/pcsx2/resources/shaders/opengl/merge.glsl",
+      "name": "merge.glsl",
+      "size": 579,
+      "sha1": "7f476bffdc19d7ba2806eef40c2e8e40bdf0896c",
+      "md5": "8ffd758adde9783ba80625a25b06ef7a",
+      "sha256": "6cd2bc21890426b5430d44b28a89289bcc6fc9ecd632bb3a8eafb6c8b818499c",
+      "crc32": "f1b5eedb",
+      "adler32": "a37cb550"
+    },
+    "ca7a974714111895bbf03360078ea1008694c52e": {
+      "path": "bios/Other/armsx2/pcsx2/resources/shaders/opengl/present.glsl",
+      "name": "present.glsl",
+      "size": 11730,
+      "sha1": "ca7a974714111895bbf03360078ea1008694c52e",
+      "md5": "ddb9dab93906986ec0bb63c5aad0401e",
+      "sha256": "27ffa5fdf1634f7be2734d2eff2d9dce0cca71c2832685e0a682388731dc5c60",
+      "crc32": "7f2bb4e3",
+      "adler32": "28b5f85e"
+    },
+    "511dc6bb2f81d0ad61fe46c6e91dce8b344fd934": {
+      "path": "bios/Other/armsx2/pcsx2/resources/shaders/opengl/shadeboost.glsl",
+      "name": "shadeboost.glsl",
+      "size": 1623,
+      "sha1": "511dc6bb2f81d0ad61fe46c6e91dce8b344fd934",
+      "md5": "8e8ebd0758705f947ca6f8eba4baf8e6",
+      "sha256": "e7297a2e333bb1882bcf82d2a109a2ab033715cce1bba4934f42ec68370f0077",
+      "crc32": "30ec9e5f",
+      "adler32": "52b30c3f"
+    },
+    "005cecf1a5e20b05407d55d0aad22cf81ad66c31": {
+      "path": "bios/Other/armsx2/pcsx2/resources/shaders/vulkan/cas.glsl",
+      "name": "cas.glsl",
+      "size": 2637,
+      "sha1": "005cecf1a5e20b05407d55d0aad22cf81ad66c31",
+      "md5": "deb7394a31184990c78c9753a293ff60",
+      "sha256": "ea3f65c6d1b18abe23b42a3d9ddf48d787df287feef6cfac52ca6109d8852d97",
+      "crc32": "e00e7479",
+      "adler32": "59323e74"
+    },
+    "53ff273e335432fdbbff9da2762e229ec2bd5078": {
+      "path": "bios/Other/armsx2/pcsx2/resources/shaders/vulkan/convert.glsl",
+      "name": "convert.glsl",
+      "size": 14024,
+      "sha1": "53ff273e335432fdbbff9da2762e229ec2bd5078",
+      "md5": "383ccce840167fd0264e3e382a411694",
+      "sha256": "e8213fa871bebc8fc883be3bbccf111c8aec1f84063e05a24850efc735312e08",
+      "crc32": "df5810f9",
+      "adler32": "a26ab337"
+    },
+    "b8d20aa6884878ba72c080d3f2107e09606963d3": {
+      "path": "bios/Other/armsx2/pcsx2/resources/shaders/vulkan/imgui.glsl",
+      "name": "imgui.glsl",
+      "size": 791,
+      "sha1": "b8d20aa6884878ba72c080d3f2107e09606963d3",
+      "md5": "23b4ac68a9c4f01ce319d1bfd7ba6627",
+      "sha256": "372e33cccb520a987983dd897c51c6b7e609f16badd67d056a95799a7f768566",
+      "crc32": "1b5ae2e5",
+      "adler32": "638efe68"
+    },
+    "d5ba24ba836c418f7f2d9d8b44bd337baa9e45a3": {
+      "path": "bios/Other/armsx2/pcsx2/resources/shaders/vulkan/interlace.glsl",
+      "name": "interlace.glsl",
+      "size": 7289,
+      "sha1": "d5ba24ba836c418f7f2d9d8b44bd337baa9e45a3",
+      "md5": "6888a8e85b9c0a357580d4464ddd7d0d",
+      "sha256": "af535e4b871b188957a7169ed883f6f8a209f0908e5b7aff17755605c8d07857",
+      "crc32": "21dc5ffb",
+      "adler32": "43e8a7f9"
+    },
+    "e84aa516874350f414e95d3891ce480fe2958aae": {
+      "path": "bios/Other/armsx2/pcsx2/resources/shaders/vulkan/merge.glsl",
+      "name": "merge.glsl",
+      "size": 759,
+      "sha1": "e84aa516874350f414e95d3891ce480fe2958aae",
+      "md5": "d4933454a5637402889209af223d59fe",
+      "sha256": "3c0eb665db06c289841829a6aa4716e46ce5ae8e08005a82ad4f3020bd8406e7",
+      "crc32": "4d559151",
+      "adler32": "b899ea33"
+    },
+    "0e22e330e10f31d7e7d7db00966cd48d1c5c6dce": {
+      "path": "bios/Other/armsx2/pcsx2/resources/shaders/vulkan/present.glsl",
+      "name": "present.glsl",
+      "size": 10336,
+      "sha1": "0e22e330e10f31d7e7d7db00966cd48d1c5c6dce",
+      "md5": "dee17db223f997696ecd59fc2bac56cb",
+      "sha256": "88d9f9b08f3a62cfd77fdf366c2a1ecca7924c407a3eabb1c1df68cfca2ee2d1",
+      "crc32": "980f007e",
+      "adler32": "31fc126f"
+    },
+    "bef69d202c6e21f2ec0d6930e439a9498642ba6b": {
+      "path": "bios/Other/armsx2/pcsx2/resources/shaders/vulkan/shadeboost.glsl",
+      "name": "shadeboost.glsl",
+      "size": 1914,
+      "sha1": "bef69d202c6e21f2ec0d6930e439a9498642ba6b",
+      "md5": "8d55f559c3f1a35c3b8c66f1a57ca25b",
+      "sha256": "31ab20c5617e0bdd3e1afaf9cac2212586f94433f176ca30810a1fecf3f338e8",
+      "crc32": "e5a3fed2",
+      "adler32": "2af75de2"
+    },
     "25e41433147face77af96fecac4519ed11ae8072": {
       "path": "bios/Other/armsx2/placeholder.png",
       "name": "placeholder.png",
@@ -49017,6 +49157,26 @@
       "crc32": "bb56de24",
       "adler32": "28b01f1d"
     },
+    "28c7616cd02e4286f9b4c1c4a8b8850832b49fcb": {
+      "path": "bios/Other/colem/EOS.ROM",
+      "name": "EOS.ROM",
+      "size": 16384,
+      "sha1": "28c7616cd02e4286f9b4c1c4a8b8850832b49fcb",
+      "md5": "cf10b154f2e006a9740d7653cfc47cab",
+      "sha256": "a49928fbac56380917134b54961ece2e90073022f3e04a6023d26cdbbd9c3356",
+      "crc32": "ef6403c5",
+      "adler32": "2d380b09"
+    },
+    "d4aec4efe1431e56fe52d83baf9118542c525255": {
+      "path": "bios/Other/colem/WRITER.ROM",
+      "name": "WRITER.ROM",
+      "size": 32768,
+      "sha1": "d4aec4efe1431e56fe52d83baf9118542c525255",
+      "md5": "4fe4f6800076ea3d897d4285653447bd",
+      "sha256": "3b17255d2679d11f79e6cacda86de5f6bc9bb5cddf78cbddc651af03b237317d",
+      "crc32": "58d86a2a",
+      "adler32": "ba97647e"
+    },
     "15d52de01320d9b954e03b4c2e71ec75fd301bbb": {
       "path": "bios/Other/cpcemu/ROM/COPYMATE.ROM",
       "name": "COPYMATE.ROM",
@@ -49096,6 +49256,26 @@
       "sha256": "456ced147bf5a3a11fe70971f56c1a215e85808fa86dd7d8610a73b3e9b6148e",
       "crc32": "588b5540",
       "adler32": "b1254be6"
+    },
+    "72ecfde5f58c5993765a6ef5b8866c4777cc4ade": {
+      "path": "bios/Other/cspect/enNextZX.rom",
+      "name": "enNextZX.rom",
+      "size": 65536,
+      "sha1": "72ecfde5f58c5993765a6ef5b8866c4777cc4ade",
+      "md5": "8535c40c6cce978623a3e06a38e3a0fd",
+      "sha256": "dd901acd306794ad34f3131ad1df54b6f4de5527ad1b2aa42f82e417f93f17a5",
+      "crc32": "6d9951f0",
+      "adler32": "d3b66ba9"
+    },
+    "4f05efec7af0829f43aa3cac18a30ae2a33ded88": {
+      "path": "bios/Other/cspect/enNxtmmc.rom",
+      "name": "enNxtmmc.rom",
+      "size": 8192,
+      "sha1": "4f05efec7af0829f43aa3cac18a30ae2a33ded88",
+      "md5": "907a03706a196b0da832ddab204264f2",
+      "sha256": "ded2038d78f57b4fd7e05df0330064f661c221f7b06d8cd2bddee1ff6062f019",
+      "crc32": "5a443736",
+      "adler32": "865d3c5e"
     },
     "e6c0050b3c67ee26198488fbbe4a5d019c15b628": {
       "path": "bios/Other/dolphin/codehandler.bin",
@@ -49277,6 +49457,156 @@
       "crc32": "35ee85c3",
       "adler32": "fa9adec5"
     },
+    "3c6b523e5432a892a0c284d9ba2593919b0173b7": {
+      "path": "bios/Other/emucorev/psvita_games.db",
+      "name": "psvita_games.db",
+      "size": 3801088,
+      "sha1": "3c6b523e5432a892a0c284d9ba2593919b0173b7",
+      "md5": "229cf38617d6669286b5d1a48906aa53",
+      "sha256": "ca56a424e87cf4c257dcd3810567e62cb10767096b6a2378e69b07040c5fbc13",
+      "crc32": "69787db6",
+      "adler32": "53e718d5"
+    },
+    "0e2ee74d1f9ebc3a6faf9dbaebbacc2ff053f4df": {
+      "path": "bios/Other/emucorex/games.db",
+      "name": "games.db",
+      "size": 6025216,
+      "sha1": "0e2ee74d1f9ebc3a6faf9dbaebbacc2ff053f4df",
+      "md5": "4b945ee2b52c49c397d368dc21fa42dc",
+      "sha256": "86883a0199a129b900f4a5c7ade6245b7e9d1399ec3c08d1fbf1838c01722e8e",
+      "crc32": "c9a52a37",
+      "adler32": "6ce8f9bd"
+    },
+    "cb0d4276f9947762af0841a8af75efa6cbe9109c": {
+      "path": "bios/Other/emucorex/resources/shaders/opengl/cas.glsl",
+      "name": "cas.glsl",
+      "size": 2483,
+      "sha1": "cb0d4276f9947762af0841a8af75efa6cbe9109c",
+      "md5": "b56eb507fac5ac64a7079514c02b8ca7",
+      "sha256": "53e5ddc6825ecde7b502acb5fae3a173ba6696ec5b8bb7445f378f7b0ad1beb8",
+      "crc32": "13eed5a5",
+      "adler32": "552611d7"
+    },
+    "35910b67070342cdd6ec4d68eb2e56b39d350543": {
+      "path": "bios/Other/emucorex/resources/shaders/opengl/convert.glsl",
+      "name": "convert.glsl",
+      "size": 16416,
+      "sha1": "35910b67070342cdd6ec4d68eb2e56b39d350543",
+      "md5": "b8f058ec01942f596c890a060a32f08b",
+      "sha256": "fcb651c2ff39102a33ece3716579e3aee7d8b92d4700e52b56b6cf14baa8b8d1",
+      "crc32": "bb25c312",
+      "adler32": "afe8a197"
+    },
+    "ca149058af89d8f612aaa529661e8267d9569875": {
+      "path": "bios/Other/emucorex/resources/shaders/opengl/imgui.glsl",
+      "name": "imgui.glsl",
+      "size": 637,
+      "sha1": "ca149058af89d8f612aaa529661e8267d9569875",
+      "md5": "9338b9a25372178b4ecbf0215697e9be",
+      "sha256": "ea82ce9731de4a0b5af3e66e47e048af569e0e98c5739b32f268fb54caa7603a",
+      "crc32": "342d0e13",
+      "adler32": "a57ec97a"
+    },
+    "be39a049af0b8ab0c2168ad6d8cf636e15ae0dd2": {
+      "path": "bios/Other/emucorex/resources/shaders/opengl/interlace.glsl",
+      "name": "interlace.glsl",
+      "size": 5983,
+      "sha1": "be39a049af0b8ab0c2168ad6d8cf636e15ae0dd2",
+      "md5": "9f46187238e838a602b358705a9b813b",
+      "sha256": "15a58d9f7442f24e86484f4a7f0c10570b434ef68e8fb2d5c38513c0016d1e64",
+      "crc32": "3198c556",
+      "adler32": "facf1933"
+    },
+    "c8eb9c1926baad8bbba25f97be54abae233fe715": {
+      "path": "bios/Other/emucorex/resources/shaders/opengl/merge.glsl",
+      "name": "merge.glsl",
+      "size": 579,
+      "sha1": "c8eb9c1926baad8bbba25f97be54abae233fe715",
+      "md5": "1cbf28d65b0d6fe727b571d3e46871b8",
+      "sha256": "654281fb002aa1a086ee979d694e9d6443864bdc8740d20188baf8e125e386fa",
+      "crc32": "ae991348",
+      "adler32": "a15cb54f"
+    },
+    "4abe45e59dc9286321a115c76c31cc7fe85e58d5": {
+      "path": "bios/Other/emucorex/resources/shaders/opengl/present.glsl",
+      "name": "present.glsl",
+      "size": 14894,
+      "sha1": "4abe45e59dc9286321a115c76c31cc7fe85e58d5",
+      "md5": "480b029f6c357fb683a6720e2b78d990",
+      "sha256": "e31c519e6b22683cebefc5c2358b2b7ddad10964a1e478fa3eba01f3ab5adb17",
+      "crc32": "67a7b03b",
+      "adler32": "c5f5ce78"
+    },
+    "03c8b0d3ebeb0ecdc7f594ba6f7242a6f6e4d564": {
+      "path": "bios/Other/emucorex/resources/shaders/opengl/shadeboost.glsl",
+      "name": "shadeboost.glsl",
+      "size": 1548,
+      "sha1": "03c8b0d3ebeb0ecdc7f594ba6f7242a6f6e4d564",
+      "md5": "23a5e91beb2072f48e1011e7a9b6e901",
+      "sha256": "15ff418a0fc877886015cc781c9c3b0810a870bee5803d76741bbcbcc540b9e5",
+      "crc32": "54c435f2",
+      "adler32": "c42ff6d7"
+    },
+    "705d20d39a910d58a070fb86780ac58c8007591c": {
+      "path": "bios/Other/emucorex/resources/shaders/vulkan/convert.glsl",
+      "name": "convert.glsl",
+      "size": 14941,
+      "sha1": "705d20d39a910d58a070fb86780ac58c8007591c",
+      "md5": "669f55ffa59d7b754ab11f96c42f206f",
+      "sha256": "ac3d88c299e304faf76cda2b305510d5a6c19c06319e53ee54fdc18b028a860f",
+      "crc32": "fd02bb00",
+      "adler32": "70d4d2c4"
+    },
+    "276d984150c2fd2fb5ba287f2e5ceb7262dc5a95": {
+      "path": "bios/Other/emucorex/resources/shaders/vulkan/imgui.glsl",
+      "name": "imgui.glsl",
+      "size": 791,
+      "sha1": "276d984150c2fd2fb5ba287f2e5ceb7262dc5a95",
+      "md5": "b79725bff4fecb48d68ad575e13950d1",
+      "sha256": "2d765ffb2bef04082138e29e8ba7f7cc1c788c6415226d1aab1b7eb5bbd0431f",
+      "crc32": "c9511683",
+      "adler32": "609afe67"
+    },
+    "268f43cd946eea999c62f63a24eb00cb2fdc342c": {
+      "path": "bios/Other/emucorex/resources/shaders/vulkan/interlace.glsl",
+      "name": "interlace.glsl",
+      "size": 6329,
+      "sha1": "268f43cd946eea999c62f63a24eb00cb2fdc342c",
+      "md5": "b3e6aa12e24e59cad71d1b7d851a2572",
+      "sha256": "710e9e43ba7115e80b3e34c18072d838ef59f08f096204a7c5c9bf8704047b7f",
+      "crc32": "3317d2fb",
+      "adler32": "80778129"
+    },
+    "808b7b46bfb033c7fe4d94d0dbf5a271de30dedc": {
+      "path": "bios/Other/emucorex/resources/shaders/vulkan/merge.glsl",
+      "name": "merge.glsl",
+      "size": 759,
+      "sha1": "808b7b46bfb033c7fe4d94d0dbf5a271de30dedc",
+      "md5": "8fbeeb5c09477bcaf614087003df61a4",
+      "sha256": "2e6883d4304c5de25c464a9fd97fcd2f642d8d2af2db9c2b13882e67f0f35b93",
+      "crc32": "51cef730",
+      "adler32": "b5c5ea32"
+    },
+    "a848aad1840c7d85bfcdd552521a7181b00331cc": {
+      "path": "bios/Other/emucorex/resources/shaders/vulkan/present.glsl",
+      "name": "present.glsl",
+      "size": 13440,
+      "sha1": "a848aad1840c7d85bfcdd552521a7181b00331cc",
+      "md5": "b0bdec53b1c50873ba45539565f1327c",
+      "sha256": "2db47ffca9510468e37717266838576f96dccd9ed6b7f00c0a721c9868338b19",
+      "crc32": "50fb46e4",
+      "adler32": "8296d1bd"
+    },
+    "9b2704655a893ff1675d28df4bd9ffc9e15d3dd5": {
+      "path": "bios/Other/emucorex/resources/shaders/vulkan/shadeboost.glsl",
+      "name": "shadeboost.glsl",
+      "size": 1831,
+      "sha1": "9b2704655a893ff1675d28df4bd9ffc9e15d3dd5",
+      "md5": "ec6b58f723279afe732b7f9660acf27d",
+      "sha256": "27ab08e76e08fa8a1023b076f3e6c23bc6841732658942f30cea634394f40729",
+      "crc32": "69dc25d7",
+      "adler32": "9f4b472e"
+    },
     "84d422b53547271e3a07342704a05ef481db3f99": {
       "path": "bios/Other/fbneo/136032.101.e3",
       "name": "136032.101.e3",
@@ -49296,6 +49626,16 @@
       "sha256": "81fb611f7dc9d531720836f31e5aff1cc5466013d0afb7ab7f947cb5b7520504",
       "crc32": "ebf1e0ae",
       "adler32": "2e4808ff"
+    },
+    "0a42a4816c89447b16e1f3245409591efea98a4a": {
+      "path": "bios/Other/fbneo/136032.103.f7",
+      "name": "136032.103.f7",
+      "size": 235,
+      "sha1": "0a42a4816c89447b16e1f3245409591efea98a4a",
+      "md5": "c4abdbe2a64c2ef06b6b659f32ea883f",
+      "sha256": "c770a3ae305c3420292516dbd86373f67798983c74754d2cc988de6ddf6ec51f",
+      "crc32": "92d6a0b4",
+      "adler32": "cc91d423"
     },
     "72ba464da01bd6d3a91b8d9997d5ac14b6f47aad": {
       "path": "bios/Other/fbneo/136032.104.f5",
@@ -49406,6 +49746,16 @@
       "sha256": "0add32bcbd0e5b350437fa9d138b3c232368e36d8009852479fdb09d9db31113",
       "crc32": "18c0ff3e",
       "adler32": "7e6df93f"
+    },
+    "8e14e85c645187504ec9d162b3ea614a0c421d32": {
+      "path": "bios/Other/mednafen/apple2e-enh-kb.rom",
+      "name": "apple2e-enh-kb.rom",
+      "size": 2048,
+      "sha1": "8e14e85c645187504ec9d162b3ea614a0c421d32",
+      "md5": "b956c537e7b6b85ffa5c3493b1490d8a",
+      "sha256": "a1989da84ea4381d309e7e08783771f884e913236b9bcc71c3d649aacf76537a",
+      "crc32": "c506efb9",
+      "adler32": "87aaa299"
     },
     "58807f32c413a0c9db6deb0365f2fac9518e7c86": {
       "path": "bios/Other/opentyrian/cubetxt1.dat",
@@ -50146,6 +50496,16 @@
       "sha256": "e3e8ab044b973137c9864f473f345849ecb4c0a9a3234eaba399dfa16c5f06f0",
       "crc32": "c6bebfc6",
       "adler32": "04deae73"
+    },
+    "8a799c6615702aac72016b784e30ea1abd3e197b": {
+      "path": "bios/Other/prboom-plus/prboom-plus.wad",
+      "name": "prboom-plus.wad",
+      "size": 357768,
+      "sha1": "8a799c6615702aac72016b784e30ea1abd3e197b",
+      "md5": "1164ae723c9181698cc41dde6a341132",
+      "sha256": "29e6e18023cf39319f9984107f5f0f796b2593b1c3a55fc79adf3ae12498a6ce",
+      "crc32": "a4626dfa",
+      "adler32": "e0b1fb08"
     },
     "0f25848f73705328ca03b02905e95e3a5d087d8c": {
       "path": "bios/Other/punes/dip.cfg",
@@ -92788,6 +93148,20 @@
       "95f294d24b5e97ceab96282f1284190f": "8dba66121f3bbc4b2bdf67722ef4c2b6b6b23ee6",
       "d66b0bccd743bd11eaca55bcaec925da": "c54f04b63ac6f04e0a0944ef260b5497e4494dbd",
       "6f47c5daf33a759df3395db8ebe62ed1": "7b0bb79d38c573648de218645c6fb16449e156e0",
+      "2c928cbd0410a7e7edae6b2808a1f566": "b478ce9d1343b8dd201c045f010bd1b64ba158ae",
+      "4791fe606bfd87d5afe710c5b4c7bbfb": "32777e258030ad9559864d9f4273d515d65f728f",
+      "fff1d8c84afbf21c47baaa919e1eef95": "04bfcabf518320593dcda8198475c7f39295ef1f",
+      "bd4ca766cc7abf55f37336234248a6fb": "d6209a8b3c4681823b1f0b7d0648c819ec72e2ad",
+      "8ffd758adde9783ba80625a25b06ef7a": "7f476bffdc19d7ba2806eef40c2e8e40bdf0896c",
+      "ddb9dab93906986ec0bb63c5aad0401e": "ca7a974714111895bbf03360078ea1008694c52e",
+      "8e8ebd0758705f947ca6f8eba4baf8e6": "511dc6bb2f81d0ad61fe46c6e91dce8b344fd934",
+      "deb7394a31184990c78c9753a293ff60": "005cecf1a5e20b05407d55d0aad22cf81ad66c31",
+      "383ccce840167fd0264e3e382a411694": "53ff273e335432fdbbff9da2762e229ec2bd5078",
+      "23b4ac68a9c4f01ce319d1bfd7ba6627": "b8d20aa6884878ba72c080d3f2107e09606963d3",
+      "6888a8e85b9c0a357580d4464ddd7d0d": "d5ba24ba836c418f7f2d9d8b44bd337baa9e45a3",
+      "d4933454a5637402889209af223d59fe": "e84aa516874350f414e95d3891ce480fe2958aae",
+      "dee17db223f997696ecd59fc2bac56cb": "0e22e330e10f31d7e7d7db00966cd48d1c5c6dce",
+      "8d55f559c3f1a35c3b8c66f1a57ca25b": "bef69d202c6e21f2ec0d6930e439a9498642ba6b",
       "ba3669cafd8b5036f15b1e682ef8c94a": "25e41433147face77af96fecac4519ed11ae8072",
       "99a84ce95581f49e5f38075648884ede": "84b000485929698392676e8e7915bfcce15291ee",
       "628d6b1c531d208721e104343dfbc607": "374ee91aeabee48013d2f090571752ec5081356f",
@@ -92865,6 +93239,8 @@
       "8b85ec04bbc2ecb403e2bca380dbbb08": "c6578caffb1a57f6c18979dc596f3fb9cb986706",
       "acb87b8d453644b45c7fc8c8247744f5": "1fbd073bbd6cb906a0c0678767fab81feb552173",
       "b15266f06fa290f3f444302a74890d9b": "62a877bfffb3e690044520f52120c5cd48b97545",
+      "cf10b154f2e006a9740d7653cfc47cab": "28c7616cd02e4286f9b4c1c4a8b8850832b49fcb",
+      "4fe4f6800076ea3d897d4285653447bd": "d4aec4efe1431e56fe52d83baf9118542c525255",
       "e9c4288eab8885a1e6ae7504a4736115": "15d52de01320d9b954e03b4c2e71ec75fd301bbb",
       "aa2fb251814bd971b2b9874ab0971b3f": "0e247123b9d3204784eeadb4629b9d35b9dfd984",
       "ffcbcbce32223a152753d30766ad6215": "582dd1706391f6f0161ad3486ae75a04fb0f7d5b",
@@ -92873,6 +93249,8 @@
       "0246740371010333385665dfeb7cd0ec": "1acd01c2c03424a78b32c9440f4d890fb1104815",
       "5ee871d5600eb9b5a22989c295f902a5": "200d59076dfef36db061d6d7d21d80021cab1237",
       "8ca256a832e83c875f5432b3dee8a36f": "6765a91a42fed68a807325bf62a728e5ac5d622f",
+      "8535c40c6cce978623a3e06a38e3a0fd": "72ecfde5f58c5993765a6ef5b8866c4777cc4ade",
+      "907a03706a196b0da832ddab204264f2": "4f05efec7af0829f43aa3cac18a30ae2a33ded88",
       "1f118b8735fcf40c20b38c3184eebfd9": "e6c0050b3c67ee26198488fbbe4a5d019c15b628",
       "a1d3c0e5a40f163f4fb00a5e0774c63c": "7fbbedcc7a1ae00414a4e9e967109cc78be1fe3b",
       "9bef639b7426ef6948602a12b33522a8": "483a17ff25b68a8f18cae691da99f16beefbe370",
@@ -92891,8 +93269,24 @@
       "5b5dd2bc68764c7204dc4fe69118f2a4": "2a15dfa682df1ff841e2092348aa6a2460e40810",
       "4e10a27e6b3ceac0b3e2df4fadc48bb4": "723b0c61428321b0aca4c43fcd91406807d4f815",
       "77b5b2d0c1c3a4200a9cda047f74f957": "fefcb49cb13ea191d2c87b406c141a957020432c",
+      "229cf38617d6669286b5d1a48906aa53": "3c6b523e5432a892a0c284d9ba2593919b0173b7",
+      "4b945ee2b52c49c397d368dc21fa42dc": "0e2ee74d1f9ebc3a6faf9dbaebbacc2ff053f4df",
+      "b56eb507fac5ac64a7079514c02b8ca7": "cb0d4276f9947762af0841a8af75efa6cbe9109c",
+      "b8f058ec01942f596c890a060a32f08b": "35910b67070342cdd6ec4d68eb2e56b39d350543",
+      "9338b9a25372178b4ecbf0215697e9be": "ca149058af89d8f612aaa529661e8267d9569875",
+      "9f46187238e838a602b358705a9b813b": "be39a049af0b8ab0c2168ad6d8cf636e15ae0dd2",
+      "1cbf28d65b0d6fe727b571d3e46871b8": "c8eb9c1926baad8bbba25f97be54abae233fe715",
+      "480b029f6c357fb683a6720e2b78d990": "4abe45e59dc9286321a115c76c31cc7fe85e58d5",
+      "23a5e91beb2072f48e1011e7a9b6e901": "03c8b0d3ebeb0ecdc7f594ba6f7242a6f6e4d564",
+      "669f55ffa59d7b754ab11f96c42f206f": "705d20d39a910d58a070fb86780ac58c8007591c",
+      "b79725bff4fecb48d68ad575e13950d1": "276d984150c2fd2fb5ba287f2e5ceb7262dc5a95",
+      "b3e6aa12e24e59cad71d1b7d851a2572": "268f43cd946eea999c62f63a24eb00cb2fdc342c",
+      "8fbeeb5c09477bcaf614087003df61a4": "808b7b46bfb033c7fe4d94d0dbf5a271de30dedc",
+      "b0bdec53b1c50873ba45539565f1327c": "a848aad1840c7d85bfcdd552521a7181b00331cc",
+      "ec6b58f723279afe732b7f9660acf27d": "9b2704655a893ff1675d28df4bd9ffc9e15d3dd5",
       "dc1aa189468255e644e44b99ad7da49c": "84d422b53547271e3a07342704a05ef481db3f99",
       "fc90330915e7c494898615eb58689d68": "2d327e78832edd67ca3909c25b8c8c839637a1ed",
+      "c4abdbe2a64c2ef06b6b659f32ea883f": "0a42a4816c89447b16e1f3245409591efea98a4a",
       "366fba6185c7abb4431ae7e8a1041a08": "72ba464da01bd6d3a91b8d9997d5ac14b6f47aad",
       "cf01b762bcc96591dbd27c236cc3b1bd": "85febd34bcb166fc3326b5e5e4e80e157b660a08",
       "befc5553a0a88cb989668b42d83418d7": "cbcd424510435a04e9041967a13781fd19b0f2c4",
@@ -92904,6 +93298,7 @@
       "cd43b9f8ec8c742fca150f9666da47a0": "f72ebcb3ad771321e36cacb49779dca6f2b4db9e",
       "034527d42a96d0f39977cb85c6a8f2d8": "fcfbbb25e06f58d13e762b02bfd468c834d98fc8",
       "ee44560f34033efa3bb47b3e0aac1772": "7b03befac4fbcef8c649048fa3ff5d095fd48dd3",
+      "b956c537e7b6b85ffa5c3493b1490d8a": "8e14e85c645187504ec9d162b3ea614a0c421d32",
       "3f2476d9ff29a06cf9fb85d52302222a": "58807f32c413a0c9db6deb0365f2fac9518e7c86",
       "2b199deeccab1042fb02b46c47c2a8d0": "ee7dc2eb87e5a75564382efcd95d13554d3835ba",
       "4229d5532a206aabe7e1fa11a7d8447e": "1ee93623406dc61b50ccb41a97bae769ea15cef2",
@@ -92978,6 +93373,7 @@
       "7844c637dc246ec5f0e760ea33475073": "2f5ac8921b7cba56b02122ef772f5f11bbf6d8a2",
       "37ce488ec574ba351c2dcf90a13d8fed": "b624812e3aa0ef2f75847f47907296e1f370cecd",
       "03336a2165522a9493190e3873beebbd": "f99a13464a4dae347628f0ebb320e767e48e3a96",
+      "1164ae723c9181698cc41dde6a341132": "8a799c6615702aac72016b784e30ea1abd3e197b",
       "05e1d1a0c8ecd45537a1d52ab925d110": "0f25848f73705328ca03b02905e95e3a5d087d8c",
       "18207ca5b15ba7d05742dca8399d30c6": "8ed9fb83d8e4d73217d347e3b7965cb640cb8395",
       "df976d4c51ac403796e2f51643617f92": "5109af30336443dd3107190b08dfbe8de623445b",
@@ -109507,6 +109903,47 @@
       "no-save.png": [
         "7b0bb79d38c573648de218645c6fb16449e156e0"
       ],
+      "cas.glsl": [
+        "b478ce9d1343b8dd201c045f010bd1b64ba158ae",
+        "005cecf1a5e20b05407d55d0aad22cf81ad66c31",
+        "cb0d4276f9947762af0841a8af75efa6cbe9109c"
+      ],
+      "convert.glsl": [
+        "32777e258030ad9559864d9f4273d515d65f728f",
+        "53ff273e335432fdbbff9da2762e229ec2bd5078",
+        "35910b67070342cdd6ec4d68eb2e56b39d350543",
+        "705d20d39a910d58a070fb86780ac58c8007591c"
+      ],
+      "imgui.glsl": [
+        "04bfcabf518320593dcda8198475c7f39295ef1f",
+        "b8d20aa6884878ba72c080d3f2107e09606963d3",
+        "ca149058af89d8f612aaa529661e8267d9569875",
+        "276d984150c2fd2fb5ba287f2e5ceb7262dc5a95"
+      ],
+      "interlace.glsl": [
+        "d6209a8b3c4681823b1f0b7d0648c819ec72e2ad",
+        "d5ba24ba836c418f7f2d9d8b44bd337baa9e45a3",
+        "be39a049af0b8ab0c2168ad6d8cf636e15ae0dd2",
+        "268f43cd946eea999c62f63a24eb00cb2fdc342c"
+      ],
+      "merge.glsl": [
+        "7f476bffdc19d7ba2806eef40c2e8e40bdf0896c",
+        "e84aa516874350f414e95d3891ce480fe2958aae",
+        "c8eb9c1926baad8bbba25f97be54abae233fe715",
+        "808b7b46bfb033c7fe4d94d0dbf5a271de30dedc"
+      ],
+      "present.glsl": [
+        "ca7a974714111895bbf03360078ea1008694c52e",
+        "0e22e330e10f31d7e7d7db00966cd48d1c5c6dce",
+        "4abe45e59dc9286321a115c76c31cc7fe85e58d5",
+        "a848aad1840c7d85bfcdd552521a7181b00331cc"
+      ],
+      "shadeboost.glsl": [
+        "511dc6bb2f81d0ad61fe46c6e91dce8b344fd934",
+        "bef69d202c6e21f2ec0d6930e439a9498642ba6b",
+        "03c8b0d3ebeb0ecdc7f594ba6f7242a6f6e4d564",
+        "9b2704655a893ff1675d28df4bd9ffc9e15d3dd5"
+      ],
       "placeholder.png": [
         "25e41433147face77af96fecac4519ed11ae8072"
       ],
@@ -109722,6 +110159,12 @@
       "cbf_zh-Hant-TW.bcfnt": [
         "62a877bfffb3e690044520f52120c5cd48b97545"
       ],
+      "EOS.ROM": [
+        "28c7616cd02e4286f9b4c1c4a8b8850832b49fcb"
+      ],
+      "WRITER.ROM": [
+        "d4aec4efe1431e56fe52d83baf9118542c525255"
+      ],
       "COPYMATE.ROM": [
         "15d52de01320d9b954e03b4c2e71ec75fd301bbb"
       ],
@@ -109745,6 +110188,12 @@
       ],
       "CPC6128.ROM.SE": [
         "6765a91a42fed68a807325bf62a728e5ac5d622f"
+      ],
+      "enNextZX.rom": [
+        "72ecfde5f58c5993765a6ef5b8866c4777cc4ade"
+      ],
+      "enNxtmmc.rom": [
+        "4f05efec7af0829f43aa3cac18a30ae2a33ded88"
       ],
       "codehandler.bin": [
         "e6c0050b3c67ee26198488fbbe4a5d019c15b628",
@@ -109799,11 +110248,20 @@
       "wqy_12pt.bdf": [
         "fefcb49cb13ea191d2c87b406c141a957020432c"
       ],
+      "psvita_games.db": [
+        "3c6b523e5432a892a0c284d9ba2593919b0173b7"
+      ],
+      "games.db": [
+        "0e2ee74d1f9ebc3a6faf9dbaebbacc2ff053f4df"
+      ],
       "136032.101.e3": [
         "84d422b53547271e3a07342704a05ef481db3f99"
       ],
       "136032.102.e5": [
         "2d327e78832edd67ca3909c25b8c8c839637a1ed"
+      ],
+      "136032.103.f7": [
+        "0a42a4816c89447b16e1f3245409591efea98a4a"
       ],
       "136032.104.f5": [
         "72ba464da01bd6d3a91b8d9997d5ac14b6f47aad"
@@ -109834,6 +110292,9 @@
       ],
       "Master.dsk": [
         "7b03befac4fbcef8c649048fa3ff5d095fd48dd3"
+      ],
+      "apple2e-enh-kb.rom": [
+        "8e14e85c645187504ec9d162b3ea614a0c421d32"
       ],
       "cubetxt1.dat": [
         "58807f32c413a0c9db6deb0365f2fac9518e7c86"
@@ -110027,6 +110488,9 @@
       ],
       "ppge_atlas.meta": [
         "f99a13464a4dae347628f0ebb320e767e48e3a96"
+      ],
+      "prboom-plus.wad": [
+        "8a799c6615702aac72016b784e30ea1abd3e197b"
       ],
       "dip.cfg": [
         "0f25848f73705328ca03b02905e95e3a5d087d8c"
@@ -120282,6 +120746,9 @@
       "136032.107.b2": [
         "72ba464da01bd6d3a91b8d9997d5ac14b6f47aad"
       ],
+      "apple2e-video.rom": [
+        "7060de104046736529c1e8a687a0dd7b84f8c51b"
+      ],
       "prism_failsafe.rom": [
         "d020440638aff4d39467128413ef795677be9c23"
       ],
@@ -127946,6 +128413,20 @@
       "2c7a1b2a": "8dba66121f3bbc4b2bdf67722ef4c2b6b6b23ee6",
       "d766f908": "c54f04b63ac6f04e0a0944ef260b5497e4494dbd",
       "6e8b2b47": "7b0bb79d38c573648de218645c6fb16449e156e0",
+      "ce9e57e4": "b478ce9d1343b8dd201c045f010bd1b64ba158ae",
+      "38998f1a": "32777e258030ad9559864d9f4273d515d65f728f",
+      "b9848dc2": "04bfcabf518320593dcda8198475c7f39295ef1f",
+      "43dd2e9e": "d6209a8b3c4681823b1f0b7d0648c819ec72e2ad",
+      "f1b5eedb": "7f476bffdc19d7ba2806eef40c2e8e40bdf0896c",
+      "7f2bb4e3": "ca7a974714111895bbf03360078ea1008694c52e",
+      "30ec9e5f": "511dc6bb2f81d0ad61fe46c6e91dce8b344fd934",
+      "e00e7479": "005cecf1a5e20b05407d55d0aad22cf81ad66c31",
+      "df5810f9": "53ff273e335432fdbbff9da2762e229ec2bd5078",
+      "1b5ae2e5": "b8d20aa6884878ba72c080d3f2107e09606963d3",
+      "21dc5ffb": "d5ba24ba836c418f7f2d9d8b44bd337baa9e45a3",
+      "4d559151": "e84aa516874350f414e95d3891ce480fe2958aae",
+      "980f007e": "0e22e330e10f31d7e7d7db00966cd48d1c5c6dce",
+      "e5a3fed2": "bef69d202c6e21f2ec0d6930e439a9498642ba6b",
       "9e4fd72a": "25e41433147face77af96fecac4519ed11ae8072",
       "15304b4e": "84b000485929698392676e8e7915bfcce15291ee",
       "156472ad": "374ee91aeabee48013d2f090571752ec5081356f",
@@ -128023,6 +128504,8 @@
       "d60e70f2": "c6578caffb1a57f6c18979dc596f3fb9cb986706",
       "90386ab3": "1fbd073bbd6cb906a0c0678767fab81feb552173",
       "bb56de24": "62a877bfffb3e690044520f52120c5cd48b97545",
+      "ef6403c5": "28c7616cd02e4286f9b4c1c4a8b8850832b49fcb",
+      "58d86a2a": "d4aec4efe1431e56fe52d83baf9118542c525255",
       "fc7f544e": "15d52de01320d9b954e03b4c2e71ec75fd301bbb",
       "37f1bb31": "0e247123b9d3204784eeadb4629b9d35b9dfd984",
       "6e28fa67": "582dd1706391f6f0161ad3486ae75a04fb0f7d5b",
@@ -128031,6 +128514,8 @@
       "2fa2e7d6": "1acd01c2c03424a78b32c9440f4d890fb1104815",
       "1574923b": "200d59076dfef36db061d6d7d21d80021cab1237",
       "588b5540": "6765a91a42fed68a807325bf62a728e5ac5d622f",
+      "6d9951f0": "72ecfde5f58c5993765a6ef5b8866c4777cc4ade",
+      "5a443736": "4f05efec7af0829f43aa3cac18a30ae2a33ded88",
       "ba8dfa56": "e6c0050b3c67ee26198488fbbe4a5d019c15b628",
       "9ac7f0c7": "7fbbedcc7a1ae00414a4e9e967109cc78be1fe3b",
       "6fe1f772": "483a17ff25b68a8f18cae691da99f16beefbe370",
@@ -128049,8 +128534,24 @@
       "b7b59533": "2a15dfa682df1ff841e2092348aa6a2460e40810",
       "0a6dccec": "723b0c61428321b0aca4c43fcd91406807d4f815",
       "35ee85c3": "fefcb49cb13ea191d2c87b406c141a957020432c",
+      "69787db6": "3c6b523e5432a892a0c284d9ba2593919b0173b7",
+      "c9a52a37": "0e2ee74d1f9ebc3a6faf9dbaebbacc2ff053f4df",
+      "13eed5a5": "cb0d4276f9947762af0841a8af75efa6cbe9109c",
+      "bb25c312": "35910b67070342cdd6ec4d68eb2e56b39d350543",
+      "342d0e13": "ca149058af89d8f612aaa529661e8267d9569875",
+      "3198c556": "be39a049af0b8ab0c2168ad6d8cf636e15ae0dd2",
+      "ae991348": "c8eb9c1926baad8bbba25f97be54abae233fe715",
+      "67a7b03b": "4abe45e59dc9286321a115c76c31cc7fe85e58d5",
+      "54c435f2": "03c8b0d3ebeb0ecdc7f594ba6f7242a6f6e4d564",
+      "fd02bb00": "705d20d39a910d58a070fb86780ac58c8007591c",
+      "c9511683": "276d984150c2fd2fb5ba287f2e5ceb7262dc5a95",
+      "3317d2fb": "268f43cd946eea999c62f63a24eb00cb2fdc342c",
+      "51cef730": "808b7b46bfb033c7fe4d94d0dbf5a271de30dedc",
+      "50fb46e4": "a848aad1840c7d85bfcdd552521a7181b00331cc",
+      "69dc25d7": "9b2704655a893ff1675d28df4bd9ffc9e15d3dd5",
       "7e84972a": "84d422b53547271e3a07342704a05ef481db3f99",
       "ebf1e0ae": "2d327e78832edd67ca3909c25b8c8c839637a1ed",
+      "92d6a0b4": "0a42a4816c89447b16e1f3245409591efea98a4a",
       "7a29dc07": "72ba464da01bd6d3a91b8d9997d5ac14b6f47aad",
       "79021d3c": "85febd34bcb166fc3326b5e5e4e80e157b660a08",
       "76ee86c4": "cbcd424510435a04e9041967a13781fd19b0f2c4",
@@ -128062,6 +128563,7 @@
       "066d1348": "f72ebcb3ad771321e36cacb49779dca6f2b4db9e",
       "8031ff02": "fcfbbb25e06f58d13e762b02bfd468c834d98fc8",
       "18c0ff3e": "7b03befac4fbcef8c649048fa3ff5d095fd48dd3",
+      "c506efb9": "8e14e85c645187504ec9d162b3ea614a0c421d32",
       "84e948df": "58807f32c413a0c9db6deb0365f2fac9518e7c86",
       "bf8e13c9": "ee7dc2eb87e5a75564382efcd95d13554d3835ba",
       "7b91c5d2": "1ee93623406dc61b50ccb41a97bae769ea15cef2",
@@ -128136,6 +128638,7 @@
       "0e016ecf": "2f5ac8921b7cba56b02122ef772f5f11bbf6d8a2",
       "eef26072": "b624812e3aa0ef2f75847f47907296e1f370cecd",
       "c6bebfc6": "f99a13464a4dae347628f0ebb320e767e48e3a96",
+      "a4626dfa": "8a799c6615702aac72016b784e30ea1abd3e197b",
       "84f47dc9": "0f25848f73705328ca03b02905e95e3a5d087d8c",
       "79b7fdc4": "8ed9fb83d8e4d73217d347e3b7965cb640cb8395",
       "be691779": "5109af30336443dd3107190b08dfbe8de623445b",
@@ -136269,6 +136772,20 @@
       "c749cd9513bd345b9f12ff46eac0ffbf4e54c0b0884921df97ca8297396e3fea": "8dba66121f3bbc4b2bdf67722ef4c2b6b6b23ee6",
       "dfd8035387a463722ad07af3c91934e0a685f2afa57e31d305f0602656d1edb1": "c54f04b63ac6f04e0a0944ef260b5497e4494dbd",
       "ab829598e15b771112130cbafbd982736400690c11e3d7c81e3fc8c582c24f47": "7b0bb79d38c573648de218645c6fb16449e156e0",
+      "3d5b9cef750ea8bedceef43c4c52215e8280abb81b5b8fa002007bb3f97f0506": "b478ce9d1343b8dd201c045f010bd1b64ba158ae",
+      "4ac385f0e38ee2c3a3f7014db86bd59927a5d4e4f76f24df9b8f8b3d97142390": "32777e258030ad9559864d9f4273d515d65f728f",
+      "25978439553bbd959fe4eb5d03b739a3d697348458a7bac3df48556148f48027": "04bfcabf518320593dcda8198475c7f39295ef1f",
+      "ff7e27fa41f33ec5d4a86b2a48a622dbcd8dd0ae37f8afe306fdd182a7aa8ec1": "d6209a8b3c4681823b1f0b7d0648c819ec72e2ad",
+      "6cd2bc21890426b5430d44b28a89289bcc6fc9ecd632bb3a8eafb6c8b818499c": "7f476bffdc19d7ba2806eef40c2e8e40bdf0896c",
+      "27ffa5fdf1634f7be2734d2eff2d9dce0cca71c2832685e0a682388731dc5c60": "ca7a974714111895bbf03360078ea1008694c52e",
+      "e7297a2e333bb1882bcf82d2a109a2ab033715cce1bba4934f42ec68370f0077": "511dc6bb2f81d0ad61fe46c6e91dce8b344fd934",
+      "ea3f65c6d1b18abe23b42a3d9ddf48d787df287feef6cfac52ca6109d8852d97": "005cecf1a5e20b05407d55d0aad22cf81ad66c31",
+      "e8213fa871bebc8fc883be3bbccf111c8aec1f84063e05a24850efc735312e08": "53ff273e335432fdbbff9da2762e229ec2bd5078",
+      "372e33cccb520a987983dd897c51c6b7e609f16badd67d056a95799a7f768566": "b8d20aa6884878ba72c080d3f2107e09606963d3",
+      "af535e4b871b188957a7169ed883f6f8a209f0908e5b7aff17755605c8d07857": "d5ba24ba836c418f7f2d9d8b44bd337baa9e45a3",
+      "3c0eb665db06c289841829a6aa4716e46ce5ae8e08005a82ad4f3020bd8406e7": "e84aa516874350f414e95d3891ce480fe2958aae",
+      "88d9f9b08f3a62cfd77fdf366c2a1ecca7924c407a3eabb1c1df68cfca2ee2d1": "0e22e330e10f31d7e7d7db00966cd48d1c5c6dce",
+      "31ab20c5617e0bdd3e1afaf9cac2212586f94433f176ca30810a1fecf3f338e8": "bef69d202c6e21f2ec0d6930e439a9498642ba6b",
       "0a42ffa04c5895647026f4cbbd30cae3e1455bd6e36d069ae83142e0c229c74b": "25e41433147face77af96fecac4519ed11ae8072",
       "e740b08eb0f7bd074a0a7e6033f5ab9292fb601157e64aacbd9fec6174020d42": "84b000485929698392676e8e7915bfcce15291ee",
       "92848f15d5eeea9fdfe87e272e4c9ea32f876b3665f5b27ef059711b7c757502": "374ee91aeabee48013d2f090571752ec5081356f",
@@ -136346,6 +136863,8 @@
       "5e39d040be8e40554009b4ff29194f7d70c468a7c9c445c0be06320539851125": "c6578caffb1a57f6c18979dc596f3fb9cb986706",
       "5d786f4ef7e59e4ee20c73803753e455ebf812046a930f5ad1437839329e8aca": "1fbd073bbd6cb906a0c0678767fab81feb552173",
       "dbefcc65df7e7e301af3fead2282626574b67bc7d838f45a6c618b74793ac7bc": "62a877bfffb3e690044520f52120c5cd48b97545",
+      "a49928fbac56380917134b54961ece2e90073022f3e04a6023d26cdbbd9c3356": "28c7616cd02e4286f9b4c1c4a8b8850832b49fcb",
+      "3b17255d2679d11f79e6cacda86de5f6bc9bb5cddf78cbddc651af03b237317d": "d4aec4efe1431e56fe52d83baf9118542c525255",
       "f68b6a88c51d63e77893d102453df550da96227eb192dd1b970ca3c3abc23b0c": "15d52de01320d9b954e03b4c2e71ec75fd301bbb",
       "7d2c4d6e2421991742c1dc9d75afd22b7d450b9ca4852462610df5af85f6ab1c": "0e247123b9d3204784eeadb4629b9d35b9dfd984",
       "3053eef5f6132188facb0c27cc67e0be2eeaebc1f9c8c10b3859731550dec5c3": "582dd1706391f6f0161ad3486ae75a04fb0f7d5b",
@@ -136354,6 +136873,8 @@
       "49c5b2da99bf3230dec3e4bfbb136609ae5f8d250d8920be0ebda1e5a256f88a": "1acd01c2c03424a78b32c9440f4d890fb1104815",
       "8ec2639be145d242d18c02f5ed9eaa52c7d4c40b49dc672755200c3be701abf7": "200d59076dfef36db061d6d7d21d80021cab1237",
       "456ced147bf5a3a11fe70971f56c1a215e85808fa86dd7d8610a73b3e9b6148e": "6765a91a42fed68a807325bf62a728e5ac5d622f",
+      "dd901acd306794ad34f3131ad1df54b6f4de5527ad1b2aa42f82e417f93f17a5": "72ecfde5f58c5993765a6ef5b8866c4777cc4ade",
+      "ded2038d78f57b4fd7e05df0330064f661c221f7b06d8cd2bddee1ff6062f019": "4f05efec7af0829f43aa3cac18a30ae2a33ded88",
       "2b2ff0716aeb9b806cc61181e559041312957f25f04c435bd7da80a78917b33b": "e6c0050b3c67ee26198488fbbe4a5d019c15b628",
       "38f9f59d505bc4e2d86b0196706195f33ad72b7fe9d029cf263072cde19d044f": "7fbbedcc7a1ae00414a4e9e967109cc78be1fe3b",
       "4ad991be2b0aa305f09b90a79fc50f57833b30b008890b5ef1336cc3d9d0bae0": "483a17ff25b68a8f18cae691da99f16beefbe370",
@@ -136372,8 +136893,24 @@
       "890991d60c3aeea43058d0c29dc72fcc428d2670e38c1d94d5d1bfae03437a8f": "2a15dfa682df1ff841e2092348aa6a2460e40810",
       "af64766bf3df3336c76b04f2d07749812373790b9f20ed59c0faf7cc8a5241ad": "723b0c61428321b0aca4c43fcd91406807d4f815",
       "ead9acd03c8d749ddde899afed49ba4b50e6ca14585a3091bc23a7074902cfe0": "fefcb49cb13ea191d2c87b406c141a957020432c",
+      "ca56a424e87cf4c257dcd3810567e62cb10767096b6a2378e69b07040c5fbc13": "3c6b523e5432a892a0c284d9ba2593919b0173b7",
+      "86883a0199a129b900f4a5c7ade6245b7e9d1399ec3c08d1fbf1838c01722e8e": "0e2ee74d1f9ebc3a6faf9dbaebbacc2ff053f4df",
+      "53e5ddc6825ecde7b502acb5fae3a173ba6696ec5b8bb7445f378f7b0ad1beb8": "cb0d4276f9947762af0841a8af75efa6cbe9109c",
+      "fcb651c2ff39102a33ece3716579e3aee7d8b92d4700e52b56b6cf14baa8b8d1": "35910b67070342cdd6ec4d68eb2e56b39d350543",
+      "ea82ce9731de4a0b5af3e66e47e048af569e0e98c5739b32f268fb54caa7603a": "ca149058af89d8f612aaa529661e8267d9569875",
+      "15a58d9f7442f24e86484f4a7f0c10570b434ef68e8fb2d5c38513c0016d1e64": "be39a049af0b8ab0c2168ad6d8cf636e15ae0dd2",
+      "654281fb002aa1a086ee979d694e9d6443864bdc8740d20188baf8e125e386fa": "c8eb9c1926baad8bbba25f97be54abae233fe715",
+      "e31c519e6b22683cebefc5c2358b2b7ddad10964a1e478fa3eba01f3ab5adb17": "4abe45e59dc9286321a115c76c31cc7fe85e58d5",
+      "15ff418a0fc877886015cc781c9c3b0810a870bee5803d76741bbcbcc540b9e5": "03c8b0d3ebeb0ecdc7f594ba6f7242a6f6e4d564",
+      "ac3d88c299e304faf76cda2b305510d5a6c19c06319e53ee54fdc18b028a860f": "705d20d39a910d58a070fb86780ac58c8007591c",
+      "2d765ffb2bef04082138e29e8ba7f7cc1c788c6415226d1aab1b7eb5bbd0431f": "276d984150c2fd2fb5ba287f2e5ceb7262dc5a95",
+      "710e9e43ba7115e80b3e34c18072d838ef59f08f096204a7c5c9bf8704047b7f": "268f43cd946eea999c62f63a24eb00cb2fdc342c",
+      "2e6883d4304c5de25c464a9fd97fcd2f642d8d2af2db9c2b13882e67f0f35b93": "808b7b46bfb033c7fe4d94d0dbf5a271de30dedc",
+      "2db47ffca9510468e37717266838576f96dccd9ed6b7f00c0a721c9868338b19": "a848aad1840c7d85bfcdd552521a7181b00331cc",
+      "27ab08e76e08fa8a1023b076f3e6c23bc6841732658942f30cea634394f40729": "9b2704655a893ff1675d28df4bd9ffc9e15d3dd5",
       "d7626affff7dfc0a8782e0894770258ea572d0f2d9859690efbc8ce018cb36bc": "84d422b53547271e3a07342704a05ef481db3f99",
       "81fb611f7dc9d531720836f31e5aff1cc5466013d0afb7ab7f947cb5b7520504": "2d327e78832edd67ca3909c25b8c8c839637a1ed",
+      "c770a3ae305c3420292516dbd86373f67798983c74754d2cc988de6ddf6ec51f": "0a42a4816c89447b16e1f3245409591efea98a4a",
       "e9c94dc577b050e856e1c7de90c4d034fa3f7eca7c4b887adb7b47115c466cfa": "72ba464da01bd6d3a91b8d9997d5ac14b6f47aad",
       "3d5bd91c33ee983e795c81ab7683d7591e73ed2d9947c7e8cec3bded31b6b686": "85febd34bcb166fc3326b5e5e4e80e157b660a08",
       "0a417e3f3bdd879ddddd22e93d0093b5d4810ce0e040b45447709ad98d0a6029": "cbcd424510435a04e9041967a13781fd19b0f2c4",
@@ -136385,6 +136922,7 @@
       "c72a36bbd471daf5d12df9f7b85773771583ec960ff9ca17e66d2f7b22e5c8c3": "f72ebcb3ad771321e36cacb49779dca6f2b4db9e",
       "fcf442b26c492253dfb8d2146e215b7b84b3ba87443face9c94a1e9474aa3ca4": "fcfbbb25e06f58d13e762b02bfd468c834d98fc8",
       "0add32bcbd0e5b350437fa9d138b3c232368e36d8009852479fdb09d9db31113": "7b03befac4fbcef8c649048fa3ff5d095fd48dd3",
+      "a1989da84ea4381d309e7e08783771f884e913236b9bcc71c3d649aacf76537a": "8e14e85c645187504ec9d162b3ea614a0c421d32",
       "2a0bc26ac4a8cdcbe7a145c9b1868a87ecb4335e9787f2f1e5713c965372df2b": "58807f32c413a0c9db6deb0365f2fac9518e7c86",
       "6604a1dcc264e8b8e98f036a8bc35579e9b90b92eccbc4d7c1effee9785d1580": "ee7dc2eb87e5a75564382efcd95d13554d3835ba",
       "fcfc9762cd4cfad42feb12d975929de86851b216d4491252c701527e22b55539": "1ee93623406dc61b50ccb41a97bae769ea15cef2",
@@ -136459,6 +136997,7 @@
       "f68a569f71fc090cec61bc5f699d0553dca7c5d012166709e74fc6c72568fdc2": "2f5ac8921b7cba56b02122ef772f5f11bbf6d8a2",
       "49f94f7bc9fc605cbf60457937429e3c8499e515d8164b7dd7cd0345844fc86a": "b624812e3aa0ef2f75847f47907296e1f370cecd",
       "e3e8ab044b973137c9864f473f345849ecb4c0a9a3234eaba399dfa16c5f06f0": "f99a13464a4dae347628f0ebb320e767e48e3a96",
+      "29e6e18023cf39319f9984107f5f0f796b2593b1c3a55fc79adf3ae12498a6ce": "8a799c6615702aac72016b784e30ea1abd3e197b",
       "0406c436e54064b938ffe855e1ad0abb362d67f009781a5dce79b044bcd68115": "0f25848f73705328ca03b02905e95e3a5d087d8c",
       "a60757b92f2f3df9447aa50e004aabe9f4cb0845bb037afca118ff89b5913ae3": "8ed9fb83d8e4d73217d347e3b7965cb640cb8395",
       "3aa539a472b4a7ffbf4329356d0e3c0b17893cedc6044408ca22988d7930ecc4": "5109af30336443dd3107190b08dfbe8de623445b",
@@ -145883,6 +146422,48 @@
       "nxengine/tilekey.dat": [
         "74c14b15dbc2f36c81d2ad9cb65e2893298415da"
       ],
+      "pcsx2/resources/shaders/opengl/cas.glsl": [
+        "b478ce9d1343b8dd201c045f010bd1b64ba158ae"
+      ],
+      "pcsx2/resources/shaders/opengl/convert.glsl": [
+        "32777e258030ad9559864d9f4273d515d65f728f"
+      ],
+      "pcsx2/resources/shaders/opengl/imgui.glsl": [
+        "04bfcabf518320593dcda8198475c7f39295ef1f"
+      ],
+      "pcsx2/resources/shaders/opengl/interlace.glsl": [
+        "d6209a8b3c4681823b1f0b7d0648c819ec72e2ad"
+      ],
+      "pcsx2/resources/shaders/opengl/merge.glsl": [
+        "7f476bffdc19d7ba2806eef40c2e8e40bdf0896c"
+      ],
+      "pcsx2/resources/shaders/opengl/present.glsl": [
+        "ca7a974714111895bbf03360078ea1008694c52e"
+      ],
+      "pcsx2/resources/shaders/opengl/shadeboost.glsl": [
+        "511dc6bb2f81d0ad61fe46c6e91dce8b344fd934"
+      ],
+      "pcsx2/resources/shaders/vulkan/cas.glsl": [
+        "005cecf1a5e20b05407d55d0aad22cf81ad66c31"
+      ],
+      "pcsx2/resources/shaders/vulkan/convert.glsl": [
+        "53ff273e335432fdbbff9da2762e229ec2bd5078"
+      ],
+      "pcsx2/resources/shaders/vulkan/imgui.glsl": [
+        "b8d20aa6884878ba72c080d3f2107e09606963d3"
+      ],
+      "pcsx2/resources/shaders/vulkan/interlace.glsl": [
+        "d5ba24ba836c418f7f2d9d8b44bd337baa9e45a3"
+      ],
+      "pcsx2/resources/shaders/vulkan/merge.glsl": [
+        "e84aa516874350f414e95d3891ce480fe2958aae"
+      ],
+      "pcsx2/resources/shaders/vulkan/present.glsl": [
+        "0e22e330e10f31d7e7d7db00966cd48d1c5c6dce"
+      ],
+      "pcsx2/resources/shaders/vulkan/shadeboost.glsl": [
+        "bef69d202c6e21f2ec0d6930e439a9498642ba6b"
+      ],
       "BeebFile/6502Tube.rom": [
         "05980c296e1a7800c4aa21d6bed16323b6d859d5"
       ],
@@ -146029,6 +146610,45 @@
       ],
       "ROM/National/CPC6128.ROM.SE": [
         "6765a91a42fed68a807325bf62a728e5ac5d622f"
+      ],
+      "resources/shaders/opengl/cas.glsl": [
+        "cb0d4276f9947762af0841a8af75efa6cbe9109c"
+      ],
+      "resources/shaders/opengl/convert.glsl": [
+        "35910b67070342cdd6ec4d68eb2e56b39d350543"
+      ],
+      "resources/shaders/opengl/imgui.glsl": [
+        "ca149058af89d8f612aaa529661e8267d9569875"
+      ],
+      "resources/shaders/opengl/interlace.glsl": [
+        "be39a049af0b8ab0c2168ad6d8cf636e15ae0dd2"
+      ],
+      "resources/shaders/opengl/merge.glsl": [
+        "c8eb9c1926baad8bbba25f97be54abae233fe715"
+      ],
+      "resources/shaders/opengl/present.glsl": [
+        "4abe45e59dc9286321a115c76c31cc7fe85e58d5"
+      ],
+      "resources/shaders/opengl/shadeboost.glsl": [
+        "03c8b0d3ebeb0ecdc7f594ba6f7242a6f6e4d564"
+      ],
+      "resources/shaders/vulkan/convert.glsl": [
+        "705d20d39a910d58a070fb86780ac58c8007591c"
+      ],
+      "resources/shaders/vulkan/imgui.glsl": [
+        "276d984150c2fd2fb5ba287f2e5ceb7262dc5a95"
+      ],
+      "resources/shaders/vulkan/interlace.glsl": [
+        "268f43cd946eea999c62f63a24eb00cb2fdc342c"
+      ],
+      "resources/shaders/vulkan/merge.glsl": [
+        "808b7b46bfb033c7fe4d94d0dbf5a271de30dedc"
+      ],
+      "resources/shaders/vulkan/present.glsl": [
+        "a848aad1840c7d85bfcdd552521a7181b00331cc"
+      ],
+      "resources/shaders/vulkan/shadeboost.glsl": [
+        "9b2704655a893ff1675d28df4bd9ffc9e15d3dd5"
       ],
       "roms/108281-001.bin": [
         "d108bb99cb1a05d808e6e25cc720da24faee9e7c"
@@ -154941,6 +155561,9 @@
       ],
       "SCPU64/pepto-pal.vpl": [
         "88a2209694f64f7167f239646aedcd0d09dc51bb"
+      ],
+      "resources/shaders/vulkan/cas.glsl": [
+        "005cecf1a5e20b05407d55d0aad22cf81ad66c31"
       ],
       "roms/5429.vbi": [
         "8060cd4b49052572bb5ec929f8ad21e2addce237"
