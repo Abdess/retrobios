@@ -3,7 +3,7 @@ type: standalone
 source: "https://github.com/Vita3K/Vita3K"
 upstream: "https://github.com/Vita3K/Vita3K"
 profiled_date: "2026-03-29"
-source_commit: "99694acd967a47f462b73dd631bad7c9fde89fc0"
+source_commit: "80075ce556a9d5c2c8fbe27f70625fb539d3bbba"
 core_version: "0.2.1"
 display_name: "Vita3K (PS Vita)"
 systems: [sony-playstation-vita]
@@ -30,18 +30,17 @@ files:
       Games load LLE modules from vs0/sys/external/*.suprx. Preload modules
       (libc, libSceFt2, libpvf) are always LLE. Without firmware most games fail.
       Some simple titles may run on HLE alone.
-    source_ref: "vita3k/packages/src/pup.cpp:260-314, vita3k/module/src/load_module.cpp:142-161,187"
+    source_ref: "vita3k/packages/src/pup.cpp:260-314, vita3k/app/src/app.cpp:175, vita3k/module/src/load_module.cpp:142-161, 187"
 
   - name: PSP2UPDAT.PUP
     path: "psvita/PSP2UPDAT.PUP"
     required: false
     hle_fallback: true
     note: >
-      Supplementary firmware font package. Populates sa0 partition with system
-      fonts (PVF format) used by UI, LiveArea, and games via sceFt2/libpvf API.
-      Vita3K bundles open-source fallback fonts (mplus-1mn-bold.ttf,
-      SourceHanSansSC-Bold-Min.ttf, neodgm.ttf) when firmware fonts are missing.
-    source_ref: "vita3k/gui/src/gui.cpp:228-267,276-318, vita3k/gui/src/initial_setup.cpp:96-97"
+      Supplementary firmware font package. Populates the sa0 partition with
+      system fonts (PVF format), which the renderer registers as the firmware
+      font directory when the partition holds content.
+    source_ref: "vita3k/packages/src/pup.cpp:296-297, vita3k/app/src/app.cpp:176, vita3k/renderer/src/renderer.cpp:121-127"
 
 notes: |
   Standalone PS Vita emulator. No libretro core.

@@ -4,7 +4,7 @@ core_classification: game_engine
 source: "https://github.com/vpinball/vpinball"
 upstream: "https://github.com/vpinball/vpinball"
 profiled_date: "2026-08-08"
-source_commit: "afc7c38ffb1078076ec523c37b30055061c93ff1"
+source_commit: "a8087ea9a3be7208c7def16045e4b5cc0330f80c"
 core_version: "10.8.0"
 display_name: "Visual Pinball X"
 cores:
@@ -99,21 +99,6 @@ notes: |
   The pinmame observations were read at f102dc6cce7eb51e64427dd0b52bed37dbd2adea.
 
 files:
-  - name: gamecontrollerdb.txt
-    system: vpinball
-    category: game_data
-    required: false
-    description: "SDL game controller mappings applied at input init"
-    source_ref: "pininput.cpp:1027-1043"
-    note: >-
-      Read from the preferences path. When it is absent the install copy at
-      assets/Default_gamecontrollerdb.txt is copied there first, and a missing
-      source only logs. SDL_GameControllerAddMappingsFromFile returns a count
-      that is logged and never acted on, so neither an absent nor an unparsable
-      file stops startup; SDL keeps its built-in mappings. Standalone reads
-      controllers through the SDL game controller layer rather than the joystick
-      layer unless GamepadOverride is set to 0, which is what makes this file
-      the place a pinball cabinet's encoder gets described.
 
   - name: hiscore.dat
     system: vpinball
@@ -136,7 +121,7 @@ files:
     category: game_data
     required: false
     description: "MAME cheat database, read when the per-ROM ini enables cheats"
-    source_ref: "pinmame src/cheat.c:8434,8602-8614, pinmame src/mame.c:578-583, standalone/inc/vpinmame/VPinMAMEController.cpp:295-321"
+    source_ref: "pinmame src/cheat.c:8434,8602-8614, pinmame src/mame.c:578-583, plugins/pinmame/Controller.cpp:156"
     note: >-
       Off by default: PinmameSetConfig zeroes options, and VPX only turns it on
       from the `cheat` key of <pinmame root>/ini/<romname>.ini, which it also
