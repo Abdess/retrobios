@@ -1028,26 +1028,62 @@ def build_report(
 
     lines_cache: dict[tuple[str, str, int | None], list[str] | None] = {}
 
-    def fetch(which: str, path: str, start: int | None = None, tokens=()):
+    def fetch(which: str, path: str, start: int | None = None, tokens=(), forced=None):
         """Lines for one path at one revision, read once per run.
 
         The same object is handed back every time so the opcode cache can key
         on identity.
         """
         tokens = tuple(tokens)
-        key = (which, path, start, tokens)
+        key = (which, path, start, tokens, forced and forced.repo.slug)
         if key not in lines_cache:
-            view, actual = resolve_path(path, start, tokens)
+            view, actual = (
+                (forced, path) if forced else resolve_path(path, start, tokens)
+            )
             sha = view.pin if which == PIN else view.head
             lines_cache[key] = upstream.fetch_file(
                 view.repo, sha, actual, cache_dir, offline
             )
         return lines_cache[key]
 
-    def describe(path: str, start=None, tokens=()) -> tuple[str | None, str | None, str]:
-        view, actual = resolve_path(path, start, tuple(tokens))
+    def describe(path: str, start=None, tokens=(), forced=None):
+        view, actual = (
+            (forced, path) if forced else resolve_path(path, start, tuple(tokens))
+        )
         slug = view.repo.slug if view is not primary else None
         return slug, upstream.raw_url(view.repo, view.head, actual), actual
+
+    def anchor_across_views(part, tokens):
+        """Judge a part against every repository that carries its path.
+
+        A ref is only broken when it fails everywhere. `mame` cites files that
+        both mamedev/mame and its libretro fork hold, with the same delimited
+        token on the cited line, so no single attribution can be right for all
+        of them; taking the best outcome across repositories settles it.
+        """
+        best = None
+        for view in views:
+            if upstream.fetch_file(
+                view.repo, view.pin, part.path, cache_dir, offline
+            ) is None:
+                continue
+            result = anchor_part(
+                part,
+                lambda which, path, start=None, toks=(), _v=view: fetch(
+                    which, path, start, toks, _v
+                ),
+                rename_getter,
+                lambda path, start=None, toks=(), _v=view: describe(
+                    path, start, toks, _v
+                ),
+                tokens,
+            )
+            rank = STATUS_ORDER.index(result.status)
+            if best is None or rank < best[0]:
+                best = (rank, result)
+        return best[1] if best else anchor_part(
+            part, fetch, rename_getter, describe, tokens
+        )
 
     # Comparing a revision with itself anchors every ref whatever it cites, so
     # a profile already sitting on HEAD is judged on self-consistency instead.
@@ -1065,7 +1101,7 @@ def build_report(
     else:
         staged = [
             (entry_name, ref, [
-                anchor_part(part, fetch, rename_getter, describe, tokens)
+                anchor_across_views(part, tokens)
                 for part in split_source_ref(ref)
             ])
             for entry_name, ref, tokens, hashes in refs

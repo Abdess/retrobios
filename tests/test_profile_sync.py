@@ -1152,6 +1152,30 @@ class TestBuildReport(unittest.TestCase):
         report = build_report("mame", profile, self.dir)
         self.assertEqual(report.entries[0].status, "ANCHORED")
 
+    def test_a_ref_is_broken_only_when_it_fails_everywhere(self):
+        # Both repositories carry the path with the same delimited token on the
+        # cited line, so no single attribution is right; the ref anchors in one
+        # of them and that settles it.
+        self.files[("portpin", "src/a.cpp")] = ["x", "GAME(1997, drgw, pgm,", "y"]
+        self.files[("porthead", "src/a.cpp")] = ["x", "", "y"]
+        self.files[("uppin", "src/a.cpp")] = ["x", "GAME(1997, pgm, 0, pgm,", "y"]
+        self.files[("uphead", "src/a.cpp")] = ["x", "GAME(1997, pgm, 0, pgm,", "y"]
+
+        heads = {"o/port": "porthead", "o/up": "uphead"}
+        profile_sync.upstream.resolve_head = (
+            lambda repo, cache, offline=False, branch=None: heads[repo.slug]
+        )
+        profile = {
+            "emulator": "MAME",
+            "source": "https://github.com/o/port",
+            "upstream": "https://github.com/o/up",
+            "source_commit": "portpin",
+            "upstream_commit": "uppin",
+            "files": [{"name": "pgm.zip", "source_ref": "src/a.cpp:2"}],
+        }
+        report = build_report("mame", profile, self.dir)
+        self.assertEqual(report.entries[0].status, "ANCHORED")
+
     def test_pin_on_the_declared_version_tag_is_flagged(self):
         self.files[("pinsha", "a.c")] = ["x", "hit"]
         self.files[("headsha", "a.c")] = ["x", "hit"]
