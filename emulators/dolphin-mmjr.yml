@@ -1,0 +1,254 @@
+emulator: Dolphin MMJR
+type: standalone
+core_classification: community_fork
+source: "https://github.com/acidtech/Dolphin-MMJR"
+upstream: "https://github.com/weihuoya/dolphin"
+profiled_date: "2026-08-11"
+source_commit: "1b095b64857c2eabb49a42cc56ffd9d7881bc263"
+core_version: "11460 - bankaimaster999"
+display_name: "Nintendo - GameCube / Wii (Dolphin MMJR)"
+cores:
+  - dolphin-mmjr
+systems:
+  - nintendo-gamecube
+  - nintendo-wii
+mode: standalone
+
+notes: |
+  Android-only Dolphin fork continuing the MMJ line, published as the org.mm.jr
+  package. The repositories it released from are gone, including the
+  Dolphin-MMJR1 link in its own README; this reading is taken from a surviving
+  copy that carries the release build metadata of the app, applicationId
+  org.mm.jr and versionCode 15808.
+  ref: Source/Android/app/build.gradle:23-29,
+       Source/Android/app/release/output-metadata.json
+
+  Two roots. The user directory is dolphin-mmjr at the root of external
+  storage. The Sys directory is extracted from the APK assets into the app's
+  internal files directory, and the first run after a versionCode change
+  deletes it and extracts it again, so nothing placed there survives an update.
+  Paths below are relative to the user directory; entries with no path are read
+  only from the Sys directory and name their location in their note.
+  ref: Source/Android/app/src/main/java/org/dolphinemu/dolphinemu/utils/DirectoryInitialization.java:93-134,
+       Source/Core/Common/CommonPaths.h:22-24, Source/Core/Common/FileUtil.cpp:756-807
+
+  The GameCube boot ROM is looked up as GC/<REGION>/IPL.bin, the region
+  directory being NTSC-J to JAP, NTSC-U to USA and PAL to EUR, in the user
+  directory first and the Sys directory second. Booting the IPL itself hashes
+  the whole file with crc32 and warns on an unknown dump, and again when a PAL
+  dump answers a non-PAL boot. SkipIPL defaults to true, so games start without
+  it.
+  ref: Source/Core/Core/ConfigManager.cpp:835-849, Source/Core/Core/ConfigManager.cpp:861-868,
+       Source/Core/Core/Boot/Boot.cpp:295-337, Source/Core/Core/Config/MainSettings.cpp:18
+
+  Fonts follow the IPL. When a dump is present the Shift JIS and Windows-1252
+  fonts are read out of it at offsets 0x1aff00 and 0x1fcf00, for 0x4a24d and
+  0x2575 bytes; otherwise the standalone font files are loaded whole, and the
+  bundled ones have different padding from the console fonts.
+  ref: Source/Core/Core/HW/EXI/EXI_DeviceIPL.cpp:99-127,
+       Source/Core/Core/HW/EXI/EXI_DeviceIPL.cpp:159-172,
+       Source/Core/Core/HW/EXI/EXI_DeviceIPL.cpp:199-240
+
+  DSP HLE is the default and reads dsp_coef.bin alone, for polyphase resampling
+  coefficients, skipping any file that is not 0x1000 bytes. DSP LLE, reached by
+  setting DSPHLE to False in Dolphin.ini, loads both ROMs from GC/ in the user
+  directory then Sys/GC/, rejects either at the wrong size and refuses to start
+  when one is missing. Both are byte-swapped into memory and the pair is then
+  hashed with adler32 against six known combinations.
+  ref: Source/Core/Core/HW/DSPLLE/DSPLLE.cpp:120-138,
+       Source/Core/Core/HW/DSPLLE/DSPLLE.cpp:140-176,
+       Source/Core/Core/HW/DSPHLE/UCodes/AX.cpp:45-58,
+       Source/Core/Core/DSP/DSPCore.cpp:38-105, Source/Core/Core/HW/DSP.cpp:190
+
+  Wii emulation reads keys.bin from the NAND root every time the key store is
+  built, and keeps the built-in keys when it is absent. SYSCONF is read through
+  the emulated filesystem and rebuilt unless it is exactly 0x4000 bytes,
+  setting.txt is read for its serial number then deleted and written again, and
+  the WiiConnect24 files shipped in Sys/Wii are copied into the NAND without
+  overwriting what is there. A missing SD card image is created at 128 MB.
+  ref: Source/Core/Core/IOS/IOSC.cpp:94, Source/Core/Core/IOS/IOSC.cpp:136-140,
+       Source/Core/Core/IOS/IOSC.cpp:559-584, Source/Core/Core/SysConf.cpp:55-66,
+       Source/Core/Core/Boot/Boot_BS2Emu.cpp:228-256, Source/Core/Core/WiiRoot.cpp:217-227,
+       Source/Core/Core/IOS/SDIO/SDIOSlot0.cpp:60-79
+
+  Every boot looks for a symbol map named after the running game ID, in Maps/
+  then Sys/Maps/, and reloads it whenever the running title changes. The game
+  ID comes from the disc metadata, not from a debugger setting.
+  ref: Source/Core/Core/Boot/Boot.cpp:253-290, Source/Core/Core/ConfigManager.cpp:698-720,
+       Source/Core/Core/ConfigManager.cpp:742-754
+
+files:
+  - name: IPL.bin
+    path: GC/USA/IPL.bin
+    system: nintendo-gamecube
+    required: false
+    hle_fallback: true
+    region: [north-america]
+    size: 2097152
+    validation: [crc32]
+    description: "GameCube boot ROM, NTSC-U directory"
+    note: "Read whole into a 2 MiB buffer with no size check, then descrambled from 0x100 for 0x1afe00 bytes. The crc32 gate runs when the IPL itself is booted, and the four non-PAL dumps pass here without complaint."
+    source_ref: "Source/Core/Core/ConfigManager.cpp:861-868, Source/Core/Core/HW/EXI/EXI_DeviceIPL.cpp:99-112, Source/Core/Core/HW/EXI/EXI_DeviceIPL.h:43, Source/Core/Core/Boot/Boot.cpp:296-330"
+
+  - name: IPL.bin
+    path: GC/EUR/IPL.bin
+    system: nintendo-gamecube
+    required: false
+    hle_fallback: true
+    region: [europe]
+    size: 2097152
+    validation: [crc32]
+    description: "GameCube boot ROM, PAL directory"
+    note: "The two PAL dumps are the ones this directory takes without a mismatch warning."
+    source_ref: "Source/Core/Core/ConfigManager.cpp:835-849, Source/Core/Core/Boot/Boot.cpp:298-337"
+
+  - name: IPL.bin
+    path: GC/JAP/IPL.bin
+    system: nintendo-gamecube
+    required: false
+    hle_fallback: true
+    region: [japan]
+    size: 2097152
+    validation: [crc32]
+    description: "GameCube boot ROM, NTSC-J directory"
+    note: "JAP is the only Japanese directory name this fork knows. FindIPLDump, which serves the font path, scans USA then EUR then JAP and stops at the first hit."
+    source_ref: "Source/Core/Common/CommonPaths.h:32-34, Source/Core/Core/HW/EXI/EXI_DeviceIPL.cpp:174-186"
+
+  - name: font_western.bin
+    path: null
+    required: false
+    hle_fallback: true
+    description: "Windows-1252 font, loaded at 0x1fcf00"
+    note: "Read from GC/ in the Sys directory, with no user directory fallback. Skipped in favour of the IPL dump whenever one is found."
+    source_ref: "Source/Core/Common/CommonPaths.h:105, Source/Core/Core/HW/EXI/EXI_DeviceIPL.cpp:126, Source/Core/Core/HW/EXI/EXI_DeviceIPL.cpp:199-240"
+
+  - name: font_japanese.bin
+    path: null
+    required: false
+    hle_fallback: true
+    description: "Shift JIS font, loaded at 0x1aff00"
+    note: "Read from GC/ in the Sys directory, with no user directory fallback. Skipped in favour of the IPL dump whenever one is found."
+    source_ref: "Source/Core/Common/CommonPaths.h:106, Source/Core/Core/HW/EXI/EXI_DeviceIPL.cpp:125, Source/Core/Core/HW/EXI/EXI_DeviceIPL.cpp:199-240"
+
+  - name: dsp_rom.bin
+    path: GC/dsp_rom.bin
+    required: false
+    hle_fallback: true
+    size: 8192
+    validation: [size]
+    known_hash_adler32: "0x66f334fe"
+    adler32_byteswap: true
+    description: "DSP instruction ROM"
+    note: "DSP LLE only, and LLE aborts when the file is absent or not 8192 bytes. The adler32 is taken over the byte-swapped image and the value here is the Nintendo pair; five replacement pairs are also accepted."
+    source_ref: "Source/Core/Common/CommonPaths.h:108, Source/Core/Core/HW/DSPLLE/DSPLLE.cpp:120-152, Source/Core/Core/DSP/DSPCore.h:35, Source/Core/Core/DSP/DSPCore.cpp:38-80"
+
+  - name: dsp_coef.bin
+    path: GC/dsp_coef.bin
+    required: false
+    hle_fallback: true
+    size: 4096
+    validation: [size]
+    known_hash_adler32: "0xf3b93527"
+    adler32_byteswap: true
+    description: "DSP coefficient ROM"
+    note: "Read by DSP LLE alongside the instruction ROM, and by the AX ucode under HLE for polyphase resampling, which drops any file that is not 0x1000 bytes and plays on without it."
+    source_ref: "Source/Core/Common/CommonPaths.h:109, Source/Core/Core/HW/DSPLLE/DSPLLE.cpp:120-152, Source/Core/Core/HW/DSPHLE/UCodes/AX.cpp:45-70, Source/Core/Core/DSP/DSPCore.h:49"
+
+  - name: codehandler.bin
+    path: null
+    required: false
+    description: "Gecko code handler"
+    note: "Read from the root of the Sys directory when cheats are enabled, and written into guest memory between the installer bounds; too large a file is refused and cheats stay off."
+    source_ref: "Source/Core/Common/CommonPaths.h:124, Source/Core/Core/GeckoCode.cpp:121-136"
+
+  - name: keys.bin
+    path: Wii/keys.bin
+    system: nintendo-wii
+    required: false
+    hle_fallback: true
+    size: 1024
+    validation: [size]
+    description: "BootMii key dump, console keys and identity"
+    note: "Read at every key store construction, so on every Wii title. Supplies the console private key and signature, the MS and CA identifiers, the NAND key and HMAC and the backup key. A short read leaves the built-in keys in place, the structure being fixed at 0x400 bytes."
+    source_ref: "Source/Core/Core/IOS/IOSC.cpp:94, Source/Core/Core/IOS/IOSC.cpp:136-140, Source/Core/Core/IOS/IOSC.cpp:559-584"
+
+  - name: SYSCONF
+    path: Wii/shared2/sys/SYSCONF
+    system: nintendo-wii
+    required: false
+    hle_fallback: true
+    size: 16384
+    validation: [size]
+    description: "Wii system configuration"
+    note: "Opened through the emulated filesystem and accepted only at 0x4000 bytes; anything else is replaced by a freshly generated one."
+    source_ref: "Source/Core/Common/CommonPaths.h:90, Source/Core/Core/SysConf.cpp:20, Source/Core/Core/SysConf.cpp:55-66"
+
+  - name: setting.txt
+    path: Wii/title/00000001/00000002/data/setting.txt
+    system: nintendo-wii
+    required: false
+    hle_fallback: true
+    size: 256
+    validation: [size]
+    description: "Wii region and language settings"
+    note: "Read for its serial number at Wii boot, then deleted and written again from the emulated region settings. The read fills a fixed 0x100 byte buffer, so a shorter file yields nothing."
+    source_ref: "Source/Core/Common/CommonPaths.h:122, Source/Core/Common/SettingsHandler.h:22-27, Source/Core/Core/Boot/Boot_BS2Emu.cpp:228-256"
+
+  - name: sd.raw
+    path: Wii/sd.raw
+    system: nintendo-wii
+    required: false
+    hle_fallback: true
+    description: "Wii SD card image"
+    note: "Opened read-write when the SD device is opened; a 128 MB image is created when the file is missing."
+    source_ref: "Source/Core/Common/CommonPaths.h:119, Source/Core/Common/FileUtil.cpp:802, Source/Core/Core/IOS/SDIO/SDIOSlot0.cpp:60-79"
+
+  - name: wiitdb.txt
+    path: Load/wiitdb.txt
+    aliases: [titles.txt]
+    required: false
+    description: "user title database"
+    note: "One title id equals name pair per line, ids of four characters and up. titles.txt is read only when wiitdb.txt yields nothing. Overlays the per-language databases shipped in the Sys directory."
+    source_ref: "Source/Core/Core/TitleDatabase.cpp:26-48, Source/Core/Core/TitleDatabase.cpp:50-63, Source/Core/Core/TitleDatabase.cpp:86-94"
+
+  - name: mios-ipl.map
+    path: Maps/mios-ipl.map
+    required: false
+    description: "MIOS symbol map"
+    note: "Read from Maps/ in the user directory when MIOS starts, and a successful load re-applies the HLE function patches against the symbols it names."
+    source_ref: "Source/Core/Core/IOS/MIOS.cpp:47, Source/Core/Core/IOS/MIOS.cpp:55-66"
+
+  - name: GFZE01.map
+    path: null
+    required: false
+    description: "symbol map for game id GFZE01"
+    note: "Reached by the per-title lookup, which reads Maps/<game id>.map from the user directory then the Sys directory. Ships in Maps/ inside the Sys directory."
+    source_ref: "Source/Core/Core/Boot/Boot.cpp:253-290"
+
+  - name: GMBE8P.map
+    path: null
+    required: false
+    description: "symbol map for game id GMBE8P"
+    note: "Reached by the per-title lookup, which reads Maps/<game id>.map from the user directory then the Sys directory. Ships in Maps/ inside the Sys directory."
+    source_ref: "Source/Core/Core/Boot/Boot.cpp:253-290"
+
+valid_bios_crc32:
+  ipl_ntsc:
+    - { crc32: "6DAC1F2A", name: "NTSC v1.0" }
+    - { crc32: "D5E6FEEA", name: "NTSC v1.1" }
+    - { crc32: "86573808", name: "NTSC v1.2" }
+    - { crc32: "667D0B64", name: "MPAL v1.1 (Brazil)" }
+  ipl_pal:
+    - { crc32: "4F319F43", name: "PAL v1.0" }
+    - { crc32: "AD1B7F16", name: "PAL v1.2" }
+
+exclusion_note: >
+  The NAND importer, which reads nand.bin and writes clientca.pem,
+  clientcakey.pem and rootca.pem, and the signature database totaldb.dsy are
+  reachable only from the Qt front-end, which the Android build does not
+  compile: the APK builds the core libraries and Source/Android/jni, and the
+  JNI surface exposes no NAND import or WAD install. libusb is switched off for
+  Android, so the Bluetooth passthrough firmware paths are out as well.
+  ref: Source/CMakeLists.txt:60-65, Source/Core/CMakeLists.txt:1-16,
+       Source/Core/DolphinQt/MainWindow.cpp:1510, Source/Core/DolphinQt/MenuBar.cpp:1092,
+       Source/Core/DolphinQt/MenuBar.cpp:1156, CMakeLists.txt:630-644

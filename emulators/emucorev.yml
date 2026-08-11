@@ -1,0 +1,310 @@
+emulator: EmuCoreV
+type: standalone
+core_classification: community_fork
+source: "https://github.com/sashkinbro/EmuCoreV"
+upstream: "https://github.com/Vita3K/Vita3K"
+author: "Oleksandr (sashkinbro)"
+profiled_date: "2026-08-11"
+source_commit: "b71d8cf5397b1c6394e92eeb48427cd17e542971"
+core_version: "0.1.8"
+display_name: "Sony - PlayStation Vita (EmuCoreV)"
+cores:
+  - emucorev
+systems:
+  - sony-playstation-vita
+mode: standalone
+
+notes: |
+  PlayStation Vita emulator for Android, package com.sbro.emucorev, arm64-v8a
+  only. A Kotlin and Compose front end drives a Vita3K tree vendored verbatim
+  under app/src/main/cpp/vita3k, reached through an adapter layer that owns
+  every JNI entry point. Frontends start the exported activity
+  com.sbro.emucorev.core.vita.Emulator with an AppStartParameters string array;
+  ES-DE passes -r followed by the title id read from the .psvita file.
+  ref: app/src/main/cpp/emucorev/README.md:1-13,
+       app/src/main/AndroidManifest.xml:85-101,
+       app/src/main/java/com/sbro/emucorev/core/vita/Emulator.kt:128,
+       app/src/main/java/com/sbro/emucorev/core/vita/Emulator.kt:140-152,
+       app/build.gradle.kts:85-86, app/build.gradle.kts:95
+
+  The Android library is built from the JNI sources plus interface.cpp and
+  performance.cpp, and links app, audio, compat, config, cppcommon, ctrl,
+  dialog, display, ime, lang, gdbstub, gxm, io, miniz, modules, motion,
+  packages, patch, renderer, shader, touch, util and psvpfsparser, with overlay
+  and np arriving through renderer and modules. The ImGui front end under
+  vita3k/gui is never added as
+  a subdirectory, gui-qt is desktop only, and the adapter drops those two and
+  updater from the link line as well when a configuration defines them. So the
+  home screen, live area, themes, trophy collection, user avatars and the pd0
+  background music player are not compiled: pd0 is written by a firmware install
+  and never read back, which is why no third preinst package is offered.
+  ref: app/src/main/cpp/vita3k/vita3k/CMakeLists.txt:122-124,
+       app/src/main/cpp/vita3k/vita3k/CMakeLists.txt:154-172,
+       app/src/main/cpp/vita3k/vita3k/CMakeLists.txt:212-215,
+       app/src/main/cpp/emucorev/cmake/AttachToVita3K.cmake:31,
+       app/src/main/cpp/emucorev/cmake/CoreTargetFilter.cmake:19-23
+
+  Firmware installation calls vanilla install_pup. The file is tested for the
+  SCEUF magic and nothing else, the SCE segments are decrypted with the built-in
+  keys, os0.img, pd0.img, sa0.img and vs0.img are joined from their pieces, and
+  each image with content is extracted into the Vita filesystem root. The
+  version string is read from the version.txt the package carries. No digest and
+  no length is compared.
+  ref: app/src/main/cpp/emucorev/src/vita_install_bridge.cpp:86-102,
+       app/src/main/cpp/vita3k/vita3k/packages/src/pup.cpp:119-123,
+       app/src/main/cpp/vita3k/vita3k/packages/src/pup.cpp:239-258,
+       app/src/main/cpp/vita3k/vita3k/packages/src/pup.cpp:260-314
+
+  Two packages are named in code, both pinned to firmware 3.74 and fetched from
+  Sony. Each URL carries the MD5 of the package it serves in its rel_ and sd_
+  path segment. The byte counts beside them feed the progress bar and its
+  fallback alone, and one of the two is not the length of the file it names, so
+  nothing measures what was downloaded.
+  ref: app/src/main/java/com/sbro/emucorev/core/FirmwareSource.kt:16-37,
+       app/src/main/java/com/sbro/emucorev/ui/onboarding/FirmwareDownloadViewModel.kt:96-124
+
+  Both packages are required. launchInstalledTitle returns MissingFirmware
+  before doing any work when vita/vs0 holds no file, and MissingFirmwareUpdate
+  when vita/sa0 holds no file, each with its own refusal string. The refusal is
+  the app's own: nothing in the vendored core tests either partition before a
+  run, and the only sa0 test in the tree sits in the front end that is not
+  compiled. The gate also sits in the in-app launcher alone, so a frontend
+  starting the activity itself, which is what ES-DE does, reaches the core
+  without passing through it.
+  ref: app/src/main/java/com/sbro/emucorev/core/VitaLaunchBridge.kt:24-30,
+       app/src/main/java/com/sbro/emucorev/core/EmulatorStorage.kt:262-272,
+       app/src/main/java/com/sbro/emucorev/core/vita/Emulator.kt:140-152,
+       app/src/main/res/values/strings.xml:27-31,
+       app/src/main/res/values/strings.xml:710-711
+
+  What the partitions are read for. Every launch queues os0:kd/bootimage.skprx
+  and os0:kd/sysmodule.skprx, then for each preload module that is LLE takes
+  app0:sce_module/<name>.suprx when the title carries one and
+  vs0:sys/external/<name>.suprx otherwise. libc, libSceFt2, libpvf and libfiber
+  are always LLE, alongside an automatic list of nineteen sysmodules, and a
+  failed module load is logged and stepped over. The overlay renderer registers
+  sa0/data/font/pvf as the firmware font directory and asks it for the ltn, jpn,
+  cn and kr faces by name, falling back to /system/fonts for its own text.
+  ref: app/src/main/cpp/vita3k/vita3k/interface.cpp:499-535,
+       app/src/main/cpp/vita3k/vita3k/module/src/load_module.cpp:142-161,
+       app/src/main/cpp/vita3k/vita3k/module/src/load_module.cpp:187-195,
+       app/src/main/cpp/vita3k/vita3k/renderer/src/renderer.cpp:114-127,
+       app/src/main/cpp/vita3k/vita3k/overlay/src/font.cpp:116-160,
+       app/src/main/cpp/vita3k/vita3k/overlay/src/font.cpp:174-234
+
+  Storage. The Vita filesystem is a directory named vita under a storage root
+  the user can move to a card, holding ux0 and the partitions a firmware install
+  writes. Configuration, logs, patches, the texture folders and the cache stay
+  on internal storage. Static assets never reach the filesystem: on Android the
+  static assets path is left empty and shaders, fonts and images are read out of
+  the package through SDL.
+  ref: app/src/main/java/com/sbro/emucorev/core/EmulatorStorage.kt:36-46,
+       app/src/main/java/com/sbro/emucorev/core/EmulatorStorage.kt:101-148,
+       app/src/main/cpp/vita3k/vita3k/app/src/app_init.cpp:244-256
+
+  Titles arrive as VPK, ZIP, PKG or an already extracted directory, and a PKG
+  needs a zRIF that is either typed in or derived from a license already
+  installed for that content id.
+  ref: app/src/main/cpp/emucorev/src/vita_install_bridge.cpp:104-197,
+       app/src/main/cpp/vita3k/vita3k/packages/src/pkg.cpp:356-376
+
+files:
+  - name: PSVUPDAT.PUP
+    system: sony-playstation-vita
+    required: true
+    storage: large_file
+    md5: f2c7b12fe85496ec88a0391b514d6e3b
+    description: "PS Vita system software update package"
+    note: >-
+      Base firmware, pinned to 3.74 by a hardcoded URL whose rel_ segment is the
+      MD5 of the package. Downloaded on demand to firmware-downloads under the
+      external files directory, or picked from anywhere through the file picker,
+      then consumed by install_pup, which extracts whichever of os0, vs0, pd0 and
+      sa0 the package carries. This one is what fills vs0, and the app refuses to
+      start a title while vs0 is empty.
+    source_ref: "app/src/main/java/com/sbro/emucorev/core/FirmwareSource.kt:17-23, app/src/main/java/com/sbro/emucorev/ui/onboarding/FirmwareDownloadViewModel.kt:96-105, app/src/main/java/com/sbro/emucorev/core/VitaInstallBridge.kt:25-36, app/src/main/cpp/emucorev/src/vita_install_bridge.cpp:97-101, app/src/main/cpp/vita3k/vita3k/packages/src/pup.cpp:292-299, app/src/main/java/com/sbro/emucorev/core/VitaLaunchBridge.kt:25-27"
+
+  - name: PSP2UPDAT.PUP
+    system: sony-playstation-vita
+    required: true
+    storage: large_file
+    md5: 59dcf059d3328fb67be7e51f8aa33418
+    description: "PS Vita firmware font package"
+    note: >-
+      Second package of the same 3.74 release, pinned by a URL whose sd_ segment
+      is its MD5, and the one that fills sa0 with the PVF system fonts. Installed
+      through the same path as the base package. The app refuses to start a title
+      while sa0 is empty, and asks for it even though the overlay carries a
+      system font fallback of its own.
+    source_ref: "app/src/main/java/com/sbro/emucorev/core/FirmwareSource.kt:25-31, app/src/main/cpp/vita3k/vita3k/packages/src/pup.cpp:296-297, app/src/main/cpp/vita3k/vita3k/renderer/src/renderer.cpp:121-127, app/src/main/java/com/sbro/emucorev/core/VitaLaunchBridge.kt:28-30"
+
+  - name: app_compat_db.xml
+    path: "compatibility/app_compat_db.xml"
+    system: sony-playstation-vita
+    required: false
+    category: game_data
+    unsourceable: "dated snapshot of the Vita3K compatibility project, rebuilt upstream and refetched by the app every twelve hours"
+    description: "per-title compatibility ratings"
+    note: >-
+      Downloaded as app_compat_db.xml.zip from the Vita3K compatibility
+      releases, unpacked into the compatibility directory of internal storage
+      and parsed for the badges the library and catalog screens draw. The native
+      side looks for the same filename in the cache directory at bootstrap and
+      logs a warning when it finds none.
+    source_ref: "app/src/main/java/com/sbro/emucorev/data/VitaCompatibilityRepository.kt:18-20, app/src/main/java/com/sbro/emucorev/data/VitaCompatibilityRepository.kt:54-107, app/src/main/java/com/sbro/emucorev/data/VitaCompatibilityRepository.kt:346-350, app/src/main/cpp/vita3k/vita3k/android/jni/native_bootstrap.cpp:122, app/src/main/cpp/vita3k/vita3k/compat/src/compat.cpp:127-150"
+
+  - name: commercial_list.json
+    path: "compatibility/commercial_list.json"
+    system: sony-playstation-vita
+    required: false
+    category: game_data
+    unsourceable: "answer of a live web API, refetched on the same twelve hour cycle"
+    description: "commercial title index"
+    note: >-
+      Fetched from the Vita3K web API and merged over the XML snapshot, so a
+      title the database does not carry still resolves. Read only when the file
+      is present and not empty.
+    source_ref: "app/src/main/java/com/sbro/emucorev/data/VitaCompatibilityRepository.kt:20, app/src/main/java/com/sbro/emucorev/data/VitaCompatibilityRepository.kt:69-73, app/src/main/java/com/sbro/emucorev/data/VitaCompatibilityRepository.kt:349"
+
+  - name: psvita_games.db
+    path: "psvita_games.db"
+    system: sony-playstation-vita
+    required: false
+    bundled: true
+    category: game_data
+    description: "bundled catalog of Vita titles"
+    note: >-
+      SQLite catalog carried in the package assets and copied into internal
+      storage the first time the catalog screen opens, then reopened read only
+      from there. A copy already present is kept.
+    source_ref: "app/src/main/java/com/sbro/emucorev/data/VitaCatalogRepository.kt:8-9, app/src/main/java/com/sbro/emucorev/data/VitaCatalogRepository.kt:276-292"
+
+  - name: config.txt
+    path: "vita/ux0/tai/config.txt"
+    system: sony-playstation-vita
+    required: false
+    category: game_data
+    unsourceable: "plugin list the user writes for their own titles"
+    description: "taiHEN plugin configuration"
+    note: >-
+      Read once per session from ux0:tai/config.txt, then from ur0:tai/config.txt
+      when the first is absent. Sections name a title id or KERNEL and list the
+      plugin paths loaded for it. No file found is logged and the session
+      continues.
+    source_ref: "app/src/main/cpp/vita3k/vita3k/modules/taiHEN/taiHEN.cpp:1253-1272, app/src/main/cpp/vita3k/vita3k/interface.cpp:535"
+
+  - name: "<plugin>.suprx"
+    path: "vita/ux0/tai/<plugin>.suprx"
+    system: sony-playstation-vita
+    required: false
+    category: game_data
+    unsourceable: "homebrew plugin built against taiHEN, chosen per collection"
+    description: "taiHEN plugin"
+    note: >-
+      Loaded at the path config.txt gives it, kernel plugins once per session and
+      title plugins on each launch of the matching title id. A plugin that fails
+      to load is logged and skipped. Exports of a loaded plugin that already have
+      an HLE implementation are overridden by it.
+    source_ref: "app/src/main/cpp/vita3k/vita3k/modules/taiHEN/taiHEN.cpp:1362-1405, app/src/main/cpp/vita3k/vita3k/modules/taiHEN/taiHEN.cpp:1306-1359"
+
+  - name: "<TITLEID>.txt"
+    path: "patch/<TITLEID>.txt"
+    system: sony-playstation-vita
+    required: false
+    category: game_data
+    unsourceable: "patch list authored per title, with no released artefact behind it"
+    description: "per-title binary patch list"
+    note: >-
+      The patch directory is scanned at module load and any filename holding the
+      running title id and ending in .txt is parsed. A bracketed header names the
+      binary the lines under it apply to, eboot.bin until one says otherwise, and
+      each line is a segment and an offset followed by the values written there.
+      A line that fails to parse is logged and the rest of the file is kept.
+    source_ref: "app/src/main/cpp/vita3k/vita3k/patch/src/patch.cpp:26-70, app/src/main/cpp/vita3k/vita3k/patch/src/patch.cpp:77-90, app/src/main/cpp/vita3k/vita3k/patch/src/util.cpp:24-50, app/src/main/cpp/vita3k/vita3k/interface.cpp:482-484"
+
+  - name: PATCHLIST.TXT
+    path: "patch/PATCHLIST.TXT"
+    system: sony-playstation-vita
+    required: false
+    category: game_data
+    unsourceable: "collected patch list, authored rather than dumped"
+    description: "shared binary patch list"
+    note: >-
+      Read alongside the per-title files whatever the running title is, the name
+      matched case insensitively as a substring. Its headers take a title id and
+      an optional binary, so one file holds patches for several titles, and the
+      lines under a header for another title are skipped.
+    source_ref: "app/src/main/cpp/vita3k/vita3k/patch/src/patch.cpp:30-37, app/src/main/cpp/vita3k/vita3k/patch/src/patch.cpp:57-59, app/src/main/cpp/vita3k/vita3k/patch/src/util.cpp:30-38"
+
+  - name: "<hash>.png"
+    path: "textures/import/<TITLEID>/<hash>.png"
+    system: sony-playstation-vita
+    required: false
+    category: game_data
+    unsourceable: "replacement artwork authored against the texture hashes of one title"
+    description: "replacement texture"
+    note: >-
+      Read when the import textures option is on. The import folder is walked
+      recursively and a file counts only when its name parses as a hexadecimal
+      hash, which is the key the texture cache looks it up by.
+    source_ref: "app/src/main/cpp/vita3k/vita3k/renderer/src/texture/cache.cpp:312-315, app/src/main/cpp/vita3k/vita3k/renderer/src/texture/replacement.cpp:607-630, app/src/main/java/com/sbro/emucorev/core/VitaCoreConfigRepository.kt:30, app/src/main/java/com/sbro/emucorev/core/VitaCoreConfigRepository.kt:262"
+
+  - name: "<hash>.dds"
+    path: "textures/import/<TITLEID>/<hash>.dds"
+    system: sony-playstation-vita
+    required: false
+    category: game_data
+    unsourceable: "replacement artwork authored against the texture hashes of one title"
+    description: "replacement texture, compressed"
+    note: >-
+      Same folder and same hash naming as the png form, taken as a DDS instead
+      and used for the block compressed formats.
+    source_ref: "app/src/main/cpp/vita3k/vita3k/renderer/src/texture/replacement.cpp:624-629"
+
+  - name: "<driver>.zip"
+    system: sony-playstation-vita
+    required: false
+    unsourceable: "Vulkan driver built for one Adreno family, not an emulator artefact"
+    description: "replacement Vulkan driver package"
+    note: >-
+      Listed by a catalog fetched from the EmuCoreV-Drivers repository, or picked
+      from the device. The archive is unpacked into a directory named after it
+      under driver in internal storage, the Vulkan library it holds is recorded
+      in a driver_name.txt written beside it, libvulkan.so taken first and any
+      other name carrying vulkan after it, and the renderer resolves
+      vkGetInstanceProcAddr through adrenotools from that pair before the Vulkan
+      instance is created. The system loader is used when no driver is
+      configured or the injection fails. The setting is shown only when the
+      device strings name Qualcomm hardware, or match an sm model with no other
+      vendor named.
+    source_ref: "app/src/main/java/com/sbro/emucorev/core/GpuDriverCatalogRepository.kt:45-78, app/src/main/java/com/sbro/emucorev/core/GpuDriverCatalogRepository.kt:130-136, app/src/main/java/com/sbro/emucorev/core/GpuDriverManager.kt:52-125, app/src/main/java/com/sbro/emucorev/core/GpuDriverManager.kt:136-171, app/src/main/java/com/sbro/emucorev/ui/settings/SettingsTabContent.kt:215, app/src/main/cpp/vita3k/vita3k/util/src/android_driver.cpp:202-215, app/src/main/cpp/vita3k/vita3k/util/src/android_driver.cpp:362-380, app/src/main/cpp/vita3k/vita3k/renderer/src/vulkan/renderer.cpp:371-387, app/src/main/cpp/vita3k/vita3k/renderer/src/vulkan/renderer.cpp:569-578"
+
+  - name: work.bin
+    path: "vita/ux0/license/<TITLEID>/<CONTENTID>.rif"
+    system: sony-playstation-vita
+    required: false
+    category: game_data
+    unsourceable: "NpDrm license issued for one copy of one title"
+    description: "title license"
+    note: >-
+      A picked file named work.bin, or carrying the .rif or .bin extension, is
+      read as a license, checked for its magic and copied under ux0:license as
+      <content id>.rif. A PKG install with no zRIF given reads the license
+      already sitting there for that content id and derives one from it. A
+      missing or corrupt license is logged and the retail livearea path is used
+      instead.
+    source_ref: "app/src/main/cpp/emucorev/src/vita_install_bridge.cpp:122-124, app/src/main/cpp/vita3k/vita3k/packages/src/license.cpp:53-84, app/src/main/cpp/vita3k/vita3k/packages/src/license.cpp:99-106, app/src/main/cpp/vita3k/vita3k/packages/src/pkg.cpp:356-376"
+
+exclusion_note: >
+  Left out are the files EmuCoreV writes and reads back, which are emulator
+  state rather than system files: config.yml and the per-title custom configs,
+  the shader and texture caches under cache, savedata and users under ux0, the
+  TROPUSR.DAT trophy progress, play_time.json, the settings backup JSON and the
+  driver_name.txt the driver installer writes. Left out with them are the static
+  assets of Vita3K, which on Android are read from inside the package and never
+  exist on the filesystem: the built-in shaders, the ImGui fonts and images, and
+  the language files.
+  ref: app/src/main/cpp/vita3k/vita3k/app/src/app_init.cpp:244-256,
+       app/src/main/java/com/sbro/emucorev/core/EmulatorStorage.kt:122-148,
+       app/src/main/java/com/sbro/emucorev/core/GpuDriverManager.kt:90,
+       app/src/main/cpp/vita3k/vita3k/np/src/trophy/collection.cpp:95

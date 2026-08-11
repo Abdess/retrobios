@@ -1,0 +1,223 @@
+emulator: FPse
+type: standalone
+core_classification: other
+source: "https://play.google.com/store/apps/details?id=com.emulator.fpse"
+upstream: closed-source
+author: "Schtruck & LDchen (EMUSOFT)"
+profiled_date: "2026-08-11"
+core_version: "12.1"
+display_name: "Sony - PlayStation (FPse)"
+cores:
+  - fpse
+systems:
+  - sony-playstation
+mode: standalone
+bios_directory: "bios/"
+bios_size: 524288
+
+notes: |
+  PlayStation emulator for Android, closed source, sold on Google Play as package
+  com.emulator.fpse. Two builds are read here and both carry the same signing
+  certificate, CN=FPse Team issued 2011, sha256
+  9af45a593faf3b522c5120fc976a03b7d82a88a9e5008162b9d6822ade7c981a: 12.1
+  versionCode 940, apk md5 09160e917333d546296d4fcdae7b35f9, armeabi-v7a, and
+  0.11.190 versionCode 720, apk md5 818ee3fe71370ac983283926234e920e, armeabi
+  plus armeabi-v7a plus x86, taken from the OUYA store archive. The archive.org
+  item labelled FPse 1.7.8 is package com.emulator.fpse64, signed with the Android
+  test key and carrying an assets/hook.apk payload, and is not read here. The
+  emulator descends from LDchen's PC FPSE and keeps its console messages, its
+  fpse.ini keys and its bios, plugin, cfg and snaps directory names.
+  ref: com.emulator.fpse META-INF/BNDLTOOL.RSA, META-INF/CERT.RSA,
+       res/raw/fpse.ini
+
+  One root holds everything and it is the private files directory of the package,
+  not shared storage. Main sets it from getFilesDir and creates bios, plugin, cfg
+  and skin under it right after the native libraries load, then unpacks its own
+  resources into them. Paths below are relative to that root. The plugins have no
+  stable path of their own: 12.1 loads them from the native library directory of
+  the package and 0.11.190 loaded them from this root, so they are recorded by
+  name alone.
+  ref: Main.java:32088, Main.java:29716-29719
+
+  Exactly one BIOS image is ever loaded and its full path is a setting rather than
+  a name the code looks for. The Load Bios browser lists .bin files only, the
+  chosen path is written to the preference com.emulator.fpse.biospath and pushed
+  into the emulator core as string slot 6, and leaving the browser without a
+  choice writes an empty string, which is the documented way to switch to HLE.
+  The stored path is re-checked at every start: a file that no longer exists or is
+  not exactly 524288 bytes clears the preference and the session runs on HLE. On
+  the core side a path that will not open reports
+  "Can't load biosfile '%s', switching to HLE" and emulation continues, so no
+  image is needed on its own. fpse.ini ships with EnableHLE=on and BiosName set to
+  the placeholder scph1001.bin_is_recommended, and the core resolves BiosName
+  under bios/ when the setting is left alone.
+  ref: Main.java:5917-5919, Main.java:1173, Main.java:1965-1971,
+       Main.java:25213-25222, res/raw/fpse.ini BiosName,
+       FPse 0.11.190 libfpse.so x86 0x5c2c8-0x5c395
+
+  Automatic detection recognises one dump and does it on content. Scanning
+  storage, FPse keeps files whose lowercased name ends in .bin and whose length is
+  exactly 524288, reads all 524288 bytes, sums them as signed bytes and accepts
+  the file when the total is 85958, writing the path to the preference and turning
+  the BIOS on. The same constant answers over NFS through isnfsbios. Reimplemented
+  over the collection, that sum resolves to a single image, the v2.2 12/04/95 A
+  dump listed below, and to no other. The HLE path impersonates the same revision:
+  its identification strings sit in .rodata as ordinary C strings next to
+  "HLE enabled.", and the library carries no 512 KB image of its own.
+  ref: Main.java:4155-4175, Main.java:4185, Main.java:21188,
+       FPse 0.11.190 libfpse.so armeabi-v7a .rodata 0x245828-0x2458cc
+
+  Emulation itself lives in plugins that Main names one by one before the core:
+  uncompress, spuplugin, soft1, nfsplugin and opengl, then fpse. libfpse.so lists
+  all of them except uncompress in DT_NEEDED, so the core will not link without
+  them. They are distributed both ways. 0.11.190 shipped none of them, tested for
+  each file in the private directory, stopped on an error dialog before loading
+  the core when one was absent, and fetched plugins267.zip and its per GPU and per
+  ABI variants from fpse.net; 12.1 carries them in the package and keeps an
+  updater that asks getfile.php for the list matching its own versionCode and ABI,
+  alongside plugins605 constants nothing reads. Both generations of the pack still
+  answer: plugins605v7.zip is 1359776 bytes and holds the armeabi-v7a build of
+  libsoft1.so, libspuplugin.so, libopengl.so, libnfsplugin.so and
+  libuncompress.so at the same lengths as the copies inside 12.1 but not the same
+  bytes, plus the libopenglex.so, libspuplugin1.so and libspupluginex.so variants
+  the package does not carry, and twenty shader pairs. An OpenGL plugin picked by
+  hand from the .so browser is copied over libopengl1.so and used in place of the
+  packaged one. libGLESv2, libjnigraphics, liblog, libstdc++, libdl, libm and libc
+  are the Android runtime and are not files anyone supplies.
+  ref: Main.java:29686-29698, Main.java:20405-20406, Main.java:11010,
+       Main.java:3417-3423, Main.java:1120-1137,
+       FPse 0.11.190 Main.java:24126-24207, FPse 0.11.190 Main.java:860-871,
+       FPse 12.1 libfpse.so readelf -d,
+       fpse.net/plugins605v7.zip md5 ae5dbdc27452092af3e712448f427fd3
+
+  Resources unpack through two helpers that differ in one respect. b2 writes only
+  when the target is absent, so bios/kanji.rom, fpse.ini and the whole skin set
+  survive being replaced by hand. c2 truncates, so gamelist.ini is rewritten from
+  the package at every start and a copy put there does not last.
+  ref: Main.java:26892-26895, Main.java:26956-26957, Main.java:29721,
+       Main.java:29755-29758, Main.java:30046
+
+files:
+  - name: scph1001.bin
+    path: bios/scph1001.bin
+    system: sony-playstation
+    required: false
+    hle_fallback: true
+    variant_group: "psx-bios"
+    config_key: "BiosName"
+    size: 524288
+    validation: [size]
+    md5: 924e392ed05558ffdb115408c263dccf
+    sha1: 10155d8d6e6e832d6ea66db9bc098321fb5e8ebf
+    description: "SCPH-1001, DTL-H1201, DTL-H3001 (v2.2 12-04-95 A)"
+    note: "The only image the code identifies, and it identifies it by a checksum of its own rather than by a hash it spells out: the 524288 bytes summed as signed bytes, accepted at 85958. The md5 and sha1 here are the dump that reproduces that sum. Selecting a BIOS by hand takes any file ending in .bin that is exactly 524288 bytes, so the other images of the group fill the slot without being recognised by name or by sum."
+    source_ref: "Main.java:4159-4175, Main.java:5919, Main.java:25217, res/raw/fpse.ini BiosName"
+
+  - name: LibPS.exe
+    system: sony-playstation
+    required: false
+    description: "PlayStation library executable loaded at startup when present"
+    note: "Loaded by bare name through the same loader as any PS-X EXE, reporting \"LibPS.exe found and loaded.\" on success and continuing untouched when the loader returns -1. Not carried by the package, and the core never chdirs, so it resolves against the working directory of the process."
+    source_ref: "FPse 0.11.190 libfpse.so x86 0x95545-0x9558a, FPse 12.1 libfpse.so .rodata 0x344634"
+
+  - name: libsoft1.so
+    required: true
+    bundled: true
+    category: game_data
+    description: "software renderer plugin"
+    note: "Named by System.loadLibrary(\"soft1\") and listed in DT_NEEDED by the core. 0.11.190 listed it the same way without shipping it, tested for the file in the private directory and stopped on an error dialog before the core when it was absent, the file coming from plugins267.zip."
+    source_ref: "Main.java:29688, FPse 0.11.190 Main.java:24148-24162"
+
+  - name: libspuplugin.so
+    required: true
+    bundled: true
+    category: game_data
+    description: "sound plugin"
+    note: "Named by System.loadLibrary(\"spuplugin\") and listed in DT_NEEDED. 0.11.190 picked libspupluginex.so, libspuplugin2.so or libspuplugin1.so by device and API level and copied the winner over this name."
+    source_ref: "Main.java:29687, FPse 0.11.190 Main.java:24126-24132"
+
+  - name: libopengl.so
+    required: true
+    bundled: true
+    category: game_data
+    aliases: ["libopengl1.so", "libopenglex.so"]
+    description: "OpenGL renderer plugin"
+    note: "Named by System.loadLibrary(\"opengl\") and listed in DT_NEEDED. A plugin chosen from the .so browser is copied over libopengl1.so, which 0.11.190 in turn copied over this name, the ex variant standing in for it on the devices that ask for it."
+    source_ref: "Main.java:29690, Main.java:11010, FPse 0.11.190 Main.java:24178-24199"
+
+  - name: libnfsplugin.so
+    required: true
+    bundled: true
+    category: game_data
+    aliases: ["libnfs.so"]
+    description: "NFS client plugin, for discs read from a network share"
+    note: "Named by System.loadLibrary(\"nfsplugin\") and listed in DT_NEEDED. Called libnfs.so through the 0.11.x line."
+    source_ref: "Main.java:29689, FPse 0.11.190 Main.java:24163-24177"
+
+  - name: libsdl.so
+    required: true
+    bundled: true
+    category: game_data
+    description: "SDL 1.2 audio backend"
+    note: "Named by System.loadLibrary(\"sdl\") and listed in DT_NEEDED."
+    source_ref: "Main.java:20405, FPse 12.1 libfpse.so readelf -d"
+
+  - name: libneon.so
+    required: true
+    bundled: true
+    category: game_data
+    description: "NEON colour conversion routines"
+    note: "Named by System.loadLibrary(\"neon\") and listed in DT_NEEDED, which resolves bgr555rgb565neon for the core."
+    source_ref: "Main.java:20406, FPse 12.1 libfpse.so readelf -d"
+
+  - name: libuncompress.so
+    required: false
+    bundled: true
+    category: game_data
+    description: "archive extractor for .zip, .rar, .7z, .ape and .ecm images"
+    note: "Named by System.loadLibrary(\"uncompress\") and the only one of the plugins the core does not list in DT_NEEDED. 0.11.190 loaded it on demand from the private directory."
+    source_ref: "Main.java:29686, FPse 0.11.190 Main.java:6244-6249"
+
+  - name: "<skin>.ini"
+    path: "skin/<skin>.ini"
+    required: false
+    category: game_data
+    unsourceable: "overlay pad artwork published by other users"
+    description: "external overlay pad skin"
+    note: "Selected through a browser listing .ini files, which is what the External entry of the gamepad skin setting opens. The default set unpacks from the package as skin/pad.ini with its button and stick artwork."
+    source_ref: "Main.java:5936-5938, Main.java:29758"
+
+  - name: "<game>.txt"
+    required: false
+    category: game_data
+    unsourceable: "cheat codes the user writes or collects per title"
+    description: "cheat codes for one title"
+    note: "Selected through a browser listing .txt files and parsed as titles between hashes followed by address and value pairs. Cheats apply only when a BIOS image is loaded."
+    source_ref: "Main.java:5965-5967, Main.java:30552"
+
+exclusion_note: >
+  Left out are the files FPse writes and reads back itself, which are emulator
+  state rather than files a user has to obtain: fpse.ini and the per-title
+  configurations under cfg, the memory cards slot1.mcd and slot2.mcd, savestates
+  and the snapshots under snaps, fpselog.txt and the cpulog.txt and gpulog.txt
+  traces. gamelist.ini is left out with them for a different reason: it is
+  rewritten from the package at every start, so a copy placed there never
+  survives. Left out too are the shipped overlay pad artwork, skin/pad.ini with
+  its button and stick images, which unpack from the package, and the shader
+  pairs, which the package carries in assets while the Shaders setting selects a
+  directory rather than a file. bios/kanji.rom is left out on the same ground: it
+  is a FONTX2 font the core draws Japanese text with, header FONTX2X11, 238586
+  bytes, md5 040d9dcbad83388c14d2628ac69ce88b, sha1
+  915880f8bb04de39fd5132b92dfb99872f54fa47 in 12.1, and it has only ever existed
+  inside the package, unpacked into bios at first start and left alone afterwards
+  so a replacement stays. It is not a dump of the font ROM inside the Japanese
+  BIOS, and it shares its generic name with the unrelated kanji ROMs of the MSX
+  and the PC-88. Only
+  the ARM builds name it; the x86 build of 0.11.190 carries neither it nor the
+  v2.2 identification strings. The disc images and their .cue sidecars are not
+  emulator files. The HLE BIOS is not a file either: it is code, and the strings
+  it answers a BIOS identification with sit in .rodata beside the rest of the core
+  messages, with no 512 KB image anywhere in the library.
+  ref: res/raw/fpse.ini MemCard1, Main.java:30046, Main.java:29721,
+       Main.java:29758-29859, res/raw/kanji.rom,
+       FPse 0.11.190 libfpse.so armeabi-v7a .rodata 0x245818-0x2458cc

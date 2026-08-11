@@ -27,6 +27,13 @@ files:
     note: "Production keys for NCA decryption (master, key area, header, titlekek)"
     source_ref: "src/core/crypto/key_manager.cpp:574-575, 853"
 
+  - name: "dev.keys"
+    required: false
+    path: "switch/"
+    mode: standalone
+    note: "Development-unit keys, read instead of prod.keys when use_dev_keys is set"
+    source_ref: "src/core/crypto/key_manager.cpp:570-571, 852"
+
   - name: "title.keys"
     required: false
     path: "switch/"
@@ -51,6 +58,5 @@ files:
 
 notes: |
   Eden is a standalone Nintendo Switch emulator, community fork of yuzu by Camille LaVey.
-  dev.keys can be used instead of prod.keys when use_dev_keys is enabled (for Switch dev units).
   Firmware (system NCAs) must be installed through Eden's UI from a firmware ZIP or NCA folder.
   Required for commercial games. Homebrew (.nro, .nso) can run without keys or firmware.

@@ -1,0 +1,672 @@
+emulator: ePSXe
+type: standalone
+core_classification: other
+source: "https://www.epsxe.com/download.php"
+upstream: closed-source
+author: "calb, _Demo_, Galtor (ePSXe Software S.L.)"
+profiled_date: "2026-08-11"
+core_version: "2.0.18"
+display_name: "Sony - PlayStation (ePSXe)"
+cores:
+  - epsxe
+systems:
+  - sony-playstation
+mode: standalone
+bios_directory: "bios/"
+bios_size: 524288
+
+notes: |
+  PlayStation emulator, closed source and distributed as a binary. Five builds
+  are read here. The desktop ones come from the download page: 2.0.18 Windows
+  (md5 c1abd8cffcd0bc3dbd9c72b13bfc20e5, UPX packed, cited at the virtual
+  addresses of the unpacked image), 2.0.5 Windows (bfa6eb173d9bae9b2e7983b23383c789),
+  2.0.5 Linux x64 (52ef10e78aeec86f84105b7b59d375ee), 2.0.5 Linux x86
+  (efe6c2c6303d4f7c5251166342bfb002) and 2.0.5 macOS x64
+  (c4ca85710fbea827da2a1ce304536973). The Linux x64 build keeps 1771 of its own
+  functions in .dynsym although it reports as stripped, so it is cited by
+  function name. The Android side is package com.epsxe.ePSXe, versionCode 139
+  versionName 2.0.15, apk md5 e18988b825f263bbc961bfbed1c4bc0b, with 2.0.6
+  (fce9c60c5cbc4e075cf97a587e64eb78) read alongside it; both verify against the
+  epsxe.com signing certificate (CN=epsxeteam, serial 0x4fdaca68), every entry
+  digest matches and none is unsigned. Two copies of 2.0.16 circulating on
+  archive.org are repackaged, signed CN=A1 and ModYolo, and are not read here.
+  ref: epsxe.com/download.php, com.epsxe.ePSXe META-INF/CERT.RSA
+
+  One root holds everything. On Linux and macOS it is $HOME/.epsxe, created at
+  startup together with plugins, bios, cheats, sstates, patches, idx, config,
+  info, covers, memcards, memcards/games, memcards/net, shaders and configs, and
+  the process chdirs into it. On Windows it is the program directory with the
+  same names. On Android it is a directory named epsxe at the root of shared
+  storage, holding sstates, bios, isos, cheats, config, idx, patches, plugins,
+  faqs, shaders, memcards and covers. Paths below are relative to that root.
+  ref: ePSXe 2.0.5 Linux x64 create_folders 0x42a727-0x42abcf,
+       ePSXe.java:1517, ePSXe.java:1541-1577
+
+  Exactly one BIOS file is ever loaded, and its full path is a setting, not a
+  name the code looks for: BiosPath in $HOME/.epsxe/epsxerc on Linux and macOS,
+  biosPref in the shared preferences on Android, both defaulting to
+  bios/scph1001.bin below the root. load_bios opens it read only, reads one block
+  of 0x80000 bytes into the 0x80000-byte psxBIOS object and logs
+  " * ePSXe: PSX BIOS loaded [%s]. ". A file that will not open reaches
+  emu_mesg_exit_error with " * !Error: PSX BIOS not found [%s]. " and the run
+  ends. The HLE branch, taken when the BiosHLE setting is on, skips the read
+  entirely and logs " * ePSXe: using HLE BIOS (compatibility limited)", so any
+  one of the images below fills the slot and none of them is needed on its own.
+  HLE arrived in 1.9.25 and savestates made under it are not interchangeable
+  with savestates made under a real image.
+  ref: ePSXe 2.0.5 Linux x64 load_bios 0x433540-0x433621,
+       ePSXe 2.0.5 Linux x64 bios_name_select 0x4334c0-0x4334f2,
+       ePSXe 2.0.5 Linux x64 write_configfiledefault 0x42ae99-0x42aeeb,
+       ePSXeReadPreferences.java:20-30, ePSXe.java:445-453,
+       docs/ePSXe_en.txt:260-271, docs/ePSXe_en.txt:883-888
+
+  Both consumer families carry a table of the images they recognise, and the two
+  tables are built differently and do not hold the same set. Android ships 21
+  pairs of label and md5; findBios walks the tree to a depth of ten, skipping
+  DCIM, Camera, asec, secure, dev, obb, .lfs and anything under /Android/data,
+  keeps files whose lowercased name ends in .bin and whose length is exactly
+  524288, md5s each one and on a hit writes biosPref to that path and turns
+  BiosHLE off. Windows ships 21 records of a 32-byte name and a 32-bit id, globs
+  bios\*.bin, reads each candidate whole and identifies it by a checksum of its
+  own: over the 512 KB as big endian 16-bit words, the sum shifted left 16 bits
+  or'd with the low 16 bits of the xor. That value is looked up only to name the
+  image in the setup wizard. The Linux and macOS builds carry neither table.
+  Seventeen dumps are in both tables; four are known to Android alone; two are
+  known to Windows alone and both turn out to be dumps TOSEC marks [b].
+  ref: ScanBiosTask.java:28, ScanBiosTask.java:145-191, ePSXeNative.java:280,
+       ePSXe 2.0.18 Windows 0x5c1090-0x5c1384, ePSXe 2.0.18 Windows 0x5c108c,
+       ePSXe 2.0.18 Windows 0x42f264-0x42f2c7,
+       ePSXe 2.0.18 Windows 0x42f4b0-0x42f568,
+       ePSXe 2.0.18 Windows 0x42f584-0x42f5b4
+
+  No region decides which image is taken. findBios keeps the first md5 that
+  answers anywhere in the walk, the Windows ids only pick a label to display, and
+  the JP, US and PAL words are part of that label string. Automatic selection of
+  a required BIOS per game existed once and was removed because it stopped
+  Legend of Dragoon US and Wild Arms 2 US from running.
+  ref: ScanBiosTask.java:167-171, ePSXe 2.0.18 Windows 0x42f5aa-0x42f5c2,
+       docs/ePSXe_en.txt:1243-1244
+
+  Video, sound, cdrom and input go through the PSEmu Pro plugin interface.
+  init_gpu builds plugins/<name> from the configured name, dlopens it and
+  resolves GPUinit, GPUopen, GPUdmaChain and the rest of the entry points one by
+  one; init_spu_plugins and LoadPadPlugins do the same for their own. Windows
+  enumerates gpu*.dll, spu*.dll and cdr*.dll in plugins\. GPUCORE, SPUCORE and
+  INPUTCORE are the built-in defaults and are not files. Android has no PSEmu Pro
+  loader: its two OpenGL renderers ship inside the package and are only replaced
+  when a file of the matching name is found under plugins.
+  ref: ePSXe 2.0.5 Linux x64 init_gpu 0x4408a1-0x440bc0,
+       ePSXe 2.0.5 Linux x64 LoadPadPlugins 0x51927e,
+       ePSXe 2.0.5 Linux x64 write_configfiledefault 0x42ae29-0x42ae6e,
+       ePSXe.java:842-977
+
+  Per-title files are looked up beside the running game. ISOtestsubchannel reads
+  patches/<name>.SBI, then patches/<name>.sbi, and reports " * Subchannel support
+  from .sbi file. " when one answers. initGSCodes reads the cheat file
+  cheats/<code>.txt keyed on the game code, on top of the two cheat databases
+  load_cheat_dynamic_database opens from cheats. Android downloads the same cheat
+  file from epsxe.com into cheats, reads faqs/<code>.txt into its help viewer and
+  fills covers from epsxe.com.
+  ref: ePSXe 2.0.5 Linux x64 ISOtestsubchannel 0x46f198-0x46f263,
+       ePSXe 2.0.5 Linux x64 initGSCodes 0x432ea4-0x432f11,
+       ePSXe 2.0.5 Linux x64 load_cheat_dynamic_database 0x431bc7-0x431cac,
+       DownloadCheatFileTask.java:49-55, ePSXe.java:1047, ePSXe.java:1896,
+       ImageLoader.java:88
+
+  Shaders are directories, not single files. createProgramCustom reads
+  <dir>/gpuCore.slv and <dir>/gpuCore.slf and readPropertiesProgramCustom reads
+  <dir>/gpuCore.ini beside them, one directory per effect, and a stage that will
+  not open logs " (unable to read shader file %s) ". The shaders pack on
+  epsxe.com carries these triplets and Android pulls the same set one file at a
+  time from an index it downloads first. The integrated Pete OpenGL2 plugin has
+  its own set under the configured shader directory, defaulting to SHADERS\.
+  ref: ePSXe 2.0.5 Linux x64 createProgramCustom 0x4f7d7e-0x4f7f42,
+       ePSXe 2.0.18 Windows 0x4fb220-0x4fb263,
+       DownloadShaderPluginTask.java:56-80
+
+files:
+  - name: scph1000.bin
+    path: bios/scph1000.bin
+    system: sony-playstation
+    required: false
+    hle_fallback: true
+    variant_group: "psx-bios"
+    config_key: "BiosPath"
+    size: 524288
+    validation: [size, md5]
+    md5: 239665b1a3dade1b5a52c06338011044
+    description: "SCPH-1000, DTL-H1000 (v1.0 J)"
+    note: "Windows names this image scph1000 - JP and identifies it by id 0xb817c93d."
+    source_ref: "ScanBiosTask.java:28, ScanBiosTask.java:162-172, ePSXe 2.0.18 Windows 0x5c10b4"
+
+  - name: scph1001.bin
+    path: bios/scph1001.bin
+    system: sony-playstation
+    required: false
+    hle_fallback: true
+    variant_group: "psx-bios"
+    config_key: "BiosPath"
+    size: 524288
+    validation: [size, md5]
+    md5: 924e392ed05558ffdb115408c263dccf
+    description: "SCPH-1001, DTL-H1201, DTL-H3001 (v2.2 12-04-95 A)"
+    note: "The name the default BiosPath and biosPref point at on every platform. Windows names it scph1001 - US (Recommended) and identifies it by id 0x4c1e4c6a."
+    source_ref: "ScanBiosTask.java:28, ePSXe 2.0.5 Linux x64 write_configfiledefault 0x42ae99, ePSXeReadPreferences.java:21, ePSXe 2.0.18 Windows 0x5c10d8"
+
+  - name: scph1001_v20.bin
+    path: bios/scph1001_v20.bin
+    system: sony-playstation
+    required: false
+    hle_fallback: true
+    variant_group: "psx-bios"
+    config_key: "BiosPath"
+    size: 524288
+    validation: [size, md5]
+    md5: dc2b9bf8da62ec93e868cfd29f0d067d
+    description: "DTL-H1001 (v2.0 05-07-95 A)"
+    note: "Windows names this image scph1200 - JP and identifies it by id 0xdac96c37."
+    source_ref: "ScanBiosTask.java:28, ePSXe 2.0.18 Windows 0x5c1120"
+
+  - name: scph1002a.bin
+    path: bios/scph1002a.bin
+    system: sony-playstation
+    required: false
+    hle_fallback: true
+    variant_group: "psx-bios"
+    config_key: "BiosPath"
+    size: 524288
+    validation: [size, md5]
+    md5: 54847e693405ffeb0359c6287434cbef
+    description: "SCPH-1002, DTL-H1002 (v2.0 05-10-95 E)"
+    note: "Windows names this image scph1002 - PAL and identifies it by id 0xea0b1691."
+    source_ref: "ScanBiosTask.java:28, ePSXe 2.0.18 Windows 0x5c10fc"
+
+  - name: scph3000.bin
+    path: bios/scph3000.bin
+    system: sony-playstation
+    required: false
+    hle_fallback: true
+    variant_group: "psx-bios"
+    config_key: "BiosPath"
+    size: 524288
+    validation: [size, md5]
+    md5: 849515939161e62f6b866f6853006780
+    description: "SCPH-3000, DTL-H1000H (v1.1 01-22-95)"
+    note: "Windows names this image scph3000 - JP and identifies it by id 0x4d0889a4."
+    source_ref: "ScanBiosTask.java:28, ePSXe 2.0.18 Windows 0x5c1144"
+
+  - name: scph3500.bin
+    path: bios/scph3500.bin
+    system: sony-playstation
+    required: false
+    hle_fallback: true
+    variant_group: "psx-bios"
+    config_key: "BiosPath"
+    size: 524288
+    validation: [size, md5]
+    md5: cba733ceeff5aef5c32254f1d617fa62
+    description: "SCPH-3500 (v2.1 07-17-95 J)"
+    note: "Windows names this image scph3500 - JP and identifies it by id 0x4dab5145."
+    source_ref: "ScanBiosTask.java:28, ePSXe 2.0.18 Windows 0x5c1168"
+
+  - name: dtlh1100.bin
+    path: bios/dtlh1100.bin
+    system: sony-playstation
+    required: false
+    hle_fallback: true
+    variant_group: "psx-bios"
+    config_key: "biosPref"
+    size: 524288
+    validation: [size, md5]
+    md5: ca5cfc321f916756e3f0effbfaeba13b
+    description: "DTL-H1100 (v2.2 03-06-96 D)"
+    note: "Known to the Android table alone; no Windows record carries its checksum."
+    source_ref: "ScanBiosTask.java:28, ScanBiosTask.java:162-172"
+
+  - name: scph1001_v21.bin
+    path: bios/scph1001_v21.bin
+    system: sony-playstation
+    required: false
+    hle_fallback: true
+    variant_group: "psx-bios"
+    config_key: "biosPref"
+    size: 524288
+    validation: [size, md5]
+    md5: da27e8b6dab242d8f91a9b25d80c63b8
+    description: "DTL-H1101 (v2.1 07-17-95 A)"
+    note: "Known to the Android table alone; no Windows record carries its checksum."
+    source_ref: "ScanBiosTask.java:28, ScanBiosTask.java:162-172"
+
+  - name: scph1002b.bin
+    path: bios/scph1002b.bin
+    system: sony-playstation
+    required: false
+    hle_fallback: true
+    variant_group: "psx-bios"
+    config_key: "biosPref"
+    size: 524288
+    validation: [size, md5]
+    md5: 417b34706319da7cf001e76e40136c23
+    description: "SCPH-1002, DTL-H1102 (v2.1 07-17-95 E)"
+    note: "Known to the Android table alone; no Windows record carries its checksum."
+    source_ref: "ScanBiosTask.java:28, ScanBiosTask.java:162-172"
+
+  - name: scph5000.bin
+    path: bios/scph5000.bin
+    system: sony-playstation
+    required: false
+    hle_fallback: true
+    variant_group: "psx-bios"
+    config_key: "biosPref"
+    size: 524288
+    validation: [size, md5]
+    md5: 57a06303dfa9cf9351222dfcbb4a29d9
+    description: "SCPH-5000, DTL-H1200 (v2.2 12-04-95 J)"
+    note: "Known to the Android table alone. The Windows record labelled scph5000 identifies a different dump."
+    source_ref: "ScanBiosTask.java:28, ScanBiosTask.java:162-172"
+
+  - name: scph1002c.bin
+    path: bios/scph1002c.bin
+    system: sony-playstation
+    required: false
+    hle_fallback: true
+    variant_group: "psx-bios"
+    config_key: "BiosPath"
+    size: 524288
+    validation: [size, md5]
+    md5: e2110b8a2b97a8e0b857a45d32f7e187
+    description: "SCPH-1002, DTL-H1202, DTL-H3002 (v2.2 12-04-95 E)"
+    note: "Windows names this image dtlh3002 - PAL and identifies it by id 0xc8ec73c0."
+    source_ref: "ScanBiosTask.java:28, ePSXe 2.0.18 Windows 0x5c1090"
+
+  - name: scph5500.bin
+    path: bios/scph5500.bin
+    system: sony-playstation
+    required: false
+    hle_fallback: true
+    variant_group: "psx-bios"
+    config_key: "BiosPath"
+    size: 524288
+    validation: [size, md5]
+    md5: 8dd7d5296a650fac7319bce665a6a53c
+    description: "SCPH-5500 (v3.0 09-09-96 J)"
+    note: "Windows names this image scph5500 - JP and identifies it by id 0xa8bc4eba."
+    source_ref: "ScanBiosTask.java:28, ePSXe 2.0.18 Windows 0x5c11b0"
+
+  - name: scph5501.bin
+    path: bios/scph5501.bin
+    system: sony-playstation
+    required: false
+    hle_fallback: true
+    variant_group: "psx-bios"
+    config_key: "BiosPath"
+    size: 524288
+    validation: [size, md5]
+    md5: 490f666e1afb15b7362b406ed1cea246
+    description: "SCPH-5501, SCPH-7003 (v3.0 11-18-96 A)"
+    note: "Windows names this image scph7003 - JP and identifies it by id 0xbe16f916."
+    source_ref: "ScanBiosTask.java:28, ePSXe 2.0.18 Windows 0x5c1288"
+
+  - name: scph5502.bin
+    path: bios/scph5502.bin
+    system: sony-playstation
+    required: false
+    hle_fallback: true
+    variant_group: "psx-bios"
+    config_key: "BiosPath"
+    size: 524288
+    validation: [size, md5]
+    md5: 32736f17079d0b2b7024407c39bd3050
+    description: "SCPH-5502, SCPH-5552 (v3.0 01-06-97 E)"
+    note: "Windows names this image scph5552 - PAL and identifies it by id 0x19181dce."
+    source_ref: "ScanBiosTask.java:28, ePSXe 2.0.18 Windows 0x5c11f8"
+
+  - name: scph7000.bin
+    path: bios/scph7000.bin
+    system: sony-playstation
+    required: false
+    hle_fallback: true
+    variant_group: "psx-bios"
+    config_key: "BiosPath"
+    size: 524288
+    validation: [size, md5]
+    md5: 8e4c14f567745eff2f0408c8129f72a6
+    description: "SCPH-7000, SCPH-9000 (v4.0 08-18-97 J)"
+    note: "Windows names this image scph7000 - JP and identifies it by id 0x43771cd1."
+    source_ref: "ScanBiosTask.java:28, ePSXe 2.0.18 Windows 0x5c121c"
+
+  - name: scph7001.bin
+    path: bios/scph7001.bin
+    system: sony-playstation
+    required: false
+    hle_fallback: true
+    variant_group: "psx-bios"
+    config_key: "BiosPath"
+    size: 524288
+    validation: [size, md5]
+    md5: 1e68c231d0896b7eadcad1d7d8e76129
+    description: "SCPH-7001, SCPH-7501, SCPH-7503, SCPH-9001 (v4.1 12-16-97 A)"
+    note: "Windows names this image scph7001 - US and identifies it by id 0x6c1ba989."
+    source_ref: "ScanBiosTask.java:28, ePSXe 2.0.18 Windows 0x5c1240"
+
+  - name: scph7002.bin
+    path: bios/scph7002.bin
+    system: sony-playstation
+    required: false
+    hle_fallback: true
+    variant_group: "psx-bios"
+    config_key: "BiosPath"
+    size: 524288
+    validation: [size, md5]
+    md5: b9d9a0286c33dc6b7237bb13cd46fdee
+    description: "SCPH-7002, SCPH-7502, SCPH-9002 (v4.1 12-16-97 E)"
+    note: "The one dump three Windows records share, scph7002 - PAL, scph7502 - PAL (Recommended) and scph9002 - PAL, all carrying id 0x701bad89."
+    source_ref: "ScanBiosTask.java:28, ePSXe 2.0.18 Windows 0x5c1264, ePSXe 2.0.18 Windows 0x5c12ac, ePSXe 2.0.18 Windows 0x5c12d0"
+
+  - name: scph100.bin
+    path: bios/scph100.bin
+    system: sony-playstation
+    required: false
+    hle_fallback: true
+    variant_group: "psx-bios"
+    config_key: "BiosPath"
+    size: 524288
+    validation: [size, md5]
+    md5: 8abc1b549a4a80954addc48ef02c4521
+    description: "SCPH-100 (v4.3 03-11-00 J)"
+    note: "Windows names this image scph100 - JP and identifies it by id 0x061a33e2."
+    source_ref: "ScanBiosTask.java:28, ePSXe 2.0.18 Windows 0x5c12f4"
+
+  - name: scph102_v44.bin
+    path: bios/scph102_v44.bin
+    system: sony-playstation
+    required: false
+    hle_fallback: true
+    variant_group: "psx-bios"
+    config_key: "BiosPath"
+    size: 524288
+    validation: [size, md5]
+    md5: b10f5e0e3d9eb60e5159690680b1e774
+    description: "SCPH-102 (v4.4 03-24-00 E)"
+    note: "Windows names this image scph102A - PAL and identifies it by id 0x9337252b, the A and B suffixes separating the two SCPH-102 revisions."
+    source_ref: "ScanBiosTask.java:28, ePSXe 2.0.18 Windows 0x5c133c"
+
+  - name: scph101_v45.bin
+    path: bios/scph101_v45.bin
+    system: sony-playstation
+    required: false
+    hle_fallback: true
+    variant_group: "psx-bios"
+    config_key: "BiosPath"
+    size: 524288
+    validation: [size, md5]
+    md5: 6e3735ff4c7dc899ee98981385f6f3d0
+    description: "SCPH-101 (v4.5 05-25-00 A)"
+    note: "Windows names this image scph101 - US and identifies it by id 0x6e7f8edd."
+    source_ref: "ScanBiosTask.java:28, ePSXe 2.0.18 Windows 0x5c1318"
+
+  - name: scph102_v45.bin
+    path: bios/scph102_v45.bin
+    system: sony-playstation
+    required: false
+    hle_fallback: true
+    variant_group: "psx-bios"
+    config_key: "BiosPath"
+    size: 524288
+    validation: [size, md5]
+    md5: de93caec13d1a141a40a79f5c86168d6
+    description: "SCPH-102 (v4.5 05-25-00 E)"
+    note: "Windows names this image scph102B - PAL and identifies it by id 0x727f8add."
+    source_ref: "ScanBiosTask.java:28, ePSXe 2.0.18 Windows 0x5c1360"
+
+  - name: scph5000_b.bin
+    path: bios/scph5000_b.bin
+    system: sony-playstation
+    required: false
+    hle_fallback: true
+    variant_group: "psx-bios"
+    config_key: "BiosPath"
+    size: 524288
+    validation: [size]
+    md5: eb201d2d98251a598af467d4347bb62f
+    description: "SCPH-5000, DTL-H1200, DTL-H3000 (v2.2 12-04-95 J), bad dump"
+    note: "Recognised by Windows alone, as scph5000 - JP with id 0xa63468aa. That record is pinned on a checksum, not on a hash the code spells out; the md5 here is the dump that reproduces the checksum. TOSEC tags the same dump [b]."
+    source_ref: "ePSXe 2.0.18 Windows 0x5c118c, ePSXe 2.0.18 Windows 0x42f525-0x42f568"
+
+  - name: scph5502_b.bin
+    path: bios/scph5502_b.bin
+    system: sony-playstation
+    required: false
+    hle_fallback: true
+    variant_group: "psx-bios"
+    config_key: "BiosPath"
+    size: 524288
+    validation: [size]
+    md5: e56ec1b027e2fe8a49217d9678f7f6bb
+    description: "SCPH-5502, SCPH-5552 (v3.0 01-06-97 E), bad dump"
+    note: "Recognised by Windows alone, as scph5502 - PAL with id 0x702fa307, resolved the same way as the SCPH-5000 bad dump above. TOSEC tags it [b]."
+    source_ref: "ePSXe 2.0.18 Windows 0x5c11d4, ePSXe 2.0.18 Windows 0x42f525-0x42f568"
+
+  - name: "<game>.sbi"
+    path: "patches/<game>.sbi"
+    system: sony-playstation
+    required: false
+    category: game_data
+    aliases: ["<game>.SBI"]
+    description: "subchannel data for a libcrypt protected disc"
+    note: "Named after the running disc. The uppercase extension is tried first and the lowercase one second, and a disc with neither runs on the built-in substitute, reported as fake .sbi."
+    source_ref: "ePSXe 2.0.5 Linux x64 ISOtestsubchannel 0x46f198-0x46f263"
+
+  - name: database.dat
+    path: cheats/database.dat
+    system: sony-playstation
+    required: false
+    category: game_data
+    description: "cheat code database"
+    note: "Opened read only from cheats at startup. Absent, the session runs with no library behind the per-title files."
+    source_ref: "ePSXe 2.0.5 Linux x64 load_cheat_dynamic_database 0x431bc7-0x431bd0"
+
+  - name: dataconf.dat
+    path: cheats/dataconf.dat
+    system: sony-playstation
+    required: false
+    category: game_data
+    description: "cheat database index, keyed on the disc serial"
+    note: "Read after database.dat into CheatDataConf, mapping serials such as SLUS_011.60 onto entries of the library."
+    source_ref: "ePSXe 2.0.5 Linux x64 load_cheat_dynamic_database 0x431ca7-0x431cfa"
+
+  - name: "<code>.txt"
+    path: "cheats/<code>.txt"
+    system: sony-playstation
+    required: false
+    category: game_data
+    description: "cheat codes for one title"
+    note: "Named after the disc serial and parsed as a list of hex address and value pairs under bracketed titles. Android downloads it from epsxe.com into the same directory."
+    source_ref: "ePSXe 2.0.5 Linux x64 initGSCodes 0x432ea4-0x43304d, DownloadCheatFileTask.java:49-55"
+
+  - name: gpuCore.slv
+    path: "shaders/<name>/gpuCore.slv"
+    required: false
+    category: game_data
+    description: "vertex stage of one GPUCORE shader effect"
+    note: "One directory per effect. A stage that will not open logs the unable to read shader file message and the effect is dropped. The shaders pack on epsxe.com carries the set."
+    source_ref: "ePSXe 2.0.5 Linux x64 createProgramCustom 0x4f7d7e-0x4f7db9, DownloadShaderPluginTask.java:68-76"
+
+  - name: gpuCore.slf
+    path: "shaders/<name>/gpuCore.slf"
+    required: false
+    category: game_data
+    description: "fragment stage of one GPUCORE shader effect"
+    note: "Read straight after the vertex stage from the same directory."
+    source_ref: "ePSXe 2.0.5 Linux x64 createProgramCustom 0x4f7dcd-0x4f7df1, DownloadShaderPluginTask.java:69-78"
+
+  - name: gpuCore.ini
+    path: "shaders/<name>/gpuCore.ini"
+    required: false
+    category: game_data
+    description: "parameters of one GPUCORE shader effect"
+    note: "Read beside the two stages once they link. Not every effect in the pack ships one."
+    source_ref: "ePSXe 2.0.5 Linux x64 readPropertiesProgramCustom 0x4f7c30, ePSXe 2.0.5 Linux x64 createProgramCustom 0x4f7f15, DownloadShaderPluginTask.java:70-80"
+
+  - name: gpuPeteOGL2.slv
+    path: "shaders/gpuPeteOGL2.slv"
+    required: false
+    category: game_data
+    description: "GLSlang vertex stage of the integrated Pete OpenGL2 plugin"
+    note: "Resolved under the configured shader directory, defaulting to SHADERS\\. Selected by the GLSlang shader effect setting."
+    source_ref: "ePSXe 2.0.18 Windows 0x4fbd79-0x4fbd7e, ePSXe 2.0.18 Windows 0x4fb220-0x4fb263"
+
+  - name: gpuPeteOGL2.slf
+    path: "shaders/gpuPeteOGL2.slf"
+    required: false
+    category: game_data
+    description: "GLSlang fragment stage of the integrated Pete OpenGL2 plugin"
+    note: "Read from the same directory as the vertex stage."
+    source_ref: "ePSXe 2.0.18 Windows 0x4fbe80, ePSXe 2.0.18 Windows 0x4fb220-0x4fb263"
+
+  - name: gpuPeteOGL2.vp
+    path: "shaders/gpuPeteOGL2.vp"
+    required: false
+    category: game_data
+    description: "ARB vertex program of the integrated Pete OpenGL2 plugin"
+    note: "The ARB alternative to the GLSlang pair, taken by a different value of the shader effect setting, and reporting the offset when the program fails to assemble."
+    source_ref: "ePSXe 2.0.18 Windows 0x4faaf2, ePSXe 2.0.18 Windows 0x59f534-0x59f580"
+
+  - name: gpuPeteOGL2.fp
+    path: "shaders/gpuPeteOGL2.fp"
+    required: false
+    category: game_data
+    description: "ARB fragment program of the integrated Pete OpenGL2 plugin"
+    note: "Read alongside the vertex program."
+    source_ref: "ePSXe 2.0.18 Windows 0x4fabbb, ePSXe 2.0.18 Windows 0x59f4c8-0x59f518"
+
+  - name: "gpuPeteOGL2_t<n>l.tga"
+    path: "shaders/gpuPeteOGL2_t<n>l.tga"
+    required: false
+    category: game_data
+    description: "linear lookup texture of the integrated Pete OpenGL2 plugin"
+    note: "Numbered per effect and resolved from the same directory as the shader stages. One of two names formatted into the same slot, the other being the nearest flavour, picked on the remainder of the effect index."
+    source_ref: "ePSXe 2.0.18 Windows 0x4fb429-0x4fb433, ePSXe 2.0.18 Windows 0x59f43c"
+
+  - name: "gpuPeteOGL2_t<n>n.tga"
+    path: "shaders/gpuPeteOGL2_t<n>n.tga"
+    required: false
+    category: game_data
+    description: "nearest lookup texture of the integrated Pete OpenGL2 plugin"
+    note: "The alternative to the linear flavour, taken when the index divides evenly, and read again on its own further in."
+    source_ref: "ePSXe 2.0.18 Windows 0x4fb3de, ePSXe 2.0.18 Windows 0x4fb573, ePSXe 2.0.18 Windows 0x59f424"
+
+  - name: "gpu<name>.dll"
+    path: "plugins/gpu<name>.dll"
+    system: sony-playstation
+    required: false
+    category: game_data
+    aliases: ["libgpu<name>.so"]
+    description: "PSEmu Pro video plugin"
+    note: "Named by the VideoPlugin setting, opened from plugins and bound entry point by entry point, from GPUinit and GPUopen through GPUdmaChain to GPUregisterResolutionCallback, each missing symbol logged as a dlsym error. Windows enumerates the directory on gpu*.dll. The built-in GPUCORE and the integrated Pete OpenGL2 plugin need no file."
+    source_ref: "ePSXe 2.0.5 Linux x64 init_gpu 0x4408a1-0x440d5d, ePSXe 2.0.18 Windows 0x58aded"
+
+  - name: "spu<name>.dll"
+    path: "plugins/spu<name>.dll"
+    system: sony-playstation
+    required: false
+    category: game_data
+    aliases: ["libspu<name>.so"]
+    description: "PSEmu Pro sound plugin"
+    note: "Named by the SoundPlugin setting. Windows enumerates the directory on spu*.dll. The built-in SPUCORE needs no file."
+    source_ref: "ePSXe 2.0.5 Linux x64 init_spu_plugins, ePSXe 2.0.5 Linux x64 write_configfiledefault 0x42ae40"
+
+  - name: "cdr<name>.dll"
+    path: "plugins/cdr<name>.dll"
+    system: sony-playstation
+    required: false
+    category: game_data
+    aliases: ["libcdr<name>.so"]
+    description: "PSEmu Pro cdrom plugin"
+    note: "Enumerated on cdr*.dll and initialised through init_plugins_cdrom. Reading a disc image directly needs none."
+    source_ref: "ePSXe 2.0.5 Linux x64 init_plugins_cdrom, ePSXe 2.0.18 Windows 0x58af0d"
+
+  - name: "pad<name>.dll"
+    path: "plugins/pad<name>.dll"
+    system: sony-playstation
+    required: false
+    category: game_data
+    aliases: ["libpad<name>.so"]
+    description: "PSEmu Pro input plugin"
+    note: "Named by the InputPlugin and Input2Plugin settings and loaded from plugins by LoadPadPlugins. The built-in INPUTCORE needs no file."
+    source_ref: "ePSXe 2.0.5 Linux x64 LoadPadPlugins 0x51927e, ePSXe 2.0.5 Linux x64 write_configfiledefault 0x42ae57-0x42ae6e"
+
+  - name: liboglplugin2.so
+    path: plugins/liboglplugin2.so
+    system: sony-playstation
+    required: false
+    bundled: true
+    category: game_data
+    description: "OpenGL2 renderer of the Android build"
+    note: "Android only. Read when the renderer setting is 5: a copy found under plugins is staged into the private directory and used, otherwise the one inside the package answers and the setting falls back to the software renderer if neither is there."
+    source_ref: "ePSXe.java:847-886"
+
+  - name: libogl2extplugin.so
+    path: plugins/libogl2extplugin.so
+    system: sony-playstation
+    required: false
+    bundled: true
+    category: game_data
+    description: "extended OpenGL2 renderer of the Android build"
+    note: "Android only. Same override path as liboglplugin2.so, taken when the renderer setting is 4."
+    source_ref: "ePSXe.java:887-926"
+
+  - name: libopenglplugin.so
+    path: libopenglplugin.so
+    system: sony-playstation
+    required: false
+    category: game_data
+    description: "external OpenGL plugin of the Android build"
+    note: "Android only. Named by the gpuPref setting, which points at the root of shared storage by default and is also looked for under the package library directory and the secondary card."
+    source_ref: "ePSXe.java:927-966, ePSXeReadPreferences.java:32-34, ePSXe 2.0.15 libepsxe.so 0x176128, ePSXe 2.0.15 libepsxe.so 0x176160"
+
+  - name: "<code>.txt"
+    path: "faqs/<code>.txt"
+    system: sony-playstation
+    required: false
+    category: game_data
+    unsourceable: "guide text the user files under the disc serial"
+    description: "in-app guide for one title"
+    note: "Android only. Named after the disc serial and loaded into the help viewer as a local page; the menu entry is offered only when the file is there."
+    source_ref: "ePSXe.java:1047, ePSXe.java:1857, ePSXe.java:1896"
+
+  - name: skin.png
+    path: skin.png
+    required: false
+    category: game_data
+    unsourceable: "pad artwork the user supplies"
+    description: "on-screen controller skin"
+    note: "Android only. Named by the skinPref setting, which points at the root of shared storage by default, and handed to the view as the input skin."
+    source_ref: "ePSXeReadPreferences.java:36-38, ePSXeNative.java:702"
+
+  - name: "<hash>.jpg"
+    path: "covers/<hash>.jpg"
+    system: sony-playstation
+    required: false
+    category: game_data
+    description: "cover art for one title"
+    note: "Cached under covers and fetched from epsxe.com when absent, the desktop builds falling back to a shipped na.jpg when the fetch finds nothing."
+    source_ref: "ImageLoader.java:88, ePSXe 2.0.5 Linux x64 download_covers, ePSXe 2.0.5 Linux x64 0x572ea0"
+
+exclusion_note: >
+  Left out are the files ePSXe writes and reads back itself, which are emulator
+  state rather than files a user has to obtain: the epsxerc configuration and the
+  per-title profiles under config, the memory cards memcards/epsxe000.mcr and
+  epsxe001.mcr with the per-game pairs memcards/games/<name>-00.mcr and -01.mcr
+  and the Windows scratch pair memcards/temp.000 and temp.001, the savestates and
+  their .pic thumbnails under sstates, the ECM indexes under idx, the game list
+  and scan records under info, epsxe.log, and shadererr.txt, which is only
+  written when a shader stage fails to compile. Left out with them are the ROM
+  images themselves and the .cue, .ccd, .mds, .ecm and .pbp sidecars of a disc.
+  The HLE BIOS is not a file either: it is code, and the ASCII and JIS fonts it
+  draws with are compiled into the binary as bios_ascii_font and bios_jis_font.
+  ref: ePSXe 2.0.5 Linux x64 write_configuration 0x42d330,
+       ePSXe 2.0.5 Linux x64 bios_ascii_font 0x883740,
+       ePSXe 2.0.5 Linux x64 bios_jis_font 0x883d00,
+       ePSXe 2.0.5 Linux x64 0x565110, ePSXe 2.0.5 Linux x64 0x56d164,
+       ePSXe 2.0.18 Windows 0x595600

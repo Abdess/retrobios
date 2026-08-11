@@ -1,0 +1,35 @@
+emulator: Eden Nightly
+type: alias
+alias_of: eden
+core_classification: alias
+source: "https://git.eden-emu.dev/eden-emu/eden"
+upstream: "https://git.eden-emu.dev/eden-emu/eden"
+source_commit: "8648c27cbb4c17b176076b09ac245271829cbd9f"
+profiled_date: "2026-08-11"
+core_version: "Git"
+display_name: "Eden Nightly (Nintendo Switch)"
+cores: ["eden-nightly"]
+systems: [nintendo-switch]
+
+note: |
+  Same tree as eden, built from master with the gradle property nightly=true
+  (src/android/app/build.gradle.kts:41-42). The property sets applicationIdSuffix
+  ".nightly" (:139) and passes -DNIGHTLY_BUILD=ON -DENABLE_UPDATE_CHECKER=ON (:95-99).
+
+  NIGHTLY_BUILD points the update feed at nightly.eden-emu.dev, repo eden-ci/nightly,
+  instead of stable.eden-emu.dev, repo eden-emu/eden
+  (CMakeModules/GenerateSCMRev.cmake:43-52), splits the release tag on "." before the
+  version compare (src/common/net/net.cpp:27-35,
+  src/frontend_common/update_checker.cpp:26-43), sets the g_is_nightly_build constant
+  (src/common/scm_rev.cpp.in:28,45) and exposes NativeLibrary.isNightlyBuild
+  (src/android/app/src/main/jni/native.cpp:1703-1711). No file loading path differs,
+  so the keys are those of eden.
+
+  Nightly builds carry no release tag: getGitVersion() returns git describe
+  (build.gradle.kts:368-383) and GenerateSCMRev.cmake:22-24 marks the result a dev build.
+
+  The android package ids are the three product flavors plus the suffix:
+  dev.eden.eden_emulator.nightly (build.gradle.kts:67),
+  com.miHoYo.Yuanshen.nightly (:206), dev.legacy.eden_emulator.nightly (:224).
+
+files: []

@@ -1,0 +1,239 @@
+emulator: Cxbx-Reloaded
+type: standalone
+core_classification: embedded_hle
+source: "https://github.com/Cxbx-Reloaded/Cxbx-Reloaded"
+upstream: "https://github.com/Cxbx-Reloaded/Cxbx-Reloaded"
+profiled_date: "2026-08-11"
+source_commit: "585c49a50af1255ab155099e06f24505f9c5a800"
+core_version: "CI-585c49a"
+display_name: "Microsoft - Xbox / Sega Chihiro (Cxbx-Reloaded)"
+cores:
+  - cxbx-reloaded
+  - cxbx
+systems:
+  - microsoft-xbox
+  - sega-chihiro
+mode: standalone
+
+notes: |
+  Windows x86 emulator running Xbox and Sega Chihiro titles. The kernel is
+  reimplemented and XBE code executes natively, so no Xbox flash ROM or MCPX
+  image is read. The flash window answers the two addresses titles poll with
+  constants, hardware revision 1.6 among them, and the MCPX device is a PCI stub
+  whose revision comes from the hardware model. A title is opened as an XBE,
+  either from an unpacked directory or from an .iso or .xiso mounted to a drive
+  letter, in which case the default.xbe of the mount is what gets opened.
+  ref: src/devices/x86/EmuX86.cpp:162-180,
+       src/devices/MCPXDevice.cpp:36-70,
+       src/devices/Xbox.cpp:48-58,
+       src/devices/Xbox.cpp:132-155,
+       src/gui/WndMain.cpp:89-96,
+       src/gui/WndMain.cpp:2252-2272
+
+  Every path below is relative to the data directory, picked on first run
+  between the folder holding cxbx.exe, %APPDATA%\Cxbx-Reloaded and a custom
+  location. EmuDisk, EmuMediaBoard and EmuMu are created under it at startup.
+  ref: src/common/Settings.cpp:82,
+       src/common/Settings.cpp:902-937,
+       src/common/Settings.cpp:968-996,
+       src/common/FilePaths.cpp:81-137
+
+  A title counts as Chihiro when its XBE type says so or a boot.id sits beside
+  it. Launching one directly requires the media board ROM: its absence ends the
+  run. The 2 MB image is cut into two 1 MB halves written as Partition2.bin and
+  Partition3.bin, the old and new SEGABOOT, and the new one is launched, which
+  then boots the title. A title returning to firmware with an empty launch path
+  goes back to the same ROM.
+  ref: src/core/kernel/init/CxbxKrnl.cpp:573-578,
+       src/core/kernel/init/CxbxKrnl.cpp:590-655,
+       src/core/kernel/exports/EmuKrnlHal.cpp:546-556,
+       src/core/kernel/support/EmuFile.cpp:250-253
+
+  The JVS base board dumps are memory mapped read/write once the title is
+  Chihiro, and each one ends the run when it cannot be opened. Byte 0x1F00 of the
+  QC firmware carries the region, rewritten to one the title's BootID accepts so
+  the board does not reject the game. Titles read and write all four images
+  through the JVS patches at offsets of their own choosing; no size, bound or
+  hash check exists anywhere in that path.
+  ref: src/core/hle/JVS/JVS.cpp:129-145,
+       src/core/hle/JVS/JVS.cpp:174-213,
+       src/core/hle/JVS/JVS.cpp:241-259,
+       src/core/hle/JVS/JVS.cpp:397-435,
+       src/core/kernel/init/CxbxKrnl.cpp:1330-1333
+
+  On the Xbox side the emulated disk holds the dashboard on Partition2. A title
+  rebooting with an empty launch path lands there, as does the Open Dashboard
+  menu entry, and an absent dashboard raises the console's own unrecoverable
+  error screen rather than an emulator failure.
+  ref: src/core/kernel/exports/EmuKrnlHal.cpp:546-556,
+       src/gui/WndMain.cpp:2463-2467,
+       src/common/xbe/Xbe.cpp:62-96,
+       src/core/kernel/support/EmuDisk.cpp:269
+
+files:
+  - name: fpr21042_m29w160et.bin
+    path: "EmuMediaBoard/fpr21042_m29w160et.bin"
+    system: sega-chihiro
+    required: true
+    size: 2097152
+    validation: [size]
+    description: "Chihiro media board flash ROM"
+    note: >-
+      Checked for existence, opened, and rejected unless it is exactly 2 MB; each
+      failure ends the run with a message naming the file and the EmuMediaBoard
+      folder. Read once, to write out the two SEGABOOT halves when they are
+      absent. It is also the target a Chihiro title returns to when it reboots
+      with an empty launch path.
+    source_ref: "src/core/kernel/init/CxbxKrnl.cpp:596-614, src/core/kernel/support/EmuFile.cpp:251, src/core/kernel/exports/EmuKrnlHal.cpp:550-553"
+
+  - name: ic10_g24lc64.bin
+    path: "EmuMediaBoard/Chihiro/ic10_g24lc64.bin"
+    system: sega-chihiro
+    required: true
+    min_size: 7937
+    description: "Base board QC microcontroller firmware"
+    note: >-
+      Memory mapped read/write at JVS setup, and the run ends when it cannot be
+      opened. Byte 0x1F00 is dereferenced straight after loading, which is the
+      floor the size carries: it holds the board region and is rewritten to USA,
+      export or Japan when the running title's BootID rejects the current value.
+      Titles read it through JvsFirmwareDownload and overwrite it through
+      JvsFirmwareUpload.
+    source_ref: "src/core/hle/JVS/JVS.cpp:181-188, src/core/hle/JVS/JVS.cpp:241-259, src/core/hle/JVS/JVS.cpp:484-523"
+
+  - name: pc20_g24lc64.bin
+    path: "EmuMediaBoard/Chihiro/pc20_g24lc64.bin"
+    system: sega-chihiro
+    required: true
+    description: "Base board SC microcontroller firmware"
+    note: >-
+      Memory mapped read/write at JVS setup, and the run ends when it cannot be
+      opened. Served to titles through JvsScFirmwareDownload and rewritten
+      through JvsScFirmwareUpload.
+    source_ref: "src/core/hle/JVS/JVS.cpp:182-192, src/core/hle/JVS/JVS.cpp:671-709"
+
+  - name: ic11_24lc024.bin
+    path: "EmuMediaBoard/Chihiro/ic11_24lc024.bin"
+    system: sega-chihiro
+    required: true
+    description: "Base board configuration EEPROM"
+    note: >-
+      Memory mapped read/write at JVS setup, and the run ends when it cannot be
+      opened. Writes from JvsEEPROM_Write are synced back to disk immediately,
+      so cabinet settings a title stores persist across runs.
+    source_ref: "src/core/hle/JVS/JVS.cpp:183-196, src/core/hle/JVS/JVS.cpp:437-482"
+
+  - name: backup_ram.bin
+    path: "EmuMediaBoard/Chihiro/backup_ram.bin"
+    system: sega-chihiro
+    required: false
+    has_builtin: true
+    size_note: "Created as 128 KB of zeros when absent, then memory mapped"
+    description: "Base board backup memory"
+    note: >-
+      The only one of the four JVS images the emulator will produce itself: when
+      the file is missing it writes 128 KB of zeros and maps that, so a fresh
+      board starts blank. Titles keep bookkeeping and high scores here through
+      JvsBACKUP_Read and JvsBACKUP_Write.
+    source_ref: "src/core/hle/JVS/JVS.cpp:184-213, src/core/hle/JVS/JVS.cpp:397-435"
+
+  - name: Partition2.bin
+    path: "EmuMediaBoard/Partition2.bin"
+    system: sega-chihiro
+    required: false
+    unsourceable: "first megabyte of the media board ROM, written by the emulator, with no distributed form of its own"
+    description: "SEGABOOT, old revision"
+    note: >-
+      Written by the emulator from the first megabyte of fpr21042_m29w160et.bin
+      when either half is missing, and mounted as the mbrom0 device. Supplying it
+      does not remove the need for the ROM, whose existence is checked before the
+      extraction block is reached.
+    source_ref: "src/core/kernel/init/CxbxKrnl.cpp:616-648, src/core/kernel/support/EmuFile.cpp:252, src/core/kernel/support/EmuMediaBoard.cpp:230-233"
+
+  - name: Partition3.bin
+    path: "EmuMediaBoard/Partition3.bin"
+    system: sega-chihiro
+    required: false
+    unsourceable: "second megabyte of the media board ROM, written by the emulator, with no distributed form of its own"
+    description: "SEGABOOT, current revision"
+    note: >-
+      Written from the second megabyte of fpr21042_m29w160et.bin under the same
+      condition as the old half, mounted as the mbrom1 device, and launched as
+      the XBE that boots the title.
+    source_ref: "src/core/kernel/init/CxbxKrnl.cpp:616-653, src/core/kernel/support/EmuFile.cpp:253, src/core/kernel/support/EmuMediaBoard.cpp:230-233"
+
+  - name: xboxdash.xbe
+    path: "EmuDisk/Partition2/xboxdash.xbe"
+    system: microsoft-xbox
+    required: false
+    description: "Xbox dashboard executable"
+    note: >-
+      Read from the shell partition of the emulated disk when a title reboots
+      with an empty launch path and when the Open Dashboard menu entry is used.
+      Its absence is handled as the console handles it, with the unrecoverable
+      error screen and the LED sequence that goes with it, the code carrying the
+      dashboard's own reason when the launch data page supplies one. Titles run
+      without it.
+    source_ref: "src/core/kernel/exports/EmuKrnlHal.cpp:546-556, src/gui/WndMain.cpp:2463-2467, src/common/xbe/Xbe.cpp:62-96, src/core/kernel/support/EmuDisk.cpp:269"
+
+  - name: EEPROM.bin
+    path: "EEPROM.bin"
+    system: microsoft-xbox
+    required: false
+    has_builtin: true
+    size: 256
+    validation: [size]
+    description: "Xbox EEPROM image"
+    note: >-
+      Opened at startup and mapped read/write; the file is created and filled
+      with defaults when it does not exist, and a file that is not 256 bytes ends
+      the run. Section checksums are recomputed on every load. The hard disk key
+      is taken from it, and the game region it carries becomes the factory
+      region. The GUI exposes an editor over the same file.
+    source_ref: "src/common/EmuEEPROM.cpp:93-193, src/common/FilePaths.cpp:125, src/core/kernel/init/CxbxKrnl.cpp:958, src/gui/DlgEepromConfig.cpp:212-230"
+
+  - name: keys.bin
+    path: "keys.bin"
+    system: microsoft-xbox
+    required: false
+    size: 32
+    validation: [size]
+    description: "Xbox EEPROM and certificate keys"
+    note: >-
+      Two 16 byte keys read in order, the EEPROM key then the certificate key,
+      as produced by dump-xbox. A file of any other length is refused with a
+      warning naming the expected length, and an absent file only costs the
+      ability to read save data from a real console. The certificate key derives
+      the LAN, signature and alternate signature keys of the running title; the
+      EEPROM key checks the EEPROM header and is read again by the EEPROM editor
+      to recompute the checksum it writes.
+    source_ref: "src/common/FilePaths.cpp:139-172, src/core/kernel/common/types.h:2232, src/core/kernel/init/CxbxKrnl.cpp:113-132, src/common/EmuEEPROM.cpp:184-191, src/gui/DlgEepromConfig.cpp:200-207"
+
+  - name: dokan2.dll
+    required: false
+    unsourceable: "signed kernel mode driver package installed by the Dokany runtime installer, not a file placed in a data folder"
+    description: "Dokany user mode library"
+    note: >-
+      Loaded by name with every entry point resolved individually, and the
+      failure message tells the user to install the upstream signed Dokany
+      runtime. It backs the only path that reads a disc image: an .iso or .xiso
+      is mounted to a drive letter and the default.xbe of the mount is opened, so
+      without it only unpacked titles load. The build produces an import library
+      from the Dokany definition file and takes headers from the vendored tree,
+      but ships no runtime of its own.
+    source_ref: "src/gui/xiso/XisoMount.cpp:36-61, src/gui/WndMain.cpp:2252-2272, projects/dokany/CMakeLists.txt:8-10, projects/cxbx/CMakeLists.txt:17-18"
+
+exclusion_note: >
+  Five host libraries the code names are not listed. ntdll.dll and the XInput
+  libraries tried in turn, xinput1_4, xinput1_3 and xinput9_1_0, are Windows
+  components resolved by the loader, and cxbxr-emu.dll is the emulator's own
+  build output shipped beside cxbx.exe. xbdm.dll is not opened at all: the name
+  is compared against the import table of the loaded XBE so the debug monitor
+  imports can be thunked to the emulator's own implementations. Two further
+  files belong to the title rather than the system: boot.id, read from the title
+  directory for its region flags, and default.xbe. logo.bmp is only the name
+  offered in the open and save dialogs of the XBE logo editor.
+  ref: src/common/input/XInputPad.cpp:100-120,
+       src/core/kernel/init/CxbxKrnl.cpp:356-365,
+       src/devices/chihiro/MediaBoard.cpp:46-57,
+       src/gui/WndMain.cpp:880-890

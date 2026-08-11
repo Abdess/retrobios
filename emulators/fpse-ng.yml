@@ -1,0 +1,302 @@
+emulator: FPseNG
+type: standalone
+core_classification: other
+source: "https://play.google.com/store/apps/details?id=com.emulator.fpse64"
+upstream: closed-source
+author: "Schtruck & LDchen"
+profiled_date: "2026-08-11"
+core_version: "1.13"
+display_name: "Sony - PlayStation (FPseNG)"
+cores:
+  - "fpse-ng"
+  - "fpseng"
+  - "fpse64"
+systems:
+  - sony-playstation
+mode: standalone
+bios_directory: "bios/"
+bios_size: 524288
+
+notes: |
+  PlayStation emulator for Android, closed source, sold on Google Play as package
+  com.emulator.fpse64 and named FPse64 until the rename. The build read here is
+  1.13, versionCode 245, minSdk 23, targetSdk 33, activity
+  com.emulator.fpse64.Main. Google signs the package through Play App Signing,
+  CN=Android O=Google Inc. issued 2020-05-02, sha256
+  5df4c204abac4d2a10c4b8f497689e28c2bfb5dc44a56081ebb4a5e1c2f1d27f, and that
+  signature block travels inside the copy read here: the repackager kept the
+  original apk as assets/SignatureKiller/origin.apk, whose MANIFEST.MF carries
+  the sha256 of all 1278 entries of the distributed build. 1274 match byte for
+  byte, among them every native library and every resource; AndroidManifest.xml,
+  classes.dex and resources.arsc differ, stamp-cert-sha256 is dropped and one
+  class, bin/mt/signature/KillerApplication, is added. Native code and resources
+  are therefore the distributed ones and the java below is the application's own,
+  minus that injection. A second copy, apkvision 1.8, is signed with the Android
+  test key and ships three of the eight libraries its own core links against; it
+  is read only to confirm that the preference key, the two size tests and the
+  checksum constant below are the application's and not the repackager's.
+  ref: com.emulator.fpse64 1.13 assets/SignatureKiller/origin.apk
+       META-INF/GOOGPLAY.RSA, META-INF/MANIFEST.MF
+
+  Two roots hold everything. The private files directory of the package is the
+  one the core is given, and bios, plugin, cfg and skin are created under it
+  right after the libraries load; the emulator resolves its own paths against it.
+  The second is a directory named FPse64 at the root of shared storage, holding
+  memcards, cheats, shaders, ogl, sbi, sstates, titles, icons, videos and
+  filelist.txt. Paths below are relative to the first root unless they name the
+  second.
+  ref: Main.java:36420, Main.java:3004, Main.java:27329-27332,
+       Main.java:27458-27459, Main.java:30411-30413
+
+  Exactly one BIOS image is ever loaded and its full path is a setting rather
+  than a name the code looks for. The Load Bios browser keeps .bin files and
+  lists only those of exactly 524288 bytes, the chosen path is written to the
+  preference com.emulator.fpse64.biospath and pushed into the core as string
+  slot 6, and the stored path is re-checked at every start: a file that no longer
+  exists or is not exactly 524288 bytes clears the preference and the session
+  runs on HLE. Slot 6 receives the empty string whenever the path is empty, the
+  BIOS switch is off or the launching intent carried bios=0, which is the
+  documented way to ask for HLE; the shortcuts the application pins carry that
+  same extra. On the core side the value is opened as given, then retried below
+  bios/ under the root, so a bare name resolves there; a hit is read as one block
+  of 0x80000 bytes after "Loading '%s'...", and a miss reports "Can't load
+  biosfile '%s', switching to HLE", sets the HLE bit and writes
+  "CEX-3000/1001/1002 by K.S.", "System ROM Version 2.2 12/04/95 A" and the Sony
+  copyright line into BIOS memory, so no image is needed on its own. The FAQ on
+  the emulator's own site states that a file named scph1001.bin is recommended
+  and is not distributed with the emulator.
+  ref: Main.java:1169, Main.java:21925-21927, Main.java:25833-25835,
+       Main.java:9943-9977, Main.java:30177-30192, Main.java:5392-5396,
+       Main.java:36446-36451, Main.java:28751-28754,
+       libfpse.so 0x70e20-0x70f20, fpsece.net/faq.html
+
+  Automatic detection recognises one dump and does it on content. Scanning
+  storage, FPseNG keeps files whose lowercased name ends in .bin and whose length
+  is exactly 524288, reads all 524288 bytes, sums them as signed bytes and
+  accepts the file when the total is 85958, writing the path to the preference
+  and turning the BIOS on. The same constant answers over NFS through isnfsbios.
+  Recomputed over the collection, that sum resolves to a single image, the
+  v2.2 12/04/95 A dump listed below, and to no other. The HLE path impersonates
+  the same revision: its identification strings sit in .rodata beside "HLE
+  enabled." and the library carries no 512 KB image of its own.
+  ref: Main.java:24466-24487, Main.java:24491, Main.java:25670,
+       libfpse.so .rodata 0x1b8d81-0x1b8dfb
+
+  Emulation is split across libraries the core links against. libfpse.so lists
+  libopengl, libsoft1, libspuplugin, libneon, libsdl and libnfsplugin in
+  DT_NEEDED, and Main names uncompress, spuplugin, soft1, nfsplugin and opengl
+  before fpse; sdl and neon are named earlier from a static block that swallows
+  UnsatisfiedLinkError, the rest are not guarded. All eight ship in the package
+  for arm64-v8a and no other ABI. Eighteen constants naming nine plugins296
+  archives on fpse.net and fpsece.net survive in the class and nothing reads
+  them, and the two archive extractors keep a branch counting eight .so members
+  that no caller reaches. What getfile.php still answers, once per versionCode
+  and keyed by ABI as type p64, is a blob handed to setnfspos and summed into a
+  preference, not a library anything writes to disk. An OpenGL plugin picked by
+  hand from the .so browser is copied over libopengl1.so under the root.
+  libGLESv2, libjnigraphics, liblog, libstdc++, libdl, libm and libc are the
+  Android runtime and are not files anyone supplies.
+  ref: Main.java:25134-25137, Main.java:27300-27312, Main.java:9985,
+       Main.java:1116-1133, Main.java:8496, Main.java:13854,
+       Main.java:23615-23621, libfpse.so readelf -d
+
+  Resources unpack through helpers that differ in one respect. The guarded one
+  writes only when the target is absent, so bios/kanji.rom, fpse.ini and the
+  whole skin set survive being replaced by hand, and the same rule puts
+  slot1.mcd and slot2.mcd under FPse64/memcards on shared storage. The
+  unguarded one truncates, so gamelist.ini is rewritten from the package at every
+  start and a copy put there does not last. The shipped shaders are copied out of
+  assets into FPse64/shaders once storage access is granted.
+  ref: Main.java:33974-33977, Main.java:34054-34057, Main.java:34750-34753,
+       Main.java:27334, Main.java:27346-27347, Main.java:27463,
+       Main.java:35829-35845
+
+  What the application fetches for itself comes from the developer's servers:
+  cheat files from fpse.net/c/, per title OpenGL option files packed as
+  fpse.net/o/ogl.zip, covers from fpse.net/i64/, titles from fpse.net/t/, game
+  notes from fpse.net/games64/, overlay pad skins from fpse.net/s/ as
+  padtemp.zip extracted into skin/, and vrback.zip extracted at the root of
+  shared storage. Files named after a game identifier and ending in .sbi are
+  downloaded into FPse64/sbi for the titles of one internal list; no library and
+  no java path reads them back, and the string ".sbi" appears in none of the
+  eight libraries.
+  ref: Main.java:10505-10507, Main.java:16605, Main.java:16644,
+       Main.java:11468, Main.java:11827, l0.java:82-89, Main.java:10846,
+       Main.java:11014, Main.java:12555-12585, Main.java:15415-15430,
+       Main.java:15489
+
+files:
+  - name: scph1001.bin
+    path: bios/scph1001.bin
+    system: sony-playstation
+    required: false
+    hle_fallback: true
+    variant_group: "psx-bios"
+    config_key: "com.emulator.fpse64.biospath"
+    size: 524288
+    validation: [size]
+    md5: 924e392ed05558ffdb115408c263dccf
+    sha1: 10155d8d6e6e832d6ea66db9bc098321fb5e8ebf
+    description: "SCPH-1001, DTL-H1201, DTL-H3001 (v2.2 12-04-95 A)"
+    note: "The only image the code identifies, and it identifies it by a checksum of its own rather than by a hash it spells out: the 524288 bytes summed as signed bytes, accepted at 85958. The md5 and sha1 here are the dump that reproduces that sum. Selecting a BIOS by hand takes any .bin of exactly 524288 bytes, so the other images of the group fill the slot without being recognised by name or by sum."
+    source_ref: "Main.java:24466-24487, Main.java:9945-9952, Main.java:30177-30192, Main.java:5392-5396, libfpse.so 0x70e20-0x70ed0"
+
+  - name: kanji.rom
+    path: bios/kanji.rom
+    required: false
+    bundled: true
+    unsourceable: "ships inside the paid application package"
+    size: 238586
+    md5: 040d9dcbad83388c14d2628ac69ce88b
+    sha1: 915880f8bb04de39fd5132b92dfb99872f54fa47
+    description: "FONTX2 font the core draws Japanese text with"
+    note: "Header FONTX2X11. Unpacked into bios/ at first start and left alone afterwards, so a replacement stays. The core appends the name to the root and its bios/ component, opens the result read only and carries on when the file is absent."
+    source_ref: "Main.java:27334, Main.java:33974-33977, libfpse.so 0x71074-0x710b4, libfpse.so 0x95ce0-0x95ce8"
+
+  - name: libsoft1.so
+    required: true
+    bundled: true
+    unsourceable: "ships inside the paid application package"
+    category: game_data
+    description: "software renderer plugin"
+    note: "Named by System.loadLibrary(\"soft1\") outside any catch and listed in DT_NEEDED by the core. Also holds the VR background loader."
+    source_ref: "Main.java:27302, libfpse.so readelf -d"
+
+  - name: libspuplugin.so
+    required: true
+    bundled: true
+    unsourceable: "ships inside the paid application package"
+    category: game_data
+    description: "sound plugin"
+    note: "Named by System.loadLibrary(\"spuplugin\") outside any catch and listed in DT_NEEDED."
+    source_ref: "Main.java:27301, libfpse.so readelf -d"
+
+  - name: libopengl.so
+    required: true
+    bundled: true
+    unsourceable: "ships inside the paid application package"
+    category: game_data
+    aliases: ["libopengl1.so"]
+    description: "OpenGL renderer plugin"
+    note: "Named by System.loadLibrary(\"opengl\") outside any catch and listed in DT_NEEDED. A plugin chosen from the .so browser is copied over libopengl1.so under the root."
+    source_ref: "Main.java:27304, Main.java:9985, libfpse.so readelf -d"
+
+  - name: libnfsplugin.so
+    required: true
+    bundled: true
+    unsourceable: "ships inside the paid application package"
+    category: game_data
+    description: "NFS client plugin, for discs read from a network share"
+    note: "Named by System.loadLibrary(\"nfsplugin\") outside any catch and listed in DT_NEEDED. Backs the isnfsbios and copyfromnfs entry points."
+    source_ref: "Main.java:27303, Main.java:25670, libfpse.so readelf -d"
+
+  - name: libsdl.so
+    required: true
+    bundled: true
+    unsourceable: "ships inside the paid application package"
+    category: game_data
+    description: "SDL audio backend"
+    note: "Named by System.loadLibrary(\"sdl\") from a static block that catches UnsatisfiedLinkError, and listed in DT_NEEDED, so the core will not link without it."
+    source_ref: "Main.java:25134, libfpse.so readelf -d"
+
+  - name: libneon.so
+    required: true
+    bundled: true
+    unsourceable: "ships inside the paid application package"
+    category: game_data
+    description: "NEON colour conversion routines"
+    note: "Named by System.loadLibrary(\"neon\") from the same static block and listed in DT_NEEDED."
+    source_ref: "Main.java:25135, libfpse.so readelf -d"
+
+  - name: libuncompress.so
+    required: true
+    bundled: true
+    unsourceable: "ships inside the paid application package"
+    category: game_data
+    description: "archive extractor for .zip, .rar, .7z, .ape and .ecm images"
+    note: "Named by System.loadLibrary(\"uncompress\") outside any catch, and the only one of the plugins the core does not list in DT_NEEDED."
+    source_ref: "Main.java:27300, Main.java:25408, libfpse.so readelf -d"
+
+  - name: "<shader>.vsh"
+    path: "FPse64/shaders/<shader>.vsh"
+    required: false
+    bundled: true
+    unsourceable: "ships inside the paid application package"
+    category: game_data
+    description: "vertex shader read whole and handed to the OpenGL renderer"
+    note: "The Shaders setting walks the directory and reads the selected pair, passing the bytes to setVSH. The packaged set is copied out of assets once storage access is granted, and a pair dropped in by hand joins the list."
+    source_ref: "Main.java:25962-25975, Main.java:35655-35669, Main.java:35829-35845"
+
+  - name: "<shader>.fsh"
+    path: "FPse64/shaders/<shader>.fsh"
+    required: false
+    bundled: true
+    unsourceable: "ships inside the paid application package"
+    category: game_data
+    description: "fragment shader read whole and handed to the OpenGL renderer"
+    note: "Read from the same directory as the vertex shader of the same name and passed to setFSH."
+    source_ref: "Main.java:25983-25996, Main.java:35677-35691, Main.java:35829-35845"
+
+  - name: vrback.raw
+    path: "vrback.raw"
+    required: false
+    category: game_data
+    description: "background image the software renderer draws behind the VR view"
+    note: "Opened read only at the root of shared storage and read as 640 by 512 sixteen bit pixels. Not carried by the package: the application downloads fpse.net/vrback.zip, extracts it at that root and deletes the archive. The distributed file is 655364 bytes."
+    source_ref: "libsoft1.so 0x5fda8-0x5fdb8, libsoft1.so 0x5fa3c-0x5fa50, Main.java:12555-12585"
+
+  - name: "<game>.txt"
+    path: "FPse64/cheats/<game>.txt"
+    required: false
+    category: game_data
+    unsourceable: "cheat codes fetched per title from the developer site or written by the user"
+    description: "cheat codes for one title"
+    note: "The path is pushed into the core as string slots 140, 141 and 143, keyed by the licence string of the running disc. A file chosen through a browser listing .txt is copied there, and the cheat search writes its results to the same name."
+    source_ref: "Main.java:21973-21975, Main.java:10319-10357, Main.java:26918, Main.java:28219-28226"
+
+  - name: "<game>.txt"
+    path: "FPse64/ogl/<game>.txt"
+    required: false
+    category: game_data
+    unsourceable: "per title OpenGL option value distributed by the developer"
+    description: "OpenGL option mask for one title"
+    note: "Read as a single integer and applied through setOptionGL, keyed by the licence string. Distributed as fpse.net/o/ogl.zip, which the application extracts into that directory, and rewritten there when the options are changed by hand."
+    source_ref: "Main.java:29309-29322, Main.java:18286-18294, Main.java:16605-16644"
+
+  - name: "<skin>.ini"
+    path: "skin/<skin>.ini"
+    required: false
+    category: game_data
+    unsourceable: "overlay pad artwork published by other users"
+    description: "external overlay pad skin"
+    note: "Selected through a browser listing .ini files. The default set unpacks from the package as skin/pad.ini with its button and stick artwork, and a pack downloaded from the developer arrives as padtemp.zip and is extracted into the same directory."
+    source_ref: "Main.java:21943-21947, Main.java:27355, Main.java:11014"
+
+  - name: LibPS.exe
+    system: sony-playstation
+    required: false
+    description: "PlayStation library executable loaded after the BIOS resources"
+    note: "Loaded by bare name during \"Loading files...\" when the matching option bit is set, reporting \"LibPS.exe found and loaded.\" on success and continuing untouched when the loader returns -1. Not carried by the package, and the core never chdirs, so it resolves against the working directory of the process."
+    source_ref: "libfpse.so 0x95de8-0x95e1c, libfpse.so .rodata 0x1ba534"
+
+exclusion_note: >
+  Left out are the files FPseNG writes and reads back itself, which are emulator
+  state rather than files a user has to obtain: fpse.ini and the per-title
+  configurations under cfg, the memory cards slot1.mcd and slot2.mcd under
+  FPse64/memcards, the savestates and snapshots under FPse64/sstates, the game
+  list cache FPse64/filelist.txt, the recorded clips under FPse64/videos, and
+  the fpselog.txt, cpulog.txt and gpulog.txt traces. gamelist.ini is left out
+  with them for a different reason: it is rewritten from the package at every
+  start, so a copy placed there never survives. Left out too are the covers,
+  titles and game notes the application downloads into FPse64/icons,
+  FPse64/titles and fpse64/infos, which are interface metadata keyed by game
+  identifier, and the shipped overlay pad artwork, skin/pad.ini with its button
+  and stick images, which unpacks from the package. The .sbi files downloaded
+  into FPse64/sbi are left out on the ground that nothing loads them: neither
+  the java nor any of the eight libraries reads that directory back, and the
+  string ".sbi" appears nowhere in the native code. The disc images and their
+  .cue sidecars are not emulator files. The HLE BIOS is not a file either: it is
+  code, and the identification strings it answers with sit in .rodata beside the
+  rest of the core messages, with no 512 KB image anywhere in the library.
+  ref: res/raw fpse.ini MemCard1, Main.java:27463, Main.java:34054-34057,
+       Main.java:15415-15430, libfpse.so .rodata 0x1b8d81-0x1b8dfb

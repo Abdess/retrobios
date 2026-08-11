@@ -1,0 +1,108 @@
+emulator: "GBA.emu"
+type: standalone
+core_classification: community_fork
+source: "https://github.com/Rakashazi/emu-ex-plus-alpha"
+upstream: "https://github.com/visualboyadvance-m/visualboyadvance-m"
+profiled_date: "2026-08-11"
+source_commit: "1c12fac5ce49badaadff2e2f210dcc30b89f4943"
+upstream_commit: "fbd043dea0920a2356c44e1458a160455403c640"
+core_version: "1.5.85"
+display_name: "Nintendo - Game Boy Advance (GBA.emu)"
+mode: standalone
+cores:
+  - "gba-emu"
+  - "GBA.emu"
+  - "GBA-EMU"
+systems:
+  - nintendo-gba
+
+notes: |
+  Android and Linux member of the EX Emulator series by Robert Broglia,
+  published as com.explusalpha.GbaEmu (GBA.emu/metadata/conf.mk:2,6,7) and
+  reached by ES-DE through its GBA-EMU find rule. VBA-M components are vendored
+  under GBA.emu/src/core (GBA.emu/metadata/conf.mk:8,
+  GBA.emu/src/main/AppMeta.cc:26) and driven by the app's own GBASys, video,
+  sound and IO layers. The build defines C_CORE, FINAL_VERSION, NO_PNG, NO_LINK
+  and NO_DEBUGGER (GBA.emu/CMakeLists.txt:14). Content is read from .gba and .mb
+  files, a .mb name sending the image to work RAM instead of the ROM area
+  (GBA.emu/metadata/conf.mk:5, GBA.emu/src/main/AppMeta.cc:31,
+  GBA.emu/src/main/Main.cc:182-183, GBA.emu/src/main/VbamApi.cc:211-246).
+
+  The BIOS is the one file the user supplies and it carries no name of its own.
+  The picker takes any .bin or .rom and stores the chosen URI in biosPath
+  (GBA.emu/src/main/EmuMenuViews.cc:485-510, GBA.emu/src/main/system.ccm:88,
+  GBA.emu/src/main/options.cc:50,79). loadContent reads the file whole and
+  throws unless it is exactly 16384 bytes (GBA.emu/src/main/Main.cc:190-197),
+  the length CPUInit tests again before copying it and setting useBios
+  (GBA.emu/src/core/gba/gba.cpp:3758-3778). Nothing else about the file is
+  examined: CPUIsGBABios, the extension test upstream passes to utilLoad, has no
+  caller here (GBA.emu/src/core/gba/gba.cpp:1655-1675; upstream
+  src/core/gba/gba.cpp:4975-4986).
+
+  Without a file the app runs on the built-in myROM stub copied into the BIOS
+  area (GBA.emu/src/core/gba/gba.cpp:131-305,3776-3778) and on the service call
+  implementations of gbaBios.cpp; useBios decides only whether an SWI enters
+  BIOS code or the HLE routine, and which register reset a boot performs
+  (GBA.emu/src/core/gba/gba.cpp:2525-2545,4104-4112). Two settings gate the
+  read: the per-content Use BIOS tristate defaults to Auto, which follows the
+  global Default Use BIOS switch, itself off until the user turns it on
+  (GBA.emu/src/main/system.ccm:107-108,165-174,
+  GBA.emu/src/main/EmuMenuViews.cc:387-395).
+
+  The 473 entry override table is byte-identical to VBA-M's
+  src/libretro/gba-over.inc, and its bios column is dropped on arrival:
+  setGameSpecificSettings takes save type, save size, RTC and mirroring and
+  nothing more (GBA.emu/src/main/gba-over.inc:1,
+  GBA.emu/src/main/Main.cc:283-319), so BIOS use never follows from the game.
+
+  Per content the app writes and reads files named after the ROM: .sav backup
+  memory created full of 0xFF (GBA.emu/src/main/Main.cc:98-108), .gqs states
+  (GBA.emu/src/main/system.ccm:128), and a .clt cheat list it saves itself under
+  the cheats path (GBA.emu/src/main/Cheats.cc:210-235,
+  GBA.emu/src/core/gba/gbaCheats.cpp:2738,2755). Under the patches path it
+  applies the first of .ips, .ups or .ppf that opens
+  (GBA.emu/src/main/Main.cc:147-178). ui.png, gpOverlay.png and the shader
+  sources are drawn by the framework from the application bundle
+  (EmuFramework/include/emuframework/AssetManager.hh:61-66,
+  EmuFramework/src/AssetManager.cc:58-73,
+  EmuFramework/src/VideoImageEffect.cc:164-172).
+
+  VBA-M's own file entry points reach nothing in this build. CPULoadRom, the
+  battery, state, GSA snapshot and eeprom import functions and the EmulatedSystem
+  table sit inside #if 0 blocks (GBA.emu/src/core/gba/gba.cpp:1301-1614,
+  1885-2134,4803-4869); CPUExportEepromFile and cheatsImportGSACodeFile keep no
+  caller (GBA.emu/src/core/gba/gba.cpp:1276,
+  GBA.emu/src/core/gba/gbaCheats.cpp:2081); and utilOpenFile, the call all of
+  them open files with, is implemented by no source in the build
+  (GBA.emu/src/CMakeLists.txt:6-36, GBA.emu/src/main/VbamApi.cc:279-321). The
+  e-Reader reads no dotcode either, the tree carrying its header alone and the
+  three entry points being stubbed (GBA.emu/src/core/gba/internal/gbaEreader.h,
+  GBA.emu/src/main/VbamApi.cc:109-113).
+
+files:
+  - name: gba_bios.bin
+    system: nintendo-gba
+    required: false
+    hle_fallback: true
+    has_builtin: true
+    agnostic: true
+    size: 16384
+    validation: [size]
+    description: "Game Boy Advance BIOS"
+    note: >-
+      Picked by the user from any path, under any name ending in .bin or .rom.
+      The only test is the length, and a file of another length aborts the load
+      rather than falling back.
+    source_ref: "GBA.emu/src/main/Main.cc:190-197 (read and size check), GBA.emu/src/core/gba/gba.cpp:3758-3778 (second check, copy, useBios), GBA.emu/src/main/EmuMenuViews.cc:485-510 (picker and extension filter)"
+
+  - name: "Motocross Challenge.7z"
+    aliases: ["MotocrossChallenge.7z"]
+    system: nintendo-gba
+    required: false
+    bundled: true
+    category: game_data
+    description: "Bundled homebrew game, listed under Bundled Content"
+    note: >-
+      Opened from the application bundle by the name the build gives it, the
+      Linux build dropping the space.
+    source_ref: "GBA.emu/src/main/AppMeta.cc:32-33 (names), EmuFramework/src/gui/BundledGamesView.cc:41,47 (open and load)"

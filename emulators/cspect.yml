@@ -20,7 +20,7 @@ notes: |
   reference below names a method and an IL offset in the CSpect.exe of 3.3.1.0.
   Type and member names in that build are obfuscated and the string literals sit
   XOR encoded in one 18146 byte blob, decoded at class load by b[i] ^ i ^ 0xAA.
-  ref: CSpect.exe 3.3.1.0, ReadMe.txt:9-12
+  ref: CSpect.exe 3.3.1.0, ReadMe.txt:9-11
 
   The machine carries no built-in ROM. A cold reset either loads the Next ROMs
   or allocates them zero filled, 65536 bytes for the ROM banks and 8192 each for
@@ -47,12 +47,13 @@ notes: |
   ref: es_systems.xml zxnext, A.h::A(string[]) IL_0697-IL_06f7, esxDOS.dll
        CRST8.cs:286-302
 
-  A positional argument that ends in none of nex, sna, snx, rom or fw and does
-  not open as a FAT image is taken for a missing card: CSpect offers to fetch
-  one, reads https://zxnext.uk/hosted/ for the first href holding 8gb, unzips it
-  and copies the single .img inside to the requested path. A .rom argument is
-  read into a 128 KB buffer entered at 0x6000 instead, and a .fw argument is
-  unpacked through the TBBLUE.FW header.
+  A positional argument ending in none of nex, sna, snx, rom or fw is taken for
+  a card image, and when no file sits at that path CSpect offers to fetch one:
+  it reads https://zxnext.uk/hosted/ for the first href holding 8gb, unzips it
+  and copies the single .img inside to the path that was asked for. The path is
+  then accepted only if its MBR and boot sector read. A .rom argument goes into
+  a 128 KB buffer entered at 0x6000 instead, and a .fw argument is unpacked
+  through the TBBLUE.FW header.
   ref: A.h::a(string[]) IL_00a6-IL_012c, A.h::b(string), A.h::B(string, string),
        a.d::C(string) IL_0086-IL_01db
 
@@ -78,7 +79,7 @@ files:
       top bank unreadable. The image failing to hold it ends the process through
       Environment.FailFast. Bytes 6 and 7 carry the NextZXOS version as
       b[6] + ((b[7] & 0x0f) << 8), and a value of 518 or less clears the flag
-      that arms a per instruction hook.
+      that arms the program counter watch the CPU runs before each instruction.
     source_ref: "CSpect.exe 3.3.1.0 a.H::e() IL_00bd-IL_00c9, a.H::e() IL_0102-IL_0149, a.H::N(int32) IL_0051-IL_0086, A.h::a(string[]) IL_0637-IL_0644"
 
   - name: enNxtmmc.rom
@@ -107,7 +108,6 @@ files:
     source_ref: "CSpect.exe 3.3.1.0 a.H::e() IL_00eb-IL_00f7, a.H::N(int32) IL_00a1-IL_00b1"
 
   - name: TBBLUE.FW
-    path: "TBBLUE.FW"
     system: sinclair-zx-spectrum-next
     required: false
     description: "FPGA core firmware"
@@ -116,7 +116,7 @@ files:
       Word 0 of its header gives the payload offset as (n + 1) * 512 and word 1
       the payload length as n * 512, and those bytes are written to memory from
       0x6000. A .fw file named on the command line takes the same route.
-    source_ref: "CSpect.exe 3.3.1.0 a.H::e() IL_0016-IL_00bb, A.h::A(string[]) IL_0164-IL_0197, a.d::C(string)"
+    source_ref: "CSpect.exe 3.3.1.0 a.H::e() IL_0016-IL_00bb, A.h::A(string[]) IL_0164-IL_0197, a.d::C(string) IL_014b-IL_01db"
 
   - name: "<sdcard>.img"
     system: sinclair-zx-spectrum-next

@@ -1,0 +1,887 @@
+emulator: future-pinball-fploader
+type: standalone
+core_classification: enhanced_fork
+source: "https://github.com/ravarcade/BAM_FPloader"
+upstream: "https://www.ravarcade.pl/"
+profiled_date: "2026-08-11"
+source_commit: "e13007994011ae57dd9d9f48674c1f774183914b"
+core_version: "1.5-408"
+display_name: "Future Pinball (BAM)"
+cores:
+  - future-pinball-fploader
+  - bam
+systems:
+  - fpinball
+mode: standalone
+
+notes: |
+  BAM, Better Arcade Mode, by Rafal Janicki. FPLoader.exe starts
+  Future Pinball.exe suspended, writes the BAM.dll path into the new process
+  with VirtualAllocEx and WriteProcessMemory, runs LoadLibraryA on it through
+  CreateRemoteThread, waits for that thread and resumes the main one. Everything
+  else lives in BAM.dll, which detours the running program. The loader is
+  published as source; the shipped FPLoader.exe carries the same .text and
+  .rdata as the build committed to that repository and differs only by an
+  Authenticode blob, 9472 bytes against 5384.
+  ref: BAM_FPloader FPLoader.cpp:259-305, FPLoader.exe .text sha1
+  d5ca74154fe97002, PE timestamp 2016-04-25 19:17:12
+
+  BAM.dll is searched in the loader's own directory first, then in
+  C:\Games\Future Pinball\BAM\. Both missing puts up "Couldn't locate BAM.dll."
+  and returns -1. Future Pinball.exe comes from /FPEXE if that switch names an
+  existing file, otherwise from one level above the loader, then from the
+  loader's directory, then from C:\Games\Future Pinball\; the same failure path
+  reports "Couldn't locate Future Pinball.exe.". Before the process is created
+  the loader prepends its own directory to %PATH% so the system resolves
+  renderingengine.dll from there while the working directory is the game
+  directory. /STAYINRAM keeps the loader alive until the game thread ends; the
+  rest of the command line is handed to Future Pinball untouched, which is how
+  /Open, /Play, /Exit and /ArcadeRender reach it.
+  ref: BAM_FPloader FPLoader.cpp:40-48, 87-111, 166-240, 249-257
+
+  BAM.dll is closed source. Its version resource reads 1.5.408 and its debug
+  tags name BAM.cpp, dllmain.cpp, BallManager.cpp, RenderEngine.cpp,
+  plugin.cpp, pbo.cpp, stereo3d.cpp and debug.cpp. Twenty five entry points are
+  detoured in one pass: CreateFileA, CreateFileW, ReadFile, WriteFile,
+  CloseHandle, GetFileSize, DeleteFileA, FindResourceA, LoadResource,
+  LockResource, SizeofResource, CoCreateInstance, StgOpenStorage,
+  GetOpenFileNameA, ChooseColorA, GetDlgItem, SendMessageA, ShowWindow,
+  SwapBuffers, ChoosePixelFormat, SetPixelFormat, wglCreateContext,
+  wglDeleteContext, wglMakeCurrent and wglGetProcAddress, with glFrustum,
+  glTexImage2D and wglChoosePixelFormatARB taken separately. That is how BAM
+  sees the program's own resource and file traffic and can answer it. Newton is
+  reached through GetModuleHandleA on the copy Future Pinball already imported
+  followed by GetProcAddress on 83 entry points; no second copy is loaded.
+  ref: BAM.dll 1.5-408 .text:0x10082a75-0x10082f3d, 0x100831b3-0x100831d9,
+  0x1002ab92-0x1002abeb, .rsrc version, debug tags Routed_glTexImage2D and
+  Routed_wglChoosePixelFormatARB
+
+  Every path BAM builds hangs off the directory holding BAM.dll. The module
+  handle saved at load time goes through GetModuleFileNameA, the result is cut
+  at the last separator, and one of two format strings finishes the job:
+  "%s\%s.%s" for a name and an extension, "%s\%s" for the cfg subdirectory.
+  Settings for a table are cfg\<table>.cfg and cfg\<table>.seq, with default.cfg
+  and default.seq as the fallbacks.
+  ref: BAM.dll 1.5-408 .text:0x10025e40-0x1002605a, 0x100319a0-0x10031d48,
+  0x10032bdb-0x10032f23
+
+  Keys are the one text file. bam.cfg is read with fopen_s and parsed as
+  "%s = %s" lines over the names Menu, Menu2, Left, Right, Up, Down, Enter,
+  Snapshot, 3DSwitch, SaveXML, SnapShotPath, SnapShotBackboxPath, HeadTracking,
+  ForceArcadeMode, SwitchToNextBall, SwitchToPrevBall, RoomOnOff, Cam, Overlay,
+  BallShadows and OverlayAspectFix. A Keyboard.cfg found beside it is renamed to
+  bam.cfg first. RetroBat rewrites the two SnapShotPath lines before launching.
+  ref: BAM.dll 1.5-408 .text:0x100c3960-0x100c3a97, .rdata:0x10654208-0x10654324,
+  retrobat emulatorLauncher/Generators/Fpinball.Generator.cs:183-209
+
+  A ball or a room is a zip of BMP/<id>.bmp entries named for the resource ids
+  Future Pinball itself uses: the program carries 29 resources of type BMP and
+  every id the shipped packs contain is one of them, 452 being the ball.
+  balls\*.zip is walked with FindFirstFileA and each hit becomes a choice in the
+  menu; default.zip in the BAM directory is applied without being chosen. The
+  routed FindResourceA answers the nine SHADERS resources the same way, while
+  the single XML resource, id 464, is read straight from the program by the save
+  path and is what the presets under XML\ are edited copies of. The 83 GLSL
+  programs BAM renders with are
+  resources of type TEXT inside BAM.dll, so no shader file is read from disk.
+  ref: BAM.dll 1.5-408 .text:0x1002d4f3-0x1002d52d, 0x100ae8ec-0x100ae990,
+  0x10037130-0x100371de, 0x1007e83b-0x1007e896, .rsrc TEXT,
+  Future Pinball.exe 1.9.1.20101231 .rsrc BMP, SHADERS, XML
+
+  Plugins are loaded by changing the working directory to plugins\, walking
+  *.dll with FindFirstFileA, calling LoadLibraryA on each and binding
+  BAM_PluginStart and BAM_PluginStop. A plugin keeps its settings by writing a
+  raw structure to <its own name>.cfg in that working directory, which is why
+  the cfg files beside the plugins carry no text.
+  ref: BAM.dll 1.5-408 .text:0x100cf400-0x100cf75c,
+  BAM_Plugins Common/BAM.h:116-157
+
+  renderingengine.dll is bound in BAM.dll's import directory through
+  FindProgram, SetModuleWithResources, LoadFileToMemory and SaveFileFromMemory,
+  so the loader resolves it before any BAM code runs. It carries Assimp, zlib,
+  libpng and libjpeg, reads the zip packs and writes the per table shadow cache
+  under Cache\.
+  ref: BAM.dll 1.5-408 import directory, .text:0x10105c18-0x1010697f
+
+  ES-DE declares the emulator as FUTURE-PINBALL-FPLOADER for Windows only,
+  finding FPLoader.exe under BAM\, BAM-OpenVR\ or BAM-OpenVR-OC\, and invokes it
+  with /Exit /Play /Open in the background. RetroBat reaches the same binary
+  under the emulator or core key bam, through the generator it shares with
+  Future Pinball. Two distributions are served: bam-setup.exe carries the
+  loader, the mod, the renderer, the tools, the plugins, the ball packs and the
+  physics presets, while BAM-OpenVR.zip carries the OpenVR plugin and the
+  settings files the other package leaves for the first save to create.
+  ref: es-de resources/systems/windows/es_find_rules.xml:448-461,
+  es-de resources/systems/windows/es_systems.xml:764,
+  retrobat emulatorLauncher/Generators/Fpinball.Generator.cs:131-135
+
+files:
+
+  # -- The chain FPLoader needs before it can inject anything --
+
+  - name: BAM.dll
+    system: fpinball
+    required: true
+    bundled: true
+    size: 8266240
+    description: "The mod, injected into Future Pinball and holding every feature"
+    source_ref: "BAM_FPloader FPLoader.cpp:45, 166-182"
+    note: >-
+      Taken from the loader's directory, else from C:\Games\Future Pinball\BAM\.
+      Neither present ends the loader with a message box.
+
+  - name: renderingengine.dll
+    system: fpinball
+    required: true
+    bundled: true
+    size: 8791552
+    description: "Rendering engine and asset loader behind BAM"
+    source_ref: "BAM.dll 1.5-408 import directory, BAM_FPloader FPLoader.cpp:249-257"
+    note: >-
+      Bound statically by BAM.dll, so the injected LoadLibraryA fails without
+      it. The loader adds its own directory to %PATH% for this file alone.
+
+  - name: Future Pinball.exe
+    system: fpinball
+    required: true
+    size: 28547584
+    description: "The program BAM starts and modifies"
+    source_ref: "BAM_FPloader FPLoader.cpp:41, 46, 184-240"
+    note: >-
+      Probed with GetFileAttributesA at four locations, /FPEXE first. Absent,
+      the loader stops before creating any process. The size is that of
+      release 1.9.1.20101231.
+
+  # -- Tools shipped beside the loader --
+
+  - name: BAM-Tracker.exe
+    system: fpinball
+    required: false
+    bundled: true
+    size: 207104
+    description: "Head tracking calibration host"
+    source_ref: "BAM-Tracker.exe import directory, BAM.dll 1.5-408 .text:0x1008320e"
+    note: >-
+      Imports BAM.dll and runs it outside the game. BAM.dll lowercases the host
+      command line and looks for this name to know it is hosted by the tracker
+      rather than by Future Pinball.
+
+  - name: ModelImporter.exe
+    system: fpinball
+    required: false
+    bundled: true
+    size: 4553472
+    description: "Converts models to the .fpm form tables import"
+    source_ref: "ModelImporter.exe import directory, .rdata dialog filter"
+    note: >-
+      Bound to renderingengine.dll for the Assimp side. Its open dialog accepts
+      .fpm, .obj, .ms3d, .md5mesh and .fbx.
+
+  # -- Settings read from the BAM directory. BAM writes each of them, so a fresh
+  #    install has only default.seq and the first save creates the rest.
+
+  - name: bam.cfg
+    system: fpinball
+    aliases:
+      - Keyboard.cfg
+    required: false
+    size: 316
+    description: "Key bindings and screenshot paths, the one text config"
+    source_ref: "BAM.dll 1.5-408 .text:0x100c3960-0x100c3a97"
+    note: >-
+      Keyboard.cfg is the older name and is renamed on sight. 9999 in a key
+      slot leaves the function unbound.
+
+  - name: default.cfg
+    system: fpinball
+    required: false
+    size: 3072
+    description: "Global camera, lighting, physics and rendering settings"
+    source_ref: "BAM.dll 1.5-408 .text:0x100326ba-0x100371bc"
+    note: >-
+      A binary block of the same shape as a per table cfg. Saving it reports
+      "default.cfg saved".
+
+  - name: default.seq
+    system: fpinball
+    required: false
+    bundled: true
+    size: 1284
+    category: game_data
+    description: "Camera animation sequences used when a table brings none"
+    source_ref: "BAM.dll 1.5-408 .text:0x10025e40-0x1002608f"
+    note: >-
+      Read as text. Every line is a comment to Future Pinball's own parser and
+      carries a position, a scale, two angles and a duration.
+
+  - name: default.xml
+    system: fpinball
+    required: false
+    description: "Physics values applied when a table specifies none"
+    source_ref: "BAM.dll 1.5-408 .text:0x100ae843-0x100ae8a7, 0x10037130-0x100371de"
+    note: >-
+      Same document shape as the presets under XML\. The save path produces one
+      by extracting resource 464 of type XML from Future Pinball, 6264 bytes, so
+      no copy ships.
+
+  - name: default.zip
+    system: fpinball
+    required: false
+    category: game_data
+    description: "Texture pack applied to every table"
+    source_ref: "BAM.dll 1.5-408 .text:0x100ae8ec-0x100ae990"
+    note: >-
+      Holds BMP/<id>.bmp entries keyed by Future Pinball resource id, the form
+      the ball packs and the Zendonius packs use.
+
+  - name: XML_Presets.txt
+    system: fpinball
+    required: false
+    description: "List of physics documents offered in the presets menu"
+    source_ref: "BAM.dll 1.5-408 .text:0x100fba6a-0x100fbd8a"
+    note: >-
+      Read whole and split on "%d: %s" lines. The menu entry Add current XML
+      appends to it, which is how the files under XML\ become reachable.
+
+  - name: Reality.dat
+    system: fpinball
+    required: false
+    size: 920
+    description: "Physical measurements of the cabinet and the screen"
+    source_ref: "BAM.dll 1.5-408 .text:0x10031bbb, 0x10031ebe"
+    note: >-
+      Read at startup and rewritten from the Reality submenu. Head tracking and
+      stereo geometry are computed from it.
+
+  - name: WiiMoteCams.dat
+    system: fpinball
+    required: false
+    size: 16
+    description: "WiiMote identifiers kept for the WiiMote camera mode"
+    source_ref: "BAM.dll 1.5-408 .text:0x10031d22, 0x10032f9f"
+
+  - name: CalibrationBoardData.cfg
+    system: fpinball
+    required: false
+    size: 272
+    description: "Dimensions of the printed board used to calibrate cameras"
+    source_ref: "BAM.dll 1.5-408 .text:0x10031ad8, 0x10032d4b"
+
+  - name: stereoCalibrationData.cfg
+    system: fpinball
+    required: false
+    size: 1160
+    description: "Result of the two camera calibration pass"
+    source_ref: "BAM.dll 1.5-408 .text:0x10031c75, 0x10032de3"
+
+  # -- Ball and room packs, walked as balls\*.zip --
+
+  - name: axis.zip
+    system: fpinball
+    path: "Balls/axis.zip"
+    required: false
+    bundled: true
+    category: game_data
+    size: 480842
+    description: "Ball texture showing the rotation axes"
+    source_ref: "BAM.dll 1.5-408 .text:0x1002d513-0x1002d52d"
+
+  - name: Baseball.zip
+    system: fpinball
+    path: "Balls/Baseball.zip"
+    required: false
+    bundled: true
+    category: game_data
+    size: 248548
+    description: "Baseball ball texture"
+    source_ref: "BAM.dll 1.5-408 .text:0x1002d513-0x1002d52d"
+
+  - name: Basketball 1.zip
+    system: fpinball
+    path: "Balls/Basketball 1.zip"
+    required: false
+    bundled: true
+    category: game_data
+    size: 148883
+    description: "Basketball ball texture"
+    source_ref: "BAM.dll 1.5-408 .text:0x1002d513-0x1002d52d"
+
+  - name: Basketball 2.zip
+    system: fpinball
+    path: "Balls/Basketball 2.zip"
+    required: false
+    bundled: true
+    category: game_data
+    size: 74296
+    description: "Second basketball ball texture"
+    source_ref: "BAM.dll 1.5-408 .text:0x1002d513-0x1002d52d"
+
+  - name: Cue Black.zip
+    system: fpinball
+    path: "Balls/Cue Black.zip"
+    required: false
+    bundled: true
+    category: game_data
+    size: 548084
+    description: "Black cue ball texture"
+    source_ref: "BAM.dll 1.5-408 .text:0x1002d513-0x1002d52d"
+
+  - name: Cue White.zip
+    system: fpinball
+    path: "Balls/Cue White.zip"
+    required: false
+    bundled: true
+    category: game_data
+    size: 554040
+    description: "White cue ball texture"
+    source_ref: "BAM.dll 1.5-408 .text:0x1002d513-0x1002d52d"
+
+  - name: earth.zip
+    system: fpinball
+    path: "Balls/earth.zip"
+    required: false
+    bundled: true
+    category: game_data
+    size: 728508
+    description: "Globe ball texture, three BMP resources"
+    source_ref: "BAM.dll 1.5-408 .text:0x1002d513-0x1002d52d"
+
+  - name: EYETOY.zip
+    system: fpinball
+    path: "Balls/EYETOY.zip"
+    required: false
+    bundled: true
+    category: game_data
+    size: 373860
+    description: "EyeToy ball texture"
+    source_ref: "BAM.dll 1.5-408 .text:0x1002d513-0x1002d52d"
+
+  - name: Fireball.zip
+    system: fpinball
+    path: "Balls/Fireball.zip"
+    required: false
+    bundled: true
+    category: game_data
+    size: 240337
+    description: "Fireball ball texture"
+    source_ref: "BAM.dll 1.5-408 .text:0x1002d513-0x1002d52d"
+
+  - name: Knight.zip
+    system: fpinball
+    path: "Balls/Knight.zip"
+    required: false
+    bundled: true
+    category: game_data
+    size: 421287
+    description: "Knight ball texture"
+    source_ref: "BAM.dll 1.5-408 .text:0x1002d513-0x1002d52d"
+
+  - name: latlong.zip
+    system: fpinball
+    path: "Balls/latlong.zip"
+    required: false
+    bundled: true
+    category: game_data
+    size: 1066167
+    description: "Latitude and longitude grid ball texture"
+    source_ref: "BAM.dll 1.5-408 .text:0x1002d513-0x1002d52d"
+
+  - name: Soccer Ball 1.zip
+    system: fpinball
+    path: "Balls/Soccer Ball 1.zip"
+    required: false
+    bundled: true
+    category: game_data
+    size: 54397
+    description: "Soccer ball texture"
+    source_ref: "BAM.dll 1.5-408 .text:0x1002d513-0x1002d52d"
+
+  # -- Physics documents, reached through XML_Presets.txt --
+
+  - name: fp-p1.0.xml
+    system: fpinball
+    path: "XML/fp-p1.0.xml"
+    required: false
+    bundled: true
+    category: game_data
+    size: 6290
+    description: "Physics 1.0 preset"
+    source_ref: "BAM.dll 1.5-408 .text:0x100fba6a-0x100fbb73"
+
+  - name: fp-p2.0.xml
+    system: fpinball
+    path: "XML/fp-p2.0.xml"
+    required: false
+    bundled: true
+    category: game_data
+    size: 6267
+    description: "Physics 2.0 preset"
+    source_ref: "BAM.dll 1.5-408 .text:0x100fba6a-0x100fbb73"
+
+  - name: fp-p2.1.xml
+    system: fpinball
+    path: "XML/fp-p2.1.xml"
+    required: false
+    bundled: true
+    category: game_data
+    size: 6267
+    description: "Physics 2.1 preset"
+    source_ref: "BAM.dll 1.5-408 .text:0x100fba6a-0x100fbb73"
+
+  - name: fp-p2.2.xml
+    system: fpinball
+    path: "XML/fp-p2.2.xml"
+    required: false
+    bundled: true
+    category: game_data
+    size: 6267
+    description: "Physics 2.2 preset"
+    source_ref: "BAM.dll 1.5-408 .text:0x100fba6a-0x100fbb73"
+
+  - name: fp-p2.3 Version 1.xml
+    system: fpinball
+    path: "XML/fp-p2.3 Version 1.xml"
+    required: false
+    bundled: true
+    category: game_data
+    size: 6278
+    description: "Physics 2.3 preset, first variant"
+    source_ref: "BAM.dll 1.5-408 .text:0x100fba6a-0x100fbb73"
+
+  - name: fp-p2.3 Version 2.xml
+    system: fpinball
+    path: "XML/fp-p2.3 Version 2.xml"
+    required: false
+    bundled: true
+    category: game_data
+    size: 6278
+    description: "Physics 2.3 preset, second variant"
+    source_ref: "BAM.dll 1.5-408 .text:0x100fba6a-0x100fbb73"
+
+  - name: fp-p2.4.xml
+    system: fpinball
+    path: "XML/fp-p2.4.xml"
+    required: false
+    bundled: true
+    category: game_data
+    size: 6267
+    description: "Physics 2.4 preset"
+    source_ref: "BAM.dll 1.5-408 .text:0x100fba6a-0x100fbb73"
+
+  - name: fp-p2.5.xml
+    system: fpinball
+    path: "XML/fp-p2.5.xml"
+    required: false
+    bundled: true
+    category: game_data
+    size: 6315
+    description: "Physics 2.5 preset"
+    source_ref: "BAM.dll 1.5-408 .text:0x100fba6a-0x100fbb73"
+
+  - name: fp-p2.5 slamtilt rubbers.xml
+    system: fpinball
+    path: "XML/fp-p2.5 slamtilt rubbers.xml"
+    required: false
+    bundled: true
+    category: game_data
+    size: 6335
+    description: "Physics 2.5 preset with the slamtilt rubber values"
+    source_ref: "BAM.dll 1.5-408 .text:0x100fba6a-0x100fbb73"
+
+  - name: fp-p2.6.xml
+    system: fpinball
+    path: "XML/fp-p2.6.xml"
+    required: false
+    bundled: true
+    category: game_data
+    size: 6315
+    description: "Physics 2.6 preset"
+    source_ref: "BAM.dll 1.5-408 .text:0x100fba6a-0x100fbb73"
+
+  - name: fp-p2.7.xml
+    system: fpinball
+    path: "XML/fp-p2.7.xml"
+    required: false
+    bundled: true
+    category: game_data
+    size: 6314
+    description: "Physics 2.7 preset"
+    source_ref: "BAM.dll 1.5-408 .text:0x100fba6a-0x100fbb73"
+
+  - name: Zendonius_v1.0.xml
+    system: fpinball
+    path: "XML/Zendonius_v1.0.xml"
+    required: false
+    bundled: true
+    category: game_data
+    size: 6333
+    description: "Zendonius physics preset"
+    source_ref: "BAM.dll 1.5-408 .text:0x100fba6a-0x100fbb73"
+
+  - name: Zendonius_v1.1.xml
+    system: fpinball
+    path: "XML/Zendonius_v1.1.xml"
+    required: false
+    bundled: true
+    category: game_data
+    size: 6333
+    description: "Zendonius physics preset, second revision"
+    source_ref: "BAM.dll 1.5-408 .text:0x100fba6a-0x100fbb73"
+
+  - name: zedonius_v1_0.zip
+    system: fpinball
+    path: "XML/zedonius_v1_0.zip"
+    required: false
+    bundled: true
+    category: game_data
+    size: 862294
+    description: "Texture pack for the Zendonius preset, resources 315 to 464"
+    source_ref: "BAM.dll 1.5-408 .text:0x100ae8ec-0x100ae990"
+
+  - name: zedonius_v1_1.zip
+    system: fpinball
+    path: "XML/zedonius_v1_1.zip"
+    required: false
+    bundled: true
+    category: game_data
+    size: 862287
+    description: "Texture pack for the second Zendonius revision"
+    source_ref: "BAM.dll 1.5-408 .text:0x100ae8ec-0x100ae990"
+
+  # -- plugins\*.dll, every one walked and loaded at startup --
+
+  - name: DesktopCam.dll
+    system: fpinball
+    path: "plugins/DesktopCam.dll"
+    required: false
+    bundled: true
+    size: 3388680
+    description: "Head tracking from any webcam, desktop geometry"
+    source_ref: "BAM.dll 1.5-408 .text:0x100cf400-0x100cf75c"
+    note: "Bound to AVICAP32 and MSVFW32 and reads the cascade files below."
+
+  - name: Simple Cam.dll
+    system: fpinball
+    path: "plugins/Simple Cam.dll"
+    required: false
+    bundled: true
+    size: 3262728
+    description: "Head tracking from any webcam, cabinet geometry"
+    source_ref: "BAM.dll 1.5-408 .text:0x100cf400-0x100cf75c"
+
+  - name: PS3Eye.dll
+    system: fpinball
+    path: "plugins/PS3Eye.dll"
+    required: false
+    bundled: true
+    size: 1699080
+    description: "Head tracking from a PlayStation Eye"
+    source_ref: "BAM.dll 1.5-408 .text:0x100cf400-0x100cf75c"
+    note: "Bound to CLEyeMulticam.dll, which comes from the CL-Eye SDK."
+
+  - name: DesktopPS3Eye.dll
+    system: fpinball
+    path: "plugins/DesktopPS3Eye.dll"
+    required: false
+    bundled: true
+    size: 1813768
+    description: "PlayStation Eye tracking with desktop geometry"
+    source_ref: "BAM.dll 1.5-408 .text:0x100cf400-0x100cf75c"
+
+  - name: HT-PS3Eyes.dll
+    system: fpinball
+    path: "plugins/HT-PS3Eyes.dll"
+    required: false
+    bundled: true
+    size: 1432272
+    description: "Two PlayStation Eye cameras tracking an infrared marker"
+    source_ref: "BAM.dll 1.5-408 .text:0x100cf400-0x100cf75c"
+    note: >-
+      Keeps its calibration in HT-PS3Eyes.dat and HT-PS3Eyes-FixCamExport.dat
+      beside itself, both produced by the calibration pass.
+
+  - name: Kinect.dll
+    system: fpinball
+    path: "plugins/Kinect.dll"
+    required: false
+    bundled: true
+    size: 2792144
+    description: "Head tracking from a Kinect for Xbox 360"
+    source_ref: "BAM.dll 1.5-408 .text:0x100cf400-0x100cf75c"
+    note: "Bound to Kinect10.dll and FaceTrackLib.dll."
+
+  - name: DesktopKinect.dll
+    system: fpinball
+    path: "plugins/DesktopKinect.dll"
+    required: false
+    bundled: true
+    size: 31952
+    description: "Kinect tracking with desktop geometry"
+    source_ref: "BAM.dll 1.5-408 .text:0x100cf400-0x100cf75c"
+
+  - name: Kinect2.dll
+    system: fpinball
+    path: "plugins/Kinect2.dll"
+    required: false
+    bundled: true
+    size: 2791632
+    description: "Head tracking from a Kinect for Windows v2"
+    source_ref: "BAM.dll 1.5-408 .text:0x100cf400-0x100cf75c"
+    note: "Bound to Kinect20.dll."
+
+  - name: FaceTrackLib.dll
+    system: fpinball
+    path: "plugins/FaceTrackLib.dll"
+    required: false
+    bundled: true
+    size: 920272
+    description: "Microsoft face tracking library used by the Kinect plugins"
+    source_ref: "DesktopKinect.dll, Kinect.dll import directories"
+
+  - name: FaceTrackData.dll
+    system: fpinball
+    path: "plugins/FaceTrackData.dll"
+    required: false
+    bundled: true
+    size: 10650832
+    description: "Model data for the face tracking library"
+    source_ref: "FaceTrackLib.dll .rdata, wide literal FaceTrackData.dll"
+
+  - name: FreeTrack.dll
+    system: fpinball
+    path: "plugins/FreeTrack.dll"
+    required: false
+    bundled: true
+    size: 95440
+    description: "Head tracking from a FreeTrack server"
+    source_ref: "BAM.dll 1.5-408 .text:0x100cf400-0x100cf75c"
+
+  - name: TrackIR.dll
+    system: fpinball
+    path: "plugins/TrackIR.dll"
+    required: false
+    bundled: true
+    size: 20176
+    description: "Head tracking from a NaturalPoint TrackIR"
+    source_ref: "BAM.dll 1.5-408 .text:0x100cf400-0x100cf75c, TrackIR.dll .text:0x100018c7"
+    note: >-
+      Matches the name NPClient with strstr and pairs LoadLibraryA with
+      GetProcAddress on it. The plugin imports no registry function, so the
+      client library is resolved as a plain module name.
+
+  - name: PostFX.dll
+    system: fpinball
+    path: "plugins/PostFX.dll"
+    required: false
+    bundled: true
+    size: 39632
+    description: "Bloom and the unfinished ambient occlusion pass"
+    source_ref: "BAM.dll 1.5-408 .text:0x100cf5ff, BAM_Plugins PostFX/PostFX.cpp:41-45"
+    note: >-
+      Named in BAM.dll and compared against the enumerated file names, so it is
+      the one plugin the mod knows by name. Its nine GLSL programs are TEXT
+      resources inside the plugin, read with FindResourceA. Two builds circulate
+      under this name, the 39632 bytes of bam-setup.exe and 191240 bytes in
+      BAM-OpenVR.zip.
+
+  - name: PinballHighScore.dll
+    system: fpinball
+    path: "plugins/PinballHighScore.dll"
+    required: false
+    bundled: true
+    size: 918224
+    description: "Records high scores across tables"
+    source_ref: "BAM.dll 1.5-408 .text:0x100cf400-0x100cf75c"
+
+  - name: PinballHighScore.cfg
+    system: fpinball
+    path: "plugins/PinballHighScore.cfg"
+    required: false
+    bundled: true
+    size: 1016
+    description: "Settings block the high score plugin reads and writes"
+    source_ref: "BAM_Plugins Common/BAM.h:136-157"
+
+  - name: PinballHighScore.db
+    system: fpinball
+    path: "plugins/PinballHighScore.db"
+    required: false
+    size: 45056
+    description: "Score database the plugin opens by name"
+    source_ref: "PinballHighScore.dll .rdata"
+    note: "Only BAM-OpenVR.zip carries a copy; the plugin creates one otherwise."
+
+  - name: PuPPlugin.dll
+    system: fpinball
+    path: "plugins/PuPPlugin.dll"
+    required: false
+    bundled: true
+    size: 240216
+    description: "PuPCOM script object drawing PinUP Player video onto table textures"
+    source_ref: "BAM.dll 1.5-408 .text:0x100cf400-0x100cf75c, PuPPlugin.dll .rdata IPuPCOM, PuPVideo"
+    note: "Takes BAM_GetTextureId and BAM_ReplaceTexture from the plugin API."
+
+  - name: icom.dll
+    system: fpinball
+    path: "plugins/icom.dll"
+    required: false
+    bundled: true
+    size: 67280
+    description: "Gives a table script the COM objects the cabinet stack exposes"
+    source_ref: "BAM.dll 1.5-408 .text:0x100cf400-0x100cf75c, icom.dll .rdata ProgID pattern"
+    note: >-
+      Matches created objects against
+      PinUpPlayer, Vpinmame, B2S, PUPDMDControl, UltraDMD, PinSSF and
+      DirectOutput.
+
+  - name: OpenVR.dll
+    system: fpinball
+    path: "plugins/OpenVR.dll"
+    required: false
+    bundled: true
+    size: 419328
+    description: "Renders the table to an OpenVR headset"
+    source_ref: "BAM_Plugins OpenVR/main.cpp, BAM.dll 1.5-408 .text:0x100cf400-0x100cf75c"
+    note: "Ships only in BAM-OpenVR.zip, which ES-DE also looks for as BAM-OpenVR\\."
+
+  - name: openvr_api.dll
+    system: fpinball
+    path: "plugins/openvr_api.dll"
+    required: false
+    bundled: true
+    size: 620760
+    description: "Valve OpenVR runtime interface"
+    source_ref: "OpenVR.dll import directory"
+
+  - name: haarcascade_frontalface_alt.xml
+    system: fpinball
+    path: "plugins/haarcascades/haarcascade_frontalface_alt.xml"
+    required: false
+    bundled: true
+    category: game_data
+    size: 919871
+    description: "OpenCV Haar cascade for frontal faces"
+    source_ref: "DesktopCam.dll, PS3Eye.dll, Simple Cam.dll .rdata"
+
+  - name: haarcascade_frontalface_default.xml
+    system: fpinball
+    path: "plugins/haarcascades/haarcascade_frontalface_default.xml"
+    required: false
+    bundled: true
+    category: game_data
+    size: 1254733
+    description: "Second OpenCV Haar cascade for frontal faces"
+    source_ref: "DesktopCam.dll, PS3Eye.dll, Simple Cam.dll .rdata"
+
+  - name: lbpcascade_frontalface.xml
+    system: fpinball
+    path: "plugins/lbpcascades/lbpcascade_frontalface.xml"
+    required: false
+    bundled: true
+    category: game_data
+    size: 51856
+    description: "OpenCV local binary pattern cascade for frontal faces"
+    source_ref: "DesktopCam.dll, PS3Eye.dll, Simple Cam.dll .rdata"
+
+  # -- Named by the code, absent from both distributions --
+
+  - name: opencv_ffmpeg2410.dll
+    system: fpinball
+    required: false
+    description: "OpenCV 2.4.10 FFmpeg bridge, video files as a camera source"
+    source_ref: "BAM.dll 1.5-408 .text:0x102a6013-0x102a605b"
+    note: >-
+      LoadLibraryA followed by GetProcAddress on cvCreateFileCapture_FFMPEG,
+      cvGrabFrame_FFMPEG and the rest. A null handle leaves the entry points
+      unbound and only the file source is lost.
+
+  - name: CLEyeMulticam.dll
+    system: fpinball
+    required: false
+    description: "CL-Eye Platform SDK driver interface for the PlayStation Eye"
+    source_ref: "PS3Eye.dll, DesktopPS3Eye.dll, HT-PS3Eyes.dll import directories"
+
+  - name: Kinect10.dll
+    system: fpinball
+    required: false
+    description: "Kinect for Windows SDK 1.x runtime"
+    source_ref: "Kinect.dll, DesktopKinect.dll, FaceTrackLib.dll import directories"
+
+  - name: Kinect20.dll
+    system: fpinball
+    required: false
+    description: "Kinect for Windows SDK 2.0 runtime"
+    source_ref: "Kinect2.dll import directory"
+
+  - name: NPClient.dll
+    system: fpinball
+    required: false
+    description: "NaturalPoint TrackIR client library"
+    source_ref: "TrackIR.dll .rdata"
+    note: >-
+      Comes from a TrackIR install rather than from any BAM distribution, which
+      is why no path is given here.
+
+analysis:
+  written_not_read:
+    note: >-
+      Opened only for writing, so they are output rather than something to
+      obtain. All of them sit in the BAM directory.
+    entries:
+      - what: "cfg\\<table>.cfg and cfg\\<table>.seq, per table settings and camera sequences"
+        source_ref: "BAM.dll 1.5-408 .text:0x10025e59, 0x100319b9, 0x10032bdb"
+        note: >-
+          Built as cfg\\<table> then finished with the extension. Saved from the
+          menu and read back on the next launch of the same table.
+      - what: "Cache\\<table>-shadows.zip, precomputed shadow maps"
+        source_ref: "BAM.dll 1.5-408 .text:0x10105c18-0x1010697f"
+        note: >-
+          Checked with GetFileAttributesA and rebuilt when absent. Holds
+          shadowmaps.txt and one <name>-shadows.tga per light, written through
+          the rendering engine.
+      - what: "set3points.dat, the three point calibration of the screen corners"
+        source_ref: "BAM.dll 1.5-408 .text:0x10077b80-0x10077bd7"
+        note: "fopen_s with wb, fwrite, fclose. No read site exists."
+      - what: "BAM_debug.log, BAM_CRASH.log and OpenGLdbg.log"
+        source_ref: "BAM.dll 1.5-408 .text:0x1007a45b, 0x1007ae0a, 0x100d4318-0x100d4391"
+        note: >-
+          The crash log is written from the fault handler installed at load
+          time; the other two only when the matching switch is on the command
+          line.
+
+  shipped_but_not_loaded:
+    note: "Present in a distribution with no code path that opens it"
+    entries:
+      - what: "zlib.dll in BAM-OpenVR.zip"
+        source_ref: "BAM.dll, renderingengine.dll and every plugin import directory"
+        note: >-
+          No shipped binary imports it and neither BAM.dll nor
+          renderingengine.dll names it in any string; both carry their own zlib.
+      - what: "License.txt, 3741 bytes"
+        source_ref: "bam-setup.exe payload"
+        note: "The zlib licence the loader source carries, copied into the install."
+
+  named_but_not_obtainable:
+    note: "A literal the code opens that no distribution can provide"
+    entries:
+      - what: "c:\\games\\ppmm.bin"
+        source_ref: "BAM.dll 1.5-408 .text:0x100cff69-0x100cffa5"
+        note: >-
+          fopen_s with rb then fread, guarded by two globals and reached only
+          after glGetFloatv has read the modelview and projection matrices. The
+          path is absolute and points at a directory no install creates.
+
+  platform_components:
+    note: >-
+      Named in import directories but supplied by Windows or by a Microsoft
+      redistributable, so they are prerequisites rather than payload.
+    entries:
+      - what: "MSVCP140.dll, VCRUNTIME140.dll, CONCRT140.dll and the api-ms-win-crt set"
+        source_ref: "BAM.dll, renderingengine.dll import directories"
+        note: "Visual C++ 2015 or later runtime. Neither distribution carries it."
+      - what: "MSVCR100.dll, MSVCR120.dll and MSVCP120.dll"
+        source_ref: "PostFX.dll, TrackIR.dll, DesktopKinect.dll, PinballHighScore.dll import directories"
+        note: "Visual C++ 2010 and 2013 runtimes, for the older plugins."
+      - what: "opengl32, glu32, dinput8, hid, avicap32, avifil32, msvfw32, d3d11, dxgi"
+        source_ref: "BAM.dll, renderingengine.dll, plugin import directories"
+        note: "Windows components."

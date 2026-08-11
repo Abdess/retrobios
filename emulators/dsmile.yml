@@ -1,0 +1,106 @@
+emulator: D.Smile
+type: standalone
+core_classification: other
+source: "https://github.com/derik-dot-digital/D.Smile"
+upstream: "https://github.com/derik-dot-digital/D.Smile"
+profiled_date: "2026-08-11"
+source_commit: "d4bbc3be27537def21513991647f14ea9a9c2d15"
+core_version: "0.4.4"
+display_name: "VTech - V.Smile (D.Smile)"
+cores:
+  - dsmile
+systems:
+  - vtech-vsmile
+mode: standalone
+
+notes: |
+  V.Smile emulator for Android, package com.dsmile.emulator, built on an SPG200
+  (unSP) core of its own. Frontends launch the exported EmuActivity either with
+  ACTION_VIEW and a content or file Uri, or with the LAUNCH_GAME action and a
+  rom, ROM, path or uri string extra carrying a path; ES-DE uses the first form.
+  ref: AndroidManifest.xml:34-51, EmuActivity.kt:123-145,
+       docs/iisu-integration.md:42-51
+
+  The machine never boots from the system ROM. UnSP::Reset takes the program
+  counter from 0xFFF7, and the FIQ, IRQ n and BREAK vectors are read from
+  0xFFF6, 0xFFF8+n and 0xFFF5; all four sit in bank 0, which ExtRead answers
+  from the cartridge under every decode mode. The system ROM sits on bank 3 and
+  is reachable only once cartridge code selects decode mode 2 or 3;
+  extmem_ctrl_ resets to 0x0028, which is decode 0, so nothing but the
+  cartridge is mapped at power on.
+  ref: unsp.cpp:49,67,77,253, spg200.cpp:188-209, spg200.cpp:37
+
+  Absent a file the constructor synthesises the region: 0x100000 words zero
+  filled, with 0x0031 written into the odd word of each pair across
+  0xFFFC0-0xFFFDB so that calls into the BIOS land on zeroed memory. LoadSysrom
+  replaces it, reading the image as little-endian 16-bit words and clamping at
+  0x100000 words, and runs only when bytes were passed.
+  ref: vsmile.cpp:273-283, vsmile.cpp:326-334, jni_bridge.cpp:34-40
+
+  Two paths reach LoadSysrom and one of them checks nothing. The BIOS button
+  imports through a file picker: validateBios demands exactly 0x200000 bytes and
+  nine of the eleven words at 0xFFF5-0xFFFF decoding inside 0x0100-0xFFF0, tries
+  both byte orders, rewrites the image to little-endian when the swapped reading
+  scores higher, and stores the result as sysrom.bin in the app's private
+  directory. With no imported file the ROM folder is searched instead: any entry
+  whose extension is bin, rom or vsmile and whose lowercased name holds bios,
+  sysrom or system rom, or begins with vsmile_v, is taken as the system ROM and
+  handed over unmeasured, the last match in directory order winning. No hash is
+  computed on either path. The three dumped revisions satisfy both tests as they
+  stand, scoring eleven of eleven in both byte orders, so they load unswapped.
+  ref: MainActivity.kt:31, MainActivity.kt:34, MainActivity.kt:215-236,
+       MainActivity.kt:238-261, MainActivity.kt:277-288, EmuActivity.kt:156-168
+
+  Region is a jumper, never a file. Port C carries the region code in its low
+  nibble and the intro jumper in bit 4. The code is fixed at 0xF and SetRegion
+  has no caller, so one image serves every session; the jumper is exposed only
+  as the Game intros setting, passed through nativeInit.
+  ref: vsmile.cpp:365-369, vsmile.h:76, vsmile.h:77, vsmile.h:116,
+       jni_bridge.cpp:39, MainActivity.kt:309,320
+
+  The system ROM has no directory of its own. The validated copy is written by
+  the app into private storage, which the user cannot reach, so the one
+  placement open to a collection is the folder chosen with ROM folder, beside
+  the cartridge dumps.
+  ref: MainActivity.kt:34, MainActivity.kt:154-168, MainActivity.kt:263-288
+
+files:
+  - name: vsmile_v103.bin
+    system: vtech-vsmile
+    required: false
+    hle_fallback: true
+    size: 2097152
+    validation: [size]
+    description: "V.Smile system ROM, revision 1.03"
+    source_ref: "app/src/main/java/com/dsmile/emulator/ui/MainActivity.kt:238-261 (size and vector test), app/src/main/java/com/dsmile/emulator/ui/MainActivity.kt:277-288 (folder detection), app/src/main/java/com/dsmile/emulator/ui/EmuActivity.kt:156-168 (selection), app/src/main/cpp/jni_bridge.cpp:34-40, app/src/main/cpp/core/vsmile.cpp:326-334 (load)"
+
+  - name: vsmile_v102.bin
+    system: vtech-vsmile
+    required: false
+    hle_fallback: true
+    size: 2097152
+    validation: [size]
+    description: "V.Smile system ROM, revision 1.02"
+    source_ref: "app/src/main/java/com/dsmile/emulator/ui/MainActivity.kt:238-261 (size and vector test), app/src/main/java/com/dsmile/emulator/ui/MainActivity.kt:277-288 (folder detection), app/src/main/java/com/dsmile/emulator/ui/EmuActivity.kt:156-168 (selection), app/src/main/cpp/jni_bridge.cpp:34-40, app/src/main/cpp/core/vsmile.cpp:326-334 (load)"
+
+  - name: vsmile_v100.bin
+    system: vtech-vsmile
+    required: false
+    hle_fallback: true
+    size: 2097152
+    validation: [size]
+    description: "V.Smile system ROM, revision 1.00"
+    source_ref: "app/src/main/java/com/dsmile/emulator/ui/MainActivity.kt:238-261 (size and vector test), app/src/main/java/com/dsmile/emulator/ui/MainActivity.kt:277-288 (folder detection), app/src/main/java/com/dsmile/emulator/ui/EmuActivity.kt:156-168 (selection), app/src/main/cpp/jni_bridge.cpp:34-40, app/src/main/cpp/core/vsmile.cpp:326-334 (load)"
+
+exclusion_note: >
+  The system ROM is the only file to obtain. The cartridge dump arrives as the
+  intent payload and everything else the app touches it writes itself: the save
+  states and their PNG thumbnails under states in the external files directory,
+  and the dsmile preferences, which also hold the touch layouts as a JSON
+  string rather than as files. The Art Studio NVRAM the SPG200 maps over bank 2
+  is dead here, the sole SetCart call passing a null pointer for it, so no such
+  image exists to name. Oboe and libc++_shared are linked into the package by
+  CMake at build time and are never opened as files. The native sources perform
+  no file I/O at all.
+  ref: EmuActivity.kt:123-145, EmuActivity.kt:246-296, EmuActivity.kt:528-555,
+       vsmile.cpp:294, spg200.cpp:204,214, CMakeLists.txt:11,26

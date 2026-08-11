@@ -1,0 +1,430 @@
+emulator: future-pinball
+type: standalone
+core_classification: game_engine
+source: "https://futurepinball.com/"
+upstream: closed-source
+profiled_date: "2026-08-11"
+core_version: "1.9.1.20101231"
+display_name: "Future Pinball"
+cores:
+  - fpinball
+  - future-pinball
+systems:
+  - fpinball
+mode: standalone
+
+notes: |
+  Closed-source Windows pinball simulator and table editor written by Chris
+  Leathley for BSP Software Design Solutions. Development stopped with
+  v1.9.1.20101231, still served from futurepinball.com. Rendering is OpenGL
+  (88 imports from opengl32 and 4 from glu32); ddraw is loaded by name only to
+  call DirectDrawCreateEx while enumerating display modes. Physics come from
+  Newton Game Dynamics, audio from FMOD 3, image decoding from DevIL and the
+  script editor from Scintilla. The binary registers its own type library at
+  startup through LoadTypeLib and RegisterTypeLib on its own path, which is the
+  registration RetroBat checks under TypeLib\{FB22A459-4AD0-4CB3-B959-15158F7139F5}
+  before deciding to relaunch elevated.
+  ref: Future Pinball.exe 1.9.1.20101231 import directory, .text:0x0042c7a2-0x0042c82e
+
+  The release is named 1.9.1.20101231 but the executable inside it carries
+  FileVersion 1.9.2008.1225 in its version resource and prints
+  "Version 1.9.1.20091231" in its own banner.
+  ref: Future Pinball.exe 1.9.1.20101231 .rsrc version, .text:0x0043d288-0x0043d298
+
+  Every relative path below hangs off one root. At startup GetModuleFileNameA
+  fills a buffer, the code scans back to the last backslash and terminates the
+  string just after it, and that install directory with its trailing separator
+  is kept for the life of the process.
+  ref: Future Pinball.exe 1.9.1.20101231 .text:0x00432af0-0x00432b49
+
+  A table is an OLE compound document with the .fpt extension and it carries
+  its own media. Every FMOD load passes FSOUND_LOADMEMORY (mode 0x8130 for
+  samples, 0x4000a130 for streams) and images go through ilLoadL, the memory
+  lump entry point, never ilLoadImage. So sounds, music and textures are read
+  out of the table file and no external media is opened while a table plays.
+  ref: Future Pinball.exe 1.9.1.20101231 .text:0x00457ede,0x00457f6f,0x00457fe6,0x0045805b,0x004417f6
+
+  What a table can pull from outside itself is a resource library. Libraries
+  are .fpl files, also OLE compound documents, holding models, textures, sounds,
+  DMD fonts and scripts under one storage per item. The Texture, Sound, Model
+  and DMD Font managers each offer Import, which copies the item into the table,
+  and Link, which records the library name and the item name instead; the manual
+  recommends always linking to the shipped model library. A linked library is
+  opened by StgOpenStorage on the name as written, which resolves against the
+  table's own folder, and on failure against the install directory plus
+  "Libraries\". Both failing raises "Unabled to Open Library - '<name>'" followed
+  by "There will be some functions missing from the game." as a warning box, and
+  the program carries on.
+  ref: Future Pinball.exe 1.9.1.20101231 .text:0x004e6cf0-0x004e6ebf, .rsrc string 149-150,
+  Future Pinball Manual.chm LibraryResourceManager.html, ModelManager.html, TextureManager.html,
+  SoundManager.html, FontManager.html
+
+  A table script reaches outside itself through LoadExternalScript, whose result
+  is handed to VBScript's ExecuteGlobal. When the reference ends in .fpl the
+  script is pulled from that library, otherwise the name is tried as given
+  against the working directory, then under the install directory with the
+  "Scripts\" prefix, then with "Tables\", and a miss reports
+  "Unable to load external script". No Scripts directory ships, so what it holds
+  is whatever a given table asks for.
+  ref: Future Pinball.exe 1.9.1.20101231 .text:0x004797c0-0x00479905, 0x00478be0-0x00478c66,
+  0x00478d20, Future Pinball Manual.chm GlobalScript.html
+
+  Settings live in the registry under HKCU\Software\Future Pinball, split into
+  GamePlayer, GamePlayer\Joypads and Editor keys; there is no ini file.
+  RetroBat writes resolution, aspect ratio, camera, render preset and the whole
+  joypad map there before launching. Per table state is written to
+  fpRAM\<table>.fpRAM beside the program. Nothing in the program verifies a size
+  or a hash on any file it opens, so the figures recorded below are those of the
+  1.9.1.20101231 release and are informative.
+  ref: Future Pinball.exe 1.9.1.20101231 .text:0x0043aa80,0x00475602,0x00475892,
+  retrobat emulatorLauncher/Generators/Fpinball.Generator.cs:326-491
+
+  Front ends drive it with the documented switches /Open "<table>", /Play, /Exit
+  and /ArcadeRender. ES-DE declares it for Windows only, as FUTURE-PINBALL
+  finding "Future Pinball.exe" and as FUTURE-PINBALL-FPLOADER finding
+  "BAM\FPLoader.exe", both invoked with /Exit /Play /Open; the fpinball system
+  is a placeholder on its six other platforms. RetroBat maps the emulator keys
+  fpinball and bam to one generator, one install folder and the same
+  "Future Pinball.exe" presence check, swapping only the launched binary, and
+  optionally starts dmdext against DmdDevice.ini to mirror the DMD. Batocera ran
+  it in a wine bottle on x86_64 and dropped it for Visual Pinball. BAM is
+  ravarcade's loader: FPLoader.exe starts the same executable with BAM.dll
+  injected, and it names none of its own files from inside Future Pinball.
+  ref: es-de resources/systems/windows/es_find_rules.xml:438-461,
+  es-de resources/systems/windows/es_systems.xml, Future Pinball Manual.chm CommandLine.html,
+  retrobat emulatorLauncher/Generators/Fpinball.Generator.cs:109-181,
+  batocera-linux batocera-Changelog.md:214
+
+files:
+
+  # -- Bound in the import directory, so the loader resolves them before any
+  #    Future Pinball code runs. A cold start opens these six and SciLexer,
+  #    nothing else, in the program directory.
+
+  - name: Newton.dll
+    system: fpinball
+    required: true
+    bundled: true
+    size: 446464
+    description: "Newton Game Dynamics, the rigid body solver under the ball physics"
+    source_ref: "Future Pinball.exe 1.9.1.20101231 import directory"
+    note: >-
+      83 functions are bound from it, the largest third party surface in the
+      binary. The process does not start without it.
+
+  - name: fmod.dll
+    system: fpinball
+    required: true
+    bundled: true
+    size: 162816
+    description: "FMOD 3 audio engine"
+    source_ref: "Future Pinball.exe 1.9.1.20101231 import directory"
+    note: >-
+      22 functions bound, FSOUND_Init through the sample and stream calls. Every
+      one of those calls passes FSOUND_LOADMEMORY, so it decodes the table's own
+      buffers rather than reading files.
+
+  - name: devil.dll
+    system: fpinball
+    aliases:
+      - DevIL.dll
+    required: true
+    bundled: true
+    size: 269312
+    description: "DevIL image decoder"
+    source_ref: "Future Pinball.exe 1.9.1.20101231 import directory"
+    note: >-
+      8 functions bound, ilInit through ilLoadL. Spelled DevIL.dll in the import
+      descriptors and shipped lowercase, which the case insensitive loader treats
+      as one name.
+
+  - name: ilu.dll
+    system: fpinball
+    aliases:
+      - ILU.dll
+    required: true
+    bundled: true
+    size: 27648
+    description: "DevIL image utility library, scaling and canvas resize"
+    source_ref: "Future Pinball.exe 1.9.1.20101231 import directory"
+    note: >-
+      4 functions bound: iluInit, iluScale, iluEnlargeCanvas and
+      iluImageParameter, used to fit imported artwork to texture dimensions.
+
+  - name: ilut.dll
+    system: fpinball
+    aliases:
+      - ILUT.dll
+    required: true
+    bundled: true
+    size: 16384
+    description: "DevIL toolkit layer, image to Windows bitmap conversion"
+    source_ref: "Future Pinball.exe 1.9.1.20101231 import directory"
+    note: >-
+      3 functions bound: ilutRenderer, ilutConvertToHBitmap and ilutGetBmpInfo,
+      which produce the preview bitmaps the editor's manager windows draw.
+
+  - name: libcurl.dll
+    system: fpinball
+    required: true
+    bundled: true
+    size: 626688
+    description: "HTTP client for the table feed"
+    source_ref: "Future Pinball.exe 1.9.1.20101231 import directory, .text:0x0043dc70"
+    note: >-
+      Only four functions are bound, curl_easy_init, setopt, perform and cleanup,
+      and the single use is fetching the table list from
+      http://www.pinsimdb.org/fpreleases/backend_xml.php under the user agent
+      FuturePinball-agent/1.0. The binding is static all the same, so the process
+      still refuses to start without the file.
+
+  - name: SciLexer.dll
+    system: fpinball
+    required: false
+    bundled: true
+    size: 407552
+    description: "Scintilla, the editing control behind the table script editor"
+    source_ref: "Future Pinball.exe 1.9.1.20101231 .text:0x0042c501-0x0042c528"
+    note: >-
+      The one library taken with LoadLibraryA rather than the import directory.
+      A null return puts up "The Scintilla DLL could not be loaded.", stores a
+      null handle and falls through to the rest of startup, so the program runs
+      and only the script editor is lost.
+
+  # -- Resource libraries, resolved against the table's folder then against
+  #    <install>\Libraries. Shipped names all start with fp and the manual asks
+  #    designers not to modify them, because a release replaces them.
+
+  - name: fpModels.fpl
+    system: fpinball
+    path: "Libraries/fpModels.fpl"
+    required: false
+    bundled: true
+    category: game_data
+    size: 5166080
+    description: "260 pinball part models, the library the manual tells tables to link"
+    source_ref: "Future Pinball.exe 1.9.1.20101231 .text:0x004e6cf0-0x004e6ebf, Future Pinball Manual.chm ModelManager.html"
+    note: >-
+      Models cannot be authored outside the development team, so a table that
+      wants a bumper cap or a flipper bat either embeds a copy or links here, and
+      the Model Manager documents linking as the recommended choice. Absent, the
+      table still loads and every model it linked is missing.
+
+  - name: fpTextures.fpl
+    system: fpinball
+    path: "Libraries/fpTextures.fpl"
+    required: false
+    bundled: true
+    category: game_data
+    size: 3495424
+    description: "90 textures for the standard table objects"
+    source_ref: "Future Pinball.exe 1.9.1.20101231 .text:0x004e6cf0-0x004e6ebf, Future Pinball Manual.chm TextureManager.html"
+    note: >-
+      Carries the surface art the built in parts expect, bulbs, triggers,
+      plungers and the rest. Resolved the same way as every other library.
+
+  - name: fpRamps.fpl
+    system: fpinball
+    path: "Libraries/fpRamps.fpl"
+    required: false
+    bundled: true
+    category: game_data
+    size: 2813440
+    description: "82 ramp models, keyed by profile, width and height"
+    source_ref: "Future Pinball.exe 1.9.1.20101231 .text:0x004e6cf0-0x004e6ebf"
+    note: >-
+      Storage names encode the shape and the dimensions, ramp-pool-t1_w30_h20
+      and so on, with a left and a right variant of each.
+
+  - name: fpSounds.fpl
+    system: fpinball
+    path: "Libraries/fpSounds.fpl"
+    required: false
+    bundled: true
+    category: game_data
+    size: 170496
+    description: "20 machine sounds, ball release, bumpers, coin in and the rest"
+    source_ref: "Future Pinball.exe 1.9.1.20101231 .text:0x004e6cf0-0x004e6ebf, Future Pinball Manual.chm SoundManager.html"
+
+  - name: fpSphereMaps.fpl
+    system: fpinball
+    path: "Libraries/fpSphereMaps.fpl"
+    required: false
+    bundled: true
+    category: game_data
+    size: 223744
+    description: "11 sphere maps giving metal and plastic parts their reflections"
+    source_ref: "Future Pinball.exe 1.9.1.20101231 .text:0x004e6cf0-0x004e6ebf"
+    note: >-
+      Storage names are bracketed, [chrome-silver], [chrome-gold] and similar,
+      which is how a material references one.
+
+  - name: fpDmdFonts.fpl
+    system: fpinball
+    path: "Libraries/fpDmdFonts.fpl"
+    required: false
+    bundled: true
+    category: game_data
+    size: 58880
+    description: "6 dot matrix fonts, named for their cell size"
+    source_ref: "Future Pinball.exe 1.9.1.20101231 .text:0x004e6cf0-0x004e6ebf, Future Pinball Manual.chm FontManager.html"
+    note: >-
+      dmd05x05p through dmd08x13p. A DMD display element with no font draws
+      nothing.
+
+  - name: fpPlayfields.fpl
+    system: fpinball
+    path: "Libraries/fpPlayfields.fpl"
+    required: false
+    bundled: true
+    category: game_data
+    size: 364032
+    description: "3 playfield images, including the plunger cutout template"
+    source_ref: "Future Pinball.exe 1.9.1.20101231 .text:0x004e6cf0-0x004e6ebf"
+
+  - name: fpScripts.fpl
+    system: fpinball
+    path: "Libraries/fpScripts.fpl"
+    required: false
+    bundled: true
+    category: game_data
+    size: 4096
+    description: "Script library, holding the one sample script the manual quotes"
+    source_ref: "Future Pinball.exe 1.9.1.20101231 .text:0x00478d20, Future Pinball Manual.chm GlobalScript.html"
+    note: >-
+      The manual's worked example is
+      ExecuteGlobal LoadExternalScript("fpScripts.fpl\myscript"), which is the
+      branch taken when a reference carries the .fpl extension. What ships is a
+      single storage named testscript.
+
+  # -- Named individually elsewhere in the binary --
+
+  - name: NewTable.fpt
+    system: fpinball
+    required: false
+    bundled: true
+    category: game_data
+    size: 226816
+    description: "Template opened by File then New"
+    source_ref: "Future Pinball.exe 1.9.1.20101231 .text:0x00448ea9-0x00448edb"
+    note: >-
+      The install directory is copied into the default table path buffer and this
+      name appended, then the result goes through the ordinary table open. It is
+      a full table with a playfield and a plunger, not an empty document.
+
+  - name: Future Pinball Manual.chm
+    system: fpinball
+    path: "Help/Future Pinball Manual.chm"
+    required: false
+    bundled: true
+    size: 8992653
+    description: "Development guide, 79 topics"
+    source_ref: "Future Pinball.exe 1.9.1.20101231 .text:0x00478477-0x004784c4"
+    note: >-
+      Opened with ShellExecuteA on the install directory plus this path when the
+      help command carries id 0x8043. It is the only description of the library
+      link mechanism and of LoadExternalScript.
+
+  - name: Script56.chm
+    system: fpinball
+    path: "Help/Script56.chm"
+    required: false
+    description: "Microsoft Windows Script 5.6 documentation, the VBScript reference"
+    source_ref: "Future Pinball.exe 1.9.1.20101231 .text:0x004784a3-0x004784c4"
+    note: >-
+      The script editor's help falls to this path for every command id other
+      than 0x8043, again through ShellExecuteA against the install directory. No
+      Future Pinball release ships it: table scripts are VBScript and this is
+      Microsoft's own reference for the language, expected to be dropped into
+      Help beside the manual.
+
+  - name: fpLatestTables.xml
+    system: fpinball
+    path: "Feeds/fpLatestTables.xml"
+    required: false
+    bundled: true
+    size: 752639
+    description: "Cached table list from pinsimdb.org"
+    source_ref: "Future Pinball.exe 1.9.1.20101231 .text:0x0043dc70-0x0043dc99, 0x0043e776-0x0043e79c"
+    note: >-
+      libcurl writes it, CreateFileA with OPEN_EXISTING reads it back and
+      DeleteFileA drops it when the panel refreshes. The code builds the path as
+      feeds\ against a directory the installer creates as Feeds. A snapshot ships
+      with the release, so the panel has something to show before any fetch.
+
+  # -- Outside the program directory --
+
+  - name: NPClient.dll
+    system: fpinball
+    required: false
+    description: "NaturalPoint TrackIR client library, head tracking"
+    source_ref: "Future Pinball.exe 1.9.1.20101231 .text:0x0045f1b8-0x0045f1f8"
+    note: >-
+      The directory is read from HKCU\Software\NaturalPoint\NATURALPOINT\NPClient
+      Location, this name appended and the result given to LoadLibraryA;
+      NP_GetSignature and the rest are then bound with GetProcAddress. A null
+      handle jumps past all tracking setup. It comes from a TrackIR install, not
+      from any Future Pinball distribution, which is why no path is given here.
+
+analysis:
+  shipped_with_the_binary:
+    note: >-
+      Present in the release and read by the program, but named at runtime rather
+      than by a literal in the code, so there is no fixed filename to record.
+    entries:
+      - what: "Tables\\, four demonstration tables"
+        source_ref: "FuturePinballSetup_v1.9.1.20101231.exe app/Tables"
+        note: >-
+          DmdDisplayDemo.fpt, LightSequencerDemo.fpt, Ramp-VUK-Demo.fpt and
+          SegmentDisplayDemo.fpt. The directory itself is the default table path
+          and the last prefix the external script resolver tries.
+      - what: "Feeds\\, 385 table screenshots"
+        source_ref: "Future Pinball.exe 1.9.1.20101231 .text:0x0043d60f"
+        note: >-
+          Named st_<id>_<n>_<n>.jpg from the entries of fpLatestTables.xml and
+          fetched with the same libcurl path, so the set changes with the feed.
+
+  user_supplied_paths:
+    note: "Named by a table or written by the program, with no fixed filename"
+    entries:
+      - what: "external table scripts, tried bare then under Scripts\\ then Tables\\"
+        source_ref: "Future Pinball.exe 1.9.1.20101231 .text:0x004797c0-0x00479905, 0x00478be0"
+        note: >-
+          LoadExternalScript takes whatever name the table's script passes. The
+          bare attempt resolves against the working directory, which is the
+          table's own folder. No Scripts directory ships.
+      - what: "fpRAM\\<table>.fpRAM, per table persistent state"
+        source_ref: "Future Pinball.exe 1.9.1.20101231 .text:0x0043aa80, 0x00475602, 0x00475892"
+        note: >-
+          Built as the prefix, the table name and the .fpRAM extension. Written
+          from play, so it is save data rather than something to obtain. The
+          installer creates the directory empty.
+      - what: "DmdFonts\\ and Models\\, editor working directories"
+        source_ref: "Future Pinball.exe 1.9.1.20101231 .text:0x00443595, 0x00443efc, 0x00516ba8, 0x00516d31, 0x00441fc8, 0x004429bb, 0x004317fa"
+        note: >-
+          Each site only fills the initial directory of a GetOpenFileName or
+          GetSaveFileName call in the DMD font and model import and export
+          dialogs, so nothing is read until the user picks a file. DmdFonts ships
+          empty and Models is not created at all. Fonts carry .dmdf and models
+          .fpm, both authored rather than distributed.
+
+  named_but_not_read:
+    note: "String literals that survive a path scan without ever reaching a file"
+    entries:
+      - what: "skin\\toolbar.bmp"
+        source_ref: "Future Pinball.exe 1.9.1.20101231 .text:0x00438ff5, 0x00448ba0, 0x00432240-0x00432290"
+        note: >-
+          Passed to the toolbar builder, which calls CreateToolbarEx with
+          hBMInst zero and a bitmap handle held in a global as wBMID. The module
+          has no resource under that name and neither syscall trace shows an open
+          for it, although both traces reach the main window.
+      - what: "tables\\ in lower case"
+        source_ref: "Future Pinball.exe 1.9.1.20101231 .text:0x00439e40-0x00439e79"
+        note: >-
+          Searched for inside a feed URL and skipped past to recover the table
+          name, with the literal opps as the fallback. Not a path being built.
+      - what: ".jlb"
+        source_ref: "Future Pinball.exe 1.9.1.20101231 .text:0x004414d0"
+        note: >-
+          A second extension accepted beside .fpl in the library dialogs. No file
+          with it ships and nothing opens one by name.

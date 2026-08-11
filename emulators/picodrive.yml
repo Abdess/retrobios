@@ -65,7 +65,7 @@ files:
   - name: "us_scd2_9306.bin"
     system: sega-segacd
     region: [north-america]
-    search_rank: 1
+    priority: 1
     required: true
     size: 131072  # 128 KB (0x20000)
     note: "US Sega CD Model 2 BIOS (September 1993). First in US search order."
@@ -74,7 +74,7 @@ files:
   - name: "SegaCDBIOS9303.bin"
     system: sega-segacd
     region: [north-america]
-    search_rank: 2
+    priority: 2
     required: false
     size: 131072
     note: "US Sega CD BIOS (March 1993). Second in US search order."
@@ -83,7 +83,7 @@ files:
   - name: "us_scd1_9210.bin"
     system: sega-segacd
     region: [north-america]
-    search_rank: 3
+    priority: 3
     required: false
     size: 131072
     note: "US Sega CD Model 1 BIOS (October 1992). Third in US search order."
@@ -92,7 +92,7 @@ files:
   - name: "bios_CD_U.bin"
     system: sega-segacd
     region: [north-america]
-    search_rank: 4
+    priority: 4
     required: false
     size: 131072
     note: "US Sega CD BIOS (generic name). Last in US search order."
@@ -104,7 +104,7 @@ files:
   - name: "eu_mcd2_9306.bin"
     system: sega-megacd
     region: [europe]
-    search_rank: 1
+    priority: 1
     required: true
     size: 131072
     note: "EU Mega CD Model 2 BIOS (June 1993). First in EU search order."
@@ -113,7 +113,7 @@ files:
   - name: "eu_mcd2_9303.bin"
     system: sega-megacd
     region: [europe]
-    search_rank: 2
+    priority: 2
     required: false
     size: 131072
     note: "EU Mega CD Model 2 BIOS (March 1993). Second in EU search order."
@@ -122,7 +122,7 @@ files:
   - name: "eu_mcd1_9210.bin"
     system: sega-megacd
     region: [europe]
-    search_rank: 3
+    priority: 3
     required: false
     size: 131072
     note: "EU Mega CD Model 1 BIOS (October 1992). Third in EU search order."
@@ -131,7 +131,7 @@ files:
   - name: "bios_CD_E.bin"
     system: sega-megacd
     region: [europe]
-    search_rank: 4
+    priority: 4
     required: false
     size: 131072
     note: "EU Mega CD BIOS (generic name). Last in EU search order."
@@ -143,7 +143,7 @@ files:
   - name: "jp_mcd2_921222.bin"
     system: sega-megacd
     region: [japan]
-    search_rank: 1
+    priority: 1
     required: true
     size: 131072
     note: "JP Mega CD Model 2 BIOS (December 1992). First in JP search order."
@@ -152,7 +152,7 @@ files:
   - name: "jp_mcd1_9112.bin"
     system: sega-megacd
     region: [japan]
-    search_rank: 2
+    priority: 2
     required: false
     size: 131072
     note: "JP Mega CD Model 1 BIOS (December 1991). Second in JP search order."
@@ -161,7 +161,7 @@ files:
   - name: "jp_mcd1_9111.bin"
     system: sega-megacd
     region: [japan]
-    search_rank: 3
+    priority: 3
     required: false
     size: 131072
     note: "JP Mega CD Model 1 BIOS (November 1991). Third in JP search order."
@@ -170,7 +170,7 @@ files:
   - name: "bios_CD_J.bin"
     system: sega-megacd
     region: [japan]
-    search_rank: 4
+    priority: 4
     required: false
     size: 131072
     note: "JP Mega CD BIOS (generic name). Last in JP search order."

@@ -1,0 +1,73 @@
+emulator: "GBC.emu"
+type: standalone
+core_classification: community_fork
+source: "https://github.com/Rakashazi/emu-ex-plus-alpha"
+upstream: "https://github.com/sinamas/gambatte"
+profiled_date: "2026-08-11"
+source_commit: "1c12fac5ce49badaadff2e2f210dcc30b89f4943"
+core_version: "1.5.85"
+display_name: "Nintendo - Game Boy / Color (GBC.emu)"
+mode: standalone
+cores:
+  - "gbc-emu"
+  - "GBC.emu"
+  - "GBC-EMU"
+systems:
+  - nintendo-gb
+  - nintendo-gbc
+
+notes: |
+  Member of the EX Emulator series by Robert Broglia, which targets Android and
+  Linux (README.md:3-4,12-13) and keeps iOS and Pandora build shortcuts in the
+  tree (GBC.emu/ios.mk, GBC.emu/pandora.mk). Published as
+  com.explusalpha.GbcEmu (GBC.emu/metadata/conf.mk:2,4,6,7) and reached by
+  ES-DE through its GBC-EMU find rule. Gambatte components are
+  vendored under GBC.emu/src/libgambatte (GBC.emu/metadata/conf.mk:8,
+  GBC.emu/src/main/AppMeta.cc:26) and driven by the app's own video, audio,
+  input and save layers, with the OSD compiled out
+  (GBC.emu/CMakeLists.txt:14-19). Content is read from .gb, .gbc and .dmg files
+  (GBC.emu/metadata/conf.mk:5, GBC.emu/src/main/AppMeta.cc:30); an archive is
+  opened by the framework, which keeps the first entry passing that same filter
+  (EmuFramework/src/EmuSystem.cc:392-419).
+
+  The content image is the only one the app loads. GB::load hands the buffer to
+  Cartridge::loadROM and starts the machine from the register, memory and
+  palette values setInitState writes, the path a reset takes as well
+  (GBC.emu/src/libgambatte/src/gambatte.cpp:83-121,
+  GBC.emu/src/libgambatte/src/mem/cartridge.cpp:557-669,
+  GBC.emu/src/libgambatte/src/initstate.cpp:1151). The vendored API carries no
+  boot ROM entry point (GBC.emu/src/libgambatte/include/gambatte.h:38-211) and
+  no menu offers a path for one, the file path view adding a cheats directory
+  to the stock save and screenshot entries
+  (GBC.emu/src/main/EmuMenuViews.cc:187-212,
+  EmuFramework/src/gui/FilePathOptionView.cc:159-163). Gambatte's own file
+  layer is left out of the build (GBC.emu/src/CMakeLists.txt:13-39).
+
+  DMG content is colored from tables held in the binary: 13 palettes and a
+  title-keyed list matched against the ROM header
+  (GBC.emu/src/main/Main.cc:41-57,155-161, GBC.emu/src/main/Palette.cc:352,359,
+  466-474, GBC.emu/src/main/EmuMenuViews.cc:74-96). Report Hardware as GBA
+  passes GBA_CGB to the load call (GBC.emu/src/main/Main.cc:150,
+  GBC.emu/src/main/system.ccm:113).
+
+  Per content the app writes and reads back files named after the ROM: a .sav
+  sized to the cartridge SRAM bank and created full of 0xFF
+  (GBC.emu/src/main/Main.cc:86-94,105-112, EmuFramework/src/EmuApp.cc:842-849),
+  a four byte .rtc base time for cartridges carrying a clock
+  (GBC.emu/src/main/Main.cc:95-102,113-124), .gqs states
+  (GBC.emu/src/main/Main.cc:66-69), a .gbcht cheat list under the cheats path
+  (GBC.emu/src/main/Cheats.cc:70-113) and GbcEmu.config
+  (GBC.emu/src/main/AppMeta.cc:27). Gambatte's own save file code sits inside
+  an #if 0 block and its two entry points are defined as no-ops by the app
+  (GBC.emu/src/libgambatte/src/mem/cartridge.cpp:671-715,
+  GBC.emu/src/main/Main.cc:308-313).
+
+  ui.png, gpOverlay.png and the shader sources are drawn from the application
+  bundle (EmuFramework/include/emuframework/AssetManager.hh:61-65,
+  EmuFramework/src/AssetManager.cc:58-65,
+  EmuFramework/src/VideoImageEffect.cc:163-173). The app declares no bundled
+  content, the framework definition defaulting to an empty span
+  (EmuFramework/src/AppMeta.cc:40,
+  EmuFramework/include/emuframework/AppMeta.hh:66-68).
+
+files: []

@@ -1,0 +1,76 @@
+emulator: DroidArcadia
+type: standalone
+core_classification: embedded_hle
+source: "https://amigan.1emu.net/releases/"
+upstream: "https://amigan.1emu.net/releases/"
+author: "James Jacobs (Amigan Software)"
+profiled_date: "2026-08-11"
+core_version: "4.60"
+display_name: "Emerson Arcadia 2001 / Interton VC 4000 (DroidArcadia)"
+cores:
+  - droidarcadia
+  - com.amigan.droidarcadia
+systems:
+  - emerson-arcadia-2001
+  - interton-vc4000
+  - elektor-tv-games-computer
+  - arcade
+mode: standalone
+
+notes: |
+  Android build of the Signetics 2650 emulator line by James Jacobs, published
+  as package com.amigan.droidarcadia. A game arrives as a content URI declared
+  by the manifest under MIME type application/octet-stream or application/zip,
+  a zip yielding its first member only, and the read stops at 32768 bytes. This
+  reading is taken from the author's own source archive DroidArcadia-src.rar
+  4.60, md5 5f88d8b01493a2430d2f9c94da69bf8a, and confirmed against the
+  published DroidArcadia.apk, md5 a72cf2f5e2b213577f3e185aa58f7e21.
+  ref: app/src/main/cpp/da.h:3-5, app/src/main/AndroidManifest.xml:21-37,
+       app/build.gradle:22-28, MainActivity.java:1502-1558,
+       res/values/strings.xml:5-6
+
+  Fifteen memory maps over five machines: Interton VC 4000 types A to D,
+  Elektor TV Games Computer basic and expanded, Emerson Arcadia 2001 types G
+  (Emerson), H (Tele-Fever) and I (Palladium), and the coin-ops Astro Wars,
+  Galaxia, Laser Battle and Lazarian (Zaccaria) with Malzak 1 and 2 (Kitronix).
+  ref: android.c:245-261, da.h:445-467
+
+  Every ROM those machines run is a const array compiled into
+  libdroidarcadia.so and copied into memory when the machine is set up:
+  a_bios[348] for the
+  Arcadia boot stub, i_bios[287] for the Interton one, e_bios_philips[2048] and
+  e_bios_hobbymodule[2048] for the two Elektor monitor ROMs, galaxia_game,
+  astrowars_game, lb_game and lz_game for the Zaccaria coin-ops, m1_bios and
+  m2_bios for the Malzak pair. The first sixteen bytes of all ten arrays are
+  present in the arm64 library of the published apk.
+  ref: android.c:588-596, arcadia.h:279 with arcadia.c:426, interton.h:1 with
+       interton.c:36, elektor.h:1,131 with elektor.c:95-103,
+       zaccaria.h:1,644,1599,3653 with zaccaria.c:243,325,423,436,
+       malzak.h:1,558 with malzak.c:363,373
+
+  The native side never opens a file. It receives the game as a byte array over
+  JNI and parses it in memory: a cartridge is matched on size and CRC32 against
+  the games.h table, and the bios field of the matched entry carries the Arcadia
+  region and picks which of the two Elektor monitor ROMs is installed.
+  RetroAchievements identification is handed that same memory with the file path
+  argument left NULL, so the file reader of the bundled rcheevos is never
+  reached. A coin-op is stepped to through the machine button rather than
+  loaded, and a raw binary aimed at Zaccaria or Malzak hardware is refused.
+  ref: android.c:877-894, android.c:2166-2192, android.c:2082-2096,
+       android.c:1010-1013, android.c:4592-4631, elektor.c:95-103,
+       OptionsActivity.java:455-465
+
+exclusion_note: >
+  Nothing to obtain. The app reads back only what it writes in its own private
+  storage, each read wrapped in a catch that continues when the file is absent:
+  DroidArcadia.ini for settings, DroidArcadia.hgh for the high score table, and
+  Autosave.cos with Quicksave.cos for save states. Screenshots go out to
+  /sdcard/Pictures/DroidArcadia and are never read back, and RetroAchievements
+  traffic, login and badge and game images alike, is decoded in memory. The apk
+  carries no assets directory and no raw resource, so no payload is unpacked on
+  first run either.
+  ref: MainActivity.java:1123,1184,1242,1312,1340,1415,
+       OptionsActivity.java:224-235,682,742, RAActivity.java:237-238,268-269,
+       NetworkUtil.java:17-38
+
+files: []
