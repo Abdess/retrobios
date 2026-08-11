@@ -814,6 +814,52 @@ class EveryManifestEntryIsFetchable(unittest.TestCase):
                     self.assertIn(entry.get("reason"), allowed)
 
 
+class PreservedBytesAreNeverNormalised(unittest.TestCase):
+    """git must not rewrite a preserved file's line endings.
+
+    SHA1 is the primary key of this collection. Git for Windows sets
+    core.autocrlf=true by default, so without an attribute saying otherwise a
+    clone there rewrites every file git guesses is text -- shaders, .ini,
+    .txt and .dat assets under bios/ -- and each one arrives with a different
+    hash from the one published here.
+    """
+
+    def _attr(self, path: str) -> str:
+        import subprocess
+
+        out = subprocess.run(
+            ["git", "check-attr", "text", "--", path],
+            capture_output=True, text=True, cwd=ROOT,
+        ).stdout
+        return out.rsplit(":", 1)[-1].strip()
+
+    def test_gitattributes_exists(self):
+        self.assertTrue(
+            (ROOT / ".gitattributes").is_file(),
+            "without it git guesses, and guesses wrong on Windows",
+        )
+
+    def test_collection_paths_are_exempt_from_normalisation(self):
+        for path in (
+            "bios/Sony/PlayStation/scph5501.bin",
+            "bios/Other/j2me-loader/color.fsh",
+            "data/anything.txt",
+            "data/dolphin-sys/config.json",
+        ):
+            with self.subTest(path=path):
+                self.assertEqual(self._attr(path), "unset", f"{path} may be rewritten")
+
+    def test_generated_artefacts_stay_lf(self):
+        for path in (
+            "database.json",
+            "scripts/dedup.py",
+            "README.md",
+            "provenance/redump.json",
+        ):
+            with self.subTest(path=path):
+                self.assertEqual(self._attr(path), "set")
+
+
 class FreshnessGuardMechanics(unittest.TestCase):
     """write_if_changed is what makes `git diff --exit-code` a real check.
 

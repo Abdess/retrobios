@@ -1,0 +1,23 @@
+# Source and generated artefacts keep LF on every platform, so a Windows
+# checkout does not show them as modified and the freshness guard keeps
+# meaning something.
+*.json text eol=lf
+*.yml text eol=lf
+*.md text eol=lf
+*.py text eol=lf
+*.sh text eol=lf
+install.ps1 text eol=lf
+
+# Preserved files are bytes, not text, and these rules come last so they win.
+#
+# Without them git guesses. A clone on Windows, where the installer sets
+# core.autocrlf=true by default, rewrites every file git considers text on
+# checkout: shaders, .ini, .txt and .dat assets under bios/ come out with CRLF
+# line endings and a different SHA1 from the one this repository publishes.
+# Verification then fails on files nobody touched, and a re-commit silently
+# changes the bytes of a preserved asset.
+#
+# provenance/ is not listed: those snapshots are generated here, not
+# preserved, so they follow the LF rule above.
+bios/** -text
+data/** -text
