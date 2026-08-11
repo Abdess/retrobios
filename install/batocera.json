@@ -5,7 +5,7 @@
   "platform": "batocera",
   "display_name": "Batocera",
   "version": "1.0",
-  "generated": "2026-08-11T12:10:33Z",
+  "generated": "2026-08-11T15:51:58Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -237,8 +237,8 @@
       }
     }
   ],
-  "total_files": 1793,
-  "total_size": 2805614238,
+  "total_files": 1794,
+  "total_size": 2805615262,
   "total_omitted": 23,
   "omitted_files": [
     {
@@ -17689,6 +17689,16 @@
       "sha256": "91ae289d37ffcbf436e99c8cd9b661a8a9fb641a068721a63ea9f385345197bc",
       "size": 2060269,
       "repo_path": "bios/Sony/PlayStation 2/patches.zip",
+      "cores": [
+        "pcsx2"
+      ]
+    },
+    {
+      "dest": "ps2-0230a-20080220.nvm",
+      "sha1": "258ad0f26b0b269462bbd9acbb5506d5dfbcc3d5",
+      "sha256": "e017efa804f1f7d4d3da82b67d7370c5be062b4860f1cff4f898f93437d691a0",
+      "size": 1024,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0230a-20080220.nvm",
       "cores": [
         "pcsx2"
       ]

@@ -5,7 +5,7 @@
   "platform": "retrodeck",
   "display_name": "RetroDECK",
   "version": "1.0",
-  "generated": "2026-08-11T08:43:51Z",
+  "generated": "2026-08-11T15:51:58Z",
   "base_destination": "",
   "detect": [
     {
@@ -237,8 +237,8 @@
       }
     }
   ],
-  "total_files": 3512,
-  "total_size": 4947725710,
+  "total_files": 3547,
+  "total_size": 5216013403,
   "total_omitted": 9,
   "omitted_files": [
     {
@@ -25578,11 +25578,283 @@
       ]
     },
     {
+      "dest": "bios/sdlpal/abc.mkf",
+      "sha1": "57728781299905c1c4f26f0333d272cb9defd173",
+      "sha256": "f9685ba8d22e851a4be492c6b74fbc671d89112d64394e7af86ec7a23751529c",
+      "size": 932346,
+      "repo_path": "bios/Other/sdlpal/sdlpal/abc.mkf",
+      "cores": [
+        "sdlpal"
+      ]
+    },
+    {
+      "dest": "bios/sdlpal/ball.mkf",
+      "sha1": "9b60a2cbf1ce159df836de9d734f0182af8dfd75",
+      "sha256": "b9925833a9d921aa6bea9d0d199dbbe170968716d951036a142c1dd303f99bd0",
+      "size": 145070,
+      "repo_path": "bios/Other/sdlpal/sdlpal/ball.mkf",
+      "cores": [
+        "sdlpal"
+      ]
+    },
+    {
+      "dest": "bios/sdlpal/data.mkf",
+      "sha1": "114446bb3afc56710ce4424370f627f1e9becb5c",
+      "sha256": "c0bc968e5322b06fe669dd6e34483dd1f12dd223ac25b03b6dc74d3742635c1b",
+      "size": 63978,
+      "repo_path": "bios/Other/sdlpal/sdlpal/data.mkf",
+      "cores": [
+        "sdlpal"
+      ]
+    },
+    {
+      "dest": "bios/sdlpal/f.mkf",
+      "sha1": "b35d6d48b13ea6d09c7eff4a922a984f718b8bdd",
+      "sha256": "eb492e6dcd0eefb6fbc1751d775bc8667b46d3cd5231974caa1eef309f3152d7",
+      "size": 173198,
+      "repo_path": "bios/Other/sdlpal/sdlpal/f.mkf",
+      "cores": [
+        "sdlpal"
+      ]
+    },
+    {
+      "dest": "bios/sdlpal/fbp.mkf",
+      "sha1": "0a8d2366e9c90370cd7ee166721b0a7e22af1aeb",
+      "sha256": "29bbc71c10c58a555e5b45b853dfeef3fa0d299ceeb8e7556b6c1d6bc40c4d84",
+      "size": 1242530,
+      "repo_path": "bios/Other/sdlpal/sdlpal/fbp.mkf",
+      "cores": [
+        "sdlpal"
+      ]
+    },
+    {
+      "dest": "bios/sdlpal/fire.mkf",
+      "sha1": "c250ee224bb118c47f0244295fd93e08cc5c7010",
+      "sha256": "5a23940d3daab5bfa95efd3b92b4d1ae481fc4f7ad38374ec66b16c7e7d5d9cf",
+      "size": 764381,
+      "repo_path": "bios/Other/sdlpal/sdlpal/fire.mkf",
+      "cores": [
+        "sdlpal"
+      ]
+    },
+    {
+      "dest": "bios/sdlpal/gop.mkf",
+      "sha1": "6aa5008a7c013dcf05e1276118b22f76f3316dd1",
+      "sha256": "5745d016a8d9c280b90a8b92d2871210a2dd0a0c04a79d4c8e65f4d0396aa04b",
+      "size": 16437766,
+      "repo_path": "bios/Other/sdlpal/sdlpal/gop.mkf",
+      "cores": [
+        "sdlpal"
+      ]
+    },
+    {
+      "dest": "bios/sdlpal/map.mkf",
+      "sha1": "a1c905ee895b99229a8a03fb571ca811e257a881",
+      "sha256": "62739644af65b5e80c0736d31da00e4fe805a56ee5c5fede6558c0c13bacd575",
+      "size": 1614602,
+      "repo_path": "bios/Other/sdlpal/sdlpal/map.mkf",
+      "cores": [
+        "sdlpal"
+      ]
+    },
+    {
+      "dest": "bios/sdlpal/mgo.mkf",
+      "sha1": "2d25209f3e3b757e927e0b7c1bf8ee2aa40a3535",
+      "sha256": "0df639e22da1cf766c821de0b07d8c0bb58602c50ff5a2eea233a9e3c9f6e789",
+      "size": 1443503,
+      "repo_path": "bios/Other/sdlpal/sdlpal/mgo.mkf",
+      "cores": [
+        "sdlpal"
+      ]
+    },
+    {
+      "dest": "bios/sdlpal/pat.mkf",
+      "sha1": "96e03ed05dadf5d4672c1f08f582a26f85533389",
+      "sha256": "b2d6a3db53a3e80106a4c041c7f94dfaf9dcb065517fce79b1ff3d413494d997",
+      "size": 8488,
+      "repo_path": "bios/Other/sdlpal/sdlpal/pat.mkf",
+      "cores": [
+        "sdlpal"
+      ]
+    },
+    {
+      "dest": "bios/sdlpal/rgm.mkf",
+      "sha1": "d24f75ea245798953f3e0407bac7ae24d7544822",
+      "sha256": "fbeb7cbafd374af8c07088ab18996edcadd6ec52b8bb0a0af644c2cee4e26bac",
+      "size": 453202,
+      "repo_path": "bios/Other/sdlpal/sdlpal/rgm.mkf",
+      "cores": [
+        "sdlpal"
+      ]
+    },
+    {
+      "dest": "bios/sdlpal/rng.mkf",
+      "sha1": "2b0f6556bb27ce4d5462e4777fe2c1c847732f7b",
+      "sha256": "5d62cad87b330d2e1ec00d7c1acc4de96b8324e547fa8095aab0f64a9811d7bd",
+      "size": 4085342,
+      "repo_path": "bios/Other/sdlpal/sdlpal/rng.mkf",
+      "cores": [
+        "sdlpal"
+      ]
+    },
+    {
+      "dest": "bios/sdlpal/sss.mkf",
+      "sha1": "34cecac4a0e2a4dcb37e6cf905db488f2d688825",
+      "sha256": "3acf15a825b674e593dea86a0b5e632ef98086ec153b6934418e3a3a9b36b774",
+      "size": 575270,
+      "repo_path": "bios/Other/sdlpal/sdlpal/sss.mkf",
+      "cores": [
+        "sdlpal"
+      ]
+    },
+    {
+      "dest": "bios/sdlpal/m.msg",
+      "sha1": "f9cbbc4a50b95434fa5df3f3f399aff8d164b449",
+      "sha256": "b8c37694665ff8575b557f426dd357b367006ce85e2306a32a654dfff56a0f5d",
+      "size": 224455,
+      "repo_path": "bios/Other/sdlpal/sdlpal/m.msg",
+      "cores": [
+        "sdlpal"
+      ]
+    },
+    {
+      "dest": "bios/sdlpal/word.dat",
+      "sha1": "daf8a250f813a6a43a71b86553c2e82d62429b21",
+      "sha256": "be56e77c7ecd61306133913a1987b1dddf656528ae870c2de1ee8ccda7ff3ebf",
+      "size": 5650,
+      "repo_path": "bios/Other/sdlpal/sdlpal/word.dat",
+      "cores": [
+        "sdlpal"
+      ]
+    },
+    {
       "dest": "bios/sdlpal/desc.dat",
       "sha1": "8c20ff26ebfefbf9b050b67af8083704003595ba",
       "sha256": "0d6487d6832488130bc94b1ec5ee71766717b929c249693327089e461460ae40",
       "size": 16027,
       "repo_path": "bios/sdlpal/desc.dat",
+      "cores": [
+        "sdlpal"
+      ]
+    },
+    {
+      "dest": "bios/sdlpal/wor16.asc",
+      "sha1": "c5d57da07dca7659159fd7a777cbd9b94492c0ea",
+      "sha256": "d28985aee96b96981be1542172f6f32509541dec325163e857cd677f56dad8f9",
+      "size": 5088,
+      "repo_path": "bios/Other/sdlpal/sdlpal/wor16.asc",
+      "cores": [
+        "sdlpal"
+      ]
+    },
+    {
+      "dest": "bios/sdlpal/wor16.fon",
+      "sha1": "20008f4bc271adbf80cd30a6c6aae16844ea8ecc",
+      "sha256": "2631bfa2b70333ad85d6e32edf7dedb5e888a3d34ee31f0f2da3f7d8599cd5e3",
+      "size": 77986,
+      "repo_path": "bios/Other/sdlpal/sdlpal/wor16.fon",
+      "cores": [
+        "sdlpal"
+      ]
+    },
+    {
+      "dest": "bios/sdlpal/voc.mkf",
+      "sha1": "6785239d04751da055a19511e4c46ba6acba5d19",
+      "sha256": "c6e14eaaff50979df269b7d6d5f7401cb354be38e3ad737e4ca3ec473c1c5ab3",
+      "size": 1997044,
+      "repo_path": "bios/Other/sdlpal/sdlpal/voc.mkf",
+      "cores": [
+        "sdlpal"
+      ]
+    },
+    {
+      "dest": "bios/sdlpal/sounds.mkf",
+      "sha1": "77e95569fc7e6fdddbd4f82ea89838022da86755",
+      "sha256": "039a5cc64be937168ce458c8288fbd61fb3d2854e9445a775ab67f6af2276e01",
+      "size": 18112888,
+      "repo_path": "bios/Other/sdlpal/sdlpal/sounds.mkf",
+      "cores": [
+        "sdlpal"
+      ]
+    },
+    {
+      "dest": "bios/sdlpal/mus.mkf",
+      "sha1": "9961f2ad3f11b8e80e6c259a215fc48151e80969",
+      "sha256": "8367c9d34331f67b20b12380e809a38d3313cae199f260d272d07fcf55e11a21",
+      "size": 331284,
+      "repo_path": "bios/Other/sdlpal/sdlpal/mus.mkf",
+      "cores": [
+        "sdlpal"
+      ]
+    },
+    {
+      "dest": "bios/sdlpal/midi.mkf",
+      "sha1": "652fd2885ad39e56a627d3cec1b9d225de1128ba",
+      "sha256": "70587d762bdcea0a6e07f0f13808993045a6f382c713f0ad81793a7f6991f913",
+      "size": 762442,
+      "repo_path": "bios/Other/sdlpal/sdlpal/midi.mkf",
+      "cores": [
+        "sdlpal"
+      ]
+    },
+    {
+      "dest": "bios/sdlpal/1.avi",
+      "sha1": "35fbefcb73b4f2611fb2c7fba03512123d768964",
+      "sha256": "c9e68039ab02bebadb36cdce2308502db42b457bd821114ee487cfbe092f76da",
+      "size": 9079428,
+      "repo_path": "bios/Other/sdlpal/sdlpal/1.avi",
+      "cores": [
+        "sdlpal"
+      ]
+    },
+    {
+      "dest": "bios/sdlpal/2.avi",
+      "sha1": "929b428407c2800615db87281587679ecc16e44e",
+      "sha256": "51f60a923bf1199910b12db84e1b58d63b4f45c1f653a447153ef26cbda3720d",
+      "size": 31872668,
+      "repo_path": "bios/Other/sdlpal/sdlpal/2.avi",
+      "cores": [
+        "sdlpal"
+      ]
+    },
+    {
+      "dest": "bios/sdlpal/3.avi",
+      "sha1": "15844682678b258957dd59c28b17146609cb8d0c",
+      "sha256": "28a97b9f3812ffa32185dea996e2928c1090e9786953f9d7cc9107ad54fc3cc0",
+      "size": 20245444,
+      "repo_path": "bios/Other/sdlpal/sdlpal/3.avi",
+      "cores": [
+        "sdlpal"
+      ]
+    },
+    {
+      "dest": "bios/sdlpal/4.avi",
+      "sha1": "0fbb47081dd269a8b288bc81a4c603d53769a236",
+      "sha256": "600616fa3aa551ae3b783715325066051a4c46151ee8daeb4e0e4243b869aa73",
+      "size": 7825060,
+      "repo_path": "bios/Other/sdlpal/sdlpal/4.avi",
+      "cores": [
+        "sdlpal"
+      ]
+    },
+    {
+      "dest": "bios/sdlpal/5.avi",
+      "sha1": "1f86bcc7c856d567b4c3f66cdd8db6a43ee0392a",
+      "sha256": "30c6a574b2625140ca5ad1b456e8fb30ae9026b1684f90381630caff4e24f069",
+      "size": 82833972,
+      "repo_path": "bios/Other/sdlpal/sdlpal/5.avi",
+      "cores": [
+        "sdlpal"
+      ],
+      "storage": "release",
+      "release_asset": "5.avi"
+    },
+    {
+      "dest": "bios/sdlpal/6.avi",
+      "sha1": "09a293724620161be64ab7ad495cf01aab9334eb",
+      "sha256": "53a8c472d50263d512bae327e7064e9b88ff459788dc5bbee8fd7f8a55300217",
+      "size": 36953012,
+      "repo_path": "bios/Other/sdlpal/sdlpal/6.avi",
       "cores": [
         "sdlpal"
       ]
@@ -30712,36 +30984,6 @@
       ]
     },
     {
-      "dest": "bios/GameIndex.yaml",
-      "sha1": "b22389650f6c0a1e276b48213fed8a9c1c6476ce",
-      "sha256": "fe469d080984767b32b45dd4f26f58680470003c4935d78e57b21ed4d2061d88",
-      "size": 2669341,
-      "repo_path": "bios/Sony/PlayStation 2/GameIndex.yaml",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "bios/ROM2.BIN",
-      "sha1": "1bae895fbdd658cfb56c53cc2139282cc1e778de",
-      "sha256": "9fc01e6beab84e61e0267fa39e23c649cdf2ccd25ad1cbfc2de0facfd160e723",
-      "size": 8192,
-      "repo_path": "bios/Sony/PlayStation 2/ROM2.BIN",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "bios/SCPH30004R.nvm",
-      "sha1": "62f5a0b54a174daf2bf66634b86c6f2a3cd297ce",
-      "sha256": "0e13330dda0c0190a3ab732593416051df19bf8f3f3186862f84531a9d6915e2",
-      "size": 1024,
-      "repo_path": "bios/Sony/PlayStation 2/SCPH30004R.nvm",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
       "dest": "bios/ps2-dvd-110u.bin",
       "sha1": "0bc9143cb6839471d62b8fdd0b2fc05e941527d3",
       "sha256": "76918ccab7350149d8236c136c4df1fc7c5c7fcba245f92a0d8bbe81e82dd251",
@@ -30872,6 +31114,36 @@
       ]
     },
     {
+      "dest": "bios/GameIndex.yaml",
+      "sha1": "b22389650f6c0a1e276b48213fed8a9c1c6476ce",
+      "sha256": "fe469d080984767b32b45dd4f26f58680470003c4935d78e57b21ed4d2061d88",
+      "size": 2669341,
+      "repo_path": "bios/Sony/PlayStation 2/GameIndex.yaml",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "bios/ROM2.BIN",
+      "sha1": "1bae895fbdd658cfb56c53cc2139282cc1e778de",
+      "sha256": "9fc01e6beab84e61e0267fa39e23c649cdf2ccd25ad1cbfc2de0facfd160e723",
+      "size": 8192,
+      "repo_path": "bios/Sony/PlayStation 2/ROM2.BIN",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "bios/SCPH30004R.nvm",
+      "sha1": "62f5a0b54a174daf2bf66634b86c6f2a3cd297ce",
+      "sha256": "0e13330dda0c0190a3ab732593416051df19bf8f3f3186862f84531a9d6915e2",
+      "size": 1024,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH30004R.nvm",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
       "dest": "bios/EROM.BIN",
       "sha1": "adb4dbb7feb8247811506a38896ddcb789c4b477",
       "sha256": "f7c4944e3001e3849cdead743e200e009d4d07bd5afb20fb937a7b201895f713",
@@ -30947,6 +31219,16 @@
       "sha256": "91ae289d37ffcbf436e99c8cd9b661a8a9fb641a068721a63ea9f385345197bc",
       "size": 2060269,
       "repo_path": "bios/Sony/PlayStation 2/patches.zip",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "bios/ps2-0230a-20080220.nvm",
+      "sha1": "258ad0f26b0b269462bbd9acbb5506d5dfbcc3d5",
+      "sha256": "e017efa804f1f7d4d3da82b67d7370c5be062b4860f1cff4f898f93437d691a0",
+      "size": 1024,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0230a-20080220.nvm",
       "cores": [
         "armsx2"
       ]
@@ -31267,6 +31549,76 @@
       "sha256": "ab829598e15b771112130cbafbd982736400690c11e3d7c81e3fc8c582c24f47",
       "size": 9655,
       "repo_path": "bios/Other/armsx2/no-save.png",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "bios/NotoSansArabic-Regular.ttf",
+      "sha1": "456e74b0805d1931a7786d3d04673a3b02dd4dd3",
+      "sha256": "90f50de40af560ad55f2fcf460af8205f842b534b057bd8b8bcf7d3e10d3223a",
+      "size": 177004,
+      "repo_path": "bios/Other/armsx2/pcsx2/resources/fonts/NotoSansArabic-Regular.ttf",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "bios/NotoSansDevanagari-Regular.ttf",
+      "sha1": "69253a2722f999ba4205f2e679d0b75e3b17109f",
+      "sha256": "11fa517464dbd568e855e449650a9004d1072c4a54ac1845aaafc462c0652b64",
+      "size": 204336,
+      "repo_path": "bios/Other/armsx2/pcsx2/resources/fonts/NotoSansDevanagari-Regular.ttf",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "bios/NotoSansHebrew-Regular.ttf",
+      "sha1": "9dc5783345f258d0c66c17028d39652daa234473",
+      "sha256": "1edcc5695148a632b8a5516ba41a86edf01f06289c5c2e84a1afafe833eb25da",
+      "size": 42704,
+      "repo_path": "bios/Other/armsx2/pcsx2/resources/fonts/NotoSansHebrew-Regular.ttf",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "bios/NotoSansJP-Regular.ttf",
+      "sha1": "6030f4e7d59b356d0eaf26f1bca370a999335058",
+      "sha256": "fb3df01b4182734d021d79ec5bac17903bb681e926a059c59ed81a373d612241",
+      "size": 5732824,
+      "repo_path": "bios/Other/armsx2/pcsx2/resources/fonts/NotoSansJP-Regular.ttf",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "bios/NotoSansKR-Regular.ttf",
+      "sha1": "83d3c03dc1fc16f2a5b8bbf929d4cc21a078282c",
+      "sha256": "9db318b65ee9c575a43e7efd273dbdd1afef26e467eea3e1073a50e1a6595f6d",
+      "size": 6192764,
+      "repo_path": "bios/Other/armsx2/pcsx2/resources/fonts/NotoSansKR-Regular.ttf",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "bios/NotoSansSC-Regular.ttf",
+      "sha1": "01299427e4d789295c614752c8398261f006479b",
+      "sha256": "ae82f4e2a55e1316a55bcc1d05e9555ce08d8bda07e893b486896b626fd852ff",
+      "size": 10560380,
+      "repo_path": "bios/Other/armsx2/pcsx2/resources/fonts/NotoSansSC-Regular.ttf",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "bios/NotoSansTC-Regular.ttf",
+      "sha1": "59815234d228a7f390364c6d6380cc518ea63db1",
+      "sha256": "6b137e2eb57a2d1e4cf391c886ab1b783a0e5ddb5c75254748bde00c15cb8ff5",
+      "size": 7110560,
+      "repo_path": "bios/Other/armsx2/pcsx2/resources/fonts/NotoSansTC-Regular.ttf",
       "cores": [
         "armsx2"
       ]

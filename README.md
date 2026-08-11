@@ -38,14 +38,14 @@ The size is what the files occupy once extracted; the ZIP itself downloads small
 | Batocera | 2.6 GB | `/userdata/bios/` | [Download](../../releases/latest) |
 | BizHawk | 2.2 GB | `Firmware/` | [Download](../../releases/latest) |
 | EmuDeck | 1.7 GB | `~/Emulation/bios/` | [Download](../../releases/latest) |
-| Lakka | 3.9 GB | `/storage/system/` | [Download](../../releases/latest) |
+| Lakka | 4.1 GB | `/storage/system/` | [Download](../../releases/latest) |
 | MiSTer FPGA | 23 MB | `/media/fat/games/` | [Download](../../releases/latest) |
-| ROCKNIX | 3.7 GB | `/storage/roms/bios/` | [Download](../../releases/latest) |
+| ROCKNIX | 4.0 GB | `/storage/roms/bios/` | [Download](../../releases/latest) |
 | Recalbox | 2.2 GB | `/recalbox/share/bios/` | [Download](../../releases/latest) |
-| RetroArch | 3.9 GB | `system/` | [Download](../../releases/latest) |
+| RetroArch | 4.1 GB | `system/` | [Download](../../releases/latest) |
 | RetroBat | 3.0 GB | `bios/` | [Download](../../releases/latest) |
-| RetroDECK | 4.6 GB | `~/retrodeck/` | [Download](../../releases/latest) |
-| RetroPie * | 3.9 GB | `~/RetroPie/BIOS/` | [Download](../../releases/latest) |
+| RetroDECK | 4.9 GB | `~/retrodeck/` | [Download](../../releases/latest) |
+| RetroPie * | 4.1 GB | `~/RetroPie/BIOS/` | [Download](../../releases/latest) |
 | RomM | 1.3 GB | `bios/{platform_slug}/` | [Download](../../releases/latest) |
 
 The RetroDECK pack already contains its own `bios/` folder, so it extracts into `~/retrodeck/` rather than into the BIOS folder.
@@ -61,11 +61,11 @@ Each file is checked the way your platform checks it. Most compare a checksum, t
 
 - **5 files** the platforms' emulators load are still to be found, and 9 more cannot be sourced at all (per-user keys, user-filled slots, dumps nobody has made); both are named in the [gap analysis](https://abdess.github.io/retrobios/gaps/)
 - **12 platforms** supported with platform-specific verification
-- **391 emulators** profiled from source (RetroArch cores + standalone)
+- **396 emulators** profiled from source (RetroArch cores + standalone)
 - **440 systems** handled by those emulators (NES, SNES, PlayStation, Saturn, Dreamcast, ...)
-- **8,372 files**, each with its SHA1, MD5, SHA256, CRC32 and Adler-32 fingerprints: 3,030 system files, 2,803 arcade ROM sets, 2,539 game and engine data files
-- **542 of 3,030 system files** matched to dump-preservation catalogs (No-Intro, Redump, TOSEC); arcade sets and engine data fall outside what those catalogs index
-- **10010 MB** total collection size
+- **8,644 files**, each with its SHA1, MD5, SHA256, CRC32 and Adler-32 fingerprints: 3,302 system files, 2,803 arcade ROM sets, 2,539 game and engine data files
+- **542 of 3,302 system files** matched to dump-preservation catalogs (No-Intro, Redump, TOSEC); arcade sets and engine data fall outside what those catalogs index
+- **10616 MB** total collection size
 
 ## Supported systems
 
@@ -128,7 +128,7 @@ The [documentation site](https://abdess.github.io/retrobios/) provides:
 - **Per-emulator profiles** with source code references for every file
 - **Per-system pages** showing which emulators and platforms cover each console
 - **Gap analysis** identifying missing files and undeclared core requirements
-- **Cross-reference** mapping files across 12 platforms and 391 emulators
+- **Cross-reference** mapping files across 12 platforms and 396 emulators
 - **Versioned data access** through JSON, CSV and SQLite exports with published SHA-256 checksums
 
 ## How it works
@@ -166,4 +166,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software. [NOTICE](NOTICE) sets out their status and how to ask for a file to be removed.
 The reasoning, and where it is weakest, is in the [FAQ](https://abdess.github.io/retrobios/wiki/faq/#is-this-legal).
 
-*Auto-generated on 2026-08-11T14:55:14Z*
+*Auto-generated on 2026-08-11T16:57:16Z*

@@ -263,7 +263,7 @@ nav:
     - vitaQuakeII: emulators/vitaquake2.md
     - yabasanshiro: emulators/yabasanshiro.md
     - Yuzu: emulators/yuzu.md
-  - Community forks (136):
+  - Community forks (140):
     - 2600.emu: emulators/2600-emu.md
     - EightyOne: emulators/81.md
     - a5200: emulators/a5200.md
@@ -328,9 +328,13 @@ nav:
     - Infinity: emulators/infinity.md
     - J2ME Loader: emulators/j2me-loader.md
     - JL-Mod: emulators/jl-mod.md
+    - KEmulator nnmod: emulators/kemulator.md
+    - Kenji-NX: emulators/kenji-nx.md
     - Lime3DS: emulators/lime3ds.md
     - LinApple: emulators/linapple.md
     - LRPS2: emulators/lrps2.md
+    - Lynx.emu: emulators/lynx-emu.md
+    - M64Plus FZ: emulators/m64plus-fz.md
     - Mandarine: emulators/mandarine.md
     - mednafen_pce: emulators/mednafen_pce.md
     - mednafen_pce_fast: emulators/mednafen_pce_fast.md
@@ -538,13 +542,14 @@ nav:
     - Stone Soup: emulators/stonesoup.md
     - UME 2015: emulators/ume2015.md
     - VBA-Next: emulators/vba_next.md
-  - Embedded HLE (8):
+  - Embedded HLE (9):
     - 3dSen: emulators/3dsen.md
     - Altirra: emulators/altirra.md
     - Cxbx-Reloaded: emulators/cxbx-reloaded.md
     - DroidArcadia: emulators/droidarcadia.md
     - izapple2: emulators/izapple2.md
     - Lindbergh Loader: emulators/lindbergh-loader.md
+    - Linkboy: emulators/linkboy.md
     - MFME: emulators/mfme.md
     - PCSX-ReARMed: emulators/pcsx_rearmed.md
   - Launchers (3):
