@@ -793,6 +793,32 @@ class TestE2E(unittest.TestCase):
         path, status = resolve_local_file(entry, self.db)
         self.assertEqual(status, "hash_mismatch")
 
+    def test_07b_resolve_unsourceable_ignores_homonym(self):
+        """An unsourceable entry takes content, never a file of the same name."""
+        entry = {
+            "name": "wrong_hash.bin",
+            "md5": "ffffffffffffffffffffffffffffffff",
+            "unsourceable": "ships inside a paid application package",
+        }
+        path, status = resolve_local_file(entry, self.db)
+        self.assertIsNone(path)
+        self.assertEqual(status, "not_found")
+
+        entry = {"name": "no_md5.bin", "unsourceable": "written per title"}
+        path, status = resolve_local_file(entry, self.db)
+        self.assertIsNone(path)
+        self.assertEqual(status, "not_found")
+
+        # Collecting the real bytes still resolves it.
+        entry = {
+            "name": "present_req.bin",
+            "sha1": self.files["present_req.bin"]["sha1"],
+            "unsourceable": "ships inside a paid application package",
+        }
+        path, status = resolve_local_file(entry, self.db)
+        self.assertEqual(status, "sha1_exact")
+        self.assertIn("present_req.bin", path)
+
     def test_08_resolve_variants_deprioritized(self):
         entry = {"name": "present_req.bin"}
         path, status = resolve_local_file(entry, self.db)

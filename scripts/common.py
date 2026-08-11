@@ -680,7 +680,16 @@ def resolve_local_file(
             file_entry, files_db.get(match_sha1, {}).get("size")
         )
 
-    if not has_strong_hash:
+    # An entry the profile documents as unsourceable is one the collection
+    # cannot hold: a font that only exists inside a paid package, cheat codes
+    # written per title. A file answering to its name is therefore a homonym
+    # from another system, not a stale dump of the same file - kanji.rom names
+    # an FPseNG font, an openMSX one and a 3DO ROM. Content still decides: the
+    # hash and path steps above run first, so collecting the real bytes makes
+    # the entry resolve.
+    unsourceable = bool(file_entry.get("unsourceable"))
+
+    if not has_strong_hash and not unsourceable:
         candidates = []
         for try_name in names_to_try:
             for match_sha1 in by_name.get(try_name, []):
@@ -751,7 +760,7 @@ def resolve_local_file(
                 primary = [p for p, _ in valid if "/.variants/" not in p]
                 return (primary[0] if primary else valid[0][0]), "hash_mismatch"
             # No candidate contains the zipped_file -fall through to step 5
-        else:
+        elif not unsourceable:
             primary = [p for p, _ in candidates if "/.variants/" not in p]
             return (primary[0] if primary else candidates[0][0]), "hash_mismatch"
 
@@ -853,7 +862,7 @@ def resolve_local_file(
                             return candidate, status
                         data_dir_mismatch = data_dir_mismatch or candidate
 
-    if data_dir_mismatch:
+    if data_dir_mismatch and not unsourceable:
         return data_dir_mismatch, "hash_mismatch"
 
     # Agnostic fallback: for filename-agnostic files, find any DB file
