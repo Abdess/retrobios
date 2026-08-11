@@ -508,7 +508,7 @@ nav:
     - Triforce: emulators/triforce.md
     - xm6pro68k: emulators/xm6pro68k.md
     - xm6typeg: emulators/xm6typeg.md
-  - Frozen snapshots (33):
+  - Frozen snapshots (34):
     - bnes: emulators/bnes.md
     - bsnes 2014: emulators/bsnes2014.md
     - bsnes C++98: emulators/bsnes_cplusplus98.md
@@ -528,6 +528,7 @@ nav:
     - MAME 2010: emulators/mame2010.md
     - MAME 2015: emulators/mame2015.md
     - MAME 2016: emulators/mame2016.md
+    - MAME4droid (0.139u1): emulators/mame4droid.md
     - mednafen_gba: emulators/mednafen_gba.md
     - mednafen_snes: emulators/mednafen_snes.md
     - MESS 2015: emulators/mess2015.md
