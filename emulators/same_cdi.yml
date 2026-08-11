@@ -4,7 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/same_cdi"
 upstream: "https://github.com/mamedev/mame"
 profiled_date: "2026-03-25"
-source_commit: "7ee1d8e9cb4307b7cd44ee1dd757e9b3f48f41d5"
+source_commit: "8a3c2acdbeb57aea4e74aeadaa703fdc5c9c5de9"
 core_version: "Git"
 display_name: "Philips - CDi (SAME CDi)"
 cores: [same_cdi]
@@ -14,10 +14,10 @@ systems:
 notes: |
   SAME CDi is a Single Arcade Machine Emulator fork of MAME libretro, stripped
   down to just the Philips CD-i driver. The core hardcodes "cdimono1" as the
-  forced system (retro_init.cpp:86,454) and searches for MAME ROM ZIPs in:
+  forced system (src/osd/libretro/libretro-internal/retro_init.cpp:86,454) and searches for MAME ROM ZIPs in:
     <system_dir>/same_cdi/bios/
 
-  The ROM path (-rp) is built at retro_init.cpp:534 as:
+  The ROM path (-rp) is built at src/osd/libretro/libretro-internal/retro_init.cpp:534 as:
     <game_path>;<system_dir>/same_cdi/bios/
 
   MAME expects each romset as a ZIP containing the individual ROM files.
@@ -32,8 +32,8 @@ notes: |
 
   ROM definitions: src/mame/drivers/cdi.cpp:574-640.
   Quizard game ROMs: src/mame/drivers/cdi.cpp:662-820.
-  System forced: retro_init.cpp:86,454,525.
-  BIOS path: retro_init.cpp:534.
+  System forced: src/osd/libretro/libretro-internal/retro_init.cpp:86,454,525.
+  BIOS path: src/osd/libretro/libretro-internal/retro_init.cpp:534.
 
 files:
   - name: cdimono1.zip
@@ -42,7 +42,7 @@ files:
     system: cdi
     required: true
     note: "Forced system. Main CPU BIOS (3 region variants via MAME BIOS switch) + servo/slave MCU dumps."
-    source_ref: "src/mame/drivers/cdi.cpp:829-443"
+    source_ref: "src/mame/drivers/cdi.cpp:491"
     contents:
       - name: cdi200.rom
         description: Magnavox CD-i 200 BIOS (default, US)
@@ -76,7 +76,7 @@ files:
     system: cdi
     required: false
     note: "CD-i Mono-II (NTSC). MACHINE_NOT_WORKING. Listed in .info as optional."
-    source_ref: "src/mame/drivers/cdi.cpp:337-346"
+    source_ref: "src/mame/drivers/cdi.cpp:492"
     contents:
       - name: "philips__cdi-220_ph3_r1.2__mb834200b-15__02f_aa__9402_z04.tc574200-le._1.7211"
         description: Mono-II main CPU BIOS, Philips CDI-220 PH3 R1.2
@@ -94,37 +94,13 @@ files:
         crc32: "5b19da07"
         sha1: "cf02d84977050c71e87a38f1249e83c43a93949b"
 
-  - name: cdibios.zip
-    path: "same_cdi/bios/cdibios.zip"
-    category: bios_zip
-    system: cdi
-    required: false
-    note: "CD-i BIOS for Quizard arcade. MACHINE_IS_BIOS_ROOT. Subset of cdimono1 + slave MCU."
-    source_ref: "src/mame/drivers/cdi.cpp:836-640"
-    contents:
-      - name: cdi200.rom
-        description: Magnavox CD-i 200 BIOS (same as cdimono1)
-        size: 524288
-        crc32: "40c4e6b9"
-        sha1: "d961de803c89b3d1902d656ceb9ce7c02dccb40a"
-      - name: cdi220b.rom
-        description: Philips CD-i 220 F2 BIOS (same as cdimono1)
-        size: 524288
-        crc32: "279683ca"
-        sha1: "53360a1f21ddac952e95306ced64186a3fc0b93e"
-      - name: "zx405042p__cdi_slave_2.0__b43t__zzmk9213.mc68hc705c8a_withtestrom.7206"
-        description: Slave MCU 2.0 (BAD_DUMP, same as cdimono1)
-        size: 8192
-        crc32: "688cda63"
-        sha1: "56d0acd7caad51c7de703247cd6d842b36173079"
-
   - name: cdi910.zip
     path: "same_cdi/bios/cdi910.zip"
     category: bios_zip
     system: cdi
     required: false
     note: "CD-i 910-17P Mini-MMC (PAL). MACHINE_NOT_WORKING. Not in .info firmware list."
-    source_ref: "src/mame/drivers/cdi.cpp:831-335"
+    source_ref: "src/mame/drivers/cdi.cpp:493"
     contents:
       - name: "philips__cd-i_2.1__mb834200b-15__26b_aa__9224_z01.tc574200.7211"
         description: CD-i 910-17P Mini-MMC BIOS (default)
@@ -163,7 +139,7 @@ files:
     system: cdi
     required: false
     note: "CD-i 490. MACHINE_NOT_WORKING. Not in .info firmware list."
-    source_ref: "src/mame/drivers/cdi.cpp:474-482"
+    source_ref: "src/mame/drivers/cdi.cpp:494"
     contents:
       - name: cdi490a.rom
         description: CD-i 490 main CPU BIOS
@@ -191,4 +167,4 @@ platform_details:
     rom_path_flag: "-rp"
     rom_search_path: "<game_path>;<system_dir>/same_cdi/bios/"
     supported_extensions: ["chd", "iso", "cue"]
-    source_ref: "retro_init.cpp:86,454,525,534"
+    source_ref: "src/osd/libretro/libretro-internal/retro_init.cpp:86,454,525,534"
