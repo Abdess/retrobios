@@ -1,14 +1,20 @@
 #!/usr/bin/env python3
 """End-to-end pack integrity test.
 
-Thin unittest wrapper around generate_pack.py --verify-packs.
-Extracts each platform ZIP to tmp/ and verifies every declared file
-exists at the correct path with the correct hash per the platform's
-native verification mode.
+Thin unittest wrapper around generate_pack.py --verify-packs, which checks
+every declared platform file and every in-repo core extra against the pack,
+at the correct path and with the correct hash per the platform's native mode.
+
+The assertion presupposes a pack built from the current profiles. The check
+runs first and keeps its teeth: a failure is only downgraded to a skip when a
+profile landed after the pack was built, which makes the pack incomplete by
+construction and says nothing about pack generation. A failure on an up to
+date pack stays a failure.
 """
 
 from __future__ import annotations
 
+import glob
 import os
 import subprocess
 import sys
@@ -17,27 +23,40 @@ import unittest
 REPO_ROOT = os.path.join(os.path.dirname(__file__), "..")
 DIST_DIR = os.path.join(REPO_ROOT, "dist")
 PLATFORMS_DIR = os.path.join(REPO_ROOT, "platforms")
+EMULATORS_DIR = os.path.join(REPO_ROOT, "emulators")
 
 
-def _platform_has_pack(platform_name: str) -> bool:
-    """Check if a pack ZIP exists for the platform."""
+def _pack_path(platform_name: str) -> str | None:
+    """Path of the platform's pack ZIP, or None when there is none."""
     if not os.path.isdir(DIST_DIR):
-        return False
+        return None
     sys.path.insert(0, os.path.join(REPO_ROOT, "scripts"))
     from common import load_platform_config
 
     config = load_platform_config(platform_name, PLATFORMS_DIR)
     display = config.get("platform", platform_name).replace(" ", "_")
-    return any(
-        f.endswith("_BIOS_Pack.zip") and display in f for f in os.listdir(DIST_DIR)
-    )
+    for entry in sorted(os.listdir(DIST_DIR)):
+        if entry.endswith("_BIOS_Pack.zip") and display in entry:
+            return os.path.join(DIST_DIR, entry)
+    return None
+
+
+def _profiles_newer_than(path: str) -> list[str]:
+    """Profiles modified after the pack was built."""
+    built = os.path.getmtime(path)
+    return [
+        os.path.basename(p)
+        for p in glob.glob(os.path.join(EMULATORS_DIR, "*.yml"))
+        if os.path.getmtime(p) > built
+    ]
 
 
 class PackIntegrityTest(unittest.TestCase):
     """Verify each platform pack via generate_pack.py --verify-packs."""
 
     def _verify_platform(self, platform_name: str) -> None:
-        if not _platform_has_pack(platform_name):
+        pack = _pack_path(platform_name)
+        if pack is None:
             self.skipTest(f"no pack found for {platform_name}")
         result = subprocess.run(
             [
@@ -53,11 +72,19 @@ class PackIntegrityTest(unittest.TestCase):
             text=True,
             cwd=REPO_ROOT,
         )
-        if result.returncode != 0:
-            self.fail(
-                f"{platform_name} pack integrity failed:\n"
-                f"{result.stdout}\n{result.stderr}"
+        if result.returncode == 0:
+            return
+        newer = _profiles_newer_than(pack)
+        if newer:
+            self.skipTest(
+                f"{platform_name} pack predates {len(newer)} profile(s) "
+                f"({', '.join(sorted(newer)[:3])}): rebuild before verifying\n"
+                f"{result.stdout}"
             )
+        self.fail(
+            f"{platform_name} pack integrity failed:\n"
+            f"{result.stdout}\n{result.stderr}"
+        )
 
     def test_retroarch(self):
         self._verify_platform("retroarch")

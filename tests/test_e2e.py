@@ -5659,6 +5659,32 @@ struct BurnDriver BurnDrvneogeo = {
         )
         self.assertTrue(checked.issubset(self._names_in(out)))
 
+    def test_verify_pack_return_matches_its_annotation(self):
+        import inspect
+        import typing
+
+        from generate_pack import generate_pack, verify_pack_against_platform
+
+        self._create_region_fixtures()
+        profiles = self._region_profiles()
+        out = generate_pack(
+            "regionplat",
+            self.platforms_dir,
+            self.db,
+            self.bios_dir,
+            self.root,
+            emu_profiles=profiles,
+        )
+        result = verify_pack_against_platform(
+            out, "regionplat", self.platforms_dir, db=self.db, emu_profiles=profiles
+        )
+        annotated = typing.get_args(
+            inspect.signature(
+                verify_pack_against_platform, eval_str=True
+            ).return_annotation
+        )
+        self.assertEqual(len(result), len(annotated))
+
     def test_narrowed_variants_skip_conformance(self):
         from generate_pack import _narrows_contents
 

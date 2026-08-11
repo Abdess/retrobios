@@ -50,7 +50,6 @@ from common import (
     require_yaml,
     resolution_is_hash_exact,
     resolve_local_file,
-    safe_extract_zip,
     yaml_load,
 )
 import region as region_mod
@@ -2821,9 +2820,13 @@ def _pack_output_lock(output_dir: str, exclusive: bool = True):
 
 
 def _run_verify_packs(args):
-    """Extract each pack and verify file paths + hashes."""
-    import shutil
+    """Verify each pack in the output directory against its platform.
 
+    Delegates to verify_pack_against_platform so the command answers the same
+    question the pipeline asks: baseline files, core extras and structure. A
+    second implementation here answered a narrower one and reported OK while
+    the core extras went unchecked.
+    """
     with open(args.db) as f:
         verify_db = json.load(f)
 
@@ -2837,226 +2840,50 @@ def _run_verify_packs(args):
     all_ok = True
     verify_regions = getattr(args, "regions", None)
     verify_profiles = load_emulator_profiles(args.emulators_dir)
-    verify_zip_contents = build_zip_contents_index(verify_db)
     verify_data_registry = load_data_dir_registry(args.platforms_dir)
+
     for platform_name in platforms:
         config = load_platform_config(platform_name, args.platforms_dir)
         display = config.get("platform", platform_name).replace(" ", "_")
-        base_dest = config.get("base_destination", "")
-        mode = config.get("verification_mode", "existence")
-        systems = config.get("systems", {})
 
-        # Find ZIP
         zip_path = None
         if os.path.isdir(args.output_dir):
-            for f in os.listdir(args.output_dir):
-                if f.endswith("_BIOS_Pack.zip") and display in f:
-                    zip_path = os.path.join(args.output_dir, f)
+            for entry in sorted(os.listdir(args.output_dir)):
+                if entry.endswith("_BIOS_Pack.zip") and display in entry:
+                    zip_path = os.path.join(args.output_dir, entry)
                     break
         if not zip_path:
             print(f"  {platform_name}: SKIP (no pack in {args.output_dir})")
             continue
 
-        # Detect source from ZIP filename
-        pack_source = "full"
-        if zip_path:
-            bn = os.path.basename(zip_path)
-            if "_Platform_" in bn:
-                pack_source = "platform"
-            elif "_Truth_" in bn:
-                pack_source = "truth"
-
-        if pack_source == "truth":
-            print(f"  {platform_name}: OK (truth pack, verified by hash integrity)")
+        if _narrows_contents(os.path.basename(zip_path)):
+            print(f"  {platform_name}: SKIP (narrowed variant)")
             continue
 
-        extract_dir = os.path.join("tmp", "verify_packs", platform_name)
-        os.makedirs(extract_dir, exist_ok=True)
-        try:
-            # Extract
-            safe_extract_zip(zip_path, extract_dir)
-
-            # Auto-detect flat vs nested extraction
-            is_flat = bool(base_dest) and not os.path.isdir(
-                os.path.join(extract_dir, base_dest)
-            )
-
-            region_drops: set[str] = set()
-            if verify_regions:
-                region_index = region_mod.build_region_index(verify_profiles)
-                region_groups: dict[str, list[tuple[str, str]]] = {}
-                for sys_id, sys_data in systems.items():
-                    members = region_groups.setdefault(sys_id, [])
-                    for fe in sys_data.get("files", []):
-                        d = _sanitize_path(
-                            fe.get("destination", fe.get("name", ""))
-                        )
-                        if d:
-                            members.append((d, fe.get("name", "")))
-                # Core extras join the groups so a platform file dropped in
-                # favour of a better-ranked core file is not reported missing.
-                from verify import find_undeclared_files as _fud
-
-                for u in _fud(
-                    config, args.emulators_dir, verify_db, verify_profiles
-                ):
-                    if not u.get("in_repo"):
-                        continue
-                    raw = u.get("path") or u["name"]
-                    d = _sanitize_path(
-                        f"{raw}{u['name']}" if raw.endswith("/") else raw
-                    )
-                    if not d:
-                        continue
-                    systems_for_extra = (
-                        [u["system"]] if u.get("system") else u.get("systems", [])
-                    ) or ["_extras"]
-                    for sid in systems_for_extra:
-                        variant = u.get("variant_group")
-                        group_id = f"{sid}:variant:{variant}" if variant else sid
-                        region_groups.setdefault(group_id, []).append((d, u["name"]))
-                region_drops = region_mod.resolve_region_drops(
-                    region_groups, region_index, verify_regions
-                )
-
-            missing = []
-            hash_fail = []
-            excluded = []
-            ok = 0
-            for sys_id, sys_data in systems.items():
-                for fe in sys_data.get("files", []):
-                    dest = fe.get("destination", fe.get("name", ""))
-                    if not dest:
-                        continue
-                    if region_drops and _sanitize_path(dest) in region_drops:
-                        continue
-                    fp = (
-                        os.path.join(extract_dir, base_dest, dest)
-                        if base_dest and not is_flat
-                        else os.path.join(extract_dir, dest)
-                    )
-                    # Case-insensitive fallback
-                    if not os.path.exists(fp):
-                        parent = os.path.dirname(fp)
-                        bn = os.path.basename(fp)
-                        if os.path.isdir(parent):
-                            for e in os.listdir(parent):
-                                if e.lower() == bn.lower():
-                                    fp = os.path.join(parent, e)
-                                    break
-                    if not os.path.exists(fp):
-                        # File-vs-directory conflict: upstream declares both
-                        # SGB1.sfc and SGB1.sfc/program.rom; the builder can
-                        # only ship one shape, the other was skipped
-                        ancestor = os.path.dirname(fp)
-                        conflicted = False
-                        while len(ancestor) > len(extract_dir):
-                            if os.path.isfile(ancestor):
-                                conflicted = True
-                                break
-                            ancestor = os.path.dirname(ancestor)
-                        if conflicted or os.path.isdir(fp):
-                            ok += 1
-                            continue
-                        if _intentional_hash_exclusion(
-                            [fe],
-                            verify_db,
-                            args.bios_dir,
-                            verify_zip_contents,
-                            data_dir_registry=verify_data_registry,
-                            verification_mode=mode,
-                        ):
-                            excluded.append(f"{sys_id}: {dest}")
-                            continue
-                        missing.append(f"{sys_id}: {dest}")
-                        continue
-                    if mode == "existence":
-                        ok += 1
-                        continue
-                    if mode == "sha1":
-                        expected = fe.get("sha1", "")
-                        if not expected:
-                            ok += 1
-                            continue
-                        with open(fp, "rb") as source:
-                            actual = hashlib.sha1(source.read()).hexdigest()
-                        if actual == expected.lower():
-                            ok += 1
-                        else:
-                            hash_fail.append(f"{sys_id}: {dest}")
-                        continue
-                    # MD5
-                    expected_md5 = fe.get("md5", "")
-                    if not expected_md5:
-                        ok += 1
-                        continue
-                    md5_list = [
-                        m.strip().lower() for m in expected_md5.split(",") if m.strip()
-                    ]
-                    with open(fp, "rb") as source:
-                        actual_md5 = hashlib.md5(source.read()).hexdigest()
-                    if actual_md5 in md5_list or any(
-                        actual_md5.startswith(m) for m in md5_list if len(m) < 32
-                    ):
-                        ok += 1
-                        continue
-                    # ZIP inner content
-                    if fp.endswith(".zip"):
-                        ok += 1  # inner content verified by verify.py
-                        continue
-                    # Path collision
-                    bn = os.path.basename(dest)
-                    collision = (
-                        sum(
-                            1
-                            for sd in systems.values()
-                            for ff in sd.get("files", [])
-                            if os.path.basename(
-                                ff.get("destination", ff.get("name", "")) or ""
-                            )
-                            == bn
-                        )
-                        > 1
-                    )
-                    if collision:
-                        ok += 1
-                    elif not _repo_satisfies_declaration([fe], verify_db, "md5"):
-                        # No repo file matches the declared hash: shipped file
-                        # is the best effort, the gap is a data issue reported
-                        # by verify.py, not a pack error
-                        ok += 1
-                    else:
-                        hash_fail.append(f"{sys_id}: {dest}")
-
-            total = sum(
-                len(
-                    [
-                        f
-                        for f in s.get("files", [])
-                        if f.get("destination", f.get("name", ""))
-                    ]
-                )
-                for s in systems.values()
-            )
-            if missing or hash_fail:
-                print(
-                    f"  {platform_name}: FAIL ({len(missing)} missing, {len(hash_fail)} hash errors / {total})"
-                )
-                for m in missing[:5]:
-                    print(f"    MISSING: {m}")
-                for h in hash_fail[:5]:
-                    print(f"    HASH: {h}")
-                all_ok = False
-            else:
-                exclusion_note = (
-                    f", {len(excluded)} unsafe excluded" if excluded else ""
-                )
-                print(
-                    f"  {platform_name}: OK ({ok}/{total} verified"
-                    f"{exclusion_note})"
-                )
-        finally:
-            shutil.rmtree(extract_dir, ignore_errors=True)
+        result = verify_pack_against_platform(
+            zip_path,
+            platform_name,
+            args.platforms_dir,
+            db=verify_db,
+            emulators_dir=args.emulators_dir,
+            emu_profiles=verify_profiles,
+            regions=verify_regions,
+            data_registry=verify_data_registry,
+        )
+        ok, errors = result[0], result[3]
+        bl_checked, bl_present = result[4], result[5]
+        core_checked, core_present = result[6], result[7]
+        counts = (
+            f"{bl_present}/{bl_checked} baseline, "
+            f"{core_present}/{core_checked} cores"
+        )
+        if ok:
+            print(f"  {platform_name}: OK ({counts})")
+        else:
+            print(f"  {platform_name}: FAIL ({counts}, {len(errors)} errors)")
+            for err in errors[:5]:
+                print(f"    {err}")
+            all_ok = False
 
     if not all_ok:
         sys.exit(1)
@@ -4293,7 +4120,7 @@ def verify_pack_against_platform(
     emu_profiles: dict | None = None,
     regions: list[str] | None = None,
     data_registry: dict | None = None,
-) -> tuple[bool, int, int, list[str], int, int, int, int, int, int]:
+) -> tuple[bool, int, int, list[str], int, int, int, int, int]:
     """Verify a pack ZIP against its platform config and core requirements.
 
     A region priority list narrows the expectation to what the builder would
