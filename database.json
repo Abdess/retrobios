@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-11T17:38:39Z",
-  "total_files": 8712,
-  "total_size": 11156963773,
+  "generated_at": "2026-08-11T17:40:12Z",
+  "total_files": 8714,
+  "total_size": 11158410956,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -54327,6 +54327,16 @@
       "crc32": "617a44b1",
       "adler32": "719eceaf"
     },
+    "8337c8056455aa25a4c2f14e53ae7e5e704d4f16": {
+      "path": "bios/Other/xm6pro68k/7z.dll",
+      "name": "7z.dll",
+      "size": 1316352,
+      "sha1": "8337c8056455aa25a4c2f14e53ae7e5e704d4f16",
+      "md5": "f4b552eb3044399c4ff98d7a5d143c34",
+      "sha256": "afffcf0732bf096aee18d2ab6363df21f53ebc053412747d64bdb6ff8e56ecf0",
+      "crc32": "9b897adc",
+      "adler32": "71685101"
+    },
     "239e9124568c862c31d9ec0605e32373ea74b86a": {
       "path": "bios/Other/xm6pro68k/ROM30.DAT",
       "name": "ROM30.DAT",
@@ -54346,6 +54356,16 @@
       "sha256": "4faa90296e5db006eda5ebe4b6c78fc154c8c52e65236f43e67419b915b695fe",
       "crc32": "1c6c889e",
       "adler32": "e365c537"
+    },
+    "697f3d391f013adbb27dd767a6b956c3b32229b6": {
+      "path": "bios/Other/xm6pro68k/zlib1.dll",
+      "name": "zlib1.dll",
+      "size": 130831,
+      "sha1": "697f3d391f013adbb27dd767a6b956c3b32229b6",
+      "md5": "f01041b029b10850c448e82e3fe55433",
+      "sha256": "52793f33a3dc8a9a57212ae7c98fef6dfbeea89b03149b84d014677ecd59d5dc",
+      "crc32": "e66a31bd",
+      "adler32": "9828524c"
     },
     "77f8f4b3f7ceaa2b30c4ff609822078a3a6452de": {
       "path": "bios/Other/xm6typeg/X68Sound.dll",
@@ -97313,8 +97333,10 @@
       "46075cd0c8c4a477081d2b302d42a257": "284743af8343e7b512b2c442c3d32b23e5112ee0",
       "8208d493370451238dcf187a5ad9e633": "e5b4d84841f54ee9517ae390b9dd6b28892f0387",
       "486f81facf798678c3244c7cf35a557f": "21ce0ee54bff57f69fafa741025bf2f15b356405",
+      "f4b552eb3044399c4ff98d7a5d143c34": "8337c8056455aa25a4c2f14e53ae7e5e704d4f16",
       "f373003710ab4322642f527f567e020a": "239e9124568c862c31d9ec0605e32373ea74b86a",
       "47404fbb2e36b82c2abdefb3a9128487": "3f063d4231cdf53da6adc4db96533725e260076a",
+      "f01041b029b10850c448e82e3fe55433": "697f3d391f013adbb27dd767a6b956c3b32229b6",
       "1793f23792f615b211afb66cabfc41b6": "77f8f4b3f7ceaa2b30c4ff609822078a3a6452de",
       "6fe54c51eee2aaa078fb3f399ba66f51": "2f6de2169be341f00b3be2dd623a24fb0f987eaf",
       "a471e64e9f69afbe59c10cc94ed1b184": "ecfc092fe6371dbf38e238a8ba5f90785b5db52d",
@@ -115472,11 +115494,17 @@
       "vc_redist.x64.exe": [
         "21ce0ee54bff57f69fafa741025bf2f15b356405"
       ],
+      "7z.dll": [
+        "8337c8056455aa25a4c2f14e53ae7e5e704d4f16"
+      ],
       "ROM30.DAT": [
         "239e9124568c862c31d9ec0605e32373ea74b86a"
       ],
       "SCSIINROM.DAT": [
         "3f063d4231cdf53da6adc4db96533725e260076a"
+      ],
+      "zlib1.dll": [
+        "697f3d391f013adbb27dd767a6b956c3b32229b6"
       ],
       "X68Sound.dll": [
         "77f8f4b3f7ceaa2b30c4ff609822078a3a6452de"
@@ -134041,8 +134069,10 @@
       "56729550": "284743af8343e7b512b2c442c3d32b23e5112ee0",
       "3f63f47b": "e5b4d84841f54ee9517ae390b9dd6b28892f0387",
       "617a44b1": "21ce0ee54bff57f69fafa741025bf2f15b356405",
+      "9b897adc": "8337c8056455aa25a4c2f14e53ae7e5e704d4f16",
       "e8f8fdad": "239e9124568c862c31d9ec0605e32373ea74b86a",
       "1c6c889e": "3f063d4231cdf53da6adc4db96533725e260076a",
+      "e66a31bd": "697f3d391f013adbb27dd767a6b956c3b32229b6",
       "e3447530": "77f8f4b3f7ceaa2b30c4ff609822078a3a6452de",
       "89b8cec7": "2f6de2169be341f00b3be2dd623a24fb0f987eaf",
       "74b76447": "ecfc092fe6371dbf38e238a8ba5f90785b5db52d",
@@ -142755,8 +142785,10 @@
       "9a5100511e127c6a2fc78edf984f95074a76d35b90c90c4d342430a5ae160e9b": "284743af8343e7b512b2c442c3d32b23e5112ee0",
       "feb57253eff0a622561e29b44cedbe86b89fc9a5bc8dc00fa2f98fafd712c2d8": "e5b4d84841f54ee9517ae390b9dd6b28892f0387",
       "cc0ff0eb1dc3f5188ae6300faef32bf5beeba4bdd6e8e445a9184072096b713b": "21ce0ee54bff57f69fafa741025bf2f15b356405",
+      "afffcf0732bf096aee18d2ab6363df21f53ebc053412747d64bdb6ff8e56ecf0": "8337c8056455aa25a4c2f14e53ae7e5e704d4f16",
       "bdba942ab9c633a3172fbf1a8579849df52c0eeb0da8a3411402f4564d035a27": "239e9124568c862c31d9ec0605e32373ea74b86a",
       "4faa90296e5db006eda5ebe4b6c78fc154c8c52e65236f43e67419b915b695fe": "3f063d4231cdf53da6adc4db96533725e260076a",
+      "52793f33a3dc8a9a57212ae7c98fef6dfbeea89b03149b84d014677ecd59d5dc": "697f3d391f013adbb27dd767a6b956c3b32229b6",
       "f523e23d03e44b3a75b29986fcda65b2b9e71187fe9f20fd701908c9c63b42d6": "77f8f4b3f7ceaa2b30c4ff609822078a3a6452de",
       "73a9ef40bce4fa800eea3a05b794a03513cdddb2cb4d9605e40d421dabe62ce0": "2f6de2169be341f00b3be2dd623a24fb0f987eaf",
       "2a86458696e83eb924fc6c6fda3ca5d320ca90885bd6c2f32d121757ade389bb": "ecfc092fe6371dbf38e238a8ba5f90785b5db52d",
