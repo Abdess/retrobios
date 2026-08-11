@@ -1,0 +1,12 @@
+!!ARBvp1.0
+
+OPTION ARB_position_invariant;
+
+PARAM	offset = program.env[1];
+
+MAD result.texcoord[ 0 ], offset.xyxy, {-0.5,-0.5,-1.5,-1.5}, vertex.texcoord[0].xyxy;
+MAD result.texcoord[ 1 ], offset.xyxy, { 0.5,-0.5, 1.5,-1.5}, vertex.texcoord[0].xyxy;
+MAD result.texcoord[ 2 ], offset.xyxy, {-0.5, 0.5,-1.5, 1.5}, vertex.texcoord[0].xyxy;
+MAD result.texcoord[ 3 ], offset.xyxy, { 0.5, 0.5, 1.5, 1.5}, vertex.texcoord[0].xyxy;
+
+END

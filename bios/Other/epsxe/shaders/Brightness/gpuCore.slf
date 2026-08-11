@@ -1,0 +1,162 @@
+#ifdef GL_ES
+precision mediump float;
+#endif
+
+//#define BR1
+#define BR2
+//#define BR3
+
+varying vec2 v_texCoord;
+uniform sampler2D Frame;
+
+void br3(in vec4 natural, out vec4 fragcolor) {
+int LUT[33];
+LUT[0] = 0;
+LUT[1] = 2;
+LUT[2] = 4;
+LUT[3] = 6;
+LUT[4] = 8;
+LUT[5] = 10;
+LUT[6] = 12;
+LUT[7] = 14;
+LUT[8] = 16;
+LUT[9] = 17;
+LUT[10] = 17;
+LUT[11] = 18;
+LUT[12] = 19;
+LUT[13] = 19;
+LUT[14] = 20;
+LUT[15] = 21;
+LUT[16] = 21;
+LUT[17] = 22;
+LUT[18] = 23;
+LUT[19] = 23;
+LUT[20] = 24;
+LUT[21] = 25;
+LUT[22] = 25;
+LUT[23] = 26;
+LUT[24] = 27;
+LUT[25] = 27;
+LUT[26] = 28;
+LUT[27] = 29;
+LUT[28] = 29;
+LUT[29] = 30;
+LUT[30] = 30;
+LUT[31] = 31;
+LUT[32] = 31;
+
+vec4 rgb16 = natural * vec4(31.0, 31.0, 31.0, 1.0);
+rgb16.r = float(LUT[int(rgb16.r)])+float(LUT[int(rgb16.r)+1]-LUT[int(rgb16.r)])*fract(rgb16.r);
+rgb16.g = float(LUT[int(rgb16.g)])+float(LUT[int(rgb16.g)+1]-LUT[int(rgb16.g)])*fract(rgb16.g);
+rgb16.b = float(LUT[int(rgb16.b)])+float(LUT[int(rgb16.b)+1]-LUT[int(rgb16.b)])*fract(rgb16.b);
+fragcolor = rgb16 / vec4(31.0,31.0,31.0,1.0);
+}
+
+void br2(in vec4 natural, out vec4 fragcolor) {
+int LUT[33];
+LUT[0] = 0;
+LUT[1] = 2;
+LUT[2] = 4;
+LUT[3] = 6;
+LUT[4] = 8;
+LUT[5] = 10;
+LUT[6] = 11;
+LUT[7] = 12;
+LUT[8] = 13;
+LUT[9] = 14;
+LUT[10] = 15;
+LUT[11] = 16;
+LUT[12] = 17;
+LUT[13] = 18;
+LUT[14] = 19;
+LUT[15] = 19;
+LUT[16] = 20;
+LUT[17] = 21;
+LUT[18] = 22;
+LUT[19] = 22;
+LUT[20] = 23;
+LUT[21] = 24;
+LUT[22] = 25;
+LUT[23] = 25;
+LUT[24] = 26;
+LUT[25] = 27;
+LUT[26] = 28;
+LUT[27] = 28;
+LUT[28] = 29;
+LUT[29] = 30;
+LUT[30] = 30;
+LUT[31] = 31;
+LUT[32] = 31;
+
+vec4 rgb16 = natural * vec4(31.0, 31.0, 31.0, 1.0);
+rgb16.r = float(LUT[int(rgb16.r)])+float(LUT[int(rgb16.r)+1]-LUT[int(rgb16.r)])*fract(rgb16.r);
+rgb16.g = float(LUT[int(rgb16.g)])+float(LUT[int(rgb16.g)+1]-LUT[int(rgb16.g)])*fract(rgb16.g);
+rgb16.b = float(LUT[int(rgb16.b)])+float(LUT[int(rgb16.b)+1]-LUT[int(rgb16.b)])*fract(rgb16.b);
+fragcolor = rgb16 / vec4(31.0,31.0,31.0,1.0);
+}
+
+void br1(in vec4 natural, out vec4 fragcolor) {
+int LUT[33];
+LUT[0] = 0;
+LUT[1] = 2;
+LUT[2] = 4;
+LUT[3] = 5;
+LUT[4] = 7;
+LUT[5] = 8;
+LUT[6] = 9;
+LUT[7] = 10;
+LUT[8] = 11;
+LUT[9] = 12;
+LUT[10] = 13;
+LUT[11] = 14;
+LUT[12] = 15;
+LUT[13] = 16;
+LUT[14] = 17;
+LUT[15] = 17;
+LUT[16] = 18;
+LUT[17] = 19;
+LUT[18] = 20;
+LUT[19] = 21;
+LUT[20] = 22;
+LUT[21] = 23;
+LUT[22] = 24;
+LUT[23] = 24;
+LUT[24] = 25;
+LUT[25] = 26;
+LUT[26] = 27;
+LUT[27] = 28;
+LUT[28] = 29;
+LUT[29] = 30;
+LUT[30] = 30;
+LUT[31] = 31;
+LUT[32] = 31;
+
+vec4 rgb16 = natural * vec4(31.0, 31.0, 31.0, 1.0);
+rgb16.r = float(LUT[int(rgb16.r)])+float(LUT[int(rgb16.r)+1]-LUT[int(rgb16.r)])*fract(rgb16.r);
+rgb16.g = float(LUT[int(rgb16.g)])+float(LUT[int(rgb16.g)+1]-LUT[int(rgb16.g)])*fract(rgb16.g);
+rgb16.b = float(LUT[int(rgb16.b)])+float(LUT[int(rgb16.b)+1]-LUT[int(rgb16.b)])*fract(rgb16.b);
+fragcolor = rgb16 / vec4(31.0,31.0,31.0,1.0);
+}
+
+
+void main()
+{
+    vec4 natural = texture2D(Frame, v_texCoord);
+    vec4 rgb32 = natural;
+
+#ifdef BR1
+   br1(natural,rgb32);
+#else
+#ifdef BR2
+   br2(natural, rgb32);
+#else
+#ifdef BR3
+   br3(natural, rgb32);
+#endif
+#endif
+#endif
+
+    gl_FragColor = rgb32;
+}
+
+

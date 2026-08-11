@@ -1,0 +1,437 @@
+/*
+   Hyllian's 5xBR v3.5a Shader
+   
+   Copyright (C) 2011 Hyllian/Jararaca - sergiogdb@gmail.com
+
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+*/
+
+#ifdef GL_ES
+precision mediump float;
+#endif
+
+varying vec2 v_texCoord;
+
+vec4 _ret_0;
+vec3 _TMP46;
+vec3 _TMP48;
+vec3 _TMP50;
+vec3 _TMP52;
+vec3 _TMP53;
+vec3 _TMP51;
+vec3 _TMP49;
+vec3 _TMP47;
+vec4 _TMP39;
+vec4 _TMP38;
+bvec4 _TMP37;
+bvec4 _TMP36;
+bvec4 _TMP35;
+bvec4 _TMP34;
+bvec4 _TMP33;
+bvec4 _TMP32;
+bvec4 _TMP31;
+bvec4 _TMP30;
+bvec4 _TMP29;
+bvec4 _TMP28;
+bvec4 _TMP27;
+float _TMP60;
+vec4 _TMP20;
+vec4 _TMP19;
+vec4 _TMP18;
+vec4 _TMP17;
+vec4 _TMP16;
+vec4 _TMP15;
+vec4 _TMP14;
+vec4 _TMP13;
+vec4 _TMP12;
+vec4 _TMP11;
+vec4 _TMP10;
+vec4 _TMP9;
+vec4 _TMP8;
+vec4 _TMP7;
+vec4 _TMP6;
+vec4 _TMP5;
+vec4 _TMP4;
+vec4 _TMP3;
+vec4 _TMP2;
+vec4 _TMP1;
+vec4 _TMP0;
+uniform sampler2D Sample;
+vec2 _x0074;
+vec2 _c0076;
+vec2 _c0078;
+vec2 _c0080;
+vec2 _c0082;
+vec2 _c0086;
+vec2 _c0088;
+vec2 _c0090;
+vec2 _c0092;
+vec2 _c0094;
+vec2 _c0096;
+vec2 _c0098;
+vec2 _c0100;
+vec2 _c0102;
+vec2 _c0104;
+vec2 _c0106;
+vec2 _c0108;
+vec2 _c0110;
+vec2 _c0112;
+vec2 _c0114;
+vec2 _c0116;
+vec4 _r0118;
+vec4 _r0128;
+vec4 _r0138;
+vec4 _r0148;
+vec4 _r0158;
+vec4 _r0168;
+vec4 _TMP179;
+vec4 _a0182;
+vec4 _TMP185;
+vec4 _a0188;
+vec4 _TMP191;
+vec4 _a0194;
+vec4 _TMP197;
+vec4 _a0200;
+vec4 _TMP203;
+vec4 _a0206;
+vec4 _TMP209;
+vec4 _a0212;
+vec4 _TMP215;
+vec4 _a0218;
+vec4 _TMP221;
+vec4 _a0224;
+vec4 _TMP227;
+vec4 _a0230;
+vec4 _TMP233;
+vec4 _a0236;
+vec4 _TMP239;
+vec4 _a0242;
+vec4 _TMP245;
+vec4 _a0248;
+vec4 _TMP249;
+vec4 _a0252;
+vec4 _TMP253;
+vec4 _a0256;
+vec4 _TMP257;
+vec4 _a0260;
+vec4 _TMP261;
+vec4 _a0264;
+vec4 _TMP267;
+vec4 _a0270;
+vec4 _TMP271;
+vec4 _a0274;
+vec4 _TMP275;
+vec4 _a0278;
+vec4 _TMP279;
+vec4 _a0282;
+vec4 _TMP283;
+vec4 _a0286;
+vec4 _TMP287;
+vec4 _a0290;
+vec4 _TMP291;
+vec4 _a0294;
+vec4 _TMP295;
+vec4 _a0298;
+vec4 _TMP299;
+vec4 _a0302;
+vec4 _TMP303;
+vec4 _a0306;
+vec4 _TMP307;
+vec4 _a0310;
+
+void main()
+{
+
+    bvec4 _edr;
+    bvec4 _edr_left;
+    bvec4 _edr_up;
+    bvec4 _px;
+    bvec4 _interp_restriction_lv1;
+    bvec4 _interp_restriction_lv2_left;
+    bvec4 _interp_restriction_lv2_up;
+    bvec4 _nc;
+    bvec4 _fx;
+    bvec4 _fx_left;
+    bvec4 _fx_up;
+    vec2 _fp;
+    vec3 _A2;
+    vec3 _B2;
+    vec3 _C;
+    vec3 _D;
+    vec3 _E;
+    vec3 _F;
+    vec3 _G;
+    vec3 _H;
+    vec3 _I;
+    vec3 _A11;
+    vec3 _C1;
+    vec3 _A0;
+    vec3 _G0;
+    vec3 _C4;
+    vec3 _I4;
+    vec3 _G5;
+    vec3 _I5;
+    vec3 _B11;
+    vec3 _D0;
+    vec3 _H5;
+    vec3 _F4;
+    vec4 _b1;
+    vec4 _c1;
+    vec4 _e1;
+    vec4 _i4;
+    vec4 _i5;
+    vec4 _h5;
+
+    _x0074 = v_texCoord.xy*vec2( 1.02400000E+003, 5.12000000E+002);
+    _fp = fract(_x0074);
+    _c0076 = (v_texCoord.xy - vec2( 9.76562500E-004, 0.00000000E+000)) - vec2( 0.00000000E+000, 1.95312500E-003);
+    _TMP0 = texture2D(Sample, _c0076);
+    _A2 = vec3(float(_TMP0.x), float(_TMP0.y), float(_TMP0.z));
+    _c0078 = v_texCoord.xy - vec2( 0.00000000E+000, 1.95312500E-003);
+    _TMP1 = texture2D(Sample, _c0078);
+    _B2 = vec3(float(_TMP1.x), float(_TMP1.y), float(_TMP1.z));
+    _c0080 = (v_texCoord.xy + vec2( 9.76562500E-004, 0.00000000E+000)) - vec2( 0.00000000E+000, 1.95312500E-003);
+    _TMP2 = texture2D(Sample, _c0080);
+    _C = vec3(float(_TMP2.x), float(_TMP2.y), float(_TMP2.z));
+    _c0082 = v_texCoord.xy - vec2( 9.76562500E-004, 0.00000000E+000);
+    _TMP3 = texture2D(Sample, _c0082);
+    _D = vec3(float(_TMP3.x), float(_TMP3.y), float(_TMP3.z));
+    _TMP4 = texture2D(Sample, v_texCoord.xy);
+    _E = vec3(float(_TMP4.x), float(_TMP4.y), float(_TMP4.z));
+    _c0086 = v_texCoord.xy + vec2( 9.76562500E-004, 0.00000000E+000);
+    _TMP5 = texture2D(Sample, _c0086);
+    _F = vec3(float(_TMP5.x), float(_TMP5.y), float(_TMP5.z));
+    _c0088 = (v_texCoord.xy - vec2( 9.76562500E-004, 0.00000000E+000)) + vec2( 0.00000000E+000, 1.95312500E-003);
+    _TMP6 = texture2D(Sample, _c0088);
+    _G = vec3(float(_TMP6.x), float(_TMP6.y), float(_TMP6.z));
+    _c0090 = v_texCoord.xy + vec2( 0.00000000E+000, 1.95312500E-003);
+    _TMP7 = texture2D(Sample, _c0090);
+    _H = vec3(float(_TMP7.x), float(_TMP7.y), float(_TMP7.z));
+    _c0092 = v_texCoord.xy + vec2( 9.76562500E-004, 0.00000000E+000) + vec2( 0.00000000E+000, 1.95312500E-003);
+    _TMP8 = texture2D(Sample, _c0092);
+    _I = vec3(float(_TMP8.x), float(_TMP8.y), float(_TMP8.z));
+    _c0094 = (v_texCoord.xy - vec2( 9.76562500E-004, 0.00000000E+000)) - vec2( 0.00000000E+000, 3.90625000E-003);
+    _TMP9 = texture2D(Sample, _c0094);
+    _A11 = vec3(float(_TMP9.x), float(_TMP9.y), float(_TMP9.z));
+    _c0096 = (v_texCoord.xy + vec2( 9.76562500E-004, 0.00000000E+000)) - vec2( 0.00000000E+000, 3.90625000E-003);
+    _TMP10 = texture2D(Sample, _c0096);
+    _C1 = vec3(float(_TMP10.x), float(_TMP10.y), float(_TMP10.z));
+    _c0098 = (v_texCoord.xy - vec2( 1.95312500E-003, 0.00000000E+000)) - vec2( 0.00000000E+000, 1.95312500E-003);
+    _TMP11 = texture2D(Sample, _c0098);
+    _A0 = vec3(float(_TMP11.x), float(_TMP11.y), float(_TMP11.z));
+    _c0100 = (v_texCoord.xy - vec2( 1.95312500E-003, 0.00000000E+000)) + vec2( 0.00000000E+000, 1.95312500E-003);
+    _TMP12 = texture2D(Sample, _c0100);
+    _G0 = vec3(float(_TMP12.x), float(_TMP12.y), float(_TMP12.z));
+    _c0102 = (v_texCoord.xy + vec2( 1.95312500E-003, 0.00000000E+000)) - vec2( 0.00000000E+000, 1.95312500E-003);
+    _TMP13 = texture2D(Sample, _c0102);
+    _C4 = vec3(float(_TMP13.x), float(_TMP13.y), float(_TMP13.z));
+    _c0104 = v_texCoord.xy + vec2( 1.95312500E-003, 0.00000000E+000) + vec2( 0.00000000E+000, 1.95312500E-003);
+    _TMP14 = texture2D(Sample, _c0104);
+    _I4 = vec3(float(_TMP14.x), float(_TMP14.y), float(_TMP14.z));
+    _c0106 = (v_texCoord.xy - vec2( 9.76562500E-004, 0.00000000E+000)) + vec2( 0.00000000E+000, 3.90625000E-003);
+    _TMP15 = texture2D(Sample, _c0106);
+    _G5 = vec3(float(_TMP15.x), float(_TMP15.y), float(_TMP15.z));
+    _c0108 = v_texCoord.xy + vec2( 9.76562500E-004, 0.00000000E+000) + vec2( 0.00000000E+000, 3.90625000E-003);
+    _TMP16 = texture2D(Sample, _c0108);
+    _I5 = vec3(float(_TMP16.x), float(_TMP16.y), float(_TMP16.z));
+    _c0110 = v_texCoord.xy - vec2( 0.00000000E+000, 3.90625000E-003);
+    _TMP17 = texture2D(Sample, _c0110);
+    _B11 = vec3(float(_TMP17.x), float(_TMP17.y), float(_TMP17.z));
+    _c0112 = v_texCoord.xy - vec2( 1.95312500E-003, 0.00000000E+000);
+    _TMP18 = texture2D(Sample, _c0112);
+    _D0 = vec3(float(_TMP18.x), float(_TMP18.y), float(_TMP18.z));
+    _c0114 = v_texCoord.xy + vec2( 0.00000000E+000, 3.90625000E-003);
+    _TMP19 = texture2D(Sample, _c0114);
+    _H5 = vec3(float(_TMP19.x), float(_TMP19.y), float(_TMP19.z));
+    _c0116 = v_texCoord.xy + vec2( 1.95312500E-003, 0.00000000E+000);
+    _TMP20 = texture2D(Sample, _c0116);
+    _F4 = vec3(float(_TMP20.x), float(_TMP20.y), float(_TMP20.z));
+    _TMP60 = dot(vec3(float(_B2.x), float(_B2.y), float(_B2.z)), vec3( 1.43593750E+001, 2.81718750E+001, 5.47265625E+000));
+    _r0118.x = float(_TMP60);
+    _TMP60 = dot(vec3(float(_D.x), float(_D.y), float(_D.z)), vec3( 1.43593750E+001, 2.81718750E+001, 5.47265625E+000));
+    _r0118.y = float(_TMP60);
+    _TMP60 = dot(vec3(float(_H.x), float(_H.y), float(_H.z)), vec3( 1.43593750E+001, 2.81718750E+001, 5.47265625E+000));
+    _r0118.z = float(_TMP60);
+    _TMP60 = dot(vec3(float(_F.x), float(_F.y), float(_F.z)), vec3( 1.43593750E+001, 2.81718750E+001, 5.47265625E+000));
+    _r0118.w = float(_TMP60);
+    _b1 = vec4(float(_r0118.x), float(_r0118.y), float(_r0118.z), float(_r0118.w));
+    _TMP60 = dot(vec3(float(_C.x), float(_C.y), float(_C.z)), vec3( 1.43593750E+001, 2.81718750E+001, 5.47265625E+000));
+    _r0128.x = float(_TMP60);
+    _TMP60 = dot(vec3(float(_A2.x), float(_A2.y), float(_A2.z)), vec3( 1.43593750E+001, 2.81718750E+001, 5.47265625E+000));
+    _r0128.y = float(_TMP60);
+    _TMP60 = dot(vec3(float(_G.x), float(_G.y), float(_G.z)), vec3( 1.43593750E+001, 2.81718750E+001, 5.47265625E+000));
+    _r0128.z = float(_TMP60);
+    _TMP60 = dot(vec3(float(_I.x), float(_I.y), float(_I.z)), vec3( 1.43593750E+001, 2.81718750E+001, 5.47265625E+000));
+    _r0128.w = float(_TMP60);
+    _c1 = vec4(float(_r0128.x), float(_r0128.y), float(_r0128.z), float(_r0128.w));
+    _TMP60 = dot(vec3(float(_E.x), float(_E.y), float(_E.z)), vec3( 1.43593750E+001, 2.81718750E+001, 5.47265625E+000));
+    _r0138.x = float(_TMP60);
+    _TMP60 = dot(vec3(float(_E.x), float(_E.y), float(_E.z)), vec3( 1.43593750E+001, 2.81718750E+001, 5.47265625E+000));
+    _r0138.y = float(_TMP60);
+    _TMP60 = dot(vec3(float(_E.x), float(_E.y), float(_E.z)), vec3( 1.43593750E+001, 2.81718750E+001, 5.47265625E+000));
+    _r0138.z = float(_TMP60);
+    _TMP60 = dot(vec3(float(_E.x), float(_E.y), float(_E.z)), vec3( 1.43593750E+001, 2.81718750E+001, 5.47265625E+000));
+    _r0138.w = float(_TMP60);
+    _e1 = vec4(float(_r0138.x), float(_r0138.y), float(_r0138.z), float(_r0138.w));
+    _TMP60 = dot(vec3(float(_I4.x), float(_I4.y), float(_I4.z)), vec3( 1.43593750E+001, 2.81718750E+001, 5.47265625E+000));
+    _r0148.x = float(_TMP60);
+    _TMP60 = dot(vec3(float(_C1.x), float(_C1.y), float(_C1.z)), vec3( 1.43593750E+001, 2.81718750E+001, 5.47265625E+000));
+    _r0148.y = float(_TMP60);
+    _TMP60 = dot(vec3(float(_A0.x), float(_A0.y), float(_A0.z)), vec3( 1.43593750E+001, 2.81718750E+001, 5.47265625E+000));
+    _r0148.z = float(_TMP60);
+    _TMP60 = dot(vec3(float(_G5.x), float(_G5.y), float(_G5.z)), vec3( 1.43593750E+001, 2.81718750E+001, 5.47265625E+000));
+    _r0148.w = float(_TMP60);
+    _i4 = vec4(float(_r0148.x), float(_r0148.y), float(_r0148.z), float(_r0148.w));
+    _TMP60 = dot(vec3(float(_I5.x), float(_I5.y), float(_I5.z)), vec3( 1.43593750E+001, 2.81718750E+001, 5.47265625E+000));
+    _r0158.x = float(_TMP60);
+    _TMP60 = dot(vec3(float(_C4.x), float(_C4.y), float(_C4.z)), vec3( 1.43593750E+001, 2.81718750E+001, 5.47265625E+000));
+    _r0158.y = float(_TMP60);
+    _TMP60 = dot(vec3(float(_A11.x), float(_A11.y), float(_A11.z)), vec3( 1.43593750E+001, 2.81718750E+001, 5.47265625E+000));
+    _r0158.z = float(_TMP60);
+    _TMP60 = dot(vec3(float(_G0.x), float(_G0.y), float(_G0.z)), vec3( 1.43593750E+001, 2.81718750E+001, 5.47265625E+000));
+    _r0158.w = float(_TMP60);
+    _i5 = vec4(float(_r0158.x), float(_r0158.y), float(_r0158.z), float(_r0158.w));
+    _TMP60 = dot(vec3(float(_H5.x), float(_H5.y), float(_H5.z)), vec3( 1.43593750E+001, 2.81718750E+001, 5.47265625E+000));
+    _r0168.x = float(_TMP60);
+    _TMP60 = dot(vec3(float(_F4.x), float(_F4.y), float(_F4.z)), vec3( 1.43593750E+001, 2.81718750E+001, 5.47265625E+000));
+    _r0168.y = float(_TMP60);
+    _TMP60 = dot(vec3(float(_B11.x), float(_B11.y), float(_B11.z)), vec3( 1.43593750E+001, 2.81718750E+001, 5.47265625E+000));
+    _r0168.z = float(_TMP60);
+    _TMP60 = dot(vec3(float(_D0.x), float(_D0.y), float(_D0.z)), vec3( 1.43593750E+001, 2.81718750E+001, 5.47265625E+000));
+    _r0168.w = float(_TMP60);
+    _h5 = vec4(float(_r0168.x), float(_r0168.y), float(_r0168.z), float(_r0168.w));
+    _fx = bvec4((vec4( 1.00000000E+000, -1.00000000E+000, -1.00000000E+000, 1.00000000E+000)*_fp.y + vec4( 1.00000000E+000, 1.00000000E+000, -1.00000000E+000, -1.00000000E+000)*_fp.x).x > 1.50000000E+000, (vec4( 1.00000000E+000, -1.00000000E+000, -1.00000000E+000, 1.00000000E+000)*_fp.y + vec4( 1.00000000E+000, 1.00000000E+000, -1.00000000E+000, -1.00000000E+000)*_fp.x).y > 5.00000000E-001, (vec4( 1.00000000E+000, -1.00000000E+000, -1.00000000E+000, 1.00000000E+000)*_fp.y + vec4( 1.00000000E+000, 1.00000000E+000, -1.00000000E+000, -1.00000000E+000)*_fp.x).z > -5.00000000E-001, (vec4( 1.00000000E+000, -1.00000000E+000, -1.00000000E+000, 1.00000000E+000)*_fp.y + vec4( 1.00000000E+000, 1.00000000E+000, -1.00000000E+000, -1.00000000E+000)*_fp.x).w > 5.00000000E-001);
+    _fx_left = bvec4((vec4( 1.00000000E+000, -1.00000000E+000, -1.00000000E+000, 1.00000000E+000)*_fp.y + vec4( 5.00000000E-001, 2.00000000E+000, -5.00000000E-001, -2.00000000E+000)*_fp.x).x > 1.00000000E+000, (vec4( 1.00000000E+000, -1.00000000E+000, -1.00000000E+000, 1.00000000E+000)*_fp.y + vec4( 5.00000000E-001, 2.00000000E+000, -5.00000000E-001, -2.00000000E+000)*_fp.x).y > 1.00000000E+000, (vec4( 1.00000000E+000, -1.00000000E+000, -1.00000000E+000, 1.00000000E+000)*_fp.y + vec4( 5.00000000E-001, 2.00000000E+000, -5.00000000E-001, -2.00000000E+000)*_fp.x).z > -5.00000000E-001, (vec4( 1.00000000E+000, -1.00000000E+000, -1.00000000E+000, 1.00000000E+000)*_fp.y + vec4( 5.00000000E-001, 2.00000000E+000, -5.00000000E-001, -2.00000000E+000)*_fp.x).w > 0.00000000E+000);
+    _fx_up = bvec4((vec4( 1.00000000E+000, -1.00000000E+000, -1.00000000E+000, 1.00000000E+000)*_fp.y + vec4( 2.00000000E+000, 5.00000000E-001, -2.00000000E+000, -5.00000000E-001)*_fp.x).x > 2.00000000E+000, (vec4( 1.00000000E+000, -1.00000000E+000, -1.00000000E+000, 1.00000000E+000)*_fp.y + vec4( 2.00000000E+000, 5.00000000E-001, -2.00000000E+000, -5.00000000E-001)*_fp.x).y > 0.00000000E+000, (vec4( 1.00000000E+000, -1.00000000E+000, -1.00000000E+000, 1.00000000E+000)*_fp.y + vec4( 2.00000000E+000, 5.00000000E-001, -2.00000000E+000, -5.00000000E-001)*_fp.x).z > -1.00000000E+000, (vec4( 1.00000000E+000, -1.00000000E+000, -1.00000000E+000, 1.00000000E+000)*_fp.y + vec4( 2.00000000E+000, 5.00000000E-001, -2.00000000E+000, -5.00000000E-001)*_fp.x).w > 5.00000000E-001);
+    _a0182 = _b1.wxyz - _b1;
+    _TMP179 = abs(_a0182);
+    _TMP27 = bvec4(_TMP179.x < 1.50000000E+001, _TMP179.y < 1.50000000E+001, _TMP179.z < 1.50000000E+001, _TMP179.w < 1.50000000E+001);
+    _a0188 = _b1.wxyz - _c1;
+    _TMP185 = abs(_a0188);
+    _TMP28 = bvec4(_TMP185.x < 1.50000000E+001, _TMP185.y < 1.50000000E+001, _TMP185.z < 1.50000000E+001, _TMP185.w < 1.50000000E+001);
+    _a0194 = _b1.zwxy - _b1.yzwx;
+    _TMP191 = abs(_a0194);
+    _TMP29 = bvec4(_TMP191.x < 1.50000000E+001, _TMP191.y < 1.50000000E+001, _TMP191.z < 1.50000000E+001, _TMP191.w < 1.50000000E+001);
+    _a0200 = _b1.zwxy - _c1.zwxy;
+    _TMP197 = abs(_a0200);
+    _TMP30 = bvec4(_TMP197.x < 1.50000000E+001, _TMP197.y < 1.50000000E+001, _TMP197.z < 1.50000000E+001, _TMP197.w < 1.50000000E+001);
+    _a0206 = _e1 - _c1.wxyz;
+    _TMP203 = abs(_a0206);
+    _TMP31 = bvec4(_TMP203.x < 1.50000000E+001, _TMP203.y < 1.50000000E+001, _TMP203.z < 1.50000000E+001, _TMP203.w < 1.50000000E+001);
+    _a0212 = _b1.wxyz - _h5.yzwx;
+    _TMP209 = abs(_a0212);
+    _TMP32 = bvec4(_TMP209.x < 1.50000000E+001, _TMP209.y < 1.50000000E+001, _TMP209.z < 1.50000000E+001, _TMP209.w < 1.50000000E+001);
+    _a0218 = _b1.wxyz - _i4;
+    _TMP215 = abs(_a0218);
+    _TMP33 = bvec4(_TMP215.x < 1.50000000E+001, _TMP215.y < 1.50000000E+001, _TMP215.z < 1.50000000E+001, _TMP215.w < 1.50000000E+001);
+    _a0224 = _b1.zwxy - _h5;
+    _TMP221 = abs(_a0224);
+    _TMP34 = bvec4(_TMP221.x < 1.50000000E+001, _TMP221.y < 1.50000000E+001, _TMP221.z < 1.50000000E+001, _TMP221.w < 1.50000000E+001);
+    _a0230 = _b1.zwxy - _i5;
+    _TMP227 = abs(_a0230);
+    _TMP35 = bvec4(_TMP227.x < 1.50000000E+001, _TMP227.y < 1.50000000E+001, _TMP227.z < 1.50000000E+001, _TMP227.w < 1.50000000E+001);
+    _a0236 = _e1 - _c1.zwxy;
+    _TMP233 = abs(_a0236);
+    _TMP36 = bvec4(_TMP233.x < 1.50000000E+001, _TMP233.y < 1.50000000E+001, _TMP233.z < 1.50000000E+001, _TMP233.w < 1.50000000E+001);
+    _a0242 = _e1 - _c1;
+    _TMP239 = abs(_a0242);
+    _TMP37 = bvec4(_TMP239.x < 1.50000000E+001, _TMP239.y < 1.50000000E+001, _TMP239.z < 1.50000000E+001, _TMP239.w < 1.50000000E+001);
+    _interp_restriction_lv1 = bvec4(_e1.x != _b1.w && _e1.x != _b1.z && (!_TMP27.x && !_TMP28.x || !_TMP29.x && !_TMP30.x || _TMP31.x && (!_TMP32.x && !_TMP33.x || !_TMP34.x && !_TMP35.x) || _TMP36.x || _TMP37.x), _e1.y != _b1.x && _e1.y != _b1.w && (!_TMP27.y && !_TMP28.y || !_TMP29.y && !_TMP30.y || _TMP31.y && (!_TMP32.y && !_TMP33.y || !_TMP34.y && !_TMP35.y) || _TMP36.y || _TMP37.y), _e1.z != _b1.y && _e1.z != _b1.x && (!_TMP27.z && !_TMP28.z || !_TMP29.z && !_TMP30.z || _TMP31.z && (!_TMP32.z && !_TMP33.z || !_TMP34.z && !_TMP35.z) || _TMP36.z || _TMP37.z), _e1.w != _b1.z && _e1.w != _b1.y && (!_TMP27.w && !_TMP28.w || !_TMP29.w && !_TMP30.w || _TMP31.w && (!_TMP32.w && !_TMP33.w || !_TMP34.w && !_TMP35.w) || _TMP36.w || _TMP37.w));
+    _interp_restriction_lv2_left = bvec4(_e1.x != _c1.z && _b1.y != _c1.z, _e1.y != _c1.w && _b1.z != _c1.w, _e1.z != _c1.x && _b1.w != _c1.x, _e1.w != _c1.y && _b1.x != _c1.y);
+    _interp_restriction_lv2_up = bvec4(_e1.x != _c1.x && _b1.x != _c1.x, _e1.y != _c1.y && _b1.y != _c1.y, _e1.z != _c1.z && _b1.z != _c1.z, _e1.w != _c1.w && _b1.w != _c1.w);
+    _a0248 = _e1 - _c1;
+    _TMP245 = abs(_a0248);
+    _a0252 = _e1 - _c1.zwxy;
+    _TMP249 = abs(_a0252);
+    _a0256 = _c1.wxyz - _h5;
+    _TMP253 = abs(_a0256);
+    _a0260 = _c1.wxyz - _h5.yzwx;
+    _TMP257 = abs(_a0260);
+    _a0264 = _b1.zwxy - _b1.wxyz;
+    _TMP261 = abs(_a0264);
+    _TMP38 = _TMP245 + _TMP249 + _TMP253 + _TMP257 + 4.00000000E+000*_TMP261;
+    _a0270 = _b1.zwxy - _b1.yzwx;
+    _TMP267 = abs(_a0270);
+    _a0274 = _b1.zwxy - _i5;
+    _TMP271 = abs(_a0274);
+    _a0278 = _b1.wxyz - _i4;
+    _TMP275 = abs(_a0278);
+    _a0282 = _b1.wxyz - _b1;
+    _TMP279 = abs(_a0282);
+    _a0286 = _e1 - _c1.wxyz;
+    _TMP283 = abs(_a0286);
+    _TMP39 = _TMP267 + _TMP271 + _TMP275 + _TMP279 + 4.00000000E+000*_TMP283;
+    _edr = bvec4(_TMP38.x < _TMP39.x && _interp_restriction_lv1.x, _TMP38.y < _TMP39.y && _interp_restriction_lv1.y, _TMP38.z < _TMP39.z && _interp_restriction_lv1.z, _TMP38.w < _TMP39.w && _interp_restriction_lv1.w);
+    _a0290 = _b1.wxyz - _c1.zwxy;
+    _TMP287 = abs(_a0290);
+    _a0294 = _b1.zwxy - _c1;
+    _TMP291 = abs(_a0294);
+    _edr_left = bvec4((2.00000000E+000*_TMP287).x <= _TMP291.x && _interp_restriction_lv2_left.x, (2.00000000E+000*_TMP287).y <= _TMP291.y && _interp_restriction_lv2_left.y, (2.00000000E+000*_TMP287).z <= _TMP291.z && _interp_restriction_lv2_left.z, (2.00000000E+000*_TMP287).w <= _TMP291.w && _interp_restriction_lv2_left.w);
+    _a0298 = _b1.wxyz - _c1.zwxy;
+    _TMP295 = abs(_a0298);
+    _a0302 = _b1.zwxy - _c1;
+    _TMP299 = abs(_a0302);
+    _edr_up = bvec4(_TMP295.x >= (2.00000000E+000*_TMP299).x && _interp_restriction_lv2_up.x, _TMP295.y >= (2.00000000E+000*_TMP299).y && _interp_restriction_lv2_up.y, _TMP295.z >= (2.00000000E+000*_TMP299).z && _interp_restriction_lv2_up.z, _TMP295.w >= (2.00000000E+000*_TMP299).w && _interp_restriction_lv2_up.w);
+    _nc = bvec4(_edr.x && (_fx.x || _edr_left.x && _fx_left.x || _edr_up.x && _fx_up.x), _edr.y && (_fx.y || _edr_left.y && _fx_left.y || _edr_up.y && _fx_up.y), _edr.z && (_fx.z || _edr_left.z && _fx_left.z || _edr_up.z && _fx_up.z), _edr.w && (_fx.w || _edr_left.w && _fx_left.w || _edr_up.w && _fx_up.w));
+    _a0306 = _e1 - _b1.wxyz;
+    _TMP303 = abs(_a0306);
+    _a0310 = _e1 - _b1.zwxy;
+    _TMP307 = abs(_a0310);
+    _px = bvec4(_TMP303.x <= _TMP307.x, _TMP303.y <= _TMP307.y, _TMP303.z <= _TMP307.z, _TMP303.w <= _TMP307.w);
+    if (_nc.x) { // if begin
+        if (_px.x) { // if begin
+            _TMP47 = _F;
+        } else {
+            _TMP47 = _H;
+        } // end if
+        _TMP46 = _TMP47;
+    } else {
+        if (_nc.y) { // if begin
+            if (_px.y) { // if begin
+                _TMP49 = _B2;
+            } else {
+                _TMP49 = _F;
+            } // end if
+            _TMP48 = _TMP49;
+        } else {
+            if (_nc.z) { // if begin
+                if (_px.z) { // if begin
+                    _TMP51 = _D;
+                } else {
+                    _TMP51 = _B2;
+                } // end if
+                _TMP50 = _TMP51;
+            } else {
+                if (_nc.w) { // if begin
+                    if (_px.w) { // if begin
+                        _TMP53 = _H;
+                    } else {
+                        _TMP53 = _D;
+                    } // end if
+                    _TMP52 = _TMP53;
+                } else {
+                    _TMP52 = _E;
+                } // end if
+                _TMP50 = _TMP52;
+            } // end if
+            _TMP48 = _TMP50;
+        } // end if
+        _TMP46 = _TMP48;
+    } // end if
+    _ret_0 = vec4(_TMP46.x, _TMP46.y, _TMP46.z, 1.00000000E+000);
+    gl_FragColor = vec4(float(_ret_0.x), float(_ret_0.y), float(_ret_0.z), float(_ret_0.w));
+    return;
+} // main end

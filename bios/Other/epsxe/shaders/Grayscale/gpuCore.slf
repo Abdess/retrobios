@@ -1,0 +1,14 @@
+#ifdef GL_ES
+precision mediump float;
+#endif
+varying vec2 v_texCoord;
+uniform sampler2D Frame;
+
+void main()
+{
+vec4 fragColor = texture2D(Frame, v_texCoord);
+float FragColor = dot(fragColor, vec4( 0.299, 0.587, 0.114, 0.0 ));
+gl_FragColor = vec4(FragColor);
+}
+
+

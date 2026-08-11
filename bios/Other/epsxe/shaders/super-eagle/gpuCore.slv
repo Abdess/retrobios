@@ -1,0 +1,44 @@
+
+struct inputdata
+{
+   vec2 video_size;
+   vec2 texture_size;
+   vec2 output_size;
+   float frame_count;
+   float frame_direction;
+   float frame_rotation;
+};
+
+
+attribute vec4 a_position;
+attribute vec2 a_texCoord;
+varying vec4 TexCoord[8];
+varying vec2 v_texCoord;
+uniform inputdata IN;
+
+void main()
+{
+   gl_Position = a_position;
+
+   vec2 ps = vec2(1.0/IN.texture_size.x, 1.0/IN.texture_size.y);
+   float dx = ps.x;
+   float dy = ps.y;
+
+   v_texCoord = a_texCoord;
+   TexCoord[0].xy = a_texCoord + vec2(-dx,-dy);
+   TexCoord[0].zw = a_texCoord + vec2(-dx,  0);
+   TexCoord[1].xy = a_texCoord + vec2(+dx,-dy);
+   TexCoord[1].zw = a_texCoord + vec2(+dx+dx,-dy);
+   TexCoord[2].xy = a_texCoord + vec2(-dx,  0);
+   TexCoord[2].zw = a_texCoord + vec2(+dx,  0);
+   TexCoord[3].xy = a_texCoord + vec2(+dx+dx,  0);
+   TexCoord[3].zw = a_texCoord + vec2(-dx,+dy);
+   TexCoord[4].xy = a_texCoord + vec2(  0,+dy);
+   TexCoord[4].zw = a_texCoord + vec2(+dx,+dy);
+   TexCoord[5].xy = a_texCoord + vec2(+dx+dx,+dy);
+   TexCoord[5].zw = a_texCoord + vec2(-dx,+dy+dy);
+   TexCoord[6].xy = a_texCoord + vec2(  0,+dy+dy);
+   TexCoord[6].zw = a_texCoord + vec2(+dx,+dy+dy);
+   TexCoord[7].xy = a_texCoord + vec2(+dx+dx,+dy+dy);
+}
+

@@ -1,0 +1,28 @@
+attribute vec4 a_position;
+attribute vec2 a_texCoord;
+varying vec4 TexCoord[8];
+
+void main()
+{
+   gl_Position = a_position;
+
+   //float x = (OGL2Size.x/2048.0)*OGL2Param.x;
+   //float y = (OGL2Size.y/1024.0)*OGL2Param.y;
+   float x = a_texCoord.x/1024.0;
+   float y = a_texCoord.y/512.0;
+   vec2 dg1 = vec2( x,y);
+   vec2 dg2 = vec2(-x,y);
+   vec2 dx  = vec2(x,0.0);
+   vec2 dy  = vec2(0.0,y);
+   TexCoord[0].xy = a_texCoord;
+   TexCoord[1].xy = TexCoord[0].xy - dy;
+   TexCoord[2].xy = TexCoord[0].xy + dy;
+   TexCoord[3].xy = TexCoord[0].xy - dx;
+   TexCoord[4].xy = TexCoord[0].xy + dx;
+   TexCoord[5].xy = TexCoord[0].xy - dg1;
+   TexCoord[6].xy = TexCoord[0].xy + dg1;
+   TexCoord[1].zw = TexCoord[0].xy - dg2;
+   TexCoord[2].zw = TexCoord[0].xy + dg2;
+
+}
+

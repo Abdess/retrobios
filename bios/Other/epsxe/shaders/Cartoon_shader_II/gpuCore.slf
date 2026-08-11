@@ -1,0 +1,43 @@
+// Cartoon shader II
+// by guest(r)
+// license: GNU-GPL
+
+#ifdef GL_ES
+precision mediump float;
+#endif
+
+const float th = 0.15;      // outlines sensitivity, recommended from 0.00...0.50
+const float bb = 1.50;      // outlines strength,    recommended from 0.50...4.00
+const float pp = 1.55;      // outlines blackening,  recommended from 0.25...2.00
+const float cl = 7.00;      // color levels,         recommended form 2.00...10.0 
+
+uniform sampler2D Sample;
+varying vec4 TexCoord[8];
+
+void main()
+
+{
+
+ vec3 uy = texture2D(Sample, TexCoord[1].xy).xyz; 
+ vec3 lx = texture2D(Sample, TexCoord[4].xy).xyz; 
+ vec3 rx = texture2D(Sample, TexCoord[5].xy).xyz; 
+ vec3 dy = texture2D(Sample, TexCoord[2].xy).xyz; 
+ vec3 ct = texture2D(Sample, TexCoord[0].xy).xyz; 
+ vec3 dt = vec3(1.0,1.0,1.0);
+
+ float d1 = 2.5*dot(abs(lx-rx),dt)/(dot(lx+rx,dt)+0.50);
+ float d2 = 2.5*dot(abs(uy-dy),dt)/(dot(uy+dy,dt)+0.50);
+ float d  = d1 + d2;
+
+ float l = cl*length(ct)/1.73;
+ float p = floor(l); 
+ float v = fract(l); 
+
+ float t = 0.33;
+ if (p==0.0) t = 0.6;
+
+ v = 0.6*(max(v-1.0+t,0.0))/t; 
+ v = 1.73*(p+v)/cl + 0.05;
+ 
+ gl_FragColor.xyz =(1.12-bb*pow(max(d-th,0.0),pp))*v*normalize(ct);
+}

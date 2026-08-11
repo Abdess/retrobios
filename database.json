@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-11T17:14:33Z",
-  "total_files": 8655,
-  "total_size": 11147355425,
+  "generated_at": "2026-08-11T17:20:13Z",
+  "total_files": 8685,
+  "total_size": 11147432390,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -49917,6 +49917,306 @@
       "crc32": "69dc25d7",
       "adler32": "9f4b472e"
     },
+    "5f589f6b1845927141dac09f6c2b050624ef2d03": {
+      "path": "bios/Other/epsxe/shaders/5xBR-v3.7c/gpuCore.ini",
+      "name": "gpuCore.ini",
+      "size": 83,
+      "sha1": "5f589f6b1845927141dac09f6c2b050624ef2d03",
+      "md5": "ff44a27f0cf1148cfa87ba17545180cc",
+      "sha256": "d1ef814cb6314357d43089f67a6808df563577604b598da7fc4697cfbe08df50",
+      "crc32": "dc249b13",
+      "adler32": "ae4c1d07"
+    },
+    "a5c69c5c3fde3f6fd5cce8e79efa3ef96a6add01": {
+      "path": "bios/Other/epsxe/shaders/5xBR-v3.7c/gpuCore.slf",
+      "name": "gpuCore.slf",
+      "size": 20868,
+      "sha1": "a5c69c5c3fde3f6fd5cce8e79efa3ef96a6add01",
+      "md5": "49ac87eb7a9260da61f836bde9c46c0e",
+      "sha256": "0a7a10c278ec13ae37192d15484bacc646bca67e2aae64fab39cd78dda1547cc",
+      "crc32": "e24efa44",
+      "adler32": "121066ae"
+    },
+    "073a34b093054d217029f7314a2b8142e1dac6b7": {
+      "path": "bios/Other/epsxe/shaders/5xBR-v3.7c/gpuCore.slv",
+      "name": "gpuCore.slv",
+      "size": 153,
+      "sha1": "073a34b093054d217029f7314a2b8142e1dac6b7",
+      "md5": "2479682ae26ccb07b37835db0f65fa63",
+      "sha256": "92f06e873b6ca0affd4029ba646c58ae60a47471f7123047c08b2fe3ad45fc41",
+      "crc32": "e454f02d",
+      "adler32": "6f9e34f1"
+    },
+    "54644d6ec012bcbf9030b369a2fb4dfbedfa511f": {
+      "path": "bios/Other/epsxe/shaders/AA_Shader_v2.0_w_Natural_Vision/gpuCore.slf",
+      "name": "gpuCore.slf",
+      "size": 2360,
+      "sha1": "54644d6ec012bcbf9030b369a2fb4dfbedfa511f",
+      "md5": "9ec7c9b77a9cbb2181ab7d6ec904b1e0",
+      "sha256": "70b69879b7583ee3bbcfdddc106a59e5ed66581914bfa2ad1f82285654c5f2a0",
+      "crc32": "a509c794",
+      "adler32": "088e9c68"
+    },
+    "dcd9f24f47443ec8421e48fef7e37fd8a52c4782": {
+      "path": "bios/Other/epsxe/shaders/AA_Shader_v2.0_w_Natural_Vision/gpuCore.slv",
+      "name": "gpuCore.slv",
+      "size": 762,
+      "sha1": "dcd9f24f47443ec8421e48fef7e37fd8a52c4782",
+      "md5": "c1896b87729b76ba2a4a289125466e82",
+      "sha256": "23ecd34d71b69e2d41b71ca66220792310c26e6799db9351e26cdae287a2f406",
+      "crc32": "6b725715",
+      "adler32": "3841e51f"
+    },
+    "10de0e6e7f616b67f7aced4fa51a55af9d9fb046": {
+      "path": "bios/Other/epsxe/shaders/AA_Shader_v2.0_w_Natural_Vision_Brightness/gpuCore.slf",
+      "name": "gpuCore.slf",
+      "size": 5295,
+      "sha1": "10de0e6e7f616b67f7aced4fa51a55af9d9fb046",
+      "md5": "3a1874705e39880bc5556261d6e71744",
+      "sha256": "56f2d9af2060f2f0fd6c2acdccbe57f77a0609a2cfb3f2e324b3c3a4fe704e49",
+      "crc32": "04e29286",
+      "adler32": "d692ac82"
+    },
+    "c966a738bffbe6f5017684318b26f66899e620f4": {
+      "path": "bios/Other/epsxe/shaders/Brightness/gpuCore.ini",
+      "name": "gpuCore.ini",
+      "size": 59,
+      "sha1": "c966a738bffbe6f5017684318b26f66899e620f4",
+      "md5": "b037a7f8e506108db89a9111766e897e",
+      "sha256": "06fac91ea6fe36e3e41780da7d631a575893c9dfb56f1369dc639a97c2fc9270",
+      "crc32": "579d5d7c",
+      "adler32": "8c74150f"
+    },
+    "036e58e46d7264e2d6b08f48bde8b2d83361a661": {
+      "path": "bios/Other/epsxe/shaders/Brightness/gpuCore.slf",
+      "name": "gpuCore.slf",
+      "size": 3089,
+      "sha1": "036e58e46d7264e2d6b08f48bde8b2d83361a661",
+      "md5": "1b37c6b0835d045c86a062267c843e2f",
+      "sha256": "a184f3e62cf87caa00d1e9c044587cb5244567369a5edab5c1dbec43edba3ff3",
+      "crc32": "5ebc2ad4",
+      "adler32": "42784330"
+    },
+    "687540a168728baf3babaf2dedf74b5f1d2f56b4": {
+      "path": "bios/Other/epsxe/shaders/CRT-Hyllian/gpuCore.ini",
+      "name": "gpuCore.ini",
+      "size": 74,
+      "sha1": "687540a168728baf3babaf2dedf74b5f1d2f56b4",
+      "md5": "f91347f046724ad7d0d4f4315a8378a1",
+      "sha256": "32db4e009959b5606e3d3153d9cd4c0e1a84312bf07848b595eaec0190ea6b9b",
+      "crc32": "b01d11f1",
+      "adler32": "e68d1ab5"
+    },
+    "f0e3d77db14b4dd11aa7cc71613097600d3e5da3": {
+      "path": "bios/Other/epsxe/shaders/CRT-Hyllian/gpuCore.slf",
+      "name": "gpuCore.slf",
+      "size": 6021,
+      "sha1": "f0e3d77db14b4dd11aa7cc71613097600d3e5da3",
+      "md5": "b3ec1b57cf72c14f0e945cd054d44d11",
+      "sha256": "8b39bd12aae661165fc35eb2627c1ea4d7cc26fef179fe2e772abb412bf94e5b",
+      "crc32": "e0c2acb6",
+      "adler32": "5da07f7b"
+    },
+    "cda44c87be8b01c7ba23e2ad09a516d1747dee9b": {
+      "path": "bios/Other/epsxe/shaders/CRT-Hyllian/gpuCore.slv",
+      "name": "gpuCore.slv",
+      "size": 201,
+      "sha1": "cda44c87be8b01c7ba23e2ad09a516d1747dee9b",
+      "md5": "1184808df8031b080289ccdb5b17ba6b",
+      "sha256": "9f63333b425c697048c6804d7f30f9a653570143eb897758c7c9fb9d3d8e119c",
+      "crc32": "41169e0a",
+      "adler32": "98f8446f"
+    },
+    "56ad43fc57833eefb116af581c9ad034c53778ee": {
+      "path": "bios/Other/epsxe/shaders/CRT-Hyllian-3D/gpuCore.ini",
+      "name": "gpuCore.ini",
+      "size": 70,
+      "sha1": "56ad43fc57833eefb116af581c9ad034c53778ee",
+      "md5": "b6b4e84b236221b2ece84dc5c1e4f154",
+      "sha256": "939ac6a08f181b926ed074f83342ff4043ec7237267652ff163650f23852de61",
+      "crc32": "7d4623fc",
+      "adler32": "5ea218ca"
+    },
+    "a582843e7dac4735392fe82fdf3e6fef88f7ff66": {
+      "path": "bios/Other/epsxe/shaders/CRT-Hyllian-3D/gpuCore.slf",
+      "name": "gpuCore.slf",
+      "size": 10438,
+      "sha1": "a582843e7dac4735392fe82fdf3e6fef88f7ff66",
+      "md5": "72ac4fd9b61c086d9836486c2f750be2",
+      "sha256": "32e45e1a9cd471bdcf7c0f1b77a425cdda265726e58e2c5a703c27bb343a52ec",
+      "crc32": "9c4acf63",
+      "adler32": "c192c0f0"
+    },
+    "0f6b69ace5bcd59ba3641bb4d833e120e93eb8dd": {
+      "path": "bios/Other/epsxe/shaders/CRT-Lottes/gpuCore.ini",
+      "name": "gpuCore.ini",
+      "size": 65,
+      "sha1": "0f6b69ace5bcd59ba3641bb4d833e120e93eb8dd",
+      "md5": "f58606c167af7d2b961a06bab8632bd0",
+      "sha256": "bb046bc18f6e1e78713e5d6f5a5c58a5b4969fe1488f41df6ef9ee0c1f82dcaf",
+      "crc32": "9aea70ac",
+      "adler32": "ff951787"
+    },
+    "c06f5745e3ecc0b33e802877b46352d8304b81bc": {
+      "path": "bios/Other/epsxe/shaders/CRT-Lottes/gpuCore.slf",
+      "name": "gpuCore.slf",
+      "size": 4400,
+      "sha1": "c06f5745e3ecc0b33e802877b46352d8304b81bc",
+      "md5": "c6fc241947fcc671b0ed1fc2dd3baa99",
+      "sha256": "db1955fb12093a469f62f30ae4995663436707149a0bd0212494840b2f52c383",
+      "crc32": "1979f565",
+      "adler32": "55c27219"
+    },
+    "501c31d7614583f6b1f25eb57f67d35343e6dff8": {
+      "path": "bios/Other/epsxe/shaders/Cartoon_shader_II/gpuCore.slf",
+      "name": "gpuCore.slf",
+      "size": 1171,
+      "sha1": "501c31d7614583f6b1f25eb57f67d35343e6dff8",
+      "md5": "e97109bf49fd31e3f60e2081baf73f5f",
+      "sha256": "adc966ee2b7e1d61515f49890ddd67cebf6335fe0e8cfb6f6fc6fa2a69a9db11",
+      "crc32": "dbade009",
+      "adler32": "96ba5c12"
+    },
+    "339af29d54a62a8d6ddea059d01a1c71dceb741f": {
+      "path": "bios/Other/epsxe/shaders/Cartoon_shader_II/gpuCore.slv",
+      "name": "gpuCore.slv",
+      "size": 707,
+      "sha1": "339af29d54a62a8d6ddea059d01a1c71dceb741f",
+      "md5": "c0406730f8e7e0048ab29df2b55aea8b",
+      "sha256": "8205995b3aea42b98adbe8ad99e28a5edfdbc711e74a5e33da045bfa1da4428c",
+      "crc32": "e7e004f8",
+      "adler32": "1838d52f"
+    },
+    "b7165607add6023abb9291e3ae80053865ab4a15": {
+      "path": "bios/Other/epsxe/shaders/FXAA_natural_vision/gpuCore.slf",
+      "name": "gpuCore.slf",
+      "size": 2763,
+      "sha1": "b7165607add6023abb9291e3ae80053865ab4a15",
+      "md5": "d9e9b284f38ac79e8e52ed8673a704b0",
+      "sha256": "a175f11b2188b4001c51bb548763d92a052211fb7b84cc82e2f492956d9623ec",
+      "crc32": "bdca044b",
+      "adler32": "79dd02db"
+    },
+    "d0d06fca34ac14d021175be133af413bdbecdf9c": {
+      "path": "bios/Other/epsxe/shaders/FXAA_natural_vision/gpuCore.slv",
+      "name": "gpuCore.slv",
+      "size": 155,
+      "sha1": "d0d06fca34ac14d021175be133af413bdbecdf9c",
+      "md5": "31c8eac7f0eff22599ec31852a151865",
+      "sha256": "7160ce15161d0a36f8dc5168b8368a0fc8e2238d40635a3c7be8cccfa884746f",
+      "crc32": "872429df",
+      "adler32": "d0fc3505"
+    },
+    "efa8ae5ed06eba9d4020ff81dc612bf934261803": {
+      "path": "bios/Other/epsxe/shaders/Grayscale/gpuCore.slf",
+      "name": "gpuCore.slf",
+      "size": 261,
+      "sha1": "efa8ae5ed06eba9d4020ff81dc612bf934261803",
+      "md5": "0d10522eadd5aea406edc29da9d5a6ee",
+      "sha256": "5e4bfe61cbf89579716b32559d8b92ac733623a414dd0c405894a36ab9457a0f",
+      "crc32": "81621cda",
+      "adler32": "123e5384"
+    },
+    "f69915f13de626f3c35bc67c8069720a9a0ea853": {
+      "path": "bios/Other/epsxe/shaders/gpuPeteOGL2.slf",
+      "name": "gpuPeteOGL2.slf",
+      "size": 1136,
+      "sha1": "f69915f13de626f3c35bc67c8069720a9a0ea853",
+      "md5": "cc93bcc8c516e0196f2652b8d9b9eeb5",
+      "sha256": "46cd5cf17654fb5730f1f557a4f864b1cc4d89031906ed5848b21468a5fb5c74",
+      "crc32": "65ba738e",
+      "adler32": "cfee53b5"
+    },
+    "fbb4cd76cee5ce70539da8cd24df370bfac1b8a2": {
+      "path": "bios/Other/epsxe/shaders/gpuPeteOGL2.slv",
+      "name": "gpuPeteOGL2.slv",
+      "size": 806,
+      "sha1": "fbb4cd76cee5ce70539da8cd24df370bfac1b8a2",
+      "md5": "a4b16b09d8bce6714a919325ffc9a43f",
+      "sha256": "c113ff0790ba6454089035036f448c261dc4742a3c28bc42f756beddaa8ff3fb",
+      "crc32": "ed4adc00",
+      "adler32": "da5cfeff"
+    },
+    "61f09b64c64964cacfec0833f04968a08f7da464": {
+      "path": "bios/Other/epsxe/shaders/gpucore/delete.me",
+      "name": "delete.me",
+      "size": 10,
+      "sha1": "61f09b64c64964cacfec0833f04968a08f7da464",
+      "md5": "2e7d76c347da6740e153d154b9064f33",
+      "sha256": "e33dbd20d732ad6d5c1f8228c36213c9385547f29b4746940bdaccfd52852a21",
+      "crc32": "aabbe87a",
+      "adler32": "14ee0370"
+    },
+    "a36992809f946cba845dbe4a8cdc4ee79e413bc0": {
+      "path": "bios/Other/epsxe/shaders/ogl2/erase.me",
+      "name": "erase.me",
+      "size": 9,
+      "sha1": "a36992809f946cba845dbe4a8cdc4ee79e413bc0",
+      "md5": "9bc925ed58fe4063cb885b9f8752dcb5",
+      "sha256": "efe376ead6f70831db442679dcbd211a1d34065617f9cfae75bee791765088ff",
+      "crc32": "f74f071a",
+      "adler32": "1113030d"
+    },
+    "339d7581e1a70f8fb287e5a572f6388f5bc00534": {
+      "path": "bios/Other/epsxe/shaders/super-eagle/gpuCore.ini",
+      "name": "gpuCore.ini",
+      "size": 75,
+      "sha1": "339d7581e1a70f8fb287e5a572f6388f5bc00534",
+      "md5": "342787edcff4c9bca0725377030b739a",
+      "sha256": "86c90b07233a952df257ca1eb6b54539bca5d4320d649c8088ad0f41085dcc63",
+      "crc32": "afc20232",
+      "adler32": "06c41b10"
+    },
+    "b757316e1cd39bad4e5045480350b7e44903efc8": {
+      "path": "bios/Other/epsxe/shaders/super-eagle/gpuCore.slf",
+      "name": "gpuCore.slf",
+      "size": 3977,
+      "sha1": "b757316e1cd39bad4e5045480350b7e44903efc8",
+      "md5": "63346f9c4d4c71f6d592988e024d810d",
+      "sha256": "3ee27e57524c2cbad894d6c8c2508b8459eee236555ed1272dcb83e1f390f7f6",
+      "crc32": "e23a78d7",
+      "adler32": "369f0225"
+    },
+    "ab6dc8c5ba131d3cc827063081b3bd29f650ba90": {
+      "path": "bios/Other/epsxe/shaders/super-eagle/gpuCore.slv",
+      "name": "gpuCore.slv",
+      "size": 1214,
+      "sha1": "ab6dc8c5ba131d3cc827063081b3bd29f650ba90",
+      "md5": "5f4bd62ead81e179f200d8c61e223d31",
+      "sha256": "8868a3c4d98538d0869537c4f6c1b27cd14cad06978e3acbef695c0ececd79e4",
+      "crc32": "a27ddd49",
+      "adler32": "f7b47df6"
+    },
+    "a9b9ed5fab307250a69a12ebce4bc44786b8b453": {
+      "path": "bios/Other/epsxe/shaders/xBR-LV2-3D/gpuCore.ini",
+      "name": "gpuCore.ini",
+      "size": 73,
+      "sha1": "a9b9ed5fab307250a69a12ebce4bc44786b8b453",
+      "md5": "fda0237b2046adf21d66b7fb5ac441ae",
+      "sha256": "db84ab7b4cc327c1ac4513a982e8b2c39bd5ddf64f15d70178f6a94ffdcdef48",
+      "crc32": "eff8698a",
+      "adler32": "9c92198c"
+    },
+    "90943fbcd3c23104fcdf7aed70df1e7752f39271": {
+      "path": "bios/Other/epsxe/shaders/xBR-LV2-3D/gpuCore.slf",
+      "name": "gpuCore.slf",
+      "size": 9708,
+      "sha1": "90943fbcd3c23104fcdf7aed70df1e7752f39271",
+      "md5": "ec51495fc1c0606a9e2f57bca6602f5a",
+      "sha256": "a9d7bfddd60c805878707f115e753e494e27ffaa879190dc045ef2eeb120f647",
+      "crc32": "4a2a86d7",
+      "adler32": "6966ce2c"
+    },
+    "7eea41770e156b05ddde4195954b5a468f163cdd": {
+      "path": "bios/Other/epsxe/shaders/xBR-LV2-3D/gpuCore.slv",
+      "name": "gpuCore.slv",
+      "size": 962,
+      "sha1": "7eea41770e156b05ddde4195954b5a468f163cdd",
+      "md5": "ac7ab73a8c909c61551b2c82f906921e",
+      "sha256": "89e80f1cb14de9a185ed46f9f4777649d0d8f19a4ac3d2cfe5157f427188f2fd",
+      "crc32": "50c5f498",
+      "adler32": "d9b822e7"
+    },
     "84d422b53547271e3a07342704a05ef481db3f99": {
       "path": "bios/Other/fbneo/136032.101.e3",
       "name": "136032.101.e3",
@@ -96302,6 +96602,36 @@
       "8fbeeb5c09477bcaf614087003df61a4": "808b7b46bfb033c7fe4d94d0dbf5a271de30dedc",
       "b0bdec53b1c50873ba45539565f1327c": "a848aad1840c7d85bfcdd552521a7181b00331cc",
       "ec6b58f723279afe732b7f9660acf27d": "9b2704655a893ff1675d28df4bd9ffc9e15d3dd5",
+      "ff44a27f0cf1148cfa87ba17545180cc": "5f589f6b1845927141dac09f6c2b050624ef2d03",
+      "49ac87eb7a9260da61f836bde9c46c0e": "a5c69c5c3fde3f6fd5cce8e79efa3ef96a6add01",
+      "2479682ae26ccb07b37835db0f65fa63": "073a34b093054d217029f7314a2b8142e1dac6b7",
+      "9ec7c9b77a9cbb2181ab7d6ec904b1e0": "54644d6ec012bcbf9030b369a2fb4dfbedfa511f",
+      "c1896b87729b76ba2a4a289125466e82": "dcd9f24f47443ec8421e48fef7e37fd8a52c4782",
+      "3a1874705e39880bc5556261d6e71744": "10de0e6e7f616b67f7aced4fa51a55af9d9fb046",
+      "b037a7f8e506108db89a9111766e897e": "c966a738bffbe6f5017684318b26f66899e620f4",
+      "1b37c6b0835d045c86a062267c843e2f": "036e58e46d7264e2d6b08f48bde8b2d83361a661",
+      "f91347f046724ad7d0d4f4315a8378a1": "687540a168728baf3babaf2dedf74b5f1d2f56b4",
+      "b3ec1b57cf72c14f0e945cd054d44d11": "f0e3d77db14b4dd11aa7cc71613097600d3e5da3",
+      "1184808df8031b080289ccdb5b17ba6b": "cda44c87be8b01c7ba23e2ad09a516d1747dee9b",
+      "b6b4e84b236221b2ece84dc5c1e4f154": "56ad43fc57833eefb116af581c9ad034c53778ee",
+      "72ac4fd9b61c086d9836486c2f750be2": "a582843e7dac4735392fe82fdf3e6fef88f7ff66",
+      "f58606c167af7d2b961a06bab8632bd0": "0f6b69ace5bcd59ba3641bb4d833e120e93eb8dd",
+      "c6fc241947fcc671b0ed1fc2dd3baa99": "c06f5745e3ecc0b33e802877b46352d8304b81bc",
+      "e97109bf49fd31e3f60e2081baf73f5f": "501c31d7614583f6b1f25eb57f67d35343e6dff8",
+      "c0406730f8e7e0048ab29df2b55aea8b": "339af29d54a62a8d6ddea059d01a1c71dceb741f",
+      "d9e9b284f38ac79e8e52ed8673a704b0": "b7165607add6023abb9291e3ae80053865ab4a15",
+      "31c8eac7f0eff22599ec31852a151865": "d0d06fca34ac14d021175be133af413bdbecdf9c",
+      "0d10522eadd5aea406edc29da9d5a6ee": "efa8ae5ed06eba9d4020ff81dc612bf934261803",
+      "cc93bcc8c516e0196f2652b8d9b9eeb5": "f69915f13de626f3c35bc67c8069720a9a0ea853",
+      "a4b16b09d8bce6714a919325ffc9a43f": "fbb4cd76cee5ce70539da8cd24df370bfac1b8a2",
+      "2e7d76c347da6740e153d154b9064f33": "61f09b64c64964cacfec0833f04968a08f7da464",
+      "9bc925ed58fe4063cb885b9f8752dcb5": "a36992809f946cba845dbe4a8cdc4ee79e413bc0",
+      "342787edcff4c9bca0725377030b739a": "339d7581e1a70f8fb287e5a572f6388f5bc00534",
+      "63346f9c4d4c71f6d592988e024d810d": "b757316e1cd39bad4e5045480350b7e44903efc8",
+      "5f4bd62ead81e179f200d8c61e223d31": "ab6dc8c5ba131d3cc827063081b3bd29f650ba90",
+      "fda0237b2046adf21d66b7fb5ac441ae": "a9b9ed5fab307250a69a12ebce4bc44786b8b453",
+      "ec51495fc1c0606a9e2f57bca6602f5a": "90943fbcd3c23104fcdf7aed70df1e7752f39271",
+      "ac7ab73a8c909c61551b2c82f906921e": "7eea41770e156b05ddde4195954b5a468f163cdd",
       "dc1aa189468255e644e44b99ad7da49c": "84d422b53547271e3a07342704a05ef481db3f99",
       "fc90330915e7c494898615eb58689d68": "2d327e78832edd67ca3909c25b8c8c839637a1ed",
       "c4abdbe2a64c2ef06b6b659f32ea883f": "0a42a4816c89447b16e1f3245409591efea98a4a",
@@ -113627,6 +113957,50 @@
       ],
       "games.db": [
         "0e2ee74d1f9ebc3a6faf9dbaebbacc2ff053f4df"
+      ],
+      "gpuCore.ini": [
+        "5f589f6b1845927141dac09f6c2b050624ef2d03",
+        "c966a738bffbe6f5017684318b26f66899e620f4",
+        "687540a168728baf3babaf2dedf74b5f1d2f56b4",
+        "56ad43fc57833eefb116af581c9ad034c53778ee",
+        "0f6b69ace5bcd59ba3641bb4d833e120e93eb8dd",
+        "339d7581e1a70f8fb287e5a572f6388f5bc00534",
+        "a9b9ed5fab307250a69a12ebce4bc44786b8b453"
+      ],
+      "gpuCore.slf": [
+        "a5c69c5c3fde3f6fd5cce8e79efa3ef96a6add01",
+        "54644d6ec012bcbf9030b369a2fb4dfbedfa511f",
+        "10de0e6e7f616b67f7aced4fa51a55af9d9fb046",
+        "036e58e46d7264e2d6b08f48bde8b2d83361a661",
+        "f0e3d77db14b4dd11aa7cc71613097600d3e5da3",
+        "a582843e7dac4735392fe82fdf3e6fef88f7ff66",
+        "c06f5745e3ecc0b33e802877b46352d8304b81bc",
+        "501c31d7614583f6b1f25eb57f67d35343e6dff8",
+        "b7165607add6023abb9291e3ae80053865ab4a15",
+        "efa8ae5ed06eba9d4020ff81dc612bf934261803",
+        "b757316e1cd39bad4e5045480350b7e44903efc8",
+        "90943fbcd3c23104fcdf7aed70df1e7752f39271"
+      ],
+      "gpuCore.slv": [
+        "073a34b093054d217029f7314a2b8142e1dac6b7",
+        "dcd9f24f47443ec8421e48fef7e37fd8a52c4782",
+        "cda44c87be8b01c7ba23e2ad09a516d1747dee9b",
+        "339af29d54a62a8d6ddea059d01a1c71dceb741f",
+        "d0d06fca34ac14d021175be133af413bdbecdf9c",
+        "ab6dc8c5ba131d3cc827063081b3bd29f650ba90",
+        "7eea41770e156b05ddde4195954b5a468f163cdd"
+      ],
+      "gpuPeteOGL2.slf": [
+        "f69915f13de626f3c35bc67c8069720a9a0ea853"
+      ],
+      "gpuPeteOGL2.slv": [
+        "fbb4cd76cee5ce70539da8cd24df370bfac1b8a2"
+      ],
+      "delete.me": [
+        "61f09b64c64964cacfec0833f04968a08f7da464"
+      ],
+      "erase.me": [
+        "a36992809f946cba845dbe4a8cdc4ee79e413bc0"
       ],
       "136032.101.e3": [
         "84d422b53547271e3a07342704a05ef481db3f99"
@@ -132838,6 +133212,36 @@
       "51cef730": "808b7b46bfb033c7fe4d94d0dbf5a271de30dedc",
       "50fb46e4": "a848aad1840c7d85bfcdd552521a7181b00331cc",
       "69dc25d7": "9b2704655a893ff1675d28df4bd9ffc9e15d3dd5",
+      "dc249b13": "5f589f6b1845927141dac09f6c2b050624ef2d03",
+      "e24efa44": "a5c69c5c3fde3f6fd5cce8e79efa3ef96a6add01",
+      "e454f02d": "073a34b093054d217029f7314a2b8142e1dac6b7",
+      "a509c794": "54644d6ec012bcbf9030b369a2fb4dfbedfa511f",
+      "6b725715": "dcd9f24f47443ec8421e48fef7e37fd8a52c4782",
+      "04e29286": "10de0e6e7f616b67f7aced4fa51a55af9d9fb046",
+      "579d5d7c": "c966a738bffbe6f5017684318b26f66899e620f4",
+      "5ebc2ad4": "036e58e46d7264e2d6b08f48bde8b2d83361a661",
+      "b01d11f1": "687540a168728baf3babaf2dedf74b5f1d2f56b4",
+      "e0c2acb6": "f0e3d77db14b4dd11aa7cc71613097600d3e5da3",
+      "41169e0a": "cda44c87be8b01c7ba23e2ad09a516d1747dee9b",
+      "7d4623fc": "56ad43fc57833eefb116af581c9ad034c53778ee",
+      "9c4acf63": "a582843e7dac4735392fe82fdf3e6fef88f7ff66",
+      "9aea70ac": "0f6b69ace5bcd59ba3641bb4d833e120e93eb8dd",
+      "1979f565": "c06f5745e3ecc0b33e802877b46352d8304b81bc",
+      "dbade009": "501c31d7614583f6b1f25eb57f67d35343e6dff8",
+      "e7e004f8": "339af29d54a62a8d6ddea059d01a1c71dceb741f",
+      "bdca044b": "b7165607add6023abb9291e3ae80053865ab4a15",
+      "872429df": "d0d06fca34ac14d021175be133af413bdbecdf9c",
+      "81621cda": "efa8ae5ed06eba9d4020ff81dc612bf934261803",
+      "65ba738e": "f69915f13de626f3c35bc67c8069720a9a0ea853",
+      "ed4adc00": "fbb4cd76cee5ce70539da8cd24df370bfac1b8a2",
+      "aabbe87a": "61f09b64c64964cacfec0833f04968a08f7da464",
+      "f74f071a": "a36992809f946cba845dbe4a8cdc4ee79e413bc0",
+      "afc20232": "339d7581e1a70f8fb287e5a572f6388f5bc00534",
+      "e23a78d7": "b757316e1cd39bad4e5045480350b7e44903efc8",
+      "a27ddd49": "ab6dc8c5ba131d3cc827063081b3bd29f650ba90",
+      "eff8698a": "a9b9ed5fab307250a69a12ebce4bc44786b8b453",
+      "4a2a86d7": "90943fbcd3c23104fcdf7aed70df1e7752f39271",
+      "50c5f498": "7eea41770e156b05ddde4195954b5a468f163cdd",
       "7e84972a": "84d422b53547271e3a07342704a05ef481db3f99",
       "ebf1e0ae": "2d327e78832edd67ca3909c25b8c8c839637a1ed",
       "92d6a0b4": "0a42a4816c89447b16e1f3245409591efea98a4a",
@@ -141495,6 +141899,36 @@
       "2e6883d4304c5de25c464a9fd97fcd2f642d8d2af2db9c2b13882e67f0f35b93": "808b7b46bfb033c7fe4d94d0dbf5a271de30dedc",
       "2db47ffca9510468e37717266838576f96dccd9ed6b7f00c0a721c9868338b19": "a848aad1840c7d85bfcdd552521a7181b00331cc",
       "27ab08e76e08fa8a1023b076f3e6c23bc6841732658942f30cea634394f40729": "9b2704655a893ff1675d28df4bd9ffc9e15d3dd5",
+      "d1ef814cb6314357d43089f67a6808df563577604b598da7fc4697cfbe08df50": "5f589f6b1845927141dac09f6c2b050624ef2d03",
+      "0a7a10c278ec13ae37192d15484bacc646bca67e2aae64fab39cd78dda1547cc": "a5c69c5c3fde3f6fd5cce8e79efa3ef96a6add01",
+      "92f06e873b6ca0affd4029ba646c58ae60a47471f7123047c08b2fe3ad45fc41": "073a34b093054d217029f7314a2b8142e1dac6b7",
+      "70b69879b7583ee3bbcfdddc106a59e5ed66581914bfa2ad1f82285654c5f2a0": "54644d6ec012bcbf9030b369a2fb4dfbedfa511f",
+      "23ecd34d71b69e2d41b71ca66220792310c26e6799db9351e26cdae287a2f406": "dcd9f24f47443ec8421e48fef7e37fd8a52c4782",
+      "56f2d9af2060f2f0fd6c2acdccbe57f77a0609a2cfb3f2e324b3c3a4fe704e49": "10de0e6e7f616b67f7aced4fa51a55af9d9fb046",
+      "06fac91ea6fe36e3e41780da7d631a575893c9dfb56f1369dc639a97c2fc9270": "c966a738bffbe6f5017684318b26f66899e620f4",
+      "a184f3e62cf87caa00d1e9c044587cb5244567369a5edab5c1dbec43edba3ff3": "036e58e46d7264e2d6b08f48bde8b2d83361a661",
+      "32db4e009959b5606e3d3153d9cd4c0e1a84312bf07848b595eaec0190ea6b9b": "687540a168728baf3babaf2dedf74b5f1d2f56b4",
+      "8b39bd12aae661165fc35eb2627c1ea4d7cc26fef179fe2e772abb412bf94e5b": "f0e3d77db14b4dd11aa7cc71613097600d3e5da3",
+      "9f63333b425c697048c6804d7f30f9a653570143eb897758c7c9fb9d3d8e119c": "cda44c87be8b01c7ba23e2ad09a516d1747dee9b",
+      "939ac6a08f181b926ed074f83342ff4043ec7237267652ff163650f23852de61": "56ad43fc57833eefb116af581c9ad034c53778ee",
+      "32e45e1a9cd471bdcf7c0f1b77a425cdda265726e58e2c5a703c27bb343a52ec": "a582843e7dac4735392fe82fdf3e6fef88f7ff66",
+      "bb046bc18f6e1e78713e5d6f5a5c58a5b4969fe1488f41df6ef9ee0c1f82dcaf": "0f6b69ace5bcd59ba3641bb4d833e120e93eb8dd",
+      "db1955fb12093a469f62f30ae4995663436707149a0bd0212494840b2f52c383": "c06f5745e3ecc0b33e802877b46352d8304b81bc",
+      "adc966ee2b7e1d61515f49890ddd67cebf6335fe0e8cfb6f6fc6fa2a69a9db11": "501c31d7614583f6b1f25eb57f67d35343e6dff8",
+      "8205995b3aea42b98adbe8ad99e28a5edfdbc711e74a5e33da045bfa1da4428c": "339af29d54a62a8d6ddea059d01a1c71dceb741f",
+      "a175f11b2188b4001c51bb548763d92a052211fb7b84cc82e2f492956d9623ec": "b7165607add6023abb9291e3ae80053865ab4a15",
+      "7160ce15161d0a36f8dc5168b8368a0fc8e2238d40635a3c7be8cccfa884746f": "d0d06fca34ac14d021175be133af413bdbecdf9c",
+      "5e4bfe61cbf89579716b32559d8b92ac733623a414dd0c405894a36ab9457a0f": "efa8ae5ed06eba9d4020ff81dc612bf934261803",
+      "46cd5cf17654fb5730f1f557a4f864b1cc4d89031906ed5848b21468a5fb5c74": "f69915f13de626f3c35bc67c8069720a9a0ea853",
+      "c113ff0790ba6454089035036f448c261dc4742a3c28bc42f756beddaa8ff3fb": "fbb4cd76cee5ce70539da8cd24df370bfac1b8a2",
+      "e33dbd20d732ad6d5c1f8228c36213c9385547f29b4746940bdaccfd52852a21": "61f09b64c64964cacfec0833f04968a08f7da464",
+      "efe376ead6f70831db442679dcbd211a1d34065617f9cfae75bee791765088ff": "a36992809f946cba845dbe4a8cdc4ee79e413bc0",
+      "86c90b07233a952df257ca1eb6b54539bca5d4320d649c8088ad0f41085dcc63": "339d7581e1a70f8fb287e5a572f6388f5bc00534",
+      "3ee27e57524c2cbad894d6c8c2508b8459eee236555ed1272dcb83e1f390f7f6": "b757316e1cd39bad4e5045480350b7e44903efc8",
+      "8868a3c4d98538d0869537c4f6c1b27cd14cad06978e3acbef695c0ececd79e4": "ab6dc8c5ba131d3cc827063081b3bd29f650ba90",
+      "db84ab7b4cc327c1ac4513a982e8b2c39bd5ddf64f15d70178f6a94ffdcdef48": "a9b9ed5fab307250a69a12ebce4bc44786b8b453",
+      "a9d7bfddd60c805878707f115e753e494e27ffaa879190dc045ef2eeb120f647": "90943fbcd3c23104fcdf7aed70df1e7752f39271",
+      "89e80f1cb14de9a185ed46f9f4777649d0d8f19a4ac3d2cfe5157f427188f2fd": "7eea41770e156b05ddde4195954b5a468f163cdd",
       "d7626affff7dfc0a8782e0894770258ea572d0f2d9859690efbc8ce018cb36bc": "84d422b53547271e3a07342704a05ef481db3f99",
       "81fb611f7dc9d531720836f31e5aff1cc5466013d0afb7ab7f947cb5b7520504": "2d327e78832edd67ca3909c25b8c8c839637a1ed",
       "c770a3ae305c3420292516dbd86373f67798983c74754d2cc988de6ddf6ec51f": "0a42a4816c89447b16e1f3245409591efea98a4a",
@@ -151561,6 +151995,96 @@
       "resources/shaders/vulkan/shadeboost.glsl": [
         "9b2704655a893ff1675d28df4bd9ffc9e15d3dd5"
       ],
+      "shaders/5xBR-v3.7c/gpuCore.ini": [
+        "5f589f6b1845927141dac09f6c2b050624ef2d03"
+      ],
+      "shaders/5xBR-v3.7c/gpuCore.slf": [
+        "a5c69c5c3fde3f6fd5cce8e79efa3ef96a6add01"
+      ],
+      "shaders/5xBR-v3.7c/gpuCore.slv": [
+        "073a34b093054d217029f7314a2b8142e1dac6b7"
+      ],
+      "shaders/AA_Shader_v2.0_w_Natural_Vision/gpuCore.slf": [
+        "54644d6ec012bcbf9030b369a2fb4dfbedfa511f"
+      ],
+      "shaders/AA_Shader_v2.0_w_Natural_Vision/gpuCore.slv": [
+        "dcd9f24f47443ec8421e48fef7e37fd8a52c4782"
+      ],
+      "shaders/AA_Shader_v2.0_w_Natural_Vision_Brightness/gpuCore.slf": [
+        "10de0e6e7f616b67f7aced4fa51a55af9d9fb046"
+      ],
+      "shaders/Brightness/gpuCore.ini": [
+        "c966a738bffbe6f5017684318b26f66899e620f4"
+      ],
+      "shaders/Brightness/gpuCore.slf": [
+        "036e58e46d7264e2d6b08f48bde8b2d83361a661"
+      ],
+      "shaders/CRT-Hyllian/gpuCore.ini": [
+        "687540a168728baf3babaf2dedf74b5f1d2f56b4"
+      ],
+      "shaders/CRT-Hyllian/gpuCore.slf": [
+        "f0e3d77db14b4dd11aa7cc71613097600d3e5da3"
+      ],
+      "shaders/CRT-Hyllian/gpuCore.slv": [
+        "cda44c87be8b01c7ba23e2ad09a516d1747dee9b"
+      ],
+      "shaders/CRT-Hyllian-3D/gpuCore.ini": [
+        "56ad43fc57833eefb116af581c9ad034c53778ee"
+      ],
+      "shaders/CRT-Hyllian-3D/gpuCore.slf": [
+        "a582843e7dac4735392fe82fdf3e6fef88f7ff66"
+      ],
+      "shaders/CRT-Lottes/gpuCore.ini": [
+        "0f6b69ace5bcd59ba3641bb4d833e120e93eb8dd"
+      ],
+      "shaders/CRT-Lottes/gpuCore.slf": [
+        "c06f5745e3ecc0b33e802877b46352d8304b81bc"
+      ],
+      "shaders/Cartoon_shader_II/gpuCore.slf": [
+        "501c31d7614583f6b1f25eb57f67d35343e6dff8"
+      ],
+      "shaders/Cartoon_shader_II/gpuCore.slv": [
+        "339af29d54a62a8d6ddea059d01a1c71dceb741f"
+      ],
+      "shaders/FXAA_natural_vision/gpuCore.slf": [
+        "b7165607add6023abb9291e3ae80053865ab4a15"
+      ],
+      "shaders/FXAA_natural_vision/gpuCore.slv": [
+        "d0d06fca34ac14d021175be133af413bdbecdf9c"
+      ],
+      "shaders/Grayscale/gpuCore.slf": [
+        "efa8ae5ed06eba9d4020ff81dc612bf934261803"
+      ],
+      "shaders/gpuPeteOGL2.slf": [
+        "f69915f13de626f3c35bc67c8069720a9a0ea853"
+      ],
+      "shaders/gpuPeteOGL2.slv": [
+        "fbb4cd76cee5ce70539da8cd24df370bfac1b8a2"
+      ],
+      "shaders/gpucore/delete.me": [
+        "61f09b64c64964cacfec0833f04968a08f7da464"
+      ],
+      "shaders/ogl2/erase.me": [
+        "a36992809f946cba845dbe4a8cdc4ee79e413bc0"
+      ],
+      "shaders/super-eagle/gpuCore.ini": [
+        "339d7581e1a70f8fb287e5a572f6388f5bc00534"
+      ],
+      "shaders/super-eagle/gpuCore.slf": [
+        "b757316e1cd39bad4e5045480350b7e44903efc8"
+      ],
+      "shaders/super-eagle/gpuCore.slv": [
+        "ab6dc8c5ba131d3cc827063081b3bd29f650ba90"
+      ],
+      "shaders/xBR-LV2-3D/gpuCore.ini": [
+        "a9b9ed5fab307250a69a12ebce4bc44786b8b453"
+      ],
+      "shaders/xBR-LV2-3D/gpuCore.slf": [
+        "90943fbcd3c23104fcdf7aed70df1e7752f39271"
+      ],
+      "shaders/xBR-LV2-3D/gpuCore.slv": [
+        "7eea41770e156b05ddde4195954b5a468f163cdd"
+      ],
       "Feeds/fpLatestTables.xml": [
         "bd9de21def48b65b5382c403971a9062928b9345"
       ],
@@ -160978,6 +161502,21 @@
       ],
       "resources/shaders/vulkan/cas.glsl": [
         "005cecf1a5e20b05407d55d0aad22cf81ad66c31"
+      ],
+      "shaders/AA_Shader_v2.0_w_Natural_Vision_Brightness/gpuCore.slv": [
+        "dcd9f24f47443ec8421e48fef7e37fd8a52c4782"
+      ],
+      "shaders/Brightness/gpuCore.slv": [
+        "073a34b093054d217029f7314a2b8142e1dac6b7"
+      ],
+      "shaders/CRT-Lottes/gpuCore.slv": [
+        "073a34b093054d217029f7314a2b8142e1dac6b7"
+      ],
+      "shaders/Grayscale/gpuCore.slv": [
+        "073a34b093054d217029f7314a2b8142e1dac6b7"
+      ],
+      "shaders/CRT-Hyllian-3D/gpuCore.slv": [
+        "cda44c87be8b01c7ba23e2ad09a516d1747dee9b"
       ],
       "DefaultSounds/20pSlide.wav": [
         "f92d854f017d154c9ae0a2351629876515ba48d7"

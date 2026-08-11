@@ -1,0 +1,301 @@
+/*
+   Hyllian's CRT Shader
+  
+   Copyright (C) 2011-2015 Hyllian - sergiogdb@gmail.com
+
+   Permission is hereby granted, free of charge, to any person obtaining a copy
+   of this software and associated documentation files (the "Software"), to deal
+   in the Software without restriction, including without limitation the rights
+   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+   copies of the Software, and to permit persons to whom the Software is
+   furnished to do so, subject to the following conditions:
+
+   The above copyright notice and this permission notice shall be included in
+   all copies or substantial portions of the Software.
+
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+   THE SOFTWARE.
+
+*/
+
+#version 100
+
+#ifdef GL_ES
+precision mediump float;
+#endif
+
+// Uncomment to enable anti-ringing to horizontal filter.
+//#define ANTI_RINGING
+
+// Comment next line if you don't desire the phosphor effect.
+//#define PHOSPHOR
+
+// Uncomment to enable adjustment of red and green saturation.
+//#define RED_GREEN_CONTROL
+
+#define InputGamma 2.4
+#define OutputGamma 2.2
+#define RED_BOOST 1.0
+#define GREEN_BOOST 1.0
+#define SCANLINES_STRENGTH 0.72
+#define BEAM_MIN_WIDTH 0.86
+#define BEAM_MAX_WIDTH 1.0
+#define COLOR_BOOST 1.5
+#define CRT_TV_BLUE_TINT 1.0 
+
+
+#define GAMMA_IN(color)     pow(color, vec3(InputGamma, InputGamma, InputGamma))
+#define GAMMA_OUT(color)    pow(color, vec3(1.0 / OutputGamma, 1.0 / OutputGamma, 1.0 / OutputGamma))
+
+const vec3 dtt = vec3(65536,255,1);
+
+
+// Horizontal cubic filter.
+
+// Some known filters use these values:
+
+//    B = 0.0, C = 0.0  =>  Hermite cubic filter.
+//    B = 1.0, C = 0.0  =>  Cubic B-Spline filter.
+//    B = 0.0, C = 0.5  =>  Catmull-Rom Spline filter. This is the default used in this shader.
+//    B = C = 1.0/3.0   =>  Mitchell-Netravali cubic filter.
+//    B = 0.3782, C = 0.3109  =>  Robidoux filter.
+//    B = 0.2620, C = 0.3690  =>  Robidoux Sharp filter.
+//    B = 0.36, C = 0.28  =>  My best config for ringing elimination in pixel art (Hyllian).
+
+
+// For more info, see: http://www.imagemagick.org/Usage/img_diagrams/cubic_survey.gif
+
+// Change these params to configure the horizontal filter.
+const  float  B =  0.0; 
+const  float  C =  0.5;  
+
+/*
+const  mat4 invX = mat4(                          (-B - 6.0*C)/6.0,         (3.0*B + 12.0*C)/6.0,     (-3.0*B - 6.0*C)/6.0,             B/6.0,
+                                        (12.0 - 9.0*B - 6.0*C)/6.0, (-18.0 + 12.0*B + 6.0*C)/6.0,                      0.0, (6.0 - 2.0*B)/6.0,
+                                       -(12.0 - 9.0*B - 6.0*C)/6.0, (18.0 - 15.0*B - 12.0*C)/6.0,      (3.0*B + 6.0*C)/6.0,             B/6.0,
+                                                   (B + 6.0*C)/6.0,                           -C,                      0.0,               0.0);
+
+*/
+const  mat4 invX = mat4(                          (-B - 6.0*C)/6.0,   (12.0 - 9.0*B - 6.0*C)/6.0,  -(12.0 - 9.0*B - 6.0*C)/6.0,   (B + 6.0*C)/6.0,
+                                              (3.0*B + 12.0*C)/6.0, (-18.0 + 12.0*B + 6.0*C)/6.0, (18.0 - 15.0*B - 12.0*C)/6.0,                -C,
+                                              (-3.0*B - 6.0*C)/6.0,                          0.0,          (3.0*B + 6.0*C)/6.0,               0.0,
+                                                             B/6.0,            (6.0 - 2.0*B)/6.0,                        B/6.0,               0.0);
+
+
+/*
+const static float4x4 invX = float4x4(            (-B - 6.0*C)/6.0,         (3.0*B + 12.0*C)/6.0,     (-3.0*B - 6.0*C)/6.0,             B/6.0,
+                                        (12.0 - 9.0*B - 6.0*C)/6.0, (-18.0 + 12.0*B + 6.0*C)/6.0,                      0.0, (6.0 - 2.0*B)/6.0,
+                                       -(12.0 - 9.0*B - 6.0*C)/6.0, (18.0 - 15.0*B - 12.0*C)/6.0,      (3.0*B + 6.0*C)/6.0,             B/6.0,
+                                                   (B + 6.0*C)/6.0,                           -C,                      0.0,               0.0);
+
+*/
+
+const   float halfpi            = 1.5707963267948966192313216916398;
+const   float pi                = 3.1415926535897932384626433832795;
+const   float JINC2_WINDOW_SINC = 0.42;
+const   float JINC2_SINC        = 0.92;
+const   float wa                = JINC2_WINDOW_SINC*pi;
+const   float wb                = JINC2_SINC*pi;
+const   float JINC2_AR_STRENGTH = 0.8;
+
+/*
+const   vec2 OGLSize    = vec2( 4096.0, 2048.0 );
+
+const   vec2 OGLInvSize = vec2( 1.0/4096.0, 1.0/2048.0 );
+
+const   vec2 dx         = vec2( 1.0/4096.0, 0.0 );
+
+const   vec2 dy         = vec2( 0.0, 1.0/2048.0 );
+
+*/
+/*
+const   vec2 OGLSize    = vec2( 1024.0, 512.0);
+
+const   vec2 OGLInvSize = vec2( 0.0009765625, 0.001953125); 
+
+const   vec2 dx         = vec2( 0.0009765625, 0.0);
+
+const   vec2 dy         = vec2( 0.0, 0.001953125 );
+
+*/
+
+//uniform vec4 OGL2InvSize;
+//uniform vec4 OGL2Size;
+
+varying vec2 v_texCoord;
+
+float reduce(vec3 A)
+{
+  return dot(A, dtt);
+}
+
+
+// Calculates the distance between two points
+float d(vec2 pt1, vec2 pt2)
+{
+  vec2 v = pt2 - pt1;
+  return sqrt(dot(v,v));
+}
+
+vec3 min4(vec3 a, vec3 b, vec3 c, vec3 d)
+{
+    return min(a, min(b, min(c, d)));
+}
+
+vec3 max4(vec3 a, vec3 b, vec3 c, vec3 d)
+{
+    return max(a, max(b, max(c, d)));
+}
+
+vec4 resampler(vec4 x)
+{
+   vec4 res;
+
+   res = (x==vec4(0.0, 0.0, 0.0, 0.0)) ?  vec4(wa*wb)  :  sin(x*wa)*sin(x*wb)/(x*x);
+
+   return res;
+}
+
+
+
+uniform sampler2D Sample;
+
+void main()
+{
+    vec3 color, E;
+    vec2 OGL2Size = vec2(1024, 512);
+    vec2 OGL2InvSize = 1.0/OGL2Size;
+
+    vec2 dx = vec2(OGL2InvSize.x,0.0);
+    vec2 dy = vec2(0.0, OGL2InvSize.y);
+
+    vec2 pix_coord = v_texCoord.xy*OGL2Size+vec2(-0.5,0.5);
+    vec2 tex = (floor(v_texCoord.xy*OGL2Size) + vec2(0.5, 0.5))/OGL2Size;
+
+    vec2 tc = (floor(pix_coord)+vec2(0.5,0.5))/OGL2Size;
+
+    vec2 fp = fract(pix_coord);
+
+    vec4 c00 = vec4(GAMMA_IN(texture2D(Sample, tc     - dx - dy).xyz),1.0);
+    vec4 c01 = vec4(GAMMA_IN(texture2D(Sample, tc          - dy).xyz),1.0);
+    vec4 c02 = vec4(GAMMA_IN(texture2D(Sample, tc     + dx - dy).xyz),1.0);
+    vec4 c03 = vec4(GAMMA_IN(texture2D(Sample, tc + 2.0*dx - dy).xyz),1.0);
+    vec4 c10 = vec4(GAMMA_IN(texture2D(Sample, tc     - dx).xyz),1.0);
+    vec4 c11 = vec4(GAMMA_IN(texture2D(Sample, tc         ).xyz),1.0);
+    vec4 c12 = vec4(GAMMA_IN(texture2D(Sample, tc     + dx).xyz),1.0);
+    vec4 c13 = vec4(GAMMA_IN(texture2D(Sample, tc + 2.0*dx).xyz),1.0);
+
+    color = E = GAMMA_IN(texture2D(Sample, v_texCoord.xy).xyz);
+
+    vec3 F0 = texture2D(Sample, tex +dx+0.25*dx +0.25*dy).xyz;
+    vec3 F1 = texture2D(Sample, tex +dx+0.25*dx -0.25*dy).xyz;
+    vec3 F2 = texture2D(Sample, tex +dx-0.25*dx -0.25*dy).xyz;
+    vec3 F3 = texture2D(Sample, tex +dx-0.25*dx +0.25*dy).xyz;
+
+    vec3 H0 = texture2D(Sample, tex +0.25*dx +0.25*dy+dy).xyz;
+    vec3 H1 = texture2D(Sample, tex +0.25*dx -0.25*dy+dy).xyz;
+    vec3 H2 = texture2D(Sample, tex -0.25*dx -0.25*dy+dy).xyz;
+    vec3 H3 = texture2D(Sample, tex -0.25*dx +0.25*dy+dy).xyz;
+
+    float f0 = reduce(F0);
+    float f1 = reduce(F1);
+    float f2 = reduce(F2);
+    float f3 = reduce(F3);
+
+    float h0 = reduce(H0);
+    float h1 = reduce(H1);
+    float h2 = reduce(H2);
+    float h3 = reduce(H3);
+
+    float block_3d = (float(f0==f1)*float(f1==f2)*float(f2==f3)*float(h0==h1)*float(h1==h2)*float(h2==h3));
+
+
+#ifdef ANTI_RINGING
+    //  Get min/max samples
+    vec4 min_sample = min(min(c01,c11), min(c02,c12));
+    vec4 max_sample = max(max(c01,c11), max(c02,c12));
+//    vec4 min_sample = min(min(c01,c11), min(c02,c12)) + (c10-c11)*(c12-c13);
+//    vec4 max_sample = max(max(c01,c11), max(c02,c12)) - (c10-c11)*(c12-c13);
+#endif
+;
+
+    mat4 color_matrix0 = mat4(c00, c01, c02, c03);
+    mat4 color_matrix1 = mat4(c10, c11, c12, c13);
+
+    vec4 lobes = vec4(fp.x*fp.x*fp.x, fp.x*fp.x, fp.x, 1.0);
+
+    vec4 invX_Px  = invX * lobes;
+    vec4 color0x   = color_matrix0 * invX_Px;
+    vec4 color1x   = color_matrix1 * invX_Px;
+    vec3 color0  = color0x.xyz;
+    vec3 color1  = color1x.xyz;
+
+
+/*
+    vec4 invX_Px  = vec4(dot(invX[0], poli), dot(invX[1], poli), dot(invX[2], poli), dot(invX[3], poli));
+    vec3 color0   = vec3(dot(color_matrix0[0], invX_Px), dot(color_matrix0[1], invX_Px), dot(color_matrix0[2], invX_Px));
+    vec3 color1   = vec3(dot(color_matrix1[0], invX_Px), dot(color_matrix1[1], invX_Px), dot(color_matrix1[2], invX_Px));
+*/
+
+/*
+    float4x3 color_matrix0 = float4x3(c00, c01, c02, c03);
+    float4x3 color_matrix1 = float4x3(c10, c11, c12, c13);
+
+    float4 invX_Px = mul(invX, float4(fp.x*fp.x*fp.x, fp.x*fp.x, fp.x, 1.0));
+    float3 color0   = mul(invX_Px, color_matrix0);
+    float3 color1   = mul(invX_Px, color_matrix1);
+*/
+
+#ifdef ANTI_RINGING
+    // Anti-ringing
+    color0 = clamp(color0, min_sample, max_sample);
+    color1 = clamp(color1, min_sample, max_sample);
+#endif
+
+    float pos0 = fp.y;
+    float pos1 = 1.0 - fp.y;
+
+    vec3 lum0 = mix(vec3(BEAM_MIN_WIDTH), vec3(BEAM_MAX_WIDTH), color0);
+    vec3 lum1 = mix(vec3(BEAM_MIN_WIDTH), vec3(BEAM_MAX_WIDTH), color1);
+
+    vec3 d0 = clamp(pos0/(lum0+0.0000001), 0.0, 1.0);
+    vec3 d1 = clamp(pos1/(lum1+0.0000001), 0.0, 1.0);
+
+    d0 = exp(-10.0*SCANLINES_STRENGTH*d0*d0);
+    d1 = exp(-10.0*SCANLINES_STRENGTH*d1*d1);
+
+    color = clamp(color0*d0+color1*d1, 0.0, 1.0);            
+
+    color *= COLOR_BOOST;
+
+#ifdef RED_GREEN_CONTROL
+    color.rgb *= vec3(RED_BOOST, GREEN_BOOST, CRT_TV_BLUE_TINT);
+#else
+    color.b *= CRT_TV_BLUE_TINT;
+#endif
+
+#ifdef PHOSPHOR
+    float mod_factor = VAR.texCoord.x * IN.output_size.x * IN.texture_size.x / IN.video_size.x;
+
+    vec3 dotMaskWeights = mix(
+                                 vec3(1.0, 0.7, 1.0),
+                                 vec3(0.7, 1.0, 0.7),
+                                 floor(fmod(mod_factor, 2.0))
+                                  );
+
+    color.rgb *= dotMaskWeights;
+#endif                   
+
+    if (block_3d!=0.0) color = E;
+    //color = block_3d ? color : E;
+
+    color  = GAMMA_OUT(color);
+
+    // final sum and weight normalization
+    gl_FragColor.xyz = color;
+}

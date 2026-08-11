@@ -1,0 +1,32 @@
+struct inputdata
+{
+   vec2 video_size;
+   vec2 texture_size;
+   vec2 output_size;
+   float frame_count;
+   float frame_direction;
+   float frame_rotation;
+};
+
+attribute vec4 a_position;
+attribute vec2 a_texCoord;
+uniform inputdata IN;
+varying vec4 TexCoord[8];
+
+void main()
+{
+const vec2 OGLSize = vec2( 1024.0, 512.0);
+vec2 OGLInvSize = 1.0/OGLSize;
+float dx = OGLInvSize.x;
+float dy = OGLInvSize.y;
+
+gl_Position = a_position;
+TexCoord[0].xy = a_texCoord;
+TexCoord[1] = TexCoord[0].xxxy + vec4( -dx, 0, dx,-2.0*dy); // A1 B1 C1
+TexCoord[2] = TexCoord[0].xxxy + vec4( -dx, 0, dx,    -dy); //  A  B  C
+TexCoord[3] = TexCoord[0].xxxy + vec4( -dx, 0, dx,      0); //  D  E  F
+TexCoord[4] = TexCoord[0].xxxy + vec4( -dx, 0, dx,     dy); //  G  H  I
+TexCoord[5] = TexCoord[0].xxxy + vec4( -dx, 0, dx, 2.0*dy); // G5 H5 I5
+TexCoord[6] = TexCoord[0].xyyy + vec4(-2.0*dx,-dy, 0,  dy); // A0 D0 G0
+TexCoord[7] = TexCoord[0].xyyy + vec4( 2.0*dx,-dy, 0,  dy); // C4 F4 I4
+}
