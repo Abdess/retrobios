@@ -5685,6 +5685,36 @@ struct BurnDriver BurnDrvneogeo = {
         )
         self.assertTrue(checked.issubset(self._names_in(out)))
 
+    def test_extras_group_under_their_system_not_a_shared_bucket(self):
+        """find_undeclared_files reports the display name, the profiles are
+        keyed by slug; a key-only lookup put nearly every core extra in one
+        bucket and lost the per-system grouping both narrowing passes need."""
+        from generate_pack import _emulator_systems_index
+
+        index = _emulator_systems_index(
+            {
+                "beetle_psx": {
+                    "emulator": "Beetle PSX (Mednafen PSX)",
+                    "systems": ["sony-playstation"],
+                },
+                "beebem": {"emulator": "beebem", "systems": ["bbc-micro-b"]},
+            }
+        )
+        self.assertEqual(index["beetle_psx"], ["sony-playstation"])
+        self.assertEqual(
+            index["Beetle PSX (Mednafen PSX)"], ["sony-playstation"]
+        )
+        self.assertEqual(index["beebem"], ["bbc-micro-b"])
+        self.assertNotIn("_extras", index)
+
+    def test_slot_narrowed_pack_gets_its_own_name(self):
+        names = {
+            os.path.basename(self._region_pack()),
+            os.path.basename(self._region_pack(one_per_slot=True)),
+        }
+        self.assertEqual(len(names), 2, names)
+        self.assertTrue(any("OnePerSlot" in n for n in names))
+
     def test_verify_pack_return_matches_its_annotation(self):
         import inspect
         import typing

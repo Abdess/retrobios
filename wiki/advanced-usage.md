@@ -145,9 +145,11 @@ cannot be ordered, so the whole slot is left alone: the North American
 PlayStation slot stays open because `scph101.bin` carries no priority, even
 though `scph5501.bin` would otherwise win at 5.
 
-`--one-per-slot` requires `--platform` or `--all`, and is refused with
-`--manifest`, `--emulator`, `--system` and `--from-md5` rather than silently
-ignored.
+`--one-per-slot` works with or without `--region`, requires `--platform` or
+`--all`, and is refused with `--manifest`, `--emulator`, `--system` and
+`--from-md5` rather than silently ignored. It tags the output name
+(`Recalbox_10.0.8_OnePerSlot_BIOS_Pack.zip`) so a narrowed build never
+overwrites the full one, and the pack README says the pack was narrowed.
 
 
 `--region` composes with `--split`, `--target`, `--required-only`, `--source`,
