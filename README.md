@@ -59,17 +59,17 @@ These are the files an emulator loads from disk instead of carrying inside itsel
 
 Each file is checked the way your platform checks it. Most compare a checksum, the fingerprint of a file's contents, which catches a corrupt or unexpected copy. RetroArch, Lakka and RetroPie only look for the filename, because that is all their code does: the Coverage table says which applies to you. Independently of that, the collection records five fingerprints per file, and wherever an emulator's code states an expected size or hash, that value is read from its source and rechecked here.
 
-- **14 files** the platforms' emulators load are not in the collection yet, named in the [gap analysis](https://abdess.github.io/retrobios/gaps/)
+- **5 files** the platforms' emulators load are still to be found, and 9 more cannot be sourced at all (per-user keys, user-filled slots, dumps nobody has made); both are named in the [gap analysis](https://abdess.github.io/retrobios/gaps/)
 - **12 platforms** supported with platform-specific verification
-- **385 emulators** profiled from source (RetroArch cores + standalone)
-- **421 systems** handled by those emulators (NES, SNES, PlayStation, Saturn, Dreamcast, ...)
+- **387 emulators** profiled from source (RetroArch cores + standalone)
+- **440 systems** handled by those emulators (NES, SNES, PlayStation, Saturn, Dreamcast, ...)
 - **8,372 files**, each with its SHA1, MD5, SHA256, CRC32 and Adler-32 fingerprints: 3,030 system files, 2,803 arcade ROM sets, 2,539 game and engine data files
 - **542 of 3,030 system files** matched to dump-preservation catalogs (No-Intro, Redump, TOSEC); arcade sets and engine data fall outside what those catalogs index
 - **10010 MB** total collection size
 
 ## Supported systems
 
-NES, SNES, Nintendo 64, GameCube, Wii, Game Boy, Game Boy Advance, Nintendo DS, Nintendo 3DS, Switch, PlayStation, PlayStation 2, PlayStation 3, PSP, PS Vita, Mega Drive, Saturn, Dreamcast, Game Gear, Master System, Neo Geo, Atari 2600, Atari 7800, Atari Lynx, Atari ST, MSX, PC Engine, TurboGrafx-16, ColecoVision, Intellivision, Commodore 64, Amiga, ZX Spectrum, Arcade (MAME), and 387+ more.
+NES, SNES, Nintendo 64, GameCube, Wii, Game Boy, Game Boy Advance, Nintendo DS, Nintendo 3DS, Switch, PlayStation, PlayStation 2, PlayStation 3, PSP, PS Vita, Mega Drive, Saturn, Dreamcast, Game Gear, Master System, Neo Geo, Atari 2600, Atari 7800, Atari Lynx, Atari ST, MSX, PC Engine, TurboGrafx-16, ColecoVision, Intellivision, Commodore 64, Amiga, ZX Spectrum, Arcade (MAME), and 406+ more.
 
 Full list with per-file details: **[https://abdess.github.io/retrobios/](https://abdess.github.io/retrobios/)**
 
@@ -128,7 +128,7 @@ The [documentation site](https://abdess.github.io/retrobios/) provides:
 - **Per-emulator profiles** with source code references for every file
 - **Per-system pages** showing which emulators and platforms cover each console
 - **Gap analysis** identifying missing files and undeclared core requirements
-- **Cross-reference** mapping files across 12 platforms and 385 emulators
+- **Cross-reference** mapping files across 12 platforms and 387 emulators
 - **Versioned data access** through JSON, CSV and SQLite exports with published SHA-256 checksums
 
 ## How it works
@@ -166,4 +166,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software. [NOTICE](NOTICE) sets out their status and how to ask for a file to be removed.
 The reasoning, and where it is weakest, is in the [FAQ](https://abdess.github.io/retrobios/wiki/faq/#is-this-legal).
 
-*Auto-generated on 2026-08-11T12:24:04Z*
+*Auto-generated on 2026-08-11T13:47:40Z*

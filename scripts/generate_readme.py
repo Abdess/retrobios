@@ -81,6 +81,7 @@ def compute_coverage(
         "core_missing": core_missing,
         "core_unsourceable": core_unsourceable,
         "missing_names": missing_names,
+        "unsourceable_names": unsourceable_names,
         "pack_files": present + core_present,
         "total_missing": missing + core_missing,
         "mode": config.get("verification_mode", "existence"),
@@ -212,6 +213,15 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
     emulator_count = len(profiles)
     comp = compute_composition(db)
     missing_total = len(set().union(*(c["missing_names"] for c in coverages.values())))
+    # "Not in the collection yet" implies somebody could still put it there.
+    # Most of this figure cannot be: per-user registration keys, slots the
+    # emulator expects the user to fill, dumps nobody has made. Counting those
+    # beside genuinely acquirable files overstates what is actionable, so the
+    # two are reported apart.
+    unsourceable_total = len(
+        set().union(*(c["unsourceable_names"] for c in coverages.values()))
+    )
+    acquirable_total = missing_total - unsourceable_total
 
     system_ids: set[str] = set()
     for p in profiles.values():
@@ -339,8 +349,10 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
             " read from its source and rechecked here.",
             "",
             (
-                f"- **{missing_total} files** the platforms' emulators load are"
-                f" not in the collection yet, named in the"
+                f"- **{acquirable_total} files** the platforms' emulators load"
+                f" are still to be found, and {unsourceable_total} more cannot"
+                f" be sourced at all (per-user keys, user-filled slots, dumps"
+                f" nobody has made); both are named in the"
                 f" [gap analysis]({SITE_URL}gaps/)"
                 if missing_total
                 else "- **Nothing missing**: every file the platforms'"

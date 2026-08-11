@@ -440,7 +440,7 @@ nav:
     - MicroW8: emulators/uw8.md
     - uzem: emulators/uzem.md
     - VirtualXT: emulators/virtualxt.md
-  - Game engines (32):
+  - Game engines (33):
     - boom3: emulators/boom3.md
     - Cannonball: emulators/cannonball.md
     - ChaiLove: emulators/chailove.md
@@ -451,6 +451,7 @@ nav:
     - FAKE-08: emulators/fake08.md
     - future-pinball: emulators/future-pinball.md
     - Gargoyle: emulators/gargoyle.md
+    - idTech4A++: emulators/idtech4a++.md
     - Jump 'n Bump: emulators/jumpnbump.md
     - lightspark: emulators/lightspark.md
     - Lutro: emulators/lutro.md
@@ -547,7 +548,7 @@ nav:
     - ArcadeFlashWeb: emulators/arcadeflashweb.md
     - Dolphin Launcher: emulators/dolphin_launcher.md
     - Parallel Launcher: emulators/parallel-launcher.md
-  - Other (44):
+  - Other (45):
     - ares: emulators/ares.md
     - Basilisk II: emulators/basiliskii.md
     - beebem: emulators/beebem.md
@@ -569,6 +570,7 @@ nav:
     - FPseNG: emulators/fpse-ng.md
     - Gopher2600: emulators/gopher2600.md
     - gopher64: emulators/gopher64.md
+    - iNES: emulators/ines.md
     - jgenesis: emulators/jgenesis.md
     - KEGS: emulators/kegs.md
     - Lexaloffle: emulators/lexaloffle.md
