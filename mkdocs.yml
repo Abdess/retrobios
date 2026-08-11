@@ -263,7 +263,7 @@ nav:
     - vitaQuakeII: emulators/vitaquake2.md
     - yabasanshiro: emulators/yabasanshiro.md
     - Yuzu: emulators/yuzu.md
-  - Community forks (133):
+  - Community forks (134):
     - 2600.emu: emulators/2600-emu.md
     - EightyOne: emulators/81.md
     - a5200: emulators/a5200.md
@@ -325,6 +325,7 @@ nav:
     - hakuX: emulators/hakux.md
     - Handy: emulators/handy.md
     - higan (SFC Accuracy): emulators/higan_sfc.md
+    - Infinity: emulators/infinity.md
     - Lime3DS: emulators/lime3ds.md
     - LinApple: emulators/linapple.md
     - LRPS2: emulators/lrps2.md
