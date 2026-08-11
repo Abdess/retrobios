@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-11T17:20:13Z",
-  "total_files": 8685,
-  "total_size": 11147432390,
+  "generated_at": "2026-08-11T17:22:52Z",
+  "total_files": 8687,
+  "total_size": 11147434628,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -50117,6 +50117,16 @@
       "crc32": "81621cda",
       "adler32": "123e5384"
     },
+    "562725bd631fca602a97a06fd00593ca9b7b5467": {
+      "path": "bios/Other/epsxe/shaders/gpuPeteOGL2.fp",
+      "name": "gpuPeteOGL2.fp",
+      "size": 1810,
+      "sha1": "562725bd631fca602a97a06fd00593ca9b7b5467",
+      "md5": "cfab4aee399c508c272aeacc6ac322ed",
+      "sha256": "6bf9032ea1f5fba1aa452947e098682c4383319862eb32e7fb56e8f808c6054c",
+      "crc32": "1baf93d5",
+      "adler32": "262ce2e4"
+    },
     "f69915f13de626f3c35bc67c8069720a9a0ea853": {
       "path": "bios/Other/epsxe/shaders/gpuPeteOGL2.slf",
       "name": "gpuPeteOGL2.slf",
@@ -50136,6 +50146,16 @@
       "sha256": "c113ff0790ba6454089035036f448c261dc4742a3c28bc42f756beddaa8ff3fb",
       "crc32": "ed4adc00",
       "adler32": "da5cfeff"
+    },
+    "c57ad5634ec5965a0d8b78d42cf707e99d70adbb": {
+      "path": "bios/Other/epsxe/shaders/gpuPeteOGL2.vp",
+      "name": "gpuPeteOGL2.vp",
+      "size": 428,
+      "sha1": "c57ad5634ec5965a0d8b78d42cf707e99d70adbb",
+      "md5": "130c3066e5210cc69c4275af58af48be",
+      "sha256": "7d436a115420853589a4435c97c47e0314963723935381c0e9adf043c01e12a0",
+      "crc32": "0ebd47b9",
+      "adler32": "a7a08745"
     },
     "61f09b64c64964cacfec0833f04968a08f7da464": {
       "path": "bios/Other/epsxe/shaders/gpucore/delete.me",
@@ -96622,8 +96642,10 @@
       "d9e9b284f38ac79e8e52ed8673a704b0": "b7165607add6023abb9291e3ae80053865ab4a15",
       "31c8eac7f0eff22599ec31852a151865": "d0d06fca34ac14d021175be133af413bdbecdf9c",
       "0d10522eadd5aea406edc29da9d5a6ee": "efa8ae5ed06eba9d4020ff81dc612bf934261803",
+      "cfab4aee399c508c272aeacc6ac322ed": "562725bd631fca602a97a06fd00593ca9b7b5467",
       "cc93bcc8c516e0196f2652b8d9b9eeb5": "f69915f13de626f3c35bc67c8069720a9a0ea853",
       "a4b16b09d8bce6714a919325ffc9a43f": "fbb4cd76cee5ce70539da8cd24df370bfac1b8a2",
+      "130c3066e5210cc69c4275af58af48be": "c57ad5634ec5965a0d8b78d42cf707e99d70adbb",
       "2e7d76c347da6740e153d154b9064f33": "61f09b64c64964cacfec0833f04968a08f7da464",
       "9bc925ed58fe4063cb885b9f8752dcb5": "a36992809f946cba845dbe4a8cdc4ee79e413bc0",
       "342787edcff4c9bca0725377030b739a": "339d7581e1a70f8fb287e5a572f6388f5bc00534",
@@ -113990,11 +114012,17 @@
         "ab6dc8c5ba131d3cc827063081b3bd29f650ba90",
         "7eea41770e156b05ddde4195954b5a468f163cdd"
       ],
+      "gpuPeteOGL2.fp": [
+        "562725bd631fca602a97a06fd00593ca9b7b5467"
+      ],
       "gpuPeteOGL2.slf": [
         "f69915f13de626f3c35bc67c8069720a9a0ea853"
       ],
       "gpuPeteOGL2.slv": [
         "fbb4cd76cee5ce70539da8cd24df370bfac1b8a2"
+      ],
+      "gpuPeteOGL2.vp": [
+        "c57ad5634ec5965a0d8b78d42cf707e99d70adbb"
       ],
       "delete.me": [
         "61f09b64c64964cacfec0833f04968a08f7da464"
@@ -133232,8 +133260,10 @@
       "bdca044b": "b7165607add6023abb9291e3ae80053865ab4a15",
       "872429df": "d0d06fca34ac14d021175be133af413bdbecdf9c",
       "81621cda": "efa8ae5ed06eba9d4020ff81dc612bf934261803",
+      "1baf93d5": "562725bd631fca602a97a06fd00593ca9b7b5467",
       "65ba738e": "f69915f13de626f3c35bc67c8069720a9a0ea853",
       "ed4adc00": "fbb4cd76cee5ce70539da8cd24df370bfac1b8a2",
+      "0ebd47b9": "c57ad5634ec5965a0d8b78d42cf707e99d70adbb",
       "aabbe87a": "61f09b64c64964cacfec0833f04968a08f7da464",
       "f74f071a": "a36992809f946cba845dbe4a8cdc4ee79e413bc0",
       "afc20232": "339d7581e1a70f8fb287e5a572f6388f5bc00534",
@@ -141919,8 +141949,10 @@
       "a175f11b2188b4001c51bb548763d92a052211fb7b84cc82e2f492956d9623ec": "b7165607add6023abb9291e3ae80053865ab4a15",
       "7160ce15161d0a36f8dc5168b8368a0fc8e2238d40635a3c7be8cccfa884746f": "d0d06fca34ac14d021175be133af413bdbecdf9c",
       "5e4bfe61cbf89579716b32559d8b92ac733623a414dd0c405894a36ab9457a0f": "efa8ae5ed06eba9d4020ff81dc612bf934261803",
+      "6bf9032ea1f5fba1aa452947e098682c4383319862eb32e7fb56e8f808c6054c": "562725bd631fca602a97a06fd00593ca9b7b5467",
       "46cd5cf17654fb5730f1f557a4f864b1cc4d89031906ed5848b21468a5fb5c74": "f69915f13de626f3c35bc67c8069720a9a0ea853",
       "c113ff0790ba6454089035036f448c261dc4742a3c28bc42f756beddaa8ff3fb": "fbb4cd76cee5ce70539da8cd24df370bfac1b8a2",
+      "7d436a115420853589a4435c97c47e0314963723935381c0e9adf043c01e12a0": "c57ad5634ec5965a0d8b78d42cf707e99d70adbb",
       "e33dbd20d732ad6d5c1f8228c36213c9385547f29b4746940bdaccfd52852a21": "61f09b64c64964cacfec0833f04968a08f7da464",
       "efe376ead6f70831db442679dcbd211a1d34065617f9cfae75bee791765088ff": "a36992809f946cba845dbe4a8cdc4ee79e413bc0",
       "86c90b07233a952df257ca1eb6b54539bca5d4320d649c8088ad0f41085dcc63": "339d7581e1a70f8fb287e5a572f6388f5bc00534",
@@ -152055,11 +152087,17 @@
       "shaders/Grayscale/gpuCore.slf": [
         "efa8ae5ed06eba9d4020ff81dc612bf934261803"
       ],
+      "shaders/gpuPeteOGL2.fp": [
+        "562725bd631fca602a97a06fd00593ca9b7b5467"
+      ],
       "shaders/gpuPeteOGL2.slf": [
         "f69915f13de626f3c35bc67c8069720a9a0ea853"
       ],
       "shaders/gpuPeteOGL2.slv": [
         "fbb4cd76cee5ce70539da8cd24df370bfac1b8a2"
+      ],
+      "shaders/gpuPeteOGL2.vp": [
+        "c57ad5634ec5965a0d8b78d42cf707e99d70adbb"
       ],
       "shaders/gpucore/delete.me": [
         "61f09b64c64964cacfec0833f04968a08f7da464"
