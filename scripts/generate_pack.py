@@ -252,6 +252,24 @@ def _find_candidate_satisfying_both(
     return None
 
 
+def _emulator_systems_index(emu_profiles: dict | None) -> dict[str, list[str]]:
+    """Map both the profile key and its display name to the profile's systems.
+
+    find_undeclared_files reports the display name ("Beetle PSX (Mednafen
+    PSX)"), while the profile dictionary is keyed by slug. A key-only lookup
+    therefore missed almost every core, dropping its files into one shared
+    bucket and losing the per-system grouping the narrowing passes rely on.
+    """
+    index: dict[str, list[str]] = {}
+    for key, profile in (emu_profiles or {}).items():
+        systems = list(profile.get("systems", []))
+        index[key] = systems
+        display = profile.get("emulator", "")
+        if display:
+            index.setdefault(display, systems)
+    return index
+
+
 def _pack_member_groups(
     config: dict,
     pack_systems: dict,
@@ -276,9 +294,10 @@ def _pack_member_groups(
                 members.append((dest, fe.get("name", "")))
     if source == "platform":
         return groups
-    emu_systems = {
-        n: list(p.get("systems", [])) for n, p in (emu_profiles or {}).items()
-    }
+    # find_undeclared_files reports the profile's display name, not its key,
+    # so index both: on a key-only lookup nearly every core extra fell into a
+    # single bucket and lost its per-system grouping.
+    emu_systems = _emulator_systems_index(emu_profiles)
     for fe in _collect_emulator_extras(
         config, emulators_dir, db, set(), base_dest, emu_profiles,
         target_cores=target_cores, include_all=(source == "truth"),
@@ -914,6 +933,8 @@ def _build_readme(
     contributors: list[dict] | None = None,
     regions: list[str] | None = None,
     fallback_systems: list[str] | None = None,
+    one_per_slot: bool = False,
+    undecidable_slots: list[str] | None = None,
 ) -> str:
     """Build a personalized step-by-step README for each platform pack."""
     sep = "=" * 50
@@ -1151,6 +1172,19 @@ def _build_readme(
             "  another region may need the unfiltered pack.\n\n"
         )
 
+    slot_info = ""
+    if one_per_slot:
+        slot_info = (
+            "PACK TYPE: One File Per Slot\n\n"
+            "  Where a core declares which BIOS it prefers, only that one was\n"
+            "  kept for each system and region. Systems whose cores declare no\n"
+            "  order keep all of theirs.\n\n"
+        )
+        if undecidable_slots:
+            slot_info += (
+                f"  {len(undecidable_slots)} slot(s) had no declared order.\n\n"
+            )
+
     credits = ""
     if contributors:
         credits = "\nCONTRIBUTORS\n\n"
@@ -1159,7 +1193,9 @@ def _build_readme(
             credits += f"  @{username}\n"
         credits += "\n"
 
-    return header + source_info + region_info + guide + credits + footer
+    return (
+        header + source_info + region_info + slot_info + guide + credits + footer
+    )
 
 
 def _build_agnostic_rename_readme(
@@ -1222,6 +1258,7 @@ def generate_pack(
     source_tag = {"platform": "_Platform", "truth": "_Truth"}.get(source, "")
     region_tag_str = f"_{region_mod.region_tag(regions)}" if regions else ""
     target_tag = f"_{_target_tag(target_name)}" if target_name else ""
+    slot_tag = "_OnePerSlot" if one_per_slot else ""
 
     sys_tag = ""
     if system_filter:
@@ -1236,7 +1273,7 @@ def generate_pack(
             display_parts.append("_".join(p.title() for p in parts if p))
         sys_tag = "_" + "_".join(display_parts)
 
-    zip_name = f"{platform_display.replace(' ', '_')}{version_tag}{source_tag}{region_tag_str}{target_tag}{req_tag}_BIOS_Pack{sys_tag}.zip"
+    zip_name = f"{platform_display.replace(' ', '_')}{version_tag}{source_tag}{region_tag_str}{target_tag}{slot_tag}{req_tag}_BIOS_Pack{sys_tag}.zip"
     zip_path = os.path.join(output_dir, zip_name)
     os.makedirs(output_dir, exist_ok=True)
 
@@ -1864,6 +1901,8 @@ def generate_pack(
           contributors=_pack_registry.get(platform_name, {}).get("contributed_by", []),
           regions=regions,
           fallback_systems=region_fallbacks,
+          one_per_slot=one_per_slot,
+          undecidable_slots=slot_undecidable,
       )
       _write_generated_member(zf, "README.txt", readme_text)
 
@@ -4468,7 +4507,10 @@ def _narrows_contents(pack_name: str) -> bool:
     full platform expectation does not apply to it and conformance is skipped.
     Region is not listed: the region filter is passed to the check itself.
     """
-    return any(tag in pack_name for tag in ("_Platform_", "_Truth_", "_Required"))
+    return any(
+        tag in pack_name
+        for tag in ("_Platform_", "_Truth_", "_Required", "_OnePerSlot")
+    )
 
 
 def verify_and_finalize_packs(
