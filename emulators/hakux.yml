@@ -1,0 +1,271 @@
+emulator: hakuX
+type: standalone
+core_classification: community_fork
+source: "https://github.com/rfandango/hakuX"
+upstream: "https://github.com/xemu-project/xemu"
+author: "rfandango"
+profiled_date: "2026-08-11"
+source_commit: "e64e336d27dc8a56b67f441ec36bfddc1379cb6e"
+upstream_commit: "26fcbe54f17e496bdf530dad9f237e74e2f943fc"
+core_version: "0.3.1"
+display_name: "Microsoft - Xbox (hakuX)"
+cores:
+  - hakux
+systems:
+  - microsoft-xbox
+mode: standalone
+
+notes: |
+  Original Xbox emulator for Android, package com.rfandango.haku_x, arm64-v8a,
+  tuned for Adreno. A Kotlin front end carries the launcher, setup wizard, game
+  library and settings, and drives a whole xemu tree built through CMake against
+  SDL2 and QEMU 10.2.0, the tree branching off the day before xemu moved to SDL3.
+  The imgui interface under ui/xui is filtered out of the source list and the
+  HUD, monitor and snapshot entry points are stubbed, so that front end is the
+  only interface. ES-DE starts .LauncherActivity with an intent VIEW whose data
+  URI becomes the disc slot before emulation opens.
+  ref: QEMU_VERSION,
+       android/README.md:36-39,
+       android/app/build.gradle.kts:33-34,
+       android/app/src/main/AndroidManifest.xml:13-30,
+       android/app/src/main/cpp/CMakeLists.txt:423-424,
+       android/app/src/main/cpp/xemu_hud_stub.c,
+       android/app/src/main/cpp/monitor_stub.c,
+       android/app/src/main/cpp/xemu_snapshots_stub.c,
+       android/app/src/main/java/com/rfandango/haku_x/LauncherActivity.kt:94-104
+
+  The wizard asks for three files through the Storage Access Framework and
+  copies each into x1box under the external files directory of the package,
+  renamed mcpx.bin, flash.bin and hdd.img. The pickers keep .bin, .rom and .img
+  for the two ROMs and .qcow2 and .img for the disk, and each step stays blocked
+  until its copy lands. Those three paths, the eeprom the wizard never asks for
+  and the disc are written to x1box/xemu.toml under sys.files, and the launcher
+  sends the user back through the wizard whenever one of them stops resolving.
+  ref: android/app/src/main/java/com/rfandango/haku_x/SetupWizardActivity.kt:49-51,
+       53-120, 249-255, 350-378,
+       android/app/src/main/java/com/rfandango/haku_x/LauncherActivity.kt:31-92,
+       android/app/src/main/cpp/xemu_android.cpp:669-673, 709-711, 748-820
+
+  The flash image is the only one whose absence stops the run: it is passed as
+  -bios and a path that cannot be opened clears autostart. Its size must be a
+  non-zero multiple of 64 KB, otherwise 256 KB of 0xFF is mapped in its place.
+  The MCPX image must be exactly 512 bytes, another size clears the path with an
+  error, and the machine property is checked a second time and ends the process
+  when it disagrees; the bytes are overlaid on the last 512 of the mirrored flash
+  region. The EEPROM must be 256 bytes and is generated as
+  XBOX_EEPROM_VERSION_R1 when the path does not exist. An empty disk path
+  attaches no drive at index 0 at all, while the disc drive at index 1 is always
+  attached and simply carries no media when no image is picked.
+  ref: system/vl.c:2921-2964, 2998-3022, 3057-3072, 3078-3092, 3094-3113,
+       hw/xbox/xbox.c:65-104, 144-166
+
+  Settings imports a dashboard tree from a ZIP or a folder into the FATX
+  partitions of the configured disk image, C at 0x8CA80000 and E at 0xABE80000,
+  moving the entries it overwrites to a backup folder first. A source that has
+  neither a C nor an E directory goes to C whole. The tree is searched for a boot
+  XBE beforehand and the best candidate is copied to C/xboxdash.xbe when that
+  name is missing, xboxdash.xbe, default.xbe, evoxdash.xbe, avalaunch.xbe,
+  unleashx.xbe, xbmc.xbe and nexgen.xbe scoring in that order. The status line
+  probes C for xboxdash.xbe, msdash.xbe, xbox.xtf and the directories xodash,
+  audio, fonts and xboxdashdata.*, and calls the install complete when the boot
+  XBE sits beside at least one of the others.
+  ref: android/app/src/main/cpp/xemu_fatx_import.c:51-54, 1704-1730, 1763-1862,
+       1864-1927,
+       android/app/src/main/java/com/rfandango/haku_x/XboxInsigniaHelper.kt:10-53,
+       android/app/src/main/java/com/rfandango/haku_x/SettingsActivity.kt:2523-2620,
+       2661-2708
+
+  Preparing Insignia networking turns the NAT backend on and writes the DNS
+  46.101.64.175 into the config sector of the disk image and into the EEPROM at
+  0xAC. Registration boots a Setup Assistant image the user picks, which is put
+  in the disc slot like any other game.
+  ref: android/app/src/main/java/com/rfandango/haku_x/XboxInsigniaHelper.kt:7-8,
+       56-86,
+       android/app/src/main/java/com/rfandango/haku_x/XboxEepromEditor.kt:17,
+       android/app/src/main/java/com/rfandango/haku_x/SettingsActivity.kt:1764-1766,
+       1830-1847
+
+  The disk tools format an image that is already configured and never create one:
+  a retail layout needs at least 0x1DD156000 bytes and the extended F and G
+  layouts need room past that boundary. The EEPROM editor rewrites language,
+  video standard, resolution flags, aspect ratio and refresh rate in place, and
+  recomputes both checksums.
+  ref: android/app/src/main/java/com/rfandango/haku_x/XboxHddFormatter.kt:7-29,
+       47-79,
+       android/app/src/main/java/com/rfandango/haku_x/XboxEepromEditor.kt:9-38,
+       android/app/src/main/cpp/xemu_hdd_tools_jni.c:932-983
+
+files:
+  - name: mcpx_1.0.bin
+    required: true
+    path: "x1box/mcpx.bin"
+    config_key: "sys.files.bootrom_path"
+    size: 512
+    validation: [size]
+    description: "MCPX southbridge boot ROM"
+    note: >-
+      Copied under the fixed name mcpx.bin from whatever .bin, .rom or .img file
+      the wizard is pointed at, and named by bootrom_path in the config. A size
+      other than 512 bytes empties the setting and the machine property is left
+      off; when the property is set the loader checks the size again and ends the
+      process rather than continue. The bytes are read over the last 512 of the
+      flash image and the region stays writable so early retail kernels keep
+      their cache quirk.
+    source_ref: "system/vl.c:2998-3022, hw/xbox/xbox.c:144-172, android/app/src/main/java/com/rfandango/haku_x/SetupWizardActivity.kt:53-74, android/app/src/main/cpp/xemu_android.cpp:669, 748-760"
+
+  - name: Complex_4627.bin
+    required: true
+    path: "x1box/flash.bin"
+    config_key: "sys.files.flashrom_path"
+    size_options: [262144, 524288, 1048576]
+    size_note: "Any non-zero multiple of 65536; 256 KB is assumed when the image cannot be read."
+    validation: [size]
+    description: "Xbox flash ROM"
+    note: >-
+      Copied under the fixed name flash.bin and passed as -bios. A path that
+      cannot be opened queues an error and clears autostart, so nothing runs
+      without it. The image is mapped at 0xFF000000 and mirrored to the top of
+      the address space; a size that is zero or not a multiple of 64 KB, or a
+      short read, falls back to 256 KB filled with 0xFF. A retail image cannot
+      launch unsigned code, so a debug or modified image is what boots a title.
+    source_ref: "system/vl.c:3057-3072, hw/xbox/xbox.c:65-124, android/app/src/main/java/com/rfandango/haku_x/SetupWizardActivity.kt:76-97, android/app/src/main/cpp/xemu_android.cpp:670, 761-773"
+
+  - name: xbox_hdd.qcow2
+    required: true
+    path: "x1box/hdd.img"
+    config_key: "sys.files.hdd_path"
+    description: "Xbox hard disk image"
+    note: >-
+      Copied under the fixed name hdd.img, in qcow2 or raw form, and attached as
+      index 0 with locked=on and cache=writethrough. An empty setting attaches no
+      drive at all and an unopenable one only queues a message, but the launcher
+      refuses to leave the wizard until the file resolves. The formatter builds
+      FATX partitions inside an image that already exists and needs at least
+      0x1DD156000 bytes for the retail layout; it never creates the image. A
+      qcow2 with a backing file is reported at load because the sectors it did
+      not modify are read from that other file.
+    source_ref: "system/vl.c:3078-3092, android/app/src/main/java/com/rfandango/haku_x/SetupWizardActivity.kt:99-120, android/app/src/main/java/com/rfandango/haku_x/XboxHddFormatter.kt:7-29, 47-79, android/app/src/main/cpp/xemu_android.cpp:176-184, 671-672, 774-795"
+
+  - name: eeprom.bin
+    required: false
+    path: "x1box/eeprom.bin"
+    config_key: "sys.files.eeprom_path"
+    size: 256
+    validation: [size]
+    description: "Xbox EEPROM image"
+    note: >-
+      Always pointed at x1box/eeprom.bin, a path the wizard never asks for.
+      Generated as XBOX_EEPROM_VERSION_R1 when it does not exist, so a dump is
+      needed only to carry over a console serial, region or HDD key. It is
+      attached through the smbus-storage device; a size other than 256 bytes, or
+      a generation that fails, clears autostart. Preparing Insignia and the
+      EEPROM editor write to it in place.
+    source_ref: "system/vl.c:2921-2964, 3045-3055, android/app/src/main/cpp/xemu_android.cpp:671, 711, android/app/src/main/java/com/rfandango/haku_x/SettingsActivity.kt:1264-1267"
+
+  - name: xboxdash.xbe
+    required: false
+    load_from: hdd_image
+    path: "C/xboxdash.xbe"
+    description: "Retail dashboard boot executable"
+    note: >-
+      Imported to the root of partition C from the C directory of a user
+      dashboard tree. The import treats this name as the boot entry: when it is
+      absent the best scoring .xbe of the tree is copied to it, and the retail
+      boot counts as ready only once the name exists. The start path of the
+      emulator never reads partition C, and preparing Insignia finishes with a
+      warning when the name is missing.
+    source_ref: "android/app/src/main/cpp/xemu_fatx_import.c:1796-1797, 1842-1843, 1864-1893, android/app/src/main/java/com/rfandango/haku_x/SettingsActivity.kt:2523-2563, 2584-2620"
+
+  - name: msdash.xbe
+    required: false
+    load_from: hdd_image
+    path: "C/msdash.xbe"
+    description: "Retail dashboard executable kept beside the boot copy"
+    note: >-
+      Probed at the root of partition C and imported with the rest of the tree.
+      Its presence beside the boot XBE is one of the marks the status line reads
+      to call a dashboard install complete.
+    source_ref: "android/app/src/main/cpp/xemu_fatx_import.c:1798-1799, 1844-1845, android/app/src/main/java/com/rfandango/haku_x/XboxInsigniaHelper.kt:13, 42-50"
+
+  - name: xbox.xtf
+    required: false
+    load_from: hdd_image
+    path: "C/xbox.xtf"
+    description: "Dashboard typeface"
+    note: >-
+      Probed at the root of partition C and imported with the rest of the tree,
+      alongside the xodash, audio, fonts and xboxdashdata.* directories the root
+      scan looks for.
+    source_ref: "android/app/src/main/cpp/xemu_fatx_import.c:1800-1801, 1846-1847, 1786-1794, android/app/src/main/java/com/rfandango/haku_x/XboxInsigniaHelper.kt:14-16"
+
+  - name: "<driver>.zip"
+    required: false
+    unsourceable: "third-party Vulkan driver built for one GPU family, not an emulator artefact"
+    description: "Replacement Vulkan driver package"
+    note: >-
+      Imported through a picker into gpu_drivers under the external files
+      directory, renamed after the name field of the meta.json it carries, then
+      unpacked whole into gpu_driver in internal storage. The minApi field is
+      compared against the device before the archive is kept. Loading is offered
+      only when /dev/kgsl-3d0 exists, and clearing the install directory returns
+      the app to the system driver.
+    source_ref: "android/app/src/main/java/com/rfandango/haku_x/GpuDriverHelper.kt:19-35, 37-70, 72-99, 101-104, 138-165"
+
+  - name: "<content hash>.png"
+    required: false
+    unsourceable: "texture pack authored per title against the hashes one dump produces"
+    description: "Replacement texture"
+    note: >-
+      Taken from a folder of per-title subdirectories, copied into
+      texture_replace in internal storage, and read back by the Vulkan renderer
+      from the subdirectory named after the title id of the running XBE in eight
+      hexadecimal digits. A name is kept only when the stem is sixteen
+      hexadecimal digits, which is the content hash of the texture it replaces;
+      each PNG is decoded to a .raw sidecar carrying width and height and mapped
+      from there. Off unless the setting is on and the folder is set.
+    source_ref: "hw/xbox/nv2a/pgraph/vk/texture_replace.c:227-320, 331-377, 388-435, android/app/src/main/java/com/rfandango/haku_x/GameLibraryActivity.kt:904-990, android/app/src/main/java/com/rfandango/haku_x/MainActivity.kt:105-113"
+
+  - name: gamecontrollerdb.txt
+    required: false
+    bundled: true
+    description: "SDL controller mapping database"
+    note: >-
+      Read from the assets of the package at startup and handed to SDL as a
+      memory stream. Nothing outside the archive replaces this copy; an added pad
+      mapping goes in through controller_map.txt instead.
+    source_ref: "android/app/src/main/cpp/xemu_android.cpp:193-268"
+
+  - name: X1_Covers.txt
+    required: false
+    bundled: true
+    description: "Cover art index for the game library"
+    note: >-
+      Read from the assets and turned into a lookup from normalised game name to
+      a URL under the X1_Covers repository, which the library fetches and caches
+      per title. Only lines ending in .png are kept.
+    source_ref: "android/app/src/main/java/com/rfandango/haku_x/GameLibraryActivity.kt:59, 398-430"
+
+  - name: controller_map.txt
+    required: false
+    load_from: internal_storage
+    description: "Extra SDL controller mappings"
+    note: >-
+      SDL builds this path from the internal storage directory of the package
+      when SDL_GAMECONTROLLERCONFIG_FILE is unset, which it is here, and reads it
+      while the game controller subsystem starts, after the mappings compiled in
+      and before the ones the environment carries. It is the one mapping file a
+      user can add without rebuilding the package. The SDL2 tree in thirdparty is
+      what the build compiles, the local checkout taking precedence over the
+      release archive CMake would otherwise fetch.
+    source_ref: "thirdparty/SDL2/src/joystick/SDL_gamecontroller.c:1873-1884, 1890-1916, android/app/src/main/cpp/CMakeLists.txt:26-34"
+
+exclusion_note: >
+  Three file loads present in the tree are not reached by this build and are not
+  listed. hw/xbox/chihiro.c falls back to the media board ROM
+  fpr21042_m29w160et.bin when no path is given, and maps a media board
+  filesystem image beside it, but the whole driver is filtered out of the source
+  list, so no Chihiro machine exists here. X1_Covers.xml ships in the assets and
+  no code opens it, the library reading X1_Covers.txt instead.
+  ref: hw/xbox/chihiro.c:191-253, 279-284,
+       android/app/src/main/cpp/CMakeLists.txt:468,
+       android/app/src/main/java/com/rfandango/haku_x/GameLibraryActivity.kt:403
