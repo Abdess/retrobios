@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{#
+  Open Graph and Twitter card tags.
+
+  mkdocs-material only emits these through its social plugin, which pulls in
+  Pillow and CairoSVG to render preview images. The pages here already carry a
+  per-page title and description, so the tags can be filled from those without
+  taking on two image dependencies. The links get shared on Discord, Reddit and
+  forums, where a bare URL with no preview is the difference between a card and
+  a grey rectangle.
+#}
+{% block extrahead %}
+  {% set page_title = page.meta.title if page and page.meta and page.meta.title else (page.title if page and page.title else config.site_name) %}
+  {% set page_description = page.meta.description if page and page.meta and page.meta.description else config.site_description %}
+  {% set page_url = page.canonical_url if page and page.canonical_url else config.site_url %}
+  {% set preview_image = config.site_url ~ 'assets/images/logo.png' if config.site_url else '' %}
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="{{ config.site_name }}">
+  <meta property="og:title" content="{{ page_title }}">
+  <meta property="og:description" content="{{ page_description }}">
+  {% if page_url %}<meta property="og:url" content="{{ page_url }}">{% endif %}
+  {% if preview_image %}<meta property="og:image" content="{{ preview_image }}">{% endif %}
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="{{ page_title }}">
+  <meta name="twitter:description" content="{{ page_description }}">
+  {% if preview_image %}<meta name="twitter:image" content="{{ preview_image }}">{% endif %}
+{% endblock %}

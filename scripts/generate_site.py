@@ -4051,6 +4051,10 @@ copyright: MIT for the tooling. BIOS and firmware files are third-party system
   software, preserved for personal backup, archival and interoperability.
 theme:
   name: material
+  # Open Graph tags live in overrides/main.html: the social plugin that
+  # would otherwise emit them needs Pillow and CairoSVG only to render a
+  # preview image the pages do not need.
+  custom_dir: docs_assets/overrides
   palette:
   - media: (prefers-color-scheme)
     toggle:
