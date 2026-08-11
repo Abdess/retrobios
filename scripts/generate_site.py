@@ -2664,6 +2664,105 @@ def generate_emulator_page(
 # Contributing page
 
 
+def _render_problem_files(platform_problems: list) -> list[str]:
+    """Files a platform declares that its own check then rejects.
+
+    Split out of generate_gap_analysis, which reached complexity 56. This
+    section is the one that stands alone: it reads platform_problems and
+    nothing else, where the sections around it share gap_report and the
+    resolved core list.
+    """
+    lines: list[str] = []
+    # ---- Section 2: Problem files ----
+
+    missing_files: dict[str, dict] = {}
+    untested_files: dict[str, dict] = {}
+    mismatch_files: dict[str, dict] = {}
+
+    for p in platform_problems:
+        fname = p["name"]
+        if p["status"] == "missing":
+            entry = missing_files.setdefault(fname, {
+                "name": fname, "required": p["required"],
+                "platforms": [], "reason": p["reason"],
+            })
+            entry["platforms"].append(p["platform"])
+            if p["required"]:
+                entry["required"] = True
+        elif p["status"] == "untested":
+            entry = untested_files.setdefault(fname, {
+                "name": fname, "required": p["required"],
+                "platforms": [], "reason": p["reason"],
+            })
+            entry["platforms"].append(p["platform"])
+        if p.get("discrepancy"):
+            entry = mismatch_files.setdefault(fname, {
+                "name": fname, "platforms": [],
+                "discrepancy": p["discrepancy"],
+            })
+            entry["platforms"].append(p["platform"])
+
+    total_problems = len(missing_files) + len(untested_files) + len(mismatch_files)
+
+    if total_problems > 0:
+        lines.extend([
+            "## Problem Files",
+            "",
+            f"{len(missing_files)} missing, {len(untested_files)} untested, "
+            f"{len(mismatch_files)} hash mismatch.",
+            "",
+        ])
+
+        if missing_files:
+            lines.extend([
+                f'### Missing <span class="rb-badge rb-badge-danger">'
+                f"{len(missing_files)} files</span>",
+                "",
+                "| File | Required | Platforms |",
+                "|------|----------|-----------|",
+            ])
+            for fname in sorted(missing_files):
+                f = missing_files[fname]
+                req = "yes" if f["required"] else "no"
+                plats = ", ".join(sorted(set(f["platforms"])))
+                lines.append(f"| `{fname}` | {req} | {plats} |")
+            lines.append("")
+
+        if untested_files:
+            lines.extend([
+                f'### Untested <span class="rb-badge rb-badge-warning">'
+                f"{len(untested_files)} files</span>",
+                "",
+                "Present but hash not verified.",
+                "",
+                "| File | Platforms | Reason |",
+                "|------|----------|--------|",
+            ])
+            for fname in sorted(untested_files):
+                f = untested_files[fname]
+                plats = ", ".join(sorted(set(f["platforms"])))
+                lines.append(f"| `{fname}` | {plats} | {f['reason']} |")
+            lines.append("")
+
+        if mismatch_files:
+            lines.extend([
+                f'### Hash Mismatch <span class="rb-badge rb-badge-warning">'
+                f"{len(mismatch_files)} files</span>",
+                "",
+                "Platform says OK but emulator validation disagrees.",
+                "",
+                "| File | Platforms | Discrepancy |",
+                "|------|----------|-------------|",
+            ])
+            for fname in sorted(mismatch_files):
+                f = mismatch_files[fname]
+                plats = ", ".join(sorted(set(f["platforms"])))
+                lines.append(f"| `{fname}` | {plats} | {f['discrepancy']} |")
+            lines.append("")
+
+    return lines
+
+
 def generate_gap_analysis(
     profiles: dict,
     coverages: dict,
@@ -2894,92 +2993,7 @@ def generate_gap_analysis(
         "",
     ])
 
-    # ---- Section 2: Problem files ----
-
-    missing_files: dict[str, dict] = {}
-    untested_files: dict[str, dict] = {}
-    mismatch_files: dict[str, dict] = {}
-
-    for p in platform_problems:
-        fname = p["name"]
-        if p["status"] == "missing":
-            entry = missing_files.setdefault(fname, {
-                "name": fname, "required": p["required"],
-                "platforms": [], "reason": p["reason"],
-            })
-            entry["platforms"].append(p["platform"])
-            if p["required"]:
-                entry["required"] = True
-        elif p["status"] == "untested":
-            entry = untested_files.setdefault(fname, {
-                "name": fname, "required": p["required"],
-                "platforms": [], "reason": p["reason"],
-            })
-            entry["platforms"].append(p["platform"])
-        if p.get("discrepancy"):
-            entry = mismatch_files.setdefault(fname, {
-                "name": fname, "platforms": [],
-                "discrepancy": p["discrepancy"],
-            })
-            entry["platforms"].append(p["platform"])
-
-    total_problems = len(missing_files) + len(untested_files) + len(mismatch_files)
-
-    if total_problems > 0:
-        lines.extend([
-            "## Problem Files",
-            "",
-            f"{len(missing_files)} missing, {len(untested_files)} untested, "
-            f"{len(mismatch_files)} hash mismatch.",
-            "",
-        ])
-
-        if missing_files:
-            lines.extend([
-                f'### Missing <span class="rb-badge rb-badge-danger">'
-                f"{len(missing_files)} files</span>",
-                "",
-                "| File | Required | Platforms |",
-                "|------|----------|-----------|",
-            ])
-            for fname in sorted(missing_files):
-                f = missing_files[fname]
-                req = "yes" if f["required"] else "no"
-                plats = ", ".join(sorted(set(f["platforms"])))
-                lines.append(f"| `{fname}` | {req} | {plats} |")
-            lines.append("")
-
-        if untested_files:
-            lines.extend([
-                f'### Untested <span class="rb-badge rb-badge-warning">'
-                f"{len(untested_files)} files</span>",
-                "",
-                "Present but hash not verified.",
-                "",
-                "| File | Platforms | Reason |",
-                "|------|----------|--------|",
-            ])
-            for fname in sorted(untested_files):
-                f = untested_files[fname]
-                plats = ", ".join(sorted(set(f["platforms"])))
-                lines.append(f"| `{fname}` | {plats} | {f['reason']} |")
-            lines.append("")
-
-        if mismatch_files:
-            lines.extend([
-                f'### Hash Mismatch <span class="rb-badge rb-badge-warning">'
-                f"{len(mismatch_files)} files</span>",
-                "",
-                "Platform says OK but emulator validation disagrees.",
-                "",
-                "| File | Platforms | Discrepancy |",
-                "|------|----------|-------------|",
-            ])
-            for fname in sorted(mismatch_files):
-                f = mismatch_files[fname]
-                plats = ", ".join(sorted(set(f["platforms"])))
-                lines.append(f"| `{fname}` | {plats} | {f['discrepancy']} |")
-            lines.append("")
+    lines.extend(_render_problem_files(platform_problems))
 
     # ---- Section 3: Core complement (cross-reference provenance) ----
 
