@@ -1368,6 +1368,9 @@ _TIMESTAMP_PATTERNS = [
     re.compile(r'"imported_at":\s*"[^"]*"'),  # provenance snapshots
     re.compile(r"\*Auto-generated on [^*]*\*"),  # README.md
     re.compile(r"\*Generated on [^*]*\*"),  # docs site pages
+    # The decorated pages carry the same stamp again as a rendered element,
+    # and missing it rewrote every page on every run for the clock alone.
+    re.compile(r'<div class="rb-timestamp">[^<]*</div>'),
 ]
 
 

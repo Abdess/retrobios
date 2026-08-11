@@ -779,5 +779,69 @@ class CheckoutCompletenessRegressions(unittest.TestCase):
                 os.chdir(cwd)
 
 
+class FreshnessGuardMechanics(unittest.TestCase):
+    """write_if_changed is what makes `git diff --exit-code` a real check.
+
+    deploy-site.yml regenerates README.md and CONTRIBUTING.md and then fails
+    if git sees a change. That is only a staleness check because a run which
+    moves nothing but the clock leaves the file untouched; if the comparison
+    missed a timestamp form, the guard would fail on every run and stop
+    meaning anything.
+    """
+
+    def setUp(self):
+        from common import write_if_changed
+
+        self.write_if_changed = write_if_changed
+        self._tmp = tempfile.TemporaryDirectory()
+        self.path = os.path.join(self._tmp.name, "page.md")
+
+    def tearDown(self):
+        self._tmp.cleanup()
+
+    def test_a_new_file_is_written(self):
+        self.assertTrue(self.write_if_changed(self.path, "body\n"))
+        with open(self.path) as handle:
+            self.assertEqual(handle.read(), "body\n")
+
+    def test_identical_content_is_not_rewritten(self):
+        self.write_if_changed(self.path, "body\n")
+        self.assertFalse(self.write_if_changed(self.path, "body\n"))
+
+    def test_real_change_is_written(self):
+        self.write_if_changed(self.path, "body\n")
+        self.assertTrue(self.write_if_changed(self.path, "other\n"))
+
+    def test_every_timestamp_form_is_ignored_on_its_own(self):
+        forms = [
+            '{{"generated_at": "{}"}}',
+            '{{"imported_at": "{}"}}',
+            "*Auto-generated on {}*",
+            "*Generated on {}*",
+            '<div class="rb-timestamp">Generated on {}.</div>',
+        ]
+        for form in forms:
+            with self.subTest(form=form):
+                first = form.format("2026-01-01T00:00:00Z")
+                second = form.format("2026-09-09T09:09:09Z")
+                self.write_if_changed(self.path, first)
+                self.assertFalse(
+                    self.write_if_changed(self.path, second),
+                    f"a clock-only change rewrote the file for {form!r}",
+                )
+
+    def test_a_change_beside_a_moving_timestamp_is_still_written(self):
+        self.write_if_changed(self.path, "count: 1\n*Generated on A*\n")
+        self.assertTrue(
+            self.write_if_changed(self.path, "count: 2\n*Generated on B*\n")
+        )
+
+    def test_the_written_file_keeps_the_new_timestamp_when_content_changed(self):
+        self.write_if_changed(self.path, "count: 1\n*Generated on A*\n")
+        self.write_if_changed(self.path, "count: 2\n*Generated on B*\n")
+        with open(self.path) as handle:
+            self.assertIn("Generated on B", handle.read())
+
+
 if __name__ == "__main__":
     unittest.main()
