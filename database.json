@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-11T12:10:33Z",
-  "total_files": 8372,
-  "total_size": 10496151265,
+  "generated_at": "2026-08-11T15:16:29Z",
+  "total_files": 8387,
+  "total_size": 10593852425,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -48247,6 +48247,76 @@
       "crc32": "6e8b2b47",
       "adler32": "f5bc538e"
     },
+    "456e74b0805d1931a7786d3d04673a3b02dd4dd3": {
+      "path": "bios/Other/armsx2/pcsx2/resources/fonts/NotoSansArabic-Regular.ttf",
+      "name": "NotoSansArabic-Regular.ttf",
+      "size": 177004,
+      "sha1": "456e74b0805d1931a7786d3d04673a3b02dd4dd3",
+      "md5": "75527903c6a793772b02807c5343f4c8",
+      "sha256": "90f50de40af560ad55f2fcf460af8205f842b534b057bd8b8bcf7d3e10d3223a",
+      "crc32": "92685e68",
+      "adler32": "50bd6e76"
+    },
+    "69253a2722f999ba4205f2e679d0b75e3b17109f": {
+      "path": "bios/Other/armsx2/pcsx2/resources/fonts/NotoSansDevanagari-Regular.ttf",
+      "name": "NotoSansDevanagari-Regular.ttf",
+      "size": 204336,
+      "sha1": "69253a2722f999ba4205f2e679d0b75e3b17109f",
+      "md5": "46dbe14f577b56ade221acf89631fd7b",
+      "sha256": "11fa517464dbd568e855e449650a9004d1072c4a54ac1845aaafc462c0652b64",
+      "crc32": "b02dadf9",
+      "adler32": "fc1273bb"
+    },
+    "9dc5783345f258d0c66c17028d39652daa234473": {
+      "path": "bios/Other/armsx2/pcsx2/resources/fonts/NotoSansHebrew-Regular.ttf",
+      "name": "NotoSansHebrew-Regular.ttf",
+      "size": 42704,
+      "sha1": "9dc5783345f258d0c66c17028d39652daa234473",
+      "md5": "5199b3892ba596a6bf8d0f930729157f",
+      "sha256": "1edcc5695148a632b8a5516ba41a86edf01f06289c5c2e84a1afafe833eb25da",
+      "crc32": "96886a26",
+      "adler32": "87c1c00b"
+    },
+    "6030f4e7d59b356d0eaf26f1bca370a999335058": {
+      "path": "bios/Other/armsx2/pcsx2/resources/fonts/NotoSansJP-Regular.ttf",
+      "name": "NotoSansJP-Regular.ttf",
+      "size": 5732824,
+      "sha1": "6030f4e7d59b356d0eaf26f1bca370a999335058",
+      "md5": "022f32abf24d5534496095e04aa739b3",
+      "sha256": "fb3df01b4182734d021d79ec5bac17903bb681e926a059c59ed81a373d612241",
+      "crc32": "ad6e4328",
+      "adler32": "c3fa86e5"
+    },
+    "83d3c03dc1fc16f2a5b8bbf929d4cc21a078282c": {
+      "path": "bios/Other/armsx2/pcsx2/resources/fonts/NotoSansKR-Regular.ttf",
+      "name": "NotoSansKR-Regular.ttf",
+      "size": 6192764,
+      "sha1": "83d3c03dc1fc16f2a5b8bbf929d4cc21a078282c",
+      "md5": "e910afbd441c5247227fb4a731d65799",
+      "sha256": "9db318b65ee9c575a43e7efd273dbdd1afef26e467eea3e1073a50e1a6595f6d",
+      "crc32": "0fcd7543",
+      "adler32": "718f3aee"
+    },
+    "01299427e4d789295c614752c8398261f006479b": {
+      "path": "bios/Other/armsx2/pcsx2/resources/fonts/NotoSansSC-Regular.ttf",
+      "name": "NotoSansSC-Regular.ttf",
+      "size": 10560380,
+      "sha1": "01299427e4d789295c614752c8398261f006479b",
+      "md5": "19498325f22381f551df06ce1b4cad4f",
+      "sha256": "ae82f4e2a55e1316a55bcc1d05e9555ce08d8bda07e893b486896b626fd852ff",
+      "crc32": "07694737",
+      "adler32": "148cf133"
+    },
+    "59815234d228a7f390364c6d6380cc518ea63db1": {
+      "path": "bios/Other/armsx2/pcsx2/resources/fonts/NotoSansTC-Regular.ttf",
+      "name": "NotoSansTC-Regular.ttf",
+      "size": 7110560,
+      "sha1": "59815234d228a7f390364c6d6380cc518ea63db1",
+      "md5": "ad18e8fc265252917dd3698e268977d7",
+      "sha256": "6b137e2eb57a2d1e4cf391c886ab1b783a0e5ddb5c75254748bde00c15cb8ff5",
+      "crc32": "05eb51ca",
+      "adler32": "cd7061bf"
+    },
     "b478ce9d1343b8dd201c045f010bd1b64ba158ae": {
       "path": "bios/Other/armsx2/pcsx2/resources/shaders/opengl/cas.glsl",
       "name": "cas.glsl",
@@ -49516,6 +49586,36 @@
       "sha256": "86883a0199a129b900f4a5c7ade6245b7e9d1399ec3c08d1fbf1838c01722e8e",
       "crc32": "c9a52a37",
       "adler32": "6ce8f9bd"
+    },
+    "4d0f8dfc5980195ee905fa39e125cd418b8a9599": {
+      "path": "bios/Other/emucorex/pcsx2/resources/fonts/NotoSansArabic-Regular.ttf",
+      "name": "NotoSansArabic-Regular.ttf",
+      "size": 234892,
+      "sha1": "4d0f8dfc5980195ee905fa39e125cd418b8a9599",
+      "md5": "22e156b807f3147bb7dcafadc52ab721",
+      "sha256": "bdff3e5659d67e67def05b33f749683b9376ae819d65d3dd62ac4640b3aaef48",
+      "crc32": "bf24835a",
+      "adler32": "cea4ecd9"
+    },
+    "e18b9aabbda0cc178436855ef8d04bce96533049": {
+      "path": "bios/Other/emucorex/pcsx2/resources/fonts/NotoSansDevanagari-Regular.ttf",
+      "name": "NotoSansDevanagari-Regular.ttf",
+      "size": 244284,
+      "sha1": "e18b9aabbda0cc178436855ef8d04bce96533049",
+      "md5": "f4ae6809bd8c31573370e8da72514012",
+      "sha256": "306b53ecfb182a504dd8a7446093c316387d2fd8dc350d0792ed1753fe0996cd",
+      "crc32": "e1232465",
+      "adler32": "838860d9"
+    },
+    "c549a2088bc9b678c8c79fa987ac5f4e6ff4772c": {
+      "path": "bios/Other/emucorex/pcsx2/resources/fonts/NotoSansHebrew-Regular.ttf",
+      "name": "NotoSansHebrew-Regular.ttf",
+      "size": 26860,
+      "sha1": "c549a2088bc9b678c8c79fa987ac5f4e6ff4772c",
+      "md5": "bf5e583b038933c5f7bc4f0a6f70617c",
+      "sha256": "cdefaf8efd47045f6820928eba84db5bed7557539328952b5f828315485e02ee",
+      "crc32": "ca72899c",
+      "adler32": "f932ede3"
     },
     "cb0d4276f9947762af0841a8af75efa6cbe9109c": {
       "path": "bios/Other/emucorex/resources/shaders/opengl/cas.glsl",
@@ -50956,6 +51056,56 @@
       "sha256": "ce50cb5d5624244d1c4c3e2b8c696bc42dd21772979f7d284608a308f1e2b8a4",
       "crc32": "9489e5a8",
       "adler32": "0c2b972a"
+    },
+    "a5e152373fa6cc91fa6953dee562ebce6868eb94": {
+      "path": "bios/Other/xenia-edge/D3D12/D3D12Core.dll",
+      "name": "D3D12Core.dll",
+      "size": 4533296,
+      "sha1": "a5e152373fa6cc91fa6953dee562ebce6868eb94",
+      "md5": "de8cf43e4ed5c8c7f9111414f508b268",
+      "sha256": "9e47f236fd3244ad88443a61f7d549eced052b42cb9bd78bbeb35a5918c25bb9",
+      "crc32": "8fbfe50d",
+      "adler32": "a43f5760"
+    },
+    "c6efd59349c430969f68fbeb86fa5328e96dc08b": {
+      "path": "bios/Other/xenia-edge/D3D12/D3D12SDKLayers.dll",
+      "name": "D3D12SDKLayers.dll",
+      "size": 5093920,
+      "sha1": "c6efd59349c430969f68fbeb86fa5328e96dc08b",
+      "md5": "d3d5beb92a7b1c711dbdc83a92639099",
+      "sha256": "0840ff2fbb677fc0019200d85eaf4bfe401b37b151e38311090f8dda47ea9173",
+      "crc32": "d456be19",
+      "adler32": "5373e436"
+    },
+    "284743af8343e7b512b2c442c3d32b23e5112ee0": {
+      "path": "bios/Other/xenia-edge/D3D12/dxcompiler.dll",
+      "name": "dxcompiler.dll",
+      "size": 28079968,
+      "sha1": "284743af8343e7b512b2c442c3d32b23e5112ee0",
+      "md5": "46075cd0c8c4a477081d2b302d42a257",
+      "sha256": "9a5100511e127c6a2fc78edf984f95074a76d35b90c90c4d342430a5ae160e9b",
+      "crc32": "56729550",
+      "adler32": "0d11c21a"
+    },
+    "e5b4d84841f54ee9517ae390b9dd6b28892f0387": {
+      "path": "bios/Other/xenia-edge/D3D12/dxil.dll",
+      "name": "dxil.dll",
+      "size": 3831600,
+      "sha1": "e5b4d84841f54ee9517ae390b9dd6b28892f0387",
+      "md5": "8208d493370451238dcf187a5ad9e633",
+      "sha256": "feb57253eff0a622561e29b44cedbe86b89fc9a5bc8dc00fa2f98fafd712c2d8",
+      "crc32": "3f63f47b",
+      "adler32": "edf099ae"
+    },
+    "21ce0ee54bff57f69fafa741025bf2f15b356405": {
+      "path": "bios/Other/xenia-edge/vc_redist.x64.exe",
+      "name": "vc_redist.x64.exe",
+      "size": 25635768,
+      "sha1": "21ce0ee54bff57f69fafa741025bf2f15b356405",
+      "md5": "486f81facf798678c3244c7cf35a557f",
+      "sha256": "cc0ff0eb1dc3f5188ae6300faef32bf5beeba4bdd6e8e445a9184072096b713b",
+      "crc32": "617a44b1",
+      "adler32": "719eceaf"
     },
     "239e9124568c862c31d9ec0605e32373ea74b86a": {
       "path": "bios/Other/xm6pro68k/ROM30.DAT",
@@ -93305,6 +93455,13 @@
       "95f294d24b5e97ceab96282f1284190f": "8dba66121f3bbc4b2bdf67722ef4c2b6b6b23ee6",
       "d66b0bccd743bd11eaca55bcaec925da": "c54f04b63ac6f04e0a0944ef260b5497e4494dbd",
       "6f47c5daf33a759df3395db8ebe62ed1": "7b0bb79d38c573648de218645c6fb16449e156e0",
+      "75527903c6a793772b02807c5343f4c8": "456e74b0805d1931a7786d3d04673a3b02dd4dd3",
+      "46dbe14f577b56ade221acf89631fd7b": "69253a2722f999ba4205f2e679d0b75e3b17109f",
+      "5199b3892ba596a6bf8d0f930729157f": "9dc5783345f258d0c66c17028d39652daa234473",
+      "022f32abf24d5534496095e04aa739b3": "6030f4e7d59b356d0eaf26f1bca370a999335058",
+      "e910afbd441c5247227fb4a731d65799": "83d3c03dc1fc16f2a5b8bbf929d4cc21a078282c",
+      "19498325f22381f551df06ce1b4cad4f": "01299427e4d789295c614752c8398261f006479b",
+      "ad18e8fc265252917dd3698e268977d7": "59815234d228a7f390364c6d6380cc518ea63db1",
       "2c928cbd0410a7e7edae6b2808a1f566": "b478ce9d1343b8dd201c045f010bd1b64ba158ae",
       "4791fe606bfd87d5afe710c5b4c7bbfb": "32777e258030ad9559864d9f4273d515d65f728f",
       "fff1d8c84afbf21c47baaa919e1eef95": "04bfcabf518320593dcda8198475c7f39295ef1f",
@@ -93432,6 +93589,9 @@
       "77b5b2d0c1c3a4200a9cda047f74f957": "fefcb49cb13ea191d2c87b406c141a957020432c",
       "229cf38617d6669286b5d1a48906aa53": "3c6b523e5432a892a0c284d9ba2593919b0173b7",
       "4b945ee2b52c49c397d368dc21fa42dc": "0e2ee74d1f9ebc3a6faf9dbaebbacc2ff053f4df",
+      "22e156b807f3147bb7dcafadc52ab721": "4d0f8dfc5980195ee905fa39e125cd418b8a9599",
+      "f4ae6809bd8c31573370e8da72514012": "e18b9aabbda0cc178436855ef8d04bce96533049",
+      "bf5e583b038933c5f7bc4f0a6f70617c": "c549a2088bc9b678c8c79fa987ac5f4e6ff4772c",
       "b56eb507fac5ac64a7079514c02b8ca7": "cb0d4276f9947762af0841a8af75efa6cbe9109c",
       "b8f058ec01942f596c890a060a32f08b": "35910b67070342cdd6ec4d68eb2e56b39d350543",
       "9338b9a25372178b4ecbf0215697e9be": "ca149058af89d8f612aaa529661e8267d9569875",
@@ -93576,6 +93736,11 @@
       "a10001250bba63ee09abc0b9e545f2bf": "09de0c832fdf8ad2db9a62c0c2c4bb5b2a746fda",
       "ef00c2f8b623b2cc9189afefca3615fd": "aa56e03c13ff0bd4f6404106c9f1488b33bf4cd9",
       "2cc415ce59f0b08586cb366df3224b11": "b623379d6059cd877c6734fb289f59493b99fbea",
+      "de8cf43e4ed5c8c7f9111414f508b268": "a5e152373fa6cc91fa6953dee562ebce6868eb94",
+      "d3d5beb92a7b1c711dbdc83a92639099": "c6efd59349c430969f68fbeb86fa5328e96dc08b",
+      "46075cd0c8c4a477081d2b302d42a257": "284743af8343e7b512b2c442c3d32b23e5112ee0",
+      "8208d493370451238dcf187a5ad9e633": "e5b4d84841f54ee9517ae390b9dd6b28892f0387",
+      "486f81facf798678c3244c7cf35a557f": "21ce0ee54bff57f69fafa741025bf2f15b356405",
       "f373003710ab4322642f527f567e020a": "239e9124568c862c31d9ec0605e32373ea74b86a",
       "47404fbb2e36b82c2abdefb3a9128487": "3f063d4231cdf53da6adc4db96533725e260076a",
       "a471e64e9f69afbe59c10cc94ed1b184": "ecfc092fe6371dbf38e238a8ba5f90785b5db52d",
@@ -110075,6 +110240,30 @@
       "no-save.png": [
         "7b0bb79d38c573648de218645c6fb16449e156e0"
       ],
+      "NotoSansArabic-Regular.ttf": [
+        "456e74b0805d1931a7786d3d04673a3b02dd4dd3",
+        "4d0f8dfc5980195ee905fa39e125cd418b8a9599"
+      ],
+      "NotoSansDevanagari-Regular.ttf": [
+        "69253a2722f999ba4205f2e679d0b75e3b17109f",
+        "e18b9aabbda0cc178436855ef8d04bce96533049"
+      ],
+      "NotoSansHebrew-Regular.ttf": [
+        "9dc5783345f258d0c66c17028d39652daa234473",
+        "c549a2088bc9b678c8c79fa987ac5f4e6ff4772c"
+      ],
+      "NotoSansJP-Regular.ttf": [
+        "6030f4e7d59b356d0eaf26f1bca370a999335058"
+      ],
+      "NotoSansKR-Regular.ttf": [
+        "83d3c03dc1fc16f2a5b8bbf929d4cc21a078282c"
+      ],
+      "NotoSansSC-Regular.ttf": [
+        "01299427e4d789295c614752c8398261f006479b"
+      ],
+      "NotoSansTC-Regular.ttf": [
+        "59815234d228a7f390364c6d6380cc518ea63db1"
+      ],
       "cas.glsl": [
         "b478ce9d1343b8dd201c045f010bd1b64ba158ae",
         "005cecf1a5e20b05407d55d0aad22cf81ad66c31",
@@ -110798,6 +110987,21 @@
       ],
       "tekifire.ogg": [
         "b623379d6059cd877c6734fb289f59493b99fbea"
+      ],
+      "D3D12Core.dll": [
+        "a5e152373fa6cc91fa6953dee562ebce6868eb94"
+      ],
+      "D3D12SDKLayers.dll": [
+        "c6efd59349c430969f68fbeb86fa5328e96dc08b"
+      ],
+      "dxcompiler.dll": [
+        "284743af8343e7b512b2c442c3d32b23e5112ee0"
+      ],
+      "dxil.dll": [
+        "e5b4d84841f54ee9517ae390b9dd6b28892f0387"
+      ],
+      "vc_redist.x64.exe": [
+        "21ce0ee54bff57f69fafa741025bf2f15b356405"
       ],
       "ROM30.DAT": [
         "239e9124568c862c31d9ec0605e32373ea74b86a"
@@ -128634,6 +128838,13 @@
       "2c7a1b2a": "8dba66121f3bbc4b2bdf67722ef4c2b6b6b23ee6",
       "d766f908": "c54f04b63ac6f04e0a0944ef260b5497e4494dbd",
       "6e8b2b47": "7b0bb79d38c573648de218645c6fb16449e156e0",
+      "92685e68": "456e74b0805d1931a7786d3d04673a3b02dd4dd3",
+      "b02dadf9": "69253a2722f999ba4205f2e679d0b75e3b17109f",
+      "96886a26": "9dc5783345f258d0c66c17028d39652daa234473",
+      "ad6e4328": "6030f4e7d59b356d0eaf26f1bca370a999335058",
+      "0fcd7543": "83d3c03dc1fc16f2a5b8bbf929d4cc21a078282c",
+      "07694737": "01299427e4d789295c614752c8398261f006479b",
+      "05eb51ca": "59815234d228a7f390364c6d6380cc518ea63db1",
       "ce9e57e4": "b478ce9d1343b8dd201c045f010bd1b64ba158ae",
       "38998f1a": "32777e258030ad9559864d9f4273d515d65f728f",
       "b9848dc2": "04bfcabf518320593dcda8198475c7f39295ef1f",
@@ -128761,6 +128972,9 @@
       "35ee85c3": "fefcb49cb13ea191d2c87b406c141a957020432c",
       "69787db6": "3c6b523e5432a892a0c284d9ba2593919b0173b7",
       "c9a52a37": "0e2ee74d1f9ebc3a6faf9dbaebbacc2ff053f4df",
+      "bf24835a": "4d0f8dfc5980195ee905fa39e125cd418b8a9599",
+      "e1232465": "e18b9aabbda0cc178436855ef8d04bce96533049",
+      "ca72899c": "c549a2088bc9b678c8c79fa987ac5f4e6ff4772c",
       "13eed5a5": "cb0d4276f9947762af0841a8af75efa6cbe9109c",
       "bb25c312": "35910b67070342cdd6ec4d68eb2e56b39d350543",
       "342d0e13": "ca149058af89d8f612aaa529661e8267d9569875",
@@ -128905,6 +129119,11 @@
       "f3941d3a": "09de0c832fdf8ad2db9a62c0c2c4bb5b2a746fda",
       "ddf31a86": "aa56e03c13ff0bd4f6404106c9f1488b33bf4cd9",
       "9489e5a8": "b623379d6059cd877c6734fb289f59493b99fbea",
+      "8fbfe50d": "a5e152373fa6cc91fa6953dee562ebce6868eb94",
+      "d456be19": "c6efd59349c430969f68fbeb86fa5328e96dc08b",
+      "56729550": "284743af8343e7b512b2c442c3d32b23e5112ee0",
+      "3f63f47b": "e5b4d84841f54ee9517ae390b9dd6b28892f0387",
+      "617a44b1": "21ce0ee54bff57f69fafa741025bf2f15b356405",
       "e8f8fdad": "239e9124568c862c31d9ec0605e32373ea74b86a",
       "1c6c889e": "3f063d4231cdf53da6adc4db96533725e260076a",
       "74b76447": "ecfc092fe6371dbf38e238a8ba5f90785b5db52d",
@@ -137008,6 +137227,13 @@
       "c749cd9513bd345b9f12ff46eac0ffbf4e54c0b0884921df97ca8297396e3fea": "8dba66121f3bbc4b2bdf67722ef4c2b6b6b23ee6",
       "dfd8035387a463722ad07af3c91934e0a685f2afa57e31d305f0602656d1edb1": "c54f04b63ac6f04e0a0944ef260b5497e4494dbd",
       "ab829598e15b771112130cbafbd982736400690c11e3d7c81e3fc8c582c24f47": "7b0bb79d38c573648de218645c6fb16449e156e0",
+      "90f50de40af560ad55f2fcf460af8205f842b534b057bd8b8bcf7d3e10d3223a": "456e74b0805d1931a7786d3d04673a3b02dd4dd3",
+      "11fa517464dbd568e855e449650a9004d1072c4a54ac1845aaafc462c0652b64": "69253a2722f999ba4205f2e679d0b75e3b17109f",
+      "1edcc5695148a632b8a5516ba41a86edf01f06289c5c2e84a1afafe833eb25da": "9dc5783345f258d0c66c17028d39652daa234473",
+      "fb3df01b4182734d021d79ec5bac17903bb681e926a059c59ed81a373d612241": "6030f4e7d59b356d0eaf26f1bca370a999335058",
+      "9db318b65ee9c575a43e7efd273dbdd1afef26e467eea3e1073a50e1a6595f6d": "83d3c03dc1fc16f2a5b8bbf929d4cc21a078282c",
+      "ae82f4e2a55e1316a55bcc1d05e9555ce08d8bda07e893b486896b626fd852ff": "01299427e4d789295c614752c8398261f006479b",
+      "6b137e2eb57a2d1e4cf391c886ab1b783a0e5ddb5c75254748bde00c15cb8ff5": "59815234d228a7f390364c6d6380cc518ea63db1",
       "3d5b9cef750ea8bedceef43c4c52215e8280abb81b5b8fa002007bb3f97f0506": "b478ce9d1343b8dd201c045f010bd1b64ba158ae",
       "4ac385f0e38ee2c3a3f7014db86bd59927a5d4e4f76f24df9b8f8b3d97142390": "32777e258030ad9559864d9f4273d515d65f728f",
       "25978439553bbd959fe4eb5d03b739a3d697348458a7bac3df48556148f48027": "04bfcabf518320593dcda8198475c7f39295ef1f",
@@ -137135,6 +137361,9 @@
       "ead9acd03c8d749ddde899afed49ba4b50e6ca14585a3091bc23a7074902cfe0": "fefcb49cb13ea191d2c87b406c141a957020432c",
       "ca56a424e87cf4c257dcd3810567e62cb10767096b6a2378e69b07040c5fbc13": "3c6b523e5432a892a0c284d9ba2593919b0173b7",
       "86883a0199a129b900f4a5c7ade6245b7e9d1399ec3c08d1fbf1838c01722e8e": "0e2ee74d1f9ebc3a6faf9dbaebbacc2ff053f4df",
+      "bdff3e5659d67e67def05b33f749683b9376ae819d65d3dd62ac4640b3aaef48": "4d0f8dfc5980195ee905fa39e125cd418b8a9599",
+      "306b53ecfb182a504dd8a7446093c316387d2fd8dc350d0792ed1753fe0996cd": "e18b9aabbda0cc178436855ef8d04bce96533049",
+      "cdefaf8efd47045f6820928eba84db5bed7557539328952b5f828315485e02ee": "c549a2088bc9b678c8c79fa987ac5f4e6ff4772c",
       "53e5ddc6825ecde7b502acb5fae3a173ba6696ec5b8bb7445f378f7b0ad1beb8": "cb0d4276f9947762af0841a8af75efa6cbe9109c",
       "fcb651c2ff39102a33ece3716579e3aee7d8b92d4700e52b56b6cf14baa8b8d1": "35910b67070342cdd6ec4d68eb2e56b39d350543",
       "ea82ce9731de4a0b5af3e66e47e048af569e0e98c5739b32f268fb54caa7603a": "ca149058af89d8f612aaa529661e8267d9569875",
@@ -137279,6 +137508,11 @@
       "166c50315fce00360976be3b4963ae5db9d232ba18ab660b4fed9eca15d60bec": "09de0c832fdf8ad2db9a62c0c2c4bb5b2a746fda",
       "7c3a60277701decff36f4e88bc0ecc9dbe06cf8bf0c4408e56d43a1beb81bb55": "aa56e03c13ff0bd4f6404106c9f1488b33bf4cd9",
       "ce50cb5d5624244d1c4c3e2b8c696bc42dd21772979f7d284608a308f1e2b8a4": "b623379d6059cd877c6734fb289f59493b99fbea",
+      "9e47f236fd3244ad88443a61f7d549eced052b42cb9bd78bbeb35a5918c25bb9": "a5e152373fa6cc91fa6953dee562ebce6868eb94",
+      "0840ff2fbb677fc0019200d85eaf4bfe401b37b151e38311090f8dda47ea9173": "c6efd59349c430969f68fbeb86fa5328e96dc08b",
+      "9a5100511e127c6a2fc78edf984f95074a76d35b90c90c4d342430a5ae160e9b": "284743af8343e7b512b2c442c3d32b23e5112ee0",
+      "feb57253eff0a622561e29b44cedbe86b89fc9a5bc8dc00fa2f98fafd712c2d8": "e5b4d84841f54ee9517ae390b9dd6b28892f0387",
+      "cc0ff0eb1dc3f5188ae6300faef32bf5beeba4bdd6e8e445a9184072096b713b": "21ce0ee54bff57f69fafa741025bf2f15b356405",
       "bdba942ab9c633a3172fbf1a8579849df52c0eeb0da8a3411402f4564d035a27": "239e9124568c862c31d9ec0605e32373ea74b86a",
       "4faa90296e5db006eda5ebe4b6c78fc154c8c52e65236f43e67419b915b695fe": "3f063d4231cdf53da6adc4db96533725e260076a",
       "2a86458696e83eb924fc6c6fda3ca5d320ca90885bd6c2f32d121757ade389bb": "ecfc092fe6371dbf38e238a8ba5f90785b5db52d",
@@ -146673,6 +146907,30 @@
       "nxengine/tilekey.dat": [
         "74c14b15dbc2f36c81d2ad9cb65e2893298415da"
       ],
+      "pcsx2/resources/fonts/NotoSansArabic-Regular.ttf": [
+        "456e74b0805d1931a7786d3d04673a3b02dd4dd3",
+        "4d0f8dfc5980195ee905fa39e125cd418b8a9599"
+      ],
+      "pcsx2/resources/fonts/NotoSansDevanagari-Regular.ttf": [
+        "69253a2722f999ba4205f2e679d0b75e3b17109f",
+        "e18b9aabbda0cc178436855ef8d04bce96533049"
+      ],
+      "pcsx2/resources/fonts/NotoSansHebrew-Regular.ttf": [
+        "9dc5783345f258d0c66c17028d39652daa234473",
+        "c549a2088bc9b678c8c79fa987ac5f4e6ff4772c"
+      ],
+      "pcsx2/resources/fonts/NotoSansJP-Regular.ttf": [
+        "6030f4e7d59b356d0eaf26f1bca370a999335058"
+      ],
+      "pcsx2/resources/fonts/NotoSansKR-Regular.ttf": [
+        "83d3c03dc1fc16f2a5b8bbf929d4cc21a078282c"
+      ],
+      "pcsx2/resources/fonts/NotoSansSC-Regular.ttf": [
+        "01299427e4d789295c614752c8398261f006479b"
+      ],
+      "pcsx2/resources/fonts/NotoSansTC-Regular.ttf": [
+        "59815234d228a7f390364c6d6380cc518ea63db1"
+      ],
       "pcsx2/resources/shaders/opengl/cas.glsl": [
         "b478ce9d1343b8dd201c045f010bd1b64ba158ae"
       ],
@@ -147028,6 +147286,18 @@
       ],
       "PPSSPP/ppge_atlas.meta": [
         "f99a13464a4dae347628f0ebb320e767e48e3a96"
+      ],
+      "D3D12/D3D12Core.dll": [
+        "a5e152373fa6cc91fa6953dee562ebce6868eb94"
+      ],
+      "D3D12/D3D12SDKLayers.dll": [
+        "c6efd59349c430969f68fbeb86fa5328e96dc08b"
+      ],
+      "D3D12/dxcompiler.dll": [
+        "284743af8343e7b512b2c442c3d32b23e5112ee0"
+      ],
+      "D3D12/dxil.dll": [
+        "e5b4d84841f54ee9517ae390b9dd6b28892f0387"
       ],
       "nvr/adgold.bin": [
         "e3b28842515140c82e2e897a53ad39333ed9512c"

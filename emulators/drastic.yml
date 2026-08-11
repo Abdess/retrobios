@@ -128,6 +128,7 @@ notes: |
 
 files:
   - name: nds_bios_arm9.bin
+    aliases: [NDS_Bios9.bin, bios9.bin, biosnds9.rom]
     path: system/nds_bios_arm9.bin
     system: nintendo-ds
     required: false
@@ -149,6 +150,7 @@ files:
     source_ref: "drastic r2.5.2.2 initialize_memory 0x1c4b0-0x1c4d4, libdrastic_arm64.so 0x2b6f0-0x2b708, DraSticActivity.smali:4084-4090, drastic_bios_readme.txt:1-31"
 
   - name: nds_bios_arm7.bin
+    aliases: [NDS_Bios7.bin, bios7.bin, biosnds7.rom]
     path: system/nds_bios_arm7.bin
     system: nintendo-ds
     required: false
@@ -170,6 +172,7 @@ files:
     source_ref: "drastic r2.5.2.2 initialize_memory 0x1c508-0x1c52c, libdrastic_arm64.so 0x2b740-0x2b758, DraSticActivity.smali:4078-4083"
 
   - name: nds_firmware.bin
+    aliases: [NDS_Lite_Firmware.bin, dsfirmware.bin, firmware.bin]
     path: system/nds_firmware.bin
     system: nintendo-ds
     required: false
