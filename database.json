@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-11T23:32:01Z",
-  "total_files": 8784,
-  "total_size": 12024094435,
+  "generated_at": "2026-08-11T23:34:51Z",
+  "total_files": 8785,
+  "total_size": 12024110819,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -49334,6 +49334,16 @@
       "crc32": "7e7b91f6",
       "adler32": "49c38466"
     },
+    "041943e068b789c8bf5145222ab4784f300da297": {
+      "path": "bios/Other/c64-emu/DRIVES/bootromCMDHD-v2-80.bin",
+      "name": "bootromCMDHD-v2-80.bin",
+      "size": 16384,
+      "sha1": "041943e068b789c8bf5145222ab4784f300da297",
+      "md5": "3e4b2f2718e4d581b946aa0b67100fc4",
+      "sha256": "6f5e61d801718ad1a871dc7f112a4231134218a4a9d405d01d904a21ef9eb75e",
+      "crc32": "5f8da286",
+      "adler32": "90d2e883"
+    },
     "3582c760e7d900ecf13b8624fa8ce0b60c9394b1": {
       "path": "bios/Other/c64-emu/PET/green.vpl",
       "name": "green.vpl",
@@ -97547,6 +97557,7 @@
       "e6f0e43686b959fa53c78f4d89ca9416": "a500a1428e787f308726024d9c7d118572d01b54",
       "c4fb96b05fb2329c69e16174c9f886c3": "549cbc5908ca9a19a6d4de564f9db25870eb08a5",
       "d3de2a04193de19ad2e5173f4c03377f": "6652f5bfa1ade4dcdaa9f08032ebeba9d38ac284",
+      "3e4b2f2718e4d581b946aa0b67100fc4": "041943e068b789c8bf5145222ab4784f300da297",
       "519d91188672810f39d07cc1fedd9d52": "3582c760e7d900ecf13b8624fa8ce0b60c9394b1",
       "7358085db9dec11b03908776f82777ed": "7605bb4c225657240ff851a38f282e304376fd3a",
       "123e0bd0e5222fff52b914ba7cde4478": "3a5b6619d9d0728cb4de1ce132a3b59a5e22a09e",
@@ -114945,6 +114956,9 @@
       "green.vpl": [
         "549cbc5908ca9a19a6d4de564f9db25870eb08a5",
         "3582c760e7d900ecf13b8624fa8ce0b60c9394b1"
+      ],
+      "bootromCMDHD-v2-80.bin": [
+        "041943e068b789c8bf5145222ab4784f300da297"
       ],
       "yape-pal.vpl": [
         "11842819c25f7b9d9ec6ce3683990081b088a63e"
@@ -134580,6 +134594,7 @@
       "1f11b38a": "a500a1428e787f308726024d9c7d118572d01b54",
       "9c4b8295": "549cbc5908ca9a19a6d4de564f9db25870eb08a5",
       "7e7b91f6": "6652f5bfa1ade4dcdaa9f08032ebeba9d38ac284",
+      "5f8da286": "041943e068b789c8bf5145222ab4784f300da297",
       "aea2e335": "3582c760e7d900ecf13b8624fa8ce0b60c9394b1",
       "8248f361": "7605bb4c225657240ff851a38f282e304376fd3a",
       "03e68893": "3a5b6619d9d0728cb4de1ce132a3b59a5e22a09e",
@@ -143366,6 +143381,7 @@
       "93e5f3636da0189b1e53094834a1813029ea446edb51df49476618bfccf2fc95": "a500a1428e787f308726024d9c7d118572d01b54",
       "429b5be2d400b6517e5b6b0dc3c9d271f0c794f888825a0f34433a345992c0f7": "549cbc5908ca9a19a6d4de564f9db25870eb08a5",
       "846474292d967c7fec5fcebc1d091eff8613e11d4de41e8adf0f31fe9a154610": "6652f5bfa1ade4dcdaa9f08032ebeba9d38ac284",
+      "6f5e61d801718ad1a871dc7f112a4231134218a4a9d405d01d904a21ef9eb75e": "041943e068b789c8bf5145222ab4784f300da297",
       "e1bcd3b861bfdee8a87b1ff7e3d88e91baeb7fa16cee8c2e292283d5d6cf9819": "3582c760e7d900ecf13b8624fa8ce0b60c9394b1",
       "6dc01bb6722dacd24960abd42669fa962509bbf744a6e290999fab3891c7bfc5": "7605bb4c225657240ff851a38f282e304376fd3a",
       "b57f9a8f103e6a83254b84f594258b521afd78aed1ade6973814b5b28370a86c": "3a5b6619d9d0728cb4de1ce132a3b59a5e22a09e",
@@ -153532,6 +153548,9 @@
       ],
       "CBM-II/gtk3_sym.vkm": [
         "6652f5bfa1ade4dcdaa9f08032ebeba9d38ac284"
+      ],
+      "DRIVES/bootromCMDHD-v2-80.bin": [
+        "041943e068b789c8bf5145222ab4784f300da297"
       ],
       "PET/green.vpl": [
         "3582c760e7d900ecf13b8624fa8ce0b60c9394b1"

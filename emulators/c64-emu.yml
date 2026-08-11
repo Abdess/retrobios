@@ -1079,6 +1079,8 @@ files:
     source_ref: "C64.emu/src/vice/drive/driverom.h:42,92, C64.emu/src/vice/drive/tcbm/tcbmrom.c:50,66, C64.emu/src/vice/plus4/plus4drive.c:46"
 
   - name: "dos2000-cs-33cc6f.bin"
+    aliases:
+      - dos2000
     path: "DRIVES/dos2000-cs-33cc6f.bin"
     required: false
     size: 32768
@@ -1087,6 +1089,8 @@ files:
     source_ref: "C64.emu/src/vice/drive/driverom.h:47,98, C64.emu/src/vice/drive/iec/iecrom.c:133,208"
 
   - name: "dos4000-fd-350022.bin"
+    aliases:
+      - dos4000
     path: "DRIVES/dos4000-fd-350022.bin"
     required: false
     size: 32768
@@ -1100,6 +1104,10 @@ files:
     size: 16384
     validation: [size]
     description: "CMD HD boot ROM"
+    note: >-
+      The MAME dump cmd_hd_bootrom_v280.bin reads the chip over 32 KB and its
+      two halves are identical; the image here is the first half, the 16 KB the
+      loader asks for.
     source_ref: "C64.emu/src/vice/drive/driverom.h:49,100, C64.emu/src/vice/drive/iec/iecrom.c:145,218"
 
   - name: "dos2031-901484-03+05.bin"
