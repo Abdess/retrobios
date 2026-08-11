@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-11T23:07:43Z",
-  "total_files": 8744,
-  "total_size": 11459106403,
+  "generated_at": "2026-08-11T23:10:43Z",
+  "total_files": 8745,
+  "total_size": 12012755555,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -45176,6 +45176,16 @@
       "sha256": "71b888e41c7d3e6173a131a4b80c4a366a13348e6c1f3c53c8b4635a839a3d2d",
       "crc32": "0a5dd673",
       "adler32": "49056af8"
+    },
+    "98737d0dbdb6fa31ac5d9b87dcfb4a929a79ce45": {
+      "path": "bios/Nintendo/Wii/nand.bin",
+      "name": "nand.bin",
+      "size": 553649152,
+      "sha1": "98737d0dbdb6fa31ac5d9b87dcfb4a929a79ce45",
+      "md5": "1a72239082535dd8542977411e7c04b0",
+      "sha256": "72e1d5ec6cf531ef9558fb364bd1c710af72a9537619b81c1c2da2bbda583257",
+      "crc32": "f777687e",
+      "adler32": "c2670342"
     },
     "b5229455dd26c1f53c73060e9089b391389e1f75": {
       "path": "bios/Nintendo/Wii/rootca.pem",
@@ -96725,6 +96735,7 @@
       "797567b427fa6b0ed74e7bf428d0a409": "4b937d4e81de11574b926386dd5f768aa23bf177",
       "a82c3521f532b7e21199cdcd976ff2d9": "a2c11886e6d12a135e1d5eb50d5fe92e028577d9",
       "93d63512960db7bde63a85cac7ccc8b3": "085771a6748da1d7d8765f3cbae6a60cc2071700",
+      "1a72239082535dd8542977411e7c04b0": "98737d0dbdb6fa31ac5d9b87dcfb4a929a79ce45",
       "f67797020b2dd108726efba4bfc34ba7": "b5229455dd26c1f53c73060e9089b391389e1f75",
       "e5e7a52e1f329fb89377027038d8dd08": "8c8134f08b2e3baa603206ede30d3935365009b8",
       "927134b2e741c6fa43deebe9efa8db92": "077a31ce116de322f089a627c5eb7ff5c2236a5d",
@@ -113250,6 +113261,9 @@
       ],
       "keys.bin": [
         "085771a6748da1d7d8765f3cbae6a60cc2071700"
+      ],
+      "nand.bin": [
+        "98737d0dbdb6fa31ac5d9b87dcfb4a929a79ce45"
       ],
       "rootca.pem": [
         "b5229455dd26c1f53c73060e9089b391389e1f75"
@@ -133594,6 +133608,7 @@
       "48e4743e": "4b937d4e81de11574b926386dd5f768aa23bf177",
       "d6867f33": "a2c11886e6d12a135e1d5eb50d5fe92e028577d9",
       "0a5dd673": "085771a6748da1d7d8765f3cbae6a60cc2071700",
+      "f777687e": "98737d0dbdb6fa31ac5d9b87dcfb4a929a79ce45",
       "835eeeec": "b5229455dd26c1f53c73060e9089b391389e1f75",
       "86ca23a0": "8c8134f08b2e3baa603206ede30d3935365009b8",
       "ad931e2e": "077a31ce116de322f089a627c5eb7ff5c2236a5d",
@@ -142340,6 +142355,7 @@
       "229ec678525e060588e8ea23e5459ec14af3c2ebb7b9e69ec46b0faf011730d9": "4b937d4e81de11574b926386dd5f768aa23bf177",
       "723be9b32c3afb83a4a3757adf352529e90c0ad6fad52509963ba8942ae625df": "a2c11886e6d12a135e1d5eb50d5fe92e028577d9",
       "71b888e41c7d3e6173a131a4b80c4a366a13348e6c1f3c53c8b4635a839a3d2d": "085771a6748da1d7d8765f3cbae6a60cc2071700",
+      "72e1d5ec6cf531ef9558fb364bd1c710af72a9537619b81c1c2da2bbda583257": "98737d0dbdb6fa31ac5d9b87dcfb4a929a79ce45",
       "c5b0f8dfcec6b9ed2ac38b8bc69a4db7c209dc177d243c8df2bddf9e39171e5f": "b5229455dd26c1f53c73060e9089b391389e1f75",
       "5709657d763f510f58792ca3ba080b0f663ec922149aa3ef5a0a4495ebabf8a6": "8c8134f08b2e3baa603206ede30d3935365009b8",
       "5e17f8bc2444048c944e92a4f3b2a89a6f7f06398a17b2552be8d32e52c6f9db": "077a31ce116de322f089a627c5eb7ff5c2236a5d",
