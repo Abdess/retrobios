@@ -143,7 +143,6 @@ files:
     system: sony-playstation-vita
     required: false
     category: game_data
-    unsourceable: "dated snapshot of the Vita3K compatibility project, rebuilt upstream and refetched by the app every twelve hours"
     description: "per-title compatibility ratings"
     note: >-
       Downloaded as app_compat_db.xml.zip from the Vita3K compatibility
@@ -158,7 +157,6 @@ files:
     system: sony-playstation-vita
     required: false
     category: game_data
-    unsourceable: "answer of a live web API, refetched on the same twelve hour cycle"
     description: "commercial title index"
     note: >-
       Fetched from the Vita3K web API and merged over the XML snapshot, so a
