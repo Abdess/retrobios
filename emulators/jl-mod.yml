@@ -53,7 +53,6 @@ files:
     system: j2me
     required: true
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     description: "Default microedition system properties"
     note: "Read from assets/defaults when a profile is created, when the config screen has no stored value and when updateSystemProperties fills the field. Each line becomes a System.setProperty and MidletSystem.setProperty pair at MIDlet startup, carrying microedition.configuration, microedition.platform, the JSR version strings and the vendor identity values."
@@ -63,7 +62,6 @@ files:
     system: j2me
     required: true
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     description: "Vertex shader for the screen blitter"
     note: "Compiled when the GL surface is created and no user shader is selected. Graphics mode 1 is the default, so this is the standard display path. Also compiled as the Simple program of the Mascot Capsule renderer."
@@ -73,7 +71,6 @@ files:
     system: j2me
     required: true
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     description: "Fragment shader for the screen blitter"
     note: "Paired with simple.vsh. createProgram returning -1 raises RuntimeException at surface creation."
@@ -83,7 +80,6 @@ files:
     system: j2me
     required: true
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     description: "Vertex shader for untextured Mascot Capsule geometry"
     note: "Program.create builds the tex, color, simple and sprite programs together the first time the Mascot Capsule renderer draws, so all four pairs are read on the first micro3d frame."
@@ -93,7 +89,6 @@ files:
     system: j2me
     required: true
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     description: "Fragment shader for untextured Mascot Capsule geometry"
     note: "Carries the sphere map, toon threshold and primitive colour uniforms of the Color program."
@@ -103,7 +98,6 @@ files:
     system: j2me
     required: true
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     description: "Vertex shader for textured Mascot Capsule geometry"
     note: "Built by Program.create alongside the other three pairs."
@@ -113,7 +107,6 @@ files:
     system: j2me
     required: true
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     description: "Fragment shader for textured Mascot Capsule geometry"
     note: "Carries the texture size, sphere map and toon uniforms of the Tex program."
@@ -123,7 +116,6 @@ files:
     system: j2me
     required: true
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     description: "Vertex shader for Mascot Capsule sprites"
     note: "Built by Program.create alongside the other three pairs."
@@ -133,7 +125,6 @@ files:
     system: j2me
     required: true
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     description: "Fragment shader for Mascot Capsule sprites"
     note: "Carries the texture size and colour key uniforms of the Sprite program."
@@ -143,7 +134,6 @@ files:
     system: j2me
     required: true
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     description: "Vertex shader for the Nokia M3D renderer"
     note: "Compiled when a MIDlet first binds a com.nokia.mid.m3d context. Carries the position, texture coordinate and matrix inputs."
@@ -153,7 +143,6 @@ files:
     system: j2me
     required: true
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     description: "Fragment shader for the Nokia M3D renderer"
     note: "Paired with m3d.vsh. A link failure raises RuntimeException in the constructor."
@@ -163,7 +152,6 @@ files:
     system: j2me
     required: true
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     description: "Binary class patches applied during MIDlet conversion"
     note: "Index of class CRC32 to patch offset, read by the static field initializer of AndroidProducer and again for each matching class the dexer instruments. A read failure outside end of file is rethrown as RuntimeException, which breaks class initialization and therefore every conversion. Patch entries are applied by the SRC/EXT/FWD/BWD opcode stream of BinaryPatcher."
@@ -173,7 +161,6 @@ files:
     system: j2me
     required: false
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     description: "Third party licence text of the about screen"
     note: "Read when the licences dialog is opened and shown as HTML. Emulation never touches it."
@@ -183,7 +170,6 @@ files:
     system: j2me
     required: false
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     description: "X.509 certificate for the crash report endpoint"
     note: "Named as an ACRA certificate path only when the crash sender is configured on Android 4.1 through 4.4, where TLSv1.2 is forced. Every other release uses the default socket factory."
@@ -193,7 +179,6 @@ files:
     system: j2me
     required: true
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     description: "NDK C++ runtime for the native modules"
     note: "Named ahead of every other native library, in the static initializers of GLESUtils and micro3d Utils, in the M3G toolkit init and in both synthesizer classes."
@@ -203,7 +188,6 @@ files:
     system: j2me
     required: true
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     description: "GLES blit routines for the Nokia M3D and Mexa OpenGL surfaces"
     note: "Loaded from the static initializer of GLESUtils, so the first blit brings it in. Holds the GLES1 and GLES2 bitmap blits."
@@ -213,7 +197,6 @@ files:
     system: j2me
     required: true
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     description: "JSR-184 M3G engine"
     note: "Named by System.loadLibrary outside any catch, the first time the toolkit reports the UI thread available. Built by ndkBuild from the m3g sources against GLES 1.1."
@@ -223,7 +206,6 @@ files:
     system: j2me
     required: true
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     description: "Mascot Capsule vertex and buffer routines"
     note: "Loaded from the static initializer of Utils, so the first Mascot Capsule call brings it in. Holds fillBuffer, glReadPixels and the bone transform."
@@ -233,7 +215,6 @@ files:
     system: j2me
     required: false
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     description: "Audio output stream of the sound bank synthesizers"
     note: "Named by both synthesizer classes ahead of their own libraries. Reached only when a sound bank is selected, and SynthPluginFactory catches the load failure and falls back to the Android synthesizer."
@@ -243,7 +224,6 @@ files:
     system: j2me
     required: false
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     description: "Shared player and listener code of the synthesizer plugins"
     note: "Named by both synthesizer classes ahead of their own libraries. Same fallback as liboboe.so."
@@ -253,7 +233,6 @@ files:
     system: j2me
     required: false
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     description: "Sonivox EAS synthesizer"
     note: "Loaded from the static initializer of LibEAS when a sound bank is selected. Links the sonivox wavetable engine statically and reads the bank as a DLS collection. A failure leaves the TinySoundFont plugin or the Android synthesizer."
@@ -263,7 +242,6 @@ files:
     system: j2me
     required: false
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     description: "TinySoundFont synthesizer"
     note: "Loaded from the static initializer of LibTSF when a sound bank is selected. Reads the bank as a SoundFont and plays standard MIDI files. A failure leaves the EAS plugin or the Android synthesizer."

@@ -158,11 +158,6 @@ files:
     validation: [signature]
     description: "Microsoft Visual C++ 2015-2022 redistributable installer"
     source_ref: "src/xenia/app/xenia_main.cc:578-582, src/xenia/ui/redist_installer_wx.cc:144-172, 379-409, 766-875"
-    unsourceable: >-
-      The aka.ms link is a rolling redirect to whatever build Microsoft
-      currently publishes, so the artifact has no fixed identity to record; the
-      source pins no SHA-256 for that reason and verifies an Authenticode chain
-      with a "Microsoft Corporation" signer instead.
     note: >-
       Not loaded by the emulator. The runtime version is read from
       HKLM\SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64, and when it is

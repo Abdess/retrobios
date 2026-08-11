@@ -156,7 +156,6 @@ files:
   - name: uzdoom.pk3
     required: true
     bundled: true
-    unsourceable: "arrives with the application package, not sourced separately"
     category: game_data
     path: "uzdoom/uzdoom.pk3"
     size: 3007398
@@ -173,7 +172,6 @@ files:
   - name: game_support.pk3
     required: true
     bundled: true
-    unsourceable: "arrives with the application package, not sourced separately"
     category: game_data
     path: "uzdoom/game_support.pk3"
     size: 2382047
@@ -190,7 +188,6 @@ files:
   - name: game_widescreen_gfx.pk3
     required: false
     bundled: true
-    unsourceable: "arrives with the application package, not sourced separately"
     category: game_data
     path: "uzdoom/game_widescreen_gfx.pk3"
     size: 5565936
@@ -205,7 +202,6 @@ files:
   - name: lights.pk3
     required: false
     bundled: true
-    unsourceable: "arrives with the application package, not sourced separately"
     category: game_data
     path: "uzdoom/lights.pk3"
     size: 24030
@@ -220,7 +216,6 @@ files:
   - name: brightmaps.pk3
     required: false
     bundled: true
-    unsourceable: "arrives with the application package, not sourced separately"
     category: game_data
     path: "uzdoom/brightmaps.pk3"
     size: 246181
@@ -235,7 +230,6 @@ files:
   - name: uzdoom.sf2
     required: false
     bundled: true
-    unsourceable: "arrives with the application package, not sourced separately"
     category: game_data
     path: "uzdoom/soundfonts/uzdoom.sf2"
     size: 3299098
@@ -251,7 +245,6 @@ files:
   - name: GENMIDI.GS.wopl
     required: false
     bundled: true
-    unsourceable: "arrives with the application package, not sourced separately"
     category: game_data
     path: "uzdoom/fm_banks/GENMIDI.GS.wopl"
     size: 118767
@@ -266,7 +259,6 @@ files:
   - name: gs-by-papiezak-and-sneakernets.wopn
     required: false
     bundled: true
-    unsourceable: "arrives with the application package, not sourced separately"
     category: game_data
     path: "uzdoom/fm_banks/gs-by-papiezak-and-sneakernets.wopn"
     size: 274864
@@ -280,7 +272,6 @@ files:
   - name: ecwolf.pk3
     required: true
     bundled: true
-    unsourceable: "arrives with the application package, not sourced separately"
     category: game_data
     path: "ecwolf/ecwolf.pk3"
     size: 185013
@@ -299,7 +290,6 @@ files:
   - name: glprogs.pk4
     required: true
     bundled: true
-    unsourceable: "arrives with the application package, not sourced separately"
     category: game_data
     size: 98396
     md5: 3155df291027d253e2596db3fca1ac4a
@@ -314,7 +304,6 @@ files:
   - name: renderprogs.pk4
     required: true
     bundled: true
-    unsourceable: "arrives with the application package, not sourced separately"
     category: game_data
     size: 223453
     md5: 7edee35e1e53475d9557c1026877ae7c
@@ -328,7 +317,6 @@ files:
   - name: glsl.pk4
     required: true
     bundled: true
-    unsourceable: "arrives with the application package, not sourced separately"
     category: game_data
     size: 51642
     md5: b94d15df5bf72a4c4510c834ef404ebb
@@ -341,7 +329,6 @@ files:
   - name: zzz_etqwbase.pk4
     required: true
     bundled: true
-    unsourceable: "arrives with the application package, not sourced separately"
     category: game_data
     size: 136061
     md5: 2f5c49dca4993da5911d632d3962c1f3
@@ -355,7 +342,6 @@ files:
   - name: legacy_v2.83.2.pk3
     required: true
     bundled: true
-    unsourceable: "arrives with the application package, not sourced separately"
     category: game_data
     path: "etw/legacy/legacy_v2.83.2.pk3"
     size: 30993701
@@ -372,7 +358,6 @@ files:
   - name: extras.pk3
     required: true
     bundled: true
-    unsourceable: "arrives with the application package, not sourced separately"
     category: game_data
     path: "xash/extras.pk3"
     size: 1491748
@@ -389,7 +374,6 @@ files:
   - name: cs16client-extras.pk3
     required: false
     bundled: true
-    unsourceable: "arrives with the application package, not sourced separately"
     category: game_data
     path: "xash/cs16client-extras.pk3"
     size: 12976942
@@ -404,7 +388,6 @@ files:
   - name: extras.zip
     required: true
     bundled: true
-    unsourceable: "arrives with the application package, not sourced separately"
     category: game_data
     size: 15081926
     md5: 15944b9068602a6d36905be035e9e547
@@ -419,7 +402,6 @@ files:
   - name: d3_sabot_a7.pk4
     required: false
     bundled: true
-    unsourceable: "arrives with the application package, not sourced separately"
     category: game_data
     path: "doom3/base/zzz_idTech4Amm_d3_sabot_a7.pk4"
     size: 2399406
@@ -436,7 +418,6 @@ files:
   - name: q4_sabot_a9.pk4
     required: false
     bundled: true
-    unsourceable: "arrives with the application package, not sourced separately"
     category: game_data
     path: "quake4/q4base/zzz_idTech4Amm_q4_sabot_a9.pk4"
     size: 21143072
@@ -451,7 +432,6 @@ files:
   - name: play_original_doom3_level.pk4
     required: false
     bundled: true
-    unsourceable: "arrives with the application package, not sourced separately"
     category: game_data
     path: "doom3/rivensin/zzz_idTech4Amm_play_original_doom3_level.pk4"
     size: 16866
@@ -466,7 +446,6 @@ files:
   - name: doom3_chinese_translation_doom3bfg.pk4
     required: false
     bundled: true
-    unsourceable: "arrives with the application package, not sourced separately"
     category: game_data
     path: "doom3/base/doom3_chinese_translation_doom3bfg.pk4"
     size: 5138117
@@ -481,7 +460,6 @@ files:
   - name: controls_theme.zipak
     required: false
     bundled: true
-    unsourceable: "arrives with the application package, not sourced separately"
     size: 3133490
     md5: 9f6f5073fda93251f7a48a91a6d4c5d1
     sha1: 5be92df9e74843bc6071e3627f4fd876d499a490
@@ -496,7 +474,6 @@ files:
   - name: btn_jump.png
     required: false
     bundled: true
-    unsourceable: "arrives with the application package, not sourced separately"
     description: "Default on-screen button images, 52 files"
     note: >-
       Read from the assets root when the theme is the built-in one. The set
@@ -508,7 +485,6 @@ files:
   - name: generic.json
     required: false
     bundled: true
-    unsourceable: "arrives with the application package, not sourced separately"
     path: "keyboard/generic.json"
     size: 10278
     md5: ef9b27699a627334930f6d4252b644d5
@@ -522,7 +498,6 @@ files:
 
   - name: autoexec.cfg
     required: false
-    unsourceable: "console commands written by the user for one install"
     description: "Console script the engine runs at startup"
     note: >-
       Executed by the id-derived engines from the mod folder and from the base
@@ -535,7 +510,6 @@ files:
 
   - name: description.txt
     required: false
-    unsourceable: "text written by whoever assembled the mod folder"
     description: "Blurb shown for a mod in the chooser"
     note: >-
       Read from the root of a mod folder when the mod list is built and shown
@@ -560,7 +534,6 @@ files:
 
   - name: "controls_theme/<name>/btn_jump.png"
     required: false
-    unsourceable: "button artwork authored per theme, with no released set to collect"
     description: "Button images of a user theme"
     note: >-
       A folder under `controls_theme/` in any search path, or inside a `.zipak`

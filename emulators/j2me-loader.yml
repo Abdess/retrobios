@@ -44,7 +44,6 @@ files:
     system: j2me
     required: true
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     description: "Typeface for the virtual keyboard and overlays"
     note: "Built into a Typeface at CanvasWrapper construction, which is a field initializer of Canvas and therefore runs for every MIDlet that opens one. Drives the key captions, the soft bar and the FPS counter."
@@ -54,7 +53,6 @@ files:
     system: j2me
     required: true
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     description: "Default microedition system properties"
     note: "Read from assets/defaults when a profile is created and again when the config screen or updateSystemProperties fills the field. Each line becomes a System.setProperty pair at MIDlet startup, carrying microedition.configuration, microedition.platform, the JSR version strings and the vendor identity values."
@@ -64,7 +62,6 @@ files:
     system: j2me
     required: true
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     description: "Vertex shader for the screen blitter"
     note: "Compiled when the GL surface is created and no user shader is selected. Graphics mode 1 is the default, so this is the standard display path. Also compiled as the Simple program of the Mascot Capsule renderer."
@@ -74,7 +71,6 @@ files:
     system: j2me
     required: true
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     description: "Fragment shader for the screen blitter"
     note: "Paired with simple.vsh. createProgram returning -1 raises RuntimeException at surface creation."
@@ -84,7 +80,6 @@ files:
     system: j2me
     required: true
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     description: "Vertex shader for untextured Mascot Capsule geometry"
     note: "Program.create builds the tex, color, simple and sprite programs together the first time the Mascot Capsule renderer initializes, so all four pairs are read on the first micro3d frame."
@@ -94,7 +89,6 @@ files:
     system: j2me
     required: true
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     description: "Fragment shader for untextured Mascot Capsule geometry"
     note: "Carries the sphere map, toon threshold and primitive colour uniforms of the Color program."
@@ -104,7 +98,6 @@ files:
     system: j2me
     required: true
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     description: "Vertex shader for textured Mascot Capsule geometry"
     note: "Built by Program.create alongside the other three pairs."
@@ -114,7 +107,6 @@ files:
     system: j2me
     required: true
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     description: "Fragment shader for textured Mascot Capsule geometry"
     note: "Carries the texture size, transparency and sphere map uniforms of the Tex program."
@@ -124,7 +116,6 @@ files:
     system: j2me
     required: true
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     description: "Vertex shader for Mascot Capsule sprites"
     note: "Built by Program.create alongside the other three pairs."
@@ -134,7 +125,6 @@ files:
     system: j2me
     required: true
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     description: "Fragment shader for Mascot Capsule sprites"
     note: "Carries the texture size, transparency and colour key uniforms of the Sprite program."
@@ -144,7 +134,6 @@ files:
     system: j2me
     required: true
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     description: "JSR-184 M3G engine"
     note: "Named by System.loadLibrary(\"javam3g\") outside any catch, the first time the toolkit reports the UI thread available. Built by ndkBuild from the m3g sources against GLES 1.1."
@@ -154,7 +143,6 @@ files:
     system: j2me
     required: true
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     description: "Mascot Capsule vertex and buffer routines"
     note: "Loaded from the static initializer of Utils, so the first Mascot Capsule call brings it in. Holds fillBuffer, glReadPixels and the bone transform."
@@ -164,7 +152,6 @@ files:
     system: j2me
     required: false
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     description: "X.509 certificate for the crash report endpoint"
     note: "Read into a trust store only when a crash report is sent from Android 4.1 through 4.4, where TLSv1.2 is forced. A read or certificate failure falls back to the default socket factory."
@@ -174,7 +161,6 @@ files:
     system: j2me
     required: false
     bundled: true
-    unsourceable: "ships inside the application package"
     category: game_data
     description: "Third party licence text of the about screen"
     note: "Read when the licences dialog is opened and shown as HTML. Emulation never touches it."
