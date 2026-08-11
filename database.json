@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-11T17:40:12Z",
-  "total_files": 8714,
-  "total_size": 11158410956,
+  "generated_at": "2026-08-11T18:20:17Z",
+  "total_files": 8717,
+  "total_size": 11223612324,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -49817,6 +49817,26 @@
       "crc32": "e9021e6f",
       "adler32": "79add7e8"
     },
+    "9e5a68ae992578d62f2d429863cb8506ee40e3b0": {
+      "path": "bios/Other/emucorev/app_compat_db.xml",
+      "name": "app_compat_db.xml",
+      "size": 633566,
+      "sha1": "9e5a68ae992578d62f2d429863cb8506ee40e3b0",
+      "md5": "ea5367172cfdc57aecc05835cd8f5ede",
+      "sha256": "30689e60b258624bc6e48a6496b9400683384508570617c6a97969f18528a367",
+      "crc32": "4c291d8b",
+      "adler32": "7c10c7a9"
+    },
+    "ea7d6bce6d0b871f40e57c792480f4912b93f247": {
+      "path": "bios/Other/emucorev/commercial_list.json",
+      "name": "commercial_list.json",
+      "size": 350615,
+      "sha1": "ea7d6bce6d0b871f40e57c792480f4912b93f247",
+      "md5": "d8c9cbf44a83f594ca1e29ab97550dec",
+      "sha256": "cadfb653e20289d260b3c0c8a2db3f83ce24cee95ba9db1dcc5ef43911eac478",
+      "crc32": "a020167d",
+      "adler32": "83f85526"
+    },
     "3c6b523e5432a892a0c284d9ba2593919b0173b7": {
       "path": "bios/Other/emucorev/psvita_games.db",
       "name": "psvita_games.db",
@@ -51506,6 +51526,16 @@
       "sha256": "208176552a7d6703be6cd2539c96d2136d37bfc9c1b21a93b4a81a032339faf4",
       "crc32": "25cfd813",
       "adler32": "c747094f"
+    },
+    "633c7a594686935dc2ae70632336f15c73ddbafa": {
+      "path": "bios/Other/groovymame/history/history.xml",
+      "name": "history.xml",
+      "size": 64217187,
+      "sha1": "633c7a594686935dc2ae70632336f15c73ddbafa",
+      "md5": "c1ba1cb2b6b2662f214ef078f7c0eec2",
+      "sha256": "9f3d415c99c2230fd4cc2c3771d0fcb33196e1ed9435556c9fa327c42983ab35",
+      "crc32": "f70f6180",
+      "adler32": "fe14077e"
     },
     "02f515deea7f3fc513496b9218244186e5cc9a61": {
       "path": "bios/Other/groovymame/history/messinfo.dat",
@@ -96882,6 +96912,8 @@
       "c259d5dd2d1a8e1f58eaa26c08efae45": "31ae916c85d012582c7cdf47de6943ac6778253b",
       "5f34f9f6108f8d57fc26789b7a7ecf82": "4dc29a1560e1cbd7afef1998f7a6c25c5db1cc3a",
       "bae4cb62265d0212911e1c6fcd23de78": "bcc9fd3be24170eace44f3816ed52f128cb2248c",
+      "ea5367172cfdc57aecc05835cd8f5ede": "9e5a68ae992578d62f2d429863cb8506ee40e3b0",
+      "d8c9cbf44a83f594ca1e29ab97550dec": "ea7d6bce6d0b871f40e57c792480f4912b93f247",
       "229cf38617d6669286b5d1a48906aa53": "3c6b523e5432a892a0c284d9ba2593919b0173b7",
       "4b945ee2b52c49c397d368dc21fa42dc": "0e2ee74d1f9ebc3a6faf9dbaebbacc2ff053f4df",
       "22e156b807f3147bb7dcafadc52ab721": "4d0f8dfc5980195ee905fa39e125cd418b8a9599",
@@ -97051,6 +97083,7 @@
       "397250dd0d1e19b14816114979b05ad9": "0c3f34ab93bc9a210db159cd68c9343930540f7b",
       "f303fd8288e0bf926d7da30644ab4988": "22b36583a956fb4c0feb1eb47e01de6efdb89a6b",
       "8171099f59d99b7a6dd0809d952075ec": "2e100cdd8b2d5492ff4ef8f1ba487364aabc687f",
+      "c1ba1cb2b6b2662f214ef078f7c0eec2": "633c7a594686935dc2ae70632336f15c73ddbafa",
       "ac347847f656ec26a554fd6f86dd10ea": "02f515deea7f3fc513496b9218244186e5cc9a61",
       "2f355f03254e572dd32e6fe7232f5ccc": "8881159097cd92f67bfec5250bc061626d87cf04",
       "eac8ae47e95f77cc1c5328a48ff5ed50": "2e8d9f0a8ff08896674badeba8aa3ac5245304c3",
@@ -114296,6 +114329,12 @@
       "usrcheat.dat": [
         "bcc9fd3be24170eace44f3816ed52f128cb2248c"
       ],
+      "app_compat_db.xml": [
+        "9e5a68ae992578d62f2d429863cb8506ee40e3b0"
+      ],
+      "commercial_list.json": [
+        "ea7d6bce6d0b871f40e57c792480f4912b93f247"
+      ],
       "psvita_games.db": [
         "3c6b523e5432a892a0c284d9ba2593919b0173b7"
       ],
@@ -114708,6 +114747,9 @@
       ],
       "gameinit.dat": [
         "2e100cdd8b2d5492ff4ef8f1ba487364aabc687f"
+      ],
+      "history.xml": [
+        "633c7a594686935dc2ae70632336f15c73ddbafa"
       ],
       "messinfo.dat": [
         "02f515deea7f3fc513496b9218244186e5cc9a61"
@@ -133618,6 +133660,8 @@
       "cd63893f": "31ae916c85d012582c7cdf47de6943ac6778253b",
       "f307d77a": "4dc29a1560e1cbd7afef1998f7a6c25c5db1cc3a",
       "e9021e6f": "bcc9fd3be24170eace44f3816ed52f128cb2248c",
+      "4c291d8b": "9e5a68ae992578d62f2d429863cb8506ee40e3b0",
+      "a020167d": "ea7d6bce6d0b871f40e57c792480f4912b93f247",
       "69787db6": "3c6b523e5432a892a0c284d9ba2593919b0173b7",
       "c9a52a37": "0e2ee74d1f9ebc3a6faf9dbaebbacc2ff053f4df",
       "bf24835a": "4d0f8dfc5980195ee905fa39e125cd418b8a9599",
@@ -133787,6 +133831,7 @@
       "080d3448": "0c3f34ab93bc9a210db159cd68c9343930540f7b",
       "9dac1097": "22b36583a956fb4c0feb1eb47e01de6efdb89a6b",
       "25cfd813": "2e100cdd8b2d5492ff4ef8f1ba487364aabc687f",
+      "f70f6180": "633c7a594686935dc2ae70632336f15c73ddbafa",
       "c4207191": "02f515deea7f3fc513496b9218244186e5cc9a61",
       "b8f57432": "8881159097cd92f67bfec5250bc061626d87cf04",
       "58c1f5e0": "2e8d9f0a8ff08896674badeba8aa3ac5245304c3",
@@ -142334,6 +142379,8 @@
       "6ad5072c3920fd6c8eba2c49d2dd058c296564a11d6013807124a919cf0d66e6": "31ae916c85d012582c7cdf47de6943ac6778253b",
       "0a4e88c5dfd20ce669b8df45d009974f23fe7cb9b1f2148dbf30b6445eca9bc5": "4dc29a1560e1cbd7afef1998f7a6c25c5db1cc3a",
       "a69264226312f584caf43343d27f0d38213d4fb01758ca01880f509c98fbeb29": "bcc9fd3be24170eace44f3816ed52f128cb2248c",
+      "30689e60b258624bc6e48a6496b9400683384508570617c6a97969f18528a367": "9e5a68ae992578d62f2d429863cb8506ee40e3b0",
+      "cadfb653e20289d260b3c0c8a2db3f83ce24cee95ba9db1dcc5ef43911eac478": "ea7d6bce6d0b871f40e57c792480f4912b93f247",
       "ca56a424e87cf4c257dcd3810567e62cb10767096b6a2378e69b07040c5fbc13": "3c6b523e5432a892a0c284d9ba2593919b0173b7",
       "86883a0199a129b900f4a5c7ade6245b7e9d1399ec3c08d1fbf1838c01722e8e": "0e2ee74d1f9ebc3a6faf9dbaebbacc2ff053f4df",
       "bdff3e5659d67e67def05b33f749683b9376ae819d65d3dd62ac4640b3aaef48": "4d0f8dfc5980195ee905fa39e125cd418b8a9599",
@@ -142503,6 +142550,7 @@
       "647b18305a8fcc7a370195da1b3599a62d56e9588f386b71083a56740560cc4a": "0c3f34ab93bc9a210db159cd68c9343930540f7b",
       "9dae63bb97fc2ced1135020c611293b731ce1a73ce62f7d2c5bb959fec591efa": "22b36583a956fb4c0feb1eb47e01de6efdb89a6b",
       "208176552a7d6703be6cd2539c96d2136d37bfc9c1b21a93b4a81a032339faf4": "2e100cdd8b2d5492ff4ef8f1ba487364aabc687f",
+      "9f3d415c99c2230fd4cc2c3771d0fcb33196e1ed9435556c9fa327c42983ab35": "633c7a594686935dc2ae70632336f15c73ddbafa",
       "9a5d4085d177910f48850672bc2bc8436c5558171eb9e06c711fabed39e485c0": "02f515deea7f3fc513496b9218244186e5cc9a61",
       "cd260d1c420dec2ad2d9511b522d88a72f820d2ca2ff63ded2cd95854d4748dd": "8881159097cd92f67bfec5250bc061626d87cf04",
       "7f7325b9d5681abda6b26d641f13bf059d25af97c7b4ddeabc7ce7071c60d84e": "2e8d9f0a8ff08896674badeba8aa3ac5245304c3",
@@ -152777,6 +152825,9 @@
       ],
       "history/gameinit.dat": [
         "2e100cdd8b2d5492ff4ef8f1ba487364aabc687f"
+      ],
+      "history/history.xml": [
+        "633c7a594686935dc2ae70632336f15c73ddbafa"
       ],
       "history/messinfo.dat": [
         "02f515deea7f3fc513496b9218244186e5cc9a61"
