@@ -65,6 +65,49 @@ ICON_CACHE_PATH = Path(".cache") / "system_icons.json"
 _icon_available: dict[str, bool] = {}
 
 
+def _by_mode(value, mode: str) -> str:
+    """Read a profile field that may be keyed by build mode."""
+    if isinstance(value, dict):
+        return str(value.get(mode) or "") if mode else ""
+    return str(value or "")
+
+
+def _repo_pins(profile: dict, field: str, label: str) -> list[tuple[str, str, str]]:
+    """Pair each declared repository URL with its own revision.
+
+    A profile whose builds live in separate repositories keys both the URL
+    and the revision by build mode. Reading them apart would pin a libretro
+    fork to the standalone revision and produce a permalink into a tree that
+    never held the cited line. Each tuple is (url, pin, source_commit
+    fallback for that same mode).
+    """
+    raw = profile.get(field, "")
+    pin_field = profile.get(f"{field}_commit") or ""
+    source_field = profile.get("source_commit") or ""
+
+    if not isinstance(raw, dict):
+        if not raw:
+            return []
+        return [
+            (
+                str(raw),
+                _by_mode(pin_field, label),
+                _by_mode(source_field, label),
+            )
+        ]
+
+    # The requested build mode first, so it wins when several repositories
+    # would otherwise be equally good candidates.
+    ordered = ([label] if label and label in raw else []) + [
+        key for key in raw if key != label
+    ]
+    return [
+        (str(raw[key]), _by_mode(pin_field, key), _by_mode(source_field, key))
+        for key in ordered
+        if raw.get(key)
+    ]
+
+
 def _forge_sources(profile: dict, label: str = "") -> list[tuple[upstream.Repo, str]]:
     """Supported source repositories and immutable revisions for a profile."""
     candidates: list[tuple[upstream.Repo, str]] = []
@@ -72,42 +115,7 @@ def _forge_sources(profile: dict, label: str = "") -> list[tuple[upstream.Repo, 
     source_repos: set[tuple[str, str]] = set()
 
     for field in ("source", "upstream"):
-        raw = profile.get(field, "")
-        raw_pin = profile.get(f"{field}_commit") or ""
-        source_pin = profile.get("source_commit") or ""
-
-        # A profile whose builds live in separate repositories keys both the
-        # URL and the revision by build mode. The two have to be read as
-        # pairs: pinning a libretro fork to the standalone revision would
-        # produce a permalink into the wrong tree.
-        pairs: list[tuple[str, str]] = []
-        if isinstance(raw, dict):
-            ordered = ([label] if label and label in raw else []) + [
-                key for key in raw if key != label
-            ]
-            for key in ordered:
-                value = raw.get(key)
-                if not value:
-                    continue
-                pin = raw_pin.get(key, "") if isinstance(raw_pin, dict) else raw_pin
-                fallback = (
-                    source_pin.get(key, "")
-                    if isinstance(source_pin, dict)
-                    else source_pin
-                )
-                pairs.append((str(value), str(pin or ""), str(fallback or "")))
-        elif raw:
-            pin = raw_pin.get(label, "") if isinstance(raw_pin, dict) and label else (
-                "" if isinstance(raw_pin, dict) else raw_pin
-            )
-            fallback = (
-                source_pin.get(label, "")
-                if isinstance(source_pin, dict) and label
-                else ("" if isinstance(source_pin, dict) else source_pin)
-            )
-            pairs.append((str(raw), str(pin or ""), str(fallback or "")))
-
-        for value, pin, fallback in pairs:
+        for value, pin, fallback in _repo_pins(profile, field, label):
             repo = upstream.parse_repo(value)
             if repo is None:
                 continue
@@ -2109,6 +2117,271 @@ def generate_emulators_index(profiles: dict) -> str:
     return "\n".join(lines) + "\n"
 
 
+def _file_badges(f: dict, in_repo: bool) -> list[str]:
+    """The status chips shown beside a file name.
+
+    Fourteen independent optional fields, each contributing at most one
+    chip. Kept apart from the rest of the row so the field-by-field
+    rendering stays readable.
+    """
+    required = f.get("required", False)
+    hle = f.get("hle_fallback", False)
+    mode = f.get("mode", "")
+    category = f.get("category", "")
+    region = f.get("region", "")
+    storage = f.get("storage", "")
+    bundled = f.get("bundled", False)
+    embedded = f.get("embedded", False)
+    has_builtin = f.get("has_builtin", False)
+    archive = f.get("archive", "")
+    ftype = f.get("type", "")
+    badges = []
+    if required:
+        badges.append(
+            '<span class="rb-badge rb-badge-danger">required</span>'
+        )
+    else:
+        badges.append(
+            '<span class="rb-badge rb-badge-muted">optional</span>'
+        )
+    if not in_repo:
+        badges.append(
+            '<span class="rb-badge rb-badge-warning">missing</span>'
+        )
+    elif in_repo:
+        badges.append(
+            '<span class="rb-badge rb-badge-success">in repo</span>'
+        )
+    if hle:
+        badges.append(
+            '<span class="rb-badge rb-badge-info">HLE fallback</span>'
+        )
+    if mode:
+        badges.append(
+            f'<span class="rb-badge rb-badge-muted">{mode}</span>'
+        )
+    if category and category != "bios":
+        badges.append(
+            f'<span class="rb-badge rb-badge-info">{category}</span>'
+        )
+    if region:
+        region_str = (
+            ", ".join(region) if isinstance(region, list) else str(region)
+        )
+        badges.append(
+            f'<span class="rb-badge rb-badge-muted">{region_str}</span>'
+        )
+    if storage and storage != "embedded":
+        badges.append(
+            f'<span class="rb-badge rb-badge-muted">{storage}</span>'
+        )
+    if bundled:
+        badges.append(
+            '<span class="rb-badge rb-badge-muted">bundled</span>'
+        )
+    if embedded:
+        badges.append(
+            '<span class="rb-badge rb-badge-muted">embedded</span>'
+        )
+    if has_builtin:
+        badges.append(
+            '<span class="rb-badge rb-badge-info">built-in fallback</span>'
+        )
+    if archive:
+        badges.append(
+            f'<span class="rb-badge rb-badge-muted">in {archive}</span>'
+        )
+    if ftype and ftype != "bios":
+        badges.append(
+            f'<span class="rb-badge rb-badge-muted">{ftype}</span>'
+        )
+
+    return badges
+
+
+def _render_emulator_file(
+    f: dict,
+    profile: dict,
+    platform_files: dict | None,
+    files: list,
+    _file_available,
+) -> list[str]:
+    """Render one row of an emulator profile's file table.
+
+    Split out of generate_emulator_page, where it was a 228-line loop body
+    carrying most of that function's branching: thirty-odd optional fields,
+    each with its own badge, hash line or note.
+    """
+    lines: list[str] = []
+    fname = f.get("name", "")
+    required = f.get("required", False)
+    in_repo = _file_available(f)
+    source_ref = f.get("source_ref", "")
+    mode = f.get("mode", "")
+    hle = f.get("hle_fallback", False)
+    aliases = f.get("aliases", [])
+    category = f.get("category", "")
+    validation = f.get("validation", [])
+    size = f.get("size")
+    fnote = f.get("note", f.get("notes", ""))
+    storage = f.get("storage", "")
+    fmd5 = f.get("md5", "")
+    fsha1 = f.get("sha1", "")
+    fcrc32 = f.get("crc32", "")
+    fsha256 = f.get("sha256", "")
+    fadler32 = f.get("known_hash_adler32", "")
+    fmin = f.get("min_size")
+    fmax = f.get("max_size")
+    desc = f.get("description", "")
+    region = f.get("region", "")
+    archive = f.get("archive", "")
+    fpath = f.get("path", "")
+    fsystem = f.get("system", "")
+    priority = f.get("priority")
+    fast_boot = f.get("fast_boot")
+    bundled = f.get("bundled", False)
+    embedded = f.get("embedded", False)
+    has_builtin = f.get("has_builtin", False)
+    contents = f.get("contents", [])
+    config_key = f.get("config_key", "")
+    dest = f.get("dest", f.get("destination", ""))
+    ftype = f.get("type", "")
+    fpattern = f.get("pattern", "")
+    region_check = f.get("region_check")
+    size_note = f.get("size_note", "")
+    size_options = f.get("size_options", [])
+    size_range = f.get("size_range", "")
+
+    badges = _file_badges(f, in_repo)
+    badge_str = " ".join(badges)
+    border_cls = (
+        "rb-file-entry-required" if required else "rb-file-entry-optional"
+    )
+    lines.append(
+        f'<div class="rb-file-entry {border_cls}" markdown>'
+    )
+    lines.append("")
+    lines.append(f"**`{fname}`** {badge_str}")
+    if desc:
+        lines.append(f"<br>{desc}")
+    lines.append("")
+
+    details = []
+    if fpath and fpath != fname:
+        details.append(f"Path: `{fpath}`")
+    if fsystem:
+        details.append(f"System: {_system_link(fsystem, '../')}")
+    if size:
+        if isinstance(size, list):
+            size_str = " / ".join(_fmt_size(s) for s in size)
+        else:
+            size_str = _fmt_size(size)
+        if fmin or fmax:
+            bounds = []
+            if fmin:
+                bounds.append(f"min {_fmt_size(fmin)}")
+            if fmax:
+                bounds.append(f"max {_fmt_size(fmax)}")
+            size_str += f" ({', '.join(bounds)})"
+        details.append(f"Size: {size_str}")
+    elif fmin or fmax:
+        bounds = []
+        if fmin:
+            bounds.append(f"min {_fmt_size(fmin)}")
+        if fmax:
+            bounds.append(f"max {_fmt_size(fmax)}")
+        details.append(f"Size: {', '.join(bounds)}")
+    if fsha1:
+        s = fsha1[:12]
+        details.append(
+            f'SHA1: <span class="rb-hash" title="{fsha1}">'
+            f"`{s}...`</span>"
+        )
+    if fmd5:
+        s = fmd5[:12]
+        details.append(
+            f'MD5: <span class="rb-hash" title="{fmd5}">'
+            f"`{s}...`</span>"
+        )
+    if fcrc32:
+        details.append(f"CRC32: `{fcrc32}`")
+    if fsha256:
+        s = fsha256[:12]
+        details.append(
+            f'SHA256: <span class="rb-hash" title="{fsha256}">'
+            f"`{s}...`</span>"
+        )
+    if fadler32:
+        details.append(f"Adler32: `{fadler32}`")
+    if aliases:
+        details.append(f"Aliases: {', '.join(f'`{a}`' for a in aliases)}")
+    if priority is not None:
+        details.append(f"Priority: {priority}")
+    if fast_boot is not None:
+        details.append(f"Fast boot: {'yes' if fast_boot else 'no'}")
+    if validation:
+        if isinstance(validation, list):
+            details.append(f"Validation: {', '.join(validation)}")
+        elif isinstance(validation, dict):
+            for scope, checks in validation.items():
+                details.append(f"Validation ({scope}): {', '.join(checks)}")
+    if source_ref:
+        details.append(
+            f"Source: {_source_ref_markdown(profile, source_ref)}"
+        )
+    if platform_files:
+        plats = sorted(
+            p for p, names in platform_files.items() if fname in names
+        )
+        if plats:
+            plat_links = [_platform_link(p, p, "../") for p in plats]
+            details.append(f"Platforms: {', '.join(plat_links)}")
+
+    if dest and dest != fname and dest != fpath:
+        details.append(f"Destination: `{dest}`")
+    if config_key:
+        details.append(f"Config key: `{config_key}`")
+    if fpattern:
+        details.append(f"Pattern: `{fpattern}`")
+    if region_check is not None:
+        details.append(f"Region check: {'yes' if region_check else 'no'}")
+    if size_note:
+        details.append(f"Size note: {size_note}")
+    if size_options:
+        details.append(
+            f"Size options: {', '.join(_fmt_size(s) for s in size_options)}"
+        )
+    if size_range:
+        details.append(f"Size range: {size_range}")
+
+    if details:
+        for d in details:
+            lines.append(f"- {d}")
+    if fnote:
+        lines.append(f"- {fnote}")
+    if contents:
+        lines.append(f"- Contents ({len(contents)} entries):")
+        for c in contents[:10]:
+            if isinstance(c, dict):
+                cname = c.get("name", "")
+                cdesc = c.get("description", "")
+                csize = c.get("size", "")
+                parts = [f"`{cname}`"]
+                if cdesc:
+                    parts.append(cdesc)
+                if csize:
+                    parts.append(_fmt_size(csize))
+                lines.append(f"    - {' -'.join(parts)}")
+            else:
+                lines.append(f"    - {c}")
+        if len(contents) > 10:
+            lines.append(f"    - ... and {len(contents) - 10} more")
+    lines.append("")
+    lines.append("</div>")
+    lines.append("")
+    return lines
+
+
 def generate_emulator_page(
     name: str,
     profile: dict,
@@ -2369,233 +2642,11 @@ def generate_emulator_page(
 
         # File table
         for f in files:
-            fname = f.get("name", "")
-            required = f.get("required", False)
-            in_repo = _file_available(f)
-            source_ref = f.get("source_ref", "")
-            mode = f.get("mode", "")
-            hle = f.get("hle_fallback", False)
-            aliases = f.get("aliases", [])
-            category = f.get("category", "")
-            validation = f.get("validation", [])
-            size = f.get("size")
-            fnote = f.get("note", f.get("notes", ""))
-            storage = f.get("storage", "")
-            fmd5 = f.get("md5", "")
-            fsha1 = f.get("sha1", "")
-            fcrc32 = f.get("crc32", "")
-            fsha256 = f.get("sha256", "")
-            fadler32 = f.get("known_hash_adler32", "")
-            fmin = f.get("min_size")
-            fmax = f.get("max_size")
-            desc = f.get("description", "")
-            region = f.get("region", "")
-            archive = f.get("archive", "")
-            fpath = f.get("path", "")
-            fsystem = f.get("system", "")
-            priority = f.get("priority")
-            fast_boot = f.get("fast_boot")
-            bundled = f.get("bundled", False)
-            embedded = f.get("embedded", False)
-            has_builtin = f.get("has_builtin", False)
-            contents = f.get("contents", [])
-            config_key = f.get("config_key", "")
-            dest = f.get("dest", f.get("destination", ""))
-            ftype = f.get("type", "")
-            fpattern = f.get("pattern", "")
-            region_check = f.get("region_check")
-            size_note = f.get("size_note", "")
-            size_options = f.get("size_options", [])
-            size_range = f.get("size_range", "")
-
-            # Status badges (HTML)
-            badges = []
-            if required:
-                badges.append(
-                    '<span class="rb-badge rb-badge-danger">required</span>'
+            lines.extend(
+                _render_emulator_file(
+                    f, profile, platform_files, files, _file_available
                 )
-            else:
-                badges.append(
-                    '<span class="rb-badge rb-badge-muted">optional</span>'
-                )
-            if not in_repo:
-                badges.append(
-                    '<span class="rb-badge rb-badge-warning">missing</span>'
-                )
-            elif in_repo:
-                badges.append(
-                    '<span class="rb-badge rb-badge-success">in repo</span>'
-                )
-            if hle:
-                badges.append(
-                    '<span class="rb-badge rb-badge-info">HLE fallback</span>'
-                )
-            if mode:
-                badges.append(
-                    f'<span class="rb-badge rb-badge-muted">{mode}</span>'
-                )
-            if category and category != "bios":
-                badges.append(
-                    f'<span class="rb-badge rb-badge-info">{category}</span>'
-                )
-            if region:
-                region_str = (
-                    ", ".join(region) if isinstance(region, list) else str(region)
-                )
-                badges.append(
-                    f'<span class="rb-badge rb-badge-muted">{region_str}</span>'
-                )
-            if storage and storage != "embedded":
-                badges.append(
-                    f'<span class="rb-badge rb-badge-muted">{storage}</span>'
-                )
-            if bundled:
-                badges.append(
-                    '<span class="rb-badge rb-badge-muted">bundled</span>'
-                )
-            if embedded:
-                badges.append(
-                    '<span class="rb-badge rb-badge-muted">embedded</span>'
-                )
-            if has_builtin:
-                badges.append(
-                    '<span class="rb-badge rb-badge-info">built-in fallback</span>'
-                )
-            if archive:
-                badges.append(
-                    f'<span class="rb-badge rb-badge-muted">in {archive}</span>'
-                )
-            if ftype and ftype != "bios":
-                badges.append(
-                    f'<span class="rb-badge rb-badge-muted">{ftype}</span>'
-                )
-
-            badge_str = " ".join(badges)
-            border_cls = (
-                "rb-file-entry-required" if required else "rb-file-entry-optional"
             )
-            lines.append(
-                f'<div class="rb-file-entry {border_cls}" markdown>'
-            )
-            lines.append("")
-            lines.append(f"**`{fname}`** {badge_str}")
-            if desc:
-                lines.append(f"<br>{desc}")
-            lines.append("")
-
-            details = []
-            if fpath and fpath != fname:
-                details.append(f"Path: `{fpath}`")
-            if fsystem:
-                details.append(f"System: {_system_link(fsystem, '../')}")
-            if size:
-                if isinstance(size, list):
-                    size_str = " / ".join(_fmt_size(s) for s in size)
-                else:
-                    size_str = _fmt_size(size)
-                if fmin or fmax:
-                    bounds = []
-                    if fmin:
-                        bounds.append(f"min {_fmt_size(fmin)}")
-                    if fmax:
-                        bounds.append(f"max {_fmt_size(fmax)}")
-                    size_str += f" ({', '.join(bounds)})"
-                details.append(f"Size: {size_str}")
-            elif fmin or fmax:
-                bounds = []
-                if fmin:
-                    bounds.append(f"min {_fmt_size(fmin)}")
-                if fmax:
-                    bounds.append(f"max {_fmt_size(fmax)}")
-                details.append(f"Size: {', '.join(bounds)}")
-            if fsha1:
-                s = fsha1[:12]
-                details.append(
-                    f'SHA1: <span class="rb-hash" title="{fsha1}">'
-                    f"`{s}...`</span>"
-                )
-            if fmd5:
-                s = fmd5[:12]
-                details.append(
-                    f'MD5: <span class="rb-hash" title="{fmd5}">'
-                    f"`{s}...`</span>"
-                )
-            if fcrc32:
-                details.append(f"CRC32: `{fcrc32}`")
-            if fsha256:
-                s = fsha256[:12]
-                details.append(
-                    f'SHA256: <span class="rb-hash" title="{fsha256}">'
-                    f"`{s}...`</span>"
-                )
-            if fadler32:
-                details.append(f"Adler32: `{fadler32}`")
-            if aliases:
-                details.append(f"Aliases: {', '.join(f'`{a}`' for a in aliases)}")
-            if priority is not None:
-                details.append(f"Priority: {priority}")
-            if fast_boot is not None:
-                details.append(f"Fast boot: {'yes' if fast_boot else 'no'}")
-            if validation:
-                if isinstance(validation, list):
-                    details.append(f"Validation: {', '.join(validation)}")
-                elif isinstance(validation, dict):
-                    for scope, checks in validation.items():
-                        details.append(f"Validation ({scope}): {', '.join(checks)}")
-            if source_ref:
-                details.append(
-                    f"Source: {_source_ref_markdown(profile, source_ref)}"
-                )
-            if platform_files:
-                plats = sorted(
-                    p for p, names in platform_files.items() if fname in names
-                )
-                if plats:
-                    plat_links = [_platform_link(p, p, "../") for p in plats]
-                    details.append(f"Platforms: {', '.join(plat_links)}")
-
-            if dest and dest != fname and dest != fpath:
-                details.append(f"Destination: `{dest}`")
-            if config_key:
-                details.append(f"Config key: `{config_key}`")
-            if fpattern:
-                details.append(f"Pattern: `{fpattern}`")
-            if region_check is not None:
-                details.append(f"Region check: {'yes' if region_check else 'no'}")
-            if size_note:
-                details.append(f"Size note: {size_note}")
-            if size_options:
-                details.append(
-                    f"Size options: {', '.join(_fmt_size(s) for s in size_options)}"
-                )
-            if size_range:
-                details.append(f"Size range: {size_range}")
-
-            if details:
-                for d in details:
-                    lines.append(f"- {d}")
-            if fnote:
-                lines.append(f"- {fnote}")
-            if contents:
-                lines.append(f"- Contents ({len(contents)} entries):")
-                for c in contents[:10]:
-                    if isinstance(c, dict):
-                        cname = c.get("name", "")
-                        cdesc = c.get("description", "")
-                        csize = c.get("size", "")
-                        parts = [f"`{cname}`"]
-                        if cdesc:
-                            parts.append(cdesc)
-                        if csize:
-                            parts.append(_fmt_size(csize))
-                        lines.append(f"    - {' -'.join(parts)}")
-                    else:
-                        lines.append(f"    - {c}")
-                if len(contents) > 10:
-                    lines.append(f"    - ... and {len(contents) - 10} more")
-            lines.append("")
-            lines.append("</div>")
-            lines.append("")
 
     # Data directories
     if data_dirs:
