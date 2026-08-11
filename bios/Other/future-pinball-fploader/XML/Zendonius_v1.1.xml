@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<document>
+  
+  <!-- Zendonius Version 1.1 Physics processing -->
+  <!-- Note. Changing the FPS will effect how how all the other values interact with each other and should 
+  be a high value due to the fact the ball in a pinball is moving very fast and lower values will cause the ball
+  to go into objects fractionally (thus we must sample at a higher rate)
+
+  threaded (true/false) defines if the physics runs in a separate thread for multicore CPU's (dev version only)
+  -->
+  <physics fps="400" threaded="1"></physics>
+
+  <!-- Settings for various objects -->
+  <ball mass="72" gravity="6800.0" damping="0.92"></ball>
+
+  <!-- moeMethod="0" Auto-calculate the moments of Inertia for the flipper using internal Newton functions -->
+  <!-- moeMethod="1" Calculate the Flipper MOE based on a rectangle (changes aiming behaivour) -->
+  <!-- Note: omega is rotational force -->
+  <flipper mass="99999.0" omega="45.0" moeMethod="0" 
+           leftXoff="0" leftYoff="1500" leftZoff="0" 
+           rightXoff="0" rightYoff="1500" rightZoff="0"></flipper>
+
+  <!-- impluse            The amount of power applied to the ball (normal setting).. 
+                          this is then scalled up or down to suit the strength setting
+       impulseRandomness  Random Percentage (of impulse) added to impulse when the ball hits the object
+       vectorRandomness   Random Angle change +/- value to ball direction
+  -->
+  <bumper 	impulse="99.0" impulseRandomness="0" vectorRandomness="6"></bumper>
+  <autoplunger mass="25000.0" force="60000.0"></autoplunger>
+  <diverter 	mass="10000.0" omega="33.0"></diverter>
+  <gate 	mass="10.0" gravity="6000.0" damping="1.25"></gate>
+  <kicker 	impulse="950.0" vukImpulse="1500.0" impulseRandomness="0" vectorRandomness="0"></kicker>
+  <plunger 	mass="20000.0" force="45000.0"></plunger>
+  <slingshot 	impulse="000.0" impulseRandomness="00" vectorRandomness="0"></slingshot>
+  <spindisk 	mass="10000.0" angularDamp="0.33" linearDamp="0.25"></spindisk>
+
+  <!--
+   <spinner 	mass="99999.0" gravity="100000" angularDamp="0.5" angularAccel="5.25"
+          	spinDampLoose="0.22" spinBackLoose="1.8"
+           	spinDampNorm="0.325" spinBackNorm="2.7"
+           	spinDampTight="0.575" spinBackTight="3.2"></spinner>
+  -->
+  <spinner 	mass="45.0" gravity="800.0" angularDamp="0.5" angularAccel="6.7" 
+           	spinDampLoose="0.300" spinBackLoose="0.700" 
+          	spinDampNorm="0.400"  spinBackNorm="0.700" 
+           	spinDampTight="0.500" spinBackTight="0.700"></spinner>
+  <emkicker 	mass="99999.0" omega="100.0"></emkicker>
+  <varitarget mass="100.0" damping="0.5" tension="3.0" return="15.0"></varitarget>
+  <magnet 	impulse="10.0" impulseRandomness="2"></magnet>
+
+  <!-- Nugde Settings -->
+  <nudge impulse="150.0" impulseRandomness="25.0" warningLevel="185" leftAngle="20" upAngle="360" rightAngle="340"
+         vectorRandomness="4" visualDistance="2" waitPeriod="300" maxBallVelocity="1000.0"></nudge>
+
+  <!-- Materials Settings -->
+
+  <!-- Static coefficient
+       - - - - - - - - - - 
+      Static friction is the force that holds back a stationary object up to the point that it 
+       just starts moving. Thus, the static coefficient of friction concerns the force restricting 
+       the movement of an object that is stationary on a relatively smooth, hard surface.
+
+       Kinetic coefficient
+       - - - - - - - - - - 
+       Once you overcome static friction, kinetic friction is the force holding back regular motion. 
+       This, kinetic fiction coefficient of friction concerns the force restricting the movement of 
+         an object that is sliding on a relatively smooth, hard surface.
+       
+       Both coefficients are based on material pairs (ie wood on wood, metal on wood) etc..
+
+       In FP all the settings are for Ball on Wood/Plastic/Rubber/Metal etc..
+
+       and from the Newton docs..
+       staticFriction and kineticFriction must be positive values. kineticFriction must be lower or equal than 
+       staticFriction. It is recommended that staticFriction and kineticFriction be set to a value 
+       lower or equal to 1.0, however because some syntetic materials can have higher than one coeficient 
+      of friction Newton allows for the coeficient of friction to be as high as 2.0.
+
+       For more information refer to http://en.wikipedia.org/wiki/Friction
+  -->
+
+  <!-- Default Materal Settings to act as defaults incase we forget to set an object during development.  
+       There shouldn't be any objects set to this material so these are just a fail safe values -->
+  <defaultMat softnessCoef="0.02" elasticCoef="0.1" staticFriction="0.50" kineticFriction="0.50"></defaultMat>
+
+  <!-- Material Settings for surfaces marked as playfields -->
+  <playfieldMat 	softnessCoef="0.50" elasticCoef="0.52" staticFriction="0.01" kineticFriction="0.02"></playfieldMat>
+
+  <!-- Primary Material Types -->
+  <metalMat 		softnessCoef="0.03" elasticCoef="0.15" staticFriction="0.02" kineticFriction="0.03"></metalMat>
+  <plasticMat 	softnessCoef="0.10" elasticCoef="0.40" staticFriction="0.02" kineticFriction="0.05"></plasticMat>
+  <woodMat 		softnessCoef="0.06" elasticCoef="0.20" staticFriction="0.02" kineticFriction="0.05"></woodMat>
+  <rubberHardMat 	softnessCoef="1.04" elasticCoef="0.20" staticFriction="0.07" kineticFriction="0.04"></rubberHardMat>
+  <rubberIntMat 	softnessCoef="2.94" elasticCoef="0.45" staticFriction="0.05" kineticFriction="0.04"></rubberIntMat>
+  <rubberSoftMat 	softnessCoef="3.94" elasticCoef="0.65" staticFriction="0.02" kineticFriction="0.05"></rubberSoftMat>
+
+  <!-- Object Specific Material Settings -->
+  <gateMat 		softnessCoef="0.03" elasticCoef="0.15" staticFriction="0.00001" kineticFriction="0.00001"></gateMat>
+  <kickerMat 		softnessCoef="0.01" elasticCoef="0.20" staticFriction="0.02" kineticFriction="0.02"></kickerMat>
+  <rampMat 		softnessCoef="0.03" elasticCoef="0.05" staticFriction="0.01" kineticFriction="0.02"></rampMat>
+  <plungerMat 	softnessCoef="0.04" elasticCoef="0.35" staticFriction="0.02" kineticFriction="0.02"></plungerMat>
+  <spindiskMat 	softnessCoef="0.05" elasticCoef="0.50" staticFriction="1.50" kineticFriction="2.00"></spindiskMat>
+  
+</document>

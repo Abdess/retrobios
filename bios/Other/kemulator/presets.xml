@@ -1,0 +1,520 @@
+<?xml version="1.0" encoding="utf-8"?>
+<presets>
+    <default value="240x320 (COMMON - full screen)"/>
+
+    <!-- Based on TwoSpacesSG research -->
+
+    <layout name="Nokia">
+        <define name="KEY_UP" 	    value="-1"/>
+        <define name="KEY_DOWN" 	value="-2"/>
+        <define name="KEY_LEFT" 	value="-3"/>
+        <define name="KEY_RIGHT" 	value="-4"/>
+        <define name="KEY_FIRE" 	value="-5"/>
+        <define name="KEY_S1" 	    value="-6"/>
+        <define name="KEY_S2" 	    value="-7"/>
+    </layout>
+    <layout name="Motorola">
+        <define name="KEY_UP" 	    value="-1"/>
+        <define name="KEY_DOWN" 	value="-6"/>
+        <define name="KEY_LEFT" 	value="-2"/>
+        <define name="KEY_RIGHT" 	value="-5"/>
+        <define name="KEY_FIRE" 	value="-20"/>
+        <define name="KEY_S1" 	    value="-21"/>
+        <define name="KEY_S2" 	    value="-22"/>
+    </layout>
+    <layout name="Motorola_Triplets">
+        <define name="KEY_UP" 	    value="-1"/>
+        <define name="KEY_DOWN" 	value="-6"/>
+        <define name="KEY_LEFT" 	value="-2"/>
+        <define name="KEY_RIGHT" 	value="-5"/>
+        <define name="KEY_FIRE" 	value="-8"/>
+        <define name="KEY_S1" 	    value="-21"/>
+        <define name="KEY_S2" 	    value="-22"/>
+    </layout>
+    <layout name="MotorolaV8">
+        <define name="KEY_UP" 	    value="-1"/>
+        <define name="KEY_DOWN" 	value="-2"/>
+        <define name="KEY_LEFT" 	value="-3"/>
+        <define name="KEY_RIGHT" 	value="-4"/>
+        <define name="KEY_FIRE" 	value="-5"/>
+        <define name="KEY_S1" 	    value="-21"/>
+        <define name="KEY_S2" 	    value="-22"/>
+    </layout>
+    <layout name="Siemens">
+        <define name="KEY_UP" 	    value="-59"/>
+        <define name="KEY_DOWN" 	value="-60"/>
+        <define name="KEY_LEFT" 	value="-61"/>
+        <define name="KEY_RIGHT" 	value="-62"/>
+        <define name="KEY_FIRE" 	value="-26"/>
+        <define name="KEY_S1" 	    value="-1"/>
+        <define name="KEY_S2" 	    value="-4"/>
+    </layout>
+    <layout name="LG">
+        <define name="KEY_UP" 	    value="-1"/>
+        <define name="KEY_DOWN" 	value="-2"/>
+        <define name="KEY_LEFT" 	value="-3"/>
+        <define name="KEY_RIGHT" 	value="-4"/>
+        <define name="KEY_FIRE" 	value="-5"/>
+        <define name="KEY_S1" 	    value="-202"/>
+        <define name="KEY_S2" 	    value="-203"/>
+    </layout>
+    <layout name="Sagem" parent="Nokia">
+        <define name="KEY_S1" 	    value="-7"/>
+        <define name="KEY_S2" 	    value="-6"/>
+    </layout>
+    <layout name="Sharp">
+        <define name="KEY_UP" value="-1"/>
+        <define name="KEY_DOWN" value="-6"/>
+        <define name="KEY_LEFT" value="-2"/>
+        <define name="KEY_RIGHT" value="-5"/>
+        <define name="KEY_FIRE" value="-20"/>
+        <define name="KEY_S1" value="-21"/>
+        <define name="KEY_S2" value="-22"/>
+    </layout>
+    <layout name="Motorola_i670">
+        <define name="KEY_UP" 	    value="-10"/>
+        <define name="KEY_DOWN" 	value="-11"/>
+        <define name="KEY_LEFT" 	value="-13"/>
+        <define name="KEY_RIGHT" 	value="-14"/>
+        <define name="KEY_FIRE" 	value="-23"/>
+        <define name="KEY_S1" 	    value="-20"/>
+        <define name="KEY_S2" 	    value="-21"/>
+    </layout>
+    <layout name="Motorola_V300">
+        <define name="KEY_UP" 	    value="1"/>
+        <define name="KEY_DOWN" 	value="6"/>
+        <define name="KEY_LEFT" 	value="2"/>
+        <define name="KEY_RIGHT" 	value="5"/>
+        <define name="KEY_FIRE" 	value="8"/>
+        <define name="KEY_S1" 	    value="21"/>
+        <define name="KEY_S2" 	    value="22"/>
+    </layout>
+
+    <!-- Common -->
+
+    <!-- Sony Ericsson K300i -->
+    <preset name="128x128 (COMMON - full screen)" layout="Nokia">
+        <define name="SCREEN_WIDTH" value="128"/>
+        <define name="SCREEN_HEIGHT" value="128"/>
+        <define name="FORCE_FULLSCREEN" value="false"/>
+    </preset>
+
+    <!-- Sony Ericsson K500i -->
+    <preset name="128x160 (COMMON - full screen)" layout="Nokia">
+        <define name="SCREEN_WIDTH" value="128"/>
+        <define name="SCREEN_HEIGHT" value="160"/>
+        <define name="FORCE_FULLSCREEN" value="false"/>
+    </preset>
+
+    <!-- Sony Ericsson W810i -->
+    <preset name="176x220 (COMMON - full screen)" layout="Nokia">
+        <define name="SCREEN_WIDTH" value="176"/>
+        <define name="SCREEN_HEIGHT" value="220"/>
+        <define name="FORCE_FULLSCREEN" value="false"/>
+    </preset>
+
+    <!-- Nokia N97 -->
+    <preset name="180x320 (half of 360x640 - full screen)" layout="Nokia">
+        <define name="SCREEN_WIDTH" value="180"/>
+        <define name="SCREEN_HEIGHT" value="320"/>
+        <define name="FORCE_FULLSCREEN" value="true"/>
+    </preset>
+
+    <!-- Nokia N97 -->
+    <preset name="320x180 (half of 640x360 - full screen)" layout="Nokia">
+        <define name="SCREEN_WIDTH" value="320"/>
+        <define name="SCREEN_HEIGHT" value="180"/>
+        <define name="FORCE_FULLSCREEN" value="true"/>
+    </preset>
+
+    <!-- Sony Ericsson K800i -->
+    <preset name="240x320 (COMMON - full screen)" layout="Nokia">
+        <define name="SCREEN_WIDTH" value="240"/>
+        <define name="SCREEN_HEIGHT" value="320"/>
+        <define name="FORCE_FULLSCREEN" value="false"/>
+    </preset>
+
+    <!-- Nokia E72 -->
+    <preset name="320x240 (COMMON - full screen)" layout="Nokia">
+        <define name="SCREEN_WIDTH" value="320"/>
+        <define name="SCREEN_HEIGHT" value="240"/>
+        <define name="FORCE_FULLSCREEN" value="false"/>
+    </preset>
+
+    <!-- Nokia Asha 311 -->
+    <preset name="240x400 (COMMON - full screen)" layout="Nokia">
+        <define name="SCREEN_WIDTH" value="240"/>
+        <define name="SCREEN_HEIGHT" value="400"/>
+        <define name="FORCE_FULLSCREEN" value="false"/>
+    </preset>
+
+    <!-- Nokia Asha 311 -->
+    <preset name="400x240 (COMMON - full screen)" layout="Nokia">
+        <define name="SCREEN_WIDTH" value="400"/>
+        <define name="SCREEN_HEIGHT" value="240"/>
+        <define name="FORCE_FULLSCREEN" value="false"/>
+    </preset>
+
+    <preset name="320x480 (COMMON - full screen)" layout="Nokia">
+        <define name="SCREEN_WIDTH" value="320"/>
+        <define name="SCREEN_HEIGHT" value="480"/>
+        <define name="FORCE_FULLSCREEN" value="false"/>
+    </preset>
+
+    <!-- Nokia N97 -->
+    <preset name="360x640 (COMMON - full screen)" layout="Nokia">
+        <define name="SCREEN_WIDTH" value="360"/>
+        <define name="SCREEN_HEIGHT" value="640"/>
+        <define name="FORCE_FULLSCREEN" value="false"/>
+    </preset>
+
+    <!-- Nokia N97 -->
+    <preset name="640x360 (COMMON - full screen)" layout="Nokia">
+        <define name="SCREEN_WIDTH" value="640"/>
+        <define name="SCREEN_HEIGHT" value="360"/>
+        <define name="FORCE_FULLSCREEN" value="false"/>
+    </preset>
+
+    <!-- Nokia E6 -->
+    <preset name="640x480 (COMMON - full screen)" layout="Nokia">
+        <define name="SCREEN_WIDTH" value="640"/>
+        <define name="SCREEN_HEIGHT" value="480"/>
+        <define name="FORCE_FULLSCREEN" value="false"/>
+    </preset>
+
+    <!-- Sony Ericsson Xperia X1 -->
+    <preset name="480x800 (COMMON - full screen)" layout="Nokia">
+        <define name="SCREEN_WIDTH" value="480"/>
+        <define name="SCREEN_HEIGHT" value="800"/>
+        <define name="FORCE_FULLSCREEN" value="false"/>
+    </preset>
+
+    <!-- Sony Ericsson Xperia X1 -->
+    <preset name="800x480 (COMMON - full screen)" layout="Nokia">
+        <define name="SCREEN_WIDTH" value="800"/>
+        <define name="SCREEN_HEIGHT" value="480"/>
+        <define name="FORCE_FULLSCREEN" value="false"/>
+    </preset>
+
+    <!-- Nokia -->
+
+    <!-- Nokia 3410 -->
+    <preset name="96x65 (Nokia - full screen)" layout="Nokia">
+        <define name="SCREEN_WIDTH" value="96"/>
+        <define name="SCREEN_HEIGHT" value="65"/>
+        <define name="FORCE_FULLSCREEN" value="false"/>
+    </preset>
+
+    <!-- Nokia N70 -->
+    <preset name="176x208 (Nokia - full screen)" layout="Nokia">
+        <define name="SCREEN_WIDTH" value="176"/>
+        <define name="SCREEN_HEIGHT" value="208"/>
+        <define name="FORCE_FULLSCREEN" value="false"/>
+    </preset>
+
+    <!-- Nokia 6230i -->
+    <preset name="208x208 (Nokia - full screen)" layout="Nokia">
+        <define name="SCREEN_WIDTH" value="208"/>
+        <define name="SCREEN_HEIGHT" value="208"/>
+        <define name="FORCE_FULLSCREEN" value="false"/>
+    </preset>
+
+    <!-- Nokia N80 -->
+    <preset name="352x416 (Nokia - full screen)" layout="Nokia">
+        <define name="SCREEN_WIDTH" value="352"/>
+        <define name="SCREEN_HEIGHT" value="416"/>
+        <define name="FORCE_FULLSCREEN" value="false"/>
+    </preset>
+
+    <!-- Sony Ericsson -->
+
+    <!-- Sony Ericsson K700i -->
+    <preset name="176x176 (Sony Ericsson - with status bar and commands)" layout="Nokia">
+        <define name="SCREEN_WIDTH" value="176"/>
+        <define name="SCREEN_HEIGHT" value="176"/>
+        <define name="FORCE_FULLSCREEN" value="true"/>
+    </preset>
+
+    <!--Sony Ericsson P990i -->
+    <preset name="208x173 (Sony Ericsson - with keypad)" layout="Nokia">
+        <define name="SCREEN_WIDTH" value="208"/>
+        <define name="SCREEN_HEIGHT" value="173"/>
+        <define name="FORCE_FULLSCREEN" value="true"/>
+    </preset>
+
+    <!-- Sony Ericsson Aino -->
+    <preset name="240x432 (Sony Ericsson - full screen)" layout="Nokia">
+        <define name="SCREEN_WIDTH" value="240"/>
+        <define name="SCREEN_HEIGHT" value="432"/>
+        <define name="FORCE_FULLSCREEN" value="false"/>
+    </preset>
+
+    <!-- Samsung -->
+
+    <!-- Samsung SGH-X460 -->
+    <preset name="128x112 (Samsung - with status bar and commands)" layout="Nokia">
+        <define name="SCREEN_WIDTH" value="128"/>
+        <define name="SCREEN_HEIGHT" value="112"/>
+        <define name="FORCE_FULLSCREEN" value="true"/>
+    </preset>
+
+    <!-- Samsung SGH-ZV10 -->
+    <preset name="176x205 (Samsung - with status bar)" layout="Nokia">
+        <define name="SCREEN_WIDTH" value="176"/>
+        <define name="SCREEN_HEIGHT" value="205"/>
+        <define name="FORCE_FULLSCREEN" value="true"/>
+    </preset>
+
+    <!-- Samsung SGH-X820 -->
+    <preset name="220x176 (Samsung - full screen)" layout="Nokia">
+        <define name="SCREEN_WIDTH" value="220"/>
+        <define name="SCREEN_HEIGHT" value="176"/>
+        <define name="FORCE_FULLSCREEN" value="false"/>
+    </preset>
+
+    <!-- Samsung SGH-F400 -->
+    <preset name="240x297 (Samsung - with status bar)" layout="Nokia">
+        <define name="SCREEN_WIDTH" value="240"/>
+        <define name="SCREEN_HEIGHT" value="297"/>
+        <define name="FORCE_FULLSCREEN" value="true"/>
+    </preset>
+
+    <!-- Motorola -->
+
+    <!-- Motorola V60i -->
+    <preset name="96x64 (Motorola - full screen)" layout="Motorola">
+        <define name="SCREEN_WIDTH" value="96"/>
+        <define name="SCREEN_HEIGHT" value="64"/>
+        <define name="FORCE_FULLSCREEN" value="false"/>
+    </preset>
+
+    <!-- Motorola C650 -->
+    <preset name="128x96 (Motorola - with status bar and commands)" layout="Motorola">
+        <define name="SCREEN_WIDTH" value="128"/>
+        <define name="SCREEN_HEIGHT" value="96"/>
+        <define name="FORCE_FULLSCREEN" value="true"/>
+    </preset>
+
+    <!-- Motorola C650 -->
+    <preset name="128x116 (Motorola - with status bar)" layout="Motorola">
+        <define name="SCREEN_WIDTH" value="128"/>
+        <define name="SCREEN_HEIGHT" value="116"/>
+        <define name="FORCE_FULLSCREEN" value="true"/>
+    </preset>
+
+    <!-- Motorola i670 -->
+    <preset name="130x130 (Motorola - full screen)" layout="Motorola_i670">
+        <define name="SCREEN_WIDTH" value="130"/>
+        <define name="SCREEN_HEIGHT" value="130"/>
+        <define name="FORCE_FULLSCREEN" value="false"/>
+    </preset>
+
+    <!-- Motorola L6 -->
+    <preset name="128x131 (Motorola - with status bar and commands)" layout="Motorola">
+        <define name="SCREEN_WIDTH" value="128"/>
+        <define name="SCREEN_HEIGHT" value="131"/>
+        <define name="FORCE_FULLSCREEN" value="true"/>
+    </preset>
+
+    <!-- Motorola L6 -->
+    <preset name="128x149 (Motorola - with status bar)" layout="Motorola">
+        <define name="SCREEN_WIDTH" value="128"/>
+        <define name="SCREEN_HEIGHT" value="149"/>
+        <define name="FORCE_FULLSCREEN" value="true"/>
+    </preset>
+
+    <!-- Motorola E398 -->
+    <preset name="176x182 (Motorola - with status bar and commands)" layout="Motorola">
+        <define name="SCREEN_WIDTH" value="176"/>
+        <define name="SCREEN_HEIGHT" value="182"/>
+        <define name="FORCE_FULLSCREEN" value="true"/>
+    </preset>
+
+    <!-- Motorola V600 -->
+    <preset name="176x182 (Motorola Triplets - with status bar and commands)" layout="Motorola_Triplets">
+        <define name="SCREEN_WIDTH" value="176"/>
+        <define name="SCREEN_HEIGHT" value="182"/>
+        <define name="FORCE_FULLSCREEN" value="true"/>
+    </preset>
+
+    <!-- Motorola E398 -->
+    <preset name="176x204 (Motorola - with status bar)" layout="Motorola">
+        <define name="SCREEN_WIDTH" value="176"/>
+        <define name="SCREEN_HEIGHT" value="204"/>
+        <define name="FORCE_FULLSCREEN" value="true"/>
+    </preset>
+
+    <!-- Motorola V600 -->
+    <preset name="176x204 (Motorola Triplets - with status bar)" layout="Motorola_Triplets">
+        <define name="SCREEN_WIDTH" value="176"/>
+        <define name="SCREEN_HEIGHT" value="204"/>
+        <define name="FORCE_FULLSCREEN" value="true"/>
+    </preset>
+
+    <!-- Motorola V300 -->
+    <preset name="176x204 (Motorola V300)" layout="Motorola_V300">
+        <define name="SCREEN_WIDTH" value="176"/>
+        <define name="SCREEN_HEIGHT" value="204"/>
+        <define name="FORCE_FULLSCREEN" value="true"/>
+    </preset>
+
+    <!-- Motorola E1000 -->
+    <preset name="240x266 (Motorola - with status bar and commands)" layout="Motorola">
+        <define name="SCREEN_WIDTH" value="240"/>
+        <define name="SCREEN_HEIGHT" value="266"/>
+        <define name="FORCE_FULLSCREEN" value="true"/>
+    </preset>
+
+    <!-- Motorola E1000 -->
+    <preset name="240x299 (Motorola - with status bar)" layout="Motorola">
+        <define name="SCREEN_WIDTH" value="240"/>
+        <define name="SCREEN_HEIGHT" value="299"/>
+        <define name="FORCE_FULLSCREEN" value="true"/>
+    </preset>
+
+    <!-- Motorola RAZR2 V8 -->
+    <preset name="240x320 (Motorola Motomagx - full screen)" layout="MotorolaV8">
+        <define name="SCREEN_WIDTH" value="240"/>
+        <define name="SCREEN_HEIGHT" value="320"/>
+        <define name="FORCE_FULLSCREEN" value="false"/>
+    </preset>
+
+    <!-- Motorola EM30 -->
+    <preset name="320x240 (Motorola Motomagx - full screen)" layout="MotorolaV8">
+        <define name="SCREEN_WIDTH" value="320"/>
+        <define name="SCREEN_HEIGHT" value="240"/>
+        <define name="FORCE_FULLSCREEN" value="false"/>
+    </preset>
+
+    <!--  -->
+    <preset name="400x240 (SoftBank - full screen)" layout="Motorola">
+        <define name="SCREEN_WIDTH" value="400"/>
+        <define name="SCREEN_HEIGHT" value="240"/>
+        <define name="FORCE_FULLSCREEN" value="false"/>
+    </preset>
+
+    <!-- Siemens -->
+
+    <!-- Siemens M50 -->
+    <preset name="101x64 (Siemens - full screen)" layout="Siemens">
+        <define name="SCREEN_WIDTH" value="101"/>
+        <define name="SCREEN_HEIGHT" value="64"/>
+        <define name="FORCE_FULLSCREEN" value="true"/>
+    </preset>
+
+    <!-- Siemens SL45i -->
+    <preset name="101x80 (Siemens - full screen)" layout="Siemens">
+        <define name="SCREEN_WIDTH" value="101"/>
+        <define name="SCREEN_HEIGHT" value="80"/>
+        <define name="FORCE_FULLSCREEN" value="true"/>
+    </preset>
+
+    <!-- Siemens C65 -->
+    <preset name="130x130 (Siemens - full screen)" layout="Siemens">
+        <define name="SCREEN_WIDTH" value="130"/>
+        <define name="SCREEN_HEIGHT" value="130"/>
+        <define name="FORCE_FULLSCREEN" value="true"/>
+    </preset>
+
+    <!-- Siemens CX75 -->
+    <preset name="132x176 (Siemens - full screen)" layout="Siemens">
+        <define name="SCREEN_WIDTH" value="132"/>
+        <define name="SCREEN_HEIGHT" value="176"/>
+        <define name="FORCE_FULLSCREEN" value="false"/>
+    </preset>
+
+    <!-- LG -->
+
+    <!-- -->
+    <preset name="128x110 (LG - with status bar and commands)" layout="LG">
+        <define name="SCREEN_WIDTH" value="128"/>
+        <define name="SCREEN_HEIGHT" value="110"/>
+        <define name="FORCE_FULLSCREEN" value="true"/>
+    </preset>
+
+    <!-- -->
+    <preset name="128x148 (LG - with status bar)" layout="LG">
+        <define name="SCREEN_WIDTH" value="128"/>
+        <define name="SCREEN_HEIGHT" value="148"/>
+        <define name="FORCE_FULLSCREEN" value="true"/>
+    </preset>
+
+    <!-- -->
+    <preset name="176x206 (LG - with status bar)" layout="LG">
+        <define name="SCREEN_WIDTH" value="176"/>
+        <define name="SCREEN_HEIGHT" value="206"/>
+        <define name="FORCE_FULLSCREEN" value="true"/>
+    </preset>
+
+    <!-- LG KU990 -->
+    <preset name="240x298 (LG - with keypad)" layout="Nokia">
+        <define name="SCREEN_WIDTH" value="240"/>
+        <define name="SCREEN_HEIGHT" value="298"/>
+        <define name="FORCE_FULLSCREEN" value="true"/>
+    </preset>
+
+    <!-- LG KF550 -->
+    <preset name="240x304 (LG - with status bar)" layout="Nokia">
+        <define name="SCREEN_WIDTH" value="240"/>
+        <define name="SCREEN_HEIGHT" value="304"/>
+        <define name="FORCE_FULLSCREEN" value="true"/>
+    </preset>
+
+    <!--  -->
+    <preset name="320x224 (LG - with status bar)" layout="Nokia">
+        <define name="SCREEN_WIDTH" value="320"/>
+        <define name="SCREEN_HEIGHT" value="224"/>
+        <define name="FORCE_FULLSCREEN" value="true"/>
+    </preset>
+
+    <!-- LG KF700 -->
+    <preset name="240x480 (LG - full screen)" layout="Nokia">
+        <define name="SCREEN_WIDTH" value="240"/>
+        <define name="SCREEN_HEIGHT" value="480"/>
+        <define name="FORCE_FULLSCREEN" value="false"/>
+    </preset>
+
+    <!-- LG BL40 -->
+    <preset name="345x800 (LG - full screen)" layout="Nokia">
+        <define name="SCREEN_WIDTH" value="345"/>
+        <define name="SCREEN_HEIGHT" value="800"/>
+        <define name="FORCE_FULLSCREEN" value="false"/>
+    </preset>
+
+    <preset name="800x345 (LG - full screen)" layout="Nokia">
+        <define name="SCREEN_WIDTH" value="800"/>
+        <define name="SCREEN_HEIGHT" value="345"/>
+        <define name="FORCE_FULLSCREEN" value="false"/>
+    </preset>
+
+    <!-- Sharp -->
+
+    <!-- Sharp GX15 -->
+    <preset name="120x160 (Sharp/DoCoMo - full screen)" layout="Sharp">
+        <define name="SCREEN_WIDTH" value="120"/>
+        <define name="SCREEN_HEIGHT" value="160"/>
+        <define name="FORCE_FULLSCREEN" value="false"/>
+    </preset>
+
+    <!-- Panasonic P902i -->
+    <preset name="240x240 (Sharp/DoCoMo - with status bar and commands)" layout="Sharp">
+        <define name="SCREEN_WIDTH" value="240"/>
+        <define name="SCREEN_HEIGHT" value="240"/>
+        <define name="FORCE_FULLSCREEN" value="true"/>
+    </preset>
+
+    <!--  -->
+    <preset name="480x800 (Sharp/DoCoMo - full screen)" layout="Sharp">
+        <define name="SCREEN_WIDTH" value="480"/>
+        <define name="SCREEN_HEIGHT" value="800"/>
+        <define name="FORCE_FULLSCREEN" value="false"/>
+    </preset>
+
+    <!--  -->
+    <preset name="800x480 (Sharp/DoCoMo - full screen)" layout="Sharp">
+        <define name="SCREEN_WIDTH" value="800"/>
+        <define name="SCREEN_HEIGHT" value="480"/>
+        <define name="FORCE_FULLSCREEN" value="false"/>
+    </preset>
+
+</presets>

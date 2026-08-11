@@ -1,0 +1,22 @@
+microedition.configuration: CDLC-1.1
+microedition.profiles: MIDP-2.0
+microedition.encoding: ISO-8859-1
+microedition.platform: Nokia 6233
+microedition.io.file.FileConnection.version: 1.0
+microedition.sensor.version: 1
+microedition.m3g.version: 1.1
+microedition.media.version: 1.0
+microedition.pim.version: 1.0
+supports.mixing: true
+supports.audio.capture: true
+supports.video.capture: false
+supports.recording: false
+com.siemens.mp.systemfolder.ringingtone: fs/MyStuff/Ringtones
+com.siemens.mp.systemfolder.pictures: fs/MyStuff/Pictures
+com.siemens.OSVersion: 11
+device.imei: 000000000000000
+com.siemens.IMEI: 000000000000000
+com.sonyericsson.imei: IMEI 00460101-501594-5-00
+com.nokia.mid.impl.isa.visual_radio_operator_id: 0
+com.nokia.mid.impl.isa.visual_radio_channel_freq: 0
+com.nokia.mid.ui.DirectGraphics.PIXEL_FORMAT: 565

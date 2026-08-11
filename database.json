@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-11T15:33:37Z",
-  "total_files": 8415,
-  "total_size": 10832119546,
+  "generated_at": "2026-08-11T15:46:20Z",
+  "total_files": 8545,
+  "total_size": 11053683245,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -49867,6 +49867,716 @@
       "crc32": "d9c5a979",
       "adler32": "cc76d7bb"
     },
+    "bd9de21def48b65b5382c403971a9062928b9345": {
+      "path": "bios/Other/future-pinball/Feeds/fpLatestTables.xml",
+      "name": "fpLatestTables.xml",
+      "size": 752639,
+      "sha1": "bd9de21def48b65b5382c403971a9062928b9345",
+      "md5": "c3dc5d644b136c2aea561f71c1eb721d",
+      "sha256": "daa2c31dbed65b66b4fb8e53a426ffbd6f73e218704cd616e0e86d145ee920d3",
+      "crc32": "fc3dee6c",
+      "adler32": "f878b599"
+    },
+    "ce2fb04c3c68eb6874527821853c6180ddc237df": {
+      "path": "bios/Other/future-pinball/Help/Future Pinball Manual.chm",
+      "name": "Future Pinball Manual.chm",
+      "size": 8992653,
+      "sha1": "ce2fb04c3c68eb6874527821853c6180ddc237df",
+      "md5": "2c21be670266dec9d2be5ab88c4e7eb5",
+      "sha256": "a6401b2ba2b401467d3a48f7349b76d812eea29980124fd62d6a95b7480f9637",
+      "crc32": "9dfb2240",
+      "adler32": "be13bb38"
+    },
+    "ec526ca156ae8c639aefcc2552914fc70950b69a": {
+      "path": "bios/Other/future-pinball/Libraries/fpDmdFonts.fpl",
+      "name": "fpDmdFonts.fpl",
+      "size": 58880,
+      "sha1": "ec526ca156ae8c639aefcc2552914fc70950b69a",
+      "md5": "8a7e3ff7b7ae3fc5de222206811b6a58",
+      "sha256": "0bcdfd08897d52ae929c0df43797662c069f45286a3dcac7d955e66c599161e5",
+      "crc32": "93958b75",
+      "adler32": "93ea9487"
+    },
+    "81f809456ad9fba296eff46f035a607a3d2cfba2": {
+      "path": "bios/Other/future-pinball/Libraries/fpModels.fpl",
+      "name": "fpModels.fpl",
+      "size": 5166080,
+      "sha1": "81f809456ad9fba296eff46f035a607a3d2cfba2",
+      "md5": "74325c5146741488524486135dc9e278",
+      "sha256": "a4b7dd3ed357d2e7daf63bd66422e557100ae44146ce65e5aebd2bdf233628e5",
+      "crc32": "5c3313be",
+      "adler32": "fbff2edc"
+    },
+    "9df8f5cca648e61cb1f92d6f3cfa150a9db58692": {
+      "path": "bios/Other/future-pinball/Libraries/fpPlayfields.fpl",
+      "name": "fpPlayfields.fpl",
+      "size": 364032,
+      "sha1": "9df8f5cca648e61cb1f92d6f3cfa150a9db58692",
+      "md5": "9a87bcc7c70a6b3f35817459820ccbd8",
+      "sha256": "16b0f40fd00921c98926373378d8dbf7113a13e1adc8f94239465971cebd5f15",
+      "crc32": "cf17dbf2",
+      "adler32": "5515bf70"
+    },
+    "07f48f32a7a08cff94121908205b2f02fcf3724b": {
+      "path": "bios/Other/future-pinball/Libraries/fpRamps.fpl",
+      "name": "fpRamps.fpl",
+      "size": 2813440,
+      "sha1": "07f48f32a7a08cff94121908205b2f02fcf3724b",
+      "md5": "343593cb9ae9ae914af5c71352af244b",
+      "sha256": "ecadb4416fa272d717cd7a8c083338309076a72369158be8b75dda372b8e0c6c",
+      "crc32": "83e2b7e2",
+      "adler32": "27432605"
+    },
+    "5a928b81cb1a3364605158e0c0b573c51b0f468f": {
+      "path": "bios/Other/future-pinball/Libraries/fpScripts.fpl",
+      "name": "fpScripts.fpl",
+      "size": 4096,
+      "sha1": "5a928b81cb1a3364605158e0c0b573c51b0f468f",
+      "md5": "3ec4b55286045a7a29ba9ac074233fa6",
+      "sha256": "89749a88e1b3b07cd67316459a09d79d2b788c45df1b199f060525a2c582890e",
+      "crc32": "bd853ad1",
+      "adler32": "f0dc87bf"
+    },
+    "ff2d159b4dcdb5ff9896b025288e40b76466eaa5": {
+      "path": "bios/Other/future-pinball/Libraries/fpSounds.fpl",
+      "name": "fpSounds.fpl",
+      "size": 170496,
+      "sha1": "ff2d159b4dcdb5ff9896b025288e40b76466eaa5",
+      "md5": "b0e7e61f93cc7af387c214789e4b69a9",
+      "sha256": "cb7255d7a50ab27768fec0045fea93a957ac84ddeb93fb0187273d21d8e3f237",
+      "crc32": "7407e78d",
+      "adler32": "5aed2ce1"
+    },
+    "04efb8fe46d0ba6381b160afa92b87bb213ba461": {
+      "path": "bios/Other/future-pinball/Libraries/fpSphereMaps.fpl",
+      "name": "fpSphereMaps.fpl",
+      "size": 223744,
+      "sha1": "04efb8fe46d0ba6381b160afa92b87bb213ba461",
+      "md5": "60c27f5f78525b6ce834716e8f98f79e",
+      "sha256": "2d7c1514365a00eb72b82b774067bb696a7f13a2912e76bc7009b47ed21c3806",
+      "crc32": "423f5efc",
+      "adler32": "0dcb8055"
+    },
+    "255cb14da5f49c7aaa210135638cfdc924130397": {
+      "path": "bios/Other/future-pinball/Libraries/fpTextures.fpl",
+      "name": "fpTextures.fpl",
+      "size": 3495424,
+      "sha1": "255cb14da5f49c7aaa210135638cfdc924130397",
+      "md5": "372e003488283ace60129e0336815de2",
+      "sha256": "96f6d3eddd5c7534fc811aeecf1d76463df4a54376d7940c9f4dc11d7d6d7c20",
+      "crc32": "2c554534",
+      "adler32": "fde8aa95"
+    },
+    "6d9d44450b8d76791373b727b699cad4446abd07": {
+      "path": "bios/Other/future-pinball/NewTable.fpt",
+      "name": "NewTable.fpt",
+      "size": 226816,
+      "sha1": "6d9d44450b8d76791373b727b699cad4446abd07",
+      "md5": "dd0a80cf800e910ddb93c188fc032093",
+      "sha256": "a807c191f754d292a7ed5e34f7d6a1552eb5676db06b551127948cd96336e749",
+      "crc32": "9762a6ec",
+      "adler32": "39ba03c8"
+    },
+    "f41672abeef6b9751b0ef4f341b973a60cb03a7a": {
+      "path": "bios/Other/future-pinball/Newton.dll",
+      "name": "Newton.dll",
+      "size": 446464,
+      "sha1": "f41672abeef6b9751b0ef4f341b973a60cb03a7a",
+      "md5": "a0df6882cf5d97577887026f38d2541d",
+      "sha256": "3f0e016ab19a3210863ac325335bd4e821b350223b674850697b6fa41aef15b8",
+      "crc32": "83502ee1",
+      "adler32": "bac433a7"
+    },
+    "661675f4d8539e14f2be10d144ab986fc5fccb46": {
+      "path": "bios/Other/future-pinball/SciLexer.dll",
+      "name": "SciLexer.dll",
+      "size": 407552,
+      "sha1": "661675f4d8539e14f2be10d144ab986fc5fccb46",
+      "md5": "8af5ddf00bd89f8e547a9296a2ef8d87",
+      "sha256": "c634133150f17a0443eba3caf8b634047744b90cd3e4cd89a2f5b1d64a44861e",
+      "crc32": "b588dcbd",
+      "adler32": "5149f45c"
+    },
+    "313a23600a169adbe130b1ae1784d8de437ce7d9": {
+      "path": "bios/Other/future-pinball/devil.dll",
+      "name": "devil.dll",
+      "size": 269312,
+      "sha1": "313a23600a169adbe130b1ae1784d8de437ce7d9",
+      "md5": "8df4d4324e5755f1a0567db3c5be4c58",
+      "sha256": "9792df088f4301012bb024979aa9b10dc1c40a3e2e801bb47ff2741af5d6a066",
+      "crc32": "90f088b8",
+      "adler32": "4bfd9c49"
+    },
+    "ee8f68d94645de24be930d6f453297d5b7b4d052": {
+      "path": "bios/Other/future-pinball/fmod.dll",
+      "name": "fmod.dll",
+      "size": 162816,
+      "sha1": "ee8f68d94645de24be930d6f453297d5b7b4d052",
+      "md5": "6ecd1b87ef86f436a8894659813afadc",
+      "sha256": "36d5fa62765629e35754dc0a1d4ef44dd470c11a0072b354f621b8d3558d0597",
+      "crc32": "2cee9d26",
+      "adler32": "bde95ddd"
+    },
+    "d3534cd62d312fe28988c6229c47ab81a3ae1f9e": {
+      "path": "bios/Other/future-pinball/ilu.dll",
+      "name": "ilu.dll",
+      "size": 27648,
+      "sha1": "d3534cd62d312fe28988c6229c47ab81a3ae1f9e",
+      "md5": "bd4ff726291d98374fa6791c0589f288",
+      "sha256": "c37851d8d77eb4a8eb6514b91dc6ff39d82ccab41e32fb3a184324b0352d81ac",
+      "crc32": "688c7661",
+      "adler32": "594048eb"
+    },
+    "30566eda672fef3036fbd3998af3cc9fdcef38e7": {
+      "path": "bios/Other/future-pinball/ilut.dll",
+      "name": "ilut.dll",
+      "size": 16384,
+      "sha1": "30566eda672fef3036fbd3998af3cc9fdcef38e7",
+      "md5": "938b740d34d77bb6c93ca3e4751ca5f7",
+      "sha256": "5d07aa29132347d877e6d5d39795dfecd4471005dd26f1a1336b36c159a7f8bb",
+      "crc32": "b10700e6",
+      "adler32": "78ca92d5"
+    },
+    "8189136493d48adc2bdeff1e77297ab988ae789d": {
+      "path": "bios/Other/future-pinball/libcurl.dll",
+      "name": "libcurl.dll",
+      "size": 626688,
+      "sha1": "8189136493d48adc2bdeff1e77297ab988ae789d",
+      "md5": "e85950e5eab078856275ceaf80ab7514",
+      "sha256": "3a9b95b349ae91458c204bf804f03554fecd1c0c9f1b05c076c1f6d8639759c5",
+      "crc32": "d4486029",
+      "adler32": "91466537"
+    },
+    "c4fc4467ccec0c9c2852a9342b5b500511b6c886": {
+      "path": "bios/Other/future-pinball-fploader/BAM-Tracker.exe",
+      "name": "BAM-Tracker.exe",
+      "size": 207104,
+      "sha1": "c4fc4467ccec0c9c2852a9342b5b500511b6c886",
+      "md5": "6779ed5942f437dae88f2b7c6d9b3803",
+      "sha256": "b2841b993dafde568e2b08df4268b19f637d6dbb66d8a7f1ea0315b72ce3b2a4",
+      "crc32": "4c05679c",
+      "adler32": "1b277ba6"
+    },
+    "cd9c5f22c5408304bacaeb88e529a4dd121f90eb": {
+      "path": "bios/Other/future-pinball-fploader/BAM.dll",
+      "name": "BAM.dll",
+      "size": 5709936,
+      "sha1": "cd9c5f22c5408304bacaeb88e529a4dd121f90eb",
+      "md5": "fdb6418c188af668032759a1c549142c",
+      "sha256": "67505ec2e8f52c731bfee423306c9aeb80a8774a45d20821cdb1f2fce99916f0",
+      "crc32": "84f38041",
+      "adler32": "4bfc8a8e"
+    },
+    "badfe5b7ab16c88f3fe255143546932c09fc2097": {
+      "path": "bios/Other/future-pinball-fploader/Balls/Baseball.zip",
+      "name": "Baseball.zip",
+      "size": 248548,
+      "sha1": "badfe5b7ab16c88f3fe255143546932c09fc2097",
+      "md5": "1c491d64ad3792e2b98a00c06a61355a",
+      "sha256": "c6457e696430d1c0945f9a645750bff8b0df8bbe48bbf7407b772fac8d79bd71",
+      "crc32": "2a48d9f2",
+      "adler32": "487fb5bc"
+    },
+    "5aff2d72c317d58a6f1951811a31ec1b99dfdfe4": {
+      "path": "bios/Other/future-pinball-fploader/Balls/Basketball 1.zip",
+      "name": "Basketball 1.zip",
+      "size": 148883,
+      "sha1": "5aff2d72c317d58a6f1951811a31ec1b99dfdfe4",
+      "md5": "69d61a305769bfa50aca88d73b44e401",
+      "sha256": "1c80ce633d717be1358f099d516b43d2752b174c6be67c1245da38eac22236bb",
+      "crc32": "1dbaeb64",
+      "adler32": "fe4a2068"
+    },
+    "1fa517b848c69c0b2c2f3a32e4097a157fff3aa2": {
+      "path": "bios/Other/future-pinball-fploader/Balls/Basketball 2.zip",
+      "name": "Basketball 2.zip",
+      "size": 74296,
+      "sha1": "1fa517b848c69c0b2c2f3a32e4097a157fff3aa2",
+      "md5": "1516aa3385665a8dedefd97678d2cab4",
+      "sha256": "3deb0fb4a43bb18e0cf00c8701293b5f000512572c422f9ed8993363e6a652fb",
+      "crc32": "6e770bb0",
+      "adler32": "5edf0a66"
+    },
+    "9238286e57f346fd9b9ed3d8ffa977083b9d3feb": {
+      "path": "bios/Other/future-pinball-fploader/Balls/Cue Black.zip",
+      "name": "Cue Black.zip",
+      "size": 548084,
+      "sha1": "9238286e57f346fd9b9ed3d8ffa977083b9d3feb",
+      "md5": "557cc0449eee80b77de23867fc1edd17",
+      "sha256": "f69527f153716f50b41e4882ac05d5d295a6b070876a8b9cf114c6ab014010d2",
+      "crc32": "436b5790",
+      "adler32": "16273cdd"
+    },
+    "948eec0af66150dc908622bd48e867e85fb0d6c5": {
+      "path": "bios/Other/future-pinball-fploader/Balls/Cue White.zip",
+      "name": "Cue White.zip",
+      "size": 554040,
+      "sha1": "948eec0af66150dc908622bd48e867e85fb0d6c5",
+      "md5": "f266f337c301c08c75c33d32adf3ed0c",
+      "sha256": "9803a8138c8ac492f1f7776ffc13da98d0d44b0a4163be09b85fd11fdc050bd9",
+      "crc32": "fcfcee47",
+      "adler32": "81fd65b6"
+    },
+    "89d8f29048176e8faff89cd48d0eda7b4875bf49": {
+      "path": "bios/Other/future-pinball-fploader/Balls/EYETOY.zip",
+      "name": "EYETOY.zip",
+      "size": 373860,
+      "sha1": "89d8f29048176e8faff89cd48d0eda7b4875bf49",
+      "md5": "d0690ab4696198a3d7fa2e5683836550",
+      "sha256": "6f05a23e9402cfb1e6f4f47f70435b2c9afd5bd89e882f9ca9e596e50f02b357",
+      "crc32": "0f3cd1f5",
+      "adler32": "2345fa23"
+    },
+    "28a08c3911ef46aca8880587bed56dfa4f99062a": {
+      "path": "bios/Other/future-pinball-fploader/Balls/Fireball.zip",
+      "name": "Fireball.zip",
+      "size": 240337,
+      "sha1": "28a08c3911ef46aca8880587bed56dfa4f99062a",
+      "md5": "f5bab002fb58e48fa9305a0fc6d1563a",
+      "sha256": "a669348b12e98cb4fbf12206e1bb97c9b80a7fbe84c3ca603e12314af6b82eb9",
+      "crc32": "6de5f68e",
+      "adler32": "01ad635d"
+    },
+    "969d38e02a6759629cc827501a049c60582d9531": {
+      "path": "bios/Other/future-pinball-fploader/Balls/Knight.zip",
+      "name": "Knight.zip",
+      "size": 421287,
+      "sha1": "969d38e02a6759629cc827501a049c60582d9531",
+      "md5": "56f0cbf6e41b3ca1a4addca75e282ed5",
+      "sha256": "97b67827dcceb4ebdbc4de6ee6b2e512a9fd125f41482245d8df71bde6dfee64",
+      "crc32": "a698ed6b",
+      "adler32": "b681b749"
+    },
+    "0a1e886e991d88761502d8434248e986bf9c238f": {
+      "path": "bios/Other/future-pinball-fploader/Balls/Soccer Ball 1.zip",
+      "name": "Soccer Ball 1.zip",
+      "size": 54397,
+      "sha1": "0a1e886e991d88761502d8434248e986bf9c238f",
+      "md5": "ffe6272958e5bf1d12fa936db8764233",
+      "sha256": "c343de86b30ca0a603b3403321d58238e728e928e9b247bbd9de1536c28f1ad2",
+      "crc32": "4e68407e",
+      "adler32": "edd1f1cb"
+    },
+    "b701f91eae625a5e8f7bf56f104be506c8d1c8d8": {
+      "path": "bios/Other/future-pinball-fploader/Balls/axis.zip",
+      "name": "axis.zip",
+      "size": 480842,
+      "sha1": "b701f91eae625a5e8f7bf56f104be506c8d1c8d8",
+      "md5": "8969ba5e09a226e4dd89fff686c63c4d",
+      "sha256": "49a44af83d073f9fe73d53cbb75f5de2ddfc0cfcaf3e199b7afd924d420da4eb",
+      "crc32": "80a60544",
+      "adler32": "fb6bcdec"
+    },
+    "0b30d717df74d90c26769d58055b507b89fdc1fc": {
+      "path": "bios/Other/future-pinball-fploader/Balls/earth.zip",
+      "name": "earth.zip",
+      "size": 728508,
+      "sha1": "0b30d717df74d90c26769d58055b507b89fdc1fc",
+      "md5": "ca2eb36122f9b82effe1e4c5c742964c",
+      "sha256": "558a20c655577497fa8ac96bc67fbd6b62ec35a722c0e288e0a9854e60e82139",
+      "crc32": "2c8a0372",
+      "adler32": "7df2eb14"
+    },
+    "d2f65f0f32e21dfc65d61a384df525dedbc57a8a": {
+      "path": "bios/Other/future-pinball-fploader/Balls/latlong.zip",
+      "name": "latlong.zip",
+      "size": 1066167,
+      "sha1": "d2f65f0f32e21dfc65d61a384df525dedbc57a8a",
+      "md5": "e5f3d63d63502bc29cae5d4994f267d3",
+      "sha256": "b3b67f777572386c9e76b576bb97e108fa666da87e2cea84ffac3ab43e2c64cb",
+      "crc32": "a0d11fd9",
+      "adler32": "157895b1"
+    },
+    "3b97a1c97624026302dbfab5b400d81a65461c99": {
+      "path": "bios/Other/future-pinball-fploader/Future Pinball.exe",
+      "name": "Future Pinball.exe",
+      "size": 28547584,
+      "sha1": "3b97a1c97624026302dbfab5b400d81a65461c99",
+      "md5": "644ae0f4dc712786cc6413f07ee5f217",
+      "sha256": "da400d3b80ab855a6a6f63fd1b552cb9900cd3355925e6086a2d409df3b27a2d",
+      "crc32": "52c855a0",
+      "adler32": "ae20ed2d"
+    },
+    "dd3874742bfe5f9c2828cb9c4e249c2f4722bd51": {
+      "path": "bios/Other/future-pinball-fploader/ModelImporter.exe",
+      "name": "ModelImporter.exe",
+      "size": 4553472,
+      "sha1": "dd3874742bfe5f9c2828cb9c4e249c2f4722bd51",
+      "md5": "93884ead095a9655157de8692884da91",
+      "sha256": "a693549f20697b02f31aa6e38e71c12ad0b0a242d8b2ac7ca7321f8af2af5a3b",
+      "crc32": "47225cfe",
+      "adler32": "b2c4f47f"
+    },
+    "694f2c0efa61c934345161c61782202bac208f9b": {
+      "path": "bios/Other/future-pinball-fploader/XML/Zendonius_v1.0.xml",
+      "name": "Zendonius_v1.0.xml",
+      "size": 6333,
+      "sha1": "694f2c0efa61c934345161c61782202bac208f9b",
+      "md5": "0648275a963f787f9ca10a11f1fd93f4",
+      "sha256": "15626c7583a43457cfbe6f04638a85911ca94c3c0164880daf2070465b0f5da6",
+      "crc32": "31a89911",
+      "adler32": "3f8ebc55"
+    },
+    "213244dc655fec822218a8780668bc74b80ac8ff": {
+      "path": "bios/Other/future-pinball-fploader/XML/Zendonius_v1.1.xml",
+      "name": "Zendonius_v1.1.xml",
+      "size": 6333,
+      "sha1": "213244dc655fec822218a8780668bc74b80ac8ff",
+      "md5": "da2794e70010e5e95f913234da62733b",
+      "sha256": "95007357981544653d47eaae7f98abe8c723faab463666c1bccc52d83b545b09",
+      "crc32": "65e772b9",
+      "adler32": "b3e8bc3d"
+    },
+    "534a239cb7ae954fb9ad43de7fd79c0e5ee6473a": {
+      "path": "bios/Other/future-pinball-fploader/XML/fp-p1.0.xml",
+      "name": "fp-p1.0.xml",
+      "size": 6290,
+      "sha1": "534a239cb7ae954fb9ad43de7fd79c0e5ee6473a",
+      "md5": "ae15da3ca57c1e29c1710f285f2846c2",
+      "sha256": "8abfbf8088807bfcc3169323a1fc4f549fe7ac412109b07feda4defa8c1e1539",
+      "crc32": "d9bd000e",
+      "adler32": "5250b8d7"
+    },
+    "db023400242b4e5c34a14876e64dc9bfc3b6e3e1": {
+      "path": "bios/Other/future-pinball-fploader/XML/fp-p2.0.xml",
+      "name": "fp-p2.0.xml",
+      "size": 6267,
+      "sha1": "db023400242b4e5c34a14876e64dc9bfc3b6e3e1",
+      "md5": "80bf0f31d5ce837ef7faa7f7b17da698",
+      "sha256": "0e9febf8d2663aeae0f73f33a8a49ebc3cf37c38a1cacdf4cbc949d86c7ceea8",
+      "crc32": "57df3a51",
+      "adler32": "b368b0e0"
+    },
+    "22ffd7dc5541bbf0048b7ad4af5bbc76034cad8f": {
+      "path": "bios/Other/future-pinball-fploader/XML/fp-p2.1.xml",
+      "name": "fp-p2.1.xml",
+      "size": 6267,
+      "sha1": "22ffd7dc5541bbf0048b7ad4af5bbc76034cad8f",
+      "md5": "ef45a9078334ffacdcc2ace03a3f55a3",
+      "sha256": "d9bdd158d3963823893ca0e17b64691aec4427e9e93d0d9ef1caf193ede42fce",
+      "crc32": "afe4f797",
+      "adler32": "0d8bb0e6"
+    },
+    "fd56e59a4d36c8f3dbccd0ee7c24abc9e66c0495": {
+      "path": "bios/Other/future-pinball-fploader/XML/fp-p2.2.xml",
+      "name": "fp-p2.2.xml",
+      "size": 6267,
+      "sha1": "fd56e59a4d36c8f3dbccd0ee7c24abc9e66c0495",
+      "md5": "3a5bc839774c2bd805da198545c0b872",
+      "sha256": "27bb21df2126dd5efdfa6b4df3f88de052ad6e2a511d64f7b287fde076a6621b",
+      "crc32": "130c0120",
+      "adler32": "1962b0e6"
+    },
+    "33970a777762fc53908499b8a0bfe2b5cbc50b99": {
+      "path": "bios/Other/future-pinball-fploader/XML/fp-p2.3 Version 1.xml",
+      "name": "fp-p2.3 Version 1.xml",
+      "size": 6278,
+      "sha1": "33970a777762fc53908499b8a0bfe2b5cbc50b99",
+      "md5": "7bc4cdbcd22ce091226fb202eb76d850",
+      "sha256": "de2961a4ccb0940aa9a95be0273759b98d4cf6d023d08ad233ff4228a8304af7",
+      "crc32": "4bfbc6f1",
+      "adler32": "a21bb460"
+    },
+    "2b0792a18766a7750b6b5da8dc9607ed63e8dc77": {
+      "path": "bios/Other/future-pinball-fploader/XML/fp-p2.3 Version 2.xml",
+      "name": "fp-p2.3 Version 2.xml",
+      "size": 6278,
+      "sha1": "2b0792a18766a7750b6b5da8dc9607ed63e8dc77",
+      "md5": "1d2e8bed4066fe74ecf0b492160e3642",
+      "sha256": "47743f2c627b70ea12e570aa9f6016a99e5171190a00481356ec181b0b30d351",
+      "crc32": "bd434c2b",
+      "adler32": "d1e4b464"
+    },
+    "ce9ab342ac870f9c5bcd53671cca05263ef27f0d": {
+      "path": "bios/Other/future-pinball-fploader/XML/fp-p2.4.xml",
+      "name": "fp-p2.4.xml",
+      "size": 6267,
+      "sha1": "ce9ab342ac870f9c5bcd53671cca05263ef27f0d",
+      "md5": "ae9001aaa2d725cbcb3c9d24b53d51f2",
+      "sha256": "24b15d60162cb044592881eeba872259504dab3ce12458ddf92c5bcf9da4f65e",
+      "crc32": "8ab62620",
+      "adler32": "6aa1b0e5"
+    },
+    "b1e1764011daa11017b571428b4cd82c12eabd2e": {
+      "path": "bios/Other/future-pinball-fploader/XML/fp-p2.5 slamtilt rubbers.xml",
+      "name": "fp-p2.5 slamtilt rubbers.xml",
+      "size": 6335,
+      "sha1": "b1e1764011daa11017b571428b4cd82c12eabd2e",
+      "md5": "42d5ef0cbe58cab47cbc2f3908e81c8b",
+      "sha256": "a0e16817ae436cd7f39755cbb7d4c6e11fc5c44e414a0885ed858416797f8010",
+      "crc32": "d278a3e3",
+      "adler32": "19abbbdf"
+    },
+    "716e15712d968f9ce0b94126bb7e0ec8a7862c29": {
+      "path": "bios/Other/future-pinball-fploader/XML/fp-p2.5.xml",
+      "name": "fp-p2.5.xml",
+      "size": 6315,
+      "sha1": "716e15712d968f9ce0b94126bb7e0ec8a7862c29",
+      "md5": "0f3d10545aaa4cfd93d5d246071cd572",
+      "sha256": "3a138084abdf02bc89284505e550063d369c14ab288bba3581b2384daa15b5f7",
+      "crc32": "5a8a3e2d",
+      "adler32": "8c9db4d2"
+    },
+    "f6abf69d826b5daef686c7ed15dd4349b47621a2": {
+      "path": "bios/Other/future-pinball-fploader/XML/fp-p2.6.xml",
+      "name": "fp-p2.6.xml",
+      "size": 6315,
+      "sha1": "f6abf69d826b5daef686c7ed15dd4349b47621a2",
+      "md5": "e3a8bb9430edbd0f6df643b5fca57cc3",
+      "sha256": "8212cd979118bf826ee16c2c21bf2f90bcd04cd6fea059d110f06e517db7c679",
+      "crc32": "8b83e1b6",
+      "adler32": "fad8b4e2"
+    },
+    "468826d947e599ec79d9bc44ddbff75fbf60ede2": {
+      "path": "bios/Other/future-pinball-fploader/XML/fp-p2.7.xml",
+      "name": "fp-p2.7.xml",
+      "size": 6314,
+      "sha1": "468826d947e599ec79d9bc44ddbff75fbf60ede2",
+      "md5": "d27d33ba4ea533d2fd8d8b41d1151cbf",
+      "sha256": "a368df333e0b81b7a2f07db9319567e3a21d5196d609fbf188543b18a411ba23",
+      "crc32": "a9656c12",
+      "adler32": "227eb4e1"
+    },
+    "2563528f492e39b947f8836d10eefa1fd278f033": {
+      "path": "bios/Other/future-pinball-fploader/XML/zedonius_v1_0.zip",
+      "name": "zedonius_v1_0.zip",
+      "size": 862294,
+      "sha1": "2563528f492e39b947f8836d10eefa1fd278f033",
+      "md5": "f3c9dbe3df6a0dc7587dad89b205fa25",
+      "sha256": "6f2b86587d748ee7eb0ff95116aeb9ef91f6c8b7afade41321f38e7fbe2890ef",
+      "crc32": "0620efaa",
+      "adler32": "c4060f57"
+    },
+    "f585911868919bbf4f6d185a468ab01982ad1878": {
+      "path": "bios/Other/future-pinball-fploader/XML/zedonius_v1_1.zip",
+      "name": "zedonius_v1_1.zip",
+      "size": 862287,
+      "sha1": "f585911868919bbf4f6d185a468ab01982ad1878",
+      "md5": "9ef3de7bd0de2055c2d64195daf75b6e",
+      "sha256": "55e804bb95e212db0c0875b6bb7642f1b41db538bcaf3cbb620779ab2afe571d",
+      "crc32": "a36e2bd5",
+      "adler32": "0a15deb8"
+    },
+    "bcc92f9af26afb64a885ef789cbb10d6f3c7f453": {
+      "path": "bios/Other/future-pinball-fploader/default.seq",
+      "name": "default.seq",
+      "size": 1284,
+      "sha1": "bcc92f9af26afb64a885ef789cbb10d6f3c7f453",
+      "md5": "2ba49f75882a456725ef1dd87519acfa",
+      "sha256": "87344f3726c46c62fb19c7f6611ae64520f78ac229e7f9082f359d2ffbfee6f4",
+      "crc32": "4f8567f8",
+      "adler32": "36f7daf9"
+    },
+    "8a5b900b98fb741a910d269d528564b3d0951a4f": {
+      "path": "bios/Other/future-pinball-fploader/plugins/DesktopCam.dll",
+      "name": "DesktopCam.dll",
+      "size": 3388680,
+      "sha1": "8a5b900b98fb741a910d269d528564b3d0951a4f",
+      "md5": "aeca57b12a7bc878240afc70020c88eb",
+      "sha256": "4928c27ab0ea5bd067aae4a2eac38d539df12a9c42e52598a5560a9ddffbafad",
+      "crc32": "46c88856",
+      "adler32": "30a168d0"
+    },
+    "19a04dbf9f43c9fc4ddb1d1357bff64526c3fec9": {
+      "path": "bios/Other/future-pinball-fploader/plugins/DesktopKinect.dll",
+      "name": "DesktopKinect.dll",
+      "size": 31952,
+      "sha1": "19a04dbf9f43c9fc4ddb1d1357bff64526c3fec9",
+      "md5": "02e5dbdbbf4b582287371b639c502a54",
+      "sha256": "4aa59e24530b739ea268abecf7c327eb238bb7c4f961baf189cfde46b8869a54",
+      "crc32": "77263de6",
+      "adler32": "bd0ef9dd"
+    },
+    "4515c749924b53a2dae034371da759f24b04c399": {
+      "path": "bios/Other/future-pinball-fploader/plugins/DesktopPS3Eye.dll",
+      "name": "DesktopPS3Eye.dll",
+      "size": 1813768,
+      "sha1": "4515c749924b53a2dae034371da759f24b04c399",
+      "md5": "b39f683e0644936fcbd7bc87ff8a04ec",
+      "sha256": "14dbb5b11749622cdd1912f37e9dc999cc2d8dca8bf0e47d1bcfc669cc49fe25",
+      "crc32": "bb43bdb3",
+      "adler32": "12c92833"
+    },
+    "aeb806a4330ce8716feffdd844e71084a86b2f88": {
+      "path": "bios/Other/future-pinball-fploader/plugins/FaceTrackData.dll",
+      "name": "FaceTrackData.dll",
+      "size": 10650832,
+      "sha1": "aeb806a4330ce8716feffdd844e71084a86b2f88",
+      "md5": "b542211bd7bde49e5b693b182afd8cdf",
+      "sha256": "e6cda854eac542c46fb100bb6928d8d5bca8300e8fb57914789c1b09ae983213",
+      "crc32": "8e430e83",
+      "adler32": "6ea1b39d"
+    },
+    "3e96611e075c0ffb82232b36b44dc6650627d9b3": {
+      "path": "bios/Other/future-pinball-fploader/plugins/FaceTrackLib.dll",
+      "name": "FaceTrackLib.dll",
+      "size": 920272,
+      "sha1": "3e96611e075c0ffb82232b36b44dc6650627d9b3",
+      "md5": "6f9d41fd642ab40edad87754ed271007",
+      "sha256": "381e24c0dc0e8471f15fffdfdbbe55c1e9ea61172f94d1d3c2e7f7b3697ac0f8",
+      "crc32": "d4c7fa5c",
+      "adler32": "e023309a"
+    },
+    "8bb00560edc99048cda818cb81afa823e8d1a682": {
+      "path": "bios/Other/future-pinball-fploader/plugins/FreeTrack.dll",
+      "name": "FreeTrack.dll",
+      "size": 95440,
+      "sha1": "8bb00560edc99048cda818cb81afa823e8d1a682",
+      "md5": "819e308bc2ea402c9528764a37272dd7",
+      "sha256": "3dfb2bb30faf6648018bc57289299a510624dc85236111e711809d521bd1d492",
+      "crc32": "b2e18ffd",
+      "adler32": "3bc02a11"
+    },
+    "61b0ff6832769f300c4278e279ce5bd4ce878827": {
+      "path": "bios/Other/future-pinball-fploader/plugins/HT-PS3Eyes.dll",
+      "name": "HT-PS3Eyes.dll",
+      "size": 1432272,
+      "sha1": "61b0ff6832769f300c4278e279ce5bd4ce878827",
+      "md5": "3fb43393cc50133aaeb2fe6b36968297",
+      "sha256": "eda430e18e4456682edfaa1bf5112c87f3d4891e47249aeb8b1e548ca8c428a7",
+      "crc32": "77c792be",
+      "adler32": "abf8e24e"
+    },
+    "f7a2c21d2acc82eb9ff700fa426cc0b37edd851a": {
+      "path": "bios/Other/future-pinball-fploader/plugins/Kinect.dll",
+      "name": "Kinect.dll",
+      "size": 2792144,
+      "sha1": "f7a2c21d2acc82eb9ff700fa426cc0b37edd851a",
+      "md5": "318aed7929851d58dfece2a7971ab1b9",
+      "sha256": "3e3225474bfca5ad059a541ac17120f1ff74ea993644f3a307e844c1610a3938",
+      "crc32": "82c0f724",
+      "adler32": "ad67ed04"
+    },
+    "22e32cd595f825b004c10d46746cd28c973f649b": {
+      "path": "bios/Other/future-pinball-fploader/plugins/Kinect2.dll",
+      "name": "Kinect2.dll",
+      "size": 2791632,
+      "sha1": "22e32cd595f825b004c10d46746cd28c973f649b",
+      "md5": "f5c243f873a73023eb081ec4147db86f",
+      "sha256": "3038bd37cfb6abff0f5a82c9e5a6b44e555c378c9ae54145eb9f4296c3e9faf8",
+      "crc32": "2a8bdd3d",
+      "adler32": "a5620fa9"
+    },
+    "44034ab6fcdce57af55431b11ebd31cfa8b1901b": {
+      "path": "bios/Other/future-pinball-fploader/plugins/PS3Eye.dll",
+      "name": "PS3Eye.dll",
+      "size": 1699080,
+      "sha1": "44034ab6fcdce57af55431b11ebd31cfa8b1901b",
+      "md5": "f6001dd7c563bb9ae3abdc7e600b579d",
+      "sha256": "191996d48372d75f781f44cd4eb0fcb97eadff49e12e1a0d1ac39b2601848e48",
+      "crc32": "565001ee",
+      "adler32": "bb172d28"
+    },
+    "852b39ba5db64e8a84e4b0612521caa5bd44fe02": {
+      "path": "bios/Other/future-pinball-fploader/plugins/PinballHighScore.cfg",
+      "name": "PinballHighScore.cfg",
+      "size": 1016,
+      "sha1": "852b39ba5db64e8a84e4b0612521caa5bd44fe02",
+      "md5": "db22ad8b700a54c4633aa217fea13f25",
+      "sha256": "277678a4ea5167fa55b37bce6f6c2756ed2cfe32d4041124dd5c27ee8afe9a7d",
+      "crc32": "9d78da95",
+      "adler32": "45f9309a"
+    },
+    "7734aecaa3cd1d019db365aecfd9df2a5ef8efbe": {
+      "path": "bios/Other/future-pinball-fploader/plugins/PinballHighScore.dll",
+      "name": "PinballHighScore.dll",
+      "size": 918224,
+      "sha1": "7734aecaa3cd1d019db365aecfd9df2a5ef8efbe",
+      "md5": "4fd79f69cb6a19e42c1a3115bb55d913",
+      "sha256": "f6fd7ed1c79302a7675732c28ea9b20717011c63a535a3d23113bd1412762a50",
+      "crc32": "213df511",
+      "adler32": "dd7e7580"
+    },
+    "52a49fdbb9328a54e9add344def6636be3d151e1": {
+      "path": "bios/Other/future-pinball-fploader/plugins/PostFX.dll",
+      "name": "PostFX.dll",
+      "size": 39632,
+      "sha1": "52a49fdbb9328a54e9add344def6636be3d151e1",
+      "md5": "a4602db09c2e2b9fbd69bbda2ad4923c",
+      "sha256": "30f9ce9cc725420fd6d3f199f9ae947207d92ba8cd15c1f33364df22f24669af",
+      "crc32": "fed25c78",
+      "adler32": "00562208"
+    },
+    "972607482b16139d1d53d919d3499a61e5ece7f8": {
+      "path": "bios/Other/future-pinball-fploader/plugins/PuPPlugin.dll",
+      "name": "PuPPlugin.dll",
+      "size": 240216,
+      "sha1": "972607482b16139d1d53d919d3499a61e5ece7f8",
+      "md5": "e39687bf70625d4de4e24451e7b32e7e",
+      "sha256": "a9b3f1d04621cfc26ff0f14a7fd3b529bbe07d7c92ffcff3bfe1247b9c96af4a",
+      "crc32": "f61dd9f7",
+      "adler32": "c44467b3"
+    },
+    "b55767f9216bc1de3f0f0ece2ab41f6db2c97a18": {
+      "path": "bios/Other/future-pinball-fploader/plugins/Simple Cam.dll",
+      "name": "Simple Cam.dll",
+      "size": 3262728,
+      "sha1": "b55767f9216bc1de3f0f0ece2ab41f6db2c97a18",
+      "md5": "cd158e82d9df59c26eef6eac930bfd52",
+      "sha256": "3b232df5e99b23c048498e54708c9c6c5ea82b6fa7a571756f8526f56c57754d",
+      "crc32": "1e2a567f",
+      "adler32": "a3b59090"
+    },
+    "000deaf4533b239cd3c22f250dcbb0d55123dc16": {
+      "path": "bios/Other/future-pinball-fploader/plugins/TrackIR.dll",
+      "name": "TrackIR.dll",
+      "size": 20176,
+      "sha1": "000deaf4533b239cd3c22f250dcbb0d55123dc16",
+      "md5": "b06f6eae6ccd58dcbe2c7fc16dacba49",
+      "sha256": "101dc5958e8e3df03d8bfcabcdf252d7b0b035a974a8eb336c45c891c16f364d",
+      "crc32": "4305d7f8",
+      "adler32": "8be4fed5"
+    },
+    "035eef24478ebf4b16c788dbd02f8b3a3f9b8951": {
+      "path": "bios/Other/future-pinball-fploader/plugins/haarcascades/haarcascade_frontalface_alt.xml",
+      "name": "haarcascade_frontalface_alt.xml",
+      "size": 919871,
+      "sha1": "035eef24478ebf4b16c788dbd02f8b3a3f9b8951",
+      "md5": "a18fd28b6213cde128ee75998cb10a58",
+      "sha256": "891f1af7c9ecd07ece294987a966c6fbcc42bf25e98e3840f60d8570c6a29678",
+      "crc32": "b35ad051",
+      "adler32": "78feaf89"
+    },
+    "85a317ce2fc0415741a41736e99bd281d2437568": {
+      "path": "bios/Other/future-pinball-fploader/plugins/haarcascades/haarcascade_frontalface_default.xml",
+      "name": "haarcascade_frontalface_default.xml",
+      "size": 1254733,
+      "sha1": "85a317ce2fc0415741a41736e99bd281d2437568",
+      "md5": "5f5a6bb58f251bcbf879985dec415244",
+      "sha256": "eeb6934b0cbf1e7b2b5ebea8fedc73ac653f0db5ffaa42e5ce61535830115466",
+      "crc32": "69e2b2ed",
+      "adler32": "185b8ea3"
+    },
+    "83a3b55b2cc1b29997d50cf38108f6725d9a0df2": {
+      "path": "bios/Other/future-pinball-fploader/plugins/icom.dll",
+      "name": "icom.dll",
+      "size": 67280,
+      "sha1": "83a3b55b2cc1b29997d50cf38108f6725d9a0df2",
+      "md5": "c1a42c4e5c3a392bf3254b05c78399c5",
+      "sha256": "b569f792df2cc10e6f37217db3ef2f8bb3affeba87fdd0af659d9fc112a46f02",
+      "crc32": "3ce371a5",
+      "adler32": "d281b5d3"
+    },
+    "d668cbe8712f062bcc6af898ebb2937b73dcfd2d": {
+      "path": "bios/Other/future-pinball-fploader/plugins/lbpcascades/lbpcascade_frontalface.xml",
+      "name": "lbpcascade_frontalface.xml",
+      "size": 51856,
+      "sha1": "d668cbe8712f062bcc6af898ebb2937b73dcfd2d",
+      "md5": "aa91e1206c7118e16ed1bf1032277c40",
+      "sha256": "6f5f20091b0d20311c929bcd8c927074e50bd0ac6424321016c679f43cf5ebcf",
+      "crc32": "c577735e",
+      "adler32": "d2e86f66"
+    },
+    "e4ad22c907042aba3162848b86f43ffec16d5c2d": {
+      "path": "bios/Other/future-pinball-fploader/renderingengine.dll",
+      "name": "renderingengine.dll",
+      "size": 5374720,
+      "sha1": "e4ad22c907042aba3162848b86f43ffec16d5c2d",
+      "md5": "ae0003e622bd21052e3a3f38e1c3d67a",
+      "sha256": "17c0738ca06b9b6a7450a27c1d77df52843de3691097ad1849af372b48efdb58",
+      "crc32": "84fa42db",
+      "adler32": "bd64a26f"
+    },
     "d87747718c1aa06a9ddd8504b2581eb0034b754a": {
       "path": "bios/Other/gba-emu/Motocross Challenge.7z",
       "name": "Motocross Challenge.7z",
@@ -49927,6 +50637,16 @@
       "crc32": "b8f57432",
       "adler32": "fbd6dfd5"
     },
+    "2e8d9f0a8ff08896674badeba8aa3ac5245304c3": {
+      "path": "bios/Other/hakux/X1_Covers.txt",
+      "name": "X1_Covers.txt",
+      "size": 34350,
+      "sha1": "2e8d9f0a8ff08896674badeba8aa3ac5245304c3",
+      "md5": "eac8ae47e95f77cc1c5328a48ff5ed50",
+      "sha256": "7f7325b9d5681abda6b26d641f13bf059d25af97c7b4ddeabc7ce7071c60d84e",
+      "crc32": "58c1f5e0",
+      "adler32": "567096cb"
+    },
     "231b29ef9d6314930eb18e57240e27ae81a6e88f": {
       "path": "bios/Other/hypseus-singe/gamecontrollerdb.txt",
       "name": "gamecontrollerdb.txt",
@@ -49937,6 +50657,266 @@
       "crc32": "bef6e55c",
       "adler32": "0440ff9c"
     },
+    "2c6cd92cfa97becc7e729c6469a441c7e7b851c7": {
+      "path": "bios/Other/idtech4a++/autoexec.cfg",
+      "name": "autoexec.cfg",
+      "size": 24,
+      "sha1": "2c6cd92cfa97becc7e729c6469a441c7e7b851c7",
+      "md5": "a5ab2ada57d1df5e51097e8c974fa078",
+      "sha256": "33767ae63d7e16f5b6786eeb0fdfe53e7af7d7abd3b544fcd91936c9483661aa",
+      "crc32": "96847af2",
+      "adler32": "75910815"
+    },
+    "d35c75fcbf972bb72230ba3a0d2e6b5afa993dc4": {
+      "path": "bios/Other/idtech4a++/btn_jump.png",
+      "name": "btn_jump.png",
+      "size": 4015,
+      "sha1": "d35c75fcbf972bb72230ba3a0d2e6b5afa993dc4",
+      "md5": "813afc64dc116dbcffdbe51873555a44",
+      "sha256": "1a8339df67295ef7169765ec440d0a1b07e1d61058c12dc68ae79122321b413a",
+      "crc32": "cbb0a5c0",
+      "adler32": "b34b5ffc"
+    },
+    "5be92df9e74843bc6071e3627f4fd876d499a490": {
+      "path": "bios/Other/idtech4a++/controls_theme.zipak",
+      "name": "controls_theme.zipak",
+      "size": 3133490,
+      "sha1": "5be92df9e74843bc6071e3627f4fd876d499a490",
+      "md5": "9f6f5073fda93251f7a48a91a6d4c5d1",
+      "sha256": "a987aabd5a29ebc169c679c6ffebb2329ef0a00f1e37cc25cdbde2569d1ef6f6",
+      "crc32": "08acb79b",
+      "adler32": "925733ee"
+    },
+    "f729b42b66b7bf3725d06bbe55983a12c0827e34": {
+      "path": "bios/Other/idtech4a++/description.txt",
+      "name": "description.txt",
+      "size": 31,
+      "sha1": "f729b42b66b7bf3725d06bbe55983a12c0827e34",
+      "md5": "9426a1e027e16c5f80f006bd3a4df0b7",
+      "sha256": "775b529a6164fe5bbc0ecc3693b6531643fb98b0a9392622c7d9e152148ee4cb",
+      "crc32": "f30fec4e",
+      "adler32": "89080933"
+    },
+    "8c06159ab1012b271d39d624b45c55c2360dc443": {
+      "path": "bios/Other/idtech4a++/doom3/base/doom3_chinese_translation_doom3bfg.pk4",
+      "name": "doom3_chinese_translation_doom3bfg.pk4",
+      "size": 5138117,
+      "sha1": "8c06159ab1012b271d39d624b45c55c2360dc443",
+      "md5": "4fa638d0accdd696149d83f3579d185e",
+      "sha256": "0edbdad94f840c669752950b1940d4258af9bef1ae8b981e01fd6c3daf8600e3",
+      "crc32": "bdee33a7",
+      "adler32": "4b05dae1"
+    },
+    "8179522bcd5abc4c5a3194bf49f6821738644500": {
+      "path": "bios/Other/idtech4a++/doom3/base/zzz_idTech4Amm_d3_sabot_a7.pk4",
+      "name": "zzz_idTech4Amm_d3_sabot_a7.pk4",
+      "size": 2399406,
+      "sha1": "8179522bcd5abc4c5a3194bf49f6821738644500",
+      "md5": "494bd9601fc82752cc6c6d14cf684d8e",
+      "sha256": "b15e8f94c2b4ade06d59c093943c512e95f257a237f40224c496710beb7d24ff",
+      "crc32": "ea61c1da",
+      "adler32": "9a335fd4"
+    },
+    "de368e97ca86f489c1f10ea148e0812913c25c7d": {
+      "path": "bios/Other/idtech4a++/doom3/rivensin/zzz_idTech4Amm_play_original_doom3_level.pk4",
+      "name": "zzz_idTech4Amm_play_original_doom3_level.pk4",
+      "size": 16866,
+      "sha1": "de368e97ca86f489c1f10ea148e0812913c25c7d",
+      "md5": "214e3daebf5d11e40cd06ca5e1b02971",
+      "sha256": "a6911b03fa5d405b0e650f0fbc5569cfb1f34d3334824175ed6558d1d8a9cb40",
+      "crc32": "d224dbc7",
+      "adler32": "43933cd7"
+    },
+    "d327b48f83d9b95c5a49597145d96be80be3eade": {
+      "path": "bios/Other/idtech4a++/ecwolf/ecwolf.pk3",
+      "name": "ecwolf.pk3",
+      "size": 185013,
+      "sha1": "d327b48f83d9b95c5a49597145d96be80be3eade",
+      "md5": "d9dcd91db4a0bc45ba12a01ad1828be8",
+      "sha256": "d70571d31929cb3b9384dc7db0fbe921dfc73d6888d3f8ded032114d2e33cfc3",
+      "crc32": "ae0745cc",
+      "adler32": "2df3280e"
+    },
+    "f156945f70545e37fb5ee33a95ee97204a7f60b7": {
+      "path": "bios/Other/idtech4a++/etw/legacy/legacy_v2.83.2.pk3",
+      "name": "legacy_v2.83.2.pk3",
+      "size": 30993701,
+      "sha1": "f156945f70545e37fb5ee33a95ee97204a7f60b7",
+      "md5": "ea838df0911a68b5f22f5010d37867f5",
+      "sha256": "f57e553963bfb2b06d4889d30cf2f666c0f86dcec806f62197a9129c97c80502",
+      "crc32": "cb31a6fe",
+      "adler32": "48c6b94e"
+    },
+    "388bfce5ba834f5ed329a0fa9864b0b75840e951": {
+      "path": "bios/Other/idtech4a++/extras.zip",
+      "name": "extras.zip",
+      "size": 15081926,
+      "sha1": "388bfce5ba834f5ed329a0fa9864b0b75840e951",
+      "md5": "15944b9068602a6d36905be035e9e547",
+      "sha256": "e2268d8e1a8e051f49e935c5a048b24c9a42803f72e75b4757755628d3abd638",
+      "crc32": "182b4baf",
+      "adler32": "2ce2190d"
+    },
+    "2651f1eff1785999918c08600f079e1ad4a206e7": {
+      "path": "bios/Other/idtech4a++/glprogs.pk4",
+      "name": "glprogs.pk4",
+      "size": 98396,
+      "sha1": "2651f1eff1785999918c08600f079e1ad4a206e7",
+      "md5": "3155df291027d253e2596db3fca1ac4a",
+      "sha256": "7cf66357beab4fa3ed48a63195e2c8ec7a7c59c053e6e20cdaa5163a32782fe6",
+      "crc32": "5808049a",
+      "adler32": "86672210"
+    },
+    "87f0f5ec3db3855c4453a9031ce695d39d0eaa44": {
+      "path": "bios/Other/idtech4a++/glsl.pk4",
+      "name": "glsl.pk4",
+      "size": 51642,
+      "sha1": "87f0f5ec3db3855c4453a9031ce695d39d0eaa44",
+      "md5": "b94d15df5bf72a4c4510c834ef404ebb",
+      "sha256": "70347cc599350c96344bbfe37f85286d809bafae39a41e9618c5893d7a061710",
+      "crc32": "78143850",
+      "adler32": "779b21e8"
+    },
+    "839c05a60c231d409f90b477bf2001c28f10b1bb": {
+      "path": "bios/Other/idtech4a++/keyboard/generic.json",
+      "name": "generic.json",
+      "size": 10278,
+      "sha1": "839c05a60c231d409f90b477bf2001c28f10b1bb",
+      "md5": "ef9b27699a627334930f6d4252b644d5",
+      "sha256": "938203874aa8fd9c283914ff4138be197796aba4667798d7363bfba4840ff51b",
+      "crc32": "8d1aea40",
+      "adler32": "0ba33a54"
+    },
+    "a3af9251c6a2b4b8d02108bd7b91919aace929dd": {
+      "path": "bios/Other/idtech4a++/quake4/q4base/zzz_idTech4Amm_q4_sabot_a9.pk4",
+      "name": "zzz_idTech4Amm_q4_sabot_a9.pk4",
+      "size": 21143072,
+      "sha1": "a3af9251c6a2b4b8d02108bd7b91919aace929dd",
+      "md5": "710997decddd8ace044d028fe79b52e9",
+      "sha256": "7976fdad1229e41abc156712fa551c37864fc974cf5c560b3c2b929a54f84ac5",
+      "crc32": "a09e0ef5",
+      "adler32": "c209f2ce"
+    },
+    "ab89141b5772de1df43831e64c53aece28c2e6f6": {
+      "path": "bios/Other/idtech4a++/renderprogs.pk4",
+      "name": "renderprogs.pk4",
+      "size": 223453,
+      "sha1": "ab89141b5772de1df43831e64c53aece28c2e6f6",
+      "md5": "7edee35e1e53475d9557c1026877ae7c",
+      "sha256": "75229f71995596c7fc136316746753372e75c61646649a7091daec5394a226c8",
+      "crc32": "b7bfae1d",
+      "adler32": "2bf667bc"
+    },
+    "ccb1fb093dc128da46a5060ba319c5bd5790e074": {
+      "path": "bios/Other/idtech4a++/uzdoom/brightmaps.pk3",
+      "name": "brightmaps.pk3",
+      "size": 246181,
+      "sha1": "ccb1fb093dc128da46a5060ba319c5bd5790e074",
+      "md5": "302fd7cffd2b197c5c68778f877d3086",
+      "sha256": "cb769c1d4a9e180b1e80a138df461285ca8ce78290a5acca4769fe0095208198",
+      "crc32": "4a827b6e",
+      "adler32": "5a316762"
+    },
+    "538d220d87b86b997f539265eb12a6c319e17a1c": {
+      "path": "bios/Other/idtech4a++/uzdoom/fm_banks/GENMIDI.GS.wopl",
+      "name": "GENMIDI.GS.wopl",
+      "size": 118767,
+      "sha1": "538d220d87b86b997f539265eb12a6c319e17a1c",
+      "md5": "29570afc6ccea3d9ef7d2734f02e6cab",
+      "sha256": "3e90b1e13007fb97c29d4a6f819519f1065892495c259961913317402a779514",
+      "crc32": "d18f9d56",
+      "adler32": "c5c270f9"
+    },
+    "eaca5d7a9fe1db6094990be0d8916b7f97920db1": {
+      "path": "bios/Other/idtech4a++/uzdoom/fm_banks/gs-by-papiezak-and-sneakernets.wopn",
+      "name": "gs-by-papiezak-and-sneakernets.wopn",
+      "size": 274864,
+      "sha1": "eaca5d7a9fe1db6094990be0d8916b7f97920db1",
+      "md5": "4978fd39a6d78de1cf1021e24424f822",
+      "sha256": "488327960374b95dcc302e5586622a62fc21bdda7082f92a40258002ed267f40",
+      "crc32": "887a8ba3",
+      "adler32": "e642dde8"
+    },
+    "cccab57d1d1b84601fa0c52a74f55bf7b36f4e1c": {
+      "path": "bios/Other/idtech4a++/uzdoom/game_support.pk3",
+      "name": "game_support.pk3",
+      "size": 2382047,
+      "sha1": "cccab57d1d1b84601fa0c52a74f55bf7b36f4e1c",
+      "md5": "64d976172bae64edb10e542f14f2de9f",
+      "sha256": "5f760f6c1829f73a24079eca02da3466a24d2197423dd5bebc6cae88dd73d400",
+      "crc32": "e991641d",
+      "adler32": "2d7fef41"
+    },
+    "9ff11fca19550b189cc8e7d4cafc9897d57cd472": {
+      "path": "bios/Other/idtech4a++/uzdoom/game_widescreen_gfx.pk3",
+      "name": "game_widescreen_gfx.pk3",
+      "size": 5565936,
+      "sha1": "9ff11fca19550b189cc8e7d4cafc9897d57cd472",
+      "md5": "8ebf4d4a7b950f156c6c277ed9244aac",
+      "sha256": "aac05e00912eff20fc4bb849bab8301cbcfdc54e8f949159f4a208c85872f1e1",
+      "crc32": "c3b20859",
+      "adler32": "ddf85226"
+    },
+    "19ad73cae23b5d9f3890ae29542a2d3e611bda00": {
+      "path": "bios/Other/idtech4a++/uzdoom/lights.pk3",
+      "name": "lights.pk3",
+      "size": 24030,
+      "sha1": "19ad73cae23b5d9f3890ae29542a2d3e611bda00",
+      "md5": "5e5977e018d3ef2dfda2607b0b3e57ae",
+      "sha256": "93169385e07423489813d3cebfd60799e616ac9721131fa83f1d9a4202b835a3",
+      "crc32": "49fb42bf",
+      "adler32": "9988cd99"
+    },
+    "4394193fb95c1e59916efe9ac3a47952ab5002f5": {
+      "path": "bios/Other/idtech4a++/uzdoom/soundfonts/uzdoom.sf2",
+      "name": "uzdoom.sf2",
+      "size": 3299098,
+      "sha1": "4394193fb95c1e59916efe9ac3a47952ab5002f5",
+      "md5": "f306ebc541a428d296cd3b7ee996d872",
+      "sha256": "a9058609b07c1f0e0c1f420e76c2e80ba78136e6173e836caab51ffb13e552f1",
+      "crc32": "408ab422",
+      "adler32": "2e39bbf9"
+    },
+    "dd2364da2cc8b49e32330ba9abff80727b4ea0a0": {
+      "path": "bios/Other/idtech4a++/uzdoom/uzdoom.pk3",
+      "name": "uzdoom.pk3",
+      "size": 3007398,
+      "sha1": "dd2364da2cc8b49e32330ba9abff80727b4ea0a0",
+      "md5": "d3f231863ee2973dbc9291e853d1eb4a",
+      "sha256": "8f77ab41b540f08caa817ad039db2920b28547de261a971306ffae5c19647bfc",
+      "crc32": "d20b2240",
+      "adler32": "4639063a"
+    },
+    "ab0c9f66e9e9be4af96c20d5ce3a9d684eeff2c2": {
+      "path": "bios/Other/idtech4a++/xash/cs16client-extras.pk3",
+      "name": "cs16client-extras.pk3",
+      "size": 12976942,
+      "sha1": "ab0c9f66e9e9be4af96c20d5ce3a9d684eeff2c2",
+      "md5": "15bf94e95c94c301f92270b6775b9a3d",
+      "sha256": "7ced212637e450f95a956fcf05cc8607d21eb2a2f487cc49b38a8c4ecfb880bc",
+      "crc32": "7c9bf65a",
+      "adler32": "dca35614"
+    },
+    "971249b94cb62fbca2f42c8ab7a7d29d30e5b368": {
+      "path": "bios/Other/idtech4a++/xash/extras.pk3",
+      "name": "extras.pk3",
+      "size": 1491748,
+      "sha1": "971249b94cb62fbca2f42c8ab7a7d29d30e5b368",
+      "md5": "1a65bf279b969c017a34497d183e5544",
+      "sha256": "55c0639f23038683e9ea479bf8390f4785c710e1d174349cd7a2769f8aea48ba",
+      "crc32": "b36e485b",
+      "adler32": "bb4ae956"
+    },
+    "0d4dee46085ced0fd117030a13533d903265301c": {
+      "path": "bios/Other/idtech4a++/zzz_etqwbase.pk4",
+      "name": "zzz_etqwbase.pk4",
+      "size": 136061,
+      "sha1": "0d4dee46085ced0fd117030a13533d903265301c",
+      "md5": "2f5c49dca4993da5911d632d3962c1f3",
+      "sha256": "994886a47a7e4f542bc0824758f122004887e19ddbdf83909bca635748f50c64",
+      "crc32": "89fa9730",
+      "adler32": "f2042e52"
+    },
     "a681437a28d02a978f70646716978bcc446108ea": {
       "path": "bios/Other/ishiiruka/codehandler.bin",
       "name": "codehandler.bin",
@@ -49946,6 +50926,326 @@
       "sha256": "3b8dc89a9ef34763b38647a4863b93f77715c03640312f151a8f5a0567ae6d5d",
       "crc32": "d524ae3e",
       "adler32": "0b53fbb5"
+    },
+    "d0860202be85147f3ce96d71aa88541d939a1aea": {
+      "path": "bios/Other/j2me-loader/Roboto-Regular.ttf",
+      "name": "Roboto-Regular.ttf",
+      "size": 438780,
+      "sha1": "d0860202be85147f3ce96d71aa88541d939a1aea",
+      "md5": "bff5a23de5917c16288d7076ad684c1b",
+      "sha256": "a2d469fde479baabafe97537270cc5e81b7c143806d12b0692ce6ac7a2c3a174",
+      "crc32": "512b4d28",
+      "adler32": "99489a10"
+    },
+    "1fb7f452e4d273b2a66d4e0644b33b7c338a3a33": {
+      "path": "bios/Other/j2me-loader/appcenter.cer",
+      "name": "appcenter.cer",
+      "size": 2194,
+      "sha1": "1fb7f452e4d273b2a66d4e0644b33b7c338a3a33",
+      "md5": "d43cb2b6ca20d16dc03c77296c4bc389",
+      "sha256": "79ca456195491cd777349e345889b707e14b13f2a4a215fd9af9d2d6f5f4779f",
+      "crc32": "d17f6632",
+      "adler32": "f9a32109"
+    },
+    "cf0f6f3f2afe3b71380dba621114686e0be20bbc": {
+      "path": "bios/Other/j2me-loader/color.fsh",
+      "name": "color.fsh",
+      "size": 886,
+      "sha1": "cf0f6f3f2afe3b71380dba621114686e0be20bbc",
+      "md5": "716e66118f844120d84dd260cf7fa6a8",
+      "sha256": "c0adf7c01912f053ebb094e543fca2c57455ba6a77451d8773eb66c244da5ea1",
+      "crc32": "31e7b73f",
+      "adler32": "73bc1f40"
+    },
+    "a32e0ab0e772ab7c8132979ceaddf8071ca4981b": {
+      "path": "bios/Other/j2me-loader/color.vsh",
+      "name": "color.vsh",
+      "size": 791,
+      "sha1": "a32e0ab0e772ab7c8132979ceaddf8071ca4981b",
+      "md5": "824b525fe683323fa8a2bd8b6507a7af",
+      "sha256": "8c923fe92e7a78329b8de0bcb60dc1ab2e6c6c3f591abb80a10ca84152c21ab9",
+      "crc32": "9521c3f3",
+      "adler32": "5902fd0c"
+    },
+    "685b990806d45047fe026edef461de33ad38eec2": {
+      "path": "bios/Other/j2me-loader/licenses.html",
+      "name": "licenses.html",
+      "size": 2205,
+      "sha1": "685b990806d45047fe026edef461de33ad38eec2",
+      "md5": "5d9ece013cabddabcbdc6d3ad798c226",
+      "sha256": "e5bfffcfab30d5223fed97d67dd2a41231c6726eff9bdaac62ce7f2c99214ecc",
+      "crc32": "b98c92bc",
+      "adler32": "e91aaf04"
+    },
+    "c6569e0e83d244224a829ce13699bc91ff01bfaf": {
+      "path": "bios/Other/j2me-loader/simple.fsh",
+      "name": "simple.fsh",
+      "size": 147,
+      "sha1": "c6569e0e83d244224a829ce13699bc91ff01bfaf",
+      "md5": "9f801bc9b0b148ae6d0368c27281d1bc",
+      "sha256": "b22148f210a5853c420f0e892b170b32b74302e4be3bd0ffa8377eb2a0fae1dd",
+      "crc32": "371db629",
+      "adler32": "47093360"
+    },
+    "475e25d9bf8422d1faeae206488507d59bf7b716": {
+      "path": "bios/Other/j2me-loader/simple.vsh",
+      "name": "simple.vsh",
+      "size": 157,
+      "sha1": "475e25d9bf8422d1faeae206488507d59bf7b716",
+      "md5": "924e08886710123aaa0fa990da0f2be2",
+      "sha256": "3b1ad06d0ab1ee01be2234ad01e1ee4ac7e25c3a7ab7d2336d059240e50b9bf1",
+      "crc32": "b6b2242b",
+      "adler32": "4f653673"
+    },
+    "f4d9ad89abaf7bb34a77783656a2aa0d2a658ed6": {
+      "path": "bios/Other/j2me-loader/sprite.fsh",
+      "name": "sprite.fsh",
+      "size": 525,
+      "sha1": "f4d9ad89abaf7bb34a77783656a2aa0d2a658ed6",
+      "md5": "1d5b8ade0242704e53ad6b7694772666",
+      "sha256": "44132aae2e21392a8e0fd817179734bd6645913bf41db90134d2bf98b7a47d37",
+      "crc32": "fc2843c2",
+      "adler32": "85a3a886"
+    },
+    "5d04cf61ac98bab639729ec171eaba947c005fe4": {
+      "path": "bios/Other/j2me-loader/sprite.vsh",
+      "name": "sprite.vsh",
+      "size": 208,
+      "sha1": "5d04cf61ac98bab639729ec171eaba947c005fe4",
+      "md5": "5644cace1df7e18acb9be5c970c664c4",
+      "sha256": "2919e72f27ef65761c15f3a17ec5b9295aeb7f22870cef4b66fda8f20bff768a",
+      "crc32": "1e54b0a8",
+      "adler32": "ecbc4412"
+    },
+    "6e06f1852ac55c06b918f01ffe2593a3cbf450be": {
+      "path": "bios/Other/j2me-loader/system.props",
+      "name": "system.props",
+      "size": 949,
+      "sha1": "6e06f1852ac55c06b918f01ffe2593a3cbf450be",
+      "md5": "b9c7cccce88a114f9d606a5234061aad",
+      "sha256": "a018d8c5512721504be0a246bf3873748c1d65364bf273033eebb86a65ba6d92",
+      "crc32": "5d126587",
+      "adler32": "4fb04b11"
+    },
+    "8823ce1f21554627b7460c8f8a0e53a1559128f6": {
+      "path": "bios/Other/j2me-loader/tex.fsh",
+      "name": "tex.fsh",
+      "size": 1333,
+      "sha1": "8823ce1f21554627b7460c8f8a0e53a1559128f6",
+      "md5": "23e5e18f7c6e275f900058eb9ea3da87",
+      "sha256": "cea7c89149be3a3ef3b37e4980b3680dc0c3fde74dc39d49d648c31ef89836fd",
+      "crc32": "f9ecb3f4",
+      "adler32": "0b13aed8"
+    },
+    "eae490cb5c934b2541d0eddf716e1b4f7e73b6e1": {
+      "path": "bios/Other/j2me-loader/tex.vsh",
+      "name": "tex.vsh",
+      "size": 854,
+      "sha1": "eae490cb5c934b2541d0eddf716e1b4f7e73b6e1",
+      "md5": "1faeb8e3230e74530a89aa38533d3fa1",
+      "sha256": "6244c7a60f707555116eaa2a7e5af8f97792f7c9891dd895ddf87ef93881b2bd",
+      "crc32": "30f34d46",
+      "adler32": "581717b2"
+    },
+    "8cac05782651c5b9e56577d7f33486a32c00480f": {
+      "path": "bios/Other/jl-mod/color.fsh",
+      "name": "color.fsh",
+      "size": 891,
+      "sha1": "8cac05782651c5b9e56577d7f33486a32c00480f",
+      "md5": "d07e54d4dd63209596eaf080cf8c35e3",
+      "sha256": "e8db921de586a6b6e2d4ab0e5454d4a850b6d2a88758228f09c44e65b392857f",
+      "crc32": "f20d50f4",
+      "adler32": "41761eda"
+    },
+    "96e1d0b91b0cf3b61a1c6a9782dd087e06286c36": {
+      "path": "bios/Other/jl-mod/color.vsh",
+      "name": "color.vsh",
+      "size": 493,
+      "sha1": "96e1d0b91b0cf3b61a1c6a9782dd087e06286c36",
+      "md5": "efde617a923308f2d02ddc1bc18ecc87",
+      "sha256": "9b96860e1af277bcd5055197155a9fde4188570626825b8761fa7884632c38c0",
+      "crc32": "b52d6dcb",
+      "adler32": "2ef7a8b1"
+    },
+    "87db7f2faca0bbc79c8b4acbca878eef521bfce9": {
+      "path": "bios/Other/jl-mod/licenses.html",
+      "name": "licenses.html",
+      "size": 2621,
+      "sha1": "87db7f2faca0bbc79c8b4acbca878eef521bfce9",
+      "md5": "30a0dccda85223a9cbec3f28874b4066",
+      "sha256": "ef3455c2589fa30eb2c2c274472c873995622ae97567a9ca1c86b3f2fc515ae1",
+      "crc32": "c91dd9fb",
+      "adler32": "e1393635"
+    },
+    "fd91f8c1337962197f5058dc9fbea5da2bac5ae6": {
+      "path": "bios/Other/jl-mod/m3d.fsh",
+      "name": "m3d.fsh",
+      "size": 206,
+      "sha1": "fd91f8c1337962197f5058dc9fbea5da2bac5ae6",
+      "md5": "3520872ade9dd04b4f8ec90dc2726bd8",
+      "sha256": "205f46d118070601f4bb4d43756dc3e20de4309716c0bcc42b058a5aba471d71",
+      "crc32": "073b5596",
+      "adler32": "27a345e5"
+    },
+    "51d4ddc7cd594b20a9019abf9c23904b64819498": {
+      "path": "bios/Other/jl-mod/m3d.vsh",
+      "name": "m3d.vsh",
+      "size": 193,
+      "sha1": "51d4ddc7cd594b20a9019abf9c23904b64819498",
+      "md5": "66a794ea1d441fabb7bc782835950f1f",
+      "sha256": "2275747871763a8b2232394a24e647308efd4084b6954f33ece287bb0b9cd607",
+      "crc32": "b99b542c",
+      "adler32": "1c1c42be"
+    },
+    "3bdf93cd0ea795e98f4195c5898d3ab0f9b918cf": {
+      "path": "bios/Other/jl-mod/patches.bin",
+      "name": "patches.bin",
+      "size": 363,
+      "sha1": "3bdf93cd0ea795e98f4195c5898d3ab0f9b918cf",
+      "md5": "6bdd30743deb5ef443afe148572f9782",
+      "sha256": "e0b4b6e12054f4e015aaf41df3e0913e9fc2432d6e9fa9bb4073f8c04ae40871",
+      "crc32": "4d4a202f",
+      "adler32": "f7b98f68"
+    },
+    "94c1d85c818c14489f4e2aa10c4c33c14a395077": {
+      "path": "bios/Other/jl-mod/sprite.fsh",
+      "name": "sprite.fsh",
+      "size": 286,
+      "sha1": "94c1d85c818c14489f4e2aa10c4c33c14a395077",
+      "md5": "247e772a2c38de937fd702d4ccc4d403",
+      "sha256": "ab7e2890d93474f9d2ce029477d2fb25e6f744f920f5ffe5c9e7065ec6dbe380",
+      "crc32": "dfaff42c",
+      "adler32": "fd4e5d96"
+    },
+    "8bff9b5dce3c825669278ea1e744d0644a57e7cb": {
+      "path": "bios/Other/jl-mod/sprite.vsh",
+      "name": "sprite.vsh",
+      "size": 255,
+      "sha1": "8bff9b5dce3c825669278ea1e744d0644a57e7cb",
+      "md5": "c527845c331d6b060c657d1fbbdadcbf",
+      "sha256": "ddb473ed3b830a4a07772fb242b214106968f3ec4a762b44bbe6c0926cad602c",
+      "crc32": "56cffcf8",
+      "adler32": "800e53f9"
+    },
+    "4b371578278811a84fd717cb726c58e3e258baaf": {
+      "path": "bios/Other/jl-mod/system.props",
+      "name": "system.props",
+      "size": 827,
+      "sha1": "4b371578278811a84fd717cb726c58e3e258baaf",
+      "md5": "5077eccf978dc046994f5acfac7cde60",
+      "sha256": "eb20451f2cc4ca2e38071740b7035dbeca74cab3d1c2ce7ada5c084fa17da137",
+      "crc32": "c2a2b807",
+      "adler32": "cc6e210f"
+    },
+    "eecb9e9f71079b1b8ab37210f58ec19d1c0f515a": {
+      "path": "bios/Other/jl-mod/tex.fsh",
+      "name": "tex.fsh",
+      "size": 1083,
+      "sha1": "eecb9e9f71079b1b8ab37210f58ec19d1c0f515a",
+      "md5": "c00b8b73be298d613fbc33867eef97ad",
+      "sha256": "b9993b7c88491081acca47f77fe9ecb16f7e974939af13a7a2d6c663e5aa2bb8",
+      "crc32": "ce34fca0",
+      "adler32": "65565d24"
+    },
+    "e8ad127bb080a8d61899aebf224e745bcc5eab44": {
+      "path": "bios/Other/jl-mod/tex.vsh",
+      "name": "tex.vsh",
+      "size": 671,
+      "sha1": "e8ad127bb080a8d61899aebf224e745bcc5eab44",
+      "md5": "c6c3e762a7e1357e6769233faf240981",
+      "sha256": "01f80dadcb8067879c98a046b17db48b687a936bb03e8b199c7d6c14133d6fa2",
+      "crc32": "c30b9a6b",
+      "adler32": "2703e3c5"
+    },
+    "d808da42aa5ba6a9b5333703e48bd0ec03fbcd90": {
+      "path": "bios/Other/kemulator/Nokia.ttf",
+      "name": "Nokia.ttf",
+      "size": 3022720,
+      "sha1": "d808da42aa5ba6a9b5333703e48bd0ec03fbcd90",
+      "md5": "8d4b76454f4bac6f289dd7e64c5d71d0",
+      "sha256": "5ed84ef4aab265cfc43dfe3625712b5e73d477b48cbeba5bb8746bef9ad42b4c",
+      "crc32": "74b78a2a",
+      "adler32": "458601b8"
+    },
+    "aedd333c565ccf05fb062289e5fab4722883712c": {
+      "path": "bios/Other/kemulator/amrdecoder.dll",
+      "name": "amrdecoder.dll",
+      "size": 183296,
+      "sha1": "aedd333c565ccf05fb062289e5fab4722883712c",
+      "md5": "311d797c3cdce0e213a4209acb32d343",
+      "sha256": "5792170bd61ddc2ad711806f18470c996e9fdc3eece61980f0724b4439a23d4d",
+      "crc32": "3ece422d",
+      "adler32": "920ddde6"
+    },
+    "079952bdeb97219b38417ebe0511ed30c2637009": {
+      "path": "bios/Other/kemulator/en.txt",
+      "name": "en.txt",
+      "size": 12145,
+      "sha1": "079952bdeb97219b38417ebe0511ed30c2637009",
+      "md5": "da9053f65288262ab06041cc3dac896b",
+      "sha256": "2ca3acdb7d780d45f21ee1d6c3d3a3d00006d51d0500e85745721ddd30602234",
+      "crc32": "bc4416d5",
+      "adler32": "12161a0e"
+    },
+    "b1d6aef4559bb46af27eebda50fe06e0de659966": {
+      "path": "bios/Other/kemulator/java_micro3d_v3_32.dll",
+      "name": "java_micro3d_v3_32.dll",
+      "size": 27648,
+      "sha1": "b1d6aef4559bb46af27eebda50fe06e0de659966",
+      "md5": "60045cd91e30880c731c9fea8c712093",
+      "sha256": "817b2a782addf510d3dd27e61bc4ff25cc71bca1542f9f63064200884e3db39a",
+      "crc32": "f22c0e27",
+      "adler32": "9ca9b6dc"
+    },
+    "ed9a60d56ddcc91514b033c16f2062638c3e6eeb": {
+      "path": "bios/Other/kemulator/jsr184client.dll",
+      "name": "jsr184client.dll",
+      "size": 405504,
+      "sha1": "ed9a60d56ddcc91514b033c16f2062638c3e6eeb",
+      "md5": "9fcb2bd1f36d1e8d94f8e4e2650914c9",
+      "sha256": "9d8fdab0f4ea3e74462cfdc1b3034e2e77d67b46af73754e4f15a22e40ebcd9a",
+      "crc32": "ba5831cb",
+      "adler32": "4bd83a8e"
+    },
+    "b566d111ccd3e303d21ab5c4cd1519dc238a4fce": {
+      "path": "bios/Other/kemulator/ma3smwemu.dll",
+      "name": "ma3smwemu.dll",
+      "size": 724992,
+      "sha1": "b566d111ccd3e303d21ab5c4cd1519dc238a4fce",
+      "md5": "c1625f6c2fbf66e2e838c6bc74ffe641",
+      "sha256": "fe23024433abc95e0d94c9df6ec95f093447d30ec47150f3042259b261c779a5",
+      "crc32": "83b24e44",
+      "adler32": "4b5cecab"
+    },
+    "f59e0d445aafe2503c6e5249ca07df4b89626f8f": {
+      "path": "bios/Other/kemulator/micro3d_v3_32.dll",
+      "name": "micro3d_v3_32.dll",
+      "size": 475136,
+      "sha1": "f59e0d445aafe2503c6e5249ca07df4b89626f8f",
+      "md5": "d5ab04740801208b92fa3de7252a75d8",
+      "sha256": "a5dcffeb838a0ee3c9eb73b2ca61a4461880b4939ad12ffb0f0f1a19962fc07a",
+      "crc32": "0c6b8b57",
+      "adler32": "e2bcd645"
+    },
+    "1066d152c3391aaaab650e5f78e19a39ec4e623f": {
+      "path": "bios/Other/kemulator/presets.xml",
+      "name": "presets.xml",
+      "size": 19663,
+      "sha1": "1066d152c3391aaaab650e5f78e19a39ec4e623f",
+      "md5": "4e05674d869db9307c4c86ae8cb61d8e",
+      "sha256": "675a7f6ef68ab5741d319df0580455324cc7eb1b537648ed9fa85cfc73502c96",
+      "crc32": "6f7784aa",
+      "adler32": "19e519fe"
+    },
+    "f077ba595d9a01218ef1d4fa6730d1cb6edf61ae": {
+      "path": "bios/Other/kemulator/s60snr.ttf",
+      "name": "s60snr.ttf",
+      "size": 442068,
+      "sha1": "f077ba595d9a01218ef1d4fa6730d1cb6edf61ae",
+      "md5": "ab43c1238b2f212c08537718cfdff5d9",
+      "sha256": "dcc1b0e836a5e7e6b06fac165174b283dcc6052742168ede12b0bb931e23331c",
+      "crc32": "544958c1",
+      "adler32": "091572e6"
     },
     "f72ebcb3ad771321e36cacb49779dca6f2b4db9e": {
       "path": "bios/Other/linapple/A2_BASIC.SYM",
@@ -93897,14 +95197,144 @@
       "c78ac640fcf02eb866b79718f5ed15fa": "20fdca7131478e1ee12691bdafd2d5bb74cbd16f",
       "5bcfc3374fc9b0c16070f1ac42f3dc63": "c0c0b5db93a61276a6fe6842049cb53e564b8413",
       "8f7c31b1e7bf7500f5a90da1dcc72967": "a71637b53251d4a14f80b53f4af4966114cde6e7",
+      "c3dc5d644b136c2aea561f71c1eb721d": "bd9de21def48b65b5382c403971a9062928b9345",
+      "2c21be670266dec9d2be5ab88c4e7eb5": "ce2fb04c3c68eb6874527821853c6180ddc237df",
+      "8a7e3ff7b7ae3fc5de222206811b6a58": "ec526ca156ae8c639aefcc2552914fc70950b69a",
+      "74325c5146741488524486135dc9e278": "81f809456ad9fba296eff46f035a607a3d2cfba2",
+      "9a87bcc7c70a6b3f35817459820ccbd8": "9df8f5cca648e61cb1f92d6f3cfa150a9db58692",
+      "343593cb9ae9ae914af5c71352af244b": "07f48f32a7a08cff94121908205b2f02fcf3724b",
+      "3ec4b55286045a7a29ba9ac074233fa6": "5a928b81cb1a3364605158e0c0b573c51b0f468f",
+      "b0e7e61f93cc7af387c214789e4b69a9": "ff2d159b4dcdb5ff9896b025288e40b76466eaa5",
+      "60c27f5f78525b6ce834716e8f98f79e": "04efb8fe46d0ba6381b160afa92b87bb213ba461",
+      "372e003488283ace60129e0336815de2": "255cb14da5f49c7aaa210135638cfdc924130397",
+      "dd0a80cf800e910ddb93c188fc032093": "6d9d44450b8d76791373b727b699cad4446abd07",
+      "a0df6882cf5d97577887026f38d2541d": "f41672abeef6b9751b0ef4f341b973a60cb03a7a",
+      "8af5ddf00bd89f8e547a9296a2ef8d87": "661675f4d8539e14f2be10d144ab986fc5fccb46",
+      "8df4d4324e5755f1a0567db3c5be4c58": "313a23600a169adbe130b1ae1784d8de437ce7d9",
+      "6ecd1b87ef86f436a8894659813afadc": "ee8f68d94645de24be930d6f453297d5b7b4d052",
+      "bd4ff726291d98374fa6791c0589f288": "d3534cd62d312fe28988c6229c47ab81a3ae1f9e",
+      "938b740d34d77bb6c93ca3e4751ca5f7": "30566eda672fef3036fbd3998af3cc9fdcef38e7",
+      "e85950e5eab078856275ceaf80ab7514": "8189136493d48adc2bdeff1e77297ab988ae789d",
+      "6779ed5942f437dae88f2b7c6d9b3803": "c4fc4467ccec0c9c2852a9342b5b500511b6c886",
+      "fdb6418c188af668032759a1c549142c": "cd9c5f22c5408304bacaeb88e529a4dd121f90eb",
+      "1c491d64ad3792e2b98a00c06a61355a": "badfe5b7ab16c88f3fe255143546932c09fc2097",
+      "69d61a305769bfa50aca88d73b44e401": "5aff2d72c317d58a6f1951811a31ec1b99dfdfe4",
+      "1516aa3385665a8dedefd97678d2cab4": "1fa517b848c69c0b2c2f3a32e4097a157fff3aa2",
+      "557cc0449eee80b77de23867fc1edd17": "9238286e57f346fd9b9ed3d8ffa977083b9d3feb",
+      "f266f337c301c08c75c33d32adf3ed0c": "948eec0af66150dc908622bd48e867e85fb0d6c5",
+      "d0690ab4696198a3d7fa2e5683836550": "89d8f29048176e8faff89cd48d0eda7b4875bf49",
+      "f5bab002fb58e48fa9305a0fc6d1563a": "28a08c3911ef46aca8880587bed56dfa4f99062a",
+      "56f0cbf6e41b3ca1a4addca75e282ed5": "969d38e02a6759629cc827501a049c60582d9531",
+      "ffe6272958e5bf1d12fa936db8764233": "0a1e886e991d88761502d8434248e986bf9c238f",
+      "8969ba5e09a226e4dd89fff686c63c4d": "b701f91eae625a5e8f7bf56f104be506c8d1c8d8",
+      "ca2eb36122f9b82effe1e4c5c742964c": "0b30d717df74d90c26769d58055b507b89fdc1fc",
+      "e5f3d63d63502bc29cae5d4994f267d3": "d2f65f0f32e21dfc65d61a384df525dedbc57a8a",
+      "644ae0f4dc712786cc6413f07ee5f217": "3b97a1c97624026302dbfab5b400d81a65461c99",
+      "93884ead095a9655157de8692884da91": "dd3874742bfe5f9c2828cb9c4e249c2f4722bd51",
+      "0648275a963f787f9ca10a11f1fd93f4": "694f2c0efa61c934345161c61782202bac208f9b",
+      "da2794e70010e5e95f913234da62733b": "213244dc655fec822218a8780668bc74b80ac8ff",
+      "ae15da3ca57c1e29c1710f285f2846c2": "534a239cb7ae954fb9ad43de7fd79c0e5ee6473a",
+      "80bf0f31d5ce837ef7faa7f7b17da698": "db023400242b4e5c34a14876e64dc9bfc3b6e3e1",
+      "ef45a9078334ffacdcc2ace03a3f55a3": "22ffd7dc5541bbf0048b7ad4af5bbc76034cad8f",
+      "3a5bc839774c2bd805da198545c0b872": "fd56e59a4d36c8f3dbccd0ee7c24abc9e66c0495",
+      "7bc4cdbcd22ce091226fb202eb76d850": "33970a777762fc53908499b8a0bfe2b5cbc50b99",
+      "1d2e8bed4066fe74ecf0b492160e3642": "2b0792a18766a7750b6b5da8dc9607ed63e8dc77",
+      "ae9001aaa2d725cbcb3c9d24b53d51f2": "ce9ab342ac870f9c5bcd53671cca05263ef27f0d",
+      "42d5ef0cbe58cab47cbc2f3908e81c8b": "b1e1764011daa11017b571428b4cd82c12eabd2e",
+      "0f3d10545aaa4cfd93d5d246071cd572": "716e15712d968f9ce0b94126bb7e0ec8a7862c29",
+      "e3a8bb9430edbd0f6df643b5fca57cc3": "f6abf69d826b5daef686c7ed15dd4349b47621a2",
+      "d27d33ba4ea533d2fd8d8b41d1151cbf": "468826d947e599ec79d9bc44ddbff75fbf60ede2",
+      "f3c9dbe3df6a0dc7587dad89b205fa25": "2563528f492e39b947f8836d10eefa1fd278f033",
+      "9ef3de7bd0de2055c2d64195daf75b6e": "f585911868919bbf4f6d185a468ab01982ad1878",
+      "2ba49f75882a456725ef1dd87519acfa": "bcc92f9af26afb64a885ef789cbb10d6f3c7f453",
+      "aeca57b12a7bc878240afc70020c88eb": "8a5b900b98fb741a910d269d528564b3d0951a4f",
+      "02e5dbdbbf4b582287371b639c502a54": "19a04dbf9f43c9fc4ddb1d1357bff64526c3fec9",
+      "b39f683e0644936fcbd7bc87ff8a04ec": "4515c749924b53a2dae034371da759f24b04c399",
+      "b542211bd7bde49e5b693b182afd8cdf": "aeb806a4330ce8716feffdd844e71084a86b2f88",
+      "6f9d41fd642ab40edad87754ed271007": "3e96611e075c0ffb82232b36b44dc6650627d9b3",
+      "819e308bc2ea402c9528764a37272dd7": "8bb00560edc99048cda818cb81afa823e8d1a682",
+      "3fb43393cc50133aaeb2fe6b36968297": "61b0ff6832769f300c4278e279ce5bd4ce878827",
+      "318aed7929851d58dfece2a7971ab1b9": "f7a2c21d2acc82eb9ff700fa426cc0b37edd851a",
+      "f5c243f873a73023eb081ec4147db86f": "22e32cd595f825b004c10d46746cd28c973f649b",
+      "f6001dd7c563bb9ae3abdc7e600b579d": "44034ab6fcdce57af55431b11ebd31cfa8b1901b",
+      "db22ad8b700a54c4633aa217fea13f25": "852b39ba5db64e8a84e4b0612521caa5bd44fe02",
+      "4fd79f69cb6a19e42c1a3115bb55d913": "7734aecaa3cd1d019db365aecfd9df2a5ef8efbe",
+      "a4602db09c2e2b9fbd69bbda2ad4923c": "52a49fdbb9328a54e9add344def6636be3d151e1",
+      "e39687bf70625d4de4e24451e7b32e7e": "972607482b16139d1d53d919d3499a61e5ece7f8",
+      "cd158e82d9df59c26eef6eac930bfd52": "b55767f9216bc1de3f0f0ece2ab41f6db2c97a18",
+      "b06f6eae6ccd58dcbe2c7fc16dacba49": "000deaf4533b239cd3c22f250dcbb0d55123dc16",
+      "a18fd28b6213cde128ee75998cb10a58": "035eef24478ebf4b16c788dbd02f8b3a3f9b8951",
+      "5f5a6bb58f251bcbf879985dec415244": "85a317ce2fc0415741a41736e99bd281d2437568",
+      "c1a42c4e5c3a392bf3254b05c78399c5": "83a3b55b2cc1b29997d50cf38108f6725d9a0df2",
+      "aa91e1206c7118e16ed1bf1032277c40": "d668cbe8712f062bcc6af898ebb2937b73dcfd2d",
+      "ae0003e622bd21052e3a3f38e1c3d67a": "e4ad22c907042aba3162848b86f43ffec16d5c2d",
       "5d68c02b3c93088f64cf6a1f0a98abbd": "d87747718c1aa06a9ddd8504b2581eb0034b754a",
       "397250dd0d1e19b14816114979b05ad9": "0c3f34ab93bc9a210db159cd68c9343930540f7b",
       "f303fd8288e0bf926d7da30644ab4988": "22b36583a956fb4c0feb1eb47e01de6efdb89a6b",
       "8171099f59d99b7a6dd0809d952075ec": "2e100cdd8b2d5492ff4ef8f1ba487364aabc687f",
       "ac347847f656ec26a554fd6f86dd10ea": "02f515deea7f3fc513496b9218244186e5cc9a61",
       "2f355f03254e572dd32e6fe7232f5ccc": "8881159097cd92f67bfec5250bc061626d87cf04",
+      "eac8ae47e95f77cc1c5328a48ff5ed50": "2e8d9f0a8ff08896674badeba8aa3ac5245304c3",
       "41eed0bf6aad777e6583ecb2ff0907b8": "231b29ef9d6314930eb18e57240e27ae81a6e88f",
+      "a5ab2ada57d1df5e51097e8c974fa078": "2c6cd92cfa97becc7e729c6469a441c7e7b851c7",
+      "813afc64dc116dbcffdbe51873555a44": "d35c75fcbf972bb72230ba3a0d2e6b5afa993dc4",
+      "9f6f5073fda93251f7a48a91a6d4c5d1": "5be92df9e74843bc6071e3627f4fd876d499a490",
+      "9426a1e027e16c5f80f006bd3a4df0b7": "f729b42b66b7bf3725d06bbe55983a12c0827e34",
+      "4fa638d0accdd696149d83f3579d185e": "8c06159ab1012b271d39d624b45c55c2360dc443",
+      "494bd9601fc82752cc6c6d14cf684d8e": "8179522bcd5abc4c5a3194bf49f6821738644500",
+      "214e3daebf5d11e40cd06ca5e1b02971": "de368e97ca86f489c1f10ea148e0812913c25c7d",
+      "d9dcd91db4a0bc45ba12a01ad1828be8": "d327b48f83d9b95c5a49597145d96be80be3eade",
+      "ea838df0911a68b5f22f5010d37867f5": "f156945f70545e37fb5ee33a95ee97204a7f60b7",
+      "15944b9068602a6d36905be035e9e547": "388bfce5ba834f5ed329a0fa9864b0b75840e951",
+      "3155df291027d253e2596db3fca1ac4a": "2651f1eff1785999918c08600f079e1ad4a206e7",
+      "b94d15df5bf72a4c4510c834ef404ebb": "87f0f5ec3db3855c4453a9031ce695d39d0eaa44",
+      "ef9b27699a627334930f6d4252b644d5": "839c05a60c231d409f90b477bf2001c28f10b1bb",
+      "710997decddd8ace044d028fe79b52e9": "a3af9251c6a2b4b8d02108bd7b91919aace929dd",
+      "7edee35e1e53475d9557c1026877ae7c": "ab89141b5772de1df43831e64c53aece28c2e6f6",
+      "302fd7cffd2b197c5c68778f877d3086": "ccb1fb093dc128da46a5060ba319c5bd5790e074",
+      "29570afc6ccea3d9ef7d2734f02e6cab": "538d220d87b86b997f539265eb12a6c319e17a1c",
+      "4978fd39a6d78de1cf1021e24424f822": "eaca5d7a9fe1db6094990be0d8916b7f97920db1",
+      "64d976172bae64edb10e542f14f2de9f": "cccab57d1d1b84601fa0c52a74f55bf7b36f4e1c",
+      "8ebf4d4a7b950f156c6c277ed9244aac": "9ff11fca19550b189cc8e7d4cafc9897d57cd472",
+      "5e5977e018d3ef2dfda2607b0b3e57ae": "19ad73cae23b5d9f3890ae29542a2d3e611bda00",
+      "f306ebc541a428d296cd3b7ee996d872": "4394193fb95c1e59916efe9ac3a47952ab5002f5",
+      "d3f231863ee2973dbc9291e853d1eb4a": "dd2364da2cc8b49e32330ba9abff80727b4ea0a0",
+      "15bf94e95c94c301f92270b6775b9a3d": "ab0c9f66e9e9be4af96c20d5ce3a9d684eeff2c2",
+      "1a65bf279b969c017a34497d183e5544": "971249b94cb62fbca2f42c8ab7a7d29d30e5b368",
+      "2f5c49dca4993da5911d632d3962c1f3": "0d4dee46085ced0fd117030a13533d903265301c",
       "f9fac1173f3a772d94e8e0750c1e9dfd": "a681437a28d02a978f70646716978bcc446108ea",
+      "bff5a23de5917c16288d7076ad684c1b": "d0860202be85147f3ce96d71aa88541d939a1aea",
+      "d43cb2b6ca20d16dc03c77296c4bc389": "1fb7f452e4d273b2a66d4e0644b33b7c338a3a33",
+      "716e66118f844120d84dd260cf7fa6a8": "cf0f6f3f2afe3b71380dba621114686e0be20bbc",
+      "824b525fe683323fa8a2bd8b6507a7af": "a32e0ab0e772ab7c8132979ceaddf8071ca4981b",
+      "5d9ece013cabddabcbdc6d3ad798c226": "685b990806d45047fe026edef461de33ad38eec2",
+      "9f801bc9b0b148ae6d0368c27281d1bc": "c6569e0e83d244224a829ce13699bc91ff01bfaf",
+      "924e08886710123aaa0fa990da0f2be2": "475e25d9bf8422d1faeae206488507d59bf7b716",
+      "1d5b8ade0242704e53ad6b7694772666": "f4d9ad89abaf7bb34a77783656a2aa0d2a658ed6",
+      "5644cace1df7e18acb9be5c970c664c4": "5d04cf61ac98bab639729ec171eaba947c005fe4",
+      "b9c7cccce88a114f9d606a5234061aad": "6e06f1852ac55c06b918f01ffe2593a3cbf450be",
+      "23e5e18f7c6e275f900058eb9ea3da87": "8823ce1f21554627b7460c8f8a0e53a1559128f6",
+      "1faeb8e3230e74530a89aa38533d3fa1": "eae490cb5c934b2541d0eddf716e1b4f7e73b6e1",
+      "d07e54d4dd63209596eaf080cf8c35e3": "8cac05782651c5b9e56577d7f33486a32c00480f",
+      "efde617a923308f2d02ddc1bc18ecc87": "96e1d0b91b0cf3b61a1c6a9782dd087e06286c36",
+      "30a0dccda85223a9cbec3f28874b4066": "87db7f2faca0bbc79c8b4acbca878eef521bfce9",
+      "3520872ade9dd04b4f8ec90dc2726bd8": "fd91f8c1337962197f5058dc9fbea5da2bac5ae6",
+      "66a794ea1d441fabb7bc782835950f1f": "51d4ddc7cd594b20a9019abf9c23904b64819498",
+      "6bdd30743deb5ef443afe148572f9782": "3bdf93cd0ea795e98f4195c5898d3ab0f9b918cf",
+      "247e772a2c38de937fd702d4ccc4d403": "94c1d85c818c14489f4e2aa10c4c33c14a395077",
+      "c527845c331d6b060c657d1fbbdadcbf": "8bff9b5dce3c825669278ea1e744d0644a57e7cb",
+      "5077eccf978dc046994f5acfac7cde60": "4b371578278811a84fd717cb726c58e3e258baaf",
+      "c00b8b73be298d613fbc33867eef97ad": "eecb9e9f71079b1b8ab37210f58ec19d1c0f515a",
+      "c6c3e762a7e1357e6769233faf240981": "e8ad127bb080a8d61899aebf224e745bcc5eab44",
+      "8d4b76454f4bac6f289dd7e64c5d71d0": "d808da42aa5ba6a9b5333703e48bd0ec03fbcd90",
+      "311d797c3cdce0e213a4209acb32d343": "aedd333c565ccf05fb062289e5fab4722883712c",
+      "da9053f65288262ab06041cc3dac896b": "079952bdeb97219b38417ebe0511ed30c2637009",
+      "60045cd91e30880c731c9fea8c712093": "b1d6aef4559bb46af27eebda50fe06e0de659966",
+      "9fcb2bd1f36d1e8d94f8e4e2650914c9": "ed9a60d56ddcc91514b033c16f2062638c3e6eeb",
+      "c1625f6c2fbf66e2e838c6bc74ffe641": "b566d111ccd3e303d21ab5c4cd1519dc238a4fce",
+      "d5ab04740801208b92fa3de7252a75d8": "f59e0d445aafe2503c6e5249ca07df4b89626f8f",
+      "4e05674d869db9307c4c86ae8cb61d8e": "1066d152c3391aaaab650e5f78e19a39ec4e623f",
+      "ab43c1238b2f212c08537718cfdff5d9": "f077ba595d9a01218ef1d4fa6730d1cb6edf61ae",
       "cd43b9f8ec8c742fca150f9666da47a0": "f72ebcb3ad771321e36cacb49779dca6f2b4db9e",
       "034527d42a96d0f39977cb85c6a8f2d8": "fcfbbb25e06f58d13e762b02bfd468c834d98fc8",
       "ee44560f34033efa3bb47b3e0aac1772": "7b03befac4fbcef8c649048fa3ff5d095fd48dd3",
@@ -107328,7 +108758,8 @@
       ],
       "ecwolf.pk3": [
         "f3f2a11f3ecd91cd62d74c3acfad68a4cc6ddbd9",
-        "9259b87edfe9b9f6d0749788a75a6ccf158f50aa"
+        "9259b87edfe9b9f6d0749788a75a6ccf158f50aa",
+        "d327b48f83d9b95c5a49597145d96be80be3eade"
       ],
       "zcdata.dat": [
         "33b50cec88bc1569431a7885c0cc2692fddb004b"
@@ -110480,7 +111911,8 @@
         "dceb4536fba7fb89452864fc512a4d071a19eae0"
       ],
       "Roboto-Regular.ttf": [
-        "00d62fbdc8d5dec4c659005e116d0ba2ee63b547"
+        "00d62fbdc8d5dec4c659005e116d0ba2ee63b547",
+        "d0860202be85147f3ce96d71aa88541d939a1aea"
       ],
       "RobotoMono-Medium.ttf": [
         "9056e59b69c6f1160fdfb92a0773f17f6307f3ad"
@@ -110971,6 +112403,219 @@
       "vrback.raw": [
         "a71637b53251d4a14f80b53f4af4966114cde6e7"
       ],
+      "fpLatestTables.xml": [
+        "bd9de21def48b65b5382c403971a9062928b9345"
+      ],
+      "Future Pinball Manual.chm": [
+        "ce2fb04c3c68eb6874527821853c6180ddc237df"
+      ],
+      "fpDmdFonts.fpl": [
+        "ec526ca156ae8c639aefcc2552914fc70950b69a"
+      ],
+      "fpModels.fpl": [
+        "81f809456ad9fba296eff46f035a607a3d2cfba2"
+      ],
+      "fpPlayfields.fpl": [
+        "9df8f5cca648e61cb1f92d6f3cfa150a9db58692"
+      ],
+      "fpRamps.fpl": [
+        "07f48f32a7a08cff94121908205b2f02fcf3724b"
+      ],
+      "fpScripts.fpl": [
+        "5a928b81cb1a3364605158e0c0b573c51b0f468f"
+      ],
+      "fpSounds.fpl": [
+        "ff2d159b4dcdb5ff9896b025288e40b76466eaa5"
+      ],
+      "fpSphereMaps.fpl": [
+        "04efb8fe46d0ba6381b160afa92b87bb213ba461"
+      ],
+      "fpTextures.fpl": [
+        "255cb14da5f49c7aaa210135638cfdc924130397"
+      ],
+      "NewTable.fpt": [
+        "6d9d44450b8d76791373b727b699cad4446abd07"
+      ],
+      "Newton.dll": [
+        "f41672abeef6b9751b0ef4f341b973a60cb03a7a"
+      ],
+      "SciLexer.dll": [
+        "661675f4d8539e14f2be10d144ab986fc5fccb46"
+      ],
+      "devil.dll": [
+        "313a23600a169adbe130b1ae1784d8de437ce7d9"
+      ],
+      "fmod.dll": [
+        "ee8f68d94645de24be930d6f453297d5b7b4d052"
+      ],
+      "ilu.dll": [
+        "d3534cd62d312fe28988c6229c47ab81a3ae1f9e"
+      ],
+      "ilut.dll": [
+        "30566eda672fef3036fbd3998af3cc9fdcef38e7"
+      ],
+      "libcurl.dll": [
+        "8189136493d48adc2bdeff1e77297ab988ae789d"
+      ],
+      "BAM-Tracker.exe": [
+        "c4fc4467ccec0c9c2852a9342b5b500511b6c886"
+      ],
+      "BAM.dll": [
+        "cd9c5f22c5408304bacaeb88e529a4dd121f90eb"
+      ],
+      "Baseball.zip": [
+        "badfe5b7ab16c88f3fe255143546932c09fc2097"
+      ],
+      "Basketball 1.zip": [
+        "5aff2d72c317d58a6f1951811a31ec1b99dfdfe4"
+      ],
+      "Basketball 2.zip": [
+        "1fa517b848c69c0b2c2f3a32e4097a157fff3aa2"
+      ],
+      "Cue Black.zip": [
+        "9238286e57f346fd9b9ed3d8ffa977083b9d3feb"
+      ],
+      "Cue White.zip": [
+        "948eec0af66150dc908622bd48e867e85fb0d6c5"
+      ],
+      "EYETOY.zip": [
+        "89d8f29048176e8faff89cd48d0eda7b4875bf49"
+      ],
+      "Fireball.zip": [
+        "28a08c3911ef46aca8880587bed56dfa4f99062a"
+      ],
+      "Knight.zip": [
+        "969d38e02a6759629cc827501a049c60582d9531"
+      ],
+      "Soccer Ball 1.zip": [
+        "0a1e886e991d88761502d8434248e986bf9c238f"
+      ],
+      "axis.zip": [
+        "b701f91eae625a5e8f7bf56f104be506c8d1c8d8"
+      ],
+      "earth.zip": [
+        "0b30d717df74d90c26769d58055b507b89fdc1fc"
+      ],
+      "latlong.zip": [
+        "d2f65f0f32e21dfc65d61a384df525dedbc57a8a"
+      ],
+      "Future Pinball.exe": [
+        "3b97a1c97624026302dbfab5b400d81a65461c99"
+      ],
+      "ModelImporter.exe": [
+        "dd3874742bfe5f9c2828cb9c4e249c2f4722bd51"
+      ],
+      "Zendonius_v1.0.xml": [
+        "694f2c0efa61c934345161c61782202bac208f9b"
+      ],
+      "Zendonius_v1.1.xml": [
+        "213244dc655fec822218a8780668bc74b80ac8ff"
+      ],
+      "fp-p1.0.xml": [
+        "534a239cb7ae954fb9ad43de7fd79c0e5ee6473a"
+      ],
+      "fp-p2.0.xml": [
+        "db023400242b4e5c34a14876e64dc9bfc3b6e3e1"
+      ],
+      "fp-p2.1.xml": [
+        "22ffd7dc5541bbf0048b7ad4af5bbc76034cad8f"
+      ],
+      "fp-p2.2.xml": [
+        "fd56e59a4d36c8f3dbccd0ee7c24abc9e66c0495"
+      ],
+      "fp-p2.3 Version 1.xml": [
+        "33970a777762fc53908499b8a0bfe2b5cbc50b99"
+      ],
+      "fp-p2.3 Version 2.xml": [
+        "2b0792a18766a7750b6b5da8dc9607ed63e8dc77"
+      ],
+      "fp-p2.4.xml": [
+        "ce9ab342ac870f9c5bcd53671cca05263ef27f0d"
+      ],
+      "fp-p2.5 slamtilt rubbers.xml": [
+        "b1e1764011daa11017b571428b4cd82c12eabd2e"
+      ],
+      "fp-p2.5.xml": [
+        "716e15712d968f9ce0b94126bb7e0ec8a7862c29"
+      ],
+      "fp-p2.6.xml": [
+        "f6abf69d826b5daef686c7ed15dd4349b47621a2"
+      ],
+      "fp-p2.7.xml": [
+        "468826d947e599ec79d9bc44ddbff75fbf60ede2"
+      ],
+      "zedonius_v1_0.zip": [
+        "2563528f492e39b947f8836d10eefa1fd278f033"
+      ],
+      "zedonius_v1_1.zip": [
+        "f585911868919bbf4f6d185a468ab01982ad1878"
+      ],
+      "default.seq": [
+        "bcc92f9af26afb64a885ef789cbb10d6f3c7f453"
+      ],
+      "DesktopCam.dll": [
+        "8a5b900b98fb741a910d269d528564b3d0951a4f"
+      ],
+      "DesktopKinect.dll": [
+        "19a04dbf9f43c9fc4ddb1d1357bff64526c3fec9"
+      ],
+      "DesktopPS3Eye.dll": [
+        "4515c749924b53a2dae034371da759f24b04c399"
+      ],
+      "FaceTrackData.dll": [
+        "aeb806a4330ce8716feffdd844e71084a86b2f88"
+      ],
+      "FaceTrackLib.dll": [
+        "3e96611e075c0ffb82232b36b44dc6650627d9b3"
+      ],
+      "FreeTrack.dll": [
+        "8bb00560edc99048cda818cb81afa823e8d1a682"
+      ],
+      "HT-PS3Eyes.dll": [
+        "61b0ff6832769f300c4278e279ce5bd4ce878827"
+      ],
+      "Kinect.dll": [
+        "f7a2c21d2acc82eb9ff700fa426cc0b37edd851a"
+      ],
+      "Kinect2.dll": [
+        "22e32cd595f825b004c10d46746cd28c973f649b"
+      ],
+      "PS3Eye.dll": [
+        "44034ab6fcdce57af55431b11ebd31cfa8b1901b"
+      ],
+      "PinballHighScore.cfg": [
+        "852b39ba5db64e8a84e4b0612521caa5bd44fe02"
+      ],
+      "PinballHighScore.dll": [
+        "7734aecaa3cd1d019db365aecfd9df2a5ef8efbe"
+      ],
+      "PostFX.dll": [
+        "52a49fdbb9328a54e9add344def6636be3d151e1"
+      ],
+      "PuPPlugin.dll": [
+        "972607482b16139d1d53d919d3499a61e5ece7f8"
+      ],
+      "Simple Cam.dll": [
+        "b55767f9216bc1de3f0f0ece2ab41f6db2c97a18"
+      ],
+      "TrackIR.dll": [
+        "000deaf4533b239cd3c22f250dcbb0d55123dc16"
+      ],
+      "haarcascade_frontalface_alt.xml": [
+        "035eef24478ebf4b16c788dbd02f8b3a3f9b8951"
+      ],
+      "haarcascade_frontalface_default.xml": [
+        "85a317ce2fc0415741a41736e99bd281d2437568"
+      ],
+      "icom.dll": [
+        "83a3b55b2cc1b29997d50cf38108f6725d9a0df2"
+      ],
+      "lbpcascade_frontalface.xml": [
+        "d668cbe8712f062bcc6af898ebb2937b73dcfd2d"
+      ],
+      "renderingengine.dll": [
+        "e4ad22c907042aba3162848b86f43ffec16d5c2d"
+      ],
       "Motocross Challenge.7z": [
         "d87747718c1aa06a9ddd8504b2581eb0034b754a"
       ],
@@ -110989,8 +112634,163 @@
       "sysinfo.dat": [
         "8881159097cd92f67bfec5250bc061626d87cf04"
       ],
+      "X1_Covers.txt": [
+        "2e8d9f0a8ff08896674badeba8aa3ac5245304c3"
+      ],
       "gamecontrollerdb.txt": [
         "231b29ef9d6314930eb18e57240e27ae81a6e88f"
+      ],
+      "autoexec.cfg": [
+        "2c6cd92cfa97becc7e729c6469a441c7e7b851c7"
+      ],
+      "btn_jump.png": [
+        "d35c75fcbf972bb72230ba3a0d2e6b5afa993dc4"
+      ],
+      "controls_theme.zipak": [
+        "5be92df9e74843bc6071e3627f4fd876d499a490"
+      ],
+      "description.txt": [
+        "f729b42b66b7bf3725d06bbe55983a12c0827e34"
+      ],
+      "doom3_chinese_translation_doom3bfg.pk4": [
+        "8c06159ab1012b271d39d624b45c55c2360dc443"
+      ],
+      "zzz_idTech4Amm_d3_sabot_a7.pk4": [
+        "8179522bcd5abc4c5a3194bf49f6821738644500"
+      ],
+      "zzz_idTech4Amm_play_original_doom3_level.pk4": [
+        "de368e97ca86f489c1f10ea148e0812913c25c7d"
+      ],
+      "legacy_v2.83.2.pk3": [
+        "f156945f70545e37fb5ee33a95ee97204a7f60b7"
+      ],
+      "extras.zip": [
+        "388bfce5ba834f5ed329a0fa9864b0b75840e951"
+      ],
+      "glprogs.pk4": [
+        "2651f1eff1785999918c08600f079e1ad4a206e7"
+      ],
+      "glsl.pk4": [
+        "87f0f5ec3db3855c4453a9031ce695d39d0eaa44"
+      ],
+      "generic.json": [
+        "839c05a60c231d409f90b477bf2001c28f10b1bb"
+      ],
+      "zzz_idTech4Amm_q4_sabot_a9.pk4": [
+        "a3af9251c6a2b4b8d02108bd7b91919aace929dd"
+      ],
+      "renderprogs.pk4": [
+        "ab89141b5772de1df43831e64c53aece28c2e6f6"
+      ],
+      "brightmaps.pk3": [
+        "ccb1fb093dc128da46a5060ba319c5bd5790e074"
+      ],
+      "GENMIDI.GS.wopl": [
+        "538d220d87b86b997f539265eb12a6c319e17a1c"
+      ],
+      "gs-by-papiezak-and-sneakernets.wopn": [
+        "eaca5d7a9fe1db6094990be0d8916b7f97920db1"
+      ],
+      "game_support.pk3": [
+        "cccab57d1d1b84601fa0c52a74f55bf7b36f4e1c"
+      ],
+      "game_widescreen_gfx.pk3": [
+        "9ff11fca19550b189cc8e7d4cafc9897d57cd472"
+      ],
+      "lights.pk3": [
+        "19ad73cae23b5d9f3890ae29542a2d3e611bda00"
+      ],
+      "uzdoom.sf2": [
+        "4394193fb95c1e59916efe9ac3a47952ab5002f5"
+      ],
+      "uzdoom.pk3": [
+        "dd2364da2cc8b49e32330ba9abff80727b4ea0a0"
+      ],
+      "cs16client-extras.pk3": [
+        "ab0c9f66e9e9be4af96c20d5ce3a9d684eeff2c2"
+      ],
+      "extras.pk3": [
+        "971249b94cb62fbca2f42c8ab7a7d29d30e5b368"
+      ],
+      "zzz_etqwbase.pk4": [
+        "0d4dee46085ced0fd117030a13533d903265301c"
+      ],
+      "appcenter.cer": [
+        "1fb7f452e4d273b2a66d4e0644b33b7c338a3a33"
+      ],
+      "color.fsh": [
+        "cf0f6f3f2afe3b71380dba621114686e0be20bbc",
+        "8cac05782651c5b9e56577d7f33486a32c00480f"
+      ],
+      "color.vsh": [
+        "a32e0ab0e772ab7c8132979ceaddf8071ca4981b",
+        "96e1d0b91b0cf3b61a1c6a9782dd087e06286c36"
+      ],
+      "licenses.html": [
+        "685b990806d45047fe026edef461de33ad38eec2",
+        "87db7f2faca0bbc79c8b4acbca878eef521bfce9"
+      ],
+      "simple.fsh": [
+        "c6569e0e83d244224a829ce13699bc91ff01bfaf"
+      ],
+      "simple.vsh": [
+        "475e25d9bf8422d1faeae206488507d59bf7b716"
+      ],
+      "sprite.fsh": [
+        "f4d9ad89abaf7bb34a77783656a2aa0d2a658ed6",
+        "94c1d85c818c14489f4e2aa10c4c33c14a395077"
+      ],
+      "sprite.vsh": [
+        "5d04cf61ac98bab639729ec171eaba947c005fe4",
+        "8bff9b5dce3c825669278ea1e744d0644a57e7cb"
+      ],
+      "system.props": [
+        "6e06f1852ac55c06b918f01ffe2593a3cbf450be",
+        "4b371578278811a84fd717cb726c58e3e258baaf"
+      ],
+      "tex.fsh": [
+        "8823ce1f21554627b7460c8f8a0e53a1559128f6",
+        "eecb9e9f71079b1b8ab37210f58ec19d1c0f515a"
+      ],
+      "tex.vsh": [
+        "eae490cb5c934b2541d0eddf716e1b4f7e73b6e1",
+        "e8ad127bb080a8d61899aebf224e745bcc5eab44"
+      ],
+      "m3d.fsh": [
+        "fd91f8c1337962197f5058dc9fbea5da2bac5ae6"
+      ],
+      "m3d.vsh": [
+        "51d4ddc7cd594b20a9019abf9c23904b64819498"
+      ],
+      "patches.bin": [
+        "3bdf93cd0ea795e98f4195c5898d3ab0f9b918cf"
+      ],
+      "Nokia.ttf": [
+        "d808da42aa5ba6a9b5333703e48bd0ec03fbcd90"
+      ],
+      "amrdecoder.dll": [
+        "aedd333c565ccf05fb062289e5fab4722883712c"
+      ],
+      "en.txt": [
+        "079952bdeb97219b38417ebe0511ed30c2637009"
+      ],
+      "java_micro3d_v3_32.dll": [
+        "b1d6aef4559bb46af27eebda50fe06e0de659966"
+      ],
+      "jsr184client.dll": [
+        "ed9a60d56ddcc91514b033c16f2062638c3e6eeb"
+      ],
+      "ma3smwemu.dll": [
+        "b566d111ccd3e303d21ab5c4cd1519dc238a4fce"
+      ],
+      "micro3d_v3_32.dll": [
+        "f59e0d445aafe2503c6e5249ca07df4b89626f8f"
+      ],
+      "presets.xml": [
+        "1066d152c3391aaaab650e5f78e19a39ec4e623f"
+      ],
+      "s60snr.ttf": [
+        "f077ba595d9a01218ef1d4fa6730d1cb6edf61ae"
       ],
       "A2_BASIC.SYM": [
         "f72ebcb3ad771321e36cacb49779dca6f2b4db9e"
@@ -124452,6 +126252,30 @@
       "epr-21576d.bin": [
         "6d27d71aec4dfba98f66316ae74a1426d567698a"
       ],
+      "amrdecoder_64.dll": [
+        "aedd333c565ccf05fb062289e5fab4722883712c"
+      ],
+      "amrdecoder_arm64.dll": [
+        "aedd333c565ccf05fb062289e5fab4722883712c"
+      ],
+      "libamrdecoder.so": [
+        "aedd333c565ccf05fb062289e5fab4722883712c"
+      ],
+      "libamrdecoder_64.so": [
+        "aedd333c565ccf05fb062289e5fab4722883712c"
+      ],
+      "libamrdecoder_arm32.so": [
+        "aedd333c565ccf05fb062289e5fab4722883712c"
+      ],
+      "libamrdecoder_arm64.so": [
+        "aedd333c565ccf05fb062289e5fab4722883712c"
+      ],
+      "libamrdecoder.dylib": [
+        "aedd333c565ccf05fb062289e5fab4722883712c"
+      ],
+      "libamrdecoder_arm64.dylib": [
+        "aedd333c565ccf05fb062289e5fab4722883712c"
+      ],
       "FluidR3_GM.sf2": [
         "22bcfeb5b6c6481569b90db96aa3f4b5f06c8848"
       ],
@@ -124626,6 +126450,15 @@
       ],
       "bank0.bin": [
         "1246203bebf9f04e3bac2df7fc64719304f9f1bd"
+      ],
+      "DevIL.dll": [
+        "313a23600a169adbe130b1ae1784d8de437ce7d9"
+      ],
+      "ILU.dll": [
+        "d3534cd62d312fe28988c6229c47ab81a3ae1f9e"
+      ],
+      "ILUT.dll": [
+        "30566eda672fef3036fbd3998af3cc9fdcef38e7"
       ],
       "dc_flash_wb.bin": [
         "72c65f2a11ee7b72b77b9945187b7a332632e14a"
@@ -129398,14 +131231,144 @@
       "3c79ef05": "20fdca7131478e1ee12691bdafd2d5bb74cbd16f",
       "1294ff68": "c0c0b5db93a61276a6fe6842049cb53e564b8413",
       "d9c5a979": "a71637b53251d4a14f80b53f4af4966114cde6e7",
+      "fc3dee6c": "bd9de21def48b65b5382c403971a9062928b9345",
+      "9dfb2240": "ce2fb04c3c68eb6874527821853c6180ddc237df",
+      "93958b75": "ec526ca156ae8c639aefcc2552914fc70950b69a",
+      "5c3313be": "81f809456ad9fba296eff46f035a607a3d2cfba2",
+      "cf17dbf2": "9df8f5cca648e61cb1f92d6f3cfa150a9db58692",
+      "83e2b7e2": "07f48f32a7a08cff94121908205b2f02fcf3724b",
+      "bd853ad1": "5a928b81cb1a3364605158e0c0b573c51b0f468f",
+      "7407e78d": "ff2d159b4dcdb5ff9896b025288e40b76466eaa5",
+      "423f5efc": "04efb8fe46d0ba6381b160afa92b87bb213ba461",
+      "2c554534": "255cb14da5f49c7aaa210135638cfdc924130397",
+      "9762a6ec": "6d9d44450b8d76791373b727b699cad4446abd07",
+      "83502ee1": "f41672abeef6b9751b0ef4f341b973a60cb03a7a",
+      "b588dcbd": "661675f4d8539e14f2be10d144ab986fc5fccb46",
+      "90f088b8": "313a23600a169adbe130b1ae1784d8de437ce7d9",
+      "2cee9d26": "ee8f68d94645de24be930d6f453297d5b7b4d052",
+      "688c7661": "d3534cd62d312fe28988c6229c47ab81a3ae1f9e",
+      "b10700e6": "30566eda672fef3036fbd3998af3cc9fdcef38e7",
+      "d4486029": "8189136493d48adc2bdeff1e77297ab988ae789d",
+      "4c05679c": "c4fc4467ccec0c9c2852a9342b5b500511b6c886",
+      "84f38041": "cd9c5f22c5408304bacaeb88e529a4dd121f90eb",
+      "2a48d9f2": "badfe5b7ab16c88f3fe255143546932c09fc2097",
+      "1dbaeb64": "5aff2d72c317d58a6f1951811a31ec1b99dfdfe4",
+      "6e770bb0": "1fa517b848c69c0b2c2f3a32e4097a157fff3aa2",
+      "436b5790": "9238286e57f346fd9b9ed3d8ffa977083b9d3feb",
+      "fcfcee47": "948eec0af66150dc908622bd48e867e85fb0d6c5",
+      "0f3cd1f5": "89d8f29048176e8faff89cd48d0eda7b4875bf49",
+      "6de5f68e": "28a08c3911ef46aca8880587bed56dfa4f99062a",
+      "a698ed6b": "969d38e02a6759629cc827501a049c60582d9531",
+      "4e68407e": "0a1e886e991d88761502d8434248e986bf9c238f",
+      "80a60544": "b701f91eae625a5e8f7bf56f104be506c8d1c8d8",
+      "2c8a0372": "0b30d717df74d90c26769d58055b507b89fdc1fc",
+      "a0d11fd9": "d2f65f0f32e21dfc65d61a384df525dedbc57a8a",
+      "52c855a0": "3b97a1c97624026302dbfab5b400d81a65461c99",
+      "47225cfe": "dd3874742bfe5f9c2828cb9c4e249c2f4722bd51",
+      "31a89911": "694f2c0efa61c934345161c61782202bac208f9b",
+      "65e772b9": "213244dc655fec822218a8780668bc74b80ac8ff",
+      "d9bd000e": "534a239cb7ae954fb9ad43de7fd79c0e5ee6473a",
+      "57df3a51": "db023400242b4e5c34a14876e64dc9bfc3b6e3e1",
+      "afe4f797": "22ffd7dc5541bbf0048b7ad4af5bbc76034cad8f",
+      "130c0120": "fd56e59a4d36c8f3dbccd0ee7c24abc9e66c0495",
+      "4bfbc6f1": "33970a777762fc53908499b8a0bfe2b5cbc50b99",
+      "bd434c2b": "2b0792a18766a7750b6b5da8dc9607ed63e8dc77",
+      "8ab62620": "ce9ab342ac870f9c5bcd53671cca05263ef27f0d",
+      "d278a3e3": "b1e1764011daa11017b571428b4cd82c12eabd2e",
+      "5a8a3e2d": "716e15712d968f9ce0b94126bb7e0ec8a7862c29",
+      "8b83e1b6": "f6abf69d826b5daef686c7ed15dd4349b47621a2",
+      "a9656c12": "468826d947e599ec79d9bc44ddbff75fbf60ede2",
+      "0620efaa": "2563528f492e39b947f8836d10eefa1fd278f033",
+      "a36e2bd5": "f585911868919bbf4f6d185a468ab01982ad1878",
+      "4f8567f8": "bcc92f9af26afb64a885ef789cbb10d6f3c7f453",
+      "46c88856": "8a5b900b98fb741a910d269d528564b3d0951a4f",
+      "77263de6": "19a04dbf9f43c9fc4ddb1d1357bff64526c3fec9",
+      "bb43bdb3": "4515c749924b53a2dae034371da759f24b04c399",
+      "8e430e83": "aeb806a4330ce8716feffdd844e71084a86b2f88",
+      "d4c7fa5c": "3e96611e075c0ffb82232b36b44dc6650627d9b3",
+      "b2e18ffd": "8bb00560edc99048cda818cb81afa823e8d1a682",
+      "77c792be": "61b0ff6832769f300c4278e279ce5bd4ce878827",
+      "82c0f724": "f7a2c21d2acc82eb9ff700fa426cc0b37edd851a",
+      "2a8bdd3d": "22e32cd595f825b004c10d46746cd28c973f649b",
+      "565001ee": "44034ab6fcdce57af55431b11ebd31cfa8b1901b",
+      "9d78da95": "852b39ba5db64e8a84e4b0612521caa5bd44fe02",
+      "213df511": "7734aecaa3cd1d019db365aecfd9df2a5ef8efbe",
+      "fed25c78": "52a49fdbb9328a54e9add344def6636be3d151e1",
+      "f61dd9f7": "972607482b16139d1d53d919d3499a61e5ece7f8",
+      "1e2a567f": "b55767f9216bc1de3f0f0ece2ab41f6db2c97a18",
+      "4305d7f8": "000deaf4533b239cd3c22f250dcbb0d55123dc16",
+      "b35ad051": "035eef24478ebf4b16c788dbd02f8b3a3f9b8951",
+      "69e2b2ed": "85a317ce2fc0415741a41736e99bd281d2437568",
+      "3ce371a5": "83a3b55b2cc1b29997d50cf38108f6725d9a0df2",
+      "c577735e": "d668cbe8712f062bcc6af898ebb2937b73dcfd2d",
+      "84fa42db": "e4ad22c907042aba3162848b86f43ffec16d5c2d",
       "7df99cca": "d87747718c1aa06a9ddd8504b2581eb0034b754a",
       "080d3448": "0c3f34ab93bc9a210db159cd68c9343930540f7b",
       "9dac1097": "22b36583a956fb4c0feb1eb47e01de6efdb89a6b",
       "25cfd813": "2e100cdd8b2d5492ff4ef8f1ba487364aabc687f",
       "c4207191": "02f515deea7f3fc513496b9218244186e5cc9a61",
       "b8f57432": "8881159097cd92f67bfec5250bc061626d87cf04",
+      "58c1f5e0": "2e8d9f0a8ff08896674badeba8aa3ac5245304c3",
       "bef6e55c": "231b29ef9d6314930eb18e57240e27ae81a6e88f",
+      "96847af2": "2c6cd92cfa97becc7e729c6469a441c7e7b851c7",
+      "cbb0a5c0": "d35c75fcbf972bb72230ba3a0d2e6b5afa993dc4",
+      "08acb79b": "5be92df9e74843bc6071e3627f4fd876d499a490",
+      "f30fec4e": "f729b42b66b7bf3725d06bbe55983a12c0827e34",
+      "bdee33a7": "8c06159ab1012b271d39d624b45c55c2360dc443",
+      "ea61c1da": "8179522bcd5abc4c5a3194bf49f6821738644500",
+      "d224dbc7": "de368e97ca86f489c1f10ea148e0812913c25c7d",
+      "ae0745cc": "d327b48f83d9b95c5a49597145d96be80be3eade",
+      "cb31a6fe": "f156945f70545e37fb5ee33a95ee97204a7f60b7",
+      "182b4baf": "388bfce5ba834f5ed329a0fa9864b0b75840e951",
+      "5808049a": "2651f1eff1785999918c08600f079e1ad4a206e7",
+      "78143850": "87f0f5ec3db3855c4453a9031ce695d39d0eaa44",
+      "8d1aea40": "839c05a60c231d409f90b477bf2001c28f10b1bb",
+      "a09e0ef5": "a3af9251c6a2b4b8d02108bd7b91919aace929dd",
+      "b7bfae1d": "ab89141b5772de1df43831e64c53aece28c2e6f6",
+      "4a827b6e": "ccb1fb093dc128da46a5060ba319c5bd5790e074",
+      "d18f9d56": "538d220d87b86b997f539265eb12a6c319e17a1c",
+      "887a8ba3": "eaca5d7a9fe1db6094990be0d8916b7f97920db1",
+      "e991641d": "cccab57d1d1b84601fa0c52a74f55bf7b36f4e1c",
+      "c3b20859": "9ff11fca19550b189cc8e7d4cafc9897d57cd472",
+      "49fb42bf": "19ad73cae23b5d9f3890ae29542a2d3e611bda00",
+      "408ab422": "4394193fb95c1e59916efe9ac3a47952ab5002f5",
+      "d20b2240": "dd2364da2cc8b49e32330ba9abff80727b4ea0a0",
+      "7c9bf65a": "ab0c9f66e9e9be4af96c20d5ce3a9d684eeff2c2",
+      "b36e485b": "971249b94cb62fbca2f42c8ab7a7d29d30e5b368",
+      "89fa9730": "0d4dee46085ced0fd117030a13533d903265301c",
       "d524ae3e": "a681437a28d02a978f70646716978bcc446108ea",
+      "512b4d28": "d0860202be85147f3ce96d71aa88541d939a1aea",
+      "d17f6632": "1fb7f452e4d273b2a66d4e0644b33b7c338a3a33",
+      "31e7b73f": "cf0f6f3f2afe3b71380dba621114686e0be20bbc",
+      "9521c3f3": "a32e0ab0e772ab7c8132979ceaddf8071ca4981b",
+      "b98c92bc": "685b990806d45047fe026edef461de33ad38eec2",
+      "371db629": "c6569e0e83d244224a829ce13699bc91ff01bfaf",
+      "b6b2242b": "475e25d9bf8422d1faeae206488507d59bf7b716",
+      "fc2843c2": "f4d9ad89abaf7bb34a77783656a2aa0d2a658ed6",
+      "1e54b0a8": "5d04cf61ac98bab639729ec171eaba947c005fe4",
+      "5d126587": "6e06f1852ac55c06b918f01ffe2593a3cbf450be",
+      "f9ecb3f4": "8823ce1f21554627b7460c8f8a0e53a1559128f6",
+      "30f34d46": "eae490cb5c934b2541d0eddf716e1b4f7e73b6e1",
+      "f20d50f4": "8cac05782651c5b9e56577d7f33486a32c00480f",
+      "b52d6dcb": "96e1d0b91b0cf3b61a1c6a9782dd087e06286c36",
+      "c91dd9fb": "87db7f2faca0bbc79c8b4acbca878eef521bfce9",
+      "073b5596": "fd91f8c1337962197f5058dc9fbea5da2bac5ae6",
+      "b99b542c": "51d4ddc7cd594b20a9019abf9c23904b64819498",
+      "4d4a202f": "3bdf93cd0ea795e98f4195c5898d3ab0f9b918cf",
+      "dfaff42c": "94c1d85c818c14489f4e2aa10c4c33c14a395077",
+      "56cffcf8": "8bff9b5dce3c825669278ea1e744d0644a57e7cb",
+      "c2a2b807": "4b371578278811a84fd717cb726c58e3e258baaf",
+      "ce34fca0": "eecb9e9f71079b1b8ab37210f58ec19d1c0f515a",
+      "c30b9a6b": "e8ad127bb080a8d61899aebf224e745bcc5eab44",
+      "74b78a2a": "d808da42aa5ba6a9b5333703e48bd0ec03fbcd90",
+      "3ece422d": "aedd333c565ccf05fb062289e5fab4722883712c",
+      "bc4416d5": "079952bdeb97219b38417ebe0511ed30c2637009",
+      "f22c0e27": "b1d6aef4559bb46af27eebda50fe06e0de659966",
+      "ba5831cb": "ed9a60d56ddcc91514b033c16f2062638c3e6eeb",
+      "83b24e44": "b566d111ccd3e303d21ab5c4cd1519dc238a4fce",
+      "0c6b8b57": "f59e0d445aafe2503c6e5249ca07df4b89626f8f",
+      "6f7784aa": "1066d152c3391aaaab650e5f78e19a39ec4e623f",
+      "544958c1": "f077ba595d9a01218ef1d4fa6730d1cb6edf61ae",
       "066d1348": "f72ebcb3ad771321e36cacb49779dca6f2b4db9e",
       "8031ff02": "fcfbbb25e06f58d13e762b02bfd468c834d98fc8",
       "18c0ff3e": "7b03befac4fbcef8c649048fa3ff5d095fd48dd3",
@@ -137815,14 +139778,144 @@
       "6597f75e97e5337198736b42a4d1ea66d4fdf01d685772482811a55e1eddf8f1": "20fdca7131478e1ee12691bdafd2d5bb74cbd16f",
       "a686ebf893d511b5b7667176cd6844593e914595a8bb9ab656b2c66969013b5c": "c0c0b5db93a61276a6fe6842049cb53e564b8413",
       "93cd6f10749171deab6b1f4170743a759d646e7ecf449dcd2ce100fa292d5cc7": "a71637b53251d4a14f80b53f4af4966114cde6e7",
+      "daa2c31dbed65b66b4fb8e53a426ffbd6f73e218704cd616e0e86d145ee920d3": "bd9de21def48b65b5382c403971a9062928b9345",
+      "a6401b2ba2b401467d3a48f7349b76d812eea29980124fd62d6a95b7480f9637": "ce2fb04c3c68eb6874527821853c6180ddc237df",
+      "0bcdfd08897d52ae929c0df43797662c069f45286a3dcac7d955e66c599161e5": "ec526ca156ae8c639aefcc2552914fc70950b69a",
+      "a4b7dd3ed357d2e7daf63bd66422e557100ae44146ce65e5aebd2bdf233628e5": "81f809456ad9fba296eff46f035a607a3d2cfba2",
+      "16b0f40fd00921c98926373378d8dbf7113a13e1adc8f94239465971cebd5f15": "9df8f5cca648e61cb1f92d6f3cfa150a9db58692",
+      "ecadb4416fa272d717cd7a8c083338309076a72369158be8b75dda372b8e0c6c": "07f48f32a7a08cff94121908205b2f02fcf3724b",
+      "89749a88e1b3b07cd67316459a09d79d2b788c45df1b199f060525a2c582890e": "5a928b81cb1a3364605158e0c0b573c51b0f468f",
+      "cb7255d7a50ab27768fec0045fea93a957ac84ddeb93fb0187273d21d8e3f237": "ff2d159b4dcdb5ff9896b025288e40b76466eaa5",
+      "2d7c1514365a00eb72b82b774067bb696a7f13a2912e76bc7009b47ed21c3806": "04efb8fe46d0ba6381b160afa92b87bb213ba461",
+      "96f6d3eddd5c7534fc811aeecf1d76463df4a54376d7940c9f4dc11d7d6d7c20": "255cb14da5f49c7aaa210135638cfdc924130397",
+      "a807c191f754d292a7ed5e34f7d6a1552eb5676db06b551127948cd96336e749": "6d9d44450b8d76791373b727b699cad4446abd07",
+      "3f0e016ab19a3210863ac325335bd4e821b350223b674850697b6fa41aef15b8": "f41672abeef6b9751b0ef4f341b973a60cb03a7a",
+      "c634133150f17a0443eba3caf8b634047744b90cd3e4cd89a2f5b1d64a44861e": "661675f4d8539e14f2be10d144ab986fc5fccb46",
+      "9792df088f4301012bb024979aa9b10dc1c40a3e2e801bb47ff2741af5d6a066": "313a23600a169adbe130b1ae1784d8de437ce7d9",
+      "36d5fa62765629e35754dc0a1d4ef44dd470c11a0072b354f621b8d3558d0597": "ee8f68d94645de24be930d6f453297d5b7b4d052",
+      "c37851d8d77eb4a8eb6514b91dc6ff39d82ccab41e32fb3a184324b0352d81ac": "d3534cd62d312fe28988c6229c47ab81a3ae1f9e",
+      "5d07aa29132347d877e6d5d39795dfecd4471005dd26f1a1336b36c159a7f8bb": "30566eda672fef3036fbd3998af3cc9fdcef38e7",
+      "3a9b95b349ae91458c204bf804f03554fecd1c0c9f1b05c076c1f6d8639759c5": "8189136493d48adc2bdeff1e77297ab988ae789d",
+      "b2841b993dafde568e2b08df4268b19f637d6dbb66d8a7f1ea0315b72ce3b2a4": "c4fc4467ccec0c9c2852a9342b5b500511b6c886",
+      "67505ec2e8f52c731bfee423306c9aeb80a8774a45d20821cdb1f2fce99916f0": "cd9c5f22c5408304bacaeb88e529a4dd121f90eb",
+      "c6457e696430d1c0945f9a645750bff8b0df8bbe48bbf7407b772fac8d79bd71": "badfe5b7ab16c88f3fe255143546932c09fc2097",
+      "1c80ce633d717be1358f099d516b43d2752b174c6be67c1245da38eac22236bb": "5aff2d72c317d58a6f1951811a31ec1b99dfdfe4",
+      "3deb0fb4a43bb18e0cf00c8701293b5f000512572c422f9ed8993363e6a652fb": "1fa517b848c69c0b2c2f3a32e4097a157fff3aa2",
+      "f69527f153716f50b41e4882ac05d5d295a6b070876a8b9cf114c6ab014010d2": "9238286e57f346fd9b9ed3d8ffa977083b9d3feb",
+      "9803a8138c8ac492f1f7776ffc13da98d0d44b0a4163be09b85fd11fdc050bd9": "948eec0af66150dc908622bd48e867e85fb0d6c5",
+      "6f05a23e9402cfb1e6f4f47f70435b2c9afd5bd89e882f9ca9e596e50f02b357": "89d8f29048176e8faff89cd48d0eda7b4875bf49",
+      "a669348b12e98cb4fbf12206e1bb97c9b80a7fbe84c3ca603e12314af6b82eb9": "28a08c3911ef46aca8880587bed56dfa4f99062a",
+      "97b67827dcceb4ebdbc4de6ee6b2e512a9fd125f41482245d8df71bde6dfee64": "969d38e02a6759629cc827501a049c60582d9531",
+      "c343de86b30ca0a603b3403321d58238e728e928e9b247bbd9de1536c28f1ad2": "0a1e886e991d88761502d8434248e986bf9c238f",
+      "49a44af83d073f9fe73d53cbb75f5de2ddfc0cfcaf3e199b7afd924d420da4eb": "b701f91eae625a5e8f7bf56f104be506c8d1c8d8",
+      "558a20c655577497fa8ac96bc67fbd6b62ec35a722c0e288e0a9854e60e82139": "0b30d717df74d90c26769d58055b507b89fdc1fc",
+      "b3b67f777572386c9e76b576bb97e108fa666da87e2cea84ffac3ab43e2c64cb": "d2f65f0f32e21dfc65d61a384df525dedbc57a8a",
+      "da400d3b80ab855a6a6f63fd1b552cb9900cd3355925e6086a2d409df3b27a2d": "3b97a1c97624026302dbfab5b400d81a65461c99",
+      "a693549f20697b02f31aa6e38e71c12ad0b0a242d8b2ac7ca7321f8af2af5a3b": "dd3874742bfe5f9c2828cb9c4e249c2f4722bd51",
+      "15626c7583a43457cfbe6f04638a85911ca94c3c0164880daf2070465b0f5da6": "694f2c0efa61c934345161c61782202bac208f9b",
+      "95007357981544653d47eaae7f98abe8c723faab463666c1bccc52d83b545b09": "213244dc655fec822218a8780668bc74b80ac8ff",
+      "8abfbf8088807bfcc3169323a1fc4f549fe7ac412109b07feda4defa8c1e1539": "534a239cb7ae954fb9ad43de7fd79c0e5ee6473a",
+      "0e9febf8d2663aeae0f73f33a8a49ebc3cf37c38a1cacdf4cbc949d86c7ceea8": "db023400242b4e5c34a14876e64dc9bfc3b6e3e1",
+      "d9bdd158d3963823893ca0e17b64691aec4427e9e93d0d9ef1caf193ede42fce": "22ffd7dc5541bbf0048b7ad4af5bbc76034cad8f",
+      "27bb21df2126dd5efdfa6b4df3f88de052ad6e2a511d64f7b287fde076a6621b": "fd56e59a4d36c8f3dbccd0ee7c24abc9e66c0495",
+      "de2961a4ccb0940aa9a95be0273759b98d4cf6d023d08ad233ff4228a8304af7": "33970a777762fc53908499b8a0bfe2b5cbc50b99",
+      "47743f2c627b70ea12e570aa9f6016a99e5171190a00481356ec181b0b30d351": "2b0792a18766a7750b6b5da8dc9607ed63e8dc77",
+      "24b15d60162cb044592881eeba872259504dab3ce12458ddf92c5bcf9da4f65e": "ce9ab342ac870f9c5bcd53671cca05263ef27f0d",
+      "a0e16817ae436cd7f39755cbb7d4c6e11fc5c44e414a0885ed858416797f8010": "b1e1764011daa11017b571428b4cd82c12eabd2e",
+      "3a138084abdf02bc89284505e550063d369c14ab288bba3581b2384daa15b5f7": "716e15712d968f9ce0b94126bb7e0ec8a7862c29",
+      "8212cd979118bf826ee16c2c21bf2f90bcd04cd6fea059d110f06e517db7c679": "f6abf69d826b5daef686c7ed15dd4349b47621a2",
+      "a368df333e0b81b7a2f07db9319567e3a21d5196d609fbf188543b18a411ba23": "468826d947e599ec79d9bc44ddbff75fbf60ede2",
+      "6f2b86587d748ee7eb0ff95116aeb9ef91f6c8b7afade41321f38e7fbe2890ef": "2563528f492e39b947f8836d10eefa1fd278f033",
+      "55e804bb95e212db0c0875b6bb7642f1b41db538bcaf3cbb620779ab2afe571d": "f585911868919bbf4f6d185a468ab01982ad1878",
+      "87344f3726c46c62fb19c7f6611ae64520f78ac229e7f9082f359d2ffbfee6f4": "bcc92f9af26afb64a885ef789cbb10d6f3c7f453",
+      "4928c27ab0ea5bd067aae4a2eac38d539df12a9c42e52598a5560a9ddffbafad": "8a5b900b98fb741a910d269d528564b3d0951a4f",
+      "4aa59e24530b739ea268abecf7c327eb238bb7c4f961baf189cfde46b8869a54": "19a04dbf9f43c9fc4ddb1d1357bff64526c3fec9",
+      "14dbb5b11749622cdd1912f37e9dc999cc2d8dca8bf0e47d1bcfc669cc49fe25": "4515c749924b53a2dae034371da759f24b04c399",
+      "e6cda854eac542c46fb100bb6928d8d5bca8300e8fb57914789c1b09ae983213": "aeb806a4330ce8716feffdd844e71084a86b2f88",
+      "381e24c0dc0e8471f15fffdfdbbe55c1e9ea61172f94d1d3c2e7f7b3697ac0f8": "3e96611e075c0ffb82232b36b44dc6650627d9b3",
+      "3dfb2bb30faf6648018bc57289299a510624dc85236111e711809d521bd1d492": "8bb00560edc99048cda818cb81afa823e8d1a682",
+      "eda430e18e4456682edfaa1bf5112c87f3d4891e47249aeb8b1e548ca8c428a7": "61b0ff6832769f300c4278e279ce5bd4ce878827",
+      "3e3225474bfca5ad059a541ac17120f1ff74ea993644f3a307e844c1610a3938": "f7a2c21d2acc82eb9ff700fa426cc0b37edd851a",
+      "3038bd37cfb6abff0f5a82c9e5a6b44e555c378c9ae54145eb9f4296c3e9faf8": "22e32cd595f825b004c10d46746cd28c973f649b",
+      "191996d48372d75f781f44cd4eb0fcb97eadff49e12e1a0d1ac39b2601848e48": "44034ab6fcdce57af55431b11ebd31cfa8b1901b",
+      "277678a4ea5167fa55b37bce6f6c2756ed2cfe32d4041124dd5c27ee8afe9a7d": "852b39ba5db64e8a84e4b0612521caa5bd44fe02",
+      "f6fd7ed1c79302a7675732c28ea9b20717011c63a535a3d23113bd1412762a50": "7734aecaa3cd1d019db365aecfd9df2a5ef8efbe",
+      "30f9ce9cc725420fd6d3f199f9ae947207d92ba8cd15c1f33364df22f24669af": "52a49fdbb9328a54e9add344def6636be3d151e1",
+      "a9b3f1d04621cfc26ff0f14a7fd3b529bbe07d7c92ffcff3bfe1247b9c96af4a": "972607482b16139d1d53d919d3499a61e5ece7f8",
+      "3b232df5e99b23c048498e54708c9c6c5ea82b6fa7a571756f8526f56c57754d": "b55767f9216bc1de3f0f0ece2ab41f6db2c97a18",
+      "101dc5958e8e3df03d8bfcabcdf252d7b0b035a974a8eb336c45c891c16f364d": "000deaf4533b239cd3c22f250dcbb0d55123dc16",
+      "891f1af7c9ecd07ece294987a966c6fbcc42bf25e98e3840f60d8570c6a29678": "035eef24478ebf4b16c788dbd02f8b3a3f9b8951",
+      "eeb6934b0cbf1e7b2b5ebea8fedc73ac653f0db5ffaa42e5ce61535830115466": "85a317ce2fc0415741a41736e99bd281d2437568",
+      "b569f792df2cc10e6f37217db3ef2f8bb3affeba87fdd0af659d9fc112a46f02": "83a3b55b2cc1b29997d50cf38108f6725d9a0df2",
+      "6f5f20091b0d20311c929bcd8c927074e50bd0ac6424321016c679f43cf5ebcf": "d668cbe8712f062bcc6af898ebb2937b73dcfd2d",
+      "17c0738ca06b9b6a7450a27c1d77df52843de3691097ad1849af372b48efdb58": "e4ad22c907042aba3162848b86f43ffec16d5c2d",
       "813ed20449c14827ecef55a147098603ab45854312ac9eaad34383030c3e0048": "d87747718c1aa06a9ddd8504b2581eb0034b754a",
       "647b18305a8fcc7a370195da1b3599a62d56e9588f386b71083a56740560cc4a": "0c3f34ab93bc9a210db159cd68c9343930540f7b",
       "9dae63bb97fc2ced1135020c611293b731ce1a73ce62f7d2c5bb959fec591efa": "22b36583a956fb4c0feb1eb47e01de6efdb89a6b",
       "208176552a7d6703be6cd2539c96d2136d37bfc9c1b21a93b4a81a032339faf4": "2e100cdd8b2d5492ff4ef8f1ba487364aabc687f",
       "9a5d4085d177910f48850672bc2bc8436c5558171eb9e06c711fabed39e485c0": "02f515deea7f3fc513496b9218244186e5cc9a61",
       "cd260d1c420dec2ad2d9511b522d88a72f820d2ca2ff63ded2cd95854d4748dd": "8881159097cd92f67bfec5250bc061626d87cf04",
+      "7f7325b9d5681abda6b26d641f13bf059d25af97c7b4ddeabc7ce7071c60d84e": "2e8d9f0a8ff08896674badeba8aa3ac5245304c3",
       "c8dd1e361ab3219a956b9b7879a17658b10273cc3569bf23cb9ffb23f55e5152": "231b29ef9d6314930eb18e57240e27ae81a6e88f",
+      "33767ae63d7e16f5b6786eeb0fdfe53e7af7d7abd3b544fcd91936c9483661aa": "2c6cd92cfa97becc7e729c6469a441c7e7b851c7",
+      "1a8339df67295ef7169765ec440d0a1b07e1d61058c12dc68ae79122321b413a": "d35c75fcbf972bb72230ba3a0d2e6b5afa993dc4",
+      "a987aabd5a29ebc169c679c6ffebb2329ef0a00f1e37cc25cdbde2569d1ef6f6": "5be92df9e74843bc6071e3627f4fd876d499a490",
+      "775b529a6164fe5bbc0ecc3693b6531643fb98b0a9392622c7d9e152148ee4cb": "f729b42b66b7bf3725d06bbe55983a12c0827e34",
+      "0edbdad94f840c669752950b1940d4258af9bef1ae8b981e01fd6c3daf8600e3": "8c06159ab1012b271d39d624b45c55c2360dc443",
+      "b15e8f94c2b4ade06d59c093943c512e95f257a237f40224c496710beb7d24ff": "8179522bcd5abc4c5a3194bf49f6821738644500",
+      "a6911b03fa5d405b0e650f0fbc5569cfb1f34d3334824175ed6558d1d8a9cb40": "de368e97ca86f489c1f10ea148e0812913c25c7d",
+      "d70571d31929cb3b9384dc7db0fbe921dfc73d6888d3f8ded032114d2e33cfc3": "d327b48f83d9b95c5a49597145d96be80be3eade",
+      "f57e553963bfb2b06d4889d30cf2f666c0f86dcec806f62197a9129c97c80502": "f156945f70545e37fb5ee33a95ee97204a7f60b7",
+      "e2268d8e1a8e051f49e935c5a048b24c9a42803f72e75b4757755628d3abd638": "388bfce5ba834f5ed329a0fa9864b0b75840e951",
+      "7cf66357beab4fa3ed48a63195e2c8ec7a7c59c053e6e20cdaa5163a32782fe6": "2651f1eff1785999918c08600f079e1ad4a206e7",
+      "70347cc599350c96344bbfe37f85286d809bafae39a41e9618c5893d7a061710": "87f0f5ec3db3855c4453a9031ce695d39d0eaa44",
+      "938203874aa8fd9c283914ff4138be197796aba4667798d7363bfba4840ff51b": "839c05a60c231d409f90b477bf2001c28f10b1bb",
+      "7976fdad1229e41abc156712fa551c37864fc974cf5c560b3c2b929a54f84ac5": "a3af9251c6a2b4b8d02108bd7b91919aace929dd",
+      "75229f71995596c7fc136316746753372e75c61646649a7091daec5394a226c8": "ab89141b5772de1df43831e64c53aece28c2e6f6",
+      "cb769c1d4a9e180b1e80a138df461285ca8ce78290a5acca4769fe0095208198": "ccb1fb093dc128da46a5060ba319c5bd5790e074",
+      "3e90b1e13007fb97c29d4a6f819519f1065892495c259961913317402a779514": "538d220d87b86b997f539265eb12a6c319e17a1c",
+      "488327960374b95dcc302e5586622a62fc21bdda7082f92a40258002ed267f40": "eaca5d7a9fe1db6094990be0d8916b7f97920db1",
+      "5f760f6c1829f73a24079eca02da3466a24d2197423dd5bebc6cae88dd73d400": "cccab57d1d1b84601fa0c52a74f55bf7b36f4e1c",
+      "aac05e00912eff20fc4bb849bab8301cbcfdc54e8f949159f4a208c85872f1e1": "9ff11fca19550b189cc8e7d4cafc9897d57cd472",
+      "93169385e07423489813d3cebfd60799e616ac9721131fa83f1d9a4202b835a3": "19ad73cae23b5d9f3890ae29542a2d3e611bda00",
+      "a9058609b07c1f0e0c1f420e76c2e80ba78136e6173e836caab51ffb13e552f1": "4394193fb95c1e59916efe9ac3a47952ab5002f5",
+      "8f77ab41b540f08caa817ad039db2920b28547de261a971306ffae5c19647bfc": "dd2364da2cc8b49e32330ba9abff80727b4ea0a0",
+      "7ced212637e450f95a956fcf05cc8607d21eb2a2f487cc49b38a8c4ecfb880bc": "ab0c9f66e9e9be4af96c20d5ce3a9d684eeff2c2",
+      "55c0639f23038683e9ea479bf8390f4785c710e1d174349cd7a2769f8aea48ba": "971249b94cb62fbca2f42c8ab7a7d29d30e5b368",
+      "994886a47a7e4f542bc0824758f122004887e19ddbdf83909bca635748f50c64": "0d4dee46085ced0fd117030a13533d903265301c",
       "3b8dc89a9ef34763b38647a4863b93f77715c03640312f151a8f5a0567ae6d5d": "a681437a28d02a978f70646716978bcc446108ea",
+      "a2d469fde479baabafe97537270cc5e81b7c143806d12b0692ce6ac7a2c3a174": "d0860202be85147f3ce96d71aa88541d939a1aea",
+      "79ca456195491cd777349e345889b707e14b13f2a4a215fd9af9d2d6f5f4779f": "1fb7f452e4d273b2a66d4e0644b33b7c338a3a33",
+      "c0adf7c01912f053ebb094e543fca2c57455ba6a77451d8773eb66c244da5ea1": "cf0f6f3f2afe3b71380dba621114686e0be20bbc",
+      "8c923fe92e7a78329b8de0bcb60dc1ab2e6c6c3f591abb80a10ca84152c21ab9": "a32e0ab0e772ab7c8132979ceaddf8071ca4981b",
+      "e5bfffcfab30d5223fed97d67dd2a41231c6726eff9bdaac62ce7f2c99214ecc": "685b990806d45047fe026edef461de33ad38eec2",
+      "b22148f210a5853c420f0e892b170b32b74302e4be3bd0ffa8377eb2a0fae1dd": "c6569e0e83d244224a829ce13699bc91ff01bfaf",
+      "3b1ad06d0ab1ee01be2234ad01e1ee4ac7e25c3a7ab7d2336d059240e50b9bf1": "475e25d9bf8422d1faeae206488507d59bf7b716",
+      "44132aae2e21392a8e0fd817179734bd6645913bf41db90134d2bf98b7a47d37": "f4d9ad89abaf7bb34a77783656a2aa0d2a658ed6",
+      "2919e72f27ef65761c15f3a17ec5b9295aeb7f22870cef4b66fda8f20bff768a": "5d04cf61ac98bab639729ec171eaba947c005fe4",
+      "a018d8c5512721504be0a246bf3873748c1d65364bf273033eebb86a65ba6d92": "6e06f1852ac55c06b918f01ffe2593a3cbf450be",
+      "cea7c89149be3a3ef3b37e4980b3680dc0c3fde74dc39d49d648c31ef89836fd": "8823ce1f21554627b7460c8f8a0e53a1559128f6",
+      "6244c7a60f707555116eaa2a7e5af8f97792f7c9891dd895ddf87ef93881b2bd": "eae490cb5c934b2541d0eddf716e1b4f7e73b6e1",
+      "e8db921de586a6b6e2d4ab0e5454d4a850b6d2a88758228f09c44e65b392857f": "8cac05782651c5b9e56577d7f33486a32c00480f",
+      "9b96860e1af277bcd5055197155a9fde4188570626825b8761fa7884632c38c0": "96e1d0b91b0cf3b61a1c6a9782dd087e06286c36",
+      "ef3455c2589fa30eb2c2c274472c873995622ae97567a9ca1c86b3f2fc515ae1": "87db7f2faca0bbc79c8b4acbca878eef521bfce9",
+      "205f46d118070601f4bb4d43756dc3e20de4309716c0bcc42b058a5aba471d71": "fd91f8c1337962197f5058dc9fbea5da2bac5ae6",
+      "2275747871763a8b2232394a24e647308efd4084b6954f33ece287bb0b9cd607": "51d4ddc7cd594b20a9019abf9c23904b64819498",
+      "e0b4b6e12054f4e015aaf41df3e0913e9fc2432d6e9fa9bb4073f8c04ae40871": "3bdf93cd0ea795e98f4195c5898d3ab0f9b918cf",
+      "ab7e2890d93474f9d2ce029477d2fb25e6f744f920f5ffe5c9e7065ec6dbe380": "94c1d85c818c14489f4e2aa10c4c33c14a395077",
+      "ddb473ed3b830a4a07772fb242b214106968f3ec4a762b44bbe6c0926cad602c": "8bff9b5dce3c825669278ea1e744d0644a57e7cb",
+      "eb20451f2cc4ca2e38071740b7035dbeca74cab3d1c2ce7ada5c084fa17da137": "4b371578278811a84fd717cb726c58e3e258baaf",
+      "b9993b7c88491081acca47f77fe9ecb16f7e974939af13a7a2d6c663e5aa2bb8": "eecb9e9f71079b1b8ab37210f58ec19d1c0f515a",
+      "01f80dadcb8067879c98a046b17db48b687a936bb03e8b199c7d6c14133d6fa2": "e8ad127bb080a8d61899aebf224e745bcc5eab44",
+      "5ed84ef4aab265cfc43dfe3625712b5e73d477b48cbeba5bb8746bef9ad42b4c": "d808da42aa5ba6a9b5333703e48bd0ec03fbcd90",
+      "5792170bd61ddc2ad711806f18470c996e9fdc3eece61980f0724b4439a23d4d": "aedd333c565ccf05fb062289e5fab4722883712c",
+      "2ca3acdb7d780d45f21ee1d6c3d3a3d00006d51d0500e85745721ddd30602234": "079952bdeb97219b38417ebe0511ed30c2637009",
+      "817b2a782addf510d3dd27e61bc4ff25cc71bca1542f9f63064200884e3db39a": "b1d6aef4559bb46af27eebda50fe06e0de659966",
+      "9d8fdab0f4ea3e74462cfdc1b3034e2e77d67b46af73754e4f15a22e40ebcd9a": "ed9a60d56ddcc91514b033c16f2062638c3e6eeb",
+      "fe23024433abc95e0d94c9df6ec95f093447d30ec47150f3042259b261c779a5": "b566d111ccd3e303d21ab5c4cd1519dc238a4fce",
+      "a5dcffeb838a0ee3c9eb73b2ca61a4461880b4939ad12ffb0f0f1a19962fc07a": "f59e0d445aafe2503c6e5249ca07df4b89626f8f",
+      "675a7f6ef68ab5741d319df0580455324cc7eb1b537648ed9fa85cfc73502c96": "1066d152c3391aaaab650e5f78e19a39ec4e623f",
+      "dcc1b0e836a5e7e6b06fac165174b283dcc6052742168ede12b0bb931e23331c": "f077ba595d9a01218ef1d4fa6730d1cb6edf61ae",
       "c72a36bbd471daf5d12df9f7b85773771583ec960ff9ca17e66d2f7b22e5c8c3": "f72ebcb3ad771321e36cacb49779dca6f2b4db9e",
       "fcf442b26c492253dfb8d2146e215b7b84b3ba87443face9c94a1e9474aa3ca4": "fcfbbb25e06f58d13e762b02bfd468c834d98fc8",
       "0add32bcbd0e5b350437fa9d138b3c232368e36d8009852479fdb09d9db31113": "7b03befac4fbcef8c649048fa3ff5d095fd48dd3",
@@ -147625,6 +149718,177 @@
       "resources/shaders/vulkan/shadeboost.glsl": [
         "9b2704655a893ff1675d28df4bd9ffc9e15d3dd5"
       ],
+      "Feeds/fpLatestTables.xml": [
+        "bd9de21def48b65b5382c403971a9062928b9345"
+      ],
+      "Help/Future Pinball Manual.chm": [
+        "ce2fb04c3c68eb6874527821853c6180ddc237df"
+      ],
+      "Libraries/fpDmdFonts.fpl": [
+        "ec526ca156ae8c639aefcc2552914fc70950b69a"
+      ],
+      "Libraries/fpModels.fpl": [
+        "81f809456ad9fba296eff46f035a607a3d2cfba2"
+      ],
+      "Libraries/fpPlayfields.fpl": [
+        "9df8f5cca648e61cb1f92d6f3cfa150a9db58692"
+      ],
+      "Libraries/fpRamps.fpl": [
+        "07f48f32a7a08cff94121908205b2f02fcf3724b"
+      ],
+      "Libraries/fpScripts.fpl": [
+        "5a928b81cb1a3364605158e0c0b573c51b0f468f"
+      ],
+      "Libraries/fpSounds.fpl": [
+        "ff2d159b4dcdb5ff9896b025288e40b76466eaa5"
+      ],
+      "Libraries/fpSphereMaps.fpl": [
+        "04efb8fe46d0ba6381b160afa92b87bb213ba461"
+      ],
+      "Libraries/fpTextures.fpl": [
+        "255cb14da5f49c7aaa210135638cfdc924130397"
+      ],
+      "Balls/Baseball.zip": [
+        "badfe5b7ab16c88f3fe255143546932c09fc2097"
+      ],
+      "Balls/Basketball 1.zip": [
+        "5aff2d72c317d58a6f1951811a31ec1b99dfdfe4"
+      ],
+      "Balls/Basketball 2.zip": [
+        "1fa517b848c69c0b2c2f3a32e4097a157fff3aa2"
+      ],
+      "Balls/Cue Black.zip": [
+        "9238286e57f346fd9b9ed3d8ffa977083b9d3feb"
+      ],
+      "Balls/Cue White.zip": [
+        "948eec0af66150dc908622bd48e867e85fb0d6c5"
+      ],
+      "Balls/EYETOY.zip": [
+        "89d8f29048176e8faff89cd48d0eda7b4875bf49"
+      ],
+      "Balls/Fireball.zip": [
+        "28a08c3911ef46aca8880587bed56dfa4f99062a"
+      ],
+      "Balls/Knight.zip": [
+        "969d38e02a6759629cc827501a049c60582d9531"
+      ],
+      "Balls/Soccer Ball 1.zip": [
+        "0a1e886e991d88761502d8434248e986bf9c238f"
+      ],
+      "Balls/axis.zip": [
+        "b701f91eae625a5e8f7bf56f104be506c8d1c8d8"
+      ],
+      "Balls/earth.zip": [
+        "0b30d717df74d90c26769d58055b507b89fdc1fc"
+      ],
+      "Balls/latlong.zip": [
+        "d2f65f0f32e21dfc65d61a384df525dedbc57a8a"
+      ],
+      "XML/Zendonius_v1.0.xml": [
+        "694f2c0efa61c934345161c61782202bac208f9b"
+      ],
+      "XML/Zendonius_v1.1.xml": [
+        "213244dc655fec822218a8780668bc74b80ac8ff"
+      ],
+      "XML/fp-p1.0.xml": [
+        "534a239cb7ae954fb9ad43de7fd79c0e5ee6473a"
+      ],
+      "XML/fp-p2.0.xml": [
+        "db023400242b4e5c34a14876e64dc9bfc3b6e3e1"
+      ],
+      "XML/fp-p2.1.xml": [
+        "22ffd7dc5541bbf0048b7ad4af5bbc76034cad8f"
+      ],
+      "XML/fp-p2.2.xml": [
+        "fd56e59a4d36c8f3dbccd0ee7c24abc9e66c0495"
+      ],
+      "XML/fp-p2.3 Version 1.xml": [
+        "33970a777762fc53908499b8a0bfe2b5cbc50b99"
+      ],
+      "XML/fp-p2.3 Version 2.xml": [
+        "2b0792a18766a7750b6b5da8dc9607ed63e8dc77"
+      ],
+      "XML/fp-p2.4.xml": [
+        "ce9ab342ac870f9c5bcd53671cca05263ef27f0d"
+      ],
+      "XML/fp-p2.5 slamtilt rubbers.xml": [
+        "b1e1764011daa11017b571428b4cd82c12eabd2e"
+      ],
+      "XML/fp-p2.5.xml": [
+        "716e15712d968f9ce0b94126bb7e0ec8a7862c29"
+      ],
+      "XML/fp-p2.6.xml": [
+        "f6abf69d826b5daef686c7ed15dd4349b47621a2"
+      ],
+      "XML/fp-p2.7.xml": [
+        "468826d947e599ec79d9bc44ddbff75fbf60ede2"
+      ],
+      "XML/zedonius_v1_0.zip": [
+        "2563528f492e39b947f8836d10eefa1fd278f033"
+      ],
+      "XML/zedonius_v1_1.zip": [
+        "f585911868919bbf4f6d185a468ab01982ad1878"
+      ],
+      "plugins/DesktopCam.dll": [
+        "8a5b900b98fb741a910d269d528564b3d0951a4f"
+      ],
+      "plugins/DesktopKinect.dll": [
+        "19a04dbf9f43c9fc4ddb1d1357bff64526c3fec9"
+      ],
+      "plugins/DesktopPS3Eye.dll": [
+        "4515c749924b53a2dae034371da759f24b04c399"
+      ],
+      "plugins/FaceTrackData.dll": [
+        "aeb806a4330ce8716feffdd844e71084a86b2f88"
+      ],
+      "plugins/FaceTrackLib.dll": [
+        "3e96611e075c0ffb82232b36b44dc6650627d9b3"
+      ],
+      "plugins/FreeTrack.dll": [
+        "8bb00560edc99048cda818cb81afa823e8d1a682"
+      ],
+      "plugins/HT-PS3Eyes.dll": [
+        "61b0ff6832769f300c4278e279ce5bd4ce878827"
+      ],
+      "plugins/Kinect.dll": [
+        "f7a2c21d2acc82eb9ff700fa426cc0b37edd851a"
+      ],
+      "plugins/Kinect2.dll": [
+        "22e32cd595f825b004c10d46746cd28c973f649b"
+      ],
+      "plugins/PS3Eye.dll": [
+        "44034ab6fcdce57af55431b11ebd31cfa8b1901b"
+      ],
+      "plugins/PinballHighScore.cfg": [
+        "852b39ba5db64e8a84e4b0612521caa5bd44fe02"
+      ],
+      "plugins/PinballHighScore.dll": [
+        "7734aecaa3cd1d019db365aecfd9df2a5ef8efbe"
+      ],
+      "plugins/PostFX.dll": [
+        "52a49fdbb9328a54e9add344def6636be3d151e1"
+      ],
+      "plugins/PuPPlugin.dll": [
+        "972607482b16139d1d53d919d3499a61e5ece7f8"
+      ],
+      "plugins/Simple Cam.dll": [
+        "b55767f9216bc1de3f0f0ece2ab41f6db2c97a18"
+      ],
+      "plugins/TrackIR.dll": [
+        "000deaf4533b239cd3c22f250dcbb0d55123dc16"
+      ],
+      "plugins/haarcascades/haarcascade_frontalface_alt.xml": [
+        "035eef24478ebf4b16c788dbd02f8b3a3f9b8951"
+      ],
+      "plugins/haarcascades/haarcascade_frontalface_default.xml": [
+        "85a317ce2fc0415741a41736e99bd281d2437568"
+      ],
+      "plugins/icom.dll": [
+        "83a3b55b2cc1b29997d50cf38108f6725d9a0df2"
+      ],
+      "plugins/lbpcascades/lbpcascade_frontalface.xml": [
+        "d668cbe8712f062bcc6af898ebb2937b73dcfd2d"
+      ],
       "history/command.dat": [
         "22b36583a956fb4c0feb1eb47e01de6efdb89a6b"
       ],
@@ -147636,6 +149900,57 @@
       ],
       "history/sysinfo.dat": [
         "8881159097cd92f67bfec5250bc061626d87cf04"
+      ],
+      "doom3/base/doom3_chinese_translation_doom3bfg.pk4": [
+        "8c06159ab1012b271d39d624b45c55c2360dc443"
+      ],
+      "doom3/base/zzz_idTech4Amm_d3_sabot_a7.pk4": [
+        "8179522bcd5abc4c5a3194bf49f6821738644500"
+      ],
+      "doom3/rivensin/zzz_idTech4Amm_play_original_doom3_level.pk4": [
+        "de368e97ca86f489c1f10ea148e0812913c25c7d"
+      ],
+      "ecwolf/ecwolf.pk3": [
+        "d327b48f83d9b95c5a49597145d96be80be3eade"
+      ],
+      "etw/legacy/legacy_v2.83.2.pk3": [
+        "f156945f70545e37fb5ee33a95ee97204a7f60b7"
+      ],
+      "keyboard/generic.json": [
+        "839c05a60c231d409f90b477bf2001c28f10b1bb"
+      ],
+      "quake4/q4base/zzz_idTech4Amm_q4_sabot_a9.pk4": [
+        "a3af9251c6a2b4b8d02108bd7b91919aace929dd"
+      ],
+      "uzdoom/brightmaps.pk3": [
+        "ccb1fb093dc128da46a5060ba319c5bd5790e074"
+      ],
+      "uzdoom/fm_banks/GENMIDI.GS.wopl": [
+        "538d220d87b86b997f539265eb12a6c319e17a1c"
+      ],
+      "uzdoom/fm_banks/gs-by-papiezak-and-sneakernets.wopn": [
+        "eaca5d7a9fe1db6094990be0d8916b7f97920db1"
+      ],
+      "uzdoom/game_support.pk3": [
+        "cccab57d1d1b84601fa0c52a74f55bf7b36f4e1c"
+      ],
+      "uzdoom/game_widescreen_gfx.pk3": [
+        "9ff11fca19550b189cc8e7d4cafc9897d57cd472"
+      ],
+      "uzdoom/lights.pk3": [
+        "19ad73cae23b5d9f3890ae29542a2d3e611bda00"
+      ],
+      "uzdoom/soundfonts/uzdoom.sf2": [
+        "4394193fb95c1e59916efe9ac3a47952ab5002f5"
+      ],
+      "uzdoom/uzdoom.pk3": [
+        "dd2364da2cc8b49e32330ba9abff80727b4ea0a0"
+      ],
+      "xash/cs16client-extras.pk3": [
+        "ab0c9f66e9e9be4af96c20d5ce3a9d684eeff2c2"
+      ],
+      "xash/extras.pk3": [
+        "971249b94cb62fbca2f42c8ab7a7d29d30e5b368"
       ],
       "roms/108281-001.bin": [
         "d108bb99cb1a05d808e6e25cc720da24faee9e7c"
@@ -156485,6 +158800,7 @@
         "af5af53f66982e749643fdf8b2acbb7d4d3ed229",
         "6e89d1227581c76441a53d605f9e324185f1da33",
         "6d27d71aec4dfba98f66316ae74a1426d567698a",
+        "aedd333c565ccf05fb062289e5fab4722883712c",
         "5a5cb5a77d7d55ee69657c2f870416daed52dea7",
         "e17a3a6d265bf1fa150312061134293d2b58288c",
         "a553481f4e2794c10cfe597fef154eef0d8257de",
@@ -156537,6 +158853,9 @@
         "c65592330c9dd84011151daed52f9aec926b7e56",
         "0877ffb4b4d1c18283468be3579b72ed8c22e3ac",
         "1246203bebf9f04e3bac2df7fc64719304f9f1bd",
+        "313a23600a169adbe130b1ae1784d8de437ce7d9",
+        "d3534cd62d312fe28988c6229c47ab81a3ae1f9e",
+        "30566eda672fef3036fbd3998af3cc9fdcef38e7",
         "72c65f2a11ee7b72b77b9945187b7a332632e14a",
         "3b71f43ff30f4b15b5cd85dd9e95ebc7e84eb5a3",
         "b7af62f0bc95fdca4b31d236f8327dafc80f83b7",
