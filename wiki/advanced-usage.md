@@ -109,6 +109,40 @@ same selection function, so the two never disagree: `--emulator duckstation`
 reports 105 files, `--emulator duckstation --region us` reports 34, and a pack
 built with the same flags carries exactly those 34.
 
+### One file per slot
+
+Region filtering leaves a system with every revision of the same BIOS:
+`scph1001` (v2.2), `scph5501` (v3.0) and `scph7001` (v4.1) are all North
+American. `--one-per-slot` keeps a single one per system and region:
+
+```bash
+python scripts/generate_pack.py --platform retroarch --region us --one-per-slot
+```
+
+It only acts on evidence. The winner comes from an ordered search list the
+core's code actually walks, recorded as `search_rank:` on the file entry, rank
+1 being tried first. PicoDrive declares three such lists, one per region
+(`biosfiles_us/eu/jp` in `platform/libretro/libretro.c`), and the pack keeps
+`us_scd2_9306.bin` over the three later candidates.
+
+Where no such list is declared, the group is left untouched and counted:
+
+```
+  63 slot(s) with no declared order: every candidate kept
+```
+
+That number is the remaining work, not a failure. Picking a file without a
+declared order would be the arbitrary selection this exists to remove, and it
+could drop the one the core would have loaded. `priority:` is deliberately not
+used for this: its meaning is disputed between the field reference and
+DuckStation's own comparison, and its values rank PS2 images above the plain
+PlayStation BIOS.
+
+`--one-per-slot` requires `--platform` or `--all`, and is refused with
+`--manifest`, `--emulator`, `--system` and `--from-md5` rather than silently
+ignored.
+
+
 `--region` composes with `--split`, `--target`, `--required-only`, `--source`,
 `--emulator` and `--system`. It is mutually exclusive with `--from-md5`, which
 selects by hash. `pipeline.py` never passes it, so the released packs stay

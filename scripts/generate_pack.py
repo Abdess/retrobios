@@ -53,6 +53,7 @@ from common import (
     yaml_load,
 )
 import region as region_mod
+import slot as slot_mod
 from deterministic_zip import _FIXED_DATE_TIME, rebuild_zip_deterministic
 from nativemode import hash_mismatch_excludes_file
 from validation import (
@@ -249,6 +250,45 @@ def _find_candidate_satisfying_both(
         if reason is None:
             return path
     return None
+
+
+def _pack_member_groups(
+    config: dict,
+    pack_systems: dict,
+    emulators_dir: str,
+    db: dict,
+    base_dest: str,
+    emu_profiles: dict | None,
+    target_cores: set[str] | None,
+    source: str,
+) -> dict[str, list[tuple[str, str]]]:
+    """Group every candidate of a pack by system, as (destination, name).
+
+    Covers the platform baseline and the core extras, because a narrowing pass
+    that saw only one of the two would compare an incomplete set.
+    """
+    groups: dict[str, list[tuple[str, str]]] = {}
+    for sys_id, system in pack_systems.items():
+        members = groups.setdefault(sys_id, [])
+        for fe in system.get("files", []):
+            dest = _sanitize_path(fe.get("destination", fe.get("name", "")))
+            if dest:
+                members.append((dest, fe.get("name", "")))
+    if source == "platform":
+        return groups
+    emu_systems = {
+        n: list(p.get("systems", [])) for n, p in (emu_profiles or {}).items()
+    }
+    for fe in _collect_emulator_extras(
+        config, emulators_dir, db, set(), base_dest, emu_profiles,
+        target_cores=target_cores, include_all=(source == "truth"),
+    ):
+        dest = _sanitize_path(fe.get("destination", fe.get("name", "")))
+        if not dest:
+            continue
+        for sys_id in emu_systems.get(fe.get("source_emulator", ""), ["_extras"]):
+            groups.setdefault(sys_id, []).append((dest, fe.get("name", "")))
+    return groups
 
 
 def _target_tag(target_name: str) -> str:
@@ -1161,6 +1201,7 @@ def generate_pack(
     flatten: bool = True,
     regions: list[str] | None = None,
     target_name: str | None = None,
+    one_per_slot: bool = False,
     offline: bool | None = None,
 ) -> str | None:
     """Generate a ZIP pack for a platform.
@@ -1349,6 +1390,30 @@ def generate_pack(
         region_fallbacks = region_mod.fallback_groups(
             region_groups, region_index, regions
         )
+
+    slot_undecidable: list[str] = []
+    if one_per_slot:
+        idx = region_mod.build_region_index(emu_profiles or {})
+        members_by_system = _pack_member_groups(
+            config, pack_systems, emulators_dir, db, base_dest,
+            emu_profiles, target_cores, source,
+        )
+        slot_groups: dict[str, list[tuple[str, str]]] = {}
+        for sys_id, members in members_by_system.items():
+            for dest, name in members:
+                if dest in region_drops:
+                    continue
+                tier = ",".join(sorted(region_mod.lookup_regions(idx, dest, name)))
+                slot_groups.setdefault(f"{sys_id}|{tier}", []).append((dest, name))
+        slot_drops, slot_undecidable = slot_mod.resolve_slot_drops(
+            slot_groups, slot_mod.build_slot_index(emu_profiles or {})
+        )
+        region_drops = region_drops | slot_drops
+        if slot_undecidable:
+            print(
+                f"  {len(slot_undecidable)} slot(s) with no declared order: "
+                f"every candidate kept"
+            )
 
     with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:
       if source != "truth":
@@ -2371,6 +2436,7 @@ def generate_split_packs(
     source: str = "full",
     regions: list[str] | None = None,
     target_name: str | None = None,
+    one_per_slot: bool = False,
     offline: bool | None = None,
 ) -> list[str]:
     """Generate split packs (one ZIP per system or manufacturer)."""
@@ -2438,6 +2504,7 @@ def generate_split_packs(
             source=source,
             regions=regions,
             target_name=target_name,
+            one_per_slot=one_per_slot,
             offline=offline,
         )
         if zip_path:
@@ -2701,6 +2768,13 @@ def _validate_args(args, parser):
         parser.error("--manifest is incompatible with --split")
     if getattr(args, "region", None) and has_from_md5:
         parser.error("--region and --from-md5 are mutually exclusive")
+    if getattr(args, "one_per_slot", False):
+        if has_from_md5:
+            parser.error("--one-per-slot and --from-md5 are mutually exclusive")
+        if args.manifest:
+            parser.error("--one-per-slot is incompatible with --manifest")
+        if has_emulator or has_system:
+            parser.error("--one-per-slot requires --platform or --all")
 
 
 def _write_manifest_if_changed(path: str, manifest: dict) -> None:
@@ -2941,6 +3015,7 @@ def _run_platform_packs(
                         source=source,
                         regions=getattr(args, "regions", None),
                         target_name=args.target,
+                        one_per_slot=args.one_per_slot,
                         offline=args.offline,
                     )
                     print(f"  Split into {len(zip_paths)} packs")
@@ -2962,6 +3037,7 @@ def _run_platform_packs(
                         source=source,
                         regions=getattr(args, "regions", None),
                         target_name=args.target,
+                        one_per_slot=args.one_per_slot,
                         offline=args.offline,
                     )
                 if not args.split and zip_path and aliases:
@@ -3089,6 +3165,11 @@ def main():
     parser.add_argument(
         "--region",
         help="Region priority list, best first (e.g. us,eu,jp)",
+    )
+    parser.add_argument(
+        "--one-per-slot",
+        action="store_true",
+        help="Keep one BIOS per system and region where the core declares an order",
     )
     parser.add_argument(
         "--list-targets",

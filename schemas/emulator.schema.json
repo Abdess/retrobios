@@ -396,6 +396,11 @@
           "load_from": {
             "type": "string"
           },
+          "search_rank": {
+            "description": "Position in an ordered search list the code walks, 1 = tried first. Only set it when the source declares such a list.",
+            "type": "integer",
+            "minimum": 1
+          },
           "priority": {
             "type": "integer"
           },
