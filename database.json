@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-11T23:34:51Z",
-  "total_files": 8785,
-  "total_size": 12024110819,
+  "generated_at": "2026-08-11T23:38:25Z",
+  "total_files": 8795,
+  "total_size": 12036698851,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -89077,6 +89077,70 @@
         }
       }
     },
+    "b7548a92bd2caa9d60cbc7f79573a5d510f88012": {
+      "path": "bios/Sony/PlayStation 2/SCPH-50009_BIOS_V10_CHN_190.BIN",
+      "name": "SCPH-50009_BIOS_V10_CHN_190.BIN",
+      "size": 4194304,
+      "sha1": "b7548a92bd2caa9d60cbc7f79573a5d510f88012",
+      "md5": "74c099882c5134e3735a91efc260046f",
+      "sha256": "3f11bc1a9d1697fe950d73ac9deb6b49c984948c108f569d7b118a7bf8e1813b",
+      "crc32": "40d6c676",
+      "adler32": "8aa245ce",
+      "provenance": {
+        "tosec": {
+          "dat": "Sony PlayStation 2 - Firmware",
+          "name": "Sony PlayStation 2 SCPH-50009 System ROM v5.0-01.90 (2003-06-23)(Sony)(CN).bin",
+          "description": "Sony PlayStation 2 SCPH-50009 System ROM v5.0-01.90 (2003-06-23)(Sony)(CN)"
+        }
+      }
+    },
+    "2ed11fd9333e62e36659565a744330a5902ed5e3": {
+      "path": "bios/Sony/PlayStation 2/SCPH-50009_BIOS_V10_CHN_190.EROM",
+      "name": "SCPH-50009_BIOS_V10_CHN_190.EROM",
+      "size": 3145728,
+      "sha1": "2ed11fd9333e62e36659565a744330a5902ed5e3",
+      "md5": "eb2726d5e62542fad8cdab332815b34e",
+      "sha256": "67a6b2779e9320abe24f75ce811acf29e54d6dc06ce65b11341b6d84103de7f8",
+      "crc32": "ff480141",
+      "adler32": "870995c0"
+    },
+    "3ffa2e74c8c8ce0e10e2069956f12d2407b91c65": {
+      "path": "bios/Sony/PlayStation 2/SCPH-50009_BIOS_V10_CHN_190.NVM",
+      "name": "SCPH-50009_BIOS_V10_CHN_190.NVM",
+      "size": 1024,
+      "sha1": "3ffa2e74c8c8ce0e10e2069956f12d2407b91c65",
+      "md5": "f8d7fca2bf3da472b353b4246263425c",
+      "sha256": "5b255bce650e66efeeb3b0bebc0dff705600d05aa2e076a315d02c6a7ed6ac9a",
+      "crc32": "d116bf8a",
+      "adler32": "dea3964b"
+    },
+    "b284280341f16b1581c28ff81934bfdf403da1f0": {
+      "path": "bios/Sony/PlayStation 2/SCPH-50009_BIOS_V10_CHN_190.ROM1",
+      "name": "SCPH-50009_BIOS_V10_CHN_190.ROM1",
+      "size": 524288,
+      "sha1": "b284280341f16b1581c28ff81934bfdf403da1f0",
+      "md5": "a463e8d27b4ec56c24f0879748e8409f",
+      "sha256": "ad812eb36b8e7daa6106411e43840f70175f012a7a7dd289965872fe43933cc4",
+      "crc32": "929b97f6",
+      "adler32": "29d8b849",
+      "provenance": {
+        "tosec": {
+          "dat": "Sony PlayStation 2 - Firmware",
+          "name": "Sony PlayStation 2 DVD Player ROM v3.02C (2003-06-23)(Sony)[u][b].bin",
+          "description": "Sony PlayStation 2 DVD Player ROM v3.02C (2003-06-23)(Sony)[u][b]"
+        }
+      }
+    },
+    "7aef1dd6de4b4f64f31daad615bbccdb3e62e79c": {
+      "path": "bios/Sony/PlayStation 2/SCPH-50009_BIOS_V10_CHN_190.ROM2",
+      "name": "SCPH-50009_BIOS_V10_CHN_190.ROM2",
+      "size": 524288,
+      "sha1": "7aef1dd6de4b4f64f31daad615bbccdb3e62e79c",
+      "md5": "02a9ca02a4d1209482a091fea1d4dcd8",
+      "sha256": "8dc012640186c46a39fcdd64a8ab9430080a220bd0630da58c977f35725de5cf",
+      "crc32": "d374379b",
+      "adler32": "5db596c7"
+    },
     "434bc0b4eb4827da0773ec0795aadc5162569a07": {
       "path": "bios/Sony/PlayStation 2/SCPH-70004.BIN",
       "name": "SCPH-70004.BIN",
@@ -89118,6 +89182,63 @@
       "sha256": "b86fbccaa111ca7497630337dafea7da7320fc4f924ada22b92145ef806e7b42",
       "crc32": "0e8797c0",
       "adler32": "5a508f48"
+    },
+    "06ccc54cdbe8b017a629155ccb66310cba9c4720": {
+      "path": "bios/Sony/PlayStation 2/SCPH-70006_BIOS_V12_HK_200.NVM",
+      "name": "SCPH-70006_BIOS_V12_HK_200.NVM",
+      "size": 1024,
+      "sha1": "06ccc54cdbe8b017a629155ccb66310cba9c4720",
+      "md5": "bc6bb12cd349c0d3dd96f3412d74b60b",
+      "sha256": "48ea5461a794fbc366798776e1dd5b734a25d0f140d75c23b642d99e48e2b76f",
+      "crc32": "df95b3e3",
+      "adler32": "8c3e4eed"
+    },
+    "cce6fac0f7e682ad167e1e828b2d53192c3d5051": {
+      "path": "bios/Sony/PlayStation 2/SCPH-70008_BIOS_V12_RUS_200.BIN",
+      "name": "SCPH-70008_BIOS_V12_RUS_200.BIN",
+      "size": 4194304,
+      "sha1": "cce6fac0f7e682ad167e1e828b2d53192c3d5051",
+      "md5": "7c5bfa5137a6f1631549557d4ace33e5",
+      "sha256": "d6da9154a9954cafd9d3df44609236ba86c197a0b7d75380f952c4cb910b67f6",
+      "crc32": "92aa71a2",
+      "adler32": "f4e85fab",
+      "provenance": {
+        "tosec": {
+          "dat": "Sony PlayStation 2 - Firmware",
+          "name": "Sony PlayStation 2 SCPH-70008 System ROM v5.0-02.00 (2004-06-14)(Sony)(IN-RU).bin",
+          "description": "Sony PlayStation 2 SCPH-70008 System ROM v5.0-02.00 (2004-06-14)(Sony)(IN-RU)"
+        }
+      }
+    },
+    "6611151e8f599230cdf19a17318e7e5ddc781961": {
+      "path": "bios/Sony/PlayStation 2/SCPH-70008_BIOS_V12_RUS_200.NVM",
+      "name": "SCPH-70008_BIOS_V12_RUS_200.NVM",
+      "size": 1024,
+      "sha1": "6611151e8f599230cdf19a17318e7e5ddc781961",
+      "md5": "bd41c04a80e9cbef0bab382b1c43be4c",
+      "sha256": "b1704c7da37f03db017ad7576508c61b250d9ed4f3ceda8732ea91a3034f6cbf",
+      "crc32": "c5dd92d4",
+      "adler32": "c12f6080"
+    },
+    "fff13c6e30c55df9d6241ee08e5d0026c6a5d618": {
+      "path": "bios/Sony/PlayStation 2/SCPH-75008_BIOS_V14_RUS_220.NVM",
+      "name": "SCPH-75008_BIOS_V14_RUS_220.NVM",
+      "size": 1024,
+      "sha1": "fff13c6e30c55df9d6241ee08e5d0026c6a5d618",
+      "md5": "295caaca6551ec811da55f9e6719f33e",
+      "sha256": "f57595d834bec00f62ece0fc59f4c0c52ebe26a46100429b065606a851dfa1a8",
+      "crc32": "86547c14",
+      "adler32": "88f3b03d"
+    },
+    "84a9628af6fa8335247c002b1ce6c81a419ea9a5": {
+      "path": "bios/Sony/PlayStation 2/SCPH-77008_BIOS_V15_RUS_220.NVM",
+      "name": "SCPH-77008_BIOS_V15_RUS_220.NVM",
+      "size": 1024,
+      "sha1": "84a9628af6fa8335247c002b1ce6c81a419ea9a5",
+      "md5": "1ec6a33c35317c2ae3fbdf9d46b319d8",
+      "sha256": "08ea4442e8f16f0e68b7b07355f044c181cab7747076d135f33184bf32f156af",
+      "crc32": "7ba25709",
+      "adler32": "d3384e56"
     },
     "62f5a0b54a174daf2bf66634b86c6f2a3cd297ce": {
       "path": "bios/Sony/PlayStation 2/SCPH30004R.nvm",
@@ -101367,9 +101488,19 @@
       "acf4730ceb38ac9d8c7d8e21f2614600": "aea061e6e263fdcc1c4fdbd68553ef78dae74263",
       "28922c703cc7d2cf856f177f2985b3a9": "8fa040852d4b8688f0c84bcfffc65eb208f2b432",
       "d5ce2c7d119f563ce04bc04dbc3a323e": "f9a5d629a036b99128f7cb530c6e3ca016e9c8b7",
+      "74c099882c5134e3735a91efc260046f": "b7548a92bd2caa9d60cbc7f79573a5d510f88012",
+      "eb2726d5e62542fad8cdab332815b34e": "2ed11fd9333e62e36659565a744330a5902ed5e3",
+      "f8d7fca2bf3da472b353b4246263425c": "3ffa2e74c8c8ce0e10e2069956f12d2407b91c65",
+      "a463e8d27b4ec56c24f0879748e8409f": "b284280341f16b1581c28ff81934bfdf403da1f0",
+      "02a9ca02a4d1209482a091fea1d4dcd8": "7aef1dd6de4b4f64f31daad615bbccdb3e62e79c",
       "dc752f160044f2ed5fc1f4964db2a095": "434bc0b4eb4827da0773ec0795aadc5162569a07",
       "9feb1fdeadd6232a13b95e60b34ccef9": "ec0121bb8e2a209044309780d2efc2559c9a0ef1",
       "82dc50fa18e636850f557c4ea66c7bfd": "cc44355ded232a2ba5309bb24d4cd55af08696b2",
+      "bc6bb12cd349c0d3dd96f3412d74b60b": "06ccc54cdbe8b017a629155ccb66310cba9c4720",
+      "7c5bfa5137a6f1631549557d4ace33e5": "cce6fac0f7e682ad167e1e828b2d53192c3d5051",
+      "bd41c04a80e9cbef0bab382b1c43be4c": "6611151e8f599230cdf19a17318e7e5ddc781961",
+      "295caaca6551ec811da55f9e6719f33e": "fff13c6e30c55df9d6241ee08e5d0026c6a5d618",
+      "1ec6a33c35317c2ae3fbdf9d46b319d8": "84a9628af6fa8335247c002b1ce6c81a419ea9a5",
       "20581825a81dcaf1ea544b645af70a15": "62f5a0b54a174daf2bf66634b86c6f2a3cd297ce",
       "8a4bc67bed996f7e0e8ac6f691805cc2": "dec5e4f137890c338babe13cfb9d41ff869fa721",
       "acafbdf18eee5925f307c9efeb77fc1f": "773b4279d8c8e182dc57e444dbf448a1d115e7e0",
@@ -125280,6 +125411,21 @@
       "SCPH-39001.bin": [
         "f9a5d629a036b99128f7cb530c6e3ca016e9c8b7"
       ],
+      "SCPH-50009_BIOS_V10_CHN_190.BIN": [
+        "b7548a92bd2caa9d60cbc7f79573a5d510f88012"
+      ],
+      "SCPH-50009_BIOS_V10_CHN_190.EROM": [
+        "2ed11fd9333e62e36659565a744330a5902ed5e3"
+      ],
+      "SCPH-50009_BIOS_V10_CHN_190.NVM": [
+        "3ffa2e74c8c8ce0e10e2069956f12d2407b91c65"
+      ],
+      "SCPH-50009_BIOS_V10_CHN_190.ROM1": [
+        "b284280341f16b1581c28ff81934bfdf403da1f0"
+      ],
+      "SCPH-50009_BIOS_V10_CHN_190.ROM2": [
+        "7aef1dd6de4b4f64f31daad615bbccdb3e62e79c"
+      ],
       "SCPH-70004.BIN": [
         "434bc0b4eb4827da0773ec0795aadc5162569a07"
       ],
@@ -125288,6 +125434,21 @@
       ],
       "SCPH-70004.ROM1": [
         "cc44355ded232a2ba5309bb24d4cd55af08696b2"
+      ],
+      "SCPH-70006_BIOS_V12_HK_200.NVM": [
+        "06ccc54cdbe8b017a629155ccb66310cba9c4720"
+      ],
+      "SCPH-70008_BIOS_V12_RUS_200.BIN": [
+        "cce6fac0f7e682ad167e1e828b2d53192c3d5051"
+      ],
+      "SCPH-70008_BIOS_V12_RUS_200.NVM": [
+        "6611151e8f599230cdf19a17318e7e5ddc781961"
+      ],
+      "SCPH-75008_BIOS_V14_RUS_220.NVM": [
+        "fff13c6e30c55df9d6241ee08e5d0026c6a5d618"
+      ],
+      "SCPH-77008_BIOS_V15_RUS_220.NVM": [
+        "84a9628af6fa8335247c002b1ce6c81a419ea9a5"
       ],
       "cheats_ni.zip": [
         "dec5e4f137890c338babe13cfb9d41ff869fa721"
@@ -138404,9 +138565,19 @@
       "b7ef81a9": "aea061e6e263fdcc1c4fdbd68553ef78dae74263",
       "9386a740": "8fa040852d4b8688f0c84bcfffc65eb208f2b432",
       "a19e0bf5": "f9a5d629a036b99128f7cb530c6e3ca016e9c8b7",
+      "40d6c676": "b7548a92bd2caa9d60cbc7f79573a5d510f88012",
+      "ff480141": "2ed11fd9333e62e36659565a744330a5902ed5e3",
+      "d116bf8a": "3ffa2e74c8c8ce0e10e2069956f12d2407b91c65",
+      "929b97f6": "b284280341f16b1581c28ff81934bfdf403da1f0",
+      "d374379b": "7aef1dd6de4b4f64f31daad615bbccdb3e62e79c",
       "6f8e3c29": "434bc0b4eb4827da0773ec0795aadc5162569a07",
       "bf3cbc65": "ec0121bb8e2a209044309780d2efc2559c9a0ef1",
       "0e8797c0": "cc44355ded232a2ba5309bb24d4cd55af08696b2",
+      "df95b3e3": "06ccc54cdbe8b017a629155ccb66310cba9c4720",
+      "92aa71a2": "cce6fac0f7e682ad167e1e828b2d53192c3d5051",
+      "c5dd92d4": "6611151e8f599230cdf19a17318e7e5ddc781961",
+      "86547c14": "fff13c6e30c55df9d6241ee08e5d0026c6a5d618",
+      "7ba25709": "84a9628af6fa8335247c002b1ce6c81a419ea9a5",
       "31791add": "62f5a0b54a174daf2bf66634b86c6f2a3cd297ce",
       "cd9be891": "dec5e4f137890c338babe13cfb9d41ff869fa721",
       "4460a2f0": "773b4279d8c8e182dc57e444dbf448a1d115e7e0",
@@ -147191,9 +147362,19 @@
       "c4dad3b5c6ad58bce70a47fc332602880f041c0338ac6be89061c928f6919ab1": "aea061e6e263fdcc1c4fdbd68553ef78dae74263",
       "ee7ae4cc152588b7da1dab17494a321ceafafaf799769baea4e8a28afa5044b1": "8fa040852d4b8688f0c84bcfffc65eb208f2b432",
       "f4c948e61a291d4b3f92a141e550cf8357204287a31ff784caccbedaef910c9d": "f9a5d629a036b99128f7cb530c6e3ca016e9c8b7",
+      "3f11bc1a9d1697fe950d73ac9deb6b49c984948c108f569d7b118a7bf8e1813b": "b7548a92bd2caa9d60cbc7f79573a5d510f88012",
+      "67a6b2779e9320abe24f75ce811acf29e54d6dc06ce65b11341b6d84103de7f8": "2ed11fd9333e62e36659565a744330a5902ed5e3",
+      "5b255bce650e66efeeb3b0bebc0dff705600d05aa2e076a315d02c6a7ed6ac9a": "3ffa2e74c8c8ce0e10e2069956f12d2407b91c65",
+      "ad812eb36b8e7daa6106411e43840f70175f012a7a7dd289965872fe43933cc4": "b284280341f16b1581c28ff81934bfdf403da1f0",
+      "8dc012640186c46a39fcdd64a8ab9430080a220bd0630da58c977f35725de5cf": "7aef1dd6de4b4f64f31daad615bbccdb3e62e79c",
       "d6653f4e93be2f6f9e9d690a934f26cf0f6ad4e348b69f41ef736732c3a6685b": "434bc0b4eb4827da0773ec0795aadc5162569a07",
       "e5bcd5925c1f22de48d49c3895dd421d167faddc033aac628f5facfba90ceef3": "ec0121bb8e2a209044309780d2efc2559c9a0ef1",
       "b86fbccaa111ca7497630337dafea7da7320fc4f924ada22b92145ef806e7b42": "cc44355ded232a2ba5309bb24d4cd55af08696b2",
+      "48ea5461a794fbc366798776e1dd5b734a25d0f140d75c23b642d99e48e2b76f": "06ccc54cdbe8b017a629155ccb66310cba9c4720",
+      "d6da9154a9954cafd9d3df44609236ba86c197a0b7d75380f952c4cb910b67f6": "cce6fac0f7e682ad167e1e828b2d53192c3d5051",
+      "b1704c7da37f03db017ad7576508c61b250d9ed4f3ceda8732ea91a3034f6cbf": "6611151e8f599230cdf19a17318e7e5ddc781961",
+      "f57595d834bec00f62ece0fc59f4c0c52ebe26a46100429b065606a851dfa1a8": "fff13c6e30c55df9d6241ee08e5d0026c6a5d618",
+      "08ea4442e8f16f0e68b7b07355f044c181cab7747076d135f33184bf32f156af": "84a9628af6fa8335247c002b1ce6c81a419ea9a5",
       "0e13330dda0c0190a3ab732593416051df19bf8f3f3186862f84531a9d6915e2": "62f5a0b54a174daf2bf66634b86c6f2a3cd297ce",
       "91d5ae704ff8b6d90165a65f69e9e2be8a9ab9c588c525dc1c9c4ecbbdef1ffd": "dec5e4f137890c338babe13cfb9d41ff869fa721",
       "d07e3adde4da6a3220363b12d7b066168918225546122643ef7d19fece53b8b1": "773b4279d8c8e182dc57e444dbf448a1d115e7e0",
