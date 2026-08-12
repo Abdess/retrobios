@@ -263,7 +263,7 @@ nav:
     - vitaQuakeII: emulators/vitaquake2.md
     - yabasanshiro: emulators/yabasanshiro.md
     - Yuzu: emulators/yuzu.md
-  - Community forks (140):
+  - Community forks (149):
     - 2600.emu: emulators/2600-emu.md
     - EightyOne: emulators/81.md
     - a5200: emulators/a5200.md
@@ -335,19 +335,28 @@ nav:
     - LRPS2: emulators/lrps2.md
     - Lynx.emu: emulators/lynx-emu.md
     - M64Plus FZ: emulators/m64plus-fz.md
+    - MAME4droid 2024: emulators/mame4droid-2024.md
     - Mandarine: emulators/mandarine.md
+    - Mariani: emulators/mariani.md
+    - MD.emu: emulators/md-emu.md
     - mednafen_pce: emulators/mednafen_pce.md
     - mednafen_pce_fast: emulators/mednafen_pce_fast.md
     - mednafen_supafaust: emulators/mednafen_supafaust.md
     - mednafen_supergrafx: emulators/mednafen_supergrafx.md
     - melonDS: emulators/melonds.md
+    - melonDS Nightly: emulators/melonds-nightly.md
     - melonDS DS: emulators/melonds_ds.md
     - Meteor GBA: emulators/meteor.md
     - Mini vMac: emulators/minivmac.md
     - Moonlight: emulators/moonlight.md
     - mpv: emulators/mpv.md
+    - MSX.emu: emulators/msx-emu.md
+    - Mupen64Plus AE: emulators/mupen64plus-ae.md
     - nekop2: emulators/nekop2.md
+    - NEO.emu: emulators/neo-emu.md
     - nes: emulators/nes.md
+    - NES.emu: emulators/nes-emu.md
+    - Nesoid: emulators/nesoid.md
     - Nestopia UE: emulators/nestopia.md
     - NooDS: emulators/noods.md
     - Numero: emulators/numero.md
@@ -543,7 +552,7 @@ nav:
     - Stone Soup: emulators/stonesoup.md
     - UME 2015: emulators/ume2015.md
     - VBA-Next: emulators/vba_next.md
-  - Embedded HLE (9):
+  - Embedded HLE (11):
     - 3dSen: emulators/3dsen.md
     - Altirra: emulators/altirra.md
     - Cxbx-Reloaded: emulators/cxbx-reloaded.md
@@ -552,12 +561,14 @@ nav:
     - Lindbergh Loader: emulators/lindbergh-loader.md
     - Linkboy: emulators/linkboy.md
     - MFME: emulators/mfme.md
+    - My Boy!: emulators/my-boy.md
+    - My OldBoy!: emulators/my-oldboy.md
     - PCSX-ReARMed: emulators/pcsx_rearmed.md
   - Launchers (3):
     - ArcadeFlashWeb: emulators/arcadeflashweb.md
     - Dolphin Launcher: emulators/dolphin_launcher.md
     - Parallel Launcher: emulators/parallel-launcher.md
-  - Other (46):
+  - Other (47):
     - ares: emulators/ares.md
     - Basilisk II: emulators/basiliskii.md
     - beebem: emulators/beebem.md
@@ -584,6 +595,7 @@ nav:
     - jgenesis: emulators/jgenesis.md
     - KEGS: emulators/kegs.md
     - Lexaloffle: emulators/lexaloffle.md
+    - MasterGear: emulators/mastergear.md
     - Mednafen: emulators/mednafen.md
     - Model 2 Emulator: emulators/model2.md
     - openMSX: emulators/openmsx.md

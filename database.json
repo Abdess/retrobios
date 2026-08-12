@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-12T03:38:29Z",
-  "total_files": 8826,
-  "total_size": 12290974286,
+  "generated_at": "2026-08-12T03:51:42Z",
+  "total_files": 8886,
+  "total_size": 12295398958,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -53778,6 +53778,606 @@
       "crc32": "b6906508",
       "adler32": "35ca53c1"
     },
+    "7743bf1d7e6e09a02f1b2972aa63bd8a9f26050d": {
+      "path": "bios/Other/nethersx2/assets/3rdparty.html",
+      "name": "3rdparty.html",
+      "size": 90296,
+      "sha1": "7743bf1d7e6e09a02f1b2972aa63bd8a9f26050d",
+      "md5": "fb4ff036f3e4769aa6daefdc4c5dba57",
+      "sha256": "2d19c5abfd0306823c7a233b8e295161056a1e186b48cb212b8765ae1a8693e8",
+      "crc32": "1b7d4986",
+      "adler32": "86eea51e"
+    },
+    "997fdfb1c1873c1a43972b2984ac0da61fd47b14": {
+      "path": "bios/Other/nethersx2/assets/GameIndex.yaml",
+      "name": "GameIndex.yaml",
+      "size": 1839281,
+      "sha1": "997fdfb1c1873c1a43972b2984ac0da61fd47b14",
+      "md5": "a083d432bdcbc3282e51798f8e231a68",
+      "sha256": "cf5f8acba52ce046647f2658eedc730fd9db27651ab3134c1310dd805e66c3e9",
+      "crc32": "eb306220",
+      "adler32": "049b484e"
+    },
+    "0b219dc8b3b98c1705b14758bb7950064b928ebb": {
+      "path": "bios/Other/nethersx2/assets/cheats_ni.zip",
+      "name": "cheats_ni.zip",
+      "size": 221493,
+      "sha1": "0b219dc8b3b98c1705b14758bb7950064b928ebb",
+      "md5": "70a2f8043f2c1be6c84ecac87157a57b",
+      "sha256": "77142f3f7e623b4102e8339b7c34f19eb16724d88bf91eae2799d5b861b58aaa",
+      "crc32": "3b3a5f5d",
+      "adler32": "3b689183"
+    },
+    "f0d9c66e4793a014cf431ed20e87056e2a96b68e": {
+      "path": "bios/Other/nethersx2/assets/cheats_ws.zip",
+      "name": "cheats_ws.zip",
+      "size": 1688377,
+      "sha1": "f0d9c66e4793a014cf431ed20e87056e2a96b68e",
+      "md5": "d9460e9df9ac219b1eb946c76f80ee0f",
+      "sha256": "33a1708b1042f9f193b1c97fd3bb84bbda76da33ad3f6e5fa446e4b27a786caa",
+      "crc32": "5f3d3bfa",
+      "adler32": "91f3d99b"
+    },
+    "9163d4a3d19b87483f843e4bf3afe236a50a72d2": {
+      "path": "bios/Other/nethersx2/assets/faq.html",
+      "name": "faq.html",
+      "size": 14048,
+      "sha1": "9163d4a3d19b87483f843e4bf3afe236a50a72d2",
+      "md5": "c2a64e0bcc401da9b0a3c7adf3cff410",
+      "sha256": "486b375eac62093b84a7aeb062b67a061bfc3dcdaf4bd71648005392d6118829",
+      "crc32": "d14db704",
+      "adler32": "a8c15a8b"
+    },
+    "694b8a2445ff39de415bf4791845442a7b1b81e5": {
+      "path": "bios/Other/nethersx2/assets/fonts/fa-solid-900.ttf",
+      "name": "fa-solid-900.ttf",
+      "size": 204528,
+      "sha1": "694b8a2445ff39de415bf4791845442a7b1b81e5",
+      "md5": "dffd9504fcb1894620fa41c700172994",
+      "sha256": "3f7b50c58c2f9a6e9285e184950cea78ff02498b878392e7b64aae8272809605",
+      "crc32": "29e8dd44",
+      "adler32": "7b29e184"
+    },
+    "3a90d8e2db8f3cc18696d06826a3169584599d61": {
+      "path": "bios/Other/nethersx2/assets/icons/flags/NTSC-B.png",
+      "name": "NTSC-B.png",
+      "size": 10285,
+      "sha1": "3a90d8e2db8f3cc18696d06826a3169584599d61",
+      "md5": "f1245b975bbb4ce4ccd6755b1f92a63f",
+      "sha256": "c9f8e819c66bcb0363c69049b202355d4002152f34b22e883737b7e793bd973e",
+      "crc32": "e87c1795",
+      "adler32": "a52ea87c"
+    },
+    "b3e5d08f89b9b0f7709bd6a693f07c9c2f149106": {
+      "path": "bios/Other/nethersx2/assets/icons/flags/NTSC-C.png",
+      "name": "NTSC-C.png",
+      "size": 2614,
+      "sha1": "b3e5d08f89b9b0f7709bd6a693f07c9c2f149106",
+      "md5": "d37973b44f87ea6c9f9129ac41d17090",
+      "sha256": "488bb75f7e3f5bedbf12271474ff02bbedea7ef8211a436cdf270b846e165929",
+      "crc32": "3cf1eeac",
+      "adler32": "a10acb11"
+    },
+    "ce5918e65406677c32605b80155891d82a55d458": {
+      "path": "bios/Other/nethersx2/assets/icons/flags/NTSC-HK.png",
+      "name": "NTSC-HK.png",
+      "size": 6007,
+      "sha1": "ce5918e65406677c32605b80155891d82a55d458",
+      "md5": "b9dc015d006eb2834915dc81deb78328",
+      "sha256": "a3ef9ac81eeda9c77b2792d0607b827673080812103e87ccb56f6e5ac91aea9e",
+      "crc32": "8c9fd3d9",
+      "adler32": "348f8256"
+    },
+    "4628c264d07b700dfaf76f47da9b097e521894d0": {
+      "path": "bios/Other/nethersx2/assets/icons/flags/NTSC-J.png",
+      "name": "NTSC-J.png",
+      "size": 1248,
+      "sha1": "4628c264d07b700dfaf76f47da9b097e521894d0",
+      "md5": "baef9810e2277a46f16c94e2761767ef",
+      "sha256": "e20476423985bea74750d22f43f3e53ab83cfa3fac403e712c745542ff9c598f",
+      "crc32": "aa75a0a1",
+      "adler32": "57b9464c"
+    },
+    "20d58405a44379588264c849a79f4cbea54cf9ad": {
+      "path": "bios/Other/nethersx2/assets/icons/flags/NTSC-K.png",
+      "name": "NTSC-K.png",
+      "size": 13557,
+      "sha1": "20d58405a44379588264c849a79f4cbea54cf9ad",
+      "md5": "a1c236e2fc18b3463ea26b0d75c87a29",
+      "sha256": "3e63963183230d9ebe1b26d1ca31026f137f10389df787ed110fb041624ae51b",
+      "crc32": "f8cd7a53",
+      "adler32": "3c40529d"
+    },
+    "c4e9d46d6ec1c42eab9bea4324314bbc62c73c05": {
+      "path": "bios/Other/nethersx2/assets/icons/flags/NTSC-T.png",
+      "name": "NTSC-T.png",
+      "size": 4809,
+      "sha1": "c4e9d46d6ec1c42eab9bea4324314bbc62c73c05",
+      "md5": "a31d61110a56ae79871e49db13d37613",
+      "sha256": "d05ab400486c25143cae9c50a4ddbf1a08bb1d1d1d07f94f38527a8c27b708c4",
+      "crc32": "688cb298",
+      "adler32": "53ca8a50"
+    },
+    "5d5de50f7a1dcfbea4fa2b96f813a1a38470e928": {
+      "path": "bios/Other/nethersx2/assets/icons/flags/NTSC-U.png",
+      "name": "NTSC-U.png",
+      "size": 9006,
+      "sha1": "5d5de50f7a1dcfbea4fa2b96f813a1a38470e928",
+      "md5": "2f5c723b52f60aa26ee7afb17b314aa7",
+      "sha256": "8ccbd6ed08da3212d5c7f5927cbe3bb771cc66ccffbf54bc404fc0d970c9c14f",
+      "crc32": "42bc46c5",
+      "adler32": "712b5705"
+    },
+    "49eada9896b50dbab2e158f02474444793e229ee": {
+      "path": "bios/Other/nethersx2/assets/icons/flags/Other.png",
+      "name": "Other.png",
+      "size": 9805,
+      "sha1": "49eada9896b50dbab2e158f02474444793e229ee",
+      "md5": "6739d86545b1a5881688837e5c91ad0b",
+      "sha256": "32e739e0d7a1b796f6439d68ceb50ce1af984c6d581c9a16543491574a99e900",
+      "crc32": "10b32a45",
+      "adler32": "37d59fa4"
+    },
+    "766400814b93717b17d840294c182300f5750cc5": {
+      "path": "bios/Other/nethersx2/assets/icons/flags/PAL-A.png",
+      "name": "PAL-A.png",
+      "size": 9294,
+      "sha1": "766400814b93717b17d840294c182300f5750cc5",
+      "md5": "772d5d39d9655415a780d4094627a7af",
+      "sha256": "64f37a61d2de0c39fe662c7899bb0cd25e7da87676e44dbdeb6e8787a1b867b2",
+      "crc32": "25bf84da",
+      "adler32": "87fef6d5"
+    },
+    "ec03cf9505567aa2c6e8638e0be5d5713ae42d5f": {
+      "path": "bios/Other/nethersx2/assets/icons/flags/PAL-AF.png",
+      "name": "PAL-AF.png",
+      "size": 9088,
+      "sha1": "ec03cf9505567aa2c6e8638e0be5d5713ae42d5f",
+      "md5": "602f540eff1b98c661fafddc11e74e31",
+      "sha256": "16b485f4d4d029d001e41074aa9d8111cdc7f8968ac5fc1ab20983e98f1064df",
+      "crc32": "80b453a7",
+      "adler32": "a05f5f22"
+    },
+    "eb82d82f35e5e96b11ef4dd72e000a6c2d1b0fbc": {
+      "path": "bios/Other/nethersx2/assets/icons/flags/PAL-AU.png",
+      "name": "PAL-AU.png",
+      "size": 608,
+      "sha1": "eb82d82f35e5e96b11ef4dd72e000a6c2d1b0fbc",
+      "md5": "3952f3e191a4aa4b04cc9c7a4f4b3e69",
+      "sha256": "2fd72ad09e853515c8e34d974104eaf26dd2c74da613750575dfb56171216fcb",
+      "crc32": "5f98ea18",
+      "adler32": "d946a2cb"
+    },
+    "47678c1dd91d5ef3bd053fec2626048b65acf2e9": {
+      "path": "bios/Other/nethersx2/assets/icons/flags/PAL-BE.png",
+      "name": "PAL-BE.png",
+      "size": 1289,
+      "sha1": "47678c1dd91d5ef3bd053fec2626048b65acf2e9",
+      "md5": "b225430ac9a4e4ca959a2d121566b47c",
+      "sha256": "792e836bb31e68337f1bfbe416a9908e46542f6197e023f98b07601bb6e525aa",
+      "crc32": "a7f8c8b0",
+      "adler32": "9e51c0bd"
+    },
+    "c78cd2ff8c2f363043a753b663af8855ee3b02f5": {
+      "path": "bios/Other/nethersx2/assets/icons/flags/PAL-E.png",
+      "name": "PAL-E.png",
+      "size": 4061,
+      "sha1": "c78cd2ff8c2f363043a753b663af8855ee3b02f5",
+      "md5": "b23ef8e761f818bced474df191a03c6d",
+      "sha256": "df64e8c770652bd8ac3c3513f00030580b67e32a26db5296b84ad011bccd4042",
+      "crc32": "60b38176",
+      "adler32": "a27fea17"
+    },
+    "5ec4eda3085b9e2ac8f70e3cf7303113c9f03fa0": {
+      "path": "bios/Other/nethersx2/assets/icons/flags/PAL-F.png",
+      "name": "PAL-F.png",
+      "size": 1338,
+      "sha1": "5ec4eda3085b9e2ac8f70e3cf7303113c9f03fa0",
+      "md5": "134dd49b5e373754535572b7719f7ffc",
+      "sha256": "d2916d534b19ee7daefa7ce7953e94072f66c033c20418a5bda0e069c200605e",
+      "crc32": "bc0d2ab4",
+      "adler32": "de033481"
+    },
+    "206f5396a610737a1b9d9aaf5583990184085317": {
+      "path": "bios/Other/nethersx2/assets/icons/flags/PAL-FI.png",
+      "name": "PAL-FI.png",
+      "size": 2202,
+      "sha1": "206f5396a610737a1b9d9aaf5583990184085317",
+      "md5": "21eca9e77e6661164acb84b02699c5f5",
+      "sha256": "ffd08a20e06a643c28ae2b8cfcd9a179d35dcd632cc6664cac2260a9b629a56d",
+      "crc32": "610910cf",
+      "adler32": "de35a667"
+    },
+    "8858e5446275bc761297ecf1470bc7c7600f92a9": {
+      "path": "bios/Other/nethersx2/assets/icons/flags/PAL-G.png",
+      "name": "PAL-G.png",
+      "size": 1446,
+      "sha1": "8858e5446275bc761297ecf1470bc7c7600f92a9",
+      "md5": "952b7abae1c24a70c70f6a8847c336d7",
+      "sha256": "158cb15ce8bbc7305a23877975c2b9728f08b68767dfadb1b600f8a50a71854e",
+      "crc32": "10a8da29",
+      "adler32": "6c70a5a0"
+    },
+    "ebf758e9b91f7064d029242f7e625c03703498de": {
+      "path": "bios/Other/nethersx2/assets/icons/flags/PAL-GR.png",
+      "name": "PAL-GR.png",
+      "size": 2457,
+      "sha1": "ebf758e9b91f7064d029242f7e625c03703498de",
+      "md5": "e2d4da3f0954bc52b408c44b9e32ec16",
+      "sha256": "6636c520e2ba2a5fb40a0a21d7c46f157bf6e5e3d1058c0b391a9d20c447d2da",
+      "crc32": "e4a3549d",
+      "adler32": "44c541ab"
+    },
+    "413ca2fc9ce57d615c0433b62b950dece702b9f2": {
+      "path": "bios/Other/nethersx2/assets/icons/flags/PAL-I.png",
+      "name": "PAL-I.png",
+      "size": 1092,
+      "sha1": "413ca2fc9ce57d615c0433b62b950dece702b9f2",
+      "md5": "35b6ef964947b7a76e1d5eb9e70a1253",
+      "sha256": "c1281bd1695fe0d069dcd12a24e6e01157ce7e7d553e54a32eb0b20b4f67c47e",
+      "crc32": "eb8581a8",
+      "adler32": "fd366742"
+    },
+    "d050d5d6feb2d8271a0327bfa9c3a0a5b6735d65": {
+      "path": "bios/Other/nethersx2/assets/icons/flags/PAL-IN.png",
+      "name": "PAL-IN.png",
+      "size": 6219,
+      "sha1": "d050d5d6feb2d8271a0327bfa9c3a0a5b6735d65",
+      "md5": "ea47c5302a1995d17c5956cb2152bce9",
+      "sha256": "33970e90ec04117583b72be1a5086eb37675c591a3a0884155fddc19622a1557",
+      "crc32": "433d27bd",
+      "adler32": "faa3a8cb"
+    },
+    "e2edb61dad8b4233f5849cf208b3bc0fe6201faf": {
+      "path": "bios/Other/nethersx2/assets/icons/flags/PAL-NL.png",
+      "name": "PAL-NL.png",
+      "size": 1811,
+      "sha1": "e2edb61dad8b4233f5849cf208b3bc0fe6201faf",
+      "md5": "e029b83758e8c17028ff559b3a2128a6",
+      "sha256": "ec7771713f12e6756ce3770b3584a4ede71d60cd52ae5b62d3e06584b37b5b23",
+      "crc32": "329f30b7",
+      "adler32": "dd081067"
+    },
+    "e24d053e5b132c731a3a361c3f34803fe2ba8083": {
+      "path": "bios/Other/nethersx2/assets/icons/flags/PAL-NO.png",
+      "name": "PAL-NO.png",
+      "size": 2786,
+      "sha1": "e24d053e5b132c731a3a361c3f34803fe2ba8083",
+      "md5": "57a2a45829bacfc271ac3e92eef53dd6",
+      "sha256": "308f7d7f50a0b7f4576b8aa50803aaa4c5245e36439f07f2f8447d0a629d1a1d",
+      "crc32": "4a07dcab",
+      "adler32": "ec837554"
+    },
+    "53b5568fe78f1245d47d157f973e65d6ec908758": {
+      "path": "bios/Other/nethersx2/assets/icons/flags/PAL-P.png",
+      "name": "PAL-P.png",
+      "size": 2633,
+      "sha1": "53b5568fe78f1245d47d157f973e65d6ec908758",
+      "md5": "7fbd9e36c106fdf0ab4fa6dec097ffdd",
+      "sha256": "30af5e7fba535190dabca217a80fbcb9d648f01d67b14814773eb3c99fd28a0a",
+      "crc32": "185bd2d7",
+      "adler32": "8a3d0472"
+    },
+    "696fc9f8b142e9f765798dd669c04747d5d702fb": {
+      "path": "bios/Other/nethersx2/assets/icons/flags/PAL-PL.png",
+      "name": "PAL-PL.png",
+      "size": 487,
+      "sha1": "696fc9f8b142e9f765798dd669c04747d5d702fb",
+      "md5": "a03e6a424495756fcae611b842432673",
+      "sha256": "eaebd67b61d0ad0ab02f21b4a3e9443b6cf6fb486204426771a18e52a665a443",
+      "crc32": "f7cf4b42",
+      "adler32": "b4e6d39a"
+    },
+    "8ea0644f4cf8dcb835ddc0d2fd0cf51a05928a89": {
+      "path": "bios/Other/nethersx2/assets/icons/flags/PAL-R.png",
+      "name": "PAL-R.png",
+      "size": 1807,
+      "sha1": "8ea0644f4cf8dcb835ddc0d2fd0cf51a05928a89",
+      "md5": "896caceec8e83eb7ad206965f8671872",
+      "sha256": "8a3ce27aa67d5d62e06feada7b0a2f1cff2e611abf056fcadc774e5872261e53",
+      "crc32": "33009cb4",
+      "adler32": "27f90997"
+    },
+    "3abeee547cf8979522c21dfc08913c7c517c0e7f": {
+      "path": "bios/Other/nethersx2/assets/icons/flags/PAL-S.png",
+      "name": "PAL-S.png",
+      "size": 14346,
+      "sha1": "3abeee547cf8979522c21dfc08913c7c517c0e7f",
+      "md5": "659eb1531c679e1a908a25bd14f839c1",
+      "sha256": "58ea504f5bf6809113046bf87e650e829042eaabe9b1f4417e82c7fb9f935781",
+      "crc32": "b62e97da",
+      "adler32": "b7c9a810"
+    },
+    "a229cecf30e2a915a096a7b9f733460437103e43": {
+      "path": "bios/Other/nethersx2/assets/icons/flags/PAL-SC.png",
+      "name": "PAL-SC.png",
+      "size": 959,
+      "sha1": "a229cecf30e2a915a096a7b9f733460437103e43",
+      "md5": "8dd90c0ec9ed69093db61b08ee093c90",
+      "sha256": "128f5a0b8a56f76630fc1dc84a4e53970a9b410c9e143193636f567716762bc1",
+      "crc32": "70c4f032",
+      "adler32": "7e86a965"
+    },
+    "e29897a27b8c73e39f9e7176c5e9b7e6b8db3918": {
+      "path": "bios/Other/nethersx2/assets/icons/flags/PAL-SW.png",
+      "name": "PAL-SW.png",
+      "size": 581,
+      "sha1": "e29897a27b8c73e39f9e7176c5e9b7e6b8db3918",
+      "md5": "102496deb6e3b7bfd1d98ccea6bd180b",
+      "sha256": "1bca86cea1ed8bf9fd5e28bd467a8bece43c181353d86becd81febb14679f15a",
+      "crc32": "2d50c905",
+      "adler32": "a9139df3"
+    },
+    "f2ea37fc9633b914bcd8c663cbd79ec81afdc36b": {
+      "path": "bios/Other/nethersx2/assets/icons/flags/PAL-SWI.png",
+      "name": "PAL-SWI.png",
+      "size": 2084,
+      "sha1": "f2ea37fc9633b914bcd8c663cbd79ec81afdc36b",
+      "md5": "2a9a684048c1a150c4583512dc7981c1",
+      "sha256": "8c5d8931855c4225d148461c8d68ea5953613292bcf2724fb9d0653f6e6cffa6",
+      "crc32": "ac6d6047",
+      "adler32": "cb25c11e"
+    },
+    "6dd96b5fee6de4799dd3642ead2f7dc9a6be28d9": {
+      "path": "bios/Other/nethersx2/assets/icons/flags/PAL-UK.png",
+      "name": "PAL-UK.png",
+      "size": 5761,
+      "sha1": "6dd96b5fee6de4799dd3642ead2f7dc9a6be28d9",
+      "md5": "fe0411a83c58f8a25577b4023139dadf",
+      "sha256": "0f42ac0d0db89fa10a1dfe7aa6ce1fb855fbd48a23ab99cf8dc59ed1df9e5392",
+      "crc32": "f7e4461d",
+      "adler32": "2ee30aba"
+    },
+    "bf066329b4e967957c43b81731418379b6725f83": {
+      "path": "bios/Other/nethersx2/assets/icons/star-0.png",
+      "name": "star-0.png",
+      "size": 307,
+      "sha1": "bf066329b4e967957c43b81731418379b6725f83",
+      "md5": "df13889cff5e9053c1d89c79d3a1c66c",
+      "sha256": "01144c9e11a9146716bbb72537c19bbfb8e3c78aba67667d598ab64b975f6f6f",
+      "crc32": "c4bd031e",
+      "adler32": "5b3068d8"
+    },
+    "952b75e55caa78f1c8d4a0a6d8b9c616cdf7df59": {
+      "path": "bios/Other/nethersx2/assets/icons/star-1.png",
+      "name": "star-1.png",
+      "size": 473,
+      "sha1": "952b75e55caa78f1c8d4a0a6d8b9c616cdf7df59",
+      "md5": "c7edd2abaa13f2a6c388a586d1e32acf",
+      "sha256": "8bbf172743072bb2277b19e47f3ecebfb8fcfc59ad0073c5b47572a4347322c2",
+      "crc32": "0812e2df",
+      "adler32": "3551c60b"
+    },
+    "af8a46cf65099fcc25d0f3a6ae306172e14520c1": {
+      "path": "bios/Other/nethersx2/assets/icons/star-2.png",
+      "name": "star-2.png",
+      "size": 544,
+      "sha1": "af8a46cf65099fcc25d0f3a6ae306172e14520c1",
+      "md5": "9cb3713c7f890285f24fb38e6cc14b92",
+      "sha256": "1aa9c2dfbb984a9376dd1e7127c71b372b1717833d4ade9f07c8e55382596fb0",
+      "crc32": "6c72f1d5",
+      "adler32": "ab6ae2ad"
+    },
+    "e399140ed72efc89d653c4cd80a5903079c8ef2e": {
+      "path": "bios/Other/nethersx2/assets/icons/star-3.png",
+      "name": "star-3.png",
+      "size": 531,
+      "sha1": "e399140ed72efc89d653c4cd80a5903079c8ef2e",
+      "md5": "4e9654a851e73d56f70d9388d3f36713",
+      "sha256": "7b87c1e3163961ea4238efee00de766fb5356e12a77e6f24bc3d8673c081e28b",
+      "crc32": "b827cb4f",
+      "adler32": "8684d883"
+    },
+    "07a2433d0ff2ce74a66bc2307df1854a5ba4a7d3": {
+      "path": "bios/Other/nethersx2/assets/icons/star-4.png",
+      "name": "star-4.png",
+      "size": 462,
+      "sha1": "07a2433d0ff2ce74a66bc2307df1854a5ba4a7d3",
+      "md5": "3ecdb1dcb76a48b966b1702abeb636b4",
+      "sha256": "bc952de5824b162e7874df9f38c78fa7d6f9d0873d3c64b00e66582d531a0259",
+      "crc32": "05a0ffaa",
+      "adler32": "01c5bb19"
+    },
+    "2bb4f6eaaea551b141125824675ad5ca94fec3cd": {
+      "path": "bios/Other/nethersx2/assets/icons/star-5.png",
+      "name": "star-5.png",
+      "size": 305,
+      "sha1": "2bb4f6eaaea551b141125824675ad5ca94fec3cd",
+      "md5": "c813f9543f4c51e7afc194720be94234",
+      "sha256": "cb0d4c4ee83c1037819b3f35e6531c8956610b2b6a623ff46a1513026ba98a86",
+      "crc32": "56ae8491",
+      "adler32": "c46f6815"
+    },
+    "c36292ab7e16bf5a6cbc4063f638e24872349c45": {
+      "path": "bios/Other/nethersx2/assets/placeholder.png",
+      "name": "placeholder.png",
+      "size": 2762,
+      "sha1": "c36292ab7e16bf5a6cbc4063f638e24872349c45",
+      "md5": "8f846541ccbf088ee7f8c49c8dcb3a6a",
+      "sha256": "456beffedc8cf1b97664b8b9c55add657b07381d2961d3f663ac823248ed1aa0",
+      "crc32": "0dcba3e9",
+      "adler32": "3a748954"
+    },
+    "3ac5f68049ed00d8ff3d2811bd09ef0c036efd0a": {
+      "path": "bios/Other/nethersx2/assets/shaders/common/fxaa.fx",
+      "name": "fxaa.fx",
+      "size": 19420,
+      "sha1": "3ac5f68049ed00d8ff3d2811bd09ef0c036efd0a",
+      "md5": "5cdeb2963c1b68c3ffb04a789cc66d6e",
+      "sha256": "69a7b9c58125f8a176a8f301c59653b7cef9b638b35dc6bfc245bdc4dbb1b079",
+      "crc32": "27f084da",
+      "adler32": "f4b3d141"
+    },
+    "1a69a0fc522caff98fc3829ebf3f12a6a006a058": {
+      "path": "bios/Other/nethersx2/assets/shaders/opengl/cas.glsl",
+      "name": "cas.glsl",
+      "size": 2448,
+      "sha1": "1a69a0fc522caff98fc3829ebf3f12a6a006a058",
+      "md5": "f8a684763e24557c97e3f5d05935bb3b",
+      "sha256": "f1fa5a2597d106f48c10307a66a5b8cd885977d710efad34e6dce80a8cc1659d",
+      "crc32": "44c2ac58",
+      "adler32": "f28ffdbd"
+    },
+    "3f47597187030144498af7a92531e8f205561211": {
+      "path": "bios/Other/nethersx2/assets/shaders/opengl/common_header.glsl",
+      "name": "common_header.glsl",
+      "size": 1863,
+      "sha1": "3f47597187030144498af7a92531e8f205561211",
+      "md5": "1dcf4ca0cc95f2f8e11b66c2ffeeaffe",
+      "sha256": "82c6e3145d6e8fbfc527a665195c130208fdf56b6b80b17e501bfe66d06911c7",
+      "crc32": "e0ca9cdb",
+      "adler32": "efff07de"
+    },
+    "b2a059787ee297654b27f633e37382e239693a36": {
+      "path": "bios/Other/nethersx2/assets/shaders/opengl/convert.glsl",
+      "name": "convert.glsl",
+      "size": 11276,
+      "sha1": "b2a059787ee297654b27f633e37382e239693a36",
+      "md5": "c3db4fcdd142912c0d9a07f3fb40bbbc",
+      "sha256": "f703fb9bed0a57b89a543f2142bd08b6662589d0a8d3d9ac69fb5fe2beab1d3b",
+      "crc32": "7b005763",
+      "adler32": "b9f63664"
+    },
+    "e74e58f530abb4af02c0875c2f04d507e854869e": {
+      "path": "bios/Other/nethersx2/assets/shaders/opengl/interlace.glsl",
+      "name": "interlace.glsl",
+      "size": 6246,
+      "sha1": "e74e58f530abb4af02c0875c2f04d507e854869e",
+      "md5": "0e537dd838a7ecd3b687f3f7cc60a7be",
+      "sha256": "1d424e067ecffb5742a6894f6038c49e9cc9aa6fb56b7e1aa29a1b1146c61688",
+      "crc32": "85ef1055",
+      "adler32": "6a0e6580"
+    },
+    "d1a3c11a1273e1d6c740e4eacc3159842f206683": {
+      "path": "bios/Other/nethersx2/assets/shaders/opengl/merge.glsl",
+      "name": "merge.glsl",
+      "size": 455,
+      "sha1": "d1a3c11a1273e1d6c740e4eacc3159842f206683",
+      "md5": "2c4d70f62928eac933eec932d7bfa0b3",
+      "sha256": "0af2a35c907c0328e9d33aa2acc05ebf04b5ebbc51b28837c37d88d7b440ab2e",
+      "crc32": "4a988f3f",
+      "adler32": "603e8ac8"
+    },
+    "bf2688971a8ef2f2c262c3c2ec579d3dd39793e6": {
+      "path": "bios/Other/nethersx2/assets/shaders/opengl/present.glsl",
+      "name": "present.glsl",
+      "size": 9458,
+      "sha1": "bf2688971a8ef2f2c262c3c2ec579d3dd39793e6",
+      "md5": "afbb9a89f17ead2d8ce7252c1b44186f",
+      "sha256": "f25cae147d89e6e3877d548e4977599a6fe7b0ca85458bbad69e4e95a3750c2e",
+      "crc32": "0a519ee2",
+      "adler32": "c793694d"
+    },
+    "8d8b8966afd2ad840151f7fcb494739041708c89": {
+      "path": "bios/Other/nethersx2/assets/shaders/opengl/shadeboost.glsl",
+      "name": "shadeboost.glsl",
+      "size": 1457,
+      "sha1": "8d8b8966afd2ad840151f7fcb494739041708c89",
+      "md5": "3d1e2be521a66cbfc2c5ff32057e7bf4",
+      "sha256": "0e64ffbc987e3138b4dc5b6cf501d99e1766c7ab64e0dd48025e5a7021b0a82c",
+      "crc32": "16e26904",
+      "adler32": "539ad16d"
+    },
+    "00eb0418e7a25c89aaf7c526922fe45d83243ec5": {
+      "path": "bios/Other/nethersx2/assets/shaders/opengl/tfx_fs.glsl",
+      "name": "tfx_fs.glsl",
+      "size": 26680,
+      "sha1": "00eb0418e7a25c89aaf7c526922fe45d83243ec5",
+      "md5": "24e39ca8f97a1ee4cbd1e9bf8b8da2fd",
+      "sha256": "166a9bb7dc0b7cb20021866668bac3a7428a0c55bc259c87b3f2285f0eaadf70",
+      "crc32": "60b663cd",
+      "adler32": "80af6d7f"
+    },
+    "0e9e98f766c9250b465af776d0077f49f797fed2": {
+      "path": "bios/Other/nethersx2/assets/shaders/opengl/tfx_vgs.glsl",
+      "name": "tfx_vgs.glsl",
+      "size": 5756,
+      "sha1": "0e9e98f766c9250b465af776d0077f49f797fed2",
+      "md5": "a97e9616f298bb9041bf9e45ee2ec597",
+      "sha256": "8808d0526eafeea64f8b1f2c7271001bb87a7a7fab0bcdf3c1da60e2008da52b",
+      "crc32": "1320bd48",
+      "adler32": "f52cd9db"
+    },
+    "709fd5393188f7cff0fe4230d0e3e8b69a82f5b9": {
+      "path": "bios/Other/nethersx2/assets/shaders/vulkan/cas.glsl",
+      "name": "cas.glsl",
+      "size": 2624,
+      "sha1": "709fd5393188f7cff0fe4230d0e3e8b69a82f5b9",
+      "md5": "56f3cf4de895dd4d32d6c79d564d0c5b",
+      "sha256": "bd7edacf6efb9e213d3e4a74f9faf91bd9ff2c3856310e8f5277116b744a2e67",
+      "crc32": "737c3226",
+      "adler32": "56bf3b40"
+    },
+    "b18a236b62e11a85c7ffda6ae60bfb312d6524ef": {
+      "path": "bios/Other/nethersx2/assets/shaders/vulkan/convert.glsl",
+      "name": "convert.glsl",
+      "size": 9354,
+      "sha1": "b18a236b62e11a85c7ffda6ae60bfb312d6524ef",
+      "md5": "7146002ee907b5242cf184d3d504fcec",
+      "sha256": "18f3e5d06d4530e8d0fe66a7c2c2b29b6db0318849bd378cfafeea3054dd6294",
+      "crc32": "eec613a5",
+      "adler32": "10ee38f8"
+    },
+    "f8d14d80036f11707c7e94db2a77531d582019dd": {
+      "path": "bios/Other/nethersx2/assets/shaders/vulkan/interlace.glsl",
+      "name": "interlace.glsl",
+      "size": 6707,
+      "sha1": "f8d14d80036f11707c7e94db2a77531d582019dd",
+      "md5": "bf3caa2532873593218bc4a09e924d4e",
+      "sha256": "4360ce5def6bd4bec5330013c8f18d984228911aabe8f3444956009bbc913572",
+      "crc32": "cb4b8266",
+      "adler32": "e324f1f4"
+    },
+    "b09de39d6459c70ffab28dcb3e3ef879b1648674": {
+      "path": "bios/Other/nethersx2/assets/shaders/vulkan/merge.glsl",
+      "name": "merge.glsl",
+      "size": 669,
+      "sha1": "b09de39d6459c70ffab28dcb3e3ef879b1648674",
+      "md5": "b776383d21609db24d5348c381c2c286",
+      "sha256": "a983fc680450ef112c09b743380bc53e7294e1b4869a864fb11c8167184a9e1c",
+      "crc32": "66802d99",
+      "adler32": "c103cfbf"
+    },
+    "4871ee00b249b41d16232769e2f661bedd1c83db": {
+      "path": "bios/Other/nethersx2/assets/shaders/vulkan/present.glsl",
+      "name": "present.glsl",
+      "size": 8177,
+      "sha1": "4871ee00b249b41d16232769e2f661bedd1c83db",
+      "md5": "72626d625bb963c6cd7074d4dfd0adda",
+      "sha256": "4c6b6237a0ba81138056cdebfe446eaf42bcf958ad0465823a3d2248053922a8",
+      "crc32": "d0844881",
+      "adler32": "bb28ab3f"
+    },
+    "26b29f57685d8108cf519c4f1d340d43aacbff6e": {
+      "path": "bios/Other/nethersx2/assets/shaders/vulkan/shadeboost.glsl",
+      "name": "shadeboost.glsl",
+      "size": 1741,
+      "sha1": "26b29f57685d8108cf519c4f1d340d43aacbff6e",
+      "md5": "366b45b6c4e9ed8e6b7454eebcb5d010",
+      "sha256": "6e2bcc05192e730ef1d6f6f9e7fc1006124074e8a65be9033ed0b221c3a90c68",
+      "crc32": "9fbe5028",
+      "adler32": "e2782cbb"
+    },
+    "aa06cffa086126bb4972674562a5f5c8dc6082f3": {
+      "path": "bios/Other/nethersx2/assets/shaders/vulkan/tfx.glsl",
+      "name": "tfx.glsl",
+      "size": 29540,
+      "sha1": "aa06cffa086126bb4972674562a5f5c8dc6082f3",
+      "md5": "f80e78f88892f0b82ad154eee613f537",
+      "sha256": "660f19006f7defae762bd07cac59d8989b4fde8bef30eb7ef3bb0136d8ef0a12",
+      "crc32": "89fe5a62",
+      "adler32": "5da0d277"
+    },
+    "eb488a76217629f620e40287567d7e2b30337680": {
+      "path": "bios/Other/nethersx2/assets/sounds/achievements/unlock.wav",
+      "name": "unlock.wav",
+      "size": 87714,
+      "sha1": "eb488a76217629f620e40287567d7e2b30337680",
+      "md5": "4d035ee86f836bfed422a975cf65c9cc",
+      "sha256": "d9641efdb7bf796a7e715be240b1148cb6d25dab23606b999df5dc63cf16e5bc",
+      "crc32": "c4c366fe",
+      "adler32": "97ab252c"
+    },
     "58807f32c413a0c9db6deb0365f2fac9518e7c86": {
       "path": "bios/Other/opentyrian/cubetxt1.dat",
       "name": "cubetxt1.dat",
@@ -98445,6 +99045,66 @@
       "39a6306e390640e3f42e0efde82b5b25": "04d7490bb3a284ab266a555c02526f6743756661",
       "bf9be1c7e59efda99a279b8d73bf3593": "1e1993f917ec098268a0af15e79b1002bf425e47",
       "cdf46c0366f0649e65a936c80bf6a2b4": "a33356beefeb0b110464e7d77b3238fc1fb90230",
+      "fb4ff036f3e4769aa6daefdc4c5dba57": "7743bf1d7e6e09a02f1b2972aa63bd8a9f26050d",
+      "a083d432bdcbc3282e51798f8e231a68": "997fdfb1c1873c1a43972b2984ac0da61fd47b14",
+      "70a2f8043f2c1be6c84ecac87157a57b": "0b219dc8b3b98c1705b14758bb7950064b928ebb",
+      "d9460e9df9ac219b1eb946c76f80ee0f": "f0d9c66e4793a014cf431ed20e87056e2a96b68e",
+      "c2a64e0bcc401da9b0a3c7adf3cff410": "9163d4a3d19b87483f843e4bf3afe236a50a72d2",
+      "dffd9504fcb1894620fa41c700172994": "694b8a2445ff39de415bf4791845442a7b1b81e5",
+      "f1245b975bbb4ce4ccd6755b1f92a63f": "3a90d8e2db8f3cc18696d06826a3169584599d61",
+      "d37973b44f87ea6c9f9129ac41d17090": "b3e5d08f89b9b0f7709bd6a693f07c9c2f149106",
+      "b9dc015d006eb2834915dc81deb78328": "ce5918e65406677c32605b80155891d82a55d458",
+      "baef9810e2277a46f16c94e2761767ef": "4628c264d07b700dfaf76f47da9b097e521894d0",
+      "a1c236e2fc18b3463ea26b0d75c87a29": "20d58405a44379588264c849a79f4cbea54cf9ad",
+      "a31d61110a56ae79871e49db13d37613": "c4e9d46d6ec1c42eab9bea4324314bbc62c73c05",
+      "2f5c723b52f60aa26ee7afb17b314aa7": "5d5de50f7a1dcfbea4fa2b96f813a1a38470e928",
+      "6739d86545b1a5881688837e5c91ad0b": "49eada9896b50dbab2e158f02474444793e229ee",
+      "772d5d39d9655415a780d4094627a7af": "766400814b93717b17d840294c182300f5750cc5",
+      "602f540eff1b98c661fafddc11e74e31": "ec03cf9505567aa2c6e8638e0be5d5713ae42d5f",
+      "3952f3e191a4aa4b04cc9c7a4f4b3e69": "eb82d82f35e5e96b11ef4dd72e000a6c2d1b0fbc",
+      "b225430ac9a4e4ca959a2d121566b47c": "47678c1dd91d5ef3bd053fec2626048b65acf2e9",
+      "b23ef8e761f818bced474df191a03c6d": "c78cd2ff8c2f363043a753b663af8855ee3b02f5",
+      "134dd49b5e373754535572b7719f7ffc": "5ec4eda3085b9e2ac8f70e3cf7303113c9f03fa0",
+      "21eca9e77e6661164acb84b02699c5f5": "206f5396a610737a1b9d9aaf5583990184085317",
+      "952b7abae1c24a70c70f6a8847c336d7": "8858e5446275bc761297ecf1470bc7c7600f92a9",
+      "e2d4da3f0954bc52b408c44b9e32ec16": "ebf758e9b91f7064d029242f7e625c03703498de",
+      "35b6ef964947b7a76e1d5eb9e70a1253": "413ca2fc9ce57d615c0433b62b950dece702b9f2",
+      "ea47c5302a1995d17c5956cb2152bce9": "d050d5d6feb2d8271a0327bfa9c3a0a5b6735d65",
+      "e029b83758e8c17028ff559b3a2128a6": "e2edb61dad8b4233f5849cf208b3bc0fe6201faf",
+      "57a2a45829bacfc271ac3e92eef53dd6": "e24d053e5b132c731a3a361c3f34803fe2ba8083",
+      "7fbd9e36c106fdf0ab4fa6dec097ffdd": "53b5568fe78f1245d47d157f973e65d6ec908758",
+      "a03e6a424495756fcae611b842432673": "696fc9f8b142e9f765798dd669c04747d5d702fb",
+      "896caceec8e83eb7ad206965f8671872": "8ea0644f4cf8dcb835ddc0d2fd0cf51a05928a89",
+      "659eb1531c679e1a908a25bd14f839c1": "3abeee547cf8979522c21dfc08913c7c517c0e7f",
+      "8dd90c0ec9ed69093db61b08ee093c90": "a229cecf30e2a915a096a7b9f733460437103e43",
+      "102496deb6e3b7bfd1d98ccea6bd180b": "e29897a27b8c73e39f9e7176c5e9b7e6b8db3918",
+      "2a9a684048c1a150c4583512dc7981c1": "f2ea37fc9633b914bcd8c663cbd79ec81afdc36b",
+      "fe0411a83c58f8a25577b4023139dadf": "6dd96b5fee6de4799dd3642ead2f7dc9a6be28d9",
+      "df13889cff5e9053c1d89c79d3a1c66c": "bf066329b4e967957c43b81731418379b6725f83",
+      "c7edd2abaa13f2a6c388a586d1e32acf": "952b75e55caa78f1c8d4a0a6d8b9c616cdf7df59",
+      "9cb3713c7f890285f24fb38e6cc14b92": "af8a46cf65099fcc25d0f3a6ae306172e14520c1",
+      "4e9654a851e73d56f70d9388d3f36713": "e399140ed72efc89d653c4cd80a5903079c8ef2e",
+      "3ecdb1dcb76a48b966b1702abeb636b4": "07a2433d0ff2ce74a66bc2307df1854a5ba4a7d3",
+      "c813f9543f4c51e7afc194720be94234": "2bb4f6eaaea551b141125824675ad5ca94fec3cd",
+      "8f846541ccbf088ee7f8c49c8dcb3a6a": "c36292ab7e16bf5a6cbc4063f638e24872349c45",
+      "5cdeb2963c1b68c3ffb04a789cc66d6e": "3ac5f68049ed00d8ff3d2811bd09ef0c036efd0a",
+      "f8a684763e24557c97e3f5d05935bb3b": "1a69a0fc522caff98fc3829ebf3f12a6a006a058",
+      "1dcf4ca0cc95f2f8e11b66c2ffeeaffe": "3f47597187030144498af7a92531e8f205561211",
+      "c3db4fcdd142912c0d9a07f3fb40bbbc": "b2a059787ee297654b27f633e37382e239693a36",
+      "0e537dd838a7ecd3b687f3f7cc60a7be": "e74e58f530abb4af02c0875c2f04d507e854869e",
+      "2c4d70f62928eac933eec932d7bfa0b3": "d1a3c11a1273e1d6c740e4eacc3159842f206683",
+      "afbb9a89f17ead2d8ce7252c1b44186f": "bf2688971a8ef2f2c262c3c2ec579d3dd39793e6",
+      "3d1e2be521a66cbfc2c5ff32057e7bf4": "8d8b8966afd2ad840151f7fcb494739041708c89",
+      "24e39ca8f97a1ee4cbd1e9bf8b8da2fd": "00eb0418e7a25c89aaf7c526922fe45d83243ec5",
+      "a97e9616f298bb9041bf9e45ee2ec597": "0e9e98f766c9250b465af776d0077f49f797fed2",
+      "56f3cf4de895dd4d32d6c79d564d0c5b": "709fd5393188f7cff0fe4230d0e3e8b69a82f5b9",
+      "7146002ee907b5242cf184d3d504fcec": "b18a236b62e11a85c7ffda6ae60bfb312d6524ef",
+      "bf3caa2532873593218bc4a09e924d4e": "f8d14d80036f11707c7e94db2a77531d582019dd",
+      "b776383d21609db24d5348c381c2c286": "b09de39d6459c70ffab28dcb3e3ef879b1648674",
+      "72626d625bb963c6cd7074d4dfd0adda": "4871ee00b249b41d16232769e2f661bedd1c83db",
+      "366b45b6c4e9ed8e6b7454eebcb5d010": "26b29f57685d8108cf519c4f1d340d43aacbff6e",
+      "f80e78f88892f0b82ad154eee613f537": "aa06cffa086126bb4972674562a5f5c8dc6082f3",
+      "4d035ee86f836bfed422a975cf65c9cc": "eb488a76217629f620e40287567d7e2b30337680",
       "3f2476d9ff29a06cf9fb85d52302222a": "58807f32c413a0c9db6deb0365f2fac9518e7c86",
       "2b199deeccab1042fb02b46c47c2a8d0": "ee7dc2eb87e5a75564382efcd95d13554d3835ba",
       "4229d5532a206aabe7e1fa11a7d8447e": "1ee93623406dc61b50ccb41a97bae769ea15cef2",
@@ -115168,7 +115828,8 @@
         "8452aac0ea8adf96f52c6fc87b7bc9c038249c97"
       ],
       "fa-solid-900.ttf": [
-        "7f0f721265c228f2484e4924bace5a80b7826fbe"
+        "7f0f721265c228f2484e4924bace5a80b7826fbe",
+        "694b8a2445ff39de415bf4791845442a7b1b81e5"
       ],
       "ffx_a.h": [
         "726370c10154ad092c15c251b98c79185e980c7c"
@@ -115177,7 +115838,8 @@
         "a1d1a687577f7a607fda35bc88950f57c2129ca5"
       ],
       "fxaa.fx": [
-        "9d7012f8bb7bb4599ed2518f12ed540655cdd8d8"
+        "9d7012f8bb7bb4599ed2518f12ed540655cdd8d8",
+        "3ac5f68049ed00d8ff3d2811bd09ef0c036efd0a"
       ],
       "imgui.fx": [
         "47491eaf3ba082383305b3d958794409cb0f5476"
@@ -115227,13 +115889,17 @@
       "cas.glsl": [
         "b478ce9d1343b8dd201c045f010bd1b64ba158ae",
         "005cecf1a5e20b05407d55d0aad22cf81ad66c31",
-        "cb0d4276f9947762af0841a8af75efa6cbe9109c"
+        "cb0d4276f9947762af0841a8af75efa6cbe9109c",
+        "1a69a0fc522caff98fc3829ebf3f12a6a006a058",
+        "709fd5393188f7cff0fe4230d0e3e8b69a82f5b9"
       ],
       "convert.glsl": [
         "32777e258030ad9559864d9f4273d515d65f728f",
         "53ff273e335432fdbbff9da2762e229ec2bd5078",
         "35910b67070342cdd6ec4d68eb2e56b39d350543",
-        "705d20d39a910d58a070fb86780ac58c8007591c"
+        "705d20d39a910d58a070fb86780ac58c8007591c",
+        "b2a059787ee297654b27f633e37382e239693a36",
+        "b18a236b62e11a85c7ffda6ae60bfb312d6524ef"
       ],
       "imgui.glsl": [
         "04bfcabf518320593dcda8198475c7f39295ef1f",
@@ -115245,28 +115911,37 @@
         "d6209a8b3c4681823b1f0b7d0648c819ec72e2ad",
         "d5ba24ba836c418f7f2d9d8b44bd337baa9e45a3",
         "be39a049af0b8ab0c2168ad6d8cf636e15ae0dd2",
-        "268f43cd946eea999c62f63a24eb00cb2fdc342c"
+        "268f43cd946eea999c62f63a24eb00cb2fdc342c",
+        "e74e58f530abb4af02c0875c2f04d507e854869e",
+        "f8d14d80036f11707c7e94db2a77531d582019dd"
       ],
       "merge.glsl": [
         "7f476bffdc19d7ba2806eef40c2e8e40bdf0896c",
         "e84aa516874350f414e95d3891ce480fe2958aae",
         "c8eb9c1926baad8bbba25f97be54abae233fe715",
-        "808b7b46bfb033c7fe4d94d0dbf5a271de30dedc"
+        "808b7b46bfb033c7fe4d94d0dbf5a271de30dedc",
+        "d1a3c11a1273e1d6c740e4eacc3159842f206683",
+        "b09de39d6459c70ffab28dcb3e3ef879b1648674"
       ],
       "present.glsl": [
         "ca7a974714111895bbf03360078ea1008694c52e",
         "0e22e330e10f31d7e7d7db00966cd48d1c5c6dce",
         "4abe45e59dc9286321a115c76c31cc7fe85e58d5",
-        "a848aad1840c7d85bfcdd552521a7181b00331cc"
+        "a848aad1840c7d85bfcdd552521a7181b00331cc",
+        "bf2688971a8ef2f2c262c3c2ec579d3dd39793e6",
+        "4871ee00b249b41d16232769e2f661bedd1c83db"
       ],
       "shadeboost.glsl": [
         "511dc6bb2f81d0ad61fe46c6e91dce8b344fd934",
         "bef69d202c6e21f2ec0d6930e439a9498642ba6b",
         "03c8b0d3ebeb0ecdc7f594ba6f7242a6f6e4d564",
-        "9b2704655a893ff1675d28df4bd9ffc9e15d3dd5"
+        "9b2704655a893ff1675d28df4bd9ffc9e15d3dd5",
+        "8d8b8966afd2ad840151f7fcb494739041708c89",
+        "26b29f57685d8108cf519c4f1d340d43aacbff6e"
       ],
       "placeholder.png": [
-        "25e41433147face77af96fecac4519ed11ae8072"
+        "25e41433147face77af96fecac4519ed11ae8072",
+        "c36292ab7e16bf5a6cbc4063f638e24872349c45"
       ],
       "present.fx": [
         "84b000485929698392676e8e7915bfcce15291ee"
@@ -115293,16 +115968,20 @@
         "d061eb8ad3d56a5dc6ab653236b2a0c9324fb595"
       ],
       "tfx.glsl": [
-        "229d91d96b6dc338421e696fe8cdcfcaa093f40d"
+        "229d91d96b6dc338421e696fe8cdcfcaa093f40d",
+        "aa06cffa086126bb4972674562a5f5c8dc6082f3"
       ],
       "tfx_fs.glsl": [
-        "d67bfc4ab5c7e550ea41a0491f45b95f395bacac"
+        "d67bfc4ab5c7e550ea41a0491f45b95f395bacac",
+        "00eb0418e7a25c89aaf7c526922fe45d83243ec5"
       ],
       "tfx_vgs.glsl": [
-        "f8200a0f4bd284670f0f0191fa9340684e94f66d"
+        "f8200a0f4bd284670f0f0191fa9340684e94f66d",
+        "0e9e98f766c9250b465af776d0077f49f797fed2"
       ],
       "unlock.wav": [
-        "da328a0a3074ec86fee2d6741bfc2e5a1f68d063"
+        "da328a0a3074ec86fee2d6741bfc2e5a1f68d063",
+        "eb488a76217629f620e40287567d7e2b30337680"
       ],
       "Account": [
         "99fc2a4d8107c36ee3075c9cff24872d2a98e37a"
@@ -116619,6 +117298,136 @@
       "Wavebeam.pal": [
         "a33356beefeb0b110464e7d77b3238fc1fb90230"
       ],
+      "3rdparty.html": [
+        "7743bf1d7e6e09a02f1b2972aa63bd8a9f26050d"
+      ],
+      "GameIndex.yaml": [
+        "997fdfb1c1873c1a43972b2984ac0da61fd47b14",
+        "57369df9ca82a460e596cea7835c5a0797dee668",
+        "b22389650f6c0a1e276b48213fed8a9c1c6476ce",
+        "6eddec30056cde7c664a0cf508dcad29353a12bb",
+        "40ecf6138c99a0aba775ef93240b295025a45500"
+      ],
+      "cheats_ni.zip": [
+        "0b219dc8b3b98c1705b14758bb7950064b928ebb",
+        "dec5e4f137890c338babe13cfb9d41ff869fa721"
+      ],
+      "cheats_ws.zip": [
+        "f0d9c66e4793a014cf431ed20e87056e2a96b68e",
+        "773b4279d8c8e182dc57e444dbf448a1d115e7e0"
+      ],
+      "faq.html": [
+        "9163d4a3d19b87483f843e4bf3afe236a50a72d2"
+      ],
+      "NTSC-B.png": [
+        "3a90d8e2db8f3cc18696d06826a3169584599d61"
+      ],
+      "NTSC-C.png": [
+        "b3e5d08f89b9b0f7709bd6a693f07c9c2f149106"
+      ],
+      "NTSC-HK.png": [
+        "ce5918e65406677c32605b80155891d82a55d458"
+      ],
+      "NTSC-J.png": [
+        "4628c264d07b700dfaf76f47da9b097e521894d0"
+      ],
+      "NTSC-K.png": [
+        "20d58405a44379588264c849a79f4cbea54cf9ad"
+      ],
+      "NTSC-T.png": [
+        "c4e9d46d6ec1c42eab9bea4324314bbc62c73c05"
+      ],
+      "NTSC-U.png": [
+        "5d5de50f7a1dcfbea4fa2b96f813a1a38470e928"
+      ],
+      "Other.png": [
+        "49eada9896b50dbab2e158f02474444793e229ee",
+        "5e1b6a478ce507542e2a59e5a1968aedf060c63c"
+      ],
+      "PAL-A.png": [
+        "766400814b93717b17d840294c182300f5750cc5"
+      ],
+      "PAL-AF.png": [
+        "ec03cf9505567aa2c6e8638e0be5d5713ae42d5f"
+      ],
+      "PAL-AU.png": [
+        "eb82d82f35e5e96b11ef4dd72e000a6c2d1b0fbc"
+      ],
+      "PAL-BE.png": [
+        "47678c1dd91d5ef3bd053fec2626048b65acf2e9"
+      ],
+      "PAL-E.png": [
+        "c78cd2ff8c2f363043a753b663af8855ee3b02f5"
+      ],
+      "PAL-F.png": [
+        "5ec4eda3085b9e2ac8f70e3cf7303113c9f03fa0"
+      ],
+      "PAL-FI.png": [
+        "206f5396a610737a1b9d9aaf5583990184085317"
+      ],
+      "PAL-G.png": [
+        "8858e5446275bc761297ecf1470bc7c7600f92a9"
+      ],
+      "PAL-GR.png": [
+        "ebf758e9b91f7064d029242f7e625c03703498de"
+      ],
+      "PAL-I.png": [
+        "413ca2fc9ce57d615c0433b62b950dece702b9f2"
+      ],
+      "PAL-IN.png": [
+        "d050d5d6feb2d8271a0327bfa9c3a0a5b6735d65"
+      ],
+      "PAL-NL.png": [
+        "e2edb61dad8b4233f5849cf208b3bc0fe6201faf"
+      ],
+      "PAL-NO.png": [
+        "e24d053e5b132c731a3a361c3f34803fe2ba8083"
+      ],
+      "PAL-P.png": [
+        "53b5568fe78f1245d47d157f973e65d6ec908758"
+      ],
+      "PAL-PL.png": [
+        "696fc9f8b142e9f765798dd669c04747d5d702fb"
+      ],
+      "PAL-R.png": [
+        "8ea0644f4cf8dcb835ddc0d2fd0cf51a05928a89"
+      ],
+      "PAL-S.png": [
+        "3abeee547cf8979522c21dfc08913c7c517c0e7f"
+      ],
+      "PAL-SC.png": [
+        "a229cecf30e2a915a096a7b9f733460437103e43"
+      ],
+      "PAL-SW.png": [
+        "e29897a27b8c73e39f9e7176c5e9b7e6b8db3918"
+      ],
+      "PAL-SWI.png": [
+        "f2ea37fc9633b914bcd8c663cbd79ec81afdc36b"
+      ],
+      "PAL-UK.png": [
+        "6dd96b5fee6de4799dd3642ead2f7dc9a6be28d9"
+      ],
+      "star-0.png": [
+        "bf066329b4e967957c43b81731418379b6725f83"
+      ],
+      "star-1.png": [
+        "952b75e55caa78f1c8d4a0a6d8b9c616cdf7df59"
+      ],
+      "star-2.png": [
+        "af8a46cf65099fcc25d0f3a6ae306172e14520c1"
+      ],
+      "star-3.png": [
+        "e399140ed72efc89d653c4cd80a5903079c8ef2e"
+      ],
+      "star-4.png": [
+        "07a2433d0ff2ce74a66bc2307df1854a5ba4a7d3"
+      ],
+      "star-5.png": [
+        "2bb4f6eaaea551b141125824675ad5ca94fec3cd"
+      ],
+      "common_header.glsl": [
+        "3f47597187030144498af7a92531e8f205561211"
+      ],
       "cubetxt1.dat": [
         "58807f32c413a0c9db6deb0365f2fac9518e7c86"
       ],
@@ -117894,9 +118703,6 @@
       ],
       "Ice.png": [
         "61274cfeb741160a1f6b55d92ee7f5729edb6995"
-      ],
-      "Other.png": [
-        "5e1b6a478ce507542e2a59e5a1968aedf060c63c"
       ],
       "Paralysis.png": [
         "d4acaf39d282ec98f9a64a3244972fca482e60b3"
@@ -125760,12 +126566,6 @@
       "scph7002.bin": [
         "8d5de56a79954f29e9006929ba3fed9b6a418c1d"
       ],
-      "GameIndex.yaml": [
-        "57369df9ca82a460e596cea7835c5a0797dee668",
-        "b22389650f6c0a1e276b48213fed8a9c1c6476ce",
-        "6eddec30056cde7c664a0cf508dcad29353a12bb",
-        "40ecf6138c99a0aba775ef93240b295025a45500"
-      ],
       "ROM2.BIN": [
         "5d5ab4313a2d0effe7572bb129193b64cab002c1",
         "1bae895fbdd658cfb56c53cc2139282cc1e778de"
@@ -125887,12 +126687,6 @@
       ],
       "SCPH-77008_BIOS_V15_RUS_220.NVM": [
         "84a9628af6fa8335247c002b1ce6c81a419ea9a5"
-      ],
-      "cheats_ni.zip": [
-        "dec5e4f137890c338babe13cfb9d41ff869fa721"
-      ],
-      "cheats_ws.zip": [
-        "773b4279d8c8e182dc57e444dbf448a1d115e7e0"
       ],
       "eeprom.dat": [
         "ffc6261e487efa8c7442069f71acfc4aa826993d"
@@ -127375,6 +128169,9 @@
       ],
       "PHILIPSDISK.rom": [
         "c3efedda7ab947a06d9345f7b8261076fa7ceeef"
+      ],
+      "PAL-M.png": [
+        "c78cd2ff8c2f363043a753b663af8855ee3b02f5"
       ],
       "iplrom30.dat": [
         "239e9124568c862c31d9ec0605e32373ea74b86a"
@@ -135648,6 +136445,66 @@
       "401d12ff": "04d7490bb3a284ab266a555c02526f6743756661",
       "7feabfbd": "1e1993f917ec098268a0af15e79b1002bf425e47",
       "b6906508": "a33356beefeb0b110464e7d77b3238fc1fb90230",
+      "1b7d4986": "7743bf1d7e6e09a02f1b2972aa63bd8a9f26050d",
+      "eb306220": "997fdfb1c1873c1a43972b2984ac0da61fd47b14",
+      "3b3a5f5d": "0b219dc8b3b98c1705b14758bb7950064b928ebb",
+      "5f3d3bfa": "f0d9c66e4793a014cf431ed20e87056e2a96b68e",
+      "d14db704": "9163d4a3d19b87483f843e4bf3afe236a50a72d2",
+      "29e8dd44": "694b8a2445ff39de415bf4791845442a7b1b81e5",
+      "e87c1795": "3a90d8e2db8f3cc18696d06826a3169584599d61",
+      "3cf1eeac": "b3e5d08f89b9b0f7709bd6a693f07c9c2f149106",
+      "8c9fd3d9": "ce5918e65406677c32605b80155891d82a55d458",
+      "aa75a0a1": "4628c264d07b700dfaf76f47da9b097e521894d0",
+      "f8cd7a53": "20d58405a44379588264c849a79f4cbea54cf9ad",
+      "688cb298": "c4e9d46d6ec1c42eab9bea4324314bbc62c73c05",
+      "42bc46c5": "5d5de50f7a1dcfbea4fa2b96f813a1a38470e928",
+      "10b32a45": "49eada9896b50dbab2e158f02474444793e229ee",
+      "25bf84da": "766400814b93717b17d840294c182300f5750cc5",
+      "80b453a7": "ec03cf9505567aa2c6e8638e0be5d5713ae42d5f",
+      "5f98ea18": "eb82d82f35e5e96b11ef4dd72e000a6c2d1b0fbc",
+      "a7f8c8b0": "47678c1dd91d5ef3bd053fec2626048b65acf2e9",
+      "60b38176": "c78cd2ff8c2f363043a753b663af8855ee3b02f5",
+      "bc0d2ab4": "5ec4eda3085b9e2ac8f70e3cf7303113c9f03fa0",
+      "610910cf": "206f5396a610737a1b9d9aaf5583990184085317",
+      "10a8da29": "8858e5446275bc761297ecf1470bc7c7600f92a9",
+      "e4a3549d": "ebf758e9b91f7064d029242f7e625c03703498de",
+      "eb8581a8": "413ca2fc9ce57d615c0433b62b950dece702b9f2",
+      "433d27bd": "d050d5d6feb2d8271a0327bfa9c3a0a5b6735d65",
+      "329f30b7": "e2edb61dad8b4233f5849cf208b3bc0fe6201faf",
+      "4a07dcab": "e24d053e5b132c731a3a361c3f34803fe2ba8083",
+      "185bd2d7": "53b5568fe78f1245d47d157f973e65d6ec908758",
+      "f7cf4b42": "696fc9f8b142e9f765798dd669c04747d5d702fb",
+      "33009cb4": "8ea0644f4cf8dcb835ddc0d2fd0cf51a05928a89",
+      "b62e97da": "3abeee547cf8979522c21dfc08913c7c517c0e7f",
+      "70c4f032": "a229cecf30e2a915a096a7b9f733460437103e43",
+      "2d50c905": "e29897a27b8c73e39f9e7176c5e9b7e6b8db3918",
+      "ac6d6047": "f2ea37fc9633b914bcd8c663cbd79ec81afdc36b",
+      "f7e4461d": "6dd96b5fee6de4799dd3642ead2f7dc9a6be28d9",
+      "c4bd031e": "bf066329b4e967957c43b81731418379b6725f83",
+      "0812e2df": "952b75e55caa78f1c8d4a0a6d8b9c616cdf7df59",
+      "6c72f1d5": "af8a46cf65099fcc25d0f3a6ae306172e14520c1",
+      "b827cb4f": "e399140ed72efc89d653c4cd80a5903079c8ef2e",
+      "05a0ffaa": "07a2433d0ff2ce74a66bc2307df1854a5ba4a7d3",
+      "56ae8491": "2bb4f6eaaea551b141125824675ad5ca94fec3cd",
+      "0dcba3e9": "c36292ab7e16bf5a6cbc4063f638e24872349c45",
+      "27f084da": "3ac5f68049ed00d8ff3d2811bd09ef0c036efd0a",
+      "44c2ac58": "1a69a0fc522caff98fc3829ebf3f12a6a006a058",
+      "e0ca9cdb": "3f47597187030144498af7a92531e8f205561211",
+      "7b005763": "b2a059787ee297654b27f633e37382e239693a36",
+      "85ef1055": "e74e58f530abb4af02c0875c2f04d507e854869e",
+      "4a988f3f": "d1a3c11a1273e1d6c740e4eacc3159842f206683",
+      "0a519ee2": "bf2688971a8ef2f2c262c3c2ec579d3dd39793e6",
+      "16e26904": "8d8b8966afd2ad840151f7fcb494739041708c89",
+      "60b663cd": "00eb0418e7a25c89aaf7c526922fe45d83243ec5",
+      "1320bd48": "0e9e98f766c9250b465af776d0077f49f797fed2",
+      "737c3226": "709fd5393188f7cff0fe4230d0e3e8b69a82f5b9",
+      "eec613a5": "b18a236b62e11a85c7ffda6ae60bfb312d6524ef",
+      "cb4b8266": "f8d14d80036f11707c7e94db2a77531d582019dd",
+      "66802d99": "b09de39d6459c70ffab28dcb3e3ef879b1648674",
+      "d0844881": "4871ee00b249b41d16232769e2f661bedd1c83db",
+      "9fbe5028": "26b29f57685d8108cf519c4f1d340d43aacbff6e",
+      "89fe5a62": "aa06cffa086126bb4972674562a5f5c8dc6082f3",
+      "c4c366fe": "eb488a76217629f620e40287567d7e2b30337680",
       "84e948df": "58807f32c413a0c9db6deb0365f2fac9518e7c86",
       "bf8e13c9": "ee7dc2eb87e5a75564382efcd95d13554d3835ba",
       "7b91c5d2": "1ee93623406dc61b50ccb41a97bae769ea15cef2",
@@ -144476,6 +145333,66 @@
       "05246e0581400635522dee56ea9902bd82f79ef83fd5bac9e20384c43c063941": "04d7490bb3a284ab266a555c02526f6743756661",
       "9db1b5758e41faf126721da5b3bc11ea6aa792faa21f1550de16deda4696c832": "1e1993f917ec098268a0af15e79b1002bf425e47",
       "39d76deecbfc98ab660b528fe1505ff912d2801f415f69c1474d8bb404123da9": "a33356beefeb0b110464e7d77b3238fc1fb90230",
+      "2d19c5abfd0306823c7a233b8e295161056a1e186b48cb212b8765ae1a8693e8": "7743bf1d7e6e09a02f1b2972aa63bd8a9f26050d",
+      "cf5f8acba52ce046647f2658eedc730fd9db27651ab3134c1310dd805e66c3e9": "997fdfb1c1873c1a43972b2984ac0da61fd47b14",
+      "77142f3f7e623b4102e8339b7c34f19eb16724d88bf91eae2799d5b861b58aaa": "0b219dc8b3b98c1705b14758bb7950064b928ebb",
+      "33a1708b1042f9f193b1c97fd3bb84bbda76da33ad3f6e5fa446e4b27a786caa": "f0d9c66e4793a014cf431ed20e87056e2a96b68e",
+      "486b375eac62093b84a7aeb062b67a061bfc3dcdaf4bd71648005392d6118829": "9163d4a3d19b87483f843e4bf3afe236a50a72d2",
+      "3f7b50c58c2f9a6e9285e184950cea78ff02498b878392e7b64aae8272809605": "694b8a2445ff39de415bf4791845442a7b1b81e5",
+      "c9f8e819c66bcb0363c69049b202355d4002152f34b22e883737b7e793bd973e": "3a90d8e2db8f3cc18696d06826a3169584599d61",
+      "488bb75f7e3f5bedbf12271474ff02bbedea7ef8211a436cdf270b846e165929": "b3e5d08f89b9b0f7709bd6a693f07c9c2f149106",
+      "a3ef9ac81eeda9c77b2792d0607b827673080812103e87ccb56f6e5ac91aea9e": "ce5918e65406677c32605b80155891d82a55d458",
+      "e20476423985bea74750d22f43f3e53ab83cfa3fac403e712c745542ff9c598f": "4628c264d07b700dfaf76f47da9b097e521894d0",
+      "3e63963183230d9ebe1b26d1ca31026f137f10389df787ed110fb041624ae51b": "20d58405a44379588264c849a79f4cbea54cf9ad",
+      "d05ab400486c25143cae9c50a4ddbf1a08bb1d1d1d07f94f38527a8c27b708c4": "c4e9d46d6ec1c42eab9bea4324314bbc62c73c05",
+      "8ccbd6ed08da3212d5c7f5927cbe3bb771cc66ccffbf54bc404fc0d970c9c14f": "5d5de50f7a1dcfbea4fa2b96f813a1a38470e928",
+      "32e739e0d7a1b796f6439d68ceb50ce1af984c6d581c9a16543491574a99e900": "49eada9896b50dbab2e158f02474444793e229ee",
+      "64f37a61d2de0c39fe662c7899bb0cd25e7da87676e44dbdeb6e8787a1b867b2": "766400814b93717b17d840294c182300f5750cc5",
+      "16b485f4d4d029d001e41074aa9d8111cdc7f8968ac5fc1ab20983e98f1064df": "ec03cf9505567aa2c6e8638e0be5d5713ae42d5f",
+      "2fd72ad09e853515c8e34d974104eaf26dd2c74da613750575dfb56171216fcb": "eb82d82f35e5e96b11ef4dd72e000a6c2d1b0fbc",
+      "792e836bb31e68337f1bfbe416a9908e46542f6197e023f98b07601bb6e525aa": "47678c1dd91d5ef3bd053fec2626048b65acf2e9",
+      "df64e8c770652bd8ac3c3513f00030580b67e32a26db5296b84ad011bccd4042": "c78cd2ff8c2f363043a753b663af8855ee3b02f5",
+      "d2916d534b19ee7daefa7ce7953e94072f66c033c20418a5bda0e069c200605e": "5ec4eda3085b9e2ac8f70e3cf7303113c9f03fa0",
+      "ffd08a20e06a643c28ae2b8cfcd9a179d35dcd632cc6664cac2260a9b629a56d": "206f5396a610737a1b9d9aaf5583990184085317",
+      "158cb15ce8bbc7305a23877975c2b9728f08b68767dfadb1b600f8a50a71854e": "8858e5446275bc761297ecf1470bc7c7600f92a9",
+      "6636c520e2ba2a5fb40a0a21d7c46f157bf6e5e3d1058c0b391a9d20c447d2da": "ebf758e9b91f7064d029242f7e625c03703498de",
+      "c1281bd1695fe0d069dcd12a24e6e01157ce7e7d553e54a32eb0b20b4f67c47e": "413ca2fc9ce57d615c0433b62b950dece702b9f2",
+      "33970e90ec04117583b72be1a5086eb37675c591a3a0884155fddc19622a1557": "d050d5d6feb2d8271a0327bfa9c3a0a5b6735d65",
+      "ec7771713f12e6756ce3770b3584a4ede71d60cd52ae5b62d3e06584b37b5b23": "e2edb61dad8b4233f5849cf208b3bc0fe6201faf",
+      "308f7d7f50a0b7f4576b8aa50803aaa4c5245e36439f07f2f8447d0a629d1a1d": "e24d053e5b132c731a3a361c3f34803fe2ba8083",
+      "30af5e7fba535190dabca217a80fbcb9d648f01d67b14814773eb3c99fd28a0a": "53b5568fe78f1245d47d157f973e65d6ec908758",
+      "eaebd67b61d0ad0ab02f21b4a3e9443b6cf6fb486204426771a18e52a665a443": "696fc9f8b142e9f765798dd669c04747d5d702fb",
+      "8a3ce27aa67d5d62e06feada7b0a2f1cff2e611abf056fcadc774e5872261e53": "8ea0644f4cf8dcb835ddc0d2fd0cf51a05928a89",
+      "58ea504f5bf6809113046bf87e650e829042eaabe9b1f4417e82c7fb9f935781": "3abeee547cf8979522c21dfc08913c7c517c0e7f",
+      "128f5a0b8a56f76630fc1dc84a4e53970a9b410c9e143193636f567716762bc1": "a229cecf30e2a915a096a7b9f733460437103e43",
+      "1bca86cea1ed8bf9fd5e28bd467a8bece43c181353d86becd81febb14679f15a": "e29897a27b8c73e39f9e7176c5e9b7e6b8db3918",
+      "8c5d8931855c4225d148461c8d68ea5953613292bcf2724fb9d0653f6e6cffa6": "f2ea37fc9633b914bcd8c663cbd79ec81afdc36b",
+      "0f42ac0d0db89fa10a1dfe7aa6ce1fb855fbd48a23ab99cf8dc59ed1df9e5392": "6dd96b5fee6de4799dd3642ead2f7dc9a6be28d9",
+      "01144c9e11a9146716bbb72537c19bbfb8e3c78aba67667d598ab64b975f6f6f": "bf066329b4e967957c43b81731418379b6725f83",
+      "8bbf172743072bb2277b19e47f3ecebfb8fcfc59ad0073c5b47572a4347322c2": "952b75e55caa78f1c8d4a0a6d8b9c616cdf7df59",
+      "1aa9c2dfbb984a9376dd1e7127c71b372b1717833d4ade9f07c8e55382596fb0": "af8a46cf65099fcc25d0f3a6ae306172e14520c1",
+      "7b87c1e3163961ea4238efee00de766fb5356e12a77e6f24bc3d8673c081e28b": "e399140ed72efc89d653c4cd80a5903079c8ef2e",
+      "bc952de5824b162e7874df9f38c78fa7d6f9d0873d3c64b00e66582d531a0259": "07a2433d0ff2ce74a66bc2307df1854a5ba4a7d3",
+      "cb0d4c4ee83c1037819b3f35e6531c8956610b2b6a623ff46a1513026ba98a86": "2bb4f6eaaea551b141125824675ad5ca94fec3cd",
+      "456beffedc8cf1b97664b8b9c55add657b07381d2961d3f663ac823248ed1aa0": "c36292ab7e16bf5a6cbc4063f638e24872349c45",
+      "69a7b9c58125f8a176a8f301c59653b7cef9b638b35dc6bfc245bdc4dbb1b079": "3ac5f68049ed00d8ff3d2811bd09ef0c036efd0a",
+      "f1fa5a2597d106f48c10307a66a5b8cd885977d710efad34e6dce80a8cc1659d": "1a69a0fc522caff98fc3829ebf3f12a6a006a058",
+      "82c6e3145d6e8fbfc527a665195c130208fdf56b6b80b17e501bfe66d06911c7": "3f47597187030144498af7a92531e8f205561211",
+      "f703fb9bed0a57b89a543f2142bd08b6662589d0a8d3d9ac69fb5fe2beab1d3b": "b2a059787ee297654b27f633e37382e239693a36",
+      "1d424e067ecffb5742a6894f6038c49e9cc9aa6fb56b7e1aa29a1b1146c61688": "e74e58f530abb4af02c0875c2f04d507e854869e",
+      "0af2a35c907c0328e9d33aa2acc05ebf04b5ebbc51b28837c37d88d7b440ab2e": "d1a3c11a1273e1d6c740e4eacc3159842f206683",
+      "f25cae147d89e6e3877d548e4977599a6fe7b0ca85458bbad69e4e95a3750c2e": "bf2688971a8ef2f2c262c3c2ec579d3dd39793e6",
+      "0e64ffbc987e3138b4dc5b6cf501d99e1766c7ab64e0dd48025e5a7021b0a82c": "8d8b8966afd2ad840151f7fcb494739041708c89",
+      "166a9bb7dc0b7cb20021866668bac3a7428a0c55bc259c87b3f2285f0eaadf70": "00eb0418e7a25c89aaf7c526922fe45d83243ec5",
+      "8808d0526eafeea64f8b1f2c7271001bb87a7a7fab0bcdf3c1da60e2008da52b": "0e9e98f766c9250b465af776d0077f49f797fed2",
+      "bd7edacf6efb9e213d3e4a74f9faf91bd9ff2c3856310e8f5277116b744a2e67": "709fd5393188f7cff0fe4230d0e3e8b69a82f5b9",
+      "18f3e5d06d4530e8d0fe66a7c2c2b29b6db0318849bd378cfafeea3054dd6294": "b18a236b62e11a85c7ffda6ae60bfb312d6524ef",
+      "4360ce5def6bd4bec5330013c8f18d984228911aabe8f3444956009bbc913572": "f8d14d80036f11707c7e94db2a77531d582019dd",
+      "a983fc680450ef112c09b743380bc53e7294e1b4869a864fb11c8167184a9e1c": "b09de39d6459c70ffab28dcb3e3ef879b1648674",
+      "4c6b6237a0ba81138056cdebfe446eaf42bcf958ad0465823a3d2248053922a8": "4871ee00b249b41d16232769e2f661bedd1c83db",
+      "6e2bcc05192e730ef1d6f6f9e7fc1006124074e8a65be9033ed0b221c3a90c68": "26b29f57685d8108cf519c4f1d340d43aacbff6e",
+      "660f19006f7defae762bd07cac59d8989b4fde8bef30eb7ef3bb0136d8ef0a12": "aa06cffa086126bb4972674562a5f5c8dc6082f3",
+      "d9641efdb7bf796a7e715be240b1148cb6d25dab23606b999df5dc63cf16e5bc": "eb488a76217629f620e40287567d7e2b30337680",
       "2a0bc26ac4a8cdcbe7a145c9b1868a87ecb4335e9787f2f1e5713c965372df2b": "58807f32c413a0c9db6deb0365f2fac9518e7c86",
       "6604a1dcc264e8b8e98f036a8bc35579e9b90b92eccbc4d7c1effee9785d1580": "ee7dc2eb87e5a75564382efcd95d13554d3835ba",
       "fcfc9762cd4cfad42feb12d975929de86851b216d4491252c701527e22b55539": "1ee93623406dc61b50ccb41a97bae769ea15cef2",
@@ -154947,6 +155864,186 @@
       "palette/Wavebeam.pal": [
         "a33356beefeb0b110464e7d77b3238fc1fb90230"
       ],
+      "assets/3rdparty.html": [
+        "7743bf1d7e6e09a02f1b2972aa63bd8a9f26050d"
+      ],
+      "assets/GameIndex.yaml": [
+        "997fdfb1c1873c1a43972b2984ac0da61fd47b14"
+      ],
+      "assets/cheats_ni.zip": [
+        "0b219dc8b3b98c1705b14758bb7950064b928ebb"
+      ],
+      "assets/cheats_ws.zip": [
+        "f0d9c66e4793a014cf431ed20e87056e2a96b68e"
+      ],
+      "assets/faq.html": [
+        "9163d4a3d19b87483f843e4bf3afe236a50a72d2"
+      ],
+      "assets/fonts/fa-solid-900.ttf": [
+        "694b8a2445ff39de415bf4791845442a7b1b81e5"
+      ],
+      "assets/icons/flags/NTSC-B.png": [
+        "3a90d8e2db8f3cc18696d06826a3169584599d61"
+      ],
+      "assets/icons/flags/NTSC-C.png": [
+        "b3e5d08f89b9b0f7709bd6a693f07c9c2f149106"
+      ],
+      "assets/icons/flags/NTSC-HK.png": [
+        "ce5918e65406677c32605b80155891d82a55d458"
+      ],
+      "assets/icons/flags/NTSC-J.png": [
+        "4628c264d07b700dfaf76f47da9b097e521894d0"
+      ],
+      "assets/icons/flags/NTSC-K.png": [
+        "20d58405a44379588264c849a79f4cbea54cf9ad"
+      ],
+      "assets/icons/flags/NTSC-T.png": [
+        "c4e9d46d6ec1c42eab9bea4324314bbc62c73c05"
+      ],
+      "assets/icons/flags/NTSC-U.png": [
+        "5d5de50f7a1dcfbea4fa2b96f813a1a38470e928"
+      ],
+      "assets/icons/flags/Other.png": [
+        "49eada9896b50dbab2e158f02474444793e229ee"
+      ],
+      "assets/icons/flags/PAL-A.png": [
+        "766400814b93717b17d840294c182300f5750cc5"
+      ],
+      "assets/icons/flags/PAL-AF.png": [
+        "ec03cf9505567aa2c6e8638e0be5d5713ae42d5f"
+      ],
+      "assets/icons/flags/PAL-AU.png": [
+        "eb82d82f35e5e96b11ef4dd72e000a6c2d1b0fbc"
+      ],
+      "assets/icons/flags/PAL-BE.png": [
+        "47678c1dd91d5ef3bd053fec2626048b65acf2e9"
+      ],
+      "assets/icons/flags/PAL-E.png": [
+        "c78cd2ff8c2f363043a753b663af8855ee3b02f5"
+      ],
+      "assets/icons/flags/PAL-F.png": [
+        "5ec4eda3085b9e2ac8f70e3cf7303113c9f03fa0"
+      ],
+      "assets/icons/flags/PAL-FI.png": [
+        "206f5396a610737a1b9d9aaf5583990184085317"
+      ],
+      "assets/icons/flags/PAL-G.png": [
+        "8858e5446275bc761297ecf1470bc7c7600f92a9"
+      ],
+      "assets/icons/flags/PAL-GR.png": [
+        "ebf758e9b91f7064d029242f7e625c03703498de"
+      ],
+      "assets/icons/flags/PAL-I.png": [
+        "413ca2fc9ce57d615c0433b62b950dece702b9f2"
+      ],
+      "assets/icons/flags/PAL-IN.png": [
+        "d050d5d6feb2d8271a0327bfa9c3a0a5b6735d65"
+      ],
+      "assets/icons/flags/PAL-NL.png": [
+        "e2edb61dad8b4233f5849cf208b3bc0fe6201faf"
+      ],
+      "assets/icons/flags/PAL-NO.png": [
+        "e24d053e5b132c731a3a361c3f34803fe2ba8083"
+      ],
+      "assets/icons/flags/PAL-P.png": [
+        "53b5568fe78f1245d47d157f973e65d6ec908758"
+      ],
+      "assets/icons/flags/PAL-PL.png": [
+        "696fc9f8b142e9f765798dd669c04747d5d702fb"
+      ],
+      "assets/icons/flags/PAL-R.png": [
+        "8ea0644f4cf8dcb835ddc0d2fd0cf51a05928a89"
+      ],
+      "assets/icons/flags/PAL-S.png": [
+        "3abeee547cf8979522c21dfc08913c7c517c0e7f"
+      ],
+      "assets/icons/flags/PAL-SC.png": [
+        "a229cecf30e2a915a096a7b9f733460437103e43"
+      ],
+      "assets/icons/flags/PAL-SW.png": [
+        "e29897a27b8c73e39f9e7176c5e9b7e6b8db3918"
+      ],
+      "assets/icons/flags/PAL-SWI.png": [
+        "f2ea37fc9633b914bcd8c663cbd79ec81afdc36b"
+      ],
+      "assets/icons/flags/PAL-UK.png": [
+        "6dd96b5fee6de4799dd3642ead2f7dc9a6be28d9"
+      ],
+      "assets/icons/star-0.png": [
+        "bf066329b4e967957c43b81731418379b6725f83"
+      ],
+      "assets/icons/star-1.png": [
+        "952b75e55caa78f1c8d4a0a6d8b9c616cdf7df59"
+      ],
+      "assets/icons/star-2.png": [
+        "af8a46cf65099fcc25d0f3a6ae306172e14520c1"
+      ],
+      "assets/icons/star-3.png": [
+        "e399140ed72efc89d653c4cd80a5903079c8ef2e"
+      ],
+      "assets/icons/star-4.png": [
+        "07a2433d0ff2ce74a66bc2307df1854a5ba4a7d3"
+      ],
+      "assets/icons/star-5.png": [
+        "2bb4f6eaaea551b141125824675ad5ca94fec3cd"
+      ],
+      "assets/placeholder.png": [
+        "c36292ab7e16bf5a6cbc4063f638e24872349c45"
+      ],
+      "assets/shaders/common/fxaa.fx": [
+        "3ac5f68049ed00d8ff3d2811bd09ef0c036efd0a"
+      ],
+      "assets/shaders/opengl/cas.glsl": [
+        "1a69a0fc522caff98fc3829ebf3f12a6a006a058"
+      ],
+      "assets/shaders/opengl/common_header.glsl": [
+        "3f47597187030144498af7a92531e8f205561211"
+      ],
+      "assets/shaders/opengl/convert.glsl": [
+        "b2a059787ee297654b27f633e37382e239693a36"
+      ],
+      "assets/shaders/opengl/interlace.glsl": [
+        "e74e58f530abb4af02c0875c2f04d507e854869e"
+      ],
+      "assets/shaders/opengl/merge.glsl": [
+        "d1a3c11a1273e1d6c740e4eacc3159842f206683"
+      ],
+      "assets/shaders/opengl/present.glsl": [
+        "bf2688971a8ef2f2c262c3c2ec579d3dd39793e6"
+      ],
+      "assets/shaders/opengl/shadeboost.glsl": [
+        "8d8b8966afd2ad840151f7fcb494739041708c89"
+      ],
+      "assets/shaders/opengl/tfx_fs.glsl": [
+        "00eb0418e7a25c89aaf7c526922fe45d83243ec5"
+      ],
+      "assets/shaders/opengl/tfx_vgs.glsl": [
+        "0e9e98f766c9250b465af776d0077f49f797fed2"
+      ],
+      "assets/shaders/vulkan/cas.glsl": [
+        "709fd5393188f7cff0fe4230d0e3e8b69a82f5b9"
+      ],
+      "assets/shaders/vulkan/convert.glsl": [
+        "b18a236b62e11a85c7ffda6ae60bfb312d6524ef"
+      ],
+      "assets/shaders/vulkan/interlace.glsl": [
+        "f8d14d80036f11707c7e94db2a77531d582019dd"
+      ],
+      "assets/shaders/vulkan/merge.glsl": [
+        "b09de39d6459c70ffab28dcb3e3ef879b1648674"
+      ],
+      "assets/shaders/vulkan/present.glsl": [
+        "4871ee00b249b41d16232769e2f661bedd1c83db"
+      ],
+      "assets/shaders/vulkan/shadeboost.glsl": [
+        "26b29f57685d8108cf519c4f1d340d43aacbff6e"
+      ],
+      "assets/shaders/vulkan/tfx.glsl": [
+        "aa06cffa086126bb4972674562a5f5c8dc6082f3"
+      ],
+      "assets/sounds/achievements/unlock.wav": [
+        "eb488a76217629f620e40287567d7e2b30337680"
+      ],
       "roms/108281-001.bin": [
         "d108bb99cb1a05d808e6e25cc720da24faee9e7c"
       ],
@@ -164287,6 +165384,27 @@
       ],
       "Machines/Shared Roms/nowindDos2.rom": [
         "8afd1ec5843ecfdcbff11497fa8c55b870c0c6f5"
+      ],
+      "assets/fonts/Roboto-Regular.ttf": [
+        "00d62fbdc8d5dec4c659005e116d0ba2ee63b547"
+      ],
+      "assets/fonts/RobotoMono-Medium.ttf": [
+        "9056e59b69c6f1160fdfb92a0773f17f6307f3ad"
+      ],
+      "assets/icons/flags/PAL-M.png": [
+        "c78cd2ff8c2f363043a753b663af8855ee3b02f5"
+      ],
+      "assets/shaders/common/ffx_a.h": [
+        "726370c10154ad092c15c251b98c79185e980c7c"
+      ],
+      "assets/shaders/common/ffx_cas.h": [
+        "a1d1a687577f7a607fda35bc88950f57c2129ca5"
+      ],
+      "assets/sounds/achievements/lbsubmit.wav": [
+        "5ad1e110dcf0ffd26405981398892a82e4f3bad1"
+      ],
+      "assets/sounds/achievements/message.wav": [
+        "c54f04b63ac6f04e0a0944ef260b5497e4494dbd"
       ],
       "roms/5429.vbi": [
         "8060cd4b49052572bb5ec929f8ad21e2addce237"

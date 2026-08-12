@@ -5,7 +5,7 @@
   "platform": "rocknix",
   "display_name": "ROCKNIX",
   "version": "1.0",
-  "generated": "2026-08-11T15:51:58Z",
+  "generated": "2026-08-12T03:38:29Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -17,8 +17,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 1769,
-  "total_size": 4293919141,
+  "total_files": 1776,
+  "total_size": 4285527944,
   "total_omitted": 9,
   "omitted_files": [
     {
@@ -1146,7 +1146,7 @@
       "sha1": "0081ea0d25bc5cd8d70b60ad8cfdc7307812c0fd",
       "sha256": "0c672d86ead61a97f49a583b88b7c1905da120645cd44f0c9f2baf4f4631e0b1",
       "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/.variants/MSX2.ROM.0081ea0d",
+      "repo_path": "bios/Other/msx-emu/Machines/Shared Roms/MSX2J.rom",
       "cores": [
         "bluemsx"
       ]
@@ -1336,7 +1336,7 @@
       "sha1": "e90f80a61d94c617850c415e12ad70ac41e66bb7",
       "sha256": "ca45b50d49a8199a2b8f74300556367a776df1bb28bf8af24d33e65f0fe37a99",
       "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/.variants/MSX2P.ROM.e90f80a6",
+      "repo_path": "bios/Other/msx-emu/Machines/Shared Roms/MSX2P.rom",
       "cores": [
         "bluemsx"
       ]
@@ -1493,10 +1493,10 @@
     },
     {
       "dest": "Machines/Shared Roms/RS232.ROM",
-      "sha1": "7aec0134ad6a5177f4056fcb6047083e8e00529b",
-      "sha256": "4df4236ea4687fc729eba6c5bf57a9ac1eceda0c012c5bbe5170b8d722ab9387",
-      "size": 16640,
-      "repo_path": "bios/Microsoft/MSX/RS232.ROM",
+      "sha1": "4e9384c9d137f0ab65ffc5a78f04cd8c9df6c8b7",
+      "sha256": "696da03345b9fd27799b8fd92024050a201c020ef730e9006cb8f10bbbf68004",
+      "size": 8192,
+      "repo_path": "bios/Other/msx-emu/Machines/Shared Roms/RS232.ROM",
       "cores": [
         "bluemsx"
       ]
@@ -2327,26 +2327,6 @@
       "sha256": "70bdd536c317ae552fddfb087fc6baec88001fd3ef526e4683d14e9d8518726c",
       "size": 32768,
       "repo_path": "bios/Sega/Arcade/opr-10188.71f",
-      "cores": [
-        "cannonball"
-      ]
-    },
-    {
-      "dest": "cannonball/res/tilemap.bin",
-      "sha1": "9c294250f54b4e3f60e3d13f73ee80325e683b04",
-      "sha256": "0c6a49015770266861e87f4562453deef0cb14a5cc917e1e18df6685ff584008",
-      "size": 2804,
-      "repo_path": "bios/Other/cannonball/res/tilemap.bin",
-      "cores": [
-        "cannonball"
-      ]
-    },
-    {
-      "dest": "cannonball/res/tilepatch.bin",
-      "sha1": "fa950979aaa1d4c947473f158f770f3f3c8c45da",
-      "sha256": "211c5443b21a51b7952c16097b54ff531ed923f371fcb89abf09d4fada4225a8",
-      "size": 1870,
-      "repo_path": "bios/Other/cannonball/res/tilepatch.bin",
       "cores": [
         "cannonball"
       ]
@@ -4026,6 +4006,16 @@
       ]
     },
     {
+      "dest": "fba2012/samples/rallyx.zip",
+      "sha1": "8844cc0ae17a476388c51d42c2ce2f61b3b4cc93",
+      "sha256": "2dd50410e202528989fb578c13fbfc3ec3382b123a1025e1dc8c995c87b3c903",
+      "size": 72511,
+      "repo_path": "bios/Other/fbalpha2012/fba2012/samples/rallyx.zip",
+      "cores": [
+        "fbalpha2012"
+      ]
+    },
+    {
       "dest": "fba2012/samples/ghox.zip",
       "sha1": "11ab10d51b27594f71336dd6d83ef30cd2742e6e",
       "sha256": "999eb2dd6f45fd6a208758eb2891937f74eddaf2d30dcc95340bd69e86390da8",
@@ -4105,10 +4095,10 @@
     },
     {
       "dest": "fbneo/samples/sfz3mix.zip",
-      "sha1": "937cdc6ccf9de418b94d8b762aad36822f857ec9",
-      "sha256": "bb50e6cd61cf40e3d89a33fb97190c5faafdfb593c7c2f31ee973bb409f42f3b",
-      "size": 116329446,
-      "repo_path": "",
+      "sha1": "227815ce9e55db427d68e075182caffe6ad60ad1",
+      "sha256": "6a720035646b3488a047ab163a6975b7be82fe75c5eec88155c8503c93a631fe",
+      "size": 96705917,
+      "repo_path": "bios/Other/fbneo/fbneo/samples/sfz3mix.zip",
       "cores": [
         "fbneo"
       ],
@@ -4117,10 +4107,10 @@
     },
     {
       "dest": "fbneo/samples/twotiger.zip",
-      "sha1": "74399cc36d97e9f74b387b87900505ebbf260ca9",
-      "sha256": "9f76508dd50b1b1da5b73f5262a53aedfb65b49713f98d5e8002763c24b33697",
-      "size": 154888877,
-      "repo_path": "",
+      "sha1": "b286035624978c94194ef5b83b5d784ec00c3a3c",
+      "sha256": "fe5408e3f513c44a64f573e7a8b68885bce9b263bc9c67bfef13fef13f3e976e",
+      "size": 154985212,
+      "repo_path": "bios/Other/fbneo/fbneo/samples/twotiger.zip",
       "cores": [
         "fbneo"
       ],
@@ -8297,16 +8287,6 @@
       "repo_path": "bios/Texas Instruments/TI-83/ti83.rom",
       "cores": [
         "numero"
-      ]
-    },
-    {
-      "dest": "nxengine/Doukutsu.exe",
-      "sha1": "91d75a87872cbb88964bead92e0cbf8b72e836b6",
-      "sha256": "8a7a63b24bb21557fb597697bdf09248c1ab7e3298cacfa1166d764dd81e7fc3",
-      "size": 1478656,
-      "repo_path": "bios/Other/NXEngine/Doukutsu.exe",
-      "cores": [
-        "nxengine"
       ]
     },
     {
@@ -13358,16 +13338,6 @@
       ]
     },
     {
-      "dest": "vice/C128/kernal-318034-01.bin",
-      "sha1": "9b0a0cef56d00035c611e07170f051ee5e63aa3a",
-      "sha256": "89d32c3a5c13cded89207a9e86d998158b00bf0a09663070ecc5524501045b74",
-      "size": 32768,
-      "repo_path": "bios/Commodore/C128/vice/C128/kernal-318034-01.bin",
-      "cores": [
-        "vice"
-      ]
-    },
-    {
       "dest": "vice/C128/kernalfi",
       "sha1": "d08e7991a6df14a843e92daafaf6756337959ba4",
       "sha256": "a7fce9cbd6fd3b6eb789f27ff7235433724e1ed0a9bdd5509bdfc8e1e62204da",
@@ -16118,11 +16088,31 @@
       ]
     },
     {
+      "dest": "SCPH-50009_BIOS_V10_CHN_190.BIN",
+      "sha1": "b7548a92bd2caa9d60cbc7f79573a5d510f88012",
+      "sha256": "3f11bc1a9d1697fe950d73ac9deb6b49c984948c108f569d7b118a7bf8e1813b",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-50009_BIOS_V10_CHN_190.BIN",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
       "dest": "SCPH-70004.BIN",
       "sha1": "434bc0b4eb4827da0773ec0795aadc5162569a07",
       "sha256": "d6653f4e93be2f6f9e9d690a934f26cf0f6ad4e348b69f41ef736732c3a6685b",
       "size": 4194304,
       "repo_path": "bios/Sony/PlayStation 2/SCPH-70004.BIN",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "SCPH-70008_BIOS_V12_RUS_200.BIN",
+      "sha1": "cce6fac0f7e682ad167e1e828b2d53192c3d5051",
+      "sha256": "d6da9154a9954cafd9d3df44609236ba86c197a0b7d75380f952c4cb910b67f6",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-70008_BIOS_V12_RUS_200.BIN",
       "cores": [
         "armsx2"
       ]
@@ -17098,6 +17088,46 @@
       ]
     },
     {
+      "dest": "SCPH-50009_BIOS_V10_CHN_190.EROM",
+      "sha1": "2ed11fd9333e62e36659565a744330a5902ed5e3",
+      "sha256": "67a6b2779e9320abe24f75ce811acf29e54d6dc06ce65b11341b6d84103de7f8",
+      "size": 3145728,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-50009_BIOS_V10_CHN_190.EROM",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "SCPH-50009_BIOS_V10_CHN_190.NVM",
+      "sha1": "3ffa2e74c8c8ce0e10e2069956f12d2407b91c65",
+      "sha256": "5b255bce650e66efeeb3b0bebc0dff705600d05aa2e076a315d02c6a7ed6ac9a",
+      "size": 1024,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-50009_BIOS_V10_CHN_190.NVM",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "SCPH-50009_BIOS_V10_CHN_190.ROM1",
+      "sha1": "b284280341f16b1581c28ff81934bfdf403da1f0",
+      "sha256": "ad812eb36b8e7daa6106411e43840f70175f012a7a7dd289965872fe43933cc4",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-50009_BIOS_V10_CHN_190.ROM1",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "SCPH-50009_BIOS_V10_CHN_190.ROM2",
+      "sha1": "7aef1dd6de4b4f64f31daad615bbccdb3e62e79c",
+      "sha256": "8dc012640186c46a39fcdd64a8ab9430080a220bd0630da58c977f35725de5cf",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-50009_BIOS_V10_CHN_190.ROM2",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
       "dest": "SCPH-70004.EROM",
       "sha1": "ec0121bb8e2a209044309780d2efc2559c9a0ef1",
       "sha256": "e5bcd5925c1f22de48d49c3895dd421d167faddc033aac628f5facfba90ceef3",
@@ -17113,6 +17143,46 @@
       "sha256": "b86fbccaa111ca7497630337dafea7da7320fc4f924ada22b92145ef806e7b42",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation 2/SCPH-70004.ROM1",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "SCPH-70006_BIOS_V12_HK_200.NVM",
+      "sha1": "06ccc54cdbe8b017a629155ccb66310cba9c4720",
+      "sha256": "48ea5461a794fbc366798776e1dd5b734a25d0f140d75c23b642d99e48e2b76f",
+      "size": 1024,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-70006_BIOS_V12_HK_200.NVM",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "SCPH-70008_BIOS_V12_RUS_200.NVM",
+      "sha1": "6611151e8f599230cdf19a17318e7e5ddc781961",
+      "sha256": "b1704c7da37f03db017ad7576508c61b250d9ed4f3ceda8732ea91a3034f6cbf",
+      "size": 1024,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-70008_BIOS_V12_RUS_200.NVM",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "SCPH-75008_BIOS_V14_RUS_220.NVM",
+      "sha1": "fff13c6e30c55df9d6241ee08e5d0026c6a5d618",
+      "sha256": "f57595d834bec00f62ece0fc59f4c0c52ebe26a46100429b065606a851dfa1a8",
+      "size": 1024,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-75008_BIOS_V14_RUS_220.NVM",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "SCPH-77008_BIOS_V15_RUS_220.NVM",
+      "sha1": "84a9628af6fa8335247c002b1ce6c81a419ea9a5",
+      "sha256": "08ea4442e8f16f0e68b7b07355f044c181cab7747076d135f33184bf32f156af",
+      "size": 1024,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-77008_BIOS_V15_RUS_220.NVM",
       "cores": [
         "armsx2"
       ]

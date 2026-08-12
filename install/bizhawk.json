@@ -5,7 +5,7 @@
   "platform": "bizhawk",
   "display_name": "BizHawk",
   "version": "1.0",
-  "generated": "2026-08-11T08:43:51Z",
+  "generated": "2026-08-12T03:38:29Z",
   "base_destination": "Firmware",
   "detect": [
     {
@@ -21,7 +21,7 @@
   ],
   "standalone_copies": [],
   "total_files": 540,
-  "total_size": 2348480441,
+  "total_size": 2328953247,
   "total_omitted": 0,
   "omitted_files": [],
   "files": [
@@ -1473,10 +1473,10 @@
     },
     {
       "dest": "fbneo/samples/sfz3mix.zip",
-      "sha1": "937cdc6ccf9de418b94d8b762aad36822f857ec9",
-      "sha256": "bb50e6cd61cf40e3d89a33fb97190c5faafdfb593c7c2f31ee973bb409f42f3b",
-      "size": 116329446,
-      "repo_path": "",
+      "sha1": "227815ce9e55db427d68e075182caffe6ad60ad1",
+      "sha256": "6a720035646b3488a047ab163a6975b7be82fe75c5eec88155c8503c93a631fe",
+      "size": 96705917,
+      "repo_path": "bios/Other/fbneo/fbneo/samples/sfz3mix.zip",
       "cores": [
         "fbneo"
       ],
@@ -1485,10 +1485,10 @@
     },
     {
       "dest": "fbneo/samples/twotiger.zip",
-      "sha1": "74399cc36d97e9f74b387b87900505ebbf260ca9",
-      "sha256": "9f76508dd50b1b1da5b73f5262a53aedfb65b49713f98d5e8002763c24b33697",
-      "size": 154888877,
-      "repo_path": "",
+      "sha1": "b286035624978c94194ef5b83b5d784ec00c3a3c",
+      "sha256": "fe5408e3f513c44a64f573e7a8b68885bce9b263bc9c67bfef13fef13f3e976e",
+      "size": 154985212,
+      "repo_path": "bios/Other/fbneo/fbneo/samples/twotiger.zip",
       "cores": [
         "fbneo"
       ],

@@ -5,7 +5,7 @@
   "platform": "batocera",
   "display_name": "Batocera",
   "version": "1.0",
-  "generated": "2026-08-11T15:51:58Z",
+  "generated": "2026-08-12T03:38:29Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -237,9 +237,9 @@
       }
     }
   ],
-  "total_files": 1794,
-  "total_size": 2805615262,
-  "total_omitted": 23,
+  "total_files": 1816,
+  "total_size": 2799948901,
+  "total_omitted": 9,
   "omitted_files": [
     {
       "dest": "Enterprise/basic21.bin",
@@ -321,146 +321,6 @@
       "reason": "not_found",
       "cores": [
         "easyrpg"
-      ]
-    },
-    {
-      "dest": "shadps4/sys_modules/libSceAt9Enc.sprx",
-      "name": "libSceAt9Enc.sprx",
-      "system": "ps4",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "shadps4"
-      ]
-    },
-    {
-      "dest": "shadps4/sys_modules/libSceAudiodecCpu.sprx",
-      "name": "libSceAudiodecCpu.sprx",
-      "system": "ps4",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "shadps4"
-      ]
-    },
-    {
-      "dest": "shadps4/sys_modules/libSceAudiodecCpuDdp.sprx",
-      "name": "libSceAudiodecCpuDdp.sprx",
-      "system": "ps4",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "shadps4"
-      ]
-    },
-    {
-      "dest": "shadps4/sys_modules/libSceAudiodecCpuDtsHdLbr.sprx",
-      "name": "libSceAudiodecCpuDtsHdLbr.sprx",
-      "system": "ps4",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "shadps4"
-      ]
-    },
-    {
-      "dest": "shadps4/sys_modules/libSceAudiodecCpuHevag.sprx",
-      "name": "libSceAudiodecCpuHevag.sprx",
-      "system": "ps4",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "shadps4"
-      ]
-    },
-    {
-      "dest": "shadps4/sys_modules/libSceAudiodecCpuM4aac.sprx",
-      "name": "libSceAudiodecCpuM4aac.sprx",
-      "system": "ps4",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "shadps4"
-      ]
-    },
-    {
-      "dest": "shadps4/sys_modules/libSceFreeTypeOl.sprx",
-      "name": "libSceFreeTypeOl.sprx",
-      "system": "ps4",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "shadps4"
-      ]
-    },
-    {
-      "dest": "shadps4/sys_modules/libSceFreeTypeOptOl.sprx",
-      "name": "libSceFreeTypeOptOl.sprx",
-      "system": "ps4",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "shadps4"
-      ]
-    },
-    {
-      "dest": "shadps4/sys_modules/libSceRudp.sprx",
-      "name": "libSceRudp.sprx",
-      "system": "ps4",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "shadps4"
-      ]
-    },
-    {
-      "dest": "shadps4/sys_modules/libSceSystemGesture.sprx",
-      "name": "libSceSystemGesture.sprx",
-      "system": "ps4",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "shadps4"
-      ]
-    },
-    {
-      "dest": "shadps4/sys_modules/libSceWkFontConfig.sprx",
-      "name": "libSceWkFontConfig.sprx",
-      "system": "ps4",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "shadps4"
-      ]
-    },
-    {
-      "dest": "shadps4/sys_modules/libSceXml.sprx",
-      "name": "libSceXml.sprx",
-      "system": "ps4",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "shadps4"
-      ]
-    },
-    {
-      "dest": "switch/console.keys",
-      "name": "console.keys",
-      "system": "nintendo-switch",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "citron"
-      ]
-    },
-    {
-      "dest": "switch/key_retail.bin",
-      "name": "key_retail.bin",
-      "system": "nintendo-switch",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "citron"
       ]
     }
   ],
@@ -3760,7 +3620,7 @@
       "sha1": "0081ea0d25bc5cd8d70b60ad8cfdc7307812c0fd",
       "sha256": "0c672d86ead61a97f49a583b88b7c1905da120645cd44f0c9f2baf4f4631e0b1",
       "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/.variants/MSX2.ROM.0081ea0d",
+      "repo_path": "bios/Other/msx-emu/Machines/Shared Roms/MSX2J.rom",
       "cores": [
         "bluemsx"
       ]
@@ -3950,7 +3810,7 @@
       "sha1": "e90f80a61d94c617850c415e12ad70ac41e66bb7",
       "sha256": "ca45b50d49a8199a2b8f74300556367a776df1bb28bf8af24d33e65f0fe37a99",
       "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/.variants/MSX2P.ROM.e90f80a6",
+      "repo_path": "bios/Other/msx-emu/Machines/Shared Roms/MSX2P.rom",
       "cores": [
         "bluemsx"
       ]
@@ -4107,10 +3967,10 @@
     },
     {
       "dest": "Machines/Shared Roms/RS232.ROM",
-      "sha1": "7aec0134ad6a5177f4056fcb6047083e8e00529b",
-      "sha256": "4df4236ea4687fc729eba6c5bf57a9ac1eceda0c012c5bbe5170b8d722ab9387",
-      "size": 16640,
-      "repo_path": "bios/Microsoft/MSX/RS232.ROM",
+      "sha1": "4e9384c9d137f0ab65ffc5a78f04cd8c9df6c8b7",
+      "sha256": "696da03345b9fd27799b8fd92024050a201c020ef730e9006cb8f10bbbf68004",
+      "size": 8192,
+      "repo_path": "bios/Other/msx-emu/Machines/Shared Roms/RS232.ROM",
       "cores": [
         "bluemsx"
       ]
@@ -4906,26 +4766,6 @@
       ]
     },
     {
-      "dest": "cannonball/res/tilemap.bin",
-      "sha1": "9c294250f54b4e3f60e3d13f73ee80325e683b04",
-      "sha256": "0c6a49015770266861e87f4562453deef0cb14a5cc917e1e18df6685ff584008",
-      "size": 2804,
-      "repo_path": "bios/Other/cannonball/res/tilemap.bin",
-      "cores": [
-        "cannonball"
-      ]
-    },
-    {
-      "dest": "cannonball/res/tilepatch.bin",
-      "sha1": "fa950979aaa1d4c947473f158f770f3f3c8c45da",
-      "sha256": "211c5443b21a51b7952c16097b54ff531ed923f371fcb89abf09d4fada4225a8",
-      "size": 1870,
-      "repo_path": "bios/Other/cannonball/res/tilepatch.bin",
-      "cores": [
-        "cannonball"
-      ]
-    },
-    {
       "dest": "cannonball/epr-10380.133",
       "sha1": "ac319cdafb156adcf6be29ae1b82d46d3048022e",
       "sha256": "79048290af606e3233cbfa7a5b78b2afeafb0deda38d6ae530e4f0341e4a9a33",
@@ -5601,6 +5441,26 @@
       "sha256": "dc6e31aae8daa9067dafcf2bca6d9d3aa691a63474eb698ad8c54be3e360753b",
       "size": 19584,
       "repo_path": "bios/Arcade/Arcade/switch/title.keys",
+      "cores": [
+        "citron"
+      ]
+    },
+    {
+      "dest": "switch/console.keys",
+      "sha1": "721ca59a261d04af13fb84497ad79b6d8c6b7609",
+      "sha256": "b98c31cc764c49b8259142de3ada5bb7440ce0fd11315ae64294ddb0d56a523d",
+      "size": 451,
+      "repo_path": "bios/Other/citron/switch/console.keys",
+      "cores": [
+        "citron"
+      ]
+    },
+    {
+      "dest": "switch/key_retail.bin",
+      "sha1": "bbdbb49a917d14f7a997d327ba40d40c39e606ce",
+      "sha256": "7f9283654ec1097fbdff31de946651ae60c2854afb544abe8963d389639c710e",
+      "size": 160,
+      "repo_path": "bios/Other/citron/switch/key_retail.bin",
       "cores": [
         "citron"
       ]
@@ -8201,10 +8061,10 @@
     },
     {
       "dest": "fbneo/samples/sfz3mix.zip",
-      "sha1": "937cdc6ccf9de418b94d8b762aad36822f857ec9",
-      "sha256": "bb50e6cd61cf40e3d89a33fb97190c5faafdfb593c7c2f31ee973bb409f42f3b",
-      "size": 116329446,
-      "repo_path": "",
+      "sha1": "227815ce9e55db427d68e075182caffe6ad60ad1",
+      "sha256": "6a720035646b3488a047ab163a6975b7be82fe75c5eec88155c8503c93a631fe",
+      "size": 96705917,
+      "repo_path": "bios/Other/fbneo/fbneo/samples/sfz3mix.zip",
       "cores": [
         "fbneo"
       ],
@@ -8213,10 +8073,10 @@
     },
     {
       "dest": "fbneo/samples/twotiger.zip",
-      "sha1": "74399cc36d97e9f74b387b87900505ebbf260ca9",
-      "sha256": "9f76508dd50b1b1da5b73f5262a53aedfb65b49713f98d5e8002763c24b33697",
-      "size": 154888877,
-      "repo_path": "",
+      "sha1": "b286035624978c94194ef5b83b5d784ec00c3a3c",
+      "sha256": "fe5408e3f513c44a64f573e7a8b68885bce9b263bc9c67bfef13fef13f3e976e",
+      "size": 154985212,
+      "repo_path": "bios/Other/fbneo/fbneo/samples/twotiger.zip",
       "cores": [
         "fbneo"
       ],
@@ -9018,7 +8878,7 @@
       "sha1": "231b29ef9d6314930eb18e57240e27ae81a6e88f",
       "sha256": "c8dd1e361ab3219a956b9b7879a17658b10273cc3569bf23cb9ffb23f55e5152",
       "size": 603323,
-      "repo_path": "bios/Other/hypseus-singe/gamecontrollerdb.txt",
+      "repo_path": "bios/Other/hakux/controller_map.txt",
       "cores": [
         "hypseus-singe"
       ]
@@ -11584,16 +11444,6 @@
       ]
     },
     {
-      "dest": "nxengine/Doukutsu.exe",
-      "sha1": "91d75a87872cbb88964bead92e0cbf8b72e836b6",
-      "sha256": "8a7a63b24bb21557fb597697bdf09248c1ab7e3298cacfa1166d764dd81e7fc3",
-      "size": 1478656,
-      "repo_path": "bios/Other/NXEngine/Doukutsu.exe",
-      "cores": [
-        "nxengine"
-      ]
-    },
-    {
       "dest": "nxengine/data/npc.tbl",
       "sha1": "19555d2f5f72a66d6beddb4acc5ca00d634ac9c4",
       "sha256": "75b38bb4ab57b50bfc6c3ba77fe670a2eb67301f425aefe96bb1ed87c2b9e2db",
@@ -13294,11 +13144,71 @@
       ]
     },
     {
+      "dest": "shadps4/sys_modules/libSceAt9Enc.sprx",
+      "sha1": "2a6fbc6cd4ffb69045863224a76085b9921fc67b",
+      "sha256": "d1c8817dd1a1896c950afcec46d3d78a584d7fefc1452b1c42a0343b423737a7",
+      "size": 157424,
+      "repo_path": "bios/Other/shadps4/shadps4/sys_modules/libSceAt9Enc.sprx",
+      "cores": [
+        "shadps4"
+      ]
+    },
+    {
       "dest": "shadps4/sys_modules/libSceAudiodec.sprx",
       "sha1": "eec337f4d127e6a2c404e4e08250d88e714a989c",
       "sha256": "bc2806808a735dc18e71226a07374496914a2ee6c19e1a27c17cd17be345b2c7",
       "size": 68824,
       "repo_path": "bios/Sony/PlayStation 4/shadps4/sys_modules/libSceAudiodec.sprx",
+      "cores": [
+        "shadps4"
+      ]
+    },
+    {
+      "dest": "shadps4/sys_modules/libSceAudiodecCpu.sprx",
+      "sha1": "ea1f3890cab882e58080eb4c9c926c777a13e014",
+      "sha256": "ad89da76518bc80073e996aad4c50acd1266dffcbe7adc8a7365e66e0324a612",
+      "size": 52624,
+      "repo_path": "bios/Other/shadps4/shadps4/sys_modules/libSceAudiodecCpu.sprx",
+      "cores": [
+        "shadps4"
+      ]
+    },
+    {
+      "dest": "shadps4/sys_modules/libSceAudiodecCpuDdp.sprx",
+      "sha1": "0f41ea820d8a74a5b1a59dc6c8e151dde40a7eac",
+      "sha256": "5879f1af2ba45e3c6058baeb9d3df8c4a916bc125f91eec794eee8b8da4a1aca",
+      "size": 609088,
+      "repo_path": "bios/Other/shadps4/shadps4/sys_modules/libSceAudiodecCpuDdp.sprx",
+      "cores": [
+        "shadps4"
+      ]
+    },
+    {
+      "dest": "shadps4/sys_modules/libSceAudiodecCpuM4aac.sprx",
+      "sha1": "72dc23f5d32b90561272daa59903c6b63cc2b5c4",
+      "sha256": "72fa07d041df1ee6d58f193b37bda217af9c576f8e789a2e1c2a8334d3aa7448",
+      "size": 372376,
+      "repo_path": "bios/Other/shadps4/shadps4/sys_modules/libSceAudiodecCpuM4aac.sprx",
+      "cores": [
+        "shadps4"
+      ]
+    },
+    {
+      "dest": "shadps4/sys_modules/libSceAudiodecCpuDtsHdLbr.sprx",
+      "sha1": "4cc1bdb8182853506a21590a7bf31a8648113156",
+      "sha256": "8da6f186c16ed11a97afb96c9f0d51b3478168a4c76785efea5f9774953046ea",
+      "size": 277200,
+      "repo_path": "bios/Other/shadps4/shadps4/sys_modules/libSceAudiodecCpuDtsHdLbr.sprx",
+      "cores": [
+        "shadps4"
+      ]
+    },
+    {
+      "dest": "shadps4/sys_modules/libSceAudiodecCpuHevag.sprx",
+      "sha1": "20df853712b4d1a95a8e765b3dc85ba96ba19df0",
+      "sha256": "4328be624627ee0e9d41d0b5727950a1118714be34dda659996ebc3e69d4a92b",
+      "size": 67304,
+      "repo_path": "bios/Other/shadps4/shadps4/sys_modules/libSceAudiodecCpuHevag.sprx",
       "cores": [
         "shadps4"
       ]
@@ -13329,6 +13239,66 @@
       "sha256": "2b1563bf12deba4c766de86fdf8de1b2ad57c28e388b221c9ce193b29d6dcc70",
       "size": 471144,
       "repo_path": "bios/Sony/PlayStation 4/shadps4/sys_modules/libSceFreeTypeOt.sprx",
+      "cores": [
+        "shadps4"
+      ]
+    },
+    {
+      "dest": "shadps4/sys_modules/libSceFreeTypeOl.sprx",
+      "sha1": "7b1887e6e7503e9e57871113c44ac88d7ae57dc3",
+      "sha256": "f77b0d52eb81340c9baa71c975a09c9e10069b46d9325a0dd693bb14055f259f",
+      "size": 579224,
+      "repo_path": "bios/Other/shadps4/shadps4/sys_modules/libSceFreeTypeOl.sprx",
+      "cores": [
+        "shadps4"
+      ]
+    },
+    {
+      "dest": "shadps4/sys_modules/libSceFreeTypeOptOl.sprx",
+      "sha1": "99aa168e4c756bc7647d3ca936c35eca892fd935",
+      "sha256": "97a4df9eed9b5e6ea4f4c5017a29696d5ad4ca2cddb8ba05f0014062d435fd73",
+      "size": 163896,
+      "repo_path": "bios/Other/shadps4/shadps4/sys_modules/libSceFreeTypeOptOl.sprx",
+      "cores": [
+        "shadps4"
+      ]
+    },
+    {
+      "dest": "shadps4/sys_modules/libSceRudp.sprx",
+      "sha1": "9d1cba7c66e2a582b065f14cc36d812d4c1c3906",
+      "sha256": "6b0243801bd81b5d4fdb3c8010dd4ae101cd31e0e4c2dc8be63ac88aa3bb8a21",
+      "size": 210288,
+      "repo_path": "bios/Other/shadps4/shadps4/sys_modules/libSceRudp.sprx",
+      "cores": [
+        "shadps4"
+      ]
+    },
+    {
+      "dest": "shadps4/sys_modules/libSceWkFontConfig.sprx",
+      "sha1": "f99295c62a62b2e8ed0a22c9d7360fbbb305d1a0",
+      "sha256": "013ffcc6e71d8a3d67c31bc4f157161fa4781bdb1a3a2437b683fb1050f93675",
+      "size": 52688,
+      "repo_path": "bios/Other/shadps4/shadps4/sys_modules/libSceWkFontConfig.sprx",
+      "cores": [
+        "shadps4"
+      ]
+    },
+    {
+      "dest": "shadps4/sys_modules/libSceSystemGesture.sprx",
+      "sha1": "199869b8a5020fe59861a507a48078665b57d8dc",
+      "sha256": "98425066e5c44346fc849931f62e369cad70e358e89ccadfa75eca2c5b1425f8",
+      "size": 68768,
+      "repo_path": "bios/Other/shadps4/shadps4/sys_modules/libSceSystemGesture.sprx",
+      "cores": [
+        "shadps4"
+      ]
+    },
+    {
+      "dest": "shadps4/sys_modules/libSceXml.sprx",
+      "sha1": "c86a4a54d8d06190d937d3906703067e93d24482",
+      "sha256": "d6ca22d54e21315b8a62780bba4029f6cac78cf2de7c07868adf84a2c00b26bf",
+      "size": 177408,
+      "repo_path": "bios/Other/shadps4/shadps4/sys_modules/libSceXml.sprx",
       "cores": [
         "shadps4"
       ]
@@ -13769,16 +13739,6 @@
       "sha256": "7f3c16d39f29e99bab4036537cbc8681f71042bc001dffb5a856e8990b25aeaf",
       "size": 16384,
       "repo_path": "bios/Commodore/C128/vice/C128/kernal-325172-01.bin",
-      "cores": [
-        "vice"
-      ]
-    },
-    {
-      "dest": "vice/C128/kernal-318034-01.bin",
-      "sha1": "9b0a0cef56d00035c611e07170f051ee5e63aa3a",
-      "sha256": "89d32c3a5c13cded89207a9e86d998158b00bf0a09663070ecc5524501045b74",
-      "size": 32768,
-      "repo_path": "bios/Commodore/C128/vice/C128/kernal-318034-01.bin",
       "cores": [
         "vice"
       ]
@@ -14864,6 +14824,16 @@
       ]
     },
     {
+      "dest": "eeprom.bin",
+      "sha1": "ff3e7eaf715fe5612e46fc984d686ed3b115baef",
+      "sha256": "e652203e6d91140729c29588b18ff8838896cdeb9a3100fbf8d20763af27c9d2",
+      "size": 256,
+      "repo_path": "bios/Microsoft/Xbox/xemu_eeprom.bin",
+      "cores": [
+        "xemu"
+      ]
+    },
+    {
       "dest": "xbox_hdd.qcow2",
       "sha1": "9da5f9ecfb1c9c32efa616f0300d02e8f702244d",
       "sha256": "c5ec3e0fbc4f31d36c13211ded7f070f3b5f04e99a367fbe5d8c2d8c6e4f925d",
@@ -14949,6 +14919,16 @@
       "sha256": "dd236210b88447c8f185fd4ed72df9879cd9d2c2077ce68d935e45a7559c2e17",
       "size": 8192,
       "repo_path": "bios/Dragon/Dragon/alpha-boot-v1.0.rom",
+      "cores": [
+        "xroar"
+      ]
+    },
+    {
+      "dest": "alpha-boot-v0.4.rom",
+      "sha1": "69ea376dbc7418f69e9e809b448d22a4de012344",
+      "sha256": "411de6824f154f82d49e56c43630fb250b3720ab06daa96a618e16cbf314ec35",
+      "size": 8192,
+      "repo_path": "bios/Other/xroar/alpha-boot-v0.4.rom",
       "cores": [
         "xroar"
       ]
@@ -16644,11 +16624,31 @@
       ]
     },
     {
+      "dest": "SCPH-50009_BIOS_V10_CHN_190.BIN",
+      "sha1": "b7548a92bd2caa9d60cbc7f79573a5d510f88012",
+      "sha256": "3f11bc1a9d1697fe950d73ac9deb6b49c984948c108f569d7b118a7bf8e1813b",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-50009_BIOS_V10_CHN_190.BIN",
+      "cores": [
+        "pcsx2"
+      ]
+    },
+    {
       "dest": "SCPH-70004.BIN",
       "sha1": "434bc0b4eb4827da0773ec0795aadc5162569a07",
       "sha256": "d6653f4e93be2f6f9e9d690a934f26cf0f6ad4e348b69f41ef736732c3a6685b",
       "size": 4194304,
       "repo_path": "bios/Sony/PlayStation 2/SCPH-70004.BIN",
+      "cores": [
+        "pcsx2"
+      ]
+    },
+    {
+      "dest": "SCPH-70008_BIOS_V12_RUS_200.BIN",
+      "sha1": "cce6fac0f7e682ad167e1e828b2d53192c3d5051",
+      "sha256": "d6da9154a9954cafd9d3df44609236ba86c197a0b7d75380f952c4cb910b67f6",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-70008_BIOS_V12_RUS_200.BIN",
       "cores": [
         "pcsx2"
       ]
@@ -17634,6 +17634,46 @@
       ]
     },
     {
+      "dest": "SCPH-50009_BIOS_V10_CHN_190.EROM",
+      "sha1": "2ed11fd9333e62e36659565a744330a5902ed5e3",
+      "sha256": "67a6b2779e9320abe24f75ce811acf29e54d6dc06ce65b11341b6d84103de7f8",
+      "size": 3145728,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-50009_BIOS_V10_CHN_190.EROM",
+      "cores": [
+        "pcsx2"
+      ]
+    },
+    {
+      "dest": "SCPH-50009_BIOS_V10_CHN_190.NVM",
+      "sha1": "3ffa2e74c8c8ce0e10e2069956f12d2407b91c65",
+      "sha256": "5b255bce650e66efeeb3b0bebc0dff705600d05aa2e076a315d02c6a7ed6ac9a",
+      "size": 1024,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-50009_BIOS_V10_CHN_190.NVM",
+      "cores": [
+        "pcsx2"
+      ]
+    },
+    {
+      "dest": "SCPH-50009_BIOS_V10_CHN_190.ROM1",
+      "sha1": "b284280341f16b1581c28ff81934bfdf403da1f0",
+      "sha256": "ad812eb36b8e7daa6106411e43840f70175f012a7a7dd289965872fe43933cc4",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-50009_BIOS_V10_CHN_190.ROM1",
+      "cores": [
+        "pcsx2"
+      ]
+    },
+    {
+      "dest": "SCPH-50009_BIOS_V10_CHN_190.ROM2",
+      "sha1": "7aef1dd6de4b4f64f31daad615bbccdb3e62e79c",
+      "sha256": "8dc012640186c46a39fcdd64a8ab9430080a220bd0630da58c977f35725de5cf",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-50009_BIOS_V10_CHN_190.ROM2",
+      "cores": [
+        "pcsx2"
+      ]
+    },
+    {
       "dest": "SCPH-70004.EROM",
       "sha1": "ec0121bb8e2a209044309780d2efc2559c9a0ef1",
       "sha256": "e5bcd5925c1f22de48d49c3895dd421d167faddc033aac628f5facfba90ceef3",
@@ -17649,6 +17689,46 @@
       "sha256": "b86fbccaa111ca7497630337dafea7da7320fc4f924ada22b92145ef806e7b42",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation 2/SCPH-70004.ROM1",
+      "cores": [
+        "pcsx2"
+      ]
+    },
+    {
+      "dest": "SCPH-70006_BIOS_V12_HK_200.NVM",
+      "sha1": "06ccc54cdbe8b017a629155ccb66310cba9c4720",
+      "sha256": "48ea5461a794fbc366798776e1dd5b734a25d0f140d75c23b642d99e48e2b76f",
+      "size": 1024,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-70006_BIOS_V12_HK_200.NVM",
+      "cores": [
+        "pcsx2"
+      ]
+    },
+    {
+      "dest": "SCPH-70008_BIOS_V12_RUS_200.NVM",
+      "sha1": "6611151e8f599230cdf19a17318e7e5ddc781961",
+      "sha256": "b1704c7da37f03db017ad7576508c61b250d9ed4f3ceda8732ea91a3034f6cbf",
+      "size": 1024,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-70008_BIOS_V12_RUS_200.NVM",
+      "cores": [
+        "pcsx2"
+      ]
+    },
+    {
+      "dest": "SCPH-75008_BIOS_V14_RUS_220.NVM",
+      "sha1": "fff13c6e30c55df9d6241ee08e5d0026c6a5d618",
+      "sha256": "f57595d834bec00f62ece0fc59f4c0c52ebe26a46100429b065606a851dfa1a8",
+      "size": 1024,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-75008_BIOS_V14_RUS_220.NVM",
+      "cores": [
+        "pcsx2"
+      ]
+    },
+    {
+      "dest": "SCPH-77008_BIOS_V15_RUS_220.NVM",
+      "sha1": "84a9628af6fa8335247c002b1ce6c81a419ea9a5",
+      "sha256": "08ea4442e8f16f0e68b7b07355f044c181cab7747076d135f33184bf32f156af",
+      "size": 1024,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-77008_BIOS_V15_RUS_220.NVM",
       "cores": [
         "pcsx2"
       ]
