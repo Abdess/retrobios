@@ -1249,24 +1249,18 @@ def _effective_validation_label(details: list[dict], validation_index: dict) -> 
     return "+".join(sorted(all_checks))
 
 
-def verify_emulator(
+def _select_profiles(
     profile_names: list[str],
-    emulators_dir: str,
-    db: dict,
-    standalone: bool = False,
-    regions: list[str] | None = None,
-) -> dict:
-    """Verify files for specific emulator profiles.
+    all_profiles: dict,
+    standalone: bool,
+) -> list[tuple[str, dict]]:
+    """Resolve the named profiles, refusing the ones that answer for others.
 
-    A region priority list narrows the report the same way a pack built with the
-    same list would be narrowed. One group per profile, as in generate_pack.
+    An alias is the same binary under another name and a launcher only
+    starts an emulator, so neither has requirements of its own: naming
+    one is a question about the wrong profile, and the answer says which
+    one to ask instead.
     """
-    load_emulator_profiles(emulators_dir)
-    zip_contents = build_zip_contents_index(db)
-
-    # Also load aliases for redirect messages
-    all_profiles = load_emulator_profiles(emulators_dir, skip_aliases=False)
-
     # Resolve profile names, reject alias/launcher
     selected: list[tuple[str, dict]] = []
     for name in profile_names:
@@ -1302,6 +1296,29 @@ def verify_emulator(
             )
             sys.exit(1)
         selected.append((name, p))
+
+    return selected
+
+
+def verify_emulator(
+    profile_names: list[str],
+    emulators_dir: str,
+    db: dict,
+    standalone: bool = False,
+    regions: list[str] | None = None,
+) -> dict:
+    """Verify files for specific emulator profiles.
+
+    A region priority list narrows the report the same way a pack built with the
+    same list would be narrowed. One group per profile, as in generate_pack.
+    """
+    load_emulator_profiles(emulators_dir)
+    zip_contents = build_zip_contents_index(db)
+
+    # Also load aliases for redirect messages
+    all_profiles = load_emulator_profiles(emulators_dir, skip_aliases=False)
+
+    selected = _select_profiles(profile_names, all_profiles, standalone)
 
     # Build validation index from selected profiles only
     selected_profiles = {n: p for n, p in selected}

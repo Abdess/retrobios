@@ -6,6 +6,8 @@ coverage report that disagree describe different collections."""
 
 from __future__ import annotations
 
+from collections import Counter
+
 from auto_fetch import DEFAULT_BIOS_DIR
 from artifacts import _build_timestamp
 from packextras import _collect_emulator_extras
@@ -405,6 +407,39 @@ def _intentional_hash_exclusion(
                 return False
     return True
 
+def _structural_errors(zf, zip_set: set) -> list[str]:
+    """Faults in the archive itself, before any file is looked up.
+
+    A duplicate entry, an absolute path or a traversal makes the pack
+    unsafe to extract whatever it contains, and a zero-byte member is a
+    file the user will believe they have. The markers Dolphin ships for
+    its graphics mods are legitimately empty.
+    """
+    errors: list[str] = []
+    # Structural checks
+    dupes = sum(1 for c in Counter(zf.namelist()).values() if c > 1)
+    if dupes:
+        errors.append(f"{dupes} duplicate entries")
+    for n in zip_set:
+        if "//" in n:
+            errors.append(f"double slash: {n}")
+        if n.startswith("/"):
+            errors.append(f"absolute path: {n}")
+        if ".." in n:
+            errors.append(f"path traversal: {n}")
+
+    # Zero-byte check (exclude Dolphin GraphicMods markers)
+    for info in zf.infolist():
+        if info.file_size == 0 and not info.is_dir():
+            if "GraphicMods" not in info.filename and info.filename not in (
+                "manifest.json",
+                "README.txt",
+            ):
+                errors.append(f"zero-byte: {info.filename}")
+
+    return errors
+
+
 def verify_pack_against_platform(
     zip_path: str,
     platform_name: str,
@@ -468,26 +503,7 @@ def verify_pack_against_platform(
             if n not in ("README.txt", "manifest.json") and not n.endswith("/")
         )
 
-        # Structural checks
-        dupes = sum(1 for c in Counter(zf.namelist()).values() if c > 1)
-        if dupes:
-            errors.append(f"{dupes} duplicate entries")
-        for n in zip_set:
-            if "//" in n:
-                errors.append(f"double slash: {n}")
-            if n.startswith("/"):
-                errors.append(f"absolute path: {n}")
-            if ".." in n:
-                errors.append(f"path traversal: {n}")
-
-        # Zero-byte check (exclude Dolphin GraphicMods markers)
-        for info in zf.infolist():
-            if info.file_size == 0 and not info.is_dir():
-                if "GraphicMods" not in info.filename and info.filename not in (
-                    "manifest.json",
-                    "README.txt",
-                ):
-                    errors.append(f"zero-byte: {info.filename}")
+        errors.extend(_structural_errors(zf, zip_set))
 
         # 1. Baseline file presence + native hash check
         verification_mode = config.get("verification_mode", "existence")
