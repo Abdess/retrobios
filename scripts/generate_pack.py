@@ -19,6 +19,7 @@ import hashlib
 import json
 import os
 import re
+import shutil
 import sys
 import tempfile
 import urllib.error
@@ -76,6 +77,28 @@ DEFAULT_DB_FILE = "database.json"
 DEFAULT_OUTPUT_DIR = "dist"
 DEFAULT_BIOS_DIR = "bios"
 
+
+
+def _add_pack_member(zf: zipfile.ZipFile, source_path: str, arcname: str) -> None:
+    """Add a file to the pack with metadata that does not depend on the build.
+
+    ZipFile.write copies the source file's mtime into the member. For a file
+    this build just produced in tmp/ that is the wall clock, and for a file
+    from the collection it is whenever the clone was checked out, so a pack
+    rebuilt from identical inputs differed from the last one although every
+    byte of content matched: 348 members of the Recalbox pack moved between
+    two consecutive builds. The content is streamed rather than read whole,
+    because some members are firmware images of several hundred megabytes.
+    """
+    info = zipfile.ZipInfo(filename=arcname, date_time=_FIXED_DATE_TIME)
+    info.compress_type = zipfile.ZIP_DEFLATED
+    info.external_attr = 0o100644 << 16
+    size = os.path.getsize(source_path)
+    info.file_size = size
+    with open(source_path, "rb") as source, zf.open(
+        info, "w", force_zip64=size >= 1 << 31
+    ) as target:
+        shutil.copyfileobj(source, target, 1024 * 1024)
 
 
 def _write_generated_member(zf: zipfile.ZipFile, arcname: str, text: str) -> None:
@@ -252,6 +275,112 @@ def download_external(file_entry: dict, dest_path: str) -> bool:
 
 
 
+
+def _pack_data_directories(
+    zf,
+    pack_systems: dict,
+    data_registry: dict | None,
+    platform_name: str,
+    base_dest: str,
+    flatten: bool,
+    case_insensitive: bool,
+    seen_destinations: set,
+    seen_lower: set,
+    seen_parents: set,
+) -> int:
+    """Add the cached data directories the platform's systems declare.
+
+    These are not BIOS and carry no hash of their own: they are whole
+    trees an emulator reads, refreshed from upstream, so what ships is
+    whatever the cache holds. Returns how many files were added.
+    """
+    added = 0
+    # Data directories from _data_dirs.yml
+    for sys_id, system in sorted(pack_systems.items()):
+        for dd in system.get("data_directories", []):
+            ref_key = dd.get("ref", "")
+            if not ref_key or not data_registry or ref_key not in data_registry:
+                continue
+            entry = data_registry[ref_key]
+            allowed = entry.get("for_platforms")
+            if allowed and platform_name not in allowed:
+                continue
+            local_path = entry.get("local_cache", "")
+            if not local_path or not os.path.isdir(local_path):
+                print(
+                    f"  WARNING: data directory '{ref_key}' not cached at {local_path} -run refresh_data_dirs.py"
+                )
+                continue
+            dd_dest = dd.get("destination", "")
+            if base_dest and dd_dest:
+                dd_prefix = f"{base_dest}/{dd_dest}"
+            elif base_dest:
+                dd_prefix = base_dest
+            else:
+                dd_prefix = dd_dest
+            for root, _dirs, filenames in os.walk(local_path):
+                for fname in filenames:
+                    src = os.path.join(root, fname)
+                    rel = os.path.relpath(src, local_path)
+                    full = f"{dd_prefix}/{rel}"
+                    if full in seen_destinations or (
+                        full.lower() in seen_lower and case_insensitive
+                    ):
+                        continue
+                    if _has_path_conflict(full, seen_destinations, seen_parents):
+                        continue
+                    seen_destinations.add(full)
+                    _register_path(full, seen_destinations, seen_parents)
+                    if case_insensitive:
+                        seen_lower.add(full.lower())
+                    _add_pack_member(zf, src, _flat(full, base_dest, flatten))
+                    added += 1
+    return added
+
+
+def _report_pack_counts(
+    zip_path: str,
+    file_status: dict,
+    total_files: int,
+    core_count: int,
+    source: str,
+    verification_mode: str,
+) -> None:
+    """Print the line the pipeline's consistency check reads.
+
+    The check compares these counts against what verify.py reports for
+    the same platform, so the wording is a contract: parse_pack_counts
+    in pipeline.py matches on it.
+    """
+    files_ok = sum(1 for s in file_status.values() if s == "ok")
+    files_untested = sum(1 for s in file_status.values() if s == "untested")
+    files_excluded = sum(1 for s in file_status.values() if s == "excluded")
+    files_miss = sum(1 for s in file_status.values() if s == "missing")
+    total_checked = len(file_status)
+
+    parts = [f"{files_ok}/{total_checked} files OK"]
+    if files_untested:
+        parts.append(f"{files_untested} untested")
+    if files_excluded:
+        parts.append(f"{files_excluded} unsafe excluded")
+    if files_miss:
+        parts.append(f"{files_miss} missing")
+    if source == "platform":
+        print(
+            f"  {zip_path}: {total_files} files packed (platform baseline only), "
+            f"{', '.join(parts)} [{verification_mode}]"
+        )
+    elif source == "truth":
+        print(
+            f"  {zip_path}: {total_files} files packed (ground truth only), "
+            f"{core_count} from emulator profiles [{verification_mode}]"
+        )
+    else:
+        baseline = total_files - core_count
+        print(
+            f"  {zip_path}: {total_files} files packed ({baseline} baseline + "
+            f"{core_count} from cores), {', '.join(parts)} [{verification_mode}]"
+        )
 
 def generate_pack(
     platform_name: str,
@@ -550,7 +679,7 @@ def generate_pack(
                             if extract and tmp_path.endswith(".zip"):
                                 _extract_zip_to_archive(tmp_path, _flat(full_dest, base_dest, flatten), zf)
                             else:
-                                zf.write(tmp_path, _flat(full_dest, base_dest, flatten))
+                                _add_pack_member(zf, tmp_path, _flat(full_dest, base_dest, flatten))
                             seen_destinations.add(dedup_key)
                             _register_path(dedup_key, seen_destinations, seen_parents)
                             if case_insensitive:
@@ -744,7 +873,7 @@ def generate_pack(
                 elif local_path.endswith(".zip"):
                     _add_zip_to_pack(local_path, flat_dest, zf, file_entry)
                 else:
-                    zf.write(local_path, flat_dest)
+                    _add_pack_member(zf, local_path, flat_dest)
                 total_files += 1
 
       # Core requirements: files platform's cores need but YAML doesn't declare
@@ -843,7 +972,7 @@ def generate_pack(
           if local_path.endswith(".zip"):
               _add_zip_to_pack(local_path, flat_dest, zf, fe)
           else:
-              zf.write(local_path, flat_dest)
+              _add_pack_member(zf, local_path, flat_dest)
           if file_status.get(full_dest) in ("missing", "excluded"):
               previous = file_status[full_dest]
               file_status[full_dest] = "ok"
@@ -864,46 +993,11 @@ def generate_pack(
           core_count += 1
           total_files += 1
 
-      # Data directories from _data_dirs.yml
-      for sys_id, system in sorted(pack_systems.items()):
-          for dd in system.get("data_directories", []):
-              ref_key = dd.get("ref", "")
-              if not ref_key or not data_registry or ref_key not in data_registry:
-                  continue
-              entry = data_registry[ref_key]
-              allowed = entry.get("for_platforms")
-              if allowed and platform_name not in allowed:
-                  continue
-              local_path = entry.get("local_cache", "")
-              if not local_path or not os.path.isdir(local_path):
-                  print(
-                      f"  WARNING: data directory '{ref_key}' not cached at {local_path} -run refresh_data_dirs.py"
-                  )
-                  continue
-              dd_dest = dd.get("destination", "")
-              if base_dest and dd_dest:
-                  dd_prefix = f"{base_dest}/{dd_dest}"
-              elif base_dest:
-                  dd_prefix = base_dest
-              else:
-                  dd_prefix = dd_dest
-              for root, _dirs, filenames in os.walk(local_path):
-                  for fname in filenames:
-                      src = os.path.join(root, fname)
-                      rel = os.path.relpath(src, local_path)
-                      full = f"{dd_prefix}/{rel}"
-                      if full in seen_destinations or (
-                          full.lower() in seen_lower and case_insensitive
-                      ):
-                          continue
-                      if _has_path_conflict(full, seen_destinations, seen_parents):
-                          continue
-                      seen_destinations.add(full)
-                      _register_path(full, seen_destinations, seen_parents)
-                      if case_insensitive:
-                          seen_lower.add(full.lower())
-                      zf.write(src, _flat(full, base_dest, flatten))
-                      total_files += 1
+      total_files += _pack_data_directories(
+          zf, pack_systems, data_registry, platform_name, base_dest,
+          flatten, case_insensitive, seen_destinations, seen_lower,
+          seen_parents,
+      )
 
       # README.txt for users -personalized step-by-step per platform
       num_systems = len(pack_systems)
@@ -925,35 +1019,11 @@ def generate_pack(
       )
       _write_generated_member(zf, "README.txt", readme_text)
 
-    files_ok = sum(1 for s in file_status.values() if s == "ok")
-    files_untested = sum(1 for s in file_status.values() if s == "untested")
-    files_excluded = sum(1 for s in file_status.values() if s == "excluded")
-    files_miss = sum(1 for s in file_status.values() if s == "missing")
-    total_checked = len(file_status)
+    _report_pack_counts(
+        zip_path, file_status, total_files, core_count, source,
+        verification_mode,
+    )
 
-    parts = [f"{files_ok}/{total_checked} files OK"]
-    if files_untested:
-        parts.append(f"{files_untested} untested")
-    if files_excluded:
-        parts.append(f"{files_excluded} unsafe excluded")
-    if files_miss:
-        parts.append(f"{files_miss} missing")
-    if source == "platform":
-        print(
-            f"  {zip_path}: {total_files} files packed (platform baseline only), "
-            f"{', '.join(parts)} [{verification_mode}]"
-        )
-    elif source == "truth":
-        print(
-            f"  {zip_path}: {total_files} files packed (ground truth only), "
-            f"{core_count} from emulator profiles [{verification_mode}]"
-        )
-    else:
-        baseline = total_files - core_count
-        print(
-            f"  {zip_path}: {total_files} files packed ({baseline} baseline + "
-            f"{core_count} from cores), {', '.join(parts)} [{verification_mode}]"
-        )
 
     for key, reason in sorted(file_reasons.items()):
         status = file_status.get(key, "")
@@ -986,7 +1056,12 @@ def _extract_zip_to_archive(
                 continue
             data = src.read(info.filename)
             target_path = f"{dest_prefix}/{clean_name}" if dest_prefix else clean_name
-            target_zf.writestr(target_path, data)
+            member = zipfile.ZipInfo(
+                filename=target_path, date_time=_FIXED_DATE_TIME
+            )
+            member.compress_type = zipfile.ZIP_DEFLATED
+            member.external_attr = 0o100644 << 16
+            target_zf.writestr(member, data)
 
 
 def _add_zip_to_pack(
@@ -1013,7 +1088,7 @@ def _add_zip_to_pack(
             or file_entry.get("crc32")
         )
     ):
-        target_zf.write(source_zip, dest_path)
+        _add_pack_member(target_zf, source_zip, dest_path)
         return
     _normalize_zip_for_pack(source_zip, dest_path, target_zf)
 
@@ -1041,10 +1116,10 @@ def _normalize_zip_for_pack(
     os.close(tmp_fd)
     try:
         rebuild_zip_deterministic(source_zip, tmp_path)
-        target_zf.write(tmp_path, dest_path)
+        _add_pack_member(target_zf, tmp_path, dest_path)
     except zipfile.BadZipFile:
         # Corrupt source ZIP: copy as-is (will be flagged by verify)
-        target_zf.write(source_zip, dest_path)
+        _add_pack_member(target_zf, source_zip, dest_path)
     finally:
         os.unlink(tmp_path)
 
@@ -1183,7 +1258,7 @@ def generate_emulator_pack(
                         seen_destinations.add(full)
                         _register_path(full, seen_destinations, seen_parents)
                         seen_lower.add(full.lower())
-                        zf.write(src, full)
+                        _add_pack_member(zf, src, full)
                         total_files += 1
 
             if not files:
@@ -1236,7 +1311,7 @@ def generate_emulator_pack(
                     if local_path.endswith(".zip"):
                         _add_zip_to_pack(local_path, archive_dest, zf, archive_entry)
                     else:
-                        zf.write(local_path, archive_dest)
+                        _add_pack_member(zf, local_path, archive_dest)
                     seen_destinations.add(archive_dest)
                     _register_path(archive_dest, seen_destinations, seen_parents)
                     seen_lower.add(archive_dest.lower())
@@ -1294,7 +1369,7 @@ def generate_emulator_pack(
                         tmp_path = tmp.name
                     try:
                         if download_external(fe, tmp_path):
-                            zf.write(tmp_path, dest)
+                            _add_pack_member(zf, tmp_path, dest)
                             seen_destinations.add(dest)
                             _register_path(dest, seen_destinations, seen_parents)
                             seen_lower.add(dest.lower())
@@ -1323,7 +1398,7 @@ def generate_emulator_pack(
                 if local_path.endswith(".zip"):
                     _add_zip_to_pack(local_path, dest, zf, fe)
                 else:
-                    zf.write(local_path, dest)
+                    _add_pack_member(zf, local_path, dest)
                 seen_destinations.add(dest)
                 _register_path(dest, seen_destinations, seen_parents)
                 seen_lower.add(dest.lower())
@@ -1699,7 +1774,7 @@ def generate_md5_pack(
                 not_in_repo.append((name, hash_val))
                 continue
 
-            zf.write(local_path, full_dest)
+            _add_pack_member(zf, local_path, full_dest)
             packed.append((name, hash_val))
 
     total = len(hashes)

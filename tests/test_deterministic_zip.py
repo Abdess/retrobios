@@ -168,6 +168,17 @@ class TestPackDeterminism(unittest.TestCase):
         payload = b"DETERMINISM_PAYLOAD"
         (self.bios / "boot.rom").write_bytes(payload)
         sha1 = hashlib.sha1(payload).hexdigest()
+        # A romset goes through the deterministic rebuild, which stages the
+        # archive in a temporary file. Copying that file into the pack took
+        # its mtime -the wall clock -so 348 members of the real Recalbox
+        # pack moved between two builds while every byte matched. Without a
+        # romset here the fixture never reaches that path.
+        romset = self.bios / "romset.zip"
+        with zipfile.ZipFile(romset, "w") as archive:
+            archive.writestr("rom_a.bin", b"ROM A CONTENT")
+            archive.writestr("rom_b.bin", b"ROM B CONTENT")
+        rom_bytes = romset.read_bytes()
+        rom_sha1 = hashlib.sha1(rom_bytes).hexdigest()
         self.db = {
             "generated_at": "2026-01-02T03:04:05Z",
             "files": {
@@ -178,10 +189,17 @@ class TestPackDeterminism(unittest.TestCase):
                     "sha1": sha1,
                     "md5": hashlib.md5(payload).hexdigest(),
                 },
+                rom_sha1: {
+                    "path": str(romset),
+                    "name": "romset.zip",
+                    "size": len(rom_bytes),
+                    "sha1": rom_sha1,
+                    "md5": hashlib.md5(rom_bytes).hexdigest(),
+                },
             },
             "indexes": {
                 "by_md5": {hashlib.md5(payload).hexdigest(): sha1},
-                "by_name": {"boot.rom": [sha1]},
+                "by_name": {"boot.rom": [sha1], "romset.zip": [rom_sha1]},
                 "by_crc32": {},
                 "by_sha256": {},
                 "by_path_suffix": {},
@@ -196,6 +214,9 @@ class TestPackDeterminism(unittest.TestCase):
             "    files:\n"
             "      - name: boot.rom\n"
             "        destination: boot.rom\n"
+            "        required: true\n"
+            "      - name: romset.zip\n"
+            "        destination: romset.zip\n"
             "        required: true\n"
         )
 
@@ -222,6 +243,24 @@ class TestPackDeterminism(unittest.TestCase):
             hashlib.sha256(first.read_bytes()).hexdigest(),
             hashlib.sha256(second.read_bytes()).hexdigest(),
         )
+
+    def test_the_rebuild_path_ran(self):
+        """Guard the guard: a fixture without a romset proves nothing."""
+        pack = self._build("out1")
+        with zipfile.ZipFile(pack) as zf:
+            names = {i.filename.rsplit("/", 1)[-1] for i in zf.infolist()}
+        self.assertIn("romset.zip", names)
+
+    def test_every_member_carries_the_fixed_epoch(self):
+        """A member's date must come from the build's inputs, not its clock.
+
+        ZipFile.write copies the source file's mtime, which is the checkout
+        time for a collection file and the wall clock for one staged in tmp/.
+        """
+        pack = self._build("out1")
+        with zipfile.ZipFile(pack) as zf:
+            dates = {i.date_time for i in zf.infolist()}
+        self.assertEqual(dates, {_FIXED_DATE_TIME})
 
     def test_generated_members_carry_the_fixed_epoch(self):
         pack = self._build("out1")
