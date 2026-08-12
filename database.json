@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-12T03:14:32Z",
-  "total_files": 8824,
-  "total_size": 12290973646,
+  "generated_at": "2026-08-12T03:38:29Z",
+  "total_files": 8826,
+  "total_size": 12290974286,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -42215,6 +42215,16 @@
         }
       }
     },
+    "49489245b400f62c62faf1736b7f0a70714d3c49": {
+      "path": "bios/Nintendo/3DS/otp.bin",
+      "name": "otp.bin",
+      "size": 256,
+      "sha1": "49489245b400f62c62faf1736b7f0a70714d3c49",
+      "md5": "b9b20e8cdc840bcae0577fe4db8b9233",
+      "sha256": "e2f1810ceff3d1fd4f1c08ffc1f4d47aa8efca551edd24cd5686205c71a3b13b",
+      "crc32": "999ea527",
+      "adler32": "bf29828c"
+    },
     "10c4173c2a7eb09c6579818f72ef18fa0b6d32de": {
       "path": "bios/Nintendo/64DD/64DD_IPL_DEV.bin",
       "name": "64DD_IPL_DEV.bin",
@@ -52710,6 +52720,16 @@
       "sha256": "dcc1b0e836a5e7e6b06fac165174b283dcc6052742168ede12b0bb931e23331c",
       "crc32": "544958c1",
       "adler32": "091572e6"
+    },
+    "92f45bb79027731d5a7a5455ecbf6acbcc8f679d": {
+      "path": "bios/Other/lime3ds/sysdata/CTCert.bin",
+      "name": "CTCert.bin",
+      "size": 384,
+      "sha1": "92f45bb79027731d5a7a5455ecbf6acbcc8f679d",
+      "md5": "f81d59366c4246be2f2b07dbf13ad5c1",
+      "sha256": "beefcad981048e5d5a906967ffabc8714c69fef74bc551cef2abbe898bd12d9c",
+      "crc32": "065355ac",
+      "adler32": "d5484b04"
     },
     "f72ebcb3ad771321e36cacb49779dca6f2b4db9e": {
       "path": "bios/Other/linapple/A2_BASIC.SYM",
@@ -97297,6 +97317,7 @@
       "73718beedb418a70bed8f16f2f2fb853": "60022d6d026c8df950722478aab25702a0dfa067",
       "ebc55bc942335965f30ce283c51e9a30": "29556640b022cbfaf427874695838b43a5e8aff4",
       "d8675e80e5dd3a9afaaf885d79b14e9c": "5a3d3d6df4743e6b50afe0fc717fa8a12bc888e6",
+      "b9b20e8cdc840bcae0577fe4db8b9233": "49489245b400f62c62faf1736b7f0a70714d3c49",
       "aad37b1492886b892f1821f37fd3ae34": "10c4173c2a7eb09c6579818f72ef18fa0b6d32de",
       "37c36e4286d36892a9fc70eafe4104be": "3c5b93ca231550c68693a14f03cea8d5dbd1be9e",
       "8d3d9f294b6e174bc7b1d2fd1c727530": "bf861922dcb78c316360e3e742f4f70ff63c9bc3",
@@ -98319,6 +98340,7 @@
       "d5ab04740801208b92fa3de7252a75d8": "f59e0d445aafe2503c6e5249ca07df4b89626f8f",
       "344ed7cef18202dc473a0ff940f33c6d": "88b2affba2dfef410dc7e460a249f1cb0c34d3fb",
       "ab43c1238b2f212c08537718cfdff5d9": "f077ba595d9a01218ef1d4fa6730d1cb6edf61ae",
+      "f81d59366c4246be2f2b07dbf13ad5c1": "92f45bb79027731d5a7a5455ecbf6acbcc8f679d",
       "cd43b9f8ec8c742fca150f9666da47a0": "f72ebcb3ad771321e36cacb49779dca6f2b4db9e",
       "034527d42a96d0f39977cb85c6a8f2d8": "fcfbbb25e06f58d13e762b02bfd468c834d98fc8",
       "ee44560f34033efa3bb47b3e0aac1772": "7b03befac4fbcef8c649048fa3ff5d095fd48dd3",
@@ -113503,6 +113525,7 @@
       ],
       "otp.bin": [
         "f0332b7252e9c01b30bf5d5a63ceb22dc47968aa",
+        "49489245b400f62c62faf1736b7f0a70714d3c49",
         "aa4ebc7f94c22b04945b6c9232547ada10b71f6f"
       ],
       "boot9.bin": [
@@ -116299,6 +116322,9 @@
       ],
       "s60snr.ttf": [
         "f077ba595d9a01218ef1d4fa6730d1cb6edf61ae"
+      ],
+      "CTCert.bin": [
+        "92f45bb79027731d5a7a5455ecbf6acbcc8f679d"
       ],
       "A2_BASIC.SYM": [
         "f72ebcb3ad771321e36cacb49779dca6f2b4db9e",
@@ -134494,6 +134520,7 @@
       "28418e6d": "60022d6d026c8df950722478aab25702a0dfa067",
       "cd2384bd": "29556640b022cbfaf427874695838b43a5e8aff4",
       "e0989f6d": "5a3d3d6df4743e6b50afe0fc717fa8a12bc888e6",
+      "999ea527": "49489245b400f62c62faf1736b7f0a70714d3c49",
       "b78064d9": "10c4173c2a7eb09c6579818f72ef18fa0b6d32de",
       "d0f567ca": "3c5b93ca231550c68693a14f03cea8d5dbd1be9e",
       "7f933ce2": "bf861922dcb78c316360e3e742f4f70ff63c9bc3",
@@ -135516,6 +135543,7 @@
       "0c6b8b57": "f59e0d445aafe2503c6e5249ca07df4b89626f8f",
       "5f38a7b9": "88b2affba2dfef410dc7e460a249f1cb0c34d3fb",
       "544958c1": "f077ba595d9a01218ef1d4fa6730d1cb6edf61ae",
+      "065355ac": "92f45bb79027731d5a7a5455ecbf6acbcc8f679d",
       "066d1348": "f72ebcb3ad771321e36cacb49779dca6f2b4db9e",
       "8031ff02": "fcfbbb25e06f58d13e762b02bfd468c834d98fc8",
       "18c0ff3e": "7b03befac4fbcef8c649048fa3ff5d095fd48dd3",
@@ -143320,6 +143348,7 @@
       "a06aaf6b50ebc38ebdccc59b913d4a1c0cc7005289957530acaaf78ffc49dddd": "60022d6d026c8df950722478aab25702a0dfa067",
       "0d866e062cf62275fbb291ba44af253e67fdc5bd76c7640b6c4a9dfe742510d9": "29556640b022cbfaf427874695838b43a5e8aff4",
       "2f88744feed717856386400a44bba4b9ca62e76a32c715d4f309c399bf28166f": "5a3d3d6df4743e6b50afe0fc717fa8a12bc888e6",
+      "e2f1810ceff3d1fd4f1c08ffc1f4d47aa8efca551edd24cd5686205c71a3b13b": "49489245b400f62c62faf1736b7f0a70714d3c49",
       "9c2962a8b994a29e4cd04b3a6e4ed730a751414655ab6a9799ebf5fc08b79d44": "10c4173c2a7eb09c6579818f72ef18fa0b6d32de",
       "e9fec87a45fba02399e88064b9e2f8cf0f2106e351c58279a87f05da5bc984ad": "3c5b93ca231550c68693a14f03cea8d5dbd1be9e",
       "806400ec0df94b0755de6c5b8249d6b6a9866124c5ddbdac198bde22499bfb8b": "bf861922dcb78c316360e3e742f4f70ff63c9bc3",
@@ -144342,6 +144371,7 @@
       "a5dcffeb838a0ee3c9eb73b2ca61a4461880b4939ad12ffb0f0f1a19962fc07a": "f59e0d445aafe2503c6e5249ca07df4b89626f8f",
       "797c22dceced5e1ec624d17d0cd63640f43e068eb886d1050491a302e7d1b6c3": "88b2affba2dfef410dc7e460a249f1cb0c34d3fb",
       "dcc1b0e836a5e7e6b06fac165174b283dcc6052742168ede12b0bb931e23331c": "f077ba595d9a01218ef1d4fa6730d1cb6edf61ae",
+      "beefcad981048e5d5a906967ffabc8714c69fef74bc551cef2abbe898bd12d9c": "92f45bb79027731d5a7a5455ecbf6acbcc8f679d",
       "c72a36bbd471daf5d12df9f7b85773771583ec960ff9ca17e66d2f7b22e5c8c3": "f72ebcb3ad771321e36cacb49779dca6f2b4db9e",
       "fcf442b26c492253dfb8d2146e215b7b84b3ba87443face9c94a1e9474aa3ca4": "fcfbbb25e06f58d13e762b02bfd468c834d98fc8",
       "0add32bcbd0e5b350437fa9d138b3c232368e36d8009852479fdb09d9db31113": "7b03befac4fbcef8c649048fa3ff5d095fd48dd3",
@@ -154739,6 +154769,9 @@
       ],
       "assets/tictactoe.p8.png": [
         "5a7d0bd289e971a4ea6dfb09704b56252b85fe01"
+      ],
+      "sysdata/CTCert.bin": [
+        "92f45bb79027731d5a7a5455ecbf6acbcc8f679d"
       ],
       "data/history.db": [
         "461eb3301dcc796362094fac901a307b29e7024b"

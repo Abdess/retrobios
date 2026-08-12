@@ -101,7 +101,7 @@ files:
     required: false
     size: 384
     validation: [size]
-    note: "console client certificate; signature type must be 0x010005 and the issuer one of the two Nintendo CA G3 strings"
+    note: "console client certificate; signature type must be 0x010005 and the issuer one of the two Nintendo CA G3 strings. The certificate here is assembled from a console OTP: signature and expiry read at 0x44 and 0x20, public key derived from the private key at 0x24 over sect233r1, and the whole body checked against Nintendo's root public key"
     source_ref: "src/core/hle/service/am/am.cpp:2427-2454, src/core/hle/service/am/am.cpp:83-93, src/core/hle/service/am/am.h:95"
 
   - name: SecureInfo_A
