@@ -130,6 +130,196 @@ def _map_emulator_to_slug(
             return sys_to_slug.get(target, "")
     return ""
 
+def _agnostic_scan_extras(
+    profiles: dict,
+    relevant: set,
+    db: dict,
+    by_name: dict,
+    seen_dests: set,
+    extras_prefix: str,
+) -> list[dict]:
+    """Every interchangeable candidate a filename-agnostic core accepts.
+
+    Such a core reads whatever sits in its BIOS directory, so the pack
+    carries every dump of the right shape rather than one chosen name.
+    The directory is the delicate part: anchoring it on a single
+    filename walked into another emulator's tree, so the profile's own
+    files have to agree before the scan follows an ambiguous name.
+    """
+    extras: list[dict] = []
+    files_db = db.get("files", {})
+    # Third pass: agnostic scan — for filename-agnostic cores, include all
+    # DB files matching the system path prefix and size criteria.
+    for emu_name, profile in sorted(profiles.items()):
+        if profile.get("type") in ("launcher", "alias"):
+            continue
+        if emu_name not in relevant:
+            continue
+        is_profile_agnostic = profile.get("bios_mode") == "agnostic"
+        if not is_profile_agnostic:
+            if not any(f.get("agnostic") for f in profile.get("files", [])):
+                continue
+
+        # Where each of this profile's files resolves.  A scan anchored on one
+        # filename walks into whatever tree that name happens to hit: rom1.bin
+        # is a PS2 ROM and a Roland SC-55 ROM, GameIndex.yaml belongs to four
+        # PS2 profiles and to an Android package.  One match is not evidence
+        # of a directory; two files of the same profile agreeing is.
+        resolved_dirs: dict[int, str] = {}
+        named_only: set[int] = set()
+        agnostic_votes: dict[str, int] = {}
+        for candidate in profile.get("files", []):
+            if not isinstance(candidate, dict):
+                continue
+            local, status = resolve_local_file(
+                candidate, db, dest_hint=candidate.get("path", "")
+            )
+            if not local or "/" not in local:
+                continue
+            directory = local.rsplit("/", 1)[0]
+            if directory.endswith("/.variants"):
+                directory = directory[: -len("/.variants")]
+            resolved_dirs[id(candidate)] = directory + "/"
+            if not (resolution_is_hash_exact(status) or status == "path_exact"):
+                named_only.add(id(candidate))
+            agnostic_votes[directory + "/"] = (
+                agnostic_votes.get(directory + "/", 0) + 1
+            )
+
+        for f in profile.get("files", []):
+            if not is_profile_agnostic and not f.get("agnostic"):
+                continue
+            fname = f.get("name", "")
+            if not fname:
+                continue
+            # An agnostic BIOS mode says the BIOS filename is free, not that
+            # every file the emulator loads is.  A free filename still has a
+            # known shape, and that shape is what identifies a candidate: an
+            # entry declaring no size takes the whole directory, which is how
+            # the flag icons of an Android package walked into a PS2 pack.
+            if f.get("category", "bios") != "bios":
+                continue
+            if not (f.get("size") or f.get("min_size") or f.get("max_size")):
+                continue
+
+            path_prefix = resolved_dirs.get(id(f), "")
+            if not path_prefix:
+                continue
+            # A name matching one file identifies it. A name matching several
+            # identifies nothing on its own, so the profile's other files have
+            # to agree on the directory before the scan walks it.
+            ambiguous = id(f) in named_only and len(by_name.get(fname, [])) > 1
+            if ambiguous and agnostic_votes.get(path_prefix, 0) < 2:
+                continue
+
+            # Size criteria from the file entry
+            min_size = f.get("min_size", 0)
+            max_size = f.get("max_size", float("inf"))
+            exact_size = f.get("size")
+            if exact_size and not min_size:
+                min_size = exact_size
+                max_size = exact_size
+
+            # Scan DB for all files under this prefix matching size
+            for sha1, entry in files_db.items():
+                path = entry.get("path", "")
+                if not path.startswith(path_prefix):
+                    continue
+                size = entry.get("size", 0)
+                if not (min_size <= size <= max_size):
+                    continue
+                scan_name = entry.get("name", "")
+                if not scan_name:
+                    continue
+                dest = scan_name
+                full_dest = f"{extras_prefix}/{dest}" if extras_prefix else dest
+                if full_dest in seen_dests:
+                    continue
+                seen_dests.add(full_dest)
+                extras.append(
+                    {
+                        "name": scan_name,
+                        "destination": dest,
+                        # The scan already holds the entry it selected, so it
+                        # names it by content.  Emitting the filename alone
+                        # sent the packing step back to a by-name lookup, and
+                        # three PS2 resources came back from another
+                        # emulator's copy of the same filename.
+                        "sha1": sha1,
+                        "required": False,
+                        "hle_fallback": False,
+                        "source_emulator": profile.get("emulator", emu_name),
+                        "source_profile": emu_name,
+                        "source_system": f.get("system"),
+                        "source_systems": list(profile.get("systems", [])),
+                        "region": f.get("region"),
+                        "variant_group": f.get("variant_group"),
+                        "agnostic_scan": True,
+                    }
+                )
+    return extras
+
+
+def _archive_prefix_extras(
+    profiles: dict,
+    relevant: set,
+    covered_names: set,
+    seen_dests: set,
+    extras_prefix: str,
+    by_name: dict,
+) -> list[dict]:
+    """A second copy of an archive under the subdirectory a core reads.
+
+    Some cores look for their romset under a directory of their own
+    (system/fbneo/neogeo.zip) while the platform declares it at the
+    root. Both paths are carried so the core's own check finds it.
+    """
+    extras: list[dict] = []
+    # Archive prefix pass: cores that store BIOS archives in a subdirectory
+    # (e.g. system/fbneo/neogeo.zip).  When the archive is already covered at
+    # the root, add a copy at the prefixed path so the core's .info firmware
+    # check finds it.
+    for emu_name, profile in sorted(profiles.items()):
+        if profile.get("type") in ("launcher", "alias"):
+            continue
+        if emu_name not in relevant:
+            continue
+        prefix = profile.get("archive_prefix", "")
+        if not prefix:
+            continue
+        profile_archives: dict[str, dict] = {}
+        for f in profile.get("files", []):
+            archive = f.get("archive", "")
+            if archive:
+                profile_archives.setdefault(archive, f)
+        for archive_name, archive_entry in sorted(profile_archives.items()):
+            if archive_name not in covered_names:
+                continue
+            dest = f"{prefix}/{archive_name}"
+            full_dest = f"{extras_prefix}/{dest}" if extras_prefix else dest
+            if full_dest in seen_dests:
+                continue
+            if not by_name.get(archive_name):
+                continue
+            seen_dests.add(full_dest)
+            extras.append(
+                {
+                    "name": archive_name,
+                    "destination": dest,
+                    "required": True,
+                    "hle_fallback": False,
+                    "source_emulator": profile.get("emulator", emu_name),
+                    "source_profile": emu_name,
+                    "source_system": archive_entry.get("system"),
+                    "source_systems": list(profile.get("systems", [])),
+                    "region": archive_entry.get("region"),
+                    "variant_group": archive_entry.get("variant_group"),
+                }
+            )
+
+    return extras
+
+
 def _collect_emulator_extras(
     config: dict,
     emulators_dir: str,
@@ -331,158 +521,18 @@ def _collect_emulator_extras(
                 }
             )
 
-    # Archive prefix pass: cores that store BIOS archives in a subdirectory
-    # (e.g. system/fbneo/neogeo.zip).  When the archive is already covered at
-    # the root, add a copy at the prefixed path so the core's .info firmware
-    # check finds it.
-    for emu_name, profile in sorted(profiles.items()):
-        if profile.get("type") in ("launcher", "alias"):
-            continue
-        if emu_name not in relevant:
-            continue
-        prefix = profile.get("archive_prefix", "")
-        if not prefix:
-            continue
-        profile_archives: dict[str, dict] = {}
-        for f in profile.get("files", []):
-            archive = f.get("archive", "")
-            if archive:
-                profile_archives.setdefault(archive, f)
-        for archive_name, archive_entry in sorted(profile_archives.items()):
-            if archive_name not in covered_names:
-                continue
-            dest = f"{prefix}/{archive_name}"
-            full_dest = f"{extras_prefix}/{dest}" if extras_prefix else dest
-            if full_dest in seen_dests:
-                continue
-            if not by_name.get(archive_name):
-                continue
-            seen_dests.add(full_dest)
-            extras.append(
-                {
-                    "name": archive_name,
-                    "destination": dest,
-                    "required": True,
-                    "hle_fallback": False,
-                    "source_emulator": profile.get("emulator", emu_name),
-                    "source_profile": emu_name,
-                    "source_system": archive_entry.get("system"),
-                    "source_systems": list(profile.get("systems", [])),
-                    "region": archive_entry.get("region"),
-                    "variant_group": archive_entry.get("variant_group"),
-                }
-            )
+    extras.extend(
+        _archive_prefix_extras(
+            profiles, relevant, covered_names, seen_dests, extras_prefix,
+            by_name,
+        )
+    )
 
-    # Third pass: agnostic scan — for filename-agnostic cores, include all
-    # DB files matching the system path prefix and size criteria.
-    files_db = db.get("files", {})
-    for emu_name, profile in sorted(profiles.items()):
-        if profile.get("type") in ("launcher", "alias"):
-            continue
-        if emu_name not in relevant:
-            continue
-        is_profile_agnostic = profile.get("bios_mode") == "agnostic"
-        if not is_profile_agnostic:
-            if not any(f.get("agnostic") for f in profile.get("files", [])):
-                continue
-
-        # Where each of this profile's files resolves.  A scan anchored on one
-        # filename walks into whatever tree that name happens to hit: rom1.bin
-        # is a PS2 ROM and a Roland SC-55 ROM, GameIndex.yaml belongs to four
-        # PS2 profiles and to an Android package.  One match is not evidence
-        # of a directory; two files of the same profile agreeing is.
-        resolved_dirs: dict[int, str] = {}
-        named_only: set[int] = set()
-        agnostic_votes: dict[str, int] = {}
-        for candidate in profile.get("files", []):
-            if not isinstance(candidate, dict):
-                continue
-            local, status = resolve_local_file(
-                candidate, db, dest_hint=candidate.get("path", "")
-            )
-            if not local or "/" not in local:
-                continue
-            directory = local.rsplit("/", 1)[0]
-            if directory.endswith("/.variants"):
-                directory = directory[: -len("/.variants")]
-            resolved_dirs[id(candidate)] = directory + "/"
-            if not (resolution_is_hash_exact(status) or status == "path_exact"):
-                named_only.add(id(candidate))
-            agnostic_votes[directory + "/"] = (
-                agnostic_votes.get(directory + "/", 0) + 1
-            )
-
-        for f in profile.get("files", []):
-            if not is_profile_agnostic and not f.get("agnostic"):
-                continue
-            fname = f.get("name", "")
-            if not fname:
-                continue
-            # An agnostic BIOS mode says the BIOS filename is free, not that
-            # every file the emulator loads is.  A free filename still has a
-            # known shape, and that shape is what identifies a candidate: an
-            # entry declaring no size takes the whole directory, which is how
-            # the flag icons of an Android package walked into a PS2 pack.
-            if f.get("category", "bios") != "bios":
-                continue
-            if not (f.get("size") or f.get("min_size") or f.get("max_size")):
-                continue
-
-            path_prefix = resolved_dirs.get(id(f), "")
-            if not path_prefix:
-                continue
-            # A name matching one file identifies it. A name matching several
-            # identifies nothing on its own, so the profile's other files have
-            # to agree on the directory before the scan walks it.
-            ambiguous = id(f) in named_only and len(by_name.get(fname, [])) > 1
-            if ambiguous and agnostic_votes.get(path_prefix, 0) < 2:
-                continue
-
-            # Size criteria from the file entry
-            min_size = f.get("min_size", 0)
-            max_size = f.get("max_size", float("inf"))
-            exact_size = f.get("size")
-            if exact_size and not min_size:
-                min_size = exact_size
-                max_size = exact_size
-
-            # Scan DB for all files under this prefix matching size
-            for sha1, entry in files_db.items():
-                path = entry.get("path", "")
-                if not path.startswith(path_prefix):
-                    continue
-                size = entry.get("size", 0)
-                if not (min_size <= size <= max_size):
-                    continue
-                scan_name = entry.get("name", "")
-                if not scan_name:
-                    continue
-                dest = scan_name
-                full_dest = f"{extras_prefix}/{dest}" if extras_prefix else dest
-                if full_dest in seen_dests:
-                    continue
-                seen_dests.add(full_dest)
-                extras.append(
-                    {
-                        "name": scan_name,
-                        "destination": dest,
-                        # The scan already holds the entry it selected, so it
-                        # names it by content.  Emitting the filename alone
-                        # sent the packing step back to a by-name lookup, and
-                        # three PS2 resources came back from another
-                        # emulator's copy of the same filename.
-                        "sha1": sha1,
-                        "required": False,
-                        "hle_fallback": False,
-                        "source_emulator": profile.get("emulator", emu_name),
-                        "source_profile": emu_name,
-                        "source_system": f.get("system"),
-                        "source_systems": list(profile.get("systems", [])),
-                        "region": f.get("region"),
-                        "variant_group": f.get("variant_group"),
-                        "agnostic_scan": True,
-                    }
-                )
+    extras.extend(
+        _agnostic_scan_extras(
+            profiles, relevant, db, by_name, seen_dests, extras_prefix
+        )
+    )
 
     return extras
 

@@ -23,6 +23,7 @@ sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 import common  # noqa: E402
 import generate_pack as builder  # noqa: E402
+import packextras  # noqa: E402
 
 SIZE = 1024
 
@@ -253,3 +254,52 @@ class PathTailBeatsABareName(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ArchivePrefixCopies(unittest.TestCase):
+    """A core that reads its romset from a subdirectory of its own.
+
+    FBNeo looks for system/fbneo/neogeo.zip while the platform declares
+    neogeo.zip at the root, so the pack carries both paths. The pass had no
+    test: extracting it surfaced a name it read from the enclosing scope and
+    would have raised on, for any platform reaching it.
+    """
+
+    def _extras(self, by_name):
+        profiles = {
+            "fbneo": {
+                "emulator": "FBNeo",
+                "type": "libretro",
+                "systems": ["arcade"],
+                "archive_prefix": "fbneo",
+                "files": [
+                    {"name": "rom.bin", "archive": "neogeo.zip", "system": "arcade"},
+                ],
+            }
+        }
+        return packextras._archive_prefix_extras(
+            profiles, {"fbneo"}, {"neogeo.zip"}, set(), "", by_name
+        )
+
+    def test_a_covered_archive_gets_a_prefixed_copy(self):
+        extras = self._extras({"neogeo.zip": ["abc"]})
+        self.assertEqual([e["destination"] for e in extras], ["fbneo/neogeo.zip"])
+
+    def test_an_archive_the_collection_lacks_is_not_copied(self):
+        """The prefixed path would name bytes nothing can supply."""
+        self.assertEqual(self._extras({}), [])
+
+    def test_a_destination_already_taken_is_not_claimed_twice(self):
+        profiles = {
+            "fbneo": {
+                "emulator": "FBNeo", "type": "libretro", "systems": ["arcade"],
+                "archive_prefix": "fbneo",
+                "files": [{"name": "rom.bin", "archive": "neogeo.zip",
+                           "system": "arcade"}],
+            }
+        }
+        extras = packextras._archive_prefix_extras(
+            profiles, {"fbneo"}, {"neogeo.zip"}, {"fbneo/neogeo.zip"}, "",
+            {"neogeo.zip": ["abc"]},
+        )
+        self.assertEqual(extras, [])
