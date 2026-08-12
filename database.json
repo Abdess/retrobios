@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-12T03:51:42Z",
-  "total_files": 8886,
-  "total_size": 12295398958,
+  "generated_at": "2026-08-12T04:09:18Z",
+  "total_files": 8888,
+  "total_size": 12295693870,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -49631,6 +49631,16 @@
       "crc32": "588b5540",
       "adler32": "b1254be6"
     },
+    "cf3639dc31afdc8bb21145dc27bf86ea17c78d92": {
+      "path": "bios/Other/cspect/TBBLUE.FW",
+      "name": "TBBLUE.FW",
+      "size": 286720,
+      "sha1": "cf3639dc31afdc8bb21145dc27bf86ea17c78d92",
+      "md5": "46ad099559903ade8770f0085c399aa8",
+      "sha256": "bbbac1b3c6897c29964872acb3f8c46aac06da85d1f1eb4a898aaad6f1eed72a",
+      "crc32": "5557408b",
+      "adler32": "67a5e652"
+    },
     "72ecfde5f58c5993765a6ef5b8866c4777cc4ade": {
       "path": "bios/Other/cspect/enNextZX.rom",
       "name": "enNextZX.rom",
@@ -49650,6 +49660,16 @@
       "sha256": "ded2038d78f57b4fd7e05df0330064f661c221f7b06d8cd2bddee1ff6062f019",
       "crc32": "5a443736",
       "adler32": "865d3c5e"
+    },
+    "cd3e231b0bbe5104e6879a739e7395f8418f302c": {
+      "path": "bios/Other/cspect/machines/next/enNextMf.rom",
+      "name": "enNextMf.rom",
+      "size": 8192,
+      "sha1": "cd3e231b0bbe5104e6879a739e7395f8418f302c",
+      "md5": "5923a41922b5af965b4a71cc26c871ba",
+      "sha256": "0ee4ba5f830c146b878a316ebabff893e12d6c2ceda85f90883ae67647c0698e",
+      "crc32": "5f492b40",
+      "adler32": "ce8fff87"
     },
     "4d8d6b1d3f7ace05cbaf03565382b0e6e40c706c": {
       "path": "bios/Other/cxbx-reloaded/EmuDisk/Partition2/xboxdash.xbe",
@@ -98631,8 +98651,10 @@
       "0246740371010333385665dfeb7cd0ec": "1acd01c2c03424a78b32c9440f4d890fb1104815",
       "5ee871d5600eb9b5a22989c295f902a5": "200d59076dfef36db061d6d7d21d80021cab1237",
       "8ca256a832e83c875f5432b3dee8a36f": "6765a91a42fed68a807325bf62a728e5ac5d622f",
+      "46ad099559903ade8770f0085c399aa8": "cf3639dc31afdc8bb21145dc27bf86ea17c78d92",
       "8535c40c6cce978623a3e06a38e3a0fd": "72ecfde5f58c5993765a6ef5b8866c4777cc4ade",
       "907a03706a196b0da832ddab204264f2": "4f05efec7af0829f43aa3cac18a30ae2a33ded88",
+      "5923a41922b5af965b4a71cc26c871ba": "cd3e231b0bbe5104e6879a739e7395f8418f302c",
       "08d3a6f99184679aa13008d6397bacce": "4d8d6b1d3f7ace05cbaf03565382b0e6e40c706c",
       "0d6ba29a5005639ac7f4d77b7e58b918": "3ababd4334d8d57abb22dd98bd2d347df39648d9",
       "2b51c63d9caec283a61a4b90a2ac7c0c": "cc03a0650bfac4bf6cb66e414bbef121cba53efe",
@@ -116201,11 +116223,17 @@
       "CPC6128.ROM.SE": [
         "6765a91a42fed68a807325bf62a728e5ac5d622f"
       ],
+      "TBBLUE.FW": [
+        "cf3639dc31afdc8bb21145dc27bf86ea17c78d92"
+      ],
       "enNextZX.rom": [
         "72ecfde5f58c5993765a6ef5b8866c4777cc4ade"
       ],
       "enNxtmmc.rom": [
         "4f05efec7af0829f43aa3cac18a30ae2a33ded88"
+      ],
+      "enNextMf.rom": [
+        "cd3e231b0bbe5104e6879a739e7395f8418f302c"
       ],
       "xboxdash.xbe": [
         "4d8d6b1d3f7ace05cbaf03565382b0e6e40c706c",
@@ -131258,6 +131286,9 @@
       "VT-DOS12-DISK.ROM": [
         "072c6160d4e7d406f5d8f5b1b66066c797d35561"
       ],
+      "enNextMF.rom": [
+        "cd3e231b0bbe5104e6879a739e7395f8418f302c"
+      ],
       "FONT.BMP": [
         "b4f14e58030ed40fff2dc312b58ea4440bdf8cc5"
       ],
@@ -136031,8 +136062,10 @@
       "2fa2e7d6": "1acd01c2c03424a78b32c9440f4d890fb1104815",
       "1574923b": "200d59076dfef36db061d6d7d21d80021cab1237",
       "588b5540": "6765a91a42fed68a807325bf62a728e5ac5d622f",
+      "5557408b": "cf3639dc31afdc8bb21145dc27bf86ea17c78d92",
       "6d9951f0": "72ecfde5f58c5993765a6ef5b8866c4777cc4ade",
       "5a443736": "4f05efec7af0829f43aa3cac18a30ae2a33ded88",
+      "5f492b40": "cd3e231b0bbe5104e6879a739e7395f8418f302c",
       "36b7043b": "4d8d6b1d3f7ace05cbaf03565382b0e6e40c706c",
       "cfc5e06f": "3ababd4334d8d57abb22dd98bd2d347df39648d9",
       "8dc8374e": "cc03a0650bfac4bf6cb66e414bbef121cba53efe",
@@ -144919,8 +144952,10 @@
       "49c5b2da99bf3230dec3e4bfbb136609ae5f8d250d8920be0ebda1e5a256f88a": "1acd01c2c03424a78b32c9440f4d890fb1104815",
       "8ec2639be145d242d18c02f5ed9eaa52c7d4c40b49dc672755200c3be701abf7": "200d59076dfef36db061d6d7d21d80021cab1237",
       "456ced147bf5a3a11fe70971f56c1a215e85808fa86dd7d8610a73b3e9b6148e": "6765a91a42fed68a807325bf62a728e5ac5d622f",
+      "bbbac1b3c6897c29964872acb3f8c46aac06da85d1f1eb4a898aaad6f1eed72a": "cf3639dc31afdc8bb21145dc27bf86ea17c78d92",
       "dd901acd306794ad34f3131ad1df54b6f4de5527ad1b2aa42f82e417f93f17a5": "72ecfde5f58c5993765a6ef5b8866c4777cc4ade",
       "ded2038d78f57b4fd7e05df0330064f661c221f7b06d8cd2bddee1ff6062f019": "4f05efec7af0829f43aa3cac18a30ae2a33ded88",
+      "0ee4ba5f830c146b878a316ebabff893e12d6c2ceda85f90883ae67647c0698e": "cd3e231b0bbe5104e6879a739e7395f8418f302c",
       "832862490c762a723856350142f49ded92b7ad966741eeb5b89e683006b16a0d": "4d8d6b1d3f7ace05cbaf03565382b0e6e40c706c",
       "df9c57cc2ad43c4563609b75d3a3be40dd844fcc69e8b3a368616b9811dc776f": "3ababd4334d8d57abb22dd98bd2d347df39648d9",
       "11dfa28d710a347313c7894d25e5ffb2f585d607c7f782b2a9970025c2bf0b7f": "cc03a0650bfac4bf6cb66e414bbef121cba53efe",
@@ -155219,6 +155254,9 @@
       "ROM/National/CPC6128.ROM.SE": [
         "6765a91a42fed68a807325bf62a728e5ac5d622f"
       ],
+      "machines/next/enNextMf.rom": [
+        "cd3e231b0bbe5104e6879a739e7395f8418f302c"
+      ],
       "EmuDisk/Partition2/xboxdash.xbe": [
         "4d8d6b1d3f7ace05cbaf03565382b0e6e40c706c"
       ],
@@ -164984,6 +165022,7 @@
         "f2572ee83d09fc08f4de4a62f101c8bb301a9505",
         "abf119cf947ea32defd08b29a8a25d75f6bd4987",
         "072c6160d4e7d406f5d8f5b1b66066c797d35561",
+        "cd3e231b0bbe5104e6879a739e7395f8418f302c",
         "b4f14e58030ed40fff2dc312b58ea4440bdf8cc5",
         "c65592330c9dd84011151daed52f9aec926b7e56",
         "0877ffb4b4d1c18283468be3579b72ed8c22e3ac",

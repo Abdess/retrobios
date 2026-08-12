@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h3 id="expectations">Expectations.</h3>
+<p>This is a free app, worked on as a hobby in the developers' free time. At the time of writing, it is in very early stages and missing many useful features, however is usable for playing some games.</p>
+
+<p>It is not going to be perfect, far from it. We will continue to improve it when we have time, but please remember this is not our jobs, and to have realistic expectations, <strong>especially if you do not have a high end device</strong>.</p>
+
+<p>NetherSX2 will always be free, and will never contain ads. If you have been forced to pay or watch ads to play games, you should get your money back.</p>
+
+<h3 id="disclaimers">Disclaimers.</h3>
+
+<p>PlayStation 2 and PS2 are registered trademarks of Sony Interactive Entertainment Europe Limited and in other regions. This app is not affiliated in any way with Sony Interactive Entertainment.</p>
+
+<p>AetherSX2 is provided under the terms of the Creative Commons Attribution-NonCommercial-NoDerivatives International License (BY-NC-ND 4.0, <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/">https://creativecommons.org/licenses/by-nc-nd/4.0/</a>).</p>
+
+<p>This means that you <strong>cannot use AetherSX2 or NetherSX2 to make money.</strong></p>
+
+<p>NetherSX2 uses third-party code. You can view the licenses for this code by selecting "Third-Party Notices" in the navigation menu (swipe out from the left).</p>
+
+<h3 id="is-nethersx2-better">Does NetherSX2 run faster than AetherSX2?</h3>
+
+<p>It depends.<br/>
+The main focus is on stability and game compatibility over performance, but some GameDB changes can be both beneficial or detrimental to performance depending on the game.<br/>
+If performance fixes exist that doesn't compromise on stability and compatibility, then they generally get added as they're discovered.<br/>
+So try it out and see if it works for you.</p>
+
+<h3 id="minimum-requirements">What are the requirements?</h3>
+
+<p>The console is an extremely complex piece of hardware, with many very powerful components, even for today. Due to differences between the console hardware and your phone's hardware, they are computationally expensive to simulate. You need a high end device to achieve good performance.</p>
+<p>We recommend at least a Snapdragon 845-equivalent device. This means 4 large cores (Cortex-A75 level). If you only have two big cores (e.g. Snapdragon 700 series SoCs), you should not enable multi-threaded VU, and performance will suffer as a result. Devices with Mali or PowerVR GPUs will run the app, but performance will be lower than Adreno GPUs.</p>
+<p>If you want to use the app on a slower device, you can try it, but games will run slow, especially heavier titles.</p>
+
+<h3 id="the-app-tells-me-i-need-a-bios">The app tells me I need a BIOS.</h3>
+
+<p>Yes, you do. A BIOS image <strong>is required</strong> to play games and is not optional. This image should be dumped from your own console, using a homebrew application. There are plenty of guides available online on how to dump your console’s BIOS.</p>
+
+<h3 id="where-do-i-get-games">Where do I get games?</h3>
+
+<p>NetherSX2 should only be used to play games you own and have dumped from disc yourself. To dump your games, you can use a tool such as ImgBurn to create a .iso for the disc, and then copy across it to your device over USB. Optionally, you can use compression tools such as gzip or chdman to further reduce the size.</p>
+
+<h3 id="best-settings">What are the best settings for X game?</h3>
+
+<p>The Default settings tend to work the best the majority of games.<br/>
+Use the Vulkan Renderer and Hardware Download Mode set to Disable Readback for an extra performance gain.</p>
+
+<h3 id="my-games-are-running-slowlagging">My games are running slow/lagging.</h3>
+<p>Different games have very different hardware requirements, due to how much they utilized the various components of the console. See the next section.</p>
+
+<h3 id="how-to-improve-performance">How to improve performance?</h3>
+<ul>
+    <li>Use the Vulkan renderer, <strong>especically if you have a Mali GPU</strong>. Note that some games may perform better with OpenGL.</li>
+    <li>For some Mali devices, enabling <strong>Threaded Presentation</strong> in Advanced Settings can significantly improve performance when not EE bottlenecked (e.g. Pixel 6).</li>
+    <li>Underclock the emulated CPU by setting the cycle rate to a negative number, and cycle skip to a positive number in System settings. This will break some games, and cause others to run slower than expected.</li>
+    <li>If the game slows down depending on the camera angle, this may be due to GS downloads, which are very slow on mobile GPUs. You can try setting the hardware download mode to Unsynchronized or Disabled, but this may create some glitches in effects.</li>
+    <li>You can try switching the SPU2 mixing mode to Async Mix instead of Timestretch. But this is not compatible with all games.</li>
+    <li>For some devices (e.g. Samsung and Pixel), using affinity control can improve performance consistency. See the affinity control section below.</li>
+    <li>Reducing blending accuracy can improve performance in some games, at the cost of broken visuals.</li>
+    <li><strong>If you have bad performance after an update, reset settings.</strong> Sometimes we change settings to more performant defaults.
+</ul>
+
+<h3 id="onscreen-buttons">How do I add L3/R3 buttons and the right analog stick?</h3>
+<p>Open Controller Settings while ingame, by pausing and tapping the controller icon in the top-right corner. Select "Add/Remove" buttons for L3/R3, and/or change the control layout to dual sticks.</p>
+<h3 id="how-do-i-customize-the-touchscreen-controller-positionscale">How do I customize the touchscreen controller (position/scale)?</h3>
+<p>Press the pause or back button while ingame, and tap the controls tab in the top-right corner. You can also add additional buttons for hotkeys here, e.g. fast forward, quick load/save, etc.</p>
+
+<h3 id="the-app-opens-in-portrait-mode-how-do-i-change-it-to-landscape">The app opens in portrait mode, how do I change it to landscape?</h3>
+<p>Turn your device around if you have auto rotation enabled. You can also force it to always use landscape in the first page of App Settings.</p>
+
+<h3 id="my-bluetooth-controller-isnt-working">My Bluetooth controller isn’t working.</h3>
+<p>Map the controller in "Controller Settings". You can start with the automatic mapping, but sometimes triggers or sticks still need to be mapped manually.</p>
+
+<h3 id="i-want-to-set-different-settings-for-each-game">I want to set different settings for each game.</h3>
+<p>Long press the game in the game list/grid, tap Game Properties, and tap the Game Settings tab. If you want to change these settings while in-game, open the pause menu, and tap the info button in the top-right corner to access Game Properties.</p>
+
+<h3 id="input-profiles">I want to a different touchscreen button layout for different games.</h3>
+<p>NetherSX2 now has "input profiles", which are a grouping of the touchscreen button layout, as well as Bluetooth controller bindings.</p>
+<p>To create an input profile:</p>
+<ol>
+  <li>Configure the touchscreen buttons in the layout you desire (optional).</li>
+  <li>Bind the bluetooth controller with the configuration you desire, and set up any macro buttons (optional).</li>
+  <li>Save this as an input profile. In Controller Settings, there is a "Save Profile" option in the first tab.</li>
+  <li>Optionally, reset the touchscreen layout back to default (also in the same menu).
+</ol>
+
+<p>You can load this profile manually when you want to use it, but you can also automatically load the profile for specific games. To do so:</p>
+<ol>
+  <li>Open Game Properties for the game you want to use the profile for (either ingame or from the game list).</li>
+  <li>Swipe across to the General tab.</li>
+  <li>Tap "Input Profile", and select the profile you wish to use.</li>
+  <li>The profile will be automatically loaded when the game starts. When switching to another game, the layout will revert to the global setting.</li>
+</ol>
+
+<h3 id="macro-buttons">I want to create macro, or "combo" buttons.</h3>
+<p>You get 4 macro buttons per virtual controller.
+<ol>
+  <li>Open Controller Settings</li>
+  <li>Swipe to the controller port you wish to create the macro for (usually Port 1).</li>
+  <li>Scroll down to the Macro category, and tap the one-of-four button you wish to customize.</li>
+  <li>Optionally, set a trigger for the macro button. This can be a button on your phone (e.g. volume), a controller button, a combination of controller buttons, etc. Or, leave it empty if you want to activate it with the touchscreen.</li>
+  <li>Choose a combination of buttons that you wish the macro to activate. You can select any combination of face buttons, stick directions, etc. For example, Cross + Right Stick Up (RUp).</li>
+  <li>The frequency setting determines how often the macro will toggle in frames. If you just want a combo button, leave the frequency at zero/default. Otherwise, it will simulate repeatedly releasing/pressing the button at the frequency you choose. In other words, it automates button mashing!</li>
+  <li>Tap out of the popup, or press the back button to leave the macro setup.</li>
+  <li>Optionally, enable the touchscreen button for the macro. They are hidden by default. This is in Controller Settings -> Add/Remove Buttons, and pick Macro 1 through 4. You must be ingame to add the button. The buttons will appear as M1 through M4.</li>
+</ol>
+
+<h3 id="my-games-have-rendering-glitches">My games have rendering glitches.</h3>
+<p>Due to the complexity of the console’s hardware, there are still plenty of issues which arise when using the hardware renderer. You can try using the software renderer for these games.</p>
+
+<h3 id="i-want-to-save-more-than-one-state">I want to save more than one state.</h3>
+<p>Open the pause menu and tap Load/Save state, there are 10 slots + a quick save (for onscreen buttons).</p>
+
+<h3 id="i-want-copy-my-saves-from-another-device">I want copy my saves from another device.</h3>
+<p>Currently you can only import an entire memory card at once; it is not possible to import individual saves. Swiping from the left in the game list will show an “Import Memory Card” option which you can use to import a *.ps2 image of a memory card.</p>
+
+<h3 id="where-are-my-saves-located">Where are my saves located?</h3>
+<p>Due to scoped storage on Android 11+, we cannot place your saves in a normal directory on external storage. However, with a file explorer app, you should be able to access the <code class="language-plaintext highlighter-rouge">Android/data/xyz.aethersx2.android</code> directory, in your primary storage volume, which contains your save states and memory cards. Note that accessing this directory requires granting additional permissions to your file manager on Android 11+.</p>
+
+<h3 id="how-do-i-add-covers-to-the-game-grid">How do I add covers to the game grid?</h3>
+<p>Place cover images in the covers directory, located in the data directory mentioned above, with the file name as the game title or serial in jpg/png format. Alternatively, you can long press in the game list and select “Choose Cover Image” to import an image.</p>
+
+<h3 id="how-do-i-create-launcher-shortcuts-for-games">How do I create launcher shortcuts for games?</h3>
+<p>Long press the game in the game list, and select “Create Launcher Shortcut”.</p>
+
+<h3 id="software-renderer-performance">How to improve software renderer performance?</h3>
+<p>The software renderer draws everything onscreen using the CPU instead of the GPU, which is very slow in comparison. However, the software renderer's performance has now been improved to the point where it's usable for many games.</p>
+<p>Assuming you have a device with 4 big cores, you'll want to <strong>disable multi-threaded VU</strong> to free up one of your big cores, and the software rendering threads to 2. You can then enable affinity control (to any mode), which will also pin the software threads to the big cores.</p>
+<p>If you have a device with only 2 big cores, the software renderer will never perform well; the small cores are much too slow for rasterization.</p>
+</h3>
+
+<h3 id="affinity-control">How do I use affinity control?</h3>
+<p>For some devices (e.g. Samsung and Pixel), using affinity control can improve performance consistency. By enabling this option, the CPU cores in your device are sorted from most powerful to least powerful, and the threads pinned to these cores in the order you select, to avoid the scheduler constantly moving them around.</p>
+<ol>
+  <li>EE Thread (Emotion Engine) - This thread is responsible for most of the game logic, as well as VU0, DMA, etc. In most games, it is the most heavy thread.</li>
+  <li>GS Thread (Graphics Synthesizer) - This thread is responsible for receiving packets from the EE and VU1,  analyses them, and generates draw commands for the host GPU for rendering. In some games, particularly those which are draw call heavy, it can be the most heavy.</li>
+  <li>VU Thread (Vector Unit 1) - This thread handles execution of VU1 microprograms, which provide similar functionality to modern GPU's vertex shaders. It is usually the lightest thread, but in some games (e.g. God of War), it can actually be the heaviest, due to complex microprograms and/or synchronization. This thread is only active when MTVU is enabled.</li>
+</ol>
+<p>The best setting will depend on your device and the game, hence why it is settable per-game. If you're experiencing massive frame rate variance, where it bounces around with a range of more than 20fps, experimenting with this option may help.</p>
+<p>Use the "Show CPU Usage" option in graphics to work out which thread is the heaviest/second heaviest, and then choose the corresponding affinity control mode. Devices with equal big/little core distribution likely won't need to use this option.</p>
+</h3>
+
+</body>
+</html>
