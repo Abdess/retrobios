@@ -154,6 +154,93 @@ class HashMismatchIsNotCoverage(unittest.TestCase):
         self.assertEqual(detail["status"], verify.Status.MISSING)
 
 
+class UnsourceableIsNotAGap(unittest.TestCase):
+    """An entry nobody can supply is absent by design, not by omission.
+
+    Counting a per-user key or a slot the user fills beside a file somebody
+    could still find invites the wrong repair: dropping the flag, deleting the
+    entry, or chasing a vendor's whole install tree. One profile read
+    "14 missing" when twelve of those were documented as unobtainable.
+    """
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.root = Path(self._tmp.name)
+        self.emulators = self.root / "emulators"
+        self.emulators.mkdir()
+        (self.emulators / "demo.yml").write_text(
+            "emulator: demo\n"
+            "type: standalone\n"
+            "display_name: Demo\n"
+            "systems: [demo-system]\n"
+            "files:\n"
+            "  - name: findable.rom\n"
+            "    system: demo-system\n"
+            "    required: true\n"
+            "  - name: paid.so\n"
+            "    system: demo-system\n"
+            "    required: true\n"
+            "    unsourceable: \"ships inside the paid application\"\n"
+        )
+        self.db = {"files": {}, "indexes": {
+            "by_name": {}, "by_md5": {}, "by_sha256": {},
+            "by_crc32": {}, "by_path_suffix": {}}}
+        from common import _emulator_profiles_cache
+
+        _emulator_profiles_cache.clear()
+
+    def tearDown(self):
+        from common import _emulator_profiles_cache
+
+        _emulator_profiles_cache.clear()
+        self._tmp.cleanup()
+
+    def _result(self):
+        cwd = os.getcwd()
+        os.chdir(self.root)
+        try:
+            return verify.verify_emulator(
+                ["demo"], str(self.emulators), self.db
+            )
+        finally:
+            os.chdir(cwd)
+
+    def test_an_unsourceable_entry_carries_its_reason(self):
+        detail = next(d for d in self._result()["details"] if d["name"] == "paid.so")
+        self.assertEqual(detail["status"], verify.Status.MISSING)
+        self.assertIn("unsourceable", detail)
+        self.assertIn("paid", detail["unsourceable"])
+
+    def test_a_findable_entry_carries_no_such_marker(self):
+        detail = next(
+            d for d in self._result()["details"] if d["name"] == "findable.rom"
+        )
+        self.assertEqual(detail["status"], verify.Status.MISSING)
+        self.assertNotIn("unsourceable", detail)
+
+    def test_the_summary_counts_the_two_apart(self):
+        import contextlib
+        import io
+
+        buffer = io.StringIO()
+        with contextlib.redirect_stdout(buffer):
+            verify.print_emulator_result(self._result())
+        summary = buffer.getvalue().splitlines()[0]
+        self.assertIn("1 missing", summary)
+        self.assertIn("1 unsourceable", summary)
+
+    def test_the_reason_is_printed_rather_than_the_entry_hidden(self):
+        import contextlib
+        import io
+
+        buffer = io.StringIO()
+        with contextlib.redirect_stdout(buffer):
+            verify.print_emulator_result(self._result())
+        out = buffer.getvalue()
+        self.assertIn("UNSOURCEABLE: paid.so", out)
+        self.assertIn("MISSING (required): findable.rom", out)
+
+
 class RepositoryWideEvidence(unittest.TestCase):
     """The real collection, so the fix is measured and not just asserted."""
 

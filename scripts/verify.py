@@ -1378,6 +1378,16 @@ def verify_emulator(
 
             if not local_path:
                 result = {"name": name, "status": Status.MISSING, "required": required}
+                # An entry the profile documents as unsourceable is absent by
+                # design: a per-user key, a slot the user fills, a dump nobody
+                # has made. Counting it beside a file somebody could still
+                # find invites the wrong repair -- dropping the flag, or
+                # chasing a vendor's whole install tree.
+                unsourceable = file_entry.get("unsourceable")
+                if unsourceable:
+                    result["unsourceable"] = (
+                        unsourceable if isinstance(unsourceable, str) else ""
+                    )
             else:
                 # Apply emulator validation
                 check = check_file_validation(local_path, name, validation_index)
@@ -1533,11 +1543,19 @@ def print_emulator_result(result: dict, verbose: bool = False) -> None:
     sc = result.get("status_counts", {})
     untested = sc.get(Status.UNTESTED, 0)
     missing = sc.get(Status.MISSING, 0)
+    unsourceable_names = {
+        d["name"]
+        for d in result["details"]
+        if d["status"] == Status.MISSING and "unsourceable" in d
+    }
+    unsourceable = len(unsourceable_names)
     parts = [f"{ok_count}/{total} OK"]
     if untested:
         parts.append(f"{untested} untested")
-    if missing:
-        parts.append(f"{missing} missing")
+    if missing - unsourceable > 0:
+        parts.append(f"{missing - unsourceable} missing")
+    if unsourceable:
+        parts.append(f"{unsourceable} unsourceable")
     print(f"{label}: {', '.join(parts)} [{mode}]")
 
     seen = set()
@@ -1558,7 +1576,7 @@ def print_emulator_result(result: dict, verbose: bool = False) -> None:
                 else:
                     print(f"    {_format_ground_truth_aggregate(gt)}")
     for d in result["details"]:
-        if d["status"] == Status.MISSING:
+        if d["status"] == Status.MISSING and "unsourceable" not in d:
             if d["name"] in seen:
                 continue
             seen.add(d["name"])
@@ -1572,6 +1590,14 @@ def print_emulator_result(result: dict, verbose: bool = False) -> None:
                         print(f"    {line}")
                 else:
                     print(f"    {_format_ground_truth_aggregate(gt)}")
+    for d in result["details"]:
+        if d["status"] == Status.MISSING and "unsourceable" in d:
+            if d["name"] in seen:
+                continue
+            seen.add(d["name"])
+            why = d.get("unsourceable") or "documented as unobtainable"
+            print(f"  UNSOURCEABLE: {d['name']} -{why}")
+
     for d in result["details"]:
         if d.get("note"):
             print(f"  {d['note']}")
