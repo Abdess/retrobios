@@ -382,6 +382,132 @@ def _report_pack_counts(
             f"{core_count} from cores), {', '.join(parts)} [{verification_mode}]"
         )
 
+def _preferred_entries(
+    pack_systems: dict,
+    db: dict,
+    bios_dir: str,
+    base_dest: str,
+    required_only: bool,
+    zip_contents,
+    data_registry,
+    offline,
+) -> dict[str, int]:
+    """Which declaration wins when several claim the same destination.
+
+    A platform can declare one destination in more than one system, bare
+    in one and hash-constrained in another. First-come dedup would let
+    the bare entry pack whatever answers to the name, so a constrained
+    sibling that resolves by content claims the destination instead.
+    """
+    preferred_entries: dict[str, int] = {}
+    dest_entries: dict[str, list[dict]] = {}
+    for sys_id, system in sorted(pack_systems.items()):
+        for file_entry in system.get("files", []):
+            if required_only and file_entry.get("required") is False:
+                continue
+            dest = sanitize_pack_path(
+                file_entry.get("destination", file_entry.get("name", ""))
+            )
+            if not dest:
+                continue
+            full = f"{base_dest}/{dest}" if base_dest else dest
+            dest_entries.setdefault(full, []).append(file_entry)
+    for full, entries in dest_entries.items():
+        if len(entries) < 2:
+            continue
+        constrained = [
+            fe
+            for fe in entries
+            if fe.get("md5") or fe.get("sha1") or fe.get("zipped_file")
+        ]
+        if not constrained:
+            continue
+        best = None
+        for fe in constrained:
+            _lp, _st = resolve_file(
+                fe,
+                db,
+                bios_dir,
+                zip_contents,
+                data_dir_registry=data_registry,
+                offline=offline,
+            )
+            if _lp and _st == "md5_exact":
+                best = fe
+                break
+            if best is None and _lp and resolution_is_hash_exact(_st):
+                best = fe
+        if best is not None:
+            preferred_entries[full] = id(best)
+
+    return preferred_entries
+
+
+def _select_variants(
+    config: dict,
+    pack_systems: dict,
+    emulators_dir: str,
+    db: dict,
+    base_dest: str,
+    emu_profiles,
+    target_cores,
+    source: str,
+    regions,
+    one_per_slot: bool,
+) -> tuple[set, list, list]:
+    """Which regional and slot alternatives this pack leaves out.
+
+    Both reductions are decided once, over the platform baseline and the
+    core extras together: deciding them separately is how the report and
+    the pack came to withdraw different files for the same request.
+    Returns the destinations to drop, the groups kept only as a
+    fallback, and the slots no profile puts in order.
+    """
+    region_drops: set[str] = set()
+    region_fallbacks: list[str] = []
+    if regions:
+        region_index = region_mod.build_region_index(emu_profiles or {})
+        region_groups, _extra_dests = platform_region_groups(
+            config,
+            pack_systems,
+            emulators_dir,
+            db,
+            base_dest,
+            emu_profiles,
+            target_cores=target_cores,
+            include_extras=(source != "platform"),
+            include_all=(source == "truth"),
+        )
+        region_drops = region_mod.resolve_region_drops(
+            region_groups, region_index, regions
+        )
+        region_fallbacks = region_mod.fallback_groups(
+            region_groups, region_index, regions
+        )
+
+    slot_undecidable: list[str] = []
+    if one_per_slot:
+        members_by_system = _pack_member_groups(
+            config, pack_systems, emulators_dir, db, base_dest,
+            emu_profiles, target_cores, source,
+        )
+        slot_groups = {
+            sys_id: [(d, n) for d, n in members if d not in region_drops]
+            for sys_id, members in members_by_system.items()
+        }
+        slot_drops, slot_undecidable = slot_mod.resolve_slot_drops(
+            slot_groups, slot_mod.build_slot_index(emu_profiles or {})
+        )
+        region_drops = region_drops | slot_drops
+        if slot_undecidable:
+            print(
+                f"  {len(slot_undecidable)} slot(s) with no declared order: "
+                f"every candidate kept"
+            )
+
+    return region_drops, region_fallbacks, slot_undecidable
+
+
 def generate_pack(
     platform_name: str,
     platforms_dir: str,
@@ -498,99 +624,22 @@ def generate_pack(
             return None
         pack_systems = filtered
 
-    # Constrained-entry preference: platforms may declare the same
-    # destination several times (bare in one system, hash-constrained in
-    # another). First-come dedup would let the bare entry pack a wrong
-    # same-named file, so when a hash-constrained sibling resolves to a
-    # matching repo file, it claims the destination instead.
     preferred_entries: dict[str, int] = {}
     if source != "truth":
-        dest_entries: dict[str, list[dict]] = {}
-        for sys_id, system in sorted(pack_systems.items()):
-            for file_entry in system.get("files", []):
-                if required_only and file_entry.get("required") is False:
-                    continue
-                dest = sanitize_pack_path(
-                    file_entry.get("destination", file_entry.get("name", ""))
-                )
-                if not dest:
-                    continue
-                full = f"{base_dest}/{dest}" if base_dest else dest
-                dest_entries.setdefault(full, []).append(file_entry)
-        for full, entries in dest_entries.items():
-            if len(entries) < 2:
-                continue
-            constrained = [
-                fe
-                for fe in entries
-                if fe.get("md5") or fe.get("sha1") or fe.get("zipped_file")
-            ]
-            if not constrained:
-                continue
-            best = None
-            for fe in constrained:
-                _lp, _st = resolve_file(
-                    fe,
-                    db,
-                    bios_dir,
-                    zip_contents,
-                    data_dir_registry=data_registry,
-                    offline=offline,
-                )
-                if _lp and _st == "md5_exact":
-                    best = fe
-                    break
-                if best is None and _lp and resolution_is_hash_exact(_st):
-                    best = fe
-            if best is not None:
-                preferred_entries[full] = id(best)
+        preferred_entries = _preferred_entries(
+            pack_systems, db, bios_dir, base_dest, required_only,
+            zip_contents, data_registry, offline,
+        )
 
     # Region selection is decided once, over both the platform baseline and the
     # core extras, so the two phases below consult a single set. Grouping uses a
     # dedicated extras pass with an empty seen set: it only needs group
     # membership, never destinations, and a superset of members is the safe
     # direction. Runs only when --region is given.
-    region_drops: set[str] = set()
-    region_fallbacks: list[str] = []
-    if regions:
-        region_index = region_mod.build_region_index(emu_profiles or {})
-        region_groups, _extra_dests = platform_region_groups(
-            config,
-            pack_systems,
-            emulators_dir,
-            db,
-            base_dest,
-            emu_profiles,
-            target_cores=target_cores,
-            include_extras=(source != "platform"),
-            include_all=(source == "truth"),
-        )
-        region_drops = region_mod.resolve_region_drops(
-            region_groups, region_index, regions
-        )
-        region_fallbacks = region_mod.fallback_groups(
-            region_groups, region_index, regions
-        )
-
-    slot_undecidable: list[str] = []
-    if one_per_slot:
-        members_by_system = _pack_member_groups(
-            config, pack_systems, emulators_dir, db, base_dest,
-            emu_profiles, target_cores, source,
-        )
-        slot_groups = {
-            sys_id: [(d, n) for d, n in members if d not in region_drops]
-            for sys_id, members in members_by_system.items()
-        }
-        slot_drops, slot_undecidable = slot_mod.resolve_slot_drops(
-            slot_groups, slot_mod.build_slot_index(emu_profiles or {})
-        )
-        region_drops = region_drops | slot_drops
-        if slot_undecidable:
-            print(
-                f"  {len(slot_undecidable)} slot(s) with no declared order: "
-                f"every candidate kept"
-            )
+    region_drops, region_fallbacks, slot_undecidable = _select_variants(
+        config, pack_systems, emulators_dir, db, base_dest, emu_profiles,
+        target_cores, source, regions, one_per_slot,
+    )
 
     with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:
       if source != "truth":
