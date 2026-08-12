@@ -50,6 +50,11 @@ _HOSTS: dict[str, tuple[str, str, str]] = {
         "https://git.eden-emu.dev/api/v1",
         "https://git.eden-emu.dev",
     ),
+    "git.ryujinx.app": (
+        "forgejo",
+        "https://git.ryujinx.app/api/v1",
+        "https://git.ryujinx.app",
+    ),
 }
 
 
@@ -474,10 +479,45 @@ def _tree_url(repo: Repo, sha: str) -> str | None:
     return f"{repo.api_base}/repos/{repo.slug}/git/trees/{sha}?recursive=1"
 
 
+TREE_PAGE_SIZE = 100
+MAX_TREE_PAGES = 50
+
+
+def _gitlab_tree(
+    repo: Repo, sha: str, cache_dir: str, offline: bool
+) -> tuple[list[str], bool]:
+    """GitLab serves its tree in pages; each page is cached on its own URL.
+
+    A page that cannot be read mid-walk reports the listing as truncated:
+    the paths already collected are real, but their absence proves nothing.
+    """
+    paths: list[str] = []
+    for page in range(1, MAX_TREE_PAGES + 1):
+        url = (
+            f"{repo.api_base}/projects/{_project(repo)}/repository/tree"
+            f"?ref={sha}&recursive=true&per_page={TREE_PAGE_SIZE}&page={page}"
+        )
+        payload = _api(url, cache_dir, offline)
+        if not isinstance(payload, list):
+            return paths, True
+        paths.extend(
+            entry["path"]
+            for entry in payload
+            if isinstance(entry, dict)
+            and entry.get("type") == "blob"
+            and entry.get("path")
+        )
+        if len(payload) < TREE_PAGE_SIZE:
+            return paths, False
+    return paths, True
+
+
 def list_tree(
     repo: Repo, sha: str, cache_dir: str, offline: bool = False
 ) -> tuple[list[str], bool]:
     """Every blob path at one revision, and whether the forge truncated it."""
+    if repo.family == "gitlab":
+        return _gitlab_tree(repo, sha, cache_dir, offline)
     url = _tree_url(repo, sha)
     if url is None:
         return [], True

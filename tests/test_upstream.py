@@ -59,6 +59,7 @@ class TestParseRepo(unittest.TestCase):
         for url in (
             "https://git.citron-emu.org/citron/emu",
             "https://git.eden-emu.dev/eden-emu/eden",
+            "https://git.ryujinx.app/projects/Kenji-NX",
         ):
             self.assertEqual(parse_repo(url).family, "forgejo")
 
@@ -139,7 +140,7 @@ class TestTokenScope(unittest.TestCase):
         self.assertNotIn("Authorization", h)
 
     def test_withheld_from_forgejo_instances(self):
-        for host in ("git.citron-emu.org", "git.eden-emu.dev"):
+        for host in ("git.citron-emu.org", "git.eden-emu.dev", "git.ryujinx.app"):
             h = upstream._headers(f"https://{host}/api/v1/repos/o/n/commits")
             self.assertNotIn("Authorization", h, host)
 
@@ -474,6 +475,58 @@ class TestCompare(unittest.TestCase):
         self.assertEqual(
             upstream.commits_touching(self.repo, "a.c", "base", self.dir), 3
         )
+
+
+class TestGitlabTree(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.dir = self.tmp.name
+        self.repo = upstream.parse_repo("https://gitlab.com/g/p")
+        self.pages: dict[int, object] = {}
+        self._orig = (upstream._http_json, upstream._http_text)
+
+        def fake(url):
+            page = int(url.rsplit("page=", 1)[1])
+            payload = self.pages.get(page)
+            if payload == "boom":
+                raise upstream.UpstreamError(url)
+            return payload
+
+        upstream._http_json = fake
+
+    def tearDown(self):
+        upstream._http_json, upstream._http_text = self._orig
+        self.tmp.cleanup()
+
+    def _blobs(self, *names):
+        return [{"type": "blob", "path": name} for name in names]
+
+    def test_single_page_is_complete(self):
+        self.pages[1] = self._blobs("src/a.c", "src/b.c") + [
+            {"type": "tree", "path": "src"}
+        ]
+        paths, truncated = upstream.list_tree(self.repo, "sha", self.dir)
+        self.assertEqual(paths, ["src/a.c", "src/b.c"])
+        self.assertFalse(truncated)
+
+    def test_pages_accumulate_until_a_short_one(self):
+        self.pages[1] = self._blobs(
+            *[f"f{i}.c" for i in range(upstream.TREE_PAGE_SIZE)]
+        )
+        self.pages[2] = self._blobs("last.c")
+        paths, truncated = upstream.list_tree(self.repo, "sha", self.dir)
+        self.assertEqual(len(paths), upstream.TREE_PAGE_SIZE + 1)
+        self.assertIn("last.c", paths)
+        self.assertFalse(truncated)
+
+    def test_unreadable_page_reports_truncation(self):
+        self.pages[1] = self._blobs(
+            *[f"f{i}.c" for i in range(upstream.TREE_PAGE_SIZE)]
+        )
+        self.pages[2] = None
+        paths, truncated = upstream.list_tree(self.repo, "sha", self.dir)
+        self.assertEqual(len(paths), upstream.TREE_PAGE_SIZE)
+        self.assertTrue(truncated)
 
 
 if __name__ == "__main__":

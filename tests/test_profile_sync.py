@@ -6,6 +6,7 @@ import contextlib
 import io
 import json
 import os
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -31,6 +32,7 @@ from profile_sync import (
     build_report,
     bump_commit,
     check_version,
+    collect_citations,
     collect_tokens,
     declared_hashes,
     declared_names,
@@ -1963,6 +1965,613 @@ class TestDriftScore(unittest.TestCase):
     def test_clean_profile_scores_zero(self):
         report = ProfileReport(name="a", entries=[], counts={"ANCHORED": 5})
         self.assertEqual(drift_score(report, None, 0), 0)
+
+
+class TestCollectCitations(unittest.TestCase):
+    def test_files_refs_in_document_order(self):
+        document = {
+            "files": [
+                {"name": "a.bin", "source_ref": "a.c:1"},
+                {"name": "b.bin"},
+                {"name": "c.bin", "source_ref": "c.c:3"},
+            ],
+        }
+        refs = [c for c in collect_citations(document) if c.kind == "ref"]
+        self.assertEqual([c.ref for c in refs], ["a.c:1", "c.c:3"])
+        self.assertEqual(refs[0].field, "files[a.bin].source_ref")
+        self.assertIs(refs[0].entry, document["files"][0])
+
+    def test_data_directories_refs_are_citations_too(self):
+        document = {
+            "data_directories": [
+                {"key": "sys", "source_ref": "loader.cpp:44"},
+            ],
+        }
+        refs = collect_citations(document)
+        self.assertEqual(len(refs), 1)
+        self.assertEqual(refs[0].kind, "ref")
+        self.assertEqual(refs[0].ref, "loader.cpp:44")
+
+    def test_mode_keyed_ref_keeps_its_label(self):
+        document = {
+            "files": [
+                {
+                    "name": "a.bin",
+                    "source_ref": {"standalone": "a.c:1", "libretro": "b.c:2"},
+                },
+            ],
+        }
+        refs = collect_citations(document)
+        self.assertEqual(
+            [(c.label, c.ref) for c in refs],
+            [("standalone", "a.c:1"), ("libretro", "b.c:2")],
+        )
+
+    def test_notes_citation_with_continuation_run(self):
+        document = {
+            "notes": "The reset path (main.c:112,1624-1633) runs first.\n",
+        }
+        prose = collect_citations(document)
+        self.assertEqual(len(prose), 1)
+        self.assertEqual(prose[0].kind, "prose")
+        self.assertEqual(prose[0].field, "notes")
+        self.assertEqual(prose[0].ref, "main.c:112,1624-1633")
+        self.assertEqual(
+            [(p.path, p.start, p.end) for p in prose[0].parts],
+            [("main.c", 112, 112), ("main.c", 1624, 1633)],
+        )
+
+    def test_spans_locate_the_tokens_on_the_line(self):
+        document = {"notes": "See main.c:112,1624-1633 for the boot path.\n"}
+        citation = collect_citations(document)[0]
+        line = document["notes"].splitlines()[citation.line]
+        self.assertEqual(line[slice(*citation.path_span)], "main.c")
+        self.assertEqual(
+            [line[lo:hi] for lo, hi in citation.spans], ["112", "1624-1633"]
+        )
+
+    def test_comma_space_is_prose_not_a_continuation(self):
+        document = {"notes": "x.c:100, 200 files are read.\n"}
+        citation = collect_citations(document)[0]
+        self.assertEqual(citation.ref, "x.c:100")
+
+    def test_a_url_port_is_not_a_citation(self):
+        document = {"notes": "Served from https://example.com:8080/path.\n"}
+        self.assertEqual(collect_citations(document), [])
+
+    def test_version_and_ratio_text_is_not_a_citation(self):
+        document = {"notes": "Since v1.6.0:123 the ratio 16:9 applies.\n"}
+        self.assertEqual(collect_citations(document), [])
+
+    def test_nested_note_and_exclusion_note_are_scanned(self):
+        document = {
+            "exclusion_note": "Loaded by hook.c:655 at boot.",
+            "files": [
+                {"name": "a.bin", "note": "Table at data.rs:12-20."},
+            ],
+        }
+        fields = {c.field for c in collect_citations(document)}
+        self.assertEqual(fields, {"exclusion_note", "files[a.bin].note"})
+
+    def test_string_inside_a_list_is_scanned(self):
+        document = {
+            "analysis": {"entries": ["checked in geo.c:234-243"]},
+        }
+        citation = collect_citations(document)[0]
+        self.assertEqual(citation.field, "analysis.entries[0]")
+        self.assertEqual(citation.ref, "geo.c:234-243")
+
+    def test_whole_value_pseudo_ref_is_a_prose_citation(self):
+        document = {"analysis": {"upstream_ref": "src/a.c:12-20"}}
+        citation = collect_citations(document)[0]
+        self.assertEqual(citation.kind, "prose")
+        self.assertEqual(citation.ref, "src/a.c:12-20")
+
+    def test_two_runs_on_one_line_stay_separate(self):
+        document = {"notes": "hook.c:655-709 and hook.c:874-928 serve it.\n"}
+        refs = [c.ref for c in collect_citations(document)]
+        self.assertEqual(refs, ["hook.c:655-709", "hook.c:874-928"])
+
+    def test_trailing_comma_stays_prose(self):
+        document = {"notes": "boot (pif.c:252-260,\nthen the response).\n"}
+        citation = collect_citations(document)[0]
+        self.assertEqual(citation.ref, "pif.c:252-260")
+
+    def test_continuation_ending_a_sentence_is_kept(self):
+        document = {"notes": "It reads b.c:2,8-9. Then it boots.\n"}
+        citation = collect_citations(document)[0]
+        self.assertEqual(citation.ref, "b.c:2,8-9")
+
+    def test_decimal_number_is_not_a_continuation(self):
+        document = {"notes": "Set at x.c:1,2.5 percent of the frame.\n"}
+        citation = collect_citations(document)[0]
+        self.assertEqual(citation.ref, "x.c:1")
+
+    def test_dotfile_keeps_its_leading_dot(self):
+        document = {"notes": "Built by CI (.gitlab-ci.yml:306) nightly.\n"}
+        citation = collect_citations(document)[0]
+        self.assertEqual(citation.ref, ".gitlab-ci.yml:306")
+        self.assertEqual(citation.parts[0].path, ".gitlab-ci.yml")
+        line = document["notes"].splitlines()[0]
+        self.assertEqual(line[slice(*citation.path_span)], ".gitlab-ci.yml")
+
+    def test_sentence_dot_is_not_a_dotfile(self):
+        document = {"notes": "It runs on boot.data.c:12 is the table.\n"}
+        citation = collect_citations(document)[0]
+        self.assertEqual(citation.parts[0].path, "boot.data.c")
+
+    def test_external_project_prefix_is_skipped(self):
+        document = {
+            "notes": "ref: mt32_model.cpp:36-97, munt ROMInfo.cpp:206-213\n"
+        }
+        refs = [c.ref for c in collect_citations(document)]
+        self.assertEqual(refs, ["mt32_model.cpp:36-97"])
+
+    def test_linking_word_is_not_a_project(self):
+        document = {"notes": "It boots, in libretro.cpp:12 as shown.\n"}
+        refs = [c.ref for c in collect_citations(document)]
+        self.assertEqual(refs, ["libretro.cpp:12"])
+
+    def test_spaced_range_continuation_is_part_of_the_run(self):
+        document = {
+            "notes": "ref: soundcanvas.cpp:55-71, 80-147, Ext plugin.cpp:23\n"
+        }
+        citations = collect_citations(document)
+        self.assertEqual(len(citations), 1)
+        self.assertEqual(citations[0].ref, "soundcanvas.cpp:55-71, 80-147")
+        self.assertEqual(
+            [(p.start, p.end) for p in citations[0].parts],
+            [(55, 71), (80, 147)],
+        )
+
+    def test_spaced_lone_number_stays_prose(self):
+        document = {"notes": "It reads x.c:100, 200 files at boot.\n"}
+        citation = collect_citations(document)[0]
+        self.assertEqual(citation.ref, "x.c:100")
+
+    def test_declared_repository_name_is_not_external(self):
+        document = {
+            "upstream": "https://github.com/o/mednafen",
+            "notes": "ref: geo.c:1-2, mednafen src/lynx/rom.cpp:55-74\n",
+        }
+        refs = [c.ref for c in collect_citations(document)]
+        self.assertEqual(refs, ["geo.c:1-2", "src/lynx/rom.cpp:55-74"])
+
+    def test_punctuation_before_the_path_is_not_a_project(self):
+        document = {"notes": "loads it (-framefile); singe_utils.cpp:35-42\n"}
+        refs = [c.ref for c in collect_citations(document)]
+        self.assertEqual(refs, ["singe_utils.cpp:35-42"])
+
+    def test_the_word_upstream_is_prose(self):
+        document = {"notes": "same shape (upstream retro_host.c:196-198).\n"}
+        refs = [c.ref for c in collect_citations(document)]
+        self.assertEqual(refs, ["retro_host.c:196-198"])
+
+
+class TestCitationSurfaceGuard(unittest.TestCase):
+    def test_no_consumer_rederives_source_ref(self):
+        """collect_citations is the only reader of source_ref values.
+
+        A consumer keying on the field name reopens the gap this closes:
+        citations outside its list rot while the pin advances. The walker
+        matches the key once; everything else goes through the collector.
+        """
+        source = Path(profile_sync.__file__).read_text(encoding="utf-8")
+        self.assertNotIn('.get("source_ref")', source)
+        self.assertEqual(source.count('== "source_ref"'), 1)
+
+
+PROSE_SAMPLE = '''emulator: Test
+source: "https://github.com/o/n"
+profiled_date: "2026-03-29"
+source_commit: "pin"
+
+notes: |
+  The loader appends dc/ to the system directory (a.c:10) and reads
+  both ranges (b.c:2,8-9) on boot.
+
+files:
+  - name: "a.bin"
+    source_ref: "a.c:10-12"
+'''
+
+
+class TestRebaseProse(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.path = Path(self.tmp.name) / "p.yml"
+        self.path.write_text(PROSE_SAMPLE, encoding="utf-8")
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def _report(self, entries, counts=None):
+        return ProfileReport(
+            name="p", repo="o/n", pin="pin", head="head",
+            entries=entries, counts=counts or {},
+        )
+
+    def _prose_entry(self, ref, parts, field="notes"):
+        status = worst_status([p.status for p in parts])
+        return EntryReport(field, ref, status, parts, "prose", field)
+
+    def test_shifted_prose_run_moves_and_the_sentence_stays(self):
+        part = PartResult(RefPart("a.c", 10, 10, "10"), "SHIFTED", None, 14, 14, [])
+        applied = rebase_refs(
+            self.path, self._report([self._prose_entry("a.c:10", [part])])
+        )
+        self.assertEqual(applied, ["notes: a.c:10 -> a.c:14"])
+        text = self.path.read_text()
+        self.assertIn("system directory (a.c:14) and reads", text)
+        self.assertEqual(
+            yaml.safe_load(text)["notes"].count("a.c:14"), 1
+        )
+
+    def test_continuation_ranges_move_together(self):
+        parts = [
+            PartResult(RefPart("b.c", 2, 2, "2"), "SHIFTED", None, 5, 5, []),
+            PartResult(RefPart("b.c", 8, 9, "8-9"), "SHIFTED", None, 11, 12, []),
+        ]
+        applied = rebase_refs(
+            self.path, self._report([self._prose_entry("b.c:2,8-9", parts)])
+        )
+        self.assertEqual(applied, ["notes: b.c:2,8-9 -> b.c:5,11-12"])
+        self.assertIn("both ranges (b.c:5,11-12) on boot", self.path.read_text())
+
+    def test_prose_and_structured_move_in_one_pass(self):
+        prose = PartResult(RefPart("a.c", 10, 10, "10"), "SHIFTED", None, 14, 14, [])
+        structured = PartResult(RefPart("a.c", 10, 12), "SHIFTED", None, 14, 16, [])
+        applied = rebase_refs(
+            self.path,
+            self._report([
+                self._prose_entry("a.c:10", [prose]),
+                EntryReport("a.bin", "a.c:10-12", "SHIFTED", [structured]),
+            ]),
+        )
+        self.assertEqual(len(applied), 2)
+        text = self.path.read_text()
+        self.assertIn('source_ref: "a.c:14-16"', text)
+        self.assertIn("(a.c:14)", text)
+
+    def test_review_status_blocks_prose_too(self):
+        part = PartResult(RefPart("a.c", 10, 10, "10"), "SHIFTED", None, 14, 14, [])
+        report = self._report(
+            [self._prose_entry("a.c:10", [part])], counts={"GONE": 1}
+        )
+        self.assertEqual(rebase_refs(self.path, report), [])
+        self.assertIn("(a.c:10)", self.path.read_text())
+
+    def test_ambiguous_sentence_location_is_left_alone(self):
+        text = PROSE_SAMPLE.replace(
+            "files:",
+            'quirks: |\n  The loader appends dc/ to the system directory '
+            '(a.c:10) and reads\n  nothing else.\nfiles:',
+        )
+        self.path.write_text(text, encoding="utf-8")
+        part = PartResult(RefPart("a.c", 10, 10, "10"), "SHIFTED", None, 14, 14, [])
+        applied = rebase_refs(
+            self.path, self._report([self._prose_entry("a.c:10", [part])])
+        )
+        self.assertEqual(applied, [])
+        self.assertEqual(self.path.read_text(), text)
+
+    def test_folded_scalar_moves_through_its_run_token(self):
+        text = PROSE_SAMPLE.replace(
+            "files:",
+            "quirk_note: >\n  Loaded beside the card\n  (q.c:7). Checked"
+            " later.\nfiles:",
+        )
+        self.path.write_text(text, encoding="utf-8")
+        part = PartResult(RefPart("q.c", 7, 7, "7"), "SHIFTED", None, 9, 9, [])
+        applied = rebase_refs(
+            self.path,
+            self._report([self._prose_entry("q.c:7", [part], "quirk_note")]),
+        )
+        self.assertEqual(applied, ["quirk_note: q.c:7 -> q.c:9"])
+        content = self.path.read_text()
+        self.assertIn("(q.c:9). Checked", content)
+        self.assertIn(
+            "(q.c:9).", yaml.safe_load(content)["quirk_note"]
+        )
+
+    def test_parts_disagreeing_on_the_new_file_do_not_move(self):
+        parts = [
+            PartResult(RefPart("b.c", 2, 2, "2"), "RENAMED", "src/b.c", 5, 5, []),
+            PartResult(RefPart("b.c", 8, 9, "8-9"), "RENAMED", "old/b.c", 11, 12, []),
+        ]
+        applied = rebase_refs(
+            self.path, self._report([self._prose_entry("b.c:2,8-9", parts)])
+        )
+        self.assertEqual(applied, [])
+
+    def test_renamed_prose_path_is_rewritten(self):
+        part = PartResult(
+            RefPart("a.c", 10, 10, "10"), "RENAMED", "src/a.c", 14, 14, []
+        )
+        applied = rebase_refs(
+            self.path, self._report([self._prose_entry("a.c:10", [part])])
+        )
+        self.assertEqual(applied, ["notes: a.c:10 -> src/a.c:14"])
+        self.assertIn("(src/a.c:14)", self.path.read_text())
+
+
+class TestPendingProse(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.path = Path(self.tmp.name) / "p.yml"
+        self.path.write_text(PROSE_SAMPLE, encoding="utf-8")
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def _report(self, parts):
+        status = worst_status([p.status for p in parts])
+        entry = EntryReport("notes", "a.c:10", status, parts, "prose", "notes")
+        return ProfileReport(
+            name="p", repo="o/n", pin="pin", head="newhead",
+            entries=[entry], counts={status: 1},
+        )
+
+    def test_moved_prose_still_in_the_file_blocks_the_pin(self):
+        part = PartResult(RefPart("a.c", 10, 10, "10"), "SHIFTED", None, 14, 14, [])
+        report = self._report([part])
+        text = self.path.read_text()
+        self.assertEqual(profile_sync.pending_recale(report, text=text), 1)
+        self.assertFalse(bump_commit(self.path, report))
+        self.assertEqual(
+            yaml.safe_load(self.path.read_text())["source_commit"], "pin"
+        )
+
+    def test_recaled_prose_lets_the_pin_advance(self):
+        part = PartResult(RefPart("a.c", 10, 10, "10"), "SHIFTED", None, 14, 14, [])
+        report = self._report([part])
+        rebase_refs(self.path, report)
+        self.assertTrue(bump_commit(self.path, report))
+        self.assertEqual(
+            yaml.safe_load(self.path.read_text())["source_commit"], "newhead"
+        )
+
+    def test_anchored_prose_never_blocks(self):
+        part = PartResult(RefPart("a.c", 10, 10, "10"), "ANCHORED", None, None, None, [])
+        report = self._report([part])
+        self.assertEqual(
+            profile_sync.pending_recale(report, text=self.path.read_text()), 0
+        )
+        self.assertTrue(bump_commit(self.path, report))
+
+    def test_unwritable_prose_blocks_the_pin(self):
+        text = PROSE_SAMPLE.replace(
+            "files:",
+            'quirks: |\n  The loader appends dc/ to the system directory '
+            '(a.c:10) and reads\n  nothing else.\nfiles:',
+        )
+        self.path.write_text(text, encoding="utf-8")
+        part = PartResult(RefPart("a.c", 10, 10, "10"), "SHIFTED", None, 14, 14, [])
+        report = self._report([part])
+        self.assertEqual(rebase_refs(self.path, report), [])
+        self.assertFalse(bump_commit(self.path, report))
+
+
+class TestRealignProse(unittest.TestCase):
+    """A prose scalar written under an older pin realigns from that pin."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.dir = Path(self.tmp.name)
+        self.path = self.dir / "p.yml"
+        self.files: dict[tuple[str, str], list[str]] = {}
+        self._orig = (
+            profile_sync.upstream.fetch_file,
+            profile_sync.upstream.list_tree,
+        )
+        profile_sync.upstream.fetch_file = (
+            lambda repo, sha, path, cache_dir, offline=False: self.files.get(
+                (sha, path)
+            )
+        )
+        profile_sync.upstream.list_tree = (
+            lambda repo, sha, cache_dir, offline=False: (
+                sorted({p for _, p in self.files}), False
+            )
+        )
+
+    def tearDown(self):
+        (
+            profile_sync.upstream.fetch_file,
+            profile_sync.upstream.list_tree,
+        ) = self._orig
+        self.tmp.cleanup()
+
+    def _git(self, *argv):
+        subprocess.run(
+            ["git", "-c", "commit.gpgsign=false", *argv],
+            cwd=self.dir, capture_output=True, check=True,
+        )
+
+    def _commit(self, text, message):
+        self.path.write_text(text, encoding="utf-8")
+        self._git("add", "p.yml")
+        self._git("commit", "-m", message)
+
+    def _repo_with_advanced_pin(self):
+        self._git("init", "-q")
+        self._git("config", "user.email", "t@t")
+        self._git("config", "user.name", "t")
+        written = PROSE_SAMPLE.replace('"pin"', '"oldpin"')
+        self._commit(written, "profile")
+        self._commit(PROSE_SAMPLE, "advance pin")
+
+    def test_run_realigns_from_the_writing_pin(self):
+        self._repo_with_advanced_pin()
+        # At the writing pin line 10 is the subject; at the current pin the
+        # same content sits on line 14. Anchoring from the current pin would
+        # track whatever occupies line 10 there instead.
+        self.files[("oldpin", "a.c")] = ["x"] * 9 + ["subject"]
+        self.files[("pin", "a.c")] = ["x"] * 13 + ["subject"]
+        self.files[("oldpin", "b.c")] = ["p", "two", "q", "r", "s", "t", "u", "eight", "nine"]
+        self.files[("pin", "b.c")] = ["p", "two", "q", "r", "s", "t", "u", "eight", "nine"]
+        messages = profile_sync.realign_prose(self.path, self.tmp.name)
+        self.assertIn("notes: a.c:10 -> a.c:14", messages)
+        text = self.path.read_text()
+        self.assertIn("(a.c:14)", text)
+        self.assertIn("(b.c:2,8-9)", text)
+        self.assertEqual(
+            yaml.safe_load(text)["source_commit"], "pin",
+        )
+
+    def test_dry_run_writes_nothing(self):
+        self._repo_with_advanced_pin()
+        self.files[("oldpin", "a.c")] = ["x"] * 9 + ["subject"]
+        self.files[("pin", "a.c")] = ["x"] * 13 + ["subject"]
+        self.files[("oldpin", "b.c")] = list("pqrstuvwx")
+        self.files[("pin", "b.c")] = list("pqrstuvwx")
+        messages = profile_sync.realign_prose(
+            self.path, self.tmp.name, dry_run=True
+        )
+        self.assertTrue(any("would recale" in m for m in messages))
+        self.assertIn("(a.c:10)", self.path.read_text())
+
+    def test_scalar_written_at_the_current_pin_is_left_alone(self):
+        self._git("init", "-q")
+        self._git("config", "user.email", "t@t")
+        self._git("config", "user.name", "t")
+        self._commit(PROSE_SAMPLE, "profile")
+        self.files[("pin", "a.c")] = ["x"] * 9 + ["subject"]
+        self.assertEqual(
+            profile_sync.realign_prose(self.path, self.tmp.name), []
+        )
+
+    def test_range_lost_between_the_pins_is_reported_not_moved(self):
+        self._repo_with_advanced_pin()
+        self.files[("oldpin", "a.c")] = ["x"] * 9 + ["subject"]
+        self.files[("pin", "a.c")] = ["y"] * 20
+        self.files[("oldpin", "b.c")] = list("pqrstuvwx")
+        self.files[("pin", "b.c")] = list("pqrstuvwx")
+        messages = profile_sync.realign_prose(self.path, self.tmp.name)
+        self.assertTrue(any("read again" in m for m in messages))
+        self.assertIn("(a.c:10)", self.path.read_text())
+
+    def test_unreadable_tree_is_not_an_absence(self):
+        self._git("init", "-q")
+        self._git("config", "user.email", "t@t")
+        self._git("config", "user.name", "t")
+        base = PROSE_SAMPLE.replace("(a.c:10)", "(deep.c:10)")
+        self._commit(base.replace('"pin"', '"oldpin"'), "profile")
+        self._commit(base, "advance pin")
+        profile_sync.upstream.list_tree = (
+            lambda repo, sha, cache_dir, offline=False: ([], True)
+        )
+        self.files[("oldpin", "b.c")] = list("pqrstuvwx")
+        self.files[("pin", "b.c")] = list("pqrstuvwx")
+        messages = profile_sync.realign_prose(self.path, self.tmp.name)
+        self.assertTrue(
+            any("tree unreadable" in m for m in messages), messages
+        )
+        self.assertFalse(any("absent at the writing" in m for m in messages))
+
+    def test_several_paths_carrying_the_name_stay_unclear(self):
+        self._git("init", "-q")
+        self._git("config", "user.email", "t@t")
+        self._git("config", "user.name", "t")
+        base = PROSE_SAMPLE.replace("(a.c:10)", "(deep.c:10)")
+        self._commit(base.replace('"pin"', '"oldpin"'), "profile")
+        self._commit(base, "advance pin")
+        self.files[("oldpin", "src/deep.c")] = ["x"]
+        self.files[("oldpin", "contrib/deep.c")] = ["y"]
+        self.files[("oldpin", "b.c")] = list("pqrstuvwx")
+        self.files[("pin", "b.c")] = list("pqrstuvwx")
+        messages = profile_sync.realign_prose(self.path, self.tmp.name)
+        self.assertTrue(
+            any("2 paths carry the name" in m for m in messages), messages
+        )
+
+    def test_bare_filename_resolves_through_the_tree(self):
+        self._git("init", "-q")
+        self._git("config", "user.email", "t@t")
+        self._git("config", "user.name", "t")
+        base = PROSE_SAMPLE.replace("(a.c:10)", "(deep.c:10)")
+        self._commit(base.replace('"pin"', '"oldpin"'), "profile")
+        self._commit(base, "advance pin")
+        self.files[("oldpin", "src/deep.c")] = ["x"] * 9 + ["subject"]
+        self.files[("pin", "src/deep.c")] = ["x"] * 13 + ["subject"]
+        self.files[("oldpin", "b.c")] = list("pqrstuvwx")
+        self.files[("pin", "b.c")] = list("pqrstuvwx")
+        messages = profile_sync.realign_prose(self.path, self.tmp.name)
+        self.assertIn("notes: deep.c:10 -> deep.c:14", messages)
+        self.assertIn("(deep.c:14)", self.path.read_text())
+
+
+class TestRealignFlagMatrix(unittest.TestCase):
+    """--realign-prose applies a flag or refuses it, never swallows it."""
+
+    def _run(self, *extra):
+        argv = ["profile_sync.py", "--emulator", "x", "--realign-prose", *extra]
+        stderr = io.StringIO()
+        saved = sys.argv
+        try:
+            sys.argv = argv
+            with contextlib.redirect_stderr(stderr):
+                with self.assertRaises(SystemExit) as caught:
+                    profile_sync.main()
+        finally:
+            sys.argv = saved
+        return caught.exception.code, stderr.getvalue()
+
+    def test_output_flags_are_refused(self):
+        for flag in (
+            "--json", "--markdown", "--fetch-plan", "--triage",
+            "--changed-only", "--check-version", "--detect-new-files",
+            "--watch-hashes", "--full-diff", "--tree-diff",
+            "--accept-changed",
+        ):
+            code, err = self._run(flag)
+            self.assertEqual(code, 1, flag)
+            self.assertIn("does not apply", err, flag)
+
+    def test_write_flags_are_refused(self):
+        for flag in ("--rebase-refs", "--bump-commit", "--backfill-commits"):
+            code, err = self._run(flag)
+            self.assertEqual(code, 1, flag)
+            self.assertIn("runs alone", err, flag)
+
+
+class TestBuildReportProse(TestBuildReport):
+    """Prose citations run through the same anchoring as source_refs."""
+
+    def test_notes_citation_is_anchored_and_counted(self):
+        profile = self._profile(["a.c:2"])
+        profile["notes"] = "The loader reads it (a.c:2).\n"
+        self.files[("pinsha", "a.c")] = ["x", "hit", "y"]
+        self.files[("headsha", "a.c")] = ["pad", "x", "hit", "y"]
+        report = build_report("test", profile, self.dir)
+        self.assertEqual(report.counts["SHIFTED"], 2)
+        prose = [e for e in report.entries if e.kind == "prose"]
+        self.assertEqual(len(prose), 1)
+        self.assertEqual(prose[0].name, "notes")
+        self.assertEqual(prose[0].field, "notes")
+        self.assertEqual(prose[0].parts[0].start, 3)
+
+    def test_gone_prose_citation_needs_review(self):
+        profile = self._profile(["a.c:2"])
+        profile["notes"] = "Written by lost.c:9 at boot.\n"
+        self.files[("pinsha", "a.c")] = ["x", "hit"]
+        self.files[("headsha", "a.c")] = ["x", "hit"]
+        report = build_report("test", profile, self.dir)
+        self.assertEqual(report.counts.get("GONE"), 1)
+        self.assertEqual(report.needs_review(), 1)
+
+    def test_prose_only_profile_is_not_skipped(self):
+        profile = {
+            "emulator": "T",
+            "source": "https://github.com/o/n",
+            "profiled_date": "2026-03-29",
+            "notes": "Boot path in a.c:2.\n",
+        }
+        self.files[("pinsha", "a.c")] = ["x", "hit"]
+        self.files[("headsha", "a.c")] = ["x", "hit"]
+        report = build_report("test", profile, self.dir)
+        self.assertIsNone(report.skipped)
+        self.assertEqual(report.entries[0].kind, "prose")
 
 
 if __name__ == "__main__":
