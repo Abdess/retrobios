@@ -116,6 +116,52 @@ class BothConsumersAgree(unittest.TestCase):
         )
 
 
+class ThePolicyIsSpeltInOnePlace(unittest.TestCase):
+    """Consumers ask the module; they do not re-spell the rule.
+
+    Four sites still compared the mode to a literal after this module existed,
+    and one of them dispatched an unknown mode to MD5 verification while
+    compute_severity was scoring it as existence.
+    """
+
+    LITERALS = ('!= "existence"', '== "existence"', 'in ("md5", "sha1")')
+
+    def test_no_consumer_compares_the_mode_to_a_literal(self):
+        scripts = Path(__file__).resolve().parent.parent / "scripts"
+        offenders = []
+        for path in sorted(scripts.glob("*.py")):
+            if path.name == "nativemode.py":
+                continue
+            for number, line in enumerate(path.read_text().splitlines(), 1):
+                if any(literal in line for literal in self.LITERALS):
+                    offenders.append(f"{path.name}:{number}: {line.strip()}")
+        self.assertEqual(
+            offenders, [],
+            "route these through nativemode: " + "; ".join(offenders),
+        )
+
+    def test_an_unknown_mode_verifies_the_way_it_is_scored(self):
+        """A typo in a platform YAML must not verify one way and score another."""
+        import verify
+
+        self.assertFalse(nativemode.reads_file_contents("sha256"))
+        self.assertEqual(
+            verify.compute_severity(verify.Status.MISSING, True, "sha256"),
+            verify.Severity.WARNING,
+        )
+        config = {
+            "platform": "Typo",
+            "verification_mode": "shaa1",
+            "systems": {},
+            "cores": [],
+        }
+        result = verify.verify_platform(
+            config, {"files": {}, "indexes": {}}, emu_profiles={},
+            supplemental_names=set(),
+        )
+        self.assertEqual(result["verification_mode"], nativemode.DEFAULT_MODE)
+
+
 class GapAnalysisAgreesWithTheBuilder(unittest.TestCase):
     """"Available" must mean the pack will carry it.
 

@@ -53,7 +53,12 @@ from common import (
 )
 
 yaml = require_yaml()
-from nativemode import hash_mismatch_excludes_file, reads_file_contents
+from nativemode import (
+    digest_algorithm,
+    hash_mismatch_excludes_file,
+    normalize as normalize_mode,
+    reads_file_contents,
+)
 from validation import (
     _build_validation_index,
     _parse_validation,
@@ -764,7 +769,9 @@ def verify_platform(
     A region priority list narrows the report to the files a pack built with the
     same list would carry, using the same selection function as the builder.
     """
-    mode = config.get("verification_mode", "existence")
+    # Normalized once: a typo in a platform YAML must not verify with one
+    # mode and be scored with another.
+    mode = normalize_mode(config.get("verification_mode"))
     platform = config.get("platform", "unknown")
 
     has_zipped = any(
@@ -842,14 +849,14 @@ def verify_platform(
                 zip_contents,
                 data_dir_registry=data_dir_registry,
             )
-            if mode == "existence":
+            if not reads_file_contents(mode):
                 result = verify_entry_existence(
                     file_entry,
                     local_path,
                     validation_index,
                     db,
                 )
-            elif mode == "sha1":
+            elif digest_algorithm(mode) == "sha1":
                 result = verify_entry_sha1(file_entry, local_path)
             else:
                 result = verify_entry_md5(file_entry, local_path, resolve_status)
@@ -1158,7 +1165,7 @@ def print_platform_result(
     problems = total - ok_count
 
     # Summary line
-    if mode == "existence":
+    if not reads_file_contents(mode):
         if problems:
             missing = c.get(Severity.WARNING, 0) + c.get(Severity.CRITICAL, 0)
             optional_missing = c.get(Severity.INFO, 0)

@@ -56,7 +56,11 @@ from common import (
 import region as region_mod
 import slot as slot_mod
 from deterministic_zip import _FIXED_DATE_TIME, rebuild_zip_deterministic
-from nativemode import hash_mismatch_excludes_file
+from nativemode import (
+    digest_algorithm,
+    hash_mismatch_excludes_file,
+    reads_file_contents,
+)
 from validation import (
     _build_validation_index,
     check_file_validation,
@@ -1745,7 +1749,9 @@ def generate_pack(
                             file_reasons[dedup_key] = "not found"
                         continue
 
-                if status == "hash_mismatch" and verification_mode != "existence":
+                if status == "hash_mismatch" and hash_mismatch_excludes_file(
+                    verification_mode
+                ):
                     zf_name = file_entry.get("zipped_file")
                     if zf_name and local_path:
                         inner_md5_raw = file_entry.get("md5", "")
@@ -3779,7 +3785,8 @@ def generate_manifest(
                 # hash the local dump contradicts is not a reason to withhold
                 # the file. Hash platforms would reject it, so they omit it.
                 if status in ("not_found", "external") or (
-                    status == "hash_mismatch" and verification_mode != "existence"
+                    status == "hash_mismatch"
+                    and hash_mismatch_excludes_file(verification_mode)
                 ):
                     record_omission(full_dest, file_entry, sys_id, status, None)
                     continue
@@ -4529,19 +4536,20 @@ def verify_pack_against_platform(
         # error when the repo holds a file matching a declaration: without
         # one, the pack ships its best effort and the gap is a data issue
         # reported by verify.py, not a generation bug.
-        if verification_mode in ("md5", "sha1"):
+        digest = digest_algorithm(verification_mode)
+        if reads_file_contents(verification_mode) and digest:
             for member, decl_entries in decl_by_member.items():
                 checkable = [
                     fe
                     for fe in decl_entries
-                    if str(fe.get(verification_mode) or "").strip()
+                    if str(fe.get(digest) or "").strip()
                 ]
                 if not checkable:
                     continue
                 member_errors = []
                 satisfied = False
                 for fe in checkable:
-                    err = _check_member_hash(zf, member, fe, verification_mode)
+                    err = _check_member_hash(zf, member, fe, digest)
                     if err is None:
                         satisfied = True
                         break

@@ -42,6 +42,7 @@ from common import (
     write_if_changed,
     yaml_load,
 )
+from nativemode import reads_file_contents
 
 yaml = require_yaml()
 from generate_readme import compute_coverage, manifest_totals
@@ -1603,7 +1604,7 @@ def generate_platform_page(
 
     pct_val = cov["present"] / cov["total"] * 100 if cov["total"] else 0
     mode_badge = (
-        "rb-badge-success" if mode in ("md5", "sha1") else "rb-badge-info"
+        "rb-badge-success" if reads_file_contents(mode) else "rb-badge-info"
     )
 
     lines = [
