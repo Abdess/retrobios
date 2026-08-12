@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-12T04:14:50Z",
-  "total_files": 8892,
-  "total_size": 12302132283,
+  "generated_at": "2026-08-12T10:39:36Z",
+  "total_files": 8908,
+  "total_size": 12307787935,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -54408,6 +54408,86 @@
       "crc32": "c4c366fe",
       "adler32": "97ab252c"
     },
+    "58fb1f8ea6cf2d526904349640453e682fe388a1": {
+      "path": "bios/Other/nethersx2-turnip-classic/assets/GameIndex.yaml",
+      "name": "GameIndex.yaml",
+      "size": 1758721,
+      "sha1": "58fb1f8ea6cf2d526904349640453e682fe388a1",
+      "md5": "3f33de7bf8e40e00a05cf27c18a6be0c",
+      "sha256": "036a2eb06bbddaeb654e8d82881e385110671ee77003dc79f9acd0ec477bcbf7",
+      "crc32": "7c34b276",
+      "adler32": "c3b8263f"
+    },
+    "31cbff66380f255d359ff9ee09b6edc06102579a": {
+      "path": "bios/Other/nethersx2-turnip-classic/assets/cheats_ni.zip",
+      "name": "cheats_ni.zip",
+      "size": 223122,
+      "sha1": "31cbff66380f255d359ff9ee09b6edc06102579a",
+      "md5": "fb2a43dcea094a19db4f4bcdc4ad32eb",
+      "sha256": "dfe5bf3c70133a320fcbe1670b5de08492bd966db2ea383c0388b3df105937d7",
+      "crc32": "53325491",
+      "adler32": "2a4e6b01"
+    },
+    "1caae7ddf0cbba5f1f6d7404b2309300d913778c": {
+      "path": "bios/Other/nethersx2-turnip-classic/assets/cheats_ws.zip",
+      "name": "cheats_ws.zip",
+      "size": 1694454,
+      "sha1": "1caae7ddf0cbba5f1f6d7404b2309300d913778c",
+      "md5": "cc19970629feb0a25b9b95263194f08f",
+      "sha256": "3dd0d5abcf09ac4c0f8419b410b21d11e824af12f9b7df860a668d59156bcb87",
+      "crc32": "701c8818",
+      "adler32": "dc36b648"
+    },
+    "9c391aae0daddf0c2ba3f0d5265aee9b491286e4": {
+      "path": "bios/Other/nethersx2-turnip-classic/assets/shaders/opengl/common_header.glsl",
+      "name": "common_header.glsl",
+      "size": 1938,
+      "sha1": "9c391aae0daddf0c2ba3f0d5265aee9b491286e4",
+      "md5": "86a37e282f029d20f395cfd05263fddd",
+      "sha256": "97eb2c727c706dd0f5dff162febba223dd6897e4d1041e1755129ac98e8e6808",
+      "crc32": "4c132c8d",
+      "adler32": "d33e1d85"
+    },
+    "26a17de3b4abc30e5c19987efad4ceac22e9a369": {
+      "path": "bios/Other/nethersx2-turnip-classic/assets/shaders/opengl/convert.glsl",
+      "name": "convert.glsl",
+      "size": 10361,
+      "sha1": "26a17de3b4abc30e5c19987efad4ceac22e9a369",
+      "md5": "0dba3321d9f902439a50b79680b220c7",
+      "sha256": "cf37d144a637dd7084cb676f7054b645ff22ee7c7bd79e81885c2c57c7ad3b9b",
+      "crc32": "f42e0c85",
+      "adler32": "60d3106c"
+    },
+    "919c3308c8850852d529d0127ce94e873375bfd2": {
+      "path": "bios/Other/nethersx2-turnip-classic/assets/shaders/opengl/tfx_fs.glsl",
+      "name": "tfx_fs.glsl",
+      "size": 25906,
+      "sha1": "919c3308c8850852d529d0127ce94e873375bfd2",
+      "md5": "9d80855607a6da1014f083340741b845",
+      "sha256": "862a850718a7918603542ffda7e215c05114be6a8d0f7da47aac3d76c974493f",
+      "crc32": "05c1a94b",
+      "adler32": "f96b7610"
+    },
+    "7a133d4cf115dc49cd1921bd7049ea64ad58acce": {
+      "path": "bios/Other/nethersx2-turnip-classic/assets/shaders/vulkan/convert.glsl",
+      "name": "convert.glsl",
+      "size": 8025,
+      "sha1": "7a133d4cf115dc49cd1921bd7049ea64ad58acce",
+      "md5": "553d33859963a1abe5508e8e45f1cb1e",
+      "sha256": "a95015ecce042e1de2b52b06b028ab0352bb14b8c71490e9d1727ad9dcc2bb86",
+      "crc32": "0c9f2c40",
+      "adler32": "1c5486bb"
+    },
+    "b4ebf3f7f20fc88f91cda033552a7489a9ff179c": {
+      "path": "bios/Other/nethersx2-turnip-classic/assets/shaders/vulkan/tfx.glsl",
+      "name": "tfx.glsl",
+      "size": 28290,
+      "sha1": "b4ebf3f7f20fc88f91cda033552a7489a9ff179c",
+      "md5": "ebc0ffa3de6fd0a7a4dea17f8b74d806",
+      "sha256": "f0f9a7c524eaedd5ef42d77d8a4379330f7b43b83e4af297baedbfb8b2bf459d",
+      "crc32": "9b62c7ff",
+      "adler32": "48dc4617"
+    },
     "58807f32c413a0c9db6deb0365f2fac9518e7c86": {
       "path": "bios/Other/opentyrian/cubetxt1.dat",
       "name": "cubetxt1.dat",
@@ -55634,6 +55714,107 @@
       "sha256": "d6ca22d54e21315b8a62780bba4029f6cac78cf2de7c07868adf84a2c00b26bf",
       "crc32": "f6be5e6f",
       "adler32": "b04582b9"
+    },
+    "010db2adfc6f895f6b21762b213dfcf379117883": {
+      "path": "bios/Other/sixtyforce/Overrides.plist",
+      "name": "Overrides.plist",
+      "size": 12855,
+      "sha1": "010db2adfc6f895f6b21762b213dfcf379117883",
+      "md5": "a186e63741e50b76fed4478fd5c59392",
+      "sha256": "af34705241e28088813239bb1068d1c8ff3c1e0b046da15621b1abfcf5d34984",
+      "crc32": "d0477839",
+      "adler32": "bb9b624c"
+    },
+    "38e44c9868c0b8a5a99ec0b6e901a28f617d25bf": {
+      "path": "bios/Other/snes9x-explus/Bio Worm.7z",
+      "name": "Bio Worm.7z",
+      "size": 42479,
+      "sha1": "38e44c9868c0b8a5a99ec0b6e901a28f617d25bf",
+      "md5": "e8d4c0a58ed4b037f3b686b2d0c1be74",
+      "sha256": "488df585dff59ef1898bcbac6e0bc7f388195eb7728065786c0f869dbad0011b",
+      "crc32": "e5b089a7",
+      "adler32": "c4136edc"
+    },
+    "58186fd34a8b9c1929913e2b1d7dc4efa507c160": {
+      "path": "bios/Other/speccy/COUPE.ROM",
+      "name": "COUPE.ROM",
+      "size": 32768,
+      "sha1": "58186fd34a8b9c1929913e2b1d7dc4efa507c160",
+      "md5": "9f40c46cce4008e0548db44f39527914",
+      "sha256": "04bcf498292125fa7143053c9ad2f92eade565b544a1b9b8a9ebd5f8d2621fad",
+      "crc32": "39ff160a",
+      "adler32": "fe14065c",
+      "provenance": {
+        "tosec": {
+          "dat": "Sinclair ZX Spectrum - Firmware - [ROM]",
+          "name": "Sam Coupe v3.x (19xx)(MGT).rom",
+          "description": "Sam Coupe v3.x (19xx)(MGT)"
+        }
+      }
+    },
+    "8466a9da0169666210ccff5d43376d70bae0ae9b": {
+      "path": "bios/Other/speccy/DIDAKTIK.ROM",
+      "name": "DIDAKTIK.ROM",
+      "size": 16384,
+      "sha1": "8466a9da0169666210ccff5d43376d70bae0ae9b",
+      "md5": "28287c397defff765b39bd0660da6d01",
+      "sha256": "dac528146fa9161cff21517a6f70c67829c87f1212d87850b8368784d04936f0",
+      "crc32": "45c29401",
+      "adler32": "fcffecff",
+      "provenance": {
+        "tosec": {
+          "dat": "Sinclair ZX Spectrum - Firmware - [ROM]",
+          "name": "Didaktik Gama 89 (19xx)(Didaktik)(CZ).rom",
+          "description": "Didaktik Gama 89 (19xx)(Didaktik)(CZ)"
+        }
+      }
+    },
+    "582254842091d9f6263652f06c6a86bd54dcf736": {
+      "path": "bios/Other/speccy/PENTAGON.ROM",
+      "name": "PENTAGON.ROM",
+      "size": 49152,
+      "sha1": "582254842091d9f6263652f06c6a86bd54dcf736",
+      "md5": "36e48cd8984702fa9628121f83264ed0",
+      "sha256": "cb510ec5696a766d419b857f92ebb168942fc294e5da61a9b271f77f025273d3",
+      "crc32": "e7bbb552",
+      "adler32": "2a8f391d"
+    },
+    "0b53d51635a2ce3d4e12c2077df9aeffeac02517": {
+      "path": "bios/Other/speccy/ROOT.chts",
+      "name": "ROOT.chts",
+      "size": 1652893,
+      "sha1": "0b53d51635a2ce3d4e12c2077df9aeffeac02517",
+      "md5": "b41d9ebf814806a25438a6d937804e54",
+      "sha256": "df747d4facb4c6b1d818e39e82c1d3179bdf5c6a864b7acbc27961ecca84a150",
+      "crc32": "b58e81f1",
+      "adler32": "04d25c0e"
+    },
+    "66cecdadf992d8adb9c66deee929eb56600dc9bc": {
+      "path": "bios/Other/speccy/SCORPION.ROM",
+      "name": "SCORPION.ROM",
+      "size": 65536,
+      "sha1": "66cecdadf992d8adb9c66deee929eb56600dc9bc",
+      "md5": "b26cba495108d1227aa5124cd9a1456d",
+      "sha256": "07c190ae55887b73916526e49919f2b4a4e6acd68212fdd374e3cf1f7dd5225d",
+      "crc32": "fef73c28",
+      "adler32": "6ffb2550",
+      "provenance": {
+        "tosec": {
+          "dat": "Sinclair ZX Spectrum - Firmware - [ROM]",
+          "name": "Scorpion ZS-256 TURBO+ v2.92 (19xx)(Scorpion)(RU).rom",
+          "description": "Scorpion ZS-256 TURBO+ v2.92 (19xx)(Scorpion)(RU)"
+        }
+      }
+    },
+    "9b8bc3190086774fe6887e975c81e9976e2711ef": {
+      "path": "bios/Other/speccy/ZXS128TR.ROM",
+      "name": "ZXS128TR.ROM",
+      "size": 32768,
+      "sha1": "9b8bc3190086774fe6887e975c81e9976e2711ef",
+      "md5": "44082607f78a3b643f260b0c7e443bbb",
+      "sha256": "722e8afe1b346e3ef07d694e3792ae0d3a5311419b8091f709b7f7ad0e82fca9",
+      "crc32": "ce98811c",
+      "adler32": "b5fbd631"
     },
     "5109af30336443dd3107190b08dfbe8de623445b": {
       "path": "bios/Other/syobonaction/4-clear.ogg",
@@ -99168,6 +99349,14 @@
       "366b45b6c4e9ed8e6b7454eebcb5d010": "26b29f57685d8108cf519c4f1d340d43aacbff6e",
       "f80e78f88892f0b82ad154eee613f537": "aa06cffa086126bb4972674562a5f5c8dc6082f3",
       "4d035ee86f836bfed422a975cf65c9cc": "eb488a76217629f620e40287567d7e2b30337680",
+      "3f33de7bf8e40e00a05cf27c18a6be0c": "58fb1f8ea6cf2d526904349640453e682fe388a1",
+      "fb2a43dcea094a19db4f4bcdc4ad32eb": "31cbff66380f255d359ff9ee09b6edc06102579a",
+      "cc19970629feb0a25b9b95263194f08f": "1caae7ddf0cbba5f1f6d7404b2309300d913778c",
+      "86a37e282f029d20f395cfd05263fddd": "9c391aae0daddf0c2ba3f0d5265aee9b491286e4",
+      "0dba3321d9f902439a50b79680b220c7": "26a17de3b4abc30e5c19987efad4ceac22e9a369",
+      "9d80855607a6da1014f083340741b845": "919c3308c8850852d529d0127ce94e873375bfd2",
+      "553d33859963a1abe5508e8e45f1cb1e": "7a133d4cf115dc49cd1921bd7049ea64ad58acce",
+      "ebc0ffa3de6fd0a7a4dea17f8b74d806": "b4ebf3f7f20fc88f91cda033552a7489a9ff179c",
       "3f2476d9ff29a06cf9fb85d52302222a": "58807f32c413a0c9db6deb0365f2fac9518e7c86",
       "2b199deeccab1042fb02b46c47c2a8d0": "ee7dc2eb87e5a75564382efcd95d13554d3835ba",
       "4229d5532a206aabe7e1fa11a7d8447e": "1ee93623406dc61b50ccb41a97bae769ea15cef2",
@@ -99290,6 +99479,14 @@
       "23b2df744d757d7d9ca56eb57e9be9d8": "199869b8a5020fe59861a507a48078665b57d8dc",
       "3ac30c6220f06a0ef2d179c52e11da75": "f99295c62a62b2e8ed0a22c9d7360fbbb305d1a0",
       "9d9e23b481a9ad6e2ce15ace32344ef1": "c86a4a54d8d06190d937d3906703067e93d24482",
+      "a186e63741e50b76fed4478fd5c59392": "010db2adfc6f895f6b21762b213dfcf379117883",
+      "e8d4c0a58ed4b037f3b686b2d0c1be74": "38e44c9868c0b8a5a99ec0b6e901a28f617d25bf",
+      "9f40c46cce4008e0548db44f39527914": "58186fd34a8b9c1929913e2b1d7dc4efa507c160",
+      "28287c397defff765b39bd0660da6d01": "8466a9da0169666210ccff5d43376d70bae0ae9b",
+      "36e48cd8984702fa9628121f83264ed0": "582254842091d9f6263652f06c6a86bd54dcf736",
+      "b41d9ebf814806a25438a6d937804e54": "0b53d51635a2ce3d4e12c2077df9aeffeac02517",
+      "b26cba495108d1227aa5124cd9a1456d": "66cecdadf992d8adb9c66deee929eb56600dc9bc",
+      "44082607f78a3b643f260b0c7e443bbb": "9b8bc3190086774fe6887e975c81e9976e2711ef",
       "df976d4c51ac403796e2f51643617f92": "5109af30336443dd3107190b08dfbe8de623445b",
       "f7d49d1962bc856bdd3bdc183a9d8ad1": "df6c0e2d1c8116c924fc266211f6ab4c840cb245",
       "6ad5f8890062aa94abb68bdd41039b35": "a96f0daf7da14225eb615f4561bc1d6d4a168601",
@@ -115965,7 +116162,9 @@
         "35910b67070342cdd6ec4d68eb2e56b39d350543",
         "705d20d39a910d58a070fb86780ac58c8007591c",
         "b2a059787ee297654b27f633e37382e239693a36",
-        "b18a236b62e11a85c7ffda6ae60bfb312d6524ef"
+        "b18a236b62e11a85c7ffda6ae60bfb312d6524ef",
+        "26a17de3b4abc30e5c19987efad4ceac22e9a369",
+        "7a133d4cf115dc49cd1921bd7049ea64ad58acce"
       ],
       "imgui.glsl": [
         "04bfcabf518320593dcda8198475c7f39295ef1f",
@@ -116035,11 +116234,13 @@
       ],
       "tfx.glsl": [
         "229d91d96b6dc338421e696fe8cdcfcaa093f40d",
-        "aa06cffa086126bb4972674562a5f5c8dc6082f3"
+        "aa06cffa086126bb4972674562a5f5c8dc6082f3",
+        "b4ebf3f7f20fc88f91cda033552a7489a9ff179c"
       ],
       "tfx_fs.glsl": [
         "d67bfc4ab5c7e550ea41a0491f45b95f395bacac",
-        "00eb0418e7a25c89aaf7c526922fe45d83243ec5"
+        "00eb0418e7a25c89aaf7c526922fe45d83243ec5",
+        "919c3308c8850852d529d0127ce94e873375bfd2"
       ],
       "tfx_vgs.glsl": [
         "f8200a0f4bd284670f0f0191fa9340684e94f66d",
@@ -116921,7 +117122,8 @@
         "486eede1bb748d95efc8a2a3d46ef1a530100559"
       ],
       "ROOT.chts": [
-        "dbbaa1e149d1e3bbf62b1b16c9e23ecf5924636d"
+        "dbbaa1e149d1e3bbf62b1b16c9e23ecf5924636d",
+        "0b53d51635a2ce3d4e12c2077df9aeffeac02517"
       ],
       "names.dat": [
         "bb1a86caeb1b6351da6e7d46ed2051e8e5ec5a15"
@@ -117378,6 +117580,7 @@
       ],
       "GameIndex.yaml": [
         "997fdfb1c1873c1a43972b2984ac0da61fd47b14",
+        "58fb1f8ea6cf2d526904349640453e682fe388a1",
         "57369df9ca82a460e596cea7835c5a0797dee668",
         "b22389650f6c0a1e276b48213fed8a9c1c6476ce",
         "6eddec30056cde7c664a0cf508dcad29353a12bb",
@@ -117385,10 +117588,12 @@
       ],
       "cheats_ni.zip": [
         "0b219dc8b3b98c1705b14758bb7950064b928ebb",
+        "31cbff66380f255d359ff9ee09b6edc06102579a",
         "dec5e4f137890c338babe13cfb9d41ff869fa721"
       ],
       "cheats_ws.zip": [
         "f0d9c66e4793a014cf431ed20e87056e2a96b68e",
+        "1caae7ddf0cbba5f1f6d7404b2309300d913778c",
         "773b4279d8c8e182dc57e444dbf448a1d115e7e0"
       ],
       "faq.html": [
@@ -117501,7 +117706,8 @@
         "2bb4f6eaaea551b141125824675ad5ca94fec3cd"
       ],
       "common_header.glsl": [
-        "3f47597187030144498af7a92531e8f205561211"
+        "3f47597187030144498af7a92531e8f205561211",
+        "9c391aae0daddf0c2ba3f0d5265aee9b491286e4"
       ],
       "cubetxt1.dat": [
         "58807f32c413a0c9db6deb0365f2fac9518e7c86"
@@ -117839,6 +118045,27 @@
       ],
       "libSceXml.sprx": [
         "c86a4a54d8d06190d937d3906703067e93d24482"
+      ],
+      "Overrides.plist": [
+        "010db2adfc6f895f6b21762b213dfcf379117883"
+      ],
+      "Bio Worm.7z": [
+        "38e44c9868c0b8a5a99ec0b6e901a28f617d25bf"
+      ],
+      "COUPE.ROM": [
+        "58186fd34a8b9c1929913e2b1d7dc4efa507c160"
+      ],
+      "DIDAKTIK.ROM": [
+        "8466a9da0169666210ccff5d43376d70bae0ae9b"
+      ],
+      "PENTAGON.ROM": [
+        "582254842091d9f6263652f06c6a86bd54dcf736"
+      ],
+      "SCORPION.ROM": [
+        "66cecdadf992d8adb9c66deee929eb56600dc9bc"
+      ],
+      "ZXS128TR.ROM": [
+        "9b8bc3190086774fe6887e975c81e9976e2711ef"
       ],
       "4-clear.ogg": [
         "5109af30336443dd3107190b08dfbe8de623445b"
@@ -128047,6 +128274,9 @@
       "IPL_JAP.n64": [
         "bf861922dcb78c316360e3e742f4f70ff63c9bc3"
       ],
+      "64dd_ipl_J.bin": [
+        "bf861922dcb78c316360e3e742f4f70ff63c9bc3"
+      ],
       "64DD_IPL_DEV.n64": [
         "10c4173c2a7eb09c6579818f72ef18fa0b6d32de"
       ],
@@ -128056,6 +128286,9 @@
       "boot4.rom": [
         "10c4173c2a7eb09c6579818f72ef18fa0b6d32de"
       ],
+      "64dd_ipl_DEV.bin": [
+        "10c4173c2a7eb09c6579818f72ef18fa0b6d32de"
+      ],
       "64DD_IPL_US.n64": [
         "3c5b93ca231550c68693a14f03cea8d5dbd1be9e"
       ],
@@ -128063,6 +128296,9 @@
         "3c5b93ca231550c68693a14f03cea8d5dbd1be9e"
       ],
       "boot5.rom": [
+        "3c5b93ca231550c68693a14f03cea8d5dbd1be9e"
+      ],
+      "64dd_ipl_U.bin": [
         "3c5b93ca231550c68693a14f03cea8d5dbd1be9e"
       ],
       "nds7.bin": [
@@ -131241,6 +131477,9 @@
       ],
       "MCX_Basic_21_AZERTY": [
         "c8fd92705fc42deb6a0ffac6274e27fd61ecd4cc"
+      ],
+      "BioWorm.7z": [
+        "38e44c9868c0b8a5a99ec0b6e901a28f617d25bf"
       ],
       "OPENBIOS.bin": [
         "389df7981873d9e6e46c84c20cd43af0e4226cf8"
@@ -136598,6 +136837,14 @@
       "9fbe5028": "26b29f57685d8108cf519c4f1d340d43aacbff6e",
       "89fe5a62": "aa06cffa086126bb4972674562a5f5c8dc6082f3",
       "c4c366fe": "eb488a76217629f620e40287567d7e2b30337680",
+      "7c34b276": "58fb1f8ea6cf2d526904349640453e682fe388a1",
+      "53325491": "31cbff66380f255d359ff9ee09b6edc06102579a",
+      "701c8818": "1caae7ddf0cbba5f1f6d7404b2309300d913778c",
+      "4c132c8d": "9c391aae0daddf0c2ba3f0d5265aee9b491286e4",
+      "f42e0c85": "26a17de3b4abc30e5c19987efad4ceac22e9a369",
+      "05c1a94b": "919c3308c8850852d529d0127ce94e873375bfd2",
+      "0c9f2c40": "7a133d4cf115dc49cd1921bd7049ea64ad58acce",
+      "9b62c7ff": "b4ebf3f7f20fc88f91cda033552a7489a9ff179c",
       "84e948df": "58807f32c413a0c9db6deb0365f2fac9518e7c86",
       "bf8e13c9": "ee7dc2eb87e5a75564382efcd95d13554d3835ba",
       "7b91c5d2": "1ee93623406dc61b50ccb41a97bae769ea15cef2",
@@ -136720,6 +136967,14 @@
       "f4f94da8": "199869b8a5020fe59861a507a48078665b57d8dc",
       "7bc5ea5c": "f99295c62a62b2e8ed0a22c9d7360fbbb305d1a0",
       "f6be5e6f": "c86a4a54d8d06190d937d3906703067e93d24482",
+      "d0477839": "010db2adfc6f895f6b21762b213dfcf379117883",
+      "e5b089a7": "38e44c9868c0b8a5a99ec0b6e901a28f617d25bf",
+      "39ff160a": "58186fd34a8b9c1929913e2b1d7dc4efa507c160",
+      "45c29401": "8466a9da0169666210ccff5d43376d70bae0ae9b",
+      "e7bbb552": "582254842091d9f6263652f06c6a86bd54dcf736",
+      "b58e81f1": "0b53d51635a2ce3d4e12c2077df9aeffeac02517",
+      "fef73c28": "66cecdadf992d8adb9c66deee929eb56600dc9bc",
+      "ce98811c": "9b8bc3190086774fe6887e975c81e9976e2711ef",
       "be691779": "5109af30336443dd3107190b08dfbe8de623445b",
       "05784ce0": "df6c0e2d1c8116c924fc266211f6ab4c840cb245",
       "d5a7498a": "a96f0daf7da14225eb615f4561bc1d6d4a168601",
@@ -145492,6 +145747,14 @@
       "6e2bcc05192e730ef1d6f6f9e7fc1006124074e8a65be9033ed0b221c3a90c68": "26b29f57685d8108cf519c4f1d340d43aacbff6e",
       "660f19006f7defae762bd07cac59d8989b4fde8bef30eb7ef3bb0136d8ef0a12": "aa06cffa086126bb4972674562a5f5c8dc6082f3",
       "d9641efdb7bf796a7e715be240b1148cb6d25dab23606b999df5dc63cf16e5bc": "eb488a76217629f620e40287567d7e2b30337680",
+      "036a2eb06bbddaeb654e8d82881e385110671ee77003dc79f9acd0ec477bcbf7": "58fb1f8ea6cf2d526904349640453e682fe388a1",
+      "dfe5bf3c70133a320fcbe1670b5de08492bd966db2ea383c0388b3df105937d7": "31cbff66380f255d359ff9ee09b6edc06102579a",
+      "3dd0d5abcf09ac4c0f8419b410b21d11e824af12f9b7df860a668d59156bcb87": "1caae7ddf0cbba5f1f6d7404b2309300d913778c",
+      "97eb2c727c706dd0f5dff162febba223dd6897e4d1041e1755129ac98e8e6808": "9c391aae0daddf0c2ba3f0d5265aee9b491286e4",
+      "cf37d144a637dd7084cb676f7054b645ff22ee7c7bd79e81885c2c57c7ad3b9b": "26a17de3b4abc30e5c19987efad4ceac22e9a369",
+      "862a850718a7918603542ffda7e215c05114be6a8d0f7da47aac3d76c974493f": "919c3308c8850852d529d0127ce94e873375bfd2",
+      "a95015ecce042e1de2b52b06b028ab0352bb14b8c71490e9d1727ad9dcc2bb86": "7a133d4cf115dc49cd1921bd7049ea64ad58acce",
+      "f0f9a7c524eaedd5ef42d77d8a4379330f7b43b83e4af297baedbfb8b2bf459d": "b4ebf3f7f20fc88f91cda033552a7489a9ff179c",
       "2a0bc26ac4a8cdcbe7a145c9b1868a87ecb4335e9787f2f1e5713c965372df2b": "58807f32c413a0c9db6deb0365f2fac9518e7c86",
       "6604a1dcc264e8b8e98f036a8bc35579e9b90b92eccbc4d7c1effee9785d1580": "ee7dc2eb87e5a75564382efcd95d13554d3835ba",
       "fcfc9762cd4cfad42feb12d975929de86851b216d4491252c701527e22b55539": "1ee93623406dc61b50ccb41a97bae769ea15cef2",
@@ -145614,6 +145877,14 @@
       "98425066e5c44346fc849931f62e369cad70e358e89ccadfa75eca2c5b1425f8": "199869b8a5020fe59861a507a48078665b57d8dc",
       "013ffcc6e71d8a3d67c31bc4f157161fa4781bdb1a3a2437b683fb1050f93675": "f99295c62a62b2e8ed0a22c9d7360fbbb305d1a0",
       "d6ca22d54e21315b8a62780bba4029f6cac78cf2de7c07868adf84a2c00b26bf": "c86a4a54d8d06190d937d3906703067e93d24482",
+      "af34705241e28088813239bb1068d1c8ff3c1e0b046da15621b1abfcf5d34984": "010db2adfc6f895f6b21762b213dfcf379117883",
+      "488df585dff59ef1898bcbac6e0bc7f388195eb7728065786c0f869dbad0011b": "38e44c9868c0b8a5a99ec0b6e901a28f617d25bf",
+      "04bcf498292125fa7143053c9ad2f92eade565b544a1b9b8a9ebd5f8d2621fad": "58186fd34a8b9c1929913e2b1d7dc4efa507c160",
+      "dac528146fa9161cff21517a6f70c67829c87f1212d87850b8368784d04936f0": "8466a9da0169666210ccff5d43376d70bae0ae9b",
+      "cb510ec5696a766d419b857f92ebb168942fc294e5da61a9b271f77f025273d3": "582254842091d9f6263652f06c6a86bd54dcf736",
+      "df747d4facb4c6b1d818e39e82c1d3179bdf5c6a864b7acbc27961ecca84a150": "0b53d51635a2ce3d4e12c2077df9aeffeac02517",
+      "07c190ae55887b73916526e49919f2b4a4e6acd68212fdd374e3cf1f7dd5225d": "66cecdadf992d8adb9c66deee929eb56600dc9bc",
+      "722e8afe1b346e3ef07d694e3792ae0d3a5311419b8091f709b7f7ad0e82fca9": "9b8bc3190086774fe6887e975c81e9976e2711ef",
       "3aa539a472b4a7ffbf4329356d0e3c0b17893cedc6044408ca22988d7930ecc4": "5109af30336443dd3107190b08dfbe8de623445b",
       "f9bc12d2f50e8ed898524078df4e69be9cace639f62d218f06987ca0696cb83d": "df6c0e2d1c8116c924fc266211f6ab4c840cb245",
       "93f02ae92ff2d0e6773f12d3cc4f2ec74f230c69aeedc660b3e821a008187ba9": "a96f0daf7da14225eb615f4561bc1d6d4a168601",
@@ -155976,13 +156247,16 @@
         "7743bf1d7e6e09a02f1b2972aa63bd8a9f26050d"
       ],
       "assets/GameIndex.yaml": [
-        "997fdfb1c1873c1a43972b2984ac0da61fd47b14"
+        "997fdfb1c1873c1a43972b2984ac0da61fd47b14",
+        "58fb1f8ea6cf2d526904349640453e682fe388a1"
       ],
       "assets/cheats_ni.zip": [
-        "0b219dc8b3b98c1705b14758bb7950064b928ebb"
+        "0b219dc8b3b98c1705b14758bb7950064b928ebb",
+        "31cbff66380f255d359ff9ee09b6edc06102579a"
       ],
       "assets/cheats_ws.zip": [
-        "f0d9c66e4793a014cf431ed20e87056e2a96b68e"
+        "f0d9c66e4793a014cf431ed20e87056e2a96b68e",
+        "1caae7ddf0cbba5f1f6d7404b2309300d913778c"
       ],
       "assets/faq.html": [
         "9163d4a3d19b87483f843e4bf3afe236a50a72d2"
@@ -156105,10 +156379,12 @@
         "1a69a0fc522caff98fc3829ebf3f12a6a006a058"
       ],
       "assets/shaders/opengl/common_header.glsl": [
-        "3f47597187030144498af7a92531e8f205561211"
+        "3f47597187030144498af7a92531e8f205561211",
+        "9c391aae0daddf0c2ba3f0d5265aee9b491286e4"
       ],
       "assets/shaders/opengl/convert.glsl": [
-        "b2a059787ee297654b27f633e37382e239693a36"
+        "b2a059787ee297654b27f633e37382e239693a36",
+        "26a17de3b4abc30e5c19987efad4ceac22e9a369"
       ],
       "assets/shaders/opengl/interlace.glsl": [
         "e74e58f530abb4af02c0875c2f04d507e854869e"
@@ -156123,7 +156399,8 @@
         "8d8b8966afd2ad840151f7fcb494739041708c89"
       ],
       "assets/shaders/opengl/tfx_fs.glsl": [
-        "00eb0418e7a25c89aaf7c526922fe45d83243ec5"
+        "00eb0418e7a25c89aaf7c526922fe45d83243ec5",
+        "919c3308c8850852d529d0127ce94e873375bfd2"
       ],
       "assets/shaders/opengl/tfx_vgs.glsl": [
         "0e9e98f766c9250b465af776d0077f49f797fed2"
@@ -156132,7 +156409,8 @@
         "709fd5393188f7cff0fe4230d0e3e8b69a82f5b9"
       ],
       "assets/shaders/vulkan/convert.glsl": [
-        "b18a236b62e11a85c7ffda6ae60bfb312d6524ef"
+        "b18a236b62e11a85c7ffda6ae60bfb312d6524ef",
+        "7a133d4cf115dc49cd1921bd7049ea64ad58acce"
       ],
       "assets/shaders/vulkan/interlace.glsl": [
         "f8d14d80036f11707c7e94db2a77531d582019dd"
@@ -156147,7 +156425,8 @@
         "26b29f57685d8108cf519c4f1d340d43aacbff6e"
       ],
       "assets/shaders/vulkan/tfx.glsl": [
-        "aa06cffa086126bb4972674562a5f5c8dc6082f3"
+        "aa06cffa086126bb4972674562a5f5c8dc6082f3",
+        "b4ebf3f7f20fc88f91cda033552a7489a9ff179c"
       ],
       "assets/sounds/achievements/unlock.wav": [
         "eb488a76217629f620e40287567d7e2b30337680"
@@ -165067,6 +165346,7 @@
         "9513091f37adf330f66a0c08f4e200344ad2e082",
         "36c30d0f198a1bffee88ef29d92f2401447a91f4",
         "c8fd92705fc42deb6a0ffac6274e27fd61ecd4cc",
+        "38e44c9868c0b8a5a99ec0b6e901a28f617d25bf",
         "389df7981873d9e6e46c84c20cd43af0e4226cf8",
         "4ecf900db8d0f69d6154bde376206d727ddddaae",
         "d1ae642aed4f0584eeb81ff50180db694e5101d4",
