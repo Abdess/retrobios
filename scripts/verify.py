@@ -1401,6 +1401,21 @@ def verify_emulator(
                             "path": local_path,
                             "reason": reason,
                         }
+                elif resolve_status == "hash_mismatch":
+                    # Nothing in validation: caught it, but the name matched
+                    # while the bytes contradict the hash the profile
+                    # declares. That is a different file wearing the right
+                    # name -- config.ini and ROM collide across systems -- so
+                    # calling it covered reports the collection as holding
+                    # something it does not. Validation runs first because it
+                    # names the specific field that disagrees.
+                    result = {
+                        "name": name,
+                        "status": Status.UNTESTED,
+                        "required": required,
+                        "path": local_path,
+                        "reason": "declared hash contradicted by the local file",
+                    }
                 else:
                     result = {
                         "name": name,
