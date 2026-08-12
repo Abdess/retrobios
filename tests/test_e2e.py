@@ -28,6 +28,7 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
 
+import largefiles
 import yaml
 from common import (
     build_zip_contents_index,
@@ -5120,8 +5121,8 @@ struct BurnDriver BurnDrvneogeo = {
                 raise urllib.error.HTTPError(url, 404, "Not Found", {}, None)
             return FakeResponse(b"payload")
 
-        original = common.urllib.request.urlopen
-        common.urllib.request.urlopen = fake_urlopen
+        original = largefiles.urllib.request.urlopen
+        largefiles.urllib.request.urlopen = fake_urlopen
         try:
             with tempfile.TemporaryDirectory() as tmpdir:
                 path = common.fetch_large_file(
@@ -5131,7 +5132,7 @@ struct BurnDriver BurnDrvneogeo = {
                 with open(path, "rb") as fh:
                     self.assertEqual(fh.read(), b"payload")
         finally:
-            common.urllib.request.urlopen = original
+            largefiles.urllib.request.urlopen = original
 
         self.assertEqual(len(attempts), 2, attempts)
         self.assertIn("MAME%200.174", attempts[0])

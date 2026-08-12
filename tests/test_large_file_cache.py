@@ -23,6 +23,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 import common  # noqa: E402
+import largefiles
 
 PAYLOAD_A = b"A" * (256 * 1024)
 PAYLOAD_B = b"B" * (256 * 1024)
@@ -54,10 +55,10 @@ class _SlowResponse(io.BytesIO):
 class LargeFileCacheTest(unittest.TestCase):
     def setUp(self):
         self.dir = tempfile.mkdtemp()
-        self._urlopen = common.urllib.request.urlopen
+        self._urlopen = largefiles.urllib.request.urlopen
 
     def tearDown(self):
-        common.urllib.request.urlopen = self._urlopen
+        largefiles.urllib.request.urlopen = self._urlopen
 
     def test_concurrent_fetches_do_not_mix(self):
         barrier = threading.Barrier(2, timeout=10)
@@ -70,7 +71,7 @@ class LargeFileCacheTest(unittest.TestCase):
                 i = next(index)
             return _SlowResponse(payloads[i], barrier)
 
-        common.urllib.request.urlopen = fake_urlopen
+        largefiles.urllib.request.urlopen = fake_urlopen
         results: list[str | None] = [None, None]
 
         def worker(slot: int):
@@ -90,7 +91,7 @@ class LargeFileCacheTest(unittest.TestCase):
         self.assertIn(digest, accepted)
 
     def test_no_scratch_file_survives_a_successful_fetch(self):
-        common.urllib.request.urlopen = lambda req, timeout=None: _SlowResponse(
+        largefiles.urllib.request.urlopen = lambda req, timeout=None: _SlowResponse(
             PAYLOAD_A
         )
         common.fetch_large_file("asset.bin", dest_dir=self.dir)
@@ -101,12 +102,12 @@ class LargeFileCacheTest(unittest.TestCase):
         def fail(req, timeout=None):
             raise urllib.error.URLError("offline")
 
-        common.urllib.request.urlopen = fail
+        largefiles.urllib.request.urlopen = fail
         self.assertIsNone(common.fetch_large_file("asset.bin", dest_dir=self.dir))
         self.assertEqual(os.listdir(self.dir), [])
 
     def test_hash_mismatch_leaves_no_scratch_file(self):
-        common.urllib.request.urlopen = lambda req, timeout=None: _SlowResponse(
+        largefiles.urllib.request.urlopen = lambda req, timeout=None: _SlowResponse(
             PAYLOAD_A
         )
         result = common.fetch_large_file(
@@ -122,7 +123,7 @@ class LargeFileCacheTest(unittest.TestCase):
         def fail(req, timeout=None):
             raise AssertionError("must not download when the cache is valid")
 
-        common.urllib.request.urlopen = fail
+        largefiles.urllib.request.urlopen = fail
         self.assertEqual(
             common.fetch_large_file("asset.bin", dest_dir=self.dir), str(cached)
         )
@@ -131,7 +132,7 @@ class LargeFileCacheTest(unittest.TestCase):
         def fail(req, timeout=None):
             raise AssertionError("offline mode must not open the network")
 
-        common.urllib.request.urlopen = fail
+        largefiles.urllib.request.urlopen = fail
         self.assertIsNone(
             common.fetch_large_file(
                 "asset.bin", dest_dir=self.dir, offline=True
@@ -146,7 +147,7 @@ class LargeFileCacheTest(unittest.TestCase):
         def fail(req, timeout=None):
             raise AssertionError("offline cache hit must not open the network")
 
-        common.urllib.request.urlopen = fail
+        largefiles.urllib.request.urlopen = fail
         self.assertEqual(
             common.fetch_large_file(
                 "asset.bin",

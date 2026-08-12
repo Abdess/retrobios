@@ -39,10 +39,69 @@ from common import (
     parse_md5_list,
     require_yaml,
     unique_emulator_profiles,
-    write_if_changed,
+    write_if_changed as _write_artifact,
     yaml_load,
 )
 from nativemode import reads_file_contents
+
+# Every path this run produced. The generated directories used to be deleted
+# before the build, which made every page new: write_if_changed had no earlier
+# version to compare against, so the whole site was rewritten for the clock
+# alone and a deploy republished 600 unchanged pages. They are swept instead,
+# and a page is only removed once nothing produced it.
+_produced: set[str] = set()
+
+
+def _record(path) -> None:
+    _produced.add(os.path.realpath(str(path)))
+
+
+def _undecorated(markdown: str) -> str:
+    """Return a page body without the front matter the decoration pass adds."""
+    if markdown.startswith("---\n") and "generated_by: retrobios-site" in markdown[:300]:
+        end = markdown.find("\n---\n", 4)
+        if end != -1:
+            markdown = markdown[end + 5:].lstrip("\n")
+            script_end = markdown.find("</script>\n\n")
+            if markdown.startswith('<script type="application/ld+json">') and script_end != -1:
+                markdown = markdown[script_end + len("</script>\n\n"):]
+    return markdown
+
+
+def write_if_changed(path: str, content: str) -> bool:
+    """Write a page body only when it moved, and remember it either way.
+
+    A page is written twice: the body here, then the same body wrapped in
+    front matter by the decoration pass. This comparison therefore reduces
+    the file on disk to its body. The decoration pass compares in full -
+    normalizing there too would make its own write look like a no-op and
+    every page would lose its front matter.
+    """
+    _record(path)
+    return _write_artifact(path, content, normalize=_undecorated)
+
+
+def write_decorated(path, content: str) -> bool:
+    """Write the wrapped page, comparing front matter and body together."""
+    _record(path)
+    return _write_artifact(str(path), content)
+
+
+def _sweep_generated(docs: Path, directories: list[str]) -> int:
+    """Delete files in the generated tree that this run did not produce."""
+    removed = 0
+    for name in directories:
+        root = docs / name
+        if not root.is_dir():
+            continue
+        for path in sorted(root.rglob("*")):
+            if path.is_file() and os.path.realpath(str(path)) not in _produced:
+                path.unlink()
+                removed += 1
+        for path in sorted(root.rglob("*"), reverse=True):
+            if path.is_dir() and not any(path.iterdir()):
+                path.rmdir()
+    return removed
 
 yaml = require_yaml()
 from generate_readme import compute_coverage, manifest_totals
@@ -1134,6 +1193,7 @@ def generate_data_exports(
     )
     for schema_name in schema_names:
         shutil.copy2(Path("schemas") / schema_name, schemas_dest / schema_name)
+        _record(schemas_dest / schema_name)
 
     file_rows = []
     for sha1, entry in sorted(db.get("files", {}).items()):
@@ -1197,6 +1257,7 @@ def generate_data_exports(
         downloads / "retrobios.sqlite", db, platform_items, platform_files,
         emulator_items, gap_rows,
     )
+    _record(downloads / "retrobios.sqlite")
 
     assets = [
         (api / "database.json", "Content database", "application/json", "schemas/database.schema.json"),
@@ -1386,13 +1447,9 @@ def decorate_markdown_pages(docs: Path) -> None:
         if relative.parts and relative.parts[0] == "superpowers":
             continue
         markdown = path.read_text(encoding="utf-8")
-        if markdown.startswith("---\n") and "generated_by: retrobios-site" in markdown[:300]:
-            end = markdown.find("\n---\n", 4)
-            if end != -1:
-                markdown = markdown[end + 5:].lstrip("\n")
-                script_end = markdown.find("</script>\n\n")
-                if markdown.startswith('<script type="application/ld+json">') and script_end != -1:
-                    markdown = markdown[script_end + len("</script>\n\n"):]
+        stripped = _undecorated(markdown)
+        if stripped is not markdown:
+            markdown = stripped
         elif markdown.startswith("---\n"):
             continue
 
@@ -1432,7 +1489,7 @@ def decorate_markdown_pages(docs: Path) -> None:
             f"{structured_json}\n"
             "</script>\n\n"
         )
-        write_if_changed(str(path), front_matter + markdown)
+        write_decorated(path, front_matter + markdown)
 
 
 # Platform pages
@@ -3881,12 +3938,6 @@ def main():
     db = load_database(args.db)
     docs = Path(args.docs_dir)
 
-    # Clean generated dirs (preserve docs/superpowers/)
-    for d in GENERATED_DIRS:
-        target = docs / d
-        if target.exists():
-            shutil.rmtree(target)
-
     # Ensure output dirs
     for d in GENERATED_DIRS:
         (docs / d).mkdir(parents=True, exist_ok=True)
@@ -4059,6 +4110,7 @@ def main():
     if wiki_src.is_dir():
         for src_file in wiki_src.glob("*.md"):
             shutil.copy2(src_file, wiki_dest / src_file.name)
+            _record(wiki_dest / src_file.name)
     # data-model.md is generated (contains live DB stats)
     write_if_changed(
         str(wiki_dest / "data-model.md"), generate_wiki_data_model(db, profiles)
@@ -4208,7 +4260,10 @@ validation:
         + 1  # contributing
         + 1  # data and API
     )
+    stale = _sweep_generated(docs, GENERATED_DIRS)
     print(f"\nGenerated {total_pages} pages in {args.docs_dir}/")
+    if stale:
+        print(f"Removed {stale} page(s) nothing produced this run")
 
 
 if __name__ == "__main__":

@@ -6,39 +6,13 @@ and file resolution - eliminates DRY violations across scripts.
 
 from __future__ import annotations
 
-import contextlib
 import hashlib
 import json
 import os
 import re
-import stat
-import tempfile
-import urllib.error
-import urllib.parse
-import urllib.request
-import xml.etree.ElementTree as ET
 import zipfile
-import zlib
 from pathlib import Path
 
-
-def parse_untrusted_xml(content: str | bytes, label: str = "XML") -> ET.Element:
-    """Parse XML fetched from a third party.
-
-    ElementTree expands internal entities, so a document that declares them
-    can make the parser build a payload far larger than the bytes downloaded.
-    Nothing this project reads (DAT packs, es_bios.xml, Emulators.xml) ever
-    declares one, so a declaration is grounds to refuse the document rather
-    than something to expand carefully.
-
-    The check targets <!ENTITY rather than <!DOCTYPE because Logiqx DATs
-    legitimately carry a doctype pointing at logiqx.com, and ElementTree does
-    not resolve external entities, so a doctype alone fetches nothing.
-    """
-    text = content if isinstance(content, str) else content.decode("utf-8", "replace")
-    if "<!ENTITY" in text.upper():
-        raise ValueError(f"XML entity declarations are not allowed in {label}")
-    return ET.fromstring(content)
 
 try:
     import yaml
@@ -46,83 +20,10 @@ except ImportError:
     yaml = None
 
 
-def require_yaml():
-    """Import and return yaml, exiting if PyYAML is not installed."""
-    try:
-        import yaml as _yaml
-
-        return _yaml
-    except ImportError:
-        import sys
-
-        print("Error: PyYAML required (pip install pyyaml)", file=sys.stderr)
-        sys.exit(1)
 
 
-def _pick_yaml_loader():
-    """Prefer the libyaml loader when the wheel ships it.
-
-    Reading the emulator profiles is the single most expensive step of every
-    command here: 375 files, and the pure-Python scanner accounts for roughly
-    70% of a verify run. The C loader parses the same documents about eight
-    times faster and pyyaml only exposes it when libyaml was available at
-    build time, so the pure-Python class stays as the fallback.
-    """
-    if yaml is None:
-        return None
-    return getattr(yaml, "CSafeLoader", None) or yaml.SafeLoader
 
 
-_YAML_LOADER = _pick_yaml_loader()
-
-
-def yaml_load(stream):
-    """Parse YAML from a string or file object, safely and quickly."""
-    if yaml is None:
-        return require_yaml()  # exits with the install hint
-    return yaml.load(stream, Loader=_YAML_LOADER)
-
-
-_ALL_ALGORITHMS = frozenset({"sha1", "md5", "sha256", "crc32", "adler32"})
-
-
-def compute_hashes(
-    filepath: str | Path,
-    algorithms: frozenset[str] | None = None,
-) -> dict[str, str]:
-    """Compute file hashes. Pass *algorithms* to limit which are computed."""
-    algos = algorithms or _ALL_ALGORITHMS
-    sha1 = hashlib.sha1() if "sha1" in algos else None
-    md5 = hashlib.md5() if "md5" in algos else None
-    sha256 = hashlib.sha256() if "sha256" in algos else None
-    do_crc = "crc32" in algos
-    do_adler = "adler32" in algos
-    crc = 0
-    adler = 1  # zlib.adler32 initial value
-    with open(filepath, "rb") as f:
-        for chunk in iter(lambda: f.read(65536), b""):
-            if sha1:
-                sha1.update(chunk)
-            if md5:
-                md5.update(chunk)
-            if sha256:
-                sha256.update(chunk)
-            if do_crc:
-                crc = zlib.crc32(chunk, crc)
-            if do_adler:
-                adler = zlib.adler32(chunk, adler)
-    result: dict[str, str] = {}
-    if sha1:
-        result["sha1"] = sha1.hexdigest()
-    if md5:
-        result["md5"] = md5.hexdigest()
-    if sha256:
-        result["sha256"] = sha256.hexdigest()
-    if do_crc:
-        result["crc32"] = format(crc & 0xFFFFFFFF, "08x")
-    if do_adler:
-        result["adler32"] = format(adler & 0xFFFFFFFF, "08x")
-    return result
 
 
 def load_database(db_path: str) -> dict:
@@ -131,20 +32,6 @@ def load_database(db_path: str) -> dict:
         return json.load(f)
 
 
-def md5sum(source: str | Path | object) -> str:
-    """Compute MD5 of a file path or file-like object - matches Batocera's md5sum()."""
-    h = hashlib.md5()
-    if hasattr(source, "read"):
-        for chunk in iter(lambda: source.read(65536), b""):
-            h.update(chunk)
-    else:
-        with open(source, "rb") as f:
-            for chunk in iter(lambda: f.read(65536), b""):
-                h.update(chunk)
-    return h.hexdigest()
-
-
-_md5_composite_cache: dict[str, str] = {}
 
 _casefold_index_cache: dict[int, dict[str, list[str]]] = {}
 
@@ -186,40 +73,6 @@ def name_match_size_ok(file_entry: dict, candidate_size: int | None) -> bool:
     return not (high is not None and candidate_size > high)
 
 
-def md5_composite(filepath: str | Path) -> str:
-    """Compute composite MD5 of a ZIP - matches Recalbox's Zip::Md5Composite().
-
-    Sorts filenames alphabetically, reads each file's contents in order,
-    feeds everything into a single MD5 hasher. The result is independent
-    of ZIP compression level or metadata. Results are cached per path.
-    """
-    key = str(filepath)
-    cached = _md5_composite_cache.get(key)
-    if cached is not None:
-        return cached
-    with zipfile.ZipFile(filepath) as zf:
-        names = sorted(n for n in zf.namelist() if not n.endswith("/"))
-        h = hashlib.md5()
-        for name in names:
-            info = zf.getinfo(name)
-            if info.file_size > 512 * 1024 * 1024:
-                continue  # skip oversized entries
-            h.update(zf.read(name))
-        result = h.hexdigest()
-    _md5_composite_cache[key] = result
-    return result
-
-
-def parse_md5_list(raw: str | list | None) -> list[str]:
-    """Normalize an md5 field into a lowercase list.
-
-    Platform YAMLs carry Recalbox multi-hash as one comma-separated string,
-    emulator profiles carry a YAML list. Both reach here.
-    """
-    if not raw:
-        return []
-    values = raw if isinstance(raw, list) else str(raw).split(",")
-    return [str(m).strip().lower() for m in values if str(m).strip()]
 
 
 _shared_yml_cache: dict[str, dict] = {}
@@ -923,67 +776,7 @@ def get_mame_clone_map() -> dict[str, str]:
     return _mame_clone_map_cache
 
 
-def check_inside_zip(container: str, file_name: str, expected_md5: str) -> str:
-    """Check a ROM inside a ZIP -replicates Batocera checkInsideZip().
 
-    Returns "ok", "untested", "not_in_zip", or "error".
-    """
-    try:
-        with zipfile.ZipFile(container) as archive:
-            for fname in archive.namelist():
-                if fname.casefold() == file_name.casefold():
-                    info = archive.getinfo(fname)
-                    if info.file_size > 512 * 1024 * 1024:
-                        return "error"
-                    if expected_md5 == "":
-                        return "ok"
-                    with archive.open(fname) as entry:
-                        actual = md5sum(entry)
-                    return "ok" if actual == expected_md5 else "untested"
-            return "not_in_zip"
-    except (zipfile.BadZipFile, OSError, KeyError):
-        return "error"
-
-
-_zip_contents_cache: tuple[frozenset[tuple[str, float]], dict] | None = None
-
-
-def build_zip_contents_index(db: dict, max_entry_size: int = 512 * 1024 * 1024) -> dict:
-    """Build {inner_rom_md5: zip_file_sha1} for ROMs inside ZIP files.
-
-    Results are cached in-process; repeated calls with unchanged ZIPs return
-    the cached index.
-    """
-    global _zip_contents_cache
-
-    # Build fingerprint from ZIP paths + mtimes for cache invalidation
-    zip_entries: list[tuple[str, str]] = []
-    for sha1, entry in db.get("files", {}).items():
-        path = entry["path"]
-        if path.endswith(".zip") and os.path.exists(path):
-            zip_entries.append((path, sha1))
-
-    fingerprint = frozenset((path, os.path.getmtime(path)) for path, _ in zip_entries)
-    if _zip_contents_cache is not None and _zip_contents_cache[0] == fingerprint:
-        return _zip_contents_cache[1]
-
-    index: dict[str, str] = {}
-    for path, sha1 in zip_entries:
-        try:
-            with zipfile.ZipFile(path, "r") as zf:
-                for info in zf.infolist():
-                    if info.is_dir() or info.file_size > max_entry_size:
-                        continue
-                    h = hashlib.md5()
-                    with zf.open(info.filename) as inner:
-                        for chunk in iter(lambda: inner.read(65536), b""):
-                            h.update(chunk)
-                    index[h.hexdigest()] = sha1
-        except (zipfile.BadZipFile, OSError):
-            continue
-
-    _zip_contents_cache = (fingerprint, index)
-    return index
 
 
 _emulator_profiles_cache: dict[tuple[str, bool], dict[str, dict]] = {}
@@ -1384,136 +1177,14 @@ def expand_platform_declared_names(config: dict, db: dict) -> set[str]:
 
 import re
 
-_TIMESTAMP_PATTERNS = [
-    re.compile(r'"generated_at":\s*"[^"]*"'),  # database.json
-    re.compile(r'"imported_at":\s*"[^"]*"'),  # provenance snapshots
-    re.compile(r"\*Auto-generated on [^*]*\*"),  # README.md
-    re.compile(r"\*Generated on [^*]*\*"),  # docs site pages
-    # The decorated pages carry the same stamp again as a rendered element,
-    # and missing it rewrote every page on every run for the clock alone.
-    re.compile(r'<div class="rb-timestamp">[^<]*</div>'),
-]
 
-
-def write_if_changed(path: str, content: str) -> bool:
-    """Write content to path only if the non-timestamp content differs.
-
-    Compares new and existing content after stripping timestamp lines.
-    Returns True if the file was written, False if skipped (unchanged).
-    """
-    if os.path.exists(path):
-        with open(path) as f:
-            existing = f.read()
-        if _strip_timestamps(existing) == _strip_timestamps(content):
-            return False
-    with open(path, "w") as f:
-        f.write(content)
-    return True
-
-
-def _strip_timestamps(text: str) -> str:
-    """Remove known timestamp patterns for content comparison."""
-    result = text
-    for pattern in _TIMESTAMP_PATTERNS:
-        result = pattern.sub("", result)
-    return result
 
 
 # Validation and mode filtering -extracted to validation.py for SoC.
 # Re-exported below for backward compatibility.
 
 
-LARGE_FILES_RELEASE = "large-files"
-LARGE_FILES_REPO = "Abdess/retrobios"
-LARGE_FILES_CACHE = ".cache/large"
 
-
-def fetch_large_file(
-    name: str,
-    dest_dir: str = LARGE_FILES_CACHE,
-    expected_sha1: str = "",
-    expected_md5: str = "",
-    *,
-    offline: bool = False,
-) -> str | None:
-    """Return a verified cached large file, downloading it only when allowed."""
-    cached = os.path.join(dest_dir, name)
-    if os.path.exists(cached):
-        if expected_sha1 or expected_md5:
-            hashes = compute_hashes(cached)
-            if expected_sha1 and hashes["sha1"].lower() != expected_sha1.lower():
-                os.unlink(cached)
-            elif expected_md5:
-                md5_list = [
-                    m.strip().lower() for m in expected_md5.split(",") if m.strip()
-                ]
-                if hashes["md5"].lower() not in md5_list:
-                    os.unlink(cached)
-                else:
-                    return cached
-            else:
-                return cached
-        else:
-            return cached
-
-    if offline:
-        return None
-
-    os.makedirs(dest_dir, exist_ok=True)
-    # A per-process scratch name: two runs fetching the same asset into one
-    # shared path interleave their writes into a full-size, corrupt file.
-    tmp_fd, tmp_path = tempfile.mkstemp(
-        dir=dest_dir, prefix=os.path.basename(cached) + ".", suffix=".tmp"
-    )
-    os.close(tmp_fd)
-    # GitHub rewrites spaces to dots in release asset names, so a file whose
-    # name contains spaces is published under a dotted name.
-    candidates = [name]
-    if " " in name:
-        candidates.append(name.replace(" ", "."))
-
-    downloaded = False
-    for candidate in candidates:
-        encoded_name = urllib.parse.quote(candidate)
-        url = (
-            f"https://github.com/{LARGE_FILES_REPO}/releases/download/"
-            f"{LARGE_FILES_RELEASE}/{encoded_name}"
-        )
-        try:
-            req = urllib.request.Request(url, headers={"User-Agent": "retrobios/1.0"})
-            with urllib.request.urlopen(req, timeout=300) as resp:
-                with open(tmp_path, "wb") as f:
-                    while True:
-                        chunk = resp.read(65536)
-                        if not chunk:
-                            break
-                        f.write(chunk)
-            downloaded = True
-            break
-        except (urllib.error.URLError, urllib.error.HTTPError):
-            if os.path.exists(tmp_path):
-                os.unlink(tmp_path)
-
-    if not downloaded:
-        if os.path.exists(tmp_path):
-            os.unlink(tmp_path)
-        return None
-
-    if expected_sha1 or expected_md5:
-        hashes = compute_hashes(tmp_path)
-        if expected_sha1 and hashes["sha1"].lower() != expected_sha1.lower():
-            os.unlink(tmp_path)
-            return None
-        if expected_md5:
-            md5_list = [m.strip().lower() for m in expected_md5.split(",") if m.strip()]
-            if hashes["md5"].lower() not in md5_list:
-                os.unlink(tmp_path)
-                return None
-    os.replace(tmp_path, cached)
-    return cached
-
-
-MAX_ZIP_MEMBERS = 100_000
 def sanitize_pack_path(raw: str) -> str:
     """Strip traversal components from a relative destination.
 
@@ -1525,117 +1196,6 @@ def sanitize_pack_path(raw: str) -> str:
     return "/".join(p for p in raw.split("/") if p and p not in ("..", "."))
 
 
-MAX_ZIP_MEMBER_SIZE = 8 * 1024 * 1024 * 1024
-# The largest generated pack is already ~5 GB uncompressed and the collection
-# only grows; this bounds a malicious archive without capping a real one.
-MAX_ZIP_TOTAL_SIZE = 64 * 1024 * 1024 * 1024
-# DEFLATE cannot exceed roughly 1,032:1, so this rejects a declared ratio no
-# real DEFLATE member can reach. Methods with a higher ceiling (bzip2, LZMA)
-# are exempt and bounded by the per-member and per-archive size limits alone.
-MAX_ZIP_COMPRESSION_RATIO = 1_100
-_BOUNDED_RATIO_METHODS = (zipfile.ZIP_STORED, zipfile.ZIP_DEFLATED)
-
-
-def safe_extract_zip(
-    zip_path: str,
-    dest_dir: str,
-    *,
-    max_members: int = MAX_ZIP_MEMBERS,
-    max_member_size: int = MAX_ZIP_MEMBER_SIZE,
-    max_total_size: int = MAX_ZIP_TOTAL_SIZE,
-    max_compression_ratio: int = MAX_ZIP_COMPRESSION_RATIO,
-) -> None:
-    """Extract a ZIP with traversal, link and resource-limit protection.
-
-    Files are streamed to a temporary sibling and atomically installed only
-    after their declared length and CRC have been checked by ``zipfile``.
-    """
-    dest = os.path.realpath(dest_dir)
-    os.makedirs(dest, exist_ok=True)
-    with zipfile.ZipFile(zip_path, "r") as zf:
-        members = zf.infolist()
-        if len(members) > max_members:
-            raise ValueError(
-                f"ZIP has {len(members)} members; limit is {max_members}"
-            )
-
-        declared_total = 0
-        seen: set[str] = set()
-        for member in members:
-            # Archives written on Windows store a backslash separator. It is a
-            # separator, not a filename character, so it is normalized before
-            # the component checks rather than rejected.
-            name = member.filename.replace("\\", "/")
-            if not name or "\x00" in name:
-                raise ValueError(f"Unsafe ZIP member name: {member.filename!r}")
-            if name.startswith("/") or re.match(r"^[A-Za-z]:", name):
-                raise ValueError(f"Absolute ZIP member path: {name}")
-            parts = [part for part in name.split("/") if part]
-            if any(part in (".", "..") for part in parts):
-                raise ValueError(f"ZIP traversal detected: {name}")
-            normalized = "/".join(parts)
-            if normalized in seen:
-                raise ValueError(f"Duplicate ZIP member path: {name}")
-            seen.add(normalized)
-
-            mode = (member.external_attr >> 16) & 0xFFFF
-            file_type = stat.S_IFMT(mode)
-            if file_type not in (0, stat.S_IFREG, stat.S_IFDIR):
-                raise ValueError(f"ZIP link or special file rejected: {name}")
-            if member.flag_bits & 0x1:
-                raise ValueError(f"Encrypted ZIP member rejected: {name}")
-            if member.file_size > max_member_size:
-                raise ValueError(
-                    f"ZIP member {name} is {member.file_size} bytes; "
-                    f"limit is {max_member_size}"
-                )
-            declared_total += member.file_size
-            if declared_total > max_total_size:
-                raise ValueError(
-                    f"ZIP expands to {declared_total} bytes; limit is {max_total_size}"
-                )
-            if member.file_size and member.compress_type in _BOUNDED_RATIO_METHODS:
-                if member.compress_size == 0:
-                    raise ValueError(f"Invalid compression size for ZIP member: {name}")
-                if member.file_size / member.compress_size > max_compression_ratio:
-                    raise ValueError(f"Suspicious compression ratio for ZIP member: {name}")
-
-            target = os.path.realpath(os.path.join(dest, *parts))
-            if not target.startswith(dest + os.sep) and target != dest:
-                raise ValueError(f"ZIP traversal detected: {name}")
-            if member.is_dir() or name.endswith("/"):
-                os.makedirs(target, exist_ok=True)
-                continue
-
-            os.makedirs(os.path.dirname(target), exist_ok=True)
-            tmp_path = ""
-            try:
-                with tempfile.NamedTemporaryFile(
-                    mode="wb", dir=os.path.dirname(target), delete=False
-                ) as tmp_file:
-                    tmp_path = tmp_file.name
-                    actual_size = 0
-                    with zf.open(member, "r") as source:
-                        while True:
-                            chunk = source.read(1024 * 1024)
-                            if not chunk:
-                                break
-                            actual_size += len(chunk)
-                            if actual_size > member.file_size or actual_size > max_member_size:
-                                raise ValueError(
-                                    f"ZIP member exceeded declared or configured size: {name}"
-                                )
-                            tmp_file.write(chunk)
-                if actual_size != member.file_size:
-                    raise ValueError(
-                        f"ZIP member size mismatch for {name}: "
-                        f"{actual_size} != {member.file_size}"
-                    )
-                os.replace(tmp_path, target)
-                tmp_path = ""
-            finally:
-                if tmp_path and os.path.exists(tmp_path):
-                    os.unlink(tmp_path)
 
 
 def list_emulator_profiles(emulators_dir: str, skip_aliases: bool = True) -> None:
@@ -1709,125 +1269,51 @@ def build_target_cores_cache(
     return cache, kept
 
 
-DEFAULT_PROVENANCE_DIR = "provenance"
-
-
-def load_provenance_snapshots(provenance_dir: str = DEFAULT_PROVENANCE_DIR) -> dict:
-    """Load dump-catalog snapshots from provenance/*.json.
-
-    Returns {source_name: snapshot} where snapshot holds the normalized
-    entries written by the redump scraper or the pack importer. Missing
-    directory means no snapshots: returns an empty dict.
-    """
-    snapshots = {}
-    prov_path = Path(provenance_dir)
-    if not prov_path.is_dir():
-        return snapshots
-    for path in sorted(prov_path.glob("*.json")):
-        with open(path) as f:
-            snapshot = json.load(f)
-        source = snapshot.get("source")
-        if source and snapshot.get("entries"):
-            snapshots[source] = snapshot
-    return snapshots
-
-
-def build_provenance_index(snapshots: dict) -> dict:
-    """Index snapshot entries by sha1 and by (md5, size) per source.
-
-    First entry wins on hash collisions within a source; entries are
-    pre-sorted at snapshot write time so the outcome is deterministic.
-    """
-    index = {}
-    for source, snapshot in snapshots.items():
-        by_sha1 = {}
-        by_md5_size = {}
-        for entry in snapshot["entries"]:
-            sha1 = entry.get("sha1", "")
-            md5 = entry.get("md5", "")
-            if sha1 and sha1 not in by_sha1:
-                by_sha1[sha1] = entry
-            if md5 and entry.get("size"):
-                key = (md5, entry["size"])
-                if key not in by_md5_size:
-                    by_md5_size[key] = entry
-        index[source] = {"by_sha1": by_sha1, "by_md5_size": by_md5_size}
-    return index
-
-
-def annotate_provenance(files: dict, snapshots: dict) -> dict[str, int]:
-    """Attach a provenance field to database file entries.
-
-    Matches by SHA1 first, then MD5 + size. Returns per-source match
-    counts. Files without any catalog match keep no provenance field.
-    """
-    index = build_provenance_index(snapshots)
-    counts = dict.fromkeys(index, 0)
-    for sha1, entry in files.items():
-        matches = {}
-        for source in sorted(index):
-            src_index = index[source]
-            hit = src_index["by_sha1"].get(sha1) or src_index["by_md5_size"].get(
-                (entry.get("md5", ""), entry.get("size", 0))
-            )
-            if hit:
-                matches[source] = {
-                    "dat": hit.get("dat", ""),
-                    "name": hit.get("name", ""),
-                    "description": hit.get("description", ""),
-                }
-                counts[source] += 1
-        if matches:
-            entry["provenance"] = matches
-        else:
-            entry.pop("provenance", None)
-    return counts
-
-
-def write_provenance_snapshot(
-    path: str, source: str, imported_at: str, dats: dict, entries: list[dict]
-) -> bool:
-    """Write a normalized provenance snapshot, sorted for determinism."""
-    snapshot = {
-        "source": source,
-        "imported_at": imported_at,
-        "dats": dict(sorted(dats.items())),
-        "entries": sorted(entries, key=lambda e: (e["dat"], e["name"])),
-    }
-    return write_if_changed(path, json.dumps(snapshot, indent=2) + "\n")
-
-
-class ArtifactLockBusy(RuntimeError):
-    """Raised when another process already holds the artifact directory."""
-
-
-@contextlib.contextmanager
-def artifact_lock(directory: str, exclusive: bool = True):
-    """Serialize access to a shared artifact directory across processes.
-
-    Two pipeline runs building the same dist/ leave readers looking at
-    half-written ZIPs, which surfaces as BadZipFile far from its cause.
-    Writers take the lock exclusively, readers share it. On platforms
-    without flock the lock is a no-op.
-    """
-    try:
-        import fcntl
-    except ImportError:
-        yield
-        return
-
-    os.makedirs(directory, exist_ok=True)
-    lock_path = os.path.join(directory, ".lock")
-    mode = fcntl.LOCK_EX if exclusive else fcntl.LOCK_SH
-    with open(lock_path, "w") as handle:
-        try:
-            fcntl.flock(handle, mode | fcntl.LOCK_NB)
-        except OSError as exc:
-            raise ArtifactLockBusy(
-                f"{directory} is in use by another run "
-                f"(lock: {lock_path}). Wait for it to finish."
-            ) from exc
-        try:
-            yield
-        finally:
-            fcntl.flock(handle, fcntl.LOCK_UN)
+# Re-exported so the existing call sites keep working while the
+# modules above become the place to import from.
+from safeparse import (  # noqa: E402,F401
+    parse_untrusted_xml,
+    require_yaml,
+    yaml_load,
+    _pick_yaml_loader,
+    _YAML_LOADER,
+)
+from hashing import (  # noqa: E402,F401
+    compute_hashes,
+    md5sum,
+    md5_composite,
+    parse_md5_list,
+    _ALL_ALGORITHMS,
+    _md5_composite_cache,
+)
+from ziptools import (  # noqa: E402,F401
+    check_inside_zip,
+    build_zip_contents_index,
+    MAX_ZIP_MEMBERS,
+    MAX_ZIP_MEMBER_SIZE,
+    MAX_ZIP_TOTAL_SIZE,
+    MAX_ZIP_COMPRESSION_RATIO,
+    safe_extract_zip,
+    _zip_contents_cache,
+    _BOUNDED_RATIO_METHODS,
+)
+from artifacts import (  # noqa: E402,F401
+    write_if_changed,
+    ArtifactLockBusy,
+    artifact_lock,
+    _TIMESTAMP_PATTERNS,
+    _strip_timestamps,
+)
+from largefiles import (  # noqa: E402,F401
+    LARGE_FILES_RELEASE,
+    LARGE_FILES_REPO,
+    LARGE_FILES_CACHE,
+    fetch_large_file,
+)
+from dumpcatalog import (  # noqa: E402,F401
+    DEFAULT_PROVENANCE_DIR,
+    load_provenance_snapshots,
+    build_provenance_index,
+    annotate_provenance,
+    write_provenance_snapshot,
+)
