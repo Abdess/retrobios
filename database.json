@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-12T03:11:17Z",
-  "total_files": 8823,
-  "total_size": 12290711502,
+  "generated_at": "2026-08-12T03:14:32Z",
+  "total_files": 8824,
+  "total_size": 12290973646,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -53151,6 +53151,23 @@
       "crc32": "2561948a",
       "adler32": "02a42a2d"
     },
+    "f145c87fcee0001521ab24f33ef172cd3053fdfb": {
+      "path": "bios/Other/mesence/Firmware/lh5323m1.bin",
+      "name": "lh5323m1.bin",
+      "size": 262144,
+      "sha1": "f145c87fcee0001521ab24f33ef172cd3053fdfb",
+      "md5": "136692ab0764d577a14f467f86ad50f6",
+      "sha256": "5f1fc3f2c1ddca27e07c1f80fefb693793ce988816d9392fb758786296239485",
+      "crc32": "5c0d224c",
+      "adler32": "2e0b8acf",
+      "provenance": {
+        "no-intro": {
+          "dat": "Nintendo - Family Computer Network System",
+          "name": "[BIOS] LH5323M1 Kanji Graphic ROM (Japan).bin",
+          "description": "[BIOS] LH5323M1 Kanji Graphic ROM (Japan)"
+        }
+      }
+    },
     "16e3c6698a10547c228b8ab474b817ff1d64c216": {
       "path": "bios/Other/mfme/DefaultMasks/ReelGradientMask.bmp",
       "name": "ReelGradientMask.bmp",
@@ -98346,6 +98363,7 @@
       "b956c537e7b6b85ffa5c3493b1490d8a": "8e14e85c645187504ec9d162b3ea614a0c421d32",
       "4431aea380185e3f509285540d7cb418": "12a2e718f5f4acd69b6c33a45a4a940b1440a481",
       "1179939a20ffa397b9c45b9e7eb9ae3a": "e7d3caf9691a6c82859903f54232d17474d7b0e7",
+      "136692ab0764d577a14f467f86ad50f6": "f145c87fcee0001521ab24f33ef172cd3053fdfb",
       "f29d49006080c3080baab7b851e1cf68": "16e3c6698a10547c228b8ab474b817ff1d64c216",
       "7786f30131c98baca83ec313281cfa6a": "e3df9d90adb0d44c43cb70b4fd3887c7ddbef1cf",
       "b4c8c434df1f038c76e5221cc6adca0c": "f92d854f017d154c9ae0a2351629876515ba48d7",
@@ -116408,6 +116426,9 @@
       ],
       "gg.rom": [
         "e7d3caf9691a6c82859903f54232d17474d7b0e7"
+      ],
+      "lh5323m1.bin": [
+        "f145c87fcee0001521ab24f33ef172cd3053fdfb"
       ],
       "ReelGradientMask.bmp": [
         "16e3c6698a10547c228b8ab474b817ff1d64c216"
@@ -135539,6 +135560,7 @@
       "c506efb9": "8e14e85c645187504ec9d162b3ea614a0c421d32",
       "e47045f4": "12a2e718f5f4acd69b6c33a45a4a940b1440a481",
       "2561948a": "e7d3caf9691a6c82859903f54232d17474d7b0e7",
+      "5c0d224c": "f145c87fcee0001521ab24f33ef172cd3053fdfb",
       "094ecf8e": "16e3c6698a10547c228b8ab474b817ff1d64c216",
       "752ae60e": "e3df9d90adb0d44c43cb70b4fd3887c7ddbef1cf",
       "96c57522": "f92d854f017d154c9ae0a2351629876515ba48d7",
@@ -144364,6 +144386,7 @@
       "a1989da84ea4381d309e7e08783771f884e913236b9bcc71c3d649aacf76537a": "8e14e85c645187504ec9d162b3ea614a0c421d32",
       "fbb9620e01f4f728e5a8ba86544900978d7803f6a7d577d384e288dfed9a4907": "12a2e718f5f4acd69b6c33a45a4a940b1440a481",
       "c8bfbb36b2bd14b9fcd6de180f9b240c1e219f7970262c162adcc2d0510fa47c": "e7d3caf9691a6c82859903f54232d17474d7b0e7",
+      "5f1fc3f2c1ddca27e07c1f80fefb693793ce988816d9392fb758786296239485": "f145c87fcee0001521ab24f33ef172cd3053fdfb",
       "68db230ab6261f452de8d59fb48110d5d012f5a448cbc77afc1ed487c9b039ce": "16e3c6698a10547c228b8ab474b817ff1d64c216",
       "ba0cd5ef1ceddcab1498a62935106e59a9682b4aea996106b2f3295fbd6fd1cd": "e3df9d90adb0d44c43cb70b4fd3887c7ddbef1cf",
       "a2b5477bddbdf966c5c72f46a0ad2d54ac27147a4c47acfdf18b6941332e385a": "f92d854f017d154c9ae0a2351629876515ba48d7",
@@ -154719,6 +154742,9 @@
       ],
       "data/history.db": [
         "461eb3301dcc796362094fac901a307b29e7024b"
+      ],
+      "Firmware/lh5323m1.bin": [
+        "f145c87fcee0001521ab24f33ef172cd3053fdfb"
       ],
       "DefaultMasks/ReelGradientMask.bmp": [
         "16e3c6698a10547c228b8ab474b817ff1d64c216"
