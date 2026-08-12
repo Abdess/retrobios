@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-11T23:42:04Z",
-  "total_files": 8798,
-  "total_size": 12036729886,
+  "generated_at": "2026-08-12T01:16:00Z",
+  "total_files": 8800,
+  "total_size": 12038835230,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -50611,6 +50611,16 @@
       "crc32": "1294ff68",
       "adler32": "27661d30"
     },
+    "a8b7dce572b74e02e65cb949b2c366c87625157f": {
+      "path": "bios/Other/flycast-dojo/naomi2_boot.bin",
+      "name": "naomi2_boot.bin",
+      "size": 2097152,
+      "sha1": "a8b7dce572b74e02e65cb949b2c366c87625157f",
+      "md5": "659d579ba9aef5b025d87323044e83f4",
+      "sha256": "569541852ed3ff8fdacd04b1c6a57fd491a361ab6c41339bbddfd916bced241e",
+      "crc32": "353fdbcd",
+      "adler32": "9c6f643a"
+    },
     "8251a8e151e31201dcc346d75158ee3996895e74": {
       "path": "bios/Other/fpse/libneon.so",
       "name": "libneon.so",
@@ -55157,6 +55167,16 @@
       "sha256": "2a86458696e83eb924fc6c6fda3ca5d320ca90885bd6c2f32d121757ade389bb",
       "crc32": "74b76447",
       "adler32": "701e6531"
+    },
+    "69ea376dbc7418f69e9e809b448d22a4de012344": {
+      "path": "bios/Other/xroar/alpha-boot-v0.4.rom",
+      "name": "alpha-boot-v0.4.rom",
+      "size": 8192,
+      "sha1": "69ea376dbc7418f69e9e809b448d22a4de012344",
+      "md5": "01e5577ef5dd9eac00bba3698e046afb",
+      "sha256": "411de6824f154f82d49e56c43630fb250b3720ab06daa96a618e16cbf314ec35",
+      "crc32": "d6172b56",
+      "adler32": "a228c7fc"
     },
     "57c0b6681224378ce1d279fde13d644478423783": {
       "path": "bios/Other/zesarux/128s.rom",
@@ -97842,6 +97862,7 @@
       "0eb6b12f36508b24f285ffd793438ef3": "d124045eccc562ff0423b23a240e27ad740fa0c9",
       "c78ac640fcf02eb866b79718f5ed15fa": "20fdca7131478e1ee12691bdafd2d5bb74cbd16f",
       "5bcfc3374fc9b0c16070f1ac42f3dc63": "c0c0b5db93a61276a6fe6842049cb53e564b8413",
+      "659d579ba9aef5b025d87323044e83f4": "a8b7dce572b74e02e65cb949b2c366c87625157f",
       "e612770bc5da7ee1a21d499ce419ce2c": "8251a8e151e31201dcc346d75158ee3996895e74",
       "a750d7553bb9ea6b62a8bf546d048480": "7e11679ec682d6357d0fd99d1454871be3750ee1",
       "8d216a17a010296d8da4c49f8d129e68": "7ee09ee05f522312b723a14e56d9e0f7f5333b7a",
@@ -98296,6 +98317,7 @@
       "1793f23792f615b211afb66cabfc41b6": "77f8f4b3f7ceaa2b30c4ff609822078a3a6452de",
       "6fe54c51eee2aaa078fb3f399ba66f51": "2f6de2169be341f00b3be2dd623a24fb0f987eaf",
       "a471e64e9f69afbe59c10cc94ed1b184": "ecfc092fe6371dbf38e238a8ba5f90785b5db52d",
+      "01e5577ef5dd9eac00bba3698e046afb": "69ea376dbc7418f69e9e809b448d22a4de012344",
       "84aef735da122d55e41a33455c7c3506": "57c0b6681224378ce1d279fde13d644478423783",
       "60e1bd8b4d59b55e5b2175126239517f": "9e535e2e24231ccb65e33d107f6d0ceb23e99477",
       "3b58941e7965e3961323d53fc080f74b": "bb7a77d66e95d2e28ebb610e543c065e0d428619",
@@ -115403,6 +115425,9 @@
       "donpachi.zip": [
         "c0c0b5db93a61276a6fe6842049cb53e564b8413"
       ],
+      "naomi2_boot.bin": [
+        "a8b7dce572b74e02e65cb949b2c366c87625157f"
+      ],
       "libneon.so": [
         "8251a8e151e31201dcc346d75158ee3996895e74"
       ],
@@ -116698,6 +116723,9 @@
       ],
       "data.zip": [
         "ecfc092fe6371dbf38e238a8ba5f90785b5db52d"
+      ],
+      "alpha-boot-v0.4.rom": [
+        "69ea376dbc7418f69e9e809b448d22a4de012344"
       ],
       "128s.rom": [
         "57c0b6681224378ce1d279fde13d644478423783"
@@ -129855,6 +129883,15 @@
       "epr-21576d.bin": [
         "6d27d71aec4dfba98f66316ae74a1426d567698a"
       ],
+      "naomi2_boot.bin.bin": [
+        "a8b7dce572b74e02e65cb949b2c366c87625157f"
+      ],
+      "naomi2_bios.bin": [
+        "a8b7dce572b74e02e65cb949b2c366c87625157f"
+      ],
+      "naomi2_bios.bin.bin": [
+        "a8b7dce572b74e02e65cb949b2c366c87625157f"
+      ],
       "amrdecoder_64.dll": [
         "aedd333c565ccf05fb062289e5fab4722883712c"
       ],
@@ -129935,6 +129972,9 @@
       ],
       "Dragon Data Ltd - Dragon Alpha Boot v1.0 150584": [
         "4a5851aa66eb426e9bb0bba196f1e02d48156068"
+      ],
+      "alpha_bt_04": [
+        "69ea376dbc7418f69e9e809b448d22a4de012344"
       ],
       "Color Basic v1.2 (1982)(Tandy)": [
         "0f14dc46c647510eb0b7bd3f53e33da07907d04f"
@@ -134931,6 +134971,7 @@
       "88d0be26": "d124045eccc562ff0423b23a240e27ad740fa0c9",
       "3c79ef05": "20fdca7131478e1ee12691bdafd2d5bb74cbd16f",
       "1294ff68": "c0c0b5db93a61276a6fe6842049cb53e564b8413",
+      "353fdbcd": "a8b7dce572b74e02e65cb949b2c366c87625157f",
       "31669117": "8251a8e151e31201dcc346d75158ee3996895e74",
       "9f8f2889": "7e11679ec682d6357d0fd99d1454871be3750ee1",
       "4705e9f5": "7ee09ee05f522312b723a14e56d9e0f7f5333b7a",
@@ -135385,6 +135426,7 @@
       "e3447530": "77f8f4b3f7ceaa2b30c4ff609822078a3a6452de",
       "89b8cec7": "2f6de2169be341f00b3be2dd623a24fb0f987eaf",
       "74b76447": "ecfc092fe6371dbf38e238a8ba5f90785b5db52d",
+      "d6172b56": "69ea376dbc7418f69e9e809b448d22a4de012344",
       "0437b160": "57c0b6681224378ce1d279fde13d644478423783",
       "f051746e": "9e535e2e24231ccb65e33d107f6d0ceb23e99477",
       "5b5c92b1": "bb7a77d66e95d2e28ebb610e543c065e0d428619",
@@ -143731,6 +143773,7 @@
       "f76b62e73e7410ab63813b9db36839be12213e4adfd3ee513eb382b7bc3a4a39": "d124045eccc562ff0423b23a240e27ad740fa0c9",
       "6597f75e97e5337198736b42a4d1ea66d4fdf01d685772482811a55e1eddf8f1": "20fdca7131478e1ee12691bdafd2d5bb74cbd16f",
       "a686ebf893d511b5b7667176cd6844593e914595a8bb9ab656b2c66969013b5c": "c0c0b5db93a61276a6fe6842049cb53e564b8413",
+      "569541852ed3ff8fdacd04b1c6a57fd491a361ab6c41339bbddfd916bced241e": "a8b7dce572b74e02e65cb949b2c366c87625157f",
       "ea2e9f8eccb2d590a0d004e0eaffa95ca4eea36f15466b5aa1a9e47393bc004f": "8251a8e151e31201dcc346d75158ee3996895e74",
       "028c8c3bf6e014669939d12734e1b05900d4fbf1174b6ac0c81a265a4947a0e1": "7e11679ec682d6357d0fd99d1454871be3750ee1",
       "cc290ee799ceae5509180011c896135ef664e7dd90a9aed22a879a0a58192b20": "7ee09ee05f522312b723a14e56d9e0f7f5333b7a",
@@ -144185,6 +144228,7 @@
       "f523e23d03e44b3a75b29986fcda65b2b9e71187fe9f20fd701908c9c63b42d6": "77f8f4b3f7ceaa2b30c4ff609822078a3a6452de",
       "73a9ef40bce4fa800eea3a05b794a03513cdddb2cb4d9605e40d421dabe62ce0": "2f6de2169be341f00b3be2dd623a24fb0f987eaf",
       "2a86458696e83eb924fc6c6fda3ca5d320ca90885bd6c2f32d121757ade389bb": "ecfc092fe6371dbf38e238a8ba5f90785b5db52d",
+      "411de6824f154f82d49e56c43630fb250b3720ab06daa96a618e16cbf314ec35": "69ea376dbc7418f69e9e809b448d22a4de012344",
       "51d291fb08a0d4461b714114ef991e996784ec7ee6be8789382dc0781121e08e": "57c0b6681224378ce1d279fde13d644478423783",
       "e56896c14377d17a736f7a6e6fef7180e67847ec253d9ecb5c73e4f3ffc4890c": "9e535e2e24231ccb65e33d107f6d0ceb23e99477",
       "88797a584dd4edea9091396ad3c56be04c5a5fa2bdbdc259e9b3367d31d874bb": "bb7a77d66e95d2e28ebb610e543c065e0d428619",
@@ -163309,6 +163353,7 @@
         "af5af53f66982e749643fdf8b2acbb7d4d3ed229",
         "6e89d1227581c76441a53d605f9e324185f1da33",
         "6d27d71aec4dfba98f66316ae74a1426d567698a",
+        "a8b7dce572b74e02e65cb949b2c366c87625157f",
         "aedd333c565ccf05fb062289e5fab4722883712c",
         "5a5cb5a77d7d55ee69657c2f870416daed52dea7",
         "e17a3a6d265bf1fa150312061134293d2b58288c",
@@ -163328,6 +163373,7 @@
         "c25632f3c2cfd1af3ee26b2f233a1ce1eccc365d",
         "da5b756ba2a9c9ecebaa7daa8ba8bfd984d56a6f",
         "4a5851aa66eb426e9bb0bba196f1e02d48156068",
+        "69ea376dbc7418f69e9e809b448d22a4de012344",
         "0f14dc46c647510eb0b7bd3f53e33da07907d04f",
         "d89196292b9ebd787647cf91bbb83c63da2b4390",
         "c3aba0eb359f7f40d40d7947f72c9ecae6e0525d",
