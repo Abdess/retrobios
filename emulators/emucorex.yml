@@ -144,6 +144,8 @@ files:
     source_ref: "app/src/main/cpp/pcsx2/pcsx2/ps2/BiosTools.cpp:214-241, app/src/main/cpp/pcsx2/pcsx2/ps2/BiosTools.cpp:366, app/src/main/cpp/pcsx2/pcsx2/ps2/BiosTools.cpp:371-381, app/src/main/java/com/sbro/emucorex/core/DocumentPathResolver.kt:25-27, app/src/main/java/com/sbro/emucorex/core/DocumentPathResolver.kt:433-438"
 
   - name: ps2-0230a-20080220.rom2
+    aliases:
+      - "SCPH-90006_BIOS_VX_HK _230.ROM2"
     path: bios/ps2-0230a-20080220.rom2
     system: sony-playstation-2
     required: false

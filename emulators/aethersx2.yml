@@ -101,6 +101,8 @@ files:
     source_ref: "aethersx2/pcsx2/ps2/BiosTools.cpp:192-218, aethersx2 v1.5-3606 usr/share/aethersx2 0xa45b44, aethersx2 v1.5-3939 MacOS/AetherSX2 0x1006e7184"
 
   - name: ps2-0230a-20080220.rom2
+    aliases:
+      - "SCPH-90006_BIOS_VX_HK _230.ROM2"
     path: bios/ps2-0230a-20080220.rom2
     required: false
     max_size: 524288

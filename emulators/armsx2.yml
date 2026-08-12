@@ -139,6 +139,8 @@ files:
     source_ref: "pcsx2/ps2/BiosTools.cpp:214-241, pcsx2/ps2/BiosTools.cpp:381, pcsx2/ps2/BiosTools.cpp:386-397, pcsx2/MemoryTypes.h:13"
 
   - name: ps2-0230a-20080220.rom2
+    aliases:
+      - "SCPH-90006_BIOS_VX_HK _230.ROM2"
     path: pcsx2/bios/ps2-0230a-20080220.rom2
     standalone_path: bios/ps2-0230a-20080220.rom2
     required: false

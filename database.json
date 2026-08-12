@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-12T04:09:18Z",
-  "total_files": 8888,
-  "total_size": 12295693870,
+  "generated_at": "2026-08-12T04:13:01Z",
+  "total_files": 8891,
+  "total_size": 12299364910,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -90184,6 +90184,36 @@
       "crc32": "7ba25709",
       "adler32": "d3384e56"
     },
+    "6b357e8624095770952fc408cdc6647fa62e0d28": {
+      "path": "bios/Sony/PlayStation 2/SCPH-90006_BIOS_VX_HK _230.EROM",
+      "name": "SCPH-90006_BIOS_VX_HK _230.EROM",
+      "size": 3145728,
+      "sha1": "6b357e8624095770952fc408cdc6647fa62e0d28",
+      "md5": "4f84fc8c2f1080a3f5f5859b403c62f3",
+      "sha256": "8801922f614b365d9d37557d7a375d06d385e936804943cb2c52abff55a3d254",
+      "crc32": "a96ce863",
+      "adler32": "694d7661"
+    },
+    "465c2738c280eb1864f679c80b55e468bf670057": {
+      "path": "bios/Sony/PlayStation 2/SCPH-90006_BIOS_VX_HK _230.NVM",
+      "name": "SCPH-90006_BIOS_VX_HK _230.NVM",
+      "size": 1024,
+      "sha1": "465c2738c280eb1864f679c80b55e468bf670057",
+      "md5": "0be3a2f91f780c0ee17de87065e4fbcc",
+      "sha256": "d218113ad67d0c178123b797d31baf7f4ae4a9466251d98b9db4192434d3a5e8",
+      "crc32": "588632a6",
+      "adler32": "6699bbc3"
+    },
+    "b96cf94772f01b8434038285896467884a84b0c2": {
+      "path": "bios/Sony/PlayStation 2/SCPH-90006_BIOS_VX_HK _230.ROM1",
+      "name": "SCPH-90006_BIOS_VX_HK _230.ROM1",
+      "size": 524288,
+      "sha1": "b96cf94772f01b8434038285896467884a84b0c2",
+      "md5": "905ebe2358502f8aaeeeac96d023f4d9",
+      "sha256": "1b7c68be427e6f571596ef6b444e8b86d1b4e2a226d62f6bfc86717a798f2317",
+      "crc32": "0917d374",
+      "adler32": "2ce5cee5"
+    },
     "62f5a0b54a174daf2bf66634b86c6f2a3cd297ce": {
       "path": "bios/Sony/PlayStation 2/SCPH30004R.nvm",
       "name": "SCPH30004R.nvm",
@@ -102538,6 +102568,9 @@
       "bd41c04a80e9cbef0bab382b1c43be4c": "6611151e8f599230cdf19a17318e7e5ddc781961",
       "295caaca6551ec811da55f9e6719f33e": "fff13c6e30c55df9d6241ee08e5d0026c6a5d618",
       "1ec6a33c35317c2ae3fbdf9d46b319d8": "84a9628af6fa8335247c002b1ce6c81a419ea9a5",
+      "4f84fc8c2f1080a3f5f5859b403c62f3": "6b357e8624095770952fc408cdc6647fa62e0d28",
+      "0be3a2f91f780c0ee17de87065e4fbcc": "465c2738c280eb1864f679c80b55e468bf670057",
+      "905ebe2358502f8aaeeeac96d023f4d9": "b96cf94772f01b8434038285896467884a84b0c2",
       "20581825a81dcaf1ea544b645af70a15": "62f5a0b54a174daf2bf66634b86c6f2a3cd297ce",
       "8a4bc67bed996f7e0e8ac6f691805cc2": "dec5e4f137890c338babe13cfb9d41ff869fa721",
       "acafbdf18eee5925f307c9efeb77fc1f": "773b4279d8c8e182dc57e444dbf448a1d115e7e0",
@@ -126716,6 +126749,15 @@
       "SCPH-77008_BIOS_V15_RUS_220.NVM": [
         "84a9628af6fa8335247c002b1ce6c81a419ea9a5"
       ],
+      "SCPH-90006_BIOS_VX_HK _230.EROM": [
+        "6b357e8624095770952fc408cdc6647fa62e0d28"
+      ],
+      "SCPH-90006_BIOS_VX_HK _230.NVM": [
+        "465c2738c280eb1864f679c80b55e468bf670057"
+      ],
+      "SCPH-90006_BIOS_VX_HK _230.ROM1": [
+        "b96cf94772f01b8434038285896467884a84b0c2"
+      ],
       "eeprom.dat": [
         "ffc6261e487efa8c7442069f71acfc4aa826993d"
       ],
@@ -129048,6 +129090,9 @@
       ],
       "SCPH-70004_BIOS_V12_EUR_200.ROM2": [
         "1bae895fbdd658cfb56c53cc2139282cc1e778de"
+      ],
+      "SCPH-90006_BIOS_VX_HK _230.ROM2": [
+        "b96cf94772f01b8434038285896467884a84b0c2"
       ],
       "ps2-0160a-20020207.bin": [
         "f9a5d629a036b99128f7cb530c6e3ca016e9c8b7"
@@ -139949,6 +139994,9 @@
       "c5dd92d4": "6611151e8f599230cdf19a17318e7e5ddc781961",
       "86547c14": "fff13c6e30c55df9d6241ee08e5d0026c6a5d618",
       "7ba25709": "84a9628af6fa8335247c002b1ce6c81a419ea9a5",
+      "a96ce863": "6b357e8624095770952fc408cdc6647fa62e0d28",
+      "588632a6": "465c2738c280eb1864f679c80b55e468bf670057",
+      "0917d374": "b96cf94772f01b8434038285896467884a84b0c2",
       "31791add": "62f5a0b54a174daf2bf66634b86c6f2a3cd297ce",
       "cd9be891": "dec5e4f137890c338babe13cfb9d41ff869fa721",
       "4460a2f0": "773b4279d8c8e182dc57e444dbf448a1d115e7e0",
@@ -148839,6 +148887,9 @@
       "b1704c7da37f03db017ad7576508c61b250d9ed4f3ceda8732ea91a3034f6cbf": "6611151e8f599230cdf19a17318e7e5ddc781961",
       "f57595d834bec00f62ece0fc59f4c0c52ebe26a46100429b065606a851dfa1a8": "fff13c6e30c55df9d6241ee08e5d0026c6a5d618",
       "08ea4442e8f16f0e68b7b07355f044c181cab7747076d135f33184bf32f156af": "84a9628af6fa8335247c002b1ce6c81a419ea9a5",
+      "8801922f614b365d9d37557d7a375d06d385e936804943cb2c52abff55a3d254": "6b357e8624095770952fc408cdc6647fa62e0d28",
+      "d218113ad67d0c178123b797d31baf7f4ae4a9466251d98b9db4192434d3a5e8": "465c2738c280eb1864f679c80b55e468bf670057",
+      "1b7c68be427e6f571596ef6b444e8b86d1b4e2a226d62f6bfc86717a798f2317": "b96cf94772f01b8434038285896467884a84b0c2",
       "0e13330dda0c0190a3ab732593416051df19bf8f3f3186862f84531a9d6915e2": "62f5a0b54a174daf2bf66634b86c6f2a3cd297ce",
       "91d5ae704ff8b6d90165a65f69e9e2be8a9ab9c588c525dc1c9c4ecbbdef1ffd": "dec5e4f137890c338babe13cfb9d41ff869fa721",
       "d07e3adde4da6a3220363b12d7b066168918225546122643ef7d19fece53b8b1": "773b4279d8c8e182dc57e444dbf448a1d115e7e0",

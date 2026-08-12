@@ -1,0 +1,594 @@
+emulator: NetherSX2
+type: standalone
+core_classification: community_fork
+bios_mode: agnostic
+source: "https://github.com/Trixarian/NetherSX2-patch"
+upstream: "https://github.com/Trixarian/AetherSX2"
+author: "Trixarian"
+profiled_date: "2026-08-12"
+source_commit: "75fc270d50b8c1ba81daf874635471b8d07be09e"
+upstream_commit: "1d1f795dfc70e38da67724c7298779260f513889"
+core_version: "2.1-4248"
+display_name: "Sony - PlayStation 2 (NetherSX2)"
+mode: standalone
+cores:
+  - "nethersx2"
+  - "NetherSX2"
+  - "NETHERSX2"
+  - "NETHERSX2-TURNIP"
+  - "NETHERSX2-TURNIP-CLASSIC"
+systems:
+  - sony-playstation-2
+
+bios_directory: "bios/"
+
+notes: |
+  PlayStation 2 emulator for Android, package xyz.aethersx2.android, activity
+  xyz.aethersx2.android.EmulationActivity. The project is a patcher rather than
+  a source tree: it rewrites the AetherSX2 application package, replaces its
+  data assets and signs the result with its own key. Two lines are published,
+  one on the AetherSX2 v1.5-4248 package and one on v1.5-3668, and both name
+  themselves NetherSX2 and keep the same package id. Every statement below was
+  read from the shipped arm64 library lib/arm64-v8a/libemucore.so, which is
+  stripped, and confirmed against the unpatched AetherSX2 packages the project
+  distributes for its own build step.
+  ref: decomp/Extract.bat:1, old/scripts/patch-apk.sh:24-33,
+       nethersx2 v2.1-4248 AndroidManifest.xml
+
+  The patch touches three instructions in the 4248 library. Two turn the
+  compare-and-branch that follows a certificate comparison into a plain branch,
+  which is what lets the package be resigned. The third replaces the test that
+  gates BIOS acceptance. Everything reached by the file loading paths is
+  byte for byte the AetherSX2 build, so the file set below is that build's,
+  read from the 4248 library rather than carried over from another release.
+  ref: decomp/Hackify.bat:24-28,
+       nethersx2 v2.1-4248 libemucore.so 0x838560,
+       nethersx2 v2.1-4248 libemucore.so 0x83b324
+
+  A BIOS image is required and boot stops without one, the application saying
+  it needs a PS2 BIOS in the bios folder of the data directory. The data
+  directory is getExternalFilesDir(null) with getDataDir() behind it, and the
+  folder names under it come from the Folders section, Bios defaulting to bios.
+  A script in the repository moves that root to /storage/emulated/0/NetherSX2
+  once all-files access is granted, and patches out the library check that
+  requires the package name in the path; the published packages do not carry it.
+  ref: nethersx2 v2.1-4248 libemucore.so 0xf70a9,
+       nethersx2 v2.1-4248 libemucore.so 0x7ea914-0x7eaa8c,
+       xyz/aethersx2/android/NativeLibrary.smali initializeOnce,
+       patches/patch_root_storage.py:14-35, patches/patch_root_storage.py:261-351
+
+  Detection is by content. The scan lists the BIOS folder with a * mask, keeps
+  files between 4194304 and 8388608 bytes, and accepts an image whose romdir
+  carries a RESET entry followed by a readable ROMVER; the fifth ROMVER
+  character gives the zone, A for USA, C for China, E for Europe, H for Asia,
+  J for Japan, P for Free, T for T10K and X for Test, any other character
+  standing for itself, and an EXTINFO entry is read along the way. Stock 4248
+  also required
+  the sixth character to differ from D, which turned away development images;
+  the patch forces that result to true, and the 3668 line never carried the
+  test. An image named in the configuration is combined with the BIOS folder and
+  opened at that path when it exists, without the size filter and without the
+  romdir test. No name and no hash is matched anywhere. The image is read into
+  the 4 MB ROM region and truncated to it, and one shorter than 2465792 bytes
+  turns off the OSDSys parameter HLE.
+  ref: aethersx2/pcsx2/ps2/BiosTools.cpp:27-28,
+       aethersx2/pcsx2/ps2/BiosTools.cpp:62-175,
+       aethersx2/pcsx2/ps2/BiosTools.cpp:235-260,
+       aethersx2/pcsx2/ps2/BiosTools.cpp:272-332,
+       nethersx2 v2.1-4248 libemucore.so 0x828d80-0x828f10,
+       nethersx2 v2.1-4248 libemucore.so 0x829020-0x8292c0,
+       nethersx2 v2.1-4248 libemucore.so 0x829244-0x829248
+
+  Companions derive from the selected image. rom1 and rom2 are appended to the
+  full name first, then substituted for the existing extension, so an image at
+  ps2-0230a-20080220.bin is followed by ps2-0230a-20080220.bin.rom1 then
+  ps2-0230a-20080220.rom1. The nvm and the mec are read at the substituted
+  extension only, and both are written with defaults when they are absent or
+  too short. No erom is loaded on this code line.
+  ref: aethersx2/pcsx2/ps2/BiosTools.cpp:193-218,
+       aethersx2/pcsx2/CDVD/CDVD.cpp:120-144,
+       aethersx2/pcsx2/CDVD/CDVD.cpp:180-214,
+       nethersx2 v2.1-4248 libemucore.so 0x8288b0-0x828b90
+
+  The network adapter opens eeprom.dat and flash.dat by bare name, so they
+  resolve against the process working directory, which the application never
+  sets. A compiled-in image stands in for the first and a card filled with 0xFF
+  for the second. DEV9hdd.raw is the default name of the empty disk image its
+  settings page writes. An IRX named in the configuration is read into the ROM
+  region at 0x3C0000 at boot; the field is empty by default and names no file of
+  its own.
+  ref: aethersx2/pcsx2/DEV9/DEV9.cpp:146-161,
+       aethersx2/pcsx2/DEV9/flash.cpp:76-104,
+       aethersx2/pcsx2/ps2/BiosTools.cpp:220-233,
+       nethersx2 v2.1-4248 libemucore.so 0x7c5bec-0x7c5ca0,
+       nethersx2 v2.1-4248 libemucore.so 0x828bc0-0x828ca0
+
+  Resources are read out of the package itself. The library has no asset
+  manager of its own and calls back into readPackageFile, readPackageFileToString
+  and playSoundAsync, each taking an asset-relative name, so the game database,
+  the patch archives, the interface fonts, the shader sources every backend
+  compiles at startup and the achievement sounds are versioned with the build
+  and never looked for on disk. The game list draws its region flags and rating
+  stars from the same assets. The project ships its own game database, patch
+  archives and help pages, and adds two files the 4248 package does not carry,
+  placeholder.png, which the library names outright, and the Polish flag the
+  game list can ask for.
+  ref: nethersx2 v2.1-4248 libemucore.so 0x8348d0,
+       nethersx2 v2.1-4248 libemucore.so 0x834bb0,
+       xyz/aethersx2/android/NativeLibrary.smali readPackageFile,
+       xyz/aethersx2/android/NativeLibrary.smali playSoundAsync
+
+files:
+  - name: ps2-0230a-20080220.bin
+    path: bios/ps2-0230a-20080220.bin
+    required: true
+    min_size: 4194304
+    max_size: 8388608
+    validation: [size]
+    description: "PS2 BIOS image"
+    note: >-
+      Any image whose romdir holds RESET and a readable ROMVER is accepted,
+      whatever its name. The 4 to 8 MB range gates the folder scan; an image
+      named in the configuration skips both that range and the romdir test. The
+      sixth ROMVER character is not examined here, the patch having replaced the
+      test that rejected images carrying D.
+    source_ref: "aethersx2/pcsx2/ps2/BiosTools.cpp:27-28, aethersx2/pcsx2/ps2/BiosTools.cpp:235-260, nethersx2 v2.1-4248 libemucore.so 0x828d80-0x828f10, nethersx2 v2.1-4248 libemucore.so 0x829244-0x829248"
+
+  - name: ps2-0230a-20080220.rom1
+    path: bios/ps2-0230a-20080220.rom1
+    required: false
+    max_size: 4194304
+    description: "DVD player ROM"
+    note: >-
+      Tried as {bios}.rom1 then {biosbase}.rom1. Read at 0x2404000 of the EE
+      memory block and truncated to 4 MB. Logged and skipped when absent.
+    source_ref: "aethersx2/pcsx2/ps2/BiosTools.cpp:193-218, nethersx2 v2.1-4248 libemucore.so 0x8288b0-0x828a24"
+
+  - name: ps2-0230a-20080220.rom2
+    aliases:
+      - "SCPH-90006_BIOS_VX_HK _230.ROM2"
+    path: bios/ps2-0230a-20080220.rom2
+    required: false
+    max_size: 524288
+    description: "Chinese ROM extension"
+    note: >-
+      Same two-step naming as rom1. Read at 0x2804000 of the EE memory block and
+      truncated to 512 KB. Only present on Chinese region consoles.
+    source_ref: "aethersx2/pcsx2/ps2/BiosTools.cpp:193-218, nethersx2 v2.1-4248 libemucore.so 0x828a34-0x828b90"
+
+  - name: ps2-0230a-20080220.nvm
+    path: bios/ps2-0230a-20080220.nvm
+    required: false
+    hle_fallback: true
+    min_size: 1024
+    validation: [size]
+    description: "Console NVRAM"
+    note: >-
+      Read at the BIOS path with the extension replaced by nvm, opened r+b.
+      Carries the console id, the iLink id, the language and the OSD
+      configuration. A 1024 byte image is written when the file is missing or
+      shorter, zeroed except for a fixed iLink id and the language defaults of
+      the BIOS region, and it is rewritten when the language block reads back
+      blank.
+    source_ref: "aethersx2/pcsx2/CDVD/CDVD.cpp:158-214, nethersx2 v2.1-4248 libemucore.so 0x79b930-0x79bb90, nethersx2 v2.1-4248 libemucore.so 0x79bce0"
+
+  - name: ps2-0230a-20080220.mec
+    path: bios/ps2-0230a-20080220.mec
+    required: false
+    hle_fallback: true
+    min_size: 4
+    validation: [size]
+    description: "Mechacon version"
+    note: >-
+      Read at the BIOS path with the extension replaced by mec. Written as
+      03 06 02 00 when the file is missing or shorter than 4 bytes.
+    source_ref: "aethersx2/pcsx2/CDVD/CDVD.cpp:120-144, nethersx2 v2.1-4248 libemucore.so 0x79cbc0-0x79cdc4"
+
+  - name: eeprom.dat
+    required: false
+    hle_fallback: true
+    size: 64
+    description: "DEV9 EEPROM"
+    note: >-
+      Opened O_RDWR by bare name when the network adapter starts and mapped over
+      64 bytes. A compiled-in image stands in when the file is missing or cannot
+      be mapped.
+    source_ref: "aethersx2/pcsx2/DEV9/DEV9.cpp:146-161, nethersx2 v2.1-4248 libemucore.so 0x7c5c40-0x7c5ca0"
+
+  - name: flash.dat
+    required: false
+    hle_fallback: true
+    max_size: 8650752
+    description: "DEV9 SmartMedia flash image"
+    note: >-
+      Opened rb by bare name at network adapter init and read as 1024 blocks of
+      16 pages of 512 bytes plus 16 ECC bytes. The card is filled with 0xFF when
+      the file is absent.
+    source_ref: "aethersx2/pcsx2/DEV9/flash.cpp:76-104, nethersx2 v2.1-4248 libemucore.so 0x7c5bec-0x7c5c40"
+
+  - name: "<module>.irx"
+    required: false
+    unsourceable: "any IOP module the user points at, under no name the code expects"
+    description: "IOP module injected at boot"
+    note: >-
+      Opened at the path the configuration holds once it is longer than three
+      characters, and read into the ROM region at 0x3C0000, capped at 0x40000
+      bytes. The field is empty by default and names no file of its own.
+    source_ref: "aethersx2/pcsx2/ps2/BiosTools.cpp:220-233, aethersx2/pcsx2/ps2/BiosTools.cpp:327-328, nethersx2 v2.1-4248 libemucore.so 0x828bc0-0x828ca0"
+
+  - name: GameIndex.yaml
+    path: assets/GameIndex.yaml
+    required: false
+    bundled: true
+    size: 1839281
+    md5: a083d432bdcbc3282e51798f8e231a68
+    sha1: 997fdfb1c1873c1a43972b2984ac0da61fd47b14
+    description: "Game database"
+    note: >-
+      Read from the package by name, keyed by serial, and carrying the per-game
+      fixes, patches and settings overrides. Parsed into gamedb.cache in the
+      cache folder. The project maintains its own copy with entries specific to
+      this build.
+    source_ref: "aethersx2/pcsx2/GameDatabase.cpp:35, aethersx2/pcsx2/GameDatabase.cpp:226, nethersx2 v2.1-4248 libemucore.so 0x2e35ec"
+
+  - name: cheats_ws.zip
+    path: assets/cheats_ws.zip
+    required: false
+    bundled: true
+    size: 1688377
+    md5: d9460e9df9ac219b1eb946c76f80ee0f
+    sha1: f0d9c66e4793a014cf431ed20e87056e2a96b68e
+    description: "Widescreen patch archive"
+    note: >-
+      Per-game pnach entries matched on the disc CRC, read from the package when
+      widescreen patches are enabled. The cheats_ws folder under the data
+      directory takes precedence and the archive is skipped when it holds a
+      match.
+    source_ref: "nethersx2 v2.1-4248 libemucore.so 0x80f8bc-0x80f9a8"
+
+  - name: cheats_ni.zip
+    path: assets/cheats_ni.zip
+    required: false
+    bundled: true
+    size: 221493
+    md5: 70a2f8043f2c1be6c84ecac87157a57b
+    sha1: 0b219dc8b3b98c1705b14758bb7950064b928ebb
+    description: "No-interlacing patch archive"
+    note: >-
+      Same form as cheats_ws.zip, read when no-interlacing patches are enabled,
+      with the cheats_ni folder taking precedence.
+    source_ref: "nethersx2 v2.1-4248 libemucore.so 0x80fa54-0x80facc"
+
+  - name: Roboto-Regular.ttf
+    path: assets/fonts/Roboto-Regular.ttf
+    required: true
+    bundled: true
+    size: 305608
+    md5: 86da78cb59576328483a11c6ef74bc2b
+    sha1: 00d62fbdc8d5dec4c659005e116d0ba2ee63b547
+    description: "Interface font"
+    note: "Read as the standard font when the interface comes up. The load fails without it."
+    source_ref: "nethersx2 v2.1-4248 libemucore.so 0x7dc87c-0x7dc88c"
+
+  - name: RobotoMono-Medium.ttf
+    path: assets/fonts/RobotoMono-Medium.ttf
+    required: true
+    bundled: true
+    size: 86820
+    md5: 8ad82b1dc550319993a7d6c932b2656d
+    sha1: 9056e59b69c6f1160fdfb92a0773f17f6307f3ad
+    description: "Fixed-width interface font"
+    note: "Read for the fixed-width font. The load fails without it."
+    source_ref: "nethersx2 v2.1-4248 libemucore.so 0x7dc8d0-0x7dc8e0"
+
+  - name: fa-solid-900.ttf
+    path: assets/fonts/fa-solid-900.ttf
+    required: true
+    bundled: true
+    size: 204528
+    md5: dffd9504fcb1894620fa41c700172994
+    sha1: 694b8a2445ff39de415bf4791845442a7b1b81e5
+    description: "Font Awesome icon font"
+    note: "Read for the interface icon glyphs. The load fails without it."
+    source_ref: "nethersx2 v2.1-4248 libemucore.so 0x7dc924-0x7dc934"
+
+  - name: ffx_a.h
+    path: assets/shaders/common/ffx_a.h
+    required: false
+    bundled: true
+    size: 161481
+    md5: 2c539b603dcb15dcdcfdc420eda56ced
+    sha1: 726370c10154ad092c15c251b98c79185e980c7c
+    description: "FidelityFX common header"
+    note: "Prepended to the sharpening shader of both backends."
+    source_ref: "nethersx2 v2.1-4248 libemucore.so 0x616ba0"
+
+  - name: ffx_cas.h
+    path: assets/shaders/common/ffx_cas.h
+    required: false
+    bundled: true
+    size: 63512
+    md5: f8a3d7f48ae19fc372cd0d5d375d5a8d
+    sha1: a1d1a687577f7a607fda35bc88950f57c2129ca5
+    description: "FidelityFX CAS header"
+    note: "Prepended to the sharpening shader of both backends."
+    source_ref: "nethersx2 v2.1-4248 libemucore.so 0x616bb0"
+
+  - name: fxaa.fx
+    path: assets/shaders/common/fxaa.fx
+    required: false
+    bundled: true
+    size: 19420
+    md5: 5cdeb2963c1b68c3ffb04a789cc66d6e
+    sha1: 3ac5f68049ed00d8ff3d2811bd09ef0c036efd0a
+    description: "FXAA shader source"
+    note: "Read by both backends when FXAA is enabled."
+    source_ref: "nethersx2 v2.1-4248 libemucore.so 0x6556c8, nethersx2 v2.1-4248 libemucore.so 0x65f020"
+
+  - name: common_header.glsl
+    path: assets/shaders/opengl/common_header.glsl
+    required: false
+    bundled: true
+    size: 1863
+    md5: 1dcf4ca0cc95f2f8e11b66c2ffeeaffe
+    sha1: 3f47597187030144498af7a92531e8f205561211
+    description: "OpenGL shader preamble"
+    note: "Prepended to every OpenGL program the renderer builds."
+    source_ref: "nethersx2 v2.1-4248 libemucore.so 0x64c5d0"
+
+  - name: convert.glsl
+    path: assets/shaders/opengl/convert.glsl
+    required: false
+    bundled: true
+    size: 11276
+    md5: c3db4fcdd142912c0d9a07f3fb40bbbc
+    sha1: b2a059787ee297654b27f633e37382e239693a36
+    description: "OpenGL format conversion shader"
+    source_ref: "nethersx2 v2.1-4248 libemucore.so 0x64cf14"
+
+  - name: present.glsl
+    path: assets/shaders/opengl/present.glsl
+    required: false
+    bundled: true
+    size: 9458
+    md5: afbb9a89f17ead2d8ce7252c1b44186f
+    sha1: bf2688971a8ef2f2c262c3c2ec579d3dd39793e6
+    description: "OpenGL presentation shader"
+    source_ref: "nethersx2 v2.1-4248 libemucore.so 0x64d458"
+
+  - name: merge.glsl
+    path: assets/shaders/opengl/merge.glsl
+    required: false
+    bundled: true
+    size: 455
+    md5: 2c4d70f62928eac933eec932d7bfa0b3
+    sha1: d1a3c11a1273e1d6c740e4eacc3159842f206683
+    description: "OpenGL frame merge shader"
+    source_ref: "nethersx2 v2.1-4248 libemucore.so 0x64d758"
+
+  - name: interlace.glsl
+    path: assets/shaders/opengl/interlace.glsl
+    required: false
+    bundled: true
+    size: 6246
+    md5: 0e537dd838a7ecd3b687f3f7cc60a7be
+    sha1: e74e58f530abb4af02c0875c2f04d507e854869e
+    description: "OpenGL deinterlacing shader"
+    source_ref: "nethersx2 v2.1-4248 libemucore.so 0x64da84"
+
+  - name: shadeboost.glsl
+    path: assets/shaders/opengl/shadeboost.glsl
+    required: false
+    bundled: true
+    size: 1457
+    md5: 3d1e2be521a66cbfc2c5ff32057e7bf4
+    sha1: 8d8b8966afd2ad840151f7fcb494739041708c89
+    description: "OpenGL brightness and contrast shader"
+    source_ref: "nethersx2 v2.1-4248 libemucore.so 0x64dc8c"
+
+  - name: cas.glsl
+    path: assets/shaders/opengl/cas.glsl
+    required: false
+    bundled: true
+    size: 2448
+    md5: f8a684763e24557c97e3f5d05935bb3b
+    sha1: 1a69a0fc522caff98fc3829ebf3f12a6a006a058
+    description: "OpenGL sharpening shader"
+    source_ref: "nethersx2 v2.1-4248 libemucore.so 0x64ee98"
+
+  - name: tfx_vgs.glsl
+    path: assets/shaders/opengl/tfx_vgs.glsl
+    required: false
+    bundled: true
+    size: 5756
+    md5: a97e9616f298bb9041bf9e45ee2ec597
+    sha1: 0e9e98f766c9250b465af776d0077f49f797fed2
+    description: "OpenGL texture function vertex and geometry shader"
+    source_ref: "nethersx2 v2.1-4248 libemucore.so 0x64f1f0"
+
+  - name: tfx_fs.glsl
+    path: assets/shaders/opengl/tfx_fs.glsl
+    required: false
+    bundled: true
+    size: 26680
+    md5: 24e39ca8f97a1ee4cbd1e9bf8b8da2fd
+    sha1: 00eb0418e7a25c89aaf7c526922fe45d83243ec5
+    description: "OpenGL texture function fragment shader"
+    source_ref: "nethersx2 v2.1-4248 libemucore.so 0x64f200"
+
+  - name: tfx.glsl
+    path: assets/shaders/vulkan/tfx.glsl
+    required: false
+    bundled: true
+    size: 29540
+    md5: f80e78f88892f0b82ad154eee613f537
+    sha1: aa06cffa086126bb4972674562a5f5c8dc6082f3
+    description: "Vulkan texture function shader"
+    source_ref: "nethersx2 v2.1-4248 libemucore.so 0x65b1b0"
+
+  - name: convert.glsl
+    path: assets/shaders/vulkan/convert.glsl
+    required: false
+    bundled: true
+    size: 9354
+    md5: 7146002ee907b5242cf184d3d504fcec
+    sha1: b18a236b62e11a85c7ffda6ae60bfb312d6524ef
+    description: "Vulkan format conversion shader"
+    source_ref: "nethersx2 v2.1-4248 libemucore.so 0x65ca34, nethersx2 v2.1-4248 libemucore.so 0x65f008"
+
+  - name: present.glsl
+    path: assets/shaders/vulkan/present.glsl
+    required: false
+    bundled: true
+    size: 8177
+    md5: 72626d625bb963c6cd7074d4dfd0adda
+    sha1: 4871ee00b249b41d16232769e2f661bedd1c83db
+    description: "Vulkan presentation shader"
+    source_ref: "nethersx2 v2.1-4248 libemucore.so 0x65d7f0"
+
+  - name: merge.glsl
+    path: assets/shaders/vulkan/merge.glsl
+    required: false
+    bundled: true
+    size: 669
+    md5: b776383d21609db24d5348c381c2c286
+    sha1: b09de39d6459c70ffab28dcb3e3ef879b1648674
+    description: "Vulkan frame merge shader"
+    source_ref: "nethersx2 v2.1-4248 libemucore.so 0x65e84c"
+
+  - name: interlace.glsl
+    path: assets/shaders/vulkan/interlace.glsl
+    required: false
+    bundled: true
+    size: 6707
+    md5: bf3caa2532873593218bc4a09e924d4e
+    sha1: f8d14d80036f11707c7e94db2a77531d582019dd
+    description: "Vulkan deinterlacing shader"
+    source_ref: "nethersx2 v2.1-4248 libemucore.so 0x65e01c"
+
+  - name: shadeboost.glsl
+    path: assets/shaders/vulkan/shadeboost.glsl
+    required: false
+    bundled: true
+    size: 1741
+    md5: 366b45b6c4e9ed8e6b7454eebcb5d010
+    sha1: 26b29f57685d8108cf519c4f1d340d43aacbff6e
+    description: "Vulkan brightness and contrast shader"
+    source_ref: "nethersx2 v2.1-4248 libemucore.so 0x65f2d4"
+
+  - name: cas.glsl
+    path: assets/shaders/vulkan/cas.glsl
+    required: false
+    bundled: true
+    size: 2624
+    md5: 56f3cf4de895dd4d32d6c79d564d0c5b
+    sha1: 709fd5393188f7cff0fe4230d0e3e8b69a82f5b9
+    description: "Vulkan sharpening shader"
+    source_ref: "nethersx2 v2.1-4248 libemucore.so 0x65fa0c"
+
+  - name: unlock.wav
+    path: assets/sounds/achievements/unlock.wav
+    required: false
+    bundled: true
+    size: 87714
+    md5: 4d035ee86f836bfed422a975cf65c9cc
+    sha1: eb488a76217629f620e40287567d7e2b30337680
+    description: "Achievement unlock sound"
+    note: "Handed to playSoundAsync, which opens it from the package and plays it through MediaPlayer."
+    source_ref: "nethersx2 v2.1-4248 libemucore.so 0x81cd38"
+
+  - name: lbsubmit.wav
+    path: assets/sounds/achievements/lbsubmit.wav
+    required: false
+    bundled: true
+    size: 82096
+    md5: fa6a7030a9f259ee7300dd0bd49f24f3
+    sha1: 5ad1e110dcf0ffd26405981398892a82e4f3bad1
+    description: "Leaderboard submission sound"
+    source_ref: "nethersx2 v2.1-4248 libemucore.so 0x81d464"
+
+  - name: message.wav
+    path: assets/sounds/achievements/message.wav
+    required: false
+    bundled: true
+    size: 15696
+    md5: d66b0bccd743bd11eaca55bcaec925da
+    sha1: c54f04b63ac6f04e0a0944ef260b5497e4494dbd
+    description: "Achievement notification sound"
+    source_ref: "nethersx2 v2.1-4248 libemucore.so 0x81bd44"
+
+  - name: placeholder.png
+    path: assets/placeholder.png
+    required: false
+    bundled: true
+    size: 2762
+    md5: 8f846541ccbf088ee7f8c49c8dcb3a6a
+    sha1: c36292ab7e16bf5a6cbc4063f638e24872349c45
+    description: "Fallback interface texture"
+    note: >-
+      Requested from the texture cache when a notification or a loading screen
+      has no image of its own. The 4248 package names it without carrying one,
+      and the project adds it.
+    source_ref: "nethersx2 v2.1-4248 libemucore.so 0x7dcbf0, nethersx2 v2.1-4248 libemucore.so 0x7dd560, nethersx2 v2.1-4248 libemucore.so 0x8238dc"
+
+  - name: "<region>.png"
+    path: assets/icons/flags/NTSC-U.png
+    required: false
+    bundled: true
+    description: "Game list region flag"
+    note: >-
+      Loaded as icons/flags/<region>.png with the region string of the entry.
+      Thirty are carried, seven NTSC and twenty-two PAL plus Other, the Polish
+      flag being one the project adds.
+    source_ref: "nethersx2 v2.1-4248 classes.dex icons/flags/%s.png"
+
+  - name: "star-<rating>.png"
+    path: assets/icons/star-0.png
+    required: false
+    bundled: true
+    description: "Game list compatibility rating icon"
+    note: "Loaded as icons/star-<rating>.png for ratings 0 to 5."
+    source_ref: "nethersx2 v2.1-4248 classes.dex icons/star-%d.png"
+
+  - name: faq.html
+    path: assets/faq.html
+    required: false
+    bundled: true
+    size: 14048
+    md5: c2a64e0bcc401da9b0a3c7adf3cff410
+    sha1: 9163d4a3d19b87483f843e4bf3afe236a50a72d2
+    description: "Help page"
+    note: "Opened under the android_asset scheme in the built-in browser view."
+    source_ref: "nethersx2 v2.1-4248 classes.dex android_asset faq.html"
+
+  - name: 3rdparty.html
+    path: assets/3rdparty.html
+    required: false
+    bundled: true
+    size: 90296
+    md5: fb4ff036f3e4769aa6daefdc4c5dba57
+    sha1: 7743bf1d7e6e09a02f1b2972aa63bd8a9f26050d
+    description: "Third party notices page"
+    note: "Opened under the android_asset scheme in the built-in browser view."
+    source_ref: "nethersx2 v2.1-4248 classes.dex android_asset 3rdparty.html"
+
+exclusion_note: >
+  Left out are the assets the package carries that no code path on this platform
+  opens. game_controller_db.txt is the largest of them: the desktop AetherSX2
+  hands it to SDL, the Android library links no SDL at all and takes pad input
+  through handleControllerButtonEvent and handleControllerAxisEvent, and the
+  name appears in neither the library nor the dex of the 3668 and 4248 packages,
+  stock or patched. The same holds for the seven Direct3D shader sources under
+  shaders/dx11, for icons/AppIconLarge.png and cover-placeholder.png, for
+  fonts/Roboto-Regular-copyright and sounds/achievements/README.txt, which are
+  licence and credit texts, and for dexopt/baseline.prof and baseline.profm,
+  which the Android runtime consumes rather than the application. Also left out
+  is everything the emulator produces for itself under the data directory:
+  memory cards as Mcd<nnn>.ps2, DEV9hdd.raw for the internal disk, save states,
+  screenshots, covers, texture dumps, logs, per-game settings, input profiles
+  and the gamedb and pipeline caches. The two branches the patch turns into
+  plain branches sit behind certificate comparisons and touch no file.
+  ref: nethersx2 v2.1-4248 libemucore.so 0x7ea914-0x7eaa8c,
+       nethersx2 v2.1-4248 libemucore.so 0x838560,
+       nethersx2 v2.1-4248 libemucore.so 0x83b324,
+       decomp/Hackify.bat:25-26
