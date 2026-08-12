@@ -664,15 +664,24 @@ def resolve_local_file(
     # is identity evidence only when no content hash was declared.  A stale
     # or incorrect destination can therefore never mask a hash mismatch.
     if dest_hint and by_path_suffix:
-        for match_sha1 in by_path_suffix.get(dest_hint, []):
-            if match_sha1 in files_db:
+        # A destination is written from the emulator's point of view
+        # ("pcsx2/resources/GameIndex.yaml") and the index from the repo's
+        # layout, so the two meet on a tail rather than on the whole string.
+        # Longest tail first, and never down to the bare filename: that is the
+        # weaker step below, and five files answer to GameIndex.yaml.
+        hint_parts = dest_hint.split("/")
+        for start in range(len(hint_parts) - 1):
+            for match_sha1 in by_path_suffix.get("/".join(hint_parts[start:]), []):
+                if match_sha1 not in files_db:
+                    continue
                 path = files_db[match_sha1]["path"]
-                if os.path.exists(path):
-                    if not has_strong_hash:
-                        return path, "path_exact"
-                    status = _record_match_status(match_sha1)
-                    if status:
-                        return path, status
+                if not os.path.exists(path):
+                    continue
+                if not has_strong_hash:
+                    return path, "path_exact"
+                status = _record_match_status(match_sha1)
+                if status:
+                    return path, status
 
     # 3. No MD5 = any file with that name or alias (existence check)
     def _size_ok(match_sha1: str) -> bool:

@@ -861,43 +861,56 @@ def _collect_emulator_extras(
             if not any(f.get("agnostic") for f in profile.get("files", [])):
                 continue
 
+        # Where each of this profile's files resolves.  A scan anchored on one
+        # filename walks into whatever tree that name happens to hit: rom1.bin
+        # is a PS2 ROM and a Roland SC-55 ROM, GameIndex.yaml belongs to four
+        # PS2 profiles and to an Android package.  One match is not evidence
+        # of a directory; two files of the same profile agreeing is.
+        resolved_dirs: dict[int, str] = {}
+        named_only: set[int] = set()
+        agnostic_votes: dict[str, int] = {}
+        for candidate in profile.get("files", []):
+            if not isinstance(candidate, dict):
+                continue
+            local, status = resolve_local_file(
+                candidate, db, dest_hint=candidate.get("path", "")
+            )
+            if not local or "/" not in local:
+                continue
+            directory = local.rsplit("/", 1)[0]
+            if directory.endswith("/.variants"):
+                directory = directory[: -len("/.variants")]
+            resolved_dirs[id(candidate)] = directory + "/"
+            if not (resolution_is_hash_exact(status) or status == "path_exact"):
+                named_only.add(id(candidate))
+            agnostic_votes[directory + "/"] = (
+                agnostic_votes.get(directory + "/", 0) + 1
+            )
+
         for f in profile.get("files", []):
             if not is_profile_agnostic and not f.get("agnostic"):
                 continue
             fname = f.get("name", "")
             if not fname:
                 continue
+            # An agnostic BIOS mode says the BIOS filename is free, not that
+            # every file the emulator loads is.  A free filename still has a
+            # known shape, and that shape is what identifies a candidate: an
+            # entry declaring no size takes the whole directory, which is how
+            # the flag icons of an Android package walked into a PS2 pack.
+            if f.get("category", "bios") != "bios":
+                continue
+            if not (f.get("size") or f.get("min_size") or f.get("max_size")):
+                continue
 
-            # Derive path prefix from the representative file in the DB
-            path_prefix = None
-            sha1_list = by_name.get(fname, [])
-            for sha1 in sha1_list:
-                entry = files_db.get(sha1, {})
-                path = entry.get("path", "")
-                if path:
-                    parts = path.rsplit("/", 1)
-                    if len(parts) == 2:
-                        path_prefix = parts[0] + "/"
-                    break
-
+            path_prefix = resolved_dirs.get(id(f), "")
             if not path_prefix:
-                # Fallback: try other files in the profile for the same system
-                for other_f in profile.get("files", []):
-                    if other_f is f:
-                        continue
-                    other_name = other_f.get("name", "")
-                    for sha1 in by_name.get(other_name, []):
-                        entry = files_db.get(sha1, {})
-                        path = entry.get("path", "")
-                        if path:
-                            parts = path.rsplit("/", 1)
-                            if len(parts) == 2:
-                                path_prefix = parts[0] + "/"
-                            break
-                    if path_prefix:
-                        break
-
-            if not path_prefix:
+                continue
+            # A name matching one file identifies it. A name matching several
+            # identifies nothing on its own, so the profile's other files have
+            # to agree on the directory before the scan walks it.
+            ambiguous = id(f) in named_only and len(by_name.get(fname, [])) > 1
+            if ambiguous and agnostic_votes.get(path_prefix, 0) < 2:
                 continue
 
             # Size criteria from the file entry
@@ -928,6 +941,12 @@ def _collect_emulator_extras(
                     {
                         "name": scan_name,
                         "destination": dest,
+                        # The scan already holds the entry it selected, so it
+                        # names it by content.  Emitting the filename alone
+                        # sent the packing step back to a by-name lookup, and
+                        # three PS2 resources came back from another
+                        # emulator's copy of the same filename.
+                        "sha1": sha1,
                         "required": False,
                         "hle_fallback": False,
                         "source_emulator": profile.get("emulator", emu_name),
