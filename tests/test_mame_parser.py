@@ -71,6 +71,16 @@ ROM_END
 CONS( 1988, megadriv, 0, 0, megadriv, megadriv, md_state, init_megadriv, "Sega", "Mega Drive", MACHINE_IS_BIOS_ROOT )
 """
 
+# GAMEL macro: GAME plus a layout, the form gq863 and aristmk5 are written with
+GAMEL_FIXTURE = """\
+ROM_START( gq863 )
+    ROM_REGION( 0x080000, "audiocpu", 0 )
+    ROM_LOAD( "863a03.7b", 0x000000, 0x080000, CRC(81498f73) SHA1(3599b40a5872eab3a00d345287635355fcb25a71) )
+ROM_END
+
+GAMEL( 1999, gq863, 0, twinkle, twinkle, twinkle_state, empty_init, ROT0, "Konami", "Twinkle System", MACHINE_IS_BIOS_ROOT, layout_bmiidx )
+"""
+
 # GAME macro WITHOUT MACHINE_IS_BIOS_ROOT (should NOT be detected)
 NON_BIOS_FIXTURE = """\
 ROM_START( pacman )
@@ -118,6 +128,17 @@ ROM_END
 GAME( 1989, rcgp, 0, rcgp, rcgp, test_state, init_test, ROT0, "Namco", "R/C Grand Prix", MACHINE_IS_BIOS_ROOT )
 """
 
+# Sizes written as arithmetic, as konamigx.c does for its GX_BIOS macro
+ARITHMETIC_SIZE_FIXTURE = """\
+ROM_START( konamigx )
+    ROM_REGION( 8*1024*1024, "maincpu", ROMREGION_ERASEFF )
+    ROM_LOAD( "300a01.34k", 0x000000, 128*1024, CRC(d5fa95f5) SHA1(c483aa98ff8ef40cdac359c19ad23fea5ecc1906) )
+    ROM_LOAD( "300a02.31k", 0x020000, 0x10000+0x800, CRC(d5fa95f6) SHA1(c483aa98ff8ef40cdac359c19ad23fea5ecc1907) )
+ROM_END
+
+GAME( 1994, konamigx, 0, konamigx, konamigx, gx_state, init_gx, ROT0, "Konami", "System GX", MACHINE_IS_BIOS_ROOT )
+"""
+
 
 class TestFindBiosRootSets(unittest.TestCase):
     """Tests for find_bios_root_sets."""
@@ -135,6 +156,14 @@ class TestFindBiosRootSets(unittest.TestCase):
     def test_detects_from_cons_macro(self) -> None:
         result = find_bios_root_sets(CONS_FIXTURE, "src/mame/sega/megadriv.cpp")
         self.assertIn("megadriv", result)
+
+    def test_detects_from_gamel_macro(self) -> None:
+        result = find_bios_root_sets(GAMEL_FIXTURE, "src/mame/konami/twinkle.cpp")
+        self.assertIn("gq863", result)
+
+    def test_gamel_rom_block_is_parsed(self) -> None:
+        roms = parse_rom_block(GAMEL_FIXTURE, "gq863")
+        self.assertEqual([r["name"] for r in roms], ["863a03.7b"])
 
     def test_ignores_non_bios_games(self) -> None:
         result = find_bios_root_sets(NON_BIOS_FIXTURE, "src/mame/pacman/pacman.cpp")
@@ -227,6 +256,16 @@ class TestParseRomBlock(unittest.TestCase):
     def test_returns_empty_for_unknown_set(self) -> None:
         roms = parse_rom_block(NEOGEO_FIXTURE, "nonexistent")
         self.assertEqual(roms, [])
+
+    def test_evaluates_arithmetic_sizes(self) -> None:
+        roms = parse_rom_block(ARITHMETIC_SIZE_FIXTURE, "konamigx")
+        self.assertEqual([r["name"] for r in roms], ["300a01.34k", "300a02.31k"])
+        self.assertEqual(roms[0]["size"], 131072)
+        self.assertEqual(roms[1]["size"], 0x10800)
+
+    def test_tracks_region_with_arithmetic_size(self) -> None:
+        roms = parse_rom_block(ARITHMETIC_SIZE_FIXTURE, "konamigx")
+        self.assertEqual(roms[0]["region"], "maincpu")
 
     def test_good_rom_not_flagged_bad_dump(self) -> None:
         roms = parse_rom_block(NODUMP_FIXTURE, "testnd")

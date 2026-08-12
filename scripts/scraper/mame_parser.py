@@ -1,7 +1,7 @@
 """Parser for MAME C source files.
 
 Extracts BIOS root sets and ROM definitions from MAME driver sources.
-Handles GAME/SYST/COMP/CONS macros with MACHINE_IS_BIOS_ROOT flag,
+Handles GAME/GAMEL/SYST/COMP/CONS macros with MACHINE_IS_BIOS_ROOT flag,
 ROM_START/ROM_END blocks, ROM_LOAD variants, ROM_REGION, ROM_SYSTEM_BIOS,
 NO_DUMP filtering, and BAD_DUMP flagging.
 """
@@ -12,9 +12,11 @@ import os
 import re
 from pathlib import Path
 
-# Macros that declare a machine entry
+# Macros that declare a machine entry. GAMEL is GAME plus a layout and is
+# the only suffixed form MAME declares (src/emu/gamedrv.h): a BIOS root that
+# ships a layout, such as gq863 or aristmk5, is written with it.
 _MACHINE_MACROS = re.compile(
-    r"\b(GAME|SYST|COMP|CONS)\s*\(",
+    r"\b(GAMEL|GAME|SYST|COMP|CONS)\s*\(",
     re.MULTILINE,
 )
 
@@ -22,10 +24,13 @@ _MACHINE_MACROS = re.compile(
 _ROM_START = re.compile(r"ROM_START\s*\(\s*(\w+)\s*\)")
 _ROM_END = re.compile(r"ROM_END")
 
+# Offsets and sizes are literals or arithmetic over them, as in 128*1024.
+_NUMBER = r"(?:0x[\da-fA-F]+|\d+)(?:\s*[*+]\s*(?:0x[\da-fA-F]+|\d+))*"
+
 # ROM_REGION variants: ROM_REGION, ROM_REGION16_BE, ROM_REGION16_LE, ROM_REGION32_LE, etc.
 _ROM_REGION = re.compile(
     r"ROM_REGION\w*\s*\("
-    r"\s*(0x[\da-fA-F]+|\d+)\s*,"  # size
+    rf"\s*({_NUMBER})\s*,"  # size
     r'\s*"([^"]+)"\s*,',  # tag
 )
 
@@ -47,8 +52,8 @@ _ROM_LOAD = re.compile(
     r"\b\w*ROMX?_LOAD\w*\s*\("
     r'[^"]*'  # skip any args before the filename (e.g., bios index)
     r'"([^"]+)"\s*,'  # name (first quoted string)
-    r"\s*(0x[\da-fA-F]+|\d+)\s*,"  # offset
-    r"\s*(0x[\da-fA-F]+|\d+)\s*,",  # size
+    rf"\s*({_NUMBER})\s*,"  # offset
+    rf"\s*({_NUMBER})\s*,",  # size
 )
 
 # CRC32 and SHA1 within a ROM_LOAD line
@@ -114,7 +119,7 @@ def strip_comments(source: str) -> str:
 def find_bios_root_sets(source: str, filename: str) -> dict[str, dict]:
     """Find machine entries flagged as BIOS root sets.
 
-    Scans for GAME/SYST/COMP/CONS macros where the args include
+    Scans for GAME/GAMEL/SYST/COMP/CONS macros where the args include
     MACHINE_IS_BIOS_ROOT, returns set names with source location.
     """
     results: dict[str, dict] = {}
@@ -137,6 +142,7 @@ def find_bios_root_sets(source: str, filename: str) -> dict[str, dict]:
 
         # The set name position varies by macro type
         # GAME(year, setname, parent, machine, input, init, monitor, company, fullname, flags)
+        # GAMEL(year, setname, parent, machine, input, init, monitor, company, fullname, flags, layout)
         # CONS(year, setname, parent, compat, machine, input, init, company, fullname, flags)
         # COMP(year, setname, parent, compat, machine, input, init, company, fullname, flags)
         # SYST(year, setname, parent, compat, machine, input, init, company, fullname, flags)
@@ -437,8 +443,12 @@ def _parse_rom_entries(block: str) -> list[dict]:
 
 
 def _parse_int(value: str) -> int:
-    """Parse an integer that may be hex (0x...) or decimal."""
-    value = value.strip()
-    if value.startswith("0x") or value.startswith("0X"):
-        return int(value, 16)
-    return int(value)
+    """Parse a hex or decimal literal, or arithmetic over them as in 128*1024."""
+    total = 0
+    for term in value.split("+"):
+        product = 1
+        for factor in term.split("*"):
+            factor = factor.strip()
+            product *= int(factor, 16 if factor[:2].lower() == "0x" else 10)
+        total += product
+    return total
