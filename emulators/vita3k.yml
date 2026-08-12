@@ -53,6 +53,6 @@ notes: |
   vs0:sys/external/{name}.suprx (firmware). Auto-LLE modules include
   libhttp, libssl, libult, libsas, libpgf, libfios2, libsystemgesture,
   libSceXml, libSceSqlite, librudp, libatrac, libface, libsmart,
-  libsceavplayer, libSceJson, and more (load_module.cpp:142-161).
+  libsceavplayer, libSceJson, and more (load_module.cpp:142-162).
   A third optional preinst firmware PUP (pd0 partition: system BGM, resources)
   is available from Sony but not commonly required for game compatibility.

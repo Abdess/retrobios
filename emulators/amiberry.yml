@@ -23,9 +23,13 @@ notes: |
   kick40068.A4000, cd32.rom, cdtv.rom. "auto" selects per model.
   ref: libretro/libretro.cpp:679,745-764
 
-  Libretro ROM search directories (in order): save_dir/Kickstarts,
-  system_dir/Kickstarts, system_dir/save-data/Kickstarts, system_dir.
-  ref: libretro/libretro.cpp:2722-2742
+  Libretro Kickstart directory detection (in order): save_dir/Kickstarts,
+  save_dir/whdboot/save-data/Kickstarts, system_dir/Kickstarts,
+  system_dir/whdboot/save-data/Kickstarts,
+  system_dir/amiberry/whdboot/save-data/Kickstarts,
+  system_dir/save-data/Kickstarts, else system_dir. system_dir stays first
+  in the ROM multipath, the detected directory follows it.
+  ref: libretro/libretro.cpp:4088-4126
 
   Standalone ROM path: configurable via amiberry.conf "rom_path" setting.
   Batocera sets this to /userdata/bios/amiga/. Fallback search order:
@@ -33,14 +37,14 @@ notes: |
   ../System/rom/kick.rom, then ROM database guess.
   ref: src/memory.cpp:2104-2146
 
-  ROM identification uses SHA1 against WinUAE database (340+ entries) but does
+  ROM identification uses SHA1 against the WinUAE ROM database but does
   not reject unknown ROMs. Cloanto encrypted ROMs supported with rom.key.
-  ref: src/rommgr.cpp:111-1100,1731-1787
+  ref: src/rommgr.cpp:121-1109,1745-1801
 
   Munt MT-32/CM-32L emulation compiled in (WITH_MIDIEMU). ROMs loaded from
   mt32-roms/ subdirectory of the ROM path. Split ROM pairs supported
   (e.g. pcm_mt32_l.rom + pcm_mt32_h.rom).
-  ref: src/midiemu.cpp:82-157
+  ref: src/midiemu.cpp:82-165
 
   Keyboard MCU emulation (keyboard_mode setting) loads MCU ROMs via ROM
   database scanning. Three MCU types supported: 6570-036 (A500/A600/A1000),
@@ -51,7 +55,7 @@ notes: |
   WHDLoad autoboot requires whdboot/ directory with boot-data.zip, WHDLoad,
   AmiQuit, JST, whdload_db.xml. These ship with the standalone build but must
   be obtained separately for the libretro core.
-  ref: src/osdep/amiberry_whdbooter.cpp:1380-1565
+  ref: src/osdep/amiberry_whdbooter.cpp:1601-1873
 
 files:
   # --- Kickstart ROMs ---

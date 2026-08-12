@@ -15,21 +15,18 @@ systems:
 notes: |
   Frozen snapshot of VBA-M circa 2011, optimized for libretro by Squarepusher.
 
-  Built-in HLE BIOS (myROM array, src/gba.cpp:8423) handles all standard SWI
+  Built-in HLE BIOS (myROM array, src/gba.c:8930) handles all standard SWI
   calls. No external BIOS file needed for most games.
 
   BIOS loading gated by HAVE_HLE_BIOS (build/Makefile.common:3) and core option
   vbanext_bios (default: enabled). When enabled, retro_init resolves gba_bios.bin
-  in system_dir (libretro/libretro.cpp:198-202). CPUInit loads via utilLoad(),
-  validates size == 0x4000, sets useBios = true (src/gba.cpp:12430-12438). On
-  failure, myROM is memcpy'd as HLE fallback (src/gba.cpp:12443).
+  in system_dir (libretro/libretro.c:213-218). CPUInit loads via utilLoad(),
+  validates size == 0x4000, sets useBios = true (src/gba.c:12943-12950). On
+  failure, myROM is memcpy'd as HLE fallback (src/gba.c:12954-12956).
 
   With real BIOS, execution starts at 0x00000000 (BIOS entry point). Without,
   jumps to 0x08000000 (ROM entry), skipping boot animation
-  (src/gba.cpp:12657-12675).
-
-  CPUIsGBABios accepts extensions: .gba, .agb, .bin, .bios, .rom
-  (src/gba.cpp:8851-8873).
+  (src/gba.c:13134-13151).
 
   Upstream VBA-M CPUInit (src/core/gba/gba.cpp:3674-3702) is functionally
   identical. No divergences in BIOS handling.

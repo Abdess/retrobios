@@ -48,12 +48,14 @@ notes: |
   FinalBurn Neo is a multi-system arcade and console emulator. BIOS files are
   expected as MAME-format ZIP archives containing individual ROM chips. The
   libretro core searches for BIOS ZIPs in this order
-  (src/burner/libretro/libretro.cpp:922-1030):
-    1. {rom_dir}/{romName}
-    2. {rom_dir}/arcade/{romName}
-    3. {system_dir}/fbneo/{romName}
-    4. {system_dir}/fbneo/arcade/{romName}
-    5. {system_dir}/{romName}
+  (src/burner/libretro/libretro.cpp:930-1083):
+    1. {system_dir}/fbneo/patched/{romName}
+    2. {rom_dir}/{romName}
+    3. {rom_dir}/{arcade|consoles}/{romName}
+    4. {system_dir}/fbneo/{romName}
+    5. {system_dir}/fbneo/{arcade|consoles}/{romName}
+    6. {system_dir}/{romName}
+    7. directories listed in rom_path.opt, plain then per-type subdirectories
 
   Each game driver specifies a parent BIOS set via BurnDriver. The BIOS ZIP
   must contain the individual ROM chip files listed below. CRC32 values from

@@ -23,7 +23,7 @@ notes: |
     builtin  - always use the built-in open-source BIOS
     official - try gba_bios.bin, warn and fall back to built-in if missing
 
-  BIOS loading path (libretro/libretro.c:1100-1131):
+  BIOS loading path (libretro/libretro.c:1200-1236):
     1. Resolve system directory (RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY)
     2. Append "/gba_bios.bin"
     3. load_bios() reads 0x4000 (16 KB) into bios_rom[]
@@ -50,7 +50,7 @@ platform_details:
   gba:
     bios_size: 16384
     hle_bios: true
-    source_ref: "libretro/libretro.c:1100-1131, bios/source/"
+    source_ref: "libretro/libretro.c:1200-1236, bios/source/core.s"
     note: |
       The built-in BIOS (open_gba_bios_rom, 16 KB) is an open-source
       reimplementation compiled from bios/source/. It implements most

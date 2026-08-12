@@ -21,7 +21,7 @@ files:
 notes:
   hle_available: true
   hle_note: >
-    PIF boot ROM is fully HLE'd (pifbootrom/pifbootrom.c:57). CIC
+    PIF boot ROM is fully HLE'd (mupen64plus-core/src/device/pif/bootrom_hle.c:48). CIC
     challenge/response handled in software (n64_cic_nus_6105.c). No BIOS
     files needed for standard cartridge games.
   dd_note: >

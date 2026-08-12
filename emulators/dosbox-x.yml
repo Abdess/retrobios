@@ -31,7 +31,7 @@ notes: |
   tables, the Z: drive utilities including GLIDE2X.OVL, and the TTF text font are
   compiled in.
   ref: int10_memory.cpp, dos_keyboard_layout_data.h, dos_codepages.h,
-       builtin/glide2x.cpp:2861, output_ttf.cpp:664
+       src/builtin/glide2x.cpp:2861, output_ttf.cpp:664
 
   Files named without a directory are searched in the working directory, the
   program directory, the user configuration directory and the resource

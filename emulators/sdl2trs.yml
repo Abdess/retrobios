@@ -25,14 +25,14 @@ notes: |
   Three ROM slots exist, one per model family, and trs_rom_init picks one from
   trs_model. Model I takes romfile1, Model III and Model 4 share romfile3, and
   Model 4P takes romfile4p (trs_cmd_rom.c:868-894). The defaults are level2.rom,
-  model3.rom and model4p.rom, each prefixed by ROM_PATH (trs_options.c:900-902).
+  model3.rom and model4p.rom, each prefixed by ROM_PATH (trs_options.c:896-898).
   ROM_PATH is a build define left empty unless a packager sets it
   (trs_options.c:53-54, CMakeLists.txt:42), so a stock build resolves the names
   against the working directory.
 
   -rom, -r and -romfile write to the slot of the model selected at the moment
-  they are parsed (trs_options.c:611-622). Options are applied in command-line
-  order after the config file has been read (trs_options.c:1020-1040), so -m has
+  they are parsed (trs_options.c:609-619). Options are applied in command-line
+  order after the config file has been read (trs_options.c:1016-1036), so -m has
   to come first to redirect them, and a model key in the config file otherwise
   decides. -rom1, -rom3 and -rom4p address a slot directly. The GUI ROM browser
   filters on .bin, .hex, .iii and .rom (trs_sdl_gui.h:63, trs_sdl_gui.c:2591-2597).
@@ -65,7 +65,7 @@ files:
     max_size: 18432
     source_ref: "src/trs_options.c:81 (romfile1), src/trs_options.c:896 (default name), src/trs_cmd_rom.c:871-884 (trs_model 1)"
     note: >
-      Model I is the model a stock configuration selects (trs_options.c:927), so
+      Model I is the model a stock configuration selects (trs_options.c:923), so
       this is the slot an unconfigured run reads. Without it the machine runs the
       compiled-in diagnostic stub and nothing else. max_size is the shared ROM
       buffer ceiling: a longer file is truncated, never rejected, and only the
@@ -216,17 +216,17 @@ analysis:
       belong to the platform layer.
     entries:
       - frontend: ES-DE
-        source_ref: "resources/systems/linux/es_systems.xml:2211-2213, USERGUIDE.md:3334-3362"
+        source_ref: "ES-DE resources/systems/linux/es_systems.xml:2211-2213, ES-DE USERGUIDE.md:3334-3362"
         note: >
           Passes -rom %ROMPATH%/trs-80/level2.rom on all three launch commands
           and -disk0 %ROMPATH%/trs-80/boot.dsk on the DOS Diskette one, with
           boot.dsk documented as a copy of a TRS-80 DOS, NewDos/80 v2.0
           recommended. No command passes -m, so the slot -rom writes to follows
           the config file, which is Model I unless the user changed it, and
-          model3.rom and model4p.rom are never named. USERGUIDE.md:3338 records
-          that both filenames are case sensitive.
+          model3.rom and model4p.rom are never named. The ES-DE user guide
+          records that both filenames are case sensitive.
       - frontend: RetroDECK
-        source_ref: "RetroDECK/components archive_later/sdl2trs/component_manifest.json"
+        source_ref: "RetroDECK archive_later/sdl2trs/component_manifest.json"
         note: >
           Declares level1.rom, level2.rom, level3.rom, level4.rom, level4p.rom
           and boot.dsk under $roms_path/trs-80. Of those the emulator opens only

@@ -18,20 +18,20 @@ notes: |
   that loads the original ROM data for graphics, sound, and gameplay logic.
 
   The core looks for ROM files in one of two locations
-  (src/main/libretro/main.cpp:945-967):
+  (src/main/libretro/main.c:1009-1020):
     1. The directory containing a loaded .game content file
     2. {system_dir}/cannonball/
 
-  ROM loading is in src/main/roms.cpp. Each file is verified by CRC32 at load
-  time (src/main/romloader.cpp:70-76). Files are loaded as raw ROM chips, not
+  ROM loading is in src/main/roms.c. Each file is located by CRC32 first,
+  canonical filename as fallback (src/main/romloader.c:168-201). Files are
+  loaded as raw ROM chips, not
   inside ZIP archives.
 
   The Rev B ROM set is always required. Japanese ROM variants are loaded on
   demand when the "Japanese Tracks" core option is enabled.
 
-  Two optional widescreen tilemap patches are loaded from a res/ subdirectory
-  (src/main/engine/omusic.cpp:42-51). These are Cannonball-specific data files,
-  not original arcade ROMs.
+  The widescreen tilemap patches are compiled into the binary
+  (tilemap_data.h) and loaded from memory (src/main/engine/omusic.c:50-67).
 
   The fixed PCM sample variant (opr-10188.71f) replaces opr-10188.71 when the
   "Fix Broken Samples" core option is enabled.
@@ -413,25 +413,6 @@ files:
     validation: [crc32]
     note: "PCM sample bank 5, fixed version (replaces opr-10188.71)"
     source_ref: "src/main/roms.cpp:123"
-
-  # -------------------------------------------------------
-  # Optional: widescreen tilemap patches
-  # -------------------------------------------------------
-  - name: "res/tilemap.bin"
-    path: "cannonball/res/tilemap.bin"
-    system: sega-outrun
-    category: game_data
-    required: false
-    note: "Widescreen tilemap patch, Cannonball-specific"
-    source_ref: "src/main/engine/omusic.cpp:42-44"
-
-  - name: "res/tilepatch.bin"
-    path: "cannonball/res/tilepatch.bin"
-    system: sega-outrun
-    category: game_data
-    required: false
-    note: "Widescreen tile patch, Cannonball-specific"
-    source_ref: "src/main/engine/omusic.cpp:49-51"
 
   # -------------------------------------------------------
   # Japanese ROM variants (loaded when jap option enabled)

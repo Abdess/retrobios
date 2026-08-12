@@ -21,7 +21,7 @@ notes: |
   from vcpkg. The machine setting selects a video adapter (hercules, cga,
   cga_mono, ega, svga_s3, svga_et3000, svga_et4000, svga_paradise, vesa_nolfb,
   vesa_oldvbe) or a machine (pcjr, tandy).
-  ref: dosbox.cpp:1317-1329, vcpkg.json
+  ref: src/dosbox.cpp:1317-1329, vcpkg.json
 
   No system BIOS: the PC BIOS, video BIOS fonts, keyboard layouts and codepage
   tables are implemented in code.
@@ -62,8 +62,9 @@ notes: |
   SOUNDCANVAS_ROM_PATH; the plugin appends the per-model subdirectory, hashes
   every file under 4 MB it finds there and matches SHA256 against its table.
   ref: soundcanvas.cpp:326-373, support.cpp:351-379,
-       Nuked-SC55-CLAP nuked_sc55.cpp:117-215, rom_loader.cpp:32-63,
-       rom_io.cpp:271-564
+       Nuked-SC55-CLAP nuked_sc55.cpp:117-215,
+       Nuked-SC55-CLAP rom_loader.cpp:32-63,
+       Nuked-SC55-CLAP rom_io.cpp:271-564
   soundcanvas_model = auto resolves sc55_121, sc55_120, sc55_110, sc55_100,
   sc55_200, sc55mk2_101, sc55mk2_100 in that order by matching plugin names.
   The plugin publishes six descriptors: SC-55 v1.00, v1.10, v1.20, v1.21,
@@ -87,7 +88,7 @@ notes: |
 
   BIOSTEST.COM loads an arbitrary BIOS image at F000:0 and is compiled only
   when the debugger is enabled, which is off by default.
-  ref: dos/CMakeLists.txt:81-83, biostest.h
+  ref: src/dos/CMakeLists.txt:81-83, biostest.h
 
 files:
   # File names are documentation only: libmt32emu and the Sound Canvas plugin

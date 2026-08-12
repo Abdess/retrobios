@@ -65,5 +65,5 @@ files:
     system: sega-saturn
     required: false
     size: 262144
-    note: "Action Replay 4M Plus firmware. Unfinished in source (ar4mp.cpp:22-24), needs CPU UBC emulation. Cart type not exposed in core options."
+    note: "Action Replay 4M Plus firmware. Unfinished in source (ar4mp.c:22-24), needs CPU UBC emulation. Cart type not exposed in core options."
     source_ref: "mednafen/ss/cart.c:218 (CART_AR4MP case), mednafen/ss/cart/ar4mp.c:150 (CART_AR4MP_Init)"

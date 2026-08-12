@@ -24,8 +24,9 @@ notes: |
   The quest arrives as the content argument. get_quest_path takes the last
   non-option argv and otherwise falls back to SOLARUS_DEFAULT_QUEST, which
   defaults to "." (MainLoop.cpp:108-121, cmake/AddOptions.cmake:8,
-  Common.h:119-123). open_quest mounts that path through PhysFS directly, then
-  tries <path>/data, <path>/data.solarus and <path>/data.solarus.zip, each both
+  include/solarus/core/Common.h:119-123). open_quest mounts that path through
+  PhysFS directly, then tries <path>/data, <path>/data.solarus and
+  <path>/data.solarus.zip, each both
   relative and under PHYSFS_getBaseDir (QuestFiles.cpp:151-165), and the quest
   counts as found once quest.dat resolves (QuestFiles.cpp:228-233). The rest
   comes out of that mount: quest.dat and project_db.dat
