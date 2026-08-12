@@ -7,6 +7,7 @@ and file resolution - eliminates DRY violations across scripts.
 from __future__ import annotations
 
 import hashlib
+import functools
 import json
 import os
 import re
@@ -338,6 +339,120 @@ def resolution_is_hash_exact(status: str) -> bool:
     return status in HASH_EXACT_RESOLUTION_STATUSES
 
 
+def declared_hash_verdict(
+    candidate: str,
+    *,
+    has_strong_hash: bool,
+    sha1_candidates: set,
+    sha256_candidates: set,
+    md5_list: list,
+    crc_raw: str,
+    zipped_file: str | None,
+    declared_size,
+) -> str:
+    """Judge a candidate found by name against everything the entry declares.
+
+    A file reached through a directory walk was matched on its filename,
+    which is the weakest evidence there is. Whatever the entry declares
+    about its content is checked here before the walk may return it.
+    """
+    if not has_strong_hash:
+        return "data_dir"
+    algorithms: set[str] = set()
+    if sha1_candidates:
+        algorithms.add("sha1")
+    if sha256_candidates:
+        algorithms.add("sha256")
+    if md5_list and not zipped_file:
+        algorithms.add("md5")
+    if crc_raw:
+        algorithms.add("crc32")
+    actual = compute_hashes(candidate, frozenset(algorithms)) if algorithms else {}
+    if sha1_candidates and actual.get("sha1", "").lower() not in sha1_candidates:
+        return "hash_mismatch"
+    if sha256_candidates and actual.get("sha256", "").lower() not in sha256_candidates:
+        return "hash_mismatch"
+    if md5_list and not zipped_file and not any(
+        actual.get("md5", "").lower().startswith(expected) for expected in md5_list
+    ):
+        return "hash_mismatch"
+    if crc_raw and actual.get("crc32", "").lower() != crc_raw:
+        return "hash_mismatch"
+    if crc_raw and declared_size is not None:
+        allowed_sizes = declared_size if isinstance(declared_size, list) else [declared_size]
+        if os.path.getsize(candidate) not in allowed_sizes:
+            return "hash_mismatch"
+    if zipped_file and md5_list and not any(
+        check_inside_zip(candidate, zipped_file, expected) == "ok"
+        for expected in md5_list
+    ):
+        return "hash_mismatch"
+    return "data_dir_hash_exact"
+
+
+def _resolve_in_data_dirs(names_to_try, data_dir_registry, verdict):
+    """Look for one of these names in the cached data directories.
+
+    Returns the first candidate whose content satisfies the entry, and
+    separately the first that answered to the name but contradicted it: a
+    name match alone never decides, so the caller reports the contradiction
+    rather than shipping the file.
+    """
+    mismatch: str | None = None
+    for _key, dd_entry in data_dir_registry.items():
+        cache_dir = dd_entry.get("local_cache", "")
+        if not cache_dir or not os.path.isdir(cache_dir):
+            continue
+        for try_name in names_to_try:
+            candidate = os.path.join(cache_dir, try_name)
+            if os.path.isfile(candidate):
+                status = verdict(candidate)
+                if status != "hash_mismatch":
+                    return (candidate, status), mismatch
+                mismatch = mismatch or candidate
+        # The declared path may not be where the cache put it, so the whole
+        # tree is walked for the bare filename, case-insensitively.
+        basename_targets = {
+            (n.rsplit("/", 1)[-1] if "/" in n else n).casefold()
+            for n in names_to_try
+        }
+        for root, _dirs, fnames in os.walk(cache_dir):
+            for fname in fnames:
+                if fname.casefold() in basename_targets:
+                    candidate = os.path.join(root, fname)
+                    status = verdict(candidate)
+                    if status != "hash_mismatch":
+                        return (candidate, status), mismatch
+                    mismatch = mismatch or candidate
+    return None, mismatch
+
+
+def _resolve_agnostic(file_entry: dict, files_db: dict, has_strong_hash: bool):
+    """Any file of the right shape under the declared prefix.
+
+    Some cores accept whatever filename sits in their BIOS directory, so the
+    shape -a size or a size range -is all that identifies a candidate. A
+    declared hash outranks that, and stops this step being reached.
+    """
+    if not file_entry.get("agnostic") or has_strong_hash:
+        return None
+    prefix = file_entry.get("agnostic_path_prefix", "")
+    if not prefix:
+        return None
+    min_size = file_entry.get("min_size", 0)
+    max_size = file_entry.get("max_size", float("inf"))
+    exact_size = file_entry.get("size")
+    if exact_size and not min_size:
+        min_size = max_size = exact_size
+    for _sha1, entry in files_db.items():
+        path = entry.get("path", "")
+        if not path.startswith(prefix):
+            continue
+        if min_size <= entry.get("size", 0) <= max_size and os.path.exists(path):
+            return path, "agnostic_fallback"
+    return None
+
+
 def resolve_local_file(
     file_entry: dict,
     db: dict,
@@ -661,93 +776,34 @@ def resolve_local_file(
                 return result[0], "mame_clone"
 
     # Data directory fallback: scan data/ caches for matching filename
-    def _unindexed_path_status(candidate: str) -> str:
-        """Validate a data-directory candidate without trusting its filename."""
-        if not has_strong_hash:
-            return "data_dir"
-        algorithms: set[str] = set()
-        if sha1_candidates:
-            algorithms.add("sha1")
-        if sha256_candidates:
-            algorithms.add("sha256")
-        if md5_list and not zipped_file:
-            algorithms.add("md5")
-        if crc_raw:
-            algorithms.add("crc32")
-        actual = compute_hashes(candidate, frozenset(algorithms)) if algorithms else {}
-        if sha1_candidates and actual.get("sha1", "").lower() not in sha1_candidates:
-            return "hash_mismatch"
-        if sha256_candidates and actual.get("sha256", "").lower() not in sha256_candidates:
-            return "hash_mismatch"
-        if md5_list and not zipped_file and not any(
-            actual.get("md5", "").lower().startswith(expected) for expected in md5_list
-        ):
-            return "hash_mismatch"
-        if crc_raw and actual.get("crc32", "").lower() != crc_raw:
-            return "hash_mismatch"
-        if crc_raw and declared_size is not None:
-            allowed_sizes = declared_size if isinstance(declared_size, list) else [declared_size]
-            if os.path.getsize(candidate) not in allowed_sizes:
-                return "hash_mismatch"
-        if zipped_file and md5_list and not any(
-            check_inside_zip(candidate, zipped_file, expected) == "ok"
-            for expected in md5_list
-        ):
-            return "hash_mismatch"
-        return "data_dir_hash_exact"
 
     data_dir_mismatch: str | None = None
     # Without a hash the cache walk matches on filename alone, which is the
     # step an unsourceable entry has to skip: hiscore.dat names one file per
     # driver set, so FBNeo's copy would answer for MAME's.
     if data_dir_registry and (has_strong_hash or not unsourceable):
-        for _dd_key, dd_entry in data_dir_registry.items():
-            cache_dir = dd_entry.get("local_cache", "")
-            if not cache_dir or not os.path.isdir(cache_dir):
-                continue
-            for try_name in names_to_try:
-                # Exact relative path
-                candidate = os.path.join(cache_dir, try_name)
-                if os.path.isfile(candidate):
-                    status = _unindexed_path_status(candidate)
-                    if status != "hash_mismatch":
-                        return candidate, status
-                    data_dir_mismatch = data_dir_mismatch or candidate
-            # Basename walk: find file anywhere in cache tree (case-insensitive)
-            basename_targets = {
-                (n.rsplit("/", 1)[-1] if "/" in n else n).casefold()
-                for n in names_to_try
-            }
-            for root, _dirs, fnames in os.walk(cache_dir):
-                for fn in fnames:
-                    if fn.casefold() in basename_targets:
-                        candidate = os.path.join(root, fn)
-                        status = _unindexed_path_status(candidate)
-                        if status != "hash_mismatch":
-                            return candidate, status
-                        data_dir_mismatch = data_dir_mismatch or candidate
+        verdict = functools.partial(
+            declared_hash_verdict,
+            has_strong_hash=has_strong_hash,
+            sha1_candidates=sha1_candidates,
+            sha256_candidates=sha256_candidates,
+            md5_list=md5_list,
+            crc_raw=crc_raw,
+            zipped_file=zipped_file,
+            declared_size=declared_size,
+        )
+        hit, data_dir_mismatch = _resolve_in_data_dirs(
+            names_to_try, data_dir_registry, verdict
+        )
+        if hit:
+            return hit
 
     if data_dir_mismatch and not unsourceable:
         return data_dir_mismatch, "hash_mismatch"
 
-    # Agnostic fallback: for filename-agnostic files, find any DB file
-    # matching the system path prefix and size criteria
-    if file_entry.get("agnostic") and not has_strong_hash:
-        agnostic_prefix = file_entry.get("agnostic_path_prefix", "")
-        min_size = file_entry.get("min_size", 0)
-        max_size = file_entry.get("max_size", float("inf"))
-        exact_size = file_entry.get("size")
-        if exact_size and not min_size:
-            min_size = exact_size
-            max_size = exact_size
-        if agnostic_prefix:
-            for _sha1, entry in files_db.items():
-                path = entry.get("path", "")
-                if not path.startswith(agnostic_prefix):
-                    continue
-                size = entry.get("size", 0)
-                if min_size <= size <= max_size and os.path.exists(path):
-                    return path, "agnostic_fallback"
+    agnostic = _resolve_agnostic(file_entry, files_db, has_strong_hash)
+    if agnostic:
+        return agnostic
 
     return None, "not_found"
 
