@@ -2103,6 +2103,155 @@ def _render_emulator_file(
     return lines
 
 
+def _render_metadata_rows(profile: dict) -> list[str]:
+    """Scalar profile fields, one table row each.
+
+    Anything structured belongs in a collapsible block below, not in a
+    row: a dict rendered into a table cell is unreadable.
+    """
+    lines: list[str] = []
+    for field, label in [
+        ("core", "Core ID"),
+        ("core_name", "Core name"),
+        ("bios_size", "BIOS size"),
+        ("bios_directory", "BIOS directory"),
+        ("bios_detection", "BIOS detection"),
+        ("bios_selection", "BIOS selection"),
+        ("firmware_file", "Firmware file"),
+        ("firmware_source", "Firmware source"),
+        ("firmware_install", "Firmware install"),
+        ("firmware_detection", "Firmware detection"),
+        ("resources_directory", "Resources directory"),
+        ("rom_path", "ROM path"),
+        ("game_count", "Game count"),
+        ("verification", "Checked by"),
+        ("analysis_date", "Analysis date"),
+        ("analysis_commit", "Analysis commit"),
+    ]:
+        val = profile.get(field)
+        if val is None or val == "" or isinstance(val, (dict, list)):
+            continue
+        if isinstance(val, str) and val.startswith("http"):
+            lines.append(f"| {label} | [{val}]({val}) |")
+        else:
+            lines.append(f"| {label} | {val} |")
+    if profile.get("source_ref"):
+        lines.append(
+            f"| Source ref | {_source_ref_markdown(profile, profile['source_ref'])} |"
+        )
+    return lines
+
+
+def _render_platform_details(profile: dict) -> list[str]:
+    """The per-platform block, one level of nesting deep."""
+    lines: list[str] = []
+    platform_details = profile.get("platform_details")
+    if platform_details and isinstance(platform_details, dict):
+        lines.extend(['???+ info "Platform details"', ""])
+        for pk, pv in platform_details.items():
+            if isinstance(pv, dict):
+                lines.append(f"    **{pk}:**")
+                for sk, sv in pv.items():
+                    lines.append(f"    - {sk}: {sv}")
+            elif isinstance(pv, list):
+                lines.append(f"    **{pk}:** {', '.join(str(x) for x in pv)}")
+            else:
+                lines.append(f"    **{pk}:** {pv}")
+        lines.append("")
+
+    return lines
+
+
+def _render_structured_blocks(profile: dict) -> list[str]:
+    """Every remaining structured field, as a collapsible section."""
+    lines: list[str] = []
+    _structured_blocks = [
+        ("analysis", "Source analysis"),
+        ("memory_layout", "Memory layout"),
+        ("regions", "Regions"),
+        ("nvm_layout", "NVM layout"),
+        ("model_kickstart_map", "Model kickstart map"),
+        ("builtin_boot_roms", "Built-in boot ROMs"),
+        ("common_bios_filenames", "Common BIOS filenames"),
+        ("valid_bios_crc32", "Valid BIOS CRC32"),
+        ("dev_flash", "dev_flash"),
+        ("dev_flash2", "dev_flash2"),
+        ("dev_flash3", "dev_flash3"),
+        ("firmware_modules", "Firmware modules"),
+        ("firmware_titles", "Firmware titles"),
+        ("fallback_fonts", "Fallback fonts"),
+        ("io_devices", "I/O devices"),
+        ("partitions", "Partitions"),
+        ("mlc_structure", "MLC structure"),
+        ("machine_directories", "Machine directories"),
+        ("machine_properties", "Machine properties"),
+        ("whdload_kickstarts", "WHDLoad kickstarts"),
+        ("bios_identical_to", "BIOS identical to"),
+        ("pack_structure", "Pack structure"),
+        ("firmware_version", "Firmware version"),
+    ]
+    for field, label in _structured_blocks:
+        val = profile.get(field)
+        if val is None:
+            continue
+        lines.append(f'???+ abstract "{label}"')
+        lines.append("")
+        _render_yaml_value(lines, val, indent=4)
+        lines.append("")
+
+    return lines
+
+
+def _availability_check(db: dict, data_names):
+    """A predicate answering whether the collection holds a file.
+
+    It answers the way cross_reference does. A page that called a file
+    missing while the gap report called it held would describe a
+    different collection on two pages of the same site.
+    """
+    from cross_reference import _resolve_source
+
+    by_name = db.get("indexes", {}).get("by_name", {})
+    by_name_lower = {k.lower(): k for k in by_name}
+    by_path_suffix = db.get("indexes", {}).get("by_path_suffix", {})
+    by_md5 = db.get("indexes", {}).get("by_md5", {})
+    db_files = db.get("files", {})
+
+    def _file_available(f: dict) -> bool:
+        """Check if a file is available using the same resolution as cross_reference."""
+        fname = f.get("name", "")
+        if not fname:
+            return False
+        storage = f.get("storage", "")
+        if storage in ("release", "large_file"):
+            return True
+        src = _resolve_source(
+            fname, by_name, by_name_lower, data_names, by_path_suffix,
+            f, db_files,
+        )
+        if src is not None:
+            return True
+        path_field = f.get("path", "")
+        if path_field and path_field != fname:
+            src = _resolve_source(
+                path_field, by_name, by_name_lower, data_names,
+                by_path_suffix, f, db_files,
+            )
+            if src is not None:
+                return True
+        md5_raw = f.get("md5", "")
+        if md5_raw:
+            for md5_val in parse_md5_list(md5_raw):
+                if by_md5.get(md5_val):
+                    return True
+        sha1 = f.get("sha1", "")
+        if sha1 and sha1 in db_files:
+            return True
+        return False
+
+    return _file_available
+
+
 def generate_emulator_page(
     name: str,
     profile: dict,
@@ -2192,89 +2341,14 @@ def generate_emulator_page(
     based_on = profile.get("based_on", "")
     if based_on:
         lines.append(f"| Based on | {based_on} |")
-    # Additional metadata fields (scalar values only -complex ones go to collapsible sections)
-    for field, label in [
-        ("core", "Core ID"),
-        ("core_name", "Core name"),
-        ("bios_size", "BIOS size"),
-        ("bios_directory", "BIOS directory"),
-        ("bios_detection", "BIOS detection"),
-        ("bios_selection", "BIOS selection"),
-        ("firmware_file", "Firmware file"),
-        ("firmware_source", "Firmware source"),
-        ("firmware_install", "Firmware install"),
-        ("firmware_detection", "Firmware detection"),
-        ("resources_directory", "Resources directory"),
-        ("rom_path", "ROM path"),
-        ("game_count", "Game count"),
-        ("verification", "Checked by"),
-        ("analysis_date", "Analysis date"),
-        ("analysis_commit", "Analysis commit"),
-    ]:
-        val = profile.get(field)
-        if val is None or val == "" or isinstance(val, (dict, list)):
-            continue
-        if isinstance(val, str) and val.startswith("http"):
-            lines.append(f"| {label} | [{val}]({val}) |")
-        else:
-            lines.append(f"| {label} | {val} |")
-    if profile.get("source_ref"):
-        lines.append(
-            f"| Source ref | {_source_ref_markdown(profile, profile['source_ref'])} |"
-        )
+    lines.extend(_render_metadata_rows(profile))
     lines.append("")
     lines.append("</div>")
     lines.append("")
 
-    # Platform-specific details (rich structured data)
-    platform_details = profile.get("platform_details")
-    if platform_details and isinstance(platform_details, dict):
-        lines.extend(['???+ info "Platform details"', ""])
-        for pk, pv in platform_details.items():
-            if isinstance(pv, dict):
-                lines.append(f"    **{pk}:**")
-                for sk, sv in pv.items():
-                    lines.append(f"    - {sk}: {sv}")
-            elif isinstance(pv, list):
-                lines.append(f"    **{pk}:** {', '.join(str(x) for x in pv)}")
-            else:
-                lines.append(f"    **{pk}:** {pv}")
-        lines.append("")
+    lines.extend(_render_platform_details(profile))
 
-    # All remaining structured data blocks as collapsible sections
-    _structured_blocks = [
-        ("analysis", "Source analysis"),
-        ("memory_layout", "Memory layout"),
-        ("regions", "Regions"),
-        ("nvm_layout", "NVM layout"),
-        ("model_kickstart_map", "Model kickstart map"),
-        ("builtin_boot_roms", "Built-in boot ROMs"),
-        ("common_bios_filenames", "Common BIOS filenames"),
-        ("valid_bios_crc32", "Valid BIOS CRC32"),
-        ("dev_flash", "dev_flash"),
-        ("dev_flash2", "dev_flash2"),
-        ("dev_flash3", "dev_flash3"),
-        ("firmware_modules", "Firmware modules"),
-        ("firmware_titles", "Firmware titles"),
-        ("fallback_fonts", "Fallback fonts"),
-        ("io_devices", "I/O devices"),
-        ("partitions", "Partitions"),
-        ("mlc_structure", "MLC structure"),
-        ("machine_directories", "Machine directories"),
-        ("machine_properties", "Machine properties"),
-        ("whdload_kickstarts", "WHDLoad kickstarts"),
-        ("bios_identical_to", "BIOS identical to"),
-        ("pack_structure", "Pack structure"),
-        ("firmware_version", "Firmware version"),
-    ]
-    for field, label in _structured_blocks:
-        val = profile.get(field)
-        if val is None:
-            continue
-        lines.append(f'???+ abstract "{label}"')
-        lines.append("")
-        _render_yaml_value(lines, val, indent=4)
-        lines.append("")
+    lines.extend(_render_structured_blocks(profile))
 
     # Notes
     if notes:
@@ -2292,45 +2366,7 @@ def generate_emulator_page(
                 ]
             )
     else:
-        from cross_reference import _resolve_source
-
-        by_name = db.get("indexes", {}).get("by_name", {})
-        by_name_lower = {k.lower(): k for k in by_name}
-        by_path_suffix = db.get("indexes", {}).get("by_path_suffix", {})
-        by_md5 = db.get("indexes", {}).get("by_md5", {})
-        db_files = db.get("files", {})
-
-        def _file_available(f: dict) -> bool:
-            """Check if a file is available using the same resolution as cross_reference."""
-            fname = f.get("name", "")
-            if not fname:
-                return False
-            storage = f.get("storage", "")
-            if storage in ("release", "large_file"):
-                return True
-            src = _resolve_source(
-                fname, by_name, by_name_lower, data_names, by_path_suffix,
-                f, db_files,
-            )
-            if src is not None:
-                return True
-            path_field = f.get("path", "")
-            if path_field and path_field != fname:
-                src = _resolve_source(
-                    path_field, by_name, by_name_lower, data_names,
-                    by_path_suffix, f, db_files,
-                )
-                if src is not None:
-                    return True
-            md5_raw = f.get("md5", "")
-            if md5_raw:
-                for md5_val in parse_md5_list(md5_raw):
-                    if by_md5.get(md5_val):
-                        return True
-            sha1 = f.get("sha1", "")
-            if sha1 and sha1 in db_files:
-                return True
-            return False
+        _file_available = _availability_check(db, data_names)
 
         # Stats by category
         bios_files = [f for f in files if f.get("category", "bios") == "bios"]
