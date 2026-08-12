@@ -1,0 +1,201 @@
+emulator: melonDS Nightly
+type: standalone
+core_classification: community_fork
+source: "https://github.com/rafaelvcaetano/melonDS-android"
+upstream: "https://github.com/rafaelvcaetano/melonDS-android-lib"
+source_commit: "ae8790bdb4bf01555c2f168ab9bc77fbeb5dceb6"
+upstream_commit: "431ab4bd0003c4356e25fce89640ae1004579b9b"
+profiled_date: "2026-08-12"
+core_version: "2.0.1 (NIGHTLY)"
+display_name: "Nintendo - DS (melonDS Nightly)"
+cores: ["melonds-nightly"]
+systems: [nintendo-ds, nintendo-dsi]
+mode: standalone
+
+notes: |
+  Android port of melonDS. The emulation code is the melonDS-android-lib
+  submodule, a fork of melonDS-emu/melonDS pinned at 431ab4bd and declaring
+  version 1.1 (CMakeLists.txt:20); the app around it is Kotlin plus a JNI layer
+  under app/src/main/cpp.
+
+  Nightly is a product flavor, not a separate tree: the build dimension "build"
+  has prod and nightly, and nightly sets applicationIdSuffix ".nightly" and the
+  version suffix " (NIGHTLY)" (app/build.gradle.kts:59-61,76-79), giving the package
+  id me.magnum.melonds.nightly. Its source set holds an app name and a launcher
+  icon (app/src/nightly/res), and the gitHubNightly set points the update check
+  at the nightly release instead of the tagged one
+  (app/src/gitHubNightly/java/me/magnum/melonds/github/repositories/GitHubNightlyUpdatesRepository.kt:31).
+  No load path differs from the prod flavor.
+
+  Files live in two directories the user picks through the storage access
+  framework, stored in the preferences bios_dir and dsi_bios_dir
+  (app/src/main/res/xml/pref_custom_firmware.xml:29-39). Both are read by
+  basename, so bios7.bin, bios9.bin and firmware.bin each name a DS image in one
+  directory and a DSi image in the other; the accepted lengths are what tell them
+  apart. The app lists the expected names on screen when a directory is unset or
+  rejected (app/src/main/res/values/strings.xml:116,118). Entries below carry the
+  basename the app opens in the path, under the console identifier the picker
+  binds to each directory, ds and dsi
+  (app/src/main/res/xml/pref_custom_firmware.xml:33,39).
+
+  use_custom_bios defaults off (app/src/main/res/xml/pref_custom_firmware.xml:11,
+  SharedPreferencesSettingsRepository.kt:258-260). With it off, launching a ROM
+  skips the directory check entirely and the core substitutes FreeBIOS and a
+  firmware built in memory, so DS games run with nothing supplied. Booting into
+  the firmware menu instead of a ROM always turns it on
+  (AndroidEmulatorManager.kt:247-253), as does any per-ROM console override
+  (AndroidEmulatorManager.kt:239). DSi needs both directories: the DSi check
+  runs the DS check after its own (ConfigurationDirectoryVerifier.kt:13-21).
+
+  The generated firmware keeps its Wi-Fi access point block in wfcsettings.bin,
+  read at boot and written back by the emulator
+  (EmulatorArgsBuilder.cpp:189,200-226, MelonInstance.cpp:58-62). It resolves
+  against context.filesDir (PlatformAndroid.cpp:158-163,
+  SharedPreferencesSettingsRepository.kt:155), app-private internal storage the
+  user cannot write to, and holds settings this build produced. Not listed below:
+  there is nothing to obtain.
+
+  Neither SD card is reachable in this build. getSDCardArgs returns nothing when
+  a card is disabled (SDCardArgsBuilder.cpp:19-20) and the JNI layer hardcodes
+  both the DSi card and the homebrew DLDI card to disabled
+  (MelonDSAndroidConfiguration.cpp:93-94), with no preference anywhere in the app
+  to turn either on; the README lists DSi SD card support under missing features. The Action Replay database the core can parse is likewise
+  never built: ARDatabaseDAT is reached only from src/frontend/qt_sdl, and the
+  Android build sets BUILD_QT_SDL OFF and links the core alone
+  (app/CMakeLists.txt:8,73). Cheats are entered in the app's own database.
+
+files:
+  # --- DS BIOS directory (preference bios_dir) ---
+  - name: bios9.bin
+    aliases: [NDS_Bios9.bin, nds9.bin]
+    path: "ds/bios9.bin"
+    system: nintendo-ds
+    config_key: "bios_dir"
+    description: "Nintendo DS ARM9 BIOS"
+    required: false
+    hle_fallback: true
+    size: 4096
+    crc32: 2ab23573
+    validation: [size, crc32]
+    note: >-
+      The picker rejects any length other than 4096. The core hashes what it
+      loads and keeps the result as a flag rather than refusing the image: a
+      CRC32 other than 2ab23573 marks the BIOS non-native, which forces direct
+      boot and makes SetupDirectBoot copy the Nintendo logo out of the ROM header
+      into the BIOS at 0x20 so DS-to-GBA communication still works. FreeBIOS is
+      substituted when custom BIOS is off.
+    source_ref: "app/src/main/java/me/magnum/melonds/impl/FileSystemConfigurationDirectoryVerifier.kt:51-53,100-113, app/src/main/java/me/magnum/melonds/impl/SharedPreferencesSettingsRepository.kt:149, app/src/main/cpp/EmulatorArgsBuilder.cpp:19-40, src/MemConstants.h:30-36, src/NDS.cpp:807-811, src/NDS.cpp:277-296,303-310"
+
+  - name: bios7.bin
+    aliases: [NDS_Bios7.bin, nds7.bin]
+    path: "ds/bios7.bin"
+    system: nintendo-ds
+    config_key: "bios_dir"
+    description: "Nintendo DS ARM7 BIOS"
+    required: false
+    hle_fallback: true
+    size: 16384
+    crc32: 1280f0d5
+    validation: [size, crc32]
+    note: >-
+      The picker rejects any length other than 16384. A CRC32 other than
+      1280f0d5 marks the BIOS non-native, which forces direct boot and leaves
+      Key1_KeyBuf zeroed instead of seeding it from offset 0x0030, so cartridge
+      Key1 encryption is unavailable. FreeBIOS is substituted when custom BIOS is
+      off.
+    source_ref: "app/src/main/java/me/magnum/melonds/impl/FileSystemConfigurationDirectoryVerifier.kt:47-49,100-113, app/src/main/java/me/magnum/melonds/impl/SharedPreferencesSettingsRepository.kt:148, app/src/main/cpp/EmulatorArgsBuilder.cpp:42-62, src/MemConstants.h:30-36, src/NDS.cpp:801-805, src/NDSCart.cpp:138-151"
+
+  - name: firmware.bin
+    aliases: [dsfirmware.bin]
+    path: "ds/firmware.bin"
+    system: nintendo-ds
+    config_key: "bios_dir"
+    description: "Nintendo DS firmware image"
+    required: false
+    hle_fallback: true
+    size_options: [131072, 262144, 524288]
+    validation: [size]
+    note: >-
+      Three lengths are accepted and everything else is rejected. Loaded only in
+      DS mode; DSi mode reads the firmware from the DSi directory but still needs
+      this file present, because the DSi check re-runs the DS directory check.
+      Nickname, message, language, colour, birthday and MAC are written into the
+      image before it reaches the core. A firmware the core reports as
+      non-bootable forces direct boot. When custom BIOS is off the core builds a
+      firmware in memory instead.
+    source_ref: "app/src/main/java/me/magnum/melonds/impl/FileSystemConfigurationDirectoryVerifier.kt:55-70,120, app/src/main/java/me/magnum/melonds/impl/SharedPreferencesSettingsRepository.kt:150, app/src/main/cpp/EmulatorArgsBuilder.cpp:93-185,289-337, src/NDS.cpp:286-288"
+
+  # --- DSi BIOS directory (preference dsi_bios_dir) ---
+  - name: dsi_bios9.bin
+    aliases: [biosdsi9.bin]
+    path: "dsi/bios9.bin"
+    system: nintendo-dsi
+    config_key: "dsi_bios_dir"
+    description: "Nintendo DSi ARM9i BIOS"
+    required: true
+    size: 65536
+    validation: [size]
+    note: >-
+      Opened as bios9.bin inside the DSi directory. The picker rejects any length
+      other than 65536, and no hash is computed on it. A load failure aborts the
+      launch. DSi boot copies four blocks out of it
+      into ITCM from 0x87F4, 0x9920, 0x99A0 and 0xA9E8, and cartridge Key1 in DSi
+      mode is seeded from 0x99A0. With the boot screen off, the reset vector is
+      overwritten in memory with 0xEAFFFFFE.
+    source_ref: "app/src/main/java/me/magnum/melonds/impl/FileSystemConfigurationDirectoryVerifier.kt:76-78,100-113,124, app/src/main/java/me/magnum/melonds/impl/SharedPreferencesSettingsRepository.kt:152, app/src/main/cpp/EmulatorArgsBuilder.cpp:235-260,475-477, src/DSi.cpp:950-955, src/NDSCart.cpp:127-134"
+
+  - name: dsi_bios7.bin
+    aliases: [biosdsi7.bin]
+    path: "dsi/bios7.bin"
+    system: nintendo-dsi
+    config_key: "dsi_bios_dir"
+    description: "Nintendo DSi ARM7i BIOS"
+    required: true
+    size: 65536
+    validation: [size]
+    note: >-
+      Opened as bios7.bin inside the DSi directory. The picker rejects any length
+      other than 65536, and no hash is computed on it. A load failure aborts the
+      launch. Offset 0x8308 holds the ES key used
+      to derive the NAND AES keys, so the NAND cannot be opened without this
+      exact image. DSi boot copies four blocks out of it from 0x8188, 0xB5D8,
+      0xC6D0 and 0xD718. With the boot screen off, the reset vector is
+      overwritten in memory with 0xEAFFFFFE.
+    source_ref: "app/src/main/java/me/magnum/melonds/impl/FileSystemConfigurationDirectoryVerifier.kt:72-74,100-113,123, app/src/main/java/me/magnum/melonds/impl/SharedPreferencesSettingsRepository.kt:151, app/src/main/cpp/EmulatorArgsBuilder.cpp:262-287,347,471-473, src/DSi.cpp:959-962"
+
+  - name: dsi_firmware.bin
+    aliases: [dsifirmware.bin]
+    path: "dsi/firmware.bin"
+    system: nintendo-dsi
+    config_key: "dsi_bios_dir"
+    description: "Nintendo DSi firmware image"
+    required: true
+    size: 131072
+    validation: [size]
+    note: >-
+      Opened as firmware.bin inside the DSi directory, where only 131072 is
+      accepted against three accepted lengths in the DS directory. Read in DSi
+      mode in place of the DS firmware, and customised the same way. The core has
+      no generator for DSi firmware, so nothing stands in for it.
+    source_ref: "app/src/main/java/me/magnum/melonds/impl/FileSystemConfigurationDirectoryVerifier.kt:80-93,125, app/src/main/java/me/magnum/melonds/impl/SharedPreferencesSettingsRepository.kt:153, app/src/main/cpp/EmulatorArgsBuilder.cpp:289-337"
+
+  - name: dsi_nand.bin
+    path: "dsi/nand.bin"
+    agnostic: true
+    system: nintendo-dsi
+    config_key: "dsi_bios_dir"
+    description: "Nintendo DSi NAND dump"
+    required: true
+    storage: large_file
+    validation: [existence]
+    note: >-
+      Opened as nand.bin inside the DSi directory. The only test the app makes is
+      that the entry is a file: no length, no hash. It is opened for read and
+      write and must already exist. The core
+      wants the nocash footer "DSi eMMC CID/CPU" at 0x40 before the end, falling
+      back to 0x000FF800 for images cut short by external tools, and reads the
+      eMMC CID and console ID from there to derive the FAT and ES keys with the
+      key at 0x8308 of the ARM7i BIOS. Touchscreen calibration is rewritten in
+      the mounted user data on every launch. Any regional dump works. A DSiWare
+      title is refused unless it is already installed in this image.
+    source_ref: "app/src/main/java/me/magnum/melonds/impl/FileSystemConfigurationDirectoryVerifier.kt:95-98,126, app/src/main/java/me/magnum/melonds/impl/SharedPreferencesSettingsRepository.kt:154, app/src/main/cpp/EmulatorArgsBuilder.cpp:339-420,479-481, app/src/main/java/me/magnum/melonds/domain/services/EmulatorLaunchPreconditionChecker.kt:47-70, src/DSi_NAND.cpp:43-70"

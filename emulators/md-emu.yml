@@ -1,0 +1,137 @@
+emulator: "MD.emu"
+type: standalone
+core_classification: community_fork
+source: "https://github.com/Rakashazi/emu-ex-plus-alpha"
+upstream: "https://github.com/ekeeke/Genesis-Plus-GX"
+profiled_date: "2026-08-12"
+source_commit: "1c12fac5ce49badaadff2e2f210dcc30b89f4943"
+upstream_commit: "27426f00aa68f9f358c86919e8a40985326fa05b"
+core_version: "1.5.85"
+display_name: "Sega - MS/MD/CD (MD.emu)"
+mode: standalone
+cores:
+  - "md-emu"
+  - "MD.emu"
+  - "MD-EMU"
+systems:
+  - sega-megadrive
+  - sega-megacd
+  - sega-mastersystem
+
+notes: |
+  Android and Linux member of the EX Emulator series by Robert Broglia, published
+  as com.explusalpha.MdEmu (MD.emu/metadata/conf.mk:2,4,6,7, README.md:3-4) and
+  reached by ES-DE through its MD-EMU find rule. Genesis Plus GX is vendored under
+  MD.emu/src/genplus-gx and driven by the app's own system, input and audio layers
+  (MD.emu/src/CMakeLists.txt:6-55), while the Sega CD hardware comes from the Gens
+  code PicoDrive carried (MD.emu/src/scd/LC89510.cc:1-7) and disc images are read
+  through Mednafen's CD layer (MD.emu/CMakeLists.txt:12). The build defines
+  LSB_FIRST, NO_SYSTEM_PICO and MDFN_CD_NO_CCD (MD.emu/CMakeLists.txt:25), leaving
+  Pico out and CD support in. Content is read from .bin, .smd, .md, .gen and .sms
+  cartridge images and from .cue, .iso and .chd discs (MD.emu/metadata/conf.mk:5,
+  MD.emu/src/main/system.ccm:91-101). A .sms name switches the machine to Power
+  Base Converter mode (MD.emu/src/genplus-gx/loadrom.cc:383-387); Game Gear and
+  SG-1000 sit inside #if 0 blocks in the renderer with no SYSTEM_GG or SYSTEM_SG
+  defined anywhere in the tree (MD.emu/src/genplus-gx/vdp_render.cc:934-962,974-989,
+  MD.emu/src/genplus-gx/system.h:35-40).
+
+  The CD boot ROM is the one file the user supplies and it carries no name of its
+  own. Three pickers store arbitrary URIs under USA CD BIOS, Japan CD BIOS and
+  Europe CD BIOS, filtered on the cartridge extensions
+  (MD.emu/src/main/EmuMenuViews.cc:289-346, MD.emu/src/main/system.ccm:84-86,136,
+  MD.emu/src/main/options.cc:57-61,86-90). Loading a disc picks one of the three by
+  region: the Game Region setting when it is not Auto, otherwise byte 0x20b of the
+  boot sector, 0x7a for USA, 0x64 for Europe, anything else Japan
+  (MD.emu/src/main/Main.cc:254-264,311-332,
+  MD.emu/src/main/EmuMenuViews.cc:132-144,167-170, MD.emu/src/main/options.cc:31).
+  An empty path ends the load with "Set a {} BIOS in the Options" and a failed read
+  with "Error loading BIOS" (MD.emu/src/main/Main.cc:333-339). The file goes into
+  the cartridge buffer, and a path ending in .zip, .7z or .rar is scanned instead,
+  the first entry with a cartridge extension being taken
+  (MD.emu/src/main/Main.cc:337,
+  imagine/src/base/common/ApplicationContext.cc:542-562,
+  imagine/src/fs/ArchiveFS.cc:75-78). init_rom accepts the image only at exactly
+  131072 bytes with "BOOT" at 0x124 or 0x128 of the raw bytes, which is what raises
+  sCD.isActive; anything else ends the load with "Invalid BIOS"
+  (MD.emu/src/genplus-gx/loadrom.cc:426-432, MD.emu/src/main/Main.cc:340-344).
+  Cartridge content never reads it.
+
+  No other boot ROM exists here. t_config has no bios field
+  (MD.emu/src/genplus-config.h:46-54), the Master System mapper table names BIOS
+  only in two game titles (MD.emu/src/genplus-gx/cart_hw/sms_cart.cc:119,126), and
+  the TMSS OS ROM is copied out of the loaded image rather than read
+  from a file, behind a config.tmss bit nothing turns on
+  (MD.emu/src/genplus-gx/genesis.cc:313-320,
+  MD.emu/src/genplus-gx/mem68k.cc:471-476). Upstream's load_bios and the
+  bios_CD_U.bin, bios_CD_E.bin and bios_CD_J.bin names it opens have no counterpart
+  in this tree (upstream core/loadrom.c:394-415,
+  upstream libretro/libretro.c:3416-3418).
+
+  The lock-on ROMs read nothing. osd.h keeps upstream's ggenie.bin, areplay.bin,
+  sk.bin and sk2chip.bin paths and all three loaders are compiled
+  (MD.emu/src/osd.h:13-16, MD.emu/src/genplus-gx/cart_hw/ggenie.cc:43-49,
+  MD.emu/src/genplus-gx/cart_hw/areplay.cc:43-49,
+  MD.emu/src/genplus-gx/cart_hw/md_cart.cc:499-531), but every one of them hangs off
+  config.lock_on, which the value initialised config object leaves at zero and no
+  code in the tree ever writes (MD.emu/src/main/AppMeta.cc:26,
+  MD.emu/src/genplus-gx/cart_hw/md_cart.cc:499,702,850). There is no menu item and
+  no config key for it (MD.emu/src/main/system.ccm:81-89), where the libretro port
+  drives the same switch from a core option
+  (upstream libretro/libretro.c:1715-1721).
+
+  Per content the app writes and reads files named after the ROM: .srm cartridge
+  backup memory, .brm CD backup memory it formats itself when absent
+  (MD.emu/src/main/Main.cc:93-101,124-233), .gp states
+  (MD.emu/src/main/system.ccm:162) and a .pat cheat list under the cheats path
+  (MD.emu/src/main/Cheats.cc:388-391,438-441). Settings live in MdEmu.config
+  (MD.emu/src/main/AppMeta.cc:34). Mednafen's image reader picks up an .sbi beside a
+  cue sheet when one is present
+  (EmuFramework/src/shared/mednafen/cdrom/CDAccess_Image.cpp:928-943), and
+  gpOverlay.png and the shader sources are drawn by the framework from the
+  application bundle (EmuFramework/include/emuframework/AssetManager.hh:61-66,
+  EmuFramework/src/AssetManager.cc:58-73, MD.emu/src/main/AppMeta.cc:188-199).
+
+files:
+  - name: bios_CD_U.bin
+    system: sega-megacd
+    region: [north-america]
+    required: true
+    agnostic: true
+    size: 131072
+    validation: [size, signature]
+    config_key: "CFGKEY_MD_CD_BIOS_USA_PATH"
+    description: "Sega CD boot ROM read for the USA region"
+    note: >-
+      Picked by the user from any path, under any name ending in .bin, .smd, .md,
+      .gen or .sms, or inside a .zip, .7z or .rar holding one. The tests are the
+      length and the "BOOT" text at 0x124 or 0x128; a file failing either aborts
+      the load rather than falling back.
+    source_ref: "MD.emu/src/main/Main.cc:311-344 (region choice, read, checks), MD.emu/src/genplus-gx/loadrom.cc:426-432 (size and signature), MD.emu/src/main/EmuMenuViews.cc:290-295,317-345 (picker and filter)"
+
+  - name: bios_CD_J.bin
+    system: sega-megacd
+    region: [japan]
+    required: true
+    agnostic: true
+    size: 131072
+    validation: [size, signature]
+    config_key: "CFGKEY_MD_CD_BIOS_JPN_PATH"
+    description: "Mega CD boot ROM read for the Japan region"
+    note: >-
+      Taken by the default branch: USA and Europe go to the other two paths and
+      every other region code lands here, both Japanese ones included.
+    source_ref: "MD.emu/src/main/Main.cc:311-344 (region choice, read, checks), MD.emu/src/genplus-gx/loadrom.cc:426-432 (size and signature), MD.emu/src/main/EmuMenuViews.cc:290-295,317-345 (picker and filter)"
+
+  - name: bios_CD_E.bin
+    system: sega-megacd
+    region: [europe]
+    required: true
+    agnostic: true
+    size: 131072
+    validation: [size, signature]
+    config_key: "CFGKEY_MD_CD_BIOS_EUR_PATH"
+    description: "Mega CD boot ROM read for the Europe region"
+    note: >-
+      Reached when the boot sector byte at 0x20b is 0x64 or the Game Region
+      setting is Europe.
+    source_ref: "MD.emu/src/main/Main.cc:311-344 (region choice, read, checks), MD.emu/src/genplus-gx/loadrom.cc:426-432 (size and signature), MD.emu/src/main/EmuMenuViews.cc:290-295,317-345 (picker and filter)"

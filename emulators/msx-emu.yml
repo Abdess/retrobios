@@ -1,0 +1,811 @@
+emulator: "MSX.emu"
+type: standalone
+core_classification: community_fork
+source: "https://github.com/Rakashazi/emu-ex-plus-alpha"
+upstream: "http://bluemsx.msxblue.com/"
+profiled_date: "2026-08-12"
+source_commit: "1c12fac5ce49badaadff2e2f210dcc30b89f4943"
+core_version: "1.5.85"
+display_name: "MSX/ColecoVision (MSX.emu)"
+mode: standalone
+cores:
+  - "msx-emu"
+  - "MSX.emu"
+  - "MSX-EMU"
+systems:
+  - msx
+  - msx1
+  - msx2
+  - msx2plus
+  - msxturbor
+  - colecovision
+
+notes: |
+  Android and Linux member of the EX Emulator series by Robert Broglia, published as
+  com.explusalpha.MsxEmu (MSX.emu/metadata/conf.mk:2,4,6,7, README.md:3-4) and reached
+  by ES-DE through its MSX-EMU find rule. blueMSX is vendored under
+  MSX.emu/src/blueMSX and driven by the app's own board, ROM loader and archive
+  layers (MSX.emu/src/CMakeLists.txt:6-16). Content is read from .rom, .mx1, .mx2
+  and .col cartridge images and from .dsk disk images, directly or as the first
+  matching entry of a .zip, .7z or .rar (MSX.emu/src/main/system.ccm:83-87,
+  MSX.emu/src/main/Main.cc:521-618). A disk image of 1 MB or more is mounted on a
+  Sunrise IDE controller instead of a floppy drive
+  (MSX.emu/src/main/Main.cc:549,556-561,588-603).
+
+  Two of blueMSX's board types are built, every MSX variant and ColecoVision.
+  createBoard returns 0 for anything else, and SVI, ColecoAdam, SG-1000, SF-7000 and
+  SC-3000 have neither a board file in the build nor their mappers
+  (MSX.emu/src/main/Main.cc:171-200, MSX.emu/src/CMakeLists.txt:80-83,
+  MSX.emu/src/blueMSX/Common/MsxTypes.h:145,150).
+
+  Everything the emulator loads comes from a machine definition. machineCreate opens
+  Machines/<name>/config.ini and reads its [Slots] section, where each line carries a
+  slot, a subslot, a start page, a page count, a numeric ROM type and the ROM's path
+  (MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468). machineInitialize then loads
+  each named path, and a file it cannot read sets success to 0 for every ROM type but
+  one, which fails msxCreate or colecoCreate and ends the load with "Error loading
+  machine files for" (MSX.emu/src/blueMSX/Board/Machine.c:1168-1181,
+  MSX.emu/src/blueMSX/Board/MSX.c:247,277-281,
+  MSX.emu/src/blueMSX/Board/Coleco.c:403,416-420,
+  MSX.emu/src/main/Main.cc:215-219,262-269). Every ROM a definition names is therefore
+  required for that machine, and only for it.
+
+  Paths are resolved against the user's BIOS folder first and the application bundle
+  second (MSX.emu/src/main/RomLoader.cc:57-92,94-133,135-144). That folder may be a
+  directory or an archive and is refused unless it carries a Machines entry
+  (MSX.emu/src/main/options.cc:212-228); with none set the app falls back to the asset
+  path on Linux and to the storage path elsewhere
+  (MSX.emu/src/main/options.cc:230-243). The machine picker lists every subdirectory
+  holding a config.ini and appends the three bundled C-BIOS names on Android, where
+  the asset directory enumeration skips directories
+  (MSX.emu/src/main/EmuMenuViews.cc:32-97,548-608).
+
+  The default machine is MSX2 and the default Coleco machine is COL - ColecoVision; a
+  .col name picks the second and a session setting overrides both
+  (MSX.emu/src/main/system.ccm:75-76, MSX.emu/src/main/Main.cc:534,563-577). Neither
+  default is bundled. The application ships only the three C-BIOS machines in its
+  assets (MSX.emu/res/firmware/Machines, symlinked into MSX.emu/res/android/assets),
+  which run cartridge images; the definitions and ROMs behind every other name come
+  from MSX.emu.zip, the firmware set on the author's site, whose Machines folder holds
+  MSX, MSX2, MSX2+, MSXturboR, COL - ColecoVision and Shared Roms. Its MSXturboR
+  definition spells MSXTR, MSXTREXT, MSXTRMUS, MSXTROPT and MSXDOS23 with a lowercase
+  .rom extension where blueMSX's own set spells them .ROM, and the loader opens the
+  string verbatim.
+
+  One ROM path is written in the code rather than in a definition,
+  Machines/Shared Roms/SUNRISEIDE.rom
+  (MSX.emu/src/blueMSX/Memory/MegaromCartridge.c:302-311). The four others cannot be
+  reached. Beer IDE, Gouda SCSI and the two Nowind images hang off cart names the app
+  never passes and off mappers EXCLUDE_IDE_DEVICES and EXCLUDE_NOWIND compile out, and
+  the FMPAC branch needs ROM_FMPAC as the incoming type where boardChangeCartridge
+  only ever passes ROM_UNKNOWN, ROM_SCC, ROM_SCCPLUS and ROM_SUNRISEIDE
+  (MSX.emu/src/blueMSX/Memory/MegaromCartridge.c:283-335,
+  MSX.emu/src/blueMSX/Common/MsxTypes.h:145-151, MSX.emu/src/main/Main.cc:56-70,
+  MSX.emu/src/main/EmuMenuViews.cc:385-413). Two of them are also spelled in lower
+  case there against the upper case of the set.
+
+  No hash is checked anywhere, and the sizes below are the ones the shipped set
+  carries. The machine definitions still carry one, because config.ini is the name of
+  every definition there is and nothing else tells two of them apart; the values are
+  those of the emulator's own assets and of the author's firmware set. A single length
+  test exists, the Kanji mapper taking 131072 or 262144 bytes
+  and nothing else (MSX.emu/src/blueMSX/Memory/romMapperKanji.c:141-149). The other
+  mappers refuse only a ROM that does not fit the pages left in its slot, which is a
+  property of the definition rather than of the dump
+  (MSX.emu/src/blueMSX/Memory/romMapperNormal.c:60-65,
+  MSX.emu/src/blueMSX/Memory/romMapperCasette.c:58-68,
+  MSX.emu/src/blueMSX/Memory/romMapperMsxMusic.c:55-68,
+  MSX.emu/src/blueMSX/Memory/romMapperDRAM.c:88-99), and the Philips FDC, Panasonic
+  FDC and MoonSound mappers test nothing at all
+  (MSX.emu/src/blueMSX/Memory/romMapperPhilipsFdc.c:139-146,
+  MSX.emu/src/blueMSX/Memory/romMapperTC8566AF.c:236-262,
+  MSX.emu/src/blueMSX/Memory/romMapperMoonsound.c:129-158).
+
+  The ROM database is compiled in. mediaDbGuessRom matches a cartridge's SHA-1 against
+  the table of EmbeddedRomDBData.h to pick its mapper, the TinyXML and MediaDb.cpp
+  sources that would read msxromdb.xml and msxsysromdb.xml are built only under
+  useXMLDB, and the two calls that loaded them are commented out
+  (MSX.emu/src/main/MediaDb.cc:50-59, MSX.emu/src/CMakeLists.txt:174-188,
+  MSX.emu/src/main/system.ccm:165-167). The floppy drive sounds read nothing either:
+  NO_EMBEDDED_SAMPLES turns fdcAudioCreate into a stub and takes the FdcRead.wav and
+  FdcMotor.wav reads with it (MSX.emu/CMakeLists.txt:33,
+  MSX.emu/src/blueMSX/IoDevice/FdcAudio.c:35-42,3456-3486).
+
+  Per content the app writes and reads files under its save path, <machine>.cmos for a
+  battery backed clock, an SRAM image named after the cartridge, and .sta save states
+  in blueMSX's own zip format (MSX.emu/src/blueMSX/Board/MSX.c:232-233,
+  MSX.emu/src/blueMSX/Memory/sramLoader.c:36-74,81-99,
+  MSX.emu/src/main/Main.cc:45,380-383,385-429). Settings live in MsxEmu.config
+  (MSX.emu/src/main/AppMeta.cc:32). gpOverlay.png, kbOverlay.png, ui.png and the
+  shader sources are drawn by the framework from the application bundle.
+
+files:
+  - name: "config.ini"
+    path: "Machines/MSX - C-BIOS/config.ini"
+    system: msx
+    required: true
+    bundled: true
+    category: game_data
+    size: 395
+    sha1: "5e36ed1fb6f148378de9f13e28013bd2d5d07ef4"
+    description: "C-BIOS MSX1 machine definition"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:450-468, MSX.emu/src/main/RomLoader.cc:135-144"
+
+  - name: "cbios_main_msx1.rom"
+    path: "Machines/MSX - C-BIOS/cbios_main_msx1.rom"
+    system: msx
+    required: true
+    bundled: true
+    size: 32768
+    description: "C-BIOS MSX1 main ROM, slot 0-0 from page 0"
+    source_ref: "MSX.emu/res/firmware/Machines/MSX - C-BIOS/config.ini:27, MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/blueMSX/Memory/romMapperNormal.c:60-65"
+
+  - name: "cbios_logo_msx1.rom"
+    path: "Machines/MSX - C-BIOS/cbios_logo_msx1.rom"
+    system: msx
+    required: true
+    bundled: true
+    size: 16384
+    description: "C-BIOS MSX1 boot logo, slot 0-0 from page 4"
+    source_ref: "MSX.emu/res/firmware/Machines/MSX - C-BIOS/config.ini:28, MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/blueMSX/Memory/romMapperNormal.c:60-65"
+
+  - name: "config.ini"
+    path: "Machines/MSX2 - C-BIOS/config.ini"
+    system: msx2
+    required: true
+    bundled: true
+    category: game_data
+    size: 472
+    sha1: "3968cca6fb977936af849d611bc4ebd4910dd81a"
+    description: "C-BIOS MSX2 machine definition"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:450-468, MSX.emu/src/main/RomLoader.cc:135-144"
+
+  - name: "cbios_main_msx2.rom"
+    path: "Machines/MSX2 - C-BIOS/cbios_main_msx2.rom"
+    system: msx2
+    required: true
+    bundled: true
+    size: 32768
+    description: "C-BIOS MSX2 main ROM, slot 0-0 from page 0"
+    source_ref: "MSX.emu/res/firmware/Machines/MSX2 - C-BIOS/config.ini:28, MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181"
+
+  - name: "cbios_logo_msx2.rom"
+    path: "Machines/MSX2 - C-BIOS/cbios_logo_msx2.rom"
+    system: msx2
+    required: true
+    bundled: true
+    size: 16384
+    description: "C-BIOS MSX2 boot logo, slot 0-0 from page 4"
+    source_ref: "MSX.emu/res/firmware/Machines/MSX2 - C-BIOS/config.ini:29, MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181"
+
+  - name: "cbios_sub.rom"
+    path: "Machines/MSX2 - C-BIOS/cbios_sub.rom"
+    system: msx2
+    required: true
+    bundled: true
+    size: 16384
+    description: "C-BIOS MSX2 sub ROM, slot 3-0"
+    source_ref: "MSX.emu/res/firmware/Machines/MSX2 - C-BIOS/config.ini:30, MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181"
+
+  - name: "config.ini"
+    path: "Machines/MSX2+ - C-BIOS/config.ini"
+    system: msx2plus
+    required: true
+    bundled: true
+    category: game_data
+    size: 534
+    sha1: "ac86b9962ac28326dbfcb1af71f3e9f9b2cc3649"
+    description: "C-BIOS MSX2+ machine definition"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:450-468, MSX.emu/src/main/RomLoader.cc:135-144"
+
+  - name: "cbios_main_msx2+.rom"
+    path: "Machines/MSX2+ - C-BIOS/cbios_main_msx2+.rom"
+    system: msx2plus
+    required: true
+    bundled: true
+    size: 32768
+    description: "C-BIOS MSX2+ main ROM, slot 0-0 from page 0"
+    source_ref: "MSX.emu/res/firmware/Machines/MSX2+ - C-BIOS/config.ini:28, MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181"
+
+  - name: "cbios_logo_msx2+.rom"
+    path: "Machines/MSX2+ - C-BIOS/cbios_logo_msx2+.rom"
+    system: msx2plus
+    required: true
+    bundled: true
+    size: 16384
+    description: "C-BIOS MSX2+ boot logo, slot 0-0 from page 4"
+    source_ref: "MSX.emu/res/firmware/Machines/MSX2+ - C-BIOS/config.ini:29, MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181"
+
+  - name: "cbios_sub.rom"
+    path: "Machines/MSX2+ - C-BIOS/cbios_sub.rom"
+    system: msx2plus
+    required: true
+    bundled: true
+    size: 16384
+    description: "C-BIOS MSX2+ sub ROM, slot 3-0, same bytes as the MSX2 C-BIOS sub ROM"
+    source_ref: "MSX.emu/res/firmware/Machines/MSX2+ - C-BIOS/config.ini:30, MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181"
+
+  - name: "cbios_music.rom"
+    path: "Machines/MSX2+ - C-BIOS/cbios_music.rom"
+    system: msx2plus
+    required: true
+    bundled: true
+    size: 16384
+    description: "C-BIOS MSX-MUSIC ROM, slot 3-1 from page 2"
+    source_ref: "MSX.emu/res/firmware/Machines/MSX2+ - C-BIOS/config.ini:31, MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/blueMSX/Memory/romMapperMsxMusic.c:55-68"
+
+  - name: "cbios.txt"
+    path: "cbios.txt"
+    system: msx
+    required: false
+    bundled: true
+    category: game_data
+    size: 10469
+    description: "C-BIOS 0.29 release notes and licence, bundled beside the machine folders"
+    note: >-
+      Shipped in the application bundle. No code reads it.
+    source_ref: "MSX.emu/res/firmware/cbios.txt"
+
+  - name: "config.ini"
+    path: "Machines/MSX/config.ini"
+    system: msx
+    required: true
+    category: game_data
+    size: 408
+    sha1: "483b2c34fcb3ddcf650314e45104f358ef74c98b"
+    description: "MSX1 machine definition"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468, MSX.emu/src/main/RomLoader.cc:135-144, MSX.emu/src/main/system.ccm:75-76, MSX.emu/src/main/EmuMenuViews.cc:32-97"
+
+  - name: "config.ini"
+    path: "Machines/MSX2/config.ini"
+    system: msx2
+    required: true
+    category: game_data
+    size: 649
+    sha1: "460ded0dbfc0285490da87a446b0321b6496aa5b"
+    description: "MSX2 machine definition, the default MSX machine"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468, MSX.emu/src/main/RomLoader.cc:135-144, MSX.emu/src/main/system.ccm:75-76, MSX.emu/src/main/EmuMenuViews.cc:32-97"
+
+  - name: "config.ini"
+    path: "Machines/MSX2+/config.ini"
+    system: msx2plus
+    required: true
+    category: game_data
+    size: 773
+    sha1: "cb7d14a17c4f4632f17ba5a64160cdd876dd6010"
+    description: "MSX2+ machine definition"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468, MSX.emu/src/main/RomLoader.cc:135-144, MSX.emu/src/main/system.ccm:75-76, MSX.emu/src/main/EmuMenuViews.cc:32-97"
+
+  - name: "config.ini"
+    path: "Machines/MSXturboR/config.ini"
+    system: msxturbor
+    required: true
+    category: game_data
+    size: 941
+    sha1: "9836d109ec7879374dcd044da149f1b5aafd4664"
+    description: "MSX turbo R machine definition"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468, MSX.emu/src/main/RomLoader.cc:135-144, MSX.emu/src/main/system.ccm:75-76, MSX.emu/src/main/EmuMenuViews.cc:32-97"
+
+  - name: "config.ini"
+    path: "Machines/COL - ColecoVision/config.ini"
+    system: colecovision
+    required: true
+    category: game_data
+    size: 347
+    sha1: "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e"
+    description: "ColecoVision machine definition, the default Coleco machine"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468, MSX.emu/src/main/RomLoader.cc:135-144, MSX.emu/src/main/system.ccm:75-76, MSX.emu/src/main/EmuMenuViews.cc:32-97"
+
+  - name: "MSX.rom"
+    path: "Machines/Shared Roms/MSX.rom"
+    system: msx
+    required: true
+    size: 32768
+    description: "MSX1 main BIOS of the MSX machine, mapped through the cassette patch mapper"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133, MSX.emu/src/blueMSX/Memory/romMapperCasette.c:58-68"
+
+  - name: "PHILIPSDISK.rom"
+    path: "Machines/Shared Roms/PHILIPSDISK.rom"
+    system: msx
+    required: true
+    size: 16384
+    description: "Philips floppy disk ROM, named by the MSX and MSX2 machine definitions"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133, MSX.emu/src/blueMSX/Memory/romMapperPhilipsFdc.c:139-146"
+
+  - name: "MSX2.rom"
+    path: "Machines/Shared Roms/MSX2.rom"
+    system: msx2
+    required: true
+    size: 32768
+    description: "MSX2 main BIOS of the MSX2 machine"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133, MSX.emu/src/blueMSX/Memory/romMapperCasette.c:58-68"
+
+  - name: "MSX2EXT.rom"
+    path: "Machines/Shared Roms/MSX2EXT.rom"
+    system: msx2
+    required: true
+    size: 16384
+    description: "MSX2 sub ROM of the MSX2 machine"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "MSX2PMUS.rom"
+    path: "Machines/Shared Roms/MSX2PMUS.rom"
+    system: msx2
+    required: true
+    size: 16384
+    description: "MSX-MUSIC ROM, named by the MSX2 and MSX2+ machine definitions"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133, MSX.emu/src/blueMSX/Memory/romMapperMsxMusic.c:55-68"
+
+  - name: "MOONSOUND.rom"
+    path: "Machines/Shared Roms/MOONSOUND.rom"
+    system: msx2
+    required: true
+    size: 2097152
+    description: "MoonSound wave ROM, named by the MSX2, MSX2+ and turbo R machine definitions"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133, MSX.emu/src/blueMSX/Memory/romMapperMoonsound.c:129-158"
+
+  - name: "XBASIC2.rom"
+    path: "Machines/Shared Roms/XBASIC2.rom"
+    system: msx2
+    required: true
+    size: 16384
+    description: "X-BASIC II ROM, named by the MSX2, MSX2+ and turbo R machine definitions"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "MSX2P.rom"
+    path: "Machines/Shared Roms/MSX2P.rom"
+    system: msx2plus
+    required: true
+    size: 32768
+    description: "MSX2+ main BIOS of the MSX2+ machine"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133, MSX.emu/src/blueMSX/Memory/romMapperCasette.c:58-68"
+
+  - name: "MSX2PEXT.rom"
+    path: "Machines/Shared Roms/MSX2PEXT.rom"
+    system: msx2plus
+    required: true
+    size: 16384
+    description: "MSX2+ sub ROM of the MSX2+ machine"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "KANJI.rom"
+    path: "Machines/Shared Roms/KANJI.rom"
+    system: msx2plus
+    required: true
+    size_options: [131072, 262144]
+    validation: [size]
+    description: "Kanji character ROM, named by the MSX2+ and turbo R machine definitions"
+    note: >-
+      The one length test in the tree: the mapper returns 0 for any other size, which
+      fails the machine.
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133, MSX.emu/src/blueMSX/Memory/romMapperKanji.c:141-149"
+
+  - name: "MSXKANJI.rom"
+    path: "Machines/Shared Roms/MSXKANJI.rom"
+    system: msx2plus
+    required: true
+    size: 32768
+    description: "Kanji BASIC ROM, named by the MSX2+ and turbo R machine definitions"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "PANASONICDISK.rom"
+    path: "Machines/Shared Roms/PANASONICDISK.rom"
+    system: msx2plus
+    required: true
+    size: 16384
+    description: "Panasonic floppy disk ROM of the MSX2+ machine"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133, MSX.emu/src/blueMSX/Memory/romMapperTC8566AF.c:236-262"
+
+  - name: "MSXTR.rom"
+    path: "Machines/Shared Roms/MSXTR.rom"
+    system: msxturbor
+    required: true
+    size: 32768
+    description: "turbo R main BIOS, mapped through the Panasonic DRAM mapper"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133, MSX.emu/src/blueMSX/Memory/romMapperDRAM.c:88-99"
+
+  - name: "MSXTREXT.rom"
+    path: "Machines/Shared Roms/MSXTREXT.rom"
+    system: msxturbor
+    required: true
+    size: 16384
+    description: "turbo R sub ROM, mapped through the Panasonic DRAM mapper"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133, MSX.emu/src/blueMSX/Memory/romMapperDRAM.c:88-99"
+
+  - name: "MSXTRMUS.rom"
+    path: "Machines/Shared Roms/MSXTRMUS.rom"
+    system: msxturbor
+    required: true
+    size: 16384
+    description: "turbo R MSX-MUSIC ROM"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "MSXTROPT.rom"
+    path: "Machines/Shared Roms/MSXTROPT.rom"
+    system: msxturbor
+    required: true
+    size: 16384
+    description: "turbo R firmware ROM"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "MSXDOS23.rom"
+    path: "Machines/Shared Roms/MSXDOS23.rom"
+    system: msxturbor
+    required: true
+    size: 65536
+    description: "MSX-DOS 2.3 disk ROM of the turbo R machine"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133, MSX.emu/src/blueMSX/Memory/romMapperTC8566AF.c:236-262"
+
+  - name: "coleco.rom"
+    path: "Machines/COL - ColecoVision/coleco.rom"
+    system: colecovision
+    required: true
+    size: 8192
+    description: "ColecoVision BIOS, slot 0-0 page 0"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "SUNRISEIDE.rom"
+    path: "Machines/Shared Roms/SUNRISEIDE.rom"
+    system: msx
+    required: false
+    size: 65536
+    description: "Sunrise IDE controller ROM"
+    note: >-
+      The one ROM path written in the code instead of a machine definition. Read when
+      the Sunrise IDE device is inserted from the ROM/Disk Control menu and when a disk
+      image of 1 MB or more is mounted as a hard drive. Without it the mapper maps a
+      blank 512 KB ROM and the device still answers.
+    source_ref: "MSX.emu/src/blueMSX/Memory/MegaromCartridge.c:302-311, MSX.emu/src/main/EmuMenuViews.cc:403-413, MSX.emu/src/main/Main.cc:588-603, MSX.emu/src/blueMSX/Memory/romMapperSunriseIDE.c:194-211"
+
+  - name: "MSXAR.ROM"
+    path: "Machines/Shared Roms/MSXAR.ROM"
+    system: msx
+    required: false
+    size: 32768
+    description: "MSX1 Arabic BIOS"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "ARAB1.ROM"
+    path: "Machines/Shared Roms/ARAB1.ROM"
+    system: msx
+    required: false
+    size: 32768
+    description: "MSX1 Arabic character ROM"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "MSXBR.rom"
+    path: "Machines/Shared Roms/MSXBR.rom"
+    system: msx
+    required: false
+    size: 32768
+    description: "MSX1 Brazilian BIOS"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "MICROSOLDISK.ROM"
+    path: "Machines/Shared Roms/MICROSOLDISK.ROM"
+    system: msx
+    required: false
+    size: 16384
+    description: "Microsol floppy disk ROM of the Brazilian machines"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "MSXFR.rom"
+    path: "Machines/Shared Roms/MSXFR.rom"
+    system: msx
+    required: false
+    size: 32768
+    description: "MSX1 French BIOS"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "MSXG.rom"
+    path: "Machines/Shared Roms/MSXG.rom"
+    system: msx
+    required: false
+    size: 32768
+    description: "MSX1 German BIOS"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "MSXJ.rom"
+    path: "Machines/Shared Roms/MSXJ.rom"
+    system: msx
+    required: false
+    size: 32768
+    description: "MSX1 Japanese BIOS"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "MSXKR.rom"
+    path: "Machines/Shared Roms/MSXKR.rom"
+    system: msx
+    required: false
+    size: 32768
+    description: "MSX1 Korean BIOS"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "MSXHAN.rom"
+    path: "Machines/Shared Roms/MSXHAN.rom"
+    system: msx
+    required: false
+    size: 8192
+    description: "MSX1 Korean Hangul ROM"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "MSXR.rom"
+    path: "Machines/Shared Roms/MSXR.rom"
+    system: msx
+    required: false
+    size: 32768
+    description: "MSX1 Russian BIOS"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "MSXR2.rom"
+    path: "Machines/Shared Roms/MSXR2.rom"
+    system: msx
+    required: false
+    size: 32768
+    description: "MSX1 Estonian BIOS"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "MSXSE.ROM"
+    path: "Machines/Shared Roms/MSXSE.ROM"
+    system: msx
+    required: false
+    size: 32768
+    description: "MSX1 Swedish BIOS"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "MSXSP.rom"
+    path: "Machines/Shared Roms/MSXSP.rom"
+    system: msx
+    required: false
+    size: 32768
+    description: "MSX1 Spanish BIOS"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "NATIONALDISK.rom"
+    path: "Machines/Shared Roms/NATIONALDISK.rom"
+    system: msx
+    required: false
+    size: 16384
+    description: "National floppy disk ROM, shared by eight MSX1 definitions"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "GCVMX80.ROM"
+    path: "Machines/Shared Roms/GCVMX80.ROM"
+    system: msx
+    required: false
+    size: 8192
+    description: "Microsol VMX-80 character ROM"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "RS232.ROM"
+    path: "Machines/Shared Roms/RS232.ROM"
+    system: msx
+    required: false
+    size: 8192
+    description: "RS-232 interface ROM"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "FMPAC.rom"
+    path: "Machines/Shared Roms/FMPAC.rom"
+    system: msx
+    required: false
+    size: 65536
+    description: "FM-PAC cartridge ROM"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "BEERIDE.ROM"
+    path: "Machines/Shared Roms/BEERIDE.ROM"
+    system: msx
+    required: false
+    size: 16384
+    description: "Beer IDE controller ROM"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "NOVAXIS.rom"
+    path: "Machines/Shared Roms/NOVAXIS.rom"
+    system: msx
+    required: false
+    size: 16384
+    description: "Gouda SCSI controller ROM"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "nowindDos1.rom"
+    path: "Machines/Shared Roms/nowindDos1.rom"
+    system: msx
+    required: false
+    size: 524288
+    description: "Nowind MSX-DOS 1 image"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "nowindDos2.rom"
+    path: "Machines/Shared Roms/nowindDos2.rom"
+    system: msx
+    required: false
+    size: 524288
+    description: "Nowind MSX-DOS 2 image"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "MSX2AR.ROM"
+    path: "Machines/Shared Roms/MSX2AR.ROM"
+    system: msx2
+    required: false
+    size: 32768
+    description: "MSX2 Arabic BIOS"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "MSX2AREXT.ROM"
+    path: "Machines/Shared Roms/MSX2AREXT.ROM"
+    system: msx2
+    required: false
+    size: 16384
+    description: "MSX2 Arabic sub ROM"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "ARABIC.rom"
+    path: "Machines/Shared Roms/ARABIC.rom"
+    system: msx2
+    required: false
+    size: 32768
+    description: "MSX2 Arabic character ROM"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "PAINT.rom"
+    path: "Machines/Shared Roms/PAINT.rom"
+    system: msx2
+    required: false
+    size: 65536
+    description: "Arabic Painter ROM of the MSX2 Arabic definition"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "SWP.rom"
+    path: "Machines/Shared Roms/SWP.rom"
+    system: msx2
+    required: false
+    size: 32768
+    description: "Arabic word processor ROM of the MSX2 Arabic definition"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "MSX2BR.rom"
+    path: "Machines/Shared Roms/MSX2BR.rom"
+    system: msx2
+    required: false
+    size: 32768
+    description: "MSX2 Brazilian BIOS"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "MSX2BREXT.rom"
+    path: "Machines/Shared Roms/MSX2BREXT.rom"
+    system: msx2
+    required: false
+    size: 16384
+    description: "MSX2 Brazilian sub ROM"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "MSX2FR.rom"
+    path: "Machines/Shared Roms/MSX2FR.rom"
+    system: msx2
+    required: false
+    size: 32768
+    description: "MSX2 French BIOS"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "MSX2FREXT.rom"
+    path: "Machines/Shared Roms/MSX2FREXT.rom"
+    system: msx2
+    required: false
+    size: 16384
+    description: "MSX2 French sub ROM"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "MSX2G.rom"
+    path: "Machines/Shared Roms/MSX2G.rom"
+    system: msx2
+    required: false
+    size: 32768
+    description: "MSX2 German BIOS"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "MSX2GEXT.rom"
+    path: "Machines/Shared Roms/MSX2GEXT.rom"
+    system: msx2
+    required: false
+    size: 16384
+    description: "MSX2 German sub ROM"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "MSX2J.rom"
+    path: "Machines/Shared Roms/MSX2J.rom"
+    system: msx2
+    required: false
+    size: 32768
+    description: "MSX2 Japanese BIOS"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "MSX2JEXT.rom"
+    path: "Machines/Shared Roms/MSX2JEXT.rom"
+    system: msx2
+    required: false
+    size: 16384
+    description: "MSX2 Japanese sub ROM"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "MSX2KR.rom"
+    path: "Machines/Shared Roms/MSX2KR.rom"
+    system: msx2
+    required: false
+    size: 32768
+    description: "MSX2 Korean BIOS"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "MSX2KREXT.rom"
+    path: "Machines/Shared Roms/MSX2KREXT.rom"
+    system: msx2
+    required: false
+    size: 32768
+    description: "MSX2 Korean sub ROM"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "MSX2HAN.rom"
+    path: "Machines/Shared Roms/MSX2HAN.rom"
+    system: msx2
+    required: false
+    size: 32768
+    description: "MSX2 Korean Hangul ROM"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "HANGUL.rom"
+    path: "Machines/Shared Roms/HANGUL.rom"
+    system: msx2
+    required: false
+    size: 131072
+    description: "Korean Hangul character ROM"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "MSX2R.rom"
+    path: "Machines/Shared Roms/MSX2R.rom"
+    system: msx2
+    required: false
+    size: 32768
+    description: "MSX2 Russian BIOS"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "MSX2R2.ROM"
+    path: "Machines/Shared Roms/MSX2R2.ROM"
+    system: msx2
+    required: false
+    size: 32768
+    description: "MSX2 Estonian BIOS"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "MSX2REXT.rom"
+    path: "Machines/Shared Roms/MSX2REXT.rom"
+    system: msx2
+    required: false
+    size: 16384
+    description: "MSX2 sub ROM of the Russian and Estonian definitions"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "MSX2SE.rom"
+    path: "Machines/Shared Roms/MSX2SE.rom"
+    system: msx2
+    required: false
+    size: 32768
+    description: "MSX2 Swedish BIOS"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "MSX2SP.rom"
+    path: "Machines/Shared Roms/MSX2SP.rom"
+    system: msx2
+    required: false
+    size: 32768
+    description: "MSX2 Spanish BIOS"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+
+  - name: "MSX2SPEXT.rom"
+    path: "Machines/Shared Roms/MSX2SPEXT.rom"
+    system: msx2
+    required: false
+    size: 16384
+    description: "MSX2 Spanish sub ROM"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133"
+

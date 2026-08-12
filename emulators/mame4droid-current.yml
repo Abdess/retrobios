@@ -1,0 +1,35 @@
+emulator: MAME4droid (Current)
+type: alias
+alias_of: mame4droid-2024
+core_classification: alias
+source: "https://github.com/seleuco/MAME4droid-Current"
+upstream: "https://github.com/mamedev/mame/tree/mame0289"
+profiled_date: "2026-08-11"
+source_commit: "32d781923fc0fb7621f3d78903f1b37fd4a5694a"
+upstream_commit: "f34f02505e32c1993c6a782b6814232cbfc74e36"
+core_version: "1.38.1"
+display_name: "Arcade (MAME4droid Current)"
+
+cores:
+  - mame4droid-current
+
+note: |
+  Android port of MAME by David Valdeita (Seleuco), application id
+  com.seleuco.mame4d2024, release 1.38.1
+  (android-MAME4droid/app/build.gradle:20,24) on MAME 0.289 (README.md:4).
+
+  The app shipped as MAME4droid 2024 from its first release on 2023-12-17 to
+  1.19 on MAME 0.272. Release 1.20 moved to MAME 0.273 and renamed it
+  MAME4droid (Current)
+  (android-MAME4droid/app/src/main/assets/changelog.htm:74,55,54), the name
+  android-MAME4droid/app/src/main/res/values/strings.xml:4 carries. The
+  repository was renamed with it: seleuco/MAME4droid-2024 resolves to
+  seleuco/MAME4droid-Current.
+
+  build.gradle declares no product flavor and the repository has a single
+  branch, so both names are the same package. The tree holds the Android OSD
+  and the patches applied over a stock MAME source tree (howtobuild.txt), so
+  the ROM sets are those of MAME 0.289. Files are mame4droid-2024's, pinned
+  to the same commit.
+
+files: []
