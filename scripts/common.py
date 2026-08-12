@@ -783,7 +783,7 @@ def resolve_local_file(
 
     # MAME clone fallback: if a file was deduped, resolve via canonical
     if _depth < 3 and not has_strong_hash:
-        clone_map = _get_mame_clone_map()
+        clone_map = get_mame_clone_map()
         canonical = clone_map.get(name)
         if canonical and canonical != name:
             canonical_entry = {"name": canonical}
@@ -835,7 +835,10 @@ def resolve_local_file(
         return "data_dir_hash_exact"
 
     data_dir_mismatch: str | None = None
-    if data_dir_registry:
+    # Without a hash the cache walk matches on filename alone, which is the
+    # step an unsourceable entry has to skip: hiscore.dat names one file per
+    # driver set, so FBNeo's copy would answer for MAME's.
+    if data_dir_registry and (has_strong_hash or not unsourceable):
         for _dd_key, dd_entry in data_dir_registry.items():
             cache_dir = dd_entry.get("local_cache", "")
             if not cache_dir or not os.path.isdir(cache_dir):
@@ -890,7 +893,7 @@ def resolve_local_file(
 _mame_clone_map_cache: dict[str, str] | None = None
 
 
-def _get_mame_clone_map() -> dict[str, str]:
+def get_mame_clone_map() -> dict[str, str]:
     """Load and cache the MAME clone map (clone_name -> canonical_name)."""
     global _mame_clone_map_cache
     if _mame_clone_map_cache is not None:

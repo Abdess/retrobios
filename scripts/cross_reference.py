@@ -20,6 +20,7 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (
+    get_mame_clone_map,
     list_registered_platforms,
     load_database,
     load_emulator_profiles,
@@ -157,6 +158,16 @@ def _resolve_source(
     # bios/ via by_path_suffix (regional variants)
     if by_path_suffix and fname in by_path_suffix:
         return "bios"
+    # bios/ under the canonical MAME set name, as resolve_local_file does:
+    # a renamed archive is held once, under the name the dedup kept.
+    canonical = get_mame_clone_map().get(fname)
+    if canonical and canonical != fname:
+        if canonical in by_name and _name_hit(canonical):
+            return "bios"
+        if canonical.lower() in by_name_lower and _name_hit(
+            by_name_lower[canonical.lower()]
+        ):
+            return "bios"
     # data/ supplemental index
     if data_names:
         if fname in data_names or key in data_names:

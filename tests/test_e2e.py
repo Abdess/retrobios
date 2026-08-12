@@ -3114,6 +3114,33 @@ class TestE2E(unittest.TestCase):
         self.assertEqual(os.path.basename(path), "data_only.bin")
         self.assertEqual(status, "data_dir")
 
+    def test_167b_unsourceable_skips_data_dir_name_match(self):
+        """The cache walk matches on filename, so unsourceable has to skip it."""
+        data_dir = os.path.join(self.root, "data", "other-core")
+        os.makedirs(data_dir, exist_ok=True)
+        with open(os.path.join(data_dir, "shared_name.dat"), "wb") as f:
+            f.write(b"ANOTHER CORE DEFINITIONS")
+
+        registry = {"other-core": {"local_cache": data_dir}}
+
+        fe = {"name": "shared_name.dat", "unsourceable": "ships inside the package"}
+        path, status = resolve_local_file(fe, self.db, data_dir_registry=registry)
+        self.assertIsNone(path)
+        self.assertEqual(status, "not_found")
+
+        # A declared hash is content proof, so the cache still answers for it.
+        import hashlib
+
+        digest = hashlib.sha1(b"ANOTHER CORE DEFINITIONS").hexdigest()
+        fe = {
+            "name": "shared_name.dat",
+            "sha1": digest,
+            "unsourceable": "ships inside the package",
+        }
+        path, status = resolve_local_file(fe, self.db, data_dir_registry=registry)
+        self.assertIsNotNone(path)
+        self.assertEqual(status, "data_dir_hash_exact")
+
     def test_168_generate_truth_basic(self):
         """generate_platform_truth resolves cores and builds system truth."""
         import yaml as _yaml
@@ -5990,6 +6017,19 @@ struct BurnDriver BurnDrvneogeo = {
         db = self._gap_db("REPO_chip.rom", "a" * 40, "465c4e1c")
         entry = {"name": "chip.rom", "aliases": ["OTHER.rom"], "crc32": "deadbeef"}
         self.assertEqual(self._gap_source(entry, db), "missing")
+
+    def test_gap_analysis_resolves_renamed_mame_set(self):
+        """A renamed set is held under the name dedup kept, as verify reads it."""
+        import cross_reference
+
+        db = self._gap_db("v4bios.zip", "a" * 40, "465c4e1c")
+        original = cross_reference.get_mame_clone_map
+        cross_reference.get_mame_clone_map = lambda: {"bctvidbs.zip": "v4bios.zip"}
+        try:
+            entry = {"name": "bctvidbs.zip", "required": True}
+            self.assertEqual(self._gap_source(entry, db), "bios")
+        finally:
+            cross_reference.get_mame_clone_map = original
 
 
 if __name__ == "__main__":
