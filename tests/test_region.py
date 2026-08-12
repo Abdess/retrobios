@@ -5,6 +5,7 @@ from __future__ import annotations
 import os
 import sys
 import unittest
+from pathlib import Path
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
 
@@ -448,6 +449,120 @@ class TestVerifyModesHonourRegion(unittest.TestCase):
         if not plain.strip():
             self.skipTest("system not present")
         self.assertNotEqual(plain, filtered)
+
+
+class TestReportAndBuilderNarrowTogether(unittest.TestCase):
+    """A region run must withdraw the same files from report and pack.
+
+    The two sides grouped their candidates separately: the builder grouped the
+    platform files and the core extras, the report only the platform files.
+    So the report kept every core extra a region run withdraws from the pack
+    -on recalbox --region us, 59 files it described as covered.
+    """
+
+    def _fixture(self):
+        import hashlib
+        import tempfile
+
+        tmp = tempfile.TemporaryDirectory()
+        root = Path(tmp.name)
+        (root / "emulators").mkdir()
+        db = {"files": {}, "indexes": {
+            "by_name": {}, "by_md5": {}, "by_sha256": {},
+            "by_crc32": {}, "by_path_suffix": {},
+        }}
+        # Two regional alternatives of one system, both held locally.
+        for fname, tag in (("us.bin", b"US BYTES"), ("jp.bin", b"JP BYTES")):
+            blob = root / fname
+            blob.write_bytes(tag)
+            sha1 = hashlib.sha1(tag).hexdigest()
+            db["files"][sha1] = {
+                "path": str(blob), "name": fname, "size": len(tag),
+                "sha1": sha1, "md5": hashlib.md5(tag).hexdigest(),
+                "sha256": hashlib.sha256(tag).hexdigest(), "crc32": "00000000",
+            }
+            db["indexes"]["by_name"][fname] = [sha1]
+            db["indexes"]["by_md5"][db["files"][sha1]["md5"]] = sha1
+        (root / "emulators" / "demo.yml").write_text(
+            "emulator: demo\n"
+            "type: libretro\n"
+            "display_name: Demo\n"
+            "systems: [demo-system]\n"
+            "cores: [demo]\n"
+            "files:\n"
+            "  - name: us.bin\n"
+            "    system: demo-system\n"
+            "    region: [north-america]\n"
+            "    required: true\n"
+            "  - name: jp.bin\n"
+            "    system: demo-system\n"
+            "    region: [japan]\n"
+            "    required: true\n"
+        )
+        config = {
+            "platform": "Demo",
+            "verification_mode": "existence",
+            "cores": ["demo"],
+            "base_destination": "",
+            "systems": {},
+        }
+        return tmp, root, db, config
+
+    def test_the_report_withdraws_what_the_builder_withdraws(self):
+        sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
+        import common
+        import generate_pack as builder
+        import verify as reporter
+
+        tmp, root, db, config = self._fixture()
+        try:
+            common._emulator_profiles_cache.clear()
+            profiles = common.load_emulator_profiles(str(root / "emulators"))
+            groups, extra_dests = builder.platform_region_groups(
+                config, config["systems"], str(root / "emulators"),
+                db, "", profiles,
+            )
+            drops = region.resolve_region_drops(
+                groups, region.build_region_index(profiles), ["north-america"]
+            )
+            self.assertEqual(
+                {d for d in drops}, {"jp.bin"},
+                "the builder must drop the Japanese alternative, not the US one",
+            )
+
+            plain = reporter.verify_platform(
+                config, db, str(root / "emulators"), profiles,
+                supplemental_names=set(),
+            )
+            narrowed = reporter.verify_platform(
+                config, db, str(root / "emulators"), profiles,
+                supplemental_names=set(), regions=["north-america"],
+            )
+            before = {u["name"] for u in plain["undeclared_files"]}
+            after = {u["name"] for u in narrowed["undeclared_files"]}
+            self.assertEqual(before, {"us.bin", "jp.bin"})
+            self.assertEqual(
+                before - after,
+                {d for d in drops},
+                "the report must withdraw exactly the builder's drop set",
+            )
+        finally:
+            common._emulator_profiles_cache.clear()
+            tmp.cleanup()
+
+    def test_one_grouping_pass_serves_both_sides(self):
+        """A second hand-rolled grouping is how the two drifted apart."""
+        scripts = Path(__file__).resolve().parent.parent / "scripts"
+        hand_rolled = 0
+        for name in ("generate_pack.py", "verify.py"):
+            for line in (scripts / name).read_text().splitlines():
+                if "region_groups.setdefault(" in line:
+                    hand_rolled += 1
+        self.assertLessEqual(
+            hand_rolled, 2,
+            "platform region grouping belongs to platform_region_groups; "
+            "the only other pass is the per-emulator pack shape",
+        )
 
 
 if __name__ == "__main__":

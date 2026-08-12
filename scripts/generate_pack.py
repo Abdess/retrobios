@@ -50,6 +50,7 @@ from common import (
     require_yaml,
     resolution_is_hash_exact,
     resolve_local_file,
+    sanitize_pack_path,
     yaml_load,
 )
 import region as region_mod
@@ -289,7 +290,7 @@ def _pack_member_groups(
     for sys_id, system in pack_systems.items():
         members = groups.setdefault(sys_id, [])
         for fe in system.get("files", []):
-            dest = _sanitize_path(fe.get("destination", fe.get("name", "")))
+            dest = sanitize_pack_path(fe.get("destination", fe.get("name", "")))
             if dest:
                 members.append((dest, fe.get("name", "")))
     if source == "platform":
@@ -302,7 +303,7 @@ def _pack_member_groups(
         config, emulators_dir, db, set(), base_dest, emu_profiles,
         target_cores=target_cores, include_all=(source == "truth"),
     ):
-        dest = _sanitize_path(fe.get("destination", fe.get("name", "")))
+        dest = sanitize_pack_path(fe.get("destination", fe.get("name", "")))
         if not dest:
             continue
         for sys_id in emu_systems.get(fe.get("source_emulator", ""), ["_extras"]):
@@ -359,13 +360,6 @@ def _target_tag(target_name: str) -> str:
     return "".join(
         part.title() for part in re.split(r"[-_\s]+", target_name.strip()) if part
     )
-
-
-def _sanitize_path(raw: str) -> str:
-    """Strip path traversal components from a relative path."""
-    raw = raw.replace("\\", "/")
-    parts = [p for p in raw.split("/") if p and p not in ("..", ".")]
-    return "/".join(parts)
 
 
 def _path_parents(dest: str) -> list[str]:
@@ -709,6 +703,12 @@ def _collect_emulator_extras(
             "hle_fallback": u.get("hle_fallback", False),
             "source_emulator": u.get("emulator", ""),
             "source_profile": u.get("profile", ""),
+            # Identity of the report entry this extra came from.  The name
+            # alone does not identify it: Dolphin declares three IPL.bin that
+            # differ only by path, and collapsing them onto one key withdraws
+            # the wrong regional variant from the report.
+            "source_name": u.get("name", ""),
+            "source_path": u.get("path") or "",
             "source_system": u.get("system"),
             "source_systems": u.get("systems", []),
             "region": u.get("region"),
@@ -949,6 +949,68 @@ def _extra_system_ids(extra: dict) -> list[str]:
     if explicit:
         return [str(explicit)]
     return [str(value) for value in extra.get("source_systems", []) if value]
+
+
+def platform_region_groups(
+    config: dict,
+    systems: dict,
+    emulators_dir: str,
+    db: dict | None,
+    base_dest: str,
+    emu_profiles: dict | None,
+    *,
+    target_cores: set[str] | None = None,
+    include_extras: bool = True,
+    include_all: bool = False,
+) -> tuple[dict[str, list[tuple[str, str]]], dict[tuple[str, str, str], str]]:
+    """Group a platform's pack candidates the way region filtering reads them.
+
+    Returns the groups and, for every core extra, the destination it was
+    grouped under, keyed by (emulator, name).  verify.py needs that mapping to
+    withdraw from its report exactly what the builder withdraws from the pack:
+    grouping the declared files here and the core extras there would let the
+    two answer differently on the same request.
+    """
+    groups: dict[str, list[tuple[str, str]]] = {}
+    for sys_id, system in systems.items():
+        members = groups.setdefault(sys_id, [])
+        for file_entry in system.get("files", []):
+            dest = sanitize_pack_path(
+                file_entry.get("destination", file_entry.get("name", ""))
+            )
+            if dest:
+                members.append((dest, file_entry.get("name", "")))
+
+    extra_dests: dict[tuple[str, str, str], str] = {}
+    if not include_extras or db is None:
+        return groups, extra_dests
+
+    for extra in _collect_emulator_extras(
+        config,
+        emulators_dir,
+        db,
+        set(),
+        base_dest,
+        emu_profiles,
+        target_cores=target_cores,
+        include_all=include_all,
+    ):
+        dest = sanitize_pack_path(extra.get("destination", extra.get("name", "")))
+        if not dest:
+            continue
+        name = extra.get("name", "")
+        extra_dests[
+            (
+                extra.get("source_emulator", ""),
+                extra.get("source_name", ""),
+                extra.get("source_path", ""),
+            )
+        ] = dest
+        variant = extra.get("variant_group")
+        for sys_id in _extra_system_ids(extra) or ["_extras"]:
+            group_id = f"{sys_id}:variant:{variant}" if variant else sys_id
+            groups.setdefault(group_id, []).append((dest, name))
+    return groups, extra_dests
 
 
 def _emulator_region_group(emu_name: str, profile: dict, file_entry: dict) -> str:
@@ -1403,7 +1465,7 @@ def generate_pack(
             for file_entry in system.get("files", []):
                 if required_only and file_entry.get("required") is False:
                     continue
-                dest = _sanitize_path(
+                dest = sanitize_pack_path(
                     file_entry.get("destination", file_entry.get("name", ""))
                 )
                 if not dest:
@@ -1447,36 +1509,17 @@ def generate_pack(
     region_fallbacks: list[str] = []
     if regions:
         region_index = region_mod.build_region_index(emu_profiles or {})
-        region_groups: dict[str, list[tuple[str, str]]] = {}
-        for sys_id, system in pack_systems.items():
-            members = region_groups.setdefault(sys_id, [])
-            for file_entry in system.get("files", []):
-                dest = _sanitize_path(
-                    file_entry.get("destination", file_entry.get("name", ""))
-                )
-                if dest:
-                    members.append((dest, file_entry.get("name", "")))
-        if source != "platform":
-            for fe in _collect_emulator_extras(
-                config,
-                emulators_dir,
-                db,
-                set(),
-                base_dest,
-                emu_profiles,
-                target_cores=target_cores,
-                include_all=(source == "truth"),
-            ):
-                dest = _sanitize_path(fe.get("destination", fe.get("name", "")))
-                if not dest:
-                    continue
-                systems = _extra_system_ids(fe) or ["_extras"]
-                for sys_id in systems:
-                    variant = fe.get("variant_group")
-                    group_id = f"{sys_id}:variant:{variant}" if variant else sys_id
-                    region_groups.setdefault(group_id, []).append(
-                        (dest, fe.get("name", ""))
-                    )
+        region_groups, _extra_dests = platform_region_groups(
+            config,
+            pack_systems,
+            emulators_dir,
+            db,
+            base_dest,
+            emu_profiles,
+            target_cores=target_cores,
+            include_extras=(source != "platform"),
+            include_all=(source == "truth"),
+        )
         region_drops = region_mod.resolve_region_drops(
             region_groups, region_index, regions
         )
@@ -1510,7 +1553,7 @@ def generate_pack(
             for file_entry in system.get("files", []):
                 if required_only and file_entry.get("required") is False:
                     continue
-                dest = _sanitize_path(file_entry.get("destination", file_entry["name"]))
+                dest = sanitize_pack_path(file_entry.get("destination", file_entry["name"]))
                 if region_drops and dest in region_drops:
                     continue
                 if not dest:
@@ -1827,7 +1870,7 @@ def generate_pack(
       for fe in core_files:
           if required_only and fe.get("required") is False:
               continue
-          dest = _sanitize_path(fe.get("destination", fe["name"]))
+          dest = sanitize_pack_path(fe.get("destination", fe["name"]))
           if region_drops and dest in region_drops:
               continue
           if not dest:
@@ -2020,7 +2063,7 @@ def _extract_zip_to_archive(
         for info in src.infolist():
             if info.is_dir():
                 continue
-            clean_name = _sanitize_path(info.filename)
+            clean_name = sanitize_pack_path(info.filename)
             if not clean_name:
                 continue
             data = src.read(info.filename)
@@ -2105,7 +2148,7 @@ def _resolve_destination(
     else:
         rel = file_entry.get("name", "")
 
-    rel = _sanitize_path(rel)
+    rel = sanitize_pack_path(rel)
 
     # Prepend pack_structure prefix
     if pack_structure:
@@ -2264,7 +2307,7 @@ def generate_emulator_pack(
             # Pack archives as units
             archive_prefix = profile.get("archive_prefix", "")
             for archive_name in sorted(archives):
-                archive_dest = _sanitize_path(archive_name)
+                archive_dest = sanitize_pack_path(archive_name)
                 if archive_prefix:
                     archive_dest = f"{archive_prefix}/{archive_dest}"
                 if pack_structure:
@@ -3661,36 +3704,17 @@ def generate_manifest(
     region_drops: set[str] = set()
     if regions:
         region_index = region_mod.build_region_index(emu_profiles)
-        region_groups: dict[str, list[tuple[str, str]]] = {}
-        for sys_id, system in pack_systems.items():
-            members = region_groups.setdefault(sys_id, [])
-            for file_entry in system.get("files", []):
-                d = _sanitize_path(
-                    file_entry.get("destination", file_entry.get("name", ""))
-                )
-                if d:
-                    members.append((d, file_entry.get("name", "")))
-        if source != "platform":
-            for fe in _collect_emulator_extras(
-                config,
-                emulators_dir,
-                db,
-                set(),
-                base_dest,
-                emu_profiles,
-                target_cores=target_cores,
-                include_all=(source == "truth"),
-            ):
-                d = _sanitize_path(fe.get("destination", fe.get("name", "")))
-                if not d:
-                    continue
-                systems = _extra_system_ids(fe) or ["_extras"]
-                for sid in systems:
-                    variant = fe.get("variant_group")
-                    group_id = f"{sid}:variant:{variant}" if variant else sid
-                    region_groups.setdefault(group_id, []).append(
-                        (d, fe.get("name", ""))
-                    )
+        region_groups, _extra_dests = platform_region_groups(
+            config,
+            pack_systems,
+            emulators_dir,
+            db,
+            base_dest,
+            emu_profiles,
+            target_cores=target_cores,
+            include_extras=(source != "platform"),
+            include_all=(source == "truth"),
+        )
         region_drops = region_mod.resolve_region_drops(
             region_groups, region_index, regions
         )
@@ -3699,7 +3723,7 @@ def generate_manifest(
     if source != "truth":
         for sys_id, system in sorted(pack_systems.items()):
             for file_entry in system.get("files", []):
-                dest = _sanitize_path(file_entry.get("destination", file_entry["name"]))
+                dest = sanitize_pack_path(file_entry.get("destination", file_entry["name"]))
                 if not dest:
                     continue
                 if region_drops and dest in region_drops:
@@ -3806,7 +3830,7 @@ def generate_manifest(
         core_files = []
     extras_pfx = _detect_extras_prefix(config, base_dest)
     for fe in core_files:
-        dest = _sanitize_path(fe.get("destination", fe["name"]))
+        dest = sanitize_pack_path(fe.get("destination", fe["name"]))
         if not dest:
             continue
         if region_drops and dest in region_drops:
@@ -4385,36 +4409,14 @@ def verify_pack_against_platform(
     region_drops: set[str] = set()
     if regions:
         region_index = region_mod.build_region_index(emu_profiles)
-        region_groups: dict[str, list[tuple[str, str]]] = {}
-        for sys_id, system in config.get("systems", {}).items():
-            members = region_groups.setdefault(sys_id, [])
-            for fe in system.get("files", []):
-                d = _sanitize_path(fe.get("destination", fe.get("name", "")))
-                if d:
-                    members.append((d, fe.get("name", "")))
-        if db is not None:
-            for extra in _collect_emulator_extras(
-                config,
-                emulators_dir,
-                db,
-                set(),
-                base_dest,
-                emu_profiles,
-            ):
-                d = _sanitize_path(
-                    extra.get("destination", extra.get("name", ""))
-                )
-                if not d:
-                    continue
-                systems_for_extra = _extra_system_ids(extra) or ["_extras"]
-                for sys_id in systems_for_extra:
-                    variant = extra.get("variant_group")
-                    group_id = (
-                        f"{sys_id}:variant:{variant}" if variant else sys_id
-                    )
-                    region_groups.setdefault(group_id, []).append(
-                        (d, extra.get("name", ""))
-                    )
+        region_groups, _extra_dests = platform_region_groups(
+            config,
+            config.get("systems", {}),
+            emulators_dir,
+            db,
+            base_dest,
+            emu_profiles,
+        )
         region_drops = region_mod.resolve_region_drops(
             region_groups, region_index, regions
         )
@@ -4468,7 +4470,7 @@ def verify_pack_against_platform(
         baseline_groups: dict[str, list[dict]] = {}
         for _sys_id, system in config.get("systems", {}).items():
             for fe in system.get("files", []):
-                dest = _sanitize_path(fe.get("destination", fe.get("name", "")))
+                dest = sanitize_pack_path(fe.get("destination", fe.get("name", "")))
                 if not dest:
                     continue
                 if region_drops and dest in region_drops:
@@ -4555,10 +4557,10 @@ def verify_pack_against_platform(
             extras_pfx = _detect_extras_prefix(config, base_dest)
             for fe in core_files:
                 raw_dest = fe.get("destination", fe.get("name", ""))
-                dest = _sanitize_path(raw_dest)
+                dest = sanitize_pack_path(raw_dest)
                 if not dest:
                     continue
-                if region_drops and _sanitize_path(dest) in region_drops:
+                if region_drops and sanitize_pack_path(dest) in region_drops:
                     continue
                 if extras_pfx and not (is_flat and extras_pfx == base_dest):
                     if not dest.startswith(f"{extras_pfx}/"):

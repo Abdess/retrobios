@@ -49,6 +49,7 @@ from common import (
     require_yaml,
     resolve_local_file,
     resolve_platform_cores,
+    sanitize_pack_path,
 )
 
 yaml = require_yaml()
@@ -803,16 +804,25 @@ def verify_platform(
     file_severity: dict[str, str] = {}
 
     region_drops: set[str] = set()
+    region_extra_dests: dict[tuple[str, str, str], str] = {}
     if regions:
         import region as region_mod
 
-        region_groups: dict[str, list[tuple[str, str]]] = {}
-        for sys_id, system in verify_systems.items():
-            members = region_groups.setdefault(sys_id, [])
-            for fe in system.get("files", []):
-                dest = fe.get("destination", fe.get("name", ""))
-                if dest:
-                    members.append((dest, fe.get("name", "")))
+        # The builder owns pack composition, so it owns the grouping the region
+        # pass reads.  Grouping the platform files here and the core extras
+        # there let the two answer differently on one request: the report kept
+        # every core extra a region run withdraws from the pack.
+        from generate_pack import platform_region_groups
+
+        region_groups, region_extra_dests = platform_region_groups(
+            config,
+            verify_systems,
+            emulators_dir,
+            db,
+            config.get("base_destination", ""),
+            profiles,
+            target_cores=target_cores,
+        )
         region_drops = region_mod.resolve_region_drops(
             region_groups, region_mod.build_region_index(profiles), regions
         )
@@ -820,7 +830,9 @@ def verify_platform(
     for sys_id, system in verify_systems.items():
         for file_entry in system.get("files", []):
             if region_drops and (
-                file_entry.get("destination", file_entry.get("name", ""))
+                sanitize_pack_path(
+                    file_entry.get("destination", file_entry.get("name", ""))
+                )
                 in region_drops
             ):
                 continue
@@ -916,6 +928,15 @@ def verify_platform(
         target_cores=target_cores,
         data_names=supplemental_names,
     )
+    if region_drops:
+        undeclared = [
+            u
+            for u in undeclared
+            if region_extra_dests.get(
+                (u.get("emulator", ""), u.get("name", ""), u.get("path") or "")
+            )
+            not in region_drops
+        ]
     exclusions = find_exclusion_notes(
         config, emulators_dir, emu_profiles, target_cores=target_cores
     )

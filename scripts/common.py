@@ -1505,6 +1505,17 @@ def fetch_large_file(
 
 
 MAX_ZIP_MEMBERS = 100_000
+def sanitize_pack_path(raw: str) -> str:
+    """Strip traversal components from a relative destination.
+
+    The builder and the coverage report key their region grouping on this
+    value, so they have to derive it the same way: a destination normalized on
+    one side only would be looked up under a key the other side never emits.
+    """
+    raw = raw.replace("\\", "/")
+    return "/".join(p for p in raw.split("/") if p and p not in ("..", "."))
+
+
 MAX_ZIP_MEMBER_SIZE = 8 * 1024 * 1024 * 1024
 # The largest generated pack is already ~5 GB uncompressed and the collection
 # only grows; this bounds a malicious archive without capping a real one.
