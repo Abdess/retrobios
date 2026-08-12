@@ -77,3 +77,7 @@ bios/Nintendo/DS/.variants/dsi_nand.bin.8b79a73c
 
 # Wii NAND backup (528MB, fetched from large-files release)
 bios/Nintendo/Wii/nand.bin
+
+# FBNeo audio samples (97MB and 155MB, fetched from large-files release)
+bios/Other/fbneo/fbneo/samples/sfz3mix.zip
+bios/Other/fbneo/fbneo/samples/twotiger.zip

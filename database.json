@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-12T01:16:00Z",
-  "total_files": 8800,
-  "total_size": 12038835230,
+  "generated_at": "2026-08-12T01:49:04Z",
+  "total_files": 8806,
+  "total_size": 12290606092,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -49484,6 +49484,16 @@
       "crc32": "bb56de24",
       "adler32": "28b01f1d"
     },
+    "b9cfa84916a930d272250130d67ceb822141177d": {
+      "path": "bios/Other/citra-mmj/sysdata/sector0x96.bin",
+      "name": "sector0x96.bin",
+      "size": 512,
+      "sha1": "b9cfa84916a930d272250130d67ceb822141177d",
+      "md5": "97eb0410ed2002a49ba221c0915d3f58",
+      "sha256": "82f2730d2c2da3f30165f987fdccac5cbab24b4e5f65c981cd7be6f438e6d9d3",
+      "crc32": "632b0877",
+      "adler32": "fe1dfec6"
+    },
     "bbdbb49a917d14f7a997d327ba40d40c39e606ce": {
       "path": "bios/Other/citron/switch/key_retail.bin",
       "name": "key_retail.bin",
@@ -49970,6 +49980,16 @@
       "sha256": "a69264226312f584caf43343d27f0d38213d4fb01758ca01880f509c98fbeb29",
       "crc32": "e9021e6f",
       "adler32": "79add7e8"
+    },
+    "fc916ff462b842983d4061d09230163ac4b38f16": {
+      "path": "bios/Other/eden/switch/dev.keys",
+      "name": "dev.keys",
+      "size": 781,
+      "sha1": "fc916ff462b842983d4061d09230163ac4b38f16",
+      "md5": "50d796b124cbceddec441e726f4ed381",
+      "sha256": "72685b5ce6c7ea3e18e3e0d98be1a99de8197299ee15429687b27df614ec92b9",
+      "crc32": "6e98cf0d",
+      "adler32": "a6dcd189"
     },
     "9e5a68ae992578d62f2d429863cb8506ee40e3b0": {
       "path": "bios/Other/emucorev/app_compat_db.xml",
@@ -50501,6 +50521,16 @@
       "crc32": "50c5f498",
       "adler32": "d9b822e7"
     },
+    "8844cc0ae17a476388c51d42c2ce2f61b3b4cc93": {
+      "path": "bios/Other/fbalpha2012/fba2012/samples/rallyx.zip",
+      "name": "rallyx.zip",
+      "size": 72511,
+      "sha1": "8844cc0ae17a476388c51d42c2ce2f61b3b4cc93",
+      "md5": "f9b6db2166d8e0db0806caf5d2823409",
+      "sha256": "2dd50410e202528989fb578c13fbfc3ec3382b123a1025e1dc8c995c87b3c903",
+      "crc32": "db785b06",
+      "adler32": "2dad5aaa"
+    },
     "84d422b53547271e3a07342704a05ef481db3f99": {
       "path": "bios/Other/fbneo/136032.101.e3",
       "name": "136032.101.e3",
@@ -50610,6 +50640,26 @@
       "sha256": "a686ebf893d511b5b7667176cd6844593e914595a8bb9ab656b2c66969013b5c",
       "crc32": "1294ff68",
       "adler32": "27661d30"
+    },
+    "227815ce9e55db427d68e075182caffe6ad60ad1": {
+      "path": "bios/Other/fbneo/fbneo/samples/sfz3mix.zip",
+      "name": "sfz3mix.zip",
+      "size": 96705917,
+      "sha1": "227815ce9e55db427d68e075182caffe6ad60ad1",
+      "md5": "486c88c15387b4bd83514899e68dec3f",
+      "sha256": "6a720035646b3488a047ab163a6975b7be82fe75c5eec88155c8503c93a631fe",
+      "crc32": "c6ab431d",
+      "adler32": "ecbdccac"
+    },
+    "b286035624978c94194ef5b83b5d784ec00c3a3c": {
+      "path": "bios/Other/fbneo/fbneo/samples/twotiger.zip",
+      "name": "twotiger.zip",
+      "size": 154985212,
+      "sha1": "b286035624978c94194ef5b83b5d784ec00c3a3c",
+      "md5": "733f951177e613819deef4c8f6feb4e7",
+      "sha256": "fe5408e3f513c44a64f573e7a8b68885bce9b263bc9c67bfef13fef13f3e976e",
+      "crc32": "b5d5b941",
+      "adler32": "5cda4b06"
     },
     "a8b7dce572b74e02e65cb949b2c366c87625157f": {
       "path": "bios/Other/flycast-dojo/naomi2_boot.bin",
@@ -53510,6 +53560,16 @@
       "sha256": "91dc5f78122114e84e7ed723cdcdba7d161ff98befe895655fe815bb334b0ebf",
       "crc32": "acf4963d",
       "adler32": "09891f9e"
+    },
+    "c939bb0c356b3388ee371959e0af2d71ffbfb6dc": {
+      "path": "bios/Other/my-boy/rom_config.ini",
+      "name": "rom_config.ini",
+      "size": 5929,
+      "sha1": "c939bb0c356b3388ee371959e0af2d71ffbfb6dc",
+      "md5": "4fb8c78a0641ded54f858feef4d4d359",
+      "sha256": "fbbb1991f822257c5928932b167a48e0886f79e7d779b7d1dd4916eec8c4297e",
+      "crc32": "26366ed0",
+      "adler32": "ab74d095"
     },
     "58807f32c413a0c9db6deb0365f2fac9518e7c86": {
       "path": "bios/Other/opentyrian/cubetxt1.dat",
@@ -97750,6 +97810,7 @@
       "8b85ec04bbc2ecb403e2bca380dbbb08": "c6578caffb1a57f6c18979dc596f3fb9cb986706",
       "acb87b8d453644b45c7fc8c8247744f5": "1fbd073bbd6cb906a0c0678767fab81feb552173",
       "b15266f06fa290f3f444302a74890d9b": "62a877bfffb3e690044520f52120c5cd48b97545",
+      "97eb0410ed2002a49ba221c0915d3f58": "b9cfa84916a930d272250130d67ceb822141177d",
       "45fd53569f5765eef9c337bd5172f937": "bbdbb49a917d14f7a997d327ba40d40c39e606ce",
       "cf10b154f2e006a9740d7653cfc47cab": "28c7616cd02e4286f9b4c1c4a8b8850832b49fcb",
       "4fe4f6800076ea3d897d4285653447bd": "d4aec4efe1431e56fe52d83baf9118542c525255",
@@ -97798,6 +97859,7 @@
       "c259d5dd2d1a8e1f58eaa26c08efae45": "31ae916c85d012582c7cdf47de6943ac6778253b",
       "5f34f9f6108f8d57fc26789b7a7ecf82": "4dc29a1560e1cbd7afef1998f7a6c25c5db1cc3a",
       "bae4cb62265d0212911e1c6fcd23de78": "bcc9fd3be24170eace44f3816ed52f128cb2248c",
+      "50d796b124cbceddec441e726f4ed381": "fc916ff462b842983d4061d09230163ac4b38f16",
       "ea5367172cfdc57aecc05835cd8f5ede": "9e5a68ae992578d62f2d429863cb8506ee40e3b0",
       "d8c9cbf44a83f594ca1e29ab97550dec": "ea7d6bce6d0b871f40e57c792480f4912b93f247",
       "0b07ce6a7f696e93c7861d5ee57b25ee": "cedf087d629bcb2145f5a2a75d015168e6af2da1",
@@ -97851,6 +97913,7 @@
       "fda0237b2046adf21d66b7fb5ac441ae": "a9b9ed5fab307250a69a12ebce4bc44786b8b453",
       "ec51495fc1c0606a9e2f57bca6602f5a": "90943fbcd3c23104fcdf7aed70df1e7752f39271",
       "ac7ab73a8c909c61551b2c82f906921e": "7eea41770e156b05ddde4195954b5a468f163cdd",
+      "f9b6db2166d8e0db0806caf5d2823409": "8844cc0ae17a476388c51d42c2ce2f61b3b4cc93",
       "dc1aa189468255e644e44b99ad7da49c": "84d422b53547271e3a07342704a05ef481db3f99",
       "fc90330915e7c494898615eb58689d68": "2d327e78832edd67ca3909c25b8c8c839637a1ed",
       "c4abdbe2a64c2ef06b6b659f32ea883f": "0a42a4816c89447b16e1f3245409591efea98a4a",
@@ -97862,6 +97925,8 @@
       "0eb6b12f36508b24f285ffd793438ef3": "d124045eccc562ff0423b23a240e27ad740fa0c9",
       "c78ac640fcf02eb866b79718f5ed15fa": "20fdca7131478e1ee12691bdafd2d5bb74cbd16f",
       "5bcfc3374fc9b0c16070f1ac42f3dc63": "c0c0b5db93a61276a6fe6842049cb53e564b8413",
+      "486c88c15387b4bd83514899e68dec3f": "227815ce9e55db427d68e075182caffe6ad60ad1",
+      "733f951177e613819deef4c8f6feb4e7": "b286035624978c94194ef5b83b5d784ec00c3a3c",
       "659d579ba9aef5b025d87323044e83f4": "a8b7dce572b74e02e65cb949b2c366c87625157f",
       "e612770bc5da7ee1a21d499ce419ce2c": "8251a8e151e31201dcc346d75158ee3996895e74",
       "a750d7553bb9ea6b62a8bf546d048480": "7e11679ec682d6357d0fd99d1454871be3750ee1",
@@ -98152,6 +98217,7 @@
       "7f76ed35d335c18e10db1adebc831553": "5d9d28246d2976cdd75adc66524ce9de5e623af0",
       "baf8b7f2e61c241d19a27661f1090b5f": "646068483c6f5c7d0eb2f76038b9e5dd25f0f01d",
       "07e1aa1f8d6b3be4610c7becda511ca7": "f77e7836ee114947f38bfd854843c0b987399f0e",
+      "4fb8c78a0641ded54f858feef4d4d359": "c939bb0c356b3388ee371959e0af2d71ffbfb6dc",
       "3f2476d9ff29a06cf9fb85d52302222a": "58807f32c413a0c9db6deb0365f2fac9518e7c86",
       "2b199deeccab1042fb02b46c47c2a8d0": "ee7dc2eb87e5a75564382efcd95d13554d3835ba",
       "4229d5532a206aabe7e1fa11a7d8447e": "1ee93623406dc61b50ccb41a97bae769ea15cef2",
@@ -115183,6 +115249,9 @@
       "cbf_zh-Hant-TW.bcfnt": [
         "62a877bfffb3e690044520f52120c5cd48b97545"
       ],
+      "sector0x96.bin": [
+        "b9cfa84916a930d272250130d67ceb822141177d"
+      ],
       "key_retail.bin": [
         "bbdbb49a917d14f7a997d327ba40d40c39e606ce"
       ],
@@ -115327,6 +115396,9 @@
       "usrcheat.dat": [
         "bcc9fd3be24170eace44f3816ed52f128cb2248c"
       ],
+      "dev.keys": [
+        "fc916ff462b842983d4061d09230163ac4b38f16"
+      ],
       "app_compat_db.xml": [
         "9e5a68ae992578d62f2d429863cb8506ee40e3b0"
       ],
@@ -115392,6 +115464,9 @@
       "erase.me": [
         "a36992809f946cba845dbe4a8cdc4ee79e413bc0"
       ],
+      "rallyx.zip": [
+        "8844cc0ae17a476388c51d42c2ce2f61b3b4cc93"
+      ],
       "136032.101.e3": [
         "84d422b53547271e3a07342704a05ef481db3f99"
       ],
@@ -115424,6 +115499,12 @@
       ],
       "donpachi.zip": [
         "c0c0b5db93a61276a6fe6842049cb53e564b8413"
+      ],
+      "sfz3mix.zip": [
+        "227815ce9e55db427d68e075182caffe6ad60ad1"
+      ],
+      "twotiger.zip": [
+        "b286035624978c94194ef5b83b5d784ec00c3a3c"
       ],
       "naomi2_boot.bin": [
         "a8b7dce572b74e02e65cb949b2c366c87625157f"
@@ -116257,6 +116338,9 @@
       ],
       "PacDrive32.dll": [
         "f77e7836ee114947f38bfd854843c0b987399f0e"
+      ],
+      "rom_config.ini": [
+        "c939bb0c356b3388ee371959e0af2d71ffbfb6dc"
       ],
       "cubetxt1.dat": [
         "58807f32c413a0c9db6deb0365f2fac9518e7c86"
@@ -134859,6 +134943,7 @@
       "d60e70f2": "c6578caffb1a57f6c18979dc596f3fb9cb986706",
       "90386ab3": "1fbd073bbd6cb906a0c0678767fab81feb552173",
       "bb56de24": "62a877bfffb3e690044520f52120c5cd48b97545",
+      "632b0877": "b9cfa84916a930d272250130d67ceb822141177d",
       "c6408c16": "bbdbb49a917d14f7a997d327ba40d40c39e606ce",
       "ef6403c5": "28c7616cd02e4286f9b4c1c4a8b8850832b49fcb",
       "58d86a2a": "d4aec4efe1431e56fe52d83baf9118542c525255",
@@ -134907,6 +134992,7 @@
       "cd63893f": "31ae916c85d012582c7cdf47de6943ac6778253b",
       "f307d77a": "4dc29a1560e1cbd7afef1998f7a6c25c5db1cc3a",
       "e9021e6f": "bcc9fd3be24170eace44f3816ed52f128cb2248c",
+      "6e98cf0d": "fc916ff462b842983d4061d09230163ac4b38f16",
       "4c291d8b": "9e5a68ae992578d62f2d429863cb8506ee40e3b0",
       "a020167d": "ea7d6bce6d0b871f40e57c792480f4912b93f247",
       "675d14ec": "cedf087d629bcb2145f5a2a75d015168e6af2da1",
@@ -134960,6 +135046,7 @@
       "eff8698a": "a9b9ed5fab307250a69a12ebce4bc44786b8b453",
       "4a2a86d7": "90943fbcd3c23104fcdf7aed70df1e7752f39271",
       "50c5f498": "7eea41770e156b05ddde4195954b5a468f163cdd",
+      "db785b06": "8844cc0ae17a476388c51d42c2ce2f61b3b4cc93",
       "7e84972a": "84d422b53547271e3a07342704a05ef481db3f99",
       "ebf1e0ae": "2d327e78832edd67ca3909c25b8c8c839637a1ed",
       "92d6a0b4": "0a42a4816c89447b16e1f3245409591efea98a4a",
@@ -134971,6 +135058,8 @@
       "88d0be26": "d124045eccc562ff0423b23a240e27ad740fa0c9",
       "3c79ef05": "20fdca7131478e1ee12691bdafd2d5bb74cbd16f",
       "1294ff68": "c0c0b5db93a61276a6fe6842049cb53e564b8413",
+      "c6ab431d": "227815ce9e55db427d68e075182caffe6ad60ad1",
+      "b5d5b941": "b286035624978c94194ef5b83b5d784ec00c3a3c",
       "353fdbcd": "a8b7dce572b74e02e65cb949b2c366c87625157f",
       "31669117": "8251a8e151e31201dcc346d75158ee3996895e74",
       "9f8f2889": "7e11679ec682d6357d0fd99d1454871be3750ee1",
@@ -135261,6 +135350,7 @@
       "5d319e61": "5d9d28246d2976cdd75adc66524ce9de5e623af0",
       "d1fa3b4a": "646068483c6f5c7d0eb2f76038b9e5dd25f0f01d",
       "acf4963d": "f77e7836ee114947f38bfd854843c0b987399f0e",
+      "26366ed0": "c939bb0c356b3388ee371959e0af2d71ffbfb6dc",
       "84e948df": "58807f32c413a0c9db6deb0365f2fac9518e7c86",
       "bf8e13c9": "ee7dc2eb87e5a75564382efcd95d13554d3835ba",
       "7b91c5d2": "1ee93623406dc61b50ccb41a97bae769ea15cef2",
@@ -143661,6 +143751,7 @@
       "5e39d040be8e40554009b4ff29194f7d70c468a7c9c445c0be06320539851125": "c6578caffb1a57f6c18979dc596f3fb9cb986706",
       "5d786f4ef7e59e4ee20c73803753e455ebf812046a930f5ad1437839329e8aca": "1fbd073bbd6cb906a0c0678767fab81feb552173",
       "dbefcc65df7e7e301af3fead2282626574b67bc7d838f45a6c618b74793ac7bc": "62a877bfffb3e690044520f52120c5cd48b97545",
+      "82f2730d2c2da3f30165f987fdccac5cbab24b4e5f65c981cd7be6f438e6d9d3": "b9cfa84916a930d272250130d67ceb822141177d",
       "7f9283654ec1097fbdff31de946651ae60c2854afb544abe8963d389639c710e": "bbdbb49a917d14f7a997d327ba40d40c39e606ce",
       "a49928fbac56380917134b54961ece2e90073022f3e04a6023d26cdbbd9c3356": "28c7616cd02e4286f9b4c1c4a8b8850832b49fcb",
       "3b17255d2679d11f79e6cacda86de5f6bc9bb5cddf78cbddc651af03b237317d": "d4aec4efe1431e56fe52d83baf9118542c525255",
@@ -143709,6 +143800,7 @@
       "6ad5072c3920fd6c8eba2c49d2dd058c296564a11d6013807124a919cf0d66e6": "31ae916c85d012582c7cdf47de6943ac6778253b",
       "0a4e88c5dfd20ce669b8df45d009974f23fe7cb9b1f2148dbf30b6445eca9bc5": "4dc29a1560e1cbd7afef1998f7a6c25c5db1cc3a",
       "a69264226312f584caf43343d27f0d38213d4fb01758ca01880f509c98fbeb29": "bcc9fd3be24170eace44f3816ed52f128cb2248c",
+      "72685b5ce6c7ea3e18e3e0d98be1a99de8197299ee15429687b27df614ec92b9": "fc916ff462b842983d4061d09230163ac4b38f16",
       "30689e60b258624bc6e48a6496b9400683384508570617c6a97969f18528a367": "9e5a68ae992578d62f2d429863cb8506ee40e3b0",
       "cadfb653e20289d260b3c0c8a2db3f83ce24cee95ba9db1dcc5ef43911eac478": "ea7d6bce6d0b871f40e57c792480f4912b93f247",
       "0b20de4de89f8ff8716e4964aa6f031d318a7adfb61ef223f74334d0513bb378": "cedf087d629bcb2145f5a2a75d015168e6af2da1",
@@ -143762,6 +143854,7 @@
       "db84ab7b4cc327c1ac4513a982e8b2c39bd5ddf64f15d70178f6a94ffdcdef48": "a9b9ed5fab307250a69a12ebce4bc44786b8b453",
       "a9d7bfddd60c805878707f115e753e494e27ffaa879190dc045ef2eeb120f647": "90943fbcd3c23104fcdf7aed70df1e7752f39271",
       "89e80f1cb14de9a185ed46f9f4777649d0d8f19a4ac3d2cfe5157f427188f2fd": "7eea41770e156b05ddde4195954b5a468f163cdd",
+      "2dd50410e202528989fb578c13fbfc3ec3382b123a1025e1dc8c995c87b3c903": "8844cc0ae17a476388c51d42c2ce2f61b3b4cc93",
       "d7626affff7dfc0a8782e0894770258ea572d0f2d9859690efbc8ce018cb36bc": "84d422b53547271e3a07342704a05ef481db3f99",
       "81fb611f7dc9d531720836f31e5aff1cc5466013d0afb7ab7f947cb5b7520504": "2d327e78832edd67ca3909c25b8c8c839637a1ed",
       "c770a3ae305c3420292516dbd86373f67798983c74754d2cc988de6ddf6ec51f": "0a42a4816c89447b16e1f3245409591efea98a4a",
@@ -143773,6 +143866,8 @@
       "f76b62e73e7410ab63813b9db36839be12213e4adfd3ee513eb382b7bc3a4a39": "d124045eccc562ff0423b23a240e27ad740fa0c9",
       "6597f75e97e5337198736b42a4d1ea66d4fdf01d685772482811a55e1eddf8f1": "20fdca7131478e1ee12691bdafd2d5bb74cbd16f",
       "a686ebf893d511b5b7667176cd6844593e914595a8bb9ab656b2c66969013b5c": "c0c0b5db93a61276a6fe6842049cb53e564b8413",
+      "6a720035646b3488a047ab163a6975b7be82fe75c5eec88155c8503c93a631fe": "227815ce9e55db427d68e075182caffe6ad60ad1",
+      "fe5408e3f513c44a64f573e7a8b68885bce9b263bc9c67bfef13fef13f3e976e": "b286035624978c94194ef5b83b5d784ec00c3a3c",
       "569541852ed3ff8fdacd04b1c6a57fd491a361ab6c41339bbddfd916bced241e": "a8b7dce572b74e02e65cb949b2c366c87625157f",
       "ea2e9f8eccb2d590a0d004e0eaffa95ca4eea36f15466b5aa1a9e47393bc004f": "8251a8e151e31201dcc346d75158ee3996895e74",
       "028c8c3bf6e014669939d12734e1b05900d4fbf1174b6ac0c81a265a4947a0e1": "7e11679ec682d6357d0fd99d1454871be3750ee1",
@@ -144063,6 +144158,7 @@
       "8664b3513f232f1d82dd90f3f99a32cfb8e71549a36961ad7e278866ab3ec2dc": "5d9d28246d2976cdd75adc66524ce9de5e623af0",
       "c52b3d221cf24124c5c2ae54f849461a38f909f3fa65529d6c110b56d357f649": "646068483c6f5c7d0eb2f76038b9e5dd25f0f01d",
       "91dc5f78122114e84e7ed723cdcdba7d161ff98befe895655fe815bb334b0ebf": "f77e7836ee114947f38bfd854843c0b987399f0e",
+      "fbbb1991f822257c5928932b167a48e0886f79e7d779b7d1dd4916eec8c4297e": "c939bb0c356b3388ee371959e0af2d71ffbfb6dc",
       "2a0bc26ac4a8cdcbe7a145c9b1868a87ecb4335e9787f2f1e5713c965372df2b": "58807f32c413a0c9db6deb0365f2fac9518e7c86",
       "6604a1dcc264e8b8e98f036a8bc35579e9b90b92eccbc4d7c1effee9785d1580": "ee7dc2eb87e5a75564382efcd95d13554d3835ba",
       "fcfc9762cd4cfad42feb12d975929de86851b216d4491252c701527e22b55539": "1ee93623406dc61b50ccb41a97bae769ea15cef2",
@@ -153856,6 +153952,9 @@
       "res/tilepatch.bin": [
         "fa950979aaa1d4c947473f158f770f3f3c8c45da"
       ],
+      "sysdata/sector0x96.bin": [
+        "b9cfa84916a930d272250130d67ceb822141177d"
+      ],
       "switch/key_retail.bin": [
         "bbdbb49a917d14f7a997d327ba40d40c39e606ce"
       ],
@@ -153915,6 +154014,9 @@
       ],
       "system/drastic_bios_arm9.bin": [
         "4dc29a1560e1cbd7afef1998f7a6c25c5db1cc3a"
+      ],
+      "switch/dev.keys": [
+        "fc916ff462b842983d4061d09230163ac4b38f16"
       ],
       "patch/PATCHLIST.TXT": [
         "cedf087d629bcb2145f5a2a75d015168e6af2da1"
@@ -154053,6 +154155,15 @@
       ],
       "shaders/xBR-LV2-3D/gpuCore.slv": [
         "7eea41770e156b05ddde4195954b5a468f163cdd"
+      ],
+      "fba2012/samples/rallyx.zip": [
+        "8844cc0ae17a476388c51d42c2ce2f61b3b4cc93"
+      ],
+      "fbneo/samples/sfz3mix.zip": [
+        "227815ce9e55db427d68e075182caffe6ad60ad1"
+      ],
+      "fbneo/samples/twotiger.zip": [
+        "b286035624978c94194ef5b83b5d784ec00c3a3c"
       ],
       "Feeds/fpLatestTables.xml": [
         "bd9de21def48b65b5382c403971a9062928b9345"
@@ -163551,6 +163662,9 @@
       ],
       "C/msdash.xbe": [
         "4d8d6b1d3f7ace05cbaf03565382b0e6e40c706c"
+      ],
+      "system/dev.keys": [
+        "fc916ff462b842983d4061d09230163ac4b38f16"
       ],
       "plugins/hiscore/hiscore.dat": [
         "d38572d22721eb5972f671cde54201d752dffe6b"
