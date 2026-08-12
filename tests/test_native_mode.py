@@ -259,3 +259,159 @@ class GapAnalysisAgreesWithTheBuilder(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class CandidateVerdict(unittest.TestCase):
+    """Whether a profile entry can be a gap, and whether it is settled.
+
+    The filter chain mixed two kinds of skip. A settled entry is answered for
+    -the platform declares it, the profile calls it unsourceable -so the same
+    requirement reached from another profile must not be reconsidered. A
+    skipped one merely does not apply here: the same file can be libretro-only
+    in one profile and standalone-only in another, and recording it from the
+    profile that cannot use it would hide it from the one that can.
+    """
+
+    def verdict(self, entry, *, standalone=False, include_all=False,
+                declared=frozenset()):
+        from verify import _candidate_verdict
+
+        return _candidate_verdict(
+            entry, entry.get("name", ""), standalone, include_all, set(declared)
+        )
+
+    def test_a_plain_requirement_is_a_candidate(self):
+        self.assertEqual(self.verdict({"name": "bios.bin"}), "keep")
+
+    def test_a_declared_file_is_settled(self):
+        self.assertEqual(
+            self.verdict({"name": "bios.bin"}, declared={"bios.bin"}), "settled"
+        )
+
+    def test_a_declared_archive_settles_its_entry(self):
+        self.assertEqual(
+            self.verdict(
+                {"name": "rom.bin", "archive": "neogeo.zip"},
+                declared={"neogeo.zip"},
+            ),
+            "settled",
+        )
+
+    def test_include_all_ignores_what_the_platform_declares(self):
+        """Ground-truth mode reports the core's needs, not the platform's list."""
+        self.assertEqual(
+            self.verdict(
+                {"name": "bios.bin"}, declared={"bios.bin"}, include_all=True
+            ),
+            "keep",
+        )
+
+    def test_an_unsourceable_entry_is_settled(self):
+        self.assertEqual(
+            self.verdict({"name": "font.rom", "unsourceable": "in a paid package"}),
+            "settled",
+        )
+
+    def test_a_placeholder_names_a_family_not_a_file(self):
+        for name in ("<region>.png", "disk*.rom", "<user-selected>.bin"):
+            self.assertEqual(self.verdict({"name": name}), "skip", name)
+
+    def test_a_null_path_means_the_user_imports_it(self):
+        self.assertEqual(self.verdict({"name": "key.bin", "path": None}), "skip")
+
+    def test_mode_mismatches_are_skipped_but_left_open(self):
+        """Not settled: the profile that can use the file must still see it."""
+        self.assertEqual(
+            self.verdict({"name": "b.bin", "mode": "standalone"}, standalone=False),
+            "skip",
+        )
+        self.assertEqual(
+            self.verdict({"name": "b.bin", "mode": "libretro"}, standalone=True),
+            "skip",
+        )
+        self.assertEqual(
+            self.verdict({"name": "b.bin", "mode": "standalone"}, standalone=True),
+            "keep",
+        )
+
+    def test_a_file_read_from_elsewhere_is_not_a_bios_gap(self):
+        self.assertEqual(
+            self.verdict({"name": "save.bin", "load_from": "save_dir"}), "skip"
+        )
+        self.assertEqual(
+            self.verdict({"name": "b.bin", "load_from": "system_dir"}), "keep"
+        )
+
+    def test_an_agnostic_entry_is_answered_by_the_builders_scan(self):
+        self.assertEqual(
+            self.verdict({"name": "any.bin", "agnostic": True}), "skip"
+        )
+
+
+class SkippingIsNotSettling(unittest.TestCase):
+    """A profile that cannot use a file must not answer for one that can.
+
+    The key recording a settled requirement carries the name, path, system and
+    variant, not the emulator, so two profiles can reach the same key. If the
+    one where the entry does not apply records it, the entry vanishes from the
+    report for the profile that does need it.
+    """
+
+    def _report(self):
+        import hashlib
+        import tempfile
+
+        import common
+        from verify import find_undeclared_files
+
+        tmp = tempfile.TemporaryDirectory()
+        root = Path(tmp.name)
+        (root / "emulators").mkdir()
+        rom = root / "shared.bin"
+        rom.write_bytes(b"SHARED REQUIREMENT")
+        sha1 = hashlib.sha1(rom.read_bytes()).hexdigest()
+        db = {
+            "files": {sha1: {"path": str(rom), "name": "shared.bin",
+                             "size": rom.stat().st_size, "sha1": sha1,
+                             "md5": hashlib.md5(rom.read_bytes()).hexdigest()}},
+            "indexes": {"by_name": {"shared.bin": [sha1]}, "by_md5": {},
+                        "by_sha256": {}, "by_crc32": {}, "by_path_suffix": {}},
+        }
+        # "a_" sorts first, so the profile that cannot use the file is seen
+        # before the one that can.
+        for slug, mode in (("a_standalone_only", "standalone"), ("b_libretro", None)):
+            entry = "  - name: shared.bin\n    system: demo-system\n"
+            if mode:
+                entry += f"    mode: {mode}\n"
+            (root / "emulators" / f"{slug}.yml").write_text(
+                f"emulator: {slug}\n"
+                "type: libretro\n"
+                f"display_name: {slug}\n"
+                "systems: [demo-system]\n"
+                f"cores: [{slug}]\n"
+                "files:\n" + entry
+            )
+        try:
+            common._emulator_profiles_cache.clear()
+            profiles = common.load_emulator_profiles(str(root / "emulators"))
+            config = {
+                "platform": "Demo", "verification_mode": "existence",
+                "cores": ["a_standalone_only", "b_libretro"], "systems": {},
+            }
+            found = find_undeclared_files(
+                config, str(root / "emulators"), db, profiles, data_names=set()
+            )
+            return {(u["emulator"], u["name"]) for u in found}
+        finally:
+            common._emulator_profiles_cache.clear()
+            tmp.cleanup()
+
+    def test_the_profile_that_needs_the_file_still_reports_it(self):
+        reported = self._report()
+        self.assertIn(
+            ("b_libretro", "shared.bin"), reported,
+            "a standalone-only entry seen first must not settle the requirement",
+        )
+
+    def test_the_profile_that_cannot_use_it_does_not_report_it(self):
+        self.assertNotIn(("a_standalone_only", "shared.bin"), self._report())

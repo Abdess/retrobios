@@ -338,6 +338,49 @@ def _name_in_index(
     return False
 
 
+def _candidate_verdict(
+    file_entry: dict,
+    fname: str,
+    is_standalone: bool,
+    include_all: bool,
+    declared_names: set,
+) -> str:
+    """Whether a profile entry can be a gap, and whether it is settled.
+
+    Three answers. "keep" means it is a candidate. "settled" means something
+    has answered for it -the platform declares it, or the profile documents
+    it as unsourceable -so the same requirement reached from another profile
+    must not be reconsidered. "skip" means it does not apply in this context,
+    which leaves it open for a profile where it does: the same file can be
+    libretro-only here and standalone-only there.
+    """
+    if file_entry.get("unsourceable"):
+        return "settled"
+    # Placeholders stand for a family of files, not a file.
+    if "<" in fname or ">" in fname or "*" in fname:
+        return "skip"
+    # An explicit null path means the user imports it through the UI.
+    if "path" in file_entry and file_entry["path"] is None:
+        return "skip"
+    file_mode = file_entry.get("mode")
+    if file_mode == "standalone" and not is_standalone:
+        return "skip"
+    if file_mode == "libretro" and is_standalone:
+        return "skip"
+    # Read from somewhere other than the system directory: not a BIOS gap.
+    load_from = file_entry.get("load_from", "")
+    if load_from and load_from != "system_dir":
+        return "skip"
+    # Filename-agnostic entries are answered by the builder's own scan.
+    if file_entry.get("agnostic"):
+        return "skip"
+    if not include_all:
+        archive = file_entry.get("archive")
+        if fname in declared_names or (archive and archive in declared_names):
+            return "settled"
+    return "keep"
+
+
 def find_undeclared_files(
     config: dict,
     emulators_dir: str,
@@ -425,42 +468,16 @@ def find_undeclared_files(
             )
             if not fname or seen_key in seen_files:
                 continue
-            # Skip unsourceable files (documented reason, not a gap)
-            if f.get("unsourceable"):
+            verdict = _candidate_verdict(
+                f, fname, is_standalone, include_all, declared_names
+            )
+            if verdict == "settled":
                 seen_files.add(seen_key)
                 continue
-            # Skip pattern placeholders (e.g., <user-selected>.bin)
-            if "<" in fname or ">" in fname or "*" in fname:
-                continue
-            # Skip UI-imported files with explicit path: null (not resolvable by pack)
-            if "path" in f and f["path"] is None:
-                continue
-            # Mode filtering: skip files incompatible with platform's usage
-            file_mode = f.get("mode")
-            if file_mode == "standalone" and not is_standalone:
-                continue
-            if file_mode == "libretro" and is_standalone:
-                continue
-            # Skip files loaded from non-system directories (save_dir, content_dir)
-            load_from = f.get("load_from", "")
-            if load_from and load_from != "system_dir":
-                continue
-
-            # Skip agnostic files (filename-agnostic, handled by agnostic scan)
-            if f.get("agnostic"):
+            if verdict == "skip":
                 continue
 
             archive = f.get("archive")
-
-            # Skip files declared by the platform (by name or archive)
-            if not include_all:
-                if fname in declared_names:
-                    seen_files.add(seen_key)
-                    continue
-                if archive and archive in declared_names:
-                    seen_files.add(seen_key)
-                    continue
-
             seen_files.add(seen_key)
 
             # Archived files are grouped by archive
