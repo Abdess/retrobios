@@ -116,5 +116,100 @@ class BothConsumersAgree(unittest.TestCase):
         )
 
 
+class GapAnalysisAgreesWithTheBuilder(unittest.TestCase):
+    """"Available" must mean the pack will carry it.
+
+    find_undeclared_files answered from the name index, so a core extra whose
+    local copy contradicts its declared hash counted as held. Under a digest
+    mode the builder drops exactly that file, so the coverage report described
+    a pack that would not contain it: seven such files across three platforms.
+    """
+
+    def _fixture(self):
+        import hashlib
+        import tempfile
+
+        tmp = tempfile.TemporaryDirectory()
+        root = Path(tmp.name)
+        (root / "emulators").mkdir()
+        rom = root / "collide.rom"
+        rom.write_bytes(b"THE BYTES THE COLLECTION HOLDS")
+        sha1 = hashlib.sha1(rom.read_bytes()).hexdigest()
+        db = {
+            "files": {
+                sha1: {
+                    "path": str(rom),
+                    "name": "collide.rom",
+                    "size": rom.stat().st_size,
+                    "sha1": sha1,
+                    "md5": hashlib.md5(rom.read_bytes()).hexdigest(),
+                    "sha256": hashlib.sha256(rom.read_bytes()).hexdigest(),
+                    "crc32": "00000000",
+                }
+            },
+            "indexes": {
+                "by_name": {"collide.rom": [sha1]},
+                "by_md5": {hashlib.md5(rom.read_bytes()).hexdigest(): sha1},
+                "by_sha256": {},
+                "by_crc32": {},
+                "by_path_suffix": {},
+            },
+        }
+        (root / "emulators" / "demo.yml").write_text(
+            "emulator: demo\n"
+            "type: libretro\n"
+            "display_name: Demo\n"
+            "systems: [demo-system]\n"
+            "cores: [demo]\n"
+            "files:\n"
+            "  - name: collide.rom\n"
+            "    system: demo-system\n"
+            "    required: true\n"
+            "    md5: \"" + "f" * 32 + "\"\n"
+        )
+        return tmp, root, db
+
+    def _in_repo(self, mode: str) -> bool:
+        import common
+        from verify import find_undeclared_files
+
+        tmp, root, db = self._fixture()
+        try:
+            common._emulator_profiles_cache.clear()
+            profiles = common.load_emulator_profiles(str(root / "emulators"))
+            config = {
+                "platform": "Demo",
+                "verification_mode": mode,
+                "cores": ["demo"],
+                "systems": {},
+            }
+            found = find_undeclared_files(
+                config, str(root / "emulators"), db, emu_profiles=profiles
+            )
+            entry = next(e for e in found if e["name"] == "collide.rom")
+            return bool(entry["in_repo"])
+        finally:
+            common._emulator_profiles_cache.clear()
+            tmp.cleanup()
+
+    def test_a_digest_mode_does_not_call_a_contradicted_copy_available(self):
+        self.assertFalse(
+            self._in_repo("md5"),
+            "the builder drops this file, so the report must not count it",
+        )
+
+    def test_existence_mode_still_counts_it(self):
+        """The frontend never opens the file, so the pack carries it."""
+        self.assertTrue(self._in_repo("existence"))
+
+    def test_the_two_modes_answer_the_way_the_shared_predicate_says(self):
+        for mode in nativemode.MODES:
+            with self.subTest(mode=mode):
+                self.assertEqual(
+                    self._in_repo(mode),
+                    not nativemode.hash_mismatch_excludes_file(mode),
+                )
+
+
 if __name__ == "__main__":
     unittest.main()

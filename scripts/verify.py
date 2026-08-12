@@ -52,7 +52,7 @@ from common import (
 )
 
 yaml = require_yaml()
-from nativemode import reads_file_contents
+from nativemode import hash_mismatch_excludes_file, reads_file_contents
 from validation import (
     _build_validation_index,
     _parse_validation,
@@ -351,6 +351,12 @@ def find_undeclared_files(
     if declared_names is None:
         declared_names = expand_platform_declared_names(config, db)
 
+    # Whether the builder drops a file whose local copy contradicts its
+    # declared hash, which decides if such a copy counts as held here.
+    shipped_on_mismatch = hash_mismatch_excludes_file(
+        config.get("verification_mode")
+    )
+
     # Collect data_directory refs
     declared_dd: set[str] = set()
     for sys_id, system in config.get("systems", {}).items():
@@ -503,6 +509,14 @@ def find_undeclared_files(
             storage = f.get("storage", "")
             if storage in ("release", "large_file"):
                 in_repo = True
+            elif shipped_on_mismatch and (f.get("md5") or f.get("sha1")):
+                # The entry states what its content should be and the builder
+                # drops a copy that contradicts it, so content decides here
+                # too. A name match would not do: generic names collide across
+                # systems, and answering yes on one describes a pack that will
+                # not contain the file.
+                _lp, _st = resolve_local_file(f, db, dest_hint=dest)
+                in_repo = _lp is not None and _st != "hash_mismatch"
             else:
                 in_repo = _name_in_index(
                     fname, by_name, by_path_suffix, data_names, by_name_lower,
@@ -515,13 +529,19 @@ def find_undeclared_files(
                     )
                 if not in_repo:
                     # Hash fallback: the repo may hold the content under a
-                    # different filename (exos21.rom vs exos21.bin)
-                    # generate_pack ships a core extra whose local copy
-                    # contradicts the declared hash and reports the divergence.
-                    # verify must agree with the builder or the two reports
-                    # disagree on the same file.
+                    # different filename (exos21.rom vs exos21.bin).
+                    #
+                    # A copy contradicting the declared hash counts as held
+                    # only where the builder would ship it. Under existence
+                    # the frontend never opens the file, so the pack carries
+                    # it and reports the divergence; under a digest mode the
+                    # frontend would reject it, the builder leaves it out, and
+                    # calling it available here would describe a pack that
+                    # does not contain it.
                     _lp, _st = resolve_local_file(f, db, dest_hint=dest)
                     in_repo = _st != "not_found" and _lp is not None
+                    if in_repo and _st == "hash_mismatch" and shipped_on_mismatch:
+                        in_repo = False
 
             checks = _parse_validation(f.get("validation"))
             undeclared.append(
