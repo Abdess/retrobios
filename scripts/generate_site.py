@@ -11,6 +11,7 @@ Usage:
 
 from __future__ import annotations
 
+from siterender import WIKI_SRC_DIR
 import argparse
 import csv
 import hashlib
@@ -44,64 +45,10 @@ from common import (
 )
 from nativemode import reads_file_contents
 
-# Every path this run produced. The generated directories used to be deleted
-# before the build, which made every page new: write_if_changed had no earlier
-# version to compare against, so the whole site was rewritten for the clock
-# alone and a deploy republished 600 unchanged pages. They are swept instead,
-# and a page is only removed once nothing produced it.
-_produced: set[str] = set()
 
 
-def _record(path) -> None:
-    _produced.add(os.path.realpath(str(path)))
 
 
-def _undecorated(markdown: str) -> str:
-    """Return a page body without the front matter the decoration pass adds."""
-    if markdown.startswith("---\n") and "generated_by: retrobios-site" in markdown[:300]:
-        end = markdown.find("\n---\n", 4)
-        if end != -1:
-            markdown = markdown[end + 5:].lstrip("\n")
-            script_end = markdown.find("</script>\n\n")
-            if markdown.startswith('<script type="application/ld+json">') and script_end != -1:
-                markdown = markdown[script_end + len("</script>\n\n"):]
-    return markdown
-
-
-def write_if_changed(path: str, content: str) -> bool:
-    """Write a page body only when it moved, and remember it either way.
-
-    A page is written twice: the body here, then the same body wrapped in
-    front matter by the decoration pass. This comparison therefore reduces
-    the file on disk to its body. The decoration pass compares in full -
-    normalizing there too would make its own write look like a no-op and
-    every page would lose its front matter.
-    """
-    _record(path)
-    return _write_artifact(path, content, normalize=_undecorated)
-
-
-def write_decorated(path, content: str) -> bool:
-    """Write the wrapped page, comparing front matter and body together."""
-    _record(path)
-    return _write_artifact(str(path), content)
-
-
-def _sweep_generated(docs: Path, directories: list[str]) -> int:
-    """Delete files in the generated tree that this run did not produce."""
-    removed = 0
-    for name in directories:
-        root = docs / name
-        if not root.is_dir():
-            continue
-        for path in sorted(root.rglob("*")):
-            if path.is_file() and os.path.realpath(str(path)) not in _produced:
-                path.unlink()
-                removed += 1
-        for path in sorted(root.rglob("*"), reverse=True):
-            if path.is_dir() and not any(path.iterdir()):
-                path.rmdir()
-    return removed
 
 yaml = require_yaml()
 from generate_readme import compute_coverage, manifest_totals
@@ -115,161 +62,8 @@ REPO_URL = "https://github.com/Abdess/retrobios"
 RELEASE_URL = f"{REPO_URL}/releases/latest"
 SITE_URL = "https://abdess.github.io/retrobios/"
 GENERATED_DIRS = ["platforms", "systems", "emulators", "wiki", "api", "downloads"]
-WIKI_SRC_DIR = "wiki"  # manually maintained wiki sources
-SYSTEM_ICON_BASE = "https://raw.githubusercontent.com/libretro/retroarch-assets/master/xmb/systematic/png"
-ICON_CACHE_PATH = Path(".cache") / "system_icons.json"
-
-# Icon names confirmed to exist upstream. A name absent from this map has not
-# been checked yet; a name mapped to False has no icon and gets none rendered,
-# because a heading with a broken image reads worse than a heading without one.
-_icon_available: dict[str, bool] = {}
 
 
-def _by_mode(value, mode: str) -> str:
-    """Read a profile field that may be keyed by build mode."""
-    if isinstance(value, dict):
-        return str(value.get(mode) or "") if mode else ""
-    return str(value or "")
-
-
-def _repo_pins(profile: dict, field: str, label: str) -> list[tuple[str, str, str]]:
-    """Pair each declared repository URL with its own revision.
-
-    A profile whose builds live in separate repositories keys both the URL
-    and the revision by build mode. Reading them apart would pin a libretro
-    fork to the standalone revision and produce a permalink into a tree that
-    never held the cited line. Each tuple is (url, pin, source_commit
-    fallback for that same mode).
-    """
-    raw = profile.get(field, "")
-    pin_field = profile.get(f"{field}_commit") or ""
-    source_field = profile.get("source_commit") or ""
-
-    if not isinstance(raw, dict):
-        if not raw:
-            return []
-        return [
-            (
-                str(raw),
-                _by_mode(pin_field, label),
-                _by_mode(source_field, label),
-            )
-        ]
-
-    # The requested build mode first, so it wins when several repositories
-    # would otherwise be equally good candidates.
-    ordered = ([label] if label and label in raw else []) + [
-        key for key in raw if key != label
-    ]
-    return [
-        (str(raw[key]), _by_mode(pin_field, key), _by_mode(source_field, key))
-        for key in ordered
-        if raw.get(key)
-    ]
-
-
-def _forge_sources(profile: dict, label: str = "") -> list[tuple[upstream.Repo, str]]:
-    """Supported source repositories and immutable revisions for a profile."""
-    candidates: list[tuple[upstream.Repo, str]] = []
-    seen: set[tuple[str, str, str]] = set()
-    source_repos: set[tuple[str, str]] = set()
-
-    for field in ("source", "upstream"):
-        for value, pin, fallback in _repo_pins(profile, field, label):
-            repo = upstream.parse_repo(value)
-            if repo is None:
-                continue
-            repo_key = (repo.host, repo.slug)
-            if field == "upstream" and not pin and repo_key in source_repos:
-                pin = fallback
-            if not pin:
-                continue
-            key = (repo.host, repo.slug, pin)
-            if key not in seen:
-                candidates.append((repo, pin))
-                seen.add(key)
-            if field == "source":
-                source_repos.add(repo_key)
-    return candidates
-
-
-def _source_permalink(repo: upstream.Repo, pin: str, path: str,
-                      start: int | None, end: int | None) -> str:
-    """Forge-specific browser URL for one file at one immutable revision."""
-    quoted_path = urllib.parse.quote(path, safe="/@:+-._~")
-    base = f"https://{repo.host}/{repo.owner}/{repo.name}"
-    if repo.family == "github":
-        url = f"{base}/blob/{pin}/{quoted_path}"
-    elif repo.family == "gitlab":
-        url = f"{base}/-/blob/{pin}/{quoted_path}"
-    else:
-        url = f"{base}/src/commit/{pin}/{quoted_path}"
-    if start is not None:
-        if repo.family == "gitlab":
-            url += f"#L{start}"
-            if end is not None and end != start:
-                url += f"-{end}"
-        else:
-            url += f"#L{start}"
-            if end is not None and end != start:
-                url += f"-L{end}"
-    return url
-
-
-def _source_ref_markdown(profile: dict, value) -> str:
-    """Render source_ref values as pinned links when their forge is known.
-
-    A profile can declare two repositories: the libretro port in ``source`` and
-    the original emulator in ``upstream``. Which of the two carries a given
-    path cannot be decided without reading their trees, and this generator runs
-    offline. Rather than guess, an unattributable path is rendered as plain
-    code: a citation with no link still names the file and the lines, while a
-    link to the wrong repository is a false citation.
-    """
-    rendered_groups: list[str] = []
-    path_re = re.compile(r"^[A-Za-z0-9_.@/+~-]+$")
-    for label, refs in source_ref_values(value):
-        candidates = _forge_sources(profile, label)
-        rendered: list[str] = []
-        for part in split_source_ref(refs):
-            display = part.path
-            if part.start is not None:
-                display += f":{part.start}"
-                if part.end is not None and part.end != part.start:
-                    display += f"-{part.end}"
-
-            selected: tuple[upstream.Repo, str] | None = None
-            real_path = part.path
-            if path_re.fullmatch(part.path) and candidates:
-                for repo, pin in candidates:
-                    prefix = f"{repo.name}/"
-                    if part.path.startswith(prefix):
-                        selected = (repo, pin)
-                        real_path = part.path[len(prefix):]
-                        break
-                if selected is None and len(candidates) == 1:
-                    selected = candidates[0]
-
-            if selected is None:
-                rendered.append(f"`{display}`")
-            else:
-                repo, pin = selected
-                url = _source_permalink(
-                    repo, pin, real_path, part.start, part.end
-                )
-                rendered.append(f"[`{display}`]({url})")
-
-        text = ", ".join(rendered) if rendered else f"`{refs}`"
-        if label:
-            text = f"**{label}:** {text}"
-        rendered_groups.append(text)
-    return "; ".join(rendered_groups)
-
-
-def _admonition_body(text: str) -> str:
-    """Indent prose without turning source tokens such as ``#if`` into H1s."""
-    escaped = re.sub(r"(?m)^(\s*)#", r"\1\\#", text)
-    return escaped.replace("\n", "\n    ")
 
 
 def _content_check_ceiling(profiles: dict) -> str:
@@ -301,67 +95,8 @@ def _content_check_ceiling(profiles: dict) -> str:
     )
 
 
-def _icon_name(manufacturer: str, console_name: str) -> str:
-    return f"{manufacturer} - {console_name}".replace("/", " ")
 
 
-def _icon_url(icon_name: str) -> str:
-    return f"{SYSTEM_ICON_BASE}/{urllib.parse.quote(icon_name)}.png"
-
-
-def prime_system_icons(names: set[str]) -> None:
-    """Record which system icons upstream actually serves.
-
-    Results persist in ``.cache`` so later runs skip the network. Names that
-    cannot be checked stay unavailable: the site never links an image it has
-    not seen answer.
-    """
-    cached: dict[str, bool] = {}
-    if ICON_CACHE_PATH.exists():
-        try:
-            with open(ICON_CACHE_PATH) as f:
-                cached = json.load(f)
-        except (json.JSONDecodeError, OSError):
-            cached = {}
-
-    unknown = sorted(n for n in names if n not in cached)
-    if unknown:
-        def check(name: str) -> tuple[str, bool | None]:
-            """True when served, False when upstream says it is gone.
-
-            None on a transient failure, so a flaky run never records an
-            icon as absent for every later build.
-            """
-            req = urllib.request.Request(_icon_url(name), method="HEAD")
-            try:
-                with urllib.request.urlopen(req, timeout=15) as resp:
-                    return name, resp.status == 200
-            except urllib.error.HTTPError as exc:
-                return name, False if exc.code == 404 else None
-            except (urllib.error.URLError, OSError):
-                return name, None
-
-        print(f"Checking {len(unknown)} system icons...")
-        with ThreadPoolExecutor(max_workers=8) as pool:
-            for name, ok in pool.map(check, unknown):
-                if ok is not None:
-                    cached[name] = ok
-        ICON_CACHE_PATH.parent.mkdir(parents=True, exist_ok=True)
-        with open(ICON_CACHE_PATH, "w") as f:
-            json.dump(cached, f, indent=2, sort_keys=True)
-
-    _icon_available.update(cached)
-    missing = sum(1 for n in names if not cached.get(n))
-    if missing:
-        print(f"  {missing} systems have no upstream icon")
-
-
-def system_icon_markdown(manufacturer: str, console_name: str) -> str:
-    """Icon image for a system heading, empty when upstream serves none."""
-    name = _icon_name(manufacturer, console_name)
-    if not _icon_available.get(name):
-        return ""
-    return f"![{console_name}]({_icon_url(name)}){{ width=24 }} "
 
 CLS_LABELS = {
     "official_port": "Official ports",
@@ -375,9 +110,6 @@ CLS_LABELS = {
     "unclassified": "Unclassified",
     "other": "Other",
 }
-
-# Global index: maps system_id -> (manufacturer_slug, console_name) for cross-linking
-_system_page_map: dict[str, tuple[str, str]] = {}
 
 
 def _build_system_page_map_from_data(
@@ -452,101 +184,15 @@ def _build_system_page_map_from_data(
                         break
 
 
-def _slugify_anchor(text: str) -> str:
-    """Slugify text for MkDocs anchor compatibility."""
-    import re
-
-    slug = text.lower()
-    slug = re.sub(r"[^\w\s-]", "", slug)
-    slug = re.sub(r"[\s]+", "-", slug)
-    slug = slug.strip("-")
-    return slug
 
 
-def _system_link(sys_id: str, prefix: str = "") -> str:
-    """Generate a markdown link to a system page with anchor."""
-    if sys_id in _system_page_map:
-        slug, console = _system_page_map[sys_id]
-        anchor = _slugify_anchor(console)
-        return f"[{sys_id}]({prefix}systems/{slug}.md#{anchor})"
-    return sys_id
 
-
-def _render_yaml_value(lines: list[str], val, indent: int = 4) -> None:
-    """Render any YAML value as indented markdown."""
-    pad = " " * indent
-    if isinstance(val, dict):
-        for k, v in val.items():
-            if isinstance(v, dict):
-                lines.append(f"{pad}**{k}:**")
-                lines.append("")
-                _render_yaml_value(lines, v, indent + 4)
-            elif isinstance(v, list):
-                lines.append(f"{pad}**{k}:**")
-                lines.append("")
-                for item in v:
-                    if isinstance(item, dict):
-                        parts = [
-                            f"{ik}: {iv}"
-                            for ik, iv in item.items()
-                            if not isinstance(iv, (dict, list))
-                        ]
-                        lines.append(f"{pad}- {', '.join(parts)}")
-                    else:
-                        lines.append(f"{pad}- {item}")
-                lines.append("")
-            else:
-                # Truncate very long strings in tables
-                sv = str(v)
-                if len(sv) > 200:
-                    sv = sv[:200] + "..."
-                lines.append(f"{pad}- **{k}:** {sv}")
-    elif isinstance(val, list):
-        for item in val:
-            if isinstance(item, dict):
-                parts = [
-                    f"{ik}: {iv}"
-                    for ik, iv in item.items()
-                    if not isinstance(iv, (dict, list))
-                ]
-                lines.append(f"{pad}- {', '.join(parts)}")
-            else:
-                lines.append(f"{pad}- {item}")
-    elif isinstance(val, str) and "\n" in val:
-        for line in val.split("\n"):
-            lines.append(f"{pad}{line}")
-    else:
-        lines.append(f"{pad}{val}")
-
-
-def _platform_link(name: str, display: str, prefix: str = "") -> str:
-    """Generate a markdown link to a platform page."""
-    return f"[{display}]({prefix}platforms/{name}.md)"
-
-
-def _emulator_link(name: str, prefix: str = "") -> str:
-    """Generate a markdown link to an emulator page."""
-    return f"[{name}]({prefix}emulators/{name}.md)"
 
 
 def _timestamp() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
-def _fmt_size(size: int) -> str:
-    if size >= 1024 * 1024 * 1024:
-        return f"{size / (1024**3):.1f} GB"
-    if size >= 1024 * 1024:
-        return f"{size / (1024**2):.1f} MB"
-    if size >= 1024:
-        return f"{size / 1024:.1f} KB"
-    return f"{size} B"
-
-
-def _pct(n: int, total: int) -> str:
-    if total == 0:
-        return "0%"
-    return f"{n / total * 100:.1f}%"
 
 
 # Home page
@@ -4265,6 +3911,39 @@ validation:
     if stale:
         print(f"Removed {stale} page(s) nothing produced this run")
 
+from sitewrite import (  # noqa: E402,F401
+    _produced,
+    _record,
+    _undecorated,
+    write_if_changed,
+    write_decorated,
+    _sweep_generated,
+)
+from sitesources import (  # noqa: E402,F401
+    _repo_pins,
+    _forge_sources,
+    _source_permalink,
+    _source_ref_markdown,
+)
+from siterender import (  # noqa: E402,F401
+    _by_mode,
+    _render_yaml_value,
+    _slugify_anchor,
+    _system_page_map,
+    _system_link,
+    _platform_link,
+    _emulator_link,
+    _fmt_size,
+    _pct,
+    _admonition_body,
+    _icon_name,
+    _icon_url,
+    system_icon_markdown,
+    prime_system_icons,
+    _icon_available,
+    SYSTEM_ICON_BASE,
+    ICON_CACHE_PATH,
+)
 
 if __name__ == "__main__":
     main()
