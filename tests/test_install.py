@@ -556,6 +556,51 @@ class TestStandaloneCopiesExtraDirs(unittest.TestCase):
         )
 
 
+class TargetFlagIsAppliedOrRefused(unittest.TestCase):
+    """A filter the installer cannot apply must stop it, not be ignored.
+
+    An unknown target used to print a warning and then install every file:
+    4 GB where the user asked for a subset. And the aliases the pack builder
+    accepts -- switch, ps2, psp -- were absent from the published target
+    manifests, so the documented word was the one that failed.
+    """
+
+    def test_the_published_manifests_carry_the_builder_aliases(self):
+        path = REPO_ROOT / "install" / "targets" / "retroarch.json"
+        if not path.is_file():
+            self.skipTest("no target manifest generated yet")
+        targets = json.loads(path.read_text())
+        self.assertIn("nintendo-switch", targets)
+        for alias in ("switch", "nx"):
+            with self.subTest(alias=alias):
+                self.assertIn(alias, targets, f"builder accepts --target {alias}")
+                self.assertEqual(targets[alias], targets["nintendo-switch"])
+
+    def test_every_alias_resolves_to_its_canonical_core_list(self):
+        import sys as _sys
+
+        _sys.path.insert(0, str(REPO_ROOT / "scripts"))
+        from common import load_target_config
+
+        for name in ("install/targets/retroarch.json",):
+            path = REPO_ROOT / name
+            if not path.is_file():
+                continue
+            targets = json.loads(path.read_text())
+            for alias in ("switch", "ps2", "psp"):
+                if alias not in targets:
+                    continue
+                with self.subTest(alias=alias):
+                    resolved = load_target_config(
+                        "retroarch", alias, str(REPO_ROOT / "platforms")
+                    )
+                    self.assertEqual(
+                        sorted(targets[alias] or []),
+                        sorted(resolved),
+                        f"{alias} disagrees with what the builder resolves",
+                    )
+
+
 class TestBaseUrlScheme(unittest.TestCase):
     """The bootstraps insist on HTTPS; the installer must not be laxer."""
 

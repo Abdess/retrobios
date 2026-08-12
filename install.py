@@ -1336,7 +1336,22 @@ def main() -> None:
             targets = fetch_targets(plat_name)
             target_info = targets.get(args.target)
             if target_info is None:
-                print(f"  Warning: target '{args.target}' not found for {plat_name}")
+                # Carrying on would install every file, which is the opposite
+                # of what a filter was asked for: a 4 GB download instead of
+                # the subset the target needs. Refuse rather than ignore.
+                print(
+                    f"Error: unknown target '{args.target}' for {plat_name}.",
+                    file=sys.stderr,
+                )
+                if targets:
+                    print(
+                        f"  available: {', '.join(sorted(targets))}", file=sys.stderr
+                    )
+                else:
+                    print(
+                        f"  {plat_name} publishes no target list", file=sys.stderr
+                    )
+                sys.exit(1)
             elif target_info.get("cores") is None:
                 print(
                     f"  Target '{args.target}' publishes no core list; "

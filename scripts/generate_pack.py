@@ -2798,6 +2798,23 @@ def generate_target_manifests(targets_dir: str, output_dir: str) -> None:
         targets = data.get("targets", {})
         if not isinstance(targets, dict):
             raise ValueError(f"{yml_file}: targets must be a mapping")
+
+        # The pack builder accepts the aliases declared in _overrides.yml, so
+        # --target switch works there. Emitting only canonical names left the
+        # installer rejecting the same word and, worse, carrying on with every
+        # file instead: the user asked for a filter and got the full pack.
+        overrides_path = targets_path / "_overrides.yml"
+        alias_map: dict[str, list[str]] = {}
+        if overrides_path.is_file():
+            with open(overrides_path) as f:
+                all_overrides = yaml_load(f) or {}
+            for tname, ovr in (
+                all_overrides.get(yml_file.stem, {}).get("targets", {}) or {}
+            ).items():
+                names = [a for a in (ovr or {}).get("aliases", []) if isinstance(a, str)]
+                if names:
+                    alias_map[tname] = names
+
         result: dict[str, list[str] | None] = {}
         for target_name, target_info in targets.items():
             if not isinstance(target_name, str) or not target_name:
@@ -2818,6 +2835,17 @@ def generate_target_manifests(targets_dir: str, output_dir: str) -> None:
                     "non-empty strings"
                 )
             result[target_name] = cores
+
+        for target_name, names in alias_map.items():
+            if target_name not in result:
+                continue
+            for alias in names:
+                if alias in result:
+                    raise ValueError(
+                        f"{yml_file}: alias {alias!r} collides with a target name"
+                    )
+                result[alias] = result[target_name]
+
         out_path = Path(output_dir) / f"{yml_file.stem}.json"
         with open(out_path, "w") as f:
             json.dump(result, f, indent=2, sort_keys=True)
