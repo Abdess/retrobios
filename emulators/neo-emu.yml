@@ -1,0 +1,307 @@
+emulator: "NEO.emu"
+type: standalone
+core_classification: community_fork
+source: "https://github.com/Rakashazi/emu-ex-plus-alpha"
+upstream: "https://github.com/pepone42/gngeo"
+profiled_date: "2026-08-12"
+source_commit: "1c12fac5ce49badaadff2e2f210dcc30b89f4943"
+upstream_commit: "ed06739a7202a87cd0992006628e4748aacd1ce5"
+core_version: "1.5.85"
+display_name: "SNK - Neo Geo (NEO.emu)"
+mode: standalone
+cores:
+  - "neo-emu"
+  - "NEO.emu"
+  - "NEO-EMU"
+systems:
+  - snk-neogeo-mvs
+  - snk-neogeo-aes
+
+notes: |
+  Member of the EX Emulator series by Robert Broglia, which targets Android and
+  Linux (README.md:3,12-13) and keeps iOS and Pandora build shortcuts in the tree
+  (NEO.emu/ios.mk, NEO.emu/pandora.mk). Published as com.explusalpha.NeoEmu
+  (NEO.emu/metadata/conf.mk:2-7) and reached by ES-DE through its NEO-EMU find
+  rule. Gngeo 0.8 by Mathieu Peponas is vendored under NEO.emu/src/gngeo
+  (NEO.emu/src/gngeo-config.h:143, NEO.emu/src/main/AppMeta.cc:26) and driven by
+  the app's own video, audio, input and archive layers
+  (NEO.emu/src/CMakeLists.txt:9-37). The 68000 is Cyclone on arm and Musashi
+  elsewhere, and the Z80 comes from MD.emu's Genesis Plus GX tree
+  (NEO.emu/src/CMakeLists.txt:1,22,39-52).
+
+  Cartridge hardware only: no path in the tree opens a disc image or a Neo Geo CD
+  system ROM. Content is an archive named after its MAME set, tried as .zip, .7z
+  then .rar (NEO.emu/src/main/unzip.cc:113-132), the set name being the content
+  file name without its dot extension (EmuFramework/src/EmuSystem.cc:81,90). The
+  app carries 240 romset definitions and the game list offers 239 of them, neogeo
+  being the one left out (NEO.emu/src/main/EmuMenuViews.cc:204-445,516-550).
+
+  The BIOS archive is the one thing the user supplies. It is opened as neogeo.zip
+  in the directory holding the content, not in a system directory
+  (NEO.emu/src/gngeo/roms.c:1202-1211, NEO.emu/src/main/Main.cc:465-471,
+  EmuFramework/src/EmuSystem.cc:83). Members are matched on name or on CRC32,
+  so an image carrying the expected CRC is taken whatever it is called; turning
+  on Strict ROM Checking, off by default, drops the name test and leaves CRC32
+  alone (NEO.emu/src/main/unzip.cc:49-50, NEO.emu/src/main/Main.cc:316-319,
+  NEO.emu/src/main/system.ccm:87). The archive itself is never hashed.
+
+  Two members are read for every game. 000-lo.lo, the zoom table, ends the load
+  with "000-lo.lo missing or invalid" when absent (NEO.emu/src/gngeo/roms.c:
+  1213-1218). The board fix layer is read as sfix.sfx then sfix.sfix and 0x20000
+  bytes of it are converted on the spot (NEO.emu/src/gngeo/roms.c:1220-1235). The
+  guard in front of it tests HAS_CUSTOM_SFIX_BIOS, which nothing sets: the only
+  site that would raise it is commented out and definition entries in that region
+  are skipped at load (NEO.emu/src/gngeo/roms.c:1419-1423,1432-1436).
+
+  One 68K BIOS is read alongside them, chosen by BIOS Type and MVS Region.
+  BIOS Type defaults to Unibios 2.3 and MVS Region to USA
+  (NEO.emu/src/main/system.ccm:74-81, NEO.emu/src/main/options.cc:45-46). The
+  menu offers the six Universe BIOS versions and MVS
+  (NEO.emu/src/main/EmuMenuViews.cc:127-136); under MVS the region picks
+  vs-bios.rom for Japan, usa_2slt.bin for USA, asia-s3.rom for Asia and sp-s2.sp1
+  for Europe and any other value (NEO.emu/src/gngeo/roms.c:1269-1300,
+  NEO.emu/src/main/EmuMenuViews.cc:103-116). aes-bios.bin sits on the SYS_HOME
+  branch, which the menu never selects but which a stored BIOS Type of 1 reaches,
+  the validity test accepting every value below SYS_MAX
+  (NEO.emu/src/gngeo/roms.c:1271-1272, NEO.emu/src/gngeo/emu.h:34-43,
+  NEO.emu/src/main/system.ccm:58,74-77). While a Universe BIOS is selected, its
+  own switches are exposed and write the console/arcade bit and the region bits
+  into the memory card (NEO.emu/src/main/EmuMenuViews.cc:559-610,656-658,
+  NEO.emu/src/main/Main.cc:254-256).
+
+  Five sets bring their own 68K BIOS in the region the definitions call
+  MAIN_CPU_BIOS and skip that read from the archive: irrmaze with 236-bios.bin,
+  kf2k3pcb with 271-bios.bin, and ms5pcb, svcpcb and svcpcba with sp-4x.sp1
+  (NEO.emu/res/romsets/*.drv, NEO.emu/src/gngeo/roms.c:1237,1408-1412). Six sets
+  name sm1.sm1 in the audio BIOS region, which is read into a buffer the
+  emulation never uses (NEO.emu/src/gngeo/roms.c:1034-1039,1413-1418,
+  roms.h:63). Both regions, and the fix layer region, are exempt from the fatal
+  path, so a miss there does not end the load
+  (NEO.emu/src/gngeo/roms.c:1440-1461).
+
+  Every definition names a parent set whose archive is opened next to the game's
+  own, and a parent that cannot be opened is fatal. Four definitions carry the
+  no-parent sentinel 0 in that field, so neogeo, ms5pcb, svcpcb and kf2k3pcb end
+  their load asking for 0.zip (NEO.emu/src/gngeo/roms.c:1364-1371,
+  NEO.emu/src/main/unzip.cc:113-132). Upstream ends the same load the same way
+  (src/roms.c:1372-1376).
+
+  The romset definitions and the CMC42/CMC50 key tables ship with the app. On
+  Android they are assets read through the asset manager; elsewhere they are read
+  from gngeo_data.zip beside the executable (NEO.emu/src/main/Main.cc:64-67,
+  198-206,321-369, imagine/src/base/linux/ApplicationContext.cc:44-47). Upstream
+  ships the same archive with 237 definitions plus a skin/ set for its own SDL
+  menu; the app carries 240, adds bbbuster, ironclad, ironclado and totcarib,
+  drops mslug3n, changes 31 others and keeps no skin, its resource loader being
+  replaced wholesale (NEO.emu/src/main/Main.cc:321-369, src/resfile.c:71-115,
+  gngeo.dat/gngeo_data.zip). The two key tables are byte identical to upstream's.
+
+  Divergences from gngeo 0.8 in what is read: upstream passes 0 for every member
+  CRC, so it verifies nothing and matches on name alone; it knows one Universe
+  BIOS under the name uni-bios.rom and falls back to a loose uni-bios.rom beside
+  the archive when the archive lacks it; and it opens the BIOS archive only as
+  .zip, under a configured rompath (src/roms.c:1217-1320,1078-1087).
+
+  Nothing else is read from outside. The per-game gngeo configuration path is
+  built and handed to cf_open_file, which is an empty stub, as is
+  cf_reset_to_default (NEO.emu/src/gngeo/fileio.c:111-139,
+  NEO.emu/src/gngeoTypes.h:44-45). Transparency pack support is unfinished and
+  its conf item answers with an empty string (NEO.emu/src/gngeo/roms.c:1097,
+  NEO.emu/src/gngeo/fileio.c:149-150, NEO.emu/src/main/Main.cc:448-451). The
+  .gno decoded-ROM cache, the .nv and .memcard backup memory, save states and
+  NeoEmu.config are written by the app (NEO.emu/src/main/Main.cc:163-184,224-247,
+  NEO.emu/src/main/AppMeta.cc:27).
+
+files:
+  - name: "neogeo.zip"
+    aliases: ["neogeo.7z", "neogeo.rar"]
+    system: snk-neogeo-mvs
+    required: true
+    load_from: content_dir
+    description: "Neo Geo system ROMs"
+    note: >-
+      Opened from the directory holding the content, as .zip then .7z then .rar.
+      A failure to open it ends the load with "Can't open BIOS archive
+      (neogeo.zip)" before any content runs. The container is never hashed.
+    source_ref: "NEO.emu/src/gngeo/roms.c:1202-1211, NEO.emu/src/main/unzip.cc:113-132, NEO.emu/src/main/Main.cc:465-471"
+
+  - name: "000-lo.lo"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: true
+    crc32: "5a86cff2"
+    description: "Zoom lookup table"
+    note: "Read for every game; a miss ends the load."
+    source_ref: "NEO.emu/src/gngeo/roms.c:1213-1218, NEO.emu/src/gngeo/video.c:757"
+
+  - name: "sfix.sfx"
+    aliases: ["sfix.sfix"]
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: true
+    size: 131072
+    crc32: "c2ea0cfd"
+    description: "Board fix layer tiles"
+    note: >-
+      Read as sfix.sfx then retried as sfix.sfix under the same CRC. Read for
+      every game, the guard that would skip it never being raised, and 0x20000
+      bytes are converted from the buffer.
+    source_ref: "NEO.emu/src/gngeo/roms.c:1220-1235,1419-1423,1432-1436"
+
+  - name: "uni-bios_2_3.rom"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: true
+    crc32: "27664eb5"
+    description: "Universe BIOS 2.3"
+    note: "Default BIOS Type, so the 68K image an untouched install asks for."
+    source_ref: "NEO.emu/src/gngeo/roms.c:1239-1243, NEO.emu/src/main/system.ccm:74-77, NEO.emu/src/main/EmuMenuViews.cc:129"
+
+  - name: "uni-bios_3_0.rom"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    crc32: "a97c89a9"
+    description: "Universe BIOS 3.0"
+    source_ref: "NEO.emu/src/gngeo/roms.c:1244-1248, NEO.emu/src/main/EmuMenuViews.cc:130"
+
+  - name: "uni-bios_3_1.rom"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    crc32: "0c58093f"
+    description: "Universe BIOS 3.1"
+    source_ref: "NEO.emu/src/gngeo/roms.c:1249-1253, NEO.emu/src/main/EmuMenuViews.cc:131"
+
+  - name: "uni-bios_3_2.rom"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    crc32: "a4e8b9b3"
+    description: "Universe BIOS 3.2"
+    source_ref: "NEO.emu/src/gngeo/roms.c:1254-1258, NEO.emu/src/main/EmuMenuViews.cc:132"
+
+  - name: "uni-bios_3_3.rom"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    crc32: "24858466"
+    description: "Universe BIOS 3.3"
+    source_ref: "NEO.emu/src/gngeo/roms.c:1259-1263, NEO.emu/src/main/EmuMenuViews.cc:133"
+
+  - name: "uni-bios_4_0.rom"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    crc32: "a7aab458"
+    description: "Universe BIOS 4.0"
+    source_ref: "NEO.emu/src/gngeo/roms.c:1264-1268, NEO.emu/src/main/EmuMenuViews.cc:134"
+
+  - name: "usa_2slt.bin"
+    aliases: ["sp-u2.sp1"]
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    crc32: "e72943de"
+    description: "MVS 68K BIOS, USA"
+    note: >-
+      Read when BIOS Type is MVS and MVS Region is USA, the default region. The
+      CRC branch also finds it under the name sp-u2.sp1.
+    source_ref: "NEO.emu/src/gngeo/roms.c:1279-1282, NEO.emu/src/main/unzip.cc:49-50, NEO.emu/src/main/EmuMenuViews.cc:107"
+
+  - name: "vs-bios.rom"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    crc32: "f0e8f27d"
+    description: "MVS 68K BIOS, Japan"
+    note: "Read when BIOS Type is MVS and MVS Region is Japan."
+    source_ref: "NEO.emu/src/gngeo/roms.c:1275-1278, NEO.emu/src/main/EmuMenuViews.cc:105"
+
+  - name: "asia-s3.rom"
+    aliases: ["sp-s3.sp1"]
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    crc32: "91b64be3"
+    description: "MVS 68K BIOS, Asia"
+    note: >-
+      Read when BIOS Type is MVS and MVS Region is Asia. The CRC branch also
+      finds it under the name sp-s3.sp1.
+    source_ref: "NEO.emu/src/gngeo/roms.c:1283-1286, NEO.emu/src/main/unzip.cc:49-50, NEO.emu/src/main/EmuMenuViews.cc:108"
+
+  - name: "sp-s2.sp1"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    crc32: "9036d879"
+    description: "MVS 68K BIOS, Europe"
+    note: "Read when BIOS Type is MVS and MVS Region is Europe or any other value."
+    source_ref: "NEO.emu/src/gngeo/roms.c:1287-1291, NEO.emu/src/main/EmuMenuViews.cc:106"
+
+  - name: "aes-bios.bin"
+    archive: neogeo.zip
+    system: snk-neogeo-aes
+    required: false
+    description: "AES 68K BIOS"
+    note: >-
+      Read on the SYS_HOME branch, which no menu entry selects but which a stored
+      BIOS Type of 1 reaches. No CRC is passed for it, so it is found by name
+      alone and cannot be found at all while Strict ROM Checking is on.
+    source_ref: "NEO.emu/src/gngeo/roms.c:1270-1272, NEO.emu/src/gngeo/emu.h:34-43, NEO.emu/src/main/system.ccm:58,74-77, NEO.emu/src/main/unzip.cc:49-50"
+
+  - name: "sm1.sm1"
+    archive: neogeo.zip
+    system: snk-neogeo-mvs
+    required: false
+    size: 131072
+    crc32: "94416d67"
+    description: "Audio board BIOS"
+    note: >-
+      Named in the audio BIOS region by irrmaze, neogeo, svcboot, svcplus,
+      svcplusa and svcsplus, and reached in this archive by the parent lookup of
+      irrmaze. The region is exempt from the fatal path and the buffer it lands
+      in is never read by the emulation.
+    source_ref: "NEO.emu/res/romsets/irrmaze.drv, NEO.emu/src/gngeo/roms.c:1034-1039,1413-1418,1440-1461, NEO.emu/src/gngeo/roms.h:63"
+
+  - name: "gngeo_data.zip"
+    system: snk-neogeo-mvs
+    required: true
+    bundled: true
+    category: game_data
+    description: "Romset definitions and CMC key tables"
+    note: >-
+      Holds rom/<set>.drv for 240 sets plus rom/cmc42.xor and rom/cmc50.xor. A
+      definition is read before anything else and a miss ends the load with
+      "This game isn't recognized". On Android the members are read as assets
+      through the asset manager; elsewhere they are read from this archive at the
+      executable's own directory.
+    source_ref: "NEO.emu/src/main/Main.cc:64-67,198-206,217-221,321-355, imagine/src/base/linux/ApplicationContext.cc:44-47"
+
+  - name: "cmc42.xor"
+    path: "rom/cmc42.xor"
+    archive: gngeo_data.zip
+    system: snk-neogeo-mvs
+    required: true
+    bundled: true
+    size: 2304
+    category: game_data
+    description: "CMC42 graphics decryption key tables"
+    note: >-
+      Read whole and cut into nine 256-byte tables for the CMC42 sprite
+      descrambler.
+    source_ref: "NEO.emu/src/gngeo/neocrypt.c:617-634, NEO.emu/src/main/Main.cc:357-369"
+
+  - name: "cmc50.xor"
+    path: "rom/cmc50.xor"
+    archive: gngeo_data.zip
+    system: snk-neogeo-mvs
+    required: true
+    bundled: true
+    size: 2816
+    category: game_data
+    description: "CMC50 graphics and M1 decryption key tables"
+    note: >-
+      Read whole and cut into eleven 256-byte tables, the last two addressing the
+      M1 descrambler.
+    source_ref: "NEO.emu/src/gngeo/neocrypt.c:635-655, NEO.emu/src/main/Main.cc:357-369"

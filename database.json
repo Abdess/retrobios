@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-12T02:19:29Z",
-  "total_files": 8815,
-  "total_size": 12290611062,
+  "generated_at": "2026-08-12T03:11:17Z",
+  "total_files": 8823,
+  "total_size": 12290711502,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -53661,6 +53661,86 @@
       "crc32": "26366ed0",
       "adler32": "ab74d095"
     },
+    "a110c33cdb3bbe17f8dd561f6a5c0160a7dd9dfa": {
+      "path": "bios/Other/neo-emu/gngeo_data.zip",
+      "name": "gngeo_data.zip",
+      "size": 94360,
+      "sha1": "a110c33cdb3bbe17f8dd561f6a5c0160a7dd9dfa",
+      "md5": "0f64534edb881583d063c3252b1f1daa",
+      "sha256": "4977f2c3b824e9ed0eeddb3a197c398b7207e2ae131c03a1c4416380e83594a4",
+      "crc32": "b78f53e8",
+      "adler32": "810f0297"
+    },
+    "4b1b4ba452735c55b39d215d926a5d9a55fec754": {
+      "path": "bios/Other/neo-emu/rom/cmc42.xor",
+      "name": "cmc42.xor",
+      "size": 2304,
+      "sha1": "4b1b4ba452735c55b39d215d926a5d9a55fec754",
+      "md5": "cdeb275c0067d5fcc5fb75b7bafa5edf",
+      "sha256": "ff0848bd8f243de054144dd6f1234fb4192df7456f0093cbe09aa62645dcc05a",
+      "crc32": "86af55af",
+      "adler32": "ea4a7bbd"
+    },
+    "e947c634549a63a746725a1330df7ae778dde305": {
+      "path": "bios/Other/neo-emu/rom/cmc50.xor",
+      "name": "cmc50.xor",
+      "size": 2816,
+      "sha1": "e947c634549a63a746725a1330df7ae778dde305",
+      "md5": "50d78ff7f20ade060577ef721a6e534f",
+      "sha256": "619e5efccaf3c5756c41fab1e97e128e90f523e3a536455ab8917c2de4a8648f",
+      "crc32": "eb67fc2d",
+      "adler32": "80977acc"
+    },
+    "e37da23fa2c644a40fb6c08dd885a96fd65bf4e5": {
+      "path": "bios/Other/nes-emu/palette/Digital Prime (FBX).pal",
+      "name": "Digital Prime (FBX).pal",
+      "size": 192,
+      "sha1": "e37da23fa2c644a40fb6c08dd885a96fd65bf4e5",
+      "md5": "68d86ceac5aab1c05430793ccaa33d9c",
+      "sha256": "667bc5badbca01ea236a8b10f1c2639f2e8e84d4f0773d65f17c3856dce23bb0",
+      "crc32": "da429d4b",
+      "adler32": "d2f552a9"
+    },
+    "5008c37920c614e8b471b45ac23118d00162b804": {
+      "path": "bios/Other/nes-emu/palette/Five Reality.pal",
+      "name": "Five Reality.pal",
+      "size": 192,
+      "sha1": "5008c37920c614e8b471b45ac23118d00162b804",
+      "md5": "d9e4c54236a1ce841fd648448e342c0b",
+      "sha256": "27df3505ba3690de763e01a38d26cde7a40318929a3a56c3b22427d347f3a37c",
+      "crc32": "8fea8e2d",
+      "adler32": "8f55540c"
+    },
+    "04d7490bb3a284ab266a555c02526f6743756661": {
+      "path": "bios/Other/nes-emu/palette/Magnum (FBX).pal",
+      "name": "Magnum (FBX).pal",
+      "size": 192,
+      "sha1": "04d7490bb3a284ab266a555c02526f6743756661",
+      "md5": "39a6306e390640e3f42e0efde82b5b25",
+      "sha256": "05246e0581400635522dee56ea9902bd82f79ef83fd5bac9e20384c43c063941",
+      "crc32": "401d12ff",
+      "adler32": "bd144ee8"
+    },
+    "1e1993f917ec098268a0af15e79b1002bf425e47": {
+      "path": "bios/Other/nes-emu/palette/Smooth V2 (FBX).pal",
+      "name": "Smooth V2 (FBX).pal",
+      "size": 192,
+      "sha1": "1e1993f917ec098268a0af15e79b1002bf425e47",
+      "md5": "bf9be1c7e59efda99a279b8d73bf3593",
+      "sha256": "9db1b5758e41faf126721da5b3bc11ea6aa792faa21f1550de16deda4696c832",
+      "crc32": "7feabfbd",
+      "adler32": "a45e534e"
+    },
+    "a33356beefeb0b110464e7d77b3238fc1fb90230": {
+      "path": "bios/Other/nes-emu/palette/Wavebeam.pal",
+      "name": "Wavebeam.pal",
+      "size": 192,
+      "sha1": "a33356beefeb0b110464e7d77b3238fc1fb90230",
+      "md5": "cdf46c0366f0649e65a936c80bf6a2b4",
+      "sha256": "39d76deecbfc98ab660b528fe1505ff912d2801f415f69c1474d8bb404123da9",
+      "crc32": "b6906508",
+      "adler32": "35ca53c1"
+    },
     "58807f32c413a0c9db6deb0365f2fac9518e7c86": {
       "path": "bios/Other/opentyrian/cubetxt1.dat",
       "name": "cubetxt1.dat",
@@ -98317,6 +98397,14 @@
       "6e7ad04a00354f1530ab29d7d02fd676": "ac86b9962ac28326dbfcb1af71f3e9f9b2cc3649",
       "ec49cd59730306b476444c046d9e25fd": "0b7a99c3beccee2b6df0fbe8e8c6db9bbf011de1",
       "4fb8c78a0641ded54f858feef4d4d359": "c939bb0c356b3388ee371959e0af2d71ffbfb6dc",
+      "0f64534edb881583d063c3252b1f1daa": "a110c33cdb3bbe17f8dd561f6a5c0160a7dd9dfa",
+      "cdeb275c0067d5fcc5fb75b7bafa5edf": "4b1b4ba452735c55b39d215d926a5d9a55fec754",
+      "50d78ff7f20ade060577ef721a6e534f": "e947c634549a63a746725a1330df7ae778dde305",
+      "68d86ceac5aab1c05430793ccaa33d9c": "e37da23fa2c644a40fb6c08dd885a96fd65bf4e5",
+      "d9e4c54236a1ce841fd648448e342c0b": "5008c37920c614e8b471b45ac23118d00162b804",
+      "39a6306e390640e3f42e0efde82b5b25": "04d7490bb3a284ab266a555c02526f6743756661",
+      "bf9be1c7e59efda99a279b8d73bf3593": "1e1993f917ec098268a0af15e79b1002bf425e47",
+      "cdf46c0366f0649e65a936c80bf6a2b4": "a33356beefeb0b110464e7d77b3238fc1fb90230",
       "3f2476d9ff29a06cf9fb85d52302222a": "58807f32c413a0c9db6deb0365f2fac9518e7c86",
       "2b199deeccab1042fb02b46c47c2a8d0": "ee7dc2eb87e5a75564382efcd95d13554d3835ba",
       "4229d5532a206aabe7e1fa11a7d8447e": "1ee93623406dc61b50ccb41a97bae769ea15cef2",
@@ -116460,6 +116548,30 @@
       "rom_config.ini": [
         "c939bb0c356b3388ee371959e0af2d71ffbfb6dc"
       ],
+      "gngeo_data.zip": [
+        "a110c33cdb3bbe17f8dd561f6a5c0160a7dd9dfa"
+      ],
+      "cmc42.xor": [
+        "4b1b4ba452735c55b39d215d926a5d9a55fec754"
+      ],
+      "cmc50.xor": [
+        "e947c634549a63a746725a1330df7ae778dde305"
+      ],
+      "Digital Prime (FBX).pal": [
+        "e37da23fa2c644a40fb6c08dd885a96fd65bf4e5"
+      ],
+      "Five Reality.pal": [
+        "5008c37920c614e8b471b45ac23118d00162b804"
+      ],
+      "Magnum (FBX).pal": [
+        "04d7490bb3a284ab266a555c02526f6743756661"
+      ],
+      "Smooth V2 (FBX).pal": [
+        "1e1993f917ec098268a0af15e79b1002bf425e47"
+      ],
+      "Wavebeam.pal": [
+        "a33356beefeb0b110464e7d77b3238fc1fb90230"
+      ],
       "cubetxt1.dat": [
         "58807f32c413a0c9db6deb0365f2fac9518e7c86"
       ],
@@ -130311,6 +130423,12 @@
       "bank0.bin": [
         "1246203bebf9f04e3bac2df7fc64719304f9f1bd"
       ],
+      "neogeo.7z": [
+        "df89ef91bbaf84f2a109377fd4b17b0050a163e8"
+      ],
+      "neogeo.rar": [
+        "df89ef91bbaf84f2a109377fd4b17b0050a163e8"
+      ],
       "DevIL.dll": [
         "313a23600a169adbe130b1ae1784d8de437ce7d9"
       ],
@@ -135472,6 +135590,14 @@
       "976f327f": "ac86b9962ac28326dbfcb1af71f3e9f9b2cc3649",
       "ff475fd9": "0b7a99c3beccee2b6df0fbe8e8c6db9bbf011de1",
       "26366ed0": "c939bb0c356b3388ee371959e0af2d71ffbfb6dc",
+      "b78f53e8": "a110c33cdb3bbe17f8dd561f6a5c0160a7dd9dfa",
+      "86af55af": "4b1b4ba452735c55b39d215d926a5d9a55fec754",
+      "eb67fc2d": "e947c634549a63a746725a1330df7ae778dde305",
+      "da429d4b": "e37da23fa2c644a40fb6c08dd885a96fd65bf4e5",
+      "8fea8e2d": "5008c37920c614e8b471b45ac23118d00162b804",
+      "401d12ff": "04d7490bb3a284ab266a555c02526f6743756661",
+      "7feabfbd": "1e1993f917ec098268a0af15e79b1002bf425e47",
+      "b6906508": "a33356beefeb0b110464e7d77b3238fc1fb90230",
       "84e948df": "58807f32c413a0c9db6deb0365f2fac9518e7c86",
       "bf8e13c9": "ee7dc2eb87e5a75564382efcd95d13554d3835ba",
       "7b91c5d2": "1ee93623406dc61b50ccb41a97bae769ea15cef2",
@@ -144289,6 +144415,14 @@
       "bf65f47b8eb34b930cd838193bfaa6e2befd52f23cf2a6fb5e2eab0cd10a31fa": "ac86b9962ac28326dbfcb1af71f3e9f9b2cc3649",
       "5ff4fd117fe632c57a7c81d15d4eb64ffda3f8cc7204773560159104ae003347": "0b7a99c3beccee2b6df0fbe8e8c6db9bbf011de1",
       "fbbb1991f822257c5928932b167a48e0886f79e7d779b7d1dd4916eec8c4297e": "c939bb0c356b3388ee371959e0af2d71ffbfb6dc",
+      "4977f2c3b824e9ed0eeddb3a197c398b7207e2ae131c03a1c4416380e83594a4": "a110c33cdb3bbe17f8dd561f6a5c0160a7dd9dfa",
+      "ff0848bd8f243de054144dd6f1234fb4192df7456f0093cbe09aa62645dcc05a": "4b1b4ba452735c55b39d215d926a5d9a55fec754",
+      "619e5efccaf3c5756c41fab1e97e128e90f523e3a536455ab8917c2de4a8648f": "e947c634549a63a746725a1330df7ae778dde305",
+      "667bc5badbca01ea236a8b10f1c2639f2e8e84d4f0773d65f17c3856dce23bb0": "e37da23fa2c644a40fb6c08dd885a96fd65bf4e5",
+      "27df3505ba3690de763e01a38d26cde7a40318929a3a56c3b22427d347f3a37c": "5008c37920c614e8b471b45ac23118d00162b804",
+      "05246e0581400635522dee56ea9902bd82f79ef83fd5bac9e20384c43c063941": "04d7490bb3a284ab266a555c02526f6743756661",
+      "9db1b5758e41faf126721da5b3bc11ea6aa792faa21f1550de16deda4696c832": "1e1993f917ec098268a0af15e79b1002bf425e47",
+      "39d76deecbfc98ab660b528fe1505ff912d2801f415f69c1474d8bb404123da9": "a33356beefeb0b110464e7d77b3238fc1fb90230",
       "2a0bc26ac4a8cdcbe7a145c9b1868a87ecb4335e9787f2f1e5713c965372df2b": "58807f32c413a0c9db6deb0365f2fac9518e7c86",
       "6604a1dcc264e8b8e98f036a8bc35579e9b90b92eccbc4d7c1effee9785d1580": "ee7dc2eb87e5a75564382efcd95d13554d3835ba",
       "fcfc9762cd4cfad42feb12d975929de86851b216d4491252c701527e22b55539": "1ee93623406dc61b50ccb41a97bae769ea15cef2",
@@ -154733,6 +154867,27 @@
       "Machines/MSXturboR/config.ini": [
         "0b7a99c3beccee2b6df0fbe8e8c6db9bbf011de1"
       ],
+      "rom/cmc42.xor": [
+        "4b1b4ba452735c55b39d215d926a5d9a55fec754"
+      ],
+      "rom/cmc50.xor": [
+        "e947c634549a63a746725a1330df7ae778dde305"
+      ],
+      "palette/Digital Prime (FBX).pal": [
+        "e37da23fa2c644a40fb6c08dd885a96fd65bf4e5"
+      ],
+      "palette/Five Reality.pal": [
+        "5008c37920c614e8b471b45ac23118d00162b804"
+      ],
+      "palette/Magnum (FBX).pal": [
+        "04d7490bb3a284ab266a555c02526f6743756661"
+      ],
+      "palette/Smooth V2 (FBX).pal": [
+        "1e1993f917ec098268a0af15e79b1002bf425e47"
+      ],
+      "palette/Wavebeam.pal": [
+        "a33356beefeb0b110464e7d77b3238fc1fb90230"
+      ],
       "roms/108281-001.bin": [
         "d108bb99cb1a05d808e6e25cc720da24faee9e7c"
       ],
@@ -163677,6 +163832,7 @@
         "c65592330c9dd84011151daed52f9aec926b7e56",
         "0877ffb4b4d1c18283468be3579b72ed8c22e3ac",
         "1246203bebf9f04e3bac2df7fc64719304f9f1bd",
+        "df89ef91bbaf84f2a109377fd4b17b0050a163e8",
         "313a23600a169adbe130b1ae1784d8de437ce7d9",
         "d3534cd62d312fe28988c6229c47ab81a3ae1f9e",
         "30566eda672fef3036fbd3998af3cc9fdcef38e7",
