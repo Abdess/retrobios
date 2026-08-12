@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-12T02:08:56Z",
-  "total_files": 8807,
-  "total_size": 12290606543,
+  "generated_at": "2026-08-12T02:19:29Z",
+  "total_files": 8815,
+  "total_size": 12290611062,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -39016,8 +39016,8 @@
       }
     },
     "0081ea0d25bc5cd8d70b60ad8cfdc7307812c0fd": {
-      "path": "bios/Microsoft/MSX/.variants/MSX2.ROM.0081ea0d",
-      "name": "MSX2.ROM",
+      "path": "bios/Other/msx-emu/Machines/Shared Roms/MSX2J.rom",
+      "name": "MSX2J.rom",
       "size": 32768,
       "sha1": "0081ea0d25bc5cd8d70b60ad8cfdc7307812c0fd",
       "md5": "53bec1c22b30c0a15263e04b91a7814f",
@@ -39033,8 +39033,8 @@
       }
     },
     "e90f80a61d94c617850c415e12ad70ac41e66bb7": {
-      "path": "bios/Microsoft/MSX/.variants/MSX2P.ROM.e90f80a6",
-      "name": "MSX2P.ROM",
+      "path": "bios/Other/msx-emu/Machines/Shared Roms/MSX2P.rom",
+      "name": "MSX2P.rom",
       "size": 32768,
       "sha1": "e90f80a61d94c617850c415e12ad70ac41e66bb7",
       "md5": "847cc025ffae665487940ff2639540e5",
@@ -39050,7 +39050,7 @@
       }
     },
     "4e9384c9d137f0ab65ffc5a78f04cd8c9df6c8b7": {
-      "path": "bios/Microsoft/MSX/.variants/RS232.ROM.4e9384c9",
+      "path": "bios/Other/msx-emu/Machines/Shared Roms/RS232.ROM",
       "name": "RS232.ROM",
       "size": 8192,
       "sha1": "4e9384c9d137f0ab65ffc5a78f04cd8c9df6c8b7",
@@ -53570,6 +53570,86 @@
       "sha256": "91dc5f78122114e84e7ed723cdcdba7d161ff98befe895655fe815bb334b0ebf",
       "crc32": "acf4963d",
       "adler32": "09891f9e"
+    },
+    "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e": {
+      "path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
+      "name": "config.ini",
+      "size": 347,
+      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
+      "md5": "8ed74c95dcaad0d714e1734c82159119",
+      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
+      "crc32": "d3de69d9",
+      "adler32": "61e06342"
+    },
+    "483b2c34fcb3ddcf650314e45104f358ef74c98b": {
+      "path": "bios/Other/msx-emu/Machines/MSX/config.ini",
+      "name": "config.ini",
+      "size": 408,
+      "sha1": "483b2c34fcb3ddcf650314e45104f358ef74c98b",
+      "md5": "98501fb5bd45bb5995f1f1ddb4fe520c",
+      "sha256": "61c8b13980541e923f3131951612e0f7625817c99820b4906b5c79ad2476a835",
+      "crc32": "fb7ea5d9",
+      "adler32": "0ea26d91"
+    },
+    "5e36ed1fb6f148378de9f13e28013bd2d5d07ef4": {
+      "path": "bios/Other/msx-emu/Machines/MSX - C-BIOS/config.ini",
+      "name": "config.ini",
+      "size": 395,
+      "sha1": "5e36ed1fb6f148378de9f13e28013bd2d5d07ef4",
+      "md5": "7765f7f301ba497f9ea97cbccaa3f098",
+      "sha256": "415df050e17addc0e119489503c4c6f6e97756b024b2af1ddab4c0d1769bd659",
+      "crc32": "6a901fbd",
+      "adler32": "6caf71cc"
+    },
+    "460ded0dbfc0285490da87a446b0321b6496aa5b": {
+      "path": "bios/Other/msx-emu/Machines/MSX2/config.ini",
+      "name": "config.ini",
+      "size": 649,
+      "sha1": "460ded0dbfc0285490da87a446b0321b6496aa5b",
+      "md5": "c616cfad5eba7ac99b03bc2d40ac669b",
+      "sha256": "5fac8e0886bd505bd536439c80b660bcc358738b8189d44fe36be6547c14d6e2",
+      "crc32": "11543fa2",
+      "adler32": "ab75ab62"
+    },
+    "3968cca6fb977936af849d611bc4ebd4910dd81a": {
+      "path": "bios/Other/msx-emu/Machines/MSX2 - C-BIOS/config.ini",
+      "name": "config.ini",
+      "size": 472,
+      "sha1": "3968cca6fb977936af849d611bc4ebd4910dd81a",
+      "md5": "0e9e525fdc819dd6ea3032289562565f",
+      "sha256": "db6e08fc1a79ad9598e3d1009e138d75cf8aee4445ab29d427377f4f53798a97",
+      "crc32": "4ac56fbb",
+      "adler32": "a8e483ae"
+    },
+    "cb7d14a17c4f4632f17ba5a64160cdd876dd6010": {
+      "path": "bios/Other/msx-emu/Machines/MSX2+/config.ini",
+      "name": "config.ini",
+      "size": 773,
+      "sha1": "cb7d14a17c4f4632f17ba5a64160cdd876dd6010",
+      "md5": "510c643fa932b346ea8b87ea4f965618",
+      "sha256": "6d6f259bd9e161174000bcd4705b0cfbe3b9c333ea8df644049543ca3e68bebd",
+      "crc32": "8609e07e",
+      "adler32": "b612ca8f"
+    },
+    "ac86b9962ac28326dbfcb1af71f3e9f9b2cc3649": {
+      "path": "bios/Other/msx-emu/Machines/MSX2+ - C-BIOS/config.ini",
+      "name": "config.ini",
+      "size": 534,
+      "sha1": "ac86b9962ac28326dbfcb1af71f3e9f9b2cc3649",
+      "md5": "6e7ad04a00354f1530ab29d7d02fd676",
+      "sha256": "bf65f47b8eb34b930cd838193bfaa6e2befd52f23cf2a6fb5e2eab0cd10a31fa",
+      "crc32": "976f327f",
+      "adler32": "cfb4944e"
+    },
+    "0b7a99c3beccee2b6df0fbe8e8c6db9bbf011de1": {
+      "path": "bios/Other/msx-emu/Machines/MSXturboR/config.ini",
+      "name": "config.ini",
+      "size": 941,
+      "sha1": "0b7a99c3beccee2b6df0fbe8e8c6db9bbf011de1",
+      "md5": "ec49cd59730306b476444c046d9e25fd",
+      "sha256": "5ff4fd117fe632c57a7c81d15d4eb64ffda3f8cc7204773560159104ae003347",
+      "crc32": "ff475fd9",
+      "adler32": "59f8ea95"
     },
     "c939bb0c356b3388ee371959e0af2d71ffbfb6dc": {
       "path": "bios/Other/my-boy/rom_config.ini",
@@ -98228,6 +98308,14 @@
       "7f76ed35d335c18e10db1adebc831553": "5d9d28246d2976cdd75adc66524ce9de5e623af0",
       "baf8b7f2e61c241d19a27661f1090b5f": "646068483c6f5c7d0eb2f76038b9e5dd25f0f01d",
       "07e1aa1f8d6b3be4610c7becda511ca7": "f77e7836ee114947f38bfd854843c0b987399f0e",
+      "8ed74c95dcaad0d714e1734c82159119": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
+      "98501fb5bd45bb5995f1f1ddb4fe520c": "483b2c34fcb3ddcf650314e45104f358ef74c98b",
+      "7765f7f301ba497f9ea97cbccaa3f098": "5e36ed1fb6f148378de9f13e28013bd2d5d07ef4",
+      "c616cfad5eba7ac99b03bc2d40ac669b": "460ded0dbfc0285490da87a446b0321b6496aa5b",
+      "0e9e525fdc819dd6ea3032289562565f": "3968cca6fb977936af849d611bc4ebd4910dd81a",
+      "510c643fa932b346ea8b87ea4f965618": "cb7d14a17c4f4632f17ba5a64160cdd876dd6010",
+      "6e7ad04a00354f1530ab29d7d02fd676": "ac86b9962ac28326dbfcb1af71f3e9f9b2cc3649",
+      "ec49cd59730306b476444c046d9e25fd": "0b7a99c3beccee2b6df0fbe8e8c6db9bbf011de1",
       "4fb8c78a0641ded54f858feef4d4d359": "c939bb0c356b3388ee371959e0af2d71ffbfb6dc",
       "3f2476d9ff29a06cf9fb85d52302222a": "58807f32c413a0c9db6deb0365f2fac9518e7c86",
       "2b199deeccab1042fb02b46c47c2a8d0": "ee7dc2eb87e5a75564382efcd95d13554d3835ba",
@@ -112641,13 +112729,11 @@
       "MSX_8020-20bios.rom": [
         "e998f0c441f4f1800ef44e42cd1659150206cf79"
       ],
-      "MSX2.ROM": [
-        "0081ea0d25bc5cd8d70b60ad8cfdc7307812c0fd",
-        "6103b39f1e38d1aa2d84b1c3219c44f1abb5436e"
+      "MSX2J.rom": [
+        "0081ea0d25bc5cd8d70b60ad8cfdc7307812c0fd"
       ],
-      "MSX2P.ROM": [
-        "e90f80a61d94c617850c415e12ad70ac41e66bb7",
-        "e2fbd56e42da637609d23ae9df9efd1b4241b18a"
+      "MSX2P.rom": [
+        "e90f80a61d94c617850c415e12ad70ac41e66bb7"
       ],
       "RS232.ROM": [
         "4e9384c9d137f0ab65ffc5a78f04cd8c9df6c8b7",
@@ -112755,8 +112841,16 @@
       "cbios_music.rom": [
         "5c5eb001e6a1fe29edb7abd428a3967bb388e5db"
       ],
+      "MSX2.ROM": [
+        "6103b39f1e38d1aa2d84b1c3219c44f1abb5436e",
+        "0081ea0d25bc5cd8d70b60ad8cfdc7307812c0fd"
+      ],
       "MSX2EXT.ROM": [
         "5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02"
+      ],
+      "MSX2P.ROM": [
+        "e2fbd56e42da637609d23ae9df9efd1b4241b18a",
+        "e90f80a61d94c617850c415e12ad70ac41e66bb7"
       ],
       "MSX2PEXT.ROM": [
         "fe0254cbfc11405b79e7c86c7769bd6322b04995"
@@ -116352,6 +116446,16 @@
       ],
       "PacDrive32.dll": [
         "f77e7836ee114947f38bfd854843c0b987399f0e"
+      ],
+      "config.ini": [
+        "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
+        "483b2c34fcb3ddcf650314e45104f358ef74c98b",
+        "5e36ed1fb6f148378de9f13e28013bd2d5d07ef4",
+        "460ded0dbfc0285490da87a446b0321b6496aa5b",
+        "3968cca6fb977936af849d611bc4ebd4910dd81a",
+        "cb7d14a17c4f4632f17ba5a64160cdd876dd6010",
+        "ac86b9962ac28326dbfcb1af71f3e9f9b2cc3649",
+        "0b7a99c3beccee2b6df0fbe8e8c6db9bbf011de1"
       ],
       "rom_config.ini": [
         "c939bb0c356b3388ee371959e0af2d71ffbfb6dc"
@@ -126493,10 +126597,10 @@
       "COLECO.ROM": [
         "45bedc4cbdeac66c7df59e9e599195c778d86a92"
       ],
-      "colecovision.rom": [
+      "coleco.rom": [
         "45bedc4cbdeac66c7df59e9e599195c778d86a92"
       ],
-      "coleco.rom": [
+      "colecovision.rom": [
         "45bedc4cbdeac66c7df59e9e599195c778d86a92"
       ],
       "amiga-os-130.rom": [
@@ -127088,6 +127192,30 @@
       ],
       "TokenInRejected.wav": [
         "37f8acd9778cbc81f11c08f129f3f726cc9964f4"
+      ],
+      "FMPAC.rom": [
+        "9d789166e3caf28e4742fe933d962e99618c633d"
+      ],
+      "MOONSOUND.rom": [
+        "32760893ce06dbe3930627755ba065cc3d8ec6ca"
+      ],
+      "MSXJ.rom": [
+        "df48902f5f12af8867ae1a87f255145f0e5e0774"
+      ],
+      "MSXKANJI.rom": [
+        "dcc3a67732aa01c4f2ee8d1ad886444a4dbafe06"
+      ],
+      "MSXSP.ROM": [
+        "342e7d4bd86f3351766f460f6de3c89a40791ee0"
+      ],
+      "NATIONALDISK.rom": [
+        "78cd7f847e77fd8cd51a647efb2725ba93f4c471"
+      ],
+      "PANASONICDISK.rom": [
+        "7ed7c55e0359737ac5e68d38cb6903f9e5d7c2b6"
+      ],
+      "PHILIPSDISK.rom": [
+        "c3efedda7ab947a06d9345f7b8261076fa7ceeef"
       ],
       "iplrom30.dat": [
         "239e9124568c862c31d9ec0605e32373ea74b86a"
@@ -128588,35 +128716,8 @@
       "svi328a.rom": [
         "10349ce675f6d6d47f0976e39cb7188eba858d89"
       ],
-      "MSXKANJI.rom": [
-        "dcc3a67732aa01c4f2ee8d1ad886444a4dbafe06"
-      ],
-      "PANASONICDISK.rom": [
-        "7ed7c55e0359737ac5e68d38cb6903f9e5d7c2b6"
-      ],
-      "FMPAC.rom": [
-        "9d789166e3caf28e4742fe933d962e99618c633d"
-      ],
-      "MOONSOUND.rom": [
-        "32760893ce06dbe3930627755ba065cc3d8ec6ca"
-      ],
-      "MSX2J.rom": [
-        "0081ea0d25bc5cd8d70b60ad8cfdc7307812c0fd"
-      ],
-      "MSX2P.rom": [
-        "e90f80a61d94c617850c415e12ad70ac41e66bb7"
-      ],
-      "MSXJ.rom": [
-        "df48902f5f12af8867ae1a87f255145f0e5e0774"
-      ],
       "MSXR2.ROM": [
         "04990aa1c3a3fc7294ec884b81deaa89832df614"
-      ],
-      "NATIONALDISK.rom": [
-        "78cd7f847e77fd8cd51a647efb2725ba93f4c471"
-      ],
-      "PHILIPSDISK.rom": [
-        "c3efedda7ab947a06d9345f7b8261076fa7ceeef"
       ],
       "squirreljme-0.3.0.jar": [
         "8a2ddc37df2366d4e205e9904cd8bac22db2afd5"
@@ -129838,9 +129939,6 @@
       ],
       "atari_5200.rom": [
         "6ad7a1e8c9fad486fbec9498cb48bf5bc3adc530"
-      ],
-      "MSXSP.ROM": [
-        "342e7d4bd86f3351766f460f6de3c89a40791ee0"
       ],
       "N80.ROM": [
         "5b922ed9de07d2a729bdf1da7b57c50ddf08809a",
@@ -135365,6 +135463,14 @@
       "5d319e61": "5d9d28246d2976cdd75adc66524ce9de5e623af0",
       "d1fa3b4a": "646068483c6f5c7d0eb2f76038b9e5dd25f0f01d",
       "acf4963d": "f77e7836ee114947f38bfd854843c0b987399f0e",
+      "d3de69d9": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
+      "fb7ea5d9": "483b2c34fcb3ddcf650314e45104f358ef74c98b",
+      "6a901fbd": "5e36ed1fb6f148378de9f13e28013bd2d5d07ef4",
+      "11543fa2": "460ded0dbfc0285490da87a446b0321b6496aa5b",
+      "4ac56fbb": "3968cca6fb977936af849d611bc4ebd4910dd81a",
+      "8609e07e": "cb7d14a17c4f4632f17ba5a64160cdd876dd6010",
+      "976f327f": "ac86b9962ac28326dbfcb1af71f3e9f9b2cc3649",
+      "ff475fd9": "0b7a99c3beccee2b6df0fbe8e8c6db9bbf011de1",
       "26366ed0": "c939bb0c356b3388ee371959e0af2d71ffbfb6dc",
       "84e948df": "58807f32c413a0c9db6deb0365f2fac9518e7c86",
       "bf8e13c9": "ee7dc2eb87e5a75564382efcd95d13554d3835ba",
@@ -144174,6 +144280,14 @@
       "8664b3513f232f1d82dd90f3f99a32cfb8e71549a36961ad7e278866ab3ec2dc": "5d9d28246d2976cdd75adc66524ce9de5e623af0",
       "c52b3d221cf24124c5c2ae54f849461a38f909f3fa65529d6c110b56d357f649": "646068483c6f5c7d0eb2f76038b9e5dd25f0f01d",
       "91dc5f78122114e84e7ed723cdcdba7d161ff98befe895655fe815bb334b0ebf": "f77e7836ee114947f38bfd854843c0b987399f0e",
+      "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
+      "61c8b13980541e923f3131951612e0f7625817c99820b4906b5c79ad2476a835": "483b2c34fcb3ddcf650314e45104f358ef74c98b",
+      "415df050e17addc0e119489503c4c6f6e97756b024b2af1ddab4c0d1769bd659": "5e36ed1fb6f148378de9f13e28013bd2d5d07ef4",
+      "5fac8e0886bd505bd536439c80b660bcc358738b8189d44fe36be6547c14d6e2": "460ded0dbfc0285490da87a446b0321b6496aa5b",
+      "db6e08fc1a79ad9598e3d1009e138d75cf8aee4445ab29d427377f4f53798a97": "3968cca6fb977936af849d611bc4ebd4910dd81a",
+      "6d6f259bd9e161174000bcd4705b0cfbe3b9c333ea8df644049543ca3e68bebd": "cb7d14a17c4f4632f17ba5a64160cdd876dd6010",
+      "bf65f47b8eb34b930cd838193bfaa6e2befd52f23cf2a6fb5e2eab0cd10a31fa": "ac86b9962ac28326dbfcb1af71f3e9f9b2cc3649",
+      "5ff4fd117fe632c57a7c81d15d4eb64ffda3f8cc7204773560159104ae003347": "0b7a99c3beccee2b6df0fbe8e8c6db9bbf011de1",
       "fbbb1991f822257c5928932b167a48e0886f79e7d779b7d1dd4916eec8c4297e": "c939bb0c356b3388ee371959e0af2d71ffbfb6dc",
       "2a0bc26ac4a8cdcbe7a145c9b1868a87ecb4335e9787f2f1e5713c965372df2b": "58807f32c413a0c9db6deb0365f2fac9518e7c86",
       "6604a1dcc264e8b8e98f036a8bc35579e9b90b92eccbc4d7c1effee9785d1580": "ee7dc2eb87e5a75564382efcd95d13554d3835ba",
@@ -152471,13 +152585,13 @@
       "openmsx/fs-a1wsx_kanjifont.rom": [
         "5aff2d9b6efc723bc395b0f96f0adfa83cc54a49"
       ],
-      ".variants/MSX2.ROM.0081ea0d": [
+      "Machines/Shared Roms/MSX2J.rom": [
         "0081ea0d25bc5cd8d70b60ad8cfdc7307812c0fd"
       ],
-      ".variants/MSX2P.ROM.e90f80a6": [
+      "Machines/Shared Roms/MSX2P.rom": [
         "e90f80a61d94c617850c415e12ad70ac41e66bb7"
       ],
-      ".variants/RS232.ROM.4e9384c9": [
+      "Machines/Shared Roms/RS232.ROM": [
         "4e9384c9d137f0ab65ffc5a78f04cd8c9df6c8b7"
       ],
       "CLK/msx-american.rom": [
@@ -154594,6 +154708,30 @@
       ],
       "Fonts/MFME.ttf": [
         "646068483c6f5c7d0eb2f76038b9e5dd25f0f01d"
+      ],
+      "Machines/COL - ColecoVision/config.ini": [
+        "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e"
+      ],
+      "Machines/MSX/config.ini": [
+        "483b2c34fcb3ddcf650314e45104f358ef74c98b"
+      ],
+      "Machines/MSX - C-BIOS/config.ini": [
+        "5e36ed1fb6f148378de9f13e28013bd2d5d07ef4"
+      ],
+      "Machines/MSX2/config.ini": [
+        "460ded0dbfc0285490da87a446b0321b6496aa5b"
+      ],
+      "Machines/MSX2 - C-BIOS/config.ini": [
+        "3968cca6fb977936af849d611bc4ebd4910dd81a"
+      ],
+      "Machines/MSX2+/config.ini": [
+        "cb7d14a17c4f4632f17ba5a64160cdd876dd6010"
+      ],
+      "Machines/MSX2+ - C-BIOS/config.ini": [
+        "ac86b9962ac28326dbfcb1af71f3e9f9b2cc3649"
+      ],
+      "Machines/MSXturboR/config.ini": [
+        "0b7a99c3beccee2b6df0fbe8e8c6db9bbf011de1"
       ],
       "roms/108281-001.bin": [
         "d108bb99cb1a05d808e6e25cc720da24faee9e7c"
@@ -163149,6 +163287,14 @@
         "93407ea10d2f30ab96a314d8eca44fe160aea734",
         "7afc276cb118adff72e4f16698f94bf3b2c64146",
         "f6a0cbfda6838065065e830ff40f322e6a3b6b00",
+        "9d789166e3caf28e4742fe933d962e99618c633d",
+        "32760893ce06dbe3930627755ba065cc3d8ec6ca",
+        "df48902f5f12af8867ae1a87f255145f0e5e0774",
+        "dcc3a67732aa01c4f2ee8d1ad886444a4dbafe06",
+        "342e7d4bd86f3351766f460f6de3c89a40791ee0",
+        "78cd7f847e77fd8cd51a647efb2725ba93f4c471",
+        "7ed7c55e0359737ac5e68d38cb6903f9e5d7c2b6",
+        "c3efedda7ab947a06d9345f7b8261076fa7ceeef",
         "239e9124568c862c31d9ec0605e32373ea74b86a",
         "b2e1955d957a475de2411770452eff4ea19f4cee",
         "a6120aed50831c9c0d95dbdf707820f601d9452e",
@@ -163320,16 +163466,7 @@
         "1b3b22092f30c4d1b2c15f04d1670eb1e9fbea07",
         "938a0bda7d9a357240718c2cec319878d36b8f72",
         "10349ce675f6d6d47f0976e39cb7188eba858d89",
-        "dcc3a67732aa01c4f2ee8d1ad886444a4dbafe06",
-        "7ed7c55e0359737ac5e68d38cb6903f9e5d7c2b6",
-        "9d789166e3caf28e4742fe933d962e99618c633d",
-        "32760893ce06dbe3930627755ba065cc3d8ec6ca",
-        "0081ea0d25bc5cd8d70b60ad8cfdc7307812c0fd",
-        "e90f80a61d94c617850c415e12ad70ac41e66bb7",
-        "df48902f5f12af8867ae1a87f255145f0e5e0774",
         "04990aa1c3a3fc7294ec884b81deaa89832df614",
-        "78cd7f847e77fd8cd51a647efb2725ba93f4c471",
-        "c3efedda7ab947a06d9345f7b8261076fa7ceeef",
         "8a2ddc37df2366d4e205e9904cd8bac22db2afd5",
         "94d44d7f9529ec1642ba3771ed3c5f756d5bc872",
         "f119506eaa3b4b70b9aa0dd83761e8cbe043d042",
@@ -163446,7 +163583,6 @@
         "decde89fbae90adb591ad2fc553d35f49030c129",
         "a107db7f16a1129cf9d933c9cf4f013b068c9e82",
         "6ad7a1e8c9fad486fbec9498cb48bf5bc3adc530",
-        "342e7d4bd86f3351766f460f6de3c89a40791ee0",
         "5b922ed9de07d2a729bdf1da7b57c50ddf08809a",
         "deef0cc2a9734ba891a6d6c022aa70ffc66f783e",
         "77511fc58798404701f66b6bbc9cbde06596eba7",
@@ -163571,6 +163707,9 @@
       "openmsx/COLECO.ROM": [
         "45bedc4cbdeac66c7df59e9e599195c778d86a92"
       ],
+      "Machines/COL - ColecoVision/coleco.rom": [
+        "45bedc4cbdeac66c7df59e9e599195c778d86a92"
+      ],
       "voice/E482.WAV": [
         "377332bc70c90a406174898e28460f860e96e5d7"
       ],
@@ -163580,16 +163719,31 @@
       ".variants/KANJI.rom.5aff2d9b": [
         "5aff2d9b6efc723bc395b0f96f0adfa83cc54a49"
       ],
+      "Machines/Shared Roms/KANJI.rom": [
+        "5aff2d9b6efc723bc395b0f96f0adfa83cc54a49"
+      ],
       ".variants/msx.rom.a317e6b4": [
         "e998f0c441f4f1800ef44e42cd1659150206cf79"
       ],
       ".variants/MSX.ROM.e998f0c4": [
         "e998f0c441f4f1800ef44e42cd1659150206cf79"
       ],
+      "Machines/Shared Roms/MSX.rom": [
+        "e998f0c441f4f1800ef44e42cd1659150206cf79"
+      ],
       "openmsx/px-7_basic-bios1.rom": [
         "302afb5d8be26c758309ca3df611ae69cced2821"
       ],
+      "Machines/Shared Roms/MSX2.rom": [
+        "6103b39f1e38d1aa2d84b1c3219c44f1abb5436e"
+      ],
+      "Machines/Shared Roms/MSX2EXT.rom": [
+        "5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02"
+      ],
       "openmsx/fs-a1wsx_msx2psub.rom": [
+        "fe0254cbfc11405b79e7c86c7769bd6322b04995"
+      ],
+      "Machines/Shared Roms/MSX2PEXT.rom": [
         "fe0254cbfc11405b79e7c86c7769bd6322b04995"
       ],
       ".variants/bios.rom.2e923467": [
@@ -163738,6 +163892,186 @@
       ],
       "DefaultSounds/TokenInRejected.wav": [
         "37f8acd9778cbc81f11c08f129f3f726cc9964f4"
+      ],
+      "Machines/MSX - C-BIOS/cbios_logo_msx1.rom": [
+        "95fe138745f5e627b021085c7e4629a6dfe6f93a"
+      ],
+      "Machines/MSX - C-BIOS/cbios_main_msx1.rom": [
+        "a49bcf7a5a1115815f730782a1fd7d1c79ce29e7"
+      ],
+      "Machines/MSX2 - C-BIOS/cbios_logo_msx2.rom": [
+        "6fc989ae715fe8492700a9d15934113d910aed36"
+      ],
+      "Machines/MSX2 - C-BIOS/cbios_main_msx2.rom": [
+        "0808d0486f77a44d3aa08cd77828a3748a356b8d"
+      ],
+      "Machines/MSX2 - C-BIOS/cbios_sub.rom": [
+        "565143f7c6fe0ffa12ec3069048113f44759d91a"
+      ],
+      "Machines/MSX2+ - C-BIOS/cbios_sub.rom": [
+        "565143f7c6fe0ffa12ec3069048113f44759d91a"
+      ],
+      "Machines/MSX2+ - C-BIOS/cbios_logo_msx2+.rom": [
+        "6e55cfc48d0d6ee57b041cb09427f614fb6a1910"
+      ],
+      "Machines/MSX2+ - C-BIOS/cbios_main_msx2+.rom": [
+        "c5edc3b289dea120fe60ad38596a51c2e28838aa"
+      ],
+      "Machines/MSX2+ - C-BIOS/cbios_music.rom": [
+        "5c5eb001e6a1fe29edb7abd428a3967bb388e5db"
+      ],
+      "Machines/Shared Roms/ARAB1.ROM": [
+        "0287b2ec897b9196788cd9f10c99e1487d7adbbb"
+      ],
+      "Machines/Shared Roms/ARABIC.rom": [
+        "2c9600c6e0025fee10d249e97448ecaa37e38c42"
+      ],
+      "Machines/Shared Roms/BEERIDE.ROM": [
+        "077bdfff644b931b6a13bab8ab847aee766d163e"
+      ],
+      "Machines/Shared Roms/FMPAC.rom": [
+        "9d789166e3caf28e4742fe933d962e99618c633d"
+      ],
+      "Machines/Shared Roms/GCVMX80.ROM": [
+        "977fed1135b6cc73e765b47f51570fc00acd5b79"
+      ],
+      "Machines/Shared Roms/HANGUL.rom": [
+        "965f4982790f1817bcbabbb38c8777183b231a55"
+      ],
+      "Machines/Shared Roms/MICROSOLDISK.ROM": [
+        "f59d33311c95edc0168445f74eddd8a6772aa6a0"
+      ],
+      "Machines/Shared Roms/MOONSOUND.rom": [
+        "32760893ce06dbe3930627755ba065cc3d8ec6ca"
+      ],
+      "Machines/Shared Roms/MSX2AR.ROM": [
+        "35195ab67c289a0b470883464df66bc6ea5b00d3"
+      ],
+      "Machines/Shared Roms/MSX2AREXT.ROM": [
+        "ebb76f9061e875365023523607db610f2eda1d26"
+      ],
+      "Machines/Shared Roms/MSX2BR.rom": [
+        "9c43106dba3ae2829e9a11dffa9d000ed6d6454c"
+      ],
+      "Machines/Shared Roms/MSX2BREXT.rom": [
+        "4f2a7e0172f0214f025f23845f6e053d0ffd28e8"
+      ],
+      "Machines/Shared Roms/MSX2FR.rom": [
+        "3926cdd91fa89657a811463e48cfbdb350676e51"
+      ],
+      "Machines/Shared Roms/MSX2FREXT.rom": [
+        "792e6b2814ab783d06c7576c1e3ccd6a9bbac34a"
+      ],
+      "Machines/Shared Roms/MSX2G.rom": [
+        "b17d9bea0eb16a1aa2d0ccbd7c9488da9f57698e"
+      ],
+      "Machines/Shared Roms/MSX2GEXT.rom": [
+        "4ab7b2030d022f5486abaab22aaeaf8aa23e05f3"
+      ],
+      "Machines/Shared Roms/MSX2HAN.rom": [
+        "87936f808423dddfd00629056d6807b4be1dc63e"
+      ],
+      ".variants/MSX2.ROM.0081ea0d": [
+        "0081ea0d25bc5cd8d70b60ad8cfdc7307812c0fd"
+      ],
+      "Machines/Shared Roms/MSX2JEXT.rom": [
+        "0fbd45ef3dd7bb82d4c31f1947884f411f1ca344"
+      ],
+      "Machines/Shared Roms/MSX2KR.rom": [
+        "affa3c5cd8db79a1450ad8a7f405a425b251653d"
+      ],
+      "Machines/Shared Roms/MSX2KREXT.rom": [
+        "b6d3649a6647fa9f6bd61efc317485a20901128f"
+      ],
+      ".variants/MSX2P.ROM.e90f80a6": [
+        "e90f80a61d94c617850c415e12ad70ac41e66bb7"
+      ],
+      "Machines/Shared Roms/MSX2PMUS.rom": [
+        "6354ccc5c100b1c558c9395fa8c00784d2e9b0a3"
+      ],
+      "Machines/Shared Roms/MSX2R.rom": [
+        "0f851ee7a1cf79819f61cc89e9948ee72a413802"
+      ],
+      "Machines/Shared Roms/MSX2R2.ROM": [
+        "ebb7eb540a390509edfd36c84288ba85e63f2d1f"
+      ],
+      "Machines/Shared Roms/MSX2REXT.rom": [
+        "03bf6d2ac86f5c9ab618e155442787c700f99fed"
+      ],
+      "Machines/Shared Roms/MSX2SE.rom": [
+        "1b70a195a00b1fc4995766390f39d3ba884b5148"
+      ],
+      "Machines/Shared Roms/MSX2SP.rom": [
+        "4811956f878c3e03da46317f787cdc4bebc86f47"
+      ],
+      "Machines/Shared Roms/MSX2SPEXT.rom": [
+        "1e9a955943aeea9b1807ddf1250ba6436d8dd276"
+      ],
+      "Machines/Shared Roms/MSXAR.ROM": [
+        "5e094fca95ab8e91873ee372a3f1239b9a48a48d"
+      ],
+      "Machines/Shared Roms/MSXBR.rom": [
+        "d6720845928ee848cfa88a86accb067397685f02"
+      ],
+      "Machines/Shared Roms/MSXFR.rom": [
+        "9eaad185efc8e224368d1db4949eb9659c26fb2c"
+      ],
+      "Machines/Shared Roms/MSXG.rom": [
+        "38a645febd0e0fe86d594f27c2d14be995acc730"
+      ],
+      "Machines/Shared Roms/MSXHAN.rom": [
+        "d41676fde0a3047792f93c4a41509b8749e55e74"
+      ],
+      "Machines/Shared Roms/MSXJ.rom": [
+        "df48902f5f12af8867ae1a87f255145f0e5e0774"
+      ],
+      "Machines/Shared Roms/MSXKANJI.rom": [
+        "dcc3a67732aa01c4f2ee8d1ad886444a4dbafe06"
+      ],
+      "Machines/Shared Roms/MSXKR.rom": [
+        "171b587bd5a947a13f3114120b6e7baca3b57d78"
+      ],
+      "Machines/Shared Roms/MSXR.rom": [
+        "4f3114e96d7b892911e3dccf1eece712be26f396"
+      ],
+      "Machines/Shared Roms/MSXSE.ROM": [
+        "87f4d0fa58cfe9cef818a3185df2735e6da6168c"
+      ],
+      "Machines/Shared Roms/MSXSP.rom": [
+        "342e7d4bd86f3351766f460f6de3c89a40791ee0"
+      ],
+      "Machines/Shared Roms/NATIONALDISK.rom": [
+        "78cd7f847e77fd8cd51a647efb2725ba93f4c471"
+      ],
+      "Machines/Shared Roms/NOVAXIS.rom": [
+        "352ec8c99fe1397a88ecb3aee6dbb4d121c818e9"
+      ],
+      "Machines/Shared Roms/PAINT.rom": [
+        "ace202e87337fbc54fea21e22c0b3af0abe6f4ae"
+      ],
+      "Machines/Shared Roms/PANASONICDISK.rom": [
+        "7ed7c55e0359737ac5e68d38cb6903f9e5d7c2b6"
+      ],
+      "Machines/Shared Roms/PHILIPSDISK.rom": [
+        "c3efedda7ab947a06d9345f7b8261076fa7ceeef"
+      ],
+      ".variants/RS232.ROM.4e9384c9": [
+        "4e9384c9d137f0ab65ffc5a78f04cd8c9df6c8b7"
+      ],
+      "Machines/Shared Roms/SUNRISEIDE.rom": [
+        "1c79c8fcfd661394f91be94b218955c84cabd742"
+      ],
+      "Machines/Shared Roms/SWP.rom": [
+        "4b4508131dca6d811694ae6379f41364c477de58"
+      ],
+      "Machines/Shared Roms/XBASIC2.rom": [
+        "47370bec7ca1f0615a54eda548b07fbc0c7ef398"
+      ],
+      "Machines/Shared Roms/nowindDos1.rom": [
+        "1d4c09166755c6569ff0ed3878bbf1b22d7e3864"
+      ],
+      "Machines/Shared Roms/nowindDos2.rom": [
+        "8afd1ec5843ecfdcbff11497fa8c55b870c0c6f5"
       ],
       "roms/5429.vbi": [
         "8060cd4b49052572bb5ec929f8ad21e2addce237"
