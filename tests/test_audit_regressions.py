@@ -926,3 +926,34 @@ class FreshnessGuardMechanics(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ScriptsImportThreeWays(unittest.TestCase):
+    """A script is run directly, run as a module, and imported as a package.
+
+    The three do not agree on what is on the path: only the first form adds
+    the scripts directory. Adding the package marker without the bootstrap
+    made `import scripts.common` fail on the first sibling import it reached.
+    """
+
+    def _run(self, *args: str):
+        import subprocess
+
+        return subprocess.run(
+            [sys.executable, *args],
+            capture_output=True, text=True, cwd=str(ROOT), timeout=300,
+        )
+
+    def test_imported_as_a_package(self):
+        result = self._run(
+            "-c", "import scripts.common, scripts.verify, scripts.generate_pack"
+        )
+        self.assertEqual(result.returncode, 0, result.stderr[-400:])
+
+    def test_run_as_a_module(self):
+        result = self._run("-m", "scripts.scraper.libretro_scraper", "--help")
+        self.assertEqual(result.returncode, 0, result.stderr[-400:])
+
+    def test_run_as_a_script(self):
+        result = self._run("scripts/list_platforms.py")
+        self.assertEqual(result.returncode, 0, result.stderr[-400:])
