@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-12T01:49:04Z",
-  "total_files": 8806,
-  "total_size": 12290606092,
+  "generated_at": "2026-08-12T02:08:56Z",
+  "total_files": 8807,
+  "total_size": 12290606543,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -49494,6 +49494,16 @@
       "crc32": "632b0877",
       "adler32": "fe1dfec6"
     },
+    "721ca59a261d04af13fb84497ad79b6d8c6b7609": {
+      "path": "bios/Other/citron/switch/console.keys",
+      "name": "console.keys",
+      "size": 451,
+      "sha1": "721ca59a261d04af13fb84497ad79b6d8c6b7609",
+      "md5": "3c23d782d19c7b2b37e3e906ca9537c7",
+      "sha256": "b98c31cc764c49b8259142de3ada5bb7440ce0fd11315ae64294ddb0d56a523d",
+      "crc32": "a4d1f88f",
+      "adler32": "960989bf"
+    },
     "bbdbb49a917d14f7a997d327ba40d40c39e606ce": {
       "path": "bios/Other/citron/switch/key_retail.bin",
       "name": "key_retail.bin",
@@ -97811,6 +97821,7 @@
       "acb87b8d453644b45c7fc8c8247744f5": "1fbd073bbd6cb906a0c0678767fab81feb552173",
       "b15266f06fa290f3f444302a74890d9b": "62a877bfffb3e690044520f52120c5cd48b97545",
       "97eb0410ed2002a49ba221c0915d3f58": "b9cfa84916a930d272250130d67ceb822141177d",
+      "3c23d782d19c7b2b37e3e906ca9537c7": "721ca59a261d04af13fb84497ad79b6d8c6b7609",
       "45fd53569f5765eef9c337bd5172f937": "bbdbb49a917d14f7a997d327ba40d40c39e606ce",
       "cf10b154f2e006a9740d7653cfc47cab": "28c7616cd02e4286f9b4c1c4a8b8850832b49fcb",
       "4fe4f6800076ea3d897d4285653447bd": "d4aec4efe1431e56fe52d83baf9118542c525255",
@@ -115251,6 +115262,9 @@
       ],
       "sector0x96.bin": [
         "b9cfa84916a930d272250130d67ceb822141177d"
+      ],
+      "console.keys": [
+        "721ca59a261d04af13fb84497ad79b6d8c6b7609"
       ],
       "key_retail.bin": [
         "bbdbb49a917d14f7a997d327ba40d40c39e606ce"
@@ -134944,6 +134958,7 @@
       "90386ab3": "1fbd073bbd6cb906a0c0678767fab81feb552173",
       "bb56de24": "62a877bfffb3e690044520f52120c5cd48b97545",
       "632b0877": "b9cfa84916a930d272250130d67ceb822141177d",
+      "a4d1f88f": "721ca59a261d04af13fb84497ad79b6d8c6b7609",
       "c6408c16": "bbdbb49a917d14f7a997d327ba40d40c39e606ce",
       "ef6403c5": "28c7616cd02e4286f9b4c1c4a8b8850832b49fcb",
       "58d86a2a": "d4aec4efe1431e56fe52d83baf9118542c525255",
@@ -143752,6 +143767,7 @@
       "5d786f4ef7e59e4ee20c73803753e455ebf812046a930f5ad1437839329e8aca": "1fbd073bbd6cb906a0c0678767fab81feb552173",
       "dbefcc65df7e7e301af3fead2282626574b67bc7d838f45a6c618b74793ac7bc": "62a877bfffb3e690044520f52120c5cd48b97545",
       "82f2730d2c2da3f30165f987fdccac5cbab24b4e5f65c981cd7be6f438e6d9d3": "b9cfa84916a930d272250130d67ceb822141177d",
+      "b98c31cc764c49b8259142de3ada5bb7440ce0fd11315ae64294ddb0d56a523d": "721ca59a261d04af13fb84497ad79b6d8c6b7609",
       "7f9283654ec1097fbdff31de946651ae60c2854afb544abe8963d389639c710e": "bbdbb49a917d14f7a997d327ba40d40c39e606ce",
       "a49928fbac56380917134b54961ece2e90073022f3e04a6023d26cdbbd9c3356": "28c7616cd02e4286f9b4c1c4a8b8850832b49fcb",
       "3b17255d2679d11f79e6cacda86de5f6bc9bb5cddf78cbddc651af03b237317d": "d4aec4efe1431e56fe52d83baf9118542c525255",
@@ -153955,6 +153971,9 @@
       "sysdata/sector0x96.bin": [
         "b9cfa84916a930d272250130d67ceb822141177d"
       ],
+      "switch/console.keys": [
+        "721ca59a261d04af13fb84497ad79b6d8c6b7609"
+      ],
       "switch/key_retail.bin": [
         "bbdbb49a917d14f7a997d327ba40d40c39e606ce"
       ],
@@ -163638,6 +163657,9 @@
       ],
       "x1box/eeprom.bin": [
         "ff3e7eaf715fe5612e46fc984d686ed3b115baef"
+      ],
+      "system/console.keys": [
+        "721ca59a261d04af13fb84497ad79b6d8c6b7609"
       ],
       "system/key_retail.bin": [
         "bbdbb49a917d14f7a997d327ba40d40c39e606ce"
