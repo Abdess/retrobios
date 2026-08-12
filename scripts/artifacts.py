@@ -86,3 +86,17 @@ def artifact_lock(directory: str, exclusive: bool = True):
             yield
         finally:
             fcntl.flock(handle, fcntl.LOCK_UN)
+
+def _build_timestamp(db: dict | None = None) -> str:
+    """Timestamp for generated artifacts.
+
+    Reads the database snapshot the artifact was built from, so rebuilding
+    the same data twice yields the same value. Falls back to the clock only
+    when no database is at hand.
+    """
+    stamp = (db or {}).get("generated_at")
+    if isinstance(stamp, str) and stamp:
+        return stamp
+    from datetime import datetime, timezone
+
+    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
