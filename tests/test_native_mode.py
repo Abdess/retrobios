@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """The native-mode policy verify.py and generate_pack.py must share.
 
-CLAUDE.md states the invariant as "verify.py and generate_pack.py must
-produce identical results; any divergence is a critical bug". It used to rest
-on both files spelling out `mode == "existence"` in their own words. Routing
-both through scripts/nativemode.py makes the rule single-sourced, and these
-tests make the agreement checkable instead of reviewable.
+verify.py and generate_pack.py must reach the same verdict on the same file:
+a pack and a coverage report that disagree describe different collections.
+The rule used to rest on both files spelling out `mode == "existence"` in
+their own words. Routing both through scripts/nativemode.py single-sources
+it, and these tests make the agreement checkable instead of reviewable.
 """
 
 from __future__ import annotations

@@ -54,7 +54,8 @@ class ProtectedDirectories(_Bios):
     """RPG Maker and ScummVM reference files by exact name and path.
 
     Collapsing two identical copies there breaks the reference that the
-    removed path served, which is why CLAUDE.md marks them NODEDUP.
+    removed path served, which is why those directories are excluded from
+    deduplication.
     """
 
     def test_rpg_maker_copies_both_survive(self):
