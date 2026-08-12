@@ -678,15 +678,15 @@ def _find_best_variant(
     """Search for a repo file that passes emulator validation.
 
     Two-pass search:
-    1. Hash lookup — use the emulator's expected hashes (sha1, md5, sha256,
+    1. Hash lookup, using the emulator's expected hashes (sha1, md5, sha256,
        crc32) to find candidates directly in the DB indexes.  This finds
        variants stored under different filenames (e.g. megacd2_v200_eu.bin
        for bios_CD_E.bin).
-    2. Name lookup — check all files sharing the same name (aliases,
+    2. Name lookup, checking all files sharing the same name (aliases,
        .variants/ with name-based suffixes).
 
     If any candidate on disk passes ``check_file_validation``, the
-    discrepancy is suppressed — the repo has what the emulator needs.
+    discrepancy is suppressed: the repo has what the emulator needs.
     """
     fname = file_entry.get("name", "")
     if not fname or fname not in validation_index:

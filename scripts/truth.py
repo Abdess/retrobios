@@ -49,7 +49,7 @@ def _enrich_hashes(entry: dict, db: dict) -> None:
 
     The profile's hashes come from the emulator source code (ground truth).
     Any hash of a given file set of bytes is a projection of that same
-    ground truth — sha1, md5, crc32 all identify the same bytes. If the
+    ground truth. sha1, md5 and crc32 all identify the same bytes. If the
     profile has ONE ground-truth hash, the DB can supply its siblings.
 
     Lookup order (all are hash-anchored, never name-based):
@@ -64,7 +64,7 @@ def _enrich_hashes(entry: dict, db: dict) -> None:
     Multi-hash entries (lists of accepted variants) are left untouched to
     preserve variant information.
     """
-    # Skip multi-hash entries — they express ground truth as "any of these N
+    # Skip multi-hash entries. They express ground truth as "any of these N
     # variants", enriching with a single sibling would lose that information.
     for h in ("sha1", "md5", "crc32"):
         if isinstance(entry.get(h), list):
@@ -388,7 +388,7 @@ def generate_platform_truth(
 
     # Drop files with no exploitable data AFTER all cores have contributed.
     # A file declared by one core without hash/size/path may be enriched by
-    # another core that has the same entry with data — the filter must run
+    # another core that has the same entry with data, so the filter must run
     # once at the end, not per-core at creation time.
     for sys_data in systems.values():
         files_list = sys_data.get("files", [])
@@ -437,7 +437,7 @@ def _match_renames(
     """
     # Hash-based fallback: detect platform renames (e.g. Batocera ROM → ROM1)
     # If an unmatched scraped file shares a hash with an unmatched truth file,
-    # it's the same file under a different name — a platform rename, not a gap.
+    # it's the same file under a different name: a platform rename, not a gap.
     rename_matched_truth: set[str] = set()
     rename_matched_scraped: set[str] = set()
 
@@ -457,7 +457,7 @@ def _match_renames(
                     continue
                 t_entry = truth_hash_index.get(s_val.lower())
                 if t_entry is not None:
-                    # Rename detected — count as matched
+                    # Rename detected. Count as matched
                     rename_matched_truth.add(t_entry["name"].lower())
                     rename_matched_scraped.add(s_key)
                     break

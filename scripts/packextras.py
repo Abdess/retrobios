@@ -148,7 +148,7 @@ def _agnostic_scan_extras(
     """
     extras: list[dict] = []
     files_db = db.get("files", {})
-    # Third pass: agnostic scan — for filename-agnostic cores, include all
+    # Third pass: the agnostic scan. For filename-agnostic cores, include all
     # DB files matching the system path prefix and size criteria.
     for emu_name, profile in sorted(profiles.items()):
         if profile.get("type") in ("launcher", "alias"):

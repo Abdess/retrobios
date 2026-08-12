@@ -171,7 +171,7 @@ def load_platform_config(platform_name: str, platforms_dir: str = "platforms") -
                 config["cores"] = reg_cores
 
         # Merge all registry fields absent from config (except cores,
-        # handled above with union logic). No hardcoded list — any field
+        # handled above with union logic). No hardcoded list: any field
         # added to the registry is automatically available in the config.
         for key, val in reg_entry.items():
             if key != "cores" and key not in config:

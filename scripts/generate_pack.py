@@ -974,7 +974,7 @@ def generate_pack(
           # Core extras: _collect_emulator_extras already adjusted
           # destinations for slug-based platforms.  Apply the effective
           # prefix (base_dest, or inferred from YAML when base_dest is
-          # empty — e.g. RetroDECK infers "bios").
+          # empty, as RetroDECK infers "bios").
           extras_pfx = _detect_extras_prefix(config, base_dest)
           if extras_pfx:
               if not dest.startswith(f"{extras_pfx}/"):

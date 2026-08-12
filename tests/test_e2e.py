@@ -700,7 +700,7 @@ class TestE2E(unittest.TestCase):
             yaml.dump(emu_subdir, fh)
 
         # Emulator whose file is declared by platform under a different name
-        # (e.g. gsplus ROM vs Batocera ROM1) — hash-based matching should resolve
+        # (e.g. gsplus ROM vs Batocera ROM1): hash-based matching should resolve
         emu_renamed = {
             "emulator": "TestRenamed",
             "type": "standalone",
@@ -712,7 +712,7 @@ class TestE2E(unittest.TestCase):
         with open(os.path.join(self.emulators_dir, "test_renamed.yml"), "w") as fh:
             yaml.dump(emu_renamed, fh)
 
-        # Agnostic profile (bios_mode: agnostic) — skipped by find_undeclared_files
+        # Agnostic profile (bios_mode: agnostic), skipped by find_undeclared_files
         emu_agnostic = {
             "emulator": "TestAgnostic",
             "type": "standalone",
@@ -4278,7 +4278,7 @@ class TestE2E(unittest.TestCase):
         }
 
         result = diff_platform_truth(truth, scraped)
-        # ROM and ROM1 share the same hash — rename, not missing+phantom
+        # ROM and ROM1 share the same hash: a rename, not missing plus phantom
         self.assertEqual(result["summary"]["total_missing"], 0)
         self.assertEqual(result["summary"]["total_extra_phantom"], 0)
 

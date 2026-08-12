@@ -2298,6 +2298,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--changed-only", action="store_true")
     parser.add_argument("--json", action="store_true", dest="as_json")
     parser.add_argument("--markdown", action="store_true")
+    parser.add_argument(
+        "--report-dir",
+        default="reports",
+        help="directory for the markdown report (default: reports)",
+    )
     parser.add_argument("--fetch-plan", action="store_true")
     parser.add_argument("--full-diff", action="store_true")
     parser.add_argument("--ref", help="restrict --full-diff to one cited path")
@@ -2617,7 +2622,7 @@ def main() -> None:
         print(json.dumps([report_to_dict(r) for r in reports], indent=2))
         return
     if args.markdown:
-        target = Path("claudedocs") / f"profile-sync-{date.today().isoformat()}.md"
+        target = Path(args.report_dir) / f"profile-sync-{date.today().isoformat()}.md"
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(format_markdown(reports), encoding="utf-8")
         print(f"written: {target}")
