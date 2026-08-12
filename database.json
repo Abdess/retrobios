@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-12T04:13:01Z",
-  "total_files": 8891,
-  "total_size": 12299364910,
+  "generated_at": "2026-08-12T04:14:50Z",
+  "total_files": 8892,
+  "total_size": 12302132283,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -51811,6 +51811,16 @@
       "crc32": "c4207191",
       "adler32": "66495e5f"
     },
+    "15c230c22dd61bbf35c979902e7f9dd1f543f856": {
+      "path": "bios/Other/groovymame/history/scores3.htm",
+      "name": "scores3.htm",
+      "size": 2767373,
+      "sha1": "15c230c22dd61bbf35c979902e7f9dd1f543f856",
+      "md5": "9ca4bfb05c82b470916c2af93fb0bf1f",
+      "sha256": "e3510367e5819b7e44b679d1bf0575b95520414fdd474c7e405a3a5224ccd012",
+      "crc32": "a37faf7f",
+      "adler32": "c521c93f"
+    },
     "8881159097cd92f67bfec5250bc061626d87cf04": {
       "path": "bios/Other/groovymame/history/sysinfo.dat",
       "name": "sysinfo.dat",
@@ -98899,6 +98909,7 @@
       "8171099f59d99b7a6dd0809d952075ec": "2e100cdd8b2d5492ff4ef8f1ba487364aabc687f",
       "c1ba1cb2b6b2662f214ef078f7c0eec2": "633c7a594686935dc2ae70632336f15c73ddbafa",
       "ac347847f656ec26a554fd6f86dd10ea": "02f515deea7f3fc513496b9218244186e5cc9a61",
+      "9ca4bfb05c82b470916c2af93fb0bf1f": "15c230c22dd61bbf35c979902e7f9dd1f543f856",
       "2f355f03254e572dd32e6fe7232f5ccc": "8881159097cd92f67bfec5250bc061626d87cf04",
       "0466dd6c19ec9c1785e8aadfc8c5269e": "f957c9aedd8ea478dafd98babe41faec7f339d8a",
       "8da4d816604e9b9d5aa69d1fd395a48e": "8b6e63f86dfd31821df210f5da73f8428b4fff15",
@@ -116815,6 +116826,9 @@
       ],
       "messinfo.dat": [
         "02f515deea7f3fc513496b9218244186e5cc9a61"
+      ],
+      "scores3.htm": [
+        "15c230c22dd61bbf35c979902e7f9dd1f543f856"
       ],
       "sysinfo.dat": [
         "8881159097cd92f67bfec5250bc061626d87cf04"
@@ -136325,6 +136339,7 @@
       "25cfd813": "2e100cdd8b2d5492ff4ef8f1ba487364aabc687f",
       "f70f6180": "633c7a594686935dc2ae70632336f15c73ddbafa",
       "c4207191": "02f515deea7f3fc513496b9218244186e5cc9a61",
+      "a37faf7f": "15c230c22dd61bbf35c979902e7f9dd1f543f856",
       "b8f57432": "8881159097cd92f67bfec5250bc061626d87cf04",
       "b12ee192": "f957c9aedd8ea478dafd98babe41faec7f339d8a",
       "4e78e0ae": "8b6e63f86dfd31821df210f5da73f8428b4fff15",
@@ -145218,6 +145233,7 @@
       "208176552a7d6703be6cd2539c96d2136d37bfc9c1b21a93b4a81a032339faf4": "2e100cdd8b2d5492ff4ef8f1ba487364aabc687f",
       "9f3d415c99c2230fd4cc2c3771d0fcb33196e1ed9435556c9fa327c42983ab35": "633c7a594686935dc2ae70632336f15c73ddbafa",
       "9a5d4085d177910f48850672bc2bc8436c5558171eb9e06c711fabed39e485c0": "02f515deea7f3fc513496b9218244186e5cc9a61",
+      "e3510367e5819b7e44b679d1bf0575b95520414fdd474c7e405a3a5224ccd012": "15c230c22dd61bbf35c979902e7f9dd1f543f856",
       "cd260d1c420dec2ad2d9511b522d88a72f820d2ca2ff63ded2cd95854d4748dd": "8881159097cd92f67bfec5250bc061626d87cf04",
       "21c6207d02009a78767783679b6e74da3d4ca6e077c4808007f79dfe083d7489": "f957c9aedd8ea478dafd98babe41faec7f339d8a",
       "3ae2f3eae3917e0130d1e1a5c8e1c5df207ea31703646a174d98f7be9a769495": "8b6e63f86dfd31821df210f5da73f8428b4fff15",
@@ -155685,6 +155701,9 @@
       ],
       "history/messinfo.dat": [
         "02f515deea7f3fc513496b9218244186e5cc9a61"
+      ],
+      "history/scores3.htm": [
+        "15c230c22dd61bbf35c979902e7f9dd1f543f856"
       ],
       "history/sysinfo.dat": [
         "8881159097cd92f67bfec5250bc061626d87cf04"
