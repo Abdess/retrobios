@@ -1,0 +1,168 @@
+emulator: "NES.emu"
+type: standalone
+core_classification: community_fork
+source: "https://github.com/Rakashazi/emu-ex-plus-alpha"
+upstream: "https://github.com/TASEmulators/fceux"
+profiled_date: "2026-08-12"
+source_commit: "1c12fac5ce49badaadff2e2f210dcc30b89f4943"
+upstream_commit: "d339f1fa0cd8b69cc637a0de3fb3f04cb28748ea"
+core_version: "1.5.85"
+display_name: "Nintendo - NES / Famicom (NES.emu)"
+mode: standalone
+cores:
+  - "nes-emu"
+  - "NES.emu"
+  - "NES-EMU"
+systems:
+  - nintendo-nes
+  - nintendo-fds
+
+notes: |
+  Member of the EX Emulator series by Robert Broglia, which targets Android and
+  Linux (README.md:1,3-4,12-13) and keeps iOS and Pandora build shortcuts in the
+  tree (NES.emu/ios.mk, NES.emu/pandora.mk). Published as com.explusalpha.NesEmu
+  (NES.emu/metadata/conf.mk:2,4,6,7) and reached by ES-DE through its NES-EMU
+  find rule, which only the Android rule set carries. FCEUX 2.7.0 is vendored
+  under NES.emu/src/fceu (NES.emu/src/fceu/version.h:63-65,
+  NES.emu/src/main/AppMeta.cc:26), synced at FCEUX git d339f1f of 2025.11.11 per
+  the app changelog, and driven by the app's own video, audio, input
+  and save layers. The Qt and Windows drivers, netplay, PNG snapshots, WAV
+  logging and FCEUX's own config parser are left out of the build
+  (NES.emu/src/CMakeLists.txt:8-62), and the file name types for movies,
+  snapshots and on-disk states return an empty string
+  (NES.emu/src/main/FceuApi.cc:367-379). Content is read from
+  .nes, .unf, .unif, .fds and .nsf files (NES.emu/metadata/conf.mk:5,
+  NES.emu/src/main/system.ccm:108-118, NES.emu/src/main/AppMeta.cc:34); an
+  archive is opened by the framework, which keeps the first entry passing that
+  same filter (EmuFramework/src/EmuSystem.cc:394-412).
+
+  The Disk System BIOS is the one file the user has to supply, and only for .fds
+  content. Its location is an option rather than a fixed name
+  (NES.emu/src/main/system.ccm:64,143, NES.emu/src/main/options.cc:64-65,112),
+  set through a selector that accepts a name ending .rom or .bin caselessly, or
+  an archive holding such an entry (NES.emu/src/main/EmuMenuViews.cc:609-624,
+  NES.emu/src/main/system.ccm:107, NES.emu/src/main/FceuApi.cc:233-254). The
+  image must measure exactly 8192 bytes; a shorter or longer one is refused as
+  "Incompatible FDS BIOS" and an unset path as "No FDS BIOS set"
+  (NES.emu/src/main/FceuApi.cc:227-231,244-248,257-263). Either answer makes the
+  loader free the disk data and return an error, so the content never runs
+  (NES.emu/src/fceu/fds.cpp:915-926, NES.emu/src/main/Main.cc:317-322). The
+  bytes are mapped as PRG bank 0 and are never hashed
+  (NES.emu/src/fceu/fds.cpp:916-917).
+
+  The Default Palette option selects FCEUX's built-in table, one of six palettes
+  read from the palette directory of the application bundle, or a .pal file the
+  user picks (NES.emu/src/main/EmuMenuViews.cc:311-315,318,336-361,
+  NES.emu/src/main/Main.cc:149-175, NES.emu/src/main/options.cc:30). The loader
+  reads up to 512 three byte entries, skips a file carrying fewer than 64 colors
+  and generates the deemphasis rows for any count other than 512
+  (NES.emu/src/main/Main.cc:134-147). Two further palette names are declared and
+  never wired to a menu item or shipped as assets
+  (NES.emu/src/main/EmuMenuViews.cc:316-317). A .pal named after the content in
+  the palettes directory overrides the default at load time
+  (NES.emu/src/main/FceuApi.cc:365-366, NES.emu/src/fceu/fceu.cpp:522,
+  NES.emu/src/fceu/palette.cpp:318-338).
+
+  FCEU_MakeFName maps the Game Genie ROM to gg.rom beside the content
+  (NES.emu/src/main/FceuApi.cc:361-362), but the only site that opens it sits
+  behind FSettings.GameGenie (NES.emu/src/fceu/cart.cpp:351-368,
+  NES.emu/src/fceu/fceu.cpp:509-511). FCEUI_Initialize clears that structure
+  (NES.emu/src/fceu/fceu.cpp:601,613) and nothing sets the flag: the app declares
+  no option for it (NES.emu/src/main/system.ccm:62-76,
+  NES.emu/src/main/options.cc:58-142) and the single call site of
+  FCEUI_SetGameGenie passes false (NES.emu/src/fceu/fceu.cpp:513,1218-1219). The
+  file is never read.
+
+  Per content the app writes and reads back files named after the ROM: a .sav for
+  cartridges wired to a battery (NES.emu/src/fceu/cart.cpp:536-586,
+  NES.emu/src/main/Main.cc:98-120), a .fds.sav holding the modified disk
+  (NES.emu/src/fceu/fds.cpp:1011-1040), .fcs states
+  (NES.emu/src/main/Main.cc:78-96), a .cht cheat list under the cheats path
+  (NES.emu/src/fceu/cheat.cpp:200-227,324-343, NES.emu/src/main/Cheats.cc:42-50)
+  and NesEmu.config (NES.emu/src/main/AppMeta.cc:27). An .ips named after the
+  content in the patches path is applied to the image as it loads
+  (NES.emu/src/main/Main.cc:312-316). The app declares no bundled content, the
+  framework definition defaulting to an empty span
+  (EmuFramework/src/AppMeta.cc:40,
+  EmuFramework/include/emuframework/AppMeta.hh:66-68).
+
+files:
+  - name: "disksys.rom"
+    system: nintendo-fds
+    required: true
+    size: 8192
+    validation: [size]
+    description: "Famicom Disk System BIOS"
+    note: >-
+      Read through a path the user sets, so no name is compiled in; the selector
+      accepts any name ending .rom or .bin caselessly, or an archive whose first
+      entry with one of those extensions is used. The size must be exactly 8192
+      bytes, and a mismatch or an unset path ends the load of any .fds content.
+      The image is never hashed.
+    source_ref: "NES.emu/src/main/FceuApi.cc:221-265, NES.emu/src/fceu/fds.cpp:915-926, NES.emu/src/main/EmuMenuViews.cc:609-624, NES.emu/src/main/system.ccm:107"
+
+  - name: "Digital Prime (FBX).pal"
+    path: "palette/Digital Prime (FBX).pal"
+    system: nintendo-nes
+    required: false
+    bundled: true
+    category: game_data
+    size: 192
+    sha1: "e37da23fa2c644a40fb6c08dd885a96fd65bf4e5"
+    description: "Default Palette option, 64 colors"
+    source_ref: "NES.emu/src/main/EmuMenuViews.cc:311,339, NES.emu/src/main/Main.cc:134-147,159-163"
+
+  - name: "Smooth V2 (FBX).pal"
+    path: "palette/Smooth V2 (FBX).pal"
+    system: nintendo-nes
+    required: false
+    bundled: true
+    category: game_data
+    size: 192
+    sha1: "1e1993f917ec098268a0af15e79b1002bf425e47"
+    description: "Default Palette option, 64 colors"
+    source_ref: "NES.emu/src/main/EmuMenuViews.cc:312,340, NES.emu/src/main/Main.cc:134-147,159-163"
+
+  - name: "Magnum (FBX).pal"
+    path: "palette/Magnum (FBX).pal"
+    system: nintendo-nes
+    required: false
+    bundled: true
+    category: game_data
+    size: 192
+    sha1: "04d7490bb3a284ab266a555c02526f6743756661"
+    description: "Default Palette option, 64 colors"
+    source_ref: "NES.emu/src/main/EmuMenuViews.cc:313,341, NES.emu/src/main/Main.cc:134-147,159-163"
+
+  - name: "Classic (FBX).pal"
+    path: "palette/Classic (FBX).pal"
+    system: nintendo-nes
+    required: false
+    bundled: true
+    category: game_data
+    size: 192
+    sha1: "37027d92e1015b82a7dc5c43e9f1649a961577ab"
+    description: "Default Palette option, 64 colors"
+    source_ref: "NES.emu/src/main/EmuMenuViews.cc:314,342, NES.emu/src/main/Main.cc:134-147,159-163"
+
+  - name: "Wavebeam.pal"
+    path: "palette/Wavebeam.pal"
+    system: nintendo-nes
+    required: false
+    bundled: true
+    category: game_data
+    size: 192
+    sha1: "a33356beefeb0b110464e7d77b3238fc1fb90230"
+    description: "Default Palette option, 64 colors"
+    source_ref: "NES.emu/src/main/EmuMenuViews.cc:315,343, NES.emu/src/main/Main.cc:134-147,159-163"
+
+  - name: "Five Reality.pal"
+    path: "palette/Five Reality.pal"
+    system: nintendo-nes
+    required: false
+    bundled: true
+    category: game_data
+    size: 192
+    sha1: "5008c37920c614e8b471b45ac23118d00162b804"
+    description: "Default Palette option, 64 colors"
+    source_ref: "NES.emu/src/main/EmuMenuViews.cc:318,344, NES.emu/src/main/Main.cc:134-147,159-163"

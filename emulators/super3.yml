@@ -1,0 +1,189 @@
+emulator: SUPER3
+type: standalone
+core_classification: community_fork
+source: "https://github.com/izzy2lost/Super3"
+upstream: "https://github.com/trzy/Supermodel"
+based_on: "Supermodel 0.3a through the arm branch of DirtBagXon/model3emu-code-sinden at fa1e305"
+author: "izzy2lost"
+profiled_date: "2026-08-12"
+source_commit: "b435c80a88fd496d4a9858be0681260e84342c85"
+core_version: "1.2.1"
+display_name: "Sega - Model 3 (SUPER3)"
+verification: existence
+cores:
+  - super3
+  - SUPER3
+  - com.izzy2lost.super3
+systems:
+  - sega-model3
+mode: standalone
+
+notes: |
+  Sega Model 3 emulator for Android, package com.izzy2lost.super3, versionName 1.2.1
+  versionCode 22, arm64-v8a alone, minSdk 26 and targetSdk 36, GPL-3.0 with the tree in
+  the open. A Kotlin front end carries the launcher, setup wizard, ini editor and save
+  state browser over the Supermodel core, built through CMake against SDL2 with an
+  OpenGL ES presenter of its own. The core states its own lineage: SUPERMODEL_VERSION
+  reads "0.3a-fa1e305-arm-mm DirtBagXon (Sinden)", and the app names both sources it
+  draws on, so the emulator is Supermodel 0.3a as carried by the arm branch of
+  DirtBagXon/model3emu-code-sinden at fa1e305, "Add ManyMouse License" of 2025-07-28.
+  No upstream commit is pinned because neither this repo nor that fork shares git
+  history with trzy/Supermodel: both report themselves as independent repositories and
+  a comparison against trzy/Supermodel has no merge base. ES-DE reaches the app through
+  its SUPER3 find rule, on Android alone among the seven find rule sets, starting
+  MainActivity with an intent VIEW whose data is the storage framework URI of the game.
+  ref: android/app/build.gradle.kts:22-36, Src/Version.h:32, README.md:3-4,
+       android/app/src/main/java/com/izzy2lost/super3/MainActivity.kt:453-463,
+       es-de resources/systems/android/es_find_rules.xml:552-557,
+       es-de resources/systems/android/es_systems.xml:1091
+
+  The Android build compiles a subset of the tree, which decides where a load path can
+  be read. The CMake source list globs Src/ and then drops all of Src/OSD/ and all of
+  Src/Graphics/ twice over, by regex and again by an explicit removal loop, adding back
+  only a named list of Src/Graphics/New3D files. So the desktop SDL frontend is absent
+  from this binary: Src/OSD/SDL/Main.cpp holds the command line and its own config file
+  handling, Src/OSD/SDL/SDLInputSystem.cpp its own controller database call, and
+  Src/Graphics/Shader.cpp the loader for external GLSL files, and none of the three is
+  built here. The paths below are the ones this build actually runs.
+  ref: android/app/src/main/cpp/CMakeLists.txt:32-91, 135-158
+
+  One directory holds everything the emulator reads. MainActivity hands the native side
+  a user data root of getExternalFilesDir(null)/super3, so
+  /storage/emulated/0/Android/data/com.izzy2lost.super3/files/super3, and
+  SetUserDataRoot creates it and changes into it, which is what makes the relative names
+  below resolve. AssetInstaller copies five trees out of the package assets into that
+  root before every launch, Assets, Config, GraphicsAnalysis, NVRAM and Saves, never
+  overwriting a file that is already there, so the emulator always finds its own
+  configuration whatever the user has done. The native entry point also probes
+  <root>/super3/Games.xml over external storage, internal storage, /storage/emulated/0
+  and /sdcard when no path is passed, but the front end always passes one, along with
+  the ROM path, the game name and the user data root as its four arguments.
+  ref: android/app/src/main/java/com/izzy2lost/super3/MainActivity.kt:501-503,
+       1155-1161, 1209-1222,
+       android/app/src/main/java/com/izzy2lost/super3/AssetInstaller.kt:7-18,
+       android/app/src/main/cpp/native-lib.cpp:247-260, 1080-1117,
+       android/app/src/main/java/com/izzy2lost/super3/Super3Activity.kt:99-111
+
+  Model 3 boards carry no shared system BIOS and this emulator loads none. Every byte
+  the machine needs comes out of the per-game MAME format zip: the program ROMs, the
+  video ROMs, the sound program and samples, and where the board has them the drive
+  board program, the MPEG program and the MPEG music, all declared as regions of one
+  game in Games.xml. The set is identified by the basename of the zip, not by a scan,
+  and the ErrorLog asks for an appropriately named archive when no game answers to that
+  name; the individual members are then matched by name or by crc32. A child set names a
+  parent and the loader opens <same directory>/<parent>.zip for the rest of its regions,
+  which the front end prepares for by walking the parent chain and staging every zip it
+  names into romcache, refusing to start and naming what is missing when one cannot be
+  found. This Games.xml declares 63 games with 41 of those lines naming a parent, every
+  named parent itself a game, and not one non-game or BIOS set among them.
+  ref: Src/GameLoader.cpp:873-928, 882-890, 913-921, 148-153,
+       Src/Model3/Model3.cpp:2919-2933,
+       android/app/src/main/java/com/izzy2lost/super3/MainActivity.kt:1163-1208,
+       Config/Games.xml
+
+  Three files ship inside the package and are read from Config/ at runtime. Games.xml is
+  the one the emulator cannot do without: InitLoader tests for it and returns failure
+  when it is absent, which leaves the loading thread in its failed state and no game
+  running. Supermodel.ini and gamecontrollerdb.txt are both skipped when they are
+  missing, on built-in defaults in the first case and SDL's built-in controller mappings
+  in the second. Nothing about any of the three is verified: no length is compared and
+  no hash is computed, the only tests being that the file is there and that it parses.
+  ref: android/app/src/main/cpp/native-lib.cpp:531-538, 568-580, 1123-1135,
+       android/app/src/main/cpp/android_input_system.cpp:291-311,
+       Src/Util/ConfigBuilders.cpp:60-73, 134-142
+
+  Two files that AssetInstaller lands are read by nothing in this build.
+  Config/Music.xml declares substitute MPEG tracks for DSB1 and DSB2 games, and neither
+  its own name nor the attributes it is written in appear anywhere in the tree, nor any
+  handling of mp2 or mp3 files: the DSB reads its music from the mpeg_music region of
+  the game zip and from nowhere else. Assets/p1crosshair.bmp and Assets/p2crosshair.bmp
+  are documented by the inherited Manual for a crosshair-style option that does not
+  exist here, and the tree holds no bitmap reader at all, Src/Util/BMPFile.h being a
+  writer; the Crosshairs setting is a two bit mask and the presenter draws the crosshair
+  as geometry. A build that wires either feature up would turn these into files to
+  collect.
+  ref: android/app/src/main/assets/Config/Music.xml, Manual.txt:99-102,
+       Src/Model3/Model3.cpp:2932, Src/Util/BMPFile.h:391,
+       android/app/src/main/cpp/native-lib.cpp:763-772, 909-976,
+       android/app/src/main/cpp/gles_presenter.cpp:364-369
+
+  The rest of the tree is written, not read. NVRAM/<game>.nv is created on exit and read
+  back on the next launch of the same game, Saves/ holds the ten save state slots and
+  their screenshots, romcache/ holds the staged copies of the user's own archives, and
+  Flyers/ is filled on request from the GitHub contents API of izzy2lost/Model3flyers
+  for the artwork in the launcher list. An optional sync copies NVRAM, Saves, Config and
+  Flyers between the internal root and a folder the user picks in the system picker.
+  ref: android/app/src/main/cpp/native-lib.cpp:262-313, 793-797,
+       android/app/src/main/java/com/izzy2lost/super3/FlyerRepoSync.kt:16-46,
+       android/app/src/main/java/com/izzy2lost/super3/UserDataSync.kt:10-25
+
+files:
+  - name: Games.xml
+    path: "Config/Games.xml"
+    required: true
+    bundled: true
+    unsourceable: "Installed from the package assets on every launch and never obtained separately"
+    size: 154928
+    md5: fc26e2deaa532794d91fe33ca73f8e2c
+    sha1: b41150f8cff409dde89939b80a980a20e853df0b
+    crc32: "b2ea6948"
+    description: "Game and ROM set definitions"
+    note: >-
+      The ROM set database, 63 games, giving for each one the regions to fill and the
+      name and crc32 of every file that fills them, the stepping, the PCI bridge, the
+      encryption key, the drive board, net board and MPEG board the machine carries, the
+      patches to apply and the parent set to fall back on. Handed to the GameLoader
+      constructor, parsed as XML, and a game load is refused outright when the file is
+      not there. The Kotlin launcher parses the same copy out of the assets for its game
+      list and its per-game input hints. Byte identical to the copy in the repository
+      root Config directory.
+    source_ref: "android/app/src/main/cpp/native-lib.cpp:568-580, 1096-1114, Src/GameLoader.cpp:492-502, 930-933, Src/Util/ConfigBuilders.cpp:60-73, android/app/src/main/java/com/izzy2lost/super3/GameXml.kt:23-24, android/app/src/main/java/com/izzy2lost/super3/MainActivity.kt:1211"
+
+  - name: Supermodel.ini
+    path: "Config/Supermodel.ini"
+    required: false
+    bundled: true
+    unsourceable: "Installed from the package assets on every launch and rewritten in place by the app"
+    size: 6887
+    md5: a468e45e005caa89356bd67b70e0d37d
+    sha1: 6c38cc6fba14863bfbdc730e53d3274fd79a4544
+    crc32: "2d012d14"
+    description: "Input and per-game settings"
+    note: >-
+      Read after the built-in defaults have been applied, the Global section first and
+      then the section named after the loaded game, each merged over what is already
+      set; a file that is absent or unparseable leaves the defaults standing. The hashes
+      are those of the copy in the package assets, which is not the 13290 byte copy in
+      the repository root Config directory: the Android build ships its own. They
+      describe the file as shipped, since AssetInstaller rewrites it on first run,
+      substituting the Android control defaults, and the in-app editor writes per-game
+      keys such as LegacyReal3DTiming afterwards.
+    source_ref: "android/app/src/main/cpp/native-lib.cpp:531-566, 620-621, Src/Util/ConfigBuilders.cpp:134-142, android/app/src/main/java/com/izzy2lost/super3/AssetInstaller.kt:17, 43-159, android/app/src/main/java/com/izzy2lost/super3/Super3Activity.kt:880-884"
+
+  - name: gamecontrollerdb.txt
+    path: "Config/gamecontrollerdb.txt"
+    required: false
+    bundled: true
+    unsourceable: "Installed from the package assets on every launch and never obtained separately"
+    size: 587398
+    md5: e8da2d033e90d6fefa884ee78690b4e0
+    sha1: cb6be8206308470ecaa8b9cc882d82abe0ef3562
+    crc32: "94468d79"
+    description: "SDL controller mapping database"
+    note: >-
+      Opened once, on the first pad the input system sees, and handed to SDL as mappings
+      to add. The name is fixed unless the ini key SDLGameControllerDB carries a path of
+      its own, and a handle that cannot be opened is passed over, leaving SDL on its
+      built-in mappings. Byte identical to the copy in the repository root Config
+      directory.
+    source_ref: "android/app/src/main/cpp/android_input_system.cpp:291-311, 207-213"
+
+exclusion_note: >
+  No BIOS or firmware file is loaded. Sega Model 3 hardware has no shared system ROM:
+  each board carries its own program, video, sound and where fitted drive board, MPEG
+  program and MPEG music ROMs, and every one of them reaches the emulator as a region of
+  a per-game MAME format zip declared in Games.xml, a child set drawing its remaining
+  regions from its parent's zip in the same directory. The three files listed above are
+  the emulator's own configuration, reinstalled from the package assets before every
+  launch. Config/Music.xml and the two crosshair bitmaps in Assets are shipped by the
+  package as well and read by no code in this build.

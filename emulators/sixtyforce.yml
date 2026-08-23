@@ -1,0 +1,139 @@
+emulator: sixtyforce
+type: standalone
+core_classification: embedded_hle
+source: "https://sixtyforce.com/"
+upstream: "https://sixtyforce.com/"
+profiled_date: "2026-08-12"
+core_version: "2.0.2"
+display_name: "Nintendo - Nintendo 64 (sixtyforce)"
+cores:
+  - sixtyforce
+systems:
+  - nintendo-64
+  - nintendo-64dd
+mode: standalone
+
+notes: |
+  Nintendo 64 emulator for macOS by Gerrit Goossen, closed source since its first
+  release in 2001. ES-DE runs it from
+  /Applications/sixtyforce.app/Contents/MacOS/sixtyforce and passes the ROM path.
+  Everything below is read from the distributed 2.0.2 build (CFBundleVersion 87,
+  single x86_64 slice, macOS 10.9 or later); addresses are the virtual addresses
+  of Contents/MacOS/sixtyforce. None of it appears on the site, in the help pages
+  or in the release notes.
+
+  The boot chain reads nothing. There is no PIF ROM and no CIC image: the boot
+  writes the constants for the CIC itself, dispatching on a number in the 6101 to
+  7106 range kept in the machine state (0x100071dbf-0x100071e2c). That number is
+  what Overrides.plist gives for the game, and when the table has no entry the
+  code sums the ROM's own IPL3 region instead (0x100071c78-0x100071c8f,
+  0x100071e31-0x100071e94). The country code byte of the cartridge header takes
+  the PAL branch for D, F, I, P, S, U, X and Y (0x100071d84-0x100071da3).
+
+  Every primitive the binary can open a file with (URLForResource:withExtension:,
+  initWithContentsOfURL:options:error:, initWithFileURL:,
+  fileHandleForReadingFromURL:error:, the two directory enumerators, mmap)
+  resolves to three sources: the ROM the user picks, the five bundle resources
+  below, and the app's own saves.
+
+  A ROM is read in any of three byte orders. The first word decides:
+  0x80371240, 0x80371241 and the 64DD IPL word 0x80270740 are big endian and get
+  a 32 bit reversal, 0x37804012, 0x37804112 and 0x27804007 are word swapped and
+  get a 16 bit reversal, 0x40123780, 0x41123780 and 0x40072780 are already in the
+  internal little endian word order and pass through. A gzip stream or a 60gz
+  container is decompressed first, and the length has to be a multiple of four
+  (0x1000ad5c0-0x1000ad6ce, SFGZFile at 0x1000ae2d0). Anything else fails with
+  "Error Loading Cartridge Format".
+
+  64DD support stops at the IPL image. HardwareState carries a cartridge slot
+  (pointer at +0x120, length at +0x128) and an IPL slot (+0x138, +0x140) and no
+  disk slot; the document types are n64, v64 and z64, and the only occurrences of
+  the letters ndd in the whole binary are the two NDDJ immediates in the loader.
+  Loading the IPL while a cartridge is open leaves the cartridge in place.
+
+  Autosaves, game freezes, controller paks and the controller configuration are
+  written by the app, so none of them is an entry here.
+
+files:
+  - name: 64DD_IPL.bin
+    system: nintendo-64dd
+    required: false
+    description: "64DD IPL ROM"
+    note: >
+      Opened through the file panel like a cartridge. The loader builds the four
+      byte game code from the header, media format at 0x3b, then the two
+      cartridge id bytes read 0x3d before 0x3c, then country at 0x3e, and keeps
+      the image in the 64DD slot instead of the cartridge slot when that code
+      reads NDDJ. That is the Japanese retail IPL; the USA image reads NDDE and
+      the development image NDXJ, so neither can reach that slot. No code path
+      opens the file by name, so the entry carries no
+      alias and the name is a label. The image is mapped at 0x06000000 and read
+      back by PI DMA bounded by its own length, and the 64DD register window at
+      0x05000000, 0x524 bytes for the ASIC buffers and registers, is installed
+      only once the image is loaded. The same pointer and length decide the disk
+      drive flag the booting game reads, so an absent image is a supported state.
+      Nothing checks a hash, and nothing checks a size beyond the container
+      format and the multiple of four.
+    source_ref: "sixtyforce 2.0.2 MacOS/sixtyforce 0x100026b18-0x100026b64 (game code test, 64DD slot), 0x10006e470-0x10006e4a7 (game code), 0x100081942-0x1000819b1 (memory map), 0x1000831b2-0x100083285 (PI DMA), 0x100071d62-0x100071d7d (drive flag)"
+
+  - name: Overrides.plist
+    path: "Contents/Resources/Overrides.plist"
+    system: nintendo-64
+    required: false
+    bundled: true
+    size: 12855
+    description: "Per-game hardware overrides"
+    note: >
+      561 entries keyed by the four byte game code, read at cartridge load and
+      carrying the CIC seed, the cartridge memory type, the framebuffer flags and
+      the expanded memory and timing settings. The CIC a game boots with comes
+      from this table, and the code falls back to a checksum of the ROM when the
+      table has no entry for it.
+    source_ref: "sixtyforce 2.0.2 MacOS/sixtyforce 0x100039336 (resource name), 0x1000392d0-0x1000393fa (lookup by game code, CIC key), 0x100026e67-0x100026e89 (called with the game code), 0x100071c78-0x100071c8f (CIC read at boot), 0x1000d21a0 (expanded memory log)"
+
+  - name: Controller-Devices.plist
+    path: "Contents/Resources/Controller-Devices.plist"
+    required: false
+    bundled: true
+    size: 73988
+    description: "Controller device database"
+    note: >
+      The bundle carries one device list. SFControllerManager loads a bundle
+      property list while it initialises and keeps it in its supportedDevices
+      table, which the handlers read when a HID device arrives or leaves. The
+      user's own mappings are a separate file the manager reads and writes from
+      the application support folder.
+    source_ref: "sixtyforce 2.0.2 MacOS/sixtyforce 0x100013494-0x1000134e6 (bundle load into supportedDevices), 0x10001918e (read on device arrival), 0x100013870-0x100013a87 (user mappings, separate read)"
+
+  - name: HID-Usage-Names.plist
+    path: "Contents/Resources/HID-Usage-Names.plist"
+    required: false
+    bundled: true
+    size: 28249
+    description: "HID usage names"
+    note: >
+      Read from the bundle to name the HID usages and usage pages shown while
+      mapping a controller element.
+    source_ref: "sixtyforce 2.0.2 MacOS/sixtyforce 0x10001cc6d-0x10001cc81 (resource name and load)"
+
+  - name: Key-Names.plist
+    path: "Contents/Resources/Base.lproj/Key-Names.plist"
+    required: false
+    bundled: true
+    size: 2440
+    description: "Keyboard key names"
+    note: >
+      Localised key names for the keyboard controller configuration sheet, read
+      from the bundle through the same loader as the other property lists.
+    source_ref: "sixtyforce 2.0.2 MacOS/sixtyforce 0x100010c8d-0x100010ca1 (resource name and load)"
+
+  - name: Unit.data
+    path: "Contents/Resources/Unit.data"
+    required: false
+    bundled: true
+    size: 65536
+    description: "Display texture"
+    note: >
+      Read from the bundle while the video controller sets up its OpenGL context
+      and kept as the unitTexture the controller draws with.
+    source_ref: "sixtyforce 2.0.2 MacOS/sixtyforce 0x10004245b-0x10004247b (resource name and load), 0x10004686d (called from video setup), 0x10004658a (unitTexture use)"

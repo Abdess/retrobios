@@ -1,0 +1,188 @@
+emulator: "Pizza Boy SC"
+type: standalone
+core_classification: other
+source: "https://play.google.com/store/apps/details?id=it.dbtecno.pizzaboyscpro"
+upstream: closed-source
+author: "Pizza Emulators"
+profiled_date: "2026-08-12"
+core_version: "1.2.4"
+display_name: "Sega - MS/GG/MD/CD (Pizza Boy SC)"
+mode: standalone
+cores:
+  - "pizza-boy-sc"
+  - "Pizza Boy SC"
+  - "PIZZA-BOY-SC"
+  - "it.dbtecno.pizzaboyscpro"
+  - "it.dbtecno.pizzaboyscbasic"
+systems:
+  - sega-mastersystem
+  - sega-gamegear
+  - sega-megadrive
+  - sega-megacd
+
+notes: |
+  Two Android packages, closed source, sold and given away on Google Play under the
+  Pizza Boy SC name, reached by ES-DE through its PIZZA-BOY-SC find rule and started
+  with the game passed as the rom_uri extra: it.dbtecno.pizzaboyscpro, the paid build
+  the rule names first, and it.dbtecno.pizzaboyscbasic, the free one. The build read
+  here is Basic 1.2.4 (versionCode 33), a Play distribution drop carrying the source
+  stamp and signed by the Play App Signing certificate sha256
+  5ae32245362ccafab6977e759f658dda66bac81cebdd804581cb55db2f219149. The Pro on the
+  store is 1.4.25 and no genuine copy of it is reachable: apkcombo bounces the
+  download page of a paid app back to the app page, apkmirror carries no SC build,
+  archive.org holds none, and the one apkvision copy, labelled Pro 1.3.7, is signed
+  CN=APKVISION.ORG with no source stamp and was rejected. The Basic library serves
+  both packages: besides its own entry points it exports
+  Java_it_dbtecno_pizzaboyscpro_MainActivity_jniEnableCallback.
+
+  The core is libsc.so, a Rust tree built as one workspace whose compilation units
+  are named in its own panic and log records: emulated/systems/genesis,
+  emulated/systems/sms, emulated/systems/mega_cd, emulated/components/cdrom,
+  emulated/common and frontend/android. The armeabi-v7a build shipped in the split
+  is stripped and carries no DWARF, so the file and line of every reference below
+  comes from the Location records the Rust log and panic paths embed. Four machines
+  run: engine start compares the system name against SMS, GameGear and SegaCD and
+  falls through to Genesis (lib.rs:481, 517, 538, 550), which covers Master System
+  and Mark III, Game Gear, Mega Drive and Genesis, and Mega CD and Sega CD. Discs
+  are read from cue and chd images through components/cdrom.
+
+  Four BIOS slots exist, one per machine, set in one call whose log reads
+  "jni setBIOSFiles sms: {} gg: {} cd: {} md: {}" (lib.rs:424); a fifth setter stores
+  a single path in a slot of its own that engine start never reads (lib.rs:416), and
+  setBIOSBoot logs "TODO jni setBIOSboot" and does nothing. Each branch reads the
+  slots its machines use, the Master System one reading the Game Gear slot as well,
+  and an empty slot is an ordinary case for Master System, Game Gear and Mega Drive.
+  Only the Mega CD slot is mandatory: without it the run stops at "MegaCD Bios not
+  provided" (lib.rs:564) and engine start returns its failure code.
+
+  The Mega CD image is the only file the core examines. It is read and its length
+  compared with 131072, then handed to the machine, which repeats the same
+  comparison and panics on a mismatch (megacd_main_machine.rs:156-157). Nothing else
+  about it is tested: no name, no header, no hash, and no region, the Game Region
+  setting being passed separately as jap, usa or eu and never selecting a file.
+
+  The user supplies each file through the document picker, which filters nothing:
+  the chosen document is copied into the application temp directory under the name
+  the picker reports, or, when that name ends in zip, the first entry is extracted
+  there instead, and the absolute path of the copy is stored. In the free package the
+  BIOS preferences are declared android:enabled="false" behind a paid badge, and its
+  Java never hands a path to the core.
+
+  Everything else the app opens it makes itself: the default skins, the cheat
+  descriptors and the two shaders are raw resources unpacked at first run, and the
+  box art, cheat, layout, sticker and per-ROM databases are created by their own
+  CREATE TABLE.
+
+files:
+  - name: bios_CD_U.bin
+    system: sega-megacd
+    required: true
+    agnostic: true
+    variant_group: "megacd-boot-rom"
+    size: 131072
+    validation: [size]
+    description: "Sega CD boot ROM"
+    note: >-
+      Chosen from any location under any name through the document picker, or, when
+      the picked document is named .zip, taken from its first entry. The stored path
+      is read at engine start and the byte count compared with 131072; the machine
+      compares it a second time and panics when it differs. An absent path ends the
+      run with "MegaCD Bios not provided", an empty one with "MegaCD BIOS path is
+      missing", a failed read with "Error loading BIOS file", and a wrong length with
+      "Invalid BIOS len". The core holds one Mega CD slot and applies no other test,
+      so the boot ROM of any region satisfies it; the three are listed because the
+      region of the discs decides which one has to be installed.
+    source_ref: "Pizza Boy SC Basic 1.2.4 libsc.so frontend/android/src/lib.rs:424
+      (four slot handoff), :517 (SegaCD branch), :564 (absent), :567 (validation
+      entry), :573 (empty path), :580 (read failure), :592 (length), :596 (accepted);
+      emulated/systems/mega_cd/src/megacd_main_machine.rs:156-157 (second length test
+      and panic); SettingsActivity.java:177-219 (picker, zip entry, stored path),
+      res/xml/pref_general.xml:105-123 (preferences and defaults)"
+
+  - name: bios_CD_E.bin
+    system: sega-megacd
+    required: true
+    agnostic: true
+    variant_group: "megacd-boot-rom"
+    size: 131072
+    validation: [size]
+    description: "Mega CD boot ROM"
+    note: >-
+      Same slot, same picker and same length test as the other Mega CD boot ROMs.
+    source_ref: "Pizza Boy SC Basic 1.2.4 libsc.so frontend/android/src/lib.rs:567-596,
+      emulated/systems/mega_cd/src/megacd_main_machine.rs:156-157"
+
+  - name: bios_CD_J.bin
+    system: sega-megacd
+    required: true
+    agnostic: true
+    variant_group: "megacd-boot-rom"
+    size: 131072
+    validation: [size]
+    description: "Mega CD boot ROM (Japan)"
+    note: >-
+      Same slot, same picker and same length test as the other Mega CD boot ROMs.
+    source_ref: "Pizza Boy SC Basic 1.2.4 libsc.so frontend/android/src/lib.rs:567-596,
+      emulated/systems/mega_cd/src/megacd_main_machine.rs:156-157"
+
+  - name: bios_U.sms
+    system: sega-mastersystem
+    required: false
+    agnostic: true
+    variant_group: "mastersystem-boot-rom"
+    description: "Master System boot ROM"
+    note: >-
+      Picked and stored like the Mega CD image and handed to the machine as a path.
+      Nothing about the file is examined on either side of the bridge, and an empty
+      slot is not an error: the cartridge runs with the boot sequence skipped.
+    source_ref: "Pizza Boy SC Basic 1.2.4 libsc.so frontend/android/src/lib.rs:424
+      (slot), :538 (branch reading the Master System and Game Gear slots),
+      emulated/systems/sms/src/system.rs:202 (path logged into the machine)"
+
+  - name: bios_E.sms
+    system: sega-mastersystem
+    required: false
+    agnostic: true
+    variant_group: "mastersystem-boot-rom"
+    description: "Master System boot ROM (Europe)"
+    note: "Same slot and same absence of tests as the other Master System boot ROMs."
+    source_ref: "Pizza Boy SC Basic 1.2.4 libsc.so frontend/android/src/lib.rs:538,
+      emulated/systems/sms/src/system.rs:202"
+
+  - name: bios_J.sms
+    system: sega-mastersystem
+    required: false
+    agnostic: true
+    variant_group: "mastersystem-boot-rom"
+    description: "Master System boot ROM (Japan)"
+    note: "Same slot and same absence of tests as the other Master System boot ROMs."
+    source_ref: "Pizza Boy SC Basic 1.2.4 libsc.so frontend/android/src/lib.rs:538,
+      emulated/systems/sms/src/system.rs:202"
+
+  - name: bios.gg
+    system: sega-gamegear
+    required: false
+    agnostic: true
+    description: "Game Gear boot ROM"
+    note: >-
+      Its own slot, separate from the Master System one, both read on the branch that
+      serves the two machines. Picked and stored the same way, handed to the machine
+      as a path, and never examined; an empty slot is not an error.
+    source_ref: "Pizza Boy SC Basic 1.2.4 libsc.so frontend/android/src/lib.rs:424
+      (slot), :481 (system name match, GameGear), :538 (branch reading the Master
+      System and Game Gear slots)"
+
+  - name: bios_MD.bin
+    system: sega-megadrive
+    required: false
+    agnostic: true
+    description: "Mega Drive TMSS boot ROM"
+    note: >-
+      Read on the Genesis branch, the one engine start falls through to when the
+      system name is neither SMS, GameGear nor SegaCD. Picked and stored the same
+      way and never examined; the machine reports it as "BIOS detected" and runs
+      without it when the slot is empty.
+    source_ref: "Pizza Boy SC Basic 1.2.4 libsc.so frontend/android/src/lib.rs:424
+      (slot), :550 (Genesis branch and slot read),
+      emulated/systems/genesis/src/system.rs:270 (path logged into the machine),
+      emulated/systems/genesis/src/genesis_machine.rs:135 (detection)"

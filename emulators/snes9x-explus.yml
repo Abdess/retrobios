@@ -1,0 +1,195 @@
+emulator: "Snes9x EX+"
+type: standalone
+core_classification: community_fork
+source: "https://github.com/Rakashazi/emu-ex-plus-alpha"
+upstream: "https://github.com/snes9xgit/snes9x"
+profiled_date: "2026-08-12"
+source_commit: "1c12fac5ce49badaadff2e2f210dcc30b89f4943"
+upstream_commit: "b33f2afb33c61d675aaf0319bd3b8cc8d6924d49"
+core_version: "1.5.85"
+display_name: "Nintendo - SNES / SFC (Snes9x EX+)"
+mode: standalone
+cores:
+  - "snes9x-explus"
+  - "SNES9X-EXPLUS"
+  - "Snes9x EX+"
+  - "Snes9xEXPlus"
+systems:
+  - nintendo-snes
+  - nintendo-satellaview
+  - nintendo-sufami-turbo
+
+notes: |
+  Member of the EX Emulator series by Robert Broglia, published as
+  com.explusalpha.Snes9xPlus and built around the target s9xp
+  (Snes9x/metadata/conf.mk:2-7, Snes9x/CMakeLists.txt:4,10). ES-DE reaches it
+  through the SNES9X-EXPLUS find rule, which only the Android rule set carries,
+  and offers it under satellaview, sfc, snes, snesna and sufami. Snes9x 1.63 is
+  vendored under Snes9x/src/snes9x at upstream b33f2af, the revision the sync
+  commit 96b2f850 names, and 114 of the 152 vendored source files are
+  byte-identical to it. The app built from Snes9x/1.43 is a separate package,
+  com.explusalpha.Snes9x, and carries none of what follows.
+
+  Content is any .smc, .sfc, .swc, .bs, .st, .fig or .mgd file, or an archive
+  whose first entry with one of those extensions is used, the app leaving
+  archives to the framework (Snes9x/src/main/AppMeta.cc:30-33,
+  EmuFramework/src/EmuSystem.cc:392-425, EmuFramework/src/AppMeta.cc:29). It
+  is read whole into memory and goes to LoadROMMem, except a Sufami Turbo cart,
+  recognized by a length of 0x80000 to 0x100000 with "BANDAI SFC-ADX" at 0 and
+  no "SFC-ADX BACKUP" at 0x10, which goes to LoadMultiCartMem with the base
+  cartridge placed in front of it (Snes9x/src/main/Main.cc:177-181,221-273,
+  Snes9x/src/snes9x/memmap.cpp:1575-1608). Dual Sufami Turbo carts are not
+  loaded: slot B is always passed as null (Snes9x/src/main/Main.cc:250-260).
+
+  Two firmware images are read, and both differ from upstream in how they are
+  found. Upstream opens BS-X.bin then BS-X.bios in its BIOS directory
+  (bsx.cpp:1204-1236) and STBIOS.bin for a Sufami Turbo load
+  (memmap.cpp:1663-1686); the app deletes both blocks and reads a URI the user
+  picks instead, so no filename is compiled in
+  (Snes9x/src/snes9x/bsx.cpp:1199-1203,
+  Snes9x/src/snes9x/memmap.cpp:1644-1670, Snes9x/src/main/S9XApi.cc:225-253,
+  Snes9x/src/main/Main.cc:194-219). Each picker lists directories, names ending
+  .bin or .bios caselessly, and .7z, .rar and .zip archives, whose first member
+  with one of those two extensions is taken (Snes9x/src/main/Main.cc:189-192,
+  Snes9x/src/main/EmuMenuViews.cc:345-387,
+  EmuFramework/include/emuframework/DataPathSelectView.hh:77-101,
+  EmuFramework/src/gui/FilePicker.cc:39-48,
+  imagine/src/fs/ArchiveFS.cc:75-78). An unset path or a failed check throws,
+  and the loader thread turns that into a failed load with the message on
+  screen (EmuFramework/src/EmuApp.cc:794-819). Neither image is hashed.
+
+  A BS-X cartridge image loaded as content takes the other branch of
+  S9xInitBSX, which copies it into the BIOS area itself and asks for nothing
+  (Snes9x/src/snes9x/bsx.cpp:1213-1233). Broadcast data is read per requested
+  channel as BSXHHHH-D.bin under the Satellaview Files path, which defaults to
+  the content directory; a miss only leaves the stream unloaded
+  (Snes9x/src/snes9x/bsx.cpp:736-790, Snes9x/src/main/S9XApi.cc:203-216,
+  Snes9x/src/main/system.ccm:108).
+
+  Every coprocessor is emulated in code with no external firmware: DSP-1 to
+  DSP-4, ST010, ST011, ST018, Cx4, S-DD1 and SPC7110, each implemented under
+  Snes9x/src/snes9x in dsp1.cpp through dsp4.cpp, seta010.cpp, seta011.cpp,
+  seta018.cpp, c4emu.cpp, sdd1emu.cpp and spc7110emu.cpp. The 1.43 branch's
+  S-DD1 data call and SPC7110 pack directory are compiled out here
+  (Snes9x/src/main/S9XApi.cc:64,89-131).
+
+  Per content the app writes and reads back a .srm, an .rtc for the S-RTC,
+  .frz states and a .cht cheat list under the cheats path; settings live in
+  Snes9xP.config (Snes9x/src/main/Main.cc:78-90,153-172,
+  Snes9x/src/snes9x/memmap.cpp:1791-1812, Snes9x/src/main/Cheats.cc:33-45,
+  Snes9x/src/main/AppMeta.cc:19). A BS game with no save of its own falls back
+  to BS-X.srm (Snes9x/src/snes9x/memmap.cpp:1874-1890). A .bps, .ups or .ips
+  named after the content in the patches path is applied as the image loads,
+  the app having dropped the search beside the content
+  (Snes9x/src/snes9x/memmap.cpp:1327,3888-4027). MSU-1 data and tracks are read
+  beside the content as .msu, or the content name with msu1.rom appended, and
+  -N.pcm per track (Snes9x/src/snes9x/msu1.cpp:60-70,116-118,157-160). UNZIP_SUPPORT is not defined, so the .msu1 pack and the
+  patch-inside-a-zip paths are not compiled (Snes9x/CMakeLists.txt:18).
+
+files:
+  - name: "BS-X.bin"
+    aliases: ["BS-X.bios"]
+    system: nintendo-satellaview
+    description: "Satellaview BS-X cartridge ROM"
+    required: true
+    agnostic: true
+    min_size: 1048576
+    validation: [existence, size]
+    config_key: "CFGKEY_BSX_BIOS_PATH"
+    category: bios
+    note: >-
+      Read for every BS game, the branch taken when the header at 0x7FC0 or
+      0xFFC0 marks the image as one. The read takes 1048576 bytes and compares
+      the count returned, so a shorter file is rejected and a longer one has its
+      tail ignored, then the 21 bytes at 0x7FC0 must read "Satellaview BS-X"
+      padded with spaces.
+      The name is the user's: the app compiles none in and only the .bin and
+      .bios endings limit what the picker offers.
+    source_ref: "Snes9x/src/snes9x/memmap.cpp:2065 (run on every load), Snes9x/src/snes9x/bsx.cpp:1240-1274 (BS branch calls the loader), Snes9x/src/snes9x/bsx.cpp:1199-1203 (loader is the app hook), Snes9x/src/main/S9XApi.cc:218-253 (path, archive, size and header checks), Snes9x/src/main/EmuMenuViews.cc:345-365 (picker), Snes9x/src/main/system.ccm:110 (setting), Snes9x/src/main/options.cc:46,79 (config key)"
+
+  - name: "STBIOS.bin"
+    system: nintendo-sufami-turbo
+    description: "Sufami Turbo base cartridge ROM"
+    required: true
+    agnostic: true
+    size: 262144
+    validation: [existence, size]
+    config_key: "CFGKEY_SUFAMI_BIOS_PATH"
+    category: bios
+    note: >-
+      Read whenever the content is a Sufami Turbo cart, and copied to the front
+      of the ROM area with the cart behind it. The whole file is buffered, so
+      the length must be exactly 262144, with "BANDAI SFC-ADX" at 0 and
+      "SFC-ADX BACKUP" at 0x10. The name is the user's, the picker accepting any
+      .bin or .bios.
+    source_ref: "Snes9x/src/main/Main.cc:250-260 (cart routes through the BIOS read), Snes9x/src/main/Main.cc:183-187,194-219 (path, archive, size and header checks), Snes9x/src/snes9x/memmap.cpp:1018-1025,1575-1608 (second check and placement), Snes9x/src/main/EmuMenuViews.cc:367-387 (picker), Snes9x/src/main/system.ccm:109 (setting), Snes9x/src/main/options.cc:45,78 (config key)"
+
+  - name: "BSX0120-0.bin"
+    system: nintendo-satellaview
+    description: "Satellaview data stream for channel 0120"
+    required: false
+    category: game_data
+    size: 34
+    validation: [existence]
+    config_key: "CFGKEY_SATELLAVIEW_PATH"
+    note: >-
+      Opened by the name the emulated unit asks for, BSXHHHH-D.bin from the
+      channel registers at 0x2188 and 0x218E, under the Satellaview Files path,
+      which defaults to the content directory. The file is measured to size the
+      queue and read 22 bytes at a time; a miss leaves the stream unloaded.
+    source_ref: "Snes9x/src/snes9x/bsx.cpp:736-790, Snes9x/src/main/S9XApi.cc:203-216, Snes9x/src/main/system.ccm:108, Snes9x/src/main/EmuMenuViews.cc:325-343"
+
+  - name: "BSX0121-0.bin"
+    system: nintendo-satellaview
+    description: "Satellaview data stream for channel 0121"
+    required: false
+    category: game_data
+    size: 34
+    validation: [existence]
+    config_key: "CFGKEY_SATELLAVIEW_PATH"
+    source_ref: "Snes9x/src/snes9x/bsx.cpp:736-790, Snes9x/src/main/S9XApi.cc:203-216"
+
+  - name: "BSX0122-0.bin"
+    system: nintendo-satellaview
+    description: "Satellaview data stream for channel 0122"
+    required: false
+    category: game_data
+    size: 1031
+    validation: [existence]
+    config_key: "CFGKEY_SATELLAVIEW_PATH"
+    source_ref: "Snes9x/src/snes9x/bsx.cpp:736-790, Snes9x/src/main/S9XApi.cc:203-216"
+
+  - name: "BSX0123-0.bin"
+    system: nintendo-satellaview
+    description: "Satellaview data stream for channel 0123"
+    required: false
+    category: game_data
+    size: 16
+    validation: [existence]
+    config_key: "CFGKEY_SATELLAVIEW_PATH"
+    source_ref: "Snes9x/src/snes9x/bsx.cpp:736-790, Snes9x/src/main/S9XApi.cc:203-216"
+
+  - name: "BSX0124-0.bin"
+    system: nintendo-satellaview
+    description: "Satellaview data stream for channel 0124"
+    required: false
+    category: game_data
+    size: 97
+    validation: [existence]
+    config_key: "CFGKEY_SATELLAVIEW_PATH"
+    source_ref: "Snes9x/src/snes9x/bsx.cpp:736-790, Snes9x/src/main/S9XApi.cc:203-216"
+
+  - name: "Bio Worm.7z"
+    aliases: ["BioWorm.7z"]
+    system: nintendo-snes
+    description: "Bundled homebrew game, listed under Bundled Content"
+    required: false
+    bundled: true
+    category: game_data
+    validation: [existence]
+    size: 42479
+    sha1: "38e44c9868c0b8a5a99ec0b6e901a28f617d25bf"
+    note: >-
+      Opened from the application bundle by the name the build gives it, the
+      Linux build dropping the space, and loaded as content.
+    source_ref: "Snes9x/src/main/AppMeta.cc:20-21 (names), EmuFramework/src/gui/BundledGamesView.cc:41,47 (open and load)"

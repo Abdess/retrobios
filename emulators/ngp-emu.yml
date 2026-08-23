@@ -1,0 +1,76 @@
+emulator: "NGP.emu"
+type: standalone
+core_classification: community_fork
+source: "https://github.com/Rakashazi/emu-ex-plus-alpha"
+upstream: "https://mednafen.github.io/"
+profiled_date: "2026-08-12"
+source_commit: "1c12fac5ce49badaadff2e2f210dcc30b89f4943"
+core_version: "1.5.85"
+display_name: "SNK - Neo Geo Pocket / Color (NGP.emu)"
+mode: standalone
+cores:
+  - "ngp-emu"
+  - "NGP.emu"
+  - "NGP-EMU"
+systems:
+  - snk-ngp
+  - snk-ngpc
+
+notes: |
+  Member of the EX Emulator series by Robert Broglia, which targets Android and
+  Linux (README.md:1,3-4,12-13) and keeps iOS and Pandora build shortcuts in the
+  tree (NGP.emu/ios.mk, NGP.emu/pandora.mk). Published as com.explusalpha.NgpEmu
+  (NGP.emu/metadata/conf.mk:2,4,6,7) and reached by ES-DE through its NGP-EMU
+  find rule, which only the Android rule set carries. Mednafen's Neo Geo Pocket
+  module, itself descended from NeoPop, is vendored under NGP.emu/src/ngp
+  (NGP.emu/metadata/conf.mk:8, NGP.emu/src/main/AppMeta.cc:27) on the 1.32 line
+  (EmuFramework/include/shared/mednafen/mednafen-config.h:167) and driven by the
+  app's own video, audio, input and save layers. Three files differ from the
+  Mednafen 1.32.1 release, all of it frontend plumbing: the pixel format and
+  sound rate hooks, the input latch and the flash file I/O move to the app
+  (NGP.emu/src/main/Main.cc:84,102,118-131, NGP.emu/src/main/system.ccm:87,93).
+  The TLCS-900h disassembler is left out of the build
+  (NGP.emu/src/CMakeLists.txt:6-32). Content is read from .ngp, .ngc, .npc and
+  .ngpc files (NGP.emu/metadata/conf.mk:5, NGP.emu/src/main/AppMeta.cc:31-34,
+  NGP.emu/src/ngp/neopop.cpp:336-337); an archive is opened by the framework,
+  which keeps the first entry passing that same filter
+  (EmuFramework/src/EmuSystem.cc:392-412).
+
+  The content image is the only one the app loads. It is read into a 4 MiB
+  buffer, hashed for the save file names and handed to the module, which refuses
+  an image over 8 MiB (NGP.emu/src/main/Main.cc:80-85,
+  EmuFramework/src/shared/mednafen-emuex/MDFNUtils.hh:133-146,
+  NGP.emu/src/ngp/neopop.cpp:183-193). The BIOS is built in memory rather than
+  read: bios_install fills a 64 KiB array with the 27 system call vectors, writes
+  opcode 0x1F at each target, copies an 0x800 byte system font held in the binary
+  to 0x8DCF and closes the image with a RETI and an infinite loop
+  (NGP.emu/src/ngp/bios.cpp:29,50-180,182-239, NGP.emu/src/ngp/neopop.cpp:211).
+  That opcode is bound to the HLE handler in the interpreter decode table, and
+  the handler answers only from the 0xFF0000 region
+  (NGP.emu/src/ngp/TLCS-900h/TLCS900h_interpret.cpp:921-926,
+  NGP.emu/src/ngp/biosHLE.cpp:43-47). The same array is what the memory map
+  returns for the BIOS region and where the font routine reads its glyphs
+  (NGP.emu/src/ngp/mem.cpp:121, NGP.emu/src/ngp/biosHLE.cpp:221). The NGP
+  Language menu item feeds the ngp.language setting, written to RAM at boot
+  rather than selecting a file (NGP.emu/src/main/EmuMenuViews.cc:31-40,
+  NGP.emu/src/main/options.cc:82-83, NGP.emu/src/ngp/mem.cpp:620,
+  NGP.emu/src/ngp/neopop.cpp:286-299).
+
+  No firmware path exists by construction: the app answers Mednafen's file name
+  request for save states, saves and save backups only, and any other kind ends
+  in unreachable() (NGP.emu/src/main/options.cc:96-106). Cheat loading and IPS
+  patching are compiled in from the shared Mednafen sources and called from
+  nowhere (EmuFramework/src/shared/mednafen/mempatcher.cpp:251-254,
+  EmuFramework/src/shared/mednafen/file.cpp:38-53). Per content the app writes
+  and reads back a .ngf image holding the cartridge flash, plus save states and
+  NgpEmu.config (NGP.emu/src/main/Main.cc:53-73,118-131,
+  NGP.emu/src/main/system.ccm:76, NGP.emu/src/main/AppMeta.cc:28). ui.png,
+  gpOverlay.png and the shader sources are drawn from the application bundle
+  (EmuFramework/include/emuframework/AssetManager.hh:61-66,
+  EmuFramework/src/AssetManager.cc:58-65,
+  EmuFramework/src/VideoImageEffect.cc:163-173). The app declares no bundled
+  content, the framework definition defaulting to an empty span
+  (EmuFramework/src/AppMeta.cc:40,
+  EmuFramework/include/emuframework/AppMeta.hh:66-68).
+
+files: []

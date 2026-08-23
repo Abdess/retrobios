@@ -1,0 +1,110 @@
+emulator: "My Boy!"
+type: standalone
+core_classification: embedded_hle
+source: "https://play.google.com/store/apps/details?id=com.fastemulator.gba"
+upstream: closed-source
+author: "Pixel Respawn LLC"
+profiled_date: "2026-08-12"
+core_version: "2.0.3"
+display_name: "Nintendo - Game Boy Advance (My Boy!)"
+mode: standalone
+cores:
+  - "my-boy"
+  - "My Boy!"
+  - "MY-BOY"
+systems:
+  - nintendo-gba
+
+notes: |
+  Android package com.fastemulator.gba, closed source, sold on Google Play, reached by
+  ES-DE through its MY-BOY find rule and started with android.intent.action.VIEW on the
+  content URI of the game. Two Play distribution builds carrying the developer
+  certificate sha256 942e532dc3a3608a1d04760b8e1b09a2f11c0c8f64ae8bb441f0c8ab1122a7ab
+  are read here: 2.0.3 (versionCode 90053, minSdk 21, targetSdk 33, arm64-v8a and
+  armeabi-v7a, bundletool v1 signer and the Play source stamp) and 1.8.0 (versionCode
+  90048, armeabi and x86). Line numbers below are those of 2.0.3 and native addresses
+  are arm64-v8a of the same build; 1.8.0 addresses are its x86 library. Four rebuilt
+  copies were rejected on their certificate: 2.0.9 (CN=APKVISION.ORG), 2.0.8 (C=RU,
+  O=A1), 2.0.6 (C=IN) and a second 1.8.0 (O=jojoy.mod).
+
+  One system is emulated, Game Boy Advance, in libgba.so behind a JNI bridge
+  (Link.java:21-23,83). Content is a .gba or .bin document, or the first entry with one
+  of those extensions in a zip document (g.java:71-78,80-100,113-122,
+  EmulatorActivity.java:2001).
+
+  The BIOS is the one file the user supplies. The document picker takes any name from
+  any location, and the choice is stored as the persisted URI biosUri
+  (settings/EmulatorSettings.java:65-73,121-135). A document is
+  accepted only when its reported size is exactly 16384 bytes, or, for an
+  application/zip document, when an entry declares that size; the name is never
+  examined (g.java:66-68,80-100,102-111). One that fails leaves the preference reading
+  "Unrecognized BIOS file." at pick time and on every later visit to the screen
+  (settings/EmulatorSettings.java:101-108,131-133). At game start the stream is read
+  until 16384 bytes are in hand and anything shorter raises, which reports "Load BIOS
+  failed." and passes null (EmulatorActivity.java:1564-1599).
+
+  The read happens only while Use BIOS is on, off until the user turns it on; both Boot
+  BIOS and the file picker depend on that switch, and the advanced reset returns all
+  three to their defaults (res/xml/settings_advanced.xml,
+  settings/EmulatorSettings.java:79-80).
+
+  The bytes are copied to the head of the emulator's 32 KB BIOS area, offsets 0x2c and
+  0x39 are cleared, the remainder is zero filled and a flag byte at the end of the area
+  records that an image is installed (libgba.so 0x165fbc-0x166070, 0x15faf0-0x15fb5c).
+  With no image that flag is false and the area is filled instead with a 692 byte
+  replacement inflated from a 488 byte deflate stream in .rodata, byte identical between
+  1.8.0 and 2.0.3 (0x15ec0c-0x15ec60). Nothing else about the file is examined: no hash
+  and no content test exists on either side of the bridge.
+
+  Two features refuse to mix the two modes. A save state made under the other setting
+  returns -5 and reports "The save file requires using the BIOS file."
+  (EmulatorActivity.java:909), and a link connection whose peer disagrees returns 3 and
+  reports "BIOS settings do not match!" (EmulatorActivity.java:768).
+
+  1.8.0 reached the same file through a filesystem path. Its own browser filtered on
+  .bin, .bios and .zip and wrote the path to biosFile
+  (settings/EmulatorSettings.java:478-486, FileBrowserActivity.java:196-211), and the
+  native loader opened it with fopen "rb", or walked it as a zip and took the first
+  entry, keeping either only when the size callback returned true for exactly 16384
+  bytes (0x10b680-0x10b76f, 0x10b770-0x10b783, 0x10a1e0-0x10a38d). That build also
+  looked beside the ROM for a .ips then a .ups image and applied it on load, and wrote
+  "<name> (patched).gba" from the manual patch entry (Link.java:18,
+  MainActivity.java:181-208, 0x10b910). Neither the code nor the strings survive in
+  2.0.3.
+
+  Per game settings come from rom_config.ini, an asset of the application keyed on the
+  four character game code (Console.java:108-130). Shaders are read from the assets of the
+  separate package com.fastemulator.shaderpack, whose own shaders array names them
+  (EmulatorActivity.java:1491, settings/EmulatorSettings.java:420,434-438). Battery
+  saves, states, cheats, screen layouts and key maps are written by the application
+  under its external files directory (w0/d.java:13-43, Console.java:61-68).
+
+files:
+  - name: gba_bios.bin
+    system: nintendo-gba
+    required: false
+    hle_fallback: true
+    has_builtin: true
+    agnostic: true
+    size: 16384
+    validation: [size]
+    config_key: "useBios"
+    description: "Game Boy Advance BIOS"
+    note: >-
+      Chosen from any location under any name through the document picker, or taken from
+      the first entry of that size in a zip document. A file of another size is refused
+      when picked and again when the game starts, and the emulator runs on the
+      replacement compiled into its library.
+    source_ref: "My Boy! 2.0.3 g.java:66-68 (size test), g.java:80-100 (zip walk and direct open), settings/EmulatorSettings.java:65-73,121-135 (picker and validation), EmulatorActivity.java:1564-1599 (read and loadBios), libgba.so 0x165fbc-0x166070 (bridge), 0x15faf0-0x15fb5c (install), 0x15ec0c-0x15ec60 (replacement); 1.8.0 settings/EmulatorSettings.java:478-486, libgba.so 0x10b680-0x10b76f, 0x10b770-0x10b783, 0x10a1e0-0x10a38d"
+
+  - name: rom_config.ini
+    system: nintendo-gba
+    required: false
+    bundled: true
+    description: "Per game settings database"
+    note: >-
+      Opened from the application assets when a game starts and read as the section
+      named by its four character code. Save type, flash size, mirroring, sprite limit,
+      cpu core and the timing hacks become console options, and the addon key arms the
+      solar, tilt, gyroscope and rumble sensors. Byte identical in 1.8.0 and 2.0.3.
+    source_ref: "My Boy! 2.0.3 Console.java:108-130, EmulatorActivity.java:642,1132; 1.8.0 Console.java:130-151"

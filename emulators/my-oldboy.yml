@@ -1,0 +1,101 @@
+emulator: "My OldBoy!"
+type: standalone
+core_classification: embedded_hle
+source: "https://play.google.com/store/apps/details?id=com.fastemulator.gbc"
+upstream: closed-source
+author: "Pixel Respawn LLC"
+profiled_date: "2026-08-12"
+core_version: "2.0.0"
+display_name: "Nintendo - Game Boy / Game Boy Color (My OldBoy!)"
+mode: standalone
+cores:
+  - "my-oldboy"
+  - "My OldBoy!"
+  - "MY-OLDBOY"
+systems:
+  - nintendo-gb
+  - nintendo-gbc
+  - nintendo-sgb
+
+notes: |
+  Android package com.fastemulator.gbc, closed source, sold on Google Play, reached by
+  ES-DE through its MY-OLDBOY find rule and started with android.intent.action.VIEW on
+  the content URI of the game. Two builds carrying the developer certificate sha256
+  942e532dc3a3608a1d04760b8e1b09a2f11c0c8f64ae8bb441f0c8ab1122a7ab are read here: 2.0.0
+  (versionCode 90022, minSdk 21, targetSdk 33, arm64-v8a and armeabi-v7a, bundletool v1
+  signer and the Play source stamp) and 1.5.1 (versionCode 90020, minSdk 9, armeabi,
+  v1 signature verified entry by entry). Line numbers below are those of 2.0.0 and
+  native addresses are arm64-v8a of the same build; 1.5.1 addresses are its armeabi
+  library. 2.0.2 (versionCode 90024) is the current Play build, offered by no mirror
+  reached here.
+
+  Emulation runs in libgbc.so behind a JNI bridge (Link.java:23,29-97). Content is a
+  .gb, .gbc, .cgb or .dmg document, or the first entry with one of those extensions in a
+  zip document (g.java:74-81,124-133). A registered .ips or .ups patch is applied to the
+  loaded image when autoIPS is on (EmulatorActivity.java:2049-2057, Link.patch).
+
+  The machine is chosen by consoleType2, one of auto, gbc, gb, gba or sgb
+  (res/xml/settings_advanced.xml, console_type_entryvalues, EmulatorActivity.java:1168).
+  The native setter maps those names to 0, 2, 1, 0x12 and 0x21 and then resolves them
+  against the cartridge header: bit 0x80 of byte 0x143 keeps Game Boy Color, otherwise
+  byte 0x146 equal to 3 gives Super Game Boy under auto, and everything else falls to
+  Game Boy (libgbc.so 0x29e74-0x29f30, 0x2436c-0x243bc). Super Game Boy allocates its
+  own 0x2200 byte state (0x24420-0x24438).
+
+  Two boot ROMs are the files the user supplies, one per machine, and the resolved
+  machine decides which one is installed: type 1 takes the 256 byte image, type 2 takes
+  the 2304 byte image, both into the same area, and any other type clears the flag that
+  records an image (libgbc.so 0x2446c-0x2454c). Game Boy Advance and Super Game Boy
+  modes therefore run without one. The library carries no image of its own, and on reset
+  the area is passed only when the flag and the reset argument are both set, null
+  otherwise (0x24550-0x245a8), which is the state the application ships in.
+
+  Both files are read only while Boot BIOS is on, off until the user turns it on, and
+  both pickers declare it as their dependency (res/xml/settings_advanced.xml). A save
+  state made under the other setting returns -5 and reports "The save file requires
+  using the BIOS file." (EmulatorActivity.java:898), and a link connection whose peer
+  disagrees returns 3 and reports "BIOS settings do not match!"
+  (EmulatorActivity.java:743).
+
+  Shaders are read from the assets of the separate package com.fastemulator.shaderpack,
+  whose own shaders and shader_names arrays name them, with a store link offered when it
+  is absent (EmulatorActivity.java:1513, settings/EmulatorSettings.java:405,419-423).
+  Battery saves, real time clock files, states, cheats, screen layouts and key maps are
+  written by the application under its external files directory (y0/d.java:13-43,
+  Console.java:58). The only file calls left in the library are those saves, the gzipped
+  states and one stat on /data/data/com.fastemulator.gbc.
+
+files:
+  - name: gb_bios.bin
+    system: nintendo-gb
+    required: false
+    hle_fallback: true
+    agnostic: true
+    size: 256
+    validation: [size]
+    config_key: "bootBios"
+    description: "Game Boy boot ROM"
+    note: >-
+      Chosen from any location under any name through the document picker and kept as
+      the persisted URI gbBiosUri, or taken from the first entry of that size in a zip
+      document. A document of another size is refused at pick time with "Invalid GB/GBC
+      BIOS file." and, if it later reports short, the game starts without it. Installed
+      only while the resolved machine is Game Boy.
+    source_ref: "My OldBoy! 2.0.0 EmulatorActivity.java:1170-1175 (gate and 256 byte read), EmulatorActivity.java:1132-1161 (exact length or null), g.java:105-118 (size test), g.java:83-103 (zip walk and direct open), settings/EmulatorSettings.java:84-98,101-120 (picker and validation), libgbc.so 0x2a268-0x2a364 (bridge), 0x2446c-0x2450c (install under type 1), 0x24550-0x245a8 (reset with or without); 1.5.1 settings/EmulatorSettings.java:142-155,229-238, EmulatorActivity.java:683-684, libgbc.so 0x1f7e8-0x1f8c0, 0x10cc0-0x10d3c, 0x10db8 (size 0x100), 0x13180-0x1335c (file or zip entry)"
+
+  - name: gbc_bios.bin
+    system: nintendo-gbc
+    required: false
+    hle_fallback: true
+    agnostic: true
+    size: 2304
+    validation: [size]
+    config_key: "bootBios"
+    description: "Game Boy Color boot ROM"
+    note: >-
+      Chosen from any location under any name through the document picker and kept as
+      the persisted URI gbcBiosUri, or taken from the first entry of that size in a zip
+      document. A document of another size is refused at pick time with "Invalid GB/GBC
+      BIOS file." and, if it later reports short, the game starts without it. Installed
+      only while the resolved machine is Game Boy Color.
+    source_ref: "My OldBoy! 2.0.0 EmulatorActivity.java:1170-1175 (gate and 2304 byte read), EmulatorActivity.java:1132-1161 (exact length or null), g.java:105-114,120-122 (size test), g.java:83-103 (zip walk and direct open), settings/EmulatorSettings.java:84-98,101-120 (picker and validation), libgbc.so 0x2a268-0x2a364 (bridge), 0x24510-0x2453c (install under type 2), 0x24550-0x245a8 (reset with or without); 1.5.1 settings/EmulatorSettings.java:142-155,229-238, EmulatorActivity.java:683-684, libgbc.so 0x1f7e8-0x1f8c0, 0x10d40-0x10d7c, 0x10dc8 (size 0x900), 0x13180-0x1335c (file or zip entry)"

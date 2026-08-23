@@ -1,0 +1,226 @@
+emulator: Virtual Virtual Boy
+type: standalone
+core_classification: other
+source: "https://github.com/SupernaviX/vvb"
+upstream: "https://github.com/SupernaviX/vvb"
+author: "Simon Gellis"
+profiled_date: "2026-08-12"
+source_commit: "0bf230bced628d78ff2c149baaf16f6fb8388cec"
+upstream_commit: "0bf230bced628d78ff2c149baaf16f6fb8388cec"
+core_version: "1.18.2"
+display_name: "Nintendo - Virtual Boy (Virtual Virtual Boy)"
+mode: standalone
+cores:
+  - virtual-virtual-boy
+  - VIRTUAL-VIRTUAL-BOY
+  - vvb
+  - com.simongellis.vvb
+  - com.simongellis.vvb.leia
+systems:
+  - nintendo-virtualboy
+
+notes: |
+  Virtual Boy emulator for Android, published as com.simongellis.vvb
+  (app/build.gradle:62,65-66) and reached by ES-DE through its
+  VIRTUAL-VIRTUAL-BOY find rule, which hands the game over as an ACTION_VIEW
+  intent on a content URI (MainActivity.kt:126-131, MainActivity.kt:40-45). The
+  hardware sits in a Rust library packaged as libvvb.so and loaded when the
+  application starts (VvbApplication.kt:69, Cargo.toml [lib]); the Kotlin side
+  owns the menus, the input mapping and every file access. Display goes through
+  mono, anaglyph, stereo, Google Cardboard and Leia CNSDK renderers, each
+  carrying its GLSL as string constants in the Rust sources
+  (src/video/renderers/mono.rs:10-26, src/video/renderers/stereo.rs:13-29).
+
+  The console has no boot ROM and the emulator loads none. The memory map
+  declares Vram, Audio, Hardware, Dram, Sram and Rom, and load_game_pak takes
+  the cartridge image and its SRAM, leaving the Rom region unpopulated until a
+  game arrives (src/emulator/memory.rs:8-14, src/emulator/memory.rs:115,
+  src/emulator/memory.rs:134-149).
+
+  Games are read from .vb, .vboy and .bin, or from the first member of a zip
+  answering the same test (GamePakLoader.kt:20-27, GamePakLoader.kt:97-98). The
+  image has to be a power of two and at most 0x01000000 bytes, either test
+  aborting the load (GamePakLoader.kt:39-45, GamePakLoader.kt:57), and the core
+  applies the same two limits again when the image reaches it
+  (src/emulator/memory.rs:136-141). The MD5 of the image names the directory
+  that holds the save data, where the app writes .srm and
+  save_states/<slot>.sav as it runs (GamePakLoader.kt:30-32,
+  GamePak.kt:8-9,30, src/emulator/state.rs:30-38). Cardboard lens parameters
+  come from scanning the viewer QR code and are kept by the SDK, the app asking
+  for them and starting a scan when none are saved
+  (src/video/renderers/cardboard.rs:29-34).
+
+  One tree ships two flavours: playStore, and leia, which appends .leia to the
+  application id and renders through the CNSDK (app/build.gradle:92-100). Both
+  carry the same nine homebrew titles, stored uncompressed so they can be opened
+  by descriptor (app/build.gradle:117).
+
+files:
+  # -- Bundled homebrew, assets/games, listed by res/raw/bundledgames.json --
+  # Each title is served over content://com.simongellis.vvb.assets and then read
+  # through the same path as a user game, so the power of two and 0x01000000
+  # tests apply to it. The id an entry declares is the MD5 of the image.
+  # Common refs: BundledGameRepository.kt:9-13, AssetsProvider.kt:18-19,
+  # GamePakLoader.kt:35-49.
+
+  - name: "BLOX.vb"
+    path: "games/BLOX.vb"
+    system: nintendo-virtualboy
+    required: false
+    bundled: true
+    category: game_data
+    md5: f82d4c9fdd81518537d88f70c6602bb5
+    sha1: f2105349dff09bdc00e4548460991dde9ac7c2af
+    max_size: 16777216
+    validation: [size]
+    description: "Bundled homebrew game by KR155E"
+    source_ref: "app/src/main/res/raw/bundledgames.json:2-7, app/src/main/java/com/simongellis/vvb/data/BundledGameRepository.kt:9-13, app/src/main/java/com/simongellis/vvb/AssetsProvider.kt:18-19, app/src/main/java/com/simongellis/vvb/game/GamePakLoader.kt:35-49"
+
+  - name: "BLOX 2.vb"
+    path: "games/BLOX 2.vb"
+    system: nintendo-virtualboy
+    required: false
+    bundled: true
+    category: game_data
+    md5: cc91d6389df2c9777919e8e8ab2c0e66
+    sha1: 66b2a25ef8e1af74bed4bbba4785951a9d6edce0
+    max_size: 16777216
+    validation: [size]
+    description: "Bundled homebrew game by KR155E"
+    source_ref: "app/src/main/res/raw/bundledgames.json:8-13, app/src/main/java/com/simongellis/vvb/data/BundledGameRepository.kt:9-13, app/src/main/java/com/simongellis/vvb/AssetsProvider.kt:18-19, app/src/main/java/com/simongellis/vvb/game/GamePakLoader.kt:35-49"
+
+  - name: "Elevated Speed.vb"
+    path: "games/Elevated Speed.vb"
+    system: nintendo-virtualboy
+    required: false
+    bundled: true
+    category: game_data
+    md5: 8f7bcfdd0f412d9060b06a97a89fe202
+    sha1: 8b08f08f37127621483aa4e204a3e3b2312af196
+    max_size: 16777216
+    validation: [size]
+    description: "Bundled homebrew game by PizzaRollsRoyce"
+    source_ref: "app/src/main/res/raw/bundledgames.json:14-19, app/src/main/java/com/simongellis/vvb/data/BundledGameRepository.kt:9-13, app/src/main/java/com/simongellis/vvb/AssetsProvider.kt:18-19, app/src/main/java/com/simongellis/vvb/game/GamePakLoader.kt:35-49"
+
+  - name: "Fishbone.vb"
+    path: "games/Fishbone.vb"
+    system: nintendo-virtualboy
+    required: false
+    bundled: true
+    category: game_data
+    md5: 61e38e4e0c43aa8d6274a89ebedd3063
+    sha1: b1e5d5ab7e49f91050d3593bbcf48ff609c1c979
+    max_size: 16777216
+    validation: [size]
+    description: "Bundled homebrew game by thunderstruck"
+    source_ref: "app/src/main/res/raw/bundledgames.json:20-25, app/src/main/java/com/simongellis/vvb/data/BundledGameRepository.kt:9-13, app/src/main/java/com/simongellis/vvb/AssetsProvider.kt:18-19, app/src/main/java/com/simongellis/vvb/game/GamePakLoader.kt:35-49"
+
+  - name: "Formula V Public Demo.vb"
+    path: "games/Formula V Public Demo.vb"
+    system: nintendo-virtualboy
+    required: false
+    bundled: true
+    category: game_data
+    md5: 34e9a2ffd60f7ea565caada82d57f29f
+    sha1: 533672b887ec16aa50a5508488d1ab125dd5e749
+    max_size: 16777216
+    validation: [size]
+    description: "Bundled homebrew game by KR155E"
+    source_ref: "app/src/main/res/raw/bundledgames.json:26-31, app/src/main/java/com/simongellis/vvb/data/BundledGameRepository.kt:9-13, app/src/main/java/com/simongellis/vvb/AssetsProvider.kt:18-19, app/src/main/java/com/simongellis/vvb/game/GamePakLoader.kt:35-49"
+
+  - name: "Red Square.vb"
+    path: "games/Red Square.vb"
+    system: nintendo-virtualboy
+    required: false
+    bundled: true
+    category: game_data
+    md5: 9c372321204b9fa65f9324f98aae53ff
+    sha1: a12529a0d7cf7f0711b913b8ae72fea193cebc17
+    max_size: 16777216
+    validation: [size]
+    description: "Bundled homebrew game by Kresna and Nyrator"
+    source_ref: "app/src/main/res/raw/bundledgames.json:32-37, app/src/main/java/com/simongellis/vvb/data/BundledGameRepository.kt:9-13, app/src/main/java/com/simongellis/vvb/AssetsProvider.kt:18-19, app/src/main/java/com/simongellis/vvb/game/GamePakLoader.kt:35-49"
+
+  - name: "The Red Castle.vb"
+    path: "games/The Red Castle.vb"
+    system: nintendo-virtualboy
+    required: false
+    bundled: true
+    category: game_data
+    md5: cdb404ff3e1df7b3c13214ac5409d512
+    sha1: 34e90abaa3ffc706882fd8a0d1a8101abc185734
+    max_size: 16777216
+    validation: [size]
+    description: "Bundled homebrew game by Timothy Beck"
+    source_ref: "app/src/main/res/raw/bundledgames.json:38-43, app/src/main/java/com/simongellis/vvb/data/BundledGameRepository.kt:9-13, app/src/main/java/com/simongellis/vvb/AssetsProvider.kt:18-19, app/src/main/java/com/simongellis/vvb/game/GamePakLoader.kt:35-49"
+
+  - name: "VUE Snake.vb"
+    path: "games/VUE Snake.vb"
+    system: nintendo-virtualboy
+    required: false
+    bundled: true
+    category: game_data
+    md5: ccfa400a0ff3d717dad36a3f736fd34d
+    sha1: 77ebaf5dbe667d8347d098b6749b6f3be09f5814
+    max_size: 16777216
+    validation: [size]
+    description: "Bundled homebrew game by KR155E"
+    source_ref: "app/src/main/res/raw/bundledgames.json:44-49, app/src/main/java/com/simongellis/vvb/data/BundledGameRepository.kt:9-13, app/src/main/java/com/simongellis/vvb/AssetsProvider.kt:18-19, app/src/main/java/com/simongellis/vvb/game/GamePakLoader.kt:35-49"
+
+  - name: "VUEngine Platformer Demo.vb"
+    path: "games/VUEngine Platformer Demo.vb"
+    system: nintendo-virtualboy
+    required: false
+    bundled: true
+    category: game_data
+    md5: c96d91fb97572a0af7d53f63b292e0f2
+    sha1: b1b9893629bbec74e8b58d7b5983e7d35e202fe0
+    max_size: 16777216
+    validation: [size]
+    description: "Bundled homebrew game by KR155E"
+    source_ref: "app/src/main/res/raw/bundledgames.json:50-55, app/src/main/java/com/simongellis/vvb/data/BundledGameRepository.kt:9-13, app/src/main/java/com/simongellis/vvb/AssetsProvider.kt:18-19, app/src/main/java/com/simongellis/vvb/game/GamePakLoader.kt:35-49"
+
+  - name: bundledgames.json
+    path: "res/raw/bundledgames.json"
+    system: nintendo-virtualboy
+    required: false
+    bundled: true
+    category: game_data
+    md5: 04ecc37b70b23fdcc3f5207040f4d178
+    sha1: 2ae5b46e78afb1bb95d11fa103d6176321573b91
+    size: 1677
+    description: "Index of the bundled homebrew titles"
+    note: >-
+      Read whole as a raw resource when the repository is built, and decoded
+      into the list the load menu offers. Each record names the title, the
+      content URI serving it, the authors and the MD5 of the image. The leia
+      flavour replaces the file with one pointing at its own authority.
+    source_ref: "app/src/main/java/com/simongellis/vvb/data/BundledGameRepository.kt:9-13, app/src/main/java/com/simongellis/vvb/data/BundledGame.kt:7-13, app/src/leia/res/raw/bundledgames.json:5"
+
+  # -- Preview frames, decoded unscaled and pushed into the eye buffers --
+  # Both are 384x224 in four shades, the shape the display expects, and they
+  # stand in for a running game while the video settings are being adjusted.
+
+  - name: vbtitlescreen_left.png
+    path: "res/drawable-nodpi/vbtitlescreen_left.png"
+    system: nintendo-virtualboy
+    required: false
+    bundled: true
+    category: game_data
+    md5: 793565cb6af20eb02c78322899e54172
+    sha1: 480e9872ab20d8a137004e45486985608882983f
+    size: 619
+    description: "Left eye of the settings preview image"
+    source_ref: "app/src/main/java/com/simongellis/vvb/game/GameViewModel.kt:41-51, app/src/main/java/com/simongellis/vvb/game/PreviewActivity.kt:32,56"
+
+  - name: vbtitlescreen_right.png
+    path: "res/drawable-nodpi/vbtitlescreen_right.png"
+    system: nintendo-virtualboy
+    required: false
+    bundled: true
+    category: game_data
+    md5: 6df7af05e6b0cb19a37615c2b29116d9
+    sha1: fc6c5857a0c298d9d6a73449044d1ef3c57fe050
+    size: 620
+    description: "Right eye of the settings preview image"
+    source_ref: "app/src/main/java/com/simongellis/vvb/game/GameViewModel.kt:41-51, app/src/main/java/com/simongellis/vvb/game/PreviewActivity.kt:32,56"

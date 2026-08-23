@@ -1,0 +1,263 @@
+emulator: X1 BOX
+type: standalone
+core_classification: community_fork
+source: "https://github.com/izzy2lost/xemu"
+upstream: "https://github.com/xemu-project/xemu"
+author: "izzy2lost"
+profiled_date: "2026-08-12"
+source_commit: "3ed53f6843ac41147287468d996dfa939b40ad00"
+upstream_commit: "26fcbe54f17e496bdf530dad9f237e74e2f943fc"
+core_version: "1.2.6"
+display_name: "Microsoft - Xbox (X1 BOX)"
+cores:
+  - "x1-box"
+  - "x1box"
+systems:
+  - microsoft-xbox
+mode: standalone
+
+notes: |
+  Original Xbox emulator for Android, package com.izzy2lost.x1box, arm64-v8a.
+  A Kotlin front end carries the launcher, setup wizard, game library, settings
+  and per-title overrides, and drives a whole xemu tree built through CMake
+  against SDL2 and QEMU 10.2.0. The imgui interface, the monitor and the
+  snapshot entry points are stubbed, so that front end is the only interface.
+  .LauncherActivity answers VIEW with a content or file URI, and that URI
+  becomes the disc slot before emulation opens.
+  ref: QEMU_VERSION,
+       android/app/build.gradle.kts:49, 55, 64-65, 68,
+       android/app/src/main/AndroidManifest.xml:13-30,
+       android/app/src/main/cpp/CMakeLists.txt:858, 867-868,
+       android/app/src/main/java/com/izzy2lost/x1box/LauncherActivity.kt:37,
+       92-121
+
+  The wizard walks four steps and each Next stays disabled until its own step
+  resolves: the MCPX boot ROM, the flash ROM, the disk image and a games
+  folder. The two ROM pickers keep .bin, .rom and .img, the disk picker .qcow2
+  and .img. A pick is fingerprinted before anything is written, and only a file
+  that passes is copied into x1box under the external files directory as
+  mcpx.bin, flash.bin or hdd.img; a file chosen as a path in place is kept as
+  that path instead. Those names, the eeprom the wizard never asks for and the
+  disc are written to x1box/xemu.toml under sys.files. The disc is handed to
+  QEMU as a file descriptor through -add-fd and only copied to x1box/dvd.iso
+  when that fails.
+  ref: android/app/src/main/java/com/izzy2lost/x1box/SetupWizardActivity.kt:63-139,
+       243-278, 411-459,
+       android/app/src/main/cpp/xemu_android.cpp:717-721, 757-870, 1315-1325
+
+  The three images are what the app gates on. The launcher sends the user back
+  through the wizard whenever the MCPX, the flash, the disk or the games folder
+  stops resolving, and an intent from a frontend reaches the emulator only once
+  the three images resolve. The core underneath is looser: an empty MCPX path
+  simply leaves the machine property off, an empty disk path attaches no drive
+  at index 0, and only the flash clears autostart on its own.
+  ref: android/app/src/main/java/com/izzy2lost/x1box/LauncherActivity.kt:117-135,
+       system/vl.c:3000-3022, 3057-3072, 3078-3092
+
+  Settings imports a dashboard tree from a ZIP or a folder into the FATX
+  partitions of the configured disk image, C at 0x8CA80000 and E at 0xABE80000,
+  keeping what it overwrites in a dated backup folder. The tree is searched for
+  a boot XBE beforehand and the best candidate is copied to C/xboxdash.xbe when
+  that name is missing, xboxdash.xbe, default.xbe, evoxdash.xbe, avalaunch.xbe,
+  unleashx.xbe, xbmc.xbe and nexgen.xbe scoring in that order, with a name
+  carrying dash and a path under dashboard scoring above one under apps or
+  games. The status line probes C for xboxdash.xbe, msdash.xbe, xbox.xtf and
+  the directories xodash, audio, fonts and xboxdashdata.*, and calls the
+  install complete when the boot XBE sits beside at least one of the others.
+  ref: android/app/src/main/cpp/xemu_fatx_import.c:51-54, 1786-1801, 1842-1847,
+       1864-1911,
+       android/app/src/main/java/com/izzy2lost/x1box/XboxInsigniaHelper.kt:10-53,
+       android/app/src/main/java/com/izzy2lost/x1box/SettingsActivity.kt:2370-2445
+
+  Preparing Insignia turns the NAT backend on and writes the DNS 46.101.64.175
+  into the config sector of the disk image and into the EEPROM at 0xAC.
+  Registration boots a Setup Assistant image the user picks, which goes in the
+  disc slot like any other game. The disk tools format an image that already
+  exists and never create one: a retail layout needs at least 0x1DD156000
+  bytes and the extended F and G layouts need room past that boundary. The
+  EEPROM editor rewrites language, video standard, resolution flags, aspect
+  ratio and refresh rate in place and recomputes both checksums. The five
+  managed files travel together through an x1box-files-*.zip archive that
+  settings both writes and reads back.
+  ref: android/app/src/main/java/com/izzy2lost/x1box/XboxInsigniaHelper.kt:7-8,
+       62-77,
+       android/app/src/main/java/com/izzy2lost/x1box/XboxEepromEditor.kt:17,
+       159-213,
+       android/app/src/main/java/com/izzy2lost/x1box/XboxHddFormatter.kt:7-16,
+       46-50,
+       android/app/src/main/java/com/izzy2lost/x1box/SettingsActivity.kt:48-56,
+       1030-1086, 1432-1445
+
+files:
+  - name: mcpx_1.0.bin
+    required: true
+    path: "x1box/mcpx.bin"
+    config_key: "sys.files.bootrom_path"
+    size: 512
+    md5: "d49c52a4102f6df7bcf8d0617ac475ed"
+    validation: [size, md5]
+    description: "MCPX southbridge boot ROM"
+    note: >-
+      The only file the app verifies by content. A pick is accepted just when
+      its MD5 equals the value hardcoded in the wizard, which is the v1.0 boot
+      ROM; anything else is refused with the expected hash quoted, and the
+      512-byte dump whose MD5 is 196a5f59a13382c185636e691d6c323d is named
+      separately as a known bad dump to re-dump. The check runs again over the
+      stored copy every time the wizard opens, so a file that stops matching
+      is dropped. The loader then checks the size a second time and ends the
+      process when it is not 512 bytes. The bytes are read over the last 512
+      of the flash image and the region stays writable so early retail kernels
+      keep their cache quirk.
+    source_ref: "android/app/src/main/java/com/izzy2lost/x1box/SetupWizardActivity.kt:23-25, 67-91, 411-459, 461-500, android/app/src/main/res/values/strings.xml:19-21, system/vl.c:2998-3022, hw/xbox/xbox.c:143-172"
+
+  - name: Complex_4627.bin
+    required: true
+    path: "x1box/flash.bin"
+    config_key: "sys.files.flashrom_path"
+    size_options: [262144, 524288, 1048576]
+    size_note: "Any non-zero multiple of 65536; 256 KB is assumed when the image cannot be read."
+    validation: [size]
+    description: "Xbox flash ROM"
+    note: >-
+      Passed as -bios, and the one image whose absence stops the run on its
+      own: a path that cannot be opened queues an error and clears autostart.
+      The picker only refuses what looks like the boot ROM, a 512-byte file or
+      either MCPX hash, and asks for a BIOS instead; there is no positive hash
+      to match. The image is mapped at 0xFF000000 and mirrored to the top of
+      the address space; a size that is zero or not a multiple of 64 KB, or a
+      short read, falls back to 256 KB filled with 0xFF. A retail image cannot
+      launch unsigned code, so a debug or modified image is what boots a title.
+    source_ref: "system/vl.c:3057-3072, hw/xbox/xbox.c:64-102, android/app/src/main/java/com/izzy2lost/x1box/SetupWizardActivity.kt:64, 93-116, 487-495"
+
+  - name: xbox_hdd.qcow2
+    required: true
+    path: "x1box/hdd.img"
+    config_key: "sys.files.hdd_path"
+    description: "Xbox hard disk image"
+    note: >-
+      Taken in qcow2 or raw form and attached as index 0 with locked=on and
+      cache=writethrough. An empty setting attaches no drive at all and an
+      unopenable one only queues a message, but the launcher refuses to leave
+      the wizard until the file resolves. The formatter builds FATX partitions
+      inside an image that already exists and needs at least 0x1DD156000 bytes
+      for the retail layout; it never creates the image. Partitions C and E of
+      this image are what the dashboard import writes into.
+    source_ref: "system/vl.c:3078-3092, android/app/src/main/java/com/izzy2lost/x1box/SetupWizardActivity.kt:65, 118-139, android/app/src/main/java/com/izzy2lost/x1box/XboxHddFormatter.kt:7-16, 46-50, android/app/src/main/cpp/xemu_android.cpp:822-843"
+
+  - name: eeprom.bin
+    required: false
+    path: "x1box/eeprom.bin"
+    config_key: "sys.files.eeprom_path"
+    size: 256
+    validation: [size]
+    description: "Xbox EEPROM image"
+    note: >-
+      Always pointed at x1box/eeprom.bin, a path the wizard never asks for.
+      Generated as XBOX_EEPROM_VERSION_R1 when it does not exist, so a dump is
+      needed only to carry over a console serial, region or HDD key. It is
+      attached through the smbus-storage device; a size other than 256 bytes,
+      or a generation that fails, clears autostart. Preparing Insignia and the
+      EEPROM editor write to it in place.
+    source_ref: "system/vl.c:2921-2964, 3045-3055, android/app/src/main/cpp/xemu_android.cpp:757-759, 719, android/app/src/main/cpp/xemu_settings_android.cc:246-286, android/app/src/main/java/com/izzy2lost/x1box/SettingsActivity.kt:2748-2751"
+
+  - name: xboxdash.xbe
+    required: false
+    load_from: hdd_image
+    path: "C/xboxdash.xbe"
+    description: "Retail dashboard boot executable"
+    note: >-
+      Imported to the root of partition C from the C directory of a user
+      dashboard tree. The import treats this name as the boot entry: when it is
+      absent the best scoring .xbe of the tree is copied to it, and the retail
+      boot counts as ready only once the name exists. The start path of the
+      emulator never reads partition C, and preparing Insignia finishes with a
+      warning when the name is missing.
+    source_ref: "android/app/src/main/cpp/xemu_fatx_import.c:1796-1797, 1842-1843, 1864-1911, android/app/src/main/java/com/izzy2lost/x1box/SettingsActivity.kt:2370-2401, 2436-2445, 2518, 2536-2538"
+
+  - name: msdash.xbe
+    required: false
+    load_from: hdd_image
+    path: "C/msdash.xbe"
+    description: "Retail dashboard executable kept beside the boot copy"
+    note: >-
+      Probed at the root of partition C and imported with the rest of the tree.
+      Its presence beside the boot XBE is one of the marks the status line
+      reads to call a dashboard install complete, and it is one of the names
+      that decide which directory of a picked tree is taken as the source root.
+    source_ref: "android/app/src/main/cpp/xemu_fatx_import.c:1798-1799, 1844-1845, android/app/src/main/java/com/izzy2lost/x1box/XboxInsigniaHelper.kt:13, 42-50, android/app/src/main/java/com/izzy2lost/x1box/SettingsActivity.kt:2518, 2539-2541"
+
+  - name: xbox.xtf
+    required: false
+    load_from: hdd_image
+    path: "C/xbox.xtf"
+    description: "Dashboard typeface"
+    note: >-
+      Probed at the root of partition C and imported with the rest of the tree,
+      alongside the xodash, audio, fonts and xboxdashdata.* directories the
+      root scan looks for.
+    source_ref: "android/app/src/main/cpp/xemu_fatx_import.c:1786-1794, 1800-1801, 1846-1847, android/app/src/main/java/com/izzy2lost/x1box/XboxInsigniaHelper.kt:12, 14-16, android/app/src/main/java/com/izzy2lost/x1box/SettingsActivity.kt:2518, 2542-2543"
+
+  - name: "<driver>.zip"
+    required: false
+    unsourceable: "third-party Vulkan driver built for one GPU family, not an emulator artefact"
+    description: "Replacement Vulkan driver package"
+    note: >-
+      Imported through a picker into gpu_drivers under the external files
+      directory, renamed after the name field of the meta.json it carries, then
+      unpacked whole into gpu_driver in internal storage, entries that would
+      escape that directory being refused. The minApi field is compared against
+      the device before the archive is kept. Loading is offered only when
+      /dev/kgsl-3d0 exists, and clearing the install directory returns the app
+      to the system driver.
+    source_ref: "android/app/src/main/java/com/izzy2lost/x1box/GpuDriverHelper.kt:15, 19-35, 41-89, 91-131, 133-136, 170-197"
+
+  - name: gamecontrollerdb.txt
+    required: false
+    bundled: true
+    unsourceable: "opened through the asset manager inside the package, so no file on disk reaches this load"
+    description: "SDL controller mapping database"
+    note: >-
+      Read from the assets of the package as the game controller subsystem
+      comes up and handed to SDL as a memory stream. The asset manager reads
+      inside the archive and the path is a constant, so there is no search
+      order and nothing outside the package replaces this copy; an added pad
+      mapping goes in through controller_map.txt instead. The revision shipped
+      here is 589031 bytes and is not the one other releases carry under this
+      name.
+    source_ref: "android/app/src/main/cpp/xemu_android.cpp:205-206, 236-275, 1192-1197"
+
+  - name: X1_Covers.txt
+    required: false
+    bundled: true
+    description: "Cover art index for the game library"
+    note: >-
+      Read from the assets and turned into a lookup from normalised game name
+      to a URL under the X1_Covers repository, which the library fetches and
+      caches per title. Only lines ending in .png are kept.
+    source_ref: "android/app/src/main/java/com/izzy2lost/x1box/GameLibraryActivity.kt:103, 895-935"
+
+  - name: controller_map.txt
+    required: false
+    load_from: internal_storage
+    description: "Extra SDL controller mappings"
+    note: >-
+      SDL builds this path from the internal storage directory of the package
+      when SDL_GAMECONTROLLERCONFIG_FILE is unset, which it is here, and reads
+      it while the game controller subsystem starts, after the mappings
+      compiled in. It is the one mapping file a user can add without
+      rebuilding the package. The SDL2 tree in thirdparty is what the build
+      compiles, the local checkout taking precedence over the release archive
+      CMake would otherwise fetch.
+    source_ref: "thirdparty/SDL2/src/joystick/SDL_gamecontroller.c:1873-1885, 1890-1907, android/app/src/main/cpp/CMakeLists.txt:61-72"
+
+exclusion_note: >
+  Two file loads present in the tree are not reached by this build and are not
+  listed. hw/xbox/chihiro.c falls back to the media board ROM when no path is
+  given and maps a media board filesystem image beside it, but the whole driver
+  is filtered out of the source list, so no Chihiro machine exists here.
+  X1_Covers.xml ships in the assets and no code opens it, the library reading
+  X1_Covers.txt instead.
+  ref: hw/xbox/chihiro.c,
+       android/app/src/main/cpp/CMakeLists.txt:705,
+       android/app/src/main/assets/X1_Covers.xml,
+       android/app/src/main/java/com/izzy2lost/x1box/GameLibraryActivity.kt:901

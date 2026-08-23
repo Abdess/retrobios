@@ -1,0 +1,101 @@
+emulator: "Swan.emu"
+type: standalone
+core_classification: community_fork
+source: "https://github.com/Rakashazi/emu-ex-plus-alpha"
+upstream: "https://mednafen.github.io/"
+profiled_date: "2026-08-12"
+source_commit: "1c12fac5ce49badaadff2e2f210dcc30b89f4943"
+core_version: "1.5.85"
+display_name: "Bandai - WonderSwan / Color (Swan.emu)"
+mode: standalone
+cores:
+  - "swan-emu"
+  - "Swan.emu"
+  - "SWAN-EMU"
+systems:
+  - bandai-wswan
+  - bandai-wswanc
+
+notes: |
+  Member of the EX Emulator series by Robert Broglia, which targets Android and
+  Linux (README.md:1,3-4,12-13) and keeps iOS and Pandora build shortcuts in the
+  tree (Swan.emu/ios.mk, Swan.emu/pandora.mk). Published as
+  com.explusalpha.SwanEmu (Swan.emu/metadata/conf.mk:2,6,7) and reached by ES-DE
+  through its SWAN-EMU find rule, which only the Android rule set carries.
+  Mednafen's WonderSwan module, itself descended from Cygne, is vendored under
+  Swan.emu/src/wswan (Swan.emu/metadata/conf.mk:8,
+  Swan.emu/src/main/AppMeta.cc:27) on the 1.32 line
+  (EmuFramework/include/shared/mednafen/mednafen-config.h:167) and driven by the
+  app's own video, audio, input and save layers. Three files differ from the
+  Mednafen 1.32.1 release: the pixel format and sound rate hooks move to the app
+  and the button latch is dropped for a value the input layer writes directly,
+  the save file calls are removed from loading and closing, and the SRAM and
+  EEPROM writes signal the app's backup memory
+  (Swan.emu/src/wswan/main.cpp:91,95, Swan.emu/src/main/Main.cc:96,104,119,
+  Swan.emu/src/main/input.cc:97,102, Swan.emu/src/wswan/memory.cpp:160-164,
+  Swan.emu/src/wswan/eeprom.cpp:164-169). The debugger and the disassembler are
+  left out of the build (Swan.emu/src/CMakeLists.txt:6-22). Content is read from
+  .ws, .wsc and .bin files (Swan.emu/metadata/conf.mk:5,
+  Swan.emu/src/main/AppMeta.cc:30); an archive is opened by the framework, which
+  keeps the first entry passing that same filter
+  (EmuFramework/src/EmuSystem.cc:394-412).
+
+  The content image is the only one the app loads. It is read into a 64 MiB
+  buffer, refused under 64 KiB or over 64 MiB, rounded up to 64 KiB then to a
+  power of two with the image sitting at the end of the buffer, and hashed for
+  the save file names (Swan.emu/src/main/Main.cc:91-97,
+  EmuFramework/src/shared/mednafen-emuex/MDFNUtils.hh:133-146,
+  Swan.emu/src/wswan/main.cpp:236-257,294-299). Byte 5 of the footer selects
+  either an EEPROM of 128, 1024 or 2048 bytes or battery RAM of 8 KiB to 512 KiB
+  (Swan.emu/src/wswan/main.cpp:317-333). A 512 KiB image carrying ELISA at
+  0x70000 whose last 16 bytes hash to crc32 0x0d05ed64, minus three blacklisted
+  images, is taken for WonderWitch firmware and read as content
+  (Swan.emu/src/wswan/main.cpp:273-291,351-352).
+
+  No boot ROM is read. Reset writes a built-in table of 200 power-on values to
+  the I/O ports, less the four EEPROM data ports
+  (Swan.emu/src/wswan/start.inc:12,
+  Swan.emu/src/wswan/main.cpp:66-70) and the memory reset writes at 0x75AC the
+  eight identifier bytes the boot ROM would have left
+  (Swan.emu/src/wswan/memory.cpp:801-808). The internal EEPROM is a built-in
+  0x400 byte image copied at init, then personalized in place with the name,
+  birth date, sex and blood type of the WonderSwan User Profile menu; the
+  language flag reaches the hardware the same way
+  (Swan.emu/src/wswan/eeprom.cpp:31,33,183-214,
+  Swan.emu/src/wswan/memory.cpp:748-772, Swan.emu/src/wswan/main.cpp:377,
+  Swan.emu/src/main/EmuMenuViews.cc:34-155,
+  Swan.emu/src/main/options.cc:117-165).
+
+  No firmware path exists by construction: the app answers Mednafen's file name
+  request for save states, saves and save backups only, and any other kind ends
+  in unreachable() (Swan.emu/src/main/options.cc:179-189). The module's own save
+  reader and writer, which would open a .sav and, for WonderWitch, a 524288 byte
+  .flash image, are unreachable, both call sites of the Mednafen release having
+  been removed from loading and closing (Swan.emu/src/wswan/memory.cpp:674-740,
+  Swan.emu/src/wswan/main.cpp:223-226,377-379). The comms setting is answered
+  false and its program path empty, so the serial link never forks a helper
+  (Swan.emu/src/main/options.cc:159-160,173-174,
+  Swan.emu/src/wswan/main.cpp:379, Swan.emu/src/wswan/comm.cpp:40-71). Cheat
+  loading and IPS patching are compiled in from the shared Mednafen sources and
+  called from nowhere (EmuFramework/src/shared/CMakeLists.txt:11-12,
+  EmuFramework/src/shared/mednafen/mempatcher.cpp:251-254,
+  EmuFramework/src/shared/mednafen/file.cpp:38-53), and the music rip player
+  routines are stubs (EmuFramework/src/shared/mednafen-emuex/MDFNApi.cc:87-88,
+  Swan.emu/src/wswan/main.cpp:259-268).
+
+  Per content the app writes and reads back one .sav holding the EEPROM followed
+  by the battery RAM, plus save states and SwanEmu.config
+  (Swan.emu/src/main/Main.cc:47-54,56-82, Swan.emu/src/main/system.ccm:155,
+  Swan.emu/src/main/AppMeta.cc:28,
+  EmuFramework/src/shared/mednafen-emuex/MDFNUtils.hh:76-122,
+  EmuFramework/src/EmuSystem.cc:168-172). ui.png, gpOverlay.png and the shader
+  sources are drawn from the application bundle
+  (EmuFramework/include/emuframework/AssetManager.hh:61-66,
+  EmuFramework/src/AssetManager.cc:58-70,
+  EmuFramework/src/VideoImageEffect.cc:163-173), as is the interface font on a
+  build without fontconfig (imagine/src/font/FreetypeFont.cc:271-289). The app
+  declares no bundled content, the framework definition defaulting to an empty
+  span (EmuFramework/src/AppMeta.cc:40,
+  EmuFramework/include/emuframework/AppMeta.hh:66-68).
+
+files: []

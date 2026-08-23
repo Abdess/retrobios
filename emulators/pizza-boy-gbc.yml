@@ -1,0 +1,130 @@
+emulator: "Pizza Boy GBC"
+type: standalone
+core_classification: embedded_hle
+source: "https://play.google.com/store/apps/details?id=it.dbtecno.pizzaboypro"
+upstream: closed-source
+author: "Pizza Emulators"
+profiled_date: "2026-08-12"
+core_version: "6.0.6"
+display_name: "Nintendo - Game Boy / Color (Pizza Boy GBC)"
+mode: standalone
+cores:
+  - "pizza-boy-gbc"
+  - "Pizza Boy GBC"
+  - "PIZZA-BOY-GBC"
+systems:
+  - nintendo-gb
+  - nintendo-gbc
+  - nintendo-sgb
+
+notes: |
+  Two Android packages, closed source, sold and given away on Google Play under the
+  Pizza Boy C name, reached by ES-DE through its PIZZA-BOY-GBC find rule and started
+  with the game passed as the rom_uri extra: it.dbtecno.pizzaboypro, the paid build the
+  rule names first, and it.dbtecno.pizzaboy, the free one. Two Play distribution builds
+  are read here, both carrying the developer certificate sha256
+  b3ee584096acf4667bb9346daa9cce19237ef7ce95c99e9260ac89be0f7d6130 (CN=Davide Berra,
+  O=DBTecno) and a source stamp: Pro 6.0.6 (versionCode 231), which supplies the Java
+  and the resources, and Basic 4.1.6 (versionCode 202), whose arm64-v8a
+  libpizzaboy-jni.so ships DWARF and an unstripped symbol table and supplies every
+  native reference below as its own file and line. Java line numbers are those of Pro
+  6.0.6. The Pro on the store is 7.4.5 (versionCode 324) and no genuine copy of it is
+  reachable: apkcombo bounces the download page of a paid app back to the app page,
+  apkvision carries no copy, and archive.org holds 6.0.6 alone. The Pro ships its core
+  as a stripped armeabi-v7a build; it carries the same log strings and the same
+  constants as the Basic core, the 64 KB clear, the 8192 byte read cap, the 256 byte
+  header copy and the 256 and 2304 byte gate, and 65 of the 70 entry points it exports
+  are exported by the Basic core as well. The Pro also ships libpizza-jni.so, an
+  older core exporting the free package JNI names and carrying no BIOS entry point,
+  which no loadLibrary call reaches.
+
+  Three systems are emulated from one tree named pizzaboy, whose compilation units
+  carry gameboy.c, mmu.c, sgb.c and camera.c: Game Boy, Game Boy Color and Super Game
+  Boy. The SGB command set, borders and palettes are handled by sgb.c behind a Super
+  Game Boy switch that is on by default, with a preference that gives Game Boy Color
+  precedence over Super Game Boy on a cartridge that offers both. camera.c drives the
+  Game Boy Camera cartridge from the device camera, and the Game Boy Printer is served
+  over the link port.
+
+  The boot ROM is the one file the user supplies, in two slots, Gameboy Classic ROMs
+  BIOS and Gameboy Color ROMs BIOS, and it is read only while Load BIOS file is on,
+  off by default (res/xml/pref_general.xml:89-99). In the free package the same three
+  preferences are declared android:enabled="false" behind a paid badge. A ROM whose
+  name ends in .gb or .sgb takes the first slot, every other name takes the second.
+
+  The library never examines the name, the extension or the content: the byte count of
+  the read decides the machine. A file of 256 bytes runs the cartridge as a Game Boy,
+  one of 2304 bytes as a Game Boy Color, and any other length is refused with "Unknown
+  BIOS file", after which the run continues with the boot skipped. The image is read
+  into a second MMU whose 0x100 to 0x1FF window is overwritten with the cartridge
+  header from the active one, the program counter starts at 0 instead of at the
+  cartridge entry, and the animation runs until it reaches 0x100, at which point the
+  active MMU returns to the cartridge and the accumulator is restored. A multiplayer
+  session exchanges the CRC32 of the Game Boy slot so that both peers run the same
+  file.
+
+  Everything else the app opens it makes itself: the default skins and the cheat
+  descriptors are raw resources unpacked at first run, the box art, cheat, sticker,
+  layout and per-ROM databases are created by their own CREATE TABLE, and the save
+  states, the RTC files, the screenshots and the GIF captures are outputs. No boot ROM
+  is compiled into the library: neither Game Boy image nor the Nintendo logo appears
+  anywhere in the loaded sections, and the post-boot register state comes from the
+  reset path instead.
+
+files:
+  - name: dmg_boot.bin
+    system: nintendo-gb
+    required: false
+    hle_fallback: true
+    agnostic: true
+    size: 256
+    validation: [size]
+    config_key: "bios_file"
+    description: "Game Boy (DMG) boot ROM"
+    note: >-
+      Chosen from any location under any name through the document picker and copied
+      into the application directory under the name the picker reports; the legacy
+      browser offers .gbc, .gb, .bin and .zip and writes the entry it extracts from a
+      zip to bios.bin. The absolute path is stored and handed to the library, which
+      copies it into a 256 byte buffer. It is used when the ROM name ends in .gb or
+      .sgb, and only on the first run of that ROM and with no multiplayer peer
+      connected. The file is read into a second MMU image, up to 8192 bytes, and a
+      count of exactly 256 starts the run as a Game Boy, keeping the default palette.
+      Nothing else is examined: no name, size range, header or hash test exists on
+      either side of the bridge, and a count that is neither 256 nor 2304 is refused.
+      A multiplayer session exchanges the CRC32 of this file so that both peers run
+      the same one.
+    source_ref: "Pizza Boy GBC Pro 6.0.6 MainActivity.java:702 (native method),
+      :8067-8081 (gate and slot selection), :1734-1757 (CRC32 of the file),
+      :1907, :2136 (multiplayer handshake), SettingsActivity.java:40-41 (request
+      codes), :96-113 (picker result and copy), :116-192 (both preferences),
+      Common.java:42 (copy to the application directory), FileDialog.java:949-975
+      (legacy browser, zip entry to bios.bin), res/xml/pref_general.xml:89-99
+      (defaults); Pizza Boy C Basic 4.1.6 libpizzaboy-jni.so pizza.c:1023-1024 (path
+      into global_bios_file), global.c:28 (char[256]), mmu.c:431-463 (open, 64 KB
+      clear, 8192 byte read, cartridge header copy, 256 and 2304 gate, refusal),
+      gameboy.c:1161-1168 (conditions and call), :1171, :1238 (failure),
+      :1179-1198 (model, MMU switch, program counter at 0, accumulator),
+      :1201-1235 (run to 0x100, return to the cartridge)"
+
+  - name: cgb_boot.bin
+    system: nintendo-gbc
+    required: false
+    hle_fallback: true
+    agnostic: true
+    size: 2304
+    validation: [size]
+    config_key: "bios_file_cgb"
+    description: "Game Boy Color (CGB) boot ROM"
+    note: >-
+      Same picker, same copy and same handoff as the Game Boy slot, used for every ROM
+      whose name does not end in .gb or .sgb. A count of exactly 2304 starts the run as
+      a Game Boy Color, which sets the accumulator to 0x11 and keeps the hardware
+      palettes instead of reloading the default one. The 0x100 to 0x1FF window of the
+      image is overwritten with the cartridge header before execution, which is the
+      gap the 2304 byte layout leaves for it.
+    source_ref: "Pizza Boy GBC Pro 6.0.6 MainActivity.java:8073-8078 (slot selection),
+      SettingsActivity.java:98 (preference key), :158-192 (preference and picker),
+      res/xml/pref_general.xml:97-99; Pizza Boy C Basic 4.1.6 libpizzaboy-jni.so
+      mmu.c:435-452 (read, header copy, 2304 gate), gameboy.c:1179 (model from the
+      return value), :1189-1198 (program counter, accumulator, palette)"

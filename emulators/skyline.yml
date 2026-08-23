@@ -1,0 +1,259 @@
+emulator: Skyline
+type: standalone
+core_classification: other
+source: "https://github.com/skyline-emu/skyline"
+upstream: "https://github.com/skyline-emu/skyline"
+profiled_date: "2026-08-12"
+source_commit: "dc20a615275f66bee20a4fd851ef0231daca4f14"
+core_version: "0.0.3"
+display_name: "Nintendo - Switch (Skyline)"
+cores:
+  - "skyline"
+  - "SKYLINE"
+systems:
+  - nintendo-switch
+mode: standalone
+
+notes: |
+  Nintendo Switch emulator for ARMv8 Android, written from scratch in C++ and Kotlin.
+  Android package skyline.emu, versionCode 3, minSdk 29, with the debug variant taking a
+  .dev suffix (build.gradle:23,28-29,120-121). ES-DE reaches it through its SKYLINE find
+  rule and starts it with android.intent.action.VIEW on the content URI of the game.
+  Development ceased and the README at the pinned commit records it; the code is split
+  across skyline and skyline-dev, whose external file surface is identical (key_store.cpp
+  :10-13 and shared_font_core.h:40-47 in both).
+
+  NCA, NRO, NSO, NSP and XCI are loaded (loader/). Two key files are read, from keys/
+  under the application internal files directory, which os.cpp:35 hands to the key store
+  as its root. Both arrive through the in-app importer, which accepts only the two names
+  and rewrites the trimmed pairs into that directory (KeyReader.kt:25-26,56-60); nothing
+  else is consulted for keys, and there is no dev.keys or console.keys path.
+
+  No firmware is installed and none is read. The system version is answered from a
+  hardcoded 9.0.0-4.0 structure (ISystemSettingsServer.cpp:9-10) and the system data
+  archives a game asks for through OpenDataStorageByDataId are served as stub RomFS
+  images from the application assets (IFileSystemProxy.cpp:84-90). Two are carried:
+  0100000000000806, the NgWord filter, holding 0.txt through 15.txt plus common.txt and
+  version.dat, and 0100000000000823, NgWord2, holding ac_<0-15>_b1_nx, ac_<0-15>_b2_nx
+  and ac_<0-15>_not_b_nx. A data id without a matching asset opens nothing.
+
+  The six shared fonts are the one place where a firmware file replaces a built-in one.
+  Each is looked for in fonts/ under the application external files directory, which
+  resolves to /storage/emulated/0/Android/data/skyline.emu/files/ (SkylineApplication.kt
+  :19,41), and only when it is absent does the asset of the same name serve instead
+  (shared_font_core.h:40-47). The emulator writes the shared font header itself, a magic
+  followed by the length XORed with a key derived at shared_font_core.h:36-38, and then
+  copies the whole file after it (shared_font_core.h:51-55), so the file it expects is
+  the raw TTF payload rather than the headered form the firmware stores. Sizes are taken
+  from the file and never checked, and the six together have to fit the 0x140A000 shared
+  memory block.
+
+  A custom Vulkan driver can be loaded through adrenotools from gpu_drivers/<label>/
+  under the internal files directory (gpu.cpp:342-357). The label and the library
+  filename are both read from a meta.json inside the archive the user installs
+  (GpuDriverHelper.kt:19-22,150-191,219), so the code names no driver file of its own;
+  loading falls back to the built-in driver and then to the system libvulkan.so. Save
+  data and the emulated SD card live under switch/ in the external files directory
+  (IFileSystemProxy.cpp:21,67) and are written by the emulator.
+
+files:
+  - name: prod.keys
+    path: "keys/prod.keys"
+    system: nintendo-switch
+    required: true
+    description: "Production keys for content decryption"
+    note: >-
+      Read as name=value pairs from keys/ under the application internal files directory.
+      Supplies header_key, and the titlekek_XX, key_area_key_application_XX,
+      key_area_key_ocean_XX and key_area_key_system_XX generation-indexed sets. An
+      encrypted NCA without header_key fails with MissingHeaderKey, and one whose key
+      area cannot be unwrapped fails with MissingKeyArea, so no retail title loads
+      without this file. The importer accepts a pair only when the name contains an
+      underscore and the value is hexadecimal.
+    source_ref: "app/src/main/cpp/skyline/os.cpp:35 (root directory), app/src/main/cpp/skyline/crypto/key_store.cpp:12-13 (read), app/src/main/cpp/skyline/crypto/key_store.h:30-39 (key names), app/src/main/cpp/skyline/crypto/key_store.cpp:46-62 (parse), app/src/main/cpp/skyline/vfs/nca.cpp:21-22,126 (failures), app/src/main/java/emu/skyline/KeyReader.kt:83-88 (import check)"
+
+  - name: title.keys
+    path: "keys/title.keys"
+    system: nintendo-switch
+    required: false
+    description: "Per-title keys"
+    note: >-
+      Read as rights id to title key pairs from the same directory. A title key normally
+      arrives instead from the .tik tickets carried inside an NSP, which are parsed and
+      pushed into the same store, so this file is only needed when no ticket supplies
+      one; that case fails with MissingTitleKey. The importer requires both halves of a
+      pair to be 32 hexadecimal characters.
+    source_ref: "app/src/main/cpp/skyline/crypto/key_store.cpp:10-11 (read), app/src/main/cpp/skyline/crypto/key_store.cpp:35-39 (parse), app/src/main/cpp/skyline/loader/nsp.cpp:14-21 (tickets), app/src/main/cpp/skyline/vfs/nca.cpp:108-110 (failure), app/src/main/java/emu/skyline/KeyReader.kt:77-82 (import check)"
+
+  - name: FontStandard.ttf
+    path: "fonts/FontStandard.ttf"
+    system: nintendo-switch
+    required: false
+    has_builtin: true
+    description: "Shared font, standard"
+    note: >-
+      Loaded from fonts/ under the application external files directory when present,
+      otherwise from the asset of the same name, which carries Noto Sans CJK. Copied
+      into the shared font block behind a header the emulator generates, so the expected
+      content is the raw TTF payload.
+    source_ref: "app/src/main/cpp/skyline/services/pl/shared_font_core.h:26 (entry), :40-47 (lookup and fallback), :51-55 (header and copy)"
+
+  - name: FontChineseSimplified.ttf
+    path: "fonts/FontChineseSimplified.ttf"
+    system: nintendo-switch
+    required: false
+    has_builtin: true
+    description: "Shared font, simplified Chinese"
+    note: >-
+      Same lookup as the standard font, with a Noto Sans CJK asset behind it.
+    source_ref: "app/src/main/cpp/skyline/services/pl/shared_font_core.h:27 (entry), :40-47 (lookup and fallback), :51-55 (header and copy)"
+
+  - name: FontExtendedChineseSimplified.ttf
+    path: "fonts/FontExtendedChineseSimplified.ttf"
+    system: nintendo-switch
+    required: false
+    has_builtin: true
+    description: "Shared font, extended simplified Chinese"
+    note: >-
+      Same lookup as the standard font, with a Noto Sans CJK asset behind it.
+    source_ref: "app/src/main/cpp/skyline/services/pl/shared_font_core.h:28 (entry), :40-47 (lookup and fallback), :51-55 (header and copy)"
+
+  - name: FontChineseTraditional.ttf
+    path: "fonts/FontChineseTraditional.ttf"
+    system: nintendo-switch
+    required: false
+    has_builtin: true
+    description: "Shared font, traditional Chinese"
+    note: >-
+      Same lookup as the standard font, with a Noto Sans CJK asset behind it.
+    source_ref: "app/src/main/cpp/skyline/services/pl/shared_font_core.h:29 (entry), :40-47 (lookup and fallback), :51-55 (header and copy)"
+
+  - name: FontKorean.ttf
+    path: "fonts/FontKorean.ttf"
+    system: nintendo-switch
+    required: false
+    has_builtin: true
+    description: "Shared font, Korean"
+    note: >-
+      Same lookup as the standard font, with a Noto Sans CJK asset behind it.
+    source_ref: "app/src/main/cpp/skyline/services/pl/shared_font_core.h:30 (entry), :40-47 (lookup and fallback), :51-55 (header and copy)"
+
+  - name: FontNintendoExtended.ttf
+    path: "fonts/FontNintendoExtended.ttf"
+    system: nintendo-switch
+    required: false
+    has_builtin: true
+    description: "Shared font, extended button glyphs"
+    note: >-
+      Same lookup as the standard font, with a Roboto asset behind it.
+    source_ref: "app/src/main/cpp/skyline/services/pl/shared_font_core.h:31 (entry), :40-47 (lookup and fallback), :51-55 (header and copy)"
+
+  - name: "0100000000000806"
+    path: "romfs/0100000000000806"
+    system: nintendo-switch
+    required: false
+    bundled: true
+    unsourceable: "stub image the emulator build carries inside its package, not a dump of the system data archive it stands in for"
+    description: "NgWord system data archive"
+    note: >-
+      Stub RomFS image served from the application assets when a game opens the data
+      storage for this title id. Holds 0.txt through 15.txt, common.txt and version.dat.
+    source_ref: "app/src/main/cpp/skyline/services/fssrv/IFileSystemProxy.cpp:84-90"
+
+  - name: "0100000000000823"
+    path: "romfs/0100000000000823"
+    system: nintendo-switch
+    required: false
+    bundled: true
+    unsourceable: "stub image the emulator build carries inside its package, not a dump of the system data archive it stands in for"
+    description: "NgWord2 system data archive"
+    note: >-
+      Stub RomFS image served from the application assets when a game opens the data
+      storage for this title id. Holds ac_<0-15>_b1_nx, ac_<0-15>_b2_nx and
+      ac_<0-15>_not_b_nx.
+    source_ref: "app/src/main/cpp/skyline/services/fssrv/IFileSystemProxy.cpp:84-90"
+
+  - name: binaryList.txt
+    path: "tzdata/binaryList.txt"
+    system: nintendo-switch
+    required: false
+    bundled: true
+    unsourceable: "generated by the emulator build from the public time zone database and carried inside its package"
+    description: "Time zone location list"
+    note: >-
+      Read from the application assets at time service init and used as the list of
+      known locations. It names the 594 zone binaries under tzdata/zoneinfo/, each of
+      which is opened by location name when a zone rule is loaded. The set is generated
+      from tzdb 2021a in Horizon format.
+    source_ref: "app/src/main/cpp/skyline/services/timesrv/core.cpp:272 (list), :293 (zone binary by name), app/src/main/cpp/skyline/services/glue/ITimeZoneService.cpp:29,56 (zone binary by requested location)"
+
+  - name: version.txt
+    path: "tzdata/version.txt"
+    system: nintendo-switch
+    required: false
+    bundled: true
+    unsourceable: "generated by the emulator build from the public time zone database and carried inside its package"
+    description: "Time zone data version"
+    note: >-
+      Read from the application assets at time service init and reported as the time
+      zone binary version.
+    source_ref: "app/src/main/cpp/skyline/services/timesrv/core.cpp:289"
+
+  - name: profile_picture.jpeg
+    system: nintendo-switch
+    required: false
+    bundled: true
+    unsourceable: "placeholder image carried inside the emulator package"
+    description: "Default user profile image"
+    note: >-
+      Opened from the application assets when a game asks the account service for the
+      profile image of the emulated user.
+    source_ref: "app/src/main/cpp/skyline/services/account/IProfile.cpp:66"
+
+  - name: blit.vert.spv
+    path: "shaders/blit.vert.spv"
+    system: nintendo-switch
+    required: false
+    bundled: true
+    unsourceable: "build output of the emulator's own shader source, carried inside its package"
+    description: "Blit vertex helper shader"
+    note: >-
+      Opened from the application assets when the GPU helper shaders are built. Compiled
+      at build time from app/src/main/shaders/blit.vert.
+    source_ref: "app/src/main/cpp/skyline/gpu/shaders/helper_shaders.cpp:201, app/src/main/cpp/skyline/gpu.cpp:403 (asset filesystem)"
+
+  - name: blit.frag.spv
+    path: "shaders/blit.frag.spv"
+    system: nintendo-switch
+    required: false
+    bundled: true
+    unsourceable: "build output of the emulator's own shader source, carried inside its package"
+    description: "Blit fragment helper shader"
+    note: >-
+      Opened from the application assets when the GPU helper shaders are built. Compiled
+      at build time from app/src/main/shaders/blit.frag.
+    source_ref: "app/src/main/cpp/skyline/gpu/shaders/helper_shaders.cpp:201, app/src/main/cpp/skyline/gpu.cpp:403 (asset filesystem)"
+
+  - name: clear.vert.spv
+    path: "shaders/clear.vert.spv"
+    system: nintendo-switch
+    required: false
+    bundled: true
+    unsourceable: "build output of the emulator's own shader source, carried inside its package"
+    description: "Clear vertex helper shader"
+    note: >-
+      Opened from the application assets when the GPU helper shaders are built. Compiled
+      at build time from app/src/main/shaders/clear.vert.
+    source_ref: "app/src/main/cpp/skyline/gpu/shaders/helper_shaders.cpp:328, app/src/main/cpp/skyline/gpu.cpp:403 (asset filesystem)"
+
+  - name: clear.frag.spv
+    path: "shaders/clear.frag.spv"
+    system: nintendo-switch
+    required: false
+    bundled: true
+    unsourceable: "build output of the emulator's own shader source, carried inside its package"
+    description: "Clear fragment helper shader"
+    note: >-
+      Opened from the application assets when the GPU helper shaders are built. Compiled
+      at build time from app/src/main/shaders/clear.frag.
+    source_ref: "app/src/main/cpp/skyline/gpu/shaders/helper_shaders.cpp:328, app/src/main/cpp/skyline/gpu.cpp:403 (asset filesystem)"

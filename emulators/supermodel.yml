@@ -26,12 +26,54 @@ notes: |
   EmuDeck installs the Flatpak package (com.supermodel3.Supermodel). Config
   stored in ~/.supermodel/Config/. No checkBIOS entry in EmuDeck.
 
-files: []
+  Four data files of its own are read from the install tree, Config/ and Assets/
+  relative to the working directory on Windows and macOS, under the home
+  directory on Linux. Supermodel.ini, NVRAM/<game>.nv and Saves/<game>.st<slot>
+  are written by the emulator itself.
+  ref: Src/OSD/Windows/FileSystemPath.cpp:28-49
+
+files:
+  - name: Games.xml
+    path: "Config/Games.xml"
+    required: true
+    bundled: true
+    description: "ROM set definitions"
+    note: "Parsed at startup into the game database. Every ROM region, file name and CRC32 the loader matches against comes from here, so an unreadable file leaves no set to resolve and the launch returns before the emulator is built. The path is a config key, so -game-xml-file moves it."
+    source_ref: "Src/OSD/SDL/Main.cpp:114, 1498, 1939, 2297-2307, Src/GameLoader.cpp:551-561, 1016-1019"
+
+  - name: p1crosshair.bmp
+    path: "Assets/p1crosshair.bmp"
+    size: 295992
+    required: true
+    bundled: true
+    unsourceable: "Ships in the release archive next to the binary that loads it"
+    description: "Player 1 light gun crosshair texture"
+    note: "Both bitmaps are read on every launch whatever CrosshairStyle holds, since the load runs before the style decides anything, and a null surface aborts startup ahead of the Model 3 object. 32 bit BMP with alpha, sides a multiple of 2."
+    source_ref: "Src/OSD/SDL/Crosshair.cpp:34-51, Src/OSD/SDL/Main.cpp:2350-2356, Assets/DIR.txt"
+
+  - name: p2crosshair.bmp
+    path: "Assets/p2crosshair.bmp"
+    size: 295992
+    required: true
+    bundled: true
+    unsourceable: "Ships in the release archive next to the binary that loads it"
+    description: "Player 2 light gun crosshair texture"
+    note: "Read in the same call as the player 1 bitmap and equally fatal when it fails to load."
+    source_ref: "Src/OSD/SDL/Crosshair.cpp:35, 49-51, Src/OSD/SDL/Main.cpp:2350-2356"
+
+  - name: Music.xml
+    path: "Config/Music.xml"
+    required: false
+    bundled: true
+    unsourceable: "Ships in the release archive as a template whose every example sits inside a dummy comment tag"
+    description: "Custom MPEG music track map"
+    note: "Consulted only for a game with a DSB1 or DSB2 board, and skipped when the file is absent. Maps an MPEG ROM offset to an MP3 the user supplies."
+    source_ref: "Src/OSD/SDL/Main.cpp:115, 940, Src/Sound/MPEG/MpegAudio.cpp:88-108"
 
 exclusion_note: >
   The Sega Model 3 arcade hardware has no shared system BIOS. Each game board
   contains its own program ROMs (CROM), video ROMs (VROM), sound program, sound
   samples, and optional DSB/drive board ROMs, all contained within per-game
   MAME-format ZIP archives. Supermodel loads all required data from these game
-  ZIPs via CRC32-based identification defined in Games.xml. No standalone BIOS
-  or firmware files are referenced by the emulator source code.
+  ZIPs via CRC32-based identification defined in Games.xml. The files listed
+  above are the emulator's own data, not system ROMs.

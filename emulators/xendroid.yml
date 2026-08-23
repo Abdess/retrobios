@@ -1,0 +1,202 @@
+emulator: XenDroid
+type: standalone
+core_classification: community_fork
+source: "https://github.com/rfandango/XenDroid"
+upstream: "https://github.com/has207/xenia-edge"
+author: "rfandango"
+profiled_date: "2026-08-12"
+source_commit: "b70d64374f8733645e8ea63f50430165b7dbd684"
+upstream_commit: "84cf209221160590768f615a0369a9c4a1456bbf"
+core_version: "b70d643"
+display_name: "Microsoft - Xbox 360 (XenDroid)"
+cores:
+  - "xendroid"
+  - "XENDROID"
+systems:
+  - microsoft-xbox-360
+mode: standalone
+
+notes: |
+  Xbox 360 emulator for Android, package xendroid.compose, arm64-v8a only.
+  Xenia Edge is vendored whole under emulator-core/src/main/cpp/xenia and a
+  Kotlin and Compose frontend replaces the desktop front end: its own windowed
+  app, AAudio and OpenSLES audio systems, an Android input driver, and Android
+  providers for the guest keyboard, the message box and disc swap. The library
+  recognises ISO, ZAR, GOD, extracted XEX folders and STFS containers, and the
+  boot path reads the file signature before mounting.
+  ref: emulator-core/src/main/cpp/CMakeLists.txt:30-56, 112-152,
+       emulator-core/src/main/cpp/xendroid_emu.cpp:333-346, 671-676,
+       app/src/main/java/xendroid/compose/data/GameFormat.kt:6, 26-32
+
+  Releases are tagged XenDroid-<short commit> and the version name is the git
+  hash handed to the build, so b70d643 is both the head of main and the current
+  release. version.h names canary_experimental dc561e4df, carried over from the
+  ax360e tree the project started as, and it does not describe the vendored
+  code. The Edge revision is named by the periodic merge pull request instead,
+  and Edge rebases its branch, so that commit is no longer reachable there.
+  ref: app/build.gradle:34, emulator-core/src/main/cpp/version.h:4-5,
+       .github/workflows/XenDroid.yml:185-187
+
+  No Xbox 360 system file is read. xboxkrnl, xam and xbdm are HLE modules
+  registered at startup, the XEX1 retail, XEX2 retail and XEX2 devkit keys are
+  constant arrays tried in turn when an image is read, and every XConfig setting
+  is answered from cvars and constants rather than from a flash image. When the
+  launched title is itself a system title the kernel resolves xam.xex, then
+  $flash_xam.xex, through the guest filesystem under the \SystemRoot symlink
+  pointing at that title's own directory.
+  ref: emulator-core/src/main/cpp/xenia/src/xenia/emulator.cc:421-428, 757-772,
+       emulator-core/src/main/cpp/xenia/src/xenia/cpu/xex_module.cc:55-63, 925-935,
+       emulator-core/src/main/cpp/xenia/src/xenia/kernel/xconfig.cc:89-159
+
+  The storage root is the compose external files directory of the package and is
+  passed as a launch argument beside the config path and the log path. content,
+  cache, cache0, cache1, patches and plugins hang off it, the global
+  configuration is xenia-canary.config.toml and per title overrides live in
+  config/<TITLE_ID>.config.toml. The custom driver directory sits in internal
+  storage instead, because the external filesystem cannot carry an executable
+  mapping.
+  ref: emulator-core/src/main/java/xendroid/compose/Application.java:14-33, 84-88,
+       app/src/main/java/xendroid/compose/EmulatorHostActivity.kt:231-236,
+       emulator-core/src/main/cpp/xendroid_emu.cpp:312-317, 355-381
+
+  479 game patches ship inside the APK, synced at build time from the
+  xenia-canary game-patches submodule pinned at 3553a5ae. The patch database
+  reads the patches directory only, so a bundled patch reaches the emulator once
+  the user toggles it, which writes the asset out under the same name.
+  ref: app/build.gradle:12-19,
+       app/src/main/java/xendroid/compose/patches/PatchAssets.kt:17-23,
+       app/src/main/java/xendroid/compose/patches/PatchStore.kt:23-33,
+       emulator-core/src/main/cpp/xenia/src/xenia/patcher/patch_db.cc:34-60
+
+  ES-DE finds the emulator by the xendroid.compose/.EmulatorHostActivity package
+  rule and hands the game over as the intent data URI.
+  ref: app/src/main/AndroidManifest.xml:54-73, docs/frontend-integration.md
+
+files:
+  - name: "<driver>.zip"
+    required: false
+    config_key: "Vulkan|vulkan_lib_path"
+    unsourceable: "third-party Vulkan driver built for one GPU family, not an emulator artefact"
+    description: "Replacement Vulkan driver package"
+    note: >-
+      Imported through a picker restricted to application/zip. The archive is
+      read whole, meta.json names the library to keep, and a single .so is taken
+      instead when no meta.json is present; the .so files and meta.json are
+      unpacked into a directory named after the archive, in internal storage.
+      The configured path is read before the instance is created and opened
+      through adrenotools when the file exists, otherwise the system libvulkan.so
+      is used. The row is hidden on devices without /dev/kgsl-3d0.
+    source_ref: "app/src/main/java/xendroid/compose/ui/settings/SettingRows.kt:175-200, app/src/main/java/xendroid/compose/settings/SettingsRepository.kt:34-35, 140, emulator-core/src/main/java/xendroid/compose/Utils.java:164-236, emulator-core/src/main/java/xendroid/compose/Application.java:21-24, emulator-core/src/main/cpp/xenia/src/xenia/ui/vulkan/vulkan_instance.cc:49, 168-192, 203"
+
+  - name: "<font>.ttf"
+    required: false
+    config_key: "UI|custom_font_path"
+    unsourceable: "any TrueType face the user points the setting at, with no name or version the code expects"
+    description: "Replacement face for the overlay text"
+    note: >-
+      Loaded when the configured path exists, over the glyph ranges the atlas is
+      built with. A path that does not resolve, or a face that fails to build,
+      leaves the embedded Inter face in place, so the absence is covered.
+    source_ref: "emulator-core/src/main/cpp/xenia/src/xenia/ui/imgui_drawer.cc:39-44, 353-366, 367-376"
+
+  - name: "<sound>.wav"
+    required: false
+    config_key: "UI|achievement_sound_path"
+    unsourceable: "any sound file the user points the setting at, with no name or version the code expects"
+    description: "Sound played when an achievement unlocks"
+    note: >-
+      Read through miniaudio, which accepts WAV, MP3, OGG and FLAC. The engine is
+      built the first time an achievement fires, and an empty or missing path
+      leaves the notification silent. Config written under the older key
+      General|notification_sound_path is carried to this cvar when the file is
+      read, and that is the key the shipped template still carries.
+    source_ref: "emulator-core/src/main/cpp/xenia/src/xenia/ui/audio_helper.cc:21-24, 38-80, 97-101, emulator-core/src/main/cpp/xenia/src/xenia/kernel/xam/achievement_manager.cc:163-166, emulator-core/src/main/cpp/xenia/src/xenia/config.cc:174-190, emulator-core/src/main/cpp/xenia/src/xenia/ui/config_helpers.h:47"
+
+  - name: "<title_id> - <title>.patch.toml"
+    required: false
+    bundled: true
+    config_key: "General|apply_patches"
+    description: "Memory patch set for one title"
+    note: >-
+      Read from the patches directory under the storage root, keeping names that
+      open with eight hexadecimal digits and close with .patch.toml. The title id
+      and title name fields and a hash node are mandatory, the file is dropped
+      without them, and each entry of the patch array is applied only when its
+      is_enabled flag is set and the module hash matches. Patching is on by
+      default.
+    source_ref: "emulator-core/src/main/cpp/xenia/src/xenia/patcher/patch_db.h:124-125, emulator-core/src/main/cpp/xenia/src/xenia/patcher/patch_db.cc:34-60, 63-105, emulator-core/src/main/cpp/xenia/src/xenia/patcher/patcher.cc:22-37, emulator-core/src/main/cpp/xenia/src/xenia/emulator.cc:415"
+
+  - name: plugins.toml
+    required: false
+    config_key: "General|allow_plugins"
+    unsourceable: "per-title manifest written by whoever authors the mod, with no distributed form"
+    description: "Plugin manifest for one title"
+    note: >-
+      Read from plugins/<TITLE_ID>/ under the storage root, where the directory
+      name is eight hexadecimal digits. Each entry of the plugin array needs a
+      hash node, and an entry without one is skipped. Plugin loading is off by
+      default, so nothing under plugins is scanned until it is turned on.
+    source_ref: "emulator-core/src/main/cpp/xenia/src/xenia/patcher/plugin_loader.cc:16-21, 27-37, 40-56, 58-125, emulator-core/src/main/cpp/xenia/src/xenia/emulator.cc:431-432"
+
+  - name: "<plugin>.xex"
+    required: false
+    unsourceable: "homebrew module built for one title, distributed with the mod it belongs to"
+    description: "Plugin module named by a plugin manifest"
+    note: >-
+      The title directory is mounted as the plugins device and each enabled entry
+      whose hash matches the running module is loaded as a user module on its own
+      thread.
+    source_ref: "emulator-core/src/main/cpp/xenia/src/xenia/patcher/plugin_loader.cc:175-233, 235-252, emulator-core/src/main/cpp/xenia/src/xenia/emulator.cc:2625-2630"
+
+  - name: Account
+    required: false
+    load_from: content_dir
+    path: "content/<XUID>/FFFE07D1/00010000/<XUID>/Account"
+    unsourceable: "per-user blob the emulator encrypts with the console key on first run"
+    description: "Encrypted profile account blob"
+    note: >-
+      A 0x10 hash, an 8 byte confounder and an encrypted X_XAMACCOUNTINFO. Read
+      from the profile directory when the content tree is enumerated and from the
+      mounted profile when a XUID is logged in, decrypted with the retail key
+      first and the devkit key second, against the HMAC the first sixteen bytes
+      carry. The frontend creates one for the gamertag XenDroid on first run when
+      the tree holds none, and writes its XUID to the slot 0 setting.
+    source_ref: "emulator-core/src/main/cpp/xenia/src/xenia/kernel/xam/profile_standalone.cc:24-52, 72-99, 129-141, emulator-core/src/main/cpp/xenia/src/xenia/kernel/xam/profile_manager.cc:256-296, app/src/main/java/xendroid/compose/core/ProfileBootstrap.kt:13-28, app/src/main/java/xendroid/compose/core/ProfilePaths.kt:6-13"
+
+exclusion_note: >
+  The file loads present in the vendored tree that this build does not reach are
+  not listed. tahoma.ttf and msgothic.ttc are read by the Windows font paths
+  only, and the two fontconfig matches are compiled out by
+  XE_PLATFORM_LINUX && !(XE_PLATFORM_ANDROID || XE_PLATFORM_xendroid), because
+  platform.h defines XE_PLATFORM_xendroid and XE_PLATFORM_LINUX for this target
+  and leaves XE_PLATFORM_ANDROID commented out. gamecontrollerdb.txt belongs to the SDL
+  input driver, and xenia-hid-sdl is absent from the link list, which carries
+  xenia-hid-nop and the fork's own Android driver. portable.txt is read by
+  xenia_main.cc, which is not compiled, the application supplying its own
+  windowed app. The profile picture the gamercard dialog reads through
+  ReadPngFromFile is never reached: the Android file picker returns false without
+  showing anything, so no path is ever selected. librenderdoc.so is opened with
+  RTLD_NOLOAD, which returns a handle only when the library is already mapped and
+  never reads the file. Edge's in-binary patch bundle, its game compatibility
+  bundle and its game title database are packed from build/data_repos, which
+  xenia-build.py fetches and the Gradle build never runs, so the bundle compiled
+  in is empty and the APK assets are the only patch source; the locale bundle is
+  guarded off when the CMake system name is Android. Two profile files sit beside
+  the Account and are not listed: tile_32.png is written and never read back, and
+  tile_64.png is written by the frontend from a picture the user picks and read
+  only to draw the avatar, the core testing its existence and nothing more.
+  ref: emulator-core/src/main/cpp/xenia/src/xenia/ui/imgui_drawer.cc:389-405, 418-465, 474-490, 500-536,
+       emulator-core/src/main/cpp/xenia/src/xenia/base/platform.h:34-40,
+       emulator-core/src/main/cpp/xenia/src/xenia/hid/sdl/CMakeLists.txt:7-8,
+       emulator-core/src/main/cpp/CMakeLists.txt:112-152,
+       emulator-core/src/main/cpp/xenia/src/xenia/app/xenia_main.cc:95-99,
+       emulator-core/src/main/cpp/xenia/src/xenia/app/xenia_main.cc:561,
+       emulator-core/src/main/cpp/xenia/src/xenia/kernel/xam/ui/gamercard_ui.cc:339-368,
+       emulator-core/src/main/cpp/xenia/src/xenia/ui/file_picker_android.cc:27-34,
+       emulator-core/src/main/cpp/xenia/src/xenia/ui/renderdoc_api.cc:33-41,
+       emulator-core/src/main/cpp/xenia/src/xenia/patcher/CMakeLists.txt:6-7,
+       emulator-core/src/main/cpp/xenia/src/xenia/app/CMakeLists.txt:213-219,
+       emulator-core/src/main/cpp/xenia/src/xenia/ui/CMakeLists.txt:66-84,
+       emulator-core/src/main/cpp/xenia/tools/build/embed_bundle.py:55-57,
+       app/src/main/java/xendroid/compose/ui/profile/ProfileManagerViewModel.kt:173-181,
+       emulator-core/src/main/cpp/xenia/src/xenia/kernel/xam/profile_standalone.cc:140-141

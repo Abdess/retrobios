@@ -228,11 +228,15 @@ files:
   - name: gamecontrollerdb.txt
     required: false
     bundled: true
+    unsourceable: "opened through the asset manager inside the package, so no file on disk reaches this load"
     description: "SDL controller mapping database"
     note: >-
       Read from the assets of the package at startup and handed to SDL as a
-      memory stream. Nothing outside the archive replaces this copy; an added pad
-      mapping goes in through controller_map.txt instead.
+      memory stream. The asset manager reads inside the archive and the path is
+      a constant, so there is no search order and nothing outside the package
+      replaces this copy; an added pad mapping goes in through
+      controller_map.txt instead. The revision shipped here is 589031 bytes and
+      is not the one other releases carry under this name.
     source_ref: "android/app/src/main/cpp/xemu_android.cpp:193-268"
 
   - name: X1_Covers.txt

@@ -1,0 +1,801 @@
+emulator: NetherSX2-Turnip
+type: standalone
+core_classification: community_fork
+bios_mode: agnostic
+source: "https://github.com/nckstwrt/NetherSX2-Turnip"
+upstream: "https://github.com/Trixarian/AetherSX2"
+author: "nckstwrt"
+profiled_date: "2026-08-12"
+source_commit: "3b7cf800ccac4ab5af768aee24b04363bedeb711"
+upstream_commit: "1d1f795dfc70e38da67724c7298779260f513889"
+core_version: "2.2n-4248-Turnip-v0.7"
+display_name: "Sony - PlayStation 2 (NetherSX2-Turnip)"
+mode: standalone
+cores:
+  - "nethersx2-turnip"
+  - "NetherSX2-Turnip"
+  - "NETHERSX2-TURNIP"
+systems:
+  - sony-playstation-2
+
+bios_directory: "bios/"
+
+notes: |
+  PlayStation 2 emulator for Android, package xyz.aethersx2.tturnip, activity
+  xyz.aethersx2.android.EmulationActivity. The application id is the only part
+  of the package name that changes, which is what lets it sit beside the build
+  it derives from. That build is NetherSX2 v2.2n-4248, itself a patch of the
+  AetherSX2 v1.5-4248 package, and the library still reports itself as
+  NetherSX2 v2.2n-4248 (Patched). The project publishes its shim sources and
+  the libraries it packs; lib/libvulkad.so, lib/libhook_impl.so and
+  lib/libmain_hook.so at the pinned revision are byte for byte the ones in the
+  v0.7 package, so the sources describe the shipped binaries. Everything below
+  was read from that package: lib/arm64-v8a/libemucore.so, libvulkad.so, the
+  dex and the assets.
+  ref: VulkanShim2/compile2.bat:21-64,
+       nethersx2-turnip v0.7 AndroidManifest.xml,
+       nethersx2-turnip v0.7 libemucore.so 0xe180c
+
+  The patch rewrites twenty places in the 4248 library. Three are the strings
+  libvulkan.so, libvulkan.so.1 and the message naming them, each turned into
+  libvulkad.so, so the Vulkan loader opens the shim instead of the system
+  driver. Twelve turn comparisons into unconditional paths, among them the
+  memchr scan for the twenty-two byte pattern that precedes the certificate
+  test and two byte-wise string comparisons whose result is forced to equal,
+  which is what lets the package be resigned under a new application id. One
+  skips the notification built from the android_warning key. The last four move
+  settings defaults: the renderer enum from 12 to 14, the upscale multiplier
+  fallback from 1.0 to 2.0 with the configuration read short-circuited, the
+  hardware download mode default, and the warning text that went with it. None
+  of them is in a file loading path, so the file set below is that of the
+  package it patches, read from this library rather than carried over.
+  ref: nethersx2-turnip v0.7 libemucore.so 0x10728e,
+       nethersx2-turnip v0.7 libemucore.so 0x83cebc-0x83cee4,
+       nethersx2-turnip v0.7 libemucore.so 0x83b728,
+       nethersx2-turnip v0.7 libemucore.so 0x83bb3c,
+       nethersx2-turnip v0.7 libemucore.so 0x83cfbc,
+       nethersx2-turnip v0.7 libemucore.so 0x80e910,
+       nethersx2-turnip v0.7 libemucore.so 0x840ff4,
+       nethersx2-turnip v0.7 libemucore.so 0x84130c,
+       nethersx2-turnip v0.7 libemucore.so 0x8421a0
+
+  A BIOS image is required and boot stops without one, the application saying
+  it needs a PS2 BIOS in the bios folder of the data directory. The data
+  directory is getExternalFilesDir(null) with getDataDir() behind it, so it
+  follows the application id, and the folder names under it come from the
+  Folders section, Bios defaulting to bios.
+  ref: nethersx2-turnip v0.7 libemucore.so 0xf70a9,
+       nethersx2-turnip v0.7 libemucore.so 0x7ea908-0x7ea930,
+       xyz/aethersx2/android/NativeLibrary getExternalFilesDir
+
+  Detection is by content. The scan lists the BIOS folder with a * mask, keeps
+  files between 4194304 and 8388608 bytes, and accepts an image whose romdir
+  carries a RESET entry followed by a readable ROMVER; the fifth ROMVER
+  character gives the zone, A for USA, C for China, E for Europe, H for Asia,
+  J for Japan, P for Free, T for T10K and X for Test, any other character
+  standing for itself. The sixth character is compared against D and the result
+  discarded, the acceptance flag being set outright, so development images pass.
+  An image named in the configuration is combined with the BIOS folder and
+  opened at that path when it exists, without the size filter and without the
+  romdir test. No name and no hash is matched anywhere. The image is read into
+  the 4 MB ROM region and truncated to it.
+  ref: aethersx2/pcsx2/ps2/BiosTools.cpp:27-28,
+       aethersx2/pcsx2/ps2/BiosTools.cpp:62-145,
+       aethersx2/pcsx2/ps2/BiosTools.cpp:235-260,
+       aethersx2/pcsx2/ps2/BiosTools.cpp:272-322,
+       nethersx2-turnip v0.7 libemucore.so 0x828d80-0x828f14,
+       nethersx2-turnip v0.7 libemucore.so 0x829140-0x8292f4
+
+  Companions derive from the selected image. rom1 and rom2 are appended to the
+  full name first, then substituted for the existing extension, so an image at
+  ps2-0230a-20080220.bin is followed by ps2-0230a-20080220.bin.rom1 then
+  ps2-0230a-20080220.rom1. The nvm and the mec are read at the substituted
+  extension only, and both are written with defaults when they are absent or
+  too short. No erom is loaded on this code line.
+  ref: aethersx2/pcsx2/ps2/BiosTools.cpp:193-216,
+       aethersx2/pcsx2/CDVD/CDVD.cpp:120-144,
+       aethersx2/pcsx2/CDVD/CDVD.cpp:158-214,
+       nethersx2-turnip v0.7 libemucore.so 0x8288b0-0x828bb8
+
+  The network adapter opens eeprom.dat and flash.dat by bare name, so they
+  resolve against the process working directory, which the application never
+  sets. A compiled-in image stands in for the first and a card filled with 0xFF
+  for the second. DEV9hdd.raw is the default name of the empty disk image its
+  settings page writes. An IRX named in the configuration is read into the ROM
+  region at 0x3C0000 at boot; the field is empty by default and names no file
+  of its own.
+  ref: aethersx2/pcsx2/DEV9/DEV9.cpp:146-161,
+       aethersx2/pcsx2/DEV9/flash.cpp:76-103,
+       aethersx2/pcsx2/ps2/BiosTools.cpp:220-233,
+       nethersx2-turnip v0.7 libemucore.so 0x7c5bec-0x7c5ca0,
+       nethersx2-turnip v0.7 libemucore.so 0x828bb8-0x828ca8
+
+  The Vulkan path is the reason this build exists. libemucore.so opens
+  libvulkad.so where the stock library opens libvulkan.so, and that shim reads
+  the Adreno model from the kgsl sysfs nodes, picks one of six Turnip drivers
+  packed beside it, creates a linker namespace over its own library directory
+  and loads libhook_impl.so and libmain_hook.so into it. The system
+  /system/lib64/libvulkan.so is then opened inside that namespace with its
+  soname patched, so its own driver load lands in the hook, which opens the
+  chosen Turnip driver instead of the vendor ICD. A driver present at
+  /data/local/tmp/libvulkan_freedreno.so is tested first and wins over all six.
+  When the namespace cannot be built the shim falls back to patching the
+  system library's global offset table, and that path alone loads libbase.so,
+  libcutils.so, libvndksupport.so and libhardware.so from the library
+  directory. The shim appends to vulkan_shim.log under the files folder of the
+  data directory.
+  ref: VulkanShim2/vulkan_shim.cpp:43-73,
+       VulkanShim2/vulkan_shim.cpp:1010-1092,
+       VulkanShim2/vulkan_shim.cpp:1099-1171,
+       VulkanShim2/vulkan_shim.cpp:1186-1204,
+       VulkanShim2/hook_impl.cpp:38-139,
+       nethersx2-turnip v0.7 libemucore.so 0x8b473c-0x8b4768
+
+  Resources are read out of the package itself. The library has no asset
+  manager of its own and calls back into readPackageFile, readPackageFileToString
+  and playSoundAsync, each taking an asset-relative name, so the game database,
+  the patch archives, the interface fonts, the shader sources every backend
+  compiles at startup and the achievement sounds are versioned with the build
+  and never looked for on disk. The game list draws its region flags and rating
+  stars from the same assets. Four of the Vulkan shader sources differ from the
+  ones the package it patches carries.
+  ref: nethersx2-turnip v0.7 libemucore.so 0x8348d0,
+       xyz/aethersx2/android/NativeLibrary readPackageFile,
+       xyz/aethersx2/android/NativeLibrary playSoundAsync
+
+files:
+  - name: ps2-0230a-20080220.bin
+    path: bios/ps2-0230a-20080220.bin
+    required: true
+    min_size: 4194304
+    max_size: 8388608
+    validation: [size]
+    description: "PS2 BIOS image"
+    note: >-
+      Any image whose romdir holds RESET and a readable ROMVER is accepted,
+      whatever its name. The 4 to 8 MB range gates the folder scan; an image
+      named in the configuration skips both that range and the romdir test.
+    source_ref: "aethersx2/pcsx2/ps2/BiosTools.cpp:27-28, aethersx2/pcsx2/ps2/BiosTools.cpp:235-260, nethersx2-turnip v0.7 libemucore.so 0x828e20-0x828e44 (size window), nethersx2-turnip v0.7 libemucore.so 0x829244-0x829248 (device type result discarded)"
+
+  - name: ps2-0230a-20080220.rom1
+    path: bios/ps2-0230a-20080220.rom1
+    required: false
+    max_size: 4194304
+    description: "DVD player ROM"
+    note: >-
+      Tried as {bios}.rom1 then {biosbase}.rom1. Read at 0x2404000 of the EE
+      memory block and truncated to 4 MB. Logged and skipped when absent.
+    source_ref: "aethersx2/pcsx2/ps2/BiosTools.cpp:193-216, nethersx2-turnip v0.7 libemucore.so 0x8288b0-0x828a24"
+
+  - name: ps2-0230a-20080220.rom2
+    aliases:
+      - "SCPH-90006_BIOS_VX_HK _230.ROM2"
+    path: bios/ps2-0230a-20080220.rom2
+    required: false
+    max_size: 524288
+    description: "Chinese ROM extension"
+    note: >-
+      Same two-step naming as rom1. Read at 0x2804000 of the EE memory block and
+      truncated to 512 KB. Only present on Chinese region consoles.
+    source_ref: "aethersx2/pcsx2/ps2/BiosTools.cpp:193-216, nethersx2-turnip v0.7 libemucore.so 0x828a34-0x828ba8"
+
+  - name: ps2-0230a-20080220.nvm
+    path: bios/ps2-0230a-20080220.nvm
+    required: false
+    hle_fallback: true
+    min_size: 1024
+    validation: [size]
+    description: "Console NVRAM"
+    note: >-
+      Read at the BIOS path with the extension replaced by nvm, opened r+b.
+      Carries the console id, the iLink id, the language and the OSD
+      configuration. A 1024 byte image is written when the file is missing or
+      shorter, zeroed except for a fixed iLink id and the language defaults of
+      the BIOS region.
+    source_ref: "aethersx2/pcsx2/CDVD/CDVD.cpp:158-214, nethersx2-turnip v0.7 libemucore.so 0x79b930-0x79ba68"
+
+  - name: ps2-0230a-20080220.mec
+    path: bios/ps2-0230a-20080220.mec
+    required: false
+    hle_fallback: true
+    min_size: 4
+    validation: [size]
+    description: "Mechacon version"
+    note: >-
+      Read at the BIOS path with the extension replaced by mec. Written as
+      03 06 02 00 when the file is missing or shorter than 4 bytes.
+    source_ref: "aethersx2/pcsx2/CDVD/CDVD.cpp:120-144, nethersx2-turnip v0.7 libemucore.so 0x79cbd0-0x79cc20"
+
+  - name: eeprom.dat
+    required: false
+    hle_fallback: true
+    size: 64
+    description: "DEV9 EEPROM"
+    note: >-
+      Opened O_RDWR by bare name when the network adapter starts and mapped over
+      64 bytes. A compiled-in image stands in when the file is missing or cannot
+      be mapped.
+    source_ref: "aethersx2/pcsx2/DEV9/DEV9.cpp:146-161, nethersx2-turnip v0.7 libemucore.so 0x7c5c44"
+
+  - name: flash.dat
+    required: false
+    hle_fallback: true
+    max_size: 8650752
+    description: "DEV9 SmartMedia flash image"
+    note: >-
+      Opened rb by bare name at network adapter init and read as 1024 blocks of
+      16 pages of 512 bytes plus 16 ECC bytes. The card is filled with 0xFF when
+      the file is absent.
+    source_ref: "aethersx2/pcsx2/DEV9/flash.cpp:76-103, nethersx2-turnip v0.7 libemucore.so 0x7c5bf0"
+
+  - name: "<module>.irx"
+    required: false
+    unsourceable: "any IOP module the user points at, under no name the code expects"
+    description: "IOP module injected at boot"
+    note: >-
+      Opened at the path the configuration holds once it is longer than three
+      characters, and read into the ROM region at 0x3C0000, capped at 0x40000
+      bytes. The field is empty by default and names no file of its own.
+    source_ref: "aethersx2/pcsx2/ps2/BiosTools.cpp:220-233, aethersx2/pcsx2/ps2/BiosTools.cpp:327-328, nethersx2-turnip v0.7 libemucore.so 0x828bb8-0x828ca8"
+
+  - name: libvulkad.so
+    path: lib/arm64-v8a/libvulkad.so
+    required: false
+    bundled: true
+    size: 484528
+    md5: 07a891beadc7c3baf4b98b7358cc6e2c
+    sha1: 55f845c4ea0262cfdc4882a3caccc6848c4f0a6b
+    description: "Vulkan loader shim"
+    note: >-
+      Opened as libvulkad.so.1 then libvulkad.so where the stock library names
+      libvulkan.so, and vkCreateInstance is resolved from it. Without it the
+      Vulkan backend does not open and the message names the shim.
+    source_ref: "VulkanShim2/vulkan_shim.cpp:971-1279 (the constructor that runs on load), nethersx2-turnip v0.7 libemucore.so 0x8b473c-0x8b4768"
+
+  - name: libhook_impl.so
+    path: lib/arm64-v8a/libhook_impl.so
+    required: false
+    bundled: true
+    size: 461856
+    md5: c2a10d75f7a186f78debc79dd2204841
+    sha1: 5a86d24c83f4a0867a3526638182c8dc67e0033b
+    description: "Driver load hook"
+    note: >-
+      Opened into the adrenotools-libvulkan namespace and asked for
+      init_hook_param, which receives the driver directory and driver name. Its
+      hook_android_dlopen_ext is what replaces the vendor driver with the Turnip
+      one, and it reopens itself in each driver namespace it creates.
+    source_ref: "VulkanShim2/vulkan_shim.cpp:1145-1163, VulkanShim2/hook_impl.cpp:38-139"
+
+  - name: libmain_hook.so
+    path: lib/arm64-v8a/libmain_hook.so
+    required: false
+    bundled: true
+    size: 5648
+    md5: 3ded83b3f45773199b82bf81c86f8c89
+    sha1: e2ee6c00247fc05b88afe43237fa4bfa90212c54
+    description: "Namespace interposer"
+    note: >-
+      Loaded RTLD_GLOBAL into the same namespace before the system Vulkan
+      library, so its android_dlopen_ext and android_load_sphal_library are the
+      ones that library binds to.
+    source_ref: "VulkanShim2/vulkan_shim.cpp:1166-1167, VulkanShim2/main_hook.c:3-8"
+
+  - name: libvulkan_freedreno_T28.so
+    path: lib/arm64-v8a/libvulkan_freedreno_T28.so
+    required: false
+    bundled: true
+    size: 18606849
+    md5: 315f4b037b77dea81ea099e13e94fa11
+    sha1: 83406408d328d8529ffa2faf7ab878664a5c7a79
+    description: "Turnip driver, default branch"
+    note: >-
+      Chosen when no other branch matches. Loaded by name from the library
+      directory through the hook; a load failure falls back to the vendor
+      driver.
+    source_ref: "VulkanShim2/vulkan_shim.cpp:1014, VulkanShim2/vulkan_shim.cpp:1086-1087, VulkanShim2/hook_impl.cpp:127-135"
+
+  - name: libvulkan_freedreno_a8xx-turnip-gen8-V31.so
+    path: lib/arm64-v8a/libvulkan_freedreno_a8xx-turnip-gen8-V31.so
+    required: false
+    bundled: true
+    size: 14509832
+    md5: 7f6dbc9ec12cb53b1802c418cf532f9b
+    sha1: 2dc32726b7a68ced6a40ea2c6cc60848716907ab
+    description: "Turnip driver, Adreno 8xx branch"
+    note: >-
+      Chosen when the Adreno model reads non-zero and is not 810. Model 825 also
+      turns off framebuffer fetch.
+    source_ref: "VulkanShim2/vulkan_shim.cpp:1013, VulkanShim2/vulkan_shim.cpp:1041-1058"
+
+  - name: libvulkan_freedreno_T24.so
+    path: lib/arm64-v8a/libvulkan_freedreno_T24.so
+    required: false
+    bundled: true
+    size: 18003849
+    md5: e90d691859e0ff8f0221f3fb497cca5d
+    sha1: d28f7c64a8296a6d1886b348946d01433c10b493
+    description: "Turnip driver, Adreno 810 branch"
+    note: "Chosen when the Adreno model reads 810."
+    source_ref: "VulkanShim2/vulkan_shim.cpp:1043-1046"
+
+  - name: libvulkan_freedreno_25.3.0_R6_Gmem.so
+    path: lib/arm64-v8a/libvulkan_freedreno_25.3.0_R6_Gmem.so
+    required: false
+    bundled: true
+    size: 12048553
+    md5: 3f1b01295ab08d070bede8122ebd0aea
+    sha1: 2159a5172176f9ee0076370314d2d100de2fe1b1
+    description: "Turnip driver, Adreno 710 and 720 branch"
+    note: >-
+      Chosen when the model is unreadable and the GPU name holds 710 or 720, or
+      the platform reads SM6475.
+    source_ref: "VulkanShim2/vulkan_shim.cpp:1062-1065"
+
+  - name: libvulkan_freedreno_v24.1.0_R18.a6xx-Patched.so
+    path: lib/arm64-v8a/libvulkan_freedreno_v24.1.0_R18.a6xx-Patched.so
+    required: false
+    bundled: true
+    size: 9407968
+    md5: 7af55500464d372a609084fb4698e16d
+    sha1: 1abf76c578cb1330e354d5588634b87cef4bc057
+    description: "Turnip driver, SM8250 and SM7325 branch"
+    note: "Chosen when the platform reads SM8250, kona or SM7325."
+    source_ref: "VulkanShim2/vulkan_shim.cpp:1030-1037"
+
+  - name: libvulkan_freedreno_T19.so
+    path: lib/arm64-v8a/libvulkan_freedreno_T19.so
+    required: false
+    bundled: true
+    size: 11581209
+    md5: 5f953080ba9ac858a99f3742c8302055
+    sha1: 4dc276dfd5842302c978ce9b2996f961dc6452f1
+    description: "Turnip driver, SM6125 branch"
+    note: "Chosen when the platform reads SM6125 or trinket."
+    source_ref: "VulkanShim2/vulkan_shim.cpp:1023-1026"
+
+  - name: libvulkan_freedreno.so
+    path: data/local/tmp/libvulkan_freedreno.so
+    required: false
+    unsourceable: "any Turnip build the user places at that path"
+    description: "Turnip driver override"
+    note: >-
+      Tested with access before any detection runs. When it exists it becomes
+      the driver and the driver directory becomes /data/local/tmp/, so none of
+      the six packed drivers is consulted.
+    source_ref: "VulkanShim2/vulkan_shim.cpp:1012, VulkanShim2/vulkan_shim.cpp:1015-1020"
+
+  - name: libbase.so
+    path: lib/arm64-v8a/libbase.so
+    required: false
+    bundled: true
+    size: 255352
+    md5: eae5ccb3f801b3333ec0e65592ce8a87
+    sha1: fecf95a804a7cb57e210f55d5482a56826c8684c
+    description: "Platform support library for the fallback path"
+    note: >-
+      Opened RTLD_GLOBAL from the library directory only when the namespace
+      approach failed and the shim falls back to patching the global offset
+      table.
+    source_ref: "VulkanShim2/vulkan_shim.cpp:1186-1201"
+
+  - name: libcutils.so
+    path: lib/arm64-v8a/libcutils.so
+    required: false
+    bundled: true
+    size: 91200
+    md5: 185cd93c21cce12ab4c3bc2430934684
+    sha1: 63e55bcae5ee690cf6bc7db69a5077c5502e4334
+    description: "Platform support library for the fallback path"
+    note: "Same fallback list as libbase.so, and a dependency of every packed driver."
+    source_ref: "VulkanShim2/vulkan_shim.cpp:1186-1201"
+
+  - name: libvndksupport.so
+    path: lib/arm64-v8a/libvndksupport.so
+    required: false
+    bundled: true
+    size: 66881
+    md5: aa5065cca6695aa4b8cfdd3c164f3d28
+    sha1: a6f2d8498a2f0a00776dd69c58f012cdbb75a308
+    description: "Platform support library for the fallback path"
+    note: >-
+      Same fallback list as libbase.so. Its android_load_sphal_library is the
+      call the shim stubs so a vendor load can be redirected.
+    source_ref: "VulkanShim2/vulkan_shim.cpp:1186-1201, VulkanShim2/vulkan_shim.cpp:742-750"
+
+  - name: libhardware.so
+    path: lib/arm64-v8a/libhardware.so
+    required: false
+    bundled: true
+    size: 66961
+    md5: 71e06a0726aa60b010e066d37021d36a
+    sha1: 555a6203cd7c23c2b49916d70615e5df7973aa87
+    description: "Platform support library for the fallback path"
+    note: "Same fallback list as libbase.so, and a dependency of every packed driver."
+    source_ref: "VulkanShim2/vulkan_shim.cpp:1186-1201"
+
+  - name: GameIndex.yaml
+    path: assets/GameIndex.yaml
+    required: false
+    bundled: true
+    size: 1850565
+    md5: 26ab10d8de93c9b9806fa7602faa2b62
+    sha1: fca26d4f7c1fe0abf6534b470da2ee5ad461eba5
+    description: "Game database"
+    note: >-
+      Read from the package by name, keyed by serial, and carrying the per-game
+      fixes, patches and settings overrides. Parsed into gamedb.cache in the
+      cache folder.
+    source_ref: "aethersx2/pcsx2/GameDatabase.cpp:35, nethersx2-turnip v0.7 libemucore.so 0x2e35e4"
+
+  - name: cheats_ws.zip
+    path: assets/cheats_ws.zip
+    required: false
+    bundled: true
+    size: 1694454
+    md5: cc19970629feb0a25b9b95263194f08f
+    sha1: 1caae7ddf0cbba5f1f6d7404b2309300d913778c
+    description: "Widescreen patch archive"
+    note: >-
+      Per-game pnach entries matched on the disc CRC, read from the package when
+      widescreen patches are enabled. The cheats_ws folder under the data
+      directory takes precedence and the archive is skipped when it holds a
+      match.
+    source_ref: "nethersx2-turnip v0.7 libemucore.so 0x80f8e4"
+
+  - name: cheats_ni.zip
+    path: assets/cheats_ni.zip
+    required: false
+    bundled: true
+    size: 223122
+    md5: fb2a43dcea094a19db4f4bcdc4ad32eb
+    sha1: 31cbff66380f255d359ff9ee09b6edc06102579a
+    description: "No-interlacing patch archive"
+    note: >-
+      Same form as cheats_ws.zip, read when no-interlacing patches are enabled,
+      with the cheats_ni folder taking precedence.
+    source_ref: "nethersx2-turnip v0.7 libemucore.so 0x80fa8c"
+
+  - name: Roboto-Regular.ttf
+    path: assets/fonts/Roboto-Regular.ttf
+    required: true
+    bundled: true
+    size: 305608
+    md5: 86da78cb59576328483a11c6ef74bc2b
+    sha1: 00d62fbdc8d5dec4c659005e116d0ba2ee63b547
+    description: "Interface font"
+    note: "Read as the standard font when the interface comes up. The load fails without it."
+    source_ref: "nethersx2-turnip v0.7 libemucore.so 0xf6f27"
+
+  - name: RobotoMono-Medium.ttf
+    path: assets/fonts/RobotoMono-Medium.ttf
+    required: true
+    bundled: true
+    size: 86820
+    md5: 8ad82b1dc550319993a7d6c932b2656d
+    sha1: 9056e59b69c6f1160fdfb92a0773f17f6307f3ad
+    description: "Fixed-width interface font"
+    note: "Read for the fixed-width font. The load fails without it."
+    source_ref: "nethersx2-turnip v0.7 libemucore.so 0xdb98d"
+
+  - name: fa-solid-900.ttf
+    path: assets/fonts/fa-solid-900.ttf
+    required: true
+    bundled: true
+    size: 204528
+    md5: dffd9504fcb1894620fa41c700172994
+    sha1: 694b8a2445ff39de415bf4791845442a7b1b81e5
+    description: "Font Awesome icon font"
+    note: "Read for the interface icon glyphs. The load fails without it."
+    source_ref: "nethersx2-turnip v0.7 libemucore.so 0x11a567"
+
+  - name: ffx_a.h
+    path: assets/shaders/common/ffx_a.h
+    required: false
+    bundled: true
+    size: 161481
+    md5: 2c539b603dcb15dcdcfdc420eda56ced
+    sha1: 726370c10154ad092c15c251b98c79185e980c7c
+    description: "FidelityFX common header"
+    note: "Prepended to the sharpening shader of both backends."
+    source_ref: "nethersx2-turnip v0.7 libemucore.so 0x10cfb5"
+
+  - name: ffx_cas.h
+    path: assets/shaders/common/ffx_cas.h
+    required: false
+    bundled: true
+    size: 63512
+    md5: f8a3d7f48ae19fc372cd0d5d375d5a8d
+    sha1: a1d1a687577f7a607fda35bc88950f57c2129ca5
+    description: "FidelityFX CAS header"
+    note: "Prepended to the sharpening shader of both backends."
+    source_ref: "nethersx2-turnip v0.7 libemucore.so 0xce5f7"
+
+  - name: fxaa.fx
+    path: assets/shaders/common/fxaa.fx
+    required: false
+    bundled: true
+    size: 19420
+    md5: 5cdeb2963c1b68c3ffb04a789cc66d6e
+    sha1: 3ac5f68049ed00d8ff3d2811bd09ef0c036efd0a
+    description: "FXAA shader source"
+    note: "Read by both backends when FXAA is enabled."
+    source_ref: "nethersx2-turnip v0.7 libemucore.so 0xe4f55"
+
+  - name: common_header.glsl
+    path: assets/shaders/opengl/common_header.glsl
+    required: false
+    bundled: true
+    size: 1863
+    md5: 1dcf4ca0cc95f2f8e11b66c2ffeeaffe
+    sha1: 3f47597187030144498af7a92531e8f205561211
+    description: "OpenGL shader preamble"
+    note: "Prepended to every OpenGL program the renderer builds."
+    source_ref: "nethersx2-turnip v0.7 libemucore.so 0x10cfcc"
+
+  - name: convert.glsl
+    path: assets/shaders/opengl/convert.glsl
+    required: false
+    bundled: true
+    size: 11276
+    md5: c3db4fcdd142912c0d9a07f3fb40bbbc
+    sha1: b2a059787ee297654b27f633e37382e239693a36
+    description: "OpenGL format conversion shader"
+    source_ref: "nethersx2-turnip v0.7 libemucore.so 0xb5bd7"
+
+  - name: present.glsl
+    path: assets/shaders/opengl/present.glsl
+    required: false
+    bundled: true
+    size: 9458
+    md5: afbb9a89f17ead2d8ce7252c1b44186f
+    sha1: bf2688971a8ef2f2c262c3c2ec579d3dd39793e6
+    description: "OpenGL presentation shader"
+    source_ref: "nethersx2-turnip v0.7 libemucore.so 0x11a06b"
+
+  - name: merge.glsl
+    path: assets/shaders/opengl/merge.glsl
+    required: false
+    bundled: true
+    size: 455
+    md5: 2c4d70f62928eac933eec932d7bfa0b3
+    sha1: d1a3c11a1273e1d6c740e4eacc3159842f206683
+    description: "OpenGL frame merge shader"
+    source_ref: "nethersx2-turnip v0.7 libemucore.so 0x117b1c"
+
+  - name: interlace.glsl
+    path: assets/shaders/opengl/interlace.glsl
+    required: false
+    bundled: true
+    size: 6246
+    md5: 0e537dd838a7ecd3b687f3f7cc60a7be
+    sha1: e74e58f530abb4af02c0875c2f04d507e854869e
+    description: "OpenGL deinterlacing shader"
+    source_ref: "nethersx2-turnip v0.7 libemucore.so 0x103b11"
+
+  - name: shadeboost.glsl
+    path: assets/shaders/opengl/shadeboost.glsl
+    required: false
+    bundled: true
+    size: 1457
+    md5: 3d1e2be521a66cbfc2c5ff32057e7bf4
+    sha1: 8d8b8966afd2ad840151f7fcb494739041708c89
+    description: "OpenGL brightness and contrast shader"
+    source_ref: "nethersx2-turnip v0.7 libemucore.so 0x1007b6"
+
+  - name: cas.glsl
+    path: assets/shaders/opengl/cas.glsl
+    required: false
+    bundled: true
+    size: 2448
+    md5: f8a684763e24557c97e3f5d05935bb3b
+    sha1: 1a69a0fc522caff98fc3829ebf3f12a6a006a058
+    description: "OpenGL sharpening shader"
+    source_ref: "nethersx2-turnip v0.7 libemucore.so 0x10967c"
+
+  - name: tfx_vgs.glsl
+    path: assets/shaders/opengl/tfx_vgs.glsl
+    required: false
+    bundled: true
+    size: 5756
+    md5: a97e9616f298bb9041bf9e45ee2ec597
+    sha1: 0e9e98f766c9250b465af776d0077f49f797fed2
+    description: "OpenGL texture function vertex and geometry shader"
+    source_ref: "nethersx2-turnip v0.7 libemucore.so 0xd49ab"
+
+  - name: tfx_fs.glsl
+    path: assets/shaders/opengl/tfx_fs.glsl
+    required: false
+    bundled: true
+    size: 26680
+    md5: 24e39ca8f97a1ee4cbd1e9bf8b8da2fd
+    sha1: 00eb0418e7a25c89aaf7c526922fe45d83243ec5
+    description: "OpenGL texture function fragment shader"
+    source_ref: "nethersx2-turnip v0.7 libemucore.so 0x117b36"
+
+  - name: tfx.glsl
+    path: assets/shaders/vulkan/tfx.glsl
+    required: false
+    bundled: true
+    size: 29670
+    md5: df60c4e6c5690dd2d3a0cc740800b284
+    sha1: 1c3a966a42cefcb9c26ce2fa77e4cd90f2d50329
+    description: "Vulkan texture function shader"
+    note: "This project's own bytes, neither the New nor the Old copy it also carries."
+    source_ref: "nethersx2-turnip v0.7 libemucore.so 0xe14fc"
+
+  - name: convert.glsl
+    path: assets/shaders/vulkan/convert.glsl
+    required: false
+    bundled: true
+    size: 9379
+    md5: f3aaf5697b069d1eb9be66fc1c932786
+    sha1: aedc25c370bf3fe28923dc8359111a098293a503
+    description: "Vulkan format conversion shader"
+    note: "This project's own bytes, neither the New nor the Old copy it also carries."
+    source_ref: "nethersx2-turnip v0.7 libemucore.so 0xc3d36"
+
+  - name: interlace.glsl
+    path: assets/shaders/vulkan/interlace.glsl
+    required: false
+    bundled: true
+    size: 7745
+    md5: 08bc6e44a6d86ccad4b0673b445bd9d8
+    sha1: 5a433c891e071c3885af7a5f7e47fed7e5ec30cf
+    description: "Vulkan deinterlacing shader"
+    note: "This project's own bytes, neither the New nor the Old copy it also carries."
+    source_ref: "nethersx2-turnip v0.7 libemucore.so 0xb86eb"
+
+  - name: cas.glsl
+    path: assets/shaders/vulkan/cas.glsl
+    required: false
+    bundled: true
+    size: 2637
+    md5: deb7394a31184990c78c9753a293ff60
+    sha1: 005cecf1a5e20b05407d55d0aad22cf81ad66c31
+    description: "Vulkan sharpening shader"
+    note: "The New copy the project also carries, byte for byte."
+    source_ref: "nethersx2-turnip v0.7 libemucore.so 0xd4a2c"
+
+  - name: present.glsl
+    path: assets/shaders/vulkan/present.glsl
+    required: false
+    bundled: true
+    size: 8177
+    md5: 72626d625bb963c6cd7074d4dfd0adda
+    sha1: 4871ee00b249b41d16232769e2f661bedd1c83db
+    description: "Vulkan presentation shader"
+    source_ref: "nethersx2-turnip v0.7 libemucore.so 0xd777a"
+
+  - name: merge.glsl
+    path: assets/shaders/vulkan/merge.glsl
+    required: false
+    bundled: true
+    size: 669
+    md5: b776383d21609db24d5348c381c2c286
+    sha1: b09de39d6459c70ffab28dcb3e3ef879b1648674
+    description: "Vulkan frame merge shader"
+    source_ref: "nethersx2-turnip v0.7 libemucore.so 0xe8c36"
+
+  - name: shadeboost.glsl
+    path: assets/shaders/vulkan/shadeboost.glsl
+    required: false
+    bundled: true
+    size: 1741
+    md5: 366b45b6c4e9ed8e6b7454eebcb5d010
+    sha1: 26b29f57685d8108cf519c4f1d340d43aacbff6e
+    description: "Vulkan brightness and contrast shader"
+    source_ref: "nethersx2-turnip v0.7 libemucore.so 0xde3c2"
+
+  - name: unlock.wav
+    path: assets/sounds/achievements/unlock.wav
+    required: false
+    bundled: true
+    size: 87714
+    md5: 4d035ee86f836bfed422a975cf65c9cc
+    sha1: eb488a76217629f620e40287567d7e2b30337680
+    description: "Achievement unlock sound"
+    note: "Handed to playSoundAsync, which opens it from the package and plays it through MediaPlayer."
+    source_ref: "nethersx2-turnip v0.7 libemucore.so 0xceb85"
+
+  - name: lbsubmit.wav
+    path: assets/sounds/achievements/lbsubmit.wav
+    required: false
+    bundled: true
+    size: 82096
+    md5: fa6a7030a9f259ee7300dd0bd49f24f3
+    sha1: 5ad1e110dcf0ffd26405981398892a82e4f3bad1
+    description: "Leaderboard submission sound"
+    source_ref: "nethersx2-turnip v0.7 libemucore.so 0xe1a29"
+
+  - name: message.wav
+    path: assets/sounds/achievements/message.wav
+    required: false
+    bundled: true
+    size: 15696
+    md5: d66b0bccd743bd11eaca55bcaec925da
+    sha1: c54f04b63ac6f04e0a0944ef260b5497e4494dbd
+    description: "Achievement notification sound"
+    source_ref: "nethersx2-turnip v0.7 libemucore.so 0xfd47d"
+
+  - name: placeholder.png
+    path: assets/placeholder.png
+    required: false
+    bundled: true
+    size: 2762
+    md5: 8f846541ccbf088ee7f8c49c8dcb3a6a
+    sha1: c36292ab7e16bf5a6cbc4063f638e24872349c45
+    description: "Fallback interface texture"
+    note: >-
+      Requested from the texture cache when a notification or a loading screen
+      has no image of its own.
+    source_ref: "nethersx2-turnip v0.7 libemucore.so 0x7dcbf4, nethersx2-turnip v0.7 libemucore.so 0x8238e0"
+
+  - name: "<region>.png"
+    path: assets/icons/flags/NTSC-U.png
+    required: false
+    bundled: true
+    description: "Game list region flag"
+    note: >-
+      Loaded as icons/flags/<region>.png with the region string of the entry.
+      Thirty are carried, seven NTSC and twenty-two PAL plus Other.
+    source_ref: "nethersx2-turnip v0.7 classes.dex icons/flags/%s.png"
+
+  - name: "star-<rating>.png"
+    path: assets/icons/star-0.png
+    required: false
+    bundled: true
+    description: "Game list compatibility rating icon"
+    note: "Loaded as icons/star-<rating>.png for ratings 0 to 5."
+    source_ref: "nethersx2-turnip v0.7 classes.dex icons/star-%d.png"
+
+  - name: faq.html
+    path: assets/faq.html
+    required: false
+    bundled: true
+    size: 14048
+    md5: c2a64e0bcc401da9b0a3c7adf3cff410
+    sha1: 9163d4a3d19b87483f843e4bf3afe236a50a72d2
+    description: "Help page"
+    note: "Opened under the android_asset scheme in the built-in browser view."
+    source_ref: "nethersx2-turnip v0.7 classes.dex android_asset faq.html"
+
+  - name: 3rdparty.html
+    path: assets/3rdparty.html
+    required: false
+    bundled: true
+    size: 90296
+    md5: fb4ff036f3e4769aa6daefdc4c5dba57
+    sha1: 7743bf1d7e6e09a02f1b2972aa63bd8a9f26050d
+    description: "Third party notices page"
+    note: "Opened under the android_asset scheme in the built-in browser view."
+    source_ref: "nethersx2-turnip v0.7 classes.dex android_asset 3rdparty.html"
+
+exclusion_note: >
+  Left out are the libraries the package carries for the dynamic linker rather
+  than for its own code. libc.so, libm.so, libdl.so, ld-android.so and
+  libc++_shared.so sit beside the drivers so the namespace built over that
+  directory can satisfy their DT_NEEDED, and no code path names any of them;
+  android_linker_ns.o is a relocatable object nothing can open. libc++.so and
+  libsync.so are named in the fallback and promote arrays but the package
+  carries neither, and the promote call passes RTLD_NOLOAD, which never reads
+  from disk. libnativewindow.so, libsync.so and libz.so, which every driver
+  needs, come from the system through the link to the default namespace. The
+  deps cache the shim would fill under cache/vulkan_deps is unreachable: the
+  functions that build it have no call site and the compiler dropped their
+  strings. Also left out are the assets no code path on this platform opens:
+  shaders/vulkan/New and shaders/vulkan/Old, reference copies for which no path
+  string exists in the library; game_controller_db.txt, whose name appears in
+  neither the library nor the dex, pad input arriving through
+  handleControllerButtonEvent and handleControllerAxisEvent; the seven Direct3D
+  shader sources under shaders/dx11; icons/AppIconLarge.png and
+  cover-placeholder.png; fonts/Roboto-Regular-copyright and
+  sounds/achievements/README.txt, which are licence and credit texts; and
+  dexopt/baseline.prof and baseline.profm, which the Android runtime consumes.
+  Everything the emulator produces for itself under the data directory is out
+  as well: memory cards as Mcd<nnn>.ps2, DEV9hdd.raw for the internal disk,
+  save states, screenshots, covers, texture dumps, per-game settings, input
+  profiles, the gamedb and pipeline caches, and vulkan_shim.log.
+  ref: VulkanShim2/vulkan_shim.cpp:599-729, VulkanShim2/vulkan_shim.cpp:1107-1112,
+       VulkanShim2/vulkan_shim.cpp:1186-1201,
+       nethersx2-turnip v0.7 libvulkad.so

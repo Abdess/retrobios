@@ -1,0 +1,85 @@
+emulator: Starboard
+type: standalone
+core_classification: other
+source: "https://github.com/get-starboard/starboard"
+upstream: closed-source
+author: "force9"
+profiled_date: "2026-08-12"
+core_version: "0.23.0"
+display_name: "PortMaster library (Starboard)"
+verification: existence
+cores:
+  - starboard
+  - STARBOARD
+  - org.force9.starboard
+systems: []
+mode: standalone
+
+notes: |
+  Catalogue manager and execution environment for the PortMaster library on
+  Android ARM64 handhelds. PortMaster ports are Linux ARM64 builds, so nothing
+  is emulated: proot opens a userspace chroot into a Debian bookworm root
+  filesystem and the games run there as native binaries against glibc, SDL2 and
+  Mesa. ES-DE reaches it through the ports system, passing a .port file as the
+  port_file extra to org.force9.starboard/.ui.game.GameActivity.
+
+  The build read here is the signed release Starboard-v0.23.0.apk, sha256
+  a81b69d471ee88ad6c47497e616c5a7c68bf8ebfb32bc7ae9348ed46c3190b3d, matching the
+  digest GitHub records for the asset. The source is not published, so the
+  readings below cite a jadx decompilation of classes.dex taken with
+  --show-bad-code, where org.force9.starboard.* keeps its names and the rest is
+  r8 output under defpackage.
+
+  The APK carries its own execution stack in lib/arm64-v8a: libproot.so,
+  libproot_loader.so and libtalloc2.so mirrored from Termux through
+  get-starboard/starboard-prebuilts, libSDL2_starboard.so preloaded ahead of the
+  SDL2 in the rootfs, libasound_module_pcm_starboard.so as the ALSA output
+  plugin, libGLESv2_wrap.so with libvirgl_vtest.so and libvirglrenderer_sb.so
+  for the per-port GPU path, libandroid-shmem.so, and libgame_bridge.so which
+  starts proot and builds the PortMaster environment. Android installs all of
+  them with the package.
+
+  What the ports find under /opt/system/Tools/PortMaster is written at launch by
+  libgame_bridge.so: bind_directories.sh, patch_ld_preload.sh,
+  seed_retroarch_cfg.sh and launcher.sh under /tmp/sb, the gptokeyb shim,
+  runtimes.json, control.txt and device_info.txt, with etc/resolv.conf and
+  etc/hosts seeded straight after extraction. The ES-DE sync writes the .port
+  files it later launches from, each holding a zip_name and a launcher key,
+  along with a ports entry in custom_systems/es_systems.xml and
+  gamelists/ports/gamelist.xml.
+
+  Games install to Starboard/ports on shared storage, marked by a
+  .starboard_installed file, and come from the PortMaster catalogue rather than
+  from this profile. A port that declares a runtime pulls a squashfs image into
+  opt/system/Tools/PortMaster/libs inside the rootfs on first launch, named by
+  the port and resolved through the utils index of PortsMaster/PortMaster-New
+  filtered to arch aarch64. Starboard names no runtime of its own and that index
+  is republished with the catalogue, so the set belongs to PortMaster.
+
+files:
+  - name: starboard-rootfs.tar.gz
+    aliases:
+      - rootfs.tar.gz
+    path: "rootfs.tar.gz"
+    required: true
+    category: game_data
+    validation: [sha256]
+    size: 582086462
+    sha256: "a40dd11b24802325b37ab6454feb5fda84a6f1de9d769c84a2dd7b6fee8035e1"
+    unsourceable: "runtime image the app fetches into its own cache and unpacks into internal storage, leaving no path a user or a pack can write"
+    description: "Debian bookworm ARM64 root filesystem the ports execute in"
+    note: >-
+      Fetched from releases/latest/download of get-starboard/starboard-runtime,
+      written to the cache directory as rootfs.tar.gz, gunzipped into a rootfs
+      directory under internal storage, then deleted. Nothing launches without
+      it: the gate reads usr/bin/env and bin/sh in the extracted tree beside
+      libproot.so in the native library directory. Integrity comes from a
+      .sha256 sidecar requested next to the asset, whose first whitespace token
+      must be 64 hex characters; the file is hashed and dropped on a mismatch,
+      while a missing sidecar logs "No rootfs checksum sidecar available" and the
+      download is kept on TLS trust alone, which is what happens today since that
+      sidecar answers 404. The size and hash recorded here identify release
+      starboard-rootfs-20260604.1, the one that URL served at profiling time, and
+      the app follows whatever release is latest. Its own version is read back
+      from etc/starboard-release, which carries release, commit and built keys.
+    source_ref: "Starboard 0.23.0 ze0.java:75,421-422 (base and asset URL), xe0.java:66-70 (download, verify, extract, delete), ze0.java:236-342 (sha256 sidecar and comparison), ze0.java:130-144 (gunzip into place), ze0.java:416-418 (install directory), ze0.java:426-428 and t20.java:125 (launch gate), ze0.java:439-463 (etc/starboard-release)"

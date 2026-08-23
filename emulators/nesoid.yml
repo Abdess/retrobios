@@ -1,0 +1,184 @@
+emulator: Nesoid
+type: standalone
+core_classification: community_fork
+source: "https://github.com/proninyaroslav/nesoid"
+upstream: "https://sourceforge.net/p/nesoid/code"
+author: "Yongzh (androidemu.com)"
+profiled_date: "2026-08-12"
+source_commit: "b2ff53fefa56a668aad4a579af85adc672d7a791"
+core_version: "2.5"
+display_name: "Nintendo - NES / Famicom (Nesoid)"
+mode: standalone
+cores:
+  - "nesoid"
+  - "Nesoid"
+  - "NESOID"
+systems:
+  - nintendo-nes
+  - nintendo-fds
+
+notes: |
+  Android package com.androidemu.nes, launched on the path of the content with
+  android.intent.action.VIEW; the activity declares the file scheme with the
+  application/zip and application/octet-stream types
+  (app/src/main/AndroidManifest.xml:59-71). Two build families answer to that
+  package id. Yongzh's own closed builds come first, and 2.3 (versionCode 56)
+  and 2.5.0 (versionCode 62) are read here, both carrying his certificate sha256
+  744b1df1b3610d58e447d243521a0957cc5f4ebd50b12d2816a92396d1aa32f2 (C=CN,
+  O=androidemu.com, freeman.yong@gmail.com). He later published the sources; the
+  SourceForge project carried them on and Yaroslav Pronin forked that tree to
+  GitHub, where release 2.5-4 (versionName 2.5, versionCode 61, armeabi-v7a,
+  certificate O=Free Software CN=Yaroslav Pronin) is the build ES-DE names. The
+  SourceForge community rebuild of the same tree (com.androidemu.nes_61.apk,
+  certificate O=Alcatraz CN=Birdman) was read beside it. Line numbers are the
+  fork's, native addresses are the armeabi library of Yongzh's 2.5.0, and the
+  SourceForge tree carries general.c and fds.c byte identical to the fork.
+
+  The emulation core is neslib, FCE Ultra 0.98 reached through the GP2X port
+  GPFCE, whose driver and blitters still sit in the tree unbuilt
+  (app/jni/neslib/drivers/gp2x/, giz_blit.s). The Android build compiles the
+  mapper, board and input sets with its own four file driver
+  (app/jni/neslib/Android.mk:12-197), leaves netplay out of the library and
+  runs it from Java instead (app/jni/neslib/fce.c:1081,1206,
+  app/jni/neslib/drivers/android/netplay.c:1,28), and reduces
+  FCEUD_PrintError and FCEUD_Message to empty bodies, so every message the core
+  raises is discarded (app/jni/neslib/drivers/android/debug.c:4-11).
+
+  The activity accepts a name ending .nes, .fds or .zip caselessly and refuses
+  anything else before the loader runs (EmulatorActivity.java:933-957,
+  app/src/main/res/values/arrays.xml:4-8). An archive is opened by the core,
+  which keeps the first entry ending .nes, .fds, .nsf, .unf, .nez or .unif, and
+  a plain file also opens gzipped (app/jni/neslib/file.c:192-232,250-273).
+  FCEUI_LoadGame then tries the iNES, NSF, FDS and UNIF loaders in that order on
+  the bytes themselves (app/jni/neslib/fce.c:1180-1187).
+
+  The Disk System BIOS is the file the user has to supply. FDSLoad asks
+  FCEU_MakeFName for it, opens it with a plain fopen and reads 8192 bytes into
+  the array mapped over 0xE000 to 0xFFFF (app/jni/neslib/fds.c:76,146,160,
+  808-843, app/jni/neslib/drivers/android/file.c:3-6). Where that name resolves
+  is the one place the two build families differ. Yongzh's builds carry a
+  setOption entry fdsRom that duplicates the path the settings screen holds and
+  return it from FCEU_MakeFName when set (libnes.so setOption 0x455a4-0x45694,
+  setter 0x8804-0x8848, FCEUMKF_FDSROM case 0x8094-0x80ac,
+  Nesoid 2.5.0 EmulatorActivity.java:834). The published sources carry neither
+  the option nor that branch, so only the fallback remains: FCEUMKF_FDSROM
+  formats disksys.rom under the base directory, and nothing on Android ever
+  calls FCEUI_SetBaseDirectory, which leaves that buffer empty
+  (app/jni/neslib/general.c:46,52-56,215). The settings screen still writes the
+  fdsRom preference and still shows the chosen path, but no code reads it back
+  (EmulatorSettingsFragment.java:96-99,150-156,195-210,
+  app/src/main/res/xml/preferences.xml:240-251). Disk switching went the same
+  way: the menu asks the engine for fdsTotalSides and fdsCurrentDisk, which
+  Yongzh's builds answer and the fork's does not, the base class returning zero
+  for any name (EmulatorActivity.java:417,969,1244-1249,
+  app/jni/common/emuengine.h:49).
+
+  The Game Genie ROM is a second path the user picks, kept across both families.
+  loadGameGenie passes it to the engine only while the Enable Game Genie switch
+  is on, the setter duplicates it into FSettings.GameGenie and OpenGenie reads it
+  once the content has loaded (EmulatorActivity.java:870-874,
+  app/jni/neslib/drivers/android/nesengine.cpp:242-243,
+  app/jni/neslib/svga.c:132-140, app/jni/neslib/fce.c:1201-1203). Both pickers
+  list names ending .nes, .rom or .bin
+  (EmulatorSettingsFragment.java:179-210, FileChooser.java:157-172).
+
+  A palette named after the content is read from the pal directory of the same
+  unset base directory as the disk BIOS, 192 bytes taken as 64 RGB triples; a
+  missing file leaves the built-in table in place
+  (app/jni/neslib/palette.c:205-224, app/jni/neslib/general.c:216-221,
+  app/jni/neslib/fce.c:1212).
+
+  Per content the emulator writes and reads back its own files, all under that
+  same base directory: sav/<name>.sav for battery backed cartridge RAM
+  (app/jni/neslib/cart.c:641-700), sav/<name>.fds for the modified disk
+  (app/jni/neslib/fds.c:845-870,915-930), fcs/<name>.fc<n> states,
+  snaps/ screenshots and movie/<name>.fcm recordings
+  (app/jni/neslib/general.c:134-195,222-238), and cheats/<name>.cht, which
+  FCEU_LoadGameCheats reads at load and FCEU_FlushGameCheats rewrites at close
+  (app/jni/neslib/cheat.c:183-208,272-300, app/jni/neslib/fce.c:1080,1213).
+  The application writes its own files through Java paths instead: state slots
+  at <content>.ss<n> beside the content (StateSlotsActivity.java:39-45,135-140),
+  an XML cheat list at <content>.cht, also beside the content
+  (Cheats.java:37-46,105-160), key profiles under its data directory
+  (KeyProfilesActivity.java:47-60,92-100), PNG screenshots under screenshot/ on
+  external storage (EmulatorActivity.java:1258-1281) and a netplay state
+  exchanged through its cache directory (EmulatorActivity.java:1292-1293).
+
+files:
+  - name: disksys.rom
+    system: nintendo-fds
+    required: true
+    min_size: 8192
+    validation: [size]
+    config_key: "fdsRom"
+    description: "Famicom Disk System BIOS"
+    note: >-
+      Read as 8192 bytes into the 8 KB array mapped over 0xE000 to 0xFFFF. A
+      failed open or a short read frees the disk data and ends the load, so no
+      .fds content runs; both messages are discarded and the application reports
+      only that the ROM failed to load. Nothing else about the image is
+      examined, so a longer file passes on its first 8192 bytes and no hash is
+      compared. The open is a plain fopen, so neither a zipped nor a gzipped
+      copy answers. Yongzh's builds take the path from the fdsRom setting, whose
+      picker lists names ending .nes, .rom or .bin; the builds made from the
+      published sources ignore that setting and resolve the compiled name under
+      a base directory that is never set, which puts it at the root of the
+      filesystem.
+    source_ref: "app/jni/neslib/fds.c:808-843 (open, read, failure), app/jni/neslib/fds.c:76,146,160 (array and mapping), app/jni/neslib/general.c:46,52-56,215 (name and empty base directory), app/jni/neslib/drivers/android/file.c:3-6 (plain fopen); Nesoid 2.5.0 libnes.so 0x455a4-0x45694 (setOption fdsRom), 0x8804-0x8848 (setter), 0x8094-0x80ac (FCEUMKF_FDSROM returns the set path), Nesoid 2.5.0 EmulatorActivity.java:834"
+
+  - name: gg.rom
+    system: nintendo-nes
+    required: false
+    min_size: 4352
+    validation: [size]
+    config_key: "gameGenieRom"
+    description: "Game Genie add-on cartridge ROM"
+    note: >-
+      Read only while the Enable Game Genie switch is on and a path is set,
+      through a picker listing names ending .nes, .rom or .bin. The first 16
+      bytes decide the format: a leading 0x4E is taken as an iNES image, from
+      which 4096 bytes of program ROM are read, then 256 bytes of character ROM
+      16 KB further in, so such a file needs at least 16656 bytes; anything else
+      is read as a raw 4352 byte image. A failed open or a short read leaves the
+      Game Genie off and the content still runs. No hash is compared.
+    source_ref: "app/jni/neslib/cart.c:475-521 (open and format branch), app/jni/neslib/svga.c:132-140 (setter), app/jni/neslib/drivers/android/nesengine.cpp:242-243, app/jni/neslib/fce.c:1201-1203 (call site), EmulatorActivity.java:870-874, EmulatorSettingsFragment.java:179-193 (picker)"
+
+  - name: "<game>.pal"
+    system: nintendo-nes
+    required: false
+    category: game_data
+    unsourceable: "any 64 colour palette the user picks for one title"
+    description: "colour palette for one title"
+    note: >-
+      Opened as pal/<name>.pal under the base directory when content loads, with
+      the name taken from the content. 192 bytes are read as 64 RGB triples and
+      replace the built-in table, without checking how many arrived, so a
+      shorter file leaves the remaining entries unset; a missing file changes
+      nothing. The base directory is never set on Android, so the name resolves
+      at the root of the filesystem.
+    source_ref: "app/jni/neslib/palette.c:205-224, app/jni/neslib/general.c:216-221, app/jni/neslib/fce.c:1212"
+
+exclusion_note: >
+  Left out are the files the emulator writes and reads back, which are its own
+  state rather than anything a user obtains: sav/<name>.sav for battery backed
+  cartridge RAM, sav/<name>.fds for the modified disk, fcs/<name>.fc<n> states,
+  snaps/ screenshots, movie/<name>.fcm recordings and cheats/<name>.cht, which
+  is reread at load and rewritten at close. The application writes its own set
+  through Java paths: state slots at <content>.ss<n>, an XML cheat list at
+  <content>.cht beside the content, key profiles, PNG screenshots under
+  screenshot/ and the netplay state in its cache directory. The IPS branch is
+  unreachable: FCEUMKF_IPS has no call site, and the only patcher applies a .ips
+  handed in as the content itself, which the activity refuses before the loader
+  runs. The netplay temporary file
+  goes with the netplay code, which the Android build does not compile. The
+  gg.rom name FCEU_MakeFName builds is never opened, the Game Genie image
+  arriving as a path instead. assets/about.html and assets/faq.html are the help
+  screens of the application and carry no emulation data.
+  ref: app/jni/neslib/general.c:196-213,222-238, app/jni/neslib/cart.c:641-700,
+       app/jni/neslib/fds.c:845-870,915-930, app/jni/neslib/cheat.c:183-208,
+       272-300, app/jni/neslib/fce.c:1080,1145-1177,1206,1213,
+       EmulatorActivity.java:949-957,1258-1293, Cheats.java:37-46,
+       StateSlotsActivity.java:39-45,135-140,
+       KeyProfilesActivity.java:47-60,92-100, app/jni/neslib/Android.mk:193-197,
+       HelpActivity.java:14-22, MainActivity.java:20,
+       EmulatorSettingsFragment.java:30-31

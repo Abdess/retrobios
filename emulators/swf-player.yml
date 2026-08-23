@@ -1,0 +1,293 @@
+emulator: "SWF Player"
+type: standalone
+core_classification: launcher
+source: "https://play.google.com/store/apps/details?id=com.issess.flashplayer"
+upstream: closed-source
+author: "issess.net"
+profiled_date: "2026-08-12"
+core_version: "1.90 free (build 507)"
+display_name: "Adobe Flash (SWF Player)"
+mode: standalone
+cores:
+  - "swf-player"
+  - "SWF Player"
+  - "SWF-PLAYER"
+systems:
+  - flash
+
+notes: |
+  Android package com.issess.flashplayer, closed source, published on Google Play and
+  reached by ES-DE through its SWF-PLAYER find rule. The build read here is 1.90 free
+  (build 507), versionCode 507, arm64-v8a and armeabi-v7a, sha256
+  0a56e74d0f8bfdfbd984ce1b8aa2a700203fdd051f3aece3c95fb17f45d4383b, signed v1 and v2 with
+  the developer certificate O=issess.com, CN=issess, sha256
+  c3a222b4339f9dde3a770bc1d0ceb551fa96e554679cdbd2056aadd0f1b843c8. Line numbers below are
+  those of that package: jadx output for the classes, the shipped file itself for
+  contents.html. The paid package com.issess.flashplayerpro, the other entry of the same
+  find rule, is built from this class tree, its activity being spelled
+  com.issess.flashplayer.player.FlashPlayerActivity. No genuine copy of it was obtainable:
+  apkpure and apkcombo bounce the download of a paid app, apkvision holds none, mi9 serves
+  zero bytes and archive.org has no item for either package.
+
+  Two engines ship in the package, one activity each, both exported and both answering
+  android.intent.action.VIEW for application/swf, application/x-shockwave-flash and
+  video/x-flv. FlashPlayerActivity is labelled "SWF Player by Ruffle" and runs the movie
+  in a WebView; AirPlayerActivity is labelled "SWF Player by AdobeAIR", lives in a :air
+  process and drives a captive Adobe AIR runtime. ES-DE names the first one and passes the
+  movie as the content URI of its own provider, so it always gets the Ruffle engine.
+  ref: AndroidManifest.xml activity com.issess.flashplayer.player.FlashPlayerActivity and
+       .AirPlayerActivity, string play_ruffle_player, play_air_player, using_ruffle_plugin,
+       using_air_plugin
+
+  The movie itself never stays where the user put it. BaseActivity.E reads the intent Uri
+  through the content resolver, or opens the path directly for a file:// intent, and writes
+  the bytes twice: to <cache>/assetLoader/cached.swf for the WebView engine and to
+  <cache>/app/<uniqueappversionid>/assets/cached.swf for the AIR engine, next to a copy of
+  the bundled AIR descriptor. The AIR name is fixed because the descriptor declares
+  cached.swf as its initial window content. A run with no Uri falls back to the last_swf
+  preference.
+  ref: BaseActivity.java:607-654, BaseActivity.java:594-605 (uniqueappversionid),
+       a2/b.java:86-92 (asset copy), a2/b.java:115 (stream copy),
+       assets/META-INF/AIR/application.xml:28
+
+  The Ruffle engine serves everything over a virtual host. FlashPlayerActivity.g0 writes
+  <cache>/assetLoader/swf.html from the bundled contents.html template, substituting the
+  movie URL and the wmode, scale, quality, background and density preferences;
+  FlashPlayerActivity.h0 builds a WebViewAssetLoader on the domain localhost.issess.net
+  mapping /ruffle/ to the package assets and / to that cache directory; i0 then loads
+  https://localhost.issess.net/swf.html one second later. The template pulls
+  /ruffle/ruffle/ruffle.js, which resolves to assets/ruffle/ruffle.js, and declares the
+  movie as a plain <object type="application/x-shockwave-flash">, which the Ruffle polyfill
+  takes over. Ruffle is the web build, nightly 2024-08-26, commit
+  c869505e88f792b1b6691cd8d6f0185bde4c21b9. The player controls are JavaScript calls on
+  that object and the frame counter comes back through the CallJava bridge.
+  ref: FlashPlayerActivity.java:262-291, 293-310, 312-346, 154, 349-386,
+       a2/b.java:327-373, c1/i.java:22-40 (assets handler), c1/i.java:77-95 (cache handler),
+       assets/contents.html:28,35-49, assets/ruffle/ruffle.js versionName field
+
+  Nothing is read from outside the package. The one mention of Adobe's own player is a main
+  list row that opens market://details?id=com.adobe.flashplayer, a store link that loads no
+  file, and the "Flash Player Not Found!" branch with its CallJava.notInstalled callback is
+  the fallback content of the object element, reached only when neither a plugin nor the
+  polyfill claims it. No plugin binary, BIOS, firmware or key is named anywhere in the
+  class tree, and ES-DE's own table records no BIOS for this system.
+  ref: MainListFragment.java:360, a2/b.java:452-468 (market intent),
+       assets/contents.html:50-60, FlashPlayerActivity.java:179-183,
+       ES-DE ANDROID.md:928
+
+files:
+  - name: ruffle.js
+    path: "assets/ruffle/ruffle.js"
+    system: flash
+    required: true
+    bundled: true
+    unsourceable: "ships inside the application package"
+    size: 344533
+    md5: c0263e609d1aef85891d56d6467a429c
+    sha1: c58c63e0ae8396018fd71f0fa7ebd4f8eb4f139f
+    description: "Ruffle web loader and polyfill, nightly 2024-08-26"
+    note: >-
+      The only script the generated page includes. It replaces the shockwave-flash object
+      with a Ruffle player and selects one of the two cores below by WebAssembly feature
+      detection. Absent, nothing claims the object element and the page renders its fallback
+      content instead, which reports back through CallJava.notInstalled.
+    source_ref: "assets/contents.html:28, FlashPlayerActivity.java:305 (/ruffle/ mapped to the package assets)"
+
+  - name: "core.ruffle.1c418e86b251861b5eca.js"
+    path: "assets/ruffle/core.ruffle.1c418e86b251861b5eca.js"
+    system: flash
+    required: true
+    bundled: true
+    unsourceable: "ships inside the application package"
+    variant_group: "ruffle-core"
+    size: 90386
+    md5: 5b1d64812875a1341ebd2a611e9324a1
+    sha1: 0eabbed786f3b8e5656d123e9f4573f918ba63d8
+    description: "Ruffle core bindings, WebAssembly extensions build"
+    note: >-
+      Glue for the SIMD core, webpack module 791. Loaded on a device whose WebAssembly
+      engine carries the extensions, which is what is_wasm_simd_used reports back.
+    source_ref: "assets/ruffle/ruffle.js webpack module 791, assets/ruffle/core.ruffle.1c418e86b251861b5eca.js is_wasm_simd_used"
+
+  - name: "75a2b30a5d3fb1a3431d.wasm"
+    path: "assets/ruffle/75a2b30a5d3fb1a3431d.wasm"
+    system: flash
+    required: true
+    bundled: true
+    unsourceable: "ships inside the application package"
+    variant_group: "ruffle-core"
+    size: 13107470
+    md5: 834f85979115fd740943a782887d0ab0
+    sha1: d27da38e4d37727a44bf04d7690a09135fad7115
+    description: "Ruffle core, WebAssembly extensions build"
+    note: >-
+      The player itself for devices with the extensions. Its target features record simd128,
+      which the baseline build below does not carry.
+    source_ref: "assets/ruffle/ruffle.js webpack module 791"
+
+  - name: "core.ruffle.9fa2f1e6feaba5f6767a.js"
+    path: "assets/ruffle/core.ruffle.9fa2f1e6feaba5f6767a.js"
+    system: flash
+    required: true
+    bundled: true
+    unsourceable: "ships inside the application package"
+    variant_group: "ruffle-core"
+    size: 94169
+    md5: 5aee868a91c066cc15f8b06999af690b
+    sha1: 45815723a1bdf4229e289906bf4e52dbfd78da56
+    description: "Ruffle core bindings, baseline build"
+    note: >-
+      Glue for the core without WebAssembly extensions, webpack module 797. Loaded when the
+      device does not report them.
+    source_ref: "assets/ruffle/ruffle.js webpack module 797, assets/ruffle/core.ruffle.9fa2f1e6feaba5f6767a.js is_wasm_simd_used"
+
+  - name: "9541e862775deeb49470.wasm"
+    path: "assets/ruffle/9541e862775deeb49470.wasm"
+    system: flash
+    required: true
+    bundled: true
+    unsourceable: "ships inside the application package"
+    variant_group: "ruffle-core"
+    size: 13323601
+    md5: fe843bd0152c714f0449493b0193108f
+    sha1: fea8e60e86cba7a63258626b13e6adb69ed110f9
+    description: "Ruffle core, baseline build"
+    note: >-
+      The player itself for devices without the WebAssembly extensions.
+    source_ref: "assets/ruffle/ruffle.js webpack module 797"
+
+  - name: contents.html
+    path: "assets/contents.html"
+    system: flash
+    required: true
+    bundled: true
+    unsourceable: "ships inside the application package"
+    size: 2421
+    md5: 39c997db73db15a6807b35f148fcc85a
+    sha1: 0aaf20633888d2d0a2da38e82773cb5d44e840eb
+    description: "Template of the page the WebView loads"
+    note: >-
+      Read from the assets on every launch and rewritten into
+      <cache>/assetLoader/swf.html with the movie URL and the display preferences
+      substituted. It carries the ruffle.js include and the object element. Unreadable, the
+      generator returns null and the WebView is pointed at a page with no movie in it.
+    source_ref: "a2/b.java:327-333, FlashPlayerActivity.java:276-291"
+
+  - name: application.xml
+    path: "assets/META-INF/AIR/application.xml"
+    system: flash
+    required: true
+    bundled: true
+    unsourceable: "ships inside the application package"
+    size: 1377
+    md5: de36d0dc1b74a39be2313749138d4d00
+    sha1: bc283d9ad8ad3bb99b632ca5b194a5bf27df1c22
+    description: "Adobe AIR application descriptor, namespace 3.8"
+    note: >-
+      Copied out of the assets into <cache>/app/<uniqueappversionid>/assets/META-INF/AIR/
+      before the AIR engine starts, and read from there by the runtime. It declares
+      cached.swf as the initial window content, which is the name the movie is copied under,
+      plus fullscreen, gpu rendering and auto orientation.
+    source_ref: "BaseActivity.java:616-630, assets/META-INF/AIR/application.xml:19,27-35"
+
+  - name: libCore.so
+    path: "lib/arm64-v8a/libCore.so"
+    system: flash
+    required: true
+    bundled: true
+    unsourceable: "ships inside the application package"
+    size: 20951456
+    md5: 7fa4474455635584fa683167ee7e948f
+    sha1: d6d91ca32cbceda054851e9aa78c2e9286bd8812
+    description: "Adobe AIR 51.1.1.3 captive runtime"
+    note: >-
+      The AIR player, loaded by path first and then by name from the package. The runtime is
+      captive: the wrapper classes live in the application's own dex and the library beside
+      them, so no separate AIR package is consulted. The armeabi-v7a build of the same
+      version is 14808220 bytes. Version read back from the library as "AND 51,1,1,3".
+    source_ref: "AndroidActivityWrapper.java:455-481, AirPlayerBaseActivity.java:59-70"
+
+  - name: libc++_shared.so
+    path: "lib/arm64-v8a/libc++_shared.so"
+    system: flash
+    required: true
+    bundled: true
+    unsourceable: "ships inside the application package"
+    size: 1058904
+    md5: 77f7b0c9bba5c0b4c4339bc655d5613a
+    sha1: 8db47ede06074dec3fbc05b69eb75f8c1c5e71a8
+    description: "NDK C++ runtime for the AIR runtime"
+    note: >-
+      Named by the wrapper ahead of the runtime itself, by path and then by name, and listed
+      as a DT_NEEDED of libCore.so. The armeabi-v7a build is 657000 bytes.
+    source_ref: "AndroidActivityWrapper.java:459,472-478"
+
+  - name: libswfplayer.so
+    path: "lib/arm64-v8a/libswfplayer.so"
+    system: flash
+    required: true
+    bundled: true
+    unsourceable: "ships inside the application package"
+    size: 3896
+    md5: 1301640830c754d20384243c97bd7854
+    sha1: 6118faa7947eb7abf4326f08f5ba94ab61e42808
+    description: "JNI library of the application"
+    note: >-
+      Loaded from the static initializer of the AIR activity's base class, so its absence
+      stops that activity from being created. It exports one symbol,
+      Java_com_issess_flashplayer_stringFromJNI, which nothing calls. The armeabi-v7a build
+      is 2688 bytes.
+    source_ref: "AirPlayerBaseActivity.java:31-33"
+
+  - name: sample1.swf
+    path: "assets/sample1.swf"
+    system: flash
+    required: false
+    bundled: true
+    unsourceable: "ships inside the application package"
+    size: 5889
+    md5: 3d801b57e0b9e1a84d9cf28ef7505b3c
+    sha1: 5194da518b3bbc77204e481c2cfed0381cf5df41
+    description: "Sample movie"
+    note: >-
+      Unpacked into <cache>/assetLoader on the sample list screen, then opened through a
+      chooser like any other movie so either engine can take it.
+    source_ref: "SampleListFragment.java:65-81, 109-117"
+
+  - name: sample2.swf
+    path: "assets/sample2.swf"
+    system: flash
+    required: false
+    bundled: true
+    unsourceable: "ships inside the application package"
+    size: 54675
+    md5: c583c7db1c5456c0d9307d5f510a63f0
+    sha1: bef0ab96169418441f43b9dae2ec92a990b89ade
+    description: "Sample movie"
+    note: >-
+      Unpacked and opened on the same path as sample1.swf.
+    source_ref: "SampleListFragment.java:65-81, 109-117"
+
+  - name: sample3.swf
+    path: "assets/sample3.swf"
+    system: flash
+    required: false
+    bundled: true
+    unsourceable: "ships inside the application package"
+    size: 23563
+    md5: 505834e937b0bd061695ff34f40301cb
+    sha1: f5992aebd3ba298f6564681592be8b4626e89158
+    description: "Sample movie"
+    note: >-
+      Unpacked and opened on the same path as sample1.swf.
+    source_ref: "SampleListFragment.java:65-81, 109-117"
+
+exclusion_note: >
+  Four files the package carries are left out because no code path opens them. The assets
+  cached.swf, Hello2.swf and empty.html are named in no class; the cached.swf the AIR
+  runtime reads is the copy of the user's movie written into the cache, not the one in the
+  assets. libysshared.so, which exports only ysEncrypt and ysDecrypt, is loaded by nothing:
+  the three loadLibrary calls in the package name swfplayer, c++_shared and Core, no
+  library declares it as a DT_NEEDED, and its soname appears nowhere in the class tree. The
+  market link to com.adobe.flashplayer is not a dependency either, being an intent to the
+  store page rather than a load of Adobe's plugin.

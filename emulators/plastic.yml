@@ -1,0 +1,50 @@
+emulator: Plastic
+type: standalone
+core_classification: other
+source: "https://github.com/Amjad50/plastic"
+upstream: "https://github.com/Amjad50/plastic"
+profiled_date: "2026-08-12"
+source_commit: "74152adb3acd890d3abee2ff5906408f26a199e2"
+core_version: "0.3.5"
+display_name: "Nintendo - NES / Famicom (Plastic)"
+cores:
+  - plastic
+systems:
+  - nintendo-nes
+mode: standalone
+
+notes: |
+  NES emulator written in Rust by Amjad Alsharafi. The emulation lives in the
+  plastic_core crate and two binaries drive it: plastic, an egui window, and
+  plastic_tui, a terminal frontend (docs/man/plastic.1). Both take the ROM
+  path as their first argument (plastic_ui/src/main.rs:418-424,
+  plastic_tui/src/main.rs:5-38).
+
+  A cartridge boots with nothing supplied. The 2A03, the PPU and every mapper
+  are emulated in software and the console has no boot ROM, so no BIOS or
+  firmware is read. Cartridge::from_file accepts a path only when its
+  extension is nes and its first four bytes are the iNES magic
+  (plastic_core/src/cartridge/mod.rs:184-263, :157-165). get_mapper implements
+  0, 1, 2, 3, 4, 7, 9, 10, 11, 12 and 66, and any other number returns
+  MapperNotImplemented (:280-296). No Famicom Disk System path exists and
+  therefore no disksys.rom.
+
+  The NES to RGB table is a constant compiled into the binary
+  (plastic_core/src/display/color.rs:22-87, selected at :158) and the 32 bytes
+  at 0x3F00 are the PPU palette RAM (plastic_core/src/ppu2c02/palette.rs:6-19),
+  so no palette file is opened. The window icon is embedded at build time
+  (plastic_ui/src/main.rs:430).
+
+  The emulator reads back only what it wrote itself. A cartridge whose header
+  carries the battery bit gets <rom>.nes.sav beside the ROM, written on drop
+  and reloaded on the next run (plastic_core/src/cartridge/mod.rs:319-348,
+  :457-463). Save state slots 0 to 9 are <rom-stem>_<slot>.pst under the data
+  directory, ~/.local/share/plastic/saved_states on Linux
+  (plastic_ui/src/main.rs:16-32,95-118; plastic_tui/src/ui.rs:38-51,144-176;
+  plastic_core/src/nes.rs:393-406).
+
+  Gamepad support comes from gilrs, which compiles the SDL controller database
+  into the binary and takes its only override from the SDL_GAMECONTROLLERCONFIG
+  environment variable rather than a file (gilrs src/mapping/mod.rs:477-485).
+
+files: []

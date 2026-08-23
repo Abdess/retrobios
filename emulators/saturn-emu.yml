@@ -1,0 +1,219 @@
+emulator: "Saturn.emu"
+type: standalone
+core_classification: community_fork
+source: "https://github.com/Rakashazi/emu-ex-plus-alpha"
+upstream: "https://mednafen.github.io/"
+profiled_date: "2026-08-12"
+source_commit: "1c12fac5ce49badaadff2e2f210dcc30b89f4943"
+core_version: "1.5.85"
+display_name: "Sega - Saturn (Saturn.emu)"
+mode: standalone
+cores:
+  - "saturn-emu"
+  - "Saturn.emu"
+  - "SATURN-EMU"
+  - "saturnemu"
+systems:
+  - sega-saturn
+
+notes: |
+  Member of the EX Emulator series by Robert Broglia, published as
+  com.explusalpha.SaturnEmu and built for arm64 and x86_64 only
+  (Saturn.emu/metadata/conf.mk:2-7, Saturn.emu/config.mk:7-9). ES-DE reaches it
+  through the SATURN-EMU find rule, which only the Android rule set carries, and
+  offers it under both the saturn and saturnjp systems. Mednafen's Saturn module
+  is vendored under Saturn.emu/src/ss on the 1.32 line
+  (EmuFramework/include/shared/mednafen/mednafen-config.h:167) and driven by the
+  app's own video, audio, input and save layers
+  (Saturn.emu/src/CMakeLists.txt:6-40). Seventeen files differ from the Mednafen
+  1.32.1 release, none of it touching file loading: statics become externals the
+  app reads (Saturn.emu/src/ss/ss.cpp:146, Saturn.emu/src/ss/smpc.cpp:96,146,
+  Saturn.emu/src/ss/vdp2.cpp:46,63, Saturn.emu/src/ss/cdb.cpp:535), backup memory
+  moves to the app's file objects and the periodic save timers are dropped
+  (Saturn.emu/src/ss/ss.cpp:1836-1849, mednafen 1.32.1 src/ss/ss.cpp:927-970,
+  1592-1600,1867-1874), the VDP2 work queue becomes a framework ring buffer
+  (Saturn.emu/src/ss/vdp2_render.cpp:3211-3231), and the rest is enum and virtual
+  qualifier tidying. The BIOS and cart ROM block is byte-identical to the release,
+  as are cart.cpp, cart/rom.cpp and db.cpp.
+
+  Content is read from .cue, .ccd, .chd, .toc and .m3u files
+  (Saturn.emu/metadata/conf.mk:5, Saturn.emu/src/main/system.ccm:106-109). An
+  archive is opened by the app, which prefers an .m3u member and otherwise keeps
+  the first entry passing that filter, and an .m3u names up to 16 images
+  (Saturn.emu/src/main/Main.cc:186-246). Every load goes through the module's
+  LoadCD entry point (Saturn.emu/src/main/Main.cc:275,
+  Saturn.emu/src/ss/ss.cpp:1757-1806). The ROM entry point Load is never called:
+  its only call site in the tree is a shared helper this app does not use
+  (EmuFramework/src/shared/mednafen-emuex/MDFNUtils.hh:133-146).
+
+  Four files the user supplies carry no name of their own. Pickers store
+  arbitrary URIs under NA/EU BIOS, JP BIOS, KoF '95 ROM and Ultraman ROM, each
+  filtered to names ending in .bin and each refusing to descend into archives
+  (Saturn.emu/src/main/EmuMenuViews.cc:34-37,44-145,
+  EmuFramework/include/emuframework/DataPathSelectView.hh:77-102,
+  Saturn.emu/src/main/system.ccm:85-95,128-131,
+  Saturn.emu/src/main/options.cc:65-68,98-101). MDFN_GetSettingS answers the four
+  path settings with the fixed tokens jp, na, kof95 and ultraman, and
+  MDFN_MakeFName turns each token back into the matching URI, ending the load
+  with a message pointing at the File Paths menu when it is unset
+  (Saturn.emu/src/main/options.cc:215-228,245-285). Every other setting name
+  reaches unreachable(), so no other firmware request can be made.
+
+  Which BIOS is read follows the emulated area: Japan and Asia NTSC take the JP
+  path, every other area the NA/EU path (Saturn.emu/src/ss/ss.cpp:1388-1394). The
+  area comes from the Region menu, or when that is Auto from the first 16 sectors
+  of the disc, checked against the security code hash and the "SEGA SEGASATURN "
+  magic (Saturn.emu/src/main/EmuMenuViews.cc:216-251,
+  Saturn.emu/src/main/options.cc:203-204, Saturn.emu/src/ss/ss.cpp:959-968,
+  1126-1144,1778-1787). The image is rejected at any length other than 524288 and
+  then hashed (Saturn.emu/src/ss/ss.cpp:1400-1404). With ss.bios_sanity forced on
+  (Saturn.emu/src/main/options.cc:193-194) a table of five known images drives two
+  further tests: a file whose name is one of the five must hash to that entry, and
+  a file whose hash is one of the five must belong to the area being emulated
+  (Saturn.emu/src/ss/ss.cpp:1406-1439). An image outside the table passes both,
+  since each test only rejects on a match. A third test compares Saturn against
+  ST-V images and can never fire here.
+
+  Cart type comes from the Cart Type menu when it is not Auto, otherwise from the
+  internal game database, otherwise none
+  (Saturn.emu/src/main/EmuMenuViews.cc:180-214,
+  Saturn.emu/src/main/options.cc:161-164, Saturn.emu/src/ss/ss.cpp:1761-1790).
+  The database forces the KoF '95 cart for MK-81088 and T-3101G and the Ultraman
+  cart for T-13308G, marking all three a game requirement
+  (Saturn.emu/src/ss/db.cpp:93-96,403), so those three discs read a ROM image and
+  every other disc reads none.
+
+  ST-V, the bootable ROM cart and Action Replay 4M Plus are compiled and
+  unreachable. All three exist only behind cart types the Cart Type menu does not
+  list and the database never assigns, and the first two are entered from Load
+  alone (Saturn.emu/src/ss/ss.cpp:1630,1669, Saturn.emu/src/ss/cart.cpp:166-181).
+  Their paths would ask for ss.bios_stv_jp, ss.bios_stv_na, ss.bios_stv_eu and
+  ss.cart.satar4mp_path, none of which MDFN_GetSettingS answers
+  (Saturn.emu/src/ss/ss.cpp:1379-1387,1293,
+  Saturn.emu/src/main/options.cc:215-228). The ST-V EEPROM save file and the
+  ST-V branches in the app's own backup memory code are dead for the same reason
+  (Saturn.emu/src/main/Main.cc:119-123,141-142).
+
+  Per content the app writes and reads back a .bkr backup RAM image, a .smpc real
+  time clock block, .mca save states and, when a memory cart is selected, a
+  gzipped .bcr cart image; settings live in SaturnEmu.config
+  (Saturn.emu/src/main/Main.cc:50-129,152-155,
+  Saturn.emu/src/main/system.ccm:180, Saturn.emu/src/ss/cart/backup.cpp:69-73,
+  Saturn.emu/src/main/AppMeta.cc:28). Mednafen's image reader picks up an .sbi
+  beside a cue sheet when one is present
+  (EmuFramework/src/shared/mednafen/cdrom/CDAccess_Image.cpp:924-941). Cheats are
+  off (Saturn.emu/src/main/options.cc:187-188), and ui.png, gpOverlay.png and the
+  shader sources are drawn from the application bundle
+  (EmuFramework/include/emuframework/AssetManager.hh:61-66,
+  EmuFramework/src/AssetManager.cc:63-69,
+  EmuFramework/src/VideoImageEffect.cc:163-173).
+
+files:
+  - name: "sega_101.bin"
+    system: sega-saturn
+    description: "Saturn BIOS v1.01, read for Japan and Asia NTSC"
+    required: true
+    region: [japan, asia-ntsc]
+    size: 524288
+    sha256: "dcfef4b99605f872b6c3b6d05c045385cdea3d1b702906a0ed930df7bcb7deac"
+    validation: [existence, size, sha256]
+    config_key: "CFGKEY_JP_BIOS_PATH"
+    category: bios
+    note: >
+      The image the module's own setting table names for the JP path
+      (Saturn.emu/src/ss/ss.cpp:2398), and one of three the sanity table accepts
+      for Japan and Asia NTSC. Any 524288-byte image the user picks loads unless
+      the sanity table contradicts it, but a file carrying this name must carry
+      this hash.
+    source_ref: "Saturn.emu/src/ss/ss.cpp:1388-1394 (area picks the JP path), Saturn.emu/src/ss/ss.cpp:1396-1404 (open, size, hash), Saturn.emu/src/ss/ss.cpp:1418 (name, hash, areas), Saturn.emu/src/ss/ss.cpp:2398 (setting default), Saturn.emu/src/main/options.cc:218-219,276-281 (token and path), Saturn.emu/src/main/EmuMenuViews.cc:67-88 (picker)"
+
+  - name: "mpr-17933.bin"
+    system: sega-saturn
+    description: "Saturn BIOS read for every area outside Japan and Asia NTSC"
+    required: true
+    region: [north-america, europe, south-korea, asia-pal, brazil, latin-america]
+    size: 524288
+    sha256: "96e106f740ab448cf89f0dd49dfbac7fe5391cb6bd6e14ad5e3061c13330266f"
+    validation: [existence, size, sha256]
+    config_key: "CFGKEY_NA_BIOS_PATH"
+    category: bios
+    note: >
+      The image the module's own setting table names for the NA/EU path
+      (Saturn.emu/src/ss/ss.cpp:2399). The sanity table grants it every area
+      except Japan and Asia NTSC, which covers North America, Europe, South
+      Korea, Asia PAL, Brazil and Latin America as the Region menu names them.
+    source_ref: "Saturn.emu/src/ss/ss.cpp:1388-1394 (area picks the NA/EU path), Saturn.emu/src/ss/ss.cpp:1396-1404 (open, size, hash), Saturn.emu/src/ss/ss.cpp:1420 (name, hash, areas), Saturn.emu/src/ss/ss.cpp:2399 (setting default), Saturn.emu/src/main/options.cc:220-221,270-275 (token and path), Saturn.emu/src/main/EmuMenuViews.cc:44-65 (picker), Saturn.emu/src/main/EmuMenuViews.cc:162-176 (area names)"
+
+  - name: "sega_100.bin"
+    system: sega-saturn
+    description: "Saturn BIOS v1.00, accepted for Japan and Asia NTSC"
+    required: false
+    region: [japan, asia-ntsc]
+    size: 524288
+    sha256: "ae4058627bb5db9be6d8d83c6be95a4aa981acc8a89042e517e73317886c8bc2"
+    validation: [existence, size, sha256]
+    config_key: "CFGKEY_JP_BIOS_PATH"
+    category: bios
+    note: >
+      Interchangeable with the other two Japan images: the sanity table gives all
+      three the same areas, and nothing in the module ranks them.
+    source_ref: "Saturn.emu/src/ss/ss.cpp:1417 (name, hash, areas), Saturn.emu/src/ss/ss.cpp:1396-1439 (open, size, hash, sanity tests)"
+
+  - name: "sega1003.bin"
+    system: sega-saturn
+    description: "Saturn BIOS v1.003, accepted for Japan and Asia NTSC"
+    required: false
+    region: [japan, asia-ntsc]
+    size: 524288
+    sha256: "cc1e1b7f88f1c6e6fc35994bae2c2292e06fdae258c79eb26a1f1391e72914a8"
+    validation: [existence, size, sha256]
+    config_key: "CFGKEY_JP_BIOS_PATH"
+    category: bios
+    source_ref: "Saturn.emu/src/ss/ss.cpp:1416 (name, hash, areas), Saturn.emu/src/ss/ss.cpp:1396-1439 (open, size, hash, sanity tests)"
+
+  - name: "sega_100a.bin"
+    system: sega-saturn
+    description: "Saturn BIOS v1.00a, accepted for every area outside Japan and Asia NTSC"
+    required: false
+    region: [north-america, europe, south-korea, asia-pal, brazil, latin-america]
+    size: 524288
+    sha256: "87293093fad802fcff31fcab427a16caff1acbc5184899b8383b360fd58efb73"
+    validation: [existence, size, sha256]
+    config_key: "CFGKEY_NA_BIOS_PATH"
+    category: bios
+    source_ref: "Saturn.emu/src/ss/ss.cpp:1419 (name, hash, areas), Saturn.emu/src/ss/ss.cpp:1396-1439 (open, size, hash, sanity tests)"
+
+  - name: "mpr-18811-mx.ic1"
+    system: sega-saturn
+    description: "King of Fighters '95 ROM cart"
+    required: false
+    agnostic: true
+    min_size: 2097152
+    validation: [existence, size]
+    config_key: "CFGKEY_KOF_ROM_PATH"
+    category: bios
+    note: >
+      Read when the cart type is KoF '95, which the internal database forces for
+      MK-81088 and T-3101G and which the Cart Type menu also offers. Those two
+      discs end the load when the path is unset; every other disc ignores it.
+      CART_ROM_Init takes a fixed 2097152 bytes and Stream::read throws on a
+      shorter file, so anything smaller aborts and anything larger has its tail
+      ignored. The name comes from the module's setting table, which this build
+      never reads: settings.cpp is out of the shared source list, and the picker
+      lists names ending in .bin.
+    source_ref: "Saturn.emu/src/ss/ss.cpp:1291 (cart to setting), Saturn.emu/src/ss/ss.cpp:1348-1357 (firmware path, open, hand to CART_Init), Saturn.emu/src/ss/cart.cpp:162-164 (dispatch), Saturn.emu/src/ss/cart/rom.cpp:37-47 (fixed read), Saturn.emu/src/ss/db.cpp:94-95,403 (database forces the cart), Saturn.emu/src/ss/ss.cpp:2434 (setting default), Saturn.emu/src/main/options.cc:222-223,258-263 (token and path), Saturn.emu/src/main/EmuMenuViews.cc:90-111 (picker)"
+
+  - name: "mpr-19367-mx.ic1"
+    system: sega-saturn
+    description: "Ultraman - Hikari no Kyojin Densetsu ROM cart"
+    required: false
+    agnostic: true
+    min_size: 2097152
+    validation: [existence, size]
+    config_key: "CFGKEY_ULTRAMAN_ROM_PATH"
+    category: bios
+    note: >
+      Read when the cart type is Ultraman, which the internal database forces for
+      T-13308G and which the Cart Type menu also offers. Same fixed 2097152-byte
+      read as the other ROM cart, and the same picker filtered to .bin.
+    source_ref: "Saturn.emu/src/ss/ss.cpp:1292 (cart to setting), Saturn.emu/src/ss/ss.cpp:1348-1357 (firmware path, open, hand to CART_Init), Saturn.emu/src/ss/cart.cpp:163-164 (dispatch), Saturn.emu/src/ss/cart/rom.cpp:37-47 (fixed read), Saturn.emu/src/ss/db.cpp:96,403 (database forces the cart), Saturn.emu/src/ss/ss.cpp:2435 (setting default), Saturn.emu/src/main/options.cc:224-225,264-269 (token and path), Saturn.emu/src/main/EmuMenuViews.cc:113-134 (picker)"

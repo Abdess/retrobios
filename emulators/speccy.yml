@@ -1,0 +1,422 @@
+emulator: Speccy
+type: standalone
+core_classification: other
+source: "https://fms.komkon.org/Speccy/"
+upstream: closed-source
+author: "Marat Fayzullin (Garage Research)"
+profiled_date: "2026-08-12"
+core_version: "5.9.11"
+display_name: "Sinclair - ZX Spectrum and Sam Coupe (Speccy)"
+verification: existence
+cores:
+  - speccy
+  - SPECCY
+  - com.fms.speccy.deluxe
+  - com.fms.speccy
+systems:
+  - sinclair-zx-spectrum
+  - timex-tc2048
+  - timex-ts2068
+  - sam-coupe
+mode: standalone
+
+notes: |
+  Sinclair emulator by Marat Fayzullin, covering ZX Spectrum 16kB, 48kB and
+  128kB, Spectrum +2, +2A and +3, Timex TC2048 and TS2068, the Slovak Didaktik
+  Gama, the Russian Pentagon and Scorpion clones, and the Sam Coupe. The build
+  read here is the free Android package com.fms.speccy, versionName 5.9.11
+  versionCode 5911, taken as the Play app bundle drop, xapk sha256
+  a93f2fd474234291d2c0dee57885204ffb12a22c94602fdfcdfbf084ed7cb354, base apk
+  sha256 7163451489ac59b8c63ca49976571ad284cffa11b54d615c1693c909dd6bf768. Its
+  META-INF/BNDLTOOL.RSA is the author's own key, CN=Marat Fayzullin O=Garage
+  Research issued 2011, fingerprint
+  d09469e9b550cbc9005d3bd089f3df5f0ba89cba71cdd3b33736a0382d6f9848, beside a
+  Play distribution source stamp in the signing block. The paid package
+  com.fms.speccy.deluxe, last published as 5.9.3 versionCode 5903 in December
+  2021, is carried by no mirror that answers: the author's site links only to
+  Play for it, apkcombo bounces its download page back to the app page, apkpure
+  redirects to its generic downloader, apkvision holds no copy and archive.org
+  none either. The native libraries keep their symbol tables, so the readings
+  below cite libmain.so offsets in the x86_64 slice; the arm64-v8a slice carries
+  the same nineteen ROM names. The free Speccy 5.9 builds for Windows and Ubuntu
+  were read beside it and open the same names with the same lengths and the same
+  order. No source has ever been published: every download on the site, from 1.7
+  for MSDOS through 5.9, is a binary package, while ColEm and fMSX on the same
+  site ship source archives.
+  ref: com.fms.speccy.apk META-INF/BNDLTOOL.RSA, https://fms.komkon.org/Speccy/,
+       Speccy59-Windows-bin.zip, Speccy59-Ubuntu-x86-bin.tgz
+
+  One directory holds everything. MainActivity hands the home directory to
+  jniStart, which copies it into the buffer GetHomeDir returns and passes that
+  same buffer to SetPrivateDir, and Application stores what GetHomeDir returns as
+  the directory LoadBIOS changes into before it opens the first ROM and back out
+  of when it is done. That directory is external storage
+  joined with the application label up to its first space, so /sdcard/Speccy for
+  the package read here, falling back to getExternalFilesDirs(null) when it is
+  not a writable directory; the author's own instructions give the same
+  placement. Every open goes through mopen, which calls OpenRealFile first: the
+  name is tried as given, and again as <PrivateDir>/<basename>, keeping the
+  larger of the two when both open. mopen then layers gzdopen over the
+  descriptor, so any of these files also opens gzipped, and a content:// name is
+  routed to the Android storage framework. The desktop builds have no home
+  directory of their own and open every name where they stand, which -home
+  changes for the system ROMs alone.
+  ref: MainActivity.java:2561-2573, EMULib.java:750, 812,
+       libmain.so jniStart 0x32dd0-0x33530 (0x332af-0x332c1, 0x33312),
+       GetHomeDir 0x30a90, SetPrivateDir 0x571d0,
+       Application 0x602f0-0x60324, OpenRealFile 0x57440-0x5766c,
+       mopen 0x57680-0x57800, LoadBIOS 0x6436d-0x6439a, 0x6466b-0x6467b,
+       Speccy59-Ubuntu-x86-bin speccy 0x3dae5-0x3db17, Speccy.html
+       "-home <dirname>", EmuAndroid "System ROMs"
+
+  LoadBIOS drives the whole set from one word of hardware flags, calling
+  TryLoadROM once per name in a fixed order with the length to read and the bit
+  that asks for it. TryLoadROM does nothing when the bit is clear, and clears
+  the bit when mopen fails, which is the only check the emulator makes: the
+  count mread returns is compared against the requested length solely to pick
+  the word it logs, OK or FAILED, and a short read leaves the bit set. Nothing
+  else about a file is examined and no hash is compared. A machine ROM that
+  loads clears every other machine bit and a peripheral ROM that loads clears
+  every other peripheral bit, so one machine and one disk interface stand at a
+  time. StartZXS gives up when no machine bit survives, logging FAILED TO LOAD
+  SYSTEM ROM! and returning zero without starting the emulation, which makes the
+  ROM of the selected model the one file the emulator cannot run without.
+  ref: libmain.so LoadBIOS 0x64350-0x646cd, TryLoadROM 0x659b0-0x65aa4
+       (mopen 0x659d4, mread 0x65a3c, bit cleared 0x65a1c, masks
+       0x65a7d-0x65a94), StartZXS 0x64040-0x6434c (LoadBIOS 0x6416d, mask
+       0x64172, message 0x64315), Speccy59-Ubuntu-x86-bin speccy
+       0x3dac0-0x3ddaa, 0x3d970-0x3da04, 0x3f43c-0x3f469, 0x3f640
+
+  Two names are reached only through another. ZXS128TR.ROM is tried in place of
+  ZXS128.ROM when the 128kB model and the TR-DOS interface are both asked for,
+  and ZXS128.ROM is loaded after it when it fails. The Multiface bit picks its
+  image from the machine already loaded, MFPLUS3.ROM behind a +2A or +3,
+  MF128.ROM behind a 128kB or +2 and MF1.ROM behind a 16kB or 48kB, and the 8192
+  bytes at offset 8192 of what it read are copied into the page below the machine
+  ROM.
+  ref: libmain.so LoadBIOS 0x64564-0x6458b, 0x645d9-0x645f5, 0x645c2-0x64651,
+       Speccy59-Ubuntu-x86-bin speccy 0x3dc79-0x3dca1, 0x3ddf0-0x3de10,
+       0x3dcd9-0x3dd64, Speccy.html "Now trying to load ZXS128TR.ROM BIOS file"
+
+  Thirteen of the nineteen ROMs ship inside the Android package. MainActivity
+  reads assets/memfs.mp3 whole and jniStart mounts it through SetMemoryFS as an
+  in-memory filesystem, which mopen consults only after OpenRealFile has failed,
+  so a copy in the home directory is served ahead of the packaged one. The
+  directory is a run of 32 byte entries, a length then a name, closed by an entry
+  with an empty name whose first word is the key: rotated left by three times the
+  entry count, XORed sixteen bits at a time into each length and rotated right by
+  three after each, it yields the thirteen lengths, which run consecutively from
+  the end of the directory and account for the file exactly. Eleven of the
+  thirteen are the same bytes the Windows and Ubuntu distributions ship, and
+  TC2048.ROM and TS2068.ROM appear in no distribution at all.
+  ref: MainActivity.java:2561-2573, libmain.so jniStart 0x32f72-0x32f98,
+       InitMemoryFS 0x57180, SetMemoryFS 0x57200-0x57422 (key 0x572a0-0x572c1,
+       lengths 0x572e0-0x57305), mopen 0x57749-0x577e4
+
+  Companion files come from the loaded program's path. LoadFile derives .sta,
+  .pok, .cht and .pal from it and reads each when it is there, and the startup
+  palette is a name of its own, <HomeDir>/Speccy.pal on Android and Speccy.pal
+  beside the binary on the desktop, which -palette redirects.
+  ref: libmain.so LoadFile 0x65482, 0x65569, 0x65590, 0x655b7,
+       Application 0x60436-0x60484, StartZXS 0x641c5-0x641d4,
+       LoadPAL 0x648d0, Speccy59-Ubuntu-x86-bin speccy 0x3f4ac-0x3f4bd,
+       0x3e450-0x3e494, Speccy.html "-palette <filename>"
+
+files:
+  - name: ZXS48.ROM
+    system: sinclair-zx-spectrum
+    required: true
+    bundled: true
+    size: 16384
+    md5: 4c42a2f075212361c3117015b107ff68
+    sha1: 5ea7c2b824672e914525d1d5c419d71b84a426a2
+    crc32: "ddee531f"
+    description: "ZX Spectrum 48kB BASIC ROM"
+    note: "Read as 16384 bytes for the 48kB model, which is the model the emulator starts in when nothing else is asked for. Present in the packaged filesystem and in the Windows and Ubuntu distributions."
+    source_ref: "libmain.so LoadBIOS 0x645a8-0x645bb, Speccy59-Ubuntu-x86-bin speccy 0x3dcbe-0x3dcd1"
+
+  - name: ZXS16.ROM
+    system: sinclair-zx-spectrum
+    required: true
+    max_size: 16384
+    description: "ZX Spectrum 16kB BASIC ROM"
+    note: "Read for the 16kB model under a name of its own, with no fallback to ZXS48.ROM, so the model refuses to start without it however many other ROMs are present. Neither the package nor the desktop distributions carry a copy."
+    source_ref: "libmain.so LoadBIOS 0x64590-0x645a3, Speccy59-Ubuntu-x86-bin speccy 0x3dca8-0x3dcbb"
+
+  - name: ZXS128.ROM
+    system: sinclair-zx-spectrum
+    required: true
+    bundled: true
+    size: 32768
+    md5: 85fede415f4294cc777517d7eada482e
+    sha1: 16375d42ea109b47edded7a16028de7fdb3013a1
+    crc32: "2cbe8995"
+    description: "ZX Spectrum 128kB ROM pair"
+    note: "Read as 32768 bytes, two pages. Loaded after ZXS128TR.ROM has been tried when the TR-DOS interface is on as well."
+    source_ref: "libmain.so LoadBIOS 0x64575-0x6458b, Speccy59-Ubuntu-x86-bin speccy 0x3dc85-0x3dca1"
+
+  - name: ZXS128TR.ROM
+    system: sinclair-zx-spectrum
+    required: false
+    bundled: true
+    size: 32768
+    md5: 44082607f78a3b643f260b0c7e443bbb
+    sha1: 9b8bc3190086774fe6887e975c81e9976e2711ef
+    crc32: "ce98811c"
+    description: "ZX Spectrum 128kB ROM pair carrying TR-DOS"
+    note: "Tried in place of ZXS128.ROM when the 128kB model and the TR-DOS interface are both asked for, and ZXS128.ROM is loaded in its place when it fails."
+    source_ref: "libmain.so LoadBIOS 0x645d9-0x645f5, Speccy59-Ubuntu-x86-bin speccy 0x3ddf0-0x3de10"
+
+  - name: ZXSPLUS2.ROM
+    system: sinclair-zx-spectrum
+    required: true
+    bundled: true
+    size: 32768
+    md5: 238f77692156a5c49d20c0aa2862e8bb
+    sha1: 8cafb292af58617907b9e6b9093d3588a75849b8
+    crc32: "e7a517dc"
+    description: "ZX Spectrum +2 ROM pair"
+    note: "Read as 32768 bytes for the +2. The +2A bit is cleared ahead of the call whenever the +3 bit is set, so the pair that asks for ZXSPLUS3.ROM cannot leave a second machine standing."
+    source_ref: "libmain.so LoadBIOS 0x64544-0x6455f, Speccy59-Ubuntu-x86-bin speccy 0x3dc56-0x3dc72"
+
+  - name: ZXSPLUS3.ROM
+    system: sinclair-zx-spectrum
+    required: true
+    bundled: true
+    size: 65536
+    md5: 7e00ed3562abfd188d0d4da03e80bc0a
+    sha1: 500c0945760abeefcbd08bc22c0d07b14b336cf0
+    crc32: "be0d9ec4"
+    description: "ZX Spectrum +2A and +3 ROM set"
+    note: "Read as 65536 bytes, four pages covering both the +2A and the +3, which the loader asks for under one bit pair."
+    source_ref: "libmain.so LoadBIOS 0x6452c-0x6453f, Speccy59-Ubuntu-x86-bin speccy 0x3dc3e-0x3dc51"
+
+  - name: TC2048.ROM
+    system: timex-tc2048
+    required: true
+    bundled: true
+    size: 16384
+    md5: 9dd7ecf784a6c04265c073c236f5fadb
+    sha1: febb2d495b6eda7cdcb4074935d6e9d9f328972d
+    crc32: "f1b5fa67"
+    description: "Timex Computer 2048 ROM"
+    note: "Read as 16384 bytes for the TC2048. Carried in the packaged filesystem only: the Windows and Ubuntu distributions ship no copy."
+    source_ref: "libmain.so LoadBIOS 0x644e4-0x644f7, Speccy59-Ubuntu-x86-bin speccy 0x3dbf6-0x3dc09"
+
+  - name: TS2068.ROM
+    system: timex-ts2068
+    required: true
+    bundled: true
+    size: 24576
+    md5: 9194283503a105f3f3dfba13e61e993f
+    sha1: 34cd8113bf75b65a4da6eea355f9d46ad635f7e4
+    crc32: "48004230"
+    description: "Timex Sinclair 2068 ROM set"
+    note: "The loader asks for 49152 bytes while the author's own image is 24576, so the read stops short of what was asked and the machine starts anyway. Carried in the packaged filesystem only."
+    source_ref: "libmain.so LoadBIOS 0x644cc-0x644df, Speccy59-Ubuntu-x86-bin speccy 0x3dbdd-0x3dbf1"
+
+  - name: DIDAKTIK.ROM
+    system: sinclair-zx-spectrum
+    required: true
+    bundled: true
+    size: 16384
+    md5: 28287c397defff765b39bd0660da6d01
+    sha1: 8466a9da0169666210ccff5d43376d70bae0ae9b
+    crc32: "45c29401"
+    description: "Didaktik Gama ROM"
+    note: "Read as 16384 bytes for the Slovak Didaktik Gama clone."
+    source_ref: "libmain.so LoadBIOS 0x644fc-0x6450f, Speccy59-Ubuntu-x86-bin speccy 0x3dc0e-0x3dc21"
+
+  - name: PENTAGON.ROM
+    system: sinclair-zx-spectrum
+    required: true
+    bundled: true
+    size: 49152
+    md5: 36e48cd8984702fa9628121f83264ed0
+    sha1: 582254842091d9f6263652f06c6a86bd54dcf736
+    crc32: "e7bbb552"
+    description: "Pentagon 128kB ROM set"
+    note: "Read as 49152 bytes, three pages. The third is copied into the disk interface window once it has loaded, so the Pentagon carries its own TR-DOS and does not need TRDOS.ROM."
+    source_ref: "libmain.so LoadBIOS 0x64488-0x644c7, Speccy59-Ubuntu-x86-bin speccy 0x3dbb8-0x3dbd7, 0x3de18-0x3de37"
+
+  - name: SCORPION.ROM
+    system: sinclair-zx-spectrum
+    required: true
+    bundled: true
+    size: 65536
+    md5: b26cba495108d1227aa5124cd9a1456d
+    sha1: 66cecdadf992d8adb9c66deee929eb56600dc9bc
+    crc32: "fef73c28"
+    description: "Scorpion 256kB ROM set"
+    note: "Read as 65536 bytes, four pages, the last copied into the disk interface window. The Scorpion bit also drops every peripheral bit before the first ROM is opened, so its own service ROM stands in place of the separate interfaces."
+    source_ref: "libmain.so LoadBIOS 0x64444-0x64483, 0x643d5-0x643e3, Speccy59-Ubuntu-x86-bin speccy 0x3db94-0x3dbb2, 0x3de40-0x3de5f"
+
+  - name: COUPE.ROM
+    system: sam-coupe
+    required: true
+    bundled: true
+    size: 32768
+    md5: 9f40c46cce4008e0548db44f39527914
+    sha1: 58186fd34a8b9c1929913e2b1d7dc4efa507c160
+    crc32: "39ff160a"
+    description: "Sam Coupe ROM"
+    note: "Read as 32768 bytes for the Sam Coupe, which is a machine of its own in the same flag word, so selecting it clears every Spectrum bit and the trapdoor devices are switched off with it."
+    source_ref: "libmain.so LoadBIOS 0x64514-0x64527, TryLoadROM 0x65a7d-0x65a94, Speccy59-Ubuntu-x86-bin speccy 0x3dc26-0x3dc39, Speccy.html \"Now disabling all trapdoor-based devices in Sam Coupe mode\""
+
+  - name: TRDOS.ROM
+    system: sinclair-zx-spectrum
+    required: false
+    bundled: true
+    size: 16384
+    md5: 53e2f417c6996df9af170e147df8e369
+    sha1: 282eb7bc819aad2a12fd954e76f7838a4e1a7929
+    crc32: "d8882a8c"
+    description: "Beta Disk TR-DOS interface ROM"
+    note: "Opened first of all, before any machine ROM, and read as 16384 bytes. A failed open drops the interface and leaves the emulation running without it. Its presence is also what makes the 128kB model reach for ZXS128TR.ROM."
+    source_ref: "libmain.so LoadBIOS 0x643e6-0x643f7, Speccy59-Ubuntu-x86-bin speccy 0x3db20-0x3db47"
+
+  - name: IF1.ROM
+    system: sinclair-zx-spectrum
+    required: false
+    bundled: true
+    size: 8192
+    md5: 31b704ae925305e74f50699271fddd9a
+    sha1: 5cfb6bca4177c45fefd571734576b55e3a127c08
+    crc32: "bb66dd1e"
+    description: "Sinclair Interface I ROM"
+    note: "Read as 8192 bytes when the Interface I is on, and dropped silently when it is missing. Snapshots that page it in need it to restore."
+    source_ref: "libmain.so LoadBIOS 0x643fc-0x6440f, Speccy59-Ubuntu-x86-bin speccy 0x3db4c-0x3db5f, Speccy.html \"Fixed some .Z80 snapshots not loading when IF1.ROM is missing\""
+
+  - name: DISCIPLE.ROM
+    system: sinclair-zx-spectrum
+    required: false
+    max_size: 16384
+    description: "DISCiPLE disk interface ROM"
+    note: "Read when the DISCiPLE interface is on, up to 16384 bytes, and dropped silently when it is missing. Neither the package nor the desktop distributions carry a copy."
+    source_ref: "libmain.so LoadBIOS 0x64414-0x64427, Speccy59-Ubuntu-x86-bin speccy 0x3db64-0x3db77"
+
+  - name: PLUSD.ROM
+    system: sinclair-zx-spectrum
+    required: false
+    max_size: 8192
+    description: "MGT +D disk interface ROM"
+    note: "Read when the +D interface is on, up to 8192 bytes, and dropped silently when it is missing. Neither the package nor the desktop distributions carry a copy."
+    source_ref: "libmain.so LoadBIOS 0x6442c-0x6443f, Speccy59-Ubuntu-x86-bin speccy 0x3db7c-0x3db8f"
+
+  - name: MF1.ROM
+    system: sinclair-zx-spectrum
+    required: false
+    max_size: 16384
+    description: "Multiface One ROM"
+    note: "Read up to 16384 bytes when the Multiface is on behind a 16kB or 48kB machine, and the 8192 bytes at offset 8192 of what it read are copied into the page below the machine ROM. Dropped silently when it is missing."
+    source_ref: "libmain.so LoadBIOS 0x64605-0x64651, Speccy59-Ubuntu-x86-bin speccy 0x3dea8-0x3deb7, 0x3dcf9-0x3dd0b"
+
+  - name: MF128.ROM
+    system: sinclair-zx-spectrum
+    required: false
+    max_size: 16384
+    description: "Multiface 128 ROM"
+    note: "Read up to 16384 bytes when the Multiface is on behind a 128kB or +2 machine, and the 8192 bytes at offset 8192 of what it read are copied into the page below the machine ROM. Dropped silently when it is missing."
+    source_ref: "libmain.so LoadBIOS 0x645f7-0x64651, Speccy59-Ubuntu-x86-bin speccy 0x3dcea-0x3dd0b"
+
+  - name: MFPLUS3.ROM
+    system: sinclair-zx-spectrum
+    required: false
+    max_size: 16384
+    description: "Multiface +3 ROM"
+    note: "Read up to 16384 bytes when the Multiface is on behind a +2A or +3 machine, and the 8192 bytes at offset 8192 of what it read are copied into the page below the machine ROM. Dropped silently when it is missing. Neither the package nor the desktop distributions carry a copy."
+    source_ref: "libmain.so LoadBIOS 0x645cb-0x64651, Speccy59-Ubuntu-x86-bin speccy 0x3dee0-0x3dee7, 0x3dcf9-0x3dd0b"
+
+  - name: Speccy.pal
+    required: false
+    unsourceable: "any palette the user writes, in the text format the parser reads"
+    category: game_data
+    description: "startup colour palette"
+    note: "Built as <HomeDir>/Speccy.pal on Android and taken as the bare name beside the binary on the desktop, loaded once the machine has started and left alone when it is absent. The parser reads the file line by line, skipping blanks and comments, so a palette is text rather than a dump, and -palette points the desktop builds at another name or at one of four built-in palettes."
+    source_ref: "libmain.so Application 0x60436-0x60484, StartZXS 0x641c5-0x641d4, LoadPAL 0x648d0-0x64c5a, Speccy59-Ubuntu-x86-bin speccy 0x3f4ac-0x3f4bd, 0x3e450-0x3e560"
+
+  - name: ROOT.chts
+    required: false
+    category: game_data
+    size: 1652893
+    md5: b41d9ebf814806a25438a6d937804e54
+    sha1: 0b53d51635a2ce3d4e12c2077df9aeffeac02517
+    crc32: "b58e81f1"
+    description: "cheat database read by the Cheatopedia browser"
+    note: "The package ships no cheat set. Cheatopedia looks for the file in the package assets, then in the home directory and its subdirectories, and takes it from Speccy-Cheats.zip in the Downloads directory when that is newer, unpacking it into <HomeDir>/Cheats. The author publishes that archive at fms.komkon.org/EmuAndroid/Speccy-Cheats.zip and states it is what re-enables the cheat features Google Play made him disable in March 2019; the copy read here holds this one file."
+    source_ref: "CheatHelper.java:17-67, Cheatopedia.java:397-427, EmuAndroid \"Cheats support\""
+
+  - name: Controls.png
+    required: false
+    category: game_data
+    size: 22587
+    md5: d10635cb6f101ed733f3d1133bc78f61
+    sha1: 14c4ab8ccc8ecb81ebf99fec336a3e872c13aabc
+    crc32: "dc9da322"
+    description: "virtual joystick skin"
+    note: "Read as <HomeDir>/Controls.png by the overlay button loader and by the layout editor. The author publishes the template to draw over at fms.komkon.org/EmuAndroid/Controls.png."
+    source_ref: "MainActivity.java:1100, LayoutEditor.java:415"
+
+  - name: Backdrop.png
+    required: false
+    category: game_data
+    unsourceable: "any picture the user places behind the emulated screen"
+    description: "backdrop drawn around the emulated screen"
+    note: "Read as <HomeDir>/Backdrop.png. A built-in drawable stands in when the file is absent."
+    source_ref: "MainActivity.java:1287-1292"
+
+  - name: "<game>.back.png"
+    required: false
+    category: game_data
+    unsourceable: "any picture the user places behind one title"
+    description: "backdrop for one title"
+    note: "Named from the loaded program's path and preferred over the shared backdrop for that game."
+    source_ref: "MainActivity.java:1287-1292"
+
+  - name: "<game>.pok"
+    required: false
+    category: game_data
+    unsourceable: "POKEs the user writes or collects per title"
+    description: "POKE list for one title"
+    note: "Named from the loaded program's path and read by LoadPOK when present."
+    source_ref: "libmain.so LoadFile 0x65569-0x6558b, LoadPOK 0x692c0"
+
+  - name: "<game>.cht"
+    required: false
+    category: game_data
+    unsourceable: "cheat codes the user writes or collects per title"
+    description: "cheat codes for one title"
+    note: "Named from the loaded program's path and read by LoadCHT when present. Distinct from the .chts sets of the Cheatopedia browser."
+    source_ref: "libmain.so LoadFile 0x65590-0x655b2, LoadCHT 0x696a0"
+
+  - name: "<game>.pal"
+    required: false
+    category: game_data
+    unsourceable: "any palette the user writes for one title"
+    description: "colour palette for one title"
+    note: "Named from the loaded program's path and read by LoadPAL when present, taking effect over the startup palette for that program."
+    source_ref: "libmain.so LoadFile 0x655b7-0x655d1, LoadPAL 0x648d0"
+
+exclusion_note: >
+  Left out are the files Speccy writes and reads back itself, which are emulator
+  state rather than anything a user obtains: <game>.sta holding saved emulation
+  state, which LoadFile restores ahead of everything else it derives from the
+  program path, LOG.MID holding the MIDI soundtrack the recorder writes,
+  <HomeDir>/PrinterOutput.txt holding what the ZX and Timex printers print, and
+  the replay files of the instant replay recorder. Snapshots, tapes, disk images
+  and screens are the user's own content: .z80, .sna, .szx, .scs, .tap, .tzx,
+  .trd, .scl, .fdi, .dsk, .mgt, .sad and .scr all reach LoadFile, and the
+  emulator writes most of them back. DEFAULT.Z80 is only the name the desktop builds
+  fall back to when they are started with no file at all. names.dat is left out
+  because the path is dead in this build: FileInfo opens assets/names.dat and
+  <HomeDir>/names.dat inside one try block, and no split of the package carries
+  that asset, so the failed asset read takes the home directory copy down with
+  it. changelog.html is left out as the release history shown from the menu, read
+  from the package assets and from nowhere else. The Android audio and graphics
+  libraries the loader opens by name are provided by the system.
+  ref: libmain.so LoadFile 0x65380-0x655d1 (0x65482-0x654d4), STAName 0x97ad0,
+       SndName 0x93970, StartZXS 0x64180-0x6418a, Application 0x603e0-0x6042d,
+       LoadRPL 0x80040, SaveRPL 0x7fc80, SaveSCR 0x69e70,
+       FileInfo.java:244-257, EMULib.java:1038, 1067,
+       Speccy59-Ubuntu-x86-bin speccy 0xbf50,
+       Speccy.html "[filename] = Name of the file to load [DEFAULT.Z80]"

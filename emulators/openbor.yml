@@ -1,0 +1,78 @@
+emulator: openbor
+type: standalone
+core_classification: game_engine
+source: "https://github.com/DCurrent/openbor"
+upstream: "https://github.com/DCurrent/openbor"
+profiled_date: "2026-08-12"
+source_commit: "0ece95d1c113c1ce86f2da826b3c25b521ee116d"
+core_version: "4.0 Build 7949"
+display_name: "OpenBOR Game Engine"
+cores:
+  - openbor
+  - openbor4432
+  - openbor6330
+  - openbor6412
+  - openbor6510
+  - openbor7142
+  - openbor7530
+systems:
+  - openbor
+mode: standalone
+
+notes: |
+  Sprite based side scrolling engine continuing Senile Team's Beats of Rage,
+  built for beat em up and shooter style 2D games. A game is a module: a .pak
+  archive carrying its own data tree, and that archive is what the frontends
+  hand over as content. ES-DE runs the .pak on macOS, the game's own AppImage,
+  .exe or .lnk on Linux and Windows, and opens the engine UI on Android since
+  the package takes no file argument. Batocera runs OpenBOR<build> <rom> after
+  reading a four digit build tag out of the file name in openborGenerator.py,
+  which is why it packages several engine versions side by side. RetroDECK
+  launches the 4.0 Linux AppImage, RetroBat runs OpenBOR.exe from a per build
+  folder.
+
+  packfile holds "bor.pak" until argv[1] names a path that exists, and with no
+  such argument the built in menu lists Paks/ and the player picks one
+  (engine/sdl/sdlport.c:25,124-135, engine/sdl/menu.c:172-203,802).
+  packfile_supported accepts any name containing .pak and skips menu.pak
+  (engine/source/gamelib/packfile.c:1577-1584).
+
+  Everything read for a running game comes out of that module. buffer_pakfile
+  tries the real filesystem first through fopen, then the same path inside the
+  archive (engine/openbor.c:921-965,969-1018), so data/models.txt,
+  data/levels.txt, data/video.txt, data/menu.txt, the scene scripts and the
+  sprites and sounds under data/ resolve either from an unpacked data/ directory
+  beside the binary (engine/source/gamelib/packfile.c:781-810) or from the pak.
+  Four names take precedence over their in-pak copy when they exist on disk:
+  translation/translation.txt and translation/menu.txt over data/translation.txt
+  (engine/source/gamelib/translation.c:102-106, engine/openbor.c:5975,53240),
+  saves/lifebar.txt over data/lifebar.txt (engine/openbor.c:4965-4972), and on
+  Android Saves/<module>/touch.txt then Saves/touch.txt over data/touch.txt
+  (engine/android/app/jni/openbor/video.c:210-218). Each holds text or a control
+  layout written for one module. The engine/translation.txt copied into the
+  release folder by CMakeLists.txt:239 is a blank msgid template whose own first
+  line sends it to the module data folder, and the published Windows archive for
+  v7533 contains only OpenBOR.exe.
+
+  Startup reads nothing. Logo, menu and log viewer artwork are PNG byte arrays
+  compiled in from engine/resources (engine/sdl/menu.c:20-27), menu text draws
+  from the embedded hankaku face (engine/sdl/menu.c:16,228), the GLSL fragment
+  shaders are string literals (engine/sdl/opengl.c:45-116), and the Android
+  touch skin is a header (engine/android/app/jni/openbor/video.c:49). No gamepad
+  mapping file is read, nothing is dlopened at runtime, the Android package
+  ships an empty assets directory, and the SecurePAK paths compile out of every
+  build because no build file defines SPK_SUPPORTED
+  (engine/source/gamelib/packfile.c:36, engine/source/gamelib/packfile.h:9,135).
+
+  Files the engine writes rather than expects: Paks, Saves, Logs and ScreenShots
+  are created at startup when missing (engine/sdl/sdlport.c:30-33,119-122),
+  settings and progress land in Saves as <module>.cfg, .sav, .hi, .scr and .inp
+  alongside default.cfg (engine/source/utils.c:284-312,
+  engine/openbor.c:2675-3040), and the viewer reads back Logs/OpenBorLog.txt and
+  Logs/ScriptLog.txt (engine/source/utils.c:47-62, engine/sdl/menu.c:652-700).
+  paks/logoff.txt is a marker whose existence alone skips the startup logo, so
+  the player creates it empty (engine/sdl/menu.c:707-716). Module script can
+  open any path it names through openfilestream
+  (engine/openborscript.c:10505-10600).
+
+files: []

@@ -1,0 +1,85 @@
+emulator: "Pizza Boy GBA"
+type: standalone
+core_classification: embedded_hle
+source: "https://play.google.com/store/apps/details?id=it.dbtecno.pizzaboygbapro"
+upstream: closed-source
+author: "Pizza Emulators"
+profiled_date: "2026-08-12"
+core_version: "2.8.13"
+display_name: "Nintendo - Game Boy Advance (Pizza Boy GBA)"
+mode: standalone
+cores:
+  - "pizza-boy-gba"
+  - "Pizza Boy GBA"
+  - "PIZZA-BOY-GBA"
+systems:
+  - nintendo-gba
+
+notes: |
+  Two Android packages, closed source, sold and given away on Google Play under the
+  Pizza Boy A name, reached by ES-DE through its PIZZA-BOY-GBA find rule and started
+  with the game passed as the rom_uri extra: it.dbtecno.pizzaboygbapro, the paid build
+  the rule names first, and it.dbtecno.pizzaboygba, the free one. Two Play distribution
+  builds are read here, both carrying the source stamp: Pro 2.8.13 (versionCode 343,
+  Play App Signing certificate sha256
+  6b5547246e41921f25eba8abb1bc018729c4f0b8db029debbd3380a2b1ec2fe1), which supplies the
+  Java and the resources, and Basic 2.3.3 (versionCode 236, developer certificate sha256
+  b3ee584096acf4667bb9346daa9cce19237ef7ce95c99e9260ac89be0f7d6130, CN=Davide Berra,
+  O=DBTecno), whose arm64-v8a libpizzaboy-jni.so ships DWARF and an unstripped symbol
+  table and supplies every native reference below as its own file and line. Java line
+  numbers are those of Pro 2.8.13. Two rebuilt copies of Pro 1.35.11 were rejected on
+  their certificate, one signed C=debugging with no source stamp and one signed
+  O=APKMODY. 69 of the 77 native methods the Pro declares are exported by the Basic
+  core, the three BIOS entry points among them: one core, compiled per package.
+
+  One system is emulated, Game Boy Advance: the core is built from a tree named
+  pizzaboyadvance whose compilation units carry gba.c and no Game Boy core, and the
+  three Game Boy Color and Super Game Boy methods the Pro still declares are among the
+  eight the library does not export.
+
+  The BIOS is the one file the user supplies, and it is read only while Load BIOS file
+  is on, off by default; the picker and the Run BIOS animation switch, on by default,
+  both depend on that box (res/xml/pref_general.xml). In the free package the same
+  three preferences are declared android:enabled="false".
+
+  A per rom Low precision BIOS set to On clears the stored path and makes the core keep
+  its own replacement, and one cartridge, checksum 0xc7d89508, forces the same at load
+  time. When a real image is installed the boot animation starts execution at 0 rather
+  than at the cartridge entry, and a multiplayer session exchanges the CRC32 of the file
+  so that both peers run the same one.
+
+  Everything else the app opens it makes itself: boxart.db and cheat.db are created by
+  their own CREATE TABLE, the default skins, the shaders and the cheat descriptors are
+  raw resources unpacked at first run, and <rom>.keys is an input recording. The
+  obfuscated assets are PairIP tamper protection.
+
+files:
+  - name: gba_bios.bin
+    system: nintendo-gba
+    required: false
+    hle_fallback: true
+    has_builtin: true
+    agnostic: true
+    size: 16384
+    config_key: "bios_file"
+    description: "Game Boy Advance BIOS"
+    note: >-
+      Chosen from any location under any name through the document picker, or, when the
+      picked document is named .zip, taken from its first entry; the legacy browser
+      offers .gba, .bin and .zip and writes the entry it extracts to bios.bin under the
+      application directory. The absolute path is stored and handed to the library,
+      which copies it into a 256 byte buffer. At load time the 16 KB BIOS area is first
+      filled with a 744 byte replacement compiled into the library, then, if the path is
+      set, the file is opened and up to 16384 bytes are read over it and a flag records
+      that a real image is installed. Nothing about the file is examined: any read
+      returning at least one byte is accepted, and no size, name or hash test exists on
+      either side of the bridge. A read of zero bytes leaves the replacement in place
+      and logs "Cannot read BIOS file".
+    source_ref: "Pizza Boy GBA Pro 2.8.13 SettingsActivity.java:116-140 (import), :143-183
+      (preference and picker), FileDialog.java:57,72,77,846-857 (legacy browser, zip entry
+      to bios.bin), Common.java:85-105 (copy to temp), :160-190 (single entry unzip),
+      MainActivity.java:833,835,865 (bridge), :10936-10941 (gate and handoff),
+      res/xml/pref_general.xml (defaults); Pizza Boy A Basic 2.3.3 libpizzaboy-jni.so
+      pizza.c:932-938 (path buffer), :945-946 (boot flag), :632-642 (low precision BIOS),
+      global.c:93-95 (defaults), mmu.c:1522-1543 (replacement, gate, read, flag),
+      :2106-2110 (forced HLE), cpu.c:40 (boot vector)"

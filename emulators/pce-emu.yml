@@ -1,0 +1,72 @@
+emulator: pce-emu
+type: standalone
+core_classification: community_fork
+source: "https://github.com/Rakashazi/emu-ex-plus-alpha"
+upstream: "https://mednafen.github.io/"
+profiled_date: "2026-08-12"
+source_commit: "1c12fac5ce49badaadff2e2f210dcc30b89f4943"
+core_version: "1.5.85"
+display_name: "PCE.emu"
+cores: ["pce-emu", "PCE.emu", "pceemu", "PCE-EMU", "com.PceEmu"]
+systems: [nec-pc-engine, nec-pc-engine-cd, nec-supergrafx]
+verification: existence
+notes: >
+  Android and desktop application by Robert Broglia built on EmuFramework,
+  vendoring Mednafen's pce_fast and pce modules. Both are compiled and
+  selectable at runtime; pce_fast is what an unset core option resolves to
+  (system.ccm:125).
+
+  HuCard content (.pce, .sgx) loads with no external file. CD content
+  (.cue, .toc, .ccd, .chd) requires a System Card image: loadContent throws
+  "No System Card Set" when the path is unset or the file is gone
+  (Main.cc:88-91).
+
+  The System Card is a single path the user picks through a file browser
+  filtered to .pce and .sgx (EmuMenuViews.cc:176-191), stored as
+  CFGKEY_SYSCARD_PATH. No filename is fixed and no directory is scanned.
+  MDFN_GetSettingS returns an empty string for pce.cdbios, pce_fast.cdbios
+  and pce.gecdbios, and MDFN_MakeFName answers every MDFNMKF_FIRMWARE
+  request with that one path (options.cc:275-301), so the Games Express
+  branch reads whichever image the setting points at. Mednafen's settings
+  table still carries the syscard3.pce and gecard.pce defaults but
+  settings.cpp is not compiled, so they are never read.
+
+  A path with an archive extension is opened as an archive and the first
+  member ending in .pce, .bin or .bios is used (MDFNFILE.cc:41-76).
+
+  Neither module hashes the image. pce_fast skips a 512-byte copier header
+  then reads a fixed 262144 bytes (huc.cpp:299-302); pce reads
+  min(rounded length, length) and accepts any size (huc.cpp:225-316).
+  HuC_Load is always called with SYSCARD_3, or SYSCARD_ARCADE when Arcade
+  Card emulation is on (pce.cpp:653).
+
+  SuperGrafx is enabled by the .sgx extension, by a CRC match against the
+  built-in sgx_table (pce.cpp:345, 382-395), or by DetectSGXCD on disc.
+  HES playback is compiled out (pce.cpp:76) and cheats are disabled
+  (options.cc:245-246).
+
+files:
+  - name: "syscard3.pce"
+    description: "Super CD-ROM2 System Card 3.0"
+    required: true
+    validation: [existence, size]
+    min_size: 262144
+    category: bios
+    source_ref: "src/main/Main.cc:80-91 (throws without it), src/main/options.cc:275-301 (path resolution), src/main/EmuMenuViews.cc:176-191 (selection), src/pce_fast/pce.cpp:477-483 + src/pce_fast/huc.cpp:284-304 (default module load), src/pce/pce.cpp:645-653 (accurate module load), src/pce_fast/pce.cpp:663 + src/pce/pce.cpp:1094 (name)"
+    note: >
+      min_size comes from the fixed 262144-byte read in pce_fast
+      (huc.cpp:302) with Stream::read throwing on a short file
+      (Stream.h:88); a 262656-byte dump passes through the copier-header
+      skip at huc.cpp:299. The pce module imposes no minimum.
+
+  - name: "gecard.pce"
+    description: "Games Express CD Card"
+    required: false
+    validation: [existence]
+    category: bios
+    source_ref: "src/pce/pce.cpp:512-551 (DetectGECD), src/pce/pce.cpp:644-646 (gecdbios branch), src/pce/huc.cpp:225-316 (size-agnostic read), src/pce/pce.cpp:1095 (name)"
+    note: >
+      Reached only when the accurate module runs and DetectGECD matches the
+      disc; pce_fast has no Games Express branch. Served through the same
+      System Card setting, so the user points it at this image to boot those
+      discs.

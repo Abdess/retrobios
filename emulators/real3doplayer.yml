@@ -1,0 +1,117 @@
+emulator: "Real3DOPlayer"
+type: standalone
+core_classification: other
+source: "http://www.arts-union.ru/node/23"
+upstream: closed-source
+author: "AltmerSoft (Maxim Grishin)"
+profiled_date: "2026-08-12"
+core_version: "1.0.32"
+display_name: "The 3DO Company - 3DO (Real3DOPlayer)"
+mode: standalone
+cores:
+  - "real3doplayer"
+  - "Real3DOPlayer"
+  - "REAL3DOPLAYER"
+systems:
+  - 3do
+
+notes: |
+  Android package ru.vastness.altmer.real3doplayer, closed source, published by the
+  author of the Phoenix Emulation Project and reached by ES-DE through its
+  REAL3DOPLAYER find rule. The build read here is app-release.apk of 2019-11-19,
+  taken from real3DOPlayer_free_1.0.32.zip on the author's own site, carrying the
+  certificate sha256 336dca7bf758d4d4d3e31783a1cb3f777cf0f0791ff6b1a8bbf698892f8860a9
+  (C=RU, L=Tula, O=AltmerSoft, CN=MAXIM GRISHIN): versionCode 33, minSdk 14,
+  targetSdk 23, seven ABIs. Java line numbers below are jadx output of that build and
+  native addresses are its arm64-v8a library; the armeabi-v7a library carries the same
+  strings and the same constants. The decompiled tree published as
+  BoUnCe587/Real3DOPlayer was rejected: it is signed with the AOSP test key
+  a40da80a59d170caa950cf15c18c454d47a39b26989d8b640ecd745ba71bf5dc.
+
+  One system is emulated, 3DO Interactive Multiplayer, in libphoenixcore.so behind a
+  JNI bridge (NativeCore.java:6-51). The library names itself "PhoenixEmuProject core
+  2.8.21" and builds the console out of MADAM, CLIO, SPORT, CD-ROM, BIOS, FONT-ROM,
+  FMV-ROM and NVRAM devices.
+
+  The user points the app at one directory holding both the discs and the ROMs, shown
+  as "Current ISOs and BIOS path". countGames lists it, keeping the extensions bin,
+  cdi, img, iso, nrg and rom, and offers every file to three adapters in turn: CD
+  image, then BIOS, then font ROM (0xdd390-0xdd9e0, dispatch at 0xdc43c). An external
+  launcher can instead pass explicit paths through the intent extras rom, cd and font,
+  which become the config keys ext-rom, ext-cd and ext-font
+  (MainActivity.java:469-471,412-414).
+
+  Nothing is recognised by name. A ROM candidate is measured, and a file of 3 MB or
+  more is dropped before it is read; the remainder is scanned on four byte boundaries
+  for the RomTag signature 01 5A 5A 5A 5A 5A 01 00, and the 0x84 byte header at that
+  point is read back. The null terminated string at header offset 0x28 is what sorts
+  the file: "rom" fills the BIOS list, "rom2" the font list, and "fmvrom" is compared
+  for but never requested (0xaa0e0-0xaa350). Running that scan over the published 3DO
+  dumps sorts every system BIOS into "rom" and every kanji dump into "rom2", the
+  512 KB arcade ROM and the 933636 byte FZ-1 font included.
+
+  The BIOS is the one file the app refuses to run without: an empty
+  NativeCore.nameOfBios() raises "BIOS not found." and returns instead of starting the
+  emulator, and at startup it raises "Select 3DO directory on SD card with BIOS and
+  CD-images." (MainActivity.java:539-543,583-584). Nothing gates on the font ROM.
+
+  The md5 of the loaded BIOS is compared against a48e6746bd7edec0f40cff078f0bb19f, the
+  Panasonic FZ-10 PAL ANVIL dump, and the outcome is passed as one construction
+  argument of the device set (0x8eea0-0x8ef58, again at 0x916c0-0x916f4). It selects
+  behaviour for that dump and is not an acceptance test: acceptance is the RomTag.
+  Four further md5 constants (5df7f21286290b2b4e9bd939f747f985,
+  dacffcf51e54e76b68fb62ec73faff42, 0da811a327361f9a3d7dca63ad503f30,
+  2536bf786f05af221038313a3e28f9aa) are all compared against the md5 taken for the
+  CD-ROM device, so they identify game discs rather than firmware.
+
+  The FMV-ROM device is built but can never be fed: the ROM adapter is only ever
+  constructed for tags "rom" and "rom2" (0xdc4e8, 0xe9784, 0xe98bc), the frontend
+  registers only Library/CD-ROM, Library/BIOS and Library/FONT-ROM (0xe965c, 0xe9794,
+  0xe98cc), and no ext-fmv key exists.
+
+  Files the app makes for itself, in its storage directory rather than the scan
+  directory: nvram.bin, the 32 KB console save area, erasable from the interface;
+  configs.xml and settings.ini; save states; and the controller maps. madam.bin and
+  clio.bin name 2 KB and 64 KB regions of the emulator's own state blob and are
+  reached only in mode 2 (0x8ce8c-0x8d064).
+
+files:
+  - name: panafz10e-anvil.bin
+    system: 3do
+    required: true
+    agnostic: true
+    max_size: 3145727
+    validation: [size]
+    config_key: "ext-rom"
+    description: "3DO system BIOS ROM"
+    note: >-
+      Any 3DO system ROM is accepted, under any name and from any directory the user
+      picks. The file is measured, then searched on four byte boundaries for the
+      RomTag signature, and it is taken as the BIOS when the header names itself
+      "rom". A file of 3 MB or more is rejected unread. The emulator will not start
+      until one is found, and the interface lists it above the discs.
+    source_ref: "Real3DOPlayer 1.0.32 MainActivity.java:100-101 (scan and BIOS name),
+      MainActivity.java:539-543,583-584 (refusal without it), MainActivity.java:412,469
+      (ext-rom), libphoenixcore.so arm64-v8a 0xaa0e0-0xaa118 (size gate),
+      0xaa140-0xaa1b0 (RomTag scan and header read), 0xaa218-0xaa27c (\"rom\" test),
+      0xdc43c-0xdc53c (dispatch and list), 0xdd228-0xdd2e0 (nameOfBios),
+      0xdd390-0xdd908 (directory scan and extensions), 0x8f6f0-0x8f71c (1 MB window)"
+
+  - name: panafz1j-kanji.bin
+    system: 3do
+    required: false
+    agnostic: true
+    max_size: 3145727
+    validation: [size]
+    config_key: "ext-font"
+    description: "3DO kanji font ROM"
+    note: >-
+      Found by the same scan of the same directory, and taken as the font when the
+      RomTag header names itself "rom2". Held in its own list and mapped into a second
+      1 MB window of the machine. Japanese titles draw their kanji from it; the
+      emulator starts and runs without one, and the core carries GRAFERR_NO_FONT and
+      GRAFERR_BADFONTFILE for that case.
+    source_ref: "Real3DOPlayer 1.0.32 MainActivity.java:413,471 (ext-font),
+      libphoenixcore.so arm64-v8a 0xaa2e8-0xaa34c (\"rom2\" test),
+      0xdc4d0-0xdc52c (dispatch and list), 0xdd9dc-0xdd9e0 (third scan pass),
+      0xe98bc-0xe98cc (Library/FONT-ROM), 0x8f74c-0x8f780 (1 MB window)"

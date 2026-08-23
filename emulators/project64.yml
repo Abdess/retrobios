@@ -1,0 +1,227 @@
+emulator: project64
+type: standalone
+core_classification: other
+source: "https://github.com/project64/project64"
+upstream: "https://github.com/project64/project64"
+profiled_date: "2026-08-12"
+source_commit: "6188e9a88dd2e7487df346fecc445716654e18ec"
+core_version: "Dev-4.0.0"
+display_name: "Nintendo - Nintendo 64 (Project64)"
+cores:
+  - project64
+systems:
+  - nintendo-64
+  - nintendo-64dd
+mode: standalone
+
+notes: |
+  Nintendo 64 and 64DD emulator for Windows. Project64.exe plus the plugin DLLs
+  the same solution builds, driven by the plugin spec in Source/Project64-plugin-spec.
+  ES-DE passes the ROM as the only argument. AppVeyor builds Win32 and x64 only;
+  Source/Android holds no build file.
+
+  Cartridge boot reads no file. PostPif is hardcoded true, so Reset seeds the
+  general purpose registers from the CIC identified in the ROM image, points the
+  program counter at 0xA4000040 and the boot block is copied into SP DMEM. The
+  branch that would start at the PIF ROM address is unreachable and the PIF ROM
+  read in the memory handler is commented out, so neither a PIF ROM nor a CIC ROM
+  is opened (Source/Project64-core/N64System/N64System.cpp:911-916,
+  Source/Project64-core/N64System/Mips/Register.cpp:342,371-373,395-535,
+  Source/Project64-core/N64System/MemoryHandler/PifRamHandler.cpp:26).
+
+  The CIC is identified from the boot block. ByteSwapRom normalises the image so
+  each 32-bit read yields the ROM's big-endian word, then GetCicChipID sums those
+  words from 0x40 to 0x1000 and matches the total against a table of constants.
+  Three of them are 64DD IPL images: 0xD2E53EF008 for the Japanese retail chip
+  8303, 0xD2E53E5DDA for the American retail chip 8501, 0xD2E53EF39F for the
+  development chip 8401. IsLoadedRomDDIPL is that test
+  (Source/Project64-core/N64System/N64Rom.cpp:240-273,281-305,500-511).
+
+  Aleck64 images are recognised by the same table, through a second sum taken at
+  0xC00, and get their own boot register seed. No arcade hardware is emulated and
+  no Aleck64 file is opened
+  (Source/Project64-core/N64System/N64Rom.cpp:283,310-316,
+  Source/Project64-core/N64System/Mips/Register.cpp:477-479).
+
+  Transfer Pak reads a Game Boy cartridge image and its save from paths the user
+  sets per game. Both are the user's own cartridge dump, and no Game Boy boot ROM
+  is involved (Source/Project64-core/N64System/Mips/GBCart.cpp:695-698,744,788,
+  Source/Project64-core/Settings.cpp:242-243).
+
+  The support files under Config ship in the installer and in the nightly package.
+  CIniFile returns silently when the path does not exist, so each of them degrades
+  to the defaults registered in AddHandler rather than failing
+  (Source/Common/IniFile.cpp:493-522, Source/Project64-core/Settings.cpp:134-145).
+
+  GLideN64 ships as a bundled plugin, pinned as a submodule at
+  gonetz/GLideN64 c8ef81c7d9aede9f67f6ed3d3426c90541f9f13e, and brings its own
+  GLideN64.ini, GLideN64.custom.ini and translations. Project64's own code names
+  none of them; only Installer.iss and package_zip.cmd copy them
+  (Source/Installer/Installer.iss:38, Source/Script/package_zip.cmd:42-47).
+
+  Generated at runtime, never supplied: Project64.cfg, Project64.rdn,
+  Project64.cache3, Project64.zcache, Config/Cheats-User, Config/Enhancements-User,
+  Save, Screenshots, Logs and the texture caches.
+
+files:
+  # -- 64DD IPL ROMs, user supplied --
+  - name: "64DD_IPL_v12_JPN.bin"
+    aliases: ["64DD_IPL.bin", "64DD_IPL_JP.n64", "64dd_ipl_J.bin"]
+    system: nintendo-64dd
+    region: [japan]
+    required: true
+    validation: [signature]
+    description: "64DD IPL ROM (Japanese retail)"
+    note: >
+      Loaded when the disk image reports Country_Japan. The path is the free text
+      Disk IPL ROM Path setting, typed or pasted into a plain edit box, so the
+      code fixes no filename and no directory. SelectAndLoadFileImageIPL tests
+      that the path exists, warns and returns false if not, and the disk never
+      starts. The file is accepted on two content checks and nothing else: the
+      first word must be one of the four image magics, 0x40072780 being the 64DD
+      one, and the boot block sum must be 0xD2E53EF008. Size is not checked and
+      no file hash is computed.
+    source_ref: "Source/Project64-core/Settings.cpp:316, Source/Project64-core/N64System/N64System.cpp:577,599,649-652,673-677,690-704, Source/Project64-core/N64System/N64Rom.cpp:303,479-498,500-511, Source/Project64/UserInterface/Settings/SettingsPage-DiskDrive.cpp:13,18,47,140"
+
+  - name: "64DD_IPL_USA.bin"
+    aliases: ["64DD_IPL_US.n64", "64dd_ipl_U.bin"]
+    system: nintendo-64dd
+    region: [north-america]
+    required: true
+    validation: [signature]
+    description: "64DD IPL ROM (American retail)"
+    note: >
+      Loaded when the disk image reports Country_NorthAmerica, from the Disk IPL
+      USA ROM Path setting. Same acceptance path as the Japanese image, matched on
+      boot block sum 0xD2E53E5DDA. The chip differs from the Japanese one, and
+      CalculateRomCrc carries a separate seed and a 0xA0000 length for it.
+    source_ref: "Source/Project64-core/Settings.cpp:317, Source/Project64-core/N64System/N64System.cpp:653-656,673-677, Source/Project64-core/N64System/N64Rom.cpp:305,369-372,500-511, Source/Project64/UserInterface/Settings/SettingsPage-DiskDrive.cpp:14,19,56,142"
+
+  - name: "64DD_IPL_DEV.bin"
+    aliases: ["64DD_IPL_DEV.n64", "64dd_ipl_DEV.bin"]
+    system: nintendo-64dd
+    required: true
+    validation: [signature]
+    description: "64DD IPL ROM (development)"
+    note: >
+      Loaded from the Development 64DD IPL ROM Path setting for disks whose country
+      byte is unknown, which is what development and prototype disks carry. Matched
+      on boot block sum 0xD2E53EF39F. When a cartridge and a disk are launched
+      together and this path is empty, the loader falls back to the Japanese image
+      and then to the American one, so the development image is only unavoidable
+      for a development disk on its own.
+    source_ref: "Source/Project64-core/Settings.cpp:318, Source/Project64-core/N64System/N64System.cpp:657-670,673-677, Source/Project64-core/N64System/N64Rom.cpp:304,377-380,500-511, Source/Project64/UserInterface/Settings/SettingsPage-DiskDrive.cpp:15,20,65,144"
+
+  # -- Per game databases shipped in the installer --
+  - name: "Project64.rdb"
+    path: "Config/Project64.rdb"
+    system: nintendo-64
+    required: false
+    bundled: true
+    description: "ROM settings database"
+    note: >
+      Sections keyed by the ROM identifier CRC1-CRC2-C:country. Backs the whole
+      Rdb_ setting family, among them RDRAM size, counter factor, save chip, VI
+      refresh rate, disk seek timing and the overclock modifier, so it decides how
+      the machine is configured per game. It also carries the microcode identifier
+      table. Absent, every lookup falls through to the Defaults section and the
+      ROM browser lists no known titles.
+    source_ref: "Source/Project64-core/Settings.cpp:87-88,134-145,151-188, Source/Project64-core/Settings/SettingType/SettingsType-RomDatabase.cpp:63,117, Source/Project64-core/RomList/RomList.cpp:47,52,58-61, Source/Project64-core/N64System/N64Rom.cpp:722,914"
+
+  - name: "Video.rdb"
+    path: "Config/Video.rdb"
+    system: nintendo-64
+    required: false
+    bundled: true
+    description: "Per game video plugin settings"
+    note: >
+      Second ini opened by the ROM database setting type, keyed on the same ROM
+      identifier, holding the microcode CRCs the ucode detector matches and the per
+      game video overrides. Without it the plugin asks the user to add an unknown
+      microcode CRC.
+    source_ref: "Source/Project64-core/Settings.cpp:89-90, Source/Project64-core/Settings/SettingType/SettingsType-RomDatabase.cpp:64,118"
+
+  - name: "Audio.rdb"
+    path: "Config/Audio.rdb"
+    system: nintendo-64
+    required: false
+    bundled: true
+    description: "Per game audio plugin settings"
+    note: >
+      Third ini opened by the ROM database setting type, same key, carrying the per
+      game audio overrides such as FPSBuffer, Fixed Audio and Sync Audio.
+    source_ref: "Source/Project64-core/Settings.cpp:91-92, Source/Project64-core/Settings/SettingType/SettingsType-RomDatabase.cpp:65,119"
+
+  - name: "Project64.rdx"
+    path: "Config/Project64.rdx"
+    system: nintendo-64
+    required: false
+    bundled: true
+    description: "ROM database extension"
+    note: >
+      Extended per game information the ROM browser shows, loaded into the romlist
+      as m_ExtIniFile alongside the ROM database itself. Absent, the browser
+      columns it feeds stay empty.
+    source_ref: "Source/Project64-core/Settings.cpp:103-104, Source/Project64-core/RomList/RomList.cpp:46,51"
+
+  - name: "Config/Cheats/*.cht"
+    system: nintendo-64
+    required: false
+    bundled: true
+    description: "Shipped cheat database"
+    note: >
+      Directory scanned for that pattern, one file per game, sections keyed on the
+      ROM identifier and holding the GameShark style codes. The user directory
+      Config/Cheats-User is scanned straight after and is where the UI writes.
+      671 files ship in the installer.
+    source_ref: "Source/Project64-core/Settings.cpp:93-96, Source/Project64-core/N64System/Enhancement/Enhancements.cpp:629,647, Source/Installer/Installer.iss:29"
+
+  - name: "Config/Enhancements/*.enh"
+    system: nintendo-64
+    required: false
+    bundled: true
+    description: "Shipped enhancement database"
+    note: >
+      Directory scanned for that pattern, same per game keying as the cheat files,
+      holding the patches offered under Enhancements such as widescreen hacks. The
+      user directory Config/Enhancements-User is scanned straight after. 115 files
+      ship in the installer.
+    source_ref: "Source/Project64-core/Settings.cpp:97-100, Source/Project64-core/N64System/Enhancement/Enhancements.cpp:665,684, Source/Installer/Installer.iss:30"
+
+  # -- Interface localisation --
+  - name: "Lang/*.pj.Lang"
+    system: nintendo-64
+    required: false
+    bundled: true
+    description: "Interface translations"
+    note: >
+      Directory scanned for that pattern, each file naming its language in a header
+      string. English is compiled in through the DEF_STR table, so an empty
+      directory leaves the interface in English.
+    source_ref: "Source/Project64-core/Settings.cpp:127-128, Source/Project64-core/Multilanguage/Language.cpp:9-571,656-673, Source/Installer/Installer.iss:33"
+
+  # -- Prebuilt plugins with no source in the tree --
+  - name: "Jabo_Direct3D8.dll"
+    path: "Plugin/GFX/Jabo_Direct3D8.dll"
+    system: nintendo-64
+    required: false
+    bundled: true
+    description: "Jabo's Direct3D8 video plugin"
+    note: >
+      Committed as a prebuilt binary under Plugin/Win32 and copied by both the
+      installer and the nightly packager. No source for it exists in the tree, so a
+      build from source cannot produce it. Project64-Video is the default graphics
+      plugin, so it is only selected when the user picks it.
+    source_ref: "Source/Project64-core/Settings.cpp:383, Source/Installer/Installer.iss:36, Source/Script/package_zip.cmd:60"
+
+  - name: "Jabo_Dsound.dll"
+    path: "Plugin/Audio/Jabo_Dsound.dll"
+    system: nintendo-64
+    required: false
+    bundled: true
+    description: "Jabo's DirectSound audio plugin"
+    note: >
+      Committed as a prebuilt binary under Plugin/Win32 and copied by both the
+      installer and the nightly packager, with no source in the tree.
+      Project64-Audio is the default audio plugin.
+    source_ref: "Source/Project64-core/Settings.cpp:385, Source/Installer/Installer.iss:34, Source/Script/package_zip.cmd:58"

@@ -1,0 +1,115 @@
+emulator: Supermodel Dojo
+type: standalone
+core_classification: enhanced_fork
+source: "https://github.com/blueminder/supermodel-dojo"
+upstream: "https://github.com/trzy/Supermodel"
+author: "blueminder"
+profiled_date: "2026-08-12"
+source_commit: "ff8cde225298fe5c4ad47fba3c581b2cd19ffc41"
+upstream_commit: "77d28eec84a5ededaa23bb31bc74db631cbe5530"
+core_version: "dojo-preview6"
+display_name: "Sega - Model 3 (Supermodel Dojo)"
+verification: existence
+cores:
+  - supermodel-dojo
+systems:
+  - sega-model3
+mode: standalone
+
+notes: |
+  Fork of Supermodel adding delay based netplay, session replay with mid replay
+  takeover, a training mode, and a launcher binary built from Frontend/. The
+  emulator side is upstream merged forward: the dojo branch takes trzy/Supermodel
+  at 77d28ee of 2026-05-28 through merge 627f023, and the commits after it are
+  launcher fixes. The two repositories are not linked on GitHub, so the pin is
+  read from the merge itself, whose second parent 77d28ee resolves in both trees
+  while the first does not.
+  ref: README.md:4-20, Makefiles/Rules.inc:179-186
+
+  Windows and macOS return relative names, Config/, Assets/, NVRAM/, Saves/,
+  resolved against the working directory, which is where the release archive puts
+  them and where ES-DE starts the process. Linux uses the working directory when
+  no home directory resolves, $HOME/.supermodel-dojo/<dir> when that directory
+  exists, otherwise $HOME/.config/supermodel-dojo/Config and
+  $HOME/.local/share/supermodel-dojo/<dir> under the XDG variables, and falls back
+  to the Config/Games.xml and Assets/ sitting next to the binary when the home copy
+  is absent. Replays/ is a path type there and a working directory folder on Windows.
+  ref: Src/OSD/Windows/FileSystemPath.cpp:28-56, Src/OSD/OSX/FileSystemPath.cpp:28-54,
+       Src/OSD/Unix/FileSystemPath.cpp:63-77, 127-138, 141-195, Src/Dojo/Replay.cpp:24-30,
+       es-de resources/systems/windows/es_systems.xml:171
+
+  ROM sets are MAME format per game archives identified by the CRC32 values in
+  Games.xml, 63 sets at this revision. A parent set holds the ROMs a regional
+  variant reuses, a relation between versions of one game rather than a shared
+  BIOS: a split child archive makes the loader open <parent>.zip from the same
+  directory. Each Model 3 board carries its own program, video, sound and drive
+  board ROMs, so no system ROM is read outside those archives.
+  ref: Config/Games.xml, Src/GameLoader.cpp:325-560, Src/GameLoader.cpp:979-1010
+
+  The emulator writes and reads back its own Supermodel.ini, generated from the
+  built in Dojo defaults whenever it is absent, plus NVRAM/<game>.nv,
+  Saves/<game>.st<slot> and Replays/<game>_<timestamp>.supr with a .st0 sidecar
+  when the session starts from a save state.
+  ref: Src/OSD/SDL/Main.cpp:1572-1592, 2425, 713-741, 775-798,
+       Src/OSD/DojoConfigFile.h:31, Src/Dojo/Replay.cpp:19-50
+
+  Two reads take a path the user chooses and have no fixed name: the MP3 tracks
+  named inside Music.xml, and external GLSL vertex and fragment shaders for the
+  legacy 3D engine, whose config keys are empty by default so the built in shader
+  source is compiled instead.
+  ref: Src/Sound/MPEG/MpegAudio.cpp:71-86, Src/OSD/SDL/Main.cpp:1692-1693,
+       Src/Graphics/Shader.cpp:93-99
+
+  The repository publishes two release trains. The Dojo builds carry the
+  dojo-preview tags, Preview 6 of 2025-04-27 being the current one, and ship
+  supermodel.exe, the dojo.exe launcher, Assets/ and Config/. The
+  v0.3a-<date>-git-<rev> releases come from a workflow that fires only on the
+  master branch, which tracks upstream: the archive of 2026-06-25 holds Games.xml,
+  Music.xml and both crosshair names in its binary and none of the Dojo strings.
+  A build stamps its version from the commit date and short sha, and the tree
+  falls back to 0.3a-WIP.
+  ref: .github/workflows/release.yml:4-5, .github/workflows/release.yml:21,
+       Makefiles/Rules.inc:289-291, Src/Version.h:32
+
+  ES-DE reaches it through the SUPERMODEL-DOJO find rule, present in the Windows
+  set alone among the seven, for the arcade, mame and model3 systems.
+  ref: es-de resources/systems/windows/es_find_rules.xml:1107-1116,
+       es-de resources/systems/windows/es_systems.xml:171, 1068, 1220
+
+files:
+  - name: Games.xml
+    path: "Config/Games.xml"
+    required: true
+    bundled: true
+    description: "ROM set definitions"
+    note: "Parsed at startup into the game database. Every ROM region, file name and CRC32 the loader matches against comes from here, so an unreadable file leaves no set to resolve and the launch returns before the emulator is built. The path is a config key, so -game-xml-file moves it."
+    source_ref: "Src/OSD/SDL/Main.cpp:117, 1684, 2143, 2509-2520, Src/GameLoader.cpp:551-561, 1016-1019, Src/OSD/Windows/FileSystemPath.cpp:28-32"
+
+  - name: p1crosshair.bmp
+    path: "Assets/p1crosshair.bmp"
+    size: 295992
+    required: true
+    bundled: true
+    unsourceable: "Ships in the release archive next to the binary that loads it"
+    description: "Player 1 light gun crosshair texture"
+    note: "Both bitmaps are read on every launch whatever CrosshairStyle holds, since the load runs before the style decides anything, and a null surface aborts startup ahead of the Model 3 object. 32 bit BMP with alpha, sides a multiple of 2."
+    source_ref: "Src/OSD/SDL/Crosshair.cpp:34-51, Src/OSD/SDL/Main.cpp:2563-2569, Assets/DIR.txt"
+
+  - name: p2crosshair.bmp
+    path: "Assets/p2crosshair.bmp"
+    size: 295992
+    required: true
+    bundled: true
+    unsourceable: "Ships in the release archive next to the binary that loads it"
+    description: "Player 2 light gun crosshair texture"
+    note: "Read in the same call as the player 1 bitmap and equally fatal when it fails to load."
+    source_ref: "Src/OSD/SDL/Crosshair.cpp:35, 49-51, Src/OSD/SDL/Main.cpp:2563-2569"
+
+  - name: Music.xml
+    path: "Config/Music.xml"
+    required: false
+    bundled: true
+    unsourceable: "Ships in the release archive as a template whose every example sits inside a dummy comment tag"
+    description: "Custom MPEG music track map"
+    note: "Consulted only for a game with a DSB1 or DSB2 board, and skipped when the file is absent. Maps an MPEG ROM offset to an MP3 the user supplies."
+    source_ref: "Src/OSD/SDL/Main.cpp:118, 967, Src/Sound/MPEG/MpegAudio.cpp:88-108"

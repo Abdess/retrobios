@@ -1,0 +1,116 @@
+emulator: SSF
+type: standalone
+core_classification: other
+source: "https://github.com/shimazzz/SEGASaturnEmulator-SSF"
+upstream: closed-source
+author: "Shima"
+profiled_date: "2026-08-12"
+core_version: "PreviewVer R38"
+display_name: "Sega - Saturn/ST-V (SSF)"
+cores:
+  - ssf
+systems:
+  - sega-saturn
+  - sega-stv
+mode: standalone
+
+notes: |
+  Sega Saturn and ST-V emulator by Shima, closed source and distributed as a
+  binary. Two artifacts are read here and they describe the same emulator: the
+  Windows build SSF_PreviewVer_R38.zip of 2026-01-01, sha256
+  7325a9b9d666560ddf632f747fb42ab880f82c45391e51fe0716beb1c535f00b, whose
+  emulator is the 64-bit SSF.exe and which is cited by virtual address; and the
+  Android build SSF_AndroidVer.zip of 2022-08-07, package
+  com.xrea.g2.aaaaaaaa.ssf, whose lib/arm64-v8a/libnative-lib.so keeps its 40738
+  dynamic symbols and which is cited by symbol. Prose references name the
+  Japanese documentation shipped in Document/.
+
+  Every path below is stored in full in SSF.ini and picked through a file dialog
+  filtered on "all files (*.*)". SSF fixes no filename and no directory for any
+  of them and looks for none, so the names used here are the dumps that fill
+  each slot rather than names the code searches.
+
+  Saturn BIOS, [Peripheral] SaturnBIOS. Readme.txt describes the image as the
+  console address range 00000000-0007FFFF and states that the filename is free.
+  Neither a length nor a hash is compared against the file. The one routine that
+  walks the 512 KiB BIOS area is CStateSaveBase::_GetBIOSHash, which folds it
+  into the checksum pair that tags a save state.
+
+  Running without it is a supported mode, [Program4] NoBIOS. SSF carries a boot
+  ROM of its own, an embedded program with the SYS_* system calls and the
+  interrupt vectors, and in that mode the backup library is always hooked.
+  Readme.txt records lower compatibility and advises supplying a BIOS.
+
+  ST-V is entered by holding left Shift at launch. [Peripheral] STVBIOS names
+  the motherboard EPROM, and both the option reference and the No BIOS entry of
+  Readme.txt state that ST-V does not run without it.
+
+  ST-V cartridges are the game and are read from a ZIP: the loader takes the
+  extension of each member as its IC number, accepts 1 through 13, byte-swaps
+  every mask ROM in 16-bit units, doubles each byte of the IC13 EPROM across the
+  16-bit bus, then mirrors each chip over its window. IC7 and IC13 are
+  exclusive. STV_ROM.html gives the same layout and notes that MAME ROM sets fit
+  once the extensions are changed.
+
+  Cheat scripts live in Cheat/ under the disc product number. Six ship with the
+  emulator and the memory cheat dialog writes more.
+
+  Everything else the binary opens it also writes: SSF.ini, Setting.ini,
+  Setting/, Backup/, StateSave/, CDIndex/, Snapshot/, Wave/, ExtractSound/,
+  DebugData/, and the LLVM/ object cache that the bundled CreateObject.exe and
+  clang.exe compile from the user's own disc for the local CPU.
+
+files:
+  - name: "sega_101.bin"
+    aliases:
+      - mpr-17933.bin
+      - sega_100.bin
+      - sega_100a.bin
+      - sega1003.bin
+      - hisaturn.bin
+      - vsaturn.bin
+    system: sega-saturn
+    required: false
+    hle_fallback: true
+    size: 524288
+    description: "Saturn BIOS"
+    note: "Any dump of the 512 KiB console ROM, the compatible machines included. Area code is chosen by [Peripheral] Areacode and AutoAreacode, not by the image, so no region selects this file."
+    source_ref: "SSF.exe 0x43d770 (SaturnBIOS 0x129b1f8), SSF.exe 0x129a2f8 with the filter at 0x129a310, SSF.exe 0x43ff96 (NoBIOS 0x129b4cc), libnative-lib.so SSF::CStateSaveBase::_GetBIOSHash 0x134b8ec-0x134b924, Document/Readme.txt BIOSファイルについて"
+
+  - name: "epr-20091.ic8"
+    aliases:
+      - epr-23603.ic8
+      - epr-19730.ic8
+      - epr-19854.ic8
+      - epr-17951a.ic8
+      - epr-17952a.ic8
+      - epr-17953a.ic8
+      - epr-17954a.ic8
+      - epr-17740.ic8
+      - epr-17740a.ic8
+      - epr-17741a.ic8
+      - epr-17742a.ic8
+    system: sega-stv
+    required: true
+    size: 524288
+    description: "ST-V BIOS"
+    note: "Loose 512 KiB EPROM image, read outside the cartridge ZIP. Any of the board revisions is accepted, the code branching on none of them."
+    source_ref: "SSF.exe 0x43d91f (STVBIOS 0x129b218), SSF.exe 0x129a328, Document/Readme.txt ST-V BIOS option, Document/Readme.txt No BIOS option"
+
+  - name: "<cartridge>.bin"
+    system: sega-saturn
+    required: false
+    category: game_data
+    description: "cartridge image mapped at A-Bus CS0"
+    note: "[Peripheral] DataCartridge, gated by DataCartridgeEnable and off by default. SSF reads the file at the configured path into the 32 MiB A-Bus CS0 window and identifies it in no way; the dumps that belong there are the two Saturn ROM carts, mpr-18811-mx.ic1 for The King of Fighters '95 and mpr-19367-mx.ic1 for Ultraman. Readme.txt records the option as unverified."
+    source_ref: "SSF.exe 0x43e26b (DataCartridge 0x1298838), SSF.exe 0x43e178 (DataCartridgeEnable 0x1298820), SSF.exe 0x129a340, SSF.exe 0x916e5e-0x916e84, Document/Readme.txt Data Cartridge option"
+
+  - name: "<name>.cht"
+    path: "Cheat/<product id>/<name>.cht"
+    system: sega-saturn
+    required: false
+    bundled: true
+    category: game_data
+    description: "cheat script"
+    note: "Read when [Program4] EnableCheat is set, from the directory named after the disc product number. The format is a script language: triggers on first read, field, file, sector, CDDA and scanline, memory reads and writes, storage slots, branches and labels. Six ship with the emulator; the memory cheat dialog saves its own with the target address in the name."
+    source_ref: "SSF.exe 0x4403c0 (EnableCheat 0x1298de0), SSF.exe 0x12998a0, SSF.exe 0x129a658, SSF.exe command table 0x128c570-0x128c808"
