@@ -6,6 +6,8 @@ profiled_date: "2026-03-29"
 source_commit: "80075ce556a9d5c2c8fbe27f70625fb539d3bbba"
 core_version: "0.2.1"
 display_name: "Vita3K (PS Vita)"
+cores:
+  - vita3k
 systems: [sony-playstation-vita]
 
 # Standalone emulator, no libretro core exists.

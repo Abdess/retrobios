@@ -10,6 +10,8 @@
 emulator: Redream
 type: libretro
 source: "https://github.com/libretro/redream"
+cores:
+  - redream
 systems:
   - sega-dreamcast
 files:

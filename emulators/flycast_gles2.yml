@@ -4,5 +4,7 @@ alias_of: "flycast"
 profiled_date: "2026-03-23"
 core_version: "0.1"
 display_name: "Sega - Dreamcast/Naomi (Flycast GLES2)"
+cores:
+  - flycast_gles2
 note: "Same codebase as flycast, compiled with -DHAVE_OPENGLES2 for older mobile GPUs. Same BIOS files."
 files: []

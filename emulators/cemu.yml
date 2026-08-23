@@ -6,6 +6,8 @@ profiled_date: "2026-03-18"
 source_commit: "daacdda0bab55dd78a2b5aac2c12d6ebe8c8e868"
 core_version: "2.6"
 display_name: "Cemu (Wii U)"
+cores:
+  - cemu
 systems: [nintendo-wiiu]
 analysis_date: "2026-03-17"
 analysis_commit: "HEAD (depth=1)"

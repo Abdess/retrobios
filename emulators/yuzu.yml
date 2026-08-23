@@ -6,6 +6,8 @@ upstream: "https://github.com/yuzu-emu/yuzu"
 profiled_date: "2026-03-26"
 core_version: "EA 4176"
 display_name: "Yuzu (Nintendo Switch)"
+cores:
+  - yuzu
 systems: [nintendo-switch]
 analysis_date: "2026-03-26"
 analysis_commit: "15e6e48 (yuzu-emu-mirror, depth=1)"

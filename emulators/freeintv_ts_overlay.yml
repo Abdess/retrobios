@@ -9,6 +9,7 @@ core_version: "1.2"
 display_name: "Mattel - Intellivision (FreeIntvTSOverlay)"
 cores:
   - freeintv
+  - freeintvtsoverlay
 systems:
   - intellivision
 

@@ -4,5 +4,7 @@ alias_of: "beetle_psx"
 profiled_date: "2026-03-24"
 core_version: "v0.9.44.1"
 display_name: "Sony - PlayStation (Beetle PSX HW)"
+cores:
+  - mednafen_psx_hw
 note: "Same codebase as beetle_psx, compiled with HAVE_HW for OpenGL/Vulkan GPU rendering. Same BIOS files."
 files: []

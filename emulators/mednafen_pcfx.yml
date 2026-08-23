@@ -4,5 +4,7 @@ alias_of: "beetle_pcfx"
 profiled_date: "2026-03-24"
 core_version: "v0.9.36.5"
 display_name: "NEC - PC-FX (Beetle PC-FX)"
+cores:
+  - mednafen_pcfx
 note: "This core uses the same BIOS/firmware as beetle_pcfx. See emulators/beetle_pcfx.yml for details."
 files: []

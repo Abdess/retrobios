@@ -7,6 +7,8 @@ profiled_date: "2026-03-26"
 source_commit: "c0ffc900cdf19b9373549c59a7e6b22c33615ea4"
 core_version: "0.1.1"
 display_name: "Eden (Nintendo Switch)"
+cores:
+  - eden
 systems: [nintendo-switch]
 analysis_date: "2026-03-26"
 analysis_commit: "9347202 (depth=1)"

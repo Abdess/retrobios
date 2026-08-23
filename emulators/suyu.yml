@@ -6,6 +6,8 @@ upstream: "https://github.com/suyu-emu/suyu"
 profiled_date: "2026-03-26"
 core_version: "Yuzu EA 4176 based"
 display_name: "Suyu (Nintendo Switch)"
+cores:
+  - suyu
 systems: [nintendo-switch]
 analysis_date: "2026-03-26"
 analysis_commit: "c096d16 (Hengle/suyu-emu mirror, depth=1)"

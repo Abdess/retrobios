@@ -9,6 +9,7 @@ core_version: "0.84.0-alpha"
 display_name: "DOS (DOSBox Staging)"
 cores:
   - dosbox-staging
+  - dosbox_staging
 systems:
   - dos
   - ibm-pc

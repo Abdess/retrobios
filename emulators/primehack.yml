@@ -7,6 +7,8 @@ profiled_date: "2026-03-26"
 source_commit: "5e7cc91d8c9a43ca189b288937f65c9763af9c22"
 core_version: "1.0.8"
 display_name: "PrimeHack (Dolphin fork for Metroid Prime)"
+cores:
+  - primehack
 systems: [nintendo-gamecube, nintendo-wii]
 analysis_date: "2026-03-26"
 analysis_commit: "b10f147 (depth=1)"

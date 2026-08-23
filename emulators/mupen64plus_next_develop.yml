@@ -4,5 +4,7 @@ alias_of: "mupen64plus_next"
 profiled_date: "2026-03-24"
 core_version: "2.8"
 display_name: "Nintendo - Nintendo 64 (Mupen64Plus-Next Develop)"
+cores:
+  - mupen64plus_next_develop
 note: "Same codebase as mupen64plus_next, built from develop branch. Experimental/testing variant."
 files: []

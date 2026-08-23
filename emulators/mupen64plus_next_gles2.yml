@@ -4,5 +4,7 @@ alias_of: "mupen64plus_next"
 profiled_date: "2026-03-24"
 core_version: "2.8"
 display_name: "Nintendo - Nintendo 64 (Mupen64Plus-Next GLES2)"
+cores:
+  - mupen64plus_next_gles2
 note: "Same codebase as mupen64plus_next, compiled with GLES=1 (-DHAVE_OPENGLES2) for OpenGL ES 2.0 devices. Same BIOS files."
 files: []

@@ -2,5 +2,7 @@ emulator: mkxp-z
 type: alias
 alias_of: mkxp_z
 display_name: "RPG Maker XP/VX/VX Ace (mkxp-z)"
+cores:
+  - mkxp-z
 profiled_date: "2026-03-24"
 files: []

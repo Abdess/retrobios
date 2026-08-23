@@ -5,6 +5,8 @@ upstream: "https://github.com/Ryujinx/Ryujinx"
 profiled_date: "2026-03-26"
 core_version: "1.1.1403"
 display_name: "Ryujinx (Nintendo Switch)"
+cores:
+  - ryujinx
 systems: [nintendo-switch]
 analysis_date: "2026-03-26"
 analysis_commit: "HEAD (depth=1, ngram.ca mirror)"

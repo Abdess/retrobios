@@ -6,6 +6,8 @@ upstream: "https://git.citron-emu.org/citron-emu/Citron"
 profiled_date: "2026-03-26"
 core_version: "2026.03.12"
 display_name: "Citron (Nintendo Switch)"
+cores:
+  - citron
 systems: [nintendo-switch]
 analysis_date: "2026-03-26"
 analysis_commit: "79dee42 (depth=1)"

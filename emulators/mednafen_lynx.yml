@@ -4,5 +4,7 @@ alias_of: "beetle_lynx"
 profiled_date: "2026-03-24"
 core_version: "v1.24.0"
 display_name: "Atari - Lynx (Beetle Lynx)"
+cores:
+  - mednafen_lynx
 note: "This core uses the same BIOS/firmware as beetle_lynx. See emulators/beetle_lynx.yml for details."
 files: []

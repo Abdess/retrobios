@@ -6,6 +6,8 @@ profiled_date: "2026-03-18"
 source_commit: "295c13e972338879ff74a3e9f0dd57b35e148c60"
 core_version: "0.8.x"
 display_name: "xemu (Xbox)"
+cores:
+  - xemu
 systems: [microsoft-xbox]
 
 notes: |
