@@ -957,3 +957,61 @@ class ScriptsImportThreeWays(unittest.TestCase):
     def test_run_as_a_script(self):
         result = self._run("scripts/list_platforms.py")
         self.assertEqual(result.returncode, 0, result.stderr[-400:])
+
+
+class ContributorsSurviveAFailedRequest(unittest.TestCase):
+    """The one part of the README that comes from the network.
+
+    A refused or rate-limited request left the list empty, which deleted the
+    section from a published README. It happened during a pipeline run and
+    the result was committed, after which the freshness check regenerated the
+    section and failed on the difference. Losing the list is a worse answer
+    than publishing a stale one.
+    """
+
+    def _block(self, text: str):
+        import tempfile
+
+        sys.path.insert(0, str(ROOT / "scripts"))
+        from generate_readme import _existing_contributor_block
+
+        with tempfile.NamedTemporaryFile("w", suffix=".md", delete=False) as handle:
+            handle.write(text)
+            name = handle.name
+        try:
+            return _existing_contributor_block(name)
+        finally:
+            os.unlink(name)
+
+    def test_a_published_list_is_read_back(self):
+        text = (
+            "# Title\n\n## Contributors\n\n"
+            '<a href="https://github.com/a"><img src="x" alt="a"></a>\n'
+            '<a href="https://github.com/b"><img src="y" alt="b"></a>\n\n'
+            "## Community tools\n\nsomething else\n"
+        )
+        block = self._block(text)
+        self.assertEqual(block[0], "## Contributors")
+        self.assertIn('alt="a"', "\n".join(block))
+        self.assertIn('alt="b"', "\n".join(block))
+        self.assertNotIn("Community tools", "\n".join(block))
+        self.assertNotIn("something else", "\n".join(block))
+
+    def test_a_readme_without_the_section_yields_nothing(self):
+        self.assertEqual(self._block("# Title\n\n## Other\n\ntext\n"), [])
+
+    def test_an_unreadable_file_yields_nothing(self):
+        sys.path.insert(0, str(ROOT / "scripts"))
+        from generate_readme import _existing_contributor_block
+
+        self.assertEqual(_existing_contributor_block("/nonexistent/README.md"), [])
+
+    def test_the_committed_readme_still_carries_its_contributors(self):
+        """Regenerating offline must never be the reason this disappears."""
+        text = (ROOT / "README.md").read_text()
+        if "## Contributors" not in text:
+            self.skipTest("README carries no contributors section")
+        self.assertGreater(
+            text.count('<a href="https://github.com/'), 0,
+            "the section is present but empty",
+        )

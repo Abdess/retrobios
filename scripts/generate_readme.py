@@ -126,6 +126,34 @@ RELEASE_URL = "../../releases/latest"
 REPO = "Abdess/retrobios"
 
 
+def _existing_contributor_block(readme_path: str = "README.md") -> list[str]:
+    """The contributors already published, read back from the file.
+
+    The section is the one part of this document that comes from the network.
+    A refused or rate-limited request used to leave the list empty, which
+    silently deleted the section from a published README and put the local
+    result permanently at odds with what the freshness check regenerates.
+    Keeping what is already there makes an offline run additive-only.
+    """
+    try:
+        with open(readme_path, encoding="utf-8") as handle:
+            text = handle.read()
+    except OSError:
+        return []
+    start = text.find("## Contributors")
+    if start == -1:
+        return []
+    rest = text[start:].splitlines()
+    block = []
+    for line in rest[1:]:
+        if line.startswith("## "):
+            break
+        block.append(line)
+    while block and not block[-1].strip():
+        block.pop()
+    return ["## Contributors"] + block if block else []
+
+
 def fetch_contributors() -> list[dict]:
     """Fetch contributors from GitHub API, exclude bots."""
     import urllib.error
@@ -518,6 +546,13 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
     )
 
     contributors = fetch_contributors()
+    if not contributors:
+        # The request failed. Republish what is already there rather than
+        # dropping the section: losing it is a worse answer than a stale list.
+        kept = _existing_contributor_block("README.md")
+        if kept:
+            print("contributors: request failed, keeping the published list")
+            lines.extend(kept + [""])
     if contributors:
         lines.extend(
             [
