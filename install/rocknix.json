@@ -5,7 +5,7 @@
   "platform": "rocknix",
   "display_name": "ROCKNIX",
   "version": "1.0",
-  "generated": "2026-08-23T06:27:16Z",
+  "generated": "2026-08-23T11:06:18Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -2506,7 +2506,7 @@
       "sha1": "483a17ff25b68a8f18cae691da99f16beefbe370",
       "sha256": "4ad991be2b0aa305f09b90a79fc50f57833b30b008890b5ef1336cc3d9d0bae0",
       "size": 6478,
-      "repo_path": "bios/Other/dolphin/font_western.bin",
+      "repo_path": "bios/Other/dolphin-mmjr/font_western.bin",
       "cores": [
         "dolphin"
       ]
@@ -2516,7 +2516,7 @@
       "sha1": "7fbbedcc7a1ae00414a4e9e967109cc78be1fe3b",
       "sha256": "38f9f59d505bc4e2d86b0196706195f33ad72b7fe9d029cf263072cde19d044f",
       "size": 259626,
-      "repo_path": "bios/Other/dolphin/font_japanese.bin",
+      "repo_path": "bios/Other/dolphin-mmjr/font_japanese.bin",
       "cores": [
         "dolphin"
       ]

@@ -5,7 +5,7 @@
   "platform": "recalbox",
   "display_name": "Recalbox",
   "version": "1.0",
-  "generated": "2026-08-23T06:27:16Z",
+  "generated": "2026-08-23T11:41:38Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -237,8 +237,8 @@
       }
     }
   ],
-  "total_files": 1317,
-  "total_size": 3896548561,
+  "total_files": 1320,
+  "total_size": 3896633840,
   "total_omitted": 5,
   "omitted_files": [
     {
@@ -4766,7 +4766,7 @@
       "sha1": "483a17ff25b68a8f18cae691da99f16beefbe370",
       "sha256": "4ad991be2b0aa305f09b90a79fc50f57833b30b008890b5ef1336cc3d9d0bae0",
       "size": 6478,
-      "repo_path": "bios/Other/dolphin/font_western.bin",
+      "repo_path": "bios/Other/dolphin-mmjr/font_western.bin",
       "cores": [
         "dolphin"
       ]
@@ -4776,7 +4776,7 @@
       "sha1": "7fbbedcc7a1ae00414a4e9e967109cc78be1fe3b",
       "sha256": "38f9f59d505bc4e2d86b0196706195f33ad72b7fe9d029cf263072cde19d044f",
       "size": 259626,
-      "repo_path": "bios/Other/dolphin/font_japanese.bin",
+      "repo_path": "bios/Other/dolphin-mmjr/font_japanese.bin",
       "cores": [
         "dolphin"
       ]
@@ -9847,6 +9847,36 @@
       "repo_path": "bios/Sega/Model 3/Config/Games.xml",
       "cores": [
         "supermodel"
+      ]
+    },
+    {
+      "dest": "Gram Kracker.ctg",
+      "sha1": "56dd520570cdcdd60dda2eedc8af1e02a781dcc5",
+      "sha256": "3e63f6a54a8001ddd75ecde70572c7030776d79817f46ee0dfcf5274dd03047f",
+      "size": 7587,
+      "repo_path": "bios/Texas Instruments/TI-99/Gram Kracker.ctg",
+      "cores": [
+        "ti99sim"
+      ]
+    },
+    {
+      "dest": "ti-pcard.ctg",
+      "sha1": "c7bf5fcfea0502011dca76d12efcc242e23421b9",
+      "sha256": "06eae0519b66734b546d4a6508f8f20ab3f57d21819c469ff748e68816e27bce",
+      "size": 71924,
+      "repo_path": "bios/Texas Instruments/TI-99/ti-pcard.ctg",
+      "cores": [
+        "ti99sim"
+      ]
+    },
+    {
+      "dest": "cf7+.ctg",
+      "sha1": "698c638e1773244a6bf8a353c87d210047cce402",
+      "sha256": "8998c8525a9014a7983a8ed3b03fa8210a08c205dacccd654f139f78f20623da",
+      "size": 5768,
+      "repo_path": "bios/Texas Instruments/TI-99/cf7+.ctg",
+      "cores": [
+        "ti99sim"
       ]
     },
     {

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-23T06:27:16Z",
-  "total_files": 8923,
-  "total_size": 12326477894,
+  "generated_at": "2026-08-23T11:41:38Z",
+  "total_files": 8925,
+  "total_size": 12326516021,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -24820,16 +24820,6 @@
       "crc32": "5ddebc61",
       "adler32": "d4ac3b75"
     },
-    "d38572d22721eb5972f671cde54201d752dffe6b": {
-      "path": "bios/Arcade/MAME/hiscore.dat",
-      "name": "hiscore.dat",
-      "size": 332919,
-      "sha1": "d38572d22721eb5972f671cde54201d752dffe6b",
-      "md5": "0ca8052de426b7eadcb64da341eadec6",
-      "sha256": "04bc41efa4be5b3cad4e7718cc8d686a3424d129bb768346333ed42491de5651",
-      "crc32": "19a61bc4",
-      "adler32": "cf2fc2a3"
-    },
     "42d6d9ac933a7819adfd686f629a8e43aea4e880": {
       "path": "bios/Arcade/MAME/history.dat",
       "name": "history.dat",
@@ -26849,16 +26839,6 @@
       "sha256": "668320eff3209f7305a1541d2eb7b5ce1b4cb013aae9760f13504e0f7ce18ce5",
       "crc32": "c4fd94b9",
       "adler32": "f0802d9d"
-    },
-    "3732f1aeea740c2e5df51b0b51c6665028314ae6": {
-      "path": "bios/Arcade/MAME/plugins/boot.lua",
-      "name": "boot.lua",
-      "size": 1019,
-      "sha1": "3732f1aeea740c2e5df51b0b51c6665028314ae6",
-      "md5": "809a691069c6b8531e5a770dc3b92a69",
-      "sha256": "8466722f2a08bba1ce9a79488e2d71133c6e9364b36e9cbb07be83085b769859",
-      "crc32": "31a106f6",
-      "adler32": "f56d500d"
     },
     "924c7ebb30337de0c372dc82f8f66ecfa479ba60": {
       "path": "bios/Arcade/MAME/plugins/cheat/cheat_json.lua",
@@ -48664,16 +48644,6 @@
       "crc32": "30ec9e5f",
       "adler32": "52b30c3f"
     },
-    "005cecf1a5e20b05407d55d0aad22cf81ad66c31": {
-      "path": "bios/Other/armsx2/pcsx2/resources/shaders/vulkan/cas.glsl",
-      "name": "cas.glsl",
-      "size": 2637,
-      "sha1": "005cecf1a5e20b05407d55d0aad22cf81ad66c31",
-      "md5": "deb7394a31184990c78c9753a293ff60",
-      "sha256": "ea3f65c6d1b18abe23b42a3d9ddf48d787df287feef6cfac52ca6109d8852d97",
-      "crc32": "e00e7479",
-      "adler32": "59323e74"
-    },
     "53ff273e335432fdbbff9da2762e229ec2bd5078": {
       "path": "bios/Other/armsx2/pcsx2/resources/shaders/vulkan/convert.glsl",
       "name": "convert.glsl",
@@ -49771,36 +49741,6 @@
       "crc32": "dcbd4121",
       "adler32": "a209b5ff"
     },
-    "e6c0050b3c67ee26198488fbbe4a5d019c15b628": {
-      "path": "bios/Other/dolphin/codehandler.bin",
-      "name": "codehandler.bin",
-      "size": 2880,
-      "sha1": "e6c0050b3c67ee26198488fbbe4a5d019c15b628",
-      "md5": "1f118b8735fcf40c20b38c3184eebfd9",
-      "sha256": "2b2ff0716aeb9b806cc61181e559041312957f25f04c435bd7da80a78917b33b",
-      "crc32": "ba8dfa56",
-      "adler32": "ffd311a0"
-    },
-    "7fbbedcc7a1ae00414a4e9e967109cc78be1fe3b": {
-      "path": "bios/Other/dolphin/font_japanese.bin",
-      "name": "font_japanese.bin",
-      "size": 259626,
-      "sha1": "7fbbedcc7a1ae00414a4e9e967109cc78be1fe3b",
-      "md5": "a1d3c0e5a40f163f4fb00a5e0774c63c",
-      "sha256": "38f9f59d505bc4e2d86b0196706195f33ad72b7fe9d029cf263072cde19d044f",
-      "crc32": "9ac7f0c7",
-      "adler32": "93980be4"
-    },
-    "483a17ff25b68a8f18cae691da99f16beefbe370": {
-      "path": "bios/Other/dolphin/font_western.bin",
-      "name": "font_western.bin",
-      "size": 6478,
-      "sha1": "483a17ff25b68a8f18cae691da99f16beefbe370",
-      "md5": "9bef639b7426ef6948602a12b33522a8",
-      "sha256": "4ad991be2b0aa305f09b90a79fc50f57833b30b008890b5ef1336cc3d9d0bae0",
-      "crc32": "6fe1f772",
-      "adler32": "e266bed2"
-    },
     "f6a0cbfda6838065065e830ff40f322e6a3b6b00": {
       "path": "bios/Other/dolphin-mmjr/Load/wiitdb.txt",
       "name": "wiitdb.txt",
@@ -49821,6 +49761,26 @@
       "crc32": "4c719966",
       "adler32": "896a11b8"
     },
+    "7fbbedcc7a1ae00414a4e9e967109cc78be1fe3b": {
+      "path": "bios/Other/dolphin-mmjr/font_japanese.bin",
+      "name": "font_japanese.bin",
+      "size": 259626,
+      "sha1": "7fbbedcc7a1ae00414a4e9e967109cc78be1fe3b",
+      "md5": "a1d3c0e5a40f163f4fb00a5e0774c63c",
+      "sha256": "38f9f59d505bc4e2d86b0196706195f33ad72b7fe9d029cf263072cde19d044f",
+      "crc32": "9ac7f0c7",
+      "adler32": "93980be4"
+    },
+    "483a17ff25b68a8f18cae691da99f16beefbe370": {
+      "path": "bios/Other/dolphin-mmjr/font_western.bin",
+      "name": "font_western.bin",
+      "size": 6478,
+      "sha1": "483a17ff25b68a8f18cae691da99f16beefbe370",
+      "md5": "9bef639b7426ef6948602a12b33522a8",
+      "sha256": "4ad991be2b0aa305f09b90a79fc50f57833b30b008890b5ef1336cc3d9d0bae0",
+      "crc32": "6fe1f772",
+      "adler32": "e266bed2"
+    },
     "3e304bc6ee181eb787245690c3c723f7f2622b2e": {
       "path": "bios/Other/dolphin-mmjr2/Readme.txt",
       "name": "Readme.txt",
@@ -49830,6 +49790,16 @@
       "sha256": "e5a888912968050c6c1d46d1c364c324684e1d15aaa62cfe36cf7fce2c687b21",
       "crc32": "91ac554c",
       "adler32": "c5bb1de0"
+    },
+    "e6c0050b3c67ee26198488fbbe4a5d019c15b628": {
+      "path": "bios/Other/dolphin-mmjr2/codehandler.bin",
+      "name": "codehandler.bin",
+      "size": 2880,
+      "sha1": "e6c0050b3c67ee26198488fbbe4a5d019c15b628",
+      "md5": "1f118b8735fcf40c20b38c3184eebfd9",
+      "sha256": "2b2ff0716aeb9b806cc61181e559041312957f25f04c435bd7da80a78917b33b",
+      "crc32": "ba8dfa56",
+      "adler32": "ffd311a0"
     },
     "08509dd4567fa61baa2bae01ba8361e8ca439659": {
       "path": "bios/Other/dolphin-mmjr2/misc.bin",
@@ -50201,6 +50171,16 @@
       "crc32": "54c435f2",
       "adler32": "c42ff6d7"
     },
+    "005cecf1a5e20b05407d55d0aad22cf81ad66c31": {
+      "path": "bios/Other/emucorex/resources/shaders/vulkan/cas.glsl",
+      "name": "cas.glsl",
+      "size": 2637,
+      "sha1": "005cecf1a5e20b05407d55d0aad22cf81ad66c31",
+      "md5": "deb7394a31184990c78c9753a293ff60",
+      "sha256": "ea3f65c6d1b18abe23b42a3d9ddf48d787df287feef6cfac52ca6109d8852d97",
+      "crc32": "e00e7479",
+      "adler32": "59323e74"
+    },
     "705d20d39a910d58a070fb86780ac58c8007591c": {
       "path": "bios/Other/emucorex/resources/shaders/vulkan/convert.glsl",
       "name": "convert.glsl",
@@ -50361,16 +50341,6 @@
       "crc32": "e0c2acb6",
       "adler32": "5da07f7b"
     },
-    "cda44c87be8b01c7ba23e2ad09a516d1747dee9b": {
-      "path": "bios/Other/epsxe/shaders/CRT-Hyllian/gpuCore.slv",
-      "name": "gpuCore.slv",
-      "size": 201,
-      "sha1": "cda44c87be8b01c7ba23e2ad09a516d1747dee9b",
-      "md5": "1184808df8031b080289ccdb5b17ba6b",
-      "sha256": "9f63333b425c697048c6804d7f30f9a653570143eb897758c7c9fb9d3d8e119c",
-      "crc32": "41169e0a",
-      "adler32": "98f8446f"
-    },
     "56ad43fc57833eefb116af581c9ad034c53778ee": {
       "path": "bios/Other/epsxe/shaders/CRT-Hyllian-3D/gpuCore.ini",
       "name": "gpuCore.ini",
@@ -50390,6 +50360,16 @@
       "sha256": "32e45e1a9cd471bdcf7c0f1b77a425cdda265726e58e2c5a703c27bb343a52ec",
       "crc32": "9c4acf63",
       "adler32": "c192c0f0"
+    },
+    "cda44c87be8b01c7ba23e2ad09a516d1747dee9b": {
+      "path": "bios/Other/epsxe/shaders/CRT-Hyllian-3D/gpuCore.slv",
+      "name": "gpuCore.slv",
+      "size": 201,
+      "sha1": "cda44c87be8b01c7ba23e2ad09a516d1747dee9b",
+      "md5": "1184808df8031b080289ccdb5b17ba6b",
+      "sha256": "9f63333b425c697048c6804d7f30f9a653570143eb897758c7c9fb9d3d8e119c",
+      "crc32": "41169e0a",
+      "adler32": "98f8446f"
     },
     "0f6b69ace5bcd59ba3641bb4d833e120e93eb8dd": {
       "path": "bios/Other/epsxe/shaders/CRT-Lottes/gpuCore.ini",
@@ -52821,6 +52801,16 @@
       "crc32": "c1c73f18",
       "adler32": "9806aeba"
     },
+    "d38572d22721eb5972f671cde54201d752dffe6b": {
+      "path": "bios/Other/mame4droid/hiscore.dat",
+      "name": "hiscore.dat",
+      "size": 332919,
+      "sha1": "d38572d22721eb5972f671cde54201d752dffe6b",
+      "md5": "0ca8052de426b7eadcb64da341eadec6",
+      "sha256": "04bc41efa4be5b3cad4e7718cc8d686a3424d129bb768346333ed42491de5651",
+      "crc32": "19a61bc4",
+      "adler32": "cf2fc2a3"
+    },
     "8d5a5e5b6b179f5c27f0d9379aea1c4fd36b51f9": {
       "path": "bios/Other/mame4droid-2024/cheat.7z",
       "name": "cheat.7z",
@@ -52840,6 +52830,16 @@
       "sha256": "9026af08979a8a1e40390f61d91267d0a3dc9676fe86765ccd2060be0d3d146f",
       "crc32": "94687e89",
       "adler32": "56251282"
+    },
+    "3732f1aeea740c2e5df51b0b51c6665028314ae6": {
+      "path": "bios/Other/mame4droid-2024/plugins/boot.lua",
+      "name": "boot.lua",
+      "size": 1019,
+      "sha1": "3732f1aeea740c2e5df51b0b51c6665028314ae6",
+      "md5": "809a691069c6b8531e5a770dc3b92a69",
+      "sha256": "8466722f2a08bba1ce9a79488e2d71133c6e9364b36e9cbb07be83085b769859",
+      "crc32": "31a106f6",
+      "adler32": "f56d500d"
     },
     "19a26e9ca77bab990337c639cb2e3ede4b272bcb": {
       "path": "bios/Other/mame4droid-2024/shaders.cfg",
@@ -93701,6 +93701,26 @@
       "crc32": "200dd7d0",
       "adler32": "636b549e"
     },
+    "1d63879573a201cab6c883327240ddc148732ccd": {
+      "path": "bios/Texas Instruments/TI-99/.variants/TI-994A.ctg.fb1ca5c5",
+      "name": "TI-994A.ctg",
+      "size": 32292,
+      "sha1": "1d63879573a201cab6c883327240ddc148732ccd",
+      "md5": "fb1ca5c58357896a0be5d6725894845d",
+      "sha256": "b115b5e8a0575f98d619b497f58c699741b4cde0a9e8f341ec5c2eb2faac4450",
+      "crc32": "0f03e166",
+      "adler32": "c9d70742"
+    },
+    "a092153d87615d64e025c118b16a0c6ec70e6fe7": {
+      "path": "bios/Texas Instruments/TI-99/.variants/ti-disk.ctg.0281841b",
+      "name": "ti-disk.ctg",
+      "size": 5835,
+      "sha1": "a092153d87615d64e025c118b16a0c6ec70e6fe7",
+      "md5": "0281841b5ea4227526e7612c0bb55cbb",
+      "sha256": "52079856886a1a8d982828d1cca0d9adcade31f3655bc0bfb209e6059be7abb8",
+      "crc32": "ad7bb88d",
+      "adler32": "a9316893"
+    },
     "630b9f529b954851fbdcfeb1d91a950d4bda0547": {
       "path": "bios/Texas Instruments/TI-99/.variants/ti99_4a.zip",
       "name": "ti99_4a.zip",
@@ -96760,7 +96780,6 @@
       "3ad52dcfc131eccc75b2859d441fe915": "1ac2517f11360bdf993b7aa8c38ab473606f8e3a",
       "0c085d2b97851a8a73068bf97ded5080": "bda4c50891efe71da22fefad5a3c51fac6af91a4",
       "0ec12b364a365739cb6b0b18536d67fe": "747676a713c79a8425b8e08cfc6fd02a3f4dd971",
-      "0ca8052de426b7eadcb64da341eadec6": "d38572d22721eb5972f671cde54201d752dffe6b",
       "343581020fb67c93e9655be579222ced": "42d6d9ac933a7819adfd686f629a8e43aea4e880",
       "1ee500cdbbe68dcc0f309e74fbdb14e0": "6379a214e91738ab7b823711d85e7e6dc9214f36",
       "219a818c4ffd9fab04b9be9c7e2107a8": "fb0c36d69f66f4b10a895aa708ae37f826755257",
@@ -96963,7 +96982,6 @@
       "b7b4c7b693c4ef9aa465ead698052b08": "50ab67fb752ece8b3ded0ab0f45a84bc9b342f8f",
       "c1c36cb1041906e7e9b7fac38f2a12b2": "9198d26f7a8426fb05e428c8a2ae575267942598",
       "ea2762076cc19dc316117d1c7fcd1829": "6148f46190d82b275ca4a573b084c82f674f4dde",
-      "809a691069c6b8531e5a770dc3b92a69": "3732f1aeea740c2e5df51b0b51c6665028314ae6",
       "5d1fef1126d5440711350bf7fb7c9189": "924c7ebb30337de0c372dc82f8f66ecfa479ba60",
       "e82dee746b98412dbec87124aa03caa7": "c8945a78dbac2eeb55a6b99ad595987b08f00e73",
       "ea63508df5f4c2e57d33d9a6513d83d4": "3ac6a1a669b768472faf7ca5c8c4381a73fd0904",
@@ -98926,7 +98944,6 @@
       "8ffd758adde9783ba80625a25b06ef7a": "7f476bffdc19d7ba2806eef40c2e8e40bdf0896c",
       "ddb9dab93906986ec0bb63c5aad0401e": "ca7a974714111895bbf03360078ea1008694c52e",
       "8e8ebd0758705f947ca6f8eba4baf8e6": "511dc6bb2f81d0ad61fe46c6e91dce8b344fd934",
-      "deb7394a31184990c78c9753a293ff60": "005cecf1a5e20b05407d55d0aad22cf81ad66c31",
       "383ccce840167fd0264e3e382a411694": "53ff273e335432fdbbff9da2762e229ec2bd5078",
       "23b4ac68a9c4f01ce319d1bfd7ba6627": "b8d20aa6884878ba72c080d3f2107e09606963d3",
       "6888a8e85b9c0a357580d4464ddd7d0d": "d5ba24ba836c418f7f2d9d8b44bd337baa9e45a3",
@@ -99036,12 +99053,12 @@
       "b442924d110414a6cd8636551a9377a9": "a79d03ac83cb94636ca3582df0786f8082162f04",
       "afacfb61877401f1611998d2b590dffd": "a13cf9c5cdfe8605d82150b7573652f419b30197",
       "3ab3f9386a280de051e82c0f147385ce": "f6b64d7b039a90af956c2c0873b30f6639a59878",
-      "1f118b8735fcf40c20b38c3184eebfd9": "e6c0050b3c67ee26198488fbbe4a5d019c15b628",
-      "a1d3c0e5a40f163f4fb00a5e0774c63c": "7fbbedcc7a1ae00414a4e9e967109cc78be1fe3b",
-      "9bef639b7426ef6948602a12b33522a8": "483a17ff25b68a8f18cae691da99f16beefbe370",
       "d677421733ba64f4b493c98667d6ab78": "f6a0cbfda6838065065e830ff40f322e6a3b6b00",
       "5b79fad600c6257c928c108cef7034a7": "63e0d5b58d41fccf0853e46e7ab2f25262d2db5d",
+      "a1d3c0e5a40f163f4fb00a5e0774c63c": "7fbbedcc7a1ae00414a4e9e967109cc78be1fe3b",
+      "9bef639b7426ef6948602a12b33522a8": "483a17ff25b68a8f18cae691da99f16beefbe370",
       "5ed871ef86a282106e4881614d4aa843": "3e304bc6ee181eb787245690c3c723f7f2622b2e",
+      "1f118b8735fcf40c20b38c3184eebfd9": "e6c0050b3c67ee26198488fbbe4a5d019c15b628",
       "09697a2bb22132b4b4a28f7e846037f5": "08509dd4567fa61baa2bae01ba8361e8ca439659",
       "42372c6860eb0a0d108b08c502035337": "27d53b55779a0db2e76dea50f51e633a53609cd5",
       "deae3b73484ee178352e9d98e3fb5906": "472c670d701bd233bc03afe4c9f18e22a6fd15c1",
@@ -99079,6 +99096,7 @@
       "1cbf28d65b0d6fe727b571d3e46871b8": "c8eb9c1926baad8bbba25f97be54abae233fe715",
       "480b029f6c357fb683a6720e2b78d990": "4abe45e59dc9286321a115c76c31cc7fe85e58d5",
       "23a5e91beb2072f48e1011e7a9b6e901": "03c8b0d3ebeb0ecdc7f594ba6f7242a6f6e4d564",
+      "deb7394a31184990c78c9753a293ff60": "005cecf1a5e20b05407d55d0aad22cf81ad66c31",
       "669f55ffa59d7b754ab11f96c42f206f": "705d20d39a910d58a070fb86780ac58c8007591c",
       "b79725bff4fecb48d68ad575e13950d1": "276d984150c2fd2fb5ba287f2e5ceb7262dc5a95",
       "b3e6aa12e24e59cad71d1b7d851a2572": "268f43cd946eea999c62f63a24eb00cb2fdc342c",
@@ -99095,9 +99113,9 @@
       "1b37c6b0835d045c86a062267c843e2f": "036e58e46d7264e2d6b08f48bde8b2d83361a661",
       "f91347f046724ad7d0d4f4315a8378a1": "687540a168728baf3babaf2dedf74b5f1d2f56b4",
       "b3ec1b57cf72c14f0e945cd054d44d11": "f0e3d77db14b4dd11aa7cc71613097600d3e5da3",
-      "1184808df8031b080289ccdb5b17ba6b": "cda44c87be8b01c7ba23e2ad09a516d1747dee9b",
       "b6b4e84b236221b2ece84dc5c1e4f154": "56ad43fc57833eefb116af581c9ad034c53778ee",
       "72ac4fd9b61c086d9836486c2f750be2": "a582843e7dac4735392fe82fdf3e6fef88f7ff66",
+      "1184808df8031b080289ccdb5b17ba6b": "cda44c87be8b01c7ba23e2ad09a516d1747dee9b",
       "f58606c167af7d2b961a06bab8632bd0": "0f6b69ace5bcd59ba3641bb4d833e120e93eb8dd",
       "c6fc241947fcc671b0ed1fc2dd3baa99": "c06f5745e3ecc0b33e802877b46352d8304b81bc",
       "e97109bf49fd31e3f60e2081baf73f5f": "501c31d7614583f6b1f25eb57f67d35343e6dff8",
@@ -99341,8 +99359,10 @@
       "034527d42a96d0f39977cb85c6a8f2d8": "fcfbbb25e06f58d13e762b02bfd468c834d98fc8",
       "ee44560f34033efa3bb47b3e0aac1772": "7b03befac4fbcef8c649048fa3ff5d095fd48dd3",
       "c0b17e87b2e1f239fd32545301f7e9cf": "75d31d949614b7d4e79de676c8a4b1c68b571f0a",
+      "0ca8052de426b7eadcb64da341eadec6": "d38572d22721eb5972f671cde54201d752dffe6b",
       "187a81ab0ca881fe44806c041e22646b": "8d5a5e5b6b179f5c27f0d9379aea1c4fd36b51f9",
       "615619e89122a6374a794d324d012b12": "461eb3301dcc796362094fac901a307b29e7024b",
+      "809a691069c6b8531e5a770dc3b92a69": "3732f1aeea740c2e5df51b0b51c6665028314ae6",
       "7fa9ea60a5745891d712df3d860d82d9": "19a26e9ca77bab990337c639cb2e3ede4b272bcb",
       "01fd7e0102b2ffdbe2d781eca0162a78": "d11a9f5eb62ac9382faeabb53926c0b10788cefd",
       "111ccf43b36893fcf4e456ea7de72f3a": "33991a884bdf2131475058cddf535a457ce50233",
@@ -103163,6 +103183,8 @@
       "d4448d09bbfde687c04f9e3310e023ab": "ef66dad3e7b2b6a86f326765e7dfd7d1a308ad8f",
       "8011181f810b5ec4e9d6a03f0e14257a": "1fddd44d54f3ff12bfb548fcb03ce36b5a4f295a",
       "c6ff8204c5c81b7be34614dbbd690c8b": "8177bc6d5489d575cbfa9a004d097fc08c6f8c86",
+      "fb1ca5c58357896a0be5d6725894845d": "1d63879573a201cab6c883327240ddc148732ccd",
+      "0281841b5ea4227526e7612c0bb55cbb": "a092153d87615d64e025c118b16a0c6ec70e6fe7",
       "6e30e823ddba73234480984ee50730c1": "630b9f529b954851fbdcfeb1d91a950d4bda0547",
       "42f768a66fa8b27dadb8361dd2e2e012": "8212fbd8899a2808c7ace4559245861e5bee2c9a",
       "7551f1d578a32cccd97efd1adff15252": "56dd520570cdcdd60dda2eedc8af1e02a781dcc5",
@@ -110951,9 +110973,6 @@
         "6299b684709319356812d58f1941c695cebf9357",
         "7842bb5656f8be814d4ad0fd86bab0768e5104d8"
       ],
-      "boot.lua": [
-        "3732f1aeea740c2e5df51b0b51c6665028314ae6"
-      ],
       "cheat_json.lua": [
         "924c7ebb30337de0c372dc82f8f66ecfa479ba60"
       ],
@@ -116318,8 +116337,8 @@
       ],
       "cas.glsl": [
         "b478ce9d1343b8dd201c045f010bd1b64ba158ae",
-        "005cecf1a5e20b05407d55d0aad22cf81ad66c31",
         "cb0d4276f9947762af0841a8af75efa6cbe9109c",
+        "005cecf1a5e20b05407d55d0aad22cf81ad66c31",
         "1a69a0fc522caff98fc3829ebf3f12a6a006a058",
         "709fd5393188f7cff0fe4230d0e3e8b69a82f5b9"
       ],
@@ -116672,9 +116691,12 @@
       "dokan2.dll": [
         "f6b64d7b039a90af956c2c0873b30f6639a59878"
       ],
+      "wiitdb.txt": [
+        "f6a0cbfda6838065065e830ff40f322e6a3b6b00"
+      ],
       "codehandler.bin": [
-        "e6c0050b3c67ee26198488fbbe4a5d019c15b628",
         "63e0d5b58d41fccf0853e46e7ab2f25262d2db5d",
+        "e6c0050b3c67ee26198488fbbe4a5d019c15b628",
         "a681437a28d02a978f70646716978bcc446108ea"
       ],
       "font_japanese.bin": [
@@ -116682,9 +116704,6 @@
       ],
       "font_western.bin": [
         "483a17ff25b68a8f18cae691da99f16beefbe370"
-      ],
-      "wiitdb.txt": [
-        "f6a0cbfda6838065065e830ff40f322e6a3b6b00"
       ],
       "Readme.txt": [
         "3e304bc6ee181eb787245690c3c723f7f2622b2e"
@@ -117464,6 +117483,9 @@
       ],
       "history.db": [
         "461eb3301dcc796362094fac901a307b29e7024b"
+      ],
+      "boot.lua": [
+        "3732f1aeea740c2e5df51b0b51c6665028314ae6"
       ],
       "shaders.cfg": [
         "19a26e9ca77bab990337c639cb2e3ede4b272bcb"
@@ -127809,15 +127831,20 @@
       "ti83se.rom": [
         "8177bc6d5489d575cbfa9a004d097fc08c6f8c86"
       ],
+      "TI-994A.ctg": [
+        "1d63879573a201cab6c883327240ddc148732ccd",
+        "4e764ab67dfcbee8adc5b7d98e7b2926a008b9d8"
+      ],
+      "ti-disk.ctg": [
+        "a092153d87615d64e025c118b16a0c6ec70e6fe7",
+        "693f5b4fe1e5eb6429fd6614fb7bb14350939814"
+      ],
       "ti99_4a.zip": [
         "630b9f529b954851fbdcfeb1d91a950d4bda0547",
         "e05575b630bea7ff98b9ca1f083d745abb3110b6"
       ],
       "Gram Kracker.ctg": [
         "56dd520570cdcdd60dda2eedc8af1e02a781dcc5"
-      ],
-      "TI-994A.ctg": [
-        "4e764ab67dfcbee8adc5b7d98e7b2926a008b9d8"
       ],
       "boot0.rom": [
         "05209c994460a34a433fc1490a3eb690ee9bf3e7"
@@ -127827,9 +127854,6 @@
       ],
       "spchrom.bin": [
         "382292295c00dff348d7e17c5ce4da12a1d87763"
-      ],
-      "ti-disk.ctg": [
-        "693f5b4fe1e5eb6429fd6614fb7bb14350939814"
       ],
       "ti-pcard.ctg": [
         "c7bf5fcfea0502011dca76d12efcc242e23421b9"
@@ -128600,9 +128624,6 @@
       "eeprom.bin": [
         "ff3e7eaf715fe5612e46fc984d686ed3b115baef"
       ],
-      "titles.txt": [
-        "f6a0cbfda6838065065e830ff40f322e6a3b6b00"
-      ],
       "nwc24msg.cfg": [
         "caf8a96a36573d7e67f086f73fec675a5d1c4245"
       ],
@@ -128684,9 +128705,6 @@
       "MSXKANJI.rom": [
         "dcc3a67732aa01c4f2ee8d1ad886444a4dbafe06"
       ],
-      "MSXSP.ROM": [
-        "342e7d4bd86f3351766f460f6de3c89a40791ee0"
-      ],
       "NATIONALDISK.rom": [
         "78cd7f847e77fd8cd51a647efb2725ba93f4c471"
       ],
@@ -128698,9 +128716,6 @@
       ],
       "PAL-M.png": [
         "c78cd2ff8c2f363043a753b663af8855ee3b02f5"
-      ],
-      "iplrom30.dat": [
-        "239e9124568c862c31d9ec0605e32373ea74b86a"
       ],
       "prism_failsafe.rom": [
         "d020440638aff4d39467128413ef795677be9c23"
@@ -129353,6 +129368,9 @@
       ],
       "cgrom.tmp": [
         "8d72c5b4d63bb14c5dbdac495244d659aa1498b6"
+      ],
+      "iplrom30.dat": [
+        "239e9124568c862c31d9ec0605e32373ea74b86a"
       ],
       "zx80.zxpand.ovl": [
         "8968261beab240e8a06e8cfe9e070987d860064b"
@@ -131425,6 +131443,9 @@
       "atari_5200.rom": [
         "6ad7a1e8c9fad486fbec9498cb48bf5bc3adc530"
       ],
+      "MSXSP.ROM": [
+        "342e7d4bd86f3351766f460f6de3c89a40791ee0"
+      ],
       "N80.ROM": [
         "5b922ed9de07d2a729bdf1da7b57c50ddf08809a",
         "063609dd518c124a4fc9ba35d1bae35771666a34"
@@ -131744,6 +131765,9 @@
       ],
       "Keyboard.cfg": [
         "a80c28156b09ff2144d60424733416ca25593870"
+      ],
+      "titles.txt": [
+        "f6a0cbfda6838065065e830ff40f322e6a3b6b00"
       ],
       "Exos (198x)(Enterprise).bin": [
         "dbe6ceeb5a5d7f2a3ef9777478b26a7fbc2ba0f6"
@@ -134304,7 +134328,6 @@
       "191f19e5": "1ac2517f11360bdf993b7aa8c38ab473606f8e3a",
       "278f9220": "bda4c50891efe71da22fefad5a3c51fac6af91a4",
       "5ddebc61": "747676a713c79a8425b8e08cfc6fd02a3f4dd971",
-      "19a61bc4": "d38572d22721eb5972f671cde54201d752dffe6b",
       "6ffd0f61": "42d6d9ac933a7819adfd686f629a8e43aea4e880",
       "2c09c219": "6379a214e91738ab7b823711d85e7e6dc9214f36",
       "ae5c68a1": "fb0c36d69f66f4b10a895aa708ae37f826755257",
@@ -134507,7 +134530,6 @@
       "8a6427ac": "50ab67fb752ece8b3ded0ab0f45a84bc9b342f8f",
       "f5eb45ad": "9198d26f7a8426fb05e428c8a2ae575267942598",
       "c4fd94b9": "6148f46190d82b275ca4a573b084c82f674f4dde",
-      "31a106f6": "3732f1aeea740c2e5df51b0b51c6665028314ae6",
       "c7815c26": "924c7ebb30337de0c372dc82f8f66ecfa479ba60",
       "fa567480": "c8945a78dbac2eeb55a6b99ad595987b08f00e73",
       "a2b1cefc": "3ac6a1a669b768472faf7ca5c8c4381a73fd0904",
@@ -136470,7 +136492,6 @@
       "f1b5eedb": "7f476bffdc19d7ba2806eef40c2e8e40bdf0896c",
       "7f2bb4e3": "ca7a974714111895bbf03360078ea1008694c52e",
       "30ec9e5f": "511dc6bb2f81d0ad61fe46c6e91dce8b344fd934",
-      "e00e7479": "005cecf1a5e20b05407d55d0aad22cf81ad66c31",
       "df5810f9": "53ff273e335432fdbbff9da2762e229ec2bd5078",
       "1b5ae2e5": "b8d20aa6884878ba72c080d3f2107e09606963d3",
       "21dc5ffb": "d5ba24ba836c418f7f2d9d8b44bd337baa9e45a3",
@@ -136580,12 +136601,12 @@
       "1d745622": "a79d03ac83cb94636ca3582df0786f8082162f04",
       "a4fcab0b": "a13cf9c5cdfe8605d82150b7573652f419b30197",
       "dcbd4121": "f6b64d7b039a90af956c2c0873b30f6639a59878",
-      "ba8dfa56": "e6c0050b3c67ee26198488fbbe4a5d019c15b628",
-      "9ac7f0c7": "7fbbedcc7a1ae00414a4e9e967109cc78be1fe3b",
-      "6fe1f772": "483a17ff25b68a8f18cae691da99f16beefbe370",
       "c1f446c6": "f6a0cbfda6838065065e830ff40f322e6a3b6b00",
       "4c719966": "63e0d5b58d41fccf0853e46e7ab2f25262d2db5d",
+      "9ac7f0c7": "7fbbedcc7a1ae00414a4e9e967109cc78be1fe3b",
+      "6fe1f772": "483a17ff25b68a8f18cae691da99f16beefbe370",
       "91ac554c": "3e304bc6ee181eb787245690c3c723f7f2622b2e",
+      "ba8dfa56": "e6c0050b3c67ee26198488fbbe4a5d019c15b628",
       "32622dbd": "08509dd4567fa61baa2bae01ba8361e8ca439659",
       "d68b445b": "27d53b55779a0db2e76dea50f51e633a53609cd5",
       "62ceb7a2": "472c670d701bd233bc03afe4c9f18e22a6fd15c1",
@@ -136623,6 +136644,7 @@
       "ae991348": "c8eb9c1926baad8bbba25f97be54abae233fe715",
       "67a7b03b": "4abe45e59dc9286321a115c76c31cc7fe85e58d5",
       "54c435f2": "03c8b0d3ebeb0ecdc7f594ba6f7242a6f6e4d564",
+      "e00e7479": "005cecf1a5e20b05407d55d0aad22cf81ad66c31",
       "fd02bb00": "705d20d39a910d58a070fb86780ac58c8007591c",
       "c9511683": "276d984150c2fd2fb5ba287f2e5ceb7262dc5a95",
       "3317d2fb": "268f43cd946eea999c62f63a24eb00cb2fdc342c",
@@ -136639,9 +136661,9 @@
       "5ebc2ad4": "036e58e46d7264e2d6b08f48bde8b2d83361a661",
       "b01d11f1": "687540a168728baf3babaf2dedf74b5f1d2f56b4",
       "e0c2acb6": "f0e3d77db14b4dd11aa7cc71613097600d3e5da3",
-      "41169e0a": "cda44c87be8b01c7ba23e2ad09a516d1747dee9b",
       "7d4623fc": "56ad43fc57833eefb116af581c9ad034c53778ee",
       "9c4acf63": "a582843e7dac4735392fe82fdf3e6fef88f7ff66",
+      "41169e0a": "cda44c87be8b01c7ba23e2ad09a516d1747dee9b",
       "9aea70ac": "0f6b69ace5bcd59ba3641bb4d833e120e93eb8dd",
       "1979f565": "c06f5745e3ecc0b33e802877b46352d8304b81bc",
       "dbade009": "501c31d7614583f6b1f25eb57f67d35343e6dff8",
@@ -136885,8 +136907,10 @@
       "8031ff02": "fcfbbb25e06f58d13e762b02bfd468c834d98fc8",
       "18c0ff3e": "7b03befac4fbcef8c649048fa3ff5d095fd48dd3",
       "c1c73f18": "75d31d949614b7d4e79de676c8a4b1c68b571f0a",
+      "19a61bc4": "d38572d22721eb5972f671cde54201d752dffe6b",
       "ef00c82b": "8d5a5e5b6b179f5c27f0d9379aea1c4fd36b51f9",
       "94687e89": "461eb3301dcc796362094fac901a307b29e7024b",
+      "31a106f6": "3732f1aeea740c2e5df51b0b51c6665028314ae6",
       "750c5ab5": "19a26e9ca77bab990337c639cb2e3ede4b272bcb",
       "ef56ccf2": "d11a9f5eb62ac9382faeabb53926c0b10788cefd",
       "2c4b2ed4": "33991a884bdf2131475058cddf535a457ce50233",
@@ -140707,6 +140731,8 @@
       "4bf05697": "ef66dad3e7b2b6a86f326765e7dfd7d1a308ad8f",
       "58f14c79": "1fddd44d54f3ff12bfb548fcb03ce36b5a4f295a",
       "200dd7d0": "8177bc6d5489d575cbfa9a004d097fc08c6f8c86",
+      "0f03e166": "1d63879573a201cab6c883327240ddc148732ccd",
+      "ad7bb88d": "a092153d87615d64e025c118b16a0c6ec70e6fe7",
       "ea0cc014": "630b9f529b954851fbdcfeb1d91a950d4bda0547",
       "b3ef7ac7": "8212fbd8899a2808c7ace4559245861e5bee2c9a",
       "f1c12fb2": "56dd520570cdcdd60dda2eedc8af1e02a781dcc5",
@@ -143229,7 +143255,6 @@
       "c4e01100d92eea6424a86a20e304ac766325e2cfc05e5b242fa004841b2e5682": "1ac2517f11360bdf993b7aa8c38ab473606f8e3a",
       "4fef6a00769bffaa781376c27dfed8289a1447f0613c8d1735e5a4504000f5fd": "bda4c50891efe71da22fefad5a3c51fac6af91a4",
       "2939463c70241506780f2585a5b1408e85bf5b1496e49ed4429a2d8193112d01": "747676a713c79a8425b8e08cfc6fd02a3f4dd971",
-      "04bc41efa4be5b3cad4e7718cc8d686a3424d129bb768346333ed42491de5651": "d38572d22721eb5972f671cde54201d752dffe6b",
       "e768148656d564487c765ee673b57f5b14f09c062e71eceafd1c9b0610689be8": "42d6d9ac933a7819adfd686f629a8e43aea4e880",
       "85815cbdcddb18cf646a0b27a891e0eecafa8c0d28b041bff685fbf25ad98540": "6379a214e91738ab7b823711d85e7e6dc9214f36",
       "f10a8a309f0547cc09cb5aec92d740ca7ad35db4aa6bb50b5241743851a51f69": "fb0c36d69f66f4b10a895aa708ae37f826755257",
@@ -143432,7 +143457,6 @@
       "47edcc988587667e2ab105152cda9c3aca7be88ed5747f4e926905ae7ed2c3a2": "50ab67fb752ece8b3ded0ab0f45a84bc9b342f8f",
       "6a5c0aade582a63a3cfc2c0bbc189d9776e3dd38c770ee8460a4516ed5bcd103": "9198d26f7a8426fb05e428c8a2ae575267942598",
       "668320eff3209f7305a1541d2eb7b5ce1b4cb013aae9760f13504e0f7ce18ce5": "6148f46190d82b275ca4a573b084c82f674f4dde",
-      "8466722f2a08bba1ce9a79488e2d71133c6e9364b36e9cbb07be83085b769859": "3732f1aeea740c2e5df51b0b51c6665028314ae6",
       "52665e28631009519623143fc5a805b268ed99473c82930b674aa6865eea8d3e": "924c7ebb30337de0c372dc82f8f66ecfa479ba60",
       "1a0ff8b83c226dcc60c4208caed30733701636821a373dd3e696e2c130d2156b": "c8945a78dbac2eeb55a6b99ad595987b08f00e73",
       "0dd7d6e78dacd778bca5d398394ceb50a83e764e59ea4f9eb69592f5b083dc25": "3ac6a1a669b768472faf7ca5c8c4381a73fd0904",
@@ -145395,7 +145419,6 @@
       "6cd2bc21890426b5430d44b28a89289bcc6fc9ecd632bb3a8eafb6c8b818499c": "7f476bffdc19d7ba2806eef40c2e8e40bdf0896c",
       "27ffa5fdf1634f7be2734d2eff2d9dce0cca71c2832685e0a682388731dc5c60": "ca7a974714111895bbf03360078ea1008694c52e",
       "e7297a2e333bb1882bcf82d2a109a2ab033715cce1bba4934f42ec68370f0077": "511dc6bb2f81d0ad61fe46c6e91dce8b344fd934",
-      "ea3f65c6d1b18abe23b42a3d9ddf48d787df287feef6cfac52ca6109d8852d97": "005cecf1a5e20b05407d55d0aad22cf81ad66c31",
       "e8213fa871bebc8fc883be3bbccf111c8aec1f84063e05a24850efc735312e08": "53ff273e335432fdbbff9da2762e229ec2bd5078",
       "372e33cccb520a987983dd897c51c6b7e609f16badd67d056a95799a7f768566": "b8d20aa6884878ba72c080d3f2107e09606963d3",
       "af535e4b871b188957a7169ed883f6f8a209f0908e5b7aff17755605c8d07857": "d5ba24ba836c418f7f2d9d8b44bd337baa9e45a3",
@@ -145505,12 +145528,12 @@
       "7ee7a8028e33d530ff8bf82018f489932c73711778ce56ce41e5108fcdc868db": "a79d03ac83cb94636ca3582df0786f8082162f04",
       "82e02a1c48ef74e449b75081d3d118bd935b81d52634dd7c6a8c95686fd83fd1": "a13cf9c5cdfe8605d82150b7573652f419b30197",
       "75600aba867acbdfdb85fcd142b524da769bdc611b855a760aeb0c6e2eaae17a": "f6b64d7b039a90af956c2c0873b30f6639a59878",
-      "2b2ff0716aeb9b806cc61181e559041312957f25f04c435bd7da80a78917b33b": "e6c0050b3c67ee26198488fbbe4a5d019c15b628",
-      "38f9f59d505bc4e2d86b0196706195f33ad72b7fe9d029cf263072cde19d044f": "7fbbedcc7a1ae00414a4e9e967109cc78be1fe3b",
-      "4ad991be2b0aa305f09b90a79fc50f57833b30b008890b5ef1336cc3d9d0bae0": "483a17ff25b68a8f18cae691da99f16beefbe370",
       "3c042d3a3bac17f6a3a989c549fe127de1ba38dfdee9ffd6c13d5379238e5c13": "f6a0cbfda6838065065e830ff40f322e6a3b6b00",
       "4e72048c6bd59cc2de556aea4d63ef4c6b21a12d9c6347c52e8eca89ff2150db": "63e0d5b58d41fccf0853e46e7ab2f25262d2db5d",
+      "38f9f59d505bc4e2d86b0196706195f33ad72b7fe9d029cf263072cde19d044f": "7fbbedcc7a1ae00414a4e9e967109cc78be1fe3b",
+      "4ad991be2b0aa305f09b90a79fc50f57833b30b008890b5ef1336cc3d9d0bae0": "483a17ff25b68a8f18cae691da99f16beefbe370",
       "e5a888912968050c6c1d46d1c364c324684e1d15aaa62cfe36cf7fce2c687b21": "3e304bc6ee181eb787245690c3c723f7f2622b2e",
+      "2b2ff0716aeb9b806cc61181e559041312957f25f04c435bd7da80a78917b33b": "e6c0050b3c67ee26198488fbbe4a5d019c15b628",
       "13dd5b6b2682defd3b23afd8e2983d00edc25bd4dc28a8389380dee0ec45a4a5": "08509dd4567fa61baa2bae01ba8361e8ca439659",
       "057b6f840c19b41ce080318bc7e717e2b910965ce72ab781a7e319017636c38e": "27d53b55779a0db2e76dea50f51e633a53609cd5",
       "ed94af416c47ed3bc2c944ebcd1d734b8935d9697feb0f7039d8fea3ec514c18": "472c670d701bd233bc03afe4c9f18e22a6fd15c1",
@@ -145548,6 +145571,7 @@
       "654281fb002aa1a086ee979d694e9d6443864bdc8740d20188baf8e125e386fa": "c8eb9c1926baad8bbba25f97be54abae233fe715",
       "e31c519e6b22683cebefc5c2358b2b7ddad10964a1e478fa3eba01f3ab5adb17": "4abe45e59dc9286321a115c76c31cc7fe85e58d5",
       "15ff418a0fc877886015cc781c9c3b0810a870bee5803d76741bbcbcc540b9e5": "03c8b0d3ebeb0ecdc7f594ba6f7242a6f6e4d564",
+      "ea3f65c6d1b18abe23b42a3d9ddf48d787df287feef6cfac52ca6109d8852d97": "005cecf1a5e20b05407d55d0aad22cf81ad66c31",
       "ac3d88c299e304faf76cda2b305510d5a6c19c06319e53ee54fdc18b028a860f": "705d20d39a910d58a070fb86780ac58c8007591c",
       "2d765ffb2bef04082138e29e8ba7f7cc1c788c6415226d1aab1b7eb5bbd0431f": "276d984150c2fd2fb5ba287f2e5ceb7262dc5a95",
       "710e9e43ba7115e80b3e34c18072d838ef59f08f096204a7c5c9bf8704047b7f": "268f43cd946eea999c62f63a24eb00cb2fdc342c",
@@ -145564,9 +145588,9 @@
       "a184f3e62cf87caa00d1e9c044587cb5244567369a5edab5c1dbec43edba3ff3": "036e58e46d7264e2d6b08f48bde8b2d83361a661",
       "32db4e009959b5606e3d3153d9cd4c0e1a84312bf07848b595eaec0190ea6b9b": "687540a168728baf3babaf2dedf74b5f1d2f56b4",
       "8b39bd12aae661165fc35eb2627c1ea4d7cc26fef179fe2e772abb412bf94e5b": "f0e3d77db14b4dd11aa7cc71613097600d3e5da3",
-      "9f63333b425c697048c6804d7f30f9a653570143eb897758c7c9fb9d3d8e119c": "cda44c87be8b01c7ba23e2ad09a516d1747dee9b",
       "939ac6a08f181b926ed074f83342ff4043ec7237267652ff163650f23852de61": "56ad43fc57833eefb116af581c9ad034c53778ee",
       "32e45e1a9cd471bdcf7c0f1b77a425cdda265726e58e2c5a703c27bb343a52ec": "a582843e7dac4735392fe82fdf3e6fef88f7ff66",
+      "9f63333b425c697048c6804d7f30f9a653570143eb897758c7c9fb9d3d8e119c": "cda44c87be8b01c7ba23e2ad09a516d1747dee9b",
       "bb046bc18f6e1e78713e5d6f5a5c58a5b4969fe1488f41df6ef9ee0c1f82dcaf": "0f6b69ace5bcd59ba3641bb4d833e120e93eb8dd",
       "db1955fb12093a469f62f30ae4995663436707149a0bd0212494840b2f52c383": "c06f5745e3ecc0b33e802877b46352d8304b81bc",
       "adc966ee2b7e1d61515f49890ddd67cebf6335fe0e8cfb6f6fc6fa2a69a9db11": "501c31d7614583f6b1f25eb57f67d35343e6dff8",
@@ -145810,8 +145834,10 @@
       "fcf442b26c492253dfb8d2146e215b7b84b3ba87443face9c94a1e9474aa3ca4": "fcfbbb25e06f58d13e762b02bfd468c834d98fc8",
       "0add32bcbd0e5b350437fa9d138b3c232368e36d8009852479fdb09d9db31113": "7b03befac4fbcef8c649048fa3ff5d095fd48dd3",
       "6e25b5a9021c18b738fbb0465446b4055bb2eff225a27a5827710ad464129631": "75d31d949614b7d4e79de676c8a4b1c68b571f0a",
+      "04bc41efa4be5b3cad4e7718cc8d686a3424d129bb768346333ed42491de5651": "d38572d22721eb5972f671cde54201d752dffe6b",
       "fa979a25c0c9db737a75b60f4ee2ab698bf8d8c2bc1fc44a7362467ed941e7df": "8d5a5e5b6b179f5c27f0d9379aea1c4fd36b51f9",
       "9026af08979a8a1e40390f61d91267d0a3dc9676fe86765ccd2060be0d3d146f": "461eb3301dcc796362094fac901a307b29e7024b",
+      "8466722f2a08bba1ce9a79488e2d71133c6e9364b36e9cbb07be83085b769859": "3732f1aeea740c2e5df51b0b51c6665028314ae6",
       "c1d5cefa6fecdb77c239d008ec08b57ddfbcc97e3194fac689c3ea0fbbecf565": "19a26e9ca77bab990337c639cb2e3ede4b272bcb",
       "ef94fa078d9a451ede98565ed953d3dd6e43a4135b9ca1abcd95172070c85dc4": "d11a9f5eb62ac9382faeabb53926c0b10788cefd",
       "367d8ed92cab8ceba681077eb497497dd7efe0ce451b56dfc7f277c6e120d8bc": "33991a884bdf2131475058cddf535a457ce50233",
@@ -149632,6 +149658,8 @@
       "f8f511f9fecff51d7561ad2cc4195fc89f2829db94616cf08c302ea1ba64d8be": "ef66dad3e7b2b6a86f326765e7dfd7d1a308ad8f",
       "85363d8e699fe0ef3d73fe633a9f73078f8292a33b6150aa7abb1304af7485cc": "1fddd44d54f3ff12bfb548fcb03ce36b5a4f295a",
       "55c318616fad4fc32335c59f97fbca21f0a02424bece13b088cc11e0af73d993": "8177bc6d5489d575cbfa9a004d097fc08c6f8c86",
+      "b115b5e8a0575f98d619b497f58c699741b4cde0a9e8f341ec5c2eb2faac4450": "1d63879573a201cab6c883327240ddc148732ccd",
+      "52079856886a1a8d982828d1cca0d9adcade31f3655bc0bfb209e6059be7abb8": "a092153d87615d64e025c118b16a0c6ec70e6fe7",
       "5b4dc460e53715e422e9dd86e4f7e7f323cc5320d35213dcd56b960fb8876003": "630b9f529b954851fbdcfeb1d91a950d4bda0547",
       "172db86fc7f03808084fcf846ae1e53143d2d26ec6a72f437b9726c6b4295359": "8212fbd8899a2808c7ace4559245861e5bee2c9a",
       "3e63f6a54a8001ddd75ecde70572c7030776d79817f46ee0dfcf5274dd03047f": "56dd520570cdcdd60dda2eedc8af1e02a781dcc5",
@@ -152747,9 +152775,6 @@
       "plugins/autofire/plugin.json": [
         "6148f46190d82b275ca4a573b084c82f674f4dde"
       ],
-      "plugins/boot.lua": [
-        "3732f1aeea740c2e5df51b0b51c6665028314ae6"
-      ],
       "plugins/cheat/cheat_json.lua": [
         "924c7ebb30337de0c372dc82f8f66ecfa479ba60"
       ],
@@ -155654,9 +155679,6 @@
       "pcsx2/resources/shaders/opengl/shadeboost.glsl": [
         "511dc6bb2f81d0ad61fe46c6e91dce8b344fd934"
       ],
-      "pcsx2/resources/shaders/vulkan/cas.glsl": [
-        "005cecf1a5e20b05407d55d0aad22cf81ad66c31"
-      ],
       "pcsx2/resources/shaders/vulkan/convert.glsl": [
         "53ff273e335432fdbbff9da2762e229ec2bd5078"
       ],
@@ -155897,6 +155919,9 @@
       "resources/shaders/opengl/shadeboost.glsl": [
         "03c8b0d3ebeb0ecdc7f594ba6f7242a6f6e4d564"
       ],
+      "resources/shaders/vulkan/cas.glsl": [
+        "005cecf1a5e20b05407d55d0aad22cf81ad66c31"
+      ],
       "resources/shaders/vulkan/convert.glsl": [
         "705d20d39a910d58a070fb86780ac58c8007591c"
       ],
@@ -155945,14 +155970,14 @@
       "shaders/CRT-Hyllian/gpuCore.slf": [
         "f0e3d77db14b4dd11aa7cc71613097600d3e5da3"
       ],
-      "shaders/CRT-Hyllian/gpuCore.slv": [
-        "cda44c87be8b01c7ba23e2ad09a516d1747dee9b"
-      ],
       "shaders/CRT-Hyllian-3D/gpuCore.ini": [
         "56ad43fc57833eefb116af581c9ad034c53778ee"
       ],
       "shaders/CRT-Hyllian-3D/gpuCore.slf": [
         "a582843e7dac4735392fe82fdf3e6fef88f7ff66"
+      ],
+      "shaders/CRT-Hyllian-3D/gpuCore.slv": [
+        "cda44c87be8b01c7ba23e2ad09a516d1747dee9b"
       ],
       "shaders/CRT-Lottes/gpuCore.ini": [
         "0f6b69ace5bcd59ba3641bb4d833e120e93eb8dd"
@@ -156313,6 +156338,9 @@
       ],
       "data/history.db": [
         "461eb3301dcc796362094fac901a307b29e7024b"
+      ],
+      "plugins/boot.lua": [
+        "3732f1aeea740c2e5df51b0b51c6665028314ae6"
       ],
       "Firmware/lh5323m1.bin": [
         "f145c87fcee0001521ab24f33ef172cd3053fdfb"
@@ -156952,20 +156980,16 @@
         "5e3b4ebae221b7ad02f3eaa052178cb39d1d9bbe"
       ],
       "roms/430vx/55XWUQ0E.BIN": [
-        "ce8d8bbaed71ab1c1c40443bcc43770b3ddaf08d",
-        "2a411c35e2385983fe3bb5f771f0237d034dff32"
+        "ce8d8bbaed71ab1c1c40443bcc43770b3ddaf08d"
       ],
       "roms/86C732P.bin": [
-        "b5c2249f7e4b328b8d099e284393c5c316c11882",
-        "0f80bbcb8f310e449d56e23118a230aa88d82bc2"
+        "b5c2249f7e4b328b8d099e284393c5c316c11882"
       ],
       "roms/86c375_1.bin": [
-        "228a2d644e1732cb5a2eb1291608c7050cf39229",
-        "3494864cf6f00720d1a65d97f8574b8dee0d9c89"
+        "228a2d644e1732cb5a2eb1291608c7050cf39229"
       ],
       "roms/86c764x1.bin": [
-        "5af93aab8000e9bb884da9eb855c6c5fe25c0ac1",
-        "a308b15f93da34961c0141ec95b98c211557e2d5"
+        "5af93aab8000e9bb884da9eb855c6c5fe25c0ac1"
       ],
       "roms/9440.vbi": [
         "3ad8e2e344fda322741e693fe9520b1500d3475b"
@@ -156992,8 +157016,7 @@
         "2bb22bbaa7d2b61bce403f3163197abef85abdaa"
       ],
       "roms/s3virge.bin": [
-        "78de1b410c171c037735d08c7f1ca3798e3e8425",
-        "59997202571b4ccb021c7b71622e57742471374e"
+        "78de1b410c171c037735d08c7f1ca3798e3e8425"
       ],
       ".variants/cdimono1.zip.e6714b3d": [
         "e6714b3d5fdc7023348435a77a016b763e0992b1"
@@ -165122,6 +165145,12 @@
       ".variants/coco2.zip": [
         "f2fa8d8e940f1d91a1b1624013df5dca0bb1ee44"
       ],
+      ".variants/TI-994A.ctg.fb1ca5c5": [
+        "1d63879573a201cab6c883327240ddc148732ccd"
+      ],
+      ".variants/ti-disk.ctg.0281841b": [
+        "a092153d87615d64e025c118b16a0c6ec70e6fe7"
+      ],
       ".variants/ti99_4a.zip": [
         "630b9f529b954851fbdcfeb1d91a950d4bda0547"
       ],
@@ -165265,16 +165294,13 @@
         "973e10840db683cf3faf61bd443090786b3a9f04",
         "93407ea10d2f30ab96a314d8eca44fe160aea734",
         "7afc276cb118adff72e4f16698f94bf3b2c64146",
-        "f6a0cbfda6838065065e830ff40f322e6a3b6b00",
         "9d789166e3caf28e4742fe933d962e99618c633d",
         "32760893ce06dbe3930627755ba065cc3d8ec6ca",
         "df48902f5f12af8867ae1a87f255145f0e5e0774",
         "dcc3a67732aa01c4f2ee8d1ad886444a4dbafe06",
-        "342e7d4bd86f3351766f460f6de3c89a40791ee0",
         "78cd7f847e77fd8cd51a647efb2725ba93f4c471",
         "7ed7c55e0359737ac5e68d38cb6903f9e5d7c2b6",
         "c3efedda7ab947a06d9345f7b8261076fa7ceeef",
-        "239e9124568c862c31d9ec0605e32373ea74b86a",
         "b2e1955d957a475de2411770452eff4ea19f4cee",
         "a6120aed50831c9c0d95dbdf707820f601d9452e",
         "5130243429b40b01a14e1304d0394b8459a6fbae",
@@ -165304,6 +165330,7 @@
         "56c1b93da6b660bf393fbf48ca47569000ef4047",
         "df94c5b4d47eb3cc404d88b33a8fda237eaf4720",
         "1c1a0d8c9f4c446ccd7470516b215ddca5052fb2",
+        "239e9124568c862c31d9ec0605e32373ea74b86a",
         "7b143ee964e9ada89d1f9e88f0bd48d919184cfc",
         "4f4b11ec22326280bdb96e3baf9db4b4cb1d02c5",
         "80080644289ed93d71a1103992a154cc9802b2fa",
@@ -165562,6 +165589,7 @@
         "decde89fbae90adb591ad2fc553d35f49030c129",
         "a107db7f16a1129cf9d933c9cf4f013b068c9e82",
         "6ad7a1e8c9fad486fbec9498cb48bf5bc3adc530",
+        "342e7d4bd86f3351766f460f6de3c89a40791ee0",
         "5b922ed9de07d2a729bdf1da7b57c50ddf08809a",
         "deef0cc2a9734ba891a6d6c022aa70ffc66f783e",
         "77511fc58798404701f66b6bbc9cbde06596eba7",
@@ -165641,6 +165669,7 @@
         "aff9959b402ae0ead377b87566cf0e7b889e3d9e",
         "7ee09ee05f522312b723a14e56d9e0f7f5333b7a",
         "a80c28156b09ff2144d60424733416ca25593870",
+        "f6a0cbfda6838065065e830ff40f322e6a3b6b00",
         "dbe6ceeb5a5d7f2a3ef9777478b26a7fbc2ba0f6",
         "c6241e1c248193108ce38b9a8e9dd33972cf47ba",
         "08da5017cb95c9f5edf07a66903eef414621cd7d",
@@ -165767,65 +165796,11 @@
       "mlc01/sys/title/0005001b/10054000/content/scerts/CACERT_NINTENDO_CLASS2_CA_G3.der": [
         "501b5c42652b659e0d0ef607c4337e457080e5a2"
       ],
-      "BeebFile/BBCINT/DNFS.rom": [
-        "7e3c536baeae84d6498a14e8405319e01ee78232"
-      ],
-      "BeebFile/BPLUS/WDFS.rom": [
-        "387d2468c6e1360f5b531784ce95d5f71a50c2b5"
-      ],
       "BeebFile/Master ET/ANFS425.rom": [
         "14f75d36ffe9af14aaac42df55b4fe3729ba75cf"
       ],
-      "BeebFile/Master ET/BASIC4.rom": [
-        "c45fd3c0abdcd32b78d2288addd2a777b19e9a1d"
-      ],
-      "C64DTV/gtk3_sym.vkm": [
-        "7fe8d706b2b2434fb276709c5f509dc1453429a3"
-      ],
-      "SCPU64/gtk3_sym.vkm": [
-        "7fe8d706b2b2434fb276709c5f509dc1453429a3"
-      ],
-      "CBM-II/pepto-pal.vpl": [
-        "d4d062dc812a8e136a4a8696959672890e5b9543"
-      ],
-      "SCPU64/pepto-pal.vpl": [
-        "88a2209694f64f7167f239646aedcd0d09dc51bb"
-      ],
-      "x1box/eeprom.bin": [
-        "ff3e7eaf715fe5612e46fc984d686ed3b115baef"
-      ],
-      "system/console.keys": [
-        "721ca59a261d04af13fb84497ad79b6d8c6b7609"
-      ],
-      "system/key_retail.bin": [
-        "bbdbb49a917d14f7a997d327ba40d40c39e606ce"
-      ],
-      "resources/shaders/vulkan/cas.glsl": [
-        "005cecf1a5e20b05407d55d0aad22cf81ad66c31"
-      ],
-      "shaders/AA_Shader_v2.0_w_Natural_Vision_Brightness/gpuCore.slv": [
-        "dcd9f24f47443ec8421e48fef7e37fd8a52c4782"
-      ],
-      "shaders/Brightness/gpuCore.slv": [
-        "073a34b093054d217029f7314a2b8142e1dac6b7"
-      ],
-      "shaders/CRT-Lottes/gpuCore.slv": [
-        "073a34b093054d217029f7314a2b8142e1dac6b7"
-      ],
-      "shaders/Grayscale/gpuCore.slv": [
-        "073a34b093054d217029f7314a2b8142e1dac6b7"
-      ],
-      "shaders/CRT-Hyllian-3D/gpuCore.slv": [
-        "cda44c87be8b01c7ba23e2ad09a516d1747dee9b"
-      ],
       "C/msdash.xbe": [
         "4d8d6b1d3f7ace05cbaf03565382b0e6e40c706c"
-      ],
-      "system/dev.keys": [
-        "fc916ff462b842983d4061d09230163ac4b38f16"
-      ],
-      "plugins/hiscore/hiscore.dat": [
-        "d38572d22721eb5972f671cde54201d752dffe6b"
       ],
       "DefaultSounds/20pSlide.wav": [
         "f92d854f017d154c9ae0a2351629876515ba48d7"
@@ -165875,134 +165850,17 @@
       "DefaultSounds/TokenInRejected.wav": [
         "37f8acd9778cbc81f11c08f129f3f726cc9964f4"
       ],
-      "Machines/MSX - C-BIOS/cbios_logo_msx1.rom": [
-        "95fe138745f5e627b021085c7e4629a6dfe6f93a"
-      ],
-      "Machines/MSX - C-BIOS/cbios_main_msx1.rom": [
-        "a49bcf7a5a1115815f730782a1fd7d1c79ce29e7"
-      ],
-      "Machines/MSX2 - C-BIOS/cbios_logo_msx2.rom": [
-        "6fc989ae715fe8492700a9d15934113d910aed36"
-      ],
-      "Machines/MSX2 - C-BIOS/cbios_main_msx2.rom": [
-        "0808d0486f77a44d3aa08cd77828a3748a356b8d"
-      ],
-      "Machines/MSX2 - C-BIOS/cbios_sub.rom": [
-        "565143f7c6fe0ffa12ec3069048113f44759d91a"
-      ],
-      "Machines/MSX2+ - C-BIOS/cbios_sub.rom": [
-        "565143f7c6fe0ffa12ec3069048113f44759d91a"
-      ],
-      "Machines/MSX2+ - C-BIOS/cbios_logo_msx2+.rom": [
-        "6e55cfc48d0d6ee57b041cb09427f614fb6a1910"
-      ],
-      "Machines/MSX2+ - C-BIOS/cbios_main_msx2+.rom": [
-        "c5edc3b289dea120fe60ad38596a51c2e28838aa"
-      ],
-      "Machines/MSX2+ - C-BIOS/cbios_music.rom": [
-        "5c5eb001e6a1fe29edb7abd428a3967bb388e5db"
-      ],
-      "Machines/Shared Roms/ARAB1.ROM": [
-        "0287b2ec897b9196788cd9f10c99e1487d7adbbb"
-      ],
-      "Machines/Shared Roms/ARABIC.rom": [
-        "2c9600c6e0025fee10d249e97448ecaa37e38c42"
-      ],
-      "Machines/Shared Roms/BEERIDE.ROM": [
-        "077bdfff644b931b6a13bab8ab847aee766d163e"
-      ],
       "Machines/Shared Roms/FMPAC.rom": [
         "9d789166e3caf28e4742fe933d962e99618c633d"
-      ],
-      "Machines/Shared Roms/GCVMX80.ROM": [
-        "977fed1135b6cc73e765b47f51570fc00acd5b79"
-      ],
-      "Machines/Shared Roms/HANGUL.rom": [
-        "965f4982790f1817bcbabbb38c8777183b231a55"
-      ],
-      "Machines/Shared Roms/MICROSOLDISK.ROM": [
-        "f59d33311c95edc0168445f74eddd8a6772aa6a0"
       ],
       "Machines/Shared Roms/MOONSOUND.rom": [
         "32760893ce06dbe3930627755ba065cc3d8ec6ca"
       ],
-      "Machines/Shared Roms/MSX2AR.ROM": [
-        "35195ab67c289a0b470883464df66bc6ea5b00d3"
-      ],
-      "Machines/Shared Roms/MSX2AREXT.ROM": [
-        "ebb76f9061e875365023523607db610f2eda1d26"
-      ],
-      "Machines/Shared Roms/MSX2BR.rom": [
-        "9c43106dba3ae2829e9a11dffa9d000ed6d6454c"
-      ],
-      "Machines/Shared Roms/MSX2BREXT.rom": [
-        "4f2a7e0172f0214f025f23845f6e053d0ffd28e8"
-      ],
-      "Machines/Shared Roms/MSX2FR.rom": [
-        "3926cdd91fa89657a811463e48cfbdb350676e51"
-      ],
-      "Machines/Shared Roms/MSX2FREXT.rom": [
-        "792e6b2814ab783d06c7576c1e3ccd6a9bbac34a"
-      ],
-      "Machines/Shared Roms/MSX2G.rom": [
-        "b17d9bea0eb16a1aa2d0ccbd7c9488da9f57698e"
-      ],
-      "Machines/Shared Roms/MSX2GEXT.rom": [
-        "4ab7b2030d022f5486abaab22aaeaf8aa23e05f3"
-      ],
-      "Machines/Shared Roms/MSX2HAN.rom": [
-        "87936f808423dddfd00629056d6807b4be1dc63e"
-      ],
       ".variants/MSX2.ROM.0081ea0d": [
         "0081ea0d25bc5cd8d70b60ad8cfdc7307812c0fd"
       ],
-      "Machines/Shared Roms/MSX2JEXT.rom": [
-        "0fbd45ef3dd7bb82d4c31f1947884f411f1ca344"
-      ],
-      "Machines/Shared Roms/MSX2KR.rom": [
-        "affa3c5cd8db79a1450ad8a7f405a425b251653d"
-      ],
-      "Machines/Shared Roms/MSX2KREXT.rom": [
-        "b6d3649a6647fa9f6bd61efc317485a20901128f"
-      ],
       ".variants/MSX2P.ROM.e90f80a6": [
         "e90f80a61d94c617850c415e12ad70ac41e66bb7"
-      ],
-      "Machines/Shared Roms/MSX2PMUS.rom": [
-        "6354ccc5c100b1c558c9395fa8c00784d2e9b0a3"
-      ],
-      "Machines/Shared Roms/MSX2R.rom": [
-        "0f851ee7a1cf79819f61cc89e9948ee72a413802"
-      ],
-      "Machines/Shared Roms/MSX2R2.ROM": [
-        "ebb7eb540a390509edfd36c84288ba85e63f2d1f"
-      ],
-      "Machines/Shared Roms/MSX2REXT.rom": [
-        "03bf6d2ac86f5c9ab618e155442787c700f99fed"
-      ],
-      "Machines/Shared Roms/MSX2SE.rom": [
-        "1b70a195a00b1fc4995766390f39d3ba884b5148"
-      ],
-      "Machines/Shared Roms/MSX2SP.rom": [
-        "4811956f878c3e03da46317f787cdc4bebc86f47"
-      ],
-      "Machines/Shared Roms/MSX2SPEXT.rom": [
-        "1e9a955943aeea9b1807ddf1250ba6436d8dd276"
-      ],
-      "Machines/Shared Roms/MSXAR.ROM": [
-        "5e094fca95ab8e91873ee372a3f1239b9a48a48d"
-      ],
-      "Machines/Shared Roms/MSXBR.rom": [
-        "d6720845928ee848cfa88a86accb067397685f02"
-      ],
-      "Machines/Shared Roms/MSXFR.rom": [
-        "9eaad185efc8e224368d1db4949eb9659c26fb2c"
-      ],
-      "Machines/Shared Roms/MSXG.rom": [
-        "38a645febd0e0fe86d594f27c2d14be995acc730"
-      ],
-      "Machines/Shared Roms/MSXHAN.rom": [
-        "d41676fde0a3047792f93c4a41509b8749e55e74"
       ],
       "Machines/Shared Roms/MSXJ.rom": [
         "df48902f5f12af8867ae1a87f255145f0e5e0774"
@@ -166010,26 +165868,8 @@
       "Machines/Shared Roms/MSXKANJI.rom": [
         "dcc3a67732aa01c4f2ee8d1ad886444a4dbafe06"
       ],
-      "Machines/Shared Roms/MSXKR.rom": [
-        "171b587bd5a947a13f3114120b6e7baca3b57d78"
-      ],
-      "Machines/Shared Roms/MSXR.rom": [
-        "4f3114e96d7b892911e3dccf1eece712be26f396"
-      ],
-      "Machines/Shared Roms/MSXSE.ROM": [
-        "87f4d0fa58cfe9cef818a3185df2735e6da6168c"
-      ],
-      "Machines/Shared Roms/MSXSP.rom": [
-        "342e7d4bd86f3351766f460f6de3c89a40791ee0"
-      ],
       "Machines/Shared Roms/NATIONALDISK.rom": [
         "78cd7f847e77fd8cd51a647efb2725ba93f4c471"
-      ],
-      "Machines/Shared Roms/NOVAXIS.rom": [
-        "352ec8c99fe1397a88ecb3aee6dbb4d121c818e9"
-      ],
-      "Machines/Shared Roms/PAINT.rom": [
-        "ace202e87337fbc54fea21e22c0b3af0abe6f4ae"
       ],
       "Machines/Shared Roms/PANASONICDISK.rom": [
         "7ed7c55e0359737ac5e68d38cb6903f9e5d7c2b6"
@@ -166040,179 +165880,8 @@
       ".variants/RS232.ROM.4e9384c9": [
         "4e9384c9d137f0ab65ffc5a78f04cd8c9df6c8b7"
       ],
-      "Machines/Shared Roms/SUNRISEIDE.rom": [
-        "1c79c8fcfd661394f91be94b218955c84cabd742"
-      ],
-      "Machines/Shared Roms/SWP.rom": [
-        "4b4508131dca6d811694ae6379f41364c477de58"
-      ],
-      "Machines/Shared Roms/XBASIC2.rom": [
-        "47370bec7ca1f0615a54eda548b07fbc0c7ef398"
-      ],
-      "Machines/Shared Roms/nowindDos1.rom": [
-        "1d4c09166755c6569ff0ed3878bbf1b22d7e3864"
-      ],
-      "Machines/Shared Roms/nowindDos2.rom": [
-        "8afd1ec5843ecfdcbff11497fa8c55b870c0c6f5"
-      ],
-      "assets/fonts/Roboto-Regular.ttf": [
-        "00d62fbdc8d5dec4c659005e116d0ba2ee63b547"
-      ],
-      "assets/fonts/RobotoMono-Medium.ttf": [
-        "9056e59b69c6f1160fdfb92a0773f17f6307f3ad"
-      ],
       "assets/icons/flags/PAL-M.png": [
         "c78cd2ff8c2f363043a753b663af8855ee3b02f5"
-      ],
-      "assets/shaders/common/ffx_a.h": [
-        "726370c10154ad092c15c251b98c79185e980c7c"
-      ],
-      "assets/shaders/common/ffx_cas.h": [
-        "a1d1a687577f7a607fda35bc88950f57c2129ca5"
-      ],
-      "assets/sounds/achievements/lbsubmit.wav": [
-        "5ad1e110dcf0ffd26405981398892a82e4f3bad1"
-      ],
-      "assets/sounds/achievements/message.wav": [
-        "c54f04b63ac6f04e0a0944ef260b5497e4494dbd"
-      ],
-      "roms/5429.vbi": [
-        "8060cd4b49052572bb5ec929f8ad21e2addce237"
-      ],
-      "roms/ami486/ami486.BIN": [
-        "4e1d4a0deec702679961ffde470f8929d903bd5c"
-      ],
-      "roms/amixt/AMI_8088_BIOS_31JAN89.BIN": [
-        "cb30f01c46dad83343999c609d6f82092e2e8f54"
-      ],
-      "roms/awe32.raw": [
-        "6ac3c1317c1acb83902397d7767763cca4de357a"
-      ],
-      "roms/bahamas64.BIN": [
-        "ac0f6402450bcf077aa95255e66e4c4c3cdd9ed8"
-      ],
-      "roms/cmdpc30/commodore pc 30 iii even.bin": [
-        "50237ffea703b867de426ab9ebc2af46bac1d0e1"
-      ],
-      "roms/cmdpc30/commodore pc 30 iii odd.bin": [
-        "27d6ad9554be86359d44331f25591e3122a31519"
-      ],
-      "roms/deskpro386/109591-005.U13.bin": [
-        "29a0e73d6b1df7dfa6c7ecb3f454bac9150017a1"
-      ],
-      "roms/deskpro386/109592-005.U11.bin": [
-        "c2d2c1660f3f4a5e70add7f294393f51c7f89129"
-      ],
-      "roms/dtk/DTK_ERSO_2.42_2764.bin": [
-        "02fa057f2c22ab199a8d9795ab1ae570f2b13a36"
-      ],
-      "roms/dtk386/3cto001.bin": [
-        "94aefc745b51015426a73015ab7892b88e7c8bcf"
-      ],
-      "roms/endeavor/1006CB0_.BI1": [
-        "d300c52e2c2e9d4c3b9c2dcc1c3000567792a1e4"
-      ],
-      "roms/endeavor/1006CB0_.BIO": [
-        "04e92db350973bb5977d642bd4b8988d2a8a7b42"
-      ],
-      "roms/europc/50145": [
-        "54430d4d0462860860397487c9c109e6f70db8e3"
-      ],
-      "roms/genxt/pcxt.rom": [
-        "a641b505bbac97b8775f91fe9b83d9afdf4d038f"
-      ],
-      "roms/ibm_vga.bin": [
-        "7b8b0e22ecd002d43d5ed1bb9f9a63d9b9948032"
-      ],
-      "roms/ibmpc/basicc11.f6": [
-        "64769b7a8b60ffeefa04e4afbec778069a2840c9"
-      ],
-      "roms/ibmpc/basicc11.f8": [
-        "082ae803994048e225150f771794ca305f73d731"
-      ],
-      "roms/ibmpc/basicc11.fa": [
-        "c9e0529470edf04da093bb8c8ae2536c688c1a74"
-      ],
-      "roms/ibmpc/basicc11.fc": [
-        "5134dd64721cbf093d059ee5d3fd09c7f86604c7"
-      ],
-      "roms/ibmpc/pc102782.bin": [
-        "40fce6a94dda4328a8b608c7ae2f39d1dc688af4"
-      ],
-      "roms/jukopc/000o001.bin": [
-        "0b343f3028ca06c9e6dc69427d1b15a47c74b9fc"
-      ],
-      "roms/ltxt/27C64.bin": [
-        "62f17c408be0036d00a182e94c5c88b83d46b625"
-      ],
-      "roms/lxt3/27C64D.bin": [
-        "59b1f8dd6fe981ef9a7700adebf6e1adda7cee90"
-      ],
-      "roms/megapc/211253-bios hi.u19": [
-        "376d483db2bd1c775d46424e1176b24779591525"
-      ],
-      "roms/megapc/41651-bios lo.u18": [
-        "14fd39ec12df7fae99ccdb0484ee097d93bf8d95"
-      ],
-      "roms/olivetti_m24/olivetti_m24_version_1.43_high.bin": [
-        "1066dcc849e6289b5ac6372c84a590e456d497a6"
-      ],
-      "roms/olivetti_m24/olivetti_m24_version_1.43_low.bin": [
-        "13423011a9bae3f3193e8c199f98a496cab48c0f"
-      ],
-      "roms/p55t2p4/0207_J2.BIN": [
-        "a8870f2f3767cda8e28662c7880b87e904c2e11d"
-      ],
-      "roms/p55va/VA021297.BIN": [
-        "b9e665097c09a9b8cb95fb3261d8494bb2a57a0a"
-      ],
-      "roms/pc1640/40100": [
-        "98302006ee38a17c09bd75504cc18c0649174e33"
-      ],
-      "roms/pc200/pc20v2.0": [
-        "8b4b2afea543b96b45d6a30365281decc15f2932"
-      ],
-      "roms/pc200/pc20v2.1": [
-        "4135102a491b25fc659d70b957e07649f3eacf24"
-      ],
-      "roms/pc2086/40179.ic129": [
-        "b882e97ee81b9ba0e7d969c63da3f2052f23b4b9"
-      ],
-      "roms/pc2086/40180.ic132": [
-        "93e045609466fcec74e2bb72578bb7405281cf7b"
-      ],
-      "roms/pc2086/40186.ic171": [
-        "5df1efe4203cd076292a7713bd7ebd1196dca577"
-      ],
-      "roms/pc3086/fc00.bin": [
-        "98c344831cc4dc59ebb39bbb1961964a8d39fe20"
-      ],
-      "roms/px386/3iip001h.bin": [
-        "b6566fd761e2e6ec34b61ee3bb043ef62d696b5e"
-      ],
-      "roms/px386/3iip001l.bin": [
-        "a6d34c3bf0de93c2b71010948c1f16354996b5ab"
-      ],
-      "roms/s3_764.bin": [
-        "50502df4d16c38608bcaea758791fc3419ee4589"
-      ],
-      "roms/tandy1000hx/v020000.u12": [
-        "976af8c04c3f6fde14d7047f6521d302bdc2d017"
-      ],
-      "roms/tandy1000sl2/8079047.hu1": [
-        "7deb71f14c2c418400b639d60066ab61b7e9df32"
-      ],
-      "roms/tandy1000sl2/8079048.hu2": [
-        "10f1a7204f69b82a18bc94a3010c9660aec0c802"
-      ],
-      "roms/vgaedge16.vbi": [
-        "c0ee6f9443fa82c0fef5d497b3e76aa3077f1865"
-      ],
-      "roms/win486/ALI1429G.AMW": [
-        "72c60172fb1ba77c9b24b06b7755f0a16f0b3a13"
-      ],
-      "alternate_roms/ace.rom": [
-        "6e5c9416a1cc89fe4012627f496f71ff2bb07b81"
       ],
       "roms/oti067/bios.bin": [
         "bfb5aced04516eb86087963dbab6b617380aa9c4"
