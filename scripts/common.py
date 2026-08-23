@@ -838,6 +838,54 @@ def get_mame_clone_map() -> dict[str, str]:
 _emulator_profiles_cache: dict[tuple[str, bool], dict[str, dict]] = {}
 
 
+class ProfileSelectionError(ValueError):
+    """A named profile cannot answer for itself."""
+
+
+def select_emulator_profiles(
+    profile_names: list[str],
+    all_profiles: dict,
+    standalone: bool = False,
+) -> list[tuple[str, dict]]:
+    """Resolve named profiles, refusing the ones that answer for others.
+
+    An alias is the same binary under another name and a launcher only
+    starts an emulator, so neither has requirements of its own: naming one
+    is a question about the wrong profile, and the error says which one to
+    ask instead. Raising rather than exiting lets the verifier stop and the
+    builder return empty-handed from one rule.
+    """
+    selected: list[tuple[str, dict]] = []
+    for name in profile_names:
+        if name not in all_profiles:
+            available = sorted(
+                key
+                for key, value in all_profiles.items()
+                if value.get("type") not in ("alias", "test")
+            )
+            raise ProfileSelectionError(
+                f"emulator '{name}' not found\n"
+                f"Available: {', '.join(available[:10])}..."
+            )
+        profile = all_profiles[name]
+        kind = profile.get("type", "libretro")
+        if kind == "alias":
+            raise ProfileSelectionError(
+                f"{name} is an alias of {profile.get('alias_of', '?')} "
+                f"-use --emulator {profile.get('alias_of', '?')}"
+            )
+        if kind == "launcher":
+            raise ProfileSelectionError(
+                f"{name} is a launcher -use the emulator it launches"
+            )
+        if standalone and "standalone" not in kind:
+            raise ProfileSelectionError(
+                f"{name} ({kind}) does not support --standalone"
+            )
+        selected.append((name, profile))
+    return selected
+
+
 def load_emulator_profiles(
     emulators_dir: str,
     skip_aliases: bool = True,

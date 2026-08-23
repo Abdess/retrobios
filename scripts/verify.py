@@ -48,8 +48,10 @@ from common import (
     md5sum,
     require_yaml,
     resolve_local_file,
+    ProfileSelectionError,
     resolve_platform_cores,
     sanitize_pack_path,
+    select_emulator_profiles,
 )
 
 yaml = require_yaml()
@@ -1254,51 +1256,12 @@ def _select_profiles(
     all_profiles: dict,
     standalone: bool,
 ) -> list[tuple[str, dict]]:
-    """Resolve the named profiles, refusing the ones that answer for others.
-
-    An alias is the same binary under another name and a launcher only
-    starts an emulator, so neither has requirements of its own: naming
-    one is a question about the wrong profile, and the answer says which
-    one to ask instead.
-    """
-    # Resolve profile names, reject alias/launcher
-    selected: list[tuple[str, dict]] = []
-    for name in profile_names:
-        if name not in all_profiles:
-            available = sorted(
-                k
-                for k, v in all_profiles.items()
-                if v.get("type") not in ("alias", "test")
-            )
-            print(f"Error: emulator '{name}' not found", file=sys.stderr)
-            print(f"Available: {', '.join(available[:10])}...", file=sys.stderr)
-            sys.exit(1)
-        p = all_profiles[name]
-        if p.get("type") == "alias":
-            alias_of = p.get("alias_of", "?")
-            print(
-                f"Error: {name} is an alias of {alias_of} -use --emulator {alias_of}",
-                file=sys.stderr,
-            )
-            sys.exit(1)
-        if p.get("type") == "launcher":
-            print(
-                f"Error: {name} is a launcher -use the emulator it launches",
-                file=sys.stderr,
-            )
-            sys.exit(1)
-        # Check standalone capability
-        ptype = p.get("type", "libretro")
-        if standalone and "standalone" not in ptype:
-            print(
-                f"Error: {name} ({ptype}) does not support --standalone",
-                file=sys.stderr,
-            )
-            sys.exit(1)
-        selected.append((name, p))
-
-    return selected
-
+    """Resolve the named profiles, stopping the run on a bad name."""
+    try:
+        return select_emulator_profiles(profile_names, all_profiles, standalone)
+    except ProfileSelectionError as exc:
+        print(f"Error: {exc}", file=sys.stderr)
+        sys.exit(1)
 
 def verify_emulator(
     profile_names: list[str],

@@ -415,3 +415,67 @@ class SkippingIsNotSettling(unittest.TestCase):
 
     def test_the_profile_that_cannot_use_it_does_not_report_it(self):
         self.assertNotIn(("a_standalone_only", "shared.bin"), self._report())
+
+
+class OneProfileSelector(unittest.TestCase):
+    """The verifier and the builder refuse the same names for the same reasons.
+
+    Both resolved the named profiles themselves, in thirty-five lines that
+    differed only in how they failed: one exits, the other returns
+    empty-handed. Two copies of a refusal drift the way every other pair in
+    this repository has.
+    """
+
+    PROFILES = {
+        "real": {"emulator": "Real", "type": "libretro", "files": []},
+        "ghost": {"emulator": "Ghost", "type": "alias", "alias_of": "real"},
+        "starter": {"emulator": "Starter", "type": "launcher"},
+        "lib_only": {"emulator": "LibOnly", "type": "libretro"},
+    }
+
+    def _select(self, names, standalone=False):
+        from common import ProfileSelectionError, select_emulator_profiles
+
+        try:
+            return select_emulator_profiles(names, self.PROFILES, standalone), None
+        except ProfileSelectionError as exc:
+            return None, str(exc)
+
+    def test_a_real_profile_resolves(self):
+        selected, error = self._select(["real"])
+        self.assertIsNone(error)
+        self.assertEqual([n for n, _p in selected], ["real"])
+
+    def test_an_alias_names_the_profile_to_ask_instead(self):
+        _selected, error = self._select(["ghost"])
+        self.assertIn("alias of real", error)
+        self.assertIn("--emulator real", error)
+
+    def test_a_launcher_is_refused(self):
+        _selected, error = self._select(["starter"])
+        self.assertIn("launcher", error)
+
+    def test_standalone_is_refused_on_a_libretro_only_profile(self):
+        _selected, error = self._select(["lib_only"], standalone=True)
+        self.assertIn("does not support --standalone", error)
+        self.assertIsNone(self._select(["lib_only"])[1])
+
+    def test_an_unknown_name_lists_what_exists(self):
+        _selected, error = self._select(["absent"])
+        self.assertIn("not found", error)
+        self.assertIn("real", error)
+        self.assertNotIn("ghost", error, "an alias is not something to suggest")
+
+    def test_both_entry_points_route_through_it(self):
+        """A copy would let one accept what the other refuses."""
+        scripts = Path(__file__).resolve().parent.parent / "scripts"
+        for name in ("verify.py", "generate_pack.py"):
+            text = (scripts / name).read_text()
+            self.assertIn(
+                "select_emulator_profiles", text,
+                f"{name} must ask common, not re-derive the refusal",
+            )
+            self.assertNotIn(
+                'is a launcher -use the emulator it launches', text,
+                f"{name} still spells the refusal itself",
+            )

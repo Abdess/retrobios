@@ -51,8 +51,10 @@ from common import (
     parse_md5_list,
     require_yaml,
     resolution_is_hash_exact,
+    ProfileSelectionError,
     resolve_local_file,
     sanitize_pack_path,
+    select_emulator_profiles,
     yaml_load,
 )
 import packresolve
@@ -1194,40 +1196,11 @@ def generate_emulator_pack(
     if zip_contents is None:
         zip_contents = build_zip_contents_index(db)
 
-    # Resolve and validate profile names
-    selected: list[tuple[str, dict]] = []
-    for name in profile_names:
-        if name not in all_profiles:
-            available = sorted(
-                k
-                for k, v in all_profiles.items()
-                if v.get("type") not in ("alias", "test")
-            )
-            print(f"Error: emulator '{name}' not found", file=sys.stderr)
-            print(f"Available: {', '.join(available[:10])}...", file=sys.stderr)
-            return None
-        p = all_profiles[name]
-        if p.get("type") == "alias":
-            alias_of = p.get("alias_of", "?")
-            print(
-                f"Error: {name} is an alias of {alias_of} -use --emulator {alias_of}",
-                file=sys.stderr,
-            )
-            return None
-        if p.get("type") == "launcher":
-            print(
-                f"Error: {name} is a launcher -use the emulator it launches",
-                file=sys.stderr,
-            )
-            return None
-        ptype = p.get("type", "libretro")
-        if standalone and "standalone" not in ptype:
-            print(
-                f"Error: {name} ({ptype}) does not support --standalone",
-                file=sys.stderr,
-            )
-            return None
-        selected.append((name, p))
+    try:
+        selected = select_emulator_profiles(profile_names, all_profiles, standalone)
+    except ProfileSelectionError as exc:
+        print(f"Error: {exc}", file=sys.stderr)
+        return None
 
     # ZIP naming
     display_names = [p.get("emulator", n).replace(" ", "") for n, p in selected]
@@ -2635,6 +2608,119 @@ def _get_repo_path(sha1: str, db: dict) -> str:
     return entry.get("path", "")
 
 
+def _manifest_core_entries(
+    core_files: list,
+    config: dict,
+    db: dict,
+    bios_dir: str,
+    base_dest: str,
+    repo_root: str,
+    zip_contents,
+    offline,
+    region_drops: set,
+    case_insensitive: bool,
+    seen_destinations: set,
+    seen_lower: set,
+    seen_parents: set,
+    manifest_files: list,
+    omitted_by_destination: dict,
+    record_omission,
+) -> int:
+    """Add the files a platform's cores need but its list does not name.
+
+    The installer fetches by hash, so an entry records the copy this
+    repository holds rather than the value the profile declares: an
+    upstream hash carried by no local file leaves the entry with no URL.
+    Returns the bytes added.
+    """
+    total_size = 0
+    extras_pfx = _detect_extras_prefix(config, base_dest)
+    for fe in core_files:
+        dest = sanitize_pack_path(fe.get("destination", fe["name"]))
+        if not dest:
+            continue
+        if region_drops and dest in region_drops:
+            continue
+        if extras_pfx:
+            if not dest.startswith(f"{extras_pfx}/"):
+                full_dest = f"{extras_pfx}/{dest}"
+            else:
+                full_dest = dest
+        else:
+            full_dest = dest
+
+        if full_dest in seen_destinations:
+            continue
+        if case_insensitive and full_dest.lower() in seen_lower:
+            continue
+        if _has_path_conflict(full_dest, seen_destinations, seen_parents):
+            continue
+
+        dest_hint = fe.get("destination", "")
+        local_path, status = resolve_file(
+            fe,
+            db,
+            bios_dir,
+            zip_contents,
+            dest_hint=dest_hint,
+            offline=offline,
+        )
+        if status in ("not_found", "external", "user_provided") or not local_path:
+            source_emu = fe.get("source_profile") or fe.get("source_emulator", "")
+            systems = _extra_system_ids(fe)
+            record_omission(
+                full_dest,
+                fe,
+                systems[0] if systems else "",
+                status,
+                [source_emu] if source_emu else [],
+            )
+            continue
+
+        sha1 = ""
+        sha256 = ""
+        file_size = 0
+        if local_path and os.path.exists(local_path):
+            file_size = os.path.getsize(local_path)
+            hashes = compute_hashes(local_path)
+            sha1 = hashes["sha1"]
+            sha256 = hashes["sha256"]
+
+        repo_path = _get_repo_path(sha1, db) if sha1 else ""
+        source_emu = fe.get("source_profile") or fe.get("source_emulator", "")
+
+        # Manifest dests are relative to base_destination; keep the inferred
+        # extras prefix when it is an internal layout dir (RetroDECK bios/).
+        manifest_dest = full_dest
+        if base_dest and manifest_dest.startswith(f"{base_dest}/"):
+            manifest_dest = manifest_dest[len(base_dest) + 1:]
+
+        entry = {
+            "dest": manifest_dest,
+            "sha1": sha1,
+            "sha256": sha256,
+            "size": file_size,
+            "repo_path": repo_path,
+            "cores": [source_emu] if source_emu else [],
+        }
+
+        if _is_large_file(local_path or "", repo_root):
+            entry["storage"] = "release"
+            entry["release_asset"] = (
+                os.path.basename(local_path) if local_path else fe["name"]
+            )
+
+        manifest_files.append(entry)
+        omitted_by_destination.pop(full_dest, None)
+        total_size += file_size
+        seen_destinations.add(full_dest)
+        _register_path(full_dest, seen_destinations, seen_parents)
+        if case_insensitive:
+            seen_lower.add(full_dest.lower())
+
+    return total_size
+
+
 def generate_manifest(
     platform_name: str,
     platforms_dir: str,
@@ -2845,89 +2931,12 @@ def generate_manifest(
         )
     else:
         core_files = []
-    extras_pfx = _detect_extras_prefix(config, base_dest)
-    for fe in core_files:
-        dest = sanitize_pack_path(fe.get("destination", fe["name"]))
-        if not dest:
-            continue
-        if region_drops and dest in region_drops:
-            continue
-        if extras_pfx:
-            if not dest.startswith(f"{extras_pfx}/"):
-                full_dest = f"{extras_pfx}/{dest}"
-            else:
-                full_dest = dest
-        else:
-            full_dest = dest
-
-        if full_dest in seen_destinations:
-            continue
-        if case_insensitive and full_dest.lower() in seen_lower:
-            continue
-        if _has_path_conflict(full_dest, seen_destinations, seen_parents):
-            continue
-
-        dest_hint = fe.get("destination", "")
-        local_path, status = resolve_file(
-            fe,
-            db,
-            bios_dir,
-            zip_contents,
-            dest_hint=dest_hint,
-            offline=offline,
-        )
-        if status in ("not_found", "external", "user_provided") or not local_path:
-            source_emu = fe.get("source_profile") or fe.get("source_emulator", "")
-            systems = _extra_system_ids(fe)
-            record_omission(
-                full_dest,
-                fe,
-                systems[0] if systems else "",
-                status,
-                [source_emu] if source_emu else [],
-            )
-            continue
-
-        sha1 = ""
-        sha256 = ""
-        file_size = 0
-        if local_path and os.path.exists(local_path):
-            file_size = os.path.getsize(local_path)
-            hashes = compute_hashes(local_path)
-            sha1 = hashes["sha1"]
-            sha256 = hashes["sha256"]
-
-        repo_path = _get_repo_path(sha1, db) if sha1 else ""
-        source_emu = fe.get("source_profile") or fe.get("source_emulator", "")
-
-        # Manifest dests are relative to base_destination; keep the inferred
-        # extras prefix when it is an internal layout dir (RetroDECK bios/).
-        manifest_dest = full_dest
-        if base_dest and manifest_dest.startswith(f"{base_dest}/"):
-            manifest_dest = manifest_dest[len(base_dest) + 1:]
-
-        entry = {
-            "dest": manifest_dest,
-            "sha1": sha1,
-            "sha256": sha256,
-            "size": file_size,
-            "repo_path": repo_path,
-            "cores": [source_emu] if source_emu else [],
-        }
-
-        if _is_large_file(local_path or "", repo_root):
-            entry["storage"] = "release"
-            entry["release_asset"] = (
-                os.path.basename(local_path) if local_path else fe["name"]
-            )
-
-        manifest_files.append(entry)
-        omitted_by_destination.pop(full_dest, None)
-        total_size += file_size
-        seen_destinations.add(full_dest)
-        _register_path(full_dest, seen_destinations, seen_parents)
-        if case_insensitive:
-            seen_lower.add(full_dest.lower())
+    total_size += _manifest_core_entries(
+        core_files, config, db, bios_dir, base_dest, repo_root,
+        zip_contents, offline, region_drops, case_insensitive,
+        seen_destinations, seen_lower, seen_parents, manifest_files,
+        omitted_by_destination, record_omission,
+    )
 
     # No phase 3 (data directories) -skipped for manifest
 
