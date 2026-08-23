@@ -35,17 +35,17 @@ The size is what the files occupy once extracted; the ZIP itself downloads small
 
 | Platform | Extracted size | Extract to | Download |
 |----------|---------------:|-----------|----------|
-| Batocera | 2.6 GB | `/userdata/bios/` | [Download](../../releases/latest) |
+| Batocera | 4.0 GB | `/userdata/bios/` | [Download](../../releases/latest) |
 | BizHawk | 2.2 GB | `Firmware/` | [Download](../../releases/latest) |
-| EmuDeck | 1.8 GB | `~/Emulation/bios/` | [Download](../../releases/latest) |
-| Lakka | 4.1 GB | `/storage/system/` | [Download](../../releases/latest) |
+| EmuDeck | 3.2 GB | `~/Emulation/bios/` | [Download](../../releases/latest) |
+| Lakka | 5.5 GB | `/storage/system/` | [Download](../../releases/latest) |
 | MiSTer FPGA | 23 MB | `/media/fat/games/` | [Download](../../releases/latest) |
-| ROCKNIX | 4.0 GB | `/storage/roms/bios/` | [Download](../../releases/latest) |
-| Recalbox | 2.2 GB | `/recalbox/share/bios/` | [Download](../../releases/latest) |
-| RetroArch | 4.1 GB | `system/` | [Download](../../releases/latest) |
-| RetroBat | 3.0 GB | `bios/` | [Download](../../releases/latest) |
-| RetroDECK | 4.8 GB | `~/retrodeck/` | [Download](../../releases/latest) |
-| RetroPie * | 4.1 GB | `~/RetroPie/BIOS/` | [Download](../../releases/latest) |
+| ROCKNIX | 5.3 GB | `/storage/roms/bios/` | [Download](../../releases/latest) |
+| Recalbox | 3.6 GB | `/recalbox/share/bios/` | [Download](../../releases/latest) |
+| RetroArch | 5.5 GB | `system/` | [Download](../../releases/latest) |
+| RetroBat | 4.4 GB | `bios/` | [Download](../../releases/latest) |
+| RetroDECK | 6.2 GB | `~/retrodeck/` | [Download](../../releases/latest) |
+| RetroPie * | 5.5 GB | `~/RetroPie/BIOS/` | [Download](../../releases/latest) |
 | RomM | 1.3 GB | `bios/{platform_slug}/` | [Download](../../releases/latest) |
 
 The RetroDECK pack already contains its own `bios/` folder, so it extracts into `~/retrodeck/` rather than into the BIOS folder.
@@ -166,4 +166,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software. [NOTICE](NOTICE) sets out their status and how to ask for a file to be removed.
 The reasoning, and where it is weakest, is in the [FAQ](https://abdess.github.io/retrobios/wiki/faq/#is-this-legal).
 
-*Auto-generated on 2026-08-12T11:17:02Z*
+*Auto-generated on 2026-08-23T06:14:09Z*
