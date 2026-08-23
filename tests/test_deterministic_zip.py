@@ -275,6 +275,52 @@ class TestPackDeterminism(unittest.TestCase):
             for info in generated:
                 self.assertEqual(info.date_time, _FIXED_DATE_TIME)
 
+    def _build_emulator(self, out_name: str) -> Path:
+        from scripts.generate_pack import generate_emulator_pack
+
+        out = self.tmp / out_name
+        out.mkdir()
+        (self.tmp / "emulators").mkdir(exist_ok=True)
+        (self.tmp / "emulators" / "detcore.yml").write_text(
+            "emulator: detcore\n"
+            "type: libretro\n"
+            "display_name: DetCore\n"
+            "systems: [test-sys]\n"
+            "cores: [detcore]\n"
+            "files:\n"
+            "  - name: boot.rom\n"
+            "    system: test-sys\n"
+            "    required: true\n"
+            "  - name: romset.zip\n"
+            "    system: test-sys\n"
+            "    required: true\n"
+        )
+        import common
+
+        common._emulator_profiles_cache.clear()
+        path = generate_emulator_pack(
+            ["detcore"], str(self.tmp / "emulators"), self.db, str(self.bios),
+            str(out), offline=True,
+        )
+        common._emulator_profiles_cache.clear()
+        self.assertIsNotNone(path)
+        return Path(path)
+
+    def test_an_emulator_pack_is_byte_identical_too(self):
+        """A distinct build path, and one the platform packs do not cover."""
+        first = self._build_emulator("emu1")
+        time.sleep(2.1)
+        second = self._build_emulator("emu2")
+        self.assertEqual(
+            hashlib.sha256(first.read_bytes()).hexdigest(),
+            hashlib.sha256(second.read_bytes()).hexdigest(),
+        )
+
+    def test_every_emulator_pack_member_carries_the_fixed_epoch(self):
+        pack = self._build_emulator("emu1")
+        with zipfile.ZipFile(pack) as zf:
+            self.assertEqual({i.date_time for i in zf.infolist()}, {_FIXED_DATE_TIME})
+
     def test_injected_manifest_is_pinned_to_the_database(self):
         from scripts.generate_pack import inject_manifest, verify_pack
 
