@@ -5,7 +5,7 @@
   "platform": "rocknix",
   "display_name": "ROCKNIX",
   "version": "1.0",
-  "generated": "2026-08-12T03:38:29Z",
+  "generated": "2026-08-12T10:39:36Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -17,8 +17,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 1776,
-  "total_size": 4285527944,
+  "total_files": 1729,
+  "total_size": 5737870689,
   "total_omitted": 9,
   "omitted_files": [
     {
@@ -17039,30 +17039,30 @@
     },
     {
       "dest": "GameIndex.yaml",
-      "sha1": "b22389650f6c0a1e276b48213fed8a9c1c6476ce",
-      "sha256": "fe469d080984767b32b45dd4f26f58680470003c4935d78e57b21ed4d2061d88",
-      "size": 2669341,
-      "repo_path": "bios/Sony/PlayStation 2/GameIndex.yaml",
+      "sha1": "57369df9ca82a460e596cea7835c5a0797dee668",
+      "sha256": "efa94cb7b9208dc6812bb9407dc986560e523cce57f511eff30942f76b7288bf",
+      "size": 1737799,
+      "repo_path": "bios/Sony/PlayStation 2/.variants/GameIndex.yaml.57369df9",
       "cores": [
         "armsx2"
       ]
     },
     {
       "dest": "ROM2.BIN",
-      "sha1": "1bae895fbdd658cfb56c53cc2139282cc1e778de",
-      "sha256": "9fc01e6beab84e61e0267fa39e23c649cdf2ccd25ad1cbfc2de0facfd160e723",
-      "size": 8192,
-      "repo_path": "bios/Sony/PlayStation 2/ROM2.BIN",
+      "sha1": "5d5ab4313a2d0effe7572bb129193b64cab002c1",
+      "sha256": "7d93fe474fcc98c06a6d96e533f8935e4e707edf0792d3e9d679ea68404375de",
+      "size": 4096,
+      "repo_path": "bios/Sony/PlayStation 2/.variants/ROM2.BIN.5d5ab431",
       "cores": [
         "armsx2"
       ]
     },
     {
       "dest": "SCPH30004R.nvm",
-      "sha1": "62f5a0b54a174daf2bf66634b86c6f2a3cd297ce",
-      "sha256": "0e13330dda0c0190a3ab732593416051df19bf8f3f3186862f84531a9d6915e2",
+      "sha1": "1d3caaed7411425c16aee8c35db47b928e31f60b",
+      "sha256": "c598dea13e5bba2fcae69de5b051c15fcd5b25842978be1bb20a86cfff243eaf",
       "size": 1024,
-      "repo_path": "bios/Sony/PlayStation 2/SCPH30004R.nvm",
+      "repo_path": "bios/Sony/PlayStation 2/.variants/SCPH30004R.nvm.5e0200d0",
       "cores": [
         "armsx2"
       ]
@@ -17188,6 +17188,36 @@
       ]
     },
     {
+      "dest": "SCPH-90006_BIOS_VX_HK _230.EROM",
+      "sha1": "6b357e8624095770952fc408cdc6647fa62e0d28",
+      "sha256": "8801922f614b365d9d37557d7a375d06d385e936804943cb2c52abff55a3d254",
+      "size": 3145728,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-90006_BIOS_VX_HK _230.EROM",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "SCPH-90006_BIOS_VX_HK _230.NVM",
+      "sha1": "465c2738c280eb1864f679c80b55e468bf670057",
+      "sha256": "d218113ad67d0c178123b797d31baf7f4ae4a9466251d98b9db4192434d3a5e8",
+      "size": 1024,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-90006_BIOS_VX_HK _230.NVM",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
+      "dest": "SCPH-90006_BIOS_VX_HK _230.ROM1",
+      "sha1": "b96cf94772f01b8434038285896467884a84b0c2",
+      "sha256": "1b7c68be427e6f571596ef6b444e8b86d1b4e2a226d62f6bfc86717a798f2317",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-90006_BIOS_VX_HK _230.ROM1",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
       "dest": "cheats_ni.zip",
       "sha1": "dec5e4f137890c338babe13cfb9d41ff869fa721",
       "sha256": "91d5ae704ff8b6d90165a65f69e9e2be8a9ab9c588c525dc1c9c4ecbbdef1ffd",
@@ -17239,10 +17269,10 @@
     },
     {
       "dest": "rom1.bin",
-      "sha1": "b91bb1d9dccffe831b7cfde7800a3fe32b2fbda6",
-      "sha256": "8a1eb33c7599b746c0c50283e4349a1bb1773b5c0ec0e9661219bf6c067d2042",
-      "size": 32768,
-      "repo_path": "bios/Roland/soundcanvas-roms/SC-55mk2-v1.01/rom1.bin",
+      "sha1": "47d2ec4b342649e4c391043ab915d4435f9d180d",
+      "sha256": "41de2047af8382988bfd568035ff26eec5f1cabc3efe773680546aa00a82857d",
+      "size": 199680,
+      "repo_path": "bios/Sony/PlayStation 2/rom1.bin",
       "cores": [
         "armsx2"
       ]
@@ -17268,564 +17298,76 @@
       ]
     },
     {
-      "dest": "AppBanner.svg",
-      "sha1": "cf42e9d792747ccb06ff243672ed37b30db23def",
-      "sha256": "4bb22e528622898ca5afdb01e2d9190449f1ed0c7b82d56c6e5074553ed4fa27",
-      "size": 2649,
-      "repo_path": "bios/Other/armsx2/AppBanner.svg",
+      "dest": "DSi_Nand_AUS.bin",
+      "sha1": "7d006f8943171a4d50ae89bf2fca12b764d27e8b",
+      "sha256": "4149fc5552f8932f28b7999de506f2b2a6cf3093140b7bfcdcc88ade51d970d2",
+      "size": 251658304,
+      "repo_path": "bios/Nintendo/DS/DSi_Nand_AUS.bin",
       "cores": [
-        "armsx2"
-      ]
+        "melonds"
+      ],
+      "storage": "release",
+      "release_asset": "DSi_Nand_AUS.bin"
     },
     {
-      "dest": "AppIconLarge.ico",
-      "sha1": "0f37f2795ca071eb712d5243247675f140897c50",
-      "sha256": "dedbaf271c3257db2a02493a53616d1da78302c678575c9b0f4d254cdb1e4293",
-      "size": 372526,
-      "repo_path": "bios/Other/armsx2/AppIconLarge.ico",
+      "dest": "DSi_Nand_CHN.bin",
+      "sha1": "4b3b3de0cb2c2aef80daa68394d5b804b8706d9f",
+      "sha256": "f5ab272f9c62a63d059934f146bf66c2abbfe5e864d852ab7708f97b53ad0fcb",
+      "size": 251658304,
+      "repo_path": "bios/Nintendo/DS/DSi_Nand_CHN.bin",
       "cores": [
-        "armsx2"
-      ]
+        "melonds"
+      ],
+      "storage": "release",
+      "release_asset": "DSi_Nand_CHN.bin"
     },
     {
-      "dest": "AppIconLarge.png",
-      "sha1": "bd9262879f8a72ec610a9554b503d747194a0f49",
-      "sha256": "c217cc125856b0ee9776208b8e0bf5f1a4f04561ff2fa644f690518f87f55942",
-      "size": 211499,
-      "repo_path": "bios/Other/armsx2/AppIconLarge.png",
+      "dest": "DSi_Nand_EUR.bin",
+      "sha1": "bc4091b6cab4feba3812ac0f23e23d0353481ecf",
+      "sha256": "e577488f582921bdbfaa12a6255832cf646f5ad9f29214d78404e6005714e8bc",
+      "size": 251658304,
+      "repo_path": "bios/Nintendo/DS/DSi_Nand_EUR.bin",
       "cores": [
-        "armsx2"
-      ]
+        "melonds"
+      ],
+      "storage": "release",
+      "release_asset": "DSi_Nand_EUR.bin"
     },
     {
-      "dest": "NotoColorEmoji-Regular.ttf",
-      "sha1": "343f90558952049a0232faf6cf136fc2b8d4be84",
-      "sha256": "1ca0775b9dc92d8d959cd06dd773e2d4dacc97301ad81e6b5aa02cd5e7233a27",
-      "size": 24274080,
-      "repo_path": "bios/Other/armsx2/NotoColorEmoji-Regular.ttf",
+      "dest": "DSi_Nand_JPN.bin",
+      "sha1": "c82d60626ac05b49ccec0cfb30001d4a3f31c5b9",
+      "sha256": "6b4c33a189794cd04a7b1359cbf3db86a24ca2c69e1cbefda545d0b34f4b5743",
+      "size": 251658304,
+      "repo_path": "bios/Nintendo/DS/DSi_Nand_JPN.bin",
       "cores": [
-        "armsx2"
-      ]
+        "melonds"
+      ],
+      "storage": "release",
+      "release_asset": "DSi_Nand_JPN.bin"
     },
     {
-      "dest": "RedumpDatabase.yaml",
-      "sha1": "dceb4536fba7fb89452864fc512a4d071a19eae0",
-      "sha256": "755962450efd5effd2f3fe2f9a60c73d6cb3f9b4acea964abf5bb25a86ee25bc",
-      "size": 1906463,
-      "repo_path": "bios/Other/armsx2/RedumpDatabase.yaml",
+      "dest": "DSi_Nand_KOR.bin",
+      "sha1": "4b061953d8f870bcda006ce86ce136f112cc1793",
+      "sha256": "9d5ec8ff568b0cde27b9817d9f4901437806265aca59557e69905ed571c120a7",
+      "size": 251658304,
+      "repo_path": "bios/Nintendo/DS/DSi_Nand_KOR.bin",
       "cores": [
-        "armsx2"
-      ]
+        "melonds"
+      ],
+      "storage": "release",
+      "release_asset": "DSi_Nand_KOR.bin"
     },
     {
-      "dest": "Roboto-Regular.ttf",
-      "sha1": "00d62fbdc8d5dec4c659005e116d0ba2ee63b547",
-      "sha256": "797e35f7f5d6020a5c6ea13b42ecd668bcfb3bbc4baa0e74773527e5b6cb3174",
-      "size": 305608,
-      "repo_path": "bios/Other/armsx2/Roboto-Regular.ttf",
+      "dest": "DSi_Nand_USA.bin",
+      "sha1": "ef08ae02c5fbe1a22a208c36e25607f5a9d5ae98",
+      "sha256": "42c2c2e4029a05b25a5d61054b29e8192f93d8a33d535d16b3ef128d5dfc83f4",
+      "size": 251658304,
+      "repo_path": "bios/Nintendo/DS/DSi_Nand_USA.bin",
       "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "RobotoMono-Medium.ttf",
-      "sha1": "9056e59b69c6f1160fdfb92a0773f17f6307f3ad",
-      "sha256": "4d901b560f20f455b3c82c6616b17b72360956747cb35c3808aa370052fe8e32",
-      "size": 86820,
-      "repo_path": "bios/Other/armsx2/RobotoMono-Medium.ttf",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "Twemoji.Mozilla.ttf",
-      "sha1": "660c7fe74de23ee604bea47673f84710bd34f075",
-      "sha256": "c4541eefde3f31e4216559ada91f52d1b7ec95b849f7e9afc7a05613a56c8bf2",
-      "size": 1574620,
-      "repo_path": "bios/Other/armsx2/Twemoji.Mozilla.ttf",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "applications-system.svg",
-      "sha1": "280834f689b9ab157d29026caed47fcc5da9fe40",
-      "sha256": "3456c17385c637e5359b815f497c1341d95a7d2b072e5628aab03dba2527fec1",
-      "size": 3797,
-      "repo_path": "bios/Other/armsx2/applications-system.svg",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "armsx2_overrides.yaml",
-      "sha1": "38508688fa25cdfe878c617078318f8d91c87f4f",
-      "sha256": "a2178512d238da25ba16a7fc592ec096a5eb08dab82cb698c5e406452477cc6f",
-      "size": 40953,
-      "repo_path": "bios/Other/armsx2/armsx2_overrides.yaml",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "back-icon.svg",
-      "sha1": "9b754fe9c868225a922dd3e6fc2f9d447ff5442c",
-      "sha256": "2930e4849159a1bbeee650c469989b8ab8fb6d14d2c19b36d3f5c28a519dda62",
-      "size": 1364,
-      "repo_path": "bios/Other/armsx2/back-icon.svg",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "cas.hlsl",
-      "sha1": "a15cc4dce1edcd3db4c4e022d2a3b78e11c18a8c",
-      "sha256": "74cfcdc60c5f7d5fdeccbd4650911a377b5532ac60633aa265969dbf961c2a63",
-      "size": 2597,
-      "repo_path": "bios/Other/armsx2/cas.hlsl",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "convert.fx",
-      "sha1": "773e6b9177ac20ec4f80181c2ebdcaa33d71c91a",
-      "sha256": "dce5359c78027b87a7de800ea619d734eac613bd31486de412d336c988eb652f",
-      "size": 15850,
-      "repo_path": "bios/Other/armsx2/convert.fx",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "cover-placeholder.png",
-      "sha1": "620b40ff921876175550bb976f0428274853fe27",
-      "sha256": "1f00d0eba7f55dfa696950eda6ed635b433f28913b37545b61c4674d6454fa03",
-      "size": 56075,
-      "repo_path": "bios/Other/armsx2/cover-placeholder.png",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "desktop-mode.svg",
-      "sha1": "513d784434cd934048e16b2a333b4d65da099e8b",
-      "sha256": "0cd9e13beb9965bdb6ba355a6bdb89a4c94a6fb799a3707c75b3ba0371bd0a85",
-      "size": 1269,
-      "repo_path": "bios/Other/armsx2/desktop-mode.svg",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "drive-cdrom.svg",
-      "sha1": "6ff7f132ca2483d7e24a52eead4d3b807eb9addf",
-      "sha256": "2e6210f4d43dcadb9ba97984c7991fd83e76ee85b3192365f26e87d8adcc9dbb",
-      "size": 1037,
-      "repo_path": "bios/Other/armsx2/drive-cdrom.svg",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "exit.svg",
-      "sha1": "8452aac0ea8adf96f52c6fc87b7bc9c038249c97",
-      "sha256": "9dacf195fc9c6f183093fdcd045a44bafb28efe19dc672f1d2c4efa1d4ad4355",
-      "size": 4042,
-      "repo_path": "bios/Other/armsx2/exit.svg",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "fa-solid-900.ttf",
-      "sha1": "7f0f721265c228f2484e4924bace5a80b7826fbe",
-      "sha256": "8a2db53f7927abee48e52262090d99ced56a22d46752fba13c8f8782ce632d73",
-      "size": 414664,
-      "repo_path": "bios/Other/armsx2/fa-solid-900.ttf",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "ffx_a.h",
-      "sha1": "726370c10154ad092c15c251b98c79185e980c7c",
-      "sha256": "a77e8b8cb03eefc7259cce808fb0c7ed37a97c9d2424a7e6c263bae96871ea68",
-      "size": 161481,
-      "repo_path": "bios/Other/armsx2/ffx_a.h",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "ffx_cas.h",
-      "sha1": "a1d1a687577f7a607fda35bc88950f57c2129ca5",
-      "sha256": "58e3eec49d30207287c9a6d692111bf5395f11a181bb40da5a81514f8c4c5a84",
-      "size": 63512,
-      "repo_path": "bios/Other/armsx2/ffx_cas.h",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "fxaa.fx",
-      "sha1": "9d7012f8bb7bb4599ed2518f12ed540655cdd8d8",
-      "sha256": "c769d784c3cd47760ed7bf85b867cda545237d4d52feac7290a059d3ff5848fb",
-      "size": 17432,
-      "repo_path": "bios/Other/armsx2/fxaa.fx",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "game_controller_db.txt",
-      "sha1": "042ce2001fb438a0a34e0c5d0001a9d95d5516df",
-      "sha256": "9e7fb1335e56027f150b7ff9b7b6cddd9c0844af19be6dbc17347e1882022038",
-      "size": 163503,
-      "repo_path": "bios/Other/aethersx2/game_controller_db.txt",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "imgui.fx",
-      "sha1": "47491eaf3ba082383305b3d958794409cb0f5476",
-      "sha256": "549ec23dea1cc5e036013ced7099c038c880fcdc2aac8e36c53a9a61fe7d58c6",
-      "size": 736,
-      "repo_path": "bios/Other/armsx2/imgui.fx",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "interlace.fx",
-      "sha1": "f3d1e30101e58143282085bc6330db33a0f77a85",
-      "sha256": "36eee253a1428098ca12f0ac5f90aa257a763eda2747c80df8c95c83645b2ada",
-      "size": 7205,
-      "repo_path": "bios/Other/armsx2/interlace.fx",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "lbsubmit.wav",
-      "sha1": "5ad1e110dcf0ffd26405981398892a82e4f3bad1",
-      "sha256": "08ca1285218bf04048d2064a20f79e6bf72267fc98d555430502c245d75b42ab",
-      "size": 82096,
-      "repo_path": "bios/Other/armsx2/lbsubmit.wav",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "media-cdrom.svg",
-      "sha1": "36cc8f46014a321b7602e52c062ab23d7c256ccc",
-      "sha256": "022c8b05d8f3e7e6046077a2d6ad2d3da1e7fa0e69c8321f3c556b9963be2477",
-      "size": 3318,
-      "repo_path": "bios/Other/armsx2/media-cdrom.svg",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "merge.fx",
-      "sha1": "8dba66121f3bbc4b2bdf67722ef4c2b6b6b23ee6",
-      "sha256": "c749cd9513bd345b9f12ff46eac0ffbf4e54c0b0884921df97ca8297396e3fea",
-      "size": 538,
-      "repo_path": "bios/Other/armsx2/merge.fx",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "message.wav",
-      "sha1": "c54f04b63ac6f04e0a0944ef260b5497e4494dbd",
-      "sha256": "dfd8035387a463722ad07af3c91934e0a685f2afa57e31d305f0602656d1edb1",
-      "size": 15696,
-      "repo_path": "bios/Other/armsx2/message.wav",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "no-save.png",
-      "sha1": "7b0bb79d38c573648de218645c6fb16449e156e0",
-      "sha256": "ab829598e15b771112130cbafbd982736400690c11e3d7c81e3fc8c582c24f47",
-      "size": 9655,
-      "repo_path": "bios/Other/armsx2/no-save.png",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "NotoSansArabic-Regular.ttf",
-      "sha1": "456e74b0805d1931a7786d3d04673a3b02dd4dd3",
-      "sha256": "90f50de40af560ad55f2fcf460af8205f842b534b057bd8b8bcf7d3e10d3223a",
-      "size": 177004,
-      "repo_path": "bios/Other/armsx2/pcsx2/resources/fonts/NotoSansArabic-Regular.ttf",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "NotoSansDevanagari-Regular.ttf",
-      "sha1": "69253a2722f999ba4205f2e679d0b75e3b17109f",
-      "sha256": "11fa517464dbd568e855e449650a9004d1072c4a54ac1845aaafc462c0652b64",
-      "size": 204336,
-      "repo_path": "bios/Other/armsx2/pcsx2/resources/fonts/NotoSansDevanagari-Regular.ttf",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "NotoSansHebrew-Regular.ttf",
-      "sha1": "9dc5783345f258d0c66c17028d39652daa234473",
-      "sha256": "1edcc5695148a632b8a5516ba41a86edf01f06289c5c2e84a1afafe833eb25da",
-      "size": 42704,
-      "repo_path": "bios/Other/armsx2/pcsx2/resources/fonts/NotoSansHebrew-Regular.ttf",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "NotoSansJP-Regular.ttf",
-      "sha1": "6030f4e7d59b356d0eaf26f1bca370a999335058",
-      "sha256": "fb3df01b4182734d021d79ec5bac17903bb681e926a059c59ed81a373d612241",
-      "size": 5732824,
-      "repo_path": "bios/Other/armsx2/pcsx2/resources/fonts/NotoSansJP-Regular.ttf",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "NotoSansKR-Regular.ttf",
-      "sha1": "83d3c03dc1fc16f2a5b8bbf929d4cc21a078282c",
-      "sha256": "9db318b65ee9c575a43e7efd273dbdd1afef26e467eea3e1073a50e1a6595f6d",
-      "size": 6192764,
-      "repo_path": "bios/Other/armsx2/pcsx2/resources/fonts/NotoSansKR-Regular.ttf",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "NotoSansSC-Regular.ttf",
-      "sha1": "01299427e4d789295c614752c8398261f006479b",
-      "sha256": "ae82f4e2a55e1316a55bcc1d05e9555ce08d8bda07e893b486896b626fd852ff",
-      "size": 10560380,
-      "repo_path": "bios/Other/armsx2/pcsx2/resources/fonts/NotoSansSC-Regular.ttf",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "NotoSansTC-Regular.ttf",
-      "sha1": "59815234d228a7f390364c6d6380cc518ea63db1",
-      "sha256": "6b137e2eb57a2d1e4cf391c886ab1b783a0e5ddb5c75254748bde00c15cb8ff5",
-      "size": 7110560,
-      "repo_path": "bios/Other/armsx2/pcsx2/resources/fonts/NotoSansTC-Regular.ttf",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "cas.glsl",
-      "sha1": "b478ce9d1343b8dd201c045f010bd1b64ba158ae",
-      "sha256": "3d5b9cef750ea8bedceef43c4c52215e8280abb81b5b8fa002007bb3f97f0506",
-      "size": 2413,
-      "repo_path": "bios/Other/armsx2/pcsx2/resources/shaders/opengl/cas.glsl",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "convert.glsl",
-      "sha1": "32777e258030ad9559864d9f4273d515d65f728f",
-      "sha256": "4ac385f0e38ee2c3a3f7014db86bd59927a5d4e4f76f24df9b8f8b3d97142390",
-      "size": 15093,
-      "repo_path": "bios/Other/armsx2/pcsx2/resources/shaders/opengl/convert.glsl",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "imgui.glsl",
-      "sha1": "04bfcabf518320593dcda8198475c7f39295ef1f",
-      "sha256": "25978439553bbd959fe4eb5d03b739a3d697348458a7bac3df48556148f48027",
-      "size": 637,
-      "repo_path": "bios/Other/armsx2/pcsx2/resources/shaders/opengl/imgui.glsl",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "interlace.glsl",
-      "sha1": "d6209a8b3c4681823b1f0b7d0648c819ec72e2ad",
-      "sha256": "ff7e27fa41f33ec5d4a86b2a48a622dbcd8dd0ae37f8afe306fdd182a7aa8ec1",
-      "size": 6946,
-      "repo_path": "bios/Other/armsx2/pcsx2/resources/shaders/opengl/interlace.glsl",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "merge.glsl",
-      "sha1": "7f476bffdc19d7ba2806eef40c2e8e40bdf0896c",
-      "sha256": "6cd2bc21890426b5430d44b28a89289bcc6fc9ecd632bb3a8eafb6c8b818499c",
-      "size": 579,
-      "repo_path": "bios/Other/armsx2/pcsx2/resources/shaders/opengl/merge.glsl",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "present.glsl",
-      "sha1": "ca7a974714111895bbf03360078ea1008694c52e",
-      "sha256": "27ffa5fdf1634f7be2734d2eff2d9dce0cca71c2832685e0a682388731dc5c60",
-      "size": 11730,
-      "repo_path": "bios/Other/armsx2/pcsx2/resources/shaders/opengl/present.glsl",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "shadeboost.glsl",
-      "sha1": "511dc6bb2f81d0ad61fe46c6e91dce8b344fd934",
-      "sha256": "e7297a2e333bb1882bcf82d2a109a2ab033715cce1bba4934f42ec68370f0077",
-      "size": 1623,
-      "repo_path": "bios/Other/armsx2/pcsx2/resources/shaders/opengl/shadeboost.glsl",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "placeholder.png",
-      "sha1": "25e41433147face77af96fecac4519ed11ae8072",
-      "sha256": "0a42ffa04c5895647026f4cbbd30cae3e1455bd6e36d069ae83142e0c229c74b",
-      "size": 2668,
-      "repo_path": "bios/Other/armsx2/placeholder.png",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "present.fx",
-      "sha1": "84b000485929698392676e8e7915bfcce15291ee",
-      "sha256": "e740b08eb0f7bd074a0a7e6033f5ab9292fb601157e64aacbd9fec6174020d42",
-      "size": 10945,
-      "repo_path": "bios/Other/armsx2/present.fx",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "promptfont.otf",
-      "sha1": "374ee91aeabee48013d2f090571752ec5081356f",
-      "sha256": "92848f15d5eeea9fdfe87e272e4c9ea32f876b3665f5b27ef059711b7c757502",
-      "size": 263548,
-      "repo_path": "bios/Other/armsx2/promptfont.otf",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "ra-icon.svg",
-      "sha1": "7d21ec2d411d63137e5352544aa74e0b8bb04199",
-      "sha256": "0d30848f6a4eb24e64cc430c2d84c1509bfcfcd0923b90a84fb8fe14e2a93700",
-      "size": 2092,
-      "repo_path": "bios/Other/armsx2/ra-icon.svg",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "shadeboost.fx",
-      "sha1": "568f01644e02944fe3d48cfb751e71ebe504c0be",
-      "sha256": "432c5a34e7b14e294211bf209d0cf242f4f13f51876b84a8b0a3a80b98d05fd6",
-      "size": 1311,
-      "repo_path": "bios/Other/armsx2/shadeboost.fx",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "start-bios.svg",
-      "sha1": "061f35078713d8bb386d595964da7366781f98ef",
-      "sha256": "c0a9204f361b449bd75465c22aaf3257fcf9a6554c3c34fbd164bd3654f3fea6",
-      "size": 1295,
-      "repo_path": "bios/Other/armsx2/start-bios.svg",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "start-file.svg",
-      "sha1": "47bd0895af12344dd80d7dc1133c26d2b5081110",
-      "sha256": "c0ca66cdb8081b7d9caa450d8e606f9fd3f9046180bef441e28013e65e11340e",
-      "size": 1120,
-      "repo_path": "bios/Other/armsx2/start-file.svg",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "start-game.svg",
-      "sha1": "dd8e7a8bebe509a38b803105abaf37b275f4cbb3",
-      "sha256": "51e2ce4df2f9a756e74d9a4a0811fac1e8767492bbbb7f7d3feff8a73938c749",
-      "size": 2839,
-      "repo_path": "bios/Other/armsx2/start-game.svg",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "tfx.fx",
-      "sha1": "d061eb8ad3d56a5dc6ab653236b2a0c9324fb595",
-      "sha256": "84e3cc198ad5958218633ae1c8351c8b2d43788fd05e146859d1e65f134828fd",
-      "size": 52018,
-      "repo_path": "bios/Other/armsx2/tfx.fx",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "tfx.glsl",
-      "sha1": "229d91d96b6dc338421e696fe8cdcfcaa093f40d",
-      "sha256": "88ac3fa98f1d87e9813d4042aeab5f4e95aeb5d7ad5277551940c0200c415f0a",
-      "size": 53738,
-      "repo_path": "bios/Other/armsx2/tfx.glsl",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "tfx_fs.glsl",
-      "sha1": "d67bfc4ab5c7e550ea41a0491f45b95f395bacac",
-      "sha256": "2eccacf959f0800afd4f55cc78442e8bf745e07ff712e82a8e197158d9c98bf9",
-      "size": 39547,
-      "repo_path": "bios/Other/armsx2/tfx_fs.glsl",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "tfx_vgs.glsl",
-      "sha1": "f8200a0f4bd284670f0f0191fa9340684e94f66d",
-      "sha256": "e4cbe52fae4f8bd59c0b616907fcf06cd10c8ce8f681cac8664af6f323795679",
-      "size": 14892,
-      "repo_path": "bios/Other/armsx2/tfx_vgs.glsl",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "unlock.wav",
-      "sha1": "da328a0a3074ec86fee2d6741bfc2e5a1f68d063",
-      "sha256": "d9b8d3b5e4ae0a6ed336e769301546735ff34f29c14be6e1232da6b7096c0988",
-      "size": 202702,
-      "repo_path": "bios/Other/armsx2/unlock.wav",
-      "cores": [
-        "armsx2"
-      ]
+        "melonds"
+      ],
+      "storage": "release",
+      "release_asset": "DSi_Nand_USA.bin"
     }
   ]
 }

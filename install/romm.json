@@ -5,7 +5,7 @@
   "platform": "romm",
   "display_name": "RomM",
   "version": "1.0",
-  "generated": "2026-08-12T03:38:29Z",
+  "generated": "2026-08-12T10:39:36Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -3084,20 +3084,20 @@
     },
     {
       "dest": "ngc/GC/USA/IPL.bin",
-      "sha1": "a1837968288253ed541f2b11440b68f5a9b33875",
-      "sha256": "5b2f2617cc63f1861a1f4ae44bb135caf10e202b5b9b79271daaf60f8caaf37d",
+      "sha1": "ef9194ab4804aa0aa8540d846caf291b28331165",
+      "sha256": "7c833f95839c226699108b93ab6acbe772788bfa3f05132b8ced5e78f5bc9a26",
       "size": 2097152,
-      "repo_path": "bios/Nintendo/GameCube/GC/JAP/IPL.bin",
+      "repo_path": "bios/Nintendo/GameCube/GC/USA/IPL.bin",
       "cores": [
         "dolphin"
       ]
     },
     {
       "dest": "ngc/GC/EUR/IPL.bin",
-      "sha1": "a1837968288253ed541f2b11440b68f5a9b33875",
-      "sha256": "5b2f2617cc63f1861a1f4ae44bb135caf10e202b5b9b79271daaf60f8caaf37d",
+      "sha1": "80b8744ff5e43585392f55546bd03a673d11ef5f",
+      "sha256": "85ffcbc834238eb24c87fce27ba7b438cc53a77db013a0a7c59c78e0af08cb84",
       "size": 2097152,
-      "repo_path": "bios/Nintendo/GameCube/GC/JAP/IPL.bin",
+      "repo_path": "bios/Nintendo/GameCube/GC/EUR/IPL.bin",
       "cores": [
         "dolphin"
       ]

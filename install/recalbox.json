@@ -5,7 +5,7 @@
   "platform": "recalbox",
   "display_name": "Recalbox",
   "version": "1.0",
-  "generated": "2026-08-12T03:38:29Z",
+  "generated": "2026-08-12T10:39:36Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -237,8 +237,8 @@
       }
     }
   ],
-  "total_files": 1306,
-  "total_size": 2382065124,
+  "total_files": 1315,
+  "total_size": 3894917262,
   "total_omitted": 5,
   "omitted_files": [
     {
@@ -11381,15 +11381,87 @@
     },
     {
       "dest": "dsi_nand.bin",
-      "sha1": "b48f44194fe918aaaec5298861479512b581d661",
-      "sha256": "f57d9bf00529bec35d58404faff029a193fd2ccda0a83403ec4e6cc32626721b",
+      "sha1": "2b972cec368e83a2699e6ab38165638b1bc1302c",
+      "sha256": "eb8960711bb99c11d1c92de195c29c8e1bf927e8e1a5d134155fd69a9a11134e",
       "size": 251658304,
-      "repo_path": "bios/Nintendo/DS/dsi_nand.bin",
+      "repo_path": "bios/Nintendo/DS/.variants/dsi_nand.bin.8b79a73c",
       "cores": [
         "melonds"
       ],
       "storage": "release",
-      "release_asset": "dsi_nand.bin"
+      "release_asset": "dsi_nand.bin.8b79a73c"
+    },
+    {
+      "dest": "DSi_Nand_AUS.bin",
+      "sha1": "7d006f8943171a4d50ae89bf2fca12b764d27e8b",
+      "sha256": "4149fc5552f8932f28b7999de506f2b2a6cf3093140b7bfcdcc88ade51d970d2",
+      "size": 251658304,
+      "repo_path": "bios/Nintendo/DS/DSi_Nand_AUS.bin",
+      "cores": [
+        "melonds"
+      ],
+      "storage": "release",
+      "release_asset": "DSi_Nand_AUS.bin"
+    },
+    {
+      "dest": "DSi_Nand_CHN.bin",
+      "sha1": "4b3b3de0cb2c2aef80daa68394d5b804b8706d9f",
+      "sha256": "f5ab272f9c62a63d059934f146bf66c2abbfe5e864d852ab7708f97b53ad0fcb",
+      "size": 251658304,
+      "repo_path": "bios/Nintendo/DS/DSi_Nand_CHN.bin",
+      "cores": [
+        "melonds"
+      ],
+      "storage": "release",
+      "release_asset": "DSi_Nand_CHN.bin"
+    },
+    {
+      "dest": "DSi_Nand_EUR.bin",
+      "sha1": "bc4091b6cab4feba3812ac0f23e23d0353481ecf",
+      "sha256": "e577488f582921bdbfaa12a6255832cf646f5ad9f29214d78404e6005714e8bc",
+      "size": 251658304,
+      "repo_path": "bios/Nintendo/DS/DSi_Nand_EUR.bin",
+      "cores": [
+        "melonds"
+      ],
+      "storage": "release",
+      "release_asset": "DSi_Nand_EUR.bin"
+    },
+    {
+      "dest": "DSi_Nand_JPN.bin",
+      "sha1": "c82d60626ac05b49ccec0cfb30001d4a3f31c5b9",
+      "sha256": "6b4c33a189794cd04a7b1359cbf3db86a24ca2c69e1cbefda545d0b34f4b5743",
+      "size": 251658304,
+      "repo_path": "bios/Nintendo/DS/DSi_Nand_JPN.bin",
+      "cores": [
+        "melonds"
+      ],
+      "storage": "release",
+      "release_asset": "DSi_Nand_JPN.bin"
+    },
+    {
+      "dest": "DSi_Nand_KOR.bin",
+      "sha1": "4b061953d8f870bcda006ce86ce136f112cc1793",
+      "sha256": "9d5ec8ff568b0cde27b9817d9f4901437806265aca59557e69905ed571c120a7",
+      "size": 251658304,
+      "repo_path": "bios/Nintendo/DS/DSi_Nand_KOR.bin",
+      "cores": [
+        "melonds"
+      ],
+      "storage": "release",
+      "release_asset": "DSi_Nand_KOR.bin"
+    },
+    {
+      "dest": "DSi_Nand_USA.bin",
+      "sha1": "ef08ae02c5fbe1a22a208c36e25607f5a9d5ae98",
+      "sha256": "42c2c2e4029a05b25a5d61054b29e8192f93d8a33d535d16b3ef128d5dfc83f4",
+      "size": 251658304,
+      "repo_path": "bios/Nintendo/DS/DSi_Nand_USA.bin",
+      "cores": [
+        "melonds"
+      ],
+      "storage": "release",
+      "release_asset": "DSi_Nand_USA.bin"
     },
     {
       "dest": "ps2-dvd-300e.bin",
@@ -12312,41 +12384,31 @@
       ]
     },
     {
-      "dest": "rom1.bin",
-      "sha1": "b91bb1d9dccffe831b7cfde7800a3fe32b2fbda6",
-      "sha256": "8a1eb33c7599b746c0c50283e4349a1bb1773b5c0ec0e9661219bf6c067d2042",
-      "size": 32768,
-      "repo_path": "bios/Roland/soundcanvas-roms/SC-55mk2-v1.01/rom1.bin",
-      "cores": [
-        "pcsx2"
-      ]
-    },
-    {
       "dest": "GameIndex.yaml",
-      "sha1": "b22389650f6c0a1e276b48213fed8a9c1c6476ce",
-      "sha256": "fe469d080984767b32b45dd4f26f58680470003c4935d78e57b21ed4d2061d88",
-      "size": 2669341,
-      "repo_path": "bios/Sony/PlayStation 2/GameIndex.yaml",
+      "sha1": "57369df9ca82a460e596cea7835c5a0797dee668",
+      "sha256": "efa94cb7b9208dc6812bb9407dc986560e523cce57f511eff30942f76b7288bf",
+      "size": 1737799,
+      "repo_path": "bios/Sony/PlayStation 2/.variants/GameIndex.yaml.57369df9",
       "cores": [
         "pcsx2"
       ]
     },
     {
       "dest": "ROM2.BIN",
-      "sha1": "1bae895fbdd658cfb56c53cc2139282cc1e778de",
-      "sha256": "9fc01e6beab84e61e0267fa39e23c649cdf2ccd25ad1cbfc2de0facfd160e723",
-      "size": 8192,
-      "repo_path": "bios/Sony/PlayStation 2/ROM2.BIN",
+      "sha1": "5d5ab4313a2d0effe7572bb129193b64cab002c1",
+      "sha256": "7d93fe474fcc98c06a6d96e533f8935e4e707edf0792d3e9d679ea68404375de",
+      "size": 4096,
+      "repo_path": "bios/Sony/PlayStation 2/.variants/ROM2.BIN.5d5ab431",
       "cores": [
         "pcsx2"
       ]
     },
     {
       "dest": "SCPH30004R.nvm",
-      "sha1": "62f5a0b54a174daf2bf66634b86c6f2a3cd297ce",
-      "sha256": "0e13330dda0c0190a3ab732593416051df19bf8f3f3186862f84531a9d6915e2",
+      "sha1": "1d3caaed7411425c16aee8c35db47b928e31f60b",
+      "sha256": "c598dea13e5bba2fcae69de5b051c15fcd5b25842978be1bb20a86cfff243eaf",
       "size": 1024,
-      "repo_path": "bios/Sony/PlayStation 2/SCPH30004R.nvm",
+      "repo_path": "bios/Sony/PlayStation 2/.variants/SCPH30004R.nvm.5e0200d0",
       "cores": [
         "pcsx2"
       ]
@@ -12602,6 +12664,36 @@
       ]
     },
     {
+      "dest": "SCPH-90006_BIOS_VX_HK _230.EROM",
+      "sha1": "6b357e8624095770952fc408cdc6647fa62e0d28",
+      "sha256": "8801922f614b365d9d37557d7a375d06d385e936804943cb2c52abff55a3d254",
+      "size": 3145728,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-90006_BIOS_VX_HK _230.EROM",
+      "cores": [
+        "pcsx2"
+      ]
+    },
+    {
+      "dest": "SCPH-90006_BIOS_VX_HK _230.NVM",
+      "sha1": "465c2738c280eb1864f679c80b55e468bf670057",
+      "sha256": "d218113ad67d0c178123b797d31baf7f4ae4a9466251d98b9db4192434d3a5e8",
+      "size": 1024,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-90006_BIOS_VX_HK _230.NVM",
+      "cores": [
+        "pcsx2"
+      ]
+    },
+    {
+      "dest": "SCPH-90006_BIOS_VX_HK _230.ROM1",
+      "sha1": "b96cf94772f01b8434038285896467884a84b0c2",
+      "sha256": "1b7c68be427e6f571596ef6b444e8b86d1b4e2a226d62f6bfc86717a798f2317",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-90006_BIOS_VX_HK _230.ROM1",
+      "cores": [
+        "pcsx2"
+      ]
+    },
+    {
       "dest": "cheats_ni.zip",
       "sha1": "dec5e4f137890c338babe13cfb9d41ff869fa721",
       "sha256": "91d5ae704ff8b6d90165a65f69e9e2be8a9ab9c588c525dc1c9c4ecbbdef1ffd",
@@ -12647,6 +12739,16 @@
       "sha256": "e017efa804f1f7d4d3da82b67d7370c5be062b4860f1cff4f898f93437d691a0",
       "size": 1024,
       "repo_path": "bios/Sony/PlayStation 2/ps2-0230a-20080220.nvm",
+      "cores": [
+        "pcsx2"
+      ]
+    },
+    {
+      "dest": "rom1.bin",
+      "sha1": "47d2ec4b342649e4c391043ab915d4435f9d180d",
+      "sha256": "41de2047af8382988bfd568035ff26eec5f1cabc3efe773680546aa00a82857d",
+      "size": 199680,
+      "repo_path": "bios/Sony/PlayStation 2/rom1.bin",
       "cores": [
         "pcsx2"
       ]

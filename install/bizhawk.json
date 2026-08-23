@@ -5,7 +5,7 @@
   "platform": "bizhawk",
   "display_name": "BizHawk",
   "version": "1.0",
-  "generated": "2026-08-12T03:38:29Z",
+  "generated": "2026-08-12T10:39:36Z",
   "base_destination": "Firmware",
   "detect": [
     {
@@ -5197,15 +5197,15 @@
     },
     {
       "dest": "dsi_nand.bin",
-      "sha1": "b48f44194fe918aaaec5298861479512b581d661",
-      "sha256": "f57d9bf00529bec35d58404faff029a193fd2ccda0a83403ec4e6cc32626721b",
+      "sha1": "2b972cec368e83a2699e6ab38165638b1bc1302c",
+      "sha256": "eb8960711bb99c11d1c92de195c29c8e1bf927e8e1a5d134155fd69a9a11134e",
       "size": 251658304,
-      "repo_path": "bios/Nintendo/DS/dsi_nand.bin",
+      "repo_path": "bios/Nintendo/DS/.variants/dsi_nand.bin.8b79a73c",
       "cores": [
         "melonds"
       ],
       "storage": "release",
-      "release_asset": "dsi_nand.bin"
+      "release_asset": "dsi_nand.bin.8b79a73c"
     }
   ]
 }
