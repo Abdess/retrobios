@@ -3,9 +3,9 @@ type: standalone
 core_classification: community_fork
 source: "https://github.com/xenios-jp/XeniOS"
 upstream: "https://github.com/has207/xenia-edge"
-profiled_date: "2026-08-12"
 source_commit: "87b176a078c316fde3adf67a217f0c44615b0e0d"
 upstream_commit: "07021f019cf55105bc26c0474e0b0835808353e2"
+profiled_date: "2026-08-23"
 core_version: "2.0.1"
 display_name: "Microsoft - Xbox 360 (XeniOS)"
 cores:
@@ -16,75 +16,95 @@ systems:
 mode: standalone
 
 notes: |
-  Xbox 360 emulator for macOS and iOS, forked from Xenia Edge by xenios-jp and
-  published as xenios_macos_apple_silicon.dmg, xenios_macos_intel.dmg,
-  xenios_macos_universal.dmg and xenios_ios_iphone_ipad.ipa. The 2.0.1 disk
-  image holds a single bundle, Xenia-edge.app, carrying the executable, an
-  icon, a compiled asset catalog and two dylibs under Contents/Frameworks.
+  Apple-focused fork of Xenia, based on Xenia Edge, published from the xenios
+  branch as xenios_macos_apple_silicon.dmg, xenios_macos_intel.dmg,
+  xenios_macos_universal.dmg and xenios_ios_iphone_ipad.ipa. The macOS build
+  names its bundle and executable Xenia-edge, the iOS build XeniOS
+  (src/xenia/app/CMakeLists.txt:11-13, 175, 339-341). ES-DE runs it through the
+  XENIOS rule with the ROM and an optional .commands file of extra arguments.
 
-  Rendering runs on Metal. Guest DXBC is converted to DXIL through
-  libdxilconv.dylib, built from the fork's own DirectX Shader Compiler branch,
-  then to Metal IR through Apple's Metal Shader Converter
-  (libmetalirconverter.dylib), which the build requires present before it will
-  configure. Both are linked as imported shared libraries and copied into the
-  bundle before it is signed (third_party/CMakeLists.txt:432-448, 489-579,
-  src/xenia/app/CMakeLists.txt:347-363, 371-378), so the code calls IRCompilerCreate
-  and DxcCreateInstance as ordinary symbols and never names either file
-  (gpu/metal/metal_shader_converter.cc:83, gpu/metal/dxbc_to_dxil_converter.cc:103).
-  MoltenVK is statically linked and its entry points resolve as real symbols,
-  so the Vulkan backend loads no loader library
-  (ui/vulkan/vulkan_instance.cc:30-33, 81-82).
+  The 2.0.1 disk image holds one bundle: beside its code signature it carries
+  Info.plist, MacOS/Xenia-edge, Resources/AppIcon.icns, Resources/Assets.car
+  and two dylibs under Contents/Frameworks. Rendering runs on Metal. Guest DXBC
+  is converted to DXIL through libdxilconv.dylib, built from the fork's own
+  DirectX Shader Compiler branch, then to Metal IR through Apple's Metal Shader
+  Converter (libmetalirconverter.dylib). Both are imported shared libraries
+  copied into Frameworks and reached by @rpath
+  (third_party/CMakeLists.txt:432-456, src/xenia/app/CMakeLists.txt:348-360),
+  so the code calls IRCompilerCreate and DxcCreateInstance as ordinary symbols
+  and never names either file
+  (src/xenia/gpu/metal/metal_shader_converter.cc:83,
+  src/xenia/gpu/metal/dxbc_to_dxil_converter.cc:103). MoltenVK is statically
+  linked and its entry points resolve as real symbols, so the Vulkan backend
+  loads no loader library (src/xenia/ui/vulkan/vulkan_instance.cc:30-39,
+  81-83).
 
   No Xbox 360 system file is read. xboxkrnl, xam and xbdm are C++ HLE modules
-  registered at startup (emulator.cc:425-427), the XEX1 and XEX2 retail keys
-  and the zeroed devkit key are constexpr arrays in the binary
-  (cpu/xex_module.cc:55-63, used at 344 and 503), and every XConfig setting is
-  assembled from cvars and constants by BuildSetting, in a file that makes no
-  filesystem call at all (kernel/xconfig.cc:87-246). Launching a system title
-  symlinks \SystemRoot to that title's own mount and resolves xam.xex, then
-  $flash_xam.xex, through the guest filesystem (emulator.cc:744-762): a
-  companion module inside the dump the user launched, not a host lookup.
+  registered at startup (src/xenia/emulator.cc:425-427), the XEX1 and XEX2
+  retail keys and the zeroed devkit key are constexpr arrays tried in turn
+  (src/xenia/cpu/xex_module.cc:55-63, used at 344, 503 and 925-935), and every
+  XConfig setting is assembled from cvars and constants by BuildSetting, in a
+  file that makes no filesystem call at all
+  (src/xenia/kernel/xconfig.cc:87-246). Launching a system title symlinks
+  \SystemRoot to that title's own mount and resolves xam.xex, then
+  $flash_xam.xex, through the guest filesystem
+  (src/xenia/emulator.cc:744-759); spa.bin is resolved the same way inside an
+  installed DLC package (src/xenia/kernel/xam/content_manager.cc:31, 425-426).
 
-  The fork's data ships inside the executable. assets/font and assets/icon are
-  linked in by xe_embed_binary_assets and the 33 assets/locale catalogues are
-  compiled to .mo at configure time and bundled, with no .mo written beside the
-  binary (ui/CMakeLists.txt:55-58, 64-83). The UI font is read from that buffer
-  with AddFontFromMemoryTTF (ui/imgui_drawer.cc:367-377), and xe::EmbeddedBundle
-  decodes the SDL controller mappings (hid/sdl/sdl_input_driver.cc:148-165), the
-  canary game patches (patcher/patch_db.cc:303-318) and the canary.json and
-  stable.json compatibility lists (app/game_compat_db.cc:65-79).
+  The fork's data ships inside the executable. The UI font and the app icon are
+  linked in by xe_embed_binary_assets, and the 33 locale catalogues are
+  compiled from .po to .mo at configure time and packed into one compressed
+  bundle (src/xenia/ui/CMakeLists.txt:55-58, 60-82), which wx_locale.cc serves
+  through a loader that replaces the wxWidgets file-based one
+  (src/xenia/ui/wx_locale.cc:43-111, 139-140). The font is read from that
+  buffer with AddFontFromMemoryTTF (src/xenia/ui/imgui_drawer.cc:367-377), and
+  xe::EmbeddedBundle decodes the SDL controller mappings
+  (src/xenia/hid/sdl/sdl_input_driver.cc:148-166), the canary game patches
+  (src/xenia/patcher/patch_db.cc:304-318) and the canary.json and stable.json
+  compatibility lists (src/xenia/app/game_compat_db.cc:65-78).
 
   Three cvars accept a file and name none by default, so nothing is expected at
   a fixed path: custom_font_path falls back to the embedded font
-  (ui/imgui_drawer.cc:39-44, 353-377), mappings_file to the embedded controller
-  DB (hid/sdl/sdl_input_driver.cc:35-39, 148-152), achievement_sound_path leaves
-  the achievement sound silent (ui/audio_helper.cc:21-25, 44-48). Each carries an
-  UPDATE_from_path rule that clears the earlier default out of an existing config.
+  (src/xenia/ui/imgui_drawer.cc:39-42, 353-377), mappings_file to the embedded
+  controller database (src/xenia/hid/sdl/sdl_input_driver.cc:35-38, 148-166),
+  achievement_sound_path leaves the achievement sound silent
+  (src/xenia/ui/audio_helper.cc:21-24, 44-53). The first two carry an
+  UPDATE_from_path rule that clears the earlier default out of an existing
+  config (src/xenia/ui/imgui_drawer.cc:43-44,
+  src/xenia/hid/sdl/sdl_input_driver.cc:39).
 
   Everything under the storage root is written by the emulator or dropped in by
   the user: xenia-edge.config.toml and per-title config/<title id>.config.toml
-  (config.cc:44-52), patches/*.patch.toml read on top of the embedded set
-  (patcher/patch_db.cc:29-60, app/xenia_main_ios.mm:275-300), plugins/<title id>/plugins.toml
-  behind allow_plugins, which defaults false (patcher/plugin_loader.cc:16-18, 40-62),
-  content, cache_host and the per-module executable_addr_flags.bin analysis cache
-  (app/xenia_main.cc:588-613, cpu/xex_module.cc:1336-1343). portable.txt next to
-  the executable keeps the storage root there instead of the user folder
-  (app/xenia_main.cc:556-570). On iOS the touch layouts live as
+  (src/xenia/config.cc:44-52), patches/*.patch.toml read on top of the embedded
+  set (src/xenia/patcher/patch_db.cc:29-59), plugins/<title id>/plugins.toml
+  behind allow_plugins, which defaults false
+  (src/xenia/patcher/plugin_loader.cc:16-21, 32-34, 58-62), content, cache_host
+  and the per-module executable_addr_flags.bin analysis cache
+  (src/xenia/app/xenia_main.cc:588-613, src/xenia/cpu/xex_module.cc:1336-1343).
+  portable.txt next to the executable keeps the storage root there instead of
+  the user folder (src/xenia/app/xenia_main.cc:556-570). On iOS the embedded
+  patches are written out to Documents/patches on first run
+  (src/xenia/app/xenia_main_ios.mm:226-253) and touch layouts live as
   Documents/touch-layouts/<id>.toml, written by the layout editor
-  (ui/ios/touch/touch_layout_store_ios.mm:117-139).
+  (src/xenia/ui/ios/touch/touch_layout_store_ios.mm:133-140). The only bundle
+  file the code opens by name is embedded.mobileprovision, absent from the
+  published .ipa and present only once the user has signed it, read for a
+  single log line reporting its size and two entitlements
+  (src/xenia/app/xenia_main_ios.mm:170-193).
 
 files: []
 
 exclusion_note: >
   XeniOS emulates the Xbox 360 by high-level emulation and reads no BIOS,
-  firmware, NAND image, flash dump or keyvault at any point: the kernel, XAM
-  and XBDM are compiled-in modules, the XEX AES keys are constant arrays and
-  XConfig is synthesised. Its own data (UI font, icons, locale catalogues, SDL
-  controller mappings, game patches, compatibility lists) is compressed into
-  the executable through xe_embed_binary_assets and xe_embed_compressed_bundle,
-  so none of it exists as a file beside the binary. The three cvars that accept
-  a path default to empty and fall back to those embedded copies. The two
-  dylibs under Contents/Frameworks, libmetalirconverter.dylib and
-  libdxilconv.dylib, are shader translation components linked at build time and
-  resolved by the loader through @rpath; no code path names them, and they are
-  obtained by the same download that provides the executable.
+  firmware, NAND image, flash dump or keyvault at any point: the kernel, XAM and
+  XBDM are compiled-in modules, the XEX AES keys are constant arrays and XConfig
+  is synthesised. Its own data (UI font, icons, locale catalogues, SDL
+  controller mappings, game patches, compatibility lists) is compressed into the
+  executable through xe_embed_binary_assets and xe_embed_compressed_bundle, so
+  none of it exists as a file beside the binary; the shipped bundle carries only
+  the executable, its property list, an icon, a compiled asset catalog and the
+  two shader translation dylibs. The three cvars that accept a path default to
+  empty and fall back to those embedded copies. libmetalirconverter.dylib and
+  libdxilconv.dylib are linked at build time and resolved by the loader through
+  @rpath, no code path names them, and they are obtained by the same download
+  that provides the executable.
