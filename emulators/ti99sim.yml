@@ -26,7 +26,7 @@ files:
     required: true
     description: "Console ROM cartridge containing CPU ROMs, system GROMs, and RAM configuration"
     source_ref: "src/core/ti994a.cpp:122-131 (v0.16.0), src/sdl/main.cpp:407-411 (v0.0.11)"
-    sha1: "0264512c7d9e7fa091a48e5c8734782ea031a52d"
+    sha1: "1d63879573a201cab6c883327240ddc148732ccd"
     note: "SHA1 is of .ctg format. v0.16.0 also recognizes console v2.2 (sha1 16e275faae427465ba4dd4c2bf8569f6546d32dd)."
 
   - name: spchrom.bin
@@ -42,26 +42,26 @@ files:
     required: false
     description: "TI Disk Controller DSR ROM (CRU >1100)"
     source_ref: "src/core/device-support.cpp:52 (v0.16.0), src/sdl/main.cpp:452-476 (v0.0.11)"
-    sha1: "ed91d48c1eaa8ca37d5055bcf67127ea51c4cad5"
+    sha1: "a092153d87615d64e025c118b16a0c6ec70e6fe7"
     note: "SHA1 is of .ctg format. Disk emulation disabled without this file."
 
   - name: "Gram Kracker.ctg"
     required: false
     description: "Miller Graphics Gram Kracker ROM manipulation peripheral"
     source_ref: "src/core/ti994a-gk.cpp:56 (v0.16.0), src/sdl/ti994a-sdl.cpp:78 (v0.0.11)"
-    sha1: "a3bd5257c63e190800921b52dbe3ffa91ad91113"
-    note: "SHA1 is of .ctg format. Gram Kracker features disabled without this file."
+    sha1: "56dd520570cdcdd60dda2eedc8af1e02a781dcc5"
+    note: "SHA1 is of the .ctg convert-ctg builds at the pinned commit. Gram Kracker features disabled without this file."
 
   - name: ti-pcard.ctg
     required: false
     description: "TI P-Code Card (UCSD Pascal) DSR ROM"
     source_ref: "src/core/device-support.cpp:53 (v0.16.0)"
-    sha1: "27aceb956262d3e3f97d938602dfaa91b53da59e"
-    note: "SHA1 is of .ctg format. v0.16.0+ only."
+    sha1: "c7bf5fcfea0502011dca76d12efcc242e23421b9"
+    note: "SHA1 is of the .ctg convert-ctg builds at the pinned commit from the .dat in roms/ and the pre-0.174 MAME images scripts/setup fetches. v0.16.0+ only."
 
   - name: cf7+.ctg
     required: false
     description: "CF7+/nanoPEB CompactFlash interface DSR ROM"
     source_ref: "src/core/device-support.cpp:51 (v0.16.0)"
-    sha1: "4d26e5ef0997ed2f3a56eb8104778bfe719b38f2"
-    note: "SHA1 is of .ctg format. v0.16.0+ only."
+    sha1: "698c638e1773244a6bf8a353c87d210047cce402"
+    note: "SHA1 is of the .ctg convert-ctg builds at the pinned commit from the .dat in roms/ and the pre-0.174 MAME images scripts/setup fetches. v0.16.0+ only."
