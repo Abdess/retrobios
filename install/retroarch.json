@@ -5,7 +5,7 @@
   "platform": "retroarch",
   "display_name": "RetroArch",
   "version": "1.0",
-  "generated": "2026-08-12T10:39:36Z",
+  "generated": "2026-08-23T06:27:16Z",
   "base_destination": "system",
   "detect": [
     {
@@ -256,7 +256,7 @@
     }
   ],
   "total_files": 1864,
-  "total_size": 5861351957,
+  "total_size": 5861335573,
   "total_omitted": 9,
   "omitted_files": [
     {
@@ -10317,8 +10317,8 @@
     },
     {
       "dest": "nxengine/Doukutsu.exe",
-      "sha1": "91d75a87872cbb88964bead92e0cbf8b72e836b6",
-      "sha256": "8a7a63b24bb21557fb597697bdf09248c1ab7e3298cacfa1166d764dd81e7fc3",
+      "sha1": "bb2d0441e073da9c584f23c2ad8c7ab8aac293bf",
+      "sha256": "fa18379fe942ecb5fd69360ede81675ad6bb8b743bef2120305c4b439c732218",
       "size": 1478656,
       "repo_path": "bios/Other/NXEngine/Doukutsu.exe",
       "cores": [
@@ -14215,9 +14215,9 @@
     },
     {
       "dest": "vice/C128/kernal-318034-01.bin",
-      "sha1": "9b0a0cef56d00035c611e07170f051ee5e63aa3a",
-      "sha256": "89d32c3a5c13cded89207a9e86d998158b00bf0a09663070ecc5524501045b74",
-      "size": 32768,
+      "sha1": "925177c99ee7e02870c32ad62a054db1327cf0c2",
+      "sha256": "2222e29cd47ff5d1fdb7c2647d52400b619a0a4acbc6060ae1131afc0b3466dd",
+      "size": 16384,
       "repo_path": "bios/Commodore/C128/vice/C128/kernal-318034-01.bin",
       "cores": [
         "vice"

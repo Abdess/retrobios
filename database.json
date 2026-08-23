@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-12T10:39:36Z",
-  "total_files": 8908,
-  "total_size": 12307787935,
+  "generated_at": "2026-08-23T06:27:16Z",
+  "total_files": 8923,
+  "total_size": 12326477894,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -31607,6 +31607,23 @@
       "crc32": "f4151454",
       "adler32": "6ae44c8f"
     },
+    "9b0a0cef56d00035c611e07170f051ee5e63aa3a": {
+      "path": "bios/Commodore/C128/vice/C128/.variants/kernal-318034-01.bin.9b0a0cef",
+      "name": "kernal-318034-01.bin",
+      "size": 32768,
+      "sha1": "9b0a0cef56d00035c611e07170f051ee5e63aa3a",
+      "md5": "6792dfeaec2eda9db164c59e45e94214",
+      "sha256": "89d32c3a5c13cded89207a9e86d998158b00bf0a09663070ecc5524501045b74",
+      "crc32": "cb4e1719",
+      "adler32": "43d0f74a",
+      "provenance": {
+        "tosec": {
+          "dat": "Commodore C128 - Firmware",
+          "name": "Complete 318034-01 (1986)(Commodore)(SE).rom",
+          "description": "Complete 318034-01 (1986)(Commodore)(SE)"
+        }
+      }
+    },
     "267654823c4fdf2167050f41faa118218d2569ce": {
       "path": "bios/Commodore/C128/vice/C128/.variants/kernal64-325182-01.bin.2aff27d3",
       "name": "kernal64-325182-01.bin",
@@ -31802,22 +31819,15 @@
         }
       }
     },
-    "9b0a0cef56d00035c611e07170f051ee5e63aa3a": {
+    "925177c99ee7e02870c32ad62a054db1327cf0c2": {
       "path": "bios/Commodore/C128/vice/C128/kernal-318034-01.bin",
       "name": "kernal-318034-01.bin",
-      "size": 32768,
-      "sha1": "9b0a0cef56d00035c611e07170f051ee5e63aa3a",
-      "md5": "6792dfeaec2eda9db164c59e45e94214",
-      "sha256": "89d32c3a5c13cded89207a9e86d998158b00bf0a09663070ecc5524501045b74",
-      "crc32": "cb4e1719",
-      "adler32": "43d0f74a",
-      "provenance": {
-        "tosec": {
-          "dat": "Commodore C128 - Firmware",
-          "name": "Complete 318034-01 (1986)(Commodore)(SE).rom",
-          "description": "Complete 318034-01 (1986)(Commodore)(SE)"
-        }
-      }
+      "size": 16384,
+      "sha1": "925177c99ee7e02870c32ad62a054db1327cf0c2",
+      "md5": "7852922295c103f067ba3c0f56378a95",
+      "sha256": "2222e29cd47ff5d1fdb7c2647d52400b619a0a4acbc6060ae1131afc0b3466dd",
+      "crc32": "1cf7f729",
+      "adler32": "8c49f269"
     },
     "98c34e0dec9f52d7862b56bb287d2573eb3f6364": {
       "path": "bios/Commodore/C128/vice/C128/kernal-325172-01.bin",
@@ -46505,7 +46515,7 @@
       "adler32": "323261bb"
     },
     "91d75a87872cbb88964bead92e0cbf8b72e836b6": {
-      "path": "bios/Other/NXEngine/Doukutsu.exe",
+      "path": "bios/Other/NXEngine/.variants/Doukutsu.exe.91d75a87",
       "name": "Doukutsu.exe",
       "size": 1478656,
       "sha1": "91d75a87872cbb88964bead92e0cbf8b72e836b6",
@@ -46513,6 +46523,16 @@
       "sha256": "8a7a63b24bb21557fb597697bdf09248c1ab7e3298cacfa1166d764dd81e7fc3",
       "crc32": "0c0644ba",
       "adler32": "c7b3f901"
+    },
+    "bb2d0441e073da9c584f23c2ad8c7ab8aac293bf": {
+      "path": "bios/Other/NXEngine/Doukutsu.exe",
+      "name": "Doukutsu.exe",
+      "size": 1478656,
+      "sha1": "bb2d0441e073da9c584f23c2ad8c7ab8aac293bf",
+      "md5": "38695d3d69d7a0ada8178072dad4c58b",
+      "sha256": "fa18379fe942ecb5fd69360ede81675ad6bb8b743bef2120305c4b439c732218",
+      "crc32": "c5a2a3f6",
+      "adler32": "0f86b3c7"
     },
     "19555d2f5f72a66d6beddb4acc5ca00d634ac9c4": {
       "path": "bios/Other/NXEngine/nxengine/data/npc.tbl",
@@ -56115,6 +56135,126 @@
       "sha256": "ce50cb5d5624244d1c4c3e2b8c696bc42dd21772979f7d284608a308f1e2b8a4",
       "crc32": "9489e5a8",
       "adler32": "0c2b972a"
+    },
+    "66b2a25ef8e1af74bed4bbba4785951a9d6edce0": {
+      "path": "bios/Other/virtual-virtual-boy/games/BLOX 2.vb",
+      "name": "BLOX 2.vb",
+      "size": 2097152,
+      "sha1": "66b2a25ef8e1af74bed4bbba4785951a9d6edce0",
+      "md5": "cc91d6389df2c9777919e8e8ab2c0e66",
+      "sha256": "7a5e2f72da47da89ca86af2f50245f30a63bd59ac3083c7f5cdab76a26230eb5",
+      "crc32": "85460a25",
+      "adler32": "b94853db"
+    },
+    "f2105349dff09bdc00e4548460991dde9ac7c2af": {
+      "path": "bios/Other/virtual-virtual-boy/games/BLOX.vb",
+      "name": "BLOX.vb",
+      "size": 1048576,
+      "sha1": "f2105349dff09bdc00e4548460991dde9ac7c2af",
+      "md5": "f82d4c9fdd81518537d88f70c6602bb5",
+      "sha256": "bb69dab364fc96ed1bd93b3f633ff928baf568db66638b830b3060411e40b208",
+      "crc32": "450feab5",
+      "adler32": "2dd929ea"
+    },
+    "8b08f08f37127621483aa4e204a3e3b2312af196": {
+      "path": "bios/Other/virtual-virtual-boy/games/Elevated Speed.vb",
+      "name": "Elevated Speed.vb",
+      "size": 4194304,
+      "sha1": "8b08f08f37127621483aa4e204a3e3b2312af196",
+      "md5": "8f7bcfdd0f412d9060b06a97a89fe202",
+      "sha256": "6c1ed18e735b6a25d873e4434161b174e60ac49a4526ca8a80b86d1a067229d5",
+      "crc32": "9c93aa2a",
+      "adler32": "b2252210"
+    },
+    "b1e5d5ab7e49f91050d3593bbcf48ff609c1c979": {
+      "path": "bios/Other/virtual-virtual-boy/games/Fishbone.vb",
+      "name": "Fishbone.vb",
+      "size": 524288,
+      "sha1": "b1e5d5ab7e49f91050d3593bbcf48ff609c1c979",
+      "md5": "61e38e4e0c43aa8d6274a89ebedd3063",
+      "sha256": "72812dc813e44534a3010545346516bae172b21b707ece99bef85dc609157814",
+      "crc32": "c279ee3e",
+      "adler32": "c6d394fa"
+    },
+    "533672b887ec16aa50a5508488d1ab125dd5e749": {
+      "path": "bios/Other/virtual-virtual-boy/games/Formula V Public Demo.vb",
+      "name": "Formula V Public Demo.vb",
+      "size": 4194304,
+      "sha1": "533672b887ec16aa50a5508488d1ab125dd5e749",
+      "md5": "34e9a2ffd60f7ea565caada82d57f29f",
+      "sha256": "dcfbe7418aab2f0bbdb09d0102e7e3985f79b432911badc6048b2421afdaff1d",
+      "crc32": "87b8d4ad",
+      "adler32": "dd5afcf4"
+    },
+    "a12529a0d7cf7f0711b913b8ae72fea193cebc17": {
+      "path": "bios/Other/virtual-virtual-boy/games/Red Square.vb",
+      "name": "Red Square.vb",
+      "size": 524288,
+      "sha1": "a12529a0d7cf7f0711b913b8ae72fea193cebc17",
+      "md5": "9c372321204b9fa65f9324f98aae53ff",
+      "sha256": "bc3526db637cdedfa09b90b2d90f793547bb479b4cc42144ae9549a790e2034b",
+      "crc32": "cea4707a",
+      "adler32": "3974f060"
+    },
+    "34e90abaa3ffc706882fd8a0d1a8101abc185734": {
+      "path": "bios/Other/virtual-virtual-boy/games/The Red Castle.vb",
+      "name": "The Red Castle.vb",
+      "size": 2097152,
+      "sha1": "34e90abaa3ffc706882fd8a0d1a8101abc185734",
+      "md5": "cdb404ff3e1df7b3c13214ac5409d512",
+      "sha256": "dfbbae12b5d890e843b4dfce4f092cd94b0da76f632a854fb1631ab70ed417b7",
+      "crc32": "8bb53eac",
+      "adler32": "b24b358e"
+    },
+    "77ebaf5dbe667d8347d098b6749b6f3be09f5814": {
+      "path": "bios/Other/virtual-virtual-boy/games/VUE Snake.vb",
+      "name": "VUE Snake.vb",
+      "size": 262144,
+      "sha1": "77ebaf5dbe667d8347d098b6749b6f3be09f5814",
+      "md5": "ccfa400a0ff3d717dad36a3f736fd34d",
+      "sha256": "faa75c6f47fdb051d5ee4d491cfd917b00cc3e6c976a05e290aa3acf5840c4df",
+      "crc32": "ad054747",
+      "adler32": "8ebbfa02"
+    },
+    "b1b9893629bbec74e8b58d7b5983e7d35e202fe0": {
+      "path": "bios/Other/virtual-virtual-boy/games/VUEngine Platformer Demo.vb",
+      "name": "VUEngine Platformer Demo.vb",
+      "size": 2097152,
+      "sha1": "b1b9893629bbec74e8b58d7b5983e7d35e202fe0",
+      "md5": "c96d91fb97572a0af7d53f63b292e0f2",
+      "sha256": "d249aac8ee41a7a86fd74890f3e6a11e1e52b8456cda652d1ea67002a2ecb3fd",
+      "crc32": "e2dbbd2e",
+      "adler32": "ab8416a0"
+    },
+    "480e9872ab20d8a137004e45486985608882983f": {
+      "path": "bios/Other/virtual-virtual-boy/res/drawable-nodpi/vbtitlescreen_left.png",
+      "name": "vbtitlescreen_left.png",
+      "size": 619,
+      "sha1": "480e9872ab20d8a137004e45486985608882983f",
+      "md5": "793565cb6af20eb02c78322899e54172",
+      "sha256": "3d87dc493743bd545ea15f6817d6f489df979d2f081a6ad7d6ec42f0dbe21a99",
+      "crc32": "7dc3a66e",
+      "adler32": "6358feee"
+    },
+    "fc6c5857a0c298d9d6a73449044d1ef3c57fe050": {
+      "path": "bios/Other/virtual-virtual-boy/res/drawable-nodpi/vbtitlescreen_right.png",
+      "name": "vbtitlescreen_right.png",
+      "size": 620,
+      "sha1": "fc6c5857a0c298d9d6a73449044d1ef3c57fe050",
+      "md5": "6df7af05e6b0cb19a37615c2b29116d9",
+      "sha256": "8891ed937547ec36951f1de529a196856d342c1d83bb9670c01ba57e3c7fb819",
+      "crc32": "7f1d88f5",
+      "adler32": "59e40141"
+    },
+    "2ae5b46e78afb1bb95d11fa103d6176321573b91": {
+      "path": "bios/Other/virtual-virtual-boy/res/raw/bundledgames.json",
+      "name": "bundledgames.json",
+      "size": 1677,
+      "sha1": "2ae5b46e78afb1bb95d11fa103d6176321573b91",
+      "md5": "04ecc37b70b23fdcc3f5207040f4d178",
+      "sha256": "e3df6beba958452d300392d2a9b57cf0a07c8abf6b842965198ec7aa5512f791",
+      "crc32": "ae8234b1",
+      "adler32": "e803e371"
     },
     "a5e152373fa6cc91fa6953dee562ebce6868eb94": {
       "path": "bios/Other/xenia-edge/D3D12/D3D12Core.dll",
@@ -87114,6 +87254,16 @@
       "crc32": "4dcfd55c",
       "adler32": "75a93df4"
     },
+    "681e3362f0251d2e26e6bc2e06157c027f5f3116": {
+      "path": "bios/Sega/Model 3/Config/Games.xml",
+      "name": "Games.xml",
+      "size": 152643,
+      "sha1": "681e3362f0251d2e26e6bc2e06157c027f5f3116",
+      "md5": "d5c1f69e9910622b4ca6beae4c23d68a",
+      "sha256": "a73b9f1c37d64532bf82d1d790a3e0cb81a9b2accb04d866901bb7ae1970473a",
+      "crc32": "a7b8bc61",
+      "adler32": "03e1bc30"
+    },
     "12de390be2595ad17015310085eaec57ad2b953f": {
       "path": "bios/Sega/SC-3000/.variants/sc3000.zip.12de390b",
       "name": "sc3000.zip",
@@ -97253,6 +97403,7 @@
       "be09394f0576cf81fa8bacf634daf9a2": "31e73e66eccb28732daea8ec3ad1addd9b39a017",
       "cda2fcd2e1f0412029383e51dd472095": "3422a7735f0f959d990ab39512d8815a5d8eab7a",
       "b2869f8678b8b274227f35aad26ba509": "6aa529a7b1b6de53e8979e407a77b4d5657727f5",
+      "6792dfeaec2eda9db164c59e45e94214": "9b0a0cef56d00035c611e07170f051ee5e63aa3a",
       "9e344195fe2937e3148b02972c80a59a": "267654823c4fdf2167050f41faa118218d2569ce",
       "57af4ae21d4b705c2991d98ed5c1f7b8": "79015323128650c742a3694c9429aa91f355905e",
       "87bb251707d0a2c915d6e0c69fdb0fed": "c4fb4a714e48a7bf6c28659de0302183a0e0d6c0",
@@ -97265,7 +97416,7 @@
       "46b3cb2140f244c0ed1150c819e7bdc4": "29ed066d513f2d5c09ff26d9166ba23c2afb2b3f",
       "9837409b6bdb7ce055409fa3eb3e9cf0": "3629b3fa28b6a30bcc027b647f26654929ed1b0f",
       "01f6903033b90cd506cde7802ec743c3": "ceb6e1a1bf7e08eb9cbc651afa29e26adccf38ab",
-      "6792dfeaec2eda9db164c59e45e94214": "9b0a0cef56d00035c611e07170f051ee5e63aa3a",
+      "7852922295c103f067ba3c0f56378a95": "925177c99ee7e02870c32ad62a054db1327cf0c2",
       "90907477d39db1b8fe1732692278a0e9": "98c34e0dec9f52d7862b56bb287d2573eb3f6364",
       "39065497630802346bce17963f13c092": "1d503e56df85a62fee696e7618dc5b4e781df1bb",
       "8fa940c39225d40f37ddf7082fba8b21": "b4862cac7b9319d8e912887c97fc270d4c239349",
@@ -98561,6 +98712,7 @@
       "2614becc041fc813cf87397aa47e8210": "3757750cd3052b8d23f379aba22d7ee3d9353bc9",
       "37c78cb6e0105b946627038dcbfc8c64": "049412d56a41865539faadcd86408d5107a1dbef",
       "f20bb7bc1b97453161e63964f24a2785": "91d75a87872cbb88964bead92e0cbf8b72e836b6",
+      "38695d3d69d7a0ada8178072dad4c58b": "bb2d0441e073da9c584f23c2ad8c7ab8aac293bf",
       "2c8dff849954bbca9c4a54087a5c06a9": "19555d2f5f72a66d6beddb4acc5ca00d634ac9c4",
       "ebc011b876b9a4755fe44fa45d366996": "73acccee601b56a2b7f624b0227fa7e1d662ef4b",
       "d74d5681ad8d825f5c229db1ee931bbb": "74c14b15dbc2f36c81d2ad9cb65e2893298415da",
@@ -99517,6 +99669,18 @@
       "a10001250bba63ee09abc0b9e545f2bf": "09de0c832fdf8ad2db9a62c0c2c4bb5b2a746fda",
       "ef00c2f8b623b2cc9189afefca3615fd": "aa56e03c13ff0bd4f6404106c9f1488b33bf4cd9",
       "2cc415ce59f0b08586cb366df3224b11": "b623379d6059cd877c6734fb289f59493b99fbea",
+      "cc91d6389df2c9777919e8e8ab2c0e66": "66b2a25ef8e1af74bed4bbba4785951a9d6edce0",
+      "f82d4c9fdd81518537d88f70c6602bb5": "f2105349dff09bdc00e4548460991dde9ac7c2af",
+      "8f7bcfdd0f412d9060b06a97a89fe202": "8b08f08f37127621483aa4e204a3e3b2312af196",
+      "61e38e4e0c43aa8d6274a89ebedd3063": "b1e5d5ab7e49f91050d3593bbcf48ff609c1c979",
+      "34e9a2ffd60f7ea565caada82d57f29f": "533672b887ec16aa50a5508488d1ab125dd5e749",
+      "9c372321204b9fa65f9324f98aae53ff": "a12529a0d7cf7f0711b913b8ae72fea193cebc17",
+      "cdb404ff3e1df7b3c13214ac5409d512": "34e90abaa3ffc706882fd8a0d1a8101abc185734",
+      "ccfa400a0ff3d717dad36a3f736fd34d": "77ebaf5dbe667d8347d098b6749b6f3be09f5814",
+      "c96d91fb97572a0af7d53f63b292e0f2": "b1b9893629bbec74e8b58d7b5983e7d35e202fe0",
+      "793565cb6af20eb02c78322899e54172": "480e9872ab20d8a137004e45486985608882983f",
+      "6df7af05e6b0cb19a37615c2b29116d9": "fc6c5857a0c298d9d6a73449044d1ef3c57fe050",
+      "04ecc37b70b23fdcc3f5207040f4d178": "2ae5b46e78afb1bb95d11fa103d6176321573b91",
       "de8cf43e4ed5c8c7f9111414f508b268": "a5e152373fa6cc91fa6953dee562ebce6868eb94",
       "d3d5beb92a7b1c711dbdc83a92639099": "c6efd59349c430969f68fbeb86fa5328e96dc08b",
       "46075cd0c8c4a477081d2b302d42a257": "284743af8343e7b512b2c442c3d32b23e5112ee0",
@@ -102549,6 +102713,7 @@
       "ff4a3572475236e859e3e9ac5c87d1f1": "02c287d10da6de579af7a4ce73b134bbdf23c970",
       "4ea493ea4e9f6c9ebfccbdb15110367e": "88d6499d874dcb5721ff58d76fe1b9af811192e3",
       "b4e76e416b887f4e7413ba76fa735f16": "70429f1d80503a0632f603bf762fe0bbaa881d22",
+      "d5c1f69e9910622b4ca6beae4c23d68a": "681e3362f0251d2e26e6bc2e06157c027f5f3116",
       "48e8821fb9087ab60a2a3b1465ee5124": "12de390be2595ad17015310085eaec57ad2b953f",
       "52adbcbef759756a5b97cafda75b922c": "c983bfa2f4c6d077e70e6ff9c7ed59b72368e355",
       "a36acd9ac53b668bebbd98bd192c43e9": "06860d96923b81afbc21e0ad32ee19487d8ff6e7",
@@ -111891,6 +112056,10 @@
       "scpu-dos-2.04.bin": [
         "6aa529a7b1b6de53e8979e407a77b4d5657727f5"
       ],
+      "kernal-318034-01.bin": [
+        "9b0a0cef56d00035c611e07170f051ee5e63aa3a",
+        "925177c99ee7e02870c32ad62a054db1327cf0c2"
+      ],
       "kernal64-325182-01.bin": [
         "267654823c4fdf2167050f41faa118218d2569ce",
         "e4f52d9b36c030eb94524eb49f6f0774c1d02e5e"
@@ -111927,9 +112096,6 @@
       ],
       "kernal-318020-05.bin": [
         "ceb6e1a1bf7e08eb9cbc651afa29e26adccf38ab"
-      ],
-      "kernal-318034-01.bin": [
-        "9b0a0cef56d00035c611e07170f051ee5e63aa3a"
       ],
       "kernal-325172-01.bin": [
         "98c34e0dec9f52d7862b56bb287d2573eb3f6364"
@@ -115517,7 +115683,8 @@
         "049412d56a41865539faadcd86408d5107a1dbef"
       ],
       "Doukutsu.exe": [
-        "91d75a87872cbb88964bead92e0cbf8b72e836b6"
+        "91d75a87872cbb88964bead92e0cbf8b72e836b6",
+        "bb2d0441e073da9c584f23c2ad8c7ab8aac293bf"
       ],
       "npc.tbl": [
         "19555d2f5f72a66d6beddb4acc5ca00d634ac9c4"
@@ -118156,6 +118323,42 @@
       ],
       "tekifire.ogg": [
         "b623379d6059cd877c6734fb289f59493b99fbea"
+      ],
+      "BLOX 2.vb": [
+        "66b2a25ef8e1af74bed4bbba4785951a9d6edce0"
+      ],
+      "BLOX.vb": [
+        "f2105349dff09bdc00e4548460991dde9ac7c2af"
+      ],
+      "Elevated Speed.vb": [
+        "8b08f08f37127621483aa4e204a3e3b2312af196"
+      ],
+      "Fishbone.vb": [
+        "b1e5d5ab7e49f91050d3593bbcf48ff609c1c979"
+      ],
+      "Formula V Public Demo.vb": [
+        "533672b887ec16aa50a5508488d1ab125dd5e749"
+      ],
+      "Red Square.vb": [
+        "a12529a0d7cf7f0711b913b8ae72fea193cebc17"
+      ],
+      "The Red Castle.vb": [
+        "34e90abaa3ffc706882fd8a0d1a8101abc185734"
+      ],
+      "VUE Snake.vb": [
+        "77ebaf5dbe667d8347d098b6749b6f3be09f5814"
+      ],
+      "VUEngine Platformer Demo.vb": [
+        "b1b9893629bbec74e8b58d7b5983e7d35e202fe0"
+      ],
+      "vbtitlescreen_left.png": [
+        "480e9872ab20d8a137004e45486985608882983f"
+      ],
+      "vbtitlescreen_right.png": [
+        "fc6c5857a0c298d9d6a73449044d1ef3c57fe050"
+      ],
+      "bundledgames.json": [
+        "2ae5b46e78afb1bb95d11fa103d6176321573b91"
       ],
       "D3D12Core.dll": [
         "a5e152373fa6cc91fa6953dee562ebce6868eb94"
@@ -126372,6 +126575,9 @@
       ],
       "sk2chip.bin": [
         "70429f1d80503a0632f603bf762fe0bbaa881d22"
+      ],
+      "Games.xml": [
+        "681e3362f0251d2e26e6bc2e06157c027f5f3116"
       ],
       "sc3000.zip": [
         "12de390be2595ad17015310085eaec57ad2b953f",
@@ -134741,6 +134947,7 @@
       "2f79984c": "31e73e66eccb28732daea8ec3ad1addd9b39a017",
       "78008489": "3422a7735f0f959d990ab39512d8815a5d8eab7a",
       "f4151454": "6aa529a7b1b6de53e8979e407a77b4d5657727f5",
+      "cb4e1719": "9b0a0cef56d00035c611e07170f051ee5e63aa3a",
       "2aff27d3": "267654823c4fdf2167050f41faa118218d2569ce",
       "f833d117": "79015323128650c742a3694c9429aa91f355905e",
       "6e2c91a7": "c4fb4a714e48a7bf6c28659de0302183a0e0d6c0",
@@ -134753,7 +134960,7 @@
       "6aaaafe6": "29ed066d513f2d5c09ff26d9166ba23c2afb2b3f",
       "bff7550b": "3629b3fa28b6a30bcc027b647f26654929ed1b0f",
       "ba456b8e": "ceb6e1a1bf7e08eb9cbc651afa29e26adccf38ab",
-      "cb4e1719": "9b0a0cef56d00035c611e07170f051ee5e63aa3a",
+      "1cf7f729": "925177c99ee7e02870c32ad62a054db1327cf0c2",
       "d311dab1": "98c34e0dec9f52d7862b56bb287d2573eb3f6364",
       "dbe3e7c7": "1d503e56df85a62fee696e7618dc5b4e781df1bb",
       "dd2976d2": "b4862cac7b9319d8e912887c97fc270d4c239349",
@@ -136049,6 +136256,7 @@
       "92e6bfdb": "3757750cd3052b8d23f379aba22d7ee3d9353bc9",
       "da6f5f8d": "049412d56a41865539faadcd86408d5107a1dbef",
       "0c0644ba": "91d75a87872cbb88964bead92e0cbf8b72e836b6",
+      "c5a2a3f6": "bb2d0441e073da9c584f23c2ad8c7ab8aac293bf",
       "16b45e6c": "19555d2f5f72a66d6beddb4acc5ca00d634ac9c4",
       "4e42c240": "73acccee601b56a2b7f624b0227fa7e1d662ef4b",
       "57841d84": "74c14b15dbc2f36c81d2ad9cb65e2893298415da",
@@ -137005,6 +137213,18 @@
       "f3941d3a": "09de0c832fdf8ad2db9a62c0c2c4bb5b2a746fda",
       "ddf31a86": "aa56e03c13ff0bd4f6404106c9f1488b33bf4cd9",
       "9489e5a8": "b623379d6059cd877c6734fb289f59493b99fbea",
+      "85460a25": "66b2a25ef8e1af74bed4bbba4785951a9d6edce0",
+      "450feab5": "f2105349dff09bdc00e4548460991dde9ac7c2af",
+      "9c93aa2a": "8b08f08f37127621483aa4e204a3e3b2312af196",
+      "c279ee3e": "b1e5d5ab7e49f91050d3593bbcf48ff609c1c979",
+      "87b8d4ad": "533672b887ec16aa50a5508488d1ab125dd5e749",
+      "cea4707a": "a12529a0d7cf7f0711b913b8ae72fea193cebc17",
+      "8bb53eac": "34e90abaa3ffc706882fd8a0d1a8101abc185734",
+      "ad054747": "77ebaf5dbe667d8347d098b6749b6f3be09f5814",
+      "e2dbbd2e": "b1b9893629bbec74e8b58d7b5983e7d35e202fe0",
+      "7dc3a66e": "480e9872ab20d8a137004e45486985608882983f",
+      "7f1d88f5": "fc6c5857a0c298d9d6a73449044d1ef3c57fe050",
+      "ae8234b1": "2ae5b46e78afb1bb95d11fa103d6176321573b91",
       "8fbfe50d": "a5e152373fa6cc91fa6953dee562ebce6868eb94",
       "d456be19": "c6efd59349c430969f68fbeb86fa5328e96dc08b",
       "56729550": "284743af8343e7b512b2c442c3d32b23e5112ee0",
@@ -140037,6 +140257,7 @@
       "c94e8c8b": "02c287d10da6de579af7a4ce73b134bbdf23c970",
       "0658f691": "88d6499d874dcb5721ff58d76fe1b9af811192e3",
       "4dcfd55c": "70429f1d80503a0632f603bf762fe0bbaa881d22",
+      "a7b8bc61": "681e3362f0251d2e26e6bc2e06157c027f5f3116",
       "62fb7d82": "12de390be2595ad17015310085eaec57ad2b953f",
       "48decddc": "c983bfa2f4c6d077e70e6ff9c7ed59b72368e355",
       "5c5aa63d": "06860d96923b81afbc21e0ad32ee19487d8ff6e7",
@@ -143651,6 +143872,7 @@
       "29f21fb4060c7a21ff3da5e6c89d42f9de82baf89d16b6c3ab56cc1bf7365cae": "31e73e66eccb28732daea8ec3ad1addd9b39a017",
       "6a13f11188990a5ac7a0f925f8cef29cf1a88525ccb1bff55ad2ed4d8d5f6df2": "3422a7735f0f959d990ab39512d8815a5d8eab7a",
       "30314d1ce44a8d262ef8adf0ecf2552d9b20b13763686381c57a697bd56039f3": "6aa529a7b1b6de53e8979e407a77b4d5657727f5",
+      "89d32c3a5c13cded89207a9e86d998158b00bf0a09663070ecc5524501045b74": "9b0a0cef56d00035c611e07170f051ee5e63aa3a",
       "f155b75021787f7d5b341c1f33e41e724688bf296f02f9f3b6f9913099e7855e": "267654823c4fdf2167050f41faa118218d2569ce",
       "89878cea0a268734696de11c4bae593eaaa506465d2029d619c0e0cbccdfa62d": "79015323128650c742a3694c9429aa91f355905e",
       "121b7c7f15f9b72e83f293f8fb3c4686730ee02359cea71d18a72c6f489cd2d7": "c4fb4a714e48a7bf6c28659de0302183a0e0d6c0",
@@ -143663,7 +143885,7 @@
       "f08d8f525b44f5cbb3f5776739fcdff737886e1813f1eb7a20aedb128db1d4a8": "29ed066d513f2d5c09ff26d9166ba23c2afb2b3f",
       "a068438e6276a5a3d54cb3f0d0da74c0885b839ae501e09318885130bdbcee9f": "3629b3fa28b6a30bcc027b647f26654929ed1b0f",
       "64ed21ad31da2840aa90eab70c6ed4731f63268a1b3c5cf85273e28d6cfa6d4d": "ceb6e1a1bf7e08eb9cbc651afa29e26adccf38ab",
-      "89d32c3a5c13cded89207a9e86d998158b00bf0a09663070ecc5524501045b74": "9b0a0cef56d00035c611e07170f051ee5e63aa3a",
+      "2222e29cd47ff5d1fdb7c2647d52400b619a0a4acbc6060ae1131afc0b3466dd": "925177c99ee7e02870c32ad62a054db1327cf0c2",
       "7f3c16d39f29e99bab4036537cbc8681f71042bc001dffb5a856e8990b25aeaf": "98c34e0dec9f52d7862b56bb287d2573eb3f6364",
       "83c60d47047d7beab8e5b7bf6f67f80daa088b7a6a27de0d7e016f6484042721": "1d503e56df85a62fee696e7618dc5b4e781df1bb",
       "734344149c44dfac54d3c876798679d871432fc8dde6d864e681031adc614bac": "b4862cac7b9319d8e912887c97fc270d4c239349",
@@ -144959,6 +145181,7 @@
       "5c06c6d9d398729bfab847d15b07a1fc79d323ebe6e05d233fcd652e9aa70759": "3757750cd3052b8d23f379aba22d7ee3d9353bc9",
       "fec02240005667f64905ee5982206abe45f9cd1bee67ee885815d453a6a5c484": "049412d56a41865539faadcd86408d5107a1dbef",
       "8a7a63b24bb21557fb597697bdf09248c1ab7e3298cacfa1166d764dd81e7fc3": "91d75a87872cbb88964bead92e0cbf8b72e836b6",
+      "fa18379fe942ecb5fd69360ede81675ad6bb8b743bef2120305c4b439c732218": "bb2d0441e073da9c584f23c2ad8c7ab8aac293bf",
       "75b38bb4ab57b50bfc6c3ba77fe670a2eb67301f425aefe96bb1ed87c2b9e2db": "19555d2f5f72a66d6beddb4acc5ca00d634ac9c4",
       "e80d72041dc20ddffb3fa7e22e4c51acb06d95e81058d5eeb888b5bf308424ea": "73acccee601b56a2b7f624b0227fa7e1d662ef4b",
       "e84df7374f8eff014458c6d8611c44f03b39b8d1a7abf30a2347dbb085b55232": "74c14b15dbc2f36c81d2ad9cb65e2893298415da",
@@ -145915,6 +146138,18 @@
       "166c50315fce00360976be3b4963ae5db9d232ba18ab660b4fed9eca15d60bec": "09de0c832fdf8ad2db9a62c0c2c4bb5b2a746fda",
       "7c3a60277701decff36f4e88bc0ecc9dbe06cf8bf0c4408e56d43a1beb81bb55": "aa56e03c13ff0bd4f6404106c9f1488b33bf4cd9",
       "ce50cb5d5624244d1c4c3e2b8c696bc42dd21772979f7d284608a308f1e2b8a4": "b623379d6059cd877c6734fb289f59493b99fbea",
+      "7a5e2f72da47da89ca86af2f50245f30a63bd59ac3083c7f5cdab76a26230eb5": "66b2a25ef8e1af74bed4bbba4785951a9d6edce0",
+      "bb69dab364fc96ed1bd93b3f633ff928baf568db66638b830b3060411e40b208": "f2105349dff09bdc00e4548460991dde9ac7c2af",
+      "6c1ed18e735b6a25d873e4434161b174e60ac49a4526ca8a80b86d1a067229d5": "8b08f08f37127621483aa4e204a3e3b2312af196",
+      "72812dc813e44534a3010545346516bae172b21b707ece99bef85dc609157814": "b1e5d5ab7e49f91050d3593bbcf48ff609c1c979",
+      "dcfbe7418aab2f0bbdb09d0102e7e3985f79b432911badc6048b2421afdaff1d": "533672b887ec16aa50a5508488d1ab125dd5e749",
+      "bc3526db637cdedfa09b90b2d90f793547bb479b4cc42144ae9549a790e2034b": "a12529a0d7cf7f0711b913b8ae72fea193cebc17",
+      "dfbbae12b5d890e843b4dfce4f092cd94b0da76f632a854fb1631ab70ed417b7": "34e90abaa3ffc706882fd8a0d1a8101abc185734",
+      "faa75c6f47fdb051d5ee4d491cfd917b00cc3e6c976a05e290aa3acf5840c4df": "77ebaf5dbe667d8347d098b6749b6f3be09f5814",
+      "d249aac8ee41a7a86fd74890f3e6a11e1e52b8456cda652d1ea67002a2ecb3fd": "b1b9893629bbec74e8b58d7b5983e7d35e202fe0",
+      "3d87dc493743bd545ea15f6817d6f489df979d2f081a6ad7d6ec42f0dbe21a99": "480e9872ab20d8a137004e45486985608882983f",
+      "8891ed937547ec36951f1de529a196856d342c1d83bb9670c01ba57e3c7fb819": "fc6c5857a0c298d9d6a73449044d1ef3c57fe050",
+      "e3df6beba958452d300392d2a9b57cf0a07c8abf6b842965198ec7aa5512f791": "2ae5b46e78afb1bb95d11fa103d6176321573b91",
       "9e47f236fd3244ad88443a61f7d549eced052b42cb9bd78bbeb35a5918c25bb9": "a5e152373fa6cc91fa6953dee562ebce6868eb94",
       "0840ff2fbb677fc0019200d85eaf4bfe401b37b151e38311090f8dda47ea9173": "c6efd59349c430969f68fbeb86fa5328e96dc08b",
       "9a5100511e127c6a2fc78edf984f95074a76d35b90c90c4d342430a5ae160e9b": "284743af8343e7b512b2c442c3d32b23e5112ee0",
@@ -148947,6 +149182,7 @@
       "bbd576bfb7acb4f7eee0c0717768275482feb0bed6d1e6d0f5fa7b6c05e8bee8": "02c287d10da6de579af7a4ce73b134bbdf23c970",
       "6e12e6b33c26ebfcd0be433251d21cf6284eafe9f71b027bda3767ae59affec1": "88d6499d874dcb5721ff58d76fe1b9af811192e3",
       "e184f5982a99c6ebf7799383f16a8624221755786056a3573944598283a4b8cf": "70429f1d80503a0632f603bf762fe0bbaa881d22",
+      "a73b9f1c37d64532bf82d1d790a3e0cb81a9b2accb04d866901bb7ae1970473a": "681e3362f0251d2e26e6bc2e06157c027f5f3116",
       "942ca934f6d43bc81677d3355cf8c795322661c8784b58e78d62951b6a033c2b": "12de390be2595ad17015310085eaec57ad2b953f",
       "258b08eafabed889970445adadcc483f91c31205e8c9a75dfa2efceab2f1c43f": "c983bfa2f4c6d077e70e6ff9c7ed59b72368e355",
       "4ae07c0e28741b17b5b7cc05ff870d415d48d70174d31cb137311f34b9131509": "06860d96923b81afbc21e0ad32ee19487d8ff6e7",
@@ -152733,6 +152969,9 @@
       "SCPU64/scpu-dos-2.04.bin": [
         "6aa529a7b1b6de53e8979e407a77b4d5657727f5"
       ],
+      "vice/C128/.variants/kernal-318034-01.bin.9b0a0cef": [
+        "9b0a0cef56d00035c611e07170f051ee5e63aa3a"
+      ],
       "vice/C128/.variants/kernal64-325182-01.bin.2aff27d3": [
         "267654823c4fdf2167050f41faa118218d2569ce"
       ],
@@ -152770,7 +153009,7 @@
         "ceb6e1a1bf7e08eb9cbc651afa29e26adccf38ab"
       ],
       "vice/C128/kernal-318034-01.bin": [
-        "9b0a0cef56d00035c611e07170f051ee5e63aa3a"
+        "925177c99ee7e02870c32ad62a054db1327cf0c2"
       ],
       "vice/C128/kernal-325172-01.bin": [
         "98c34e0dec9f52d7862b56bb287d2573eb3f6364"
@@ -155325,6 +155564,9 @@
       "themes/light.json": [
         "049412d56a41865539faadcd86408d5107a1dbef"
       ],
+      ".variants/Doukutsu.exe.91d75a87": [
+        "91d75a87872cbb88964bead92e0cbf8b72e836b6"
+      ],
       "nxengine/data/npc.tbl": [
         "19555d2f5f72a66d6beddb4acc5ca00d634ac9c4"
       ],
@@ -156651,6 +156893,42 @@
       ],
       "shadps4/sys_modules/libSceXml.sprx": [
         "c86a4a54d8d06190d937d3906703067e93d24482"
+      ],
+      "games/BLOX 2.vb": [
+        "66b2a25ef8e1af74bed4bbba4785951a9d6edce0"
+      ],
+      "games/BLOX.vb": [
+        "f2105349dff09bdc00e4548460991dde9ac7c2af"
+      ],
+      "games/Elevated Speed.vb": [
+        "8b08f08f37127621483aa4e204a3e3b2312af196"
+      ],
+      "games/Fishbone.vb": [
+        "b1e5d5ab7e49f91050d3593bbcf48ff609c1c979"
+      ],
+      "games/Formula V Public Demo.vb": [
+        "533672b887ec16aa50a5508488d1ab125dd5e749"
+      ],
+      "games/Red Square.vb": [
+        "a12529a0d7cf7f0711b913b8ae72fea193cebc17"
+      ],
+      "games/The Red Castle.vb": [
+        "34e90abaa3ffc706882fd8a0d1a8101abc185734"
+      ],
+      "games/VUE Snake.vb": [
+        "77ebaf5dbe667d8347d098b6749b6f3be09f5814"
+      ],
+      "games/VUEngine Platformer Demo.vb": [
+        "b1b9893629bbec74e8b58d7b5983e7d35e202fe0"
+      ],
+      "res/drawable-nodpi/vbtitlescreen_left.png": [
+        "480e9872ab20d8a137004e45486985608882983f"
+      ],
+      "res/drawable-nodpi/vbtitlescreen_right.png": [
+        "fc6c5857a0c298d9d6a73449044d1ef3c57fe050"
+      ],
+      "res/raw/bundledgames.json": [
+        "2ae5b46e78afb1bb95d11fa103d6176321573b91"
       ],
       "D3D12/D3D12Core.dll": [
         "a5e152373fa6cc91fa6953dee562ebce6868eb94"
@@ -164498,6 +164776,9 @@
       ],
       ".variants/rom.db.e5414fb1": [
         "e5414fb1c4cc7d7f5101c07e4547316779ba3d97"
+      ],
+      "Config/Games.xml": [
+        "681e3362f0251d2e26e6bc2e06157c027f5f3116"
       ],
       ".variants/sc3000.zip.12de390b": [
         "12de390be2595ad17015310085eaec57ad2b953f"

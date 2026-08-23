@@ -5,7 +5,7 @@
   "platform": "emudeck",
   "display_name": "EmuDeck",
   "version": "1.0",
-  "generated": "2026-08-12T10:39:36Z",
+  "generated": "2026-08-23T06:27:16Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -250,8 +250,8 @@
       }
     }
   ],
-  "total_files": 618,
-  "total_size": 3396715983,
+  "total_files": 619,
+  "total_size": 3396868626,
   "total_omitted": 0,
   "omitted_files": [],
   "files": [
@@ -4899,6 +4899,16 @@
       "repo_path": "bios/Other/shadps4/shadps4/sys_modules/libSceXml.sprx",
       "cores": [
         "shadps4"
+      ]
+    },
+    {
+      "dest": "Config/Games.xml",
+      "sha1": "681e3362f0251d2e26e6bc2e06157c027f5f3116",
+      "sha256": "a73b9f1c37d64532bf82d1d790a3e0cb81a9b2accb04d866901bb7ae1970473a",
+      "size": 152643,
+      "repo_path": "bios/Sega/Model 3/Config/Games.xml",
+      "cores": [
+        "supermodel"
       ]
     },
     {

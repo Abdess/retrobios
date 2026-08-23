@@ -263,7 +263,7 @@ nav:
     - vitaQuakeII: emulators/vitaquake2.md
     - yabasanshiro: emulators/yabasanshiro.md
     - Yuzu: emulators/yuzu.md
-  - Community forks (149):
+  - Community forks (161):
     - 2600.emu: emulators/2600-emu.md
     - EightyOne: emulators/81.md
     - a5200: emulators/a5200.md
@@ -358,6 +358,10 @@ nav:
     - NES.emu: emulators/nes-emu.md
     - Nesoid: emulators/nesoid.md
     - Nestopia UE: emulators/nestopia.md
+    - NetherSX2: emulators/nethersx2.md
+    - NetherSX2-Turnip: emulators/nethersx2-turnip.md
+    - NetherSX2-Turnip Classic: emulators/nethersx2-turnip-classic.md
+    - NGP.emu: emulators/ngp-emu.md
     - NooDS: emulators/noods.md
     - Numero: emulators/numero.md
     - O2EM: emulators/o2em.md
@@ -365,6 +369,7 @@ nav:
     - ONScripter: emulators/onscripter.md
     - Opera (4DO): emulators/opera.md
     - ParaLLEl N64: emulators/parallel_n64.md
+    - pce-emu: emulators/pce-emu.md
     - PCem: emulators/pcem.md
     - PCSX1: emulators/pcsx1.md
     - PD777: emulators/pd777.md
@@ -381,10 +386,14 @@ nav:
     - RetroDream: emulators/retrodream.md
     - Rosalie's Mupen GUI: emulators/rosalies-mupen-gui.md
     - SAME CDi: emulators/same_cdi.md
+    - Saturn.emu: emulators/saturn-emu.md
     - SDL2TRS: emulators/sdl2trs.md
     - SimCoupe: emulators/simcp.md
     - simple64: emulators/simple64.md
+    - Snes9x EX+: emulators/snes9x-explus.md
+    - SUPER3: emulators/super3.md
     - Suyu: emulators/suyu.md
+    - Swan.emu: emulators/swan-emu.md
     - swanstation: emulators/swanstation.md
     - Syobon Action: emulators/syobonaction.md
     - TamaLIBretro: emulators/tamalibretro.md
@@ -408,9 +417,12 @@ nav:
     - vitaQuakeIII: emulators/vitaquake3.md
     - vitavoyager: emulators/vitavoyager.md
     - X Millennium: emulators/x1.md
+    - X1 BOX: emulators/x1-box.md
     - x64sdl: emulators/x64sdl.md
+    - XenDroid: emulators/xendroid.md
     - Xenia Canary: emulators/xenia.md
     - Xenia Edge: emulators/xenia-edge.md
+    - XeniOS: emulators/xenios.md
     - yabause: emulators/yabause.md
     - ymir: emulators/ymir.md
   - Pure libretro (42):
@@ -456,7 +468,7 @@ nav:
     - MicroW8: emulators/uw8.md
     - uzem: emulators/uzem.md
     - VirtualXT: emulators/virtualxt.md
-  - Game engines (33):
+  - Game engines (34):
     - boom3: emulators/boom3.md
     - Cannonball: emulators/cannonball.md
     - ChaiLove: emulators/chailove.md
@@ -474,6 +486,7 @@ nav:
     - mkxp-z: emulators/mkxp_z.md
     - NXEngine: emulators/nxengine.md
     - ONScripter Yuri: emulators/onsyuri.md
+    - openbor: emulators/openbor.md
     - OpenLara: emulators/openlara.md
     - OpenTyrian: emulators/opentyrian.md
     - PrBoom: emulators/prboom.md
@@ -490,7 +503,7 @@ nav:
     - WASM-4: emulators/wasm4.md
     - XRick: emulators/xrick.md
     - Zelda Classic v2.10: emulators/zc210.md
-  - Enhanced forks (26):
+  - Enhanced forks (27):
     - A7800: emulators/a7800.md
     - AdvanceMAME: emulators/advancemame.md
     - bsnes-hd beta: emulators/bsnes_hd_beta.md
@@ -514,6 +527,7 @@ nav:
     - PCSX2x6: emulators/pcsx2x6.md
     - PrimeHack: emulators/primehack.md
     - SMS Plus GX: emulators/smsplus.md
+    - Supermodel Dojo: emulators/supermodel-dojo.md
     - Triforce: emulators/triforce.md
     - xm6pro68k: emulators/xm6pro68k.md
     - xm6typeg: emulators/xm6typeg.md
@@ -552,7 +566,7 @@ nav:
     - Stone Soup: emulators/stonesoup.md
     - UME 2015: emulators/ume2015.md
     - VBA-Next: emulators/vba_next.md
-  - Embedded HLE (11):
+  - Embedded HLE (14):
     - 3dSen: emulators/3dsen.md
     - Altirra: emulators/altirra.md
     - Cxbx-Reloaded: emulators/cxbx-reloaded.md
@@ -564,11 +578,15 @@ nav:
     - My Boy!: emulators/my-boy.md
     - My OldBoy!: emulators/my-oldboy.md
     - PCSX-ReARMed: emulators/pcsx_rearmed.md
-  - Launchers (3):
+    - Pizza Boy GBA: emulators/pizza-boy-gba.md
+    - Pizza Boy GBC: emulators/pizza-boy-gbc.md
+    - sixtyforce: emulators/sixtyforce.md
+  - Launchers (4):
     - ArcadeFlashWeb: emulators/arcadeflashweb.md
     - Dolphin Launcher: emulators/dolphin_launcher.md
     - Parallel Launcher: emulators/parallel-launcher.md
-  - Other (47):
+    - SWF Player: emulators/swf-player.md
+  - Other (56):
     - ares: emulators/ares.md
     - Basilisk II: emulators/basiliskii.md
     - beebem: emulators/beebem.md
@@ -600,17 +618,26 @@ nav:
     - Model 2 Emulator: emulators/model2.md
     - openMSX: emulators/openmsx.md
     - Oricutron: emulators/oricutron.md
+    - Pizza Boy SC: emulators/pizza-boy-sc.md
+    - Plastic: emulators/plastic.md
+    - project64: emulators/project64.md
     - puNES: emulators/punes.md
+    - Real3DOPlayer: emulators/real3doplayer.md
     - Redream: emulators/redream.md
     - Ryujinx: emulators/ryujinx.md
     - shadps4: emulators/shadps4.md
     - SheepShaver: emulators/sheepshaver.md
+    - Skyline: emulators/skyline.md
+    - Speccy: emulators/speccy.md
+    - SSF: emulators/ssf.md
+    - Starboard: emulators/starboard.md
     - Supermodel: emulators/supermodel.md
     - SUPER ZSNES: emulators/superzsnes.md
     - ti99sim: emulators/ti99sim.md
     - tsugaru: emulators/tsugaru.md
     - veesem: emulators/veesem.md
     - VICE: emulators/vice.md
+    - Virtual Virtual Boy: emulators/virtual-virtual-boy.md
     - Vita3K: emulators/vita3k.md
     - x16emu: emulators/x16emu.md
     - Xemu: emulators/xemu.md

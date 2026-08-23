@@ -5,7 +5,7 @@
   "platform": "batocera",
   "display_name": "Batocera",
   "version": "1.0",
-  "generated": "2026-08-12T10:39:36Z",
+  "generated": "2026-08-23T06:27:16Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -237,8 +237,8 @@
       }
     }
   ],
-  "total_files": 1825,
-  "total_size": 4312801039,
+  "total_files": 1828,
+  "total_size": 4314448722,
   "total_omitted": 9,
   "omitted_files": [
     {
@@ -11444,6 +11444,16 @@
       ]
     },
     {
+      "dest": "nxengine/Doukutsu.exe",
+      "sha1": "bb2d0441e073da9c584f23c2ad8c7ab8aac293bf",
+      "sha256": "fa18379fe942ecb5fd69360ede81675ad6bb8b743bef2120305c4b439c732218",
+      "size": 1478656,
+      "repo_path": "bios/Other/NXEngine/Doukutsu.exe",
+      "cores": [
+        "nxengine"
+      ]
+    },
+    {
       "dest": "nxengine/data/npc.tbl",
       "sha1": "19555d2f5f72a66d6beddb4acc5ca00d634ac9c4",
       "sha256": "75b38bb4ab57b50bfc6c3ba77fe670a2eb67301f425aefe96bb1ed87c2b9e2db",
@@ -13554,6 +13564,16 @@
       ]
     },
     {
+      "dest": "Config/Games.xml",
+      "sha1": "681e3362f0251d2e26e6bc2e06157c027f5f3116",
+      "sha256": "a73b9f1c37d64532bf82d1d790a3e0cb81a9b2accb04d866901bb7ae1970473a",
+      "size": 152643,
+      "repo_path": "bios/Sega/Model 3/Config/Games.xml",
+      "cores": [
+        "supermodel"
+      ]
+    },
+    {
       "dest": "MYTOWNS.ROM",
       "sha1": "e245f8086df57ce6e48853f0e13525f738e5c4d8",
       "sha256": "2bb0766f171db2523ea150d5596fe1bbd4ec2b0ee96e61e14c9f6ac8349e8269",
@@ -13739,6 +13759,16 @@
       "sha256": "7f3c16d39f29e99bab4036537cbc8681f71042bc001dffb5a856e8990b25aeaf",
       "size": 16384,
       "repo_path": "bios/Commodore/C128/vice/C128/kernal-325172-01.bin",
+      "cores": [
+        "vice"
+      ]
+    },
+    {
+      "dest": "vice/C128/kernal-318034-01.bin",
+      "sha1": "925177c99ee7e02870c32ad62a054db1327cf0c2",
+      "sha256": "2222e29cd47ff5d1fdb7c2647d52400b619a0a4acbc6060ae1131afc0b3466dd",
+      "size": 16384,
+      "repo_path": "bios/Commodore/C128/vice/C128/kernal-318034-01.bin",
       "cores": [
         "vice"
       ]
