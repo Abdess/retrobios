@@ -238,7 +238,7 @@
     }
   ],
   "total_files": 3511,
-  "total_size": 6661468439,
+  "total_size": 6661468445,
   "total_omitted": 9,
   "omitted_files": [
     {
@@ -470,43 +470,11 @@
       "cores": null
     },
     {
-      "dest": "bios/a2diskiing.zip",
-      "sha1": "d9bb189730e15d46c27e7246d7bb23137e7d761e",
-      "sha256": "e73eee381d01faecb0fa7f767b0d999f38692f023bcdbe1f9f8d57ad87941f6d",
-      "size": 371,
-      "repo_path": "bios/Apple/Apple II/a2diskiing.zip",
-      "cores": null
-    },
-    {
       "dest": "bios/apple2e.zip",
       "sha1": "891f44b09ab1a948d3d887f8a30b9c9265849ada",
       "sha256": "82e28c1d338990afba6027e4d208963d01789f1ef3597e2bd3761fa00963a836",
       "size": 15975,
       "repo_path": "bios/Apple/Apple II/apple2e.zip",
-      "cores": null
-    },
-    {
-      "dest": "bios/d2fdc.zip",
-      "sha1": "bc39fbd5b9a8d2287ac5d0a42e639fc4d3c2f9d4",
-      "sha256": "e5e30615040567c1e7a2d21599681f8dac820edbdcda177b816a64d74b3a12f2",
-      "size": 256,
-      "repo_path": "bios/Apple/Apple II/DiskII/state-machine-16.rom",
-      "cores": null
-    },
-    {
-      "dest": "bios/votrsc01.zip",
-      "sha1": "a57f14469867ce0d0865995a645b69f41a0ea718",
-      "sha256": "14217ca8e25435ea8497b272d8963ebc79ae29cdc21e972817ab09115e2f1b2d",
-      "size": 588,
-      "repo_path": "bios/Apple/Apple II/votrsc01.zip",
-      "cores": null
-    },
-    {
-      "dest": "bios/votrsc01a.zip",
-      "sha1": "14a5ff2c8ca68d35a77ebfbc227ed9c8e19d7524",
-      "sha256": "67e3bd12aa4db426a035ec65410fbdeee0d008ba89012285c7e61c0542a5c167",
-      "size": 590,
-      "repo_path": "bios/Arcade/Arcade/votrax.zip",
       "cores": null
     },
     {
@@ -891,6 +859,14 @@
       "sha256": "f8a740ce73c1c433af44914e5e6c8961f4ebe7884854891fe9fbe12d7e0ad031",
       "size": 1590,
       "repo_path": "bios/Arcade/Arcade/a2corvus.zip",
+      "cores": null
+    },
+    {
+      "dest": "bios/a2diskiing.zip",
+      "sha1": "d9bb189730e15d46c27e7246d7bb23137e7d761e",
+      "sha256": "e73eee381d01faecb0fa7f767b0d999f38692f023bcdbe1f9f8d57ad87941f6d",
+      "size": 371,
+      "repo_path": "bios/Apple/Apple II/a2diskiing.zip",
       "cores": null
     },
     {
@@ -4667,6 +4643,14 @@
       "sha256": "67061af22953255f1ed9e3f5a9a8a086069147b48b4ba8d6c3a3804b23b9fa19",
       "size": 673549,
       "repo_path": "bios/Arcade/Arcade/cubo.zip",
+      "cores": null
+    },
+    {
+      "dest": "bios/d2fdc.zip",
+      "sha1": "af56c948598291b284a528f3fce06b961dba55e3",
+      "sha256": "69ee0f8f0862e1a623bcbe9870f9531f7976312f292a20d1aff7ed61b6085a69",
+      "size": 262,
+      "repo_path": "bios/Arcade/Arcade/a3fdc.zip",
       "cores": null
     },
     {
@@ -12038,6 +12022,14 @@
       "cores": null
     },
     {
+      "dest": "bios/votrsc01.zip",
+      "sha1": "a57f14469867ce0d0865995a645b69f41a0ea718",
+      "sha256": "14217ca8e25435ea8497b272d8963ebc79ae29cdc21e972817ab09115e2f1b2d",
+      "size": 588,
+      "repo_path": "bios/Apple/Apple II/votrsc01.zip",
+      "cores": null
+    },
+    {
       "dest": "bios/votraxtnt.zip",
       "sha1": "b32303333a66101a83d008af1a8c1966751ed156",
       "sha256": "b134ad5401d990ad0ffead0f141f8d60e31d17f92bbbea921e380fa6f968749c",
@@ -12067,6 +12059,14 @@
       "sha256": "4e580c6ab090548db447ac0ebe57f97b736111f8185a07b6ce7227572c558b25",
       "size": 3613,
       "repo_path": "bios/Arcade/Arcade/vp575.zip",
+      "cores": null
+    },
+    {
+      "dest": "bios/votrsc01a.zip",
+      "sha1": "14a5ff2c8ca68d35a77ebfbc227ed9c8e19d7524",
+      "sha256": "67e3bd12aa4db426a035ec65410fbdeee0d008ba89012285c7e61c0542a5c167",
+      "size": 590,
+      "repo_path": "bios/Arcade/Arcade/votrax.zip",
       "cores": null
     },
     {
@@ -12459,14 +12459,6 @@
       "sha256": "d725a3cd214e61d0c44a978875d3a457101f8f2cdc621ccad3c984b5a8b3efa0",
       "size": 41646,
       "repo_path": "bios/Arcade/FBNeo/spec1282a.zip",
-      "cores": null
-    },
-    {
-      "dest": "bios/channelf.zip",
-      "sha1": "1cb23b462b990241013deb4b5e07ce741af28267",
-      "sha256": "c158f7c177c61c7b441eb1061e5148737597e871cbcfa1e2d60ace15e90c8e70",
-      "size": 2705,
-      "repo_path": "bios/Arcade/Arcade/channelf.zip",
       "cores": null
     },
     {
@@ -13211,6 +13203,14 @@
       "sha256": "876a263d28d8f9e9f51785b91269393f06599debae9ba2ef1cba67a283504e2c",
       "size": 1024,
       "repo_path": "bios/Arcade/FBNeo/sl31253.rom",
+      "cores": null
+    },
+    {
+      "dest": "bios/channelf.zip",
+      "sha1": "1cb23b462b990241013deb4b5e07ce741af28267",
+      "sha256": "c158f7c177c61c7b441eb1061e5148737597e871cbcfa1e2d60ace15e90c8e70",
+      "size": 2705,
+      "repo_path": "bios/Arcade/Arcade/channelf.zip",
       "cores": null
     },
     {

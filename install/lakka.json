@@ -1329,38 +1329,6 @@
       "cores": null
     },
     {
-      "dest": "quasi88/n88_0.rom",
-      "sha1": "d1ae642aed4f0584eeb81ff50180db694e5101d4",
-      "sha256": "8b584cd9143a670ddfce657ca65067c86f6be1db757a3085f48b1479ac6e8cf3",
-      "size": 8192,
-      "repo_path": "bios/NEC/PC-98/n88_0.rom",
-      "cores": null
-    },
-    {
-      "dest": "quasi88/n88_1.rom",
-      "sha1": "4ae4d37409ff99411a623da9f6a44192170a854e",
-      "sha256": "810936574cdf68849822a1570046091f0bad0590dee3635dbc89a4cc4e099555",
-      "size": 8192,
-      "repo_path": "bios/NEC/PC-98/n88_1.rom",
-      "cores": null
-    },
-    {
-      "dest": "quasi88/n88_2.rom",
-      "sha1": "e94278682ef9e9bbb82201f72c50382748dcea2a",
-      "sha256": "7d361b1bfd8523cd580bd9ca73902154556fbf45f60f0f539beef397d9462646",
-      "size": 8192,
-      "repo_path": "bios/NEC/PC-98/n88_2.rom",
-      "cores": null
-    },
-    {
-      "dest": "quasi88/n88_3.rom",
-      "sha1": "af452aed79b072c4d17985830b7c5dca64d4b412",
-      "sha256": "3dc431af6e0c724582a3aa49e5c22cb9cc99d8298a4cce500e62bbaf1bc4bffb",
-      "size": 8192,
-      "repo_path": "bios/NEC/PC-98/n88_3.rom",
-      "cores": null
-    },
-    {
       "dest": "quasi88/n88jisho.rom",
       "sha1": "deef0cc2a9734ba891a6d6c022aa70ffc66f783e",
       "sha256": "25773eaee3af617db08d26602d8f4cdc7d42ed946ca510d3b1d96fe1645af63c",
@@ -1446,6 +1414,38 @@
       "sha256": "8580fecc6574b40a082aaf227afc3c1dbd06f333ba7549278ff73647b02b2303",
       "size": 8192,
       "repo_path": "bios/NEC/PC-98/N88EXT3.ROM",
+      "cores": null
+    },
+    {
+      "dest": "quasi88/n88_0.rom",
+      "sha1": "d1ae642aed4f0584eeb81ff50180db694e5101d4",
+      "sha256": "8b584cd9143a670ddfce657ca65067c86f6be1db757a3085f48b1479ac6e8cf3",
+      "size": 8192,
+      "repo_path": "bios/NEC/PC-98/n88_0.rom",
+      "cores": null
+    },
+    {
+      "dest": "quasi88/n88_1.rom",
+      "sha1": "4ae4d37409ff99411a623da9f6a44192170a854e",
+      "sha256": "810936574cdf68849822a1570046091f0bad0590dee3635dbc89a4cc4e099555",
+      "size": 8192,
+      "repo_path": "bios/NEC/PC-98/n88_1.rom",
+      "cores": null
+    },
+    {
+      "dest": "quasi88/n88_2.rom",
+      "sha1": "e94278682ef9e9bbb82201f72c50382748dcea2a",
+      "sha256": "7d361b1bfd8523cd580bd9ca73902154556fbf45f60f0f539beef397d9462646",
+      "size": 8192,
+      "repo_path": "bios/NEC/PC-98/n88_2.rom",
+      "cores": null
+    },
+    {
+      "dest": "quasi88/n88_3.rom",
+      "sha1": "af452aed79b072c4d17985830b7c5dca64d4b412",
+      "sha256": "3dc431af6e0c724582a3aa49e5c22cb9cc99d8298a4cce500e62bbaf1bc4bffb",
+      "size": 8192,
+      "repo_path": "bios/NEC/PC-98/n88_3.rom",
       "cores": null
     },
     {

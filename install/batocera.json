@@ -238,7 +238,7 @@
     }
   ],
   "total_files": 1828,
-  "total_size": 4314448722,
+  "total_size": 4314432234,
   "total_omitted": 9,
   "omitted_files": [
     {
@@ -543,10 +543,10 @@
     },
     {
       "dest": "d2fdc.zip",
-      "sha1": "bc39fbd5b9a8d2287ac5d0a42e639fc4d3c2f9d4",
-      "sha256": "e5e30615040567c1e7a2d21599681f8dac820edbdcda177b816a64d74b3a12f2",
-      "size": 256,
-      "repo_path": "bios/Apple/Apple II/DiskII/state-machine-16.rom",
+      "sha1": "af56c948598291b284a528f3fce06b961dba55e3",
+      "sha256": "69ee0f8f0862e1a623bcbe9870f9531f7976312f292a20d1aff7ed61b6085a69",
+      "size": 262,
+      "repo_path": "bios/Arcade/Arcade/a3fdc.zip",
       "cores": null
     },
     {
@@ -1399,10 +1399,10 @@
     },
     {
       "dest": "coco_fdc_v11.zip",
-      "sha1": "45795e083e635c7beab9a40793c628a16f9990e6",
-      "sha256": "61e9bc795b0406b2efe4f3c5a07baa6e84ddc817299f89f26a09aa665423517e",
-      "size": 23115,
-      "repo_path": "bios/Arcade/Arcade/coco_fdc_v11.zip",
+      "sha1": "533870dbc4671a84f0765a96a2b7fea24564afd1",
+      "sha256": "d0159776a6e3ba40f32020c373c1050d9685c61fc3041fd4a3025221dcb2f5ba",
+      "size": 7134,
+      "repo_path": "bios/Arcade/Arcade/.variants/coco_fdc_v11.zip.e94f7c27",
       "cores": null
     },
     {
@@ -2473,10 +2473,10 @@
     },
     {
       "dest": "pcw9512.zip",
-      "sha1": "844988dc5a36917b002d0140d3a7692d1407f783",
-      "sha256": "bdc25c862aa0f2a91b2fdac9aa4c91d00d34e95ae2ca50b76ece7a7e35c7cfed",
-      "size": 2625,
-      "repo_path": "bios/Amstrad/PCW/pcw9512.zip",
+      "sha1": "675597949a7b0e1b393840bb4355376509cfa816",
+      "sha256": "dd4bca9f7efd22e80a196444f877c7b60e328916f9e6a1d183238f34fcc6a7d0",
+      "size": 2134,
+      "repo_path": "bios/Arcade/Arcade/pcw9512.zip",
       "cores": null
     },
     {
@@ -2935,10 +2935,10 @@
     },
     {
       "dest": "ym2608.zip",
-      "sha1": "06fc753d015b43ca1787f4cfd9331b1674202e64",
-      "sha256": "187ede0f57d1439092a7ac50ea923533871ab7ee65e29baabc4dcdfa7ad4823f",
-      "size": 7609,
-      "repo_path": "bios/Arcade/Arcade/ym2608.zip",
+      "sha1": "0b6519209766ed883e3fca4c61bf866804c89004",
+      "sha256": "5ac777862d538bcef10e3bec3ee66c218bce6da3896e5c35e524b0ae8e6acfd5",
+      "size": 7587,
+      "repo_path": "bios/Arcade/Arcade/.variants/ym2608.zip.0b651920",
       "cores": null
     },
     {

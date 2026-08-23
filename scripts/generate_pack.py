@@ -635,9 +635,11 @@ def generate_pack(
 
     preferred_entries: dict[str, int] = {}
     if source != "truth":
+        # A manifest lists the full set and carries no data directories, so
+        # the preference is resolved with neither narrowing nor a cache.
         preferred_entries = _preferred_entries(
-            pack_systems, db, bios_dir, base_dest, required_only,
-            zip_contents, data_registry, offline,
+            pack_systems, db, bios_dir, base_dest, False,
+            zip_contents, None, offline,
         )
 
     # Region selection is decided once, over both the platform baseline and the
@@ -2830,6 +2832,17 @@ def generate_manifest(
 
     # Phase 1: baseline files
     if source != "truth":
+        # The same destination can be declared by more than one system, bare
+        # in one and hash-constrained in another. The builder lets the
+        # constrained sibling claim it; without the same rule here the
+        # manifest named whatever answered to the name, so the pack and the
+        # installer disagreed about which file a destination means.
+        # A manifest lists the full set and carries no data directories, so
+        # the preference is resolved with neither narrowing nor a cache.
+        preferred_entries = _preferred_entries(
+            pack_systems, db, bios_dir, base_dest, False,
+            zip_contents, None, offline,
+        )
         for sys_id, system in sorted(pack_systems.items()):
             for file_entry in system.get("files", []):
                 dest = sanitize_pack_path(file_entry.get("destination", file_entry["name"]))
@@ -2838,6 +2851,10 @@ def generate_manifest(
                 if region_drops and dest in region_drops:
                     continue
                 full_dest = f"{base_dest}/{dest}" if base_dest else dest
+
+                preferred = preferred_entries.get(full_dest)
+                if preferred is not None and id(file_entry) != preferred:
+                    continue
 
                 dedup_key = full_dest
                 if dedup_key in seen_destinations:
