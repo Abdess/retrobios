@@ -94,8 +94,15 @@ def _add_pack_member(zf: zipfile.ZipFile, source_path: str, arcname: str) -> Non
     """
     info = zipfile.ZipInfo(filename=arcname, date_time=_FIXED_DATE_TIME)
     info.compress_type = zipfile.ZIP_DEFLATED
-    info.external_attr = 0o100644 << 16
-    size = os.path.getsize(source_path)
+    # The executable bit is the one permission worth carrying: the RetroDECK
+    # pack ships the two Voxatron engine binaries, and a user who extracts
+    # them at 644 cannot run them. Git records the bit, so reading it from
+    # the source keeps the pack the same from any clone. Nothing else about
+    # the source's mode reaches the archive.
+    stat_result = os.stat(source_path)
+    mode = 0o755 if stat_result.st_mode & 0o111 else 0o644
+    info.external_attr = (0o100000 | mode) << 16
+    size = stat_result.st_size
     info.file_size = size
     with open(source_path, "rb") as source, zf.open(
         info, "w", force_zip64=size >= 1 << 31

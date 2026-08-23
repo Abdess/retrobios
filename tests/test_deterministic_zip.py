@@ -321,6 +321,49 @@ class TestPackDeterminism(unittest.TestCase):
         with zipfile.ZipFile(pack) as zf:
             self.assertEqual({i.date_time for i in zf.infolist()}, {_FIXED_DATE_TIME})
 
+    def test_an_executable_source_stays_executable(self):
+        """Pinning the mode stripped the bit the RetroDECK pack needs.
+
+        It ships the two Voxatron engine binaries; extracted at 644 they
+        cannot be run. Git records the bit, so reading it from the source
+        leaves the pack the same from any clone.
+        """
+        import os
+        import stat as stat_module
+
+        runnable = self.bios / "engine.bin"
+        runnable.write_bytes(b"NOT REALLY AN ELF")
+        os.chmod(runnable, 0o755)
+        digest = hashlib.sha1(runnable.read_bytes()).hexdigest()
+        self.db["files"][digest] = {
+            "path": str(runnable), "name": "engine.bin",
+            "size": runnable.stat().st_size, "sha1": digest,
+            "md5": hashlib.md5(runnable.read_bytes()).hexdigest(),
+        }
+        self.db["indexes"]["by_name"]["engine.bin"] = [digest]
+        config = (self.platforms / "detplat.yml")
+        config.write_text(
+            config.read_text()
+            + "      - name: engine.bin\n"
+            + "        destination: engine.bin\n"
+            + "        required: true\n"
+        )
+        pack = self._build("exec1")
+        with zipfile.ZipFile(pack) as zf:
+            modes = {
+                i.filename.rsplit("/", 1)[-1]: (i.external_attr >> 16) & 0o777
+                for i in zf.infolist()
+            }
+        self.assertIn("engine.bin", modes, sorted(modes))
+        self.assertEqual(
+            modes["engine.bin"] & stat_module.S_IXUSR, stat_module.S_IXUSR,
+            "a runnable payload must stay runnable after extraction",
+        )
+        self.assertEqual(
+            modes["boot.rom"] & 0o777, 0o644,
+            "a plain ROM keeps the fixed mode, whatever the local filesystem says",
+        )
+
     def test_injected_manifest_is_pinned_to_the_database(self):
         from scripts.generate_pack import inject_manifest, verify_pack
 

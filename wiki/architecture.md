@@ -155,6 +155,26 @@ with different hardware filters get separate packs. Emulator and system packs
 also retain system identity, `variant_group` and requested region; same-named
 regional files are never collapsed merely because their display label matches.
 
+## Pack reproducibility
+
+A pack is a function of its inputs. Two builds from the same collection and
+the same `database.json` produce the same bytes, so a third party can rebuild
+a published pack and compare it against the checksum in `SHA256SUMS.txt`.
+
+Three things make that hold. Generated members (`README.txt`, `manifest.json`)
+carry a fixed date rather than the wall clock, and the manifest's `generated`
+field is read from `database.json` instead of the build time. MAME and FBNeo
+romsets are rebuilt deterministically from their ROMs, so a pack does not
+inherit whatever metadata the source archive happened to carry. And every
+member is written with the same fixed date: `ZipFile.write` copies the source
+file's mtime, which is the checkout time for a file from the collection and
+the wall clock for one the build just staged in `tmp/`.
+
+`tests/test_deterministic_zip.py` builds the same fixture twice and compares
+the bytes, for both the platform and the emulator pack paths. Its fixture
+holds a romset, because without one the comparison never reaches the rebuild
+path and passes while the real packs still move.
+
 ## Storage tiers
 
 | Tier | Meaning |
