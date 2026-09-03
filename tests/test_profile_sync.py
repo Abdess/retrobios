@@ -457,6 +457,117 @@ class TestExternalCitation(unittest.TestCase):
         self.assertNotIn("EXTERNAL", profile_sync.REVIEW_STATUSES)
 
 
+class TestBinaryCitation(unittest.TestCase):
+    """A ref read by disassembly has no source path to anchor."""
+
+    def test_hex_address_is_binary(self):
+        self.assertTrue(profile_sync.is_binary_citation(
+            "BAM.dll 1.5-408 .text:0x100c3960-0x100c3a97"
+        ))
+        self.assertTrue(profile_sync.is_binary_citation("libmain.so LoadNES 0x3bb49"))
+
+    def test_binary_suffix_followed_by_words_is_binary(self):
+        self.assertTrue(profile_sync.is_binary_citation("BAM-Tracker.exe import directory"))
+
+    def test_section_name_is_binary(self):
+        self.assertTrue(profile_sync.is_binary_citation(".rdata dialog filter"))
+
+    def test_a_source_path_is_not_binary(self):
+        for path in ("src/foo.c", "libs/libCg.so", "Source/Core/hook.c", "resources/font.h"):
+            self.assertFalse(profile_sync.is_binary_citation(path), path)
+
+    def test_binary_part_is_reported_not_reviewed(self):
+        result = anchor_part(
+            RefPart("BAM.dll 1.5-408 .text:0x10031bbb", None, None),
+            make_fetch({}),
+            renamer(CompareResult([], False)),
+        )
+        self.assertEqual(result.status, "BINARY")
+        self.assertNotIn("BINARY", profile_sync.REVIEW_STATUSES)
+
+    def test_binary_part_at_the_pin(self):
+        part = RefPart("ModelImporter.exe import directory", None, None, "")
+        self.assertEqual(profile_sync.verify_at_pin(part, None, []).status, "BINARY")
+
+
+class TestRepoWord(unittest.TestCase):
+    """A leading word naming a declared repository is a location, not a project."""
+
+    def test_declared_repository_word_is_stripped(self):
+        self.assertEqual(
+            profile_sync.strip_repo_word("BAM_FPloader FPLoader.cpp", {"bam_fploader"}),
+            "FPLoader.cpp",
+        )
+
+    def test_undeclared_project_word_stays(self):
+        self.assertEqual(
+            profile_sync.strip_repo_word("munt ROMInfo.cpp", {"bam_fploader"}),
+            "munt ROMInfo.cpp",
+        )
+
+    def test_a_directory_prefix_is_not_a_project_word(self):
+        self.assertEqual(
+            profile_sync.strip_repo_word("src/dir file.cpp", {"src/dir"}),
+            "src/dir file.cpp",
+        )
+
+
+class TestNarrowByCited(unittest.TestCase):
+    """A bare filename carried by two trees follows the tree the profile cites."""
+
+    MATCHES = [
+        "BasiliskII/src/include/version.h",
+        "SheepShaver/src/include/version.h",
+    ]
+
+    def test_deepest_cited_directory_wins(self):
+        self.assertEqual(
+            profile_sync.narrow_by_cited(self.MATCHES, {"SheepShaver", "SheepShaver/src"}),
+            ["SheepShaver/src/include/version.h"],
+        )
+
+    def test_equal_depth_keeps_both(self):
+        matches = [
+            "SheepShaver/src/EthernetDriver/cpu_emulation.h",
+            "SheepShaver/src/include/cpu_emulation.h",
+        ]
+        self.assertEqual(
+            profile_sync.narrow_by_cited(matches, {"SheepShaver/src"}), matches
+        )
+
+    def test_nothing_cited_keeps_all(self):
+        self.assertEqual(profile_sync.narrow_by_cited(self.MATCHES, set()), self.MATCHES)
+
+    def test_depth_counts_components_not_characters(self):
+        matches = [
+            "SheepShaver/src/Unix/configure.ac",
+            "SheepShaver/src/Windows/configure.ac",
+        ]
+        cited = {"SheepShaver", "SheepShaver/src", "SheepShaver/src/Unix", "SheepShaver/src/Windows"}
+        self.assertEqual(profile_sync.narrow_by_cited(matches, cited), matches)
+
+
+class TestSymlinkTarget(unittest.TestCase):
+    """A one-line blob naming a same-named file is a link to follow."""
+
+    def test_relative_link_resolves_from_the_link_directory(self):
+        self.assertEqual(
+            profile_sync.symlink_target(
+                "SheepShaver/src/Unix/ether_unix.cpp",
+                ["../../../BasiliskII/src/Unix/ether_unix.cpp"],
+            ),
+            "BasiliskII/src/Unix/ether_unix.cpp",
+        )
+
+    def test_a_real_one_line_file_is_not_a_link(self):
+        self.assertIsNone(profile_sync.symlink_target("a/VERSION", ["1.2.3"]))
+        self.assertIsNone(profile_sync.symlink_target("a/x.c", ["int main() { return 0; }"]))
+        self.assertIsNone(profile_sync.symlink_target("a/x.c", ["../other.c"]))
+
+    def test_a_link_leaving_the_tree_is_ignored(self):
+        self.assertIsNone(profile_sync.symlink_target("x.c", ["../../x.c"]))
+
+
 class TestAnchorTokens(unittest.TestCase):
     def test_archive_members_supply_the_content_values(self):
         tokens = profile_sync._anchor_tokens(

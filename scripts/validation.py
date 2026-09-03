@@ -128,14 +128,15 @@ def _build_validation_index(profiles: dict) -> dict[str, dict]:
                     if norm.startswith("0x"):
                         norm = norm[2:]
                     index[fname]["crc32"].add(norm)
+            # A hash field may carry several accepted values, as a list or as
+            # the comma-separated string the schema spells out
             for hash_type in ("md5", "sha1", "sha256"):
                 if hash_type in checks and f.get(hash_type):
                     val = f[hash_type]
-                    if isinstance(val, list):
-                        for h in val:
-                            index[fname][hash_type].add(str(h).lower())
-                    else:
-                        index[fname][hash_type].add(str(val).lower())
+                    values = val if isinstance(val, list) else str(val).split(",")
+                    for h in values:
+                        if str(h).strip():
+                            index[fname][hash_type].add(str(h).strip().lower())
             # Adler32 -stored as known_hash_adler32 field (not in validation: list
             # for Dolphin, but support it in both forms for future profiles)
             adler_val = f.get("known_hash_adler32") or f.get("adler32")

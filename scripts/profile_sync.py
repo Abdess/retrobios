@@ -33,7 +33,7 @@ ANON_QUOTA = 60
 TRIAGE_PATH_SAMPLE = 5
 
 STATUS_ORDER = (
-    "ANCHORED", "EXTERNAL", "SHIFTED", "RENAMED", "MOVED", "AMBIGUOUS",
+    "ANCHORED", "EXTERNAL", "BINARY", "SHIFTED", "RENAMED", "MOVED", "AMBIGUOUS",
     "CHANGED", "GONE",
 )
 REVIEW_STATUSES = ("CHANGED", "GONE", "AMBIGUOUS")
@@ -231,6 +231,86 @@ def is_external_citation(path: str) -> bool:
         return False
     head = path.split(" ", 1)[0]
     return "/" not in head and "." not in head
+
+
+_BINARY_SUFFIXES = (
+    ".dll", ".exe", ".so", ".dylib", ".apk", ".elf", ".o", ".a", ".jar", ".dex",
+)
+_HEX_ADDRESS_RE = re.compile(r"\b0x[0-9a-fA-F]{2,}")
+
+
+def is_binary_citation(path: str) -> bool:
+    """True when a ref locates code inside a shipped binary, not a source file.
+
+    `BAM.dll 1.5-408 .text:0x100c3960-0x100c3a97`, `libmain.so LoadNES
+    0x3bb49` and `.rdata dialog filter` were read by disassembly. No revision
+    of any repository holds those bytes, so the ref can neither anchor nor
+    break: 77 parts of `future-pinball-fploader` alone were reported GONE.
+    """
+    if _HEX_ADDRESS_RE.search(path):
+        return True
+    if " " not in path:
+        return False
+    head = path.split(" ", 1)[0]
+    if head.lower().endswith(_BINARY_SUFFIXES):
+        return True
+    return head.startswith(".") and "/" not in head
+
+
+def strip_repo_word(path: str, known=frozenset()) -> str:
+    """Drop a leading project word that names a declared repository.
+
+    `BAM_FPloader FPLoader.cpp:45` follows the `munt ROMInfo.cpp` convention,
+    but BAM_FPloader is the profile's own source: the path is FPLoader.cpp,
+    to be found in that tree, not an out-of-reach citation.
+    """
+    if " " not in path:
+        return path
+    head, _, tail = path.partition(" ")
+    if head.lower() in known and tail and "/" not in head and "." not in head:
+        return tail.strip()
+    return path
+
+
+def narrow_by_cited(matches: list[str], cited_dirs) -> list[str]:
+    """Keep the candidates under the deepest directory the profile cites.
+
+    A bare `version.h` matches BasiliskII/src/include/version.h and
+    SheepShaver/src/include/version.h in cebix/macemu; the profile's own
+    source_refs all live under SheepShaver/src, which is the tree the prose
+    meant. Candidates under no cited directory are kept only when none is.
+    """
+    best = -1
+    kept: list[str] = []
+    for match in matches:
+        depth = max(
+            (d.count("/") + 1 for d in cited_dirs if match.startswith(d + "/")),
+            default=-1,
+        )
+        if depth > best:
+            best, kept = depth, [match]
+        elif depth == best:
+            kept.append(match)
+    return kept if best >= 0 else matches
+
+
+def symlink_target(path: str, lines: list[str] | None) -> str | None:
+    """The file a one-line blob points at, when the blob is a symbolic link.
+
+    Git stores a symlink as a blob holding its target, and the raw endpoints
+    serve that text: SheepShaver/src/Unix/ether_unix.cpp is the single line
+    ../../../BasiliskII/src/Unix/ether_unix.cpp. Anchoring a line number in
+    it would report every citation as beyond the end of the file.
+    """
+    if not lines or len(lines) != 1:
+        return None
+    target = lines[0].strip()
+    if not target or " " in target or "/" not in target:
+        return None
+    if posixpath.basename(target) != posixpath.basename(path):
+        return None
+    resolved = posixpath.normpath(posixpath.join(posixpath.dirname(path), target))
+    return None if resolved.startswith("..") or resolved == path else resolved
 
 
 def _anchor_tokens(entry: dict) -> list[str]:
@@ -657,6 +737,11 @@ def anchor_part(
     `describe(path)` returns (repo slug, raw URL at HEAD) for the repository
     that owns the path, or (None, None) when the caller does not track it.
     """
+    if is_binary_citation(part.path):
+        return PartResult(
+            part, "BINARY", None, None, None, [],
+            "cites a shipped binary, no source path to anchor",
+        )
     if is_external_citation(part.path):
         return PartResult(
             part, "EXTERNAL", None, None, None, [],
@@ -939,6 +1024,11 @@ def verify_at_pin(part: RefPart, pin_lines, tokens, hash_tokens=()) -> PartResul
     contains, so comparing the two says nothing. What can still be checked is
     self-consistency: does the cited range carry the value the entry declares?
     """
+    if is_binary_citation(part.path):
+        return PartResult(
+            part, "BINARY", None, None, None, [],
+            "cites a shipped binary, no source path to anchor",
+        )
     if is_external_citation(part.path):
         return PartResult(
             part, "EXTERNAL", None, None, None, [],
@@ -1006,7 +1096,7 @@ def reconcile_self_check(parts: list[PartResult]) -> list[PartResult]:
     """
     if not any(part.status == "ANCHORED" for part in parts):
         return parts
-    kept = ("ANCHORED", "GONE", "EXTERNAL")
+    kept = ("ANCHORED", "GONE", "EXTERNAL", "BINARY")
     return [
         part if part.status in kept
         else PartResult(part.part, "ANCHORED", None, None, None, [])
@@ -1067,6 +1157,11 @@ def build_report(
     # no declared value, so it anchors on content alone: the nudge and
     # relocation heuristics stay off rather than guess from a profile-wide
     # token pool.
+    known = frozenset(
+        repo.name.lower()
+        for _, _, url in declared_repositories(profile)
+        if (repo := upstream.parse_repo(url)) is not None
+    )
     refs = []
     for citation in collect_citations(profile):
         if citation.kind == "ref":
@@ -1074,15 +1169,28 @@ def build_report(
             display = str(entry.get("name") or "") or citation.field
             if citation.label:
                 display += f" [{citation.label}]"
+            parts = [
+                RefPart(strip_repo_word(p.path, known), p.start, p.end, p.raw)
+                for p in split_source_ref(citation.ref)
+            ]
             refs.append((
                 display, citation.ref, _anchor_tokens(entry),
-                entry_hashes(entry), split_source_ref(citation.ref), citation,
+                entry_hashes(entry), parts, citation,
             ))
         else:
             refs.append((
                 citation.field, citation.ref, [], [],
                 list(citation.parts), citation,
             ))
+    # Directories the profile already cites, deepest first, to settle a bare
+    # filename that several trees of one repository carry.
+    cited_dirs: set[str] = set()
+    for _, _, _, _, parts, _ in refs:
+        for part in parts:
+            directory = posixpath.dirname(part.path)
+            while directory:
+                cited_dirs.add(directory)
+                directory = posixpath.dirname(directory)
 
     if select_repo(profile) is None:
         declared = str(profile.get("source") or profile.get("upstream") or "")
@@ -1140,8 +1248,12 @@ def build_report(
                     p for p in tree or []
                     if posixpath.basename(p) == path
                 ]
-                if len(matches) == 1 and matches[0] not in candidates:
-                    candidates.append(matches[0])
+                if len(matches) > 1:
+                    matches = narrow_by_cited(matches, cited_dirs)
+                # A few survivors are told apart by the cited line below: a
+                # 266-line Windows configure.ac cannot carry line 754.
+                if len(matches) <= 4:
+                    candidates.extend(m for m in matches if m not in candidates)
 
         def score(lines) -> int:
             """How well a repository's cited line matches what the ref means.
@@ -1177,6 +1289,14 @@ def build_report(
                     )
                     if found is None:
                         continue
+                    target = symlink_target(candidate, found)
+                    if target:
+                        found = upstream.fetch_file(
+                            view.repo, sha_of(view), target, cache_dir, offline
+                        )
+                        if found is None:
+                            continue
+                        candidate = target
                     rank = score(found)
                     if rank == 3:
                         return view, candidate
