@@ -1,0 +1,208 @@
+emulator: hatariB
+type: libretro
+core_classification: community_fork
+source: "https://github.com/bbbradsmith/hatariB"
+upstream: "https://github.com/hatari/hatari"
+profiled_date: "2026-09-03"
+source_commit: "e9bbbd5fb35076402dc6b3c8ee3259e1809001cf"
+upstream_commit: "6a8e26d69fb32d61efd398dc1ad9a77122400034"
+core_version: "0.5"
+display_name: "Atari - ST/STE/TT/Falcon (hatariB)"
+cores:
+  - hatarib
+systems:
+  - atari-st
+  - atari-ste
+  - atari-tt
+  - atari-falcon
+
+notes: |
+  hatariB carries Hatari 2.6.1 in its hatari/ directory, every change
+  fenced by __LIBRETRO__ (DEVELOP.md:7-14, DEVELOP.md:44-48), and
+  builds as hatarib (makefile.libretro:1-3, core/core.c:1134); the
+  upstream_commit is the v2.6.1 tag the tree was taken from. The core
+  reads and writes through core_file.c, using the libretro VFS when the
+  frontend offers version 3 (core/core_file.c:747-790). Hatari's own
+  directory strings are replaced by <nopath> (hatari/src/paths.c:339-350),
+  hatari.cfg is never read because Main_LoadInitialConfig calls
+  core_config_init instead (hatari/src/main.c:984-1012,
+  core/core_config.c:1421-1426), and printer, RS232 and keymap file
+  settings keep their disabled defaults with no option to change them
+  (hatari/src/configuration.c:728, hatari/src/keymap.c:63,
+  hatari/src/keymap.c:699-718).
+
+  At retro_set_environment the core looks for <system>/tos.img and lists
+  every entry of <system>/hatarib/, up to 128 files and 16 directories
+  (core/core_file.c:13-14, core/core_file.c:791-851). Those lists fill the
+  hatarib_tos, hatarib_cartridge and hatarib_hardimg options, 100 values
+  each: TOS candidates end in .img, .rom, .bin or .tos, cartridges in .img,
+  .rom, .bin or .cart, hard disks are any file or subdirectory
+  (core/core_config.c:11, core/core_config.c:1299-1366). The TOS option
+  defaults to <tos.img> when the file exists and to EmuTOS 192uk otherwise
+  (core/core_config.c:68-92, core/core_config.c:1306-1321); the four
+  special values select tos.img or one of the built-in images, any other
+  value is a path under the system directory
+  (core/core_config.c:1094-1117). TOS_LoadImage copies the built-in image
+  or reads the file with core_read_file_system and caches it
+  (hatari/src/tos.c:45-63, hatari/src/tos.c:1028-1078); a failed load
+  raises a notification and halts the CPU instead of leaving
+  (hatari/src/tos.c:1080-1086, hatari/src/tos.c:1250-1262,
+  core/core.c:419-433, hatari/src/main.c:903-922). Validation is
+  upstream's (hatari/src/tos.c:1114-1160), but TOS_CheckSysConfig only
+  warns and never switches machine or CPU (hatari/src/tos.c:859-1000). The
+  hatarib_emutos_region and hatarib_emutos_framerate options rewrite the
+  OS header word of an EmuTOS image (hatari/src/tos.c:1351-1365,
+  core/core_config.c:1163-1169). Symbols_LoadTOS still runs
+  (hatari/src/tos.c:1193) but resolves <tos>.sym against the process
+  working directory, so nothing is read from the system directory.
+
+  The three EmuTOS images are EmuTOS 1.4 built from the hatarib-custom-140
+  branch of bbbradsmith/emutos, which lets DESKTOP.INF and NEWDESK.INF be
+  loaded, and are compiled in through emutos/bin_to_h.py
+  (DEVELOP.md:10, README.md:305-307).
+
+  A cartridge is read with core_read_file_system from the option value
+  (hatari/src/cart.c:40, hatari/src/cart.c:57-100) and disabled with
+  GEMDOS hard disk emulation, extended VDI or OS tracing
+  (hatari/src/cart.c:108-147). A permanent hard disk comes from
+  system/hatarib through hatarib_hardimg and hatarib_hardtype, GEMDOS
+  folder, ACSI, SCSI or IDE (core/core_config.c:186-233,
+  core/core_config.c:1000-1057, core/core_config.c:1151-1162); temporary
+  ones are content with an .acsi, .ahd, .vhd, .scsi, .shd, .ide or .gem
+  extension or lines of an M3U (core/core_disk.c:16-23,
+  core/core_disk.c:676-713, core/core_disk.c:782-785,
+  core/core_config.c:1059-1087). Images open through core_file_open_hard
+  (hatari/src/hdc.c:903, hatari/src/hdc.c:961-963,
+  hatari/src/ide.c:663-666) and GEMDOS folders through core_scandir_hard
+  (hatari/src/gemdos.c:663, hatari/src/gemdos.c:761,
+  hatari/src/gemdos.c:1321); hard disks are write protected by default
+  (hatari/src/configuration.c:918). Floppy content is ST, MSA, DIM, STX,
+  IPF or CTR, also inside a ZIP, ZST or GZ, or an M3U or M3U8 list with
+  #BOOTA, #BOOTB, #AUTO and #RES directives (core/core_disk.c:14-24,
+  core/core_disk.c:202-384, core/core_disk.c:444-559,
+  core/core_disk.c:621-670). Before the original image the core takes a
+  same-named copy from the save directory and, for STX, a .wd1772 overlay
+  there (core/core_disk.c:787-814); modified disks are written back to
+  the save directory (core/core_disk.c:1154-1226, hatari/src/st.c:93,
+  hatari/src/msa.c:417, hatari/src/floppy_stx.c:451). #AUTO and #RES
+  write a virtual INF file to system/hatarib.tmp
+  (hatari/src/inffile.c:761) and, when booting from a GEMDOS C: folder,
+  read the DESKTOP.INF, NEWDESK.INF or EMUDESK.INF found there
+  (hatari/src/inffile.c:598-667). MIDI goes through the libretro MIDI
+  interface (core/core.c:485-545, hatari/src/midi.c:593-700); Midi_Host_Open
+  no longer opens files (hatari/src/midi.c:346-424).
+
+files:
+  - name: "tos.img"
+    path: "tos.img"
+    description: "Atari TOS ROM image, default when present"
+    required: false
+    has_builtin: true
+    max_size: 1048576
+    validation: [size]
+    source_ref: "core/core_file.c:791-851, core/core_config.c:68-92, core/core_config.c:1094-1117, core/core_config.c:1306-1321, hatari/src/tos.c:1028-1160"
+    note: >
+      Any TOS 1.00 to 4.04, TOS 0.00, a RAM TOS or EmuTOS. Further images
+      go in system/hatarib/ with an .img, .rom, .bin or .tos extension and
+      are selected with the hatarib_tos option; without tos.img the
+      built-in EmuTOS 192uk is the default.
+
+  - name: "etos1024k.img"
+    description: "EmuTOS 1.4 1024 KB image, all machine types"
+    required: false
+    embedded: true
+    size: 1048576
+    md5: 1cb3775c4775bad75d24447a90a2890b
+    sha1: 38dc8baf5224229df55e7d0804b6b7b6bacfc7a0
+    sha256: 757c571b98b955887ea6d9034513555f4263040420e9d2195cd0c6f8de06c451
+    crc32: 118b35b4
+    source_ref: "emutos/bin_to_h.py:1-30, hatari/src/tos.c:45-63, hatari/src/tos.c:1038-1046, core/core_config.c:76, core/core_config.c:1096-1116"
+    note: >
+      Compiled into the core from emutos/etos1024k.img and never opened at
+      run time. Built from the hatarib-custom-140 branch of
+      bbbradsmith/emutos; hashes are of the file in the repository.
+
+  - name: "etos192uk.img"
+    description: "EmuTOS 1.4 192 KB UK image, 50 Hz, default TOS"
+    required: false
+    embedded: true
+    size: 196608
+    md5: 5f5730d9b557c44ddb9bc410ce2925d8
+    sha1: ef3a3ccffcb317bff7d0dceca0abacefc3a58abc
+    sha256: 5c679e6b1b8ed178fa079e4957ed66f9277094f0fe0a5b50c8cbea041e220250
+    crc32: fe4c3ff1
+    source_ref: "emutos/bin_to_h.py:1-30, hatari/src/tos.c:45-63, hatari/src/tos.c:1038-1046, core/core_config.c:77, core/core_config.c:91, core/core_config.c:1096-1116"
+    note: >
+      Compiled into the core from emutos/etos192uk.img and never opened at
+      run time. Selected when no tos.img exists and no other image is
+      chosen. Built from the hatarib-custom-140 branch of
+      bbbradsmith/emutos; hashes are of the file in the repository.
+
+  - name: "etos192us.img"
+    description: "EmuTOS 1.4 192 KB US image, 60 Hz"
+    required: false
+    embedded: true
+    size: 196608
+    md5: 796f62574413bc59ca767063b3184f90
+    sha1: bb98cd8a50df53afecfe183b049eda4014fc0d05
+    sha256: ccccc420908012e03b4b38b8ed4530923bb04f27ab189eb2c694bf7e8509b666
+    crc32: 18030f9a
+    source_ref: "emutos/bin_to_h.py:1-30, hatari/src/tos.c:45-63, hatari/src/tos.c:1038-1046, core/core_config.c:78, core/core_config.c:1096-1116"
+    note: >
+      Compiled into the core from emutos/etos192us.img and never opened at
+      run time. Built from the hatarib-custom-140 branch of
+      bbbradsmith/emutos; hashes are of the file in the repository.
+
+  - name: "cartridge ROM"
+    path: null
+    config_key: "hatarib_cartridge"
+    description: "Atari ST cartridge image loaded at 0xFA0000"
+    required: false
+    min_size: 40
+    max_size: 131076
+    validation: [size]
+    source_ref: "core/core_config.c:166-185, core/core_config.c:1145-1149, core/core_config.c:1332-1344, core/core_file.c:256-259, hatari/src/cart.c:40, hatari/src/cart.c:57-100, hatari/src/cart.c:108-147"
+    note: >
+      Any file of system/hatarib/ with an .img, .rom, .bin or .cart
+      extension. Raw images up to 0x20000 bytes or .stc images of exactly
+      0x20004 bytes whose 4-byte header is skipped. Replaced by the
+      built-in GEMDOS trampoline whenever GEMDOS hard disk emulation,
+      extended VDI or OS tracing is on.
+
+  - name: "hatarib.nvram"
+    path: "hatarib.nvram"
+    description: "TT and Falcon NVRAM contents, 50 bytes"
+    required: false
+    has_builtin: true
+    min_size: 50
+    validation: [size]
+    storage: user_provided
+    unsourceable: "machine state the emulator writes itself when the content closes; no canonical contents"
+    source_ref: "hatari/src/falcon/nvram.c:97, hatari/src/falcon/nvram.c:111-117, hatari/src/falcon/nvram.c:127-170, hatari/src/falcon/nvram.c:178-205, hatari/src/falcon/nvram.c:317-330, hatari/src/falcon/nvram.c:371-374, hatari/src/falcon/nvram.h:54-58, core/core_file.c:273-277, core/core_file.c:319-322"
+    note: >
+      Read from the system directory at NvRam_Init for the TT and Falcon
+      machines only; a read shorter than 50 bytes keeps the built-in
+      defaults. Written back when the core shuts down.
+
+  - name: "capsimg.so"
+    path: null
+    description: "CAPSImage 5.1 shared library for IPF and CTR floppy images, Linux, macOS, Android and Raspberry Pi builds"
+    required: false
+    source_ref: "hatari/src/floppy_ipf.c:320-331, hatari/src/floppy_ipf.c:632-640, hatari/src/floppy_ipf.c:686-744, hatari/src/floppy_ipf.c:752-764, hatari/CMakeLists.txt:246, hatari/cmake/config-cmake.h:99-101, DEVELOP.md:56, DEVELOP.md:59"
+    note: >
+      Opened with dlopen on the first IPF or CTR read, from the dlopen
+      search path or next to the core, and required to export the CAPS
+      functions the core imports; without it those images are refused
+      with a notification and every other format still works.
+      rsn8887/capsimg publishes one build per platform under this name.
+
+  - name: "capsimg.dll"
+    path: null
+    description: "CAPSImage 5.1 shared library for IPF and CTR floppy images, Windows build"
+    required: false
+    source_ref: "hatari/src/floppy_ipf.c:320-331, hatari/src/floppy_ipf.c:632-640, hatari/src/floppy_ipf.c:686-744, hatari/src/floppy_ipf.c:752-764, DEVELOP.md:56"
+    note: >
+      Opened with LoadLibrary on the first IPF or CTR read, from the
+      RetroArch directory or the library search path; without it those
+      images are refused with a notification and every other format still
+      works.
