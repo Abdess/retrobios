@@ -1,5 +1,5 @@
 platform: RetroBat
-version: 8.1.2
+version: 8.2.1
 homepage: "https://www.retrobat.org"
 source: "https://raw.githubusercontent.com/RetroBat-Official/emulatorlauncher/master/batocera-systems/Resources/batocera-systems.json"
 base_destination: bios
@@ -1047,6 +1047,15 @@ systems:
       required: true
       md5: aad37b1492886b892f1821f37fd3ae34
     name: Nintendo 64 DD
+  namco2x6:
+    files:
+    - name: r27v1602f.7d
+      destination: pcsx2/bios/r27v1602f.7d
+      required: true
+    - name: r27v1602f.8g
+      destination: pcsx2/bios/r27v1602f.8g
+      required: true
+    name: Namco2x6
   naomi:
     files:
     - name: naomi.zip

@@ -22,6 +22,13 @@ batocera:
 
 retroarch:
   targets:
+    # The buildbot publishes a 6 KB placeholder named "na" on two Android
+    # targets. Its retro_get_system_info name is "Not Available": it emulates
+    # nothing and no profile can describe it.
+    android-armeabi-v7a:
+      remove_cores: [na]
+    android-x86_64:
+      remove_cores: [na]
     nintendo-switch:
       aliases: [switch, nx]
     linux-x86_64:

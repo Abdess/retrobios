@@ -142,7 +142,7 @@ systems:
       required: true
       sha1: deb62b0074b8cae4f162c257662136733cfc76ad
       md5: 00dad01abdbf8ea9e79ad2fe11bdb182
-      crc32: '81315163'
+      crc32: "81315163"
       size: 1859335
     - name: bubsys.zip
       destination: fbneo/bubsys.zip
@@ -184,7 +184,7 @@ systems:
       required: true
       sha1: deb62b0074b8cae4f162c257662136733cfc76ad
       md5: 00dad01abdbf8ea9e79ad2fe11bdb182
-      crc32: '81315163'
+      crc32: "81315163"
       size: 1859335
     - name: nmk004.zip
       destination: fbneo/nmk004.zip
@@ -826,7 +826,7 @@ systems:
       required: true
       sha1: 9dd7f38a74f119f142b17e5a16ebd8afa7bbea01
       md5: 653daaf7b9b29c2c4e577f489580f247
-      crc32: '58239527'
+      crc32: "58239527"
       size: 32768
     native_id: Enterprise - 64/128
     includes:
@@ -1123,7 +1123,7 @@ systems:
       required: true
       sha1: e2fbd56e42da637609d23ae9df9efd1b4241b18a
       md5: 6d8c0ca64e726c82a4b726e9b01cdf1e
-      crc32: 00870134
+      crc32: "00870134"
       size: 32768
     - name: MSX2PEXT.ROM
       destination: MSX2PEXT.ROM
@@ -1480,7 +1480,7 @@ systems:
       required: true
       sha1: 300c20df6731a33952ded8c436f7f186d25d3492
       md5: a860e8c0b6d573d191e4ec7db1b1e4f6
-      crc32: '81977335'
+      crc32: "81977335"
       size: 16384
     native_id: Nintendo - Game Boy Advance
     core: gpsp
@@ -1559,7 +1559,7 @@ systems:
       required: true
       sha1: ef9194ab4804aa0aa8540d846caf291b28331165
       md5: b17148254a5799684c7d783206504926
-      crc32: '86573808'
+      crc32: "86573808"
       size: 2097152
     - name: gc-pal-10.bin
       destination: gc-pal-10.bin
@@ -1594,14 +1594,14 @@ systems:
       required: true
       sha1: ef9194ab4804aa0aa8540d846caf291b28331165
       md5: b17148254a5799684c7d783206504926
-      crc32: '86573808'
+      crc32: "86573808"
       size: 2097152
     - name: IPL.bin
       destination: dolphin-emu/Sys/GC/USA/IPL.bin
       required: true
       sha1: ef9194ab4804aa0aa8540d846caf291b28331165
       md5: b17148254a5799684c7d783206504926
-      crc32: '86573808'
+      crc32: "86573808"
       size: 2097152
     - name: codehandler.bin
       destination: dolphin-emu/Sys/codehandler.bin
@@ -2142,7 +2142,7 @@ systems:
       required: true
       sha1: b6ff66dcb5547bd91760d239ddf428a655631c53
       md5: 547f3d12aed389058ca06148f1cca0ed
-      crc32: '17516536'
+      crc32: "17516536"
       size: 1394278
     - name: f355dlx.zip
       destination: dc/f355dlx.zip
@@ -2493,7 +2493,7 @@ systems:
       required: true
       sha1: 9a75ed4b293f968985be4c9aa893cd88276d1ced
       md5: 78e61a2a02121873c1756b21fd1398b1
-      crc32: '82047489'
+      crc32: "82047489"
       size: 8192
     - name: disk_plus3.szx
       destination: disk_plus3.szx
@@ -2863,7 +2863,7 @@ systems:
       required: true
       sha1: b0f1c4fa8d4492a04431805f6537138b842b549f
       md5: 11526d58d4c524daef7d5d677dc6b004
-      crc32: '33697892'
+      crc32: "33697892"
       size: 524288
     - name: top-sp1.bin
       destination: neocd/top-sp1.bin
@@ -2911,7 +2911,7 @@ systems:
       required: true
       sha1: 10155d8d6e6e832d6ea66db9bc098321fb5e8ebf
       md5: 924e392ed05558ffdb115408c263dccf
-      crc32: '37157331'
+      crc32: "37157331"
       size: 524288
     - name: scph1002.bin
       destination: scph1002.bin

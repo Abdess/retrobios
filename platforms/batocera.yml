@@ -6,7 +6,7 @@ base_destination: bios
 hash_type: md5
 verification_mode: md5
 cores:
-- '81'
+- "81"
 - a5200
 - abuse
 - arduous

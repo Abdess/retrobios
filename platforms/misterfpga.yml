@@ -1,7 +1,7 @@
 platform: MiSTer FPGA
-version: '2026-07-27'
-homepage: https://misterfpga.org
-source: https://raw.githubusercontent.com/ajgowans/BiosDB_MiSTer/db/bios_db.json.zip
+version: '2026-08-29'
+homepage: "https://misterfpga.org"
+source: "https://raw.githubusercontent.com/ajgowans/BiosDB_MiSTer/db/bios_db.json.zip"
 base_destination: games
 hash_type: md5
 verification_mode: md5
@@ -21,7 +21,7 @@ systems:
       size: 1048576
     native_id: 3DO
     name: 3DO Interactive Multiplayer
-    docs: https://github.com/MiSTer-devel/3DO_MiSTer
+    docs: "https://github.com/MiSTer-devel/3DO_MiSTer"
   apple-iigs:
     files:
     - name: boot.rom
@@ -36,7 +36,7 @@ systems:
       size: 131072
     native_id: Apple-IIgs
     name: Apple IIGS
-    docs: https://github.com/MiSTer-devel/Apple-IIgs_MiSTer
+    docs: "https://github.com/MiSTer-devel/Apple-IIgs_MiSTer"
   atari-jaguar:
     files:
     - name: boot.rom
@@ -56,7 +56,7 @@ systems:
       size: 131072
     native_id: Jaguar
     name: Atari Jaguar
-    docs: https://github.com/MiSTer-devel/Jaguar_MiSTer
+    docs: "https://github.com/MiSTer-devel/Jaguar_MiSTer"
   atari-lynx:
     files:
     - name: boot.rom
@@ -66,7 +66,7 @@ systems:
       size: 512
     native_id: AtariLynx
     name: Atari Lynx
-    docs: https://github.com/MiSTer-devel/AtariLynx_MiSTer
+    docs: "https://github.com/MiSTer-devel/AtariLynx_MiSTer"
   bally-astrocade:
     files:
     - name: boot.rom
@@ -76,7 +76,7 @@ systems:
       size: 8192
     native_id: Astrocade
     name: Bally Astrocade
-    docs: https://github.com/MiSTer-devel/Astrocade_MiSTer
+    docs: "https://github.com/MiSTer-devel/Astrocade_MiSTer"
   casio-pv2000:
     files:
     - name: boot0.rom
@@ -86,7 +86,7 @@ systems:
       size: 16384
     native_id: Casio_PV-2000
     name: Casio PV-2000
-    docs: https://github.com/MiSTer-devel/Casio_PV-2000_MiSTer
+    docs: "https://github.com/MiSTer-devel/Casio_PV-2000_MiSTer"
   creativision:
     files:
     - name: boot.rom
@@ -96,7 +96,7 @@ systems:
       size: 16384
     native_id: CreatiVision
     name: VTech CreatiVision
-    docs: https://github.com/MiSTer-devel/CreatiVision_MiSTer
+    docs: "https://github.com/MiSTer-devel/CreatiVision_MiSTer"
   epoch-scv:
     files:
     - name: boot.rom
@@ -106,7 +106,7 @@ systems:
       size: 6144
     native_id: SCV
     name: Epoch Super Cassette Vision
-    docs: https://github.com/MiSTer-devel/SuperCassetteVision_MiSTer
+    docs: "https://github.com/MiSTer-devel/SuperCassetteVision_MiSTer"
   gamate:
     files:
     - name: boot.rom
@@ -116,7 +116,16 @@ systems:
       size: 4096
     native_id: Gamate
     name: Bit Corporation Gamate
-    docs: https://github.com/MiSTer-devel/Gamate_MiSTer
+    docs: "https://github.com/MiSTer-devel/Gamate_MiSTer"
+  gameking:
+    files:
+    - name: boot.rom
+      destination: GameKing/boot.rom
+      required: true
+      md5: 1c7e3cb2df4af8ce3eff187c4155d1a7
+      size: 524288
+    native_id: GameKing
+    name: gameking
   interact:
     files:
     - name: boot.rom
@@ -126,7 +135,7 @@ systems:
       size: 2048
     native_id: Interact
     name: Interact Home Computer
-    docs: https://github.com/MiSTer-devel/Interact_MiSTer
+    docs: "https://github.com/MiSTer-devel/Interact_MiSTer"
   mattel-intellivision:
     files:
     - name: boot0.rom
@@ -151,7 +160,7 @@ systems:
       size: 24576
     native_id: Intellivision
     name: Mattel Intellivision
-    docs: https://github.com/MiSTer-devel/Intv_MiSTer
+    docs: "https://github.com/MiSTer-devel/Intv_MiSTer"
   microsoft-msx:
     files:
     - name: boot.rom
@@ -161,7 +170,7 @@ systems:
       size: 32768
     native_id: MSX1
     name: MSX1
-    docs: https://github.com/MiSTer-devel/MSX1_MiSTer
+    docs: "https://github.com/MiSTer-devel/MSX1_MiSTer"
   nec-pc-88:
     files:
     - name: boot.rom
@@ -171,7 +180,7 @@ systems:
       size: 393216
     native_id: PC8801
     name: NEC PC-8801
-    docs: https://github.com/MiSTer-devel/PC88_MiSTer
+    docs: "https://github.com/MiSTer-devel/PC88_MiSTer"
   nec-pc-engine-cd:
     files:
     - name: cd_bios.rom
@@ -181,7 +190,21 @@ systems:
       size: 262144
     native_id: TGFX16-CD
     name: PC Engine CD / TurboGrafx-CD
-    docs: https://github.com/MiSTer-devel/TurboGrafx16_MiSTer
+    docs: "https://github.com/MiSTer-devel/TurboGrafx16_MiSTer"
+  ngpc:
+    files:
+    - name: boot0.rom
+      destination: NGPC/boot0.rom
+      required: true
+      md5: 3655aacebb43a963607d4cf821fc1301
+      size: 65536
+    - name: boot1.rom
+      destination: NGPC/boot1.rom
+      required: true
+      md5: d87d876c4391935c9d48ef352a3ff02d
+      size: 65536
+    native_id: NGPC
+    name: ngpc
   nintendo-64:
     files:
     - name: boot.rom
@@ -211,7 +234,7 @@ systems:
       size: 4194304
     native_id: N64
     name: Nintendo 64
-    docs: https://github.com/MiSTer-devel/N64_MiSTer
+    docs: "https://github.com/MiSTer-devel/N64_MiSTer"
   nintendo-gb:
     files:
     - name: boot1.rom
@@ -221,7 +244,7 @@ systems:
       size: 2304
     native_id: GAMEBOY
     name: Game Boy / Game Boy Color
-    docs: https://github.com/MiSTer-devel/Gameboy_MiSTer
+    docs: "https://github.com/MiSTer-devel/Gameboy_MiSTer"
   nintendo-gba:
     files:
     - name: boot.rom
@@ -231,7 +254,7 @@ systems:
       size: 16384
     native_id: GBA
     name: Game Boy Advance
-    docs: https://github.com/MiSTer-devel/GBA_MiSTer
+    docs: "https://github.com/MiSTer-devel/GBA_MiSTer"
   nintendo-nes:
     files:
     - name: boot0.rom
@@ -241,7 +264,7 @@ systems:
       size: 8192
     native_id: NES
     name: NES / Famicom Disk System
-    docs: https://github.com/MiSTer-devel/NES_MiSTer
+    docs: "https://github.com/MiSTer-devel/NES_MiSTer"
   nintendo-pokemon-mini:
     files:
     - name: boot.rom
@@ -251,7 +274,7 @@ systems:
       size: 4096
     native_id: PokemonMini
     name: Pokemon Mini
-    docs: https://github.com/MiSTer-devel/PokemonMini_MiSTer
+    docs: "https://github.com/MiSTer-devel/PokemonMini_MiSTer"
   nintendo-sgb:
     files:
     - name: Super Game Boy 2.sfc
@@ -266,7 +289,7 @@ systems:
       size: 262144
     native_id: SGB
     name: Super Game Boy
-    docs: https://github.com/MiSTer-devel/SGB_MiSTer
+    docs: "https://github.com/MiSTer-devel/SGB_MiSTer"
   nintendo-snes:
     files:
     - name: bsx_bios.rom
@@ -276,7 +299,7 @@ systems:
       size: 1048576
     native_id: SNES
     name: Super NES / Super Famicom
-    docs: https://github.com/MiSTer-devel/SNES_MiSTer
+    docs: "https://github.com/MiSTer-devel/SNES_MiSTer"
   philips-cdi:
     files:
     - name: boot0.rom
@@ -296,7 +319,7 @@ systems:
       size: 131072
     native_id: CD-i
     name: Philips CD-i
-    docs: https://github.com/MiSTer-devel/CDi_MiSTer
+    docs: "https://github.com/MiSTer-devel/CDi_MiSTer"
   pocket-challenge-v2:
     files:
     - name: boot.rom
@@ -311,7 +334,7 @@ systems:
       size: 8192
     native_id: PocketChallengeV2
     name: Benesse Pocket Challenge V2
-    docs: https://github.com/MiSTer-devel/WonderSwan_MiSTer
+    docs: "https://github.com/MiSTer-devel/WonderSwan_MiSTer"
   sega-mega-cd:
     files:
     - name: cd_bios.rom
@@ -336,7 +359,7 @@ systems:
       size: 131072
     native_id: MegaCD
     name: Sega CD / Mega-CD
-    docs: https://github.com/MiSTer-devel/MegaCD_MiSTer
+    docs: "https://github.com/MiSTer-devel/MegaCD_MiSTer"
   sega-saturn:
     files:
     - name: boot.rom
@@ -346,7 +369,7 @@ systems:
       size: 524288
     native_id: Saturn
     name: Sega Saturn
-    docs: https://github.com/MiSTer-devel/Saturn_MiSTer
+    docs: "https://github.com/MiSTer-devel/Saturn_MiSTer"
   snk-neogeo:
     files:
     - name: 000-lo.lo
@@ -376,7 +399,7 @@ systems:
       size: 131072
     native_id: NEOGEO
     name: Neo Geo AES / MVS
-    docs: https://github.com/MiSTer-devel/NeoGeo_MiSTer
+    docs: "https://github.com/MiSTer-devel/NeoGeo_MiSTer"
   snk-neogeo-cd:
     files:
     - name: neocd.bin
@@ -396,16 +419,7 @@ systems:
       size: 524288
     native_id: NeoGeo-CD
     name: Neo Geo CD
-    docs: https://github.com/MiSTer-devel/NeoGeo_MiSTer
-  snk-neogeo-pocket:
-    files:
-    - name: boot.rom
-      destination: NeoGeoPocket/boot.rom
-      required: true
-      md5: 43d0d53c69c12cc0d28f197717a1bb06
-      size: 65536
-    native_id: NeoGeoPocket
-    name: Neo Geo Pocket
+    docs: "https://github.com/MiSTer-devel/NeoGeo_MiSTer"
   sony-playstation:
     files:
     - name: boot.rom
@@ -430,7 +444,36 @@ systems:
       size: 218953
     native_id: PSX
     name: Sony PlayStation
-    docs: https://github.com/MiSTer-devel/PSX_MiSTer
+    docs: "https://github.com/MiSTer-devel/PSX_MiSTer"
+  studio-ii:
+    files:
+    - name: boot0.rom
+      destination: Studio-II/boot0.rom
+      required: true
+      md5: b37205bf19b197682f00619d05da194b
+      size: 2048
+    - name: boot1.rom
+      destination: Studio-II/boot1.rom
+      required: true
+      md5: a6b94e449bc9ec58a30e1f75d590c558
+      size: 4096
+    - name: boot2.rom
+      destination: Studio-II/boot2.rom
+      required: true
+      md5: 849a484aa4b2784ece5c35c39d9d51a8
+      size: 4096
+    - name: boot3.rom
+      destination: Studio-II/boot3.rom
+      required: true
+      md5: aeec6fe3934481e20eb7db6d5ff56a54
+      size: 2048
+    - name: boot4.rom
+      destination: Studio-II/boot4.rom
+      required: true
+      md5: 9f037435b6721be9ee91dc93293e52ce
+      size: 768
+    native_id: Studio-II
+    name: studio-ii
   tandy-coco:
     files:
     - name: boot0.rom
@@ -450,7 +493,7 @@ systems:
       size: 8192
     native_id: COCO3
     name: Tandy Color Computer 3
-    docs: https://github.com/MiSTer-devel/CoCo3_MiSTer
+    docs: "https://github.com/MiSTer-devel/CoCo3_MiSTer"
   ti99:
     files:
     - name: boot0.rom
@@ -460,7 +503,7 @@ systems:
       size: 196608
     native_id: TI-99_4A
     name: Texas Instruments TI-99/4A
-    docs: https://github.com/MiSTer-devel/TI-99_4A_MiSTer
+    docs: "https://github.com/MiSTer-devel/TI-99_4A_MiSTer"
   tiger-game-com:
     files:
     - name: boot.rom
@@ -484,7 +527,7 @@ systems:
       size: 8192
     native_id: WonderSwan
     name: Bandai WonderSwan
-    docs: https://github.com/MiSTer-devel/WonderSwan_MiSTer
+    docs: "https://github.com/MiSTer-devel/WonderSwan_MiSTer"
   wonderswan-color:
     files:
     - name: boot.rom
@@ -499,4 +542,4 @@ systems:
       size: 8192
     native_id: WonderSwanColor
     name: Bandai WonderSwan Color
-    docs: https://github.com/MiSTer-devel/WonderSwan_MiSTer
+    docs: "https://github.com/MiSTer-devel/WonderSwan_MiSTer"

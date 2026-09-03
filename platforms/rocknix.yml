@@ -1,5 +1,5 @@
 platform: ROCKNIX
-version: '20260801'
+version: "20260901"
 homepage: "https://rocknix.org"
 source: "https://raw.githubusercontent.com/ROCKNIX/distribution/next/projects/ROCKNIX/packages/rocknix/sources/scripts/rocknix-systems"
 base_destination: bios
