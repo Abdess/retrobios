@@ -36,6 +36,9 @@ DEFAULT_BIOS_DIR = "bios"
 NODEDUP_DIRS = {
     "RPG Maker",
     "ScummVM",
+    # A zoneinfo tree is addressed by zone name and its aliases are equal
+    # files by design: US/Samoa is Pacific/Midway.
+    "tzdata",
 }
 
 
