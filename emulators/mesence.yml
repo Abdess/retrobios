@@ -7,7 +7,7 @@ profiled_date: "2026-08-06"
 source_commit: "bec4fe632cb21ec97ad2b39cd6fdc826ecd02753"
 core_version: "2.2.1"
 display_name: "Multi-System (MesenCE)"
-cores: [mesence]
+cores: [mesence, mesen2]
 systems:
   - nintendo-nes
   - nintendo-fds
@@ -72,6 +72,7 @@ files:
   # -------------------------------------------------------
   - name: "dsp1.rom"
     path: "Firmware/dsp1.rom"
+    aliases: ["SNES_dsp1.rom"]
     system: nintendo-snes
     required: true
     size: 8192
@@ -82,6 +83,7 @@ files:
 
   - name: "dsp1b.rom"
     path: "Firmware/dsp1b.rom"
+    aliases: ["SNES_dsp1b.rom"]
     system: nintendo-snes
     required: true
     size: 8192
@@ -92,6 +94,7 @@ files:
 
   - name: "dsp2.rom"
     path: "Firmware/dsp2.rom"
+    aliases: ["SNES_dsp2.rom"]
     system: nintendo-snes
     required: true
     size: 8192
@@ -102,6 +105,7 @@ files:
 
   - name: "dsp3.rom"
     path: "Firmware/dsp3.rom"
+    aliases: ["SNES_dsp3.rom"]
     system: nintendo-snes
     required: true
     size: 8192
@@ -112,6 +116,7 @@ files:
 
   - name: "dsp4.rom"
     path: "Firmware/dsp4.rom"
+    aliases: ["SNES_dsp4.rom"]
     system: nintendo-snes
     required: true
     size: 8192
@@ -122,6 +127,7 @@ files:
 
   - name: "st010.rom"
     path: "Firmware/st010.rom"
+    aliases: ["SNES_st010.rom"]
     system: nintendo-snes
     required: true
     size: 53248
@@ -132,6 +138,7 @@ files:
 
   - name: "st011.rom"
     path: "Firmware/st011.rom"
+    aliases: ["SNES_st011.rom"]
     system: nintendo-snes
     required: true
     size: 53248
@@ -142,6 +149,7 @@ files:
 
   - name: "st018.rom"
     path: "Firmware/st018.rom"
+    aliases: ["SNES_st018.rom"]
     system: nintendo-snes
     required: true
     size: 163840
@@ -163,6 +171,7 @@ files:
 
   - name: "SufamiTurbo.sfc"
     path: "Firmware/SufamiTurbo.sfc"
+    aliases: ["STBIOS.bin"]
     system: nintendo-sufami-turbo
     required: true
     size: 262144

@@ -136,6 +136,7 @@ files:
     source_ref: "libmain.so LoadBIOS 0x645a8-0x645bb, Speccy59-Ubuntu-x86-bin speccy 0x3dcbe-0x3dcd1"
 
   - name: ZXS16.ROM
+    aliases: ["ZXS48.ROM", "48.rom"]
     system: sinclair-zx-spectrum
     required: true
     max_size: 16384
