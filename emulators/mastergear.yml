@@ -115,7 +115,6 @@ files:
   - name: names.dat
     required: false
     bundled: true
-    unsourceable: "ships inside the paid application package"
     category: game_data
     size: 21161
     description: "title database keyed by system and CRC32"
@@ -125,7 +124,6 @@ files:
   - name: changelog.html
     required: false
     bundled: true
-    unsourceable: "ships inside the paid application package"
     category: game_data
     size: 68201
     description: "release history shown from the Android menu"

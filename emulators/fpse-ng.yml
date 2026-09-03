@@ -145,7 +145,6 @@ files:
     path: bios/kanji.rom
     required: false
     bundled: true
-    unsourceable: "ships inside the paid application package"
     size: 238586
     md5: 040d9dcbad83388c14d2628ac69ce88b
     sha1: 915880f8bb04de39fd5132b92dfb99872f54fa47
@@ -156,7 +155,6 @@ files:
   - name: libsoft1.so
     required: true
     bundled: true
-    unsourceable: "ships inside the paid application package"
     category: game_data
     description: "software renderer plugin"
     note: "Named by System.loadLibrary(\"soft1\") outside any catch and listed in DT_NEEDED by the core. Also holds the VR background loader."
@@ -165,7 +163,6 @@ files:
   - name: libspuplugin.so
     required: true
     bundled: true
-    unsourceable: "ships inside the paid application package"
     category: game_data
     description: "sound plugin"
     note: "Named by System.loadLibrary(\"spuplugin\") outside any catch and listed in DT_NEEDED."
@@ -174,7 +171,6 @@ files:
   - name: libopengl.so
     required: true
     bundled: true
-    unsourceable: "ships inside the paid application package"
     category: game_data
     aliases: ["libopengl1.so"]
     description: "OpenGL renderer plugin"
@@ -184,7 +180,6 @@ files:
   - name: libnfsplugin.so
     required: true
     bundled: true
-    unsourceable: "ships inside the paid application package"
     category: game_data
     description: "NFS client plugin, for discs read from a network share"
     note: "Named by System.loadLibrary(\"nfsplugin\") outside any catch and listed in DT_NEEDED. Backs the isnfsbios and copyfromnfs entry points."
@@ -193,7 +188,6 @@ files:
   - name: libsdl.so
     required: true
     bundled: true
-    unsourceable: "ships inside the paid application package"
     category: game_data
     description: "SDL audio backend"
     note: "Named by System.loadLibrary(\"sdl\") from a static block that catches UnsatisfiedLinkError, and listed in DT_NEEDED, so the core will not link without it."
@@ -202,7 +196,6 @@ files:
   - name: libneon.so
     required: true
     bundled: true
-    unsourceable: "ships inside the paid application package"
     category: game_data
     description: "NEON colour conversion routines"
     note: "Named by System.loadLibrary(\"neon\") from the same static block and listed in DT_NEEDED."
@@ -211,31 +204,276 @@ files:
   - name: libuncompress.so
     required: true
     bundled: true
-    unsourceable: "ships inside the paid application package"
     category: game_data
     description: "archive extractor for .zip, .rar, .7z, .ape and .ecm images"
     note: "Named by System.loadLibrary(\"uncompress\") outside any catch, and the only one of the plugins the core does not list in DT_NEEDED."
     source_ref: "Main.java:27300, Main.java:25408, libfpse.so readelf -d"
 
-  - name: "<shader>.vsh"
-    path: "FPse64/shaders/<shader>.vsh"
+  # The Shaders setting walks FPse64/shaders and reads the selected pair,
+  # passing the bytes to setVSH and setFSH. The packaged set below is copied
+  # out of assets once storage access is granted, and a pair dropped in by
+  # hand joins the list. Cartoon_A, Cartoon_B, FXAA, FXAA_natural_vision and
+  # TV_HDR share one vertex shader, as do CRT-Hyllian, Grayscale and
+  # MangaToon; each pair is read by its own name.
+  - name: "4xhqglsl.vsh"
+    path: "FPse64/shaders/4xhqglsl.vsh"
     required: false
     bundled: true
-    unsourceable: "ships inside the paid application package"
     category: game_data
-    description: "vertex shader read whole and handed to the OpenGL renderer"
-    note: "The Shaders setting walks the directory and reads the selected pair, passing the bytes to setVSH. The packaged set is copied out of assets once storage access is granted, and a pair dropped in by hand joins the list."
+    size: 1048
+    sha1: "4af25bc179d1b9b20d080feebc037f08181598d4"
+    description: "4xhqglsl vertex shader"
     source_ref: "Main.java:25962-25975, Main.java:35655-35669, Main.java:35829-35845"
 
-  - name: "<shader>.fsh"
-    path: "FPse64/shaders/<shader>.fsh"
+  - name: "4xhqglsl.fsh"
+    path: "FPse64/shaders/4xhqglsl.fsh"
     required: false
     bundled: true
-    unsourceable: "ships inside the paid application package"
     category: game_data
-    description: "fragment shader read whole and handed to the OpenGL renderer"
-    note: "Read from the same directory as the vertex shader of the same name and passed to setFSH."
-    source_ref: "Main.java:25983-25996, Main.java:35677-35691, Main.java:35829-35845"
+    size: 2159
+    sha1: "cdf41e359264996a4ad973d852c9f1daca537e45"
+    description: "4xhqglsl fragment shader"
+    source_ref: "Main.java:25962-25975, Main.java:35655-35669, Main.java:35829-35845"
+
+  - name: "5xBR.vsh"
+    path: "FPse64/shaders/5xBR.vsh"
+    required: false
+    bundled: true
+    category: game_data
+    size: 1100
+    sha1: "cf393a7e10bb4c31de0b59056f3a469aecfe6ccf"
+    description: "5xBR vertex shader"
+    source_ref: "Main.java:25962-25975, Main.java:35655-35669, Main.java:35829-35845"
+
+  - name: "5xBR.fsh"
+    path: "FPse64/shaders/5xBR.fsh"
+    required: false
+    bundled: true
+    category: game_data
+    size: 5595
+    sha1: "bd2f44f82be53c94c69a20dc8d46019ee91dfc61"
+    description: "5xBR fragment shader"
+    source_ref: "Main.java:25962-25975, Main.java:35655-35669, Main.java:35829-35845"
+
+  - name: "5XBRZ.vsh"
+    path: "FPse64/shaders/5XBRZ.vsh"
+    required: false
+    bundled: true
+    category: game_data
+    size: 1373
+    sha1: "92a3f7fdefe9e6ef7af0c37267a809695e9ae4aa"
+    description: "5XBRZ vertex shader"
+    source_ref: "Main.java:25962-25975, Main.java:35655-35669, Main.java:35829-35845"
+
+  - name: "5XBRZ.fsh"
+    path: "FPse64/shaders/5XBRZ.fsh"
+    required: false
+    bundled: true
+    category: game_data
+    size: 7985
+    sha1: "abf7371da6b38205b5df861151e6510bc693522d"
+    description: "5XBRZ fragment shader"
+    source_ref: "Main.java:25962-25975, Main.java:35655-35669, Main.java:35829-35845"
+
+  - name: "Aacolor.vsh"
+    path: "FPse64/shaders/Aacolor.vsh"
+    required: false
+    bundled: true
+    category: game_data
+    size: 856
+    sha1: "548b2ebebaff89127b243ac8e96dc1243c934ac5"
+    description: "Aacolor vertex shader"
+    source_ref: "Main.java:25962-25975, Main.java:35655-35669, Main.java:35829-35845"
+
+  - name: "Aacolor.fsh"
+    path: "FPse64/shaders/Aacolor.fsh"
+    required: false
+    bundled: true
+    category: game_data
+    size: 1865
+    sha1: "e818588e8d5e01a73f45c2d596c6a9a8a9d029f8"
+    description: "Aacolor fragment shader"
+    source_ref: "Main.java:25962-25975, Main.java:35655-35669, Main.java:35829-35845"
+
+  - name: "Cartoon_A.vsh"
+    path: "FPse64/shaders/Cartoon_A.vsh"
+    required: false
+    bundled: true
+    category: game_data
+    size: 195
+    sha1: "363d817dadf81bb5ecdcb8675acf9e096dd66241"
+    description: "Cartoon_A vertex shader"
+    source_ref: "Main.java:25962-25975, Main.java:35655-35669, Main.java:35829-35845"
+
+  - name: "Cartoon_A.fsh"
+    path: "FPse64/shaders/Cartoon_A.fsh"
+    required: false
+    bundled: true
+    category: game_data
+    size: 1081
+    sha1: "74f54c5430e546c328a5226e068a4ea1e60f67bf"
+    description: "Cartoon_A fragment shader"
+    source_ref: "Main.java:25962-25975, Main.java:35655-35669, Main.java:35829-35845"
+
+  - name: "Cartoon_B.vsh"
+    path: "FPse64/shaders/Cartoon_B.vsh"
+    required: false
+    bundled: true
+    category: game_data
+    size: 195
+    sha1: "363d817dadf81bb5ecdcb8675acf9e096dd66241"
+    description: "Cartoon_B vertex shader"
+    source_ref: "Main.java:25962-25975, Main.java:35655-35669, Main.java:35829-35845"
+
+  - name: "Cartoon_B.fsh"
+    path: "FPse64/shaders/Cartoon_B.fsh"
+    required: false
+    bundled: true
+    category: game_data
+    size: 1002
+    sha1: "2d3a1cd8d94c6d4223f9ed0f2ae7431d2bd33fe9"
+    description: "Cartoon_B fragment shader"
+    source_ref: "Main.java:25962-25975, Main.java:35655-35669, Main.java:35829-35845"
+
+  - name: "CRT-Hyllian.vsh"
+    path: "FPse64/shaders/CRT-Hyllian.vsh"
+    required: false
+    bundled: true
+    category: game_data
+    size: 197
+    sha1: "376fc334df812840ff9c1bf6d23e57574b64b618"
+    description: "CRT-Hyllian vertex shader"
+    source_ref: "Main.java:25962-25975, Main.java:35655-35669, Main.java:35829-35845"
+
+  - name: "CRT-Hyllian.fsh"
+    path: "FPse64/shaders/CRT-Hyllian.fsh"
+    required: false
+    bundled: true
+    category: game_data
+    size: 10670
+    sha1: "02a5c9962b973619c31dc9674120c13c33636427"
+    description: "CRT-Hyllian fragment shader"
+    source_ref: "Main.java:25962-25975, Main.java:35655-35669, Main.java:35829-35845"
+
+  - name: "Dot.vsh"
+    path: "FPse64/shaders/Dot.vsh"
+    required: false
+    bundled: true
+    category: game_data
+    size: 844
+    sha1: "186fa21b02c96e3cbc84fcecd51b60e6305b2269"
+    description: "Dot vertex shader"
+    source_ref: "Main.java:25962-25975, Main.java:35655-35669, Main.java:35829-35845"
+
+  - name: "Dot.fsh"
+    path: "FPse64/shaders/Dot.fsh"
+    required: false
+    bundled: true
+    category: game_data
+    size: 1744
+    sha1: "eeb68f155918dbdcf5b3288173712fef36c259dd"
+    description: "Dot fragment shader"
+    source_ref: "Main.java:25962-25975, Main.java:35655-35669, Main.java:35829-35845"
+
+  - name: "FXAA.vsh"
+    path: "FPse64/shaders/FXAA.vsh"
+    required: false
+    bundled: true
+    category: game_data
+    size: 195
+    sha1: "363d817dadf81bb5ecdcb8675acf9e096dd66241"
+    description: "FXAA vertex shader"
+    source_ref: "Main.java:25962-25975, Main.java:35655-35669, Main.java:35829-35845"
+
+  - name: "FXAA.fsh"
+    path: "FPse64/shaders/FXAA.fsh"
+    required: false
+    bundled: true
+    category: game_data
+    size: 1929
+    sha1: "e3ebfd7a60030496925db8a621921d0a0e312731"
+    description: "FXAA fragment shader"
+    source_ref: "Main.java:25962-25975, Main.java:35655-35669, Main.java:35829-35845"
+
+  - name: "FXAA_natural_vision.vsh"
+    path: "FPse64/shaders/FXAA_natural_vision.vsh"
+    required: false
+    bundled: true
+    category: game_data
+    size: 195
+    sha1: "363d817dadf81bb5ecdcb8675acf9e096dd66241"
+    description: "FXAA_natural_vision vertex shader"
+    source_ref: "Main.java:25962-25975, Main.java:35655-35669, Main.java:35829-35845"
+
+  - name: "FXAA_natural_vision.fsh"
+    path: "FPse64/shaders/FXAA_natural_vision.fsh"
+    required: false
+    bundled: true
+    category: game_data
+    size: 2786
+    sha1: "7c18d8516b12a46c2d453f0403922ae0145a569f"
+    description: "FXAA_natural_vision fragment shader"
+    source_ref: "Main.java:25962-25975, Main.java:35655-35669, Main.java:35829-35845"
+
+  - name: "Grayscale.vsh"
+    path: "FPse64/shaders/Grayscale.vsh"
+    required: false
+    bundled: true
+    category: game_data
+    size: 197
+    sha1: "376fc334df812840ff9c1bf6d23e57574b64b618"
+    description: "Grayscale vertex shader"
+    source_ref: "Main.java:25962-25975, Main.java:35655-35669, Main.java:35829-35845"
+
+  - name: "Grayscale.fsh"
+    path: "FPse64/shaders/Grayscale.fsh"
+    required: false
+    bundled: true
+    category: game_data
+    size: 215
+    sha1: "f679b5cb40646cd29afb2dea6467cf5527d29947"
+    description: "Grayscale fragment shader"
+    source_ref: "Main.java:25962-25975, Main.java:35655-35669, Main.java:35829-35845"
+
+  - name: "MangaToon.vsh"
+    path: "FPse64/shaders/MangaToon.vsh"
+    required: false
+    bundled: true
+    category: game_data
+    size: 197
+    sha1: "376fc334df812840ff9c1bf6d23e57574b64b618"
+    description: "MangaToon vertex shader"
+    source_ref: "Main.java:25962-25975, Main.java:35655-35669, Main.java:35829-35845"
+
+  - name: "MangaToon.fsh"
+    path: "FPse64/shaders/MangaToon.fsh"
+    required: false
+    bundled: true
+    category: game_data
+    size: 2760
+    sha1: "1e5200df1cd3c828bad5bededf0d357f137f9706"
+    description: "MangaToon fragment shader"
+    source_ref: "Main.java:25962-25975, Main.java:35655-35669, Main.java:35829-35845"
+
+  - name: "TV_HDR.vsh"
+    path: "FPse64/shaders/TV_HDR.vsh"
+    required: false
+    bundled: true
+    category: game_data
+    size: 195
+    sha1: "363d817dadf81bb5ecdcb8675acf9e096dd66241"
+    description: "TV_HDR vertex shader"
+    source_ref: "Main.java:25962-25975, Main.java:35655-35669, Main.java:35829-35845"
+
+  - name: "TV_HDR.fsh"
+    path: "FPse64/shaders/TV_HDR.fsh"
+    required: false
+    bundled: true
+    category: game_data
+    size: 358
+    sha1: "6fb63828bd49afa86280b903d92a0e5e862d2e66"
+    description: "TV_HDR fragment shader"
+    source_ref: "Main.java:25962-25975, Main.java:35655-35669, Main.java:35829-35845"
 
   - name: vrback.raw
     path: "vrback.raw"
